@@ -15,10 +15,21 @@ namespace Do.PluginLib.Builtin
 		string uri, name, icon;
 		
 		public FileItem (string name, string uri)
-		{
+		{	
 			this.uri = uri;
 			this.name = name;
-			this.icon = "document";
+			
+			if (System.IO.Directory.Exists (uri)) {
+				icon = "folder";
+			} else {
+				try {
+					icon = Gnome.Vfs.Global.GetMimeType (uri);
+					icon = icon.Replace ('/', '-');
+					icon = string.Format ("gnome-mime-{0}", icon);
+				} catch (NullReferenceException) {
+					icon = "file";
+				}
+			}
 		}
 		
 		public string Name {
@@ -35,6 +46,12 @@ namespace Do.PluginLib.Builtin
 		
 		public virtual void Open ()
 		{
+			Console.WriteLine ("Opening \"{0}\"...", uri);
+			try {
+				System.Diagnostics.Process.Start ("gnome-open", string.Format ("\"{0}\"", uri));
+			} catch (Exception e) {
+				Console.WriteLine ("Failed to open \"{0}\": ", e.Message);
+			}
 		}
 	}
 }

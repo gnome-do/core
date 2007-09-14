@@ -1,10 +1,6 @@
 <?xml version="1.0"?>
-<UserCombinePreferences filename="/home/dave/src/Do/Do.mds">
-  <Files>
-    <File filename="Welcome" />
-    <File filename="./Do/src/Main.cs" />
-    <File filename="./PluginLib/src/Builtin/RecentFileItemSource.cs" />
-  </Files>
+<UserCombinePreferences filename="/home/dave/src/gnome-do/Do.mds">
+  <Files />
   <Views>
     <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">
       <TreeView>
@@ -21,7 +17,7 @@
             <Node name="Resources" expanded="True" />
             <Node name="src" expanded="True">
               <Node name="Builtin" expanded="True">
-                <Node name="RecentFileItemSource.cs" expanded="False" selected="True" />
+                <Node name="FileItem.cs" expanded="False" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -48,7 +44,7 @@
   </Views>
   <Properties>
     <Properties>
-      <Property key="ActiveWindow" value="/home/dave/src/Do/PluginLib/src/Builtin/RecentFileItemSource.cs" />
+      <Property key="ActiveWindow" value="" />
       <Property key="ActiveConfiguration" value="Debug" />
     </Properties>
   </Properties>
