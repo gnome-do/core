@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<UserCombinePreferences filename="/home/dave/src/Do/Do.mds">
+  <Files>
+    <File filename="Welcome" />
+    <File filename="./Do/src/Main.cs" />
+    <File filename="./PluginLib/src/Builtin/RecentFileItemSource.cs" />
+  </Files>
+  <Views>
+    <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">
+      <TreeView>
+        <Node expanded="True">
+          <Node name="DBusLib" expanded="True" />
+          <Node name="Do" expanded="True">
+            <Node name="src" expanded="True">
+              <Node name="Core" expanded="True" />
+            </Node>
+          </Node>
+          <Node name="Packages" expanded="True" />
+          <Node name="PluginLib" expanded="True">
+            <Node name="References" expanded="True" />
+            <Node name="Resources" expanded="True" />
+            <Node name="src" expanded="True">
+              <Node name="Builtin" expanded="True">
+                <Node name="RecentFileItemSource.cs" expanded="False" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </Node>
+      </TreeView>
+    </ViewMemento>
+    <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ClassPad">
+      <TreeView>
+        <Node expanded="True">
+          <Node name="PluginLib" expanded="True" />
+        </Node>
+      </TreeView>
+    </ViewMemento>
+    <ViewMemento Id="MonoQuery.DatabasePad">
+      <TreeView>
+        <Node expanded="False" />
+      </TreeView>
+    </ViewMemento>
+    <ViewMemento Id="MonoDevelop.NUnit.TestPad">
+      <TreeView>
+        <Node expanded="False" />
+      </TreeView>
+    </ViewMemento>
+  </Views>
+  <Properties>
+    <Properties>
+      <Property key="ActiveWindow" value="/home/dave/src/Do/PluginLib/src/Builtin/RecentFileItemSource.cs" />
+      <Property key="ActiveConfiguration" value="Debug" />
+    </Properties>
+  </Properties>
+</UserCombinePreferences>

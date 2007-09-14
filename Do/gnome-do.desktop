@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=GNOME Do
+Type=Application
+Exec=gnome-do
+Terminal=false
+Icon=gnome-run
+Comment=Do things quickly with objects in your GNOME desktop enviornment
+Categories=Utility;
+OnlyShowIn=GNOME;
+GenericName[en_US]=

@@ -1,0 +1,56 @@
+using System;
+
+using Do.PluginLib;
+
+namespace MyNamespace
+{
+	
+	public class MyCommand : ICommand
+	{
+	
+		public MyCommand ()
+		{
+		}
+		
+		public string Name {
+			get { return "Run"; }
+		}
+		
+		public string Icon {
+			get { return "gnome-run"; }
+		}
+		
+		public Type[] SupportedTypes {
+			get {
+				return new Type[] {
+					/* typeof (MyItem) */
+				};
+			}
+		}
+		
+		public Type[] SupportedIndirectTypes {
+			get {
+				return new Type[] {
+					/* typeof (MyIndirectItem) */
+				};
+			}
+		}
+		
+		public void PerformOnItem (IItem item)
+		{
+			switch (item.Type) {
+			case "SupportedType1":
+				break;
+			}
+		}
+		
+		public void PerformOnItemWithIndirectItem (IItem item, IItem iitem)
+		{
+			switch (item.Type) {
+			case "SupportedType1":
+				break;
+			}
+		}
+		
+	}
+}
