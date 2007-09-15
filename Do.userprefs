@@ -16,7 +16,9 @@
           <Node name="Do" expanded="True">
             <Node name="src" expanded="True">
               <Node name="Core" expanded="True" />
-              <Node name="UI" expanded="True" />
+              <Node name="UI" expanded="True">
+                <Node name="LBWindow.cs" expanded="False" selected="True" />
+              </Node>
             </Node>
           </Node>
           <Node name="Packages" expanded="True" />
@@ -24,9 +26,7 @@
             <Node name="References" expanded="True" />
             <Node name="Resources" expanded="True" />
             <Node name="src" expanded="True">
-              <Node name="Builtin" expanded="True">
-                <Node name="DirectoryFileItemSource.cs" expanded="False" selected="True" />
-              </Node>
+              <Node name="Builtin" expanded="True" />
             </Node>
           </Node>
         </Node>
@@ -52,7 +52,7 @@
   </Views>
   <Properties>
     <Properties>
-      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/PluginLib/src/Builtin/DirectoryFileItemSource.cs" />
+      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/Do/src/UI/LBWindow.cs" />
       <Property key="ActiveConfiguration" value="Debug" />
     </Properties>
   </Properties>

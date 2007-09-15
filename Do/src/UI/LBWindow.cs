@@ -18,6 +18,8 @@ namespace Do.UI
 	{
 		
 		private static Pixbuf default_item_pixbuf;
+		const int ResultsListIconSize = 32;
+		const int ResultsListLength = 7; 
 		
 		protected enum WindowFocus {
 			ItemFocus,
@@ -62,7 +64,7 @@ namespace Do.UI
 			default_item_pixbuf = Util.PixbufFromIconName ("gtk-find", Util.DefaultIconSize);
 		}
 		
-		public LBWindow (Commander commander, bool transparent) : base ("GNOME Commander")
+		public LBWindow (Commander commander, bool transparent) : base ("GNOME Go")
 		{
 			Build ();
 			
@@ -158,7 +160,7 @@ namespace Do.UI
 			instruction.Show ();
 			
 			result_sw = new ScrolledWindow ();
-			result_sw.SetSizeRequest (-1, (Util.DefaultIconSize + 4) * 4 + 2);
+			result_sw.SetSizeRequest (-1, (ResultsListIconSize + 4) * ResultsListLength + 2);
 			result_sw.SetPolicy (PolicyType.Automatic, PolicyType.Automatic);
 			result_sw.ShadowType = ShadowType.In;
 			vbox.PackStart (result_sw, true, true, 0);
@@ -181,7 +183,7 @@ namespace Do.UI
 			// cell.CellBackgroundSet = true;
 			// Maybe below?
 			// cell.CellBackground = "white";
-			cell.SetFixedSize (-1, Util.DefaultIconSize - (int) cell.Ypad);
+			cell.SetFixedSize (-1, ResultsListIconSize - (int) cell.Ypad);
 			column.AddAttribute (cell, "pixbuf", (int) Column.PixbufColumn);
 			
 			cell = new CellRendererText ();
@@ -227,7 +229,14 @@ namespace Do.UI
 			instruction.Show ();
 			size = SizeRequest();
 			Resize (size.Width, size.Height);
-		}		
+		}	
+		
+		protected override bool OnButtonPressEvent (EventButton evnt)
+		{
+			Hide ();
+			return false;
+		}
+
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
@@ -503,7 +512,8 @@ namespace Do.UI
 				store = result_treeview.Model as ListStore;
 				store.Clear ();
 				foreach (GCObject result in results) {
-					iter = store.AppendValues (new object[] { result, result.Pixbuf, result.Name });
+					Pixbuf small_icon = Util.PixbufFromIconName (result.Icon, ResultsListIconSize);
+					iter = store.AppendValues (new object[] { result, small_icon, result.Name });
 					if (!selected) {
 						result_treeview.Selection.SelectIter (iter);
 						selected = true;
