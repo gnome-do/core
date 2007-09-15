@@ -15,7 +15,6 @@ namespace Do.Core
 	public abstract class GCObject
 	{
 		
-		public const int DefaultIconSize = 48;
 		public static readonly string DefaultItemName = "No name";
 		
 		protected Pixbuf _pixbuf;
@@ -33,7 +32,7 @@ namespace Do.Core
 		public virtual Pixbuf Pixbuf {
 			get {
 				if (_pixbuf == null) {
-					_pixbuf = Util.PixbufFromIconName (Icon, DefaultIconSize);
+					_pixbuf = Util.PixbufFromIconName (Icon, Util.DefaultIconSize);
 				}
 				return _pixbuf;
 			}

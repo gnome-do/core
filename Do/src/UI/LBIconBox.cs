@@ -51,7 +51,7 @@ namespace Do.UI
 			
 			image.SetSizeRequest (Util.DefaultIconSize + 2, Util.DefaultIconSize + 2);
 			label.SetSizeRequest (Util.DefaultIconSize * 2, -1);
-			SetSizeRequest (Util.DefaultIconSize * 3, Util.DefaultIconSize * 2);
+			//SetSizeRequest (Util.DefaultIconSize * 3, Util.DefaultIconSize * 2);
 			
 			Realized += OnRealized;
 		}

@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <UserCombinePreferences filename="/home/dave/src/gnome-do/Do.mds">
-  <Files />
+  <Files>
+    <File filename="Welcome" />
+    <File filename="./Do/src/UI/LBIconBox.cs" />
+    <File filename="./Do/src/UI/LBWindow.cs" />
+    <File filename="./Do/src/Core/GCObject.cs" />
+    <File filename="./Do/src/Core/Util.cs" />
+  </Files>
   <Views>
     <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">
       <TreeView>
@@ -8,7 +14,10 @@
           <Node name="DBusLib" expanded="True" />
           <Node name="Do" expanded="True">
             <Node name="src" expanded="True">
-              <Node name="Core" expanded="True" />
+              <Node name="Core" expanded="True">
+                <Node name="Util.cs" expanded="False" selected="True" />
+              </Node>
+              <Node name="UI" expanded="True" />
             </Node>
           </Node>
           <Node name="Packages" expanded="True" />
@@ -16,9 +25,7 @@
             <Node name="References" expanded="True" />
             <Node name="Resources" expanded="True" />
             <Node name="src" expanded="True">
-              <Node name="Builtin" expanded="True">
-                <Node name="FileItem.cs" expanded="False" selected="True" />
-              </Node>
+              <Node name="Builtin" expanded="True" />
             </Node>
           </Node>
         </Node>
@@ -44,7 +51,7 @@
   </Views>
   <Properties>
     <Properties>
-      <Property key="ActiveWindow" value="" />
+      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/Do/src/Core/Util.cs" />
       <Property key="ActiveConfiguration" value="Debug" />
     </Properties>
   </Properties>

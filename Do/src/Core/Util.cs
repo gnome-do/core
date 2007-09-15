@@ -21,7 +21,7 @@ namespace Do.Core
 	{
 		
 		public static readonly Pixbuf UnknownPixbuf;
-		public const int DefaultIconSize = 48;
+		public const int DefaultIconSize = 80;
 		
 		static Util ()
 		{
