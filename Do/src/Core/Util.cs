@@ -123,7 +123,11 @@ namespace Do.Core
 			}
 			
 			if (name.StartsWith ("/")) {
-				return new Gdk.Pixbuf (name, size, size);
+				try {
+					return new Gdk.Pixbuf (name, size, size);
+				} catch {
+					return null;
+				}
 			}
 			
 			iconTheme = Gtk.IconTheme.Default;
