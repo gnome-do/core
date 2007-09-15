@@ -61,17 +61,21 @@ namespace Do.PluginLib.Builtin
 				return;
 			}
 			
-			directoryEntries = Directory.GetEntries (path);
-			foreach (FileInfo file in directoryEntries) {
-				// No hidden files or special directories.
-				if (file.Name.StartsWith (".")) continue;
-				
-				item_path = System.IO.Path.Combine (path, file.Name);
-				item = new FileItem (file.Name, item_path);
-				files.Add (item);
-				if (file.Type == FileType.Directory) {
-					ReadFiles (item_path, levels-1);
+			try {
+				directoryEntries = Directory.GetEntries (path);
+				foreach (FileInfo file in directoryEntries) {
+					// No hidden files or special directories.
+					if (file.Name.StartsWith (".")) continue;
+					
+					item_path = System.IO.Path.Combine (path, file.Name);
+					item = new FileItem (file.Name, item_path);
+					files.Add (item);
+					if (file.Type == FileType.Directory) {
+						ReadFiles (item_path, levels-1);
+					}
 				}
+			} catch (System.IO.FileNotFoundException) {
+				return;
 			}
 		}
 	}
