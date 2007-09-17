@@ -256,10 +256,19 @@ namespace Do.UI
 			case Gdk.Key.Control_L:
 				break;
 			case Gdk.Key.Escape:
-				if (searchString.Length == 0) {
-					Hide ();
+				if (focus == WindowFocus.ItemFocus) {
+					if (searchString.Length == 0) {
+						Hide ();
+					}
+					commander.State = CommanderState.Default;
+				} else {
+					if (searchString.Length == 0) {
+						commander.State = CommanderState.Default;
+					} else {
+						searchString = "";
+						QueueSearch ();
+					}
 				}
-				commander.State = CommanderState.Default;
 				break;
 			case Gdk.Key.Return:
 			case Gdk.Key.ISO_Enter:
@@ -287,30 +296,35 @@ namespace Do.UI
 				TreeModel model;
 				TreeIter iter;
 				TreePath path;
+				int num_items = 0;
 				
 				switch (focus) {
 				case WindowFocus.ItemFocus:
-					if (commander.CurrentItems.Length == 0) return false;
+					num_items = commander.CurrentItems.Length;
 					break;
 				case WindowFocus.CommandFocus:
-					if (commander.CurrentCommands.Length == 0) return false;
+					num_items = commander.CurrentCommands.Length;
 					break;
 				}
+				if (num_items == 0) {
+					return false;
+				}
+				
 				result_treeview.Selection.GetSelected (out model, out iter);
 				path = model.GetPath (iter);
-				if (!result_sw.Visible) {
-					ShowSearchResults ();
-				}
-				else {	
-					if (key == Gdk.Key.Up) {
-						if (!path.Prev ()) {
-							HideSearchResults ();
-						}
+				
+				if (key == Gdk.Key.Up) {
+					if (!path.Prev ()) {
+						HideSearchResults ();
 					}
-					else if (commander.CurrentItems.Length > 0) {
-						path.Next ();
-					}					
 				}
+				else if (key == Gdk.Key.Down && num_items > 0) {
+					if (result_sw.Visible) {
+						path.Next ();
+					} else {
+						ShowSearchResults ();
+					}
+				}					
 				result_treeview.Selection.SelectPath (path);
 				result_treeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
 			}
@@ -399,13 +413,13 @@ namespace Do.UI
 			switch (focus) {
 			case WindowFocus.CommandFocus:
 				searchString = commander.CommandSearchString;
-				QueueSearch ();
 				break;
 			case WindowFocus.ItemFocus:
 				searchString = commander.ItemSearchString;
-				QueueSearch ();
 				break;
 			}
+			OnSearchCompleteStateEvent ();
+			DisplayLabel.Markup = string.Format ("<big>{0}</big>", searchString);
 			item_icon_box.IsFocused = (focus == WindowFocus.ItemFocus);
 			command_icon_box.IsFocused = (focus == WindowFocus.CommandFocus);
 		}
@@ -462,16 +476,16 @@ namespace Do.UI
 		protected virtual void SetDefaultState ()
 		{
 			searchString = itemSearchString = "";
+			
+			HideSearchResults ();
+			(result_treeview.Model as ListStore).Clear ();
+			SetWindowFocus (WindowFocus.ItemFocus);
+			
 			item_icon_box.Pixbuf = default_item_pixbuf;
 			item_icon_box.Caption = "";
 			command_icon_box.Clear ();
 			
-			DisplayLabel.Markup = String.Format ("<i><big>{0}</big></i>", "Type to begin searching");
-			DisplayLabel.Show ();
-			
-			(result_treeview.Model as ListStore).Clear ();
-			SetWindowFocus (WindowFocus.ItemFocus);
-			HideSearchResults ();
+			DisplayLabel.Markup = String.Format ("<i><big>{0}</big></i>", "Type to begin searching");			
 		}
 		
 		protected virtual void SetNoResultsFoundState ()
@@ -503,9 +517,8 @@ namespace Do.UI
 		protected void OnSearchCompleteStateEvent ()
 		{
 			ListStore store;
-			TreeIter  iter;
-			bool selected = false;
-			GCObject [] results;
+			TreeIter  iter, selected_iter;
+			GCObject[] results;
 			
 			switch (focus) {
 			case WindowFocus.ItemFocus:
@@ -527,16 +540,23 @@ namespace Do.UI
 				
 				store = result_treeview.Model as ListStore;
 				store.Clear ();
+				int current_index = 0;
+				selected_iter = default (TreeIter);
 				foreach (GCObject result in results) {
 					Pixbuf small_icon = Util.PixbufFromIconName (result.Icon, ResultsListIconSize);
 					string result_info = string.Format ("<b>{0}</b>\n<i><small>{1}</small></i>", result.Name, result.Description);
 					iter = store.AppendValues (new object[] { result, small_icon, result_info });
 					
-					if (!selected) {
-						result_treeview.Selection.SelectIter (iter);
-						selected = true;
+					if ((focus == WindowFocus.ItemFocus && commander.CurrentItemIndex == current_index) ||
+						(focus == WindowFocus.CommandFocus && commander.CurrentCommandIndex == current_index)) {
+						selected_iter = iter;
 					}
+					current_index++;
 				}
+				result_treeview.Selection.SelectIter (selected_iter);
+				result_treeview.ScrollToCell (result_treeview.Model.GetPath (selected_iter),
+				                              null, false, 0.0F, 0.0F);
+				
 			}
 		}
 		
