@@ -15,6 +15,8 @@ namespace Do.Core
 	public class ItemSource : GCObject
 	{
 	
+		public static readonly string DefaultItemSourceName = "";
+		public static readonly string DefaultItemSourceDescription = "";
 		public static readonly string DefaultItemSourceIcon = "";
 		
 		private bool enabled;
@@ -35,7 +37,11 @@ namespace Do.Core
 		}
 		
 		public override string Name {
-			get { return source.Name; }
+			get { return (source.Name == null ? DefaultItemSourceName : source.Name); }
+		}
+		
+		public override string Description {
+			get { return (source.Description == null ? DefaultItemSourceDescription : source.Description); }
 		}
 		
 		public override string Icon {

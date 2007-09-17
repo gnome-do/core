@@ -15,6 +15,10 @@ namespace Do.PluginLib.Builtin
 			get { return "Open"; }
 		}
 		
+		public string Description {
+			get { return "Opens many kinds of items."; }
+		}
+		
 		public string Icon {
 			get { return "gtk-open"; }
 		}

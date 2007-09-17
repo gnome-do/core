@@ -33,6 +33,10 @@ namespace Do.PluginLib.Builtin
 			get { return "Applications"; }
 		}
 		
+		public string Description {
+			get { return "Finds applications in /usr/share/applications"; }
+		}
+		
 		public string Icon {
 			get { return "gtk-run"; }
 		}

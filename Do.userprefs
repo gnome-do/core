@@ -3,7 +3,7 @@
   <Files>
     <File filename="Welcome" />
     <File filename="./Do/src/UI/LBWindow.cs" />
-    <File filename="./Do/src/Core/Util.cs" />
+    <File filename="./Do/src/Core/ItemSource.cs" />
   </Files>
   <Views>
     <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">

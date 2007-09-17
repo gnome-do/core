@@ -21,6 +21,10 @@ namespace Do.PluginLib.Builtin
 			get { return name; }
 		}
 		
+		public string Description {
+			get { return url; }
+		}
+		
 		public string Icon {
 			get { return "www"; }
 		}

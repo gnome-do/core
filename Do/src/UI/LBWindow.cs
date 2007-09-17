@@ -44,7 +44,7 @@ namespace Do.UI
 		
 		LBFrame frame;
 		Alignment instruction;
-		Label instr_label;
+		Label DisplayLabel;
 	
 		ScrolledWindow result_sw;
 		HBox result_hbox;
@@ -81,7 +81,7 @@ namespace Do.UI
 			get { return transparent; }
 			set {
 				if (value && !can_rgba) {
-					System.Console.Error.WriteLine ("Cannot paint window transparent (no rgba).");
+					Console.Error.WriteLine ("Cannot paint window transparent (no rgba).");
 					return;
 				}
 				transparent = value;	
@@ -89,10 +89,10 @@ namespace Do.UI
 					item_icon_box.Transparent = true;
 					command_icon_box.Transparent = true;
 					frame.Fill = true;
-					instr_label.ModifyFg (StateType.Normal, instr_label.Style.White);
+					DisplayLabel.ModifyFg (StateType.Normal, DisplayLabel.Style.White);
 					result_sw.ShadowType = ShadowType.None;
 				} else {
-					instr_label.ModifyFg (StateType.Normal, instr_label.Style.Foreground (StateType.Normal));
+					DisplayLabel.ModifyFg (StateType.Normal, DisplayLabel.Style.Foreground (StateType.Normal));
 					result_sw.ShadowType = ShadowType.In;
 				}
 				if (IsDrawable) {
@@ -121,8 +121,8 @@ namespace Do.UI
 			searchString = itemSearchString = "";
 			
 			frame = new LBFrame ();
-			frame.FillColor = new Gdk.Color (0, 0, 0);;
-			frame.FillAlpha = (ushort) (ushort.MaxValue * 0.7);
+			frame.FillColor = new Gdk.Color (0, 0, 0);
+			frame.FillAlpha = (ushort) (ushort.MaxValue * 0.8);
 			Add (frame);
 			frame.Show ();
 			
@@ -147,15 +147,16 @@ namespace Do.UI
 
 			instruction = new Alignment (0.5F, 0.5F, 1, 1);
 			instruction.SetPadding (8, 0, 0, 0);
-			instr_label = new Label ();
-			instr_label.UseMarkup = true;
-			instruction.Add (instr_label);
+			DisplayLabel = new Label ();
+			DisplayLabel.UseMarkup = true;
+
+			instruction.Add (DisplayLabel);
 			vbox.PackStart (instruction, false, false, 0);
-			instr_label.Show ();
+			DisplayLabel.Show ();
 			instruction.Show ();
 			
 			result_sw = new ScrolledWindow ();
-			result_sw.SetSizeRequest (-1, (ResultsListIconSize + 4) * ResultsListLength + 2);
+			result_sw.SetSizeRequest (-1, (ResultsListIconSize + 2) * ResultsListLength + 2);
 			result_sw.SetPolicy (PolicyType.Automatic, PolicyType.Automatic);
 			result_sw.ShadowType = ShadowType.In;
 			vbox.PackStart (result_sw, true, true, 0);
@@ -178,7 +179,7 @@ namespace Do.UI
 			// cell.CellBackgroundSet = true;
 			// Maybe below?
 			// cell.CellBackground = "white";
-			cell.SetFixedSize (-1, ResultsListIconSize - (int) cell.Ypad);
+			cell.SetFixedSize (-1, 4 + ResultsListIconSize - (int) cell.Ypad);
 			column.AddAttribute (cell, "pixbuf", (int) Column.PixbufColumn);
 			
 			cell = new CellRendererText ();
@@ -213,7 +214,6 @@ namespace Do.UI
 			result_sw.Show ();
 			// instruction.Hide ();
 			size = SizeRequest ();
-			
 			Resize (size.Width, size.Height);
 		}
 		
@@ -288,22 +288,35 @@ namespace Do.UI
 				TreeIter iter;
 				TreePath path;
 				
+				switch (focus) {
+				case WindowFocus.ItemFocus:
+					if (commander.CurrentItems.Length == 0) return false;
+					break;
+				case WindowFocus.CommandFocus:
+					if (commander.CurrentCommands.Length == 0) return false;
+					break;
+				}
+				result_treeview.Selection.GetSelected (out model, out iter);
+				path = model.GetPath (iter);
 				if (!result_sw.Visible) {
 					ShowSearchResults ();
 				}
-				else if (result_treeview.Selection.GetSelected (out model, out iter)) {
-					path = model.GetPath (iter);
+				else {	
 					if (key == Gdk.Key.Up) {
 						if (!path.Prev ()) {
 							HideSearchResults ();
 						}
-					} else {
-						path.Next ();
 					}
-					result_treeview.Selection.SelectPath (path);
-					result_treeview.ScrollToCell (path, null, false, 0.0F, 0.0F);					
+					else if (commander.CurrentItems.Length > 0) {
+						path.Next ();
+					}					
 				}
+				result_treeview.Selection.SelectPath (path);
+				result_treeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
 			}
+				break;
+			case Gdk.Key.Right:
+			case Gdk.Key.Left:
 				break;
 			default:
 				// Default input behavior
@@ -381,6 +394,7 @@ namespace Do.UI
 			}
 			
 			this.focus = focus;
+			
 			(result_treeview.Model as ListStore).Clear ();
 			switch (focus) {
 			case WindowFocus.CommandFocus:
@@ -452,8 +466,8 @@ namespace Do.UI
 			item_icon_box.Caption = "";
 			command_icon_box.Clear ();
 			
-			instr_label.Markup = String.Format ("<i>{0}</i>", "Type to begin searching");
-			instr_label.Show ();
+			DisplayLabel.Markup = String.Format ("<i><big>{0}</big></i>", "Type to begin searching");
+			DisplayLabel.Show ();
 			
 			(result_treeview.Model as ListStore).Clear ();
 			SetWindowFocus (WindowFocus.ItemFocus);
@@ -465,13 +479,13 @@ namespace Do.UI
 			switch (focus) {
 			case WindowFocus.CommandFocus:
 				command_icon_box.Clear ();
-				instr_label.Markup = String.Format ("<i>{0}</i>", "No commands found");
+				DisplayLabel.Markup = String.Format ("<i><big>{0}</big></i>", "No commands found");
 				break;
 			default:
 			// case WindowFocus.ItemFocus:
 				command_icon_box.Clear ();
 				item_icon_box.Clear ();
-				instr_label.Markup = String.Format ("<i>{0}</i>", "No items found");
+				DisplayLabel.Markup = String.Format ("<i><big>{0}</big></i>", "No items found");
 				break;
 			}
 		}
@@ -483,7 +497,7 @@ namespace Do.UI
 		
 		protected void OnSearchingStateEvent ()
 		{
-			instr_label.Markup = String.Format ("<i>{0}</i>", searchString);
+			DisplayLabel.Markup = String.Format ("<big>{0}</big>", searchString);
 		}
 		
 		protected void OnSearchCompleteStateEvent ()
@@ -515,7 +529,9 @@ namespace Do.UI
 				store.Clear ();
 				foreach (GCObject result in results) {
 					Pixbuf small_icon = Util.PixbufFromIconName (result.Icon, ResultsListIconSize);
-					iter = store.AppendValues (new object[] { result, small_icon, result.Name });
+					string result_info = string.Format ("<b>{0}</b>\n<i><small>{1}</small></i>", result.Name, result.Description);
+					iter = store.AppendValues (new object[] { result, small_icon, result_info });
+					
 					if (!selected) {
 						result_treeview.Selection.SelectIter (iter);
 						selected = true;

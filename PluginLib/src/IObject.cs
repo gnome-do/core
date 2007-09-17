@@ -12,6 +12,7 @@ namespace Do.PluginLib
 	public interface IObject
 	{
 		string Name { get; }
+		string Description { get; }
 		string Icon { get; }
 	}
 }

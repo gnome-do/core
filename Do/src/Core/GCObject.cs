@@ -22,6 +22,8 @@ namespace Do.Core
 		
 		public abstract string Name { get; }
 		
+		public abstract string Description { get; }
+		
 		public abstract string Icon { get; }
 		
 		public int Score {

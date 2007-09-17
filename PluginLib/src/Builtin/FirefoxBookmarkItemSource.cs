@@ -69,6 +69,10 @@ namespace Do.PluginLib.Builtin
 			get { return "Firefox Bookmarks"; }
 		}
 		
+		public string Description {
+			get { return "Finds Firefox bookmarks in your default profile."; }
+		}
+		
 		public string Icon {
 			get { return "www"; }
 		}

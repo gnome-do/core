@@ -26,7 +26,7 @@ namespace Do.PluginLib.Builtin
 		
 		protected string desktopFile;
 		protected IntPtr desktopFilePtr;
-		protected string name, icon;
+		protected string name, description, icon;
 		
 		public ApplicationItem (string desktopFile)
 		{
@@ -37,6 +37,7 @@ namespace Do.PluginLib.Builtin
 				throw new ApplicationDetailMissingException("Failed to load launcher");
      	}
 			name = gnome_desktop_item_get_string(desktopFilePtr, "Name");
+			description = gnome_desktop_item_get_string(desktopFilePtr, "Comment");
 			icon = gnome_desktop_item_get_string(desktopFilePtr, "Icon");
 			
 			if (icon == null || icon == "") {
@@ -47,6 +48,10 @@ namespace Do.PluginLib.Builtin
 		
 		public string Name {
 			get { return name; }
+		}
+		
+		public string Description {
+			get { return description; }
 		}
 		
 		public string Icon {

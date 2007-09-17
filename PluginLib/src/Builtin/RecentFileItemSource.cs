@@ -37,6 +37,10 @@ namespace Do.PluginLib.Builtin
 			get { return "Recent Files"; }
 		}
 		
+		public string Description {
+			get { return "Finds recently-opened files."; }
+		}
+		
 		public string Icon {
 			get { return "document"; }
 		}

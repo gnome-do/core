@@ -34,7 +34,11 @@ namespace Do.PluginLib.Builtin
 		}
 		
 		public string Name {
-			get { return string.Format("Files in directory '{0}'", path); }
+			get { return path; }
+		}
+		
+		public string Description {
+			get { return string.Format("Finds files in directory '{0}'", path); }
 		}
 		
 		public string Icon {

@@ -15,6 +15,7 @@ namespace Do.Core
 	public class Item : GCObject
 	{
 		public static readonly string DefaultItemIcon = "gnome-fs-executable";
+		public static readonly string DefaultItemDescription = "";
 		
 		protected Item parent;
 		protected IItem item;
@@ -33,6 +34,10 @@ namespace Do.Core
 		
 		public override string Name {
 			get { return (item.Name == null ? DefaultItemName : item.Name); }
+		}
+		
+		public override string Description {
+			get { return (item.Description == null ? DefaultItemDescription : item.Description); }
 		}
 		
 		public override string Icon {

@@ -18,6 +18,10 @@ namespace Do.PluginLib.Builtin
 			get { return "Do Nothing"; }
 		}
 		
+		public string Description {
+			get { return "Does absolutely nothing."; }
+		}
+		
 		public string Icon {
 			get { return "gtk-stop"; }
 		}

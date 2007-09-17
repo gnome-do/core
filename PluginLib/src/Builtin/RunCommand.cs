@@ -17,6 +17,10 @@ namespace Do.PluginLib.Builtin
 			get { return "Run"; }
 		}
 		
+		public string Description {
+			get { return "Run an application, script, or other executable."; }
+		}
+		
 		public string Icon {
 			get { return "gnome-run"; }
 		}

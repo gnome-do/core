@@ -36,6 +36,10 @@ namespace Do.PluginLib.Builtin
 			get { return name; }
 		}
 		
+		public string Description {
+			get { return uri; }
+		}
+		
 		public string Icon {
 			get { return icon; }
 		}

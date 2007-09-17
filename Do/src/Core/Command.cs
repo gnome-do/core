@@ -28,6 +28,10 @@ namespace Do.Core
 			get { return command.Name; }
 		}
 		
+		public override string Description {
+			get { return command.Description; }
+		}
+		
 		public override string Icon {
 			get { return (command.Icon == null ? DefaultCommandIcon : command.Icon); }
 		}
