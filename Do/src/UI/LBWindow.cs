@@ -54,8 +54,6 @@ namespace Do.UI
 
 		TreeView result_treeview;
 
-		Pixbuf empty_pixbuf;
-		
 		bool          can_rgba;
 		bool          transparent;
 		
@@ -122,9 +120,6 @@ namespace Do.UI
 			
 			searchString = itemSearchString = "";
 			
-			empty_pixbuf = new Pixbuf (Colorspace.Rgb, true, 8, Util.DefaultIconSize, Util.DefaultIconSize);
-			empty_pixbuf.Fill (uint.MinValue);
-			
 			frame = new LBFrame ();
 			frame.FillColor = new Gdk.Color (0, 0, 0);;
 			frame.FillAlpha = (ushort) (ushort.MaxValue * 0.7);
@@ -140,12 +135,12 @@ namespace Do.UI
 			vbox.PackStart (result_hbox, false, false, 0);
 			result_hbox.Show ();
 			
-			item_icon_box = new LBIconBox ("", empty_pixbuf);
+			item_icon_box = new LBIconBox ("", null);
 			item_icon_box.IsFocused = true;
 			result_hbox.PackStart (item_icon_box, false, false, 0);
 			item_icon_box.Show ();
 			
-			command_icon_box = new LBIconBox ("", empty_pixbuf);
+			command_icon_box = new LBIconBox ("", null);
 			command_icon_box.IsFocused = false;
 			result_hbox.PackStart (command_icon_box, false, false, 0);
 			command_icon_box.Show ();
@@ -164,7 +159,7 @@ namespace Do.UI
 			result_sw.SetPolicy (PolicyType.Automatic, PolicyType.Automatic);
 			result_sw.ShadowType = ShadowType.In;
 			vbox.PackStart (result_sw, true, true, 0);
-			// result_sw.Show ();
+			result_sw.Show ();
 			
 			result_treeview = new TreeView ();
 			result_treeview.EnableSearch = false;
@@ -216,8 +211,9 @@ namespace Do.UI
 			Requisition size;
 			
 			result_sw.Show ();
-			instruction.Hide ();
+			// instruction.Hide ();
 			size = SizeRequest ();
+			
 			Resize (size.Width, size.Height);
 		}
 		
@@ -226,7 +222,7 @@ namespace Do.UI
 			Requisition size;
 			
 			result_sw.Hide ();
-			instruction.Show ();
+			// instruction.Show ();
 			size = SizeRequest();
 			Resize (size.Width, size.Height);
 		}	
@@ -295,7 +291,7 @@ namespace Do.UI
 				if (!result_sw.Visible) {
 					ShowSearchResults ();
 				}
-				if (result_treeview.Selection.GetSelected (out model, out iter)) {
+				else if (result_treeview.Selection.GetSelected (out model, out iter)) {
 					path = model.GetPath (iter);
 					if (key == Gdk.Key.Up) {
 						if (!path.Prev ()) {
@@ -452,10 +448,9 @@ namespace Do.UI
 		protected virtual void SetDefaultState ()
 		{
 			searchString = itemSearchString = "";
-			item_icon_box.Caption = "";
 			item_icon_box.Pixbuf = default_item_pixbuf;
-			command_icon_box.Caption = "";
-			command_icon_box.Pixbuf = empty_pixbuf;
+			item_icon_box.Caption = "";
+			command_icon_box.Clear ();
 			
 			instr_label.Markup = String.Format ("<i>{0}</i>", "Type to begin searching");
 			instr_label.Show ();
@@ -467,11 +462,18 @@ namespace Do.UI
 		
 		protected virtual void SetNoResultsFoundState ()
 		{
-			instr_label.Markup = String.Format ("<i>{0}</i>", "No results found");
-			item_icon_box.Caption = "";
-			item_icon_box.Pixbuf = empty_pixbuf;
-			command_icon_box.Caption = "";
-			command_icon_box.Pixbuf = empty_pixbuf;
+			switch (focus) {
+			case WindowFocus.CommandFocus:
+				command_icon_box.Clear ();
+				instr_label.Markup = String.Format ("<i>{0}</i>", "No commands found");
+				break;
+			default:
+			// case WindowFocus.ItemFocus:
+				command_icon_box.Clear ();
+				item_icon_box.Clear ();
+				instr_label.Markup = String.Format ("<i>{0}</i>", "No items found");
+				break;
+			}
 		}
 		
 		protected void OnDefaultStateEvent ()

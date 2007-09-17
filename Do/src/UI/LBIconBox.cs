@@ -20,7 +20,7 @@ namespace Do.UI
 		protected bool transparent;
 		
 		protected string caption;
-		protected Pixbuf pixbuf;
+		protected Pixbuf pixbuf, empty_pixbuf;
 		
 		protected VBox vbox;
 		protected Gtk.Image image;
@@ -30,7 +30,7 @@ namespace Do.UI
 		{
 			Build ();
 			this.caption = caption;
-			this.pixbuf = pixbuf;
+			this.pixbuf = (pixbuf == null ? empty_pixbuf : pixbuf);
 		}
 		
 		protected virtual void Build ()
@@ -39,6 +39,9 @@ namespace Do.UI
 			vbox.BorderWidth = 6;
 			Add (vbox);
 			vbox.Show ();
+			
+			empty_pixbuf = new Pixbuf (Colorspace.Rgb, true, 8, Util.DefaultIconSize, Util.DefaultIconSize);
+			empty_pixbuf.Fill (uint.MinValue);
 			
 			image = new Gtk.Image ();
 			vbox.PackStart (image, false, false, 0);
@@ -54,6 +57,11 @@ namespace Do.UI
 			//SetSizeRequest (Util.DefaultIconSize * 3, Util.DefaultIconSize * 2);
 			
 			Realized += OnRealized;
+		}
+		
+		public virtual void Clear () {
+			Pixbuf = empty_pixbuf;
+			Caption = "";
 		}
 		
 		protected virtual void OnRealized (object o, EventArgs args)

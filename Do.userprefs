@@ -2,11 +2,8 @@
 <UserCombinePreferences filename="/home/dave/src/gnome-do/Do.mds">
   <Files>
     <File filename="Welcome" />
-    <File filename="./Do/src/UI/LBIconBox.cs" />
     <File filename="./Do/src/UI/LBWindow.cs" />
-    <File filename="./Do/src/Core/GCObject.cs" />
     <File filename="./Do/src/Core/Util.cs" />
-    <File filename="./PluginLib/src/Builtin/DirectoryFileItemSource.cs" />
   </Files>
   <Views>
     <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">
