@@ -112,7 +112,7 @@ namespace Do.UI
 			KeepAbove = true;
 			Decorated = false;
 			
-			SetPosition (WindowPosition.CenterAlways);
+			SetPosition (WindowPosition.Center);
 			
 			try { SetIconFromFile ("/usr/share/icons/gnome/scalable/actions/system-run.svg"); } catch { }
 			SetColormap ();
@@ -128,11 +128,11 @@ namespace Do.UI
 			frame.Show ();
 			
 			vbox = new VBox (false, 6);
-			vbox.BorderWidth = 18;
+			vbox.BorderWidth = 14;
 			frame.Add (vbox);
 			vbox.Show ();		
 			
-			result_hbox = new HBox (false, 12);
+			result_hbox = new HBox (false, 10);
 			vbox.PackStart (result_hbox, false, false, 0);
 			result_hbox.Show ();
 			
@@ -147,9 +147,10 @@ namespace Do.UI
 			command_icon_box.Show ();
 
 			instruction = new Alignment (0.5F, 0.5F, 1, 1);
-			instruction.SetPadding (8, 0, 0, 0);
+			instruction.SetPadding (4, 4, 0, 0);
 			DisplayLabel = new Label ();
 			DisplayLabel.UseMarkup = true;
+			DisplayLabel.Ellipsize = Pango.EllipsizeMode.Start;
 
 			instruction.Add (DisplayLabel);
 			vbox.PackStart (instruction, false, false, 0);
@@ -336,10 +337,15 @@ namespace Do.UI
 			default:
 				char c;
 				
-				c = (char) Gdk.Keyval.ToUnicode ((uint) key);				
-				searchString += c;
+				c = (char) Gdk.Keyval.ToUnicode ((uint) key);	
+				if (char.IsLetterOrDigit (c)
+				    || char.IsPunctuation (c)
+				    || c == ' '
+				    || char.IsSymbol (c)) {
+					searchString += c;
 
-				QueueSearch ();
+					QueueSearch ();
+				}
 				break;
 			}
 			return false;
@@ -357,7 +363,7 @@ namespace Do.UI
 			int selectedRowIndex;
 			
 			try {
-			selectedRowIndex = result_treeview.Selection.GetSelectedRows()[0].Indices[0];
+				selectedRowIndex = result_treeview.Selection.GetSelectedRows()[0].Indices[0];
 			} catch (IndexOutOfRangeException) {
 				return;
 			}
@@ -400,12 +406,13 @@ namespace Do.UI
 		
 		protected virtual void SetWindowFocus (WindowFocus focus)
 		{
+			string nonEmptySearchString;
+			
 			if (this.focus == focus) {
 				return;
 			}			
 			this.focus = focus;
-			
-			(result_treeview.Model as ListStore).Clear ();
+
 			switch (focus) {
 			case WindowFocus.CommandFocus:
 				searchString = commander.CommandSearchString;
@@ -414,8 +421,15 @@ namespace Do.UI
 				searchString = commander.ItemSearchString;
 				break;
 			}
+
+			// Repopulate the results list.
 			OnSearchCompleteStateEvent ();
-			DisplayLabel.Markup = string.Format ("<big>{0}</big>", searchString);
+			
+			nonEmptySearchString = searchString;
+			if (searchString == null || searchString.Trim () == "") {
+				nonEmptySearchString = " ";
+			}
+			DisplayLabel.Markup = string.Format ("<big>{0}</big>",  nonEmptySearchString);
 			item_icon_box.IsFocused = (focus == WindowFocus.ItemFocus);
 			command_icon_box.IsFocused = (focus == WindowFocus.CommandFocus);
 		}
