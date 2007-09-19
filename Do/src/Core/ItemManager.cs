@@ -69,10 +69,11 @@ namespace Do.Core
 		
 		protected override void PerformSearch (SearchContext context)
 		{
-			int numScoreNonZero;
+			int numScoreAboveCutoff, cutoff;
 			Item [] items;
 			
-			System.Console.WriteLine("Searching for items matching {0} with {1}intermediate results", context.ItemSearchString, context.Results == null ? "no ":"");
+			cutoff = 30;
+			// System.Console.WriteLine("Searching for items matching {0} with {1}intermediate results", context.ItemSearchString, context.Results == null ? "no ":"");
 			// Use intermediate search results if available.
 			if (context.Results == null) {
 				items = AllItems ();
@@ -86,11 +87,11 @@ namespace Do.Core
 			}
 			Array.Sort<GCObject> (items, new GCObjectScoreComparer ());
 			
-			// Chop the array where the scores become zero
-			for (numScoreNonZero = 0; numScoreNonZero < items.Length; ++numScoreNonZero) {
-				if (items [numScoreNonZero].Score == 0) break;
+			// Chop the array where the scores become less than cutoff
+			for (numScoreAboveCutoff = 0; numScoreAboveCutoff < items.Length; ++numScoreAboveCutoff) {
+				if (items [numScoreAboveCutoff].Score < cutoff) break;
 			}
-			Array.Resize<Item> (ref items, numScoreNonZero);
+			Array.Resize<Item> (ref items, numScoreAboveCutoff);
 			
 			context.Results = items;
 		}
