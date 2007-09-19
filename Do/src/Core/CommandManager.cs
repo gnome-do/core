@@ -47,10 +47,21 @@ namespace Do.Core
 		
 		private Command[] _CommandsForItem (Item item) {
 			List<Command> commands;
+			List<Type> types;
+			Type baseType;
 			
 			commands = new List<Command> ();
-			Type[] interfaces = item.IItem.GetType ().GetInterfaces ();
-			foreach (Type type in interfaces) {
+			types = new List<Type> ();
+			
+			// Climb up the inheritance tree adding types.
+			baseType = item.IItem.GetType ();
+			while (baseType != typeof (object)) {
+				types.Add (baseType);
+				baseType = baseType.BaseType;    
+			}
+			// Add all implemented interfaces
+			types.AddRange (item.IItem.GetType ().GetInterfaces ());
+			foreach (Type type in types) {
 				if (commandLists.ContainsKey (type)) {
 					foreach (Command command in commandLists[type] as IEnumerable<Command>) {
 						if (command.SupportsItem (item.IItem)) {
@@ -64,10 +75,10 @@ namespace Do.Core
 		
 		protected override ContextRelation GetContextRelation (SearchContext a, SearchContext b)
 		{
-			
 			if (a.Item == b.Item && a.CommandSearchString == b.CommandSearchString)
 				return ContextRelation.Repeat;
-			else if (a.Item == b.Item && a.CommandSearchString.StartsWith (b.CommandSearchString))
+			else if (a.Item == b.Item
+			         && a.CommandSearchString.StartsWith (b.CommandSearchString))
 				return ContextRelation.Continuation;
 			else
 				return ContextRelation.Fresh;

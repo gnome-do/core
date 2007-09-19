@@ -69,6 +69,7 @@ namespace Do.Core
 				return new Command [] {
 					new Command (new RunCommand ()),
 					new Command (new OpenCommand ()),
+					new Command (new RunInShellCommand ()),
 					// new Command (new VoidCommand ()),
 				};
 			}
@@ -274,17 +275,14 @@ namespace Do.Core
 			this.itemSearchString = itemSearchString;
 			commandSearchString = "";
 			currentItems = itemManager.ItemsForAbbreviation (itemSearchString);
+			if (currentItems.Length == 0) {
+				currentItems = new Item[] { new Item (new TextItem (itemSearchString)) };
+			}
 			
 			// Update items and commands state.
-			if (currentItems.Length >  0) {
-				currentItemIndex = 0;
-				currentCommandIndex = 0;
-				currentCommands = commandManager.CommandsForItem (CurrentItem, "");
-			} else {
-				currentItemIndex = -1;
-				currentCommandIndex = -1;
-				currentCommands = new Command [0];
-			}
+			currentItemIndex = 0;
+			currentCommandIndex = 0;
+			currentCommands = commandManager.CommandsForItem (CurrentItem, "");
 			
 			State = CommanderState.ItemSearchComplete;
 		}

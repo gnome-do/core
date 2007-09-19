@@ -12,6 +12,11 @@ namespace Do.PluginLib
 	public interface IItem : IObject
 	{
 	}
+	
+	public interface ITextItem : IItem
+	{
+		string Text { get; }
+	}
 
 	public interface IRunnableItem : IItem
 	{

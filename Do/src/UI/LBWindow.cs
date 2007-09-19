@@ -17,7 +17,7 @@ namespace Do.UI
 	public class LBWindow : Gtk.Window
 	{
 		
-		private static Pixbuf default_item_pixbuf;
+		private static Pixbuf default_item_pixbuf, missing_item_pixbuf;
 		const int ResultsListIconSize = 32;
 		const int ResultsListLength = 7; 
 		
@@ -60,6 +60,7 @@ namespace Do.UI
 		static LBWindow ()
 		{
 			default_item_pixbuf = Util.PixbufFromIconName ("gtk-find", Util.DefaultIconSize);
+            missing_item_pixbuf = Util.PixbufFromIconName ("gtk-dialog-question", Util.DefaultIconSize);
 		}
 		
 		public LBWindow (Commander commander, bool transparent) : base ("GNOME Go")
@@ -333,12 +334,11 @@ namespace Do.UI
 			case Gdk.Key.Left:
 				break;
 			default:
-				// Default input behavior
-				if (key == Gdk.Key.space) {
-					searchString += " ";
-				} else {
-					searchString += key;
-				}
+				char c;
+				
+				c = (char) Gdk.Keyval.ToUnicode ((uint) key);				
+				searchString += c;
+
 				QueueSearch ();
 				break;
 			}
@@ -402,11 +402,7 @@ namespace Do.UI
 		{
 			if (this.focus == focus) {
 				return;
-			}
-			if (focus == WindowFocus.CommandFocus && commander.CurrentCommand == null) {
-				return;
-			}
-			
+			}			
 			this.focus = focus;
 			
 			(result_treeview.Model as ListStore).Clear ();
@@ -492,14 +488,14 @@ namespace Do.UI
 		{
 			switch (focus) {
 			case WindowFocus.CommandFocus:
-				command_icon_box.Clear ();
-				DisplayLabel.Markup = String.Format ("<i><big>{0}</big></i>", "No commands found");
+				command_icon_box.Pixbuf = missing_item_pixbuf;
+				command_icon_box.Caption = "No commands found";
 				break;
 			default:
 			// case WindowFocus.ItemFocus:
 				command_icon_box.Clear ();
-				item_icon_box.Clear ();
-				DisplayLabel.Markup = String.Format ("<i><big>{0}</big></i>", "No items found");
+				item_icon_box.Pixbuf = missing_item_pixbuf;
+				item_icon_box.Caption = "No items found";
 				break;
 			}
 		}
@@ -532,14 +528,14 @@ namespace Do.UI
 				break;
 			}
 			
+			store = result_treeview.Model as ListStore;
+			store.Clear ();
 			if (results.Length == 0) {
 				SetNoResultsFoundState ();
 			} else {
 				SetItemIndex (commander.CurrentItemIndex, commander.ItemSearchString);
 				SetCommandIndex (commander.CurrentCommandIndex, commander.CommandSearchString);
 				
-				store = result_treeview.Model as ListStore;
-				store.Clear ();
 				int current_index = 0;
 				selected_iter = default (TreeIter);
 				foreach (GCObject result in results) {

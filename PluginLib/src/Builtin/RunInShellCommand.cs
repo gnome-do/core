@@ -10,25 +10,25 @@ using Do.PluginLib;
 namespace Do.PluginLib.Builtin
 {
 	
-	public class RunCommand : ICommand
+	public class RunInShellCommand : ICommand
 	{
 	
 		public string Name {
-			get { return "Run"; }
+			get { return "Run in Shell"; }
 		}
 		
 		public string Description {
-			get { return "Run an application, script, or other executable."; }
+			get { return "Run a command in a shell."; }
 		}
 		
 		public string Icon {
-			get { return "gnome-run"; }
+			get { return "gnome-terminal"; }
 		}
 		
 		public Type[] SupportedTypes {
 			get {
 				return new Type[] {
-					typeof (IRunnableItem),
+					typeof (ITextItem),
 				};
 			}
 		}
@@ -43,8 +43,16 @@ namespace Do.PluginLib.Builtin
 		
 		public void PerformOnItem (IItem item)
 		{
-			if (item is IRunnableItem) {
-				(item as IRunnableItem).Run ();
+			string cmd = null;
+			if (item is ITextItem) {
+				cmd = (item as ITextItem).Text;
+			}
+			
+			Console.WriteLine (cmd);
+			try {
+				System.Diagnostics.Process.Start (cmd);
+			} catch (Exception e) {
+				Console.WriteLine ("Failed to run command in shell \"{0}\": ", e.Message);
 			}
 		}
 		
@@ -54,4 +62,5 @@ namespace Do.PluginLib.Builtin
 		}
 		
 	}
+	
 }
