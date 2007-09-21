@@ -145,7 +145,11 @@ namespace Do.Core
 				}
 			}
 			if (pixbuf == null && name == "gnome-mime-text-plain") {
-				pixbuf = iconTheme.LoadIcon ("gnome-mime-text", size, 0);
+				try {
+					pixbuf = iconTheme.LoadIcon ("gnome-mime-text", size, 0);
+				} catch {
+					pixbuf = null;
+				}
 			}
 			if (pixbuf == null) {
 				pixbuf = UnknownPixbuf;
