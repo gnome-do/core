@@ -232,6 +232,7 @@ namespace Do.UI
 		protected override bool OnButtonPressEvent (EventButton evnt)
 		{
 			Hide ();
+			commander.State = CommanderState.Default;
 			return false;
 		}
 
