@@ -43,13 +43,8 @@ namespace Do.PluginLib.Builtin
 				return true;
 		}
 		
-		public void PerformOnItem (IItem item)
+		public void Perform (IItem[] items, IItem[] indirectItems)
 		{
-		}
-		
-		public void PerformOnItemWithIndirectItem (IItem item, IItem iitem)
-		{
-			throw new NotImplementedException ();
 		}
 		
 	}

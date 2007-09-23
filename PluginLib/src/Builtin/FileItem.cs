@@ -37,7 +37,7 @@ namespace Do.PluginLib.Builtin
 		}
 		
 		public string Description {
-			get { return uri; }
+			get { return ShortUri (uri); }
 		}
 		
 		public string Icon {
@@ -56,6 +56,15 @@ namespace Do.PluginLib.Builtin
 			} catch (Exception e) {
 				Console.WriteLine ("Failed to open \"{0}\": ", e.Message);
 			}
+		}
+		
+		public static string ShortUri (string uri) {
+			string home;
+			
+			uri = (uri == null ? "" : uri);
+			home = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+			uri = uri.Replace (home, "~");
+			return uri;
 		}
 	}
 }

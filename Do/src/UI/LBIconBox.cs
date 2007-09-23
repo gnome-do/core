@@ -21,16 +21,19 @@ namespace Do.UI
 		
 		protected string caption;
 		protected Pixbuf pixbuf, empty_pixbuf;
+		protected int icon_size;
 		
 		protected VBox vbox;
 		protected Gtk.Image image;
 		protected Label label;
 		
-		public LBIconBox(string caption, Pixbuf pixbuf) : base ()
+		public LBIconBox(int icon_size) : base ()
 		{
+			this.icon_size = icon_size;
+			caption = "";
+			pixbuf = empty_pixbuf;
+			
 			Build ();
-			this.caption = caption;
-			this.pixbuf = (pixbuf == null ? empty_pixbuf : pixbuf);
 		}
 		
 		protected virtual void Build ()
@@ -40,7 +43,7 @@ namespace Do.UI
 			Add (vbox);
 			vbox.Show ();
 			
-			empty_pixbuf = new Pixbuf (Colorspace.Rgb, true, 8, Util.DefaultIconSize, Util.DefaultIconSize);
+			empty_pixbuf = new Pixbuf (Colorspace.Rgb, true, 8, icon_size, icon_size);
 			empty_pixbuf.Fill (uint.MinValue);
 			
 			image = new Gtk.Image ();
@@ -52,11 +55,12 @@ namespace Do.UI
 			vbox.PackStart (label, false, false, 0);
 			label.Show ();
 			
-			image.SetSizeRequest (Util.DefaultIconSize + 2, Util.DefaultIconSize + 2);
-			label.SetSizeRequest (Util.DefaultIconSize * 2, -1);
-			//SetSizeRequest (Util.DefaultIconSize * 3, Util.DefaultIconSize * 2);
+			image.SetSizeRequest (icon_size, icon_size);
+			label.SetSizeRequest (icon_size / 4 * 5, 12);
+			// SetSizeRequest (icon_size * 2, icon_size * 2);
 			
 			Realized += OnRealized;
+			UpdateHighlight ();
 		}
 		
 		public virtual void Clear () {
@@ -89,7 +93,7 @@ namespace Do.UI
 			get { return caption; }
 			set {
 				caption = value;
-				label.Markup = string.Format ("<b>{0}</b>", caption);				
+				label.Markup = string.Format ("<small>{0}</small>", caption);				
 			}
 		}
 		

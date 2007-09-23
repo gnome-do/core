@@ -12,7 +12,7 @@ using Do.PluginLib;
 
 namespace Do.Core
 {
-	public class Item : GCObject
+	public class Item : GCObject, IItem
 	{
 		public static readonly string DefaultItemIcon = "gnome-fs-executable";
 		public static readonly string DefaultItemDescription = "";

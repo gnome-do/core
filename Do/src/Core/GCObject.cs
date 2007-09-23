@@ -9,15 +9,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Gdk;
 
+using Do.PluginLib;
+
 namespace Do.Core
 {
 
-	public abstract class GCObject
+	public abstract class GCObject : IObject
 	{
 		
 		public static readonly string DefaultItemName = "No name";
 		
-		protected Pixbuf _pixbuf;
 		protected int _score;
 		
 		public abstract string Name { get; }
@@ -29,16 +30,6 @@ namespace Do.Core
 		public int Score {
 			get { return _score; }
 			set { _score = value; }
-		}
-		
-		public virtual Pixbuf Pixbuf {
-			get {
-				if (_pixbuf == null) {
-					_pixbuf = Util.PixbufFromIconName (Icon, Util.DefaultIconSize);
-				}
-				return _pixbuf;
-			}
-			set { _pixbuf = value; }
 		}
 		
 		public int ScoreForAbbreviation (string ab)

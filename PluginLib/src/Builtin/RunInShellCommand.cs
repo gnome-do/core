@@ -41,25 +41,23 @@ namespace Do.PluginLib.Builtin
 			return true;
 		}
 		
-		public void PerformOnItem (IItem item)
+		public void Perform (IItem[] items, IItem[] indirectItems)
 		{
 			string cmd = null;
-			if (item is ITextItem) {
-				cmd = (item as ITextItem).Text;
-			}
-			
-			Console.WriteLine (cmd);
-			try {
-				System.Diagnostics.Process.Start (cmd);
-			} catch (Exception e) {
-				Console.WriteLine ("Failed to run command in shell \"{0}\": ", e.Message);
+			foreach (IItem item in items) {
+				if (item is ITextItem) {
+					cmd = (item as ITextItem).Text;
+				}
+				
+				Console.WriteLine (cmd);
+				try {
+					System.Diagnostics.Process.Start (cmd);
+				} catch (Exception e) {
+					Console.WriteLine ("Failed to run command in shell \"{0}\": ", e.Message);
+				}
 			}
 		}
-		
-		public void PerformOnItemWithIndirectItem (IItem item, IItem iitem)
-		{
-			throw new NotImplementedException ();
-		}
+	
 		
 	}
 	

@@ -12,7 +12,7 @@ using Do.PluginLib;
 namespace Do.Core
 {
 	
-	public class ItemSource : GCObject
+	public class ItemSource : GCObject 
 	{
 	
 		public static readonly string DefaultItemSourceName = "";

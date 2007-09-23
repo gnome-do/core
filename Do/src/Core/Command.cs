@@ -11,7 +11,7 @@ using Do.PluginLib;
 namespace Do.Core
 {
 
-	public class Command : GCObject
+	public class Command : GCObject, ICommand
 	{
 		public static readonly string DefaultCommandIcon = "gnome-run";
 	
@@ -49,13 +49,25 @@ namespace Do.Core
 			return command.SupportsItem (item);
 		}
 		
-		public void PerformOnItem (Item item)
+		public void Perform (IItem[] items, IItem[] indirectItems)
 		{
-			command.PerformOnItem (item.IItem);
-		}
-		
-		public void PerformOnItemWithIndirectItem (Item item, Item iitem) {
-			command.PerformOnItemWithIndirectItem (item.IItem, iitem.IItem);
+			IItem[] inner_items;
+			IItem[] inner_indirectItems;
+			
+			inner_items = items.Clone () as IItem[];
+			inner_indirectItems = indirectItems.Clone () as IItem[];
+			
+			for (int i = 0; i < items.Length; ++i) {
+				if (items[i] is Item) {
+					inner_items[i] = (items[i] as Item).IItem;
+				}
+			}
+			for (int i = 0; i < indirectItems.Length; ++i) {
+				if (indirectItems[i] is Item) {
+					inner_indirectItems[i] = (indirectItems[i] as Item).IItem;
+				}
+			}
+			command.Perform (inner_items, inner_indirectItems);
 		}
 		
 	}

@@ -41,17 +41,15 @@ namespace Do.PluginLib.Builtin
 			return true;
 		}
 		
-		public void PerformOnItem (IItem item)
+		public void Perform (IItem[] items, IItem[] indirectItems)
 		{
-			if (item is IRunnableItem) {
-				(item as IRunnableItem).Run ();
+			foreach (IItem item in items) {
+				if (item is IRunnableItem) {
+					(item as IRunnableItem).Run ();
+				}
 			}
 		}
-		
-		public void PerformOnItemWithIndirectItem (IItem item, IItem iitem)
-		{
-			throw new NotImplementedException ();
-		}
+	
 		
 	}
 }

@@ -312,7 +312,7 @@ namespace Do.Core
 			o = this.CurrentItem;
 			c = this.CurrentCommand;
 			if (o != null && c != null) {
-				c.PerformOnItem (o);
+				c.Perform (new IItem[] {o}, new IItem[] {});
 			}
 		}
 		

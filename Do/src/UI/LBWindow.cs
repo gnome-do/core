@@ -10,6 +10,7 @@ using Gtk;
 using Gdk;
 
 using Do.Core;
+using Do.PluginLib;
 
 namespace Do.UI
 {
@@ -18,12 +19,14 @@ namespace Do.UI
 	{
 		
 		private static Pixbuf default_item_pixbuf, missing_item_pixbuf;
+		const int IconBoxIconSize = 128;
 		const int ResultsListIconSize = 32;
 		const int ResultsListLength = 7; 
 		
 		protected enum WindowFocus {
 			ItemFocus,
-			CommandFocus
+			CommandFocus,
+			IndirectItemFocus,
 		}
 		
 		protected enum Column {
@@ -43,14 +46,14 @@ namespace Do.UI
 		protected string itemSearchString;
 		
 		LBFrame frame;
-		Alignment instruction;
-		Label DisplayLabel;
+		LBDisplayText displayText;
 	
 		ScrolledWindow result_sw;
 		HBox result_hbox;
 
 		LBIconBox item_icon_box;
 		LBIconBox command_icon_box;
+		LBIconBox iitem_icon_box;
 
 		TreeView result_treeview;
 
@@ -59,8 +62,8 @@ namespace Do.UI
 		
 		static LBWindow ()
 		{
-			default_item_pixbuf = Util.PixbufFromIconName ("gtk-find", Util.DefaultIconSize);
-            missing_item_pixbuf = Util.PixbufFromIconName ("gtk-dialog-question", Util.DefaultIconSize);
+			default_item_pixbuf = Util.PixbufFromIconName ("gtk-find", IconBoxIconSize);
+            missing_item_pixbuf = Util.PixbufFromIconName ("gtk-dialog-question", IconBoxIconSize);
 		}
 		
 		public LBWindow (Commander commander, bool transparent) : base ("GNOME Go")
@@ -88,12 +91,11 @@ namespace Do.UI
 				transparent = value;	
 				if (transparent) {
 					item_icon_box.Transparent = true;
+					iitem_icon_box.Transparent = true;
 					command_icon_box.Transparent = true;
 					frame.Fill = true;
-					DisplayLabel.ModifyFg (StateType.Normal, DisplayLabel.Style.White);
 					result_sw.ShadowType = ShadowType.None;
 				} else {
-					DisplayLabel.ModifyFg (StateType.Normal, DisplayLabel.Style.Foreground (StateType.Normal));
 					result_sw.ShadowType = ShadowType.In;
 				}
 				if (IsDrawable) {
@@ -107,18 +109,16 @@ namespace Do.UI
 			VBox         vbox;
 			TreeViewColumn column;
 			CellRenderer   cell;
+			Alignment align;
 			
 			AppPaintable = true;
 			KeepAbove = true;
 			Decorated = false;
-			
-			SetPosition (WindowPosition.Center);
-			
+				
 			try { SetIconFromFile ("/usr/share/icons/gnome/scalable/actions/system-run.svg"); } catch { }
 			SetColormap ();
 			
 			focus = WindowFocus.ItemFocus;
-			
 			searchString = itemSearchString = "";
 			
 			frame = new LBFrame ();
@@ -127,35 +127,38 @@ namespace Do.UI
 			Add (frame);
 			frame.Show ();
 			
-			vbox = new VBox (false, 6);
-			vbox.BorderWidth = 14;
+			vbox = new VBox (false, 12);
 			frame.Add (vbox);
+			vbox.BorderWidth = 16;
 			vbox.Show ();		
 			
-			result_hbox = new HBox (false, 10);
+			result_hbox = new HBox (false, 12);
+			result_hbox.BorderWidth = 0;
 			vbox.PackStart (result_hbox, false, false, 0);
 			result_hbox.Show ();
 			
-			item_icon_box = new LBIconBox ("", null);
+			item_icon_box = new LBIconBox (IconBoxIconSize);
 			item_icon_box.IsFocused = true;
 			result_hbox.PackStart (item_icon_box, false, false, 0);
 			item_icon_box.Show ();
 			
-			command_icon_box = new LBIconBox ("", null);
+			command_icon_box = new LBIconBox (IconBoxIconSize);
 			command_icon_box.IsFocused = false;
 			result_hbox.PackStart (command_icon_box, false, false, 0);
 			command_icon_box.Show ();
-
-			instruction = new Alignment (0.5F, 0.5F, 1, 1);
-			instruction.SetPadding (4, 4, 0, 0);
-			DisplayLabel = new Label ();
-			DisplayLabel.UseMarkup = true;
-			DisplayLabel.Ellipsize = Pango.EllipsizeMode.Start;
-
-			instruction.Add (DisplayLabel);
-			vbox.PackStart (instruction, false, false, 0);
-			DisplayLabel.Show ();
-			instruction.Show ();
+			
+			iitem_icon_box = new LBIconBox (IconBoxIconSize);
+			iitem_icon_box.IsFocused = false;
+			result_hbox.PackStart (iitem_icon_box, false, false, 0);
+			iitem_icon_box.Show ();
+	
+			align = new Alignment (0.5F, 0.5F, 1, 1);
+			align.SetPadding (0, 0, 0, 0);
+			displayText = new LBDisplayText ();
+			align.Add (displayText);
+			vbox.PackStart (align, false, false, 0);
+			displayText.Show ();
+			align.Show ();
 			
 			result_sw = new ScrolledWindow ();
 			result_sw.SetSizeRequest (-1, (ResultsListIconSize + 2) * ResultsListLength + 2);
@@ -193,8 +196,10 @@ namespace Do.UI
 			
 			result_treeview.Selection.Changed += OnWindowResultRowSelected;
 			ScreenChanged += OnScreenChanged;
+			
+			SetPosition (WindowPosition.Center);
 		}
-		
+	
 		protected virtual void SetColormap ()
 		{
 			Gdk.Colormap  colormap;
@@ -402,13 +407,15 @@ namespace Do.UI
 				cairo.Operator = Cairo.Operator.Source;
 				cairo.Paint ();
 			}
+			
 			return base.OnExposeEvent (evnt);
 		}
 		
 		protected virtual void SetWindowFocus (WindowFocus focus)
-		{
-			string nonEmptySearchString;
+		{	
+			IObject currentObject;
 			
+			currentObject = null;
 			if (this.focus == focus) {
 				return;
 			}			
@@ -417,22 +424,22 @@ namespace Do.UI
 			switch (focus) {
 			case WindowFocus.CommandFocus:
 				searchString = commander.CommandSearchString;
+				currentObject = commander.CurrentCommand;
 				break;
 			case WindowFocus.ItemFocus:
 				searchString = commander.ItemSearchString;
+				currentObject = commander.CurrentItem;
 				break;
 			}
 
 			// Repopulate the results list.
 			OnSearchCompleteStateEvent ();
 			
-			nonEmptySearchString = searchString;
-			if (searchString == null || searchString.Trim () == "") {
-				nonEmptySearchString = " ";
-			}
-			DisplayLabel.Markup = string.Format ("<big>{0}</big>",  nonEmptySearchString);
+			displayText.DisplayObject = currentObject;
+			displayText.Highlight = searchString;
 			item_icon_box.IsFocused = (focus == WindowFocus.ItemFocus);
 			command_icon_box.IsFocused = (focus == WindowFocus.CommandFocus);
+			iitem_icon_box.IsFocused = (focus == WindowFocus.IndirectItemFocus);
 		}
 		
 		protected virtual void QueueSearch ()
@@ -448,9 +455,7 @@ namespace Do.UI
 		}
 		
 		protected virtual void SetItemIndex (int itemIndex, string match)
-		{
-			string markup;
-				
+		{	
 			if (itemIndex >= commander.CurrentItems.Length) {
 				SetItemIndex (commander.CurrentItems.Length-1, match);
 				return;
@@ -460,28 +465,29 @@ namespace Do.UI
 			} catch (IndexOutOfRangeException) {
 				return;
 			}
-			markup = Util.MarkupSubstring (commander.CurrentItem.Name, match);
-			item_icon_box.Caption = markup;
-			item_icon_box.Pixbuf = commander.CurrentItem.Pixbuf;
+			item_icon_box.Caption = commander.CurrentItem.Name;
+			item_icon_box.Pixbuf = Util.PixbufFromIconName (commander.CurrentItem.Icon, IconBoxIconSize);
+			if (focus == WindowFocus.ItemFocus) {
+				displayText.DisplayObject = commander.CurrentItem;
+				displayText.Highlight = searchString;
+			}
 			SetCommandIndex (0, "");
 		}
 		
 		protected virtual void SetCommandIndex (int commandIndex, string match)
 		{
-			string markup;
-			
 			try {
 				commander.CurrentCommandIndex = commandIndex;
 			} catch (IndexOutOfRangeException) {
 				return;
 			}
-			if (match != null) {
-				markup = Util.MarkupSubstring (commander.CurrentCommand.Name, match);
-			} else {
-				markup = commander.CurrentCommand.Name;
+
+			command_icon_box.Caption = commander.CurrentCommand.Name;
+			command_icon_box.Pixbuf = Util.PixbufFromIconName (commander.CurrentCommand.Icon, IconBoxIconSize);
+			if (focus == WindowFocus.CommandFocus) {
+				displayText.DisplayObject = commander.CurrentCommand;
+				displayText.Highlight = match;
 			}
-			command_icon_box.Caption = markup;
-			command_icon_box.Pixbuf = commander.CurrentCommand.Pixbuf;
 		}
 		
 		protected virtual void SetDefaultState ()
@@ -496,7 +502,7 @@ namespace Do.UI
 			item_icon_box.Caption = "";
 			command_icon_box.Clear ();
 			
-			DisplayLabel.Markup = String.Format ("<i><big>{0}</big></i>", "Type to begin searching");			
+			displayText.SetDisplayText ("Type to begin searching", "press down arrow for more results");			
 		}
 		
 		protected virtual void SetNoResultsFoundState ()
@@ -522,7 +528,7 @@ namespace Do.UI
 		
 		protected void OnSearchingStateEvent ()
 		{
-			DisplayLabel.Markup = String.Format ("<big>{0}</big>", searchString);
+			displayText.Text = string.Format ("<u>{0}</u>", searchString);
 		}
 		
 		protected void OnSearchCompleteStateEvent ()

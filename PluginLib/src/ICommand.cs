@@ -13,8 +13,8 @@ namespace Do.PluginLib
 	{
 		Type[] SupportedTypes { get; }
 		Type[] SupportedIndirectTypes { get; }
-		void PerformOnItem (IItem item);
-		void PerformOnItemWithIndirectItem (IItem item, IItem iitem);
+		void Perform (IItem[] items, IItem[] indirectItems);
+
 		bool SupportsItem (IItem item);
 	}
 }
