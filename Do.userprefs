@@ -3,6 +3,7 @@
   <Files>
     <File filename="Welcome" />
     <File filename="./Do/src/UI/LBWindow.cs" />
+    <File filename="./Do/src/UI/LBDisplayText.cs" />
   </Files>
   <Views>
     <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">
@@ -13,7 +14,7 @@
             <Node name="src" expanded="True">
               <Node name="Core" expanded="True" />
               <Node name="UI" expanded="True">
-                <Node name="LBWindow.cs" expanded="False" selected="True" />
+                <Node name="LBDisplayText.cs" expanded="False" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -48,7 +49,7 @@
   </Views>
   <Properties>
     <Properties>
-      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/Do/src/UI/LBWindow.cs" />
+      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/Do/src/UI/LBDisplayText.cs" />
       <Property key="ActiveConfiguration" value="Debug" />
     </Properties>
   </Properties>

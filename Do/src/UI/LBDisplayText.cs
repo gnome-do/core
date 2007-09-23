@@ -41,12 +41,12 @@ namespace Do.UI
 				IObject displayObject;
 				
 				displayObject = value;
-				name = description = "";
+				name = description = highlight = "";
 				if (displayObject != null) {
 					name = displayObject.Name;
 					description = displayObject.Description;
 				}
-				UpdateText ();
+				SetDisplayText (name, description);
 			}
 		}
 		
