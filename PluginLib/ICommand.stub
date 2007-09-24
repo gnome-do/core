@@ -28,29 +28,16 @@ namespace MyNamespace
 			}
 		}
 		
-		public Type[] SupportedIndirectTypes {
+		public Type[] SupportedModifierTypes {
 			get {
 				return new Type[] {
-					/* typeof (MyIndirectItem) */
+					/* typeof (MyModifierItem) */
 				};
 			}
 		}
 		
-		public void PerformOnItem (IItem item)
+		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
-			switch (item.Type) {
-			case "SupportedType1":
-				break;
-			}
 		}
-		
-		public void PerformOnItemWithIndirectItem (IItem item, IItem iitem)
-		{
-			switch (item.Type) {
-			case "SupportedType1":
-				break;
-			}
-		}
-		
 	}
 }

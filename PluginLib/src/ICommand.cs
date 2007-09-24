@@ -12,8 +12,8 @@ namespace Do.PluginLib
 	public interface ICommand : IObject
 	{
 		Type[] SupportedTypes { get; }
-		Type[] SupportedIndirectTypes { get; }
-		void Perform (IItem[] items, IItem[] indirectItems);
+		Type[] SupportedModifierTypes { get; }
+		void Perform (IItem[] items, IItem[] modifierItems);
 
 		bool SupportsItem (IItem item);
 	}

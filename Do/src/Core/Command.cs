@@ -40,8 +40,8 @@ namespace Do.Core
 			get { return (command.SupportedTypes == null ? new Type[0] : command.SupportedTypes); }
 		}
 		
-		public Type[] SupportedIndirectTypes {
-			get { return (command.SupportedIndirectTypes == null ? new Type[0] : command.SupportedIndirectTypes); }
+		public Type[] SupportedModifierTypes {
+			get { return (command.SupportedModifierTypes == null ? new Type[0] : command.SupportedModifierTypes); }
 		}
 
 		public bool SupportsItem (IItem item)
@@ -49,25 +49,25 @@ namespace Do.Core
 			return command.SupportsItem (item);
 		}
 		
-		public void Perform (IItem[] items, IItem[] indirectItems)
+		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
 			IItem[] inner_items;
-			IItem[] inner_indirectItems;
+			IItem[] inner_modifierItems;
 			
 			inner_items = items.Clone () as IItem[];
-			inner_indirectItems = indirectItems.Clone () as IItem[];
+			inner_modifierItems = modifierItems.Clone () as IItem[];
 			
 			for (int i = 0; i < items.Length; ++i) {
 				if (items[i] is Item) {
 					inner_items[i] = (items[i] as Item).IItem;
 				}
 			}
-			for (int i = 0; i < indirectItems.Length; ++i) {
-				if (indirectItems[i] is Item) {
-					inner_indirectItems[i] = (indirectItems[i] as Item).IItem;
+			for (int i = 0; i < modifierItems.Length; ++i) {
+				if (modifierItems[i] is Item) {
+					inner_modifierItems[i] = (modifierItems[i] as Item).IItem;
 				}
 			}
-			command.Perform (inner_items, inner_indirectItems);
+			command.Perform (inner_items, inner_modifierItems);
 		}
 		
 	}

@@ -31,7 +31,7 @@ namespace Do.PluginLib.Builtin
 			}
 		}
 		
-		public Type[] SupportedIndirectTypes {
+		public Type[] SupportedModifierTypes {
 			get {
 				return null;
 			}
@@ -41,7 +41,7 @@ namespace Do.PluginLib.Builtin
 			return true;
 		}
 		
-		public void Perform (IItem[] items, IItem[] indirectItems)
+		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
 			foreach (IItem item in items) {
 				if (item is IOpenableItem) {
