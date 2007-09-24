@@ -4,6 +4,7 @@
     <File filename="Welcome" />
     <File filename="./Do/src/UI/LBWindow.cs" />
     <File filename="./Do/src/UI/LBDisplayText.cs" />
+    <File filename="./Do/src/Core/Commander.cs" />
   </Files>
   <Views>
     <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">
@@ -12,10 +13,10 @@
           <Node name="DBusLib" expanded="True" />
           <Node name="Do" expanded="True">
             <Node name="src" expanded="True">
-              <Node name="Core" expanded="True" />
-              <Node name="UI" expanded="True">
-                <Node name="LBDisplayText.cs" expanded="False" selected="True" />
+              <Node name="Core" expanded="True">
+                <Node name="Commander.cs" expanded="False" selected="True" />
               </Node>
+              <Node name="UI" expanded="True" />
             </Node>
           </Node>
           <Node name="Packages" expanded="True" />
@@ -49,7 +50,7 @@
   </Views>
   <Properties>
     <Properties>
-      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/Do/src/UI/LBDisplayText.cs" />
+      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/Do/src/Core/Commander.cs" />
       <Property key="ActiveConfiguration" value="Debug" />
     </Properties>
   </Properties>
