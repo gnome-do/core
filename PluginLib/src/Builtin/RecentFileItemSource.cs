@@ -60,14 +60,6 @@ namespace Do.PluginLib.Builtin
 		
 		protected virtual void ForceUpdateItems ()
 		{
-			string home, username;
-			
-			home = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
-			username = System.Environment.UserName;
-			
-			files.Clear ();
-			files.Add (new FileItem (username, home));
-
 			/*
 			foreach (IntPtr info_ptr in Gtk.RecentManager.Default.Items) {
 				Console.WriteLine ("Recent items source adding item: {0}", info);

@@ -5,8 +5,10 @@
 //
 
 using System;
-using Do.PluginLib;
+using System.IO;
 using System.Collections;
+
+using Do.PluginLib;
 
 namespace Do.PluginLib.Builtin
 {
@@ -39,7 +41,7 @@ namespace Do.PluginLib.Builtin
 			return true;
 		}
 		
-		public static FileItem Create (string name, string uri)
+		public static FileItem Create (string uri)
 		{
 			string ext;
 			Type fi_type;
@@ -55,9 +57,9 @@ namespace Do.PluginLib.Builtin
 				fi_type = typeof (FileItem);
 			}
 			try {
-				result = (FileItem) System.Activator.CreateInstance (fi_type, new string[] {name, uri});
+				result = (FileItem) System.Activator.CreateInstance (fi_type, new string[] {uri});
 			} catch {
-				result = new FileItem (name, uri);
+				result = new FileItem (uri);
 			}
 			return result;
 		}
@@ -73,10 +75,10 @@ namespace Do.PluginLib.Builtin
 		
 		string uri, name, icon;
 		
-		public FileItem (string name, string uri)
+		public FileItem (string uri)
 		{	
 			this.uri = uri;
-			this.name = name;
+			this.name = Path.GetFileName (uri);
 			
 			if (System.IO.Directory.Exists (uri)) {
 				icon = "folder";

@@ -4,6 +4,8 @@
     <File filename="Welcome" />
     <File filename="./Do/src/Core/Commander.cs" />
     <File filename="./PluginLib/src/Builtin/FileItem.cs" />
+    <File filename="./PluginLib/src/Builtin/ImageFileItem.cs" />
+    <File filename="./PluginLib/src/Builtin/RecentFileItemSource.cs" />
   </Files>
   <Views>
     <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">

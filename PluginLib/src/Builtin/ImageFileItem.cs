@@ -29,8 +29,8 @@ namespace Do.PluginLib.Builtin
 		}
 		*/
 		
-		public ImageFileItem (string name, string uri)
-			: base (name, uri)
+		public ImageFileItem (string uri)
+			: base (uri)
 		{	
 		}
 		
