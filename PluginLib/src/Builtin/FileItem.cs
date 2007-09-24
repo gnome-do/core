@@ -6,12 +6,71 @@
 
 using System;
 using Do.PluginLib;
+using System.Collections;
 
 namespace Do.PluginLib.Builtin
 {
 	
 	public class FileItem : IFileItem
 	{
+
+		static Hashtable extensionTypes;
+		
+		static FileItem ()
+		{
+			string[] extentions;
+			
+			extensionTypes = new Hashtable ();
+			
+			// Register extensions for specialized subclasses.
+			// See note in ImageFileItem.cs
+			extentions = new string[] { "jpg", "jpeg", "png", "gif" };
+			foreach (string ext in extentions) {
+				FileItem.RegisterExtensionForFileItemType (ext, typeof (ImageFileItem));
+			}
+		}
+		
+		public static bool RegisterExtensionForFileItemType (string ext, Type fi_type)
+		{
+			if (extensionTypes.ContainsKey (ext)) {
+				return false;
+			}
+			extensionTypes[ext] = fi_type;
+			return true;
+		}
+		
+		public static FileItem Create (string name, string uri)
+		{
+			string ext;
+			Type fi_type;
+			FileItem result;
+			
+			ext = System.IO.Path.GetExtension (uri).ToLower ();
+			if (ext.StartsWith (".")) {
+				ext = ext.Substring (1);
+			}
+			if (extensionTypes.ContainsKey (ext)) {
+				fi_type = extensionTypes[ext] as Type;
+			} else {
+				fi_type = typeof (FileItem);
+			}
+			try {
+				result = (FileItem) System.Activator.CreateInstance (fi_type, new string[] {name, uri});
+			} catch {
+				result = new FileItem (name, uri);
+			}
+			return result;
+		}
+		
+		public static string ShortUri (string uri) {
+			string home;
+			
+			uri = (uri == null ? "" : uri);
+			home = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+			uri = uri.Replace (home, "~");
+			return uri;
+		}
+		
 		string uri, name, icon;
 		
 		public FileItem (string name, string uri)
@@ -32,15 +91,15 @@ namespace Do.PluginLib.Builtin
 			}
 		}
 		
-		public string Name {
+		public virtual string Name {
 			get { return name; }
 		}
 		
-		public string Description {
+		public virtual string Description {
 			get { return ShortUri (uri); }
 		}
 		
-		public string Icon {
+		public virtual string Icon {
 			get { return icon; }
 		}
 		
@@ -56,15 +115,6 @@ namespace Do.PluginLib.Builtin
 			} catch (Exception e) {
 				Console.WriteLine ("Failed to open \"{0}\": ", e.Message);
 			}
-		}
-		
-		public static string ShortUri (string uri) {
-			string home;
-			
-			uri = (uri == null ? "" : uri);
-			home = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
-			uri = uri.Replace (home, "~");
-			return uri;
 		}
 	}
 }

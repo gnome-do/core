@@ -72,7 +72,7 @@ namespace Do.PluginLib.Builtin
 					if (file.Name.StartsWith (".")) continue;
 					
 					item_path = System.IO.Path.Combine (path, file.Name);
-					item = new FileItem (file.Name, item_path);
+					item = FileItem.Create (file.Name, item_path);
 					files.Add (item);
 					if (file.Type == FileType.Directory) {
 						ReadFiles (item_path, levels-1);
