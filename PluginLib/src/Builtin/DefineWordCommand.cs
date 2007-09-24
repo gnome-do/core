@@ -10,19 +10,19 @@ using Do.PluginLib;
 namespace Do.PluginLib.Builtin
 {
 	
-	public class RunInShellCommand : ICommand
+	public class DefineWordCommand : ICommand
 	{
 	
 		public string Name {
-			get { return "Run in Shell"; }
+			get { return "Define Word"; }
 		}
 		
 		public string Description {
-			get { return "Run a command in a shell."; }
+			get { return "Define a given word."; }
 		}
 		
 		public string Icon {
-			get { return "gnome-terminal"; }
+			get { return "accessories-dictionary.png"; }
 		}
 		
 		public Type[] SupportedTypes {
@@ -38,26 +38,24 @@ namespace Do.PluginLib.Builtin
 		}
 
 		public bool SupportsItem (IItem item) {
-			if (item is ITextItem) {
-				string cmd = (item as ITextItem).Text;
-				// lookup cmd in path
-			}
 			return true;
 		}
 		
 		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
-			string cmd = null;
+			string word, cmd;
 			foreach (IItem item in items) {
 				if (item is ITextItem) {
-					cmd = (item as ITextItem).Text;
+					word = (item as ITextItem).Text;
+				} else {
+					continue;
 				}
-				
-				Console.WriteLine (cmd);
+
+				cmd = string.Format ("gnome-dictionary --look-up \"{0}\"", word);
 				try {
 					System.Diagnostics.Process.Start (cmd);
 				} catch (Exception e) {
-					Console.WriteLine ("Failed to run command in shell \"{0}\": ", e.Message);
+					Console.WriteLine ("Failed to define word: \"{0}\"", e.Message);
 				}
 			}
 		}

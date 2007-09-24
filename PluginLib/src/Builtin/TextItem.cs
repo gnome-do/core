@@ -9,12 +9,11 @@ namespace Do.PluginLib.Builtin
 	public class TextItem : ITextItem
 	{
 		
-		protected string text, description;
+		protected string text;
 		
 		public TextItem (string text)
 		{
 			this.text = text;
-			this.description = text;
 		}
 		
 		public string Name {
@@ -22,7 +21,7 @@ namespace Do.PluginLib.Builtin
 		}
 		
 		public string Description {
-			get { return description; }
+			get { return "Raw input text"; }
 		}
 		
 		public string Icon {

@@ -4,6 +4,9 @@
     <File filename="Welcome" />
     <File filename="./Do/src/UI/LBWindow.cs" />
     <File filename="./Do/src/UI/LBIconBox.cs" />
+    <File filename="./PluginLib/src/Builtin/DefineWordCommand.cs" />
+    <File filename="./Do/src/Core/Commander.cs" />
+    <File filename="./PluginLib/src/Builtin/TextItem.cs" />
   </Files>
   <Views>
     <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">
@@ -13,17 +16,14 @@
           <Node name="Do" expanded="True">
             <Node name="src" expanded="True">
               <Node name="Core" expanded="True" />
-              <Node name="UI" expanded="True">
-                <Node name="LBWindow.cs" expanded="False" selected="True" />
-              </Node>
+              <Node name="UI" expanded="True" />
             </Node>
           </Node>
-          <Node name="Packages" expanded="True" />
           <Node name="PluginLib" expanded="True">
-            <Node name="References" expanded="True" />
-            <Node name="Resources" expanded="True" />
             <Node name="src" expanded="True">
-              <Node name="Builtin" expanded="True" />
+              <Node name="Builtin" expanded="True">
+                <Node name="TextItem.cs" expanded="False" selected="True" />
+              </Node>
             </Node>
           </Node>
         </Node>
@@ -31,7 +31,7 @@
     </ViewMemento>
     <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ClassPad">
       <TreeView>
-        <Node expanded="True">
+        <Node expanded="True" selected="True">
           <Node name="PluginLib" expanded="True" />
         </Node>
       </TreeView>
@@ -49,7 +49,7 @@
   </Views>
   <Properties>
     <Properties>
-      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/Do/src/UI/LBWindow.cs" />
+      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/PluginLib/src/Builtin/TextItem.cs" />
       <Property key="ActiveConfiguration" value="Debug" />
     </Properties>
   </Properties>

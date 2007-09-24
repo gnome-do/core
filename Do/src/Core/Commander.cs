@@ -72,6 +72,7 @@ namespace Do.Core
 					new Command (new RunCommand ()),
 					new Command (new OpenCommand ()),
 					new Command (new RunInShellCommand ()),
+					new Command (new DefineWordCommand ()),
 					// new Command (new VoidCommand ()),
 				};
 			}
