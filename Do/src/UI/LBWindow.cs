@@ -149,7 +149,7 @@ namespace Do.UI
 			
 			iitem_icon_box = new LBIconBox (IconBoxIconSize);
 			iitem_icon_box.IsFocused = false;
-			result_hbox.PackStart (iitem_icon_box, false, false, 0);
+			// result_hbox.PackStart (iitem_icon_box, false, false, 0);
 			iitem_icon_box.Show ();
 	
 			align = new Alignment (0.5F, 0.5F, 1, 1);
