@@ -28,8 +28,9 @@ namespace Do.PluginLib
 		void Open ();
 	}
 	
-	public interface IFileItem : IOpenableItem
+	public interface IFileItem : IItem
 	{
 		string Uri { get; }
+		string MimeType { get; }
 	}
 }

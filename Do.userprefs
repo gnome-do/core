@@ -7,6 +7,9 @@
     <File filename="./PluginLib/src/Builtin/DefineWordCommand.cs" />
     <File filename="./Do/src/Core/Commander.cs" />
     <File filename="./PluginLib/src/Builtin/TextItem.cs" />
+    <File filename="./PluginLib/src/Builtin/DirectoryFileItemSource.cs" />
+    <File filename="./PluginLib/src/Builtin/OpenCommand.cs" />
+    <File filename="./PluginLib/src/Builtin/FileItem.cs" />
   </Files>
   <Views>
     <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">
@@ -22,7 +25,7 @@
           <Node name="PluginLib" expanded="True">
             <Node name="src" expanded="True">
               <Node name="Builtin" expanded="True">
-                <Node name="TextItem.cs" expanded="False" selected="True" />
+                <Node name="FileItem.cs" expanded="False" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -49,7 +52,7 @@
   </Views>
   <Properties>
     <Properties>
-      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/PluginLib/src/Builtin/TextItem.cs" />
+      <Property key="ActiveWindow" value="/home/dave/src/gnome-do/PluginLib/src/Builtin/FileItem.cs" />
       <Property key="ActiveConfiguration" value="Debug" />
     </Properties>
   </Properties>

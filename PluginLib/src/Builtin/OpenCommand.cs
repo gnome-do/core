@@ -26,7 +26,8 @@ namespace Do.PluginLib.Builtin
 		public Type[] SupportedTypes {
 			get {
 				return new Type[] {
-					typeof (IOpenableItem)
+					typeof (IOpenableItem),
+					typeof (IFileItem),
 				};
 			}
 		}
@@ -43,9 +44,27 @@ namespace Do.PluginLib.Builtin
 		
 		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
+			string open_item;
+			
+			open_item = null;
 			foreach (IItem item in items) {
 				if (item is IOpenableItem) {
 					(item as IOpenableItem).Open ();
+					continue;
+				}
+
+				if (item is IFileItem) {
+					open_item = (item as IFileItem).Uri;
+				}
+
+				// Use gnome-open to open the open_item
+				if (open_item != null) {
+					Console.WriteLine ("Opening \"{0}\"...", open_item);
+					try {
+						System.Diagnostics.Process.Start ("gnome-open", string.Format ("\"{0}\"", open_item));
+					} catch (Exception e) {
+						Console.WriteLine ("Failed to open \"{0}\": ", e.Message);
+					}
 				}
 			}
 		}

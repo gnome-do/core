@@ -73,19 +73,19 @@ namespace Do.PluginLib.Builtin
 			return uri;
 		}
 		
-		string uri, name, icon;
+		string uri, name, icon, mime_type;
 		
 		public FileItem (string uri)
 		{	
 			this.uri = uri;
 			this.name = Path.GetFileName (uri);
+			this.mime_type = Gnome.Vfs.Global.GetMimeType (uri);
 			
 			if (System.IO.Directory.Exists (uri)) {
 				icon = "folder";
 			} else {
 				try {
-					icon = Gnome.Vfs.Global.GetMimeType (uri);
-					icon = icon.Replace ('/', '-');
+					icon = mime_type.Replace ('/', '-');
 					icon = string.Format ("gnome-mime-{0}", icon);
 				} catch (NullReferenceException) {
 					icon = "file";
@@ -109,14 +109,9 @@ namespace Do.PluginLib.Builtin
 			get { return uri; }
 		}
 		
-		public virtual void Open ()
-		{
-			Console.WriteLine ("Opening \"{0}\"...", uri);
-			try {
-				System.Diagnostics.Process.Start ("gnome-open", string.Format ("\"{0}\"", uri));
-			} catch (Exception e) {
-				Console.WriteLine ("Failed to open \"{0}\": ", e.Message);
-			}
+		public string MimeType {
+			get { return mime_type; }
 		}
+
 	}
 }
