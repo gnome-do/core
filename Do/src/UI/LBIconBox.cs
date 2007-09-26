@@ -15,6 +15,7 @@ namespace Do.UI
 
 	public class LBIconBox : LBFrame
 	{
+		const string captionFormat = "<small>{0}</small>";
 		
 		protected bool isFocused;
 		protected bool transparent;
@@ -56,6 +57,7 @@ namespace Do.UI
 			label.Show ();
 			
 			image.SetSizeRequest (icon_size, icon_size);
+			// TODO: change 12 to -1
 			label.SetSizeRequest (icon_size / 4 * 5, 12);
 			// SetSizeRequest (icon_size * 2, icon_size * 2);
 			
@@ -93,7 +95,7 @@ namespace Do.UI
 			get { return caption; }
 			set {
 				caption = value;
-				label.Markup = string.Format ("<small>{0}</small>", caption);				
+				label.Markup = string.Format (captionFormat, caption);				
 			}
 		}
 		

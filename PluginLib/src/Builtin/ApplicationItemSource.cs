@@ -16,7 +16,11 @@ namespace Do.PluginLib.Builtin
 	public class ApplicationItemSource : IItemSource
 	{
 		
-		public static readonly string DesktopFilesDirectory = "/usr/share/applications";
+		public static readonly string[] DesktopFilesDirectories = {
+			"/usr/share/applications",
+			"/usr/share/applications/kde",
+			"/usr/local/share/applications",
+		};
 		
 		private List<IItem> apps;
 		
@@ -25,8 +29,8 @@ namespace Do.PluginLib.Builtin
 			apps = new List<IItem> ();
 			
 			Vfs.Initialize();
-				
-			LoadDesktopFiles ();
+			
+			UpdateItems ();
 		}
 		
 		public string Name {
@@ -34,22 +38,26 @@ namespace Do.PluginLib.Builtin
 		}
 		
 		public string Description {
-			get { return "Finds applications in /usr/share/applications"; }
+			get { return "Finds applications in many default locations."; }
 		}
 		
 		public string Icon {
 			get { return "gtk-run"; }
 		}
 		
-		private void LoadDesktopFiles ()
+		private void LoadDesktopFiles (string desktop_files_dir)
 		{
 			Gnome.Vfs.FileInfo[] directoryEntries;
 			ApplicationItem app;
 			string desktopFile;
 			
-			directoryEntries = Gnome.Vfs.Directory.GetEntries (DesktopFilesDirectory);
+			try {
+				directoryEntries = Gnome.Vfs.Directory.GetEntries (desktop_files_dir);
+			} catch {
+				return;
+			}
 			foreach (Gnome.Vfs.FileInfo file in directoryEntries) {
-				desktopFile = Path.Combine (DesktopFilesDirectory, file.Name);
+				desktopFile = Path.Combine (desktop_files_dir, file.Name);
 				try {
 					app = new ApplicationItem (desktopFile);
 				} catch (ApplicationDetailMissingException) {
@@ -62,7 +70,11 @@ namespace Do.PluginLib.Builtin
 		
 		public bool UpdateItems ()
 		{
-			return false;
+			apps.Clear ();
+			foreach (string dir in DesktopFilesDirectories) {
+				LoadDesktopFiles (dir);
+			}
+			return true;
 		}
 		
 		public ICollection<IItem> Items {

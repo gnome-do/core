@@ -39,7 +39,7 @@ namespace Do.PluginLib.Builtin
 
 		public bool SupportsItem (IItem item) {
 			if (item is ITextItem) {
-				string cmd = (item as ITextItem).Text;
+				// string cmd = (item as ITextItem).Text;
 				// lookup cmd in path
 			}
 			return true;

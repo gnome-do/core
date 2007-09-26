@@ -33,9 +33,9 @@ namespace Do.PluginLib.Builtin
 			this.desktopFile = desktopFile;
 
 			desktopFilePtr = gnome_desktop_item_new_from_file (desktopFile, 0, IntPtr.Zero);
-     	if (desktopFilePtr == IntPtr.Zero) {
-				throw new ApplicationDetailMissingException("Failed to load launcher");
-     	}
+	     	if (desktopFilePtr == IntPtr.Zero) {
+					throw new ApplicationDetailMissingException("Failed to load launcher");
+	     	}
 			name = gnome_desktop_item_get_string(desktopFilePtr, "Name");
 			description = gnome_desktop_item_get_string(desktopFilePtr, "Comment");
 			icon = gnome_desktop_item_get_string(desktopFilePtr, "Icon");
