@@ -56,11 +56,11 @@ namespace Do.PluginLib.Builtin
 		
 		public bool UpdateItems ()
 		{
-			Readitems (path, levels);
+			ReadItems (path, levels);
 			return true;
 		}
 		
-		protected virtual void Readitems (string dir, int levels)
+		protected virtual void ReadItems (string dir, int levels)
 		{
 			string[] files;
 			string[] directories;
@@ -71,7 +71,7 @@ namespace Do.PluginLib.Builtin
 			try {
 				files = Directory.GetFiles (dir);
 				directories = Directory.GetDirectories (dir);
-			} catch (FileNotFoundException) {
+			} catch (DirectoryNotFoundException) {
 				return;
 			}
 			foreach (string file in files) {
@@ -90,7 +90,7 @@ namespace Do.PluginLib.Builtin
 				if (Path.GetFileName (directory).StartsWith (".")) continue;
 				item = FileItem.Create (directory);
 				items.Add (item);
-				Readitems (directory, levels - 1);
+				ReadItems (directory, levels - 1);
 			}
 		}
 	}
