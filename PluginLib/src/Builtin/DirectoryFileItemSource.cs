@@ -87,7 +87,8 @@ namespace Do.PluginLib.Builtin
 				items.Add (item);
 			}
 			foreach (string directory in directories) {
-			    item = FileItem.Create (directory);
+				if (directory.StartsWith (".")) continue;
+			  item = FileItem.Create (directory);
 				items.Add (item);
 				Readitems (directory, levels - 1);
 			}
