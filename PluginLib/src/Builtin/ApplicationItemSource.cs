@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Gnome.Vfs;
 
 using Do.PluginLib;
 
@@ -23,13 +22,15 @@ namespace Do.PluginLib.Builtin
 		};
 		
 		private List<IItem> apps;
+
+		static ApplicationItemSource ()
+		{
+			Gnome.Vfs.Vfs.Initialize ();
+		}
 		
 		public ApplicationItemSource ()
 		{
-			apps = new List<IItem> ();
-			
-			Vfs.Initialize();
-			
+			apps = new List<IItem> ();			
 			UpdateItems ();
 		}
 		
@@ -47,20 +48,18 @@ namespace Do.PluginLib.Builtin
 		
 		private void LoadDesktopFiles (string desktop_files_dir)
 		{
-			Gnome.Vfs.FileInfo[] directoryEntries;
 			ApplicationItem app;
-			string desktopFile;
+			string desktopFile = null;
 			
-			try {
-				directoryEntries = Gnome.Vfs.Directory.GetEntries (desktop_files_dir);
-			} catch {
-				return;
-			}
-			foreach (Gnome.Vfs.FileInfo file in directoryEntries) {
-				desktopFile = Path.Combine (desktop_files_dir, file.Name);
+			if (!Directory.Exists (desktop_files_dir)) return;
+			foreach (string filename in Directory.GetFiles (desktop_files_dir)) {
+				// No hidden files or special directories.
+				if (filename.StartsWith (".")) continue;
+
+				desktopFile = Path.Combine (desktop_files_dir, filename);
 				try {
 					app = new ApplicationItem (desktopFile);
-				} catch (ApplicationDetailMissingException) {
+				} catch {
 					continue;
 				}
 				apps.Add(app);

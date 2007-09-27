@@ -6,7 +6,7 @@
 
 using System;
 using System.Collections.Generic;
-using Gnome.Vfs;
+using System.IO;
 
 using Do.PluginLib;
 
@@ -16,10 +16,15 @@ namespace Do.PluginLib.Builtin
 	public class DirectoryFileItemSource : IItemSource
 	{
 		
-		List<IItem> files;
+		List<IItem> items;
 		int levels;
 		string path;
-		
+
+		static DirectoryFileItemSource ()
+		{
+			Gnome.Vfs.Vfs.Initialize ();
+		}
+
 		public DirectoryFileItemSource (string path, int levels)
 		{
 			string home;
@@ -29,7 +34,7 @@ namespace Do.PluginLib.Builtin
 			
 			this.path = path;
 			this.levels = levels;
-			this.files = new List<IItem> ();
+			this.items = new List<IItem> ();
 			UpdateItems ();
 		}
 		
@@ -38,7 +43,7 @@ namespace Do.PluginLib.Builtin
 		}
 		
 		public string Description {
-			get { return string.Format("Finds files in directory '{0}'", path); }
+			get { return string.Format("Finds items in directory '{0}'", path); }
 		}
 		
 		public string Icon {
@@ -46,40 +51,45 @@ namespace Do.PluginLib.Builtin
 		}
 		
 		public ICollection<IItem> Items {
-			get { return files; }
+			get { return items; }
 		}
 		
 		public bool UpdateItems ()
 		{
-			ReadFiles (path, levels);
+			Readitems (path, levels);
 			return true;
 		}
 		
-		protected virtual void ReadFiles (string path, int levels)
+		protected virtual void Readitems (string dir, int levels)
 		{
-			FileInfo[] directoryEntries;
+			string[] files;
+			string[] directories;
+			string path;
 			FileItem item;
-			string item_path;
 			
-			if (levels == 0) {
+			if (levels == 0) return;
+			try {
+				files = Directory.GetFiles (dir);
+				directories = Directory.GetDirectories (dir);
+			} catch (FileNotFoundException) {
 				return;
 			}
-			
-			try {
-				directoryEntries = Directory.GetEntries (path);
-				foreach (FileInfo file in directoryEntries) {
-					// No hidden files or special directories.
-					if (file.Name.StartsWith (".")) continue;
-					
-					item_path = System.IO.Path.Combine (path, file.Name);
-					item = FileItem.Create (item_path);
-					files.Add (item);
-					if (file.Type == FileType.Directory) {
-						ReadFiles (item_path, levels-1);
-					}
+			foreach (string file in files) {
+				// No hidden items or special directories.
+				if (file.StartsWith (".")) continue;
+				
+				path = Path.Combine (dir, file);
+				try {
+					item = FileItem.Create (path);
+				} catch (FileNotFoundException) {
+					continue;
 				}
-			} catch (System.IO.FileNotFoundException) {
-				return;
+				items.Add (item);
+			}
+			foreach (string directory in directories) {
+			    item = FileItem.Create (directory);
+				items.Add (item);
+				Readitems (directory, levels - 1);
 			}
 		}
 	}
