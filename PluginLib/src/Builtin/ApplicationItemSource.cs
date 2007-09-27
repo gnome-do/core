@@ -49,16 +49,13 @@ namespace Do.PluginLib.Builtin
 		private void LoadDesktopFiles (string desktop_files_dir)
 		{
 			ApplicationItem app;
-			string desktopFile = null;
 			
 			if (!Directory.Exists (desktop_files_dir)) return;
 			foreach (string filename in Directory.GetFiles (desktop_files_dir)) {
-				// No hidden files or special directories.
-				if (filename.StartsWith (".")) continue;
-
-				desktopFile = Path.Combine (desktop_files_dir, filename);
+				if (!filename.EndsWith (".desktop")) continue;
+				
 				try {
-					app = new ApplicationItem (desktopFile);
+					app = new ApplicationItem (filename);
 				} catch {
 					continue;
 				}

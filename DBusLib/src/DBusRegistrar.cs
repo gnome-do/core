@@ -33,10 +33,8 @@ namespace Do.DBusLib
 		}
 
 		public static T Register<T> (T busItem, string objectPath) {
-			RequestNameReply reply;
-
 			try {
-				reply = Bus.Session.RequestName (BusName);
+				Bus.Session.RequestName (BusName);
 				Bus.Session.Register (BusName, new ObjectPath (objectPath), busItem);
 			} catch {
 				return default (T);

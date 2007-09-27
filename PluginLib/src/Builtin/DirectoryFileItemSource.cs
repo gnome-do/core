@@ -66,7 +66,6 @@ namespace Do.PluginLib.Builtin
 		{
 			string[] files;
 			string[] directories;
-			string path;
 			FileItem item;
 			
 			if (levels == 0) return;
