@@ -19,6 +19,7 @@ namespace Do.PluginLib.Builtin
 		List<IItem> items;
 		int levels;
 		string path;
+		bool include_hidden;
 
 		static DirectoryFileItemSource ()
 		{
@@ -35,6 +36,7 @@ namespace Do.PluginLib.Builtin
 			this.path = path;
 			this.levels = levels;
 			this.items = new List<IItem> ();
+			this.include_hidden = false;
 			UpdateItems ();
 		}
 		
@@ -75,19 +77,16 @@ namespace Do.PluginLib.Builtin
 				return;
 			}
 			foreach (string file in files) {
-				// No hidden items or special directories.
-				if (file.StartsWith (".")) continue;
-				
-				path = Path.Combine (dir, file);
-				try {
-					item = FileItem.Create (path);
-				} catch (FileNotFoundException) {
+				if (!include_hidden && Path.GetFileName (file).StartsWith (".")) {
 					continue;
 				}
+				item = FileItem.Create (file);
 				items.Add (item);
 			}
 			foreach (string directory in directories) {
-				if (Path.GetFileName (directory).StartsWith (".")) continue;
+				if (!include_hidden && Path.GetFileName (directory).StartsWith (".")) {
+					continue;
+				}
 				item = FileItem.Create (directory);
 				items.Add (item);
 				ReadItems (directory, levels - 1);
