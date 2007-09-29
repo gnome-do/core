@@ -124,8 +124,8 @@ namespace Do.UI
 			searchString = itemSearchString = "";
 			
 			frame = new LBFrame ();
-			frame.FillColor = new Gdk.Color (0, 0, 0);
-			frame.FillAlpha = (ushort) (ushort.MaxValue * 0.8);
+			frame.FillColor = new Gdk.Color (0x35, 0x30, 0x45);
+			frame.FillAlpha = (ushort) (ushort.MaxValue * 0.9);
 			Add (frame);
 			frame.Show ();
 			
@@ -467,7 +467,7 @@ namespace Do.UI
 			} catch (IndexOutOfRangeException) {
 				return;
 			}
-			item_icon_box.Caption = commander.CurrentItem.Name;
+			item_icon_box.Caption = Util.UnderlineStringWithString (commander.CurrentItem.Name, match);
 			item_icon_box.Pixbuf = Util.PixbufFromIconName (commander.CurrentItem.Icon, IconBoxIconSize);
 			if (focus == WindowFocus.ItemFocus) {
 				displayText.DisplayObject = commander.CurrentItem;
@@ -484,7 +484,7 @@ namespace Do.UI
 				return;
 			}
 
-			command_icon_box.Caption = commander.CurrentCommand.Name;
+			command_icon_box.Caption = Util.UnderlineStringWithString (commander.CurrentCommand.Name, match);
 			command_icon_box.Pixbuf = Util.PixbufFromIconName (commander.CurrentCommand.Icon, IconBoxIconSize);
 			if (focus == WindowFocus.CommandFocus) {
 				displayText.DisplayObject = commander.CurrentCommand;
@@ -504,7 +504,7 @@ namespace Do.UI
 			item_icon_box.Caption = "";
 			command_icon_box.Clear ();
 			
-			displayText.SetDisplayText ("Type to begin searching", "press down arrow for more results");			
+			displayText.SetDisplayText ("Type to begin searching", "Type to start searching.");			
 		}
 		
 		protected virtual void SetNoResultsFoundState ()
@@ -521,6 +521,7 @@ namespace Do.UI
 				item_icon_box.Caption = "No items found";
 				break;
 			}
+			displayText.Text = "";
 		}
 		
 		protected void OnDefaultStateEvent ()

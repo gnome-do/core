@@ -15,7 +15,7 @@ namespace Do.UI
 
 	public class LBIconBox : LBFrame
 	{
-		const string captionFormat = "<small>{0}</small>";
+		const string captionFormat = "{0}";
 		
 		protected bool isFocused;
 		protected bool transparent;
@@ -57,8 +57,7 @@ namespace Do.UI
 			label.Show ();
 			
 			image.SetSizeRequest (icon_size, icon_size);
-			// TODO: change 12 to -1
-			label.SetSizeRequest (icon_size / 4 * 5, 12);
+			label.SetSizeRequest (icon_size / 4 * 5, -1);
 			// SetSizeRequest (icon_size * 2, icon_size * 2);
 			
 			Realized += OnRealized;
@@ -95,6 +94,8 @@ namespace Do.UI
 			get { return caption; }
 			set {
 				caption = value;
+				caption = caption.Replace ("<u>", "<span weight=\"heavy\" background=\"#353045\" >");
+				caption = caption.Replace ("</u>", "</span>");
 				label.Markup = string.Format (captionFormat, caption);				
 			}
 		}
@@ -110,7 +111,7 @@ namespace Do.UI
 		protected virtual void UpdateHighlight ()
 		{
 			if (transparent) {
-				FillAlpha = (ushort) ((isFocused ? 0.6 : 0.2) * ushort.MaxValue);
+				FillAlpha = (ushort) ((isFocused ? 0.4 : 0.1) * ushort.MaxValue);
 			} else {
 				FillColor = Style.Base (isFocused ? StateType.Selected : StateType.Normal);
 				Fill = true;

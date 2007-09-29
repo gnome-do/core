@@ -157,9 +157,39 @@ namespace Do.Core
 			return pixbuf;
 		}
 		
-		public static string MarkupSubstring (string main, string substring)
-		{
-			return main;
+		public static string UnderlineStringWithString (string main, string underline) {
+			int pos, len, match_pos, last_main_cut;
+			string lower_main, lower_underline, result;
+			
+			result = "";
+			match_pos = last_main_cut = 0;
+			lower_main = main.ToLower ();
+			lower_underline = underline.ToLower ();
+			
+			for (pos = 0; pos < underline.Length; ++pos) {
+				for (len = 1; len < underline.Length - pos; ++len) {
+					int tmp_match_pos = lower_main.IndexOf (lower_underline.Substring (pos, len));
+					if (tmp_match_pos < 0) {
+						--len;
+						break;
+					} else {
+						match_pos = tmp_match_pos;
+					}
+				}
+				if (0 < len) {
+					// Theres a match starting at match_pos with positive length
+					string skipped = main.Substring (last_main_cut, match_pos - last_main_cut);
+					string matched = main.Substring (match_pos, len);
+					string remainder = UnderlineStringWithString (main.Substring (match_pos + len), underline.Substring (pos + len));
+					result = string.Format ("{0}<u>{1}</u>{2}", skipped, matched, remainder);
+					break;
+				}
+			}
+			if (result == "") {
+				// no matches
+				result = main;
+			}
+			return result;
 		}
 		
 		public static void PresentWindow (Gtk.Window window)
