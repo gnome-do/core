@@ -19,15 +19,12 @@ namespace Do
 		public DefaultCommander ()
 		{
 			window = new LBWindow (this, true);
-			
 			State = CommanderState.Default;
 		}
 		
 		protected override void OnVisibilityChanged (bool visible)
 		{
 				if (visible) {
-					// For some reason we need to call this twice... FIX
-					Util.PresentWindow (window);
 					Util.PresentWindow (window);
 				}
 		}

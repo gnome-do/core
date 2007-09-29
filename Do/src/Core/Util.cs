@@ -167,7 +167,7 @@ namespace Do.Core
 			window.Present ();
 			window.GdkWindow.Raise ();
 			
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 100; i++) {
 				if (TryGrabWindow (window)) {
 					break;
 				}

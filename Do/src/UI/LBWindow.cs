@@ -114,6 +114,8 @@ namespace Do.UI
 			AppPaintable = true;
 			KeepAbove = true;
 			Decorated = false;
+			// This typehint gets the window to raise all the way to top.
+			TypeHint = WindowTypeHint.Splashscreen;
 				
 			try { SetIconFromFile ("/usr/share/icons/gnome/scalable/actions/system-run.svg"); } catch { }
 			SetColormap ();
