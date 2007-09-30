@@ -13,6 +13,36 @@ namespace Do.PluginLib.Builtin
 	public class RunInShellCommand : ICommand
 	{
 	
+		public static bool CommandLineIsFoundOnPath (string command_line)
+		{
+			string path, command, command_file;
+			int space_position;
+			
+			if (command_line == null) {
+				return false;
+			}
+			
+			command = command_line.Trim ();			
+			space_position = command.IndexOf (" ");
+			if (space_position > 0) {
+				command = command.Substring (0, space_position);
+			}
+			
+			path = System.Environment.GetEnvironmentVariable ("PATH");
+			if (path == null) {
+				return false;
+			}
+			
+			// Try to find command file in path.
+			foreach (string part in path.Split (':')) {
+				command_file = System.IO.Path.Combine (part, command);
+				if (System.IO.File.Exists (command_file)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
 		public string Name {
 			get { return "Run in Shell"; }
 		}
@@ -38,11 +68,17 @@ namespace Do.PluginLib.Builtin
 		}
 
 		public bool SupportsItem (IItem item) {
+			string command_line;
+			
+			command_line = null;
 			if (item is ITextItem) {
-				// string cmd = (item as ITextItem).Text;
-				// lookup cmd in path
+				command_line = (item as ITextItem).Text;
 			}
-			return true;
+			
+			if (command_line != null) {
+				return CommandLineIsFoundOnPath (command_line);
+			}
+			return false;
 		}
 		
 		public void Perform (IItem[] items, IItem[] modifierItems)

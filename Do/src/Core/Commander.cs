@@ -206,11 +206,14 @@ namespace Do.Core
 				if (value < 0 || value >= currentItems.Length) {
 					throw new IndexOutOfRangeException ();
 				}
-				if (currentItemIndex != value) {
-					currentItemIndex = value;
-					currentCommandIndex = 0;
-					currentCommands = commandManager.CommandsForItem (CurrentItem, "");
+				currentItemIndex = value;
+				currentCommands = commandManager.CommandsForItem (CurrentItem, "");
+				if (currentCommands.Length == 0) {
+					currentCommands = new Command[] { 
+						new Command (new Do.PluginLib.Builtin.VoidCommand ()),
+					};
 				}
+				currentCommandIndex = 0;
 			}
 		}
 		
@@ -284,9 +287,7 @@ namespace Do.Core
 			}
 			
 			// Update items and commands state.
-			currentItemIndex = 0;
-			currentCommandIndex = 0;
-			currentCommands = commandManager.CommandsForItem (CurrentItem, "");
+			CurrentItemIndex = 0;
 			
 			State = CommanderState.ItemSearchComplete;
 		}
