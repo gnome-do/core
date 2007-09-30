@@ -15,7 +15,7 @@ namespace Do.PluginLib.Builtin
 	public class DefineWordCommand : ICommand
 	{
 	
-		const string wordPattern = @"^([^\W0-9_]+([ ]|[^\W0-9_])*)$";
+		const string wordPattern = @"^([^\W0-9_]+([ -][^\W0-9_]+)?)$";
 
 		Regex wordRegex;
 		

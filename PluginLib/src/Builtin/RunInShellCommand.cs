@@ -33,7 +33,11 @@ namespace Do.PluginLib.Builtin
 				return false;
 			}
 			
-			// Try to find command file in path.
+			// If the command is found, fine.
+			if (System.IO.File.Exists (command)) {
+				return true;
+			}
+			// Otherwise, try to find the command file in path.
 			foreach (string part in path.Split (':')) {
 				command_file = System.IO.Path.Combine (part, command);
 				if (System.IO.File.Exists (command_file)) {
