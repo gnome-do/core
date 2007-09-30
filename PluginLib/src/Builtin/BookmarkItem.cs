@@ -6,7 +6,7 @@ using Do.PluginLib;
 namespace Do.PluginLib.Builtin
 {
 
-	public class BookmarkItem : IOpenableItem
+	public class BookmarkItem : IURLItem
 	{
 		
 		protected string name, url;
@@ -29,13 +29,9 @@ namespace Do.PluginLib.Builtin
 			get { return "www"; }
 		}
 		
-		public string Url {
+		public string URL {
 			get { return url; }
 		}
 
-		public void Open ()
-		{
-			Gnome.Url.Show (Url);
-		}
 	}
 }

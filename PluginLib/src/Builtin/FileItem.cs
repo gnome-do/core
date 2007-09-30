@@ -105,7 +105,7 @@ namespace Do.PluginLib.Builtin
 			get { return icon; }
 		}
 		
-		public string Uri {
+		public string URI {
 			get { return uri; }
 		}
 		

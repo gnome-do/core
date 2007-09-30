@@ -27,7 +27,7 @@ namespace Do.PluginLib.Builtin
 			get {
 				return new Type[] {
 					typeof (IOpenableItem),
-					typeof (IFileItem),
+					typeof (IURIItem),
 				};
 			}
 		}
@@ -53,8 +53,8 @@ namespace Do.PluginLib.Builtin
 					continue;
 				}
 
-				if (item is IFileItem) {
-					open_item = (item as IFileItem).Uri;
+				if (item is IURIItem) {
+					open_item = (item as IURIItem).URI;
 				}
 
 				// Use gnome-open to open the open_item

@@ -5,6 +5,8 @@
 //
 
 using System;
+using System.Text.RegularExpressions;
+
 using Do.PluginLib;
 
 namespace Do.PluginLib.Builtin
@@ -13,6 +15,15 @@ namespace Do.PluginLib.Builtin
 	public class DefineWordCommand : ICommand
 	{
 	
+		const string wordPattern = @"^(\w+[\w ]*)$";
+
+		Regex wordRegex;
+		
+		public DefineWordCommand ()
+		{
+			wordRegex = new Regex (wordPattern, RegexOptions.Compiled);
+		}
+		
 		public string Name {
 			get { return "Define Word"; }
 		}
@@ -38,7 +49,17 @@ namespace Do.PluginLib.Builtin
 		}
 
 		public bool SupportsItem (IItem item) {
-			return true;
+			string word;
+
+			word = null;
+			if (item is ITextItem) {
+				word = (item as ITextItem).Text;
+			}
+
+			if (word != null) {
+				return wordRegex.IsMatch (word);
+			}
+			return false;
 		}
 		
 		public void Perform (IItem[] items, IItem[] modifierItems)

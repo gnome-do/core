@@ -36,7 +36,7 @@ namespace Do.PluginLib.Builtin
 		
 		// ImageFileItems use themselves as their icons!
 		public override string Icon {
-			get { return Uri; }
+			get { return URI; }
 		}
 	}
 }

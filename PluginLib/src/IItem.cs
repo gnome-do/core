@@ -17,6 +17,16 @@ namespace Do.PluginLib
 	{
 		string Text { get; }
 	}
+	
+	public interface IURLItem : IItem
+	{
+		string URL { get; }
+	}
+	
+	public interface IURIItem : IItem
+	{
+		string URI { get; }
+	}
 
 	public interface IRunnableItem : IItem
 	{
@@ -28,9 +38,8 @@ namespace Do.PluginLib
 		void Open ();
 	}
 	
-	public interface IFileItem : IItem
+	public interface IFileItem : IURIItem
 	{
-		string Uri { get; }
 		string MimeType { get; }
 	}
 }

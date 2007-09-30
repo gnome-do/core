@@ -71,6 +71,7 @@ namespace Do.Core
 				return new Command [] {
 					new Command (new RunCommand ()),
 					new Command (new OpenCommand ()),
+					new Command (new OpenURLCommand ()),
 					new Command (new RunInShellCommand ()),
 					new Command (new DefineWordCommand ()),
 					// new Command (new VoidCommand ()),
