@@ -9,7 +9,7 @@ namespace Do.PluginLib.Builtin
 	public class OpenURLCommand : ICommand
 	{
 	
-		const string urlPattern = @"(^\w+:\/\/\w+)|(\w+.\w+$)";
+		const string urlPattern = @"(^\w+:\/\/\w+)|(\w+\.\w+$)";
 		
 		Regex urlRegex;
 		
