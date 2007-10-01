@@ -1,4 +1,4 @@
-// GLBWindow.cs created with MonoDevelop
+// GSymbolWindow.cs created with MonoDevelop
 // User: dave at 11:15 AM 8/25/2007
 //
 // To change standard headers go to Edit->Preferences->Coding->Standard Headers
@@ -15,10 +15,26 @@ using Do.PluginLib;
 namespace Do.UI
 {
 	
-	public class LBWindow : Gtk.Window
+	public class SymbolWindow : Gtk.Window
 	{
+		class DefaultIconBoxObject : IObject {
+			public string Icon { get { return "gtk-find"; } }
+			public string Name { get { return ""; } }
+			public string Description { get { return ""; } }
+		}
 		
-		private static Pixbuf default_item_pixbuf, missing_item_pixbuf;
+		class NoItemsFoundObject : IObject {
+			public string Icon { get { return "gtk-dialog-question"; } }
+			public string Name { get { return "No items found."; } }
+			public string Description { get { return ""; } }
+		}
+
+        class NoCommandsFoundObject : IObject {
+			public string Icon { get { return "gtk-dialog-question"; } }
+			public string Name { get { return "No commands found."; } }
+			public string Description { get { return ""; } }
+		}
+		
 		const int IconBoxIconSize = 128;
 		const int ResultsListIconSize = 32;
 		const int ResultsListLength = 7; 
@@ -36,72 +52,42 @@ namespace Do.UI
 			NumberColumns = 3
 		}
 		
+		ScrolledWindow resultsScrolledWindow;
+		TreeView resultsTreeview;
+		HBox resultsHBox;
+		
 		protected Commander commander;
-		protected Command current_command;
-		protected Do.Core.Item current_item;
-		protected int current_item_index;
-		protected int current_command_index;
+		protected Command currentCommand;
+		protected Do.Core.Item currentItem;
+		protected int currentItemIndex;
+		protected int currentCommandIndex;
 		protected WindowFocus focus;
 		protected string searchString;
 		protected string itemSearchString;
 		
-		LBFrame frame;
-		LBDisplayText displayText;
-	
-		ScrolledWindow result_sw;
-		HBox result_hbox;
+		RoundedFrame frame;
+		SymbolDisplayLabel displayLabel;
 
-		LBIconBox item_icon_box;
-		LBIconBox command_icon_box;
-		LBIconBox iitem_icon_box;
-
-		TreeView result_treeview;
-
-		bool          can_rgba;
-		bool          transparent;
+		IconBox itemBox;
+		IconBox commandBox;
+		IconBox modItemBox;
 		
-		static LBWindow ()
+		static SymbolWindow ()
 		{
-			default_item_pixbuf = Util.PixbufFromIconName ("gtk-find", IconBoxIconSize);
-            missing_item_pixbuf = Util.PixbufFromIconName ("gtk-dialog-question", IconBoxIconSize);
 		}
 		
-		public LBWindow (Commander commander, bool transparent) : base ("GNOME Go")
+		public SymbolWindow (Commander commander) : base ("GNOME Go")
 		{
 			Build ();
 			
 			this.commander = commander;
 			SetDefaultState ();
-			Transparent = transparent;
 			
 			commander.SetDefaultStateEvent += OnDefaultStateEvent;
 			commander.SetSearchingItemsStateEvent += OnSearchingStateEvent;
 			commander.SetSearchingCommandsStateEvent += OnSearchingStateEvent;
 			commander.SetItemSearchCompleteStateEvent += OnSearchCompleteStateEvent;
 			commander.SetCommandSearchCompleteStateEvent += OnSearchCompleteStateEvent;
-		}
-		
-		public bool Transparent {
-			get { return transparent; }
-			set {
-				if (value && !can_rgba) {
-					Console.Error.WriteLine ("Cannot paint window transparent (no rgba).");
-					return;
-				}
-				transparent = value;	
-				if (transparent) {
-					item_icon_box.Transparent = true;
-					iitem_icon_box.Transparent = true;
-					command_icon_box.Transparent = true;
-					frame.Fill = true;
-					result_sw.ShadowType = ShadowType.None;
-				} else {
-					result_sw.ShadowType = ShadowType.In;
-				}
-				if (IsDrawable) {
-					QueueDraw ();
-				}
-			}
 		}
 		
 		protected void Build ()
@@ -123,9 +109,10 @@ namespace Do.UI
 			focus = WindowFocus.ItemFocus;
 			searchString = itemSearchString = "";
 			
-			frame = new LBFrame ();
+			frame = new RoundedFrame ();
+			frame.DrawFill = true;
 			frame.FillColor = new Gdk.Color (0x35, 0x30, 0x45);
-			frame.FillAlpha = (ushort) (ushort.MaxValue * 0.9);
+			frame.FillAlpha = 0.9;
 			Add (frame);
 			frame.Show ();
 			
@@ -134,48 +121,48 @@ namespace Do.UI
 			vbox.BorderWidth = 16;
 			vbox.Show ();		
 			
-			result_hbox = new HBox (false, 12);
-			result_hbox.BorderWidth = 0;
-			vbox.PackStart (result_hbox, false, false, 0);
-			result_hbox.Show ();
+			resultsHBox = new HBox (false, 12);
+			resultsHBox.BorderWidth = 0;
+			vbox.PackStart (resultsHBox, false, false, 0);
+			resultsHBox.Show ();
 			
-			item_icon_box = new LBIconBox (IconBoxIconSize);
-			item_icon_box.IsFocused = true;
-			result_hbox.PackStart (item_icon_box, false, false, 0);
-			item_icon_box.Show ();
+			itemBox = new IconBox (IconBoxIconSize);
+			itemBox.IsFocused = true;
+			resultsHBox.PackStart (itemBox, false, false, 0);
+			itemBox.Show ();
 			
-			command_icon_box = new LBIconBox (IconBoxIconSize);
-			command_icon_box.IsFocused = false;
-			result_hbox.PackStart (command_icon_box, false, false, 0);
-			command_icon_box.Show ();
+			commandBox = new IconBox (IconBoxIconSize);
+			commandBox.IsFocused = false;
+			resultsHBox.PackStart (commandBox, false, false, 0);
+			commandBox.Show ();
 			
-			iitem_icon_box = new LBIconBox (IconBoxIconSize);
-			iitem_icon_box.IsFocused = false;
-			// result_hbox.PackStart (iitem_icon_box, false, false, 0);
-			iitem_icon_box.Show ();
+			modItemBox = new IconBox (IconBoxIconSize);
+			modItemBox.IsFocused = false;
+			// resultsHBox.PackStart (modItemBox, false, false, 0);
+			modItemBox.Show ();
 	
 			align = new Alignment (0.5F, 0.5F, 1, 1);
 			align.SetPadding (0, 0, 0, 0);
-			displayText = new LBDisplayText ();
-			align.Add (displayText);
+			displayLabel = new SymbolDisplayLabel ();
+			align.Add (displayLabel);
 			vbox.PackStart (align, false, false, 0);
-			displayText.Show ();
+			displayLabel.Show ();
 			align.Show ();
 			
-			result_sw = new ScrolledWindow ();
-			result_sw.SetSizeRequest (-1, (ResultsListIconSize + 2) * ResultsListLength + 2);
-			result_sw.SetPolicy (PolicyType.Automatic, PolicyType.Automatic);
-			result_sw.ShadowType = ShadowType.In;
-			vbox.PackStart (result_sw, true, true, 0);
-			result_sw.Show ();
+			resultsScrolledWindow = new ScrolledWindow ();
+			resultsScrolledWindow.SetSizeRequest (-1, (ResultsListIconSize + 2) * ResultsListLength + 2);
+			resultsScrolledWindow.SetPolicy (PolicyType.Automatic, PolicyType.Automatic);
+			resultsScrolledWindow.ShadowType = ShadowType.None;
+			vbox.PackStart (resultsScrolledWindow, true, true, 0);
+			resultsScrolledWindow.Show ();
 			
-			result_treeview = new TreeView ();
-			result_treeview.EnableSearch = false;
-			result_treeview.HeadersVisible = false;
-			result_sw.Add (result_treeview);
-			result_treeview.Show ();
+			resultsTreeview = new TreeView ();
+			resultsTreeview.EnableSearch = false;
+			resultsTreeview.HeadersVisible = false;
+			resultsScrolledWindow.Add (resultsTreeview);
+			resultsTreeview.Show ();
 			
-			result_treeview.Model = new ListStore (new Type[] { typeof(GCObject), typeof(Pixbuf), typeof(string) }); 
+			resultsTreeview.Model = new ListStore (new Type[] { typeof(GCObject), typeof(Pixbuf), typeof(string) }); 
 			
 			column = new TreeViewColumn ();
 			cell = new CellRendererPixbuf ();
@@ -194,9 +181,9 @@ namespace Do.UI
 			column.PackStart (cell, true);
 			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
 			
-			result_treeview.AppendColumn (column);
-			
-			result_treeview.Selection.Changed += OnWindowResultRowSelected;
+			resultsTreeview.AppendColumn (column);
+
+			resultsTreeview.Selection.Changed += OnWindowResultRowSelected;
 			ScreenChanged += OnScreenChanged;
 			
 			SetPosition (WindowPosition.Center);
@@ -206,21 +193,19 @@ namespace Do.UI
 		{
 			Gdk.Colormap  colormap;
 
-			colormap = this.Screen.RgbaColormap;
-			if (colormap != null) {
-				can_rgba = true;
-			} else {
-				colormap = this.Screen.RgbColormap;
-				System.Console.WriteLine ("No alpha support.");
+			colormap = Screen.RgbaColormap;
+			if (colormap == null) {
+				colormap = Screen.RgbColormap;
+				Console.WriteLine ("No alpha support.");
 			}
-			this.Colormap = colormap;
+			Colormap = colormap;
 		}
 		
 		protected virtual void ShowSearchResults ()
 		{
 			Requisition size;
 			
-			result_sw.Show ();
+			resultsScrolledWindow.Show ();
 			// instruction.Hide ();
 			size = SizeRequest ();
 			Resize (size.Width, size.Height);
@@ -230,7 +215,7 @@ namespace Do.UI
 		{
 			Requisition size;
 			
-			result_sw.Hide ();
+			resultsScrolledWindow.Hide ();
 			// instruction.Show ();
 			size = SizeRequest();
 			Resize (size.Width, size.Height);
@@ -320,7 +305,7 @@ namespace Do.UI
 					return false;
 				}
 				
-				result_treeview.Selection.GetSelected (out model, out iter);
+				resultsTreeview.Selection.GetSelected (out model, out iter);
 				path = model.GetPath (iter);
 				
 				if (key == Gdk.Key.Up) {
@@ -329,14 +314,14 @@ namespace Do.UI
 					}
 				}
 				else if (key == Gdk.Key.Down && num_items > 0) {
-					if (result_sw.Visible) {
+					if (resultsScrolledWindow.Visible) {
 						path.Next ();
 					} else {
 						ShowSearchResults ();
 					}
 				}					
-				result_treeview.Selection.SelectPath (path);
-				result_treeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
+				resultsTreeview.Selection.SelectPath (path);
+				resultsTreeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
 			}
 				break;
 			case Gdk.Key.Right:
@@ -371,7 +356,7 @@ namespace Do.UI
 			int selectedRowIndex;
 			
 			try {
-				selectedRowIndex = result_treeview.Selection.GetSelectedRows()[0].Indices[0];
+				selectedRowIndex = resultsTreeview.Selection.GetSelectedRows()[0].Indices[0];
 			} catch (IndexOutOfRangeException) {
 				return;
 			}
@@ -388,27 +373,14 @@ namespace Do.UI
 		}
 		
 		protected override bool OnExposeEvent (EventExpose evnt)
-		// private void OnExposeEvent (object sender, ExposeEventArgs args)
 		{
-			//return;
 			Cairo.Context cairo;
 			
-			if (!transparent) {
-				Gtk.Style.PaintBox (Style,
-				                    GdkWindow,
-				                    StateType.Normal,
-				                    ShadowType.In,
-				                    evnt.Area,
-				                    this,
-				                    "base",
-				                    0, 0, -1, -1);
-			} else {
-				cairo = Gdk.CairoHelper.Create (GdkWindow);
-				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-				cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
-				cairo.Operator = Cairo.Operator.Source;
-				cairo.Paint ();
-			}
+			cairo = Gdk.CairoHelper.Create (GdkWindow);
+			cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+			cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
+			cairo.Operator = Cairo.Operator.Source;
+			cairo.Paint ();
 			
 			return base.OnExposeEvent (evnt);
 		}
@@ -437,11 +409,11 @@ namespace Do.UI
 			// Repopulate the results list.
 			OnSearchCompleteStateEvent ();
 			
-			displayText.DisplayObject = currentObject;
-			displayText.Highlight = searchString;
-			item_icon_box.IsFocused = (focus == WindowFocus.ItemFocus);
-			command_icon_box.IsFocused = (focus == WindowFocus.CommandFocus);
-			iitem_icon_box.IsFocused = (focus == WindowFocus.IndirectItemFocus);
+			displayLabel.DisplayObject = currentObject;
+			displayLabel.Highlight = searchString;
+			itemBox.IsFocused = (focus == WindowFocus.ItemFocus);
+			commandBox.IsFocused = (focus == WindowFocus.CommandFocus);
+			modItemBox.IsFocused = (focus == WindowFocus.IndirectItemFocus);
 		}
 		
 		protected virtual void QueueSearch ()
@@ -467,11 +439,11 @@ namespace Do.UI
 			} catch (IndexOutOfRangeException) {
 				return;
 			}
-			item_icon_box.Caption = Util.UnderlineStringWithString (commander.CurrentItem.Name, match);
-			item_icon_box.Pixbuf = Util.PixbufFromIconName (commander.CurrentItem.Icon, IconBoxIconSize);
+			itemBox.DisplayObject = commander.CurrentItem;
+			itemBox.Highlight = match;
 			if (focus == WindowFocus.ItemFocus) {
-				displayText.DisplayObject = commander.CurrentItem;
-				displayText.Highlight = searchString;
+				displayLabel.DisplayObject = commander.CurrentItem;
+				displayLabel.Highlight = searchString;
 			}
 			SetCommandIndex (0, "");
 		}
@@ -484,11 +456,11 @@ namespace Do.UI
 				return;
 			}
 
-			command_icon_box.Caption = Util.UnderlineStringWithString (commander.CurrentCommand.Name, match);
-			command_icon_box.Pixbuf = Util.PixbufFromIconName (commander.CurrentCommand.Icon, IconBoxIconSize);
+			commandBox.DisplayObject = commander.CurrentCommand;
+			commandBox.Highlight = match;
 			if (focus == WindowFocus.CommandFocus) {
-				displayText.DisplayObject = commander.CurrentCommand;
-				displayText.Highlight = match;
+				displayLabel.DisplayObject = commander.CurrentCommand;
+				displayLabel.Highlight = match;
 			}
 		}
 		
@@ -497,31 +469,28 @@ namespace Do.UI
 			searchString = itemSearchString = "";
 			
 			HideSearchResults ();
-			(result_treeview.Model as ListStore).Clear ();
+			(resultsTreeview.Model as ListStore).Clear ();
 			SetWindowFocus (WindowFocus.ItemFocus);
 			
-			item_icon_box.Pixbuf = default_item_pixbuf;
-			item_icon_box.Caption = "";
-			command_icon_box.Clear ();
+			itemBox.DisplayObject = new DefaultIconBoxObject ();
+			commandBox.Clear ();
 			
-			displayText.SetDisplayText ("Type to begin searching", "Type to start searching.");			
+			displayLabel.SetdisplayLabel ("Type to begin searching", "Type to start searching.");			
 		}
 		
 		protected virtual void SetNoResultsFoundState ()
 		{
 			switch (focus) {
 			case WindowFocus.CommandFocus:
-				command_icon_box.Pixbuf = missing_item_pixbuf;
-				command_icon_box.Caption = "No commands found";
+				commandBox.DisplayObject = new NoCommandsFoundObject ();
 				break;
 			default:
 			// case WindowFocus.ItemFocus:
-				command_icon_box.Clear ();
-				item_icon_box.Pixbuf = missing_item_pixbuf;
-				item_icon_box.Caption = "No items found";
+				commandBox.Clear ();
+				itemBox.DisplayObject = new NoItemsFoundObject ();
 				break;
 			}
-			displayText.Text = "";
+			displayLabel.Text = "";
 		}
 		
 		protected void OnDefaultStateEvent ()
@@ -531,7 +500,6 @@ namespace Do.UI
 		
 		protected void OnSearchingStateEvent ()
 		{
-			displayText.Text = string.Format ("<u>{0}</u>", searchString);
 		}
 		
 		protected void OnSearchCompleteStateEvent ()
@@ -552,7 +520,7 @@ namespace Do.UI
 				break;
 			}
 			
-			store = result_treeview.Model as ListStore;
+			store = resultsTreeview.Model as ListStore;
 			store.Clear ();
 			if (results.Length == 0) {
 				SetNoResultsFoundState ();
@@ -573,8 +541,8 @@ namespace Do.UI
 					}
 					current_index++;
 				}
-				result_treeview.Selection.SelectIter (selected_iter);
-				result_treeview.ScrollToCell (result_treeview.Model.GetPath (selected_iter),
+				resultsTreeview.Selection.SelectIter (selected_iter);
+				resultsTreeview.ScrollToCell (resultsTreeview.Model.GetPath (selected_iter),
 				                              null, false, 0.0F, 0.0F);
 				
 			}

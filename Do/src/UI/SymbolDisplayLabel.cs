@@ -1,4 +1,4 @@
-// LBFrame.cs created with MonoDevelop
+// RoundedFrame.cs created with MonoDevelop
 // User: dave at 11:15 AM 8/25/2007
 //
 // To change standard headers go to Edit->Preferences->Coding->Standard Headers
@@ -14,7 +14,7 @@ using Do.PluginLib;
 namespace Do.UI
 {
 	
-	public class LBDisplayText : Label
+	public class SymbolDisplayLabel : Label
 	{
 		
 		// const string displayFormat = " <big>{0}</big> \n {1} ";
@@ -25,7 +25,7 @@ namespace Do.UI
 		string highlight;
 		string name, description;
 		
-		public LBDisplayText () : base ()
+		public SymbolDisplayLabel () : base ()
 		{		
 			Build ();
 			highlight = name = description = "";
@@ -49,11 +49,11 @@ namespace Do.UI
 					name = displayObject.Name;
 					description = displayObject.Description;
 				}
-				SetDisplayText (name, description);
+				SetdisplayLabel (name, description);
 			}
 		}
 		
-		public void SetDisplayText (string name, string description) {
+		public void SetdisplayLabel (string name, string description) {
 			this.name = (name == null ? "" : name);
 			this.description = (description == null ? "" : description);
 			highlight = "";

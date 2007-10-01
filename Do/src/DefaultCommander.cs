@@ -18,7 +18,7 @@ namespace Do
 		
 		public DefaultCommander ()
 		{
-			window = new LBWindow (this, true);
+			window = new SymbolWindow (this);
 			State = CommanderState.Default;
 		}
 		

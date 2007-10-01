@@ -1,4 +1,4 @@
-// LBFrame.cs created with MonoDevelop
+// RoundedFrame.cs created with MonoDevelop
 // User: dave at 11:15 AM 8/25/2007
 //
 // To change standard headers go to Edit->Preferences->Coding->Standard Headers
@@ -13,63 +13,63 @@ using Do.Core;
 namespace Do.UI
 {
 	
-	public class LBFrame : Bin
+	public class RoundedFrame : Bin
 	{
 		
-		Rectangle child_alloc;
+		Rectangle childAlloc;
 		double radius;
 		
-		bool draw_frame;
-		Color frame_color;
-		ushort frame_alpha;
+		bool drawFrame;
+		Color frameColor;
+		double frameAlpha;
 		
 		bool fill;
-		Color fill_color;
-		ushort fill_alpha;
+		Color fillColor;
+		double fillAlpha;
 		
-		public LBFrame () : base ()
+		public RoundedFrame () : base ()
 		{
 			fill = false;
-			fill_alpha = 0xFFFF;
-			draw_frame = false;
-			frame_alpha = 0xFFFF;
-			radius = 10.0;
-			fill_color = frame_color = new Color (0, 0, 0);
+			fillAlpha = 1.0;
+			drawFrame = false;
+			frameAlpha = 1.0;
+			radius = 12.0;
+			fillColor = frameColor = new Color (0, 0, 0);
 		}
 		
 		public double Radius {
 			get { return radius; }
 			set {
-				this.radius = value;
+				radius = value;
 				if (IsDrawable) QueueDraw ();
 			}
 		}
 		
-		public bool Frame {
-			get { return draw_frame; }
+		public bool DrawFrame {
+			get { return drawFrame; }
 			set {
-				draw_frame = value;
+				drawFrame = value;
 				if (IsDrawable) QueueDraw ();
 			}
 		}
 		
 		public Color FrameColor {
-			get { return frame_color; }
+			get { return frameColor; }
 			set {
-				fill_color = new Color ((byte)value.Red, (byte)value.Green, (byte)value.Blue);
+				fillColor = new Color ((byte)value.Red, (byte)value.Green, (byte)value.Blue);
 				if (IsDrawable) QueueDraw ();
 			}
 		}
 		
-		public ushort FrameAlpha {
-			get { return frame_alpha; }
+		public double FrameAlpha {
+			get { return frameAlpha; }
 			set {
-				frame_alpha = value;
+				frameAlpha = value;
 				if (IsDrawable) QueueDraw ();
 			}
 		}
 		
-		public bool Fill {
+		public bool DrawFill {
 			get { return fill; }
 			set {
 				fill = value;
@@ -78,17 +78,17 @@ namespace Do.UI
 		}
 		
 		public Color FillColor {
-			get { return fill_color; }
+			get { return fillColor; }
 			set {
-				fill_color = new Color ((byte)value.Red, (byte)value.Green, (byte)value.Blue);
+				fillColor = new Color ((byte)value.Red, (byte)value.Green, (byte)value.Blue);
 				if (IsDrawable) QueueDraw ();
 			}
 		}
 		
-		public ushort FillAlpha {
-			get { return fill_alpha; }
+		public double FillAlpha {
+			get { return fillAlpha; }
 			set {
-				fill_alpha = value;
+				fillAlpha = value;
 				if (IsDrawable) QueueDraw ();
 			}
 		}
@@ -135,16 +135,16 @@ namespace Do.UI
 			if (!IsDrawable) {
 				return;
 			}
-			if (!draw_frame && !fill) {
+			if (!drawFrame && !fill) {
 				/* Nothing to draw. */
 				return;
 			}
 			
-			x = child_alloc.X - Style.XThickness;
-			y = child_alloc.Y - Style.YThickness;
+			x = childAlloc.X - Style.XThickness;
+			y = childAlloc.Y - Style.YThickness;
 
-			width  = child_alloc.Width + 2 * Style.XThickness;
-			height = child_alloc.Height + 2 * Style.Ythickness;
+			width  = childAlloc.Width + 2 * Style.XThickness;
+			height = childAlloc.Height + 2 * Style.Ythickness;
 
 			if (this.radius < 0.0) {
 				radius = (int) Util.Min (width, height);
@@ -163,21 +163,21 @@ namespace Do.UI
 			if (fill) {
 				double r, g, b, a;
 
-				r = (double) fill_color.Red / ushort.MaxValue;
-				g = (double) fill_color.Green / ushort.MaxValue;
-				b = (double) fill_color.Blue / ushort.MaxValue;
-				a = (double) fill_alpha / ushort.MaxValue;
+				r = (double) fillColor.Red / ushort.MaxValue;
+				g = (double) fillColor.Green / ushort.MaxValue;
+				b = (double) fillColor.Blue / ushort.MaxValue;
+				a = fillAlpha / 1.0;
 				cairo.Color = new Cairo.Color (r, g, b, a);
 				cairo.FillPreserve ();
 			}
 
-			if (draw_frame) {
+			if (drawFrame) {
 				double r, g, b, a;
 
-				r = (double) frame_color.Red / ushort.MaxValue;
-				g = (double) frame_color.Green / ushort.MaxValue;
-				b = (double) frame_color.Blue / ushort.MaxValue;
-				a = (double) frame_alpha / ushort.MaxValue;
+				r = (double) frameColor.Red / ushort.MaxValue;
+				g = (double) frameColor.Green / ushort.MaxValue;
+				b = (double) frameColor.Blue / ushort.MaxValue;
+				a = frameAlpha / 1.0;
 				cairo.Color = new Cairo.Color (r, g, b, a);
 				cairo.Stroke ();
 			}
@@ -219,13 +219,13 @@ namespace Do.UI
 			                                        - Style.Ythickness);
 			new_alloc.X += allocation.X;
 			new_alloc.Y += allocation.Y;
-			if (IsMapped && new_alloc != child_alloc) {
+			if (IsMapped && new_alloc != childAlloc) {
 				GdkWindow.InvalidateRect (new_alloc, false);
 			}
 			if (Child != null && Child.Visible) {
 				Child.SizeAllocate (new_alloc);
 			}
-			child_alloc = new_alloc;
+			childAlloc = new_alloc;
 		}
 	}
 }
