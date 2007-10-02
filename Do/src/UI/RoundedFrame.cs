@@ -161,24 +161,22 @@ namespace Do.UI
 			cairo.Operator = Cairo.Operator.Over;
 			
 			if (fill) {
-				double r, g, b, a;
+				double r, g, b;
 
 				r = (double) fillColor.Red / ushort.MaxValue;
 				g = (double) fillColor.Green / ushort.MaxValue;
 				b = (double) fillColor.Blue / ushort.MaxValue;
-				a = fillAlpha / 1.0;
-				cairo.Color = new Cairo.Color (r, g, b, a);
+				cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
 				cairo.FillPreserve ();
 			}
 
 			if (drawFrame) {
-				double r, g, b, a;
+				double r, g, b;
 
 				r = (double) frameColor.Red / ushort.MaxValue;
 				g = (double) frameColor.Green / ushort.MaxValue;
 				b = (double) frameColor.Blue / ushort.MaxValue;
-				a = frameAlpha / 1.0;
-				cairo.Color = new Cairo.Color (r, g, b, a);
+				cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
 				cairo.Stroke ();
 			}
 		}

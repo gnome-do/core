@@ -38,6 +38,7 @@ namespace Do.UI
 		const int IconBoxIconSize = 128;
 		const int ResultsListIconSize = 32;
 		const int ResultsListLength = 7; 
+		const double WindowTransparency = 0.91;
 		
 		protected enum WindowFocus {
 			ItemFocus,
@@ -112,7 +113,7 @@ namespace Do.UI
 			frame = new RoundedFrame ();
 			frame.DrawFill = true;
 			frame.FillColor = new Gdk.Color (0x35, 0x30, 0x45);
-			frame.FillAlpha = 0.9;
+			frame.FillAlpha = WindowTransparency;
 			Add (frame);
 			frame.Show ();
 			
