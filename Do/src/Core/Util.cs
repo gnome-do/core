@@ -158,8 +158,15 @@ namespace Do.Core
 		}
 		
 		public static string UnderlineStringWithString (string main, string underline) {
+			return EntagCommonSubsequencesOfStringWithString (main, underline, "<u>", "</u>");
+		}
+		
+		public static string EntagCommonSubsequencesOfStringWithString (string main, string underline, 
+		                                                                string begin_entag, string end_entag) {
 			int pos, len, match_pos, last_main_cut;
 			string lower_main, lower_underline, result;
+			string skipped, matched, remainder;
+			bool matchedTermination;
 			
 			result = "";
 			match_pos = last_main_cut = 0;
@@ -167,21 +174,32 @@ namespace Do.Core
 			lower_underline = underline.ToLower ();
 			
 			for (pos = 0; pos < underline.Length; ++pos) {
-				for (len = 1; len < underline.Length - pos; ++len) {
+				matchedTermination = false;
+				for (len = 1; len <= underline.Length - pos; ++len) {
 					int tmp_match_pos = lower_main.IndexOf (lower_underline.Substring (pos, len));
 					if (tmp_match_pos < 0) {
-						--len;
+						len--;
+						matchedTermination = false;
 						break;
 					} else {
+						matchedTermination = true;
 						match_pos = tmp_match_pos;
 					}
 				}
+				if (matchedTermination) {
+					len--;
+				}
 				if (0 < len) {
-					// Theres a match starting at match_pos with positive length
-					string skipped = main.Substring (last_main_cut, match_pos - last_main_cut);
-					string matched = main.Substring (match_pos, len);
-					string remainder = UnderlineStringWithString (main.Substring (match_pos + len), underline.Substring (pos + len));
-					result = string.Format ("{0}<u>{1}</u>{2}", skipped, matched, remainder);
+					 //Theres a match starting at match_pos with positive length
+					skipped = main.Substring (last_main_cut, match_pos - last_main_cut);
+					matched = main.Substring (match_pos, len);
+					if ( skipped.Length + matched.Length < main.Length) {
+						remainder = UnderlineStringWithString (main.Substring (match_pos + len), underline.Substring (pos + len));
+					}
+					else {
+						remainder = "";
+					}
+					result = string.Format ("{0}{1}{2}{3}{4}", skipped, begin_entag, matched, end_entag, remainder);
 					break;
 				}
 			}
