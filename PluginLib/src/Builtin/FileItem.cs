@@ -80,7 +80,7 @@ namespace Do.PluginLib.Builtin
 			this.uri = uri;
 			this.name = Path.GetFileName (uri);
 			this.mime_type = Gnome.Vfs.Global.GetMimeType (uri);
-			
+
 			if (System.IO.Directory.Exists (uri)) {
 				icon = "folder";
 			} else {

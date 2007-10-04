@@ -152,7 +152,11 @@ namespace Do.Core
 				}
 			}
 			if (pixbuf == null) {
-				pixbuf = UnknownPixbuf;
+				try {
+					pixbuf = iconTheme.LoadIcon ("empty", size, 0);
+				} catch {
+					pixbuf = UnknownPixbuf;
+				}
 			}
 			return pixbuf;
 		}
