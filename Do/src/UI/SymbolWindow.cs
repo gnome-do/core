@@ -39,9 +39,9 @@ namespace Do.UI
 		const double WindowTransparency = 0.91;
 		
 		protected enum WindowFocus {
-			ItemFocus,
-			CommandFocus,
-			IndirectItemFocus,
+			ItemFocus = 0,
+			CommandFocus = 1,
+			ModifierItemFocus = 2,
 		}
 		
 		RoundedFrame frame;
@@ -180,7 +180,8 @@ namespace Do.UI
 			
 			resultsWindow.GetSize (out results.Width, out results.Height);
 			results.Y = main.Y + main.Height;
-			resultsWindow.SetUposition (main.X, results.Y);			
+			results.X = main.X + (IconBoxIconSize + 60) * (int) focus + 10;
+			resultsWindow.SetUposition (results.X, results.Y);			
 		}
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
@@ -213,8 +214,8 @@ namespace Do.UI
 					commander.State = CommanderState.Default;
 				} else {
 					if (searchString.Length == 0) {
-						commander.State = CommanderState.Default;
 						resultsWindow.Hide ();
+						commander.State = CommanderState.Default;
 					} else {
 						searchString = "";
 						QueueSearch ();
@@ -255,12 +256,13 @@ namespace Do.UI
 					num_items = commander.CurrentCommands.Length;
 					break;
 				}
-				if (num_items == 0) {
-					return false;
-				}
 				
 				if (key == Gdk.Key.Up) {
-					resultsWindow.SelectPrev ();
+					if (resultsWindow.SelectedIndex == 0) {
+						resultsWindow.Hide ();
+					} else {
+						resultsWindow.SelectPrev ();
+					}
 				}
 				else if (key == Gdk.Key.Down) {
 					if (resultsWindow.Visible) {
@@ -329,11 +331,7 @@ namespace Do.UI
 			IObject[] results;
 			int selectedIndex;
 			
-			if (this.focus == focus) {
-				return;
-			}			
 			this.focus = focus;
-
 			results = null;
 			selectedIndex = -1;
 			switch (focus) {
@@ -356,7 +354,9 @@ namespace Do.UI
 			displayLabel.Highlight = searchString;
 			itemBox.IsFocused = (focus == WindowFocus.ItemFocus);
 			commandBox.IsFocused = (focus == WindowFocus.CommandFocus);
-			modItemBox.IsFocused = (focus == WindowFocus.IndirectItemFocus);
+			modItemBox.IsFocused = (focus == WindowFocus.ModifierItemFocus);
+
+			Reposition ();
 		}
 		
 		protected virtual void QueueSearch ()

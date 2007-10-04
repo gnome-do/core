@@ -89,7 +89,7 @@ namespace Do.UI
 			vbox = new VBox (false, 0);
 			Add (vbox);
 			vbox.BorderWidth = 4;
-			vbox.SetSizeRequest (396, (ResultIconSize + 3) * NumberResultsDisplayed);
+			vbox.SetSizeRequest (350, (ResultIconSize + 3) * NumberResultsDisplayed);
 			vbox.Show ();
 			
 			resultsScrolledWindow = new ScrolledWindow ();
