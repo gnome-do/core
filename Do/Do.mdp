@@ -21,6 +21,7 @@
     <File name="./src/Main.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/UI" subtype="Directory" buildaction="Compile" />
     <File name="./src/UI/RoundedFrame.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/UI/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/UI/SymbolWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/UI/IconBox.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Core" subtype="Directory" buildaction="Compile" />

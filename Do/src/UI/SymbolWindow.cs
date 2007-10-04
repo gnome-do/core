@@ -29,15 +29,13 @@ namespace Do.UI
 			public string Description { get { return ""; } }
 		}
 
-        class NoCommandsFoundObject : IObject {
+		class NoCommandsFoundObject : IObject {
 			public string Icon { get { return "gtk-dialog-question"; } }
 			public string Name { get { return "No commands found."; } }
 			public string Description { get { return ""; } }
 		}
 		
 		const int IconBoxIconSize = 128;
-		const int ResultsListIconSize = 32;
-		const int ResultsListLength = 7; 
 		const double WindowTransparency = 0.91;
 		
 		protected enum WindowFocus {
@@ -46,16 +44,13 @@ namespace Do.UI
 			IndirectItemFocus,
 		}
 		
-		protected enum Column {
-			ItemColumn = 0,
-			PixbufColumn = 1,
-			NameColumn = 2,
-			NumberColumns = 3
-		}
-		
-		ScrolledWindow resultsScrolledWindow;
-		TreeView resultsTreeview;
+		RoundedFrame frame;
+		SymbolDisplayLabel displayLabel;
+		ResultsWindow resultsWindow;
 		HBox resultsHBox;
+		IconBox itemBox;
+		IconBox commandBox;
+		IconBox modItemBox;
 		
 		protected Commander commander;
 		protected Command currentCommand;
@@ -65,17 +60,6 @@ namespace Do.UI
 		protected WindowFocus focus;
 		protected string searchString;
 		protected string itemSearchString;
-		
-		RoundedFrame frame;
-		SymbolDisplayLabel displayLabel;
-
-		IconBox itemBox;
-		IconBox commandBox;
-		IconBox modItemBox;
-		
-		static SymbolWindow ()
-		{
-		}
 		
 		public SymbolWindow (Commander commander) : base ("GNOME Go")
 		{
@@ -94,8 +78,6 @@ namespace Do.UI
 		protected void Build ()
 		{
 			VBox         vbox;
-			TreeViewColumn column;
-			CellRenderer   cell;
 			Alignment align;
 			
 			AppPaintable = true;
@@ -106,7 +88,10 @@ namespace Do.UI
 				
 			try { SetIconFromFile ("/usr/share/icons/gnome/scalable/actions/system-run.svg"); } catch { }
 			SetColormap ();
-			
+
+			resultsWindow = new ResultsWindow ();
+			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
+
 			focus = WindowFocus.ItemFocus;
 			searchString = itemSearchString = "";
 			
@@ -149,45 +134,10 @@ namespace Do.UI
 			vbox.PackStart (align, false, false, 0);
 			displayLabel.Show ();
 			align.Show ();
-			
-			resultsScrolledWindow = new ScrolledWindow ();
-			resultsScrolledWindow.SetSizeRequest (-1, (ResultsListIconSize + 2) * ResultsListLength + 2);
-			resultsScrolledWindow.SetPolicy (PolicyType.Automatic, PolicyType.Automatic);
-			resultsScrolledWindow.ShadowType = ShadowType.None;
-			vbox.PackStart (resultsScrolledWindow, true, true, 0);
-			resultsScrolledWindow.Show ();
-			
-			resultsTreeview = new TreeView ();
-			resultsTreeview.EnableSearch = false;
-			resultsTreeview.HeadersVisible = false;
-			resultsScrolledWindow.Add (resultsTreeview);
-			resultsTreeview.Show ();
-			
-			resultsTreeview.Model = new ListStore (new Type[] { typeof(GCObject), typeof(Pixbuf), typeof(string) }); 
-			
-			column = new TreeViewColumn ();
-			cell = new CellRendererPixbuf ();
-			column.PackStart (cell, false);
-			
-			cell.CellBackgroundGdk = new Color (byte.MaxValue, byte.MaxValue, byte.MaxValue);
-			// This property is not available.
-			// cell.CellBackgroundSet = true;
-			// Maybe below?
-			// cell.CellBackground = "white";
-			cell.SetFixedSize (-1, 4 + ResultsListIconSize - (int) cell.Ypad);
-			column.AddAttribute (cell, "pixbuf", (int) Column.PixbufColumn);
-			
-			cell = new CellRendererText ();
-			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
-			column.PackStart (cell, true);
-			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
-			
-			resultsTreeview.AppendColumn (column);
-
-			resultsTreeview.Selection.Changed += OnWindowResultRowSelected;
+				
 			ScreenChanged += OnScreenChanged;
-			
-			SetPosition (WindowPosition.Center);
+		
+			Reposition ();
 		}
 	
 		protected virtual void SetColormap ()
@@ -202,33 +152,36 @@ namespace Do.UI
 			Colormap = colormap;
 		}
 		
-		protected virtual void ShowSearchResults ()
-		{
-			Requisition size;
-			
-			resultsScrolledWindow.Show ();
-			// instruction.Hide ();
-			size = SizeRequest ();
-			Resize (size.Width, size.Height);
-		}
-		
-		protected virtual void HideSearchResults ()
-		{
-			Requisition size;
-			
-			resultsScrolledWindow.Hide ();
-			// instruction.Show ();
-			size = SizeRequest();
-			Resize (size.Width, size.Height);
-		}	
-		
 		protected override bool OnButtonPressEvent (EventButton evnt)
 		{
 			Hide ();
-			commander.State = CommanderState.Default;
 			return false;
 		}
-
+		
+		public virtual new void Hide ()
+		{
+			base.Hide ();
+			resultsWindow.Hide ();
+			commander.State = CommanderState.Default;
+		}
+		
+		public void Reposition ()
+		{
+			int monitor;
+			Gdk.Rectangle geo, main, results;
+			
+			GetPosition (out main.X, out main.Y);
+			GetSize (out main.Width, out main.Height);
+			monitor = Screen.GetMonitorAtPoint (main.X, main.Y);
+			geo = Screen.GetMonitorGeometry (monitor);
+			main.X = (geo.Width - main.Width) / 2;
+			main.Y =  (int) ((geo.Height - main.Height) / 2.5);
+			SetUposition (main.X, main.Y);
+			
+			resultsWindow.GetSize (out results.Width, out results.Height);
+			results.Y = main.Y + main.Height;
+			resultsWindow.SetUposition (main.X, results.Y);			
+		}
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
@@ -256,10 +209,12 @@ namespace Do.UI
 					if (searchString.Length == 0) {
 						Hide ();
 					}
+					resultsWindow.Hide ();
 					commander.State = CommanderState.Default;
 				} else {
 					if (searchString.Length == 0) {
 						commander.State = CommanderState.Default;
+						resultsWindow.Hide ();
 					} else {
 						searchString = "";
 						QueueSearch ();
@@ -289,11 +244,9 @@ namespace Do.UI
 			case Gdk.Key.Up:
 			case Gdk.Key.Down:
 			{
-				TreeModel model;
-				TreeIter iter;
-				TreePath path;
-				int num_items = 0;
+				int num_items;
 				
+				num_items = 0;
 				switch (focus) {
 				case WindowFocus.ItemFocus:
 					num_items = commander.CurrentItems.Length;
@@ -306,23 +259,16 @@ namespace Do.UI
 					return false;
 				}
 				
-				resultsTreeview.Selection.GetSelected (out model, out iter);
-				path = model.GetPath (iter);
-				
 				if (key == Gdk.Key.Up) {
-					if (!path.Prev ()) {
-						HideSearchResults ();
+					resultsWindow.SelectPrev ();
+				}
+				else if (key == Gdk.Key.Down) {
+					if (resultsWindow.Visible) {
+						resultsWindow.SelectNext ();
+					} else {					
+						resultsWindow.Show ();
 					}
 				}
-				else if (key == Gdk.Key.Down && num_items > 0) {
-					if (resultsScrolledWindow.Visible) {
-						path.Next ();
-					} else {
-						ShowSearchResults ();
-					}
-				}					
-				resultsTreeview.Selection.SelectPath (path);
-				resultsTreeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
 			}
 				break;
 			case Gdk.Key.Right:
@@ -347,24 +293,16 @@ namespace Do.UI
 		
 		protected virtual void ActivateCommand ()
 		{
-			Hide ();
 			commander.Execute ();
-			commander.State = CommanderState.Default;
+			Hide ();
 		}
 		
-		private void OnWindowResultRowSelected (object sender, EventArgs args)
+		private void OnResultsWindowSelectionChanged (object sender, ResultsWindowSelectionEventArgs args)
 		{
-			int selectedRowIndex;
-			
-			try {
-				selectedRowIndex = resultsTreeview.Selection.GetSelectedRows()[0].Indices[0];
-			} catch (IndexOutOfRangeException) {
-				return;
-			}
 			if (focus == WindowFocus.ItemFocus) {
-				SetItemIndex (selectedRowIndex, searchString);
+				SetItemIndex (args.SelectedIndex, searchString);
 			} else if (focus == WindowFocus.CommandFocus) {
-				SetCommandIndex (selectedRowIndex, searchString);
+				SetCommandIndex (args.SelectedIndex, searchString);
 			}			
 		}
 
@@ -388,29 +326,33 @@ namespace Do.UI
 		
 		protected virtual void SetWindowFocus (WindowFocus focus)
 		{	
-			IObject currentObject;
+			IObject[] results;
+			int selectedIndex;
 			
-			currentObject = null;
 			if (this.focus == focus) {
 				return;
 			}			
 			this.focus = focus;
 
+			results = null;
+			selectedIndex = -1;
 			switch (focus) {
 			case WindowFocus.CommandFocus:
 				searchString = commander.CommandSearchString;
-				currentObject = commander.CurrentCommand;
+				results = commander.CurrentCommands;
+				selectedIndex = commander.CurrentCommandIndex;
 				break;
 			case WindowFocus.ItemFocus:
 				searchString = commander.ItemSearchString;
-				currentObject = commander.CurrentItem;
+				results = commander.CurrentItems;
+				selectedIndex = commander.CurrentItemIndex;
 				break;
 			}
 
-			// Repopulate the results list.
-			OnSearchCompleteStateEvent ();
+			resultsWindow.Results = results;
+			resultsWindow.SelectedIndex = selectedIndex;
 			
-			displayLabel.DisplayObject = currentObject;
+			displayLabel.DisplayObject = resultsWindow.SelectedObject;
 			displayLabel.Highlight = searchString;
 			itemBox.IsFocused = (focus == WindowFocus.ItemFocus);
 			commandBox.IsFocused = (focus == WindowFocus.CommandFocus);
@@ -468,9 +410,7 @@ namespace Do.UI
 		protected virtual void SetDefaultState ()
 		{
 			searchString = itemSearchString = "";
-			
-			HideSearchResults ();
-			(resultsTreeview.Model as ListStore).Clear ();
+
 			SetWindowFocus (WindowFocus.ItemFocus);
 			
 			itemBox.DisplayObject = new DefaultIconBoxObject ();
@@ -505,8 +445,6 @@ namespace Do.UI
 		
 		protected void OnSearchCompleteStateEvent ()
 		{
-			ListStore store;
-			TreeIter  iter, selected_iter;
 			GCObject[] results;
 			
 			switch (focus) {
@@ -520,32 +458,13 @@ namespace Do.UI
 				results = new GCObject [0];
 				break;
 			}
-			
-			store = resultsTreeview.Model as ListStore;
-			store.Clear ();
+		
+			resultsWindow.Results = results;
 			if (results.Length == 0) {
 				SetNoResultsFoundState ();
 			} else {
 				SetItemIndex (commander.CurrentItemIndex, commander.ItemSearchString);
 				SetCommandIndex (commander.CurrentCommandIndex, commander.CommandSearchString);
-				
-				int current_index = 0;
-				selected_iter = default (TreeIter);
-				foreach (GCObject result in results) {
-					Pixbuf small_icon = Util.PixbufFromIconName (result.Icon, ResultsListIconSize);
-					string result_info = string.Format ("<b>{0}</b>\n<i><small>{1}</small></i>", result.Name, result.Description);
-					iter = store.AppendValues (new object[] { result, small_icon, result_info });
-					
-					if ((focus == WindowFocus.ItemFocus && commander.CurrentItemIndex == current_index) ||
-						(focus == WindowFocus.CommandFocus && commander.CurrentCommandIndex == current_index)) {
-						selected_iter = iter;
-					}
-					current_index++;
-				}
-				resultsTreeview.Selection.SelectIter (selected_iter);
-				resultsTreeview.ScrollToCell (resultsTreeview.Model.GetPath (selected_iter),
-				                              null, false, 0.0F, 0.0F);
-				
 			}
 		}
 		
