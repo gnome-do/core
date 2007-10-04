@@ -17,8 +17,7 @@ namespace Do.UI
 	public class IconBox : RoundedFrame
 	{
 		const string captionFormat = "{0}";
-		const string beginHighlight = "<span weight=\"heavy\" background=\"#353045\">";
-		const string endHighlight = "</span>";
+		const string highlightFormat = "<span weight=\"heavy\" background=\"#353045\">{0}</span>";
 		
 		protected bool isFocused;
 		
@@ -136,9 +135,7 @@ namespace Do.UI
 				string highlight;
 				
 				if (value != null) {
-					highlight = Util.UnderlineStringWithString (caption, value);
-					highlight = highlight.Replace ("<u>", beginHighlight);
-					highlight = highlight.Replace ("</u>", endHighlight);
+					highlight = Util.FormatCommonSubstrings (caption, value, highlightFormat);
 				} else {
 					highlight = caption;
 				}

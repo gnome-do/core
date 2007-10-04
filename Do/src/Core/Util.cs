@@ -157,26 +157,21 @@ namespace Do.Core
 			return pixbuf;
 		}
 		
-		public static string UnderlineStringWithString (string main, string underline) {
-			return EntagCommonSubsequencesOfStringWithString (main, underline, "<u>", "</u>");
-		}
-		
-		public static string EntagCommonSubsequencesOfStringWithString (string main, string underline, 
-		                                                                string begin_entag, string end_entag) {
+		public static string FormatCommonSubstrings (string main, string other, string format) {
 			int pos, len, match_pos, last_main_cut;
-			string lower_main, lower_underline, result;
+			string lower_main, result;
 			string skipped, matched, remainder;
 			bool matchedTermination;
 			
 			result = "";
 			match_pos = last_main_cut = 0;
 			lower_main = main.ToLower ();
-			lower_underline = underline.ToLower ();
+			other = other.ToLower ();
 			
-			for (pos = 0; pos < underline.Length; ++pos) {
+			for (pos = 0; pos < other.Length; ++pos) {
 				matchedTermination = false;
-				for (len = 1; len <= underline.Length - pos; ++len) {
-					int tmp_match_pos = lower_main.IndexOf (lower_underline.Substring (pos, len));
+				for (len = 1; len <= other.Length - pos; ++len) {
+					int tmp_match_pos = lower_main.IndexOf (other.Substring (pos, len));
 					if (tmp_match_pos < 0) {
 						len--;
 						matchedTermination = false;
@@ -194,12 +189,12 @@ namespace Do.Core
 					skipped = main.Substring (last_main_cut, match_pos - last_main_cut);
 					matched = main.Substring (match_pos, len);
 					if ( skipped.Length + matched.Length < main.Length) {
-						remainder = UnderlineStringWithString (main.Substring (match_pos + len), underline.Substring (pos + len));
+						remainder = FormatCommonSubstrings ( main.Substring (match_pos + len), other.Substring (pos + len), format);
 					}
 					else {
 						remainder = "";
 					}
-					result = string.Format ("{0}{1}{2}{3}{4}", skipped, begin_entag, matched, end_entag, remainder);
+					result = string.Format ("{0}{1}{2}", skipped, string.Format(format, matched), remainder);
 					break;
 				}
 			}

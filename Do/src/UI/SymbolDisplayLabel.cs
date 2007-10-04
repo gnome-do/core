@@ -70,7 +70,7 @@ namespace Do.UI
 		
 		void UpdateText ()
 		{
-			Markup = string.Format (displayFormat, Util.UnderlineStringWithString (name, highlight), description);
+			Markup = string.Format (displayFormat, Util.FormatCommonSubstrings(name, highlight, "<u>{0}</u>"), description);
 		}
 		
 	}
