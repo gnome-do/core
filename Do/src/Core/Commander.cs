@@ -59,9 +59,9 @@ namespace Do.Core
 					// Index contents of Home (~) directory to 1 level
 					new ItemSource (new DirectoryFileItemSource ("~", 1)),
 					// Index contents of ~/Documents to 3 levels
-					new ItemSource (new DirectoryFileItemSource ("~/Documents", 2)),
+					new ItemSource (new DirectoryFileItemSource ("~/Documents", 3)),
 					// Index contents of ~/Desktop to 1 levels
-					new ItemSource (new DirectoryFileItemSource ("~/Desktop", 1)),
+					new ItemSource (new DirectoryFileItemSource ("~/Desktop", 2)),
 				};
 			}
 		}

@@ -25,7 +25,7 @@ namespace Do.PluginLib.Builtin
 		}
 		
 		public string Name {
-			get { return "Define Word"; }
+			get { return "Define"; }
 		}
 		
 		public string Description {
