@@ -6,6 +6,7 @@
 
 using System;
 using System.Text;
+using System.Collections.Generic;
 
 using Gtk;
 using Gdk;
@@ -23,8 +24,12 @@ namespace Do.Core
 		public static readonly Pixbuf UnknownPixbuf;
 		public const int DefaultIconSize = 80;
 		
+		// TODO: Implement a separate Pixbuf cache class
+		static Dictionary<string, Pixbuf> pixbufCache;
+		
 		static Util ()
 		{
+			pixbufCache = new Dictionary<string,Gdk.Pixbuf> ();
 			UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, DefaultIconSize, DefaultIconSize);
 			UnknownPixbuf.Fill (0x00000000);
 		}
@@ -117,10 +122,17 @@ namespace Do.Core
 		{
 			Gtk.IconTheme iconTheme;
 			Gdk.Pixbuf pixbuf;
+			string icon_description;
 
 			if (name == null || name.Length == 0) {
 				return null;
 			}
+			
+			icon_description = name + size;
+			if (pixbufCache.ContainsKey (icon_description)) {
+				return pixbufCache[icon_description];
+			}
+			
 			
 			if (name.StartsWith ("/")) {
 				try {
@@ -158,6 +170,10 @@ namespace Do.Core
 					pixbuf = UnknownPixbuf;
 				}
 			}
+			if (pixbuf != null && pixbuf != UnknownPixbuf) {
+				pixbufCache[icon_description] = pixbuf;
+			}
+			
 			return pixbuf;
 		}
 		
