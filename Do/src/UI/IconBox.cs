@@ -102,7 +102,7 @@ namespace Do.UI
 		
 		public string Icon {
 			set {
-				Pixbuf = Util.PixbufFromIconName (value, iconSize);
+				Pixbuf = Util.Appearance.PixbufFromIconName (value, iconSize);
 			}
 		}
 		
@@ -116,16 +116,15 @@ namespace Do.UI
 		
 		public IObject DisplayObject {
 			set {
-				Pixbuf icon;
-				string name;
+				string name, icon;
 				
 				icon = null;
 				name = "";
 				if (value != null) {
-					icon = Util.PixbufFromIconName (value.Icon, iconSize);
+					icon = value.Icon;
 					name = value.Name;
 				}
-				Pixbuf = icon;
+				Icon = icon;
 				Caption = name;
 			}
 		}

@@ -25,7 +25,7 @@ namespace Do
 		protected override void OnVisibilityChanged (bool visible)
 		{
 				if (visible) {
-					Util.PresentWindow (window);
+					Util.Appearance.PresentWindow (window);
 				}
 		}
 	}

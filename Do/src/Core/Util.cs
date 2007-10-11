@@ -21,21 +21,166 @@ namespace Do.Core
 	public class Util
 	{
 		
-		public static readonly Pixbuf UnknownPixbuf;
-		public const int DefaultIconSize = 80;
-		
-		// TODO: Implement a separate Pixbuf cache class
-		static Dictionary<string, Pixbuf> pixbufCache;
 		
 		static Util ()
 		{
-			pixbufCache = new Dictionary<string,Gdk.Pixbuf> ();
-			UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, DefaultIconSize, DefaultIconSize);
-			UnknownPixbuf.Fill (0x00000000);
 		}
-		
-		public Util ()
+
+		public class Appearance
 		{
+
+			public static readonly Pixbuf UnknownPixbuf;
+			public const int DefaultIconSize = 80;
+			
+			// TODO: Implement a separate Pixbuf cache class
+			static Dictionary<string, Pixbuf> pixbufCache;
+
+			static Appearance ()
+			{
+				pixbufCache = new Dictionary<string,Gdk.Pixbuf> ();
+				UnknownPixbuf = new Pixbuf (Colorspace.Rgb,
+																		true, 8,
+																		DefaultIconSize,
+																		DefaultIconSize);
+				UnknownPixbuf.Fill (0x00000000);
+			}
+
+			public static string MarkupSafeString (string s)
+			{
+				if (s == null) {
+					return "";
+				}
+				s = s.Replace ("&", "&amp;");
+				s = s.Replace ("=", "");
+				return s;
+			}
+
+			public static Pixbuf PixbufFromIconName (string name, int size)
+			{
+				IconTheme iconTheme;
+				Pixbuf pixbuf;
+				string icon_description;
+
+				if (name == null || name.Length == 0) {
+					return null;
+				}
+				
+				pixbuf = null;
+				icon_description = name + size;
+				if (pixbufCache.ContainsKey (icon_description)) {
+					return pixbufCache[icon_description];
+				}
+				
+				// TODO: Use a GNOME ThumbnailFactory
+				if (name.StartsWith ("/")) {
+					try {
+						pixbuf = new Pixbuf (name, size, size);
+					} catch {
+						return null;
+					}
+				}
+
+				iconTheme = Gtk.IconTheme.Default;
+				if (pixbuf == null) {
+					try {
+						pixbuf = iconTheme.LoadIcon (name, size, 0);
+					} catch {
+						pixbuf = null;
+					}
+				}
+				if (pixbuf == null) {
+					try {
+						string newname = name.Remove (name.LastIndexOf ("."));
+						pixbuf = iconTheme.LoadIcon (newname, size, 0);
+					} catch {
+						pixbuf = null;
+					}
+				}
+				if (pixbuf == null && name == "gnome-mime-text-plain") {
+					try {
+						pixbuf = iconTheme.LoadIcon ("gnome-mime-text", size, 0);
+					} catch {
+						pixbuf = null;
+					}
+				}
+				if (pixbuf == null) {
+					try {
+						pixbuf = iconTheme.LoadIcon ("empty", size, 0);
+					} catch {
+						pixbuf = UnknownPixbuf;
+					}
+				}
+				if (pixbuf != null && pixbuf != UnknownPixbuf) {
+					pixbufCache[icon_description] = pixbuf;
+				}
+				return pixbuf;
+			}
+			
+			
+			public static void PresentWindow (Gtk.Window window)
+			{
+				window.Present ();
+				window.GdkWindow.Raise ();
+				
+				for (int i = 0; i < 100; i++) {
+					if (TryGrabWindow (window)) {
+						break;
+					}
+					System.Threading.Thread.Sleep (100);
+				}
+			}
+			
+			[DllImport ("/usr/lib/libgtk-x11-2.0.so.0")]
+			private static extern uint gdk_x11_get_server_time (IntPtr gdk_window);
+			
+			private static bool TryGrabWindow (Gtk.Window window)
+			{
+				uint time;
+				try {
+					time = gdk_x11_get_server_time (window.GdkWindow.Handle);
+				} catch (DllNotFoundException) {
+					Console.WriteLine ("/usr/lib/libgtk-x11-2.0.so.0 not found - cannot grab window");
+					return true;
+				}
+				if (Pointer.Grab (window.GdkWindow,
+										true,
+										EventMask.ButtonPressMask |
+										EventMask.ButtonReleaseMask |
+										EventMask.PointerMotionMask,
+										null,
+										null,
+										time) == GrabStatus.Success) {
+					if (Keyboard.Grab (window.GdkWindow, true, time) == GrabStatus.Success) {
+						return true;
+					} else {
+						Pointer.Ungrab (time);
+						return false;
+					} 
+				}
+				return false;
+			}
+				
+			[DllImport ("libc")] // Linux
+					private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
+					
+					[DllImport ("libc")] // BSD
+					private static extern void setproctitle (byte [] fmt, byte [] str_arg);
+
+			// Results in SIGSEGV
+					public static void SetProcessName (string name)
+					{
+							try {
+									if(prctl(15 /* PR_SET_NAME */, Encoding.ASCII.GetBytes(name + "\0"), 
+											IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0) {
+											throw new ApplicationException("Error setting process name: " + 
+													Mono.Unix.Native.Stdlib.GetLastError());
+									}
+							} catch(EntryPointNotFoundException) {
+									setproctitle(Encoding.ASCII.GetBytes("%s\0"), 
+											Encoding.ASCII.GetBytes(name + "\0"));
+							}
+					}
+			
 		}
 		
 		public static IComparable Min (IComparable a, IComparable b) {
@@ -117,66 +262,7 @@ namespace Do.Core
 			}
 			return 0;
 		}
-		
-		public static Gdk.Pixbuf PixbufFromIconName (string name, int size)
-		{
-			Gtk.IconTheme iconTheme;
-			Gdk.Pixbuf pixbuf;
-			string icon_description;
 
-			if (name == null || name.Length == 0) {
-				return null;
-			}
-			
-			icon_description = name + size;
-			if (pixbufCache.ContainsKey (icon_description)) {
-				return pixbufCache[icon_description];
-			}
-			
-			
-			if (name.StartsWith ("/")) {
-				try {
-					return new Gdk.Pixbuf (name, size, size);
-				} catch {
-					return null;
-				}
-			}
-			
-			iconTheme = Gtk.IconTheme.Default;
-			try {
-				pixbuf = iconTheme.LoadIcon (name, size, 0);
-			} catch {
-				pixbuf = null;
-			}
-			if (pixbuf == null) {
-				try {
-					string newname = name.Remove (name.LastIndexOf ("."));
-					pixbuf = iconTheme.LoadIcon (newname, size, 0);
-				} catch {
-					pixbuf = null;
-				}
-			}
-			if (pixbuf == null && name == "gnome-mime-text-plain") {
-				try {
-					pixbuf = iconTheme.LoadIcon ("gnome-mime-text", size, 0);
-				} catch {
-					pixbuf = null;
-				}
-			}
-			if (pixbuf == null) {
-				try {
-					pixbuf = iconTheme.LoadIcon ("empty", size, 0);
-				} catch {
-					pixbuf = UnknownPixbuf;
-				}
-			}
-			if (pixbuf != null && pixbuf != UnknownPixbuf) {
-				pixbufCache[icon_description] = pixbuf;
-			}
-			
-			return pixbuf;
-		}
-		
 		public static string FormatCommonSubstrings (string main, string other, string format) {
 			int pos, len, match_pos, last_main_cut;
 			string lower_main, result;
@@ -224,70 +310,5 @@ namespace Do.Core
 			}
 			return result;
 		}
-		
-		public static void PresentWindow (Gtk.Window window)
-		{
-			window.Present ();
-			window.GdkWindow.Raise ();
-			
-			for (int i = 0; i < 100; i++) {
-				if (TryGrabWindow (window)) {
-					break;
-				}
-				System.Threading.Thread.Sleep (100);
-			}
-		}
-		
-		[DllImport ("/usr/lib/libgtk-x11-2.0.so.0")]
-		private static extern uint gdk_x11_get_server_time (IntPtr gdk_window);
-		
-		private static bool TryGrabWindow (Gtk.Window window)
-		{
-			uint time;
-			try {
-				time = gdk_x11_get_server_time (window.GdkWindow.Handle);
-			} catch (DllNotFoundException) {
-				Console.WriteLine ("/usr/lib/libgtk-x11-2.0.so.0 not found - cannot grab window");
-				return true;
-			}
-			if (Pointer.Grab (window.GdkWindow,
-								  true,
-								  EventMask.ButtonPressMask |
-								  EventMask.ButtonReleaseMask |
-								  EventMask.PointerMotionMask,
-								  null,
-								  null,
-								  time) == GrabStatus.Success) {
-				if (Keyboard.Grab (window.GdkWindow, true, time) == GrabStatus.Success) {
-					return true;
-				} else {
-					Pointer.Ungrab (time);
-					return false;
-				} 
-			}
-			return false;
-		}
-			
-		[DllImport ("libc")] // Linux
-        private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
-        
-        [DllImport ("libc")] // BSD
-        private static extern void setproctitle (byte [] fmt, byte [] str_arg);
-
-		// Results in SIGSEGV
-        public static void SetProcessName (string name)
-        {
-            try {
-                if(prctl(15 /* PR_SET_NAME */, Encoding.ASCII.GetBytes(name + "\0"), 
-                    IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0) {
-                    throw new ApplicationException("Error setting process name: " + 
-                        Mono.Unix.Native.Stdlib.GetLastError());
-                }
-            } catch(EntryPointNotFoundException) {
-                setproctitle(Encoding.ASCII.GetBytes("%s\0"), 
-                    Encoding.ASCII.GetBytes(name + "\0"));
-            }
-        }
-		
-	}
+	}		
 }

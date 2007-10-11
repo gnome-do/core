@@ -70,7 +70,14 @@ namespace Do.UI
 		
 		void UpdateText ()
 		{
-			Markup = string.Format (displayFormat, Util.FormatCommonSubstrings(name, highlight, "<u>{0}</u>"), description);
+			string highlighted, safe_name, safe_description;
+
+			safe_name = Util.Appearance.MarkupSafeString (name);
+			safe_description = Util.Appearance.MarkupSafeString (description);
+			highlighted = Util.FormatCommonSubstrings(safe_name,
+																								highlight,
+																								"<u>{0}</u>");
+			Markup = string.Format (displayFormat, highlighted, safe_description);
 		}
 		
 	}

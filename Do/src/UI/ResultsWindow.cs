@@ -217,9 +217,11 @@ namespace Do.UI
 				seen_first = false;
 
 				foreach (IObject result in results) {
-					icon = Util.PixbufFromIconName (result.Icon, ResultIconSize);
+					icon = Util.Appearance.PixbufFromIconName (result.Icon,
+																										 ResultIconSize);
 					info = string.Format (ResultInfoFormat,
 																result.Name, result.Description);
+					info = Util.Appearance.MarkupSafeString (info);
 					iter = store.AppendValues (new object[] {
 							result,
 							icon,
