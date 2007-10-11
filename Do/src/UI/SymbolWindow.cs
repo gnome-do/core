@@ -176,12 +176,12 @@ namespace Do.UI
 			geo = Screen.GetMonitorGeometry (monitor);
 			main.X = (geo.Width - main.Width) / 2;
 			main.Y =  (int) ((geo.Height - main.Height) / 2.5);
-			SetUposition (main.X, main.Y);
+			Move (main.X, main.Y);
 			
 			resultsWindow.GetSize (out results.Width, out results.Height);
 			results.Y = main.Y + main.Height;
 			results.X = main.X + (IconBoxIconSize + 60) * (int) focus + 10;
-			resultsWindow.SetUposition (results.X, results.Y);			
+			resultsWindow.Move (results.X, results.Y);			
 		}
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
@@ -236,6 +236,7 @@ namespace Do.UI
 				}
 				break;
 			case Gdk.Key.Tab:
+				resultsWindow.Hide ();
 				if (focus == WindowFocus.ItemFocus && commander.CurrentItem != null) {
 					SetWindowFocus (WindowFocus.CommandFocus);
 				} else if (focus == WindowFocus.CommandFocus) {
@@ -244,19 +245,7 @@ namespace Do.UI
 				break;
 			case Gdk.Key.Up:
 			case Gdk.Key.Down:
-			{
-				int num_items;
-				
-				num_items = 0;
-				switch (focus) {
-				case WindowFocus.ItemFocus:
-					num_items = commander.CurrentItems.Length;
-					break;
-				case WindowFocus.CommandFocus:
-					num_items = commander.CurrentCommands.Length;
-					break;
-				}
-				
+			{	
 				if (key == Gdk.Key.Up) {
 					if (resultsWindow.SelectedIndex == 0) {
 						resultsWindow.Hide ();
@@ -416,7 +405,7 @@ namespace Do.UI
 			itemBox.DisplayObject = new DefaultIconBoxObject ();
 			commandBox.Clear ();
 			
-			displayLabel.SetdisplayLabel ("Type to begin searching", "Type to start searching.");			
+			displayLabel.SetDisplayLabel ("Type to begin searching", "Type to start searching.");			
 		}
 		
 		protected virtual void SetNoResultsFoundState ()

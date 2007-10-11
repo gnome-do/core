@@ -26,9 +26,9 @@ namespace Do.UI
 		string name, description;
 		
 		public SymbolDisplayLabel () : base ()
-		{		
-			Build ();
+		{
 			highlight = name = description = "";
+			Build ();
 		}
 		
 		void Build ()
@@ -49,11 +49,11 @@ namespace Do.UI
 					name = displayObject.Name;
 					description = displayObject.Description;
 				}
-				SetdisplayLabel (name, description);
+				SetDisplayLabel (name, description);
 			}
 		}
 		
-		public void SetdisplayLabel (string name, string description) {
+		public void SetDisplayLabel (string name, string description) {
 			this.name = (name == null ? "" : name);
 			this.description = (description == null ? "" : description);
 			highlight = "";

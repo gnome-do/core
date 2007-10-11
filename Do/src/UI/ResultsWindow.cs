@@ -163,10 +163,12 @@ namespace Do.UI
 				TreeIter iter;
 				TreePath path;
 				int new_selection;
-					
-				if (results == null)
+
+				if (value == selectedIndex)
 					return;
-				else if (value > results.Length)
+				else if (results.Length == 0)
+					return;
+				else if (value >= results.Length)
 					new_selection = results.Length - 1;
 				else if (value < 0)
 					new_selection = 0;

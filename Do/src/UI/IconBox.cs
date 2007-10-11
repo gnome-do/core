@@ -119,7 +119,7 @@ namespace Do.UI
 				string name, icon;
 				
 				icon = null;
-				name = "";
+				name = null;
 				if (value != null) {
 					icon = value.Icon;
 					name = value.Name;
