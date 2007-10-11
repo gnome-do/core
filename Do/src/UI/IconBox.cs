@@ -8,7 +8,6 @@ using System;
 using Gtk;
 using Gdk;
 
-using Do.Core;
 using Do.PluginLib;
 
 namespace Do.UI

@@ -20,6 +20,8 @@ namespace Do
 			
 			Application.Init ();
 			
+			Globals.Initialize ();
+			
 			commander = DBusRegistrar.GetCommanderInstance ();
 			if (commander != null) {
 				commander.Show ();

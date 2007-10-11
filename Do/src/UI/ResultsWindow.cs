@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using Gtk;
 using Gdk;
 
-using Do.Core;
 using Do.PluginLib;
 
 namespace Do.UI
@@ -220,7 +219,7 @@ namespace Do.UI
 
 				foreach (IObject result in results) {
 					icon = Util.Appearance.PixbufFromIconName (result.Icon,
-																										 ResultIconSize);
+						                                       ResultIconSize);
 					info = string.Format (ResultInfoFormat,
 																result.Name, result.Description);
 					info = Util.Appearance.MarkupSafeString (info);

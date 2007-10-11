@@ -45,6 +45,7 @@ namespace Do.PluginLib.Builtin
 		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
 			string open_item;
+			string error_message;
 			
 			open_item = null;
 			foreach (IItem item in items) {
@@ -57,15 +58,7 @@ namespace Do.PluginLib.Builtin
 					open_item = (item as IURIItem).URI;
 				}
 
-				// Use gnome-open to open the open_item
-				if (open_item != null) {
-					Console.WriteLine ("Opening \"{0}\"...", open_item);
-					try {
-						System.Diagnostics.Process.Start ("gnome-open", string.Format ("\"{0}\"", open_item));
-					} catch (Exception e) {
-						Console.WriteLine ("Failed to open \"{0}\": ", e.Message);
-					}
-				}
+				Util.System.DesktopOpen (open_item, out error_message);
 			}
 		}
 		

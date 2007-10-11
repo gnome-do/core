@@ -6,7 +6,9 @@
 
 using System;
 using System.Text;
+using System.Threading;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Gtk;
 using Gdk;
@@ -24,6 +26,32 @@ namespace Do.Core
 		
 		static Util ()
 		{
+		}
+		
+		public class System
+		{
+			public static bool DesktopOpen (string open_item, out string error)
+			{
+				bool success;
+				
+				error = null;
+				success = false;
+				if (open_item == null) {
+					success = false;
+				} else {
+					Console.WriteLine ("Opening \"{0}\"...", open_item);
+					try {
+						Process.Start ("gnome-open", string.Format ("\"{0}\"", open_item));
+						success = true;
+					} catch (Exception e) {
+						Console.WriteLine ("Failed to open \"{0}\": ", e.Message);
+						error = e.Message;
+						success = false;
+					}
+				}
+				return success;
+			}
+			                                
 		}
 
 		public class Appearance
@@ -126,7 +154,7 @@ namespace Do.Core
 					if (TryGrabWindow (window)) {
 						break;
 					}
-					System.Threading.Thread.Sleep (100);
+					Thread.Sleep (100);
 				}
 			}
 			
