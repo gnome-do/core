@@ -53,12 +53,10 @@ namespace Do.PluginLib.Builtin
 					(item as IOpenableItem).Open ();
 					continue;
 				}
-
-				if (item is IURIItem) {
+				else if (item is IURIItem) {
 					open_item = (item as IURIItem).URI;
 				}
-
-				Util.System.DesktopOpen (open_item, out error_message);
+				Util.Desktop.Open (open_item, out error_message);
 			}
 		}
 		

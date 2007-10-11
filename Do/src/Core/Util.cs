@@ -28,9 +28,9 @@ namespace Do.Core
 		{
 		}
 		
-		public class System
+		public class Desktop
 		{
-			public static bool DesktopOpen (string open_item, out string error)
+			public static bool Open (string open_item, out string error)
 			{
 				bool success;
 				
@@ -39,12 +39,13 @@ namespace Do.Core
 				if (open_item == null) {
 					success = false;
 				} else {
-					Console.WriteLine ("Opening \"{0}\"...", open_item);
+					Log.Info ("Opening \"{0}\"...", open_item);
 					try {
-						Process.Start ("gnome-open", string.Format ("\"{0}\"", open_item));
+						open_item = string.Format ("\"{0}\"", open_item);
+						Process.Start ("gnome-open", open_item);
 						success = true;
 					} catch (Exception e) {
-						Console.WriteLine ("Failed to open \"{0}\": ", e.Message);
+						Log.Error ("Failed to open \"{0}\": ", e.Message);
 						error = e.Message;
 						success = false;
 					}
@@ -166,8 +167,8 @@ namespace Do.Core
 				uint time;
 				try {
 					time = gdk_x11_get_server_time (window.GdkWindow.Handle);
-				} catch (DllNotFoundException) {
-					Console.WriteLine ("/usr/lib/libgtk-x11-2.0.so.0 not found - cannot grab window");
+				} catch (DllNotFoundException e) {
+					Log.Error ("Cannot grab window: {0}", e.Message);
 					return true;
 				}
 				if (Pointer.Grab (window.GdkWindow,

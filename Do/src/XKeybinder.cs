@@ -4,6 +4,8 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using Mono.Unix;
 
+using Do;
+
 namespace Tomboy
 {
 	public class XKeybinder 
@@ -38,7 +40,7 @@ namespace Tomboy
 			try {
 				tomboy_keybinder_init ();
 			} catch (DllNotFoundException) {
-				Console.WriteLine ("libtomboy not found - keybindings will not work.");
+				Log.Error ("libtomboy not found - keybindings will not work.");
 			}
 		}
 
@@ -107,8 +109,7 @@ namespace Tomboy
 							       this);
 				bindings.Add (binding);
 			} catch (Exception e){
-				Console.WriteLine("Error Adding global keybinding:");
-				Console.WriteLine(e.ToString ());
+				Log.Error ("Could not add global keybinding: {0}", e.Message);
 			}
 		}
 
@@ -118,8 +119,7 @@ namespace Tomboy
 				bindings.Clear ();
 				base.UnbindAll ();
 			} catch (Exception e) {
-				Console.WriteLine("Error Removing global keybinding:");
-				Console.WriteLine(e.ToString ());
+				Log.Error ("Could not remove global keybinding: {0}", e.Message);
 			}
 		}
 
@@ -143,8 +143,7 @@ namespace Tomboy
 				try {
 					key_sequence = (string) parent.client.Get (gconf_path);
 				} catch {
-					Console.WriteLine("GConf key '{0}' does not exist, using default.", 
-							   gconf_path);
+					Log.Info ("GConf key '{0}' does not exist, using default.", gconf_path);
 				}
 
 				SetBinding ();
@@ -157,9 +156,7 @@ namespace Tomboy
 			void BindingChanged (object sender, GConf.NotifyEventArgs args)
 			{
 				if (args.Key == gconf_path) {
-					Console.WriteLine("Binding for '{0}' changed to '{1}'!",
-							   gconf_path,
-							   args.Value);
+					Log.Info ("Binding for '{0}' changed to '{1}'!", gconf_path, args.Value);
 
 					UnsetBinding ();
 
@@ -175,7 +172,7 @@ namespace Tomboy
 				    key_sequence == "disabled")
 					return;
 
-				Console.WriteLine("Binding key '{0}' for '{1}'",
+				Log.Info ("Binding key '{0}' for '{1}'",
 						   key_sequence,
 						   gconf_path);
 
@@ -187,7 +184,7 @@ namespace Tomboy
 				if (key_sequence == null)
 					return;
 
-				Console.WriteLine("Unbinding key '{0}' for '{1}'",
+				Log.Info ("Unbinding key '{0}' for '{1}'",
 						   key_sequence,
 						   gconf_path);
 
