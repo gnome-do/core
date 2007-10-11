@@ -99,6 +99,7 @@ namespace Do.UI
 			frame.DrawFill = true;
 			frame.FillColor = new Gdk.Color (0x35, 0x30, 0x45);
 			frame.FillAlpha = WindowTransparency;
+			SetFrameRadius ();
 			Add (frame);
 			frame.Show ();
 			
@@ -300,6 +301,15 @@ namespace Do.UI
 		private void OnScreenChanged (object sender, EventArgs args)
 		{
 			SetColormap ();
+		}
+		
+		protected virtual void SetFrameRadius ()
+		{
+			if (Screen.IsComposited) {
+				frame.Radius = 10;
+			} else {
+				frame.Radius = 0;
+			}
 		}
 		
 		protected override bool OnExposeEvent (EventExpose evnt)
