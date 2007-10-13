@@ -42,6 +42,11 @@ namespace Do
 		static List<ILog> logs;
 		static LogLevel level;
 		
+		public static void Initialize ()
+		{
+			AddLog (new ConsoleLog ());
+		}
+		
 		static Log ()
 		{
 			level = LogLevel.Info;

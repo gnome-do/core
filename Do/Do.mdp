@@ -15,45 +15,43 @@
   </Configurations>
   <Contents>
     <File name="./gnome-do.desktop" subtype="Code" buildaction="FileCopy" DeployService.TargetDirectoryId="Linux.DesktopApplications" />
-    <File name="./src" subtype="Directory" buildaction="Compile" />
-    <File name="./src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/DefaultCommander.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Main.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/UI" subtype="Directory" buildaction="Compile" />
-    <File name="./src/UI/RoundedFrame.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/UI/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/UI/SymbolWindow.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/UI/IconBox.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core" subtype="Directory" buildaction="Compile" />
-    <File name="./src/Core/Command.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core/Commander.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core/CommandManager.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core/Item.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core/ItemManager.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core/ItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core/GCObjectManager.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core/GCObject.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core/SearchContext.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core/Util.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.UI" subtype="Directory" buildaction="Compile" />
+    <File name="./src/Do.Core" subtype="Directory" buildaction="Compile" />
     <File name="./gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/UI/SymbolDisplayLabel.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Core/Globals.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/DefaultCommander.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Log.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/Command.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/CommandManager.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/Commander.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/GCObject.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/GCObjectManager.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/Item.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/ItemManager.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/ItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/SearchContext.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.UI/IconBox.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.UI/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.UI/RoundedFrame.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.UI/SymbolDisplayLabel.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.UI/SymbolWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Util.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
-    <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <ProjectReference type="Gac" localcopy="True" refto="glade-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <ProjectReference type="Project" localcopy="True" refto="PluginLib" />
-    <ProjectReference type="Project" localcopy="True" refto="DBusLib" />
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Project" localcopy="True" refto="DBusLib" />
+    <ProjectReference type="Gac" localcopy="True" refto="gconf-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="glade-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Cairo, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
-    <ProjectReference type="Gac" localcopy="True" refto="gconf-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Project" localcopy="True" refto="Do.Addins" />
   </References>
   <Deployment.LinuxDeployData scriptName="gnome-do" />
   <GtkDesignInfo />
