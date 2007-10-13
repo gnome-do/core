@@ -103,13 +103,13 @@ namespace Do.UI
 			Add (frame);
 			frame.Show ();
 			
-			vbox = new VBox (false, 12);
+			vbox = new VBox (false, 0);
 			frame.Add (vbox);
-			vbox.BorderWidth = 16;
+			vbox.BorderWidth = 6;
 			vbox.Show ();		
 			
 			resultsHBox = new HBox (false, 12);
-			resultsHBox.BorderWidth = 0;
+			resultsHBox.BorderWidth = 6;
 			vbox.PackStart (resultsHBox, false, false, 0);
 			resultsHBox.Show ();
 			
@@ -321,7 +321,7 @@ namespace Do.UI
 			cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
 			cairo.Operator = Cairo.Operator.Source;
 			cairo.Paint ();
-			
+
 			return base.OnExposeEvent (evnt);
 		}
 		
