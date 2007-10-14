@@ -7,22 +7,20 @@
 using System;
 using System.Text;
 using System.Threading;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using Gtk;
 using Gdk;
 
 using Mono.Unix;
-using System.Runtime.InteropServices;
-
 
 namespace Do
 {
 	
 	public class Util
 	{
-		
 		
 		static Util ()
 		{

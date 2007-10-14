@@ -19,8 +19,7 @@ namespace Do
 			ICommander commander;
 			
 			Log.Initialize ();
-			Util.Initialize ();
-			
+
 			Application.Init ();
 						
 			commander = DBusRegistrar.GetCommanderInstance ();
@@ -28,6 +27,8 @@ namespace Do
 				commander.Show ();
 				System.Environment.Exit (0);
 			}
+			
+			Util.Initialize ();
 			
 			commander = DBusRegistrar.RegisterCommander (new DefaultCommander ());
 			commander.Show ();
