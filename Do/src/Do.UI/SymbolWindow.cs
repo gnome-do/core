@@ -107,11 +107,11 @@ namespace Do.UI
 			
 			vbox = new VBox (false, 0);
 			frame.Add (vbox);
-			vbox.BorderWidth = 6;
+			vbox.BorderWidth = 8;
 			vbox.Show ();		
 			
 			resultsHBox = new HBox (false, 12);
-			resultsHBox.BorderWidth = 6;
+			resultsHBox.BorderWidth = 8;
 			vbox.PackStart (resultsHBox, false, false, 0);
 			resultsHBox.Show ();
 			
