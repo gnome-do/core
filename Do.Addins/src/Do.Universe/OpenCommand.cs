@@ -57,7 +57,7 @@ namespace Do.Universe
 				else if (item is IURIItem) {
 					open_item = (item as IURIItem).URI;
 				}
-				Util.Desktop.Open (open_item, out error_message);
+				Util.Environment.Open (open_item, out error_message);
 			}
 		}
 		

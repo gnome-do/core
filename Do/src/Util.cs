@@ -31,15 +31,15 @@ namespace Do
 			// Misc
 			Addins.Util.FormatCommonSubstrings = FormatCommonSubstrings;
 			
-			// System utilities
-			Addins.Util.Desktop.Open = Desktop.Open;
+			// Environment utilities
+			Addins.Util.Environment.Open = Environment.Open;
 			
 			// Appearance utilities
 			Addins.Util.Appearance.PixbufFromIconName = Appearance.PixbufFromIconName;
 			Addins.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
 		}
 		
-		public class Desktop
+		public class Environment
 		{
 			public static bool Open (string open_item, out string error)
 			{
@@ -72,6 +72,8 @@ namespace Do
 			public static readonly Pixbuf UnknownPixbuf;
 			public const int DefaultIconSize = 80;
 			
+			static int mainMenuX, mainMenuY;
+			
 			// TODO: Implement a separate Pixbuf cache class
 			static Dictionary<string, Pixbuf> pixbufCache;
 
@@ -83,6 +85,20 @@ namespace Do
 																		DefaultIconSize,
 																		DefaultIconSize);
 				UnknownPixbuf.Fill (0x00000000);
+			}
+			
+			public static void ShowMainMenuAtPosition (int x, int y)
+			{
+				mainMenuX = x;
+				mainMenuY = y;	
+				Do.MainMenu.Popup (null, null, PositionMainMenu, IntPtr.Zero, 3, 0);
+			}
+			
+			static void PositionMainMenu (Menu menu, out int x, out int y, out bool push_in)
+			{
+				x = mainMenuX;
+				y = mainMenuY;
+				push_in = true;
 			}
 
 			public static string MarkupSafeString (string s)
