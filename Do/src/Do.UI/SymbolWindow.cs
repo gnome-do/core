@@ -108,7 +108,7 @@ namespace Do.UI
 			
 			vbox = new VBox (false, 0);
 			frame.Add (vbox);
-			vbox.BorderWidth = 8;
+			vbox.BorderWidth = 6;
 			vbox.Show ();		
 			
 			settings_icon = new Gtk.Image (GetType().Assembly, "settings-triangle.png");
@@ -120,7 +120,7 @@ namespace Do.UI
 			align.Show ();
 			
 			resultsHBox = new HBox (false, 12);
-			resultsHBox.BorderWidth = 8;
+			resultsHBox.BorderWidth = 6;
 			vbox.PackStart (resultsHBox, false, false, 0);
 			resultsHBox.Show ();
 			
@@ -181,9 +181,9 @@ namespace Do.UI
 			click_near_settings_icon = (end_x - 25) <= click_x && click_x < end_x &&
 				                       start_y <= click_y && click_y < (start_y + 25);
 			if (click_near_settings_icon) {
-				Util.Appearance.ShowMainMenuAtPosition (end_x - 18, start_y + 16);
+				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 18, start_y + 16);
 				// Have to re-grab the focus from the menu.
-				Util.Appearance.PresentWindow (this);
+				Addins.Util.Appearance.PresentWindow (this);
 			} else if (!click_on_window) {
 				Hide ();
 			}

@@ -5,7 +5,6 @@
 //
 
 using System;
-using Gtk;
 
 using Do.Core;
 using Do.DBusLib;
@@ -15,52 +14,30 @@ namespace Do
 	
 	public class Do {
 		
-		static ICommander commander;
-		
-		static Menu mainMenu;
-		
+		static Commander commander;
+	
 		public static void Main (string[] args) {
 			
 			Log.Initialize ();
 
-			Application.Init ();
+			Gtk.Application.Init ();
 						
-			commander = DBusRegistrar.GetCommanderInstance ();
+			commander = DBusRegistrar.GetCommanderInstance () as Commander;
 			if (commander != null) {
 				commander.Show ();
 				System.Environment.Exit (0);
 			}
 			
 			Util.Initialize ();
-			InitializeMainMenu ();
 			
-			commander = DBusRegistrar.RegisterCommander (new DefaultCommander ());
+			commander = DBusRegistrar.RegisterCommander (new DefaultCommander ()) as Commander;
 			commander.Show ();
 			
-			Application.Run ();
-		}
+			Gtk.Application.Run ();
+		}	
 		
-		static void InitializeMainMenu ()
-		{
-			
-			mainMenu = new Menu();
-			
-		    ImageMenuItem quit_item = new ImageMenuItem ("Quit");
-      		quit_item.Image = new Image(Stock.Quit, IconSize.Menu);
-      		mainMenu.Add (quit_item);
-      		quit_item.Activated += new EventHandler (OnMainMenuQuitClicked);
-			mainMenu.ShowAll();
+		public static Commander Commander {
+			get { return commander; }
 		}
-		
-		
-		static void OnMainMenuQuitClicked (object o, EventArgs args)
-		{
-			Application.Quit();
-		}
-		
-		public static Menu MainMenu {
-			get { return mainMenu; }
-		}
-
 	}
 }

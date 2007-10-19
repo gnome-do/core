@@ -15,6 +15,7 @@ using Gtk;
 using Gdk;
 
 using Mono.Unix;
+using Do.UI;
 
 namespace Do
 {
@@ -37,6 +38,9 @@ namespace Do
 			// Appearance utilities
 			Addins.Util.Appearance.PixbufFromIconName = Appearance.PixbufFromIconName;
 			Addins.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
+			Addins.Util.Appearance.PresentWindow = Appearance.PresentWindow;
+			//
+			Addins.Util.Appearance.PopupMainMenuAtPosition = MainMenu.Instance.PopupAtPosition;
 		}
 		
 		public class Environment
@@ -72,8 +76,6 @@ namespace Do
 			public static readonly Pixbuf UnknownPixbuf;
 			public const int DefaultIconSize = 80;
 			
-			static int mainMenuX, mainMenuY;
-			
 			// TODO: Implement a separate Pixbuf cache class
 			static Dictionary<string, Pixbuf> pixbufCache;
 
@@ -87,20 +89,6 @@ namespace Do
 				UnknownPixbuf.Fill (0x00000000);
 			}
 			
-			public static void ShowMainMenuAtPosition (int x, int y)
-			{
-				mainMenuX = x;
-				mainMenuY = y;	
-				Do.MainMenu.Popup (null, null, PositionMainMenu, IntPtr.Zero, 3, 0);
-			}
-			
-			static void PositionMainMenu (Menu menu, out int x, out int y, out bool push_in)
-			{
-				x = mainMenuX;
-				y = mainMenuY;
-				push_in = true;
-			}
-
 			public static string MarkupSafeString (string s)
 			{
 				if (s == null) {
@@ -186,18 +174,11 @@ namespace Do
 				}
 			}
 			
-			[DllImport ("/usr/lib/libgtk-x11-2.0.so.0")]
-			private static extern uint gdk_x11_get_server_time (IntPtr gdk_window);
-			
 			private static bool TryGrabWindow (Gtk.Window window)
 			{
 				uint time;
-				try {
-					time = gdk_x11_get_server_time (window.GdkWindow.Handle);
-				} catch (DllNotFoundException e) {
-					Log.Error ("Cannot grab window: {0}", e.Message);
-					return true;
-				}
+				
+				time = Gtk.Global.CurrentEventTime;
 				if (Pointer.Grab (window.GdkWindow,
 										true,
 										EventMask.ButtonPressMask |
