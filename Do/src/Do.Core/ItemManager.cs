@@ -47,6 +47,13 @@ namespace Do.Core
 			return items.ToArray ();
 		}
 		
+		public void UpdateItemSources ()
+		{
+			foreach (ItemSource source in _sources) {
+				source.UpdateItems ();
+			}
+		}
+		
 		public Item [] ItemsForAbbreviation (string ab)
 		{
 			SearchContext context;

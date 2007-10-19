@@ -81,7 +81,8 @@ namespace Do.UI
 		{
 			VBox         vbox;
 			Alignment align;
-			
+			Gtk.Image settings_icon;
+				
 			AppPaintable = true;
 			KeepAbove = true;
 			Decorated = false;
@@ -107,11 +108,19 @@ namespace Do.UI
 			
 			vbox = new VBox (false, 0);
 			frame.Add (vbox);
-			vbox.BorderWidth = 8;
+			vbox.BorderWidth = 6;
 			vbox.Show ();		
 			
+			settings_icon = new Gtk.Image (GetType().Assembly, "settings-triangle.png");
+			align = new Alignment (1.0F, 0.0F, 0, 0);
+			align.SetPadding (0, 0, 0, 0);
+			align.Add (settings_icon);
+			vbox.PackStart (align, false, false, 0);
+			settings_icon.Show ();
+			align.Show ();
+			
 			resultsHBox = new HBox (false, 12);
-			resultsHBox.BorderWidth = 8;
+			resultsHBox.BorderWidth = 6;
 			vbox.PackStart (resultsHBox, false, false, 0);
 			resultsHBox.Show ();
 			
@@ -157,8 +166,28 @@ namespace Do.UI
 		
 		protected override bool OnButtonPressEvent (EventButton evnt)
 		{
-			Hide ();
-			return false;
+			int start_x, start_y, end_x, end_y;
+			int click_x, click_y;
+			bool click_on_window, click_near_settings_icon;
+			
+			GetPosition (out start_x, out start_y);
+			GetSize (out end_x, out end_y);
+			end_x += start_x;
+			end_y += start_y;
+			click_x = (int) evnt.XRoot;
+			click_y = (int) evnt.YRoot;
+			click_on_window = start_x <= click_x && click_x < end_x &&
+				              start_y <= click_y && click_y < end_y;
+			click_near_settings_icon = (end_x - 25) <= click_x && click_x < end_x &&
+				                       start_y <= click_y && click_y < (start_y + 25);
+			if (click_near_settings_icon) {
+				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 18, start_y + 16);
+				// Have to re-grab the focus from the menu.
+				Addins.Util.Appearance.PresentWindow (this);
+			} else if (!click_on_window) {
+				Hide ();
+			}
+			return base.OnButtonPressEvent (evnt);
 		}
 		
 		public virtual new void Hide ()
@@ -282,7 +311,7 @@ namespace Do.UI
 				}
 				break;
 			}
-			return false;
+			return base.OnKeyPressEvent (evnt);
 		}
 		
 		protected virtual void ActivateCommand ()

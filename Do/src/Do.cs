@@ -5,7 +5,6 @@
 //
 
 using System;
-using Gtk;
 
 using Do.Core;
 using Do.DBusLib;
@@ -15,14 +14,15 @@ namespace Do
 	
 	public class Do {
 		
+		static Commander commander;
+	
 		public static void Main (string[] args) {
-			ICommander commander;
 			
 			Log.Initialize ();
 
-			Application.Init ();
+			Gtk.Application.Init ();
 						
-			commander = DBusRegistrar.GetCommanderInstance ();
+			commander = DBusRegistrar.GetCommanderInstance () as Commander;
 			if (commander != null) {
 				commander.Show ();
 				System.Environment.Exit (0);
@@ -30,11 +30,14 @@ namespace Do
 			
 			Util.Initialize ();
 			
-			commander = DBusRegistrar.RegisterCommander (new DefaultCommander ());
+			commander = DBusRegistrar.RegisterCommander (new DefaultCommander ()) as Commander;
 			commander.Show ();
 			
-			Application.Run ();
+			Gtk.Application.Run ();
+		}	
+		
+		public static Commander Commander {
+			get { return commander; }
 		}
-
 	}
 }

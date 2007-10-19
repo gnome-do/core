@@ -15,6 +15,7 @@ using Gtk;
 using Gdk;
 
 using Mono.Unix;
+using Do.UI;
 
 namespace Do
 {
@@ -31,15 +32,18 @@ namespace Do
 			// Misc
 			Addins.Util.FormatCommonSubstrings = FormatCommonSubstrings;
 			
-			// System utilities
-			Addins.Util.Desktop.Open = Desktop.Open;
+			// Environment utilities
+			Addins.Util.Environment.Open = Environment.Open;
 			
 			// Appearance utilities
 			Addins.Util.Appearance.PixbufFromIconName = Appearance.PixbufFromIconName;
 			Addins.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
+			Addins.Util.Appearance.PresentWindow = Appearance.PresentWindow;
+			//
+			Addins.Util.Appearance.PopupMainMenuAtPosition = MainMenu.Instance.PopupAtPosition;
 		}
 		
-		public class Desktop
+		public class Environment
 		{
 			public static bool Open (string open_item, out string error)
 			{
@@ -84,7 +88,7 @@ namespace Do
 																		DefaultIconSize);
 				UnknownPixbuf.Fill (0x00000000);
 			}
-
+			
 			public static string MarkupSafeString (string s)
 			{
 				if (s == null) {
@@ -170,18 +174,11 @@ namespace Do
 				}
 			}
 			
-			[DllImport ("/usr/lib/libgtk-x11-2.0.so.0")]
-			private static extern uint gdk_x11_get_server_time (IntPtr gdk_window);
-			
 			private static bool TryGrabWindow (Gtk.Window window)
 			{
 				uint time;
-				try {
-					time = gdk_x11_get_server_time (window.GdkWindow.Handle);
-				} catch (DllNotFoundException e) {
-					Log.Error ("Cannot grab window: {0}", e.Message);
-					return true;
-				}
+				
+				time = Gtk.Global.CurrentEventTime;
 				if (Pointer.Grab (window.GdkWindow,
 										true,
 										EventMask.ButtonPressMask |

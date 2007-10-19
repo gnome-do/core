@@ -4,7 +4,7 @@
       <Builder rootEntry="./Do.mds" TargetDirectory="/home/dave/Desktop" DefaultConfiguration="Debug" ctype="TarballDeployTarget">
         <ChildEntries>
           <Entry>./Do/Do.mdp</Entry>
-          <Entry>./PluginLib/PluginLib.mdp</Entry>
+          <Entry>./Do.Addins/Do.Addins.mdp</Entry>
           <Entry>./DBusLib/DBusLib.mdp</Entry>
         </ChildEntries>
       </Builder>

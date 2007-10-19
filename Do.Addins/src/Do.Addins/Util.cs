@@ -8,25 +8,29 @@ using System;
 
 namespace Do.Addins
 {
-	public delegate bool DesktopOpenDelegate (string item, out string error);
+	public delegate bool EnvironmentOpenDelegate (string item, out string error);
+	public delegate void PopupMainMenuAtPositionDelegate (int x, int y);
 	public delegate Gdk.Pixbuf PixbufFromIconNameDelegate (string icon_name, int size);
 	public delegate string StringTransformationDelegate (string old);
 	public delegate string FormatCommonSubstringsDelegate (string main, string highlight, string format);
+	public delegate void PresentWindowDelegate (Gtk.Window window);
 	
 	public class Util
 	{
 		
 		public static FormatCommonSubstringsDelegate FormatCommonSubstrings;
 		
-		public static class Desktop
+		public static class Environment
 		{
-			public static DesktopOpenDelegate Open;
+			public static EnvironmentOpenDelegate Open;
 		}
 		
 		public class Appearance
 		{
+			public static PresentWindowDelegate PresentWindow;
 			public static PixbufFromIconNameDelegate PixbufFromIconName;
 			public static StringTransformationDelegate MarkupSafeString;
+			public static PopupMainMenuAtPositionDelegate PopupMainMenuAtPosition;
 		}		
 	}
 }
