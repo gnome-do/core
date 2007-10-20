@@ -1,8 +1,22 @@
-// RecentFileItemSource.cs created with MonoDevelop
-// User: dave at 2:18 PM 9/13/2007
-//
-// To change standard headers go to Edit->Preferences->Coding->Standard Headers
-//
+/* DirectoryFileItemSource.cs
+ *
+ * GNOME Do is the legal property of its developers. Please refer to the
+ * COPYRIGHT file distributed with this
+ * source distribution.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using System;
 using System.Collections.Generic;
@@ -10,10 +24,11 @@ using System.IO;
 
 namespace Do.Universe
 {
-	
+	/// <summary>
+	/// Indexes files recursively starting in a specific directory.
+	/// </summary>
 	public class DirectoryFileItemSource : IItemSource
 	{
-		
 		List<IItem> items;
 		int levels;
 		string path;
@@ -60,6 +75,18 @@ namespace Do.Universe
 			return true;
 		}
 		
+		/// <summary>
+		/// Create items for files found in a given directory. Recurses a
+		/// given number of levels deep into nested directories.
+		/// </summary>
+		/// <param name="dir">
+		/// A <see cref="System.String"/> containing the absolute path
+		/// to the directory to read FileItems from.
+		/// </param>
+		/// <param name="levels">
+		/// A <see cref="System.Int32"/> specifying the number of levels
+		/// of nested directories to explore.
+		/// </param>
 		protected virtual void ReadItems (string dir, int levels)
 		{
 			string[] files;
@@ -74,6 +101,7 @@ namespace Do.Universe
 				return;
 			}
 			foreach (string file in files) {
+				// Ignore system/hidden files.
 				if (!include_hidden && Path.GetFileName (file).StartsWith (".")) {
 					continue;
 				}

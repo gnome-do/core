@@ -1,3 +1,5 @@
+// http://www.mono-project.com/GtkSharpNotificationIcon
+
 using System;
 using System.Runtime.InteropServices;
  
