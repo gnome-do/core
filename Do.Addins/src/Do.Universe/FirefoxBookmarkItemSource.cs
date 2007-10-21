@@ -1,4 +1,4 @@
-/* ${FileName}
+/* FirefoxBookmarkItemSource.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -39,6 +39,57 @@ namespace Do.Universe
 		
 		List<IItem> bookmarks;
 		
+		/// <summary>
+		/// Initialize the item source.
+		/// </summary>
+		public FirefoxBookmarkItemSource ()
+		{
+			bookmarks = new List<IItem> ();
+			UpdateItems ();
+		}
+		
+		public Type[] SupportedItemTypes {
+			get { return new Type[] {
+					typeof (BookmarkItem),
+				};
+			}
+		}
+		
+		public string Name {
+			get { return "Firefox Bookmarks"; }
+		}
+		
+		public string Description {
+			get { return "Finds Firefox bookmarks in your default profile."; }
+		}
+		
+		public string Icon {
+			get { return "www"; }
+		}
+		
+		public ICollection<IItem> Items {
+			get { return bookmarks; }
+		}
+		
+		public ICollection<IItem> ChildrenOfItem (IItem item) {
+			return null;
+		}
+		
+		public void UpdateItems ()
+		{
+			foreach (IItem item in ReadBookmarksFromFile (GetFirefoxBookmarkFilePath ()))
+				bookmarks.Add (item);
+		}
+		
+		/// <summary>
+		/// Looks in the firefox profiles file (~/.mozilla/firefox/profiles.ini)
+		/// for the name of the default profile, and returns the path to the
+		/// default profile.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/> containing the absolute path to the
+		/// bookmarks.html file of the default firefox profile for the current user.
+		/// </returns>
 		public static string GetFirefoxBookmarkFilePath ()
 		{
 			string home, path, profile;
@@ -76,43 +127,26 @@ namespace Do.Universe
 			return path;
 			
 		}
-	
-		public FirefoxBookmarkItemSource ()
+		
+		/// <summary>
+		/// Given a bookmarks file, create a BookmarkItem for each bookmark found
+		/// in the file, returning a collection of BookmarkItems created.
+		/// </summary>
+		/// <param name="file">
+		/// A <see cref="System.String"/> containing the absolute path to a Firefox
+		/// bookmarks.html file (e.g. the path returned by GetFirefoxBookmarkFilePath).
+		/// </param>
+		/// <returns>
+		/// A <see cref="ICollection`1"/> of BookmarkItems.
+		/// </returns>
+		protected ICollection<BookmarkItem> ReadBookmarksFromFile (string file)
 		{
-			bookmarks = new List<IItem> ();
-			UpdateItems ();
-		}
-		
-		public string Name {
-			get { return "Firefox Bookmarks"; }
-		}
-		
-		public string Description {
-			get { return "Finds Firefox bookmarks in your default profile."; }
-		}
-		
-		public string Icon {
-			get { return "www"; }
-		}
-		
-		public ICollection<IItem> Items {
-			get { return bookmarks; }
-		}
-		
-		public bool UpdateItems ()
-		{
-			bookmarks.AddRange (ReadBookmarksFromFile (GetFirefoxBookmarkFilePath ()));
-			return true;
-		}
-		
-		protected ICollection<IItem> ReadBookmarksFromFile (string file)
-		{
-			ICollection<IItem> list;
+			ICollection<BookmarkItem> list;
 			StreamReader reader;
 			int urlIndex, nameIndex;
 			string url, name;
 			
-			list = new List<IItem> ();
+			list = new List<BookmarkItem> ();
 
 			try {
 				reader = System.IO.File.OpenText (file);

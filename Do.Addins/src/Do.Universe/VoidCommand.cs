@@ -38,7 +38,7 @@ namespace Do.Universe
 			get { return "gtk-stop"; }
 		}
 		
-		public Type[] SupportedTypes {
+		public Type[] SupportedItemTypes {
 			get {
 				return new Type[] {
 					typeof (IItem)
@@ -46,13 +46,22 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierTypes {
-			get { return null; }
+		public Type[] SupportedModifierItemTypes {
+			get {
+				return new Type[] {
+					typeof (IItem)
+				};
+			}
 		}
 
 		public bool SupportsItem (IItem item)
 		{
 				return true;
+		}
+			
+		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		{
+			return false;
 		}
 		
 		public void Perform (IItem[] items, IItem[] modifierItems)

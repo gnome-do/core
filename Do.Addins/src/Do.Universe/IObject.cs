@@ -1,4 +1,4 @@
-/* ${FileName}
+/* IObject.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -22,11 +22,37 @@ using System;
 
 namespace Do.Universe
 {
-	
+	/// <summary>
+	/// This interface captures everything common to IItem, ICommand,
+	/// and IItemSource interfaces.
+	/// </summary>
 	public interface IObject
 	{
+		/// <value>
+		/// The human-readable name of the object.
+		/// Example: The name of an application, like "Pidgin Internet Messenger."
+		/// </value>
 		string Name { get; }
+		
+		/// <value>
+		/// The human-readable name of the object.
+		/// Example: The URL of a bookmark or absolute path of a file.
+		/// </value>
 		string Description { get; }
+		
+		/// <summary>
+		/// The object's icon. This can be either an absolute path to an image,
+		/// an icon name that can be looked up with Gtk.IconTheme.Default.LoadIcon,
+		/// or the path to a resource in the same assembly as the implementing class.
+		/// In the case of a path to an assembly resource, use this path convention:
+		/// 
+		///    "Fully.Qualified.Class.Name:path_to_my_resource"
+		/// 
+		/// For example, if your class is JohnDoe.PidginItem and your assembly contains
+		/// a resource called pidgin_icon.svg, use this string:
+		/// 
+		///    "JohnDoe.PidginItem:pidgin_icon.svg"
+		/// </summary>
 		string Icon { get; }
 	}
 }

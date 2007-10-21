@@ -38,7 +38,7 @@ namespace Do.Universe
 			get { return "gnome-run"; }
 		}
 		
-		public Type[] SupportedTypes {
+		public Type[] SupportedItemTypes {
 			get {
 				return new Type[] {
 					typeof (IRunnableItem),
@@ -46,12 +46,18 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierTypes {
+		public Type[] SupportedModifierItemTypes {
 			get { return null; }
 		}
 
-		public bool SupportsItem (IItem item) {
+		public bool SupportsItem (IItem item)
+		{
 			return true;
+		}
+		
+		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		{
+			return false;
 		}
 		
 		public void Perform (IItem[] items, IItem[] modifierItems)

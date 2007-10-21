@@ -117,7 +117,7 @@ namespace Do
 				IconTheme iconTheme;
 				Pixbuf pixbuf;
 				string icon_description;
-
+				
 				if (name == null || name.Length == 0) {
 					return null;
 				}

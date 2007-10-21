@@ -1,4 +1,4 @@
-/* ${FileName}
+/* TextItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -24,6 +24,9 @@ using System.Collections.Generic;
 namespace Do.Universe
 {
 
+	/// <summary>
+	/// A concrete implementation of the ITextItem interface.
+	/// </summary>
 	public class TextItem : ITextItem
 	{
 		

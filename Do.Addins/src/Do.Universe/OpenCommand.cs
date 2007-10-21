@@ -1,4 +1,4 @@
-/* ${FileName}
+/* OpenCommand.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -25,6 +25,9 @@ using Do.Addins;
 namespace Do.Universe
 {
 	
+	/// <summary>
+	/// A command providing "open" semantics to many kinds of items.
+	/// </summary>
 	public class OpenCommand : ICommand
 	{
 	
@@ -44,7 +47,7 @@ namespace Do.Universe
 			get { return "gtk-open"; }
 		}
 		
-		public Type[] SupportedTypes {
+		public Type[] SupportedItemTypes {
 			get {
 				return new Type[] {
 					typeof (IOpenableItem),
@@ -53,14 +56,20 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierTypes {
+		public Type[] SupportedModifierItemTypes {
 			get {
 				return null;
 			}
 		}
 
-		public bool SupportsItem (IItem item) {
+		public bool SupportsItem (IItem item)
+		{
 			return true;
+		}
+		
+		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		{
+			return false;
 		}
 		
 		public void Perform (IItem[] items, IItem[] modifierItems)

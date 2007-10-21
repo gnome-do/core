@@ -1,4 +1,4 @@
-/* ${FileName}
+/* RunInShellCommand.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -23,6 +23,9 @@ using System;
 namespace Do.Universe
 {
 	
+	/// <summary>
+	/// Runs text commands in a shell.
+	/// </summary>
 	public class RunInShellCommand : ICommand
 	{
 	
@@ -72,7 +75,8 @@ namespace Do.Universe
 			get { return "gnome-terminal"; }
 		}
 		
-		public Type[] SupportedTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (ITextItem),
@@ -80,11 +84,13 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierTypes {
+		public Type[] SupportedModifierItemTypes
+		{
 			get { return null; }
 		}
 
-		public bool SupportsItem (IItem item) {
+		public bool SupportsItem (IItem item)
+		{
 			string command_line;
 			
 			command_line = null;
@@ -95,6 +101,11 @@ namespace Do.Universe
 			if (command_line != null) {
 				return CommandLineIsFoundOnPath (command_line);
 			}
+			return false;
+		}
+		
+		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		{
 			return false;
 		}
 		

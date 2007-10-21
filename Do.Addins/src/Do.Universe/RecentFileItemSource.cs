@@ -28,21 +28,25 @@ namespace Do.Universe
 	{
 		
 		List<IItem> files;
-		bool recentUpdated;
 		
 		public RecentFileItemSource()
 		{
 			files = new List<IItem> ();
 			Gtk.RecentManager.Default.Changed += OnRecentChanged;
-			
-			recentUpdated = false;
+
 			ForceUpdateItems ();
 		}
 		
 		protected void OnRecentChanged (object sender, EventArgs args)
 		{
-			recentUpdated = true;
 			ForceUpdateItems ();
+		}
+		
+		public Type[] SupportedItemTypes {
+			get { return new Type[] {
+					typeof (FileItem),
+				};
+			}
 		}
 		
 		public string Name {
@@ -61,13 +65,12 @@ namespace Do.Universe
 			get { return files; }
 		}
 		
-		public bool UpdateItems ()
-		{
-			bool tmp;
+		public ICollection<IItem> ChildrenOfItem (IItem item) {
+			return null;
+		}
 		
-			tmp = recentUpdated;
-			recentUpdated = false;
-			return tmp;
+		public void UpdateItems ()
+		{
 		}
 		
 		protected virtual void ForceUpdateItems ()

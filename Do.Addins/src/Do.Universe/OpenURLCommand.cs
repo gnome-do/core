@@ -48,7 +48,7 @@ namespace Do.Universe
 			get { return "web-browser"; }
 		}
 		
-		public Type[] SupportedTypes {
+		public Type[] SupportedItemTypes {
 			get {
 				return new Type[] {
 					typeof (IURLItem),
@@ -57,7 +57,7 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierTypes {
+		public Type[] SupportedModifierItemTypes {
 			get {
 				return null;
 			}
@@ -69,6 +69,11 @@ namespace Do.Universe
 			} else if (item is IURLItem) {
 				return true;
 			}
+			return false;
+		}
+		
+		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		{
 			return false;
 		}
 		

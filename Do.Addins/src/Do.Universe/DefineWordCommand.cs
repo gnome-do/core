@@ -1,8 +1,7 @@
-/* ${FileName}
+/* DefineWordCommand.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
+ * COPYRIGHT file distributed with this source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +56,7 @@ namespace Do.Universe
 			get { return "accessories-dictionary.png"; }
 		}
 		
-		public Type[] SupportedTypes {
+		public Type[] SupportedItemTypes {
 			get {
 				return new Type[] {
 					typeof (ITextItem),
@@ -65,7 +64,7 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierTypes {
+		public Type[] SupportedModifierItemTypes {
 			get { return null; }
 		}
 
@@ -90,6 +89,11 @@ namespace Do.Universe
 			if (word != null) {
 				return wordRegex.IsMatch (word);
 			}
+			return false;
+		}
+		
+		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		{
 			return false;
 		}
 		

@@ -1,4 +1,4 @@
-/* ${FileName}
+/* ItemSource.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -29,9 +29,9 @@ namespace Do.Core
 	public class ItemSource : GCObject 
 	{
 	
-		public static readonly string DefaultItemSourceName = "";
-		public static readonly string DefaultItemSourceDescription = "";
-		public static readonly string DefaultItemSourceIcon = "";
+		public static readonly string DefaultItemSourceName = "Unnamed Item Source";
+		public static readonly string DefaultItemSourceDescription = "No description.";
+		public static readonly string DefaultItemSourceIcon = "empty";
 		
 		private bool enabled;
 		protected IItemSource source;
@@ -62,21 +62,21 @@ namespace Do.Core
 			get { return (source.Icon == null ? DefaultItemSourceIcon : source.Icon); }
 		}
 		
-		public bool UpdateItems () {
-			if (source.UpdateItems ()) {
-				items.Clear ();
-				items = new List<Item> ();
-				foreach (IItem item in source.Items) {
-					items.Add (new Item (item));
-				}
-				return true;
-			} else {
-				return false;
+		public void UpdateItems () {
+			source.UpdateItems ();
+			items.Clear ();
+			items = new List<Item> ();
+			foreach (IItem item in source.Items) {
+				items.Add (new Item (item));
 			}
 		}
 		
 		public ICollection<Item> Items {
 			get { return items; }
+		}
+		
+		public ICollection<IItem> ChildrenOfItem (IItem item) {
+			return new List<IItem> ();
 		}
 		
 		public bool Enabled {

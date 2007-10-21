@@ -38,6 +38,13 @@ namespace Do.Universe
 		{
 			Gnome.Vfs.Vfs.Initialize ();
 		}
+		
+		public Type[] SupportedItemTypes {
+			get { return new Type[] {
+					typeof (FileItem),
+				};
+			}
+		}
 
 		public DirectoryFileItemSource (string path, int levels)
 		{
@@ -69,10 +76,13 @@ namespace Do.Universe
 			get { return items; }
 		}
 		
-		public bool UpdateItems ()
+		public ICollection<IItem> ChildrenOfItem (IItem item) {
+			return null;
+		}
+		
+		public void UpdateItems ()
 		{
 			ReadItems (path, levels);
-			return true;
 		}
 		
 		/// <summary>

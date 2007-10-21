@@ -37,7 +37,7 @@ namespace Do.Core
 		
 		public void AddCommand (Command command)
 		{
-			foreach (Type type in command.SupportedTypes) {
+			foreach (Type type in command.SupportedItemTypes) {
 				List<Command> commands;
 				if (!commandLists.ContainsKey (type)) {
 					commandLists[type] = new List<Command> ();
@@ -78,7 +78,7 @@ namespace Do.Core
 			foreach (Type type in types) {
 				if (commandLists.ContainsKey (type)) {
 					foreach (Command command in commandLists[type] as IEnumerable<Command>) {
-						if (command.SupportsItem (item.IItem)) {
+						if (command.SupportsItem (item)) {
 							commands.Add (command);
 						}
 					}

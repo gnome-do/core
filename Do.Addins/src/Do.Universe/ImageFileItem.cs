@@ -1,4 +1,4 @@
-/* ${FileName}
+/* ImageFileItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -22,7 +22,9 @@ using System;
 
 namespace Do.Universe
 {
-	
+	/// <summary>
+	/// FileItem subclass represnting an image file.
+	/// </summary>
 	public class ImageFileItem : FileItem
 	{
 		/*
@@ -47,7 +49,9 @@ namespace Do.Universe
 		{	
 		}
 		
-		// ImageFileItems use themselves as their icons!
+		/// <value>
+		/// ImageFileItems use themselves as their icons!
+		/// </value>
 		public override string Icon {
 			get { return URI; }
 		}

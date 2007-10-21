@@ -33,6 +33,7 @@ namespace Do.Universe
 		public static readonly string[] DesktopFilesDirectories = {
 			"/usr/share/applications",
 			"/usr/share/applications/kde",
+			"/usr/share/gdm/applications",
 			"/usr/local/share/applications",
 		};
 		
@@ -47,6 +48,13 @@ namespace Do.Universe
 		{
 			apps = new List<IItem> ();			
 			UpdateItems ();
+		}
+		
+		public Type[] SupportedItemTypes {
+			get { return new Type[] {
+					typeof (ApplicationItem),
+				};
+			}
 		}
 		
 		public string Name {
@@ -88,17 +96,20 @@ namespace Do.Universe
 			
 		}
 		
-		public bool UpdateItems ()
+		public void UpdateItems ()
 		{
 			apps.Clear ();
 			foreach (string dir in DesktopFilesDirectories) {
 				LoadDesktopFiles (dir);
 			}
-			return true;
 		}
 		
 		public ICollection<IItem> Items {
 			get { return apps; }
+		}
+		
+		public ICollection<IItem> ChildrenOfItem (IItem item) {
+			return null;
 		}
 		
 	}
