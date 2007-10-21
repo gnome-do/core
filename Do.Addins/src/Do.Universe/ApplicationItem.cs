@@ -1,8 +1,22 @@
-// GCApplicationItem.cs created with MonoDevelop
-// User: dave at 11:00 AM 8/18/2007
-//
-// To change standard headers go to Edit->Preferences->Coding->Standard Headers
-//
+/* ApplicationItem.cs
+ *
+ * GNOME Do is the legal property of its developers. Please refer to the
+ * COPYRIGHT file distributed with this
+ * source distribution.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using System;
 using System.Collections.Generic;
@@ -12,6 +26,10 @@ using System.Runtime.InteropServices;
 namespace Do.Universe
 {
 
+	/// <summary>
+	/// If this exception is thrown in the ApplicationItem constructor, the
+	/// ApplicationItemSource will catch it and discard the item.
+	/// </summary>
 	public class ApplicationDetailMissingException: ApplicationException
 	{
 		public ApplicationDetailMissingException (string message) : base (message)
@@ -26,6 +44,13 @@ namespace Do.Universe
 		protected IntPtr desktopFilePtr;
 		protected string name, description, icon;
 		
+		/// <summary>
+		/// Create an application item from a desktop file location.
+		/// </summary>
+		/// <param name="desktopFile">
+		/// A <see cref="System.String"/> containing the absolute path of
+		/// a desktop (.desktop) file.
+		/// </param>
 		public ApplicationItem (string desktopFile)
 		{
 			this.desktopFile = desktopFile;
@@ -39,7 +64,7 @@ namespace Do.Universe
 			icon = gnome_desktop_item_get_string(desktopFilePtr, "Icon");
 			
 			if (icon == null || icon == "") {
-				// If there's no icon, throw an exception and disregard this object.
+				// If there's no icon, throw an exception and discard this object.
 				throw new ApplicationDetailMissingException (name + " has no icon.");
 			}
 		}
@@ -47,7 +72,7 @@ namespace Do.Universe
 		public string Name {
 			get { return name; }
 		}
-		
+
 		public string Description {
 			get { return description; }
 		}
@@ -56,6 +81,10 @@ namespace Do.Universe
 			get { return icon; }
 		}
 		
+		/// <summary>
+		/// Executes the application by launching the desktop item given in the
+		/// constructor.
+		/// </summary>
 		public void Run () {
 			if (desktopFilePtr != IntPtr.Zero) {
 				gnome_desktop_item_launch(desktopFilePtr, IntPtr.Zero, 0, IntPtr.Zero);
