@@ -47,6 +47,9 @@ namespace Do.Core
 		private Item[] currentItems;
 		private Command[] currentCommands;
 		
+		private SearchManager searchManager;
+		private UpdateManager updateManager;
+		
 		private int currentItemIndex;
 		private int currentCommandIndex;
 		
@@ -95,6 +98,8 @@ namespace Do.Core
 			LoadAssemblies ();
 			SetupKeybindings ();
 			State = CommanderState.Default;
+			updateManager = new UpdateManager ();
+			searchManager = updateManager.SearchManager;
 		}
 		
 		public CommanderState State
@@ -274,13 +279,32 @@ namespace Do.Core
 		
 		protected abstract void OnVisibilityChanged (bool visible);
 			
-		public void SearchItems (string itemSearchString)
+		public void SearchItems (string itemSearchString, SearchAction searchAction)
 		{
 			State = CommanderState.SearchingItems;
+			SearchContext searchContext = new SearchContext ();
+			searchContext.ItemSearchString = itemSearchString;
+			searchContext.SearchPosition = SentencePositionLocator.Item;
 			
 			this.itemSearchString = itemSearchString;
 			commandSearchString = "";
-			currentItems = itemManager.ItemsForAbbreviation (itemSearchString);
+			//currentItems = itemManager.ItemsForAbbreviation (itemSearchString);
+			if (searchAction == SearchAction.Append) {
+				searchContext = searchManager.Search (searchContext);
+				currentItems = (Item[]) (searchContext.Results);
+			}
+			else if (searchAction == SearchAction.Delete) {
+				searchContext = searchManager.DeleteLastSearchCharacter (searchContext);
+				if (searchContext != null) {
+					currentItems = (Item[]) (searchContext.Results);
+				}
+				else {
+					currentItems = new Item[0];
+				}
+			}
+			else {
+				currentItems = new Item[0];
+			}
 			if (currentItems.Length == 0) {
 				currentItems = new Item[] { new Item (new TextItem (itemSearchString)) };
 			}
@@ -291,18 +315,35 @@ namespace Do.Core
 			State = CommanderState.ItemSearchComplete;
 		}
 		
-		public void SearchCommands (string commandSearchString)
+		public void SearchCommands (string commandSearchString, SearchAction searchAction)
 		{
 			State = CommanderState.SearchingCommands;
 			
 			this.commandSearchString = commandSearchString;
-			currentCommands = commandManager.CommandsForItem (CurrentItem, commandSearchString);
+			//currentCommands = commandManager.CommandsForItem (CurrentItem, commandSearchString);
+			
+			SearchContext searchContext = new SearchContext ();
+			searchContext.CommandSearchString = commandSearchString;
+			searchContext.Item = CurrentItem;
+			searchContext.ItemSearchString = CurrentItem.Name;
+			searchContext.SearchPosition = SentencePositionLocator.Command;
 			
 			// Update items and commands state.
-			if (currentCommands.Length >  0) {
-				CurrentCommandIndex = 0;
-			} else {
-				currentCommandIndex = -1;
+			if (searchAction == SearchAction.Append) {
+				searchContext = searchManager.Search (searchContext);
+				currentCommands = (Command[]) (searchContext.Results);
+			}
+			else if (searchAction == SearchAction.Delete) {
+				searchContext = searchManager.DeleteLastSearchCharacter (searchContext);
+				if (searchContext != null) {
+					currentCommands = (Command[]) (searchContext.Results);
+				}
+				else {
+					currentCommands = new Command[0];
+				}
+			}
+			else {
+				currentCommands = new Command[0];
 			}
 			
 			State = CommanderState.CommandSearchComplete;

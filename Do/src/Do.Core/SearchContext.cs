@@ -19,11 +19,45 @@ namespace Do.Core
 		Item item, iitem;
 		Command command;
 		string itemSearchString, indirectItemSearchString, commandSearchString;
+		SentencePositionLocator searchPosition;
+		SearchContext lastContext;
 		
 		GCObject [] results;
 				
 		public SearchContext ()
 		{
+		}
+		
+		public SearchContext Clone () {
+			SearchContext clonedContext = new SearchContext ();
+			clonedContext.Command = command;
+			clonedContext.CommandSearchString = commandSearchString;
+			clonedContext.IndirectItem = iitem;
+			clonedContext.IndirectItemSearchString = indirectItemSearchString;
+			clonedContext.Item = item;
+			clonedContext.ItemSearchString = itemSearchString;
+			clonedContext.LastContext = lastContext;
+			clonedContext.Results = (GCObject[]) (results.Clone ());
+			clonedContext.SearchPosition = searchPosition;
+			return clonedContext;
+		}
+		
+		public SearchContext LastContext {
+			get {
+				return lastContext;
+			}
+			set {
+				lastContext = value;
+			}
+		}
+		
+		public SentencePositionLocator SearchPosition {
+			get {
+				return searchPosition;
+			}
+			set {
+				searchPosition = value;
+			}
 		}
 		
 		public Item Item {

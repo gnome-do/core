@@ -250,7 +250,7 @@ namespace Do.UI
 						commander.State = CommanderState.Default;
 					} else {
 						searchString = "";
-						QueueSearch ();
+						QueueSearch (SearchAction.Reset);
 					}
 				}
 				break;
@@ -262,7 +262,7 @@ namespace Do.UI
 			case Gdk.Key.BackSpace:
 				if (searchString.Length > 1) {
 					searchString = searchString.Substring (0, searchString.Length-1);
-					QueueSearch ();
+					QueueSearch (SearchAction.Delete);
 				} else {
 					commander.State = CommanderState.Default;
 				}
@@ -307,7 +307,7 @@ namespace Do.UI
 				    || char.IsSymbol (c)) {
 					searchString += c;
 
-					QueueSearch ();
+					QueueSearch (SearchAction.Append);
 				}
 				break;
 			}
@@ -389,14 +389,14 @@ namespace Do.UI
 			Reposition ();
 		}
 		
-		protected virtual void QueueSearch ()
+		protected virtual void QueueSearch (SearchAction searchAction)
 		{
 			switch (focus) {
 			case WindowFocus.ItemFocus:
-				commander.SearchItems (searchString);
+				commander.SearchItems (searchString, searchAction);
 				break;
 			case WindowFocus.CommandFocus:
-				commander.SearchCommands (searchString);
+				commander.SearchCommands (searchString, searchAction);
 				break;
 			}
 		}
