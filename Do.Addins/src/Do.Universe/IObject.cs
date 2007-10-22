@@ -35,7 +35,7 @@ namespace Do.Universe
 		string Name { get; }
 		
 		/// <value>
-		/// The human-readable name of the object.
+		/// The human-readable description of the object.
 		/// Example: The URL of a bookmark or absolute path of a file.
 		/// </value>
 		string Description { get; }
@@ -46,12 +46,12 @@ namespace Do.Universe
 		/// or the path to a resource in the same assembly as the implementing class.
 		/// In the case of a path to an assembly resource, use this path convention:
 		/// 
-		///    "Fully.Qualified.Class.Name:path_to_my_resource"
+		///    "Fully.Qualified.Class.Name/path_to_my_resource"
 		/// 
 		/// For example, if your class is JohnDoe.PidginItem and your assembly contains
 		/// a resource called pidgin_icon.svg, use this string:
 		/// 
-		///    "JohnDoe.PidginItem:pidgin_icon.svg"
+		///    "JohnDoe.PidginItem/pidgin_icon.svg"
 		/// </summary>
 		string Icon { get; }
 	}

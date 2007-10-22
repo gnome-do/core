@@ -1,8 +1,7 @@
 /* IItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
+ * COPYRIGHT file distributed with this source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +23,8 @@ using System.Collections.Generic;
 namespace Do.Universe
 {
 	/// <summary>
-	/// The base interface that all classes to be used as items
-	/// (objects on which commands operate) must implement, either directly
-	/// or indirectly.
+	/// The base interface that all classes to be used as items (objects on which
+	/// commands operate) must implement, either directly or indirectly.
 	/// </summary>
 	public interface IItem : IObject
 	{
@@ -34,8 +32,7 @@ namespace Do.Universe
 	
 	/// <summary>
 	/// An IItem with a meaningful text representation.
-	/// Example: Something that would make sense if copied
-	/// to the clipboard. 
+	/// Example: Something that would make sense if copied to the clipboard. 
 	/// </summary>
 	public interface ITextItem : IItem
 	{
@@ -73,8 +70,8 @@ namespace Do.Universe
 	public interface IRunnableItem : IItem
 	{
 		/// <summary>
-		/// When called, this method should have a meaningful
-		/// "run" effect for the user.
+		/// When called, this method should have a meaningful "run" effect for the
+		/// user.
 		/// </summary>
 		void Run ();
 	}
@@ -85,8 +82,8 @@ namespace Do.Universe
 	public interface IOpenableItem : IItem
 	{
 		/// <summary>
-		/// When called, this method should have a meaningful
-		/// "open" effect for the user.
+		/// When called, this method should have a meaningful "open" effect for the
+		/// user.
 		/// </summary>
 		void Open ();
 	}
@@ -97,8 +94,8 @@ namespace Do.Universe
 	public interface IFileItem : IURIItem
 	{
 		/// <summary>
-		/// The mime-type of the file. This is used to determine
-		/// which applications can open which files.
+		/// The mime-type of the file. This is used to determine which applications
+		/// can open which files.
 		/// </summary>
 		string MimeType { get; }
 	}

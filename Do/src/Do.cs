@@ -1,4 +1,4 @@
-/* ${FileName}
+/* Do.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -30,24 +30,29 @@ namespace Do
 		static Commander commander;
 	
 		public static void Main (string[] args) {
-			
-			Log.Initialize ();
+
+			DetectInstanceAndExit ();	
 
 			Gtk.Application.Init ();
-						
-			commander = DBusRegistrar.GetCommanderInstance () as Commander;
-			if (commander != null) {
-				commander.Show ();
-				System.Environment.Exit (0);
-			}
-			
+			Log.Initialize ();
 			Util.Initialize ();
-			
-			commander = DBusRegistrar.RegisterCommander (new DefaultCommander ()) as Commander;
+		
+			commander = new DefaultCommander ();	
+			DBusRegistrar.RegisterCommander (commander);
 			commander.Show ();
 			
 			Gtk.Application.Run ();
 		}	
+
+		static void DetectInstanceAndExit ()
+		{
+			ICommander dbus_commander;			
+			dbus_commander = DBusRegistrar.GetCommanderInstance ();
+			if (dbus_commander != null) {
+				dbus_commander.Show ();
+				System.Environment.Exit (0);
+			}
+		}
 		
 		public static Commander Commander {
 			get { return commander; }
