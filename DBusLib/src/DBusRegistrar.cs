@@ -39,7 +39,10 @@ namespace Do.DBusLib
 		
 		static DBusRegistrar ()
 		{
-			BusG.Init ();
+			try {
+				BusG.Init ();
+			} catch {
+			}
 		}
 		
 		
@@ -54,7 +57,11 @@ namespace Do.DBusLib
 		/// A <see cref="T"/> instance if it was found on the bus; null otherwise.
 		/// </returns>
 		public static T GetInstance<T> (string objectPath) {
-			if (!Bus.Session.NameHasOwner (BusName)) {
+			try {
+				if (!Bus.Session.NameHasOwner (BusName)) {
+					return default (T);
+				}
+			} catch {
 				return default (T);
 			}
 			return Bus.Session.GetObject<T> (BusName, new ObjectPath (objectPath));
