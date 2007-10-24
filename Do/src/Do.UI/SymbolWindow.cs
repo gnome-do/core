@@ -76,7 +76,7 @@ namespace Do.UI
 		protected string searchString;
 		protected string itemSearchString;
 		
-		public SymbolWindow (Commander commander) : base ("GNOME Go")
+		public SymbolWindow (Commander commander) : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
 			
