@@ -161,7 +161,16 @@ namespace Do.Universe
 		}
 		
 		public virtual string Description {
-			get { return ShortUri (uri); }
+			get {
+				string uri_short;
+				
+				uri_short = ShortUri (uri);
+				if (uri_short == "~")
+					// Sowing only "~" looks too abbreviated.
+					return uri;
+				else
+					return uri_short;
+			}
 		}
 		
 		public virtual string Icon {
