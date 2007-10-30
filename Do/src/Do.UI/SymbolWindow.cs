@@ -406,6 +406,9 @@ namespace Do.UI
 				selectedIndex = currentContext.ObjectIndex;
 				break;
 			}
+			if (searchString == null) {
+				searchString = "";
+			}
 
 			resultsWindow.Results = results;
 			resultsWindow.SelectedIndex = selectedIndex;

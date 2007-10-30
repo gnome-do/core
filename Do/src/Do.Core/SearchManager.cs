@@ -17,12 +17,6 @@ namespace Do.Core
 		ModifierItem = 2
 	}
 	
-	public enum SearchAction {
-		Append = 0,
-		Delete = 1,
-		Reset = 2
-	}
-	
 	public class SearchManager
 	{
 		Dictionary<string, IObject[]> firstCharacterResultsCommands;
