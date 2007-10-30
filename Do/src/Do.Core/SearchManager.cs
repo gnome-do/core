@@ -31,11 +31,8 @@ namespace Do.Core
 	
 		Dictionary<string, IObject> commandsUniverse;
 		Dictionary<string, IObject> itemsUniverse;
-		Dictionary<string, System.Collections.Generic.List<Item>> commandToItemMap;
-		
-		SearchContext lastCommandContext;
-		SearchContext lastItemContext;
-		SearchContext lastModifierItemContext;
+		Dictionary<string, System.Collections.Generic.List<System.Type>> commandToItemMap;
+		Dictionary<string, System.Collections.Generic.List<Command>> itemToCommandMap;
 		
 		public Dictionary<string, IObject> CommandsUniverse {
 			get { return commandsUniverse; }
@@ -47,18 +44,25 @@ namespace Do.Core
 			set { itemsUniverse = value; }
 		}
 		
-		public Dictionary<string, List<Item>> CommandToItemMap {
+		public Dictionary<string, List<System.Type>> CommandToItemMap {
 			get { return commandToItemMap; }
 			set { commandToItemMap = value; }
 		}
 		
+		public Dictionary<string, List<Command>> ItemToCommandMap {
+			get { return itemToCommandMap; }
+			set { itemToCommandMap = value; }
+		}
+		
 		public SearchManager (Dictionary<string, IObject> newCommandsUniverse,
 		                      Dictionary<string, IObject> newItemUniverse,
-		                      Dictionary<string, List<Item>> newCommandToItemMap)
+		                      Dictionary<string, List<System.Type>> newCommandToItemMap,
+		                      Dictionary<string, List<Command>> newItemToCommandMap)
 		{
 			commandsUniverse = newCommandsUniverse;
 			itemsUniverse = newItemUniverse;
 			commandToItemMap = newCommandToItemMap;
+			itemToCommandMap = newItemToCommandMap;
 			List<IObject> keypress_matches;
 			RelevanceSorter comparer;
 			SentencePositionLocator sentencePosition;
@@ -90,36 +94,57 @@ namespace Do.Core
 				firstCharacterResultsModifierItems[keypress.ToString ()] = comparer.NarrowResults (universeList).ToArray ();			
 			}
 		}
-		
-		
-		
-		public SearchContext DeleteLastSearchCharacter (SearchContext newContext)
-		{
-			SearchContext deletedContext;
-			if (newContext.SearchPosition == SentencePositionLocator.Command) {
-				deletedContext = lastCommandContext;
-				if (lastCommandContext != null) {
-					lastCommandContext = lastCommandContext.LastContext;
+
+		public SearchContext ChangeSearchPosition (SearchContext searchContext, SentencePositionLocator newPosition) {
+			SearchContext newSearchContext;
+			newSearchContext = new SearchContext ();
+			if (newPosition == SentencePositionLocator.Command) {
+				if (searchContext.LastCommandContext != null) {
+					newSearchContext = searchContext.LastCommandContext;
+				}
+				else {
+					newSearchContext = searchContext.Clone ();
+					newSearchContext.SearchPosition = SentencePositionLocator.Command;
+					newSearchContext.LastContext = null;
+					newSearchContext.Results = CommandsForItem (newSearchContext.Item);
 				}
 			}
-			else if (newContext.SearchPosition == SentencePositionLocator.Item) {
-				deletedContext = lastItemContext;
-				if (lastItemContext != null) {
-					lastItemContext = lastItemContext.LastContext;
+			else if (newPosition == SentencePositionLocator.Item) {
+				if (searchContext.LastItemContext != null) {
+					newSearchContext = searchContext.LastItemContext;
 				}
+				else {
+					newSearchContext = searchContext.Clone ();
+					newSearchContext.SearchPosition = SentencePositionLocator.Command;
+					newSearchContext.LastContext = null;
+					newSearchContext.Results = null;
+				}
+			}
+			if (searchContext.SearchPosition == SentencePositionLocator.Item) {
+				newSearchContext.LastItemContext = searchContext;
+			}
+			else if (searchContext.SearchPosition == SentencePositionLocator.Command) {
+				newSearchContext.LastCommandContext = searchContext;
 			}
 			else {
-				deletedContext = lastModifierItemContext;
-				if (lastModifierItemContext != null) {
-					lastModifierItemContext = lastItemContext.LastContext;
-				}
+				newSearchContext.LastModifierItemContext = searchContext;
 			}
-			return deletedContext;
+			return newSearchContext;
+		}
+		
+		public Command[] CommandsForItem (Item item) {
+			Console.WriteLine (item.IItem.GetType ());
+			if (itemToCommandMap.ContainsKey (item.IItem.GetType ().ToString ())) {
+				return (itemToCommandMap[item.IItem.GetType ().ToString ()].ToArray ());
+			}
+			else { 
+				Command[] commandList = new Command[0];
+				return commandList;
+			}
 		}
 		
 		public SearchContext Search (SearchContext newSearchContext)
 		{
-			System.Console.WriteLine ("Flag A");
 			string keypress;
 			IObject[] results;
 			List<Item> filtered_items;
@@ -127,34 +152,40 @@ namespace Do.Core
 			List<IObject> filtered_results;
 			RelevanceSorter comparer;
 			Dictionary<string, IObject[]> firstResults;
-			Console.WriteLine ("Keypress: " + newSearchContext.ItemSearchString);
 			SearchContext lastContext;
 
+			lastContext = newSearchContext.LastContext;
 			if (newSearchContext.SearchPosition == SentencePositionLocator.Command) {
-				Console.WriteLine ("FlagA1");
 				keypress = newSearchContext.CommandSearchString;
 				firstResults = firstCharacterResultsCommands;
-				lastContext = lastCommandContext;
+				if (newSearchContext.LastContext != null) {
+					if (newSearchContext.SearchPosition != newSearchContext.LastContext.SearchPosition) {
+						lastContext = newSearchContext.LastCommandContext;
+					}
+				}
 			}
 			else if (newSearchContext.SearchPosition == SentencePositionLocator.Item) {
-				Console.WriteLine ("FlagA2");
 				keypress = newSearchContext.ItemSearchString;
 				firstResults = firstCharacterResultsItems;
-				lastContext = lastItemContext;
+				if (newSearchContext.LastContext != null) {
+					if (newSearchContext.SearchPosition != newSearchContext.LastContext.SearchPosition) {
+						lastContext = newSearchContext.LastItemContext;
+					}
+				}
 			}
 			else {
-				Console.WriteLine ("FlagA3");
 				keypress = newSearchContext.IndirectItemSearchString;
 				firstResults = firstCharacterResultsModifierItems;
-				lastContext = lastModifierItemContext;
+				if (newSearchContext.LastContext != null) {
+					if (newSearchContext.SearchPosition != newSearchContext.LastContext.SearchPosition) {
+						lastContext = newSearchContext.LastModifierItemContext;
+					}
+				}
 			}
-			
-			System.Console.WriteLine ("Flag B "+keypress);
 			
 			// We can build on the last results.
 			// example: searched for "f" then "fi"
 			if (lastContext != null) {
-				System.Console.WriteLine ("Flag C1");
 				results = lastContext.Results;
 				comparer = new RelevanceSorter (keypress, newSearchContext.SearchPosition);
 				filtered_results = new List<IObject> (results);
@@ -164,7 +195,6 @@ namespace Do.Core
 
 			// If someone typed a single key, BOOM we're done.
 			else if (firstResults.ContainsKey (keypress)) {
-				System.Console.WriteLine ("Flag C2");
 				results = firstResults[keypress];
 				filtered_results = new List<IObject> (results);
 			}
@@ -172,7 +202,6 @@ namespace Do.Core
 			// Or we just have to do an expensive search...
 			// This is the current behavior on first keypress.
 			else {
-				System.Console.WriteLine ("Flag C3");
 				filtered_results = new List<IObject> ();
 				if (newSearchContext.SearchPosition == SentencePositionLocator.Command) {
 					filtered_results.AddRange (commandsUniverse.Values);
@@ -185,16 +214,14 @@ namespace Do.Core
 				// Sort results based on keypress
 			}
 
-			Console.WriteLine ("Flag D");
 			if (newSearchContext.SearchPosition == SentencePositionLocator.Command) {
 				IObject[] filteredResultsArray = filtered_results.ToArray ();
 				for (int i = 0; i < filteredResultsArray.Length; i++) {
-					System.Console.WriteLine (filteredResultsArray[i].Name);
 					IObject result = (filteredResultsArray[i]);
-					List<Item> itemsForCommand;
-					if (commandToItemMap.ContainsKey (((Command) result).Name)) {
-						itemsForCommand = commandToItemMap[((Command) result).Name];
-						if (!(itemsForCommand.Contains (newSearchContext.Item))) {
+					List<System.Type> itemsForCommand;
+					if (commandToItemMap.ContainsKey (((Command) result).Name + ((Command) result).Description)) {
+						itemsForCommand = commandToItemMap[((Command) result).Name + ((Command) result).Description];
+						if (!(itemsForCommand.Contains (newSearchContext.Item.IItem.GetType ()))) {
 							filtered_results.Remove (result);
 						}
 					}
@@ -216,7 +243,6 @@ namespace Do.Core
 //				// suitability to the current context:
 //				filtered_results.Add (result); 
 //			}
-			Console.WriteLine ("Flag E");
 			if (newSearchContext.SearchPosition == SentencePositionLocator.Command) {
 				filtered_commands = new List<Command> ();
 				foreach (IObject iobject in filtered_results) {
@@ -231,7 +257,6 @@ namespace Do.Core
 				}
 				newSearchContext.Results = filtered_items.ToArray ();
 			}
-			Console.WriteLine ("Flag F");
 			// This is a clever way to keep
 			// a stack of incremental results.
 			// NOTE: Clone should return a deep (enough) copy.
@@ -243,16 +268,16 @@ namespace Do.Core
 			newSearchContext.LastContext = lastContext;
 			
 			if (newSearchContext.SearchPosition == SentencePositionLocator.Command) {
-				lastCommandContext = lastContext;
+				newSearchContext.LastCommandContext = lastContext;
 			}
 			else if (newSearchContext.SearchPosition == SentencePositionLocator.Item) {
-				lastItemContext = lastContext;
+				newSearchContext.LastItemContext = lastContext;
+				newSearchContext.LastCommandContext = null;
 			}
 			else {
-				lastModifierItemContext = lastContext;
+				newSearchContext.LastModifierItemContext = lastContext;
 			}
 			
-			Console.WriteLine ("Flag G");
 			return newSearchContext;
 		}
 	}

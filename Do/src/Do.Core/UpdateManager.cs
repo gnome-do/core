@@ -17,7 +17,8 @@ namespace Do.Core
 		private List<ItemSource> itemSources;
 		private Dictionary<string, IObject> commandsUniverse;
 		private Dictionary<string, IObject> itemsUniverse;
-		private Dictionary<string, System.Collections.Generic.List<Item>> commandToItemMap;
+		private Dictionary<string, System.Collections.Generic.List<System.Type>> commandToItemMap;
+		private Dictionary<string, System.Collections.Generic.List<Command>> itemToCommandMap;
 		private Hashtable commandLists;
 		private SearchManager searchManager;
 		
@@ -26,15 +27,16 @@ namespace Do.Core
 			itemSources = new List<ItemSource> ();
 			itemsUniverse = new Dictionary<string,IObject> ();
 			commandsUniverse = new Dictionary<string,IObject> ();
-			commandToItemMap = new Dictionary<string,System.Collections.Generic.List<Item>> ();
+			commandToItemMap = new Dictionary<string,System.Collections.Generic.List<System.Type>> ();
+			itemToCommandMap = new Dictionary<string,System.Collections.Generic.List<Command>> ();
 			commandLists = new Hashtable ();
 			foreach (ItemSource source in BuiltinItemSources) {
 				itemSources.Add (source);
 			}
 			
 			foreach (Command command in BuiltinCommands) {
-				if (!(commandsUniverse.ContainsKey (command.Name))) {
-					commandsUniverse.Add (command.Name, command);
+				if (!(commandsUniverse.ContainsKey (command.Name+command.Description))) {
+					commandsUniverse.Add (command.Name+command.Description, command);
 					foreach (Type type in command.SupportedTypes) {
 						List<Command> commands;
 						if (!commandLists.ContainsKey (type)) {
@@ -50,28 +52,32 @@ namespace Do.Core
 					
 			foreach (ItemSource source in itemSources) {
 				foreach (Item item in source.Items) {
-					if (itemsUniverse.ContainsKey (item.Name)) {
-						System.Console.WriteLine (item.Name);
+					if (itemsUniverse.ContainsKey (item.Name+item.Description)) {
+						System.Console.WriteLine (item.Name+item.Description);
 					}
 					else {
-						itemsUniverse.Add (item.Name, item);
+						itemsUniverse.Add (item.Name+item.Description, item);
 					}
 					Command[] commandList = _CommandsForItem (item);
+					List<Command> commandListFormatted = new List<Command> ();
+					commandListFormatted.AddRange (commandList);
+					if (!(itemToCommandMap.ContainsKey (item.IItem.GetType ().ToString ()))) {
+						itemToCommandMap.Add (item.IItem.GetType ().ToString (), commandListFormatted);
+					}
 					foreach (Command command in commandList) {
-						if (commandToItemMap.ContainsKey (command.Name)) {
-							List<Item> itemList = commandToItemMap[command.Name];
-							itemList.Add (item);
+						if (commandToItemMap.ContainsKey (command.Name+command.Description)) {
+							List<System.Type> itemList = commandToItemMap[command.Name+command.Description];
+							itemList.Add (item.IItem.GetType ());
 						}
 						else {
-							List<Item> itemList = new List<Item> ();
-							itemList.Add(item);
-							commandToItemMap[command.Name] = itemList;
+							List<System.Type> itemList = new List<System.Type> ();
+							itemList.Add(item.IItem.GetType ());
+							commandToItemMap[command.Name+command.Description] = itemList;
 						}
 					}
 				}
 			}
-			foreach (string CommandName in commandToItemMap.Keys) { Console.WriteLine ("Test3: "+CommandName); }
-			searchManager = new SearchManager (commandsUniverse, itemsUniverse, commandToItemMap);
+			searchManager = new SearchManager (commandsUniverse, itemsUniverse, commandToItemMap, itemToCommandMap);
 		}
 		
 		private Command[] _CommandsForItem (Item item) {

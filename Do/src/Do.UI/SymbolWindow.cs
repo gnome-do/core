@@ -61,20 +61,29 @@ namespace Do.UI
 		protected int currentCommandIndex;
 		protected WindowFocus focus;
 		protected string searchString;
-		protected string itemSearchString;
+		
+		protected SearchContext currentContext;
+		
+		private Do.Core.Item[] currentItems;
+		private Command[] currentCommands;
+		
+		private SearchManager searchManager;
+		private UpdateManager updateManager;
 		
 		public SymbolWindow (Commander commander) : base ("GNOME Go")
 		{
 			Build ();
 			
 			this.commander = commander;
-			SetDefaultState ();
+			currentContext = new SearchContext ();
 			
 			commander.SetDefaultStateEvent += OnDefaultStateEvent;
 			commander.SetSearchingItemsStateEvent += OnSearchingStateEvent;
 			commander.SetSearchingCommandsStateEvent += OnSearchingStateEvent;
 			commander.SetItemSearchCompleteStateEvent += OnSearchCompleteStateEvent;
 			commander.SetCommandSearchCompleteStateEvent += OnSearchCompleteStateEvent;
+			updateManager = new UpdateManager ();
+			searchManager = updateManager.SearchManager;
 		}
 		
 		protected void Build ()
@@ -96,7 +105,7 @@ namespace Do.UI
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
 			focus = WindowFocus.ItemFocus;
-			searchString = itemSearchString = "";
+			searchString = "";
 			
 			frame = new RoundedFrame ();
 			frame.DrawFill = true;
@@ -250,9 +259,9 @@ namespace Do.UI
 						commander.State = CommanderState.Default;
 					} else {
 						searchString = "";
-						QueueSearch (SearchAction.Reset);
 					}
 				}
+				ResetContext ();
 				break;
 			case Gdk.Key.Return:
 			case Gdk.Key.ISO_Enter:
@@ -260,16 +269,20 @@ namespace Do.UI
 				break;
 			case Gdk.Key.Delete:
 			case Gdk.Key.BackSpace:
+				if (searchString == null) {
+					searchString = "";
+				}
 				if (searchString.Length > 1) {
 					searchString = searchString.Substring (0, searchString.Length-1);
-					QueueSearch (SearchAction.Delete);
+					DeleteCharacter ();
 				} else {
-					commander.State = CommanderState.Default;
+					searchString = "";
+					ResetContext ();
 				}
 				break;
 			case Gdk.Key.Tab:
 				resultsWindow.Hide ();
-				if (focus == WindowFocus.ItemFocus && commander.CurrentItem != null) {
+				if (focus == WindowFocus.ItemFocus && currentContext.Item != null) {
 					SetWindowFocus (WindowFocus.CommandFocus);
 				} else if (focus == WindowFocus.CommandFocus) {
 					SetWindowFocus (WindowFocus.ItemFocus);
@@ -307,7 +320,7 @@ namespace Do.UI
 				    || char.IsSymbol (c)) {
 					searchString += c;
 
-					QueueSearch (SearchAction.Append);
+					QueueSearch ();
 				}
 				break;
 			}
@@ -316,16 +329,18 @@ namespace Do.UI
 		
 		protected virtual void ActivateCommand ()
 		{
-			commander.Execute ();
+			commander.Execute (currentContext);
 			Hide ();
 		}
 		
 		private void OnResultsWindowSelectionChanged (object sender, ResultsWindowSelectionEventArgs args)
 		{
 			if (focus == WindowFocus.ItemFocus) {
-				SetItemIndex (args.SelectedIndex, searchString);
+				SetItemIndex (searchString);
+				currentContext.ObjectIndex = args.SelectedIndex;
 			} else if (focus == WindowFocus.CommandFocus) {
-				SetCommandIndex (args.SelectedIndex, searchString);
+				SetCommandIndex (searchString);
+				currentContext.ObjectIndex = args.SelectedIndex;
 			}			
 		}
 
@@ -366,14 +381,16 @@ namespace Do.UI
 			selectedIndex = -1;
 			switch (focus) {
 			case WindowFocus.CommandFocus:
-				searchString = commander.CommandSearchString;
-				results = commander.CurrentCommands;
-				selectedIndex = commander.CurrentCommandIndex;
+				currentContext = searchManager.ChangeSearchPosition (currentContext, SentencePositionLocator.Command);
+				searchString = currentContext.CommandSearchString;
+				results = currentContext.Results;
+				selectedIndex = currentContext.ObjectIndex;
 				break;
 			case WindowFocus.ItemFocus:
-				searchString = commander.ItemSearchString;
-				results = commander.CurrentItems;
-				selectedIndex = commander.CurrentItemIndex;
+				currentContext = searchManager.ChangeSearchPosition (currentContext, SentencePositionLocator.Item);
+				searchString = currentContext.ItemSearchString;
+				results = currentContext.Results;
+				selectedIndex = currentContext.ObjectIndex;
 				break;
 			}
 
@@ -389,57 +406,115 @@ namespace Do.UI
 			Reposition ();
 		}
 		
-		protected virtual void QueueSearch (SearchAction searchAction)
+		protected virtual void DeleteCharacter () 
 		{
 			switch (focus) {
 			case WindowFocus.ItemFocus:
-				commander.SearchItems (searchString, searchAction);
+				commander.State = CommanderState.SearchingItems;
+				currentContext = currentContext.LastContext.LastContext;
+				SearchContext temp;
+				temp = currentContext;
+				currentContext = currentContext.Clone ();
+				currentContext.LastContext = temp;
+				currentItems = (Do.Core.Item[]) (currentContext.Results);
+				commander.State = CommanderState.ItemSearchComplete;
 				break;
 			case WindowFocus.CommandFocus:
-				commander.SearchCommands (searchString, searchAction);
+				commander.State = CommanderState.SearchingCommands;
+				currentContext = currentContext.LastContext.LastContext;
+				SearchContext tempContext;
+				tempContext = currentContext;
+				currentContext = currentContext.Clone ();
+				currentContext.LastContext = tempContext;
+				currentCommands = (Command[]) (currentContext.Results);
+				commander.State = CommanderState.CommandSearchComplete;
 				break;
 			}
 		}
 		
-		protected virtual void SetItemIndex (int itemIndex, string match)
-		{	
-			if (itemIndex >= commander.CurrentItems.Length) {
-				SetItemIndex (commander.CurrentItems.Length-1, match);
-				return;
+		protected virtual void QueueSearch ()
+		{
+			switch (focus) {
+			case WindowFocus.ItemFocus:
+				commander.State = CommanderState.SearchingItems;
+				currentContext.ItemSearchString = searchString;
+				currentContext.SearchPosition = SentencePositionLocator.Item;
+				currentContext = searchManager.Search (currentContext);
+				currentItems = (Do.Core.Item[]) (currentContext.Results);
+				commander.State = CommanderState.ItemSearchComplete;
+				break;
+			case WindowFocus.CommandFocus:
+				commander.State = CommanderState.SearchingCommands;
+				currentContext.Item = CurrentItem;
+				currentContext.ItemSearchString = CurrentItem.Name;
+				currentContext.CommandSearchString = searchString;
+				currentContext.SearchPosition = SentencePositionLocator.Command;
+				currentContext = searchManager.Search (currentContext);
+				currentCommands = (Command[]) (currentContext.Results);
+				commander.State = CommanderState.CommandSearchComplete;
+				break;
 			}
-			try {
-				commander.CurrentItemIndex = itemIndex;
-			} catch (IndexOutOfRangeException) {
-				return;
-			}
-			itemBox.DisplayObject = commander.CurrentItem;
-			itemBox.Highlight = match;
-			if (focus == WindowFocus.ItemFocus) {
-				displayLabel.DisplayObject = commander.CurrentItem;
-				displayLabel.Highlight = searchString;
-			}
-			SetCommandIndex (0, "");
 		}
 		
-		protected virtual void SetCommandIndex (int commandIndex, string match)
+		protected virtual void ResetContext ()
 		{
-			try {
-				commander.CurrentCommandIndex = commandIndex;
-			} catch (IndexOutOfRangeException) {
-				return;
+			switch (focus) {
+			case WindowFocus.ItemFocus:
+				currentContext = new SearchContext ();
+				currentItems = new Do.Core.Item[0];
+				SetDefaultState ();
+				break;
+			case WindowFocus.CommandFocus:
+				currentContext = new SearchContext ();
+				currentItems = new Do.Core.Item[0];
+				SetDefaultState ();
+				break;
 			}
+		}
+		
+		protected virtual void SetItemIndex (string match)
+		{	
+//			if (itemIndex >= currentContext.Results.Length) {
+//				SetItemIndex (currentContext.Results.Length, match);
+//				return;
+//			}
+//			try {
+//				currentContext.ObjectIndex = itemIndex;
+//			} catch (IndexOutOfRangeException) {
+//				return;
+//			}
+			itemBox.DisplayObject = currentContext.Item;
+			itemBox.Highlight = match;
+			if (focus == WindowFocus.ItemFocus) {
+				displayLabel.DisplayObject = currentContext.Item;
+				displayLabel.Highlight = searchString;
+			}
+			if (currentContext.Item != null) {
+				currentCommands = searchManager.CommandsForItem (currentContext.Item);
+				currentContext.Command = currentCommands[0];
+			}
+			SetCommandIndex ("");
+		}
+		
+		protected virtual void SetCommandIndex (string match)
+		{
+//			try {
+//				currentContext.ObjectIndex = commandIndex;
+//			} catch (IndexOutOfRangeException) {
+//				return;
+//			}
 
-			commandBox.DisplayObject = commander.CurrentCommand;
+			commandBox.DisplayObject = currentContext.Command;
 			commandBox.Highlight = match;
 			if (focus == WindowFocus.CommandFocus) {
-				displayLabel.DisplayObject = commander.CurrentCommand;
+				displayLabel.DisplayObject = currentContext.Command;
 				displayLabel.Highlight = match;
 			}
 		}
 		
 		protected virtual void SetDefaultState ()
 		{
-			searchString = itemSearchString = "";
+			searchString = "";
 
 			SetWindowFocus (WindowFocus.ItemFocus);
 			
@@ -479,10 +554,10 @@ namespace Do.UI
 			
 			switch (focus) {
 			case WindowFocus.ItemFocus:
-				results = commander.CurrentItems;
+				results = currentContext.Results;
 				break;
 			case WindowFocus.CommandFocus:
-				results = commander.CurrentCommands;
+				results = currentContext.Results;
 				break;
 			default:
 				results = new GCObject [0];
@@ -493,8 +568,68 @@ namespace Do.UI
 			if (results.Length == 0) {
 				SetNoResultsFoundState ();
 			} else {
-				SetItemIndex (commander.CurrentItemIndex, commander.ItemSearchString);
-				SetCommandIndex (commander.CurrentCommandIndex, commander.CommandSearchString);
+				SetItemIndex (currentContext.ItemSearchString);
+				SetCommandIndex (currentContext.CommandSearchString);
+			}
+		}
+		
+		public Do.Core.Item [] CurrentItems
+		{
+			get { return currentItems; }
+		}
+		
+		public Do.Core.Item CurrentItem
+		{
+			get {
+				if (currentItemIndex >= 0)
+					return currentItems [currentItemIndex];
+				else
+					return null;
+			}
+		}
+		
+		public Command [] CurrentCommands
+		{
+			get { return currentCommands; }
+		}
+		
+		public Command CurrentCommand
+		{
+			get {
+				if (this.currentCommandIndex >= 0) {
+					return currentCommands [currentCommandIndex];
+				} else {
+					return null;
+				}
+			}
+		}
+		
+		public int CurrentItemIndex
+		{
+			get { return currentItemIndex; }
+			set {
+				if (value < 0 || value >= currentItems.Length) {
+					throw new IndexOutOfRangeException ();
+				}
+				currentItemIndex = value;
+				currentCommands = searchManager.CommandsForItem (currentItem);
+				if (currentCommands.Length == 0) {
+					currentCommands = new Command[] { 
+						new Command (new VoidCommand ()),
+					};
+				}
+				currentCommandIndex = 0;
+			}
+		}
+		
+		public int CurrentCommandIndex
+		{
+			get { return currentCommandIndex; }
+			set {
+				if (value < 0 || value >= currentCommands.Length) {
+					throw new IndexOutOfRangeException ();
+				}
+				currentCommandIndex = value;
 			}
 		}
 		

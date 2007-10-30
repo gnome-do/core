@@ -40,19 +40,8 @@ namespace Do.Core
 		
 		public event VisibilityChangedHandler VisibilityChanged;
 		
-		private ItemManager itemManager;
-		private CommandManager commandManager;
 		private string itemSearchString, commandSearchString;
-		
-		private Item[] currentItems;
-		private Command[] currentCommands;
-		
-		private SearchManager searchManager;
-		private UpdateManager updateManager;
-		
-		private int currentItemIndex;
-		private int currentCommandIndex;
-		
+				
 		public static ItemSource [] BuiltinItemSources {
 			get {
 				return new ItemSource [] {
@@ -82,9 +71,6 @@ namespace Do.Core
 		}
 		
 		public Commander () {
-			itemManager = new ItemManager ();
-			commandManager = new CommandManager ();
-			
 			keybinder = new Tomboy.GConfXKeybinder ();
 			
 			SetSearchingItemsStateEvent = SetSearchingItemsState;
@@ -98,8 +84,6 @@ namespace Do.Core
 			LoadAssemblies ();
 			SetupKeybindings ();
 			State = CommanderState.Default;
-			updateManager = new UpdateManager ();
-			searchManager = updateManager.SearchManager;
 		}
 		
 		public CommanderState State
@@ -126,16 +110,6 @@ namespace Do.Core
 				}
 			}
 		}
-		
-		public CommandManager CommandManager
-		{
-			get { return commandManager; }
-		}
-		
-		public ItemManager ItemManager
-		{
-			get { return itemManager; }
-		}
 
 		public string ItemSearchString
 		{
@@ -149,11 +123,6 @@ namespace Do.Core
 		
 		protected virtual void SetDefaultState ()
 		{
-			currentItems = new Item [0];
-			currentCommands = new Command [0];
-			currentItemIndex = -1;
-			currentCommandIndex = -1;
-			itemSearchString = "";
 		}
 		
 		protected virtual void SetSearchingItemsState ()
@@ -172,74 +141,8 @@ namespace Do.Core
 		{
 		}
 		
-		public Item [] CurrentItems
-		{
-			get { return currentItems; }
-		}
-		
-		public Item CurrentItem
-		{
-			get {
-				if (currentItemIndex >= 0)
-					return currentItems [currentItemIndex];
-				else
-					return null;
-			}
-		}
-		
-		public Command [] CurrentCommands
-		{
-			get { return currentCommands; }
-		}
-		
-		public Command CurrentCommand
-		{
-			get {
-				if (this.currentCommandIndex >= 0) {
-					return currentCommands [currentCommandIndex];
-				} else {
-					return null;
-				}
-			}
-		}
-		
-		public int CurrentItemIndex
-		{
-			get { return currentItemIndex; }
-			set {
-				if (value < 0 || value >= currentItems.Length) {
-					throw new IndexOutOfRangeException ();
-				}
-				currentItemIndex = value;
-				currentCommands = commandManager.CommandsForItem (CurrentItem, "");
-				if (currentCommands.Length == 0) {
-					currentCommands = new Command[] { 
-						new Command (new VoidCommand ()),
-					};
-				}
-				currentCommandIndex = 0;
-			}
-		}
-		
-		public int CurrentCommandIndex
-		{
-			get { return currentCommandIndex; }
-			set {
-				if (value < 0 || value >= currentCommands.Length) {
-					throw new IndexOutOfRangeException ();
-				}
-				currentCommandIndex = value;
-			}
-		}
-		
 		protected void LoadBuiltins ()
 		{
-			foreach (ItemSource source in BuiltinItemSources) {
-				itemManager.AddItemSource (source);
-			}
-			foreach (Command command in BuiltinCommands) {
-				commandManager.AddCommand (command);
-			}
 		}
 		
 		protected virtual void SetupKeybindings ()
@@ -278,84 +181,14 @@ namespace Do.Core
 		}
 		
 		protected abstract void OnVisibilityChanged (bool visible);
-			
-		public void SearchItems (string itemSearchString, SearchAction searchAction)
-		{
-			State = CommanderState.SearchingItems;
-			SearchContext searchContext = new SearchContext ();
-			searchContext.ItemSearchString = itemSearchString;
-			searchContext.SearchPosition = SentencePositionLocator.Item;
-			
-			this.itemSearchString = itemSearchString;
-			commandSearchString = "";
-			//currentItems = itemManager.ItemsForAbbreviation (itemSearchString);
-			if (searchAction == SearchAction.Append) {
-				searchContext = searchManager.Search (searchContext);
-				currentItems = (Item[]) (searchContext.Results);
-			}
-			else if (searchAction == SearchAction.Delete) {
-				searchContext = searchManager.DeleteLastSearchCharacter (searchContext);
-				if (searchContext != null) {
-					currentItems = (Item[]) (searchContext.Results);
-				}
-				else {
-					currentItems = new Item[0];
-				}
-			}
-			else {
-				currentItems = new Item[0];
-			}
-			if (currentItems.Length == 0) {
-				currentItems = new Item[] { new Item (new TextItem (itemSearchString)) };
-			}
-			
-			// Update items and commands state.
-			CurrentItemIndex = 0;
-			
-			State = CommanderState.ItemSearchComplete;
-		}
 		
-		public void SearchCommands (string commandSearchString, SearchAction searchAction)
-		{
-			State = CommanderState.SearchingCommands;
-			
-			this.commandSearchString = commandSearchString;
-			//currentCommands = commandManager.CommandsForItem (CurrentItem, commandSearchString);
-			
-			SearchContext searchContext = new SearchContext ();
-			searchContext.CommandSearchString = commandSearchString;
-			searchContext.Item = CurrentItem;
-			searchContext.ItemSearchString = CurrentItem.Name;
-			searchContext.SearchPosition = SentencePositionLocator.Command;
-			
-			// Update items and commands state.
-			if (searchAction == SearchAction.Append) {
-				searchContext = searchManager.Search (searchContext);
-				currentCommands = (Command[]) (searchContext.Results);
-			}
-			else if (searchAction == SearchAction.Delete) {
-				searchContext = searchManager.DeleteLastSearchCharacter (searchContext);
-				if (searchContext != null) {
-					currentCommands = (Command[]) (searchContext.Results);
-				}
-				else {
-					currentCommands = new Command[0];
-				}
-			}
-			else {
-				currentCommands = new Command[0];
-			}
-			
-			State = CommanderState.CommandSearchComplete;
-		}
-		
-		public void Execute ()
+		public void Execute (SearchContext executeContext)
 		{
 			Item o;
 			Command c;
 
-			o = this.CurrentItem;
-			c = this.CurrentCommand;
+			o = executeContext.Item;
+			c = executeContext.Command;
 			if (o != null && c != null) {
 				c.Perform (new IItem[] {o}, new IItem[] {});
 			}

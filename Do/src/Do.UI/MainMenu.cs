@@ -75,7 +75,7 @@ namespace Do.UI
 		
 		protected void OnMainMenuRefreshCatalogClicked (object o, EventArgs args)
 		{
-			Do.Commander.ItemManager.UpdateItemSources ();
+//			DoMain.Commander.ItemManager.UpdateItemSources ();
 		}
 		
 		protected void OnMainMenuAboutClicked (object o, EventArgs args)

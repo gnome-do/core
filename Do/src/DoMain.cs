@@ -12,7 +12,7 @@ using Do.DBusLib;
 namespace Do
 {
 	
-	public class Do {
+	public class DoMain {
 		
 		static Commander commander;
 	

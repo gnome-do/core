@@ -21,16 +21,14 @@
     <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/DefaultCommander.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/DoMain.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/Command.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/CommandManager.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/Commander.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/GCObject.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/GCObjectManager.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/Item.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/ItemManager.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/ItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/SearchContext.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.UI/IconBox.cs" subtype="Code" buildaction="Compile" />
