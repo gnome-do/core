@@ -15,6 +15,7 @@ namespace Do.Core
 	
 	public class RelevanceSorter : IComparer<IObject>
 	{
+		const int kMaxSearchResults = 1000;
 		SentencePositionLocator sentencePosition;
 		string searchString;
 		
@@ -45,7 +46,7 @@ namespace Do.Core
 				Array.Sort<GCObject> (commands, new GCObjectScoreComparer ());
 				
 				// Chop the array where the scores become zero
-				for (numScoreNonZero = 0; numScoreNonZero < commands.Length && numScoreNonZero < 1000; ++numScoreNonZero) {
+				for (numScoreNonZero = 0; numScoreNonZero < commands.Length && numScoreNonZero < kMaxSearchResults; ++numScoreNonZero) {
 					if (commands[numScoreNonZero].Score == 0) break;
 				}
 				Array.Resize<Command> (ref commands, numScoreNonZero);
@@ -69,7 +70,7 @@ namespace Do.Core
 				Array.Sort<GCObject> (items, new GCObjectScoreComparer ());
 				
 				// Chop the array where the scores become less than cutoff
-				for (numScoreAboveCutoff = 0; numScoreAboveCutoff < items.Length && numScoreAboveCutoff < 1000; ++numScoreAboveCutoff) {
+				for (numScoreAboveCutoff = 0; numScoreAboveCutoff < items.Length && numScoreAboveCutoff < kMaxResult; ++numScoreAboveCutoff) {
 					if (items [numScoreAboveCutoff].Score < cutoff) break;
 				}
 				Array.Resize<Item> (ref items, numScoreAboveCutoff);
