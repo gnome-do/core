@@ -19,6 +19,7 @@
  */
 
 using System;
+using Do.Universe;
 
 namespace Do.Core
 {
@@ -39,7 +40,7 @@ namespace Do.Core
 		SearchContext lastCommandContext;
 		SearchContext lastModifierItemContext;
 		
-		GCObject [] results;
+		IObject[] results;
 				
 		public SearchContext ()
 		{
@@ -164,11 +165,14 @@ namespace Do.Core
 			}
 		}
 
-		public GCObject[] Results {
+		public IObject[] Results {
 			get {
 				return results;
 			}
 			set {
+				// NOTE Do something special here later; if
+				// a client class sets this field, it must
+				// be ensured that array contains GCObjects.
 				results = value;
 			}
 		}

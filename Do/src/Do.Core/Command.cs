@@ -119,5 +119,10 @@ namespace Do.Core
 			return inner_items;
 		}
 		
+		public override int GetHashCode ()
+		{
+			return string.Format ("{0}{1}{2}", command.GetType (), Name, Description).GetHashCode ();
+		}
+		
 	}
 }

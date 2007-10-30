@@ -77,11 +77,8 @@ namespace Do.UI
 		
 		protected SearchContext currentContext;
 		
-		private Do.Core.Item[] currentItems;
-		private Command[] currentCommands;
-		
-		private SearchManager searchManager;
-		private UpdateManager updateManager;
+		private IObject[] currentItems;
+		private IObject[] currentCommands;
 		
 		public SymbolWindow (Commander commander) : base (Gtk.WindowType.Toplevel)
 		{
@@ -95,8 +92,6 @@ namespace Do.UI
 			commander.SetSearchingCommandsStateEvent += OnSearchingStateEvent;
 			commander.SetItemSearchCompleteStateEvent += OnSearchCompleteStateEvent;
 			commander.SetCommandSearchCompleteStateEvent += OnSearchCompleteStateEvent;
-			updateManager = new UpdateManager ();
-			searchManager = updateManager.SearchManager;
 		}
 		
 		protected void Build ()
@@ -394,13 +389,13 @@ namespace Do.UI
 			selectedIndex = -1;
 			switch (focus) {
 			case WindowFocus.CommandFocus:
-				currentContext = searchManager.ChangeSearchPosition (currentContext, SentencePositionLocator.Command);
+				currentContext = Do.UniverseManager.ChangeSearchPosition (currentContext, SentencePositionLocator.Command);
 				searchString = currentContext.CommandSearchString;
 				results = currentContext.Results;
 				selectedIndex = currentContext.ObjectIndex;
 				break;
 			case WindowFocus.ItemFocus:
-				currentContext = searchManager.ChangeSearchPosition (currentContext, SentencePositionLocator.Item);
+				currentContext = Do.UniverseManager.ChangeSearchPosition (currentContext, SentencePositionLocator.Item);
 				searchString = currentContext.ItemSearchString;
 				results = currentContext.Results;
 				selectedIndex = currentContext.ObjectIndex;
@@ -432,7 +427,7 @@ namespace Do.UI
 				temp = currentContext;
 				currentContext = currentContext.Clone ();
 				currentContext.LastContext = temp;
-				currentItems = (Do.Core.Item[]) (currentContext.Results);
+				currentItems = (IItem[]) (currentContext.Results);
 				commander.State = CommanderState.ItemSearchComplete;
 				break;
 			case WindowFocus.CommandFocus:
@@ -455,8 +450,8 @@ namespace Do.UI
 				commander.State = CommanderState.SearchingItems;
 				currentContext.ItemSearchString = searchString;
 				currentContext.SearchPosition = SentencePositionLocator.Item;
-				currentContext = searchManager.Search (currentContext);
-				currentItems = (Do.Core.Item[]) (currentContext.Results);
+				currentContext = Do.UniverseManager.Search (currentContext);
+				currentItems = (IItem[]) (currentContext.Results);
 				commander.State = CommanderState.ItemSearchComplete;
 				break;
 			case WindowFocus.CommandFocus:
@@ -465,8 +460,8 @@ namespace Do.UI
 				currentContext.ItemSearchString = CurrentItem.Name;
 				currentContext.CommandSearchString = searchString;
 				currentContext.SearchPosition = SentencePositionLocator.Command;
-				currentContext = searchManager.Search (currentContext);
-				currentCommands = (Command[]) (currentContext.Results);
+				currentContext = Do.UniverseManager.Search (currentContext);
+				currentCommands = (ICommand[]) (currentContext.Results);
 				commander.State = CommanderState.CommandSearchComplete;
 				break;
 			}
@@ -477,12 +472,12 @@ namespace Do.UI
 			switch (focus) {
 			case WindowFocus.ItemFocus:
 				currentContext = new SearchContext ();
-				currentItems = new Do.Core.Item[0];
+				currentItems = new IObject[0];
 				SetDefaultState ();
 				break;
 			case WindowFocus.CommandFocus:
 				currentContext = new SearchContext ();
-				currentItems = new Do.Core.Item[0];
+				currentItems = new IObject[0];
 				SetDefaultState ();
 				break;
 			}
@@ -506,7 +501,7 @@ namespace Do.UI
 				displayLabel.Highlight = searchString;
 			}
 			if (currentContext.Item != null) {
-				currentCommands = searchManager.CommandsForItem (currentContext.Item);
+				currentCommands = Do.UniverseManager.CommandsForItem (currentContext.Item);
 				currentContext.Command = currentCommands[0];
 			}
 			SetCommandIndex ("");
@@ -566,7 +561,7 @@ namespace Do.UI
 		
 		protected void OnSearchCompleteStateEvent ()
 		{
-			GCObject[] results;
+			IObject[] results;
 			
 			switch (focus) {
 			case WindowFocus.ItemFocus:
@@ -576,7 +571,7 @@ namespace Do.UI
 				results = currentContext.Results;
 				break;
 			default:
-				results = new GCObject [0];
+				results = new IObject[0];
 				break;
 			}
 		
@@ -589,31 +584,31 @@ namespace Do.UI
 			}
 		}
 		
-		public Do.Core.Item [] CurrentItems
+		public IObject[] CurrentItems
 		{
 			get { return currentItems; }
 		}
 		
-		public Do.Core.Item CurrentItem
+		public IItem CurrentItem
 		{
 			get {
 				if (currentItemIndex >= 0)
-					return currentItems [currentItemIndex];
+					return currentItems [currentItemIndex] as IItem;
 				else
 					return null;
 			}
 		}
 		
-		public Command [] CurrentCommands
+		public IObject[] CurrentCommands
 		{
 			get { return currentCommands; }
 		}
 		
-		public Command CurrentCommand
+		public ICommand CurrentCommand
 		{
 			get {
 				if (this.currentCommandIndex >= 0) {
-					return currentCommands [currentCommandIndex];
+					return currentCommands [currentCommandIndex] as ICommand;
 				} else {
 					return null;
 				}
@@ -628,7 +623,7 @@ namespace Do.UI
 					throw new IndexOutOfRangeException ();
 				}
 				currentItemIndex = value;
-				currentCommands = searchManager.CommandsForItem (currentItem);
+				currentCommands = Do.UniverseManager.CommandsForItem (currentItem);
 				if (currentCommands.Length == 0) {
 					currentCommands = new Command[] { 
 						new Command (new VoidCommand ()),

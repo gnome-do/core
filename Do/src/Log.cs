@@ -25,11 +25,11 @@ namespace Do
 {
 	
 	public enum LogLevel {
-			Debug,
-			Info,
-			Warn,
-			Error,
-			Fatal,
+		Debug,
+	    Info,
+		Warn,
+		Error,
+		Fatal,
 	}
 	
 	public interface ILog

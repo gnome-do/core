@@ -33,6 +33,28 @@ namespace Do.Core
 		
 		public static readonly string DefaultItemName = "No name";
 		
+
+		public static List<Type> GetAllImplementedTypes (IObject o)
+		{
+			Type baseType;
+			List<Type> types;
+			
+			baseType = o.GetType ();
+			types = new List<Type> ();
+			// Climb up the inheritance tree adding types.
+			while (typeof (IObject).IsAssignableFrom (baseType)) {
+				types.Add (baseType);
+				baseType = baseType.BaseType;    
+			}
+			// Add all implemented interfaces
+			foreach (Type interface_type in o.GetType ().GetInterfaces ()) {
+				if (typeof (IObject).IsAssignableFrom (interface_type)) {
+					types.Add (interface_type);
+				}
+			}
+			return types;
+		}
+		
 		protected int _score;
 		
 		public abstract string Name { get; }
@@ -62,7 +84,6 @@ namespace Do.Core
 		{
 			return Name;
 		}
-		
 	}
 	
 	public class GCObjectScoreComparer : IComparer<GCObject> {

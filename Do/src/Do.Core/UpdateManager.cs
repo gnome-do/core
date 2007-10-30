@@ -113,12 +113,8 @@ namespace Do.Core
 				return new ItemSource [] {
 					new ItemSource (new ApplicationItemSource ()),
 					new ItemSource (new FirefoxBookmarkItemSource ()),
-					// Index contents of Home (~) directory to 1 level
-					new ItemSource (new DirectoryFileItemSource ("~", 1)),
-					// Index contents of ~/Documents to 3 levels
-					new ItemSource (new DirectoryFileItemSource ("~/Documents", 3)),
-					// Index contents of ~/Desktop to 1 levels
-					new ItemSource (new DirectoryFileItemSource ("~/Desktop", 2)),
+					new ItemSource (new DirectoryFileItemSource ()),
+					new ItemSource (new GNOMESpecialLocationsItemSource ()),	
 				};
 			}
 		}
@@ -131,7 +127,7 @@ namespace Do.Core
 					new Command (new OpenURLCommand ()),
 					new Command (new RunInShellCommand ()),
 					new Command (new DefineWordCommand ()),
-					// new Command (new VoidCommand ()),
+					
 				};
 			}
 		}
