@@ -1,9 +1,22 @@
-// Main.cs created with MonoDevelop
-// User: dave at 8:25 PM 8/16/2007
-//
-// To change standard headers go to Edit->Preferences->Coding->Standard Headers
-//
-// project created on 8/16/2007 at 8:25 PM
+/* ${FileName}
+ *
+ * GNOME Do is the legal property of its developers. Please refer to the
+ * COPYRIGHT file distributed with this
+ * source distribution.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using System;
 using System.Reflection;
@@ -47,12 +60,8 @@ namespace Do.Core
 				return new ItemSource [] {
 					new ItemSource (new ApplicationItemSource ()),
 					new ItemSource (new FirefoxBookmarkItemSource ()),
-					// Index contents of Home (~) directory to 1 level
-					new ItemSource (new DirectoryFileItemSource ("~", 1)),
-					// Index contents of ~/Documents to 3 levels
-					new ItemSource (new DirectoryFileItemSource ("~/Documents", 3)),
-					// Index contents of ~/Desktop to 1 levels
-					new ItemSource (new DirectoryFileItemSource ("~/Desktop", 2)),
+					new ItemSource (new DirectoryFileItemSource ()),
+					new ItemSource (new GNOMESpecialLocationsItemSource()),
 				};
 			}
 		}
@@ -65,7 +74,6 @@ namespace Do.Core
 					new Command (new OpenURLCommand ()),
 					new Command (new RunInShellCommand ()),
 					new Command (new DefineWordCommand ()),
-					// new Command (new VoidCommand ()),
 				};
 			}
 		}

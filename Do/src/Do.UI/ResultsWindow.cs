@@ -1,3 +1,21 @@
+/* ${FileName}
+ *
+ * GNOME Do is the legal property of its developers. Please refer to the
+ * COPYRIGHT file distributed with this source distribution.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using System;
 using System.Runtime.InteropServices;
@@ -54,7 +72,7 @@ namespace Do.UI
 		IObject[] results;
 		int selectedIndex;
 
-		public ResultsWindow () : base ("")
+		public ResultsWindow () : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
 			results = null;
@@ -80,12 +98,12 @@ namespace Do.UI
 			TreeViewColumn column;
 			CellRenderer   cell;
 			
-			AppPaintable = true;
 			KeepAbove = true;
-			Decorated = false;
+			AppPaintable = true;
 			// This typehint gets the window to raise all the way to top.
 			TypeHint = WindowTypeHint.Splashscreen;
-				
+
+			
 			vbox = new VBox (false, 0);
 			Add (vbox);
 			vbox.BorderWidth = 4;
@@ -240,6 +258,25 @@ namespace Do.UI
 					resultsTreeview.Selection.SelectIter (first_iter);
 				}
 			}
+		}
+
+		// Draw a border around the window.	
+		protected override bool OnExposeEvent (EventExpose evnt)
+		{
+			Cairo.Context cairo;
+			Gdk.Color border_color;
+			
+			cairo = Gdk.CairoHelper.Create (GdkWindow);
+			cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+			border_color = Style.Dark (StateType.Normal);
+			cairo.Color = new Cairo.Color ((double) border_color.Red / ushort.MaxValue,
+			                               (double) border_color.Green / ushort.MaxValue,
+			                               (double) border_color.Blue / ushort.MaxValue,
+			                               1.0);
+			cairo.Operator = Cairo.Operator.Source;
+			cairo.Stroke ();
+
+			return base.OnExposeEvent (evnt);
 		}
 
 	}

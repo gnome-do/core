@@ -1,8 +1,22 @@
-// ItemSource.cs created with MonoDevelop
-// User: dave at 1:08 AM 8/17/2007
-//
-// To change standard headers go to Edit->Preferences->Coding->Standard Headers
-//
+/* ItemSource.cs
+ *
+ * GNOME Do is the legal property of its developers. Please refer to the
+ * COPYRIGHT file distributed with this
+ * source distribution.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using System;
 using System.Collections.Generic;
@@ -15,9 +29,9 @@ namespace Do.Core
 	public class ItemSource : GCObject 
 	{
 	
-		public static readonly string DefaultItemSourceName = "";
-		public static readonly string DefaultItemSourceDescription = "";
-		public static readonly string DefaultItemSourceIcon = "";
+		public static readonly string DefaultItemSourceName = "Unnamed Item Source";
+		public static readonly string DefaultItemSourceDescription = "No description.";
+		public static readonly string DefaultItemSourceIcon = "empty";
 		
 		private bool enabled;
 		protected IItemSource source;
@@ -48,21 +62,21 @@ namespace Do.Core
 			get { return (source.Icon == null ? DefaultItemSourceIcon : source.Icon); }
 		}
 		
-		public bool UpdateItems () {
-			if (source.UpdateItems ()) {
-				items.Clear ();
-				items = new List<Item> ();
-				foreach (IItem item in source.Items) {
-					items.Add (new Item (item));
-				}
-				return true;
-			} else {
-				return false;
+		public void UpdateItems () {
+			source.UpdateItems ();
+			items.Clear ();
+			items = new List<Item> ();
+			foreach (IItem item in source.Items) {
+				items.Add (new Item (item));
 			}
 		}
 		
 		public ICollection<Item> Items {
 			get { return items; }
+		}
+		
+		public ICollection<IItem> ChildrenOfItem (IItem item) {
+			return new List<IItem> ();
 		}
 		
 		public bool Enabled {

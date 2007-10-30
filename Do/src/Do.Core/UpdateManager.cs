@@ -37,7 +37,7 @@ namespace Do.Core
 			foreach (Command command in BuiltinCommands) {
 				if (!(commandsUniverse.ContainsKey (command.Name+command.Description))) {
 					commandsUniverse.Add (command.Name+command.Description, command);
-					foreach (Type type in command.SupportedTypes) {
+					foreach (Type type in command.SupportedItemTypes) {
 						List<Command> commands;
 						if (!commandLists.ContainsKey (type)) {
 							commandLists[type] = new List<Command> ();

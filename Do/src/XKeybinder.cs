@@ -1,3 +1,5 @@
+// This class was taken from Tomboy.
+// http://svn.gnome.org/viewvc/tomboy/trunk/Tomboy/XKeybinder.cs?view=markup
 
 using System;
 using System.Collections;
