@@ -29,11 +29,29 @@ namespace Do.Universe
 	/// </summary>
 	public class DirectoryFileItemSource : IItemSource
 	{
+		DirectoryLevelPair[] dirs;
 		List<IItem> items;
-		int levels;
-		string path;
 		bool include_hidden;
 
+		struct DirectoryLevelPair {
+			public string Directory;
+			public int Levels;
+			
+			public DirectoryLevelPair (string dir, int levels)
+			{
+				Directory = dir.Replace ("~",
+				   System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
+				Levels = levels;
+			}
+		}
+		
+		static readonly DirectoryLevelPair[] kDefaultDirectories = {
+			new DirectoryLevelPair ("~",             1),
+			new DirectoryLevelPair ("~/Desktop",     1),
+			new DirectoryLevelPair ("~/Documents",   2),
+			new DirectoryLevelPair ("/home",   1),
+		};
+		
 		static DirectoryFileItemSource ()
 		{
 			Gnome.Vfs.Vfs.Initialize ();
@@ -46,26 +64,20 @@ namespace Do.Universe
 			}
 		}
 
-		public DirectoryFileItemSource (string path, int levels)
+		public DirectoryFileItemSource ()
 		{
-			string home;
-			
-			home = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
-			path = path.Replace ("~", home);
-			
-			this.path = path;
-			this.levels = levels;
-			this.items = new List<IItem> ();
-			this.include_hidden = false;
+			dirs = kDefaultDirectories;
+			items = new List<IItem> ();
+			include_hidden = false;
 			UpdateItems ();
 		}
 		
 		public string Name {
-			get { return path; }
+			get { return "Directory Scanner"; }
 		}
 		
 		public string Description {
-			get { return string.Format("Finds items in directory '{0}'", path); }
+			get { return string.Format("Catalog files in user-specified directories."); }
 		}
 		
 		public string Icon {
@@ -82,7 +94,10 @@ namespace Do.Universe
 		
 		public void UpdateItems ()
 		{
-			ReadItems (path, levels);
+			items.Clear ();
+			foreach (DirectoryLevelPair dir in dirs) {
+				ReadItems (dir.Directory, dir.Levels);
+			}
 		}
 		
 		/// <summary>
@@ -103,13 +118,16 @@ namespace Do.Universe
 			string[] directories;
 			FileItem item;
 			
-			if (levels == 0) return;
+			if (levels == 0) {
+				return;
+			}		
 			try {
 				files = Directory.GetFiles (dir);
 				directories = Directory.GetDirectories (dir);
 			} catch (DirectoryNotFoundException) {
 				return;
 			}
+			
 			foreach (string file in files) {
 				// Ignore system/hidden files.
 				if (!include_hidden && Path.GetFileName (file).StartsWith (".")) {

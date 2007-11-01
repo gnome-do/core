@@ -44,8 +44,10 @@ namespace Do.Core
 			}
 			this.source = source;
 			items = new List<Item> ();
-			foreach (IItem item in source.Items) {
-				items.Add (new Item (item));
+			if (source.Items != null) {
+				foreach (IItem item in source.Items) {
+					items.Add (new Item (item));
+				}
 			}
 			enabled = true;
 		}
@@ -66,8 +68,10 @@ namespace Do.Core
 			source.UpdateItems ();
 			items.Clear ();
 			items = new List<Item> ();
-			foreach (IItem item in source.Items) {
-				items.Add (new Item (item));
+			if (source.Items != null) {
+				foreach (IItem item in source.Items) {
+					items.Add (new Item (item));
+				}
 			}
 		}
 		
