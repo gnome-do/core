@@ -71,6 +71,7 @@ namespace Do.Core
 					new ItemSource (new DirectoryFileItemSource ()),
 					new ItemSource (new GNOMESpecialLocationsItemSource ()),
 					
+					// new ItemSource (new ThunderbirdContactItemSource ()),
 					new ItemSource (new EvolutionContactItemSource ()),
 					new ItemSource (new PidginContactItemSource ()),	
 				};
