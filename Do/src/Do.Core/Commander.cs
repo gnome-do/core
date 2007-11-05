@@ -34,9 +34,9 @@ namespace Do.Core
 	public enum CommanderState {
 			Default,
 			SearchingItems,
-			ItemSearchComplete,
+			FirstSearchComplete,
 			SearchingCommands,
-			CommandSearchComplete
+			SecondSearchComplete
 	}
 	
 	public abstract class Commander : ICommander {
@@ -46,9 +46,9 @@ namespace Do.Core
 		private CommanderState state;
 		
 		public event OnCommanderStateChange SetSearchingItemsStateEvent;
-		public event OnCommanderStateChange SetItemSearchCompleteStateEvent;
+		public event OnCommanderStateChange SetFirstCompleteStateEvent;
 		public event OnCommanderStateChange SetSearchingCommandsStateEvent;
-		public event OnCommanderStateChange SetCommandSearchCompleteStateEvent;
+		public event OnCommanderStateChange SetSecondCompleteStateEvent;
 		public event OnCommanderStateChange SetDefaultStateEvent;
 		
 		public event VisibilityChangedHandler VisibilityChanged;
@@ -82,9 +82,9 @@ namespace Do.Core
 			keybinder = new Tomboy.GConfXKeybinder ();
 			
 			SetSearchingItemsStateEvent = SetSearchingItemsState;
-			SetItemSearchCompleteStateEvent = SetItemSearchCompleteState;
+			SetFirstCompleteStateEvent = SetFirstSearchCompleteState;
 			SetSearchingCommandsStateEvent = SetSearchingCommandsState;
-			SetCommandSearchCompleteStateEvent = SetCommandSearchCompleteState;
+			SetSecondCompleteStateEvent = SetSecondSearchCompleteState;
 			SetDefaultStateEvent = SetDefaultState;
 			VisibilityChanged = OnVisibilityChanged;
 			
@@ -106,14 +106,14 @@ namespace Do.Core
 				case CommanderState.SearchingItems:
 					SetSearchingItemsStateEvent ();
 					break;
-				case CommanderState.ItemSearchComplete:
-					SetItemSearchCompleteStateEvent ();
+				case CommanderState.FirstSearchComplete:
+					SetFirstCompleteStateEvent ();
 					break;
 				case CommanderState.SearchingCommands:
 					SetSearchingCommandsStateEvent ();
 					break;
-				case CommanderState.CommandSearchComplete:
-					SetCommandSearchCompleteStateEvent ();
+				case CommanderState.SecondSearchComplete:
+					SetSecondCompleteStateEvent ();
 					break;
 				}
 			}
@@ -137,7 +137,7 @@ namespace Do.Core
 		{
 		}
 		
-		protected virtual void SetItemSearchCompleteState ()
+		protected virtual void SetFirstSearchCompleteState ()
 		{
 		}
 		
@@ -145,7 +145,7 @@ namespace Do.Core
 		{
 		}
 		
-		protected virtual void SetCommandSearchCompleteState ()
+		protected virtual void SetSecondSearchCompleteState ()
 		{
 		}
 		
@@ -192,11 +192,22 @@ namespace Do.Core
 		
 		public void Execute (SearchContext executeContext)
 		{
+			GCObject firstResult = executeContext.FirstObject;
+			GCObject secondResult = executeContext.SecondObject;
+			Item dummyItem = new Item (new FileItem (""));
+
 			Item o;
 			Command c;
+			
+			if (firstResult.GetType ().Equals (dummyItem.GetType ())) {
+				o = (Item) firstResult;
+				c = (Command) secondResult;
+			}
+			else {
+				o = (Item) secondResult;
+				c = (Command) firstResult;
+			}
 
-			o = executeContext.Item;
-			c = executeContext.Command;
 			if (o != null && c != null) {
 				c.Perform (new IItem[] {o}, new IItem[] {});
 			}

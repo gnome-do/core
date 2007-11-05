@@ -31,7 +31,8 @@ namespace Do
 		
 		public DefaultCommander ()
 		{
-			window = new SymbolWindow (this);
+			UniverseManager universeManager = new UniverseManager ();
+			window = new SymbolWindow (this, universeManager);
 			State = CommanderState.Default;
 		}
 		

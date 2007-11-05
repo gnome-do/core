@@ -52,7 +52,12 @@ namespace Do.Universe
 
 		public bool SupportsItem (IItem item)
 		{
-			return true;
+			if (item is IRunnableItem) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 		
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)

@@ -54,9 +54,9 @@ namespace Do.UI
 		const double WindowTransparency = 0.91;
 		
 		protected enum WindowFocus {
-			ItemFocus = 0,
-			CommandFocus = 1,
-			ModifierItemFocus = 2,
+			FirstFocus = 0,
+			SecondFocus = 1,
+			ThirdItemFocus = 2,
 		}
 		
 		RoundedFrame frame;
@@ -77,21 +77,26 @@ namespace Do.UI
 		
 		protected SearchContext currentContext;
 		
-		private IObject[] currentItems;
-		private IObject[] currentCommands;
+		protected SearchContext[] paneContext;
 		
-		public SymbolWindow (Commander commander) : base (Gtk.WindowType.Toplevel)
+		private GCObject[] firstPaneObjects;
+		private GCObject[] secondPaneObjects;
+		
+		private UniverseManager universeManager;
+		
+		public SymbolWindow (Commander commander, UniverseManager universeManager) : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
 			
 			this.commander = commander;
 			currentContext = new SearchContext ();
+			this.universeManager = universeManager;
 			
 			commander.SetDefaultStateEvent += OnDefaultStateEvent;
 			commander.SetSearchingItemsStateEvent += OnSearchingStateEvent;
 			commander.SetSearchingCommandsStateEvent += OnSearchingStateEvent;
-			commander.SetItemSearchCompleteStateEvent += OnSearchCompleteStateEvent;
-			commander.SetCommandSearchCompleteStateEvent += OnSearchCompleteStateEvent;
+			commander.SetFirstCompleteStateEvent += OnSearchFirstCompleteStateEvent;
+			commander.SetSecondCompleteStateEvent += OnSearchSecondCompleteStateEvent;
 		}
 		
 		protected void Build ()
@@ -112,7 +117,7 @@ namespace Do.UI
 			resultsWindow = new ResultsWindow ();
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
-			focus = WindowFocus.ItemFocus;
+			focus = WindowFocus.FirstFocus;
 			searchString = "";
 			
 			frame = new RoundedFrame ();
@@ -255,7 +260,7 @@ namespace Do.UI
 			case Gdk.Key.Control_L:
 				break;
 			case Gdk.Key.Escape:
-				if (focus == WindowFocus.ItemFocus) {
+				if (focus == WindowFocus.FirstFocus) {
 					if (searchString.Length == 0) {
 						Hide ();
 					}
@@ -290,10 +295,10 @@ namespace Do.UI
 				break;
 			case Gdk.Key.Tab:
 				resultsWindow.Hide ();
-				if (focus == WindowFocus.ItemFocus && currentContext.Item != null) {
-					SetWindowFocus (WindowFocus.CommandFocus);
-				} else if (focus == WindowFocus.CommandFocus) {
-					SetWindowFocus (WindowFocus.ItemFocus);
+				if (focus == WindowFocus.FirstFocus) {
+					SetWindowFocus (WindowFocus.SecondFocus);
+				} else if (focus == WindowFocus.SecondFocus) {
+					SetWindowFocus (WindowFocus.FirstFocus);
 				}
 				break;
 			case Gdk.Key.Up:
@@ -303,13 +308,20 @@ namespace Do.UI
 					if (resultsWindow.SelectedIndex == 0) {
 						resultsWindow.Hide ();
 					} else {
+						if (currentContext.ObjectIndex > 0) {
+							currentContext.ObjectIndex--;
+						}
 						resultsWindow.SelectPrev ();
 					}
 				}
 				else if (key == Gdk.Key.Down) {
 					if (resultsWindow.Visible) {
+						if (currentContext.ObjectIndex < currentContext.Results.Length - 2) {
+							currentContext.ObjectIndex++;
+						}
 						resultsWindow.SelectNext ();
-					} else {					
+					} else {				
+						Console.WriteLine ("No change");
 						resultsWindow.Show ();
 					}
 				}
@@ -343,12 +355,11 @@ namespace Do.UI
 		
 		private void OnResultsWindowSelectionChanged (object sender, ResultsWindowSelectionEventArgs args)
 		{
-			if (focus == WindowFocus.ItemFocus) {
-				SetItemIndex (searchString);
-				currentContext.ObjectIndex = args.SelectedIndex;
-			} else if (focus == WindowFocus.CommandFocus) {
-				SetCommandIndex (searchString);
-				currentContext.ObjectIndex = args.SelectedIndex;
+			if (focus == WindowFocus.FirstFocus) {
+				SetFirstIndex (paneContext[0].SearchString);
+			}
+			else if (focus == WindowFocus.SecondFocus) {
+				SetSecondIndex (paneContext[1].SearchString);
 			}			
 		}
 
@@ -388,15 +399,15 @@ namespace Do.UI
 			results = null;
 			selectedIndex = -1;
 			switch (focus) {
-			case WindowFocus.CommandFocus:
-				currentContext = Do.UniverseManager.ChangeSearchPosition (currentContext, SentencePositionLocator.Command);
-				searchString = currentContext.CommandSearchString;
+			case WindowFocus.SecondFocus:
+				currentContext = paneContext[1];
+				searchString = currentContext.SearchString;
 				results = currentContext.Results;
 				selectedIndex = currentContext.ObjectIndex;
 				break;
-			case WindowFocus.ItemFocus:
-				currentContext = Do.UniverseManager.ChangeSearchPosition (currentContext, SentencePositionLocator.Item);
-				searchString = currentContext.ItemSearchString;
+			case WindowFocus.FirstFocus:
+				currentContext = paneContext[0];
+				searchString = currentContext.SearchString;
 				results = currentContext.Results;
 				selectedIndex = currentContext.ObjectIndex;
 				break;
@@ -405,40 +416,45 @@ namespace Do.UI
 				searchString = "";
 			}
 
+			
 			resultsWindow.Results = results;
-			resultsWindow.SelectedIndex = selectedIndex;
+			resultsWindow.SelectedIndex = selectedIndex;		
 			
 			displayLabel.DisplayObject = resultsWindow.SelectedObject;
 			displayLabel.Highlight = searchString;
-			itemBox.IsFocused = (focus == WindowFocus.ItemFocus);
-			commandBox.IsFocused = (focus == WindowFocus.CommandFocus);
-			modItemBox.IsFocused = (focus == WindowFocus.ModifierItemFocus);
-
+			itemBox.IsFocused = (focus == WindowFocus.FirstFocus);
+			commandBox.IsFocused = (focus == WindowFocus.SecondFocus);
+			modItemBox.IsFocused = (focus == WindowFocus.ThirdItemFocus);
 			Reposition ();
 		}
 		
 		protected virtual void DeleteCharacter () 
 		{
 			switch (focus) {
-			case WindowFocus.ItemFocus:
+			case WindowFocus.FirstFocus:
 				commander.State = CommanderState.SearchingItems;
 				currentContext = currentContext.LastContext.LastContext;
 				SearchContext temp;
 				temp = currentContext;
 				currentContext = currentContext.Clone ();
 				currentContext.LastContext = temp;
-				currentItems = (IItem[]) (currentContext.Results);
-				commander.State = CommanderState.ItemSearchComplete;
+				firstPaneObjects =  (currentContext.Results);
+				paneContext[1] = null;
+				paneContext[0] = currentContext;
+				commander.State = CommanderState.FirstSearchComplete;
+				currentContext = paneContext[0];
 				break;
-			case WindowFocus.CommandFocus:
+			case WindowFocus.SecondFocus:
 				commander.State = CommanderState.SearchingCommands;
 				currentContext = currentContext.LastContext.LastContext;
 				SearchContext tempContext;
 				tempContext = currentContext;
 				currentContext = currentContext.Clone ();
 				currentContext.LastContext = tempContext;
-				currentCommands = (Command[]) (currentContext.Results);
-				commander.State = CommanderState.CommandSearchComplete;
+				secondPaneObjects =  (currentContext.Results);
+				paneContext[1] = currentContext;
+				commander.State = CommanderState.SecondSearchComplete;
+				currentContext = paneContext[1];
 				break;
 			}
 		}
@@ -446,23 +462,24 @@ namespace Do.UI
 		protected virtual void QueueSearch ()
 		{
 			switch (focus) {
-			case WindowFocus.ItemFocus:
+			case WindowFocus.FirstFocus:
 				commander.State = CommanderState.SearchingItems;
-				currentContext.ItemSearchString = searchString;
-				currentContext.SearchPosition = SentencePositionLocator.Item;
-				currentContext = Do.UniverseManager.Search (currentContext);
-				currentItems = (IItem[]) (currentContext.Results);
-				commander.State = CommanderState.ItemSearchComplete;
+				currentContext.SearchString = searchString;
+				currentContext.SearchPosition = SentencePositionLocator.Ambigious;
+				currentContext = universeManager.Search (currentContext);
+				firstPaneObjects = (GCObject[]) (currentContext.Results);
+				paneContext[0] = currentContext;
+				commander.State = CommanderState.FirstSearchComplete;
+				currentContext = paneContext[0];
 				break;
-			case WindowFocus.CommandFocus:
+			case WindowFocus.SecondFocus:
 				commander.State = CommanderState.SearchingCommands;
-				currentContext.Item = CurrentItem;
-				currentContext.ItemSearchString = CurrentItem.Name;
-				currentContext.CommandSearchString = searchString;
-				currentContext.SearchPosition = SentencePositionLocator.Command;
-				currentContext = Do.UniverseManager.Search (currentContext);
-				currentCommands = (ICommand[]) (currentContext.Results);
-				commander.State = CommanderState.CommandSearchComplete;
+				currentContext.SearchString = searchString;
+				currentContext = universeManager.Search (currentContext);
+				secondPaneObjects = (GCObject[]) (currentContext.Results);
+				paneContext[1] = currentContext;
+				commander.State = CommanderState.SecondSearchComplete;
+				currentContext = paneContext[1];
 				break;
 			}
 		}
@@ -470,64 +487,75 @@ namespace Do.UI
 		protected virtual void ResetContext ()
 		{
 			switch (focus) {
-			case WindowFocus.ItemFocus:
-				currentContext = new SearchContext ();
-				currentItems = new IObject[0];
+			case WindowFocus.FirstFocus:
+				firstPaneObjects = new GCObject[0];
+				for (int i = 0; i < paneContext.Length; i++) {
+					paneContext[i] = null;
+				}
+				paneContext[0] = new SearchContext ();
+				currentContext = paneContext[0];
 				SetDefaultState ();
 				break;
-			case WindowFocus.CommandFocus:
-				currentContext = new SearchContext ();
-				currentItems = new IObject[0];
+			case WindowFocus.SecondFocus:
+				firstPaneObjects = new GCObject[0];
+				for (int i = 0; i < paneContext.Length; i++) {
+					paneContext[i] = null;
+				}
+				paneContext[0] = new SearchContext ();
+				currentContext = paneContext[0];
 				SetDefaultState ();
 				break;
 			}
 		}
 		
-		protected virtual void SetItemIndex (string match)
+		protected virtual void SetFirstIndex (string match)
 		{	
-//			if (itemIndex >= currentContext.Results.Length) {
-//				SetItemIndex (currentContext.Results.Length, match);
-//				return;
-//			}
-//			try {
-//				currentContext.ObjectIndex = itemIndex;
-//			} catch (IndexOutOfRangeException) {
-//				return;
-//			}
-			itemBox.DisplayObject = currentContext.Item;
+			Console.WriteLine ("Object Index "+paneContext[0].ObjectIndex);
+			paneContext[0].FirstObject = paneContext[0].Results[paneContext[0].ObjectIndex];
+			itemBox.DisplayObject = paneContext[0].FirstObject;
 			itemBox.Highlight = match;
-			if (focus == WindowFocus.ItemFocus) {
-				displayLabel.DisplayObject = currentContext.Item;
-				displayLabel.Highlight = searchString;
+			displayLabel.DisplayObject = firstPaneObjects[currentContext.ObjectIndex];
+			displayLabel.Highlight= searchString;
+			if (paneContext[0].FirstObject.GetType ().Equals (typeof(Core.Item))) {
+				paneContext[1] = paneContext[0].Clone ();
+				paneContext[1].SearchPosition = SentencePositionLocator.Command;
+				paneContext[1].SearchString = "";
+				paneContext[1] = universeManager.Search (paneContext[1]);
+				secondPaneObjects = paneContext[1].Results;
+				paneContext[1].ObjectIndex = 0;
 			}
-			if (currentContext.Item != null) {
-				currentCommands = Do.UniverseManager.CommandsForItem (currentContext.Item);
-				currentContext.Command = currentCommands[0];
+			else {
+				paneContext[1] = paneContext[0].Clone ();
+				paneContext[1].SearchPosition = SentencePositionLocator.Item;
+				paneContext[1].SearchString = "";
+				paneContext[1] = universeManager.Search (paneContext[1]);
+				secondPaneObjects = paneContext[1].Results;
+				paneContext[1].ObjectIndex = 0;
 			}
-			SetCommandIndex ("");
+			SetSecondIndex ("");
 		}
 		
-		protected virtual void SetCommandIndex (string match)
+		protected virtual void SetSecondIndex (string match)
 		{
-//			try {
-//				currentContext.ObjectIndex = commandIndex;
-//			} catch (IndexOutOfRangeException) {
-//				return;
-//			}
-
-			commandBox.DisplayObject = currentContext.Command;
+			paneContext[1].SecondObject = paneContext[1].Results[paneContext[1].ObjectIndex];
+			commandBox.DisplayObject = paneContext[1].SecondObject;
+			
 			commandBox.Highlight = match;
-			if (focus == WindowFocus.CommandFocus) {
-				displayLabel.DisplayObject = currentContext.Command;
+			if (focus == WindowFocus.SecondFocus) {
+				displayLabel.DisplayObject = currentContext.SecondObject;
 				displayLabel.Highlight = match;
 			}
 		}
 		
 		protected virtual void SetDefaultState ()
 		{
+			paneContext = new SearchContext[3];
+			currentContext = new SearchContext ();
+			currentContext.SearchPosition = SentencePositionLocator.Ambigious;
+			paneContext[0] = currentContext;
 			searchString = "";
 
-			SetWindowFocus (WindowFocus.ItemFocus);
+			SetWindowFocus (WindowFocus.FirstFocus);
 			
 			itemBox.DisplayObject = new DefaultIconBoxObject ();
 			commandBox.Clear ();
@@ -535,20 +563,18 @@ namespace Do.UI
 			displayLabel.SetDisplayLabel ("Type to begin searching", "Type to start searching.");			
 		}
 		
-		protected virtual void SetNoResultsFoundState ()
+		protected virtual void SetNoResultsFirstFoundState ()
 		{
-			switch (focus) {
-			case WindowFocus.CommandFocus:
-				commandBox.DisplayObject = new NoCommandsFoundObject ();
-				break;
-			default:
-			// case WindowFocus.ItemFocus:
-				commandBox.Clear ();
-				itemBox.DisplayObject = new NoItemsFoundObject ();
-				break;
-			}
+			commandBox.Clear ();
+			itemBox.DisplayObject = new NoItemsFoundObject ();
 			displayLabel.Text = "";
 		}
+		
+		protected virtual void SetNoResultsSecondFoundState ()
+		{
+			commandBox.DisplayObject = new NoCommandsFoundObject ();
+			displayLabel.Text = "";
+		}		
 		
 		protected void OnDefaultStateEvent ()
 		{
@@ -559,88 +585,29 @@ namespace Do.UI
 		{
 		}
 		
-		protected void OnSearchCompleteStateEvent ()
+		protected void OnSearchFirstCompleteStateEvent ()
 		{
 			IObject[] results;
 			
-			switch (focus) {
-			case WindowFocus.ItemFocus:
-				results = currentContext.Results;
-				break;
-			case WindowFocus.CommandFocus:
-				results = currentContext.Results;
-				break;
-			default:
-				results = new IObject[0];
-				break;
-			}
-		
+			results = paneContext[0].Results;		
 			resultsWindow.Results = results;
 			if (results.Length == 0) {
-				SetNoResultsFoundState ();
+				SetNoResultsFirstFoundState ();
 			} else {
-				SetItemIndex (currentContext.ItemSearchString);
-				SetCommandIndex (currentContext.CommandSearchString);
+				SetFirstIndex (paneContext[0].SearchString);
 			}
 		}
 		
-		public IObject[] CurrentItems
+		protected void OnSearchSecondCompleteStateEvent ()
 		{
-			get { return currentItems; }
-		}
-		
-		public IItem CurrentItem
-		{
-			get {
-				if (currentItemIndex >= 0)
-					return currentItems [currentItemIndex] as IItem;
-				else
-					return null;
-			}
-		}
-		
-		public IObject[] CurrentCommands
-		{
-			get { return currentCommands; }
-		}
-		
-		public ICommand CurrentCommand
-		{
-			get {
-				if (this.currentCommandIndex >= 0) {
-					return currentCommands [currentCommandIndex] as ICommand;
-				} else {
-					return null;
-				}
-			}
-		}
-		
-		public int CurrentItemIndex
-		{
-			get { return currentItemIndex; }
-			set {
-				if (value < 0 || value >= currentItems.Length) {
-					throw new IndexOutOfRangeException ();
-				}
-				currentItemIndex = value;
-				currentCommands = Do.UniverseManager.CommandsForItem (currentItem);
-				if (currentCommands.Length == 0) {
-					currentCommands = new Command[] { 
-						new Command (new VoidCommand ()),
-					};
-				}
-				currentCommandIndex = 0;
-			}
-		}
-		
-		public int CurrentCommandIndex
-		{
-			get { return currentCommandIndex; }
-			set {
-				if (value < 0 || value >= currentCommands.Length) {
-					throw new IndexOutOfRangeException ();
-				}
-				currentCommandIndex = value;
+			IObject[] results;
+			
+			results = paneContext[1].Results;
+			resultsWindow.Results = results;
+			if (results.Length == 0) {
+				SetNoResultsSecondFoundState ();
+			} else {
+				SetSecondIndex (paneContext[1].SearchString);
 			}
 		}
 		

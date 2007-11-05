@@ -16,12 +16,10 @@ namespace Do.Core
 	public class RelevanceSorter : IComparer<IObject>
 	{
 		const int kMaxSearchResults = 1000;
-		SentencePositionLocator sentencePosition;
 		string searchString;
 		
-		public RelevanceSorter(string searchString, SentencePositionLocator sentencePosition)
+		public RelevanceSorter(string searchString)
 		{
-			this.sentencePosition = sentencePosition;
 			this.searchString = searchString;
 		}
 		
@@ -31,52 +29,26 @@ namespace Do.Core
 		
 		public List<IObject> NarrowResults (List<IObject> broadResults) {
 			List<IObject> narrowResults;
-			if (sentencePosition == SentencePositionLocator.Command) {
-				int numScoreNonZero;
-				Command[] commands;
-				IObject[] uncastedCommands = broadResults.ToArray ();
-				commands = new Command[uncastedCommands.Length];
-				for (int i = 0; i < uncastedCommands.Length; i++) {
-					commands[i] = (Command) (uncastedCommands[i]);
-				}
-				
-				foreach (Command command in commands) {
-					command.Score = command.ScoreForAbbreviation (searchString);
-				}
-				Array.Sort<GCObject> (commands, new GCObjectScoreComparer ());
-				
-				// Chop the array where the scores become zero
-				for (numScoreNonZero = 0; numScoreNonZero < commands.Length && numScoreNonZero < kMaxSearchResults; ++numScoreNonZero) {
-					if (commands[numScoreNonZero].Score == 0) break;
-				}
-				Array.Resize<Command> (ref commands, numScoreNonZero);
-				
-				narrowResults = new List<IObject> (commands);
+			int numScoreNonZero;
+
+			IObject[] newArray = broadResults.ToArray ();
+			GCObject[] results = new GCObject[newArray.Length];
+			for (int i = 0; i < newArray.Length; i++) {
+				results[i] = (GCObject) (newArray[i]);
 			}
-			else {
-				int numScoreAboveCutoff, cutoff;
-				Item [] items;
-				IObject[] uncastedItems = broadResults.ToArray ();
-				items = new Item[uncastedItems.Length];
-				for (int i = 0; i < uncastedItems.Length; i++) {
-					items[i] = (Item) (uncastedItems[i]);
-				}
 			
-				cutoff = 30;
-				// Score the commands based on the search string and sort them.
-				foreach (GCObject item in items) {
-					item.Score = item.ScoreForAbbreviation (searchString);
-				}
-				Array.Sort<GCObject> (items, new GCObjectScoreComparer ());
-				
-				// Chop the array where the scores become less than cutoff
-				for (numScoreAboveCutoff = 0; numScoreAboveCutoff < items.Length && numScoreAboveCutoff < kMaxResult; ++numScoreAboveCutoff) {
-					if (items [numScoreAboveCutoff].Score < cutoff) break;
-				}
-				Array.Resize<Item> (ref items, numScoreAboveCutoff);
-				
-				narrowResults = new List<IObject> (items);
+			foreach (GCObject result in results) {
+				result.Score = result.ScoreForAbbreviation (searchString);
 			}
+			Array.Sort<GCObject> (results, new GCObjectScoreComparer ());
+			
+			// Chop the array where the scores become zero
+			for (numScoreNonZero = 0; numScoreNonZero < results.Length && numScoreNonZero < kMaxSearchResults; ++numScoreNonZero) {
+				if (results[numScoreNonZero].Score == 0) break;
+			}
+			Array.Resize<GCObject> (ref results, numScoreNonZero);
+			
+			narrowResults = new List<IObject> (results);
 			return narrowResults;
 		}
 	}

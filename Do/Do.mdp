@@ -40,9 +40,7 @@
     <File name="./src/TrayLib.cs" subtype="Code" buildaction="Nothing" />
     <File name="./settings-triangle.png" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./src/Do.UI/MainMenu.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/SearchManager.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/RelevanceSorter.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/UpdateManager.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/UniverseManager.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
