@@ -12,6 +12,7 @@ using Do.Universe;
 
 namespace Do.Core
 {
+	//Remove this
 	public enum SentencePositionLocator {
 		Ambigious = 0,
 		Command = 1,
@@ -22,9 +23,11 @@ namespace Do.Core
 	
 	public class UniverseManager
 	{
+		//Add GTK dialog box, while indexing
 		
 		Dictionary<string, IObject[]> firstCharacterResults;
 	
+		// Change to univariate hash
 		Dictionary<int, IObject> universe;
 		
 		Dictionary<int, List<Command>> itemToCommandMap;
@@ -69,6 +72,7 @@ namespace Do.Core
 				}
 			}
 			
+			//Load/save results to XML
 			firstCharacterResults = new Dictionary<string, IObject[]> ();
 			for (char keypress = 'a'; keypress < 'z'; keypress++) {
 				List <IObject> universeList = new List<IObject> ();

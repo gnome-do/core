@@ -308,20 +308,13 @@ namespace Do.UI
 					if (resultsWindow.SelectedIndex == 0) {
 						resultsWindow.Hide ();
 					} else {
-						if (currentContext.ObjectIndex > 0) {
-							currentContext.ObjectIndex--;
-						}
 						resultsWindow.SelectPrev ();
 					}
 				}
 				else if (key == Gdk.Key.Down) {
 					if (resultsWindow.Visible) {
-						if (currentContext.ObjectIndex < currentContext.Results.Length - 2) {
-							currentContext.ObjectIndex++;
-						}
 						resultsWindow.SelectNext ();
 					} else {				
-						Console.WriteLine ("No change");
 						resultsWindow.Show ();
 					}
 				}
@@ -357,9 +350,11 @@ namespace Do.UI
 		private void OnResultsWindowSelectionChanged (object sender, ResultsWindowSelectionEventArgs args)
 		{
 			if (focus == WindowFocus.FirstFocus) {
+				paneContext[0].ObjectIndex = args.SelectedIndex;
 				SetFirstIndex (paneContext[0].SearchString);
 			}
 			else if (focus == WindowFocus.SecondFocus) {
+				paneContext[0].ObjectIndex = args.SelectedIndex;
 				SetSecondIndex (paneContext[1].SearchString);
 			}			
 		}
