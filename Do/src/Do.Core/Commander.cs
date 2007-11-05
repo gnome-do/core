@@ -52,8 +52,6 @@ namespace Do.Core
 		public event OnCommanderStateChange SetDefaultStateEvent;
 		
 		public event VisibilityChangedHandler VisibilityChanged;
-		
-		private string itemSearchString, commandSearchString;
 				
 		public static ItemSource [] BuiltinItemSources {
 			get {
@@ -117,16 +115,6 @@ namespace Do.Core
 					break;
 				}
 			}
-		}
-
-		public string ItemSearchString
-		{
-			get { return itemSearchString; }
-		}
-		
-		public string CommandSearchString
-		{
-			get { return commandSearchString; }
 		}
 		
 		protected virtual void SetDefaultState ()
@@ -194,18 +182,19 @@ namespace Do.Core
 		{
 			GCObject firstResult = executeContext.FirstObject;
 			GCObject secondResult = executeContext.SecondObject;
-			Item dummyItem = new Item (new FileItem (""));
 
-			Item o;
-			Command c;
+			Item o = null;
+			Command c = null;
 			
-			if (firstResult.GetType ().Equals (dummyItem.GetType ())) {
-				o = (Item) firstResult;
-				c = (Command) secondResult;
-			}
-			else {
-				o = (Item) secondResult;
-				c = (Command) firstResult;
+			if (firstResult != null) {
+				if (firstResult.GetType ().Equals (typeof (Item))) {
+					o = (Item) firstResult;
+					c = (Command) secondResult;
+				}
+				else {
+					o = (Item) secondResult;
+					c = (Command) firstResult;
+				}
 			}
 
 			if (o != null && c != null) {

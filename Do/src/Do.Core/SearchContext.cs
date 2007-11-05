@@ -42,7 +42,7 @@ namespace Do.Core
 				
 		public SearchContext ()
 		{
-			searchPosition = SentencePositionLocator.Item;
+			searchPosition = SentencePositionLocator.Ambigious;
 		}
 		
 		public SearchContext Clone () {

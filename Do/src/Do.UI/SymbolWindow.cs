@@ -295,7 +295,7 @@ namespace Do.UI
 				break;
 			case Gdk.Key.Tab:
 				resultsWindow.Hide ();
-				if (focus == WindowFocus.FirstFocus) {
+				if (focus == WindowFocus.FirstFocus && currentContext.Results != null) {				
 					SetWindowFocus (WindowFocus.SecondFocus);
 				} else if (focus == WindowFocus.SecondFocus) {
 					SetWindowFocus (WindowFocus.FirstFocus);
@@ -349,6 +349,7 @@ namespace Do.UI
 		
 		protected virtual void ActivateCommand ()
 		{
+			Console.WriteLine ("Activate Command");
 			commander.Execute (currentContext);
 			Hide ();
 		}
