@@ -39,15 +39,16 @@
     <File name="./src/Do.Universe/ContactItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Addins/ContactItemStore.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/MailtoCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/Evolution Addin" subtype="Directory" buildaction="Compile" />
-    <File name="./src/Do.Universe/Evolution Addin/EvolutionContactItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/Pidgin Addin" subtype="Directory" buildaction="Compile" />
-    <File name="./src/Do.Universe/Pidgin Addin/PidginContactItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/Pidgin Addin/PidginChatCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/Pidgin Addin/Pidgin.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/Thunderbird Addin" subtype="Directory" buildaction="Compile" />
-    <File name="./src/Do.Universe/Thunderbird Addin/Mork.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/Thunderbird Addin/ThunderbirdContactItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Evolution Addin/EvolutionContactItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Pidgin Addin/Pidgin.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Pidgin Addin/PidginChatCommand.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Pidgin Addin/PidginContactItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Thunderbird Addin/Mork.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Thunderbird Addin/ThunderbirdContactItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Rhythmbox Addin/Rhythmbox.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Rhythmbox Addin/RhythmboxItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Rhythmbox Addin/RhythmboxItems.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Rhythmbox Addin/RhythmboxPlayCommand.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />

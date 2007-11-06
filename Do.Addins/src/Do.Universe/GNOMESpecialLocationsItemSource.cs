@@ -50,18 +50,23 @@ namespace Do.Universe
 		
 		class GNOMETrashURIItem : GNOMEURIItem
 		{
+			
+			static readonly string kTrashDirectory;
+			
+			static GNOMETrashURIItem ()
+			{
+				kTrashDirectory = "~/.Trash".Replace ("~",
+					     System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
+			}
+			
 			public GNOMETrashURIItem () : base ("trash://", "Trash", null)
 			{
 			}
 			
 			override public string Icon {
 				get {
-					string trash_dir;
-					
-					trash_dir = "~/.Trash".Replace ("~",
-					     System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
-					if (System.IO.Directory.Exists (trash_dir)
-						&& System.IO.Directory.GetFileSystemEntries (trash_dir).Length > 0) {
+					if (System.IO.Directory.Exists (kTrashDirectory)
+						&& System.IO.Directory.GetFileSystemEntries (kTrashDirectory).Length > 0) {
 						icon = "user-trash-full";
 					} else {
 						icon = "user-trash";

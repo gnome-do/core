@@ -95,7 +95,11 @@ namespace Do.Universe
 			Type fi_type;
 			FileItem result;
 			
-			ext = System.IO.Path.GetExtension (uri).ToLower ();
+			if (Directory.Exists (uri)) {
+				return new DirectoryFileItem (uri);
+			}
+			
+			ext = Path.GetExtension (uri).ToLower ();
 			if (ext.StartsWith (".")) {
 				ext = ext.Substring (1);
 			}
@@ -105,7 +109,7 @@ namespace Do.Universe
 				fi_type = typeof (FileItem);
 			}
 			try {
-				result = (FileItem) System.Activator.CreateInstance (fi_type, new string[] {uri});
+				result = (FileItem) System.Activator.CreateInstance (fi_type, new object[] {uri});
 			} catch {
 				result = new FileItem (uri);
 			}
@@ -185,5 +189,13 @@ namespace Do.Universe
 			get { return mime_type; }
 		}
 
+	}
+	
+	class DirectoryFileItem : FileItem
+	{
+		public DirectoryFileItem (string uri) :
+			base (uri)
+		{
+		}
 	}
 }

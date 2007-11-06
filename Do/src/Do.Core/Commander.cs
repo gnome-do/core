@@ -73,7 +73,9 @@ namespace Do.Core
 					
 					// new ItemSource (new ThunderbirdContactItemSource ()),
 					new ItemSource (new EvolutionContactItemSource ()),
-					new ItemSource (new PidginContactItemSource ()),	
+					new ItemSource (new PidginContactItemSource ()),
+					
+					new ItemSource (new RhythmboxItemSource ()),
 				};
 			}
 		}
@@ -89,6 +91,8 @@ namespace Do.Core
 					
 					new Command (new MailtoCommand ()),
 					new Command (new PidginChatCommand ()),
+							
+					new Command (new RhythmboxPlayCommand ()),
 				};
 			}
 		}
