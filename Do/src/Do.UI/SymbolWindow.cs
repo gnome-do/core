@@ -68,8 +68,6 @@ namespace Do.UI
 		IconBox modItemBox;
 		
 		protected Commander commander;
-		protected Command currentCommand;
-		protected IItem currentItem;
 		protected int currentItemIndex;
 		protected int currentCommandIndex;
 		protected WindowFocus focus;
@@ -80,9 +78,6 @@ namespace Do.UI
 		protected SearchContext[] paneContext;
 		
 		private IObject[][] paneObjects;
-		
-		private IObject[] firstPaneObjects;
-		private IObject[] secondPaneObjects;
 		
 		private UniverseManager universeManager;
 		
@@ -121,6 +116,8 @@ namespace Do.UI
 
 			focus = WindowFocus.FirstFocus;
 			searchString = "";
+			
+			paneObjects = new IObject[2][];
 			
 			frame = new RoundedFrame ();
 			frame.DrawFill = true;
@@ -356,7 +353,7 @@ namespace Do.UI
 				SetFirstIndex (paneContext[0].SearchString);
 			}
 			else if (focus == WindowFocus.SecondFocus) {
-				paneContext[0].ObjectIndex = args.SelectedIndex;
+				paneContext[1].ObjectIndex = args.SelectedIndex;
 				SetSecondIndex (paneContext[1].SearchString);
 			}			
 		}
@@ -441,7 +438,7 @@ namespace Do.UI
 				temp = currentContext;
 				currentContext = currentContext.Clone ();
 				currentContext.LastContext = temp;
-				firstPaneObjects =  (currentContext.Results);
+				paneObjects[0] =  (currentContext.Results);
 				paneContext[0] = currentContext;
 				paneContext[1] = null;
 				commander.State = CommanderState.FirstSearchComplete;
@@ -454,7 +451,7 @@ namespace Do.UI
 				currentContext = currentContext.Clone ();
 				currentContext.LastContext = tempContext;
 				paneContext[1] = currentContext;
-				secondPaneObjects =  (currentContext.Results);
+				paneObjects[1] =  (currentContext.Results);
 				commander.State = CommanderState.SecondSearchComplete;
 				break;
 			}
@@ -472,7 +469,7 @@ namespace Do.UI
 				currentContext.SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 				currentContext.FirstObject = null;
 				currentContext = universeManager.Search (currentContext);
-				firstPaneObjects = (IObject[]) (currentContext.Results);
+				paneObjects[0] = currentContext.Results;
 				paneContext[0] = currentContext;
 				commander.State = CommanderState.FirstSearchComplete;
 				break;
@@ -480,7 +477,7 @@ namespace Do.UI
 				commander.State = CommanderState.SearchingCommands;
 				currentContext.SearchString = searchString;
 				currentContext = universeManager.Search (currentContext);
-				secondPaneObjects = (IObject[]) (currentContext.Results);
+				paneObjects[1] = currentContext.Results;
 				paneContext[1] = currentContext;
 				commander.State = CommanderState.SecondSearchComplete;
 				break;
@@ -497,7 +494,7 @@ namespace Do.UI
 			paneContext[0].FirstObject = paneContext[0].Results[paneContext[0].ObjectIndex];
 			itemBox.DisplayObject = paneContext[0].FirstObject;
 			itemBox.Highlight = match;
-			displayLabel.DisplayObject = firstPaneObjects[currentContext.ObjectIndex];
+			displayLabel.DisplayObject = paneObjects[0][currentContext.ObjectIndex];
 			displayLabel.Highlight= searchString;
 
 			//Set up the next pane based on what's in the first pane
@@ -506,7 +503,7 @@ namespace Do.UI
 				paneContext[1].SearchTypes = new Type[] { typeof (ICommand) };
 				paneContext[1].SearchString = "";
 				paneContext[1] = universeManager.Search (paneContext[1]);
-				secondPaneObjects = paneContext[1].Results;
+				paneObjects[1] = paneContext[1].Results;
 				paneContext[1].ObjectIndex = 0;
 			}
 			else {
@@ -514,7 +511,7 @@ namespace Do.UI
 				paneContext[1].SearchTypes = new Type[] { typeof (IItem) };
 				paneContext[1].SearchString = "";
 				paneContext[1] = universeManager.Search (paneContext[1]);
-				secondPaneObjects = paneContext[1].Results;
+				paneObjects[1] = paneContext[1].Results;
 				paneContext[1].ObjectIndex = 0;
 			}
 			SetSecondIndex ("");
