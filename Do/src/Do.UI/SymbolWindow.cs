@@ -38,18 +38,12 @@ namespace Do.UI
 			public string Description { get { return ""; } }
 		}
 		
-		class NoItemsFoundObject : IObject {
+		class NoResultsFoundObject : IObject {
 			public string Icon { get { return "gtk-dialog-question"; } }
-			public string Name { get { return "No items found."; } }
-			public string Description { get { return ""; } }
+			public string Name { get { return "No results found."; } }
+			public string Description { get { return "Try searching for something else."; } }
 		}
 
-		class NoCommandsFoundObject : IObject {
-			public string Icon { get { return "gtk-dialog-question"; } }
-			public string Name { get { return "No commands found."; } }
-			public string Description { get { return ""; } }
-		}
-		
 		const int IconBoxIconSize = 128;
 		const double WindowTransparency = 0.91;
 		
@@ -530,13 +524,17 @@ namespace Do.UI
 		
 		protected virtual void SetSecondIndex (string match)
 		{
-			paneContext[1].SecondObject = paneContext[1].Results[paneContext[1].ObjectIndex];
-			commandBox.DisplayObject = paneContext[1].SecondObject;
-			
-			commandBox.Highlight = match;
-			if (focus == WindowFocus.SecondFocus) {
-				displayLabel.DisplayObject = currentContext.SecondObject;
-				displayLabel.Highlight = match;
+			if (paneContext[1].Results.Length > 0) {
+				paneContext[1].SecondObject = paneContext[1].Results[paneContext[1].ObjectIndex];
+				commandBox.DisplayObject = paneContext[1].SecondObject;
+				
+				commandBox.Highlight = match;
+				if (focus == WindowFocus.SecondFocus) {
+					displayLabel.DisplayObject = currentContext.SecondObject;
+					displayLabel.Highlight = match;
+				}
+			} else {
+				commandBox.DisplayObject = new NoResultsFoundObject ();
 			}
 		}
 		
@@ -559,13 +557,13 @@ namespace Do.UI
 		protected virtual void SetNoResultsFirstFoundState ()
 		{
 			commandBox.Clear ();
-			itemBox.DisplayObject = new NoItemsFoundObject ();
+			itemBox.DisplayObject = new NoResultsFoundObject ();
 			displayLabel.Text = "";
 		}
 		
 		protected virtual void SetNoResultsSecondFoundState ()
 		{
-			commandBox.DisplayObject = new NoCommandsFoundObject ();
+			commandBox.DisplayObject = new NoResultsFoundObject ();
 			displayLabel.Text = "";
 		}		
 		

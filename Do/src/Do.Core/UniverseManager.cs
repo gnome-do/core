@@ -280,16 +280,14 @@ namespace Do.Core
 			
 			
 			if (independentObject is Command) {
-				foreach (IObject iobject in results) {
+				Command cmd;
+				
+				cmd = independentObject as Command;
+				foreach (Item item in results) {
 					//If the independent object is a command, add the result if its item type is supported
-					List<Type> supportedItemTypes = new List<Type>
-						(((Command) independentObject).SupportedItemTypes);
-					List<Type> implementedItemTypes = new List<Type>
-						(GCObject.GetAllImplementedTypes ((iobject as Item).IItem));
-					foreach (Type type in supportedItemTypes) {
-						if (implementedItemTypes.Contains (type)) {
-							filtered_results.Add (iobject);
-							break;
+					foreach (Type supported_type in cmd.SupportedItemTypes) {
+						if (supported_type.IsAssignableFrom (item.IItem.GetType ()) && cmd.SupportsItem (item)) {
+							filtered_results.Add (item);
 						}
 					}
 				}
@@ -315,31 +313,7 @@ namespace Do.Core
 			}
 			return false;
 		}
-		
-		
-		public static ItemSource [] BuiltinItemSources {
-			get {
-				return new ItemSource [] {
-					new ItemSource (new ApplicationItemSource ()),
-					new ItemSource (new FirefoxBookmarkItemSource ()),
-					new ItemSource (new DirectoryFileItemSource ()),
-					new ItemSource (new GNOMESpecialLocationsItemSource ()),	
-				};
-			}
-		}
-		
-		public static Command [] BuiltinCommands {
-			get {
-				return new Command [] {
-					new Command (new RunCommand ()),
-					new Command (new OpenCommand ()),
-					new Command (new OpenURLCommand ()),
-					new Command (new RunInShellCommand ()),
-					new Command (new DefineWordCommand ()),
-				};
-			}
-		}
-		
+
 		List<Command> CommandsForItem (Item item)
 		{
 			List<Command> commands;

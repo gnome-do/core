@@ -23,11 +23,6 @@ using Do.Universe;
 
 namespace Do.Core
 {
-	public enum ContextRelation {
-		Fresh,
-		Repeat,
-		Continuation
-	}
 	
 	public class SearchContext
 	{
@@ -42,7 +37,7 @@ namespace Do.Core
 				
 		public SearchContext ()
 		{
-			searchTypes = new Type [2] { typeof (Item), typeof (Command) };
+			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
 		}
 		
 		public SearchContext Clone () {
