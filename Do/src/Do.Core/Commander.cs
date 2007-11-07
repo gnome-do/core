@@ -28,6 +28,7 @@ using Do.Universe;
 
 namespace Do.Core
 {
+	
 	public delegate void OnCommanderStateChange ();
 	public delegate void VisibilityChangedHandler (bool visible);
 	
@@ -40,6 +41,8 @@ namespace Do.Core
 	}
 	
 	public abstract class Commander : ICommander {
+		
+		const string kActivateShortcut = "<Super>space";
 		
 		protected Tomboy.GConfXKeybinder keybinder;
 		
@@ -220,7 +223,7 @@ namespace Do.Core
 		protected virtual void SetupKeybindings ()
 		{
 			keybinder.Bind ("/apps/do/bindings/activate",
-						 "<Shift>space",
+						 kActivateShortcut,
 						 OnActivate);
 		}
 		
