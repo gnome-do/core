@@ -22,6 +22,7 @@ namespace Do.Core
 		// Change to univariate hash
 		Dictionary<int, IObject> universe;
 		
+		Dictionary<Command, List<IObject>> commandToItemMap;
 		
 		private List<ItemSource> itemSources;
 		private List<Command> all_commands;
@@ -34,6 +35,7 @@ namespace Do.Core
 			itemSources = new List<ItemSource> ();
 			universe = new Dictionary<int, IObject> ();
 			all_commands = new List<Command> ();
+			commandToItemMap = new Dictionary<Command, List<IObject>> ();
 			// commandsUniverse = new Dictionary<IObject, bool> ();
 
 			foreach (ItemSource source in BuiltinItemSources) {
@@ -45,11 +47,24 @@ namespace Do.Core
 					universe[command.GetHashCode ()] = command;
 				}
 				all_commands.Add (command);
-			}
-					
+				commandToItemMap.Add (command, new List<IObject> ());
+			}	
 
 			foreach (ItemSource source in itemSources) {
 				foreach (Item item in source.Items) {
+					foreach (Command command in all_commands) {
+						List<IObject> commandResults = commandToItemMap[command];
+						List<Type> supportedItemTypes = new List<Type>
+							(command.SupportedItemTypes);
+						List<Type> implementedItemTypes = new List<Type>
+							(GCObject.GetAllImplementedTypes (item.IItem));
+						foreach (Type type in supportedItemTypes) {
+							if (implementedItemTypes.Contains (type)) {
+								commandResults.Add (item);
+								break;
+							}
+						}
+					}
 					if (universe.ContainsKey (item.GetHashCode ())) {
 					}
 					else {
@@ -71,11 +86,7 @@ namespace Do.Core
 		
 		public SearchContext Search (SearchContext newSearchContext)
 		{
-			Console.WriteLine (newSearchContext.SearchString);
 			string keypress;
-			IObject[] results;
-			List<Item> filtered_items;
-			List<Command> filtered_commands;
 			List<IObject> filtered_results;
 			RelevanceSorter comparer;
 			Dictionary<string, IObject[]> firstResults;
@@ -85,29 +96,31 @@ namespace Do.Core
 			lastContext = newSearchContext.LastContext;
 			
 			int i = 0;
-			if (newSearchContext.SearchString == "") {
-				results = new IObject[universe.Values.Count];
-				foreach (IObject result in universe.Values) {
-					results[i] = result;
-					i++;
+			if (newSearchContext.SearchString == "" && newSearchContext.FirstObject != null) {
+				filtered_results = new List<IObject> ();
+				if (ContainsType (newSearchContext.SearchTypes, typeof (Command))) {
+					foreach (Command command in CommandsForItem (newSearchContext.FirstObject as Item)) {
+						filtered_results.Add (command);
+					}
 				}
-				filtered_results = new List<IObject> (results);
+				else if (ContainsType (newSearchContext.SearchTypes, typeof (Item))) {
+					commandToItemMap.TryGetValue (newSearchContext.FirstObject as Command, out filtered_results);
+				}
 			}
 			else {
 				// We can build on the last results.
 				// example: searched for "f" then "fi"
 				if (lastContext != null) {
-					results = lastContext.Results;
 					comparer = new RelevanceSorter (keypress);
-					filtered_results = new List<IObject> (results);
+					filtered_results = new List<IObject> (lastContext.Results);
 					// Sort results based on new keypress string
 					filtered_results = comparer.NarrowResults (filtered_results);
 				}
 
 				// If someone typed a single key, BOOM we're done.
 				else if (firstCharacterResults.ContainsKey (keypress)) {
-					results = firstCharacterResults[keypress];
-					filtered_results = new List<IObject> (results);
+					filtered_results = new List<IObject> 
+						(firstCharacterResults[keypress]);
 				}
 
 				// Or we just have to do an expensive search...
@@ -124,12 +137,7 @@ namespace Do.Core
 			filtered_results = filterResultsByType (filtered_results, newSearchContext.SearchTypes, keypress);
 			filtered_results = filterResultsByDependency(filtered_results, newSearchContext.FirstObject);
 
-			newSearchContext.Results = new IObject[filtered_results.ToArray ().Length];
-			i = 0;
-			foreach (IObject gcobject in filtered_results) {
-				newSearchContext.Results[i] = gcobject;
-				i++;
-			}
+			newSearchContext.Results = filtered_results.ToArray ();
 			// This is a clever way to keep
 			// a stack of incremental results.
 			// NOTE: Clone should return a deep (enough) copy.
@@ -145,7 +153,6 @@ namespace Do.Core
 		
 		private List<IObject> filterResultsByType (List<IObject> results, Type[] acceptableTypes, string keypress) 
 		{
-
 			List<IObject> filtered_results = new List<IObject> ();
 			//Add a text item based on the key entered
 			if (keypress != "") 

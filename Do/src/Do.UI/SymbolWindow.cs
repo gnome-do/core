@@ -507,7 +507,6 @@ namespace Do.UI
 		
 		protected virtual void SetFirstIndex (string match)
 		{	
-			Console.WriteLine ("Object Index "+paneContext[0].ObjectIndex);
 			paneContext[0].FirstObject = paneContext[0].Results[paneContext[0].ObjectIndex];
 			itemBox.DisplayObject = paneContext[0].FirstObject;
 			itemBox.Highlight = match;
