@@ -231,25 +231,30 @@ namespace Do.Core
 		
 		protected void LoadAddins ()
 		{
-			string addin_dir;
-			string[] files;
+			List<string> addin_dirs;
 			
-			addin_dir = "~/.do/addins".Replace ("~",
-				   System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
+			addin_dirs = new List<string> ();
 			
-			files = System.IO.Directory.GetFiles (addin_dir);
-			foreach (string file in files) {
-				Assembly addin;
+			addin_dirs.Add ("~/.do/addins".Replace ("~",
+				   System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal)));
+			
+			foreach (string addin_dir in addin_dirs) {
+				string[] files;
 				
-				if (!file.EndsWith (".dll")) continue;
-				try {
-					addin = Assembly.LoadFile (file);
-					LoadAssembly (addin);
+				files = System.IO.Directory.GetFiles (addin_dir);
+				foreach (string file in files) {
+					Assembly addin;
+					
+					if (!file.EndsWith (".dll")) continue;
+					try {
+						addin = Assembly.LoadFile (file);
+						LoadAssembly (addin);
 					} catch (Exception e) {
 						Log.Error ("Do encountered and error while trying to load addin {0}: {1}", file, e.Message);
 						continue;
 					}
 				}
+			}
 		}
 		
 		private void LoadAssembly (Assembly addin)

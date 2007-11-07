@@ -1,8 +1,3 @@
-// AssemblyInfo.cs created with MonoDevelop
-// User: dave at 3:46 PM 8/22/2007
-//
-// To change standard headers go to Edit->Preferences->Coding->Standard Headers
-//
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
