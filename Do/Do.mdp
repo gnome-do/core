@@ -25,12 +25,9 @@
     <File name="./src/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/Command.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/CommandManager.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/Commander.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/GCObject.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/GCObjectManager.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/Item.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/ItemManager.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/ItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/SearchContext.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.UI/IconBox.cs" subtype="Code" buildaction="Compile" />
@@ -42,6 +39,8 @@
     <File name="./src/TrayLib.cs" subtype="Code" buildaction="Nothing" />
     <File name="./settings-triangle.png" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./src/Do.UI/MainMenu.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/RelevanceSorter.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/UniverseManager.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

@@ -57,6 +57,12 @@ namespace Do.Core
 		public override string Icon {
 			get { return (item.Icon == null ? DefaultItemIcon : item.Icon); }
 		}
+		
+		public override int GetHashCode ()
+		{
+			return string.Format ("{0}{1}{2}", item.GetType (), Name, Description).GetHashCode ();
+		}
+
 	
 	}
 }

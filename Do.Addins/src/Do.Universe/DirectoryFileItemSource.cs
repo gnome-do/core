@@ -74,6 +74,15 @@ namespace Do.Universe
 			UpdateItems ();
 		}
 		
+		public DirectoryFileItemSource (string dir, int levels)
+		{
+			dirs = kDefaultDirectories;
+			items = new List<IItem> ();
+			include_hidden = false;
+			UpdateItems ();
+			ReadItems (dir, levels);
+		}
+		
 		public string Name {
 			get { return "Directory Scanner"; }
 		}
@@ -129,7 +138,6 @@ namespace Do.Universe
 			} catch (DirectoryNotFoundException) {
 				return;
 			}
-			
 			foreach (string file in files) {
 				// Ignore system/hidden files.
 				if (!include_hidden && Path.GetFileName (file).StartsWith (".")) {

@@ -19,6 +19,7 @@
  */
 
 using System;
+using Do.Universe;
 
 namespace Do.Core
 {
@@ -30,77 +31,98 @@ namespace Do.Core
 	
 	public class SearchContext
 	{
-		Item item, iitem;
-		Command command;
-		string itemSearchString, indirectItemSearchString, commandSearchString;
+		IObject firstObject;
+		IObject secondObject;
+		string searchString;
+		int index;
+		SearchContext lastContext;
+		Type[] searchTypes;
 		
-		GCObject [] results;
+		IObject[] results;
 				
 		public SearchContext ()
 		{
+			searchTypes = new Type [2] { typeof (Item), typeof (Command) };
 		}
 		
-		public Item Item {
+		public SearchContext Clone () {
+			SearchContext clonedContext = new SearchContext ();
+			clonedContext.FirstObject = firstObject;
+			clonedContext.SecondObject = secondObject;
+			clonedContext.SearchString = searchString;
+			clonedContext.LastContext = lastContext;
+			if (results != null) {
+				clonedContext.Results = (IObject[]) (results.Clone ());
+			}
+			clonedContext.SearchTypes = searchTypes;
+			return clonedContext;
+		}
+		
+		public SearchContext LastContext {
 			get {
-				return item;
+				return lastContext;
 			}
 			set {
-				item = value;
+				lastContext = value;
+			}
+		}
+		
+		public IObject FirstObject {
+			get {
+				return firstObject;
+			}
+			set {
+				firstObject = value;
+			}
+		}
+		
+		public IObject SecondObject {
+			get {
+				return secondObject;
+			}
+			set {
+				secondObject = value;
+			}
+		}
+			
+
+		public string SearchString {
+			get {
+				return searchString;
+			}
+			set {
+				searchString = value;
 			}
 		}
 
-		public Item IndirectItem {
-			get {
-				return iitem;
-			}
-			set {
-				iitem = value;
-			}
-		}
-
-		public Command Command {
-			get {
-				return command;
-			}
-			set {
-				command = value;
-			}
-		}
-
-		public string ItemSearchString {
-			get {
-				return itemSearchString;
-			}
-			set {
-				itemSearchString = value;
-			}
-		}
-
-		public string IndirectItemSearchString {
-			get {
-				return indirectItemSearchString;
-			}
-			set {
-				indirectItemSearchString = value;
-			}
-		}
-
-		public string CommandSearchString {
-			get {
-				return commandSearchString;
-			}
-			set {
-				commandSearchString = value;
-			}
-		}
-
-		public GCObject[] Results {
+		public IObject[] Results {
 			get {
 				return results;
 			}
 			set {
+				// NOTE Do something special here later; if
+				// a client class sets this field, it must
+				// be ensured that array contains IObjects.
 				results = value;
 			}
 		}
+		
+		public int ObjectIndex {
+			get {
+				return index;
+			}
+			set {
+				index = value;
+			}
+		}
+		
+		public Type[] SearchTypes {
+			get {
+				return searchTypes;
+			}
+			set {
+				searchTypes = value;
+			}
+		}			
 	}
 }

@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -35,9 +34,9 @@ namespace Do.Core
 	public enum CommanderState {
 			Default,
 			SearchingItems,
-			ItemSearchComplete,
+			FirstSearchComplete,
 			SearchingCommands,
-			CommandSearchComplete
+			SecondSearchComplete
 	}
 	
 	public abstract class Commander : ICommander {
@@ -49,38 +48,23 @@ namespace Do.Core
 		private CommanderState state;
 		
 		public event OnCommanderStateChange SetSearchingItemsStateEvent;
-		public event OnCommanderStateChange SetItemSearchCompleteStateEvent;
+		public event OnCommanderStateChange SetFirstCompleteStateEvent;
 		public event OnCommanderStateChange SetSearchingCommandsStateEvent;
-		public event OnCommanderStateChange SetCommandSearchCompleteStateEvent;
+		public event OnCommanderStateChange SetSecondCompleteStateEvent;
 		public event OnCommanderStateChange SetDefaultStateEvent;
 		
 		public event VisibilityChangedHandler VisibilityChanged;
 		
-		private ItemManager itemManager;
-		private CommandManager commandManager;
-		private string itemSearchString, commandSearchString;
-		
-		private Item[] currentItems;
-		private Command[] currentCommands;
-		
-		private int currentItemIndex;
-		private int currentCommandIndex;
-		
 		public Commander () {
-			itemManager = new ItemManager ();
-			commandManager = new CommandManager ();
-			
 			keybinder = new Tomboy.GConfXKeybinder ();
 			
 			SetSearchingItemsStateEvent = SetSearchingItemsState;
-			SetItemSearchCompleteStateEvent = SetItemSearchCompleteState;
+			SetFirstCompleteStateEvent = SetFirstSearchCompleteState;
 			SetSearchingCommandsStateEvent = SetSearchingCommandsState;
-			SetCommandSearchCompleteStateEvent = SetCommandSearchCompleteState;
+			SetSecondCompleteStateEvent = SetSecondSearchCompleteState;
 			SetDefaultStateEvent = SetDefaultState;
 			VisibilityChanged = OnVisibilityChanged;
 			
-			LoadBuiltins ();
-			LoadAddins ();
 			SetupKeybindings ();
 			State = CommanderState.Default;
 		}
@@ -97,53 +81,28 @@ namespace Do.Core
 				case CommanderState.SearchingItems:
 					SetSearchingItemsStateEvent ();
 					break;
-				case CommanderState.ItemSearchComplete:
-					SetItemSearchCompleteStateEvent ();
+				case CommanderState.FirstSearchComplete:
+					SetFirstCompleteStateEvent ();
 					break;
 				case CommanderState.SearchingCommands:
 					SetSearchingCommandsStateEvent ();
 					break;
-				case CommanderState.CommandSearchComplete:
-					SetCommandSearchCompleteStateEvent ();
+				case CommanderState.SecondSearchComplete:
+					SetSecondCompleteStateEvent ();
 					break;
 				}
 			}
 		}
 		
-		public CommandManager CommandManager
-		{
-			get { return commandManager; }
-		}
-		
-		public ItemManager ItemManager
-		{
-			get { return itemManager; }
-		}
-
-		public string ItemSearchString
-		{
-			get { return itemSearchString; }
-		}
-		
-		public string CommandSearchString
-		{
-			get { return commandSearchString; }
-		}
-		
 		protected virtual void SetDefaultState ()
 		{
-			currentItems = new Item [0];
-			currentCommands = new Command [0];
-			currentItemIndex = -1;
-			currentCommandIndex = -1;
-			itemSearchString = "";
 		}
 		
 		protected virtual void SetSearchingItemsState ()
 		{
 		}
 		
-		protected virtual void SetItemSearchCompleteState ()
+		protected virtual void SetFirstSearchCompleteState ()
 		{
 		}
 		
@@ -151,73 +110,8 @@ namespace Do.Core
 		{
 		}
 		
-		protected virtual void SetCommandSearchCompleteState ()
+		protected virtual void SetSecondSearchCompleteState ()
 		{
-		}
-		
-		public Item [] CurrentItems
-		{
-			get { return currentItems; }
-		}
-		
-		public Item CurrentItem
-		{
-			get {
-				if (currentItemIndex >= 0)
-					return currentItems [currentItemIndex];
-				else
-					return null;
-			}
-		}
-		
-		public Command [] CurrentCommands
-		{
-			get { return currentCommands; }
-		}
-		
-		public Command CurrentCommand
-		{
-			get {
-				if (this.currentCommandIndex >= 0) {
-					return currentCommands [currentCommandIndex];
-				} else {
-					return null;
-				}
-			}
-		}
-		
-		public int CurrentItemIndex
-		{
-			get { return currentItemIndex; }
-			set {
-				if (value < 0 || value >= currentItems.Length) {
-					throw new IndexOutOfRangeException ();
-				}
-				currentItemIndex = value;
-				currentCommands = commandManager.CommandsForItem (CurrentItem, "");
-				if (currentCommands.Length == 0) {
-					currentCommands = new Command[] { 
-						new Command (new VoidCommand ()),
-					};
-				}
-				currentCommandIndex = 0;
-			}
-		}
-		
-		public int CurrentCommandIndex
-		{
-			get { return currentCommandIndex; }
-			set {
-				if (value < 0 || value >= currentCommands.Length) {
-					throw new IndexOutOfRangeException ();
-				}
-				currentCommandIndex = value;
-			}
-		}
-		
-		protected void LoadBuiltins ()
-		{
-			LoadAssembly (typeof (IItem).Assembly);
 		}
 		
 		protected virtual void SetupKeybindings ()
@@ -232,116 +126,7 @@ namespace Do.Core
 			Show ();
 		}
 		
-		protected void LoadAddins ()
-		{
-			List<string> addin_dirs;
-			
-			addin_dirs = new List<string> ();
-			
-			addin_dirs.Add ("~/.do/addins".Replace ("~",
-				   System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal)));
-			
-			foreach (string addin_dir in addin_dirs) {
-				string[] files;
-				
-				files = null;
-				try {
-					files = System.IO.Directory.GetFiles (addin_dir);
-				} catch (Exception e) {
-					Log.Error ("Could not read addins directory {0}: {1}", addin_dir, e.Message);
-					continue;
-				}
-				
-				foreach (string file in files) {
-					Assembly addin;
-					
-					if (!file.EndsWith (".dll")) continue;
-					try {
-						addin = Assembly.LoadFile (file);
-						LoadAssembly (addin);
-					} catch (Exception e) {
-						Log.Error ("Do encountered and error while trying to load addin {0}: {1}", file, e.Message);
-						continue;
-					}
-				}
-			}
-		}
-		
-		private void LoadAssembly (Assembly addin)
-		{
-			if (addin == null) return;
-			
-			foreach (Type type in addin.GetTypes ()) {
-				
-				if (type.IsAbstract) continue;
-				if (type == typeof(VoidCommand)) continue;
-				
-				foreach (Type iface in type.GetInterfaces ()) {
-					if (iface == typeof (IItemSource)) {
-						IItemSource source;
-						
-						source = System.Activator.CreateInstance (type) as IItemSource;
-						itemManager.AddItemSource (new ItemSource (source));
-						Log.Info ("Successfully loaded \"{0}\" Item Source.", source.Name);
-					}
-					if (iface == typeof (ICommand)) {
-						ICommand command;
-						
-						command = System.Activator.CreateInstance (type) as ICommand;
-						commandManager.AddCommand (new Command (command));
-						Log.Info ("Successfully loaded \"{0}\" Command.", command.Name);
-					}
-				}
-			}
-		}
-		
 		protected abstract void OnVisibilityChanged (bool visible);
-			
-		public void SearchItems (string itemSearchString)
-		{
-			State = CommanderState.SearchingItems;
-			
-			this.itemSearchString = itemSearchString;
-			commandSearchString = "";
-			currentItems = itemManager.ItemsForAbbreviation (itemSearchString);
-			if (currentItems.Length == 0) {
-				currentItems = new Item[] { new Item (new TextItem (itemSearchString)) };
-			}
-			
-			// Update items and commands state.
-			CurrentItemIndex = 0;
-			
-			State = CommanderState.ItemSearchComplete;
-		}
-		
-		public void SearchCommands (string commandSearchString)
-		{
-			State = CommanderState.SearchingCommands;
-			
-			this.commandSearchString = commandSearchString;
-			currentCommands = commandManager.CommandsForItem (CurrentItem, commandSearchString);
-			
-			// Update items and commands state.
-			if (currentCommands.Length >  0) {
-				CurrentCommandIndex = 0;
-			} else {
-				currentCommandIndex = -1;
-			}
-			
-			State = CommanderState.CommandSearchComplete;
-		}
-		
-		public void Execute ()
-		{
-			Item o;
-			Command c;
-
-			o = this.CurrentItem;
-			c = this.CurrentCommand;
-			if (o != null && c != null) {
-				c.Perform (new IItem[] {o}, new IItem[] {});
-			}
-		}
 		
 		// ICommand members
 		
