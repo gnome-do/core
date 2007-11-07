@@ -63,32 +63,6 @@ namespace Do.Core
 		private int currentItemIndex;
 		private int currentCommandIndex;
 		
-		public static ItemSource [] BuiltinItemSources {
-			get {
-				return new ItemSource [] {
-					new ItemSource (new ApplicationItemSource ()),
-					new ItemSource (new FirefoxBookmarkItemSource ()),
-					new ItemSource (new DirectoryFileItemSource ()),
-					new ItemSource (new GNOMESpecialLocationsItemSource ()),
-				};
-			}
-		}
-		
-		public static Command [] BuiltinCommands {
-			get {
-				return new Command [] {
-					new Command (new RunCommand ()),
-					new Command (new OpenCommand ()),
-					new Command (new OpenURLCommand ()),
-					new Command (new RunInShellCommand ()),
-					new Command (new DefineWordCommand ()),
-					
-					new Command (new MailtoCommand ()),
-							
-				};
-			}
-		}
-		
 		public Commander () {
 			itemManager = new ItemManager ();
 			commandManager = new CommandManager ();
@@ -240,18 +214,13 @@ namespace Do.Core
 		
 		protected void LoadBuiltins ()
 		{
-			foreach (ItemSource source in BuiltinItemSources) {
-				itemManager.AddItemSource (source);
-			}
-			foreach (Command command in BuiltinCommands) {
-				commandManager.AddCommand (command);
-			}
+			LoadAssembly (typeof (IItem).Assembly);
 		}
 		
 		protected virtual void SetupKeybindings ()
 		{
 			keybinder.Bind ("/apps/do/bindings/activate",
-						 "<Control>space",
+						 "<Shift>space",
 						 OnActivate);
 		}
 		
@@ -275,27 +244,40 @@ namespace Do.Core
 				if (!file.EndsWith (".dll")) continue;
 				try {
 					addin = Assembly.LoadFile (file);
-				
-					foreach (Type type in addin.GetTypes ())
-					foreach (Type iface in type.GetInterfaces ()) {
-						if (iface == typeof (IItemSource)) {
-							IItemSource source = addin.CreateInstance (type.ToString ()) as IItemSource;
-							itemManager.AddItemSource (new ItemSource (source));
-							Log.Info ("Successfully loaded \"{0}\" Item Source from addin {1}.", source.Name, file);
-						}
-						if (iface == typeof (ICommand)) {
-							ICommand command = addin.CreateInstance (type.ToString ()) as ICommand;
-							commandManager.AddCommand (new Command (command));
-							Log.Info ("Successfully loaded \"{0}\" Command from addin {1}.", command.Name, file);
-						}
+					LoadAssembly (addin);
+					} catch (Exception e) {
+						Log.Error ("Do encountered and error while trying to load addin {0}: {1}", file, e.Message);
+						continue;
 					}
-				} catch (Exception e) {
-					Log.Error ("Failed to load addin {0}: {1}", file, e.Message);
-					continue;
+				}
+		}
+		
+		private void LoadAssembly (Assembly addin)
+		{
+			if (addin == null) return;
+			
+			foreach (Type type in addin.GetTypes ()) {
+				
+				if (type.IsAbstract) continue;
+				if (type == typeof(VoidCommand)) continue;
+				
+				foreach (Type iface in type.GetInterfaces ()) {
+					if (iface == typeof (IItemSource)) {
+						IItemSource source;
+						
+						source = System.Activator.CreateInstance (type) as IItemSource;
+						itemManager.AddItemSource (new ItemSource (source));
+						Log.Info ("Successfully loaded \"{0}\" Item Source.", source.Name);
+					}
+					if (iface == typeof (ICommand)) {
+						ICommand command;
+						
+						command = System.Activator.CreateInstance (type) as ICommand;
+						commandManager.AddCommand (new Command (command));
+						Log.Info ("Successfully loaded \"{0}\" Command.", command.Name);
+					}
 				}
 			}
-			
-	
 		}
 		
 		protected abstract void OnVisibilityChanged (bool visible);
