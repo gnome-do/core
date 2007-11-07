@@ -33,7 +33,7 @@ namespace Do.Universe
 		
 		class GNOMEURIItem : IURIItem
 		{
-			string uri, name, icon;
+			protected string uri, name, icon;
 			
 			public GNOMEURIItem (string uri, string name, string icon)
 			{
@@ -42,16 +42,44 @@ namespace Do.Universe
 				this.icon = icon;
 			}
 			
-			public string Name { get { return name; } }
-			public string Description { get { return URI; } }
-			public string Icon { get { return icon; } }
-			public string URI { get { return uri; } }
+			virtual public string Name { get { return name; } }
+			virtual public string Description { get { return URI; } }
+			virtual public string Icon { get { return icon; } }
+			virtual public string URI { get { return uri; } }
+		}
+		
+		class GNOMETrashURIItem : GNOMEURIItem
+		{
+			
+			static readonly string kTrashDirectory;
+			
+			static GNOMETrashURIItem ()
+			{
+				kTrashDirectory = "~/.Trash".Replace ("~",
+					     System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
+			}
+			
+			public GNOMETrashURIItem () : base ("trash://", "Trash", null)
+			{
+			}
+			
+			override public string Icon {
+				get {
+					if (System.IO.Directory.Exists (kTrashDirectory)
+						&& System.IO.Directory.GetFileSystemEntries (kTrashDirectory).Length > 0) {
+						icon = "user-trash-full";
+					} else {
+						icon = "user-trash";
+					}
+					return icon;
+				}
+			}
 		}
 		
 		public GNOMESpecialLocationsItemSource()
 		{
 			items = new List<IItem> ();
-			items.Add (new GNOMEURIItem ("trash://", "Trash", "user-trash"));
+			items.Add (new GNOMETrashURIItem ());
 			items.Add (new GNOMEURIItem ("computer:///", "Computer", "computer"));
 			items.Add (new GNOMEURIItem ("network://", "Network", "network"));
 			items.Add (new GNOMEURIItem ("~", "Home", "user-home"));

@@ -47,8 +47,10 @@ namespace Do.Universe
 		
 		static readonly DirectoryLevelPair[] kDefaultDirectories = {
 			new DirectoryLevelPair ("~",             1),
-			new DirectoryLevelPair ("~/Desktop",     1),
-			new DirectoryLevelPair ("~/Documents",   2),
+			new DirectoryLevelPair ("~/Desktop",     3),
+			new DirectoryLevelPair ("~/Documents",   -1),
+			new DirectoryLevelPair ("~/Music",   2),
+			new DirectoryLevelPair ("~/Photos",   2),
 			new DirectoryLevelPair ("/home",   1),
 		};
 		

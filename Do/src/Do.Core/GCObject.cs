@@ -51,7 +51,7 @@ namespace Do.Core
 			float similarity;
 			
 			if (ab == "") {
-				return int.MaxValue;
+				return 100;
 			} else {
 				similarity = Util.StringScoreForAbbreviation (Name, ab);
 			}

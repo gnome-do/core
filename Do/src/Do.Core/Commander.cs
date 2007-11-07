@@ -28,6 +28,7 @@ using Do.Universe;
 
 namespace Do.Core
 {
+	
 	public delegate void OnCommanderStateChange ();
 	public delegate void VisibilityChangedHandler (bool visible);
 	
@@ -40,6 +41,8 @@ namespace Do.Core
 	}
 	
 	public abstract class Commander : ICommander {
+		
+		const string kActivateShortcut = "<Super>space";
 		
 		protected Tomboy.GConfXKeybinder keybinder;
 		
@@ -63,29 +66,6 @@ namespace Do.Core
 		private int currentItemIndex;
 		private int currentCommandIndex;
 		
-		public static ItemSource [] BuiltinItemSources {
-			get {
-				return new ItemSource [] {
-					new ItemSource (new ApplicationItemSource ()),
-					new ItemSource (new FirefoxBookmarkItemSource ()),
-					new ItemSource (new DirectoryFileItemSource ()),
-					new ItemSource (new GNOMESpecialLocationsItemSource()),
-				};
-			}
-		}
-		
-		public static Command [] BuiltinCommands {
-			get {
-				return new Command [] {
-					new Command (new RunCommand ()),
-					new Command (new OpenCommand ()),
-					new Command (new OpenURLCommand ()),
-					new Command (new RunInShellCommand ()),
-					new Command (new DefineWordCommand ()),
-				};
-			}
-		}
-		
 		public Commander () {
 			itemManager = new ItemManager ();
 			commandManager = new CommandManager ();
@@ -100,7 +80,7 @@ namespace Do.Core
 			VisibilityChanged = OnVisibilityChanged;
 			
 			LoadBuiltins ();
-			LoadAssemblies ();
+			LoadAddins ();
 			SetupKeybindings ();
 			State = CommanderState.Default;
 		}
@@ -237,18 +217,13 @@ namespace Do.Core
 		
 		protected void LoadBuiltins ()
 		{
-			foreach (ItemSource source in BuiltinItemSources) {
-				itemManager.AddItemSource (source);
-			}
-			foreach (Command command in BuiltinCommands) {
-				commandManager.AddCommand (command);
-			}
+			LoadAssembly (typeof (IItem).Assembly);
 		}
 		
 		protected virtual void SetupKeybindings ()
 		{
 			keybinder.Bind ("/apps/do/bindings/activate",
-						 "<Control>space",
+						 kActivateShortcut,
 						 OnActivate);
 		}
 		
@@ -257,27 +232,67 @@ namespace Do.Core
 			Show ();
 		}
 		
-		protected void LoadAssemblies ()
+		protected void LoadAddins ()
 		{
-			/*
-			Assembly currentAssembly;
-			string appAssembly;
+			List<string> addin_dirs;
 			
-			appAssembly = "/home/dave/Current Documents/gnome-commander/gnome-commander-applications/bin/Debug/gnome-commander-applications.dll";
-			currentAssembly = Assembly.LoadFile (appAssembly);
+			addin_dirs = new List<string> ();
 			
-			foreach (Type type in currentAssembly.GetTypes ())
-			foreach (Type iface in type.GetInterfaces ()) {
-				if (iface == typeof (IItemSource)) {
-					IItemSource source = currentAssembly.CreateInstance (type.ToString ()) as IItemSource;
-					itemManager.AddItemSource (new ItemSource (source));
+			addin_dirs.Add ("~/.do/addins".Replace ("~",
+				   System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal)));
+			
+			foreach (string addin_dir in addin_dirs) {
+				string[] files;
+				
+				files = null;
+				try {
+					files = System.IO.Directory.GetFiles (addin_dir);
+				} catch (Exception e) {
+					Log.Error ("Could not read addins directory {0}: {1}", addin_dir, e.Message);
+					continue;
 				}
-				if (iface == typeof (ICommand)) {
-					ICommand command = currentAssembly.CreateInstance (type.ToString ()) as ICommand;
-					commandManager.AddCommand (new Command (command));
+				
+				foreach (string file in files) {
+					Assembly addin;
+					
+					if (!file.EndsWith (".dll")) continue;
+					try {
+						addin = Assembly.LoadFile (file);
+						LoadAssembly (addin);
+					} catch (Exception e) {
+						Log.Error ("Do encountered and error while trying to load addin {0}: {1}", file, e.Message);
+						continue;
+					}
 				}
 			}
-			*/
+		}
+		
+		private void LoadAssembly (Assembly addin)
+		{
+			if (addin == null) return;
+			
+			foreach (Type type in addin.GetTypes ()) {
+				
+				if (type.IsAbstract) continue;
+				if (type == typeof(VoidCommand)) continue;
+				
+				foreach (Type iface in type.GetInterfaces ()) {
+					if (iface == typeof (IItemSource)) {
+						IItemSource source;
+						
+						source = System.Activator.CreateInstance (type) as IItemSource;
+						itemManager.AddItemSource (new ItemSource (source));
+						Log.Info ("Successfully loaded \"{0}\" Item Source.", source.Name);
+					}
+					if (iface == typeof (ICommand)) {
+						ICommand command;
+						
+						command = System.Activator.CreateInstance (type) as ICommand;
+						commandManager.AddCommand (new Command (command));
+						Log.Info ("Successfully loaded \"{0}\" Command.", command.Name);
+					}
+				}
+			}
 		}
 		
 		protected abstract void OnVisibilityChanged (bool visible);
