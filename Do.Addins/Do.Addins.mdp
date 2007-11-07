@@ -39,25 +39,11 @@
     <File name="./src/Do.Universe/ContactItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Addins/ContactItemStore.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/MailtoCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Evolution Addin/EvolutionContactItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Pidgin Addin/Pidgin.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Pidgin Addin/PidginChatCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Pidgin Addin/PidginContactItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Thunderbird Addin/Mork.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Thunderbird Addin/ThunderbirdContactItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Rhythmbox Addin/Rhythmbox.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Rhythmbox Addin/RhythmboxItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Rhythmbox Addin/RhythmboxItems.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Rhythmbox Addin/RhythmboxPlayCommand.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
-    <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gnome-sharp, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gnome-vfs-sharp, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <ProjectReference type="Gac" localcopy="True" refto="evolution-sharp, Version=3.0.0.0, Culture=neutral, PublicKeyToken=457eed85bd9370df" />
-    <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </References>
 </Project>

@@ -191,7 +191,7 @@ namespace Do.Universe
 
 	}
 	
-	class DirectoryFileItem : FileItem
+	public class DirectoryFileItem : FileItem
 	{
 		public DirectoryFileItem (string uri) :
 			base (uri)

@@ -70,12 +70,6 @@ namespace Do.Core
 					new ItemSource (new FirefoxBookmarkItemSource ()),
 					new ItemSource (new DirectoryFileItemSource ()),
 					new ItemSource (new GNOMESpecialLocationsItemSource ()),
-					
-					// new ItemSource (new ThunderbirdContactItemSource ()),
-					new ItemSource (new EvolutionContactItemSource ()),
-					new ItemSource (new PidginContactItemSource ()),
-					
-					new ItemSource (new RhythmboxItemSource ()),
 				};
 			}
 		}
@@ -90,9 +84,7 @@ namespace Do.Core
 					new Command (new DefineWordCommand ()),
 					
 					new Command (new MailtoCommand ()),
-					new Command (new PidginChatCommand ()),
 							
-					new Command (new RhythmboxPlayCommand ()),
 				};
 			}
 		}
