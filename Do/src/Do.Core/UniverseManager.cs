@@ -11,15 +11,7 @@ using Do;
 using Do.Universe;
 
 namespace Do.Core
-{
-	//Remove this
-	public enum SentencePositionLocator {
-		Ambigious = 0,
-		Command = 1,
-		Item = 2,
-		ModifierItem = 3
-	}
-	
+{	
 	
 	public class UniverseManager
 	{
@@ -30,19 +22,18 @@ namespace Do.Core
 		// Change to univariate hash
 		Dictionary<int, IObject> universe;
 		
-		Dictionary<int, List<Command>> itemToCommandMap;
 		
 		private List<ItemSource> itemSources;
+		private List<Command> all_commands;
 		
 		public UniverseManager()
 		{
 			List<IObject> keypress_matches;
 			RelevanceSorter comparer;
-			SentencePositionLocator sentencePosition;
 			
 			itemSources = new List<ItemSource> ();
 			universe = new Dictionary<int, IObject> ();
-			itemToCommandMap = new Dictionary<int,List<Command>> ();
+			all_commands = new List<Command> ();
 			// commandsUniverse = new Dictionary<IObject, bool> ();
 
 			foreach (ItemSource source in BuiltinItemSources) {
@@ -53,17 +44,12 @@ namespace Do.Core
 				if (!(universe.ContainsKey (command.GetHashCode ()))) {
 					universe[command.GetHashCode ()] = command;
 				}
+				all_commands.Add (command);
 			}
 					
 
 			foreach (ItemSource source in itemSources) {
 				foreach (Item item in source.Items) {
-					if (!(itemToCommandMap.ContainsKey (item.GetHashCode ()))) {
-						Command[] itemCommands = _CommandsForItem (item);
-						List<Command> commandList = new List<Command> ();
-						commandList.AddRange (itemCommands);
-						itemToCommandMap.Add (item.GetHashCode (), commandList);
-					}
 					if (universe.ContainsKey (item.GetHashCode ())) {
 					}
 					else {
@@ -72,7 +58,7 @@ namespace Do.Core
 				}
 			}
 			
-			//Load/save results to XML
+			//Do this Load/save results to XML
 			firstCharacterResults = new Dictionary<string, IObject[]> ();
 			for (char keypress = 'a'; keypress < 'z'; keypress++) {
 				List <IObject> universeList = new List<IObject> ();
@@ -110,7 +96,7 @@ namespace Do.Core
 			else {
 				// We can build on the last results.
 				// example: searched for "f" then "fi"
-				if (lastContext != null && lastContext.SearchPosition == newSearchContext.SearchPosition) {
+				if (lastContext != null) {
 					results = lastContext.Results;
 					comparer = new RelevanceSorter (keypress);
 					filtered_results = new List<IObject> (results);
@@ -134,45 +120,13 @@ namespace Do.Core
 					// Sort results based on keypress
 				}
 			}
+			
+			filtered_results = filterResultsByType (filtered_results, newSearchContext.SearchTypes, keypress);
+			filtered_results = filterResultsByDependency(filtered_results, newSearchContext.FirstObject);
 
-			if (newSearchContext.SearchPosition == SentencePositionLocator.Ambigious) { 
-			}
-			else if (newSearchContext.SearchPosition == SentencePositionLocator.Command) {
-				List<Command> commandsForItem = new List<Command> ();
-				commandsForItem.AddRange (itemToCommandMap[newSearchContext.FirstObject.GetHashCode ()]);
-				Console.WriteLine (newSearchContext.FirstObject.Name);
-				IObject[] filtered_results_array = filtered_results.ToArray ();
-				for (i = 0; i < filtered_results_array.Length; i++) {
-					GCObject result = (GCObject) filtered_results_array[i];
-					if (result.GetType () != typeof(Command)) {
-						filtered_results.Remove (result);
-					}
-					else {
-						Console.WriteLine (result.Name + " "+commandsForItem.Contains ((Command) result));
-						if (!(commandsForItem.Contains ((Command) result))) {
-							filtered_results.Remove (result);
-						}
-					}
-				}
-			}
-			else {
-				IObject[] filtered_results_array = filtered_results.ToArray ();
-				for (i = 0; i < filtered_results_array.Length; i++) {
-					GCObject result = (GCObject) filtered_results_array[i];
-					if (result.GetType () != typeof(Item)) {
-						filtered_results.Remove (result);
-					}					
-					else {
-						if (!(((Command) (newSearchContext.FirstObject)).SupportsItem ((Item) result))) {
-							filtered_results.Remove (result);
-						}
-					}
-				}
-			}
-
-			newSearchContext.Results = new GCObject[filtered_results.ToArray ().Length];
+			newSearchContext.Results = new IObject[filtered_results.ToArray ().Length];
 			i = 0;
-			foreach (GCObject gcobject in filtered_results) {
+			foreach (IObject gcobject in filtered_results) {
 				newSearchContext.Results[i] = gcobject;
 				i++;
 			}
@@ -188,6 +142,75 @@ namespace Do.Core
 			
 			return newSearchContext;
 		}
+		
+		private List<IObject> filterResultsByType (List<IObject> results, Type[] acceptableTypes, string keypress) 
+		{
+
+			List<IObject> filtered_results = new List<IObject> ();
+			//Add a text item based on the key entered
+			if (keypress != "") 
+				results.Add (new Item (new TextItem (keypress)));
+			else
+				results.Add (new Item (new TextItem ("Enter Word Definition")));
+			
+			//Now we look through the list and add an object when it's type belongs in acceptableTypes
+			foreach (IObject iobject in results) {
+				List<Type> implementedTypes = GCObject.GetAllImplementedTypes (iobject);
+				foreach (Type type in acceptableTypes) {
+					if (implementedTypes.Contains (type)) {
+						filtered_results.Add (iobject);
+						break;
+					}
+				}
+			}
+			
+			return filtered_results;
+		}
+		
+		private List<IObject> filterResultsByDependency (List<IObject> results, IObject independentObject)
+		{
+			if (independentObject == null)
+				return results;
+			List <IObject> filtered_results = new List<IObject> ();
+			
+			
+			if (independentObject is Command) {
+				foreach (IObject iobject in results) {
+					//If the independent object is a command, add the result if its item type is supported
+					List<Type> supportedItemTypes = new List<Type>
+						(((Command) independentObject).SupportedItemTypes);
+					List<Type> implementedItemTypes = new List<Type>
+						(GCObject.GetAllImplementedTypes ((iobject as Item).IItem));
+					foreach (Type type in supportedItemTypes) {
+						if (implementedItemTypes.Contains (type)) {
+							filtered_results.Add (iobject);
+							break;
+						}
+					}
+				}
+			}
+			else if (independentObject is Item) {
+				foreach (IObject iobject in results) {
+					//If the ind. object is an item, run the function commands for items to see if the result is in it
+					List<Command> supportedCommands = CommandsForItem (independentObject as Item);
+					if (supportedCommands.Contains (iobject as Command)) {
+						filtered_results.Add (iobject);
+					}
+				}
+			}
+			return filtered_results;
+		}
+				
+		
+		//Function to determine whether a type array contains a type
+		private bool ContainsType (Type[] typeArray, Type checkType) {
+			foreach (Type type in typeArray) {
+				if (type.Equals (checkType))
+					return true;
+			}
+			return false;
+		}
+		
 		
 		public static ItemSource [] BuiltinItemSources {
 			get {
@@ -212,21 +235,20 @@ namespace Do.Core
 			}
 		}
 		
-		private Command[] _CommandsForItem (Item item) {
+		List<Command> CommandsForItem (Item item)
+		{
 			List<Command> commands;
-			
-			
+
 			commands = new List<Command> ();
-			Console.WriteLine ("Name: "+item.Name);
-			foreach (IObject result in universe.Values) {
-				if (result.GetType ().Equals (typeof (Command))) {
-					if (((Command) result).SupportsItem (item.IItem)) {
-						Console.WriteLine ("Adding "+result.Name);
-						commands.Add ((Command) result);
+			foreach (Command command in all_commands) {
+				foreach (Type item_type in command.SupportedItemTypes) {
+					if (item_type.IsAssignableFrom (item.IItem.GetType ()) 
+					    && command.SupportsItem (item.IItem)) {
+						commands.Add (command);
 					}
 				}
 			}
-			return commands.ToArray ();
+			return commands;
 		}
 		
 	}

@@ -79,8 +79,8 @@ namespace Do.UI
 		
 		protected SearchContext[] paneContext;
 		
-		private GCObject[] firstPaneObjects;
-		private GCObject[] secondPaneObjects;
+		private IObject[] firstPaneObjects;
+		private IObject[] secondPaneObjects;
 		
 		private UniverseManager universeManager;
 		
@@ -461,9 +461,10 @@ namespace Do.UI
 			case WindowFocus.FirstFocus:
 				commander.State = CommanderState.SearchingItems;
 				currentContext.SearchString = searchString;
-				currentContext.SearchPosition = SentencePositionLocator.Ambigious;
+				currentContext.SearchTypes = new Type[] { typeof (Core.Item), typeof (Command) };
+				currentContext.FirstObject = null;
 				currentContext = universeManager.Search (currentContext);
-				firstPaneObjects = (GCObject[]) (currentContext.Results);
+				firstPaneObjects = (IObject[]) (currentContext.Results);
 				paneContext[0] = currentContext;
 				commander.State = CommanderState.FirstSearchComplete;
 				currentContext = paneContext[0];
@@ -472,7 +473,7 @@ namespace Do.UI
 				commander.State = CommanderState.SearchingCommands;
 				currentContext.SearchString = searchString;
 				currentContext = universeManager.Search (currentContext);
-				secondPaneObjects = (GCObject[]) (currentContext.Results);
+				secondPaneObjects = (IObject[]) (currentContext.Results);
 				paneContext[1] = currentContext;
 				commander.State = CommanderState.SecondSearchComplete;
 				currentContext = paneContext[1];
@@ -484,7 +485,7 @@ namespace Do.UI
 		{
 			switch (focus) {
 			case WindowFocus.FirstFocus:
-				firstPaneObjects = new GCObject[0];
+				firstPaneObjects = new IObject[0];
 				for (int i = 0; i < paneContext.Length; i++) {
 					paneContext[i] = null;
 				}
@@ -493,7 +494,7 @@ namespace Do.UI
 				SetDefaultState ();
 				break;
 			case WindowFocus.SecondFocus:
-				firstPaneObjects = new GCObject[0];
+				firstPaneObjects = new IObject[0];
 				for (int i = 0; i < paneContext.Length; i++) {
 					paneContext[i] = null;
 				}
@@ -514,7 +515,7 @@ namespace Do.UI
 			displayLabel.Highlight= searchString;
 			if (paneContext[0].FirstObject.GetType ().Equals (typeof(Core.Item))) {
 				paneContext[1] = paneContext[0].Clone ();
-				paneContext[1].SearchPosition = SentencePositionLocator.Command;
+				paneContext[1].SearchTypes = new Type[] { typeof (Command) };
 				paneContext[1].SearchString = "";
 				paneContext[1] = universeManager.Search (paneContext[1]);
 				secondPaneObjects = paneContext[1].Results;
@@ -522,7 +523,7 @@ namespace Do.UI
 			}
 			else {
 				paneContext[1] = paneContext[0].Clone ();
-				paneContext[1].SearchPosition = SentencePositionLocator.Item;
+				paneContext[1].SearchTypes = new Type[] { typeof (Core.Item) };
 				paneContext[1].SearchString = "";
 				paneContext[1] = universeManager.Search (paneContext[1]);
 				secondPaneObjects = paneContext[1].Results;
@@ -547,7 +548,7 @@ namespace Do.UI
 		{
 			paneContext = new SearchContext[3];
 			currentContext = new SearchContext ();
-			currentContext.SearchPosition = SentencePositionLocator.Ambigious;
+			currentContext.SearchTypes = new Type[] { typeof (Command), typeof (Core.Item) };
 			paneContext[0] = currentContext;
 			searchString = "";
 

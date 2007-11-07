@@ -31,18 +31,18 @@ namespace Do.Core
 	
 	public class SearchContext
 	{
-		GCObject firstObject;
-		GCObject secondObject;
+		IObject firstObject;
+		IObject secondObject;
 		string searchString;
 		int index;
-		SentencePositionLocator searchPosition;
 		SearchContext lastContext;
+		Type[] searchTypes;
 		
-		GCObject[] results;
+		IObject[] results;
 				
 		public SearchContext ()
 		{
-			searchPosition = SentencePositionLocator.Ambigious;
+			searchTypes = new Type [2] { typeof (Item), typeof (Command) };
 		}
 		
 		public SearchContext Clone () {
@@ -52,9 +52,9 @@ namespace Do.Core
 			clonedContext.SearchString = searchString;
 			clonedContext.LastContext = lastContext;
 			if (results != null) {
-				clonedContext.Results = (GCObject[]) (results.Clone ());
+				clonedContext.Results = (IObject[]) (results.Clone ());
 			}
-			clonedContext.SearchPosition = searchPosition;
+			clonedContext.SearchTypes = searchTypes;
 			return clonedContext;
 		}
 		
@@ -67,16 +67,7 @@ namespace Do.Core
 			}
 		}
 		
-		public SentencePositionLocator SearchPosition {
-			get {
-				return searchPosition;
-			}
-			set {
-				searchPosition = value;
-			}
-		}
-		
-		public GCObject FirstObject {
+		public IObject FirstObject {
 			get {
 				return firstObject;
 			}
@@ -85,7 +76,7 @@ namespace Do.Core
 			}
 		}
 		
-		public GCObject SecondObject {
+		public IObject SecondObject {
 			get {
 				return secondObject;
 			}
@@ -104,14 +95,14 @@ namespace Do.Core
 			}
 		}
 
-		public GCObject[] Results {
+		public IObject[] Results {
 			get {
 				return results;
 			}
 			set {
 				// NOTE Do something special here later; if
 				// a client class sets this field, it must
-				// be ensured that array contains GCObjects.
+				// be ensured that array contains IObjects.
 				results = value;
 			}
 		}
@@ -124,6 +115,14 @@ namespace Do.Core
 				index = value;
 			}
 		}
-						
+		
+		public Type[] SearchTypes {
+			get {
+				return searchTypes;
+			}
+			set {
+				searchTypes = value;
+			}
+		}			
 	}
 }

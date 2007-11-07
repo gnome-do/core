@@ -180,8 +180,8 @@ namespace Do.Core
 		
 		public void Execute (SearchContext executeContext)
 		{
-			GCObject firstResult = executeContext.FirstObject;
-			GCObject secondResult = executeContext.SecondObject;
+			IObject firstResult = executeContext.FirstObject;
+			IObject secondResult = executeContext.SecondObject;
 
 			Item o = null;
 			Command c = null;
