@@ -69,7 +69,7 @@ namespace Do.UI
 		
 		protected Commander commander;
 		protected Command currentCommand;
-		protected Core.Item currentItem;
+		protected IItem currentItem;
 		protected int currentItemIndex;
 		protected int currentCommandIndex;
 		protected WindowFocus focus;
@@ -78,6 +78,8 @@ namespace Do.UI
 		protected SearchContext currentContext;
 		
 		protected SearchContext[] paneContext;
+		
+		private IObject[][] paneObjects;
 		
 		private IObject[] firstPaneObjects;
 		private IObject[] secondPaneObjects;
@@ -394,6 +396,8 @@ namespace Do.UI
 			this.focus = focus;
 			results = null;
 			selectedIndex = -1;
+
+			//Set the current context to the appropriate paneContext
 			switch (focus) {
 			case WindowFocus.SecondFocus:
 				currentContext = paneContext[1];
@@ -403,7 +407,7 @@ namespace Do.UI
 				break;
 			case WindowFocus.FirstFocus:
 				currentContext = paneContext[0];
-				searchString = currentContext.SearchString;
+				searchString = currentContext.SearchString;		
 				results = currentContext.Results;
 				selectedIndex = currentContext.ObjectIndex;
 				break;
@@ -412,9 +416,9 @@ namespace Do.UI
 				searchString = "";
 			}
 
-			
+			//Change window to match new paneContext	
 			resultsWindow.Results = results;
-			resultsWindow.SelectedIndex = selectedIndex;		
+			resultsWindow.SelectedIndex = selectedIndex;			
 			
 			displayLabel.DisplayObject = resultsWindow.SelectedObject;
 			displayLabel.Highlight = searchString;
@@ -426,6 +430,9 @@ namespace Do.UI
 		
 		protected virtual void DeleteCharacter () 
 		{
+			//In either case move two contexts back (the reason being is because before we search
+			//Queue search gives us two identical copies at the end of the linked list, so that
+			//one can be manipulated by Search() and one stays the same)
 			switch (focus) {
 			case WindowFocus.FirstFocus:
 				commander.State = CommanderState.SearchingItems;
@@ -435,10 +442,9 @@ namespace Do.UI
 				currentContext = currentContext.Clone ();
 				currentContext.LastContext = temp;
 				firstPaneObjects =  (currentContext.Results);
-				paneContext[1] = null;
 				paneContext[0] = currentContext;
+				paneContext[1] = null;
 				commander.State = CommanderState.FirstSearchComplete;
-				currentContext = paneContext[0];
 				break;
 			case WindowFocus.SecondFocus:
 				commander.State = CommanderState.SearchingCommands;
@@ -447,27 +453,28 @@ namespace Do.UI
 				tempContext = currentContext;
 				currentContext = currentContext.Clone ();
 				currentContext.LastContext = tempContext;
-				secondPaneObjects =  (currentContext.Results);
 				paneContext[1] = currentContext;
+				secondPaneObjects =  (currentContext.Results);
 				commander.State = CommanderState.SecondSearchComplete;
-				currentContext = paneContext[1];
 				break;
 			}
 		}
 		
 		protected virtual void QueueSearch ()
 		{
+			//Set up the current search context to the proper state information then
+			//call Search() on universe manager. After it's done change CommanderState to
+			//update the window
 			switch (focus) {
 			case WindowFocus.FirstFocus:
 				commander.State = CommanderState.SearchingItems;
 				currentContext.SearchString = searchString;
-				currentContext.SearchTypes = new Type[] { typeof (Core.Item), typeof (Command) };
+				currentContext.SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 				currentContext.FirstObject = null;
 				currentContext = universeManager.Search (currentContext);
 				firstPaneObjects = (IObject[]) (currentContext.Results);
 				paneContext[0] = currentContext;
 				commander.State = CommanderState.FirstSearchComplete;
-				currentContext = paneContext[0];
 				break;
 			case WindowFocus.SecondFocus:
 				commander.State = CommanderState.SearchingCommands;
@@ -476,33 +483,13 @@ namespace Do.UI
 				secondPaneObjects = (IObject[]) (currentContext.Results);
 				paneContext[1] = currentContext;
 				commander.State = CommanderState.SecondSearchComplete;
-				currentContext = paneContext[1];
 				break;
 			}
 		}
 		
 		protected virtual void ResetContext ()
 		{
-			switch (focus) {
-			case WindowFocus.FirstFocus:
-				firstPaneObjects = new IObject[0];
-				for (int i = 0; i < paneContext.Length; i++) {
-					paneContext[i] = null;
-				}
-				paneContext[0] = new SearchContext ();
-				currentContext = paneContext[0];
-				SetDefaultState ();
-				break;
-			case WindowFocus.SecondFocus:
-				firstPaneObjects = new IObject[0];
-				for (int i = 0; i < paneContext.Length; i++) {
-					paneContext[i] = null;
-				}
-				paneContext[0] = new SearchContext ();
-				currentContext = paneContext[0];
-				SetDefaultState ();
-				break;
-			}
+			SetDefaultState ();
 		}
 		
 		protected virtual void SetFirstIndex (string match)
@@ -512,9 +499,11 @@ namespace Do.UI
 			itemBox.Highlight = match;
 			displayLabel.DisplayObject = firstPaneObjects[currentContext.ObjectIndex];
 			displayLabel.Highlight= searchString;
-			if (paneContext[0].FirstObject.GetType ().Equals (typeof(Core.Item))) {
+
+			//Set up the next pane based on what's in the first pane
+			if (typeof (IItem).IsAssignableFrom (paneContext[0].FirstObject.GetType ())) {
 				paneContext[1] = paneContext[0].Clone ();
-				paneContext[1].SearchTypes = new Type[] { typeof (Command) };
+				paneContext[1].SearchTypes = new Type[] { typeof (ICommand) };
 				paneContext[1].SearchString = "";
 				paneContext[1] = universeManager.Search (paneContext[1]);
 				secondPaneObjects = paneContext[1].Results;
@@ -522,7 +511,7 @@ namespace Do.UI
 			}
 			else {
 				paneContext[1] = paneContext[0].Clone ();
-				paneContext[1].SearchTypes = new Type[] { typeof (Core.Item) };
+				paneContext[1].SearchTypes = new Type[] { typeof (IItem) };
 				paneContext[1].SearchString = "";
 				paneContext[1] = universeManager.Search (paneContext[1]);
 				secondPaneObjects = paneContext[1].Results;
@@ -547,10 +536,10 @@ namespace Do.UI
 		{
 			paneContext = new SearchContext[3];
 			currentContext = new SearchContext ();
-			currentContext.SearchTypes = new Type[] { typeof (Command), typeof (Core.Item) };
+			currentContext.SearchTypes = new Type[] { typeof (ICommand), typeof (IItem) };
 			paneContext[0] = currentContext;
 			searchString = "";
-
+			
 			SetWindowFocus (WindowFocus.FirstFocus);
 			
 			itemBox.DisplayObject = new DefaultIconBoxObject ();

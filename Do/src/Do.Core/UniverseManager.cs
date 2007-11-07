@@ -29,27 +29,43 @@ namespace Do.Core
 		
 		public UniverseManager()
 		{
-			List<IObject> keypress_matches;
-			RelevanceSorter comparer;
 			
 			itemSources = new List<ItemSource> ();
 			universe = new Dictionary<int, IObject> ();
 			all_commands = new List<Command> ();
 			commandToItemMap = new Dictionary<Command, List<IObject>> ();
-			// commandsUniverse = new Dictionary<IObject, bool> ();
 
+			IndexCommands ();
+			IndexItems ();
+			BuildFirstKeyCache ();
+		}
+		
+		private void BuildFirstKeyCache () 
+		{			
+			List<IObject> keypress_matches;
+			RelevanceSorter comparer;
+			
+			//Do this: Load/save results to XML
+
+			firstCharacterResults = new Dictionary<string, IObject[]> ();
+			//For each starting character add every matching object from the universe to
+			//the firstCharacterResults dictionary with the key of the character
+			for (char keypress = 'a'; keypress < 'z'; keypress++) {
+				List <IObject> universeList = new List<IObject> ();
+				universeList.AddRange (universe.Values);
+				comparer = new RelevanceSorter (keypress.ToString ());
+				firstCharacterResults[keypress.ToString ()] = comparer.NarrowResults (universeList).ToArray ();
+			}
+		}
+		
+		private void IndexItems () {
+			
 			foreach (ItemSource source in BuiltinItemSources) {
 				itemSources.Add (source);
 			}
 			
-			foreach (Command command in BuiltinCommands) {
-				if (!(universe.ContainsKey (command.GetHashCode ()))) {
-					universe[command.GetHashCode ()] = command;
-				}
-				all_commands.Add (command);
-				commandToItemMap.Add (command, new List<IObject> ());
-			}	
-
+			//For each item add to universe, then check against all commands
+			//to see if the item should be added to the list in the command to item map
 			foreach (ItemSource source in itemSources) {
 				foreach (Item item in source.Items) {
 					foreach (Command command in all_commands) {
@@ -65,6 +81,7 @@ namespace Do.Core
 							}
 						}
 					}
+					
 					if (universe.ContainsKey (item.GetHashCode ())) {
 					}
 					else {
@@ -72,38 +89,71 @@ namespace Do.Core
 					}
 				}
 			}
-			
-			//Do this Load/save results to XML
-			firstCharacterResults = new Dictionary<string, IObject[]> ();
-			for (char keypress = 'a'; keypress < 'z'; keypress++) {
-				List <IObject> universeList = new List<IObject> ();
-				universeList.AddRange (universe.Values);
-				comparer = new RelevanceSorter (keypress.ToString ());
-				firstCharacterResults[keypress.ToString ()] = comparer.NarrowResults (universeList).ToArray ();
+		}
+		
+		private void IndexCommands () {
+			//For each command addit to the universe, to the list of commands and
+			//initialize the list for the command to item map
+			foreach (Command command in BuiltinCommands) {
+				if (!(universe.ContainsKey (command.GetHashCode ()))) {
+					universe[command.GetHashCode ()] = command;
+				}
+				all_commands.Add (command);
+				commandToItemMap.Add (command, new List<IObject> ());
 			}
 		}
 		
 		
 		public SearchContext Search (SearchContext newSearchContext)
 		{
-			string keypress;
+			string keypress = newSearchContext.SearchString;
 			List<IObject> filtered_results;
+			SearchContext lastContext = newSearchContext.LastContext;
+		
+			//Get the results based on the search string
+			filtered_results = GenerateUnfilteredList (newSearchContext);
+			//Filter results based on the required type
+			filtered_results = filterResultsByType (filtered_results, newSearchContext.SearchTypes, keypress);
+			//Filter results based on object dependencies
+			filtered_results = filterResultsByDependency(filtered_results, newSearchContext.FirstObject);
+
+			newSearchContext.Results = filtered_results.ToArray ();
+			// This is a clever way to keep
+			// a stack of incremental results.
+			// NOTE: Clone should return a deep (enough) copy.
+			// Also note - tricky pointer magic.
+			SearchContext temp;
+			temp = newSearchContext;
+			newSearchContext = newSearchContext.Clone ();
+			lastContext = temp;
+			newSearchContext.LastContext = lastContext;
+			
+			return newSearchContext;
+		}
+		
+		private List<IObject> GenerateUnfilteredList (SearchContext newSearchContext) 
+		{
+			string keypress;
 			RelevanceSorter comparer;
 			Dictionary<string, IObject[]> firstResults;
 			SearchContext lastContext;
-
+			List<IObject> filtered_results;
+			
 			keypress = newSearchContext.SearchString.ToLower ();
 			lastContext = newSearchContext.LastContext;
-			
-			int i = 0;
+		
+			//If this is the initial search for the all the corresponding items/commands for the first object
+			/// we don't need to filter based on search string
 			if (newSearchContext.SearchString == "" && newSearchContext.FirstObject != null) {
 				filtered_results = new List<IObject> ();
-				if (ContainsType (newSearchContext.SearchTypes, typeof (Command))) {
+				//If command, just grab the commands for the item
+				if (ContainsType (newSearchContext.SearchTypes, typeof (ICommand))) {
 					foreach (Command command in CommandsForItem (newSearchContext.FirstObject as Item)) {
 						filtered_results.Add (command);
 					}
 				}
-				else if (ContainsType (newSearchContext.SearchTypes, typeof (Item))) {
+				//If item, use the command to item map
+				else if (ContainsType (newSearchContext.SearchTypes, typeof (IItem))) {
 					commandToItemMap.TryGetValue (newSearchContext.FirstObject as Command, out filtered_results);
 				}
 			}
@@ -133,23 +183,9 @@ namespace Do.Core
 					// Sort results based on keypress
 				}
 			}
-			
-			filtered_results = filterResultsByType (filtered_results, newSearchContext.SearchTypes, keypress);
-			filtered_results = filterResultsByDependency(filtered_results, newSearchContext.FirstObject);
-
-			newSearchContext.Results = filtered_results.ToArray ();
-			// This is a clever way to keep
-			// a stack of incremental results.
-			// NOTE: Clone should return a deep (enough) copy.
-			// Also note - tricky pointer magic.
-			SearchContext temp;
-			temp = newSearchContext;
-			newSearchContext = newSearchContext.Clone ();
-			lastContext = temp;
-			newSearchContext.LastContext = lastContext;
-			
-			return newSearchContext;
+			return filtered_results;
 		}
+			
 		
 		private List<IObject> filterResultsByType (List<IObject> results, Type[] acceptableTypes, string keypress) 
 		{
@@ -163,6 +199,8 @@ namespace Do.Core
 			//Now we look through the list and add an object when it's type belongs in acceptableTypes
 			foreach (IObject iobject in results) {
 				List<Type> implementedTypes = GCObject.GetAllImplementedTypes (iobject);
+				foreach (Type type in implementedTypes) {
+				}
 				foreach (Type type in acceptableTypes) {
 					if (implementedTypes.Contains (type)) {
 						filtered_results.Add (iobject);
@@ -170,7 +208,6 @@ namespace Do.Core
 					}
 				}
 			}
-			
 			return filtered_results;
 		}
 		

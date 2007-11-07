@@ -24,32 +24,26 @@ namespace Do.Core
 		}
 		
 		public int Compare (IObject x, IObject y) {
-			return 0;
+			int xScore = (x as GCObject).Score = (x as GCObject).ScoreForAbbreviation (searchString);
+			int yScore = (y as GCObject).Score = (y as GCObject).ScoreForAbbreviation (searchString);
+			return (xScore - yScore);
 		}
 		
 		public List<IObject> NarrowResults (List<IObject> broadResults) {
-			List<IObject> narrowResults;
-			int numScoreNonZero;
-
-			IObject[] newArray = broadResults.ToArray ();
-			GCObject[] results = new GCObject[newArray.Length];
-			for (int i = 0; i < newArray.Length; i++) {
-				results[i] = (GCObject) (newArray[i]);
+			List<GCObject> nonZeroResults = new List<GCObject> ();
+			
+			//First throw out the non-zero items, there's no point wasting sorting time on them
+			foreach (GCObject gcObject in broadResults) {
+				gcObject.Score = gcObject.ScoreForAbbreviation (searchString);
+				if (gcObject.Score > 0) {
+					nonZeroResults.Add (gcObject);
+				}
 			}
 			
-			foreach (GCObject result in results) {
-				result.Score = result.ScoreForAbbreviation (searchString);
-			}
-			Array.Sort<GCObject> (results, new GCObjectScoreComparer ());
-			
-			// Chop the array where the scores become zero
-			for (numScoreNonZero = 0; numScoreNonZero < results.Length && numScoreNonZero < kMaxSearchResults; ++numScoreNonZero) {
-				if (results[numScoreNonZero].Score == 0) break;
-			}
-			Array.Resize<GCObject> (ref results, numScoreNonZero);
-			
-			narrowResults = new List<IObject> (results);
-			return narrowResults;
+			//Sort the remaining items
+			nonZeroResults.Sort (new GCObjectScoreComparer ());
+			//Return the results in List<IObject> System.FormatException
+			return new List<IObject> (nonZeroResults.ToArray ());
 		}
 	}
 }
