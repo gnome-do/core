@@ -103,7 +103,7 @@ namespace Do.Core
 			VisibilityChanged = OnVisibilityChanged;
 			
 			LoadBuiltins ();
-			LoadAssemblies ();
+			LoadAddins ();
 			SetupKeybindings ();
 			State = CommanderState.Default;
 		}
@@ -260,27 +260,42 @@ namespace Do.Core
 			Show ();
 		}
 		
-		protected void LoadAssemblies ()
+		protected void LoadAddins ()
 		{
-			/*
-			Assembly currentAssembly;
-			string appAssembly;
+			string addin_dir;
+			string[] files;
 			
-			appAssembly = "/home/dave/Current Documents/gnome-commander/gnome-commander-applications/bin/Debug/gnome-commander-applications.dll";
-			currentAssembly = Assembly.LoadFile (appAssembly);
+			addin_dir = "~/.do/addins".Replace ("~",
+				   System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
 			
-			foreach (Type type in currentAssembly.GetTypes ())
-			foreach (Type iface in type.GetInterfaces ()) {
-				if (iface == typeof (IItemSource)) {
-					IItemSource source = currentAssembly.CreateInstance (type.ToString ()) as IItemSource;
-					itemManager.AddItemSource (new ItemSource (source));
-				}
-				if (iface == typeof (ICommand)) {
-					ICommand command = currentAssembly.CreateInstance (type.ToString ()) as ICommand;
-					commandManager.AddCommand (new Command (command));
+			files = System.IO.Directory.GetFiles (addin_dir);
+			foreach (string file in files) {
+				Assembly addin;
+				
+				if (!file.EndsWith (".dll")) continue;
+				try {
+					addin = Assembly.LoadFile (file);
+				
+					foreach (Type type in addin.GetTypes ())
+					foreach (Type iface in type.GetInterfaces ()) {
+						if (iface == typeof (IItemSource)) {
+							IItemSource source = addin.CreateInstance (type.ToString ()) as IItemSource;
+							itemManager.AddItemSource (new ItemSource (source));
+							Log.Info ("Successfully loaded \"{0}\" Item Source from addin {1}.", source.Name, file);
+						}
+						if (iface == typeof (ICommand)) {
+							ICommand command = addin.CreateInstance (type.ToString ()) as ICommand;
+							commandManager.AddCommand (new Command (command));
+							Log.Info ("Successfully loaded \"{0}\" Command from addin {1}.", command.Name, file);
+						}
+					}
+				} catch (Exception e) {
+					Log.Error ("Failed to load addin {0}: {1}", file, e.Message);
+					continue;
 				}
 			}
-			*/
+			
+	
 		}
 		
 		protected abstract void OnVisibilityChanged (bool visible);
