@@ -341,8 +341,19 @@ namespace Do.UI
 		
 		protected virtual void ActivateCommand ()
 		{
-			Console.WriteLine ("Activate Command");
-			commander.Execute (currentContext);
+			ICommand command;
+			IItem[] items = new IItem[1];
+			IItem[] modItems = new IItem[0];
+			
+			if (currentContext.FirstObject is IItem) {
+				items[0] = paneContext[1].FirstObject as IItem;
+				command = paneContext[1].SecondObject as ICommand;
+			} else {
+				items[0] = paneContext[1].SecondObject as IItem;
+				command = paneContext[1].FirstObject as ICommand;
+			}
+			
+			command.Perform (items, modItems);
 			Hide ();
 		}
 		
@@ -498,7 +509,7 @@ namespace Do.UI
 			displayLabel.Highlight= searchString;
 
 			//Set up the next pane based on what's in the first pane
-			if (typeof (IItem).IsAssignableFrom (paneContext[0].FirstObject.GetType ())) {
+			if (paneContext[0].FirstObject is IItem) {
 				paneContext[1] = paneContext[0].Clone ();
 				paneContext[1].SearchTypes = new Type[] { typeof (ICommand) };
 				paneContext[1].SearchString = "";

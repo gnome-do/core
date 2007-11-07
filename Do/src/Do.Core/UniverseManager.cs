@@ -42,7 +42,6 @@ namespace Do.Core
 		
 		private void BuildFirstKeyCache () 
 		{			
-			List<IObject> keypress_matches;
 			RelevanceSorter comparer;
 			
 			//Do this: Load/save results to XML
@@ -135,7 +134,6 @@ namespace Do.Core
 		{
 			string keypress;
 			RelevanceSorter comparer;
-			Dictionary<string, IObject[]> firstResults;
 			SearchContext lastContext;
 			List<IObject> filtered_results;
 			
@@ -154,7 +152,7 @@ namespace Do.Core
 				}
 				//If item, use the command to item map
 				else if (ContainsType (newSearchContext.SearchTypes, typeof (IItem))) {
-					commandToItemMap.TryGetValue (newSearchContext.FirstObject as Command, out filtered_results);
+					filtered_results.AddRange (universe.Values);
 				}
 			}
 			else {
@@ -199,8 +197,6 @@ namespace Do.Core
 			//Now we look through the list and add an object when it's type belongs in acceptableTypes
 			foreach (IObject iobject in results) {
 				List<Type> implementedTypes = GCObject.GetAllImplementedTypes (iobject);
-				foreach (Type type in implementedTypes) {
-				}
 				foreach (Type type in acceptableTypes) {
 					if (implementedTypes.Contains (type)) {
 						filtered_results.Add (iobject);
