@@ -244,7 +244,14 @@ namespace Do.Core
 			foreach (string addin_dir in addin_dirs) {
 				string[] files;
 				
-				files = System.IO.Directory.GetFiles (addin_dir);
+				files = null;
+				try {
+					files = System.IO.Directory.GetFiles (addin_dir);
+				} catch (Exception e) {
+					Log.Error ("Could not read addins directory {0}: {1}", addin_dir, e.Message);
+					continue;
+				}
+				
 				foreach (string file in files) {
 					Assembly addin;
 					
