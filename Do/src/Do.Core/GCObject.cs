@@ -86,8 +86,8 @@ namespace Do.Core
 		}
 	}
 	
-	public class GCObjectScoreComparer : IComparer<GCObject> {
-		public int Compare (GCObject x, GCObject y) {
+	public class GCObjectScoreComparer : IComparer<IObject> {
+		public int Compare (IObject x, IObject y) {
 			float xscore, yscore;
 			
 			if (x == null)

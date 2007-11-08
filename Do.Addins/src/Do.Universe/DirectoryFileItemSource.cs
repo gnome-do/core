@@ -47,8 +47,8 @@ namespace Do.Universe
 		
 		static readonly DirectoryLevelPair[] kDefaultDirectories = {
 			new DirectoryLevelPair ("~",             1),
-			new DirectoryLevelPair ("~/Desktop",     3),
-			new DirectoryLevelPair ("~/Documents",   -1),
+			new DirectoryLevelPair ("~/Desktop",     1),
+			new DirectoryLevelPair ("~/Documents",   3),
 			new DirectoryLevelPair ("~/Music",   2),
 			new DirectoryLevelPair ("~/Photos",   2),
 			new DirectoryLevelPair ("/home",   1),
@@ -135,7 +135,7 @@ namespace Do.Universe
 			try {
 				files = Directory.GetFiles (dir);
 				directories = Directory.GetDirectories (dir);
-			} catch (DirectoryNotFoundException) {
+			} catch {
 				return;
 			}
 			foreach (string file in files) {

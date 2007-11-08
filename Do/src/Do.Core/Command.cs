@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading;
 
 using Do.Universe;
 
@@ -74,9 +75,13 @@ namespace Do.Core
 		
 		public void Perform (IItem[] items, IItem[] modItems)
 		{
-			items = EnsureIItemArray (items);
-			modItems = EnsureIItemArray (modItems);
-			command.Perform (items, modItems);
+			new Thread ((ThreadStart) delegate {
+				
+				items = EnsureIItemArray (items);
+				modItems = EnsureIItemArray (modItems);
+				command.Perform (items, modItems);
+				
+			}).Start ();
 		}
 		
 		/// <summary>

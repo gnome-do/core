@@ -30,20 +30,20 @@ namespace Do.Core
 		}
 		
 		public List<IObject> NarrowResults (List<IObject> broadResults) {
-			List<GCObject> nonZeroResults = new List<GCObject> ();
+			List<IObject> results = new List<IObject> ();
 			
 			//First throw out the non-zero items, there's no point wasting sorting time on them
-			foreach (GCObject gcObject in broadResults) {
-				gcObject.Score = gcObject.ScoreForAbbreviation (searchString);
-				if (gcObject.Score > 0) {
-					nonZeroResults.Add (gcObject);
+			foreach (GCObject obj in broadResults) {
+				obj.Score = obj.ScoreForAbbreviation (searchString);
+				if (obj.Score > 0) {
+					results.Add (obj);
 				}
 			}
 			
-			//Sort the remaining items
-			nonZeroResults.Sort (new GCObjectScoreComparer ());
+				    //Sort the remaining items
+			results.Sort (new GCObjectScoreComparer ());
 			//Return the results in List<IObject> System.FormatException
-			return new List<IObject> (nonZeroResults.ToArray ());
+			return results.GetRange (0, Math.Min (kMaxSearchResults, results.Count));
 		}
 	}
 }
