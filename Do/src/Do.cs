@@ -38,6 +38,9 @@ namespace Do
 			Log.Initialize ();
 			Util.Initialize ();
 		
+			// GLib.Thread.Init ();
+			Gdk.Threads.Init ();
+			
 			universeManager = new UniverseManager ();
 			commander = new DefaultCommander ();	
 			DBusRegistrar.RegisterCommander (commander);

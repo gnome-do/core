@@ -209,48 +209,6 @@ namespace Do
 				}
 				return false;
 			}
-				
-			[DllImport ("libc")] // Linux
-					private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
-					
-					[DllImport ("libc")] // BSD
-					private static extern void setproctitle (byte [] fmt, byte [] str_arg);
-
-			// Results in SIGSEGV
-					public static void SetProcessName (string name)
-					{
-							try {
-									if(prctl(15 /* PR_SET_NAME */, Encoding.ASCII.GetBytes(name + "\0"), 
-											IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0) {
-											throw new ApplicationException("Error setting process name: " + 
-													Mono.Unix.Native.Stdlib.GetLastError());
-									}
-							} catch(EntryPointNotFoundException) {
-									setproctitle(Encoding.ASCII.GetBytes("%s\0"), 
-											Encoding.ASCII.GetBytes(name + "\0"));
-							}
-					}
-			
-		}
-		
-		public static IComparable Min (IComparable a, IComparable b) {
-			return a.CompareTo (b) < 0 ? a : b;
-		}
-		
-		public static IComparable Max (IComparable a, IComparable b) {
-			return a.CompareTo (b) < 0 ? b : a;
-		}
-		
-		public static IComparable Min3 (IComparable a, IComparable b, IComparable c) {
-			IComparable min_ab = Min(a, b);
-			IComparable min_bc = Min(b, c);
-			return min_ab.CompareTo (min_bc) < 0 ? min_ab : min_bc;
-		}
-		
-		public static IComparable Max3 (IComparable a, IComparable b, IComparable c) {
-			IComparable max_ab = Max(a, b);
-			IComparable max_bc = Max(b, c);
-			return max_ab.CompareTo (max_bc) < 0 ? max_bc : max_ab;
 		}
 		
 		// Quicksilver algorithm.

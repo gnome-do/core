@@ -78,11 +78,12 @@ namespace Do.Core
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
 
-			// TODO Why does creating a thread here cause such trouble? It crashes a
-			// lot.
-		//	new Thread ((ThreadStart) delegate {
+			
+			new Thread ((ThreadStart) delegate {
+				Gdk.Threads.Enter ();
 				command.Perform (items, modItems);
-	  //	}).Start ();
+				Gdk.Threads.Leave ();
+			}).Start ();
 		}
 		
 		/// <summary>

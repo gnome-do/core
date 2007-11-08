@@ -160,7 +160,7 @@ namespace Do.UI
 			height = childAlloc.Height + 2 * Style.Ythickness;
 
 			if (this.radius < 0.0) {
-				radius = (int) Util.Min (width, height);
+				radius = Math.Min (width, height);
 				radius = (radius / 100) * 10;
 			} else {
 				radius = this.radius;
@@ -210,7 +210,7 @@ namespace Do.UI
 			requisition.Height = requisition.Width = 0;
 			if (Child != null && Child.Visible) {
 				cr = Child.SizeRequest ();
-				requisition.Width = (int)Util.Max (requisition.Width, cr.Width);
+				requisition.Width = Math.Max (requisition.Width, cr.Width);
 				requisition.Height += cr.Height;
 			}
 			requisition.Width += (int)(BorderWidth + Style.XThickness * 2);
@@ -222,9 +222,9 @@ namespace Do.UI
 			Rectangle new_alloc;
 			
 			new_alloc.X = (int) BorderWidth + Style.XThickness;
-			new_alloc.Width = (int) Util.Max (1, allocation.Width - new_alloc.X * 2);
+			new_alloc.Width = Math.Max (1, allocation.Width - new_alloc.X * 2);
 			new_alloc.Y = (int) BorderWidth  + Style.Ythickness;
-			new_alloc.Height = (int) Util.Max (1, allocation.Height
+			new_alloc.Height = Math.Max (1, allocation.Height
 			                                        - new_alloc.Y
 			                                        - (int) BorderWidth
 			                                        - Style.Ythickness);
