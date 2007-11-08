@@ -135,20 +135,6 @@ namespace Do.Core
 			//to see if the item should be added to the list in the command to item map
 			foreach (ItemSource source in itemSources) {
 				foreach (Item item in source.Items) {
-					foreach (Command command in all_commands) {
-						List<IObject> commandResults = commandToItemMap[command];
-						List<Type> supportedItemTypes = new List<Type>
-							(command.SupportedItemTypes);
-						List<Type> implementedItemTypes = new List<Type>
-							(GCObject.GetAllImplementedTypes (item.IItem));
-						foreach (Type type in supportedItemTypes) {
-							if (implementedItemTypes.Contains (type)) {
-								commandResults.Add (item);
-								break;
-							}
-						}
-					}
-					
 					if (universe.ContainsKey (item.GetHashCode ())) {
 					}
 					else {
@@ -177,9 +163,9 @@ namespace Do.Core
 			//Get the results based on the search string
 			filtered_results = GenerateUnfilteredList (newSearchContext);
 			//Filter results based on the required type
-			filtered_results = filterResultsByType (filtered_results, newSearchContext.SearchTypes, keypress);
+			filtered_results = FilterResultsByType (filtered_results, newSearchContext.SearchTypes, keypress);
 			//Filter results based on object dependencies
-			filtered_results = filterResultsByDependency(filtered_results, newSearchContext.FirstObject);
+			filtered_results = FilterResultsByDependency(filtered_results, newSearchContext.FirstObject);
 
 			newSearchContext.Results = filtered_results.ToArray ();
 			// This is a clever way to keep
@@ -251,15 +237,14 @@ namespace Do.Core
 		}
 			
 		
-		private List<IObject> filterResultsByType (List<IObject> results, Type[] acceptableTypes, string keypress) 
+		private List<IObject> FilterResultsByType (List<IObject> results, Type[] acceptableTypes, string keypress) 
 		{
 			List<IObject> filtered_results = new List<IObject> ();
 			//Add a text item based on the key entered
 			if (keypress != "") 
 				results.Add (new Item (new TextItem (keypress)));
 			else
-				results.Add (new Item (new TextItem ("Enter Word Definition")));
-			
+				results.Add (new Item (new TextItem ("Enter Definition Here")));
 			//Now we look through the list and add an object when it's type belongs in acceptableTypes
 			foreach (IObject iobject in results) {
 				List<Type> implementedTypes = GCObject.GetAllImplementedTypes (iobject);
@@ -273,7 +258,7 @@ namespace Do.Core
 			return filtered_results;
 		}
 		
-		private List<IObject> filterResultsByDependency (List<IObject> results, IObject independentObject)
+		private List<IObject> FilterResultsByDependency (List<IObject> results, IObject independentObject)
 		{
 			if (independentObject == null)
 				return results;

@@ -87,7 +87,7 @@ namespace Do.Universe
 			}
 
 			if (word != null) {
-				return wordRegex.IsMatch (word);
+				return (wordRegex.IsMatch (word));
 			}
 			return false;
 		}
