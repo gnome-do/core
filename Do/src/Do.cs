@@ -28,6 +28,7 @@ namespace Do
 	public class Do {
 		
 		static Commander commander;
+		static UniverseManager universeManager;
 	
 		public static void Main (string[] args) {
 
@@ -37,6 +38,7 @@ namespace Do
 			Log.Initialize ();
 			Util.Initialize ();
 		
+			universeManager = new UniverseManager ();
 			commander = new DefaultCommander ();	
 			DBusRegistrar.RegisterCommander (commander);
 			commander.Show ();
@@ -56,6 +58,10 @@ namespace Do
 		
 		public static Commander Commander {
 			get { return commander; }
+		}
+		
+		public static UniverseManager UniverseManager {
+			get { return universeManager; }
 		}
 	}
 }

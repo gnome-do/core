@@ -73,15 +73,13 @@ namespace Do.UI
 		
 		private IObject[][] paneObjects;
 		
-		private UniverseManager universeManager;
 		
-		public SymbolWindow (Commander commander, UniverseManager universeManager) : base (Gtk.WindowType.Toplevel)
+		public SymbolWindow (Commander commander) : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
 			
 			this.commander = commander;
 			currentContext = new SearchContext ();
-			this.universeManager = universeManager;
 			
 			commander.SetDefaultStateEvent += OnDefaultStateEvent;
 			commander.SetSearchingItemsStateEvent += OnSearchingStateEvent;
@@ -473,7 +471,7 @@ namespace Do.UI
 				currentContext.SearchString = searchString;
 				currentContext.SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 				currentContext.FirstObject = null;
-				currentContext = universeManager.Search (currentContext);
+				currentContext = Do.UniverseManager.Search (currentContext);
 				paneObjects[0] = currentContext.Results;
 				paneContext[0] = currentContext;
 				commander.State = CommanderState.FirstSearchComplete;
@@ -481,7 +479,7 @@ namespace Do.UI
 			case WindowFocus.SecondFocus:
 				commander.State = CommanderState.SearchingCommands;
 				currentContext.SearchString = searchString;
-				currentContext = universeManager.Search (currentContext);
+				currentContext = Do.UniverseManager.Search (currentContext);
 				paneObjects[1] = currentContext.Results;
 				paneContext[1] = currentContext;
 				commander.State = CommanderState.SecondSearchComplete;
@@ -507,7 +505,7 @@ namespace Do.UI
 				paneContext[1] = paneContext[0].Clone ();
 				paneContext[1].SearchTypes = new Type[] { typeof (ICommand) };
 				paneContext[1].SearchString = "";
-				paneContext[1] = universeManager.Search (paneContext[1]);
+				paneContext[1] = Do.UniverseManager.Search (paneContext[1]);
 				paneObjects[1] = paneContext[1].Results;
 				paneContext[1].ObjectIndex = 0;
 			}
@@ -515,7 +513,7 @@ namespace Do.UI
 				paneContext[1] = paneContext[0].Clone ();
 				paneContext[1].SearchTypes = new Type[] { typeof (IItem) };
 				paneContext[1].SearchString = "";
-				paneContext[1] = universeManager.Search (paneContext[1]);
+				paneContext[1] = Do.UniverseManager.Search (paneContext[1]);
 				paneObjects[1] = paneContext[1].Results;
 				paneContext[1].ObjectIndex = 0;
 			}

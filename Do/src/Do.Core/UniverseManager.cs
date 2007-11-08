@@ -192,7 +192,6 @@ namespace Do.Core
 			lastContext = temp;
 			newSearchContext.LastContext = lastContext;
 			
-			Console.WriteLine ("End Search "+filtered_results.Count);
 			return newSearchContext;
 		}
 		
@@ -225,7 +224,6 @@ namespace Do.Core
 				// We can build on the last results.
 				// example: searched for "f" then "fi"
 				if (lastContext != null) {
-					Console.WriteLine ("Previous Results");
 					comparer = new RelevanceSorter (keypress);
 					filtered_results = new List<IObject> (lastContext.Results);
 					// Sort results based on new keypress string
@@ -234,7 +232,6 @@ namespace Do.Core
 
 				// If someone typed a single key, BOOM we're done.
 				else if (firstCharacterResults.ContainsKey (keypress)) {
-					Console.WriteLine ("Cached Results");
 					filtered_results = new List<IObject> 
 						(firstCharacterResults[keypress]);
 					
@@ -243,7 +240,6 @@ namespace Do.Core
 				// Or we just have to do an expensive search...
 				// This is the current behavior on first keypress.
 				else {
-					Console.WriteLine ("Slow Search");
 					filtered_results = new List<IObject> ();
 					filtered_results.AddRange (universe.Values);
 					comparer = new RelevanceSorter (keypress);
