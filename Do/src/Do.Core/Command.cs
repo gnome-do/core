@@ -75,13 +75,14 @@ namespace Do.Core
 		
 		public void Perform (IItem[] items, IItem[] modItems)
 		{
-			new Thread ((ThreadStart) delegate {
-				
-				items = EnsureIItemArray (items);
-				modItems = EnsureIItemArray (modItems);
+			items = EnsureIItemArray (items);
+			modItems = EnsureIItemArray (modItems);
+
+			// TODO Why does creating a thread here cause such trouble? It crashes a
+			// lot.
+		//	new Thread ((ThreadStart) delegate {
 				command.Perform (items, modItems);
-				
-			}).Start ();
+	  //	}).Start ();
 		}
 		
 		/// <summary>
