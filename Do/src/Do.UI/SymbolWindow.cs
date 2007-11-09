@@ -1,4 +1,4 @@
-/* ${FileName}
+/* SymbolWindow.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -379,11 +379,12 @@ namespace Do.UI
 		{
 			Cairo.Context cairo;
 			
-			cairo = Gdk.CairoHelper.Create (GdkWindow);
-			cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-			cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
-			cairo.Operator = Cairo.Operator.Source;
-			cairo.Paint ();
+			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
+				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+				cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
+				cairo.Operator = Cairo.Operator.Source;
+				cairo.Paint ();
+			}
 
 			return base.OnExposeEvent (evnt);
 		}

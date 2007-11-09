@@ -166,31 +166,32 @@ namespace Do.UI
 				radius = this.radius;
 			}
 			
-			cairo = Gdk.CairoHelper.Create (this.GdkWindow);
-			cairo.Rectangle (x, y, width, height);
-			cairo.Clip ();
+			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
+				cairo.Rectangle (x, y, width, height);
+				cairo.Clip ();
 
-			cc_rectangle_re (cairo, x, y, width, height, radius);
-			cairo.Operator = Cairo.Operator.Over;
-			
-			if (fill) {
-				double r, g, b;
+				cc_rectangle_re (cairo, x, y, width, height, radius);
+				cairo.Operator = Cairo.Operator.Over;
+				
+				if (fill) {
+					double r, g, b;
 
-				r = (double) fillColor.Red / ushort.MaxValue;
-				g = (double) fillColor.Green / ushort.MaxValue;
-				b = (double) fillColor.Blue / ushort.MaxValue;
-				cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
-				cairo.FillPreserve ();
-			}
+					r = (double) fillColor.Red / ushort.MaxValue;
+					g = (double) fillColor.Green / ushort.MaxValue;
+					b = (double) fillColor.Blue / ushort.MaxValue;
+					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
+					cairo.FillPreserve ();
+				}
 
-			if (drawFrame) {
-				double r, g, b;
+				if (drawFrame) {
+					double r, g, b;
 
-				r = (double) frameColor.Red / ushort.MaxValue;
-				g = (double) frameColor.Green / ushort.MaxValue;
-				b = (double) frameColor.Blue / ushort.MaxValue;
-				cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
-				cairo.Stroke ();
+					r = (double) frameColor.Red / ushort.MaxValue;
+					g = (double) frameColor.Green / ushort.MaxValue;
+					b = (double) frameColor.Blue / ushort.MaxValue;
+					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
+					cairo.Stroke ();
+				}
 			}
 		}
 		
