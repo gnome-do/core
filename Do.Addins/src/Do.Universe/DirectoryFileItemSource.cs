@@ -49,7 +49,6 @@ namespace Do.Universe
 			new DirectoryLevelPair ("~",             1),
 			new DirectoryLevelPair ("~/Desktop",     1),
 			new DirectoryLevelPair ("~/Documents",   3),
-			new DirectoryLevelPair ("~/Music",   2),
 			new DirectoryLevelPair ("~/Photos",   2),
 			new DirectoryLevelPair ("/home",   1),
 		};

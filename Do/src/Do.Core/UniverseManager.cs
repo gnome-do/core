@@ -36,12 +36,15 @@ namespace Do.Core
 			all_commands = new List<Command> ();
 			commandToItemMap = new Dictionary<Command, List<IObject>> ();
 
+			
 			LoadBuiltins ();
 			LoadAddins ();
 
+			
 			IndexCommands ();
 			IndexItems ();
 			BuildFirstKeyCache ();
+			
 		}
 
 		protected void LoadBuiltins ()

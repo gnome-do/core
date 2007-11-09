@@ -28,55 +28,34 @@ namespace Do.Core
 	
 	public class ItemSource : GCObject 
 	{
-	
-		public static readonly string DefaultItemSourceName = "Unnamed Item Source";
-		public static readonly string DefaultItemSourceDescription = "No description.";
-		public static readonly string DefaultItemSourceIcon = "empty";
 		
 		private bool enabled;
 		protected IItemSource source;
-		protected List<Item> items;
 		
-		public ItemSource (IItemSource source)
+		public ItemSource (IItemSource source):
+			base (source)
 		{
-			if (source == null) {
-				throw new ArgumentNullException ();
-			}
 			this.source = source;
-			items = new List<Item> ();
-			if (source.Items != null) {
-				foreach (IItem item in source.Items) {
-					items.Add (new Item (item));
-				}
-			}
 			enabled = true;
-		}
-		
-		public override string Name {
-			get { return (source.Name == null ? DefaultItemSourceName : source.Name); }
-		}
-		
-		public override string Description {
-			get { return (source.Description == null ? DefaultItemSourceDescription : source.Description); }
-		}
-		
-		public override string Icon {
-			get { return (source.Icon == null ? DefaultItemSourceIcon : source.Icon); }
 		}
 		
 		public void UpdateItems () {
 			source.UpdateItems ();
-			items.Clear ();
-			items = new List<Item> ();
-			if (source.Items != null) {
-				foreach (IItem item in source.Items) {
-					items.Add (new Item (item));
-				}
-			}
 		}
 		
-		public ICollection<Item> Items {
-			get { return items; }
+		public ICollection<IItem> Items {
+			get {
+				List<IItem> items;
+				
+				items = new List<IItem> ();
+				if (source.Items != null) {
+					items.Capacity = source.Items.Count;
+					foreach (IItem item in source.Items) {
+						items.Add (new Item (item));
+					}
+				}
+				return items;
+			}
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item) {
@@ -86,16 +65,6 @@ namespace Do.Core
 		public bool Enabled {
 			get { return enabled; }
 			set { enabled = value; }
-		}
-		
-		public override string ToString ()
-		{
-			string items_str = GetType().ToString() + " {";
-			foreach (Item item in items) {
-				items_str = String.Format ("{0}\t{1}\n", items_str, item);
-			}
-			items_str += "}";
-			return items_str;
 		}
 		
 	}

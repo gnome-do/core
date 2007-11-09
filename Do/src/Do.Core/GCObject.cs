@@ -2,7 +2,7 @@
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
- * source distribution.
+ * inner distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,9 @@ namespace Do.Core
 	public abstract class GCObject : IObject
 	{
 		
-		public static readonly string DefaultItemName = "No name";
-		
+		public const string kDefaultName = "No name";
+		public const string kDefaultDescription = "No description.";
+		public const string kDefaultIcon = "empty";
 
 		public static List<Type> GetAllImplementedTypes (IObject o)
 		{
@@ -56,12 +57,38 @@ namespace Do.Core
 		}
 		
 		protected int _score;
+		protected IObject inner;
 		
-		public abstract string Name { get; }
+		protected GCObject (IObject inner)
+		{
+			if (inner == null)
+				throw new ArgumentNullException ("Inner IObject may not be null.");
+			
+			this.inner = inner;
+		}
 		
-		public abstract string Description { get; }
+		public virtual string Name {
+			get { return inner.Name ?? kDefaultName; }
+		}
 		
-		public abstract string Icon { get; }
+		public virtual string Description {
+			get { return inner.Description ?? kDefaultDescription; }
+		}
+		
+		public virtual string Icon {
+			get { return inner.Icon ?? kDefaultIcon; }
+		}
+		
+		public string UID {
+			get {
+				return string.Format ("{0}___{1}___{2}", inner.GetType (), Name, Description);
+			}
+		}
+		
+		public override int GetHashCode ()
+		{
+			return UID.GetHashCode ();
+		}
 		
 		public int Score {
 			get { return _score; }

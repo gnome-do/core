@@ -28,27 +28,18 @@ namespace Do.Core
 
 	public class Command : GCObject, ICommand
 	{
-		public static readonly string DefaultCommandIcon = "gnome-run";
+		public const string kDefaultCommandIcon = "gnome-run";
 	
 		protected ICommand command;
 		
-		public Command (ICommand command) {
-			if (command == null) {
-				throw new ArgumentNullException ();
-			}
+		public Command (ICommand command):
+			base (command)
+		{
 			this.command = command;
 		}
 		
-		public override string Name {
-			get { return command.Name; }
-		}
-		
-		public override string Description {
-			get { return command.Description; }
-		}
-		
 		public override string Icon {
-			get { return (command.Icon == null ? DefaultCommandIcon : command.Icon); }
+			get { return command.Icon ?? kDefaultCommandIcon; }
 		}
 		
 		public Type[] SupportedItemTypes {
@@ -124,11 +115,6 @@ namespace Do.Core
 				}
 			}
 			return inner_items;
-		}
-		
-		public override int GetHashCode ()
-		{
-			return string.Format ("{0}{1}{2}", command.GetType (), Name, Description).GetHashCode ();
 		}
 		
 	}

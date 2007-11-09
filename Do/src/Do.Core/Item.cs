@@ -28,17 +28,13 @@ namespace Do.Core
 {
 	public class Item : GCObject, IItem
 	{
-		public static readonly string DefaultItemIcon = "gnome-fs-executable";
-		public static readonly string DefaultItemDescription = "";
 		
 		protected Item parent;
 		protected IItem item;
 		
-		public Item (IItem item)
+		public Item (IItem item):
+			base (item)
 		{
-			if (item == null) {
-				throw new ArgumentNullException ();
-			}
 			this.item = item;
 		}
 		
@@ -46,23 +42,5 @@ namespace Do.Core
 			get { return item; }
 		}
 		
-		public override string Name {
-			get { return (item.Name == null ? DefaultItemName : item.Name); }
-		}
-		
-		public override string Description {
-			get { return (item.Description == null ? DefaultItemDescription : item.Description); }
-		}
-		
-		public override string Icon {
-			get { return (item.Icon == null ? DefaultItemIcon : item.Icon); }
-		}
-		
-		public override int GetHashCode ()
-		{
-			return string.Format ("{0}{1}{2}", item.GetType (), Name, Description).GetHashCode ();
-		}
-
-	
 	}
 }
