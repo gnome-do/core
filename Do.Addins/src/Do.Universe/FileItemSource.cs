@@ -48,11 +48,10 @@ namespace Do.Universe
 		static readonly string kConfigFile;
 		
 		static readonly DirectoryLevelPair[] kDefaultDirectories = {
+			new DirectoryLevelPair ("/home",			   1),
 			new DirectoryLevelPair ("~",             1),
 			new DirectoryLevelPair ("~/Desktop",     1),
 			new DirectoryLevelPair ("~/Documents",   3),
-			new DirectoryLevelPair ("~/Photos",   2),
-			new DirectoryLevelPair ("/home",   1),
 		};
 		
 		static FileItemSource ()
@@ -72,8 +71,11 @@ namespace Do.Universe
 				try {
 					foreach (string line in File.ReadAllLines (kConfigFile)) {
 						string[] parts;
+						if (line.Trim ().StartsWith ("#")) continue;
 						parts = line.Trim ().Split (':');
-						dirs.Add (new DirectoryLevelPair (parts[0].Trim (), int.Parse (parts[1].Trim ())));
+						if (parts.Length != 2) continue;
+						dirs.Add (new DirectoryLevelPair (parts[0].Trim (),
+																							int.Parse (parts[1].Trim ())));
 					}
 				} catch (Exception e) {
 					Console.Error.WriteLine ("Error reading FileItemSource config file {0}: {1}", kConfigFile, e.Message);
