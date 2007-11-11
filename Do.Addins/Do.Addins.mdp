@@ -20,7 +20,7 @@
     <File name="./src/Do.Universe/ApplicationItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/BookmarkItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/DefineWordCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/DirectoryFileItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/FileItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/FileItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/FirefoxBookmarkItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/ICommand.cs" subtype="Code" buildaction="Compile" />
@@ -39,11 +39,13 @@
     <File name="./src/Do.Universe/ContactItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Addins/ContactItemStore.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/MailtoCommand.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/OpenTerminalHereCommand.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gnome-sharp, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gnome-vfs-sharp, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <ProjectReference type="Gac" localcopy="True" refto="gconf-sharp, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
 </Project>

@@ -1,4 +1,4 @@
-/* DirectoryFileItemSource.cs
+/* FileItemSource.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -27,9 +27,9 @@ namespace Do.Universe
 	/// <summary>
 	/// Indexes files recursively starting in a specific directory.
 	/// </summary>
-	public class DirectoryFileItemSource : IItemSource
+	public class FileItemSource : IItemSource
 	{
-		DirectoryLevelPair[] dirs;
+		ICollection<DirectoryLevelPair> dirs;
 		List<IItem> items;
 		bool include_hidden;
 
@@ -40,10 +40,12 @@ namespace Do.Universe
 			public DirectoryLevelPair (string dir, int levels)
 			{
 				Directory = dir.Replace ("~",
-				   System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
+				   Environment.GetFolderPath (Environment.SpecialFolder.Personal));
 				Levels = levels;
 			}
 		}
+		
+		static readonly string kConfigFile;
 		
 		static readonly DirectoryLevelPair[] kDefaultDirectories = {
 			new DirectoryLevelPair ("~",             1),
@@ -53,9 +55,44 @@ namespace Do.Universe
 			new DirectoryLevelPair ("/home",   1),
 		};
 		
-		static DirectoryFileItemSource ()
+		static FileItemSource ()
 		{
 			Gnome.Vfs.Vfs.Initialize ();
+			
+			kConfigFile = "~/.do/FileItemSource.config".Replace ("~",
+				   Environment.GetFolderPath (Environment.SpecialFolder.Personal));
+		}
+		
+		static List<DirectoryLevelPair> LoadSavedDirectoryLevelPairs ()
+		{
+			List<DirectoryLevelPair> dirs;
+			
+			dirs = new List<DirectoryLevelPair> ();
+			if (File.Exists (kConfigFile)) {
+				try {
+					foreach (string line in File.ReadAllLines (kConfigFile)) {
+						string[] parts;
+						parts = line.Trim ().Split (':');
+						dirs.Add (new DirectoryLevelPair (parts[0].Trim (), int.Parse (parts[1].Trim ())));
+					}
+				} catch (Exception e) {
+					Console.Error.WriteLine ("Error reading FileItemSource config file {0}: {1}", kConfigFile, e.Message);
+				}
+			} 
+			return dirs;
+		}
+		
+		static void SaveDirectoryLevelPairs (ICollection<DirectoryLevelPair> dirs)
+		{
+			try {
+				if (!Directory.Exists (Path.GetDirectoryName (kConfigFile)))
+					Directory.CreateDirectory (Path.GetDirectoryName (kConfigFile));
+				foreach (DirectoryLevelPair pair in dirs) {
+					File.AppendAllText (kConfigFile, string.Format ("{0}: {1}\n", pair.Directory, pair.Levels)); 
+				}
+			} catch (Exception e) {
+				Console.Error.WriteLine ("Error saving FileItemSource config file {0}: {1}", kConfigFile, e.Message);
+			}
 		}
 		
 		public Type[] SupportedItemTypes {
@@ -64,22 +101,18 @@ namespace Do.Universe
 				};
 			}
 		}
-
-		public DirectoryFileItemSource ()
-		{
-			dirs = kDefaultDirectories;
-			items = new List<IItem> ();
-			include_hidden = false;
-			UpdateItems ();
-		}
 		
-		public DirectoryFileItemSource (string dir, int levels)
+		public FileItemSource ()
 		{
-			dirs = kDefaultDirectories;
+			if (File.Exists (kConfigFile)) {
+				dirs = LoadSavedDirectoryLevelPairs ();
+			} else {
+				dirs = kDefaultDirectories;
+				SaveDirectoryLevelPairs (dirs);
+			}
 			items = new List<IItem> ();
 			include_hidden = false;
 			UpdateItems ();
-			ReadItems (dir, levels);
 		}
 		
 		public string Name {

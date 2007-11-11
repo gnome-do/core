@@ -72,7 +72,13 @@ namespace Do.Core
 			
 			new Thread ((ThreadStart) delegate {
 				Gdk.Threads.Enter ();
-				command.Perform (items, modItems);
+				
+				try {
+					command.Perform (items, modItems);
+				} catch (Exception e) {
+					Log.Error ("Command \"{0}\" encountered an error: {1}", command.Name, e.Message);
+				}
+				
 				Gdk.Threads.Leave ();
 			}).Start ();
 		}
