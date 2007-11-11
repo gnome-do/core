@@ -41,7 +41,7 @@ namespace Do.Core
 	
 	public abstract class Commander : ICommander {
 		
-		const string kActivateShortcut = "<Super>space";
+		const string kActivateKeybinding = "<Super>space";
 		
 		protected Tomboy.GConfXKeybinder keybinder;
 		
@@ -116,9 +116,17 @@ namespace Do.Core
 		
 		protected virtual void SetupKeybindings ()
 		{
-			keybinder.Bind ("/apps/do/bindings/activate",
-						 kActivateShortcut,
-						 OnActivate);
+			GConf.Client client;
+            string binding;
+
+			client = new GConf.Client();
+            try {
+                binding = client.Get ("/apps/gnome-do/preferences/key_binding") as string;
+            } catch {
+                binding = kActivateKeybinding;
+                client.Set ("/apps/gnome-do/preferences/key_binding", binding);
+            }
+            keybinder.Bind ("/apps/gnome-do/preferences/key_binding", binding, OnActivate);
 		}
 		
 		private void OnActivate (object sender, EventArgs args)
