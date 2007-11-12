@@ -339,16 +339,19 @@ namespace Do.UI
 			IItem[] items = new IItem[1];
 			IItem[] modItems = new IItem[0];
 			
-			if (paneContext[0].FirstObject != null) {
+			// This class will be re-written soon to take better care
+			// of corner cases like ones that lead to NullReferenceExceptions here.
+			try {
 				if (currentContext.FirstObject is IItem) {
 					items[0] = paneContext[1].FirstObject as IItem;
 					command = paneContext[1].SecondObject as ICommand;
 				} else {
 					items[0] = paneContext[1].SecondObject as IItem;
-					command = paneContext[1].FirstObject as ICommand;
+					command = paneContext[1].FirstObject as ICommand;			
 				}
+				
 				command.Perform (items, modItems);
-			}
+			} catch { }
 			Hide ();
 		}
 		
