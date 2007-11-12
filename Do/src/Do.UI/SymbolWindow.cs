@@ -339,15 +339,16 @@ namespace Do.UI
 			IItem[] items = new IItem[1];
 			IItem[] modItems = new IItem[0];
 			
-			if (currentContext.FirstObject is IItem) {
-				items[0] = paneContext[1].FirstObject as IItem;
-				command = paneContext[1].SecondObject as ICommand;
-			} else {
-				items[0] = paneContext[1].SecondObject as IItem;
-				command = paneContext[1].FirstObject as ICommand;
+			if (paneContext[0].FirstObject != null) {
+				if (currentContext.FirstObject is IItem) {
+					items[0] = paneContext[1].FirstObject as IItem;
+					command = paneContext[1].SecondObject as ICommand;
+				} else {
+					items[0] = paneContext[1].SecondObject as IItem;
+					command = paneContext[1].FirstObject as ICommand;
+				}
+				command.Perform (items, modItems);
 			}
-			
-			command.Perform (items, modItems);
 			Hide ();
 		}
 		
