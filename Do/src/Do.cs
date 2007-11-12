@@ -38,8 +38,13 @@ namespace Do
 			Log.Initialize ();
 			Util.Initialize ();
 		
-			// GLib.Thread.Init ();
 			Gdk.Threads.Init ();
+			
+			try {
+				Util.SetProcessName ("gnome-do");
+			} catch (Exception e) {
+				Log.Error ("Failed to set process name: {0}", e.Message);
+			}
 			
 			universeManager = new UniverseManager ();
 			commander = new DefaultCommander ();	
