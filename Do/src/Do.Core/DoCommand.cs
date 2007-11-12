@@ -1,4 +1,4 @@
-/* Command.cs
+/* DoCommand.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -26,13 +26,13 @@ using Do.Universe;
 namespace Do.Core
 {
 
-	public class Command : GCObject, ICommand
+	public class DoCommand : DoObject, ICommand
 	{
 		public const string kDefaultCommandIcon = "gnome-run";
 	
 		protected ICommand command;
 		
-		public Command (ICommand command):
+		public DoCommand (ICommand command):
 			base (command)
 		{
 			this.command = command;
@@ -52,8 +52,17 @@ namespace Do.Core
 
 		public bool SupportsItem (IItem item)
 		{
-			if (item is Item)
-				item = (item as Item).IItem;
+			bool type_ok;
+			
+			item = EnsureIItem(item);
+			type_ok = false;
+			foreach (Type item_type in SupportedItemTypes) {
+				if (item_type.IsAssignableFrom (item.GetType ())) {
+					type_ok = true;
+					break;
+				}
+			}
+			if (!type_ok) return false;
 			return command.SupportsItem (item);
 		}
 		
@@ -85,18 +94,18 @@ namespace Do.Core
 		
 		/// <summary>
 		/// Returns the inner item if the static type of given
-		/// item is an Item subtype. Returns the argument otherwise.
+		/// item is an DoItem subtype. Returns the argument otherwise.
 		/// </summary>
 		/// <param name="items">
-		/// A <see cref="IItem"/> that may or may not be an Item subtype.
+		/// A <see cref="IItem"/> that may or may not be an DoItem subtype.
 		/// </param>
 		/// <returns>
-		/// A <see cref="IItem"/> that is NOT an Item subtype (the inner IItem of an Item).
+		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem of an DoItem).
 		/// </returns>
 		IItem EnsureIItem (IItem item)
 		{
-			if (item is Item)
-				item = (item as Item).IItem;
+			if (item is DoItem)
+				item = (item as DoItem).IItem;
 			return item;
 		}
 		
@@ -105,7 +114,7 @@ namespace Do.Core
 		/// </summary>
 		/// <param name="items">
 		/// A <see cref="IItem[]"/> that may contain
-		/// Item subtypes.
+		/// DoItem subtypes.
 		/// </param>
 		/// <returns>
 		/// A <see cref="IItem[]"/> of inner IItems.
@@ -116,8 +125,8 @@ namespace Do.Core
 			
 			inner_items = items.Clone () as IItem[];
 			for (int i = 0; i < items.Length; ++i) {
-				if (items[i] is Item) {
-					inner_items[i] = (items[i] as Item).IItem;
+				if (items[i] is DoItem) {
+					inner_items[i] = (items[i] as DoItem).IItem;
 				}
 			}
 			return inner_items;

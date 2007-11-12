@@ -1,8 +1,22 @@
-// UniverseManager.cs created with MonoDevelop
-// User: dave at 4:01 PM 10/30/2007
-//
-// To change standard headers go to Edit->Preferences->Coding->Standard Headers
-//
+/* UniverseManager.cs
+ *
+ * GNOME Do is the legal property of its developers. Please refer to the
+ * COPYRIGHT file distributed with this
+ * source distribution.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using System;
 using System.Reflection;
@@ -16,35 +30,24 @@ namespace Do.Core
 	
 	public class UniverseManager
 	{
-		//Add GTK dialog box, while indexing
 		
-		Dictionary<string, IObject[]> firstCharacterResults;
-	
-		// Change to univariate hash
+		Dictionary<string, IObject[]> firstResults;
 		Dictionary<int, IObject> universe;
 		
-		Dictionary<Command, List<IObject>> commandToItemMap;
-		
-		private List<ItemSource> itemSources;
-		private List<Command> all_commands;
+		List<DoItemSource> doItemSources;
+		List<DoCommand> doCommands;
 		
 		public UniverseManager()
 		{
-			
-			itemSources = new List<ItemSource> ();
 			universe = new Dictionary<int, IObject> ();
-			all_commands = new List<Command> ();
-			commandToItemMap = new Dictionary<Command, List<IObject>> ();
-
+			doItemSources = new List<DoItemSource> ();
+			doCommands = new List<DoCommand> ();
+			firstResults = new Dictionary<string, IObject[]> ();
 			
 			LoadBuiltins ();
 			LoadAddins ();
-
-			
-			IndexCommands ();
-			IndexItems ();
-			BuildFirstKeyCache ();
-			
+			BuildUniverse ();
+			BuildFirstResults ();	
 		}
 
 		protected void LoadBuiltins ()
@@ -57,9 +60,8 @@ namespace Do.Core
 			List<string> addin_dirs;
 			
 			addin_dirs = new List<string> ();
-			
 			addin_dirs.Add ("~/.do/addins".Replace ("~",
-				   System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal)));
+				   Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
 			
 			foreach (string addin_dir in addin_dirs) {
 				string[] files;
@@ -92,7 +94,6 @@ namespace Do.Core
 			if (addin == null) return;
 			
 			foreach (Type type in addin.GetTypes ()) {
-				
 				if (type.IsAbstract) continue;
 				if (type == typeof(VoidCommand)) continue;
 				
@@ -101,75 +102,46 @@ namespace Do.Core
 						IItemSource source;
 						
 						source = System.Activator.CreateInstance (type) as IItemSource;
-						itemSources.Add (new ItemSource (source));
+						doItemSources.Add (new DoItemSource (source));
 						Log.Info ("Successfully loaded \"{0}\" Item Source.", source.Name);
 					}
 					if (iface == typeof (ICommand)) {
 						ICommand command;
 						
 						command = System.Activator.CreateInstance (type) as ICommand;
-						all_commands.Add (new Command (command));
+						doCommands.Add (new DoCommand (command));
 						Log.Info ("Successfully loaded \"{0}\" Command.", command.Name);
 					}
 				}
 			}
 		}
 
-		private void BuildFirstKeyCache () 
+		private void BuildFirstResults () 
 		{			
+			List<IObject> results;
 			RelevanceSorter comparer;
-			
-			//Do this: Load/save results to XML
 
-			firstCharacterResults = new Dictionary<string, IObject[]> ();
 			//For each starting character add every matching object from the universe to
-			//the firstCharacterResults dictionary with the key of the character
+			//the firstResults dictionary with the key of the character
 			for (char keypress = 'a'; keypress < 'z'; keypress++) {
-				List <IObject> universeList = new List<IObject> ();
-				universeList.AddRange (universe.Values);
+				results = new List<IObject> (universe.Values);
 				comparer = new RelevanceSorter (keypress.ToString ());
-				firstCharacterResults[keypress.ToString ()] = comparer.NarrowResults (universeList).ToArray ();
+				firstResults[keypress.ToString ()] = comparer.NarrowResults (results).ToArray ();
 			}
 		}
 		
-		private void IndexItems () {
-			
-			//For each item add to universe, then check against all commands
-			//to see if the item should be added to the list in the command to item map
-			foreach (ItemSource source in itemSources) {
-				foreach (Item item in source.Items) {
-					foreach (Command command in all_commands) {
-						List<IObject> commandResults = commandToItemMap[command];
-						List<Type> supportedItemTypes = new List<Type>
-							(command.SupportedItemTypes);
-						List<Type> implementedItemTypes = new List<Type>
-							(GCObject.GetAllImplementedTypes (item.IItem));
-						foreach (Type type in supportedItemTypes) {
-							if (implementedItemTypes.Contains (type)) {
-								commandResults.Add (item);
-								break;
-							}
-						}
-					}
-					
-					if (universe.ContainsKey (item.GetHashCode ())) {
-					}
-					else {
-						universe.Add (item.GetHashCode (), item);
-					}
+		private void BuildUniverse () {
+			// Hash items.
+			foreach (DoItemSource source in doItemSources) {
+				foreach (DoItem item in source.Items) {
+					universe[item.GetHashCode ()] = item;
 				}
 			}
-		}
-		
-		private void IndexCommands () {
-			//For each command addit to the universe, to the list of commands and
-			//initialize the list for the command to item map
-			foreach (Command command in all_commands) {
+			// Hash commands.
+			foreach (DoCommand command in doCommands) {
 				universe[command.GetHashCode ()] = command;
-				commandToItemMap.Add (command, new List<IObject> ());
 			}
 		}
-		
 		
 		public SearchContext Search (SearchContext newSearchContext)
 		{
@@ -198,82 +170,81 @@ namespace Do.Core
 			return newSearchContext;
 		}
 		
-		private List<IObject> GenerateUnfilteredList (SearchContext newSearchContext) 
+		private List<IObject> GenerateUnfilteredList (SearchContext context) 
 		{
-			string keypress;
+			string query;
 			RelevanceSorter comparer;
 			SearchContext lastContext;
-			List<IObject> filtered_results;
+			List<IObject> results;
 			
-			keypress = newSearchContext.SearchString.ToLower ();
-			lastContext = newSearchContext.LastContext;
+			query = context.SearchString.ToLower ();
+			lastContext = context.LastContext;
 		
 			//If this is the initial search for the all the corresponding items/commands for the first object
 			/// we don't need to filter based on search string
-			if (newSearchContext.SearchString == "" && newSearchContext.FirstObject != null) {
-				filtered_results = new List<IObject> ();
+			if (context.SearchString == "" && context.FirstObject != null) {
+				results = new List<IObject> ();
 				//If command, just grab the commands for the item
-				if (ContainsType (newSearchContext.SearchTypes, typeof (ICommand))) {
-					foreach (Command command in CommandsForItem (newSearchContext.FirstObject as Item)) {
-						filtered_results.Add (command);
+				if (ContainsType (context.SearchTypes, typeof (ICommand))) {
+					foreach (DoCommand command in CommandsForItem (context.FirstObject as DoItem)) {
+						results.Add (command);
 					}
 				}
 				//If item, use the command to item map
-				else if (ContainsType (newSearchContext.SearchTypes, typeof (IItem))) {
-					filtered_results.AddRange (universe.Values);
+				else if (ContainsType (context.SearchTypes, typeof (IItem))) {
+					results.AddRange (universe.Values);
 				}
 			}
 			else {
 				// We can build on the last results.
 				// example: searched for "f" then "fi"
 				if (lastContext != null) {
-					comparer = new RelevanceSorter (keypress);
-					filtered_results = new List<IObject> (lastContext.Results);
-					// Sort results based on new keypress string
-					filtered_results = comparer.NarrowResults (filtered_results);
+					comparer = new RelevanceSorter (query);
+					results = new List<IObject> (lastContext.Results);
+					results = comparer.NarrowResults (results);
 				}
 
 				// If someone typed a single key, BOOM we're done.
-				else if (firstCharacterResults.ContainsKey (keypress)) {
-					filtered_results = new List<IObject> 
-						(firstCharacterResults[keypress]);
+				else if (firstResults.ContainsKey (query)) {
+					results = new List<IObject> (firstResults[query]);
 					
 				}
 
 				// Or we just have to do an expensive search...
 				// This is the current behavior on first keypress.
 				else {
-					filtered_results = new List<IObject> ();
-					filtered_results.AddRange (universe.Values);
-					comparer = new RelevanceSorter (keypress);
-					filtered_results.Sort (comparer);
-					// Sort results based on keypress
+					results = new List<IObject> ();
+					results.AddRange (universe.Values);
+					comparer = new RelevanceSorter (query);
+					results.Sort (comparer);
 				}
 			}
-			return filtered_results;
+			return results;
 		}
 			
 		
 		private List<IObject> filterResultsByType (List<IObject> results, Type[] acceptableTypes, string keypress) 
 		{
-			List<IObject> filtered_results = new List<IObject> ();
+			List<IObject> new_results;
+			
+			new_results = new List<IObject> ();
 			//Add a text item based on the key entered
 			if (keypress != "") 
-				results.Add (new Item (new TextItem (keypress)));
+				results.Add (new DoItem (new TextItem (keypress)));
 			else
-				results.Add (new Item (new TextItem ("Enter Word Definition")));
+				results.Add (new DoItem (new TextItem ("Enter Word Definition")));
 			
-			//Now we look through the list and add an object when it's type belongs in acceptableTypes
+			//Now we look through the list and add an object when its type belongs in acceptableTypes
 			foreach (IObject iobject in results) {
-				List<Type> implementedTypes = GCObject.GetAllImplementedTypes (iobject);
+				List<Type> implementedTypes = DoObject.GetAllImplementedTypes (iobject);
 				foreach (Type type in acceptableTypes) {
 					if (implementedTypes.Contains (type)) {
-						filtered_results.Add (iobject);
+						new_results.Add (iobject);
 						break;
 					}
 				}
 			}
-			return filtered_results;
+			return new_results;
 		}
 		
 		private List<IObject> filterResultsByDependency (List<IObject> results, IObject independentObject)
@@ -283,11 +254,11 @@ namespace Do.Core
 			List <IObject> filtered_results = new List<IObject> ();
 			
 			
-			if (independentObject is Command) {
-				Command cmd;
+			if (independentObject is DoCommand) {
+				DoCommand cmd;
 				
-				cmd = independentObject as Command;
-				foreach (Item item in results) {
+				cmd = independentObject as DoCommand;
+				foreach (DoItem item in results) {
 					//If the independent object is a command, add the result if its item type is supported
 					foreach (Type supported_type in cmd.SupportedItemTypes) {
 						if (supported_type.IsAssignableFrom (item.IItem.GetType ()) && cmd.SupportsItem (item)) {
@@ -296,11 +267,11 @@ namespace Do.Core
 					}
 				}
 			}
-			else if (independentObject is Item) {
+			else if (independentObject is DoItem) {
 				foreach (IObject iobject in results) {
 					//If the ind. object is an item, run the function commands for items to see if the result is in it
-					List<Command> supportedCommands = CommandsForItem (independentObject as Item);
-					if (supportedCommands.Contains (iobject as Command)) {
+					List<DoCommand> supportedCommands = CommandsForItem (independentObject as DoItem);
+					if (supportedCommands.Contains (iobject as DoCommand)) {
 						filtered_results.Add (iobject);
 					}
 				}
@@ -318,20 +289,17 @@ namespace Do.Core
 			return false;
 		}
 
-		List<Command> CommandsForItem (Item item)
+		List<DoCommand> CommandsForItem (DoItem item)
 		{
-			List<Command> commands;
+			List<DoCommand> item_commands;
 
-			commands = new List<Command> ();
-			foreach (Command command in all_commands) {
-				foreach (Type item_type in command.SupportedItemTypes) {
-					if (item_type.IsAssignableFrom (item.IItem.GetType ()) 
-					    && command.SupportsItem (item.IItem)) {
-						commands.Add (command);
-					}
+			item_commands = new List<DoCommand> ();
+			foreach (DoCommand command in doCommands) {
+				if (command.SupportsItem (item)) {
+					item_commands.Add (command);
 				}
 			}
-			return commands;
+			return item_commands;
 		}
 		
 	}

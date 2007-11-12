@@ -18,7 +18,9 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+
 using Gtk;
 using Gdk;
 
@@ -473,6 +475,20 @@ namespace Do.UI
 				currentContext.SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 				currentContext.FirstObject = null;
 				currentContext = Do.UniverseManager.Search (currentContext);
+				
+				// For now, only allow commands if they take only ITextItem:
+				List<IObject> filtered = new List<IObject> ();
+				foreach (IObject o in currentContext.Results) {
+					if (o is ICommand) {
+						ICommand cmd = o as ICommand;
+						if (cmd == null ||
+						    cmd.SupportedItemTypes.Length != 1 ||
+						    cmd.SupportedItemTypes[0] != typeof (ITextItem))
+							continue;
+					}
+					filtered.Add (o);
+				}
+				currentContext.Results = filtered.ToArray ();
 				paneObjects[0] = currentContext.Results;
 				paneContext[0] = currentContext;
 				commander.State = CommanderState.FirstSearchComplete;

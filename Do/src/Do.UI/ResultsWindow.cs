@@ -1,4 +1,4 @@
-/* ${FileName}
+/* ResultsWindow.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -19,6 +19,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+
 using Gtk;
 using Gdk;
 
@@ -107,7 +108,7 @@ namespace Do.UI
 			vbox = new VBox (false, 0);
 			Add (vbox);
 			vbox.BorderWidth = 4;
-			vbox.SetSizeRequest (350, (ResultIconSize + 3) * NumberResultsDisplayed);
+			vbox.SetSizeRequest (400, (ResultIconSize + 3) * NumberResultsDisplayed);
 			vbox.Show ();
 			
 			resultsScrolledWindow = new ScrolledWindow ();

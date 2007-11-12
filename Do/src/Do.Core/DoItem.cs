@@ -1,4 +1,4 @@
-/* ItemSource.cs
+/* DoItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,52 +19,26 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Do.Universe;
 
 namespace Do.Core
 {
-	
-	public class ItemSource : GCObject 
+	public class DoItem : DoObject, IItem
 	{
 		
-		private bool enabled;
-		protected IItemSource source;
+		protected IItem item;
 		
-		public ItemSource (IItemSource source):
-			base (source)
+		public DoItem (IItem item):
+			base (item)
 		{
-			this.source = source;
-			enabled = true;
+			this.item = item;
 		}
 		
-		public void UpdateItems () {
-			source.UpdateItems ();
-		}
-		
-		public ICollection<IItem> Items {
-			get {
-				List<IItem> items;
-				
-				items = new List<IItem> ();
-				if (source.Items != null) {
-					items.Capacity = source.Items.Count;
-					foreach (IItem item in source.Items) {
-						items.Add (new Item (item));
-					}
-				}
-				return items;
-			}
-		}
-		
-		public ICollection<IItem> ChildrenOfItem (IItem item) {
-			return new List<IItem> ();
-		}
-		
-		public bool Enabled {
-			get { return enabled; }
-			set { enabled = value; }
+		public IItem IItem {
+			get { return item; }
 		}
 		
 	}

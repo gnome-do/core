@@ -1,4 +1,4 @@
-/* ${FileName}
+/* Log.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -18,7 +18,6 @@
  */
 
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace Do
@@ -110,26 +109,9 @@ namespace Do
 		
 		static void Write (LogLevel lvl, string msg, params object[] args)
 		{
-			string caller_info;
-			StackTrace stack;
-			StackFrame[] frames;
-			
-			stack = new StackTrace (true);
-			frames = stack.GetFrames ();
-			caller_info = "";
-			if (frames.Length > 2) {
-				try {
-					caller_info = string.Format (" (from {0}.{1}:{2})",
-					                         frames[2].GetMethod ().DeclaringType.Name,
-				                             frames[2].GetMethod ().Name,
-				                             frames[2].GetFileLineNumber ());
-				} catch {
-					caller_info = "";
-				}
-			}
 			if (lvl >= level) {
 				foreach (ILog log in logs) {
-					log.Log (lvl, msg + caller_info, args);
+					log.Log (lvl, msg, args);
 				}
 			}
 		}

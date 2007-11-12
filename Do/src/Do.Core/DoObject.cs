@@ -1,4 +1,4 @@
-/* ${FileName}
+/* DoObject.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -28,7 +28,7 @@ using Do.Universe;
 namespace Do.Core
 {
 
-	public abstract class GCObject : IObject
+	public abstract class DoObject : IObject
 	{
 		
 		public const string kDefaultName = "No name";
@@ -59,7 +59,7 @@ namespace Do.Core
 		protected int _score;
 		protected IObject inner;
 		
-		protected GCObject (IObject inner)
+		protected DoObject (IObject inner)
 		{
 			if (inner == null)
 				throw new ArgumentNullException ("Inner IObject may not be null.");
@@ -113,7 +113,7 @@ namespace Do.Core
 		}
 	}
 	
-	public class GCObjectScoreComparer : IComparer<IObject> {
+	public class DoObjectScoreComparer : IComparer<IObject> {
 		public int Compare (IObject x, IObject y) {
 			float xscore, yscore;
 			
@@ -122,8 +122,8 @@ namespace Do.Core
 			else if (y == null)
 				return 1;
 			
-			xscore = (x as GCObject).Score;
-			yscore = (y as GCObject).Score;
+			xscore = (x as DoObject).Score;
+			yscore = (y as DoObject).Score;
 			if (xscore == yscore)
 				return 0;
 			else

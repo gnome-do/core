@@ -24,11 +24,7 @@
     <File name="./src/Do.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/Command.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/Commander.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/GCObject.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/Item.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/ItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/SearchContext.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.UI/IconBox.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.UI/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
@@ -41,6 +37,10 @@
     <File name="./src/Do.UI/MainMenu.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/RelevanceSorter.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/UniverseManager.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/DoCommand.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/DoItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/DoItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/DoObject.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
