@@ -149,11 +149,10 @@ namespace Do.Core
 		
 			// Get the results based on the search string
 			results = GenerateUnfilteredList (context);
-			results.Add (new DoItem (new TextItem (context.SearchString)));
 			// Filter results based on the required type
 			results = FilterResultsByType (results, context.SearchTypes);
 			// Filter results based on object dependencies
-			results = FilterResultsByDependency (results, context.FirstObject);			
+			results = FilterResultsByDependency (results, context.FirstObject);		
 			context.Results = results.ToArray ();
 			
 			// Keep a stack of incremental results.
@@ -171,10 +170,19 @@ namespace Do.Core
 			
 			query = context.SearchString.ToLower ();
 		
+			// Special handling for commands that take only text:
+			if (context.FirstObject != null &&
+			    context.FirstObject is DoCommand &&
+			    (context.FirstObject as DoCommand).AcceptsOnlyText) {
+				results = new List<IObject> ();
+				results.Add (new DoItem (new TextItem (query == "" ? "Enter Text" : context.SearchString)));
+				return results;
+			}
 			//If this is the initial search for the all the corresponding items/commands for the first object
 			/// we don't need to filter based on search string
-			if (context.SearchString == "" && context.FirstObject != null) {
+			else if (context.SearchString == "" && context.FirstObject != null) {
 				results = new List<IObject> ();
+				
 				//If command, just grab the commands for the item
 				if (ContainsType (context.SearchTypes, typeof (ICommand))) {
 					foreach (DoCommand command in CommandsForItem (context.FirstObject as DoItem)) {
@@ -210,6 +218,7 @@ namespace Do.Core
 					results.Sort (comparer);
 				}
 			}
+			results.Add (new DoItem (new TextItem (context.SearchString)));
 			return results;
 		}
 			
@@ -245,9 +254,6 @@ namespace Do.Core
 					if ((constraint as DoCommand).SupportsItem (item)) {
 						filtered_results.Add (item);
 					}
-				}
-				if (ContainsType ((constraint as DoCommand).SupportedItemTypes, typeof (ITextItem))) {
-					filtered_results.Add (new DoItem (new TextItem ("Enter Text")));
 				}
 			}
 			else if (constraint is DoItem) {

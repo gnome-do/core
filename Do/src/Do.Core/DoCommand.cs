@@ -132,5 +132,12 @@ namespace Do.Core
 			return inner_items;
 		}
 		
+		public bool AcceptsOnlyText {
+			get {
+				return SupportedItemTypes.Length == 1
+					&& typeof (ITextItem).IsAssignableFrom (SupportedItemTypes[0]);
+			}
+		}
+		
 	}
 }
