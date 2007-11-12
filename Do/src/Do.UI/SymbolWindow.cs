@@ -556,6 +556,7 @@ namespace Do.UI
 		
 		protected virtual void SetDefaultState ()
 		{
+			resultsWindow.Hide ();
 			paneContext = new SearchContext[3];
 			currentContext = new SearchContext ();
 			currentContext.SearchTypes = new Type[] { typeof (ICommand), typeof (IItem) };

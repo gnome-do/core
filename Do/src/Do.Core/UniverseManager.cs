@@ -143,42 +143,33 @@ namespace Do.Core
 			}
 		}
 		
-		public SearchContext Search (SearchContext newSearchContext)
+		public SearchContext Search (SearchContext context)
 		{
-			string keypress = newSearchContext.SearchString;
-			List<IObject> filtered_results;
-			SearchContext lastContext = newSearchContext.LastContext;
+			List<IObject> results;
 		
-			//Get the results based on the search string
-			filtered_results = GenerateUnfilteredList (newSearchContext);
-			//Filter results based on the required type
-			filtered_results = filterResultsByType (filtered_results, newSearchContext.SearchTypes, keypress);
-			//Filter results based on object dependencies
-			filtered_results = filterResultsByDependency(filtered_results, newSearchContext.FirstObject);
-
-			newSearchContext.Results = filtered_results.ToArray ();
-			// This is a clever way to keep
-			// a stack of incremental results.
-			// NOTE: Clone should return a deep (enough) copy.
-			// Also note - tricky pointer magic.
-			SearchContext temp;
-			temp = newSearchContext;
-			newSearchContext = newSearchContext.Clone ();
-			lastContext = temp;
-			newSearchContext.LastContext = lastContext;
+			// Get the results based on the search string
+			results = GenerateUnfilteredList (context);
+			results.Add (new DoItem (new TextItem (context.SearchString)));
+			// Filter results based on the required type
+			results = FilterResultsByType (results, context.SearchTypes);
+			// Filter results based on object dependencies
+			results = FilterResultsByDependency (results, context.FirstObject);			
+			context.Results = results.ToArray ();
 			
-			return newSearchContext;
+			// Keep a stack of incremental results.
+			SearchContext clone;
+			clone = context.Clone ();
+			clone.LastContext = context;
+			return clone;
 		}
 		
 		private List<IObject> GenerateUnfilteredList (SearchContext context) 
 		{
 			string query;
 			RelevanceSorter comparer;
-			SearchContext lastContext;
 			List<IObject> results;
 			
 			query = context.SearchString.ToLower ();
-			lastContext = context.LastContext;
 		
 			//If this is the initial search for the all the corresponding items/commands for the first object
 			/// we don't need to filter based on search string
@@ -198,9 +189,9 @@ namespace Do.Core
 			else {
 				// We can build on the last results.
 				// example: searched for "f" then "fi"
-				if (lastContext != null) {
+				if (context.LastContext != null) {
 					comparer = new RelevanceSorter (query);
-					results = new List<IObject> (lastContext.Results);
+					results = new List<IObject> (context.LastContext.Results);
 					results = comparer.NarrowResults (results);
 				}
 
@@ -223,23 +214,17 @@ namespace Do.Core
 		}
 			
 		
-		private List<IObject> filterResultsByType (List<IObject> results, Type[] acceptableTypes, string keypress) 
+		private List<IObject> FilterResultsByType (List<IObject> results, Type[] acceptableTypes) 
 		{
 			List<IObject> new_results;
 			
-			new_results = new List<IObject> ();
-			//Add a text item based on the key entered
-			if (keypress != "") 
-				results.Add (new DoItem (new TextItem (keypress)));
-			else
-				results.Add (new DoItem (new TextItem ("Enter Word Definition")));
-			
+			new_results = new List<IObject> ();			
 			//Now we look through the list and add an object when its type belongs in acceptableTypes
-			foreach (IObject iobject in results) {
-				List<Type> implementedTypes = DoObject.GetAllImplementedTypes (iobject);
+			foreach (IObject result in results) {
+				List<Type> implementedTypes = DoObject.GetAllImplementedTypes (result);
 				foreach (Type type in acceptableTypes) {
 					if (implementedTypes.Contains (type)) {
-						new_results.Add (iobject);
+						new_results.Add (result);
 						break;
 					}
 				}
@@ -247,34 +232,26 @@ namespace Do.Core
 			return new_results;
 		}
 		
-		private List<IObject> filterResultsByDependency (List<IObject> results, IObject independentObject)
+		private List<IObject> FilterResultsByDependency (List<IObject> results, IObject constraint)
 		{
-			if (independentObject == null)
-				return results;
-			List <IObject> filtered_results = new List<IObject> ();
+			List <IObject> filtered_results;
 			
+			if (constraint == null) return results;
+			filtered_results = new List<IObject> ();
 			
-			if (independentObject is DoCommand) {
-				DoCommand cmd;
-				
-				cmd = independentObject as DoCommand;
+			if (constraint is DoCommand) {
 				foreach (DoItem item in results) {
-					//If the independent object is a command, add the result if its item type is supported
-					foreach (Type supported_type in cmd.SupportedItemTypes) {
-						if (supported_type.IsAssignableFrom (item.IItem.GetType ()) && cmd.SupportsItem (item)) {
-							filtered_results.Add (item);
-						}
+					// If the constraint is a DoCommand, add the result if it's supported.
+					if ((constraint as DoCommand).SupportsItem (item)) {
+						filtered_results.Add (item);
 					}
+				}
+				if (ContainsType ((constraint as DoCommand).SupportedItemTypes, typeof (ITextItem))) {
+					filtered_results.Add (new DoItem (new TextItem ("Enter Text")));
 				}
 			}
-			else if (independentObject is DoItem) {
-				foreach (IObject iobject in results) {
-					//If the ind. object is an item, run the function commands for items to see if the result is in it
-					List<DoCommand> supportedCommands = CommandsForItem (independentObject as DoItem);
-					if (supportedCommands.Contains (iobject as DoCommand)) {
-						filtered_results.Add (iobject);
-					}
-				}
+			else if (constraint is DoItem) {
+				filtered_results = results;
 			}
 			return filtered_results;
 		}
