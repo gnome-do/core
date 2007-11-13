@@ -1,0 +1,6 @@
+Name: Do.DBus
+Description: Do.DBus
+Version: 0.1
+
+Requires: 
+Libs: -r:@prefix@/lib/@PACKAGE@/Do.DBus.dll

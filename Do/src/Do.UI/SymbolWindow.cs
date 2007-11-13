@@ -74,12 +74,13 @@ namespace Do.UI
 		HBox resultsHBox;
 		IconBox[] iconbox;
 		
-		protected int currentItemIndex;
-		protected int currentCommandIndex;
 		protected Pane currentPane;
-		
 		protected SearchContext[] context;
 		protected int[] cursor;
+
+		ICommand command;
+		List<IItem> items;
+		List<IItem> modItems;
 
 		bool tabbing;
 		
@@ -87,16 +88,22 @@ namespace Do.UI
 		{
 			Build ();
 
+			items = new List<IItem> ();
+			modItems = new List<IItem> ();
+
 			context = new SearchContext[3];	
 			cursor = new int[] {0, 0, 0};
 			
 			SetDefaultState ();	
 		}
 
-		IObject CurrentObject {
-			get {
-				return CurrentContext.Results[CurrentCursor];
-			}
+		IObject GetCurrentObject (Pane pane) {
+			IObject o;
+
+			try {
+				o = context[(int) pane].Results[cursor[(int) pane]];
+			} catch { o = null; }
+			return o;
 		}
 
 		Pane CurrentPane {
@@ -109,17 +116,8 @@ namespace Do.UI
 			}
 		}
 
-		SearchContext CurrentContext {
-			get {
-				return context[(int) currentPane];
-			}
-		}
-
-		IconBox CurrentIconBox {
-			get {
-				return iconbox[(int) currentPane];
-			}
-		}
+		SearchContext CurrentContext { get { return context[(int) currentPane]; } }
+		IconBox CurrentIconBox { get { return iconbox[(int) currentPane]; } }
 
 		int CurrentCursor {
 			get {
@@ -130,94 +128,63 @@ namespace Do.UI
 			}
 		}
 		
-		protected void Build ()
+		protected virtual void SetDefaultState ()
 		{
-			VBox         vbox;
-			Alignment align;
-			Gtk.Image settings_icon;
-				
-			AppPaintable = true;
-			KeepAbove = true;
-			Decorated = false;
-			// This typehint gets the window to raise all the way to top.
-			TypeHint = WindowTypeHint.Splashscreen;
-				
-			try { SetIconFromFile ("/usr/share/icons/gnome/scalable/actions/system-run.svg"); } catch { }
-			SetColormap ();
+			resultsWindow.Hide ();
+			tabbing = false;
 
-			resultsWindow = new ResultsWindow ();
-			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
+			context[0] = new SearchContext ();
+			context[1] = new SearchContext ();
+			context[2] = new SearchContext ();
+			context[0].SearchTypes = new Type[] { typeof (ICommand), typeof (IItem) };
 
-			currentPane = Pane.First;
+			CurrentPane = Pane.First;
+			iconbox[0].DisplayObject = new DefaultIconBoxObject ();
+			iconbox[1].Clear ();
 			
-			frame = new RoundedFrame ();
-			frame.DrawFill = true;
-			frame.FillColor = new Gdk.Color (0x35, 0x30, 0x45);
-			frame.FillAlpha = WindowTransparency;
-			SetFrameRadius ();
-			Add (frame);
-			frame.Show ();
-			
-			vbox = new VBox (false, 0);
-			frame.Add (vbox);
-			vbox.BorderWidth = 6;
-			vbox.Show ();		
-			
-			settings_icon = new Gtk.Image (GetType().Assembly, "settings-triangle.png");
-			align = new Alignment (1.0F, 0.0F, 0, 0);
-			align.SetPadding (0, 0, 0, 0);
-			align.Add (settings_icon);
-			vbox.PackStart (align, false, false, 0);
-			settings_icon.Show ();
-			align.Show ();
-			
-			resultsHBox = new HBox (false, 12);
-			resultsHBox.BorderWidth = 6;
-			vbox.PackStart (resultsHBox, false, false, 0);
-			resultsHBox.Show ();
-		
-			iconbox = new IconBox[3];	
-
-			iconbox[0] = new IconBox (IconBoxIconSize);
-			iconbox[0].IsFocused = true;
-			resultsHBox.PackStart (iconbox[0], false, false, 0);
-			iconbox[0].Show ();
-			
-			iconbox[1] = new IconBox (IconBoxIconSize);
-			iconbox[1].IsFocused = false;
-			resultsHBox.PackStart (iconbox[1], false, false, 0);
-			iconbox[1].Show ();
-			
-			iconbox[2] = new IconBox (IconBoxIconSize);
-			iconbox[2].IsFocused = false;
-			// resultsHBox.PackStart (iconbox[2], false, false, 0);
-			iconbox[2].Show ();
-	
-			align = new Alignment (0.5F, 0.5F, 1, 1);
-			align.SetPadding (0, 0, 0, 0);
-			label = new SymbolDisplayLabel ();
-			align.Add (label);
-			vbox.PackStart (align, false, false, 0);
-			label.Show ();
-			align.Show ();
-				
-			ScreenChanged += OnScreenChanged;
-		
-			Reposition ();
+			label.SetDisplayLabel ("Type to begin searching", "Type to start searching.");			
 		}
-	
-		protected virtual void SetColormap ()
+		
+		protected virtual void SetNoResultsFoundState (Pane pane)
 		{
-			Gdk.Colormap  colormap;
+			NoResultsFoundObject none_found;
 
-			colormap = Screen.RgbaColormap;
-			if (colormap == null) {
-				colormap = Screen.RgbColormap;
-				Console.Error.WriteLine ("No alpha support.");
+			if (currentPane == Pane.First) {
+				iconbox[1].Clear ();
 			}
-			Colormap = colormap;
+			iconbox[2].Clear ();
+
+			none_found = new NoResultsFoundObject (context[(int) pane].SearchString);
+			iconbox[(int) pane].DisplayObject = none_found;
+			if (currentPane == pane) {
+				label.SetDisplayLabel ("", none_found.Description);
+				resultsWindow.Results = new IObject[0];
+			}
 		}
 		
+		protected void DisplaySearchResults ()
+		{
+			if (CurrentContext.Results.Length == 0) {
+				SetNoResultsFoundState (currentPane);
+				return;
+			}
+			label.DisplayObject = CurrentContext.Results[0];
+			resultsWindow.Results = CurrentContext.Results;
+			resultsWindow.SelectedIndex = 0;
+		}
+
+		protected void ClearSearchResults ()
+		{
+			switch (currentPane) {
+				case Pane.First:
+					SetDefaultState ();
+					break;
+				case Pane.Second:
+					SearchSecondPane ("");
+					break;
+			}
+		}
+
 		protected override bool OnButtonPressEvent (EventButton evnt)
 		{
 			int start_x, start_y, end_x, end_y;
@@ -403,24 +370,26 @@ namespace Do.UI
 		
 		protected virtual void ActivateCommand ()
 		{
-			ICommand command;
-			IItem[] items = new IItem[1];
-			IItem[] modItems = new IItem[0];
-			
+			IObject first, second;
+
 			Hide ();
-			// This class will be re-written soon to take better care
-			// of corner cases like ones that lead to NullReferenceExceptions here.
-			try {
-				if (context[0].Results[cursor[0]] is IItem) {
-					items[0] = context[0].Results[cursor[0]] as IItem;
-					command = context[1].Results[cursor[1]] as ICommand;
+
+			items.Clear ();
+			modItems.Clear ();
+
+			first = GetCurrentObject (Pane.First);
+			second = GetCurrentObject (Pane.Second);
+			if (first != null && second != null) {
+				if (first is IItem) {
+					items.Add (first as IItem);
+					command = second as ICommand;
 				} else {
-					items[0] = context[1].Results[cursor[1]] as IItem;
-					command = context[0].Results[cursor[0]] as ICommand;
+					items.Add (second as IItem);
+					command = first as ICommand;
 				}
-				
-				command.Perform (items, modItems);
-			} catch { }
+				Console.WriteLine ("Perform {0} on {1}", command, items[0]);
+				command.Perform (items.ToArray (), modItems.ToArray ());
+			}
 			SetDefaultState ();
 		}
 		
@@ -452,27 +421,8 @@ namespace Do.UI
 		
 		protected virtual void SetFrameRadius ()
 		{
-			if (Screen.IsComposited) {
-				frame.Radius = 10;
-			} else {
-				frame.Radius = 0;
-			}
-		}
-		
-		protected override bool OnExposeEvent (EventExpose evnt)
-		{
-			Cairo.Context cairo;
+				}
 			
-			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
-				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-				cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
-				cairo.Operator = Cairo.Operator.Source;
-				cairo.Paint ();
-			}
-
-			return base.OnExposeEvent (evnt);
-		}
-		
 		protected virtual void SetPane (Pane pane)
 		{	
 			currentPane = pane;
@@ -562,6 +512,7 @@ namespace Do.UI
 				label.DisplayObject = context[0].Results[cursor[0]];
 				label.Highlight = match;
 				resultsWindow.Results = context[0].Results;
+				resultsWindow.SelectedIndex = 0;
 			}
 	
 			SearchSecondPane ("");
@@ -598,63 +549,109 @@ namespace Do.UI
 			}
 		}
 		
-		protected virtual void SetDefaultState ()
+	
+		protected void Build ()
 		{
-			resultsWindow.Hide ();
-			tabbing = false;
+			VBox         vbox;
+			Alignment align;
+			Gtk.Image settings_icon;
+				
+			AppPaintable = true;
+			KeepAbove = true;
+			Decorated = false;
+			// This typehint gets the window to raise all the way to top.
+			TypeHint = WindowTypeHint.Splashscreen;
+				
+			try { SetIconFromFile ("/usr/share/icons/gnome/scalable/actions/system-run.svg"); } catch { }
+			SetColormap ();
 
-			context[0] = new SearchContext ();
-			context[1] = new SearchContext ();
-			context[2] = new SearchContext ();
-			context[0].SearchTypes = new Type[] { typeof (ICommand), typeof (IItem) };
+			resultsWindow = new ResultsWindow ();
+			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
-			CurrentPane = Pane.First;
-			iconbox[0].DisplayObject = new DefaultIconBoxObject ();
-			iconbox[1].Clear ();
+			currentPane = Pane.First;
 			
-			label.SetDisplayLabel ("Type to begin searching", "Type to start searching.");			
-		}
+			frame = new RoundedFrame ();
+			frame.DrawFill = true;
+			frame.FillColor = new Gdk.Color (0x35, 0x30, 0x45);
+			frame.FillAlpha = WindowTransparency;
+			frame.Radius = Screen.IsComposited ? 10 : 0;
+			Add (frame);
+			frame.Show ();
+			
+			vbox = new VBox (false, 0);
+			frame.Add (vbox);
+			vbox.BorderWidth = 6;
+			vbox.Show ();		
+			
+			settings_icon = new Gtk.Image (GetType().Assembly, "settings-triangle.png");
+			align = new Alignment (1.0F, 0.0F, 0, 0);
+			align.SetPadding (0, 0, 0, 0);
+			align.Add (settings_icon);
+			vbox.PackStart (align, false, false, 0);
+			settings_icon.Show ();
+			align.Show ();
+			
+			resultsHBox = new HBox (false, 12);
+			resultsHBox.BorderWidth = 6;
+			vbox.PackStart (resultsHBox, false, false, 0);
+			resultsHBox.Show ();
 		
-		protected virtual void SetNoResultsFoundState (Pane pane)
-		{
-			NoResultsFoundObject none_found;
+			iconbox = new IconBox[3];	
 
-			if (currentPane == Pane.First) {
-				iconbox[1].Clear ();
-			}
-			iconbox[2].Clear ();
-
-			none_found = new NoResultsFoundObject (context[(int) pane].SearchString);
-			iconbox[(int) pane].DisplayObject = none_found;
-			if (currentPane == pane) {
-				label.SetDisplayLabel ("", none_found.Description);
-				resultsWindow.Results = new IObject[0];
-			}
-		}
+			iconbox[0] = new IconBox (IconBoxIconSize);
+			iconbox[0].IsFocused = true;
+			resultsHBox.PackStart (iconbox[0], false, false, 0);
+			iconbox[0].Show ();
+			
+			iconbox[1] = new IconBox (IconBoxIconSize);
+			iconbox[1].IsFocused = false;
+			resultsHBox.PackStart (iconbox[1], false, false, 0);
+			iconbox[1].Show ();
+			
+			iconbox[2] = new IconBox (IconBoxIconSize);
+			iconbox[2].IsFocused = false;
+			// resultsHBox.PackStart (iconbox[2], false, false, 0);
+			iconbox[2].Show ();
+	
+			align = new Alignment (0.5F, 0.5F, 1, 1);
+			align.SetPadding (0, 0, 0, 0);
+			label = new SymbolDisplayLabel ();
+			align.Add (label);
+			vbox.PackStart (align, false, false, 0);
+			label.Show ();
+			align.Show ();
+				
+			ScreenChanged += OnScreenChanged;
 		
-		protected void DisplaySearchResults ()
+			Reposition ();
+		}
+	
+		protected virtual void SetColormap ()
 		{
-			if (CurrentContext.Results.Length == 0) {
-				SetNoResultsFoundState (currentPane);
-				return;
+			Gdk.Colormap  colormap;
+
+			colormap = Screen.RgbaColormap;
+			if (colormap == null) {
+				colormap = Screen.RgbColormap;
+				Console.Error.WriteLine ("No alpha support.");
 			}
-			label.DisplayObject = CurrentContext.Results[0];
-			resultsWindow.Results = CurrentContext.Results;
-			resultsWindow.SelectedIndex = 0;
+			Colormap = colormap;
 		}
 
-		protected void ClearSearchResults ()
+		protected override bool OnExposeEvent (EventExpose evnt)
 		{
-			switch (currentPane) {
-				case Pane.First:
-					SetDefaultState ();
-					break;
-				case Pane.Second:
-					SearchSecondPane ("");
-					break;
+			Cairo.Context cairo;
+			
+			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
+				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+				cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
+				cairo.Operator = Cairo.Operator.Source;
+				cairo.Paint ();
 			}
+
+			return base.OnExposeEvent (evnt);
 		}
+
 	}
 
-	
 }
