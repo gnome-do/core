@@ -29,7 +29,6 @@ namespace Do.Core
 		IObject firstObject;
 		IObject secondObject;
 		string searchString;
-		int index;
 		SearchContext lastContext;
 		Type[] searchTypes;
 		
@@ -38,6 +37,7 @@ namespace Do.Core
 		public SearchContext ()
 		{
 			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
+			searchString = "";
 		}
 		
 		public SearchContext Clone () {
@@ -99,15 +99,6 @@ namespace Do.Core
 				// a client class sets this field, it must
 				// be ensured that array contains IObjects.
 				results = value;
-			}
-		}
-		
-		public int ObjectIndex {
-			get {
-				return index;
-			}
-			set {
-				index = value;
 			}
 		}
 		

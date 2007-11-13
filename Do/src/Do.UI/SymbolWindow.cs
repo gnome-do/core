@@ -19,13 +19,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 using Gtk;
 using Gdk;
 
 using Do.Universe;
 using Do.Addins;
+
 // Do.Core dependency needs to be removed
 using Do.Core;
 
@@ -41,53 +41,93 @@ namespace Do.UI
 		}
 		
 		class NoResultsFoundObject : IObject {
+
+			string query;
+
+			public NoResultsFoundObject (string query)
+			{
+				this.query = query;
+			}
+
 			public string Icon { get { return "gtk-dialog-question"; } }
 			public string Name { get { return "No results found."; } }
-			public string Description { get { return "Try searching for something else."; } }
+
+			public string Description {
+				get {
+					return string.Format ("No results found for \"{0}\".", query);
+			 	}
+			}
 		}
 
 		const int IconBoxIconSize = 128;
 		const double WindowTransparency = 0.91;
 		
-		protected enum WindowFocus {
-			FirstFocus = 0,
-			SecondFocus = 1,
-			ThirdItemFocus = 2,
+		protected enum Pane {
+			First = 0,
+			Second = 1,
+			Third = 2,
 		}
 		
 		RoundedFrame frame;
-		SymbolDisplayLabel displayLabel;
+		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
 		HBox resultsHBox;
-		IconBox itemBox;
-		IconBox commandBox;
-		IconBox modItemBox;
+		IconBox[] iconbox;
 		
-		protected Commander commander;
 		protected int currentItemIndex;
 		protected int currentCommandIndex;
-		protected WindowFocus focus;
-		protected string searchString;
+		protected Pane currentPane;
 		
-		protected SearchContext currentContext;
+		protected SearchContext[] context;
+		protected int[] cursor;
+
+		bool tabbing;
 		
-		protected SearchContext[] paneContext;
-		
-		private IObject[][] paneObjects;
-		
-		
-		public SymbolWindow (Commander commander) : base (Gtk.WindowType.Toplevel)
+		public SymbolWindow () : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
+
+			context = new SearchContext[3];	
+			cursor = new int[] {0, 0, 0};
 			
-			this.commander = commander;
-			currentContext = new SearchContext ();
-			
-			commander.SetDefaultStateEvent += OnDefaultStateEvent;
-			commander.SetSearchingItemsStateEvent += OnSearchingStateEvent;
-			commander.SetSearchingCommandsStateEvent += OnSearchingStateEvent;
-			commander.SetFirstCompleteStateEvent += OnSearchFirstCompleteStateEvent;
-			commander.SetSecondCompleteStateEvent += OnSearchSecondCompleteStateEvent;
+			SetDefaultState ();	
+		}
+
+		IObject CurrentObject {
+			get {
+				return CurrentContext.Results[CurrentCursor];
+			}
+		}
+
+		Pane CurrentPane {
+			get {
+				return currentPane;
+			}
+			set {
+				currentPane = value;
+				SetPane (currentPane);
+			}
+		}
+
+		SearchContext CurrentContext {
+			get {
+				return context[(int) currentPane];
+			}
+		}
+
+		IconBox CurrentIconBox {
+			get {
+				return iconbox[(int) currentPane];
+			}
+		}
+
+		int CurrentCursor {
+			get {
+				return cursor[(int) currentPane];
+			}
+			set {
+				cursor[(int) currentPane] = value;
+			}
 		}
 		
 		protected void Build ()
@@ -108,10 +148,7 @@ namespace Do.UI
 			resultsWindow = new ResultsWindow ();
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
-			focus = WindowFocus.FirstFocus;
-			searchString = "";
-			
-			paneObjects = new IObject[2][];
+			currentPane = Pane.First;
 			
 			frame = new RoundedFrame ();
 			frame.DrawFill = true;
@@ -138,28 +175,30 @@ namespace Do.UI
 			resultsHBox.BorderWidth = 6;
 			vbox.PackStart (resultsHBox, false, false, 0);
 			resultsHBox.Show ();
+		
+			iconbox = new IconBox[3];	
+
+			iconbox[0] = new IconBox (IconBoxIconSize);
+			iconbox[0].IsFocused = true;
+			resultsHBox.PackStart (iconbox[0], false, false, 0);
+			iconbox[0].Show ();
 			
-			itemBox = new IconBox (IconBoxIconSize);
-			itemBox.IsFocused = true;
-			resultsHBox.PackStart (itemBox, false, false, 0);
-			itemBox.Show ();
+			iconbox[1] = new IconBox (IconBoxIconSize);
+			iconbox[1].IsFocused = false;
+			resultsHBox.PackStart (iconbox[1], false, false, 0);
+			iconbox[1].Show ();
 			
-			commandBox = new IconBox (IconBoxIconSize);
-			commandBox.IsFocused = false;
-			resultsHBox.PackStart (commandBox, false, false, 0);
-			commandBox.Show ();
-			
-			modItemBox = new IconBox (IconBoxIconSize);
-			modItemBox.IsFocused = false;
-			// resultsHBox.PackStart (modItemBox, false, false, 0);
-			modItemBox.Show ();
+			iconbox[2] = new IconBox (IconBoxIconSize);
+			iconbox[2].IsFocused = false;
+			// resultsHBox.PackStart (iconbox[2], false, false, 0);
+			iconbox[2].Show ();
 	
 			align = new Alignment (0.5F, 0.5F, 1, 1);
 			align.SetPadding (0, 0, 0, 0);
-			displayLabel = new SymbolDisplayLabel ();
-			align.Add (displayLabel);
+			label = new SymbolDisplayLabel ();
+			align.Add (label);
 			vbox.PackStart (align, false, false, 0);
-			displayLabel.Show ();
+			label.Show ();
 			align.Show ();
 				
 			ScreenChanged += OnScreenChanged;
@@ -174,7 +213,7 @@ namespace Do.UI
 			colormap = Screen.RgbaColormap;
 			if (colormap == null) {
 				colormap = Screen.RgbColormap;
-				Console.WriteLine ("No alpha support.");
+				Console.Error.WriteLine ("No alpha support.");
 			}
 			Colormap = colormap;
 		}
@@ -197,7 +236,7 @@ namespace Do.UI
 				                       start_y <= click_y && click_y < (start_y + 25);
 			if (click_near_settings_icon) {
 				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 18, start_y + 16);
-				// Have to re-grab the focus from the menu.
+				// Have to re-grab the pane from the menu.
 				Addins.Util.Appearance.PresentWindow (this);
 			} else if (!click_on_window) {
 				Hide ();
@@ -209,7 +248,6 @@ namespace Do.UI
 		{
 			base.Hide ();
 			resultsWindow.Hide ();
-			commander.State = CommanderState.Default;
 		}
 		
 		public void Reposition ()
@@ -227,107 +265,137 @@ namespace Do.UI
 			
 			resultsWindow.GetSize (out results.Width, out results.Height);
 			results.Y = main.Y + main.Height;
-			results.X = main.X + (IconBoxIconSize + 60) * (int) focus + 10;
+			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + 10;
 			resultsWindow.Move (results.X, results.Y);			
+		}
+
+		void OnControlKeyPressEvent (EventKey evnt)
+		{
+			switch ((Gdk.Key) evnt.KeyValue) {
+				case Gdk.Key.q:
+					Application.Quit ();
+					break;
+			}
+		}
+
+		void OnEscapeKeyPressEvent (EventKey evnt)
+		{
+			if (CurrentContext.SearchString.Length == 0) {
+				if (currentPane == Pane.First) Hide ();
+				SetDefaultState ();
+			}
+			ClearSearchResults ();
+		}
+
+		void OnActivateKeyPressEvent (EventKey evnt)
+		{
+			ActivateCommand ();
+		}
+
+		void OnDeleteKeyPressEvent (EventKey evnt)
+		{
+			string query;
+
+			query = CurrentContext.SearchString;
+			if (query.Length > 1) {
+				query = query.Substring (0, query.Length-1);
+				CurrentContext.SearchString = query;
+				QueueSearch ();
+				// DeleteCharacter ();
+			} else {
+				ClearSearchResults ();
+			}
+			CurrentContext.SearchString = query;
+		}
+
+		void OnTabKeyPressEvent (EventKey evnt)
+		{
+			tabbing = true;
+			if (CurrentPane == Pane.First &&
+					context[0].Results != null &&
+					context[0].Results.Length != 0) {				
+				CurrentPane = Pane.Second;
+			} else if (currentPane == Pane.Second) {
+				CurrentPane = Pane.First;
+			}
+			tabbing = false;
+		}
+
+		void OnUpDownKeyPressEvent (EventKey evnt)
+		{
+			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
+				if (resultsWindow.SelectedIndex == 0) {
+					resultsWindow.Hide ();
+				} else {
+					resultsWindow.SelectPrev ();
+				}
+			} else {
+				if (resultsWindow.Visible) {
+					resultsWindow.SelectNext ();
+				} else {				
+					resultsWindow.Show ();
+				}
+			}
+		}
+
+		void OnLeftRightKeyPressEvent (EventKey evnt)
+		{
+			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {
+			} else {
+			}
+		}
+
+		void OnInputKeyPressEvent (EventKey evnt)
+		{
+			char c;
+				
+			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);	
+			if (char.IsLetterOrDigit (c)
+					|| char.IsPunctuation (c)
+					|| c == ' '
+					|| char.IsSymbol (c)) {
+				CurrentContext.SearchString += c;
+				QueueSearch ();
+			}
 		}
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
-			Gdk.Key key;
-			
-			key = (Gdk.Key) evnt.KeyValue;
-			
 			// Handle command keys (Quit, etc.)
 			if (((int) evnt.State & (int) ModifierType.ControlMask) != 0) {
-				switch (key) {
-				case Gdk.Key.q:
-					Application.Quit ();
-					break;
-				}
-				return false;
+					OnControlKeyPressEvent (evnt);
+					return false;
 			}
 			
-			switch (key) {
+			switch ((Gdk.Key) evnt.KeyValue) {
 			// Throwaway keys
 			case Gdk.Key.Shift_L:
 			case Gdk.Key.Control_L:
 				break;
 			case Gdk.Key.Escape:
-				if (focus == WindowFocus.FirstFocus) {
-					if (searchString.Length == 0) {
-						Hide ();
-					}
-					resultsWindow.Hide ();
-					commander.State = CommanderState.Default;
-				} else {
-					if (searchString.Length == 0) {
-						resultsWindow.Hide ();
-						commander.State = CommanderState.Default;
-					} else {
-						searchString = "";
-					}
-				}
-				ResetContext ();
+				OnEscapeKeyPressEvent (evnt);
 				break;
 			case Gdk.Key.Return:
 			case Gdk.Key.ISO_Enter:
-				ActivateCommand ();
+				OnActivateKeyPressEvent (evnt);
 				break;
 			case Gdk.Key.Delete:
 			case Gdk.Key.BackSpace:
-				if (searchString == null) {
-					searchString = "";
-				}
-				if (searchString.Length > 1) {
-					searchString = searchString.Substring (0, searchString.Length-1);
-					DeleteCharacter ();
-				} else {
-					searchString = "";
-					ResetContext ();
-				}
+				OnDeleteKeyPressEvent (evnt);
 				break;
 			case Gdk.Key.Tab:
-				resultsWindow.Hide ();
-				if (focus == WindowFocus.FirstFocus && currentContext.Results != null) {				
-					SetWindowFocus (WindowFocus.SecondFocus);
-				} else if (focus == WindowFocus.SecondFocus) {
-					SetWindowFocus (WindowFocus.FirstFocus);
-				}
+				OnTabKeyPressEvent (evnt);	
 				break;
 			case Gdk.Key.Up:
 			case Gdk.Key.Down:
-			{	
-				if (key == Gdk.Key.Up) {
-					if (resultsWindow.SelectedIndex == 0) {
-						resultsWindow.Hide ();
-					} else {
-						resultsWindow.SelectPrev ();
-					}
-				}
-				else if (key == Gdk.Key.Down) {
-					if (resultsWindow.Visible) {
-						resultsWindow.SelectNext ();
-					} else {				
-						resultsWindow.Show ();
-					}
-				}
-			}
+				OnUpDownKeyPressEvent (evnt);
 				break;
 			case Gdk.Key.Right:
 			case Gdk.Key.Left:
+				OnLeftRightKeyPressEvent (evnt);
 				break;
 			default:
-				char c;
-				
-				c = (char) Gdk.Keyval.ToUnicode ((uint) key);	
-				if (char.IsLetterOrDigit (c)
-				    || char.IsPunctuation (c)
-				    || c == ' '
-				    || char.IsSymbol (c)) {
-					searchString += c;
-
-					QueueSearch ();
-				}
+				OnInputKeyPressEvent (evnt);
 				break;
 			}
 			return base.OnKeyPressEvent (evnt);
@@ -339,32 +407,42 @@ namespace Do.UI
 			IItem[] items = new IItem[1];
 			IItem[] modItems = new IItem[0];
 			
+			Hide ();
 			// This class will be re-written soon to take better care
 			// of corner cases like ones that lead to NullReferenceExceptions here.
 			try {
-				if (currentContext.FirstObject is IItem) {
-					items[0] = paneContext[1].FirstObject as IItem;
-					command = paneContext[1].SecondObject as ICommand;
+				if (context[0].Results[cursor[0]] is IItem) {
+					items[0] = context[0].Results[cursor[0]] as IItem;
+					command = context[1].Results[cursor[1]] as ICommand;
 				} else {
-					items[0] = paneContext[1].SecondObject as IItem;
-					command = paneContext[1].FirstObject as ICommand;			
+					items[0] = context[1].Results[cursor[1]] as IItem;
+					command = context[0].Results[cursor[0]] as ICommand;
 				}
 				
 				command.Perform (items, modItems);
 			} catch { }
-			Hide ();
+			SetDefaultState ();
 		}
 		
 		private void OnResultsWindowSelectionChanged (object sender, ResultsWindowSelectionEventArgs args)
 		{
-			if (focus == WindowFocus.FirstFocus) {
-				paneContext[0].ObjectIndex = args.SelectedIndex;
-				SetFirstIndex (paneContext[0].SearchString);
+			CurrentCursor = args.SelectedIndex;
+
+			label.DisplayObject = CurrentContext.Results[CurrentCursor];
+			label.Highlight = CurrentContext.SearchString;
+			CurrentIconBox.DisplayObject = CurrentContext.Results[CurrentCursor];
+			CurrentIconBox.Highlight = CurrentContext.SearchString;
+
+			// If we're just tabbing, no need to search.
+			if (!tabbing) {
+				switch (currentPane) {
+					case Pane.First:
+						SearchSecondPane ("");
+						break;
+					case Pane.Second:
+						break;
+				}
 			}
-			else if (focus == WindowFocus.SecondFocus) {
-				paneContext[1].ObjectIndex = args.SelectedIndex;
-				SetSecondIndex (paneContext[1].SearchString);
-			}			
 		}
 
 		private void OnScreenChanged (object sender, EventArgs args)
@@ -395,233 +473,187 @@ namespace Do.UI
 			return base.OnExposeEvent (evnt);
 		}
 		
-		protected virtual void SetWindowFocus (WindowFocus focus)
+		protected virtual void SetPane (Pane pane)
 		{	
-			IObject[] results;
-			int selectedIndex;
-			
-			this.focus = focus;
-			results = null;
-			selectedIndex = -1;
+			currentPane = pane;
+			iconbox[0].IsFocused = (pane == Pane.First);
+			iconbox[1].IsFocused = (pane == Pane.Second);
+			iconbox[2].IsFocused = (pane == Pane.Third);
 
-			//Set the current context to the appropriate paneContext
-			switch (focus) {
-			case WindowFocus.SecondFocus:
-				currentContext = paneContext[1];
-				searchString = currentContext.SearchString;
-				results = currentContext.Results;
-				selectedIndex = currentContext.ObjectIndex;
-				break;
-			case WindowFocus.FirstFocus:
-				currentContext = paneContext[0];
-				searchString = currentContext.SearchString;		
-				results = currentContext.Results;
-				selectedIndex = currentContext.ObjectIndex;
-				break;
-			}
-			if (searchString == null) {
-				searchString = "";
-			}
+			resultsWindow.Hide ();
 
-			//Change window to match new paneContext	
-			resultsWindow.Results = results;
-			resultsWindow.SelectedIndex = selectedIndex;			
-			
-			displayLabel.DisplayObject = resultsWindow.SelectedObject;
-			displayLabel.Highlight = searchString;
-			itemBox.IsFocused = (focus == WindowFocus.FirstFocus);
-			commandBox.IsFocused = (focus == WindowFocus.SecondFocus);
-			modItemBox.IsFocused = (focus == WindowFocus.ThirdItemFocus);
+			resultsWindow.Results = CurrentContext.Results;
+			resultsWindow.SelectedIndex = CurrentCursor;
+
 			Reposition ();
 		}
 		
 		protected virtual void DeleteCharacter () 
 		{
-			//In either case move two contexts back (the reason being is because before we search
+			SearchContext currentContext;
+			//In either case move two context back (the reason being is because before we search
 			//Queue search gives us two identical copies at the end of the linked list, so that
 			//one can be manipulated by Search() and one stays the same)
-			switch (focus) {
-			case WindowFocus.FirstFocus:
-				commander.State = CommanderState.SearchingItems;
+			currentContext = null;
+			switch (currentPane) {
+			case Pane.First:
 				currentContext = currentContext.LastContext.LastContext;
 				SearchContext temp;
 				temp = currentContext;
 				currentContext = currentContext.Clone ();
 				currentContext.LastContext = temp;
-				paneObjects[0] =  (currentContext.Results);
-				paneContext[0] = currentContext;
-				paneContext[1] = null;
-				commander.State = CommanderState.FirstSearchComplete;
+				context[0] = currentContext;
+				context[1] = null;
+				DisplaySearchResults ();
 				break;
-			case WindowFocus.SecondFocus:
-				commander.State = CommanderState.SearchingCommands;
+			case Pane.Second:
 				currentContext = currentContext.LastContext.LastContext;
 				SearchContext tempContext;
 				tempContext = currentContext;
 				currentContext = currentContext.Clone ();
 				currentContext.LastContext = tempContext;
-				paneContext[1] = currentContext;
-				paneObjects[1] =  (currentContext.Results);
-				commander.State = CommanderState.SecondSearchComplete;
+				context[1] = currentContext;
+				DisplaySearchResults ();
 				break;
 			}
 		}
-		
-		protected virtual void QueueSearch ()
-		{
-			//Set up the current search context to the proper state information then
-			//call Search() on universe manager. After it's done change CommanderState to
-			//update the window
-			switch (focus) {
-			case WindowFocus.FirstFocus:
-				commander.State = CommanderState.SearchingItems;
-				currentContext.SearchString = searchString;
-				currentContext.SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
-				currentContext.FirstObject = null;
-				currentContext = Do.UniverseManager.Search (currentContext);
-				
-				// For now, only allow commands if they take only ITextItem:
-				List<IObject> filtered = new List<IObject> ();
-				foreach (IObject o in currentContext.Results) {
-					if (o is ICommand) {
-						ICommand cmd = o as ICommand;
-						if (cmd == null ||
-						    cmd.SupportedItemTypes.Length != 1 ||
-						    cmd.SupportedItemTypes[0] != typeof (ITextItem))
-							continue;
-					}
-					filtered.Add (o);
-				}
-				currentContext.Results = filtered.ToArray ();
-				paneObjects[0] = currentContext.Results;
-				paneContext[0] = currentContext;
-				commander.State = CommanderState.FirstSearchComplete;
-				break;
-			case WindowFocus.SecondFocus:
-				commander.State = CommanderState.SearchingCommands;
-				currentContext.SearchString = searchString;
-				currentContext = Do.UniverseManager.Search (currentContext);
-				paneObjects[1] = currentContext.Results;
-				paneContext[1] = currentContext;
-				commander.State = CommanderState.SecondSearchComplete;
-				break;
-			}
-		}
-		
-		protected virtual void ResetContext ()
-		{
-			SetDefaultState ();
-		}
-		
-		protected virtual void SetFirstIndex (string match)
-		{	
-			paneContext[0].FirstObject = paneContext[0].Results[paneContext[0].ObjectIndex];
-			itemBox.DisplayObject = paneContext[0].FirstObject;
-			itemBox.Highlight = match;
-			displayLabel.DisplayObject = paneObjects[0][currentContext.ObjectIndex];
-			displayLabel.Highlight= searchString;
 
-			//Set up the next pane based on what's in the first pane
-			if (paneContext[0].FirstObject is IItem) {
-				paneContext[1] = paneContext[0].Clone ();
-				paneContext[1].SearchTypes = new Type[] { typeof (ICommand) };
-				paneContext[1].SearchString = "";
-				paneContext[1] = Do.UniverseManager.Search (paneContext[1]);
-				paneObjects[1] = paneContext[1].Results;
-				paneContext[1].ObjectIndex = 0;
+		void QueueSearch ()
+		{
+			switch (currentPane) {
+				case Pane.First:
+					SearchFirstPane (CurrentContext.SearchString);
+					break;
+				case Pane.Second:
+					SearchSecondPane (CurrentContext.SearchString);
+					break;
 			}
-			else {
-				paneContext[1] = paneContext[0].Clone ();
-				paneContext[1].SearchTypes = new Type[] { typeof (IItem) };
-				paneContext[1].SearchString = "";
-				paneContext[1] = Do.UniverseManager.Search (paneContext[1]);
-				paneObjects[1] = paneContext[1].Results;
-				paneContext[1].ObjectIndex = 0;
+
+		}
+	
+		protected virtual void SearchFirstPane (string match)
+		{	
+			cursor[0] = 0;
+			cursor[1] = 0;
+			cursor[2] = 0;
+
+			context[0].SearchString = match;
+			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
+			context[0].FirstObject = null;
+			context[0] = Do.UniverseManager.Search (context[0]);
+			// For now, only allow commands if they take only ITextItem:
+			List<IObject> filtered = new List<IObject> ();
+			foreach (IObject o in context[0].Results) {
+				if (o is ICommand) {
+					ICommand cmd = o as ICommand;
+					if (cmd == null ||
+							cmd.SupportedItemTypes.Length != 1 ||
+							cmd.SupportedItemTypes[0] != typeof (ITextItem))
+						continue;
+				}
+				filtered.Add (o);
 			}
-			SetSecondIndex ("");
+
+			context[0].FirstObject = context[0].Results[cursor[0]];
+			iconbox[0].DisplayObject = context[0].FirstObject;
+			iconbox[0].Highlight = match;
+
+			if (currentPane == Pane.First) {
+				label.DisplayObject = context[0].Results[cursor[0]];
+				label.Highlight = match;
+				resultsWindow.Results = context[0].Results;
+			}
+	
+			SearchSecondPane ("");
 		}
 		
-		protected virtual void SetSecondIndex (string match)
+		protected virtual void SearchSecondPane (string match)
 		{
-			if (paneContext[1].Results.Length > 0) {
-				paneContext[1].SecondObject = paneContext[1].Results[paneContext[1].ObjectIndex];
-				commandBox.DisplayObject = paneContext[1].SecondObject;
-				
-				commandBox.Highlight = match;
-				if (focus == WindowFocus.SecondFocus) {
-					displayLabel.DisplayObject = currentContext.SecondObject;
-					displayLabel.Highlight = match;
+			cursor[1] = 0;
+			cursor[2] = 0;
+
+			// Set up the next pane based on what's in the first pane:
+			context[1].FirstObject = context[0].Results[cursor[0]];
+			if (context[0].Results[cursor[0]] is IItem) {
+				context[1].SearchTypes = new Type[] { typeof (ICommand) };
+			} else {
+				context[1].SearchTypes = new Type[] { typeof (IItem) };
+			}
+
+			context[1].SearchString = match;
+			context[1] = Do.UniverseManager.Search (context[1]);
+
+			if (context[1].Results.Length > 0) {
+				iconbox[1].DisplayObject = context[1].Results[0];
+				iconbox[1].Highlight = match;
+
+				if (currentPane == Pane.Second) {
+					label.DisplayObject = context[1].SecondObject;
+					label.Highlight = match;
+					resultsWindow.Results = CurrentContext.Results;
+					resultsWindow.SelectedIndex = 0;
 				}
 			} else {
-				commandBox.DisplayObject = new NoResultsFoundObject ();
+				SetNoResultsFoundState (Pane.Second);
 			}
 		}
 		
 		protected virtual void SetDefaultState ()
 		{
 			resultsWindow.Hide ();
-			paneContext = new SearchContext[3];
-			currentContext = new SearchContext ();
-			currentContext.SearchTypes = new Type[] { typeof (ICommand), typeof (IItem) };
-			paneContext[0] = currentContext;
-			searchString = "";
+			tabbing = false;
+
+			context[0] = new SearchContext ();
+			context[1] = new SearchContext ();
+			context[2] = new SearchContext ();
+			context[0].SearchTypes = new Type[] { typeof (ICommand), typeof (IItem) };
+
+			CurrentPane = Pane.First;
+			iconbox[0].DisplayObject = new DefaultIconBoxObject ();
+			iconbox[1].Clear ();
 			
-			SetWindowFocus (WindowFocus.FirstFocus);
-			
-			itemBox.DisplayObject = new DefaultIconBoxObject ();
-			commandBox.Clear ();
-			
-			displayLabel.SetDisplayLabel ("Type to begin searching", "Type to start searching.");			
+			label.SetDisplayLabel ("Type to begin searching", "Type to start searching.");			
 		}
 		
-		protected virtual void SetNoResultsFirstFoundState ()
+		protected virtual void SetNoResultsFoundState (Pane pane)
 		{
-			commandBox.Clear ();
-			itemBox.DisplayObject = new NoResultsFoundObject ();
-			displayLabel.Text = "";
-		}
-		
-		protected virtual void SetNoResultsSecondFoundState ()
-		{
-			commandBox.DisplayObject = new NoResultsFoundObject ();
-			displayLabel.Text = "";
-		}		
-		
-		protected void OnDefaultStateEvent ()
-		{
-			SetDefaultState ();
-		}
-		
-		protected void OnSearchingStateEvent ()
-		{
-		}
-		
-		protected void OnSearchFirstCompleteStateEvent ()
-		{
-			IObject[] results;
-			
-			results = paneContext[0].Results;		
-			resultsWindow.Results = results;
-			if (results.Length == 0) {
-				SetNoResultsFirstFoundState ();
-			} else {
-				SetFirstIndex (paneContext[0].SearchString);
+			NoResultsFoundObject none_found;
+
+			if (currentPane == Pane.First) {
+				iconbox[1].Clear ();
+			}
+			iconbox[2].Clear ();
+
+			none_found = new NoResultsFoundObject (context[(int) pane].SearchString);
+			iconbox[(int) pane].DisplayObject = none_found;
+			if (currentPane == pane) {
+				label.SetDisplayLabel ("", none_found.Description);
+				resultsWindow.Results = new IObject[0];
 			}
 		}
 		
-		protected void OnSearchSecondCompleteStateEvent ()
+		protected void DisplaySearchResults ()
 		{
-			IObject[] results;
-			
-			results = paneContext[1].Results;
-			resultsWindow.Results = results;
-			if (results.Length == 0) {
-				SetNoResultsSecondFoundState ();
-			} else {
-				SetSecondIndex (paneContext[1].SearchString);
+			if (CurrentContext.Results.Length == 0) {
+				SetNoResultsFoundState (currentPane);
+				return;
+			}
+			label.DisplayObject = CurrentContext.Results[0];
+			resultsWindow.Results = CurrentContext.Results;
+			resultsWindow.SelectedIndex = 0;
+		}
+
+		protected void ClearSearchResults ()
+		{
+			switch (currentPane) {
+				case Pane.First:
+					SetDefaultState ();
+					break;
+				case Pane.Second:
+					SearchSecondPane ("");
+					break;
 			}
 		}
-		
 	}
 
 	
