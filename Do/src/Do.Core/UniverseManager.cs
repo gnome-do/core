@@ -288,7 +288,6 @@ namespace Do.Core
 			return results;
 		}
 			
-		
 		private List<IObject> FilterResultsByType (List<IObject> results, Type[] acceptableTypes) 
 		{
 			List<IObject> new_results;
