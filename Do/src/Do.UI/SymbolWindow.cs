@@ -161,17 +161,6 @@ namespace Do.UI
 			}
 		}
 		
-		protected void DisplaySearchResults ()
-		{
-			if (CurrentContext.Results.Length == 0) {
-				SetNoResultsFoundState (currentPane);
-				return;
-			}
-			label.DisplayObject = CurrentContext.Results[0];
-			resultsWindow.Results = CurrentContext.Results;
-			resultsWindow.SelectedIndex = 0;
-		}
-
 		protected void ClearSearchResults ()
 		{
 			switch (currentPane) {
@@ -436,37 +425,7 @@ namespace Do.UI
 
 			Reposition ();
 		}
-		
-		protected virtual void DeleteCharacter () 
-		{
-			SearchContext currentContext;
-			//In either case move two context back (the reason being is because before we search
-			//Queue search gives us two identical copies at the end of the linked list, so that
-			//one can be manipulated by Search() and one stays the same)
-			currentContext = null;
-			switch (currentPane) {
-			case Pane.First:
-				currentContext = currentContext.LastContext.LastContext;
-				SearchContext temp;
-				temp = currentContext;
-				currentContext = currentContext.Clone ();
-				currentContext.LastContext = temp;
-				context[0] = currentContext;
-				context[1] = null;
-				DisplaySearchResults ();
-				break;
-			case Pane.Second:
-				currentContext = currentContext.LastContext.LastContext;
-				SearchContext tempContext;
-				tempContext = currentContext;
-				currentContext = currentContext.Clone ();
-				currentContext.LastContext = tempContext;
-				context[1] = currentContext;
-				DisplaySearchResults ();
-				break;
-			}
-		}
-
+	
 		void QueueSearch ()
 		{
 			switch (currentPane) {
