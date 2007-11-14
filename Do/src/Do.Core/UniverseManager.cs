@@ -167,9 +167,13 @@ namespace Do.Core
 			SearchContext last;
 
 			// Do backwards search.	
+			// This is very tricky because it can mess up on 
 			last = context.LastContext;
 			if (last != null && last.LastContext != null &&
-					last.LastContext.SearchString == context.SearchString) {
+					last.SearchString.Length > 0 &&
+					last.SearchString.StartsWith (last.LastContext.SearchString) &&
+					last.LastContext.SearchString == context.SearchString &&
+					last.LastContext.FirstObject == last.LastContext.FirstObject) {
 				return last.LastContext;
 			} 
 
@@ -178,6 +182,7 @@ namespace Do.Core
 			if (results.Count == 0) {
 				results.Add (new DoItem (new TextItem (context.SearchString)));
 			}
+
 			// Filter results based on the required type
 			results = FilterResultsByType (results, context.SearchTypes);
 			// Filter results based on object dependencies
@@ -224,20 +229,20 @@ namespace Do.Core
 
 			} else {
 
+				// We are given results (e.g. begin browsing)
+				if (context.ResultsIn != null) {
+					results = new List<IObject> (context.ResultsIn);
+				}
+				
 				// We can build on the last results.
 				// example: searched for "f" then "fi"
-				if (context.LastContext != null) {
+				else if (context.LastContext != null) {
 					comparer = new RelevanceSorter (query);
 					results = new List<IObject> (context.LastContext.Results);
 					results = comparer.NarrowResults (results);
 				}
 
-				// We are given results (e.g. begin browsing)
-				else if (context.ResultsIn != null) {
-					Console.WriteLine ("Results in.");
-					results = new List<IObject> (context.ResultsIn);
-				}
-				
+			
 				// If someone typed a single key, BOOM we're done.
 				else if (firstResults.ContainsKey (query)) {
 					results = new List<IObject> (firstResults[query]);

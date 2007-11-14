@@ -187,11 +187,12 @@ namespace Do.UI
 				TreePath path;
 				int new_selection;
 
+				if (selectedIndexSet &&
+						value == selectedIndex) return;
+
 				selectedIndexSet = true;
 
-				if (value == selectedIndex)
-					return;
-				else if (results.Length == 0)
+				if (results.Length == 0)
 					return;
 				else if (value >= results.Length)
 					new_selection = results.Length - 1;
@@ -213,8 +214,6 @@ namespace Do.UI
 				}
 				resultsTreeview.Selection.SelectPath (path);
 				resultsTreeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
-				
-				NotifySelectionChanged ();
 			}
 		}
 		

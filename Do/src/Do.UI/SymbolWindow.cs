@@ -245,14 +245,22 @@ namespace Do.UI
 
 		void OnEscapeKeyPressEvent (EventKey evnt)
 		{
+			bool something_typed, results_showing;
+
+			results_showing = resultsWindow.Visible;
+			something_typed = CurrentContext.SearchString.Length > 0;
+
+			if (currentPane == Pane.First && results_showing) resultsWindow.Hide ();
+			ClearSearchResults ();
+
+			if (!something_typed && results_showing) resultsWindow.Hide ();
+			if (results_showing || something_typed) return;
+			if (currentPane == Pane.First) Hide ();
 			if (resultsWindow.Visible) {
 				resultsWindow.Hide ();
-			}
-			if (CurrentContext.SearchString.Length == 0) {
-				if (currentPane == Pane.First) Hide ();
+			} else {
 				SetDefaultState ();
 			}
-			ClearSearchResults ();
 		}
 
 		void OnActivateKeyPressEvent (EventKey evnt)
@@ -481,17 +489,22 @@ namespace Do.UI
 			}
 			context[0].FirstObject = context[0].Results[cursor[0]];
 			UpdatePane (Pane.First);
+
+			context[1] = new SearchContext ();
 			SearchSecondPane ("");
 		}
 		
 		protected virtual void SearchSecondPane (string match)
 		{
+			IObject first;
+
 			cursor[1] = 0;
 			cursor[2] = 0;
-
+	
+			first = GetCurrentObject (Pane.First);
 			// Set up the next pane based on what's in the first pane:
-			context[1].FirstObject = context[0].Results[cursor[0]];
-			if (context[0].Results[cursor[0]] is IItem) {
+			context[1].FirstObject = first;
+			if (first is IItem) {
 				context[1].SearchTypes = new Type[] { typeof (ICommand) };
 			} else {
 				context[1].SearchTypes = new Type[] { typeof (IItem) };
