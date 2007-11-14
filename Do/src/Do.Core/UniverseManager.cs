@@ -46,8 +46,8 @@ namespace Do.Core
 			
 			LoadBuiltins ();
 			LoadAddins ();
-			BuildUniverse ();
-			BuildFirstResults ();	
+			BuildUniverse (universe);
+			BuildFirstResults (universe, firstResults);	
 		}
 
 		protected void LoadBuiltins ()
@@ -116,7 +116,8 @@ namespace Do.Core
 			}
 		}
 
-		private void BuildFirstResults () 
+		private void BuildFirstResults (Dictionary<int, IObject> builtUniverse,
+		                                Dictionary<string, IObject[]> resultsToIndex) 
 		{			
 			List<IObject> results;
 			RelevanceSorter comparer;
@@ -124,22 +125,22 @@ namespace Do.Core
 			//For each starting character add every matching object from the universe to
 			//the firstResults dictionary with the key of the character
 			for (char keypress = 'a'; keypress < 'z'; keypress++) {
-				results = new List<IObject> (universe.Values);
+				results = new List<IObject> (builtUniverse.Values);
 				comparer = new RelevanceSorter (keypress.ToString ());
-				firstResults[keypress.ToString ()] = comparer.NarrowResults (results).ToArray ();
+				resultsToIndex[keypress.ToString ()] = comparer.NarrowResults (results).ToArray ();
 			}
 		}
 		
-		private void BuildUniverse () {
+		private void BuildUniverse (Dictionary<int, IObject> universeToBuild) {
 			// Hash items.
 			foreach (DoItemSource source in doItemSources) {
 				foreach (DoItem item in source.Items) {
-					universe[item.GetHashCode ()] = item;
+					universeToBuild[item.GetHashCode ()] = item;
 				}
 			}
 			// Hash commands.
 			foreach (DoCommand command in doCommands) {
-				universe[command.GetHashCode ()] = command;
+				universeToBuild[command.GetHashCode ()] = command;
 			}
 		}
 		
