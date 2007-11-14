@@ -134,7 +134,15 @@ namespace Do.Universe
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item) {
-			return null;
+			List<IItem> children;
+			
+			children = new List<IItem> ();
+			if (item is DirectoryFileItem) {
+				foreach (string uri in Directory.GetFileSystemEntries ((item as DirectoryFileItem).URI)) {
+					children.Add (FileItem.Create (uri));
+				}
+			}
+			return children;
 		}
 		
 		public void UpdateItems ()

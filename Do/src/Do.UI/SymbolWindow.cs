@@ -116,7 +116,15 @@ namespace Do.UI
 			}
 		}
 
-		SearchContext CurrentContext { get { return context[(int) currentPane]; } }
+		SearchContext CurrentContext {
+			get {
+				return context[(int) currentPane];
+			}
+			set {
+				context[(int) currentPane] = value;
+			}
+		}
+		
 		IconBox CurrentIconBox { get { return iconbox[(int) currentPane]; } }
 
 		int CurrentCursor {
@@ -298,7 +306,17 @@ namespace Do.UI
 
 		void OnLeftRightKeyPressEvent (EventKey evnt)
 		{
-			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {
+			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
+				IObject parent;
+				IObject[] children;
+				
+				parent = GetCurrentObject (currentPane);
+				if (parent == null) return;
+				children = Do.UniverseManager.ChildrenOfObject (parent);
+				if (children.Length == 0) return;
+				CurrentContext = new SearchContext ();
+				CurrentContext.ResultsIn = children;
+				QueueSearch ();
 			} else {
 			}
 		}
@@ -461,18 +479,8 @@ namespace Do.UI
 				}
 				filtered.Add (o);
 			}
-
 			context[0].FirstObject = context[0].Results[cursor[0]];
-			iconbox[0].DisplayObject = context[0].FirstObject;
-			iconbox[0].Highlight = match;
-
-			if (currentPane == Pane.First) {
-				label.DisplayObject = context[0].Results[cursor[0]];
-				label.Highlight = match;
-				resultsWindow.Results = context[0].Results;
-				resultsWindow.SelectedIndex = 0;
-			}
-	
+			UpdatePane (Pane.First);
 			SearchSecondPane ("");
 		}
 		
@@ -493,21 +501,24 @@ namespace Do.UI
 			context[1] = Do.UniverseManager.Search (context[1]);
 
 			if (context[1].Results.Length > 0) {
-				iconbox[1].DisplayObject = context[1].Results[0];
-				iconbox[1].Highlight = match;
-
-				if (currentPane == Pane.Second) {
-					label.DisplayObject = context[1].SecondObject;
-					label.Highlight = match;
-					resultsWindow.Results = CurrentContext.Results;
-					resultsWindow.SelectedIndex = 0;
-				}
+				UpdatePane (Pane.Second);
 			} else {
 				SetNoResultsFoundState (Pane.Second);
 			}
 		}
 		
-	
+		protected void UpdatePane (Pane pane)
+		{
+			iconbox[(int) pane].DisplayObject = GetCurrentObject (pane);
+			iconbox[(int) pane].Highlight = context[(int) pane].SearchString;
+
+			if (pane == currentPane) {
+				label.DisplayObject = GetCurrentObject (pane);
+				resultsWindow.Results = CurrentContext.Results;
+				resultsWindow.SelectedIndex = CurrentCursor;
+			}
+		}
+		
 		protected void Build ()
 		{
 			VBox         vbox;

@@ -49,6 +49,24 @@ namespace Do.Core
 			BuildUniverse ();
 			BuildFirstResults ();	
 		}
+		
+		public IObject[] ChildrenOfObject (IObject parent)
+		{
+			Dictionary<string, IObject> children;
+			
+			children = new Dictionary<string,IObject> ();
+			if (parent is DoItem) {
+				foreach (DoItemSource source in doItemSources) {
+					foreach (DoItem child in source.ChildrenOfItem (parent as IItem)) {
+						children[child.UID] = child;
+					}
+				}
+			}
+
+			IObject[] c = new IObject[children.Count];
+			children.Values.CopyTo (c, 0);
+			return c;
+		}
 
 		protected void LoadBuiltins ()
 		{
@@ -156,7 +174,7 @@ namespace Do.Core
 			} 
 
 			// Get the results based on the search string
-			results = GenerateUnfilteredList (context);
+			results = GenerateUnfilteredList (context);		
 			if (results.Count == 0) {
 				results.Add (new DoItem (new TextItem (context.SearchString)));
 			}
@@ -214,6 +232,12 @@ namespace Do.Core
 					results = comparer.NarrowResults (results);
 				}
 
+				// We are given results (e.g. begin browsing)
+				else if (context.ResultsIn != null) {
+					Console.WriteLine ("Results in.");
+					results = new List<IObject> (context.ResultsIn);
+				}
+				
 				// If someone typed a single key, BOOM we're done.
 				else if (firstResults.ContainsKey (query)) {
 					results = new List<IObject> (firstResults[query]);

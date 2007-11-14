@@ -33,12 +33,14 @@ namespace Do.Core
 		Type[] searchTypes;
 		
 		IObject[] results;
+		IObject[] resultsIn;
 				
 		public SearchContext ()
 		{
 			lastContext = null;
 			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
 			searchString = "";
+			results = resultsIn = null;
 		}
 		
 		public SearchContext Clone () {
@@ -100,6 +102,15 @@ namespace Do.Core
 				// a client class sets this field, it must
 				// be ensured that array contains IObjects.
 				results = value;
+			}
+		}
+		
+		public IObject[] ResultsIn {
+			get {
+				return resultsIn;
+			}
+			set {
+				resultsIn = value;
 			}
 		}
 		
