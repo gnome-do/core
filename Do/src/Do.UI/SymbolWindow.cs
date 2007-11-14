@@ -241,6 +241,7 @@ namespace Do.UI
 			if (((int) evnt.State & (int) ModifierType.ControlMask) != 0) {
 				switch (key) {
 				case Gdk.Key.q:
+					Do.UniverseManager.KillIndexThread ();
 					Application.Quit ();
 					break;
 				}

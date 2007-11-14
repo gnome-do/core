@@ -21,6 +21,7 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Threading;
 
 using Do;
 using Do.Universe;
@@ -37,6 +38,12 @@ namespace Do.Core
 		List<DoItemSource> doItemSources;
 		List<DoCommand> doCommands;
 		
+		Thread indexThread;
+		Mutex universeMutex;
+		Mutex firstResultsMutex;
+		
+		const int kUpdateWaitTime = 300000;
+		
 		public UniverseManager()
 		{
 			universe = new Dictionary<int, IObject> ();
@@ -44,10 +51,61 @@ namespace Do.Core
 			doCommands = new List<DoCommand> ();
 			firstResults = new Dictionary<string, IObject[]> ();
 			
+			universeMutex = new Mutex ();
+			firstResultsMutex = new Mutex ();
 			LoadBuiltins ();
 			LoadAddins ();
+			universeMutex.WaitOne ();
 			BuildUniverse (universe);
-			BuildFirstResults (universe, firstResults);	
+			firstResultsMutex.WaitOne ();
+			BuildFirstResults (universe, firstResults);
+			universeMutex.ReleaseMutex ();
+			firstResultsMutex.ReleaseMutex ();
+
+			ThreadStart updateJob = new ThreadStart (UpdateUniverse);
+			indexThread = new Thread (updateJob);
+			indexThread.Start ();
+		}
+		
+		public void KillIndexThread () {
+			indexThread.Abort ();
+		}
+		
+		public void AwakeIndexThread () {
+			Monitor.Enter (indexThread);
+			Monitor.Pulse (indexThread);
+			Monitor.Exit (indexThread);
+		}
+		
+		public void UpdateUniverse ()
+		{
+			Dictionary<string, IObject[]> updateFirstResults;
+			Dictionary<int, IObject> updateUniverse;
+			while (true) {
+				Monitor.Enter (indexThread);
+				Monitor.Wait (indexThread, kUpdateWaitTime);
+				Monitor.Exit (indexThread);
+				updateUniverse = new Dictionary<int, IObject> ();
+				updateFirstResults = new Dictionary<string,IObject[]> ();
+				
+				LoadBuiltins ();
+				LoadAddins ();
+				BuildUniverse (updateUniverse);
+				//Possible idea to implement: when updating the universe check to see if
+				//any objects that have non-zero relevance with each character string were added.
+				//Then pass the array of non-valid characters to the BuildFirstResults method, to avoid
+				//unnecessary work. For example if the only new object was called Art, there is no need
+				//to re-index the cache for anything else besides characters 'A', 'R' and 'T'
+				BuildFirstResults (updateUniverse, updateFirstResults);
+
+				universeMutex.WaitOne ();
+				universe = updateUniverse;
+				universeMutex.ReleaseMutex ();
+				
+				firstResultsMutex.WaitOne ();
+				firstResults = updateFirstResults;
+				firstResultsMutex.ReleaseMutex ();
+			}
 		}
 
 		protected void LoadBuiltins ()
@@ -146,6 +204,9 @@ namespace Do.Core
 		
 		public SearchContext Search (SearchContext context)
 		{
+			universeMutex.WaitOne ();
+			firstResultsMutex.WaitOne ();
+			
 			List<IObject> results;
 		
 			// Get the results based on the search string
@@ -220,6 +281,10 @@ namespace Do.Core
 				}
 			}
 			results.Add (new DoItem (new TextItem (context.SearchString)));
+			
+			universeMutex.ReleaseMutex ();
+			firstResultsMutex.ReleaseMutex ();
+			
 			return results;
 		}
 			

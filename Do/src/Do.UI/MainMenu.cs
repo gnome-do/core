@@ -92,7 +92,7 @@ namespace Do.UI
 
 		protected void OnMainMenuRefreshCatalogClicked (object o, EventArgs args)
 		{
-//			DoMain.Commander.ItemManager.UpdateItemSources ();
+			Do.UniverseManager.AwakeIndexThread ();
 		}
 
 		protected void OnMainMenuAboutClicked (object o, EventArgs args)
