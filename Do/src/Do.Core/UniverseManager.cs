@@ -146,9 +146,20 @@ namespace Do.Core
 		public SearchContext Search (SearchContext context)
 		{
 			List<IObject> results;
-		
+			SearchContext last;
+
+			// Do backwards search.	
+			last = context.LastContext;
+			if (last != null && last.LastContext != null &&
+					last.LastContext.SearchString == context.SearchString) {
+				return last.LastContext;
+			} 
+
 			// Get the results based on the search string
 			results = GenerateUnfilteredList (context);
+			if (results.Count == 0) {
+				results.Add (new DoItem (new TextItem (context.SearchString)));
+			}
 			// Filter results based on the required type
 			results = FilterResultsByType (results, context.SearchTypes);
 			// Filter results based on object dependencies
@@ -156,10 +167,10 @@ namespace Do.Core
 			context.Results = results.ToArray ();
 			
 			// Keep a stack of incremental results.
-			SearchContext clone;
-			clone = context.Clone ();
-			clone.LastContext = context;
-			return clone;
+			last = context;
+			context = context.Clone ();
+			context.LastContext = last;
+			return context;
 		}
 		
 		private List<IObject> GenerateUnfilteredList (SearchContext context) 
@@ -171,30 +182,30 @@ namespace Do.Core
 			query = context.SearchString.ToLower ();
 		
 			// Special handling for commands that take only text:
-			if (context.FirstObject != null &&
-			    context.FirstObject is DoCommand &&
+			if (context.FirstObject != null && context.FirstObject is DoCommand &&
 			    (context.FirstObject as DoCommand).AcceptsOnlyText) {
 				results = new List<IObject> ();
 				results.Add (new DoItem (new TextItem (query == "" ? "Enter Text" : context.SearchString)));
 				return results;
 			}
+
 			//If this is the initial search for the all the corresponding items/commands for the first object
 			/// we don't need to filter based on search string
-			else if (context.SearchString == "" && context.FirstObject != null) {
+			if (query == "" && context.FirstObject != null) {
 				results = new List<IObject> ();
 				
-				//If command, just grab the commands for the item
+				// If command, just grab the commands for the item
 				if (ContainsType (context.SearchTypes, typeof (ICommand))) {
 					foreach (DoCommand command in CommandsForItem (context.FirstObject as DoItem)) {
 						results.Add (command);
 					}
 				}
-				//If item, use the command to item map
 				else if (ContainsType (context.SearchTypes, typeof (IItem))) {
 					results.AddRange (universe.Values);
 				}
-			}
-			else {
+
+			} else {
+
 				// We can build on the last results.
 				// example: searched for "f" then "fi"
 				if (context.LastContext != null) {
@@ -218,7 +229,6 @@ namespace Do.Core
 					results.Sort (comparer);
 				}
 			}
-			results.Add (new DoItem (new TextItem (context.SearchString)));
 			return results;
 		}
 			

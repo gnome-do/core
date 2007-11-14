@@ -36,6 +36,7 @@ namespace Do.Core
 				
 		public SearchContext ()
 		{
+			lastContext = null;
 			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
 			searchString = "";
 		}

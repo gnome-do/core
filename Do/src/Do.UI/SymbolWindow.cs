@@ -130,7 +130,6 @@ namespace Do.UI
 		
 		protected virtual void SetDefaultState ()
 		{
-			resultsWindow.Hide ();
 			tabbing = false;
 
 			context[0] = new SearchContext ();
@@ -180,6 +179,8 @@ namespace Do.UI
 					SetDefaultState ();
 					break;
 				case Pane.Second:
+					context[1] = new SearchContext ();
+					context[2] = new SearchContext ();
 					SearchSecondPane ("");
 					break;
 			}
@@ -247,6 +248,9 @@ namespace Do.UI
 
 		void OnEscapeKeyPressEvent (EventKey evnt)
 		{
+			if (resultsWindow.Visible) {
+				resultsWindow.Hide ();
+			}
 			if (CurrentContext.SearchString.Length == 0) {
 				if (currentPane == Pane.First) Hide ();
 				SetDefaultState ();
@@ -261,18 +265,14 @@ namespace Do.UI
 
 		void OnDeleteKeyPressEvent (EventKey evnt)
 		{
-			string query;
+			if (CurrentContext.SearchString.Length == 0) return;
 
-			query = CurrentContext.SearchString;
-			if (query.Length > 1) {
-				query = query.Substring (0, query.Length-1);
-				CurrentContext.SearchString = query;
+			if (CurrentContext.SearchString.Length > 1) {
+				CurrentContext.SearchString = CurrentContext.SearchString.Substring (0, CurrentContext.SearchString.Length-1);
 				QueueSearch ();
-				// DeleteCharacter ();
 			} else {
 				ClearSearchResults ();
 			}
-			CurrentContext.SearchString = query;
 		}
 
 		void OnTabKeyPressEvent (EventKey evnt)
@@ -281,8 +281,10 @@ namespace Do.UI
 			if (CurrentPane == Pane.First &&
 					context[0].Results != null &&
 					context[0].Results.Length != 0) {				
+				resultsWindow.Hide ();
 				CurrentPane = Pane.Second;
 			} else if (currentPane == Pane.Second) {
+				resultsWindow.Hide ();
 				CurrentPane = Pane.First;
 			}
 			tabbing = false;
@@ -387,7 +389,6 @@ namespace Do.UI
 					items.Add (second as IItem);
 					command = first as ICommand;
 				}
-				Console.WriteLine ("Perform {0} on {1}", command, items[0]);
 				command.Perform (items.ToArray (), modItems.ToArray ());
 			}
 			SetDefaultState ();
@@ -429,8 +430,6 @@ namespace Do.UI
 			iconbox[0].IsFocused = (pane == Pane.First);
 			iconbox[1].IsFocused = (pane == Pane.Second);
 			iconbox[2].IsFocused = (pane == Pane.Third);
-
-			resultsWindow.Hide ();
 
 			resultsWindow.Results = CurrentContext.Results;
 			resultsWindow.SelectedIndex = CurrentCursor;
