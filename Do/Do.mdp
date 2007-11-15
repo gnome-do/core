@@ -39,7 +39,6 @@
     <File name="./src/Do.Core/DoObject.cs" subtype="Code" buildaction="Compile" />
     <File name="../Do.Addins/bin/Debug/Do.Addins.dll" subtype="Code" buildaction="EmbedAsResource" />
     <File name="../Do.DBus/bin/Debug/Do.DBus.dll" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="./gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

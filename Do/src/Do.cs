@@ -48,8 +48,15 @@ namespace Do
 			
 			universeManager = new UniverseManager ();
 			commander = new DefaultCommander ();	
-			DBusRegistrar.RegisterCommander (commander);
-			commander.Show ();
+			DBusRegistrar.RegisterCommander (commander);	
+
+			// Temporary quiet start feature.
+			bool quiet_start = false;
+			foreach (string arg in args)
+				quiet_start |= (arg == "--quiet");
+			
+			if (!quiet_start)
+				commander.Show ();
 			
 			Gtk.Application.Run ();
 		}	
