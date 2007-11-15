@@ -174,9 +174,10 @@ namespace Tomboy
 				    key_sequence == "disabled")
 					return;
 
-				Log.Info ("Binding key '{0}' for '{1}'",
-						   key_sequence,
-						   gconf_path);
+				Log.Info ("Binding key '{0}' for '{1}'." +
+									" You may change this keybinding with" +
+								  " Configuration Editor (gconf-editor).",
+									 key_sequence, gconf_path);
 
 				parent.Bind (key_sequence, handler);
 			}
