@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+
 using Do.Universe;
 
 namespace Do.Core
@@ -26,8 +28,9 @@ namespace Do.Core
 	
 	public class SearchContext
 	{
-		IObject firstObject;
-		IObject secondObject;
+		List<DoItem> items;
+		DoCommand command;
+		List<DoItem> modifierItems;
 		string searchString;
 		int index;
 		SearchContext lastContext;
@@ -38,12 +41,15 @@ namespace Do.Core
 		public SearchContext ()
 		{
 			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
+			items = new List<DoItem> ();
+			modifierItems = new List<DoItem> ();
 		}
 		
 		public SearchContext Clone () {
 			SearchContext clonedContext = new SearchContext ();
-			clonedContext.FirstObject = firstObject;
-			clonedContext.SecondObject = secondObject;
+			clonedContext.Command = command;
+			clonedContext.Items = items;
+			clonedContext.ModifierItems = modifierItems;
 			clonedContext.SearchString = searchString;
 			clonedContext.LastContext = lastContext;
 			if (results != null) {
@@ -62,25 +68,33 @@ namespace Do.Core
 			}
 		}
 		
-		public IObject FirstObject {
+		public List<DoItem> Items {
 			get {
-				return firstObject;
+				return items;
 			}
 			set {
-				firstObject = value;
+				items = value;
 			}
 		}
 		
-		public IObject SecondObject {
+		public List<DoItem> ModifierItems {
 			get {
-				return secondObject;
+				return modifierItems;
 			}
 			set {
-				secondObject = value;
+				modifierItems = value;
+			}
+		}
+		
+		public DoCommand Command {
+			get {
+				return command;
+			}
+			set {
+				command = value;
 			}
 		}
 			
-
 		public string SearchString {
 			get {
 				return searchString;
@@ -118,6 +132,99 @@ namespace Do.Core
 			set {
 				searchTypes = value;
 			}
-		}			
+		}
+		
+		//This returns an array of the inner items, based on the list of DoItems
+		//This is necessary because SearchContext stores its items as DoItems, but sometimes
+		//methods like ActivateCommand want the IItems associated with DoItems
+		public IItem[] IItems {
+			get {
+				IItem[] returnItems = new IItem [items.Count];
+				int i = 0;
+				foreach (DoItem item in items) {
+					returnItems[i] = item.IItem;
+					i++;
+				}
+				return returnItems;
+			}
+		}
+		
+		public IItem[] ModIItems {
+			get {
+				IItem[] returnItems = new IItem [modifierItems.Count];
+				int i = 0;
+				foreach (DoItem item in modifierItems) {
+					returnItems[i] = item.IItem;
+					i++;
+				}
+				return returnItems;
+			}
+		}
+		
+		public bool ContainsFirstObject ()
+		{
+			return (items.Count != 0 || command != null);
+		}
+		
+		public bool ContainsSecondObject ()
+		{
+			return (items.Count != 0 && command != null);
+		}
+		
+		public bool ContainsCommand ()
+		{
+			return (command != null);
+		}
+		
+		public bool ContainsItems ()
+		{
+			return (items.Count != 0);
+		}
+		
+		public bool ContainsModifierItems ()
+		{
+			return (modifierItems.Count != 0);
+		}
+		
+		public void ResetAllObjects ()
+		{
+			items = new List<DoItem> ();
+			modifierItems = new List<DoItem> ();
+			command = null;
+		}
+		
+		//When setting the "first object" on a search context, set the proper item/command
+		/// value, then erase the other ones ensuring that the object is actually the "first"
+		public IObject FirstObject {
+			set {
+				if (value is IItem) {
+					command = null;
+					items = new List<DoItem> ();
+					modifierItems = new List<DoItem> ();
+					items.Add (value as DoItem);
+				}
+				else if (value is ICommand) {
+					items = new List<DoItem> ();
+					modifierItems = new List<DoItem> ();
+					command = value as DoCommand;
+				}
+			}
+		}
+		
+		//Same as the first object, but don't reset the opposite item/command corresponding to the "first"
+		/// only erase modifierItems
+		public IObject SecondObject {
+			set {
+				if (value is IItem) {
+					items = new List<DoItem> ();
+					items.Add (value as DoItem);
+					modifierItems = new List<DoItem> ();
+				}
+				else if (value is ICommand) {
+					command = value as DoCommand;
+					modifierItems = new List<DoItem> ();
+				}
+			}
+		}
 	}
 }

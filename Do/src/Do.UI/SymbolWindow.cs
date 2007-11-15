@@ -320,21 +320,13 @@ namespace Do.UI
 		
 		protected virtual void ActivateCommand ()
 		{
-			ICommand command;
-			IItem[] items = new IItem[1];
-			IItem[] modItems = new IItem[0];
-			
+			ICommand command = paneContext[1].Command;
+			IItem[] items = paneContext[1].IItems;
+			IItem[] modItems = paneContext[1].ModIItems;
+						
 			// This class will be re-written soon to take better care
 			// of corner cases like ones that lead to NullReferenceExceptions here.
 			try {
-				if (paneContext[1].FirstObject is IItem) {
-					items[0] = paneContext[1].FirstObject as IItem;
-					command = paneContext[1].SecondObject as ICommand;
-				} else {
-					items[0] = paneContext[1].SecondObject as IItem;
-					command = paneContext[1].FirstObject as ICommand;
-				}
-			
 				command.Perform (items, modItems);
 			} catch { }
 			Hide ();
@@ -433,7 +425,7 @@ namespace Do.UI
 			CurrentContext.SearchString = searchString;
 			if (focus == WindowFocus.FirstFocus ) {
 				paneContext[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
-				paneContext[0].FirstObject = null;
+				paneContext[0].ResetAllObjects ();
 			}
 			CurrentContext = Do.UniverseManager.Search (CurrentContext);
 			CurrentObjects = CurrentContext.Results;
@@ -464,16 +456,16 @@ namespace Do.UI
 		
 		protected virtual void SetFirstIndex (string match)
 		{	
-			paneContext[0].FirstObject = paneContext[0].Results[paneContext[0].ObjectIndex];
+			IObject firstObject = paneContext[0].FirstObject = paneContext[0].Results[paneContext[0].ObjectIndex];
 			
-			itemBox.DisplayObject = paneContext[0].FirstObject;
+			itemBox.DisplayObject = firstObject;
 			itemBox.Highlight = match;
 			displayLabel.DisplayObject = paneObjects[0][paneContext[0].ObjectIndex];
 			displayLabel.Highlight= searchString;
 
 			paneContext[1] = paneContext[0].Clone ();
 			//Set up the next pane based on what's in the first pane
-			if (paneContext[0].FirstObject is IItem) {
+			if (firstObject is IItem) {
 				paneContext[1].SearchTypes = new Type[] { typeof (ICommand) };
 			}
 			else {
@@ -489,12 +481,12 @@ namespace Do.UI
 		protected virtual void SetSecondIndex (string match)
 		{
 			if (paneContext[1].Results.Length > 0) {
-				paneContext[1].SecondObject = paneContext[1].Results[paneContext[1].ObjectIndex];
-				commandBox.DisplayObject = paneContext[1].SecondObject;
+				IObject secondObject = paneContext[1].SecondObject = paneContext[1].Results[paneContext[1].ObjectIndex];
+				commandBox.DisplayObject = secondObject;
 				
 				commandBox.Highlight = match;
 				if (focus == WindowFocus.SecondFocus) {
-					displayLabel.DisplayObject = paneContext[1].SecondObject;
+					displayLabel.DisplayObject = secondObject;
 					displayLabel.Highlight = match;
 				}
 			} else {

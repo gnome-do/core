@@ -214,9 +214,12 @@ namespace Do.Core
 			// Filter results based on the required type
 			results = FilterResultsByType (results, context.SearchTypes);
 			// Filter results based on object dependencies
-			results = FilterResultsByDependency (results, context.FirstObject);		
+			results = FilterResultsByCommandDependency (results, context.Command);
 			context.Results = results.ToArray ();
 			
+			universeMutex.ReleaseMutex ();
+			firstResultsMutex.ReleaseMutex ();
+
 			// Keep a stack of incremental results.
 			SearchContext clone;
 			clone = context.Clone ();
@@ -232,23 +235,44 @@ namespace Do.Core
 			
 			query = context.SearchString.ToLower ();
 		
-			// Special handling for commands that take only text:
-			if (context.FirstObject != null &&
-			    context.FirstObject is DoCommand &&
-			    (context.FirstObject as DoCommand).AcceptsOnlyText) {
+			// Special handling for commands that take only text as an item:
+			if (context.ContainsCommand () && !(context.ContainsSecondObject ())
+			    && (context.Command as DoCommand).AcceptsOnlyText) {
 				results = new List<IObject> ();
 				results.Add (new DoItem (new TextItem (query == "" ? "Enter Text" : context.SearchString)));
 				return results;
 			}
 			//If this is the initial search for the all the corresponding items/commands for the first object
 			/// we don't need to filter based on search string
-			else if (context.SearchString == "" && context.FirstObject != null) {
+			else if (context.SearchString == "" && context.ContainsFirstObject ()) {
 				results = new List<IObject> ();
 				
-				//If command, just grab the commands for the item
+				//If command, we have to grab the set of commands that are valid for all items in our list
 				if (ContainsType (context.SearchTypes, typeof (ICommand))) {
-					foreach (DoCommand command in CommandsForItem (context.FirstObject as DoItem)) {
-						results.Add (command);
+					bool firstList = true;
+					//Iterate through the item list in SearchContext
+					foreach (DoItem item in context.Items) {
+						List<IObject> newResults = new List<IObject> ();						
+						//Insert all the commands for that item into a list
+						foreach (DoCommand command in CommandsForItem (item)) {
+							newResults.Add (command);
+						}
+						//If this is the first item in the list set the command results to the commands for that item
+						if (firstList) {
+							results.AddRange (newResults);
+							firstList = false;
+						}
+						//If this is not the first item, iterate through all the commands for the items and if its
+						//not in the results list for the previous items, remove it from the new results list
+						//We are trying to get the intersection of the set of all of these commands.
+						else {
+							foreach (DoCommand command in newResults) {
+								if (!(results.Contains (command))) {
+									newResults.Remove (command);
+								}
+							}
+							results = newResults;
+						}
 					}
 				}
 				//If item, use the command to item map
@@ -282,9 +306,6 @@ namespace Do.Core
 			}
 			results.Add (new DoItem (new TextItem (context.SearchString)));
 			
-			universeMutex.ReleaseMutex ();
-			firstResultsMutex.ReleaseMutex ();
-			
 			return results;
 		}
 			
@@ -306,27 +327,21 @@ namespace Do.Core
 			return new_results;
 		}
 		
-		private List<IObject> FilterResultsByDependency (List<IObject> results, IObject constraint)
+		private List<IObject> FilterResultsByCommandDependency (List<IObject> results, DoCommand constraint)
 		{
 			List <IObject> filtered_results;
 			
 			if (constraint == null) return results;
 			filtered_results = new List<IObject> ();
 			
-			if (constraint is DoCommand) {
-				foreach (DoItem item in results) {
-					// If the constraint is a DoCommand, add the result if it's supported.
-					if ((constraint as DoCommand).SupportsItem (item)) {
-						filtered_results.Add (item);
-					}
+			foreach (DoItem item in results) {
+				// If the constraint is a DoCommand, add the result if it's supported.
+				if ((constraint as DoCommand).SupportsItem (item)) {
+					filtered_results.Add (item);
 				}
-			}
-			else if (constraint is DoItem) {
-				filtered_results = results;
 			}
 			return filtered_results;
 		}
-				
 		
 		//Function to determine whether a type array contains a type
 		private bool ContainsType (Type[] typeArray, Type checkType) {
