@@ -297,18 +297,14 @@ namespace Do.UI
 
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
+			if (!resultsWindow.Visible) {
+			 	resultsWindow.Show ();
+				return;
+			}
 			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
-				if (resultsWindow.SelectedIndex == 0) {
-					resultsWindow.Hide ();
-				} else {
-					resultsWindow.SelectPrev ();
-				}
+				resultsWindow.SelectPrev ();
 			} else {
-				if (resultsWindow.Visible) {
-					resultsWindow.SelectNext ();
-				} else {				
-					resultsWindow.Show ();
-				}
+				resultsWindow.SelectNext ();
 			}
 		}
 
@@ -320,8 +316,11 @@ namespace Do.UI
 				
 				parent = GetCurrentObject (currentPane);
 				if (parent == null) return;
+				
 				children = Do.UniverseManager.ChildrenOfObject (parent);
 				if (children.Length == 0) return;
+				
+				if (!resultsWindow.Visible) resultsWindow.Show ();
 				CurrentContext = new SearchContext ();
 				CurrentContext.ResultsIn = children;
 				QueueSearch ();
@@ -481,12 +480,12 @@ namespace Do.UI
 				if (o is ICommand) {
 					ICommand cmd = o as ICommand;
 					if (cmd == null ||
-							cmd.SupportedItemTypes.Length != 1 ||
-							cmd.SupportedItemTypes[0] != typeof (ITextItem))
-						continue;
+						cmd.SupportedItemTypes.Length != 1 ||
+						cmd.SupportedItemTypes[0] != typeof (ITextItem)) continue;
 				}
 				filtered.Add (o);
 			}
+			context[0].Results = filtered.ToArray ();
 			context[0].FirstObject = context[0].Results[cursor[0]];
 			UpdatePane (Pane.First);
 

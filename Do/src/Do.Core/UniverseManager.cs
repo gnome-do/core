@@ -62,7 +62,7 @@ namespace Do.Core
 					}
 				}
 			}
-
+			
 			IObject[] c = new IObject[children.Count];
 			children.Values.CopyTo (c, 0);
 			return c;

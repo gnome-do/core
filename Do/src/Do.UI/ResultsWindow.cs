@@ -81,10 +81,19 @@ namespace Do.UI
 			selectedIndex = 0;
 			selectedIndexSet = false;
 			SelectionChanged = OnSelectionChangedEvent;
+			Shown += OnShown;
 		}
 		
 		protected virtual void OnSelectionChangedEvent (object sender, ResultsWindowSelectionEventArgs args)
 		{
+		}
+		
+		protected virtual void OnShown (object sender, EventArgs args)
+		{
+			// Do this to load the icons.
+			Results = results;
+			selectedIndexSet = false;
+			SelectedIndex = selectedIndex;
 		}
 		
 		private void NotifySelectionChanged ()
@@ -243,10 +252,12 @@ namespace Do.UI
 				seen_first = false;
 
 				foreach (IObject result in results) {
-					icon = Util.Appearance.PixbufFromIconName (result.Icon,
-						                                       ResultIconSize);
-					info = string.Format (ResultInfoFormat,
-																result.Name, result.Description);
+					if (Visible)
+							icon = Util.Appearance.PixbufFromIconName (result.Icon, ResultIconSize);
+					else
+							icon = Util.Appearance.PixbufFromIconName ("empty", ResultIconSize);
+							
+					info = string.Format (ResultInfoFormat, result.Name, result.Description);
 					info = Util.Appearance.MarkupSafeString (info);
 					iter = store.AppendValues (new object[] {
 							result,
