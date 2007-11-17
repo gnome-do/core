@@ -1,3 +1,3 @@
 #!/bin/sh
 
-exec mono "@prefix@/lib/@PACKAGE@/Do.exe" "$@"
+exec mono "@libdir@/@PACKAGE@/Do.exe" "$@"

@@ -31,7 +31,7 @@ bin_SCRIPTS = $(BINARIES)
 
 linuxdesktopapplicationsdir = @prefix@/share/applications
 linuxdesktopapplications_DATA = $(LINUX_DESKTOPAPPLICATIONS)
-programfilesdir = @prefix@/lib/@PACKAGE@
+programfilesdir = @libdir@/@PACKAGE@
 programfiles_DATA = $(PROGRAMFILES)
-linuxpkgconfigdir = @prefix@/lib/pkgconfig
+linuxpkgconfigdir = @libdir@/pkgconfig
 linuxpkgconfig_DATA = $(LINUX_PKGCONFIG)
