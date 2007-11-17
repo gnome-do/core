@@ -29,15 +29,18 @@ namespace Do.Core
 		IObject firstObject;
 		IObject secondObject;
 		string searchString;
-		int index;
 		SearchContext lastContext;
 		Type[] searchTypes;
 		
 		IObject[] results;
+		IObject[] resultsIn;
 				
 		public SearchContext ()
 		{
+			lastContext = null;
 			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
+			searchString = "";
+			results = resultsIn = null;
 		}
 		
 		public SearchContext Clone () {
@@ -102,12 +105,12 @@ namespace Do.Core
 			}
 		}
 		
-		public int ObjectIndex {
+		public IObject[] ResultsIn {
 			get {
-				return index;
+				return resultsIn;
 			}
 			set {
-				index = value;
+				resultsIn = value;
 			}
 		}
 		

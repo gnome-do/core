@@ -59,7 +59,22 @@ namespace Do.Core
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item) {
-			return new List<IItem> ();
+			ICollection<IItem> children;
+			List<IItem> doChildren;
+			
+			doChildren = new List<IItem> ();
+			if (item is DoItem)
+				item = (item as DoItem).IItem;
+			try {
+				children = source.ChildrenOfItem (item);
+			} catch { children = null; }
+			
+			if (children != null) {
+				foreach (IItem child in children) {
+					doChildren.Add (new DoItem (child));
+				}
+			}
+			return doChildren;
 		}
 		
 		public bool Enabled {

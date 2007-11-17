@@ -72,20 +72,31 @@ namespace Do.UI
 		TreeView resultsTreeview;
 		IObject[] results;
 		int selectedIndex;
+		bool selectedIndexSet;
 
 		public ResultsWindow () : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
 			results = null;
 			selectedIndex = 0;
+			selectedIndexSet = false;
 			SelectionChanged = OnSelectionChangedEvent;
+			Shown += OnShown;
 		}
 		
 		protected virtual void OnSelectionChangedEvent (object sender, ResultsWindowSelectionEventArgs args)
 		{
 		}
 		
-		private void NotifiySelectionChanged ()
+		protected virtual void OnShown (object sender, EventArgs args)
+		{
+			// Do this to load the icons.
+			Results = results;
+			selectedIndexSet = false;
+			SelectedIndex = selectedIndex;
+		}
+		
+		private void NotifySelectionChanged ()
 		{
 			ResultsWindowSelectionEventArgs args;
 
@@ -108,7 +119,7 @@ namespace Do.UI
 			vbox = new VBox (false, 0);
 			Add (vbox);
 			vbox.BorderWidth = 4;
-			vbox.SetSizeRequest (400, (ResultIconSize + 3) * NumberResultsDisplayed);
+			vbox.SetSizeRequest (375, (ResultIconSize + 3) * NumberResultsDisplayed);
 			vbox.Show ();
 			
 			resultsScrolledWindow = new ScrolledWindow ();
@@ -162,9 +173,10 @@ namespace Do.UI
 		
 		private void OnResultRowSelected (object sender, EventArgs args)
 		{
+			if (!selectedIndexSet) return;
 			if (resultsTreeview.Selection.GetSelectedRows().Length > 0) {
 				selectedIndex = resultsTreeview.Selection.GetSelectedRows()[0].Indices[0];
-				NotifiySelectionChanged ();
+				NotifySelectionChanged ();
 			}
 		}
 
@@ -172,6 +184,7 @@ namespace Do.UI
 		{
 			(resultsTreeview.Model as ListStore).Clear ();
 			selectedIndex = 0;
+			selectedIndexSet = false;
 			results = null;
 		}
 		
@@ -183,9 +196,12 @@ namespace Do.UI
 				TreePath path;
 				int new_selection;
 
-				if (value == selectedIndex)
-					return;
-				else if (results.Length == 0)
+				if (selectedIndexSet &&
+						value == selectedIndex) return;
+
+				selectedIndexSet = true;
+
+				if (results.Length == 0)
 					return;
 				else if (value >= results.Length)
 					new_selection = results.Length - 1;
@@ -207,8 +223,6 @@ namespace Do.UI
 				}
 				resultsTreeview.Selection.SelectPath (path);
 				resultsTreeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
-				
-				NotifiySelectionChanged ();
 			}
 		}
 		
@@ -238,10 +252,12 @@ namespace Do.UI
 				seen_first = false;
 
 				foreach (IObject result in results) {
-					icon = Util.Appearance.PixbufFromIconName (result.Icon,
-						                                       ResultIconSize);
-					info = string.Format (ResultInfoFormat,
-																result.Name, result.Description);
+					if (Visible)
+							icon = Util.Appearance.PixbufFromIconName (result.Icon, ResultIconSize);
+					else
+							icon = Util.Appearance.PixbufFromIconName ("empty", ResultIconSize);
+							
+					info = string.Format (ResultInfoFormat, result.Name, result.Description);
 					info = Util.Appearance.MarkupSafeString (info);
 					iter = store.AppendValues (new object[] {
 							result,
