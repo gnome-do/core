@@ -3,4 +3,4 @@ Description: Do.DBus
 Version: 0.1
 
 Requires: 
-Libs: -r:@libdir@/@PACKAGE@/Do.DBus.dll
+Libs: -r:@prefix@/lib/@PACKAGE@/Do.DBus.dll
