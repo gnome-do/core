@@ -56,7 +56,7 @@ namespace Do.UI
 	{
 		
 		const int ResultIconSize = 32;
-		const int NumberResultsDisplayed = 6; 
+		const int NumberResultsDisplayed = 5; 
 		const string ResultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
 		
 		public event OnSelectionChanged SelectionChanged;
@@ -124,7 +124,7 @@ namespace Do.UI
 			vbox = new VBox (false, 0);
 			Add (vbox);
 			vbox.BorderWidth = 4;
-			vbox.SetSizeRequest (375, (ResultIconSize + 3) * NumberResultsDisplayed);
+			vbox.SetSizeRequest (375, (ResultIconSize + 9) * NumberResultsDisplayed);
 			vbox.Show ();
 			
 			resultsScrolledWindow = new ScrolledWindow ();
