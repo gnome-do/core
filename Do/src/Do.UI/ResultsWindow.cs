@@ -73,6 +73,7 @@ namespace Do.UI
 		IObject[] results;
 		int selectedIndex;
 		bool selectedIndexSet;
+		bool quietSelectionChange;
 
 		public ResultsWindow () : base (Gtk.WindowType.Toplevel)
 		{
@@ -90,10 +91,15 @@ namespace Do.UI
 		
 		protected virtual void OnShown (object sender, EventArgs args)
 		{
+			int savedSelectedIndex;    // setting Results calls Clear(), resets this.
+			
 			// Do this to load the icons.
+			savedSelectedIndex = selectedIndex;
+			quietSelectionChange = true;
 			Results = results;
 			selectedIndexSet = false;
-			SelectedIndex = selectedIndex;
+			SelectedIndex = savedSelectedIndex;
+			quietSelectionChange = false;
 		}
 		
 		private void NotifySelectionChanged ()
@@ -115,7 +121,6 @@ namespace Do.UI
 			// This typehint gets the window to raise all the way to top.
 			TypeHint = WindowTypeHint.Splashscreen;
 
-			
 			vbox = new VBox (false, 0);
 			Add (vbox);
 			vbox.BorderWidth = 4;
@@ -173,7 +178,7 @@ namespace Do.UI
 		
 		private void OnResultRowSelected (object sender, EventArgs args)
 		{
-			if (!selectedIndexSet) return;
+			if (!selectedIndexSet || quietSelectionChange) return;
 			if (resultsTreeview.Selection.GetSelectedRows().Length > 0) {
 				selectedIndex = resultsTreeview.Selection.GetSelectedRows()[0].Indices[0];
 				NotifySelectionChanged ();

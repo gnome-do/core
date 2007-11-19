@@ -102,7 +102,9 @@ namespace Do.UI
 
 			try {
 				o = context[(int) pane].Results[cursor[(int) pane]];
-			} catch { o = null; }
+			} catch {
+				o = new NoResultsFoundObject (context[(int) pane].SearchString);
+			}
 			return o;
 		}
 
@@ -447,6 +449,8 @@ namespace Do.UI
 
 			resultsWindow.Results = CurrentContext.Results;
 			resultsWindow.SelectedIndex = CurrentCursor;
+
+			label.DisplayObject = GetCurrentObject (pane);
 
 			Reposition ();
 		}
