@@ -52,20 +52,19 @@ namespace Do.Core
 		
 		public IObject[] ChildrenOfObject (IObject parent)
 		{
-			Dictionary<string, IObject> children;
+			List<IObject> children;
 			
-			children = new Dictionary<string,IObject> ();
+			children = new List<IObject> ();
 			if (parent is DoItem) {
 				foreach (DoItemSource source in doItemSources) {
-					foreach (DoItem child in source.ChildrenOfItem (parent as IItem)) {
-						children[child.UID] = child;
+					IItem iparent = (parent as DoItem).IItem;
+					foreach (IItem child in source.ChildrenOfItem (iparent)) {
+						children.Add (child);
 					}
 				}
 			}
 			
-			IObject[] c = new IObject[children.Count];
-			children.Values.CopyTo (c, 0);
-			return c;
+			return children.ToArray ();
 		}
 
 		protected void LoadBuiltins ()
