@@ -57,8 +57,7 @@ namespace Do.Core
 			children = new List<IObject> ();
 			if (parent is DoItem) {
 				foreach (DoItemSource source in doItemSources) {
-					IItem iparent = (parent as DoItem).IItem;
-					foreach (IItem child in source.ChildrenOfItem (iparent)) {
+					foreach (IItem child in source.ChildrenOfItem (parent as DoItem)) {
 						children.Add (child);
 					}
 				}
