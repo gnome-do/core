@@ -242,6 +242,8 @@ namespace Do.UI
 				case Gdk.Key.q:
 					Application.Quit ();
 					break;
+				default:
+					break;
 			}
 		}
 
