@@ -216,9 +216,16 @@ namespace Do.Core
 			SearchContext oldContext = EquivalentPreviousContext (context);
 
 			if (oldContext != null) {
-				return AddStackToClone (oldContext);
+				return AddCloneToStack (oldContext);
 			}
-
+			else if (context.FindingChildren)
+			{
+				return ChildContext (context);
+			}
+			else if (context.FindingParent)
+			{
+				return ParentContext (context);
+			}
 			else {
 				if (context.IsIndependent ()) {
 					results = IndependentResults (context);
@@ -234,7 +241,7 @@ namespace Do.Core
 
 			context.Results = results.ToArray ();
 			// Keep a stack of incremental results.
-			return AddStackToClone (context);
+			return AddCloneToStack (context);
 		}
 		
 		public SearchContext EquivalentPreviousContext (SearchContext context) {
@@ -243,11 +250,48 @@ namespace Do.Core
 			return null;
 		}
 		
-		private SearchContext AddStackToClone (SearchContext context) {
+		private SearchContext AddCloneToStack (SearchContext context) {
 			SearchContext clone;
 			clone = context.Clone ();
 			clone.LastContext = context;
 			return clone;
+		}
+		
+		private SearchContext ParentContext (SearchContext context) {
+			//Check to see if parent context exists first
+			if (context.ParentContext == null)
+				return context;
+			
+			context = context.ParentContext;
+			context.FindingChildren = false;
+			return context;
+		}
+		
+		private SearchContext ChildContext (SearchContext context) {
+			IObject[] childObjects = new IObject[0];
+			SearchContext newContext;
+			
+			Console.WriteLine ("Child Context");
+			//Check to if the current object has children first			
+			if (context.Results[context.ObjectIndex] is DoItem) {
+				Console.WriteLine ("Item "+context.Items.Count);
+				if (context.Items.Count != 1)
+					return context;
+				else
+					childObjects = ChildrenOfObject (context.Items.ToArray ()[0]);
+			}
+			
+			Console.WriteLine ("Child Count "+childObjects.Length);
+			//Don't do anything if there are no children
+			if (childObjects.Length == 0)
+				return context;
+			
+			newContext = context.Clone ();
+			newContext.ParentContext = context;
+			newContext.Results = childObjects;
+			newContext.FindingChildren = false;
+			
+			return newContext;
 		}
 		
 		private List<IObject> DependentResults (SearchContext context) {
@@ -449,12 +493,15 @@ namespace Do.Core
 		public IObject[] ChildrenOfObject (IObject parent)
 		{
 			List<IObject> children;
+			Console.WriteLine ("Checking object chidren "+parent.Name);
 			
 			children = new List<IObject> ();
 			if (parent is DoItem) {
 				foreach (DoItemSource source in doItemSources) {
 					IItem iparent = (parent as DoItem).IItem;
+					Console.WriteLine ("Source: "+source.GetType ().Name+" Length: "+source.ChildrenOfItem (iparent).Count);
 					foreach (IItem child in source.ChildrenOfItem (iparent)) {
+						Console.WriteLine ("Adding child");
 						children.Add (child);
 					}
 				}

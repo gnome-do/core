@@ -29,8 +29,9 @@ namespace Do.Core
 	public class SearchContext
 	{
 		const int MOD_ITEMS = 1;
-		const int GET_CHILD = 2;
+		const int GET_CHILDREN = 2;
 		const int GET_PARENT = 3;
+
 		List<DoItem> items;
 		DoCommand command;
 		List<DoItem> modifierItems;
@@ -41,6 +42,7 @@ namespace Do.Core
 		IObject[] results;
 		Type[] searchTypes;
 		int flag;
+		IObject parentObject;
 				
 		public SearchContext ()
 		{
@@ -75,6 +77,7 @@ namespace Do.Core
 			if (results != null) {
 				clonedContext.Results = (IObject[]) (results.Clone ());
 			}
+			clonedContext.flag = flag;
 			return clonedContext;
 		}
 		
@@ -221,6 +224,12 @@ namespace Do.Core
 		
 		public bool CommandSearch ()
 		{
+			if (items == null)
+				return false;
+			
+			if (searchTypes.Length == 0)
+				return false;
+			
 			if (items.Count != 0 && searchTypes[0].Equals (typeof (ICommand)) && searchTypes.Length == 1) {
 				return true;
 			}
@@ -236,6 +245,30 @@ namespace Do.Core
 					flag = flag | MOD_ITEMS;
 				else
 					flag = flag & ~(MOD_ITEMS);
+			}
+		}
+	
+		public bool FindingChildren {
+			get {
+				return ((flag & GET_CHILDREN) == GET_CHILDREN);
+			}
+			set {
+				if (value)
+					flag = flag | GET_CHILDREN;
+				else
+					flag = flag & ~(GET_CHILDREN);
+			}
+		}
+		
+		public bool FindingParent {
+			get {
+				return ((flag & GET_PARENT) == GET_PARENT);
+			}
+			set {
+				if (value)
+					flag = flag | GET_PARENT;
+				else
+					flag = flag & ~(GET_PARENT);
 			}
 		}
 		
@@ -268,6 +301,15 @@ namespace Do.Core
 			}
 			set {
 				searchTypes = value;
+			}
+		}
+		
+		public IObject ParentObject {
+			get {
+				return parentObject;
+			}
+			set {
+				parentObject = value;
 			}
 		}
 	}

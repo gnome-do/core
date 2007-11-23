@@ -313,17 +313,9 @@ namespace Do.UI
 		void OnLeftRightKeyPressEvent (EventKey evnt)
 		{
 			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
-				IObject parent;
-				IObject[] children;
+				CurrentContext.FindingChildren = true;
 				
-				parent = GetCurrentObject (currentPane);
-				if (parent == null) return;
-				
-				children = Do.UniverseManager.ChildrenOfObject (parent);
-				if (children.Length == 0) return;
-				
-				if (!resultsWindow.Visible) resultsWindow.Show ();
-				CurrentContext = new SearchContext ();
+				CurrentContext = Do.UniverseManager.Search (CurrentContext);
 				//Do something here
 				QueueSearch ();
 			} else {
@@ -413,6 +405,7 @@ namespace Do.UI
 		private void OnResultsWindowSelectionChanged (object sender, ResultsWindowSelectionEventArgs args)
 		{
 			CurrentCursor = args.SelectedIndex;
+			CurrentContext.ObjectIndex = CurrentCursor;
 
 			label.DisplayObject = CurrentContext.Results[CurrentCursor];
 			label.Highlight = CurrentContext.SearchString;
