@@ -31,7 +31,7 @@ namespace Do
 		
 		public DefaultCommander ()
 		{
-			window = new SymbolWindow (this);
+			window = new SymbolWindow ();
 			State = CommanderState.Default;
 		}
 		

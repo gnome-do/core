@@ -43,14 +43,14 @@ namespace Do.Core
 		Mutex firstResultsMutex;
 		
 		const int kUpdateWaitTime = 300000;
+		const int kMaxSearchResults = 1000;
 		
 		public UniverseManager()
 		{
 			universe = new Dictionary<int, IObject> ();
 			doItemSources = new List<DoItemSource> ();
 			doCommands = new List<DoCommand> ();
-			firstResults = new Dictionary<string, IObject[]> ();
-			
+			firstResults = new Dictionary<string, IObject[]> ();		
 			universeMutex = new Mutex ();
 			firstResultsMutex = new Mutex ();
 			LoadBuiltins ();
@@ -62,9 +62,9 @@ namespace Do.Core
 			universeMutex.ReleaseMutex ();
 			firstResultsMutex.ReleaseMutex ();
 
-			ThreadStart updateJob = new ThreadStart (UpdateUniverse);
-			indexThread = new Thread (updateJob);
-			indexThread.Start ();
+			//ThreadStart updateJob = new ThreadStart (UpdateUniverse);
+			//indexThread = new Thread (updateJob);
+			//indexThread.Start ();
 		}
 		
 		public void KillIndexThread () {
@@ -174,8 +174,8 @@ namespace Do.Core
 			}
 		}
 
-		private void BuildFirstResults (Dictionary<int, IObject> builtUniverse,
-		                                Dictionary<string, IObject[]> resultsToIndex) 
+		private void BuildFirstResults (Dictionary<int, IObject> startingUniverse,
+		                                Dictionary<string, IObject[]> newResults) 
 		{			
 			List<IObject> results;
 			RelevanceSorter comparer;
@@ -183,168 +183,249 @@ namespace Do.Core
 			//For each starting character add every matching object from the universe to
 			//the firstResults dictionary with the key of the character
 			for (char keypress = 'a'; keypress < 'z'; keypress++) {
-				results = new List<IObject> (builtUniverse.Values);
+				results = new List<IObject> (startingUniverse.Values);
 				comparer = new RelevanceSorter (keypress.ToString ());
-				resultsToIndex[keypress.ToString ()] = comparer.NarrowResults (results).ToArray ();
+				newResults[keypress.ToString ()] = comparer.NarrowResults (results).ToArray ();
 			}
 		}
 		
-		private void BuildUniverse (Dictionary<int, IObject> universeToBuild) {
+		private void BuildUniverse (Dictionary<int, IObject> newUniverse) {
+			// Hash commands.
+			foreach (DoCommand command in doCommands) {
+				newUniverse[command.GetHashCode ()] = command;
+			}
+			
 			// Hash items.
 			foreach (DoItemSource source in doItemSources) {
 				foreach (DoItem item in source.Items) {
-					universeToBuild[item.GetHashCode ()] = item;
+					newUniverse[item.GetHashCode ()] = item;
 				}
-			}
-			// Hash commands.
-			foreach (DoCommand command in doCommands) {
-				universeToBuild[command.GetHashCode ()] = command;
 			}
 		}
 		
-		public SearchContext Search (SearchContext context)
-		{
+		public SearchContext Search (SearchContext context) {
 			universeMutex.WaitOne ();
 			firstResultsMutex.WaitOne ();
 			
-			List<IObject> results;
-		
-			// Get the results based on the search string
-			results = GenerateUnfilteredList (context);
-			// Filter results based on the required type
-			results = FilterResultsByType (results, context.SearchTypes);
-			// Filter results based on object dependencies
-			results = FilterResultsByCommandDependency (results, context.Command);
-			context.Results = results.ToArray ();
+			string query = context.SearchString.ToLower ();
+			List<IObject> results = new List<IObject> ();
+			SearchContext clone;
 			
+			//First check to see if the search context is equivalent to a lastContext or parentContext
+			//Just return that context if it is
+			SearchContext oldContext = EquivalentPreviousContext (context);
+
+			if (oldContext != null) {
+				return AddStackToClone (oldContext);
+			}
+
+			else {
+				if (context.IsIndependent ()) {
+					results = IndependentResults (context);
+				}
+				else {
+					results = DependentResults (context);
+				}
+			}
+			
+			results.AddRange (AddNonUniverseItems (context));
 			universeMutex.ReleaseMutex ();
 			firstResultsMutex.ReleaseMutex ();
 
+			context.Results = results.ToArray ();
 			// Keep a stack of incremental results.
+			return AddStackToClone (context);
+		}
+		
+		public SearchContext EquivalentPreviousContext (SearchContext context) {
+			if (context.Equivalent (context.LastContext.LastContext))
+				return context.LastContext.LastContext;
+			return null;
+		}
+		
+		private SearchContext AddStackToClone (SearchContext context) {
 			SearchContext clone;
 			clone = context.Clone ();
 			clone.LastContext = context;
 			return clone;
 		}
 		
-		private List<IObject> GenerateUnfilteredList (SearchContext context) 
-		{
+		private List<IObject> DependentResults (SearchContext context) {
+			List<IObject> results;
+			string query = context.SearchString.ToLower ();
+			
+			if (context.SearchString == "") {
+				results = InitialDependentResults (context);
+			}
+			else {
+				if (context.ItemsSearch () && firstResults.ContainsKey (query)) {
+					if (context.CommandSearch ())
+						results = GetModItemsFromList (context,
+						                               new List<IObject> (firstResults[query]));
+					else
+					{
+						results = GetItemsFromList (context,
+						                            new List<IObject> (firstResults[query]));
+					}
+				}
+				else {
+					results = FilterPreviousList (context);
+				}
+			}
+			return results;
+		}
+				
+		private List<IObject> InitialDependentResults (SearchContext context) {
+			List<IObject> results;	
+			
+			if (context.ModItemsSearch)
+			results = GetModItemsFromList (context, 
+				                               new List<IObject> (universe.Values));
+			else if (context.CommandSearch ())
+				results = InitialCommandResults (context);
+			else
+			{
+				results = GetItemsFromList (context,
+				                            new List<IObject> (universe.Values));
+			}	
+			return results;
+		}
+			
+		private List<IObject> AddNonUniverseItems (SearchContext context) {
+			List<IObject> results = new List<IObject> ();
+			
+			//If we're on modifier items, add a text item if its supported
+			if (context.ModItemsSearch) {
+				if (ContainsType (context.Command.SupportedModifierItemTypes,
+				                       typeof (TextItem))) {
+					results.Add (new DoItem (new TextItem (context.SearchString)));
+				}
+			}
+			//Same if we're on items
+			else if (context.ItemsSearch ()) {
+				
+				if (ContainsType (context.Command.SupportedItemTypes,
+				                       typeof (ITextItem))) {
+					results.Add (new DoItem (new TextItem (context.SearchString)));
+				}
+			}
+			return results;	
+		}
+		
+		//This generates a list of modifier items supported by the context in a given initial list
+		public List<IObject> GetModItemsFromList (SearchContext context, List<IObject> initialList) {
+			int itemCount = 0;
+			List<IObject> results = new List<IObject> ();
+			
+			foreach (IObject iobject in initialList) {
+				if (iobject is DoItem) {
+					//If the item is supported add it
+					if (context.Command.SupportsModifierItemForItems (context.IItems,
+				                                                  (iobject as DoItem).IItem)) 
+					{
+						results.Add (iobject);
+						itemCount++;
+					}
+				}
+				//Make sure we don't go over the max search results.
+				if (itemCount == kMaxSearchResults)
+					break;
+			}
+			return results;
+		}
+		
+		//Same as GetModItemsFrom list but for items
+		public List<IObject> GetItemsFromList (SearchContext context, List<IObject> initialList) {
+			int itemCount = 0;
+			List<IObject> results = new List<IObject> ();
+			foreach (IObject iobject in initialList) {
+				if (iobject is DoItem) {
+					if (context.Command.SupportsItem ((iobject as DoItem).IItem)) 
+					{
+						results.Add (iobject);
+						itemCount++;
+					}
+				}
+				if (itemCount == kMaxSearchResults)
+					break;
+			}
+			return results;
+		}
+		
+		//This will filter out the results in the previous context that match the current query
+		private List<IObject> FilterPreviousList (SearchContext context) {
+			string query = context.SearchString.ToLower ();
+			RelevanceSorter comparer;
+			List<IObject> results;
+			
+			comparer = new RelevanceSorter (query);
+			results = new List<IObject> (context.LastContext.Results);
+			return comparer.NarrowResults (results);
+		}
+		
+		
+		private List<IObject> IndependentResults (SearchContext context) {
 			string query;
 			RelevanceSorter comparer;
 			List<IObject> results;
 			
 			query = context.SearchString.ToLower ();
-		
-			// Special handling for commands that take only text as an item:
-			if (context.ContainsCommand () && !(context.ContainsSecondObject ())
-			    && (context.Command as DoCommand).AcceptsOnlyText) {
-				results = new List<IObject> ();
-				results.Add (new DoItem (new TextItem (query == "" ? "Enter Text" : context.SearchString)));
-				return results;
+			// We can build on the last results.
+			// example: searched for "f" then "fi"
+			if (context.LastContext.LastContext != null) {
+				results = FilterPreviousList (context);
 			}
-			//If this is the initial search for the all the corresponding items/commands for the first object
-			/// we don't need to filter based on search string
-			else if (context.SearchString == "" && context.ContainsFirstObject ()) {
-				results = new List<IObject> ();
+
+			// If someone typed a single key, BOOM we're done.
+			else if (firstResults.ContainsKey (query)) {
+				results = new List<IObject> (firstResults[query]);
 				
-				//If command, we have to grab the set of commands that are valid for all items in our list
-				if (ContainsType (context.SearchTypes, typeof (ICommand))) {
-					bool firstList = true;
-					//Iterate through the item list in SearchContext
-					foreach (DoItem item in context.Items) {
-						List<IObject> newResults = new List<IObject> ();						
-						//Insert all the commands for that item into a list
-						foreach (DoCommand command in CommandsForItem (item)) {
-							newResults.Add (command);
-						}
-						//If this is the first item in the list set the command results to the commands for that item
-						if (firstList) {
-							results.AddRange (newResults);
-							firstList = false;
-						}
-						//If this is not the first item, iterate through all the commands for the items and if its
-						//not in the results list for the previous items, remove it from the new results list
-						//We are trying to get the intersection of the set of all of these commands.
-						else {
-							foreach (DoCommand command in newResults) {
-								if (!(results.Contains (command))) {
-									newResults.Remove (command);
-								}
-							}
-							results = newResults;
-						}
-					}
-				}
-				//If item, use the command to item map
-				else if (ContainsType (context.SearchTypes, typeof (IItem))) {
-					results.AddRange (universe.Values);
-				}
 			}
+
+			// Or we just have to do an expensive search...
+			// This is the current behavior on first keypress.
 			else {
-				// We can build on the last results.
-				// example: searched for "f" then "fi"
-				if (context.LastContext != null) {
-					comparer = new RelevanceSorter (query);
-					results = new List<IObject> (context.LastContext.Results);
-					results = comparer.NarrowResults (results);
-				}
-
-				// If someone typed a single key, BOOM we're done.
-				else if (firstResults.ContainsKey (query)) {
-					results = new List<IObject> (firstResults[query]);
-					
-				}
-
-				// Or we just have to do an expensive search...
-				// This is the current behavior on first keypress.
-				else {
-					results = new List<IObject> ();
-					results.AddRange (universe.Values);
-					comparer = new RelevanceSorter (query);
-					results.Sort (comparer);
-				}
+				results = new List<IObject> ();
+				results.AddRange (universe.Values);
+				comparer = new RelevanceSorter (query);
+				results.Sort (comparer);
 			}
 			results.Add (new DoItem (new TextItem (context.SearchString)));
-			
 			return results;
 		}
+		
+		//This method gives us all the commands that are supported by all the items in the list
+		private List<IObject> InitialCommandResults (SearchContext context) {
+			List<IObject> results = new List<IObject> ();
+			bool initial = true;
 			
-		private List<IObject> FilterResultsByType (List<IObject> results, Type[] acceptableTypes) 
-		{
-			List<IObject> new_results;
-			
-			new_results = new List<IObject> ();			
-			//Now we look through the list and add an object when its type belongs in acceptableTypes
-			foreach (IObject result in results) {
-				List<Type> implementedTypes = DoObject.GetAllImplementedTypes (result);
-				foreach (Type type in acceptableTypes) {
-					if (implementedTypes.Contains (type)) {
-						new_results.Add (result);
-						break;
+			foreach (DoItem item in context.Items) {
+				List<IObject> itemResults = new List<IObject> ();
+				itemResults.AddRange (CommandsForItem (item));
+				
+				//If this is the first item in the list, add all of its supported commands
+				if (initial) {
+					results.AddRange (itemResults);
+					initial = false;
+				}
+				
+				//For every subsequent item, check every command in the pre-existing list
+				//if its not supported by this item, remove it from the list
+				else {
+					List<IObject> filteredResults = new List<IObject> ();
+					foreach (DoItem includedItem in results) {
+						if (itemResults.Contains (includedItem))
+							filteredResults.Add (includedItem);
 					}
+					results = filteredResults;
 				}
 			}
-			return new_results;
+			return results;
 		}
 		
-		private List<IObject> FilterResultsByCommandDependency (List<IObject> results, DoCommand constraint)
-		{
-			List <IObject> filtered_results;
-			
-			if (constraint == null) return results;
-			filtered_results = new List<IObject> ();
-			
-			foreach (DoItem item in results) {
-				// If the constraint is a DoCommand, add the result if it's supported.
-				if ((constraint as DoCommand).SupportsItem (item)) {
-					filtered_results.Add (item);
-				}
-			}
-			return filtered_results;
-		}
 		
 		//Function to determine whether a type array contains a type
-		private bool ContainsType (Type[] typeArray, Type checkType) {
+		static public bool ContainsType (Type[] typeArray, Type checkType) {
 			foreach (Type type in typeArray) {
 				if (type.Equals (checkType))
 					return true;
@@ -352,7 +433,7 @@ namespace Do.Core
 			return false;
 		}
 
-		List<DoCommand> CommandsForItem (DoItem item)
+		DoCommand[] CommandsForItem (DoItem item)
 		{
 			List<DoCommand> item_commands;
 
@@ -362,7 +443,24 @@ namespace Do.Core
 					item_commands.Add (command);
 				}
 			}
-			return item_commands;
+			return item_commands.ToArray ();
+		}
+		
+		public IObject[] ChildrenOfObject (IObject parent)
+		{
+			List<IObject> children;
+			
+			children = new List<IObject> ();
+			if (parent is DoItem) {
+				foreach (DoItemSource source in doItemSources) {
+					IItem iparent = (parent as DoItem).IItem;
+					foreach (IItem child in source.ChildrenOfItem (iparent)) {
+						children.Add (child);
+					}
+				}
+			}
+			
+			return children.ToArray ();
 		}
 		
 	}

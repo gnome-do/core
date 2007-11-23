@@ -28,21 +28,40 @@ namespace Do.Core
 	
 	public class SearchContext
 	{
+		const int MOD_ITEMS = 1;
+		const int GET_CHILD = 2;
+		const int GET_PARENT = 3;
 		List<DoItem> items;
 		DoCommand command;
 		List<DoItem> modifierItems;
 		string searchString;
 		int index;
 		SearchContext lastContext;
-		Type[] searchTypes;
-		
+		SearchContext parentContext;
 		IObject[] results;
+		Type[] searchTypes;
+		int flag;
 				
 		public SearchContext ()
 		{
-			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
+			Build ();
+			lastContext = new SearchContext (false);
+		}
+		
+		public SearchContext (bool bufferLastContext)
+		{
+			Build ();
+			if (bufferLastContext) {
+				lastContext = new SearchContext (false);
+			}
+		}
+		
+		public void Build () {
+			SearchTypes = new Type[0];
+			flag = 0;
 			items = new List<DoItem> ();
 			modifierItems = new List<DoItem> ();
+			SearchString = "";
 		}
 		
 		public SearchContext Clone () {
@@ -52,10 +71,10 @@ namespace Do.Core
 			clonedContext.ModifierItems = modifierItems;
 			clonedContext.SearchString = searchString;
 			clonedContext.LastContext = lastContext;
+			clonedContext.ParentContext = parentContext;
 			if (results != null) {
 				clonedContext.Results = (IObject[]) (results.Clone ());
 			}
-			clonedContext.SearchTypes = searchTypes;
 			return clonedContext;
 		}
 		
@@ -65,6 +84,15 @@ namespace Do.Core
 			}
 			set {
 				lastContext = value;
+			}
+		}
+		
+		public SearchContext ParentContext {
+			get {
+				return parentContext;
+			}
+			set {
+				parentContext = value;
 			}
 		}
 		
@@ -125,15 +153,6 @@ namespace Do.Core
 			}
 		}
 		
-		public Type[] SearchTypes {
-			get {
-				return searchTypes;
-			}
-			set {
-				searchTypes = value;
-			}
-		}
-		
 		//This returns an array of the inner items, based on the list of DoItems
 		//This is necessary because SearchContext stores its items as DoItems, but sometimes
 		//methods like ActivateCommand want the IItems associated with DoItems
@@ -161,29 +180,67 @@ namespace Do.Core
 			}
 		}
 		
-		public bool ContainsFirstObject ()
-		{
-			return (items.Count != 0 || command != null);
+		public bool Equivalent (SearchContext test) {
+			//If its null, return false right away so a null exception isn't thrown
+			if (test == null)
+				return false;
+			
+			//Test to see if the search strings are the same
+			if (searchString != test.SearchString)
+				return false;
+			
+			//Test to see if the type filters are the same
+			if (test.SearchTypes.Length != SearchTypes.Length)
+				return false;
+			foreach (Type type in SearchTypes) {
+				if (!(UniverseManager.ContainsType (test.SearchTypes, type)))
+					return false;
+			}
+			
+			//Chech to see if items the same, but only if items are supposed to be fixed
+			if (test.CommandSearch () || test.ModItemsSearch)
+				foreach (DoItem item in test.Items)
+					if (!(Items.Contains (item)))
+						return false;
+			
+			//Check to see if commands are the same, but only if commands are supposed to be fixed
+			if (test.ItemsSearch () || test.ModItemsSearch)
+				if (!(test.Command.Equals (Command)))
+					return false;
+			
+			return true;
 		}
 		
-		public bool ContainsSecondObject ()
+		public bool ItemsSearch ()
 		{
-			return (items.Count != 0 && command != null);
+			if (command != null && searchTypes[0].Equals (typeof (IItem)) && searchTypes.Length == 1) {
+				return true;
+			}
+			return false;
 		}
 		
-		public bool ContainsCommand ()
+		public bool CommandSearch ()
 		{
-			return (command != null);
+			if (items.Count != 0 && searchTypes[0].Equals (typeof (ICommand)) && searchTypes.Length == 1) {
+				return true;
+			}
+			return false;
 		}
 		
-		public bool ContainsItems ()
-		{
-			return (items.Count != 0);
+		public bool ModItemsSearch {
+			get {
+				return ((flag & MOD_ITEMS) == MOD_ITEMS);
+			}
+			set {
+				if (value)
+					flag = flag | MOD_ITEMS;
+				else
+					flag = flag & ~(MOD_ITEMS);
+			}
 		}
 		
-		public bool ContainsModifierItems ()
-		{
-			return (modifierItems.Count != 0);
+		public bool IsIndependent () {
+			return (!(CommandSearch () || ItemsSearch ()));
 		}
 		
 		public void ResetAllObjects ()
@@ -193,37 +250,24 @@ namespace Do.Core
 			command = null;
 		}
 		
-		//When setting the "first object" on a search context, set the proper item/command
-		/// value, then erase the other ones ensuring that the object is actually the "first"
 		public IObject FirstObject {
 			set {
-				if (value is IItem) {
-					command = null;
-					items = new List<DoItem> ();
-					modifierItems = new List<DoItem> ();
-					items.Add (value as DoItem);
+				if (value is DoItem) {
+					Items = new List<DoItem> ();
+					Items.Add (value as DoItem);
 				}
-				else if (value is ICommand) {
-					items = new List<DoItem> ();
-					modifierItems = new List<DoItem> ();
-					command = value as DoCommand;
+				else {
+					Command = value as DoCommand;
 				}
 			}
 		}
 		
-		//Same as the first object, but don't reset the opposite item/command corresponding to the "first"
-		/// only erase modifierItems
-		public IObject SecondObject {
+		public Type[] SearchTypes {
+			get {
+				return searchTypes;
+			}
 			set {
-				if (value is IItem) {
-					items = new List<DoItem> ();
-					items.Add (value as DoItem);
-					modifierItems = new List<DoItem> ();
-				}
-				else if (value is ICommand) {
-					command = value as DoCommand;
-					modifierItems = new List<DoItem> ();
-				}
+				searchTypes = value;
 			}
 		}
 	}
