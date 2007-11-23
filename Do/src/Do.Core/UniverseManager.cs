@@ -271,27 +271,28 @@ namespace Do.Core
 			IObject[] childObjects = new IObject[0];
 			SearchContext newContext;
 			
-			Console.WriteLine ("Child Context");
 			//Check to if the current object has children first			
 			if (context.Results[context.ObjectIndex] is DoItem) {
-				Console.WriteLine ("Item "+context.Items.Count);
 				if (context.Items.Count != 1)
 					return context;
 				else
-					childObjects = ChildrenOfObject (context.Items.ToArray ()[0]);
+					childObjects = ChildrenOfObject (context.Results[context.ObjectIndex]);
 			}
 			
-			Console.WriteLine ("Child Count "+childObjects.Length);
 			//Don't do anything if there are no children
 			if (childObjects.Length == 0)
 				return context;
 			
 			newContext = context.Clone ();
 			newContext.ParentContext = context;
+			newContext.SearchString = "";
+			newContext.Results = this.AddNonUniverseItems (newContext).ToArray ();
+			Array.Copy (childObjects, newContext.Results, newContext.Results.Length);
 			newContext.Results = childObjects;
 			newContext.FindingChildren = false;
+			newContext.LastContext = new SearchContext (false);
 			
-			return newContext;
+			return AddCloneToStack (newContext);
 		}
 		
 		private List<IObject> DependentResults (SearchContext context) {
@@ -347,12 +348,16 @@ namespace Do.Core
 			}
 			//Same if we're on items
 			else if (context.ItemsSearch ()) {
-				
 				if (ContainsType (context.Command.SupportedItemTypes,
 				                       typeof (ITextItem))) {
 					results.Add (new DoItem (new TextItem (context.SearchString)));
 				}
 			}
+			//If independent always add a text item
+			else if (context.IsIndependent ()) {
+				results.Add (new DoItem (new TextItem (context.SearchString)));
+			}
+				
 			return results;	
 		}
 		
@@ -434,7 +439,6 @@ namespace Do.Core
 				comparer = new RelevanceSorter (query);
 				results.Sort (comparer);
 			}
-			results.Add (new DoItem (new TextItem (context.SearchString)));
 			return results;
 		}
 		
@@ -493,15 +497,12 @@ namespace Do.Core
 		public IObject[] ChildrenOfObject (IObject parent)
 		{
 			List<IObject> children;
-			Console.WriteLine ("Checking object chidren "+parent.Name);
 			
 			children = new List<IObject> ();
 			if (parent is DoItem) {
 				foreach (DoItemSource source in doItemSources) {
 					IItem iparent = (parent as DoItem).IItem;
-					Console.WriteLine ("Source: "+source.GetType ().Name+" Length: "+source.ChildrenOfItem (iparent).Count);
 					foreach (IItem child in source.ChildrenOfItem (iparent)) {
-						Console.WriteLine ("Adding child");
 						children.Add (child);
 					}
 				}

@@ -312,13 +312,15 @@ namespace Do.UI
 
 		void OnLeftRightKeyPressEvent (EventKey evnt)
 		{
-			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
-				CurrentContext.FindingChildren = true;
-				
-				CurrentContext = Do.UniverseManager.Search (CurrentContext);
-				//Do something here
-				QueueSearch ();
-			} else {
+			if (CurrentContext.Results != null) {
+				if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
+					CurrentContext.FindingChildren = true;
+					QueueSearch ();
+				} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {
+					
+					CurrentContext.FindingParent = true;
+					QueueSearch ();
+				}
 			}
 		}
 
@@ -471,6 +473,7 @@ namespace Do.UI
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 			context[0].FirstObject = null;
 			context[0] = Do.UniverseManager.Search (context[0]);
+			
 			// For now, only allow commands if they take only ITextItem:
 			List<IObject> filtered = new List<IObject> ();
 			context[0].FirstObject = context[0].Results[cursor[0]];

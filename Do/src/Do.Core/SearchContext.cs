@@ -30,19 +30,19 @@ namespace Do.Core
 	{
 		const int MOD_ITEMS = 1;
 		const int GET_CHILDREN = 2;
-		const int GET_PARENT = 3;
+		const int GET_PARENT = 4;
 
 		List<DoItem> items;
 		DoCommand command;
 		List<DoItem> modifierItems;
 		string searchString;
-		int index;
 		SearchContext lastContext;
 		SearchContext parentContext;
 		IObject[] results;
 		Type[] searchTypes;
 		int flag;
 		IObject parentObject;
+		int objectIndex;
 				
 		public SearchContext ()
 		{
@@ -64,6 +64,9 @@ namespace Do.Core
 			items = new List<DoItem> ();
 			modifierItems = new List<DoItem> ();
 			SearchString = "";
+			lastContext = null;
+			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
+			searchString = "";
 		}
 		
 		public SearchContext Clone () {
@@ -147,15 +150,6 @@ namespace Do.Core
 			}
 		}
 		
-		public int ObjectIndex {
-			get {
-				return index;
-			}
-			set {
-				index = value;
-			}
-		}
-		
 		//This returns an array of the inner items, based on the list of DoItems
 		//This is necessary because SearchContext stores its items as DoItems, but sometimes
 		//methods like ActivateCommand want the IItems associated with DoItems
@@ -210,6 +204,9 @@ namespace Do.Core
 			if (test.ItemsSearch () || test.ModItemsSearch)
 				if (!(test.Command.Equals (Command)))
 					return false;
+			
+			if (test.flag != flag)
+				return false;
 			
 			return true;
 		}
@@ -310,6 +307,15 @@ namespace Do.Core
 			}
 			set {
 				parentObject = value;
+			}
+		}
+		
+		public int ObjectIndex {
+			get {
+				return objectIndex;
+			}
+			set {
+				objectIndex = value;
 			}
 		}
 	}

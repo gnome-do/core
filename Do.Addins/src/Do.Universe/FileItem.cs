@@ -37,16 +37,7 @@ namespace Do.Universe
 		
 		static FileItem ()
 		{
-			string[] extentions;
-			
 			extensionTypes = new Hashtable ();
-			
-			// Register extensions for specialized subclasses.
-			// See note in ImageFileItem.cs
-			extentions = new string[] { "jpg", "jpeg", "png", "gif" };
-			foreach (string ext in extentions) {
-				FileItem.RegisterExtensionForFileItemType (ext, typeof (ImageFileItem));
-			}
 		}
 		
 		/// <summary>
@@ -134,7 +125,7 @@ namespace Do.Universe
 			return uri;
 		}
 		
-		string uri, name, icon, mime_type;
+		protected string uri, name, icon, mime_type;
 		
 		/// <summary>
 		/// Create a new FileItem for a given file.
@@ -148,15 +139,14 @@ namespace Do.Universe
 			this.name = Path.GetFileName (uri);
 			this.mime_type = Gnome.Vfs.Global.GetMimeType (uri);
 
-			if (System.IO.Directory.Exists (uri)) {
-				icon = "folder";
-			} else {
-				try {
-					icon = mime_type.Replace ('/', '-');
-					icon = string.Format ("gnome-mime-{0}", icon);
-				} catch (NullReferenceException) {
-					icon = "file";
+			try {
+				icon = mime_type.Replace ('/', '-');
+				icon = string.Format ("gnome-mime-{0}", icon);
+				if (icon.StartsWith ("gnome-mime-image")) {
+					icon = "gnome-mime-image";
 				}
+			} catch (NullReferenceException) {
+				icon = "file";
 			}
 		}
 		
@@ -196,6 +186,7 @@ namespace Do.Universe
 		public DirectoryFileItem (string uri) :
 			base (uri)
 		{
+			icon = "folder";
 		}
 	}
 }

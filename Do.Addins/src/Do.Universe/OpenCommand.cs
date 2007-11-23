@@ -64,12 +64,7 @@ namespace Do.Universe
 
 		public bool SupportsItem (IItem item)
 		{
-			if (item is IOpenableItem || item is IURIItem) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			return true;
 		}
 		
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
