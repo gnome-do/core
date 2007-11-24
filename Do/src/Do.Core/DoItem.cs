@@ -42,4 +42,16 @@ namespace Do.Core
 		}
 		
 	}
+	
+	public class DoTextItem: DoItem, ITextItem
+	{
+		public DoTextItem (string text):
+			base (new TextItem (text))
+		{
+		}
+		
+		public string Text {
+			get { return (item as ITextItem).Text; }
+		}
+	}
 }

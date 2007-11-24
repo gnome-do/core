@@ -32,7 +32,7 @@ namespace Do.Core
 	public class UniverseManager
 	{
 		
-		Dictionary<string, IObject[]> firstResults;
+		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<int, IObject> universe;
 		
 		List<DoItemSource> doItemSources;
@@ -50,7 +50,7 @@ namespace Do.Core
 			universe = new Dictionary<int, IObject> ();
 			doItemSources = new List<DoItemSource> ();
 			doCommands = new List<DoCommand> ();
-			firstResults = new Dictionary<string, IObject[]> ();		
+			firstResults = new Dictionary<string, List<IObject>> ();		
 			universeMutex = new Mutex ();
 			firstResultsMutex = new Mutex ();
 			LoadBuiltins ();
@@ -79,14 +79,14 @@ namespace Do.Core
 		
 		public void UpdateUniverse ()
 		{
-			Dictionary<string, IObject[]> updateFirstResults;
+			Dictionary<string, List<IObject>> updateFirstResults;
 			Dictionary<int, IObject> updateUniverse;
 			while (true) {
 				Monitor.Enter (indexThread);
 				Monitor.Wait (indexThread, kUpdateWaitTime);
 				Monitor.Exit (indexThread);
 				updateUniverse = new Dictionary<int, IObject> ();
-				updateFirstResults = new Dictionary<string,IObject[]> ();
+				updateFirstResults = new Dictionary<string,List<IObject>> ();
 				
 				LoadBuiltins ();
 				LoadAddins ();
@@ -175,7 +175,7 @@ namespace Do.Core
 		}
 
 		private void BuildFirstResults (Dictionary<int, IObject> startingUniverse,
-		                                Dictionary<string, IObject[]> newResults) 
+		                                Dictionary<string, List<IObject>> newResults) 
 		{			
 			List<IObject> results;
 			RelevanceSorter comparer;
@@ -185,20 +185,20 @@ namespace Do.Core
 			for (char keypress = 'a'; keypress < 'z'; keypress++) {
 				results = new List<IObject> (startingUniverse.Values);
 				comparer = new RelevanceSorter (keypress.ToString ());
-				newResults[keypress.ToString ()] = comparer.NarrowResults (results).ToArray ();
+				newResults[keypress.ToString ()] = comparer.NarrowResults (results);
 			}
 		}
 		
 		private void BuildUniverse (Dictionary<int, IObject> newUniverse) {
 			// Hash commands.
 			foreach (DoCommand command in doCommands) {
-				newUniverse[command.GetHashCode ()] = command;
+				newUniverse[command.UID.GetHashCode ()] = command;
 			}
 			
 			// Hash items.
 			foreach (DoItemSource source in doItemSources) {
 				foreach (DoItem item in source.Items) {
-					newUniverse[item.GetHashCode ()] = item;
+					newUniverse[item.UID.GetHashCode ()] = item;
 				}
 			}
 		}
@@ -207,16 +207,16 @@ namespace Do.Core
 			universeMutex.WaitOne ();
 			firstResultsMutex.WaitOne ();
 			
-			string query = context.SearchString.ToLower ();
+			string query = context.Query.ToLower ();
 			List<IObject> results = new List<IObject> ();
 			SearchContext clone;
 			
 			//First check to see if the search context is equivalent to a lastContext or parentContext
 			//Just return that context if it is
-			SearchContext oldContext = EquivalentPreviousContext (context);
+			SearchContext oldContext = context.EquivalentPreviousContextIfExists ();
 
 			if (oldContext != null) {
-				return AddCloneToStack (oldContext);
+				return oldContext.GetContinuedContext ();
 			}
 			else if (context.FindingChildren)
 			{
@@ -227,7 +227,7 @@ namespace Do.Core
 				return ParentContext (context);
 			}
 			else {
-				if (context.IsIndependent ()) {
+				if (context.Independent) {
 					results = IndependentResults (context);
 				}
 				else {
@@ -241,20 +241,7 @@ namespace Do.Core
 
 			context.Results = results.ToArray ();
 			// Keep a stack of incremental results.
-			return AddCloneToStack (context);
-		}
-		
-		public SearchContext EquivalentPreviousContext (SearchContext context) {
-			if (context.Equivalent (context.LastContext.LastContext))
-				return context.LastContext.LastContext;
-			return null;
-		}
-		
-		private SearchContext AddCloneToStack (SearchContext context) {
-			SearchContext clone;
-			clone = context.Clone ();
-			clone.LastContext = context;
-			return clone;
+			return context.GetContinuedContext ();
 		}
 		
 		private SearchContext ParentContext (SearchContext context) {
@@ -272,11 +259,11 @@ namespace Do.Core
 			SearchContext newContext;
 			
 			//Check to if the current object has children first			
-			if (context.Results[context.ObjectIndex] is DoItem) {
+			if (context.Results[context.Cursor] is DoItem) {
 				if (context.Items.Count != 1)
 					return context;
 				else
-					childObjects = ChildrenOfObject (context.Results[context.ObjectIndex]);
+					childObjects = ChildrenOfObject (context.Results[context.Cursor]);
 			}
 			
 			//Don't do anything if there are no children
@@ -285,26 +272,26 @@ namespace Do.Core
 			
 			newContext = context.Clone ();
 			newContext.ParentContext = context;
-			newContext.SearchString = "";
+			newContext.Query = "";
 			newContext.Results = this.AddNonUniverseItems (newContext).ToArray ();
 			Array.Copy (childObjects, newContext.Results, newContext.Results.Length);
 			newContext.Results = childObjects;
 			newContext.FindingChildren = false;
 			newContext.LastContext = new SearchContext (false);
 			
-			return AddCloneToStack (newContext);
+			return newContext.GetContinuedContext ();
 		}
 		
 		private List<IObject> DependentResults (SearchContext context) {
 			List<IObject> results;
-			string query = context.SearchString.ToLower ();
+			string query = context.Query.ToLower ();
 			
-			if (context.SearchString == "") {
+			if (context.Query == "") {
 				results = InitialDependentResults (context);
 			}
 			else {
-				if (context.ItemsSearch () && firstResults.ContainsKey (query)) {
-					if (context.CommandSearch ())
+				if (context.ItemsSearch && firstResults.ContainsKey (query)) {
+					if (context.CommandSearch)
 						results = GetModItemsFromList (context,
 						                               new List<IObject> (firstResults[query]));
 					else
@@ -326,7 +313,7 @@ namespace Do.Core
 			if (context.ModItemsSearch)
 			results = GetModItemsFromList (context, 
 				                               new List<IObject> (universe.Values));
-			else if (context.CommandSearch ())
+			else if (context.CommandSearch)
 				results = InitialCommandResults (context);
 			else
 			{
@@ -343,19 +330,19 @@ namespace Do.Core
 			if (context.ModItemsSearch) {
 				if (ContainsType (context.Command.SupportedModifierItemTypes,
 				                       typeof (TextItem))) {
-					results.Add (new DoItem (new TextItem (context.SearchString)));
+					results.Add (new DoTextItem (context.Query));
 				}
 			}
 			//Same if we're on items
-			else if (context.ItemsSearch ()) {
+			else if (context.ItemsSearch) {
 				if (ContainsType (context.Command.SupportedItemTypes,
 				                       typeof (ITextItem))) {
-					results.Add (new DoItem (new TextItem (context.SearchString)));
+					results.Add (new DoTextItem (context.Query));
 				}
 			}
 			//If independent always add a text item
-			else if (context.IsIndependent ()) {
-				results.Add (new DoItem (new TextItem (context.SearchString)));
+			else if (context.Independent) {
+				results.Add (new DoTextItem (context.Query));
 			}
 				
 			return results;	
@@ -370,13 +357,15 @@ namespace Do.Core
 				if (iobject is DoItem) {
 					//If the item is supported add it
 					if (context.Command.SupportsModifierItemForItems (context.IItems,
-				                                                  (iobject as DoItem).IItem)) 
+				                                                  iobject as DoItem)) 
 					{
 						results.Add (iobject);
 						itemCount++;
 					}
 				}
 				//Make sure we don't go over the max search results.
+				//Initial list should be pre-sorted, so this should only cut off least relevant
+				//results
 				if (itemCount == kMaxSearchResults)
 					break;
 			}
@@ -389,7 +378,7 @@ namespace Do.Core
 			List<IObject> results = new List<IObject> ();
 			foreach (IObject iobject in initialList) {
 				if (iobject is DoItem) {
-					if (context.Command.SupportsItem ((iobject as DoItem).IItem)) 
+					if (context.Command.SupportsItem (iobject as DoItem)) 
 					{
 						results.Add (iobject);
 						itemCount++;
@@ -403,7 +392,7 @@ namespace Do.Core
 		
 		//This will filter out the results in the previous context that match the current query
 		private List<IObject> FilterPreviousList (SearchContext context) {
-			string query = context.SearchString.ToLower ();
+			string query = context.Query.ToLower ();
 			RelevanceSorter comparer;
 			List<IObject> results;
 			
@@ -418,7 +407,7 @@ namespace Do.Core
 			RelevanceSorter comparer;
 			List<IObject> results;
 			
-			query = context.SearchString.ToLower ();
+			query = context.Query.ToLower ();
 			// We can build on the last results.
 			// example: searched for "f" then "fi"
 			if (context.LastContext.LastContext != null) {

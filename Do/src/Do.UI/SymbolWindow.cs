@@ -76,7 +76,6 @@ namespace Do.UI
 		
 		protected Pane currentPane;
 		protected SearchContext[] context;
-		protected int[] cursor;
 
 		ICommand command;
 		List<IItem> items;
@@ -92,8 +91,7 @@ namespace Do.UI
 			modItems = new List<IItem> ();
 
 			context = new SearchContext[3];	
-			cursor = new int[] {0, 0, 0};
-			
+	
 			SetDefaultState ();	
 		}
 
@@ -101,9 +99,9 @@ namespace Do.UI
 			IObject o;
 
 			try {
-				o = context[(int) pane].Results[cursor[(int) pane]];
+				o = context[(int) pane].Results[context[(int) pane].Cursor];
 			} catch {
-				o = new NoResultsFoundObject (context[(int) pane].SearchString);
+				o = new NoResultsFoundObject (context[(int) pane].Query);
 			}
 			return o;
 		}
@@ -131,10 +129,10 @@ namespace Do.UI
 
 		int CurrentCursor {
 			get {
-				return cursor[(int) currentPane];
+				return context[(int) currentPane].Cursor;
 			}
 			set {
-				cursor[(int) currentPane] = value;
+				context[(int) currentPane].Cursor = value;
 			}
 		}
 		
@@ -163,7 +161,7 @@ namespace Do.UI
 			}
 			iconbox[2].Clear ();
 
-			none_found = new NoResultsFoundObject (context[(int) pane].SearchString);
+			none_found = new NoResultsFoundObject (context[(int) pane].Query);
 			iconbox[(int) pane].DisplayObject = none_found;
 			if (currentPane == pane) {
 				label.SetDisplayLabel ("", none_found.Description);
@@ -250,7 +248,7 @@ namespace Do.UI
 			bool something_typed, results_showing;
 
 			results_showing = resultsWindow.Visible;
-			something_typed = CurrentContext.SearchString.Length > 0;
+			something_typed = CurrentContext.Query.Length > 0;
 
 			if (currentPane == Pane.First && results_showing) resultsWindow.Hide ();
 			ClearSearchResults ();
@@ -272,10 +270,10 @@ namespace Do.UI
 
 		void OnDeleteKeyPressEvent (EventKey evnt)
 		{
-			if (CurrentContext.SearchString.Length == 0) return;
+			if (CurrentContext.Query.Length == 0) return;
 
-			if (CurrentContext.SearchString.Length > 1) {
-				CurrentContext.SearchString = CurrentContext.SearchString.Substring (0, CurrentContext.SearchString.Length-1);
+			if (CurrentContext.Query.Length > 1) {
+				CurrentContext.Query = CurrentContext.Query.Substring (0, CurrentContext.Query.Length-1);
 				QueueSearch ();
 			} else {
 				ClearSearchResults ();
@@ -333,7 +331,7 @@ namespace Do.UI
 					|| char.IsPunctuation (c)
 					|| c == ' '
 					|| char.IsSymbol (c)) {
-				CurrentContext.SearchString += c;
+				CurrentContext.Query += c;
 				QueueSearch ();
 			}
 		}
@@ -407,12 +405,11 @@ namespace Do.UI
 		private void OnResultsWindowSelectionChanged (object sender, ResultsWindowSelectionEventArgs args)
 		{
 			CurrentCursor = args.SelectedIndex;
-			CurrentContext.ObjectIndex = CurrentCursor;
 
 			label.DisplayObject = CurrentContext.Results[CurrentCursor];
-			label.Highlight = CurrentContext.SearchString;
+			label.Highlight = CurrentContext.Query;
 			CurrentIconBox.DisplayObject = CurrentContext.Results[CurrentCursor];
-			CurrentIconBox.Highlight = CurrentContext.SearchString;
+			CurrentIconBox.Highlight = CurrentContext.Query;
 
 			// If we're just tabbing, no need to search.
 			if (!tabbing) {
@@ -454,10 +451,10 @@ namespace Do.UI
 		{
 			switch (currentPane) {
 				case Pane.First:
-					SearchFirstPane (CurrentContext.SearchString);
+					SearchFirstPane (CurrentContext.Query);
 					break;
 				case Pane.Second:
-					SearchSecondPane (CurrentContext.SearchString);
+					SearchSecondPane (CurrentContext.Query);
 					break;
 			}
 
@@ -465,18 +462,17 @@ namespace Do.UI
 	
 		protected virtual void SearchFirstPane (string match)
 		{	
-			cursor[0] = 0;
-			cursor[1] = 0;
-			cursor[2] = 0;
+			context[0].Cursor = 0;
+			context[1].Cursor = 0;
+			context[2].Cursor = 0;
 
-			context[0].SearchString = match;
+			context[0].Query = match;
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
-			context[0].FirstObject = null;
 			context[0] = Do.UniverseManager.Search (context[0]);
 			
 			// For now, only allow commands if they take only ITextItem:
 			List<IObject> filtered = new List<IObject> ();
-			context[0].FirstObject = context[0].Results[cursor[0]];
+			context[0].GenericObject = context[0].Results[context[0].Cursor];
 			UpdatePane (Pane.First);
 
 			context[1] = new SearchContext ();
@@ -487,19 +483,19 @@ namespace Do.UI
 		{
 			IObject first;
 
-			cursor[1] = 0;
-			cursor[2] = 0;
+			context[1].Cursor = 0;
+			context[2].Cursor = 0;
 	
 			first = GetCurrentObject (Pane.First);
 			// Set up the next pane based on what's in the first pane:
-			context[1].FirstObject = first;
+			context[1].GenericObject = first;
 			if (first is IItem) {
 				context[1].SearchTypes = new Type[] { typeof (ICommand) };
 			} else {
 				context[1].SearchTypes = new Type[] { typeof (IItem) };
 			}
 
-			context[1].SearchString = match;
+			context[1].Query = match;
 			context[1] = Do.UniverseManager.Search (context[1]);
 
 			if (context[1].Results.Length > 0) {
@@ -512,7 +508,7 @@ namespace Do.UI
 		protected void UpdatePane (Pane pane)
 		{
 			iconbox[(int) pane].DisplayObject = GetCurrentObject (pane);
-			iconbox[(int) pane].Highlight = context[(int) pane].SearchString;
+			iconbox[(int) pane].Highlight = context[(int) pane].Query;
 
 			if (pane == currentPane) {
 				label.DisplayObject = GetCurrentObject (pane);

@@ -35,19 +35,18 @@ namespace Do.Core
 		List<DoItem> items;
 		DoCommand command;
 		List<DoItem> modifierItems;
-		string searchString;
+		string query;
 		SearchContext lastContext;
 		SearchContext parentContext;
 		IObject[] results;
 		Type[] searchTypes;
 		int flag;
 		IObject parentObject;
-		int objectIndex;
+		int cursor;
 				
-		public SearchContext ()
+		public SearchContext ():
+			this (true)
 		{
-			Build ();
-			lastContext = new SearchContext (false);
 		}
 		
 		public SearchContext (bool bufferLastContext)
@@ -63,10 +62,11 @@ namespace Do.Core
 			flag = 0;
 			items = new List<DoItem> ();
 			modifierItems = new List<DoItem> ();
-			SearchString = "";
+			Query = "";
 			lastContext = null;
+			cursor = 0;
 			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
-			searchString = "";
+			query = "";
 		}
 		
 		public SearchContext Clone () {
@@ -74,7 +74,7 @@ namespace Do.Core
 			clonedContext.Command = command;
 			clonedContext.Items = items;
 			clonedContext.ModifierItems = modifierItems;
-			clonedContext.SearchString = searchString;
+			clonedContext.Query = query;
 			clonedContext.LastContext = lastContext;
 			clonedContext.ParentContext = parentContext;
 			if (results != null) {
@@ -129,12 +129,12 @@ namespace Do.Core
 			}
 		}
 			
-		public string SearchString {
+		public string Query {
 			get {
-				return searchString;
+				return query;
 			}
 			set {
-				searchString = value;
+				query = value;
 			}
 		}
 
@@ -183,7 +183,7 @@ namespace Do.Core
 				return false;
 			
 			//Test to see if the search strings are the same
-			if (searchString != test.SearchString)
+			if (query != test.Query)
 				return false;
 			
 			//Test to see if the type filters are the same
@@ -195,13 +195,13 @@ namespace Do.Core
 			}
 			
 			//Chech to see if items the same, but only if items are supposed to be fixed
-			if (test.CommandSearch () || test.ModItemsSearch)
+			if (test.CommandSearch || test.ModItemsSearch)
 				foreach (DoItem item in test.Items)
 					if (!(Items.Contains (item)))
 						return false;
 			
 			//Check to see if commands are the same, but only if commands are supposed to be fixed
-			if (test.ItemsSearch () || test.ModItemsSearch)
+			if (test.ItemsSearch || test.ModItemsSearch)
 				if (!(test.Command.Equals (Command)))
 					return false;
 			
@@ -211,26 +211,29 @@ namespace Do.Core
 			return true;
 		}
 		
-		public bool ItemsSearch ()
+		public bool ItemsSearch
 		{
-			if (command != null && searchTypes[0].Equals (typeof (IItem)) && searchTypes.Length == 1) {
-				return true;
+			get {
+				if (command != null && searchTypes[0].Equals (typeof (IItem)) && searchTypes.Length == 1) {
+					return true;
+				}
+				return false;
 			}
-			return false;
 		}
 		
-		public bool CommandSearch ()
+		public bool CommandSearch
 		{
-			if (items == null)
+			get {
+				if (items == null)
+					return false;
+				if (searchTypes.Length == 0)
+					return false;
+
+				if (items.Count != 0 && searchTypes[0].Equals (typeof (ICommand)) && searchTypes.Length == 1) {
+					return true;
+				}
 				return false;
-			
-			if (searchTypes.Length == 0)
-				return false;
-			
-			if (items.Count != 0 && searchTypes[0].Equals (typeof (ICommand)) && searchTypes.Length == 1) {
-				return true;
 			}
-			return false;
 		}
 		
 		public bool ModItemsSearch {
@@ -269,8 +272,10 @@ namespace Do.Core
 			}
 		}
 		
-		public bool IsIndependent () {
-			return (!(CommandSearch () || ItemsSearch ()));
+		public bool Independent {
+			get {
+				return (!(CommandSearch || ItemsSearch || ModItemsSearch));
+			}
 		}
 		
 		public void ResetAllObjects ()
@@ -280,7 +285,7 @@ namespace Do.Core
 			command = null;
 		}
 		
-		public IObject FirstObject {
+		public IObject GenericObject {
 			set {
 				if (value is DoItem) {
 					Items = new List<DoItem> ();
@@ -310,13 +315,26 @@ namespace Do.Core
 			}
 		}
 		
-		public int ObjectIndex {
+		public int Cursor {
 			get {
-				return objectIndex;
+				return cursor;
 			}
 			set {
-				objectIndex = value;
+				cursor = value;
 			}
+		}
+		
+		public SearchContext EquivalentPreviousContextIfExists () {
+			if (Equivalent (LastContext.LastContext))
+				return LastContext.LastContext;
+			return null;
+		}
+		
+		public SearchContext GetContinuedContext () {
+			SearchContext clone;
+			clone = Clone ();
+			clone.LastContext = this;
+			return clone;
 		}
 	}
 }
