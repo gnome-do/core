@@ -480,18 +480,6 @@ namespace Do.UI
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 			context[0].FirstObject = null;
 			context[0] = Do.UniverseManager.Search (context[0]);
-			// For now, only allow commands if they take only ITextItem:
-			List<IObject> filtered = new List<IObject> ();
-			foreach (IObject o in context[0].Results) {
-				if (o is ICommand) {
-					ICommand cmd = o as ICommand;
-					if (cmd == null ||
-						cmd.SupportedItemTypes.Length != 1 ||
-						cmd.SupportedItemTypes[0] != typeof (ITextItem)) continue;
-				}
-				filtered.Add (o);
-			}
-			context[0].Results = filtered.ToArray ();
 			context[0].FirstObject = context[0].Results[cursor[0]];
 			UpdatePane (Pane.First);
 
