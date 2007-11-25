@@ -216,14 +216,20 @@ namespace Do.Core
 			SearchContext oldContext = context.EquivalentPreviousContextIfExists ();
 
 			if (oldContext != null) {
+				universeMutex.WaitOne ();
+				firstResultsMutex.WaitOne ();
 				return oldContext.GetContinuedContext ();
 			}
 			else if (context.FindingChildren)
 			{
+				universeMutex.WaitOne ();
+				firstResultsMutex.WaitOne ();
 				return ChildContext (context);
 			}
 			else if (context.FindingParent)
 			{
+				universeMutex.WaitOne ();
+				firstResultsMutex.WaitOne ();
 				return ParentContext (context);
 			}
 			else {
@@ -245,6 +251,9 @@ namespace Do.Core
 		}
 		
 		private SearchContext ParentContext (SearchContext context) {
+			//Since we are dealing with the parent, turn off the finding parent
+			//flag
+			context.FindingParent = false;
 			//Check to see if parent context exists first
 			if (context.ParentContext == null)
 				return context;
@@ -257,18 +266,16 @@ namespace Do.Core
 		private SearchContext ChildContext (SearchContext context) {
 			IObject[] childObjects = new IObject[0];
 			SearchContext newContext;
-			
+			context.FindingChildren = false;
 			//Check to if the current object has children first			
 			if (context.Results[context.Cursor] is DoItem) {
-				if (context.Items.Count != 1)
-					return context;
-				else
-					childObjects = ChildrenOfObject (context.Results[context.Cursor]);
+				childObjects = ChildrenOfObject (context.Results[context.Cursor]);
 			}
 			
 			//Don't do anything if there are no children
-			if (childObjects.Length == 0)
+			if (childObjects.Length == 0) {
 				return context;
+			}
 			
 			newContext = context.Clone ();
 			newContext.ParentContext = context;
@@ -278,6 +285,8 @@ namespace Do.Core
 			newContext.Results = childObjects;
 			newContext.FindingChildren = false;
 			newContext.LastContext = new SearchContext (false);
+			
+			context.FindingChildren = true;
 			
 			return newContext.GetContinuedContext ();
 		}
@@ -290,7 +299,10 @@ namespace Do.Core
 				results = InitialDependentResults (context);
 			}
 			else {
-				if (context.ItemsSearch && firstResults.ContainsKey (query)) {
+				//If we have already have the results cached from this string, use the cache and filter out
+				//what we need. However if this a child context the items might not be in the universe, and
+				//if we're looking for commands it's quicker to do a item->command type lookup
+				if (context.ItemsSearch && firstResults.ContainsKey (query) && context.ParentContext == null) {
 					if (context.CommandSearch)
 						results = GetModItemsFromList (context,
 						                               new List<IObject> (firstResults[query]));
@@ -411,18 +423,20 @@ namespace Do.Core
 			// We can build on the last results.
 			// example: searched for "f" then "fi"
 			if (context.LastContext.LastContext != null) {
+				Console.WriteLine ("A");
 				results = FilterPreviousList (context);
 			}
 
 			// If someone typed a single key, BOOM we're done.
 			else if (firstResults.ContainsKey (query)) {
+				Console.WriteLine ("B");
 				results = new List<IObject> (firstResults[query]);
-				
 			}
 
 			// Or we just have to do an expensive search...
 			// This is the current behavior on first keypress.
 			else {
+				Console.WriteLine ("C");
 				results = new List<IObject> ();
 				results.AddRange (universe.Values);
 				comparer = new RelevanceSorter (query);

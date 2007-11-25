@@ -77,6 +77,7 @@ namespace Do.Core
 			clonedContext.Query = query;
 			clonedContext.LastContext = lastContext;
 			clonedContext.ParentContext = parentContext;
+			clonedContext.Cursor = Cursor;
 			if (results != null) {
 				clonedContext.Results = (IObject[]) (results.Clone ());
 			}
@@ -147,6 +148,8 @@ namespace Do.Core
 				// a client class sets this field, it must
 				// be ensured that array contains IObjects.
 				results = value;
+				//Since there are new results the old cursor value is irrelevant
+				cursor = 0;
 			}
 		}
 		

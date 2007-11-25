@@ -272,11 +272,12 @@ namespace Do.UI
 		{
 			if (CurrentContext.Query.Length == 0) return;
 
-			if (CurrentContext.Query.Length > 1) {
+			if (CurrentContext.Query.Length > 1 || CurrentContext.ParentContext != null) {
 				CurrentContext.Query = CurrentContext.Query.Substring (0, CurrentContext.Query.Length-1);
 				QueueSearch ();
 			} else {
-				ClearSearchResults ();
+				if (CurrentContext.ParentContext == null)
+					ClearSearchResults ();
 			}
 		}
 
@@ -312,10 +313,12 @@ namespace Do.UI
 		{
 			if (CurrentContext.Results != null) {
 				if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
+					SearchContext parentContext = CurrentContext;
 					CurrentContext.FindingChildren = true;
 					QueueSearch ();
-				} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {
-					
+					if (parentContext.FindingChildren)
+						resultsWindow.Show ();
+				} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {					
 					CurrentContext.FindingParent = true;
 					QueueSearch ();
 				}
@@ -462,7 +465,6 @@ namespace Do.UI
 	
 		protected virtual void SearchFirstPane (string match)
 		{	
-			context[0].Cursor = 0;
 			context[1].Cursor = 0;
 			context[2].Cursor = 0;
 
@@ -483,7 +485,6 @@ namespace Do.UI
 		{
 			IObject first;
 
-			context[1].Cursor = 0;
 			context[2].Cursor = 0;
 	
 			first = GetCurrentObject (Pane.First);
