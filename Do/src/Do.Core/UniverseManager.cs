@@ -423,20 +423,17 @@ namespace Do.Core
 			// We can build on the last results.
 			// example: searched for "f" then "fi"
 			if (context.LastContext.LastContext != null) {
-				Console.WriteLine ("A");
 				results = FilterPreviousList (context);
 			}
 
 			// If someone typed a single key, BOOM we're done.
 			else if (firstResults.ContainsKey (query)) {
-				Console.WriteLine ("B");
 				results = new List<IObject> (firstResults[query]);
 			}
 
 			// Or we just have to do an expensive search...
 			// This is the current behavior on first keypress.
 			else {
-				Console.WriteLine ("C");
 				results = new List<IObject> ();
 				results.AddRange (universe.Values);
 				comparer = new RelevanceSorter (query);
