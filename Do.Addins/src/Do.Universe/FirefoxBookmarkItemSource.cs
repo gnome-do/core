@@ -34,6 +34,8 @@ namespace Do.Universe
 		const string BeginDefaultProfile = "Name=default";
 		const string BeginURL = "<DT><A HREF=\"";
 		const string EndURL = "\"";
+		const string BeginShortcut = "SHORTCUTURL=\"";
+		const string EndShortcut = "\"";
 		const string BeginName = "\">";
 		const string EndName = "</A>";
 		
@@ -143,8 +145,8 @@ namespace Do.Universe
 		{
 			ICollection<BookmarkItem> list;
 			StreamReader reader;
-			int urlIndex, nameIndex;
-			string url, name;
+			int urlIndex, nameIndex, shortcutIndex;
+			string url, name, shortcut;
 			
 			list = new List<BookmarkItem> ();
 
@@ -156,6 +158,14 @@ namespace Do.Universe
 						if (urlIndex < 0) continue;
 						line = line.Substring (urlIndex + BeginURL.Length);
 						url = line.Substring (0, line.IndexOf (EndURL));
+
+						// See if this bookmark has a shortcut (SHORTCUTURL="blog")
+						shortcut = null;
+						shortcutIndex = line.IndexOf (BeginShortcut);
+						if (shortcutIndex > 0) {
+							line = line.Substring (shortcutIndex + BeginShortcut.Length);
+							shortcut = line.Substring (0, line.IndexOf (EndShortcut));
+						}
 						
 						nameIndex = line.IndexOf (BeginName);
 						if (nameIndex < 0) continue;
@@ -164,7 +174,10 @@ namespace Do.Universe
 					} catch {
 						continue;
 					}
+
 					list.Add (new BookmarkItem (name, url));
+					if (shortcut != null)
+						list.Add (new BookmarkItem (shortcut, url));
 				}	
 			} catch {
 				list.Clear ();

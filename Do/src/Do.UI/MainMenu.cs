@@ -55,18 +55,18 @@ namespace Do.UI
 			// Preferences menu item
 			item = new ImageMenuItem  ("_Preferences");
 			(item as ImageMenuItem).Image = new Image (Stock.Preferences, IconSize.Menu);
-			menu.Add (item);
+			// menu.Add (item);
 			item.CanFocus = false;
 			item.Sensitive = false;
 
 			// Refresh catalog menu item
 			item = new ImageMenuItem ("_Refresh Catalog");
 			(item as ImageMenuItem).Image = new Image (Stock.Refresh, IconSize.Menu);
-			menu.Add (item);
+			// menu.Add (item);
 			item.Activated += OnMainMenuRefreshCatalogClicked;
 
 			// Separator
-			menu.Add (new SeparatorMenuItem ());
+			// menu.Add (new SeparatorMenuItem ());
 
 			// About menu item
 			item = new ImageMenuItem  ("_About Do");

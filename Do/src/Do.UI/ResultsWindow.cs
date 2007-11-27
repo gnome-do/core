@@ -118,6 +118,7 @@ namespace Do.UI
 			
 			KeepAbove = true;
 			AppPaintable = true;
+			AcceptFocus = false;
 			// This typehint gets the window to raise all the way to top.
 			TypeHint = WindowTypeHint.Splashscreen;
 

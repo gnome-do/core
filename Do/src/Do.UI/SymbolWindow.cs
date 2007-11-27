@@ -240,6 +240,8 @@ namespace Do.UI
 				case Gdk.Key.q:
 					Application.Quit ();
 					break;
+				default:
+					break;
 			}
 		}
 
@@ -471,8 +473,7 @@ namespace Do.UI
 			context[0].Query = match;
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 			context[0] = Do.UniverseManager.Search (context[0]);
-			
-			// For now, only allow commands if they take only ITextItem:
+	
 			List<IObject> filtered = new List<IObject> ();
 			context[0].GenericObject = context[0].Results[context[0].Cursor];
 			UpdatePane (Pane.First);
