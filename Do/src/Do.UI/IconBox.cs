@@ -79,7 +79,7 @@ namespace Do.UI
 			label.SetSizeRequest (iconSize / 4 * 5, -1);
 			// SetSizeRequest (iconSize * 2, iconSize * 2);
 			
-			DrawFrame = false;			
+			DrawFrame = false;
 			DrawFill = true;
 			FillColor = new Color (byte.MaxValue, byte.MaxValue, byte.MaxValue);
 			
@@ -157,7 +157,7 @@ namespace Do.UI
 		
 		protected virtual void UpdateFocus ()
 		{
-			FillAlpha = (isFocused ? focusedTransparency : unfocusedTransparency);
+			FrameAlpha = FillAlpha = (isFocused ? focusedTransparency : unfocusedTransparency);
 		}
 		
 	}

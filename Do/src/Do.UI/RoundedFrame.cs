@@ -1,4 +1,4 @@
-/* ${FileName}
+/* RoundedFrame.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -189,7 +189,7 @@ namespace Do.UI
 					r = (double) frameColor.Red / ushort.MaxValue;
 					g = (double) frameColor.Green / ushort.MaxValue;
 					b = (double) frameColor.Blue / ushort.MaxValue;
-					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
+					cairo.Color = new Cairo.Color (r, g, b, frameAlpha);
 					cairo.Stroke ();
 				}
 			}
