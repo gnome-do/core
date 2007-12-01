@@ -95,20 +95,14 @@ namespace Do
 			static Appearance ()
 			{
 				pixbufCache = new Dictionary<string,Gdk.Pixbuf> ();
-				UnknownPixbuf = new Pixbuf (Colorspace.Rgb,
-																		true, 8,
-																		DefaultIconSize,
-																		DefaultIconSize);
+				UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, DefaultIconSize, DefaultIconSize);
 				UnknownPixbuf.Fill (0x00000000);
 			}
 			
 			public static string MarkupSafeString (string s)
 			{
-				if (s == null) {
-					return "";
-				}
+				if (s == null) return "";
 				s = s.Replace ("&", "&amp;");
-				s = s.Replace ("=", "");
 				return s;
 			}
 

@@ -1,4 +1,4 @@
-/* ${FileName}
+/* IconBox.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -108,8 +108,8 @@ namespace Do.UI
 		public string Caption {
 			get { return caption; }
 			set {
-				caption = (value == null ? "" : value);
-				label.Markup = string.Format (captionFormat, caption);				
+				caption = value ?? "";
+				label.Markup = string.Format (captionFormat, Util.Appearance.MarkupSafeString (caption));				
 			}
 		}
 		
@@ -122,7 +122,7 @@ namespace Do.UI
 		public Pixbuf Pixbuf {
 			get { return pixbuf; }
 			set {
-				pixbuf = (value == null ? emptyPixbuf : value);
+				pixbuf = value ?? emptyPixbuf;
 				image.Pixbuf = pixbuf;
 			}
 		}

@@ -1,4 +1,4 @@
-/* ${FileName}
+/* SymbolDisplayLabel.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -39,7 +39,8 @@ namespace Do.UI
 		string highlight;
 		string name, description;
 		
-		public SymbolDisplayLabel () : base ()
+		public SymbolDisplayLabel ():
+			base ("")
 		{
 			highlight = name = description = "";
 			Build ();
@@ -68,8 +69,8 @@ namespace Do.UI
 		}
 		
 		public void SetDisplayLabel (string name, string description) {
-			this.name = (name == null ? "" : name);
-			this.description = (description == null ? "" : description);
+			this.name = name ?? "";
+			this.description = description ?? "";
 			highlight = "";
 			UpdateText ();
 		}
@@ -77,7 +78,7 @@ namespace Do.UI
 		public string Highlight {
 			get { return highlight; }
 			set {
-				highlight = (value == null ? "" : value);
+				highlight = value ?? "";
 				UpdateText ();
 			}
 		}
@@ -88,9 +89,7 @@ namespace Do.UI
 
 			safe_name = Util.Appearance.MarkupSafeString (name);
 			safe_description = Util.Appearance.MarkupSafeString (description);
-			highlighted = Util.FormatCommonSubstrings(safe_name,
-																								highlight,
-																								"<u>{0}</u>");
+			highlighted = Util.FormatCommonSubstrings(safe_name, highlight, "<u>{0}</u>");
 			Markup = string.Format (displayFormat, highlighted, safe_description);
 		}
 		
