@@ -56,7 +56,7 @@ namespace Do.UI
 	{
 		
 		const int ResultIconSize = 32;
-		const int NumberResultsDisplayed = 5; 
+		const int NumberResultsDisplayed = 6; 
 		const string ResultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
 		
 		public event OnSelectionChanged SelectionChanged;

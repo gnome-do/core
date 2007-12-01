@@ -51,7 +51,8 @@ namespace Do.Universe
 		}
 		
 		public Type[] SupportedItemTypes {
-			get { return new Type[] {
+			get {
+				return new Type[] {
 					typeof (BookmarkItem),
 				};
 			}
