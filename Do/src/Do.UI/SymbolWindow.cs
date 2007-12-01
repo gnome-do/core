@@ -197,10 +197,10 @@ namespace Do.UI
 			click_y = (int) evnt.YRoot;
 			click_on_window = start_x <= click_x && click_x < end_x &&
 				              start_y <= click_y && click_y < end_y;
-			click_near_settings_icon = (end_x - 25) <= click_x && click_x < end_x &&
-				                       start_y <= click_y && click_y < (start_y + 25);
+			click_near_settings_icon = (end_x - 27) <= click_x && click_x < end_x &&
+				                       start_y <= click_y && click_y < (start_y + 27);
 			if (click_near_settings_icon) {
-				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 18, start_y + 16);
+				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 21, start_y + 16);
 				// Have to re-grab the pane from the menu.
 				Addins.Util.Appearance.PresentWindow (this);
 			} else if (!click_on_window) {
@@ -543,7 +543,7 @@ namespace Do.UI
 			frame.DrawFill = true;
 			frame.FillColor = new Gdk.Color (0x35, 0x30, 0x45);
 			frame.FillAlpha = WindowTransparency;
-			frame.Radius = Screen.IsComposited ? 10 : 0;
+			frame.Radius = Screen.IsComposited ? 20 : 0;
 			Add (frame);
 			frame.Show ();
 			
@@ -554,7 +554,7 @@ namespace Do.UI
 			
 			settings_icon = new Gtk.Image (GetType().Assembly, "settings-triangle.png");
 			align = new Alignment (1.0F, 0.0F, 0, 0);
-			align.SetPadding (0, 0, 0, 0);
+			align.SetPadding (1, 0, 0, 6);
 			align.Add (settings_icon);
 			vbox.PackStart (align, false, false, 0);
 			settings_icon.Show ();
@@ -569,16 +569,19 @@ namespace Do.UI
 
 			iconbox[0] = new IconBox (IconBoxIconSize);
 			iconbox[0].IsFocused = true;
+			iconbox[0].Radius = 20;
 			resultsHBox.PackStart (iconbox[0], false, false, 0);
 			iconbox[0].Show ();
 			
 			iconbox[1] = new IconBox (IconBoxIconSize);
 			iconbox[1].IsFocused = false;
+			iconbox[1].Radius = 20;
 			resultsHBox.PackStart (iconbox[1], false, false, 0);
 			iconbox[1].Show ();
 			
 			iconbox[2] = new IconBox (IconBoxIconSize);
 			iconbox[2].IsFocused = false;
+			iconbox[2].Radius = 20;
 			// resultsHBox.PackStart (iconbox[2], false, false, 0);
 			iconbox[2].Show ();
 	
