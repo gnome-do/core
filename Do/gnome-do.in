@@ -1,3 +1,17 @@
 #!/bin/sh
 
-exec mono "@prefix@/lib/@PACKAGE@/Do.exe" "$@"
+SCRIPT_PATH=`dirname $0`
+SCRIPT_PATH=`cd $SCRIPT_PATH; pwd`
+
+TOMBOY_LIB=`pkg-config --variable=libdir tomboy-addins`/tomboy
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$TOMBOY_LIB
+
+if [ "x$SCRIPT_PATH" = "x@abs_srcdir@/bin/Debug" ] ||
+   [ "x$SCRIPT_PATH" = "x@abs_srcdir@" ] ; then
+    echo "*** Running uninstalled ***"
+    GNOME_DO_EXE="@abs_srcdir@/bin/Debug/Do.exe"
+else
+    GNOME_DO_EXE="@prefix@/lib/@PACKAGE@/Do.exe"
+fi
+
+exec mono "$GNOME_DO_EXE" "$@"

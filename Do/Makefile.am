@@ -130,6 +130,7 @@ $(DO_DBUS_DLL_MDB): $(DO_DBUS_DLL_MDB_SOURCE)
 
 $(GNOME_DO): gnome-do
 	mkdir -p $(BUILD_DIR)
+	chmod 755 '$<'
 	cp '$<' '$@'
 
 $(DO_ADDINS_DLL_MDB): $(DO_ADDINS_DLL_MDB_SOURCE)
