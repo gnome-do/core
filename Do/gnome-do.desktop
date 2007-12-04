@@ -1,5 +1,5 @@
 [Desktop Entry]
-Version=1.0
+Version=0.1
 Encoding=UTF-8
 Name=GNOME Do
 Type=Application
@@ -9,4 +9,3 @@ Icon=gnome-run
 Comment=Do things quickly with objects in your GNOME desktop enviornment
 Categories=Utility;
 OnlyShowIn=GNOME;
-GenericName[en_US]=

@@ -12,14 +12,14 @@ namespace Tomboy
 {
 	public class XKeybinder 
 	{
-		[DllImport("/usr/lib/tomboy/libtomboy.so")]
+		[DllImport("libtomboy")]
 		static extern void tomboy_keybinder_init ();
 
-		[DllImport("/usr/lib/tomboy/libtomboy.so")]
+		[DllImport("libtomboy")]
 		static extern void tomboy_keybinder_bind (string keystring,
 							  BindkeyHandler handler);
 
-		[DllImport("/usr/lib/tomboy/libtomboy.so")]
+		[DllImport("libtomboy")]
 		static extern void tomboy_keybinder_unbind (string keystring,
 							    BindkeyHandler handler);
 
