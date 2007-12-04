@@ -51,7 +51,10 @@ namespace Do.Core
 				if (source.Items != null) {
 					items.Capacity = source.Items.Count;
 					foreach (IItem item in source.Items) {
-						items.Add (new DoItem (item));
+						if (item is DoItem)
+							items.Add (item);
+						else
+							items.Add (new DoItem (item));
 					}
 				}
 				return items;

@@ -1,4 +1,4 @@
-/* DoItem.cs
+/* InternalItemSource.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,27 +19,56 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
-using Do.Universe;
+using Do.Core;
 
-namespace Do.Core
+namespace Do.Universe
 {
-	public class DoItem : DoObject, IItem
+	
+
+	
+	public class InternalItemSource : IItemSource
 	{
 		
-		protected IItem item;
+		private List<IItem> items;
 		
-		public DoItem (IItem item):
-			base (item)
+		public InternalItemSource ()
 		{
-			this.item = item;
+			items = new List<IItem> ();
+			items.Add (LastItem.Instance);
 		}
 		
-		public IItem IItem {
-			get { return item; }
-			set { item = value; }
+		public Type[] SupportedItemTypes {
+			get {
+				return new Type[] {
+				};
+			}
+		}
+		
+		public string Name {
+			get { return "Internal GNOME Do Items"; }
+		}
+		
+		public string Description {
+			get { return "Special items relevant to the inner-workings of GNOME Do."; }
+		}
+		
+		public string Icon {
+			get { return "gtk-run"; }
+		}
+		
+		
+		public void UpdateItems ()
+		{
+		}
+		
+		public ICollection<IItem> Items {
+			get { return items; }
+		}
+		
+		public ICollection<IItem> ChildrenOfItem (IItem item) {
+			return null;
 		}
 		
 	}
