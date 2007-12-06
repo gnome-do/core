@@ -81,7 +81,7 @@ namespace Do.Core
 				Gdk.Threads.Enter ();
 				
 				try {
-					LastItem.Instance.IItem = items[0]; // TODO: Create a command performed event and move this.
+					InternalItemSource.LastItem.IItem = items[0]; // TODO: Create a command performed event and move this.
 					command.Perform (items, modItems);
 				} catch (Exception e) {
 					Log.Error ("Command \"{0}\" encountered an error: {1}", command.Name, e.Message);

@@ -40,9 +40,9 @@
     <File name="../Do.Addins/bin/Debug/Do.Addins.dll" subtype="Code" buildaction="EmbedAsResource" />
     <File name="../Do.DBus/bin/Debug/Do.DBus.dll" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./src/Do.Universe/InternalItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/LastItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/EmptyItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/DoTextItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/ProxyItem.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
