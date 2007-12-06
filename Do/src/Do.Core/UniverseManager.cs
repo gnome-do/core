@@ -111,6 +111,7 @@ namespace Do.Core
 		protected void LoadBuiltins ()
 		{
 			LoadAssembly (typeof (IItem).Assembly);
+			LoadAssembly (typeof (DoItem).Assembly);
 		}
 
 		protected void LoadAddins ()
@@ -154,7 +155,9 @@ namespace Do.Core
 			foreach (Type type in addin.GetTypes ()) {
 				if (type.IsAbstract) continue;
 				if (type == typeof(VoidCommand)) continue;
-				
+				if (type == typeof(DoCommand)) continue;
+				if (type == typeof(DoItem)) continue;
+
 				foreach (Type iface in type.GetInterfaces ()) {
 					if (iface == typeof (IItemSource)) {
 						IItemSource source;

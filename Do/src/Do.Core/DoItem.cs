@@ -39,19 +39,8 @@ namespace Do.Core
 		
 		public IItem IItem {
 			get { return item; }
+			set { item = value; }
 		}
 		
-	}
-	
-	public class DoTextItem: DoItem, ITextItem
-	{
-		public DoTextItem (string text):
-			base (new TextItem (text))
-		{
-		}
-		
-		public string Text {
-			get { return (item as ITextItem).Text; }
-		}
 	}
 }

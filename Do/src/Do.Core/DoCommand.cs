@@ -53,9 +53,9 @@ namespace Do.Core
 		public bool SupportsItem (IItem item)
 		{
 			bool type_ok;
-			
-			item = EnsureIItem(item);
+
 			type_ok = false;
+			item = EnsureIItem (item);						
 			foreach (Type item_type in SupportedItemTypes) {
 				if (item_type.IsAssignableFrom (item.GetType ())) {
 					type_ok = true;
@@ -68,7 +68,6 @@ namespace Do.Core
 		
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
 		{
-			
 			items = EnsureIItemArray (items);
 			return command.SupportsModifierItemForItems (items, EnsureIItem (modItem));
 		}
@@ -78,16 +77,15 @@ namespace Do.Core
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
 
-			
 			new Thread ((ThreadStart) delegate {
 				Gdk.Threads.Enter ();
 				
 				try {
+					InternalItemSource.LastItem.IItem = items[0]; // TODO: Create a command performed event and move this.
 					command.Perform (items, modItems);
 				} catch (Exception e) {
 					Log.Error ("Command \"{0}\" encountered an error: {1}", command.Name, e.Message);
 				}
-				
 				Gdk.Threads.Leave ();
 			}).Start ();
 		}

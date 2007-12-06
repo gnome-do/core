@@ -391,19 +391,22 @@ namespace Do.UI
 
 			items.Clear ();
 			modItems.Clear ();
-
-			first = GetCurrentObject (Pane.First);
-			second = GetCurrentObject (Pane.Second);
-			if (first != null && second != null) {
-				if (first is IItem) {
-					items.Add (first as IItem);
-					command = second as ICommand;
-				} else {
-					items.Add (second as IItem);
-					command = first as ICommand;
+			
+			try {
+				// FIXME: these can be NoResultsFoundObjects...
+				first = GetCurrentObject (Pane.First);
+				second = GetCurrentObject (Pane.Second);
+				if (first != null && second != null) {
+					if (first is IItem) {
+						items.Add (first as IItem);
+						command = second as ICommand;
+					} else {
+						items.Add (second as IItem);
+						command = first as ICommand;
+					}
+					command.Perform (items.ToArray (), modItems.ToArray ());
 				}
-				command.Perform (items.ToArray (), modItems.ToArray ());
-			}
+			} catch {}
 			SetDefaultState ();
 		}
 		

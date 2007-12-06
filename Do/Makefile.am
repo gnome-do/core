@@ -79,6 +79,10 @@ FILES =  \
 	src/Do.UI/RoundedFrame.cs \
 	src/Do.UI/SymbolDisplayLabel.cs \
 	src/Do.UI/SymbolWindow.cs \
+	src/Do.Universe/DoTextItem.cs \
+	src/Do.Universe/EmptyItem.cs \
+	src/Do.Universe/InternalItemSource.cs \
+	src/Do.Universe/ProxyItem.cs \
 	src/Log.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 
