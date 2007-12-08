@@ -102,7 +102,6 @@ namespace Do.UI
 				o = context[(int) pane].Results[context[(int) pane].Cursor];
 			} catch {
 				o = null;
-				// o = new NoResultsFoundObject (context[(int) pane].Query);
 			}
 			return o;
 		}
@@ -393,7 +392,6 @@ namespace Do.UI
 			items.Clear ();
 			modItems.Clear ();
 			
-			// FIXME: these can be NoResultsFoundObjects...
 			first = GetCurrentObject (Pane.First);
 			second = GetCurrentObject (Pane.Second);
 			if (first != null && second != null) {
