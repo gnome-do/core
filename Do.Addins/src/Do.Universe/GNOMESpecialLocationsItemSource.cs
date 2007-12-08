@@ -87,7 +87,7 @@ namespace Do.Universe
 		
 		public string Name { get { return "GNOME Special Locations"; } }
 		public string Description { get { return "Special locations in GNOME, such as Computer and Network."; } }
-		public string Icon { get { return "gnome"; } }
+		public string Icon { get { return "user-home"; } }
 
 		public Type[] SupportedItemTypes {
 			get {

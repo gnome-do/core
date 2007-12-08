@@ -57,7 +57,7 @@ namespace Do.Universe
 		}
 		
 		public string Icon {
-			get { return "gtk-run"; }
+			get { return "gnome-system"; }
 		}
 		
 		
