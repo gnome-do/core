@@ -101,7 +101,8 @@ namespace Do.UI
 			try {
 				o = context[(int) pane].Results[context[(int) pane].Cursor];
 			} catch {
-				o = new NoResultsFoundObject (context[(int) pane].Query);
+				o = null;
+				// o = new NoResultsFoundObject (context[(int) pane].Query);
 			}
 			return o;
 		}
@@ -392,21 +393,19 @@ namespace Do.UI
 			items.Clear ();
 			modItems.Clear ();
 			
-			try {
-				// FIXME: these can be NoResultsFoundObjects...
-				first = GetCurrentObject (Pane.First);
-				second = GetCurrentObject (Pane.Second);
-				if (first != null && second != null) {
-					if (first is IItem) {
-						items.Add (first as IItem);
-						command = second as ICommand;
-					} else {
-						items.Add (second as IItem);
-						command = first as ICommand;
-					}
-					command.Perform (items.ToArray (), modItems.ToArray ());
+			// FIXME: these can be NoResultsFoundObjects...
+			first = GetCurrentObject (Pane.First);
+			second = GetCurrentObject (Pane.Second);
+			if (first != null && second != null) {
+				if (first is IItem) {
+					items.Add (first as IItem);
+					command = second as ICommand;
+				} else {
+					items.Add (second as IItem);
+					command = first as ICommand;
 				}
-			} catch {}
+				command.Perform (items.ToArray (), modItems.ToArray ());
+			}
 			SetDefaultState ();
 		}
 		
@@ -450,7 +449,8 @@ namespace Do.UI
 			resultsWindow.Results = CurrentContext.Results;
 			resultsWindow.SelectedIndex = CurrentCursor;
 
-			label.DisplayObject = GetCurrentObject (pane);
+			label.DisplayObject = GetCurrentObject (pane) ??
+				new NoResultsFoundObject (CurrentContext.Query);
 
 			Reposition ();
 		}
@@ -512,8 +512,15 @@ namespace Do.UI
 		
 		protected void UpdatePane (Pane pane)
 		{
-			iconbox[(int) pane].DisplayObject = GetCurrentObject (pane);
-			iconbox[(int) pane].Highlight = context[(int) pane].Query;
+			IObject currentObject;
+
+			currentObject = GetCurrentObject (pane);
+			if (currentObject != null) {
+				iconbox[(int) pane].DisplayObject = currentObject;
+				iconbox[(int) pane].Highlight = context[(int) pane].Query;
+			} else {
+				iconbox[(int) pane].DisplayObject = new NoResultsFoundObject (context[(int) pane].Query);
+			}
 
 			if (pane == currentPane) {
 				label.DisplayObject = GetCurrentObject (pane);

@@ -82,6 +82,7 @@ FILES =  \
 	src/Do.Universe/DoTextItem.cs \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/InternalItemSource.cs \
+	src/Do.Universe/ItemSourceItemSource.cs \
 	src/Do.Universe/ProxyItem.cs \
 	src/Log.cs \
 	src/Util.cs \

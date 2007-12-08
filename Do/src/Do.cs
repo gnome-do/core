@@ -47,6 +47,8 @@ namespace Do
 			}
 			
 			universeManager = new UniverseManager ();
+			universeManager.Initialize ();
+			
 			commander = new DefaultCommander ();	
 			DBusRegistrar.RegisterCommander (commander);	
 

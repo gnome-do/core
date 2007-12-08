@@ -26,7 +26,7 @@ using Do.Universe;
 namespace Do.Core
 {
 	
-	public class DoItemSource : DoObject 
+	public class DoItemSource : DoObject, IItem
 	{
 		
 		private bool enabled;
@@ -37,6 +37,10 @@ namespace Do.Core
 		{
 			this.source = source;
 			enabled = true;
+		}
+		
+		public IItemSource IItemSource {
+			get { return source; }
 		}
 		
 		public void UpdateItems () {
@@ -74,7 +78,10 @@ namespace Do.Core
 			
 			if (children != null) {
 				foreach (IItem child in children) {
-					doChildren.Add (new DoItem (child));
+					if (child is DoItem)
+						doChildren.Add (child);
+					else
+						doChildren.Add (new DoItem (child));
 				}
 			}
 			return doChildren;

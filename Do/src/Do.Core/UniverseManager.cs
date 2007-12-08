@@ -53,6 +53,9 @@ namespace Do.Core
 			firstResults = new Dictionary<string, List<IObject>> ();		
 			universeMutex = new Mutex ();
 			firstResultsMutex = new Mutex ();
+		}
+		
+		internal void Initialize () {
 			LoadBuiltins ();
 			LoadAddins ();
 			universeMutex.WaitOne ();
@@ -65,6 +68,10 @@ namespace Do.Core
 			//ThreadStart updateJob = new ThreadStart (UpdateUniverse);
 			//indexThread = new Thread (updateJob);
 			//indexThread.Start ();
+		}
+		
+		internal ICollection<DoItemSource> ItemSources {
+			get { return doItemSources.AsReadOnly (); }
 		}
 		
 		public void KillIndexThread () {
@@ -267,16 +274,16 @@ namespace Do.Core
 		}
 		
 		private SearchContext ChildContext (SearchContext context) {
-			IObject[] childObjects = new IObject[0];
+			IItem[] childItems = new IItem[0];
 			SearchContext newContext;
 			context.FindingChildren = false;
 			//Check to if the current object has children first			
 			if (context.Results[context.Cursor] is DoItem) {
-				childObjects = ChildrenOfObject (context.Results[context.Cursor]);
+				childItems = ChildrenOfItem (context.Results[context.Cursor] as DoItem);
 			}
 			
 			//Don't do anything if there are no children
-			if (childObjects.Length == 0) {
+			if (childItems.Length == 0) {
 				return context;
 			}
 			
@@ -284,8 +291,8 @@ namespace Do.Core
 			newContext.ParentContext = context;
 			newContext.Query = "";
 			newContext.Results = this.AddNonUniverseItems (newContext).ToArray ();
-			Array.Copy (childObjects, newContext.Results, newContext.Results.Length);
-			newContext.Results = childObjects;
+			Array.Copy (childItems, newContext.Results, newContext.Results.Length);
+			newContext.Results = childItems;
 			newContext.FindingChildren = false;
 			newContext.LastContext = new SearchContext (false);
 			
@@ -497,20 +504,14 @@ namespace Do.Core
 			return item_commands.ToArray ();
 		}
 		
-		public IObject[] ChildrenOfObject (IObject parent)
+		public IItem[] ChildrenOfItem (DoItem parent)
 		{
-			List<IObject> children;
+			List<IItem> children;
 			
-			children = new List<IObject> ();
-			if (parent is DoItem) {
-				foreach (DoItemSource source in doItemSources) {
-					IItem iparent = (parent as DoItem).IItem;
-					foreach (IItem child in source.ChildrenOfItem (iparent)) {
-						children.Add (child);
-					}
-				}
+			children = new List<IItem> ();
+			foreach (DoItemSource source in doItemSources) {
+				children.AddRange (source.ChildrenOfItem (parent));
 			}
-			
 			return children.ToArray ();
 		}
 		
