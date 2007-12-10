@@ -289,15 +289,16 @@ namespace Do.UI
 			Cairo.Context cairo;
 			Gdk.Color border_color;
 			
-			cairo = Gdk.CairoHelper.Create (GdkWindow);
-			cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-			border_color = Style.Dark (StateType.Normal);
-			cairo.Color = new Cairo.Color ((double) border_color.Red / ushort.MaxValue,
-			                               (double) border_color.Green / ushort.MaxValue,
-			                               (double) border_color.Blue / ushort.MaxValue,
-			                               1.0);
-			cairo.Operator = Cairo.Operator.Source;
-			cairo.Stroke ();
+			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
+				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+				border_color = Style.Dark (StateType.Normal);
+				cairo.Color = new Cairo.Color ((double) border_color.Red / ushort.MaxValue,
+																			 (double) border_color.Green / ushort.MaxValue,
+																			 (double) border_color.Blue / ushort.MaxValue,
+																			 1.0);
+				cairo.Operator = Cairo.Operator.Source;
+				cairo.Stroke ();
+			}
 
 			return base.OnExposeEvent (evnt);
 		}
