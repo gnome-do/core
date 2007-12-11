@@ -23,11 +23,9 @@ using Do.Core;
 
 namespace Do.Universe
 {
-	
 	public class ProxyItem: DoItem
 	{
 		string name, description, icon;
-		
 		
 		public ProxyItem ():
 			this (new EmptyItem ())
@@ -83,7 +81,5 @@ namespace Do.Universe
 		public override string Icon {
 			get { return icon ?? base.Icon; }
 		}
-
-
 	}
 }

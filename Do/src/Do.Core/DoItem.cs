@@ -28,7 +28,6 @@ namespace Do.Core
 {
 	public class DoItem : DoObject, IItem
 	{
-		
 		protected IItem item;
 		
 		public DoItem (IItem item):
@@ -37,10 +36,10 @@ namespace Do.Core
 			this.item = item;
 		}
 		
-		public IItem IItem {
+		public IItem IItem
+		{
 			get { return item; }
 			set { item = value; }
 		}
-		
 	}
 }

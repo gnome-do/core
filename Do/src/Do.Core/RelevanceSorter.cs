@@ -25,8 +25,6 @@ using Do.Universe;
 
 namespace Do.Core
 {
-	
-	
 	public class RelevanceSorter : IComparer<IObject>
 	{
 		const int kMaxSearchResults = 1000;

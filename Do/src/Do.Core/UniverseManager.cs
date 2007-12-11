@@ -27,34 +27,32 @@ using Do;
 using Do.Universe;
 
 namespace Do.Core
-{	
-	
+{
 	public class UniverseManager
 	{
-		
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<int, IObject> universe;
-		
+
 		List<DoItemSource> doItemSources;
 		List<DoCommand> doCommands;
-		
+
 		Thread indexThread;
 		Mutex universeMutex;
 		Mutex firstResultsMutex;
-		
+
 		const int kUpdateWaitTime = 300000;
 		const int kMaxSearchResults = 1000;
-		
+
 		public UniverseManager()
 		{
 			universe = new Dictionary<int, IObject> ();
 			doItemSources = new List<DoItemSource> ();
 			doCommands = new List<DoCommand> ();
-			firstResults = new Dictionary<string, List<IObject>> ();		
+			firstResults = new Dictionary<string, List<IObject>> ();
 			universeMutex = new Mutex ();
 			firstResultsMutex = new Mutex ();
 		}
-		
+
 		internal void Initialize () {
 			LoadBuiltins ();
 			LoadAddins ();
@@ -69,21 +67,21 @@ namespace Do.Core
 			//indexThread = new Thread (updateJob);
 			//indexThread.Start ();
 		}
-		
+
 		internal ICollection<DoItemSource> ItemSources {
 			get { return doItemSources.AsReadOnly (); }
 		}
-		
+
 		public void KillIndexThread () {
 			indexThread.Abort ();
 		}
-		
+
 		public void AwakeIndexThread () {
 			Monitor.Enter (indexThread);
 			Monitor.Pulse (indexThread);
 			Monitor.Exit (indexThread);
 		}
-		
+
 		public void UpdateUniverse ()
 		{
 			Dictionary<string, List<IObject>> updateFirstResults;
@@ -94,7 +92,7 @@ namespace Do.Core
 				Monitor.Exit (indexThread);
 				updateUniverse = new Dictionary<int, IObject> ();
 				updateFirstResults = new Dictionary<string,List<IObject>> ();
-				
+
 				LoadBuiltins ();
 				LoadAddins ();
 				BuildUniverse (updateUniverse);
@@ -108,7 +106,7 @@ namespace Do.Core
 				universeMutex.WaitOne ();
 				universe = updateUniverse;
 				universeMutex.ReleaseMutex ();
-				
+
 				firstResultsMutex.WaitOne ();
 				firstResults = updateFirstResults;
 				firstResultsMutex.ReleaseMutex ();
@@ -124,14 +122,14 @@ namespace Do.Core
 		protected void LoadAddins ()
 		{
 			List<string> addin_dirs;
-			
+
 			addin_dirs = new List<string> ();
 			addin_dirs.Add ("~/.do/addins".Replace ("~",
 				   Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
-			
+
 			foreach (string addin_dir in addin_dirs) {
 				string[] files;
-				
+
 				files = null;
 				try {
 					files = System.IO.Directory.GetFiles (addin_dir);
@@ -139,10 +137,10 @@ namespace Do.Core
 					Log.Error ("Could not read addins directory {0}: {1}", addin_dir, e.Message);
 					continue;
 				}
-				
+
 				foreach (string file in files) {
 					Assembly addin;
-					
+
 					if (!file.EndsWith (".dll")) continue;
 					try {
 						addin = Assembly.LoadFile (file);
@@ -154,11 +152,11 @@ namespace Do.Core
 				}
 			}
 		}
-		
+
 		private void LoadAssembly (Assembly addin)
 		{
 			if (addin == null) return;
-			
+
 			foreach (Type type in addin.GetTypes ()) {
 				if (type.IsAbstract) continue;
 				if (type == typeof(VoidCommand)) continue;
@@ -168,14 +166,14 @@ namespace Do.Core
 				foreach (Type iface in type.GetInterfaces ()) {
 					if (iface == typeof (IItemSource)) {
 						IItemSource source;
-						
+
 						source = System.Activator.CreateInstance (type) as IItemSource;
 						doItemSources.Add (new DoItemSource (source));
 						Log.Info ("Successfully loaded \"{0}\" Item Source.", source.Name);
 					}
 					if (iface == typeof (ICommand)) {
 						ICommand command;
-						
+
 						command = System.Activator.CreateInstance (type) as ICommand;
 						doCommands.Add (new DoCommand (command));
 						Log.Info ("Successfully loaded \"{0}\" Command.", command.Name);
@@ -185,8 +183,8 @@ namespace Do.Core
 		}
 
 		private void BuildFirstResults (Dictionary<int, IObject> startingUniverse,
-		                                Dictionary<string, List<IObject>> newResults) 
-		{			
+		                                Dictionary<string, List<IObject>> newResults)
+		{
 			List<IObject> results;
 			RelevanceSorter comparer;
 
@@ -198,13 +196,13 @@ namespace Do.Core
 				newResults[keypress.ToString ()] = comparer.NarrowResults (results);
 			}
 		}
-		
+
 		private void BuildUniverse (Dictionary<int, IObject> newUniverse) {
 			// Hash commands.
 			foreach (DoCommand command in doCommands) {
 				newUniverse[command.UID.GetHashCode ()] = command;
 			}
-			
+
 			// Hash items.
 			foreach (DoItemSource source in doItemSources) {
 				foreach (DoItem item in source.Items) {
@@ -212,15 +210,15 @@ namespace Do.Core
 				}
 			}
 		}
-		
+
 		public SearchContext Search (SearchContext context) {
 			universeMutex.WaitOne ();
 			firstResultsMutex.WaitOne ();
-			
+
 			string query = context.Query.ToLower ();
 			List<IObject> results = new List<IObject> ();
 			SearchContext clone;
-			
+
 			//First check to see if the search context is equivalent to a lastContext or parentContext
 			//Just return that context if it is
 			SearchContext oldContext = context.EquivalentPreviousContextIfExists ();
@@ -250,7 +248,7 @@ namespace Do.Core
 					results = DependentResults (context);
 				}
 			}
-			
+
 			results.AddRange (AddNonUniverseItems (context));
 			universeMutex.ReleaseMutex ();
 			firstResultsMutex.ReleaseMutex ();
@@ -259,7 +257,7 @@ namespace Do.Core
 			// Keep a stack of incremental results.
 			return context.GetContinuedContext ();
 		}
-		
+
 		private SearchContext ParentContext (SearchContext context) {
 			//Since we are dealing with the parent, turn off the finding parent
 			//flag
@@ -267,26 +265,26 @@ namespace Do.Core
 			//Check to see if parent context exists first
 			if (context.ParentContext == null)
 				return context;
-			
+
 			context = context.ParentContext;
 			context.FindingChildren = false;
 			return context;
 		}
-		
+
 		private SearchContext ChildContext (SearchContext context) {
 			IItem[] childItems = new IItem[0];
 			SearchContext newContext;
 			context.FindingChildren = false;
-			//Check to if the current object has children first			
+			//Check to if the current object has children first
 			if (context.Results[context.Cursor] is DoItem) {
 				childItems = ChildrenOfItem (context.Results[context.Cursor] as DoItem);
 			}
-			
+
 			//Don't do anything if there are no children
 			if (childItems.Length == 0) {
 				return context;
 			}
-			
+
 			newContext = context.Clone ();
 			newContext.ParentContext = context;
 			newContext.Query = "";
@@ -295,16 +293,16 @@ namespace Do.Core
 			newContext.Results = childItems;
 			newContext.FindingChildren = false;
 			newContext.LastContext = new SearchContext (false);
-			
+
 			context.FindingChildren = true;
-			
+
 			return newContext.GetContinuedContext ();
 		}
-		
+
 		private List<IObject> DependentResults (SearchContext context) {
 			List<IObject> results;
 			string query = context.Query.ToLower ();
-			
+
 			if (context.Query == "") {
 				results = InitialDependentResults (context);
 			}
@@ -328,12 +326,12 @@ namespace Do.Core
 			}
 			return results;
 		}
-				
+
 		private List<IObject> InitialDependentResults (SearchContext context) {
-			List<IObject> results;	
-			
+			List<IObject> results;
+
 			if (context.ModItemsSearch)
-			results = GetModItemsFromList (context, 
+			results = GetModItemsFromList (context,
 				                               new List<IObject> (universe.Values));
 			else if (context.CommandSearch)
 				results = InitialCommandResults (context);
@@ -341,13 +339,13 @@ namespace Do.Core
 			{
 				results = GetItemsFromList (context,
 				                            new List<IObject> (universe.Values));
-			}	
+			}
 			return results;
 		}
-			
+
 		private List<IObject> AddNonUniverseItems (SearchContext context) {
 			List<IObject> results = new List<IObject> ();
-			
+
 			//If we're on modifier items, add a text item if its supported
 			if (context.ModItemsSearch) {
 				if (ContainsType (context.Command.SupportedModifierItemTypes,
@@ -366,20 +364,20 @@ namespace Do.Core
 			else if (context.Independent) {
 				results.Add (new DoTextItem (context.Query));
 			}
-				
-			return results;	
+
+			return results;
 		}
-		
+
 		//This generates a list of modifier items supported by the context in a given initial list
 		public List<IObject> GetModItemsFromList (SearchContext context, List<IObject> initialList) {
 			int itemCount = 0;
 			List<IObject> results = new List<IObject> ();
-			
+
 			foreach (IObject iobject in initialList) {
 				if (iobject is DoItem) {
 					//If the item is supported add it
 					if (context.Command.SupportsModifierItemForItems (context.IItems,
-				                                                  iobject as DoItem)) 
+				                                                  iobject as DoItem))
 					{
 						results.Add (iobject);
 						itemCount++;
@@ -393,14 +391,14 @@ namespace Do.Core
 			}
 			return results;
 		}
-		
+
 		//Same as GetModItemsFrom list but for items
 		public List<IObject> GetItemsFromList (SearchContext context, List<IObject> initialList) {
 			int itemCount = 0;
 			List<IObject> results = new List<IObject> ();
 			foreach (IObject iobject in initialList) {
 				if (iobject is DoItem) {
-					if (context.Command.SupportsItem (iobject as DoItem)) 
+					if (context.Command.SupportsItem (iobject as DoItem))
 					{
 						results.Add (iobject);
 						itemCount++;
@@ -411,24 +409,24 @@ namespace Do.Core
 			}
 			return results;
 		}
-		
+
 		//This will filter out the results in the previous context that match the current query
 		private List<IObject> FilterPreviousList (SearchContext context) {
 			string query = context.Query.ToLower ();
 			RelevanceSorter comparer;
 			List<IObject> results;
-			
+
 			comparer = new RelevanceSorter (query);
 			results = new List<IObject> (context.LastContext.Results);
 			return comparer.NarrowResults (results);
 		}
-		
-		
+
+
 		private List<IObject> IndependentResults (SearchContext context) {
 			string query;
 			RelevanceSorter comparer;
 			List<IObject> results;
-			
+
 			query = context.Query.ToLower ();
 			// We can build on the last results.
 			// example: searched for "f" then "fi"
@@ -451,22 +449,22 @@ namespace Do.Core
 			}
 			return results;
 		}
-		
+
 		//This method gives us all the commands that are supported by all the items in the list
 		private List<IObject> InitialCommandResults (SearchContext context) {
 			List<IObject> results = new List<IObject> ();
 			bool initial = true;
-			
+
 			foreach (DoItem item in context.Items) {
 				List<IObject> itemResults = new List<IObject> ();
 				itemResults.AddRange (CommandsForItem (item));
-				
+
 				//If this is the first item in the list, add all of its supported commands
 				if (initial) {
 					results.AddRange (itemResults);
 					initial = false;
 				}
-				
+
 				//For every subsequent item, check every command in the pre-existing list
 				//if its not supported by this item, remove it from the list
 				else {
@@ -480,8 +478,8 @@ namespace Do.Core
 			}
 			return results;
 		}
-		
-		
+
+
 		//Function to determine whether a type array contains a type
 		static public bool ContainsType (Type[] typeArray, Type checkType) {
 			foreach (Type type in typeArray) {
@@ -503,17 +501,16 @@ namespace Do.Core
 			}
 			return item_commands.ToArray ();
 		}
-		
+
 		public IItem[] ChildrenOfItem (DoItem parent)
 		{
 			List<IItem> children;
-			
+
 			children = new List<IItem> ();
 			foreach (DoItemSource source in doItemSources) {
 				children.AddRange (source.ChildrenOfItem (parent));
 			}
 			return children.ToArray ();
 		}
-		
 	}
 }

@@ -22,10 +22,9 @@ using System.Collections.Generic;
 
 namespace Do
 {
-	
 	public enum LogLevel {
 		Debug,
-	    Info,
+		Info,
 		Warn,
 		Error,
 		Fatal,
@@ -49,8 +48,6 @@ namespace Do
 	
 	public class Log
 	{
-		
-		
 		static List<ILog> logs;
 		static LogLevel level;
 		

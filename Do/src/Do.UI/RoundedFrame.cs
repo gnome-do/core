@@ -25,21 +25,21 @@ using Do.Core;
 
 namespace Do.UI
 {
-	
+
 	public class RoundedFrame : Bin
 	{
-		
+
 		Rectangle childAlloc;
 		double radius;
-		
+
 		bool drawFrame;
 		Color frameColor;
 		double frameAlpha;
-		
+
 		bool fill;
 		Color fillColor;
 		double fillAlpha;
-		
+
 		public RoundedFrame () : base ()
 		{
 			fill = false;
@@ -49,7 +49,7 @@ namespace Do.UI
 			radius = 12.0;
 			fillColor = frameColor = new Color (0, 0, 0);
 		}
-		
+
 		public double Radius {
 			get { return radius; }
 			set {
@@ -57,7 +57,7 @@ namespace Do.UI
 				if (IsDrawable) QueueDraw ();
 			}
 		}
-		
+
 		public bool DrawFrame {
 			get { return drawFrame; }
 			set {
@@ -65,7 +65,7 @@ namespace Do.UI
 				if (IsDrawable) QueueDraw ();
 			}
 		}
-		
+
 		public Color FrameColor {
 			get { return frameColor; }
 			set {
@@ -73,7 +73,7 @@ namespace Do.UI
 				if (IsDrawable) QueueDraw ();
 			}
 		}
-		
+
 		public double FrameAlpha {
 			get { return frameAlpha; }
 			set {
@@ -81,7 +81,7 @@ namespace Do.UI
 				if (IsDrawable) QueueDraw ();
 			}
 		}
-		
+
 		public bool DrawFill {
 			get { return fill; }
 			set {
@@ -89,7 +89,7 @@ namespace Do.UI
 				if (IsDrawable) QueueDraw ();
 			}
 		}
-		
+
 		public Color FillColor {
 			get { return fillColor; }
 			set {
@@ -97,7 +97,7 @@ namespace Do.UI
 				if (IsDrawable) QueueDraw ();
 			}
 		}
-		
+
 		public double FillAlpha {
 			get { return fillAlpha; }
 			set {
@@ -105,46 +105,23 @@ namespace Do.UI
 				if (IsDrawable) QueueDraw ();
 			}
 		}
-		
-		protected void cc_rectangle_re (Cairo.Context cairo, double x, double y, double width, double height, double radius)
+
+		protected void RoundedRectangle (Cairo.Context cairo, int x, int y, int width, int height, double radius)
 		{
-			double cx, cy;
-			
-			width -= 2 * radius;
-			height -= 2 * radius;
-			cairo.MoveTo (x + radius, y);
-			cairo.RelLineTo (width, 0.0);
-			
-			cx = cairo.CurrentPoint.X;
-			cy = cairo.CurrentPoint.Y;
-			cairo.Arc (cx, cy + radius, radius, 3.0 * (Math.PI / 2.0), 0);
-			
-			cairo.RelLineTo (0.0, height);
-
-			cx = cairo.CurrentPoint.X;
-			cy = cairo.CurrentPoint.Y;
-			cairo.Arc (cx - radius, cy, radius, 0, (Math.PI / 2.0));
-			cairo.RelLineTo (-width, 0.0);
-			
-			cx = cairo.CurrentPoint.X;
-			cy = cairo.CurrentPoint.Y;
-			cairo.Arc (cx, cy - radius, radius, (Math.PI / 2.0), Math.PI);
-			cairo.RelLineTo (0.0, -height);
-
-			cx = cairo.CurrentPoint.X;
-			cy = cairo.CurrentPoint.Y;
-			cairo.Arc (cx + radius, cy, radius, Math.PI, 3.0 * (Math.PI / 2.0));
-			
-			cairo.ClosePath ();
+			cairo.MoveTo (x+radius, y);
+			cairo.Arc (x+width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
+			cairo.Arc (x+width-radius, y+height-radius, radius, 0, (Math.PI*0.5));
+			cairo.Arc (x+radius, y+height-radius, radius, (Math.PI*0.5), Math.PI);
+			cairo.Arc (x+radius, y+radius, radius, Math.PI, (Math.PI*1.5));
 		}
-		
+
 		protected virtual void Paint (Gdk.Rectangle area)
 		{
 			Cairo.Context cairo;
-			int         x, y;
-			int         width, height;
+			int x, y;
+			int width, height;
 			double radius;
-			
+
 			if (!IsDrawable) {
 				return;
 			}
@@ -152,12 +129,13 @@ namespace Do.UI
 				/* Nothing to draw. */
 				return;
 			}
-			
-			x = childAlloc.X - Style.XThickness;
-			y = childAlloc.Y - Style.YThickness;
 
-			width  = childAlloc.Width + 2 * Style.XThickness;
-			height = childAlloc.Height + 2 * Style.Ythickness;
+			// Why thickness?? Isn't it useless?
+			x = childAlloc.X + Style.XThickness;
+			y = childAlloc.Y + Style.YThickness;
+
+			width  = childAlloc.Width - 2 * Style.XThickness;
+			height = childAlloc.Height - 2 * Style.Ythickness;
 
 			if (this.radius < 0.0) {
 				radius = Math.Min (width, height);
@@ -165,17 +143,13 @@ namespace Do.UI
 			} else {
 				radius = this.radius;
 			}
-			
-			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
-				cairo.Rectangle (x, y, width, height);
-				cairo.Clip ();
 
-				cc_rectangle_re (cairo, x, y, width, height, radius);
+			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
+				RoundedRectangle (cairo, x, y, width, height, radius);
 				cairo.Operator = Cairo.Operator.Over;
-				
+
 				if (fill) {
 					double r, g, b;
-
 					r = (double) fillColor.Red / ushort.MaxValue;
 					g = (double) fillColor.Green / ushort.MaxValue;
 					b = (double) fillColor.Blue / ushort.MaxValue;
@@ -185,7 +159,6 @@ namespace Do.UI
 
 				if (drawFrame) {
 					double r, g, b;
-
 					r = (double) frameColor.Red / ushort.MaxValue;
 					g = (double) frameColor.Green / ushort.MaxValue;
 					b = (double) frameColor.Blue / ushort.MaxValue;
@@ -194,7 +167,7 @@ namespace Do.UI
 				}
 			}
 		}
-		
+
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			if (IsDrawable) {
@@ -203,7 +176,7 @@ namespace Do.UI
 			}
 			return false;
 		}
-		
+
 		protected override void OnSizeRequested (ref Requisition requisition)
 		{
 			Requisition cr;
@@ -217,18 +190,18 @@ namespace Do.UI
 			requisition.Width += (int)(BorderWidth + Style.XThickness * 2);
 			requisition.Height += (int)(BorderWidth + Style.Ythickness * 2);
 		}
-		
+
 		protected override void OnSizeAllocated (Rectangle allocation)
 		{
 			Rectangle new_alloc;
-			
+
 			new_alloc.X = (int) BorderWidth + Style.XThickness;
 			new_alloc.Width = Math.Max (1, allocation.Width - new_alloc.X * 2);
 			new_alloc.Y = (int) BorderWidth  + Style.Ythickness;
 			new_alloc.Height = Math.Max (1, allocation.Height
-			                                        - new_alloc.Y
-			                                        - (int) BorderWidth
-			                                        - Style.Ythickness);
+			                                - new_alloc.Y
+			                                - (int) BorderWidth
+			                                - Style.Ythickness);
 			new_alloc.X += allocation.X;
 			new_alloc.Y += allocation.Y;
 			if (IsMapped && new_alloc != childAlloc) {

@@ -31,7 +31,7 @@ using Do.Core;
 
 namespace Do.UI
 {
-	
+
 	public class SymbolWindow : Gtk.Window
 	{
 		class DefaultIconBoxObject : IObject {
@@ -39,7 +39,7 @@ namespace Do.UI
 			public string Name { get { return ""; } }
 			public string Description { get { return ""; } }
 		}
-		
+
 		class NoResultsFoundObject : IObject {
 
 			string query;
@@ -55,25 +55,27 @@ namespace Do.UI
 			public string Description {
 				get {
 					return string.Format ("No results found for \"{0}\".", query);
-			 	}
+				}
 			}
 		}
 
 		const int IconBoxIconSize = 128;
+		const int IconBoxPadding = 6;
+		const int IconBoxRadius = 20;
 		const double WindowTransparency = 0.91;
-		
+
 		protected enum Pane {
 			First = 0,
 			Second = 1,
 			Third = 2,
 		}
-		
+
 		RoundedFrame frame;
 		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
 		HBox resultsHBox;
 		IconBox[] iconbox;
-		
+
 		protected Pane currentPane;
 		protected SearchContext[] context;
 
@@ -82,17 +84,14 @@ namespace Do.UI
 		List<IItem> modItems;
 
 		bool tabbing;
-		
+
 		public SymbolWindow () : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
-
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
-
-			context = new SearchContext[3];	
-	
-			SetDefaultState ();	
+			context = new SearchContext[3];
+			SetDefaultState ();
 		}
 
 		IObject GetCurrentObject (Pane pane) {
@@ -124,7 +123,7 @@ namespace Do.UI
 				context[(int) currentPane] = value;
 			}
 		}
-		
+
 		IconBox CurrentIconBox { get { return iconbox[(int) currentPane]; } }
 
 		int CurrentCursor {
@@ -135,7 +134,7 @@ namespace Do.UI
 				context[(int) currentPane].Cursor = value;
 			}
 		}
-		
+
 		protected virtual void SetDefaultState ()
 		{
 			tabbing = false;
@@ -148,10 +147,10 @@ namespace Do.UI
 			CurrentPane = Pane.First;
 			iconbox[0].DisplayObject = new DefaultIconBoxObject ();
 			iconbox[1].Clear ();
-			
-			label.SetDisplayLabel ("Type to begin searching", "Type to start searching.");			
+
+			label.SetDisplayLabel ("Type to begin searching", "Type to start searching.");
 		}
-		
+
 		protected virtual void SetNoResultsFoundState (Pane pane)
 		{
 			NoResultsFoundObject none_found;
@@ -168,7 +167,7 @@ namespace Do.UI
 				resultsWindow.Results = new IObject[0];
 			}
 		}
-		
+
 		protected void ClearSearchResults ()
 		{
 			switch (currentPane) {
@@ -188,7 +187,7 @@ namespace Do.UI
 			int start_x, start_y, end_x, end_y;
 			int click_x, click_y;
 			bool click_on_window, click_near_settings_icon;
-			
+
 			GetPosition (out start_x, out start_y);
 			GetSize (out end_x, out end_y);
 			end_x += start_x;
@@ -196,9 +195,9 @@ namespace Do.UI
 			click_x = (int) evnt.XRoot;
 			click_y = (int) evnt.YRoot;
 			click_on_window = start_x <= click_x && click_x < end_x &&
-				              start_y <= click_y && click_y < end_y;
+			                  start_y <= click_y && click_y < end_y;
 			click_near_settings_icon = (end_x - 27) <= click_x && click_x < end_x &&
-				                       start_y <= click_y && click_y < (start_y + 27);
+			                            start_y <= click_y && click_y < (start_y + 27);
 			if (click_near_settings_icon) {
 				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 21, start_y + 16);
 				// Have to re-grab the pane from the menu.
@@ -208,30 +207,34 @@ namespace Do.UI
 			}
 			return base.OnButtonPressEvent (evnt);
 		}
-		
+
 		public virtual new void Hide ()
 		{
 			base.Hide ();
 			resultsWindow.Hide ();
 		}
-		
+
 		public void Reposition ()
 		{
 			int monitor;
+			int extraGap = 1; // why 1? something is wrong with math rounding?
 			Gdk.Rectangle geo, main, results;
-			
+
+			if (currentPane == Pane.First)
+				extraGap = IconBoxRadius-(IconBoxPadding*2); // Add an additional gap on the first pane
+
 			GetPosition (out main.X, out main.Y);
 			GetSize (out main.Width, out main.Height);
 			monitor = Screen.GetMonitorAtPoint (main.X, main.Y);
 			geo = Screen.GetMonitorGeometry (monitor);
 			main.X = (geo.Width - main.Width) / 2;
-			main.Y =  (int) ((geo.Height - main.Height) / 2.5);
+			main.Y = (int)((geo.Height - main.Height) / 2.5);
 			Move (main.X, main.Y);
-			
+
 			resultsWindow.GetSize (out results.Width, out results.Height);
 			results.Y = main.Y + main.Height;
-			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + 10;
-			resultsWindow.Move (results.X, results.Y);			
+			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + IconBoxPadding*2 + extraGap;
+			resultsWindow.Move (results.X, results.Y);
 		}
 
 		void OnControlKeyPressEvent (EventKey evnt)
@@ -287,8 +290,8 @@ namespace Do.UI
 		{
 			tabbing = true;
 			if (CurrentPane == Pane.First &&
-					context[0].Results != null &&
-					context[0].Results.Length != 0) {				
+			    context[0].Results != null &&
+			    context[0].Results.Length != 0) {
 				resultsWindow.Hide ();
 				CurrentPane = Pane.Second;
 			} else if (currentPane == Pane.Second) {
@@ -301,7 +304,7 @@ namespace Do.UI
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
 			if (!resultsWindow.Visible) {
-			 	resultsWindow.Show ();
+				resultsWindow.Show ();
 				return;
 			}
 			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
@@ -320,7 +323,7 @@ namespace Do.UI
 					QueueSearch ();
 					if (parentContext.FindingChildren)
 						resultsWindow.Show ();
-				} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {					
+				} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {
 					CurrentContext.FindingParent = true;
 					QueueSearch ();
 				}
@@ -330,8 +333,8 @@ namespace Do.UI
 		void OnInputKeyPressEvent (EventKey evnt)
 		{
 			char c;
-				
-			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);	
+
+			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
 			if (char.IsLetterOrDigit (c)
 					|| char.IsPunctuation (c)
 					|| c == ' '
@@ -340,7 +343,7 @@ namespace Do.UI
 				QueueSearch ();
 			}
 		}
-		
+
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
 			// Handle command keys (Quit, etc.)
@@ -348,41 +351,41 @@ namespace Do.UI
 					OnControlKeyPressEvent (evnt);
 					return false;
 			}
-			
+
 			switch ((Gdk.Key) evnt.KeyValue) {
-			// Throwaway keys
-			case Gdk.Key.Shift_L:
-			case Gdk.Key.Control_L:
-				break;
-			case Gdk.Key.Escape:
-				OnEscapeKeyPressEvent (evnt);
-				break;
-			case Gdk.Key.Return:
-			case Gdk.Key.ISO_Enter:
-				OnActivateKeyPressEvent (evnt);
-				break;
-			case Gdk.Key.Delete:
-			case Gdk.Key.BackSpace:
-				OnDeleteKeyPressEvent (evnt);
-				break;
-			case Gdk.Key.Tab:
-				OnTabKeyPressEvent (evnt);	
-				break;
-			case Gdk.Key.Up:
-			case Gdk.Key.Down:
-				OnUpDownKeyPressEvent (evnt);
-				break;
-			case Gdk.Key.Right:
-			case Gdk.Key.Left:
-				OnLeftRightKeyPressEvent (evnt);
-				break;
-			default:
-				OnInputKeyPressEvent (evnt);
-				break;
+				// Throwaway keys
+				case Gdk.Key.Shift_L:
+				case Gdk.Key.Control_L:
+					break;
+				case Gdk.Key.Escape:
+					OnEscapeKeyPressEvent (evnt);
+					break;
+				case Gdk.Key.Return:
+				case Gdk.Key.ISO_Enter:
+					OnActivateKeyPressEvent (evnt);
+					break;
+				case Gdk.Key.Delete:
+				case Gdk.Key.BackSpace:
+					OnDeleteKeyPressEvent (evnt);
+					break;
+				case Gdk.Key.Tab:
+					OnTabKeyPressEvent (evnt);
+					break;
+				case Gdk.Key.Up:
+				case Gdk.Key.Down:
+					OnUpDownKeyPressEvent (evnt);
+					break;
+				case Gdk.Key.Right:
+				case Gdk.Key.Left:
+					OnLeftRightKeyPressEvent (evnt);
+					break;
+				default:
+					OnInputKeyPressEvent (evnt);
+					break;
 			}
 			return base.OnKeyPressEvent (evnt);
 		}
-		
+
 		protected virtual void ActivateCommand ()
 		{
 			IObject first, second;
@@ -391,7 +394,7 @@ namespace Do.UI
 
 			items.Clear ();
 			modItems.Clear ();
-			
+
 			first = GetCurrentObject (Pane.First);
 			second = GetCurrentObject (Pane.Second);
 			if (first != null && second != null) {
@@ -406,7 +409,7 @@ namespace Do.UI
 			}
 			SetDefaultState ();
 		}
-		
+
 		private void OnResultsWindowSelectionChanged (object sender, ResultsWindowSelectionEventArgs args)
 		{
 			CurrentCursor = args.SelectedIndex;
@@ -432,13 +435,14 @@ namespace Do.UI
 		{
 			SetColormap ();
 		}
-		
+
 		protected virtual void SetFrameRadius ()
 		{
-				}
-			
+			// Nothing
+		}
+
 		protected virtual void SetPane (Pane pane)
-		{	
+		{
 			currentPane = pane;
 			iconbox[0].IsFocused = (pane == Pane.First);
 			iconbox[1].IsFocused = (pane == Pane.Second);
@@ -452,7 +456,7 @@ namespace Do.UI
 
 			Reposition ();
 		}
-	
+
 		void QueueSearch ()
 		{
 			switch (currentPane) {
@@ -463,32 +467,30 @@ namespace Do.UI
 					SearchSecondPane (CurrentContext.Query);
 					break;
 			}
-
 		}
-	
+
 		protected virtual void SearchFirstPane (string match)
-		{	
+		{
 			context[1].Cursor = 0;
 			context[2].Cursor = 0;
 
 			context[0].Query = match;
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 			context[0] = Do.UniverseManager.Search (context[0]);
-	
-			List<IObject> filtered = new List<IObject> ();
+
 			context[0].GenericObject = context[0].Results[context[0].Cursor];
 			UpdatePane (Pane.First);
 
 			context[1] = new SearchContext ();
 			SearchSecondPane ("");
 		}
-		
+
 		protected virtual void SearchSecondPane (string match)
 		{
 			IObject first;
 
 			context[2].Cursor = 0;
-	
+
 			first = GetCurrentObject (Pane.First);
 			// Set up the next pane based on what's in the first pane:
 			context[1].GenericObject = first;
@@ -507,7 +509,7 @@ namespace Do.UI
 				SetNoResultsFoundState (Pane.Second);
 			}
 		}
-		
+
 		protected void UpdatePane (Pane pane)
 		{
 			IObject currentObject;
@@ -526,19 +528,19 @@ namespace Do.UI
 				resultsWindow.SelectedIndex = CurrentCursor;
 			}
 		}
-		
+
 		protected void Build ()
 		{
-			VBox         vbox;
+			VBox      vbox;
 			Alignment align;
 			Gtk.Image settings_icon;
-				
+
 			AppPaintable = true;
 			KeepAbove = true;
 			Decorated = false;
 			// This typehint gets the window to raise all the way to top.
 			TypeHint = WindowTypeHint.Splashscreen;
-				
+
 			try { SetIconFromFile ("/usr/share/icons/gnome/scalable/actions/system-run.svg"); } catch { }
 			SetColormap ();
 
@@ -546,66 +548,66 @@ namespace Do.UI
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
 			currentPane = Pane.First;
-			
+
 			frame = new RoundedFrame ();
 			frame.DrawFill = true;
 			frame.FillColor = new Gdk.Color (0x35, 0x30, 0x45);
 			frame.FillAlpha = WindowTransparency;
-			frame.Radius = Screen.IsComposited ? 20 : 0;
+			frame.Radius = Screen.IsComposited ? IconBoxRadius : 0;
 			Add (frame);
 			frame.Show ();
-			
+
 			vbox = new VBox (false, 0);
 			frame.Add (vbox);
-			vbox.BorderWidth = 6;
-			vbox.Show ();		
-			
+			vbox.BorderWidth = IconBoxPadding;
+			vbox.Show ();
+
 			settings_icon = new Gtk.Image (GetType().Assembly, "settings-triangle.png");
 			align = new Alignment (1.0F, 0.0F, 0, 0);
-			align.SetPadding (1, 0, 0, 6);
+			align.SetPadding (3, 0, 0, IconBoxPadding);
 			align.Add (settings_icon);
 			vbox.PackStart (align, false, false, 0);
 			settings_icon.Show ();
 			align.Show ();
-			
-			resultsHBox = new HBox (false, 12);
-			resultsHBox.BorderWidth = 6;
+
+			resultsHBox = new HBox (false, IconBoxPadding*2);
+			resultsHBox.BorderWidth = IconBoxPadding;
 			vbox.PackStart (resultsHBox, false, false, 0);
 			resultsHBox.Show ();
-		
-			iconbox = new IconBox[3];	
+
+			iconbox = new IconBox[3];
 
 			iconbox[0] = new IconBox (IconBoxIconSize);
 			iconbox[0].IsFocused = true;
-			iconbox[0].Radius = 20;
+			iconbox[0].Radius = IconBoxRadius;
 			resultsHBox.PackStart (iconbox[0], false, false, 0);
 			iconbox[0].Show ();
-			
+
 			iconbox[1] = new IconBox (IconBoxIconSize);
 			iconbox[1].IsFocused = false;
-			iconbox[1].Radius = 20;
+			iconbox[1].Radius = IconBoxRadius;
 			resultsHBox.PackStart (iconbox[1], false, false, 0);
 			iconbox[1].Show ();
-			
+
 			iconbox[2] = new IconBox (IconBoxIconSize);
 			iconbox[2].IsFocused = false;
-			iconbox[2].Radius = 20;
-			// resultsHBox.PackStart (iconbox[2], false, false, 0);
+			iconbox[2].Radius = IconBoxRadius;
+//		resultsHBox.PackStart (iconbox[2], false, false, 0);
 			iconbox[2].Show ();
-	
+
 			align = new Alignment (0.5F, 0.5F, 1, 1);
-			align.SetPadding (0, 0, 0, 0);
+			align.SetPadding (0, 2, 0, 0);
 			label = new SymbolDisplayLabel ();
 			align.Add (label);
 			vbox.PackStart (align, false, false, 0);
 			label.Show ();
 			align.Show ();
-				
+
 			ScreenChanged += OnScreenChanged;
-		
+
 			Reposition ();
 		}
-	
+
 		protected virtual void SetColormap ()
 		{
 			Gdk.Colormap  colormap;
@@ -621,14 +623,13 @@ namespace Do.UI
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			Cairo.Context cairo;
-			
+
 			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
 				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
 				cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
 				cairo.Operator = Cairo.Operator.Source;
 				cairo.Paint ();
 			}
-
 			return base.OnExposeEvent (evnt);
 		}
 

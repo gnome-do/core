@@ -48,7 +48,6 @@ namespace Do.UI
 		public IconBox (int iconSize) : base ()
 		{
 			this.iconSize = iconSize;
-
 			Build ();
 		}
 		
@@ -57,8 +56,8 @@ namespace Do.UI
 			caption = "";
 			pixbuf = emptyPixbuf;
 			
-			vbox = new VBox (false, 12);
-			vbox.BorderWidth = 6;
+			vbox = new VBox (false, 8);
+			vbox.BorderWidth = 10;
 			Add (vbox);
 			vbox.Show ();
 			

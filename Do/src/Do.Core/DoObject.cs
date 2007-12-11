@@ -27,7 +27,6 @@ using Do.Universe;
 
 namespace Do.Core
 {
-
 	public abstract class DoObject : IObject
 	{
 		
