@@ -22,23 +22,25 @@ using System;
 
 namespace Do.Universe
 {
-	
 	public class VoidCommand : ICommand
 	{
-		
-		public string Name {
+		public string Name
+		{
 			get { return "Do Nothing"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Does absolutely nothing."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "gtk-stop"; }
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (IItem)
@@ -46,7 +48,8 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes {
+		public Type[] SupportedModifierItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (IItem)
@@ -56,7 +59,7 @@ namespace Do.Universe
 
 		public bool SupportsItem (IItem item)
 		{
-				return true;
+			return true;
 		}
 			
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
@@ -67,6 +70,5 @@ namespace Do.Universe
 		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
 		}
-		
 	}
 }

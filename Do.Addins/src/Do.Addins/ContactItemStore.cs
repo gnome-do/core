@@ -25,66 +25,65 @@ using Do.Universe;
 
 namespace Do.Addins
 {
-
 	public class ContactItemStore
-
 	{
 		static Dictionary<ContactItem, bool> contacts;
 		static Dictionary<string, ContactItem> contacts_by_name;
 		static Dictionary<string, ContactItem> contacts_by_email;
 		static Dictionary<string, ContactItem> contacts_by_aim;
 		static Dictionary<string, ContactItem> contacts_by_jabber;
-		
-		static ContactItemStore () {
+
+		static ContactItemStore ()
+		{
 			contacts = new Dictionary<ContactItem, bool> ();
 			contacts_by_name = new Dictionary<string, ContactItem> ();
 			contacts_by_email = new Dictionary<string, ContactItem> ();
 			contacts_by_aim = new Dictionary<string, ContactItem> ();
 			contacts_by_jabber = new Dictionary<string, ContactItem> ();
 		}
-		
+
 		public static bool SynchronizeContactWithStore (ref ContactItem contact)
 		{
 			ContactItem match;
-			
+
 			match = null;
 			if (contact.name != null) {
 				contacts_by_name.TryGetValue (contact.Name.ToLower(), out match);
 				if (match != null) goto got_match;
 			}
-			
+
 			foreach (string email in contact.Emails) {
 				contacts_by_email.TryGetValue (email.ToLower(), out match);
 				if (match != null) goto got_match;
 			}
-			
+
 			foreach (string aim in contact.AIMs) {
 				contacts_by_aim.TryGetValue (aim.ToLower(), out match);
 				if (match != null) goto got_match;
 			}
-			
+
 			foreach (string jabber in contact.Jabbers) {
 				contacts_by_jabber.TryGetValue (jabber.ToLower(), out match);
 				if (match != null) goto got_match;
 			}
-			
-			// New contact data.			
+
+			// New contact data.
 			AddContactData (contact);
-			return false;			
-		 got_match:
+			return false;
+			got_match:
 			MergeContactIntoContact (contact, match);
 			AddContactData (match);
 			contact = match;
 			return true;
 		}
-		
+
 		static void MergeContactIntoContact (ContactItem source, ContactItem dest)
 		{
 			// This is a very delicate line; the distinction between fields
 			// and properties is essential.
 			if (dest.name == null && source.name != null)
 				dest.Name = source.Name;
-			
+
 			// If dest has no photo, give it source's photo.
 			if (dest.Photo == null) {
 				dest.Photo = source.Photo;
@@ -93,19 +92,19 @@ namespace Do.Addins
 			} else if (source.Photo != null && File.Exists (dest.Photo)
 			                                && File.Exists (source.Photo)) {
 				long source_photo_size, dest_photo_size;
-					
+
 				source_photo_size = new FileInfo (source.Photo).Length;
 				dest_photo_size = new FileInfo (dest.Photo).Length;
 				if (source_photo_size > dest_photo_size) {
 					dest.Photo = source.Photo;
 				}
 			}
-			
+
 			AddMissingListElements<string> (source.Emails, dest.Emails);
 			AddMissingListElements<string> (source.AIMs, dest.AIMs);
 			AddMissingListElements<string> (source.Jabbers, dest.Jabbers);
 		}
-		
+
 		static void AddMissingListElements<T> (List<T> source, List<T> dest)
 		{
 			foreach (T member in source) {
@@ -113,27 +112,28 @@ namespace Do.Addins
 					dest.Add (member);
 			}
 		}
-		
+
 		public static void AddContactData (ContactItem c)
 		{
 			if (c == null) return;
-			
+
 			contacts[c] = true;
-			
+
 			if (c.name != null)
 				contacts_by_name[c.name.ToLower()] = c;
-			
+
 			foreach (string email in c.Emails)
 				contacts_by_email[email.ToLower()] = c;
-			
+
 			foreach (string aim in c.AIMs)
 				contacts_by_aim[aim.ToLower()] = c;
-			
+
 			foreach (string jabber in c.Jabbers)
 				contacts_by_jabber[jabber.ToLower()] = c;
 		}
-		
-		public static ICollection<ContactItem> Contacts {
+
+		public static ICollection<ContactItem> Contacts
+		{
 			get {
 				return contacts.Keys;
 			}

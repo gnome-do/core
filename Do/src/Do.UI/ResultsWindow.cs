@@ -41,11 +41,13 @@ namespace Do.UI
 			this.selection = selection;
 		}
 
-		public int SelectedIndex {
+		public int SelectedIndex
+		{
 			get { return index; }
 		}
 
-		public IObject SelectedObject {
+		public IObject SelectedObject
+		{
 			get {
 				return selection;
 			}
@@ -54,7 +56,6 @@ namespace Do.UI
 
 	public class ResultsWindow : Gtk.Window
 	{
-
 		const int ResultIconSize = 32;
 		const int NumberResultsDisplayed = 6;
 		const string ResultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
@@ -194,7 +195,8 @@ namespace Do.UI
 			results = null;
 		}
 
-		public int SelectedIndex {
+		public int SelectedIndex
+		{
 			get { return selectedIndex; }
 			set {
 				TreeModel model;
@@ -232,7 +234,8 @@ namespace Do.UI
 			}
 		}
 
-		public IObject SelectedObject {
+		public IObject SelectedObject
+		{
 			get {
 				if (results != null && 0 <= selectedIndex && selectedIndex < results.Length) {
 					return results[selectedIndex];
@@ -242,7 +245,8 @@ namespace Do.UI
 			}
 		}
 
-		public IObject[] Results {
+		public IObject[] Results
+		{
 			get { return results; }
 			set {
 				ListStore store;

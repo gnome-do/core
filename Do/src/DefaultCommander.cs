@@ -22,11 +22,9 @@ using Do.Core;
 using Do.UI;
 
 namespace Do
-{	
-
+{
 	public class DefaultCommander : Commander
 	{
-		
 		private Gtk.Window window;
 		
 		public DefaultCommander ()

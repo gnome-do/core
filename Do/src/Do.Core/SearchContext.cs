@@ -25,7 +25,6 @@ using Do.Universe;
 
 namespace Do.Core
 {
-	
 	public class SearchContext
 	{
 		const int MOD_ITEMS = 1;
@@ -57,7 +56,8 @@ namespace Do.Core
 			}
 		}
 		
-		public void Build () {
+		public void Build ()
+		{
 			SearchTypes = new Type[0];
 			flag = 0;
 			items = new List<DoItem> ();
@@ -69,7 +69,8 @@ namespace Do.Core
 			query = "";
 		}
 		
-		public SearchContext Clone () {
+		public SearchContext Clone ()
+		{
 			SearchContext clonedContext = new SearchContext ();
 			clonedContext.Command = command;
 			clonedContext.Items = items;
@@ -85,7 +86,8 @@ namespace Do.Core
 			return clonedContext;
 		}
 		
-		public SearchContext LastContext {
+		public SearchContext LastContext
+		{
 			get {
 				return lastContext;
 			}
@@ -94,7 +96,8 @@ namespace Do.Core
 			}
 		}
 		
-		public SearchContext ParentContext {
+		public SearchContext ParentContext
+		{
 			get {
 				return parentContext;
 			}
@@ -103,7 +106,8 @@ namespace Do.Core
 			}
 		}
 		
-		public List<DoItem> Items {
+		public List<DoItem> Items
+		{
 			get {
 				return items;
 			}
@@ -112,7 +116,8 @@ namespace Do.Core
 			}
 		}
 		
-		public List<DoItem> ModifierItems {
+		public List<DoItem> ModifierItems
+		{
 			get {
 				return modifierItems;
 			}
@@ -121,7 +126,8 @@ namespace Do.Core
 			}
 		}
 		
-		public DoCommand Command {
+		public DoCommand Command
+		{
 			get {
 				return command;
 			}
@@ -130,7 +136,8 @@ namespace Do.Core
 			}
 		}
 			
-		public string Query {
+		public string Query
+		{
 			get {
 				return query;
 			}
@@ -139,7 +146,8 @@ namespace Do.Core
 			}
 		}
 
-		public IObject[] Results {
+		public IObject[] Results
+		{
 			get {
 				return results;
 			}
@@ -156,7 +164,8 @@ namespace Do.Core
 		//This returns an array of the inner items, based on the list of DoItems
 		//This is necessary because SearchContext stores its items as DoItems, but sometimes
 		//methods like ActivateCommand want the IItems associated with DoItems
-		public IItem[] IItems {
+		public IItem[] IItems
+		{
 			get {
 				IItem[] returnItems = new IItem [items.Count];
 				int i = 0;
@@ -168,7 +177,8 @@ namespace Do.Core
 			}
 		}
 		
-		public IItem[] ModIItems {
+		public IItem[] ModIItems
+		{
 			get {
 				IItem[] returnItems = new IItem [modifierItems.Count];
 				int i = 0;
@@ -180,7 +190,8 @@ namespace Do.Core
 			}
 		}
 		
-		public bool Equivalent (SearchContext test) {
+		public bool Equivalent (SearchContext test)
+		{
 			//If its null, return false right away so a null exception isn't thrown
 			if (test == null)
 				return false;
@@ -239,7 +250,8 @@ namespace Do.Core
 			}
 		}
 		
-		public bool ModItemsSearch {
+		public bool ModItemsSearch
+		{
 			get {
 				return ((flag & MOD_ITEMS) == MOD_ITEMS);
 			}
@@ -251,7 +263,8 @@ namespace Do.Core
 			}
 		}
 	
-		public bool FindingChildren {
+		public bool FindingChildren
+		{
 			get {
 				return ((flag & GET_CHILDREN) == GET_CHILDREN);
 			}
@@ -263,7 +276,8 @@ namespace Do.Core
 			}
 		}
 		
-		public bool FindingParent {
+		public bool FindingParent
+		{
 			get {
 				return ((flag & GET_PARENT) == GET_PARENT);
 			}
@@ -275,7 +289,8 @@ namespace Do.Core
 			}
 		}
 		
-		public bool Independent {
+		public bool Independent
+		{
 			get {
 				return (!(CommandSearch || ItemsSearch || ModItemsSearch));
 			}
@@ -288,7 +303,8 @@ namespace Do.Core
 			command = null;
 		}
 		
-		public IObject GenericObject {
+		public IObject GenericObject
+		{
 			set {
 				if (value is DoItem) {
 					Items = new List<DoItem> ();
@@ -300,7 +316,8 @@ namespace Do.Core
 			}
 		}
 		
-		public Type[] SearchTypes {
+		public Type[] SearchTypes
+		{
 			get {
 				return searchTypes;
 			}
@@ -309,7 +326,8 @@ namespace Do.Core
 			}
 		}
 		
-		public IObject ParentObject {
+		public IObject ParentObject
+		{
 			get {
 				return parentObject;
 			}
@@ -318,7 +336,8 @@ namespace Do.Core
 			}
 		}
 		
-		public int Cursor {
+		public int Cursor
+		{
 			get {
 				return cursor;
 			}
@@ -327,13 +346,15 @@ namespace Do.Core
 			}
 		}
 		
-		public SearchContext EquivalentPreviousContextIfExists () {
+		public SearchContext EquivalentPreviousContextIfExists ()
+		{
 			if (Equivalent (LastContext.LastContext))
 				return LastContext.LastContext;
 			return null;
 		}
 		
-		public SearchContext GetContinuedContext () {
+		public SearchContext GetContinuedContext ()
+		{
 			SearchContext clone;
 			clone = Clone ();
 			clone.LastContext = this;

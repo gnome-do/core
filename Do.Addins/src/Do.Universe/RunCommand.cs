@@ -22,23 +22,25 @@ using System;
 
 namespace Do.Universe
 {
-	
 	public class RunCommand : ICommand
 	{
-	
-		public string Name {
+		public string Name
+		{
 			get { return "Run"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Run an application, script, or other executable."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "gnome-run"; }
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (IRunnableItem),
@@ -46,7 +48,8 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes {
+		public Type[] SupportedModifierItemTypes
+		{
 			get { return null; }
 		}
 
@@ -73,7 +76,5 @@ namespace Do.Universe
 				}
 			}
 		}
-	
-		
 	}
 }

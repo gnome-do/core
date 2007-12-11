@@ -23,10 +23,8 @@ using System.Text.RegularExpressions;
 
 namespace Do.Universe
 {
-	
 	public class OpenURLCommand : ICommand
 	{
-	
 		const string urlPattern = @"(^\w+:\/\/\w+)|(\w+\.\w+)";
 		
 		Regex urlRegex;
@@ -36,19 +34,23 @@ namespace Do.Universe
 			urlRegex = new Regex (urlPattern, RegexOptions.Compiled);
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return "Open URL"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Opens bookmarks and manually-typed URLs."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "web-browser"; }
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (IURLItem),
@@ -57,13 +59,15 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes {
+		public Type[] SupportedModifierItemTypes
+		{
 			get {
 				return null;
 			}
 		}
 
-		public bool SupportsItem (IItem item) {
+		public bool SupportsItem (IItem item)
+		{
 			if (item is ITextItem) {
 				return urlRegex.IsMatch ((item as ITextItem).Text);
 			} else if (item is IURLItem) {
@@ -100,6 +104,5 @@ namespace Do.Universe
 				}
 			}
 		}
-		
 	}
 }

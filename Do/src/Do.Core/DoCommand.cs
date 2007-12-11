@@ -25,28 +25,30 @@ using Do.Universe;
 
 namespace Do.Core
 {
-
 	public class DoCommand : DoObject, ICommand
 	{
 		public const string kDefaultCommandIcon = "gnome-run";
-	
+
 		protected ICommand command;
-		
+
 		public DoCommand (ICommand command):
 			base (command)
 		{
 			this.command = command;
 		}
-		
-		public override string Icon {
+
+		public override string Icon
+		{
 			get { return command.Icon ?? kDefaultCommandIcon; }
 		}
-		
-		public Type[] SupportedItemTypes {
+
+		public Type[] SupportedItemTypes
+		{
 			get { return (command.SupportedItemTypes == null ? new Type[0] : command.SupportedItemTypes); }
 		}
-		
-		public Type[] SupportedModifierItemTypes {
+
+		public Type[] SupportedModifierItemTypes
+		{
 			get { return (command.SupportedModifierItemTypes == null ? new Type[0] : command.SupportedModifierItemTypes); }
 		}
 
@@ -55,7 +57,7 @@ namespace Do.Core
 			bool type_ok;
 
 			type_ok = false;
-			item = EnsureIItem (item);						
+			item = EnsureIItem (item);
 			foreach (Type item_type in SupportedItemTypes) {
 				if (item_type.IsAssignableFrom (item.GetType ())) {
 					type_ok = true;
@@ -65,13 +67,13 @@ namespace Do.Core
 			if (!type_ok) return false;
 			return command.SupportsItem (item);
 		}
-		
+
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
 		{
 			items = EnsureIItemArray (items);
 			return command.SupportsModifierItemForItems (items, EnsureIItem (modItem));
 		}
-		
+
 		public void Perform (IItem[] items, IItem[] modItems)
 		{
 			items = EnsureIItemArray (items);
@@ -79,7 +81,7 @@ namespace Do.Core
 
 			new Thread ((ThreadStart) delegate {
 				Gdk.Threads.Enter ();
-				
+
 				try {
 					InternalItemSource.LastItem.IItem = items[0]; // TODO: Create a command performed event and move this.
 					command.Perform (items, modItems);
@@ -89,7 +91,7 @@ namespace Do.Core
 				Gdk.Threads.Leave ();
 			}).Start ();
 		}
-		
+
 		/// <summary>
 		/// Returns the inner item if the static type of given
 		/// item is an DoItem subtype. Returns the argument otherwise.
@@ -106,7 +108,7 @@ namespace Do.Core
 				item = (item as DoItem).IItem;
 			return item;
 		}
-		
+
 		/// <summary>
 		/// Like EnsureItem but for arrays of IItems.
 		/// </summary>
@@ -120,7 +122,7 @@ namespace Do.Core
 		IItem[] EnsureIItemArray (IItem[] items)
 		{
 			IItem[] inner_items;
-			
+
 			inner_items = items.Clone () as IItem[];
 			for (int i = 0; i < items.Length; ++i) {
 				if (items[i] is DoItem) {
@@ -129,13 +131,13 @@ namespace Do.Core
 			}
 			return inner_items;
 		}
-		
-		public bool AcceptsOnlyText {
+
+		public bool AcceptsOnlyText
+		{
 			get {
 				return SupportedItemTypes.Length == 1
 					&& typeof (ITextItem).IsAssignableFrom (SupportedItemTypes[0]);
 			}
 		}
-		
 	}
 }

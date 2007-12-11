@@ -31,17 +31,17 @@ using Do.Core;
 
 namespace Do.UI
 {
-
 	public class SymbolWindow : Gtk.Window
 	{
-		class DefaultIconBoxObject : IObject {
+		class DefaultIconBoxObject : IObject
+		{
 			public string Icon { get { return "gtk-find"; } }
 			public string Name { get { return ""; } }
 			public string Description { get { return ""; } }
 		}
 
-		class NoResultsFoundObject : IObject {
-
+		class NoResultsFoundObject : IObject
+		{
 			string query;
 
 			public NoResultsFoundObject (string query)
@@ -52,7 +52,8 @@ namespace Do.UI
 			public string Icon { get { return "gtk-dialog-question"; } }
 			public string Name { get { return "No results found."; } }
 
-			public string Description {
+			public string Description
+			{
 				get {
 					return string.Format ("No results found for \"{0}\".", query);
 				}
@@ -94,7 +95,8 @@ namespace Do.UI
 			SetDefaultState ();
 		}
 
-		IObject GetCurrentObject (Pane pane) {
+		IObject GetCurrentObject (Pane pane)
+		{
 			IObject o;
 
 			try {
@@ -105,7 +107,8 @@ namespace Do.UI
 			return o;
 		}
 
-		Pane CurrentPane {
+		Pane CurrentPane
+		{
 			get {
 				return currentPane;
 			}
@@ -115,7 +118,8 @@ namespace Do.UI
 			}
 		}
 
-		SearchContext CurrentContext {
+		SearchContext CurrentContext
+		{
 			get {
 				return context[(int) currentPane];
 			}
@@ -126,7 +130,8 @@ namespace Do.UI
 
 		IconBox CurrentIconBox { get { return iconbox[(int) currentPane]; } }
 
-		int CurrentCursor {
+		int CurrentCursor
+		{
 			get {
 				return context[(int) currentPane].Cursor;
 			}
@@ -217,11 +222,12 @@ namespace Do.UI
 		public void Reposition ()
 		{
 			int monitor;
-			int extraGap = 1; // why 1? something is wrong with math rounding?
+			int extraGap = IconBoxRadius-(IconBoxPadding*2);
 			Gdk.Rectangle geo, main, results;
 
-			if (currentPane == Pane.First)
-				extraGap = IconBoxRadius-(IconBoxPadding*2); // Add an additional gap on the first pane
+			// Do special things for the first Pane
+			// if (currentPane == Pane.First)
+			// 	extraGap = IconBoxRadius-(IconBoxPadding*2);
 
 			GetPosition (out main.X, out main.Y);
 			GetSize (out main.Width, out main.Height);
@@ -592,7 +598,7 @@ namespace Do.UI
 			iconbox[2] = new IconBox (IconBoxIconSize);
 			iconbox[2].IsFocused = false;
 			iconbox[2].Radius = IconBoxRadius;
-//		resultsHBox.PackStart (iconbox[2], false, false, 0);
+			// resultsHBox.PackStart (iconbox[2], false, false, 0);
 			iconbox[2].Show ();
 
 			align = new Alignment (0.5F, 0.5F, 1, 1);
@@ -632,7 +638,5 @@ namespace Do.UI
 			}
 			return base.OnExposeEvent (evnt);
 		}
-
 	}
-
 }

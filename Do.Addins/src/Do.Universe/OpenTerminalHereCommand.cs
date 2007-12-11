@@ -25,27 +25,29 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-
 	public class OpenTerminalHereCommand : ICommand
 	{
-	
 		public OpenTerminalHereCommand ()
 		{
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return "Open Terminal Here"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Opens a Terminal in a given location."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "gnome-terminal"; }
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (FileItem),
@@ -53,7 +55,8 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes {
+		public Type[] SupportedModifierItemTypes
+		{
 			get {
 				return null;
 			}
@@ -74,14 +77,14 @@ namespace Do.Universe
 			GConf.Client client;
 			Process term;
 			FileItem fi;
-            string dir, exec;
+			string dir, exec;
 
 			client = new GConf.Client();
-            try {
-                exec = client.Get ("/desktop/gnome/applications/terminal/exec") as string;
-            } catch {
-                exec = "gnome-terminal";
-            }
+			try {
+				exec = client.Get ("/desktop/gnome/applications/terminal/exec") as string;
+			} catch {
+				exec = "gnome-terminal";
+			}
 			
 			fi = items[0] as FileItem;
 			dir = fi.URI;
@@ -93,6 +96,5 @@ namespace Do.Universe
 			term.StartInfo.FileName = exec;
 			term.Start ();
 		}
-		
 	}
 }

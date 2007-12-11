@@ -37,15 +37,18 @@ namespace Do.Core
 			enabled = true;
 		}
 		
-		public IItemSource IItemSource {
+		public IItemSource IItemSource
+		{
 			get { return source; }
 		}
 		
-		public void UpdateItems () {
+		public void UpdateItems ()
+		{
 			source.UpdateItems ();
 		}
 		
-		public ICollection<IItem> Items {
+		public ICollection<IItem> Items
+		{
 			get {
 				List<IItem> items;
 				
@@ -63,7 +66,8 @@ namespace Do.Core
 			}
 		}
 		
-		public ICollection<IItem> ChildrenOfItem (IItem item) {
+		public ICollection<IItem> ChildrenOfItem (IItem item)
+		{
 			ICollection<IItem> children;
 			List<IItem> doChildren;
 			
@@ -85,7 +89,8 @@ namespace Do.Core
 			return doChildren;
 		}
 		
-		public bool Enabled {
+		public bool Enabled
+		{
 			get { return enabled; }
 			set { enabled = value; }
 		}

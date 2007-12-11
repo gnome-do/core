@@ -28,7 +28,6 @@ namespace Do.Universe
 	/// </summary>
 	public class DefineWordCommand : ICommand
 	{
-	
 		/// <summary>
 		/// Should match those and only those strings that can be
 		/// looked up in a dictionary.
@@ -48,15 +47,18 @@ namespace Do.Universe
 			get { return "Define"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Define a given word."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "accessories-dictionary.png"; }
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (ITextItem),
@@ -64,7 +66,8 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes {
+		public Type[] SupportedModifierItemTypes
+		{
 			get { return null; }
 		}
 
@@ -78,7 +81,8 @@ namespace Do.Universe
 		/// A <see cref="System.Boolean"/> indicating whether or not IITem
 		/// can be defined.
 		/// </returns>
-		public bool SupportsItem (IItem item) {
+		public bool SupportsItem (IItem item)
+		{
 			string word;
 
 			word = null;
@@ -115,8 +119,5 @@ namespace Do.Universe
 				}
 			}
 		}
-	
-		
 	}
-	
 }

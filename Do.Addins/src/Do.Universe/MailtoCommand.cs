@@ -23,23 +23,25 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	
-	
-	public class MailtoCommand : ICommand {
-		
-		public string Name {
+	public class MailtoCommand : ICommand
+	{
+		public string Name
+		{
 			get { return "Email"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Compose a new email to a friend."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "email"; }
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (ContactItem),
@@ -47,7 +49,8 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes {
+		public Type[] SupportedModifierItemTypes
+		{
 			get { return null; }
 		}
 

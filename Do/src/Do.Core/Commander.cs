@@ -1,4 +1,4 @@
-/* ${FileName}
+/* Commander.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -27,7 +27,6 @@ using Do.Universe;
 
 namespace Do.Core
 {
-	
 	public delegate void OnCommanderStateChange ();
 	public delegate void VisibilityChangedHandler (bool visible);
 	
@@ -39,8 +38,8 @@ namespace Do.Core
 			SecondSearchComplete
 	}
 	
-	public abstract class Commander : ICommander {
-		
+	public abstract class Commander : ICommander
+	{
 		const string kActivateKeybinding = "<Super>space";
 		
 		protected Tomboy.GConfXKeybinder keybinder;
@@ -55,7 +54,8 @@ namespace Do.Core
 		
 		public event VisibilityChangedHandler VisibilityChanged;
 		
-		public Commander () {
+		public Commander ()
+		{
 			keybinder = new Tomboy.GConfXKeybinder ();
 			
 			SetSearchingItemsStateEvent = SetSearchingItemsState;
@@ -117,16 +117,16 @@ namespace Do.Core
 		protected virtual void SetupKeybindings ()
 		{
 			GConf.Client client;
-            string binding;
+			string binding;
 
 			client = new GConf.Client();
-            try {
-                binding = client.Get ("/apps/gnome-do/preferences/key_binding") as string;
-            } catch {
-                binding = kActivateKeybinding;
-                client.Set ("/apps/gnome-do/preferences/key_binding", binding);
-            }
-            keybinder.Bind ("/apps/gnome-do/preferences/key_binding", binding, OnActivate);
+			try {
+				binding = client.Get ("/apps/gnome-do/preferences/key_binding") as string;
+			} catch {
+				binding = kActivateKeybinding;
+				client.Set ("/apps/gnome-do/preferences/key_binding", binding);
+			}
+			keybinder.Bind ("/apps/gnome-do/preferences/key_binding", binding, OnActivate);
 		}
 		
 		private void OnActivate (object sender, EventArgs args)

@@ -24,60 +24,61 @@ using Do.DBusLib;
 
 namespace Do
 {
-	
-	public class Do {
-		
+	public class Do
+	{
 		static Commander commander;
 		static UniverseManager universeManager;
-	
-		public static void Main (string[] args) {
 
-			DetectInstanceAndExit ();	
+		public static void Main (string[] args)
+		{
+			DetectInstanceAndExit ();
 
 			Gtk.Application.Init ();
 			Log.Initialize ();
 			Util.Initialize ();
-		
+
 			Gdk.Threads.Init ();
-			
+
 			try {
 				Util.SetProcessName ("gnome-do");
 			} catch (Exception e) {
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
-			
+
 			universeManager = new UniverseManager ();
 			universeManager.Initialize ();
-			
-			commander = new DefaultCommander ();	
-			DBusRegistrar.RegisterCommander (commander);	
+
+			commander = new DefaultCommander ();
+			DBusRegistrar.RegisterCommander (commander);
 
 			// Temporary quiet start feature.
 			bool quiet_start = false;
 			foreach (string arg in args)
 				quiet_start |= (arg == "--quiet");
-			
+
 			if (!quiet_start)
 				commander.Show ();
-			
+
 			Gtk.Application.Run ();
-		}	
+		}
 
 		static void DetectInstanceAndExit ()
 		{
-			ICommander dbus_commander;			
+			ICommander dbus_commander;
 			dbus_commander = DBusRegistrar.GetCommanderInstance ();
 			if (dbus_commander != null) {
 				dbus_commander.Show ();
 				System.Environment.Exit (0);
 			}
 		}
-		
-		public static Commander Commander {
+
+		public static Commander Commander
+		{
 			get { return commander; }
 		}
-		
-		public static UniverseManager UniverseManager {
+
+		public static UniverseManager UniverseManager
+		{
 			get { return universeManager; }
 		}
 	}

@@ -30,7 +30,8 @@ namespace Do.Core
 		{
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (DoItemSource),
@@ -39,15 +40,18 @@ namespace Do.Core
 			}
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return "GNOME Do Item Sources"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Item Sources providing all items GNOME Do knows about."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "gnome-run"; }
 		}
 		
@@ -55,11 +59,13 @@ namespace Do.Core
 		{
 		}
 		
-		public ICollection<IItem> Items {
+		public ICollection<IItem> Items
+		{
 			get { return null; }
 		}
 		
-		public ICollection<IItem> ChildrenOfItem (IItem item) {
+		public ICollection<IItem> ChildrenOfItem (IItem item)
+		{
 			List<IItem> children;
 			bool parent_is_this;
 		

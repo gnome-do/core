@@ -16,12 +16,10 @@ namespace Tomboy
 		static extern void tomboy_keybinder_init ();
 
 		[DllImport("libtomboy")]
-		static extern void tomboy_keybinder_bind (string keystring,
-							  BindkeyHandler handler);
+		static extern void tomboy_keybinder_bind (string keystring, BindkeyHandler handler);
 
 		[DllImport("libtomboy")]
-		static extern void tomboy_keybinder_unbind (string keystring,
-							    BindkeyHandler handler);
+		static extern void tomboy_keybinder_unbind (string keystring, BindkeyHandler handler);
 
 		public delegate void BindkeyHandler (string key, IntPtr user_data);
 
@@ -55,8 +53,7 @@ namespace Tomboy
 			}
 		}
 
-		public void Bind (string       keystring, 
-				  EventHandler handler)
+		public void Bind (string keystring, EventHandler handler)
 		{
 			Binding bind = new Binding ();
 			bind.keystring = keystring;
@@ -70,8 +67,7 @@ namespace Tomboy
 		{
 			foreach (Binding bind in bindings) {
 				if (bind.keystring == keystring) {
-					tomboy_keybinder_unbind (bind.keystring,
-								 key_handler);
+					tomboy_keybinder_unbind (bind.keystring, key_handler);
 
 					bindings.Remove (bind);
 					break;
@@ -101,14 +97,14 @@ namespace Tomboy
 		}
 
 		public void Bind (string       gconf_path, 
-				  string       default_binding, 
-				  EventHandler handler)
+		                  string       default_binding, 
+		                  EventHandler handler)
 		{
 			try {
 				Binding binding = new Binding (gconf_path, 
-							       default_binding,
-							       handler,
-							       this);
+				                               default_binding,
+				                               handler,
+				                               this);
 				bindings.Add (binding);
 			} catch (Exception e){
 				Log.Error ("Could not add global keybinding: {0}", e.Message);
@@ -133,9 +129,9 @@ namespace Tomboy
 			GConfXKeybinder parent;
 
 			public Binding (string          gconf_path, 
-					string          default_binding,
-					EventHandler    handler,
-					GConfXKeybinder parent)
+			                string          default_binding,
+			                EventHandler    handler,
+			                GConfXKeybinder parent)
 			{
 				this.gconf_path = gconf_path;
 				this.key_sequence = default_binding;
@@ -175,9 +171,9 @@ namespace Tomboy
 					return;
 
 				Log.Info ("Binding key '{0}' for '{1}'." +
-									" You may change this keybinding with" +
-								  " Configuration Editor (gconf-editor).",
-									 key_sequence, gconf_path);
+				          " You may change this keybinding with" +
+				          " Configuration Editor (gconf-editor).",
+				          key_sequence, gconf_path);
 
 				parent.Bind (key_sequence, handler);
 			}
@@ -188,8 +184,8 @@ namespace Tomboy
 					return;
 
 				Log.Info ("Unbinding key '{0}' for '{1}'",
-						   key_sequence,
-						   gconf_path);
+				          key_sequence,
+				          gconf_path);
 
 				parent.Unbind (key_sequence);
 			}

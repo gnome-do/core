@@ -24,11 +24,8 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	
-	
 	public class GNOMESpecialLocationsItemSource : IItemSource
 	{
-		
 		List<IItem> items;
 		
 		class GNOMEURIItem : IURIItem
@@ -50,20 +47,20 @@ namespace Do.Universe
 		
 		class GNOMETrashURIItem : GNOMEURIItem
 		{
-			
 			static readonly string kTrashDirectory;
 			
 			static GNOMETrashURIItem ()
 			{
 				kTrashDirectory = "~/.Trash".Replace ("~",
-					     System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
+				                  System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
 			}
 			
 			public GNOMETrashURIItem () : base ("trash://", "Trash", null)
 			{
 			}
 			
-			override public string Icon {
+			override public string Icon
+			{
 				get {
 					if (System.IO.Directory.Exists (kTrashDirectory)
 						&& System.IO.Directory.GetFileSystemEntries (kTrashDirectory).Length > 0) {
@@ -89,7 +86,8 @@ namespace Do.Universe
 		public string Description { get { return "Special locations in GNOME, such as Computer and Network."; } }
 		public string Icon { get { return "user-home"; } }
 
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (IURIItem),

@@ -25,10 +25,8 @@ using Do.Core;
 
 namespace Do.UI
 {
-
 	public class RoundedFrame : Bin
 	{
-
 		Rectangle childAlloc;
 		double radius;
 
@@ -50,7 +48,8 @@ namespace Do.UI
 			fillColor = frameColor = new Color (0, 0, 0);
 		}
 
-		public double Radius {
+		public double Radius
+		{
 			get { return radius; }
 			set {
 				radius = value;
@@ -58,7 +57,8 @@ namespace Do.UI
 			}
 		}
 
-		public bool DrawFrame {
+		public bool DrawFrame
+		{
 			get { return drawFrame; }
 			set {
 				drawFrame = value;
@@ -66,7 +66,8 @@ namespace Do.UI
 			}
 		}
 
-		public Color FrameColor {
+		public Color FrameColor
+		{
 			get { return frameColor; }
 			set {
 				fillColor = new Color ((byte)value.Red, (byte)value.Green, (byte)value.Blue);
@@ -74,7 +75,8 @@ namespace Do.UI
 			}
 		}
 
-		public double FrameAlpha {
+		public double FrameAlpha
+		{
 			get { return frameAlpha; }
 			set {
 				frameAlpha = value;
@@ -82,7 +84,8 @@ namespace Do.UI
 			}
 		}
 
-		public bool DrawFill {
+		public bool DrawFill
+		{
 			get { return fill; }
 			set {
 				fill = value;
@@ -90,7 +93,8 @@ namespace Do.UI
 			}
 		}
 
-		public Color FillColor {
+		public Color FillColor
+		{
 			get { return fillColor; }
 			set {
 				fillColor = new Color ((byte)value.Red, (byte)value.Green, (byte)value.Blue);
@@ -98,7 +102,8 @@ namespace Do.UI
 			}
 		}
 
-		public double FillAlpha {
+		public double FillAlpha
+		{
 			get { return fillAlpha; }
 			set {
 				fillAlpha = value;

@@ -36,13 +36,15 @@ namespace Do.Core
 			this.searchString = searchString;
 		}
 		
-		public int Compare (IObject x, IObject y) {
+		public int Compare (IObject x, IObject y)
+		{
 			int xScore = (x as DoObject).Score = (x as DoObject).ScoreForAbbreviation (searchString);
 			int yScore = (y as DoObject).Score = (y as DoObject).ScoreForAbbreviation (searchString);
 			return (xScore - yScore);
 		}
 		
-		public List<IObject> NarrowResults (List<IObject> broadResults) {
+		public List<IObject> NarrowResults (List<IObject> broadResults)
+		{
 			List<IObject> results = new List<IObject> ();
 			
 			//First throw out the non-zero items, there's no point wasting sorting time on them

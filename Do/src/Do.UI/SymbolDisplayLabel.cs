@@ -52,7 +52,8 @@ namespace Do.UI
 			ModifyFg (StateType.Normal, Style.White);
 		}
 		
-		public IObject DisplayObject {
+		public IObject DisplayObject
+		{
 			set {
 				IObject displayObject;
 				
@@ -66,14 +67,16 @@ namespace Do.UI
 			}
 		}
 		
-		public void SetDisplayLabel (string name, string description) {
+		public void SetDisplayLabel (string name, string description)
+		{
 			this.name = name ?? "";
 			this.description = description ?? "";
 			highlight = "";
 			UpdateText ();
 		}
 		
-		public string Highlight {
+		public string Highlight
+		{
 			get { return highlight; }
 			set {
 				highlight = value ?? "";

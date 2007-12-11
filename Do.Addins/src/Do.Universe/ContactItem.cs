@@ -42,7 +42,8 @@ namespace Do.Universe
 			jabbers = new List<string> ();
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get {
 				if (name != null) return name;
 				if (emails.Count > 0) return emails[0];
@@ -53,12 +54,14 @@ namespace Do.Universe
 			set { name = value; }
 		}
 		
-		public string Photo {
+		public string Photo
+		{
 			get { return photo; }
 			set { photo = value; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get {
 				if (emails.Count > 0) return emails[0];
 				if (aims.Count > 0) return "AIM: " + aims[0];
@@ -67,7 +70,8 @@ namespace Do.Universe
 			}
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get {
 				return Photo ?? "stock_person";
 			}
