@@ -25,11 +25,8 @@ using Do.Core;
 
 namespace Do.Universe
 {
-	
-	
 	public class InternalItemSource : IItemSource
 	{
-		
 		public static readonly ProxyItem LastItem = new ProxyItem ("Last Item",
 		                                                           "The last item used in a command.",
 		                                                           "undo");
@@ -72,6 +69,5 @@ namespace Do.Universe
 		public ICollection<IItem> ChildrenOfItem (IItem item) {
 			return null;
 		}
-		
 	}
 }

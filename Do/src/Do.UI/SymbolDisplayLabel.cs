@@ -27,10 +27,8 @@ using Do.Addins;
 
 namespace Do.UI
 {
-	
 	public class SymbolDisplayLabel : Label
 	{
-		
 		// const string displayFormat = " <big>{0}</big> \n {1} ";
 		
 		// Description only:

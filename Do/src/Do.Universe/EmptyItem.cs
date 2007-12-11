@@ -23,7 +23,6 @@ using Do.Universe;
 
 namespace Do
 {
-	
 	public class EmptyItem : IItem
 	{
 		public string Name { get { return ""; } }

@@ -25,10 +25,8 @@ using Do.Universe;
 
 namespace Do.Core
 {
-	
 	public class DoItemSource : DoObject, IItem
 	{
-		
 		private bool enabled;
 		protected IItemSource source;
 		
@@ -91,6 +89,5 @@ namespace Do.Core
 			get { return enabled; }
 			set { enabled = value; }
 		}
-		
 	}
 }

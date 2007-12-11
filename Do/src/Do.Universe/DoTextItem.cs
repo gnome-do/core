@@ -24,7 +24,6 @@ using Do.Core;
 
 namespace Do
 {
-	
 	public class DoTextItem: DoItem, ITextItem
 	{
 		public DoTextItem (string text):
