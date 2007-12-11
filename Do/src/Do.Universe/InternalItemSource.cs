@@ -38,22 +38,26 @@ namespace Do.Universe
 			items.Add (LastItem);
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 				};
 			}
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return "Internal GNOME Do Items"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Special items relevant to the inner-workings of GNOME Do."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "gnome-system"; }
 		}
 		
@@ -62,11 +66,13 @@ namespace Do.Universe
 		{
 		}
 		
-		public ICollection<IItem> Items {
+		public ICollection<IItem> Items
+		{
 			get { return items; }
 		}
 		
-		public ICollection<IItem> ChildrenOfItem (IItem item) {
+		public ICollection<IItem> ChildrenOfItem (IItem item)
+		{
 			return null;
 		}
 	}

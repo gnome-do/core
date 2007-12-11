@@ -22,7 +22,6 @@ using System.Collections.Generic;
 
 namespace Do.Universe
 {
-
 	/// <summary>
 	/// A source of IItems.
 	/// Example: A "EpiphanyBookmarkItemSource" could provide IItems representing
@@ -30,7 +29,6 @@ namespace Do.Universe
 	/// </summary>
 	public interface IItemSource : IObject
 	{
-
 		/// <value>
 		/// IItem sub-types provided/supported by this source. These include any
 		/// types of items provided by the Items property, and the types of items

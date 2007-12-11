@@ -45,6 +45,6 @@ namespace Do.Addins
 			public static PixbufFromIconNameDelegate PixbufFromIconName;
 			public static StringTransformationDelegate MarkupSafeString;
 			public static PopupMainMenuAtPositionDelegate PopupMainMenuAtPosition;
-		}		
+		}
 	}
 }

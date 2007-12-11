@@ -29,7 +29,6 @@ namespace Do.Core
 {
 	public abstract class DoObject : IObject
 	{
-		
 		public const string kDefaultName = "No name";
 		public const string kDefaultDescription = "No description.";
 		public const string kDefaultIcon = "empty";
@@ -66,19 +65,23 @@ namespace Do.Core
 			this.inner = inner;
 		}
 		
-		public virtual string Name {
+		public virtual string Name
+		{
 			get { return inner.Name ?? kDefaultName; }
 		}
 		
-		public virtual string Description {
+		public virtual string Description
+		{
 			get { return inner.Description ?? kDefaultDescription; }
 		}
 		
-		public virtual string Icon {
+		public virtual string Icon
+		{
 			get { return inner.Icon ?? kDefaultIcon; }
 		}
 		
-		public string UID {
+		public string UID
+		{
 			get {
 				return string.Format ("{0}___{1}___{2}", inner.GetType (), Name, Description);
 			}
@@ -89,7 +92,8 @@ namespace Do.Core
 			return UID.GetHashCode ();
 		}
 		
-		public int Score {
+		public int Score
+		{
 			get { return _score; }
 			set { _score = value; }
 		}
@@ -112,7 +116,8 @@ namespace Do.Core
 		}
 	}
 	
-	public class DoObjectScoreComparer : IComparer<IObject> {
+	public class DoObjectScoreComparer : IComparer<IObject>
+	{
 		public int Compare (IObject x, IObject y) {
 			float xscore, yscore;
 			
@@ -128,6 +133,5 @@ namespace Do.Core
 			else
 				return xscore > yscore ? -1 : 1;
 		}
-
 	}
 }

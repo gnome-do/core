@@ -24,30 +24,32 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	
 	/// <summary>
 	/// A command providing "open" semantics to many kinds of items.
 	/// </summary>
 	public class OpenCommand : ICommand
 	{
-	
 		public OpenCommand ()
 		{
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return "Open"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Opens many kinds of items."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "gtk-open"; }
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (IOpenableItem),
@@ -56,7 +58,8 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes {
+		public Type[] SupportedModifierItemTypes
+		{
 			get {
 				return null;
 			}
@@ -89,6 +92,5 @@ namespace Do.Universe
 				Util.Environment.Open (open_item, out error_message);
 			}
 		}
-		
 	}
 }

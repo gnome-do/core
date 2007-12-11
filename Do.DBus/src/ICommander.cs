@@ -32,5 +32,4 @@ namespace Do.DBusLib
 		/// </summary>
 		void Show ();
 	}
-
 }

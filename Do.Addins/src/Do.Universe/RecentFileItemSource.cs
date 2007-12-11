@@ -23,10 +23,8 @@ using System.Collections.Generic;
 
 namespace Do.Universe
 {
-	
 	public class RecentFileItemSource : IItemSource
 	{
-		
 		List<IItem> files;
 		
 		public RecentFileItemSource()
@@ -42,22 +40,26 @@ namespace Do.Universe
 			ForceUpdateItems ();
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get { return new Type[] {
 					typeof (FileItem),
 				};
 			}
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return "Recent Files"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Finds recently-opened files."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "document"; }
 		}
 		
@@ -82,6 +84,5 @@ namespace Do.Universe
 			}
 			*/
 		}
-		
 	}
 }

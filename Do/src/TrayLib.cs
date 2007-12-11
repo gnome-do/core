@@ -2,24 +2,24 @@
 
 using System;
 using System.Runtime.InteropServices;
- 
+
 using Gtk;
 using Gdk;
- 
+
 namespace Egg
 {
 	public class TrayIcon : Plug
 	{
 		int stamp;
 		Orientation orientation;
-		
+
 		int selection_atom;
 		int manager_atom;
 		int system_tray_opcode_atom;
 		int orientation_atom;
 		IntPtr manager_window;
 		FilterFunc filter;
-		
+
 		public TrayIcon (string name)
 		{
 			Title = name;
@@ -28,7 +28,7 @@ namespace Egg
 			AddEvents ((int)EventMask.PropertyChangeMask);
 			filter = new FilterFunc (ManagerFilter);
 		}
- 
+
 		protected override void OnRealized ()
 		{
 			base.OnRealized ();
@@ -41,7 +41,7 @@ namespace Egg
 			UpdateManagerWindow ();
 			//Screen.RootWindow.AddFilter (filter);
 		}
- 
+
 		protected override void OnUnrealized ()
 		{
 			if (manager_window != IntPtr.Zero)
@@ -49,11 +49,11 @@ namespace Egg
 				Gdk.Window gdkwin = Gdk.Window.LookupForDisplay (Display, (uint)manager_window);
 				//gdkwin.RemoveFilter (filter);
 			}
-			
+
 			//Screen.RootWindow.RemoveFilter (filter);
 			base.OnUnrealized ();
 		}
- 
+
 		private void UpdateManagerWindow ()
 		{
 			IntPtr xdisplay = gdk_x11_display_get_xdisplay (Display.Handle);
@@ -62,15 +62,15 @@ namespace Egg
 				Gdk.Window gdkwin = Gdk.Window.LookupForDisplay (Display, (uint)manager_window);
 				//gdkwin.RemoveFilter (filter);
 			}
- 
+
 			XGrabServer (xdisplay);
- 
+
 			manager_window = XGetSelectionOwner (xdisplay, selection_atom);
 			if (manager_window != IntPtr.Zero)
 				XSelectInput (xdisplay, manager_window, EventMask.StructureNotifyMask | EventMask.PropertyChangeMask);
 			XUngrabServer (xdisplay);
 			XFlush (xdisplay);
- 
+
 			if (manager_window != IntPtr.Zero) {
 				Gdk.Window gdkwin = Gdk.Window.LookupForDisplay (Display, (uint)manager_window);
 				//gdkwin.AddFilter (filter);
@@ -78,17 +78,17 @@ namespace Egg
 				GetOrientationProperty ();
 			}
 		}
- 
+
 		private void SendDockRequest ()
 		{
 			SendManagerMessage (SystemTrayMessage.RequestDock, manager_window, Id, 0, 0);
 		}
- 
+
 		private void SendManagerMessage (SystemTrayMessage message, IntPtr window, uint data1, uint data2, uint data3)
 		{
 			XClientMessageEvent ev = new XClientMessageEvent ();
 			IntPtr display;
- 
+
 			ev.type = XEventName.ClientMessage;
 			ev.window = window;
 			ev.message_type = (IntPtr)system_tray_opcode_atom;
@@ -98,24 +98,24 @@ namespace Egg
 			ev.ptr3 = (IntPtr)data1;
 			ev.ptr4 = (IntPtr)data2;
 			ev.ptr5 = (IntPtr)data3;
- 
+
 			display = gdk_x11_display_get_xdisplay (Display.Handle);
 			gdk_error_trap_push ();
 			XSendEvent (display, manager_window, false, EventMask.NoEventMask, ref ev);
 			gdk_error_trap_pop ();
 		}
- 
+
 		private FilterReturn ManagerFilter (IntPtr xevent, Event evnt)
 		{
 			//TODO: Implement;
 			return FilterReturn.Continue;
 		}
- 
+
 		private void GetOrientationProperty ()
 		{
 			//TODO: Implement;
 		}
- 
+
 		[DllImport ("gdk-x11-2.0.so.0")]
 		static extern IntPtr gdk_x11_display_get_xdisplay (IntPtr display);
 		[DllImport ("gdk-x11-2.0.so.0")]
@@ -124,7 +124,7 @@ namespace Egg
 		static extern void gdk_error_trap_push ();
 		[DllImport ("gdk-x11-2.0.so.0")]
 		static extern void gdk_error_trap_pop ();
-		
+
 		[DllImport ("libX11", EntryPoint="XInternAtom")]
 		extern static int XInternAtom(IntPtr display, string atom_name, bool only_if_exists);
 		[DllImport ("libX11")]
@@ -140,7 +140,7 @@ namespace Egg
 		[DllImport ("libX11", EntryPoint="XSendEvent")]
 		extern static int XSendEvent(IntPtr display, IntPtr window, bool propagate, EventMask event_mask, ref XClientMessageEvent send_event);
 	}
- 
+
 	[Flags]
 	internal enum EventMask {
 		NoEventMask             = 0,
@@ -163,27 +163,27 @@ namespace Egg
 		VisibilityChangeMask    = 1<<16,
 		StructureNotifyMask     = 1<<17,
 		ResizeRedirectMask      = 1<<18,
-                SubstructureNotifyMask  = 1<<19,
+		SubstructureNotifyMask  = 1<<19,
 		SubstructureRedirectMask= 1<<20,
 		FocusChangeMask         = 1<<21,
 		PropertyChangeMask      = 1<<22,
 		ColormapChangeMask      = 1<<23,
 		OwnerGrabButtonMask     = 1<<24
 	}
- 
+
 	internal enum SystemTrayMessage
 	{
 		RequestDock,
 		BeginMessage,
 		CancelMessage
 	}
- 
+
 	internal enum SystemTrayOrientation
 	{
 		Horz,
 		Vert
 	}
-	
+
 	[StructLayout(LayoutKind.Sequential)]
 	internal struct XClientMessageEvent {
 		internal XEventName     type;
@@ -199,7 +199,7 @@ namespace Egg
 		internal IntPtr         ptr4;
 		internal IntPtr         ptr5;
 	}
- 
+
 	internal enum XEventName {
 		KeyPress                = 2,
 		KeyRelease              = 3,
@@ -235,7 +235,7 @@ namespace Egg
 		ClientMessage           = 33,
 		MappingNotify           = 34,
 		TimerNotify             = 100,
-		
+
 		LASTEvent
 	}
 }

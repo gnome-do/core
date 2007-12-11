@@ -52,7 +52,8 @@ namespace Do.Universe
 		/// <value>
 		/// ImageFileItems use their image files as their icons!
 		/// </value>
-		public override string Icon {
+		public override string Icon
+		{
 			get { return URI; }
 		}
 	}

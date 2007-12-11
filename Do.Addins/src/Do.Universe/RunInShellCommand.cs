@@ -22,13 +22,11 @@ using System;
 
 namespace Do.Universe
 {
-	
 	/// <summary>
 	/// Runs text commands in a shell.
 	/// </summary>
 	public class RunInShellCommand : ICommand
 	{
-	
 		public static bool CommandLineIsFoundOnPath (string command_line)
 		{
 			string path, command, command_file;
@@ -63,15 +61,18 @@ namespace Do.Universe
 			return false;
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return "Run in Shell"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Run a command in a shell."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "gnome-terminal"; }
 		}
 		
@@ -125,8 +126,5 @@ namespace Do.Universe
 				}
 			}
 		}
-	
-		
 	}
-	
 }

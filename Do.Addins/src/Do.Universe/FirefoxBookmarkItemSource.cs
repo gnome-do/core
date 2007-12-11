@@ -29,7 +29,6 @@ namespace Do.Universe
 {
 	public class FirefoxBookmarkItemSource : IItemSource
 	{
-	
 		const string BeginProfileName = "Path=";
 		const string BeginDefaultProfile = "Name=default";
 		const string BeginURL = "<DT><A HREF=\"";
@@ -50,7 +49,8 @@ namespace Do.Universe
 			UpdateItems ();
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get {
 				return new Type[] {
 					typeof (BookmarkItem),
@@ -58,23 +58,28 @@ namespace Do.Universe
 			}
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return "Firefox Bookmarks"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Finds Firefox bookmarks in your default profile."; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "www"; }
 		}
 		
-		public ICollection<IItem> Items {
+		public ICollection<IItem> Items
+		{
 			get { return bookmarks; }
 		}
 		
-		public ICollection<IItem> ChildrenOfItem (IItem item) {
+		public ICollection<IItem> ChildrenOfItem (IItem item)
+		{
 			return null;
 		}
 		
@@ -128,7 +133,6 @@ namespace Do.Universe
 			path = System.IO.Path.Combine (path, profile);
 			path = System.IO.Path.Combine (path, "bookmarks.html");
 			return path;
-			
 		}
 		
 		/// <summary>
@@ -185,6 +189,5 @@ namespace Do.Universe
 			}
 			return list;
 		}
-		
 	}
 }

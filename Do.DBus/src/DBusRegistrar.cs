@@ -24,14 +24,12 @@ using org.freedesktop.DBus;
 
 namespace Do.DBusLib
 {
-
 	/// <summary>
 	/// DBusRegistrar is used for getting DBus-ready classes on and off the
 	/// session bus.
 	/// </summary>
 	public class DBusRegistrar
 	{
-		
 		public static readonly string BusName = "org.gnome.Do";
 		
 		public static readonly string BaseItemPath = "/org/gnome/Do";
@@ -45,7 +43,6 @@ namespace Do.DBusLib
 			}
 		}
 		
-		
 		/// <summary>
 		/// Get an instace of T if it exists on the session bus.
 		/// Returns null if there is no such instance.
@@ -56,7 +53,8 @@ namespace Do.DBusLib
 		/// <returns>
 		/// A <see cref="T"/> instance if it was found on the bus; null otherwise.
 		/// </returns>
-		public static T GetInstance<T> (string objectPath) {
+		public static T GetInstance<T> (string objectPath)
+		{
 			try {
 				if (!Bus.Session.NameHasOwner (BusName)) {
 					return default (T);
@@ -82,7 +80,8 @@ namespace Do.DBusLib
 		/// <returns>
 		/// A <see cref="T"/> instance registered on the bus if successful; null otherwise.
 		/// </returns>
-		public static T Register<T> (T busItem, string objectPath) {
+		public static T Register<T> (T busItem, string objectPath)
+		{
 			try {
 				Bus.Session.RequestName (BusName);
 				Bus.Session.Register (BusName, new ObjectPath (objectPath), busItem);
@@ -116,6 +115,5 @@ namespace Do.DBusLib
 		{
 			return Register<ICommander> (commander, CommanderItemPath);
 		}
-		
 	}
 }

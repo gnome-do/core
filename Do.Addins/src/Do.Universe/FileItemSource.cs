@@ -75,7 +75,7 @@ namespace Do.Universe
 						parts = line.Trim ().Split (':');
 						if (parts.Length != 2) continue;
 						dirs.Add (new DirectoryLevelPair (parts[0].Trim (),
-																							int.Parse (parts[1].Trim ())));
+						          int.Parse (parts[1].Trim ())));
 					}
 				} catch (Exception e) {
 					Console.Error.WriteLine ("Error reading FileItemSource config file {0}: {1}", kConfigFile, e.Message);
@@ -97,7 +97,8 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedItemTypes {
+		public Type[] SupportedItemTypes
+		{
 			get { return new Type[] {
 					typeof (FileItem),
 				};
@@ -117,23 +118,28 @@ namespace Do.Universe
 			UpdateItems ();
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return "Directory Scanner"; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return string.Format("Catalog files in user-specified directories."); }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "folder"; }
 		}
 		
-		public ICollection<IItem> Items {
+		public ICollection<IItem> Items
+		{
 			get { return items; }
 		}
 		
-		public ICollection<IItem> ChildrenOfItem (IItem item) {
+		public ICollection<IItem> ChildrenOfItem (IItem item)
+		{
 			List<IItem> children;
 			
 			children = new List<IItem> ();

@@ -24,7 +24,6 @@ using System.Collections;
 
 namespace Do.Universe
 {
-
 	/// <summary>
 	/// FileItem is an item describing a file. FileItem subclasses
 	/// can be created and registered with FileItem for instantiation
@@ -32,7 +31,6 @@ namespace Do.Universe
 	/// </summary>
 	public class FileItem : IFileItem
 	{
-
 		static Hashtable extensionTypes;
 		
 		static FileItem ()
@@ -116,7 +114,8 @@ namespace Do.Universe
 		/// <returns>
 		/// A <see cref="System.String"/> containing the abbreviated path.
 		/// </returns>
-		public static string ShortUri (string uri) {
+		public static string ShortUri (string uri)
+		{
 			string home;
 			
 			uri = (uri == null ? "" : uri);
@@ -150,11 +149,13 @@ namespace Do.Universe
 			}
 		}
 		
-		public virtual string Name {
+		public virtual string Name
+		{
 			get { return name; }
 		}
 		
-		public virtual string Description {
+		public virtual string Description
+		{
 			get {
 				string uri_short;
 				
@@ -167,18 +168,20 @@ namespace Do.Universe
 			}
 		}
 		
-		public virtual string Icon {
+		public virtual string Icon
+		{
 			get { return icon; }
 		}
 		
-		public string URI {
+		public string URI
+		{
 			get { return uri; }
 		}
 		
-		public string MimeType {
+		public string MimeType
+		{
 			get { return mime_type; }
 		}
-
 	}
 	
 	public class DirectoryFileItem : FileItem

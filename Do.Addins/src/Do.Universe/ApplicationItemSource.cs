@@ -26,7 +26,6 @@ namespace Do.Universe
 {
 	public class ApplicationItemSource : IItemSource
 	{
-		
 		/// <summary>
 		/// Locations to search for .desktop files.
 		/// </summary>
@@ -36,39 +35,43 @@ namespace Do.Universe
 			"/usr/share/gdm/applications",
 			"/usr/local/share/applications",
 		};
-		
+
 		private List<IItem> apps;
 
 		static ApplicationItemSource ()
 		{
 			Gnome.Vfs.Vfs.Initialize ();
 		}
-		
+
 		public ApplicationItemSource ()
 		{
-			apps = new List<IItem> ();			
+			apps = new List<IItem> ();
 			UpdateItems ();
 		}
-		
-		public Type[] SupportedItemTypes {
+
+		public Type[] SupportedItemTypes
+		{
 			get { return new Type[] {
 					typeof (ApplicationItem),
 				};
 			}
 		}
-		
-		public string Name {
+
+		public string Name
+		{
 			get { return "Applications"; }
 		}
-		
-		public string Description {
+
+		public string Description
+		{
 			get { return "Finds applications in many locations."; }
 		}
-		
-		public string Icon {
+
+		public string Icon
+		{
 			get { return "gnome-applications"; }
 		}
-		
+
 		/// <summary>
 		/// Given an absolute path to a directory, scan that directory for
 		/// .desktop files, creating an ApplicationItem for each desktop file
@@ -81,11 +84,11 @@ namespace Do.Universe
 		private void LoadDesktopFiles (string desktop_files_dir)
 		{
 			ApplicationItem app;
-			
+
 			if (!Directory.Exists (desktop_files_dir)) return;
 			foreach (string filename in Directory.GetFiles (desktop_files_dir)) {
 				if (!filename.EndsWith (".desktop")) continue;
-				
+
 				try {
 					app = new ApplicationItem (filename);
 				} catch {
@@ -93,9 +96,8 @@ namespace Do.Universe
 				}
 				apps.Add(app);
 			}
-			
 		}
-		
+
 		public void UpdateItems ()
 		{
 			apps.Clear ();
@@ -103,14 +105,13 @@ namespace Do.Universe
 				LoadDesktopFiles (dir);
 			}
 		}
-		
+
 		public ICollection<IItem> Items {
 			get { return apps; }
 		}
-		
+
 		public ICollection<IItem> ChildrenOfItem (IItem item) {
 			return null;
 		}
-		
 	}
 }

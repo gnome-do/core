@@ -24,17 +24,17 @@ using Do;
 
 namespace Do.UI
 {
-
-
 	public class MainMenu
 	{
 		static MainMenu instance;
 
 		static MainMenu ()
 		{
+			// Nothing
 		}
 
-		public static MainMenu Instance {
+		public static MainMenu Instance
+		{
 			get { 
 				if (instance == null) {
 					instance = new MainMenu ();
@@ -83,7 +83,6 @@ namespace Do.UI
 
 			menu.ShowAll();
 		}
-
 
 		protected void OnMainMenuQuitClicked (object o, EventArgs args)
 		{
@@ -134,6 +133,5 @@ namespace Do.UI
 			y = mainMenuY;
 			push_in = true;
 		}
-
 	}
 }

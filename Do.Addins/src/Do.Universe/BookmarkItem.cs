@@ -23,14 +23,12 @@ using System.Collections.Generic;
 
 namespace Do.Universe
 {
-
 	/// <summary>
 	/// Simple base class for representing bookmarks.
 	/// A bookmark is any item with a name and URL.
 	/// </summary>
 	public class BookmarkItem : IURLItem
 	{
-		
 		protected string name, url;
 		
 		/// <summary>
@@ -48,19 +46,23 @@ namespace Do.Universe
 			this.url = url;
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return name; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return url; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "www"; }
 		}
 		
-		public string URL {
+		public string URL
+		{
 			get { return url; }
 		}
 

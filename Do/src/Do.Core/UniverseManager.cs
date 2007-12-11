@@ -53,7 +53,8 @@ namespace Do.Core
 			firstResultsMutex = new Mutex ();
 		}
 
-		internal void Initialize () {
+		internal void Initialize ()
+		{
 			LoadBuiltins ();
 			LoadAddins ();
 			universeMutex.WaitOne ();
@@ -68,15 +69,18 @@ namespace Do.Core
 			//indexThread.Start ();
 		}
 
-		internal ICollection<DoItemSource> ItemSources {
+		internal ICollection<DoItemSource> ItemSources
+		{
 			get { return doItemSources.AsReadOnly (); }
 		}
 
-		public void KillIndexThread () {
+		public void KillIndexThread ()
+		{
 			indexThread.Abort ();
 		}
 
-		public void AwakeIndexThread () {
+		public void AwakeIndexThread ()
+		{
 			Monitor.Enter (indexThread);
 			Monitor.Pulse (indexThread);
 			Monitor.Exit (indexThread);
@@ -125,7 +129,7 @@ namespace Do.Core
 
 			addin_dirs = new List<string> ();
 			addin_dirs.Add ("~/.do/addins".Replace ("~",
-				   Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
+			                Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
 
 			foreach (string addin_dir in addin_dirs) {
 				string[] files;
@@ -197,7 +201,8 @@ namespace Do.Core
 			}
 		}
 
-		private void BuildUniverse (Dictionary<int, IObject> newUniverse) {
+		private void BuildUniverse (Dictionary<int, IObject> newUniverse)
+		{
 			// Hash commands.
 			foreach (DoCommand command in doCommands) {
 				newUniverse[command.UID.GetHashCode ()] = command;
@@ -211,7 +216,8 @@ namespace Do.Core
 			}
 		}
 
-		public SearchContext Search (SearchContext context) {
+		public SearchContext Search (SearchContext context)
+		{
 			universeMutex.WaitOne ();
 			firstResultsMutex.WaitOne ();
 
@@ -258,7 +264,8 @@ namespace Do.Core
 			return context.GetContinuedContext ();
 		}
 
-		private SearchContext ParentContext (SearchContext context) {
+		private SearchContext ParentContext (SearchContext context)
+		{
 			//Since we are dealing with the parent, turn off the finding parent
 			//flag
 			context.FindingParent = false;
@@ -271,7 +278,8 @@ namespace Do.Core
 			return context;
 		}
 
-		private SearchContext ChildContext (SearchContext context) {
+		private SearchContext ChildContext (SearchContext context)
+		{
 			IItem[] childItems = new IItem[0];
 			SearchContext newContext;
 			context.FindingChildren = false;
@@ -299,7 +307,8 @@ namespace Do.Core
 			return newContext.GetContinuedContext ();
 		}
 
-		private List<IObject> DependentResults (SearchContext context) {
+		private List<IObject> DependentResults (SearchContext context)
+		{
 			List<IObject> results;
 			string query = context.Query.ToLower ();
 
@@ -327,7 +336,8 @@ namespace Do.Core
 			return results;
 		}
 
-		private List<IObject> InitialDependentResults (SearchContext context) {
+		private List<IObject> InitialDependentResults (SearchContext context)
+		{
 			List<IObject> results;
 
 			if (context.ModItemsSearch)
@@ -343,7 +353,8 @@ namespace Do.Core
 			return results;
 		}
 
-		private List<IObject> AddNonUniverseItems (SearchContext context) {
+		private List<IObject> AddNonUniverseItems (SearchContext context)
+		{
 			List<IObject> results = new List<IObject> ();
 
 			//If we're on modifier items, add a text item if its supported
@@ -369,7 +380,8 @@ namespace Do.Core
 		}
 
 		//This generates a list of modifier items supported by the context in a given initial list
-		public List<IObject> GetModItemsFromList (SearchContext context, List<IObject> initialList) {
+		public List<IObject> GetModItemsFromList (SearchContext context, List<IObject> initialList)
+		{
 			int itemCount = 0;
 			List<IObject> results = new List<IObject> ();
 
@@ -393,7 +405,8 @@ namespace Do.Core
 		}
 
 		//Same as GetModItemsFrom list but for items
-		public List<IObject> GetItemsFromList (SearchContext context, List<IObject> initialList) {
+		public List<IObject> GetItemsFromList (SearchContext context, List<IObject> initialList)
+		{
 			int itemCount = 0;
 			List<IObject> results = new List<IObject> ();
 			foreach (IObject iobject in initialList) {
@@ -411,7 +424,8 @@ namespace Do.Core
 		}
 
 		//This will filter out the results in the previous context that match the current query
-		private List<IObject> FilterPreviousList (SearchContext context) {
+		private List<IObject> FilterPreviousList (SearchContext context)
+		{
 			string query = context.Query.ToLower ();
 			RelevanceSorter comparer;
 			List<IObject> results;
@@ -422,7 +436,8 @@ namespace Do.Core
 		}
 
 
-		private List<IObject> IndependentResults (SearchContext context) {
+		private List<IObject> IndependentResults (SearchContext context)
+		{
 			string query;
 			RelevanceSorter comparer;
 			List<IObject> results;
@@ -451,7 +466,8 @@ namespace Do.Core
 		}
 
 		//This method gives us all the commands that are supported by all the items in the list
-		private List<IObject> InitialCommandResults (SearchContext context) {
+		private List<IObject> InitialCommandResults (SearchContext context)
+		{
 			List<IObject> results = new List<IObject> ();
 			bool initial = true;
 
@@ -479,9 +495,9 @@ namespace Do.Core
 			return results;
 		}
 
-
 		//Function to determine whether a type array contains a type
-		static public bool ContainsType (Type[] typeArray, Type checkType) {
+		static public bool ContainsType (Type[] typeArray, Type checkType)
+		{
 			foreach (Type type in typeArray) {
 				if (type.Equals (checkType))
 					return true;

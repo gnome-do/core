@@ -23,13 +23,11 @@ using System.Collections.Generic;
 
 namespace Do.Universe
 {
-
 	/// <summary>
 	/// A concrete implementation of the ITextItem interface.
 	/// </summary>
 	public class TextItem : ITextItem
 	{
-		
 		protected string text;
 		
 		public TextItem (string text)
@@ -37,22 +35,25 @@ namespace Do.Universe
 			this.text = text;
 		}
 		
-		public string Name {
+		public string Name
+		{
 			get { return text; }
 		}
 		
-		public string Description {
+		public string Description
+		{
 			get { return "Raw input text"; }
 		}
 		
-		public string Icon {
+		public string Icon
+		{
 			get { return "gnome-mime-text"; }
 		}
 		
-		public string Text {
+		public string Text
+		{
 			get { return text; }
 			set { text = value; }
 		}
-
 	}
 }
