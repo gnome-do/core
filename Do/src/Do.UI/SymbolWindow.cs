@@ -355,7 +355,7 @@ namespace Do.UI
 			// Handle command keys (Quit, etc.)
 			if (((int) evnt.State & (int) ModifierType.ControlMask) != 0) {
 					OnControlKeyPressEvent (evnt);
-					return false;
+					return base.OnKeyPressEvent (evnt);
 			}
 
 			switch ((Gdk.Key) evnt.KeyValue) {

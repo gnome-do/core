@@ -37,6 +37,8 @@ namespace Do
 		{
 				if (visible) {
 					Util.Appearance.PresentWindow (window);
+				} else {
+					window.Hide ();
 				}
 		}
 	}

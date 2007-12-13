@@ -30,17 +30,12 @@ namespace Do.UI
 
 		static MainMenu ()
 		{
-			// Nothing
+			instance = new MainMenu ();
 		}
 
 		public static MainMenu Instance
 		{
-			get { 
-				if (instance == null) {
-					instance = new MainMenu ();
-				}
-				return instance;
-			}
+			get { return instance; }
 		}
 
 		Menu menu;
@@ -98,6 +93,8 @@ namespace Do.UI
 		{
 			AboutDialog about;
 			string [] authors;
+
+			Do.Commander.Hide ();
 
 			authors = new string[] {
 				"David Siegel <djsiegel@gmail.com>",
