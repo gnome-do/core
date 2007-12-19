@@ -222,12 +222,7 @@ namespace Do.UI
 		public void Reposition ()
 		{
 			int monitor;
-			int extraGap = IconBoxRadius-(IconBoxPadding*2);
 			Gdk.Rectangle geo, main, results;
-
-			// Do special things for the first Pane
-			// if (currentPane == Pane.First)
-			// 	extraGap = IconBoxRadius-(IconBoxPadding*2);
 
 			GetPosition (out main.X, out main.Y);
 			GetSize (out main.Width, out main.Height);
@@ -238,8 +233,8 @@ namespace Do.UI
 			Move (main.X, main.Y);
 
 			resultsWindow.GetSize (out results.Width, out results.Height);
-			results.Y = main.Y + main.Height;
-			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + IconBoxPadding*2 + extraGap;
+			results.Y = main.Y + main.Height - 1;
+			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + IconBoxRadius;
 			resultsWindow.Move (results.X, results.Y);
 		}
 
@@ -261,16 +256,11 @@ namespace Do.UI
 			results_showing = resultsWindow.Visible;
 			something_typed = CurrentContext.Query.Length > 0;
 
-			if (currentPane == Pane.First && results_showing) resultsWindow.Hide ();
-			ClearSearchResults ();
-
-			if (!something_typed && results_showing) resultsWindow.Hide ();
-			if (results_showing || something_typed) return;
-			if (currentPane == Pane.First) Hide ();
-			if (resultsWindow.Visible) {
-				resultsWindow.Hide ();
-			} else {
-				SetDefaultState ();
+			resultsWindow.Hide ();
+			if (currentPane == Pane.First && !something_typed) Hide ();
+			else if (!something_typed) SetDefaultState ();
+			else {
+				ClearSearchResults ();
 			}
 		}
 

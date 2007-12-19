@@ -25,7 +25,7 @@ namespace Do
 {
 	public class DefaultCommander : Commander
 	{
-		private Gtk.Window window;
+		private SymbolWindow window;
 		
 		public DefaultCommander ()
 		{

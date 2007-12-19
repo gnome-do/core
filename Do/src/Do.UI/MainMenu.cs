@@ -110,7 +110,7 @@ namespace Do.UI
 			// about.Copyright = "Copyright \xa9 2008 David Siegel";
 			about.Comments = "Do things as quickly as possible\nin your GNOME desktop environment.";
 			about.Website = "http://launchpad.net/gc";
-			// about.WebsiteLabel = "Visit Homepage";
+			about.WebsiteLabel = "Visit Homepage";
 			about.Authors = authors;
 			about.IconName = "gnome-run";
 			about.Run ();
