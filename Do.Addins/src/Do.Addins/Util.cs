@@ -22,7 +22,7 @@ using System;
 
 namespace Do.Addins
 {
-	public delegate bool EnvironmentOpenDelegate (string item, out string error);
+	public delegate void EnvironmentOpenDelegate (string item);
 	public delegate void PopupMainMenuAtPositionDelegate (int x, int y);
 	public delegate Gdk.Pixbuf PixbufFromIconNameDelegate (string icon_name, int size);
 	public delegate string StringTransformationDelegate (string old);

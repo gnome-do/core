@@ -78,7 +78,6 @@ namespace Do.Universe
 		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
 			string open_item;
-			string error_message;
 			
 			open_item = null;
 			foreach (IItem item in items) {
@@ -89,7 +88,7 @@ namespace Do.Universe
 				else if (item is IURIItem) {
 					open_item = (item as IURIItem).URI;
 				}
-				Util.Environment.Open (open_item, out error_message);
+				Util.Environment.Open (open_item);
 			}
 		}
 	}
