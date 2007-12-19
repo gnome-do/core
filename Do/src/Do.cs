@@ -21,23 +21,29 @@ using System;
 
 using Do.Core;
 using Do.DBusLib;
+using Mono.GetOptions;
 
 namespace Do
 {
 	public class Do
 	{
-		static Commander commander;
+		const string kActivateKeybinding = "<Super>space";
+		static Tomboy.GConfXKeybinder keybinder;
+		
+		static Controller controller;
 		static UniverseManager universeManager;
 
 		public static void Main (string[] args)
 		{
-			DetectInstanceAndExit ();
-
+			DoOptions options;
+			
 			Gtk.Application.Init ();
+			
+			DetectInstanceAndExit ();
 			Log.Initialize ();
 			Util.Initialize ();
-
-			Gdk.Threads.Init ();
+			
+			Gdk.Threads.Init ();			
 
 			try {
 				Util.SetProcessName ("gnome-do");
@@ -45,41 +51,62 @@ namespace Do
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
 
+			options = new DoOptions ();
+			options.ProcessArgs (args);
+			
 			universeManager = new UniverseManager ();
 			universeManager.Initialize ();
 
-			commander = new DefaultCommander ();
-			DBusRegistrar.RegisterCommander (commander);
+			controller = new Controller ();
+			DBusRegistrar.RegisterController (controller);
+			
+			keybinder = new Tomboy.GConfXKeybinder ();
+			SetupKeybindings ();
 
-			// Temporary quiet start feature.
-			bool quiet_start = false;
-			foreach (string arg in args)
-				quiet_start |= (arg == "--quiet");
-
-			if (!quiet_start)
-				commander.Show ();
+			if (!options.quiet)
+				controller.Summon ();
 
 			Gtk.Application.Run ();
 		}
 
 		static void DetectInstanceAndExit ()
 		{
-			ICommander dbus_commander;
-			dbus_commander = DBusRegistrar.GetCommanderInstance ();
-			if (dbus_commander != null) {
-				dbus_commander.Show ();
+			IController dbus_controller;
+			dbus_controller = DBusRegistrar.GetControllerInstance ();
+			if (dbus_controller != null) {
+				dbus_controller.Summon ();
 				System.Environment.Exit (0);
 			}
 		}
 
-		public static Commander Commander
+		public static Controller Controller
 		{
-			get { return commander; }
+			get { return controller; }
 		}
 
 		public static UniverseManager UniverseManager
 		{
 			get { return universeManager; }
+		}
+		
+		static void SetupKeybindings ()
+		{
+			GConf.Client client;
+			string binding;
+
+			client = new GConf.Client();
+			try {
+				binding = client.Get ("/apps/gnome-do/preferences/key_binding") as string;
+			} catch {
+				binding = kActivateKeybinding;
+				client.Set ("/apps/gnome-do/preferences/key_binding", binding);
+			}
+			keybinder.Bind ("/apps/gnome-do/preferences/key_binding", binding, OnActivate);
+		}
+		
+		static void OnActivate (object sender, EventArgs args)
+		{
+			controller.Summon ();
 		}
 	}
 }

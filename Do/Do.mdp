@@ -17,11 +17,9 @@
     <File name="./gnome-do.desktop" subtype="Code" buildaction="FileCopy" DeployService.TargetDirectoryId="Linux.DesktopApplications" />
     <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/DefaultCommander.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Core/Commander.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Core/SearchContext.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.UI/IconBox.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.UI/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
@@ -44,6 +42,8 @@
     <File name="./src/Do.Universe/DoTextItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/ProxyItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/ItemSourceItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Core/Controller.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/DoOptions.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -59,6 +59,7 @@
     <ProjectReference type="Project" localcopy="True" refto="Do.DBus" />
     <ProjectReference type="Gac" localcopy="True" refto="gconf-sharp-peditors, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="atk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="Mono.GetOptions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </References>
   <Deployment.LinuxDeployData scriptName="gnome-do" />
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">

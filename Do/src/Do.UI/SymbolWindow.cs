@@ -208,15 +208,15 @@ namespace Do.UI
 				// Have to re-grab the pane from the menu.
 				Addins.Util.Appearance.PresentWindow (this);
 			} else if (!click_on_window) {
-				Hide ();
+				Vanish ();
 			}
 			return base.OnButtonPressEvent (evnt);
 		}
 
-		public virtual new void Hide ()
+		public void Vanish ()
 		{
-			base.Hide ();
 			resultsWindow.Hide ();
+			Hide ();
 		}
 
 		public void Reposition ()
@@ -386,7 +386,7 @@ namespace Do.UI
 		{
 			IObject first, second;
 
-			Hide ();
+			Vanish ();
 
 			items.Clear ();
 			modItems.Clear ();

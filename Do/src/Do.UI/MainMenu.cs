@@ -94,7 +94,7 @@ namespace Do.UI
 			AboutDialog about;
 			string [] authors;
 
-			Do.Commander.Hide ();
+			Do.Controller.Vanish ();
 
 			authors = new string[] {
 				"David Siegel <djsiegel@gmail.com>",

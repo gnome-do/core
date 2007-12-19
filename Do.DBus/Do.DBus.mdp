@@ -15,8 +15,8 @@
   </Configurations>
   <Contents>
     <File name="./src/DBusRegistrar.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/ICommander.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/IController.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="NDesk.DBus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f6716e4f9b2ed099" />
