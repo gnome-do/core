@@ -21,6 +21,8 @@
 using System;
 using System.Text.RegularExpressions;
 
+using Do.Addins;
+
 namespace Do.Universe
 {
 	public class OpenURLCommand : ICommand
@@ -70,10 +72,8 @@ namespace Do.Universe
 		{
 			if (item is ITextItem) {
 				return urlRegex.IsMatch ((item as ITextItem).Text);
-			} else if (item is IURLItem) {
-				return true;
 			}
-			return false;
+			return true;
 		}
 		
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
@@ -92,16 +92,7 @@ namespace Do.Universe
 				} else if (item is ITextItem) {
 					url = (item as ITextItem).Text;
 				}
-				
-				// Use gnome-open to open the url
-				if (url != null) {
-					Console.WriteLine ("Opening URL \"{0}\"...", url);
-					try {
-						System.Diagnostics.Process.Start ("gnome-open", string.Format ("\"{0}\"", url));
-					} catch (Exception e) {
-						Console.WriteLine ("Failed to open \"{0}\": ", e.Message);
-					}
-				}
+				Util.Environment.Open (url);	
 			}
 		}
 	}
