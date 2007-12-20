@@ -22,6 +22,8 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 
+using Do.Addins;
+
 namespace Do.Universe
 {
 	/// <summary>
@@ -37,8 +39,8 @@ namespace Do.Universe
 		{
 			terminals = new Dictionary<string, string> ();
 			terminals["gnome-terminal"] = "-x";
-			terminals["konsole"] = "-e";
 			terminals["xterm"] = "-e";
+			terminals["konsole"] = "-e";
 		}
 
 		public static bool CommandLineIsFoundOnPath (string command_line)
@@ -101,6 +103,39 @@ namespace Do.Universe
 			}
 			return program != null;
 		}
+		
+		public static void RunCommandlineInTerminal (string commandline)
+		{
+			string command, args;
+			string terminal, terminal_args;
+			Process proc;
+			
+			// Split commandline into command and arguments.
+			if (commandline.Contains (" ")) {
+				command = commandline.Substring (0, commandline.IndexOf (" "));
+				args = commandline.Substring (commandline.IndexOf (" ")+1);
+			} else {
+				command = commandline;
+				args = "";
+			}
+			
+			proc = new Process ();
+			// Get settings for running command in a terminal.
+			if (GetTerminalSettings (out terminal, out terminal_args)) {
+				proc.StartInfo.FileName = terminal;
+				proc.StartInfo.Arguments = string.Format ("{0} {1}", terminal_args, commandline);
+			} else {
+				// No settings found - just run command as a process.
+				proc.StartInfo.FileName = command;
+				proc.StartInfo.Arguments = args;
+			}
+			Console.WriteLine (proc.StartInfo.FileName + " " + proc.StartInfo.Arguments);
+			try {
+				proc.Start ();
+			} catch (Exception e) {
+				Console.Error.WriteLine ("Failed to run command in terminal \"{0}\": ", e.Message);
+			}
+		}
 
 		public string Name
 		{
@@ -122,6 +157,7 @@ namespace Do.Universe
 			get {
 				return new Type[] {
 					typeof (ITextItem),
+					typeof (FileItem),
 				};
 			}
 		}
@@ -133,15 +169,10 @@ namespace Do.Universe
 
 		public bool SupportsItem (IItem item)
 		{
-			string command_line;
-			
-			command_line = null;
 			if (item is ITextItem) {
-				command_line = (item as ITextItem).Text;
-			}
-			
-			if (command_line != null) {
-				return CommandLineIsFoundOnPath (command_line);
+				return CommandLineIsFoundOnPath ((item as ITextItem).Text);
+			} else if (item is FileItem) {
+				return Util.FileIsExecutable ((item as FileItem).URI);
 			}
 			return false;
 		}
@@ -153,43 +184,19 @@ namespace Do.Universe
 
 		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
-			string commandline, command, args;
-			string terminal, terminal_args;
-			Process proc;
-
+			string commandline;
 
 			foreach (IItem item in items) {
 				commandline = null;
 				if (item is ITextItem) {
 					commandline = (item as ITextItem).Text;
 				}
-
+				else if (item is FileItem) {
+					// Format the filename so the terminal doesn't choke on it.
+					commandline = (item as FileItem).URI.Replace (" ", "\\ ");
+				}
 				if (commandline == null) continue;
-
-				// Split commandline into command and arguments.
-				if (commandline.Contains (" ")) {
-					command = commandline.Substring (0, commandline.IndexOf (" "));
-					args = commandline.Substring (commandline.IndexOf (" ")+1);
-				} else {
-					command = commandline;
-					args = "";
-				}
-				
-				proc = new Process ();
-				// Get settings for running command in a terminal.
-				if (GetTerminalSettings (out terminal, out terminal_args)) {
-					proc.StartInfo.FileName = terminal;
-					proc.StartInfo.Arguments = string.Format ("{0} {1}", terminal_args, commandline);
-				} else {
-					// No settings found - just run command as a process.
-					proc.StartInfo.FileName = command;
-					proc.StartInfo.Arguments = args;
-				}
-				try {
-					proc.Start ();
-				} catch (Exception e) {
-					Console.Error.WriteLine ("Failed to run command in terminal \"{0}\": ", e.Message);
-				}
+				RunCommandlineInTerminal (commandline);
 			}
 		}
 

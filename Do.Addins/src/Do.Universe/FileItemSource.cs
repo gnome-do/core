@@ -22,6 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+using Do.Addins;
+
 namespace Do.Universe
 {
 	/// <summary>
@@ -188,16 +190,14 @@ namespace Do.Universe
 			}
 			foreach (string file in files) {
 				// Ignore system/hidden files.
-				if (!include_hidden && Path.GetFileName (file).StartsWith (".")) {
-					continue;
-				}
+				if (!include_hidden && Util.FileIsHidden (file)) continue;
+
 				item = FileItem.Create (file);
 				items.Add (item);
 			}
 			foreach (string directory in directories) {
-				if (!include_hidden && Path.GetFileName (directory).StartsWith (".")) {
-					continue;
-				}
+				if (!include_hidden && Util.FileIsHidden (directory)) continue;
+
 				item = FileItem.Create (directory);
 				items.Add (item);
 				ReadItems (directory, levels - 1);
