@@ -54,6 +54,8 @@ namespace Do.Addins
 		{
 			UnixFileInfo info;
 
+			if (System.IO.Directory.Exists (path)) return false;
+
 			info = new UnixFileInfo (path);
 			return (info.FileAccessPermissions & FileAccessPermissions.UserExecute) != 0;
 		}
