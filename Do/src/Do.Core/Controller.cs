@@ -1,7 +1,8 @@
-/* ${FileName}
+/* Controller.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this source distribution.
+ * COPYRIGHT file distributed with this
+ * source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,26 +19,39 @@
  */
 
 using System;
-using Do.Core;
+using System.Collections;
+using System.Collections.Generic;
+
+using Do.DBusLib;
+using Do.Universe;
 using Do.UI;
 
-namespace Do
+namespace Do.Core
 {
-	public class DefaultCommander : Commander
+	
+	public class Controller : IController
 	{
-		private Gtk.Window window;
 		
-		public DefaultCommander ()
-		{
+		protected SymbolWindow window;
+		
+		public Controller ()
+		{		
 			window = new SymbolWindow ();
-			State = CommanderState.Default;
+		}
+
+		///////////////////////////
+		/// IController Members ///
+		///////////////////////////
+		
+		public void Summon ()
+		{
+			window.Show ();
+			Util.Appearance.PresentWindow (window);
 		}
 		
-		protected override void OnVisibilityChanged (bool visible)
+		public void Vanish ()
 		{
-				if (visible) {
-					Util.Appearance.PresentWindow (window);
-				}
-		}
+			window.Vanish ();
+		}	
 	}
 }

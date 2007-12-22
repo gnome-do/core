@@ -53,6 +53,20 @@ namespace Do.Core
 			}
 			return types;
 		}
+
+		public static bool IObjectTypeCheck (IObject o, Type[] types)
+		{
+			bool type_ok;
+
+			type_ok = false;
+			foreach (Type type in types) {
+				if (type.IsAssignableFrom (o.GetType ())) {
+					type_ok = true;
+					break;
+				}
+			}
+			return type_ok;
+		}
 		
 		protected int _score;
 		protected IObject inner;

@@ -56,27 +56,25 @@ namespace Do
 
 		public class Environment
 		{
-			public static bool Open (string open_item, out string error)
+			public static void Open (string open_item)
 			{
-				bool success;
+				Process start_proc;
 
-				error = null;
-				success = false;
-				if (open_item == null) {
-					success = false;
-				} else {
+				if (open_item == null) return;
+
+				start_proc = new Process ();
+				// According to the documentation, the following is the most cross-platform
+				// way to open a file or URL, but it causes a messy crash...
+				// start_proc.StartInfo.FileName = string.Format ("\"{0}\"", open_item);
+				// start_proc.StartInfo.UseShellExecute = true;
+				start_proc.StartInfo.FileName = "xdg-open";
+				start_proc.StartInfo.Arguments = string.Format ("\"{0}\"", open_item);
+				try {
 					Log.Info ("Opening \"{0}\"...", open_item);
-					try {
-						open_item = string.Format ("\"{0}\"", open_item);
-						Process.Start ("gnome-open", open_item);
-						success = true;
-					} catch (Exception e) {
-						Log.Error ("Failed to open \"{0}\": ", e.Message);
-						error = e.Message;
-						success = false;
-					}
+					start_proc.Start ();
+				} catch (Exception e) {
+					Log.Error ("Failed to open {0}: {1}", open_item, e.Message);
 				}
-				return success;
 			}
 		}
 

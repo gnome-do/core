@@ -67,7 +67,6 @@ namespace Do.Universe
 		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
 			string recipients;
-			string error;
 			
 			recipients = "";
 			foreach (IItem item in items) {
@@ -75,7 +74,7 @@ namespace Do.Universe
 					recipients += (item as ContactItem).Emails[0] + ",";
 				}
 			}
-			Util.Environment.Open ("mailto:" + recipients, out error);
+			Util.Environment.Open ("mailto:" + recipients);
 		}
 	}
 }

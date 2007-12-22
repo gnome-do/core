@@ -33,7 +33,7 @@ namespace Do.DBusLib
 		public static readonly string BusName = "org.gnome.Do";
 		
 		public static readonly string BaseItemPath = "/org/gnome/Do";
-		public static readonly string CommanderItemPath = BaseItemPath + "/Commander";
+		public static readonly string ControllerItemPath = BaseItemPath + "/Controller";
 		
 		static DBusRegistrar ()
 		{
@@ -92,28 +92,28 @@ namespace Do.DBusLib
 		}
 		
 		/// <summary>
-		/// Get an ICommander instance registered on the session bus.
+		/// Get an IController instance registered on the session bus.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="ICommander"/> instance if successful; null otherwise.
+		/// A <see cref="IController"/> instance if successful; null otherwise.
 		/// </returns>
-		public static ICommander GetCommanderInstance ()
+		public static IController GetControllerInstance ()
 		{
-			return GetInstance<ICommander> (CommanderItemPath);
+			return GetInstance<IController> (ControllerItemPath);
 		}
 		
 		/// <summary>
-		/// Register an ICommander instance on the session bus.
+		/// Register an IController instance on the session bus.
 		/// </summary>
 		/// <param name="commander">
-		/// A <see cref="ICommander"/> instance to register.
+		/// A <see cref="IController"/> instance to register.
 		/// </param>
 		/// <returns>
-		/// A <see cref="ICommander"/> instance if registered successfully; null otherwise.
+		/// A <see cref="IController"/> instance if registered successfully; null otherwise.
 		/// </returns>
-		public static ICommander RegisterCommander (ICommander commander)
+		public static IController RegisterController (IController commander)
 		{
-			return Register<ICommander> (commander, CommanderItemPath);
+			return Register<IController> (commander, ControllerItemPath);
 		}
 	}
 }

@@ -30,17 +30,12 @@ namespace Do.UI
 
 		static MainMenu ()
 		{
-			// Nothing
+			instance = new MainMenu ();
 		}
 
 		public static MainMenu Instance
 		{
-			get { 
-				if (instance == null) {
-					instance = new MainMenu ();
-				}
-				return instance;
-			}
+			get { return instance; }
 		}
 
 		Menu menu;
@@ -99,6 +94,8 @@ namespace Do.UI
 			AboutDialog about;
 			string [] authors;
 
+			Do.Controller.Vanish ();
+
 			authors = new string[] {
 				"David Siegel <djsiegel@gmail.com>",
 				"DR Colkitt <douglas.colkitt@gmail.com>",
@@ -113,7 +110,7 @@ namespace Do.UI
 			// about.Copyright = "Copyright \xa9 2008 David Siegel";
 			about.Comments = "Do things as quickly as possible\nin your GNOME desktop environment.";
 			about.Website = "http://launchpad.net/gc";
-			// about.WebsiteLabel = "Visit Homepage";
+			about.WebsiteLabel = "Visit Homepage";
 			about.Authors = authors;
 			about.IconName = "gnome-run";
 			about.Run ();

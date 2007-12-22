@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 using Do.Addins;
 
@@ -61,7 +62,9 @@ namespace Do.Universe
 		public Type[] SupportedModifierItemTypes
 		{
 			get {
-				return null;
+				return new Type[] {
+					typeof (ApplicationItem),
+				};
 			}
 		}
 
@@ -72,15 +75,31 @@ namespace Do.Universe
 		
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
 		{
-			return false;
+			/* This is too strict - many desktop files are incomplete, so MimeTypes
+			 * is no reliable.
+			return items[0] is FileItem &&
+							(modItem as ApplicationItem).MimeTypes.Contains (
+								(items[0] as FileItem).MimeType);
+			*/
+			return items[0] is FileItem;
 		}
 		
 		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
 			string open_item;
-			string error_message;
 			
 			open_item = null;
+
+			// Open a list of URIs with an ApplicationItem
+			if (modifierItems.Length > 0) {
+				List<string> uris = new List<string> ();
+				foreach (IItem item in items) {
+					uris.Add ("file://" + (item as IURIItem).URI);
+				}
+				(modifierItems[0] as ApplicationItem).RunWithURIs (uris);
+				return;
+			}
+
 			foreach (IItem item in items) {
 				if (item is IOpenableItem) {
 					(item as IOpenableItem).Open ();
@@ -89,7 +108,8 @@ namespace Do.Universe
 				else if (item is IURIItem) {
 					open_item = (item as IURIItem).URI;
 				}
-				Util.Environment.Open (open_item, out error_message);
+
+				Util.Environment.Open (open_item);
 			}
 		}
 	}

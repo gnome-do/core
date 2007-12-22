@@ -63,8 +63,7 @@ all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_DESKTOPAPPLICATIONS) $(BINARIES)
 FILES =  \
 	gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
-	src/DefaultCommander.cs \
-	src/Do.Core/Commander.cs \
+	src/Do.Core/Controller.cs \
 	src/Do.Core/DoCommand.cs \
 	src/Do.Core/DoItem.cs \
 	src/Do.Core/DoItemSource.cs \
@@ -84,6 +83,7 @@ FILES =  \
 	src/Do.Universe/InternalItemSource.cs \
 	src/Do.Universe/ItemSourceItemSource.cs \
 	src/Do.Universe/ProxyItem.cs \
+	src/DoOptions.cs \
 	src/Log.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 
@@ -103,6 +103,7 @@ REFERENCES =  \
 	../Do.Addins/bin/Debug/Do.Addins.dll \
 	../Do.DBus/bin/Debug/Do.DBus.dll \
 	Mono.Cairo \
+	Mono.GetOptions \
 	Mono.Posix \
 	-pkg:gconf-sharp-2.0 \
 	-pkg:glade-sharp-2.0 \

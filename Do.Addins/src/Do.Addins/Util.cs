@@ -1,4 +1,4 @@
-/* ${FileName}
+/* Util.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,10 +19,13 @@
  */
 
 using System;
+using Mono.Unix;
+
+using Do.Universe;
 
 namespace Do.Addins
 {
-	public delegate bool EnvironmentOpenDelegate (string item, out string error);
+	public delegate void EnvironmentOpenDelegate (string item);
 	public delegate void PopupMainMenuAtPositionDelegate (int x, int y);
 	public delegate Gdk.Pixbuf PixbufFromIconNameDelegate (string icon_name, int size);
 	public delegate string StringTransformationDelegate (string old);
@@ -45,6 +48,26 @@ namespace Do.Addins
 			public static PixbufFromIconNameDelegate PixbufFromIconName;
 			public static StringTransformationDelegate MarkupSafeString;
 			public static PopupMainMenuAtPositionDelegate PopupMainMenuAtPosition;
+		}
+		
+		public static bool FileIsExecutable (string path)
+		{
+			UnixFileInfo info;
+
+			if (System.IO.Directory.Exists (path)) return false;
+
+			info = new UnixFileInfo (path);
+			return (info.FileAccessPermissions & FileAccessPermissions.UserExecute) != 0;
+		}
+		
+		public static bool FileIsHidden (string path)
+		{
+			System.IO.FileInfo info;
+
+			if (path.EndsWith ("~")) return true;
+
+			info = new System.IO.FileInfo (path);
+			return (info.Attributes & System.IO.FileAttributes.Hidden) != 0;
 		}
 	}
 }

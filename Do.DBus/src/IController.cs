@@ -1,4 +1,4 @@
-/* ICommander.cs
+/* IController.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -22,14 +22,19 @@ using NDesk.DBus;
 
 namespace Do.DBusLib
 {
-	[Interface ("org.gnome.Do.Commander")]
-	public interface ICommander
+	[Interface ("org.gnome.Do.Controller")]
+	public interface IController
 	{
 		/// <summary>
-		/// Causes an ICommander instance to show its user interface
+		/// Causes an IController instance to show its user interface
 		/// so the user can interact with it. For example, making a
 		/// SymbolWindow become visible and raise to the top.
 		/// </summary>
-		void Show ();
+		void Summon ();
+		
+		/// <summary>
+		/// Causes an IController instance to hide its user interface.
+		/// </summary>
+		void Vanish ();
 	}
 }

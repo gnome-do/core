@@ -54,24 +54,27 @@ namespace Do.Core
 
 		public bool SupportsItem (IItem item)
 		{
-			bool type_ok;
-
-			type_ok = false;
 			item = EnsureIItem (item);
-			foreach (Type item_type in SupportedItemTypes) {
-				if (item_type.IsAssignableFrom (item.GetType ())) {
-					type_ok = true;
-					break;
-				}
+			if (!IObjectTypeCheck (item, SupportedItemTypes)) return false;
+
+			try {
+				return command.SupportsItem (item);
+			} catch {
+				return false;
 			}
-			if (!type_ok) return false;
-			return command.SupportsItem (item);
 		}
 
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
 		{
 			items = EnsureIItemArray (items);
-			return command.SupportsModifierItemForItems (items, EnsureIItem (modItem));
+			modItem = EnsureIItem (modItem);
+			if (!IObjectTypeCheck (modItem, SupportedModifierItemTypes)) return false;
+
+			try {
+				return command.SupportsModifierItemForItems (items, modItem);
+			} catch {
+				return false;
+			}
 		}
 
 		public void Perform (IItem[] items, IItem[] modItems)

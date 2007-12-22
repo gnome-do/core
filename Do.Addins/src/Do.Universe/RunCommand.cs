@@ -1,4 +1,4 @@
-/* ${FileName}
+/* RunCommand.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,6 +19,9 @@
  */
 
 using System;
+using System.IO;
+
+using Do.Addins;
 
 namespace Do.Universe
 {
@@ -44,6 +47,8 @@ namespace Do.Universe
 			get {
 				return new Type[] {
 					typeof (IRunnableItem),
+					// Files can be run if they're executable.
+					typeof (FileItem),
 				};
 			}
 		}
@@ -55,12 +60,10 @@ namespace Do.Universe
 
 		public bool SupportsItem (IItem item)
 		{
-			if (item is IRunnableItem) {
-				return true;
+			if (item is FileItem) {
+				return Util.FileIsExecutable ((item as FileItem).URI);
 			}
-			else {
-				return false;
-			}
+			return true;
 		}
 		
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
@@ -74,7 +77,16 @@ namespace Do.Universe
 				if (item is IRunnableItem) {
 					(item as IRunnableItem).Run ();
 				}
+				else if (item is FileItem) {
+					System.Diagnostics.Process proc;
+					
+					proc = new System.Diagnostics.Process ();
+					proc.StartInfo.FileName = (item as FileItem).URI;
+					proc.StartInfo.UseShellExecute = false;
+					proc.Start ();
+				}
 			}
 		}
+		
 	}
 }

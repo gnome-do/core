@@ -20,8 +20,9 @@
 
 using System;
 using System.Collections.Generic;
-using Mono.Unix;
 using System.Runtime.InteropServices;
+
+using Mono.Unix;
 
 namespace Do.Universe
 {
@@ -40,7 +41,7 @@ namespace Do.Universe
 	{
 		protected string desktopFile;
 		protected IntPtr desktopFilePtr;
-		protected string name, description, icon;
+		protected string name, description, icon, mimeTypes;
 		
 		/// <summary>
 		/// Create an application item from a desktop file location.
@@ -63,8 +64,8 @@ namespace Do.Universe
 			description = Marshal.PtrToStringAuto (
 					gnome_desktop_item_get_localestring(desktopFilePtr, "Comment"));
 
-			// Not sure if it works 100% with i18n, so using get_string for the moment
 			icon = gnome_desktop_item_get_string(desktopFilePtr, "Icon");
+			mimeTypes = gnome_desktop_item_get_string(desktopFilePtr, "MimeType");
 			
 			if (icon == null || icon == "") {
 				// If there's no icon, throw an exception and discard this object.
@@ -86,6 +87,11 @@ namespace Do.Universe
 		{
 			get { return icon; }
 		}
+
+		public string MimeTypes
+		{
+			get { return mimeTypes; }
+		}
 		
 		/// <summary>
 		/// Executes the application by launching the desktop item given in the
@@ -97,9 +103,23 @@ namespace Do.Universe
 				gnome_desktop_item_launch(desktopFilePtr, IntPtr.Zero, 0, IntPtr.Zero);
 			}
 		}
+
+		public void RunWithURIs (ICollection<string> uris)
+		{
+			string uri_list;
+
+			uri_list = "";
+			foreach (string uri in uris) {
+				uri_list += uri + "\r\n";
+			}
+			gnome_desktop_item_drop_uri_list (desktopFilePtr, uri_list, 0, IntPtr.Zero);
+		}
 		
 		[DllImport ("libgnome-desktop-2.so.2")]
 		private static extern IntPtr gnome_desktop_item_new_from_file(string file, int flags, IntPtr error);
+
+		[DllImport ("libgnome-desktop-2.so.2")]
+		private static extern IntPtr gnome_desktop_item_drop_uri_list (IntPtr item, string list, int flags, IntPtr error);
 
 		[DllImport ("libgnome-desktop-2.so.2")]
 		private static extern int gnome_desktop_item_launch(IntPtr item, IntPtr args, int flags, IntPtr error);

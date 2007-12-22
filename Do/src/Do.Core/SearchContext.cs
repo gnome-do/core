@@ -31,9 +31,9 @@ namespace Do.Core
 		const int GET_CHILDREN = 2;
 		const int GET_PARENT = 4;
 
-		List<DoItem> items;
-		DoCommand command;
-		List<DoItem> modifierItems;
+		List<IItem> items;
+		ICommand command;
+		List<IItem> modifierItems;
 		string query;
 		SearchContext lastContext;
 		SearchContext parentContext;
@@ -50,23 +50,20 @@ namespace Do.Core
 		
 		public SearchContext (bool bufferLastContext)
 		{
-			Build ();
-			if (bufferLastContext) {
-				lastContext = new SearchContext (false);
-			}
-		}
-		
-		public void Build ()
-		{
 			SearchTypes = new Type[0];
 			flag = 0;
-			items = new List<DoItem> ();
-			modifierItems = new List<DoItem> ();
+			items = new List<IItem> ();
+			modifierItems = new List<IItem> ();
 			Query = "";
 			lastContext = null;
 			cursor = 0;
 			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
 			query = "";
+			results = null;
+
+			if (bufferLastContext) {
+				lastContext = new SearchContext (false);
+			}
 		}
 		
 		public SearchContext Clone ()
@@ -106,7 +103,7 @@ namespace Do.Core
 			}
 		}
 		
-		public List<DoItem> Items
+		public List<IItem> Items
 		{
 			get {
 				return items;
@@ -116,7 +113,7 @@ namespace Do.Core
 			}
 		}
 		
-		public List<DoItem> ModifierItems
+		public List<IItem> ModifierItems
 		{
 			get {
 				return modifierItems;
@@ -126,7 +123,7 @@ namespace Do.Core
 			}
 		}
 		
-		public DoCommand Command
+		public ICommand Command
 		{
 			get {
 				return command;
@@ -161,35 +158,6 @@ namespace Do.Core
 			}
 		}
 		
-		//This returns an array of the inner items, based on the list of DoItems
-		//This is necessary because SearchContext stores its items as DoItems, but sometimes
-		//methods like ActivateCommand want the IItems associated with DoItems
-		public IItem[] IItems
-		{
-			get {
-				IItem[] returnItems = new IItem [items.Count];
-				int i = 0;
-				foreach (DoItem item in items) {
-					returnItems[i] = item.IItem;
-					i++;
-				}
-				return returnItems;
-			}
-		}
-		
-		public IItem[] ModIItems
-		{
-			get {
-				IItem[] returnItems = new IItem [modifierItems.Count];
-				int i = 0;
-				foreach (DoItem item in modifierItems) {
-					returnItems[i] = item.IItem;
-					i++;
-				}
-				return returnItems;
-			}
-		}
-		
 		public bool Equivalent (SearchContext test)
 		{
 			//If its null, return false right away so a null exception isn't thrown
@@ -204,13 +172,13 @@ namespace Do.Core
 			if (test.SearchTypes.Length != SearchTypes.Length)
 				return false;
 			foreach (Type type in SearchTypes) {
-				if (!(UniverseManager.ContainsType (test.SearchTypes, type)))
+				if (!UniverseManager.ContainsType (test.SearchTypes, type))
 					return false;
 			}
 			
 			//Chech to see if items the same, but only if items are supposed to be fixed
 			if (test.CommandSearch || test.ModItemsSearch)
-				foreach (DoItem item in test.Items)
+				foreach (IItem item in test.Items)
 					if (!(Items.Contains (item)))
 						return false;
 			
@@ -228,10 +196,7 @@ namespace Do.Core
 		public bool ItemsSearch
 		{
 			get {
-				if (command != null && searchTypes[0].Equals (typeof (IItem)) && searchTypes.Length == 1) {
-					return true;
-				}
-				return false;
+				return searchTypes.Length == 1 && searchTypes[0] == typeof (IItem);
 			}
 		}
 		
@@ -253,7 +218,7 @@ namespace Do.Core
 		public bool ModItemsSearch
 		{
 			get {
-				return ((flag & MOD_ITEMS) == MOD_ITEMS);
+				return (flag & MOD_ITEMS) == MOD_ITEMS;
 			}
 			set {
 				if (value)
@@ -266,7 +231,7 @@ namespace Do.Core
 		public bool FindingChildren
 		{
 			get {
-				return ((flag & GET_CHILDREN) == GET_CHILDREN);
+				return (flag & GET_CHILDREN) == GET_CHILDREN;
 			}
 			set {
 				if (value)
@@ -292,27 +257,27 @@ namespace Do.Core
 		public bool Independent
 		{
 			get {
-				return (!(CommandSearch || ItemsSearch || ModItemsSearch));
+				return !(CommandSearch || ItemsSearch || ModItemsSearch);
 			}
 		}
 		
 		public void ResetAllObjects ()
 		{
-			items = new List<DoItem> ();
-			modifierItems = new List<DoItem> ();
+			items = new List<IItem> ();
+			modifierItems = new List<IItem> ();
 			command = null;
 		}
 		
-		public IObject GenericObject
+		public IObject Selection
 		{
-			set {
-				if (value is DoItem) {
-					Items = new List<DoItem> ();
-					Items.Add (value as DoItem);
+			get {
+				IObject o;
+				try {
+					o = results[cursor];
+				} catch {
+					o = null;
 				}
-				else {
-					Command = value as DoCommand;
-				}
+				return o;
 			}
 		}
 		
