@@ -71,6 +71,7 @@ namespace Do.UI
 			Third = 2,
 		}
 
+		const int SearchDelay = 150;
 		uint[] searchTimeout;
 
 		RoundedFrame frame;
@@ -145,7 +146,12 @@ namespace Do.UI
 
 		protected virtual void SetDefaultState ()
 		{
-			GLib.Source.Remove (searchTimeout[2]);
+			// Cancel any pending searches.
+			for (int i = 0; i < 3; ++i) {
+				if (searchTimeout[i] > 0) 
+					GLib.Source.Remove (searchTimeout[i]);
+				searchTimeout[i] = 0;
+			}
 
 			tabbing = false;
 
@@ -158,9 +164,6 @@ namespace Do.UI
 			iconbox[0].DisplayObject = new DefaultIconBoxObject ();
 			iconbox[1].Clear ();
 			iconbox[2].Clear ();
-			iconbox[2].Hide ();
-			Resize (1, 1);
-			Gtk.Application.RunIteration (false);
 
 			label.SetDisplayLabel ("Type to begin searching", "Type to start searching.");
 		}
@@ -190,16 +193,16 @@ namespace Do.UI
 				case Pane.First:
 					// Do this once we have "" in the first results list(?)
 					// context[0] = new SearchContext ();
-					// SearchFirstPane ("");
+					// SearchFirstPane ();
 					SetDefaultState ();
 					break;
 				case Pane.Second:
 					context[1] = new SearchContext ();
-					SearchSecondPane ("");
+					SearchSecondPane ();
 					break;
 				case Pane.Third:
 					context[2] = new SearchContext ();
-					SearchThirdPane ("");
+					SearchThirdPane ();
 					break;
 			}
 		}
@@ -289,7 +292,7 @@ namespace Do.UI
 
 			if (CurrentContext.Query.Length > 1 || CurrentContext.ParentContext != null) {
 				CurrentContext.Query = CurrentContext.Query.Substring (0, CurrentContext.Query.Length-1);
-				QueueSearch ();
+				QueueSearch (false);
 			} else {
 				if (CurrentContext.ParentContext == null)
 					ClearSearchResults ();
@@ -303,17 +306,12 @@ namespace Do.UI
 			if (CurrentPane == Pane.First &&
 					context[0].Results != null && context[0].Results.Length != 0) {
 				CurrentPane = Pane.Second;
-				iconbox[2].Hide ();
 			} else if (CurrentPane == Pane.Second &&
 					context[1].Results != null && context[1].Results.Length != 0) {
 				CurrentPane = Pane.Third;
-				iconbox[2].Show ();
 			} else {
 				CurrentPane = Pane.First;
-				iconbox[2].Hide ();
 			}
-			Resize (1, 1);
-			Gtk.Application.RunIteration (false);
 			tabbing = false;
 		}
 
@@ -335,10 +333,10 @@ namespace Do.UI
 			if (CurrentContext.Results != null) {
 				if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
 					CurrentContext.FindingChildren = true;
-					QueueSearch ();
+					QueueSearch (false);
 				} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {
 					CurrentContext.FindingParent = true;
-					QueueSearch ();
+					QueueSearch (false);
 				}
 				resultsWindow.Show ();
 			}
@@ -354,7 +352,7 @@ namespace Do.UI
 					|| c == ' '
 					|| char.IsSymbol (c)) {
 				CurrentContext.Query += c;
-				QueueSearch ();
+				QueueSearch (false);
 			}
 		}
 
@@ -442,11 +440,11 @@ namespace Do.UI
 				switch (currentPane) {
 					case Pane.First:
 						context[1] = new SearchContext ();
-						SearchSecondPane ("");
+						SearchPaneDelayed (Pane.Second);
 						break;
 					case Pane.Second:
 						context[2] = new SearchContext ();
-						SearchThirdPane ("");
+						SearchPaneDelayed (Pane.Third);
 						break;
 				}
 			}
@@ -455,11 +453,6 @@ namespace Do.UI
 		private void OnScreenChanged (object sender, EventArgs args)
 		{
 			SetColormap ();
-		}
-
-		protected virtual void SetFrameRadius ()
-		{
-			// Nothing
 		}
 
 		protected virtual void SetPane (Pane pane)
@@ -478,37 +471,86 @@ namespace Do.UI
 			Reposition ();
 		}
 
-		void QueueSearch ()
+		void QueueSearch (bool delayed)
 		{
+			if (delayed) {
+				SearchPaneDelayed (currentPane);
+				return;
+			}
+
 			switch (currentPane) {
 				case Pane.First:
-					SearchFirstPane (CurrentContext.Query);
+					SearchFirstPane ();
 					break;
 				case Pane.Second:
-					SearchSecondPane (CurrentContext.Query);
+					SearchSecondPane ();
 					break;
 				case Pane.Third:
-					SearchThirdPane (CurrentContext.Query);
+					SearchThirdPane ();
 					break;
 			}
 		}
 
-		protected virtual void SearchFirstPane (string match)
+		void SearchPaneDelayed (Pane pane)
 		{
-			context[0].Query = match;
+			GLib.TimeoutHandler handler = null;
+
+			for (int i = 0; i < 3; ++i) {
+				if (searchTimeout[i] > 0) 
+					GLib.Source.Remove (searchTimeout[i]);
+				searchTimeout[i] = 0;
+			}
+
+			for (int i = (int) pane; i < 3; ++i) {
+					iconbox[i].Clear ();
+			}
+
+			switch (pane) {
+				case Pane.First:
+					handler = new GLib.TimeoutHandler (HandleSearchFirstPane);
+					break;
+				case Pane.Second:
+					handler = new GLib.TimeoutHandler (HandleSearchSecondPane);
+					break;
+				case Pane.Third:
+					handler = new GLib.TimeoutHandler (HandleSearchThirdPane);
+					break;
+			}
+			searchTimeout[(int) pane] = GLib.Timeout.Add (SearchDelay, handler);
+		}
+
+		bool HandleSearchFirstPane ()
+		{
+			SearchFirstPane ();
+			return false;
+		}
+
+		bool HandleSearchSecondPane ()
+		{
+			SearchSecondPane ();
+			return false;
+		}
+
+		bool HandleSearchThirdPane ()
+		{
+			SearchThirdPane ();
+			return false;
+		}
+
+		protected virtual void SearchFirstPane ()
+		{
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 			Do.UniverseManager.Search (ref context[0]);
 
 			UpdatePane (Pane.First);
+
 			context[1] = new SearchContext ();
-			SearchSecondPane ("");
+			SearchPaneDelayed (Pane.Second);
 		}
 
-		protected virtual void SearchSecondPane (string match)
+		protected virtual void SearchSecondPane ()
 		{
 			IObject first;
-
-			GLib.Source.Remove (searchTimeout[2]);
 
 			// Set up the next pane based on what's in the first pane:
 			first = GetCurrentObject (Pane.First);
@@ -521,26 +563,14 @@ namespace Do.UI
 				context[1].Command = first as ICommand;
 				context[1].SearchTypes = new Type[] { typeof (IItem) };
 			}
-
-			context[1].Query = match;
 			Do.UniverseManager.Search (ref context[1]);
 
-			if (context[1].Results.Length > 0) {
-				UpdatePane (Pane.Second);
-				context[2] = new SearchContext ();
-				searchTimeout[2] = GLib.Timeout.Add (500, new GLib.TimeoutHandler (HandleSearchThirdPane));
-			} else {
-				SetNoResultsFoundState (Pane.Second);
-			}
+			UpdatePane (Pane.Second);
+			context[2] = new SearchContext ();
+			SearchPaneDelayed (Pane.Third);
 		}
 
-		bool HandleSearchThirdPane ()
-		{
-			SearchThirdPane ("");
-			return false;
-		}
-
-		protected virtual void SearchThirdPane (string match)
+		protected virtual void SearchThirdPane ()
 		{
 			IObject first, second;
 
@@ -549,7 +579,11 @@ namespace Do.UI
 
 			first = GetCurrentObject (Pane.First);
 			second = GetCurrentObject (Pane.Second);
-			// Set up the next pane based on what's in the other panes:
+			if (first == null || second == null) {
+				SetNoResultsFoundState (Pane.Third);
+				return;
+			}
+
 			if (first is IItem) {
 				context[2].Items.Add (first as IItem);
 				context[2].Command = second as ICommand;
@@ -558,14 +592,8 @@ namespace Do.UI
 				context[2].Command = first as ICommand;
 			}
 
-			context[2].Query = match;
 			Do.UniverseManager.Search (ref context[2]);
-
-			if (context[2].Results.Length > 0) {
-				UpdatePane (Pane.Third);
-			} else {
-				SetNoResultsFoundState (Pane.Third);
-			}
+			UpdatePane (Pane.Third);
 		}
 
 		protected void UpdatePane (Pane pane)
@@ -577,7 +605,7 @@ namespace Do.UI
 				iconbox[(int) pane].DisplayObject = currentObject;
 				iconbox[(int) pane].Highlight = context[(int) pane].Query;
 			} else {
-				iconbox[(int) pane].DisplayObject = new NoResultsFoundObject (context[(int) pane].Query);
+				SetNoResultsFoundState (pane);
 			}
 
 			if (pane == currentPane) {
@@ -651,7 +679,7 @@ namespace Do.UI
 			iconbox[2].IsFocused = false;
 			iconbox[2].Radius = IconBoxRadius;
 			resultsHBox.PackStart (iconbox[2], false, false, 0);
-			// iconbox[2].Show ();
+			iconbox[2].Show ();
 
 			align = new Alignment (0.5F, 0.5F, 1, 1);
 			align.SetPadding (0, 2, 0, 0);
