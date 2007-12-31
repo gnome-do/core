@@ -233,7 +233,7 @@ namespace Do.Universe
 			}
 		}
 
-		public void Open ()
+		public virtual void Open ()
 		{
 			Util.Environment.Open (Path);
 		}

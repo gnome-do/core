@@ -112,5 +112,11 @@ namespace Do.Universe
 				}
 			}
 		}
+
+		public override void Open ()
+		{
+			// Override Open to open trash:// instead of ~/.Trash.
+			Util.Environment.Open ("trash://");
+		}
 	}
 }
