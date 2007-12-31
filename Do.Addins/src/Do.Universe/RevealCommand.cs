@@ -1,4 +1,4 @@
-/* OpenTerminalHereCommand.cs
+/* RevealCommand.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -25,25 +25,25 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	public class OpenTerminalHereCommand : ICommand
+	public class RevealCommand : ICommand
 	{
-		public OpenTerminalHereCommand ()
+		public RevealCommand ()
 		{
 		}
 		
 		public string Name
 		{
-			get { return "Open Terminal Here"; }
+			get { return "Reveal"; }
 		}
 		
 		public string Description
 		{
-			get { return "Opens a Terminal in a given location."; }
+			get { return "Reveals a file in the file manager."; }
 		}
 		
 		public string Icon
 		{
-			get { return "terminal"; }
+			get { return "file-manager"; }
 		}
 		
 		public Type[] SupportedItemTypes
@@ -74,27 +74,11 @@ namespace Do.Universe
 		
 		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
-			GConf.Client client;
-			Process term;
-			IFileItem fi;
-			string dir, exec;
-
-			client = new GConf.Client();
-			try {
-				exec = client.Get ("/desktop/gnome/applications/terminal/exec") as string;
-			} catch {
-				exec = "gnome-terminal";
+			foreach (IFileItem file in items) {
+				// Nautilus does not have a "reveal file" option, so we just open the
+				// parent directory for now.
+				Util.Environment.Open (System.IO.Path.GetDirectoryName (file.Path));
 			}
-			
-			fi = items[0] as IFileItem;
-			dir = fi.Path;
-			if (!(fi is DirectoryFileItem))
-				dir = System.IO.Path.GetDirectoryName (dir);
-
-			term = new Process ();
-			term.StartInfo.WorkingDirectory = dir;
-			term.StartInfo.FileName = exec;
-			term.Start ();
 		}
 	}
 }

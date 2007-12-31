@@ -59,6 +59,7 @@ FILES =  \
 	src/Do.Universe/OpenURLCommand.cs \
 	src/Do.Universe/OpenWithCommand.cs \
 	src/Do.Universe/RecentFileItemSource.cs \
+	src/Do.Universe/RevealCommand.cs \
 	src/Do.Universe/RunCommand.cs \
 	src/Do.Universe/RunInTerminalCommand.cs \
 	src/Do.Universe/TextItem.cs \
