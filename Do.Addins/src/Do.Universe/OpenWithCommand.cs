@@ -1,4 +1,4 @@
-/* OpenCommand.cs
+/* OpenWithCommand.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -26,22 +26,22 @@ using Do.Addins;
 namespace Do.Universe
 {
 	/// <summary>
-	/// A command providing "open" semantics to many kinds of items.
+	/// A command providing "open with..." semantics to file items.
 	/// </summary>
-	public class OpenCommand : ICommand
+	public class OpenWithCommand : ICommand
 	{
-		public OpenCommand ()
+		public OpenWithCommand ()
 		{
 		}
 		
 		public string Name
 		{
-			get { return "Open"; }
+			get { return "Open with..."; }
 		}
 		
 		public string Description
 		{
-			get { return "Opens many kinds of items."; }
+			get { return "Opens files in specified applications."; }
 		}
 		
 		public string Icon
@@ -53,8 +53,7 @@ namespace Do.Universe
 		{
 			get {
 				return new Type[] {
-					typeof (IOpenableItem),
-					typeof (IURIItem),
+					typeof (IFileItem),
 				};
 			}
 		}
@@ -62,7 +61,9 @@ namespace Do.Universe
 		public Type[] SupportedModifierItemTypes
 		{
 			get {
-				return null;
+				return new Type[] {
+					typeof (ApplicationItem),
+				};
 			}
 		}
 
@@ -73,25 +74,27 @@ namespace Do.Universe
 		
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
 		{
-			return false;
+			// This is too strict - many desktop files are incomplete,
+			// so MimeTypes is not reliable.
+			/* 
+			return items[0] is FileItem &&
+							(modItem as ApplicationItem).MimeTypes.Contains (
+								(items[0] as FileItem).MimeType);
+			*/
+			return true;
 		}
 		
 		public void Perform (IItem[] items, IItem[] modifierItems)
 		{
-			string open_item;
-			
-			open_item = null;
-			foreach (IItem item in items) {
-				if (item is IOpenableItem) {
-					(item as IOpenableItem).Open ();
-					continue;
-				}
+			List<string> uris;
 
-				if (item is IURIItem) {
-					open_item = (item as IURIItem).URI;
-				}
-				Util.Environment.Open (open_item);
+			if (modifierItems.Length == 0) return;
+
+			uris = new List<string> ();
+			foreach (IItem item in items) {
+				uris.Add ((item as IFileItem).URI);
 			}
+			(modifierItems[0] as ApplicationItem).RunWithURIs (uris);
 		}
 	}
 }
