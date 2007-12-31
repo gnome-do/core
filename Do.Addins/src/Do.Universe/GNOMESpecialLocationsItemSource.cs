@@ -51,7 +51,6 @@ namespace Do.Universe
 			items.Add (new GNOMETrashDirectoryFileItem ());
 			items.Add (new GNOMEURIItem ("computer:///", "Computer", "computer"));
 			items.Add (new GNOMEURIItem ("network://", "Network", "network"));
-			items.Add (new GNOMEURIItem ("~", "Home", "user-home"));
 		}
 		
 		public string Name { get { return "GNOME Special Locations"; } }
