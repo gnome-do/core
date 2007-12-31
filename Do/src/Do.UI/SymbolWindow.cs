@@ -71,8 +71,9 @@ namespace Do.UI
 			Third = 2,
 		}
 
-		const int SearchDelay = 150;
+		const int SearchDelay = 200;
 		uint[] searchTimeout;
+		IObject[] lastResult;
 
 		RoundedFrame frame;
 		SymbolDisplayLabel label;
@@ -93,6 +94,7 @@ namespace Do.UI
 		{
 			Build ();
 			searchTimeout = new uint[3];
+			lastResult = new IObject[3];
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			context = new SearchContext[3];
@@ -153,6 +155,7 @@ namespace Do.UI
 				searchTimeout[i] = 0;
 			}
 
+			lastResult = new IObject[3];
 			tabbing = false;
 
 			context[0] = new SearchContext ();
@@ -271,32 +274,31 @@ namespace Do.UI
 
 		void OnEscapeKeyPressEvent (EventKey evnt)
 		{
-			bool something_typed;
+			bool results, something_typed;
 
 			something_typed = CurrentContext.Query.Length > 0;
+			results = CurrentContext.Results != null &&
+								CurrentContext.Results.Length > 0;
 
 			resultsWindow.Hide ();
 			ClearSearchResults ();
-			if (currentPane == Pane.First && !something_typed) Vanish ();
+			if (CurrentPane == Pane.First && !results) Vanish ();
 			else if (!something_typed) SetDefaultState ();
 		}
 
 		void OnActivateKeyPressEvent (EventKey evnt)
 		{
-			ActivateCommand ();
+			PerformCommand ();
 		}
 
 		void OnDeleteKeyPressEvent (EventKey evnt)
 		{
-			if (CurrentContext.Query.Length == 0) return;
+			string query;
 
-			if (CurrentContext.Query.Length > 1 || CurrentContext.ParentContext != null) {
-				CurrentContext.Query = CurrentContext.Query.Substring (0, CurrentContext.Query.Length-1);
-				QueueSearch (false);
-			} else {
-				if (CurrentContext.ParentContext == null)
-					ClearSearchResults ();
-			}
+			query = CurrentContext.Query;
+			if (query.Length == 0) return;
+			CurrentContext.Query = query.Substring (0, query.Length-1);
+			QueueSearch (false);
 		}
 
 		void OnTabKeyPressEvent (EventKey evnt)
@@ -398,7 +400,7 @@ namespace Do.UI
 			return base.OnKeyPressEvent (evnt);
 		}
 
-		protected virtual void ActivateCommand ()
+		protected virtual void PerformCommand ()
 		{
 			IObject first, second, third;
 
@@ -410,6 +412,15 @@ namespace Do.UI
 			first = GetCurrentObject (Pane.First);
 			second = GetCurrentObject (Pane.Second);
 			third = GetCurrentObject (Pane.Third);
+
+			// User may have pressed enter before delayed search completed.
+			// We guess this is the case if there is nothing in the second pane,
+			// so we immediately do a search and use the first result.
+			if (first != null && second == null) {
+				SearchSecondPane ();
+				second = GetCurrentObject (Pane.Second);
+			}
+
 			if (first != null && second != null) {
 				if (first is IItem) {
 					items.Add (first as IItem);
@@ -539,13 +550,26 @@ namespace Do.UI
 
 		protected virtual void SearchFirstPane ()
 		{
+			if (context[0].Query == "") {
+				SetDefaultState ();
+				return;
+			}
+
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 			Do.UniverseManager.Search (ref context[0]);
-
 			UpdatePane (Pane.First);
 
-			context[1] = new SearchContext ();
-			SearchPaneDelayed (Pane.Second);
+			// Queue a search for the next pane unless the result of the most
+			// recent search is the same as the last result - if this is the
+			// case, we already have a valid search queued.
+			if (GetCurrentObject (Pane.First) != lastResult[0]) {
+				context[1] = new SearchContext ();
+				SearchPaneDelayed (Pane.Second);
+			}
+			if (CurrentPane == Pane.First) {
+				lastResult[0] = GetCurrentObject (Pane.First);
+				lastResult[1] = null;
+			}
 		}
 
 		protected virtual void SearchSecondPane ()
@@ -563,11 +587,20 @@ namespace Do.UI
 				context[1].Command = first as ICommand;
 				context[1].SearchTypes = new Type[] { typeof (IItem) };
 			}
-			Do.UniverseManager.Search (ref context[1]);
 
+			Do.UniverseManager.Search (ref context[1]);
 			UpdatePane (Pane.Second);
-			context[2] = new SearchContext ();
-			SearchPaneDelayed (Pane.Third);
+
+			// Queue a search for the next pane unless the result of the most
+			// recent search is the same as the last result - if this is the
+			// case, we already have a valid search queued.
+			if (GetCurrentObject (Pane.Second) != lastResult[1]) {
+				context[2] = new SearchContext ();
+				SearchPaneDelayed (Pane.Third);
+			}
+			if (CurrentPane == Pane.Second) {
+				lastResult[1] = GetCurrentObject (Pane.Second);
+			}
 		}
 
 		protected virtual void SearchThirdPane ()
