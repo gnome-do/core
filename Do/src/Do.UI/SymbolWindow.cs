@@ -511,50 +511,31 @@ namespace Do.UI
 					GLib.Source.Remove (searchTimeout[i]);
 				searchTimeout[i] = 0;
 			}
-
 			for (int i = (int) pane; i < 3; ++i) {
 					iconbox[i].Clear ();
 			}
 
 			switch (pane) {
 				case Pane.First:
-					handler = new GLib.TimeoutHandler (HandleSearchFirstPane);
+					handler = new GLib.TimeoutHandler (SearchFirstPane);
 					break;
 				case Pane.Second:
-					handler = new GLib.TimeoutHandler (HandleSearchSecondPane);
+					handler = new GLib.TimeoutHandler (SearchSecondPane);
 					break;
 				case Pane.Third:
-					handler = new GLib.TimeoutHandler (HandleSearchThirdPane);
+					handler = new GLib.TimeoutHandler (SearchThirdPane);
 					break;
 			}
 			searchTimeout[(int) pane] = GLib.Timeout.Add (SearchDelay, handler);
 		}
 
-		bool HandleSearchFirstPane ()
-		{
-			SearchFirstPane ();
-			return false;
-		}
-
-		bool HandleSearchSecondPane ()
-		{
-			SearchSecondPane ();
-			return false;
-		}
-
-		bool HandleSearchThirdPane ()
-		{
-			SearchThirdPane ();
-			return false;
-		}
-
-		protected virtual void SearchFirstPane ()
+		protected bool SearchFirstPane ()
 		{
 			// If we delete the entire query on a regular search (we are not
 			// searching children) then set default state.
 			if (context[0].Query == "" && context[0].ParentContext == null) {
 				SetDefaultState ();
-				return;
+				return false;
 			}
 
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
@@ -572,9 +553,10 @@ namespace Do.UI
 				lastResult[0] = GetCurrentObject (Pane.First);
 				lastResult[1] = null;
 			}
+			return false;
 		}
 
-		protected virtual void SearchSecondPane ()
+		protected bool SearchSecondPane ()
 		{
 			IObject first;
 
@@ -603,9 +585,10 @@ namespace Do.UI
 			if (CurrentPane == Pane.Second) {
 				lastResult[1] = GetCurrentObject (Pane.Second);
 			}
+			return false;
 		}
 
-		protected virtual void SearchThirdPane ()
+		protected bool SearchThirdPane ()
 		{
 			IObject first, second;
 
@@ -616,7 +599,7 @@ namespace Do.UI
 			second = GetCurrentObject (Pane.Second);
 			if (first == null || second == null) {
 				SetNoResultsFoundState (Pane.Third);
-				return;
+				return false;
 			}
 
 			if (first is IItem) {
@@ -629,6 +612,7 @@ namespace Do.UI
 
 			Do.UniverseManager.Search (ref context[2]);
 			UpdatePane (Pane.Third);
+			return false;
 		}
 
 		protected void UpdatePane (Pane pane)

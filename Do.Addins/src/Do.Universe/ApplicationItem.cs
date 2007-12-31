@@ -41,7 +41,6 @@ namespace Do.Universe
 	{
 		protected string desktopFile;
 		protected IntPtr desktopFilePtr;
-		protected string name, description, icon, mimeTypes;
 		
 		/// <summary>
 		/// Create an application item from a desktop file location.
@@ -56,41 +55,40 @@ namespace Do.Universe
 
 			desktopFilePtr = gnome_desktop_item_new_from_file (desktopFile, 0, IntPtr.Zero);
 			if (desktopFilePtr == IntPtr.Zero) {
-				throw new ApplicationDetailMissingException("Failed to load launcher");
-			}
-			// Gets the i18n name and description
-			name = Marshal.PtrToStringAuto (
-					gnome_desktop_item_get_localestring(desktopFilePtr, "Name"));
-			description = Marshal.PtrToStringAuto (
-					gnome_desktop_item_get_localestring(desktopFilePtr, "Comment"));
-
-			icon = gnome_desktop_item_get_string(desktopFilePtr, "Icon");
-			mimeTypes = gnome_desktop_item_get_string(desktopFilePtr, "MimeType");
-			
-			if (icon == null || icon == "") {
-				// If there's no icon, throw an exception and discard this object.
-				throw new ApplicationDetailMissingException (name + " has no icon.");
+				throw new ApplicationDetailMissingException ("Failed to load launcher");
 			}
 		}
 		
 		public string Name
 		{
-			get { return name; }
+			get {
+				return Marshal.PtrToStringAuto (
+					gnome_desktop_item_get_localestring (desktopFilePtr, "Name"));
+			}
 		}
 
 		public string Description
 		{
-			get { return description; }
+			get {
+				return Marshal.PtrToStringAuto (
+					gnome_desktop_item_get_localestring (desktopFilePtr, "Comment"));
+			}
 		}
 		
 		public string Icon
 		{
-			get { return icon; }
+			get {
+				return Marshal.PtrToStringAuto (
+				    gnome_desktop_item_get_string (desktopFilePtr, "Icon"));
+			}
 		}
 
 		public string MimeTypes
 		{
-			get { return mimeTypes; }
+			get {
+				return Marshal.PtrToStringAuto (
+				    gnome_desktop_item_get_string (desktopFilePtr, "MimeTypes"));
+			}
 		}
 		
 		/// <summary>
@@ -99,9 +97,8 @@ namespace Do.Universe
 		/// </summary>
 		public void Run ()
 		{
-			if (desktopFilePtr != IntPtr.Zero) {
-				gnome_desktop_item_launch(desktopFilePtr, IntPtr.Zero, 0, IntPtr.Zero);
-			}
+			if (desktopFilePtr == IntPtr.Zero) return;
+			gnome_desktop_item_launch (desktopFilePtr, IntPtr.Zero, 0, IntPtr.Zero);
 		}
 
 		public void RunWithURIs (ICollection<string> uris)
@@ -116,19 +113,18 @@ namespace Do.Universe
 		}
 		
 		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern IntPtr gnome_desktop_item_new_from_file(string file, int flags, IntPtr error);
+		private static extern IntPtr gnome_desktop_item_new_from_file (string file, int flags, IntPtr error);
 
 		[DllImport ("libgnome-desktop-2.so.2")]
 		private static extern IntPtr gnome_desktop_item_drop_uri_list (IntPtr item, string list, int flags, IntPtr error);
 
 		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern int gnome_desktop_item_launch(IntPtr item, IntPtr args, int flags, IntPtr error);
+		private static extern int gnome_desktop_item_launch (IntPtr item, IntPtr args, int flags, IntPtr error);
 
 		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern IntPtr gnome_desktop_item_get_localestring(IntPtr item, string id);
+		private static extern IntPtr gnome_desktop_item_get_localestring (IntPtr item, string id);
 
-		// Do we really need this? isn't localestring enough?
 		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern string gnome_desktop_item_get_string(IntPtr item, string id);
+		private static extern IntPtr gnome_desktop_item_get_string (IntPtr item, string id);
 	}
 }

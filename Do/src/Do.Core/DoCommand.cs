@@ -54,14 +54,22 @@ namespace Do.Core
 
 		public bool SupportsItem (IItem item)
 		{
+			bool supports;
+			
 			item = EnsureIItem (item);
 			if (!IObjectTypeCheck (item, SupportedItemTypes)) return false;
 
+			supports = false;
+			// Unless I call Gtk.Threads.Enter/Leave, this method freezes and does not return!
+			// WTF!?!?@?@@#!@
+			// Why is this so fucking weird? The freeze has to do with Gtk.Clipboard interaction in DefineWordCommand.Text. 
+			Gdk.Threads.Enter ();
 			try {
-				return command.SupportsItem (item);
-			} catch {
-				return false;
+				supports = command.SupportsItem (item);
+			} finally {
+				Gdk.Threads.Leave ();
 			}
+			return supports;
 		}
 
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
@@ -82,17 +90,12 @@ namespace Do.Core
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
 
-			new Thread ((ThreadStart) delegate {
-				Gdk.Threads.Enter ();
-
-				try {
-					InternalItemSource.LastItem.IItem = items[0]; // TODO: Create a command performed event and move this.
-					command.Perform (items, modItems);
-				} catch (Exception e) {
-					Log.Error ("Command \"{0}\" encountered an error: {1}", command.Name, e.Message);
-				}
-				Gdk.Threads.Leave ();
-			}).Start ();
+			InternalItemSource.LastItem.IItem = items[0]; // TODO: Create a command performed event and move this.
+			try {
+				command.Perform (items, modItems);
+			} catch (Exception e) {
+				Log.Error ("Command \"{0}\" encountered an error: {1}", command.Name, e.Message);
+			}
 		}
 
 		/// <summary>

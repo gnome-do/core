@@ -220,7 +220,7 @@ namespace Do.Core
 		{
 			universeMutex.WaitOne ();
 			firstResultsMutex.WaitOne ();
-
+			
 			string query = context.Query.ToLower ();
 			List<IObject> results = new List<IObject> ();
 			SearchContext clone;
@@ -360,16 +360,16 @@ namespace Do.Core
 			return results;
 		}
 
-		//This generates a list of modifier items supported by the context in a given initial list
+		// This generates a list of modifier items supported by the context in a given initial list.
 		public List<IObject> GetModItemsFromList (SearchContext context, List<IObject> initialList)
 		{
 			List<IObject> results = new List<IObject> ();
+			IItem[] items = context.Items.ToArray ();
 
 			foreach (IObject iobject in initialList) {
 				if (iobject is IItem) {
 					// If the item is supported add it
-					if (context.Command.SupportsModifierItemForItems (context.Items.ToArray (),
-				                                                  iobject as IItem)) {
+					if (context.Command.SupportsModifierItemForItems (items, iobject as IItem)) {
 						results.Add (iobject);
 					}
 				}

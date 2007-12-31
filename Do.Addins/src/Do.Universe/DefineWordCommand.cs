@@ -89,11 +89,7 @@ namespace Do.Universe
 			if (item is ITextItem) {
 				word = (item as ITextItem).Text;
 			}
-
-			if (word != null) {
-				return (wordRegex.IsMatch (word));
-			}
-			return false;
+			return word != null && wordRegex.IsMatch (word);
 		}
 		
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)

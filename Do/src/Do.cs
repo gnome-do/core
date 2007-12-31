@@ -65,7 +65,7 @@ namespace Do
 
 			if (!options.quiet)
 				controller.Summon ();
-
+			
 			Gtk.Application.Run ();
 		}
 

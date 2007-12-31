@@ -1,4 +1,4 @@
-/* InternalItemSource.cs
+/* SelectedSelectedTextItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,62 +19,51 @@
  */
 
 using System;
+using System.Threading;
 using System.Collections.Generic;
-
-using Do.Core;
 
 namespace Do.Universe
 {
-	public class InternalItemSource : IItemSource
-	{
-		public static readonly ProxyItem LastItem = new ProxyItem ("Last Item",
-		                                                           "The last item used in a command.",
-		                                                           "undo");
-		private List<IItem> items;
-		
-		public InternalItemSource ()
+
+	public class SelectedTextItem : ITextItem
+	{		
+		public SelectedTextItem ()
 		{
-			items = new List<IItem> ();
-			items.Add (LastItem);
-			items.Add (new SelectedTextItem ());
-		}
-		
-		public Type[] SupportedItemTypes
-		{
-			get {
-				return new Type[] {
-				};
-			}
 		}
 		
 		public string Name
 		{
-			get { return "Internal GNOME Do Items"; }
+			get { return "Selected text"; }
 		}
 		
 		public string Description
 		{
-			get { return "Special items relevant to the inner-workings of GNOME Do."; }
+			get { return "Currently selected text."; }
 		}
 		
 		public string Icon
 		{
-			get { return "gnome-system"; }
+			get { return "edit-select-all"; }
 		}
 		
-		
-		public void UpdateItems ()
+		public string Text
 		{
-		}
-		
-		public ICollection<IItem> Items
-		{
-			get { return items; }
-		}
-		
-		public ICollection<IItem> ChildrenOfItem (IItem item)
-		{
-			return null;
+			get {
+				Gtk.Clipboard primary;
+				string text;
+			
+				Console.WriteLine ("\nTrying to get clipboard text on thread {0}.", Thread.CurrentThread.Name);
+				primary = Gtk.Clipboard.Get (Gdk.Selection.Primary);
+				if (primary.WaitIsTextAvailable ()) {
+					Console.WriteLine ("Text available. Waiting for text...");
+					text = primary.WaitForText ();
+					Console.WriteLine ("Got clipboard text \"{0}\"", text);
+				} else {
+					Console.WriteLine ("No clipboard text available.");
+					text = "";
+				}
+				return text;
+			}
 		}
 	}
 }
