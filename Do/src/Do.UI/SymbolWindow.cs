@@ -550,7 +550,9 @@ namespace Do.UI
 
 		protected virtual void SearchFirstPane ()
 		{
-			if (context[0].Query == "") {
+			// If we delete the entire query on a regular search (we are not
+			// searching children) then set default state.
+			if (context[0].Query == "" && context[0].ParentContext == null) {
 				SetDefaultState ();
 				return;
 			}

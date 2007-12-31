@@ -94,9 +94,8 @@ namespace Do.Universe
 	public interface IFileItem : IURIItem
 	{
 		/// <summary>
-		/// The mime-type of the file. This is used to determine which applications
-		/// can open which files.
+		/// The absolute path of the file.
 		/// </summary>
-		string MimeType { get; }
+		string Path { get; }
 	}
 }

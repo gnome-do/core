@@ -22,14 +22,18 @@ using System;
 using System.IO;
 using System.Collections;
 
+using Mono.Unix;
+
+using Do.Addins;
+
 namespace Do.Universe
 {
 	/// <summary>
 	/// FileItem is an item describing a file. FileItem subclasses
 	/// can be created and registered with FileItem for instantiation
-	/// in the factory method FileItem.Create (string uri).
+	/// in the factory method FileItem.Create.
 	/// </summary>
-	public class FileItem : IFileItem
+	public class FileItem : IFileItem, IOpenableItem
 	{
 		static Hashtable extensionTypes;
 		
@@ -78,17 +82,17 @@ namespace Do.Universe
 		/// <returns>
 		/// A <see cref="FileItem"/> instance.
 		/// </returns>
-		public static FileItem Create (string uri)
+		public static FileItem Create (string path)
 		{
 			string ext;
 			Type fi_type;
 			FileItem result;
 			
-			if (Directory.Exists (uri)) {
-				return new DirectoryFileItem (uri);
+			if (Directory.Exists (path)) {
+				return new DirectoryFileItem (path);
 			}
 			
-			ext = Path.GetExtension (uri).ToLower ();
+			ext = System.IO.Path.GetExtension (path).ToLower ();
 			if (ext.StartsWith (".")) {
 				ext = ext.Substring (1);
 			}
@@ -98,9 +102,9 @@ namespace Do.Universe
 				fi_type = typeof (FileItem);
 			}
 			try {
-				result = (FileItem) System.Activator.CreateInstance (fi_type, new object[] {uri});
+				result = (FileItem) System.Activator.CreateInstance (fi_type, new object[] {path});
 			} catch {
-				result = new FileItem (uri);
+				result = new FileItem (path);
 			}
 			return result;
 		}
@@ -114,82 +118,139 @@ namespace Do.Universe
 		/// <returns>
 		/// A <see cref="System.String"/> containing the abbreviated path.
 		/// </returns>
-		public static string ShortUri (string uri)
+		public static string ShortPath (string path)
 		{
 			string home;
 			
-			uri = (uri == null ? "" : uri);
+			path = path ?? "";
 			home = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
-			uri = uri.Replace (home, "~");
-			return uri;
+			path = path.Replace (home, "~");
+			return path;
 		}
 		
-		protected string uri, name, icon, mime_type;
+		public static bool IsExecutable (FileItem fi)
+		{
+			if (fi == null) return false;
+			return IsExecutable (fi.Path);
+		}
+
+		public static bool IsExecutable (string path)
+		{
+			UnixFileInfo info;
+
+			if (System.IO.Directory.Exists (path)) return false;
+
+			info = new UnixFileInfo (path);
+			return (info.FileAccessPermissions & FileAccessPermissions.UserExecute) != 0;
+		}
+		
+		public static bool IsHidden (FileItem fi)
+		{
+			if (fi == null) return false;
+			return IsHidden (fi.Path);
+		}
+
+		public static bool IsHidden (string path)
+		{
+			System.IO.FileInfo info;
+
+			if (path.EndsWith ("~")) return true;
+
+			info = new System.IO.FileInfo (path);
+			return (info.Attributes & System.IO.FileAttributes.Hidden) != 0;
+		}
+		
+		protected string path;
 		
 		/// <summary>
 		/// Create a new FileItem for a given file.
 		/// </summary>
-		/// <param name="uri">
+		/// <param name="path">
 		/// A <see cref="System.String"/> containing an absolute path to a file.
 		/// </param>
-		public FileItem (string uri)
+		public FileItem (string path)
 		{	
-			this.uri = uri;
-			this.name = Path.GetFileName (uri);
-			this.mime_type = Gnome.Vfs.Global.GetMimeType (uri);
-
-			try {
-				icon = mime_type.Replace ('/', '-');
-				icon = string.Format ("gnome-mime-{0}", icon);
-				if (icon.StartsWith ("gnome-mime-image")) {
-					icon = "gnome-mime-image";
-				}
-			} catch (NullReferenceException) {
-				icon = "file";
-			}
+			this.path = path;
 		}
 		
 		public virtual string Name
 		{
-			get { return name; }
+			get {
+				return System.IO.Path.GetFileName (path);
+			}
 		}
 		
 		public virtual string Description
 		{
 			get {
-				string uri_short;
+				string short_path;
 				
-				uri_short = ShortUri (uri);
-				if (uri_short == "~")
+				short_path = ShortPath (path);
+				if (short_path == "~")
 					// Sowing only "~" looks too abbreviated.
-					return uri;
+					return path;
 				else
-					return uri_short;
+					return short_path;
 			}
 		}
 		
 		public virtual string Icon
 		{
-			get { return icon; }
+			get {
+				string icon;
+
+				try {
+					icon = MimeType.Replace ('/', '-');
+					icon = string.Format ("gnome-mime-{0}", icon);
+					if (icon.StartsWith ("gnome-mime-image")) {
+						icon = "gnome-mime-image";
+					}
+				} catch (NullReferenceException) {
+					icon = "file";
+				}
+				return icon;
+			}
+		}
+		
+		public string Path
+		{
+			get {
+				return path;
+			}
 		}
 		
 		public string URI
 		{
-			get { return uri; }
+			get {
+				return "file://" + path;
+			}
 		}
 		
 		public string MimeType
 		{
-			get { return mime_type; }
+			get {
+				return Gnome.Vfs.Global.GetMimeType (path);
+			}
+		}
+
+		public void Open ()
+		{
+			Util.Environment.Open (Path);
 		}
 	}
 	
 	public class DirectoryFileItem : FileItem
 	{
-		public DirectoryFileItem (string uri) :
-			base (uri)
+		public DirectoryFileItem (string path) : base (path)
 		{
-			icon = "folder";
+		}
+
+		public override string Icon
+		{
+			get {
+				return "folder";
+			}
 		}
 	}
+
 }

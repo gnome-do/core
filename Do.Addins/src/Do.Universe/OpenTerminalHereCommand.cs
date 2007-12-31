@@ -87,7 +87,7 @@ namespace Do.Universe
 			}
 			
 			fi = items[0] as FileItem;
-			dir = fi.URI;
+			dir = fi.Path;
 			if (!(fi is DirectoryFileItem))
 				dir = System.IO.Path.GetDirectoryName (dir);
 

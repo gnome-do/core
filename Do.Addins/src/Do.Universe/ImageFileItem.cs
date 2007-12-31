@@ -44,8 +44,8 @@ namespace Do.Universe
 		}
 		*/
 		
-		public ImageFileItem (string uri)
-			: base (uri)
+		public ImageFileItem (string path)
+			: base (path)
 		{	
 		}
 		
@@ -54,7 +54,7 @@ namespace Do.Universe
 		/// </value>
 		public override string Icon
 		{
-			get { return URI; }
+			get { return Path; }
 		}
 	}
 }

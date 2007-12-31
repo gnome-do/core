@@ -1,4 +1,4 @@
-/* ${FileName}
+/* RecentFileItemSource.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -32,12 +32,12 @@ namespace Do.Universe
 			files = new List<IItem> ();
 			Gtk.RecentManager.Default.Changed += OnRecentChanged;
 
-			ForceUpdateItems ();
+			UpdateItems ();
 		}
 		
 		protected void OnRecentChanged (object sender, EventArgs args)
 		{
-			ForceUpdateItems ();
+			UpdateItems ();
 		}
 		
 		public Type[] SupportedItemTypes
@@ -73,16 +73,14 @@ namespace Do.Universe
 		
 		public void UpdateItems ()
 		{
-		}
-		
-		protected virtual void ForceUpdateItems ()
-		{
+			files.Clear ();
 			/*
-			foreach (IntPtr info_ptr in Gtk.RecentManager.Default.Items) {
+			foreach (Gtk.RecentInfo info in Gtk.RecentManager.Default.Items) {
 				Console.WriteLine ("Recent items source adding item: {0}", info);
-				files.Add (new FileItem (info.DisplayName, info.Uri));
+				files.Add (new FileItem (info.Uri));
 			}
 			*/
 		}
 	}
+
 }

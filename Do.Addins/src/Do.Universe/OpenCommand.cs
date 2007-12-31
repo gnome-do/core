@@ -75,8 +75,9 @@ namespace Do.Universe
 		
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
 		{
-			/* This is too strict - many desktop files are incomplete, so MimeTypes
-			 * is no reliable.
+			// This is too strict - many desktop files are incomplete,
+			// so MimeTypes is not reliable.
+			/* 
 			return items[0] is FileItem &&
 							(modItem as ApplicationItem).MimeTypes.Contains (
 								(items[0] as FileItem).MimeType);
@@ -94,7 +95,7 @@ namespace Do.Universe
 			if (modifierItems.Length > 0) {
 				List<string> uris = new List<string> ();
 				foreach (IItem item in items) {
-					uris.Add ("file://" + (item as IURIItem).URI);
+					uris.Add ((item as IURIItem).URI);
 				}
 				(modifierItems[0] as ApplicationItem).RunWithURIs (uris);
 				return;
@@ -105,10 +106,10 @@ namespace Do.Universe
 					(item as IOpenableItem).Open ();
 					continue;
 				}
-				else if (item is IURIItem) {
+
+				if (item is IURIItem) {
 					open_item = (item as IURIItem).URI;
 				}
-
 				Util.Environment.Open (open_item);
 			}
 		}

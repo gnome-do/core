@@ -146,8 +146,8 @@ namespace Do.Universe
 			
 			children = new List<IItem> ();
 			if (item is DirectoryFileItem) {
-				foreach (string uri in Directory.GetFileSystemEntries ((item as DirectoryFileItem).URI)) {
-					children.Add (FileItem.Create (uri));
+				foreach (string path in Directory.GetFileSystemEntries ((item as DirectoryFileItem).Path)) {
+					children.Add (FileItem.Create (path));
 				}
 			}
 			return children;
@@ -190,13 +190,13 @@ namespace Do.Universe
 			}
 			foreach (string file in files) {
 				// Ignore system/hidden files.
-				if (!include_hidden && Util.FileIsHidden (file)) continue;
+				if (!include_hidden && FileItem.IsHidden (file)) continue;
 
 				item = FileItem.Create (file);
 				items.Add (item);
 			}
 			foreach (string directory in directories) {
-				if (!include_hidden && Util.FileIsHidden (directory)) continue;
+				if (!include_hidden && FileItem.IsHidden (directory)) continue;
 
 				item = FileItem.Create (directory);
 				items.Add (item);

@@ -172,7 +172,7 @@ namespace Do.Universe
 			if (item is ITextItem) {
 				return CommandLineIsFoundOnPath ((item as ITextItem).Text);
 			} else if (item is FileItem) {
-				return Util.FileIsExecutable ((item as FileItem).URI);
+				return FileItem.IsExecutable (item as FileItem);
 			}
 			return false;
 		}
@@ -193,7 +193,7 @@ namespace Do.Universe
 				}
 				else if (item is FileItem) {
 					// Format the filename so the terminal doesn't choke on it.
-					commandline = (item as FileItem).URI.Replace (" ", "\\ ");
+					commandline = (item as FileItem).Path.Replace (" ", "\\ ");
 				}
 				if (commandline == null) continue;
 				RunCommandlineInTerminal (commandline);

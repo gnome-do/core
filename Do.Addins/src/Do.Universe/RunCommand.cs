@@ -61,7 +61,7 @@ namespace Do.Universe
 		public bool SupportsItem (IItem item)
 		{
 			if (item is FileItem) {
-				return Util.FileIsExecutable ((item as FileItem).URI);
+				return FileItem.IsExecutable (item as FileItem);
 			}
 			return true;
 		}
@@ -81,7 +81,7 @@ namespace Do.Universe
 					System.Diagnostics.Process proc;
 					
 					proc = new System.Diagnostics.Process ();
-					proc.StartInfo.FileName = (item as FileItem).URI;
+					proc.StartInfo.FileName = (item as FileItem).Path;
 					proc.StartInfo.UseShellExecute = false;
 					proc.Start ();
 				}
