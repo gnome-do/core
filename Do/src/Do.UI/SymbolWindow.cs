@@ -418,7 +418,7 @@ namespace Do.UI
 					items.Add (second as IItem);
 					command = first as ICommand;
 				}
-				if (iconbox[2].Visible && third != null) {
+				if (third != null && context[2].Query != "") {
 					modItems.Add (third as IItem);
 				}
 				command.Perform (items.ToArray (), modItems.ToArray ());

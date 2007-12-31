@@ -44,12 +44,12 @@ namespace Do.Core
 
 		public Type[] SupportedItemTypes
 		{
-			get { return (command.SupportedItemTypes == null ? new Type[0] : command.SupportedItemTypes); }
+			get { return command.SupportedItemTypes ?? new Type[0]; }
 		}
 
 		public Type[] SupportedModifierItemTypes
 		{
-			get { return (command.SupportedModifierItemTypes == null ? new Type[0] : command.SupportedModifierItemTypes); }
+			get { return command.SupportedModifierItemTypes ?? new Type[0]; }
 		}
 
 		public bool SupportsItem (IItem item)

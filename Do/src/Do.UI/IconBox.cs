@@ -52,11 +52,13 @@ namespace Do.UI
 
 		protected virtual void Build ()
 		{
+			Alignment label_align;
+
 			caption = "";
 			pixbuf = emptyPixbuf;
 
-			vbox = new VBox (false, 8);
-			vbox.BorderWidth = 10;
+			vbox = new VBox (false, 4);
+			vbox.BorderWidth = 6;
 			Add (vbox);
 			vbox.Show ();
 
@@ -70,8 +72,12 @@ namespace Do.UI
 			label = new Label ();
 			label.Ellipsize = Pango.EllipsizeMode.End;
 			label.ModifyFg (StateType.Normal, Style.White);
-			vbox.PackStart (label, false, false, 0);
+			label_align = new Alignment (1.0F, 0.0F, 0, 0);
+			label_align.SetPadding (0, 2, 2, 2);
+			label_align.Add (label);
+			vbox.PackStart (label_align, false, false, 0);
 			label.Show ();
+			label_align.Show ();
 
 			image.SetSizeRequest (iconSize, iconSize);
 			label.SetSizeRequest (iconSize / 4 * 5, -1);
