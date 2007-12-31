@@ -61,13 +61,13 @@ namespace Do.Core
 
 			supports = false;
 			// Unless I call Gtk.Threads.Enter/Leave, this method freezes and does not return!
-			// WTF!?!?@?@@#!@
+			// WTF!?!?@?@@#!@ *Adding* these calls makes the UI freeze in unrelated execution paths.
 			// Why is this so fucking weird? The freeze has to do with Gtk.Clipboard interaction in DefineWordCommand.Text. 
-			Gdk.Threads.Enter ();
+			//Gdk.Threads.Enter ();
 			try {
 				supports = command.SupportsItem (item);
 			} finally {
-				Gdk.Threads.Leave ();
+				//Gdk.Threads.Leave ();
 			}
 			return supports;
 		}
