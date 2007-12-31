@@ -91,6 +91,12 @@ namespace Do
 				pixbufCache = new Dictionary<string,Gdk.Pixbuf> ();
 				UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, DefaultIconSize, DefaultIconSize);
 				UnknownPixbuf.Fill (0x00000000);
+				Gtk.IconTheme.Default.Changed += OnDefaultIconThemeChanged;
+			}
+			
+			private static void OnDefaultIconThemeChanged (object sender, EventArgs args)
+			{
+				pixbufCache.Clear ();
 			}
 
 			public static string MarkupSafeString (string s)
@@ -104,7 +110,7 @@ namespace Do
 			{
 				IconTheme iconTheme;
 				Pixbuf pixbuf;
-				string icon_description;
+				string icon_description, name_noext;
 
 				if (name == null || name.Length == 0) {
 					return null;
@@ -121,40 +127,44 @@ namespace Do
 					try {
 						pixbuf = new Pixbuf (name, size, size);
 					} catch {
-						return null;
+						return UnknownPixbuf;
 					}
 				}
 
 				iconTheme = Gtk.IconTheme.Default;
+				if (name.Contains (".")) name_noext = name.Remove (name.LastIndexOf ("."));
+				else name_noext = name;
+				
+				if (iconTheme.HasIcon (name)) {
+					pixbuf = iconTheme.LoadIcon (name, size, 0);
+				} else if (iconTheme.HasIcon (name_noext)) {
+					pixbuf = iconTheme.LoadIcon (name_noext, size, 0);
+				} else if (name == "gnome-mime-text-plain" && iconTheme.HasIcon ("gnome-mime-text")) {
+					pixbuf = iconTheme.LoadIcon ("gnome-mime-text", size, 0);
+				}
+				
 				if (pixbuf == null) {
-					try {
-						pixbuf = iconTheme.LoadIcon (name, size, 0);
-					} catch {
-						pixbuf = null;
+					// If the icon couldn't be found in the default icon theme, search Tango.
+					IconTheme tango;
+
+					tango = new IconTheme ();
+					tango.CustomTheme = "Tango";
+					if (tango.HasIcon (name)) {
+						pixbuf = tango.LoadIcon (name, size, 0);
+					} else if (tango.HasIcon (name_noext)) {
+						pixbuf = tango.LoadIcon (name_noext, size, 0);
+					} else if (name == "gnome-mime-text-plain" && tango.HasIcon ("gnome-mime-text")) {
+						pixbuf = tango.LoadIcon ("gnome-mime-text", size, 0);
 					}
+				}	
+				
+				if (pixbuf == null && iconTheme.HasIcon ("empty")) {
+					pixbuf = iconTheme.LoadIcon ("empty", size, 0);
 				}
 				if (pixbuf == null) {
-					try {
-						string newname = name.Remove (name.LastIndexOf ("."));
-						pixbuf = iconTheme.LoadIcon (newname, size, 0);
-					} catch {
-						pixbuf = null;
-					}
+					pixbuf = UnknownPixbuf;
 				}
-				if (pixbuf == null && name == "gnome-mime-text-plain") {
-					try {
-						pixbuf = iconTheme.LoadIcon ("gnome-mime-text", size, 0);
-					} catch {
-						pixbuf = null;
-					}
-				}
-				if (pixbuf == null) {
-					try {
-						pixbuf = iconTheme.LoadIcon ("empty", size, 0);
-					} catch {
-						pixbuf = UnknownPixbuf;
-					}
-				}
+				// Cache icon pixbuf.
 				if (pixbuf != null && pixbuf != UnknownPixbuf) {
 					pixbufCache[icon_description] = pixbuf;
 				}
