@@ -19,9 +19,9 @@
  */
 
 using System;
+using System.Threading;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Threading;
 
 using Do;
 using Do.Universe;

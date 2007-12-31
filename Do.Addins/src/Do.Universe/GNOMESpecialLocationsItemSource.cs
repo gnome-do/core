@@ -45,38 +45,10 @@ namespace Do.Universe
 			virtual public string URI { get { return uri; } }
 		}
 		
-		class GNOMETrashURIItem : GNOMEURIItem
-		{
-			static readonly string kTrashDirectory;
-			
-			static GNOMETrashURIItem ()
-			{
-				kTrashDirectory = "~/.Trash".Replace ("~",
-				                  System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
-			}
-			
-			public GNOMETrashURIItem () : base ("trash://", "Trash", null)
-			{
-			}
-			
-			override public string Icon
-			{
-				get {
-					if (System.IO.Directory.Exists (kTrashDirectory)
-						&& System.IO.Directory.GetFileSystemEntries (kTrashDirectory).Length > 0) {
-						icon = "user-trash-full";
-					} else {
-						icon = "user-trash";
-					}
-					return icon;
-				}
-			}
-		}
-		
 		public GNOMESpecialLocationsItemSource()
 		{
 			items = new List<IItem> ();
-			items.Add (new GNOMETrashURIItem ());
+			items.Add (new GNOMETrashDirectoryFileItem ());
 			items.Add (new GNOMEURIItem ("computer:///", "Computer", "computer"));
 			items.Add (new GNOMEURIItem ("network://", "Network", "network"));
 			items.Add (new GNOMEURIItem ("~", "Home", "user-home"));
@@ -107,6 +79,39 @@ namespace Do.Universe
 		
 		public void UpdateItems ()
 		{
+		}
+	}
+	
+	class GNOMETrashDirectoryFileItem : DirectoryFileItem
+	{
+		static readonly string kTrashDirectory;
+		
+		static GNOMETrashDirectoryFileItem ()
+		{
+			kTrashDirectory = "~/.Trash".Replace ("~",
+			                  System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
+		}
+		
+		public GNOMETrashDirectoryFileItem () : base (kTrashDirectory)
+		{
+		}
+		
+		public override string Name {
+			get { 
+				return "Trash";
+			}
+		}
+
+		public override string Icon
+		{
+			get {
+				if (System.IO.Directory.Exists (kTrashDirectory) &&
+					System.IO.Directory.GetFileSystemEntries (kTrashDirectory).Length > 0) {
+					return "user-trash-full";
+				} else {
+					return "user-trash";
+				}
+			}
 		}
 	}
 }
