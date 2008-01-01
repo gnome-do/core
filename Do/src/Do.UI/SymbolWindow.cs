@@ -323,12 +323,12 @@ namespace Do.UI
 				CurrentPane = Pane.Second;
 			} else if (CurrentPane == Pane.Second &&
 					context[1].Results.Length != 0 &&
-					context[2].Results.Length != 0) {
+					(context[2].Results.Length != 0 ||
+					 context[2].Query != "")) {
 				CurrentPane = Pane.Third;
 				ShowThirdPane ();
 			} else {
 				CurrentPane = Pane.First;
-				HideThirdPane ();
 			}
 			tabbing = false;
 		}
@@ -615,8 +615,11 @@ namespace Do.UI
 
 			Do.UniverseManager.Search (ref context[2]);
 			UpdatePane (Pane.Third);
-			if (context[2].Results.Length > 0)
+			if (context[2].Results.Length == 0 && context[2].Query == "") {
+				HideThirdPane ();
+			} else {
 				ShowThirdPane ();
+			}
 			return false;
 		}
 
