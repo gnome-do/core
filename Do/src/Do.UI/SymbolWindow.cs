@@ -71,7 +71,7 @@ namespace Do.UI
 			Third = 2,
 		}
 
-		const int SearchDelay = 200;
+		const int SearchDelay = 250;
 		uint[] searchTimeout;
 		IObject[] lastResult;
 
@@ -288,7 +288,8 @@ namespace Do.UI
 
 		void OnActivateKeyPressEvent (EventKey evnt)
 		{
-			PerformCommand ();
+			bool shift_pressed = (evnt.State & ModifierType.ShiftMask) != 0;
+			PerformCommand (!shift_pressed);
 		}
 
 		void OnDeleteKeyPressEvent (EventKey evnt)
@@ -400,14 +401,15 @@ namespace Do.UI
 			return base.OnKeyPressEvent (evnt);
 		}
 
-		protected virtual void PerformCommand ()
+		protected virtual void PerformCommand (bool vanish)
 		{
 			IObject first, second, third;
 
-			Vanish ();
-
-			items.Clear ();
-			modItems.Clear ();
+			if (vanish) {
+				Vanish ();
+				items.Clear ();
+				modItems.Clear ();
+			}
 
 			first = GetCurrentObject (Pane.First);
 			second = GetCurrentObject (Pane.Second);
@@ -434,7 +436,10 @@ namespace Do.UI
 				}
 				command.Perform (items.ToArray (), modItems.ToArray ());
 			}
-			SetDefaultState ();
+
+			if (vanish) {
+				SetDefaultState ();
+			}
 		}
 
 		private void OnResultsWindowSelectionChanged (object sender, ResultsWindowSelectionEventArgs args)

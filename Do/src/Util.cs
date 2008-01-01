@@ -89,7 +89,7 @@ namespace Do
 			static Appearance ()
 			{
 				pixbufCache = new Dictionary<string,Gdk.Pixbuf> ();
-				UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, DefaultIconSize, DefaultIconSize);
+				UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
 				UnknownPixbuf.Fill (0x00000000);
 				Gtk.IconTheme.Default.Changed += OnDefaultIconThemeChanged;
 			}
