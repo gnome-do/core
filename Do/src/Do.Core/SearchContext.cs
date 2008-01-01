@@ -59,7 +59,7 @@ namespace Do.Core
 			cursor = 0;
 			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
 			query = "";
-			results = null;
+			results = new IObject[0];
 
 			if (bufferLastContext) {
 				lastContext = new SearchContext (false);

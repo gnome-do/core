@@ -119,8 +119,19 @@ namespace Do.UI
 				return currentPane;
 			}
 			set {
+				if (currentPane == value) return;
+
 				currentPane = value;
-				SetPane (currentPane);
+				iconbox[0].IsFocused = (value == Pane.First);
+				iconbox[1].IsFocused = (value == Pane.Second);
+				iconbox[2].IsFocused = (value == Pane.Third);
+
+				resultsWindow.Context = CurrentContext;
+
+				label.DisplayObject = GetCurrentObject (value) ??
+					new NoResultsFoundObject (CurrentContext.Query);
+
+				Reposition ();
 			}
 		}
 
@@ -167,6 +178,7 @@ namespace Do.UI
 			iconbox[0].DisplayObject = new DefaultIconBoxObject ();
 			iconbox[1].Clear ();
 			iconbox[2].Clear ();
+			HideThirdPane ();
 
 			label.SetDisplayLabel ("Type to begin searching", "Type to start searching.");
 		}
@@ -185,7 +197,7 @@ namespace Do.UI
 			none_found = new NoResultsFoundObject (context[(int) pane].Query);
 			iconbox[(int) pane].DisplayObject = none_found;
 			if (currentPane == pane) {
-				label.SetDisplayLabel ("", none_found.Description);
+				label.DisplayObject = none_found;
 				resultsWindow.Results = new IObject[0];
 			}
 		}
@@ -307,13 +319,16 @@ namespace Do.UI
 			tabbing = true;
 			resultsWindow.Hide ();
 			if (CurrentPane == Pane.First &&
-					context[0].Results != null && context[0].Results.Length != 0) {
+					context[0].Results.Length != 0) {
 				CurrentPane = Pane.Second;
 			} else if (CurrentPane == Pane.Second &&
-					context[1].Results != null && context[1].Results.Length != 0) {
+					context[1].Results.Length != 0 &&
+					context[2].Results.Length != 0) {
 				CurrentPane = Pane.Third;
+				ShowThirdPane ();
 			} else {
 				CurrentPane = Pane.First;
+				HideThirdPane ();
 			}
 			tabbing = false;
 		}
@@ -405,16 +420,15 @@ namespace Do.UI
 		{
 			IObject first, second, third;
 
+			items.Clear ();
+			modItems.Clear ();
 			if (vanish) {
 				Vanish ();
-				items.Clear ();
-				modItems.Clear ();
 			}
 
 			first = GetCurrentObject (Pane.First);
 			second = GetCurrentObject (Pane.Second);
 			third = GetCurrentObject (Pane.Third);
-
 			// User may have pressed enter before delayed search completed.
 			// We guess this is the case if there is nothing in the second pane,
 			// so we immediately do a search and use the first result.
@@ -469,22 +483,6 @@ namespace Do.UI
 		private void OnScreenChanged (object sender, EventArgs args)
 		{
 			SetColormap ();
-		}
-
-		protected virtual void SetPane (Pane pane)
-		{
-			currentPane = pane;
-			iconbox[0].IsFocused = (pane == Pane.First);
-			iconbox[1].IsFocused = (pane == Pane.Second);
-			iconbox[2].IsFocused = (pane == Pane.Third);
-
-			resultsWindow.Results = CurrentContext.Results;
-			resultsWindow.SelectedIndex = CurrentCursor;
-
-			label.DisplayObject = GetCurrentObject (pane) ??
-				new NoResultsFoundObject (CurrentContext.Query);
-
-			Reposition ();
 		}
 
 		void QueueSearch (bool delayed)
@@ -617,6 +615,8 @@ namespace Do.UI
 
 			Do.UniverseManager.Search (ref context[2]);
 			UpdatePane (Pane.Third);
+			if (context[2].Results.Length > 0)
+				ShowThirdPane ();
 			return false;
 		}
 
@@ -630,12 +630,12 @@ namespace Do.UI
 				iconbox[(int) pane].Highlight = context[(int) pane].Query;
 			} else {
 				SetNoResultsFoundState (pane);
+				return;
 			}
 
 			if (pane == currentPane) {
 				label.DisplayObject = GetCurrentObject (pane);
-				resultsWindow.Results = CurrentContext.Results;
-				resultsWindow.SelectedIndex = CurrentCursor;
+				resultsWindow.Context = CurrentContext;
 			}
 		}
 
@@ -651,7 +651,9 @@ namespace Do.UI
 			// This typehint gets the window to raise all the way to top.
 			TypeHint = WindowTypeHint.Splashscreen;
 
-			try { SetIconFromFile ("/usr/share/icons/gnome/scalable/actions/system-run.svg"); } catch { }
+			try {
+				SetIconFromFile ("/usr/share/icons/gnome/scalable/actions/system-run.svg");
+			} catch { }
 			SetColormap ();
 
 			resultsWindow = new ResultsWindow ();
@@ -673,6 +675,7 @@ namespace Do.UI
 			vbox.Show ();
 
 			settings_icon = new Gtk.Image (GetType().Assembly, "settings-triangle.png");
+
 			align = new Alignment (1.0F, 0.0F, 0, 0);
 			align.SetPadding (3, 0, 0, IconBoxPadding);
 			align.Add (settings_icon);
@@ -703,7 +706,7 @@ namespace Do.UI
 			iconbox[2].IsFocused = false;
 			iconbox[2].Radius = IconBoxRadius;
 			resultsHBox.PackStart (iconbox[2], false, false, 0);
-			iconbox[2].Show ();
+			// iconbox[2].Show ();
 
 			align = new Alignment (0.5F, 0.5F, 1, 1);
 			align.SetPadding (0, 2, 0, 0);
@@ -714,6 +717,7 @@ namespace Do.UI
 			align.Show ();
 
 			ScreenChanged += OnScreenChanged;
+			ConfigureEvent += OnConfigureEvent;
 
 			Reposition ();
 		}
@@ -733,6 +737,26 @@ namespace Do.UI
 		void OnConfigureEvent (object sender, ConfigureEventArgs args)
 		{
 			Reposition ();
+		}
+
+		void ShowThirdPane ()
+		{
+			iconbox[2].Show ();
+			GLib.Timeout.Add (5, delegate {
+				Resize (1, 1);
+				Reposition ();
+				return false;
+			});
+		}
+
+		void HideThirdPane ()
+		{
+			iconbox[2].Hide ();
+			GLib.Timeout.Add (5, delegate {
+				Resize (1, 1);
+				Reposition ();
+				return false;
+			});
 		}
 
 		protected override bool OnExposeEvent (EventExpose evnt)

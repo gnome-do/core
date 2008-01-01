@@ -23,8 +23,9 @@ using System.Runtime.InteropServices;
 using Gtk;
 using Gdk;
 
-using Do.Universe;
+using Do.Core;
 using Do.Addins;
+using Do.Universe;
 
 namespace Do.UI
 {
@@ -59,6 +60,7 @@ namespace Do.UI
 		const int ResultIconSize = 32;
 		const int NumberResultsDisplayed = 6;
 		const string ResultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
+		const string QueryLabelFormat = "<b>{0}</b>";
 
 		public event OnSelectionChanged SelectionChanged;
 
@@ -75,6 +77,7 @@ namespace Do.UI
 		int selectedIndex;
 		bool selectedIndexSet;
 		bool quietSelectionChange;
+		Label queryLabel;
 
 		public ResultsWindow () : base (Gtk.WindowType.Toplevel)
 		{
@@ -114,6 +117,7 @@ namespace Do.UI
 		protected void Build ()
 		{
 			VBox           vbox;
+			Alignment align;
 			TreeViewColumn column;
 			CellRenderer   cell;
 
@@ -129,6 +133,16 @@ namespace Do.UI
 			vbox.SetSizeRequest (360, (ResultIconSize + 9) * NumberResultsDisplayed);
 			vbox.Show ();
 
+			align = new Alignment (0.0F, 0.0F, 0, 0);
+			align.SetPadding (1, 2, 1, 1);
+			queryLabel = new Label ();
+			queryLabel.UseMarkup = true;
+			queryLabel.SingleLineMode = true;
+			align.Add (queryLabel);
+			vbox.PackStart (align, false, false, 0);
+			// queryLabel.Show ();
+			// align.Show ();
+			
 			resultsScrolledWindow = new ScrolledWindow ();
 			resultsScrolledWindow.SetPolicy (PolicyType.Automatic, PolicyType.Automatic);
 			resultsScrolledWindow.ShadowType = ShadowType.In;
@@ -193,6 +207,18 @@ namespace Do.UI
 			selectedIndex = 0;
 			selectedIndexSet = false;
 			results = null;
+			// Query = "";
+		}
+
+		public SearchContext Context
+		{
+			set {
+				if (value == null) return;
+
+				Results = value.Results;
+				SelectedIndex = value.Cursor;
+				Query = value.Query;
+			}
 		}
 
 		public int SelectedIndex
@@ -208,6 +234,13 @@ namespace Do.UI
 				    value == selectedIndex) return;
 
 				selectedIndexSet = true;
+
+				// Don't bother updating widgets if we're not visible -
+				// instead, do these things on Show.
+				if (!Visible) {
+					selectedIndex = value;
+					return;
+				}
 
 				if (results.Length == 0)
 					return;
@@ -237,9 +270,9 @@ namespace Do.UI
 		public IObject SelectedObject
 		{
 			get {
-				if (results != null && 0 <= selectedIndex && selectedIndex < results.Length) {
+				try {
 					return results[selectedIndex];
-				} else {
+				} catch {
 					return null;
 				}
 			}
@@ -256,17 +289,17 @@ namespace Do.UI
 				string info;
 
 				Clear ();
-				results = (value == null ? new IObject[0] : value);
+				results = value ?? new IObject[0];
 				store = resultsTreeview.Model as ListStore;
 				first_iter = default (TreeIter);
 				seen_first = false;
 
-				foreach (IObject result in results) {
-					if (Visible)
-						icon = Util.Appearance.PixbufFromIconName (result.Icon, ResultIconSize);
-					else
-						icon = Util.Appearance.PixbufFromIconName ("empty", ResultIconSize);
+				// Don't bother updating widgets if we're not visible -
+				// instead, do these things on Show.
+				if (!Visible) return;
 
+				foreach (IObject result in results) {
+					icon = Util.Appearance.PixbufFromIconName (result.Icon, ResultIconSize);
 					info = string.Format (ResultInfoFormat, result.Name, result.Description);
 					info = Util.Appearance.MarkupSafeString (info);
 					iter = store.AppendValues (new object[] {
@@ -284,6 +317,13 @@ namespace Do.UI
 					                              null, false, 0.0F, 0.0F);
 					resultsTreeview.Selection.SelectIter (first_iter);
 				}
+			}
+		}
+
+		public string Query
+		{
+			set {
+				queryLabel.Markup = string.Format (QueryLabelFormat, value ?? "");
 			}
 		}
 
