@@ -43,7 +43,7 @@ namespace Do.Universe
 		
 		public string Icon
 		{
-			get { return "edit-select-all"; }
+			get { return "gtk-select-all"; }
 		}
 		
 		public string Text

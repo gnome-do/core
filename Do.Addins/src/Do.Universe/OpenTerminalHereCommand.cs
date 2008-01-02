@@ -25,28 +25,28 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	public class OpenTerminalHereCommand : ICommand
+	public class OpenTerminalHereCommand : AbstractCommand
 	{
 		public OpenTerminalHereCommand ()
 		{
 		}
 		
-		public string Name
+		public override string Name
 		{
 			get { return "Open Terminal Here"; }
 		}
 		
-		public string Description
+		public override string Description
 		{
 			get { return "Opens a Terminal in a given location."; }
 		}
 		
-		public string Icon
+		public override string Icon
 		{
 			get { return "terminal"; }
 		}
 		
-		public Type[] SupportedItemTypes
+		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -55,24 +55,7 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes
-		{
-			get {
-				return null;
-			}
-		}
-
-		public bool SupportsItem (IItem item)
-		{
-			return true;
-		}
-		
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			return false;
-		}
-		
-		public void Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			GConf.Client client;
 			Process term;
@@ -95,6 +78,7 @@ namespace Do.Universe
 			term.StartInfo.WorkingDirectory = dir;
 			term.StartInfo.FileName = exec;
 			term.Start ();
+			return null;
 		}
 	}
 }

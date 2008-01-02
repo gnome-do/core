@@ -25,7 +25,7 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	public class OpenURLCommand : ICommand
+	public class OpenURLCommand : AbstractCommand
 	{
 		const string urlPattern = @"(^\w+:\/\/\w+)|(\w+\.\w+)";
 		
@@ -36,22 +36,22 @@ namespace Do.Universe
 			urlRegex = new Regex (urlPattern, RegexOptions.Compiled);
 		}
 		
-		public string Name
+		public override string Name
 		{
 			get { return "Open URL"; }
 		}
 		
-		public string Description
+		public override string Description
 		{
 			get { return "Opens bookmarks and manually-typed URLs."; }
 		}
 		
-		public string Icon
+		public override string Icon
 		{
 			get { return "web-browser"; }
 		}
 		
-		public Type[] SupportedItemTypes
+		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -60,15 +60,8 @@ namespace Do.Universe
 				};
 			}
 		}
-		
-		public Type[] SupportedModifierItemTypes
-		{
-			get {
-				return null;
-			}
-		}
 
-		public bool SupportsItem (IItem item)
+		public override bool SupportsItem (IItem item)
 		{
 			if (item is ITextItem) {
 				return urlRegex.IsMatch ((item as ITextItem).Text);
@@ -76,12 +69,7 @@ namespace Do.Universe
 			return true;
 		}
 		
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			return false;
-		}
-		
-		public void Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			string url;
 			
@@ -94,6 +82,7 @@ namespace Do.Universe
 				}
 				Util.Environment.Open (url);	
 			}
+			return null;
 		}
 	}
 }

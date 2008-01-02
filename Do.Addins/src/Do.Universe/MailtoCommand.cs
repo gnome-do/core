@@ -23,24 +23,24 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	public class MailtoCommand : ICommand
+	public class MailtoCommand : AbstractCommand
 	{
-		public string Name
+		public override string Name
 		{
 			get { return "Email"; }
 		}
 		
-		public string Description
+		public override string Description
 		{
 			get { return "Compose a new email to a friend."; }
 		}
 		
-		public string Icon
+		public override string Icon
 		{
 			get { return "email"; }
 		}
 		
-		public Type[] SupportedItemTypes
+		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -48,23 +48,13 @@ namespace Do.Universe
 				};
 			}
 		}
-		
-		public Type[] SupportedModifierItemTypes
-		{
-			get { return null; }
-		}
 
-		public bool SupportsItem (IItem item)
+		public override bool SupportsItem (IItem item)
 		{
 			return item is ContactItem && (item as ContactItem).Emails.Count > 0;
 		}
 		
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			return false;
-		}
-		
-		public void Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			string recipients;
 			
@@ -75,6 +65,7 @@ namespace Do.Universe
 				}
 			}
 			Util.Environment.Open ("mailto:" + recipients);
+			return null;
 		}
 	}
 }

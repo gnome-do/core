@@ -161,11 +161,11 @@ namespace Do.Core
 		{
 			if (addin == null) return;
 
-			foreach (Type type in addin.GetTypes ()) {
+			foreach (Type type in addin.GetTypes ()) {			
 				if (type.IsAbstract) continue;
-				if (type == typeof(VoidCommand)) continue;
-				if (type == typeof(DoCommand)) continue;
-				if (type == typeof(DoItem)) continue;
+				if (type == typeof (VoidCommand)) continue;
+				if (type == typeof (DoCommand)) continue;
+				if (type == typeof (DoItem)) continue;
 
 				foreach (Type iface in type.GetInterfaces ()) {
 					if (iface == typeof (IItemSource)) {

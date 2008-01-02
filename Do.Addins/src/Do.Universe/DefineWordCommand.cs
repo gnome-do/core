@@ -26,7 +26,7 @@ namespace Do.Universe
 	/// Given an ITextItem, DefineWordCommand will look up the Text
 	/// contents of the ITextItem using the gnome-dictionary.
 	/// </summary>
-	public class DefineWordCommand : ICommand
+	public class DefineWordCommand : AbstractCommand
 	{
 		/// <summary>
 		/// Should match those and only those strings that can be
@@ -43,32 +43,27 @@ namespace Do.Universe
 			wordRegex = new Regex (wordPattern, RegexOptions.Compiled);
 		}
 		
-		public string Name {
+		public override string Name {
 			get { return "Define"; }
 		}
 		
-		public string Description
+		public override string Description
 		{
 			get { return "Define a given word."; }
 		}
 		
-		public string Icon
+		public override string Icon
 		{
 			get { return "accessories-dictionary.png"; }
 		}
 		
-		public Type[] SupportedItemTypes
+		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
 					typeof (ITextItem),
 				};
 			}
-		}
-		
-		public Type[] SupportedModifierItemTypes
-		{
-			get { return null; }
 		}
 
 		/// <summary>
@@ -81,7 +76,7 @@ namespace Do.Universe
 		/// A <see cref="System.Boolean"/> indicating whether or not IITem
 		/// can be defined.
 		/// </returns>
-		public bool SupportsItem (IItem item)
+		public override bool SupportsItem (IItem item)
 		{
 			string word;
 
@@ -92,12 +87,7 @@ namespace Do.Universe
 			return word != null && wordRegex.IsMatch (word);
 		}
 		
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			return false;
-		}
-		
-		public void Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			string word, cmd;
 			foreach (IItem item in items) {
@@ -114,6 +104,7 @@ namespace Do.Universe
 					Console.WriteLine ("Failed to define word: \"{0}\"", e.Message);
 				}
 			}
+			return null;
 		}
 	}
 }

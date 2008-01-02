@@ -28,28 +28,28 @@ namespace Do.Universe
 	/// <summary>
 	/// A command providing "open with..." semantics to file items.
 	/// </summary>
-	public class OpenWithCommand : ICommand
+	public class OpenWithCommand : AbstractCommand 
 	{
 		public OpenWithCommand ()
 		{
 		}
 		
-		public string Name
+		public override string Name
 		{
 			get { return "Open with..."; }
 		}
 		
-		public string Description
+		public override string Description
 		{
 			get { return "Opens files in specified applications."; }
 		}
 		
-		public string Icon
+		public override string Icon
 		{
 			get { return "gtk-open"; }
 		}
 		
-		public Type[] SupportedItemTypes
+		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -58,18 +58,13 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes
+		public override Type[] SupportedModifierItemTypes
 		{
 			get {
 				return new Type[] {
 					typeof (ApplicationItem),
 				};
 			}
-		}
-
-		public bool SupportsItem (IItem item)
-		{
-			return true;
 		}
 		
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
@@ -84,17 +79,18 @@ namespace Do.Universe
 			return true;
 		}
 		
-		public void Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			List<string> uris;
 
-			if (modifierItems.Length == 0) return;
-
-			uris = new List<string> ();
-			foreach (IItem item in items) {
-				uris.Add ((item as IFileItem).URI);
+			if (modifierItems.Length > 0) {
+				uris = new List<string> ();
+				foreach (IItem item in items) {
+					uris.Add ((item as IFileItem).URI);
+				}
+				(modifierItems[0] as ApplicationItem).RunWithURIs (uris);
 			}
-			(modifierItems[0] as ApplicationItem).RunWithURIs (uris);
+			return null;
 		}
 	}
 }

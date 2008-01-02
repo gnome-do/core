@@ -20,7 +20,7 @@
 using System;
 
 namespace Do.Universe
-{
+{	
 	/// <summary>
 	/// An ICommand is the root interface implemented by classes that will be used
 	/// as commands.
@@ -40,6 +40,8 @@ namespace Do.Universe
 		/// </value>
 		Type[] SupportedModifierItemTypes { get; }
 		
+		bool ModifierItemsOptional { get; }
+		
 		/// <summary>
 		/// Perform this command on the given items with the given modifier items.
 		/// </summary>
@@ -49,7 +51,7 @@ namespace Do.Universe
 		/// <param name="modItems">
 		/// A <see cref="IItem[]"/> of modifier items.
 		/// </param>
-		void Perform (IItem[] items, IItem[] modItems);
+		IItem[] Perform (IItem[] items, IItem[] modItems);
 
 		/// <summary>
 		/// Indicate whether the command can operate on the given item.  The item is
@@ -85,5 +87,44 @@ namespace Do.Universe
 		/// the particular modifier item for the items in the IItem array.
 		/// </returns>
 		bool SupportsModifierItemForItems (IItem[] items, IItem modItem);
+		
+		IItem[] DynamicModifierItemsForItem (IItem item);
+	}
+	
+	public abstract class AbstractCommand : ICommand
+	{
+		
+		public abstract string Name { get; }
+		public abstract string Icon { get; }
+		public abstract string Description { get; }
+		
+		public abstract Type[] SupportedItemTypes { get; }
+		
+		public virtual Type[] SupportedModifierItemTypes
+		{
+			get { return null; }
+		}
+		
+		public virtual bool ModifierItemsOptional
+		{
+			get { return false; }
+		}
+
+		public virtual bool SupportsItem (IItem item)
+		{
+			return true;
+		}
+
+		public virtual bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		{
+			return true;
+		}
+		
+		public virtual IItem[] DynamicModifierItemsForItem (IItem item)
+		{
+			return null;
+		}
+		
+		public abstract IItem[] Perform (IItem[] items, IItem[] modItems);
 	}
 }

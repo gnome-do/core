@@ -25,24 +25,24 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	public class RunCommand : ICommand
+	public class RunCommand : AbstractCommand
 	{
-		public string Name
+		public override string Name
 		{
 			get { return "Run"; }
 		}
 		
-		public string Description
+		public override string Description
 		{
 			get { return "Run an application, script, or other executable."; }
 		}
 		
-		public string Icon
+		public override string Icon
 		{
 			get { return "gnome-run"; }
 		}
 		
-		public Type[] SupportedItemTypes
+		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -52,13 +52,8 @@ namespace Do.Universe
 				};
 			}
 		}
-		
-		public Type[] SupportedModifierItemTypes
-		{
-			get { return null; }
-		}
 
-		public bool SupportsItem (IItem item)
+		public override bool SupportsItem (IItem item)
 		{
 			if (item is FileItem) {
 				return FileItem.IsExecutable (item as FileItem);
@@ -66,18 +61,12 @@ namespace Do.Universe
 			return true;
 		}
 		
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			return false;
-		}
-		
-		public void Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			foreach (IItem item in items) {
 				if (item is IRunnableItem) {
 					(item as IRunnableItem).Run ();
-				}
-				else if (item is FileItem) {
+				} else if (item is FileItem) {
 					System.Diagnostics.Process proc;
 					
 					proc = new System.Diagnostics.Process ();
@@ -86,6 +75,7 @@ namespace Do.Universe
 					proc.Start ();
 				}
 			}
+			return null;
 		}
 		
 	}

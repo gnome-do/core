@@ -51,6 +51,26 @@ namespace Do.Core
 		{
 			get { return command.SupportedModifierItemTypes ?? new Type[0]; }
 		}
+		
+		public bool ModifierItemsOptional
+		{
+			get { return command.ModifierItemsOptional; }
+		}
+		
+		public IItem[] DynamicModifierItemsForItem (IItem item)
+		{
+			IItem[] modItems;
+			
+			modItems = null;
+			try {
+				modItems = DynamicModifierItemsForItem (EnsureIItem (item));
+			} catch {
+				modItems = null;
+			} finally {
+				modItems = modItems ?? new IItem[0];
+			}
+			return EnsureDoItemArray (modItems);
+		}
 
 		public bool SupportsItem (IItem item)
 		{
@@ -89,17 +109,25 @@ namespace Do.Core
 			return supports;
 		}
 
-		public void Perform (IItem[] items, IItem[] modItems)
+		public IItem[] Perform (IItem[] items, IItem[] modItems)
 		{
+			IItem[] resultItems;
+			
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
 
 			InternalItemSource.LastItem.IItem = items[0]; // TODO: Create a command performed event and move this.
+			
+			resultItems = null;
 			try {
-				command.Perform (items, modItems);
+				resultItems = command.Perform (items, modItems);
 			} catch (Exception e) {
+				resultItems = null;
 				Log.Error ("Command \"{0}\" encountered an error: {1}", command.Name, e.Message);
+			} finally {
+				resultItems = resultItems ?? new IItem[0];
 			}
+			return EnsureDoItemArray (resultItems);
 		}
 
 		/// <summary>
@@ -142,12 +170,17 @@ namespace Do.Core
 			return inner_items;
 		}
 
-		public bool AcceptsOnlyText
+		IItem[] EnsureDoItemArray (IItem[] items)
 		{
-			get {
-				return SupportedItemTypes.Length == 1
-					&& typeof (ITextItem).IsAssignableFrom (SupportedItemTypes[0]);
+			IItem[] do_items;
+
+			do_items = items.Clone () as IItem[];
+			for (int i = 0; i < items.Length; ++i) {
+				if (!(items[i] is DoItem)) {
+					do_items[i] = new DoItem (items[i]);
+				}
 			}
+			return do_items;
 		}
 	}
 }

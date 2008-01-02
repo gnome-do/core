@@ -24,28 +24,28 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	public class RevealCommand : ICommand
+	public class RevealCommand : AbstractCommand
 	{
 		public RevealCommand ()
 		{
 		}
 		
-		public string Name
+		public override string Name
 		{
 			get { return "Reveal"; }
 		}
 		
-		public string Description
+		public override string Description
 		{
 			get { return "Reveals a file in the file manager."; }
 		}
 		
-		public string Icon
+		public override string Icon
 		{
 			get { return "file-manager"; }
 		}
 		
-		public Type[] SupportedItemTypes
+		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -54,30 +54,14 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes
-		{
-			get {
-				return null;
-			}
-		}
-
-		public bool SupportsItem (IItem item)
-		{
-			return true;
-		}
-		
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			return false;
-		}
-		
-		public void Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			foreach (IFileItem file in items) {
 				// Nautilus does not have a "reveal file" option, so we just open the
 				// parent directory for now.
 				Util.Environment.Open (System.IO.Path.GetDirectoryName (file.Path));
 			}
+			return null;
 		}
 	}
 }

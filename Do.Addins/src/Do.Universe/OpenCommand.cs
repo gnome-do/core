@@ -28,28 +28,28 @@ namespace Do.Universe
 	/// <summary>
 	/// A command providing "open" semantics to many kinds of items.
 	/// </summary>
-	public class OpenCommand : ICommand
+	public class OpenCommand : AbstractCommand
 	{
 		public OpenCommand ()
 		{
 		}
 		
-		public string Name
+		public override string Name
 		{
 			get { return "Open"; }
 		}
 		
-		public string Description
+		public override string Description
 		{
 			get { return "Opens many kinds of items."; }
 		}
 		
-		public string Icon
+		public override string Icon
 		{
 			get { return "gtk-open"; }
 		}
 		
-		public Type[] SupportedItemTypes
+		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -59,24 +59,7 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes
-		{
-			get {
-				return null;
-			}
-		}
-
-		public bool SupportsItem (IItem item)
-		{
-			return true;
-		}
-		
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			return false;
-		}
-		
-		public void Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			string open_item;
 			
@@ -92,6 +75,7 @@ namespace Do.Universe
 				}
 				Util.Environment.Open (open_item);
 			}
+			return null;
 		}
 	}
 }

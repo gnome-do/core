@@ -29,7 +29,7 @@ namespace Do.Universe
 	/// <summary>
 	/// Runs text commands in a terminal.
 	/// </summary>
-	public class RunInTerminalCommand : ICommand
+	public class RunInTerminalCommand : AbstractCommand
 	{
 
 		static string last_command_found;
@@ -137,22 +137,22 @@ namespace Do.Universe
 			}
 		}
 
-		public string Name
+		public override string Name
 		{
 			get { return "Run in Terminal"; }
 		}
 		
-		public string Description
+		public override string Description
 		{
 			get { return "Run a command in a terminal."; }
 		}
 		
-		public string Icon
+		public override string Icon
 		{
 			get { return "terminal"; }
 		}
 		
-		public Type[] SupportedItemTypes
+		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -162,12 +162,7 @@ namespace Do.Universe
 			}
 		}
 		
-		public Type[] SupportedModifierItemTypes
-		{
-			get { return null; }
-		}
-
-		public bool SupportsItem (IItem item)
+		public override bool SupportsItem (IItem item)
 		{
 			if (item is ITextItem) {
 				return CommandLineIsFoundOnPath ((item as ITextItem).Text);
@@ -176,13 +171,8 @@ namespace Do.Universe
 			}
 			return false;
 		}
-		
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			return false;
-		}
 
-		public void Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			string commandline;
 
@@ -198,6 +188,7 @@ namespace Do.Universe
 				if (commandline == null) continue;
 				RunCommandlineInTerminal (commandline);
 			}
+			return null;
 		}
 
 	}
