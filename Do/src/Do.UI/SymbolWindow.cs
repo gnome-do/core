@@ -464,23 +464,20 @@ namespace Do.UI
 		{
 			CurrentCursor = args.SelectedIndex;
 
-			label.DisplayObject = CurrentContext.Selection;
-			label.Highlight = CurrentContext.Query;
-			CurrentIconBox.DisplayObject = CurrentContext.Selection;
-			CurrentIconBox.Highlight = CurrentContext.Query;
+			UpdatePane (currentPane, false);
 
 			// If we're just tabbing, no need to search.
-			if (!tabbing) {
-				switch (currentPane) {
-					case Pane.First:
-						context[1] = new SearchContext ();
-						SearchPaneDelayed (Pane.Second);
-						break;
-					case Pane.Second:
-						context[2] = new SearchContext ();
-						SearchPaneDelayed (Pane.Third);
-						break;
-				}
+			if (tabbing) return;
+
+			switch (currentPane) {
+				case Pane.First:
+					context[1] = new SearchContext ();
+					SearchPaneDelayed (Pane.Second);
+					break;
+				case Pane.Second:
+					context[2] = new SearchContext ();
+					SearchPaneDelayed (Pane.Third);
+					break;
 			}
 		}
 
@@ -547,7 +544,7 @@ namespace Do.UI
 
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 			Do.UniverseManager.Search (ref context[0]);
-			UpdatePane (Pane.First);
+			UpdatePane (Pane.First, true);
 
 			// Queue a search for the next pane unless the result of the most
 			// recent search is the same as the last result - if this is the
@@ -580,7 +577,7 @@ namespace Do.UI
 			}
 
 			Do.UniverseManager.Search (ref context[1]);
-			UpdatePane (Pane.Second);
+			UpdatePane (Pane.Second, true);
 
 			// Queue a search for the next pane unless the result of the most
 			// recent search is the same as the last result - if this is the
@@ -618,11 +615,11 @@ namespace Do.UI
 			}
 
 			Do.UniverseManager.Search (ref context[2]);
-			UpdatePane (Pane.Third);
+			UpdatePane (Pane.Third, true);
 			return false;
 		}
 
-		protected void UpdatePane (Pane pane)
+		protected void UpdatePane (Pane pane, bool updateResults)
 		{
 			IObject currentObject;
 
@@ -646,7 +643,7 @@ namespace Do.UI
 
 			if (pane == currentPane) {
 				label.DisplayObject = GetCurrentObject (pane);
-				resultsWindow.Context = CurrentContext;
+				if (updateResults) resultsWindow.Context = CurrentContext;
 			}
 		}
 
