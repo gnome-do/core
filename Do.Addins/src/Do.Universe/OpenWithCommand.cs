@@ -36,12 +36,12 @@ namespace Do.Universe
 		
 		public override string Name
 		{
-			get { return "Open with..."; }
+			get { return "Open With..."; }
 		}
 		
 		public override string Description
 		{
-			get { return "Opens files in specified applications."; }
+			get { return "Opens files in specific applications."; }
 		}
 		
 		public override string Icon

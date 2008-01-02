@@ -71,7 +71,7 @@ namespace Do.UI
 			Third = 2,
 		}
 
-		const int SearchDelay = 250;
+		const int SearchDelay = 225;
 		uint[] searchTimeout;
 		IObject[] lastResult;
 
@@ -316,17 +316,21 @@ namespace Do.UI
 
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
+			IObject second;
+
 			tabbing = true;
 			resultsWindow.Hide ();
+			second = GetCurrentObject (Pane.Second);
 			if (CurrentPane == Pane.First &&
 					context[0].Results.Length != 0) {
 				CurrentPane = Pane.Second;
 			} else if (CurrentPane == Pane.Second &&
 					context[1].Results.Length != 0 &&
-					(context[2].Results.Length != 0 ||
-					 context[2].Query != "")) {
+					second != null &&
+					second is ICommand &&
+					(second as ICommand).SupportedModifierItemTypes.Length > 0) {
 				CurrentPane = Pane.Third;
-				ShowThirdPane ();
+				// ShowThirdPane ();
 			} else {
 				CurrentPane = Pane.First;
 			}
@@ -615,11 +619,6 @@ namespace Do.UI
 
 			Do.UniverseManager.Search (ref context[2]);
 			UpdatePane (Pane.Third);
-			if (context[2].Results.Length == 0 && context[2].Query == "") {
-				HideThirdPane ();
-			} else {
-				ShowThirdPane ();
-			}
 			return false;
 		}
 
@@ -631,6 +630,15 @@ namespace Do.UI
 			if (currentObject != null) {
 				iconbox[(int) pane].DisplayObject = currentObject;
 				iconbox[(int) pane].Highlight = context[(int) pane].Query;
+
+				if (currentObject is ICommand) {
+					if ((currentObject as ICommand).SupportedModifierItemTypes.Length > 0 &&
+						!(currentObject as ICommand).ModifierItemsOptional) {
+						ShowThirdPane ();
+					} else {
+						HideThirdPane ();
+					}
+				}
 			} else {
 				SetNoResultsFoundState (pane);
 				return;
