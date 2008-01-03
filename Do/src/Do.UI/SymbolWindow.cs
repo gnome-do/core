@@ -550,14 +550,15 @@ namespace Do.UI
 
 		protected bool SearchFirstPane ()
 		{
-			/*
 			// If we delete the entire query on a regular search (we are not
 			// searching children) then set default state.
-			if (context[0].Query == "" && context[0].ParentContext == null) {
+			if (context[0].Query == "" &&
+					// DR, I could kill you right now.
+					context[0].LastContext.LastContext.LastContext == null &&
+					context[0].ParentContext == null) {
 				SetDefaultState ();
 				return false;
 			}
-			*/
 
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 			Do.UniverseManager.Search (ref context[0]);
