@@ -64,7 +64,7 @@ namespace Do.Universe
 			
 			locate = new System.Diagnostics.Process ();
 			locate.StartInfo.FileName = "locate";
-			locate.StartInfo.Arguments = string.Format ("-n {0} {1}", maxResults, query);
+			locate.StartInfo.Arguments = string.Format ("-i -n {0} {1}", maxResults, query);
 			locate.StartInfo.RedirectStandardOutput = true;
 			locate.StartInfo.UseShellExecute = false;
 			try {
