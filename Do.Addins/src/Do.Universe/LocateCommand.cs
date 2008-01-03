@@ -79,7 +79,8 @@ namespace Do.Universe
 				if (!System.IO.File.Exists (path) &&
 						!System.IO.Directory.Exists (path)) continue;
 				// Don't allow files in hidden directories (like .svn directories).
-				if (!allowHidden && path.Contains ("/.")) continue;
+				if (!allowHidden &&
+						System.IO.Path.GetDirectoryName (path).Contains ("/.")) continue;
 				files.Add (FileItem.Create (path));
 			}
 			return files.ToArray ();
