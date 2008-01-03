@@ -75,12 +75,11 @@ namespace Do.Universe
 				Console.Error.WriteLine ("LocateCommand error: The program 'locate' could not be found.");
 				file_list = "";
 			}
-			Console.WriteLine (file_list);
 			foreach (string path in file_list.Split ('\n')) {
 				if (!System.IO.File.Exists (path) &&
 						!System.IO.Directory.Exists (path)) continue;
 				// Don't allow files in hidden directories (like .svn directories).
-				if (!allowHidden && (path.Contains ("/."))) continue;
+				if (!allowHidden && path.Contains ("/.")) continue;
 				files.Add (FileItem.Create (path));
 			}
 			return files.ToArray ();
