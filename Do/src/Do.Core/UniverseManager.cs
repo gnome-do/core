@@ -128,7 +128,7 @@ namespace Do.Core
 			List<string> addin_dirs;
 
 			addin_dirs = new List<string> ();
-			addin_dirs.Add ("~/.do/addins".Replace ("~",
+			addin_dirs.Add ("~/.do/plugins".Replace ("~",
 			                Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
 
 			foreach (string addin_dir in addin_dirs) {
@@ -138,7 +138,7 @@ namespace Do.Core
 				try {
 					files = System.IO.Directory.GetFiles (addin_dir);
 				} catch (Exception e) {
-					Log.Error ("Could not read addins directory {0}: {1}", addin_dir, e.Message);
+					Log.Error ("Could not read plugins directory {0}: {1}", addin_dir, e.Message);
 					continue;
 				}
 
@@ -150,7 +150,7 @@ namespace Do.Core
 						addin = Assembly.LoadFile (file);
 						LoadAssembly (addin);
 					} catch (Exception e) {
-						Log.Error ("Do encountered and error while trying to load addin {0}: {1}", file, e.Message);
+						Log.Error ("Encountered and error while trying to load plugin {0}: {1}", file, e.Message);
 						continue;
 					}
 				}

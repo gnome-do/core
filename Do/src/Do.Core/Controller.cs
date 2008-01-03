@@ -38,6 +38,12 @@ namespace Do.Core
 		{		
 			window = new SymbolWindow ();
 		}
+		
+		public void SummonWithObjects (IObject[] objects)
+		{
+			window.DisplayObjects (objects);
+			Summon ();
+		}
 
 		///////////////////////////
 		/// IController Members ///

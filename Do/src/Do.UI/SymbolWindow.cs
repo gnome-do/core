@@ -35,7 +35,7 @@ namespace Do.UI
 	{
 		class DefaultIconBoxObject : IObject
 		{
-			public string Icon { get { return "gtk-find"; } }
+			public string Icon { get { return "search"; } }
 			public string Name { get { return ""; } }
 			public string Description { get { return ""; } }
 		}
@@ -505,6 +505,15 @@ namespace Do.UI
 					break;
 			}
 		}
+		
+		public void DisplayObjects (IObject[] objects)
+		{
+			SetDefaultState ();
+			context[0].Results = objects;
+			// This is extremely awkward. DR....
+			context[0].LastContext.LastContext = context[0].LastContext = context[0];
+			SearchFirstPane ();
+		}
 
 		void SearchPaneDelayed (Pane pane)
 		{
@@ -535,12 +544,14 @@ namespace Do.UI
 
 		protected bool SearchFirstPane ()
 		{
+			/*
 			// If we delete the entire query on a regular search (we are not
 			// searching children) then set default state.
 			if (context[0].Query == "" && context[0].ParentContext == null) {
 				SetDefaultState ();
 				return false;
 			}
+			*/
 
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
 			Do.UniverseManager.Search (ref context[0]);

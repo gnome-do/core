@@ -127,7 +127,17 @@ namespace Do.Core
 			} finally {
 				resultItems = resultItems ?? new IItem[0];
 			}
-			return EnsureDoItemArray (resultItems);
+			resultItems = EnsureDoItemArray (resultItems);
+			
+			// If we have results to feed back into the window, do so after a delay
+			// so Perform has time to return in the window.
+			if (resultItems.Length > 0) {
+				GLib.Timeout.Add (50, delegate {
+					Do.Controller.SummonWithObjects (resultItems);
+					return false;
+				});
+			}
+			return resultItems;
 		}
 
 		/// <summary>

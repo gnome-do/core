@@ -247,10 +247,7 @@ namespace Do.Universe
 
 		public override string Icon
 		{
-			get {
-				return "folder";
-			}
+			get { return "folder"; }
 		}
 	}
-
 }
