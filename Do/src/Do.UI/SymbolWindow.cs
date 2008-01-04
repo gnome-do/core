@@ -166,6 +166,9 @@ namespace Do.UI
 				searchTimeout[i] = 0;
 			}
 
+			resultsWindow.Hide ();
+			resultsWindow.Clear ();
+
 			lastResult = new IObject[3];
 			tabbing = false;
 
