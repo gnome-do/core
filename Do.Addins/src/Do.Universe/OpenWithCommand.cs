@@ -67,7 +67,7 @@ namespace Do.Universe
 			}
 		}
 		
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		public override bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
 		{
 			// This is too strict - many desktop files are incomplete,
 			// so MimeTypes is not reliable.

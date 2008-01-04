@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.IO; 
 using System.Collections.Generic;
 
 namespace Do.Universe
@@ -27,7 +28,7 @@ namespace Do.Universe
 	{
 		
 		bool allowHidden = false;
-		uint maxResults = 100;
+		uint maxResults = 1000;
 		
 		public override string Name
 		{
@@ -69,21 +70,59 @@ namespace Do.Universe
 			locate.StartInfo.UseShellExecute = false;
 			try {
 				locate.Start ();
-				locate.WaitForExit ();
-				file_list = locate.StandardOutput.ReadToEnd ();
 			} catch {
 				Console.Error.WriteLine ("LocateCommand error: The program 'locate' could not be found.");
-				file_list = "";
+				return null;
 			}
-			foreach (string path in file_list.Split ('\n')) {
-				if (!System.IO.File.Exists (path) &&
-						!System.IO.Directory.Exists (path)) continue;
-				// Don't allow files in hidden directories (like .svn directories).
+
+			string path;
+			query = query.ToLower ();
+			while (null != (path = locate.StandardOutput.ReadLine ())) {
+				// Disallow hidden directories in the absolute path.
+				// This gets rid of messy .svn directories and their contents.
 				if (!allowHidden &&
-						System.IO.Path.GetDirectoryName (path).Contains ("/.")) continue;
-				files.Add (FileItem.Create (path));
+						Path.GetDirectoryName (path).Contains ("/."))
+					continue;
+
+				// Only allow files that contain the query as a substring.
+				// It may be faster to use grep, but I've tested this and it
+				// seems prety snappy.
+				if (Path.GetFileName (path).ToLower().Contains (query))
+					files.Add (FileItem.Create (path));
 			}
+			files.Sort (new FileItemNameComparer (query));
 			return files.ToArray ();
+		}
+
+		// Order files by (A) position of query in the file name and
+		// (B) by length.
+		private class FileItemNameComparer : IComparer<IItem>
+		{
+			string query;
+
+			public FileItemNameComparer (string query)
+			{
+				this.query = query.ToLower ();
+			}
+
+			public int Compare (IItem a, IItem b)
+			{
+				string a_name_lower, b_name_lower;
+				int a_score, b_score;
+
+				a_name_lower = (a as FileItem).Path;
+				a_name_lower = Path.GetFileName (a_name_lower).ToLower (); 
+				b_name_lower = (b as FileItem).Path;
+				b_name_lower = Path.GetFileName (b_name_lower).ToLower (); 
+
+				a_score = a_name_lower.IndexOf (query);
+				b_score = b_name_lower.IndexOf (query);
+
+				if (a_score == b_score)
+					return a_name_lower.Length - b_name_lower.Length;
+				else
+					return a_score - b_score;
+			}
 		}
 	}
 }
