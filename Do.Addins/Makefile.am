@@ -53,7 +53,6 @@ FILES =  \
 	src/Do.Universe/IItemSource.cs \
 	src/Do.Universe/ImageFileItem.cs \
 	src/Do.Universe/IObject.cs \
-	src/Do.Universe/LocateCommand.cs \
 	src/Do.Universe/MailtoCommand.cs \
 	src/Do.Universe/OpenCommand.cs \
 	src/Do.Universe/OpenTerminalHereCommand.cs \

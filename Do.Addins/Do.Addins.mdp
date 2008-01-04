@@ -42,7 +42,6 @@
     <File name="./src/Do.Universe/RunInTerminalCommand.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/OpenWithCommand.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/RevealCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/LocateCommand.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gnome-sharp, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
