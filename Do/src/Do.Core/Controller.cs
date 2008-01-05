@@ -38,9 +38,16 @@ namespace Do.Core
 		{		
 			window = new SymbolWindow ();
 		}
+
+		bool Summonable {
+			get {
+				return MainMenu.Instance.AboutDialog == null;
+			}
+		}
 		
 		public void SummonWithObjects (IObject[] objects)
 		{
+			if (!Summonable) return;
 			window.DisplayObjects (objects);
 			Summon ();
 		}
@@ -51,6 +58,7 @@ namespace Do.Core
 		
 		public void Summon ()
 		{
+			if (!Summonable) return;
 			window.Show ();
 			Util.Appearance.PresentWindow (window);
 		}

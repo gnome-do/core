@@ -39,12 +39,14 @@ namespace Do.UI
 		}
 
 		Menu menu;
+		AboutDialog about;
 		int mainMenuX, mainMenuY;
 
 		public MainMenu ()
 		{
 			MenuItem item;
 
+			about = null;
 			menu = new Menu();
 
 			// Preferences menu item
@@ -79,6 +81,11 @@ namespace Do.UI
 			menu.ShowAll();
 		}
 
+		public AboutDialog AboutDialog
+		{
+			get { return about; }
+		}
+
 		protected void OnMainMenuQuitClicked (object o, EventArgs args)
 		{
 			Application.Quit();
@@ -86,35 +93,47 @@ namespace Do.UI
 
 		protected void OnMainMenuRefreshCatalogClicked (object o, EventArgs args)
 		{
-			Do.UniverseManager.AwakeIndexThread ();
 		}
 
 		protected void OnMainMenuAboutClicked (object o, EventArgs args)
 		{
-			AboutDialog about;
-			string [] authors;
+			string[] authors;
+			string[] logos;
+			string logo;
 
 			Do.Controller.Vanish ();
 
 			authors = new string[] {
 				"David Siegel <djsiegel@gmail.com>",
 				"DR Colkitt <douglas.colkitt@gmail.com>",
-				"Ian Cohen <ianrcohen@gmail.com>",
-				"James Walker <mr.j.s.walker@gmail.com>",
 			};
 
 			about = new AboutDialog ();
 			about.Name = "GNOME Do";
-			about.Version = "0.1";
-			about.Logo = Util.Appearance.PixbufFromIconName ("gnome-run", 80);
-			// about.Copyright = "Copyright \xa9 2008 David Siegel";
-			about.Comments = "Do things as quickly as possible\nin your GNOME desktop environment.";
-			about.Website = "http://launchpad.net/gc";
+			about.Version = "0.3.0";
+
+			logos = new string[] {
+				"/usr/share/icons/gnome/scalable/actions/search.svg",
+			};
+
+			logo = "gnome-run";
+			foreach (string l in logos) {
+				if (!System.IO.File.Exists (l)) continue;
+				logo = l;
+			}
+
+			about.Logo = Util.Appearance.PixbufFromIconName (logo, 140);
+			about.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
+			about.Comments = "Do things as quickly as possible\n" +
+				"(but no quicker) with your files, bookmarks,\n" +
+				"applications, music, contacts, and more!";
+			about.Website = "http://do.davebsd.com/";
 			about.WebsiteLabel = "Visit Homepage";
 			about.Authors = authors;
 			about.IconName = "gnome-run";
 			about.Run ();
 			about.Destroy ();
+			about = null;
 		}
 
 		public void PopupAtPosition (int x, int y)

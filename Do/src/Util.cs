@@ -63,8 +63,10 @@ namespace Do
 				if (open_item == null) return;
 
 				start_proc = new Process ();
-				start_proc.StartInfo.FileName = open_item;
-				start_proc.StartInfo.UseShellExecute = true;
+				// start_proc.StartInfo.FileName = open_item;
+				// start_proc.StartInfo.UseShellExecute = true;
+				start_proc.StartInfo.FileName = "xdg-open";
+				start_proc.StartInfo.Arguments = open_item;
 				try {
 					Log.Info ("Opening \"{0}\"...", open_item);
 					start_proc.Start ();
