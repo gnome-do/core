@@ -235,7 +235,7 @@ namespace Do.Universe
 
 		public virtual void Open ()
 		{
-			Util.Environment.Open (Path);
+			Util.Environment.Open (Path.Replace (" ", "\\ "));
 		}
 	}
 	

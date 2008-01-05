@@ -63,12 +63,8 @@ namespace Do
 				if (open_item == null) return;
 
 				start_proc = new Process ();
-				// According to the documentation, the following is the most cross-platform
-				// way to open a file or URL, but it causes a messy crash...
-				// start_proc.StartInfo.FileName = string.Format ("\"{0}\"", open_item);
-				// start_proc.StartInfo.UseShellExecute = true;
-				start_proc.StartInfo.FileName = "xdg-open";
-				start_proc.StartInfo.Arguments = string.Format ("\"{0}\"", open_item);
+				start_proc.StartInfo.FileName = open_item;
+				start_proc.StartInfo.UseShellExecute = true;
 				try {
 					Log.Info ("Opening \"{0}\"...", open_item);
 					start_proc.Start ();

@@ -183,7 +183,7 @@ namespace Do.UI
 			iconbox[2].Clear ();
 			HideThirdPane ();
 
-			label.SetDisplayLabel ("Type to begin searching", "Type to start searching.");
+			label.SetDisplayLabel ("", "Type to begin a new search.");
 		}
 
 		protected virtual void SetNoResultsFoundState (Pane pane)
@@ -292,8 +292,7 @@ namespace Do.UI
 			bool results, something_typed;
 
 			something_typed = CurrentContext.Query.Length > 0;
-			results = CurrentContext.Results != null &&
-								CurrentContext.Results.Length > 0;
+			results = CurrentContext.Results.Length > 0;
 
 			resultsWindow.Hide ();
 			ClearSearchResults ();
@@ -355,7 +354,7 @@ namespace Do.UI
 
 		void OnRightLeftKeyPressEvent (EventKey evnt)
 		{
-			if (CurrentContext.Results != null) {
+			if (CurrentContext.Results.Length > 0) {
 				if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
 					CurrentContext.FindingChildren = true;
 					QueueSearch (false);

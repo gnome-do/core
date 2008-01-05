@@ -1,4 +1,4 @@
-/* ${FileName}
+/* OpenURLCommand.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -80,6 +80,7 @@ namespace Do.Universe
 				} else if (item is ITextItem) {
 					url = (item as ITextItem).Text;
 				}
+				url = url.Replace (" ", "%20");
 				Util.Environment.Open (url);	
 			}
 			return null;
