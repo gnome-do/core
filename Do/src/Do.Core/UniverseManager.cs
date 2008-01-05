@@ -377,20 +377,16 @@ namespace Do.Core
 			return results;
 		}
 
-		//Same as GetModItemsFrom list but for items
+		// Same as GetModItemsFrom list but for items
 		public List<IObject> GetItemsFromList (SearchContext context, List<IObject> initialList)
 		{
-			int itemCount = 0;
 			List<IObject> results = new List<IObject> ();
 			foreach (IObject iobject in initialList) {
 				if (iobject is IItem) {
 					if (context.Command.SupportsItem (iobject as IItem)) {
 						results.Add (iobject);
-						itemCount++;
 					}
 				}
-				if (itemCount == kMaxSearchResults)
-					break;
 			}
 			return results;
 		}
