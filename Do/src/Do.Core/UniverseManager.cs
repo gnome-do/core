@@ -119,6 +119,9 @@ namespace Do.Core
 				}
 				newFirstResults = new List<IObject> (universe.Values);
 				resultsSorter = new RelevanceSorter (firstResultKey);
+				if (firstResults.ContainsKey (firstResultKey)) {
+					firstResults.Remove (firstResultKey);
+				}
 				firstResults[firstResultKey] = resultsSorter.NarrowResults (newFirstResults);
 				Log.Info ("Updated first results for '{0}'.", firstResultKey);
 				t_update += (DateTime.Now - then).Milliseconds;
