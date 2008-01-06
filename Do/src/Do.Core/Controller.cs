@@ -39,6 +39,13 @@ namespace Do.Core
 			window = new SymbolWindow ();
 		}
 
+		public Gtk.Window MainWindow
+		{
+			get {
+				return window;
+			}
+		}
+
 		bool Summonable {
 			get {
 				return MainMenu.Instance.AboutDialog == null;

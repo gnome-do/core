@@ -145,8 +145,6 @@ namespace Do.UI
 			}
 		}
 
-		IconBox CurrentIconBox { get { return iconbox[(int) currentPane]; } }
-
 		int CurrentCursor
 		{
 			get {

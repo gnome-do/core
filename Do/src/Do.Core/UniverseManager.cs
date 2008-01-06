@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Threading;
 using System.Reflection;
 using System.Collections.Generic;
 
@@ -30,17 +29,21 @@ namespace Do.Core
 {
 	public class UniverseManager
 	{
+		// How long between update events (seconds).
+		const int UpdateInterval = 15;
+		// Maximum amount of time to spend updating (millseconds).
+		const int MaxUpdateTime = 120;
+
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<int, IObject> universe;
 
 		List<DoItemSource> doItemSources;
 		List<DoCommand> doCommands;
 
-		Thread indexThread;
-		Mutex universeMutex;
-		Mutex firstResultsMutex;
+		// Keep track of next data structures to update.
+		int itemSourceCursor;
+		int firstResultsCursor;
 
-		const int kUpdateWaitTime = 300000;
 		const int kMaxSearchResults = 1000;
 
 		public UniverseManager()
@@ -49,24 +52,77 @@ namespace Do.Core
 			doItemSources = new List<DoItemSource> ();
 			doCommands = new List<DoCommand> ();
 			firstResults = new Dictionary<string, List<IObject>> ();
-			universeMutex = new Mutex ();
-			firstResultsMutex = new Mutex ();
+			itemSourceCursor = firstResultsCursor = 0;
 		}
 
 		internal void Initialize ()
 		{
 			LoadBuiltins ();
 			LoadAddins ();
-			universeMutex.WaitOne ();
 			BuildUniverse (universe);
-			firstResultsMutex.WaitOne ();
 			BuildFirstResults (universe, firstResults);
-			universeMutex.ReleaseMutex ();
-			firstResultsMutex.ReleaseMutex ();
 
-			//ThreadStart updateJob = new ThreadStart (UpdateUniverse);
-			//indexThread = new Thread (updateJob);
-			//indexThread.Start ();
+			GLib.Timeout.Add (UpdateInterval * 1000, new GLib.TimeoutHandler (OnTimeoutUpdate));
+		}
+
+		bool OnTimeoutUpdate ()
+		{
+			DateTime then;
+			int t_update = 0;
+			
+			if (Do.Controller.MainWindow.Visible) return true;
+
+			// Keep track of the total time (in ms) we have spend updating.
+			// We spend half of MaxUpdateTime updating item sources, then
+			// another half of MaxUpdateTime updating first results lists.
+			do {
+				DoItemSource itemSource;
+
+				then = DateTime.Now;
+				itemSourceCursor = (itemSourceCursor + 1) % doItemSources.Count;
+				itemSource = doItemSources[itemSourceCursor];
+				// Remove old items from universe.
+				foreach (DoItem oldItem in itemSource.Items) {
+					if (universe.ContainsKey (oldItem.UID.GetHashCode ())) {
+						universe.Remove (oldItem.UID.GetHashCode ());
+					}
+				}
+				// Update the item source.
+				itemSource.UpdateItems ();
+				// Add new items to universe.
+				foreach (DoItem newItem in itemSource.Items) {
+					universe[newItem.UID.GetHashCode ()] = newItem;
+				}
+				Log.Info ("Updated \"{0}\" Item Source.", itemSource.Name);
+				t_update += (DateTime.Now - then).Milliseconds;
+			} while (t_update < MaxUpdateTime / 2);
+
+			// Updating a first results list takes about 50ms at most, so we can afford
+			// to update a couple of them.
+			t_update = 0;
+			do {
+				List<IObject> newFirstResults;
+				RelevanceSorter resultsSorter;
+				string firstResultKey = null;
+				int currentFirstResultsList = 0;
+
+				then = DateTime.Now;
+				firstResultsCursor = (firstResultsCursor + 1) % firstResults.Count;
+				// Now pick a first results list to update.
+				foreach (KeyValuePair<string, List<IObject>> keyval in firstResults) {
+					if (currentFirstResultsList == firstResultsCursor) {
+						firstResultKey = keyval.Key;
+						break;
+					}
+					currentFirstResultsList++;
+				}
+				newFirstResults = new List<IObject> (universe.Values);
+				resultsSorter = new RelevanceSorter (firstResultKey);
+				firstResults[firstResultKey] = resultsSorter.NarrowResults (newFirstResults);
+				Log.Info ("Updated first results for '{0}'.", firstResultKey);
+				t_update += (DateTime.Now - then).Milliseconds;
+			} while (t_update < MaxUpdateTime / 2);
+			return true;
 		}
 
 		internal ICollection<DoItemSource> ItemSources
@@ -74,52 +130,11 @@ namespace Do.Core
 			get { return doItemSources.AsReadOnly (); }
 		}
 
-		public void KillIndexThread ()
-		{
-			indexThread.Abort ();
-		}
-
-		public void AwakeIndexThread ()
-		{
-			Monitor.Enter (indexThread);
-			Monitor.Pulse (indexThread);
-			Monitor.Exit (indexThread);
-		}
-
-		public void UpdateUniverse ()
-		{
-			Dictionary<string, List<IObject>> updateFirstResults;
-			Dictionary<int, IObject> updateUniverse;
-			while (true) {
-				Monitor.Enter (indexThread);
-				Monitor.Wait (indexThread, kUpdateWaitTime);
-				Monitor.Exit (indexThread);
-				updateUniverse = new Dictionary<int, IObject> ();
-				updateFirstResults = new Dictionary<string,List<IObject>> ();
-
-				LoadBuiltins ();
-				LoadAddins ();
-				BuildUniverse (updateUniverse);
-				//Possible idea to implement: when updating the universe check to see if
-				//any objects that have non-zero relevance with each character string were added.
-				//Then pass the array of non-valid characters to the BuildFirstResults method, to avoid
-				//unnecessary work. For example if the only new object was called Art, there is no need
-				//to re-index the cache for anything else besides characters 'A', 'R' and 'T'
-				BuildFirstResults (updateUniverse, updateFirstResults);
-
-				universeMutex.WaitOne ();
-				universe = updateUniverse;
-				universeMutex.ReleaseMutex ();
-
-				firstResultsMutex.WaitOne ();
-				firstResults = updateFirstResults;
-				firstResultsMutex.ReleaseMutex ();
-			}
-		}
-
 		protected void LoadBuiltins ()
 		{
+			// Load from Do.Addins asembly.
 			LoadAssembly (typeof (IItem).Assembly);
+			// Load from main application assembly.
 			LoadAssembly (typeof (DoItem).Assembly);
 		}
 
@@ -218,31 +233,20 @@ namespace Do.Core
 
 		public void Search (ref SearchContext context)
 		{
-			universeMutex.WaitOne ();
-			firstResultsMutex.WaitOne ();
-			
-			string query = context.Query.ToLower ();
 			List<IObject> results = new List<IObject> ();
-			SearchContext clone;
 
 			// First check to see if the search context is equivalent to the
 			// lastContext or parentContext. Just return that context if it is.
 			SearchContext oldContext = context.EquivalentPreviousContextIfExists ();
 			if (oldContext != null) {
-				universeMutex.WaitOne ();
-				firstResultsMutex.WaitOne ();
 				context = oldContext.GetContinuedContext ();
 				return;
 			}
 			else if (context.FindingChildren) {
-				universeMutex.WaitOne ();
-				firstResultsMutex.WaitOne ();
 				context = ChildContext (context);
 				return;
 			}
 			else if (context.FindingParent) {
-				universeMutex.WaitOne ();
-				firstResultsMutex.WaitOne ();
 				context = ParentContext (context);
 				return;
 			}
@@ -254,9 +258,6 @@ namespace Do.Core
 				}
 			}
 			results.AddRange (AddNonUniverseItems (context));
-
-			universeMutex.ReleaseMutex ();
-			firstResultsMutex.ReleaseMutex ();
 
 			context.Results = results.ToArray ();
 			// Keep a stack of incremental results.
