@@ -78,21 +78,42 @@ namespace Do.Core
 			t_update = 0;
 			while (t_update < MaxUpdateTime / 2) {
 				DoItemSource itemSource;
+				ICollection<IItem> oldItems;
+				Dictionary<int, DoItem> newItems;
 
 				then = DateTime.Now;
 				itemSourceCursor = (itemSourceCursor + 1) % doItemSources.Count;
 				itemSource = doItemSources[itemSourceCursor];
-				// Remove old items from universe.
-				foreach (DoItem oldItem in itemSource.Items) {
-					if (universe.ContainsKey (oldItem.UID.GetHashCode ())) {
-						universe.Remove (oldItem.UID.GetHashCode ());
-					}
-				}
+				newItems = new Dictionary<int, DoItem> ();
+				// Remember old items.
+				oldItems = itemSource.Items;	
 				// Update the item source.
 				itemSource.UpdateItems ();
-				// Add new items to universe.
+				// Create a map of the new items.
 				foreach (DoItem newItem in itemSource.Items) {
-					universe[newItem.UID.GetHashCode ()] = newItem;
+					newItems[newItem.GetHashCode ()] = newItem;
+				}
+				// Update the universe by either updating items, adding new items,
+				// or removing items.
+				foreach (DoItem newItem in itemSource.Items) {
+					if (universe.ContainsKey (newItem.GetHashCode ()) &&
+							universe[newItem.GetHashCode ()] is DoItem) {
+						// We're updating an item. This updates the item across all
+						// first results lists.
+						(universe[newItem.GetHashCode ()] as DoItem).Inner = newItem.Inner;
+					} else {
+						// We're adding a new item. It might take a few minutes to show
+						// up in all results lists.
+						universe[newItem.GetHashCode ()] = newItem;
+					}
+				}
+				// See if there are any old items that didn't make it into the
+				// set of new items. These items need to be removed from the universe.
+				foreach (DoItem oldItem in oldItems) {
+					if (!newItems.ContainsKey (oldItem.GetHashCode ()) &&
+							universe.ContainsKey (oldItem.GetHashCode ())) {
+						universe.Remove (oldItem.GetHashCode ());
+					}
 				}
 				Log.Info ("Updated \"{0}\" Item Source.", itemSource.Name);
 				t_update += (DateTime.Now - then).Milliseconds;

@@ -36,10 +36,11 @@ namespace Do.Core
 			this.item = item;
 		}
 		
-		public IItem IItem
-		{
-			get { return item; }
-			set { item = value; }
+		public override IObject Inner {
+			set {
+				item = (IItem) value;
+				base.Inner = value;
+			}
 		}
 	}
 }

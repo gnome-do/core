@@ -78,6 +78,11 @@ namespace Do.Core
 			
 			this.inner = inner;
 		}
+
+		public virtual IObject Inner {
+			get { return inner; }
+			set { inner = value; }
+		}
 		
 		public virtual string Name
 		{

@@ -116,7 +116,7 @@ namespace Do.Core
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
 
-			InternalItemSource.LastItem.IItem = items[0]; // TODO: Create a command performed event and move this.
+			InternalItemSource.LastItem.Inner = items[0]; // TODO: Create a command performed event and move this.
 			
 			resultItems = null;
 			try {
@@ -153,7 +153,7 @@ namespace Do.Core
 		IItem EnsureIItem (IItem item)
 		{
 			if (item is DoItem)
-				item = (item as DoItem).IItem;
+				item = (item as DoItem).Inner as IItem;
 			return item;
 		}
 
@@ -174,7 +174,7 @@ namespace Do.Core
 			inner_items = items.Clone () as IItem[];
 			for (int i = 0; i < items.Length; ++i) {
 				if (items[i] is DoItem) {
-					inner_items[i] = (items[i] as DoItem).IItem;
+					inner_items[i] = (items[i] as DoItem).Inner as IItem;
 				}
 			}
 			return inner_items;

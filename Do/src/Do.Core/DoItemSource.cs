@@ -73,7 +73,7 @@ namespace Do.Core
 			
 			doChildren = new List<IItem> ();
 			if (item is DoItem)
-				item = (item as DoItem).IItem;
+				item = (item as DoItem).Inner as IItem;
 			try {
 				children = source.ChildrenOfItem (item);
 			} catch { children = null; }
