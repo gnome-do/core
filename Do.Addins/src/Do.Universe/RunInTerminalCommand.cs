@@ -1,4 +1,4 @@
-/* RunInShellCommand.cs
+/* RunInTerminalCommand.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -93,7 +93,7 @@ namespace Do.Universe
 			}
 			
 			// No settings found. Try to find a suitable terminal manually.
-			if (program == null) {
+			if (string.IsNullOrEmpty (program)) {
 				foreach (string terminal in terminals.Keys) {
 					if (CommandLineIsFoundOnPath (terminal)) {
 						program = terminal;
