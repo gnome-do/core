@@ -84,13 +84,13 @@ namespace Do.Addins
 			if (dest.name == null && source.name != null)
 				dest.Name = source.Name;
 
-			// If dest has no photo, give it source's photo.
-			if (dest.Photo == null) {
+			if (dest.Photo == null || !File.Exists (dest.Photo)) {
+				// If dest has no photo, give it source's photo.
 				dest.Photo = source.Photo;
-			// If there's already a photo file in place for this contact,
-			// replace it if the source photo is larger (heuristic for highest quality).
 			} else if (source.Photo != null && File.Exists (dest.Photo)
 			                                && File.Exists (source.Photo)) {
+				// If there's already a photo file in place for this contact, replace it
+				// if the source photo is larger (heuristic for highest quality).
 				long source_photo_size, dest_photo_size;
 
 				source_photo_size = new FileInfo (source.Photo).Length;
