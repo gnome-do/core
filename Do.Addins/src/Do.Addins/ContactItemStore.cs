@@ -70,6 +70,7 @@ namespace Do.Addins
 			// New contact data.
 			AddContactData (contact);
 			return false;
+			
 			got_match:
 			MergeContactIntoContact (contact, match);
 			AddContactData (match);
@@ -85,7 +86,7 @@ namespace Do.Addins
 				dest.Name = source.Name;
 
 			// If dest has no photo, give it source's photo.
-			if (dest.Photo == null) {
+			if (dest.Photo == null || !File.Exists (dest.Photo)) {
 				dest.Photo = source.Photo;
 			// If there's already a photo file in place for this contact,
 			// replace it if the source photo is larger (heuristic for highest quality).

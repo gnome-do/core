@@ -20,7 +20,7 @@
 
 using System;
 using System.IO;
-
+using Mono.Unix;
 using Do.Addins;
 
 namespace Do.Universe
@@ -29,12 +29,12 @@ namespace Do.Universe
 	{
 		public string Name
 		{
-			get { return "Run"; }
+			get { return Catalog.GetString ("Run"); }
 		}
 		
 		public string Description
 		{
-			get { return "Run an application, script, or other executable."; }
+			get { return Catalog.GetString ("Run an application, script, or other executable."); }
 		}
 		
 		public string Icon

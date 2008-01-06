@@ -18,6 +18,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using Mono.Unix;
 
 using Do.Addins;
 
@@ -27,12 +28,12 @@ namespace Do.Universe
 	{
 		public string Name
 		{
-			get { return "Email"; }
+			get { return Catalog.GetString ("Email"); }
 		}
 		
 		public string Description
 		{
-			get { return "Compose a new email to a friend."; }
+			get { return Catalog.GetString ("Compose a new email to a friend."); }
 		}
 		
 		public string Icon

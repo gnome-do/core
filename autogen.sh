@@ -1,4 +1,37 @@
-#! /bin/sh
+#! /bin/bash
+
+function check_autotool_version () {
+	which $1 &>/dev/null || {
+		error "$1 is not installed, and is required to configure $PACKAGE"
+	}
+
+	version=$($1 --version | head -n 1 | cut -f4 -d' ')
+	major=$(echo $version | cut -f1 -d.)
+	minor=$(echo $version | cut -f2 -d.)
+	major_check=$(echo $2 | cut -f1 -d.)
+	minor_check=$(echo $2 | cut -f2 -d.)
+
+	if [ $major -lt $major_check ]; then
+		do_bail=yes
+	elif [[ $minor -lt $minor_check && $major = $major_check ]]; then
+		do_bail=yes
+	fi
+
+	if [ x"$do_bail" = x"yes" ]; then
+		error "$1 version $2 or better is required to configure $PROJECT"
+	fi
+}
+
+function run () {
+	echo "Running $@ ..."
+	$@ 2>.autogen.log || {
+		cat .autogen.log 1>&2
+		rm .autogen.log
+		error "Could not run $1, which is required to configure $PROJECT"
+	}
+	rm .autogen.log
+}
+
 
 PROJECT=Do
 FILE=
@@ -20,6 +53,7 @@ TEST_TYPE=-f
 aclocalinclude="-I . $ACLOCAL_FLAGS"
 
 DIE=0
+
 
 ($AUTOCONF --version) < /dev/null > /dev/null 2>&1 || {
         echo
@@ -78,6 +112,9 @@ $AUTOMAKE --add-missing --gnu $am_opt
 
 echo "Running $AUTOCONF ..."
 $AUTOCONF
+
+check_autotool_version intltoolize 0.35
+run intltoolize --force --copy --automake
 
 echo Running $srcdir/configure $conf_flags "$@" ...
 $srcdir/configure --enable-maintainer-mode $conf_flags "$@" \

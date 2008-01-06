@@ -1,0 +1,12 @@
+[encoding: UTF-8]
+Do/src/Do.UI/SymbolWindow.cs
+Do/src/Do.UI/MainMenu.cs
+Do/src/Do.Core/SearchContext.cs
+Do.Addins/src/Do.Universe/RunCommand.cs
+Do.Addins/src/Do.Universe/DefineWordCommand.cs
+Do.Addins/src/Do.Universe/OpenCommand.cs
+Do.Addins/src/Do.Universe/MailtoCommand.cs
+Do.Addins/src/Do.Universe/OpenTerminalHereCommand.cs
+Do.Addins/src/Do.Universe/RunInTerminalCommand.cs
+Do.Addins/src/Do.Universe/OpenURLCommand.cs
+Do.Addins/src/Do.Universe/RunCommand.cs

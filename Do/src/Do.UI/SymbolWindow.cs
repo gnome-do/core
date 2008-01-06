@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mono.Unix;
 
 using Gtk;
 using Gdk;
@@ -50,12 +51,12 @@ namespace Do.UI
 			}
 
 			public string Icon { get { return "gtk-dialog-question"; } }
-			public string Name { get { return "No results found."; } }
+			public string Name { get { return Catalog.GetString ("No results found."); } }
 
 			public string Description
 			{
 				get {
-					return string.Format ("No results found for \"{0}\".", query);
+					return string.Format (Catalog.GetString ("No results found for \"{0}\"."), query);
 				}
 			}
 		}
@@ -153,7 +154,7 @@ namespace Do.UI
 			iconbox[0].DisplayObject = new DefaultIconBoxObject ();
 			iconbox[1].Clear ();
 
-			label.SetDisplayLabel ("Type to begin searching", "Type to start searching.");
+			label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), Catalog.GetString ("Type to start searching."));
 		}
 
 		protected virtual void SetNoResultsFoundState (Pane pane)

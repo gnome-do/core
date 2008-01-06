@@ -1,0 +1,25 @@
+Notes on how to do a localization (l10n) for gnome-do
+=====================================================
+
+Creating a l10n:
+        First of all you create a template to base your translation on:
+                intltool-update --pot
+
+        Then copy it to your translation
+                cp gnunit.pot ca_ES.po
+        Do your translation, with some kind of editor
+                emacs ca_ES.po
+		it has to be UTF-8 encoded.
+
+        Add your l10n to configure.in, find the ALL_LINGUAS variable and add your
+        l10n to it.
+
+Please, pay special when doing the translations because most of the logic puzzles
+need to have very clear and precise questions to be fair.
+
+Updating your l10n:
+------------------
+        To update an existing po fx ca_ES.po:
+                intltool-update ca_ES
+
+

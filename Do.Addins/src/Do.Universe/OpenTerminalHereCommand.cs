@@ -20,6 +20,7 @@
 
 using System;
 using System.Diagnostics;
+using Mono.Unix;
 
 using Do.Addins;
 
@@ -33,12 +34,12 @@ namespace Do.Universe
 		
 		public string Name
 		{
-			get { return "Open Terminal Here"; }
+			get { return Catalog.GetString ("Open Terminal Here"); }
 		}
 		
 		public string Description
 		{
-			get { return "Opens a Terminal in a given location."; }
+			get { return Catalog.GetString ("Opens a Terminal in a given location."); }
 		}
 		
 		public string Icon

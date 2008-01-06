@@ -20,6 +20,7 @@
 
 using System;
 using System.Text.RegularExpressions;
+using Mono.Unix;
 
 using Do.Addins;
 
@@ -38,12 +39,12 @@ namespace Do.Universe
 		
 		public string Name
 		{
-			get { return "Open URL"; }
+			get { return  Catalog.GetString ("Open URL"); }
 		}
 		
 		public string Description
 		{
-			get { return "Opens bookmarks and manually-typed URLs."; }
+			get { return  Catalog.GetString ("Opens bookmarks and manually-typed URLs."); }
 		}
 		
 		public string Icon

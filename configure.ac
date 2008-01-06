@@ -4,6 +4,8 @@ AC_PREREQ([2.54])
 AC_INIT([Do], [0.1])
 AM_INIT_AUTOMAKE([foreign])
 
+AC_PROG_INTLTOOL([0.35])
+
 dnl pkg-config
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 if test "x$PKG_CONFIG" = "xno"; then
@@ -27,6 +29,12 @@ PKG_CHECK_MODULES([GLADE_SHARP_20], [glade-sharp-2.0])
 PKG_CHECK_MODULES([NDESK_DBUS_10], [ndesk-dbus-1.0])
 PKG_CHECK_MODULES([GNOME_VFS_SHARP_20], [gnome-vfs-sharp-2.0])
 
+dnl -- Intl
+
+GETTEXT_PACKAGE=gnome-do
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package])
+AM_GLIB_GNU_GETTEXT
 
 AC_ARG_ENABLE(debug,
 	AC_HELP_STRING([--enable-debug],
@@ -57,7 +65,7 @@ Do/Makefile
 Do/gnome-do
 Do.Addins/do.addins.pc
 Do.DBus/do.dbus.pc
-
+po/Makefile.in
 ])
 
 AC_OUTPUT

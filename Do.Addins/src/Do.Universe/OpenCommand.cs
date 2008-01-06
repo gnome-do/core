@@ -19,6 +19,7 @@
  */
 
 using System;
+using Mono.Unix;
 
 using Do.Addins;
 
@@ -35,12 +36,12 @@ namespace Do.Universe
 		
 		public string Name
 		{
-			get { return "Open"; }
+			get { return Catalog.GetString ("Open"); }
 		}
 		
 		public string Description
 		{
-			get { return "Opens many kinds of items."; }
+			get { return Catalog.GetString ("Opens many kinds of items."); }
 		}
 		
 		public string Icon

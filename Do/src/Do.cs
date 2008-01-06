@@ -22,6 +22,7 @@ using System;
 using Do.Core;
 using Do.DBusLib;
 using Mono.GetOptions;
+using Mono.Unix;
 
 namespace Do
 {
@@ -37,6 +38,7 @@ namespace Do
 		{
 			DoOptions options;
 			
+			Catalog.Init ("gnome-do",  "/usr/local/share/locale");
 			Gtk.Application.Init ();
 			
 			DetectInstanceAndExit ();
