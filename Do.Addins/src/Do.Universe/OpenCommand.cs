@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mono.Unix;
 
 using Do.Addins;
 
@@ -36,12 +37,12 @@ namespace Do.Universe
 		
 		public override string Name
 		{
-			get { return "Open"; }
+			get { return Catalog.GetString ("Open"); }
 		}
 		
 		public override string Description
 		{
-			get { return "Opens many kinds of items."; }
+			get { return Catalog.GetString ("Opens many kinds of items."); }
 		}
 		
 		public override string Icon

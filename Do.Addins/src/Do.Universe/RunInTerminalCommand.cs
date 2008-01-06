@@ -21,6 +21,7 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Mono.Unix;
 
 using Do.Addins;
 
@@ -139,12 +140,12 @@ namespace Do.Universe
 
 		public override string Name
 		{
-			get { return "Run in Terminal"; }
+			get { return Catalog.GetString ("Run in Terminal"); }
 		}
 		
 		public override string Description
 		{
-			get { return "Run a command in a terminal."; }
+			get { return Catalog.GetString ("Run a command in a terminal."); }
 		}
 		
 		public override string Icon

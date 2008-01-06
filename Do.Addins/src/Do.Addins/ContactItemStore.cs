@@ -70,6 +70,7 @@ namespace Do.Addins
 			// New contact data.
 			AddContactData (contact);
 			return false;
+			
 			got_match:
 			MergeContactIntoContact (contact, match);
 			AddContactData (match);

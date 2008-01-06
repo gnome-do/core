@@ -19,6 +19,7 @@
 
 using System;
 using System.Text.RegularExpressions;
+using Mono.Unix;
 
 namespace Do.Universe
 {
@@ -44,12 +45,12 @@ namespace Do.Universe
 		}
 		
 		public override string Name {
-			get { return "Define"; }
+			get { return Catalog.GetString ("Define"); }
 		}
 		
 		public override string Description
 		{
-			get { return "Define a given word."; }
+			get { return Catalog.GetString ("Define a given word."); }
 		}
 		
 		public override string Icon

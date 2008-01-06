@@ -19,6 +19,7 @@
 
 using System;
 using Gtk;
+using Mono.Unix;
 
 using Do;
 
@@ -66,14 +67,14 @@ namespace Do.UI
 			// menu.Add (new SeparatorMenuItem ());
 
 			// About menu item
-			item = new ImageMenuItem  ("_About Do");
+			item = new ImageMenuItem  (Catalog.GetString ("_About Do"));
 			(item as ImageMenuItem).Image = new Image (Stock.About, IconSize.Menu);
 			menu.Add (item);
 			item.CanFocus = false;
 			item.Activated += OnMainMenuAboutClicked;
 
 			// Quit menu item
-			item = new ImageMenuItem ("_Quit");
+			item = new ImageMenuItem (Catalog.GetString ("_Quit"));
 			(item as ImageMenuItem).Image = new Image (Stock.Quit, IconSize.Menu);
 			menu.Add (item);
 			item.Activated += OnMainMenuQuitClicked;
