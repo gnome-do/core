@@ -30,7 +30,7 @@ namespace Do.Core
 	public class UniverseManager
 	{
 		// How long between update events (seconds).
-		const int UpdateInterval = 15;
+		const int UpdateInterval = 60;
 		// Maximum amount of time to spend updating (millseconds).
 		const int MaxUpdateTime = 120;
 
