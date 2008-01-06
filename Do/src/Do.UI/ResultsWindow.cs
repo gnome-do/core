@@ -85,12 +85,7 @@ namespace Do.UI
 			results = null;
 			selectedIndex = 0;
 			selectedIndexSet = false;
-			SelectionChanged = OnSelectionChangedEvent;
 			Shown += OnShown;
-		}
-
-		protected virtual void OnSelectionChangedEvent (object sender, ResultsWindowSelectionEventArgs args)
-		{
 		}
 
 		protected virtual void OnShown (object sender, EventArgs args)
@@ -111,7 +106,9 @@ namespace Do.UI
 			ResultsWindowSelectionEventArgs args;
 
 			args = new ResultsWindowSelectionEventArgs (SelectedIndex, SelectedObject);
-			SelectionChanged (this, args);
+			if (null != SelectionChanged) {
+				SelectionChanged (this, args);
+			}
 		}
 
 		protected void Build ()
