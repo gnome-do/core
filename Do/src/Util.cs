@@ -89,7 +89,14 @@ namespace Do
 				pixbufCache = new Dictionary<string,Gdk.Pixbuf> ();
 				UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
 				UnknownPixbuf.Fill (0x00000000);
+
 				Gtk.IconTheme.Default.Changed += OnDefaultIconThemeChanged;
+				Do.Controller.Vanished += OnMainWindowVanished;
+			}
+
+			private static void OnMainWindowVanished (object sender, EventArgs args)
+			{
+				pixbufCache.Clear ();
 			}
 			
 			private static void OnDefaultIconThemeChanged (object sender, EventArgs args)

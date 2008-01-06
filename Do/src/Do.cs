@@ -26,25 +26,26 @@ using Mono.Unix;
 
 namespace Do
 {
-	public class Do
+
+	public static class Do
 	{
-		const string kActivateKeybinding = "<Super>space";
+
 		static Tomboy.GConfXKeybinder keybinder;
+		const string kActivateKeybinding = "<Super>space";
 		
+		static DoOptions options;
 		static Controller controller;
 		static UniverseManager universeManager;
 
 		public static void Main (string[] args)
 		{
-			DoOptions options;
-			
-			Catalog.Init ("gnome-do",  "/usr/local/share/locale");
+			Catalog.Init ("gnome-do", "/usr/local/share/locale");
 			Gtk.Application.Init ();
 			
 			DetectInstanceAndExit ();
 			Log.Initialize ();
 			Util.Initialize ();
-			
+
 			Gdk.Threads.Init ();			
 
 			try {
@@ -53,20 +54,23 @@ namespace Do
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
 
-			options = new DoOptions ();
-			options.ProcessArgs (args);
-			
-			universeManager = new UniverseManager ();
-			universeManager.Initialize ();
+			Options.ProcessArgs (args);
+			UniverseManager.Initialize ();
 
-			controller = new Controller ();
-			DBusRegistrar.RegisterController (controller);
+			// Previously, Controller's constructor created a Gtk.Window, and that
+			// window used Util.Appearance to load an icon, and Util.Appearance used
+			// Do.Controller in its constructor to subscribe to an event.  This lead
+			// to some strange behavior, so we new the Controller, /then/ Initialize
+			// it so that Do.Controller is non-null when Util.Appearance references
+			// it.
+			Controller.Initialize ();
+			DBusRegistrar.RegisterController (Controller);
 			
 			keybinder = new Tomboy.GConfXKeybinder ();
 			SetupKeybindings ();
 
 			if (!options.quiet)
-				controller.Summon ();
+				Controller.Summon ();
 			
 			Gtk.Application.Run ();
 		}
@@ -81,14 +85,34 @@ namespace Do
 			}
 		}
 
+		public static DoOptions Options
+		{
+			get {
+				if (null == options) {
+					options = new DoOptions ();
+				}
+				return options;
+			}
+		}
+
 		public static Controller Controller
 		{
-			get { return controller; }
+			get {
+				if (null == controller) {
+					controller = new Controller ();
+				}
+				return controller;
+			}
 		}
 
 		public static UniverseManager UniverseManager
 		{
-			get { return universeManager; }
+			get {
+				if (null == universeManager) {
+					universeManager = new UniverseManager ();
+				}
+				return universeManager;
+			}
 		}
 		
 		static void SetupKeybindings ()

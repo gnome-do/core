@@ -32,11 +32,30 @@ namespace Do.Core
 	public class Controller : IController
 	{
 		
+		public event EventHandler Vanished;
+
 		protected SymbolWindow window;
 		
 		public Controller ()
 		{		
+		}
+
+		public void Initialize ()
+		{
 			window = new SymbolWindow ();
+			window.Hidden += OnWindowHidden;
+		}
+
+		private void OnWindowHidden (object sender, EventArgs args)
+		{
+			NotifyVanished ();
+		}
+
+		protected void NotifyVanished ()
+		{
+			if (Vanished != null) {
+				Vanished (this, new EventArgs ());
+			}
 		}
 
 		public Gtk.Window MainWindow
@@ -73,6 +92,7 @@ namespace Do.Core
 		public void Vanish ()
 		{
 			window.Vanish ();
+			NotifyVanished ();
 		}	
 	}
 }
