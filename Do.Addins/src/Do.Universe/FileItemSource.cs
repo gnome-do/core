@@ -101,7 +101,8 @@ namespace Do.Universe
 		
 		public Type[] SupportedItemTypes
 		{
-			get { return new Type[] {
+			get {
+				return new Type[] {
 					typeof (FileItem),
 				};
 			}
@@ -127,7 +128,9 @@ namespace Do.Universe
 		
 		public string Description
 		{
-			get { return string.Format("Catalog files in user-specified directories."); }
+			get {
+				return string.Format ("Catalog files in user-specified directories.");
+			}
 		}
 		
 		public string Icon

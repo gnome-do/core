@@ -61,4 +61,34 @@ namespace Do.Universe
 		/// </summary>
 		void UpdateItems ();
 	}
+
+	public abstract class AbstractItemSource : IItemSource
+	{
+
+		public abstract string Name { get; }
+
+		public abstract string Description { get; }
+
+		public virtual string Icon
+		{
+			get { return null; }
+		}
+
+		public abstract Type[] SupportedItemTypes { get; }
+		
+		public virtual ICollection<IItem> Items
+		{
+			get { return null; }
+		}
+		
+		public virtual ICollection<IItem> ChildrenOfItem (IItem item)
+		{
+			return null;
+		}
+		
+		public virtual void UpdateItems ()
+		{
+		}
+	}
+
 }

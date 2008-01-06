@@ -1,4 +1,4 @@
-/* OpenCommand.cs
+/* OpenManuallyTypedPathCommand.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -28,37 +28,35 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	/// <summary>
-	/// A command providing "open" semantics to many kinds of items.
-	/// </summary>
-	public class OpenCommand : AbstractCommand
+	public class OpenManuallyTypedPathCommand : AbstractCommand
 	{
-		public OpenCommand ()
+		public OpenManuallyTypedPathCommand ()
 		{
 		}
-		
+
 		public override string Name
 		{
-			get { return Catalog.GetString ("Open"); }
+			get {
+				return Catalog.GetString ("Open Path");
+			}
 		}
-		
+
 		public override string Description
 		{
-			get { return Catalog.GetString ("Opens many kinds of items."); }
+			get {
+				return Catalog.GetString ("Opens manually-typed file and folder paths.");
+			}
 		}
-		
+
 		public override string Icon
 		{
 			get { return "gtk-open"; }
 		}
-		
+
 		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
-					typeof (IOpenableItem),
-					typeof (IURIItem),
-					// Support opening manually-typed paths.
 					typeof (ITextItem),
 				};
 			}
@@ -67,38 +65,21 @@ namespace Do.Universe
 		public override bool SupportsItem (IItem item)
 		{
 			string path;
-		
-			// Check if typed text is a valid path.
-			if (item is ITextItem) {	
-				path = (item as ITextItem).Text;
-				path = path.Replace ("~",
-						Environment.GetFolderPath (Environment.SpecialFolder.Personal));
-				return Directory.Exists (path) || File.Exists (path);
-			}
-			return true;
+		 
+			path = (item as ITextItem).Text;
+			path = path.Replace ("~",
+					Environment.GetFolderPath (Environment.SpecialFolder.Personal));
+			return Directory.Exists (path) || File.Exists (path);
 		}
 
-		
-		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem[] Perform (IItem[] items, IItem[] modItems)
 		{
-			string open_item;
-			
-			open_item = null;
+			string path;
+
 			foreach (IItem item in items) {
-				if (item is IOpenableItem) {
-					(item as IOpenableItem).Open ();
-					continue;
-				}
-
-				if (item is IURIItem) {
-					open_item = (item as IURIItem).URI;
-				} else if (item is ITextItem) {
-					// open_item is a valid file or folder path.
-					open_item = (item as ITextItem).Text;
-					open_item = open_item.Replace (" ", "\\ ");
-				}
-
-				Util.Environment.Open (open_item);
+				path = (item as ITextItem).Text;
+				path = path.Replace (" ", "\\ ");
+				Util.Environment.Open (path);
 			}
 			return null;
 		}
