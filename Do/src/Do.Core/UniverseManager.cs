@@ -68,14 +68,15 @@ namespace Do.Core
 		bool OnTimeoutUpdate ()
 		{
 			DateTime then;
-			int t_update = 0;
+			int t_update;
 			
 			if (Do.Controller.MainWindow.Visible) return true;
 
 			// Keep track of the total time (in ms) we have spend updating.
 			// We spend half of MaxUpdateTime updating item sources, then
 			// another half of MaxUpdateTime updating first results lists.
-			do {
+			t_update = 0;
+			while (t_update < MaxUpdateTime / 2) {
 				DoItemSource itemSource;
 
 				then = DateTime.Now;
@@ -95,12 +96,12 @@ namespace Do.Core
 				}
 				Log.Info ("Updated \"{0}\" Item Source.", itemSource.Name);
 				t_update += (DateTime.Now - then).Milliseconds;
-			} while (t_update < MaxUpdateTime / 2);
+			}
 
 			// Updating a first results list takes about 50ms at most, so we can afford
 			// to update a couple of them.
 			t_update = 0;
-			do {
+			while (t_update < MaxUpdateTime / 2) {
 				List<IObject> newFirstResults;
 				RelevanceSorter resultsSorter;
 				string firstResultKey = null;
@@ -121,7 +122,7 @@ namespace Do.Core
 				firstResults[firstResultKey] = resultsSorter.NarrowResults (newFirstResults);
 				Log.Info ("Updated first results for '{0}'.", firstResultKey);
 				t_update += (DateTime.Now - then).Milliseconds;
-			} while (t_update < MaxUpdateTime / 2);
+			}
 			return true;
 		}
 
