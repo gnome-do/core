@@ -29,32 +29,29 @@ namespace Do.Core
 	{
 		public const string kDefaultCommandIcon = "gnome-run";
 
-		protected ICommand command;
-
 		public DoCommand (ICommand command):
 			base (command)
 		{
-			this.command = command;
 		}
 
 		public override string Icon
 		{
-			get { return command.Icon ?? kDefaultCommandIcon; }
+			get { return (Inner as ICommand).Icon ?? kDefaultCommandIcon; }
 		}
 
 		public Type[] SupportedItemTypes
 		{
-			get { return command.SupportedItemTypes ?? new Type[0]; }
+			get { return (Inner as ICommand).SupportedItemTypes ?? new Type[0]; }
 		}
 
 		public Type[] SupportedModifierItemTypes
 		{
-			get { return command.SupportedModifierItemTypes ?? new Type[0]; }
+			get { return (Inner as ICommand).SupportedModifierItemTypes ?? new Type[0]; }
 		}
 		
 		public bool ModifierItemsOptional
 		{
-			get { return command.ModifierItemsOptional; }
+			get { return (Inner as ICommand).ModifierItemsOptional; }
 		}
 		
 		public IItem[] DynamicModifierItemsForItem (IItem item)
@@ -84,7 +81,7 @@ namespace Do.Core
 			// Why is this so fucking weird? The freeze has to do with Gtk.Clipboard interaction in DefineWordCommand.Text. 
 			//Gdk.Threads.Enter ();
 			try {
-				supports = command.SupportsItem (item);
+				supports = (Inner as ICommand).SupportsItem (item);
 			} catch {
 				supports = false;
 			} finally {
@@ -102,7 +99,7 @@ namespace Do.Core
 			if (!IObjectTypeCheck (modItem, SupportedModifierItemTypes)) return false;
 
 			try {
-				supports = command.SupportsModifierItemForItems (items, modItem);
+				supports = (Inner as ICommand).SupportsModifierItemForItems (items, modItem);
 			} catch {
 				supports = false;
 			}
@@ -120,10 +117,10 @@ namespace Do.Core
 			
 			resultItems = null;
 			try {
-				resultItems = command.Perform (items, modItems);
+				resultItems = (Inner as ICommand).Perform (items, modItems);
 			} catch (Exception e) {
 				resultItems = null;
-				Log.Error ("Command \"{0}\" encountered an error: {1}", command.Name, e.Message);
+				Log.Error ("Command \"{0}\" encountered an error: {1}", Inner.Name, e.Message);
 			} finally {
 				resultItems = resultItems ?? new IItem[0];
 			}

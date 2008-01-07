@@ -19,11 +19,11 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 using Gnome;
 using Gnome.Vfs;
-using System.IO;
 
 namespace Do.Universe
 {

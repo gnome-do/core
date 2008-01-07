@@ -70,7 +70,7 @@ namespace Do.Core
 			bool parent_is_this;
 		
 			children = new List<IItem> ();
-			parent_is_this = (item is DoItemSource && (item as DoItemSource).IItemSource == this);
+			parent_is_this = (item is DoItemSource && (item as DoItemSource).Inner == this);
 			if (item is DoItemSource && !parent_is_this) {
 				foreach (DoItem child in (item as DoItemSource).Items) {
 					children.Add (child);

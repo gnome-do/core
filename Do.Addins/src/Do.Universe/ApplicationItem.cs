@@ -58,6 +58,13 @@ namespace Do.Universe
 				throw new ApplicationDetailMissingException ("Failed to load launcher");
 			}
 		}
+
+		~ApplicationItem ()
+		{
+			if (desktopFilePtr != IntPtr.Zero) {
+				gnome_desktop_item_unref (desktopFilePtr);
+			}
+		}
 		
 		public string Name
 		{
@@ -114,6 +121,9 @@ namespace Do.Universe
 		
 		[DllImport ("libgnome-desktop-2.so.2")]
 		private static extern IntPtr gnome_desktop_item_new_from_file (string file, int flags, IntPtr error);
+
+		[DllImport ("libgnome-desktop-2.so.2")]
+		private static extern void gnome_desktop_item_unref (IntPtr item);
 
 		[DllImport ("libgnome-desktop-2.so.2")]
 		private static extern IntPtr gnome_desktop_item_drop_uri_list (IntPtr item, string list, int flags, IntPtr error);

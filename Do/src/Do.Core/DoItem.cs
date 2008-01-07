@@ -28,19 +28,9 @@ namespace Do.Core
 {
 	public class DoItem : DoObject, IItem
 	{
-		protected IItem item;
-		
 		public DoItem (IItem item):
 			base (item)
 		{
-			this.item = item;
-		}
-		
-		public override IObject Inner {
-			set {
-				item = (IItem) value;
-				base.Inner = value;
-			}
 		}
 	}
 }

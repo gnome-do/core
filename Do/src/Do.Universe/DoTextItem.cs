@@ -19,8 +19,8 @@
 
 using System;
 
-using Do.Universe;
 using Do.Core;
+using Do.Universe;
 
 namespace Do
 {
@@ -32,7 +32,13 @@ namespace Do
 		}
 		
 		public string Text {
-			get { return (item as ITextItem).Text; }
+			get {
+				try {
+					return (Inner as ITextItem).Text;
+				} catch {
+					return "";
+				}
+			}
 		}
 	}
 }

@@ -28,23 +28,16 @@ namespace Do.Core
 	public class DoItemSource : DoObject, IItem
 	{
 		private bool enabled;
-		protected IItemSource source;
 		
 		public DoItemSource (IItemSource source):
 			base (source)
 		{
-			this.source = source;
 			enabled = true;
-		}
-		
-		public IItemSource IItemSource
-		{
-			get { return source; }
 		}
 		
 		public void UpdateItems ()
 		{
-			source.UpdateItems ();
+			(Inner as IItemSource).UpdateItems ();
 		}
 		
 		public ICollection<IItem> Items
@@ -53,9 +46,8 @@ namespace Do.Core
 				List<IItem> items;
 				
 				items = new List<IItem> ();
-				if (source.Items != null) {
-					items.Capacity = source.Items.Count;
-					foreach (IItem item in source.Items) {
+				if ((Inner as IItemSource).Items != null) {
+					foreach (IItem item in (Inner as IItemSource).Items) {
 						if (item is DoItem)
 							items.Add (item);
 						else
@@ -75,8 +67,10 @@ namespace Do.Core
 			if (item is DoItem)
 				item = (item as DoItem).Inner as IItem;
 			try {
-				children = source.ChildrenOfItem (item);
-			} catch { children = null; }
+				children = (Inner as IItemSource).ChildrenOfItem (item);
+			} catch {
+				children = null;
+			}
 			
 			if (children != null) {
 				foreach (IItem child in children) {
