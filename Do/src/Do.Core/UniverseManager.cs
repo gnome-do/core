@@ -62,7 +62,7 @@ namespace Do.Core
 			BuildUniverse (universe);
 			BuildFirstResults (universe, firstResults);
 
-			GLib.Timeout.Add (UpdateInterval * 1000, new GLib.TimeoutHandler (OnTimeoutUpdate));
+			// GLib.Timeout.Add (UpdateInterval * 1000, new GLib.TimeoutHandler (OnTimeoutUpdate));
 		}
 
 		bool OnTimeoutUpdate ()
