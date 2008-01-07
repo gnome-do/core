@@ -769,8 +769,8 @@ namespace Do.UI
 		void ShowThirdPane ()
 		{
 			iconbox[2].Show ();
-			GLib.Timeout.Add (5, delegate {
-				Resize (1, 1);
+			Resize (1, 1);
+			GLib.Timeout.Add (10, delegate {
 				Reposition ();
 				return false;
 			});
@@ -779,8 +779,8 @@ namespace Do.UI
 		void HideThirdPane ()
 		{
 			iconbox[2].Hide ();
-			GLib.Timeout.Add (5, delegate {
-				Resize (1, 1);
+			Resize (1, 1);
+			GLib.Timeout.Add (10, delegate {
 				Reposition ();
 				return false;
 			});
