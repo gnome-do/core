@@ -137,15 +137,21 @@ namespace Do
 				}
 
 				iconTheme = Gtk.IconTheme.Default;
-				if (name.Contains (".")) name_noext = name.Remove (name.LastIndexOf ("."));
-				else name_noext = name;
+				if (name.Contains ("."))
+					name_noext = name.Remove (name.LastIndexOf ("."));
+				else
+					name_noext = name;
 				
-				if (iconTheme.HasIcon (name)) {
-					pixbuf = iconTheme.LoadIcon (name, size, 0);
-				} else if (iconTheme.HasIcon (name_noext)) {
-					pixbuf = iconTheme.LoadIcon (name_noext, size, 0);
-				} else if (name == "gnome-mime-text-plain" && iconTheme.HasIcon ("gnome-mime-text")) {
-					pixbuf = iconTheme.LoadIcon ("gnome-mime-text", size, 0);
+				try {
+					if (iconTheme.HasIcon (name)) {
+						pixbuf = iconTheme.LoadIcon (name, size, 0);
+					} else if (iconTheme.HasIcon (name_noext)) {
+						pixbuf = iconTheme.LoadIcon (name_noext, size, 0);
+					} else if (name == "gnome-mime-text-plain" && iconTheme.HasIcon ("gnome-mime-text")) {
+						pixbuf = iconTheme.LoadIcon ("gnome-mime-text", size, 0);
+					}
+				} catch {
+					pixbuf = null;
 				}
 				
 				if (pixbuf == null) {
@@ -154,17 +160,25 @@ namespace Do
 
 					tango = new IconTheme ();
 					tango.CustomTheme = "Tango";
-					if (tango.HasIcon (name)) {
-						pixbuf = tango.LoadIcon (name, size, 0);
-					} else if (tango.HasIcon (name_noext)) {
-						pixbuf = tango.LoadIcon (name_noext, size, 0);
-					} else if (name == "gnome-mime-text-plain" && tango.HasIcon ("gnome-mime-text")) {
-						pixbuf = tango.LoadIcon ("gnome-mime-text", size, 0);
+					try {
+						if (tango.HasIcon (name)) {
+							pixbuf = tango.LoadIcon (name, size, 0);
+						} else if (tango.HasIcon (name_noext)) {
+							pixbuf = tango.LoadIcon (name_noext, size, 0);
+						} else if (name == "gnome-mime-text-plain" && tango.HasIcon ("gnome-mime-text")) {
+							pixbuf = tango.LoadIcon ("gnome-mime-text", size, 0);
+						}
+					} catch {
+						pixbuf = null;
 					}
 				}	
 				
 				if (pixbuf == null && iconTheme.HasIcon ("empty")) {
-					pixbuf = iconTheme.LoadIcon ("empty", size, 0);
+					try {
+						pixbuf = iconTheme.LoadIcon ("empty", size, 0);
+					} catch {
+						pixbuf = null;
+					}
 				}
 				if (pixbuf == null) {
 					pixbuf = UnknownPixbuf;
