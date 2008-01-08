@@ -22,15 +22,12 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using Gnome;
-using Gnome.Vfs;
-
 namespace Do.Universe
 {
 	public class FirefoxBookmarkItemSource : IItemSource
 	{
 		const string BeginProfileName = "Path=";
-		const string BeginDefaultProfile = "Name=default";
+		const string BeginDefaultProfile = "Default=1";
 		const string BeginURL = "<DT><A HREF=\"";
 		const string EndURL = "\"";
 		const string BeginShortcut = "SHORTCUTURL=\"";
@@ -70,7 +67,7 @@ namespace Do.Universe
 		
 		public string Icon
 		{
-			get { return "www"; }
+			get { return "firefox"; }
 		}
 		
 		public ICollection<IItem> Items
@@ -105,23 +102,19 @@ namespace Do.Universe
 
 			profile = null;
 			home = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
-			path = System.IO.Path.Combine (home, ".mozilla/firefox/profiles.ini");
+			path = Path.Combine (home, ".mozilla/firefox/profiles.ini");
 			try {
-				reader = System.IO.File.OpenText (path);
+				reader = File.OpenText (path);
 			} catch {
 				return null;
 			}
 			
-			bool got_default = false;
 			for (string line = reader.ReadLine (); line != null; line = reader.ReadLine ()) {
-				if (got_default && line.StartsWith (BeginProfileName)) {
+				if (line.StartsWith (BeginDefaultProfile)) break;
+				if (line.StartsWith (BeginProfileName)) {
 					line = line.Trim ();
 					line = line.Substring (BeginProfileName.Length);
 					profile = line;
-					break;
-				}
-				else if (line.StartsWith (BeginDefaultProfile)) {
-					got_default = true;
 				}
 			}
 			reader.Close ();
@@ -129,9 +122,9 @@ namespace Do.Universe
 			if (profile == null) {
 				return null;
 			}
-			path = System.IO.Path.Combine (home, ".mozilla/firefox");
-			path = System.IO.Path.Combine (path, profile);
-			path = System.IO.Path.Combine (path, "bookmarks.html");
+			path = Path.Combine (home, ".mozilla/firefox");
+			path = Path.Combine (path, profile);
+			path = Path.Combine (path, "bookmarks.html");
 			return path;
 		}
 		
@@ -156,7 +149,7 @@ namespace Do.Universe
 			list = new List<BookmarkItem> ();
 
 			try {
-				reader = System.IO.File.OpenText (file);
+				reader = File.OpenText (file);
 				for (string line = reader.ReadLine (); line != null; line = reader.ReadLine ()) {
 					try {
 						urlIndex = line.IndexOf (BeginURL);
