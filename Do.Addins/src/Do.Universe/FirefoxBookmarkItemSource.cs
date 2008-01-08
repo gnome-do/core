@@ -82,6 +82,7 @@ namespace Do.Universe
 		
 		public void UpdateItems ()
 		{
+			bookmarks.Clear ();
 			foreach (IItem item in ReadBookmarksFromFile (GetFirefoxBookmarkFilePath ()))
 				bookmarks.Add (item);
 		}

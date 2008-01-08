@@ -32,7 +32,7 @@ namespace Do.Core
 		// How long between update events (seconds).
 		const int UpdateInterval = 60;
 		// Maximum amount of time to spend updating (millseconds).
-		const int MaxUpdateTime = 120;
+		const int MaxUpdateTime = 250;
 
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<int, IObject> universe;
@@ -62,7 +62,7 @@ namespace Do.Core
 			BuildUniverse (universe);
 			BuildFirstResults (universe, firstResults);
 
-			// GLib.Timeout.Add (UpdateInterval * 1000, new GLib.TimeoutHandler (OnTimeoutUpdate));
+			GLib.Timeout.Add (UpdateInterval * 1000, new GLib.TimeoutHandler (OnTimeoutUpdate));
 		}
 
 		bool OnTimeoutUpdate ()
