@@ -96,7 +96,7 @@ namespace Do
 
 			private static void OnMainWindowVanished (object sender, EventArgs args)
 			{
-				pixbufCache.Clear ();
+				 // pixbufCache.Clear ();
 			}
 			
 			private static void OnDefaultIconThemeChanged (object sender, EventArgs args)
@@ -147,7 +147,8 @@ namespace Do
 						pixbuf = iconTheme.LoadIcon (name, size, 0);
 					} else if (iconTheme.HasIcon (name_noext)) {
 						pixbuf = iconTheme.LoadIcon (name_noext, size, 0);
-					} else if (name == "gnome-mime-text-plain" && iconTheme.HasIcon ("gnome-mime-text")) {
+					} else if (name == "gnome-mime-text-plain" &&
+								     iconTheme.HasIcon ("gnome-mime-text")) {
 						pixbuf = iconTheme.LoadIcon ("gnome-mime-text", size, 0);
 					}
 				} catch {
@@ -165,7 +166,8 @@ namespace Do
 							pixbuf = tango.LoadIcon (name, size, 0);
 						} else if (tango.HasIcon (name_noext)) {
 							pixbuf = tango.LoadIcon (name_noext, size, 0);
-						} else if (name == "gnome-mime-text-plain" && tango.HasIcon ("gnome-mime-text")) {
+						} else if (name == "gnome-mime-text-plain" &&
+							      	tango.HasIcon ("gnome-mime-text")) {
 							pixbuf = tango.LoadIcon ("gnome-mime-text", size, 0);
 						}
 					} catch {
