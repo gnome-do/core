@@ -37,17 +37,23 @@ namespace Do.Core
 		
 		public void UpdateItems ()
 		{
-			(Inner as IItemSource).UpdateItems ();
+			try {
+				(Inner as IItemSource).UpdateItems ();
+			} catch (Exception e) {
+				Log.Error ("Item source \"{0}\" encountered an error while " +
+						"updating items: {1}", Inner.Name, e.Message);
+			}
 		}
 		
 		public ICollection<IItem> Items
 		{
 			get {
+				IItemSource source = Inner as IItemSource;
 				List<IItem> items;
 				
 				items = new List<IItem> ();
-				if ((Inner as IItemSource).Items != null) {
-					foreach (IItem item in (Inner as IItemSource).Items) {
+				if (source.Items != null) {
+					foreach (IItem item in source.Items) {
 						if (item is DoItem)
 							items.Add (item);
 						else
@@ -60,25 +66,25 @@ namespace Do.Core
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item)
 		{
-			ICollection<IItem> children;
+			IItemSource source = Inner as IItemSource;
+			ICollection<IItem> children = null;
 			List<IItem> doChildren;
 			
 			doChildren = new List<IItem> ();
-			if (item is DoItem)
-				item = (item as DoItem).Inner as IItem;
+			item = EnsureIItem (item);
 			try {
-				children = (Inner as IItemSource).ChildrenOfItem (item);
+				children = source.ChildrenOfItem (item);
 			} catch {
 				children = null;
+			} finally {
+				children = children ?? new IItem[0];
 			}
 			
-			if (children != null) {
-				foreach (IItem child in children) {
-					if (child is DoItem)
-						doChildren.Add (child);
-					else
-						doChildren.Add (new DoItem (child));
-				}
+			foreach (IItem child in children) {
+				if (child is DoItem)
+					doChildren.Add (child);
+				else
+					doChildren.Add (new DoItem (child));
 			}
 			return doChildren;
 		}

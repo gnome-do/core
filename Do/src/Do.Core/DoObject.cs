@@ -67,8 +67,62 @@ namespace Do.Core
 			}
 			return type_ok;
 		}
+
+		/// <summary>
+		/// Returns the inner item if the static type of given
+		/// item is an DoItem subtype. Returns the argument otherwise.
+		/// </summary>
+		/// <param name="items">
+		/// A <see cref="IItem"/> that may or may not be an DoItem subtype.
+		/// </param>
+		/// <returns>
+		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem of an DoItem).
+		/// </returns>
+
+		public static IItem EnsureIItem (IItem item)
+		{
+			if (item is DoItem)
+				item = (item as DoItem).Inner as IItem;
+			return item;
+		}
+
+		/// <summary>
+		/// Like EnsureItem but for arrays of IItems.
+		/// </summary>
+		/// <param name="items">
+		/// A <see cref="IItem[]"/> that may contain
+		/// DoItem subtypes.
+		/// </param>
+		/// <returns>
+		/// A <see cref="IItem[]"/> of inner IItems.
+		/// </returns>
+		public static IItem[] EnsureIItemArray (IItem[] items)
+		{
+			IItem[] inner_items;
+
+			inner_items = items.Clone () as IItem[];
+			for (int i = 0; i < items.Length; ++i) {
+				if (items[i] is DoItem) {
+					inner_items[i] = (items[i] as DoItem).Inner as IItem;
+				}
+			}
+			return inner_items;
+		}
+
+		public static IItem[] EnsureDoItemArray (IItem[] items)
+		{
+			IItem[] do_items;
+
+			do_items = items.Clone () as IItem[];
+			for (int i = 0; i < items.Length; ++i) {
+				if (!(items[i] is DoItem)) {
+					do_items[i] = new DoItem (items[i]);
+				}
+			}
+			return do_items;
+		}
 		
-		protected int _score;
+		protected int score;
 		protected IObject inner;
 		
 		protected DoObject (IObject inner)
@@ -113,8 +167,8 @@ namespace Do.Core
 		
 		public int Score
 		{
-			get { return _score; }
-			set { _score = value; }
+			get { return score; }
+			set { score = value; }
 		}
 		
 		public int ScoreForAbbreviation (string ab)
@@ -135,22 +189,4 @@ namespace Do.Core
 		}
 	}
 	
-	public class DoObjectScoreComparer : IComparer<IObject>
-	{
-		public int Compare (IObject x, IObject y) {
-			float xscore, yscore;
-			
-			if (x == null)
-				return y == null ? 0 : 1;
-			else if (y == null)
-				return 1;
-			
-			xscore = (x as DoObject).Score;
-			yscore = (y as DoObject).Score;
-			if (xscore == yscore)
-				return 0;
-			else
-				return xscore > yscore ? -1 : 1;
-		}
-	}
 }

@@ -36,31 +36,41 @@ namespace Do.Core
 
 		public override string Icon
 		{
-			get { return (Inner as ICommand).Icon ?? kDefaultCommandIcon; }
+			get {
+				return (Inner as ICommand).Icon ?? kDefaultCommandIcon;
+			}
 		}
 
 		public Type[] SupportedItemTypes
 		{
-			get { return (Inner as ICommand).SupportedItemTypes ?? new Type[0]; }
+			get {
+				return (Inner as ICommand).SupportedItemTypes ?? new Type[0];
+			}
 		}
 
 		public Type[] SupportedModifierItemTypes
 		{
-			get { return (Inner as ICommand).SupportedModifierItemTypes ?? new Type[0]; }
+			get {
+				return (Inner as ICommand).SupportedModifierItemTypes ?? new Type[0];
+			}
 		}
 		
 		public bool ModifierItemsOptional
 		{
-			get { return (Inner as ICommand).ModifierItemsOptional; }
+			get {
+				return (Inner as ICommand).ModifierItemsOptional;
+			}
 		}
 		
 		public IItem[] DynamicModifierItemsForItem (IItem item)
 		{
+			ICommand command = Inner as ICommand;
 			IItem[] modItems;
 			
 			modItems = null;
+			item = EnsureIItem (item);
 			try {
-				modItems = DynamicModifierItemsForItem (EnsureIItem (item));
+				modItems = command.DynamicModifierItemsForItem (item);
 			} catch {
 				modItems = null;
 			} finally {
@@ -71,17 +81,19 @@ namespace Do.Core
 
 		public bool SupportsItem (IItem item)
 		{
+			ICommand command = Inner as ICommand;
 			bool supports;
 			
 			item = EnsureIItem (item);
-			if (!IObjectTypeCheck (item, SupportedItemTypes)) return false;
+			if (!IObjectTypeCheck (item, SupportedItemTypes))
+				return false;
 
 			// Unless I call Gtk.Threads.Enter/Leave, this method freezes and does not return!
 			// WTF!?!?@?@@#!@ *Adding* these calls makes the UI freeze in unrelated execution paths.
 			// Why is this so fucking weird? The freeze has to do with Gtk.Clipboard interaction in DefineWordCommand.Text. 
 			//Gdk.Threads.Enter ();
 			try {
-				supports = (Inner as ICommand).SupportsItem (item);
+				supports = command.SupportsItem (item);
 			} catch {
 				supports = false;
 			} finally {
@@ -92,14 +104,16 @@ namespace Do.Core
 
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
 		{
+			ICommand command = Inner as ICommand;
 			bool supports;
 
 			items = EnsureIItemArray (items);
 			modItem = EnsureIItem (modItem);
-			if (!IObjectTypeCheck (modItem, SupportedModifierItemTypes)) return false;
+			if (!IObjectTypeCheck (modItem, SupportedModifierItemTypes))
+				return false;
 
 			try {
-				supports = (Inner as ICommand).SupportsModifierItemForItems (items, modItem);
+				supports = command.SupportsModifierItemForItems (items, modItem);
 			} catch {
 				supports = false;
 			}
@@ -108,26 +122,30 @@ namespace Do.Core
 
 		public IItem[] Perform (IItem[] items, IItem[] modItems)
 		{
+			ICommand command = Inner as ICommand;
 			IItem[] resultItems;
 			
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
 
-			InternalItemSource.LastItem.Inner = items[0]; // TODO: Create a command performed event and move this.
+			// TODO: Create a command performed event and move this.
+			if (items.Length > 0 )
+				InternalItemSource.LastItem.Inner = items[0];
 			
 			resultItems = null;
 			try {
-				resultItems = (Inner as ICommand).Perform (items, modItems);
+				resultItems = command.Perform (items, modItems);
 			} catch (Exception e) {
 				resultItems = null;
-				Log.Error ("Command \"{0}\" encountered an error: {1}", Inner.Name, e.Message);
+				Log.Error ("Command \"{0}\" encountered an error: {1}",
+						Inner.Name, e.Message);
 			} finally {
 				resultItems = resultItems ?? new IItem[0];
 			}
 			resultItems = EnsureDoItemArray (resultItems);
 			
-			// If we have results to feed back into the window, do so after a delay
-			// so Perform has time to return in the window.
+			// If we have results to feed back into the window, do so in a new
+			// iteration.
 			if (resultItems.Length > 0) {
 				GLib.Timeout.Add (50, delegate {
 					Do.Controller.SummonWithObjects (resultItems);
@@ -137,57 +155,5 @@ namespace Do.Core
 			return resultItems;
 		}
 
-		/// <summary>
-		/// Returns the inner item if the static type of given
-		/// item is an DoItem subtype. Returns the argument otherwise.
-		/// </summary>
-		/// <param name="items">
-		/// A <see cref="IItem"/> that may or may not be an DoItem subtype.
-		/// </param>
-		/// <returns>
-		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem of an DoItem).
-		/// </returns>
-		IItem EnsureIItem (IItem item)
-		{
-			if (item is DoItem)
-				item = (item as DoItem).Inner as IItem;
-			return item;
-		}
-
-		/// <summary>
-		/// Like EnsureItem but for arrays of IItems.
-		/// </summary>
-		/// <param name="items">
-		/// A <see cref="IItem[]"/> that may contain
-		/// DoItem subtypes.
-		/// </param>
-		/// <returns>
-		/// A <see cref="IItem[]"/> of inner IItems.
-		/// </returns>
-		IItem[] EnsureIItemArray (IItem[] items)
-		{
-			IItem[] inner_items;
-
-			inner_items = items.Clone () as IItem[];
-			for (int i = 0; i < items.Length; ++i) {
-				if (items[i] is DoItem) {
-					inner_items[i] = (items[i] as DoItem).Inner as IItem;
-				}
-			}
-			return inner_items;
-		}
-
-		IItem[] EnsureDoItemArray (IItem[] items)
-		{
-			IItem[] do_items;
-
-			do_items = items.Clone () as IItem[];
-			for (int i = 0; i < items.Length; ++i) {
-				if (!(items[i] is DoItem)) {
-					do_items[i] = new DoItem (items[i]);
-				}
-			}
-			return do_items;
-		}
-	}
+	}	
 }

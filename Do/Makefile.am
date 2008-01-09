@@ -68,7 +68,7 @@ FILES =  \
 	src/Do.Core/DoItem.cs \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
-	src/Do.Core/RelevanceSorter.cs \
+	src/Do.Core/DoObjectRelevanceSorter.cs \
 	src/Do.Core/SearchContext.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \

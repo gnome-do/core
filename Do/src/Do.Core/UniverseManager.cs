@@ -44,8 +44,6 @@ namespace Do.Core
 		int itemSourceCursor;
 		int firstResultsCursor;
 
-		const int kMaxSearchResults = 1000;
-
 		public UniverseManager()
 		{
 			universe = new Dictionary<int, IObject> ();
@@ -123,8 +121,7 @@ namespace Do.Core
 			// to update a couple of them.
 			t_update = 0;
 			while (t_update < MaxUpdateTime / 2) {
-				List<IObject> newFirstResults;
-				RelevanceSorter resultsSorter;
+				DoObjectRelevanceSorter sorter;
 				string firstResultKey = null;
 				int currentFirstResultsList = 0;
 
@@ -138,12 +135,11 @@ namespace Do.Core
 					}
 					currentFirstResultsList++;
 				}
-				newFirstResults = new List<IObject> (universe.Values);
-				resultsSorter = new RelevanceSorter (firstResultKey);
+				sorter = new DoObjectRelevanceSorter (firstResultKey);
 				if (firstResults.ContainsKey (firstResultKey)) {
 					firstResults.Remove (firstResultKey);
 				}
-				firstResults[firstResultKey] = resultsSorter.NarrowResults (newFirstResults);
+				firstResults[firstResultKey] = sorter.SortAndNarrowResults (universe.Values);
 				Log.Info ("Updated first results for '{0}'.", firstResultKey);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
@@ -230,14 +226,14 @@ namespace Do.Core
 		                                Dictionary<string, List<IObject>> newResults)
 		{
 			List<IObject> results;
-			RelevanceSorter comparer;
+			DoObjectRelevanceSorter sorter;
 
 			//For each starting character add every matching object from the universe to
 			//the firstResults dictionary with the key of the character
 			for (char keypress = 'a'; keypress < 'z'; keypress++) {
 				results = new List<IObject> (startingUniverse.Values);
-				comparer = new RelevanceSorter (keypress.ToString ());
-				newResults[keypress.ToString ()] = comparer.NarrowResults (results);
+				sorter = new DoObjectRelevanceSorter (keypress.ToString ());
+				newResults[keypress.ToString ()] = sorter.SortAndNarrowResults (results);
 			}
 		}
 
@@ -420,21 +416,18 @@ namespace Do.Core
 		// This will filter out the results in the previous context that match the current query
 		private List<IObject> FilterPreviousSearchResultsWithContinuedContext (SearchContext context)
 		{
-			RelevanceSorter comparer;
-			List<IObject> results;
+			DoObjectRelevanceSorter sorter;
 			string query;
 		 
 			query	= context.Query.ToLower ();
-			comparer = new RelevanceSorter (query);
-			results = new List<IObject> (context.LastContext.Results);
-			return comparer.NarrowResults (results);
+			sorter = new DoObjectRelevanceSorter (query);
+			return sorter.SortAndNarrowResults (context.LastContext.Results);
 		}
 
 
 		private List<IObject> IndependentResults (SearchContext context)
 		{
 			string query;
-			RelevanceSorter comparer;
 			List<IObject> results;
 
 			query = context.Query.ToLower ();
@@ -451,10 +444,9 @@ namespace Do.Core
 
 			// Or we just have to do an expensive search...
 			else {
-				results = new List<IObject> ();
-				results.AddRange (universe.Values);
-				comparer = new RelevanceSorter (query);
-				results.Sort (comparer);
+				DoObjectRelevanceSorter sorter;
+				sorter = new DoObjectRelevanceSorter (query);
+				results = sorter.SortAndNarrowResults (universe.Values);
 			}
 			return results;
 		}

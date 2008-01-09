@@ -1,4 +1,4 @@
-/* RelevanceSorter.cs
+/* DoObjectRelevanceSorter.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -25,40 +25,55 @@ using Do.Universe;
 
 namespace Do.Core
 {
-	public class RelevanceSorter : IComparer<IObject>
+	public class DoObjectRelevanceSorter
 	{
 		const int kMaxSearchResults = 1000;
 		
-		string searchString;
+		string query;
 		
-		public RelevanceSorter(string searchString)
+		public DoObjectRelevanceSorter (string query)
 		{
-			this.searchString = searchString;
+			this.query = query;
 		}
 		
-		public int Compare (IObject x, IObject y)
+		public List<IObject> SortResults (ICollection<IObject> broadResults)
 		{
-			int xScore = (x as DoObject).Score = (x as DoObject).ScoreForAbbreviation (searchString);
-			int yScore = (y as DoObject).Score = (y as DoObject).ScoreForAbbreviation (searchString);
-			return (xScore - yScore);
-		}
-		
-		public List<IObject> NarrowResults (List<IObject> broadResults)
-		{
-			List<IObject> results = new List<IObject> ();
-			
-			//First throw out the non-zero items, there's no point wasting sorting time on them
+			List<IObject> results;
+		 
+			results	= new List<IObject> ();
+			// Throw out the zero-relevance items.
 			foreach (DoObject obj in broadResults) {
-				obj.Score = obj.ScoreForAbbreviation (searchString);
+				obj.Score = obj.ScoreForAbbreviation (query);
 				if (obj.Score > 0) {
 					results.Add (obj);
 				}
 			}
-			
-			//Sort the remaining items
 			results.Sort (new DoObjectScoreComparer ());
-			//Return the results in List<IObject> System.FormatException
-			return results.GetRange (0, Math.Min (kMaxSearchResults, results.Count));
+			return results;
 		}
+
+		public List<IObject> SortAndNarrowResults (ICollection<IObject> broadResults)
+		{
+			List<IObject> results;
+
+			results = SortResults (broadResults);
+			// Shorten the list if neccessary.
+			if (results.Count > kMaxSearchResults)
+				results = results.GetRange (0, kMaxSearchResults);
+			return results;
+		}
+
+		class DoObjectScoreComparer : IComparer<IObject>
+		{
+			public int Compare (IObject x, IObject y) {
+				if (x == null)
+					return y == null ? 0 : 1;
+				else if (y == null)
+					return 1;
+				
+				return (y as DoObject).Score - (x as DoObject).Score;
+			}
+		}
+
 	}
 }
