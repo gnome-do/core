@@ -57,8 +57,8 @@ namespace Do.Core
 		{
 			LoadBuiltins ();
 			LoadAddins ();
-			BuildUniverse (universe);
-			BuildFirstResults (universe, firstResults);
+			BuildUniverse ();
+			BuildFirstResults ();
 
 			GLib.Timeout.Add (UpdateInterval * 1000, new GLib.TimeoutHandler (OnTimeoutUpdate));
 		}
@@ -222,32 +222,29 @@ namespace Do.Core
 			}
 		}
 
-		private void BuildFirstResults (Dictionary<int, IObject> startingUniverse,
-		                                Dictionary<string, List<IObject>> newResults)
+		private void BuildFirstResults ()
 		{
-			List<IObject> results;
 			DoObjectRelevanceSorter sorter;
 
-			//For each starting character add every matching object from the universe to
-			//the firstResults dictionary with the key of the character
+			// For each starting character, add every matching object from the universe to
+			// the firstResults list corresponding to that character.
 			for (char keypress = 'a'; keypress < 'z'; keypress++) {
-				results = new List<IObject> (startingUniverse.Values);
 				sorter = new DoObjectRelevanceSorter (keypress.ToString ());
-				newResults[keypress.ToString ()] = sorter.SortAndNarrowResults (results);
+				firstResults[keypress.ToString ()] = sorter.SortAndNarrowResults (universe.Values);
 			}
 		}
 
-		private void BuildUniverse (Dictionary<int, IObject> newUniverse)
+		private void BuildUniverse ()
 		{
 			// Hash commands.
 			foreach (DoCommand command in doCommands) {
-				newUniverse[command.UID.GetHashCode ()] = command;
+				universe[command.UID.GetHashCode ()] = command;
 			}
 
 			// Hash items.
 			foreach (DoItemSource source in doItemSources) {
 				foreach (DoItem item in source.Items) {
-					newUniverse[item.UID.GetHashCode ()] = item;
+					universe[item.UID.GetHashCode ()] = item;
 				}
 			}
 		}
@@ -417,11 +414,9 @@ namespace Do.Core
 		private List<IObject> FilterPreviousSearchResultsWithContinuedContext (SearchContext context)
 		{
 			DoObjectRelevanceSorter sorter;
-			string query;
 		 
-			query	= context.Query.ToLower ();
-			sorter = new DoObjectRelevanceSorter (query);
-			return sorter.SortAndNarrowResults (context.LastContext.Results);
+			sorter = new DoObjectRelevanceSorter (context.Query.ToLower ());
+			return sorter.SortResults (context.LastContext.Results);
 		}
 
 
