@@ -54,8 +54,8 @@ FILES =  \
 	src/Do.Universe/ImageFileItem.cs \
 	src/Do.Universe/IObject.cs \
 	src/Do.Universe/MailtoCommand.cs \
-	src/Do.Universe/OpenCommand.cs \
 	src/Do.Universe/ManuallyTypedPathItemSource.cs \
+	src/Do.Universe/OpenCommand.cs \
 	src/Do.Universe/OpenTerminalHereCommand.cs \
 	src/Do.Universe/OpenURLCommand.cs \
 	src/Do.Universe/OpenWithCommand.cs \

@@ -183,9 +183,19 @@ namespace Do.Core
 			return (int) (100 * similarity);
 		}
 		
+		public override bool Equals (object o)
+		{
+			IObject other = o as IObject;
+
+			if (other == null) return false;
+			return this.GetType () == other.GetType () &&
+				Name == other.Name &&
+				Description == other.Description;
+		}
+
 		public override string ToString ()
 		{
-			return Name;
+			return UID;
 		}
 	}
 	

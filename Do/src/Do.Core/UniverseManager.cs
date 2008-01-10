@@ -260,20 +260,20 @@ namespace Do.Core
 				context = oldContext.GetContinuedContext ();
 				return;
 			}
-			else if (context.FindingChildren) {
-				context = ChildContext (context);
-				return;
-			}
 			else if (context.FindingParent) {
 				context = ParentContext (context);
 				return;
 			}
-			else {
-				if (context.Independent) {
-					results = IndependentResults (context);
-				} else {
-					results = DependentResults (context);
-				}
+			else if (context.FindingChildren) {
+				// TODO: Children are not filtered at all. This needs to be fixed.
+				context = ChildContext (context);
+				return;
+			}
+
+			if (context.Independent) {
+				results = IndependentResults (context);
+			} else {
+				results = DependentResults (context);
 			}
 			results.AddRange (AddNonUniverseItems (context));
 
@@ -307,8 +307,6 @@ namespace Do.Core
 			} else {
 				children = new List<IItem> ();
 			}
-
-			// Don't do anything if there are no children
 			if (children.Count == 0) {
 				context.FindingChildren = false;
 				return context;
@@ -321,6 +319,11 @@ namespace Do.Core
 			newContext.FindingChildren = false;
 			newContext.LastContext = new SearchContext (false);
 
+			// We need to do something like this (filter the children), but DR's work
+			// is intractable.
+			// if (!context.Independent) {
+			// 	newContext.Results = DependentResults (newContext).ToArray ();
+			// }
 			context.FindingChildren = true;
 			return newContext.GetContinuedContext ();
 		}
@@ -337,18 +340,32 @@ namespace Do.Core
 				return FilterPreviousSearchResultsWithContinuedContext (context);
 			}
 
-			// After this, we're only searching for items or mod items in a new
-			// search.
+			// Or else this is a brand new search:
 			if (firstResults.ContainsKey (query))
 				results = new List<IObject> (firstResults[query]);
 			else
 				results = new List<IObject> (universe.Values);
 
 			// Filter the results appropriately.
-			if (context.ModItemsSearch)
+			if (context.ModItemsSearch) {
+				// Use a dictionary to get the intersection of the dynamic modifier
+				// items for all items in the context.
+				Dictionary <IItem, IItem> dynamicModItems = new Dictionary<IItem, IItem> ();
+				foreach (IItem item in context.Items) {
+					foreach (IItem modItem in
+							context.Command.DynamicModifierItemsForItem (item)) {
+						dynamicModItems[modItem] = modItem;
+					}
+				}
+				// Add the intersected set to the results list.
+				foreach (IItem modItem in dynamicModItems.Values) {
+					results.Insert (0, modItem);
+				}
 				results = GetModItemsFromList (context, results);
-			else // These are items:
+			} else {
+			 	// These are items:
 				results = GetItemsFromList (context, results);
+			}
 
 			return results;
 		}

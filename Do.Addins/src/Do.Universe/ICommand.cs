@@ -29,17 +29,24 @@ namespace Do.Universe
 	{
 		/// <value>
 		/// An array of IItem sub-interfaces that this command supports.
-		/// null is ok---it signifies that NO types are supported.
+		/// null is ok--it signifies that NO types are supported.
 		/// </value>
 		Type[] SupportedItemTypes { get; }
 		
 		/// <value>
 		/// An array of IItem sub-interfaces that this command supports as modifier
-		/// items.
-		/// null is ok---it signifies that NO types are supported.
+		/// items. If your command uses modifier items, either optionally or necessarily,
+		/// either from the item universe or provided dynamically with DynamicModifierItemsForItem,
+		/// this must return a non-empty array; if you return null or an empty array
+		/// here, your command will not work with modifier items.
+		/// null is ok--it signifies that NO types are supported.
 		/// </value>
 		Type[] SupportedModifierItemTypes { get; }
 		
+		/// <value>
+		/// Whether modifier items are optional (if you indicate that modifier
+		/// items are /not/ optional, this means that they are required).
+		/// </value>
 		bool ModifierItemsOptional { get; }
 		
 		/// <summary>
@@ -51,6 +58,10 @@ namespace Do.Universe
 		/// <param name="modItems">
 		/// A <see cref="IItem[]"/> of modifier items.
 		/// </param>
+		/// <returns>
+		/// A <see cref="IItem[]"/> of result items to present to the user.
+		/// You may return null--this is the same as returning an empty array.
+		/// </returns>
 		IItem[] Perform (IItem[] items, IItem[] modItems);
 
 		/// <summary>
@@ -88,9 +99,25 @@ namespace Do.Universe
 		/// </returns>
 		bool SupportsModifierItemForItems (IItem[] items, IItem modItem);
 		
+		/// <summary>
+		/// If you would like to supply modifier items dynamically, do
+		/// so here.
+		/// </summary>
+		/// <param name="item">
+		/// An <see cref="IItem[]"/> for which you will or will not provide
+		/// dynamic modifier items.
+		/// </param>
+		/// <returns>
+		/// An <see cref="IItem[]"/> containing items to use as modifier items.
+		/// null is ok--it signifies that no modifier items are provided.
+		/// </returns>
 		IItem[] DynamicModifierItemsForItem (IItem item);
 	}
 	
+	/// <summary>
+	/// This class is for your convenience. It stubs some less-frequently
+	/// implemented ICommand members with default values.
+	/// </summary>
 	public abstract class AbstractCommand : ICommand
 	{
 		

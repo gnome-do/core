@@ -156,6 +156,37 @@ namespace Do.UI
 			}
 		}
 
+		bool ThirdPaneAllowed
+		{
+			get {
+				IObject first, second;
+				ICommand command;
+
+				first = GetCurrentObject (Pane.First);
+				second = GetCurrentObject (Pane.Second);
+				command = (first as ICommand) ?? (second as ICommand);
+				return command != null &&
+					command.SupportedModifierItemTypes.Length > 0 &&
+					context[1].Results.Length > 0;
+			}
+		}
+
+		bool ThirdPaneRequired
+		{
+			get {
+				IObject first, second;
+				ICommand command;
+
+				first = GetCurrentObject (Pane.First);
+				second = GetCurrentObject (Pane.Second);
+				command = (first as ICommand) ?? (second as ICommand);
+				return command != null &&
+					command.SupportedModifierItemTypes.Length > 0 &&
+					!command.ModifierItemsOptional &&
+					context[1].Results.Length > 0;
+			}
+		}
+
 		protected virtual void SetDefaultState ()
 		{
 			// Cancel any pending searches.
@@ -317,21 +348,13 @@ namespace Do.UI
 
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
-			IObject second;
-
 			tabbing = true;
 			resultsWindow.Hide ();
-			second = GetCurrentObject (Pane.Second);
 			if (CurrentPane == Pane.First &&
 					context[0].Results.Length != 0) {
 				CurrentPane = Pane.Second;
-			} else if (CurrentPane == Pane.Second &&
-					context[1].Results.Length != 0 &&
-					second != null &&
-					second is ICommand &&
-					(second as ICommand).SupportedModifierItemTypes.Length > 0) {
+			} else if (CurrentPane == Pane.Second && ThirdPaneAllowed) {
 				CurrentPane = Pane.Third;
-				// ShowThirdPane ();
 			} else {
 				CurrentPane = Pane.First;
 			}
@@ -450,7 +473,7 @@ namespace Do.UI
 					items.Add (second as IItem);
 					command = first as ICommand;
 				}
-				if (third != null && context[2].Query != "") {
+				if (third != null && iconbox[2].Visible) {
 					modItems.Add (third as IItem);
 				}
 				command.Perform (items.ToArray (), modItems.ToArray ());
@@ -461,7 +484,8 @@ namespace Do.UI
 			}
 		}
 
-		private void OnResultsWindowSelectionChanged (object sender, ResultsWindowSelectionEventArgs args)
+		private void OnResultsWindowSelectionChanged (object sender,
+				ResultsWindowSelectionEventArgs args)
 		{
 			CurrentCursor = args.SelectedIndex;
 
@@ -635,26 +659,23 @@ namespace Do.UI
 
 			Do.UniverseManager.Search (ref context[2]);
 			UpdatePane (Pane.Third, true);
+
+			if (ThirdPaneRequired) {
+				ShowThirdPane ();
+			} else {
+				HideThirdPane ();
+			}
 			return false;
 		}
 
 		protected void UpdatePane (Pane pane, bool updateResults)
 		{
-			IObject currentObject;
+			IObject current;
 
-			currentObject = GetCurrentObject (pane);
-			if (currentObject != null) {
-				iconbox[(int) pane].DisplayObject = currentObject;
+			current = GetCurrentObject (pane);
+			if (current != null) {
+				iconbox[(int) pane].DisplayObject = current;
 				iconbox[(int) pane].Highlight = context[(int) pane].Query;
-
-				if (currentObject is ICommand) {
-					if ((currentObject as ICommand).SupportedModifierItemTypes.Length > 0 &&
-						!(currentObject as ICommand).ModifierItemsOptional) {
-						ShowThirdPane ();
-					} else {
-						HideThirdPane ();
-					}
-				}
 			} else {
 				SetNoResultsFoundState (pane);
 				return;
