@@ -67,18 +67,6 @@ namespace Do.Universe
 			}
 		}
 		
-		public override bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			// This is too strict - many desktop files are incomplete,
-			// so MimeTypes is not reliable.
-			/* 
-			return items[0] is FileItem &&
-							(modItem as ApplicationItem).MimeTypes.Contains (
-								(items[0] as FileItem).MimeType);
-			*/
-			return true;
-		}
-		
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			List<string> uris;

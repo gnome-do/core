@@ -355,6 +355,11 @@ namespace Do.UI
 				CurrentPane = Pane.Second;
 			} else if (CurrentPane == Pane.Second && ThirdPaneAllowed) {
 				CurrentPane = Pane.Third;
+				ShowThirdPane ();
+			} else if (CurrentPane == Pane.Third && !ThirdPaneRequired) {
+				// This is used for commands for which modifier items are optional.
+				CurrentPane = Pane.First;
+				HideThirdPane ();
 			} else {
 				CurrentPane = Pane.First;
 			}
@@ -662,7 +667,7 @@ namespace Do.UI
 
 			if (ThirdPaneRequired) {
 				ShowThirdPane ();
-			} else {
+			} else if (!ThirdPaneAllowed) {
 				HideThirdPane ();
 			}
 			return false;
