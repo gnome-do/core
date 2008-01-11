@@ -30,7 +30,7 @@ namespace Do.Core
 	public class UniverseManager
 	{
 		// How long between update events (seconds).
-		const int UpdateInterval = 60;
+		const int UpdateInterval = 120;
 		// Maximum amount of time to spend updating (millseconds).
 		const int MaxUpdateTime = 250;
 
@@ -55,12 +55,29 @@ namespace Do.Core
 
 		internal void Initialize ()
 		{
+			GConf.Client client;
+			bool enable_updating;
+
 			LoadBuiltins ();
 			LoadAddins ();
 			BuildUniverse ();
 			BuildFirstResults ();
 
-			GLib.Timeout.Add (UpdateInterval * 1000, new GLib.TimeoutHandler (OnTimeoutUpdate));
+			client = new GConf.Client();
+			try {
+				enable_updating = (bool) client.Get
+					("/apps/gnome-do/preferences/enable_updating");
+			} catch {
+				client.Set ("/apps/gnome-do/preferences/enable_updating", false);
+				enable_updating = false;
+			}
+			if (enable_updating) {
+				Log.Info ("Universe updating is enabled. Will re-scan item sources every {0} seconds.", UpdateInterval);
+				GLib.Timeout.Add (UpdateInterval * 1000,
+						new GLib.TimeoutHandler (OnTimeoutUpdate));
+			} else {
+				Log.Info ("Universe updating is not enabled. This experimental feature can be enabled in Configuration Editor.");
+			}
 		}
 
 		bool OnTimeoutUpdate ()
