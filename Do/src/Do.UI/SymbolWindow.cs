@@ -383,10 +383,10 @@ namespace Do.UI
 		{
 			if (CurrentContext.Results.Length > 0) {
 				if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
-					CurrentContext.FindingChildren = true;
+					CurrentContext.ChildrenSearch = true;
 					QueueSearch (false);
 				} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {
-					CurrentContext.FindingParent = true;
+					CurrentContext.ParentSearch = true;
 					QueueSearch (false);
 				}
 				resultsWindow.Show ();
@@ -645,7 +645,6 @@ namespace Do.UI
 			IObject first, second;
 
 			context[2].SearchTypes = new Type[] { typeof (IItem) };
-			context[2].ModItemsSearch = true;
 
 			first = GetCurrentObject (Pane.First);
 			second = GetCurrentObject (Pane.Second);

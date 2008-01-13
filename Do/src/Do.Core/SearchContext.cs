@@ -25,23 +25,22 @@ using Do.Universe;
 
 namespace Do.Core
 {
-	public class SearchContext
+	public class SearchContext : ICloneable, IEquatable<SearchContext>
 	{
-		const int MOD_ITEMS = 1;
-		const int GET_CHILDREN = 2;
-		const int GET_PARENT = 4;
-
 		List<IItem> items;
-		ICommand command;
 		List<IItem> modifierItems;
+		
+		ICommand command;
+		
 		string query;
+		Type[] searchTypes;
+		int cursor;
+		IObject[] results;
+		
 		SearchContext lastContext;
 		SearchContext parentContext;
-		IObject[] results;
-		Type[] searchTypes;
-		int flag;
-		IObject parentObject;
-		int cursor;
+		
+		bool parentSearch, childrenSearch;
 				
 		public SearchContext ():
 			this (true)
@@ -50,125 +49,169 @@ namespace Do.Core
 		
 		public SearchContext (bool bufferLastContext)
 		{
-			SearchTypes = new Type[0];
-			flag = 0;
 			items = new List<IItem> ();
 			modifierItems = new List<IItem> ();
-			Query = "";
-			lastContext = null;
-			cursor = 0;
-			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
+			command = null;
+			
 			query = "";
+			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
 			results = new IObject[0];
-
+			cursor = 0;
+			
+			lastContext = parentContext = null;
+			parentSearch = childrenSearch = false;
+			
 			if (bufferLastContext) {
 				lastContext = new SearchContext (false);
 			}
 		}
 		
-		public SearchContext Clone ()
-		{
-			SearchContext clonedContext = new SearchContext ();
-			clonedContext.Command = command;
-			clonedContext.Items = items;
-			clonedContext.ModifierItems = modifierItems;
-			clonedContext.Query = query;
-			clonedContext.LastContext = lastContext;
-			clonedContext.ParentContext = parentContext;
-			clonedContext.Cursor = Cursor;
-			if (results != null) {
-				clonedContext.Results = (IObject[]) (results.Clone ());
-			}
-			clonedContext.flag = flag;
-			return clonedContext;
-		}
-		
 		public SearchContext LastContext
 		{
-			get {
-				return lastContext;
-			}
-			set {
-				lastContext = value;
-			}
+			get { return lastContext; }
+			set { lastContext = value; }
 		}
 		
 		public SearchContext ParentContext
 		{
-			get {
-				return parentContext;
-			}
-			set {
-				parentContext = value;
-			}
+			get { return parentContext; }
+			set { parentContext = value; }
 		}
 		
 		public List<IItem> Items
 		{
-			get {
-				return items;
-			}
-			set {
-				items = value;
-			}
+			get { return items; }
+			set { items = value; }
 		}
 		
 		public List<IItem> ModifierItems
 		{
-			get {
-				return modifierItems;
-			}
-			set {
-				modifierItems = value;
-			}
+			get { return modifierItems; }
+			set { modifierItems = value; }
 		}
 		
 		public ICommand Command
 		{
-			get {
-				return command;
-			}
-			set {
-				command = value;
-			}
+			get { return command; }
+			set { command = value; }
 		}
 			
 		public string Query
 		{
-			get {
-				return query;
-			}
-			set {
-				query = value;
-			}
+			get { return query; }
+			set { query = value; }
 		}
 
 		public IObject[] Results
 		{
-			get {
-				return results;
-			}
+			get { return results; }
 			set {
-				// NOTE Do something special here later; if
-				// a client class sets this field, it must
-				// be ensured that array contains IObjects.
-				results = value;
-				//Since there are new results the old cursor value is irrelevant
+				results = value ?? new IObject[0];
 				cursor = 0;
 			}
 		}
 		
-		public bool Equivalent (SearchContext test)
+		public bool ItemsSearch
 		{
-			//If its null, return false right away so a null exception isn't thrown
-			if (test == null)
-				return false;
+			get {
+				return searchTypes.Length == 1 &&
+					searchTypes[0] == typeof (IItem);
+			}
+		}
+		
+		public bool CommandSearch
+		{
+			get {
+				return  searchTypes.Length == 1 &&
+					searchTypes[0] == typeof (ICommand);
+			}
+		}
+		
+		public bool ModifierItemsSearch
+		{
+			get {
+				return searchTypes.Length == 1 &&
+					searchTypes[0] == typeof (IItem) &&
+					items.Count > 0 && command != null;
+			}
+		}
+	
+		public bool ChildrenSearch
+		{
+			get { return childrenSearch;}
+			set { childrenSearch = value; }
+		}
+		
+		public bool ParentSearch
+		{
+			get { return parentSearch; }
+			set { parentSearch = value; }
+		}
+		
+		public bool Independent
+		{
+			get {
+				return !(CommandSearch || ItemsSearch || ModifierItemsSearch);
+			}
+		}
+		
+		public IObject Selection
+		{
+			get {
+				try {
+					return results[cursor];
+				} catch {
+					return null;
+				}
+			}
+		}
+		
+		public Type[] SearchTypes
+		{
+			get { return searchTypes; }
+			set { searchTypes = value; }
+		}
+		
+		public int Cursor
+		{
+			get { return cursor; }
+			set { cursor = value; }
+		}
+		
+		public object Clone ()
+		{
+			SearchContext clone;
 			
-			//Test to see if the search strings are the same
-			if (query != test.Query)
-				return false;
+			clone = new SearchContext ();
+			clone.Command = command;
+			clone.Items = new List<IItem> (items);
+			clone.ModifierItems = new List<IItem> (modifierItems);
+			clone.Query = query;
+			clone.LastContext = lastContext;
+			clone.ParentContext = parentContext;
+			clone.Cursor = Cursor;
+			clone.Results = results.Clone () as IObject[];
+			clone.ChildrenSearch = childrenSearch;
+			clone.ParentSearch = parentSearch;
+			return clone;
+		}
+		
+		public override int GetHashCode ()
+		{
+			return base.GetHashCode ();
+		}
+
+		public override bool Equals (object o)
+		{
+			return Equals (o as SearchContext);
+		}
+
+		public bool Equals (SearchContext test)
+		{			
+			if (test == null) return false;
+			if (query != test.Query) return false;
 			
-			//Test to see if the type filters are the same
+			// Test to see if the type filters are the same.
 			if (test.SearchTypes.Length != SearchTypes.Length)
 				return false;
 			foreach (Type type in SearchTypes) {
@@ -176,144 +219,34 @@ namespace Do.Core
 					return false;
 			}
 			
-			//Chech to see if items the same, but only if items are supposed to be fixed
-			if (test.CommandSearch || test.ModItemsSearch)
+			// Check to see if items the same, but only if items are supposed to be fixed.
+			if (test.CommandSearch || test.ModifierItemsSearch)
 				foreach (IItem item in test.Items)
-					if (!(Items.Contains (item)))
-						return false;
+					if (!Items.Contains (item)) return false;
 			
-			//Check to see if commands are the same, but only if commands are supposed to be fixed
-			if (test.ItemsSearch || test.ModItemsSearch)
-				if (!(test.Command.Equals (Command)))
-					return false;
+			// Check to see if commands are the same, but only if commands are supposed to be fixed
+			if (test.ItemsSearch || test.ModifierItemsSearch)
+				if (test.Command != Command) return false;
 			
-			if (test.flag != flag)
+			if (test.ModifierItemsSearch != ModifierItemsSearch) return false;
+			
+			if (test.ChildrenSearch != childrenSearch ||
+			    test.ParentSearch != parentSearch)
 				return false;
 			
 			return true;
 		}
 		
-		public bool ItemsSearch
-		{
-			get {
-				return searchTypes.Length == 1 && searchTypes[0] == typeof (IItem);
-			}
-		}
-		
-		public bool CommandSearch
-		{
-			get {
-				if (items == null)
-					return false;
-				if (searchTypes.Length == 0)
-					return false;
-
-				if (items.Count != 0 && searchTypes[0].Equals (typeof (ICommand)) && searchTypes.Length == 1) {
-					return true;
-				}
-				return false;
-			}
-		}
-		
-		public bool ModItemsSearch
-		{
-			get {
-				return (flag & MOD_ITEMS) == MOD_ITEMS;
-			}
-			set {
-				if (value)
-					flag = flag | MOD_ITEMS;
-				else
-					flag = flag & ~(MOD_ITEMS);
-			}
-		}
-	
-		public bool FindingChildren
-		{
-			get {
-				return (flag & GET_CHILDREN) == GET_CHILDREN;
-			}
-			set {
-				if (value)
-					flag = flag | GET_CHILDREN;
-				else
-					flag = flag & ~(GET_CHILDREN);
-			}
-		}
-		
-		public bool FindingParent
-		{
-			get {
-				return ((flag & GET_PARENT) == GET_PARENT);
-			}
-			set {
-				if (value)
-					flag = flag | GET_PARENT;
-				else
-					flag = flag & ~(GET_PARENT);
-			}
-		}
-		
-		public bool Independent
-		{
-			get {
-				return !(CommandSearch || ItemsSearch || ModItemsSearch);
-			}
-		}
-		
-		public void ResetAllObjects ()
+		public void Clear ()
 		{
 			items = new List<IItem> ();
 			modifierItems = new List<IItem> ();
 			command = null;
 		}
 		
-		public IObject Selection
-		{
-			get {
-				IObject o;
-				try {
-					o = results[cursor];
-				} catch {
-					o = null;
-				}
-				return o;
-			}
-		}
-		
-		public Type[] SearchTypes
-		{
-			get {
-				return searchTypes;
-			}
-			set {
-				searchTypes = value;
-			}
-		}
-		
-		public IObject ParentObject
-		{
-			get {
-				return parentObject;
-			}
-			set {
-				parentObject = value;
-			}
-		}
-		
-		public int Cursor
-		{
-			get {
-				return cursor;
-			}
-			set {
-				cursor = value;
-			}
-		}
-		
 		public SearchContext EquivalentPreviousContextIfExists ()
 		{
-			if (Equivalent (LastContext.LastContext))
+			if (Equals (LastContext.LastContext))
 				return LastContext.LastContext;
 			return null;
 		}
@@ -321,9 +254,25 @@ namespace Do.Core
 		public SearchContext GetContinuedContext ()
 		{
 			SearchContext clone;
-			clone = Clone ();
+			
+			clone = Clone () as SearchContext;
 			clone.LastContext = this;
 			return clone;
+		}
+		
+		public override string ToString ()
+		{
+			return "SearchContext " + base.ToString () + 
+			"\n\tQuery: \"" + query + "\"" +
+			"\n\tCommand: " + command +
+			"\n\tNumber of items: " + items.Count +
+			"\n\tNumber of modifier items: " + modifierItems.Count +
+			"\n\tHas last context: " + (lastContext != null) +
+			"\n\tHas parent context: " + (parentContext != null) +
+			"\n\tCursor: " + cursor +
+			"\n\tResults: " + results +
+			"\n\tSearching children: " + childrenSearch +
+			"\n\tSearching parent: " + parentSearch;
 		}
 	}
 }

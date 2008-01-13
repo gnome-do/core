@@ -31,6 +31,9 @@ namespace Do.Addins
 	public delegate string FormatCommonSubstringsDelegate (string main, string highlight, string format);
 	public delegate void PresentWindowDelegate (Gtk.Window window);
 	
+	/// <summary>
+	/// Useful functionality for plugins. See <see cref="Do.Util"/>.
+	/// </summary>
 	public class Util
 	{
 		

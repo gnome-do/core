@@ -55,7 +55,7 @@ namespace Do.Universe
 		
 		public override string Icon
 		{
-			get { return "accessories-dictionary.png"; }
+			get { return "accessories-dictionary"; }
 		}
 		
 		public override Type[] SupportedItemTypes
@@ -85,7 +85,7 @@ namespace Do.Universe
 			if (item is ITextItem) {
 				word = (item as ITextItem).Text;
 			}
-			return word != null && wordRegex.IsMatch (word);
+			return !string.IsNullOrEmpty (word) && wordRegex.IsMatch (word);
 		}
 		
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
@@ -97,13 +97,8 @@ namespace Do.Universe
 				} else {
 					continue;
 				}
-
 				cmd = string.Format ("gnome-dictionary --look-up \"{0}\"", word);
-				try {
-					System.Diagnostics.Process.Start (cmd);
-				} catch (Exception e) {
-					Console.WriteLine ("Failed to define word: \"{0}\"", e.Message);
-				}
+				System.Diagnostics.Process.Start (cmd);
 			}
 			return null;
 		}

@@ -29,9 +29,14 @@ namespace Do.Core
 {
 	public class UniverseManager
 	{
-		// How long between update events (seconds).
+		/// <summary>
+		/// How long between update events (seconds).
+		/// </summary>
 		const int UpdateInterval = 120;
-		// Maximum amount of time to spend updating (millseconds).
+		
+		/// <summary>
+		/// Maximum amount of time to spend updating (millseconds).
+		/// </summary>
 		const int MaxUpdateTime = 250;
 
 		Dictionary<string, List<IObject>> firstResults;
@@ -72,11 +77,13 @@ namespace Do.Core
 				enable_updating = false;
 			}
 			if (enable_updating) {
-				Log.Info ("Universe updating is enabled. Will re-scan item sources every {0} seconds.", UpdateInterval);
+				Log.Info ("Universe updating is enabled. Will re-scan item " +
+				          "sources every {0} seconds.", UpdateInterval);
 				GLib.Timeout.Add (UpdateInterval * 1000,
 						new GLib.TimeoutHandler (OnTimeoutUpdate));
 			} else {
-				Log.Info ("Universe updating is not enabled. This experimental feature can be enabled in Configuration Editor.");
+				Log.Info ("Universe updating is not enabled. This experimental " +
+				          "feature can be enabled in Configuration Editor.");
 			}
 		}
 
@@ -277,11 +284,11 @@ namespace Do.Core
 				context = oldContext.GetContinuedContext ();
 				return;
 			}
-			else if (context.FindingParent) {
+			else if (context.ParentSearch) {
 				context = ParentContext (context);
 				return;
 			}
-			else if (context.FindingChildren) {
+			else if (context.ChildrenSearch) {
 				// TODO: Children are not filtered at all. This needs to be fixed.
 				context = ChildContext (context);
 				return;
@@ -292,7 +299,7 @@ namespace Do.Core
 			} else {
 				results = DependentResults (context);
 			}
-			results.AddRange (AddNonUniverseItems (context));
+			results.AddRange (SpecialItemsForContext (context));
 
 			context.Results = results.ToArray ();
 			// Keep a stack of incremental results.
@@ -303,13 +310,13 @@ namespace Do.Core
 		{
 			//Since we are dealing with the parent, turn off the finding parent
 			//flag
-			context.FindingParent = false;
+			context.ParentSearch = false;
 			//Check to see if parent context exists first
 			if (context.ParentContext == null)
 				return context;
 
 			context = context.ParentContext;
-			context.FindingChildren = false;
+			context.ChildrenSearch = false;
 			return context;
 		}
 
@@ -325,15 +332,15 @@ namespace Do.Core
 				children = new List<IItem> ();
 			}
 			if (children.Count == 0) {
-				context.FindingChildren = false;
+				context.ChildrenSearch = false;
 				return context;
 			}
 
-			newContext = context.Clone ();
+			newContext = context.Clone () as SearchContext;
 			newContext.ParentContext = context;
 			newContext.Query = "";
 			newContext.Results = children.ToArray ();
-			newContext.FindingChildren = false;
+			newContext.ChildrenSearch = false;
 			newContext.LastContext = new SearchContext (false);
 
 			// We need to do something like this (filter the children), but DR's work
@@ -341,7 +348,7 @@ namespace Do.Core
 			// if (!context.Independent) {
 			// 	newContext.Results = DependentResults (newContext).ToArray ();
 			// }
-			context.FindingChildren = true;
+			context.ChildrenSearch = true;
 			return newContext.GetContinuedContext ();
 		}
 
@@ -364,7 +371,7 @@ namespace Do.Core
 				results = new List<IObject> (universe.Values);
 
 			// Filter the results appropriately.
-			if (context.ModItemsSearch) {
+			if (context.ModifierItemsSearch) {
 				// Use a dictionary to get the intersection of the dynamic modifier
 				// items for all items in the context.
 				Dictionary <IItem, IItem> dynamicModItems = new Dictionary<IItem, IItem> ();
@@ -387,27 +394,26 @@ namespace Do.Core
 			return results;
 		}
 
-		private List<IObject> AddNonUniverseItems (SearchContext context)
+		private List<IObject> SpecialItemsForContext (SearchContext context)
 		{
 			List<IObject> results = new List<IObject> ();
-
-			//If we're on modifier items, add a text item if its supported
-			if (context.ModItemsSearch) {
-				if (ContainsType (context.Command.SupportedModifierItemTypes,
-				                       typeof (TextItem))) {
-					results.Add (new DoTextItem (context.Query));
+			IItem textItem = new DoTextItem (context.Query);
+			
+			// If we're on modifier items, add a text item if it's supported.
+			if (context.ModifierItemsSearch) {
+				if (context.Command.SupportsModifierItemForItems (context.Items.ToArray (), textItem)) {
+					results.Add (textItem);
 				}
 			}
-			//Same if we're on items
+			// Same if we're on items.
 			else if (context.ItemsSearch) {
-				if (ContainsType (context.Command.SupportedItemTypes,
-				                       typeof (ITextItem))) {
-					results.Add (new DoTextItem (context.Query));
+				if (context.Command.SupportsItem (textItem)) {
+					results.Add (textItem);
 				}
 			}
-			//If independent always add a text item
+			// If independent, always add.
 			else if (context.Independent) {
-				results.Add (new DoTextItem (context.Query));
+				results.Add (textItem);
 			}
 
 			return results;

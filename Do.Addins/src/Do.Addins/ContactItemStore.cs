@@ -25,6 +25,14 @@ using Do.Universe;
 
 namespace Do.Addins
 {
+	/// <summary>
+	/// This class helps de-duplicate ContactItems created from different
+	/// item sources; for example, combining partial information about a single
+	/// contact from Pidgin and Evolution.
+	/// 
+	/// TODO: Rewrite this class so that ContactItems can contain arbitrary
+	/// attributes. Perhaps use VCard standard as a starting point.
+	/// </summary>
 	public class ContactItemStore
 	{
 		static Dictionary<ContactItem, bool> contacts;
@@ -41,37 +49,55 @@ namespace Do.Addins
 			contacts_by_aim = new Dictionary<string, ContactItem> ();
 			contacts_by_jabber = new Dictionary<string, ContactItem> ();
 		}
+		
+		public static ICollection<ContactItem> Contacts
+		{
+			get { return contacts.Keys; }
+		}
 
+		/// <summary>
+		/// Given a ContactItem with some information about a contact, this
+		/// method will attempt to find information about this contact
+		/// already contained in the contact store. Additional information from
+		/// the contact passed by reference will be added to the canonical contact
+		/// in the store, and the updated contact from the store will be returned
+		/// in the reference.
+		/// </summary>
+		/// <param name="contact">
+		/// A <see cref="ContactItem"/> whose information you wish to merge with
+		/// the store.
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/> indicating whether the contact was merged
+		/// with a pre-existing contact from the store.
+		/// </returns>
 		public static bool SynchronizeContactWithStore (ref ContactItem contact)
 		{
 			ContactItem match;
 
 			match = null;
-			if (contact.name != null) {
-				contacts_by_name.TryGetValue (contact.Name.ToLower(), out match);
-				if (match != null) goto got_match;
-			}
+			do {
+				if (contact.name != null) {
+					contacts_by_name.TryGetValue (contact.Name.ToLower(), out match);
+					if (match != null) break;
+				}
+				foreach (string email in contact.Emails) {
+					contacts_by_email.TryGetValue (email.ToLower(), out match);
+					if (match != null) break;
+				}
+				foreach (string aim in contact.AIMs) {
+					contacts_by_aim.TryGetValue (aim.ToLower(), out match);
+					if (match != null) break;
+				}
+				foreach (string jabber in contact.Jabbers) {
+					contacts_by_jabber.TryGetValue (jabber.ToLower(), out match);
+					if (match != null) break;
+				}
+				// New contact data.
+				AddContactData (contact);
+				return false;
+			} while (false);	
 
-			foreach (string email in contact.Emails) {
-				contacts_by_email.TryGetValue (email.ToLower(), out match);
-				if (match != null) goto got_match;
-			}
-
-			foreach (string aim in contact.AIMs) {
-				contacts_by_aim.TryGetValue (aim.ToLower(), out match);
-				if (match != null) goto got_match;
-			}
-
-			foreach (string jabber in contact.Jabbers) {
-				contacts_by_jabber.TryGetValue (jabber.ToLower(), out match);
-				if (match != null) goto got_match;
-			}
-
-			// New contact data.
-			AddContactData (contact);
-			return false;
-			
-			got_match:
 			MergeContactIntoContact (contact, match);
 			AddContactData (match);
 			contact = match;
@@ -131,13 +157,6 @@ namespace Do.Addins
 
 			foreach (string jabber in c.Jabbers)
 				contacts_by_jabber[jabber.ToLower()] = c;
-		}
-
-		public static ICollection<ContactItem> Contacts
-		{
-			get {
-				return contacts.Keys;
-			}
 		}
 	}
 }
