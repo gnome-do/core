@@ -49,37 +49,13 @@ namespace Do.Universe
 		public string Text
 		{
 			get {
-				string text;
-				
-				// This causes a lot of trouble...
-				/*
 				Gtk.Clipboard primary;
+				string text;
 			
-				Console.WriteLine ("\nTrying to get clipboard text on thread {0}.", Thread.CurrentThread.Name);
 				primary = Gtk.Clipboard.Get (Gdk.Selection.Primary);
 				if (primary.WaitIsTextAvailable ()) {
-					Console.WriteLine ("Text available. Waiting for text...");
 					text = primary.WaitForText ();
-					Console.WriteLine ("Got clipboard text \"{0}\"", text);
 				} else {
-					Console.WriteLine ("No clipboard text available.");
-					text = "";
-				}
-				return text;
-				*/
-				
-				System.Diagnostics.Process xclip;
-				xclip = new System.Diagnostics.Process ();
-				xclip.StartInfo.FileName = "xclip";
-				xclip.StartInfo.Arguments = "-o";
-				xclip.StartInfo.RedirectStandardOutput = true;
-				xclip.StartInfo.UseShellExecute = false;
-				try {
-					xclip.Start ();
-					xclip.WaitForExit ();
-					text = xclip.StandardOutput.ReadToEnd ();
-				} catch {
-					Console.Error.WriteLine ("SelectedTextItem error: The program 'xclip' could not be found.");
 					text = "";
 				}
 				return text;
