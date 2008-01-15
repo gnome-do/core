@@ -40,7 +40,7 @@ namespace Do.Core
 		const int MaxUpdateTime = 250;
 
 		Dictionary<string, List<IObject>> firstResults;
-		Dictionary<int, IObject> universe;
+		Dictionary<IObject, IObject> universe;
 
 		List<DoItemSource> doItemSources;
 		List<DoCommand> doCommands;
@@ -51,7 +51,7 @@ namespace Do.Core
 
 		public UniverseManager()
 		{
-			universe = new Dictionary<int, IObject> ();
+			universe = new Dictionary<IObject, IObject> ();
 			doItemSources = new List<DoItemSource> ();
 			doCommands = new List<DoCommand> ();
 			firstResults = new Dictionary<string, List<IObject>> ();
@@ -101,40 +101,39 @@ namespace Do.Core
 			while (t_update < MaxUpdateTime / 2) {
 				DoItemSource itemSource;
 				ICollection<IItem> oldItems;
-				Dictionary<int, DoItem> newItems;
+				Dictionary<IObject, DoItem> newItems;
 
 				then = DateTime.Now;
 				itemSourceCursor = (itemSourceCursor + 1) % doItemSources.Count;
 				itemSource = doItemSources[itemSourceCursor];
-				newItems = new Dictionary<int, DoItem> ();
+				newItems = new Dictionary<IObject, DoItem> ();
 				// Remember old items.
 				oldItems = itemSource.Items;	
 				// Update the item source.
 				itemSource.UpdateItems ();
 				// Create a map of the new items.
 				foreach (DoItem newItem in itemSource.Items) {
-					newItems[newItem.GetHashCode ()] = newItem;
+					newItems[newItem] = newItem;
 				}
 				// Update the universe by either updating items, adding new items,
 				// or removing items.
 				foreach (DoItem newItem in itemSource.Items) {
-					if (universe.ContainsKey (newItem.GetHashCode ()) &&
-							universe[newItem.GetHashCode ()] is DoItem) {
+					if (universe.ContainsKey (newItem)) {
 						// We're updating an item. This updates the item across all
 						// first results lists.
-						(universe[newItem.GetHashCode ()] as DoItem).Inner = newItem.Inner;
+						(universe[newItem] as DoItem).Inner = newItem.Inner;
 					} else {
 						// We're adding a new item. It might take a few minutes to show
 						// up in all results lists.
-						universe[newItem.GetHashCode ()] = newItem;
+						universe[newItem] = newItem;
 					}
 				}
 				// See if there are any old items that didn't make it into the
 				// set of new items. These items need to be removed from the universe.
 				foreach (DoItem oldItem in oldItems) {
-					if (!newItems.ContainsKey (oldItem.GetHashCode ()) &&
-							universe.ContainsKey (oldItem.GetHashCode ())) {
-						universe.Remove (oldItem.GetHashCode ());
+					if (!newItems.ContainsKey (oldItem) &&
+							universe.ContainsKey (oldItem)) {
+						universe.Remove (oldItem);
 					}
 				}
 				Log.Info ("Updated \"{0}\" Item Source.", itemSource.Name);
@@ -262,13 +261,13 @@ namespace Do.Core
 		{
 			// Hash commands.
 			foreach (DoCommand command in doCommands) {
-				universe[command.UID.GetHashCode ()] = command;
+				universe[command] = command;
 			}
 
 			// Hash items.
 			foreach (DoItemSource source in doItemSources) {
 				foreach (DoItem item in source.Items) {
-					universe[item.UID.GetHashCode ()] = item;
+					universe[item] = item;
 				}
 			}
 		}
