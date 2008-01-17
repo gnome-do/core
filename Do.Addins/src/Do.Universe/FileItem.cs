@@ -235,7 +235,11 @@ namespace Do.Universe
 
 		public virtual void Open ()
 		{
-			Util.Environment.Open (Path.Replace (" ", "\\ "));
+			string escaped_name;
+
+			escaped_name = Path.Replace (" ", "\\ ")
+				.Replace ("'", "\\'");
+			Util.Environment.Open (escaped_name);
 		}
 	}
 	
