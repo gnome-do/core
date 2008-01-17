@@ -51,58 +51,58 @@ msgid ""
 "in your GNOME desktop environment."
 msgstr ""
 
-#: ../Do.Addins/src/Do.Universe/RunCommand.cs:32
+#: ../Do.Addins/src/Do.Universe/RunAction.cs:32
 msgid "Run"
 msgstr "Executa"
 
-#: ../Do.Addins/src/Do.Universe/RunCommand.cs:37
+#: ../Do.Addins/src/Do.Universe/RunAction.cs:37
 msgid "Run an application, script, or other executable."
 msgstr "Executa una aplicació, script o executable."
 
-#: ../Do.Addins/src/Do.Universe/DefineWordCommand.cs:48
+#: ../Do.Addins/src/Do.Universe/DefineWordAction.cs:48
 msgid "Define"
 msgstr "Defineix"
 
-#: ../Do.Addins/src/Do.Universe/DefineWordCommand.cs:53
+#: ../Do.Addins/src/Do.Universe/DefineWordAction.cs:53
 msgid "Define a given word."
 msgstr "Defineix una paraula."
 
-#: ../Do.Addins/src/Do.Universe/OpenCommand.cs:39
+#: ../Do.Addins/src/Do.Universe/OpenAction.cs:39
 msgid "Open"
 msgstr "Obre"
 
-#: ../Do.Addins/src/Do.Universe/OpenCommand.cs:44
+#: ../Do.Addins/src/Do.Universe/OpenAction.cs:44
 msgid "Opens many kinds of items."
 msgstr "Obre molts tipus d'elements."
 
-#: ../Do.Addins/src/Do.Universe/MailtoCommand.cs:31
+#: ../Do.Addins/src/Do.Universe/MailtoAction.cs:31
 msgid "Email"
 msgstr "Correu electrònic"
 
-#: ../Do.Addins/src/Do.Universe/MailtoCommand.cs:36
+#: ../Do.Addins/src/Do.Universe/MailtoAction.cs:36
 msgid "Compose a new email to a friend."
 msgstr "Compon un correu electrònic i envia'l a un amic."
 
-#: ../Do.Addins/src/Do.Universe/OpenTerminalHereCommand.cs:37
+#: ../Do.Addins/src/Do.Universe/OpenTerminalHereAction.cs:37
 msgid "Open Terminal Here"
 msgstr "Obre un terminal aquí"
 
-#: ../Do.Addins/src/Do.Universe/OpenTerminalHereCommand.cs:42
+#: ../Do.Addins/src/Do.Universe/OpenTerminalHereAction.cs:42
 msgid "Opens a Terminal in a given location."
 msgstr "Obre un terminal en la ubicació donada."
 
-#: ../Do.Addins/src/Do.Universe/RunInTerminalCommand.cs:143
+#: ../Do.Addins/src/Do.Universe/RunInTerminalAction.cs:143
 msgid "Run in Terminal"
 msgstr "Executa en un terminal"
 
-#: ../Do.Addins/src/Do.Universe/RunInTerminalCommand.cs:148
+#: ../Do.Addins/src/Do.Universe/RunInTerminalAction.cs:148
 msgid "Run a command in a terminal."
 msgstr "Executa una ordre en un terminal."
 
-#: ../Do.Addins/src/Do.Universe/OpenURLCommand.cs:42
+#: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:42
 msgid "Open URL"
 msgstr "Obre una URL"
 
-#: ../Do.Addins/src/Do.Universe/OpenURLCommand.cs:47
+#: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:47
 msgid "Opens bookmarks and manually-typed URLs."
 msgstr "Obre adreces d'interès i URL teclejades manualment."
