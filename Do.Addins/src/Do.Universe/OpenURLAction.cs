@@ -1,4 +1,4 @@
-/* RevealCommand.cs
+/* OpenURLAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,47 +19,70 @@
  */
 
 using System;
+using System.Text.RegularExpressions;
+using Mono.Unix;
 
 using Do.Addins;
 
 namespace Do.Universe
 {
-	public class RevealCommand : AbstractCommand
+	public class OpenURLAction : AbstractAction
 	{
-		public RevealCommand ()
+		const string urlPattern = @"(^\w+:\/\/\w+)|(\w+\.(com|net|org|gov|edu|fm|tv)(\.|\/|$))";
+		
+		Regex urlRegex;
+		
+		public OpenURLAction ()
 		{
+			urlRegex = new Regex (urlPattern, RegexOptions.Compiled);
 		}
 		
 		public override string Name
 		{
-			get { return "Reveal"; }
+			get { return  Catalog.GetString ("Open URL"); }
 		}
 		
 		public override string Description
 		{
-			get { return "Reveals a file in the file manager."; }
+			get { return  Catalog.GetString ("Opens bookmarks and manually-typed URLs."); }
 		}
 		
 		public override string Icon
 		{
-			get { return "file-manager"; }
+			get { return "web-browser"; }
 		}
 		
 		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
-					typeof (IFileItem),
+					typeof (IURLItem),
+					typeof (ITextItem),
 				};
 			}
+		}
+
+		public override bool SupportsItem (IItem item)
+		{
+			if (item is ITextItem) {
+				return urlRegex.IsMatch ((item as ITextItem).Text);
+			}
+			return true;
 		}
 		
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
-			foreach (IFileItem file in items) {
-				// Nautilus does not have a "reveal file" option, so we just open the
-				// parent directory for now.
-				Util.Environment.Open (System.IO.Path.GetDirectoryName (file.Path));
+			string url;
+			
+			url = null;
+			foreach (IItem item in items) {
+				if (item is IURLItem) {
+					url = (item as IURLItem).URL;
+				} else if (item is ITextItem) {
+					url = (item as ITextItem).Text;
+				}
+				url = url.Replace (" ", "%20");
+				Util.Environment.Open (url);	
 			}
 			return null;
 		}

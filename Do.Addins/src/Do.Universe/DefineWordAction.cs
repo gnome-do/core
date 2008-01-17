@@ -1,4 +1,4 @@
-/* DefineWordCommand.cs
+/* DefineWordAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -24,10 +24,10 @@ using Mono.Unix;
 namespace Do.Universe
 {
 	/// <summary>
-	/// Given an ITextItem, DefineWordCommand will look up the Text
+	/// Given an ITextItem, DefineWordAction will look up the Text
 	/// contents of the ITextItem using the gnome-dictionary.
 	/// </summary>
-	public class DefineWordCommand : AbstractCommand
+	public class DefineWordAction : AbstractAction
 	{
 		/// <summary>
 		/// Should match those and only those strings that can be
@@ -39,7 +39,7 @@ namespace Do.Universe
 
 		Regex wordRegex;
 		
-		public DefineWordCommand ()
+		public DefineWordAction ()
 		{
 			wordRegex = new Regex (wordPattern, RegexOptions.Compiled);
 		}

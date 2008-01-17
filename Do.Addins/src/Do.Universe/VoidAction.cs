@@ -1,4 +1,4 @@
-/* OpenTerminalHereCommand.cs
+/* VoidAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,66 +19,37 @@
  */
 
 using System;
-using System.Diagnostics;
-using Mono.Unix;
-
-using Do.Addins;
 
 namespace Do.Universe
 {
-	public class OpenTerminalHereCommand : AbstractCommand
+	public class VoidAction : AbstractAction
 	{
-		public OpenTerminalHereCommand ()
-		{
-		}
-		
 		public override string Name
 		{
-			get { return Catalog.GetString ("Open Terminal Here"); }
+			get { return "Do Nothing"; }
 		}
 		
 		public override string Description
 		{
-			get { return Catalog.GetString ("Opens a Terminal in a given location."); }
+			get { return "Does absolutely nothing."; }
 		}
 		
 		public override string Icon
 		{
-			get { return "terminal"; }
+			get { return "gtk-stop"; }
 		}
 		
 		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
-					typeof (IFileItem),
+					typeof (IItem)
 				};
 			}
 		}
 		
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
-			GConf.Client client;
-			Process term;
-			IFileItem fi;
-			string dir, exec;
-
-			client = new GConf.Client();
-			try {
-				exec = client.Get ("/desktop/gnome/applications/terminal/exec") as string;
-			} catch {
-				exec = "gnome-terminal";
-			}
-			
-			fi = items[0] as IFileItem;
-			dir = fi.Path;
-			if (!(fi is DirectoryFileItem))
-				dir = System.IO.Path.GetDirectoryName (dir);
-
-			term = new Process ();
-			term.StartInfo.WorkingDirectory = dir;
-			term.StartInfo.FileName = exec;
-			term.Start ();
 			return null;
 		}
 	}

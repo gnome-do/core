@@ -43,28 +43,29 @@ FILES =  \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/BookmarkItem.cs \
 	src/Do.Universe/ContactItem.cs \
-	src/Do.Universe/DefineWordCommand.cs \
+	src/Do.Universe/DefineWordAction.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/FileItemSource.cs \
 	src/Do.Universe/FirefoxBookmarkItemSource.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Universe/ICommand.cs \
+	src/Do.Universe/IAction.cs \
 	src/Do.Universe/IItem.cs \
 	src/Do.Universe/IItemSource.cs \
 	src/Do.Universe/ImageFileItem.cs \
 	src/Do.Universe/IObject.cs \
-	src/Do.Universe/MailtoCommand.cs \
+	src/Do.Universe/MailtoAction.cs \
 	src/Do.Universe/ManuallyTypedPathItemSource.cs \
-	src/Do.Universe/OpenCommand.cs \
-	src/Do.Universe/OpenTerminalHereCommand.cs \
-	src/Do.Universe/OpenURLCommand.cs \
-	src/Do.Universe/OpenWithCommand.cs \
+	src/Do.Universe/OpenAction.cs \
+	src/Do.Universe/OpenTerminalHereAction.cs \
+	src/Do.Universe/OpenURLAction.cs \
+	src/Do.Universe/OpenWithAction.cs \
 	src/Do.Universe/RecentFileItemSource.cs \
-	src/Do.Universe/RevealCommand.cs \
-	src/Do.Universe/RunCommand.cs \
-	src/Do.Universe/RunInTerminalCommand.cs \
+	src/Do.Universe/RevealAction.cs \
+	src/Do.Universe/RunAction.cs \
+	src/Do.Universe/RunInTerminalAction.cs \
 	src/Do.Universe/TextItem.cs \
-	src/Do.Universe/VoidCommand.cs 
+	src/Do.Universe/VoidAction.cs 
 
 DATA_FILES = 
 

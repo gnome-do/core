@@ -1,4 +1,4 @@
-//  MailtoCommand.cs
+//  MailtoAction.cs
 //
 //  GNOME Do is the legal property of its developers, whose names are too numerous
 //  to list here.  Please refer to the COPYRIGHT file distributed with this
@@ -24,7 +24,7 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	public class MailtoCommand : AbstractCommand
+	public class MailtoAction : AbstractAction
 	{
 		public override string Name
 		{

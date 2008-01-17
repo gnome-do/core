@@ -1,4 +1,4 @@
-/* DoCommand.cs
+/* DoAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -25,52 +25,59 @@ using Do.Universe;
 
 namespace Do.Core
 {
-	public class DoCommand : DoObject, ICommand
-	{
-		public const string kDefaultCommandIcon = "gnome-run";
 
-		public DoCommand (ICommand command):
-			base (command)
+	public class DoAction : DoObject, IAction
+	{
+		public const string kDefaultActionIcon = "gnome-run";
+
+		public DoAction (IAction action):
+			base (action)
+		{
+		}
+		
+		// Legacy Command support.
+		public DoAction (ICommand command):
+			this (new ICommandWrapperAction (command))
 		{
 		}
 
 		public override string Icon
 		{
 			get {
-				return (Inner as ICommand).Icon ?? kDefaultCommandIcon;
+				return (Inner as IAction).Icon ?? kDefaultActionIcon;
 			}
 		}
 
 		public Type[] SupportedItemTypes
 		{
 			get {
-				return (Inner as ICommand).SupportedItemTypes ?? new Type[0];
+				return (Inner as IAction).SupportedItemTypes ?? new Type[0];
 			}
 		}
 
 		public Type[] SupportedModifierItemTypes
 		{
 			get {
-				return (Inner as ICommand).SupportedModifierItemTypes ?? new Type[0];
+				return (Inner as IAction).SupportedModifierItemTypes ?? new Type[0];
 			}
 		}
 		
 		public bool ModifierItemsOptional
 		{
 			get {
-				return (Inner as ICommand).ModifierItemsOptional;
+				return (Inner as IAction).ModifierItemsOptional;
 			}
 		}
 		
 		public IItem[] DynamicModifierItemsForItem (IItem item)
 		{
-			ICommand command = Inner as ICommand;
+			IAction action = Inner as IAction;
 			IItem[] modItems;
 			
 			modItems = null;
 			item = EnsureIItem (item);
 			try {
-				modItems = command.DynamicModifierItemsForItem (item);
+				modItems = action.DynamicModifierItemsForItem (item);
 			} catch {
 				modItems = null;
 			} finally {
@@ -81,7 +88,7 @@ namespace Do.Core
 
 		public bool SupportsItem (IItem item)
 		{
-			ICommand command = Inner as ICommand;
+			IAction action = Inner as IAction;
 			bool supports;
 			
 			item = EnsureIItem (item);
@@ -90,10 +97,10 @@ namespace Do.Core
 
 			// Unless I call Gtk.Threads.Enter/Leave, this method freezes and does not return!
 			// WTF!?!?@?@@#!@ *Adding* these calls makes the UI freeze in unrelated execution paths.
-			// Why is this so fucking weird? The freeze has to do with Gtk.Clipboard interaction in DefineWordCommand.Text. 
+			// Why is this so fucking weird? The freeze has to do with Gtk.Clipboard interaction in DefineWordAction.Text. 
 			//Gdk.Threads.Enter ();
 			try {
-				supports = command.SupportsItem (item);
+				supports = action.SupportsItem (item);
 			} catch {
 				supports = false;
 			} finally {
@@ -104,7 +111,7 @@ namespace Do.Core
 
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
 		{
-			ICommand command = Inner as ICommand;
+			IAction action = Inner as IAction;
 			bool supports;
 
 			items = EnsureIItemArray (items);
@@ -113,7 +120,7 @@ namespace Do.Core
 				return false;
 
 			try {
-				supports = command.SupportsModifierItemForItems (items, modItem);
+				supports = action.SupportsModifierItemForItems (items, modItem);
 			} catch {
 				supports = false;
 			}
@@ -122,22 +129,22 @@ namespace Do.Core
 
 		public IItem[] Perform (IItem[] items, IItem[] modItems)
 		{
-			ICommand command = Inner as ICommand;
+			IAction action = Inner as IAction;
 			IItem[] resultItems;
 			
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
 
-			// TODO: Create a command performed event and move this.
+			// TODO: Create a action performed event and move this.
 			if (items.Length > 0 )
 				InternalItemSource.LastItem.Inner = items[0];
 			
 			resultItems = null;
 			try {
-				resultItems = command.Perform (items, modItems);
+				resultItems = action.Perform (items, modItems);
 			} catch (Exception e) {
 				resultItems = null;
-				Log.Error ("Command \"{0}\" encountered an error: {1}",
+				Log.Error ("Action \"{0}\" encountered an error: {1}",
 						Inner.Name, e.Message);
 			} finally {
 				resultItems = resultItems ?? new IItem[0];
@@ -147,13 +154,74 @@ namespace Do.Core
 			// If we have results to feed back into the window, do so in a new
 			// iteration.
 			if (resultItems.Length > 0) {
-				GLib.Timeout.Add (50, delegate {
+				GLib.Timeout.Add (10, delegate {
 					Do.Controller.SummonWithObjects (resultItems);
 					return false;
 				});
 			}
 			return resultItems;
 		}
-
 	}	
+
+	// Wraps an ICommand as an IAction for legacy Command support.
+	class ICommandWrapperAction : IAction
+	{
+		private ICommand c;
+
+		public ICommandWrapperAction (ICommand command)
+		{
+			c = command;
+		}
+
+		public string Name
+		{
+			get { return c.Name; }
+		}
+
+		public string Description
+		{
+			get { return c.Description; }
+	 	}
+
+		public string Icon
+		{
+			get { return c.Icon; }
+		}
+		
+		public Type[] SupportedItemTypes
+		{
+			get { return c.SupportedItemTypes; }
+		}
+		
+		public Type[] SupportedModifierItemTypes
+		{
+			get { return c.SupportedModifierItemTypes; }
+		}
+		
+		public bool ModifierItemsOptional
+		{
+			get { return c.ModifierItemsOptional; }
+		}
+
+		public bool SupportsItem (IItem item)
+		{
+			return c.SupportsItem (item);
+		}
+
+		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		{
+			return c.SupportsModifierItemForItems (items, modItem);
+		}
+		
+		public IItem[] DynamicModifierItemsForItem (IItem item)
+		{
+			return c.DynamicModifierItemsForItem (item);
+		}
+		
+		public IItem[] Perform (IItem[] items, IItem[] modItems)
+		{
+			return c.Perform (items, modItems);
+		}
+	}
+
 }

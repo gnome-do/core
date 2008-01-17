@@ -1,4 +1,4 @@
-/* OpenCommand.cs
+/* OpenAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -31,9 +31,9 @@ namespace Do.Universe
 	/// <summary>
 	/// A command providing "open" semantics to many kinds of items.
 	/// </summary>
-	public class OpenCommand : AbstractCommand
+	public class OpenAction : AbstractAction
 	{
-		public OpenCommand ()
+		public OpenAction ()
 		{
 		}
 		

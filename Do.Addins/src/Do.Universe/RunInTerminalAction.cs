@@ -1,4 +1,4 @@
-/* RunInTerminalCommand.cs
+/* RunInTerminalAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -30,13 +30,13 @@ namespace Do.Universe
 	/// <summary>
 	/// Runs text commands in a terminal.
 	/// </summary>
-	public class RunInTerminalCommand : AbstractCommand
+	public class RunInTerminalAction : AbstractAction
 	{
 
 		static string last_command_found;
 		static Dictionary<string, string> terminals;
 
-		static RunInTerminalCommand ()
+		static RunInTerminalAction ()
 		{
 			terminals = new Dictionary<string, string> ();
 			terminals["gnome-terminal"] = "-x";

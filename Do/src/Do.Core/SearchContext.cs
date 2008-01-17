@@ -30,7 +30,7 @@ namespace Do.Core
 		List<IItem> items;
 		List<IItem> modifierItems;
 		
-		ICommand command;
+		IAction action;
 		
 		string query;
 		Type[] searchTypes;
@@ -51,10 +51,10 @@ namespace Do.Core
 		{
 			items = new List<IItem> ();
 			modifierItems = new List<IItem> ();
-			command = null;
+			action = null;
 			
 			query = "";
-			searchTypes = new Type [] { typeof (IItem), typeof (ICommand) };
+			searchTypes = new Type [] { typeof (IItem), typeof (IAction) };
 			results = new IObject[0];
 			cursor = 0;
 			
@@ -90,10 +90,10 @@ namespace Do.Core
 			set { modifierItems = value; }
 		}
 		
-		public ICommand Command
+		public IAction Action
 		{
-			get { return command; }
-			set { command = value; }
+			get { return action; }
+			set { action = value; }
 		}
 			
 		public string Query
@@ -119,11 +119,11 @@ namespace Do.Core
 			}
 		}
 		
-		public bool CommandSearch
+		public bool ActionSearch
 		{
 			get {
 				return  searchTypes.Length == 1 &&
-					searchTypes[0] == typeof (ICommand);
+					searchTypes[0] == typeof (IAction);
 			}
 		}
 		
@@ -132,7 +132,7 @@ namespace Do.Core
 			get {
 				return searchTypes.Length == 1 &&
 					searchTypes[0] == typeof (IItem) &&
-					items.Count > 0 && command != null;
+					items.Count > 0 && action != null;
 			}
 		}
 	
@@ -151,7 +151,7 @@ namespace Do.Core
 		public bool Independent
 		{
 			get {
-				return !(CommandSearch || ItemsSearch || ModifierItemsSearch);
+				return !(ActionSearch || ItemsSearch || ModifierItemsSearch);
 			}
 		}
 		
@@ -183,7 +183,7 @@ namespace Do.Core
 			SearchContext clone;
 			
 			clone = new SearchContext ();
-			clone.Command = command;
+			clone.Action = action;
 			clone.Items = new List<IItem> (items);
 			clone.ModifierItems = new List<IItem> (modifierItems);
 			clone.Query = query;
@@ -220,13 +220,13 @@ namespace Do.Core
 			}
 			
 			// Check to see if items the same, but only if items are supposed to be fixed.
-			if (test.CommandSearch || test.ModifierItemsSearch)
+			if (test.ActionSearch || test.ModifierItemsSearch)
 				foreach (IItem item in test.Items)
 					if (!Items.Contains (item)) return false;
 			
-			// Check to see if commands are the same, but only if commands are supposed to be fixed
+			// Check to see if actions are the same, but only if actions are supposed to be fixed
 			if (test.ItemsSearch || test.ModifierItemsSearch)
-				if (test.Command != Command) return false;
+				if (test.Action != Action) return false;
 			
 			if (test.ModifierItemsSearch != ModifierItemsSearch) return false;
 			
@@ -241,7 +241,7 @@ namespace Do.Core
 		{
 			items = new List<IItem> ();
 			modifierItems = new List<IItem> ();
-			command = null;
+			action = null;
 		}
 		
 		public SearchContext EquivalentPreviousContextIfExists ()
@@ -264,7 +264,7 @@ namespace Do.Core
 		{
 			return "SearchContext " + base.ToString () + 
 			"\n\tQuery: \"" + query + "\"" +
-			"\n\tCommand: " + command +
+			"\n\tAction: " + action +
 			"\n\tNumber of items: " + items.Count +
 			"\n\tNumber of modifier items: " + modifierItems.Count +
 			"\n\tHas last context: " + (lastContext != null) +

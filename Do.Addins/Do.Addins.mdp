@@ -19,7 +19,7 @@
     <File name="./src/Do.Universe/ApplicationItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/ApplicationItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/BookmarkItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/DefineWordCommand.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/DefineWordAction.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/FileItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/FileItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/FirefoxBookmarkItemSource.cs" subtype="Code" buildaction="Compile" />
@@ -28,20 +28,20 @@
     <File name="./src/Do.Universe/IItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/IObject.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/ImageFileItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/OpenCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/OpenURLCommand.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/OpenAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/OpenURLAction.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/RecentFileItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/RunCommand.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/RunAction.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/TextItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/VoidCommand.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/VoidAction.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/GNOMESpecialLocationsItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Universe/ContactItem.cs" subtype="Code" buildaction="Compile" />
     <File name="./src/Do.Addins/ContactItemStore.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/MailtoCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/OpenTerminalHereCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/RunInTerminalCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/OpenWithCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./src/Do.Universe/RevealCommand.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/MailtoAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/OpenTerminalHereAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/RunInTerminalAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/OpenWithAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="./src/Do.Universe/RevealAction.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gnome-sharp, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />

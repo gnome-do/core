@@ -1,4 +1,4 @@
-/* OpenWithCommand.cs
+/* OpenWithAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -28,9 +28,9 @@ namespace Do.Universe
 	/// <summary>
 	/// A command providing "open with..." semantics to file items.
 	/// </summary>
-	public class OpenWithCommand : AbstractCommand 
+	public class OpenWithAction : AbstractAction 
 	{
-		public OpenWithCommand ()
+		public OpenWithAction ()
 		{
 		}
 		

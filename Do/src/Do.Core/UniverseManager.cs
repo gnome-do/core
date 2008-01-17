@@ -43,7 +43,7 @@ namespace Do.Core
 		Dictionary<IObject, IObject> universe;
 
 		List<DoItemSource> doItemSources;
-		List<DoCommand> doCommands;
+		List<DoAction> doActions;
 
 		// Keep track of next data structures to update.
 		int itemSourceCursor;
@@ -53,7 +53,7 @@ namespace Do.Core
 		{
 			universe = new Dictionary<IObject, IObject> ();
 			doItemSources = new List<DoItemSource> ();
-			doCommands = new List<DoCommand> ();
+			doActions = new List<DoAction> ();
 			firstResults = new Dictionary<string, List<IObject>> ();
 			itemSourceCursor = firstResultsCursor = 0;
 		}
@@ -64,7 +64,7 @@ namespace Do.Core
 			bool enable_updating;
 
 			LoadBuiltins ();
-			LoadAddins ();
+			LoadPlugins ();
 			BuildUniverse ();
 			BuildFirstResults ();
 
@@ -182,32 +182,32 @@ namespace Do.Core
 			LoadAssembly (typeof (DoItem).Assembly);
 		}
 
-		protected void LoadAddins ()
+		protected void LoadPlugins ()
 		{
-			List<string> addin_dirs;
+			List<string> plugin_dirs;
 
-			addin_dirs = new List<string> ();
-			addin_dirs.Add ("~/.do/plugins".Replace ("~",
-			                Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
+			plugin_dirs = new List<string> ();
+			plugin_dirs.Add ("~/.do/plugins".Replace ("~",
+						Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
 
-			foreach (string addin_dir in addin_dirs) {
+			foreach (string plugin_dir in plugin_dirs) {
 				string[] files;
 
 				files = null;
 				try {
-					files = System.IO.Directory.GetFiles (addin_dir);
+					files = System.IO.Directory.GetFiles (plugin_dir);
 				} catch (Exception e) {
-					Log.Error ("Could not read plugins directory {0}: {1}", addin_dir, e.Message);
+					Log.Error ("Could not read plugins directory {0}: {1}", plugin_dir, e.Message);
 					continue;
 				}
 
 				foreach (string file in files) {
-					Assembly addin;
+					Assembly plugin;
 
 					if (!file.EndsWith (".dll")) continue;
 					try {
-						addin = Assembly.LoadFile (file);
-						LoadAssembly (addin);
+						plugin = Assembly.LoadFile (file);
+						LoadAssembly (plugin);
 					} catch (Exception e) {
 						Log.Error ("Encountered and error while trying to load plugin {0}: {1}", file, e.Message);
 						continue;
@@ -216,31 +216,65 @@ namespace Do.Core
 			}
 		}
 
-		private void LoadAssembly (Assembly addin)
+		private void LoadAssembly (Assembly plugin)
 		{
-			if (addin == null) return;
+			if (plugin == null) return;
 
-			foreach (Type type in addin.GetTypes ()) {			
+			foreach (Type type in plugin.GetTypes ()) {			
 				if (type.IsAbstract) continue;
-				if (type == typeof (VoidCommand)) continue;
-				if (type == typeof (DoCommand)) continue;
+				if (type == typeof (VoidAction)) continue;
+				if (type == typeof (ICommandWrapperAction)) continue;
+				if (type == typeof (DoAction)) continue;
 				if (type == typeof (DoItem)) continue;
 
 				foreach (Type iface in type.GetInterfaces ()) {
 					if (iface == typeof (IItemSource)) {
-						IItemSource source;
+						IItemSource source = null;
 
-						source = System.Activator.CreateInstance (type) as IItemSource;
-						doItemSources.Add (new DoItemSource (source));
-						Log.Info ("Successfully loaded \"{0}\" Item Source.", source.Name);
+						try {
+							source = System.Activator.CreateInstance (type) as IItemSource;
+						} catch (Exception e) {
+							source = null;
+							Log.Error ("Failed to load item source from {0}: {1}",
+									plugin.Location, e.Message);
+						}
+						if (source != null) {
+							doItemSources.Add (new DoItemSource (source));
+							Log.Info ("Successfully loaded \"{0}\" item source.", source.Name);
+						}
 					}
-					if (iface == typeof (ICommand)) {
-						ICommand command;
+					if (iface == typeof (IAction)) {
+						IAction action = null;
 
-						command = System.Activator.CreateInstance (type) as ICommand;
-						doCommands.Add (new DoCommand (command));
-						Log.Info ("Successfully loaded \"{0}\" Command.", command.Name);
+						try {
+							action = System.Activator.CreateInstance (type) as IAction;
+						} catch (Exception e) {
+							action = null;
+							Log.Error ("Failed to load action from {0}: {1}",
+									plugin.Location, e.Message);
+						}
+						if (action != null) {
+							doActions.Add (new DoAction (action));
+							Log.Info ("Successfully loaded \"{0}\" action.", action.Name);
+						}
 					}
+					// Legacy support for commands.
+					else if (iface == typeof (ICommand)) {
+						ICommand command = null;
+
+						try {
+							command = System.Activator.CreateInstance (type) as ICommand;
+						} catch (Exception e) {
+							command = null;
+							Log.Error ("Failed to load command from {0}: {1}",
+									plugin.Location, e.Message);
+						}
+						if (command != null) {
+							doActions.Add (new DoAction (command));
+							Log.Info ("Successfully loaded \"{0}\" command.", command.Name);
+						}
+					}
+
 				}
 			}
 		}
@@ -259,9 +293,9 @@ namespace Do.Core
 
 		private void BuildUniverse ()
 		{
-			// Hash commands.
-			foreach (DoCommand command in doCommands) {
-				universe[command] = command;
+			// Hash actions.
+			foreach (DoAction action in doActions) {
+				universe[action] = action;
 			}
 
 			// Hash items.
@@ -356,8 +390,8 @@ namespace Do.Core
 			List<IObject> results = null;
 			string query = context.Query.ToLower ();
 
-			if (context.CommandSearch && context.Query == "") {
-				return InitialCommandResults (context);
+			if (context.ActionSearch && context.Query == "") {
+				return InitialActionResults (context);
 			}
 			else if (context.LastContext.LastContext != null) {
 				return FilterPreviousSearchResultsWithContinuedContext (context);
@@ -376,7 +410,7 @@ namespace Do.Core
 				Dictionary <IItem, IItem> dynamicModItems = new Dictionary<IItem, IItem> ();
 				foreach (IItem item in context.Items) {
 					foreach (IItem modItem in
-							context.Command.DynamicModifierItemsForItem (item)) {
+							context.Action.DynamicModifierItemsForItem (item)) {
 						dynamicModItems[modItem] = modItem;
 					}
 				}
@@ -400,13 +434,13 @@ namespace Do.Core
 			
 			// If we're on modifier items, add a text item if it's supported.
 			if (context.ModifierItemsSearch) {
-				if (context.Command.SupportsModifierItemForItems (context.Items.ToArray (), textItem)) {
+				if (context.Action.SupportsModifierItemForItems (context.Items.ToArray (), textItem)) {
 					results.Add (textItem);
 				}
 			}
 			// Same if we're on items.
 			else if (context.ItemsSearch) {
-				if (context.Command.SupportsItem (textItem)) {
+				if (context.Action.SupportsItem (textItem)) {
 					results.Add (textItem);
 				}
 			}
@@ -427,7 +461,7 @@ namespace Do.Core
 			foreach (IObject iobject in initialList) {
 				if (iobject is IItem) {
 					// If the item is supported add it
-					if (context.Command.SupportsModifierItemForItems (items, iobject as IItem)) {
+					if (context.Action.SupportsModifierItemForItems (items, iobject as IItem)) {
 						results.Add (iobject);
 					}
 				}
@@ -441,7 +475,7 @@ namespace Do.Core
 			List<IObject> results = new List<IObject> ();
 			foreach (IObject iobject in initialList) {
 				if (iobject is IItem) {
-					if (context.Command.SupportsItem (iobject as IItem)) {
+					if (context.Action.SupportsItem (iobject as IItem)) {
 						results.Add (iobject);
 					}
 				}
@@ -485,34 +519,34 @@ namespace Do.Core
 			return results;
 		}
 
-		// This method gives us all the commands that are supported by all the items in the list
-		private List<IObject> InitialCommandResults (SearchContext context)
+		// This method gives us all the actions that are supported by all the items in the list
+		private List<IObject> InitialActionResults (SearchContext context)
 		{
-			List<IObject> commands = new List<IObject> ();
-			List<IObject> commands_to_remove = new List<IObject> ();
+			List<IObject> actions = new List<IObject> ();
+			List<IObject> actions_to_remove = new List<IObject> ();
 			bool initial = true;
 
 			foreach (IItem item in context.Items) {
-				List<IObject> item_commands = CommandsForItem (item);
+				List<IObject> item_actions = ActionsForItem (item);
 
-				// If this is the first item in the list, add all of its supported commands.
+				// If this is the first item in the list, add all of its supported actions.
 				if (initial) {
-					commands.AddRange (item_commands);
+					actions.AddRange (item_actions);
 					initial = false;
 				}
-				//For every subsequent item, check every command in the pre-existing list
+				//For every subsequent item, check every action in the pre-existing list
 				//if its not supported by this item, remove it from the list
 				else {
-					foreach (ICommand command in commands) {
-						if (!item_commands.Contains (command)) {
-							commands_to_remove.Add (command);
+					foreach (IAction action in actions) {
+						if (!item_actions.Contains (action)) {
+							actions_to_remove.Add (action);
 						}
 					}
 				}
 			}
-			foreach (IObject rm in commands_to_remove)
-				commands.Remove (rm);
-			return commands;
+			foreach (IObject rm in actions_to_remove)
+				actions.Remove (rm);
+			return actions;
 		}
 
 		//Function to determine whether a type array contains a type
@@ -525,17 +559,17 @@ namespace Do.Core
 			return false;
 		}
 
-		public List<IObject> CommandsForItem (IItem item)
+		public List<IObject> ActionsForItem (IItem item)
 		{
-			List<IObject> item_commands;
+			List<IObject> item_actions;
 
-			item_commands = new List<IObject> ();
-			foreach (ICommand command in doCommands) {
-				if (command.SupportsItem (item)) {
-					item_commands.Add (command);
+			item_actions = new List<IObject> ();
+			foreach (IAction action in doActions) {
+				if (action.SupportsItem (item)) {
+					item_actions.Add (action);
 				}
 			}
-			return item_commands;
+			return item_actions;
 		}
 
 		public List<IItem> ChildrenOfItem (IItem parent)

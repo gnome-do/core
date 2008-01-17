@@ -1,4 +1,4 @@
-/* RunCommand.cs
+/* OpenTerminalHereAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,64 +19,67 @@
  */
 
 using System;
-using System.IO;
+using System.Diagnostics;
 using Mono.Unix;
+
 using Do.Addins;
 
 namespace Do.Universe
 {
-	public class RunCommand : AbstractCommand
+	public class OpenTerminalHereAction : AbstractAction
 	{
+		public OpenTerminalHereAction ()
+		{
+		}
+		
 		public override string Name
 		{
-			get { return Catalog.GetString ("Run"); }
+			get { return Catalog.GetString ("Open Terminal Here"); }
 		}
 		
 		public override string Description
 		{
-			get { return Catalog.GetString ("Run an application, script, or other executable."); }
+			get { return Catalog.GetString ("Opens a Terminal in a given location."); }
 		}
 		
 		public override string Icon
 		{
-			get { return "gnome-run"; }
+			get { return "terminal"; }
 		}
 		
 		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
-					typeof (IRunnableItem),
-					// Files can be run if they're executable.
-					typeof (FileItem),
+					typeof (IFileItem),
 				};
 			}
-		}
-
-		public override bool SupportsItem (IItem item)
-		{
-			if (item is FileItem) {
-				return FileItem.IsExecutable (item as FileItem);
-			}
-			return true;
 		}
 		
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
-			foreach (IItem item in items) {
-				if (item is IRunnableItem) {
-					(item as IRunnableItem).Run ();
-				} else if (item is FileItem) {
-					System.Diagnostics.Process proc;
-					
-					proc = new System.Diagnostics.Process ();
-					proc.StartInfo.FileName = (item as FileItem).Path;
-					proc.StartInfo.UseShellExecute = false;
-					proc.Start ();
-				}
+			GConf.Client client;
+			Process term;
+			IFileItem fi;
+			string dir, exec;
+
+			client = new GConf.Client();
+			try {
+				exec = client.Get ("/desktop/gnome/applications/terminal/exec") as string;
+			} catch {
+				exec = "gnome-terminal";
 			}
+			
+			fi = items[0] as IFileItem;
+			dir = fi.Path;
+			if (!(fi is DirectoryFileItem))
+				dir = System.IO.Path.GetDirectoryName (dir);
+
+			term = new Process ();
+			term.StartInfo.WorkingDirectory = dir;
+			term.StartInfo.FileName = exec;
+			term.Start ();
 			return null;
 		}
-		
 	}
 }

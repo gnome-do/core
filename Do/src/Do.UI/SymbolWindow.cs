@@ -85,7 +85,7 @@ namespace Do.UI
 		protected Pane currentPane;
 		protected SearchContext[] context;
 
-		ICommand command;
+		IAction action;
 		List<IItem> items;
 		List<IItem> modItems;
 
@@ -160,13 +160,13 @@ namespace Do.UI
 		{
 			get {
 				IObject first, second;
-				ICommand command;
+				IAction action;
 
 				first = GetCurrentObject (Pane.First);
 				second = GetCurrentObject (Pane.Second);
-				command = (first as ICommand) ?? (second as ICommand);
-				return command != null &&
-					command.SupportedModifierItemTypes.Length > 0 &&
+				action = (first as IAction) ?? (second as IAction);
+				return action != null &&
+					action.SupportedModifierItemTypes.Length > 0 &&
 					context[1].Results.Length > 0;
 			}
 		}
@@ -175,14 +175,14 @@ namespace Do.UI
 		{
 			get {
 				IObject first, second;
-				ICommand command;
+				IAction action;
 
 				first = GetCurrentObject (Pane.First);
 				second = GetCurrentObject (Pane.Second);
-				command = (first as ICommand) ?? (second as ICommand);
-				return command != null &&
-					command.SupportedModifierItemTypes.Length > 0 &&
-					!command.ModifierItemsOptional &&
+				action = (first as IAction) ?? (second as IAction);
+				return action != null &&
+					action.SupportedModifierItemTypes.Length > 0 &&
+					!action.ModifierItemsOptional &&
 					context[1].Results.Length > 0;
 			}
 		}
@@ -205,7 +205,7 @@ namespace Do.UI
 			context[0] = new SearchContext ();
 			context[1] = new SearchContext ();
 			context[2] = new SearchContext ();
-			context[0].SearchTypes = new Type[] { typeof (ICommand), typeof (IItem) };
+			context[0].SearchTypes = new Type[] { typeof (IAction), typeof (IItem) };
 
 			CurrentPane = Pane.First;
 			iconbox[0].DisplayObject = new DefaultIconBoxObject ();
@@ -333,7 +333,7 @@ namespace Do.UI
 		void OnActivateKeyPressEvent (EventKey evnt)
 		{
 			bool shift_pressed = (evnt.State & ModifierType.ShiftMask) != 0;
-			PerformCommand (!shift_pressed);
+			PerformAction (!shift_pressed);
 		}
 
 		void OnDeleteKeyPressEvent (EventKey evnt)
@@ -357,7 +357,7 @@ namespace Do.UI
 				CurrentPane = Pane.Third;
 				ShowThirdPane ();
 			} else if (CurrentPane == Pane.Third && !ThirdPaneRequired) {
-				// This is used for commands for which modifier items are optional.
+				// This is used for actions for which modifier items are optional.
 				CurrentPane = Pane.First;
 				HideThirdPane ();
 			} else {
@@ -409,7 +409,7 @@ namespace Do.UI
 
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
-			// Handle command keys (Quit, etc.)
+			// Handle action keys (Quit, etc.)
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
 					OnControlKeyPressEvent (evnt);
 					return base.OnKeyPressEvent (evnt);
@@ -449,7 +449,7 @@ namespace Do.UI
 			return base.OnKeyPressEvent (evnt);
 		}
 
-		protected virtual void PerformCommand (bool vanish)
+		protected virtual void PerformAction (bool vanish)
 		{
 			IObject first, second, third;
 
@@ -473,15 +473,15 @@ namespace Do.UI
 			if (first != null && second != null) {
 				if (first is IItem) {
 					items.Add (first as IItem);
-					command = second as ICommand;
+					action = second as IAction;
 				} else {
 					items.Add (second as IItem);
-					command = first as ICommand;
+					action = first as IAction;
 				}
 				if (third != null && iconbox[2].Visible) {
 					modItems.Add (third as IItem);
 				}
-				command.Perform (items.ToArray (), modItems.ToArray ());
+				action.Perform (items.ToArray (), modItems.ToArray ());
 			}
 
 			if (vanish) {
@@ -595,7 +595,7 @@ namespace Do.UI
 				return;
 			}
 
-			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
+			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (IAction) };
 			Do.UniverseManager.Search (ref context[0]);
 			UpdatePane (Pane.First, true);
 
@@ -621,10 +621,10 @@ namespace Do.UI
 			if (first is IItem) {
 				// Selection is an IItem
 				context[1].Items.Add (first as IItem);
-				context[1].SearchTypes = new Type[] { typeof (ICommand) };
+				context[1].SearchTypes = new Type[] { typeof (IAction) };
 			} else {
-				// Selection is an ICommand
-				context[1].Command = first as ICommand;
+				// Selection is an IAction
+				context[1].Action = first as IAction;
 				context[1].SearchTypes = new Type[] { typeof (IItem) };
 			}
 
@@ -658,10 +658,10 @@ namespace Do.UI
 
 			if (first is IItem) {
 				context[2].Items.Add (first as IItem);
-				context[2].Command = second as ICommand;
+				context[2].Action = second as IAction;
 			} else {
 				context[2].Items.Add (second as IItem);
-				context[2].Command = first as ICommand;
+				context[2].Action = first as IAction;
 			}
 
 			Do.UniverseManager.Search (ref context[2]);

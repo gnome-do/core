@@ -1,4 +1,4 @@
-/* ${FileName}
+/* RunAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,38 +19,64 @@
  */
 
 using System;
+using System.IO;
+using Mono.Unix;
+using Do.Addins;
 
 namespace Do.Universe
 {
-	public class VoidCommand : AbstractCommand
+	public class RunAction : AbstractAction
 	{
 		public override string Name
 		{
-			get { return "Do Nothing"; }
+			get { return Catalog.GetString ("Run"); }
 		}
 		
 		public override string Description
 		{
-			get { return "Does absolutely nothing."; }
+			get { return Catalog.GetString ("Run an application, script, or other executable."); }
 		}
 		
 		public override string Icon
 		{
-			get { return "gtk-stop"; }
+			get { return "gnome-run"; }
 		}
 		
 		public override Type[] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
-					typeof (IItem)
+					typeof (IRunnableItem),
+					// Files can be run if they're executable.
+					typeof (FileItem),
 				};
 			}
+		}
+
+		public override bool SupportsItem (IItem item)
+		{
+			if (item is FileItem) {
+				return FileItem.IsExecutable (item as FileItem);
+			}
+			return true;
 		}
 		
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
+			foreach (IItem item in items) {
+				if (item is IRunnableItem) {
+					(item as IRunnableItem).Run ();
+				} else if (item is FileItem) {
+					System.Diagnostics.Process proc;
+					
+					proc = new System.Diagnostics.Process ();
+					proc.StartInfo.FileName = (item as FileItem).Path;
+					proc.StartInfo.UseShellExecute = false;
+					proc.Start ();
+				}
+			}
 			return null;
 		}
+		
 	}
 }

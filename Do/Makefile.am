@@ -64,7 +64,7 @@ FILES =  \
 	gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/Do.Core/Controller.cs \
-	src/Do.Core/DoCommand.cs \
+	src/Do.Core/DoAction.cs \
 	src/Do.Core/DoItem.cs \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
