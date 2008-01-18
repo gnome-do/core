@@ -34,6 +34,7 @@ namespace Do.Universe
 			"/usr/share/applications/kde",
 			"/usr/share/gdm/applications",
 			"/usr/local/share/applications",
+			"~/.local/share/applications",
 		};
 
 		private List<IItem> apps;
@@ -100,9 +101,13 @@ namespace Do.Universe
 
 		public void UpdateItems ()
 		{
+			string dir_absolute;
+
 			apps.Clear ();
 			foreach (string dir in DesktopFilesDirectories) {
-				LoadDesktopFiles (dir);
+				dir_absolute = dir.Replace ("~",
+						Environment.GetFolderPath (Environment.SpecialFolder.Personal));
+				LoadDesktopFiles (dir_absolute);
 			}
 		}
 
