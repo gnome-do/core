@@ -10,3 +10,4 @@ Do.Addins/src/Do.Universe/OpenTerminalHereCommand.cs
 Do.Addins/src/Do.Universe/RunInTerminalCommand.cs
 Do.Addins/src/Do.Universe/OpenURLCommand.cs
 Do.Addins/src/Do.Universe/RunCommand.cs
+Do.Addins/src/Do.Universe/ManuallyTypedPathItemSource.cs

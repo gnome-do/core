@@ -24,7 +24,6 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using Gtk;
 using Gdk;
 
 using Mono.Unix;
@@ -46,8 +45,7 @@ namespace Do
 			// Environment utilities
 			Addins.Util.Environment.Open = Environment.Open;
 
-			// Appearance utilities
-			Addins.Util.Appearance.PixbufFromIconName = Appearance.PixbufFromIconName;
+			// Appearance utilities			
 			Addins.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
 			Addins.Util.Appearance.PresentWindow = Appearance.PresentWindow;
 			//
@@ -77,20 +75,10 @@ namespace Do
 		}
 
 		public class Appearance
-		{
-			public static readonly Pixbuf UnknownPixbuf;
-			public const int DefaultIconSize = 80;
-
-			// TODO: Implement a separate Pixbuf cache class
-			static Dictionary<string, Pixbuf> pixbufCache;
+		{			
 
 			static Appearance ()
 			{
-				pixbufCache = new Dictionary<string,Gdk.Pixbuf> ();
-				UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
-				UnknownPixbuf.Fill (0x00000000);
-
-				Gtk.IconTheme.Default.Changed += OnDefaultIconThemeChanged;
 				Do.Controller.Vanished += OnMainWindowVanished;
 			}
 
@@ -99,10 +87,6 @@ namespace Do
 				 // pixbufCache.Clear ();
 			}
 			
-			private static void OnDefaultIconThemeChanged (object sender, EventArgs args)
-			{
-				pixbufCache.Clear ();
-			}
 
 			public static string MarkupSafeString (string s)
 			{
@@ -111,86 +95,7 @@ namespace Do
 				return s;
 			}
 
-			public static Pixbuf PixbufFromIconName (string name, int size)
-			{
-				IconTheme iconTheme;
-				Pixbuf pixbuf;
-				string icon_description, name_noext;
-
-				if (name == null || name.Length == 0) {
-					return null;
-				}
-
-				pixbuf = null;
-				icon_description = name + size;
-				if (pixbufCache.ContainsKey (icon_description)) {
-					return pixbufCache[icon_description];
-				}
-
-				// TODO: Use a GNOME ThumbnailFactory
-				if (name.StartsWith ("/")) {
-					try {
-						pixbuf = new Pixbuf (name, size, size);
-					} catch {
-						return UnknownPixbuf;
-					}
-				}
-
-				iconTheme = Gtk.IconTheme.Default;
-				if (name.Contains ("."))
-					name_noext = name.Remove (name.LastIndexOf ("."));
-				else
-					name_noext = name;
-				
-				try {
-					if (iconTheme.HasIcon (name)) {
-						pixbuf = iconTheme.LoadIcon (name, size, 0);
-					} else if (iconTheme.HasIcon (name_noext)) {
-						pixbuf = iconTheme.LoadIcon (name_noext, size, 0);
-					} else if (name == "gnome-mime-text-plain" &&
-								     iconTheme.HasIcon ("gnome-mime-text")) {
-						pixbuf = iconTheme.LoadIcon ("gnome-mime-text", size, 0);
-					}
-				} catch {
-					pixbuf = null;
-				}
-				
-				if (pixbuf == null) {
-					// If the icon couldn't be found in the default icon theme, search Tango.
-					IconTheme tango;
-
-					tango = new IconTheme ();
-					tango.CustomTheme = "Tango";
-					try {
-						if (tango.HasIcon (name)) {
-							pixbuf = tango.LoadIcon (name, size, 0);
-						} else if (tango.HasIcon (name_noext)) {
-							pixbuf = tango.LoadIcon (name_noext, size, 0);
-						} else if (name == "gnome-mime-text-plain" &&
-							      	tango.HasIcon ("gnome-mime-text")) {
-							pixbuf = tango.LoadIcon ("gnome-mime-text", size, 0);
-						}
-					} catch {
-						pixbuf = null;
-					}
-				}	
-				
-				if (pixbuf == null && iconTheme.HasIcon ("empty")) {
-					try {
-						pixbuf = iconTheme.LoadIcon ("empty", size, 0);
-					} catch {
-						pixbuf = null;
-					}
-				}
-				if (pixbuf == null) {
-					pixbuf = UnknownPixbuf;
-				}
-				// Cache icon pixbuf.
-				if (pixbuf != null && pixbuf != UnknownPixbuf) {
-					pixbufCache[icon_description] = pixbuf;
-				}
-				return pixbuf;
-			}
+			
 
 			public static void PresentWindow (Gtk.Window window)
 			{

@@ -73,6 +73,7 @@ FILES =  \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.UI/IconBox.cs \
+	src/Do.UI/IconProvider.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ResultsWindow.cs \
 	src/Do.UI/RoundedFrame.cs \

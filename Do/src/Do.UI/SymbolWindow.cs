@@ -546,15 +546,15 @@ namespace Do.UI
 
 			// Showing the results after a bit of a delay looks a bit better.
 			GLib.Timeout.Add (250, delegate {
+				Gdk.Threads.Enter ();
 				resultsWindow.Show ();
+				Gdk.Threads.Leave ();
 				return false;
 			});
 		}
 
 		void SearchPaneDelayed (Pane pane)
 		{
-			GLib.TimeoutHandler handler = null;
-
 			for (int i = 0; i < 3; ++i) {
 				if (searchTimeout[i] > 0) 
 					GLib.Source.Remove (searchTimeout[i]);
@@ -564,21 +564,26 @@ namespace Do.UI
 					iconbox[i].Clear ();
 			}
 
-			switch (pane) {
-				case Pane.First:
-					handler = new GLib.TimeoutHandler (SearchFirstPane);
-					break;
-				case Pane.Second:
-					handler = new GLib.TimeoutHandler (SearchSecondPane);
-					break;
-				case Pane.Third:
-					handler = new GLib.TimeoutHandler (SearchThirdPane);
-					break;
-			}
-			searchTimeout[(int) pane] = GLib.Timeout.Add (SearchDelay, handler);
+			
+			searchTimeout[(int) pane] = GLib.Timeout.Add (SearchDelay, delegate {
+				Gdk.Threads.Enter ();
+				switch (pane) {
+					case Pane.First:
+						SearchFirstPane ();
+						break;
+					case Pane.Second:
+						SearchSecondPane ();
+						break;
+					case Pane.Third:
+						SearchThirdPane ();
+						break;
+				}
+				Gdk.Threads.Leave ();
+				return false;
+			});
 		}
 
-		protected bool SearchFirstPane ()
+		protected void SearchFirstPane ()
 		{
 			// If we delete the entire query on a regular search (we are not
 			// searching children) then set default state.
@@ -587,7 +592,7 @@ namespace Do.UI
 					context[0].LastContext.LastContext.LastContext == null &&
 					context[0].ParentContext == null) {
 				SetDefaultState ();
-				return false;
+				return;
 			}
 
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (ICommand) };
@@ -605,10 +610,9 @@ namespace Do.UI
 				lastResult[0] = GetCurrentObject (Pane.First);
 				lastResult[1] = null;
 			}
-			return false;
 		}
 
-		protected bool SearchSecondPane ()
+		protected void SearchSecondPane ()
 		{
 			IObject first;
 
@@ -637,10 +641,9 @@ namespace Do.UI
 			if (CurrentPane == Pane.Second) {
 				lastResult[1] = GetCurrentObject (Pane.Second);
 			}
-			return false;
 		}
 
-		protected bool SearchThirdPane ()
+		protected void SearchThirdPane ()
 		{
 			IObject first, second;
 
@@ -650,7 +653,7 @@ namespace Do.UI
 			second = GetCurrentObject (Pane.Second);
 			if (first == null || second == null) {
 				SetNoResultsFoundState (Pane.Third);
-				return false;
+				return;
 			}
 
 			if (first is IItem) {
@@ -669,7 +672,6 @@ namespace Do.UI
 			} else if (!ThirdPaneAllowed) {
 				HideThirdPane ();
 			}
-			return false;
 		}
 
 		protected void UpdatePane (Pane pane, bool updateResults)
@@ -796,7 +798,9 @@ namespace Do.UI
 			iconbox[2].Show ();
 			Resize (1, 1);
 			GLib.Timeout.Add (10, delegate {
+				Gdk.Threads.Enter ();
 				Reposition ();
+				Gdk.Threads.Leave ();
 				return false;
 			});
 		}
@@ -806,7 +810,9 @@ namespace Do.UI
 			iconbox[2].Hide ();
 			Resize (1, 1);
 			GLib.Timeout.Add (10, delegate {
+				Gdk.Threads.Enter ();
 				Reposition ();
+				Gdk.Threads.Leave ();
 				return false;
 			});
 		}

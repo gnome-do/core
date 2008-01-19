@@ -66,9 +66,8 @@ namespace Do.UI
 
 		protected enum Column {
 			ItemColumn = 0,
-			PixbufColumn = 1,
-			NameColumn = 2,
-			NumberColumns = 3
+			NameColumn = 1,
+			NumberColumns = 2
 		}
 
 		ScrolledWindow resultsScrolledWindow;
@@ -86,6 +85,7 @@ namespace Do.UI
 			selectedIndex = 0;
 			selectedIndexSet = false;
 			Shown += OnShown;
+			IconProvider.IconUpdated += OnIconUpdated;			
 		}
 
 		protected virtual void OnShown (object sender, EventArgs args)
@@ -149,21 +149,25 @@ namespace Do.UI
 			resultsTreeview = new TreeView ();
 			resultsTreeview.EnableSearch = false;
 			resultsTreeview.HeadersVisible = false;
+			// If this is not set the tree will call IconDataFunc for all rows to 
+			// determine the total height of the tree
+			resultsTreeview.FixedHeightMode = true;
+			
 			resultsScrolledWindow.Add (resultsTreeview);
 			resultsTreeview.Show ();
 
 			resultsTreeview.Model = new ListStore (new Type[] {
-				typeof (IObject),
-				typeof (Pixbuf),
+				typeof (IObject),				
 				typeof (string)
 			});
 
-			column = new TreeViewColumn ();
-
-			cell = new CellRendererPixbuf ();
-			cell.SetFixedSize (-1, 4 + ResultIconSize - (int) cell.Ypad);
+			column = new TreeViewColumn ();			
+			column.Sizing = Gtk.TreeViewColumnSizing.Fixed; // because resultsTreeview.FixedHeightMode = true:  
+				
+			cell = new CellRendererPixbuf ();				
+			cell.SetFixedSize (-1, 4 + ResultIconSize - (int) cell.Ypad);			
 			column.PackStart (cell, false);
-			column.AddAttribute (cell, "pixbuf", (int) Column.PixbufColumn);
+			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
 
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
@@ -173,6 +177,13 @@ namespace Do.UI
 			resultsTreeview.AppendColumn (column);
 
 			resultsTreeview.Selection.Changed += OnResultRowSelected;
+		}
+						
+		private void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
+		{			
+			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
+			IObject o = (IObject) ((resultsTreeview.Model as ListStore).GetValue (iter, 0));
+			renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, ResultIconSize);
 		}
 
 		public virtual void SelectNext ()
@@ -278,11 +289,10 @@ namespace Do.UI
 		public IObject[] Results
 		{
 			get { return results; }
-			set {
+			set {				
 				ListStore store;
 				TreeIter iter, first_iter;
-				bool seen_first;
-				Pixbuf icon;
+				bool seen_first;				
 				string info;
 
 				Clear ();
@@ -295,15 +305,15 @@ namespace Do.UI
 				// instead, do these things on Show.
 				if (!Visible) return;
 
-				foreach (IObject result in results) {
-					icon = Util.Appearance.PixbufFromIconName (result.Icon, ResultIconSize);
+				foreach (IObject result in results) {					
+					
 					info = string.Format (ResultInfoFormat, result.Name, result.Description);
 					info = Util.Appearance.MarkupSafeString (info);
 					iter = store.AppendValues (new object[] {
 						result,
-						icon,
 						info
 					});
+							
 					if (!seen_first) {
 						first_iter = iter;
 						seen_first = true;
@@ -343,8 +353,26 @@ namespace Do.UI
 
 			return base.OnExposeEvent (evnt);
 		}
-
+							
+							
+		void OnIconUpdated (object sender, IconUpdatedEventArgs e)
+		{
+			if (!Visible) return;
+			
+			//refresh all visible rows
+			TreePath start, stop;
+			Gtk.TreeIter iter;
+							
+			resultsTreeview.GetVisibleRange (out start, out stop);
+			if (start == null || stop == null) return;
+											
+			while (!start.Equals (stop)) {					
+				resultsTreeview.Model.GetIter (out iter, start);
+				if (string.Equals ((resultsTreeview.Model.GetValue (iter, 0) as IObject).Icon, e.IconName)) {
+					resultsTreeview.Model.EmitRowChanged (start, iter);
+				}
+				start.Next ();
+			}
+		}
 	}
-
-
 }

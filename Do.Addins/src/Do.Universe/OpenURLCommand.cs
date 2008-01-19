@@ -28,7 +28,7 @@ namespace Do.Universe
 {
 	public class OpenURLCommand : AbstractCommand
 	{
-		const string urlPattern = @"(^\w+:\/\/\w+)|(\w+\.\w+)";
+		const string urlPattern = @"(^\w+:\/\/\w+)|(\w+\.(com|net|org|gov|edu|fm|tv)(\.|\/|$))";
 		
 		Regex urlRegex;
 		

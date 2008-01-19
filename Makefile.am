@@ -1,5 +1,5 @@
-
-EXTRA_DIST =  
+EXTRA_DIST = intltool-update.in intltool-extract.in intltool-merge.in
+CLEANFILES = intltool-update intltool-extract intltool-merge
 
 #Warning: This is an automatically generated file, do not edit!
 if ENABLE_DEBUG
