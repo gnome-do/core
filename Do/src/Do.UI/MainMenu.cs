@@ -123,7 +123,7 @@ namespace Do.UI
 				logo = l;
 			}
 
-			about.Logo = Util.Appearance.PixbufFromIconName (logo, 140);
+			about.Logo = IconProvider.PixbufFromIconName (logo, 140);
 			about.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
 			about.Comments = "Do things as quickly as possible\n" +
 				"(but no quicker) with your files, bookmarks,\n" +
