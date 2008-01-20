@@ -353,27 +353,26 @@ namespace Do.UI
 
 			return base.OnExposeEvent (evnt);
 		}
-							
-							
+		
 		void OnIconUpdated (object sender, IconUpdatedEventArgs e)
 		{
-			TreePath start, stop;
+			TreePath firstPath, lastPath;
 			Gtk.TreeIter iter;
 
 			if (!Visible) return;
-							
-			resultsTreeview.GetVisibleRange (out start, out stop);
-			if (start == null || stop == null) return;
-											
-			while (!start.Equals (stop)) {					
+
+			resultsTreeview.GetVisibleRange (out firstPath, out lastPath);
+			if (firstPath == null || lastPath == null) return;
+
+			while (firstPath.Compare (lastPath) <= 0) {
 				IObject currentObject;
 
-				resultsTreeview.Model.GetIter (out iter, start);
+				resultsTreeview.Model.GetIter (out iter, lastPath);
 				currentObject = resultsTreeview.Model.GetValue (iter, 0) as IObject;
 				if (currentObject.Icon == e.IconName) {
-					resultsTreeview.Model.EmitRowChanged (start, iter);
+					resultsTreeview.Model.EmitRowChanged (firstPath, iter);
 				}
-				start.Next ();
+				firstPath.Next ();
 			}
 		}
 	}
