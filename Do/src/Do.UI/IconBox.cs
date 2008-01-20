@@ -18,11 +18,12 @@
  */
 
 using System;
+
 using Gtk;
 using Gdk;
 
-using Do.Universe;
 using Do.Addins;
+using Do.Universe;
 
 namespace Do.UI
 {
@@ -33,7 +34,7 @@ namespace Do.UI
 
 		protected bool isFocused;
 
-		protected string caption;
+		protected string caption, iconName;
 		protected Pixbuf pixbuf, emptyPixbuf;
 		protected int iconSize;
 
@@ -46,8 +47,16 @@ namespace Do.UI
 
 		public IconBox (int iconSize) : base ()
 		{
+			IconProvider.IconUpdated += OnIconUpdated;
 			this.iconSize = iconSize;
 			Build ();
+		}
+		
+		void OnIconUpdated (object sender, IconUpdatedEventArgs e)
+		{
+			if (iconName == e.IconName) {
+				Icon = e.IconName;
+			}
 		}
 
 		protected virtual void Build ()
@@ -123,7 +132,8 @@ namespace Do.UI
 		public string Icon
 		{
 			set {
-				Pixbuf = Util.Appearance.PixbufFromIconName (value, iconSize);
+				iconName = value;
+				Pixbuf = IconProvider.PixbufFromIconName (value, iconSize);
 			}
 		}
 
@@ -146,7 +156,7 @@ namespace Do.UI
 				if (value != null) {
 					icon = value.Icon;
 					name = value.Name;
-				}
+				}				
 				Icon = icon;
 				Caption = name;
 			}
