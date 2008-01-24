@@ -212,17 +212,11 @@ namespace Do.Core
 			if (query != test.Query) return false;
 			
 			// Test to see if the type filters are the same.
-			if (test.SearchTypes.Length != SearchTypes.Length)
-				return false;
-			foreach (Type type in SearchTypes) {
-				if (!UniverseManager.ContainsType (test.SearchTypes, type))
-					return false;
-			}
+			if (!SearchTypes.Equals (test.SearchTypes)) return false;
 			
 			// Check to see if items the same, but only if items are supposed to be fixed.
 			if (test.ActionSearch || test.ModifierItemsSearch)
-				foreach (IItem item in test.Items)
-					if (!Items.Contains (item)) return false;
+				if (!Items.Equals (test.Items)) return false;
 			
 			// Check to see if actions are the same, but only if actions are supposed to be fixed
 			if (test.ItemsSearch || test.ModifierItemsSearch)

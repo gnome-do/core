@@ -72,6 +72,7 @@ FILES =  \
 	src/Do.Core/SearchContext.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
+	src/Preferences.cs \
 	src/Do.UI/IconBox.cs \
 	src/Do.UI/IconProvider.cs \
 	src/Do.UI/MainMenu.cs \

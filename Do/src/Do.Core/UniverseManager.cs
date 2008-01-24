@@ -32,12 +32,12 @@ namespace Do.Core
 		/// <summary>
 		/// How long between update events (seconds).
 		/// </summary>
-		const int UpdateInterval = 120;
+		const int UpdateInterval = 60;
 		
 		/// <summary>
 		/// Maximum amount of time to spend updating (millseconds).
 		/// </summary>
-		const int MaxUpdateTime = 250;
+		const int MaxUpdateTime = 125;
 
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<IObject, IObject> universe;
@@ -60,24 +60,13 @@ namespace Do.Core
 
 		internal void Initialize ()
 		{
-			GConf.Client client;
-			bool enable_updating;
-
 			LoadBuiltins ();
 			LoadPlugins ();
 			BuildUniverse ();
 			BuildFirstResults ();
 
-			client = new GConf.Client();
-			try {
-				enable_updating = (bool) client.Get
-					("/apps/gnome-do/preferences/enable_updating");
-			} catch {
-				client.Set ("/apps/gnome-do/preferences/enable_updating", false);
-				enable_updating = false;
-			}
-			if (enable_updating) {
-				Log.Info ("Universe updating is enabled. Will re-scan item " +
+			if (Do.Preferences.UpdatingEnabled) {
+				Log.Info ("Universe updating is enabled. Do will re-scan item " +
 				          "sources every {0} seconds.", UpdateInterval);
 				GLib.Timeout.Add (UpdateInterval * 1000,
 						new GLib.TimeoutHandler (OnTimeoutUpdate));
@@ -92,7 +81,7 @@ namespace Do.Core
 			DateTime then;
 			int t_update;
 			
-			if (Do.Controller.MainWindow.Visible) return true;
+			if (Do.Controller.IsSummoned) return true;
 
 			// Keep track of the total time (in ms) we have spend updating.
 			// We spend half of MaxUpdateTime updating item sources, then
@@ -300,7 +289,14 @@ namespace Do.Core
 
 			// Hash items.
 			foreach (DoItemSource source in doItemSources) {
-				foreach (DoItem item in source.Items) {
+				ICollection<IItem> items;
+
+				items = source.Items;
+				if (items.Count == 0) {
+					source.UpdateItems ();
+					items = source.Items;
+				}
+				foreach (DoItem item in items) {
 					universe[item] = item;
 				}
 			}
@@ -547,16 +543,6 @@ namespace Do.Core
 			foreach (IObject rm in actions_to_remove)
 				actions.Remove (rm);
 			return actions;
-		}
-
-		//Function to determine whether a type array contains a type
-		static public bool ContainsType (Type[] typeArray, Type checkType)
-		{
-			foreach (Type type in typeArray) {
-				if (type.Equals (checkType))
-					return true;
-			}
-			return false;
 		}
 
 		public List<IObject> ActionsForItem (IItem item)

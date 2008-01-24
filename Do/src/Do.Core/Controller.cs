@@ -58,14 +58,13 @@ namespace Do.Core
 			}
 		}
 
-		public Gtk.Window MainWindow
-		{
+		public bool IsSummoned {
 			get {
-				return window;
+				return null != window && window.Visible;
 			}
 		}
 
-		bool Summonable {
+		bool IsSummonable {
 			get {
 				return MainMenu.Instance.AboutDialog == null;
 			}
@@ -73,7 +72,7 @@ namespace Do.Core
 		
 		public void SummonWithObjects (IObject[] objects)
 		{
-			if (!Summonable) return;
+			if (!IsSummonable) return;
 			window.DisplayObjects (objects);
 			Summon ();
 		}
@@ -84,7 +83,7 @@ namespace Do.Core
 		
 		public void Summon ()
 		{
-			if (!Summonable) return;
+			if (!IsSummonable) return;
 			window.Show ();
 			Util.Appearance.PresentWindow (window);
 		}

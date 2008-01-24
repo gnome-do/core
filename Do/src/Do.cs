@@ -19,21 +19,21 @@
 
 using System;
 
+using Mono.Unix;
+using Mono.GetOptions;
+
 using Do.Core;
 using Do.DBusLib;
-using Mono.GetOptions;
-using Mono.Unix;
 
 namespace Do
 {
 
 	public static class Do
 	{
-
 		static Tomboy.GConfXKeybinder keybinder;
-		const string kActivateKeybinding = "<Super>space";
 		
 		static DoOptions options;
+		static Preferences preferences;
 		static Controller controller;
 		static UniverseManager universeManager;
 
@@ -90,46 +90,39 @@ namespace Do
 		public static DoOptions Options
 		{
 			get {
-				if (null == options) {
+				return options ??
 					options = new DoOptions ();
-				}
-				return options;
+			}
+		}
+
+		public static Preferences Preferences
+		{
+			get {
+				return preferences ??
+					preferences = new Preferences ();
 			}
 		}
 
 		public static Controller Controller
 		{
 			get {
-				if (null == controller) {
+				return controller ??
 					controller = new Controller ();
-				}
-				return controller;
 			}
 		}
 
 		public static UniverseManager UniverseManager
 		{
 			get {
-				if (null == universeManager) {
+				return universeManager ??
 					universeManager = new UniverseManager ();
-				}
-				return universeManager;
 			}
 		}
 		
 		static void SetupKeybindings ()
 		{
-			GConf.Client client;
-			string binding;
-
-			client = new GConf.Client();
-			try {
-				binding = client.Get ("/apps/gnome-do/preferences/key_binding") as string;
-			} catch {
-				binding = kActivateKeybinding;
-				client.Set ("/apps/gnome-do/preferences/key_binding", binding);
-			}
-			keybinder.Bind ("/apps/gnome-do/preferences/key_binding", binding, OnActivate);
+			keybinder.Bind ("/apps/gnome-do/preferences/key_binding",
+					Preferences.SummonKeyBinding, OnActivate);
 		}
 		
 		static void OnActivate (object sender, EventArgs args)
