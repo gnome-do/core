@@ -212,11 +212,16 @@ namespace Do.Core
 			if (query != test.Query) return false;
 			
 			// Test to see if the type filters are the same.
-			if (!SearchTypes.Equals (test.SearchTypes)) return false;
+			if (test.SearchTypes.Length != SearchTypes.Length) return false; 	
+			foreach (Type type in SearchTypes) { 	
+				if (Array.IndexOf (test.SearchTypes, type) == -1)
+					return false; 	
+			}
 			
 			// Check to see if items the same, but only if items are supposed to be fixed.
-			if (test.ActionSearch || test.ModifierItemsSearch)
+			if (test.ActionSearch || test.ModifierItemsSearch) {
 				if (!Items.Equals (test.Items)) return false;
+			}
 			
 			// Check to see if actions are the same, but only if actions are supposed to be fixed
 			if (test.ItemsSearch || test.ModifierItemsSearch)
