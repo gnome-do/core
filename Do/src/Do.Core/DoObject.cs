@@ -19,9 +19,7 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Gdk;
 
 using Do.Universe;
 
@@ -78,7 +76,6 @@ namespace Do.Core
 		/// <returns>
 		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem of an DoItem).
 		/// </returns>
-
 		public static IItem EnsureIItem (IItem item)
 		{
 			if (item is DoItem)
@@ -153,10 +150,10 @@ namespace Do.Core
 			get { return inner.Icon ?? kDefaultIcon; }
 		}
 		
-		public string UID
+		public virtual string UID
 		{
 			get {
-				return string.Format ("{0}___{1}___{2}", inner.GetType (), Name, Description);
+				return string.Format ("{0}{1}{2}", inner.GetType (), Name, Description);
 			}
 		}
 		
