@@ -212,27 +212,32 @@ namespace Do.Core
 			if (query != test.Query) return false;
 			
 			// Test to see if the type filters are the same.
+			// TODO: Use Array.Equals once mono supports it.
 			if (test.SearchTypes.Length != SearchTypes.Length) return false; 	
-			foreach (Type type in SearchTypes) { 	
-				if (Array.IndexOf (test.SearchTypes, type) == -1)
+			for (int i = 0; i < SearchTypes.Length; ++i) { 	
+				if (test.SearchTypes[i] != SearchTypes[i])
 					return false; 	
 			}
 			
 			// Check to see if items the same, but only if items are supposed to be fixed.
 			if (test.ActionSearch || test.ModifierItemsSearch) {
-				if (!Items.Equals (test.Items)) return false;
+				// TODO: Use List.Equals once mono supports it.
+				if (test.Items.Count != Items.Count) return false; 	
+				for (int i = 0; i < Items.Count; ++i) { 	
+					if (test.Items[i] != Items[i])
+						return false; 	
+				}
 			}
 			
 			// Check to see if actions are the same, but only if actions are supposed to be fixed
 			if (test.ItemsSearch || test.ModifierItemsSearch)
 				if (test.Action != Action) return false;
 			
-			if (test.ModifierItemsSearch != ModifierItemsSearch) return false;
-			
-			if (test.ChildrenSearch != childrenSearch ||
-			    test.ParentSearch != parentSearch)
+			if (test.ModifierItemsSearch != ModifierItemsSearch ||
+				test.ChildrenSearch != childrenSearch ||
+				test.ParentSearch != parentSearch)
 				return false;
-			
+
 			return true;
 		}
 		
@@ -245,8 +250,9 @@ namespace Do.Core
 		
 		public SearchContext EquivalentPreviousContextIfExists ()
 		{
-			if (Equals (LastContext.LastContext))
+			if (Equals (LastContext.LastContext)) {
 				return LastContext.LastContext;
+			}
 			return null;
 		}
 		

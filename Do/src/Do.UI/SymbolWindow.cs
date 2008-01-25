@@ -621,6 +621,7 @@ namespace Do.UI
 			first = GetCurrentObject (Pane.First);
 			if (first is IItem) {
 				// Selection is an IItem
+				context[1].Items.Clear ();
 				context[1].Items.Add (first as IItem);
 				context[1].SearchTypes = new Type[] { typeof (IAction) };
 			} else {
@@ -655,9 +656,11 @@ namespace Do.UI
 			}
 
 			if (first is IItem) {
+				context[2].Items.Clear ();
 				context[2].Items.Add (first as IItem);
 				context[2].Action = second as IAction;
 			} else {
+				context[2].Items.Clear ();
 				context[2].Items.Add (second as IItem);
 				context[2].Action = first as IAction;
 			}
