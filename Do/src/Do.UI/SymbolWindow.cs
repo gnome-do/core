@@ -74,7 +74,6 @@ namespace Do.UI
 
 		const int SearchDelay = 225;
 		uint[] searchTimeout;
-		IObject[] lastResult;
 
 		RoundedFrame frame;
 		SymbolDisplayLabel label;
@@ -95,7 +94,6 @@ namespace Do.UI
 		{
 			Build ();
 			searchTimeout = new uint[3];
-			lastResult = new IObject[3];
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			context = new SearchContext[3];
@@ -199,7 +197,6 @@ namespace Do.UI
 			resultsWindow.Hide ();
 			resultsWindow.Clear ();
 
-			lastResult = new IObject[3];
 			tabbing = false;
 
 			context[0] = new SearchContext ();
@@ -213,7 +210,8 @@ namespace Do.UI
 			iconbox[2].Clear ();
 			HideThirdPane ();
 
-			label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), Catalog.GetString ("Type to start searching."));
+			label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"),
+					Catalog.GetString ("Type to start searching."));
 		}
 
 		protected virtual void SetNoResultsFoundState (Pane pane)
@@ -585,6 +583,10 @@ namespace Do.UI
 
 		protected void SearchFirstPane ()
 		{
+			IObject lastResult;
+
+			lastResult = GetCurrentObject (Pane.First);
+
 			// If we delete the entire query on a regular search (we are not
 			// searching children) then set default state.
 			if (context[0].Query == "" &&
@@ -602,19 +604,18 @@ namespace Do.UI
 			// Queue a search for the next pane unless the result of the most
 			// recent search is the same as the last result - if this is the
 			// case, we already have a valid search queued.
-			if (GetCurrentObject (Pane.First) != lastResult[0]) {
+			if (GetCurrentObject (Pane.First) != lastResult) {
 				context[1] = new SearchContext ();
 				SearchPaneDelayed (Pane.Second);
-			}
-			if (CurrentPane == Pane.First) {
-				lastResult[0] = GetCurrentObject (Pane.First);
-				lastResult[1] = null;
 			}
 		}
 
 		protected void SearchSecondPane ()
 		{
 			IObject first;
+			IObject lastResult;
+
+			lastResult = GetCurrentObject (Pane.Second);
 
 			// Set up the next pane based on what's in the first pane:
 			first = GetCurrentObject (Pane.First);
@@ -634,12 +635,9 @@ namespace Do.UI
 			// Queue a search for the next pane unless the result of the most
 			// recent search is the same as the last result - if this is the
 			// case, we already have a valid search queued.
-			if (GetCurrentObject (Pane.Second) != lastResult[1]) {
+			if (GetCurrentObject (Pane.Second) != lastResult) {
 				context[2] = new SearchContext ();
 				SearchPaneDelayed (Pane.Third);
-			}
-			if (CurrentPane == Pane.Second) {
-				lastResult[1] = GetCurrentObject (Pane.Second);
 			}
 		}
 

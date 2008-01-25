@@ -41,9 +41,7 @@ namespace Do
 		public string SummonKeyBinding
 		{
 			get {
-				string binding;
-				Get<string> ("key_binding", "<Super>space", out binding);
-				return binding;
+				return Get<string> ("key_binding", "<Super>space");
 			}
 			set {
 				Set<string> ("key_binding", value);
@@ -53,9 +51,7 @@ namespace Do
 		public bool UpdatingEnabled
 		{
 			get {
-				bool enabled;
-				Get<bool> ("enable_updating", false, out enabled);
-				return enabled;
+				return Get<bool> ("enable_updating", false);
 			}
 			set {
 				Set<bool> ("enable_updating", value);
@@ -70,7 +66,16 @@ namespace Do
 				return GConfRootPath + key;
 		}
 
-		public bool Get<T> (string key, out T val)
+
+		public T Get<T> (string key, T def)
+		{
+			T val;
+
+			TryGet (key, def, out val);
+			return val;
+		}
+
+		public bool TryGet<T> (string key, out T val)
 		{
 			bool success;
 
@@ -83,12 +88,11 @@ namespace Do
 			return success;
 		}
 
-
-		public bool Get<T> (string key, T def, out T val)
+		public bool TryGet<T> (string key, T def, out T val)
 		{
 			bool success;
 
-			success = Get<T> (key, out val);
+			success = TryGet<T> (key, out val);
 			if (!success) {
 				success = Set<T> (key, def);
 				val = def;
