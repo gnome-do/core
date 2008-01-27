@@ -541,6 +541,7 @@ namespace Do.UI
 			// This is extremely awkward. DR....
 			context[0].LastContext.LastContext = context[0].LastContext = context[0];
 			SearchFirstPane ();
+			SearchSecondPane ();
 
 			// Showing the results after a bit of a delay looks a bit better.
 			GLib.Timeout.Add (250, delegate {
