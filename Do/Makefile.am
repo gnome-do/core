@@ -86,7 +86,6 @@ FILES =  \
 	src/Do.Universe/ItemSourceItemSource.cs \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
-	src/DoOptions.cs \
 	src/Log.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 

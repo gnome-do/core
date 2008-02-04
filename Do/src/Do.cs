@@ -20,7 +20,6 @@
 using System;
 
 using Mono.Unix;
-using Mono.GetOptions;
 
 using Do.Core;
 using Do.DBusLib;
@@ -32,7 +31,6 @@ namespace Do
 	{
 		static Tomboy.GConfXKeybinder keybinder;
 		
-		static DoOptions options;
 		static Preferences preferences;
 		static Controller controller;
 		static UniverseManager universeManager;
@@ -54,7 +52,6 @@ namespace Do
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
 
-			Options.ProcessArgs (args);
 			UniverseManager.Initialize ();
 
 			// Previously, Controller's constructor created a Gtk.Window, and that
@@ -69,8 +66,12 @@ namespace Do
 			keybinder = new Tomboy.GConfXKeybinder ();
 			SetupKeybindings ();
 
-			if (!options.quiet)
+			if (Array.IndexOf (args, "--quiet") != -1 ||
+					Array.IndexOf (args, "-q") != -1) {
+				// Quiet start.
+			} else {
 				Controller.Summon ();
+			}
 			
 			Gtk.Application.Run ();
 			
@@ -84,14 +85,6 @@ namespace Do
 			if (dbus_controller != null) {
 				dbus_controller.Summon ();
 				System.Environment.Exit (0);
-			}
-		}
-
-		public static DoOptions Options
-		{
-			get {
-				return options ??
-					options = new DoOptions ();
 			}
 		}
 
