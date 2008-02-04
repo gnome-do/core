@@ -114,7 +114,7 @@ namespace Do.Universe
 		public virtual string Name
 		{
 			get {
-				return System.IO.Path.GetFileName (path);
+				return System.IO.Path.GetFileName (Path);
 			}
 		}
 		
@@ -123,10 +123,10 @@ namespace Do.Universe
 			get {
 				string short_path;
 				
-				short_path = ShortPath (path);
+				short_path = ShortPath (Path);
 				if (short_path == "~")
 					// Sowing only "~" looks too abbreviated.
-					return path;
+					return Path;
 				else
 					return short_path;
 			}
@@ -164,14 +164,14 @@ namespace Do.Universe
 		public string URI
 		{
 			get {
-				return "file://" + path;
+				return "file://" + Path;
 			}
 		}
 		
 		public string MimeType
 		{
 			get {
-				return Gnome.Vfs.Global.GetMimeType (path);
+				return Gnome.Vfs.Global.GetMimeType (Path);
 			}
 		}
 
