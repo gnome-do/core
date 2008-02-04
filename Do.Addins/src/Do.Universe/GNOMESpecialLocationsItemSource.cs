@@ -18,6 +18,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 using Do.Addins;
@@ -48,7 +49,7 @@ namespace Do.Universe
 		public GNOMESpecialLocationsItemSource()
 		{
 			items = new List<IItem> ();
-			items.Add (new GNOMETrashDirectoryFileItem ());
+			items.Add (new GNOMETrashFileItem ());
 			items.Add (new GNOMEURIItem ("computer:///", "Computer", "computer"));
 			items.Add (new GNOMEURIItem ("network://", "Network", "network"));
 		}
@@ -81,31 +82,41 @@ namespace Do.Universe
 		}
 	}
 	
-	class GNOMETrashDirectoryFileItem : DirectoryFileItem
+	class GNOMETrashFileItem : IFileItem, IOpenableItem
 	{
-		static readonly string kTrashDirectory;
+		static readonly string TrashDirectory;
 		
-		static GNOMETrashDirectoryFileItem ()
+		static GNOMETrashFileItem ()
 		{
-			kTrashDirectory = "~/.Trash".Replace ("~",
-			                  System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal));
+			TrashDirectory = "~/.Trash".Replace ("~",
+				Environment.GetFolderPath (Environment.SpecialFolder.Personal));
 		}
 		
-		public GNOMETrashDirectoryFileItem () : base (kTrashDirectory)
+		public GNOMETrashFileItem ()
 		{
 		}
 		
-		public override string Name {
-			get { 
-				return "Trash";
-			}
+		public string Name {
+			get { return "Trash"; }
 		}
 
-		public override string Icon
+		public string Description {
+			get { return "Trash"; }
+		}
+
+		public string Path {
+			get { return TrashDirectory; }
+		}
+
+		public string URI {
+			get { return "trash://"; }
+		}
+
+		public string Icon
 		{
 			get {
-				if (System.IO.Directory.Exists (kTrashDirectory) &&
-					System.IO.Directory.GetFileSystemEntries (kTrashDirectory).Length > 0) {
+				if (Directory.Exists (TrashDirectory) &&
+					Directory.GetFileSystemEntries (TrashDirectory).Length > 0) {
 					return "user-trash-full";
 				} else {
 					return "user-trash";
@@ -113,7 +124,7 @@ namespace Do.Universe
 			}
 		}
 
-		public override void Open ()
+		public void Open ()
 		{
 			// Override Open to open trash:// instead of ~/.Trash.
 			Util.Environment.Open ("trash://");

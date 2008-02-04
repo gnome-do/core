@@ -146,11 +146,14 @@ namespace Do.Universe
 		public ICollection<IItem> ChildrenOfItem (IItem item)
 		{
 			List<IItem> children;
+			IFileItem fi;
 			
+			fi = item as IFileItem;
 			children = new List<IItem> ();
-			if (item is DirectoryFileItem) {
-				foreach (string path in Directory.GetFileSystemEntries ((item as DirectoryFileItem).Path)) {
-					children.Add (FileItem.Create (path));
+			if (FileItem.IsDirectory (fi)) {
+				foreach (string path in
+					Directory.GetFileSystemEntries (fi.Path)) {
+					children.Add (new FileItem (path));
 				}
 			}
 			return children;
@@ -195,13 +198,13 @@ namespace Do.Universe
 				// Ignore system/hidden files.
 				if (!include_hidden && FileItem.IsHidden (file)) continue;
 
-				item = FileItem.Create (file);
+				item = new FileItem (file);
 				items.Add (item);
 			}
 			foreach (string directory in directories) {
 				if (!include_hidden && FileItem.IsHidden (directory)) continue;
 
-				item = FileItem.Create (directory);
+				item = new FileItem (directory);
 				items.Add (item);
 				ReadItems (directory, levels - 1);
 			}

@@ -20,6 +20,7 @@
 
 using System;
 using System.Diagnostics;
+
 using Mono.Unix;
 
 using Do.Addins;
@@ -72,7 +73,7 @@ namespace Do.Universe
 			
 			fi = items[0] as IFileItem;
 			dir = fi.Path;
-			if (!(fi is DirectoryFileItem))
+			if (!FileItem.IsDirectory (fi))
 				dir = System.IO.Path.GetDirectoryName (dir);
 
 			term = new Process ();

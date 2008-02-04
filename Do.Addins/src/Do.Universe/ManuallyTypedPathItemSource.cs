@@ -71,11 +71,11 @@ namespace Do.Universe
 			// For directories, return their contents.
 			if (Directory.Exists (path)) {
 				foreach (string child_path in Directory.GetFileSystemEntries (path)) {
-					children.Add (FileItem.Create (child_path));
+					children.Add (new FileItem (child_path));
 				}
 			// For files, return their FileItem representations.
 			} else if (File.Exists (path)) {
-				children.Add (FileItem.Create (path));
+				children.Add (new FileItem (path));
 			}
 			return children;
 		}
