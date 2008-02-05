@@ -37,12 +37,12 @@ namespace Do.Universe
 		
 		public string Name
 		{
-			get { return text; }
+			get { return Text; }
 		}
 		
 		public string Description
 		{
-			get { return "Raw input text"; }
+			get { return Text; }
 		}
 		
 		public string Icon
