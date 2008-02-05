@@ -47,7 +47,7 @@ namespace Do.UI
 		void Build ()
 		{
 			UseMarkup = true;
-			LineWrap = true;
+			Ellipsize = Pango.EllipsizeMode.Middle;
 			Justify = Justification.Center;
 			ModifyFg (StateType.Normal, Style.White);
 		}
