@@ -1,4 +1,4 @@
-<Combine name="Do" fileversion="2.0" outputpath="./build/bin/">
+<Combine name="Do" fileversion="2.0" outputpath="build/bin/">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Debug" />
@@ -20,9 +20,9 @@
     <Execute type="None" entry="Do.DBus" />
   </StartMode>
   <Entries>
-    <Entry filename="./Do/Do.mdp" />
-    <Entry filename="./Packages.mdse" />
-    <Entry filename="./Do.Addins/Do.Addins.mdp" />
-    <Entry filename="./Do.DBus/Do.DBus.mdp" />
+    <Entry filename="Do/Do.mdp" />
+    <Entry filename="Packages.mdse" />
+    <Entry filename="Do.Addins/Do.Addins.mdp" />
+    <Entry filename="Do.DBus/Do.DBus.mdp" />
   </Entries>
 </Combine>

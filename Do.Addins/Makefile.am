@@ -48,8 +48,8 @@ FILES =  \
 	src/Do.Universe/FileItemSource.cs \
 	src/Do.Universe/FirefoxBookmarkItemSource.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
-	src/Do.Universe/ICommand.cs \
 	src/Do.Universe/IAction.cs \
+	src/Do.Universe/ICommand.cs \
 	src/Do.Universe/IItem.cs \
 	src/Do.Universe/IItemSource.cs \
 	src/Do.Universe/ImageFileItem.cs \
@@ -69,7 +69,7 @@ FILES =  \
 
 DATA_FILES = 
 
-RESOURCES = 
+RESOURCES = Do.Addins.addin.xml 
 
 EXTRAS = \
 	do.addins.pc.in 

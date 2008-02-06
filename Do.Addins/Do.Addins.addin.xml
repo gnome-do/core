@@ -1,0 +1,60 @@
+<Addin id="Do" namespace= "Do" version="1.0" isroot="true">
+ 
+	<Runtime>
+		<Import assembly="Do.exe"/>
+		<Import assembly="Do.Addins.dll"/>
+	</Runtime>
+	
+	<!-- Extension points -->
+	<ExtensionPoint path = "/Do/ItemSource">
+		<ExtensionNode name="ItemSource" objectType="Do.Universe.IItemSource"/>
+	</ExtensionPoint>
+	<ExtensionPoint path = "/Do/Action">
+		<ExtensionNode name="Action" objectType="Do.Universe.IAction"/>
+	</ExtensionPoint>
+	
+	<!-- Extensions included in the main assemblies -->
+	<!-- Sources -->
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Core.ItemSourceItemSource" />
+	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.InternalItemSource" />
+	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.ApplicationItemSource" />
+	</Extension>
+	
+	<!-- Actions -->
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.DefineWordAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.MailtoAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.OpenAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.OpenTerminalHereAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.OpenURLAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.OpenWithAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.RevealAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.RunAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.RunInTerminalAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.VoidAction" />
+	</Extension>
+	
+</Addin>
