@@ -28,7 +28,7 @@ PKG_CHECK_MODULES([GCONF_SHARP_20], [gconf-sharp-2.0])
 PKG_CHECK_MODULES([GLADE_SHARP_20], [glade-sharp-2.0])
 PKG_CHECK_MODULES([NDESK_DBUS_10], [ndesk-dbus-1.0])
 PKG_CHECK_MODULES([GNOME_VFS_SHARP_20], [gnome-vfs-sharp-2.0])
-
+PKG_CHECK_MODULES([MONO_ADDINS_20], [mono-addins])
 dnl -- Intl
 
 GETTEXT_PACKAGE=gnome-do
