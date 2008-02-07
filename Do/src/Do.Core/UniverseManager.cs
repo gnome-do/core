@@ -42,6 +42,11 @@ namespace Do.Core
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<IObject, IObject> universe;
 
+		/// <summary>
+		/// Contains types we've seen while loading plugins.
+		/// </summary>
+		Dictionary<Type, Assembly> loadedTypes;
+
 		List<DoItemSource> doItemSources;
 		List<DoAction> doActions;
 
@@ -55,6 +60,7 @@ namespace Do.Core
 			doItemSources = new List<DoItemSource> ();
 			doActions = new List<DoAction> ();
 			firstResults = new Dictionary<string, List<IObject>> ();
+			loadedTypes = new Dictionary<Type, Assembly> ();
 			itemSourceCursor = firstResultsCursor = 0;
 		}
 
@@ -67,12 +73,12 @@ namespace Do.Core
 
 			if (Do.Preferences.UpdatingEnabled) {
 				Log.Info ("Universe updating is enabled. Do will re-scan item " +
-				          "sources every {0} seconds.", UpdateInterval);
+					"sources every {0} seconds.", UpdateInterval);
 				GLib.Timeout.Add (UpdateInterval * 1000,
-						new GLib.TimeoutHandler (OnTimeoutUpdate));
+					new GLib.TimeoutHandler (OnTimeoutUpdate));
 			} else {
 				Log.Info ("Universe updating is not enabled. This experimental " +
-				          "feature can be enabled in Configuration Editor.");
+					"feature can be enabled in Configuration Editor.");
 			}
 		}
 
@@ -177,7 +183,7 @@ namespace Do.Core
 
 			plugin_dirs = new List<string> ();
 			plugin_dirs.Add ("~/.do/plugins".Replace ("~",
-						Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
+				Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
 
 			foreach (string plugin_dir in plugin_dirs) {
 				string[] files;
@@ -198,7 +204,8 @@ namespace Do.Core
 						plugin = Assembly.LoadFile (file);
 						LoadAssembly (plugin);
 					} catch (Exception e) {
-						Log.Error ("Encountered and error while trying to load plugin {0}: {1}", file, e.Message);
+						Log.Error ("Encountered and error while trying to load plugin {0}: {1}",
+							file, e.Message);
 						continue;
 					}
 				}
@@ -215,7 +222,13 @@ namespace Do.Core
 				if (type == typeof (ICommandWrapperAction)) continue;
 				if (type == typeof (DoAction)) continue;
 				if (type == typeof (DoItem)) continue;
+				if (loadedTypes.ContainsKey (type)) {
+					Log.Warn ("Duplicate plugin type detected; {0} may be a duplicate plugin.",
+						plugin.Location);
+					break;
+				}
 
+				loadedTypes[type] = plugin;
 				foreach (Type iface in type.GetInterfaces ()) {
 					if (iface == typeof (IItemSource)) {
 						IItemSource source = null;
@@ -225,7 +238,7 @@ namespace Do.Core
 						} catch (Exception e) {
 							source = null;
 							Log.Error ("Failed to load item source from {0}: {1}",
-									plugin.Location, e.Message);
+								plugin.Location, e.Message);
 						}
 						if (source != null) {
 							doItemSources.Add (new DoItemSource (source));
@@ -240,7 +253,7 @@ namespace Do.Core
 						} catch (Exception e) {
 							action = null;
 							Log.Error ("Failed to load action from {0}: {1}",
-									plugin.Location, e.Message);
+								plugin.Location, e.Message);
 						}
 						if (action != null) {
 							doActions.Add (new DoAction (action));
