@@ -20,8 +20,10 @@
 using System;
 using Gtk;
 using Mono.Unix;
+using Mono.Addins.Gui;
 
 using Do;
+using Do.Core;
 
 namespace Do.UI
 {
@@ -73,6 +75,13 @@ namespace Do.UI
 			item.CanFocus = false;
 			item.Activated += OnMainMenuAboutClicked;
 
+			item = new ImageMenuItem  (Catalog.GetString ("Addin _Manager"));
+			//TODO: See if we can find a better item to represent the addin manager
+			(item as ImageMenuItem).Image = new Image (Stock.Preferences, IconSize.Menu);
+			menu.Add (item);
+			item.CanFocus = false;
+			item.Activated += OnMainMenuAddinManagerClicked;
+			
 			// Quit menu item
 			item = new ImageMenuItem (Catalog.GetString ("_Quit"));
 			(item as ImageMenuItem).Image = new Image (Stock.Quit, IconSize.Menu);
@@ -92,6 +101,11 @@ namespace Do.UI
 			Application.Quit();
 		}
 
+		protected void OnMainMenuAddinManagerClicked (object o, EventArgs args)
+		{
+			AddinManagerWindow.Run (Do.Controller.Window);
+		}
+		
 		protected void OnMainMenuRefreshCatalogClicked (object o, EventArgs args)
 		{
 		}

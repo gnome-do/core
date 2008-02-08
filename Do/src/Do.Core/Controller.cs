@@ -35,6 +35,9 @@ namespace Do.Core
 		public event EventHandler Vanished;
 
 		protected SymbolWindow window;
+		public SymbolWindow Window{
+			get{ return window;}
+		}
 		
 		public Controller ()
 		{		

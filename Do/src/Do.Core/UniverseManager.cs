@@ -73,9 +73,9 @@ namespace Do.Core
 
 		internal void Initialize ()
 		{
-			AddinManager.Initialize(AddinDir);
-			AddinManager.AddExtensionNodeHandler("/Do/ItemSource",OnItemSourcesChange);
-			AddinManager.AddExtensionNodeHandler("/Do/Action", OnActionsChange);
+			AddinManager.Initialize (AddinDir);
+			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource",OnItemSourcesChange);
+			AddinManager.AddExtensionNodeHandler ("/Do/Action", OnActionsChange);
 			//LoadBuiltins ();
 			//LoadPlugins ();
 			BuildUniverse ();
@@ -594,41 +594,41 @@ namespace Do.Core
 		/// <param name="args">
 		/// A <see cref="ExtensionNodeEventArgs"/>
 		/// </param>
-		public void OnItemSourcesChange(object s, ExtensionNodeEventArgs args)
+		public void OnItemSourcesChange (object s, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
-			IItemSource source = (IItemSource) node.CreateInstance();
+			IItemSource source = (IItemSource) node.CreateInstance ();
 			if (args.Change == ExtensionChange.Add)
 			{
-				doItemSources.Add (new DoItemSource(source));
+				doItemSources.Add (new DoItemSource (source));
 				Log.Info ("Successfully loaded \"{0}\" itemsource.", source.Name);
 			}
 			else{
-				foreach(DoItemSource dis in doItemSources)
+				foreach (DoItemSource dis in doItemSources)
 				{
-					if(dis.Inner.Equals(source))
+					if (dis.Inner.Equals(source))
 					{
-						doItemSources.Remove(dis);
+						doItemSources.Remove (dis);
 						Log.Info ("Successfully unloaded \"{0}\" itemsource.", source.Name);
 					}
 				}
 			}
 		}
-		public void OnActionsChange(object s, ExtensionNodeEventArgs args)
+		public void OnActionsChange (object s, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
-			IAction action = (IAction) node.CreateInstance();
+			IAction action = (IAction) node.CreateInstance ();
 			if (args.Change == ExtensionChange.Add)
 			{
 				doActions.Add (new DoAction(action));
 				Log.Info ("Successfully loaded \"{0}\" action", action.Name);
 			}
 			else{
-				foreach(DoAction da in doActions)
+				foreach (DoAction da in doActions)
 				{
-					if(da.Inner.Equals(action))
+					if (da.Inner.Equals (action))
 					{
-						doActions.Remove(da);
+						doActions.Remove (da);
 						Log.Info ("Successfully removed \"{0}\" action", action.Name);
 					}
 				}

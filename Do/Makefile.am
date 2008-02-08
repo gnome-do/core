@@ -102,6 +102,7 @@ EXTRAS = \
 	gnome-do.in 
 
 REFERENCES =  \
+	../../../../../../usr/lib/mono-addins/Mono.Addins.Gui.dll \
 	../Do.Addins/bin/Debug/Do.Addins.dll \
 	../Do.DBus/bin/Debug/Do.DBus.dll \
 	Mono.Cairo \
