@@ -18,67 +18,131 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace Do.Universe
 {
+	public interface IContactDetailItem : IItem
+	{
+		string Key { get; }
+		string Value { get; }
+	}
 	
 	public class ContactItem : IItem
 	{
-		// These fields are internal so they can be accessed by ContactItemStore
-		internal string name, photo;
-		internal List<string> emails, aims, jabbers;
+		static Dictionary<string, ContactItem> contactsByName, contactsByEmail;
 		
-		public ContactItem () :
-			this (null)
+		static ContactItem ()
 		{
+			contactsByName = new Dictionary<string, ContactItem> ();
+			contactsByEmail = new Dictionary<string, ContactItem> ();
 		}
 		
-		public ContactItem (string name)
+		public static ContactItem Create (string name)
 		{
-			this.name = name;
-			emails = new List<string> ();
-			aims = new List<string> ();
-			jabbers = new List<string> ();
+			return CreateWithName (name);
+		}
+		
+		public static ContactItem CreateWithName (string name)
+		{
+			ContactItem contact;
+			
+			contactsByName.TryGetValue (name.ToLower (), out contact);
+			if (null == contact) {
+				contactsByName[name.ToLower ()] = contact = new ContactItem ();
+				contact["name"] = name;
+			}
+			return contact;
+		}
+		
+		public static ContactItem CreateWithEmail (string email)
+		{
+			ContactItem contact;
+			
+			contactsByEmail.TryGetValue (email.ToLower (), out contact);
+			if (null == contact) {
+				contactsByEmail[email.ToLower ()] = contact = new ContactItem ();
+				contact["email"] = email;
+			}
+			return contact;
+		}
+		
+		protected Dictionary<string,string> details;
+		
+		private ContactItem ()
+		{
+			details = new Dictionary<string,string> ();
+		}
+
+		public IEnumerable<string> Details
+		{
+			get { return details.Keys; }
+		}
+		
+		public string this [string key]
+		{
+			get {
+				string detail;
+				details.TryGetValue (key, out detail);
+				return detail;
+			}
+			set {
+				if (string.IsNullOrEmpty (key) || string.IsNullOrEmpty (value)) return;
+				
+				if (key.StartsWith ("email"))
+					contactsByEmail[value.ToLower ()] = this;
+				else if (key == "name")
+					contactsByName[value.ToLower ()] = this;
+				
+				switch (key) {
+				case "photo":
+					UpdatePhotoDetail (value);
+					break;
+				default:
+					details[key] = value;
+					break;
+				}
+			}
 		}
 		
 		public string Name
 		{
-			get {
-				if (name != null) return name;
-				if (emails.Count > 0) return emails[0];
-				if (aims.Count > 0) return aims[0];
-				if (jabbers.Count > 0) return jabbers[0];
-				return "Unnamed Contact";
-			}
-			set { name = value; }
+			get { return this["name"] ?? this["email"]; }
 		}
 		
 		public string Photo
 		{
-			get { return photo; }
-			set { photo = value; }
+			get { return this["photo"]; }
 		}
 		
 		public string Description
 		{
-			get {
-				if (emails.Count > 0) return emails[0];
-				if (aims.Count > 0) return "AIM: " + aims[0];
-				if (jabbers.Count > 0) return "Jabber: " + jabbers[0];
-				return "No description.";
-			}
+			get { return this["email"] ?? this["email.work"] ?? this["email.home"]; }
 		}
 		
 		public string Icon
 		{
 			get {
-				return Photo ?? "stock_person";
+				if (null != Photo && File.Exists (Photo))
+					return Photo;
+				return "stock_person";
 			}
 		}
 		
-		public List<string> Emails { get { return emails; } }
-		public List<string> AIMs { get { return aims; } }
-		public List<string> Jabbers { get { return jabbers; } }
+		protected void UpdatePhotoDetail (string photo)
+		{                   
+			if (null == Photo) {
+				details["photo"] = photo;
+			} else if (!File.Exists (Photo)) {
+				details["photo"] = photo;
+			} else if (File.Exists (photo)) {
+				// If there's already a photo file in place for this contact, replace it
+				// if the new photo is larger (heuristic for highest quality).
+				if (new FileInfo (Photo).Length < new FileInfo (photo).Length) {
+					details["photo"] = photo;
+				}
+			}
+		}
 	}
 }

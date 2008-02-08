@@ -37,7 +37,6 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
-	src/Do.Addins/ContactItemStore.cs \
 	src/Do.Addins/Util.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
@@ -48,8 +47,8 @@ FILES =  \
 	src/Do.Universe/FileItemSource.cs \
 	src/Do.Universe/FirefoxBookmarkItemSource.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
-	src/Do.Universe/ICommand.cs \
 	src/Do.Universe/IAction.cs \
+	src/Do.Universe/ICommand.cs \
 	src/Do.Universe/IItem.cs \
 	src/Do.Universe/IItemSource.cs \
 	src/Do.Universe/ImageFileItem.cs \

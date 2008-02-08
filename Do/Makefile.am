@@ -72,7 +72,6 @@ FILES =  \
 	src/Do.Core/SearchContext.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
-	src/Preferences.cs \
 	src/Do.UI/IconBox.cs \
 	src/Do.UI/IconProvider.cs \
 	src/Do.UI/MainMenu.cs \
@@ -87,6 +86,7 @@ FILES =  \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
 	src/Log.cs \
+	src/Preferences.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 
 

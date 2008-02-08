@@ -52,20 +52,35 @@ namespace Do.Universe
 
 		public override bool SupportsItem (IItem item)
 		{
-			return item is ContactItem && (item as ContactItem).Emails.Count > 0;
+			ContactItem contact = item as ContactItem;
+			foreach (string detail in contact.Details)
+				if (detail.StartsWith ("email"))
+					return true;
+			return false;
 		}
 		
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
-			string recipients;
+			string to;
 			
-			recipients = "";
+			to = "";
 			foreach (IItem item in items) {
 				if (item is ContactItem) {
-					recipients += (item as ContactItem).Emails[0] + ",";
+					ContactItem contact = item as ContactItem;
+					string email = contact["email"];
+					
+					if (null == email) {
+						foreach (string detail in contact.Details) {
+							if (detail.StartsWith ("email")) {
+								email = contact[detail];
+								break;
+							}
+						}
+					}
+					to += email + ",";
 				}
 			}
-			Util.Environment.Open ("mailto:" + recipients);
+			Util.Environment.Open ("mailto:" + to);
 			return null;
 		}
 	}
