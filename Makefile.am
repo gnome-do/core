@@ -1,4 +1,4 @@
-EXTRA_DIST = intltool-update.in intltool-extract.in intltool-merge.in
+EXTRA_DIST = intltool-update.in intltool-extract.in intltool-merge.in COPYRIGHT
 CLEANFILES = intltool-update intltool-extract intltool-merge
 
 #Warning: This is an automatically generated file, do not edit!
