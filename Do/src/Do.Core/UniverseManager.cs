@@ -54,6 +54,11 @@ namespace Do.Core
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<IObject, IObject> universe;
 
+		/// <summary>
+		/// Contains types we've seen while loading plugins.
+		/// </summary>
+		Dictionary<Type, Assembly> loadedTypes;
+
 		List<DoItemSource> doItemSources;
 		List<DoAction> doActions;
 
@@ -67,6 +72,7 @@ namespace Do.Core
 			doItemSources = new List<DoItemSource> ();
 			doActions = new List<DoAction> ();
 			firstResults = new Dictionary<string, List<IObject>> ();
+			loadedTypes = new Dictionary<Type, Assembly> ();
 			itemSourceCursor = firstResultsCursor = 0;
 			
 		}
@@ -83,12 +89,12 @@ namespace Do.Core
 
 			if (Do.Preferences.UpdatingEnabled) {
 				Log.Info ("Universe updating is enabled. Do will re-scan item " +
-				          "sources every {0} seconds.", UpdateInterval);
+					"sources every {0} seconds.", UpdateInterval);
 				GLib.Timeout.Add (UpdateInterval * 1000,
-						new GLib.TimeoutHandler (OnTimeoutUpdate));
+					new GLib.TimeoutHandler (OnTimeoutUpdate));
 			} else {
 				Log.Info ("Universe updating is not enabled. This experimental " +
-				          "feature can be enabled in Configuration Editor.");
+					"feature can be enabled in Configuration Editor.");
 			}
 		}
 
