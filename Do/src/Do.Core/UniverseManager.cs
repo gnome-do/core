@@ -177,22 +177,53 @@ namespace Do.Core
 			LoadAssembly (typeof (DoItem).Assembly);
 		}
 
-		protected void LoadPlugins ()
+		//GetPluginDirs & XDGDirs should go away (or at least be moved elsewhere)
+		//For now, they can go here.  Please don't rely on them, they'll move somewhere else soon!
+		List<string> GetPluginDirs ()
 		{
 			List<string> plugin_dirs;
+			plugin_dirs = new List<string>();
+			plugin_dirs.AddRange (XDGDirs ("XDG_DATA_HOME", "gnome-do/plugins", "~/.local/share"));
+			plugin_dirs.AddRange (XDGDirs ("XDG_DATA_DIRS", "gnome-do/plugins", "/usr/local/share:/usr/share"));
+			return plugin_dirs;
+		}
+		
+		List<string> XDGDirs (string xdgVar, string suffix, string fallback)
+		{
+			List<string> dir_list;
+			string envVal;
+			
+			envVal = Environment.GetEnvironmentVariable(xdgVar);
+			if (string.IsNullOrEmpty (envVal)) {
+				envVal = fallback;
+			}
 
-			plugin_dirs = new List<string> ();
-			plugin_dirs.Add ("~/.do/plugins".Replace ("~",
-				Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
-
-			foreach (string plugin_dir in plugin_dirs) {
+			dir_list = new List<string>();
+			string full_path;
+			foreach (string path in envVal.Split(':')) {
+				if (path != string.Empty) {
+					full_path = System.IO.Path.Combine(path, suffix);
+					    //TODO: We should probably handle embedded environment variables here, it seems
+					    //the spec allows them.  I've not seen them used, so this should be sufficient for now.
+					full_path = full_path.Replace ("~", Environment.GetFolderPath (Environment.SpecialFolder.Personal));
+					dir_list.Add(full_path);
+				}
+			}
+			
+			return dir_list;
+		}
+		
+		protected void LoadPlugins ()
+		{
+			foreach (string plugin_dir in GetPluginDirs ()) {
+				Log.Info ("Searching for plugins in directory {0}", plugin_dir);
 				string[] files;
 
 				files = null;
 				try {
 					files = System.IO.Directory.GetFiles (plugin_dir);
 				} catch (Exception e) {
-					Log.Error ("Could not read plugins directory {0}: {1}", plugin_dir, e.Message);
+					Log.Warn ("Could not read plugins directory {0}: {1}", plugin_dir, e.Message);
 					continue;
 				}
 
