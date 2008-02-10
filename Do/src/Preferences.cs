@@ -48,16 +48,6 @@ namespace Do
 			}
 		}
 
-		public bool UpdatingEnabled
-		{
-			get {
-				return Get<bool> ("enable_updating", false);
-			}
-			set {
-				Set<bool> ("enable_updating", value);
-			}
-		}
-
 		private string MakeKeyPath (string key)
 		{
 			if (key.StartsWith ("/"))
