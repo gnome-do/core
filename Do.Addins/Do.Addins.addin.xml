@@ -1,7 +1,6 @@
 <Addin id="Core" namespace= "Do" version="1.0" isroot="true">
  
 	<Runtime>
-		<Import assembly="Do.exe"/>
 		<Import assembly="Do.Addins.dll"/>
 	</Runtime>
 	

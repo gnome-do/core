@@ -20,6 +20,7 @@
 
 using System;
 using System.Reflection;
+using System.IO;
 using System.Collections.Generic;
 using Mono.Addins;
 
@@ -40,24 +41,8 @@ namespace Do.Core
 		/// </summary>
 		const int MaxUpdateTime = 125;
 		
-		
-		/**
-		 * TODO: find a way to change the addin dirs depending on how the program is run.
-		 * ie: if it's been developped or installed.
-		 */
-		
-		/// <summary>
-		/// The directory that contains the addins
-		/// </summary>
-		String AddinDir = "Do/bin/Debug";
-
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<IObject, IObject> universe;
-
-		/// <summary>
-		/// Contains types we've seen while loading plugins.
-		/// </summary>
-		Dictionary<Type, Assembly> loadedTypes;
 
 		List<DoItemSource> doItemSources;
 		List<DoAction> doActions;
@@ -72,16 +57,16 @@ namespace Do.Core
 			doItemSources = new List<DoItemSource> ();
 			doActions = new List<DoAction> ();
 			firstResults = new Dictionary<string, List<IObject>> ();
-			loadedTypes = new Dictionary<Type, Assembly> ();
 			itemSourceCursor = firstResultsCursor = 0;
 			
 		}
 
 		internal void Initialize ()
 		{
-			AddinManager.Initialize (AddinDir);
+			this.initAddinManager();
 			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource",OnItemSourcesChange);
 			AddinManager.AddExtensionNodeHandler ("/Do/Action", OnActionsChange);
+			
 			//LoadBuiltins ();
 			//LoadPlugins ();
 			BuildUniverse ();
@@ -184,111 +169,6 @@ namespace Do.Core
 		{
 			get { return doItemSources.AsReadOnly (); }
 		}
-
-//		protected void LoadBuiltins ()
-//		{
-//			// Load from Do.Addins asembly.
-//			LoadAssembly (typeof (IItem).Assembly);
-//			// Load from main application assembly.
-//			LoadAssembly (typeof (DoItem).Assembly);
-//		}
-//
-//		protected void LoadPlugins ()
-//		{
-//			List<string> plugin_dirs;
-//
-//			plugin_dirs = new List<string> ();
-//			plugin_dirs.Add ("~/.do/plugins".Replace ("~",
-//						Environment.GetFolderPath (Environment.SpecialFolder.Personal)));
-//
-//			foreach (string plugin_dir in plugin_dirs) {
-//				string[] files;
-//
-//				files = null;
-//				try {
-//					files = System.IO.Directory.GetFiles (plugin_dir);
-//				} catch (Exception e) {
-//					Log.Error ("Could not read plugins directory {0}: {1}", plugin_dir, e.Message);
-//					continue;
-//				}
-//
-//				foreach (string file in files) {
-//					Assembly plugin;
-//
-//					if (!file.EndsWith (".dll")) continue;
-//					try {
-//						plugin = Assembly.LoadFile (file);
-//						LoadAssembly (plugin);
-//					} catch (Exception e) {
-//						Log.Error ("Encountered and error while trying to load plugin {0}: {1}", file, e.Message);
-//						continue;
-//					}
-//				}
-//			}
-//		}
-//
-//		private void LoadAssembly (Assembly plugin)
-//		{
-//			if (plugin == null) return;
-//
-//			foreach (Type type in plugin.GetTypes ()) {			
-//				if (type.IsAbstract) continue;
-//				if (type == typeof (VoidAction)) continue;
-//				if (type == typeof (ICommandWrapperAction)) continue;
-//				if (type == typeof (DoAction)) continue;
-//				if (type == typeof (DoItem)) continue;
-//
-//				foreach (Type iface in type.GetInterfaces ()) {
-//					if (iface == typeof (IItemSource)) {
-//						IItemSource source = null;
-//
-//						try {
-//							source = System.Activator.CreateInstance (type) as IItemSource;
-//						} catch (Exception e) {
-//							source = null;
-//							Log.Error ("Failed to load item source from {0}: {1}",
-//									plugin.Location, e.Message);
-//						}
-//						if (source != null) {
-//							doItemSources.Add (new DoItemSource (source));
-//							Log.Info ("Successfully loaded \"{0}\" item source.", source.Name);
-//						}
-//					}
-//					if (iface == typeof (IAction)) {
-//						IAction action = null;
-//
-//						try {
-//							action = System.Activator.CreateInstance (type) as IAction;
-//						} catch (Exception e) {
-//							action = null;
-//							Log.Error ("Failed to load action from {0}: {1}",
-//									plugin.Location, e.Message);
-//						}
-//						if (action != null) {
-//							doActions.Add (new DoAction (action));
-//							Log.Info ("Successfully loaded \"{0}\" action.", action.Name);
-//						}
-//					}
-//					// Legacy support for commands.
-//					else if (iface == typeof (ICommand)) {
-//						ICommand command = null;
-//
-//						try {
-//							command = System.Activator.CreateInstance (type) as ICommand;
-//						} catch (Exception e) {
-//							command = null;
-//							Log.Error ("Failed to load command from {0}: {1}",
-//									plugin.Location, e.Message);
-//						}
-//						if (command != null) {
-//							doActions.Add (new DoAction (command));
-//							Log.Info ("Successfully loaded \"{0}\" command.", command.Name);
-//						}
-//					}
-//
-//				}
-//			}
-//		}
 
 		private void BuildFirstResults ()
 		{
@@ -600,7 +480,7 @@ namespace Do.Core
 		/// <param name="args">
 		/// A <see cref="ExtensionNodeEventArgs"/>
 		/// </param>
-		public void OnItemSourcesChange (object s, ExtensionNodeEventArgs args)
+		protected void OnItemSourcesChange (object s, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
 			IItemSource source = (IItemSource) node.CreateInstance ();
@@ -620,7 +500,7 @@ namespace Do.Core
 				}
 			}
 		}
-		public void OnActionsChange (object s, ExtensionNodeEventArgs args)
+		protected void OnActionsChange (object s, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
 			IAction action = (IAction) node.CreateInstance ();
@@ -640,5 +520,13 @@ namespace Do.Core
 				}
 			}	
 		}
+		
+		private void initAddinManager ()
+		{
+			string userAddinDir = System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config");
+			userAddinDir = System.IO.Path.Combine (userAddinDir, "gnome-do");
+			AddinManager.Initialize (userAddinDir);
+		}
+			
 	}
 }
