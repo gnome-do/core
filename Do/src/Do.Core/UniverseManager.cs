@@ -201,7 +201,7 @@ namespace Do.Core
 			dir_list = new List<string>();
 			string full_path;
 			foreach (string path in envVal.Split (':')) {
-				if (path != "") {
+				if (!string.IsNullOrEmpty (path)) {
 					// TODO: We should probably handle embedded environment
 					// variables here, it seems the spec allows them.  I've not
 					// seen them used, so this should be sufficient for now.
@@ -412,7 +412,7 @@ namespace Do.Core
 
 			newContext = context.Clone () as SearchContext;
 			newContext.ParentContext = context;
-			newContext.Query = "";
+			newContext.Query = string.Empty;
 			newContext.Results = children.ToArray ();
 			newContext.ChildrenSearch = false;
 			newContext.LastContext = new SearchContext (false);
@@ -431,7 +431,7 @@ namespace Do.Core
 			List<IObject> results = null;
 			string query = context.Query.ToLower ();
 
-			if (context.ActionSearch && context.Query == "") {
+			if (context.ActionSearch && context.Query.Length == 0) {
 				return InitialActionResults (context);
 			}
 			else if (context.LastContext.LastContext != null) {
