@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.IO;
 using System.Reflection;
 using System.IO;
 using System.Collections.Generic;
@@ -72,15 +73,8 @@ namespace Do.Core
 			BuildUniverse ();
 			BuildFirstResults ();
 
-			if (Do.Preferences.UpdatingEnabled) {
-				Log.Info ("Universe updating is enabled. Do will re-scan item " +
-					"sources every {0} seconds.", UpdateInterval);
-				GLib.Timeout.Add (UpdateInterval * 1000,
-					new GLib.TimeoutHandler (OnTimeoutUpdate));
-			} else {
-				Log.Info ("Universe updating is not enabled. This experimental " +
-					"feature can be enabled in Configuration Editor.");
-			}
+			GLib.Timeout.Add (UpdateInterval * 1000,
+				new GLib.TimeoutHandler (OnTimeoutUpdate));
 		}
 
 		bool OnTimeoutUpdate ()
@@ -269,7 +263,7 @@ namespace Do.Core
 
 			newContext = context.Clone () as SearchContext;
 			newContext.ParentContext = context;
-			newContext.Query = "";
+			newContext.Query = string.Empty;
 			newContext.Results = children.ToArray ();
 			newContext.ChildrenSearch = false;
 			newContext.LastContext = new SearchContext (false);
@@ -288,7 +282,7 @@ namespace Do.Core
 			List<IObject> results = null;
 			string query = context.Query.ToLower ();
 
-			if (context.ActionSearch && context.Query == "") {
+			if (context.ActionSearch && context.Query.Length == 0) {
 				return InitialActionResults (context);
 			}
 			else if (context.LastContext.LastContext != null) {
