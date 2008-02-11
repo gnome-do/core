@@ -98,7 +98,6 @@ RESOURCES = \
 	Resources/settings-triangle.png 
 
 EXTRAS = \
-	src/TrayLib.cs \
 	gnome-do.in 
 
 REFERENCES =  \
