@@ -155,11 +155,27 @@ namespace Do.UI
 
 				if (fill) {
 					double r, g, b;
+					
 					r = (double) fillColor.Red / ushort.MaxValue;
 					g = (double) fillColor.Green / ushort.MaxValue;
 					b = (double) fillColor.Blue / ushort.MaxValue;
-					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
+
+					Cairo.Gradient pat = new Cairo.LinearGradient(0,0,0,height);
+					
+					pat.AddColorStop(0, new Cairo.Color(r+.25, g+.25, b+.25, fillAlpha));
+					pat.AddColorStop(.25, new Cairo.Color(r,g,b,fillAlpha));
+					pat.AddColorStop(.75, new Cairo.Color(r-.15, g-.15, b-.15, fillAlpha));
+					
+					cairo.Save();
+					
+					cairo.Pattern = pat;
 					cairo.FillPreserve ();
+					
+					cairo.Restore();
+					
+					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
+					cairo.LineWidth = 2;
+					cairo.Stroke();
 				}
 
 				if (drawFrame) {

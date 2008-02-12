@@ -715,11 +715,55 @@ namespace Do.UI
 			resultsWindow = new ResultsWindow ();
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
-			currentPane = Pane.First;
-
+			currentPane = Pane.First;	
+			Gdk.Color clr = Gtk.Rc.GetStyle(this).Backgrounds[(int)StateType.Selected];
+			
+			//unless you know what you are doing, and I dont, you should not touch this
+			ushort colorLim = 30069;
+			
+			
+			//Credit to James Auger -- Thanks for the advice on the bitshifting
+			if ( clr.Red > colorLim || clr.Green > colorLim || clr.Blue > colorLim)
+			{
+				if ( clr.Red >= clr.Green && clr.Red >= clr.Blue )
+				{
+					Console.WriteLine("Red Case");
+					//red max
+					double x = ((double)colorLim) / clr.Red;
+					clr.Red = colorLim;
+					byte b = (byte)(((ushort) (clr.Blue * x)) >> 8);
+					byte g = (byte)(((ushort) (clr.Green * x)) >> 8);
+					clr.Blue = (ushort)( ((ushort)b << 8) | b );
+					clr.Green = (ushort)( ((ushort)g << 8) | g );
+				}
+				else if ( clr.Blue >= clr.Red && clr.Blue >= clr.Green )
+				{
+					Console.WriteLine("Blue Case");
+					//blue max
+					double x = ((double)colorLim) / clr.Blue;
+					clr.Blue = colorLim;
+					byte r = (byte)(((ushort) (clr.Red * x)) >> 8);
+					byte g = (byte)(((ushort) (clr.Green * x)) >> 8);
+					clr.Red = (ushort)( ((ushort)r << 8) | r );
+					clr.Green = (ushort) (((ushort)g << 8) | g );
+				}
+				else
+				{
+					Console.WriteLine("Green Case");
+					//green max
+					double x = ((double)colorLim) / clr.Green;
+					clr.Green = colorLim;
+					byte r = (byte)(((ushort) (clr.Red * x)) >> 8);
+					byte b = (byte)(((ushort) (clr.Blue * x)) >> 8);
+					clr.Red = (ushort)( ((ushort)r << 8) | r );
+					clr.Blue = (ushort) (((ushort)b << 8) | b );
+				}
+				
+			}
+			
 			frame = new RoundedFrame ();
 			frame.DrawFill = true;
-			frame.FillColor = new Gdk.Color (0x35, 0x30, 0x45);
+			frame.FillColor = clr;
 			frame.FillAlpha = WindowTransparency;
 			frame.Radius = Screen.IsComposited ? IconBoxRadius : 0;
 			Add (frame);
