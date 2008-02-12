@@ -15,12 +15,6 @@
 	<!-- Extensions included in the main assemblies -->
 	<!-- Sources -->
 	<Extension path = "/Do/ItemSource">
-		<ItemSource type="Do.Core.ItemSourceItemSource" />
-	</Extension>
-	<Extension path = "/Do/ItemSource">
-		<ItemSource type="Do.Universe.InternalItemSource" />
-	</Extension>
-	<Extension path = "/Do/ItemSource">
 		<ItemSource type="Do.Universe.ApplicationItemSource" />
 	</Extension>
 	
