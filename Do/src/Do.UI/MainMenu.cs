@@ -103,6 +103,7 @@ namespace Do.UI
 
 		protected void OnMainMenuAddinManagerClicked (object o, EventArgs args)
 		{
+			Do.Controller.Vanish ();
 			AddinManagerWindow.Run (Do.Controller.Window);
 		}
 		
