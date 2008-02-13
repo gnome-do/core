@@ -44,12 +44,13 @@ namespace Do.UI
 		
 		public RoundedFrameGloss () : base ()
 		{
-			glossHeight = (int)(height/2);
-			glossAngle = -25;
+			
 		}
 		
 		protected void GlossOverlay (Cairo.Context cairo, int x, int y, int width, int height, double radius)
 		{
+			glossHeight = (int)(height/2);
+			glossAngle = -25;
 			Cairo.PointD pt1 = new Cairo.PointD (x,           glossHeight);
 			Cairo.PointD pt2 = new Cairo.PointD (x+2*width/3, glossHeight+glossAngle);
 			Cairo.PointD pt3 = new Cairo.PointD (x+width/3,   glossHeight+glossAngle);

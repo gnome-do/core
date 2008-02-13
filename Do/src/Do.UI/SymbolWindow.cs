@@ -80,6 +80,7 @@ namespace Do.UI
 		ResultsWindow resultsWindow;
 		HBox resultsHBox;
 		IconBox[] iconbox;
+		GConf.Client gconfClient;
 
 		protected Pane currentPane;
 		protected SearchContext[] context;
@@ -97,6 +98,8 @@ namespace Do.UI
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			context = new SearchContext[3];
+			gconfClient = new GConf.Client();
+			gconfClient.AddNotify("/desktop/gnome/interface", new GConf.NotifyEventHandler (GconfThemeChange));
 			SetDefaultState ();
 		}
 
@@ -776,6 +779,12 @@ namespace Do.UI
 			ConfigureEvent += OnConfigureEvent;
 
 			Reposition ();
+		}
+		
+		public void GconfThemeChange (object o, GConf.NotifyEventArgs e)
+		{
+			Console.WriteLine("TEST");
+			frame.FillColor = BackgroundColor;
 		}
 		
 		private void RGB_to_HSV (ref byte r, ref byte g, ref byte b)
