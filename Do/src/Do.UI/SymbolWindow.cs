@@ -75,7 +75,7 @@ namespace Do.UI
 		const int SearchDelay = 225;
 		uint[] searchTimeout;
 
-		RoundedFrame frame;
+		RoundedFrameGloss frame;
 		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
 		HBox resultsHBox;
@@ -791,13 +791,13 @@ namespace Do.UI
 			green = (double) g;
 			blue = (double) b;
 			
-			max = Math.Max (red, Math.Max(blue, green));
-			min = Math.Min (red, Math.Min(blue, green));
+			max = Math.Max (red, Math.Max (blue, green));
+			min = Math.Min (red, Math.Min (blue, green));
 			lum = (max/255.0)*100.0;
 			
 			delta = max - min;
 			
-			if (Math.Abs(max - min) < 0.0001)
+			if (Math.Abs (max - min) < 0.0001)
 			{
 				lum = 0;
 				sat = 0;
@@ -918,7 +918,7 @@ namespace Do.UI
 				if ( b > maxLum ) b = maxLum;
 				HSV_to_RGB(ref r, ref g, ref b);
 				
-				return new Gdk.Color(r, g, b);
+				return new Gdk.Color (r, g, b);
 			}
 		}
 

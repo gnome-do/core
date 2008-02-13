@@ -27,19 +27,29 @@ namespace Do.UI
 	
 	public class RoundedFrameGloss : RoundedFrame
 	{
+		private int glossHeight;
+		private int glossAngle;
+		
+		public int GlossHeight
+		{
+			get { return glossHeight; }
+			set { glossHeight = value; }
+		}
+		
+		public int GlossAngle
+		{
+			get { return glossAngle; }
+			set { glossAngle = value; }
+		}
 		
 		public RoundedFrameGloss () : base ()
 		{
+			glossHeight = (int)(height/2);
+			glossAngle = -25;
 		}
 		
 		protected void GlossOverlay (Cairo.Context cairo, int x, int y, int width, int height, double radius)
 		{
-			int glossHeight;
-			int glossAngle;
-			
-			glossHeight = (int)(height/2);
-			glossAngle = -25;
-			
 			Cairo.PointD pt1 = new Cairo.PointD (x,           glossHeight);
 			Cairo.PointD pt2 = new Cairo.PointD (x+2*width/3, glossHeight+glossAngle);
 			Cairo.PointD pt3 = new Cairo.PointD (x+width/3,   glossHeight+glossAngle);
