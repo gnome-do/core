@@ -77,6 +77,7 @@ FILES =  \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ResultsWindow.cs \
 	src/Do.UI/RoundedFrame.cs \
+	src/Do.UI/RoundedFrameGloss.cs \
 	src/Do.UI/SymbolDisplayLabel.cs \
 	src/Do.UI/SymbolWindow.cs \
 	src/Do.Universe/DoTextItem.cs \

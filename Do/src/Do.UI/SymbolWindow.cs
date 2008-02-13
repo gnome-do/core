@@ -717,7 +717,7 @@ namespace Do.UI
 
 			currentPane = Pane.First;
 
-			frame = new RoundedFrame ();
+			frame = new RoundedFrameGloss ();
 			frame.DrawFill = true;
 			frame.FillColor = BackgroundColor;
 			frame.FillAlpha = WindowTransparency;

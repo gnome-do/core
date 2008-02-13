@@ -27,16 +27,16 @@ namespace Do.UI
 {
 	public class RoundedFrame : Bin
 	{
-		Rectangle childAlloc;
-		double radius;
+		protected Rectangle childAlloc;
+		protected double radius;
 
-		bool drawFrame;
-		Color frameColor;
-		double frameAlpha;
+		protected bool drawFrame;
+		protected Color frameColor;
+		protected double frameAlpha;
 
-		bool fill;
-		Color fillColor;
-		double fillAlpha;
+		protected bool fill;
+		protected Color fillColor;
+		protected double fillAlpha;
 
 		public RoundedFrame () : base ()
 		{
@@ -119,7 +119,7 @@ namespace Do.UI
 			cairo.Arc (x+radius, y+height-radius, radius, (Math.PI*0.5), Math.PI);
 			cairo.Arc (x+radius, y+radius, radius, Math.PI, (Math.PI*1.5));
 		}
-
+		
 		protected virtual void Paint (Gdk.Rectangle area)
 		{
 			Cairo.Context cairo;
