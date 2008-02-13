@@ -34,9 +34,9 @@ namespace Do.UI
 		
 		protected void GlossOverlay (Cairo.Context cairo, int x, int y, int width, int height, double radius)
 		{
-			Cairo.PointD pt1 = new Cairo.PointD (x, height/2);
-			Cairo.PointD pt2 = new Cairo.PointD ((x+2*width/3), 125);
-			Cairo.PointD pt3 = new Cairo.PointD (x+width/3, 125);
+			Cairo.PointD pt1 = new Cairo.PointD (x,           height/2);
+			Cairo.PointD pt2 = new Cairo.PointD (x+2*width/3, height/2+25);
+			Cairo.PointD pt3 = new Cairo.PointD (x+width/3,   height/2+25);
 			
 			cairo.MoveTo (x+radius, y);
 			cairo.Arc (x+width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
