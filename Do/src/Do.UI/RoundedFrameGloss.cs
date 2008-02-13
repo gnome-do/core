@@ -35,12 +35,14 @@ namespace Do.UI
 		protected void GlossOverlay (Cairo.Context cairo, int x, int y, int width, int height, double radius)
 		{
 			int glossHeight;
+			int glossAngle;
 			
-			glossHeight = (int)(height/2.5);
+			glossHeight = (int)(height/2);
+			glossAngle = -25;
 			
 			Cairo.PointD pt1 = new Cairo.PointD (x,           glossHeight);
-			Cairo.PointD pt2 = new Cairo.PointD (x+2*width/3, glossHeight+25);
-			Cairo.PointD pt3 = new Cairo.PointD (x+width/3,   glossHeight+25);
+			Cairo.PointD pt2 = new Cairo.PointD (x+2*width/3, glossHeight+glossAngle);
+			Cairo.PointD pt3 = new Cairo.PointD (x+width/3,   glossHeight+glossAngle);
 			
 			cairo.MoveTo (x+radius, y);
 			cairo.Arc (x+width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
@@ -117,12 +119,12 @@ namespace Do.UI
 					cairo.Restore ();
 					glare.Restore ();
 
-					glare.Color = new Cairo.Color (1, 1, 1, .5);
-					glare.LineWidth = 1;
-					glare.Stroke ();
+					//glare.Color = new Cairo.Color (1, 1, 1, .5);
+					//glare.LineWidth = 1;
+					//glare.Stroke ();
 					
 					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
-					cairo.LineWidth = 2;
+					cairo.LineWidth = 3;
 					cairo.Stroke ();
 				}
 
