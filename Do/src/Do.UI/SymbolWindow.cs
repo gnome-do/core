@@ -777,44 +777,148 @@ namespace Do.UI
 
 			Reposition ();
 		}
+		
+		private void RGB_to_HSV (ref byte r, ref byte g, ref byte b)
+		{
+			//CLEANUP
+			double red, green, blue;
+			double hue = 0, lum, sat;
+			double max, min;
+			double delta;
+			
+			red = (double) r;
+			green = (double) g;
+			blue = (double) b;
+			
+			max = Math.Max (red, Math.Max(blue, green));
+			min = Math.Min (red, Math.Min(blue, green));
+			lum = (max/255.0)*100.0;
+			
+			delta = max - min;
+			
+			if ( Math.Abs(max - min) < 0.0001 )
+			{
+				lum = 0;
+				sat = 0;
+			} else {
+				sat = ( delta / max ) * 100;
+				
+				if ( red == max )   hue = ( green - blue) / delta;
+				if ( green == max ) hue = 2 + ( blue - red ) / delta;
+				if ( blue == max )  hue = 4 + ( red - green ) / delta;
+				
+				hue *= 60;
+				if ( hue <= 0 )
+					hue += 360;
+				
+			}
+			r = (byte) hue;
+			g = (byte) sat;
+			b = (byte) lum;
+		}
+		
+		private void HSV_to_RGB (ref byte hue, ref byte sat, ref byte val)
+		{
+			double h;
+			double s;
+			double v;
+
+			double r = 0;
+			double g = 0;
+			double b = 0;
+
+			h = (double) hue;
+			s = ((double) sat) / 100;
+			v = ((double) val) / 100;
+
+			if ( s == 0 ) 
+			{
+				r = v;
+				g = v;
+				b = v;
+			} 
+			else 
+			{
+				double p;
+				double q;
+				double t;
+
+				double fracSec;
+				int secNum;
+				double sectorPos;
+				
+				secNum = (int)(Math.Floor(h / 60));
+				fracSec = (h / 60) - secNum;
+
+				p = v * (1 - s);
+				q = v * (1 - (s * fracSec));
+				t = v * (1 - (s * (1 - fracSec)));
+
+				switch (secNum) 
+				{
+					case 0:
+						r = v;
+						g = t;
+						b = p;
+						break;
+
+					case 1:
+						r = q;
+						g = v;
+						b = p;
+						break;
+
+					case 2:
+						r = p;
+						g = v;
+						b = t;
+						break;
+
+					case 3:
+						r = p;
+						g = q;
+						b = v;
+						break;
+
+					case 4:
+						r = t;
+						g = p;
+						b = v;
+						break;
+
+					case 5:
+						r = v;
+						g = p;
+						b = q;
+						break;
+				}
+			}
+
+			hue = Convert.ToByte(r*255);
+			sat = Convert.ToByte(g*255);
+			val = Convert.ToByte(b*255);
+		}
 
 		private Gdk.Color BackgroundColor
 		{
 			get {
-				double scale;
 				byte r, g, b;
+				byte maxLum;
 				Gdk.Color bgColor;
-				ushort maxColor, ColorLimit = 30069; // <-- DO NOT CHANGE
-				bool redIsMax, greenIsMax, blueIsMax;
 
+				maxLum = 100;
 				bgColor = Gtk.Rc.GetStyle (this).Backgrounds[(int) StateType.Selected];
-				maxColor = Math.Max (bgColor.Red, Math.Max (bgColor.Green, bgColor.Blue));
-				scale = (double) ColorLimit / maxColor;
-
-				// If no color component exceeds the color limit, return.
-				if (maxColor <= ColorLimit) return bgColor;
-
-				// Useful as we change color values.
-				redIsMax   = bgColor.Red   == maxColor;
-				greenIsMax = bgColor.Green == maxColor;
-				blueIsMax  = bgColor.Blue  == maxColor;
 				
-				// Set the maximum color to the color limit.
-				if (redIsMax)        bgColor.Red   = ColorLimit;
-				else if (greenIsMax) bgColor.Green = ColorLimit;
-				else if (blueIsMax)  bgColor.Blue  = ColorLimit;
-
-				// Scale the colors that were not the maximum.
-				// Credit to James Auger--thanks for the advice on the bitshifting.
-				r = (byte) ((ushort) (bgColor.Red   * scale) >> 8);
-				g = (byte) ((ushort) (bgColor.Green * scale) >> 8);
-				b = (byte) ((ushort) (bgColor.Blue  * scale) >> 8);
-
-				if (!redIsMax)   bgColor.Red   = (ushort) ((ushort) r << 8 | r);
-				if (!greenIsMax) bgColor.Green = (ushort) ((ushort) g << 8 | g);
-				if (!blueIsMax)  bgColor.Blue  = (ushort) ((ushort) b << 8 | b);
-
-				return bgColor;
+				r = (byte) ((bgColor.Red) >> 8);
+				g = (byte) ((bgColor.Green) >> 8);
+				b = (byte) ((bgColor.Blue) >> 8);
+				
+				RGB_to_HSV(ref r, ref g, ref b);
+				if ( b > 50 )
+					b = 50;
+				HSV_to_RGB(ref r, ref g, ref b);
+				
+				return new Gdk.Color(r, g, b);
 			}
 		}
 
@@ -862,7 +966,7 @@ namespace Do.UI
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			Cairo.Context cairo;
-			frame.FillColor = BackgroundColor;
+			//frame.FillColor = BackgroundColor;
 			
 			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
 				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
