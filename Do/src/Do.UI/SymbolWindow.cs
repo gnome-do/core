@@ -781,6 +781,7 @@ namespace Do.UI
 		private void RGB_to_HSV (ref byte r, ref byte g, ref byte b)
 		{
 			//CLEANUP
+			//Ported from Murrine Engine
 			double red, green, blue;
 			double hue = 0, lum, sat;
 			double max, min;
@@ -836,16 +837,13 @@ namespace Do.UI
 				r = v;
 				g = v;
 				b = v;
-			} 
-			else 
-			{
+			} else {
 				double p;
 				double q;
 				double t;
 
 				double fracSec;
 				int secNum;
-				double sectorPos;
 				
 				secNum = (int)(Math.Floor(h / 60));
 				fracSec = (h / 60) - secNum;
@@ -906,17 +904,17 @@ namespace Do.UI
 				byte maxLum;
 				Gdk.Color bgColor;
 
-				maxLum = 100;
+				maxLum = 50;
 				bgColor = Gtk.Rc.GetStyle (this).Backgrounds[(int) StateType.Selected];
 				
 				r = (byte) ((bgColor.Red) >> 8);
 				g = (byte) ((bgColor.Green) >> 8);
 				b = (byte) ((bgColor.Blue) >> 8);
 				
-				RGB_to_HSV(ref r, ref g, ref b);
-				if ( b > 50 )
-					b = 50;
-				HSV_to_RGB(ref r, ref g, ref b);
+				//with stupid
+				//RGB_to_HSV(ref r, ref g, ref b);
+				//if ( b > maxLum ) b = maxLum;
+				//HSV_to_RGB(ref r, ref g, ref b);
 				
 				return new Gdk.Color(r, g, b);
 			}
