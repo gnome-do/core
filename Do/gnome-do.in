@@ -14,4 +14,12 @@ else
     GNOME_DO_EXE="@prefix@/lib/@PACKAGE@/Do.exe"
 fi
 
-exec mono "$GNOME_DO_EXE" "$@"
+# Send the dbus Summon signal right away for fastest response if
+# Do is already running.
+dbus-send --session --type=method_call --dest='org.gnome.Do' \
+	'/org/gnome/Do/Controller' 'org.gnome.Do.Controller.Summon'
+
+# If Do is not running, run it.
+if pgrep -u "`id -un`" '^gnome-do$' >/dev/null; then
+	exec mono "$GNOME_DO_EXE" "$@"
+fi
