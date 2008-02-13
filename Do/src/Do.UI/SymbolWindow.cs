@@ -797,19 +797,19 @@ namespace Do.UI
 			
 			delta = max - min;
 			
-			if ( Math.Abs(max - min) < 0.0001 )
+			if (Math.Abs(max - min) < 0.0001)
 			{
 				lum = 0;
 				sat = 0;
 			} else {
-				sat = ( delta / max ) * 100;
+				sat = (delta / max) * 100;
 				
-				if ( red == max )   hue = ( green - blue) / delta;
-				if ( green == max ) hue = 2 + ( blue - red ) / delta;
-				if ( blue == max )  hue = 4 + ( red - green ) / delta;
+				if (red == max)   hue = (green - blue) / delta;
+				if (green == max) hue = 2 + (blue - red) / delta;
+				if (blue == max)  hue = 4 + (red - green) / delta;
 				
 				hue *= 60;
-				if ( hue <= 0 )
+				if (hue <= 0)
 					hue += 360;
 				
 			}
@@ -832,7 +832,7 @@ namespace Do.UI
 			s = ((double) sat) / 100;
 			v = ((double) val) / 100;
 
-			if ( s == 0 ) 
+			if (s == 0) 
 			{
 				r = v;
 				g = v;
@@ -904,7 +904,9 @@ namespace Do.UI
 				byte maxLum;
 				Gdk.Color bgColor;
 
-				maxLum = 50;
+				//Useful for making overbright themes less ugly with do
+				//still trying to find a happy balance between 50 and 90...
+				maxLum = 60;
 				bgColor = Gtk.Rc.GetStyle (this).Backgrounds[(int) StateType.Selected];
 				
 				r = (byte) ((bgColor.Red) >> 8);
@@ -912,9 +914,9 @@ namespace Do.UI
 				b = (byte) ((bgColor.Blue) >> 8);
 				
 				//with stupid
-				//RGB_to_HSV(ref r, ref g, ref b);
-				//if ( b > maxLum ) b = maxLum;
-				//HSV_to_RGB(ref r, ref g, ref b);
+				RGB_to_HSV(ref r, ref g, ref b);
+				if ( b > maxLum ) b = maxLum;
+				HSV_to_RGB(ref r, ref g, ref b);
 				
 				return new Gdk.Color(r, g, b);
 			}

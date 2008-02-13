@@ -81,8 +81,8 @@ namespace Do.UI
 				radius = this.radius;
 			}
 
-			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
-				glare = Gdk.CairoHelper.Create (GdkWindow);
+			using (cairo = Gdk.CairoHelper.Create (GdkWindow))
+			using (glare = Gdk.CairoHelper.Create (GdkWindow)) {
 				RoundedRectangle (cairo, x, y, width, height, radius);
 				cairo.Operator = Cairo.Operator.Over;
 				
@@ -105,7 +105,7 @@ namespace Do.UI
 					
 					fade = new Cairo.LinearGradient (0, 0, 0, height);
 					fade.AddColorStop (0,   new Cairo.Color (1, 1, 1, 0));
-					fade.AddColorStop (.75, new Cairo.Color (1, 1, 1, .5));
+					fade.AddColorStop (.75, new Cairo.Color (1, 1, 1, .25));
 					
 					glare.Save ();
 					cairo.Save ();
@@ -124,7 +124,7 @@ namespace Do.UI
 					//glare.Stroke ();
 					
 					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
-					cairo.LineWidth = 3;
+					cairo.LineWidth = 2;
 					cairo.Stroke ();
 				}
 
