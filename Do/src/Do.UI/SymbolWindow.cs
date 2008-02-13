@@ -715,55 +715,11 @@ namespace Do.UI
 			resultsWindow = new ResultsWindow ();
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
-			currentPane = Pane.First;	
-			Gdk.Color clr = Gtk.Rc.GetStyle(this).Backgrounds[(int)StateType.Selected];
-			
-			//unless you know what you are doing, and I dont, you should not touch this
-			ushort colorLim = 30069;
-			
-			
-			//Credit to James Auger -- Thanks for the advice on the bitshifting
-			if ( clr.Red > colorLim || clr.Green > colorLim || clr.Blue > colorLim)
-			{
-				if ( clr.Red >= clr.Green && clr.Red >= clr.Blue )
-				{
-					Console.WriteLine("Red Case");
-					//red max
-					double x = ((double)colorLim) / clr.Red;
-					clr.Red = colorLim;
-					byte b = (byte)(((ushort) (clr.Blue * x)) >> 8);
-					byte g = (byte)(((ushort) (clr.Green * x)) >> 8);
-					clr.Blue = (ushort)( ((ushort)b << 8) | b );
-					clr.Green = (ushort)( ((ushort)g << 8) | g );
-				}
-				else if ( clr.Blue >= clr.Red && clr.Blue >= clr.Green )
-				{
-					Console.WriteLine("Blue Case");
-					//blue max
-					double x = ((double)colorLim) / clr.Blue;
-					clr.Blue = colorLim;
-					byte r = (byte)(((ushort) (clr.Red * x)) >> 8);
-					byte g = (byte)(((ushort) (clr.Green * x)) >> 8);
-					clr.Red = (ushort)( ((ushort)r << 8) | r );
-					clr.Green = (ushort) (((ushort)g << 8) | g );
-				}
-				else
-				{
-					Console.WriteLine("Green Case");
-					//green max
-					double x = ((double)colorLim) / clr.Green;
-					clr.Green = colorLim;
-					byte r = (byte)(((ushort) (clr.Red * x)) >> 8);
-					byte b = (byte)(((ushort) (clr.Blue * x)) >> 8);
-					clr.Red = (ushort)( ((ushort)r << 8) | r );
-					clr.Blue = (ushort) (((ushort)b << 8) | b );
-				}
-				
-			}
-			
+			currentPane = Pane.First;
+
 			frame = new RoundedFrame ();
 			frame.DrawFill = true;
-			frame.FillColor = clr;
+			frame.FillColor = BackgroundColor;
 			frame.FillAlpha = WindowTransparency;
 			frame.Radius = Screen.IsComposited ? IconBoxRadius : 0;
 			Add (frame);
@@ -820,6 +776,46 @@ namespace Do.UI
 			ConfigureEvent += OnConfigureEvent;
 
 			Reposition ();
+		}
+
+		private Gdk.Color BackgroundColor
+		{
+			get {
+				double scale;
+				byte r, g, b;
+				Gdk.Color bgColor;
+				ushort maxColor, ColorLimit = 30069; // <-- DO NOT CHANGE
+				bool redIsMax, greenIsMax, blueIsMax;
+
+				bgColor = Gtk.Rc.GetStyle (this).Backgrounds[(int) StateType.Selected];
+				maxColor = Math.Max (bgColor.Red, Math.Max (bgColor.Green, bgColor.Blue));
+				scale = (double) ColorLimit / maxColor;
+
+				// If no color component exceeds the color limit, return.
+				if (maxColor <= ColorLimit) return bgColor;
+
+				// Useful as we change color values.
+				redIsMax   = bgColor.Red   == maxColor;
+				greenIsMax = bgColor.Green == maxColor;
+				blueIsMax  = bgColor.Blue  == maxColor;
+				
+				// Set the maximum color to the color limit.
+				if (redIsMax)        bgColor.Red   = ColorLimit;
+				else if (greenIsMax) bgColor.Green = ColorLimit;
+				else if (blueIsMax)  bgColor.Blue  = ColorLimit;
+
+				// Scale the colors that were not the maximum.
+				// Credit to James Auger--thanks for the advice on the bitshifting.
+				r = (byte) ((ushort) (bgColor.Red   * scale) >> 8);
+				g = (byte) ((ushort) (bgColor.Green * scale) >> 8);
+				b = (byte) ((ushort) (bgColor.Blue  * scale) >> 8);
+
+				if (!redIsMax)   bgColor.Red   = (ushort) ((ushort) r << 8 | r);
+				if (!greenIsMax) bgColor.Green = (ushort) ((ushort) g << 8 | g);
+				if (!blueIsMax)  bgColor.Blue  = (ushort) ((ushort) b << 8 | b);
+
+				return bgColor;
+			}
 		}
 
 		protected virtual void SetColormap ()

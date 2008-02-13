@@ -154,28 +154,27 @@ namespace Do.UI
 				cairo.Operator = Cairo.Operator.Over;
 
 				if (fill) {
+					Cairo.Gradient gloss;
 					double r, g, b;
 					
 					r = (double) fillColor.Red / ushort.MaxValue;
 					g = (double) fillColor.Green / ushort.MaxValue;
 					b = (double) fillColor.Blue / ushort.MaxValue;
 
-					Cairo.Gradient pat = new Cairo.LinearGradient(0,0,0,height);
+					gloss = new Cairo.LinearGradient (0, 0, 0, height);
+					gloss.AddColorStop (0,   new Cairo.Color (r+.25, g+.25, b+.25, fillAlpha));
+					gloss.AddColorStop (.25, new Cairo.Color (r,     g,     b,     fillAlpha));
+					gloss.AddColorStop (.75, new Cairo.Color (r-.15, g-.15, b-.15, fillAlpha));
 					
-					pat.AddColorStop(0, new Cairo.Color(r+.25, g+.25, b+.25, fillAlpha));
-					pat.AddColorStop(.25, new Cairo.Color(r,g,b,fillAlpha));
-					pat.AddColorStop(.75, new Cairo.Color(r-.15, g-.15, b-.15, fillAlpha));
+					cairo.Save ();
 					
-					cairo.Save();
-					
-					cairo.Pattern = pat;
+					cairo.Pattern = gloss;
 					cairo.FillPreserve ();
-					
-					cairo.Restore();
-					
+					cairo.Restore ();
+
 					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
 					cairo.LineWidth = 2;
-					cairo.Stroke();
+					cairo.Stroke ();
 				}
 
 				if (drawFrame) {
