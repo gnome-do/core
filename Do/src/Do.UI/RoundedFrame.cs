@@ -171,10 +171,6 @@ namespace Do.UI
 					cairo.Pattern = gloss;
 					cairo.FillPreserve ();
 					cairo.Restore ();
-
-					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
-					cairo.LineWidth = 2;
-					cairo.Stroke ();
 				}
 
 				if (drawFrame) {
