@@ -480,16 +480,24 @@ namespace Do.Core
 			IItemSource source = (IItemSource) node.CreateInstance ();
 			if (args.Change == ExtensionChange.Add)
 			{
-				doItemSources.Add (new DoItemSource (source));
-				Log.Info ("Successfully loaded \"{0}\" itemsource.", source.Name);
+				try{
+					doItemSources.Add (new DoItemSource (source));
+					Log.Info ("Successfully loaded \"{0}\" itemsource.", source.Name);
+				}catch (Exception e){
+					Log.Info ("ItemSource \"{0}\" threw an exception while trying to load it.", source.Name);
+				}
 			}
 			else{
 				foreach (DoItemSource dis in doItemSources)
 				{
 					if (dis.Inner.Equals(source))
 					{
-						doItemSources.Remove (dis);
-						Log.Info ("Successfully unloaded \"{0}\" itemsource.", source.Name);
+						try{
+							doItemSources.Remove (dis);
+							Log.Info ("Successfully unloaded \"{0}\" itemsource.", source.Name);
+						}catch (Exception e){
+							Log.Info ("ItemSource \"{0}\" threw an exeption while trying to unload it.", source.Name);
+						}
 					}
 				}
 			}
@@ -500,16 +508,24 @@ namespace Do.Core
 			IAction action = (IAction) node.CreateInstance ();
 			if (args.Change == ExtensionChange.Add)
 			{
-				doActions.Add (new DoAction(action));
-				Log.Info ("Successfully loaded \"{0}\" action", action.Name);
+				try{
+					doActions.Add (new DoAction(action));
+					Log.Info ("Successfully loaded \"{0}\" action", action.Name);
+				}catch (Exception e){
+					Log.Info ("Action \"{0}\" threw an exception while trying to load it.", action.Name);
+				}
 			}
 			else{
 				foreach (DoAction da in doActions)
 				{
 					if (da.Inner.Equals (action))
 					{
-						doActions.Remove (da);
-						Log.Info ("Successfully removed \"{0}\" action", action.Name);
+						try{
+							doActions.Remove (da);
+							Log.Info ("Successfully removed \"{0}\" action", action.Name);
+						}catch (Exception e){
+							Log.Info ("Action \"{0}\" threw an exeption while trying to unload it.", action.Name);
+						}
 					}
 				}
 			}	
