@@ -306,7 +306,7 @@ namespace Do.UI
 			Move (main.X, main.Y);
 
 			resultsWindow.GetSize (out results.Width, out results.Height);
-			results.Y = main.Y + main.Height - 1;
+			results.Y = main.Y + main.Height;
 			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + IconBoxRadius;
 			resultsWindow.Move (results.X, results.Y);
 		}

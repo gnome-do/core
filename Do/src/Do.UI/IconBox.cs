@@ -30,7 +30,7 @@ namespace Do.UI
 	public class IconBox : RoundedFrame
 	{
 		const string captionFormat = "{0}";
-		const string highlightFormat = "<span weight=\"heavy\" background=\"#353045\">{0}</span>";
+		const string highlightFormat = "<span weight=\"bold\" underline=\"single\">{0}</span>";
 
 		protected bool isFocused;
 
