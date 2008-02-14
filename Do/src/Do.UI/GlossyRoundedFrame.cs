@@ -1,4 +1,4 @@
-/* ResultsWindow.cs
+/* GlossyRoundedFrame.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -18,18 +18,21 @@
  */
 
 using System;
+
 using Gtk;
 using Gdk;
 
 namespace Do.UI
 {
-	
-	
-	public class RoundedFrameGloss : RoundedFrame
+	public class GlossyRoundedFrame : RoundedFrame
 	{
 		private int glossHeight;
 		private int glossAngle;
-		
+
+		public GlossyRoundedFrame ()
+		{
+		}
+
 		public int GlossHeight
 		{
 			get { return glossHeight; }
@@ -42,18 +45,15 @@ namespace Do.UI
 			set { glossAngle = value; }
 		}
 		
-		public RoundedFrameGloss () : base ()
-		{
-			
-		}
-		
 		protected void GlossOverlay (Cairo.Context cairo, int x, int y, int width, int height, double radius)
 		{
-			glossHeight = (int)(height/2);
+			Cairo.PointD pt1, pt2, pt3;
+
+			glossHeight = height / 2;
 			glossAngle = -25;
-			Cairo.PointD pt1 = new Cairo.PointD (x,           glossHeight);
-			Cairo.PointD pt2 = new Cairo.PointD (x+2*width/3, glossHeight+glossAngle);
-			Cairo.PointD pt3 = new Cairo.PointD (x+width/3,   glossHeight+glossAngle);
+			pt1 = new Cairo.PointD (x,           glossHeight);
+			pt2 = new Cairo.PointD (x+2*width/3, glossHeight+glossAngle);
+			pt3 = new Cairo.PointD (x+width/3,   glossHeight+glossAngle);
 			
 			cairo.MoveTo (x+radius, y);
 			cairo.Arc (x+width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
@@ -64,21 +64,14 @@ namespace Do.UI
 		
 		protected override void Paint (Gdk.Rectangle area)
 		{
-			Cairo.Context cairo;
-			Cairo.Context glare;
 			int x, y;
-			int width, height;
 			double radius;
+			int width, height;
+			Cairo.Context cairo, glare;
 
-			if (!IsDrawable) {
-				return;
-			}
-			if (!drawFrame && !fill) {
-				/* Nothing to draw. */
-				return;
-			}
+			if (!IsDrawable) return;
+			if (!drawFrame && !fill) return;
 
-			// Why thickness?? Isn't it useless?
 			x = childAlloc.X + Style.XThickness;
 			y = childAlloc.Y + Style.YThickness;
 
@@ -101,9 +94,8 @@ namespace Do.UI
 				glare.Operator = Cairo.Operator.Over;
 
 				if (fill) {
-					Cairo.Gradient gloss;
-					Cairo.Gradient fade;
 					double r, g, b;
+					Cairo.Gradient gloss, fade;
 					
 					r = (double) fillColor.Red / ushort.MaxValue;
 					g = (double) fillColor.Green / ushort.MaxValue;
@@ -129,10 +121,6 @@ namespace Do.UI
 					
 					cairo.Restore ();
 					glare.Restore ();
-
-					//glare.Color = new Cairo.Color (1, 1, 1, .5);
-					//glare.LineWidth = 1;
-					//glare.Stroke ();
 					
 					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
 					cairo.LineWidth = 2;

@@ -75,7 +75,7 @@ namespace Do.UI
 		const int SearchDelay = 225;
 		uint[] searchTimeout;
 
-		RoundedFrameGloss frame;
+		GlossyRoundedFrame frame;
 		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
 		HBox resultsHBox;
@@ -94,12 +94,16 @@ namespace Do.UI
 		public SymbolWindow () : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
+
 			searchTimeout = new uint[3];
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			context = new SearchContext[3];
-			gconfClient = new GConf.Client();
-			gconfClient.AddNotify("/desktop/gnome/interface", new GConf.NotifyEventHandler (GconfThemeChange));
+
+			gconfClient = new GConf.Client ();
+			gconfClient.AddNotify ("/desktop/gnome/interface",
+				new GConf.NotifyEventHandler (DesktopThemeChanged));
+
 			SetDefaultState ();
 		}
 
@@ -720,7 +724,7 @@ namespace Do.UI
 
 			currentPane = Pane.First;
 
-			frame = new RoundedFrameGloss ();
+			frame = new GlossyRoundedFrame ();
 			frame.DrawFill = true;
 			frame.FillColor = BackgroundColor;
 			frame.FillAlpha = WindowTransparency;
@@ -781,16 +785,14 @@ namespace Do.UI
 			Reposition ();
 		}
 		
-		public void GconfThemeChange (object o, GConf.NotifyEventArgs e)
+		private void DesktopThemeChanged (object o, GConf.NotifyEventArgs e)
 		{
-			Console.WriteLine("TEST");
 			frame.FillColor = BackgroundColor;
 		}
 		
-		private void RGB_to_HSV (ref byte r, ref byte g, ref byte b)
+		private void RGBToHSV (ref byte r, ref byte g, ref byte b)
 		{
-			//CLEANUP
-			//Ported from Murrine Engine
+			// Ported from Murrine Engine.
 			double red, green, blue;
 			double hue = 0, lum, sat;
 			double max, min;
@@ -802,12 +804,10 @@ namespace Do.UI
 			
 			max = Math.Max (red, Math.Max (blue, green));
 			min = Math.Min (red, Math.Min (blue, green));
-			lum = (max/255.0)*100.0;
-			
 			delta = max - min;
+			lum = max / 255.0 * 100.0;
 			
-			if (Math.Abs (max - min) < 0.0001)
-			{
+			if (Math.Abs (delta) < 0.0001) {
 				lum = 0;
 				sat = 0;
 			} else {
@@ -818,81 +818,64 @@ namespace Do.UI
 				if (blue == max)  hue = 4 + (red - green) / delta;
 				
 				hue *= 60;
-				if (hue <= 0)
-					hue += 360;
-				
+				if (hue <= 0) hue += 360;
 			}
 			r = (byte) hue;
 			g = (byte) sat;
 			b = (byte) lum;
 		}
 		
-		private void HSV_to_RGB (ref byte hue, ref byte sat, ref byte val)
+		private void HSVToRGB (ref byte hue, ref byte sat, ref byte val)
 		{
-			double h;
-			double s;
-			double v;
-
-			double r = 0;
-			double g = 0;
-			double b = 0;
+			double h, s, v;
+			double r = 0, g = 0, b = 0;
 
 			h = (double) hue;
-			s = ((double) sat) / 100;
-			v = ((double) val) / 100;
+			s = (double) sat / 100;
+			v = (double) val / 100;
 
-			if (s == 0) 
-			{
+			if (s == 0) {
 				r = v;
 				g = v;
 				b = v;
 			} else {
-				double p;
-				double q;
-				double t;
-
-				double fracSec;
 				int secNum;
+				double fracSec;
+				double p, q, t;
 				
-				secNum = (int)(Math.Floor(h / 60));
-				fracSec = (h / 60) - secNum;
+				secNum = (int) Math.Floor(h / 60);
+				fracSec = h/60 - secNum;
 
 				p = v * (1 - s);
-				q = v * (1 - (s * fracSec));
-				t = v * (1 - (s * (1 - fracSec)));
+				q = v * (1 - s*fracSec);
+				t = v * (1 - s*(1 - fracSec));
 
-				switch (secNum) 
-				{
+				switch (secNum) {
 					case 0:
 						r = v;
 						g = t;
 						b = p;
 						break;
-
 					case 1:
 						r = q;
 						g = v;
 						b = p;
 						break;
-
 					case 2:
 						r = p;
 						g = v;
 						b = t;
 						break;
-
 					case 3:
 						r = p;
 						g = q;
 						b = v;
 						break;
-
 					case 4:
 						r = t;
 						g = p;
 						b = v;
 						break;
-
 					case 5:
 						r = v;
 						g = p;
@@ -900,7 +883,6 @@ namespace Do.UI
 						break;
 				}
 			}
-
 			hue = Convert.ToByte(r*255);
 			sat = Convert.ToByte(g*255);
 			val = Convert.ToByte(b*255);
@@ -910,22 +892,19 @@ namespace Do.UI
 		{
 			get {
 				byte r, g, b;
-				byte maxLum;
 				Gdk.Color bgColor;
 
-				//Useful for making overbright themes less ugly with do
-				//still trying to find a happy balance between 50 and 90...
-				maxLum = 60;
 				bgColor = Gtk.Rc.GetStyle (this).Backgrounds[(int) StateType.Selected];
-				
 				r = (byte) ((bgColor.Red) >> 8);
 				g = (byte) ((bgColor.Green) >> 8);
 				b = (byte) ((bgColor.Blue) >> 8);
 				
-				//with stupid
-				RGB_to_HSV(ref r, ref g, ref b);
-				if ( b > maxLum ) b = maxLum;
-				HSV_to_RGB(ref r, ref g, ref b);
+				// Useful for making overbright themes less ugly. Still trying
+				// to find a happy balance between 50 and 90...
+				byte maxLum = 60;
+				RGBToHSV(ref r, ref g, ref b);
+				b = Math.Min (b, maxLum);
+				HSVToRGB(ref r, ref g, ref b);
 				
 				return new Gdk.Color (r, g, b);
 			}
