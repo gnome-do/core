@@ -49,7 +49,7 @@ namespace Do.UI
 			UseMarkup = true;
 			Ellipsize = Pango.EllipsizeMode.Middle;
 			Justify = Justification.Center;
-			ModifyFg (StateType.Normal, Style.White);
+			ModifyFg (StateType.Normal, Gtk.Rc.GetStyle (this).Foregrounds[(int) StateType.Selected]);
 		}
 		
 		public IObject DisplayObject

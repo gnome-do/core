@@ -75,11 +75,12 @@ namespace Do.UI
 		const int SearchDelay = 225;
 		uint[] searchTimeout;
 
-		RoundedFrame frame;
+		GlossyRoundedFrame frame;
 		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
 		HBox resultsHBox;
 		IconBox[] iconbox;
+		GConf.Client gconfClient;
 
 		protected Pane currentPane;
 		protected SearchContext[] context;
@@ -93,10 +94,16 @@ namespace Do.UI
 		public SymbolWindow () : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
+
 			searchTimeout = new uint[3];
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			context = new SearchContext[3];
+
+			gconfClient = new GConf.Client ();
+			gconfClient.AddNotify ("/desktop/gnome/interface",
+				new GConf.NotifyEventHandler (DesktopThemeChanged));
+
 			SetDefaultState ();
 		}
 
@@ -717,9 +724,9 @@ namespace Do.UI
 
 			currentPane = Pane.First;
 
-			frame = new RoundedFrame ();
+			frame = new GlossyRoundedFrame ();
 			frame.DrawFill = true;
-			frame.FillColor = new Gdk.Color (0x35, 0x30, 0x45);
+			frame.FillColor = BackgroundColor;
 			frame.FillAlpha = WindowTransparency;
 			frame.Radius = Screen.IsComposited ? IconBoxRadius : 0;
 			Add (frame);
@@ -777,6 +784,131 @@ namespace Do.UI
 
 			Reposition ();
 		}
+		
+		private void DesktopThemeChanged (object o, GConf.NotifyEventArgs e)
+		{
+			frame.FillColor = BackgroundColor;
+		}
+		
+		private void RGBToHSV (ref byte r, ref byte g, ref byte b)
+		{
+			// Ported from Murrine Engine.
+			double red, green, blue;
+			double hue = 0, lum, sat;
+			double max, min;
+			double delta;
+			
+			red = (double) r;
+			green = (double) g;
+			blue = (double) b;
+			
+			max = Math.Max (red, Math.Max (blue, green));
+			min = Math.Min (red, Math.Min (blue, green));
+			delta = max - min;
+			lum = max / 255.0 * 100.0;
+			
+			if (Math.Abs (delta) < 0.0001) {
+				lum = 0;
+				sat = 0;
+			} else {
+				sat = (delta / max) * 100;
+				
+				if (red == max)   hue = (green - blue) / delta;
+				if (green == max) hue = 2 + (blue - red) / delta;
+				if (blue == max)  hue = 4 + (red - green) / delta;
+				
+				hue *= 60;
+				if (hue <= 0) hue += 360;
+			}
+			r = (byte) hue;
+			g = (byte) sat;
+			b = (byte) lum;
+		}
+		
+		private void HSVToRGB (ref byte hue, ref byte sat, ref byte val)
+		{
+			double h, s, v;
+			double r = 0, g = 0, b = 0;
+
+			h = (double) hue;
+			s = (double) sat / 100;
+			v = (double) val / 100;
+
+			if (s == 0) {
+				r = v;
+				g = v;
+				b = v;
+			} else {
+				int secNum;
+				double fracSec;
+				double p, q, t;
+				
+				secNum = (int) Math.Floor(h / 60);
+				fracSec = h/60 - secNum;
+
+				p = v * (1 - s);
+				q = v * (1 - s*fracSec);
+				t = v * (1 - s*(1 - fracSec));
+
+				switch (secNum) {
+					case 0:
+						r = v;
+						g = t;
+						b = p;
+						break;
+					case 1:
+						r = q;
+						g = v;
+						b = p;
+						break;
+					case 2:
+						r = p;
+						g = v;
+						b = t;
+						break;
+					case 3:
+						r = p;
+						g = q;
+						b = v;
+						break;
+					case 4:
+						r = t;
+						g = p;
+						b = v;
+						break;
+					case 5:
+						r = v;
+						g = p;
+						b = q;
+						break;
+				}
+			}
+			hue = Convert.ToByte(r*255);
+			sat = Convert.ToByte(g*255);
+			val = Convert.ToByte(b*255);
+		}
+
+		private Gdk.Color BackgroundColor
+		{
+			get {
+				byte r, g, b;
+				Gdk.Color bgColor;
+
+				bgColor = Gtk.Rc.GetStyle (this).Backgrounds[(int) StateType.Selected];
+				r = (byte) ((bgColor.Red) >> 8);
+				g = (byte) ((bgColor.Green) >> 8);
+				b = (byte) ((bgColor.Blue) >> 8);
+				
+				// Useful for making overbright themes less ugly. Still trying
+				// to find a happy balance between 50 and 90...
+				byte maxLum = 60;
+				RGBToHSV(ref r, ref g, ref b);
+				b = Math.Min (b, maxLum);
+				HSVToRGB(ref r, ref g, ref b);
+				
+				return new Gdk.Color (r, g, b);
+			}
+		}
 
 		protected virtual void SetColormap ()
 		{
@@ -822,7 +954,8 @@ namespace Do.UI
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			Cairo.Context cairo;
-
+			//frame.FillColor = BackgroundColor;
+			
 			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
 				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
 				cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
