@@ -147,6 +147,11 @@ namespace Do.UI
 			about.WebsiteLabel = "Visit Homepage";
 			about.Authors = authors;
 			about.IconName = "gnome-run";
+
+			if (null != about.Screen.RgbaColormap) {
+				Gtk.Widget.DefaultColormap = about.Screen.RgbaColormap;
+			}
+
 			about.Run ();
 			about.Destroy ();
 			about = null;

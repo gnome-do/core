@@ -21,7 +21,6 @@
 using System;
 using System.IO;
 using System.Reflection;
-using System.IO;
 using System.Collections.Generic;
 using Mono.Addins;
 
@@ -484,7 +483,7 @@ namespace Do.Core
 					doItemSources.Add (new DoItemSource (source));
 					Log.Info ("Successfully loaded \"{0}\" itemsource.", source.Name);
 				}catch (Exception e){
-					Log.Info ("ItemSource \"{0}\" threw an exception while trying to load it.", source.Name);
+					Log.Info ("ItemSource \"{0}\" threw an exception while trying to load it." +e, source.Name);
 				}
 			}
 			else{
@@ -496,7 +495,7 @@ namespace Do.Core
 							doItemSources.Remove (dis);
 							Log.Info ("Successfully unloaded \"{0}\" itemsource.", source.Name);
 						}catch (Exception e){
-							Log.Info ("ItemSource \"{0}\" threw an exeption while trying to unload it.", source.Name);
+							Log.Info ("ItemSource \"{0}\" threw an exeption while trying to unload it." + e, source.Name);
 						}
 					}
 				}
@@ -512,7 +511,7 @@ namespace Do.Core
 					doActions.Add (new DoAction(action));
 					Log.Info ("Successfully loaded \"{0}\" action", action.Name);
 				}catch (Exception e){
-					Log.Info ("Action \"{0}\" threw an exception while trying to load it.", action.Name);
+					Log.Info ("Action \"{0}\" threw an exception while trying to load it." + e, action.Name);
 				}
 			}
 			else{
@@ -524,7 +523,7 @@ namespace Do.Core
 							doActions.Remove (da);
 							Log.Info ("Successfully removed \"{0}\" action", action.Name);
 						}catch (Exception e){
-							Log.Info ("Action \"{0}\" threw an exeption while trying to unload it.", action.Name);
+							Log.Info ("Action \"{0}\" threw an exeption while trying to unload it." + e, action.Name);
 						}
 					}
 				}
