@@ -27,16 +27,16 @@ namespace Do.UI
 {
 	public class RoundedFrame : Bin
 	{
-		Rectangle childAlloc;
-		double radius;
+		protected Rectangle childAlloc;
+		protected double radius;
 
-		bool drawFrame;
-		Color frameColor;
-		double frameAlpha;
+		protected bool drawFrame;
+		protected Color frameColor;
+		protected double frameAlpha;
 
-		bool fill;
-		Color fillColor;
-		double fillAlpha;
+		protected bool fill;
+		protected Color fillColor;
+		protected double fillAlpha;
 
 		public RoundedFrame () : base ()
 		{
@@ -119,7 +119,7 @@ namespace Do.UI
 			cairo.Arc (x+radius, y+height-radius, radius, (Math.PI*0.5), Math.PI);
 			cairo.Arc (x+radius, y+radius, radius, Math.PI, (Math.PI*1.5));
 		}
-
+		
 		protected virtual void Paint (Gdk.Rectangle area)
 		{
 			Cairo.Context cairo;
@@ -154,12 +154,27 @@ namespace Do.UI
 				cairo.Operator = Cairo.Operator.Over;
 
 				if (fill) {
+					Cairo.Gradient gloss;
 					double r, g, b;
+					
 					r = (double) fillColor.Red / ushort.MaxValue;
 					g = (double) fillColor.Green / ushort.MaxValue;
 					b = (double) fillColor.Blue / ushort.MaxValue;
-					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
+
+					gloss = new Cairo.LinearGradient (0, 0, 0, height);
+					gloss.AddColorStop (0,   new Cairo.Color (r+.25, g+.25, b+.25, fillAlpha));
+					gloss.AddColorStop (.25, new Cairo.Color (r,     g,     b,     fillAlpha));
+					gloss.AddColorStop (.75, new Cairo.Color (r-.15, g-.15, b-.15, fillAlpha));
+					
+					cairo.Save ();
+					
+					cairo.Pattern = gloss;
 					cairo.FillPreserve ();
+					cairo.Restore ();
+					
+					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
+					cairo.LineWidth = 2;
+					cairo.Stroke ();
 				}
 
 				if (drawFrame) {
