@@ -72,12 +72,12 @@ FILES =  \
 	src/Do.Core/SearchContext.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
+	src/Do.UI/GlossyRoundedFrame.cs \
 	src/Do.UI/IconBox.cs \
 	src/Do.UI/IconProvider.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ResultsWindow.cs \
 	src/Do.UI/RoundedFrame.cs \
-	src/Do.UI/GlossyRoundedFrame.cs \
 	src/Do.UI/SymbolDisplayLabel.cs \
 	src/Do.UI/SymbolWindow.cs \
 	src/Do.Universe/DoTextItem.cs \
@@ -113,6 +113,7 @@ REFERENCES =  \
 	-pkg:gtk-sharp-2.0 \
 	-pkg:mono-addins \
 	-pkg:mono-addins-gui \
+	-pkg:mono-addins-setup \
 	System
 
 DLL_REFERENCES = 

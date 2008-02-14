@@ -23,6 +23,7 @@ using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using Mono.Addins;
+using Mono.Addins.Setup;
 
 using Do;
 using Do.Universe;
@@ -532,9 +533,18 @@ namespace Do.Core
 		
 		private void initAddinManager ()
 		{
+			//Initialize the registry
 			string userAddinDir = System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config");
 			userAddinDir = System.IO.Path.Combine (userAddinDir, "gnome-do");
 			AddinManager.Initialize (userAddinDir);
+			
+			//Check that  http://do.davebsd.com/repository/dev is registered in the repository
+			SetupService setupService = new SetupService (AddinManager.Registry);
+			if (!setupService.Repositories.ContainsRepository ("http://do.davebsd.com/repository/dev"))
+			{
+				setupService.Repositories.RegisterRepository (null, "http://do.davebsd.com/repository/dev", true); 
+			}
+			
 		}
 			
 	}
