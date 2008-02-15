@@ -76,13 +76,27 @@ namespace Do.Core
 				new GLib.TimeoutHandler (OnTimeoutUpdate));
 		}
 
-		bool OnTimeoutUpdate ()
+		private bool OnTimeoutUpdate ()
+		{
+			if (Do.Controller.IsSummoned) return true;
+
+			Gdk.Threads.Enter ();
+			try {
+				Update ();
+			} catch {
+				// I don't expect any exceptions, but this is a good way to
+				// leave the thread.
+			} finally {
+				Gdk.Threads.Leave ();
+			}
+			return true;
+		}
+
+		private void Update ()
 		{
 			DateTime then;
 			int t_update;
 			
-			if (Do.Controller.IsSummoned) return true;
-
 			// Keep track of the total time (in ms) we have spend updating.
 			// We spend half of MaxUpdateTime updating item sources, then
 			// another half of MaxUpdateTime updating first results lists.
@@ -155,7 +169,6 @@ namespace Do.Core
 				Log.Info ("Updated first results for '{0}'.", firstResultKey);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
-			return true;
 		}
 
 		internal ICollection<DoItemSource> ItemSources
