@@ -33,7 +33,7 @@ namespace Do.Core
 		/// <summary>
 		/// How long between update events (seconds).
 		/// </summary>
-		const int UpdateInterval = 60;
+		const int UpdateInterval = 3;
 		
 		/// <summary>
 		/// Maximum amount of time to spend updating (millseconds).
@@ -78,16 +78,10 @@ namespace Do.Core
 
 		private bool OnTimeoutUpdate ()
 		{
-			if (Do.Controller.IsSummoned) return true;
-
-			Gdk.Threads.Enter ();
-			try {
-				Update ();
-			} catch {
-				// I don't expect any exceptions, but this is a good way to
-				// leave the thread.
-			} finally {
-				Gdk.Threads.Leave ();
+			if (!Do.Controller.IsSummoned) {
+				Gtk.Application.Invoke (delegate {
+					Update ();
+				});
 			}
 			return true;
 		}
