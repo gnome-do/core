@@ -33,7 +33,7 @@ namespace Do.Core
 		/// <summary>
 		/// How long between update events (seconds).
 		/// </summary>
-		const int UpdateInterval = 3;
+		const int UpdateInterval = 60;
 		
 		/// <summary>
 		/// Maximum amount of time to spend updating (millseconds).
