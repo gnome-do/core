@@ -30,23 +30,19 @@ namespace Do.Universe
 		{
 		}
 		
-		public override string Name
-		{
+		public override string Name {
 			get { return "Reveal"; }
 		}
 		
-		public override string Description
-		{
+		public override string Description {
 			get { return "Reveals a file in the file manager."; }
 		}
 		
-		public override string Icon
-		{
+		public override string Icon {
 			get { return "file-manager"; }
 		}
 		
-		public override Type[] SupportedItemTypes
-		{
+		public override Type[] SupportedItemTypes {
 			get {
 				return new Type[] {
 					typeof (IFileItem),
@@ -57,9 +53,13 @@ namespace Do.Universe
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			foreach (IFileItem file in items) {
+				String escapedPath;
 				// Nautilus does not have a "reveal file" option, so we just open the
 				// parent directory for now.
-				Util.Environment.Open (System.IO.Path.GetDirectoryName (file.Path));
+				escapedPath = System.IO.Path.GetDirectoryName (file.Path)
+					.Replace (" ", "\\ ")
+					.Replace ("'", "\\'");
+				Util.Environment.Open (escapedPath);
 			}
 			return null;
 		}

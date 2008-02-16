@@ -111,15 +111,13 @@ namespace Do.Universe
 			this.path = path;
 		}
 		
-		public virtual string Name
-		{
+		public virtual string Name {
 			get {
 				return System.IO.Path.GetFileName (Path);
 			}
 		}
 		
-		public virtual string Description
-		{
+		public virtual string Description {
 			get {
 				string short_path;
 				
@@ -132,8 +130,7 @@ namespace Do.Universe
 			}
 		}
 		
-		public virtual string Icon
-		{
+		public virtual string Icon {
 			get {
 				string icon;
 
@@ -154,22 +151,19 @@ namespace Do.Universe
 			}
 		}
 		
-		public string Path
-		{
+		public string Path {
 			get {
 				return path;
 			}
 		}
 		
-		public string URI
-		{
+		public string URI {
 			get {
 				return "file://" + Path;
 			}
 		}
 		
-		public string MimeType
-		{
+		public string MimeType {
 			get {
 				return Gnome.Vfs.Global.GetMimeType (Path);
 			}
