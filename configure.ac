@@ -58,6 +58,7 @@ fi
 
 
 AC_CONFIG_FILES([
+libdo/Makefile
 Do.Addins/Makefile
 Makefile
 Do.DBus/Makefile
