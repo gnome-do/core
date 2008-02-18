@@ -13,12 +13,21 @@ if test "x$PKG_CONFIG" = "xno"; then
 fi
 
 AC_PROG_INSTALL
+AC_PROG_CC
+AC_HEADER_STDC
 
 AC_PATH_PROG(GMCS, gmcs, no)
 if test "x$GMCS" = "xno"; then
         AC_MSG_ERROR([gmcs Not found])
 fi
 
+AM_DISABLE_STATIC
+AM_PROG_LIBTOOL
+
+
+PKG_CHECK_MODULES(LIBDO, glib-2.0 gdk-2.0 gdk-x11-2.0 gtk+-2.0)
+AC_SUBST(LIBDO_CFLAGS)
+AC_SUBST(LIBDO_LIBS)
 
 PKG_CHECK_MODULES([GTK_SHARP_20], [gtk-sharp-2.0])
 PKG_CHECK_MODULES([NDESK_DBUS_GLIB_10], [ndesk-dbus-glib-1.0])

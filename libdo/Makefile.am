@@ -1,4 +1,3 @@
-
 INCLUDES = 				\
 	-I$(top_srcdir)			\
 	-DG_LOG_DOMAIN=\"libdo\"	\
