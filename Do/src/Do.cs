@@ -29,7 +29,7 @@ namespace Do
 
 	public static class Do
 	{
-		static Do.GConfXKeybinder keybinder;
+		static GConfXKeybinder keybinder;
 		
 		static Preferences preferences;
 		static Controller controller;
@@ -63,7 +63,7 @@ namespace Do
 			Controller.Initialize ();
 			DBusRegistrar.RegisterController (Controller);
 			
-			keybinder = new Do.GConfXKeybinder ();
+			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
 
 			if (Array.IndexOf (args, "--quiet") != -1 ||

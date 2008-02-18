@@ -3,7 +3,7 @@
 SCRIPT_PATH=`dirname $0`
 SCRIPT_PATH=`cd $SCRIPT_PATH; pwd`
 
-GNOMEDO_LIB=`@libdir@`/gnome-do
+GNOMEDO_LIB="@prefix@/lib/gnome-do"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GNOMEDO_LIB
 
 if [ "x$SCRIPT_PATH" = "x@abs_srcdir@/bin/Debug" ] ||
