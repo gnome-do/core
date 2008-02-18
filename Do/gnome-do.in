@@ -3,8 +3,8 @@
 SCRIPT_PATH=`dirname $0`
 SCRIPT_PATH=`cd $SCRIPT_PATH; pwd`
 
-TOMBOY_LIB=`pkg-config --variable=libdir tomboy-addins`/tomboy
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$TOMBOY_LIB
+GNOMEDO_LIB=`@libdir@`/gnome-do
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GNOMEDO_LIB
 
 if [ "x$SCRIPT_PATH" = "x@abs_srcdir@/bin/Debug" ] ||
    [ "x$SCRIPT_PATH" = "x@abs_srcdir@" ] ; then

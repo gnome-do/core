@@ -29,7 +29,7 @@ namespace Do
 
 	public static class Do
 	{
-		static Tomboy.GConfXKeybinder keybinder;
+		static Do.GConfXKeybinder keybinder;
 		
 		static Preferences preferences;
 		static Controller controller;
@@ -63,7 +63,7 @@ namespace Do
 			Controller.Initialize ();
 			DBusRegistrar.RegisterController (Controller);
 			
-			keybinder = new Tomboy.GConfXKeybinder ();
+			keybinder = new Do.GConfXKeybinder ();
 			SetupKeybindings ();
 
 			if (Array.IndexOf (args, "--quiet") != -1 ||
