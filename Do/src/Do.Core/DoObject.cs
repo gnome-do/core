@@ -27,9 +27,18 @@ namespace Do.Core
 {
 	public abstract class DoObject : IObject
 	{
-		public const string kDefaultName = "No name";
-		public const string kDefaultDescription = "No description.";
-		public const string kDefaultIcon = "empty";
+		const string kDefaultName = "No name";
+		const string kDefaultDescription = "No description.";
+		const string kDefaultIcon = "empty";
+		
+		static IRelevanceProvider relevanceProvider;
+
+		int relevance;
+		
+		static DoObject ()
+		{
+			relevanceProvider = RelevanceProvider.GetProvider ();
+		}
 
 		public static List<Type> GetAllImplementedTypes (IObject o)
 		{
@@ -128,6 +137,7 @@ namespace Do.Core
 				throw new ArgumentNullException ("Inner IObject may not be null.");
 			
 			this.inner = inner;
+			relevance = relevanceProvider.GetRelevance (this);
 		}
 
 		public virtual IObject Inner {
@@ -135,23 +145,19 @@ namespace Do.Core
 			set { inner = value; }
 		}
 		
-		public virtual string Name
-		{
+		public virtual string Name {
 			get { return inner.Name ?? kDefaultName; }
 		}
 		
-		public virtual string Description
-		{
+		public virtual string Description {
 			get { return inner.Description ?? kDefaultDescription; }
 		}
 		
-		public virtual string Icon
-		{
+		public virtual string Icon {
 			get { return inner.Icon ?? kDefaultIcon; }
 		}
 		
-		public virtual string UID
-		{
+		public virtual string UID {
 			get {
 				return string.Format ("{0}{1}{2}", inner.GetType (), Name, Description);
 			}
@@ -162,10 +168,22 @@ namespace Do.Core
 			return UID.GetHashCode ();
 		}
 		
-		public int Score
-		{
+		public int Score {
 			get { return score; }
 			set { score = value; }
+		}
+		
+		public int Relevance {
+			get {
+				return relevance;
+			}
+			set {
+				if (value < Relevance)
+					relevanceProvider.Decrease (this);
+				else if (value > Relevance)
+					relevanceProvider.Increase (this);
+				relevance = relevanceProvider.GetRelevance (this);
+			}
 		}
 		
 		public int ScoreForAbbreviation (string ab)
@@ -195,5 +213,4 @@ namespace Do.Core
 			return UID;
 		}
 	}
-	
 }

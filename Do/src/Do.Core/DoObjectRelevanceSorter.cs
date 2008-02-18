@@ -66,12 +66,23 @@ namespace Do.Core
 		class DoObjectScoreComparer : IComparer<IObject>
 		{
 			public int Compare (IObject x, IObject y) {
-				if (x == null)
-					return y == null ? 0 : 1;
-				else if (y == null)
-					return 1;
+				DoObject a, b;
+				int compareRelevance, compareScore, compareAction;
 				
-				return (y as DoObject).Score - (x as DoObject).Score;
+				a = x as DoObject;
+				b = y as DoObject;
+				
+				// Actions are penalized when compared against non-actions.
+				compareAction = 100 * ((b is DoAction?-1:0) - (a is DoAction?-1:0));
+
+				compareRelevance = b.Relevance - a.Relevance;
+				compareScore = b.Score - a.Score;
+
+				return (int) (
+					compareAction	 * .10 +
+					compareRelevance * .30 +
+					compareScore     * .60
+				);
 			}
 		}
 

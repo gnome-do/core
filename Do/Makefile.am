@@ -69,15 +69,16 @@ FILES =  \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
 	src/Do.Core/DoObjectRelevanceSorter.cs \
+	src/Do.Core/RelevanceProvider.cs \
 	src/Do.Core/SearchContext.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
+	src/Do.UI/GlossyRoundedFrame.cs \
 	src/Do.UI/IconBox.cs \
 	src/Do.UI/IconProvider.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ResultsWindow.cs \
 	src/Do.UI/RoundedFrame.cs \
-	src/Do.UI/GlossyRoundedFrame.cs \
 	src/Do.UI/SymbolDisplayLabel.cs \
 	src/Do.UI/SymbolWindow.cs \
 	src/Do.Universe/DoTextItem.cs \
@@ -111,7 +112,8 @@ REFERENCES =  \
 	-pkg:glade-sharp-2.0 \
 	-pkg:glib-sharp-2.0 \
 	-pkg:gtk-sharp-2.0 \
-	System
+	System \
+	System.Xml
 
 DLL_REFERENCES = 
 

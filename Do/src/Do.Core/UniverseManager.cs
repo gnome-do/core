@@ -371,6 +371,7 @@ namespace Do.Core
 			}
 			else if (context.ChildrenSearch) {
 				// TODO: Children are not filtered at all. This needs to be fixed.
+			
 				context = ChildContext (context);
 				return;
 			}
@@ -403,6 +404,7 @@ namespace Do.Core
 
 		private SearchContext ChildContext (SearchContext context)
 		{
+			DoObject parent;
 			List<IItem> children;
 			SearchContext newContext;
 
@@ -415,6 +417,12 @@ namespace Do.Core
 			if (children.Count == 0) {
 				context.ChildrenSearch = false;
 				return context;
+			}
+
+			// Increase relevance of the parent.
+			parent = context.Selection as DoObject;
+			if (parent != null) {
+				parent.Relevance++;
 			}
 
 			newContext = context.Clone () as SearchContext;
