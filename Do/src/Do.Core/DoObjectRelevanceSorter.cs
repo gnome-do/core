@@ -80,8 +80,8 @@ namespace Do.Core
 
 				return (int) (
 					compareAction	 * .10 +
-					compareRelevance * .30 +
-					compareScore     * .60
+					compareRelevance * .20 +
+					compareScore     * .70
 				);
 			}
 		}

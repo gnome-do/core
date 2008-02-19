@@ -44,15 +44,15 @@ namespace Do.Core
 	
 	class HistogramRelevanceProvider : IRelevanceProvider {
 		
-		int total;
+		int maxHits;
 		Dictionary<int, int> tokenHits;
 		
 		Timer serializeTimer;
-		const int SerializeInterval = 10*60;
+		const int SerializeInterval = 3*60;
 		
 		public HistogramRelevanceProvider ()
 		{
-			total = 0;
+			maxHits = 0;
 			tokenHits = new Dictionary<int,int> ();
 
 			Deserialize ();
@@ -64,7 +64,7 @@ namespace Do.Core
 		
 		protected string DB {
 			get {
-				return "~/.do/histogram.relevance".Replace ("~",
+				return "~/.do/relevance1".Replace ("~",
 					Environment.GetFolderPath (Environment.SpecialFolder.Personal));
 			}
 		}
@@ -87,8 +87,7 @@ namespace Do.Core
 							key = int.Parse (parts[0]);
 							value = int.Parse (parts[1]);
 							tokenHits[key] = value;
-							if (key == "total".GetHashCode ())
-								total = value;
+							maxHits = Math.Max (maxHits, value);
 						} catch {
 							continue;
 						}
@@ -103,7 +102,6 @@ namespace Do.Core
 		protected void Serialize ()
 		{
 			lock (tokenHits) {		
-				tokenHits["total".GetHashCode ()] = total;
 				try {
 					Log.Info ("Serializing HistogramRelevanceProvider...");
 					using (StreamWriter writer = new StreamWriter (DB)) {
@@ -127,8 +125,9 @@ namespace Do.Core
 
 			lock (tokenHits) {
 				tokenHits.TryGetValue (key, out rel);
-				tokenHits[key] = rel + 1;
-				total++;
+				rel = rel + 1;
+				tokenHits[key] = rel;
+				maxHits = Math.Max (maxHits, rel);
 			}
 		}
 		
@@ -147,7 +146,6 @@ namespace Do.Core
 				} else {
 					tokenHits[key] = rel;
 				}
-				total--;
 			}
 		}
 		
@@ -160,7 +158,7 @@ namespace Do.Core
 				tokenHits.TryGetValue (key, out rel);
 			}
 			if (rel != 0) {
-				rel = (int) (100 * ((double) rel / (double) total));
+				rel = (int) (100 * ((double) rel / (double) maxHits));
 			}
 			return rel;
 		}
