@@ -159,7 +159,7 @@ namespace Do.Core
 				if (firstResults.ContainsKey (firstResultKey)) {
 					firstResults.Remove (firstResultKey);
 				}
-				firstResults[firstResultKey] = sorter.SortAndNarrowResults (universe.Values);
+				firstResults[firstResultKey] = sorter.SortAndNarrowResults (universe.Values, true);
 				Log.Info ("Updated first results for '{0}'.", firstResultKey);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
@@ -328,7 +328,8 @@ namespace Do.Core
 			// the firstResults list corresponding to that character.
 			for (char keypress = 'a'; keypress < 'z'; keypress++) {
 				sorter = new DoObjectRelevanceSorter (keypress.ToString ());
-				firstResults[keypress.ToString ()] = sorter.SortAndNarrowResults (universe.Values);
+				firstResults[keypress.ToString ()] = sorter.SortAndNarrowResults (
+					universe.Values, true);
 			}
 		}
 
@@ -545,7 +546,7 @@ namespace Do.Core
 			DoObjectRelevanceSorter sorter;
 		 
 			sorter = new DoObjectRelevanceSorter (context.Query.ToLower ());
-			return sorter.SortResults (context.LastContext.Results);
+			return sorter.SortResults (context.LastContext.Results, false);
 		}
 
 
@@ -570,7 +571,7 @@ namespace Do.Core
 			else {
 				DoObjectRelevanceSorter sorter;
 				sorter = new DoObjectRelevanceSorter (query);
-				results = sorter.SortAndNarrowResults (universe.Values);
+				results = sorter.SortAndNarrowResults (universe.Values, false);
 			}
 			return results;
 		}

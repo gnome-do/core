@@ -197,7 +197,7 @@ namespace Do.Core
 			}
 			return (int) (100 * similarity);
 		}
-		
+
 		public override bool Equals (object o)
 		{
 			IObject other = o as IObject;

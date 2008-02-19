@@ -35,14 +35,17 @@ namespace Do.Core
 		{
 			this.query = query;
 		}
-		
-		public List<IObject> SortResults (ICollection<IObject> broadResults)
+	
+		public List<IObject> SortResults (ICollection<IObject> broadResults, bool strict)
 		{
 			List<IObject> results;
 		 
 			results	= new List<IObject> ();
-			// Throw out the zero-relevance items.
 			foreach (DoObject obj in broadResults) {
+				if (strict && query.Length > 0 &&
+					!LetterOccursAfterDelimiter (char.ToLower (query[0]), obj.Name.ToLower ()))
+					continue;
+
 				obj.Score = obj.ScoreForAbbreviation (query);
 				if (obj.Score > 0) {
 					results.Add (obj);
@@ -52,16 +55,34 @@ namespace Do.Core
 			return results;
 		}
 
-		public List<IObject> SortAndNarrowResults (ICollection<IObject> broadResults)
+
+		public List<IObject> SortAndNarrowResults (ICollection<IObject> broadResults, bool strict)
 		{
 			List<IObject> results;
 
-			results = SortResults (broadResults);
+			results = SortResults (broadResults, strict);
 			// Shorten the list if neccessary.
 			if (results.Count > kMaxSearchResults)
 				results = results.GetRange (0, kMaxSearchResults);
 			return results;
 		}
+
+		bool LetterOccursAfterDelimiter (char a, string s)
+		{
+			int idx;
+
+			idx = 0;
+			while (idx < s.Length && (idx = s.IndexOf (a, idx)) > -1) {
+				if (idx == 0 ||
+					(idx > 0 && s[idx-1] == ' ')) {
+					return true;
+				}
+				idx++;
+			}
+			return false;
+		}
+		
+
 
 		class DoObjectScoreComparer : IComparer<IObject>
 		{
