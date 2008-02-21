@@ -48,6 +48,17 @@ namespace Do
 			}
 		}
 
+		public bool UseMiniMode
+		{
+			get {
+				return Get<bool> ("mini_mode", false);
+			}
+			set {
+				Set<bool> ("mini_mode", value);
+			}
+		}
+
+
 		private string MakeKeyPath (string key)
 		{
 			if (key.StartsWith ("/"))

@@ -61,9 +61,14 @@ namespace Do.UI
 			}
 		}
 
-		const int IconBoxIconSize = 128;
-		const int IconBoxPadding = 6;
-		const int IconBoxRadius = 20;
+		const int DefaultIconBoxIconSize = 128;
+		const uint DefaultIconBoxPadding = 6;
+		const int DefaultIconBoxRadius = 20;
+
+		const int MiniIconBoxIconSize = 80;
+		const uint MiniIconBoxPadding = 4;
+		const int MiniIconBoxRadius = 14;
+
 		const double WindowTransparency = 0.91;
 
 		protected enum Pane {
@@ -105,6 +110,27 @@ namespace Do.UI
 				new GConf.NotifyEventHandler (DesktopThemeChanged));
 
 			SetDefaultState ();
+		}
+
+		int IconBoxIconSize {
+			get {
+				return Do.Preferences.UseMiniMode ? MiniIconBoxIconSize :
+					DefaultIconBoxIconSize;
+			}
+		}
+
+		uint IconBoxPadding {
+			get {
+				return Do.Preferences.UseMiniMode ? MiniIconBoxPadding :
+					DefaultIconBoxPadding;
+			}
+		}
+
+		int IconBoxRadius {
+			get {
+				return Do.Preferences.UseMiniMode ? MiniIconBoxRadius :
+					DefaultIconBoxRadius;
+			}
 		}
 
 		IObject GetCurrentObject (Pane pane)
@@ -746,7 +772,7 @@ namespace Do.UI
 			settings_icon.Show ();
 			align.Show ();
 
-			resultsHBox = new HBox (false, IconBoxPadding*2);
+			resultsHBox = new HBox (false, (int) IconBoxPadding * 2);
 			resultsHBox.BorderWidth = IconBoxPadding;
 			vbox.PackStart (resultsHBox, false, false, 0);
 			resultsHBox.Show ();

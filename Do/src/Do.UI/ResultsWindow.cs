@@ -57,7 +57,12 @@ namespace Do.UI
 
 	public class ResultsWindow : Gtk.Window
 	{
-		const int ResultIconSize = 32;
+		const int DefaultResultIconSize = 32;
+		const int DefaultWindowWidth = 360;
+
+		const int MiniResultIconSize = 20;
+		const int MiniWindowWidth = 250;
+
 		const int NumberResultsDisplayed = 6;
 		const string ResultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
 		const string QueryLabelFormat = "<b>{0}</b>";
@@ -77,6 +82,21 @@ namespace Do.UI
 		bool selectedIndexSet;
 		bool quietSelectionChange;
 		Label queryLabel;
+
+		int ResultIconSize {
+			get {
+				return Do.Preferences.UseMiniMode ? MiniResultIconSize :
+					DefaultResultIconSize;
+			}
+		}
+
+		int WindowWidth {
+			get {
+				return Do.Preferences.UseMiniMode ? MiniWindowWidth :
+					DefaultWindowWidth;
+			}
+		}
+
 
 		public ResultsWindow () : base (Gtk.WindowType.Toplevel)
 		{
@@ -127,7 +147,7 @@ namespace Do.UI
 			vbox = new VBox (false, 0);
 			Add (vbox);
 			vbox.BorderWidth = 4;
-			vbox.SetSizeRequest (360, (ResultIconSize + 9) * NumberResultsDisplayed);
+			vbox.SetSizeRequest (WindowWidth, (ResultIconSize + 9) * NumberResultsDisplayed);
 			vbox.Show ();
 
 			align = new Alignment (0.0F, 0.0F, 0, 0);
