@@ -135,67 +135,6 @@ namespace Do
 			}
 		}
 
-		// Quicksilver algorithm.
-		// http://docs.blacktree.com/quicksilver/development/string_ranking?DokuWiki=10df5a965790f5b8cc9ef63be6614516
-		public static float StringScoreForAbbreviation (string s, string ab) {
-			return StringScoreForAbbreviationInRanges (s, ab,
-			                                           new int[] {0, s.Length},
-			                                           new int[] {0, ab.Length});
-		}
-
-		private static float StringScoreForAbbreviationInRanges (string s, string ab, int[] s_range, int[] ab_range)
-		{
-			float score, remainingScore;
-			int i, j;
-			int[] remainingSearchRange = {0, 0};
-
-			if (ab_range[1] == 0) return 0.9F;
-			if (ab_range[1] > s_range[1]) return 0.0F;
-			for (i = ab_range[1]; i > 0; i--) {
-				// Search for steadily smaller portions of the abbreviation.
-				// TODO Turn this into a dynamic algorithm.
-				string ab_substring = ab.Substring (ab_range[0], i);
-				string s_substring = s.Substring (s_range[0], s_range[1]);
-				int loc = s_substring.IndexOf (ab_substring, StringComparison.CurrentCultureIgnoreCase);
-				if (loc < 0) continue;
-				remainingSearchRange[0] = loc + i;
-				remainingSearchRange[1] = s_range[1] - remainingSearchRange[0];
-				remainingScore = StringScoreForAbbreviationInRanges (s, ab,
-				                                                     remainingSearchRange,
-				                                                     new int[] {ab_range[0]+i, ab_range[1]-i});
-				if (remainingScore != 0) {
-					score = remainingSearchRange[0] - s_range[0];
-					if (loc > s_range[0]) {
-						// If some letters were skipped.
-						if (s[loc-1] == ' ') {
-							for (j = loc-2; j >= s_range[0]; j--) {
-								if (s[j] == ' ')
-									score--;
-								else
-									score -= 0.15F;
-							}
-						}
-						// Else if word is uppercase (?)
-						else if (s[loc] >= 'A') {
-							for (j = loc-1; j >= s_range[0]; j--) {
-								if (s[j] >= 'A')
-									score--;
-								else
-									score -= 0.15F;
-							}
-						}
-						else {
-							score -= loc - s_range[0];
-						}
-					}
-					score += remainingScore * remainingSearchRange[1];
-					score /= s_range[1];
-					return score;
-				}
-			}
-			return 0;
-		}
-
 		public static string FormatCommonSubstrings (string main, string other, string format)
 		{
 			int pos, len, match_pos, last_main_cut;

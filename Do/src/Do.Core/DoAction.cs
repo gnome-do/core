@@ -126,17 +126,6 @@ namespace Do.Core
 			IAction action = Inner as IAction;
 			IItem[] resultItems;
 			
-			// Increase relevance of Action and Items:
-			Relevance++;
-			foreach (IItem item in items) {
-				if (item is DoItem)
-					(item as DoItem).Relevance++;
-			}
-			foreach (IItem item in modItems) {
-				if (item is DoItem)
-					(item as DoItem).Relevance++;
-			}
-			
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
 
