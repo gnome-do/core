@@ -316,7 +316,6 @@ namespace Do.Core
 							Log.Info ("Successfully loaded \"{0}\" command.", command.Name);
 						}
 					}
-
 				}
 			}
 		}
@@ -437,19 +436,20 @@ namespace Do.Core
 		private SearchContext ChildContext (SearchContext context)
 		{
 			DoObject parent;
-			List<IItem> children;
+			List<IObject> children;
 			SearchContext newContext;
 
 			// Check to if the current object has children first
 			if (context.Selection is IItem) {
 				children = ChildrenOfItem (context.Selection as IItem);
 			} else {
-				children = new List<IItem> ();
+				children = new List<IObject> ();
 			}
 			if (children.Count == 0) {
 				context.ChildrenSearch = false;
 				return context;
 			}
+			children = SortResults (children, "", null, false);
 
 			// Increase relevance of the parent.
 			parent = context.Selection as DoObject;
@@ -513,6 +513,7 @@ namespace Do.Core
 			} else {
 			 	// These are items:
 				results = GetItemsFromList (context, results);
+				results = SortResults (results, context.Query, null, false);
 			}
 
 			return results;
@@ -646,13 +647,14 @@ namespace Do.Core
 			return item_actions;
 		}
 
-		public List<IItem> ChildrenOfItem (IItem parent)
+		public List<IObject> ChildrenOfItem (IItem parent)
 		{
-			List<IItem> children;
+			List<IObject> children;
 
-			children = new List<IItem> ();
+			children = new List<IObject> ();
 			foreach (DoItemSource source in doItemSources) {
-				children.AddRange (source.ChildrenOfItem (parent));
+				foreach (IObject child in source.ChildrenOfItem (parent))
+					children.Add (child);
 			}
 			return children;
 		}
