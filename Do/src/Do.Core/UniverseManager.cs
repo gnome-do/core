@@ -160,7 +160,7 @@ namespace Do.Core
 				if (firstResults.ContainsKey (firstResultKey)) {
 					firstResults.Remove (firstResultKey);
 				}
-				firstResults[firstResultKey] = SortAndNarrowResults (universe.Values, firstResultKey, true);
+				firstResults[firstResultKey] = SortAndNarrowResults (universe.Values, firstResultKey, null, true);
 				Log.Info ("Updated first results for '{0}'.", firstResultKey);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
@@ -322,7 +322,7 @@ namespace Do.Core
 		}
 
 		protected List<IObject>
-		SortResults (IEnumerable<IObject> broadResults, string query, bool strict)
+		SortResults (IEnumerable<IObject> broadResults, string query, IObject other, bool strict)
 		{
 			List<IObject> results;
 		 
@@ -332,7 +332,7 @@ namespace Do.Core
 					!obj.CanBeFirstResultForKeypress (query[0]))
 					continue;
 
-				obj.UpdateRelevance (query, null);
+				obj.UpdateRelevance (query, other as DoObject);
 				if (obj.Relevance > 0) {
 					results.Add (obj);
 				}
@@ -342,11 +342,11 @@ namespace Do.Core
 		}
 
 		protected List<IObject>
-		SortAndNarrowResults (IEnumerable<IObject> broadResults, string query, bool strict)
+		SortAndNarrowResults (IEnumerable<IObject> broadResults, string query, IObject other, bool strict)
 		{
 			List<IObject> results;
 
-			results = SortResults (broadResults, query, strict);
+			results = SortResults (broadResults, query, other, strict);
 			// Shorten the list if neccessary.
 			if (results.Count > MaxSearchResults)
 				results = results.GetRange (0, MaxSearchResults);
@@ -359,7 +359,7 @@ namespace Do.Core
 			// the firstResults list corresponding to that character.
 			for (char keypress = 'a'; keypress <= 'z'; keypress++) {
 				firstResults[keypress.ToString ()] = SortAndNarrowResults (
-					universe.Values, keypress.ToString (), true);
+					universe.Values, keypress.ToString (), null, true);
 			}
 		}
 
@@ -509,7 +509,7 @@ namespace Do.Core
 				results = GetModItemsFromList (context, results);
 				// We need to sort because we added the out-of-order dynamic modifier
 				// items.
-				results = SortResults (results, context.Query, false);
+				results = SortResults (results, context.Query, context.Items[0], false);
 			} else {
 			 	// These are items:
 				results = GetItemsFromList (context, results);
@@ -577,7 +577,7 @@ namespace Do.Core
 		// This will filter out the results in the previous context that match the current query
 		private List<IObject> FilterPreviousSearchResultsWithContinuedContext (SearchContext context)
 		{
-			return SortResults (context.LastContext.Results, context.Query, false);
+			return SortResults (context.LastContext.Results, context.Query, null, false);
 		}
 
 		private List<IObject> IndependentResults (SearchContext context)
@@ -597,7 +597,7 @@ namespace Do.Core
 
 			} else {
 				// Or we just have to do an expensive search...
-				results = SortAndNarrowResults (universe.Values, query, false);
+				results = SortAndNarrowResults (universe.Values, query, null, false);
 			}
 			return results;
 		}
@@ -630,7 +630,7 @@ namespace Do.Core
 			}
 			foreach (IObject rm in actions_to_remove)
 				actions.Remove (rm);
-			return SortResults (actions, context.Query, false);
+			return SortResults (actions, context.Query, context.Items[0], false);
 		}
 
 		public List<IObject> ActionsForItem (IItem item)

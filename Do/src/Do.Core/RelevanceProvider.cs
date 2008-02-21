@@ -144,7 +144,7 @@ namespace Do.Core
 		Dictionary<int, int> itemHits, actionHits;
 		
 		Timer serializeTimer;
-		const int SerializeInterval = 3*60;
+		const int SerializeInterval = 1*60;
 		
 		public HistogramRelevanceProvider ()
 		{
