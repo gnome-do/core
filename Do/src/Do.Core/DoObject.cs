@@ -25,11 +25,18 @@ using Do.Universe;
 
 namespace Do.Core
 {
-	public abstract class DoObject : IObject
+	public abstract class DoObject : IObject, IComparable<IObject>
 	{
-		public const string kDefaultName = "No name";
-		public const string kDefaultDescription = "No description.";
-		public const string kDefaultIcon = "empty";
+		const string kDefaultName = "No name";
+		const string kDefaultDescription = "No description.";
+		const string kDefaultIcon = "empty";
+		
+		static RelevanceProvider relevanceProvider;
+
+		static DoObject ()
+		{
+			relevanceProvider = RelevanceProvider.GetProvider ();
+		}
 
 		public static List<Type> GetAllImplementedTypes (IObject o)
 		{
@@ -119,14 +126,13 @@ namespace Do.Core
 			return do_items;
 		}
 		
-		protected int score;
 		protected IObject inner;
+		protected float relevance;
 		
 		protected DoObject (IObject inner)
 		{
 			if (inner == null)
 				throw new ArgumentNullException ("Inner IObject may not be null.");
-			
 			this.inner = inner;
 		}
 
@@ -134,24 +140,25 @@ namespace Do.Core
 			get { return inner; }
 			set { inner = value; }
 		}
+	
+		public float Relevance {
+			get { return relevance; }
+			set { relevance = value; }
+		}
 		
-		public virtual string Name
-		{
+		public virtual string Name {
 			get { return inner.Name ?? kDefaultName; }
 		}
 		
-		public virtual string Description
-		{
+		public virtual string Description {
 			get { return inner.Description ?? kDefaultDescription; }
 		}
 		
-		public virtual string Icon
-		{
+		public virtual string Icon {
 			get { return inner.Icon ?? kDefaultIcon; }
 		}
 		
-		public virtual string UID
-		{
+		public virtual string UID {
 			get {
 				return string.Format ("{0}{1}{2}", inner.GetType (), Name, Description);
 			}
@@ -161,39 +168,44 @@ namespace Do.Core
 		{
 			return UID.GetHashCode ();
 		}
-		
-		public int Score
-		{
-			get { return score; }
-			set { score = value; }
-		}
-		
-		public int ScoreForAbbreviation (string ab)
-		{
-			float similarity;
-			
-			if (ab == "") {
-				return 100;
-			} else {
-				similarity = Util.StringScoreForAbbreviation (Name, ab);
-			}
-			return (int) (100 * similarity);
-		}
-		
+	
 		public override bool Equals (object o)
 		{
-			IObject other = o as IObject;
+			DoObject other = o as DoObject;
 
 			if (other == null) return false;
-			return this.GetType () == other.GetType () &&
-				Name == other.Name &&
-				Description == other.Description;
+			return other.UID == UID;
 		}
 
 		public override string ToString ()
 		{
-			return UID;
+			return Name;
+		}
+
+		public void IncreaseRelevance (string match, DoObject other)
+		{
+			relevanceProvider.IncreaseRelevance (this, match, other);
+		}
+
+		public void DecreaseRelevance (string match, DoObject other)
+		{
+			relevanceProvider.DecreaseRelevance (this, match, other);
+		}
+
+		public void UpdateRelevance (string match, DoObject other)
+		{
+			relevance = relevanceProvider.GetRelevance (this, match, other);
+		}
+
+		public bool CanBeFirstResultForKeypress (char a)
+		{
+			return relevanceProvider.CanBeFirstResultForKeypress (this, a);
+		}
+
+		// Only compare with DoObjects.
+		public int CompareTo (IObject other)
+		{
+			return (int) (1000000 * ((other as DoObject).Relevance - Relevance));
 		}
 	}
-	
 }

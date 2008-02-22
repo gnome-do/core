@@ -95,16 +95,10 @@ namespace Do.Core
 			if (!IObjectTypeCheck (item, SupportedItemTypes))
 				return false;
 
-			// Unless I call Gtk.Threads.Enter/Leave, this method freezes and does not return!
-			// WTF!?!?@?@@#!@ *Adding* these calls makes the UI freeze in unrelated execution paths.
-			// Why is this so fucking weird? The freeze has to do with Gtk.Clipboard interaction in DefineWordAction.Text. 
-			//Gdk.Threads.Enter ();
 			try {
 				supports = action.SupportsItem (item);
 			} catch {
 				supports = false;
-			} finally {
-				//Gdk.Threads.Leave ();
 			}
 			return supports;
 		}

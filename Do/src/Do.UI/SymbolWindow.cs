@@ -483,6 +483,7 @@ namespace Do.UI
 		protected virtual void PerformAction (bool vanish)
 		{
 			IObject first, second, third;
+			string actionQuery, itemQuery, modItemQuery;
 
 			items.Clear ();
 			modItems.Clear ();
@@ -505,13 +506,34 @@ namespace Do.UI
 				if (first is IItem) {
 					items.Add (first as IItem);
 					action = second as IAction;
+					itemQuery = context[0].Query;
+					actionQuery = context[1].Query;
 				} else {
 					items.Add (second as IItem);
 					action = first as IAction;
+					itemQuery = context[1].Query;
+					actionQuery = context[0].Query;
 				}
 				if (third != null && iconbox[2].Visible) {
 					modItems.Add (third as IItem);
+					modItemQuery = context[2].Query;
+					(third as DoObject).IncreaseRelevance (modItemQuery, null);
 				}
+
+				/////////////////////////////////////////////////////////////
+				/// Relevance accounting
+				/////////////////////////////////////////////////////////////
+				
+				// Increase the relevance of the item.
+				// Someday this will need to be moved to allow for >1 item.
+				(items[0] as DoObject).IncreaseRelevance (itemQuery, null);
+
+				// Increase the relevance of the action alone:
+				(action as DoAction).IncreaseRelevance (actionQuery, null);
+				// Increase the relevance of the action /for each item/:
+				foreach (DoObject item in items)
+					(action as DoObject).IncreaseRelevance (actionQuery, item);
+
 				action.Perform (items.ToArray (), modItems.ToArray ());
 			}
 

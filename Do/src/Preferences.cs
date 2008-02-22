@@ -32,10 +32,12 @@ namespace Do
 		const string GConfRootPath = "/apps/gnome-do/preferences/";
 
 		GConf.Client client;
+		string[] options;
 
-		public Preferences ()
+		public Preferences (string[] args)
 		{
 			client = new GConf.Client();
+			options = args;
 		}
 
 		public string SummonKeyBinding
@@ -51,13 +53,26 @@ namespace Do
 		public bool UseMiniMode
 		{
 			get {
-				return Get<bool> ("mini_mode", false);
-			}
-			set {
-				Set<bool> ("mini_mode", value);
+				return HasOption ("--mini");
 			}
 		}
 
+		public bool EnableLearning {
+			get {
+				return HasOption ("--enable-learning");
+			}
+		}
+
+		public bool BeQuiet {
+			get {
+				return HasOption ("--quiet") || HasOption ("-q");
+			}
+		}
+
+		protected bool HasOption (string option)
+		{
+			return Array.IndexOf (options, option) != -1;
+		}
 
 		private string MakeKeyPath (string key)
 		{
@@ -114,5 +129,4 @@ namespace Do
 			return success;
 		}
 	}
-
 }

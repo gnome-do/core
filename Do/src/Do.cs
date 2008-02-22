@@ -52,6 +52,8 @@ namespace Do
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
 
+			preferences = new Preferences (args);
+
 			UniverseManager.Initialize ();
 
 			// Previously, Controller's constructor created a Gtk.Window, and that
@@ -66,10 +68,7 @@ namespace Do
 			keybinder = new Tomboy.GConfXKeybinder ();
 			SetupKeybindings ();
 
-			if (Array.IndexOf (args, "--quiet") != -1 ||
-					Array.IndexOf (args, "-q") != -1) {
-				// Quiet start.
-			} else {
+			if (!Preferences.BeQuiet) {
 				Controller.Summon ();
 			}
 			
@@ -90,10 +89,7 @@ namespace Do
 
 		public static Preferences Preferences
 		{
-			get {
-				return preferences ??
-					preferences = new Preferences ();
-			}
+			get { return preferences; }
 		}
 
 		public static Controller Controller

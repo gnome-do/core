@@ -30,6 +30,7 @@ namespace Do.Core
 {
 	public class UniverseManager
 	{
+	
 		/// <summary>
 		/// How long between update events (seconds).
 		/// </summary>
@@ -39,6 +40,8 @@ namespace Do.Core
 		/// Maximum amount of time to spend updating (millseconds).
 		/// </summary>
 		const int MaxUpdateTime = 125;
+
+		const int MaxSearchResults = 1000;
 
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<IObject, IObject> universe;
@@ -141,7 +144,6 @@ namespace Do.Core
 			// to update a couple of them.
 			t_update = 0;
 			while (t_update < MaxUpdateTime / 2) {
-				DoObjectRelevanceSorter sorter;
 				string firstResultKey = null;
 				int currentFirstResultsList = 0;
 
@@ -155,11 +157,10 @@ namespace Do.Core
 					}
 					currentFirstResultsList++;
 				}
-				sorter = new DoObjectRelevanceSorter (firstResultKey);
 				if (firstResults.ContainsKey (firstResultKey)) {
 					firstResults.Remove (firstResultKey);
 				}
-				firstResults[firstResultKey] = sorter.SortAndNarrowResults (universe.Values);
+				firstResults[firstResultKey] = SortAndNarrowResults (universe.Values, firstResultKey, null, true);
 				Log.Info ("Updated first results for '{0}'.", firstResultKey);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
@@ -315,20 +316,49 @@ namespace Do.Core
 							Log.Info ("Successfully loaded \"{0}\" command.", command.Name);
 						}
 					}
-
 				}
 			}
 		}
 
+		protected List<IObject>
+		SortResults (IEnumerable<IObject> broadResults, string query, IObject other, bool strict)
+		{
+			List<IObject> results;
+		 
+			results	= new List<IObject> ();
+			foreach (DoObject obj in broadResults) {
+				if (strict && query.Length > 0 &&
+					!obj.CanBeFirstResultForKeypress (query[0]))
+					continue;
+
+				obj.UpdateRelevance (query, other as DoObject);
+				if (obj.Relevance > 0) {
+					results.Add (obj);
+				}
+			}
+			results.Sort ();
+			return results;
+		}
+
+		protected List<IObject>
+		SortAndNarrowResults (IEnumerable<IObject> broadResults, string query, IObject other, bool strict)
+		{
+			List<IObject> results;
+
+			results = SortResults (broadResults, query, other, strict);
+			// Shorten the list if neccessary.
+			if (results.Count > MaxSearchResults)
+				results = results.GetRange (0, MaxSearchResults);
+			return results;
+		}
+
 		private void BuildFirstResults ()
 		{
-			DoObjectRelevanceSorter sorter;
-
 			// For each starting character, add every matching object from the universe to
 			// the firstResults list corresponding to that character.
-			for (char keypress = 'a'; keypress < 'z'; keypress++) {
-				sorter = new DoObjectRelevanceSorter (keypress.ToString ());
-				firstResults[keypress.ToString ()] = sorter.SortAndNarrowResults (universe.Values);
+			for (char keypress = 'a'; keypress <= 'z'; keypress++) {
+				firstResults[keypress.ToString ()] = SortAndNarrowResults (
+					universe.Values, keypress.ToString (), null, true);
 			}
 		}
 
@@ -352,6 +382,7 @@ namespace Do.Core
 					universe[item] = item;
 				}
 			}
+			Log.Info ("Universe contains {0} objects.", universe.Count);
 		}
 
 		public void Search (ref SearchContext context)
@@ -371,6 +402,7 @@ namespace Do.Core
 			}
 			else if (context.ChildrenSearch) {
 				// TODO: Children are not filtered at all. This needs to be fixed.
+			
 				context = ChildContext (context);
 				return;
 			}
@@ -403,18 +435,26 @@ namespace Do.Core
 
 		private SearchContext ChildContext (SearchContext context)
 		{
-			List<IItem> children;
+			DoObject parent;
+			List<IObject> children;
 			SearchContext newContext;
 
 			// Check to if the current object has children first
 			if (context.Selection is IItem) {
 				children = ChildrenOfItem (context.Selection as IItem);
 			} else {
-				children = new List<IItem> ();
+				children = new List<IObject> ();
 			}
 			if (children.Count == 0) {
 				context.ChildrenSearch = false;
 				return context;
+			}
+			children = SortResults (children, "", null, false);
+
+			// Increase relevance of the parent.
+			parent = context.Selection as DoObject;
+			if (parent != null) {
+				parent.IncreaseRelevance (context.Query, null);
 			}
 
 			newContext = context.Clone () as SearchContext;
@@ -467,9 +507,13 @@ namespace Do.Core
 					results.Insert (0, modItem);
 				}
 				results = GetModItemsFromList (context, results);
+				// We need to sort because we added the out-of-order dynamic modifier
+				// items.
+				results = SortResults (results, context.Query, context.Items[0], false);
 			} else {
 			 	// These are items:
 				results = GetItemsFromList (context, results);
+				results = SortResults (results, context.Query, null, false);
 			}
 
 			return results;
@@ -534,12 +578,8 @@ namespace Do.Core
 		// This will filter out the results in the previous context that match the current query
 		private List<IObject> FilterPreviousSearchResultsWithContinuedContext (SearchContext context)
 		{
-			DoObjectRelevanceSorter sorter;
-		 
-			sorter = new DoObjectRelevanceSorter (context.Query.ToLower ());
-			return sorter.SortResults (context.LastContext.Results);
+			return SortResults (context.LastContext.Results, context.Query, null, false);
 		}
-
 
 		private List<IObject> IndependentResults (SearchContext context)
 		{
@@ -547,22 +587,18 @@ namespace Do.Core
 			List<IObject> results;
 
 			query = context.Query.ToLower ();
-			// We can build on the last results.
-			// example: searched for "f" then "fi"
 			if (context.LastContext.LastContext != null) {
+				// We can build on the last results.
+				// example: searched for "f" then "fi"
 				results = FilterPreviousSearchResultsWithContinuedContext (context);
-			}
 
-			// If someone typed a single key, BOOM we're done.
-			else if (firstResults.ContainsKey (query)) {
+			} else if (firstResults.ContainsKey (query)) {
+				// If someone typed a single key, BOOM we're done.
 				results = new List<IObject> (firstResults[query]);
-			}
 
-			// Or we just have to do an expensive search...
-			else {
-				DoObjectRelevanceSorter sorter;
-				sorter = new DoObjectRelevanceSorter (query);
-				results = sorter.SortAndNarrowResults (universe.Values);
+			} else {
+				// Or we just have to do an expensive search...
+				results = SortAndNarrowResults (universe.Values, query, null, false);
 			}
 			return results;
 		}
@@ -582,8 +618,9 @@ namespace Do.Core
 					actions.AddRange (item_actions);
 					initial = false;
 				}
-				//For every subsequent item, check every action in the pre-existing list
-				//if its not supported by this item, remove it from the list
+				// For every subsequent item, check every action in the
+				// pre-existing list if its not supported by this item, remove
+				// it from the list
 				else {
 					foreach (IAction action in actions) {
 						if (!item_actions.Contains (action)) {
@@ -594,7 +631,7 @@ namespace Do.Core
 			}
 			foreach (IObject rm in actions_to_remove)
 				actions.Remove (rm);
-			return actions;
+			return SortResults (actions, context.Query, context.Items[0], false);
 		}
 
 		public List<IObject> ActionsForItem (IItem item)
@@ -610,13 +647,14 @@ namespace Do.Core
 			return item_actions;
 		}
 
-		public List<IItem> ChildrenOfItem (IItem parent)
+		public List<IObject> ChildrenOfItem (IItem parent)
 		{
-			List<IItem> children;
+			List<IObject> children;
 
-			children = new List<IItem> ();
+			children = new List<IObject> ();
 			foreach (DoItemSource source in doItemSources) {
-				children.AddRange (source.ChildrenOfItem (parent));
+				foreach (IObject child in source.ChildrenOfItem (parent))
+					children.Add (child);
 			}
 			return children;
 		}
