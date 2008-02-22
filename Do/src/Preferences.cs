@@ -59,7 +59,7 @@ namespace Do
 
 		public bool EnableLearning {
 			get {
-				return HasOption ("--enable-learning");
+				return !HasOption ("--disable-learning");
 			}
 		}
 
