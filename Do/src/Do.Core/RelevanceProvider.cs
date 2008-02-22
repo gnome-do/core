@@ -29,7 +29,10 @@ namespace Do.Core
 
 		public static RelevanceProvider GetProvider ()
 		{
-			return new HistogramRelevanceProvider ();
+			if (Do.Preferences.EnableLearning)
+				return new HistogramRelevanceProvider ();
+			else
+				return new RelevanceProvider ();
 		}
 
 		// Quicksilver algorithm.
@@ -95,26 +98,6 @@ namespace Do.Core
 			return 0;
 		}
 
-		static bool IObjectBelongsInFirstResultsForKeypress (IObject o, char a)
-		{
-			return LetterOccursAfterDelimiter (o.Name.ToLower (), char.ToLower (a));
-		}
-
-		static bool LetterOccursAfterDelimiter (string s, char a)
-		{
-			int idx;
-
-			idx = 0;
-			while (idx < s.Length && (idx = s.IndexOf (a, idx)) > -1) {
-				if (idx == 0 ||
-					(idx > 0 && s[idx-1] == ' ')) {
-					return true;
-				}
-				idx++;
-			}
-			return false;
-		}
-
 		public virtual void IncreaseRelevance (DoObject r, string match, DoObject other)
 		{
 		}
@@ -130,7 +113,7 @@ namespace Do.Core
 
 		public virtual bool CanBeFirstResultForKeypress (DoObject r, char a)
 		{
-			return IObjectBelongsInFirstResultsForKeypress (r, a);
+			return true;
 		}
 	}
 }

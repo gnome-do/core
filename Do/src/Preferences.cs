@@ -32,10 +32,12 @@ namespace Do
 		const string GConfRootPath = "/apps/gnome-do/preferences/";
 
 		GConf.Client client;
+		string[] args;
 
-		public Preferences ()
+		public Preferences (string[] args)
 		{
 			client = new GConf.Client();
+			this.args = args;
 		}
 
 		public string SummonKeyBinding
@@ -46,6 +48,23 @@ namespace Do
 			set {
 				Set<string> ("key_binding", value);
 			}
+		}
+
+		public bool EnableLearning {
+			get {
+				return HasArgument ("--enable-learning");
+			}
+		}
+
+		public bool BeQuiet {
+			get {
+				return HasArgument ("--quiet") || HasArgument ("-q");
+			}
+		}
+
+		protected bool HasArgument (string a)
+		{
+			return Array.IndexOf (args, a) >= 0;
 		}
 
 		private string MakeKeyPath (string key)

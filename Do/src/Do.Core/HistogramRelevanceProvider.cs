@@ -36,6 +36,21 @@ namespace Do.Core
 		Timer serializeTimer;
 		const int SerializeInterval = 3*60;
 		
+		static bool LetterOccursAfterDelimiter (string s, char a)
+		{
+			int idx;
+
+			idx = 0;
+			while (idx < s.Length && (idx = s.IndexOf (a, idx)) > -1) {
+				if (idx == 0 ||
+					(idx > 0 && s[idx-1] == ' ')) {
+					return true;
+				}
+				idx++;
+			}
+			return false;
+		}
+
 		public HistogramRelevanceProvider ()
 		{
 			maxActionHits = maxItemHits = 0;
@@ -116,6 +131,11 @@ namespace Do.Core
 					Log.Error ("Serializing HistogramRelevanceProvider failed: {0}", e.Message);
 				}
 			}
+		}
+
+		public override bool CanBeFirstResultForKeypress (DoObject r, char a)
+		{
+			return LetterOccursAfterDelimiter (r.Name.ToLower (), char.ToLower (a));
 		}
 
 		public override void IncreaseRelevance (DoObject r, string match, DoObject other)
