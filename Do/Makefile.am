@@ -68,8 +68,8 @@ FILES =  \
 	src/Do.Core/DoItem.cs \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
-	src/Do.Core/RelevanceProvider.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
+	src/Do.Core/RelevanceProvider.cs \
 	src/Do.Core/SearchContext.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
@@ -112,8 +112,7 @@ REFERENCES =  \
 	-pkg:glade-sharp-2.0 \
 	-pkg:glib-sharp-2.0 \
 	-pkg:gtk-sharp-2.0 \
-	System \
-	System.Xml
+	System
 
 DLL_REFERENCES = 
 
