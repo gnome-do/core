@@ -27,6 +27,7 @@ using Mono.Unix;
 
 using Do.DBusLib;
 using Do.Universe;
+using Do.Addins;
 using Do.Addins.UI;
 
 namespace Do.Core
@@ -53,6 +54,37 @@ namespace Do.Core
 			}
 			set {
 				context[(int) window.CurrentPane] = value;
+			}
+		}
+		
+		bool ThirdPaneAllowed
+		{
+			get {
+				IObject first, second;
+				IAction action;
+
+				first = GetCurrentObject (Pane.First);
+				second = GetCurrentObject (Pane.Second);
+				action = (first as IAction) ?? (second as IAction);
+				return action != null &&
+					action.SupportedModifierItemTypes.Length > 0 &&
+					context[1].Results.Length > 0;
+			}
+		}
+
+		bool ThirdPaneRequired
+		{
+			get {
+				IObject first, second;
+				IAction action;
+
+				first = GetCurrentObject (Pane.First);
+				second = GetCurrentObject (Pane.Second);
+				action = (first as IAction) ?? (second as IAction);
+				return action != null &&
+					action.SupportedModifierItemTypes.Length > 0 &&
+					!action.ModifierItemsOptional &&
+					context[1].Results.Length > 0;
 			}
 		}
 		
@@ -104,17 +136,14 @@ namespace Do.Core
 				return null != window && window.Visible;
 			}
 		}
-
-		bool IsSummonable {
-			get {
-				return MainMenu.Instance.AboutDialog == null;
-			}
-		}
 		
 		public void SummonWithObjects (IObject[] objects)
 		{
-			if (!IsSummonable) return;
-			window.DisplayObjects (objects);
+			if (!window.IsSummonable) return;
+			SearchContext search = new SearchContext ();
+			search.Results = objects;
+			
+			window.DisplayObjects (search);
 			Summon ();
 		}
 		
@@ -136,7 +165,7 @@ namespace Do.Core
 				case Gdk.Key.Control_L:
 					break;
 				case Gdk.Key.Escape:
-					//OnEscapeKeyPressEvent (evnt);
+					OnEscapeKeyPressEvent (evnt);
 					break;
 				case Gdk.Key.Return:
 				case Gdk.Key.ISO_Enter:
@@ -162,6 +191,19 @@ namespace Do.Core
 					break;
 			}
 			return; //base.OnKeyPressEvent (evnt);
+		}
+		
+		void OnEscapeKeyPressEvent (EventKey evnt)
+		{
+			bool results;
+
+			results = CurrentContext.Results.Length > 0;
+			
+			ClearSearchResults ();
+
+			window.Reset ();
+			if (window.CurrentPane == Pane.First && !results) 
+				window.Vanish ();
 		}
 		
 		void OnInputKeyPressEvent (EventKey evnt)
@@ -191,13 +233,13 @@ namespace Do.Core
 
 			switch (window.CurrentPane) {
 				case Pane.First:
-					//SearchFirstPane ();
+					SearchFirstPane ();
 					break;
 				case Pane.Second:
-					//SearchSecondPane ();
+					SearchSecondPane ();
 					break;
 				case Pane.Third:
-					//SearchThirdPane ();
+					SearchThirdPane ();
 					break;
 			}
 		}
@@ -218,13 +260,13 @@ namespace Do.Core
 				Gdk.Threads.Enter ();
 				switch (pane) {
 					case Pane.First:
-						//SearchFirstPane ();
+						SearchFirstPane ();
 						break;
 					case Pane.Second:
-						//SearchSecondPane ();
+						SearchSecondPane ();
 						break;
 					case Pane.Third:
-						//SearchThirdPane ();
+						SearchThirdPane ();
 						break;
 				}
 				Gdk.Threads.Leave ();
@@ -261,6 +303,91 @@ namespace Do.Core
 			}
 		}
 		
+		protected void SearchSecondPane ()
+		{
+			IObject first;
+			IObject lastResult;
+
+			lastResult = GetCurrentObject (Pane.Second);
+
+			// Set up the next pane based on what's in the first pane:
+			first = GetCurrentObject (Pane.First);
+			if (first is IItem) {
+				// Selection is an IItem
+				context[1].Items.Clear ();
+				context[1].Items.Add (first as IItem);
+				context[1].SearchTypes = new Type[] { typeof (IAction) };
+			} else {
+				// Selection is an IAction
+				context[1].Action = first as IAction;
+				context[1].SearchTypes = new Type[] { typeof (IItem) };
+			}
+
+			Do.UniverseManager.Search (ref context[1]);
+			UpdatePane (Pane.Second, true);
+
+			// Queue a search for the next pane unless the result of the most
+			// recent search is the same as the last result - if this is the
+			// case, we already have a valid search queued.
+			if (GetCurrentObject (Pane.Second) != lastResult) {
+				context[2] = new SearchContext ();
+				SearchPaneDelayed (Pane.Third);
+			}
+		}
+		
+		protected void SearchThirdPane ()
+		{
+			IObject first, second;
+
+			context[2].SearchTypes = new Type[] { typeof (IItem) };
+
+			first = GetCurrentObject (Pane.First);
+			second = GetCurrentObject (Pane.Second);
+			if (first == null || second == null) {
+				SetNoResultsFoundState (Pane.Third);
+				return;
+			}
+
+			if (first is IItem) {
+				context[2].Items.Clear ();
+				context[2].Items.Add (first as IItem);
+				context[2].Action = second as IAction;
+			} else {
+				context[2].Items.Clear ();
+				context[2].Items.Add (second as IItem);
+				context[2].Action = first as IAction;
+			}
+
+			Do.UniverseManager.Search (ref context[2]);
+			UpdatePane (Pane.Third, true);
+
+			if (ThirdPaneRequired) {
+				window.Grow ();
+			} else if (!ThirdPaneAllowed) {
+				window.Shrink ();
+			}
+		}
+		
+		protected void ClearSearchResults ()
+		{
+			switch (window.CurrentPane) {
+				case Pane.First:
+					// Do this once we have "" in the first results list(?)
+					// context[0] = new SearchContext ();
+					// SearchFirstPane ();
+					window.Reset ();
+					break;
+				case Pane.Second:
+					context[1] = new SearchContext ();
+					SearchSecondPane ();
+					break;
+				case Pane.Third:
+					context[2] = new SearchContext ();
+					SearchThirdPane ();
+					break;
+			}
+		}
+		
 		/********************************************
 		 * ---------- Pane Update Methods -----------
 		 * ******************************************/
@@ -284,7 +411,7 @@ namespace Do.Core
 			if (pane == window.CurrentPane) {
 				window.DisplayInLabel (GetCurrentObject (pane));
 				//FIXME
-				//if (updateResults) resultsWindow.Context = CurrentContext;
+				if (updateResults) window.DisplayObjects (CurrentContext);
 			}
 		}
 		
@@ -303,8 +430,8 @@ namespace Do.Core
 			//iconbox[(int) pane].DisplayObject = none_found;
 			window.DisplayInPane (pane, none_found);
 			if (window.CurrentPane == pane) {
-				window.DisplayInLabel (none_found);
-				window.DisplayObjects (new IObject[0]);
+				window.DisplayInLabel (none_found);				
+				window.DisplayObjects (new SearchContext ());
 			}
 		}
 		
@@ -330,7 +457,7 @@ namespace Do.Core
 		
 		public void Summon ()
 		{
-			if (!IsSummonable) return;
+			if (!window.IsSummonable) return;
 			window.Summon ();
 			
 			//FIXME == This method requires a Gtk.Window... for desktop agnostic we can not do this...

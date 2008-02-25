@@ -70,7 +70,6 @@ FILES =  \
 	src/Do.Core/DoObject.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
 	src/Do.Core/RelevanceProvider.cs \
-	src/Do.Core/SearchContext.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.UI/GlossyRoundedFrame.cs \

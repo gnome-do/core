@@ -20,7 +20,6 @@
     <File name="src/Do.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/SearchContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IconBox.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/RoundedFrame.cs" subtype="Code" buildaction="Compile" />

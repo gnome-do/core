@@ -39,7 +39,7 @@ FILES =  \
 	AssemblyInfo.cs \
 	src/Do.Addins/Do.Addins.UI/IconProvider.cs \
 	src/Do.Addins/Do.Addins.UI/IDoWindow.cs \
-	src/Do.Addins/Do.Addins.UI/MainMenu.cs \
+	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/Util.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \

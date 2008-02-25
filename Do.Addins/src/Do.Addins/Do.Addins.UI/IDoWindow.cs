@@ -38,19 +38,14 @@ namespace Do.Addins.UI
 		bool Visible { get; }
 		
 		/// <value>
-		/// Returns true if the results window is currently being displayed
+		/// Return false if the window is not in a summonable state
 		/// </value>
-		bool ResultsWindowVisible { get; set; }
+		bool IsSummonable { get; }
 		
 		/// <value>
 		/// Set and Get current Pane
 		/// </value>
 		Pane CurrentPane { get; set; }
-		
-		/// <value>
-		/// Sets the label text for the main window
-		/// </value>
-		string LabelText { set; }
 		
 		/// <summary>
 		/// Summoning of main window.  Does not imply resetting of normal state
@@ -78,14 +73,6 @@ namespace Do.Addins.UI
 		event Gtk.KeyPressEventHandler KeyPressEvent;
 		
 		/// <summary>
-		/// Inform UI that it is now proper to focus a new pane.
-		/// </summary>
-		/// <param name="pane">
-		/// A <see cref="Pane"/>
-		/// </param>
-		void FocusPane (Pane pane);
-		
-		/// <summary>
 		/// Informs the UI of the need to display multiple objects in a result window.  Updating
 		/// the main window with new object displays as they are selected is the responsibility 
 		/// of the UI.  Showing of the results window is implied.
@@ -93,7 +80,7 @@ namespace Do.Addins.UI
 		/// <param name="objects">
 		/// A <see cref="IObject"/>
 		/// </param>
-		void DisplayObjects (IObject[] objects);
+		void DisplayObjects (SearchContext context);
 		
 		/// <summary>
 		/// Select next object in the results window.
@@ -113,20 +100,20 @@ namespace Do.Addins.UI
 		void HideResultWindow ();
 		
 		/// <summary>
-		/// Inform UI that a pane that is currently hidden should be diplayed.
+		/// Inform UI that the third display area needs to be displayed
 		/// </summary>
 		/// <param name="pane">
 		/// A <see cref="Pane"/>
 		/// </param>
-		void DisplayPane (Pane pane);
+		void Grow ();
 		
 		/// <summary>
-		/// Inform UI that a pane this is currently show should be hidden.
+		/// Inform UI that the third display area needs to be hidden
 		/// </summary>
 		/// <param name="pane">
 		/// A <see cref="Pane"/>
 		/// </param>
-		void HidePane (Pane pane);
+		void Shrink ();
 		
 		/// <summary>
 		/// Inform UI that a pane should display the passed IObject.
@@ -176,6 +163,6 @@ namespace Do.Addins.UI
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		bool PaneVisible (Pane pane);
+		//bool PaneVisible (Pane pane);
 	}
 }
