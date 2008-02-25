@@ -1,12 +1,12 @@
 <CombineEntry name="Packages" fileversion="2.0" ctype="PackagingProject">
   <Packages>
     <Package name="Tarball">
-      <Builder rootEntry="./Do.mds" TargetDirectory="/home/dave/Desktop" DefaultConfiguration="Debug" ctype="TarballDeployTarget">
+      <Builder rootEntry="Do.mds" TargetDirectory="/home/dave/Desktop" DefaultConfiguration="Debug" ctype="TarballDeployTarget">
         <ChildEntries>
-          <Entry>./Do/Do.mdp</Entry>
-          <Entry>./Do.Addins/Do.Addins.mdp</Entry>
-          <Entry>./DBusLib/DBusLib.mdp</Entry>
-          <Entry>./Do.DBus/Do.DBus.mdp</Entry>
+          <Entry>Do/Do.mdp</Entry>
+          <Entry>Do.Addins/Do.Addins.mdp</Entry>
+          <Entry>DBusLib/DBusLib.mdp</Entry>
+          <Entry>Do.DBus/Do.DBus.mdp</Entry>
         </ChildEntries>
       </Builder>
     </Package>
