@@ -37,8 +37,15 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
+	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/GlossyRoundedFrame.cs \
+	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/IconBox.cs \
+	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/ResultsWindow.cs \
+	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/RoundedFrame.cs \
+	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/SymbolDisplayLabel.cs \
+	src/Do.Addins/Do.Addins.UI/DoClassicWindow.cs \
 	src/Do.Addins/Do.Addins.UI/IconProvider.cs \
 	src/Do.Addins/Do.Addins.UI/IDoWindow.cs \
+	src/Do.Addins/Do.Addins.UI/ResultsWindowSelectionEventArgs.cs \
 	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/Util.cs \
 	src/Do.Universe/ApplicationItem.cs \
@@ -77,6 +84,7 @@ EXTRAS = \
 	do.addins.pc.in 
 
 REFERENCES =  \
+	Mono.Cairo \
 	Mono.Posix \
 	-pkg:gconf-sharp-2.0 \
 	-pkg:gnome-sharp-2.0 \

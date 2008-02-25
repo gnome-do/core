@@ -206,11 +206,11 @@ namespace Do.Core
 					break;
 				case Gdk.Key.Up:
 				case Gdk.Key.Down:
-					//OnUpDownKeyPressEvent (evnt);
+					OnUpDownKeyPressEvent (evnt);
 					break;
 				case Gdk.Key.Right:
 				case Gdk.Key.Left:
-					//OnRightLeftKeyPressEvent (evnt);
+					OnRightLeftKeyPressEvent (evnt);
 					break;
 				default:
 					OnInputKeyPressEvent (evnt);
@@ -262,6 +262,20 @@ namespace Do.Core
 			}
 		}
 		
+		void OnRightLeftKeyPressEvent (EventKey evnt)
+		{
+			if (CurrentContext.Results.Length > 0) {
+				if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
+					CurrentContext.ChildrenSearch = true;
+					QueueSearch (false);
+				} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {
+					CurrentContext.ParentSearch = true;
+					QueueSearch (false);
+				}
+				window.DisplayObjects (CurrentContext);
+			}
+		}
+		
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
 			tabbing = true;
@@ -280,6 +294,19 @@ namespace Do.Core
 				window.CurrentPane = Pane.First;
 			}
 			tabbing = false;
+		}
+		
+		void OnUpDownKeyPressEvent (EventKey evnt)
+		{
+			/*if (!resultsWindow.Visible) {
+				resultsWindow.Show ();
+				return;
+			}*/
+			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
+				window.ResultsWindowPrev ();
+			} else {
+				window.ResultsWindowNext ();
+			}
 		}
 		
 		/************************************************

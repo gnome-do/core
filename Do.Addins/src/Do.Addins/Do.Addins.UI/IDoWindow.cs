@@ -72,6 +72,8 @@ namespace Do.Addins.UI
 		/// </param>
 		event Gtk.KeyPressEventHandler KeyPressEvent;
 		
+		event OnSelectionChanged SelectionChanged;
+		
 		/// <summary>
 		/// Informs the UI of the need to display multiple objects in a result window.  Updating
 		/// the main window with new object displays as they are selected is the responsibility 
