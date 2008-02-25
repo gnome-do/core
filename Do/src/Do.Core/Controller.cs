@@ -44,6 +44,11 @@ namespace Do.Core
 		const int SearchDelay = 225;
 		
 		uint[] searchTimeout;
+		IAction action;
+		List<IItem> items;
+		List<IItem> modItems;
+		bool thirdPaneVisible;
+		bool tabbing = false;
 		
 		//-------------------- Class Properties-----------------//
 		
@@ -54,6 +59,24 @@ namespace Do.Core
 			}
 			set {
 				context[(int) window.CurrentPane] = value;
+			}
+		}
+		
+		bool ThirdPaneVisible
+		{
+			set {
+				if (value == thirdPaneVisible)
+					return;
+				
+				if (value == true)
+					window.Grow ();
+				else
+					window.Shrink ();
+				thirdPaneVisible = value;
+			}
+			
+			get {
+				return thirdPaneVisible;
 			}
 		}
 		
@@ -112,8 +135,11 @@ namespace Do.Core
 		
 		//-------------------- CONSTRUCTOR ---------------------//
 		public Controller ()
-		{		
+		{
+			items = new List<IItem> ();
+			modItems = new List<IItem> ();
 			searchTimeout = new uint[3];
+			context = new SearchContext[3];
 		}
 		
 		//-------------------- METHODS -------------------------//
@@ -169,14 +195,14 @@ namespace Do.Core
 					break;
 				case Gdk.Key.Return:
 				case Gdk.Key.ISO_Enter:
-					//OnActivateKeyPressEvent (evnt);
+					OnActivateKeyPressEvent (evnt);
 					break;
 				case Gdk.Key.Delete:
 				case Gdk.Key.BackSpace:
-					//OnDeleteKeyPressEvent (evnt);
+					OnDeleteKeyPressEvent (evnt);
 					break;
 				case Gdk.Key.Tab:
-					//OnTabKeyPressEvent (evnt);
+					OnTabKeyPressEvent (evnt);
 					break;
 				case Gdk.Key.Up:
 				case Gdk.Key.Down:
@@ -191,6 +217,22 @@ namespace Do.Core
 					break;
 			}
 			return; //base.OnKeyPressEvent (evnt);
+		}
+		
+		void OnActivateKeyPressEvent (EventKey evnt)
+		{
+			bool shift_pressed = (evnt.State & ModifierType.ShiftMask) != 0;
+			PerformAction (!shift_pressed);
+		}
+		
+		void OnDeleteKeyPressEvent (EventKey evnt)
+		{
+			string query;
+
+			query = CurrentContext.Query;
+			if (query.Length == 0) return;
+			CurrentContext.Query = query.Substring (0, query.Length-1);
+			QueueSearch (false);
 		}
 		
 		void OnEscapeKeyPressEvent (EventKey evnt)
@@ -218,6 +260,26 @@ namespace Do.Core
 				CurrentContext.Query += c;
 				QueueSearch (false);
 			}
+		}
+		
+		void OnTabKeyPressEvent (EventKey evnt)
+		{
+			tabbing = true;
+			//resultsWindow.Hide ();
+			if (window.CurrentPane == Pane.First &&
+					context[0].Results.Length != 0) {
+				window.CurrentPane = Pane.Second;
+			} else if (window.CurrentPane == Pane.Second && ThirdPaneAllowed) {
+				window.CurrentPane = Pane.Third;
+				ThirdPaneVisible = true;
+			} else if (window.CurrentPane == Pane.Third && !ThirdPaneRequired) {
+				// This is used for actions for which modifier items are optional.
+				window.CurrentPane = Pane.First;
+				ThirdPaneVisible = false;
+			} else {
+				window.CurrentPane = Pane.First;
+			}
+			tabbing = false;
 		}
 		
 		/************************************************
@@ -362,9 +424,9 @@ namespace Do.Core
 			UpdatePane (Pane.Third, true);
 
 			if (ThirdPaneRequired) {
-				window.Grow ();
+				ThirdPaneVisible = true;
 			} else if (!ThirdPaneAllowed) {
-				window.Shrink ();
+				ThirdPaneVisible = false;
 			}
 		}
 		
@@ -449,6 +511,68 @@ namespace Do.Core
 				o = null;
 			}
 			return o;
+		}
+		
+		protected virtual void PerformAction (bool vanish)
+		{
+			IObject first, second, third;
+			string actionQuery, itemQuery, modItemQuery;
+
+			items.Clear ();
+			modItems.Clear ();
+			if (vanish) {
+				Vanish ();
+			}
+
+			first = GetCurrentObject (Pane.First);
+			second = GetCurrentObject (Pane.Second);
+			third = GetCurrentObject (Pane.Third);
+			// User may have pressed enter before delayed search completed.
+			// We guess this is the case if there is nothing in the second pane,
+			// so we immediately do a search and use the first result.
+			if (first != null && second == null) {
+				SearchSecondPane ();
+				second = GetCurrentObject (Pane.Second);
+			}
+
+			if (first != null && second != null) {
+				if (first is IItem) {
+					items.Add (first as IItem);
+					action = second as IAction;
+					itemQuery = context[0].Query;
+					actionQuery = context[1].Query;
+				} else {
+					items.Add (second as IItem);
+					action = first as IAction;
+					itemQuery = context[1].Query;
+					actionQuery = context[0].Query;
+				}
+				if (third != null && ThirdPaneVisible) {
+					modItems.Add (third as IItem);
+					modItemQuery = context[2].Query;
+					(third as DoObject).IncreaseRelevance (modItemQuery, null);
+				}
+
+				/////////////////////////////////////////////////////////////
+				/// Relevance accounting
+				/////////////////////////////////////////////////////////////
+				
+				// Increase the relevance of the item.
+				// Someday this will need to be moved to allow for >1 item.
+				(items[0] as DoObject).IncreaseRelevance (itemQuery, null);
+
+				// Increase the relevance of the action alone:
+				(action as DoAction).IncreaseRelevance (actionQuery, null);
+				// Increase the relevance of the action /for each item/:
+				foreach (DoObject item in items)
+					(action as DoObject).IncreaseRelevance (actionQuery, item);
+
+				action.Perform (items.ToArray (), modItems.ToArray ());
+			}
+
+			if (vanish) {
+				window.Reset ();
+			}
 		}
 
 		///////////////////////////
