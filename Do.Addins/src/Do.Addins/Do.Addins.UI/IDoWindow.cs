@@ -23,7 +23,12 @@ using Gdk;
 
 namespace Do.Addins.UI
 {
-	
+	public enum Pane
+	{
+		First = 0,
+		Second = 1,
+		Third = 2,
+	}
 	
 	public interface IDoWindow
 	{
