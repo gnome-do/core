@@ -47,6 +47,11 @@ namespace Do.Addins.UI
 		/// </value>
 		Pane CurrentPane { get; set; }
 		
+		/// <value>
+		/// Sets the label text for the main window
+		/// </value>
+		string LabelText { set; }
+		
 		/// <summary>
 		/// Summoning of main window.  Does not imply resetting of normal state
 		/// </summary>
@@ -100,6 +105,8 @@ namespace Do.Addins.UI
 		/// </summary>
 		void ResultsWindowPrev ();
 		
+		//void ResultsWindowContext 
+		
 		/// <summary>
 		/// Hide results window.  Implies destruction of current results window list.
 		/// </summary>
@@ -131,6 +138,26 @@ namespace Do.Addins.UI
 		/// A <see cref="IObject"/>
 		/// </param>
 		void DisplayInPane (Pane pane, IObject item);
+		
+		/// <summary>
+		/// Text to show in main label.
+		/// </summary>
+		/// <param name="item">
+		/// A <see cref="IObject"/>
+		/// </param>
+		void DisplayInLabel (IObject item);
+		
+		/// <summary>
+		/// Used to set the highlight string of a pane.  UI must implement but can stub without
+		/// any serious side effects
+		/// </summary>
+		/// <param name="pane">
+		/// A <see cref="Pane"/>
+		/// </param>
+		/// <param name="highlight">
+		/// A <see cref="System.String"/>
+		/// </param>
+		void SetPaneHighlight (Pane pane, string highlight);
 		
 		/// <summary>
 		/// Clear out all contents of a pane.

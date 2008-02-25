@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Gdk;
+using Mono.Unix;
 
 using Do.DBusLib;
 using Do.Universe;
@@ -52,6 +53,28 @@ namespace Do.Core
 			}
 			set {
 				context[(int) window.CurrentPane] = value;
+			}
+		}
+		
+		//-------------------- NESTED CLASS --------------------//
+		
+		class NoResultsFoundObject : IObject
+		{
+			string query;
+
+			public NoResultsFoundObject (string query)
+			{
+				this.query = query;
+			}
+
+			public string Icon { get { return "gtk-dialog-question"; } }
+			public string Name { get { return Catalog.GetString ("No results found."); } }
+
+			public string Description
+			{
+				get {
+					return string.Format (Catalog.GetString ("No results found for \"{0}\"."), query);
+				}
 			}
 		}
 		
@@ -235,6 +258,53 @@ namespace Do.Core
 			if (GetCurrentObject (Pane.First) != lastResult) {
 				context[1] = new SearchContext ();
 				SearchPaneDelayed (Pane.Second);
+			}
+		}
+		
+		/********************************************
+		 * ---------- Pane Update Methods -----------
+		 * ******************************************/
+		
+		protected void UpdatePane (Pane pane, bool updateResults)
+		{
+			IObject current;
+
+			current = GetCurrentObject (pane);
+			if (current != null) {
+				//iconbox[(int) pane].DisplayObject = current;
+				window.DisplayInPane (pane, current);
+				
+				//iconbox[(int) pane].Highlight = context[(int) pane].Query;
+				window.SetPaneHighlight (pane, context[(int) pane].Query);
+			} else {
+				SetNoResultsFoundState (pane);
+				return;
+			}
+
+			if (pane == window.CurrentPane) {
+				window.DisplayInLabel (GetCurrentObject (pane));
+				//FIXME
+				//if (updateResults) resultsWindow.Context = CurrentContext;
+			}
+		}
+		
+		protected void SetNoResultsFoundState (Pane pane)
+		{
+			NoResultsFoundObject none_found;
+
+			if (pane == Pane.First) {
+				window.ClearPane (Pane.First);
+				window.ClearPane (Pane.Second);
+			} else if (pane == Pane.Second) {
+				window.ClearPane (Pane.Second);
+			}
+
+			none_found = new NoResultsFoundObject (context[(int) pane].Query);
+			//iconbox[(int) pane].DisplayObject = none_found;
+			window.DisplayInPane (pane, none_found);
+			if (window.CurrentPane == pane) {
+				window.DisplayInLabel (none_found);
+				window.DisplayObjects (new IObject[0]);
 			}
 		}
 		
