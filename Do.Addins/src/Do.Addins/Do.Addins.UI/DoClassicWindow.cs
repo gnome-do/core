@@ -304,12 +304,11 @@ namespace Do.Addins.UI
 			iconbox[2].Clear ();
 		}
 
-		public void DisplayObjects (Do.Addins.SearchContext context, bool force)
+		public void DisplayObjects (Do.Addins.SearchContext context)
 		{
-			if (resultsWindow.Results.GetHashCode () != context.Results.GetHashCode () || force )
+			if (resultsWindow.Results.GetHashCode () != context.Results.GetHashCode ())
 			{
 				resultsWindow.Context = context;
-				Console.WriteLine("hash mismatch");
 			} else {
 				resultsWindow.SelectedIndex = context.Cursor;
 			}
@@ -468,7 +467,6 @@ namespace Do.Addins.UI
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			Cairo.Context cairo;
-			//frame.FillColor = BackgroundColor;
 			
 			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
 				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);

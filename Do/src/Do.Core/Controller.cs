@@ -180,7 +180,7 @@ namespace Do.Core
 		}
 		
 		/// <summary>
-		/// Summons a window with objects in it... needs work.
+		/// Summons a window with objects in it... seems to work
 		/// </summary>
 		/// <param name="objects">
 		/// A <see cref="IObject"/>
@@ -191,11 +191,20 @@ namespace Do.Core
 			
 			Reset ();
 			
-			SearchContext search = new SearchContext ();
-			search.Results = objects;
+			//Someone is going to need to explain this to me
+			context[0].Results = objects;
+			context[0].LastContext.LastContext = context[0].LastContext = context[0];
 			
-			window.DisplayObjects (search, true);
-			Summon ();
+			SearchFirstPane ();
+			SearchSecondPane ();
+
+			// Showing the results after a bit of a delay looks a bit better.
+			GLib.Timeout.Add (250, delegate {
+				Gdk.Threads.Enter ();
+				Summon ();
+				Gdk.Threads.Leave ();
+				return false;
+			});
 		}
 		
 		/************************************************
@@ -297,7 +306,7 @@ namespace Do.Core
 					CurrentContext.ParentSearch = true;
 					QueueSearch (false);
 				}
-				window.DisplayObjects (CurrentContext, true);
+				window.DisplayObjects (CurrentContext);
 			}
 		}
 		
@@ -332,7 +341,7 @@ namespace Do.Core
 			} else {
 				CurrentContext.Cursor++;
 			}
-			window.DisplayObjects (CurrentContext, false);
+			window.DisplayObjects (CurrentContext);
 			
 			//We don't want to search the "default" state if the user presses down
 			if (tabbing || 
@@ -540,7 +549,7 @@ namespace Do.Core
 			if (pane == window.CurrentPane) {
 				window.DisplayInLabel (GetCurrentObject (pane));
 				//FIXME
-				if (updateResults) window.DisplayObjects (CurrentContext, true);
+				if (updateResults) window.DisplayObjects (CurrentContext);
 			}
 		}
 		
@@ -556,11 +565,11 @@ namespace Do.Core
 			}
 
 			none_found = new NoResultsFoundObject (context[(int) pane].Query);
-			//iconbox[(int) pane].DisplayObject = none_found;
+
 			window.DisplayInPane (pane, none_found);
 			if (window.CurrentPane == pane) {
 				window.DisplayInLabel (none_found);				
-				window.DisplayObjects (new SearchContext (), true);
+				window.DisplayObjects (new SearchContext ());
 			}
 		}
 		
@@ -569,6 +578,12 @@ namespace Do.Core
 		/// </summary>
 		void Reset ()
 		{
+			for (int i = 0; i < 3; ++i) {
+				if (searchTimeout[i] > 0) 
+					GLib.Source.Remove (searchTimeout[i]);
+				searchTimeout[i] = 0;
+			}
+			
 			ThirdPaneVisible = false;
 			
 			context[0] = new SearchContext ();
