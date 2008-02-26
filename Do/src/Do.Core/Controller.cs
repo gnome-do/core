@@ -179,9 +179,18 @@ namespace Do.Core
 			}
 		}
 		
+		/// <summary>
+		/// Summons a window with objects in it... needs work.
+		/// </summary>
+		/// <param name="objects">
+		/// A <see cref="IObject"/>
+		/// </param>
 		public void SummonWithObjects (IObject[] objects)
 		{
 			if (!window.IsSummonable) return;
+			
+			Reset ();
+			
 			SearchContext search = new SearchContext ();
 			search.Results = objects;
 			
@@ -531,7 +540,7 @@ namespace Do.Core
 			if (pane == window.CurrentPane) {
 				window.DisplayInLabel (GetCurrentObject (pane));
 				//FIXME
-				if (updateResults) window.DisplayObjects (CurrentContext, false);
+				if (updateResults) window.DisplayObjects (CurrentContext, true);
 			}
 		}
 		
@@ -560,6 +569,8 @@ namespace Do.Core
 		/// </summary>
 		void Reset ()
 		{
+			ThirdPaneVisible = false;
+			
 			context[0] = new SearchContext ();
 			context[1] = new SearchContext ();
 			context[2] = new SearchContext ();

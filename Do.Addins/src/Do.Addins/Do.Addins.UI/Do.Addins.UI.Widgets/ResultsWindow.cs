@@ -280,7 +280,8 @@ namespace Do.Addins.UI
 
 		public IObject[] Results
 		{
-			get { return results; }
+			//Needed for hashing
+			get { return results ?? results = new IObject[0]; }
 			set {				
 				ListStore store;
 				TreeIter iter, first_iter;

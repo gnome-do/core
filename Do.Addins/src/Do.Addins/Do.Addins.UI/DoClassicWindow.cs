@@ -306,9 +306,10 @@ namespace Do.Addins.UI
 
 		public void DisplayObjects (Do.Addins.SearchContext context, bool force)
 		{
-			if (resultsWindow.Query != context.Query || force)
+			if (resultsWindow.Results.GetHashCode () != context.Results.GetHashCode () || force )
 			{
 				resultsWindow.Context = context;
+				Console.WriteLine("hash mismatch");
 			} else {
 				resultsWindow.SelectedIndex = context.Cursor;
 			}
