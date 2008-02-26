@@ -104,7 +104,9 @@ namespace Do.Addins
 
 		public IObject[] Results
 		{
-			get { return results; }
+			get { 
+				return results ?? results = new IObject[0];
+			}
 			set {
 				results = value ?? new IObject[0];
 				cursor = 0;

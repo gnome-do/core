@@ -72,8 +72,6 @@ namespace Do.Addins.UI
 		/// </param>
 		event DoEventKeyDelegate KeyPressEvent;
 		
-		event OnSelectionChanged SelectionChanged;
-		
 		/// <summary>
 		/// Informs the UI of the need to display multiple objects in a result window.  Updating
 		/// the main window with new object displays as they are selected is the responsibility 
@@ -83,18 +81,6 @@ namespace Do.Addins.UI
 		/// A <see cref="IObject"/>
 		/// </param>
 		void DisplayObjects (SearchContext context);
-		
-		/// <summary>
-		/// Select next object in the results window.
-		/// </summary>
-		void ResultsWindowNext ();
-		
-		/// <summary>
-		/// Select previous object in the results window.
-		/// </summary>
-		void ResultsWindowPrev ();
-		
-		//void ResultsWindowContext 
 		
 		/// <summary>
 		/// Hide results window.  Implies destruction of current results window list.

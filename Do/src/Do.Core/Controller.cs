@@ -155,7 +155,7 @@ namespace Do.Core
 		{
 			window = new DoClassicWindow ();
 			window.KeyPressEvent += KeyPressWrap;
-			window.SelectionChanged += OnResultsWindowSelectionChanged;
+			
 			
 			context[0] = new SearchContext ();
 			context[1] = new SearchContext ();
@@ -318,16 +318,17 @@ namespace Do.Core
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
-			
-			Console.WriteLine("Cursor Before: {0}",CurrentContext.Cursor);
 			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
+				if (CurrentContext.Cursor <= 0) {
+					window.HideResultWindow ();
+					return;
+				}
 				CurrentContext.Cursor--;
 			} else {
 				CurrentContext.Cursor++;
 			}
-			Console.WriteLine("Cursor After: {0}",CurrentContext.Cursor);
-			Console.WriteLine("Results Length: {0}",CurrentContext.Results.Length);
 			window.DisplayObjects (CurrentContext);
+			window.DisplayInPane (window.CurrentPane, CurrentContext.Selection);
 		}
 		
 		/************************************************

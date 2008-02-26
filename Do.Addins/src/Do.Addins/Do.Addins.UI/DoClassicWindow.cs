@@ -50,8 +50,6 @@ namespace Do.Addins.UI
 		bool summonable;
 		
 		//-------------------Events-----------------------
-		public event OnSelectionChanged SelectionChanged;
-		
 		public new event DoEventKeyDelegate KeyPressEvent;
 			
 		//-------------------Properties-------------------
@@ -124,7 +122,6 @@ namespace Do.Addins.UI
 			SetColormap ();
 
 			resultsWindow = new ResultsWindow ();
-			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
 			currentPane = Pane.First;
 
@@ -196,12 +193,6 @@ namespace Do.Addins.UI
 			KeyPressEvent (evnt);
 			
 			return base.OnKeyPressEvent (evnt);
-		}
-		
-		private void OnResultsWindowSelectionChanged (object sender,
-				ResultsWindowSelectionEventArgs args)
-		{
-			SelectionChanged (this, args);
 		}
 		
 		protected virtual void SetColormap ()
@@ -326,20 +317,15 @@ namespace Do.Addins.UI
 
 		public void DisplayObjects (Do.Addins.SearchContext context)
 		{
-			resultsWindow.Context = context;
+			if (resultsWindow.Results.Length != context.Results.Length)
+			{
+				resultsWindow.Context = context;
+			} else {
+				resultsWindow.SelectedIndex = context.Cursor;
+			}
 			
-			if ( !resultsWindow.Visible )
+			if (!resultsWindow.Visible)
 				resultsWindow.Show ();
-		}
-
-		public void ResultsWindowNext ()
-		{
-			resultsWindow.SelectNext ();
-		}
-
-		public void ResultsWindowPrev ()
-		{
-			resultsWindow.SelectPrev ();
 		}
 
 		public void HideResultWindow ()
