@@ -118,7 +118,25 @@ namespace Do.Universe
 		
 		public string Description
 		{
-			get { return this["email"] ?? this["email.work"] ?? this["email.home"]; }
+			get {
+				return AnEmailAddress ?? "No description.";
+			}
+		}
+
+		public string AnEmailAddress
+		{
+			get {
+				string email;
+				
+				email = this ["email"] ?? this ["email.work"] ?? this ["email.home"];
+				if (email == null) {
+					foreach (string detail in Details) {
+						if (detail.StartsWith ("email"))
+							return this [detail];
+					}
+				}
+				return null;
+			}
 		}
 		
 		public string Icon
