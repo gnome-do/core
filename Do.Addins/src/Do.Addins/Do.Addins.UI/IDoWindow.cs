@@ -75,12 +75,14 @@ namespace Do.Addins.UI
 		/// <summary>
 		/// Informs the UI of the need to display multiple objects in a result window.  Updating
 		/// the main window with new object displays as they are selected is the responsibility 
-		/// of the UI.  Showing of the results window is implied.
+		/// of the UI.  Showing of the results window is implied.  If bool is set to true, the UI
+		/// should be sure to reload the entire context instead of shortcircuiting on the 
+		/// Context.Query
 		/// </summary>
 		/// <param name="objects">
 		/// A <see cref="IObject"/>
 		/// </param>
-		void DisplayObjects (SearchContext context);
+		void DisplayObjects (SearchContext context, bool forceRefresh);
 		
 		/// <summary>
 		/// Hide results window.  Implies destruction of current results window list.

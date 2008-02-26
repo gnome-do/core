@@ -185,7 +185,7 @@ namespace Do.Core
 			SearchContext search = new SearchContext ();
 			search.Results = objects;
 			
-			window.DisplayObjects (search);
+			window.DisplayObjects (search, true);
 			Summon ();
 		}
 		
@@ -288,7 +288,7 @@ namespace Do.Core
 					CurrentContext.ParentSearch = true;
 					QueueSearch (false);
 				}
-				window.DisplayObjects (CurrentContext);
+				window.DisplayObjects (CurrentContext, true);
 			}
 		}
 		
@@ -323,11 +323,13 @@ namespace Do.Core
 			} else {
 				CurrentContext.Cursor++;
 			}
-			window.DisplayObjects (CurrentContext);
+			window.DisplayObjects (CurrentContext, false);
+			
+			//We don't want to search the "default" state if the user presses down
+			if (tabbing || 
+			    (CurrentContext.Query.Length == 0 && window.CurrentPane == Pane.First)) return;
 			UpdatePane (window.CurrentPane, false);
 			
-			if (tabbing) return;
-
 			switch (window.CurrentPane) {
 				case Pane.First:
 					context[1] = new SearchContext ();
@@ -406,7 +408,7 @@ namespace Do.Core
 					// DR, I could kill you right now.
 					context[0].LastContext.LastContext.LastContext == null &&
 					context[0].ParentContext == null) {
-				window.Reset ();
+				Reset ();
 				return;
 			}
 
@@ -529,7 +531,7 @@ namespace Do.Core
 			if (pane == window.CurrentPane) {
 				window.DisplayInLabel (GetCurrentObject (pane));
 				//FIXME
-				if (updateResults) window.DisplayObjects (CurrentContext);
+				if (updateResults) window.DisplayObjects (CurrentContext, false);
 			}
 		}
 		
@@ -549,7 +551,7 @@ namespace Do.Core
 			window.DisplayInPane (pane, none_found);
 			if (window.CurrentPane == pane) {
 				window.DisplayInLabel (none_found);				
-				window.DisplayObjects (new SearchContext ());
+				window.DisplayObjects (new SearchContext (), true);
 			}
 		}
 		

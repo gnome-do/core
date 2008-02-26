@@ -54,6 +54,7 @@ namespace Do.Addins.UI
 		bool selectedIndexSet;
 		bool quietSelectionChange;
 		Label queryLabel;
+		string query;
 
 		int ResultIconSize {
 			get {
@@ -279,7 +280,7 @@ namespace Do.Addins.UI
 
 		public IObject[] Results
 		{
-			get { return results ?? results = new IObject[0]; }
+			get { return results; }
 			set {				
 				ListStore store;
 				TreeIter iter, first_iter;
@@ -321,8 +322,10 @@ namespace Do.Addins.UI
 		public string Query
 		{
 			set {
+				query = value;
 				queryLabel.Markup = string.Format (QueryLabelFormat, value ?? "");
 			}
+			get { return query; }
 		}
 
 		// Draw a border around the window.

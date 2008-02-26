@@ -33,7 +33,7 @@ namespace Do.Addins.UI
 	{
 		
 		//-------------------Class Members------------------
-		RoundedFrame frame;
+		GlossyRoundedFrame frame;
 		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
 		HBox resultsHBox;
@@ -94,7 +94,7 @@ namespace Do.Addins.UI
 		}
 		
 		//-------------------ctor----------------------
-		public DoClassicWindow() : base ("")
+		public DoClassicWindow() : base (Gtk.WindowType.Toplevel)
 		{
 			gconfClient = new GConf.Client ();
 			gconfClient.AddNotify ("/desktop/gnome/interface",
@@ -125,7 +125,7 @@ namespace Do.Addins.UI
 
 			currentPane = Pane.First;
 
-			frame = new RoundedFrame ();
+			frame = new GlossyRoundedFrame ();
 			frame.DrawFill = true;
 			frame.FillColor = BackgroundColor;
 			frame.FillAlpha = WindowTransparency;
@@ -315,9 +315,9 @@ namespace Do.Addins.UI
 			iconbox[2].Clear ();
 		}
 
-		public void DisplayObjects (Do.Addins.SearchContext context)
+		public void DisplayObjects (Do.Addins.SearchContext context, bool force)
 		{
-			if (resultsWindow.Results.Length != context.Results.Length)
+			if (resultsWindow.Query != context.Query || force)
 			{
 				resultsWindow.Context = context;
 			} else {
