@@ -306,12 +306,7 @@ namespace Do.Addins.UI
 
 		public void DisplayObjects (Do.Addins.SearchContext context)
 		{
-			if (resultsWindow.Results.GetHashCode () != context.Results.GetHashCode ())
-			{
-				resultsWindow.Context = context;
-			} else {
-				resultsWindow.SelectedIndex = context.Cursor;
-			}
+			resultsWindow.Context = context;
 			
 			if (!resultsWindow.Visible)
 				resultsWindow.Show ();

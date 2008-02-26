@@ -215,9 +215,12 @@ namespace Do.Addins.UI
 			set {
 				if (value == null) return;
 
-				Results = value.Results;
+				if (Results.GetHashCode () != value.Results.GetHashCode ())
+				{
+					Results = value.Results;
+					Query = value.Query;
+				}
 				SelectedIndex = value.Cursor;
-				Query = value.Query;
 			}
 		}
 

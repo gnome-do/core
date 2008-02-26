@@ -199,12 +199,7 @@ namespace Do.Core
 			SearchSecondPane ();
 
 			// Showing the results after a bit of a delay looks a bit better.
-			GLib.Timeout.Add (250, delegate {
-				Gdk.Threads.Enter ();
-				Summon ();
-				Gdk.Threads.Leave ();
-				return false;
-			});
+			Summon ();
 		}
 		
 		/************************************************
