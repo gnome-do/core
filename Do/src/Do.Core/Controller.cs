@@ -48,6 +48,7 @@ namespace Do.Core
 		List<IItem> items;
 		List<IItem> modItems;
 		bool thirdPaneVisible;
+		bool resultsVisible;
 		bool tabbing = false;
 		
 		//-------------------- Class Properties-----------------//
@@ -200,6 +201,7 @@ namespace Do.Core
 
 			// Showing the results after a bit of a delay looks a bit better.
 			Summon ();
+			resultsVisible = true;
 		}
 		
 		/************************************************
@@ -301,7 +303,7 @@ namespace Do.Core
 					CurrentContext.ParentSearch = true;
 					QueueSearch (false);
 				}
-				window.DisplayObjects (CurrentContext);
+				DisplayObjects (CurrentContext);
 			}
 		}
 		
@@ -334,9 +336,9 @@ namespace Do.Core
 				}
 				CurrentContext.Cursor--;
 			} else {
-				CurrentContext.Cursor++;
+				if ( resultsVisible ) CurrentContext.Cursor++;
 			}
-			window.DisplayObjects (CurrentContext);
+			DisplayObjects (CurrentContext);
 			
 			//We don't want to search the "default" state if the user presses down
 			if (tabbing || 
@@ -497,7 +499,7 @@ namespace Do.Core
 			UpdatePane (Pane.Third, true);
 
 			if (ThirdPaneRequired) {
-				ThirdPaneVisible = false;
+				ThirdPaneVisible = true;
 			} else if (!ThirdPaneAllowed) {
 				ThirdPaneVisible = false;
 			}
@@ -531,10 +533,7 @@ namespace Do.Core
 
 			current = GetCurrentObject (pane);
 			if (current != null) {
-				//iconbox[(int) pane].DisplayObject = current;
 				window.DisplayInPane (pane, current);
-				
-				//iconbox[(int) pane].Highlight = context[(int) pane].Query;
 				window.SetPaneHighlight (pane, context[(int) pane].Query);
 			} else {
 				SetNoResultsFoundState (pane);
@@ -544,8 +543,14 @@ namespace Do.Core
 			if (pane == window.CurrentPane) {
 				window.DisplayInLabel (GetCurrentObject (pane));
 				//FIXME
-				//if (updateResults) window.DisplayObjects (CurrentContext);
+				//if (updateResults) DisplayObjects (CurrentContext);
 			}
+		}
+		
+		protected void DisplayObjects (SearchContext context)
+		{
+			window.DisplayObjects (context);
+			resultsVisible = true;
 		}
 		
 		protected void SetNoResultsFoundState (Pane pane)
@@ -564,7 +569,7 @@ namespace Do.Core
 			window.DisplayInPane (pane, none_found);
 			if (window.CurrentPane == pane) {
 				window.DisplayInLabel (none_found);				
-				window.DisplayObjects (new SearchContext ());
+				DisplayObjects (new SearchContext ());
 			}
 		}
 		
@@ -589,6 +594,7 @@ namespace Do.Core
 			window.DisplayInPane (Pane.First, new DefaultIconBoxObject ());
 			window.DisplayInLabel (new DefaultLabelBoxObject ());
 			
+			resultsVisible = false;
 		}
 		
 		/**************************************

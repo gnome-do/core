@@ -291,6 +291,7 @@ namespace Do.Addins.UI
 		public void Vanish ()
 		{
 			this.Hide ();
+			HideResultWindow ();
 		}
 
 		public void Reset ()
