@@ -70,7 +70,7 @@ namespace Do.Addins.UI
 		/// <param name="pane">
 		/// A <see cref="Pane"/>
 		/// </param>
-		event Gtk.KeyPressEventHandler KeyPressEvent;
+		event DoEventKeyDelegate KeyPressEvent;
 		
 		event OnSelectionChanged SelectionChanged;
 		

@@ -178,6 +178,7 @@ namespace Do.Addins.UI
 
 		public virtual void SelectNext ()
 		{
+			Console.WriteLine(SelectedIndex);
 			if (SelectedIndex < results.Length - 1) {
 				SelectedIndex++;
 			}

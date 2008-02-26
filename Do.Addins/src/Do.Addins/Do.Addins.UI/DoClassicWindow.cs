@@ -31,7 +31,9 @@ namespace Do.Addins.UI
 	
 	public class DoClassicWindow : Gtk.Window, IDoWindow
 	{
-		GlossyRoundedFrame frame;
+		
+		//-------------------Class Members------------------
+		RoundedFrame frame;
 		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
 		HBox resultsHBox;
@@ -45,12 +47,17 @@ namespace Do.Addins.UI
 		const double WindowTransparency = 0.91;
 		
 		Pane currentPane;
+		bool summonable;
 		
+		//-------------------Events-----------------------
 		public event OnSelectionChanged SelectionChanged;
-
+		
+		public new event DoEventKeyDelegate KeyPressEvent;
+			
+		//-------------------Properties-------------------
 		public bool IsSummonable {
 			get {
-				throw new NotImplementedException();
+				return summonable;
 			}
 		}
 
@@ -59,7 +66,14 @@ namespace Do.Addins.UI
 				return currentPane;
 			}
 			set {
+				if (currentPane == value) return;
+
 				currentPane = value;
+				iconbox[0].IsFocused = (value == Pane.First);
+				iconbox[1].IsFocused = (value == Pane.Second);
+				iconbox[2].IsFocused = (value == Pane.Third);
+
+				Reposition ();
 			}
 		}
 		
@@ -81,10 +95,17 @@ namespace Do.Addins.UI
 			}
 		}
 		
+		//-------------------ctor----------------------
 		public DoClassicWindow() : base ("")
 		{
+			gconfClient = new GConf.Client ();
+			gconfClient.AddNotify ("/desktop/gnome/interface",
+				new GConf.NotifyEventHandler (DesktopThemeChanged));
+			
+			Build ();
 		}
 		
+		//-------------------methods------------------
 		protected void Build ()
 		{
 			VBox      vbox;
@@ -107,7 +128,7 @@ namespace Do.Addins.UI
 
 			currentPane = Pane.First;
 
-			frame = new GlossyRoundedFrame ();
+			frame = new RoundedFrame ();
 			frame.DrawFill = true;
 			frame.FillColor = BackgroundColor;
 			frame.FillAlpha = WindowTransparency;
@@ -164,8 +185,17 @@ namespace Do.Addins.UI
 
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
+			
+			summonable = true;
 
 			Reposition ();
+		}
+		
+		protected override bool OnKeyPressEvent (EventKey evnt)
+		{
+			KeyPressEvent (evnt);
+			
+			return base.OnKeyPressEvent (evnt);
 		}
 		
 		private void OnResultsWindowSelectionChanged (object sender,
@@ -183,6 +213,7 @@ namespace Do.Addins.UI
 				colormap = Screen.RgbColormap;
 				Console.Error.WriteLine ("No alpha support.");
 			}
+			
 			Colormap = colormap;
 		}
 		
@@ -213,9 +244,14 @@ namespace Do.Addins.UI
 			SetColormap ();
 		}
 		
-		void OnConfigureEvent (object sender, ConfigureEventArgs args)
+		private void OnConfigureEvent (object sender, ConfigureEventArgs args)
 		{
 			Reposition ();
+		}
+		
+		private void DesktopThemeChanged (object o, GConf.NotifyEventArgs e)
+		{
+			frame.FillColor = BackgroundColor;
 		}
 		
 		public void Reposition ()
@@ -236,70 +272,123 @@ namespace Do.Addins.UI
 			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + IconBoxRadius;
 			resultsWindow.Move (results.X, results.Y);
 		}
+		
+		protected override bool OnButtonPressEvent (EventButton evnt)
+		{
+			int start_x, start_y, end_x, end_y;
+			int click_x, click_y;
+			bool click_on_window, click_near_settings_icon;
 
+			GetPosition (out start_x, out start_y);
+			GetSize (out end_x, out end_y);
+			end_x += start_x;
+			end_y += start_y;
+			click_x = (int) evnt.XRoot;
+			click_y = (int) evnt.YRoot;
+			click_on_window = start_x <= click_x && click_x < end_x &&
+			                  start_y <= click_y && click_y < end_y;
+			click_near_settings_icon = (end_x - 27) <= click_x && click_x < end_x &&
+			                            start_y <= click_y && click_y < (start_y + 27);
+			if (click_near_settings_icon) {
+				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 21, start_y + 16);
+				// Have to re-grab the pane from the menu.
+				Addins.Util.Appearance.PresentWindow (this);
+			} else if (!click_on_window) {
+				Vanish ();
+			}
+			return base.OnButtonPressEvent (evnt);
+		}
+
+		  ///////////////////////
+		 //     IDoWindow     //
+		///////////////////////
+		
 		public void Summon ()
 		{
-			throw new NotImplementedException();
+			this.Show ();
 		}
 
 		public void Vanish ()
 		{
-			throw new NotImplementedException();
+			this.Hide ();
 		}
 
 		public void Reset ()
 		{
-			throw new NotImplementedException();
+			resultsWindow.Hide ();
+			resultsWindow.Clear ();
+			
+			CurrentPane = Pane.First;
+			iconbox[0].Clear ();
+			iconbox[1].Clear ();
+			iconbox[2].Clear ();
 		}
 
 		public void DisplayObjects (Do.Addins.SearchContext context)
 		{
-			throw new NotImplementedException();
+			resultsWindow.Context = context;
+			
+			if ( !resultsWindow.Visible )
+				resultsWindow.Show ();
 		}
 
 		public void ResultsWindowNext ()
 		{
-			throw new NotImplementedException();
+			resultsWindow.SelectNext ();
 		}
 
 		public void ResultsWindowPrev ()
 		{
-			throw new NotImplementedException();
+			resultsWindow.SelectPrev ();
 		}
 
 		public void HideResultWindow ()
 		{
-			throw new NotImplementedException();
+			resultsWindow.Hide ();
 		}
 
 		public void Grow ()
 		{
-			throw new NotImplementedException();
+			iconbox[2].Show ();
+			Resize (1, 1);
+			GLib.Timeout.Add (10, delegate {
+				Gdk.Threads.Enter ();
+				Reposition ();
+				Gdk.Threads.Leave ();
+				return false;
+			});
 		}
 
 		public void Shrink ()
 		{
-			throw new NotImplementedException();
+			iconbox[2].Hide ();
+			Resize (1, 1);
+			GLib.Timeout.Add (10, delegate {
+				Gdk.Threads.Enter ();
+				Reposition ();
+				Gdk.Threads.Leave ();
+				return false;
+			});
 		}
 
 		public void DisplayInPane (Pane pane, IObject item)
 		{
-			throw new NotImplementedException();
+			iconbox[(int) pane].DisplayObject = item;
 		}
 
 		public void DisplayInLabel (IObject item)
 		{
-			throw new NotImplementedException();
+			label.SetDisplayLabel (item.Name, item.Description);
 		}
 
 		public void SetPaneHighlight (Pane pane, string highlight)
 		{
-			throw new NotImplementedException();
+			iconbox[(int) pane].Highlight = highlight;
 		}
 
 		public void ClearPane (Pane pane)
 		{
-			throw new NotImplementedException();
+			iconbox[(int) pane].Clear ();
 		}
 		
 		private void RGBToHSV (ref byte r, ref byte g, ref byte b)
@@ -398,6 +487,20 @@ namespace Do.Addins.UI
 			hue = Convert.ToByte(r*255);
 			sat = Convert.ToByte(g*255);
 			val = Convert.ToByte(b*255);
+		}
+		
+		protected override bool OnExposeEvent (EventExpose evnt)
+		{
+			Cairo.Context cairo;
+			//frame.FillColor = BackgroundColor;
+			
+			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
+				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+				cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
+				cairo.Operator = Cairo.Operator.Source;
+				cairo.Paint ();
+			}
+			return base.OnExposeEvent (evnt);
 		}
 	}
 }

@@ -133,6 +133,13 @@ namespace Do.Core
 			}
 		}
 		
+		class DefaultIconBoxObject : IObject
+		{
+			public string Icon { get { return "search"; } }
+			public string Name { get { return ""; } }
+			public string Description { get { return ""; } }
+		}
+		
 		//-------------------- CONSTRUCTOR ---------------------//
 		public Controller ()
 		{
@@ -146,8 +153,15 @@ namespace Do.Core
 
 		public void Initialize ()
 		{
-			//window = new SymbolWindow ();
+			window = new DoClassicWindow ();
 			window.KeyPressEvent += KeyPressWrap;
+			window.SelectionChanged += OnResultsWindowSelectionChanged;
+			
+			context[0] = new SearchContext ();
+			context[1] = new SearchContext ();
+			context[2] = new SearchContext ();
+			
+			window.DisplayInPane (Pane.First, new DefaultIconBoxObject ());
 		}
 
 		protected void NotifyVanished ()
@@ -176,9 +190,10 @@ namespace Do.Core
 		/************************************************
 		 * -------------KEYPRESS HANDLING----------------
 		 * **********************************************/
-		private void KeyPressWrap (object o, Gtk.KeyPressEventArgs args)
+		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
-			Gdk.EventKey evnt = args.Event;
+			
+			Console.WriteLine ( evnt.Key );
 			
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
 					//sOnControlKeyPressEvent (evnt);
@@ -241,9 +256,14 @@ namespace Do.Core
 
 			results = CurrentContext.Results.Length > 0;
 			
+			Console.WriteLine (CurrentContext.Results.Length);
+			
 			ClearSearchResults ();
-
+			
+			ThirdPaneVisible = false;
 			window.Reset ();
+			
+			window.DisplayInPane (Pane.First, new DefaultIconBoxObject ());
 			if (window.CurrentPane == Pane.First && !results) 
 				window.Vanish ();
 		}
@@ -279,7 +299,7 @@ namespace Do.Core
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
 			tabbing = true;
-			//resultsWindow.Hide ();
+			window.HideResultWindow ();
 			if (window.CurrentPane == Pane.First &&
 					context[0].Results.Length != 0) {
 				window.CurrentPane = Pane.Second;
@@ -298,15 +318,16 @@ namespace Do.Core
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
-			/*if (!resultsWindow.Visible) {
-				resultsWindow.Show ();
-				return;
-			}*/
+			
+			Console.WriteLine("Cursor Before: {0}",CurrentContext.Cursor);
 			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
-				window.ResultsWindowPrev ();
+				CurrentContext.Cursor--;
 			} else {
-				window.ResultsWindowNext ();
+				CurrentContext.Cursor++;
 			}
+			Console.WriteLine("Cursor After: {0}",CurrentContext.Cursor);
+			Console.WriteLine("Results Length: {0}",CurrentContext.Results.Length);
+			window.DisplayObjects (CurrentContext);
 		}
 		
 		/************************************************
@@ -462,8 +483,7 @@ namespace Do.Core
 			switch (window.CurrentPane) {
 				case Pane.First:
 					// Do this once we have "" in the first results list(?)
-					// context[0] = new SearchContext ();
-					// SearchFirstPane ();
+					context[0] = new SearchContext ();
 					window.Reset ();
 					break;
 				case Pane.Second:
@@ -601,6 +621,28 @@ namespace Do.Core
 				window.Reset ();
 			}
 		}
+		
+		private void OnResultsWindowSelectionChanged (object sender,
+				ResultsWindowSelectionEventArgs args)
+		{
+			//CurrentCursor = args.SelectedIndex;
+
+			UpdatePane (window.CurrentPane, false);
+
+			// If we're just tabbing, no need to search.
+			if (tabbing) return;
+
+			switch (window.CurrentPane) {
+				case Pane.First:
+					context[1] = new SearchContext ();
+					SearchPaneDelayed (Pane.Second);
+					break;
+				case Pane.Second:
+					context[2] = new SearchContext ();
+					SearchPaneDelayed (Pane.Third);
+					break;
+			}
+		}
 
 		///////////////////////////
 		/// IController Members ///
@@ -614,7 +656,7 @@ namespace Do.Core
 			//FIXME == This method requires a Gtk.Window... for desktop agnostic we can not do this...
 			//Should we even do this?  The UI might not really want this...
 			
-			//Util.Appearance.PresentWindow (window);
+			Util.Appearance.PresentWindow ((Gtk.Window)window);
 		}
 		
 		public void Vanish ()

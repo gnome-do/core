@@ -78,7 +78,7 @@ FILES =  \
 
 DATA_FILES = 
 
-RESOURCES = 
+RESOURCES = ../Do/Resources/settings-triangle.png 
 
 EXTRAS = \
 	do.addins.pc.in 
