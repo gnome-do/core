@@ -502,7 +502,7 @@ namespace Do.Core
 			UpdatePane (Pane.Third, true);
 
 			if (ThirdPaneRequired) {
-				ThirdPaneVisible = true;
+				ThirdPaneVisible = false;
 			} else if (!ThirdPaneAllowed) {
 				ThirdPaneVisible = false;
 			}
@@ -549,7 +549,7 @@ namespace Do.Core
 			if (pane == window.CurrentPane) {
 				window.DisplayInLabel (GetCurrentObject (pane));
 				//FIXME
-				if (updateResults) window.DisplayObjects (CurrentContext);
+				//if (updateResults) window.DisplayObjects (CurrentContext);
 			}
 		}
 		
