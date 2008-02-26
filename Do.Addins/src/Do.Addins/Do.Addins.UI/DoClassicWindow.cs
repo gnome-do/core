@@ -40,9 +40,9 @@ namespace Do.Addins.UI
 		IconBox[] iconbox;
 		GConf.Client gconfClient;
 		
-		const int DefaultIconBoxIconSize = 128;
-		const uint DefaultIconBoxPadding = 6;
-		const int DefaultIconBoxRadius = 20;
+		const int IconBoxIconSize = 128;
+		const uint IconBoxPadding = 6;
+		const int IconBoxRadius = 20;
 
 		const double WindowTransparency = 0.91;
 		
@@ -72,24 +72,6 @@ namespace Do.Addins.UI
 				iconbox[2].IsFocused = (value == Pane.Third);
 
 				Reposition ();
-			}
-		}
-		
-		int IconBoxIconSize {
-			get {
-				return DefaultIconBoxIconSize;
-			}
-		}
-
-		uint IconBoxPadding {
-			get {
-				return DefaultIconBoxPadding;
-			}
-		}
-
-		int IconBoxRadius {
-			get {
-				return DefaultIconBoxRadius;
 			}
 		}
 		
@@ -242,7 +224,14 @@ namespace Do.Addins.UI
 		
 		private void DesktopThemeChanged (object o, GConf.NotifyEventArgs e)
 		{
-			frame.FillColor = BackgroundColor;
+			//this is needed to account for the delay between the gconf change
+			//and the theme change propogating to this application.
+			GLib.Timeout.Add (3000, delegate {
+				Gdk.Threads.Enter ();
+				frame.FillColor = BackgroundColor;
+				Gdk.Threads.Leave ();
+				return false;
+			});
 		}
 		
 		public void Reposition ()

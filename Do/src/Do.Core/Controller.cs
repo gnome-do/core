@@ -647,28 +647,6 @@ namespace Do.Core
 				Reset ();
 			}
 		}
-		
-		private void OnResultsWindowSelectionChanged (object sender,
-				ResultsWindowSelectionEventArgs args)
-		{
-			//CurrentCursor = args.SelectedIndex;
-
-			UpdatePane (window.CurrentPane, false);
-
-			// If we're just tabbing, no need to search.
-			if (tabbing) return;
-
-			switch (window.CurrentPane) {
-				case Pane.First:
-					context[1] = new SearchContext ();
-					SearchPaneDelayed (Pane.Second);
-					break;
-				case Pane.Second:
-					context[2] = new SearchContext ();
-					SearchPaneDelayed (Pane.Third);
-					break;
-			}
-		}
 
 		///////////////////////////
 		/// IController Members ///

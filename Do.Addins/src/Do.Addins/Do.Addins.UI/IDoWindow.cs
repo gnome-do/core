@@ -143,16 +143,5 @@ namespace Do.Addins.UI
 		/// A <see cref="Pane"/>
 		/// </param>
 		void ClearPane (Pane pane);
-		
-		/// <summary>
-		/// Check if pane is visible
-		/// </summary>
-		/// <param name="pane">
-		/// A <see cref="Pane"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.Boolean"/>
-		/// </returns>
-		//bool PaneVisible (Pane pane);
 	}
 }
