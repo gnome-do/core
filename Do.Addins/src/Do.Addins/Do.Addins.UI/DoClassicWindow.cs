@@ -337,7 +337,7 @@ namespace Do.Addins.UI
 		{
 			iconbox[2].Show ();
 			Resize (1, 1);
-			GLib.Timeout.Add (10, delegate {
+			GLib.Timeout.Add (70, delegate {
 				Gdk.Threads.Enter ();
 				Reposition ();
 				Gdk.Threads.Leave ();
@@ -349,7 +349,7 @@ namespace Do.Addins.UI
 		{
 			iconbox[2].Hide ();
 			Resize (1, 1);
-			GLib.Timeout.Add (10, delegate {
+			GLib.Timeout.Add (70, delegate {
 				Gdk.Threads.Enter ();
 				Reposition ();
 				Gdk.Threads.Leave ();

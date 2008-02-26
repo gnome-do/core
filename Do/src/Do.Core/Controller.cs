@@ -140,6 +140,13 @@ namespace Do.Core
 			public string Description { get { return ""; } }
 		}
 		
+		class DefaultLabelBoxObject : IObject
+		{
+			public string Icon { get { return "search"; } }
+			public string Name { get { return Catalog.GetString ("Type to begin searching"); } }
+			public string Description { get { return Catalog.GetString ("Type to start searching."); } }
+		}
+		
 		//-------------------- CONSTRUCTOR ---------------------//
 		public Controller ()
 		{
@@ -156,12 +163,7 @@ namespace Do.Core
 			window = new DoClassicWindow ();
 			window.KeyPressEvent += KeyPressWrap;
 			
-			
-			context[0] = new SearchContext ();
-			context[1] = new SearchContext ();
-			context[2] = new SearchContext ();
-			
-			window.DisplayInPane (Pane.First, new DefaultIconBoxObject ());
+			Reset ();
 		}
 
 		protected void NotifyVanished ()
@@ -192,12 +194,8 @@ namespace Do.Core
 		 * **********************************************/
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
-			
-			Console.WriteLine ( evnt.Key );
-			
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
-					//sOnControlKeyPressEvent (evnt);
-					return; //base.OnKeyPressEvent (evnt);
+					return;
 			}
 
 			switch ((Gdk.Key) evnt.KeyValue) {
@@ -231,7 +229,7 @@ namespace Do.Core
 					OnInputKeyPressEvent (evnt);
 					break;
 			}
-			return; //base.OnKeyPressEvent (evnt);
+			return;
 		}
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
@@ -256,14 +254,12 @@ namespace Do.Core
 
 			results = CurrentContext.Results.Length > 0;
 			
-			Console.WriteLine (CurrentContext.Results.Length);
-			
 			ClearSearchResults ();
 			
 			ThirdPaneVisible = false;
-			window.Reset ();
+			Reset ();
 			
-			window.DisplayInPane (Pane.First, new DefaultIconBoxObject ());
+			
 			if (window.CurrentPane == Pane.First && !results) 
 				window.Vanish ();
 		}
@@ -328,7 +324,20 @@ namespace Do.Core
 				CurrentContext.Cursor++;
 			}
 			window.DisplayObjects (CurrentContext);
-			window.DisplayInPane (window.CurrentPane, CurrentContext.Selection);
+			UpdatePane (window.CurrentPane, false);
+			
+			if (tabbing) return;
+
+			switch (window.CurrentPane) {
+				case Pane.First:
+					context[1] = new SearchContext ();
+					SearchPaneDelayed (Pane.Second);
+					break;
+				case Pane.Second:
+					context[2] = new SearchContext ();
+					SearchPaneDelayed (Pane.Third);
+					break;
+			}
 		}
 		
 		/************************************************
@@ -484,8 +493,7 @@ namespace Do.Core
 			switch (window.CurrentPane) {
 				case Pane.First:
 					// Do this once we have "" in the first results list(?)
-					context[0] = new SearchContext ();
-					window.Reset ();
+					Reset ();
 					break;
 				case Pane.Second:
 					context[1] = new SearchContext ();
@@ -543,6 +551,21 @@ namespace Do.Core
 				window.DisplayInLabel (none_found);				
 				window.DisplayObjects (new SearchContext ());
 			}
+		}
+		
+		/// <summary>
+		/// Call to fully reset Do.  This should return Do to its starting state
+		/// </summary>
+		void Reset ()
+		{
+			context[0] = new SearchContext ();
+			context[1] = new SearchContext ();
+			context[2] = new SearchContext ();
+			
+			window.Reset ();
+			window.DisplayInPane (Pane.First, new DefaultIconBoxObject ());
+			window.DisplayInLabel (new DefaultLabelBoxObject ());
+			
 		}
 		
 		/**************************************
@@ -619,7 +642,7 @@ namespace Do.Core
 			}
 
 			if (vanish) {
-				window.Reset ();
+				Reset ();
 			}
 		}
 		
