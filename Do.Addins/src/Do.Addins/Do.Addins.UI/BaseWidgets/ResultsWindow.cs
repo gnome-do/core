@@ -216,21 +216,6 @@ namespace Do.Addins.UI
 			renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
 		}
 
-		public virtual void SelectNext ()
-		{
-			Console.WriteLine(SelectedIndex);
-			if (SelectedIndex < results.Length - 1) {
-				SelectedIndex++;
-			}
-		}
-
-		public virtual void SelectPrev ()
-		{
-			if (0 < SelectedIndex) {
-			  SelectedIndex--;
-			}
-		}
-
 		private void OnResultRowSelected (object sender, EventArgs args)
 		{
 			if (!selectedIndexSet || quietSelectionChange) return;
@@ -254,8 +239,7 @@ namespace Do.Addins.UI
 			set {
 				if (value == null) return;
 
-				if (Results.GetHashCode () != value.Results.GetHashCode ())
-				{
+				if (Results.GetHashCode () != value.Results.GetHashCode ()) {
 					Results = value.Results;
 					Query = value.Query;
 				}

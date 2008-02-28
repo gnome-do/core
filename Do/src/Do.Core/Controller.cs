@@ -133,7 +133,7 @@ namespace Do.Core
 
 		public void Initialize ()
 		{
-			window = new MiniWindow ((IDoController) this);
+			window = new DarkFrame ((IDoController) this);
 			window.KeyPressEvent += KeyPressWrap;
 			
 			Reset ();
@@ -235,18 +235,19 @@ namespace Do.Core
 		
 		void OnEscapeKeyPressEvent (EventKey evnt)
 		{
-			bool results;
+			bool results, something_typed;
 
+			something_typed = CurrentContext.Query.Length > 0;
 			results = CurrentContext.Results.Length > 0;
 			
 			ClearSearchResults ();
 			
 			ThirdPaneVisible = false;
-			Reset ();
+			//Reset ();
 			
 			
-			if (window.CurrentPane == Pane.First && !results) 
-				window.Vanish ();
+			if (window.CurrentPane == Pane.First && !results) Vanish ();
+			else if (!something_typed) Reset ();
 		}
 		
 		void OnInputKeyPressEvent (EventKey evnt)
@@ -496,9 +497,6 @@ namespace Do.Core
 		
 		protected void UpdatePane (Pane pane)
 		{
-			IObject current;
-
-			current = GetCurrentObject (pane);
 			window.SetPaneContext (pane, context[(int) pane]);
 		}
 		

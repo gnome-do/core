@@ -33,23 +33,23 @@ namespace Do.Addins.UI
 	{
 		
 		//-------------------Class Members------------------
-		MiniWindowFrame frame;
-		SymbolDisplayLabel label;
-		ResultsWindow resultsWindow;
-		HBox resultsHBox;
-		MiniIconBox[] iconbox;
+		protected MiniWindowFrame frame;
+		protected SymbolDisplayLabel label;
+		protected ResultsWindow resultsWindow;
+		protected HBox resultsHBox;
+		protected MiniIconBox[] iconbox;
 		IDoController controller;
 		
-		const int IconBoxIconSize = 64;
-		const uint IconBoxPadding = 2;
-		const int IconBoxRadius = 3;
+		protected const int IconBoxIconSize = 64;
+		protected const uint IconBoxPadding = 2;
+		protected const int IconBoxRadius = 3;
 		
-		const int MainRadius = 6;
+		protected const int MainRadius = 6;
 
-		const double WindowTransparency = 0.95;
+		protected const double WindowTransparency = 0.95;
 		
-		Pane currentPane;
-		bool summonable;
+		protected Pane currentPane;
+		protected bool summonable;
 		
 		//-------------------Events-----------------------
 		public new event DoEventKeyDelegate KeyPressEvent;
@@ -86,7 +86,7 @@ namespace Do.Addins.UI
 		}
 		
 		//-------------------methods------------------
-		protected void Build ()
+		protected virtual void Build ()
 		{
 			VBox      vbox;
 			Alignment align;
@@ -104,8 +104,8 @@ namespace Do.Addins.UI
 			SetColormap ();
 
 			resultsWindow = new ResultsWindow (new Color(42, 45, 49));
-			resultsWindow.DefaultWindowWidth = 325;
-			resultsWindow.NumberResultsDisplayed = 5;
+			resultsWindow.DefaultWindowWidth = 310;
+			resultsWindow.NumberResultsDisplayed = 4;
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
 			currentPane = Pane.First;
@@ -165,7 +165,7 @@ namespace Do.Addins.UI
 			align.Add (label);
 			vbox.PackStart (align, false, false, 0);
 			label.Show ();
-			align.Show ();
+			//align.Show ();
 
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
@@ -177,11 +177,9 @@ namespace Do.Addins.UI
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
-			if (evnt.Key == Gdk.Key.Tab || (evnt.Key == Gdk.Key.Up && resultsWindow.SelectedIndex <= 0))
-			{	
+			if (evnt.Key == Gdk.Key.Tab || (evnt.Key == Gdk.Key.Up && resultsWindow.SelectedIndex <= 0)) {	
 				resultsWindow.Hide ();
-				if (evnt.Key == Gdk.Key.Tab)
-				{
+				if (evnt.Key == Gdk.Key.Tab) {
 					//technically this is not really a needed step because there is no situation
 					//where new set of results are thrown in.
 					resultsWindow.Clear ();
@@ -214,12 +212,12 @@ namespace Do.Addins.UI
 			Colormap = colormap;
 		}
 		
-		private void OnScreenChanged (object sender, EventArgs args)
+		protected void OnScreenChanged (object sender, EventArgs args)
 		{
 			SetColormap ();
 		}
 		
-		private void OnConfigureEvent (object sender, ConfigureEventArgs args)
+		protected void OnConfigureEvent (object sender, ConfigureEventArgs args)
 		{
 			Reposition ();
 		}
@@ -275,7 +273,7 @@ namespace Do.Addins.UI
 			return base.OnButtonPressEvent (evnt);
 		}
 		
-		private void OnResultsWindowSelectionChanged (object sender,
+		protected  void OnResultsWindowSelectionChanged (object sender,
 				ResultsWindowSelectionEventArgs args)
 		{
 			controller.NewContextSelection (CurrentPane, args.SelectedIndex);
