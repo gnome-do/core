@@ -101,14 +101,11 @@ namespace Do.Addins.UI
 		void SetPaneContext (Pane pane, SearchContext context);
 		
 		/// <summary>
-		/// Clear out the context of a pane.  If the bool is true, also set the no results found state
+		/// Clear out the context of a pane.
 		/// </summary>
 		/// <param name="pane">
 		/// A <see cref="Pane"/>
 		/// </param>
-		/// <param name="noResultsCondition">
-		/// A <see cref="System.Boolean"/>
-		/// </param>
-		void ClearPane (Pane pane, bool noResultsCondition);
+		void ClearPane (Pane pane);
 	}
 }

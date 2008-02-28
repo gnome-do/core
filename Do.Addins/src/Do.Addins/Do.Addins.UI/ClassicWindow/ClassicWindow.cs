@@ -176,20 +176,21 @@ namespace Do.Addins.UI
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
-			if (evnt.Key == Gdk.Key.Tab || (evnt.Key == Gdk.Key.Up && resultsWindow.SelectedIndex <= 0))
-			{	
+			if (evnt.Key == Gdk.Key.Tab || (evnt.Key == Gdk.Key.Up && resultsWindow.SelectedIndex <= 0)) {	
 				resultsWindow.Hide ();
 				if (evnt.Key == Gdk.Key.Tab)
 					//technically this is not really a needed step because there is no situation
 					//where new set of results are thrown in.
 					resultsWindow.Clear ();
-			} else if ((evnt.Key == Gdk.Key.Up || evnt.Key == Gdk.Key.Down) && !resultsWindow.Visible) {
+			} else if ((evnt.Key == Gdk.Key.Up || evnt.Key == Gdk.Key.Down || evnt.Key == Gdk.Key.Right) 
+			           && !resultsWindow.Visible) {
 				//triggers the controller to do a context update since we have captured this keypress
 				//this way the first item is properly selected since the controller is unaware
 				//that the results window was hidden.
 				controller.NewContextSelection(CurrentPane, 0);
 				ShowResultsWindow ();
-				return base.OnKeyPressEvent (evnt);
+				if (evnt.Key != Gdk.Key.Right)
+					return base.OnKeyPressEvent (evnt);
 			}
 			KeyPressEvent (evnt);
 			
@@ -367,29 +368,26 @@ namespace Do.Addins.UI
 		
 		public void SetPaneContext (Pane pane, SearchContext context)
 		{
+			if (context.Results.Length == 0) {
+				for (int i = (int) pane; i < 3; i++) {
+					iconbox[i].Clear ();
+					iconbox[i].DisplayObject = new Do.Addins.NoResultsFoundObject ();
+				}
+				return;
+			}
 			iconbox[(int) pane].DisplayObject = context.Selection;
 			iconbox[(int) pane].Highlight = context.Query;
 			
-			if (pane == CurrentPane)
-			{
+			if (pane == CurrentPane) {
 				resultsWindow.Context = context;
 				label.SetDisplayLabel (context.Selection.Name, context.Selection.Description);
 			}
 		}
 
-		public void ClearPane (Pane pane, bool noResultsCondition)
+		public void ClearPane (Pane pane)
 		{
 			if (pane == CurrentPane)
 				resultsWindow.Clear ();
-			
-			if (noResultsCondition)
-			{
-				for (int i = (int) pane; i < 3; i++)
-				{
-					iconbox[i].Clear ();
-					iconbox[i].DisplayObject = new Do.Addins.NoResultsFoundObject ();
-				}
-			}
 		}
 		
 		protected override bool OnExposeEvent (EventExpose evnt)

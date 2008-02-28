@@ -357,7 +357,7 @@ namespace Do.Core
 				searchTimeout[i] = 0;
 			}
 			for (int i = (int) pane; i < 3; ++i) {
-					window.ClearPane((Pane) i, false);
+					window.ClearPane((Pane) i);
 			}
 
 			
@@ -449,7 +449,7 @@ namespace Do.Core
 			first = GetCurrentObject (Pane.First);
 			second = GetCurrentObject (Pane.Second);
 			if (first == null || second == null) {
-				SetNoResultsFoundState (Pane.Third);
+				window.SetPaneContext (Pane.Third, context[2]);
 				return;
 			}
 
@@ -499,23 +499,7 @@ namespace Do.Core
 			IObject current;
 
 			current = GetCurrentObject (pane);
-			if (current != null) {
-				window.SetPaneContext (pane, context[(int) pane]);
-			} else {
-				//window.ClearPane (pane, true);
-				SetNoResultsFoundState (pane);
-				return;
-			}
-		}
-		
-		protected void SetNoResultsFoundState (Pane pane)
-		{
-			if (pane == Pane.First) {
-				window.ClearPane (Pane.First, true);
-				window.ClearPane (Pane.Second, true);
-			} else if (pane == Pane.Second) {
-				window.ClearPane (Pane.Second, true);
-			}
+			window.SetPaneContext (pane, context[(int) pane]);
 		}
 		
 		/// <summary>
