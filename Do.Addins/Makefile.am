@@ -37,15 +37,17 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
+	src/Do.Addins/Do.Addins.UI/ClassicWindow.cs \
+	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/DefaultObjects.cs \
 	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/GlossyRoundedFrame.cs \
 	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/IconBox.cs \
 	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/ResultsWindow.cs \
 	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/RoundedFrame.cs \
 	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/SymbolDisplayLabel.cs \
-	src/Do.Addins/Do.Addins.UI/DoClassicWindow.cs \
 	src/Do.Addins/Do.Addins.UI/IconProvider.cs \
 	src/Do.Addins/Do.Addins.UI/IDoWindow.cs \
 	src/Do.Addins/Do.Addins.UI/ResultsWindowSelectionEventArgs.cs \
+	src/Do.Addins/IDoController.cs \
 	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/Util.cs \
 	src/Do.Universe/ApplicationItem.cs \

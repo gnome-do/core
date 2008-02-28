@@ -73,21 +73,6 @@ namespace Do.Addins.UI
 		event DoEventKeyDelegate KeyPressEvent;
 		
 		/// <summary>
-		/// Informs the UI of the need to display multiple objects in a result window.  Updating
-		/// the main window with new object displays as they are selected is the responsibility 
-		/// of the UI.  Showing of the results window is implied.
-		/// </summary>
-		/// <param name="objects">
-		/// A <see cref="IObject"/>
-		/// </param>
-		void DisplayObjects (SearchContext context);
-		
-		/// <summary>
-		/// Hide results window.  Implies destruction of current results window list.
-		/// </summary>
-		void HideResultWindow ();
-		
-		/// <summary>
 		/// Inform UI that the third display area needs to be displayed
 		/// </summary>
 		/// <param name="pane">
@@ -104,42 +89,26 @@ namespace Do.Addins.UI
 		void Shrink ();
 		
 		/// <summary>
-		/// Inform UI that a pane should display the passed IObject.
+		/// All inclusive pane set method.  This should update the search results as well as the current
+		/// objects and its highlight.
 		/// </summary>
 		/// <param name="pane">
 		/// A <see cref="Pane"/>
 		/// </param>
-		/// <param name="item">
-		/// A <see cref="IObject"/>
+		/// <param name="context">
+		/// A <see cref="SearchContext"/>
 		/// </param>
-		void DisplayInPane (Pane pane, IObject item);
+		void SetPaneContext (Pane pane, SearchContext context);
 		
 		/// <summary>
-		/// Text to show in main label.
-		/// </summary>
-		/// <param name="item">
-		/// A <see cref="IObject"/>
-		/// </param>
-		void DisplayInLabel (IObject item);
-		
-		/// <summary>
-		/// Used to set the highlight string of a pane.  UI must implement but can stub without
-		/// any serious side effects
+		/// Clear out the context of a pane.  If the bool is true, also set the no results found state
 		/// </summary>
 		/// <param name="pane">
 		/// A <see cref="Pane"/>
 		/// </param>
-		/// <param name="highlight">
-		/// A <see cref="System.String"/>
+		/// <param name="noResultsCondition">
+		/// A <see cref="System.Boolean"/>
 		/// </param>
-		void SetPaneHighlight (Pane pane, string highlight);
-		
-		/// <summary>
-		/// Clear out all contents of a pane.
-		/// </summary>
-		/// <param name="pane">
-		/// A <see cref="Pane"/>
-		/// </param>
-		void ClearPane (Pane pane);
+		void ClearPane (Pane pane, bool noResultsCondition);
 	}
 }

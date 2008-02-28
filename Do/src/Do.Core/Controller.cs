@@ -33,7 +33,7 @@ using Do.Addins.UI;
 namespace Do.Core
 {
 	
-	public class Controller : IController
+	public class Controller : IController, IDoController
 	{
 		//-------------------- Class Members--------------------//
 		public event EventHandler Vanished;
@@ -48,7 +48,6 @@ namespace Do.Core
 		List<IItem> items;
 		List<IItem> modItems;
 		bool thirdPaneVisible;
-		bool resultsVisible;
 		bool tabbing = false;
 		
 		//-------------------- Class Properties-----------------//
@@ -112,40 +111,13 @@ namespace Do.Core
 			}
 		}
 		
-		//-------------------- NESTED CLASS --------------------//
+		//-------------------- NESTED ENUM --------------------//
 		
-		class NoResultsFoundObject : IObject
+		protected enum State
 		{
-			string query;
-
-			public NoResultsFoundObject (string query)
-			{
-				this.query = query;
-			}
-
-			public string Icon { get { return "gtk-dialog-question"; } }
-			public string Name { get { return Catalog.GetString ("No results found."); } }
-
-			public string Description
-			{
-				get {
-					return string.Format (Catalog.GetString ("No results found for \"{0}\"."), query);
-				}
-			}
-		}
-		
-		class DefaultIconBoxObject : IObject
-		{
-			public string Icon { get { return "search"; } }
-			public string Name { get { return ""; } }
-			public string Description { get { return ""; } }
-		}
-		
-		class DefaultLabelBoxObject : IObject
-		{
-			public string Icon { get { return "search"; } }
-			public string Name { get { return Catalog.GetString ("Type to begin searching"); } }
-			public string Description { get { return Catalog.GetString ("Type to start searching."); } }
+			IconDefault = 0,
+			LabelDefault = 1,
+			NoObjects = 2,
 		}
 		
 		//-------------------- CONSTRUCTOR ---------------------//
@@ -161,7 +133,7 @@ namespace Do.Core
 
 		public void Initialize ()
 		{
-			window = new DoClassicWindow ();
+			window = new ClassicWindow ((IDoController) this);
 			window.KeyPressEvent += KeyPressWrap;
 			
 			Reset ();
@@ -199,9 +171,7 @@ namespace Do.Core
 			SearchFirstPane ();
 			SearchSecondPane ();
 
-			// Showing the results after a bit of a delay looks a bit better.
 			Summon ();
-			resultsVisible = true;
 		}
 		
 		/************************************************
@@ -303,14 +273,14 @@ namespace Do.Core
 					CurrentContext.ParentSearch = true;
 					QueueSearch (false);
 				}
-				DisplayObjects (CurrentContext);
+				window.SetPaneContext(window.CurrentPane, CurrentContext);
+				Console.WriteLine("Right/Left Arrow Pressed, Context Cursor: {0}", CurrentContext.Cursor);
 			}
 		}
 		
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
 			tabbing = true;
-			window.HideResultWindow ();
 			if (window.CurrentPane == Pane.First &&
 					context[0].Results.Length != 0) {
 				window.CurrentPane = Pane.Second;
@@ -329,20 +299,19 @@ namespace Do.Core
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
+			if (CurrentContext.Equals(new SearchContext())) return;
+			Console.WriteLine("Before Up/Down Arrow Pressed, Context Cursor: {0}", CurrentContext.Cursor);
 			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
-				if (CurrentContext.Cursor <= 0) {
-					window.HideResultWindow ();
-					return;
-				}
+				if (CurrentContext.Cursor <= 0) return;
 				CurrentContext.Cursor--;
 			} else {
-				if ( resultsVisible ) CurrentContext.Cursor++;
+				CurrentContext.Cursor++;
 			}
-			DisplayObjects (CurrentContext);
 			
+			Console.WriteLine("After Up/Down Arrow Pressed, Context Cursor: {0}", CurrentContext.Cursor);
+			Console.WriteLine(CurrentContext.Query.Length);
 			//We don't want to search the "default" state if the user presses down
-			if (tabbing || 
-			    (CurrentContext.Query.Length == 0 && window.CurrentPane == Pane.First)) return;
+			if (tabbing) return;
 			UpdatePane (window.CurrentPane, false);
 			
 			switch (window.CurrentPane) {
@@ -389,7 +358,7 @@ namespace Do.Core
 				searchTimeout[i] = 0;
 			}
 			for (int i = (int) pane; i < 3; ++i) {
-					window.ClearPane((Pane) i);
+					window.ClearPane((Pane) i, false);
 			}
 
 			
@@ -509,7 +478,6 @@ namespace Do.Core
 		{
 			switch (window.CurrentPane) {
 				case Pane.First:
-					// Do this once we have "" in the first results list(?)
 					Reset ();
 					break;
 				case Pane.Second:
@@ -533,43 +501,21 @@ namespace Do.Core
 
 			current = GetCurrentObject (pane);
 			if (current != null) {
-				window.DisplayInPane (pane, current);
-				window.SetPaneHighlight (pane, context[(int) pane].Query);
+				window.SetPaneContext (pane, context[(int) pane]);
 			} else {
+				//window.ClearPane (pane, true);
 				SetNoResultsFoundState (pane);
 				return;
 			}
-
-			if (pane == window.CurrentPane) {
-				window.DisplayInLabel (GetCurrentObject (pane));
-				//FIXME
-				//if (updateResults) DisplayObjects (CurrentContext);
-			}
-		}
-		
-		protected void DisplayObjects (SearchContext context)
-		{
-			window.DisplayObjects (context);
-			resultsVisible = true;
 		}
 		
 		protected void SetNoResultsFoundState (Pane pane)
 		{
-			NoResultsFoundObject none_found;
-
 			if (pane == Pane.First) {
-				window.ClearPane (Pane.First);
-				window.ClearPane (Pane.Second);
+				window.ClearPane (Pane.First, true);
+				window.ClearPane (Pane.Second, true);
 			} else if (pane == Pane.Second) {
-				window.ClearPane (Pane.Second);
-			}
-
-			none_found = new NoResultsFoundObject (context[(int) pane].Query);
-
-			window.DisplayInPane (pane, none_found);
-			if (window.CurrentPane == pane) {
-				window.DisplayInLabel (none_found);				
-				DisplayObjects (new SearchContext ());
+				window.ClearPane (Pane.Second, true);
 			}
 		}
 		
@@ -591,10 +537,6 @@ namespace Do.Core
 			context[2] = new SearchContext ();
 			
 			window.Reset ();
-			window.DisplayInPane (Pane.First, new DefaultIconBoxObject ());
-			window.DisplayInLabel (new DefaultLabelBoxObject ());
-			
-			resultsVisible = false;
 		}
 		
 		/**************************************
@@ -695,5 +637,30 @@ namespace Do.Core
 			window.Vanish ();
 			NotifyVanished ();
 		}	
+		
+		/////////////////////////////
+		/// IDOController Members ///
+		/////////////////////////////
+		
+		public void NewContextSelection (Pane pane, int index)
+		{
+			if (context[(int) pane].Equals(new SearchContext())) return;
+			context[(int) pane].Cursor = index;
+			window.SetPaneContext (pane, context[(int) pane]);
+			
+			if (pane != window.CurrentPane)
+				return;
+			
+			switch (window.CurrentPane) {
+				case Pane.First:
+					context[1] = new SearchContext ();
+					SearchPaneDelayed (Pane.Second);
+					break;
+				case Pane.Second:
+					context[2] = new SearchContext ();
+					SearchPaneDelayed (Pane.Third);
+					break;
+			}
+		}
 	}
 }
