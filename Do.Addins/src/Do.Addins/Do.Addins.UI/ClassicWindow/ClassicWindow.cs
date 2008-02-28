@@ -77,7 +77,7 @@ namespace Do.Addins.UI
 		}
 		
 		//-------------------ctor----------------------
-		public ClassicWindow(IDoController controller) : base (Gtk.WindowType.Toplevel)
+		public ClassicWindow (IDoController controller) : base (Gtk.WindowType.Toplevel)
 		{
 			this.controller = controller;
 			
@@ -106,15 +106,15 @@ namespace Do.Addins.UI
 			} catch { }
 			SetColormap ();
 
-			resultsWindow = new ResultsWindow ();
+			resultsWindow = new ResultsWindow (BackgroundColor);
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
 			currentPane = Pane.First;
 
 			frame = new GlossyRoundedFrame ();
-			frame.DrawFill = true;
-			frame.FillColor = BackgroundColor;
-			frame.FillAlpha = WindowTransparency;
+			frame.DrawFill = frame.DrawFrame = true;
+			frame.FillColor = frame.FrameColor = BackgroundColor;
+			frame.FillAlpha = frame.FrameAlpha = WindowTransparency;
 			frame.Radius = Screen.IsComposited ? IconBoxRadius : 0;
 			Add (frame);
 			frame.Show ();
@@ -179,13 +179,18 @@ namespace Do.Addins.UI
 			if (evnt.Key == Gdk.Key.Tab || (evnt.Key == Gdk.Key.Up && resultsWindow.SelectedIndex <= 0))
 			{	
 				resultsWindow.Hide ();
+				if (evnt.Key == Gdk.Key.Tab)
+					//technically this is not really a needed step because there is no situation
+					//where new set of results are thrown in.
+					resultsWindow.Clear ();
 			} else if ((evnt.Key == Gdk.Key.Up || evnt.Key == Gdk.Key.Down) && !resultsWindow.Visible) {
-//				controller.NewContextSelection (CurrentPane, 0);
-				resultsWindow.Show ();
-//				return base.OnKeyPressEvent (evnt);
+				//triggers the controller to do a context update since we have captured this keypress
+				//this way the first item is properly selected since the controller is unaware
+				//that the results window was hidden.
+				controller.NewContextSelection(CurrentPane, 0);
+				ShowResultsWindow ();
+				return base.OnKeyPressEvent (evnt);
 			}
-			
-			
 			KeyPressEvent (evnt);
 			
 			return base.OnKeyPressEvent (evnt);
@@ -218,9 +223,9 @@ namespace Do.Addins.UI
 				// Useful for making overbright themes less ugly. Still trying
 				// to find a happy balance between 50 and 90...
 				byte maxLum = 60;
-				RGBToHSV(ref r, ref g, ref b);
+				Addins.Util.Appearance.RGBToHSV(ref r, ref g, ref b);
 				b = Math.Min (b, maxLum);
-				HSVToRGB(ref r, ref g, ref b);
+				Addins.Util.Appearance.HSVToRGB(ref r, ref g, ref b);
 				
 				return new Gdk.Color (r, g, b);
 			}
@@ -243,9 +248,16 @@ namespace Do.Addins.UI
 			GLib.Timeout.Add (3000, delegate {
 				Gdk.Threads.Enter ();
 				frame.FillColor = BackgroundColor;
+				resultsWindow.UpdateColors (BackgroundColor);
 				Gdk.Threads.Leave ();
 				return false;
 			});
+		}
+		
+		private void ShowResultsWindow ()
+		{
+			resultsWindow.Show ();
+			Reposition ();
 		}
 		
 		public void Reposition ()
@@ -262,7 +274,7 @@ namespace Do.Addins.UI
 			Move (main.X, main.Y);
 
 			resultsWindow.GetSize (out results.Width, out results.Height);
-			results.Y = main.Y + main.Height;
+			results.Y = main.Y + main.Height - 3;
 			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + IconBoxRadius;
 			resultsWindow.Move (results.X, results.Y);
 		}
@@ -329,14 +341,6 @@ namespace Do.Addins.UI
 			                       Catalog.GetString ("Type to start searching."));
 		}
 
-		public void DisplayObjects (Do.Addins.SearchContext context)
-		{
-			resultsWindow.Context = context;
-			
-			if (!resultsWindow.Visible)
-				resultsWindow.Show ();
-		}
-
 		public void Grow ()
 		{
 			iconbox[2].Show ();
@@ -386,104 +390,6 @@ namespace Do.Addins.UI
 					iconbox[i].DisplayObject = new Do.Addins.NoResultsFoundObject ();
 				}
 			}
-		}
-		
-		private void RGBToHSV (ref byte r, ref byte g, ref byte b)
-		{
-			// Ported from Murrine Engine.
-			double red, green, blue;
-			double hue = 0, lum, sat;
-			double max, min;
-			double delta;
-			
-			red = (double) r;
-			green = (double) g;
-			blue = (double) b;
-			
-			max = Math.Max (red, Math.Max (blue, green));
-			min = Math.Min (red, Math.Min (blue, green));
-			delta = max - min;
-			lum = max / 255.0 * 100.0;
-			
-			if (Math.Abs (delta) < 0.0001) {
-				lum = 0;
-				sat = 0;
-			} else {
-				sat = (delta / max) * 100;
-				
-				if (red == max)   hue = (green - blue) / delta;
-				if (green == max) hue = 2 + (blue - red) / delta;
-				if (blue == max)  hue = 4 + (red - green) / delta;
-				
-				hue *= 60;
-				if (hue <= 0) hue += 360;
-			}
-			r = (byte) hue;
-			g = (byte) sat;
-			b = (byte) lum;
-		}
-		
-		private void HSVToRGB (ref byte hue, ref byte sat, ref byte val)
-		{
-			double h, s, v;
-			double r = 0, g = 0, b = 0;
-
-			h = (double) hue;
-			s = (double) sat / 100;
-			v = (double) val / 100;
-
-			if (s == 0) {
-				r = v;
-				g = v;
-				b = v;
-			} else {
-				int secNum;
-				double fracSec;
-				double p, q, t;
-				
-				secNum = (int) Math.Floor(h / 60);
-				fracSec = h/60 - secNum;
-
-				p = v * (1 - s);
-				q = v * (1 - s*fracSec);
-				t = v * (1 - s*(1 - fracSec));
-
-				switch (secNum) {
-					case 0:
-						r = v;
-						g = t;
-						b = p;
-						break;
-					case 1:
-						r = q;
-						g = v;
-						b = p;
-						break;
-					case 2:
-						r = p;
-						g = v;
-						b = t;
-						break;
-					case 3:
-						r = p;
-						g = q;
-						b = v;
-						break;
-					case 4:
-						r = t;
-						g = p;
-						b = v;
-						break;
-					case 5:
-						r = v;
-						g = p;
-						b = q;
-						break;
-				}
-			}
-			hue = Convert.ToByte(r*255);
-			sat = Convert.ToByte(g*255);
-			val = Convert.ToByte(b*255);
 		}
 		
 		protected override bool OnExposeEvent (EventExpose evnt)

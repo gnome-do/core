@@ -43,21 +43,26 @@
     <File name="src/Do.Universe/RevealAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/IAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ManuallyTypedPathItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Addins/Do.Addins.UI/IDoWindow.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/IconProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/SearchContext.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/ClassicWindow.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets" subtype="Directory" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/RoundedFrame.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/GlossyRoundedFrame.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/SymbolDisplayLabel.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/IconBox.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/BaseWidgets/GlossyRoundedFrame.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/BaseWidgets/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/BaseWidgets/SymbolDisplayLabel.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/BaseWidgets/IconBox.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/Do.Addins.UI/ResultsWindowSelectionEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="../Do/Resources/settings-triangle.png" subtype="Code" buildaction="EmbedAsResource" />
     <File name="src/Do.Addins/IDoController.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/DefaultObjects.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/BaseWidgets/DefaultObjects.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/BaseWidgets/IconProvider.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/ClassicWindow" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/ClassicWindow/ClassicWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/BaseWidgets/Frame.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/BaseWidgets/HalfRoundedFrame.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/BaseWidgets/TextFrame.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/MiniWindow" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/MiniWindow/MiniWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/MiniWindow/MiniWindowFrame.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/Do.Addins.UI/MiniWindow/MiniIconBox.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gnome-sharp, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />

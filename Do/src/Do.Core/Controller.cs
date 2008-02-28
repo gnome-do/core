@@ -133,7 +133,7 @@ namespace Do.Core
 
 		public void Initialize ()
 		{
-			window = new ClassicWindow ((IDoController) this);
+			window = new MiniWindow ((IDoController) this);
 			window.KeyPressEvent += KeyPressWrap;
 			
 			Reset ();
@@ -274,17 +274,16 @@ namespace Do.Core
 					QueueSearch (false);
 				}
 				window.SetPaneContext(window.CurrentPane, CurrentContext);
-				Console.WriteLine("Right/Left Arrow Pressed, Context Cursor: {0}", CurrentContext.Cursor);
 			}
 		}
 		
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
 			tabbing = true;
-			if (window.CurrentPane == Pane.First &&
+			if (window.CurrentPane == Pane.First && //first pane and results
 					context[0].Results.Length != 0) {
 				window.CurrentPane = Pane.Second;
-			} else if (window.CurrentPane == Pane.Second && ThirdPaneAllowed) {
+			} else if (window.CurrentPane == Pane.Second && ThirdPaneAllowed) { //second pane
 				window.CurrentPane = Pane.Third;
 				ThirdPaneVisible = true;
 			} else if (window.CurrentPane == Pane.Third && !ThirdPaneRequired) {
@@ -294,13 +293,15 @@ namespace Do.Core
 			} else {
 				window.CurrentPane = Pane.First;
 			}
+			window.SetPaneContext (window.CurrentPane, CurrentContext);
 			tabbing = false;
 		}
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
-			if (CurrentContext.Equals(new SearchContext())) return;
-			Console.WriteLine("Before Up/Down Arrow Pressed, Context Cursor: {0}", CurrentContext.Cursor);
+			if (CurrentContext.Results.Length == 0) {
+				return;
+			}
 			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
 				if (CurrentContext.Cursor <= 0) return;
 				CurrentContext.Cursor--;
@@ -308,11 +309,9 @@ namespace Do.Core
 				CurrentContext.Cursor++;
 			}
 			
-			Console.WriteLine("After Up/Down Arrow Pressed, Context Cursor: {0}", CurrentContext.Cursor);
-			Console.WriteLine(CurrentContext.Query.Length);
 			//We don't want to search the "default" state if the user presses down
 			if (tabbing) return;
-			UpdatePane (window.CurrentPane, false);
+			UpdatePane (window.CurrentPane);
 			
 			switch (window.CurrentPane) {
 				case Pane.First:
@@ -398,7 +397,7 @@ namespace Do.Core
 
 			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (IAction) };
 			Do.UniverseManager.Search (ref context[0]);
-			UpdatePane (Pane.First, true);
+			UpdatePane (Pane.First);
 
 			// Queue a search for the next pane unless the result of the most
 			// recent search is the same as the last result - if this is the
@@ -430,7 +429,7 @@ namespace Do.Core
 			}
 
 			Do.UniverseManager.Search (ref context[1]);
-			UpdatePane (Pane.Second, true);
+			UpdatePane (Pane.Second);
 
 			// Queue a search for the next pane unless the result of the most
 			// recent search is the same as the last result - if this is the
@@ -465,7 +464,7 @@ namespace Do.Core
 			}
 
 			Do.UniverseManager.Search (ref context[2]);
-			UpdatePane (Pane.Third, true);
+			UpdatePane (Pane.Third);
 
 			if (ThirdPaneRequired) {
 				ThirdPaneVisible = true;
@@ -495,7 +494,7 @@ namespace Do.Core
 		 * ---------- Pane Update Methods -----------
 		 * ******************************************/
 		
-		protected void UpdatePane (Pane pane, bool updateResults)
+		protected void UpdatePane (Pane pane)
 		{
 			IObject current;
 
@@ -644,7 +643,7 @@ namespace Do.Core
 		
 		public void NewContextSelection (Pane pane, int index)
 		{
-			if (context[(int) pane].Equals(new SearchContext())) return;
+			if (context[(int) pane].Results.Length == 0) return;
 			context[(int) pane].Cursor = index;
 			window.SetPaneContext (pane, context[(int) pane]);
 			

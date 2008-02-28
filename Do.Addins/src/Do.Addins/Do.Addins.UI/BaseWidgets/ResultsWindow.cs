@@ -32,10 +32,37 @@ namespace Do.Addins.UI
 
 	public class ResultsWindow : Gtk.Window
 	{
-		const int DefaultResultIconSize = 32;
-		const int DefaultWindowWidth = 360;
+		private int defaultResultIconSize = 32;
+		private int defaultWindowWidth = 352;
+		private int numberResultsDisplayed = 6;
+		
+		
+		public int DefaultResultIconSize
+		{
+			set { 
+				defaultResultIconSize = value;
+				vbox.SetSizeRequest (DefaultWindowWidth, (value + 9) * NumberResultsDisplayed);
+			}
+			get { return defaultResultIconSize; }
+		}
+		public int DefaultWindowWidth
+		{
+			set { 
+				defaultWindowWidth = value;
+				vbox.SetSizeRequest (value, (DefaultResultIconSize + 9) * NumberResultsDisplayed);
+			}
+			get { return defaultWindowWidth; }
+		}
+		
+		public int NumberResultsDisplayed
+		{
+			set { 
+				numberResultsDisplayed = value;
+				vbox.SetSizeRequest (DefaultWindowWidth, (DefaultResultIconSize + 9) * value);
+			}
+			get { return numberResultsDisplayed; }
+		}
 
-		const int NumberResultsDisplayed = 6;
 		const string ResultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
 		const string QueryLabelFormat = "<b>{0}</b>";
 
@@ -54,23 +81,15 @@ namespace Do.Addins.UI
 		bool selectedIndexSet;
 		bool quietSelectionChange;
 		Label queryLabel;
+		HalfRoundedFrame frame;
 		string query;
-
-		int ResultIconSize {
-			get {
-				return DefaultResultIconSize;
-			}
-		}
-
-		int WindowWidth {
-			get {
-				return DefaultWindowWidth;
-			}
-		}
+		Gdk.Color backgroundColor;
+		VBox vbox;
 
 
-		public ResultsWindow () : base (Gtk.WindowType.Toplevel)
+		public ResultsWindow (Gdk.Color backgroundColor) : base (Gtk.WindowType.Toplevel)
 		{
+			this.backgroundColor = backgroundColor;
 			Build ();
 			results = null;
 			selectedIndex = 0;
@@ -104,7 +123,6 @@ namespace Do.Addins.UI
 
 		protected void Build ()
 		{
-			VBox           vbox;
 			Alignment align;
 			TreeViewColumn column;
 			CellRenderer   cell;
@@ -115,10 +133,24 @@ namespace Do.Addins.UI
 			// This typehint gets the window to raise all the way to top.
 			TypeHint = WindowTypeHint.Splashscreen;
 
+			
+			SetColormap ();
+			
+			
+			frame = new HalfRoundedFrame ();
+			frame.DrawFill = true;
+			frame.DrawFrame = true;
+			frame.FillColor = frame.FrameColor = backgroundColor;
+			frame.FillAlpha = .55;
+			frame.FrameAlpha = .7;
+			frame.Radius = 0;
+			frame.Show ();
+			
 			vbox = new VBox (false, 0);
-			Add (vbox);
-			vbox.BorderWidth = 4;
-			vbox.SetSizeRequest (WindowWidth, (ResultIconSize + 9) * NumberResultsDisplayed);
+			Add (frame);
+			frame.Add (vbox);
+			vbox.BorderWidth = 8;
+			vbox.SetSizeRequest (DefaultWindowWidth, (DefaultResultIconSize + 9) * NumberResultsDisplayed);
 			vbox.Show ();
 
 			align = new Alignment (0.0F, 0.0F, 0, 0);
@@ -153,10 +185,11 @@ namespace Do.Addins.UI
 			});
 
 			column = new TreeViewColumn ();			
-			column.Sizing = Gtk.TreeViewColumnSizing.Fixed; // because resultsTreeview.FixedHeightMode = true:  
+			column.Sizing = Gtk.TreeViewColumnSizing.Fixed; 
+				// because resultsTreeview.FixedHeightMode = true:  
 				
 			cell = new CellRendererPixbuf ();				
-			cell.SetFixedSize (-1, 4 + ResultIconSize - (int) cell.Ypad);			
+			cell.SetFixedSize (-1, 4 + DefaultResultIconSize - (int) cell.Ypad);			
 			column.PackStart (cell, false);
 			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
 
@@ -169,12 +202,18 @@ namespace Do.Addins.UI
 
 			resultsTreeview.Selection.Changed += OnResultRowSelected;
 		}
+			
+		public void UpdateColors (Gdk.Color backgroundColor)
+		{
+			this.backgroundColor = backgroundColor;
+			frame.FillColor = backgroundColor;
+		}
 						
 		private void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
 		{			
 			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
 			IObject o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as IObject;
-			renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, ResultIconSize);
+			renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
 		}
 
 		public virtual void SelectNext ()
@@ -336,17 +375,12 @@ namespace Do.Addins.UI
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			Cairo.Context cairo;
-			Gdk.Color border_color;
-
+			
 			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
 				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-				border_color = Style.Dark (StateType.Normal);
-				cairo.Color = new Cairo.Color ((double) border_color.Red / ushort.MaxValue,
-				                               (double) border_color.Green / ushort.MaxValue,
-				                               (double) border_color.Blue / ushort.MaxValue,
-				                               1.0);
+				cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
 				cairo.Operator = Cairo.Operator.Source;
-				cairo.Stroke ();
+				cairo.Paint ();
 			}
 
 			return base.OnExposeEvent (evnt);
@@ -372,6 +406,18 @@ namespace Do.Addins.UI
 				}
 				firstPath.Next ();
 			}
+		}
+						
+		protected virtual void SetColormap ()
+		{
+			Gdk.Colormap  colormap;
+
+			colormap = Screen.RgbaColormap;
+			if (colormap == null) {
+				colormap = Screen.RgbColormap;
+				Console.Error.WriteLine ("No alpha support.");
+			}
+			Colormap = colormap;
 		}
 	}
 }

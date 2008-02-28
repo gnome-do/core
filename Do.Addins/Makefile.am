@@ -37,15 +37,20 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
-	src/Do.Addins/Do.Addins.UI/ClassicWindow.cs \
-	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/DefaultObjects.cs \
-	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/GlossyRoundedFrame.cs \
-	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/IconBox.cs \
-	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/ResultsWindow.cs \
-	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/RoundedFrame.cs \
-	src/Do.Addins/Do.Addins.UI/Do.Addins.UI.Widgets/SymbolDisplayLabel.cs \
-	src/Do.Addins/Do.Addins.UI/IconProvider.cs \
+	src/Do.Addins/Do.Addins.UI/BaseWidgets/DefaultObjects.cs \
+	src/Do.Addins/Do.Addins.UI/BaseWidgets/Frame.cs \
+	src/Do.Addins/Do.Addins.UI/BaseWidgets/GlossyRoundedFrame.cs \
+	src/Do.Addins/Do.Addins.UI/BaseWidgets/HalfRoundedFrame.cs \
+	src/Do.Addins/Do.Addins.UI/BaseWidgets/IconBox.cs \
+	src/Do.Addins/Do.Addins.UI/BaseWidgets/IconProvider.cs \
+	src/Do.Addins/Do.Addins.UI/BaseWidgets/ResultsWindow.cs \
+	src/Do.Addins/Do.Addins.UI/BaseWidgets/SymbolDisplayLabel.cs \
+	src/Do.Addins/Do.Addins.UI/BaseWidgets/TextFrame.cs \
+	src/Do.Addins/Do.Addins.UI/ClassicWindow/ClassicWindow.cs \
 	src/Do.Addins/Do.Addins.UI/IDoWindow.cs \
+	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniIconBox.cs \
+	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniWindow.cs \
+	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniWindowFrame.cs \
 	src/Do.Addins/Do.Addins.UI/ResultsWindowSelectionEventArgs.cs \
 	src/Do.Addins/IDoController.cs \
 	src/Do.Addins/SearchContext.cs \

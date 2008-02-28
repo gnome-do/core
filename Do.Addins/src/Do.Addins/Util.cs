@@ -51,6 +51,104 @@ namespace Do.Addins
 			public static PixbufFromIconNameDelegate PixbufFromIconName;
 			public static StringTransformationDelegate MarkupSafeString;
 			public static PopupMainMenuAtPositionDelegate PopupMainMenuAtPosition;
+			
+			public static void RGBToHSV (ref byte r, ref byte g, ref byte b)
+			{
+				// Ported from Murrine Engine.
+				double red, green, blue;
+				double hue = 0, lum, sat;
+				double max, min;
+				double delta;
+				
+				red = (double) r;
+				green = (double) g;
+				blue = (double) b;
+				
+				max = Math.Max (red, Math.Max (blue, green));
+				min = Math.Min (red, Math.Min (blue, green));
+				delta = max - min;
+				lum = max / 255.0 * 100.0;
+				
+				if (Math.Abs (delta) < 0.0001) {
+					lum = 0;
+					sat = 0;
+				} else {
+					sat = (delta / max) * 100;
+					
+					if (red == max)   hue = (green - blue) / delta;
+					if (green == max) hue = 2 + (blue - red) / delta;
+					if (blue == max)  hue = 4 + (red - green) / delta;
+					
+					hue *= 60;
+					if (hue <= 0) hue += 360;
+				}
+				r = (byte) hue;
+				g = (byte) sat;
+				b = (byte) lum;
+			}
+			
+			public static void HSVToRGB (ref byte hue, ref byte sat, ref byte val)
+			{
+				double h, s, v;
+				double r = 0, g = 0, b = 0;
+
+				h = (double) hue;
+				s = (double) sat / 100;
+				v = (double) val / 100;
+
+				if (s == 0) {
+					r = v;
+					g = v;
+					b = v;
+				} else {
+					int secNum;
+					double fracSec;
+					double p, q, t;
+					
+					secNum = (int) Math.Floor(h / 60);
+					fracSec = h/60 - secNum;
+
+					p = v * (1 - s);
+					q = v * (1 - s*fracSec);
+					t = v * (1 - s*(1 - fracSec));
+
+					switch (secNum) {
+						case 0:
+							r = v;
+							g = t;
+							b = p;
+							break;
+						case 1:
+							r = q;
+							g = v;
+							b = p;
+							break;
+						case 2:
+							r = p;
+							g = v;
+							b = t;
+							break;
+						case 3:
+							r = p;
+							g = q;
+							b = v;
+							break;
+						case 4:
+							r = t;
+							g = p;
+							b = v;
+							break;
+						case 5:
+							r = v;
+							g = p;
+							b = q;
+							break;
+					}
+				}
+				hue = Convert.ToByte(r*255);
+				sat = Convert.ToByte(g*255);
+				val = Convert.ToByte(b*255);
+			}
 		}
 	}
 }

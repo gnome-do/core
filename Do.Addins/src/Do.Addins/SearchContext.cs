@@ -80,7 +80,7 @@ namespace Do.Addins
 		
 		public List<IItem> Items
 		{
-			get { return items; }
+			get { return items ?? items = new List<IItem> (); }
 			set { items = value; }
 		}
 		
@@ -98,13 +98,13 @@ namespace Do.Addins
 			
 		public string Query
 		{
-			get { return query; }
+			get { return query ?? query = ""; }
 			set { query = value; }
 		}
 
 		public IObject[] Results
 		{
-			get { return results; }
+			get { return results ?? results = new IObject[0]; }
 			set {
 				results = value ?? new IObject[0];
 				cursor = 0;
