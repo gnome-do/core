@@ -48,6 +48,7 @@ FILES =  \
 	src/Do.Addins/Do.Addins.UI/BaseWidgets/TextFrame.cs \
 	src/Do.Addins/Do.Addins.UI/ClassicWindow/ClassicWindow.cs \
 	src/Do.Addins/Do.Addins.UI/DarkFrame/DarkFrame.cs \
+	src/Do.Addins/Do.Addins.UI/DarkFrame/IconImage.cs \
 	src/Do.Addins/Do.Addins.UI/IDoWindow.cs \
 	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniIconBox.cs \
 	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniWindow.cs \

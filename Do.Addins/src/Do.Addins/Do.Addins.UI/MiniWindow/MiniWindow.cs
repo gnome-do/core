@@ -40,7 +40,7 @@ namespace Do.Addins.UI
 		protected MiniIconBox[] iconbox;
 		IDoController controller;
 		
-		protected const int IconBoxIconSize = 64;
+		protected const int IconBoxIconSize = 48;
 		protected const uint IconBoxPadding = 2;
 		protected const int IconBoxRadius = 3;
 		
