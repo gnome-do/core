@@ -64,8 +64,6 @@ FILES =  \
 	gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/Do.Core/Controller.cs \
-	src/Do.Core/Do.UI/IconProvider.cs \
-	src/Do.Core/Do.UI/MainMenu.cs \
 	src/Do.Core/DoAction.cs \
 	src/Do.Core/DoItem.cs \
 	src/Do.Core/DoItemSource.cs \
@@ -74,6 +72,7 @@ FILES =  \
 	src/Do.Core/RelevanceProvider.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
+	src/Do.UI/MainMenu.cs \
 	src/Do.Universe/DoTextItem.cs \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/InternalItemSource.cs \

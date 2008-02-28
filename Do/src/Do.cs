@@ -74,7 +74,7 @@ namespace Do
 			
 			Gtk.Application.Run ();
 			
-			UI.IconProvider.DeleteDownloadedIcons ();
+			Addins.UI.IconProvider.DeleteDownloadedIcons ();
 		}
 
 		static void DetectInstanceAndExit ()
