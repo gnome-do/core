@@ -134,11 +134,11 @@ namespace Do.Core
 		public void Initialize ()
 		{
 			if (Do.Preferences.UseMiniMode) {
-				window = new MiniWindow ((IDoController) this);
+				window = new MiniWindow (this);
 			} else if (Do.Preferences.UseDarkFrame) {
-				window = new DarkFrame ((IDoController) this);
+				window = new DarkFrame (this);
 			} else {
-				window = new ClassicWindow ((IDoController) this);
+				window = new ClassicWindow (this); //FIXME
 			}
 			window.KeyPressEvent += KeyPressWrap;
 			
