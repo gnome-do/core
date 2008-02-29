@@ -48,7 +48,6 @@ FILES =  \
 	src/Do.Addins/Do.Addins.UI/BaseWidgets/TextFrame.cs \
 	src/Do.Addins/Do.Addins.UI/ClassicWindow/ClassicWindow.cs \
 	src/Do.Addins/Do.Addins.UI/DarkFrame/DarkFrame.cs \
-	src/Do.Addins/Do.Addins.UI/DarkFrame/IconImage.cs \
 	src/Do.Addins/Do.Addins.UI/IDoWindow.cs \
 	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniIconBox.cs \
 	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniWindow.cs \
@@ -99,7 +98,8 @@ REFERENCES =  \
 	-pkg:gnome-sharp-2.0 \
 	-pkg:gnome-vfs-sharp-2.0 \
 	-pkg:gtk-sharp-2.0 \
-	System
+	System \
+	System.Drawing
 
 DLL_REFERENCES = 
 
