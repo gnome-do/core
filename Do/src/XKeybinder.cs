@@ -22,20 +22,19 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using Mono.Unix;
 
-using Do;
 
-namespace Tomboy
+namespace Do
 {
 	public class XKeybinder 
 	{
-		[DllImport("libtomboy")]
-		static extern void tomboy_keybinder_init ();
+		[DllImport("libdo")]
+		static extern void gnomedo_keybinder_init ();
 
-		[DllImport("libtomboy")]
-		static extern void tomboy_keybinder_bind (string keystring, BindkeyHandler handler);
+		[DllImport("libdo")]
+		static extern void gnomedo_keybinder_bind (string keystring, BindkeyHandler handler);
 
-		[DllImport("libtomboy")]
-		static extern void tomboy_keybinder_unbind (string keystring, BindkeyHandler handler);
+		[DllImport("libdo")]
+		static extern void gnomedo_keybinder_unbind (string keystring, BindkeyHandler handler);
 
 		public delegate void BindkeyHandler (string key, IntPtr user_data);
 
@@ -54,9 +53,9 @@ namespace Tomboy
 			key_handler = new BindkeyHandler (KeybindingPressed);
 			
 			try {
-				tomboy_keybinder_init ();
+				gnomedo_keybinder_init ();
 			} catch (DllNotFoundException) {
-				Log.Error ("libtomboy not found - keybindings will not work.");
+				Log.Error ("libdo not found - keybindings will not work.");
 			}
 		}
 
@@ -76,14 +75,14 @@ namespace Tomboy
 			bind.handler = handler;
 			bindings.Add (bind);
 			
-			tomboy_keybinder_bind (bind.keystring, key_handler);
+			gnomedo_keybinder_bind (bind.keystring, key_handler);
 		}
 
 		public void Unbind (string keystring)
 		{
 			foreach (Binding bind in bindings) {
 				if (bind.keystring == keystring) {
-					tomboy_keybinder_unbind (bind.keystring, key_handler);
+					gnomedo_keybinder_unbind (bind.keystring, key_handler);
 
 					bindings.Remove (bind);
 					break;
@@ -94,7 +93,7 @@ namespace Tomboy
 		public virtual void UnbindAll ()
 		{
 			foreach (Binding bind in bindings) {
-				tomboy_keybinder_unbind (bind.keystring, key_handler);
+				gnomedo_keybinder_unbind (bind.keystring, key_handler);
 			}
 
 			bindings.Clear ();
