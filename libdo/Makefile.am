@@ -1,11 +1,12 @@
-INCLUDES = 				\
-	-I$(top_srcdir)			\
-	-DG_LOG_DOMAIN=\"libdo\"	\
-	-DEGG_COMPILATION 		\
-	-DGTK_DISABLE_DEPRECATED 	\
-	-DGDK_DISABLE_DEPRECATED 	\
-	-DG_DISABLE_DEPRECATED		\
-	$(LIBDO_CFLAGS)
+INCLUDES = -I$(top_srcdir)
+
+AM_CFLAGS = -DG_LOG_DOMAIN=\"libdo\"	\
+	    -DEGG_COMPILATION 		\
+	    -DGTK_DISABLE_DEPRECATED 	\
+	    -DGDK_DISABLE_DEPRECATED 	\
+	    -DG_DISABLE_DEPRECATED	\
+	    $(LIBDO_CFLAGS)
+
 
 dolibdir = $(pkglibdir)
 dolib_LTLIBRARIES = libdo.la
