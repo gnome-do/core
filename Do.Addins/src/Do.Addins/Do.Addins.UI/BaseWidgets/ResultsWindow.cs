@@ -81,7 +81,7 @@ namespace Do.Addins.UI
 		bool selectedIndexSet;
 		bool quietSelectionChange;
 		Label queryLabel;
-		HalfRoundedFrame frame;
+		Frame frame;
 		string query;
 		Gdk.Color backgroundColor;
 		VBox vbox;
@@ -137,7 +137,7 @@ namespace Do.Addins.UI
 			SetColormap ();
 			
 			
-			frame = new HalfRoundedFrame ();
+			frame = new Frame ();
 			frame.DrawFill = true;
 			frame.DrawFrame = true;
 			frame.FillColor = frame.FrameColor = backgroundColor;
@@ -149,7 +149,7 @@ namespace Do.Addins.UI
 			vbox = new VBox (false, 0);
 			Add (frame);
 			frame.Add (vbox);
-			vbox.BorderWidth = 8;
+			vbox.BorderWidth = 4;
 			vbox.SetSizeRequest (DefaultWindowWidth, (DefaultResultIconSize + 9) * NumberResultsDisplayed);
 			vbox.Show ();
 

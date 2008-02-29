@@ -242,8 +242,9 @@ namespace Do.Addins.UI
 			Move (main.X, main.Y);
 
 			resultsWindow.GetSize (out results.Width, out results.Height);
-			results.Y = main.Y + main.Height - 4;
-			results.X = main.X + (IconBoxIconSize * 3 + 20) * (int) currentPane + MainRadius;
+			results.Y = main.Y + main.Height;
+			results.X = main.X + (((iconbox[0].Width) + ((int) IconBoxPadding * 2)) * 
+			                      (int) currentPane + MainRadius);
 			resultsWindow.Move (results.X, results.Y);
 		}
 		

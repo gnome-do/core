@@ -42,6 +42,13 @@ namespace Do.Addins.UI
 			drawGradient = true;
 		}
 		
+		public int Width
+		{
+			get {
+				return (iconSize * 3) + 4 + 12;
+			}
+		}
+		
 		protected override void Build ()
 		{
 			Alignment label_align;
