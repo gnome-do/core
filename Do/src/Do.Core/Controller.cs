@@ -133,7 +133,13 @@ namespace Do.Core
 
 		public void Initialize ()
 		{
-			window = new DarkFrame ((IDoController) this);
+			if (Do.Preferences.UseMiniMode) {
+				window = new MiniWindow ((IDoController) this);
+			} else if (Do.Preferences.UseDarkFrame) {
+				window = new DarkFrame ((IDoController) this);
+			} else {
+				window = new ClassicWindow ((IDoController) this);
+			}
 			window.KeyPressEvent += KeyPressWrap;
 			
 			Reset ();

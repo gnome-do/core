@@ -83,6 +83,17 @@ namespace Do
 				return HasOption ("--mini");
 			}
 		}
+		
+		/// <value>
+		/// Whether Do should use a darkframe user interface better suited
+		/// for smaller displays. Enabled with the command line option --mini.
+		/// </value>
+		public bool UseDarkFrame
+		{
+			get {
+				return HasOption ("--darkframe");
+			}
+		}
 
 		/// <value>
 		/// Whether Do should use learning techniques to provide better search
