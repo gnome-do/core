@@ -31,7 +31,7 @@ namespace Do {
 		public void Log (Log.Level level, string msg)
 		{
 			Console.WriteLine ("{0} [{1}]: {2}",
-               DateTime.Now, Enum.GetName (typeof (Log.Level), level), msg);
+                DateTime.Now, Enum.GetName (typeof (Log.Level), level), msg);
 		}
 	}
 	
