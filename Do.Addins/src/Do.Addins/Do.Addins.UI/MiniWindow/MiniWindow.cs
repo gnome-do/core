@@ -355,6 +355,8 @@ namespace Do.Addins.UI
 
 		public void ClearPane (Pane pane)
 		{
+			iconbox[(int) pane].Clear ();
+			
 			if (pane == CurrentPane)
 				resultsWindow.Clear ();
 		}
