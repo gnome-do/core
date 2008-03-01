@@ -20,21 +20,18 @@
 
 using System;
 using System.IO;
-using System.Collections;
+using System.Collections.Generic;
 
 using Mono.Unix;
 
-using Do.Addins;
+namespace Do.Universe {
 
-namespace Do.Universe
-{
 	/// <summary>
 	/// FileItem is an item describing a file. FileItem subclasses
 	/// can be created and registered with FileItem for instantiation
 	/// in the factory method FileItem.Create.
 	/// </summary>
-	public class FileItem : IFileItem, IOpenableItem
-	{
+	public class FileItem : IFileItem, IOpenableItem {
 		
 		/// <summary>
 		/// Abbreviates an absolute path by replacing $HOME with ~.
@@ -65,7 +62,7 @@ namespace Do.Universe
 		{
 			UnixFileInfo info;
 
-			if (System.IO.Directory.Exists (path)) return false;
+			if (Directory.Exists (path)) return false;
 
 			info = new UnixFileInfo (path);
 			return (info.FileAccessPermissions & FileAccessPermissions.UserExecute) != 0;
@@ -97,6 +94,18 @@ namespace Do.Universe
 		{
 			return Directory.Exists (path);
 		}
+
+        public static string EscapedPath (IFileItem fi)
+        {
+            return EscapedPath (fi.Path);
+        }
+
+        public static string EscapedPath (string path)
+        {
+            return path
+				.Replace (" ", "\\ ")
+				.Replace ("'", "\\'");
+        }
 		
 		protected string path;
 		
@@ -152,9 +161,8 @@ namespace Do.Universe
 		}
 		
 		public string Path {
-			get {
-				return path;
-			}
+			get { return path; }
+			set { path = value; }
 		}
 		
 		public string URI {
@@ -171,13 +179,7 @@ namespace Do.Universe
 
 		public virtual void Open ()
 		{
-			string escaped_name;
-
-			escaped_name = Path
-				.Replace (" ", "\\ ")
-				.Replace ("'", "\\'");
-			Util.Environment.Open (escaped_name);
+			Do.Addins.Util.Environment.Open (EscapedPath (this));
 		}
 	}
-	
 }

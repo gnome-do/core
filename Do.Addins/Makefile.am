@@ -45,6 +45,7 @@ FILES =  \
 	src/Do.Universe/DefineWordAction.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/FileItemSource.cs \
+	src/Do.Universe/FileItemActions.cs \
 	src/Do.Universe/FirefoxBookmarkItemSource.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Universe/IAction.cs \
