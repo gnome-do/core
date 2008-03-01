@@ -248,7 +248,8 @@ namespace Do.Core
 			
 			ClearSearchResults ();
 			
-			ThirdPaneVisible = false;
+			if (!ThirdPaneRequired)
+				ThirdPaneVisible = false;
 			//Reset ();
 			
 			

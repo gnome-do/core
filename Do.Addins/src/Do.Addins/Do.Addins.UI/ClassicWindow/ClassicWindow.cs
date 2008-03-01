@@ -191,7 +191,9 @@ namespace Do.Addins.UI
 				ShowResultsWindow ();
 				if (evnt.Key != Gdk.Key.Right)
 					return base.OnKeyPressEvent (evnt);
-			}
+			} else if (evnt.Key == Gdk.Key.Escape) {
+				resultsWindow.Hide ();
+			}			
 			KeyPressEvent (evnt);
 			
 			return base.OnKeyPressEvent (evnt);

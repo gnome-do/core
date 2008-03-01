@@ -179,11 +179,10 @@ namespace Do.Addins.UI
 		{
 			if (evnt.Key == Gdk.Key.Tab || (evnt.Key == Gdk.Key.Up && resultsWindow.SelectedIndex <= 0)) {	
 				resultsWindow.Hide ();
-				if (evnt.Key == Gdk.Key.Tab) {
+				if (evnt.Key == Gdk.Key.Tab)
 					//technically this is not really a needed step because there is no situation
 					//where new set of results are thrown in.
 					resultsWindow.Clear ();
-				}
 			} else if ((evnt.Key == Gdk.Key.Up || evnt.Key == Gdk.Key.Down || evnt.Key == Gdk.Key.Right) 
 			           && !resultsWindow.Visible) {
 				//triggers the controller to do a context update since we have captured this keypress
@@ -193,7 +192,9 @@ namespace Do.Addins.UI
 				ShowResultsWindow ();
 				if (evnt.Key != Gdk.Key.Right)
 					return base.OnKeyPressEvent (evnt);
-			}
+			} else if (evnt.Key == Gdk.Key.Escape) {
+				resultsWindow.Hide ();
+			}				
 			KeyPressEvent (evnt);
 			
 			return base.OnKeyPressEvent (evnt);
