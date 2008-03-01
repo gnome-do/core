@@ -75,18 +75,22 @@ namespace Do.Addins.UI
 		/// <summary>
 		/// Inform UI that the third display area needs to be displayed
 		/// </summary>
-		/// <param name="pane">
-		/// A <see cref="Pane"/>
-		/// </param>
 		void Grow ();
 		
 		/// <summary>
 		/// Inform UI that the third display area needs to be hidden
 		/// </summary>
-		/// <param name="pane">
-		/// A <see cref="Pane"/>
-		/// </param>
 		void Shrink ();
+		
+		/// <summary>
+		/// Inform UI that it is appropriate to show more results than are currently shown
+		/// </summary>
+		void GrowResults ();
+		
+		/// <summary>
+		/// Inform UI that it is appropriate to show fewer results than are currently shown
+		/// </summary>
+		void ShrinkResults ();
 		
 		/// <summary>
 		/// All inclusive pane set method.  This should update the search results as well as the current

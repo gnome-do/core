@@ -49,6 +49,7 @@ namespace Do.Core
 		List<IItem> modItems;
 		bool thirdPaneVisible;
 		bool tabbing = false;
+		int resultsGrowth;
 		
 		//-------------------- Class Properties-----------------//
 		
@@ -127,6 +128,7 @@ namespace Do.Core
 			modItems = new List<IItem> ();
 			searchTimeout = new uint[3];
 			context = new SearchContext[3];
+			resultsGrowth = 0;
 		}
 		
 		//-------------------- METHODS -------------------------//
@@ -178,6 +180,8 @@ namespace Do.Core
 			SearchSecondPane ();
 
 			Summon ();
+			if (resultsGrowth <= 0)
+				GrowResults ();
 		}
 		
 		/************************************************
@@ -250,8 +254,9 @@ namespace Do.Core
 			
 			if (!ThirdPaneAllowed)
 				ThirdPaneVisible = false;
-			//Reset ();
 			
+			while (resultsGrowth > 0)
+				ShrinkResults ();
 			
 			if (window.CurrentPane == Pane.First && !results) Vanish ();
 			else if (!something_typed) Reset ();
@@ -283,10 +288,15 @@ namespace Do.Core
 				}
 				window.SetPaneContext(window.CurrentPane, CurrentContext);
 			}
+			if (resultsGrowth <= 0)
+				GrowResults ();
 		}
 		
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
+			while (resultsGrowth > 0)
+				ShrinkResults ();
+			
 			tabbing = true;
 			if (window.CurrentPane == Pane.First && //first pane and results
 					context[0].Results.Length != 0) {
@@ -311,9 +321,16 @@ namespace Do.Core
 				return;
 			}
 			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
-				if (CurrentContext.Cursor <= 0) return;
+				if (CurrentContext.Cursor <= 0) {
+					ShrinkResults ();
+					return;
+				}
 				CurrentContext.Cursor--;
 			} else {
+				if (resultsGrowth == 0) {
+					GrowResults ();
+					return;
+				}
 				CurrentContext.Cursor++;
 			}
 			
@@ -525,6 +542,22 @@ namespace Do.Core
 			context[2] = new SearchContext ();
 			
 			window.Reset ();
+			
+			//reset result growth back to 0
+			while (resultsGrowth > 0)
+				ShrinkResults ();
+		}
+		
+		void GrowResults ()
+		{
+			window.GrowResults ();
+			resultsGrowth++;
+		}
+		
+		void ShrinkResults ()
+		{
+			window.ShrinkResults ();
+			resultsGrowth--;
 		}
 		
 		/**************************************
@@ -622,6 +655,9 @@ namespace Do.Core
 		
 		public void Vanish ()
 		{
+			while (resultsGrowth > 0)
+				ShrinkResults ();
+			
 			window.Vanish ();
 			NotifyVanished ();
 		}	

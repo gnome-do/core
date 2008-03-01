@@ -177,24 +177,6 @@ namespace Do.Addins.UI
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
-			if (evnt.Key == Gdk.Key.Tab || (evnt.Key == Gdk.Key.Up && resultsWindow.SelectedIndex <= 0)) {	
-				resultsWindow.Hide ();
-				if (evnt.Key == Gdk.Key.Tab)
-					//technically this is not really a needed step because there is no situation
-					//where new set of results are thrown in.
-					resultsWindow.Clear ();
-			} else if ((evnt.Key == Gdk.Key.Up || evnt.Key == Gdk.Key.Down || evnt.Key == Gdk.Key.Right) 
-			           && !resultsWindow.Visible) {
-				//triggers the controller to do a context update since we have captured this keypress
-				//this way the first item is properly selected since the controller is unaware
-				//that the results window was hidden.
-				controller.NewContextSelection(CurrentPane, 0);
-				ShowResultsWindow ();
-				if (evnt.Key != Gdk.Key.Right)
-					return base.OnKeyPressEvent (evnt);
-			} else if (evnt.Key == Gdk.Key.Escape) {
-				resultsWindow.Hide ();
-			}				
 			KeyPressEvent (evnt);
 			
 			return base.OnKeyPressEvent (evnt);
@@ -220,12 +202,6 @@ namespace Do.Addins.UI
 		
 		protected void OnConfigureEvent (object sender, ConfigureEventArgs args)
 		{
-			Reposition ();
-		}
-		
-		private void ShowResultsWindow ()
-		{
-			resultsWindow.Show ();
 			Reposition ();
 		}
 		
@@ -293,12 +269,10 @@ namespace Do.Addins.UI
 		public void Vanish ()
 		{
 			Hide ();
-			resultsWindow.Hide ();
 		}
 
 		public void Reset ()
 		{
-			resultsWindow.Hide ();
 			resultsWindow.Clear ();
 			
 			CurrentPane = Pane.First;
@@ -333,6 +307,18 @@ namespace Do.Addins.UI
 				Gdk.Threads.Leave ();
 				return false;
 			});
+		}
+		
+		public void GrowResults ()
+		{
+			if (!resultsWindow.Visible)
+				resultsWindow.Show ();
+		}
+		
+		public void ShrinkResults ()
+		{
+			if (resultsWindow.Visible)
+				resultsWindow.Hide ();
 		}
 		
 		public void SetPaneContext (Pane pane, SearchContext context)
