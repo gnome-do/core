@@ -23,16 +23,13 @@ using System.Collections.Generic;
 
 using Do.Universe;
 
-namespace Do.Core
-{
+namespace Do.Core {
+
 	class RelevanceProvider {
 
 		public static RelevanceProvider GetProvider ()
 		{
-			if (Do.Preferences.EnableLearning)
-				return new HistogramRelevanceProvider ();
-			else
-				return new RelevanceProvider ();
+            return new HistogramRelevanceProvider ();
 		}
 
 		// Quicksilver algorithm.

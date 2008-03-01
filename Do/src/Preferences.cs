@@ -85,16 +85,6 @@ namespace Do
 		}
 
 		/// <value>
-		/// Whether Do should use learning techniques to provide better search
-		/// results. Enabled by default; disable with --disable-learning.
-		/// </value>
-		public bool EnableLearning {
-			get {
-				return !HasOption ("--disable-learning");
-			}
-		}
-
-		/// <value>
 		/// Whether Do should display its window when it first starts. Enable
 		/// with the command line options -q or --quiet.
 		/// </value>
