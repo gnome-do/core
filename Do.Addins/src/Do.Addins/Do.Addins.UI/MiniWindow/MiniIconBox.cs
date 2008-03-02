@@ -74,13 +74,12 @@ namespace Do.Addins.UI
 			label_align = new Alignment (1.0F, 0.5F, 0, 0);
 			label_align.SetPadding (0, 0, 0, 0);
 			label_align.Add (label);
-			hbox.PackStart (label_align, false, false, 0);
+			hbox.PackStart (label_align, true, true, 0);
 			label.Show ();
 			label_align.Show ();
 
 			image.SetSizeRequest (iconSize, iconSize);
 			label.SetSizeRequest ((int) (iconSize * 2), -1);
-			// SetSizeRequest (iconSize * 2, iconSize * 2);
 
 			DrawFill = true;
 			FrameColor = FillColor = new Color (byte.MaxValue, byte.MaxValue, byte.MaxValue);

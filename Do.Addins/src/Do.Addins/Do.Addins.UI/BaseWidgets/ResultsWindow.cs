@@ -37,12 +37,9 @@ namespace Do.Addins.UI
 		private int numberResultsDisplayed = 6;
 		
 		
-		public int DefaultResultIconSize
+		private int DefaultResultIconSize
 		{
-			set { 
-				defaultResultIconSize = value;
-				vbox.SetSizeRequest (DefaultWindowWidth, (value + 9) * NumberResultsDisplayed);
-			}
+			set { defaultResultIconSize = value; }
 			get { return defaultResultIconSize; }
 		}
 		public int DefaultWindowWidth
@@ -62,8 +59,14 @@ namespace Do.Addins.UI
 			}
 			get { return numberResultsDisplayed; }
 		}
-
-		const string ResultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
+		
+		public string ResultInfoFormat
+		{
+			set { resultInfoFormat = value; }
+			get { return resultInfoFormat; }
+		}
+		
+		private string resultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
 		const string QueryLabelFormat = "<b>{0}</b>";
 
 		public event OnSelectionChanged SelectionChanged;
@@ -90,6 +93,19 @@ namespace Do.Addins.UI
 		public ResultsWindow (Gdk.Color backgroundColor) : base (Gtk.WindowType.Toplevel)
 		{
 			this.backgroundColor = backgroundColor;
+			Build ();
+			results = null;
+			selectedIndex = 0;
+			selectedIndexSet = false;
+			Shown += OnShown;
+			IconProvider.IconUpdated += OnIconUpdated;			
+		}
+		
+		public ResultsWindow (Gdk.Color backgroundColor, int DefaultIconSize) 
+			: base (Gtk.WindowType.Toplevel)
+		{
+			this.backgroundColor = backgroundColor;
+			this.DefaultResultIconSize = DefaultIconSize;
 			Build ();
 			results = null;
 			selectedIndex = 0;
@@ -189,7 +205,7 @@ namespace Do.Addins.UI
 				// because resultsTreeview.FixedHeightMode = true:  
 				
 			cell = new CellRendererPixbuf ();				
-			cell.SetFixedSize (-1, 4 + DefaultResultIconSize - (int) cell.Ypad);			
+			cell.SetFixedSize (-1, 4 + DefaultResultIconSize - (int) cell.Ypad);
 			column.PackStart (cell, false);
 			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
 

@@ -103,10 +103,11 @@ namespace Do.Addins.UI
 			} catch { }
 			SetColormap ();
 
-			resultsWindow = new ResultsWindow (new Color(42, 45, 49));
+			resultsWindow = new ResultsWindow (new Color(42, 45, 49), 24);
 			resultsWindow.DefaultWindowWidth = 310;
-			resultsWindow.NumberResultsDisplayed = 4;
+			resultsWindow.NumberResultsDisplayed = 6;
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
+			resultsWindow.ResultInfoFormat = "<b>{0}</b>";
 
 			currentPane = Pane.First;
 
