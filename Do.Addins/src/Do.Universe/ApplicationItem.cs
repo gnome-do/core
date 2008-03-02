@@ -111,6 +111,9 @@ namespace Do.Universe
 		public void RunWithURIs (ICollection<string> uris)
 		{
 			string uri_list;
+            
+            // FIXME: Hardy/GNOME bug causes Do to run out of memory here...
+            return;
 
 			uri_list = "";
 			foreach (string uri in uris) {
