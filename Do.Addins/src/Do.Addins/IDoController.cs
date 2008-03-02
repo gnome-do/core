@@ -29,7 +29,25 @@ namespace Do.Addins
 	
 	public interface IDoController
 	{
+		/// <summary>
+		/// Allows the UI to alert the controller that a mouse event has selected a new object in a context
+		/// </summary>
+		/// <param name="pane">
+		/// A <see cref="Pane"/>
+		/// </param>
+		/// <param name="index">
+		/// A <see cref="System.Int32"/>
+		/// </param>
 		void NewContextSelection (Pane pane, int index);
+		
+		/// <summary>
+		/// Allows the UI to alert the controller that a mouse click has occured off of its main window
+		/// </summary>
 		void ButtonPressOffWindow ();
+		
+		/// <value>
+		/// Allows the UI to query what level of results it should be showing right now.
+		/// </value>
+		//int CurrentResultsGrowth { get; }
 	}
 }

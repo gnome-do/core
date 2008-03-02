@@ -307,7 +307,8 @@ namespace Do.Core
 			} else if (window.CurrentPane == Pane.Third && !ThirdPaneRequired) {
 				// This is used for actions for which modifier items are optional.
 				window.CurrentPane = Pane.First;
-				ThirdPaneVisible = false;
+				if (context[2].Query.Length == 0)
+					ThirdPaneVisible = false;
 			} else {
 				window.CurrentPane = Pane.First;
 			}
@@ -493,7 +494,8 @@ namespace Do.Core
 
 			if (ThirdPaneRequired) {
 				ThirdPaneVisible = true;
-			} else if (!ThirdPaneAllowed) {
+			} else if (!ThirdPaneAllowed || 
+			           (context[2].Query.Length == 0 && window.CurrentPane != Pane.Third)) {
 				ThirdPaneVisible = false;
 			}
 		}
