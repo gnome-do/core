@@ -60,8 +60,6 @@ namespace Do.Addins.UI
 			SetColormap ();
 
 			resultsWindow = new ResultsWindow (new Color(42, 45, 49));
-			resultsWindow.DefaultWindowWidth = 350;
-			resultsWindow.NumberResultsDisplayed = 7;
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
 			currentPane = Pane.First;

@@ -32,33 +32,9 @@ namespace Do.Addins.UI
 
 	public class ResultsWindow : Gtk.Window
 	{
-		private int defaultResultIconSize = 32;
-		private int defaultWindowWidth = 352;
-		private int numberResultsDisplayed = 6;
-		
-		
-		private int DefaultResultIconSize
-		{
-			set { defaultResultIconSize = value; }
-			get { return defaultResultIconSize; }
-		}
-		public int DefaultWindowWidth
-		{
-			set { 
-				defaultWindowWidth = value;
-				vbox.SetSizeRequest (value, (DefaultResultIconSize + 9) * NumberResultsDisplayed);
-			}
-			get { return defaultWindowWidth; }
-		}
-		
-		public int NumberResultsDisplayed
-		{
-			set { 
-				numberResultsDisplayed = value;
-				vbox.SetSizeRequest (DefaultWindowWidth, (DefaultResultIconSize + 9) * value);
-			}
-			get { return numberResultsDisplayed; }
-		}
+		private int DefaultResultIconSize = 32;
+		private int DefaultWindowWidth = 352;
+		private int NumberResultsDisplayed = 6;
 		
 		public string ResultInfoFormat
 		{
@@ -101,11 +77,15 @@ namespace Do.Addins.UI
 			IconProvider.IconUpdated += OnIconUpdated;			
 		}
 		
-		public ResultsWindow (Gdk.Color backgroundColor, int DefaultIconSize) 
+		public ResultsWindow (Gdk.Color backgroundColor, int DefaultIconSize, 
+		                      int WindowWidth, int NumberResults) 
 			: base (Gtk.WindowType.Toplevel)
 		{
 			this.backgroundColor = backgroundColor;
 			this.DefaultResultIconSize = DefaultIconSize;
+			this.DefaultWindowWidth = WindowWidth;
+			this.NumberResultsDisplayed = NumberResults;
+			
 			Build ();
 			results = null;
 			selectedIndex = 0;
@@ -166,7 +146,7 @@ namespace Do.Addins.UI
 			Add (frame);
 			frame.Add (vbox);
 			vbox.BorderWidth = 4;
-			vbox.SetSizeRequest (DefaultWindowWidth, (DefaultResultIconSize + 9) * NumberResultsDisplayed);
+			//vbox.SetSizeRequest (DefaultWindowWidth, (DefaultResultIconSize + 9) * NumberResultsDisplayed);
 			vbox.Show ();
 
 			align = new Alignment (0.0F, 0.0F, 0, 0);
@@ -206,13 +186,23 @@ namespace Do.Addins.UI
 				
 			cell = new CellRendererPixbuf ();				
 			cell.SetFixedSize (-1, 4 + DefaultResultIconSize - (int) cell.Ypad);
+
+			int width, height;
+			cell.GetFixedSize (out width, out height);
+				
 			column.PackStart (cell, false);
 			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
-
+				
+			Console.WriteLine(height);
+			vbox.SetSizeRequest (DefaultWindowWidth, 
+				                 (height + 4) * NumberResultsDisplayed + 10);
+			
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
 			column.PackStart (cell, true);
 			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
+				
+			
 
 			resultsTreeview.AppendColumn (column);
 

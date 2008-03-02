@@ -279,7 +279,7 @@ namespace Do.Addins.UI
 				// Have to re-grab the pane from the menu.
 				Addins.Util.Appearance.PresentWindow (this);
 			} else if (!click_on_window) {
-				Vanish ();
+				controller.ButtonPressOffWindow ();
 			}
 			return base.OnButtonPressEvent (evnt);
 		}

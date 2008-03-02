@@ -556,8 +556,10 @@ namespace Do.Core
 		
 		void ShrinkResults ()
 		{
-			window.ShrinkResults ();
-			resultsGrowth--;
+			if (resultsGrowth > 0) {
+				resultsGrowth--;
+				window.ShrinkResults ();
+			}
 		}
 		
 		/**************************************
@@ -685,6 +687,11 @@ namespace Do.Core
 					SearchPaneDelayed (Pane.Third);
 					break;
 			}
+		}
+		
+		public void ButtonPressOffWindow ()
+		{
+			Vanish ();
 		}
 	}
 }

@@ -103,9 +103,7 @@ namespace Do.Addins.UI
 			} catch { }
 			SetColormap ();
 
-			resultsWindow = new ResultsWindow (new Color(42, 45, 49), 24);
-			resultsWindow.DefaultWindowWidth = 310;
-			resultsWindow.NumberResultsDisplayed = 6;
+			resultsWindow = new ResultsWindow (new Color(42, 45, 49), 24, 300, 4);
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 			resultsWindow.ResultInfoFormat = "<b>{0}</b>";
 
@@ -247,7 +245,7 @@ namespace Do.Addins.UI
 				// Have to re-grab the pane from the menu.
 				Addins.Util.Appearance.PresentWindow (this);
 			} else if (!click_on_window) {
-				Vanish ();
+				controller.ButtonPressOffWindow ();
 			}
 			return base.OnButtonPressEvent (evnt);
 		}

@@ -30,6 +30,6 @@ namespace Do.Addins
 	public interface IDoController
 	{
 		void NewContextSelection (Pane pane, int index);
-		
+		void ButtonPressOffWindow ();
 	}
 }
