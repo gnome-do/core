@@ -34,7 +34,10 @@ namespace Do.Core
 		Dictionary<int, int> itemHits, actionHits;
 		
 		Timer serializeTimer;
-		const int SerializeInterval = 10*60;
+		const int SerializeInterval = 15*60;
+
+		const int HistogramMax = 200;
+		const float HistogramScaleFactor = 0.60f;
 		
 		static bool LetterOccursAfterDelimiter (string s, char a)
 		{
@@ -53,7 +56,7 @@ namespace Do.Core
 
 		public HistogramRelevanceProvider ()
 		{
-			maxActionHits = maxItemHits = 0;
+			maxActionHits = maxItemHits = 1;
 			itemHits = new Dictionary<int,int> ();
 			actionHits = new Dictionary<int,int> ();
 
@@ -80,6 +83,9 @@ namespace Do.Core
 		{
 			lock (itemHits)
 			lock (actionHits) {
+				maxItemHits = maxActionHits = 1;
+				itemHits.Clear ();
+				actionHits.Clear ();
 				try {
 					Log.Info ("Deserializing HistogramRelevanceProvider...");
 					bool isAction;
@@ -112,24 +118,47 @@ namespace Do.Core
 		
 		protected void Serialize ()
 		{
+			bool shrinkItemHits, shrinkActionHits;
+
+			shrinkItemHits = maxItemHits > HistogramMax;
+			shrinkActionHits = maxActionHits > HistogramMax;
+
 			lock (itemHits)
 			lock (actionHits) {
 				try {
 					Log.Info ("Serializing HistogramRelevanceProvider...");
 					using (StreamWriter writer = new StreamWriter (DB)) {
 						// Serialize item hits information:
-						foreach (KeyValuePair<int, int> kvp in itemHits) {
-							writer.WriteLine (string.Format ("{0}\t{1}\t0", kvp.Key, kvp.Value));
+						foreach (int key in itemHits.Keys) {
+							int hits = itemHits [key];
+							if (shrinkItemHits) {
+								hits = (int) (hits * HistogramScaleFactor);
+								if (hits == 0)
+									continue;
+							}
+							writer.WriteLine (string.Format ("{0}\t{1}\t0",
+								key, hits));
 						}
 						// Serialize action hits information:
-						foreach (KeyValuePair<int, int> kvp in actionHits) {
-							writer.WriteLine (string.Format ("{0}\t{1}\t1", kvp.Key, kvp.Value));
+						foreach (int key in actionHits.Keys) {
+							int hits = actionHits [key];
+							if (shrinkActionHits) {
+								hits = (int) (hits * HistogramScaleFactor);
+								if (hits == 0)
+									continue;
+							}
+							writer.WriteLine (string.Format ("{0}\t{1}\t1",
+								key, hits));
 						}
 					}
 					Log.Info ("Successfully serialized HistogramRelevanceProvider.");
 				} catch (Exception e) {
 					Log.Error ("Serializing HistogramRelevanceProvider failed: {0}", e.Message);
 				}
+			}
+			if (shrinkItemHits || shrinkActionHits) {
+				Log.Info ("Shrinking histogram...");
+				Deserialize ();
 			}
 		}
 

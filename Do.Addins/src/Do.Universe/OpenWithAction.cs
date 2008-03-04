@@ -28,7 +28,7 @@ namespace Do.Universe
 	/// <summary>
 	/// A command providing "open with..." semantics to file items.
 	/// </summary>
-	public class OpenWithAction : AbstractAction 
+	public abstract class OpenWithAction : AbstractAction 
 	{
 		public OpenWithAction ()
 		{
