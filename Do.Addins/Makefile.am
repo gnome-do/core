@@ -48,6 +48,7 @@ FILES =  \
 	src/Do.Addins/Do.Addins.UI/BaseWidgets/TextFrame.cs \
 	src/Do.Addins/Do.Addins.UI/ClassicWindow/ClassicWindow.cs \
 	src/Do.Addins/Do.Addins.UI/DarkFrame/DarkFrame.cs \
+	src/Do.Addins/Do.Addins.UI/FullWindow/FullWindow.cs \
 	src/Do.Addins/Do.Addins.UI/IDoWindow.cs \
 	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniIconBox.cs \
 	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniWindow.cs \
@@ -63,7 +64,6 @@ FILES =  \
 	src/Do.Universe/DefineWordAction.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/FileItemSource.cs \
-	src/Do.Universe/FileItemActions.cs \
 	src/Do.Universe/FirefoxBookmarkItemSource.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Universe/IAction.cs \

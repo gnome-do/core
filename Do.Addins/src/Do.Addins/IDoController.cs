@@ -48,6 +48,6 @@ namespace Do.Addins
 		/// <value>
 		/// Allows the UI to query what level of results it should be showing right now.
 		/// </value>
-		//int CurrentResultsGrowth { get; }
+		int CurrentResultsGrowth { get; }
 	}
 }

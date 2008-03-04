@@ -94,6 +94,17 @@ namespace Do
 				return HasOption ("--darkframe");
 			}
 		}
+		
+		/// <value>
+		/// Whether Do should use a fullwindow interface better suited for
+		/// users with poor eyesight.
+		/// </value>
+		public bool UseFullMode
+		{
+			get {
+				return HasOption ("--full");
+			}
+		}
 
 		/// <value>
 		/// Whether Do should display its window when it first starts. Enable
