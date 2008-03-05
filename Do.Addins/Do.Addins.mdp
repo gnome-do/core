@@ -61,10 +61,7 @@
     <File name="src/Do.Addins/Do.Addins.UI/MiniWindow/MiniWindowFrame.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/Do.Addins.UI/MiniWindow/MiniIconBox.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/Do.Addins.UI/BaseWidgets/IconProvider.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/DarkFrame" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Addins/Do.Addins.UI/DarkFrame/DarkFrame.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/FullWindow" subtype="Directory" buildaction="Compile" />
-    <File name="src/Do.Addins/Do.Addins.UI/FullWindow/FullWindow.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gnome-sharp, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
