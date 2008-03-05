@@ -301,28 +301,34 @@ namespace Do.Core
 		
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
-			while (resultsGrowth > 0)
-				ShrinkResults ();
-			
 			if (window.CurrentPane == Pane.First && context[0].Results.Length == 0)
 				return;
 			
+			while (resultsGrowth > 0)
+				ShrinkResults ();
+			
 			tabbing = true;
-			if (window.CurrentPane == Pane.First && //first pane and results
-					context[0].Results.Length != 0) {
-				window.CurrentPane = Pane.Second;
-			} else if (window.CurrentPane == Pane.Second && ThirdPaneAllowed) { //second pane
-				window.CurrentPane = Pane.Third;
-				ThirdPaneVisible = true;
-			} else if (window.CurrentPane == Pane.Third && !ThirdPaneRequired) {
-				// This is used for actions for which modifier items are optional.
-				window.CurrentPane = Pane.First;
-				if (context[2].Query.Length == 0)
-					ThirdPaneVisible = false;
-			} else {
-				window.CurrentPane = Pane.First;
+
+			switch (window.CurrentPane) {
+				case Pane.First:
+					window.CurrentPane = Pane.Second;
+					break;
+				case Pane.Second:
+					if (ThirdPaneAllowed) {
+						window.CurrentPane = Pane.Third;
+						ThirdPaneVisible = true;
+					} else {
+						window.CurrentPane = Pane.First;
+					}
+					break;
+				case Pane.Third:
+					window.CurrentPane = Pane.First;
+					if (!ThirdPaneRequired && context[2].Query.Length == 0)
+						ThirdPaneVisible = false;
+					break;
 			}
 			window.SetPaneContext (window.CurrentPane, CurrentContext);
+			
 			tabbing = false;
 		}
 		
