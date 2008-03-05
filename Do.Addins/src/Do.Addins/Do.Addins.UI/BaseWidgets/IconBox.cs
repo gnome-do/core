@@ -47,18 +47,10 @@ namespace Do.Addins.UI
 
 		public IconBox (int iconSize) : base ()
 		{
-			IconProvider.IconUpdated += OnIconUpdated;
 			this.iconSize = iconSize;
 			Build ();
 		}
 		
-		void OnIconUpdated (object sender, IconUpdatedEventArgs e)
-		{
-			if (iconName == e.IconName) {
-				Icon = e.IconName;
-			}
-		}
-
 		protected virtual void Build ()
 		{
 			Alignment label_align;

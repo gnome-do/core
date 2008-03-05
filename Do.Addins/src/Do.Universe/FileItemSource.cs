@@ -24,16 +24,16 @@ using System.Collections.Generic;
 
 using Do.Addins;
 
-namespace Do.Universe
-{
+namespace Do.Universe {
+
 	/// <summary>
 	/// Indexes files recursively starting in a specific directory.
 	/// </summary>
-	public class FileItemSource : IItemSource
-	{
-		ICollection<DirectoryLevelPair> dirs;
+	public class FileItemSource : IItemSource {
+
 		List<IItem> items;
 		bool include_hidden;
+		ICollection<DirectoryLevelPair> dirs;
 
 		struct DirectoryLevelPair {
 			public string Directory;
@@ -47,31 +47,34 @@ namespace Do.Universe
 			}
 		}
 		
-		static readonly string kConfigFile;
+		static readonly string ConfigFile;
 		
-		static readonly DirectoryLevelPair[] kDefaultDirectories = {
-			new DirectoryLevelPair ("/home",			   1),
-			new DirectoryLevelPair ("~",             1),
-			new DirectoryLevelPair ("~/Desktop",     1),
-			new DirectoryLevelPair ("~/Documents",   3),
+		static readonly DirectoryLevelPair[] DefaultDirectories = {
+			new DirectoryLevelPair ("/home",		   1),
+			new DirectoryLevelPair (Paths.UserHome,    1),
+			new DirectoryLevelPair (Desktop,		   1),
+			new DirectoryLevelPair (Documents,	    	3),
 		};
 		
 		static FileItemSource ()
 		{
 			Gnome.Vfs.Vfs.Initialize ();
-			
-			kConfigFile = "~/.do/FileItemSource.config".Replace ("~",
-				   Environment.GetFolderPath (Environment.SpecialFolder.Personal));
+			ConfigFile = Paths.Combine (Paths.ApplicationData, "FileItemSource.config");
 		}
 		
-		static List<DirectoryLevelPair> LoadSavedDirectoryLevelPairs ()
+		static ICollection<DirectoryLevelPair> LoadSavedDirectoryLevelPairs ()
 		{
 			List<DirectoryLevelPair> dirs;
+
+			if (!File.Exists (ConfigFile)) {
+				SaveDirectoryLevelPairs (DefaultDirectories);
+				return DefaultDirectories;
+			}
 			
 			dirs = new List<DirectoryLevelPair> ();
-			if (File.Exists (kConfigFile)) {
+			if (File.Exists (ConfigFile)) {
 				try {
-					foreach (string line in File.ReadAllLines (kConfigFile)) {
+					foreach (string line in File.ReadAllLines (ConfigFile)) {
 						string[] parts;
 						if (line.Trim ().StartsWith ("#")) continue;
 						parts = line.Trim ().Split (':');
@@ -80,7 +83,7 @@ namespace Do.Universe
 						          int.Parse (parts[1].Trim ())));
 					}
 				} catch (Exception e) {
-					Console.Error.WriteLine ("Error reading FileItemSource config file {0}: {1}", kConfigFile, e.Message);
+					Console.Error.WriteLine ("Error reading FileItemSource config file {0}: {1}", ConfigFile, e.Message);
 				}
 			} 
 			return dirs;
@@ -89,13 +92,13 @@ namespace Do.Universe
 		static void SaveDirectoryLevelPairs (ICollection<DirectoryLevelPair> dirs)
 		{
 			try {
-				if (!Directory.Exists (Path.GetDirectoryName (kConfigFile)))
-					Directory.CreateDirectory (Path.GetDirectoryName (kConfigFile));
+				if (!Directory.Exists (Path.GetDirectoryName (ConfigFile)))
+					Directory.CreateDirectory (Path.GetDirectoryName (ConfigFile));
 				foreach (DirectoryLevelPair pair in dirs) {
-					File.AppendAllText (kConfigFile, string.Format ("{0}: {1}\n", pair.Directory, pair.Levels)); 
+					File.AppendAllText (ConfigFile, string.Format ("{0}: {1}\n", pair.Directory, pair.Levels)); 
 				}
 			} catch (Exception e) {
-				Console.Error.WriteLine ("Error saving FileItemSource config file {0}: {1}", kConfigFile, e.Message);
+				Console.Error.WriteLine ("Error saving FileItemSource config file {0}: {1}", ConfigFile, e.Message);
 			}
 		}
 		
@@ -110,12 +113,7 @@ namespace Do.Universe
 		
 		public FileItemSource ()
 		{
-			if (File.Exists (kConfigFile)) {
-				dirs = LoadSavedDirectoryLevelPairs ();
-			} else {
-				dirs = kDefaultDirectories;
-				SaveDirectoryLevelPairs (dirs);
-			}
+			dirs = LoadSavedDirectoryLevelPairs ();
 			items = new List<IItem> ();
 			include_hidden = false;
 			UpdateItems ();
@@ -208,6 +206,30 @@ namespace Do.Universe
 				items.Add (item);
 				ReadItems (directory, levels - 1);
 			}
+		}
+
+		public static string Music {
+			get { return Paths.ReadXdgUserDir ("XDG_MUSIC_DIR", "Music"); }
+		}
+
+		public static string Pictures {
+			get { return Paths.ReadXdgUserDir ("XDG_PICTURES_DIR", "Pictures"); }
+		}
+
+		public static string Videos {
+			get { return Paths.ReadXdgUserDir ("XDG_VIDEOS_DIR", "Videos"); }
+		}
+
+		public static string Desktop {
+			get { return Paths.ReadXdgUserDir ("XDG_DESKTOP_DIR", "Desktop"); }
+		}
+
+		public static string Downloads {
+			get { return Paths.ReadXdgUserDir ("XDG_DOWNLOAD_DIR", "Downloads"); }
+		}
+
+		public static string Documents {
+			get { return Paths.ReadXdgUserDir ("XDG_DOCUMENTS_DIR", "Documents"); }
 		}
 	}
 }

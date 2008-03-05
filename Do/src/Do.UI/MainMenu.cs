@@ -73,6 +73,13 @@ namespace Do.UI
 			item.CanFocus = false;
 			item.Activated += OnMainMenuAboutClicked;
 
+			// Open plugin folder
+			item = new ImageMenuItem  (Catalog.GetString ("_Open Plugins Folder"));
+			(item as ImageMenuItem).Image = new Image (Stock.Open, IconSize.Menu);
+			menu.Add (item);
+			item.CanFocus = false;
+			item.Activated += OnMainMenuOpenPluginFolderClicked;
+
 			// Quit menu item
 			item = new ImageMenuItem (Catalog.GetString ("_Quit"));
 			(item as ImageMenuItem).Image = new Image (Stock.Quit, IconSize.Menu);
@@ -89,11 +96,18 @@ namespace Do.UI
 
 		protected void OnMainMenuQuitClicked (object o, EventArgs args)
 		{
-			Application.Quit();
+			Do.Controller.Vanish ();
+			Application.Quit ();
 		}
 
 		protected void OnMainMenuRefreshCatalogClicked (object o, EventArgs args)
 		{
+		}
+
+		protected void OnMainMenuOpenPluginFolderClicked (object o, EventArgs args)
+		{
+			Do.Controller.Vanish ();
+			Util.Environment.Open (Paths.UserPlugins);
 		}
 
 		protected void OnMainMenuAboutClicked (object o, EventArgs args)

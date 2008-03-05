@@ -74,7 +74,6 @@ namespace Do.Addins.UI
 			selectedIndex = 0;
 			selectedIndexSet = false;
 			Shown += OnShown;
-			IconProvider.IconUpdated += OnIconUpdated;			
 		}
 		
 		public ResultsWindow (Gdk.Color backgroundColor, int DefaultIconSize, 
@@ -91,7 +90,6 @@ namespace Do.Addins.UI
 			selectedIndex = 0;
 			selectedIndexSet = false;
 			Shown += OnShown;
-			IconProvider.IconUpdated += OnIconUpdated;			
 		}
 
 		protected virtual void OnShown (object sender, EventArgs args)
@@ -376,28 +374,6 @@ namespace Do.Addins.UI
 			return base.OnExposeEvent (evnt);
 		}
 		
-		void OnIconUpdated (object sender, IconUpdatedEventArgs e)
-		{
-			TreePath firstPath, lastPath;
-			Gtk.TreeIter iter;
-
-			if (!Visible) return;
-
-			resultsTreeview.GetVisibleRange (out firstPath, out lastPath);
-			if (firstPath == null || lastPath == null) return;
-
-			while (firstPath.Compare (lastPath) <= 0) {
-				IObject currentObject;
-
-				resultsTreeview.Model.GetIter (out iter, lastPath);
-				currentObject = resultsTreeview.Model.GetValue (iter, 0) as IObject;
-				if (currentObject.Icon == e.IconName) {
-					resultsTreeview.Model.EmitRowChanged (firstPath, iter);
-				}
-				firstPath.Next ();
-			}
-		}
-						
 		protected virtual void SetColormap ()
 		{
 			Gdk.Colormap  colormap;

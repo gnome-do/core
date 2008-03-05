@@ -67,10 +67,9 @@ namespace Do.Core
 			serializeTimer.Change (SerializeInterval*1000, SerializeInterval*1000);
 		}
 		
-		protected string DB {
+		protected string RelevanceFile {
 			get {
-				return "~/.do/relevance2".Replace ("~",
-					Environment.GetFolderPath (Environment.SpecialFolder.Personal));
+				return Paths.Combine (Paths.ApplicationData, "relevance3");
 			}
 		}
 		
@@ -91,7 +90,7 @@ namespace Do.Core
 					bool isAction;
 					string[] parts;
 					int	key, value;
-					foreach (string line in File.ReadAllLines (DB)) {
+					foreach (string line in File.ReadAllLines (RelevanceFile)) {
 						try {
 							parts = line.Split ('\t');
 							key = int.Parse (parts[0]);
@@ -127,7 +126,7 @@ namespace Do.Core
 			lock (actionHits) {
 				try {
 					Log.Info ("Serializing HistogramRelevanceProvider...");
-					using (StreamWriter writer = new StreamWriter (DB)) {
+					using (StreamWriter writer = new StreamWriter (RelevanceFile)) {
 						// Serialize item hits information:
 						foreach (int key in itemHits.Keys) {
 							int hits = itemHits [key];

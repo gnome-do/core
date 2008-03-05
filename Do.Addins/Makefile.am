@@ -37,6 +37,7 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
+	src/Paths.cs \
 	src/Do.Addins/Do.Addins.UI/BaseWidgets/DefaultObjects.cs \
 	src/Do.Addins/Do.Addins.UI/BaseWidgets/Frame.cs \
 	src/Do.Addins/Do.Addins.UI/BaseWidgets/GlossyRoundedFrame.cs \
