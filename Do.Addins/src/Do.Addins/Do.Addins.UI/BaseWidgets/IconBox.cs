@@ -25,9 +25,9 @@ using Gdk;
 using Do.Addins;
 using Do.Universe;
 
-namespace Do.UI
+namespace Do.Addins.UI
 {
-	public class IconBox : RoundedFrame
+	public class IconBox : Frame
 	{
 		const string captionFormat = "{0}";
 		const string highlightFormat = "<span weight=\"bold\" underline=\"single\">{0}</span>";
@@ -92,9 +92,8 @@ namespace Do.UI
 			label.SetSizeRequest (iconSize / 4 * 5, -1);
 			// SetSizeRequest (iconSize * 2, iconSize * 2);
 
-			DrawFrame = false;
-			DrawFill = true;
-			FillColor = new Color (byte.MaxValue, byte.MaxValue, byte.MaxValue);
+			DrawFrame = DrawFill = true;
+			FrameColor = FillColor = new Color (byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
 			Realized += OnRealized;
 			UpdateFocus ();

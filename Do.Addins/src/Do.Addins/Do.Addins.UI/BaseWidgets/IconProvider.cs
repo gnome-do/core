@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using Gtk;
 using Gdk;
 
-namespace Do.UI
+namespace Do.Addins.UI
 {
 		
 	public static class IconProvider
@@ -67,8 +67,8 @@ namespace Do.UI
 				try {
 					Directory.CreateDirectory (TemporaryIconsPath);
 				} catch (Exception e) {
-					Log.Error ("Could not create temporary icons directory {0}: {1}",
-							TemporaryIconsPath, e.Message);
+					//Log.Error ("Could not create temporary icons directory {0}: {1}",
+					//		TemporaryIconsPath, e.Message);
 				}
 			}
 		}
@@ -245,8 +245,8 @@ namespace Do.UI
 				try {
 					if (response.StatusCode != HttpStatusCode.OK || 
 					   !response.ContentType.StartsWith ("image/")) {
-						Log.Error ("Could not download icon image {0}. Http-status: {1}. Content-type: {2}", 
-						         name, response.StatusDescription, response.ContentType);
+						//Log.Error ("Could not download icon image {0}. Http-status: {1}. Content-type: {2}", 
+						//         name, response.StatusDescription, response.ContentType);
 						return;
 					}
 					stream = response.GetResponseStream ();
@@ -272,7 +272,7 @@ namespace Do.UI
 					}
 				});
 			} catch (Exception ex) {
-				Log.Error ("Could not download icon file \"{0}\": {1}", name, ex.Message);
+				//Log.Error ("Could not download icon file \"{0}\": {1}", name, ex.Message);
 			}
 		}
 							

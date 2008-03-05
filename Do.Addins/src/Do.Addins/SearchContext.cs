@@ -23,7 +23,7 @@ using System.Collections.Generic;
 
 using Do.Universe;
 
-namespace Do.Core
+namespace Do.Addins
 {
 	public class SearchContext : ICloneable, IEquatable<SearchContext>
 	{
@@ -80,7 +80,7 @@ namespace Do.Core
 		
 		public List<IItem> Items
 		{
-			get { return items; }
+			get { return items ?? items = new List<IItem> (); }
 			set { items = value; }
 		}
 		
@@ -98,13 +98,13 @@ namespace Do.Core
 			
 		public string Query
 		{
-			get { return query; }
+			get { return query ?? query = ""; }
 			set { query = value; }
 		}
 
 		public IObject[] Results
 		{
-			get { return results; }
+			get { return results ?? results = new IObject[0]; }
 			set {
 				results = value ?? new IObject[0];
 				cursor = 0;
@@ -175,7 +175,14 @@ namespace Do.Core
 		public int Cursor
 		{
 			get { return cursor; }
-			set { cursor = value; }
+			set { 
+				if (value > Results.Length - 1)
+					cursor = Results.Length - 1;
+				else if ( value <= 0 )
+					cursor = 0;
+				else
+					cursor = value;
+			}
 		}
 		
 		public object Clone ()

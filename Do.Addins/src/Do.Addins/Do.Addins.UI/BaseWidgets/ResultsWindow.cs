@@ -23,48 +23,26 @@ using System.Runtime.InteropServices;
 using Gtk;
 using Gdk;
 
-using Do.Core;
 using Do.Addins;
 using Do.Universe;
 
-namespace Do.UI
+namespace Do.Addins.UI
 {
 	public delegate void OnSelectionChanged (object sender, ResultsWindowSelectionEventArgs args);
 
-	public class ResultsWindowSelectionEventArgs : EventArgs
-	{
-		int index;
-		IObject selection;
-
-		public ResultsWindowSelectionEventArgs (int index, IObject selection)
-		{
-			this.index = index;
-			this.selection = selection;
-		}
-
-		public int SelectedIndex
-		{
-			get { return index; }
-		}
-
-		public IObject SelectedObject
-		{
-			get {
-				return selection;
-			}
-		}
-	}
-
 	public class ResultsWindow : Gtk.Window
 	{
-		const int DefaultResultIconSize = 32;
-		const int DefaultWindowWidth = 360;
-
-		const int MiniResultIconSize = 20;
-		const int MiniWindowWidth = 250;
-
-		const int NumberResultsDisplayed = 6;
-		const string ResultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
+		private int DefaultResultIconSize = 32;
+		private int DefaultWindowWidth = 352;
+		private int NumberResultsDisplayed = 6;
+		
+		public string ResultInfoFormat
+		{
+			set { resultInfoFormat = value; }
+			get { return resultInfoFormat; }
+		}
+		
+		private string resultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
 		const string QueryLabelFormat = "<b>{0}</b>";
 
 		public event OnSelectionChanged SelectionChanged;
@@ -82,24 +60,32 @@ namespace Do.UI
 		bool selectedIndexSet;
 		bool quietSelectionChange;
 		Label queryLabel;
-
-		int ResultIconSize {
-			get {
-				return Do.Preferences.UseMiniMode ? MiniResultIconSize :
-					DefaultResultIconSize;
-			}
-		}
-
-		int WindowWidth {
-			get {
-				return Do.Preferences.UseMiniMode ? MiniWindowWidth :
-					DefaultWindowWidth;
-			}
-		}
+		Frame frame;
+		string query;
+		Gdk.Color backgroundColor;
+		VBox vbox;
 
 
-		public ResultsWindow () : base (Gtk.WindowType.Toplevel)
+		public ResultsWindow (Gdk.Color backgroundColor) : base (Gtk.WindowType.Toplevel)
 		{
+			this.backgroundColor = backgroundColor;
+			Build ();
+			results = null;
+			selectedIndex = 0;
+			selectedIndexSet = false;
+			Shown += OnShown;
+			IconProvider.IconUpdated += OnIconUpdated;			
+		}
+		
+		public ResultsWindow (Gdk.Color backgroundColor, int DefaultIconSize, 
+		                      int WindowWidth, int NumberResults) 
+			: base (Gtk.WindowType.Toplevel)
+		{
+			this.backgroundColor = backgroundColor;
+			this.DefaultResultIconSize = DefaultIconSize;
+			this.DefaultWindowWidth = WindowWidth;
+			this.NumberResultsDisplayed = NumberResults;
+			
 			Build ();
 			results = null;
 			selectedIndex = 0;
@@ -133,7 +119,6 @@ namespace Do.UI
 
 		protected void Build ()
 		{
-			VBox           vbox;
 			Alignment align;
 			TreeViewColumn column;
 			CellRenderer   cell;
@@ -144,10 +129,24 @@ namespace Do.UI
 			// This typehint gets the window to raise all the way to top.
 			TypeHint = WindowTypeHint.Splashscreen;
 
+			
+			SetColormap ();
+			
+			
+			frame = new Frame ();
+			frame.DrawFill = true;
+			frame.DrawFrame = true;
+			frame.FillColor = frame.FrameColor = backgroundColor;
+			frame.FillAlpha = .55;
+			frame.FrameAlpha = .7;
+			frame.Radius = 0;
+			frame.Show ();
+			
 			vbox = new VBox (false, 0);
-			Add (vbox);
+			Add (frame);
+			frame.Add (vbox);
 			vbox.BorderWidth = 4;
-			vbox.SetSizeRequest (WindowWidth, (ResultIconSize + 9) * NumberResultsDisplayed);
+			//vbox.SetSizeRequest (DefaultWindowWidth, (DefaultResultIconSize + 9) * NumberResultsDisplayed);
 			vbox.Show ();
 
 			align = new Alignment (0.0F, 0.0F, 0, 0);
@@ -182,42 +181,45 @@ namespace Do.UI
 			});
 
 			column = new TreeViewColumn ();			
-			column.Sizing = Gtk.TreeViewColumnSizing.Fixed; // because resultsTreeview.FixedHeightMode = true:  
+			column.Sizing = Gtk.TreeViewColumnSizing.Fixed; 
+				// because resultsTreeview.FixedHeightMode = true:  
 				
 			cell = new CellRendererPixbuf ();				
-			cell.SetFixedSize (-1, 4 + ResultIconSize - (int) cell.Ypad);			
+			cell.SetFixedSize (-1, 4 + DefaultResultIconSize - (int) cell.Ypad);
+
+			int width, height;
+			cell.GetFixedSize (out width, out height);
+				
 			column.PackStart (cell, false);
 			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
-
+				
+			Console.WriteLine(height);
+			vbox.SetSizeRequest (DefaultWindowWidth, 
+				                 (height + 4) * NumberResultsDisplayed + 10);
+			
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
 			column.PackStart (cell, true);
 			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
+				
+			
 
 			resultsTreeview.AppendColumn (column);
 
 			resultsTreeview.Selection.Changed += OnResultRowSelected;
+		}
+			
+		public void UpdateColors (Gdk.Color backgroundColor)
+		{
+			this.backgroundColor = backgroundColor;
+			frame.FillColor = backgroundColor;
 		}
 						
 		private void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
 		{			
 			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
 			IObject o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as IObject;
-			renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, ResultIconSize);
-		}
-
-		public virtual void SelectNext ()
-		{
-			if (SelectedIndex < results.Length - 1) {
-				SelectedIndex++;
-			}
-		}
-
-		public virtual void SelectPrev ()
-		{
-			if (0 < SelectedIndex) {
-			  SelectedIndex--;
-			}
+			renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
 		}
 
 		private void OnResultRowSelected (object sender, EventArgs args)
@@ -243,9 +245,11 @@ namespace Do.UI
 			set {
 				if (value == null) return;
 
-				Results = value.Results;
+				if (Results.GetHashCode () != value.Results.GetHashCode ()) {
+					Results = value.Results;
+					Query = value.Query;
+				}
 				SelectedIndex = value.Cursor;
-				Query = value.Query;
 			}
 		}
 
@@ -308,7 +312,8 @@ namespace Do.UI
 
 		public IObject[] Results
 		{
-			get { return results; }
+			//Needed for hashing
+			get { return results ?? results = new IObject[0]; }
 			set {				
 				ListStore store;
 				TreeIter iter, first_iter;
@@ -350,25 +355,22 @@ namespace Do.UI
 		public string Query
 		{
 			set {
+				query = value;
 				queryLabel.Markup = string.Format (QueryLabelFormat, value ?? "");
 			}
+			get { return query; }
 		}
 
 		// Draw a border around the window.
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			Cairo.Context cairo;
-			Gdk.Color border_color;
-
+			
 			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
 				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-				border_color = Style.Dark (StateType.Normal);
-				cairo.Color = new Cairo.Color ((double) border_color.Red / ushort.MaxValue,
-				                               (double) border_color.Green / ushort.MaxValue,
-				                               (double) border_color.Blue / ushort.MaxValue,
-				                               1.0);
+				cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
 				cairo.Operator = Cairo.Operator.Source;
-				cairo.Stroke ();
+				cairo.Paint ();
 			}
 
 			return base.OnExposeEvent (evnt);
@@ -394,6 +396,18 @@ namespace Do.UI
 				}
 				firstPath.Next ();
 			}
+		}
+						
+		protected virtual void SetColormap ()
+		{
+			Gdk.Colormap  colormap;
+
+			colormap = Screen.RgbaColormap;
+			if (colormap == null) {
+				colormap = Screen.RgbColormap;
+				Console.Error.WriteLine ("No alpha support.");
+			}
+			Colormap = colormap;
 		}
 	}
 }

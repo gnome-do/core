@@ -70,17 +70,9 @@ FILES =  \
 	src/Do.Core/DoObject.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
 	src/Do.Core/RelevanceProvider.cs \
-	src/Do.Core/SearchContext.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
-	src/Do.UI/GlossyRoundedFrame.cs \
-	src/Do.UI/IconBox.cs \
-	src/Do.UI/IconProvider.cs \
 	src/Do.UI/MainMenu.cs \
-	src/Do.UI/ResultsWindow.cs \
-	src/Do.UI/RoundedFrame.cs \
-	src/Do.UI/SymbolDisplayLabel.cs \
-	src/Do.UI/SymbolWindow.cs \
 	src/Do.Universe/DoTextItem.cs \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/InternalItemSource.cs \
