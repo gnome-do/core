@@ -52,7 +52,7 @@ namespace Do {
 		{
 			string home_dir, config_dir, env_path, user_dirs_path;
 
-			home_dir = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+			home_dir = UserHome;
 			config_dir = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
 
 			env_path = Environment.GetEnvironmentVariable (key);
@@ -119,8 +119,11 @@ namespace Do {
 
 		public static string UserHome {
 			get {
-				return ReadXdgUserDir ("HOME",
-					Environment.GetFolderPath (Environment.SpecialFolder.Personal));
+
+				string home = Environment.GetEnvironmentVariable ("HOME");
+				if (string.IsNullOrEmpty (home))
+					home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+				return home;
 			}
 		}
 
