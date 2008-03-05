@@ -37,7 +37,6 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
-	src/Paths.cs \
 	src/Do.Addins/Do.Addins.UI/BaseWidgets/DefaultObjects.cs \
 	src/Do.Addins/Do.Addins.UI/BaseWidgets/Frame.cs \
 	src/Do.Addins/Do.Addins.UI/BaseWidgets/GlossyRoundedFrame.cs \
@@ -84,7 +83,8 @@ FILES =  \
 	src/Do.Universe/RunAction.cs \
 	src/Do.Universe/RunInTerminalAction.cs \
 	src/Do.Universe/TextItem.cs \
-	src/Do.Universe/VoidAction.cs 
+	src/Do.Universe/VoidAction.cs \
+	src/Paths.cs 
 
 DATA_FILES = 
 

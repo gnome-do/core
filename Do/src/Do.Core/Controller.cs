@@ -304,6 +304,9 @@ namespace Do.Core
 			while (resultsGrowth > 0)
 				ShrinkResults ();
 			
+			if (window.CurrentPane == Pane.First && context[0].Results.Length == 0)
+				return;
+			
 			tabbing = true;
 			if (window.CurrentPane == Pane.First && //first pane and results
 					context[0].Results.Length != 0) {
