@@ -146,8 +146,6 @@ namespace Do.Core
 				window = new MiniWindow (this);
 			} else if (Do.Preferences.UseDarkFrame) {
 				window = new DarkFrame (this);
-			} else if (Do.Preferences.UseFullMode) {
-				window = new FullWindow (this);
 			} else {
 				window = new ClassicWindow (this); //FIXME
 			}
