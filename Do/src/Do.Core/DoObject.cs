@@ -29,7 +29,7 @@ namespace Do.Core {
 
 		const string DefaultName = "No name";
 		const string DefaultDescription = "No description.";
-		const string DefaultIcon = "empty";
+		const string DefaultIcon = "emblem-unreadable";
 		
 		static RelevanceProvider relevanceProvider;
 

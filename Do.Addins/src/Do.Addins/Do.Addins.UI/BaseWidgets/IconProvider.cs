@@ -36,7 +36,7 @@ namespace Do.Addins.UI
 		// Cache of loaded icons: key is "iconname_size".
 		static Dictionary<string, Pixbuf> pixbufCache;
 
-		static IconTheme [] themes;
+		static IconTheme  [] themes;
 
 		static IconProvider ()
 		{
@@ -45,8 +45,8 @@ namespace Do.Addins.UI
 			UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
 			UnknownPixbuf.Fill (0x00000000);
 
-			themes = new IconTheme [2];
-			themes [0] = IconTheme.Default;
+			themes = new IconTheme  [2];
+			themes  [0] = IconTheme.Default;
 			
 			IconTheme.Default.Changed += OnDefaultIconThemeChanged;
 		}
@@ -124,9 +124,9 @@ namespace Do.Addins.UI
 			}
 				
 			theme = IconTheme.Default;
-			if (pixbuf == null && themes[0].HasIcon ("empty")) {
+			if (pixbuf == null && themes [0].HasIcon ("emblem-noread")) {
 				try {
-					pixbuf = themes[0].LoadIcon ("empty", size, 0);
+					pixbuf = themes [0].LoadIcon ("emblem-noread", size, 0);
 				} catch {
 					pixbuf = null;					
 				}
@@ -136,7 +136,7 @@ namespace Do.Addins.UI
 			}			
 			// Cache icon pixbuf.
 			if (pixbuf != null && pixbuf != UnknownPixbuf) {
-				pixbufCache[iconKey] = pixbuf;				
+				pixbufCache [iconKey] = pixbuf;				
 			}
 			
 			return pixbuf;

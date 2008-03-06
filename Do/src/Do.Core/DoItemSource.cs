@@ -25,7 +25,7 @@ using Do.Universe;
 
 namespace Do.Core {
 
-	public class DoItemSource : DoObject, IItem {
+	public class DoItemSource : DoObject, IItemSource, IItem {
 
 		private bool enabled;
 		
@@ -34,6 +34,21 @@ namespace Do.Core {
 		{
 			enabled = true;
 		}
+
+		public Type [] SupportedItemTypes
+		{
+			get {
+				try {
+					return (Inner as IItemSource).SupportedItemTypes ??
+						new Type [0];
+				} catch (Exception e) {
+					LogError ("SupportedItemTypes", e);
+					return new Type [0];
+				}
+			}
+		}
+
+
 
 		public void UpdateItems ()
 		{
@@ -79,6 +94,10 @@ namespace Do.Core {
 			
 			doChildren = new List<IItem> ();
 			item = EnsureIItem (item);
+
+			if (!IObjectTypeCheck (item, SupportedItemTypes))
+				return doChildren;
+
 			try {
 				children = source.ChildrenOfItem (item);
 			} catch (Exception e) {

@@ -27,25 +27,11 @@ namespace Do.Core {
 
 	public class DoAction : DoObject, IAction {
 
-		public const string DefaultActionIcon = "gnome-run";
-
 		public DoAction (IAction action):
 			base (action)
 		{
 		}
 	
-		public override string Icon
-		{
-			get {
-				try {
-					return (Inner as IAction).Icon ?? DefaultActionIcon;
-				} catch (Exception e) {
-					LogError ("Icon", e);
-					return DefaultActionIcon;
-				}
-			}
-		}
-
 		public Type [] SupportedItemTypes
 		{
 			get {
