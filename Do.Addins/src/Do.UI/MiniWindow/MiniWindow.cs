@@ -21,34 +21,36 @@ using System;
 using System.Collections.Generic;
 using Mono.Unix;
 
+using Do.Addins;
 using Do.Universe;
 using Gdk;
 using Gtk;
 
-namespace Do.Addins.UI
+namespace Do.UI
 {
 	
 	
-	public class ClassicWindow : Gtk.Window, IDoWindow
+	public class MiniWindow : Gtk.Window, IDoWindow
 	{
 		
 		//-------------------Class Members------------------
-		GlossyRoundedFrame frame;
-		SymbolDisplayLabel label;
-		ResultsWindow resultsWindow;
-		HBox resultsHBox;
-		IconBox[] iconbox;
-		GConf.Client gconfClient;
+		protected MiniWindowFrame frame;
+		protected SymbolDisplayLabel label;
+		protected ResultsWindow resultsWindow;
+		protected HBox resultsHBox;
+		protected MiniIconBox[] iconbox;
 		IDoController controller;
 		
-		const int IconBoxIconSize = 128;
-		const uint IconBoxPadding = 6;
-		const int IconBoxRadius = 20;
-
-		const double WindowTransparency = 0.91;
+		protected const int IconBoxIconSize = 48;
+		protected const uint IconBoxPadding = 2;
+		protected const int IconBoxRadius = 3;
 		
-		Pane currentPane;
-		bool summonable;
+		protected const int MainRadius = 6;
+
+		protected const double WindowTransparency = 0.95;
+		
+		protected Pane currentPane;
+		protected bool summonable;
 		
 		//-------------------Events-----------------------
 		public new event DoEventKeyDelegate KeyPressEvent;
@@ -77,19 +79,15 @@ namespace Do.Addins.UI
 		}
 		
 		//-------------------ctor----------------------
-		public ClassicWindow (IDoController controller) : base (Gtk.WindowType.Toplevel)
+		public MiniWindow (IDoController controller) : base (Gtk.WindowType.Toplevel)
 		{
 			this.controller = controller;
-			
-			gconfClient = new GConf.Client ();
-			gconfClient.AddNotify ("/desktop/gnome/interface",
-				new GConf.NotifyEventHandler (DesktopThemeChanged));
 			
 			Build ();
 		}
 		
 		//-------------------methods------------------
-		protected void Build ()
+		protected virtual void Build ()
 		{
 			VBox      vbox;
 			Alignment align;
@@ -106,16 +104,19 @@ namespace Do.Addins.UI
 			} catch { }
 			SetColormap ();
 
-			resultsWindow = new ResultsWindow (BackgroundColor);
+			resultsWindow = new ResultsWindow (new Color(42, 45, 49), 24, 300, 4);
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
+			resultsWindow.ResultInfoFormat = "<b>{0}</b>";
 
 			currentPane = Pane.First;
 
-			frame = new GlossyRoundedFrame ();
+			frame = new MiniWindowFrame ();
 			frame.DrawFill = frame.DrawFrame = true;
-			frame.FillColor = frame.FrameColor = BackgroundColor;
-			frame.FillAlpha = frame.FrameAlpha = WindowTransparency;
-			frame.Radius = Screen.IsComposited ? IconBoxRadius : 0;
+			frame.FillColor = new Color(42, 45, 49);
+			frame.FillAlpha = WindowTransparency;
+			frame.FrameColor = new Color(0, 0, 0);
+			frame.FrameAlpha = .35;
+			frame.Radius = Screen.IsComposited ? MainRadius : 0;
 			Add (frame);
 			frame.Show ();
 
@@ -138,21 +139,21 @@ namespace Do.Addins.UI
 			vbox.PackStart (resultsHBox, false, false, 0);
 			resultsHBox.Show ();
 
-			iconbox = new IconBox[3];
+			iconbox = new MiniIconBox[3];
 
-			iconbox[0] = new IconBox (IconBoxIconSize);
+			iconbox[0] = new MiniIconBox (IconBoxIconSize);
 			iconbox[0].IsFocused = true;
 			iconbox[0].Radius = IconBoxRadius;
 			resultsHBox.PackStart (iconbox[0], false, false, 0);
 			iconbox[0].Show ();
 
-			iconbox[1] = new IconBox (IconBoxIconSize);
+			iconbox[1] = new MiniIconBox (IconBoxIconSize);
 			iconbox[1].IsFocused = false;
 			iconbox[1].Radius = IconBoxRadius;
 			resultsHBox.PackStart (iconbox[1], false, false, 0);
 			iconbox[1].Show ();
 
-			iconbox[2] = new IconBox (IconBoxIconSize);
+			iconbox[2] = new MiniIconBox (IconBoxIconSize);
 			iconbox[2].IsFocused = false;
 			iconbox[2].Radius = IconBoxRadius;
 			resultsHBox.PackStart (iconbox[2], false, false, 0);
@@ -164,7 +165,7 @@ namespace Do.Addins.UI
 			align.Add (label);
 			vbox.PackStart (align, false, false, 0);
 			label.Show ();
-			align.Show ();
+			//align.Show ();
 
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
@@ -194,49 +195,14 @@ namespace Do.Addins.UI
 			Colormap = colormap;
 		}
 		
-		private Gdk.Color BackgroundColor
-		{
-			get {
-				byte r, g, b;
-				Gdk.Color bgColor;
-
-				bgColor = Gtk.Rc.GetStyle (this).Backgrounds[(int) StateType.Selected];
-				r = (byte) ((bgColor.Red) >> 8);
-				g = (byte) ((bgColor.Green) >> 8);
-				b = (byte) ((bgColor.Blue) >> 8);
-				
-				// Useful for making overbright themes less ugly. Still trying
-				// to find a happy balance between 50 and 90...
-				byte maxLum = 60;
-				Addins.Util.Appearance.RGBToHSV(ref r, ref g, ref b);
-				b = Math.Min (b, maxLum);
-				Addins.Util.Appearance.HSVToRGB(ref r, ref g, ref b);
-				
-				return new Gdk.Color (r, g, b);
-			}
-		}
-		
-		private void OnScreenChanged (object sender, EventArgs args)
+		protected void OnScreenChanged (object sender, EventArgs args)
 		{
 			SetColormap ();
 		}
 		
-		private void OnConfigureEvent (object sender, ConfigureEventArgs args)
+		protected void OnConfigureEvent (object sender, ConfigureEventArgs args)
 		{
 			Reposition ();
-		}
-		
-		private void DesktopThemeChanged (object o, GConf.NotifyEventArgs e)
-		{
-			//this is needed to account for the delay between the gconf change
-			//and the theme change propogating to this application.
-			GLib.Timeout.Add (3000, delegate {
-				Gdk.Threads.Enter ();
-				frame.FillColor = BackgroundColor;
-				resultsWindow.UpdateColors (BackgroundColor);
-				Gdk.Threads.Leave ();
-				return false;
-			});
 		}
 		
 		public void Reposition ()
@@ -254,7 +220,8 @@ namespace Do.Addins.UI
 
 			resultsWindow.GetSize (out results.Width, out results.Height);
 			results.Y = main.Y + main.Height;
-			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + IconBoxRadius;
+			results.X = main.X + (((iconbox[0].Width) + ((int) IconBoxPadding * 2)) * 
+			                      (int) currentPane + MainRadius);
 			resultsWindow.Move (results.X, results.Y);
 		}
 		
@@ -284,7 +251,7 @@ namespace Do.Addins.UI
 			return base.OnButtonPressEvent (evnt);
 		}
 		
-		private void OnResultsWindowSelectionChanged (object sender,
+		protected  void OnResultsWindowSelectionChanged (object sender,
 				ResultsWindowSelectionEventArgs args)
 		{
 			controller.NewContextSelection (CurrentPane, args.SelectedIndex);

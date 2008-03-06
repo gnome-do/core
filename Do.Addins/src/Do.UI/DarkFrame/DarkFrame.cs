@@ -24,10 +24,11 @@ using System;
 using Mono.Unix;
 
 using Do.Universe;
+using Do.Addins;
 using Gdk;
 using Gtk;
 
-namespace Do.Addins.UI
+namespace Do.UI
 {
 	
 	

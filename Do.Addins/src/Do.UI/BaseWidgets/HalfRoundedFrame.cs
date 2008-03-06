@@ -19,7 +19,7 @@
 
 using System;
 
-namespace Do.Addins.UI
+namespace Do.UI
 {
 	
 	

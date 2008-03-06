@@ -37,25 +37,25 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
-	src/Do.Addins/Do.Addins.UI/BaseWidgets/DefaultObjects.cs \
-	src/Do.Addins/Do.Addins.UI/BaseWidgets/Frame.cs \
-	src/Do.Addins/Do.Addins.UI/BaseWidgets/GlossyRoundedFrame.cs \
-	src/Do.Addins/Do.Addins.UI/BaseWidgets/HalfRoundedFrame.cs \
-	src/Do.Addins/Do.Addins.UI/BaseWidgets/IconBox.cs \
-	src/Do.Addins/Do.Addins.UI/BaseWidgets/IconProvider.cs \
-	src/Do.Addins/Do.Addins.UI/BaseWidgets/ResultsWindow.cs \
-	src/Do.Addins/Do.Addins.UI/BaseWidgets/SymbolDisplayLabel.cs \
-	src/Do.Addins/Do.Addins.UI/BaseWidgets/TextFrame.cs \
-	src/Do.Addins/Do.Addins.UI/ClassicWindow/ClassicWindow.cs \
-	src/Do.Addins/Do.Addins.UI/DarkFrame/DarkFrame.cs \
-	src/Do.Addins/Do.Addins.UI/IDoWindow.cs \
-	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniIconBox.cs \
-	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniWindow.cs \
-	src/Do.Addins/Do.Addins.UI/MiniWindow/MiniWindowFrame.cs \
-	src/Do.Addins/Do.Addins.UI/ResultsWindowSelectionEventArgs.cs \
 	src/Do.Addins/IDoController.cs \
 	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/Util.cs \
+	src/Do.UI/BaseWidgets/DefaultObjects.cs \
+	src/Do.UI/BaseWidgets/Frame.cs \
+	src/Do.UI/BaseWidgets/GlossyRoundedFrame.cs \
+	src/Do.UI/BaseWidgets/HalfRoundedFrame.cs \
+	src/Do.UI/BaseWidgets/IconBox.cs \
+	src/Do.UI/BaseWidgets/ResultsWindow.cs \
+	src/Do.UI/BaseWidgets/SymbolDisplayLabel.cs \
+	src/Do.UI/BaseWidgets/TextFrame.cs \
+	src/Do.UI/ClassicWindow/ClassicWindow.cs \
+	src/Do.UI/DarkFrame/DarkFrame.cs \
+	src/Do.UI/IconProvider.cs \
+	src/Do.UI/IDoWindow.cs \
+	src/Do.UI/MiniWindow/MiniIconBox.cs \
+	src/Do.UI/MiniWindow/MiniWindow.cs \
+	src/Do.UI/MiniWindow/MiniWindowFrame.cs \
+	src/Do.UI/ResultsWindowSelectionEventArgs.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/BookmarkItem.cs \

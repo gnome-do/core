@@ -25,7 +25,7 @@ using Gdk;
 using Do.Universe;
 using Do.Addins;
 
-namespace Do.Addins.UI
+namespace Do.UI
 {
 	public class SymbolDisplayLabel : Label
 	{

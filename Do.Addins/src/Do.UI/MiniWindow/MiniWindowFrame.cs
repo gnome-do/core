@@ -24,7 +24,7 @@ using Cairo;
 using Gdk;
 using Gtk;
 
-namespace Do.Addins.UI
+namespace Do.UI
 {
 	
 	

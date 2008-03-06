@@ -28,7 +28,7 @@ using Mono.Unix;
 using Do.DBusLib;
 using Do.Universe;
 using Do.Addins;
-using Do.Addins.UI;
+using Do.UI;
 
 namespace Do.Core
 {

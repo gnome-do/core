@@ -20,7 +20,7 @@
 using System;
 
 using Do.Addins;
-using Do.Addins.UI;
+using Do.UI;
 using Do.Universe;
 
 namespace Do.Addins

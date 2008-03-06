@@ -18,10 +18,11 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using Do.Addins;
 using Do.Universe;
 using Gdk;
 
-namespace Do.Addins.UI
+namespace Do.UI
 {
 	public enum Pane
 	{

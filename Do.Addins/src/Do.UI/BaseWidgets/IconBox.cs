@@ -25,7 +25,7 @@ using Gdk;
 using Do.Addins;
 using Do.Universe;
 
-namespace Do.Addins.UI
+namespace Do.UI
 {
 	public class IconBox : Frame
 	{
