@@ -240,7 +240,7 @@ namespace Do.UI
 			});
 		}
 		
-		public void Reposition ()
+		public virtual void Reposition ()
 		{
 			int monitor;
 			Gdk.Rectangle geo, main, results;

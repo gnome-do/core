@@ -38,7 +38,11 @@ namespace Do.UI
 		new const uint IconBoxPadding = 2;
 		new const int IconBoxRadius = 3;
 		
-		public DarkFrame(IDoController controller) : base (controller)
+		protected int frameoffset;
+		protected new const int MainRadius = 10;
+		protected new GlassFrame frame;
+		
+		public DarkFrame (IDoController controller) : base (controller)
 		{
 		}
 		
@@ -59,16 +63,17 @@ namespace Do.UI
 			} catch { }
 			SetColormap ();
 
-			resultsWindow = new ResultsWindow (new Color(42, 45, 49));
+			resultsWindow = new ResultsWindow (new Color(15, 15, 15));
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
 			currentPane = Pane.First;
 
-			frame = new MiniWindowFrame ();
+			frameoffset = 10;
+			frame = new GlassFrame (frameoffset);
 			frame.DrawFill = frame.DrawFrame = true;
-			frame.FillColor = new Color(42, 45, 49);
+			frame.FillColor = new Color(15, 15, 15);
 			frame.FillAlpha = WindowTransparency;
-			frame.FrameColor = new Color(0, 0, 0);
+			frame.FrameColor = new Color(125, 125, 135);
 			frame.FrameAlpha = .35;
 			frame.Radius = Screen.IsComposited ? MainRadius : 0;
 			Add (frame);
@@ -76,7 +81,7 @@ namespace Do.UI
 
 			vbox = new VBox (false, 0);
 			frame.Add (vbox);
-			vbox.BorderWidth = IconBoxPadding;
+			vbox.BorderWidth = (uint) (IconBoxPadding + frameoffset);
 			vbox.Show ();
 
 			settings_icon = new Gtk.Image (GetType().Assembly, "settings-triangle.png");
@@ -118,8 +123,8 @@ namespace Do.UI
 			label = new SymbolDisplayLabel ();
 			align.Add (label);
 			vbox.PackStart (align, false, false, 0);
-			label.Show ();
-			align.Show ();
+			//label.Show ();
+			//align.Show ();
 
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
@@ -127,6 +132,26 @@ namespace Do.UI
 			summonable = true;
 
 			Reposition ();
+		}
+		
+		public override void Reposition ()
+		{
+			int monitor;
+			Gdk.Rectangle geo, main, results;
+			
+			GetPosition (out main.X, out main.Y);
+			GetSize (out main.Width, out main.Height);
+			monitor = Screen.GetMonitorAtPoint (main.X, main.Y);
+			geo = Screen.GetMonitorGeometry (monitor);
+			main.X = (geo.Width - main.Width) / 2;
+			main.Y = (int)((geo.Height - main.Height) / 2.5);
+			Move (main.X, main.Y);
+
+			resultsWindow.GetSize (out results.Width, out results.Height);
+			results.Y = main.Y + main.Height - frameoffset;
+			results.X = main.X + (((iconbox[0].Width) + ((int) IconBoxPadding * 2)) * 
+			                      (int) currentPane + MainRadius) + frameoffset;
+			resultsWindow.Move (results.X, results.Y);
 		}
 	}
 }
