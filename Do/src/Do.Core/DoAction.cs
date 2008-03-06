@@ -35,38 +35,43 @@ namespace Do.Core {
 		public Type [] SupportedItemTypes
 		{
 			get {
+				Type [] types = null;
 				try {
-					return (Inner as IAction).SupportedItemTypes ??
-						new Type [0];
+					types = (Inner as IAction).SupportedItemTypes;
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
-					return new Type [0];
+				} finally {
+					types = types ?? new Type [0];
 				}
+				return types;
 			}
 		}
 
 		public Type [] SupportedModifierItemTypes
 		{
 			get {
+				Type [] types = null;
 				try {
-					return (Inner as IAction).SupportedModifierItemTypes ??
-						new Type [0];
+					types = (Inner as IAction).SupportedModifierItemTypes;
 				} catch (Exception e) {
 					LogError ("SupportedModifierItemTypes", e);
-					return new Type [0];
+				} finally {
+					types = types ?? new Type [0];
 				}
+				return types;
 			}
 		}
 		
 		public bool ModifierItemsOptional
 		{
 			get {
+				bool optional = true;
 				try {
-					return (Inner as IAction).ModifierItemsOptional;
+					optional = (Inner as IAction).ModifierItemsOptional;
 				} catch (Exception e) {
 					LogError ("ModifierItemsOptional", e);
-					return true;
 				}
+				return optional;
 			}
 		}
 		
@@ -81,7 +86,6 @@ namespace Do.Core {
 				modItems = action.DynamicModifierItemsForItem (item);
 			} catch (Exception e) {
 				LogError ("DynamicModifierItemsForItem", e);
-				modItems = null;
 			} finally {
 				modItems = modItems ?? new IItem [0];
 			}
@@ -91,7 +95,7 @@ namespace Do.Core {
 		public bool SupportsItem (IItem item)
 		{
 			IAction action = Inner as IAction;
-			bool supports;
+			bool supports = false;
 			
 			item = EnsureIItem (item);
 			if (!IObjectTypeCheck (item, SupportedItemTypes))
@@ -101,7 +105,6 @@ namespace Do.Core {
 				supports = action.SupportsItem (item);
 			} catch (Exception e) {
 				LogError ("SupportsItem", e);
-				supports = false;
 			}
 			return supports;
 		}
@@ -109,7 +112,7 @@ namespace Do.Core {
 		public bool SupportsModifierItemForItems (IItem [] items, IItem modItem)
 		{
 			IAction action = Inner as IAction;
-			bool supports;
+			bool supports = false;
 
 			items = EnsureIItemArray (items);
 			modItem = EnsureIItem (modItem);
@@ -120,7 +123,6 @@ namespace Do.Core {
 				supports = action.SupportsModifierItemForItems (items, modItem);
 			} catch (Exception e) {
 				LogError ("SupportsModifierItemForItems", e);
-				supports = false;
 			}
 			return supports;
 		}
@@ -128,7 +130,7 @@ namespace Do.Core {
 		public IItem [] Perform (IItem [] items, IItem [] modItems)
 		{
 			IAction action = Inner as IAction;
-			IItem [] resultItems;
+			IItem [] resultItems = null;
 			
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
@@ -137,12 +139,10 @@ namespace Do.Core {
 			if (items.Length > 0 )
 				InternalItemSource.LastItem.Inner = items [0];
 			
-			resultItems = null;
 			try {
 				resultItems = action.Perform (items, modItems);
 			} catch (Exception e) {
 				LogError ("Perform", e);
-				resultItems = null;
 			} finally {
 				resultItems = resultItems ?? new IItem [0];
 			}

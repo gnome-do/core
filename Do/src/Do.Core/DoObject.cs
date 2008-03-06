@@ -38,50 +38,25 @@ namespace Do.Core {
 			relevanceProvider = RelevanceProvider.GetProvider ();
 		}
 
-		public static List<Type> GetAllImplementedTypes (IObject o)
-		{
-			Type baseType;
-			List<Type> types;
-			
-			baseType = o.GetType ();
-			types = new List<Type> ();
-			// Climb up the inheritance tree adding types.
-			while (typeof (IObject).IsAssignableFrom (baseType)) {
-				types.Add (baseType);
-				baseType = baseType.BaseType;    
-			}
-			// Add all implemented interfaces
-			foreach (Type interface_type in o.GetType ().GetInterfaces ()) {
-				if (typeof (IObject).IsAssignableFrom (interface_type)) {
-					types.Add (interface_type);
-				}
-			}
-			return types;
-		}
-
 		public static bool IObjectTypeCheck (IObject o, Type [] types)
 		{
-			bool type_ok;
-
-			type_ok = false;
 			foreach (Type type in types) {
-				if (type.IsAssignableFrom (o.GetType ())) {
-					type_ok = true;
-					break;
-				}
+				if (type.IsAssignableFrom (o.GetType ()))
+					return true;
 			}
-			return type_ok;
+			return false;
 		}
 
 		/// <summary>
-		/// Returns the inner item if the static type of given
-		/// item is an DoItem subtype. Returns the argument otherwise.
+		/// Returns the inner item if the static type of given item is an DoItem
+		/// subtype. Returns the argument otherwise.
 		/// </summary>
 		/// <param name="items">
 		/// A <see cref="IItem"/> that may or may not be an DoItem subtype.
 		/// </param>
 		/// <returns>
-		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem of an DoItem).
+		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem
+		/// of an DoItem).
 		/// </returns>
 		public static IItem EnsureIItem (IItem item)
 		{
@@ -133,6 +108,7 @@ namespace Do.Core {
 		{
 			if (inner == null)
 				throw new ArgumentNullException ("Inner IObject may not be null.");
+
 			this.inner = inner;
 		}
 
@@ -148,34 +124,43 @@ namespace Do.Core {
 		
 		public virtual string Name {
 			get {
+				string name = null;
 				try {
-					return inner.Name ?? DefaultName;
+					name = inner.Name;
 				} catch (Exception e) {
 					LogError ("Name", e, "_");
-					return DefaultName;
+				} finally {
+					name = name ?? DefaultName;
 				}
+				return name;
 			}
 		}
 		
 		public virtual string Description {
 			get {
+				string description = null;
 				try {
-					return inner.Description ?? DefaultDescription;
+					description = inner.Description;
 				} catch (Exception e) {
 					LogError ("Description", e);
-					return DefaultDescription;
+				} finally {
+					description = description ?? DefaultDescription;
 				}
+				return description;
 			}
 		}
 		
 		public virtual string Icon {
 			get {
+				string icon = null;
 				try {
-					return inner.Icon ?? DefaultIcon;
+					icon = inner.Icon;
 				} catch (Exception e) {
 					LogError ("Icon", e);
-					return DefaultIcon;
+				} finally {
+					icon = icon ?? DefaultIcon;
 				}
+				return icon;
 			}
 		}
 		

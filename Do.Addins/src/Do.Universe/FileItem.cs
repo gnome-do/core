@@ -154,7 +154,7 @@ namespace Do.Universe {
 						icon = string.Format ("gnome-mime-{0}", icon);
 					}
 				} catch (NullReferenceException) {
-					icon = "file";
+					icon = "gtk-file";
 				}
 				return icon;
 			}

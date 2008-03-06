@@ -38,13 +38,15 @@ namespace Do.Core {
 		public Type [] SupportedItemTypes
 		{
 			get {
+				Type [] types = null;
 				try {
-					return (Inner as IItemSource).SupportedItemTypes ??
-						new Type [0];
+					types = (Inner as IItemSource).SupportedItemTypes;
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
-					return new Type [0];
+				} finally {
+					types = types ?? new Type [0];
 				}
+				return types;
 			}
 		}
 
@@ -69,7 +71,6 @@ namespace Do.Core {
 					innerItems = source.Items;
 				} catch (Exception e) {
 					LogError ("Items", e);
-					innerItems = null;
 				} finally {
 					innerItems = innerItems ?? new IItem [0];
 				}
@@ -100,7 +101,6 @@ namespace Do.Core {
 				children = source.ChildrenOfItem (item);
 			} catch (Exception e) {
 				LogError ("ChildrenOfItem", e);
-				children = null;
 			} finally {
 				children = children ?? new IItem [0];
 			}

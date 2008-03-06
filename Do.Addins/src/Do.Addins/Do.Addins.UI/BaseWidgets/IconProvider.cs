@@ -124,6 +124,14 @@ namespace Do.Addins.UI
 			}
 				
 			theme = IconTheme.Default;
+			if (pixbuf == null && name.StartsWith ("gnome-mime") &&
+					themes [0].HasIcon ("gtk-file")) {
+				try {
+					pixbuf = themes [0].LoadIcon ("gtk-file", size, 0);
+				} catch {
+					pixbuf = null;					
+				}
+			}
 			if (pixbuf == null && themes [0].HasIcon ("emblem-noread")) {
 				try {
 					pixbuf = themes [0].LoadIcon ("emblem-noread", size, 0);
