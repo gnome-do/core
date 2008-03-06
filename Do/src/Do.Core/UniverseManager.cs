@@ -229,7 +229,6 @@ namespace Do.Core
 			foreach (Type type in plugin.GetTypes ()) {			
 				if (type.IsAbstract) continue;
 				if (type == typeof (VoidAction)) continue;
-				if (type == typeof (ICommandWrapperAction)) continue;
 				if (type == typeof (DoAction)) continue;
 				if (type == typeof (DoItem)) continue;
 				if (loadedTypes.ContainsKey (type)) {
@@ -268,22 +267,6 @@ namespace Do.Core
 						if (action != null) {
 							doActions.Add (new DoAction (action));
 							Log.Info ("Successfully loaded \"{0}\" action.", action.Name);
-						}
-					}
-					// Legacy support for commands.
-					else if (iface == typeof (ICommand)) {
-						ICommand command = null;
-
-						try {
-							command = System.Activator.CreateInstance (type) as ICommand;
-						} catch (Exception e) {
-							command = null;
-							Log.Error ("Failed to load command from {0}: {1}",
-									plugin.Location, e.Message);
-						}
-						if (command != null) {
-							doActions.Add (new DoAction (command));
-							Log.Info ("Successfully loaded \"{0}\" command.", command.Name);
 						}
 					}
 				}

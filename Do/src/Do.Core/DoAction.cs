@@ -23,65 +23,81 @@ using System.Threading;
 
 using Do.Universe;
 
-namespace Do.Core
-{
+namespace Do.Core {
 
-	public class DoAction : DoObject, IAction
-	{
-		public const string kDefaultActionIcon = "gnome-run";
+	public class DoAction : DoObject, IAction {
+
+		public const string DefaultActionIcon = "gnome-run";
 
 		public DoAction (IAction action):
 			base (action)
 		{
 		}
-		
-		// Legacy Command support.
-		public DoAction (ICommand command):
-			this (new ICommandWrapperAction (command))
-		{
-		}
-
+	
 		public override string Icon
 		{
 			get {
-				return (Inner as IAction).Icon ?? kDefaultActionIcon;
+				try {
+					return (Inner as IAction).Icon ?? DefaultActionIcon;
+				} catch (Exception e) {
+					LogError ("Icon", e);
+					return DefaultActionIcon;
+				}
 			}
 		}
 
-		public Type[] SupportedItemTypes
+		public Type [] SupportedItemTypes
 		{
 			get {
-				return (Inner as IAction).SupportedItemTypes ?? new Type[0];
+				try {
+					return (Inner as IAction).SupportedItemTypes ??
+						new Type [0];
+				} catch (Exception e) {
+					LogError ("SupportedItemTypes", e);
+					return new Type [0];
+				}
 			}
 		}
 
-		public Type[] SupportedModifierItemTypes
+		public Type [] SupportedModifierItemTypes
 		{
 			get {
-				return (Inner as IAction).SupportedModifierItemTypes ?? new Type[0];
+				try {
+					return (Inner as IAction).SupportedModifierItemTypes ??
+						new Type [0];
+				} catch (Exception e) {
+					LogError ("SupportedModifierItemTypes", e);
+					return new Type [0];
+				}
 			}
 		}
 		
 		public bool ModifierItemsOptional
 		{
 			get {
-				return (Inner as IAction).ModifierItemsOptional;
+				try {
+					return (Inner as IAction).ModifierItemsOptional;
+				} catch (Exception e) {
+					LogError ("ModifierItemsOptional", e);
+					return true;
+				}
 			}
 		}
 		
-		public IItem[] DynamicModifierItemsForItem (IItem item)
+		public IItem [] DynamicModifierItemsForItem (IItem item)
 		{
 			IAction action = Inner as IAction;
-			IItem[] modItems;
+			IItem [] modItems;
 			
 			modItems = null;
 			item = EnsureIItem (item);
 			try {
 				modItems = action.DynamicModifierItemsForItem (item);
-			} catch {
+			} catch (Exception e) {
+				LogError ("DynamicModifierItemsForItem", e);
 				modItems = null;
 			} finally {
-				modItems = modItems ?? new IItem[0];
+				modItems = modItems ?? new IItem [0];
 			}
 			return EnsureDoItemArray (modItems);
 		}
@@ -97,13 +113,14 @@ namespace Do.Core
 
 			try {
 				supports = action.SupportsItem (item);
-			} catch {
+			} catch (Exception e) {
+				LogError ("SupportsItem", e);
 				supports = false;
 			}
 			return supports;
 		}
 
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		public bool SupportsModifierItemForItems (IItem [] items, IItem modItem)
 		{
 			IAction action = Inner as IAction;
 			bool supports;
@@ -115,33 +132,33 @@ namespace Do.Core
 
 			try {
 				supports = action.SupportsModifierItemForItems (items, modItem);
-			} catch {
+			} catch (Exception e) {
+				LogError ("SupportsModifierItemForItems", e);
 				supports = false;
 			}
 			return supports;
 		}
 
-		public IItem[] Perform (IItem[] items, IItem[] modItems)
+		public IItem [] Perform (IItem [] items, IItem [] modItems)
 		{
 			IAction action = Inner as IAction;
-			IItem[] resultItems;
+			IItem [] resultItems;
 			
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
 
 			// TODO: Create a action performed event and move this.
 			if (items.Length > 0 )
-				InternalItemSource.LastItem.Inner = items[0];
+				InternalItemSource.LastItem.Inner = items [0];
 			
 			resultItems = null;
 			try {
 				resultItems = action.Perform (items, modItems);
 			} catch (Exception e) {
+				LogError ("Perform", e);
 				resultItems = null;
-				Log.Error ("Action \"{0}\" encountered an error: {1}",
-						Inner.Name, e.Message);
 			} finally {
-				resultItems = resultItems ?? new IItem[0];
+				resultItems = resultItems ?? new IItem [0];
 			}
 			resultItems = EnsureDoItemArray (resultItems);
 			
@@ -156,66 +173,4 @@ namespace Do.Core
 			return resultItems;
 		}
 	}	
-
-	// Wraps an ICommand as an IAction for legacy Command support.
-	class ICommandWrapperAction : IAction
-	{
-		private ICommand c;
-
-		public ICommandWrapperAction (ICommand command)
-		{
-			c = command;
-		}
-
-		public string Name
-		{
-			get { return c.Name; }
-		}
-
-		public string Description
-		{
-			get { return c.Description; }
-	 	}
-
-		public string Icon
-		{
-			get { return c.Icon; }
-		}
-		
-		public Type[] SupportedItemTypes
-		{
-			get { return c.SupportedItemTypes; }
-		}
-		
-		public Type[] SupportedModifierItemTypes
-		{
-			get { return c.SupportedModifierItemTypes; }
-		}
-		
-		public bool ModifierItemsOptional
-		{
-			get { return c.ModifierItemsOptional; }
-		}
-
-		public bool SupportsItem (IItem item)
-		{
-			return c.SupportsItem (item);
-		}
-
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			return c.SupportsModifierItemForItems (items, modItem);
-		}
-		
-		public IItem[] DynamicModifierItemsForItem (IItem item)
-		{
-			return c.DynamicModifierItemsForItem (item);
-		}
-		
-		public IItem[] Perform (IItem[] items, IItem[] modItems)
-		{
-			return c.Perform (items, modItems);
-		}
-	}
-
 }

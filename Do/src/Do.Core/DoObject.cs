@@ -23,13 +23,13 @@ using System.Collections.Generic;
 
 using Do.Universe;
 
-namespace Do.Core
-{
-	public abstract class DoObject : IObject, IComparable<IObject>
-	{
-		const string kDefaultName = "No name";
-		const string kDefaultDescription = "No description.";
-		const string kDefaultIcon = "empty";
+namespace Do.Core {
+
+	public abstract class DoObject : IObject, IComparable<IObject> {
+
+		const string DefaultName = "No name";
+		const string DefaultDescription = "No description.";
+		const string DefaultIcon = "empty";
 		
 		static RelevanceProvider relevanceProvider;
 
@@ -59,7 +59,7 @@ namespace Do.Core
 			return types;
 		}
 
-		public static bool IObjectTypeCheck (IObject o, Type[] types)
+		public static bool IObjectTypeCheck (IObject o, Type [] types)
 		{
 			bool type_ok;
 
@@ -94,33 +94,33 @@ namespace Do.Core
 		/// Like EnsureItem but for arrays of IItems.
 		/// </summary>
 		/// <param name="items">
-		/// A <see cref="IItem[]"/> that may contain
+		/// A <see cref="IItem []"/> that may contain
 		/// DoItem subtypes.
 		/// </param>
 		/// <returns>
-		/// A <see cref="IItem[]"/> of inner IItems.
+		/// A <see cref="IItem []"/> of inner IItems.
 		/// </returns>
-		public static IItem[] EnsureIItemArray (IItem[] items)
+		public static IItem [] EnsureIItemArray (IItem [] items)
 		{
-			IItem[] inner_items;
+			IItem [] inner_items;
 
-			inner_items = items.Clone () as IItem[];
+			inner_items = items.Clone () as IItem [];
 			for (int i = 0; i < items.Length; ++i) {
-				if (items[i] is DoItem) {
-					inner_items[i] = (items[i] as DoItem).Inner as IItem;
+				if (items [i] is DoItem) {
+					inner_items [i] = (items [i] as DoItem).Inner as IItem;
 				}
 			}
 			return inner_items;
 		}
 
-		public static IItem[] EnsureDoItemArray (IItem[] items)
+		public static IItem [] EnsureDoItemArray (IItem [] items)
 		{
-			IItem[] do_items;
+			IItem [] do_items;
 
-			do_items = items.Clone () as IItem[];
+			do_items = items.Clone () as IItem [];
 			for (int i = 0; i < items.Length; ++i) {
-				if (!(items[i] is DoItem)) {
-					do_items[i] = new DoItem (items[i]);
+				if (!(items [i] is DoItem)) {
+					do_items [i] = new DoItem (items [i]);
 				}
 			}
 			return do_items;
@@ -147,20 +147,42 @@ namespace Do.Core
 		}
 		
 		public virtual string Name {
-			get { return inner.Name ?? kDefaultName; }
+			get {
+				try {
+					return inner.Name ?? DefaultName;
+				} catch (Exception e) {
+					LogError ("Name", e, "_");
+					return DefaultName;
+				}
+			}
 		}
 		
 		public virtual string Description {
-			get { return inner.Description ?? kDefaultDescription; }
+			get {
+				try {
+					return inner.Description ?? DefaultDescription;
+				} catch (Exception e) {
+					LogError ("Description", e);
+					return DefaultDescription;
+				}
+			}
 		}
 		
 		public virtual string Icon {
-			get { return inner.Icon ?? kDefaultIcon; }
+			get {
+				try {
+					return inner.Icon ?? DefaultIcon;
+				} catch (Exception e) {
+					LogError ("Icon", e);
+					return DefaultIcon;
+				}
+			}
 		}
 		
 		public virtual string UID {
 			get {
-				return string.Format ("{0}{1}{2}", inner.GetType (), Name, Description);
+				return string.Format ("{0}{1}{2}",
+					inner.GetType (), Name, Description);
 			}
 		}
 		
@@ -206,6 +228,19 @@ namespace Do.Core
 		public int CompareTo (IObject other)
 		{
 			return (int) (1000000 * ((other as DoObject).Relevance - Relevance));
+		}
+
+		protected void LogError (string where, Exception e)
+		{
+			LogError (where, e, Name);
+		}
+
+		protected void LogError (string where, Exception e, string name)
+		{
+			Log.Error ("\"{0}\" ({1}) encountered an error in {2}:\n\t" +
+				       "{3}: {4}",
+				name, (inner != null ? inner.GetType () : GetType ()),
+				where, e.GetType (), e.Message);
 		}
 	}
 }

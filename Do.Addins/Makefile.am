@@ -67,7 +67,6 @@ FILES =  \
 	src/Do.Universe/FirefoxBookmarkItemSource.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Universe/IAction.cs \
-	src/Do.Universe/ICommand.cs \
 	src/Do.Universe/IItem.cs \
 	src/Do.Universe/IItemSource.cs \
 	src/Do.Universe/ImageFileItem.cs \
