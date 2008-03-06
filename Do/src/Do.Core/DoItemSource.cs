@@ -48,8 +48,6 @@ namespace Do.Core {
 			}
 		}
 
-
-
 		public void UpdateItems ()
 		{
 			try {
