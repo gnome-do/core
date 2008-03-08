@@ -166,8 +166,8 @@ namespace Do.UI
 			click_y = (int) evnt.YRoot;
 			click_on_window = start_x <= click_x && click_x < end_x &&
 			                  start_y <= click_y && click_y < end_y;
-			click_near_settings_icon = (((end_x - 30) <= click_x) && (click_x < end_x - 10) && 
-			                            (start_y <= click_y) && (click_y < (start_y + 15)));
+			click_near_settings_icon = (end_x - 30 <= click_x) && (click_x < end_x - 10) && 
+			                            (start_y <= click_y) && (click_y < start_y + 15);
 			if (click_near_settings_icon) {
 				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 21, start_y + 12);
 				// Have to re-grab the pane from the menu.
