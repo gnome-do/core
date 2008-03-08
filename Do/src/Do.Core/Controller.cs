@@ -217,6 +217,7 @@ namespace Do.Core
 					OnDeleteKeyPressEvent (evnt);
 					break;
 				case Gdk.Key.Tab:
+				case Gdk.Key.ISO_Left_Tab:
 					OnTabKeyPressEvent (evnt);
 					break;
 				case Gdk.Key.Up:
@@ -309,23 +310,44 @@ namespace Do.Core
 			
 			tabbing = true;
 
-			switch (window.CurrentPane) {
-				case Pane.First:
-					window.CurrentPane = Pane.Second;
-					break;
-				case Pane.Second:
-					if (ThirdPaneAllowed) {
-						window.CurrentPane = Pane.Third;
-						ThirdPaneVisible = true;
-					} else {
+			if (evnt.Key == Key.Tab) {
+				switch (window.CurrentPane) {
+					case Pane.First:
+						window.CurrentPane = Pane.Second;
+						break;
+					case Pane.Second:
+						if (ThirdPaneAllowed) {
+							window.CurrentPane = Pane.Third;
+							ThirdPaneVisible = true;
+						} else {
+							window.CurrentPane = Pane.First;
+						}
+						break;
+					case Pane.Third:
 						window.CurrentPane = Pane.First;
-					}
-					break;
-				case Pane.Third:
-					window.CurrentPane = Pane.First;
-					if (!ThirdPaneRequired && context[2].Query.Length == 0)
-						ThirdPaneVisible = false;
-					break;
+						if (!ThirdPaneRequired && context[2].Query.Length == 0)
+							ThirdPaneVisible = false;
+						break;
+				}
+			} else if (evnt.Key == Key.ISO_Left_Tab) {
+				switch (window.CurrentPane) {
+					case Pane.First:
+						if (ThirdPaneAllowed) {
+							window.CurrentPane = Pane.Third;
+							ThirdPaneVisible = true;
+						} else {
+							window.CurrentPane = Pane.Second;
+						}
+						break;
+					case Pane.Second:
+						window.CurrentPane = Pane.First;
+						break;
+					case Pane.Third:
+						window.CurrentPane = Pane.Second;
+						if (!ThirdPaneRequired && context[2].Query.Length == 0)
+							ThirdPaneVisible = false;
+						break;
+				}
 			}
 			window.SetPaneContext (window.CurrentPane, CurrentContext);
 			
