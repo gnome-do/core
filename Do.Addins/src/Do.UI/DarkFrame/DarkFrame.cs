@@ -72,8 +72,8 @@ namespace Do.UI
 			frame.DrawFill = frame.DrawFrame = true;
 			frame.FillColor = new Color(15, 15, 15);
 			frame.FillAlpha = WindowTransparency;
-			frame.FrameColor = new Color(125, 125, 135);
-			frame.FrameAlpha = .35;
+			frame.FrameColor = new Color(125, 125, 145);
+			frame.FrameAlpha = .65;
 			frame.Radius = Screen.IsComposited ? MainRadius : 0;
 			Add (frame);
 			frame.Show ();

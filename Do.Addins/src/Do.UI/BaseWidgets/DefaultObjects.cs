@@ -28,17 +28,22 @@ namespace Do.Addins
 	
 	public class NoResultsFoundObject : IObject
 	{
-		public NoResultsFoundObject ()
+		string query;
+		
+		public NoResultsFoundObject (string query)
 		{
+			this.query = query;
 		}
 
 		public string Icon { get { return "gtk-dialog-question"; } }
-		public string Name { get { return Catalog.GetString ("No results found."); } }
+		public string Name { get { return Catalog.GetString (
+				                   string.Format("No results for <b><u>{0}</u></b>.", query)); } }
 
 		public string Description
 		{
 			get {
-				return string.Format (Catalog.GetString ("No results found"));
+				return string.Format (Catalog.GetString (
+				                      string.Format("No results found for <b><u>{0}</u></b>.", query)));
 			}
 		}
 	}

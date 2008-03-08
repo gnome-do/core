@@ -326,7 +326,10 @@ namespace Do.UI
 			if (context.Results.Length == 0) {
 				for (int i = (int) pane; i < 3; i++) {
 					iconbox[i].Clear ();
-					iconbox[i].DisplayObject = new Do.Addins.NoResultsFoundObject ();
+					NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
+					iconbox[i].DisplayObject = noRes;
+					if (i == (int) CurrentPane)
+						label.SetDisplayLabel (noRes.Name, noRes.Description);
 				}
 				return;
 			}
