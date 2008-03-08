@@ -50,7 +50,6 @@ namespace Do.UI
 		{
 			VBox      vbox;
 			Alignment align;
-			Gtk.Image settings_icon;
 
 			AppPaintable = true;
 			KeepAbove = true;
@@ -83,15 +82,6 @@ namespace Do.UI
 			frame.Add (vbox);
 			vbox.BorderWidth = (uint) (IconBoxPadding + frameoffset);
 			vbox.Show ();
-
-			settings_icon = new Gtk.Image (GetType().Assembly, "settings-triangle.png");
-
-			align = new Alignment (1.0F, 0.0F, 0, 0);
-			align.SetPadding (3, 0, 0, IconBoxPadding);
-			align.Add (settings_icon);
-			vbox.PackStart (align, false, false, 0);
-			settings_icon.Show ();
-			align.Show ();
 
 			resultsHBox = new HBox (false, (int) IconBoxPadding * 2);
 			resultsHBox.BorderWidth = IconBoxPadding;
@@ -132,6 +122,62 @@ namespace Do.UI
 			summonable = true;
 
 			Reposition ();
+		}
+		
+		protected override bool OnMotionNotifyEvent (EventMotion evnt)
+		{
+			//SLOW, fix by permenant storage
+			int end_x, end_y, start_x, start_y;
+			int point_x, point_y;
+
+			GetPosition (out start_x, out start_y);
+			GetSize (out end_x, out end_y);
+			
+			end_x += start_x;
+			end_y += start_y;
+			
+			point_x = (int) evnt.XRoot;
+			point_y = (int) evnt.YRoot;
+			
+			if ((end_x - 30 <= point_x) && (point_x < end_x - 10) && 
+			    (start_y <= point_y) && (point_y < start_y + 15)) {
+				if (!frame.DrawArrow)
+					frame.DrawArrow = true;
+			} else {
+				if (frame.DrawArrow)
+					frame.DrawArrow = false;
+			}
+			
+			return base.OnMotionNotifyEvent (evnt);
+		}
+
+		
+		protected override bool OnButtonPressEvent (EventButton evnt)
+		{
+			int start_x, start_y, end_x, end_y;
+			int click_x, click_y;
+			bool click_on_window, click_near_settings_icon;
+
+			GetPosition (out start_x, out start_y);
+			GetSize (out end_x, out end_y);
+			end_x += start_x;
+			end_y += start_y;
+			click_x = (int) evnt.XRoot;
+			click_y = (int) evnt.YRoot;
+			click_on_window = start_x <= click_x && click_x < end_x &&
+			                  start_y <= click_y && click_y < end_y;
+			click_near_settings_icon = (((end_x - 30) <= click_x) && (click_x < end_x - 10) && 
+			                            (start_y <= click_y) && (click_y < (start_y + 15)));
+			if (click_near_settings_icon) {
+				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 21, start_y + 12);
+				// Have to re-grab the pane from the menu.
+				Addins.Util.Appearance.PresentWindow (this);
+				frame.DrawArrow = false;
+			} else if (!click_on_window) {
+				controller.ButtonPressOffWindow ();
+			}
+			//what do true/false mean here?
+			return true;
 		}
 		
 		public override void Reposition ()

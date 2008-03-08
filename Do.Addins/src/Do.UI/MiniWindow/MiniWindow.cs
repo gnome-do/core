@@ -39,7 +39,7 @@ namespace Do.UI
 		protected ResultsWindow resultsWindow;
 		protected HBox resultsHBox;
 		protected MiniIconBox[] iconbox;
-		IDoController controller;
+		protected IDoController controller;
 		
 		protected const int IconBoxIconSize = 48;
 		protected const uint IconBoxPadding = 2;

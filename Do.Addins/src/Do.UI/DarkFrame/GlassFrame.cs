@@ -31,6 +31,15 @@ namespace Do.UI
 	public class GlassFrame : Frame
 	{
 		int offset;
+		bool drawArrow;
+		
+		public bool DrawArrow {
+			get { return drawArrow; }
+			set {
+				drawArrow = value;
+				QueueDraw ();
+			}
+		}
 		
 		public GlassFrame(int offset)
 		{
@@ -56,10 +65,21 @@ namespace Do.UI
 			return gloss;
 		}
 		
+		protected virtual void GetMenuButton (Cairo.Context cairo)
+		{
+			int triWidth = 11;
+			int triHeight = 6;
+			
+			cairo.MoveTo (x+width-15, y+2);
+			cairo.LineTo (x+width-15-triWidth, y+2);
+			cairo.LineTo (x+width-15-(triWidth/2), y+2+triHeight);
+			cairo.ClosePath ();
+		}
+		
 		protected override void PaintFill ()
 		{
 			cairo.Save ();
-			
+			//get big frame
 			GetFrame (cairo);
 			cairo.Color = new Cairo.Color (.7, .7, .7, .55);
 			
@@ -68,27 +88,35 @@ namespace Do.UI
 			
 			cairo.Save ();
 			cairo.NewPath ();
-			
+			//save old variables
 			int tempx = x, tempy = y, temph = height, tempw = width;
 			double tempr = radius;
-			x = x + offset;
-			y = y + offset;
-			width = width - 2 * offset;
-			height = height - 2 * offset;
-			
-			radius = radius / 1.4;
-			
+			//set new variable to constrain box
+			x += offset;
+			y += offset;
+			width -= 2 * offset;
+			height -= 2 * offset;
+			radius /= 1.4;
+			//get reduced frame
 			GetFrame (cairo);
 			cairo.Pattern = GetGradient ();
 			cairo.FillPreserve ();
-			
 			cairo.Restore ();
-			
+			//restore variables from temps
 			radius = tempr;
 			x = tempx;
 			y = tempy;
 			width = tempw;
 			height = temph;
+			
+			if (drawArrow) {
+				cairo.Save ();
+				cairo.NewPath ();
+				GetMenuButton (cairo);
+				cairo.Color = new Color (0, 0, 0, .9);
+				cairo.FillPreserve ();
+				cairo.Restore ();
+			}
 		}
 	}
 }
