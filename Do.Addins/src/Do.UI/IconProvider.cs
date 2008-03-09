@@ -76,8 +76,8 @@ namespace Do.UI
 				resourceNamespace = name.Substring (resourceName.Length +1);
 								
 				// loop though all loaded assemblies in the AppDomain
-				foreach (Assembly asmb in AppDomain.CurrentDomain.GetAssemblies ())	{										
-					if (asmb.FullName.StartsWith (resourceNamespace)) {
+				foreach (Assembly asmb in AppDomain.CurrentDomain.GetAssemblies ())	{					
+					if (new AssemblyName (asmb.FullName).Name.Equals (resourceNamespace)) {
 						try	{
 							pixbuf = new Pixbuf (asmb, resourceName, size, size);
 							break;														
