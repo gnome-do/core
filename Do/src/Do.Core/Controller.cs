@@ -56,10 +56,46 @@ namespace Do.Core
 		SearchContext CurrentContext
 		{
 			get {
-				return context[(int) window.CurrentPane];
+				return context[(int) CurrentPane];
 			}
 			set {
-				context[(int) window.CurrentPane] = value;
+				context[(int) CurrentPane] = value;
+			}
+		}
+		
+		public Pane CurrentPane
+		{
+			set {
+				if (window.CurrentPane == Pane.First && CurrentContext.Results.Length == 0)
+					return;
+				
+				switch (value) {
+					//Move to First Pane
+					case Pane.First:
+						window.CurrentPane = Pane.First;
+						break;
+					//Move to Second Pane
+					case Pane.Second:
+						window.CurrentPane = Pane.Second;
+						break;
+					//Move to Third Pane
+					case Pane.Third:
+						if (ThirdPaneAllowed)
+							window.CurrentPane = Pane.Third;
+						break;
+				}
+
+				//Determine if third pane needed
+				if (!ThirdPaneAllowed || 
+				    (!ThirdPaneRequired && context[2].Query.Length == 0 && context[2].Cursor == 0 ))
+					ThirdPaneVisible = false;
+				
+				if ((ThirdPaneAllowed && window.CurrentPane == Pane.Third) || ThirdPaneRequired)
+					ThirdPaneVisible = true;
+			}
+			
+			get {
+				return window.CurrentPane;
 			}
 		}
 		
@@ -266,7 +302,7 @@ namespace Do.Core
 			while (resultsGrowth > 0)
 				ShrinkResults ();
 			
-			if (window.CurrentPane == Pane.First && !results) Vanish ();
+			if (CurrentPane == Pane.First && !results) Vanish ();
 			else if (!something_typed) Reset ();
 		}
 		
@@ -294,7 +330,7 @@ namespace Do.Core
 					CurrentContext.ParentSearch = true;
 					QueueSearch (false);
 				}
-				window.SetPaneContext(window.CurrentPane, CurrentContext);
+				window.SetPaneContext(CurrentPane, CurrentContext);
 			}
 			if (resultsGrowth <= 0)
 				GrowResults ();
@@ -302,82 +338,51 @@ namespace Do.Core
 		
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
-			if (window.CurrentPane == Pane.First && context[0].Results.Length == 0)
-				return;
-			
 			while (resultsGrowth > 0)
 				ShrinkResults ();
 			
 			tabbing = true;
 
 			if (evnt.Key == Key.Tab) {
-				switch (window.CurrentPane) {
-					case Pane.First:
-						window.CurrentPane = Pane.Second;
-						break;
-					case Pane.Second:
-						if (ThirdPaneAllowed) {
-							window.CurrentPane = Pane.Third;
-							ThirdPaneVisible = true;
-						} else {
-							window.CurrentPane = Pane.First;
-						}
-						break;
-					case Pane.Third:
-						window.CurrentPane = Pane.First;
-						if (!ThirdPaneRequired && context[2].Query.Length == 0)
-							ThirdPaneVisible = false;
-						break;
-				}
+				NextPane ();
 			} else if (evnt.Key == Key.ISO_Left_Tab) {
-				switch (window.CurrentPane) {
-					case Pane.First:
-						if (ThirdPaneAllowed) {
-							window.CurrentPane = Pane.Third;
-							ThirdPaneVisible = true;
-						} else {
-							window.CurrentPane = Pane.Second;
-						}
-						break;
-					case Pane.Second:
-						window.CurrentPane = Pane.First;
-						break;
-					case Pane.Third:
-						window.CurrentPane = Pane.Second;
-						if (!ThirdPaneRequired && context[2].Query.Length == 0)
-							ThirdPaneVisible = false;
-						break;
-				}
+				PrevPane ();
 			}
-			window.SetPaneContext (window.CurrentPane, CurrentContext);
+			if (!(CurrentPane == Pane.First && CurrentContext.Results.Length == 0))
+				window.SetPaneContext (CurrentPane, CurrentContext);
 			
 			tabbing = false;
 		}
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
+			//Nothing to do
 			if (CurrentContext.Results.Length == 0) {
 				return;
 			}
+			
+			if (resultsGrowth == 0) {
+				GrowResults ();
+				return;
+			}
+			
 			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
+				//Up Arrow
 				if (CurrentContext.Cursor <= 0) {
 					ShrinkResults ();
 					return;
 				}
 				CurrentContext.Cursor--;
 			} else {
-				if (resultsGrowth == 0) {
-					GrowResults ();
-					return;
-				}
+				//Down Arrow
 				CurrentContext.Cursor++;
 			}
 			
 			//We don't want to search the "default" state if the user presses down
 			if (tabbing) return;
-			UpdatePane (window.CurrentPane);
+			UpdatePane (CurrentPane);
 			
-			switch (window.CurrentPane) {
+			switch (CurrentPane) {
 				case Pane.First:
 					context[1] = new SearchContext ();
 					SearchPaneDelayed (Pane.Second);
@@ -389,6 +394,42 @@ namespace Do.Core
 			}
 		}
 		
+		void NextPane ()
+		{
+			switch (CurrentPane) {
+				case Pane.First:
+					CurrentPane = Pane.Second;
+					break;
+				case Pane.Second:
+					if (ThirdPaneAllowed)
+						CurrentPane = Pane.Third;
+					else
+						CurrentPane = Pane.First;
+					break;
+				case Pane.Third:
+					CurrentPane = Pane.First;
+					break;
+			}
+		}
+		
+		void PrevPane ()
+		{
+			switch (CurrentPane) {
+				case Pane.First:
+					if (ThirdPaneAllowed)
+						CurrentPane = Pane.Third;
+					else
+						CurrentPane = Pane.Second;
+					break;
+				case Pane.Second:
+					CurrentPane = Pane.First;
+					break;
+				case Pane.Third:
+					CurrentPane = Pane.Second;
+					break;
+			}
+		}
+		
 		/************************************************
 		 * --------------Search Method-------------------
 		 * **********************************************/
@@ -396,11 +437,11 @@ namespace Do.Core
 		void QueueSearch (bool delayed)
 		{
 			if (delayed) {
-				SearchPaneDelayed (window.CurrentPane);
+				SearchPaneDelayed (CurrentPane);
 				return;
 			}
 
-			switch (window.CurrentPane) {
+			switch (CurrentPane) {
 				case Pane.First:
 					SearchFirstPane ();
 					break;
@@ -533,14 +574,14 @@ namespace Do.Core
 			if (ThirdPaneRequired) {
 				ThirdPaneVisible = true;
 			} else if (!ThirdPaneAllowed || 
-			           (context[2].Query.Length == 0 && window.CurrentPane != Pane.Third)) {
+			           (context[2].Query.Length == 0 && CurrentPane != Pane.Third)) {
 				ThirdPaneVisible = false;
 			}
 		}
 		
 		protected void ClearSearchResults ()
 		{
-			switch (window.CurrentPane) {
+			switch (CurrentPane) {
 				case Pane.First:
 					Reset ();
 					break;
@@ -714,10 +755,10 @@ namespace Do.Core
 			context[(int) pane].Cursor = index;
 			window.SetPaneContext (pane, context[(int) pane]);
 			
-			if (pane != window.CurrentPane)
+			if (pane != CurrentPane)
 				return;
 			
-			switch (window.CurrentPane) {
+			switch (CurrentPane) {
 				case Pane.First:
 					context[1] = new SearchContext ();
 					SearchPaneDelayed (Pane.Second);

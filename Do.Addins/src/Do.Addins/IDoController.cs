@@ -49,5 +49,11 @@ namespace Do.Addins
 		/// Allows the UI to query what level of results it should be showing right now.
 		/// </value>
 		int CurrentResultsGrowth { get; }
+		
+		/// <value>
+		/// Allow the UI to set the Controllers idea of the CurrentPane.  Useful for allowing current
+		/// pane setting through mouse events.
+		/// </value>
+		Pane CurrentPane { set; }
 	}
 }
