@@ -49,18 +49,15 @@ namespace Do.UI
 		protected override LinearGradient GetGradient ()
 		{
 			double r, g, b;
-			double up, down;
-			
-			up   =  .2;
-			down = -.2;
 			
 			LinearGradient gloss = base.GetGradient ();
 			r = (double) fillColor.Red / ushort.MaxValue;
 			g = (double) fillColor.Green / ushort.MaxValue;
 			b = (double) fillColor.Blue / ushort.MaxValue;
 			
-			gloss.AddColorStop (0, new Cairo.Color (r+up,   g+up,   b+up,   1));
-			gloss.AddColorStop (1, new Cairo.Color (r+down, g+down, b+down, 1));
+			gloss.AddColorStop (0, new Cairo.Color (r, g, b, 1));
+			gloss.AddColorStop (1, new Cairo.Color (0, 0, 0, 1));
+			//gloss.AddColorStop (1, new Cairo.Color (r+down, g+down, b+down, 1));
 			
 			return gloss;
 		}
@@ -117,6 +114,44 @@ namespace Do.UI
 				cairo.FillPreserve ();
 				cairo.Restore ();
 			}
+		}
+		
+		protected virtual void GetBorderFrame (Cairo.Context cairo)
+		{
+			double X,Y,Width,Height;
+			X = x+.5;
+			Y = y+.5;
+			Width = width - 1;
+			Height = height - 1;
+			if (radius == 0)
+			{
+				cairo.MoveTo (X, Y);
+				cairo.Rectangle (X, Y, Width, Height);
+			} else {
+				cairo.MoveTo (X+radius, Y);
+				cairo.Arc (X+Width-radius, Y+radius, radius, (Math.PI*1.5), (Math.PI*2));
+				cairo.Arc (X+Width-radius, Y+Height-radius, radius, 0, (Math.PI*0.5));
+				cairo.Arc (X+radius, Y+Height-radius, radius, (Math.PI*0.5), Math.PI);
+				cairo.Arc (X+radius, Y+radius, radius, Math.PI, (Math.PI*1.5));
+			}
+		}
+		
+		protected override void PaintBorder ()
+		{
+			double r, g, b;
+			
+			r = (double) frameColor.Red / ushort.MaxValue;
+			g = (double) frameColor.Green / ushort.MaxValue;
+			b = (double) frameColor.Blue / ushort.MaxValue;
+			
+			cairo.Save ();
+			GetBorderFrame (cairo);
+			
+			cairo.LineWidth = 1;
+			cairo.Color = new Cairo.Color (r, g, b, frameAlpha);
+			cairo.Stroke ();
+			
+			cairo.Restore ();
 		}
 	}
 }

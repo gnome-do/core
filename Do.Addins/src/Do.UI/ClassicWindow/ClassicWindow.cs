@@ -298,6 +298,7 @@ namespace Do.UI
 		public void Summon ()
 		{
 			Show ();
+			Util.Appearance.PresentWindow (this);
 		}
 
 		public void Vanish ()
@@ -309,7 +310,6 @@ namespace Do.UI
 		{
 			resultsWindow.Clear ();
 			
-			CurrentPane = Pane.First;
 			iconbox[0].Clear ();
 			iconbox[1].Clear ();
 			iconbox[2].Clear ();

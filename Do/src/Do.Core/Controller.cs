@@ -53,6 +53,9 @@ namespace Do.Core
 		
 		//-------------------- Class Properties-----------------//
 		
+		/// <value>
+		/// shortcut to context[(int) CurrentPane]
+		/// </value>
 		SearchContext CurrentContext
 		{
 			get {
@@ -63,6 +66,9 @@ namespace Do.Core
 			}
 		}
 		
+		/// <value>
+		/// The currently active pane, setting does not imply searching currently
+		/// </value>
 		public Pane CurrentPane
 		{
 			set {
@@ -148,20 +154,15 @@ namespace Do.Core
 			}
 		}
 		
+		/// <value>
+		/// Allow UI to check what the current growth of the results window should be.  Useful mostly
+		/// for error checking and debugging new UI's.
+		/// </value>
 		public int CurrentResultsGrowth
 		{
 			get {
 				return resultsGrowth;
 			}
-		}
-		
-		//-------------------- NESTED ENUM --------------------//
-		
-		protected enum State
-		{
-			IconDefault = 0,
-			LabelDefault = 1,
-			NoObjects = 2,
 		}
 		
 		//-------------------- CONSTRUCTOR ---------------------//
@@ -183,8 +184,10 @@ namespace Do.Core
 			} else if (Do.Preferences.UseDarkFrame) {
 				window = new DarkFrame (this);
 			} else {
-				window = new ClassicWindow (this); //FIXME
+				window = new ClassicWindow (this);
 			}
+			
+			//get key press events from window since we want to control that here
 			window.KeyPressEvent += KeyPressWrap;
 			
 			Reset ();
@@ -258,6 +261,8 @@ namespace Do.Core
 					break;
 				case Gdk.Key.Up:
 				case Gdk.Key.Down:
+				case Gdk.Key.Home:
+				case Gdk.Key.End:
 					OnUpDownKeyPressEvent (evnt);
 					break;
 				case Gdk.Key.Right:
@@ -366,16 +371,22 @@ namespace Do.Core
 				return;
 			}
 			
-			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Up) {
+			if (evnt.Key == Gdk.Key.Up) {
 				//Up Arrow
 				if (CurrentContext.Cursor <= 0) {
 					ShrinkResults ();
 					return;
 				}
 				CurrentContext.Cursor--;
-			} else {
+			} else if (evnt.Key == Gdk.Key.Down) {
 				//Down Arrow
 				CurrentContext.Cursor++;
+			} else if (evnt.Key == Gdk.Key.Home) {
+				//Home Key
+				CurrentContext.Cursor = 0;
+			} else if (evnt.Key == Gdk.Key.End) {
+				//End Key
+				CurrentContext.Cursor = CurrentContext.Results.Length - 1;
 			}
 			
 			//We don't want to search the "default" state if the user presses down
@@ -394,6 +405,9 @@ namespace Do.Core
 			}
 		}
 		
+		/// <summary>
+		/// Selects the logical next pane in the UI left to right
+		/// </summary>
 		void NextPane ()
 		{
 			switch (CurrentPane) {
@@ -412,6 +426,9 @@ namespace Do.Core
 			}
 		}
 		
+		/// <summary>
+		/// Selects the logical previous pane in the UI left to right
+		/// </summary>
 		void PrevPane ()
 		{
 			switch (CurrentPane) {
@@ -454,6 +471,12 @@ namespace Do.Core
 			}
 		}
 		
+		/// <summary>
+		/// Searches panes with a delay for the sake of beauty.
+		/// </summary>
+		/// <param name="pane">
+		/// A <see cref="Pane"/>
+		/// </param>
 		void SearchPaneDelayed (Pane pane)
 		{
 			for (int i = 0; i < 3; ++i) {
@@ -622,6 +645,9 @@ namespace Do.Core
 			context[1] = new SearchContext ();
 			context[2] = new SearchContext ();
 			
+			//Must happen after new searchcontext's are set
+			CurrentPane = Pane.First;
+			
 			window.Reset ();
 			
 			//reset result growth back to 0
@@ -629,12 +655,18 @@ namespace Do.Core
 				ShrinkResults ();
 		}
 		
+		/// <summary>
+		/// Should cause UI to display more results
+		/// </summary>
 		void GrowResults ()
 		{
-			window.GrowResults ();
 			resultsGrowth++;
+			window.GrowResults ();
 		}
 		
+		/// <summary>
+		/// Should cause UI to display fewer results, 0 == no results displayed
+		/// </summary>
 		void ShrinkResults ()
 		{
 			if (resultsGrowth > 0) {
@@ -729,11 +761,6 @@ namespace Do.Core
 		{
 			if (!window.IsSummonable) return;
 			window.Summon ();
-			
-			//FIXME == This method requires a Gtk.Window... for desktop agnostic we can not do this...
-			//Should we even do this?  The UI might not really want this...
-			
-			Util.Appearance.PresentWindow ((Gtk.Window)window);
 		}
 		
 		public void Vanish ()
@@ -746,7 +773,7 @@ namespace Do.Core
 		}	
 		
 		/////////////////////////////
-		/// IDOController Members ///
+		/// IDoController Members ///
 		/////////////////////////////
 		
 		public void NewContextSelection (Pane pane, int index)

@@ -37,13 +37,13 @@ namespace Do.Addins
 
 		public string Icon { get { return "gtk-dialog-question"; } }
 		public string Name { get { return Catalog.GetString (
-				                   string.Format("No results for <b><u>{0}</u></b>.", query)); } }
+				                   string.Format("No results for <b><u>{0}</u></b>", query)); } }
 
 		public string Description
 		{
 			get {
 				return string.Format (Catalog.GetString (
-				                      string.Format("No results found for <b><u>{0}</u></b>.", query)));
+				                      string.Format("No results found for <b><u>{0}</u></b>", query)));
 			}
 		}
 	}

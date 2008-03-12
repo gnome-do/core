@@ -51,6 +51,7 @@ FILES =  \
 	src/Do.UI/ClassicWindow/ClassicWindow.cs \
 	src/Do.UI/DarkFrame/DarkFrame.cs \
 	src/Do.UI/DarkFrame/GlassFrame.cs \
+	src/Do.UI/DarkFrame/GlassIconBox.cs \
 	src/Do.UI/IconProvider.cs \
 	src/Do.UI/IDoWindow.cs \
 	src/Do.UI/MiniWindow/MiniIconBox.cs \
