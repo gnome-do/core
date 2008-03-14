@@ -119,8 +119,15 @@ namespace Do.UI
 			Do.Controller.Vanish ();
 
 			authors = new string[] {
+				"Chris Halse Rogers <chalserogers@gmail.com>",
 				"David Siegel <djsiegel@gmail.com>",
 				"DR Colkitt <douglas.colkitt@gmail.com>",
+				"James Walker",
+				"Jason Smith",
+				"Miguel de Icaza",
+				"Rick Harding",
+				"Thomsen Anders",
+				"Volker Braun"
 			};
 
 			about = new AboutDialog ();
