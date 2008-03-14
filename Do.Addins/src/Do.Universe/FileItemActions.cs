@@ -166,77 +166,77 @@ namespace Do.Files {
         }
 	}
 
-    class MoveToTrashAction : AbstractAction {
+    // class MoveToTrashAction : AbstractAction {
        
-        public override string Name { get { return "Move to Trash"; } } 
-        public override string Description { get { return "Moves a file or folder to the trash."; } } 
-        public override string Icon { get { return "user-trash-full"; } } 
+    //     public override string Name { get { return "Move to Trash"; } } 
+    //     public override string Description { get { return "Moves a file or folder to the trash."; } } 
+    //     public override string Icon { get { return "user-trash-full"; } } 
 
-        string Trash {
-            get {
-                string home;
-                home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-                return "~/.Trash".Replace ("~", home);
-            }
-        }
+    //     string Trash {
+    //         get {
+    //             string home;
+    //             home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+    //             return "~/.Trash".Replace ("~", home);
+    //         }
+    //     }
 
-		public override Type[] SupportedItemTypes {
-            get {
-                return new Type[] {
-                    typeof (FileItem),
-                };
-            }
-        }
+    // 		public override Type[] SupportedItemTypes {
+    //         get {
+    //             return new Type[] {
+    //                 typeof (FileItem),
+    //             };
+    //         }
+    //     }
 
-		public override IItem[] Perform (IItem[] items, IItem[] modItems)
-        {
-            List<string> seenPaths;
+    // 		public override IItem[] Perform (IItem[] items, IItem[] modItems)
+    //     {
+    //         List<string> seenPaths;
 
-            seenPaths = new List<string> ();
-            foreach (FileItem src in items) {
-                if (seenPaths.Contains (src.Path)) continue;
-                try {
-                    System.Diagnostics.Process.Start ("mv",
-                       string.Format ("{0} {1}",
-                           FileItem.EscapedPath (src), Trash));
-                    seenPaths.Add (src.Path);
-                    src.Path = Path.Combine (Trash,
-                        Path.GetFileName (src.Path));
-                } catch (Exception e) {
-                    Console.Error.WriteLine ("MoveToTrashAction could not move "+
-                        src.Path + " to the trash: " + e.Message);
-                }
-            }
-            return null;
-        }
-	}
+    //         seenPaths = new List<string> ();
+    //         foreach (FileItem src in items) {
+    //             if (seenPaths.Contains (src.Path)) continue;
+    //             try {
+    //                 System.Diagnostics.Process.Start ("mv",
+    //                    string.Format ("{0} {1}",
+    //                        FileItem.EscapedPath (src), Trash));
+    //                 seenPaths.Add (src.Path);
+    //                 src.Path = Path.Combine (Trash,
+    //                     Path.GetFileName (src.Path));
+    //             } catch (Exception e) {
+    //                 Console.Error.WriteLine ("MoveToTrashAction could not move "+
+    //                     src.Path + " to the trash: " + e.Message);
+    //             }
+    //         }
+    //         return null;
+    //     }
+    // 	}
 
-    class DeleteAction : AbstractAction {
+    // class DeleteAction : AbstractAction {
        
-        public override string Name { get { return "Delete File"; } } 
-        public override string Description { get { return "Deletes a file or folder."; } } 
-        public override string Icon { get { return "gtk-delete"; } } 
+    //     public override string Name { get { return "Delete File"; } } 
+    //     public override string Description { get { return "Deletes a file or folder."; } } 
+    //     public override string Icon { get { return "gtk-delete"; } } 
 
-		public override Type[] SupportedItemTypes {
-            get {
-                return new Type[] {
-                    typeof (FileItem),
-                };
-            }
-        }
+    // 		public override Type[] SupportedItemTypes {
+    //         get {
+    //             return new Type[] {
+    //                 typeof (FileItem),
+    //             };
+    //         }
+    //     }
 
-		public override IItem[] Perform (IItem[] items, IItem[] modItems)
-        {
-            foreach (FileItem src in items) {
-                try {
-                    System.Diagnostics.Process.Start ("rm",
-                       string.Format ("-rf {0}", FileItem.EscapedPath (src)));
-                } catch (Exception e) {
-                    Console.Error.WriteLine ("DeleteFileAction could not delete "+
-                        src.Path + ": " + e.Message);
-                }
-            }
-            return null;
-        }
-	}
+    // 		public override IItem[] Perform (IItem[] items, IItem[] modItems)
+    //     {
+    //         foreach (FileItem src in items) {
+    //             try {
+    //                 System.Diagnostics.Process.Start ("rm",
+    //                    string.Format ("-rf {0}", FileItem.EscapedPath (src)));
+    //             } catch (Exception e) {
+    //                 Console.Error.WriteLine ("DeleteFileAction could not delete "+
+    //                     src.Path + ": " + e.Message);
+    //             }
+    //         }
+    //         return null;
+    //     }
+    // 	}
 }
