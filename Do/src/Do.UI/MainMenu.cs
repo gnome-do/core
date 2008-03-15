@@ -132,7 +132,7 @@ namespace Do.UI
 
 			about = new AboutDialog ();
 			about.Name = "GNOME Do";
-			about.Version = "0.3.2.1";
+			about.Version = "0.4.0";
 
 			logos = new string[] {
 				"/usr/share/icons/gnome/scalable/actions/search.svg",
