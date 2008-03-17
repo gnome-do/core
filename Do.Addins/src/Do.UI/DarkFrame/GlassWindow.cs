@@ -285,7 +285,7 @@ namespace Do.UI
 			click_near_settings_icon = (end_x - 35 <= click_x) && (click_x < end_x - 15) && 
 			                            (start_y+frameoffset <= click_y) && (click_y < start_y + frameoffset + 15);
 			if (click_near_settings_icon) {
-				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 21, start_y + 12);
+				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 35, start_y + 25);
 				// Have to re-grab the pane from the menu.
 				Addins.Util.Appearance.PresentWindow (this);
 				//frame.DrawArrow = false;

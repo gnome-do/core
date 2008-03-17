@@ -67,9 +67,9 @@ namespace Do.UI
 			int triWidth = 11;
 			int triHeight = 6;
 			
-			cairo.MoveTo (x+width-20, y+offset+2);
-			cairo.LineTo (x+width-20-triWidth, y+offset+2);
-			cairo.LineTo (x+width-20-(triWidth/2), y+offset+2+triHeight);
+			cairo.MoveTo (x+width-20, y+offset+3);
+			cairo.LineTo (x+width-20-triWidth, y+offset+3);
+			cairo.LineTo (x+width-20-(triWidth/2), y+offset+3+triHeight);
 			cairo.ClosePath ();
 		}
 		
