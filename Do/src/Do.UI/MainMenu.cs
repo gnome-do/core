@@ -119,13 +119,20 @@ namespace Do.UI
 			Do.Controller.Vanish ();
 
 			authors = new string[] {
+				"Chris Halse Rogers <chalserogers@gmail.com>",
 				"David Siegel <djsiegel@gmail.com>",
 				"DR Colkitt <douglas.colkitt@gmail.com>",
+				"James Walker",
+				"Jason Smith",
+				"Miguel de Icaza",
+				"Rick Harding",
+				"Thomsen Anders",
+				"Volker Braun"
 			};
 
 			about = new AboutDialog ();
 			about.Name = "GNOME Do";
-			about.Version = "0.3.2.1";
+			about.Version = "0.4.0";
 
 			logos = new string[] {
 				"/usr/share/icons/gnome/scalable/actions/search.svg",
