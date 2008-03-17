@@ -1,7 +1,7 @@
 [encoding: UTF-8]
 Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs
 Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs
-Do.Addins/src/Do.UI/DarkFrame/DarkFrame.cs
+Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs
 Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs
 Do.Addins/src/Do.Universe/DefineWordAction.cs
 Do.Addins/src/Do.Universe/MailtoAction.cs
