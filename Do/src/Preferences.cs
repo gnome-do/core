@@ -88,10 +88,10 @@ namespace Do
 		/// Whether Do should use a darkframe user interface better suited
 		/// for smaller displays. Enabled with the command line option --mini.
 		/// </value>
-		public bool UseDarkFrame
+		public bool UseGlassFrame
 		{
 			get {
-				return HasOption ("--darkframe");
+				return HasOption ("--glassframe");
 			}
 		}
 

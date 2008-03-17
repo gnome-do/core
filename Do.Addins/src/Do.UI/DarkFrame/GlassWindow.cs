@@ -32,7 +32,7 @@ namespace Do.UI
 {
 	
 	
-	public class DarkFrame : Gtk.Window, IDoWindow
+	public class GlassWindow : Gtk.Window, IDoWindow
 	{
 		protected GlassFrame frame;
 		protected SymbolDisplayLabel label;
@@ -86,7 +86,7 @@ namespace Do.UI
 		/// <param name="controller">
 		/// A <see cref="IDoController"/>
 		/// </param>
-		public DarkFrame (IDoController controller) : base (Gtk.WindowType.Toplevel)
+		public GlassWindow (IDoController controller) : base (Gtk.WindowType.Toplevel)
 		{
 			this.controller = controller;
 			
@@ -100,7 +100,7 @@ namespace Do.UI
 		protected void Build ()
 		{
 			VBox      vbox;
-			Alignment align;
+//			Alignment align;
 
 			AppPaintable = true;
 			KeepAbove = true;
@@ -125,6 +125,7 @@ namespace Do.UI
 			frame.FillColor = new Color(45, 45, 45);
 			frame.FrameColor = new Color(255, 255, 255);
 			frame.FrameAlpha = 1;
+			frame.DrawArrow = true;
 			frame.Radius = Screen.IsComposited ? MainRadius : 0;
 			Add (frame);
 			frame.Show ();
@@ -134,13 +135,13 @@ namespace Do.UI
 			vbox.BorderWidth = (uint) (IconBoxPadding + frameoffset);
 			vbox.Show ();
 			
-			align = new Alignment (0.5F, 0.5F, 1, 1);
-			align.SetPadding (0, 0, 0, 0);
+//			align = new Alignment (0.5F, 0.5F, 1, 1);
+//			align.SetPadding (0, 0, 0, 0);
 			label = new SymbolDisplayLabel ();
-			align.Add (label);
-			vbox.PackStart (align, false, false, 0);
-			label.Show ();
-			align.Show ();
+//			align.Add (label);
+//			vbox.PackStart (align, false, false, 0);
+//			label.Show ();
+//			align.Show ();
 
 			resultsHBox = new HBox (false, (int) IconBoxPadding * 2);
 			resultsHBox.BorderWidth = IconBoxPadding;
@@ -222,41 +223,41 @@ namespace Do.UI
 		{
 			controller.NewContextSelection (CurrentPane, args.SelectedIndex);
 		}
-		
-		/// <summary>
-		/// Detect motion events in the area of the menu and show the menu button when hovered
-		/// </summary>
-		/// <param name="evnt">
-		/// A <see cref="EventMotion"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.Boolean"/>
-		/// </returns>
-		protected override bool OnMotionNotifyEvent (EventMotion evnt)
-		{
-			int end_x, end_y, start_x, start_y;
-			int point_x, point_y;
-
-			GetPosition (out start_x, out start_y);
-			GetSize (out end_x, out end_y);
-			
-			end_x += start_x;
-			end_y += start_y;
-			
-			point_x = (int) evnt.XRoot;
-			point_y = (int) evnt.YRoot;
-			
-			if ((end_x - 30 <= point_x) && (point_x < end_x - 10) && 
-			    (start_y <= point_y) && (point_y < start_y + 15)) {
-				if (!frame.DrawArrow)
-					frame.DrawArrow = true;
-			} else {
-				if (frame.DrawArrow)
-					frame.DrawArrow = false;
-			}
-			
-			return base.OnMotionNotifyEvent (evnt);
-		}
+//		
+//		/// <summary>
+//		/// Detect motion events in the area of the menu and show the menu button when hovered
+//		/// </summary>
+//		/// <param name="evnt">
+//		/// A <see cref="EventMotion"/>
+//		/// </param>
+//		/// <returns>
+//		/// A <see cref="System.Boolean"/>
+//		/// </returns>
+//		protected override bool OnMotionNotifyEvent (EventMotion evnt)
+//		{
+//			int end_x, end_y, start_x, start_y;
+//			int point_x, point_y;
+//
+//			GetPosition (out start_x, out start_y);
+//			GetSize (out end_x, out end_y);
+//			
+//			end_x += start_x;
+//			end_y += start_y;
+//			
+//			point_x = (int) evnt.XRoot;
+//			point_y = (int) evnt.YRoot;
+//			
+//			if ((end_x - 30 <= point_x) && (point_x < end_x - 10) && 
+//			    (start_y <= point_y) && (point_y < start_y + 15)) {
+//				if (!frame.DrawArrow)
+//					frame.DrawArrow = true;
+//			} else {
+//				if (frame.DrawArrow)
+//					frame.DrawArrow = false;
+//			}
+//			
+//			return base.OnMotionNotifyEvent (evnt);
+//		}
 		
 		/// <summary>
 		/// Detect if we have clicked on or off the window and and alert the controller.
@@ -281,13 +282,13 @@ namespace Do.UI
 			click_y = (int) evnt.YRoot;
 			click_on_window = start_x <= click_x && click_x < end_x &&
 			                  start_y <= click_y && click_y < end_y;
-			click_near_settings_icon = (end_x - 30 <= click_x) && (click_x < end_x - 10) && 
-			                            (start_y <= click_y) && (click_y < start_y + 15);
+			click_near_settings_icon = (end_x - 35 <= click_x) && (click_x < end_x - 15) && 
+			                            (start_y+frameoffset <= click_y) && (click_y < start_y + frameoffset + 15);
 			if (click_near_settings_icon) {
 				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 21, start_y + 12);
 				// Have to re-grab the pane from the menu.
 				Addins.Util.Appearance.PresentWindow (this);
-				frame.DrawArrow = false;
+				//frame.DrawArrow = false;
 			} else if (!click_on_window) {
 				controller.ButtonPressOffWindow ();
 			}
@@ -329,7 +330,7 @@ namespace Do.UI
 
 			//use frameoffset to get proper positioning and account for additional glass framing
 			resultsWindow.GetSize (out results.Width, out results.Height);
-			results.Y = main.Y + main.Height - frameoffset;
+			results.Y = main.Y + main.Height;// - frameoffset;
 			results.X = main.X + (((iconbox[0].Width) + ((int) IconBoxPadding * 2)) * 
 			                      (int) currentPane + MainRadius) + frameoffset;
 			resultsWindow.Move (results.X, results.Y);

@@ -49,9 +49,9 @@ FILES =  \
 	src/Do.UI/BaseWidgets/SymbolDisplayLabel.cs \
 	src/Do.UI/BaseWidgets/TextFrame.cs \
 	src/Do.UI/ClassicWindow/ClassicWindow.cs \
-	src/Do.UI/DarkFrame/DarkFrame.cs \
 	src/Do.UI/DarkFrame/GlassFrame.cs \
 	src/Do.UI/DarkFrame/GlassIconBox.cs \
+	src/Do.UI/DarkFrame/GlassWindow.cs \
 	src/Do.UI/IconProvider.cs \
 	src/Do.UI/IDoWindow.cs \
 	src/Do.UI/MiniWindow/MiniIconBox.cs \

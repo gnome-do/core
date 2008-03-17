@@ -181,8 +181,8 @@ namespace Do.Core
 		{
 			if (Do.Preferences.UseMiniMode) {
 				window = new MiniWindow (this);
-			} else if (Do.Preferences.UseDarkFrame) {
-				window = new DarkFrame (this);
+			} else if (Do.Preferences.UseGlassFrame) {
+				window = new GlassWindow (this);
 			} else {
 				window = new ClassicWindow (this);
 			}
