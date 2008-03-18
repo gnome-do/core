@@ -1,8 +1,14 @@
 dnl Warning: This is an automatically generated file, do not edit!
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.54])
-AC_INIT([gnome-do], [0.4.0])
+
+dnl A change in the plugin API/ABI should be accompanied by a Minor/Major revision bump
+dnl ...give or take!
+AC_INIT([gnome-do], [0.4.0.1])
 AM_INIT_AUTOMAKE([foreign])
+
+ASM_VERSION="$VERSION"
+AC_SUBST(ASM_VERSION)
 
 AC_PROG_INTLTOOL([0.35])
 
@@ -71,6 +77,7 @@ libdo/Makefile
 Do.Addins/Makefile
 Makefile
 Do.DBus/Makefile
+Do/src/AssemblyInfo.cs
 Do/Makefile
 Do/gnome-do
 Do/Do.exe.config

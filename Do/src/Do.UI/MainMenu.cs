@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Reflection;
 using Gtk;
 using Mono.Unix;
 
@@ -132,8 +133,18 @@ namespace Do.UI
 
 			about = new AboutDialog ();
 			about.Name = "GNOME Do";
-			about.Version = "0.4.0";
 
+			try {
+				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
+				about.Version = String.Format ("{0}.{1}.{2}.{3}", 
+				                               name.Version.Major,
+				                               name.Version.Minor,
+				                               name.Version.Build,
+				                               name.Version.Revision);
+			} catch {
+				about.Version = Catalog.GetString ("Unknown");
+			}
+			
 			logos = new string[] {
 				"/usr/share/icons/gnome/scalable/actions/search.svg",
 			};
