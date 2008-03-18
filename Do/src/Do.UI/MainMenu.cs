@@ -136,11 +136,11 @@ namespace Do.UI
 
 			try {
 				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
-				about.Version = String.Format ("{0}.{1}.{2}.{3}", 
-				                               name.Version.Major,
-				                               name.Version.Minor,
-				                               name.Version.Build,
-				                               name.Version.Revision);
+				about.Version = String.Format ("{0}.{1}.{2}.{3}",
+											name.Version.Major,
+											name.Version.Minor,
+											name.Version.Build,
+											name.Version.Revision);
 			} catch {
 				about.Version = Catalog.GetString ("Unknown");
 			}
