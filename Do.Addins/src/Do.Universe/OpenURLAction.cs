@@ -93,6 +93,9 @@ namespace Do.Universe
 					url = (item as ITextItem).Text;
 				}
 				url = url.Replace (" ", "%20");
+				if (!url.Contains("://")) {
+					url = url.Insert(0, "http://");
+				}
 				Util.Environment.Open (url);	
 			}
 			return null;
