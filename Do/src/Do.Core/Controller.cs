@@ -155,7 +155,8 @@ namespace Do.Core
 		}
 		
 		/// <value>
-		/// Allow UI to check what the current growth of the results window should be.  Useful mostly
+		/// Allow UI to check what the current growth of the results window
+		/// should be.  Useful mostly
 		/// for error checking and debugging new UI's.
 		/// </value>
 		public int CurrentResultsGrowth
@@ -249,6 +250,7 @@ namespace Do.Core
 					break;
 				case Gdk.Key.Return:
 				case Gdk.Key.ISO_Enter:
+				case Gdk.Key.KP_Enter:
 					OnActivateKeyPressEvent (evnt);
 					break;
 				case Gdk.Key.Delete:

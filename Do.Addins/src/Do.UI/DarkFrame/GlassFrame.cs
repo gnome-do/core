@@ -31,12 +31,12 @@ namespace Do.UI
 	public class GlassFrame : Frame
 	{
 		int offset;
-		bool drawArrow;
+		bool hoverArrow;
 		
-		public bool DrawArrow {
-			get { return drawArrow; }
+		public bool HoverArrow {
+			get { return hoverArrow; }
 			set {
-				drawArrow = value;
+				hoverArrow = value;
 				QueueDraw ();
 			}
 		}
@@ -57,19 +57,28 @@ namespace Do.UI
 			
 			gloss.AddColorStop (0, new Cairo.Color (r, g, b, 1));
 			gloss.AddColorStop (1, new Cairo.Color (0, 0, 0, 1));
-			//gloss.AddColorStop (1, new Cairo.Color (r+down, g+down, b+down, 1));
 			
 			return gloss;
 		}
 		
 		protected virtual void GetMenuButton (Cairo.Context cairo)
 		{
-			int triWidth = 11;
-			int triHeight = 6;
+			int triWidth, triHeight, start_x, start_y;
+			if (HoverArrow)
+			{
+				triWidth = 13;
+				triHeight = 7;
+				start_x = x+width-19;
+			} else {
+				triWidth = 11;
+				triHeight = 6;
+				start_x = x+width-20;
+			}
+			start_y = y+offset+3;
 			
-			cairo.MoveTo (x+width-20, y+offset+3);
-			cairo.LineTo (x+width-20-triWidth, y+offset+3);
-			cairo.LineTo (x+width-20-(triWidth/2), y+offset+3+triHeight);
+			cairo.MoveTo (start_x,              start_y);
+			cairo.LineTo (start_x-triWidth,     start_y);
+			cairo.LineTo (start_x-(triWidth/2), start_y+triHeight);
 			cairo.ClosePath ();
 		}
 		
@@ -106,14 +115,12 @@ namespace Do.UI
 			width = tempw;
 			height = temph;
 			
-			if (drawArrow) {
-				cairo.Save ();
-				cairo.NewPath ();
-				GetMenuButton (cairo);
-				cairo.Color = new Color (1, 1, 1, .9);
-				cairo.FillPreserve ();
-				cairo.Restore ();
-			}
+			cairo.Save ();
+			cairo.NewPath ();
+			GetMenuButton (cairo);
+			cairo.Color = new Color (1, 1, 1, .9);
+			cairo.FillPreserve ();
+			cairo.Restore ();
 		}
 		
 		protected virtual void GetBorderFrame (Cairo.Context cairo)
@@ -129,10 +136,14 @@ namespace Do.UI
 				cairo.Rectangle (X, Y, Width, Height);
 			} else {
 				cairo.MoveTo (X+radius, Y);
-				cairo.Arc (X+Width-radius, Y+radius, radius, (Math.PI*1.5), (Math.PI*2));
-				cairo.Arc (X+Width-radius, Y+Height-radius, radius, 0, (Math.PI*0.5));
-				cairo.Arc (X+radius, Y+Height-radius, radius, (Math.PI*0.5), Math.PI);
-				cairo.Arc (X+radius, Y+radius, radius, Math.PI, (Math.PI*1.5));
+				cairo.Arc (X+Width-radius, Y+radius, 
+				           radius, (Math.PI*1.5), (Math.PI*2));
+				cairo.Arc (X+Width-radius, Y+Height-radius, 
+				           radius, 0, (Math.PI*0.5));
+				cairo.Arc (X+radius, Y+Height-radius, 
+				           radius, (Math.PI*0.5), Math.PI);
+				cairo.Arc (X+radius, Y+radius, radius, 
+				           Math.PI, (Math.PI*1.5));
 			}
 		}
 		

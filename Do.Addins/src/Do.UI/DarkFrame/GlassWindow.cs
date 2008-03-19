@@ -125,7 +125,6 @@ namespace Do.UI
 			frame.FillColor = new Color(45, 45, 45);
 			frame.FrameColor = new Color(255, 255, 255);
 			frame.FrameAlpha = 1;
-			frame.DrawArrow = true;
 			frame.Radius = Screen.IsComposited ? MainRadius : 0;
 			Add (frame);
 			frame.Show ();
@@ -223,41 +222,43 @@ namespace Do.UI
 		{
 			controller.NewContextSelection (CurrentPane, args.SelectedIndex);
 		}
-//		
-//		/// <summary>
-//		/// Detect motion events in the area of the menu and show the menu button when hovered
-//		/// </summary>
-//		/// <param name="evnt">
-//		/// A <see cref="EventMotion"/>
-//		/// </param>
-//		/// <returns>
-//		/// A <see cref="System.Boolean"/>
-//		/// </returns>
-//		protected override bool OnMotionNotifyEvent (EventMotion evnt)
-//		{
-//			int end_x, end_y, start_x, start_y;
-//			int point_x, point_y;
-//
-//			GetPosition (out start_x, out start_y);
-//			GetSize (out end_x, out end_y);
-//			
-//			end_x += start_x;
-//			end_y += start_y;
-//			
-//			point_x = (int) evnt.XRoot;
-//			point_y = (int) evnt.YRoot;
-//			
-//			if ((end_x - 30 <= point_x) && (point_x < end_x - 10) && 
-//			    (start_y <= point_y) && (point_y < start_y + 15)) {
-//				if (!frame.DrawArrow)
-//					frame.DrawArrow = true;
-//			} else {
-//				if (frame.DrawArrow)
-//					frame.DrawArrow = false;
-//			}
-//			
-//			return base.OnMotionNotifyEvent (evnt);
-//		}
+		
+		/// <summary>
+		/// Detect motion events in the area of the menu and show the menu button when hovered
+		/// </summary>
+		/// <param name="evnt">
+		/// A <see cref="EventMotion"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/>
+		/// </returns>
+		protected override bool OnMotionNotifyEvent (EventMotion evnt)
+		{
+			int end_x, end_y, start_x, start_y;
+			int point_x, point_y;
+
+			GetPosition (out start_x, out start_y);
+			GetSize (out end_x, out end_y);
+			
+			end_x += start_x;
+			end_y += start_y;
+			
+			point_x = (int) evnt.XRoot;
+			point_y = (int) evnt.YRoot;
+			
+			if ((end_x - 35 <= point_x) && 
+				(point_x < end_x - 15) && 
+			    (start_y+frameoffset <= point_y) && 
+				(point_y < start_y + frameoffset + 15)) {
+				if (!frame.HoverArrow)
+					frame.HoverArrow = true;
+			} else {
+				if (frame.HoverArrow)
+					frame.HoverArrow = false;
+			}
+			
+			return base.OnMotionNotifyEvent (evnt);
+		}
 		
 		/// <summary>
 		/// Detect if we have clicked on or off the window and and alert the controller.
@@ -288,7 +289,7 @@ namespace Do.UI
 				Addins.Util.Appearance.PopupMainMenuAtPosition (end_x - 35, start_y + 25);
 				// Have to re-grab the pane from the menu.
 				Addins.Util.Appearance.PresentWindow (this);
-				//frame.DrawArrow = false;
+				frame.HoverArrow = false;
 			} else if (!click_on_window) {
 				controller.ButtonPressOffWindow ();
 			}
