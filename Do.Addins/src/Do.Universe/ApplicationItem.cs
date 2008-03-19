@@ -112,6 +112,9 @@ namespace Do.Universe
 		{
 			string uri_list;
 
+			// FIXME: Hardy/GNOME bug causes Do to run out of memory here...
+			return;
+
 			uri_list = "";
 			foreach (string uri in uris) {
 				uri_list += uri + "\r\n";

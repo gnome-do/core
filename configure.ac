@@ -1,8 +1,14 @@
 dnl Warning: This is an automatically generated file, do not edit!
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.54])
-AC_INIT([gnome-do], [0.3.2.1])
+
+dnl A change in the plugin API/ABI should be accompanied by a Minor/Major revision bump
+dnl ...give or take!
+AC_INIT([gnome-do], [0.4.0.1])
 AM_INIT_AUTOMAKE([foreign])
+
+ASM_VERSION="$VERSION"
+AC_SUBST(ASM_VERSION)
 
 AC_PROG_INTLTOOL([0.35])
 
@@ -13,12 +19,21 @@ if test "x$PKG_CONFIG" = "xno"; then
 fi
 
 AC_PROG_INSTALL
+AC_PROG_CC
+AC_HEADER_STDC
 
 AC_PATH_PROG(GMCS, gmcs, no)
 if test "x$GMCS" = "xno"; then
         AC_MSG_ERROR([gmcs Not found])
 fi
 
+AM_DISABLE_STATIC
+AM_PROG_LIBTOOL
+
+
+PKG_CHECK_MODULES(LIBDO, glib-2.0 gdk-2.0 gdk-x11-2.0 gtk+-2.0)
+AC_SUBST(LIBDO_CFLAGS)
+AC_SUBST(LIBDO_LIBS)
 
 PKG_CHECK_MODULES([GTK_SHARP_20], [gtk-sharp-2.0])
 PKG_CHECK_MODULES([NDESK_DBUS_GLIB_10], [ndesk-dbus-glib-1.0])
@@ -61,11 +76,14 @@ fi
 
 
 AC_CONFIG_FILES([
+libdo/Makefile
 Do.Addins/Makefile
 Makefile
 Do.DBus/Makefile
+Do/src/AssemblyInfo.cs
 Do/Makefile
 Do/gnome-do
+Do/Do.exe.config
 Do.Addins/do.addins.pc
 Do.DBus/do.dbus.pc
 po/Makefile.in

@@ -29,7 +29,7 @@ namespace Do
 
 	public static class Do
 	{
-		static Tomboy.GConfXKeybinder keybinder;
+		static GConfXKeybinder keybinder;
 		
 		static Preferences preferences;
 		static Controller controller;
@@ -52,6 +52,8 @@ namespace Do
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
 
+			preferences = new Preferences (args);
+
 			UniverseManager.Initialize ();
 
 			// Previously, Controller's constructor created a Gtk.Window, and that
@@ -63,19 +65,14 @@ namespace Do
 			Controller.Initialize ();
 			DBusRegistrar.RegisterController (Controller);
 			
-			keybinder = new Tomboy.GConfXKeybinder ();
+			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
 
-			if (Array.IndexOf (args, "--quiet") != -1 ||
-					Array.IndexOf (args, "-q") != -1) {
-				// Quiet start.
-			} else {
+			if (!Preferences.BeQuiet) {
 				Controller.Summon ();
 			}
 			
 			Gtk.Application.Run ();
-			
-			UI.IconProvider.DeleteDownloadedIcons ();
 		}
 
 		static void DetectInstanceAndExit ()
@@ -90,10 +87,7 @@ namespace Do
 
 		public static Preferences Preferences
 		{
-			get {
-				return preferences ??
-					preferences = new Preferences ();
-			}
+			get { return preferences; }
 		}
 
 		public static Controller Controller

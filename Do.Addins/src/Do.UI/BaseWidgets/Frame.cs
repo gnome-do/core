@@ -1,4 +1,4 @@
-/* RoundedFrame.cs
+/* Frame.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -21,11 +21,9 @@ using System;
 using Gtk;
 using Gdk;
 
-using Do.Core;
-
 namespace Do.UI
 {
-	public class RoundedFrame : Bin
+	public class Frame : Bin
 	{
 		protected Rectangle childAlloc;
 		protected double radius;
@@ -33,12 +31,17 @@ namespace Do.UI
 		protected bool drawFrame;
 		protected Color frameColor;
 		protected double frameAlpha;
+		protected bool drawGradient;
 
 		protected bool fill;
 		protected Color fillColor;
 		protected double fillAlpha;
+		
+		protected Cairo.Context cairo;
+		protected int height, width;
+		protected int x, y;
 
-		public RoundedFrame () : base ()
+		public Frame () : base ()
 		{
 			fill = false;
 			fillAlpha = 1.0;
@@ -70,7 +73,7 @@ namespace Do.UI
 		{
 			get { return frameColor; }
 			set {
-				fillColor = new Color ((byte)value.Red, (byte)value.Green, (byte)value.Blue);
+				frameColor = new Color ((byte)value.Red, (byte)value.Green, (byte)value.Blue);
 				if (IsDrawable) QueueDraw ();
 			}
 		}
@@ -111,22 +114,23 @@ namespace Do.UI
 			}
 		}
 
-		protected void RoundedRectangle (Cairo.Context cairo, int x, int y, int width, int height, double radius)
+		protected virtual void GetFrame (Cairo.Context cairo)
 		{
-			cairo.MoveTo (x+radius, y);
-			cairo.Arc (x+width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
-			cairo.Arc (x+width-radius, y+height-radius, radius, 0, (Math.PI*0.5));
-			cairo.Arc (x+radius, y+height-radius, radius, (Math.PI*0.5), Math.PI);
-			cairo.Arc (x+radius, y+radius, radius, Math.PI, (Math.PI*1.5));
+			if (radius == 0)
+			{
+				cairo.MoveTo (x, y);
+				cairo.Rectangle (x, y, width, height);
+			} else {
+				cairo.MoveTo (x+radius, y);
+				cairo.Arc (x+width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
+				cairo.Arc (x+width-radius, y+height-radius, radius, 0, (Math.PI*0.5));
+				cairo.Arc (x+radius, y+height-radius, radius, (Math.PI*0.5), Math.PI);
+				cairo.Arc (x+radius, y+radius, radius, Math.PI, (Math.PI*1.5));
+			}
 		}
 		
 		protected virtual void Paint (Gdk.Rectangle area)
 		{
-			Cairo.Context cairo;
-			int x, y;
-			int width, height;
-			double radius;
-
 			if (!IsDrawable) {
 				return;
 			}
@@ -139,53 +143,71 @@ namespace Do.UI
 			x = childAlloc.X + Style.XThickness;
 			y = childAlloc.Y + Style.YThickness;
 
+			
+			//FIXME
 			width  = childAlloc.Width - 2 * Style.XThickness;
 			height = childAlloc.Height - 2 * Style.Ythickness;
 
 			if (this.radius < 0.0) {
 				radius = Math.Min (width, height);
 				radius = (radius / 100) * 10;
-			} else {
-				radius = this.radius;
 			}
 
 			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
-				RoundedRectangle (cairo, x, y, width, height, radius);
 				cairo.Operator = Cairo.Operator.Over;
 
 				if (fill) {
-					Cairo.Gradient gloss;
-					double r, g, b;
-					
-					r = (double) fillColor.Red / ushort.MaxValue;
-					g = (double) fillColor.Green / ushort.MaxValue;
-					b = (double) fillColor.Blue / ushort.MaxValue;
-
-					gloss = new Cairo.LinearGradient (0, 0, 0, height);
-					gloss.AddColorStop (0,   new Cairo.Color (r+.25, g+.25, b+.25, fillAlpha));
-					gloss.AddColorStop (.25, new Cairo.Color (r,     g,     b,     fillAlpha));
-					gloss.AddColorStop (.75, new Cairo.Color (r-.15, g-.15, b-.15, fillAlpha));
-					
-					cairo.Save ();
-					
-					cairo.Pattern = gloss;
-					cairo.FillPreserve ();
-					cairo.Restore ();
-					
-					cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
-					cairo.LineWidth = 2;
-					cairo.Stroke ();
+					PaintFill ();
 				}
+				cairo.NewPath ();
 
 				if (drawFrame) {
-					double r, g, b;
-					r = (double) frameColor.Red / ushort.MaxValue;
-					g = (double) frameColor.Green / ushort.MaxValue;
-					b = (double) frameColor.Blue / ushort.MaxValue;
-					cairo.Color = new Cairo.Color (r, g, b, frameAlpha);
-					cairo.Stroke ();
+					PaintBorder ();
 				}
 			}
+		}
+		
+		protected virtual Cairo.LinearGradient GetGradient ()
+		{
+			return new Cairo.LinearGradient (x, y, x, y+height);
+		}
+		
+		protected virtual void PaintFill ()
+		{
+			double r, g, b;
+			
+			r = (double) fillColor.Red / ushort.MaxValue;
+			g = (double) fillColor.Green / ushort.MaxValue;
+			b = (double) fillColor.Blue / ushort.MaxValue;
+			
+			cairo.Save ();
+			GetFrame (cairo);
+			
+			if ( !drawGradient )
+				cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
+			else
+				cairo.Pattern = GetGradient ();
+			
+			cairo.FillPreserve ();
+			cairo.Restore ();
+		}
+		
+		protected virtual void PaintBorder ()
+		{
+			double r, g, b;
+			
+			r = (double) frameColor.Red / ushort.MaxValue;
+			g = (double) frameColor.Green / ushort.MaxValue;
+			b = (double) frameColor.Blue / ushort.MaxValue;
+			
+			cairo.Save ();
+			GetFrame (cairo);
+			
+			cairo.LineWidth = 2;
+			cairo.Color = new Cairo.Color (r, g, b, frameAlpha);
+			cairo.Stroke ();
+			
+			cairo.Restore ();
 		}
 
 		protected override bool OnExposeEvent (EventExpose evnt)

@@ -20,37 +20,34 @@
 using System;
 using System.Collections.Generic;
 
-namespace Do
-{
-	public enum LogLevel {
-		Debug,
-		Info,
-		Warn,
-		Error,
-		Fatal,
+namespace Do {
+
+	public interface ILog {
+		void Log (Log.Level level, string msg);
 	}
 	
-	public interface ILog
-	{
-		void Log (LogLevel level, string msg, params object[] args);
-	}
-	
-	public class ConsoleLog : ILog
-	{
-		public void Log (LogLevel level, string msg, params object[] args)
+	public class ConsoleLog : ILog {
+
+		public void Log (Log.Level level, string msg)
 		{
 			Console.WriteLine ("{0} [{1}]: {2}",
-			                   DateTime.Now,
-			                   Enum.GetName (typeof(LogLevel), level),
-			                   string.Format (msg, args));
+                DateTime.Now, Enum.GetName (typeof (Log.Level), level), msg);
 		}
 	}
 	
-	public class Log
-	{
+	public static class Log {
+
+        public enum Level {
+            Debug,
+            Info,
+            Warn,
+            Error,
+            Fatal,
+        }
+	
 		static List<ILog> logs;
-		static LogLevel level;
-		
+		static Level level;
+
 		public static void Initialize ()
 		{
 			AddLog (new ConsoleLog ());
@@ -58,15 +55,13 @@ namespace Do
 		
 		static Log ()
 		{
-			level = LogLevel.Info;
+			level = Level.Info;
 			logs = new List<ILog> ();
 		}
 		
-		public LogLevel Level {
+		public static Level LogLevel {
 			get { return level; }
-			set {
-				level = value;
-			}
+			set { level = value; }
 		}
 		
 		public static void AddLog (ILog log)
@@ -81,34 +76,40 @@ namespace Do
 		
 		public static void Debug (string msg, params object[] args)
 		{
-			Write (LogLevel.Debug, msg, args);
+			Write (Level.Debug, msg, args);
 		}
 		
 		public static void Info (string msg, params object[] args)
 		{
-			Write (LogLevel.Info, msg, args);
+			Write (Level.Info, msg, args);
 		}
 		
 		public static void Warn (string msg, params object[] args)
 		{
-			Write (LogLevel.Warn, msg, args);
+			Write (Level.Warn, msg, args);
 		}
 		
 		public static void Error (string msg, params object[] args)
 		{
-			Write (LogLevel.Error, msg, args);
+			Write (Level.Error, msg, args);
 		}
 		
 		public static void LogFatal (string msg, params object[] args)
 		{
-			Write (LogLevel.Fatal, msg, args);
+			Write (Level.Fatal, msg, args);
 		}
 		
-		static void Write (LogLevel lvl, string msg, params object[] args)
+		static void Write (Level lvl, string msg, params object[] args)
 		{
+			msg = string.Format (msg, args);
 			if (lvl >= level) {
 				foreach (ILog log in logs) {
-					log.Log (lvl, msg, args);
+                    try {
+                        log.Log (lvl, msg);
+                    } catch (Exception e) {
+                        Console.Error.WriteLine ("Logger {0} encountered an error: {1}",
+                            log, e.Message);
+                    }
 				}
 			}
 		}

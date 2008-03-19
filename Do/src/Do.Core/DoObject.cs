@@ -23,58 +23,40 @@ using System.Collections.Generic;
 
 using Do.Universe;
 
-namespace Do.Core
-{
-	public abstract class DoObject : IObject
-	{
-		public const string kDefaultName = "No name";
-		public const string kDefaultDescription = "No description.";
-		public const string kDefaultIcon = "empty";
+namespace Do.Core {
 
-		public static List<Type> GetAllImplementedTypes (IObject o)
+	public abstract class DoObject : IObject, IComparable<IObject> {
+
+		const string DefaultName = "No name";
+		const string DefaultDescription = "No description.";
+		const string DefaultIcon = "emblem-noread";
+		
+		static RelevanceProvider relevanceProvider;
+
+		static DoObject ()
 		{
-			Type baseType;
-			List<Type> types;
-			
-			baseType = o.GetType ();
-			types = new List<Type> ();
-			// Climb up the inheritance tree adding types.
-			while (typeof (IObject).IsAssignableFrom (baseType)) {
-				types.Add (baseType);
-				baseType = baseType.BaseType;    
-			}
-			// Add all implemented interfaces
-			foreach (Type interface_type in o.GetType ().GetInterfaces ()) {
-				if (typeof (IObject).IsAssignableFrom (interface_type)) {
-					types.Add (interface_type);
-				}
-			}
-			return types;
+			relevanceProvider = RelevanceProvider.GetProvider ();
 		}
 
-		public static bool IObjectTypeCheck (IObject o, Type[] types)
+		public static bool IObjectTypeCheck (IObject o, Type [] types)
 		{
-			bool type_ok;
-
-			type_ok = false;
 			foreach (Type type in types) {
-				if (type.IsAssignableFrom (o.GetType ())) {
-					type_ok = true;
-					break;
-				}
+				if (type.IsAssignableFrom (o.GetType ()))
+					return true;
 			}
-			return type_ok;
+			return false;
 		}
 
 		/// <summary>
-		/// Returns the inner item if the static type of given
-		/// item is an DoItem subtype. Returns the argument otherwise.
+		/// Returns the inner item if the static type of given item is an DoItem
+		/// subtype. Returns the argument otherwise.
 		/// </summary>
 		/// <param name="items">
 		/// A <see cref="IItem"/> that may or may not be an DoItem subtype.
 		/// </param>
 		/// <returns>
-		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem of an DoItem).
+		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem
+		/// of an DoItem).
 		/// </returns>
 		public static IItem EnsureIItem (IItem item)
 		{
@@ -87,46 +69,46 @@ namespace Do.Core
 		/// Like EnsureItem but for arrays of IItems.
 		/// </summary>
 		/// <param name="items">
-		/// A <see cref="IItem[]"/> that may contain
+		/// A <see cref="IItem []"/> that may contain
 		/// DoItem subtypes.
 		/// </param>
 		/// <returns>
-		/// A <see cref="IItem[]"/> of inner IItems.
+		/// A <see cref="IItem []"/> of inner IItems.
 		/// </returns>
-		public static IItem[] EnsureIItemArray (IItem[] items)
+		public static IItem [] EnsureIItemArray (IItem [] items)
 		{
-			IItem[] inner_items;
+			IItem [] inner_items;
 
-			inner_items = items.Clone () as IItem[];
+			inner_items = items.Clone () as IItem [];
 			for (int i = 0; i < items.Length; ++i) {
-				if (items[i] is DoItem) {
-					inner_items[i] = (items[i] as DoItem).Inner as IItem;
+				if (items [i] is DoItem) {
+					inner_items [i] = (items [i] as DoItem).Inner as IItem;
 				}
 			}
 			return inner_items;
 		}
 
-		public static IItem[] EnsureDoItemArray (IItem[] items)
+		public static IItem [] EnsureDoItemArray (IItem [] items)
 		{
-			IItem[] do_items;
+			IItem [] do_items;
 
-			do_items = items.Clone () as IItem[];
+			do_items = items.Clone () as IItem [];
 			for (int i = 0; i < items.Length; ++i) {
-				if (!(items[i] is DoItem)) {
-					do_items[i] = new DoItem (items[i]);
+				if (!(items [i] is DoItem)) {
+					do_items [i] = new DoItem (items [i]);
 				}
 			}
 			return do_items;
 		}
 		
-		protected int score;
 		protected IObject inner;
+		protected float relevance;
 		
 		protected DoObject (IObject inner)
 		{
 			if (inner == null)
 				throw new ArgumentNullException ("Inner IObject may not be null.");
-			
+
 			this.inner = inner;
 		}
 
@@ -134,26 +116,58 @@ namespace Do.Core
 			get { return inner; }
 			set { inner = value; }
 		}
-		
-		public virtual string Name
-		{
-			get { return inner.Name ?? kDefaultName; }
+	
+		public float Relevance {
+			get { return relevance; }
+			set { relevance = value; }
 		}
 		
-		public virtual string Description
-		{
-			get { return inner.Description ?? kDefaultDescription; }
-		}
-		
-		public virtual string Icon
-		{
-			get { return inner.Icon ?? kDefaultIcon; }
-		}
-		
-		public virtual string UID
-		{
+		public virtual string Name {
 			get {
-				return string.Format ("{0}{1}{2}", inner.GetType (), Name, Description);
+				string name = null;
+				try {
+					name = inner.Name;
+				} catch (Exception e) {
+					LogError ("Name", e, "_");
+				} finally {
+					name = name ?? DefaultName;
+				}
+				return name;
+			}
+		}
+		
+		public virtual string Description {
+			get {
+				string description = null;
+				try {
+					description = inner.Description;
+				} catch (Exception e) {
+					LogError ("Description", e);
+				} finally {
+					description = description ?? DefaultDescription;
+				}
+				return description;
+			}
+		}
+		
+		public virtual string Icon {
+			get {
+				string icon = null;
+				try {
+					icon = inner.Icon;
+				} catch (Exception e) {
+					LogError ("Icon", e);
+				} finally {
+					icon = icon ?? DefaultIcon;
+				}
+				return icon;
+			}
+		}
+		
+		public virtual string UID {
+			get {
+				return string.Format ("{0}{1}{2}",
+					inner.GetType (), Name, Description);
 			}
 		}
 		
@@ -161,39 +175,57 @@ namespace Do.Core
 		{
 			return UID.GetHashCode ();
 		}
-		
-		public int Score
-		{
-			get { return score; }
-			set { score = value; }
-		}
-		
-		public int ScoreForAbbreviation (string ab)
-		{
-			float similarity;
-			
-			if (ab == "") {
-				return 100;
-			} else {
-				similarity = Util.StringScoreForAbbreviation (Name, ab);
-			}
-			return (int) (100 * similarity);
-		}
-		
+	
 		public override bool Equals (object o)
 		{
-			IObject other = o as IObject;
+			DoObject other = o as DoObject;
 
 			if (other == null) return false;
-			return this.GetType () == other.GetType () &&
-				Name == other.Name &&
-				Description == other.Description;
+			return other.UID == UID;
 		}
 
 		public override string ToString ()
 		{
-			return UID;
+			return Name;
+		}
+
+		public void IncreaseRelevance (string match, DoObject other)
+		{
+			relevanceProvider.IncreaseRelevance (this, match, other);
+		}
+
+		public void DecreaseRelevance (string match, DoObject other)
+		{
+			relevanceProvider.DecreaseRelevance (this, match, other);
+		}
+
+		public void UpdateRelevance (string match, DoObject other)
+		{
+			relevance = relevanceProvider.GetRelevance (this, match, other);
+		}
+
+		public bool CanBeFirstResultForKeypress (char a)
+		{
+			return relevanceProvider.CanBeFirstResultForKeypress (this, a);
+		}
+
+		// Only compare with DoObjects.
+		public int CompareTo (IObject other)
+		{
+			return (int) (1000000 * ((other as DoObject).Relevance - Relevance));
+		}
+
+		protected void LogError (string where, Exception e)
+		{
+			LogError (where, e, Name);
+		}
+
+		protected void LogError (string where, Exception e, string name)
+		{
+			Log.Error ("\"{0}\" ({1}) encountered an error in {2}:\n\t" +
+				       "{3}: {4}",
+				name, (inner != null ? inner.GetType () : GetType ()),
+				where, e.GetType (), e.Message);
 		}
 	}
-	
 }

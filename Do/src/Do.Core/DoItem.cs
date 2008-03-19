@@ -24,13 +24,14 @@ using System.Collections.Generic;
 
 using Do.Universe;
 
-namespace Do.Core
-{
-	public class DoItem : DoObject, IItem
-	{
+namespace Do.Core {
+
+	public class DoItem : DoObject, IItem {
+
 		public DoItem (IItem item):
 			base (item)
 		{
 		}
+
 	}
 }

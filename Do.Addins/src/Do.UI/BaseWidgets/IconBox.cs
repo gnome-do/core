@@ -27,10 +27,10 @@ using Do.Universe;
 
 namespace Do.UI
 {
-	public class IconBox : RoundedFrame
+	public class IconBox : Frame
 	{
 		const string captionFormat = "{0}";
-		const string highlightFormat = "<span weight=\"heavy\" background=\"#353045\">{0}</span>";
+		const string highlightFormat = "<span weight=\"bold\" underline=\"single\">{0}</span>";
 
 		protected bool isFocused;
 
@@ -47,18 +47,10 @@ namespace Do.UI
 
 		public IconBox (int iconSize) : base ()
 		{
-			IconProvider.IconUpdated += OnIconUpdated;
 			this.iconSize = iconSize;
 			Build ();
 		}
 		
-		void OnIconUpdated (object sender, IconUpdatedEventArgs e)
-		{
-			if (iconName == e.IconName) {
-				Icon = e.IconName;
-			}
-		}
-
 		protected virtual void Build ()
 		{
 			Alignment label_align;
@@ -92,9 +84,8 @@ namespace Do.UI
 			label.SetSizeRequest (iconSize / 4 * 5, -1);
 			// SetSizeRequest (iconSize * 2, iconSize * 2);
 
-			DrawFrame = false;
-			DrawFill = true;
-			FillColor = new Color (byte.MaxValue, byte.MaxValue, byte.MaxValue);
+			DrawFrame = DrawFill = true;
+			FrameColor = FillColor = new Color (byte.MaxValue, byte.MaxValue, byte.MaxValue);
 
 			Realized += OnRealized;
 			UpdateFocus ();

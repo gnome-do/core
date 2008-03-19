@@ -20,21 +20,18 @@
 
 using System;
 using System.IO;
-using System.Collections;
+using System.Collections.Generic;
 
 using Mono.Unix;
 
-using Do.Addins;
+namespace Do.Universe {
 
-namespace Do.Universe
-{
 	/// <summary>
 	/// FileItem is an item describing a file. FileItem subclasses
 	/// can be created and registered with FileItem for instantiation
 	/// in the factory method FileItem.Create.
 	/// </summary>
-	public class FileItem : IFileItem, IOpenableItem
-	{
+	public class FileItem : IFileItem, IOpenableItem {
 		
 		/// <summary>
 		/// Abbreviates an absolute path by replacing $HOME with ~.
@@ -65,7 +62,7 @@ namespace Do.Universe
 		{
 			UnixFileInfo info;
 
-			if (System.IO.Directory.Exists (path)) return false;
+			if (Directory.Exists (path)) return false;
 
 			info = new UnixFileInfo (path);
 			return (info.FileAccessPermissions & FileAccessPermissions.UserExecute) != 0;
@@ -97,6 +94,18 @@ namespace Do.Universe
 		{
 			return Directory.Exists (path);
 		}
+
+        public static string EscapedPath (IFileItem fi)
+        {
+            return EscapedPath (fi.Path);
+        }
+
+        public static string EscapedPath (string path)
+        {
+            return path
+				.Replace (" ", "\\ ")
+				.Replace ("'", "\\'");
+        }
 		
 		protected string path;
 		
@@ -111,15 +120,13 @@ namespace Do.Universe
 			this.path = path;
 		}
 		
-		public virtual string Name
-		{
+		public virtual string Name {
 			get {
 				return System.IO.Path.GetFileName (Path);
 			}
 		}
 		
-		public virtual string Description
-		{
+		public virtual string Description {
 			get {
 				string short_path;
 				
@@ -132,8 +139,7 @@ namespace Do.Universe
 			}
 		}
 		
-		public virtual string Icon
-		{
+		public virtual string Icon {
 			get {
 				string icon;
 
@@ -148,28 +154,24 @@ namespace Do.Universe
 						icon = string.Format ("gnome-mime-{0}", icon);
 					}
 				} catch (NullReferenceException) {
-					icon = "file";
+					icon = "gtk-file";
 				}
 				return icon;
 			}
 		}
 		
-		public string Path
-		{
-			get {
-				return path;
-			}
+		public string Path {
+			get { return path; }
+			set { path = value; }
 		}
 		
-		public string URI
-		{
+		public string URI {
 			get {
 				return "file://" + Path;
 			}
 		}
 		
-		public string MimeType
-		{
+		public string MimeType {
 			get {
 				return Gnome.Vfs.Global.GetMimeType (Path);
 			}
@@ -177,13 +179,7 @@ namespace Do.Universe
 
 		public virtual void Open ()
 		{
-			string escaped_name;
-
-			escaped_name = Path
-				.Replace (" ", "\\ ")
-				.Replace ("'", "\\'");
-			Util.Environment.Open (escaped_name);
+			Do.Addins.Util.Environment.Open (EscapedPath (this));
 		}
 	}
-	
 }

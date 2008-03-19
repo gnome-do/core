@@ -49,7 +49,7 @@ namespace Do.Universe
 		public GNOMESpecialLocationsItemSource()
 		{
 			items = new List<IItem> ();
-			items.Add (new GNOMETrashFileItem ());
+//			items.Add (new GNOMETrashFileItem ());
 			items.Add (new GNOMEURIItem ("computer:///", "Computer", "computer"));
 			items.Add (new GNOMEURIItem ("network://", "Network", "network"));
 		}

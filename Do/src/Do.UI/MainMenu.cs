@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Reflection;
 using Gtk;
 using Mono.Unix;
 using Mono.Addins.Gui;
@@ -98,17 +99,24 @@ namespace Do.UI
 
 		protected void OnMainMenuQuitClicked (object o, EventArgs args)
 		{
-			Application.Quit();
+			Do.Controller.Vanish ();
+			Application.Quit ();
 		}
 
 		protected void OnMainMenuAddinManagerClicked (object o, EventArgs args)
 		{
 			Do.Controller.Vanish ();
-			AddinManagerWindow.Run (Do.Controller.Window);
+			AddinManagerWindow.Run (null); //(Do.Controller.Window);
 		}
 		
 		protected void OnMainMenuRefreshCatalogClicked (object o, EventArgs args)
 		{
+		}
+
+		protected void OnMainMenuOpenPluginFolderClicked (object o, EventArgs args)
+		{
+			Do.Controller.Vanish ();
+			Util.Environment.Open (Paths.UserPlugins);
 		}
 
 		protected void OnMainMenuAboutClicked (object o, EventArgs args)
@@ -120,14 +128,31 @@ namespace Do.UI
 			Do.Controller.Vanish ();
 
 			authors = new string[] {
+				"Chris Halse Rogers <chalserogers@gmail.com>",
 				"David Siegel <djsiegel@gmail.com>",
 				"DR Colkitt <douglas.colkitt@gmail.com>",
+				"James Walker",
+				"Jason Smith",
+				"Miguel de Icaza",
+				"Rick Harding",
+				"Thomsen Anders",
+				"Volker Braun"
 			};
 
 			about = new AboutDialog ();
 			about.Name = "GNOME Do";
-			about.Version = "0.3.2.1";
 
+			try {
+				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
+				about.Version = String.Format ("{0}.{1}.{2}.{3}",
+											name.Version.Major,
+											name.Version.Minor,
+											name.Version.Build,
+											name.Version.Revision);
+			} catch {
+				about.Version = Catalog.GetString ("Unknown");
+			}
+			
 			logos = new string[] {
 				"/usr/share/icons/gnome/scalable/actions/search.svg",
 			};
@@ -138,7 +163,7 @@ namespace Do.UI
 				logo = l;
 			}
 
-			about.Logo = IconProvider.PixbufFromIconName (logo, 140);
+			about.Logo = UI.IconProvider.PixbufFromIconName (logo, 140);
 			about.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
 			about.Comments = "Do things as quickly as possible\n" +
 				"(but no quicker) with your files, bookmarks,\n" +

@@ -37,18 +37,38 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
+	src/Do.Addins/IDoController.cs \
+	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/Util.cs \
+	src/Do.UI/BaseWidgets/DefaultObjects.cs \
+	src/Do.UI/BaseWidgets/Frame.cs \
+	src/Do.UI/BaseWidgets/GlossyRoundedFrame.cs \
+	src/Do.UI/BaseWidgets/HalfRoundedFrame.cs \
+	src/Do.UI/BaseWidgets/IconBox.cs \
+	src/Do.UI/BaseWidgets/ResultsWindow.cs \
+	src/Do.UI/BaseWidgets/SymbolDisplayLabel.cs \
+	src/Do.UI/BaseWidgets/TextFrame.cs \
+	src/Do.UI/ClassicWindow/ClassicWindow.cs \
+	src/Do.UI/DarkFrame/GlassFrame.cs \
+	src/Do.UI/DarkFrame/GlassIconBox.cs \
+	src/Do.UI/DarkFrame/GlassWindow.cs \
+	src/Do.UI/IconProvider.cs \
+	src/Do.UI/IDoWindow.cs \
+	src/Do.UI/MiniWindow/MiniIconBox.cs \
+	src/Do.UI/MiniWindow/MiniWindow.cs \
+	src/Do.UI/MiniWindow/MiniWindowFrame.cs \
+	src/Do.UI/ResultsWindowSelectionEventArgs.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/BookmarkItem.cs \
 	src/Do.Universe/ContactItem.cs \
 	src/Do.Universe/DefineWordAction.cs \
 	src/Do.Universe/FileItem.cs \
+	src/Do.Universe/FileItemActions.cs \
 	src/Do.Universe/FileItemSource.cs \
 	src/Do.Universe/FirefoxBookmarkItemSource.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Universe/IAction.cs \
-	src/Do.Universe/ICommand.cs \
 	src/Do.Universe/IItem.cs \
 	src/Do.Universe/IItemSource.cs \
 	src/Do.Universe/ImageFileItem.cs \
@@ -64,16 +84,20 @@ FILES =  \
 	src/Do.Universe/RunAction.cs \
 	src/Do.Universe/RunInTerminalAction.cs \
 	src/Do.Universe/TextItem.cs \
-	src/Do.Universe/VoidAction.cs 
+	src/Do.Universe/VoidAction.cs \
+	src/Paths.cs 
 
 DATA_FILES = 
 
-RESOURCES = Do.Addins.addin.xml 
+RESOURCES = \
+	Do.Addins.addin.xml \
+	../Do/Resources/settings-triangle.png 
 
 EXTRAS = \
 	do.addins.pc.in 
 
 REFERENCES =  \
+	Mono.Cairo \
 	Mono.Posix \
 	-pkg:gconf-sharp-2.0 \
 	-pkg:gnome-sharp-2.0 \

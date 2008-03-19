@@ -22,12 +22,15 @@ using System.Collections.Generic;
 
 using Do.Universe;
 
-namespace Do.Core
-{
-	public class ItemSourceItemSource : IItemSource
-	{
+namespace Do.Core {
+
+	public class ItemSourceItemSource : IItemSource {
+
+		List<IItem> items;
+
 		public ItemSourceItemSource ()
 		{
+			items = new List<IItem> ();
 		}
 		
 		public Type[] SupportedItemTypes
@@ -35,7 +38,6 @@ namespace Do.Core
 			get {
 				return new Type[] {
 					typeof (DoItemSource),
-					typeof (ApplicationItem),
 				};
 			}
 		}
@@ -57,11 +59,14 @@ namespace Do.Core
 		
 		public void UpdateItems ()
 		{
+			items.Clear ();
+			foreach (DoItemSource source in Do.UniverseManager.ItemSources)
+				items.Add (source);
 		}
 		
 		public ICollection<IItem> Items
 		{
-			get { return null; }
+			get { return items; }
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item)
@@ -70,18 +75,15 @@ namespace Do.Core
 			bool parent_is_this;
 		
 			children = new List<IItem> ();
-			parent_is_this = (item is DoItemSource && (item as DoItemSource).Inner == this);
-			if (item is DoItemSource && !parent_is_this) {
+			parent_is_this = item is DoItemSource &&
+				(item as DoItemSource).Inner == this;
+			if (parent_is_this) {
+				children = items;
+			} else if (item is DoItemSource) {
 				foreach (DoItem child in (item as DoItemSource).Items) {
 					children.Add (child);
 				}
-			}
-			else if (parent_is_this ||
-			         (item is ApplicationItem &&(item as ApplicationItem).Name == "GNOME Do")) {   // parent is GNOME Do
-				foreach (DoItemSource source in Do.UniverseManager.ItemSources) {
-					children.Add (source);
-				}
-			}
+			} 
 			return children;
 		}
 	}

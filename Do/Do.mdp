@@ -20,15 +20,7 @@
     <File name="src/Do.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/SearchContext.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/IconBox.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/RoundedFrame.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/SymbolDisplayLabel.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/SymbolWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Util.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/TrayLib.cs" subtype="Code" buildaction="Nothing" />
-    <File name="src/Do.UI/MainMenu.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/UniverseManager.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/DoAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/DoItem.cs" subtype="Code" buildaction="Compile" />
@@ -43,10 +35,11 @@
     <File name="src/Do.Universe/ItemSourceItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/Controller.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/SelectedTextItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/DoObjectRelevanceSorter.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/IconProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Preferences.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/GlossyRoundedFrame.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/HistogramRelevanceProvider.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/RelevanceProvider.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MainMenu.cs" subtype="Code" buildaction="Compile" />
+    <File name="gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -60,7 +53,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Addins" />
     <ProjectReference type="Project" localcopy="True" refto="Do.DBus" />
-    <ProjectReference type="Gac" localcopy="True" refto="gconf-sharp-peditors, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="atk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.GetOptions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins, Version=0.2.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
@@ -68,7 +60,8 @@
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins.Setup, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </References>
   <Deployment.LinuxDeployData scriptName="gnome-do" />
-  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">
+  <GtkDesignInfo />
+  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">
     <BuildFilesVar Sync="True" Name="FILES" />
     <DeployFilesVar />
     <ResourcesVar Sync="True" Name="REFERENCES" />
@@ -77,5 +70,4 @@
     <AsmRefVar Sync="True" Name="REFERENCES" />
     <ProjectRefVar Sync="True" Name="REFERENCES" />
   </MonoDevelop.Autotools.MakefileInfo>
-  <GtkDesignInfo />
 </Project>

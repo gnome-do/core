@@ -48,16 +48,16 @@ PROGRAMFILES = \
 	$(DO_ADDINS_DLL) \
 	$(DO_DBUS_DLL) \
 	$(DO_DBUS_DLL_MDB) \
-	$(DO_ADDINS_DLL_MDB)  
+	$(DO_ADDINS_DLL_MDB) \
+	$(DO_EXE_CONFIG)
+
 
 LINUX_DESKTOPAPPLICATIONS = \
 	$(GNOME_DO_DESKTOP)  
 
 BINARIES = \
-	$(GNOME_DO)  
+	$(GNOME_DO)
 
-
-	
 all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_DESKTOPAPPLICATIONS) $(BINARIES) 
 
 FILES =  \
@@ -68,18 +68,11 @@ FILES =  \
 	src/Do.Core/DoItem.cs \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
-	src/Do.Core/DoObjectRelevanceSorter.cs \
-	src/Do.Core/SearchContext.cs \
+	src/Do.Core/HistogramRelevanceProvider.cs \
+	src/Do.Core/RelevanceProvider.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
-	src/Do.UI/GlossyRoundedFrame.cs \
-	src/Do.UI/IconBox.cs \
-	src/Do.UI/IconProvider.cs \
 	src/Do.UI/MainMenu.cs \
-	src/Do.UI/ResultsWindow.cs \
-	src/Do.UI/RoundedFrame.cs \
-	src/Do.UI/SymbolDisplayLabel.cs \
-	src/Do.UI/SymbolWindow.cs \
 	src/Do.Universe/DoTextItem.cs \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/InternalItemSource.cs \
@@ -99,7 +92,8 @@ RESOURCES = \
 	Resources/settings-triangle.png 
 
 EXTRAS = \
-	gnome-do.in 
+	gnome-do.in \
+	Do.exe.config.in
 
 REFERENCES =  \
 	../Do.Addins/bin/Debug/Do.Addins.dll \
@@ -122,6 +116,7 @@ DO_ADDINS_DLL = $(BUILD_DIR)/Do.Addins.dll
 GNOME_DO_DESKTOP = $(BUILD_DIR)/gnome-do.desktop
 DO_DBUS_DLL = $(BUILD_DIR)/Do.DBus.dll
 GNOME_DO = $(BUILD_DIR)/gnome-do
+DO_EXE_CONFIG = $(BUILD_DIR)/Do.exe.config
 
 $(DO_ADDINS_DLL): $(DO_ADDINS_DLL_SOURCE)
 	mkdir -p $(BUILD_DIR)
@@ -144,10 +139,13 @@ $(GNOME_DO): gnome-do
 	chmod 755 '$<'
 	cp '$<' '$@'
 
-$(DO_ADDINS_DLL_MDB): $(DO_ADDINS_DLL_MDB_SOURCE)
+$(DO_EXE_CONFIG): Do.exe.config
 	mkdir -p $(BUILD_DIR)
 	cp '$<' '$@'
 
+$(DO_ADDINS_DLL_MDB): $(DO_ADDINS_DLL_MDB_SOURCE)
+	mkdir -p $(BUILD_DIR)
+	cp '$<' '$@'
 
 
 $(build_xamlg_list): %.xaml.g.cs: %.xaml

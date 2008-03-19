@@ -23,10 +23,10 @@ using System.Collections.Generic;
 
 using Do.Universe;
 
-namespace Do.Core
-{
-	public class DoItemSource : DoObject, IItem
-	{
+namespace Do.Core {
+
+	public class DoItemSource : DoObject, IItemSource, IItem {
+
 		private bool enabled;
 		
 		public DoItemSource (IItemSource source):
@@ -34,14 +34,28 @@ namespace Do.Core
 		{
 			enabled = true;
 		}
-		
+
+		public Type [] SupportedItemTypes
+		{
+			get {
+				Type [] types = null;
+				try {
+					types = (Inner as IItemSource).SupportedItemTypes;
+				} catch (Exception e) {
+					LogError ("SupportedItemTypes", e);
+				} finally {
+					types = types ?? new Type [0];
+				}
+				return types;
+			}
+		}
+
 		public void UpdateItems ()
 		{
 			try {
 				(Inner as IItemSource).UpdateItems ();
 			} catch (Exception e) {
-				Log.Error ("Item source \"{0}\" encountered an error while " +
-						"updating items: {1}", Inner.Name, e.Message);
+				LogError ("UpdateItems", e);
 			}
 		}
 		
@@ -49,16 +63,23 @@ namespace Do.Core
 		{
 			get {
 				IItemSource source = Inner as IItemSource;
+				ICollection<IItem> innerItems = null;
 				List<IItem> items;
 				
 				items = new List<IItem> ();
-				if (source.Items != null) {
-					foreach (IItem item in source.Items) {
-						if (item is DoItem)
-							items.Add (item);
-						else
-							items.Add (new DoItem (item));
-					}
+				try {
+					innerItems = source.Items;
+				} catch (Exception e) {
+					LogError ("Items", e);
+				} finally {
+					innerItems = innerItems ?? new IItem [0];
+				}
+
+				foreach (IItem item in innerItems) {
+					if (item is DoItem)
+						items.Add (item);
+					else
+						items.Add (new DoItem (item));
 				}
 				return items;
 			}
@@ -72,12 +93,16 @@ namespace Do.Core
 			
 			doChildren = new List<IItem> ();
 			item = EnsureIItem (item);
+
+			if (!IObjectTypeCheck (item, SupportedItemTypes))
+				return doChildren;
+
 			try {
 				children = source.ChildrenOfItem (item);
-			} catch {
-				children = null;
+			} catch (Exception e) {
+				LogError ("ChildrenOfItem", e);
 			} finally {
-				children = children ?? new IItem[0];
+				children = children ?? new IItem [0];
 			}
 			
 			foreach (IItem child in children) {

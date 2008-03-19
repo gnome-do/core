@@ -47,7 +47,7 @@ namespace Do.UI
 		void Build ()
 		{
 			UseMarkup = true;
-			Ellipsize = Pango.EllipsizeMode.Middle;
+			Ellipsize = Pango.EllipsizeMode.End;
 			Justify = Justification.Center;
 			ModifyFg (StateType.Normal, Gtk.Rc.GetStyle (this).Foregrounds[(int) StateType.Selected]);
 		}
