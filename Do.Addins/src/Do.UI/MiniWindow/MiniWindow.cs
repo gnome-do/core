@@ -50,6 +50,7 @@ namespace Do.UI
 
 		const double WindowTransparency = 0.95;
 		
+		int monitor;
 		Pane currentPane;
 		bool summonable;
 		
@@ -207,29 +208,36 @@ namespace Do.UI
 			Colormap = colormap;
 		}
 		
-		protected void OnScreenChanged (object sender, EventArgs args)
+		private void OnScreenChanged (object sender, EventArgs args)
 		{
 			SetColormap ();
 		}
 		
-		protected void OnConfigureEvent (object sender, ConfigureEventArgs args)
+		private void OnConfigureEvent (object sender, ConfigureEventArgs args)
 		{
 			Reposition ();
 		}
 		
-		public virtual void Reposition ()
-		{
-			int monitor;
-			Gdk.Rectangle geo, main, results;
+		public void Reposition ()
+		{		
+			Gdk.Rectangle geo, main, results, point;
 			
 			GetPosition (out main.X, out main.Y);
 			GetSize (out main.Width, out main.Height);
-			monitor = Screen.GetMonitorAtPoint (main.X, main.Y);
-			geo = Screen.GetMonitorGeometry (monitor);
-			main.X = (geo.Width - main.Width) / 2;
-			main.Y = (int)((geo.Height - main.Height) / 2.5);
-			Move (main.X, main.Y);
+			
+			//only change monitors if we are currently not showing the window
+			if (!Visible) {
+				Display disp = Screen.Display;
+				disp.GetPointer(out point.X, out point.Y);
+				
+				//current monitor
+				monitor = Screen.GetMonitorAtPoint (point.X, point.Y);
+			}
 
+			geo = Screen.GetMonitorGeometry (monitor);
+			main.X = ((geo.Width - main.Width) / 2) + geo.X;
+			main.Y = (int)((geo.Height + geo.Y - main.Height) / 2.5) + geo.Y;
+			Move (main.X, main.Y);
 			resultsWindow.GetSize (out results.Width, out results.Height);
 			results.Y = main.Y + main.Height;
 			results.X = main.X + (((iconbox[0].Width) + ((int) IconBoxPadding * 2)) * 
@@ -275,6 +283,7 @@ namespace Do.UI
 		
 		public void Summon ()
 		{
+			Reposition ();
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}

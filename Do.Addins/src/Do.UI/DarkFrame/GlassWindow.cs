@@ -34,23 +34,24 @@ namespace Do.UI
 	
 	public class GlassWindow : Gtk.Window, IDoWindow
 	{
-		protected GlassFrame frame;
-		protected SymbolDisplayLabel label;
-		protected ResultsWindow resultsWindow;
-		protected HBox resultsHBox;
-		protected IDoController controller;
-		protected GlassIconBox[] iconbox;
+		GlassFrame frame;
+		SymbolDisplayLabel label;
+		ResultsWindow resultsWindow;
+		HBox resultsHBox;
+		IDoController controller;
+		GlassIconBox[] iconbox;
 		
 		const int IconBoxIconSize = 64;
 		const uint IconBoxPadding = 2;
 		const int IconBoxRadius = 5;
 		const int NumberResultsDisplayed = 6;
 		
-		protected int frameoffset;
-		protected const int MainRadius = 13;
+		int frameoffset;
+		int monitor;
+		const int MainRadius = 13;
 		
-		protected Pane currentPane;
-		protected bool summonable;
+		Pane currentPane;
+		bool summonable;
 		
 		//-------------------Events-----------------------
 		public new event DoEventKeyDelegate KeyPressEvent;
@@ -332,15 +333,23 @@ namespace Do.UI
 		/// </summary>
 		public void Reposition ()
 		{
-			int monitor;
-			Gdk.Rectangle geo, main, results;
+			Gdk.Rectangle geo, main, results, point;
 			
 			GetPosition (out main.X, out main.Y);
 			GetSize (out main.Width, out main.Height);
-			monitor = Screen.GetMonitorAtPoint (main.X, main.Y);
+			
+			//only change monitors if we are currently not showing the window
+			if (!Visible) {
+				Display disp = Screen.Display;
+				disp.GetPointer(out point.X, out point.Y);
+				
+				//current monitor
+				monitor = Screen.GetMonitorAtPoint (point.X, point.Y);
+			}
+
 			geo = Screen.GetMonitorGeometry (monitor);
-			main.X = (geo.Width - main.Width) / 2;
-			main.Y = (int)((geo.Height - main.Height) / 2.5);
+			main.X = ((geo.Width - main.Width) / 2) + geo.X;
+			main.Y = (int)((geo.Height + geo.Y - main.Height) / 2.5) + geo.Y;
 			Move (main.X, main.Y);
 
 			//use frameoffset to get proper positioning and account for additional glass framing
@@ -357,6 +366,8 @@ namespace Do.UI
 		
 		public void Summon ()
 		{
+			//needed to know where our monitor sits...
+			Reposition ();
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}
