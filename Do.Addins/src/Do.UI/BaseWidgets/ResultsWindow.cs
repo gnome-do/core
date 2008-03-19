@@ -66,9 +66,12 @@ namespace Do.UI
 		VBox vbox;
 
 
-		public ResultsWindow (Gdk.Color backgroundColor) : base (Gtk.WindowType.Toplevel)
+		public ResultsWindow (Gdk.Color backgroundColor, int NumberResults) 
+			: base (Gtk.WindowType.Toplevel)
 		{
 			this.backgroundColor = backgroundColor;
+			this.NumberResultsDisplayed = NumberResults;
+			
 			Build ();
 			results = null;
 			selectedIndex = 0;
@@ -94,7 +97,8 @@ namespace Do.UI
 
 		protected virtual void OnShown (object sender, EventArgs args)
 		{
-			int savedSelectedIndex;    // setting Results calls Clear(), resets this.
+			// setting Results calls Clear(), resets this.
+			int savedSelectedIndex;    
 
 			// Do this to load the icons.
 			savedSelectedIndex = selectedIndex;
@@ -144,7 +148,6 @@ namespace Do.UI
 			Add (frame);
 			frame.Add (vbox);
 			vbox.BorderWidth = 4;
-			//vbox.SetSizeRequest (DefaultWindowWidth, (DefaultResultIconSize + 9) * NumberResultsDisplayed);
 			vbox.Show ();
 
 			align = new Alignment (0.0F, 0.0F, 0, 0);

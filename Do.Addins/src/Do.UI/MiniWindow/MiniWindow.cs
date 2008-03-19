@@ -34,23 +34,24 @@ namespace Do.UI
 	{
 		
 		//-------------------Class Members------------------
-		protected MiniWindowFrame frame;
-		protected SymbolDisplayLabel label;
-		protected ResultsWindow resultsWindow;
-		protected HBox resultsHBox;
-		protected MiniIconBox[] iconbox;
-		protected IDoController controller;
+		MiniWindowFrame frame;
+		SymbolDisplayLabel label;
+		ResultsWindow resultsWindow;
+		HBox resultsHBox;
+		MiniIconBox[] iconbox;
+		IDoController controller;
 		
-		protected const int IconBoxIconSize = 48;
-		protected const uint IconBoxPadding = 2;
-		protected const int IconBoxRadius = 3;
+		const int IconBoxIconSize = 48;
+		const uint IconBoxPadding = 2;
+		const int IconBoxRadius = 3;
+		const int NumberResultsDisplayed = 4;
 		
-		protected const int MainRadius = 6;
+		const int MainRadius = 6;
 
-		protected const double WindowTransparency = 0.95;
+		const double WindowTransparency = 0.95;
 		
-		protected Pane currentPane;
-		protected bool summonable;
+		Pane currentPane;
+		bool summonable;
 		
 		//-------------------Events-----------------------
 		public new event DoEventKeyDelegate KeyPressEvent;
@@ -87,7 +88,7 @@ namespace Do.UI
 		}
 		
 		//-------------------methods------------------
-		protected virtual void Build ()
+		protected void Build ()
 		{
 			VBox      vbox;
 			Alignment align;
@@ -104,7 +105,8 @@ namespace Do.UI
 			} catch { }
 			SetColormap ();
 
-			resultsWindow = new ResultsWindow (new Color(42, 45, 49), 24, 300, 4);
+			resultsWindow = new ResultsWindow (new Color(42, 45, 49), 24, 300, 
+			                                   NumberResultsDisplayed);
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 			resultsWindow.ResultInfoFormat = "<b>{0}</b>";
 
@@ -177,8 +179,18 @@ namespace Do.UI
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
-			KeyPressEvent (evnt);
-			
+			switch (evnt.Key) {
+				case Gdk.Key.Page_Up:
+					resultsWindow.SelectedIndex -= NumberResultsDisplayed;
+					break;
+				case Gdk.Key.Page_Down:
+					resultsWindow.SelectedIndex += NumberResultsDisplayed;
+					break;
+				default:
+					KeyPressEvent (evnt);
+					break;
+			}
+
 			return base.OnKeyPressEvent (evnt);
 		}
 		

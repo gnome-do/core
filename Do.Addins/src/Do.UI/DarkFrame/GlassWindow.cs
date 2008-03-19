@@ -44,6 +44,7 @@ namespace Do.UI
 		const int IconBoxIconSize = 64;
 		const uint IconBoxPadding = 2;
 		const int IconBoxRadius = 5;
+		const int NumberResultsDisplayed = 6;
 		
 		protected int frameoffset;
 		protected const int MainRadius = 13;
@@ -86,7 +87,8 @@ namespace Do.UI
 		/// <param name="controller">
 		/// A <see cref="IDoController"/>
 		/// </param>
-		public GlassWindow (IDoController controller) : base (Gtk.WindowType.Toplevel)
+		public GlassWindow (IDoController controller) 
+			: base (Gtk.WindowType.Toplevel)
 		{
 			this.controller = controller;
 			
@@ -94,7 +96,8 @@ namespace Do.UI
 		}
 		
 		/// <summary>
-		/// Provides primary building and packing of the IDoWindow.  Custom widgets are packed in
+		/// Provides primary building and packing of the IDoWindow.  
+		/// Custom widgets are packed in
 		/// here and most settings are selected.
 		/// </summary>
 		protected void Build ()
@@ -113,7 +116,8 @@ namespace Do.UI
 			} catch { }
 			SetColormap ();
 
-			resultsWindow = new ResultsWindow (new Color(15, 15, 15));
+			resultsWindow = new ResultsWindow (new Color(15, 15, 15), 
+			                                   NumberResultsDisplayed);
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
 			currentPane = Pane.First;
@@ -308,8 +312,18 @@ namespace Do.UI
 		/// </returns>
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
-			KeyPressEvent (evnt);
-			
+			switch (evnt.Key) {
+				case Gdk.Key.Page_Up:
+					resultsWindow.SelectedIndex -= NumberResultsDisplayed;
+					break;
+				case Gdk.Key.Page_Down:
+					resultsWindow.SelectedIndex += NumberResultsDisplayed;
+					break;
+				default:
+					KeyPressEvent (evnt);
+					break;
+			}
+
 			return base.OnKeyPressEvent (evnt);
 		}
 		

@@ -45,6 +45,7 @@ namespace Do.UI
 		const int IconBoxIconSize = 128;
 		const uint IconBoxPadding = 6;
 		const int IconBoxRadius = 20;
+		const int NumberResultsDisplayed = 6;
 
 		const double WindowTransparency = 0.91;
 		
@@ -107,7 +108,8 @@ namespace Do.UI
 			} catch { }
 			SetColormap ();
 
-			resultsWindow = new ResultsWindow (BackgroundColor);
+			resultsWindow = new ResultsWindow (BackgroundColor, 
+			                                   NumberResultsDisplayed);
 			resultsWindow.SelectionChanged += OnResultsWindowSelectionChanged;
 
 			currentPane = Pane.First;
@@ -177,8 +179,18 @@ namespace Do.UI
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
-			KeyPressEvent (evnt);
-			
+			switch (evnt.Key) {
+				case Gdk.Key.Page_Up:
+					resultsWindow.SelectedIndex -= NumberResultsDisplayed;
+					break;
+				case Gdk.Key.Page_Down:
+					resultsWindow.SelectedIndex += NumberResultsDisplayed;
+					break;
+				default:
+					KeyPressEvent (evnt);
+					break;
+			}
+
 			return base.OnKeyPressEvent (evnt);
 		}
 		
