@@ -36,8 +36,6 @@ namespace Do.Core
 	public class Controller : IController, IDoController
 	{
 		//-------------------- Class Members--------------------//
-		public event EventHandler Vanished;
-
 		protected IDoWindow window;
 		protected SearchContext[] context;
 		
@@ -194,13 +192,6 @@ namespace Do.Core
 			Reset ();
 		}
 
-		protected void NotifyVanished ()
-		{
-			if (Vanished != null) {
-				Vanished (this, new EventArgs ());
-			}
-		}
-
 		public bool IsSummoned {
 			get {
 				return null != window && window.Visible;
@@ -239,7 +230,7 @@ namespace Do.Core
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
 					return;
 			}
-
+			
 			switch ((Gdk.Key) evnt.KeyValue) {
 				// Throwaway keys
 				case Gdk.Key.Shift_L:
@@ -771,7 +762,6 @@ namespace Do.Core
 				ShrinkResults ();
 			
 			window.Vanish ();
-			NotifyVanished ();
 		}	
 		
 		/////////////////////////////

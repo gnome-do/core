@@ -273,7 +273,8 @@ namespace Do.UI
 			main.X = ((geo.Width - main.Width) / 2) + geo.X;
 			main.Y = (int)((geo.Height + geo.Y - main.Height) / 2.5) + geo.Y;
 			Move (main.X, main.Y);
-
+			//Console.WriteLine ("Width: {0}, Height: {1}, X: {2}, Y: {3}, Mon: {4}",
+			//                   geo.Width, geo.Height, geo.X, geo.Y, monitor);
 			resultsWindow.GetSize (out results.Width, out results.Height);
 			results.Y = main.Y + main.Height;
 			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + IconBoxRadius;
