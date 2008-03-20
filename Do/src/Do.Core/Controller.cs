@@ -25,17 +25,16 @@ using System.Collections.Generic;
 using Gdk;
 using Mono.Unix;
 
-using Do.DBusLib;
-using Do.Universe;
-using Do.Addins;
 using Do.UI;
+using Do.Addins;
+using Do.Universe;
+using Do.DBusLib;
 
 namespace Do.Core
 {
 	
 	public class Controller : IController, IDoController
 	{
-		//-------------------- Class Members--------------------//
 		protected IDoWindow window;
 		protected SearchContext[] context;
 		
@@ -47,12 +46,10 @@ namespace Do.Core
 		List<IItem> modItems;
 		bool thirdPaneVisible;
 		bool tabbing = false;
-		int resultsGrowth;
-		
-		//-------------------- Class Properties-----------------//
+		bool resultsGrown;
 		
 		/// <value>
-		/// shortcut to context[(int) CurrentPane]
+		/// Convenience Method
 		/// </value>
 		SearchContext CurrentContext
 		{
@@ -65,36 +62,38 @@ namespace Do.Core
 		}
 		
 		/// <value>
-		/// The currently active pane, setting does not imply searching currently
+		/// The currently active pane, setting does not imply searching
+		/// currently
 		/// </value>
 		public Pane CurrentPane
 		{
 			set {
-				if (window.CurrentPane == Pane.First && CurrentContext.Results.Length == 0)
+				if (window.CurrentPane == Pane.First &&
+					CurrentContext.Results.Length == 0)
 					return;
 				
 				switch (value) {
-					//Move to First Pane
 					case Pane.First:
 						window.CurrentPane = Pane.First;
 						break;
-					//Move to Second Pane
 					case Pane.Second:
 						window.CurrentPane = Pane.Second;
 						break;
-					//Move to Third Pane
 					case Pane.Third:
 						if (ThirdPaneAllowed)
 							window.CurrentPane = Pane.Third;
 						break;
 				}
 
-				//Determine if third pane needed
+				// Determine if third pane needed
 				if (!ThirdPaneAllowed || 
-				    (!ThirdPaneRequired && context[2].Query.Length == 0 && context[2].Cursor == 0 ))
+				    (!ThirdPaneRequired &&
+					 context[2].Query.Length == 0 &&
+					 context[2].Cursor == 0))
 					ThirdPaneVisible = false;
 				
-				if ((ThirdPaneAllowed && window.CurrentPane == Pane.Third) || ThirdPaneRequired)
+				if ((ThirdPaneAllowed && window.CurrentPane == Pane.Third) ||
+						ThirdPaneRequired)
 					ThirdPaneVisible = true;
 			}
 			
@@ -127,8 +126,8 @@ namespace Do.Core
 				IObject first, second;
 				IAction action;
 
-				first = GetCurrentObject (Pane.First);
-				second = GetCurrentObject (Pane.Second);
+				first = GetSelection (Pane.First);
+				second = GetSelection (Pane.Second);
 				action = (first as IAction) ?? (second as IAction);
 				return action != null &&
 					action.SupportedModifierItemTypes.Length > 0 &&
@@ -142,8 +141,8 @@ namespace Do.Core
 				IObject first, second;
 				IAction action;
 
-				first = GetCurrentObject (Pane.First);
-				second = GetCurrentObject (Pane.Second);
+				first = GetSelection (Pane.First);
+				second = GetSelection (Pane.Second);
 				action = (first as IAction) ?? (second as IAction);
 				return action != null &&
 					action.SupportedModifierItemTypes.Length > 0 &&
@@ -152,30 +151,15 @@ namespace Do.Core
 			}
 		}
 		
-		/// <value>
-		/// Allow UI to check what the current growth of the results window
-		/// should be.  Useful mostly
-		/// for error checking and debugging new UI's.
-		/// </value>
-		public int CurrentResultsGrowth
-		{
-			get {
-				return resultsGrowth;
-			}
-		}
-		
-		//-------------------- CONSTRUCTOR ---------------------//
 		public Controller ()
 		{
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			searchTimeout = new uint[3];
 			context = new SearchContext[3];
-			resultsGrowth = 0;
+			resultsGrown = false;
 		}
 		
-		//-------------------- METHODS -------------------------//
-
 		public void Initialize ()
 		{
 			if (Do.Preferences.UseMiniMode) {
@@ -185,10 +169,8 @@ namespace Do.Core
 			} else {
 				window = new ClassicWindow (this);
 			}
-			
-			//get key press events from window since we want to control that here
+			// Get key press events from window since we want to control that here.
 			window.KeyPressEvent += KeyPressWrap;
-			
 			Reset ();
 		}
 
@@ -218,13 +200,25 @@ namespace Do.Core
 			SearchSecondPane ();
 
 			Summon ();
-			if (resultsGrowth <= 0)
-				GrowResults ();
+
+			// If there are multiple results, show results window after a short
+			// delay.
+			if (objects.Length > 1) {
+				GLib.Timeout.Add (50,
+					delegate {
+						Gdk.Threads.Enter ();
+						GrowResults ();
+						Gdk.Threads.Leave ();
+						return false;
+					}
+				);
+			}
 		}
 		
-		/************************************************
-		 * -------------KEYPRESS HANDLING----------------
-		 * **********************************************/
+		/////////////////////////
+		/// Key Handling ////////
+		/////////////////////////
+
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
@@ -297,8 +291,7 @@ namespace Do.Core
 			if (!ThirdPaneAllowed)
 				ThirdPaneVisible = false;
 			
-			while (resultsGrowth > 0)
-				ShrinkResults ();
+			ShrinkResults ();
 			
 			if (CurrentPane == Pane.First && !results) Vanish ();
 			else if (!something_typed) Reset ();
@@ -330,14 +323,12 @@ namespace Do.Core
 				}
 				window.SetPaneContext(CurrentPane, CurrentContext);
 			}
-			if (resultsGrowth <= 0)
-				GrowResults ();
+			GrowResults ();
 		}
 		
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
-			while (resultsGrowth > 0)
-				ShrinkResults ();
+			ShrinkResults ();
 			
 			tabbing = true;
 
@@ -354,36 +345,27 @@ namespace Do.Core
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
-			//Nothing to do
-			if (CurrentContext.Results.Length == 0) {
-				return;
-			}
-			
-			if (resultsGrowth == 0) {
-				GrowResults ();
-				return;
-			}
 			
 			if (evnt.Key == Gdk.Key.Up) {
-				//Up Arrow
 				if (CurrentContext.Cursor <= 0) {
 					ShrinkResults ();
 					return;
 				}
 				CurrentContext.Cursor--;
 			} else if (evnt.Key == Gdk.Key.Down) {
-				//Down Arrow
+				if (!resultsGrown) {
+					GrowResults ();
+					return;
+				}
 				CurrentContext.Cursor++;
 			} else if (evnt.Key == Gdk.Key.Home) {
-				//Home Key
 				CurrentContext.Cursor = 0;
 			} else if (evnt.Key == Gdk.Key.End) {
-				//End Key
 				CurrentContext.Cursor = CurrentContext.Results.Length - 1;
 			}
 			
 			//We don't want to search the "default" state if the user presses down
-			if (tabbing) return;
+			if (tabbing || CurrentContext.Results.Length == 0) return;
 			UpdatePane (CurrentPane);
 			
 			switch (CurrentPane) {
@@ -439,11 +421,7 @@ namespace Do.Core
 					break;
 			}
 		}
-		
-		/************************************************
-		 * --------------Search Method-------------------
-		 * **********************************************/
-		
+
 		void QueueSearch (bool delayed)
 		{
 			if (delayed) {
@@ -504,7 +482,7 @@ namespace Do.Core
 		{
 			IObject lastResult;
 
-			lastResult = GetCurrentObject (Pane.First);
+			lastResult = GetSelection (Pane.First);
 
 			// If we delete the entire query on a regular search (we are not
 			// searching children) then set default state.
@@ -523,7 +501,7 @@ namespace Do.Core
 			// Queue a search for the next pane unless the result of the most
 			// recent search is the same as the last result - if this is the
 			// case, we already have a valid search queued.
-			if (GetCurrentObject (Pane.First) != lastResult) {
+			if (GetSelection (Pane.First) != lastResult) {
 				context[1] = new SearchContext ();
 				SearchPaneDelayed (Pane.Second);
 			}
@@ -534,10 +512,10 @@ namespace Do.Core
 			IObject first;
 			IObject lastResult;
 
-			lastResult = GetCurrentObject (Pane.Second);
+			lastResult = GetSelection (Pane.Second);
 
 			// Set up the next pane based on what's in the first pane:
-			first = GetCurrentObject (Pane.First);
+			first = GetSelection (Pane.First);
 			if (first is IItem) {
 				// Selection is an IItem
 				context[1].Items.Clear ();
@@ -555,7 +533,7 @@ namespace Do.Core
 			// Queue a search for the next pane unless the result of the most
 			// recent search is the same as the last result - if this is the
 			// case, we already have a valid search queued.
-			if (GetCurrentObject (Pane.Second) != lastResult) {
+			if (GetSelection (Pane.Second) != lastResult) {
 				context[2] = new SearchContext ();
 				SearchPaneDelayed (Pane.Third);
 			}
@@ -567,8 +545,8 @@ namespace Do.Core
 
 			context[2].SearchTypes = new Type[] { typeof (IItem) };
 
-			first = GetCurrentObject (Pane.First);
-			second = GetCurrentObject (Pane.Second);
+			first = GetSelection (Pane.First);
+			second = GetSelection (Pane.Second);
 			if (first == null || second == null) {
 				window.SetPaneContext (Pane.Third, context[2]);
 				return;
@@ -612,10 +590,10 @@ namespace Do.Core
 			}
 		}
 		
-		/********************************************
-		 * ---------- Pane Update Methods -----------
-		 * ******************************************/
-		
+		/////////////////////////
+		// Pane Update Methods //
+		/////////////////////////
+
 		protected void UpdatePane (Pane pane)
 		{
 			window.SetPaneContext (pane, context[(int) pane]);
@@ -641,11 +619,8 @@ namespace Do.Core
 			//Must happen after new searchcontext's are set
 			CurrentPane = Pane.First;
 			
+			ShrinkResults ();
 			window.Reset ();
-			
-			//reset result growth back to 0
-			while (resultsGrowth > 0)
-				ShrinkResults ();
 		}
 		
 		/// <summary>
@@ -653,8 +628,8 @@ namespace Do.Core
 		/// </summary>
 		void GrowResults ()
 		{
-			resultsGrowth++;
 			window.GrowResults ();
+			resultsGrown = true;	
 		}
 		
 		/// <summary>
@@ -662,22 +637,16 @@ namespace Do.Core
 		/// </summary>
 		void ShrinkResults ()
 		{
-			if (resultsGrowth > 0) {
-				resultsGrowth--;
-				window.ShrinkResults ();
-			}
+			window.ShrinkResults ();
+			resultsGrown = false;
 		}
 		
-		/**************************************
-		 * -------Object Related methods-------
-		 * ************************************/
-		
-		IObject GetCurrentObject (Pane pane)
+		IObject GetSelection (Pane pane)
 		{
 			IObject o;
 
 			try {
-				o = context[(int) pane].Results[context[(int) pane].Cursor];
+				o = context[(int) pane].Selection;
 			} catch {
 				o = null;
 			}
@@ -695,15 +664,15 @@ namespace Do.Core
 				Vanish ();
 			}
 
-			first = GetCurrentObject (Pane.First);
-			second = GetCurrentObject (Pane.Second);
-			third = GetCurrentObject (Pane.Third);
+			first = GetSelection (Pane.First);
+			second = GetSelection (Pane.Second);
+			third = GetSelection (Pane.Third);
 			// User may have pressed enter before delayed search completed.
 			// We guess this is the case if there is nothing in the second pane,
 			// so we immediately do a search and use the first result.
 			if (first != null && second == null) {
 				SearchSecondPane ();
-				second = GetCurrentObject (Pane.Second);
+				second = GetSelection (Pane.Second);
 			}
 
 			if (first != null && second != null) {
@@ -758,9 +727,7 @@ namespace Do.Core
 		
 		public void Vanish ()
 		{
-			while (resultsGrowth > 0)
-				ShrinkResults ();
-			
+			ShrinkResults ();
 			window.Vanish ();
 		}	
 		
@@ -792,6 +759,7 @@ namespace Do.Core
 		public void ButtonPressOffWindow ()
 		{
 			Vanish ();
+			Reset ();
 		}
 	}
 }
