@@ -37,6 +37,7 @@ namespace Do.UI
 		GlossyRoundedFrame frame;
 		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
+		PositionWindow positionWindow;
 		HBox resultsHBox;
 		IconBox[] iconbox;
 		GConf.Client gconfClient;
@@ -49,7 +50,6 @@ namespace Do.UI
 
 		const double WindowTransparency = 0.91;
 		
-		int monitor;
 		Pane currentPane;
 		bool summonable;
 		
@@ -76,6 +76,13 @@ namespace Do.UI
 				iconbox[2].IsFocused = (value == Pane.Third);
 
 				Reposition ();
+			}
+		}
+		
+		public PositionWindow PositionWindow {
+			get {
+				return positionWindow ??
+					positionWindow = new PositionWindow (this, resultsWindow);
 			}
 		}
 		
@@ -255,30 +262,13 @@ namespace Do.UI
 		
 		public virtual void Reposition ()
 		{
-			Gdk.Rectangle geo, main, results, point;
-			
-			GetPosition (out main.X, out main.Y);
-			GetSize (out main.Width, out main.Height);
-			
-			//only change monitors if we are currently not showing the window
-			if (!Visible) {
-				Display disp = Screen.Display;
-				disp.GetPointer(out point.X, out point.Y);
-				
-				//current monitor
-				monitor = Screen.GetMonitorAtPoint (point.X, point.Y);
-			}
+			Gdk.Rectangle offset;
+			int iconboxWidth;
 
-			geo = Screen.GetMonitorGeometry (monitor);
-			main.X = ((geo.Width - main.Width) / 2) + geo.X;
-			main.Y = (int)((geo.Height + geo.Y - main.Height) / 2.5) + geo.Y;
-			Move (main.X, main.Y);
-			//Console.WriteLine ("Width: {0}, Height: {1}, X: {2}, Y: {3}, Mon: {4}",
-			//                   geo.Width, geo.Height, geo.X, geo.Y, monitor);
-			resultsWindow.GetSize (out results.Width, out results.Height);
-			results.Y = main.Y + main.Height;
-			results.X = main.X + (IconBoxIconSize + 60) * (int) currentPane + IconBoxRadius;
-			resultsWindow.Move (results.X, results.Y);
+			offset = new Rectangle (IconBoxRadius, 0, 0 ,0);
+			iconboxWidth = IconBoxIconSize + 60;
+			
+			PositionWindow.UpdatePosition (iconboxWidth, currentPane, offset);
 		}
 		
 		protected override bool OnButtonPressEvent (EventButton evnt)
@@ -319,7 +309,9 @@ namespace Do.UI
 		
 		public void Summon ()
 		{
-			Reposition ();
+			if (PositionWindow.GetMonitor()) {
+				Reposition ();
+			}
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}
@@ -385,8 +377,10 @@ namespace Do.UI
 					iconbox[i].Clear ();
 					NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
 					iconbox[i].DisplayObject = noRes;
-					if (i == (int) CurrentPane)
+					if (i == (int) CurrentPane) {
 						label.SetDisplayLabel (noRes.Name, noRes.Description);
+						resultsWindow.Clear ();
+					}
 				}
 				return;
 			}
