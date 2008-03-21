@@ -53,6 +53,8 @@ namespace Do
 			}
 
 			preferences = new Preferences (args);
+			if (Preferences.BeQuiet)
+				Log.LogLevel = Log.Level.Error;
 
 			UniverseManager.Initialize ();
 
