@@ -229,9 +229,13 @@ namespace Do.UI
 				// Useful for making overbright themes less ugly. Still trying
 				// to find a happy balance between 50 and 90...
 				byte maxLum = 60;
-				Addins.Util.Appearance.RGBToHSV(ref r, ref g, ref b);
-				b = Math.Min (b, maxLum);
-				Addins.Util.Appearance.HSVToRGB(ref r, ref g, ref b);
+				double hue, sat, val;
+				Addins.Util.Appearance.RGBToHSV(r, g, b, out hue, 
+				                                out sat, out val);
+				val = Math.Min (val, maxLum);
+				
+				Addins.Util.Appearance.HSVToRGB(hue, sat, val, out r,
+				                                out g, out b);
 				
 				return new Gdk.Color (r, g, b);
 			}
@@ -253,7 +257,7 @@ namespace Do.UI
 			//and the theme change propogating to this application.
 			GLib.Timeout.Add (3000, delegate {
 				Gdk.Threads.Enter ();
-				frame.FillColor = BackgroundColor;
+				frame.FrameColor = frame.FillColor = BackgroundColor;
 				resultsWindow.UpdateColors (BackgroundColor);
 				Gdk.Threads.Leave ();
 				return false;
@@ -373,13 +377,13 @@ namespace Do.UI
 		public void SetPaneContext (Pane pane, SearchContext context)
 		{
 			if (context.Results.Length == 0) {
+				NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
 				for (int i = (int) pane; i < 3; i++) {
 					iconbox[i].Clear ();
-					NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
 					iconbox[i].DisplayObject = noRes;
 					if (i == (int) CurrentPane) {
 						label.SetDisplayLabel (noRes.Name, noRes.Description);
-						resultsWindow.Clear ();
+						resultsWindow.Context = context;
 					}
 				}
 				return;

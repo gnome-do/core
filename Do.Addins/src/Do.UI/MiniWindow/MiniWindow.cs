@@ -338,13 +338,13 @@ namespace Do.UI
 		public void SetPaneContext (Pane pane, SearchContext context)
 		{
 			if (context.Results.Length == 0) {
+				NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
 				for (int i = (int) pane; i < 3; i++) {
 					iconbox[i].Clear ();
-					NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
 					iconbox[i].DisplayObject = noRes;
 					if (i == (int) CurrentPane) {
 						label.SetDisplayLabel (noRes.Name, noRes.Description);
-						resultsWindow.Clear ();
+						resultsWindow.Context = context;
 					}
 				}
 				return;
