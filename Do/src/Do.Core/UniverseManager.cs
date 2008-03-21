@@ -229,8 +229,9 @@ namespace Do.Core
 			foreach (Type type in plugin.GetTypes ()) {			
 				if (type.IsAbstract) continue;
 				if (type == typeof (VoidAction)) continue;
-				if (type == typeof (DoAction)) continue;
 				if (type == typeof (DoItem)) continue;
+				if (type == typeof (DoAction)) continue;
+				if (type == typeof (DoItemSource)) continue;
 				if (loadedTypes.ContainsKey (type)) {
 					Log.Warn ("Duplicate plugin type detected; {0} may be a duplicate plugin.",
 						plugin.Location);
