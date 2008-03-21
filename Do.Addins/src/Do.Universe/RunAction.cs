@@ -23,10 +23,12 @@ using System.IO;
 using Mono.Unix;
 using Do.Addins;
 
-namespace Do.Universe
-{
-	public class RunAction : AbstractAction
-	{
+namespace Do.Universe {
+
+	public class RunAction : AbstractAction {
+
+		static string last_command_found;
+
 		public override string Name
 		{
 			get { return Catalog.GetString ("Run"); }
@@ -48,15 +50,19 @@ namespace Do.Universe
 				return new Type[] {
 					typeof (IRunnableItem),
 					// Files can be run if they're executable.
-					typeof (FileItem),
+					typeof (IFileItem),
+					// ITextItems canbe run if they're valid command lines.
+					typeof (ITextItem),
 				};
 			}
 		}
 
 		public override bool SupportsItem (IItem item)
 		{
-			if (item is FileItem) {
-				return FileItem.IsExecutable (item as FileItem);
+			if (item is IFileItem) {
+				return FileItem.IsExecutable (item as IFileItem);
+			} else if (item is ITextItem) {
+				return CommandLineIsFoundOnPath ((item as ITextItem).Text);
 			}
 			return true;
 		}
@@ -66,16 +72,53 @@ namespace Do.Universe
 			foreach (IItem item in items) {
 				if (item is IRunnableItem) {
 					(item as IRunnableItem).Run ();
-				} else if (item is FileItem) {
+				} else if (item is IFileItem) {
 					System.Diagnostics.Process proc;
 					
 					proc = new System.Diagnostics.Process ();
-					proc.StartInfo.FileName = (item as FileItem).Path;
+					proc.StartInfo.FileName = (item as IFileItem).Path;
 					proc.StartInfo.UseShellExecute = false;
 					proc.Start ();
+				} else if (item is ITextItem) {
+					System.Diagnostics.Process.Start ((item as ITextItem).Text);
 				}
 			}
 			return null;
+		}
+
+		static bool CommandLineIsFoundOnPath (string line)
+		{
+			string path, command, command_file;
+			
+			if (line == null) return false;
+			
+			command = line.Trim ();			
+			int space = command.IndexOf (" ");
+			if (space > 0) {
+				command = command.Substring (0, space);
+			}
+
+			// If this command is the same as the last, yes.
+			if (command == last_command_found) return true;
+			
+			// If the command is found, fine.
+			if (System.IO.File.Exists (command)) {
+				last_command_found = command;
+				return true;
+			}
+			
+			// Otherwise, try to find the command file in path.
+			path = System.Environment.GetEnvironmentVariable ("PATH");
+			if (path != null) {
+				foreach (string part in path.Split (':')) {
+					command_file = System.IO.Path.Combine (part, command);
+					if (System.IO.File.Exists (command_file)) {
+						last_command_found = command;
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 		
 	}
