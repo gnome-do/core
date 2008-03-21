@@ -55,7 +55,11 @@ namespace Do {
 		
 		static Log ()
 		{
-			level = Level.Info;
+			if (Do.Preferences.BeQuiet)
+				level = Level.Error;
+			else
+				level = Level.Info;
+
 			logs = new List<ILog> ();
 		}
 		

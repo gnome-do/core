@@ -40,6 +40,8 @@ namespace Do
 			Catalog.Init ("gnome-do", "/usr/local/share/locale");
 			Gtk.Application.Init ();
 			
+			preferences = new Preferences (args);
+
 			DetectInstanceAndExit ();
 			Log.Initialize ();
 			Util.Initialize ();
@@ -51,10 +53,6 @@ namespace Do
 			} catch (Exception e) {
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
-
-			preferences = new Preferences (args);
-			if (Preferences.BeQuiet)
-				Log.LogLevel = Log.Level.Error;
 
 			UniverseManager.Initialize ();
 
