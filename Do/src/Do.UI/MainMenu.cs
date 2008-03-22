@@ -132,7 +132,7 @@ namespace Do.UI
 			};
 
 			about = new AboutDialog ();
-			about.Name = "GNOME Do";
+			about.ProgramName = "GNOME Do";
 
 			try {
 				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
