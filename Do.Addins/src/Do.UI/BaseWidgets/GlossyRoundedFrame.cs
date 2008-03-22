@@ -60,11 +60,20 @@ namespace Do.UI
 			pt2 = new Cairo.PointD (x+2*width/3, localGlossHeight+glossAngle);
 			pt3 = new Cairo.PointD (x+width/3,   localGlossHeight+glossAngle);
 			
-			glare.MoveTo  (x+radius,       y);
-			glare.Arc     (x+width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
-			glare.LineTo  (x+width,        localGlossHeight);
-			glare.CurveTo (pt2,            pt3,      pt1);
-			glare.Arc     (x+radius,       y+radius, radius, Math.PI, (Math.PI*1.5));
+			if (radius != 0) {
+				glare.MoveTo  (x+radius,       y);
+				glare.Arc     (x+width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
+				glare.LineTo  (x+width,        localGlossHeight);
+				glare.CurveTo (pt2,            pt3,      pt1);
+				glare.Arc     (x+radius,       y+radius, radius, Math.PI, (Math.PI*1.5));
+			} else {
+				glare.MoveTo    (x,       y);
+				glare.LineTo    (x+width, y);
+				glare.LineTo    (x+width, localGlossHeight);
+				glare.CurveTo   (pt2,     pt3, pt1);
+				glare.ClosePath ();
+			}
+			
 		}
 		
 		protected override LinearGradient GetGradient ()
