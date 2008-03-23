@@ -247,12 +247,10 @@ namespace Do.Core
 			if (oldContext != null) {
 				context = oldContext.GetContinuedContext ();
 				return;
-			}
-			else if (context.ParentSearch) {
+			} else if (context.ParentSearch) {
 				context = ParentContext (context);
 				return;
-			}
-			else if (context.ChildrenSearch) {
+			} else if (context.ChildrenSearch) {
 				// TODO: Children are not filtered at all. This needs to be fixed.
 			
 				context = ChildContext (context);
@@ -332,8 +330,7 @@ namespace Do.Core
 
 			if (context.ActionSearch && context.Query.Length == 0) {
 				return InitialActionResults (context);
-			}
-			else if (context.LastContext.LastContext != null) {
+			} else if (context.LastContext.LastContext != null) {
 				return FilterPreviousSearchResultsWithContinuedContext (context);
 			}
 
@@ -378,18 +375,15 @@ namespace Do.Core
 			
 			// If we're on modifier items, add a text item if it's supported.
 			if (context.ModifierItemsSearch) {
-				if (context.Action.SupportsModifierItemForItems (context.Items.ToArray (), textItem)) {
+				if (context.Action.SupportsModifierItemForItems (context.Items.ToArray (), textItem))
 					results.Add (textItem);
-				}
-			}
-			// Same if we're on items.
-			else if (context.ItemsSearch) {
+			} else if (context.ItemsSearch) {
+				// Same if we're on items.
 				if (context.Action.SupportsItem (textItem)) {
 					results.Add (textItem);
 				}
-			}
-			// If independent, always add.
-			else if (context.Independent) {
+			} else if (context.Independent) {
+				// If independent, always add.
 				results.Add (textItem);
 			}
 
@@ -469,11 +463,10 @@ namespace Do.Core
 				if (initial) {
 					actions.AddRange (item_actions);
 					initial = false;
-				}
+				} else {
 				// For every subsequent item, check every action in the
 				// pre-existing list if its not supported by this item, remove
 				// it from the list
-				else {
 					foreach (IAction action in actions) {
 						if (!item_actions.Contains (action)) {
 							actions_to_remove.Add (action);
@@ -534,7 +527,7 @@ namespace Do.Core
 				}
 			} else {
 				foreach (DoItemSource dis in doItemSources) {
-					if (dis.Inner.Equals(source)) {
+					if (dis.Inner.Equals (source)) {
 						try {
 							doItemSources.Remove (dis);
 							Log.Info ("Successfully unloaded \"{0}\" itemsource.", source.Name);
@@ -546,19 +539,19 @@ namespace Do.Core
 				}
 			}
 		}
+		
 		protected void OnActionsChange (object s, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
 			IAction action = (IAction) node.CreateInstance ();
 			if (args.Change == ExtensionChange.Add) {
 				try {
-					doActions.Add (new DoAction(action));
+					doActions.Add (new DoAction (action));
 					Log.Info ("Successfully loaded \"{0}\" action", action.Name);
 				} catch (Exception e) {
 					Log.Info ("Action \"{0}\" threw an exception while trying to load it." + e, action.Name);
 				}
-			}
-			else{
+			} else {
 				foreach (DoAction da in doActions) {
 					if (da.Inner.Equals (action)) {
 						try {
@@ -575,15 +568,21 @@ namespace Do.Core
 		
 		private void initAddinManager ()
 		{
-			//Initialize the registry
-			string userAddinDir = System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config");
+			// Initialize the registry
+			string userAddinDir = System.IO.Path.Combine 
+				(Environment.GetFolderPath (Environment.SpecialFolder.Personal), 
+				 ".config");
+			
 			userAddinDir = System.IO.Path.Combine (userAddinDir, "gnome-do");
 			AddinManager.Initialize (userAddinDir);
 			
-			//Check that  http://do.davebsd.com/repository/dev is registered in the repository
+			// Check that  http://do.davebsd.com/repository/dev 
+			// is registered in the repository
 			SetupService setupService = new SetupService (AddinManager.Registry);
-			if (!setupService.Repositories.ContainsRepository ("http://do.davebsd.com/repository/dev")) {
-				setupService.Repositories.RegisterRepository (null, "http://do.davebsd.com/repository/dev", true); 
+			if (!setupService.Repositories.ContainsRepository 
+			    ("http://do.davebsd.com/repository/dev")) {
+				setupService.Repositories.RegisterRepository 
+					(null, "http://do.davebsd.com/repository/dev", true); 
 			}
 			
 		}
