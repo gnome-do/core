@@ -37,6 +37,7 @@ namespace Do.UI
 		MiniWindowFrame frame;
 		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
+		PositionWindow positionWindow;
 		HBox resultsHBox;
 		MiniIconBox[] iconbox;
 		IDoController controller;
@@ -50,7 +51,6 @@ namespace Do.UI
 
 		const double WindowTransparency = 0.95;
 		
-		int monitor;
 		Pane currentPane;
 		bool summonable;
 		
@@ -77,6 +77,13 @@ namespace Do.UI
 				iconbox[2].IsFocused = (value == Pane.Third);
 
 				Reposition ();
+			}
+		}
+		
+		public PositionWindow PositionWindow {
+			get {
+				return positionWindow ??
+					positionWindow = new PositionWindow (this, resultsWindow);
 			}
 		}
 		
@@ -220,29 +227,13 @@ namespace Do.UI
 		
 		public void Reposition ()
 		{		
-			Gdk.Rectangle geo, main, results, point;
-			
-			GetPosition (out main.X, out main.Y);
-			GetSize (out main.Width, out main.Height);
-			
-			//only change monitors if we are currently not showing the window
-			if (!Visible) {
-				Display disp = Screen.Display;
-				disp.GetPointer(out point.X, out point.Y);
-				
-				//current monitor
-				monitor = Screen.GetMonitorAtPoint (point.X, point.Y);
-			}
+			Gdk.Rectangle offset;
+			int iconboxWidth;
 
-			geo = Screen.GetMonitorGeometry (monitor);
-			main.X = ((geo.Width - main.Width) / 2) + geo.X;
-			main.Y = (int)((geo.Height + geo.Y - main.Height) / 2.5) + geo.Y;
-			Move (main.X, main.Y);
-			resultsWindow.GetSize (out results.Width, out results.Height);
-			results.Y = main.Y + main.Height;
-			results.X = main.X + (((iconbox[0].Width) + ((int) IconBoxPadding * 2)) * 
-			                      (int) currentPane + MainRadius);
-			resultsWindow.Move (results.X, results.Y);
+			offset = new Rectangle (MainRadius, 0, 0 ,0);
+			iconboxWidth = (iconbox[0].Width + ((int) IconBoxPadding * 2));
+			
+			PositionWindow.UpdatePosition (iconboxWidth, currentPane, offset);
 		}
 		
 		protected override bool OnButtonPressEvent (EventButton evnt)
@@ -283,7 +274,9 @@ namespace Do.UI
 		
 		public void Summon ()
 		{
-			Reposition ();
+			if (PositionWindow.GetMonitor ()) {
+				Reposition ();
+			}
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}
@@ -345,12 +338,14 @@ namespace Do.UI
 		public void SetPaneContext (Pane pane, SearchContext context)
 		{
 			if (context.Results.Length == 0) {
+				NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
 				for (int i = (int) pane; i < 3; i++) {
 					iconbox[i].Clear ();
-					NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
 					iconbox[i].DisplayObject = noRes;
-					if (i == (int) CurrentPane)
+					if (i == (int) CurrentPane) {
 						label.SetDisplayLabel (noRes.Name, noRes.Description);
+						resultsWindow.Context = context;
+					}
 				}
 				return;
 			}

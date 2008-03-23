@@ -25,16 +25,14 @@ using System.Collections.Generic;
 using Do;
 using Do.Universe;
 
-namespace Do
-{
+namespace Do {
 	
 	/// <summary>
 	/// A class providing generic functionality for dealing with preferences,
 	/// whether those preferences are provided by gconf, command line options,
 	/// etc.
 	/// </summary>
-	public class Preferences
-	{
+	public class Preferences {
 		const string GConfRootPath = "/apps/gnome-do/preferences/";
 
 		GConf.Client client;
@@ -45,7 +43,7 @@ namespace Do
 		/// <param name="args">
 		/// A <see cref="System.String"/> array.
 		/// </param>
-		string[] options;
+		string [] options;
 
 		/// <summary>
 		/// 
@@ -53,7 +51,7 @@ namespace Do
 		/// <param name="args">
 		/// A <see cref="System.String"/>
 		/// </param>
-		public Preferences (string[] args)
+		public Preferences (string [] args)
 		{
 			client = new GConf.Client();
 			options = args;

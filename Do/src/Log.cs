@@ -31,19 +31,19 @@ namespace Do {
 		public void Log (Log.Level level, string msg)
 		{
 			Console.WriteLine ("{0} [{1}]: {2}",
-                DateTime.Now, Enum.GetName (typeof (Log.Level), level), msg);
+				DateTime.Now, Enum.GetName (typeof (Log.Level), level), msg);
 		}
 	}
 	
 	public static class Log {
 
-        public enum Level {
-            Debug,
-            Info,
-            Warn,
-            Error,
-            Fatal,
-        }
+		public enum Level {
+			Debug,
+			Info,
+			Warn,
+			Error,
+			Fatal,
+		}
 	
 		static List<ILog> logs;
 		static Level level;
@@ -55,7 +55,11 @@ namespace Do {
 		
 		static Log ()
 		{
-			level = Level.Info;
+			if (Do.Preferences.BeQuiet)
+				level = Level.Error;
+			else
+				level = Level.Info;
+
 			logs = new List<ILog> ();
 		}
 		

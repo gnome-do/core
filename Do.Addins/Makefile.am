@@ -57,6 +57,7 @@ FILES =  \
 	src/Do.UI/MiniWindow/MiniIconBox.cs \
 	src/Do.UI/MiniWindow/MiniWindow.cs \
 	src/Do.UI/MiniWindow/MiniWindowFrame.cs \
+	src/Do.UI/PositionWindow.cs \
 	src/Do.UI/ResultsWindowSelectionEventArgs.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
@@ -89,9 +90,9 @@ FILES =  \
 
 DATA_FILES = 
 
-RESOURCES = \
-	Do.Addins.addin.xml \
-	../Do/Resources/settings-triangle.png 
+RESOURCES =  \
+	../Do/Resources/settings-triangle.png \
+	Do.Addins.addin.xml 
 
 EXTRAS = \
 	do.addins.pc.in 

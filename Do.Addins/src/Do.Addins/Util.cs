@@ -52,11 +52,11 @@ namespace Do.Addins
 			public static StringTransformationDelegate MarkupSafeString;
 			public static PopupMainMenuAtPositionDelegate PopupMainMenuAtPosition;
 			
-			public static void RGBToHSV (ref byte r, ref byte g, ref byte b)
+			public static void RGBToHSV (byte r, byte g, byte b, 
+			                             out double hue, out double sat, out double val)
 			{
 				// Ported from Murrine Engine.
 				double red, green, blue;
-				double hue = 0, lum, sat;
 				double max, min;
 				double delta;
 				
@@ -64,13 +64,15 @@ namespace Do.Addins
 				green = (double) g;
 				blue = (double) b;
 				
+				hue = 0;
+				
 				max = Math.Max (red, Math.Max (blue, green));
 				min = Math.Min (red, Math.Min (blue, green));
 				delta = max - min;
-				lum = max / 255.0 * 100.0;
+				val = max / 255.0 * 100.0;
 				
 				if (Math.Abs (delta) < 0.0001) {
-					lum = 0;
+					val = 0;
 					sat = 0;
 				} else {
 					sat = (delta / max) * 100;
@@ -82,19 +84,17 @@ namespace Do.Addins
 					hue *= 60;
 					if (hue <= 0) hue += 360;
 				}
-				r = (byte) hue;
-				g = (byte) sat;
-				b = (byte) lum;
 			}
 			
-			public static void HSVToRGB (ref byte hue, ref byte sat, ref byte val)
+			public static void HSVToRGB (double hue, double sat, double val,
+			                             out byte red, out byte green, out byte blue)
 			{
 				double h, s, v;
 				double r = 0, g = 0, b = 0;
 
-				h = (double) hue;
-				s = (double) sat / 100;
-				v = (double) val / 100;
+				h = hue;
+				s = sat / 100;
+				v = val / 100;
 
 				if (s == 0) {
 					r = v;
@@ -145,9 +145,9 @@ namespace Do.Addins
 							break;
 					}
 				}
-				hue = Convert.ToByte(r*255);
-				sat = Convert.ToByte(g*255);
-				val = Convert.ToByte(b*255);
+				red   = Convert.ToByte(r*255);
+				green = Convert.ToByte(g*255);
+				blue  = Convert.ToByte(b*255);
 			}
 		}
 	}

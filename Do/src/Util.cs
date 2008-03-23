@@ -77,17 +77,6 @@ namespace Do
 		public class Appearance
 		{			
 
-			static Appearance ()
-			{
-				Do.Controller.Vanished += OnMainWindowVanished;
-			}
-
-			private static void OnMainWindowVanished (object sender, EventArgs args)
-			{
-				 // pixbufCache.Clear ();
-			}
-			
-
 			public static string MarkupSafeString (string s)
 			{
 				if (s == null) return "";

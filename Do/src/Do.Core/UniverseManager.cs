@@ -63,7 +63,6 @@ namespace Do.Core
 			doActions = new List<DoAction> ();
 			firstResults = new Dictionary<string, List<IObject>> ();
 			itemSourceCursor = firstResultsCursor = 0;
-			
 		}
 
 		internal void Initialize ()
