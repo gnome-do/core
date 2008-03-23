@@ -524,24 +524,22 @@ namespace Do.Core
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
 			IItemSource source = (IItemSource) node.CreateInstance ();
-			if (args.Change == ExtensionChange.Add)
-			{
-				try{
+			if (args.Change == ExtensionChange.Add) {
+				try {
 					doItemSources.Add (new DoItemSource (source));
 					Log.Info ("Successfully loaded \"{0}\" itemsource.", source.Name);
-				}catch (Exception e){
+				}
+				catch (Exception e) {
 					Log.Info ("ItemSource \"{0}\" threw an exception while trying to load it." +e, source.Name);
 				}
-			}
-			else{
-				foreach (DoItemSource dis in doItemSources)
-				{
-					if (dis.Inner.Equals(source))
-					{
-						try{
+			} else {
+				foreach (DoItemSource dis in doItemSources) {
+					if (dis.Inner.Equals(source)) {
+						try {
 							doItemSources.Remove (dis);
 							Log.Info ("Successfully unloaded \"{0}\" itemsource.", source.Name);
-						}catch (Exception e){
+						}
+						catch (Exception e) {
 							Log.Info ("ItemSource \"{0}\" threw an exeption while trying to unload it." + e, source.Name);
 						}
 					}
@@ -552,24 +550,22 @@ namespace Do.Core
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
 			IAction action = (IAction) node.CreateInstance ();
-			if (args.Change == ExtensionChange.Add)
-			{
-				try{
+			if (args.Change == ExtensionChange.Add) {
+				try {
 					doActions.Add (new DoAction(action));
 					Log.Info ("Successfully loaded \"{0}\" action", action.Name);
-				}catch (Exception e){
+				} catch (Exception e) {
 					Log.Info ("Action \"{0}\" threw an exception while trying to load it." + e, action.Name);
 				}
 			}
 			else{
-				foreach (DoAction da in doActions)
-				{
-					if (da.Inner.Equals (action))
-					{
-						try{
+				foreach (DoAction da in doActions) {
+					if (da.Inner.Equals (action)) {
+						try {
 							doActions.Remove (da);
 							Log.Info ("Successfully removed \"{0}\" action", action.Name);
-						}catch (Exception e){
+						}
+						catch (Exception e) {
 							Log.Info ("Action \"{0}\" threw an exeption while trying to unload it." + e, action.Name);
 						}
 					}
@@ -586,8 +582,7 @@ namespace Do.Core
 			
 			//Check that  http://do.davebsd.com/repository/dev is registered in the repository
 			SetupService setupService = new SetupService (AddinManager.Registry);
-			if (!setupService.Repositories.ContainsRepository ("http://do.davebsd.com/repository/dev"))
-			{
+			if (!setupService.Repositories.ContainsRepository ("http://do.davebsd.com/repository/dev")) {
 				setupService.Repositories.RegisterRepository (null, "http://do.davebsd.com/repository/dev", true); 
 			}
 			

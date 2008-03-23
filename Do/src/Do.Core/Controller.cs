@@ -73,16 +73,16 @@ namespace Do.Core
 					return;
 				
 				switch (value) {
-					case Pane.First:
-						window.CurrentPane = Pane.First;
-						break;
-					case Pane.Second:
-						window.CurrentPane = Pane.Second;
-						break;
-					case Pane.Third:
-						if (ThirdPaneAllowed)
-							window.CurrentPane = Pane.Third;
-						break;
+				case Pane.First:
+					window.CurrentPane = Pane.First;
+					break;
+				case Pane.Second:
+					window.CurrentPane = Pane.Second;
+					break;
+				case Pane.Third:
+					if (ThirdPaneAllowed)
+						window.CurrentPane = Pane.Third;
+					break;
 				}
 
 				// Determine if third pane needed
@@ -225,39 +225,39 @@ namespace Do.Core
 			}
 
 			switch ((Gdk.Key) evnt.KeyValue) {
-				// Throwaway keys
-				case Gdk.Key.Shift_L:
-				case Gdk.Key.Control_L:
-					break;
-				case Gdk.Key.Escape:
-					OnEscapeKeyPressEvent (evnt);
-					break;
-				case Gdk.Key.Return:
-				case Gdk.Key.ISO_Enter:
-				case Gdk.Key.KP_Enter:
-					OnActivateKeyPressEvent (evnt);
-					break;
-				case Gdk.Key.Delete:
-				case Gdk.Key.BackSpace:
-					OnDeleteKeyPressEvent (evnt);
-					break;
-				case Gdk.Key.Tab:
-				case Gdk.Key.ISO_Left_Tab:
-					OnTabKeyPressEvent (evnt);
-					break;
-				case Gdk.Key.Up:
-				case Gdk.Key.Down:
-				case Gdk.Key.Home:
-				case Gdk.Key.End:
-					OnUpDownKeyPressEvent (evnt);
-					break;
-				case Gdk.Key.Right:
-				case Gdk.Key.Left:
-					OnRightLeftKeyPressEvent (evnt);
-					break;
-				default:
-					OnInputKeyPressEvent (evnt);
-					break;
+			// Throwaway keys
+			case Gdk.Key.Shift_L:
+			case Gdk.Key.Control_L:
+				break;
+			case Gdk.Key.Escape:
+				OnEscapeKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.Return:
+			case Gdk.Key.ISO_Enter:
+			case Gdk.Key.KP_Enter:
+				OnActivateKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.Delete:
+			case Gdk.Key.BackSpace:
+				OnDeleteKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.Tab:
+			case Gdk.Key.ISO_Left_Tab:
+				OnTabKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.Up:
+			case Gdk.Key.Down:
+			case Gdk.Key.Home:
+			case Gdk.Key.End:
+				OnUpDownKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.Right:
+			case Gdk.Key.Left:
+				OnRightLeftKeyPressEvent (evnt);
+				break;
+			default:
+				OnInputKeyPressEvent (evnt);
+				break;
 			}
 			return;
 		}
@@ -368,14 +368,14 @@ namespace Do.Core
 			UpdatePane (CurrentPane);
 			
 			switch (CurrentPane) {
-				case Pane.First:
-					context[1] = new SearchContext ();
-					SearchPaneDelayed (Pane.Second);
-					break;
-				case Pane.Second:
-					context[2] = new SearchContext ();
-					SearchPaneDelayed (Pane.Third);
-					break;
+			case Pane.First:
+				context[1] = new SearchContext ();
+				SearchPaneDelayed (Pane.Second);
+				break;
+			case Pane.Second:
+				context[2] = new SearchContext ();
+				SearchPaneDelayed (Pane.Third);
+				break;
 			}
 		}
 		
@@ -385,18 +385,18 @@ namespace Do.Core
 		void NextPane ()
 		{
 			switch (CurrentPane) {
-				case Pane.First:
-					CurrentPane = Pane.Second;
-					break;
-				case Pane.Second:
-					if (ThirdPaneAllowed)
-						CurrentPane = Pane.Third;
-					else
-						CurrentPane = Pane.First;
-					break;
-				case Pane.Third:
+			case Pane.First:
+				CurrentPane = Pane.Second;
+				break;
+			case Pane.Second:
+				if (ThirdPaneAllowed)
+					CurrentPane = Pane.Third;
+				else
 					CurrentPane = Pane.First;
-					break;
+				break;
+			case Pane.Third:
+				CurrentPane = Pane.First;
+				break;
 			}
 		}
 		
@@ -406,18 +406,18 @@ namespace Do.Core
 		void PrevPane ()
 		{
 			switch (CurrentPane) {
-				case Pane.First:
-					if (ThirdPaneAllowed)
-						CurrentPane = Pane.Third;
-					else
-						CurrentPane = Pane.Second;
-					break;
-				case Pane.Second:
-					CurrentPane = Pane.First;
-					break;
-				case Pane.Third:
+			case Pane.First:
+				if (ThirdPaneAllowed)
+					CurrentPane = Pane.Third;
+				else
 					CurrentPane = Pane.Second;
-					break;
+				break;
+			case Pane.Second:
+				CurrentPane = Pane.First;
+				break;
+			case Pane.Third:
+				CurrentPane = Pane.Second;
+				break;
 			}
 		}
 
@@ -429,15 +429,15 @@ namespace Do.Core
 			}
 
 			switch (CurrentPane) {
-				case Pane.First:
-					SearchFirstPane ();
-					break;
-				case Pane.Second:
-					SearchSecondPane ();
-					break;
-				case Pane.Third:
-					SearchThirdPane ();
-					break;
+			case Pane.First:
+				SearchFirstPane ();
+				break;
+			case Pane.Second:
+				SearchSecondPane ();
+				break;
+			case Pane.Third:
+				SearchThirdPane ();
+				break;
 			}
 		}
 		
@@ -462,15 +462,15 @@ namespace Do.Core
 			searchTimeout[(int) pane] = GLib.Timeout.Add (SearchDelay, delegate {
 				Gdk.Threads.Enter ();
 				switch (pane) {
-					case Pane.First:
-						SearchFirstPane ();
-						break;
-					case Pane.Second:
-						SearchSecondPane ();
-						break;
-					case Pane.Third:
-						SearchThirdPane ();
-						break;
+				case Pane.First:
+					SearchFirstPane ();
+					break;
+				case Pane.Second:
+					SearchSecondPane ();
+					break;
+				case Pane.Third:
+					SearchThirdPane ();
+					break;
 				}
 				Gdk.Threads.Leave ();
 				return false;
@@ -575,17 +575,17 @@ namespace Do.Core
 		protected void ClearSearchResults ()
 		{
 			switch (CurrentPane) {
-				case Pane.First:
-					Reset ();
-					break;
-				case Pane.Second:
-					context[1] = new SearchContext ();
-					SearchSecondPane ();
-					break;
-				case Pane.Third:
-					context[2] = new SearchContext ();
-					SearchThirdPane ();
-					break;
+			case Pane.First:
+				Reset ();
+				break;
+			case Pane.Second:
+				context[1] = new SearchContext ();
+				SearchSecondPane ();
+				break;
+			case Pane.Third:
+				context[2] = new SearchContext ();
+				SearchThirdPane ();
+				break;
 			}
 		}
 		
@@ -744,14 +744,14 @@ namespace Do.Core
 				return;
 			
 			switch (CurrentPane) {
-				case Pane.First:
-					context[1] = new SearchContext ();
-					SearchPaneDelayed (Pane.Second);
-					break;
-				case Pane.Second:
-					context[2] = new SearchContext ();
-					SearchPaneDelayed (Pane.Third);
-					break;
+			case Pane.First:
+				context[1] = new SearchContext ();
+				SearchPaneDelayed (Pane.Second);
+				break;
+			case Pane.Second:
+				context[2] = new SearchContext ();
+				SearchPaneDelayed (Pane.Third);
+				break;
 			}
 		}
 		
