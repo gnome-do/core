@@ -81,6 +81,8 @@ Do.Addins/Makefile
 Makefile
 Do.DBus/Makefile
 Do/src/AssemblyInfo.cs
+Do.Addins/AssemblyInfo.cs
+Do.DBus/src/AssemblyInfo.cs
 Do/Makefile
 Do/gnome-do
 Do/Do.exe.config
