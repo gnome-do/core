@@ -32,20 +32,39 @@ namespace Do {
 
 		static Paths ()
 		{
-			if (File.Exists (Temp))
-				File.Delete (Temp);
+			if (File.Exists (Temp)) {
+				try {
+					File.Delete (Temp);
+				} catch (Exception e) {
+					Console.Error.WriteLine ("Could not delete temporary directory {0}: {1}",
+						Temp, e.Message);
+				}
+			}
 
-			CreateDirs (ApplicationData, Temp);
+			CreateDirs (ApplicationData, UserData, UserPlugins, Temp);
 		}
 
 		private static void CreateDirs (string first, params string [] rest)
 		{
-			if (!Directory.Exists (first))
-				Directory.CreateDirectory (first);
+			if (!Directory.Exists (first)) {
+				try {
+					Directory.CreateDirectory (first);
+				} catch (Exception e) {
+					Console.Error.WriteLine ("Failed to create directory {0}: {1}",
+						first, e.Message);
+				}
+			}
 
-			foreach (string dir in rest)
-				if (!Directory.Exists (dir))
-					Directory.CreateDirectory (dir);
+			foreach (string dir in rest) {
+				if (!Directory.Exists (dir)) {
+					try {
+						Directory.CreateDirectory (dir);
+					} catch (Exception e) {
+						Console.Error.WriteLine ("Failed to create directory {0}: {1}",
+							dir, e.Message);
+					}
+				}
+			}
 		}
 
 		public static string ReadXdgUserDir (string key, string fallback)
@@ -84,14 +103,12 @@ namespace Do {
 							} else if (!path.StartsWith ("/")) {
 								relative = true;
 							}
-
 							return relative ? Path.Combine (home_dir, path) : path;
 						}
 					}
 				}
 			} catch (FileNotFoundException) {
 			}
-
 			return Path.Combine (home_dir, fallback);
 		}
 
