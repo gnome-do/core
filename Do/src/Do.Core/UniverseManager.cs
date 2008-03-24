@@ -553,10 +553,11 @@ namespace Do.Core
 				}
 			} else {
 				foreach (DoAction da in doActions) {
-					if (da.Inner.Equals (action)) {
+					if (da.Name.Equals (action.Name)) {
 						try {
 							doActions.Remove (da);
 							Log.Info ("Successfully removed \"{0}\" action", action.Name);
+							return;
 						}
 						catch (Exception e) {
 							Log.Info ("Action \"{0}\" threw an exeption while trying to unload it." + e, action.Name);
