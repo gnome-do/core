@@ -26,217 +26,213 @@ using Do.Universe;
 
 namespace Do.Files {
 
-    class CopyToAction : IAction {
-       
-        public string Name { get { return "Copy to..."; } } 
-        public string Description { get { return "Copies a file or folder to another location."; } } 
-        public string Icon { get { return "gtk-copy"; } } 
+	class CopyToAction : IAction {
 
-		public Type[] SupportedItemTypes {
-            get {
-                return new Type[] {
-                    typeof (FileItem),
-                };
-            }
-        }
+		public string Name { get { return "Copy to..."; } } 
+		public string Description { get { return "Copies a file or folder to another location."; } } 
+		public string Icon { get { return "gtk-copy"; } } 
 
-		public Type[] SupportedModifierItemTypes {
-            get {
-                return new Type[] {
-                    typeof (FileItem),
-                };
-            }
-        }
+		public Type [] SupportedItemTypes {
+			get {
+				return new Type [] {
+					typeof (FileItem),
+				};
+			}
+		}
 
-		public bool ModifierItemsOptional {
-            get { return false; }
-        }
-
-		public bool SupportsItem (IItem item)
-        {
-            return true;
-        }
-
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-        {
-            return FileItem.IsDirectory (modItem as FileItem);
-        }
-
-		public IItem[] DynamicModifierItemsForItem (IItem item)
-        {
-            return null;
-        }
-
-		public IItem[] Perform (IItem[] items, IItem[] modItems)
-        {
-            FileItem dest;
-            List<string> seenPaths;
-
-            dest = modItems[0] as FileItem;
-            seenPaths = new List<string> ();
-            foreach (FileItem src in items) {
-                if (seenPaths.Contains (src.Path)) continue;
-                try {
-                    System.Diagnostics.Process.Start ("cp",
-                       string.Format ("-r {0} {1}",
-                           FileItem.EscapedPath (src),
-                           FileItem.EscapedPath (dest)));
-                    seenPaths.Add (src.Path);
-                    src.Path = Path.Combine (dest.Path,
-                        Path.GetFileName (src.Path));
-                } catch (Exception e) {
-                    Console.Error.WriteLine ("CopyToAction could not copy "+
-                        src.Path + " to " + dest.Path + ": " + e.Message);
-                }
-            }
-            return null;
-        }
-	}
-
-    class MoveToAction : IAction {
-       
-        public string Name { get { return "Move to..."; } } 
-        public string Description { get { return "Moves a file or folder to another location."; } } 
-        public string Icon { get { return "forward"; } } 
-
-		public Type[] SupportedItemTypes {
-            get {
-                return new Type[] {
-                    typeof (FileItem),
-                };
-            }
-        }
-
-		public Type[] SupportedModifierItemTypes {
-            get {
-                return new Type[] {
-                    typeof (FileItem),
-                };
-            }
-        }
+		public Type [] SupportedModifierItemTypes {
+			get {
+				return new Type [] {
+					typeof (IFileItem),
+				};
+			}
+		}
 
 		public bool ModifierItemsOptional {
-            get { return false; }
-        }
+			get { return false; }
+		}
 
 		public bool SupportsItem (IItem item)
-        {
-            return true;
-        }
+		{
+			return true;
+		}
 
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-        {
-            return items.Length == 1 ||
-                FileItem.IsDirectory (modItem as FileItem);
-        }
+		public bool SupportsModifierItemForItems (IItem [] items, IItem modItem)
+		{
+			return FileItem.IsDirectory (modItem as IFileItem);
+		}
 
-		public IItem[] DynamicModifierItemsForItem (IItem item)
-        {
-            return null;
-        }
+		public IItem [] DynamicModifierItemsForItem (IItem item)
+		{
+			return null;
+		}
 
-		public IItem[] Perform (IItem[] items, IItem[] modItems)
-        {
-            FileItem dest;
-            List<string> seenPaths;
+		public IItem [] Perform (IItem [] items, IItem [] modItems)
+		{
+			IFileItem dest;
+			List<string> seenPaths;
 
-            dest = modItems[0] as FileItem;
-            seenPaths = new List<string> ();
-            foreach (FileItem src in items) {
-                if (seenPaths.Contains (src.Path)) continue;
-                try {
-                    System.Diagnostics.Process.Start ("mv",
-                       string.Format ("{0} {1}",
-                           FileItem.EscapedPath (src),
-                           FileItem.EscapedPath (dest)));
-                    seenPaths.Add (src.Path);
+			dest = modItems [0] as IFileItem;
+			seenPaths = new List<string> ();
+			foreach (FileItem src in items) {
+				if (seenPaths.Contains (src.Path)) continue;
+				try {
+					System.Diagnostics.Process.Start ("cp",
+							string.Format ("-r {0} {1}",
+								FileItem.EscapedPath (src), FileItem.EscapedPath (dest)));
 
-                    if (FileItem.IsDirectory (dest)) {
-                        src.Path = Path.Combine (dest.Path,
-                            Path.GetFileName (src.Path));
-                    } else {
-                        src.Path = dest.Path;
-                    }
-                } catch (Exception e) {
-                    Console.Error.WriteLine ("MoveToAction could not move "+
-                        src.Path + " to " + dest.Path + ": " + e.Message);
-                }
-            }
-            return null;
-        }
+					seenPaths.Add (src.Path);
+					src.Path = Path.Combine (dest.Path, Path.GetFileName (src.Path));
+				} catch (Exception e) {
+					Console.Error.WriteLine ("CopyToAction could not copy "+
+							src.Path + " to " + dest.Path + ": " + e.Message);
+				}
+			}
+			return null;
+		}
 	}
 
-    // class MoveToTrashAction : AbstractAction {
-       
-    //     public override string Name { get { return "Move to Trash"; } } 
-    //     public override string Description { get { return "Moves a file or folder to the trash."; } } 
-    //     public override string Icon { get { return "user-trash-full"; } } 
+	class MoveToAction : IAction {
 
-    //     string Trash {
-    //         get {
-    //             string home;
-    //             home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-    //             return "~/.Trash".Replace ("~", home);
-    //         }
-    //     }
+		public string Name { get { return "Move to..."; } } 
+		public string Description { get { return "Moves a file or folder to another location."; } } 
+		public string Icon { get { return "forward"; } } 
 
-    // 		public override Type[] SupportedItemTypes {
-    //         get {
-    //             return new Type[] {
-    //                 typeof (FileItem),
-    //             };
-    //         }
-    //     }
+		public Type [] SupportedItemTypes {
+			get {
+				return new Type [] {
+					typeof (FileItem),
+				};
+			}
+		}
 
-    // 		public override IItem[] Perform (IItem[] items, IItem[] modItems)
-    //     {
-    //         List<string> seenPaths;
+		public Type [] SupportedModifierItemTypes {
+			get {
+				return new Type [] {
+					typeof (IFileItem),
+				};
+			}
+		}
 
-    //         seenPaths = new List<string> ();
-    //         foreach (FileItem src in items) {
-    //             if (seenPaths.Contains (src.Path)) continue;
-    //             try {
-    //                 System.Diagnostics.Process.Start ("mv",
-    //                    string.Format ("{0} {1}",
-    //                        FileItem.EscapedPath (src), Trash));
-    //                 seenPaths.Add (src.Path);
-    //                 src.Path = Path.Combine (Trash,
-    //                     Path.GetFileName (src.Path));
-    //             } catch (Exception e) {
-    //                 Console.Error.WriteLine ("MoveToTrashAction could not move "+
-    //                     src.Path + " to the trash: " + e.Message);
-    //             }
-    //         }
-    //         return null;
-    //     }
-    // 	}
+		public bool ModifierItemsOptional {
+			get { return false; }
+		}
 
-    // class DeleteAction : AbstractAction {
-       
-    //     public override string Name { get { return "Delete File"; } } 
-    //     public override string Description { get { return "Deletes a file or folder."; } } 
-    //     public override string Icon { get { return "gtk-delete"; } } 
+		public bool SupportsItem (IItem item)
+		{
+			return true;
+		}
 
-    // 		public override Type[] SupportedItemTypes {
-    //         get {
-    //             return new Type[] {
-    //                 typeof (FileItem),
-    //             };
-    //         }
-    //     }
+		public bool SupportsModifierItemForItems (IItem [] items, IItem modItem)
+		{
+			return items.Length == 1 ||
+				FileItem.IsDirectory (modItem as IFileItem);
+		}
 
-    // 		public override IItem[] Perform (IItem[] items, IItem[] modItems)
-    //     {
-    //         foreach (FileItem src in items) {
-    //             try {
-    //                 System.Diagnostics.Process.Start ("rm",
-    //                    string.Format ("-rf {0}", FileItem.EscapedPath (src)));
-    //             } catch (Exception e) {
-    //                 Console.Error.WriteLine ("DeleteFileAction could not delete "+
-    //                     src.Path + ": " + e.Message);
-    //             }
-    //         }
-    //         return null;
-    //     }
-    // 	}
+		public IItem [] DynamicModifierItemsForItem (IItem item)
+		{
+			return null;
+		}
+
+		public IItem [] Perform (IItem [] items, IItem [] modItems)
+		{
+			IFileItem dest;
+			List<string> seenPaths;
+
+			dest = modItems [0] as IFileItem;
+			seenPaths = new List<string> ();
+			foreach (FileItem src in items) {
+				if (seenPaths.Contains (src.Path)) continue;
+				try {
+					System.Diagnostics.Process.Start ("mv",
+							string.Format ("{0} {1}",
+								FileItem.EscapedPath (src), FileItem.EscapedPath (dest)));
+					seenPaths.Add (src.Path);
+
+					if (FileItem.IsDirectory (dest)) {
+						src.Path = Path.Combine (dest.Path,
+								Path.GetFileName (src.Path));
+					} else {
+						src.Path = dest.Path;
+					}
+				} catch (Exception e) {
+					Console.Error.WriteLine ("MoveToAction could not move "+
+							src.Path + " to " + dest.Path + ": " + e.Message);
+				}
+			}
+			return null;
+		}
+	}
+
+	class MoveToTrashAction : AbstractAction {
+
+		public override string Name { get { return "Move to Trash"; } } 
+		public override string Description { get { return "Moves a file or folder to the trash."; } } 
+		public override string Icon { get { return "user-trash-full"; } } 
+
+		string Trash {
+			get { 
+				return Paths.Combine (
+						Paths.ReadXdgUserDir ("XDG_DATA_HOME", ".local/share"),
+						"Trash/files");
+			}
+		}
+
+		public override Type [] SupportedItemTypes {
+			get {
+				return new Type [] {
+					typeof (FileItem),
+				};
+			}
+		}
+
+		public override IItem [] Perform (IItem [] items, IItem [] modItems)
+		{
+			List<string> seenPaths;
+
+			seenPaths = new List<string> ();
+			foreach (FileItem src in items) {
+				if (seenPaths.Contains (src.Path)) continue;
+				try {
+					System.Diagnostics.Process.Start ("mv",
+							string.Format ("{0} {1}", FileItem.EscapedPath (src), Trash));
+					seenPaths.Add (src.Path);
+					src.Path = Path.Combine (Trash, Path.GetFileName (src.Path));
+				} catch (Exception e) {
+					Console.Error.WriteLine ("MoveToTrashAction could not move "+
+							src.Path + " to the trash: " + e.Message);
+				}
+			}
+			return null;
+		}
+	}
+
+	class DeleteAction : AbstractAction {
+
+		public override string Name { get { return "Delete File"; } } 
+		public override string Description { get { return "Deletes a file or folder."; } } 
+		public override string Icon { get { return "gtk-delete"; } } 
+
+		public override Type [] SupportedItemTypes {
+			get {
+				return new Type [] {
+					typeof (IFileItem),
+				};
+			}
+		}
+
+		public override IItem [] Perform (IItem [] items, IItem [] modItems)
+		{
+			foreach (IFileItem src in items) {
+				try {
+					System.Diagnostics.Process.Start ("rm",
+							string.Format ("-rf {0}", FileItem.EscapedPath (src)));
+				} catch (Exception e) {
+					Console.Error.WriteLine ("DeleteFileAction could not delete "+
+							src.Path + ": " + e.Message);
+				}
+			}
+			return null;
+		}
+	}
 }

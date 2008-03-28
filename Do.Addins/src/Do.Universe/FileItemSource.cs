@@ -102,11 +102,11 @@ namespace Do.Universe {
 			}
 		}
 		
-		public Type[] SupportedItemTypes
+		public Type [] SupportedItemTypes
 		{
 			get {
 				return new Type[] {
-					typeof (FileItem),
+					typeof (IFileItem),
 				};
 			}
 		}
