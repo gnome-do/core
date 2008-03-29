@@ -64,6 +64,31 @@ namespace Do.Universe {
 			}
 		}
 
+		static IEnumerable<IItem> GtkBookmarkItems {
+			get {
+				string line;
+				StreamReader reader;
+				List<IItem> bookmarks;
+
+				reader = null;
+				bookmarks = new List<IItem> ();
+				try {
+					reader = File.OpenText (
+						Path.Combine (Paths.UserHome, ".gtk-bookmarks"));
+				} catch {
+					return bookmarks;
+				}
+
+				while (null != (line = reader.ReadLine ())) {
+					if (!line.StartsWith ("file://")) continue;
+					line = line.Substring ("file://".Length);
+					if (File.Exists (line) || Directory.Exists (line))
+						bookmarks.Add (new FileItem (line));
+				}
+				return bookmarks;
+			}
+		}
+
 		public FileItemSource ()
 		{
 			dirs = Deserialize ();
@@ -173,6 +198,7 @@ namespace Do.Universe {
 		public void UpdateItems ()
 		{
 			items.Clear ();
+			items.AddRange (GtkBookmarkItems);
 			foreach (DirectoryLevelPair dir in dirs) {
 				ReadItems (dir.Directory, dir.Levels);
 			}
