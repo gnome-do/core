@@ -45,12 +45,7 @@ namespace Do.Universe {
 				Levels = levels;
 			}
 		}
-		
-		static FileItemSource ()
-		{
-			Gnome.Vfs.Vfs.Initialize ();
-		}
-
+	
 		static string ConfigFile {
 			get {
 				return Paths.Combine (Paths.ApplicationData,
@@ -68,6 +63,15 @@ namespace Do.Universe {
 				};
 			}
 		}
+
+		public FileItemSource ()
+		{
+			dirs = Deserialize ();
+			items = new List<IItem> ();
+			include_hidden = false;
+			UpdateItems ();
+		}
+				
 		
 		static IEnumerable<DirectoryLevelPair> Deserialize ()
 		{
@@ -116,14 +120,6 @@ namespace Do.Universe {
 			}
 		}
 
-		public FileItemSource ()
-		{
-			dirs = Deserialize ();
-			items = new List<IItem> ();
-			include_hidden = false;
-			UpdateItems ();
-		}
-				
 		public Type [] SupportedItemTypes {
 			get {
 				return new Type [] {
@@ -158,6 +154,7 @@ namespace Do.Universe {
 			
 			if (item is ITextItem) {
 				string path = (item as ITextItem).Text;
+				path = path.Replace ("~", Paths.UserHome);
 				if (!Directory.Exists (path)) return null;
 				fi = new FileItem (path);
 			} else {
@@ -223,37 +220,37 @@ namespace Do.Universe {
 			}
 		}
 
-		public static string Music {
+		static string Music {
 			get {
 				return Paths.ReadXdgUserDir ("XDG_MUSIC_DIR", "Music");
 			}
 		}
 
-		public static string Pictures {
+		static string Pictures {
 			get {
 				return Paths.ReadXdgUserDir ("XDG_PICTURES_DIR", "Pictures");
 			}
 		}
 
-		public static string Videos {
+		static string Videos {
 			get {
 				return Paths.ReadXdgUserDir ("XDG_VIDEOS_DIR", "Videos");
 			}
 		}
 
-		public static string Desktop {
+		static string Desktop {
 			get {
 				return Paths.ReadXdgUserDir ("XDG_DESKTOP_DIR", "Desktop");
 			}
 		}
 
-		public static string Downloads {
+		static string Downloads {
 			get {
 				return Paths.ReadXdgUserDir ("XDG_DOWNLOAD_DIR", "Downloads");
 			}
 		}
 
-		public static string Documents {
+		static string Documents {
 			get {
 				return Paths.ReadXdgUserDir ("XDG_DOCUMENTS_DIR", "Documents");
 			}

@@ -27,12 +27,7 @@ namespace Do.Universe {
 	public class ApplicationItemSource : IItemSource {
 
 		private List<IItem> apps;
-
-		static ApplicationItemSource ()
-		{
-			Gnome.Vfs.Vfs.Initialize ();
-		}
-
+		
 		/// <summary>
 		/// Locations to search for .desktop files.
 		/// </summary>
@@ -54,7 +49,6 @@ namespace Do.Universe {
 				return Paths.ReadXdgUserDir ("XDG_DESKTOP_DIR", "Desktop");
 			}
 		}
-
 
 		public ApplicationItemSource ()
 		{
