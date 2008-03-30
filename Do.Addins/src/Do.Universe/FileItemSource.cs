@@ -33,7 +33,7 @@ namespace Do.Universe {
 
 		List<IItem> items;
 		bool include_hidden;
-		ICollection<DirectoryLevelPair> dirs;
+		IEnumerable<DirectoryLevelPair> dirs;
 
 		struct DirectoryLevelPair {
 			public string Directory;
@@ -41,33 +41,69 @@ namespace Do.Universe {
 			
 			public DirectoryLevelPair (string dir, int levels)
 			{
-				Directory = dir.Replace ("~",
-				   Environment.GetFolderPath (Environment.SpecialFolder.Personal));
+				Directory = dir.Replace ("~", Paths.UserHome);
 				Levels = levels;
 			}
 		}
-		
-		static readonly string ConfigFile;
-		
-		static readonly DirectoryLevelPair[] DefaultDirectories = {
-			new DirectoryLevelPair ("/home",		   1),
-			new DirectoryLevelPair (Paths.UserHome,    1),
-			new DirectoryLevelPair (Desktop,		   1),
-			new DirectoryLevelPair (Documents,	    	3),
-		};
-		
-		static FileItemSource ()
-		{
-			Gnome.Vfs.Vfs.Initialize ();
-			ConfigFile = Paths.Combine (Paths.ApplicationData, "FileItemSource.config");
+	
+		static string ConfigFile {
+			get {
+				return Paths.Combine (Paths.ApplicationData,
+					"FileItemSource.config");
+			}
 		}
+
+		static DirectoryLevelPair [] DefaultDirectories {
+			get	{
+				return new DirectoryLevelPair [] {
+					new DirectoryLevelPair ("/home",		1),
+					new DirectoryLevelPair (Paths.UserHome, 1),
+					new DirectoryLevelPair (Desktop,		1),
+					new DirectoryLevelPair (Documents,		3),
+				};
+			}
+		}
+
+		static IEnumerable<IItem> GtkBookmarkItems {
+			get {
+				string line;
+				StreamReader reader;
+				List<IItem> bookmarks;
+
+				reader = null;
+				bookmarks = new List<IItem> ();
+				try {
+					reader = File.OpenText (
+						Path.Combine (Paths.UserHome, ".gtk-bookmarks"));
+				} catch {
+					return bookmarks;
+				}
+
+				while (null != (line = reader.ReadLine ())) {
+					if (!line.StartsWith ("file://")) continue;
+					line = line.Substring ("file://".Length);
+					if (File.Exists (line) || Directory.Exists (line))
+						bookmarks.Add (new FileItem (line));
+				}
+				return bookmarks;
+			}
+		}
+
+		public FileItemSource ()
+		{
+			dirs = Deserialize ();
+			items = new List<IItem> ();
+			include_hidden = false;
+			UpdateItems ();
+		}
+				
 		
-		static ICollection<DirectoryLevelPair> LoadSavedDirectoryLevelPairs ()
+		static IEnumerable<DirectoryLevelPair> Deserialize ()
 		{
 			List<DirectoryLevelPair> dirs;
 
 			if (!File.Exists (ConfigFile)) {
-				SaveDirectoryLevelPairs (DefaultDirectories);
+				Serialize (DefaultDirectories);
 				return DefaultDirectories;
 			}
 			
@@ -75,78 +111,80 @@ namespace Do.Universe {
 			if (File.Exists (ConfigFile)) {
 				try {
 					foreach (string line in File.ReadAllLines (ConfigFile)) {
-						string[] parts;
+						string [] parts;
 						if (line.Trim ().StartsWith ("#")) continue;
 						parts = line.Trim ().Split (':');
 						if (parts.Length != 2) continue;
-						dirs.Add (new DirectoryLevelPair (parts[0].Trim (),
-						          int.Parse (parts[1].Trim ())));
+						dirs.Add (new DirectoryLevelPair (parts [0].Trim (),
+						          int.Parse (parts [1].Trim ())));
 					}
 				} catch (Exception e) {
-					Console.Error.WriteLine ("Error reading FileItemSource config file {0}: {1}", ConfigFile, e.Message);
+					Console.Error.WriteLine (
+						"Error reading FileItemSource config file {0}: {1}",
+						ConfigFile, e.Message);
 				}
 			} 
 			return dirs;
 		}
 		
-		static void SaveDirectoryLevelPairs (ICollection<DirectoryLevelPair> dirs)
+		static void Serialize (IEnumerable<DirectoryLevelPair> dirs)
 		{
+			string configDir = Path.GetDirectoryName (ConfigFile);
 			try {
-				if (!Directory.Exists (Path.GetDirectoryName (ConfigFile)))
-					Directory.CreateDirectory (Path.GetDirectoryName (ConfigFile));
+				if (!Directory.Exists (configDir))
+					Directory.CreateDirectory (configDir);
 				foreach (DirectoryLevelPair pair in dirs) {
-					File.AppendAllText (ConfigFile, string.Format ("{0}: {1}\n", pair.Directory, pair.Levels)); 
+					File.AppendAllText (ConfigFile,
+						string.Format ("{0}: {1}\n", pair.Directory,
+							pair.Levels)); 
 				}
 			} catch (Exception e) {
-				Console.Error.WriteLine ("Error saving FileItemSource config file {0}: {1}", ConfigFile, e.Message);
+				Console.Error.WriteLine (
+					"Error saving FileItemSource config file {0}: {1}",
+					ConfigFile, e.Message);
 			}
 		}
-		
-		public Type[] SupportedItemTypes
-		{
+
+		public Type [] SupportedItemTypes {
 			get {
-				return new Type[] {
-					typeof (FileItem),
+				return new Type [] {
+					typeof (IFileItem),
+					typeof (ITextItem),
 				};
 			}
 		}
 		
-		public FileItemSource ()
-		{
-			dirs = LoadSavedDirectoryLevelPairs ();
-			items = new List<IItem> ();
-			include_hidden = false;
-			UpdateItems ();
+		public string Name {
+			get { return "File Indexer"; }
 		}
 		
-		public string Name
-		{
-			get { return "Directory Scanner"; }
-		}
-		
-		public string Description
-		{
+		public string Description {
 			get {
-				return string.Format ("Catalog files in user-specified directories.");
+				return string.Format ("Frequently used files and folders.");
 			}
 		}
 		
-		public string Icon
-		{
+		public string Icon {
 			get { return "folder"; }
 		}
 		
-		public ICollection<IItem> Items
-		{
+		public ICollection<IItem> Items {
 			get { return items; }
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item)
 		{
-			List<IItem> children;
 			IFileItem fi;
+			List<IItem> children;
 			
-			fi = item as IFileItem;
+			if (item is ITextItem) {
+				string path = (item as ITextItem).Text;
+				path = path.Replace ("~", Paths.UserHome);
+				if (!Directory.Exists (path)) return null;
+				fi = new FileItem (path);
+			} else {
+				fi = item as IFileItem;
+			}
 			children = new List<IItem> ();
 			if (FileItem.IsDirectory (fi)) {
 				foreach (string path in
@@ -160,6 +198,7 @@ namespace Do.Universe {
 		public void UpdateItems ()
 		{
 			items.Clear ();
+			items.AddRange (GtkBookmarkItems);
 			foreach (DirectoryLevelPair dir in dirs) {
 				ReadItems (dir.Directory, dir.Levels);
 			}
@@ -179,13 +218,12 @@ namespace Do.Universe {
 		/// </param>
 		protected virtual void ReadItems (string dir, int levels)
 		{
-			string[] files;
-			string[] directories;
 			FileItem item;
+			string [] files;
+			string [] directories;
 			
-			if (levels == 0) {
-				return;
-			}		
+			if (levels == 0) return;
+
 			try {
 				files = Directory.GetFiles (dir);
 				directories = Directory.GetDirectories (dir);
@@ -208,28 +246,40 @@ namespace Do.Universe {
 			}
 		}
 
-		public static string Music {
-			get { return Paths.ReadXdgUserDir ("XDG_MUSIC_DIR", "Music"); }
+		static string Music {
+			get {
+				return Paths.ReadXdgUserDir ("XDG_MUSIC_DIR", "Music");
+			}
 		}
 
-		public static string Pictures {
-			get { return Paths.ReadXdgUserDir ("XDG_PICTURES_DIR", "Pictures"); }
+		static string Pictures {
+			get {
+				return Paths.ReadXdgUserDir ("XDG_PICTURES_DIR", "Pictures");
+			}
 		}
 
-		public static string Videos {
-			get { return Paths.ReadXdgUserDir ("XDG_VIDEOS_DIR", "Videos"); }
+		static string Videos {
+			get {
+				return Paths.ReadXdgUserDir ("XDG_VIDEOS_DIR", "Videos");
+			}
 		}
 
-		public static string Desktop {
-			get { return Paths.ReadXdgUserDir ("XDG_DESKTOP_DIR", "Desktop"); }
+		static string Desktop {
+			get {
+				return Paths.ReadXdgUserDir ("XDG_DESKTOP_DIR", "Desktop");
+			}
 		}
 
-		public static string Downloads {
-			get { return Paths.ReadXdgUserDir ("XDG_DOWNLOAD_DIR", "Downloads"); }
+		static string Downloads {
+			get {
+				return Paths.ReadXdgUserDir ("XDG_DOWNLOAD_DIR", "Downloads");
+			}
 		}
 
-		public static string Documents {
-			get { return Paths.ReadXdgUserDir ("XDG_DOCUMENTS_DIR", "Documents"); }
+		static string Documents {
+			get {
+				return Paths.ReadXdgUserDir ("XDG_DOCUMENTS_DIR", "Documents");
+			}
 		}
 	}
 }

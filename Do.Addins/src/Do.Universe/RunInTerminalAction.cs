@@ -42,6 +42,7 @@ namespace Do.Universe
 			terminals["gnome-terminal"] = "-x";
 			terminals["xterm"] = "-e";
 			terminals["konsole"] = "-e";
+			terminals["xfce4-terminal"] = "-x";
 		}
 
 		public static bool CommandLineIsFoundOnPath (string command_line)
@@ -88,11 +89,14 @@ namespace Do.Universe
 			try {
 				program = client.Get ("/desktop/gnome/applications/terminal/exec") as string;
 				args = client.Get ("/desktop/gnome/applications/terminal/exec_arg") as string;
+				if (!CommandLineIsFoundOnPath (program))
+					program = args = null;
 			} catch {
 				program = args = null;
 			}
 			
-			// No settings found. Try to find a suitable terminal manually.
+			// No settings found or the program cannot be found. Try to find a
+			// suitable terminal manually.
 			if (string.IsNullOrEmpty (program)) {
 				foreach (string terminal in terminals.Keys) {
 					if (CommandLineIsFoundOnPath (terminal)) {

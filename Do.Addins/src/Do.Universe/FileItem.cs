@@ -33,6 +33,11 @@ namespace Do.Universe {
 	/// </summary>
 	public class FileItem : IFileItem, IOpenableItem {
 		
+		static FileItem ()
+		{
+			Gnome.Vfs.Vfs.Initialize ();
+		}
+
 		/// <summary>
 		/// Abbreviates an absolute path by replacing $HOME with ~.
 		/// </summary>
@@ -44,12 +49,10 @@ namespace Do.Universe {
 		/// </returns>
 		public static string ShortPath (string path)
 		{
-			string home;
-			
-			path = path ?? "";
-			home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-			path = path.Replace (home, "~");
-			return path;
+			if (null == path)
+				throw new ArgumentNullException ();
+
+			return path.Replace (Paths.UserHome, "~");
 		}
 		
 		public static bool IsExecutable (IFileItem fi)
@@ -65,7 +68,8 @@ namespace Do.Universe {
 			if (Directory.Exists (path)) return false;
 
 			info = new UnixFileInfo (path);
-			return (info.FileAccessPermissions & FileAccessPermissions.UserExecute) != 0;
+			return (info.FileAccessPermissions &
+				FileAccessPermissions.UserExecute) != 0;
 		}
 		
 		public static bool IsHidden (IFileItem fi)

@@ -26,6 +26,9 @@
 	<Extension path = "/Do/ItemSource">
 		<ItemSource type="Do.Universe.RecentFileItemSource" />
 	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.GNOMESpecialLocationsItemSource" />
+	</Extension>
 	
 	<!-- Actions -->
 	<Extension path = "/Do/Action">

@@ -22,26 +22,32 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-namespace Do.Universe
-{
-	public class ApplicationItemSource : IItemSource
-	{
+namespace Do.Universe {
+
+	public class ApplicationItemSource : IItemSource {
+
+		private List<IItem> apps;
+		
 		/// <summary>
 		/// Locations to search for .desktop files.
 		/// </summary>
-		public static readonly string[] DesktopFilesDirectories = {
-			"/usr/share/applications",
-			"/usr/share/applications/kde",
-			"/usr/share/gdm/applications",
-			"/usr/local/share/applications",
-			"~/.local/share/applications",
-		};
+		static string [] DesktopFilesDirectories {
+			get {
+				return new string [] {
+					"/usr/share/applications",
+					"/usr/share/applications/kde",
+					"/usr/share/gdm/applications",
+					"/usr/local/share/applications",
+					"~/.local/share/applications",
+					Desktop,
+				};
+			}
+		}
 
-		private List<IItem> apps;
-
-		static ApplicationItemSource ()
-		{
-			Gnome.Vfs.Vfs.Initialize ();
+		static string Desktop {
+			get {
+				return Paths.ReadXdgUserDir ("XDG_DESKTOP_DIR", "Desktop");
+			}
 		}
 
 		public ApplicationItemSource ()
@@ -50,64 +56,58 @@ namespace Do.Universe
 			UpdateItems ();
 		}
 
-		public Type[] SupportedItemTypes
-		{
-			get { return new Type[] {
+		public Type [] SupportedItemTypes {
+			get {
+				return new Type [] {
 					typeof (ApplicationItem),
 				};
 			}
 		}
 
-		public string Name
-		{
+		public string Name {
 			get { return "Applications"; }
 		}
 
-		public string Description
-		{
+		public string Description {
 			get { return "Finds applications in many locations."; }
 		}
 
-		public string Icon
-		{
+		public string Icon {
 			get { return "gnome-applications"; }
 		}
 
 		/// <summary>
 		/// Given an absolute path to a directory, scan that directory for
 		/// .desktop files, creating an ApplicationItem for each desktop file
-		/// found and adding the ApplicationItem to the list of ApplicationItems.
+		/// found and adding the ApplicationItem to the list of
+		/// ApplicationItems.
 		/// </summary>
-		/// <param name="desktop_files_dir">
-		/// A <see cref="System.String"/> containing an absolute path to a directory
+		/// <param name="dir">
+		/// A <see cref="System.String"/> containing an absolute path to a
+		/// directory
 		/// where .desktop files can be found.
 		/// </param>
-		private void LoadDesktopFiles (string desktop_files_dir)
+		private void LoadDesktopFiles (string dir)
 		{
 			ApplicationItem app;
 
-			if (!Directory.Exists (desktop_files_dir)) return;
-			foreach (string filename in Directory.GetFiles (desktop_files_dir)) {
+			if (!Directory.Exists (dir)) return;
+			foreach (string filename in Directory.GetFiles (dir)) {
 				if (!filename.EndsWith (".desktop")) continue;
-
 				try {
 					app = new ApplicationItem (filename);
 				} catch {
 					continue;
 				}
-				apps.Add(app);
+				apps.Add (app);
 			}
 		}
 
 		public void UpdateItems ()
 		{
-			string dir_absolute;
-
 			apps.Clear ();
 			foreach (string dir in DesktopFilesDirectories) {
-				dir_absolute = dir.Replace ("~",
-						Environment.GetFolderPath (Environment.SpecialFolder.Personal));
-				LoadDesktopFiles (dir_absolute);
+				LoadDesktopFiles (dir.Replace ("~", Paths.UserHome));
 			}
 		}
 
@@ -115,7 +115,8 @@ namespace Do.Universe
 			get { return apps; }
 		}
 
-		public ICollection<IItem> ChildrenOfItem (IItem item) {
+		public ICollection<IItem> ChildrenOfItem (IItem item)
+		{
 			return null;
 		}
 	}

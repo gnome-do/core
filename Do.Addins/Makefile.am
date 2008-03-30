@@ -75,7 +75,6 @@ FILES =  \
 	src/Do.Universe/ImageFileItem.cs \
 	src/Do.Universe/IObject.cs \
 	src/Do.Universe/MailtoAction.cs \
-	src/Do.Universe/ManuallyTypedPathItemSource.cs \
 	src/Do.Universe/OpenAction.cs \
 	src/Do.Universe/OpenTerminalHereAction.cs \
 	src/Do.Universe/OpenURLAction.cs \

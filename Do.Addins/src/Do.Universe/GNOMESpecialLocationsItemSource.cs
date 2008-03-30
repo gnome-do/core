@@ -23,14 +23,11 @@ using System.Collections.Generic;
 
 using Do.Addins;
 
-namespace Do.Universe
-{
-	public class GNOMESpecialLocationsItemSource : IItemSource
-	{
-		List<IItem> items;
+namespace Do.Universe {
+
+	public class GNOMESpecialLocationsItemSource : IItemSource {
 		
-		class GNOMEURIItem : IURIItem
-		{
+		class GNOMEURIItem : IURIItem {
 			protected string uri, name, icon;
 			
 			public GNOMEURIItem (string uri, string name, string icon)
@@ -45,17 +42,11 @@ namespace Do.Universe
 			virtual public string Icon { get { return icon; } }
 			virtual public string URI { get { return uri; } }
 		}
-		
-		public GNOMESpecialLocationsItemSource()
-		{
-			items = new List<IItem> ();
-//			items.Add (new GNOMETrashFileItem ());
-			items.Add (new GNOMEURIItem ("computer:///", "Computer", "computer"));
-			items.Add (new GNOMEURIItem ("network://", "Network", "network"));
-		}
-		
+			
 		public string Name { get { return "GNOME Special Locations"; } }
-		public string Description { get { return "Special locations in GNOME, such as Computer and Network."; } }
+		public string Description { get {
+			return "Special locations in GNOME, such as Computer and Network.";
+		} }
 		public string Icon { get { return "user-home"; } }
 
 		public Type[] SupportedItemTypes
@@ -69,7 +60,14 @@ namespace Do.Universe
 		
 		public ICollection<IItem> Items
 		{
-			get { return items; }
+			get {
+				return new IItem [] {
+					new GNOMETrashFileItem (),
+					new GNOMEURIItem ("computer:///", "Computer", "computer"),
+					new GNOMEURIItem ("network://", "Network", "network"),
+				};
+			}
+
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item)
@@ -82,30 +80,22 @@ namespace Do.Universe
 		}
 	}
 	
-	class GNOMETrashFileItem : IFileItem, IOpenableItem
-	{
-		static readonly string TrashDirectory;
+	class GNOMETrashFileItem : IFileItem, IOpenableItem {
 		
-		static GNOMETrashFileItem ()
-		{
-			TrashDirectory = "~/.Trash".Replace ("~",
-				Environment.GetFolderPath (Environment.SpecialFolder.Personal));
+		public string Path {
+			get { 
+				return Paths.Combine (
+					Paths.ReadXdgUserDir ("XDG_DATA_HOME", ".local/share"),
+					"Trash/files");
+			}
 		}
-		
-		public GNOMETrashFileItem ()
-		{
-		}
-		
+
 		public string Name {
 			get { return "Trash"; }
 		}
 
 		public string Description {
 			get { return "Trash"; }
-		}
-
-		public string Path {
-			get { return TrashDirectory; }
 		}
 
 		public string URI {
@@ -115,8 +105,8 @@ namespace Do.Universe
 		public string Icon
 		{
 			get {
-				if (Directory.Exists (TrashDirectory) &&
-					Directory.GetFileSystemEntries (TrashDirectory).Length > 0) {
+				if (Directory.Exists (Path) &&
+					Directory.GetFileSystemEntries (Path).Length > 0) {
 					return "user-trash-full";
 				} else {
 					return "user-trash";

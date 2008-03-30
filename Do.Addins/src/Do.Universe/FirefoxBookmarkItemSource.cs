@@ -22,10 +22,10 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-namespace Do.Universe
-{
-	public class FirefoxBookmarkItemSource : IItemSource
-	{
+namespace Do.Universe {
+
+	public class FirefoxBookmarkItemSource : IItemSource {
+
 		const string BeginProfileName = "Path=";
 		const string BeginDefaultProfile = "Default=1";
 		const string BeginURL = "<DT><A HREF=\"";
@@ -35,19 +35,18 @@ namespace Do.Universe
 		const string BeginName = "\">";
 		const string EndName = "</A>";
 		
-		List<IItem> bookmarks;
+		ICollection<IItem> items;
 		
 		/// <summary>
 		/// Initialize the item source.
 		/// </summary>
 		public FirefoxBookmarkItemSource ()
 		{
-			bookmarks = new List<IItem> ();
+			items = new IItem [0];
 			UpdateItems ();
 		}
 		
-		public Type[] SupportedItemTypes
-		{
+		public Type[] SupportedItemTypes {
 			get {
 				return new Type[] {
 					typeof (BookmarkItem),
@@ -55,24 +54,20 @@ namespace Do.Universe
 			}
 		}
 		
-		public string Name
-		{
+		public string Name {
 			get { return "Firefox Bookmarks"; }
 		}
 		
-		public string Description
-		{
+		public string Description {
 			get { return "Finds Firefox bookmarks in your default profile."; }
 		}
 		
-		public string Icon
-		{
+		public string Icon {
 			get { return "firefox"; }
 		}
 		
-		public ICollection<IItem> Items
-		{
-			get { return bookmarks; }
+		public ICollection<IItem> Items {
+			get { return items; }
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item)
@@ -82,9 +77,7 @@ namespace Do.Universe
 		
 		public void UpdateItems ()
 		{
-			bookmarks.Clear ();
-			foreach (IItem item in ReadBookmarksFromFile (GetFirefoxBookmarkFilePath ()))
-				bookmarks.Add (item);
+			items = BookmarkItems;
 		}
 		
 		/// <summary>
@@ -96,21 +89,20 @@ namespace Do.Universe
 		/// A <see cref="System.String"/> containing the absolute path to the
 		/// bookmarks.html file of the default firefox profile for the current user.
 		/// </returns>
-		public static string GetFirefoxBookmarkFilePath ()
-		{
-			string home, path, profile;
+		static string BookmarkFilePath { get {
 			StreamReader reader;
+			string line, path, profile;
 
 			profile = null;
-			home = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
-			path = Path.Combine (home, ".mozilla/firefox/profiles.ini");
+			path = Path.Combine (Paths.UserHome,
+				".mozilla/firefox/profiles.ini");
 			try {
 				reader = File.OpenText (path);
 			} catch {
 				return null;
 			}
 			
-			for (string line = reader.ReadLine (); line != null; line = reader.ReadLine ()) {
+			while (null != (line = reader.ReadLine ())) {
 				if (line.StartsWith (BeginDefaultProfile)) break;
 				if (line.StartsWith (BeginProfileName)) {
 					line = line.Trim ();
@@ -120,50 +112,37 @@ namespace Do.Universe
 			}
 			reader.Close ();
 			
-			if (profile == null) {
-				return null;
-			}
-			path = Path.Combine (home, ".mozilla/firefox");
-			path = Path.Combine (path, profile);
-			path = Path.Combine (path, "bookmarks.html");
+			if (profile == null) return null;
+			path = Paths.Combine (Paths.UserHome,
+				".mozilla/firefox", profile, "bookmarks.html");
 			return path;
-		}
+		} }
 		
-		/// <summary>
-		/// Given a bookmarks file, create a BookmarkItem for each bookmark found
-		/// in the file, returning a collection of BookmarkItems created.
-		/// </summary>
-		/// <param name="file">
-		/// A <see cref="System.String"/> containing the absolute path to a Firefox
-		/// bookmarks.html file (e.g. the path returned by GetFirefoxBookmarkFilePath).
-		/// </param>
-		/// <returns>
-		/// A <see cref="ICollection`1"/> of BookmarkItems.
-		/// </returns>
-		protected ICollection<BookmarkItem> ReadBookmarksFromFile (string file)
-		{
-			ICollection<BookmarkItem> list;
+		protected ICollection<IItem> BookmarkItems { get {
 			StreamReader reader;
+			List<IItem> bookmarks;
+			string line, url, name, shortcut;
 			int urlIndex, nameIndex, shortcutIndex;
-			string url, name, shortcut;
 			
-			list = new List<BookmarkItem> ();
-
+			bookmarks = new List<IItem> ();
 			try {
-				reader = File.OpenText (file);
-				for (string line = reader.ReadLine (); line != null; line = reader.ReadLine ()) {
+				reader = File.OpenText (BookmarkFilePath);
+				while (null != (line = reader.ReadLine ())) {
 					try {
 						urlIndex = line.IndexOf (BeginURL);
 						if (urlIndex < 0) continue;
 						line = line.Substring (urlIndex + BeginURL.Length);
 						url = line.Substring (0, line.IndexOf (EndURL));
 
-						// See if this bookmark has a shortcut (SHORTCUTURL="blog")
+						// See if this bookmark has a shortcut
+						// (SHORTCUTURL="blog")
 						shortcut = null;
 						shortcutIndex = line.IndexOf (BeginShortcut);
 						if (shortcutIndex > 0) {
-							line = line.Substring (shortcutIndex + BeginShortcut.Length);
-							shortcut = line.Substring (0, line.IndexOf (EndShortcut));
+							line = line.Substring (shortcutIndex +
+								BeginShortcut.Length);
+							shortcut = line.Substring (0,
+								line.IndexOf (EndShortcut));
 						}
 						
 						nameIndex = line.IndexOf (BeginName);
@@ -173,15 +152,14 @@ namespace Do.Universe
 					} catch {
 						continue;
 					}
-
-					list.Add (new BookmarkItem (name, url));
+					bookmarks.Add (new BookmarkItem (name, url));
 					if (shortcut != null)
-						list.Add (new BookmarkItem (shortcut, url));
+						bookmarks.Add (new BookmarkItem (shortcut, url));
 				}	
 			} catch {
-				list.Clear ();
+				bookmarks.Clear ();
 			}
-			return list;
-		}
+			return bookmarks;
+		} }
 	}
 }
