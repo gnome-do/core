@@ -89,6 +89,13 @@ namespace Do.Universe
 				    gnome_desktop_item_get_string (desktopFilePtr, "Icon"));
 			}
 		}
+		
+		public string Exec {
+			get {
+				return Marshal.PtrToStringAuto (
+				    gnome_desktop_item_get_string (desktopFilePtr, "Exec"));
+			}
+		}
 
 		public string MimeTypes
 		{
