@@ -17,6 +17,15 @@
 	<Extension path = "/Do/ItemSource">
 		<ItemSource type="Do.Universe.ApplicationItemSource" />
 	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.FirefoxBookmarkItemSource" />
+	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.FileItemSource" />
+	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.RecentFileItemSource" />
+	</Extension>
 	
 	<!-- Actions -->
 	<Extension path = "/Do/Action">
