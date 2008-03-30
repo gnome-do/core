@@ -207,7 +207,7 @@ namespace Do.Files {
 		}
 	}
 
-	class DeleteAction : AbstractAction {
+	abstract class DeleteAction : AbstractAction {
 
 		public override string Name { get { return "Delete File"; } } 
 		public override string Description { get { return "Deletes a file or folder."; } } 
