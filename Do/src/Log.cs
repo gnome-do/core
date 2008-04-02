@@ -23,30 +23,80 @@ using System.Collections.Generic;
 namespace Do {
 
 	public interface ILog {
-		void Log (Log.Level level, string msg);
+		void Log (LogEntryType level, string msg);
 	}
 	
 	public class ConsoleLog : ILog {
 
-		public void Log (Log.Level level, string msg)
+		public void Log (LogEntryType type, string msg)
 		{
-			Console.WriteLine ("{0} [{1}]: {2}",
-				DateTime.Now, Enum.GetName (typeof (Log.Level), level), msg);
+		    string time = string.Format ("{0:00}:{1:00}:{2:00}.{3:000}",
+				DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second,
+				DateTime.Now.Millisecond);
+			string stype  = Enum.GetName (typeof (LogEntryType), type);
+			string prompt = string.Format ("[{0} {1}]", stype, time);
+
+			switch (type) {
+			case LogEntryType.Fatal:
+				ConsoleCrayon.BackgroundColor = ConsoleColor.Red;
+				ConsoleCrayon.ForegroundColor = ConsoleColor.White;
+				break;
+			case LogEntryType.Error:
+				ConsoleCrayon.ForegroundColor = ConsoleColor.Red;
+				break;
+			case LogEntryType.Warn:
+				ConsoleCrayon.ForegroundColor = ConsoleColor.Yellow;
+				break;
+			case LogEntryType.Info:
+				ConsoleCrayon.ForegroundColor = ConsoleColor.Green;
+				break;
+			case LogEntryType.Debug:
+				ConsoleCrayon.ForegroundColor = ConsoleColor.Blue;
+				break;
+			}
+			Console.Write (prompt);
+			ConsoleCrayon.ResetColor ();
+			Console.Write (" ");
+			Console.WriteLine (AlignMessage (msg, prompt.Length + 1));
+		}
+
+		string AlignMessage (string msg, int margin)
+		{
+			int maxWidth   = 90;
+			int lineWidth  = 0;
+			string aligned = "";
+			string padding = "";
+			string[] words = msg.Split (' ');
+
+			while (padding.Length < margin)
+				padding += " ";
+
+			lineWidth = margin;
+			foreach (string word in words) {
+				if (lineWidth + word.Length < maxWidth) {
+					aligned = string.Format ("{0}{1} ", aligned, word);
+					lineWidth += word.Length + 1;
+				} else {
+					aligned = string.Format ("{0}\n{1}{2} ", aligned, padding, word);
+					lineWidth = margin + word.Length + 1;
+				}
+			}
+			return aligned;
 		}
 	}
 	
-	public static class Log {
+	public enum LogEntryType {
+		Debug,
+		Info,
+		Warn,
+		Error,
+		Fatal,
+	}
 
-		public enum Level {
-			Debug,
-			Info,
-			Warn,
-			Error,
-			Fatal,
-		}
+	public static class Log {
 	
 		static List<ILog> logs;
-		static Level level;
+		static LogEntryType level;
 
 		public static void Initialize ()
 		{
@@ -56,14 +106,13 @@ namespace Do {
 		static Log ()
 		{
 			if (Do.Preferences.BeQuiet)
-				level = Level.Error;
+				level = LogEntryType.Error;
 			else
-				level = Level.Info;
-
+				level = LogEntryType.Info;
 			logs = new List<ILog> ();
 		}
 		
-		public static Level LogLevel {
+		public static LogEntryType LogLevel {
 			get { return level; }
 			set { level = value; }
 		}
@@ -80,30 +129,30 @@ namespace Do {
 		
 		public static void Debug (string msg, params object[] args)
 		{
-			Write (Level.Debug, msg, args);
+			Write (LogEntryType.Debug, msg, args);
 		}
 		
 		public static void Info (string msg, params object[] args)
 		{
-			Write (Level.Info, msg, args);
+			Write (LogEntryType.Info, msg, args);
 		}
 		
 		public static void Warn (string msg, params object[] args)
 		{
-			Write (Level.Warn, msg, args);
+			Write (LogEntryType.Warn, msg, args);
 		}
 		
 		public static void Error (string msg, params object[] args)
 		{
-			Write (Level.Error, msg, args);
+			Write (LogEntryType.Error, msg, args);
 		}
 		
 		public static void LogFatal (string msg, params object[] args)
 		{
-			Write (Level.Fatal, msg, args);
+			Write (LogEntryType.Fatal, msg, args);
 		}
 		
-		static void Write (Level lvl, string msg, params object[] args)
+		static void Write (LogEntryType lvl, string msg, params object[] args)
 		{
 			msg = string.Format (msg, args);
 			if (lvl >= level) {

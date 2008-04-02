@@ -30,7 +30,7 @@ namespace Do.Universe
 	/// <summary>
 	/// Runs text commands in a terminal.
 	/// </summary>
-	public class RunInTerminalAction : AbstractAction
+	abstract public class RunInTerminalAction : AbstractAction
 	{
 
 		static string last_command_found;

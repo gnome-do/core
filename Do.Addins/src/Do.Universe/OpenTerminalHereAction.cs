@@ -27,7 +27,7 @@ using Do.Addins;
 
 namespace Do.Universe
 {
-	public class OpenTerminalHereAction : AbstractAction
+	abstract public class OpenTerminalHereAction : AbstractAction
 	{
 		public OpenTerminalHereAction ()
 		{
