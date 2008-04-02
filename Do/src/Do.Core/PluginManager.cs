@@ -31,7 +31,7 @@ namespace Do.Core
 {
 	public class PluginManager
 	{
-		const string HttpRepo = "http://do.davebsd.com/HttpRepository/dev";
+		const string HttpRepo = "http://do.davebsd.com/repository/dev";
 
 		List<DoItemSource> sources;
 		List<DoAction> actions;
