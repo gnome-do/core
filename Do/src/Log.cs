@@ -62,7 +62,7 @@ namespace Do {
 
 		string AlignMessage (string msg, int margin)
 		{
-			int maxWidth   = 90;
+			int maxWidth   = 80;
 			int lineWidth  = 0;
 			string aligned = "";
 			string padding = "";
@@ -77,8 +77,8 @@ namespace Do {
 					aligned = string.Format ("{0}{1} ", aligned, word);
 					lineWidth += word.Length + 1;
 				} else {
-					aligned = string.Format ("{0}\n{1}{2} ", aligned, padding, word);
-					lineWidth = margin + word.Length + 1;
+					aligned = string.Format ("{0}\n    {1} ", aligned, word);
+					lineWidth = 4 + word.Length + 1;
 				}
 			}
 			return aligned;
