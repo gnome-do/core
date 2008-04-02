@@ -51,17 +51,11 @@ namespace Do.UI
 		const double WindowTransparency = 0.91;
 		
 		Pane currentPane;
-		bool summonable;
 		
 		//-------------------Events-----------------------
 		public new event DoEventKeyDelegate KeyPressEvent;
 			
 		//-------------------Properties-------------------
-		public bool IsSummonable {
-			get {
-				return summonable;
-			}
-		}
 
 		public Pane CurrentPane {
 			get {
@@ -179,8 +173,6 @@ namespace Do.UI
 
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
-			
-			summonable = true;
 
 			Reposition ();
 		}

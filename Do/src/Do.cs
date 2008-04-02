@@ -33,6 +33,7 @@ namespace Do
 		
 		static Preferences preferences;
 		static Controller controller;
+		static PluginManager pluginManager;
 		static UniverseManager universeManager;
 
 		public static void Main (string[] args)
@@ -54,6 +55,7 @@ namespace Do
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
 
+			PluginManager.Initialize ();
 			UniverseManager.Initialize ();
 
 			// Previously, Controller's constructor created a Gtk.Window, and that
@@ -95,6 +97,14 @@ namespace Do
 			get {
 				return controller ??
 					controller = new Controller ();
+			}
+		}
+
+		public static PluginManager PluginManager
+		{
+			get {
+				return pluginManager ??
+					pluginManager = new PluginManager ();
 			}
 		}
 

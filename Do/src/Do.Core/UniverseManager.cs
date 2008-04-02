@@ -22,8 +22,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
-using Mono.Addins;
-using Mono.Addins.Setup;
 
 using Do;
 using Do.Addins;
@@ -49,9 +47,6 @@ namespace Do.Core
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<IObject, IObject> universe;
 
-		List<DoItemSource> doItemSources;
-		List<DoAction> doActions;
-
 		// Keep track of next data structures to update.
 		int itemSourceCursor;
 		int firstResultsCursor;
@@ -59,20 +54,12 @@ namespace Do.Core
 		public UniverseManager()
 		{
 			universe = new Dictionary<IObject, IObject> ();
-			doItemSources = new List<DoItemSource> ();
-			doActions = new List<DoAction> ();
 			firstResults = new Dictionary<string, List<IObject>> ();
 			itemSourceCursor = firstResultsCursor = 0;
 		}
 
 		internal void Initialize ()
 		{
-			this.initAddinManager();
-			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource",OnItemSourcesChange);
-			AddinManager.AddExtensionNodeHandler ("/Do/Action", OnActionsChange);
-			
-			//LoadBuiltins ();
-			//LoadPlugins ();
 			BuildUniverse ();
 			BuildFirstResults ();
 
@@ -105,8 +92,9 @@ namespace Do.Core
 				Dictionary<IObject, DoItem> newItems;
 
 				then = DateTime.Now;
-				itemSourceCursor = (itemSourceCursor + 1) % doItemSources.Count;
-				itemSource = doItemSources[itemSourceCursor];
+				itemSourceCursor = (itemSourceCursor + 1) %
+					Do.PluginManager.ItemSources.Count;
+				itemSource = Do.PluginManager.ItemSources [itemSourceCursor];
 				newItems = new Dictionary<IObject, DoItem> ();
 				// Remember old items.
 				oldItems = itemSource.Items;	
@@ -167,11 +155,6 @@ namespace Do.Core
 			}
 		}
 
-		internal ICollection<DoItemSource> ItemSources
-		{
-			get { return doItemSources.AsReadOnly (); }
-		}
-
 		protected List<IObject>
 		SortResults (IEnumerable<IObject> broadResults, string query, IObject other, bool strict)
 		{
@@ -217,12 +200,12 @@ namespace Do.Core
 		private void BuildUniverse ()
 		{
 			// Hash actions.
-			foreach (DoAction action in doActions) {
+			foreach (DoAction action in Do.PluginManager.Actions) {
 				universe[action] = action;
 			}
 
 			// Hash items.
-			foreach (DoItemSource source in doItemSources) {
+			foreach (DoItemSource source in Do.PluginManager.ItemSources) {
 				ICollection<IItem> items;
 
 				items = source.Items;
@@ -484,7 +467,7 @@ namespace Do.Core
 			List<IObject> item_actions;
 
 			item_actions = new List<IObject> ();
-			foreach (IAction action in doActions) {
+			foreach (IAction action in Do.PluginManager.Actions) {
 				if (action.SupportsItem (item)) {
 					item_actions.Add (action);
 				}
@@ -497,96 +480,11 @@ namespace Do.Core
 			List<IObject> children;
 
 			children = new List<IObject> ();
-			foreach (DoItemSource source in doItemSources) {
+			foreach (DoItemSource source in Do.PluginManager.ItemSources) {
 				foreach (IObject child in source.ChildrenOfItem (parent))
 					children.Add (child);
 			}
 			return children;
 		}
-		
-		/// <summary>
-		/// Called when a node is added or removed
-		/// </summary>
-		/// <param name="s">
-		/// A <see cref="System.Object"/>
-		/// </param>
-		/// <param name="args">
-		/// A <see cref="ExtensionNodeEventArgs"/>
-		/// </param>
-		protected void OnItemSourcesChange (object s, ExtensionNodeEventArgs args)
-		{
-			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
-			IItemSource source = (IItemSource) node.CreateInstance ();
-			if (args.Change == ExtensionChange.Add) {
-				try {
-					doItemSources.Add (new DoItemSource (source));
-					Log.Info ("Successfully loaded \"{0}\" itemsource.", source.Name);
-				}
-				catch (Exception e) {
-					Log.Info ("ItemSource \"{0}\" threw an exception while trying to load it." +e, source.Name);
-				}
-			} else {
-				foreach (DoItemSource dis in doItemSources) {
-					if (dis.Inner.Equals (source)) {
-						try {
-							doItemSources.Remove (dis);
-							Log.Info ("Successfully unloaded \"{0}\" itemsource.", source.Name);
-						}
-						catch (Exception e) {
-							Log.Info ("ItemSource \"{0}\" threw an exeption while trying to unload it." + e, source.Name);
-						}
-					}
-				}
-			}
-		}
-		
-		protected void OnActionsChange (object s, ExtensionNodeEventArgs args)
-		{
-			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
-			IAction action = (IAction) node.CreateInstance ();
-			if (args.Change == ExtensionChange.Add) {
-				try {
-					doActions.Add (new DoAction (action));
-					Log.Info ("Successfully loaded \"{0}\" action", action.Name);
-				} catch (Exception e) {
-					Log.Info ("Action \"{0}\" threw an exception while trying to load it." + e, action.Name);
-				}
-			} else {
-				foreach (DoAction da in doActions) {
-					if (da.Name.Equals (action.Name)) {
-						try {
-							doActions.Remove (da);
-							Log.Info ("Successfully removed \"{0}\" action", action.Name);
-							return;
-						}
-						catch (Exception e) {
-							Log.Info ("Action \"{0}\" threw an exeption while trying to unload it." + e, action.Name);
-						}
-					}
-				}
-			}	
-		}
-		
-		private void initAddinManager ()
-		{
-			// Initialize the registry
-			string userAddinDir = System.IO.Path.Combine 
-				(Environment.GetFolderPath (Environment.SpecialFolder.Personal), 
-				 ".config");
-			
-			userAddinDir = System.IO.Path.Combine (userAddinDir, "gnome-do");
-			AddinManager.Initialize (userAddinDir);
-			
-			// Check that  http://do.davebsd.com/repository/dev 
-			// is registered in the repository
-			SetupService setupService = new SetupService (AddinManager.Registry);
-			if (!setupService.Repositories.ContainsRepository 
-			    ("http://do.davebsd.com/repository/dev")) {
-				setupService.Repositories.RegisterRepository 
-					(null, "http://do.davebsd.com/repository/dev", true); 
-			}
-			
-		}
-			
 	}
 }

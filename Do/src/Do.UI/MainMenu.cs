@@ -18,10 +18,8 @@
  */
 
 using System;
-using System.Reflection;
 using Gtk;
 using Mono.Unix;
-using Mono.Addins.Gui;
 
 using Do;
 using Do.Core;
@@ -32,26 +30,21 @@ namespace Do.UI
 	{
 		static MainMenu instance;
 
-		static MainMenu ()
-		{
-			instance = new MainMenu ();
-		}
-
-		public static MainMenu Instance
-		{
-			get { return instance; }
+		public static MainMenu Instance {
+			get {
+				return instance ??
+					instance = new MainMenu ();
+			}
 		}
 
 		Menu menu;
-		AboutDialog about;
 		int mainMenuX, mainMenuY;
 
 		public MainMenu ()
 		{
 			MenuItem item;
 
-			about = null;
-			menu = new Menu();
+			menu = new Menu ();
 
 			// Preferences menu item
 			item = new ImageMenuItem  ("_Preferences");
@@ -59,15 +52,6 @@ namespace Do.UI
 			// menu.Add (item);
 			item.CanFocus = false;
 			item.Sensitive = false;
-
-			// Refresh catalog menu item
-			item = new ImageMenuItem ("_Refresh Catalog");
-			(item as ImageMenuItem).Image = new Image (Stock.Refresh, IconSize.Menu);
-			// menu.Add (item);
-			item.Activated += OnMainMenuRefreshCatalogClicked;
-
-			// Separator
-			// menu.Add (new SeparatorMenuItem ());
 
 			// About menu item
 			item = new ImageMenuItem  (Catalog.GetString ("_About Do"));
@@ -89,12 +73,7 @@ namespace Do.UI
 			menu.Add (item);
 			item.Activated += OnMainMenuQuitClicked;
 
-			menu.ShowAll();
-		}
-
-		public AboutDialog AboutDialog
-		{
-			get { return about; }
+			menu.ShowAll ();
 		}
 
 		protected void OnMainMenuQuitClicked (object o, EventArgs args)
@@ -105,14 +84,9 @@ namespace Do.UI
 
 		protected void OnMainMenuAddinManagerClicked (object o, EventArgs args)
 		{
-			Do.Controller.Vanish ();
-			AddinManagerWindow.Run (null); //(Do.Controller.Window);
+			Do.Controller.ShowAddinManager ();
 		}
 		
-		protected void OnMainMenuRefreshCatalogClicked (object o, EventArgs args)
-		{
-		}
-
 		protected void OnMainMenuOpenPluginFolderClicked (object o, EventArgs args)
 		{
 			Do.Controller.Vanish ();
@@ -121,65 +95,7 @@ namespace Do.UI
 
 		protected void OnMainMenuAboutClicked (object o, EventArgs args)
 		{
-			string[] authors;
-			string[] logos;
-			string logo;
-
-			Do.Controller.Vanish ();
-
-			authors = new string[] {
-				"Chris Halse Rogers <chalserogers@gmail.com>",
-				"David Siegel <djsiegel@gmail.com>",
-				"DR Colkitt <douglas.colkitt@gmail.com>",
-				"James Walker",
-				"Jason Smith",
-				"Miguel de Icaza",
-				"Rick Harding",
-				"Thomsen Anders",
-				"Volker Braun"
-			};
-
-			about = new AboutDialog ();
-			about.Name = "GNOME Do";
-
-			try {
-				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
-				about.Version = String.Format ("{0}.{1}.{2}.{3}",
-											name.Version.Major,
-											name.Version.Minor,
-											name.Version.Build,
-											name.Version.Revision);
-			} catch {
-				about.Version = Catalog.GetString ("Unknown");
-			}
-			
-			logos = new string[] {
-				"/usr/share/icons/gnome/scalable/actions/search.svg",
-			};
-
-			logo = "gnome-run";
-			foreach (string l in logos) {
-				if (!System.IO.File.Exists (l)) continue;
-				logo = l;
-			}
-
-			about.Logo = UI.IconProvider.PixbufFromIconName (logo, 140);
-			about.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
-			about.Comments = "Do things as quickly as possible\n" +
-				"(but no quicker) with your files, bookmarks,\n" +
-				"applications, music, contacts, and more!";
-			about.Website = "http://do.davebsd.com/";
-			about.WebsiteLabel = "Visit Homepage";
-			about.Authors = authors;
-			about.IconName = "gnome-run";
-
-			if (null != about.Screen.RgbaColormap) {
-				Gtk.Widget.DefaultColormap = about.Screen.RgbaColormap;
-			}
-
-			about.Run ();
-			about.Destroy ();
-			about = null;
+			Do.Controller.ShowAbout ();
 		}
 
 		public void PopupAtPosition (int x, int y)

@@ -63,6 +63,7 @@ all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_DESKTOPAPPLICATIONS) $(BINARIES)
 FILES =  \
 	gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
+	src/ConsoleCrayon.cs \
 	src/Do.Core/Controller.cs \
 	src/Do.Core/DoAction.cs \
 	src/Do.Core/DoItem.cs \
@@ -70,6 +71,7 @@ FILES =  \
 	src/Do.Core/DoObject.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
 	src/Do.Core/RelevanceProvider.cs \
+	src/Do.Core/PluginManager.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.UI/MainMenu.cs \
@@ -80,7 +82,6 @@ FILES =  \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
 	src/Log.cs \
-	src/ConsoleCrayon.cs \
 	src/Preferences.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 

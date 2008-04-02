@@ -19,11 +19,12 @@
  */
 
 using System;
-using System.Collections;
+using System.Reflection;
 using System.Collections.Generic;
 
 using Gdk;
 using Mono.Unix;
+using Mono.Addins.Gui;
 
 using Do.UI;
 using Do.Addins;
@@ -36,6 +37,8 @@ namespace Do.Core
 	public class Controller : IController, IDoController
 	{
 		protected IDoWindow window;
+		protected Gtk.Window addinWindow;
+		protected Gtk.AboutDialog aboutWindow;
 		protected SearchContext[] context;
 		
 		const int SearchDelay = 225;
@@ -48,11 +51,43 @@ namespace Do.Core
 		bool tabbing = false;
 		bool resultsGrown;
 		
+		public Controller ()
+		{
+			aboutWindow = null;
+			addinWindow = null;
+			items = new List<IItem> ();
+			modItems = new List<IItem> ();
+			searchTimeout = new uint[3];
+			context = new SearchContext[3];
+			resultsGrown = false;
+		}
+		
+		public void Initialize ()
+		{
+			if (Do.Preferences.UseMiniMode) {
+				window = new MiniWindow (this);
+			} else if (Do.Preferences.UseGlassFrame) {
+				window = new GlassWindow (this);
+			} else {
+				window = new ClassicWindow (this);
+			}
+			// Get key press events from window since we want to control that
+			// here.
+			window.KeyPressEvent += KeyPressWrap;
+			Reset ();
+		}
+
+		bool IsSummonable {
+			get {
+				return aboutWindow == null && 
+					(addinWindow == null || !addinWindow.Visible);
+			}
+		}
+
 		/// <value>
 		/// Convenience Method
 		/// </value>
-		SearchContext CurrentContext
-		{
+		SearchContext CurrentContext {
 			get {
 				return context[(int) CurrentPane];
 			}
@@ -65,8 +100,7 @@ namespace Do.Core
 		/// The currently active pane, setting does not imply searching
 		/// currently
 		/// </value>
-		public Pane CurrentPane
-		{
+		public Pane CurrentPane {
 			set {
 				if (window.CurrentPane == Pane.First &&
 					CurrentContext.Results.Length == 0)
@@ -102,8 +136,7 @@ namespace Do.Core
 			}
 		}
 		
-		bool ThirdPaneVisible
-		{
+		bool ThirdPaneVisible {
 			set {
 				if (value == thirdPaneVisible)
 					return;
@@ -120,8 +153,7 @@ namespace Do.Core
 			}
 		}
 		
-		bool ThirdPaneAllowed
-		{
+		bool ThirdPaneAllowed {
 			get {
 				IObject first, second;
 				IAction action;
@@ -135,8 +167,7 @@ namespace Do.Core
 			}
 		}
 
-		bool ThirdPaneRequired
-		{
+		bool ThirdPaneRequired {
 			get {
 				IObject first, second;
 				IAction action;
@@ -149,29 +180,6 @@ namespace Do.Core
 					!action.ModifierItemsOptional &&
 					context[1].Results.Length > 0;
 			}
-		}
-		
-		public Controller ()
-		{
-			items = new List<IItem> ();
-			modItems = new List<IItem> ();
-			searchTimeout = new uint[3];
-			context = new SearchContext[3];
-			resultsGrown = false;
-		}
-		
-		public void Initialize ()
-		{
-			if (Do.Preferences.UseMiniMode) {
-				window = new MiniWindow (this);
-			} else if (Do.Preferences.UseGlassFrame) {
-				window = new GlassWindow (this);
-			} else {
-				window = new ClassicWindow (this);
-			}
-			// Get key press events from window since we want to control that here.
-			window.KeyPressEvent += KeyPressWrap;
-			Reset ();
 		}
 
 		public bool IsSummoned {
@@ -188,7 +196,7 @@ namespace Do.Core
 		/// </param>
 		public void SummonWithObjects (IObject[] objects)
 		{
-			if (!window.IsSummonable) return;
+			if (!IsSummonable) return;
 			
 			Reset ();
 			
@@ -720,7 +728,7 @@ namespace Do.Core
 		
 		public void Summon ()
 		{
-			if (!window.IsSummonable) return;
+			if (!IsSummonable) return;
 			window.Summon ();
 		}
 		
@@ -729,6 +737,78 @@ namespace Do.Core
 			ShrinkResults ();
 			window.Vanish ();
 		}	
+
+		public void ShowAddinManager ()
+		{
+			Vanish ();
+			Reset ();
+
+			addinWindow = AddinManagerWindow.Show (null);
+			addinWindow.DestroyEvent += delegate {
+				addinWindow = null;
+			};
+		}
+
+		public void ShowAbout ()
+		{
+			string[] authors;
+			string[] logos;
+			string logo;
+
+			Vanish ();
+			Reset ();
+
+			authors = new string[] {
+				"Chris Halse Rogers <chalserogers@gmail.com>",
+				"David Siegel <djsiegel@gmail.com>",
+				"DR Colkitt <douglas.colkitt@gmail.com>",
+				"James Walker",
+				"Jason Smith",
+				"Miguel de Icaza",
+				"Rick Harding",
+				"Thomsen Anders",
+				"Volker Braun"
+			};
+
+			aboutWindow = new Gtk.AboutDialog ();
+			aboutWindow.Name = "GNOME Do";
+
+			try {
+				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
+				aboutWindow.Version = String.Format ("{0}.{1}.{2}",
+					name.Version.Major, name.Version.Minor, name.Version.Build);
+			} catch {
+				aboutWindow.Version = Catalog.GetString ("Unknown");
+			}
+			
+			logos = new string[] {
+				"/usr/share/icons/gnome/scalable/actions/search.svg",
+			};
+
+			logo = "gnome-run";
+			foreach (string l in logos) {
+				if (!System.IO.File.Exists (l)) continue;
+				logo = l;
+			}
+
+			aboutWindow.Logo = UI.IconProvider.PixbufFromIconName (logo, 140);
+			aboutWindow.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
+			aboutWindow.Comments = "Do things as quickly as possible\n" +
+				"(but no quicker) with your files, bookmarks,\n" +
+				"applications, music, contacts, and more!";
+			aboutWindow.Website = "http://do.davebsd.com/";
+			aboutWindow.WebsiteLabel = "Visit Homepage";
+			aboutWindow.Authors = authors;
+			aboutWindow.IconName = "gnome-run";
+
+			if (null != aboutWindow.Screen.RgbaColormap) {
+				Gtk.Widget.DefaultColormap = aboutWindow.Screen.RgbaColormap;
+			}
+
+			aboutWindow.Run ();
+			aboutWindow.Destroy ();
+			aboutWindow = null;
+		}
 		
 		/////////////////////////////
 		/// IDoController Members ///
@@ -754,7 +834,7 @@ namespace Do.Core
 				break;
 			}
 		}
-		
+
 		public void ButtonPressOffWindow ()
 		{
 			Vanish ();
