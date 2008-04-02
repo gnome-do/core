@@ -84,7 +84,6 @@ FILES =  \
 	src/Do.Universe/RunAction.cs \
 	src/Do.Universe/RunInTerminalAction.cs \
 	src/Do.Universe/TextItem.cs \
-	src/Do.Universe/VoidAction.cs \
 	src/Paths.cs 
 
 DATA_FILES = 

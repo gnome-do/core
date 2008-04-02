@@ -46,9 +46,11 @@
 	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.OpenURLAction" />
 	</Extension>
+	<!--
 	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.OpenWithAction" />
 	</Extension>
+	-->
 	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.RevealAction" />
 	</Extension>
@@ -58,8 +60,4 @@
 	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.RunInTerminalAction" />
 	</Extension>
-	<Extension path = "/Do/Action">
-		<Action type="Do.Universe.VoidAction" />
-	</Extension>
-	
 </Addin>

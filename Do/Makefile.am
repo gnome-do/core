@@ -80,6 +80,7 @@ FILES =  \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
 	src/Log.cs \
+	src/ConsoleCrayon.cs \
 	src/Preferences.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 
