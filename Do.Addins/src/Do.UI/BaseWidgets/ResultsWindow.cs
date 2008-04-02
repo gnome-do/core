@@ -194,9 +194,8 @@ namespace Do.UI
 			column.PackStart (cell, false);
 			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
 				
-			Console.WriteLine(height);
 			vbox.SetSizeRequest (DefaultWindowWidth, 
-				                 (height + 4) * NumberResultsDisplayed + 10);
+				(height + 4) * NumberResultsDisplayed + 10);
 			
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
