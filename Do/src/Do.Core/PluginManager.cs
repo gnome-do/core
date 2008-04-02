@@ -89,8 +89,7 @@ namespace Do.Core
 					Log.Info ("Successfully loaded \"{0}\" item source.",
 						source.Name);
 				} catch (Exception e) {
-					Log.Error ("Failed to load \"{0}\" item source: {1}.",
-						node, e.Message);
+					Log.Error ("Failed to load item source: {0}", e.Message);
 				}
 			} else {
 				try {
@@ -99,8 +98,7 @@ namespace Do.Core
 					Log.Info ("Successfully unloaded \"{0}\" item source.",
 						source.Name);
 				} catch (Exception e) {
-					Log.Error ("Failed to unload \"{0}\" item source: {1}.",
-						node, e.Message);
+					Log.Error ("Failed to unload item source: {0}", e.Message);
 				}
 			}
 		}
@@ -115,21 +113,17 @@ namespace Do.Core
 				try {
 					action = new DoAction (node.CreateInstance () as IAction);
 					actions.Add (action);
-					Log.Info ("Successfully loaded \"{0}\" action.",
-						action.Name);
+					Log.Info ("Successfully loaded \"{0}\" action.", action.Name);
 				} catch (Exception e) {
-					Log.Error ("Action \"{0}\" failed to load: {1}.", node,
-						e.Message);
+					Log.Error ("Action failed to load: {0}.", e.Message);
 				}
 			} else {
 				try {
 					action = new DoAction (node.GetInstance () as IAction);
 					actions.Remove (action);
-					Log.Info ("Successfully unloaded \"{0}\" action.",
-						action.Name);
+					Log.Info ("Successfully unloaded \"{0}\" action.", action.Name);
 				} catch (Exception e) {
-					Log.Error ("Action \"{0}\" failed to unload: {1}.", node,
-						e.Message);
+					Log.Error ("Action failed to unload: {0}", e.Message);
 				}
 			}	
 		}
