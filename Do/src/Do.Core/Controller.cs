@@ -738,7 +738,7 @@ namespace Do.Core
 			window.Vanish ();
 		}	
 
-		public void ShowAddinManager ()
+		public void ShowPluginManager ()
 		{
 			Vanish ();
 			Reset ();

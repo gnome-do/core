@@ -60,12 +60,12 @@ namespace Do.UI
 			item.CanFocus = false;
 			item.Activated += OnMainMenuAboutClicked;
 
-			item = new ImageMenuItem  (Catalog.GetString ("Addin _Manager"));
+			item = new ImageMenuItem  (Catalog.GetString ("Plugin _Manager"));
 			//TODO: See if we can find a better item to represent the addin manager
 			(item as ImageMenuItem).Image = new Image (Stock.Preferences, IconSize.Menu);
 			menu.Add (item);
 			item.CanFocus = false;
-			item.Activated += OnMainMenuAddinManagerClicked;
+			item.Activated += OnMainMenuPluginManagerClicked;
 			
 			// Quit menu item
 			item = new ImageMenuItem (Catalog.GetString ("_Quit"));
@@ -82,9 +82,9 @@ namespace Do.UI
 			Application.Quit ();
 		}
 
-		protected void OnMainMenuAddinManagerClicked (object o, EventArgs args)
+		protected void OnMainMenuPluginManagerClicked (object o, EventArgs args)
 		{
-			Do.Controller.ShowAddinManager ();
+			Do.Controller.ShowPluginManager ();
 		}
 		
 		protected void OnMainMenuOpenPluginFolderClicked (object o, EventArgs args)
