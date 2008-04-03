@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
 
 using Do;
@@ -31,7 +32,6 @@ namespace Do.Core
 {
 	public class UniverseManager
 	{
-	
 		/// <summary>
 		/// How long between update events (seconds).
 		/// </summary>
@@ -48,14 +48,14 @@ namespace Do.Core
 		Dictionary<IObject, IObject> universe;
 
 		// Keep track of next data structures to update.
-		int itemSourceCursor;
-		int firstResultsCursor;
+		int sources_i;
+		int results_i;
 
 		public UniverseManager()
 		{
 			universe = new Dictionary<IObject, IObject> ();
 			firstResults = new Dictionary<string, List<IObject>> ();
-			itemSourceCursor = firstResultsCursor = 0;
+			sources_i = results_i = 0;
 		}
 
 		internal void Initialize ()
@@ -71,86 +71,104 @@ namespace Do.Core
 		{
 			if (!Do.Controller.IsSummoned) {
 				Gtk.Application.Invoke (delegate {
-					Update ();
+					UpdateItemSources ();
+					UpdateFirstResults ();
 				});
 			}
 			return true;
 		}
 
-		private void Update ()
+		private void UpdateItemSources ()
 		{
-			DateTime then;
 			int t_update;
-			
-			// Keep track of the total time (in ms) we have spend updating.
-			// We spend half of MaxUpdateTime updating item sources, then
-			// another half of MaxUpdateTime updating first results lists.
+			IEnumerator sourceE;
+		
 			t_update = 0;
+			sourceE = Do.PluginManager.ItemSources.GetEnumerator ();	
+			// Advance enum to remembered position.
+			for (int i = 0; i < sources_i; ++i)
+				sourceE.MoveNext ();
+
+			// Keep track of the total time (in ms) we have spend updating.
+			// We spend half of MaxUpdateTime updating item sources.
 			while (t_update < MaxUpdateTime / 2) {
-				DoItemSource itemSource;
+				DateTime then;
+				DoItemSource source;
 				ICollection<IItem> oldItems;
 				Dictionary<IObject, DoItem> newItems;
 
+				if (sourceE.MoveNext ()) {
+					source = sourceE.Current as DoItemSource;
+					sources_i = (sources_i + 1) %
+						Do.PluginManager.ItemSources.Count;
+				} else {
+					sourceE.Reset ();
+					sources_i = 0;
+					continue;
+				}
+
 				then = DateTime.Now;
-				itemSourceCursor = (itemSourceCursor + 1) %
-					Do.PluginManager.ItemSources.Count;
-				itemSource = Do.PluginManager.ItemSources [itemSourceCursor];
 				newItems = new Dictionary<IObject, DoItem> ();
 				// Remember old items.
-				oldItems = itemSource.Items;	
+				oldItems = source.Items;	
 				// Update the item source.
-				itemSource.UpdateItems ();
+				source.UpdateItems ();
 				// Create a map of the new items.
-				foreach (DoItem newItem in itemSource.Items) {
-					newItems[newItem] = newItem;
+				foreach (DoItem newItem in source.Items) {
+					newItems [newItem] = newItem;
 				}
-				// Update the universe by either updating items, adding new items,
-				// or removing items.
-				foreach (DoItem newItem in itemSource.Items) {
+				// Update the universe by either updating items, adding new
+				// items, or removing items.
+				foreach (DoItem newItem in source.Items) {
 					if (universe.ContainsKey (newItem)) {
-						// We're updating an item. This updates the item across all
-						// first results lists.
+						// We're updating an item. This updates the item across
+						// all first results lists.
 						(universe[newItem] as DoItem).Inner = newItem.Inner;
 					} else {
-						// We're adding a new item. It might take a few minutes to show
-						// up in all results lists.
+						// We're adding a new item. It might take a few minutes
+						// to show up in all results lists.
 						universe[newItem] = newItem;
 					}
 				}
 				// See if there are any old items that didn't make it into the
-				// set of new items. These items need to be removed from the universe.
+				// set of new items. These items need to be removed from the
+				// universe.
 				foreach (DoItem oldItem in oldItems) {
 					if (!newItems.ContainsKey (oldItem) &&
 							universe.ContainsKey (oldItem)) {
 						universe.Remove (oldItem);
 					}
 				}
-				Log.Info ("Updated \"{0}\" Item Source.", itemSource.Name);
+				Log.Info ("Updated \"{0}\" Item Source.", source.Name);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
+		}
 
-			// Updating a first results list takes about 50ms at most, so we can afford
-			// to update a couple of them.
+		private void UpdateFirstResults ()
+		{
+			int t_update;
+
+			// Updating a first results list takes about 50ms at most, so we
+			// can afford to update a couple of them.
 			t_update = 0;
 			while (t_update < MaxUpdateTime / 2) {
-				string firstResultKey = null;
-				int currentFirstResultsList = 0;
+				string key = "";
+				DateTime then = DateTime.Now;
 
-				then = DateTime.Now;
-				firstResultsCursor = (firstResultsCursor + 1) % firstResults.Count;
-				// Now pick a first results list to update.
-				foreach (KeyValuePair<string, List<IObject>> keyval in firstResults) {
-					if (currentFirstResultsList == firstResultsCursor) {
-						firstResultKey = keyval.Key;
-						break;
-					}
-					currentFirstResultsList++;
+				// Key key for results list #results_i.
+				int i = 0;
+				foreach (string k in firstResults.Keys) {
+					key = k;
+					if (i == results_i) break;
+					i++;
 				}
-				if (firstResults.ContainsKey (firstResultKey)) {
-					firstResults.Remove (firstResultKey);
+				results_i = (results_i + 1) % firstResults.Count;
+				if (firstResults.ContainsKey (key)) {
+					firstResults.Remove (key);
 				}
-				firstResults[firstResultKey] = SortAndNarrowResults (universe.Values, firstResultKey, null, true);
-				Log.Info ("Updated first results for '{0}'.", firstResultKey);
+				firstResults [key] = SortAndNarrowResults (universe.Values, key,
+					null, true);
+				Log.Info ("Updated first results for '{0}'.", key);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
 		}

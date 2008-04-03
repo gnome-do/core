@@ -42,11 +42,11 @@ namespace Do.Core
 			actions = new List<DoAction> ();
 		}
 
-		public IList<DoItemSource> ItemSources {
+		public ICollection<DoItemSource> ItemSources {
 			get { return sources; }
 		}
 
-		public IList<DoAction> Actions {
+		public ICollection<DoAction> Actions {
 			get { return actions; }
 		}
 
