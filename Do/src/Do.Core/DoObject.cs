@@ -222,8 +222,7 @@ namespace Do.Core {
 
 		protected void LogError (string where, Exception e, string name)
 		{
-			Log.Error ("\"{0}\" ({1}) encountered an error in {2}:\n\t" +
-				       "{3}: {4}",
+			Log.Error ("\"{0}\" ({1}) encountered an error in {2}:\n\t{3}: {4}",
 				name, (inner != null ? inner.GetType () : GetType ()),
 				where, e.GetType (), e.Message);
 		}

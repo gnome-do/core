@@ -249,14 +249,8 @@ namespace Do.Core
 			else
 				relevance = (float) objectHits / (float) maxHits;
 
-			/*
-			if (match == "")
-			Console.WriteLine ("{0}: {1} has relevance {2} ({3}/{4}) and score {5}.",
-				match, r, relevance, objectHits, maxHits, score);
-			*/
-
-			return itemReward * .20f +
-				   relevance  * .30f +
+			return itemReward * .10f +
+				   relevance  * .20f +
 			       score      * .70f;
 		}
 	}
