@@ -119,7 +119,8 @@ namespace Do.Universe
 		public string Description
 		{
 			get {
-				return AnEmailAddress ?? "No description.";
+				return AnEmailAddress ?? this ["description"] ??
+					"No description.";
 			}
 		}
 
@@ -128,7 +129,8 @@ namespace Do.Universe
 			get {
 				string email;
 				
-				email = this ["email"] ?? this ["email.work"] ?? this ["email.home"];
+				email = this ["email"] ?? this ["email.work"] ??
+					this ["email.home"];
 				if (email == null) {
 					foreach (string detail in Details) {
 						if (detail.StartsWith ("email"))

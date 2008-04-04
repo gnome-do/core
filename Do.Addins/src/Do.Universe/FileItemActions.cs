@@ -166,9 +166,23 @@ namespace Do.Files {
 
 	class MoveToTrashAction : AbstractAction {
 
-		public override string Name { get { return "Move to Trash"; } } 
-		public override string Description { get { return "Moves a file or folder to the trash."; } } 
-		public override string Icon { get { return "user-trash-full"; } } 
+		public override string Name {
+			get {
+				return "Move to Trash";
+			}
+		} 
+
+		public override string Description {
+			get {
+				return "Moves a file or folder to the trash.";
+			}
+		} 
+
+		public override string Icon {
+			get {
+				return "user-trash-full";
+			}
+		} 
 
 		string Trash {
 			get { 
