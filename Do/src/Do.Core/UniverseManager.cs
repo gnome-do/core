@@ -66,6 +66,12 @@ namespace Do.Core
 			GLib.Timeout.Add (UpdateInterval * 1000,
 				new GLib.TimeoutHandler (OnTimeoutUpdate));
 		}
+		
+		internal void Reload ()
+		{
+			BuildUniverse ();
+			BuildFirstResults ();
+		}
 
 		private bool OnTimeoutUpdate ()
 		{
@@ -120,14 +126,15 @@ namespace Do.Core
 				// Update the universe by either updating items, adding new
 				// items, or removing items.
 				foreach (DoItem newItem in source.Items) {
-					if (universe.ContainsKey (newItem)) {
+					if (universe.ContainsKey (newItem) &&
+					    universe [newItem] is DoItem) {
 						// We're updating an item. This updates the item across
 						// all first results lists.
-						(universe[newItem] as DoItem).Inner = newItem.Inner;
+						(universe [newItem] as DoItem).Inner = newItem.Inner;
 					} else {
 						// We're adding a new item. It might take a few minutes
 						// to show up in all results lists.
-						universe[newItem] = newItem;
+						universe [newItem] = newItem;
 					}
 				}
 				// See if there are any old items that didn't make it into the
@@ -207,19 +214,22 @@ namespace Do.Core
 
 		private void BuildFirstResults ()
 		{
+			firstResults.Clear ();
 			// For each starting character, add every matching object from the universe to
 			// the firstResults list corresponding to that character.
 			for (char keypress = 'a'; keypress <= 'z'; keypress++) {
-				firstResults[keypress.ToString ()] = SortAndNarrowResults (
+				firstResults [keypress.ToString ()] = SortAndNarrowResults (
 					universe.Values, keypress.ToString (), null, true);
 			}
 		}
 
 		private void BuildUniverse ()
 		{
+			universe.Clear ();
+			
 			// Hash actions.
 			foreach (DoAction action in Do.PluginManager.Actions) {
-				universe[action] = action;
+				universe [action] = action;
 			}
 
 			// Hash items.
@@ -232,7 +242,7 @@ namespace Do.Core
 					items = source.Items;
 				}
 				foreach (DoItem item in items) {
-					universe[item] = item;
+					universe [item] = item;
 				}
 			}
 			Log.Info ("Universe contains {0} objects.", universe.Count);

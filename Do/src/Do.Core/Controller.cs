@@ -33,7 +33,6 @@ using Do.DBusLib;
 
 namespace Do.Core
 {
-	
 	public class Controller : IController, IDoController
 	{
 		protected IDoWindow window;
@@ -746,6 +745,11 @@ namespace Do.Core
 			addinWindow = AddinManagerWindow.Show (null);
 			addinWindow.DestroyEvent += delegate {
 				addinWindow = null;
+			};
+			addinWindow.DeleteEvent += delegate {
+				Log.Info ("Refreshing universe...");
+				Do.UniverseManager.Reload ();
+				Log.Info ("Universe completely refreshed.");
 			};
 		}
 

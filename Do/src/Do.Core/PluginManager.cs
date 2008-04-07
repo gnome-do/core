@@ -41,6 +41,12 @@ namespace Do.Core
 			sources = new List<DoItemSource> ();
 			actions = new List<DoAction> ();
 		}
+		
+		string LocalRepo {
+			get {
+				return Paths.Combine (Paths.UserData, "repo");
+			}
+		}
 
 		public ICollection<DoItemSource> ItemSources {
 			get { return sources; }
@@ -64,6 +70,12 @@ namespace Do.Core
 			SetupService setup = new SetupService (AddinManager.Registry);
 			if (!setup.Repositories.ContainsRepository (HttpRepo)) {
 				setup.Repositories.RegisterRepository (null, HttpRepo, true);
+			}
+			
+			// Check for local repo.
+			if (System.IO.Directory.Exists (LocalRepo) &&
+			    !setup.Repositories.ContainsRepository (LocalRepo)) {
+				setup.Repositories.RegisterRepository (null, LocalRepo, true);
 			}
 		}
 
