@@ -72,6 +72,14 @@ namespace Do.Core
 			BuildUniverse ();
 			BuildFirstResults ();
 		}
+		
+		internal void AddItem (IItem item)
+		{
+			if (!(item is DoItem))
+				item = new DoItem (item);
+			universe [item] = item;
+			BuildFirstResults ();
+		}
 
 		private bool OnTimeoutUpdate ()
 		{

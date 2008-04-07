@@ -41,6 +41,8 @@
     <File name="src/Do.UI/MainMenu.cs" subtype="Code" buildaction="Compile" />
     <File name="src/ConsoleCrayon.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/PluginManager.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/AliasItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/AliasAction.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

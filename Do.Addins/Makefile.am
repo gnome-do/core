@@ -88,8 +88,8 @@ FILES =  \
 DATA_FILES = 
 
 RESOURCES =  \
-	Resources/settings-triangle.png \
-	Do.Addins.addin.xml 
+	Do.Addins.addin.xml \
+	Resources/settings-triangle.png 
 
 EXTRAS = \
 	do.addins.pc.in 

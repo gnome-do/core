@@ -1,4 +1,4 @@
-/* InternalItemSource.cs
+/* AliasItemSource.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -23,58 +23,71 @@ using System.Collections.Generic;
 
 using Do.Universe;
 
-namespace Do.Core {
-	
-	public class InternalItemSource : IItemSource {
+namespace Do
+{	
+	public class AliasItemSource : IItemSource
+	{
+		static List<IItem> items;
 		
-		public static readonly ProxyItem LastItem
-			= new ProxyItem ("Last Item", "The last item used in a command.", "undo");
-		
-		private List<IItem> items;
-		
-		public InternalItemSource ()
+		static AliasItemSource ()
 		{
 			items = new List<IItem> ();
-			items.Add (LastItem);
-			items.Add (new SelectedTextItem ());
 		}
 		
-		public Type[] SupportedItemTypes
+		public static void AliasItem (IItem item, string alias)
 		{
+			ProxyItem proxy;
+			
+			proxy = new ProxyItem (alias, item);
+			items.Add (proxy);
+			//Do.UniverseManager.Reload ();
+			Do.UniverseManager.AddItem (proxy);
+		}
+		
+		public static void Unalias (ProxyItem proxy)
+		{
+			items.Remove (proxy);
+		}
+		
+		public string Name {
 			get {
-				return new Type[] {
+				return "Alias items";
+			}
+		}
+
+		public string Description {
+			get {
+				return "Aliased items from Do's universe.";
+			}
+		}
+
+		public string Icon {
+			get {
+				return "emblem-symbolic-link";
+			}
+		}
+
+		public Type [] SupportedItemTypes {
+			get {
+				return new Type [] {
+					typeof (ProxyItem),
 				};
 			}
 		}
-		
-		public string Name
-		{
-			get { return "Internal GNOME Do Items"; }
-		}
-		
-		public string Description
-		{
-			get { return "Special items relevant to the inner-workings of GNOME Do."; }
-		}
-		
-		public string Icon
-		{
-			get { return "gnome-system"; }
-		}
-		
-		
-		public void UpdateItems ()
-		{
-		}
-		
-		public ICollection<IItem> Items
-		{
-			get { return items; }
+
+		public ICollection<IItem> Items {
+			get {
+				return items;
+			}
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item)
 		{
 			return null;
+		}
+
+		public void UpdateItems ()
+		{
 		}
 	}
 }

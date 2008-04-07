@@ -16,4 +16,12 @@
 	<Extension path = "/Do/ItemSource">
 		<ItemSource type="Do.Core.InternalItemSource" />
 	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.AliasItemSource" />
+	</Extension>
+
+	<!-- Actions -->
+	<Extension path = "/Do/Action">
+		<Action type="Do.AliasAction" />
+	</Extension>
 </Addin>

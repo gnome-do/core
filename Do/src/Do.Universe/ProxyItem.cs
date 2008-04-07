@@ -21,10 +21,10 @@ using System;
 
 using Do.Core;
 
-namespace Do.Universe
-{
-	public class ProxyItem: DoItem
-	{
+namespace Do.Universe {
+	
+	public class ProxyItem: DoItem {
+		
 		string name, description, icon;
 		
 		public ProxyItem ():

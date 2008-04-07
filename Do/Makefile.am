@@ -75,6 +75,8 @@ FILES =  \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.UI/MainMenu.cs \
+	src/Do.Universe/AliasAction.cs \
+	src/Do.Universe/AliasItemSource.cs \
 	src/Do.Universe/DoTextItem.cs \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/InternalItemSource.cs \
