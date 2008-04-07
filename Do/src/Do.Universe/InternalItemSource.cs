@@ -21,11 +21,11 @@
 using System;
 using System.Collections.Generic;
 
-using Do.Core;
+using Do.Universe;
 
-namespace Do.Universe
-{
-	public class InternalItemSource : IItemSource
+namespace Do.Core {
+	
+	public class InternalItemSource : IItemSource 
 	{
 		public static readonly ProxyItem LastItem = new ProxyItem ("Last Item",
 		                                                           "The last item used in a command.",

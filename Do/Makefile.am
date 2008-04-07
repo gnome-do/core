@@ -91,7 +91,7 @@ DATA_FILES = \
 
 RESOURCES = \
 	gtk-gui/gui.stetic \
-	Resources/settings-triangle.png 
+	Resources/Do.addin.xml
 
 EXTRAS = \
 	gnome-do.in \

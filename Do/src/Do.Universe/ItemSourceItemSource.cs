@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using Do.Universe;
 
 namespace Do.Core {
-
+	
 	public class ItemSourceItemSource : IItemSource {
 
 		List<IItem> items;
