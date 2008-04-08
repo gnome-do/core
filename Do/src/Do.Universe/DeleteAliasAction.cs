@@ -1,4 +1,4 @@
-/* AliasAction.cs
+/* DeleteAliasAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -23,23 +23,23 @@ using System.Collections.Generic;
 
 namespace Do.Universe {
 	
-	class AliasAction : IAction {
+	class DeleteAliasAction : IAction {
 		
 		public string Name {
 			get {
-				return "Alias...";
+				return "Delete Alias";
 			}
 		}
 
 		public string Description {
 			get {
-				return "Assign an item an alternative name.";
+				return "Deletes an alias.";
 			}
 		}
 
 		public string Icon {
 			get {
-				return "emblem-symbolic-link";
+				return "gtk-delete";
 			}
 		}
 
@@ -53,9 +53,7 @@ namespace Do.Universe {
 
 		public Type[] SupportedModifierItemTypes {
 			get {
-				return new Type [] {
-					typeof (ITextItem),
-				};
+				return null;
 			}
 		}
 
@@ -65,19 +63,15 @@ namespace Do.Universe {
 			}
 		}
 
-		public IItem[] Perform (IItem[] items, IItem[] modItems)
+		public IItem [] Perform (IItem[] items, IItem[] modItems)
 		{
-			string alias;
-			
-			alias = (modItems [0] as ITextItem).Text;
-			AliasItemSource.Alias (items [0], alias);
-			
+			AliasItemSource.Unalias (items [0]);
 			return null;
 		}
 
 		public bool SupportsItem (IItem item)
 		{
-			return true;
+			return AliasItemSource.ItemHasAlias (item);
 		}
 
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)

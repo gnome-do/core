@@ -21,10 +21,16 @@
 using System;
 using System.Collections.Generic;
 
-using Do.Universe;
-
-namespace Do
+namespace Do.Universe
 {	
+	class AliasItem : ProxyItem
+	{
+		public AliasItem (string alias, IItem item) :
+			base (alias, item)
+		{
+		}
+	}
+	
 	public class AliasItemSource : IItemSource
 	{
 		static List<IItem> items;
@@ -34,19 +40,37 @@ namespace Do
 			items = new List<IItem> ();
 		}
 		
-		public static void AliasItem (IItem item, string alias)
+		public static void Alias (IItem item, string alias)
 		{
-			ProxyItem proxy;
+			AliasItem aliasItem;
 			
-			proxy = new ProxyItem (alias, item);
-			items.Add (proxy);
-			//Do.UniverseManager.Reload ();
-			Do.UniverseManager.AddItem (proxy);
+			aliasItem = new AliasItem (alias, item);
+			items.Add (aliasItem);
+			
+			Do.UniverseManager.AddItems (new IItem [] { aliasItem });
 		}
 		
-		public static void Unalias (ProxyItem proxy)
+		public static void Unalias (IItem item)
 		{
-			items.Remove (proxy);
+			int i = IndexOfAlias (item);
+			if (i != -1)
+				items.RemoveAt (i);
+		}
+		
+		public static bool ItemHasAlias (IItem item)
+		{
+			return IndexOfAlias (item) != -1;
+		}
+		
+		static int IndexOfAlias (IItem item)
+		{
+			int i = 0;
+			foreach (AliasItem alias in items) {
+				if (alias.Inner.Equals (item))
+					return i;
+				i++;
+			}
+			return -1;
 		}
 		
 		public string Name {

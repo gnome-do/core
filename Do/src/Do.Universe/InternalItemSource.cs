@@ -21,9 +21,7 @@
 using System;
 using System.Collections.Generic;
 
-using Do.Universe;
-
-namespace Do.Core {
+namespace Do.Universe {
 	
 	public class InternalItemSource : IItemSource {
 		

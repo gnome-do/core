@@ -20,9 +20,9 @@
 using System;
 using System.Collections.Generic;
 
-using Do.Universe;
+using Do.Core;
 
-namespace Do.Core {
+namespace Do.Universe {
 	
 	public class ItemSourceItemSource : IItemSource {
 

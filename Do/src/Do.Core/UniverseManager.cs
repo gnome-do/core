@@ -73,11 +73,14 @@ namespace Do.Core
 			BuildFirstResults ();
 		}
 		
-		internal void AddItem (IItem item)
+		internal void AddItems (IEnumerable<IItem> items)
 		{
-			if (!(item is DoItem))
-				item = new DoItem (item);
-			universe [item] = item;
+			foreach (IItem item in items) {
+				if (item is DoItem)
+					universe [item] = item;
+				else
+					universe [item] = new DoItem (item);
+			}
 			BuildFirstResults ();
 		}
 

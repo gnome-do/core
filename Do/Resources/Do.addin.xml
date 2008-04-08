@@ -11,17 +11,20 @@
 	<!-- Extensions included in this assembly -->
 	<!-- Sources -->
 	<Extension path = "/Do/ItemSource">
-		<ItemSource type="Do.Core.ItemSourceItemSource" />
+		<ItemSource type="Do.Universe.ItemSourceItemSource" />
 	</Extension>
 	<Extension path = "/Do/ItemSource">
-		<ItemSource type="Do.Core.InternalItemSource" />
+		<ItemSource type="Do.Universe.InternalItemSource" />
 	</Extension>
 	<Extension path = "/Do/ItemSource">
-		<ItemSource type="Do.AliasItemSource" />
+		<ItemSource type="Do.Universe.AliasItemSource" />
 	</Extension>
 
 	<!-- Actions -->
 	<Extension path = "/Do/Action">
-		<Action type="Do.AliasAction" />
+		<Action type="Do.Universe.AliasAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.DeleteAliasAction" />
 	</Extension>
 </Addin>

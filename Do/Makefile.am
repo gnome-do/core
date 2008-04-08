@@ -77,6 +77,7 @@ FILES =  \
 	src/Do.UI/MainMenu.cs \
 	src/Do.Universe/AliasAction.cs \
 	src/Do.Universe/AliasItemSource.cs \
+	src/Do.Universe/DeleteAliasAction.cs \
 	src/Do.Universe/DoTextItem.cs \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/InternalItemSource.cs \
