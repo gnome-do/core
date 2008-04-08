@@ -250,8 +250,8 @@ namespace Do.Core
 				relevance = (float) objectHits / (float) maxHits;
 
 			return itemReward * .10f +
-				   relevance  * .20f +
-			       score      * .70f;
+				   relevance  * .10f +
+			       score      * .80f;
 		}
 	}
 }

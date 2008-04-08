@@ -40,7 +40,7 @@ namespace Do.Core
 		protected Gtk.AboutDialog aboutWindow;
 		protected SearchContext[] context;
 		
-		const int SearchDelay = 225;
+		const int SearchDelay = 250;
 		
 		uint[] searchTimeout;
 		IAction action;
@@ -464,7 +464,6 @@ namespace Do.Core
 			for (int i = (int) pane; i < 3; ++i) {
 					window.ClearPane((Pane) i);
 			}
-
 			
 			searchTimeout[(int) pane] = GLib.Timeout.Add (SearchDelay, delegate {
 				Gdk.Threads.Enter ();
@@ -508,7 +507,7 @@ namespace Do.Core
 			// recent search is the same as the last result - if this is the
 			// case, we already have a valid search queued.
 			if (GetSelection (Pane.First) != lastResult) {
-				context[1] = new SearchContext ();
+				context [1] = new SearchContext ();
 				SearchPaneDelayed (Pane.Second);
 			}
 		}
