@@ -31,16 +31,16 @@ using Do.Addins;
 using Do.Universe;
 using Do.DBusLib;
 
-namespace Do.Core
-{
-	public class Controller : IController, IDoController
-	{
+namespace Do.Core {
+
+	public class Controller : IController, IDoController {
+
 		protected IDoWindow window;
 		protected Gtk.Window addinWindow;
 		protected Gtk.AboutDialog aboutWindow;
 		protected SearchContext[] context;
 		
-		const int SearchDelay = 250;
+		const int SearchDelay = 275;
 		
 		uint[] searchTimeout;
 		IAction action;
@@ -456,31 +456,31 @@ namespace Do.Core
 		/// </param>
 		void SearchPaneDelayed (Pane pane)
 		{
-			for (int i = 0; i < 3; ++i) {
-				if (searchTimeout[i] > 0) 
-					GLib.Source.Remove (searchTimeout[i]);
-				searchTimeout[i] = 0;
-			}
 			for (int i = (int) pane; i < 3; ++i) {
-					window.ClearPane((Pane) i);
+				if (searchTimeout [i] > 0) 
+					GLib.Source.Remove (searchTimeout[i]);
+				searchTimeout [i] = 0;
+				window.ClearPane((Pane) i);
 			}
 			
-			searchTimeout[(int) pane] = GLib.Timeout.Add (SearchDelay, delegate {
-				Gdk.Threads.Enter ();
-				switch (pane) {
-				case Pane.First:
-					SearchFirstPane ();
-					break;
-				case Pane.Second:
-					SearchSecondPane ();
-					break;
-				case Pane.Third:
-					SearchThirdPane ();
-					break;
+			searchTimeout[(int) pane] = GLib.Timeout.Add (SearchDelay,
+				delegate {
+					Gdk.Threads.Enter ();
+					switch (pane) {
+					case Pane.First:
+						SearchFirstPane ();
+						break;
+					case Pane.Second:
+						SearchSecondPane ();
+						break;
+					case Pane.Third:
+						SearchThirdPane ();
+						break;
+					}
+					Gdk.Threads.Leave ();
+					return false;
 				}
-				Gdk.Threads.Leave ();
-				return false;
-			});
+			);
 		}
 		
 		protected void SearchFirstPane ()
