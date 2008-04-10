@@ -27,13 +27,13 @@ namespace Do.Universe {
 		
 		public string Name {
 			get {
-				return "Alias...";
+				return "Assign Alias...";
 			}
 		}
 
 		public string Description {
 			get {
-				return "Assign an item an alternative name.";
+				return "Give an item an alternate name.";
 			}
 		}
 
@@ -68,16 +68,17 @@ namespace Do.Universe {
 		public IItem[] Perform (IItem[] items, IItem[] modItems)
 		{
 			string alias;
+			IItem aliasItem;
 			
 			alias = (modItems [0] as ITextItem).Text;
-			AliasItemSource.Alias (items [0], alias);
+			aliasItem = AliasItemSource.Alias (items [0], alias);
 			
-			return null;
+			return new IItem [] { aliasItem };
 		}
 
 		public bool SupportsItem (IItem item)
 		{
-			return true;
+			return !(item is IProxyItem);
 		}
 
 		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)

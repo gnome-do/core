@@ -25,7 +25,7 @@ using Do.Universe;
 
 namespace Do.Core {
 
-	public abstract class DoObject : IObject, IComparable<IObject> {
+	public class DoObject : IObject, IComparable<IObject> {
 
 		const string DefaultName = "No name";
 		const string DefaultDescription = "No description.";
@@ -104,7 +104,7 @@ namespace Do.Core {
 		protected IObject inner;
 		protected float relevance;
 		
-		protected DoObject (IObject inner)
+		internal DoObject (IObject inner)
 		{
 			if (inner == null)
 				throw new ArgumentNullException ("Inner IObject may not be null.");

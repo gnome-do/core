@@ -22,27 +22,25 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 
-namespace Do.Universe
-{
+namespace Do.Universe {
 
-	public class SelectedTextItem : ITextItem
-	{		
-		public SelectedTextItem ()
-		{
+	public class SelectedTextItem : IProxyItem, ITextItem {		
+		
+		public IObject Inner {
+			get {
+				return new TextItem (Text);
+			}
 		}
 		
-		public string Name
-		{
+		public string Name {
 			get { return "Selected text"; }
 		}
 		
-		public string Description
-		{
+		public string Description {
 			get { return "Currently selected text."; }
 		}
 		
-		public string Icon
-		{
+		public string Icon {
 			get { return "gtk-select-all"; }
 		}
 		

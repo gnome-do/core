@@ -28,10 +28,28 @@ using Do;
 using Do.Addins;
 using Do.Universe;
 
-namespace Do.Core
-{
-	public class UniverseManager
-	{
+namespace Do.Core {
+
+	public class UniverseManager {
+		
+		/// <summary>
+		/// Class used to lookup objects in universe by UID string.
+		/// </summary>
+		private class UIDObject : DoObject {
+			
+			string uid;
+			
+			public UIDObject (string uid) :
+				base (new EmptyItem ())
+			{
+				this.uid = uid;
+			}
+			
+			public override string UID {
+				get { return uid; }
+			}
+		}
+
 		/// <summary>
 		/// How long between update events (seconds).
 		/// </summary>
@@ -82,6 +100,24 @@ namespace Do.Core
 					universe [item] = new DoItem (item);
 			}
 			BuildFirstResults ();
+		}
+
+		public string UIDForObject (IObject o)
+		{
+			if (o is DoObject)
+				return (o as DoObject).UID;
+			else
+				return new DoObject (o).UID;
+		}
+
+		public void TryGetObjectForUID (string uid, out IObject o)
+		{
+			IObject lookup;
+			
+			o = null;
+			lookup = new UIDObject (uid);
+			if (universe.ContainsKey (lookup))
+				o = (universe [lookup] as DoObject).Inner;
 		}
 
 		private bool OnTimeoutUpdate ()

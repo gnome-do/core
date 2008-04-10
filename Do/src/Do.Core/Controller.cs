@@ -207,6 +207,7 @@ namespace Do.Core {
 			SearchSecondPane ();
 
 			Summon ();
+
 			// If there are multiple results, show results window after a short
 			// delay.
 			if (objects.Length > 1) {

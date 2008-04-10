@@ -305,9 +305,8 @@ namespace Do.UI
 		
 		public void Summon ()
 		{
-			if (PositionWindow.GetMonitor()) {
+			if (PositionWindow.GetMonitor ())
 				Reposition ();
-			}
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}

@@ -25,49 +25,32 @@ namespace Do.Universe {
 	
 	public class InternalItemSource : IItemSource {
 		
-		public static readonly ProxyItem LastItem
-			= new ProxyItem ("Last Item", "The last item used in a command.", "undo");
-		
-		private List<IItem> items;
-		
-		public InternalItemSource ()
-		{
-			items = new List<IItem> ();
-			items.Add (LastItem);
-			items.Add (new SelectedTextItem ());
+		public Type[] SupportedItemTypes {
+			get { return null; }
 		}
 		
-		public Type[] SupportedItemTypes
-		{
-			get {
-				return new Type[] {
-				};
-			}
-		}
-		
-		public string Name
-		{
+		public string Name {
 			get { return "Internal GNOME Do Items"; }
 		}
 		
-		public string Description
-		{
+		public string Description {
 			get { return "Special items relevant to the inner-workings of GNOME Do."; }
 		}
 		
-		public string Icon
-		{
+		public string Icon {
 			get { return "gnome-system"; }
 		}
-		
 		
 		public void UpdateItems ()
 		{
 		}
 		
-		public ICollection<IItem> Items
-		{
-			get { return items; }
+		public ICollection<IItem> Items {
+			get {
+				List<IItem> items = new List<IItem> ();
+				items.Add (new SelectedTextItem ());
+				return items;
+			}
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item)

@@ -1,4 +1,4 @@
-//  ProxyItem.cs
+//  DoProxyItem.cs
 //
 //  GNOME Do is the legal property of its developers, whose names are too numerous
 //  to list here.  Please refer to the COPYRIGHT file distributed with this
@@ -23,46 +23,52 @@ using Do.Core;
 
 namespace Do.Universe {
 	
-	public class ProxyItem: DoItem {
+	public interface IProxyItem : IItem {
+		IObject Inner {
+			get;
+		}
+	}
+	
+	public class DoProxyItem : DoItem, IProxyItem {
 		
 		string name, description, icon;
 		
-		public ProxyItem ():
+		public DoProxyItem ():
 			this (new EmptyItem ())
 		{
 		}
 			
-		public ProxyItem (IItem item):
+		public DoProxyItem (IItem item):
 			this (null, null, null, item)
 		{
 		}
 		
-		public ProxyItem (string name):
+		public DoProxyItem (string name):
 			this (name, new EmptyItem ())
 		{
 		}
 		
-		public ProxyItem (string name, IItem item):
+		public DoProxyItem (string name, IItem item):
 			this (name, null, null, item)
 		{
 		}
 		
-		public ProxyItem (string name, string description):
+		public DoProxyItem (string name, string description):
 			this (name, description, new EmptyItem ())
 		{
 		}
 		
-		public ProxyItem (string name, string description, IItem item):
+		public DoProxyItem (string name, string description, IItem item):
 			this (name, description, null, item)
 		{
 		}
 		
-		public ProxyItem (string name, string description, string icon):
+		public DoProxyItem (string name, string description, string icon):
 			this (name, description, icon, new EmptyItem ())
 		{
 		}
 		
-		public ProxyItem (string name, string description, string icon, IItem item):
+		public DoProxyItem (string name, string description, string icon, IItem item):
 			base (item)
 		{
 			this.name = name;
@@ -80,10 +86,6 @@ namespace Do.Universe {
 		
 		public override string Icon {
 			get { return icon ?? base.Icon; }
-		}
-
-		public override string UID {
-			get { return string.Format ("{0}{1}{2}", GetType (), Name, Description); }
 		}
 	}
 }

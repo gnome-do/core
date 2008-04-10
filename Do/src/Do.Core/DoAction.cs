@@ -134,10 +134,6 @@ namespace Do.Core {
 			
 			items = EnsureIItemArray (items);
 			modItems = EnsureIItemArray (modItems);
-
-			// TODO: Create a action performed event and move this.
-			if (items.Length > 0 )
-				InternalItemSource.LastItem.Inner = items [0];
 			
 			try {
 				resultItems = action.Perform (items, modItems);

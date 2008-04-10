@@ -19,42 +19,98 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Do.Universe
-{	
-	class AliasItem : ProxyItem
-	{
+using Do;
+
+namespace Do.Universe {	
+	
+	class AliasItem : DoProxyItem	{
 		public AliasItem (string alias, IItem item) :
 			base (alias, item)
 		{
 		}
 	}
+
+	[Serializable]
+	class AliasRecord {
+		
+		public readonly string UID, Alias;
+		
+		public AliasRecord (string uid, string alias)
+		{
+			UID = uid;
+			Alias = alias;
+		}
+	}
 	
-	public class AliasItemSource : IItemSource
-	{
-		static List<IItem> items;
+	public class AliasItemSource : IItemSource {
+		
+		static List<AliasRecord> aliases;
+		
+		static string AliasFile {
+			get {
+				return Paths.Combine (Paths.UserData,
+				    typeof (AliasItemSource).FullName);
+			}
+		}
 		
 		static AliasItemSource ()
 		{
-			items = new List<IItem> ();
+			Deserialize ();
 		}
 		
-		public static void Alias (IItem item, string alias)
+		static void Deserialize ()
+		{			
+			try {
+				using (Stream s = File.OpenRead (AliasFile)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					aliases = f.Deserialize (s) as List<AliasRecord>;
+				}
+			} catch (Exception e) {
+				Log.Error (e.Message);
+				aliases = new List<AliasRecord> ();
+			}
+		}
+		
+		static void Serialize ()
+		{
+			try {
+				using (Stream s = File.OpenWrite (AliasFile)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					f.Serialize (s, aliases);
+				}
+			} catch (Exception e) {
+				Log.Error (e.Message);
+			}
+		}
+		
+		public static IItem Alias (IItem item, string alias)
 		{
 			AliasItem aliasItem;
 			
-			aliasItem = new AliasItem (alias, item);
-			items.Add (aliasItem);
+			if (!ItemHasAlias (item, alias)) {
+				string uid = Do.UniverseManager.UIDForObject (item);
+				aliases.Add (new AliasRecord (uid, alias));
+			}
 			
+			aliasItem = new AliasItem (alias, item);
 			Do.UniverseManager.AddItems (new IItem [] { aliasItem });
+
+			Serialize ();
+			return aliasItem;
 		}
 		
 		public static void Unalias (IItem item)
 		{
 			int i = IndexOfAlias (item);
 			if (i != -1)
-				items.RemoveAt (i);
+				aliases.RemoveAt (i);
+			
+			Serialize ();
 		}
 		
 		public static bool ItemHasAlias (IItem item)
@@ -62,11 +118,18 @@ namespace Do.Universe
 			return IndexOfAlias (item) != -1;
 		}
 		
+		public static bool ItemHasAlias (IItem item, string alias)
+		{
+			int i = IndexOfAlias (item);
+			return i != -1 && aliases [i].Alias == alias;
+		}
+		
 		static int IndexOfAlias (IItem item)
 		{
 			int i = 0;
-			foreach (AliasItem alias in items) {
-				if (alias.Inner.Equals (item))
+			string uid = Do.UniverseManager.UIDForObject (item);
+			foreach (AliasRecord alias in aliases) {
+				if (alias.UID == uid)
 					return i;
 				i++;
 			}
@@ -94,13 +157,24 @@ namespace Do.Universe
 		public Type [] SupportedItemTypes {
 			get {
 				return new Type [] {
-					typeof (ProxyItem),
+					typeof (AliasItem),
 				};
 			}
 		}
 
 		public ICollection<IItem> Items {
 			get {
+				List<IItem> items;
+				
+				items = new List<IItem> ();
+				foreach (AliasRecord alias in aliases) {
+					IObject item;
+					
+					Do.UniverseManager.TryGetObjectForUID (alias.UID, out item);
+					if (null != item && item is IItem) {
+						items.Add (new AliasItem (alias.Alias, item as IItem));
+					}
+			    }
 				return items;
 			}
 		}
