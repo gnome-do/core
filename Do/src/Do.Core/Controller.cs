@@ -40,7 +40,7 @@ namespace Do.Core {
 		protected Gtk.AboutDialog aboutWindow;
 		protected SearchContext[] context;
 		
-		const int SearchDelay = 275;
+		const int SearchDelay = 250;
 		
 		uint[] searchTimeout;
 		IAction action;
