@@ -254,7 +254,7 @@ namespace Do.Core {
 			if (r is IAction &&
 				(r as IAction).SupportedModifierItemTypes.Length > 0 &&
 				!(r as IAction).ModifierItemsOptional)
-				relevance *= 0.70f;
+				relevance *= 0.50f;
 
 			return itemReward * .10f +
 				relevance  * .10f +
