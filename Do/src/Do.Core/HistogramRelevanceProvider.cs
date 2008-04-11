@@ -26,19 +26,19 @@ using System.Threading;
 
 using Do.Universe;
 
-namespace Do.Core
-{
+namespace Do.Core {
+
 	class HistogramRelevanceProvider : RelevanceProvider {
-		
+
 		int maxActionHits, maxItemHits;
 		Dictionary<int, int> itemHits, actionHits;
-		
+
 		Timer serializeTimer;
 		const int SerializeInterval = 15*60;
 
 		const int HistogramMax = 200;
 		const float HistogramScaleFactor = 0.60f;
-		
+
 		static bool LetterOccursAfterDelimiter (string s, char a)
 		{
 			int idx;
@@ -46,7 +46,7 @@ namespace Do.Core
 			idx = 0;
 			while (idx < s.Length && (idx = s.IndexOf (a, idx)) > -1) {
 				if (idx == 0 ||
-					(idx > 0 && s[idx-1] == ' ')) {
+						(idx > 0 && s[idx-1] == ' ')) {
 					return true;
 				}
 				idx++;
@@ -61,60 +61,60 @@ namespace Do.Core
 			actionHits = new Dictionary<int,int> ();
 
 			Deserialize ();
-			
+
 			// Serialize every few minutes.
 			serializeTimer = new Timer (OnSerializeTimer);
 			serializeTimer.Change (SerializeInterval*1000, SerializeInterval*1000);
 		}
-		
+
 		protected string RelevanceFile {
 			get {
 				return Paths.Combine (Paths.ApplicationData, "relevance3");
 			}
 		}
-		
+
 		private void OnSerializeTimer (object state)
 		{
 			Serialize ();
 		}
-			
+
 		protected void Deserialize ()
 		{
 			lock (itemHits)
-			lock (actionHits) {
-				maxItemHits = maxActionHits = 1;
-				itemHits.Clear ();
-				actionHits.Clear ();
-				try {
-					Log.Info ("Deserializing HistogramRelevanceProvider...");
-					bool isAction;
-					string[] parts;
-					int	key, value;
-					foreach (string line in File.ReadAllLines (RelevanceFile)) {
-						try {
-							parts = line.Split ('\t');
-							key = int.Parse (parts[0]);
-							value = int.Parse (parts[1]);
-							isAction = parts[2] == "1";
+				lock (actionHits) {
+					maxItemHits = maxActionHits = 1;
+					itemHits.Clear ();
+					actionHits.Clear ();
+					try {
+						Log.Info ("Deserializing HistogramRelevanceProvider...");
+						bool isAction;
+						string[] parts;
+						int	key, value;
+						foreach (string line in File.ReadAllLines (RelevanceFile)) {
+							try {
+								parts = line.Split ('\t');
+								key = int.Parse (parts[0]);
+								value = int.Parse (parts[1]);
+								isAction = parts[2] == "1";
 
-							if (isAction) {
-								actionHits[key] = value;
-								maxActionHits = Math.Max (maxActionHits, value);
-							} else {
-								itemHits[key] = value;
-								maxItemHits = Math.Max (maxItemHits, value);
+								if (isAction) {
+									actionHits[key] = value;
+									maxActionHits = Math.Max (maxActionHits, value);
+								} else {
+									itemHits[key] = value;
+									maxItemHits = Math.Max (maxItemHits, value);
+								}
+							} catch {
+								continue;
 							}
-						} catch {
-							continue;
 						}
+						Log.Info ("Successfully deserialized HistogramRelevanceProvider.");
+					} catch (Exception e) {
+						Log.Error ("Deserializing HistogramRelevanceProvider failed: {0}", e.Message);
 					}
-					Log.Info ("Successfully deserialized HistogramRelevanceProvider.");
-				} catch (Exception e) {
-					Log.Error ("Deserializing HistogramRelevanceProvider failed: {0}", e.Message);
 				}
-			}
 		}
-		
+
 		protected void Serialize ()
 		{
 			bool shrinkItemHits, shrinkActionHits;
@@ -123,38 +123,38 @@ namespace Do.Core
 			shrinkActionHits = maxActionHits > HistogramMax;
 
 			lock (itemHits)
-			lock (actionHits) {
-				try {
-					Log.Info ("Serializing HistogramRelevanceProvider...");
-					using (StreamWriter writer = new StreamWriter (RelevanceFile)) {
-						// Serialize item hits information:
-						foreach (int key in itemHits.Keys) {
-							int hits = itemHits [key];
-							if (shrinkItemHits) {
-								hits = (int) (hits * HistogramScaleFactor);
-								if (hits == 0)
-									continue;
+				lock (actionHits) {
+					try {
+						Log.Info ("Serializing HistogramRelevanceProvider...");
+						using (StreamWriter writer = new StreamWriter (RelevanceFile)) {
+							// Serialize item hits information:
+							foreach (int key in itemHits.Keys) {
+								int hits = itemHits [key];
+								if (shrinkItemHits) {
+									hits = (int) (hits * HistogramScaleFactor);
+									if (hits == 0)
+										continue;
+								}
+								writer.WriteLine (string.Format ("{0}\t{1}\t0",
+											key, hits));
 							}
-							writer.WriteLine (string.Format ("{0}\t{1}\t0",
-								key, hits));
-						}
-						// Serialize action hits information:
-						foreach (int key in actionHits.Keys) {
-							int hits = actionHits [key];
-							if (shrinkActionHits) {
-								hits = (int) (hits * HistogramScaleFactor);
-								if (hits == 0)
-									continue;
+							// Serialize action hits information:
+							foreach (int key in actionHits.Keys) {
+								int hits = actionHits [key];
+								if (shrinkActionHits) {
+									hits = (int) (hits * HistogramScaleFactor);
+									if (hits == 0)
+										continue;
+								}
+								writer.WriteLine (string.Format ("{0}\t{1}\t1",
+											key, hits));
 							}
-							writer.WriteLine (string.Format ("{0}\t{1}\t1",
-								key, hits));
 						}
+						Log.Info ("Successfully serialized HistogramRelevanceProvider.");
+					} catch (Exception e) {
+						Log.Error ("Serializing HistogramRelevanceProvider failed: {0}", e.Message);
 					}
-					Log.Info ("Successfully serialized HistogramRelevanceProvider.");
-				} catch (Exception e) {
-					Log.Error ("Serializing HistogramRelevanceProvider failed: {0}", e.Message);
 				}
-			}
 			if (shrinkItemHits || shrinkActionHits) {
 				Log.Info ("Shrinking histogram...");
 				Deserialize ();
@@ -172,7 +172,7 @@ namespace Do.Core
 			int key = r.GetHashCode ();
 			Dictionary<int, int> hits;
 			int maxHits;
-			
+
 			if (r is DoTextItem) return;
 
 			if (!(r is IAction)) {
@@ -195,13 +195,13 @@ namespace Do.Core
 			else
 				maxActionHits = maxHits;
 		}
-		
+
 		public override void DecreaseRelevance (DoObject r, string match, DoObject other)
 		{
 			int rel;
 			int key = r.GetHashCode ();
 			Dictionary<int, int> hits;
-			
+
 			if (r is DoTextItem) return;
 
 			if (!(r is IAction)) {
@@ -220,10 +220,11 @@ namespace Do.Core
 				}
 			}
 		}
-		
+
 		public override float GetRelevance (DoObject r, string match, DoObject other)
 		{
-			float relevance, score, itemReward; // These should all be between 0 and 1.
+			// These should all be between 0 and 1.
+			float relevance, score, itemReward;
 			int key = r.GetHashCode ();
 			Dictionary<int, int> hits;
 			int objectHits, maxHits;
@@ -249,9 +250,15 @@ namespace Do.Core
 			else
 				relevance = (float) objectHits / (float) maxHits;
 
+			// Penalize actions that require modifier items.
+			if (r is IAction &&
+				(r as IAction).SupportedModifierItemTypes.Length > 0 &&
+				!(r as IAction).ModifierItemsOptional)
+				relevance *= 0.70f;
+
 			return itemReward * .10f +
-				   relevance  * .10f +
-			       score      * .80f;
+				relevance  * .10f +
+				score      * .80f;
 		}
 	}
 }
