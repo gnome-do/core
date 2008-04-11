@@ -19,6 +19,9 @@
 	<Extension path = "/Do/ItemSource">
 		<ItemSource type="Do.Universe.AliasItemSource" />
 	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.ShelfItemSource" />
+	</Extension>
 
 	<!-- Actions -->
 	<Extension path = "/Do/Action">
@@ -26,5 +29,17 @@
 	</Extension>
 	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.DeleteAliasAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.ShelfAddAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.ShelfRemoveAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.ShelfExploreAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.NewShelfAction" />
 	</Extension>
 </Addin>

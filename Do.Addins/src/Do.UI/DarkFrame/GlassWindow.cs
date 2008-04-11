@@ -349,9 +349,8 @@ namespace Do.UI
 		public void Summon ()
 		{
 			//needed to know where our monitor sits...
-			if (PositionWindow.GetMonitor ()) {
-				Reposition ();
-			}
+			PositionWindow.GetMonitor ();
+			Reposition ();
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}

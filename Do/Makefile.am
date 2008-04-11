@@ -84,6 +84,8 @@ FILES =  \
 	src/Do.Universe/ItemSourceItemSource.cs \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
+	src/Do.Universe/ShelfActions.cs \
+	src/Do.Universe/ShelfItemSource.cs \
 	src/Log.cs \
 	src/Preferences.cs \
 	src/Util.cs \
