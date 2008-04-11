@@ -144,6 +144,8 @@ namespace Do.Universe
 		
 		public void RemoveItem (IItem item)
 		{
+			if (tempItems.Remove (item)) return;
+			
 			string uid = Do.UniverseManager.UIDForObject (item);
 			
 			uids.Remove (uid);
