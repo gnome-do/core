@@ -30,50 +30,19 @@ using Do.Universe;
 using Do.Core;
 
 namespace Do.Universe
-{
+{	
 	[Serializable]
-	public class ShelfRecord
-	{
-		public readonly string Name;
-		
-		public readonly List<ShelfItemRecord> items;
-		
-		public ShelfRecord (string name, List<IItem> items)
-		{
-			Name = name;
-			this.items = new List<ShelfItemRecord> ();
-			
-			string UID;
-			foreach (IItem item in items) {
-				UID = Do.UniverseManager.UIDForObject (item);
-				this.items.Add (new ShelfItemRecord (UID));
-			}
-		}
-	}
-	
-	[Serializable]
-	public class ShelfItemRecord
-	{
-		public readonly string UID;
-		
-		public ShelfItemRecord (string uid)
-		{
-			UID = uid;
-		}
-	}
-	
 	public class ShelfItem : IItem
 	{
 		private string name;
 		private List<string> uids;
+		
+		[NonSerialized]
 		private List<IItem> tempItems = new List<IItem> ();
 		
-		public ShelfItem (ShelfRecord record)
-		{
-			name = record.Name;
-			uids = new List<string> ();
-			foreach (ShelfItemRecord r in record.items) {
-				uids.Add (r.UID);
+		private List<IItem> TempItems {
+			get {
+				return tempItems ?? tempItems = new List<IItem> ();
 			}
 		}
 		
@@ -99,7 +68,7 @@ namespace Do.Universe
 						items.Add (item as IItem);
 				}
 				
-				items.AddRange (tempItems);
+				items.AddRange (TempItems);
 				
 				return items;
 			}
@@ -134,8 +103,8 @@ namespace Do.Universe
 			Do.UniverseManager.TryGetObjectForUID (uid, out obj);
 			
 			if (obj == null) {
-				if (!tempItems.Contains (item))
-				    tempItems.Add (item); //temp items
+				if (!TempItems.Contains (item))
+				    TempItems.Add (item); //temp items
 			} else {
 				uids.Add (uid); //real items
 			}
@@ -144,24 +113,18 @@ namespace Do.Universe
 		
 		public void RemoveItem (IItem item)
 		{
-			if (tempItems.Remove (item)) return;
+			if (TempItems.Remove (item)) return;
 			
 			string uid = Do.UniverseManager.UIDForObject (item);
 			
 			uids.Remove (uid);
 			ShelfItemSource.Serialize ();
 		}
-		
-		public ShelfRecord ToRecord ()
-		{
-			ShelfRecord record = new ShelfRecord (ShelfName, Items);
-			return record;
-		}
 	}
 	
 	public class ShelfItemSource : IItemSource
 	{	
-		static string ShelfDirectory {
+		static string ShelfFile {
 			get {
 				return Paths.Combine (Paths.UserData, "shelf");
 			}
@@ -169,35 +132,26 @@ namespace Do.Universe
 		
 		private void Deserialize () 
 		{
-			if (!Directory.Exists (ShelfDirectory)) {
-				Directory.CreateDirectory (ShelfDirectory);
-				return;
-			}
-			string[] files = Directory.GetFiles (ShelfDirectory);
-			foreach (string file in files) {
-				try {
-					using (Stream s = File.OpenRead (file)) {
-						BinaryFormatter f = new BinaryFormatter ();
-						ShelfRecord rec = f.Deserialize (s) as ShelfRecord;
-						shelf.Add (rec.Name, new ShelfItem (rec));
-					}
-				} catch (Exception e) {
-					Log.Error (e.Message);
+			try {
+				using (Stream s = File.OpenRead (ShelfFile)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					Dictionary<string,ShelfItem> rec = f.Deserialize (s) as Dictionary<string,ShelfItem>;
+					shelf = rec;
 				}
+			} catch (Exception e) {
+				Log.Error (e.Message);
 			}
 		}
 		
 		static public void Serialize ()
 		{
-			foreach (ShelfItem s in shelf.Values) {
-				try {
-					using (Stream stream = File.OpenWrite (Path.Combine (ShelfDirectory, s.ShelfName))) {
-						BinaryFormatter f = new BinaryFormatter ();
-						f.Serialize (stream, s.ToRecord ());
-					}
-				} catch (Exception e) {
-					Log.Error (e.Message);
+			try {
+				using (Stream stream = File.OpenWrite (ShelfFile)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					f.Serialize (stream, shelf);
 				}
+			} catch (Exception e) {
+				Log.Error (e.Message);
 			}
 		}
 		
