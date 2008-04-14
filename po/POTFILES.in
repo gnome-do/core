@@ -5,7 +5,6 @@ Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs
 Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs
 Do.Addins/src/Do.Universe/DefineWordAction.cs
 Do.Addins/src/Do.Universe/MailtoAction.cs
-Do.Addins/src/Do.Universe/ManuallyTypedPathItemSource.cs
 Do.Addins/src/Do.Universe/OpenAction.cs
 Do.Addins/src/Do.Universe/OpenTerminalHereAction.cs
 Do.Addins/src/Do.Universe/OpenURLAction.cs
