@@ -246,33 +246,9 @@ namespace Do.Universe {
 			}
 		}
 
-		static string Music {
-			get {
-				return Paths.ReadXdgUserDir ("XDG_MUSIC_DIR", "Music");
-			}
-		}
-
-		static string Pictures {
-			get {
-				return Paths.ReadXdgUserDir ("XDG_PICTURES_DIR", "Pictures");
-			}
-		}
-
-		static string Videos {
-			get {
-				return Paths.ReadXdgUserDir ("XDG_VIDEOS_DIR", "Videos");
-			}
-		}
-
 		static string Desktop {
 			get {
 				return Paths.ReadXdgUserDir ("XDG_DESKTOP_DIR", "Desktop");
-			}
-		}
-
-		static string Downloads {
-			get {
-				return Paths.ReadXdgUserDir ("XDG_DOWNLOAD_DIR", "Downloads");
 			}
 		}
 
