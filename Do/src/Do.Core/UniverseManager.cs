@@ -1,8 +1,7 @@
 /* UniverseManager.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
+ * COPYRIGHT file distributed with this source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +57,7 @@ namespace Do.Core {
 		/// <summary>
 		/// Maximum amount of time to spend updating (millseconds).
 		/// </summary>
-		const int MaxUpdateTime = 125;
+		const int MaxUpdateTime = 250;
 
 		const int MaxSearchResults = 1000;
 
@@ -220,26 +219,23 @@ namespace Do.Core {
 				if (firstResults.ContainsKey (key)) {
 					firstResults.Remove (key);
 				}
-				firstResults [key] = SortAndNarrowResults (universe.Values, key,
-					null, true);
+				firstResults [key] =
+					SortAndNarrowResults (universe.Values, key, null);
 				Log.Info ("Updated first results for '{0}'.", key);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
 		}
 
 		protected List<IObject>
-		SortResults (IEnumerable<IObject> broadResults, string query, IObject other, bool strict)
+		SortResults (IEnumerable<IObject> broadResults, string query, IObject other)
 		{
 			List<IObject> results;
+			float epsilon = 0.00001f;
 		 
 			results	= new List<IObject> ();
 			foreach (DoObject obj in broadResults) {
-				if (strict && query.Length > 0 &&
-					!obj.CanBeFirstResultForKeypress (query[0]))
-					continue;
-
 				obj.UpdateRelevance (query, other as DoObject);
-				if (obj.Relevance > 0) {
+				if (Math.Abs (obj.Relevance) > epsilon) {
 					results.Add (obj);
 				}
 			}
@@ -248,11 +244,11 @@ namespace Do.Core {
 		}
 
 		protected List<IObject>
-		SortAndNarrowResults (IEnumerable<IObject> broadResults, string query, IObject other, bool strict)
+		SortAndNarrowResults (IEnumerable<IObject> broadResults, string query, IObject other)
 		{
 			List<IObject> results;
 
-			results = SortResults (broadResults, query, other, strict);
+			results = SortResults (broadResults, query, other);
 			// Shorten the list if neccessary.
 			if (results.Count > MaxSearchResults)
 				results = results.GetRange (0, MaxSearchResults);
@@ -264,9 +260,9 @@ namespace Do.Core {
 			firstResults.Clear ();
 			// For each starting character, add every matching object from the universe to
 			// the firstResults list corresponding to that character.
-			for (char keypress = 'a'; keypress <= 'z'; keypress++) {
-				firstResults [keypress.ToString ()] = SortAndNarrowResults (
-					universe.Values, keypress.ToString (), null, true);
+			for (char key = 'a'; key <= 'z'; key++) {
+				firstResults [key.ToString ()] =
+					SortAndNarrowResults (universe.Values, key.ToString (), null);
 			}
 		}
 
@@ -357,7 +353,7 @@ namespace Do.Core {
 				context.ChildrenSearch = false;
 				return context;
 			}
-			children = SortResults (children, "", null, false);
+			children = SortResults (children, "", null);
 
 			// Increase relevance of the parent.
 			parent = context.Selection as DoObject;
@@ -416,11 +412,11 @@ namespace Do.Core {
 				results = GetModItemsFromList (context, results);
 				// We need to sort because we added the out-of-order dynamic modifier
 				// items.
-				results = SortResults (results, context.Query, context.Items[0], false);
+				results = SortResults (results, context.Query, context.Items[0]);
 			} else {
 			 	// These are items:
 				results = GetItemsFromList (context, results);
-				results = SortResults (results, context.Query, null, false);
+				results = SortResults (results, context.Query, null);
 			}
 
 			return results;
@@ -482,7 +478,7 @@ namespace Do.Core {
 		// This will filter out the results in the previous context that match the current query
 		private List<IObject> FilterPreviousSearchResultsWithContinuedContext (SearchContext context)
 		{
-			return SortResults (context.LastContext.Results, context.Query, null, false);
+			return SortResults (context.LastContext.Results, context.Query, null);
 		}
 
 		private List<IObject> IndependentResults (SearchContext context)
@@ -502,7 +498,7 @@ namespace Do.Core {
 
 			} else {
 				// Or we just have to do an expensive search...
-				results = SortAndNarrowResults (universe.Values, query, null, false);
+				results = SortAndNarrowResults (universe.Values, query, null);
 			}
 			return results;
 		}
@@ -534,7 +530,7 @@ namespace Do.Core {
 			}
 			foreach (IObject rm in actions_to_remove)
 				actions.Remove (rm);
-			return SortResults (actions, context.Query, context.Items[0], false);
+			return SortResults (actions, context.Query, context.Items[0]);
 		}
 
 		public List<IObject> ActionsForItem (IItem item)
