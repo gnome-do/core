@@ -106,7 +106,6 @@ REFERENCES =  \
 	../Do.Addins/bin/Debug/Do.Addins.dll \
 	../Do.DBus/bin/Debug/Do.DBus.dll \
 	Mono.Cairo \
-	Mono.GetOptions \
 	Mono.Posix \
 	-pkg:gconf-sharp-2.0 \
 	-pkg:glade-sharp-2.0 \

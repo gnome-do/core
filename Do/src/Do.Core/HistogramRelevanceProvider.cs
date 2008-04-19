@@ -35,6 +35,7 @@ namespace Do.Core {
 	class HistogramRelevanceProvider : RelevanceProvider {
 		
 		uint max_hits;
+		DateTime oldest_hit;
 		Dictionary<string, RelevanceRecord> hits;
 
 		Timer serializeTimer;
@@ -43,12 +44,16 @@ namespace Do.Core {
 		public HistogramRelevanceProvider ()
 		{
 			max_hits = 1;
+			oldest_hit = DateTime.Now;
 			hits = new Dictionary<string, RelevanceRecord> ();
 
 			Deserialize ();
 			
-			foreach (RelevanceRecord rec in hits.Values)
+			foreach (RelevanceRecord rec in hits.Values) {
 				max_hits = Math.Max (max_hits, rec.Hits);
+				oldest_hit = oldest_hit.CompareTo (rec.LastHit) < 0 ?
+					oldest_hit : rec.LastHit;
+			}
 
 			// Serialize every few minutes.
 			serializeTimer = new Timer (OnSerializeTimer);
@@ -143,21 +148,22 @@ namespace Do.Core {
 			if (score == 0) return 0;
 			
 			if (hits.ContainsKey (r.UID)) {
+				float age;
 				RelevanceRecord rec = hits [r.UID];
-				// If the item is old, decrease its hits. 
-				if (DateTime.Now - rec.LastHit > TimeSpan.FromDays (30)) {
-					rec.Hits /= 2;
-					rec.LastHit = DateTime.Now;
-					if (rec.Hits == 0)
-						hits.Remove (r.UID);
-				}
-				
+	
+				// On a scale of 0 to 1, how old is the item?
+				age = 1 -
+					(float) (DateTime.Now - rec.LastHit).TotalSeconds /
+					(float) (DateTime.Now - oldest_hit).TotalSeconds;
+					
 				// Relevance is non-zero only if the record contains first char
 				// relevance for the item.
-				if (match.Length > 0 && rec.HasFirstChar (match [0]))
+				if (match == "" || rec.HasFirstChar (match [0]))
 					relevance = (float) rec.Hits / (float) max_hits;
 				else
 					relevance = 0f;
+				
+				relevance *= age;
 		    } else {
 				relevance = 0f;
 			}
@@ -177,7 +183,7 @@ namespace Do.Core {
 				relevance += 0.1f;
 			
 			itemReward = r is IItem ? 1.0f : 0f;
-				
+			
 			return itemReward * .10f +
 				relevance  * .20f +
 				score      * .70f;

@@ -2,5 +2,6 @@
 <stetic-interface>
   <configuration>
     <images-root-path>..</images-root-path>
+    <target-gtk-version>2.12.0</target-gtk-version>
   </configuration>
 </stetic-interface>
