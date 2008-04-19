@@ -16,7 +16,6 @@
   <Contents>
     <File name="gnome-do.desktop" subtype="Code" buildaction="FileCopy" DeployService.TargetDirectoryId="Linux.DesktopApplications" />
     <File name="gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
@@ -44,9 +43,9 @@
     <File name="src/Do.Universe/DeleteAliasAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ShelfActions.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ShelfItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="../Do.Addins/bin/Debug/Do.Addins.dll" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="../Do.DBus/bin/Debug/Do.DBus.dll" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="../Do.Addins/bin/Debug" subtype="Directory" buildaction="Compile" />
+    <File name="../Do.DBus/bin/Debug" subtype="Directory" buildaction="Compile" />
+    <File name="AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

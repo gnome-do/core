@@ -43,11 +43,9 @@
 	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.OpenURLAction" />
 	</Extension>
-	<!--
 	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.OpenWithAction" />
 	</Extension>
-	-->
 	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.RevealAction" />
 	</Extension>
