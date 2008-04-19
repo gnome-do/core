@@ -61,8 +61,8 @@ BINARIES = \
 all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_DESKTOPAPPLICATIONS) $(BINARIES) 
 
 FILES =  \
-	AssemblyInfo.cs \
 	gtk-gui/generated.cs \
+	src/AssemblyInfo.cs \
 	src/ConsoleCrayon.cs \
 	src/Do.Core/Controller.cs \
 	src/Do.Core/DoAction.cs \
