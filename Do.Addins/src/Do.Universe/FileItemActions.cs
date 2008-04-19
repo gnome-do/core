@@ -146,7 +146,9 @@ namespace Do.Files {
 				try {
 					System.Diagnostics.Process.Start ("mv",
 							string.Format ("{0} {1}",
-								FileItem.EscapedPath (src), FileItem.EscapedPath (dest)));
+								FileItem.EscapedPath (src),
+								FileItem.EscapedPath (dest)));
+
 					seenPaths.Add (src.Path);
 
 					if (FileItem.IsDirectory (dest)) {

@@ -52,7 +52,7 @@ namespace Do.Universe {
 			item = new DesktopItem (desktopFileP);
 
 			// We may need to call this depending on how DesktopItem works.
-			// gnome_desktop_item_unref (desktopFileP);
+			gnome_desktop_item_unref (desktopFileP);
 		}
 		
 		public string Name
