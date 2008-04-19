@@ -147,6 +147,10 @@ namespace Do {
 		public static string Temp {
 			get { return Combine (Paths.ApplicationData, "tmp"); }
 		}
+		
+		public static string AddinRegistry {
+			get { return Combine (UserData, "addins-registry"); }
+		}
 
 		public static string GetTemporaryFilePath ()
 		{

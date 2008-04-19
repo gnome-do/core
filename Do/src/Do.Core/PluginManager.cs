@@ -73,10 +73,45 @@ namespace Do.Core
 			}
 			
 			// Check for local repo.
-			if (System.IO.Directory.Exists (LocalRepo) &&
-			    !setup.Repositories.ContainsRepository (LocalRepo)) {
-				setup.Repositories.RegisterRepository (null, LocalRepo, true);
+			//if (System.IO.Directory.Exists (LocalRepo) &&
+			//    !setup.Repositories.ContainsRepository (LocalRepo)) {
+			//	setup.Repositories.RegisterRepository (null, LocalRepo, true);
+			//}
+			
+			LocalPlugins (setup);
+		}
+		
+		internal void LocalPlugins (SetupService setup)
+		{
+			string[] files;
+		
+			Log.Info ("Updating Local Plugins");
+			// Load local items into repo
+			if (System.IO.Directory.Exists (Paths.AddinRegistry)) {
+				files = System.IO.Directory.GetFiles (Paths.AddinRegistry);
+				//silly, fixme
+				foreach (string file in files) {
+					if (file.EndsWith (".dll")) {
+						string path = System.IO.Path.Combine(Paths.AddinRegistry, file);
+						setup.BuildPackage (new ConsoleProgressStatus(false), Paths.AddinRegistry, 
+						                    new string[] {path});
+						//System.IO.File.Delete (path);
+					}
+				}
 			}
+			
+			files = System.IO.Directory.GetFiles (Paths.AddinRegistry);
+			foreach (string file in files) {
+				if (file.EndsWith (".mpack")) {
+					string path = System.IO.Path.Combine (Paths.AddinRegistry, file);
+					setup.Install (new ConsoleProgressStatus (false), new string[] {path});
+				}
+			}
+			
+			//we do this here instead of deleting above so dll's that fail to build are not
+			//deleted until the very end.
+			System.IO.Directory.Delete (Paths.AddinRegistry, true);
+			System.IO.Directory.CreateDirectory (Paths.AddinRegistry);
 		}
 
 		/// <summary>
