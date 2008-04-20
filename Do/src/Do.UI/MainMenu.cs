@@ -46,19 +46,19 @@ namespace Do.UI
 
 			menu = new Menu ();
 
-			// Preferences menu item
-			item = new ImageMenuItem  ("_Preferences");
-			(item as ImageMenuItem).Image = new Image (Stock.Preferences, IconSize.Menu);
-			// menu.Add (item);
-			item.CanFocus = false;
-			item.Sensitive = false;
-
 			// About menu item
 			item = new ImageMenuItem  (Catalog.GetString ("_About Do"));
 			(item as ImageMenuItem).Image = new Image (Stock.About, IconSize.Menu);
 			menu.Add (item);
 			item.CanFocus = false;
 			item.Activated += OnMainMenuAboutClicked;
+			
+			// Preferences menu item
+			item = new ImageMenuItem  ("_Preferences");
+			(item as ImageMenuItem).Image = new Image (Stock.Preferences, IconSize.Menu);
+			menu.Add (item);
+			item.CanFocus = false;
+			item.Activated += OnMainMenuPreferencesClicked;
 
 			item = new ImageMenuItem  (Catalog.GetString ("Plugin _Manager"));
 			//TODO: See if we can find a better item to represent the addin manager
@@ -87,10 +87,10 @@ namespace Do.UI
 			Do.Controller.ShowPluginManager ();
 		}
 		
-		protected void OnMainMenuOpenPluginFolderClicked (object o, EventArgs args)
+		protected void OnMainMenuPreferencesClicked (object o, EventArgs args)
 		{
 			Do.Controller.Vanish ();
-			Util.Environment.Open (Paths.UserPlugins);
+			Do.PreferencesWindow.Show ();
 		}
 
 		protected void OnMainMenuAboutClicked (object o, EventArgs args)

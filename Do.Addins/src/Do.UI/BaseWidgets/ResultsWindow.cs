@@ -130,10 +130,8 @@ namespace Do.UI
 			AcceptFocus = false;
 			// This typehint gets the window to raise all the way to top.
 			TypeHint = WindowTypeHint.Splashscreen;
-
 			
 			SetColormap ();
-			
 			
 			frame = new Frame ();
 			frame.DrawFill = true;
@@ -201,9 +199,7 @@ namespace Do.UI
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
 			column.PackStart (cell, true);
 			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
-				
 			
-
 			resultsTreeview.AppendColumn (column);
 
 			resultsTreeview.Selection.Changed += OnResultRowSelected;

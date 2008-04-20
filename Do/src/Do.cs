@@ -21,20 +21,21 @@ using System;
 
 using Mono.Unix;
 
+using Do.UI;
 using Do.Core;
 using Do.DBusLib;
 
-namespace Do
-{
+namespace Do {
 
-	public static class Do
-	{
+	public static class Do {
+		
 		static GConfXKeybinder keybinder;
 		
 		static Preferences preferences;
 		static Controller controller;
-		static PluginManager pluginManager;
-		static UniverseManager universeManager;
+		static PluginManager plugin_manager;
+		static UniverseManager universe_manager;
+		static SettingsWindow preferences_window;
 
 		public static void Main (string[] args)
 		{
@@ -87,32 +88,35 @@ namespace Do
 			}
 		}
 
-		public static Preferences Preferences
-		{
+		public static Preferences Preferences {
 			get { return preferences; }
 		}
+		
+		public static SettingsWindow PreferencesWindow {
+			get {
+				return preferences_window ??
+					preferences_window = new SettingsWindow ();
+			}
+		}
 
-		public static Controller Controller
-		{
+		public static Controller Controller {
 			get {
 				return controller ??
 					controller = new Controller ();
 			}
 		}
 
-		public static PluginManager PluginManager
-		{
+		public static PluginManager PluginManager {
 			get {
-				return pluginManager ??
-					pluginManager = new PluginManager ();
+				return plugin_manager ??
+					plugin_manager = new PluginManager ();
 			}
 		}
 
-		public static UniverseManager UniverseManager
-		{
+		public static UniverseManager UniverseManager {
 			get {
-				return universeManager ??
-					universeManager = new UniverseManager ();
+				return universe_manager ??
+					universe_manager = new UniverseManager ();
 			}
 		}
 		

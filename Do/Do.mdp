@@ -43,9 +43,12 @@
     <File name="src/Do.Universe/DeleteAliasAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ShelfActions.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ShelfItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="../Do.Addins/bin/Debug" subtype="Directory" buildaction="Compile" />
-    <File name="../Do.DBus/bin/Debug" subtype="Directory" buildaction="Compile" />
     <File name="AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
+    <File name="../Do.Addins/bin/Debug/Do.Addins.dll" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="../Do.DBus/bin/Debug/Do.DBus.dll" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="src/Do.UI/SettingsWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="gtk-gui/Do.UI.SettingsWindow.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
