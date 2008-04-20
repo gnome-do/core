@@ -20,14 +20,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-
-// This is text that goes after " [options]" in help output.
-[assembly: Mono.UsageComplement ("")]
-
-// Attributes visible in " -V"
-[assembly: Mono.About("Do things quickly.")]
-[assembly: Mono.Author ("David Siegel et al")]
-
 // The assembly version has following format:
 //
 // Major.Minor.Build.Revision
