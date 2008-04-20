@@ -113,13 +113,15 @@ namespace Do.Core {
 			}
 		}
 
-		public override void IncreaseRelevance (DoObject r, string match, DoObject other)
+		public override void IncreaseRelevance (DoObject o,
+												string match,
+												DoObject other)
 		{
 			RelevanceRecord rec;
 			
-			if (!hits.TryGetValue (r.UID, out rec)) {
+			if (!hits.TryGetValue (o.UID, out rec)) {
 				rec = new RelevanceRecord ();
-				hits [r.UID] = rec;
+				hits [o.UID] = rec;
 			}
 			rec.Hits++;
 			rec.LastHit = DateTime.Now;
@@ -128,28 +130,31 @@ namespace Do.Core {
 			max_hits = Math.Max (max_hits, rec.Hits);
 		}
 
-		public override void DecreaseRelevance (DoObject r, string match, DoObject other)
+		public override void DecreaseRelevance (DoObject o,
+												string match,
+												DoObject other)
 		{
 			RelevanceRecord rec;
 			
-			if (!hits.TryGetValue (r.UID, out rec))
-				return;
-			rec.Hits--;
+			if (hits.TryGetValue (o.UID, out rec))
+				rec.Hits--;
 		}
 
-		public override float GetRelevance (DoObject r, string match, DoObject other)
+		public override float GetRelevance (DoObject o,
+											string match,
+											DoObject other)
 		{
 			// These should all be between 0 and 1.
-			float relevance, score, itemReward;
+			float relevance, score;
 			
-			relevance = itemReward = 0f;			
+			relevance = 0f;			
 			// Get string similarity score. Return immediately if 0.
-			score = RelevanceProvider.StringScoreForAbbreviation (r.Name, match);
+			score = StringScoreForAbbreviation (o.Name, match);
 			if (score == 0) return 0;
 			
-			if (hits.ContainsKey (r.UID)) {
+			if (hits.ContainsKey (o.UID)) {
 				float age;
-				RelevanceRecord rec = hits [r.UID];
+				RelevanceRecord rec = hits [o.UID];
 	
 				// On a scale of 0 to 1, how old is the item?
 				age = 1 -
@@ -163,30 +168,34 @@ namespace Do.Core {
 				else
 					relevance = 0f;
 				
-				relevance = (relevance * 0.5f) * (1f + age);
-		    } else {
-				relevance = 0f;
-			}
+				relevance *= 0.5f * (1f + age);
+		    }
 			
 			// Penalize actions that require modifier items.
 			// other != null ==> we're getting relevance for second pane.
-			if (other != null && r is IAction &&
-			    (r as IAction).SupportedModifierItemTypes.Length > 0)
+			if (other != null && o is IAction &&
+			    (o as IAction).SupportedModifierItemTypes.Length > 0)
 				relevance -= 0.1f;
 			// Penalize item sources so that items are preferred.
-			if (r.Inner is IItemSource)
+			if (o.Inner is IItemSource)
 				relevance -= 0.1f;
 			// Give the most popular actions a little leg up.
-			if (r.Inner is OpenAction ||
-			    r.Inner is OpenURLAction ||
-			    r.Inner is RunAction)
+			if (o.Inner is OpenAction ||
+			    o.Inner is OpenURLAction ||
+			    o.Inner is RunAction)
 				relevance += 0.1f;
 			
-			itemReward = r is IItem ? 1.0f : 0f;
-			
-			return itemReward * .10f +
-				   relevance  * .20f +
-				   score      * .70f;
+			return BalanceRelevanceWithScore (o, relevance, score);
+		}
+
+		float BalanceRelevanceWithScore (IObject o, float rel, float score)
+		{
+			float reward;
+		   
+			reward = o is IItem ? 1.0f : 0f;
+			return reward * .10f +
+				   rel    * .20f +
+				   score  * .70f;
 		}
 	}
 	
