@@ -62,6 +62,7 @@ all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_DESKTOPAPPLICATIONS) $(BINARIES)
 
 FILES =  \
 	gtk-gui/generated.cs \
+	gtk-gui/Do.UI.SettingsWindow.cs \
 	src/AssemblyInfo.cs \
 	src/ConsoleCrayon.cs \
 	src/Do.Core/Controller.cs \
