@@ -148,8 +148,8 @@ namespace Do {
 			get { return Combine (Paths.ApplicationData, "tmp"); }
 		}
 		
-		public static string AddinRegistry {
-			get { return Combine (UserData, "addins-registry"); }
+		public static string PluginInstall {
+			get { return Combine (UserData, "plugin-install"); }
 		}
 
 		public static string GetTemporaryFilePath ()

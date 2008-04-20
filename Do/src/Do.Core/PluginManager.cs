@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 using Mono.Addins;
@@ -27,10 +28,10 @@ using Mono.Addins.Setup;
 using Do;
 using Do.Universe;
 
-namespace Do.Core
-{
-	public class PluginManager
-	{
+namespace Do.Core {
+	
+	public class PluginManager {
+		
 		const string HttpRepo = "http://do.davebsd.com/repository/dev";
 
 		List<DoItemSource> sources;
@@ -40,12 +41,6 @@ namespace Do.Core
 		{
 			sources = new List<DoItemSource> ();
 			actions = new List<DoAction> ();
-		}
-		
-		string LocalRepo {
-			get {
-				return Paths.Combine (Paths.UserData, "repo");
-			}
 		}
 
 		public ICollection<DoItemSource> ItemSources {
@@ -71,47 +66,51 @@ namespace Do.Core
 			if (!setup.Repositories.ContainsRepository (HttpRepo)) {
 				setup.Repositories.RegisterRepository (null, HttpRepo, true);
 			}
-			
-			// Check for local repo.
-			//if (System.IO.Directory.Exists (LocalRepo) &&
-			//    !setup.Repositories.ContainsRepository (LocalRepo)) {
-			//	setup.Repositories.RegisterRepository (null, LocalRepo, true);
-			//}
-			
-			LocalPlugins (setup);
+		
+			InstallLocalPlugins (setup);
 		}
 		
-		internal void LocalPlugins (SetupService setup)
+		/// <summary>
+		/// Installs plugins that are located in the <see cref="Paths.PluginsInstall"/> directory.
+		/// This will build addins (mpack files) and install them.
+		/// </summary>
+		/// <param name="setup">
+		/// A <see cref="SetupService"/>
+		/// </param>
+		public void InstallLocalPlugins (SetupService setup)
 		{
-			string[] files;
-		
-			Log.Info ("Updating Local Plugins");
+			string [] files;
+
 			// Load local items into repo
-			if (System.IO.Directory.Exists (Paths.AddinRegistry)) {
-				files = System.IO.Directory.GetFiles (Paths.AddinRegistry);
-				//silly, fixme
-				foreach (string file in files) {
-					if (file.EndsWith (".dll")) {
-						string path = System.IO.Path.Combine(Paths.AddinRegistry, file);
-						setup.BuildPackage (new ConsoleProgressStatus(false), Paths.AddinRegistry, 
-						                    new string[] {path});
-						//System.IO.File.Delete (path);
-					}
-				}
-			}
+			if (!Directory.Exists (Paths.PluginInstall)) return;
 			
-			files = System.IO.Directory.GetFiles (Paths.AddinRegistry);
+			files = Directory.GetFiles (Paths.PluginInstall);
+			if (files.Length == 0)
+				return;
+			
+			Log.Info ("Installing local plugins...");
+			
 			foreach (string file in files) {
-				if (file.EndsWith (".mpack")) {
-					string path = System.IO.Path.Combine (Paths.AddinRegistry, file);
-					setup.Install (new ConsoleProgressStatus (false), new string[] {path});
-				}
+				if (!file.EndsWith (".dll")) continue;
+				
+				string path = Path.Combine (Paths.PluginInstall, file);
+				Log.Info ("Creating mpack for {0}...", path);
+				setup.BuildPackage (new ConsoleProgressStatus (false), Paths.PluginInstall, 
+				                    new string [] { path });
 			}
 			
-			//we do this here instead of deleting above so dll's that fail to build are not
-			//deleted until the very end.
-			System.IO.Directory.Delete (Paths.AddinRegistry, true);
-			System.IO.Directory.CreateDirectory (Paths.AddinRegistry);
+			files = Directory.GetFiles (Paths.PluginInstall);
+			foreach (string file in files) {
+				if (!file.EndsWith (".mpack")) continue;
+				
+				string path = Path.Combine (Paths.PluginInstall, file);
+				Log.Info ("Installing local plugin {0}...", path);
+				setup.Install (new ConsoleProgressStatus (false), new string [] { path });
+			}
+			
+			// Delete the dlls that have been build as addins and installed.
+			Directory.Delete (Paths.PluginInstall, true);
+			Directory.CreateDirectory (Paths.PluginInstall);
 		}
 
 		/// <summary>
