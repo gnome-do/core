@@ -163,7 +163,7 @@ namespace Do.Core {
 				else
 					relevance = 0f;
 				
-				relevance *= age;
+				relevance = (relevance * 0.5f) * (1f + age);
 		    } else {
 				relevance = 0f;
 			}
@@ -185,8 +185,8 @@ namespace Do.Core {
 			itemReward = r is IItem ? 1.0f : 0f;
 			
 			return itemReward * .10f +
-				relevance  * .20f +
-				score      * .70f;
+				   relevance  * .20f +
+				   score      * .70f;
 		}
 	}
 	
