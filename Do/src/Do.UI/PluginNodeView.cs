@@ -58,8 +58,7 @@ namespace Do
 			}
 			
 			foreach (Addin a in AddinManager.Registry.GetAddins ()) {
-				string shortName = a.Name.Split (new char[] {',','.'})[1];
-				store.AppendValues (a.Enabled, shortName, a);
+				store.AppendValues (a.Enabled, a.Name, a);
 			}
 		}
 		
