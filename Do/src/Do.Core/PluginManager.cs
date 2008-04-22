@@ -122,7 +122,7 @@ namespace Do.Core {
 		/// <param name="args">
 		/// A <see cref="ExtensionNodeEventArgs"/>
 		/// </param>
-		protected void OnItemSourceChange (object s, ExtensionNodeEventArgs args)
+		public void OnItemSourceChange (object s, ExtensionNodeEventArgs args)
 		{
 			DoItemSource source;
 			TypeExtensionNode node;
@@ -149,7 +149,7 @@ namespace Do.Core {
 			}
 		}
 		
-		protected void OnActionChange (object s, ExtensionNodeEventArgs args)
+		public void OnActionChange (object s, ExtensionNodeEventArgs args)
 		{
 			DoAction action;
 			TypeExtensionNode node;

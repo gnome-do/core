@@ -18,6 +18,7 @@
  */
 
 using System;
+using Mono.Addins;
 
 using Gtk;
 
@@ -27,60 +28,61 @@ namespace Do.UI {
 	
 	public partial class SettingsWindow : Gtk.Window {
 		
+		PluginNodeView nodeView;
+		
 		protected enum Column {
 			CheckButtonColumn = 0,
 			InfoColumn = 1,
-			NumberColumns = 2
+			Addin = 2
 		}
 		
 		public SettingsWindow () : 
 				base (Gtk.WindowType.Toplevel)
-		{
-			TreeViewColumn column;
-			CellRenderer   cell;
-			
+		{			
 			Build ();
 			
-			all_plugins_treeview.Model  = new ListStore (new Type [] {		
-				typeof (string),
-			});
+			mainNotebook.Page = 0;
+			ok_btn.GrabFocus ();
 			
-			column = new TreeViewColumn ();			
-			column.Sizing = Gtk.TreeViewColumnSizing.Fixed; 
-				
-			cell = new Gtk.CellRendererToggle ();
-			column.PackStart (cell, false);
-			all_plugins_treeview.AppendColumn (column);			
-
-			// Column 2
-			column = new TreeViewColumn ();			
-			column.Sizing = Gtk.TreeViewColumnSizing.Fixed; 
+			nodeView = new PluginNodeView ();
+			nodeScroll.Add (nodeView);
+			nodeView.Show ();
 			
-			cell = new CellRendererPixbuf ();				
-			cell.SetFixedSize (-1, 30 - (int) cell.Ypad);
-			column.PackStart (cell, false);
-			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
-			
-			cell = new CellRendererText ();
-			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
-			column.PackStart (cell, true);	
-			column.AddAttribute (cell, "markup", (int) Column.InfoColumn);		
-
-			all_plugins_treeview.Selection.Changed += OnPluginSelected;
-			
-			ListStore store = all_plugins_treeview.Model as ListStore;
-			store.AppendValues (new object [] {
-				"Hello, world!",
-			});
+			nodeView.PluginToggled += OnPluginToggle;
+			nodeView.Selection.Changed += OnPluginSelected;
 		}
 		
 		private void OnPluginSelected (object sender, EventArgs args)
 		{
-			Console.WriteLine ("Hey!");
+			TreeIter iter;
+			ListStore store = nodeView.Model as ListStore;
+			
+			if (!nodeView.Selection.GetSelected (out iter)) return;
+			
+			Addin addin = (Addin) store.GetValue (iter, (int) Column.Addin);
+			
+			name_label.Text = addin.Name;
+			author_label.Text = addin.Description.Author;
+			description_label.Text = addin.Description.Description;
+		}
+		
+		private void OnPluginToggle (object sender, ToggledArgs args)
+		{
+			TreeIter iter;
+			ListStore store = nodeView.Model as ListStore;
+			
+			if (!store.GetIter (out iter, new TreePath (args.Path))) return;
+			
+			Addin addin = (Addin) store.GetValue (iter, (int) Column.Addin);
+			bool enabled = (bool) store.GetValue (iter, (int) Column.CheckButtonColumn);
+			
+			addin.Enabled = !enabled;
+			store.SetValue (iter, (int) Column.CheckButtonColumn, !enabled);
 		}
 
 		protected virtual void plugins_btnClicked (object sender, System.EventArgs e)
 		{
+			mainNotebook.Page = 0;
 		}
 
 		protected virtual void ok_btnClicked (object sender, System.EventArgs e)
@@ -95,15 +97,7 @@ namespace Do.UI {
 
 		protected virtual void preferences_btnClicked (object sender, System.EventArgs e)
 		{
+			mainNotebook.Page = 1;
 		}
-		
-		private void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
-		{			
-			CellRendererPixbuf rend;
-			
-			rend = cell as CellRendererPixbuf;
-			//IObject o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as IObject;
-			rend.Pixbuf = IconProvider.PixbufFromIconName ("firefox", 14);
-		}		
 	}
 }

@@ -61,8 +61,8 @@ BINARIES = \
 all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_DESKTOPAPPLICATIONS) $(BINARIES) 
 
 FILES =  \
-	gtk-gui/generated.cs \
 	gtk-gui/Do.UI.SettingsWindow.cs \
+	gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/ConsoleCrayon.cs \
 	src/Do.Core/Controller.cs \
@@ -76,6 +76,7 @@ FILES =  \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.UI/MainMenu.cs \
+	src/Do.UI/PluginNodeView.cs \
 	src/Do.UI/SettingsWindow.cs \
 	src/Do.Universe/AliasAction.cs \
 	src/Do.Universe/AliasItemSource.cs \
