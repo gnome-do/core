@@ -11,8 +11,8 @@
     <action-group name="Default">
       <action id="ManagePluginsAction">
         <property name="Type">Radio</property>
-        <property name="Label" translatable="yes">_Manage Plugins</property>
-        <property name="ShortLabel" translatable="yes">_Manage Plugins</property>
+        <property name="Label" translatable="yes">Manage Plugins</property>
+        <property name="ShortLabel" translatable="yes">Manage Plugins</property>
         <property name="StockId">gtk-execute</property>
         <property name="DrawAsRadio">False</property>
         <property name="Active">True</property>
@@ -20,10 +20,10 @@
         <property name="Group">group1</property>
         <signal name="Activated" handler="plugins_btnClicked" />
       </action>
-      <action id="GeneralPreferencesAction">
+      <action id="GeneralSettingsAction">
         <property name="Type">Radio</property>
-        <property name="Label" translatable="yes">General _Preferences</property>
-        <property name="ShortLabel" translatable="yes">General _Preferences</property>
+        <property name="Label" translatable="yes">General Settings</property>
+        <property name="ShortLabel" translatable="yes">General Settings</property>
         <property name="StockId">gtk-preferences</property>
         <property name="DrawAsRadio">False</property>
         <property name="Active">False</property>
@@ -34,14 +34,12 @@
     </action-group>
     <property name="MemberName" />
     <property name="WidthRequest">650</property>
-    <property name="HeightRequest">400</property>
-    <property name="Title" translatable="yes">Do Settings</property>
+    <property name="HeightRequest">550</property>
+    <property name="Title" translatable="yes">GNOME Do Preferences</property>
     <property name="Icon">stock:gtk-preferences Menu</property>
     <property name="WindowPosition">Center</property>
     <property name="Resizable">False</property>
     <property name="AllowGrow">False</property>
-    <property name="DefaultWidth">600</property>
-    <property name="DefaultHeight">550</property>
     <child>
       <widget class="Gtk.VBox" id="vbox3">
         <property name="MemberName" />
@@ -53,7 +51,7 @@
             <property name="ButtonStyle">Both</property>
             <property name="IconSize">Dnd</property>
             <node name="toolbar1" type="Menubar">
-              <node type="Toolitem" action="GeneralPreferencesAction" />
+              <node type="Toolitem" action="GeneralSettingsAction" />
               <node type="Toolitem" action="ManagePluginsAction" />
             </node>
           </widget>
@@ -71,7 +69,7 @@
             <property name="CurrentPage">0</property>
             <property name="ShowBorder">False</property>
             <property name="ShowTabs">False</property>
-            <property name="BorderWidth">6</property>
+            <property name="BorderWidth">9</property>
             <child>
               <widget class="Gtk.HPaned" id="hpaned2">
                 <property name="MemberName" />
@@ -231,10 +229,8 @@
             <child>
               <widget class="Gtk.Button" id="ok_btn">
                 <property name="MemberName" />
-                <property name="WidthRequest">80</property>
-                <property name="HeightRequest">32</property>
-                <property name="CanDefault">True</property>
-                <property name="HasDefault">True</property>
+                <property name="WidthRequest">84</property>
+                <property name="HeightRequest">34</property>
                 <property name="CanFocus">True</property>
                 <property name="Type">TextAndIcon</property>
                 <property name="Icon">stock:gtk-ok Menu</property>
@@ -243,23 +239,23 @@
                 <signal name="Clicked" handler="ok_btnClicked" />
               </widget>
               <packing>
-                <property name="X">563</property>
+                <property name="X">553</property>
               </packing>
             </child>
             <child>
               <widget class="Gtk.Button" id="help_btn">
                 <property name="MemberName" />
-                <property name="WidthRequest">80</property>
-                <property name="HeightRequest">32</property>
+                <property name="WidthRequest">84</property>
+                <property name="HeightRequest">34</property>
                 <property name="CanFocus">True</property>
                 <property name="Type">TextAndIcon</property>
-                <property name="Icon">stock:gtk-help Menu</property>
+                <property name="Icon">stock:gtk-help SmallToolbar</property>
                 <property name="Label" translatable="yes">Help</property>
                 <property name="UseUnderline">True</property>
                 <signal name="Clicked" handler="help_btnClicked" />
               </widget>
               <packing>
-                <property name="X">6</property>
+                <property name="X">8</property>
               </packing>
             </child>
           </widget>
