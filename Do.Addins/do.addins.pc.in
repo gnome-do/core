@@ -3,4 +3,4 @@ Description: Do.Addins
 Version: 0.1
 
 Requires: 
-Libs: -r:@prefix@/lib/@PACKAGE@/Do.Addins.dll
+Libs: -r:@libdir@/@PACKAGE@/Do.Addins.dll

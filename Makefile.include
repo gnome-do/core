@@ -29,9 +29,9 @@ DISTCLEANFILES = $(GENERATED_FILES) $(pc_files) $(BUILD_DIR)/*
 pkglib_SCRIPTS = $(ASSEMBLY)
 bin_SCRIPTS = $(BINARIES)
 
-linuxdesktopapplicationsdir = @prefix@/share/applications
+linuxdesktopapplicationsdir = @datadir@/applications
 linuxdesktopapplications_DATA = $(LINUX_DESKTOPAPPLICATIONS)
-programfilesdir = @prefix@/lib/@PACKAGE@
+programfilesdir = @libdir@/@PACKAGE@
 programfiles_DATA = $(PROGRAMFILES)
-linuxpkgconfigdir = @prefix@/lib/pkgconfig
+linuxpkgconfigdir = @libdir@/pkgconfig
 linuxpkgconfig_DATA = $(LINUX_PKGCONFIG)

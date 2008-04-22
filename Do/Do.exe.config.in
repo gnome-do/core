@@ -1,4 +1,4 @@
 <configuration>
 	<dllmap dll="libc" target="libc.so.6"/>
-	<dllmap dll="libdo" target="@prefix@/lib/@PACKAGE@/libdo.so"/>
+	<dllmap dll="libdo" target="@libdir@/@PACKAGE@/libdo.so"/>
 </configuration>
