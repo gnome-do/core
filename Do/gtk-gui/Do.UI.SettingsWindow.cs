@@ -15,7 +15,7 @@ namespace Do.UI {
         
         private Gtk.RadioAction ManagePluginsAction;
         
-        private Gtk.RadioAction GeneralPreferencesAction;
+        private Gtk.RadioAction GeneralSettingsAction;
         
         private Gtk.VBox vbox3;
         
@@ -62,32 +62,30 @@ namespace Do.UI {
             // Widget Do.UI.SettingsWindow
             Gtk.UIManager w1 = new Gtk.UIManager();
             Gtk.ActionGroup w2 = new Gtk.ActionGroup("Default");
-            this.ManagePluginsAction = new Gtk.RadioAction("ManagePluginsAction", Mono.Unix.Catalog.GetString("_Manage Plugins"), null, "gtk-execute", 0);
+            this.ManagePluginsAction = new Gtk.RadioAction("ManagePluginsAction", Mono.Unix.Catalog.GetString("Manage Plugins"), null, "gtk-execute", 0);
             this.ManagePluginsAction.Group = new GLib.SList(System.IntPtr.Zero);
-            this.ManagePluginsAction.ShortLabel = Mono.Unix.Catalog.GetString("_Manage Plugins");
+            this.ManagePluginsAction.ShortLabel = Mono.Unix.Catalog.GetString("Manage Plugins");
             w2.Add(this.ManagePluginsAction, null);
-            this.GeneralPreferencesAction = new Gtk.RadioAction("GeneralPreferencesAction", Mono.Unix.Catalog.GetString("General _Preferences"), null, "gtk-preferences", 0);
-            this.GeneralPreferencesAction.Group = this.ManagePluginsAction.Group;
-            this.GeneralPreferencesAction.ShortLabel = Mono.Unix.Catalog.GetString("General _Preferences");
-            w2.Add(this.GeneralPreferencesAction, null);
+            this.GeneralSettingsAction = new Gtk.RadioAction("GeneralSettingsAction", Mono.Unix.Catalog.GetString("General Settings"), null, "gtk-preferences", 0);
+            this.GeneralSettingsAction.Group = this.ManagePluginsAction.Group;
+            this.GeneralSettingsAction.ShortLabel = Mono.Unix.Catalog.GetString("General Settings");
+            w2.Add(this.GeneralSettingsAction, null);
             w1.InsertActionGroup(w2, 0);
             this.AddAccelGroup(w1.AccelGroup);
             this.WidthRequest = 650;
-            this.HeightRequest = 400;
+            this.HeightRequest = 550;
             this.Name = "Do.UI.SettingsWindow";
-            this.Title = Mono.Unix.Catalog.GetString("Do Settings");
+            this.Title = Mono.Unix.Catalog.GetString("GNOME Do Preferences");
             this.Icon = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Menu, 16);
             this.WindowPosition = ((Gtk.WindowPosition)(1));
             this.Resizable = false;
             this.AllowGrow = false;
-            this.DefaultWidth = 600;
-            this.DefaultHeight = 550;
             // Container child Do.UI.SettingsWindow.Gtk.Container+ContainerChild
             this.vbox3 = new Gtk.VBox();
             this.vbox3.Name = "vbox3";
             this.vbox3.Spacing = 6;
             // Container child vbox3.Gtk.Box+BoxChild
-            w1.AddUiFromString("<ui><toolbar name='toolbar1'><toolitem action='GeneralPreferencesAction'/><toolitem action='ManagePluginsAction'/></toolbar></ui>");
+            w1.AddUiFromString("<ui><toolbar name='toolbar1'><toolitem action='GeneralSettingsAction'/><toolitem action='ManagePluginsAction'/></toolbar></ui>");
             this.toolbar1 = ((Gtk.Toolbar)(w1.GetWidget("/toolbar1")));
             this.toolbar1.Name = "toolbar1";
             this.toolbar1.ShowArrow = false;
@@ -105,7 +103,7 @@ namespace Do.UI {
             this.mainNotebook.CurrentPage = 0;
             this.mainNotebook.ShowBorder = false;
             this.mainNotebook.ShowTabs = false;
-            this.mainNotebook.BorderWidth = ((uint)(6));
+            this.mainNotebook.BorderWidth = ((uint)(9));
             // Container child mainNotebook.Gtk.Notebook+NotebookChild
             this.hpaned2 = new Gtk.HPaned();
             this.hpaned2.CanFocus = true;
@@ -223,9 +221,8 @@ namespace Do.UI {
             this.fixed1.HasWindow = false;
             // Container child fixed1.Gtk.Fixed+FixedChild
             this.ok_btn = new Gtk.Button();
-            this.ok_btn.WidthRequest = 80;
-            this.ok_btn.HeightRequest = 32;
-            this.ok_btn.CanDefault = true;
+            this.ok_btn.WidthRequest = 84;
+            this.ok_btn.HeightRequest = 34;
             this.ok_btn.CanFocus = true;
             this.ok_btn.Name = "ok_btn";
             this.ok_btn.UseUnderline = true;
@@ -247,11 +244,11 @@ namespace Do.UI {
             this.ok_btn.Add(w18);
             this.fixed1.Add(this.ok_btn);
             Gtk.Fixed.FixedChild w26 = ((Gtk.Fixed.FixedChild)(this.fixed1[this.ok_btn]));
-            w26.X = 563;
+            w26.X = 553;
             // Container child fixed1.Gtk.Fixed+FixedChild
             this.help_btn = new Gtk.Button();
-            this.help_btn.WidthRequest = 80;
-            this.help_btn.HeightRequest = 32;
+            this.help_btn.WidthRequest = 84;
+            this.help_btn.HeightRequest = 34;
             this.help_btn.CanFocus = true;
             this.help_btn.Name = "help_btn";
             this.help_btn.UseUnderline = true;
@@ -262,7 +259,7 @@ namespace Do.UI {
             w28.Spacing = 2;
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w29 = new Gtk.Image();
-            w29.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-help", Gtk.IconSize.Menu, 16);
+            w29.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-help", Gtk.IconSize.SmallToolbar, 18);
             w28.Add(w29);
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w31 = new Gtk.Label();
@@ -273,7 +270,7 @@ namespace Do.UI {
             this.help_btn.Add(w27);
             this.fixed1.Add(this.help_btn);
             Gtk.Fixed.FixedChild w35 = ((Gtk.Fixed.FixedChild)(this.fixed1[this.help_btn]));
-            w35.X = 6;
+            w35.X = 8;
             this.vbox3.Add(this.fixed1);
             Gtk.Box.BoxChild w36 = ((Gtk.Box.BoxChild)(this.vbox3[this.fixed1]));
             w36.Position = 3;
@@ -284,10 +281,11 @@ namespace Do.UI {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.ok_btn.HasDefault = true;
+            this.DefaultWidth = 664;
+            this.DefaultHeight = 626;
             this.Show();
             this.ManagePluginsAction.Activated += new System.EventHandler(this.plugins_btnClicked);
-            this.GeneralPreferencesAction.Activated += new System.EventHandler(this.preferences_btnClicked);
+            this.GeneralSettingsAction.Activated += new System.EventHandler(this.preferences_btnClicked);
             this.ok_btn.Clicked += new System.EventHandler(this.ok_btnClicked);
             this.help_btn.Clicked += new System.EventHandler(this.help_btnClicked);
         }
