@@ -72,12 +72,16 @@ namespace Do.UI {
             w2.Add(this.GeneralPreferencesAction, null);
             w1.InsertActionGroup(w2, 0);
             this.AddAccelGroup(w1.AccelGroup);
+            this.WidthRequest = 650;
+            this.HeightRequest = 400;
             this.Name = "Do.UI.SettingsWindow";
             this.Title = Mono.Unix.Catalog.GetString("Do Settings");
             this.Icon = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Menu, 16);
             this.WindowPosition = ((Gtk.WindowPosition)(1));
+            this.Resizable = false;
+            this.AllowGrow = false;
             this.DefaultWidth = 600;
-            this.DefaultHeight = 350;
+            this.DefaultHeight = 550;
             // Container child Do.UI.SettingsWindow.Gtk.Container+ContainerChild
             this.vbox3 = new Gtk.VBox();
             this.vbox3.Name = "vbox3";
@@ -101,6 +105,7 @@ namespace Do.UI {
             this.mainNotebook.CurrentPage = 0;
             this.mainNotebook.ShowBorder = false;
             this.mainNotebook.ShowTabs = false;
+            this.mainNotebook.BorderWidth = ((uint)(6));
             // Container child mainNotebook.Gtk.Notebook+NotebookChild
             this.hpaned2 = new Gtk.HPaned();
             this.hpaned2.CanFocus = true;
@@ -219,7 +224,7 @@ namespace Do.UI {
             // Container child fixed1.Gtk.Fixed+FixedChild
             this.ok_btn = new Gtk.Button();
             this.ok_btn.WidthRequest = 80;
-            this.ok_btn.HeightRequest = 30;
+            this.ok_btn.HeightRequest = 32;
             this.ok_btn.CanDefault = true;
             this.ok_btn.CanFocus = true;
             this.ok_btn.Name = "ok_btn";
@@ -242,11 +247,11 @@ namespace Do.UI {
             this.ok_btn.Add(w18);
             this.fixed1.Add(this.ok_btn);
             Gtk.Fixed.FixedChild w26 = ((Gtk.Fixed.FixedChild)(this.fixed1[this.ok_btn]));
-            w26.X = 564;
+            w26.X = 563;
             // Container child fixed1.Gtk.Fixed+FixedChild
             this.help_btn = new Gtk.Button();
             this.help_btn.WidthRequest = 80;
-            this.help_btn.HeightRequest = 30;
+            this.help_btn.HeightRequest = 32;
             this.help_btn.CanFocus = true;
             this.help_btn.Name = "help_btn";
             this.help_btn.UseUnderline = true;
@@ -268,12 +273,13 @@ namespace Do.UI {
             this.help_btn.Add(w27);
             this.fixed1.Add(this.help_btn);
             Gtk.Fixed.FixedChild w35 = ((Gtk.Fixed.FixedChild)(this.fixed1[this.help_btn]));
-            w35.X = 5;
+            w35.X = 6;
             this.vbox3.Add(this.fixed1);
             Gtk.Box.BoxChild w36 = ((Gtk.Box.BoxChild)(this.vbox3[this.fixed1]));
             w36.Position = 3;
             w36.Expand = false;
             w36.Fill = false;
+            w36.Padding = ((uint)(4));
             this.Add(this.vbox3);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
