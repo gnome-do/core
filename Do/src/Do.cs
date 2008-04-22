@@ -59,12 +59,12 @@ namespace Do {
 			PluginManager.Initialize ();
 			UniverseManager.Initialize ();
 
-			// Previously, Controller's constructor created a Gtk.Window, and that
-			// window used Util.Appearance to load an icon, and Util.Appearance used
-			// Do.Controller in its constructor to subscribe to an event.  This lead
-			// to some strange behavior, so we new the Controller, /then/ Initialize
-			// it so that Do.Controller is non-null when Util.Appearance references
-			// it.
+			// Previously, Controller's constructor created a Gtk.Window, and
+			// that window used Util.Appearance to load an icon, and
+			// Util.Appearance used Do.Controller in its constructor to
+			// subscribe to an event.  This lead to some strange behavior, so
+			// we new the Controller, /then/ Initialize it so that
+			// Do.Controller is non-null when Util.Appearance references it.
 			Controller.Initialize ();
 			DBusRegistrar.RegisterController (Controller);
 			
@@ -94,8 +94,14 @@ namespace Do {
 		
 		public static SettingsWindow PreferencesWindow {
 			get {
-				return preferences_window ??
+				if (null == preferences_window) {
 					preferences_window = new SettingsWindow ();
+					preferences_window.Destroyed +=
+						delegate {
+							preferences_window = null;
+						};
+				}
+				return preferences_window;
 			}
 		}
 
