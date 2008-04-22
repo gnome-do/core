@@ -166,6 +166,7 @@ namespace Do.UI {
             this.description_label = new Gtk.Label();
             this.description_label.Name = "description_label";
             this.description_label.LabelProp = "";
+            this.description_label.Wrap = true;
             this.fixed2.Add(this.description_label);
             Gtk.Fixed.FixedChild w10 = ((Gtk.Fixed.FixedChild)(this.fixed2[this.description_label]));
             w10.X = 110;

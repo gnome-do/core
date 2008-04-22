@@ -73,6 +73,7 @@
   <GtkDesignInfo isWidgetLibrary="True" gtkVersion="2.12.0">
     <ExportedWidgets>
       <Widget>Do.UI.PluginView</Widget>
+      <Widget>Do.PluginNodeView</Widget>
     </ExportedWidgets>
   </GtkDesignInfo>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">
