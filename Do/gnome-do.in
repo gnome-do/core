@@ -8,7 +8,7 @@ if [ "x$SCRIPT_PATH" = "x@abs_srcdir@/bin/Debug" ] ||
     echo "*** Running uninstalled ***"
     GNOME_DO_EXE="@abs_srcdir@/bin/Debug/Do.exe"
 else
-    GNOME_DO_EXE="@libdir@/@PACKAGE@/Do.exe"
+    GNOME_DO_EXE="@expanded_libdir@/@PACKAGE@/Do.exe"
 fi
 
 # Send the dbus Summon signal right away for fastest response if

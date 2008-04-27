@@ -30,6 +30,11 @@ fi
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
 
+dnl Expansions
+SHAMROCK_EXPAND_LIBDIR
+SHAMROCK_EXPAND_BINDIR
+SHAMROCK_EXPAND_DATADIR
+
 
 PKG_CHECK_MODULES(LIBDO, glib-2.0 gdk-2.0 gdk-x11-2.0 gtk+-2.0)
 AC_SUBST(LIBDO_CFLAGS)
@@ -71,7 +76,6 @@ if test -z "$CONFIG_REQUESTED" ; then
 	AM_CONDITIONAL(ENABLE_DEBUG, true)
 fi
 
-
 AC_CONFIG_FILES([
 libdo/Makefile
 Do.Addins/Makefile
@@ -83,6 +87,7 @@ Do/gnome-do
 Do/Do.exe.config
 Do.Addins/do.addins.pc
 Do.DBus/do.dbus.pc
+m4/Makefile
 po/Makefile.in
 ])
 
