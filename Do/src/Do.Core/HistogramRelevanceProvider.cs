@@ -34,7 +34,7 @@ namespace Do.Core {
 	/// </summary>
 	class HistogramRelevanceProvider : RelevanceProvider {
 		
-		uint max_hits;
+		uint max_item_hits, max_action_hits;
 		DateTime oldest_hit;
 		Dictionary<string, RelevanceRecord> hits;
 
@@ -43,14 +43,14 @@ namespace Do.Core {
 
 		public HistogramRelevanceProvider ()
 		{
-			max_hits = 1;
+			max_item_hits = max_action_hits = 1;
 			oldest_hit = DateTime.Now;
 			hits = new Dictionary<string, RelevanceRecord> ();
 
 			Deserialize ();
 			
 			foreach (RelevanceRecord rec in hits.Values) {
-				max_hits = Math.Max (max_hits, rec.Hits);
+				UpdateMaxHits (rec);
 				oldest_hit = oldest_hit.CompareTo (rec.LastHit) < 0 ?
 					oldest_hit : rec.LastHit;
 			}
@@ -59,13 +59,21 @@ namespace Do.Core {
 			serializeTimer = new Timer (OnSerializeTimer);
 			serializeTimer.Change (SerializeInterval*1000, SerializeInterval*1000);
 		}
+		
+		void UpdateMaxHits (RelevanceRecord rec)
+		{
+			if (rec.IsAction)
+				max_action_hits = Math.Max (max_action_hits, rec.Hits);
+			else
+				max_item_hits = Math.Max (max_item_hits, rec.Hits);
+		}
 
 		/// <value>
 		/// Path of file where relevance data is serialized.
 		/// </value>
 		protected string RelevanceFile {
 			get {
-				return Paths.Combine (Paths.ApplicationData, "relevance4");
+				return Paths.Combine (Paths.ApplicationData, "relevance5");
 			}
 		}
 
@@ -120,14 +128,14 @@ namespace Do.Core {
 			RelevanceRecord rec;
 			
 			if (!hits.TryGetValue (o.UID, out rec)) {
-				rec = new RelevanceRecord ();
+				rec = new RelevanceRecord (o);
 				hits [o.UID] = rec;
 			}
 			rec.Hits++;
 			rec.LastHit = DateTime.Now;
 			if (match.Length > 0)
-				rec.AddFirstChar (match [0]);	
-			max_hits = Math.Max (max_hits, rec.Hits);
+				rec.AddFirstChar (match [0]);
+			UpdateMaxHits (rec);
 		}
 
 		public override void DecreaseRelevance (DoObject o,
@@ -164,7 +172,8 @@ namespace Do.Core {
 				// Relevance is non-zero only if the record contains first char
 				// relevance for the item.
 				if (match == "" || rec.HasFirstChar (match [0]))
-					relevance = (float) rec.Hits / (float) max_hits;
+					relevance = (float) rec.Hits / 
+						(float) (rec.IsAction ? max_action_hits : max_item_hits);
 				else
 					relevance = 0f;
 				
@@ -209,12 +218,14 @@ namespace Do.Core {
 		public DateTime LastHit;
 		public uint Hits;
 		public string FirstChars;
+		public bool IsAction;
 		
-		public RelevanceRecord ()
+		public RelevanceRecord (IObject o)
 		{
 			LastHit = DateTime.Now;
 			Hits = 0;
 			FirstChars = "";
+			IsAction = o is IAction;
 		}
 		
 		/// <summary>
