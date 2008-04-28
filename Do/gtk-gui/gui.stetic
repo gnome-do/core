@@ -153,6 +153,7 @@
                       <widget class="Gtk.Label" id="description_label">
                         <property name="MemberName" />
                         <property name="LabelProp" translatable="yes" />
+                        <property name="Wrap">True</property>
                       </widget>
                       <packing>
                         <property name="X">110</property>
