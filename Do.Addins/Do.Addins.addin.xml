@@ -55,13 +55,4 @@
 	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.RunInTerminalAction" />
 	</Extension>
-	<Extension path = "/Do/Action">
-		<Action type="Do.Files.MoveToAction" />
-	</Extension>
-	<Extension path = "/Do/Action">
-		<Action type="Do.Files.CopyToAction" />
-	</Extension>
-	<Extension path = "/Do/Action">
-		<Action type="Do.Files.MoveToTrashAction" />
-	</Extension>
 </Addin>
