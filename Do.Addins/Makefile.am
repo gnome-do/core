@@ -65,7 +65,6 @@ FILES =  \
 	src/Do.Universe/ContactItem.cs \
 	src/Do.Universe/DefineWordAction.cs \
 	src/Do.Universe/FileItem.cs \
-	src/Do.Universe/FileItemSource.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Universe/IAction.cs \
 	src/Do.Universe/IItem.cs \
@@ -77,7 +76,6 @@ FILES =  \
 	src/Do.Universe/OpenTerminalHereAction.cs \
 	src/Do.Universe/OpenURLAction.cs \
 	src/Do.Universe/OpenWithAction.cs \
-	src/Do.Universe/RecentFileItemSource.cs \
 	src/Do.Universe/RevealAction.cs \
 	src/Do.Universe/RunAction.cs \
 	src/Do.Universe/RunInTerminalAction.cs \
