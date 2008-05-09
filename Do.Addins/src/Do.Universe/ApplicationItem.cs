@@ -40,37 +40,26 @@ namespace Do.Universe {
 		/// </param>
 		public ApplicationItem (string desktopFile)
 		{
-			IntPtr desktopFileP;
-			
-			desktopFileP = gnome_desktop_item_new_from_file (
-				desktopFile, 0, IntPtr.Zero);			
+			item = DesktopItem.NewFromFile (desktopFile,
+				DesktopItemLoadFlags.OnlyIfExists);
 
-			if (desktopFileP == IntPtr.Zero)
-				throw new Exception ("Failed to load desktop file "
-					+ desktopFile);
-
-			item = new DesktopItem (desktopFileP);
-
-			// We may need to call this depending on how DesktopItem works.
-			gnome_desktop_item_unref (desktopFileP);
+			if (null == item)
+				throw new Exception (desktopFile + " not found.");
 		}
 		
-		public string Name
-		{
+		public string Name {
 			get {
 				return item.GetLocalestring ("Name");
 			}
 		}
 
-		public string Description
-		{
+		public string Description {
 			get {
 				return item.GetLocalestring ("Comment");
 			}
 		}
 		
-		public string Icon
-		{
+		public string Icon {
 			get {
 				return item.GetString ("Icon");
 			}
@@ -82,8 +71,7 @@ namespace Do.Universe {
 			}
 		}
 
-		public bool Hidden
-		{
+		public bool Hidden {
 			get {
 				return item.GetBoolean ("NoDisplay");
 			}
@@ -120,11 +108,5 @@ namespace Do.Universe {
 			arr = new List<T> (es).ToArray ();
 			return new GLib.List (arr, typeof (T), false, true);
 		}
-		
-		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern IntPtr gnome_desktop_item_new_from_file (string file, int flags, IntPtr error);
-
-		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern void gnome_desktop_item_unref (IntPtr item);
 	}
 }
