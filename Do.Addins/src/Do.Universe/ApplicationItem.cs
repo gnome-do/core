@@ -41,7 +41,7 @@ namespace Do.Universe {
 		public ApplicationItem (string desktopFile)
 		{
 			item = DesktopItem.NewFromFile (desktopFile,
-				DesktopItemLoadFlags.OnlyIfExists);
+				DesktopItemLoadFlags.NoTranslations);
 
 			if (null == item)
 				throw new Exception (desktopFile + " not found.");
