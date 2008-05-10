@@ -26,12 +26,9 @@ using Do.Addins;
 using Gdk;
 using Gtk;
 
-namespace Do.UI
-{
+namespace Do.UI {
 	
-	
-	public class ClassicWindow : Gtk.Window, IDoWindow
-	{
+	public class ClassicWindow : Gtk.Window, IDoWindow {
 		
 		//-------------------Class Members------------------
 		GlossyRoundedFrame frame;
@@ -305,6 +302,8 @@ namespace Do.UI
 		
 		public void Summon ()
 		{
+			frame.Radius = Screen.IsComposited ? IconBoxRadius : 0;
+
 			PositionWindow.GetMonitor ();
 			Reposition ();
 			Show ();
