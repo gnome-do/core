@@ -71,8 +71,9 @@ namespace Do.Core {
 		}
 		
 		/// <summary>
-		/// Installs plugins that are located in the <see cref="Paths.PluginsInstall"/> directory.
-		/// This will build addins (mpack files) and install them.
+        /// Installs plugins that are located in the <see
+        /// cref="Paths.PluginsInstall"/> directory.  This will build addins
+        /// (mpack files) and install them.
 		/// </summary>
 		/// <param name="setup">
 		/// A <see cref="SetupService"/>
@@ -85,8 +86,7 @@ namespace Do.Core {
 			if (!Directory.Exists (Paths.PluginInstall)) return;
 			
 			files = Directory.GetFiles (Paths.PluginInstall);
-			if (files.Length == 0)
-				return;
+			if (files.Length == 0) return;
 			
 			Log.Info ("Installing local plugins...");
 			
@@ -95,8 +95,9 @@ namespace Do.Core {
 				
 				string path = Path.Combine (Paths.PluginInstall, file);
 				Log.Info ("Creating mpack for {0}...", path);
-				setup.BuildPackage (new ConsoleProgressStatus (false), Paths.PluginInstall, 
-				                    new string [] { path });
+				setup.BuildPackage (new ConsoleProgressStatus (false),
+                    Paths.PluginInstall, 
+                    new string [] { path });
 			}
 			
 			files = Directory.GetFiles (Paths.PluginInstall);
@@ -105,7 +106,8 @@ namespace Do.Core {
 				
 				string path = Path.Combine (Paths.PluginInstall, file);
 				Log.Info ("Installing local plugin {0}...", path);
-				setup.Install (new ConsoleProgressStatus (false), new string [] { path });
+				setup.Install (new ConsoleProgressStatus (false),
+                    new string [] { path });
 			}
 			
 			// Delete the dlls that have been build as addins and installed.
