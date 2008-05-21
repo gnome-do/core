@@ -90,13 +90,11 @@ namespace Do.Universe {
 		/// </param>
 		private void LoadDesktopFiles (string dir)
 		{
-			ApplicationItem app;
-
 			if (!Directory.Exists (dir)) return;
-			foreach (string filename in Directory.GetFiles (dir)) {
-				if (!filename.EndsWith (".desktop")) continue;
+			foreach (string file in Directory.GetFiles (dir, "*.desktop")) {
+                ApplicationItem app;
 				try {
-					app = new ApplicationItem (filename);
+					app = new ApplicationItem (file);
 				} catch {
 					continue;
 				}
