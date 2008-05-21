@@ -80,39 +80,30 @@ namespace Do.Core {
 		/// </param>
 		public void InstallLocalPlugins (SetupService setup)
 		{
-			string [] files;
-
 			// Load local items into repo
 			if (!Directory.Exists (Paths.PluginInstall)) return;
-			
-			files = Directory.GetFiles (Paths.PluginInstall);
-			if (files.Length == 0) return;
-			
 			Log.Info ("Installing local plugins...");
 			
-			foreach (string file in files) {
-				if (!file.EndsWith (".dll")) continue;
-				
+            // Create mpack (addin packages) out of dlls. Delete each dll
+            // when finished creating package.
+			foreach (string file in 
+                Directory.GetFiles (Paths.PluginInstall, "*.dll")) {
 				string path = Path.Combine (Paths.PluginInstall, file);
-				Log.Info ("Creating mpack for {0}...", path);
 				setup.BuildPackage (new ConsoleProgressStatus (false),
-                    Paths.PluginInstall, 
-                    new string [] { path });
+                    Paths.PluginInstall, new string [] { path });
+				File.Delete (path);
 			}
-			
-			files = Directory.GetFiles (Paths.PluginInstall);
-			foreach (string file in files) {
-				if (!file.EndsWith (".mpack")) continue;
-				
+
+            // Install each mpack file, deleting each file when finished
+            // installing it.
+			foreach (string file in 
+                Directory.GetFiles (Paths.PluginInstall, "*.mpack")) {
 				string path = Path.Combine (Paths.PluginInstall, file);
-				Log.Info ("Installing local plugin {0}...", path);
+				//Log.Info ("Installing local plugin {0}...", path);
 				setup.Install (new ConsoleProgressStatus (false),
                     new string [] { path });
+                File.Delete (path);
 			}
-			
-			// Delete the dlls that have been build as addins and installed.
-			Directory.Delete (Paths.PluginInstall, true);
-			Directory.CreateDirectory (Paths.PluginInstall);
 		}
 
 		/// <summary>

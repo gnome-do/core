@@ -100,7 +100,7 @@ namespace Do.Universe {
 				} catch {
 					continue;
 				}
-				if (show_hidden || !app.Hidden)
+				if (!app.Hidden || show_hidden)
 					apps.Add (app);
 			}
 		}
