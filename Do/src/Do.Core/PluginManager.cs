@@ -82,7 +82,6 @@ namespace Do.Core {
 		{
 			// Load local items into repo
 			if (!Directory.Exists (Paths.PluginInstall)) return;
-			Log.Info ("Installing local plugins...");
 			
             // Create mpack (addin packages) out of dlls. Delete each dll
             // when finished creating package.
