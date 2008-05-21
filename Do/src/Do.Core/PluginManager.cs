@@ -78,32 +78,32 @@ namespace Do.Core {
 		/// <param name="setup">
 		/// A <see cref="SetupService"/>
 		/// </param>
-		public void InstallLocalPlugins (SetupService setup)
-		{
-			// Load local items into repo
-			if (!Directory.Exists (Paths.PluginInstall)) return;
-			
+        public void InstallLocalPlugins (SetupService setup)
+        {
+            // Load local items into repo
+            if (!Directory.Exists (Paths.PluginInstall)) return;
+
             // Create mpack (addin packages) out of dlls. Delete each dll
             // when finished creating package.
-			foreach (string file in 
-                Directory.GetFiles (Paths.PluginInstall, "*.dll")) {
-				string path = Path.Combine (Paths.PluginInstall, file);
-				setup.BuildPackage (new ConsoleProgressStatus (false),
-                    Paths.PluginInstall, new string [] { path });
-				File.Delete (path);
-			}
+            foreach (string file in 
+                    Directory.GetFiles (Paths.PluginInstall, "*.dll")) {
+                string path = Path.Combine (Paths.PluginInstall, file);
+                setup.BuildPackage (new ConsoleProgressStatus (false),
+                        Paths.PluginInstall, new string [] { path });
+                File.Delete (path);
+            }
 
             // Install each mpack file, deleting each file when finished
             // installing it.
-			foreach (string file in 
-                Directory.GetFiles (Paths.PluginInstall, "*.mpack")) {
-				string path = Path.Combine (Paths.PluginInstall, file);
-				//Log.Info ("Installing local plugin {0}...", path);
-				setup.Install (new ConsoleProgressStatus (false),
-                    new string [] { path });
+            foreach (string file in 
+                    Directory.GetFiles (Paths.PluginInstall, "*.mpack")) {
+                string path = Path.Combine (Paths.PluginInstall, file);
+                //Log.Info ("Installing local plugin {0}...", path);
+                setup.Install (new ConsoleProgressStatus (false),
+                        new string [] { path });
                 File.Delete (path);
-			}
-		}
+            }
+        }
 
 		/// <summary>
 		/// Called when a node is added or removed
