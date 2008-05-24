@@ -27,6 +27,8 @@ namespace Do.Universe {
 	public class ApplicationItemSource : IItemSource {
 
 		private List<IItem> apps;
+
+		bool show_hidden = false;
 		
 		/// <summary>
 		/// Locations to search for .desktop files.
@@ -53,7 +55,6 @@ namespace Do.Universe {
 		public ApplicationItemSource ()
 		{
 			apps = new List<IItem> ();
-			UpdateItems ();
 		}
 
 		public Type [] SupportedItemTypes {
@@ -89,17 +90,16 @@ namespace Do.Universe {
 		/// </param>
 		private void LoadDesktopFiles (string dir)
 		{
-			ApplicationItem app;
-
 			if (!Directory.Exists (dir)) return;
-			foreach (string filename in Directory.GetFiles (dir)) {
-				if (!filename.EndsWith (".desktop")) continue;
+			foreach (string file in Directory.GetFiles (dir, "*.desktop")) {
+                ApplicationItem app;
 				try {
-					app = new ApplicationItem (filename);
+					app = new ApplicationItem (file);
 				} catch {
 					continue;
 				}
-				apps.Add (app);
+				if (!app.Hidden || show_hidden)
+					apps.Add (app);
 			}
 		}
 

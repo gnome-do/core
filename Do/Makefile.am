@@ -61,26 +61,38 @@ BINARIES = \
 all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_DESKTOPAPPLICATIONS) $(BINARIES) 
 
 FILES =  \
+	gtk-gui/Do.UI.PreferencesWindow.cs \
+	gtk-gui/Do.UI.SettingsWindow.cs \
 	gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
+	src/ConsoleCrayon.cs \
 	src/Do.Core/Controller.cs \
 	src/Do.Core/DoAction.cs \
 	src/Do.Core/DoItem.cs \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
+	src/Do.Core/PluginManager.cs \
 	src/Do.Core/RelevanceProvider.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.UI/MainMenu.cs \
+	src/Do.UI/PluginNodeView.cs \
+	src/Do.UI/PreferencesTreeNode.cs \
+	src/Do.UI/PreferencesWindow.cs \
+	src/Do.UI/SettingsWindow.cs \
+	src/Do.Universe/AliasAction.cs \
+	src/Do.Universe/AliasItemSource.cs \
+	src/Do.Universe/DeleteAliasAction.cs \
 	src/Do.Universe/DoTextItem.cs \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/InternalItemSource.cs \
 	src/Do.Universe/ItemSourceItemSource.cs \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
+	src/Do.Universe/ShelfActions.cs \
+	src/Do.Universe/ShelfItemSource.cs \
 	src/Log.cs \
-	src/ConsoleCrayon.cs \
 	src/Preferences.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 
@@ -90,7 +102,7 @@ DATA_FILES = \
 
 RESOURCES = \
 	gtk-gui/gui.stetic \
-	Resources/settings-triangle.png 
+	Resources/Do.addin.xml
 
 EXTRAS = \
 	gnome-do.in \
@@ -100,12 +112,14 @@ REFERENCES =  \
 	../Do.Addins/bin/Debug/Do.Addins.dll \
 	../Do.DBus/bin/Debug/Do.DBus.dll \
 	Mono.Cairo \
-	Mono.GetOptions \
 	Mono.Posix \
 	-pkg:gconf-sharp-2.0 \
 	-pkg:glade-sharp-2.0 \
 	-pkg:glib-sharp-2.0 \
 	-pkg:gtk-sharp-2.0 \
+	-pkg:mono-addins \
+	-pkg:mono-addins-gui \
+	-pkg:mono-addins-setup \
 	System
 
 DLL_REFERENCES = 

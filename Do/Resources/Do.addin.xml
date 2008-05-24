@@ -1,0 +1,45 @@
+<Addin isroot="true" namespace="Do">
+ 
+	<Runtime>
+		<Import assembly="Do.exe"/>
+	</Runtime>
+	
+	<Dependencies>
+		<Addin id="Core" version="1.0" />
+	</Dependencies>
+	
+	<!-- Extensions included in this assembly -->
+	<!-- Sources -->
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.ItemSourceItemSource" />
+	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.InternalItemSource" />
+	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.AliasItemSource" />
+	</Extension>
+	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.ShelfItemSource" />
+	</Extension>
+
+	<!-- Actions -->
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.AliasAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.DeleteAliasAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.ShelfAddAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.ShelfRemoveAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.ShelfExploreAction" />
+	</Extension>
+	<Extension path = "/Do/Action">
+		<Action type="Do.Universe.NewShelfAction" />
+	</Extension>
+</Addin>

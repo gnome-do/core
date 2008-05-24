@@ -1,8 +1,7 @@
 /* UniverseManager.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
+ * COPYRIGHT file distributed with this source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,17 +20,35 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
 
 using Do;
 using Do.Addins;
 using Do.Universe;
 
-namespace Do.Core
-{
-	public class UniverseManager
-	{
-	
+namespace Do.Core {
+
+	public class UniverseManager {
+		
+		/// <summary>
+		/// Class used to lookup objects in universe by UID string.
+		/// </summary>
+		private class UIDObject : DoObject {
+			
+			string uid;
+			
+			public UIDObject (string uid) :
+				base (new EmptyItem ())
+			{
+				this.uid = uid;
+			}
+			
+			public override string UID {
+				get { return uid; }
+			}
+		}
+
 		/// <summary>
 		/// How long between update events (seconds).
 		/// </summary>
@@ -40,253 +57,185 @@ namespace Do.Core
 		/// <summary>
 		/// Maximum amount of time to spend updating (millseconds).
 		/// </summary>
-		const int MaxUpdateTime = 125;
+		const int MaxUpdateTime = 250;
 
 		const int MaxSearchResults = 1000;
 
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<IObject, IObject> universe;
 
-		/// <summary>
-		/// Contains types we've seen while loading plugins.
-		/// </summary>
-		Dictionary<Type, Assembly> loadedTypes;
-
-		List<DoItemSource> doItemSources;
-		List<DoAction> doActions;
-
 		// Keep track of next data structures to update.
-		int itemSourceCursor;
-		int firstResultsCursor;
+		int sources_i;
+		int results_i;
 
 		public UniverseManager()
 		{
 			universe = new Dictionary<IObject, IObject> ();
-			doItemSources = new List<DoItemSource> ();
-			doActions = new List<DoAction> ();
 			firstResults = new Dictionary<string, List<IObject>> ();
-			loadedTypes = new Dictionary<Type, Assembly> ();
-			itemSourceCursor = firstResultsCursor = 0;
+			sources_i = results_i = 0;
 		}
 
 		internal void Initialize ()
 		{
-			LoadBuiltins ();
-			LoadPlugins ();
 			BuildUniverse ();
 			BuildFirstResults ();
 
 			GLib.Timeout.Add (UpdateInterval * 1000,
 				new GLib.TimeoutHandler (OnTimeoutUpdate));
 		}
+		
+		internal void Reload ()
+		{
+			BuildUniverse ();
+			BuildFirstResults ();
+		}
+		
+		internal void AddItems (IEnumerable<IItem> items)
+		{
+			foreach (IItem item in items) {
+				if (item is DoItem)
+					universe [item] = item;
+				else
+					universe [item] = new DoItem (item);
+			}
+			BuildFirstResults ();
+		}
+
+		public string UIDForObject (IObject o)
+		{
+			if (o is DoObject)
+				return (o as DoObject).UID;
+			else
+				return new DoObject (o).UID;
+		}
+
+		public void TryGetObjectForUID (string uid, out IObject o)
+		{
+			IObject lookup;
+			
+			o = null;
+			lookup = new UIDObject (uid);
+			if (universe.ContainsKey (lookup))
+				o = (universe [lookup] as DoObject).Inner;
+		}
 
 		private bool OnTimeoutUpdate ()
 		{
 			if (!Do.Controller.IsSummoned) {
 				Gtk.Application.Invoke (delegate {
-					Update ();
+					UpdateItemSources ();
+					UpdateFirstResults ();
 				});
 			}
 			return true;
 		}
 
-		private void Update ()
+		private void UpdateItemSources ()
 		{
-			DateTime then;
 			int t_update;
-			
-			// Keep track of the total time (in ms) we have spend updating.
-			// We spend half of MaxUpdateTime updating item sources, then
-			// another half of MaxUpdateTime updating first results lists.
+			IEnumerator sourceE;
+		
 			t_update = 0;
+			sourceE = Do.PluginManager.ItemSources.GetEnumerator ();	
+			// Advance enum to remembered position.
+			for (int i = 0; i < sources_i; ++i)
+				sourceE.MoveNext ();
+
+			// Keep track of the total time (in ms) we have spend updating.
+			// We spend half of MaxUpdateTime updating item sources.
 			while (t_update < MaxUpdateTime / 2) {
-				DoItemSource itemSource;
+				DateTime then;
+				DoItemSource source;
 				ICollection<IItem> oldItems;
 				Dictionary<IObject, DoItem> newItems;
 
+				if (sourceE.MoveNext ()) {
+					source = sourceE.Current as DoItemSource;
+					sources_i = (sources_i + 1) %
+						Do.PluginManager.ItemSources.Count;
+				} else {
+					sourceE.Reset ();
+					sources_i = 0;
+					continue;
+				}
+
 				then = DateTime.Now;
-				itemSourceCursor = (itemSourceCursor + 1) % doItemSources.Count;
-				itemSource = doItemSources[itemSourceCursor];
 				newItems = new Dictionary<IObject, DoItem> ();
 				// Remember old items.
-				oldItems = itemSource.Items;	
+				oldItems = source.Items;	
 				// Update the item source.
-				itemSource.UpdateItems ();
+				source.UpdateItems ();
 				// Create a map of the new items.
-				foreach (DoItem newItem in itemSource.Items) {
-					newItems[newItem] = newItem;
+				foreach (DoItem newItem in source.Items) {
+					newItems [newItem] = newItem;
 				}
-				// Update the universe by either updating items, adding new items,
-				// or removing items.
-				foreach (DoItem newItem in itemSource.Items) {
-					if (universe.ContainsKey (newItem)) {
-						// We're updating an item. This updates the item across all
-						// first results lists.
-						(universe[newItem] as DoItem).Inner = newItem.Inner;
+				// Update the universe by either updating items, adding new
+				// items, or removing items.
+				foreach (DoItem newItem in source.Items) {
+					if (universe.ContainsKey (newItem) &&
+					    universe [newItem] is DoItem) {
+						// We're updating an item. This updates the item across
+						// all first results lists.
+						(universe [newItem] as DoItem).Inner = newItem.Inner;
 					} else {
-						// We're adding a new item. It might take a few minutes to show
-						// up in all results lists.
-						universe[newItem] = newItem;
+						// We're adding a new item. It might take a few minutes
+						// to show up in all results lists.
+						universe [newItem] = newItem;
 					}
 				}
 				// See if there are any old items that didn't make it into the
-				// set of new items. These items need to be removed from the universe.
+				// set of new items. These items need to be removed from the
+				// universe.
 				foreach (DoItem oldItem in oldItems) {
 					if (!newItems.ContainsKey (oldItem) &&
 							universe.ContainsKey (oldItem)) {
 						universe.Remove (oldItem);
 					}
 				}
-				Log.Info ("Updated \"{0}\" Item Source.", itemSource.Name);
+				Log.Info ("Updated \"{0}\" Item Source.", source.Name);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
+		}
 
-			// Updating a first results list takes about 50ms at most, so we can afford
-			// to update a couple of them.
+		private void UpdateFirstResults ()
+		{
+			int t_update;
+
+			// Updating a first results list takes about 50ms at most, so we
+			// can afford to update a couple of them.
 			t_update = 0;
 			while (t_update < MaxUpdateTime / 2) {
-				string firstResultKey = null;
-				int currentFirstResultsList = 0;
+				string key = "";
+				DateTime then = DateTime.Now;
 
-				then = DateTime.Now;
-				firstResultsCursor = (firstResultsCursor + 1) % firstResults.Count;
-				// Now pick a first results list to update.
-				foreach (KeyValuePair<string, List<IObject>> keyval in firstResults) {
-					if (currentFirstResultsList == firstResultsCursor) {
-						firstResultKey = keyval.Key;
-						break;
-					}
-					currentFirstResultsList++;
+				// Key key for results list #results_i.
+				int i = 0;
+				foreach (string k in firstResults.Keys) {
+					key = k;
+					if (i == results_i) break;
+					i++;
 				}
-				if (firstResults.ContainsKey (firstResultKey)) {
-					firstResults.Remove (firstResultKey);
+				results_i = (results_i + 1) % firstResults.Count;
+				if (firstResults.ContainsKey (key)) {
+					firstResults.Remove (key);
 				}
-				firstResults[firstResultKey] = SortAndNarrowResults (universe.Values, firstResultKey, null, true);
-				Log.Info ("Updated first results for '{0}'.", firstResultKey);
+				firstResults [key] =
+					SortAndNarrowResults (universe.Values, key, null);
+				Log.Info ("Updated first results for '{0}'.", key);
 				t_update += (DateTime.Now - then).Milliseconds;
-			}
-		}
-
-		internal ICollection<DoItemSource> ItemSources
-		{
-			get { return doItemSources.AsReadOnly (); }
-		}
-
-		protected void LoadBuiltins ()
-		{
-			// Load from Do.Addins asembly.
-			LoadAssembly (typeof (IItem).Assembly);
-			// Load from main application assembly.
-			LoadAssembly (typeof (DoItem).Assembly);
-		}
-
-		private IEnumerable<string> PluginsDirs
-		{
-			get {
-				List<string> dirs;
-
-				dirs = new List<string>();
-				dirs.Add (Paths.UserPlugins);
-				dirs.AddRange (Paths.SystemPlugins);
-				return dirs;
-			}
-		}
-
-		protected void LoadPlugins ()
-		{
-			foreach (string plugin_dir in PluginsDirs) {
-				Log.Info ("Searching for plugins in directory {0}", plugin_dir);
-				string[] files;
-
-				files = null;
-				try {
-					files = System.IO.Directory.GetFiles (plugin_dir);
-				} catch (Exception e) {
-					Log.Warn ("Could not read plugins directory {0}: {1}", plugin_dir, e.Message);
-					continue;
-				}
-
-				foreach (string file in files) {
-					Assembly plugin;
-
-					if (!file.EndsWith (".dll")) continue;
-					try {
-						plugin = Assembly.LoadFile (file);
-						LoadAssembly (plugin);
-					} catch (Exception e) {
-						Log.Error ("Encountered and error while trying to load plugin {0}: {1}",
-							file, e.Message);
-						continue;
-					}
-				}
-			}
-		}
-
-		private void LoadAssembly (Assembly plugin)
-		{
-			if (plugin == null) return;
-
-			foreach (Type type in plugin.GetTypes ()) {			
-				if (type.IsAbstract) continue;
-				if (type == typeof (VoidAction)) continue;
-				if (type == typeof (DoItem)) continue;
-				if (type == typeof (DoAction)) continue;
-				if (type == typeof (DoItemSource)) continue;
-				if (loadedTypes.ContainsKey (type)) {
-					Log.Warn ("Duplicate plugin type detected; {0} may be a duplicate plugin.",
-						plugin.Location);
-					break;
-				}
-
-				loadedTypes[type] = plugin;
-				foreach (Type iface in type.GetInterfaces ()) {
-					if (iface == typeof (IItemSource)) {
-						IItemSource source = null;
-
-						try {
-							source = System.Activator.CreateInstance (type) as IItemSource;
-						} catch (Exception e) {
-							source = null;
-							Log.Error ("Failed to load item source from {0}: {1}",
-								plugin.Location, e.Message);
-						}
-						if (source != null) {
-							doItemSources.Add (new DoItemSource (source));
-							Log.Info ("Successfully loaded \"{0}\" item source.", source.Name);
-						}
-					}
-					if (iface == typeof (IAction)) {
-						IAction action = null;
-
-						try {
-							action = System.Activator.CreateInstance (type) as IAction;
-						} catch (Exception e) {
-							action = null;
-							Log.Error ("Failed to load action from {0}: {1}",
-								plugin.Location, e.Message);
-						}
-						if (action != null) {
-							doActions.Add (new DoAction (action));
-							Log.Info ("Successfully loaded \"{0}\" action.", action.Name);
-						}
-					}
-				}
 			}
 		}
 
 		protected List<IObject>
-		SortResults (IEnumerable<IObject> broadResults, string query, IObject other, bool strict)
+		SortResults (IEnumerable<IObject> broadResults, string query, IObject other)
 		{
 			List<IObject> results;
+			float epsilon = 0.00001f;
 		 
 			results	= new List<IObject> ();
 			foreach (DoObject obj in broadResults) {
-				if (strict && query.Length > 0 &&
-					!obj.CanBeFirstResultForKeypress (query[0]))
-					continue;
-
 				obj.UpdateRelevance (query, other as DoObject);
-				if (obj.Relevance > 0) {
+				if (Math.Abs (obj.Relevance) > epsilon) {
 					results.Add (obj);
 				}
 			}
@@ -295,11 +244,11 @@ namespace Do.Core
 		}
 
 		protected List<IObject>
-		SortAndNarrowResults (IEnumerable<IObject> broadResults, string query, IObject other, bool strict)
+		SortAndNarrowResults (IEnumerable<IObject> broadResults, string query, IObject other)
 		{
 			List<IObject> results;
 
-			results = SortResults (broadResults, query, other, strict);
+			results = SortResults (broadResults, query, other);
 			// Shorten the list if neccessary.
 			if (results.Count > MaxSearchResults)
 				results = results.GetRange (0, MaxSearchResults);
@@ -308,23 +257,26 @@ namespace Do.Core
 
 		private void BuildFirstResults ()
 		{
+			firstResults.Clear ();
 			// For each starting character, add every matching object from the universe to
 			// the firstResults list corresponding to that character.
-			for (char keypress = 'a'; keypress <= 'z'; keypress++) {
-				firstResults[keypress.ToString ()] = SortAndNarrowResults (
-					universe.Values, keypress.ToString (), null, true);
+			for (char key = 'a'; key <= 'z'; key++) {
+				firstResults [key.ToString ()] =
+					SortAndNarrowResults (universe.Values, key.ToString (), null);
 			}
 		}
 
 		private void BuildUniverse ()
 		{
+			universe.Clear ();
+			
 			// Hash actions.
-			foreach (DoAction action in doActions) {
-				universe[action] = action;
+			foreach (DoAction action in Do.PluginManager.Actions) {
+				universe [action] = action;
 			}
 
 			// Hash items.
-			foreach (DoItemSource source in doItemSources) {
+			foreach (DoItemSource source in Do.PluginManager.ItemSources) {
 				ICollection<IItem> items;
 
 				items = source.Items;
@@ -333,7 +285,7 @@ namespace Do.Core
 					items = source.Items;
 				}
 				foreach (DoItem item in items) {
-					universe[item] = item;
+					universe [item] = item;
 				}
 			}
 			Log.Info ("Universe contains {0} objects.", universe.Count);
@@ -349,12 +301,10 @@ namespace Do.Core
 			if (oldContext != null) {
 				context = oldContext.GetContinuedContext ();
 				return;
-			}
-			else if (context.ParentSearch) {
+			} else if (context.ParentSearch) {
 				context = ParentContext (context);
 				return;
-			}
-			else if (context.ChildrenSearch) {
+			} else if (context.ChildrenSearch) {
 				// TODO: Children are not filtered at all. This needs to be fixed.
 			
 				context = ChildContext (context);
@@ -403,7 +353,7 @@ namespace Do.Core
 				context.ChildrenSearch = false;
 				return context;
 			}
-			children = SortResults (children, "", null, false);
+			children = SortResults (children, "", null);
 
 			// Increase relevance of the parent.
 			parent = context.Selection as DoObject;
@@ -434,8 +384,7 @@ namespace Do.Core
 
 			if (context.ActionSearch && context.Query.Length == 0) {
 				return InitialActionResults (context);
-			}
-			else if (context.LastContext.LastContext != null) {
+			} else if (context.LastContext.LastContext != null) {
 				return FilterPreviousSearchResultsWithContinuedContext (context);
 			}
 
@@ -463,11 +412,11 @@ namespace Do.Core
 				results = GetModItemsFromList (context, results);
 				// We need to sort because we added the out-of-order dynamic modifier
 				// items.
-				results = SortResults (results, context.Query, context.Items[0], false);
+				results = SortResults (results, context.Query, context.Items[0]);
 			} else {
 			 	// These are items:
 				results = GetItemsFromList (context, results);
-				results = SortResults (results, context.Query, null, false);
+				results = SortResults (results, context.Query, null);
 			}
 
 			return results;
@@ -480,18 +429,15 @@ namespace Do.Core
 			
 			// If we're on modifier items, add a text item if it's supported.
 			if (context.ModifierItemsSearch) {
-				if (context.Action.SupportsModifierItemForItems (context.Items.ToArray (), textItem)) {
+				if (context.Action.SupportsModifierItemForItems (context.Items.ToArray (), textItem))
 					results.Add (textItem);
-				}
-			}
-			// Same if we're on items.
-			else if (context.ItemsSearch) {
+			} else if (context.ItemsSearch) {
+				// Same if we're on items.
 				if (context.Action.SupportsItem (textItem)) {
 					results.Add (textItem);
 				}
-			}
-			// If independent, always add.
-			else if (context.Independent) {
+			} else if (context.Independent) {
+				// If independent, always add.
 				results.Add (textItem);
 			}
 
@@ -532,7 +478,7 @@ namespace Do.Core
 		// This will filter out the results in the previous context that match the current query
 		private List<IObject> FilterPreviousSearchResultsWithContinuedContext (SearchContext context)
 		{
-			return SortResults (context.LastContext.Results, context.Query, null, false);
+			return SortResults (context.LastContext.Results, context.Query, null);
 		}
 
 		private List<IObject> IndependentResults (SearchContext context)
@@ -552,7 +498,7 @@ namespace Do.Core
 
 			} else {
 				// Or we just have to do an expensive search...
-				results = SortAndNarrowResults (universe.Values, query, null, false);
+				results = SortAndNarrowResults (universe.Values, query, null);
 			}
 			return results;
 		}
@@ -571,11 +517,10 @@ namespace Do.Core
 				if (initial) {
 					actions.AddRange (item_actions);
 					initial = false;
-				}
+				} else {
 				// For every subsequent item, check every action in the
 				// pre-existing list if its not supported by this item, remove
 				// it from the list
-				else {
 					foreach (IAction action in actions) {
 						if (!item_actions.Contains (action)) {
 							actions_to_remove.Add (action);
@@ -585,7 +530,7 @@ namespace Do.Core
 			}
 			foreach (IObject rm in actions_to_remove)
 				actions.Remove (rm);
-			return SortResults (actions, context.Query, context.Items[0], false);
+			return SortResults (actions, context.Query, context.Items[0]);
 		}
 
 		public List<IObject> ActionsForItem (IItem item)
@@ -593,7 +538,7 @@ namespace Do.Core
 			List<IObject> item_actions;
 
 			item_actions = new List<IObject> ();
-			foreach (IAction action in doActions) {
+			foreach (IAction action in Do.PluginManager.Actions) {
 				if (action.SupportsItem (item)) {
 					item_actions.Add (action);
 				}
@@ -606,7 +551,7 @@ namespace Do.Core
 			List<IObject> children;
 
 			children = new List<IObject> ();
-			foreach (DoItemSource source in doItemSources) {
+			foreach (DoItemSource source in Do.PluginManager.ItemSources) {
 				foreach (IObject child in source.ChildrenOfItem (parent))
 					children.Add (child);
 			}

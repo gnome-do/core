@@ -37,140 +37,166 @@ namespace Do.UI
 		// Cache of loaded icons: key is "iconname_size".
 		static Dictionary<string, Pixbuf> pixbufCache;
 
-		static IconTheme  [] themes;
-
 		static IconProvider ()
 		{
 			pixbufCache = new Dictionary<string, Pixbuf> ();
 						
 			UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
 			UnknownPixbuf.Fill (0x00000000);
-
-			themes = new IconTheme  [2];
-			themes  [0] = IconTheme.Default;
 			
 			IconTheme.Default.Changed += OnDefaultIconThemeChanged;
+		}
+		
+		static bool IconIsEmbeddedResource (string name)
+		{
+			return name.IndexOf ("@") > 0;
+		}
+		
+		static bool IconIsFile (string name)
+		{
+			return name.StartsWith ("/") ||
+				   name.StartsWith ("~/") || 
+				   name.StartsWith ("file://",
+				        StringComparison.OrdinalIgnoreCase);
+		}
+		
+		static Pixbuf IconFromEmbeddedResource (string name, int size)
+		{
+			Pixbuf pixbuf = null;
+			string resource, assemblyName;
+			
+			resource = name.Substring (0, name.IndexOf ("@"));
+			assemblyName = name.Substring (resource.Length + 1);
+			try {
+				foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies ()) {
+					if (asm.FullName != assemblyName) continue;
+					pixbuf = new Pixbuf (asm, resource, size, size);
+					break;
+				}
+			} catch (Exception e) {
+				Console.Error.WriteLine ("Failed to load icon resource {0} " +
+				    "from assembly {1}: {2}", resource, assemblyName, e.Message); 
+				pixbuf = null;
+			}
+			return pixbuf;
+		}
+		
+		static Pixbuf IconFromFile (string name, int size)
+		{
+			Pixbuf pixbuf;
+			
+			name = name.Replace ("~", Paths.UserHome);
+			try	{
+				pixbuf = new Pixbuf (name, size, size);
+			} catch {
+				pixbuf = null;
+			}
+			return pixbuf;
+		}
+		
+		static Pixbuf IconFromTheme (string name, int size, IconTheme theme)
+		{
+			Pixbuf pixbuf = null;
+			string name_noext;
+			
+			// We may have to remove the extension.
+			if (name.Contains (".")) {
+				name_noext = name.Remove (name.LastIndexOf ("."));
+			} else {
+				name_noext = name;
+			}
+			try	{
+				if (theme.HasIcon (name)) {  
+					pixbuf = theme.LoadIcon (name, size, 0);
+				} else if (theme.HasIcon (name_noext)) { 
+					pixbuf = theme.LoadIcon (name_noext, size, 0);
+				} else if (name == "gnome-mime-text-plain" &&
+				           theme.HasIcon ("gnome-mime-text")) { 
+					pixbuf = theme.LoadIcon ("gnome-mime-text", size, 0);
+				}
+			} catch {
+				pixbuf = null;
+			}
+			return pixbuf;
+		}
+		
+		static Pixbuf GenericFileIcon (int size)
+		{
+			Pixbuf pixbuf = null;
+			if (IconTheme.Default.HasIcon ("gtk-file")) {
+				try {
+					pixbuf = IconTheme.Default.LoadIcon ("gtk-file", size, 0);
+				} catch {
+					pixbuf = null;					
+				}
+			}
+			return pixbuf;
+		}
+		
+		static Pixbuf UnknownIcon (int size)
+		{
+			Pixbuf pixbuf = null;
+			
+			if (IconTheme.Default.HasIcon ("emblem-noread")) {
+				try {
+					pixbuf = IconTheme.Default.LoadIcon ("emblem-noread", size, 0);
+				} catch {
+					pixbuf = null;					
+				}
+			}
+			return pixbuf;
 		}
 
 		public static Pixbuf PixbufFromIconName (string name, int size)
 		{			
 			Pixbuf pixbuf;									
-			string name_noext, iconKey, resourceName, resourceNamespace;
-			IconTheme theme;
+			string iconKey;
 			
-			if (string.IsNullOrEmpty (name)) return null;	
+			if (null == name)
+				throw new ArgumentNullException ("name");
+			if (name.Equals (string.Empty))
+				throw new ArgumentException ("name cannot be empty");
 
 			// Is the icon name in cache?
 			iconKey = string.Format ("{0}_{1}", name, size);
 			if (pixbufCache.TryGetValue (iconKey, out pixbuf)) {				
 				return pixbuf;
 			}
-			 
-			// TODO: Use a GNOME ThumbnailFactory
-
-			// The icon can be loaded from a loaded assembly if the icon has 
-			// the format: "resource@assemblyname".
 			
-			if (name.IndexOf ("@") > 0) {
-				resourceName = name.Substring (0, name.IndexOf ("@"));
-				resourceNamespace = name.Substring (resourceName.Length +1);
-								
-				// loop though all loaded assemblies in the AppDomain
-				foreach (Assembly asmb in AppDomain.CurrentDomain.GetAssemblies ())	{					
-					if (new AssemblyName (asmb.FullName).Name.Equals (resourceNamespace)) {
-						try	{
-							pixbuf = new Pixbuf (asmb, resourceName, size, size);
-							break;														
-						} catch {
-							// TODO: Should we log this error?
-						}
-					}
+			do {
+				// The icon can be loaded from a loaded assembly if the icon has 
+				// the format: "resource@assemblyname".
+				if (IconIsEmbeddedResource (name)) {
+					pixbuf = IconFromEmbeddedResource (name, size);
+					break;
+				} 
+				if (IconIsFile (name)) {
+					pixbuf = IconFromFile (name, size);
+					break;
 				}
-			} 
-			else {				
-				if (name.StartsWith ("/") ||
-					name.StartsWith ("~/") || 
-				    name.StartsWith ("file://", StringComparison.OrdinalIgnoreCase)) {
-					try	{
-						pixbuf = new Pixbuf (name, size, size);
-					} catch {
-						// Could not load from file.
-						pixbuf = null;
-					}			
-				} else {					
-					if (name.Contains (".")) {
-						name_noext = name.Remove (name.LastIndexOf ("."));
-					}
-					else {
-						name_noext = name;
-					}
-					
-					theme = IconTheme.Default;
-					try	{
-						if (theme.HasIcon (name)) {  
-							pixbuf = theme.LoadIcon (name, size, 0);
-						}
-						else if (theme.HasIcon (name_noext)) { 
-							pixbuf = theme.LoadIcon (name_noext, size, 0);
-						}
-						else if (name == "gnome-mime-text-plain" &&
-								 theme.HasIcon ("gnome-mime-text")) { 
-							pixbuf = theme.LoadIcon ("gnome-mime-text", size, 0);
-						}
-					} catch {
-						pixbuf = null;
-					}		
-					
-
-					// Try Tango theme if no icon was found.
-					// This code duplication (loop unrolling) was necessary
-					// becuase something funny was happening with the icon loading
-					// when using themes stored in an array.
-					if (pixbuf == null) {
-						theme = new IconTheme ();
-						theme.CustomTheme = "Tango";
-						try	{
-								if (theme.HasIcon (name)) {  
-									pixbuf = theme.LoadIcon (name, size, 0);
-								}
-								else if (theme.HasIcon (name_noext)) { 
-									pixbuf = theme.LoadIcon (name_noext, size, 0);
-								}
-								else if (name == "gnome-mime-text-plain" &&
-												 theme.HasIcon ("gnome-mime-text")) { 
-									pixbuf = theme.LoadIcon ("gnome-mime-text", size, 0);
-								}
-							} catch {
-								pixbuf = null;
-							}		
-					}
+				// Try to load icon from defaul theme.
+				pixbuf = IconFromTheme (name, size, IconTheme.Default);
+				// Try to load from Tango if no icon found in default theme.
+				if (pixbuf == null) {
+					IconTheme tango = new IconTheme ();
+				    tango.CustomTheme = "Tango";
+					pixbuf = IconFromTheme (name, size, tango);
 				}
-					
-				theme = IconTheme.Default;
-				if (pixbuf == null && name.StartsWith ("gnome-mime") &&
-						themes [0].HasIcon ("gtk-file")) {
-					try {
-						pixbuf = themes [0].LoadIcon ("gtk-file", size, 0);
-					} catch {
-						pixbuf = null;					
-					}
-				}
-				if (pixbuf == null && themes [0].HasIcon ("emblem-noread")) {
-					try {
-						pixbuf = themes [0].LoadIcon ("emblem-noread", size, 0);
-					} catch {
-						pixbuf = null;					
-					}
-				}
-			}
+				// Try to load a generic file icon.
+				if (pixbuf == null && name.StartsWith ("gnome-mime"))
+					pixbuf = GenericFileIcon (size);
+		    } while (false);
 			
-			if (pixbuf == null) {
+			// Try to load a pretty "no icon found" icon.
+			if (pixbuf == null)
+				pixbuf = UnknownIcon (size);
+			// If all else fails, use the UnknownPixbuf.
+			if (pixbuf == null)
 				pixbuf = UnknownPixbuf;
-			}			
+			
 			// Cache icon pixbuf.
-			if (pixbuf != null && pixbuf != UnknownPixbuf) {
-				pixbufCache [iconKey] = pixbuf;				
-			}
+			if (pixbuf != null && pixbuf != UnknownPixbuf)
+				pixbufCache [iconKey] = pixbuf;
 			
 			return pixbuf;
 		}

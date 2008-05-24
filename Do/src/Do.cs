@@ -21,19 +21,21 @@ using System;
 
 using Mono.Unix;
 
+using Do.UI;
 using Do.Core;
 using Do.DBusLib;
 
-namespace Do
-{
+namespace Do {
 
-	public static class Do
-	{
+	public static class Do {
+		
 		static GConfXKeybinder keybinder;
 		
 		static Preferences preferences;
 		static Controller controller;
-		static UniverseManager universeManager;
+		static PluginManager plugin_manager;
+		static UniverseManager universe_manager;
+		static SettingsWindow preferences_window;
 
 		public static void Main (string[] args)
 		{
@@ -54,14 +56,15 @@ namespace Do
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
 
+			PluginManager.Initialize ();
 			UniverseManager.Initialize ();
 
-			// Previously, Controller's constructor created a Gtk.Window, and that
-			// window used Util.Appearance to load an icon, and Util.Appearance used
-			// Do.Controller in its constructor to subscribe to an event.  This lead
-			// to some strange behavior, so we new the Controller, /then/ Initialize
-			// it so that Do.Controller is non-null when Util.Appearance references
-			// it.
+			// Previously, Controller's constructor created a Gtk.Window, and
+			// that window used Util.Appearance to load an icon, and
+			// Util.Appearance used Do.Controller in its constructor to
+			// subscribe to an event.  This lead to some strange behavior, so
+			// we new the Controller, /then/ Initialize it so that
+			// Do.Controller is non-null when Util.Appearance references it.
 			Controller.Initialize ();
 			DBusRegistrar.RegisterController (Controller);
 			
@@ -85,24 +88,41 @@ namespace Do
 			}
 		}
 
-		public static Preferences Preferences
-		{
+		public static Preferences Preferences {
 			get { return preferences; }
 		}
+		
+		public static SettingsWindow PreferencesWindow {
+			get {
+				if (null == preferences_window) {
+					preferences_window = new SettingsWindow ();
+					preferences_window.Destroyed +=
+						delegate {
+							preferences_window = null;
+						};
+				}
+				return preferences_window;
+			}
+		}
 
-		public static Controller Controller
-		{
+		public static Controller Controller {
 			get {
 				return controller ??
 					controller = new Controller ();
 			}
 		}
 
-		public static UniverseManager UniverseManager
-		{
+		public static PluginManager PluginManager {
 			get {
-				return universeManager ??
-					universeManager = new UniverseManager ();
+				return plugin_manager ??
+					plugin_manager = new PluginManager ();
+			}
+		}
+
+		public static UniverseManager UniverseManager {
+			get {
+				return universe_manager ??
+					universe_manager = new UniverseManager ();
 			}
 		}
 		

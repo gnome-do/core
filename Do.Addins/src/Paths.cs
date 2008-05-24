@@ -147,6 +147,10 @@ namespace Do {
 		public static string Temp {
 			get { return Combine (Paths.ApplicationData, "tmp"); }
 		}
+		
+		public static string PluginInstall {
+			get { return Combine (UserData, "plugin-install"); }
+		}
 
 		public static string GetTemporaryFilePath ()
 		{

@@ -25,7 +25,7 @@ using Do.Universe;
 
 namespace Do.Core {
 
-	public abstract class DoObject : IObject, IComparable<IObject> {
+	public class DoObject : IObject, IComparable<IObject> {
 
 		const string DefaultName = "No name";
 		const string DefaultDescription = "No description.";
@@ -104,7 +104,7 @@ namespace Do.Core {
 		protected IObject inner;
 		protected float relevance;
 		
-		protected DoObject (IObject inner)
+		internal DoObject (IObject inner)
 		{
 			if (inner == null)
 				throw new ArgumentNullException ("Inner IObject may not be null.");
@@ -222,10 +222,9 @@ namespace Do.Core {
 
 		protected void LogError (string where, Exception e, string name)
 		{
-			Log.Error ("\"{0}\" ({1}) encountered an error in {2}:\n\t" +
-				       "{3}: {4}",
-				name, (inner != null ? inner.GetType () : GetType ()),
-				where, e.GetType (), e.Message);
+			Type t = inner != null ? inner.GetType () : GetType ();
+			Log.Error ("\"{0}\" ({1}) encountered an error in {2}: {3}",
+				name, t, where, e.Message);
 		}
 	}
 }

@@ -1,8 +1,7 @@
-/* VoidAction.cs
+/* PreferencesTreeNode.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
+ * COPYRIGHT file distributed with this source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,37 +19,34 @@
 
 using System;
 
-namespace Do.Universe
+using Gtk;
+
+namespace Do.UI
 {
-	public class VoidAction : AbstractAction
-	{
-		public override string Name
-		{
-			get { return "Do Nothing"; }
+    [TreeNode (ListOnly=true)]
+    public class PreferencesTreeNode : TreeNode, IEquatable<PreferencesTreeNode> {
+
+		string label;
+	
+        public PreferencesTreeNode (string label)
+        {
+                this.label = label;
+        }
+
+        [TreeNodeValue (Column=0)]
+        public string Label {
+			get { return label; }
 		}
 		
-		public override string Description
-		{
-			get { return "Does absolutely nothing."; }
-		}
+		public bool Equals (PreferencesTreeNode x)
+        {
+        	return label.Equals (x.Label);
+        }
 		
-		public override string Icon
+		public override int GetHashCode ()
 		{
-			get { return "gtk-stop"; }
+			return label.GetHashCode ();
 		}
-		
-		public override Type[] SupportedItemTypes
-		{
-			get {
-				return new Type[] {
-					typeof (IItem)
-				};
-			}
-		}
-		
-		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
-		{
-			return null;
-		}
-	}
+
+    }
 }

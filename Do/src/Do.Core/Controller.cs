@@ -19,7 +19,7 @@
  */
 
 using System;
-using System.Collections;
+using System.Reflection;
 using System.Collections.Generic;
 
 using Gdk;
@@ -30,15 +30,16 @@ using Do.Addins;
 using Do.Universe;
 using Do.DBusLib;
 
-namespace Do.Core
-{
-	
-	public class Controller : IController, IDoController
-	{
+namespace Do.Core {
+
+	public class Controller : IController, IDoController {
+
 		protected IDoWindow window;
+		protected Gtk.Window addinWindow;
+		protected Gtk.AboutDialog aboutWindow;
 		protected SearchContext[] context;
 		
-		const int SearchDelay = 225;
+		const int SearchDelay = 250;
 		
 		uint[] searchTimeout;
 		IAction action;
@@ -48,11 +49,41 @@ namespace Do.Core
 		bool tabbing = false;
 		bool resultsGrown;
 		
+		public Controller ()
+		{
+			aboutWindow = null;
+			items = new List<IItem> ();
+			modItems = new List<IItem> ();
+			searchTimeout = new uint[3];
+			context = new SearchContext[3];
+			resultsGrown = false;
+		}
+		
+		public void Initialize ()
+		{
+			if (Do.Preferences.UseMiniMode) {
+				window = new MiniWindow (this);
+			} else if (Do.Preferences.UseGlassFrame) {
+				window = new GlassWindow (this);
+			} else {
+				window = new ClassicWindow (this);
+			}
+			// Get key press events from window since we want to control that
+			// here.
+			window.KeyPressEvent += KeyPressWrap;
+			Reset ();
+		}
+
+		bool IsSummonable {
+			get {
+				return aboutWindow == null;
+			}
+		}
+
 		/// <value>
 		/// Convenience Method
 		/// </value>
-		SearchContext CurrentContext
-		{
+		SearchContext CurrentContext {
 			get {
 				return context[(int) CurrentPane];
 			}
@@ -65,24 +96,23 @@ namespace Do.Core
 		/// The currently active pane, setting does not imply searching
 		/// currently
 		/// </value>
-		public Pane CurrentPane
-		{
+		public Pane CurrentPane {
 			set {
 				if (window.CurrentPane == Pane.First &&
 					CurrentContext.Results.Length == 0)
 					return;
 				
 				switch (value) {
-					case Pane.First:
-						window.CurrentPane = Pane.First;
-						break;
-					case Pane.Second:
-						window.CurrentPane = Pane.Second;
-						break;
-					case Pane.Third:
-						if (ThirdPaneAllowed)
-							window.CurrentPane = Pane.Third;
-						break;
+				case Pane.First:
+					window.CurrentPane = Pane.First;
+					break;
+				case Pane.Second:
+					window.CurrentPane = Pane.Second;
+					break;
+				case Pane.Third:
+					if (ThirdPaneAllowed)
+						window.CurrentPane = Pane.Third;
+					break;
 				}
 
 				// Determine if third pane needed
@@ -102,8 +132,7 @@ namespace Do.Core
 			}
 		}
 		
-		bool ThirdPaneVisible
-		{
+		bool ThirdPaneVisible {
 			set {
 				if (value == thirdPaneVisible)
 					return;
@@ -120,8 +149,7 @@ namespace Do.Core
 			}
 		}
 		
-		bool ThirdPaneAllowed
-		{
+		bool ThirdPaneAllowed {
 			get {
 				IObject first, second;
 				IAction action;
@@ -135,8 +163,7 @@ namespace Do.Core
 			}
 		}
 
-		bool ThirdPaneRequired
-		{
+		bool ThirdPaneRequired {
 			get {
 				IObject first, second;
 				IAction action;
@@ -149,29 +176,6 @@ namespace Do.Core
 					!action.ModifierItemsOptional &&
 					context[1].Results.Length > 0;
 			}
-		}
-		
-		public Controller ()
-		{
-			items = new List<IItem> ();
-			modItems = new List<IItem> ();
-			searchTimeout = new uint[3];
-			context = new SearchContext[3];
-			resultsGrown = false;
-		}
-		
-		public void Initialize ()
-		{
-			if (Do.Preferences.UseMiniMode) {
-				window = new MiniWindow (this);
-			} else if (Do.Preferences.UseGlassFrame) {
-				window = new GlassWindow (this);
-			} else {
-				window = new ClassicWindow (this);
-			}
-			// Get key press events from window since we want to control that here.
-			window.KeyPressEvent += KeyPressWrap;
-			Reset ();
 		}
 
 		public bool IsSummoned {
@@ -188,7 +192,7 @@ namespace Do.Core
 		/// </param>
 		public void SummonWithObjects (IObject[] objects)
 		{
-			if (!window.IsSummonable) return;
+			if (!IsSummonable) return;
 			
 			Reset ();
 			
@@ -224,41 +228,41 @@ namespace Do.Core
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
 					return;
 			}
-			
+
 			switch ((Gdk.Key) evnt.KeyValue) {
-				// Throwaway keys
-				case Gdk.Key.Shift_L:
-				case Gdk.Key.Control_L:
-					break;
-				case Gdk.Key.Escape:
-					OnEscapeKeyPressEvent (evnt);
-					break;
-				case Gdk.Key.Return:
-				case Gdk.Key.ISO_Enter:
-				case Gdk.Key.KP_Enter:
-					OnActivateKeyPressEvent (evnt);
-					break;
-				case Gdk.Key.Delete:
-				case Gdk.Key.BackSpace:
-					OnDeleteKeyPressEvent (evnt);
-					break;
-				case Gdk.Key.Tab:
-				case Gdk.Key.ISO_Left_Tab:
-					OnTabKeyPressEvent (evnt);
-					break;
-				case Gdk.Key.Up:
-				case Gdk.Key.Down:
-				case Gdk.Key.Home:
-				case Gdk.Key.End:
-					OnUpDownKeyPressEvent (evnt);
-					break;
-				case Gdk.Key.Right:
-				case Gdk.Key.Left:
-					OnRightLeftKeyPressEvent (evnt);
-					break;
-				default:
-					OnInputKeyPressEvent (evnt);
-					break;
+			// Throwaway keys
+			case Gdk.Key.Shift_L:
+			case Gdk.Key.Control_L:
+				break;
+			case Gdk.Key.Escape:
+				OnEscapeKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.Return:
+			case Gdk.Key.ISO_Enter:
+			case Gdk.Key.KP_Enter:
+				OnActivateKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.Delete:
+			case Gdk.Key.BackSpace:
+				OnDeleteKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.Tab:
+			case Gdk.Key.ISO_Left_Tab:
+				OnTabKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.Up:
+			case Gdk.Key.Down:
+			case Gdk.Key.Home:
+			case Gdk.Key.End:
+				OnUpDownKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.Right:
+			case Gdk.Key.Left:
+				OnRightLeftKeyPressEvent (evnt);
+				break;
+			default:
+				OnInputKeyPressEvent (evnt);
+				break;
 			}
 			return;
 		}
@@ -369,14 +373,14 @@ namespace Do.Core
 			UpdatePane (CurrentPane);
 			
 			switch (CurrentPane) {
-				case Pane.First:
-					context[1] = new SearchContext ();
-					SearchPaneDelayed (Pane.Second);
-					break;
-				case Pane.Second:
-					context[2] = new SearchContext ();
-					SearchPaneDelayed (Pane.Third);
-					break;
+			case Pane.First:
+				context[1] = new SearchContext ();
+				SearchPaneDelayed (Pane.Second);
+				break;
+			case Pane.Second:
+				context[2] = new SearchContext ();
+				SearchPaneDelayed (Pane.Third);
+				break;
 			}
 		}
 		
@@ -386,18 +390,18 @@ namespace Do.Core
 		void NextPane ()
 		{
 			switch (CurrentPane) {
-				case Pane.First:
-					CurrentPane = Pane.Second;
-					break;
-				case Pane.Second:
-					if (ThirdPaneAllowed)
-						CurrentPane = Pane.Third;
-					else
-						CurrentPane = Pane.First;
-					break;
-				case Pane.Third:
+			case Pane.First:
+				CurrentPane = Pane.Second;
+				break;
+			case Pane.Second:
+				if (ThirdPaneAllowed)
+					CurrentPane = Pane.Third;
+				else
 					CurrentPane = Pane.First;
-					break;
+				break;
+			case Pane.Third:
+				CurrentPane = Pane.First;
+				break;
 			}
 		}
 		
@@ -407,18 +411,18 @@ namespace Do.Core
 		void PrevPane ()
 		{
 			switch (CurrentPane) {
-				case Pane.First:
-					if (ThirdPaneAllowed)
-						CurrentPane = Pane.Third;
-					else
-						CurrentPane = Pane.Second;
-					break;
-				case Pane.Second:
-					CurrentPane = Pane.First;
-					break;
-				case Pane.Third:
+			case Pane.First:
+				if (ThirdPaneAllowed)
+					CurrentPane = Pane.Third;
+				else
 					CurrentPane = Pane.Second;
-					break;
+				break;
+			case Pane.Second:
+				CurrentPane = Pane.First;
+				break;
+			case Pane.Third:
+				CurrentPane = Pane.Second;
+				break;
 			}
 		}
 
@@ -430,15 +434,15 @@ namespace Do.Core
 			}
 
 			switch (CurrentPane) {
-				case Pane.First:
-					SearchFirstPane ();
-					break;
-				case Pane.Second:
-					SearchSecondPane ();
-					break;
-				case Pane.Third:
-					SearchThirdPane ();
-					break;
+			case Pane.First:
+				SearchFirstPane ();
+				break;
+			case Pane.Second:
+				SearchSecondPane ();
+				break;
+			case Pane.Third:
+				SearchThirdPane ();
+				break;
 			}
 		}
 		
@@ -450,19 +454,17 @@ namespace Do.Core
 		/// </param>
 		void SearchPaneDelayed (Pane pane)
 		{
-			for (int i = 0; i < 3; ++i) {
-				if (searchTimeout[i] > 0) 
-					GLib.Source.Remove (searchTimeout[i]);
-				searchTimeout[i] = 0;
-			}
 			for (int i = (int) pane; i < 3; ++i) {
-					window.ClearPane((Pane) i);
+				if (searchTimeout [i] > 0) 
+					GLib.Source.Remove (searchTimeout[i]);
+				searchTimeout [i] = 0;
+				window.ClearPane((Pane) i);
 			}
-
 			
-			searchTimeout[(int) pane] = GLib.Timeout.Add (SearchDelay, delegate {
-				Gdk.Threads.Enter ();
-				switch (pane) {
+			searchTimeout[(int) pane] = GLib.Timeout.Add (SearchDelay,
+				delegate {
+					Gdk.Threads.Enter ();
+					switch (pane) {
 					case Pane.First:
 						SearchFirstPane ();
 						break;
@@ -472,10 +474,11 @@ namespace Do.Core
 					case Pane.Third:
 						SearchThirdPane ();
 						break;
+					}
+					Gdk.Threads.Leave ();
+					return false;
 				}
-				Gdk.Threads.Leave ();
-				return false;
-			});
+			);
 		}
 		
 		protected void SearchFirstPane ()
@@ -502,7 +505,7 @@ namespace Do.Core
 			// recent search is the same as the last result - if this is the
 			// case, we already have a valid search queued.
 			if (GetSelection (Pane.First) != lastResult) {
-				context[1] = new SearchContext ();
+				context [1] = new SearchContext ();
 				SearchPaneDelayed (Pane.Second);
 			}
 		}
@@ -576,17 +579,17 @@ namespace Do.Core
 		protected void ClearSearchResults ()
 		{
 			switch (CurrentPane) {
-				case Pane.First:
-					Reset ();
-					break;
-				case Pane.Second:
-					context[1] = new SearchContext ();
-					SearchSecondPane ();
-					break;
-				case Pane.Third:
-					context[2] = new SearchContext ();
-					SearchThirdPane ();
-					break;
+			case Pane.First:
+				Reset ();
+				break;
+			case Pane.Second:
+				context[1] = new SearchContext ();
+				SearchSecondPane ();
+				break;
+			case Pane.Third:
+				context[2] = new SearchContext ();
+				SearchThirdPane ();
+				break;
 			}
 		}
 		
@@ -721,7 +724,7 @@ namespace Do.Core
 		
 		public void Summon ()
 		{
-			if (!window.IsSummonable) return;
+			if (!IsSummonable) return;
 			window.Summon ();
 		}
 		
@@ -730,6 +733,75 @@ namespace Do.Core
 			ShrinkResults ();
 			window.Vanish ();
 		}	
+
+		public void ShowPreferences ()
+		{
+			Vanish ();
+			Reset ();
+
+			new PreferencesWindow ().Show ();
+		}
+
+		public void ShowAbout ()
+		{
+			string[] authors;
+			string[] logos;
+			string logo;
+
+			Vanish ();
+			Reset ();
+
+			authors = new string[] {
+				"Chris Halse Rogers <chalserogers@gmail.com>",
+				"David Siegel <djsiegel@gmail.com>",
+				"DR Colkitt <douglas.colkitt@gmail.com>",
+				"James Walker",
+				"Jason Smith",
+				"Miguel de Icaza",
+				"Rick Harding",
+				"Thomsen Anders",
+				"Volker Braun"
+			};
+
+			aboutWindow = new Gtk.AboutDialog ();
+			aboutWindow.Name = "GNOME Do";
+
+			try {
+				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
+				aboutWindow.Version = String.Format ("{0}.{1}.{2}",
+					name.Version.Major, name.Version.Minor, name.Version.Build);
+			} catch {
+				aboutWindow.Version = Catalog.GetString ("Unknown");
+			}
+			
+			logos = new string[] {
+				"/usr/share/icons/gnome/scalable/actions/search.svg",
+			};
+
+			logo = "gnome-run";
+			foreach (string l in logos) {
+				if (!System.IO.File.Exists (l)) continue;
+				logo = l;
+			}
+
+			aboutWindow.Logo = UI.IconProvider.PixbufFromIconName (logo, 140);
+			aboutWindow.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
+			aboutWindow.Comments = "Do things as quickly as possible\n" +
+				"(but no quicker) with your files, bookmarks,\n" +
+				"applications, music, contacts, and more!";
+			aboutWindow.Website = "http://do.davebsd.com/";
+			aboutWindow.WebsiteLabel = "Visit Homepage";
+			aboutWindow.Authors = authors;
+			aboutWindow.IconName = "gnome-run";
+
+			if (null != aboutWindow.Screen.RgbaColormap) {
+				Gtk.Widget.DefaultColormap = aboutWindow.Screen.RgbaColormap;
+			}
+
+			aboutWindow.Run ();
+			aboutWindow.Destroy ();
+			aboutWindow = null;
+		}
 		
 		/////////////////////////////
 		/// IDoController Members ///
@@ -745,17 +817,17 @@ namespace Do.Core
 				return;
 			
 			switch (CurrentPane) {
-				case Pane.First:
-					context[1] = new SearchContext ();
-					SearchPaneDelayed (Pane.Second);
-					break;
-				case Pane.Second:
-					context[2] = new SearchContext ();
-					SearchPaneDelayed (Pane.Third);
-					break;
+			case Pane.First:
+				context[1] = new SearchContext ();
+				SearchPaneDelayed (Pane.Second);
+				break;
+			case Pane.Second:
+				context[2] = new SearchContext ();
+				SearchPaneDelayed (Pane.Third);
+				break;
 			}
 		}
-		
+
 		public void ButtonPressOffWindow ()
 		{
 			Vanish ();

@@ -65,9 +65,6 @@ FILES =  \
 	src/Do.Universe/ContactItem.cs \
 	src/Do.Universe/DefineWordAction.cs \
 	src/Do.Universe/FileItem.cs \
-	src/Do.Universe/FileItemActions.cs \
-	src/Do.Universe/FileItemSource.cs \
-	src/Do.Universe/FirefoxBookmarkItemSource.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Universe/IAction.cs \
 	src/Do.Universe/IItem.cs \
@@ -79,17 +76,17 @@ FILES =  \
 	src/Do.Universe/OpenTerminalHereAction.cs \
 	src/Do.Universe/OpenURLAction.cs \
 	src/Do.Universe/OpenWithAction.cs \
-	src/Do.Universe/RecentFileItemSource.cs \
 	src/Do.Universe/RevealAction.cs \
 	src/Do.Universe/RunAction.cs \
 	src/Do.Universe/RunInTerminalAction.cs \
 	src/Do.Universe/TextItem.cs \
-	src/Do.Universe/VoidAction.cs \
 	src/Paths.cs 
 
 DATA_FILES = 
 
-RESOURCES = ../Do/Resources/settings-triangle.png 
+RESOURCES =  \
+	Do.Addins.addin.xml \
+	Resources/settings-triangle.png 
 
 EXTRAS = \
 	do.addins.pc.in 
@@ -98,6 +95,8 @@ REFERENCES =  \
 	Mono.Cairo \
 	Mono.Posix \
 	-pkg:gconf-sharp-2.0 \
+	-pkg:glib-sharp-2.0 \
+	-pkg:gnome-desktop-sharp-2.0 \
 	-pkg:gnome-sharp-2.0 \
 	-pkg:gnome-vfs-sharp-2.0 \
 	-pkg:gtk-sharp-2.0 \

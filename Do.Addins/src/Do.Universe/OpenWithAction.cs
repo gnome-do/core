@@ -23,34 +23,30 @@ using System.Collections.Generic;
 
 using Do.Addins;
 
-namespace Do.Universe
-{
+namespace Do.Universe {
+
 	/// <summary>
 	/// A command providing "open with..." semantics to file items.
 	/// </summary>
-	public abstract class OpenWithAction : AbstractAction 
-	{
+	public class OpenWithAction : AbstractAction {
+
 		public OpenWithAction ()
 		{
 		}
 		
-		public override string Name
-		{
+		public override string Name {
 			get { return "Open With..."; }
 		}
 		
-		public override string Description
-		{
+		public override string Description {
 			get { return "Opens files in specific applications."; }
 		}
 		
-		public override string Icon
-		{
+		public override string Icon {
 			get { return "gtk-open"; }
 		}
 		
-		public override Type[] SupportedItemTypes
-		{
+		public override Type[] SupportedItemTypes {
 			get {
 				return new Type[] {
 					typeof (IFileItem),
@@ -58,8 +54,7 @@ namespace Do.Universe
 			}
 		}
 		
-		public override Type[] SupportedModifierItemTypes
-		{
+		public override Type[] SupportedModifierItemTypes {
 			get {
 				return new Type[] {
 					typeof (ApplicationItem),
@@ -71,13 +66,11 @@ namespace Do.Universe
 		{
 			List<string> uris;
 
-			if (modifierItems.Length > 0) {
-				uris = new List<string> ();
-				foreach (IItem item in items) {
-					uris.Add ((item as IFileItem).URI);
-				}
-				(modifierItems[0] as ApplicationItem).RunWithURIs (uris);
+			uris = new List<string> ();
+			foreach (IItem item in items) {
+				uris.Add ((item as IFileItem).URI);
 			}
+			(modifierItems [0] as ApplicationItem).RunWithUris (uris);
 			return null;
 		}
 	}

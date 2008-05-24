@@ -22,25 +22,14 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
+using Gnome;
 using Mono.Unix;
 
-namespace Do.Universe
-{
-	/// <summary>
-	/// If this exception is thrown in the ApplicationItem constructor, the
-	/// ApplicationItemSource will catch it and discard the item.
-	/// </summary>
-	public class ApplicationDetailMissingException: ApplicationException
-	{
-		public ApplicationDetailMissingException (string message) : base (message)
-		{
-		}
-	}
+namespace Do.Universe {
 
-	public class ApplicationItem : IRunnableItem
-	{
-		protected string desktopFile;
-		protected IntPtr desktopFilePtr;
+	public class ApplicationItem : IRunnableItem {
+		
+		protected DesktopItem item;
 		
 		/// <summary>
 		/// Create an application item from a desktop file location.
@@ -51,93 +40,73 @@ namespace Do.Universe
 		/// </param>
 		public ApplicationItem (string desktopFile)
 		{
-			this.desktopFile = desktopFile;
+			item = DesktopItem.NewFromFile (desktopFile,
+				DesktopItemLoadFlags.NoTranslations);
 
-			desktopFilePtr = gnome_desktop_item_new_from_file (desktopFile, 0, IntPtr.Zero);
-			if (desktopFilePtr == IntPtr.Zero) {
-				throw new ApplicationDetailMissingException ("Failed to load launcher");
+			if (null == item)
+				throw new Exception (desktopFile + " not found.");
+		}
+		
+		public string Name {
+			get {
+				return item.GetLocalestring ("Name");
 			}
 		}
 
-		~ApplicationItem ()
-		{
-			if (desktopFilePtr != IntPtr.Zero) {
-				gnome_desktop_item_unref (desktopFilePtr);
+		public string Description {
+			get {
+				return item.GetLocalestring ("Comment");
 			}
 		}
 		
-		public string Name
-		{
+		public string Icon {
 			get {
-				return Marshal.PtrToStringAuto (
-					gnome_desktop_item_get_localestring (desktopFilePtr, "Name"));
-			}
-		}
-
-		public string Description
-		{
-			get {
-				return Marshal.PtrToStringAuto (
-					gnome_desktop_item_get_localestring (desktopFilePtr, "Comment"));
+				return item.GetString ("Icon");
 			}
 		}
 		
-		public string Icon
-		{
+		public string Exec {
 			get {
-				return Marshal.PtrToStringAuto (
-				    gnome_desktop_item_get_string (desktopFilePtr, "Icon"));
+				return item.GetString ("Exec");
 			}
 		}
 
-		public string MimeTypes
-		{
+		public bool Hidden {
 			get {
-				return Marshal.PtrToStringAuto (
-				    gnome_desktop_item_get_string (desktopFilePtr, "MimeTypes"));
+				return item.GetBoolean ("NoDisplay");
 			}
 		}
 		
 		/// <summary>
-		/// Executes the application by launching the desktop item given in the
-		/// constructor.
+		/// Executes the application.
 		/// </summary>
 		public void Run ()
 		{
-			if (desktopFilePtr == IntPtr.Zero) return;
-			gnome_desktop_item_launch (desktopFilePtr, IntPtr.Zero, 0, IntPtr.Zero);
+			item.Launch (null, DesktopItemLaunchFlags.OnlyOne);
 		}
 
-		public void RunWithURIs (ICollection<string> uris)
+		public void RunWithUris (IEnumerable<string> uris)
 		{
-			string uri_list;
-
-			// FIXME: Hardy/GNOME bug causes Do to run out of memory here...
-			return;
-
-			uri_list = "";
-			foreach (string uri in uris) {
-				uri_list += uri + "\r\n";
-			}
-			gnome_desktop_item_drop_uri_list (desktopFilePtr, uri_list, 0, IntPtr.Zero);
+			item.Launch (IEnumerableToList<string> (uris),
+			             DesktopItemLaunchFlags.OnlyOne);
 		}
 		
-		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern IntPtr gnome_desktop_item_new_from_file (string file, int flags, IntPtr error);
-
-		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern void gnome_desktop_item_unref (IntPtr item);
-
-		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern IntPtr gnome_desktop_item_drop_uri_list (IntPtr item, string list, int flags, IntPtr error);
-
-		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern int gnome_desktop_item_launch (IntPtr item, IntPtr args, int flags, IntPtr error);
-
-		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern IntPtr gnome_desktop_item_get_localestring (IntPtr item, string id);
-
-		[DllImport ("libgnome-desktop-2.so.2")]
-		private static extern IntPtr gnome_desktop_item_get_string (IntPtr item, string id);
+		/// <summary>
+		/// Simple helper function to convert an IEnumerable<T> to a
+		/// GLib.List.
+		/// </summary>
+		/// <param name="es">
+		/// A <see cref="IEnumerable`1"/>.
+		/// </param>
+		/// <returns>
+		/// A <see cref="GLib.List"/> representation of the IEnumerable.
+		/// </returns>
+		GLib.List IEnumerableToList<T> (IEnumerable<T> es)
+		{
+			object [] arr;
+	
+			arr = new List<T> (es).ToArray ();
+			return new GLib.List (arr, typeof (T), false, true);
+		}
 	}
 }

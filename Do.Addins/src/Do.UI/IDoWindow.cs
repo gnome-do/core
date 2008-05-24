@@ -39,11 +39,6 @@ namespace Do.UI
 		bool Visible { get; }
 		
 		/// <value>
-		/// Return false if the window is not in a summonable state
-		/// </value>
-		bool IsSummonable { get; }
-		
-		/// <value>
 		/// Set and Get current Pane
 		/// </value>
 		Pane CurrentPane { get; set; }

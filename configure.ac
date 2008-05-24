@@ -43,11 +43,15 @@ AC_SUBST(LIBDO_LIBS)
 PKG_CHECK_MODULES([GTK_SHARP_20], [gtk-sharp-2.0])
 PKG_CHECK_MODULES([NDESK_DBUS_GLIB_10], [ndesk-dbus-glib-1.0])
 PKG_CHECK_MODULES([GNOME_SHARP_20], [gnome-sharp-2.0])
+PKG_CHECK_MODULES([GNOME_DESKTOP_SHARP_20], [gnome-desktop-sharp-2.0])
 PKG_CHECK_MODULES([GLIB_SHARP_20], [glib-sharp-2.0])
 PKG_CHECK_MODULES([GCONF_SHARP_20], [gconf-sharp-2.0])
 PKG_CHECK_MODULES([GLADE_SHARP_20], [glade-sharp-2.0])
 PKG_CHECK_MODULES([NDESK_DBUS_10], [ndesk-dbus-1.0])
 PKG_CHECK_MODULES([GNOME_VFS_SHARP_20], [gnome-vfs-sharp-2.0])
+PKG_CHECK_MODULES([MONO_ADDINS], [mono-addins])
+PKG_CHECK_MODULES([MONO_ADDINS_GUI], [mono-addins-gui])
+PKG_CHECK_MODULES([MONO_ADDINS_SETUP], [mono-addins-setup])
 
 dnl -- Intl
 
@@ -82,6 +86,8 @@ Do.Addins/Makefile
 Makefile
 Do.DBus/Makefile
 Do/src/AssemblyInfo.cs
+Do.Addins/AssemblyInfo.cs
+Do.DBus/src/AssemblyInfo.cs
 Do/Makefile
 Do/gnome-do
 Do/Do.exe.config

@@ -1,4 +1,4 @@
-/* InternalItemSource.cs
+/* AliasAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -23,37 +23,70 @@ using System.Collections.Generic;
 
 namespace Do.Universe {
 	
-	public class InternalItemSource : IItemSource {
-		
-		public Type[] SupportedItemTypes {
-			get { return null; }
-		}
+	class AliasAction : IAction {
 		
 		public string Name {
-			get { return "Internal GNOME Do Items"; }
-		}
-		
-		public string Description {
-			get { return "Special items relevant to the inner-workings of GNOME Do."; }
-		}
-		
-		public string Icon {
-			get { return "gnome-system"; }
-		}
-		
-		public void UpdateItems ()
-		{
-		}
-		
-		public ICollection<IItem> Items {
 			get {
-				List<IItem> items = new List<IItem> ();
-				items.Add (new SelectedTextItem ());
-				return items;
+				return "Assign Alias...";
 			}
 		}
-		
-		public ICollection<IItem> ChildrenOfItem (IItem item)
+
+		public string Description {
+			get {
+				return "Give an item an alternate name.";
+			}
+		}
+
+		public string Icon {
+			get {
+				return "emblem-symbolic-link";
+			}
+		}
+
+		public Type [] SupportedItemTypes {
+			get {
+				return new Type [] {
+					typeof (IItem),
+				};
+			}
+		}
+
+		public Type[] SupportedModifierItemTypes {
+			get {
+				return new Type [] {
+					typeof (ITextItem),
+				};
+			}
+		}
+
+		public bool ModifierItemsOptional {
+			get {
+				return false;
+			}
+		}
+
+		public IItem[] Perform (IItem[] items, IItem[] modItems)
+		{
+			string alias;
+			IItem aliasItem;
+			
+			alias = (modItems [0] as ITextItem).Text;
+			aliasItem = AliasItemSource.Alias (items [0], alias);
+			
+			return new IItem [] { aliasItem };
+		}
+
+		public bool SupportsItem (IItem item)
+		{
+			return !(item is IProxyItem);
+		}
+
+		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		{
+			return true;
+		}
+
+		public IItem[] DynamicModifierItemsForItem (IItem item)
 		{
 			return null;
 		}

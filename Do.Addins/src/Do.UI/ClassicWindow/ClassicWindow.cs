@@ -26,12 +26,9 @@ using Do.Addins;
 using Gdk;
 using Gtk;
 
-namespace Do.UI
-{
+namespace Do.UI {
 	
-	
-	public class ClassicWindow : Gtk.Window, IDoWindow
-	{
+	public class ClassicWindow : Gtk.Window, IDoWindow {
 		
 		//-------------------Class Members------------------
 		GlossyRoundedFrame frame;
@@ -51,17 +48,11 @@ namespace Do.UI
 		const double WindowTransparency = 0.91;
 		
 		Pane currentPane;
-		bool summonable;
 		
 		//-------------------Events-----------------------
 		public new event DoEventKeyDelegate KeyPressEvent;
 			
 		//-------------------Properties-------------------
-		public bool IsSummonable {
-			get {
-				return summonable;
-			}
-		}
 
 		public Pane CurrentPane {
 			get {
@@ -179,8 +170,6 @@ namespace Do.UI
 
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
-			
-			summonable = true;
 
 			Reposition ();
 		}
@@ -313,9 +302,10 @@ namespace Do.UI
 		
 		public void Summon ()
 		{
-			if (PositionWindow.GetMonitor()) {
-				Reposition ();
-			}
+			frame.Radius = Screen.IsComposited ? IconBoxRadius : 0;
+
+			PositionWindow.GetMonitor ();
+			Reposition ();
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}

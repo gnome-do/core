@@ -51,18 +51,11 @@ namespace Do.UI
 		const int MainRadius = 13;
 		
 		Pane currentPane;
-		bool summonable;
 		
 		//-------------------Events-----------------------
 		public new event DoEventKeyDelegate KeyPressEvent;
 			
 		//-------------------Properties-------------------
-		public bool IsSummonable {
-			get {
-				return summonable;
-			}
-		}
-		
 		/// <value>
 		/// IDoWindow public pane member
 		/// </value>
@@ -185,8 +178,6 @@ namespace Do.UI
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
 			
-			summonable = true;
-
 			Reposition ();
 		}
 		
@@ -358,9 +349,8 @@ namespace Do.UI
 		public void Summon ()
 		{
 			//needed to know where our monitor sits...
-			if (PositionWindow.GetMonitor ()) {
-				Reposition ();
-			}
+			PositionWindow.GetMonitor ();
+			Reposition ();
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}

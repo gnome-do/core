@@ -1,4 +1,4 @@
-/* SelectedSelectedTextItem.cs
+/* DeleteAliasAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,45 +19,69 @@
  */
 
 using System;
-using System.Threading;
 using System.Collections.Generic;
 
 namespace Do.Universe {
-
-	public class SelectedTextItem : IProxyItem, ITextItem {		
-		
-		public IObject Inner {
-			get {
-				return new TextItem (Text);
-			}
-		}
+	
+	class DeleteAliasAction : IAction {
 		
 		public string Name {
-			get { return "Selected text"; }
-		}
-		
-		public string Description {
-			get { return "Currently selected text."; }
-		}
-		
-		public string Icon {
-			get { return "gtk-select-all"; }
-		}
-		
-		public string Text
-		{
 			get {
-				Gtk.Clipboard primary;
-				string text;
-			
-				primary = Gtk.Clipboard.Get (Gdk.Selection.Primary);
-				if (primary.WaitIsTextAvailable ()) {
-					text = primary.WaitForText ();
-				} else {
-					text = "";
-				}
-				return text;
+				return "Delete Alias";
 			}
+		}
+
+		public string Description {
+			get {
+				return "Deletes an alias.";
+			}
+		}
+
+		public string Icon {
+			get {
+				return "gtk-delete";
+			}
+		}
+
+		public Type [] SupportedItemTypes {
+			get {
+				return new Type [] {
+					typeof (IItem),
+				};
+			}
+		}
+
+		public Type[] SupportedModifierItemTypes {
+			get {
+				return null;
+			}
+		}
+
+		public bool ModifierItemsOptional {
+			get {
+				return false;
+			}
+		}
+
+		public IItem [] Perform (IItem[] items, IItem[] modItems)
+		{
+			AliasItemSource.Unalias (items [0]);
+			return null;
+		}
+
+		public bool SupportsItem (IItem item)
+		{
+			return AliasItemSource.ItemHasAlias (item);
+		}
+
+		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		{
+			return true;
+		}
+
+		public IItem[] DynamicModifierItemsForItem (IItem item)
+		{
+			return null;
 		}
 	}
 }

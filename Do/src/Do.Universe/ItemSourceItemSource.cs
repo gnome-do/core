@@ -20,10 +20,10 @@
 using System;
 using System.Collections.Generic;
 
-using Do.Universe;
+using Do.Core;
 
-namespace Do.Core {
-
+namespace Do.Universe {
+	
 	public class ItemSourceItemSource : IItemSource {
 
 		List<IItem> items;
@@ -42,31 +42,33 @@ namespace Do.Core {
 			}
 		}
 		
-		public string Name
-		{
-			get { return "GNOME Do Item Sources"; }
+		public string Name {
+			get {
+				return "GNOME Do Item Sources";
+			}
 		}
 		
-		public string Description
-		{
-			get { return "Item Sources providing all items GNOME Do knows about."; }
+		public string Description {
+			get {
+				return "Item Sources providing all items GNOME Do knows about.";
+			}
 		}
 		
-		public string Icon
-		{
-			get { return "gnome-run"; }
+		public string Icon {
+			get {
+				return "gnome-run";
+			}
 		}
 		
+		public ICollection<IItem> Items {
+			get { return items; }
+		}
+
 		public void UpdateItems ()
 		{
 			items.Clear ();
-			foreach (DoItemSource source in Do.UniverseManager.ItemSources)
+			foreach (DoItemSource source in Do.PluginManager.ItemSources)
 				items.Add (source);
-		}
-		
-		public ICollection<IItem> Items
-		{
-			get { return items; }
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item)
