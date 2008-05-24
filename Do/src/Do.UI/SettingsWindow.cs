@@ -33,7 +33,7 @@ namespace Do.UI {
 		protected enum Column {
 			CheckButtonColumn = 0,
 			InfoColumn = 1,
-			Addin = 2
+			Addin = 2,
 		}
 		
 		public SettingsWindow () : 

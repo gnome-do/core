@@ -24,7 +24,6 @@ using System.Collections.Generic;
 
 using Gdk;
 using Mono.Unix;
-using Mono.Addins.Gui;
 
 using Do.UI;
 using Do.Addins;
@@ -53,7 +52,6 @@ namespace Do.Core {
 		public Controller ()
 		{
 			aboutWindow = null;
-			addinWindow = null;
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			searchTimeout = new uint[3];
@@ -78,8 +76,7 @@ namespace Do.Core {
 
 		bool IsSummonable {
 			get {
-				return aboutWindow == null && 
-					(addinWindow == null || !addinWindow.Visible);
+				return aboutWindow == null;
 			}
 		}
 
@@ -737,20 +734,12 @@ namespace Do.Core {
 			window.Vanish ();
 		}	
 
-		public void ShowPluginManager ()
+		public void ShowPreferences ()
 		{
 			Vanish ();
 			Reset ();
 
-			addinWindow = AddinManagerWindow.Show (null);
-			addinWindow.DestroyEvent += delegate {
-				addinWindow = null;
-			};
-			addinWindow.DeleteEvent += delegate {
-				Log.Info ("Refreshing universe...");
-				Do.UniverseManager.Reload ();
-				Log.Info ("Universe completely refreshed.");
-			};
+			new PreferencesWindow ().Show ();
 		}
 
 		public void ShowAbout ()
