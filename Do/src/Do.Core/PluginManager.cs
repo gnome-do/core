@@ -72,7 +72,7 @@ namespace Do.Core {
 		
 		/// <summary>
         /// Installs plugins that are located in the <see
-        /// cref="Paths.PluginsInstall"/> directory.  This will build addins
+        /// cref="Paths.UserPlugins"/> directory.  This will build addins
         /// (mpack files) and install them.
 		/// </summary>
 		/// <param name="setup">
@@ -81,23 +81,23 @@ namespace Do.Core {
         public void InstallLocalPlugins (SetupService setup)
         {
             // Load local items into repo
-            if (!Directory.Exists (Paths.PluginInstall)) return;
+            if (!Directory.Exists (Paths.UserPlugins)) return;
 
             // Create mpack (addin packages) out of dlls. Delete each dll
             // when finished creating package.
             foreach (string file in 
-                    Directory.GetFiles (Paths.PluginInstall, "*.dll")) {
-                string path = Path.Combine (Paths.PluginInstall, file);
+                    Directory.GetFiles (Paths.UserPlugins, "*.dll")) {
+                string path = Path.Combine (Paths.UserPlugins, file);
                 setup.BuildPackage (new ConsoleProgressStatus (false),
-                        Paths.PluginInstall, new string [] { path });
+                        Paths.UserPlugins, new string [] { path });
                 File.Delete (path);
             }
 
             // Install each mpack file, deleting each file when finished
             // installing it.
             foreach (string file in 
-                    Directory.GetFiles (Paths.PluginInstall, "*.mpack")) {
-                string path = Path.Combine (Paths.PluginInstall, file);
+                    Directory.GetFiles (Paths.UserPlugins, "*.mpack")) {
+                string path = Path.Combine (Paths.UserPlugins, file);
                 //Log.Info ("Installing local plugin {0}...", path);
                 setup.Install (new ConsoleProgressStatus (false),
                         new string [] { path });
