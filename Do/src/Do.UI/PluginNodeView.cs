@@ -24,6 +24,7 @@ using System;
 
 using Gtk;
 using Mono.Addins;
+using Mono.Addins.Setup;
 
 namespace Do
 {
@@ -34,29 +35,30 @@ namespace Do
 			TreeViewColumn column;
 			CellRenderer cell;
 			
-			this.Model  = new ListStore (typeof (bool), typeof (string),
-			                                             typeof (Addin));
+			Model  = new ListStore (typeof (bool), typeof (string), typeof (string));
 			
 			column = new TreeViewColumn ();
 			cell = new CellRendererToggle ();
 			(cell as CellRendererToggle).Activatable = true;
 			(cell as CellRendererToggle).Toggled += OnPluginToggle;
-			this.AppendColumn ("Enable", cell, "active", 0);
+			AppendColumn ("Enabled", cell, "active", 0);
 			
 			cell = new Gtk.CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
-			this.AppendColumn ("Plugin Name", cell, "text", 1);
+			AppendColumn ("Plugin", cell, "text", 1);
 			
-			ListStore store = this.Model as ListStore;
-			
-			foreach (Addin a in AddinManager.Registry.GetAddins ()) {
-				store.AppendValues (a.Enabled, a.Name, a);
+			ListStore store = Model as ListStore;
+			SetupService setup = new SetupService (AddinManager.Registry);
+			foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
+				store.AppendValues (AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
+				                    e.Addin.Name,
+				                    e.Addin.Id);
 			}
 		}
 		
 		protected void OnPluginToggle (object sender, ToggledArgs args)
 		{
-			Addin addin;
+			string addinId;
 			bool enabled;
 			TreeIter iter;
 			ListStore store;
@@ -65,16 +67,16 @@ namespace Do
 			if (!store.GetIter (out iter, new TreePath (args.Path)))
 				return;
 			
-			addin = (Addin) store.GetValue (iter, 2);
+			addinId = (string) store.GetValue (iter, 2);
 			enabled = (bool) store.GetValue (iter, 0);
 			
 			if (null != PluginToggled) {
-				PluginToggled (addin, !enabled);
+				PluginToggled (addinId, !enabled);
 			}
 			store.SetValue (iter, 0, !enabled);
 		}
 		
 		public event PluginToggledDelegate PluginToggled;
-		public delegate void PluginToggledDelegate (Addin addin, bool enabled);
+		public delegate void PluginToggledDelegate (string addinId, bool enabled);
 	}
 }
