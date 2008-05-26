@@ -28,23 +28,23 @@ namespace Do.Universe
 {
 	public class MailtoAction : AbstractAction
 	{
-		public override string Name
-		{
-			get { return Catalog.GetString ("Email"); }
+		public override string Name {
+			get {
+                return Catalog.GetString ("Email");
+            }
 		}
 		
-		public override string Description
-		{
-			get { return Catalog.GetString ("Compose a new email to a friend."); }
+		public override string Description {
+			get {
+                return Catalog.GetString ("Compose a new email to a friend.");
+            }
 		}
 		
-		public override string Icon
-		{
+		public override string Icon {
 			get { return "email"; }
 		}
 		
-		public override Type[] SupportedItemTypes
-		{
+		public override Type[] SupportedItemTypes {
 			get {
 				return new Type[] {
 					typeof (ContactItem),
@@ -60,20 +60,18 @@ namespace Do.Universe
 				foreach (string detail in contact.Details)
 					if (detail.StartsWith ("email"))
 						return true;
-			}
-			else if ((item as IContactDetailItem).Key.StartsWith ("email"))
-				return true;
-			
+			} else if (item is IContactDetailItem) {
+                return (item as IContactDetailItem).Key.StartsWith ("email");
+            }
 			return false;
 		}
 		
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
-			string to;
+			string emails, email;
 			
-			to = "";
+			emails = email = "";
 			foreach (IItem item in items) {
-				string email;
 				if (item is ContactItem) {
 					ContactItem contact = item as ContactItem;
 					email = contact["email"];
@@ -86,12 +84,12 @@ namespace Do.Universe
 							}
 						}
 					}
-				}
-				else
+				} else if (item is IContactDetailItem) {
 					email = (item as IContactDetailItem).Value;
-				to += email + ",";
+                }
+				emails += email + ",";
 			}
-			Util.Environment.Open ("mailto:" + to);
+			Util.Environment.Open ("mailto:" + emails);
 			return null;
 		}
 	}
