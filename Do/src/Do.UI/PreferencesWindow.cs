@@ -98,16 +98,6 @@ namespace Do.UI
 			}
         }
 
-		protected virtual void OnBtnManagePluginsClicked (object sender, System.EventArgs e)
-		{
-			Window addins = AddinManagerWindow.Show (this);
-			addins.DeleteEvent += delegate {
-				Log.Info ("Completely refreshing universe...");
-				Do.UniverseManager.Reload ();
-				Log.Info ("Universe completely refreshed!");
-			};
-		}
-
 		protected virtual void OnBtnCloseClicked (object sender, System.EventArgs e)
 		{
 			Destroy ();
