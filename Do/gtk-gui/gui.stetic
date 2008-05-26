@@ -6,7 +6,6 @@
   </configuration>
   <import>
     <widget-library name="../bin/Debug/Do.exe" internal="true" />
-    <widget-library name="MonoDevelop.Ide, Version=1.0.0.0, Culture=neutral" />
   </import>
   <widget class="Gtk.Window" id="Do.UI.SettingsWindow" design-size="664 626">
     <action-group name="Default">
@@ -316,134 +315,10 @@
                 <property name="MemberName" />
                 <property name="WidthRequest">300</property>
                 <property name="CanFocus">True</property>
-                <property name="CurrentPage">1</property>
+                <property name="CurrentPage">0</property>
                 <property name="ShowTabs">False</property>
                 <child>
                   <placeholder />
-                </child>
-                <child>
-                  <widget class="Gtk.Label" id="label1">
-                    <property name="MemberName" />
-                    <property name="LabelProp" translatable="yes">page4</property>
-                  </widget>
-                  <packing>
-                    <property name="type">tab</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="Gtk.VBox" id="vbox2">
-                    <property name="MemberName" />
-                    <property name="Spacing">6</property>
-                    <child>
-                      <widget class="Gtk.HBox" id="hbox2">
-                        <property name="MemberName" />
-                        <property name="Spacing">6</property>
-                        <property name="BorderWidth">6</property>
-                        <child>
-                          <widget class="Gtk.Label" id="label4">
-                            <property name="MemberName" />
-                            <property name="LabelProp" translatable="yes">Summon:</property>
-                          </widget>
-                          <packing>
-                            <property name="Position">0</property>
-                            <property name="AutoSize">True</property>
-                            <property name="Expand">False</property>
-                            <property name="Fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="Gtk.Alignment" id="alignment2">
-                            <property name="MemberName" />
-                            <property name="LeftPadding">8</property>
-                            <property name="RightPadding">80</property>
-                            <child>
-                              <widget class="Gtk.ComboBox" id="combo_summon_key">
-                                <property name="MemberName" />
-                                <property name="IsTextCombo">True</property>
-                                <property name="Items" translatable="yes">&lt;Super&gt;space
-&lt;Ctrl&gt;space</property>
-                                <property name="Active">0</property>
-                                <signal name="Changed" handler="OnComboSummonKeyChanged" after="yes" />
-                              </widget>
-                            </child>
-                          </widget>
-                          <packing>
-                            <property name="Position">1</property>
-                            <property name="AutoSize">False</property>
-                          </packing>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="Position">0</property>
-                        <property name="AutoSize">True</property>
-                        <property name="Expand">False</property>
-                        <property name="Fill">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder />
-                    </child>
-                    <child>
-                      <placeholder />
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="Position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="Gtk.Label" id="label3">
-                    <property name="MemberName" />
-                    <property name="LabelProp" translatable="yes">Keybindings</property>
-                  </widget>
-                  <packing>
-                    <property name="type">tab</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="Gtk.Fixed" id="fixed3">
-                    <property name="MemberName" />
-                    <property name="HasWindow">False</property>
-                    <child>
-                      <widget class="Gtk.Button" id="btn_manage_plugins">
-                        <property name="MemberName" />
-                        <property name="CanFocus">True</property>
-                        <property name="Type">TextAndIcon</property>
-                        <property name="Icon">stock:gtk-execute Button</property>
-                        <property name="Label" translatable="yes">Add/Remove Plugins...</property>
-                        <property name="UseUnderline">True</property>
-                        <signal name="Clicked" handler="OnBtnManagePluginsClicked" />
-                      </widget>
-                      <packing>
-                        <property name="X">110</property>
-                        <property name="Y">100</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="Position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="Gtk.Label" id="label2">
-                    <property name="MemberName" />
-                    <property name="LabelProp" translatable="yes">Manage Plugins</property>
-                  </widget>
-                  <packing>
-                    <property name="type">tab</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder />
-                </child>
-                <child>
-                  <widget class="Gtk.Label" id="label6">
-                    <property name="MemberName" />
-                    <property name="LabelProp" translatable="yes">More...</property>
-                  </widget>
-                  <packing>
-                    <property name="type">tab</property>
-                  </packing>
                 </child>
               </widget>
               <packing>
@@ -477,12 +352,14 @@
               <widget class="Gtk.Button" id="btn_close">
                 <property name="MemberName" />
                 <property name="WidthRequest">80</property>
+                <property name="CanDefault">True</property>
+                <property name="HasDefault">True</property>
                 <property name="CanFocus">True</property>
-                <property name="Type">TextAndIcon</property>
-                <property name="Icon">stock:gtk-close Button</property>
-                <property name="Label" translatable="yes">_Close</property>
-                <property name="UseUnderline">True</property>
+                <property name="UseStock">True</property>
+                <property name="Type">StockItem</property>
+                <property name="StockId">gtk-close</property>
                 <signal name="Clicked" handler="OnBtnCloseClicked" />
+                <property name="label">gtk-close</property>
               </widget>
               <packing>
                 <property name="X">488</property>
@@ -493,11 +370,11 @@
                 <property name="MemberName" />
                 <property name="WidthRequest">80</property>
                 <property name="CanFocus">True</property>
-                <property name="Type">TextAndIcon</property>
-                <property name="Icon">stock:gtk-help Button</property>
-                <property name="Label" translatable="yes">Help</property>
-                <property name="UseUnderline">True</property>
+                <property name="UseStock">True</property>
+                <property name="Type">StockItem</property>
+                <property name="StockId">gtk-help</property>
                 <signal name="Clicked" handler="OnBtnHelpClicked" />
+                <property name="label">gtk-help</property>
               </widget>
             </child>
           </widget>
@@ -506,6 +383,98 @@
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="Gtk.Bin" id="Do.UI.KeybindingsPreferencesWidget" design-size="300 300">
+    <property name="MemberName" />
+    <child>
+      <widget class="Gtk.VBox" id="vbox1">
+        <property name="MemberName" />
+        <property name="Spacing">6</property>
+        <property name="BorderWidth">6</property>
+        <child>
+          <widget class="Gtk.HBox" id="hbox2">
+            <property name="MemberName" />
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.Label" id="label1">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Summon:</property>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Alignment" id="alignment1">
+                <property name="MemberName" />
+                <property name="LeftPadding">10</property>
+                <property name="RightPadding">80</property>
+                <child>
+                  <widget class="Gtk.ComboBox" id="combo_summon">
+                    <property name="MemberName" />
+                    <property name="IsTextCombo">True</property>
+                    <property name="Items" translatable="yes" />
+                    <signal name="Changed" handler="OnComboSummonChanged" />
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">False</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="Position">0</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder />
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="Gtk.Bin" id="Do.KeybindingsPreferencesWidget" design-size="300 300">
+    <property name="MemberName" />
+    <child>
+      <placeholder />
+    </child>
+  </widget>
+  <widget class="Gtk.Bin" id="Do.UI.GeneralPreferencesWidget" design-size="300 300">
+    <property name="MemberName" />
+    <child>
+      <placeholder />
+    </child>
+  </widget>
+  <widget class="Gtk.Bin" id="Do.UI.ManagePluginsPreferencesWidget" design-size="300 300">
+    <property name="MemberName" />
+    <child>
+      <widget class="Gtk.Fixed" id="fixed1">
+        <property name="MemberName" />
+        <property name="HasWindow">False</property>
+        <child>
+          <widget class="Gtk.Button" id="btn_manage_plugins">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="Type">TextAndIcon</property>
+            <property name="Icon">stock:gtk-execute Button</property>
+            <property name="Label" translatable="yes">Manage plugins...</property>
+            <property name="UseUnderline">True</property>
+            <signal name="Clicked" handler="OnBtnManagePluginsClicked" />
+          </widget>
+          <packing>
+            <property name="X">81</property>
+            <property name="Y">56</property>
           </packing>
         </child>
       </widget>

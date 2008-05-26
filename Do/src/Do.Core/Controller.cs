@@ -184,6 +184,10 @@ namespace Do.Core {
 				return null != window && window.Visible;
 			}
 		}
+
+		internal PreferencesWindow PreferencesWindow {
+			get { return prefsWindow; }
+		}
 		
 		/// <summary>
 		/// Summons a window with objects in it... seems to work
@@ -742,7 +746,7 @@ namespace Do.Core {
 
 			if (null == prefsWindow) {
 				prefsWindow = new PreferencesWindow ();
-				prefsWindow.DeleteEvent += delegate { prefsWindow = null; };
+				prefsWindow.Destroyed += delegate { prefsWindow = null; };
 			}
 			prefsWindow.Show ();
 		}

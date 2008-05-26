@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 using System;
+using System.Collections.Generic;
 
 using Gtk;
 using Mono.Addins.Gui;
@@ -40,19 +42,29 @@ namespace Do.UI
 			scroll_window.Add (ndview);
 			ndview.ShowAll ();
 			ndview.Selection.SelectPath (TreePath.NewFirst ());
+			
+			// Add notebook pages.
+			foreach (KeyValuePair<string, Widget> page in Pages) {
+				notebook.Add (page.Value);
+			}
+			
+			//SetupService setup = new SetupService (AddinManager.Registry);
 		}
 		
-		PreferencesTreeNode[] nodes;
-		PreferencesTreeNode[] Nodes {
+		KeyValuePair<string, Widget>[] pages;
+		KeyValuePair<string, Widget>[] Pages {
 			get {
-				if (null == nodes) {
-					nodes = new PreferencesTreeNode [] {
-						new PreferencesTreeNode ("General Preferences"),
-						new PreferencesTreeNode ("Shortcut Keys"),
-						new PreferencesTreeNode ("Manage Plugins"),
+				if (null == pages) {
+					pages = new KeyValuePair<string, Widget> [] {
+						new KeyValuePair<string, Widget> (
+						    "General Preferences", new GeneralPreferencesWidget ()),
+						new KeyValuePair<string, Widget> (
+						    "Shortcut Keys", new KeybindingsPreferencesWidget ()),
+						new KeyValuePair<string, Widget> (
+						    "Manage Plugins", new ManagePluginsPreferencesWidget ()),
 					};
 				}
-				return nodes;
+				return pages;
 			}
 		}
 		
@@ -61,8 +73,8 @@ namespace Do.UI
             get {
 	            if (store == null) {
                     store = new NodeStore (typeof (PreferencesTreeNode));
-					foreach (ITreeNode node in Nodes) {
-						store.AddNode (node);
+					foreach (KeyValuePair<string, Widget> page in Pages) {
+						store.AddNode (new PreferencesTreeNode (page.Key));
 					}
 	            }
 	            return store;
@@ -78,7 +90,12 @@ namespace Do.UI
 			node = selection.SelectedNode as PreferencesTreeNode;
 			
 			// Unsafe for now.
-			notebook.CurrentPage = Array.IndexOf (Nodes, node);
+			for (int i = 0; i < Pages.Length; ++i) {
+				if (Pages [i].Key == node.Label) {
+					notebook.CurrentPage = i;
+					break;
+				}
+			}
         }
 
 		protected virtual void OnBtnManagePluginsClicked (object sender, System.EventArgs e)
@@ -100,11 +117,5 @@ namespace Do.UI
 		{
 			Util.Environment.Open ("https://wiki.ubuntu.com/GnomeDo/Use");
 		}
-
-		protected virtual void OnComboSummonKeyChanged (object sender, System.EventArgs e)
-		{
-			Do.Preferences.SummonKeyBinding = (sender as ComboBox).ActiveText;
-		}
-
 	}
 }
