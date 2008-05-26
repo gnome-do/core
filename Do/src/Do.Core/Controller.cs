@@ -37,6 +37,7 @@ namespace Do.Core {
 		protected IDoWindow window;
 		protected Gtk.Window addinWindow;
 		protected Gtk.AboutDialog aboutWindow;
+		protected PreferencesWindow prefsWindow;
 		protected SearchContext[] context;
 		
 		const int SearchDelay = 250;
@@ -739,7 +740,11 @@ namespace Do.Core {
 			Vanish ();
 			Reset ();
 
-			new PreferencesWindow ().Show ();
+			if (null == prefsWindow) {
+				prefsWindow = new PreferencesWindow ();
+				prefsWindow.DeleteEvent += delegate { prefsWindow = null; };
+			}
+			prefsWindow.Show ();
 		}
 
 		public void ShowAbout ()
