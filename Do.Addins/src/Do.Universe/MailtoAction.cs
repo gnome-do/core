@@ -56,7 +56,7 @@ namespace Do.Universe
 		public override bool SupportsItem (IItem item)
 		{
 			if (item is ContactItem) {
-				foreach (string detail in (item as ConctactItem).Details)
+				foreach (string detail in (item as ContactItem).Details)
 					if (detail.StartsWith ("email"))
                         return true;
 			} else if (item is IContactDetailItem) {
