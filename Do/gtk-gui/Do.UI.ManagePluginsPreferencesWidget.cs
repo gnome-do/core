@@ -42,7 +42,7 @@ namespace Do.UI {
             // Container child vbox3.Gtk.Box+BoxChild
             this.alignment4 = new Gtk.Alignment(1F, 0.5F, 1F, 1F);
             this.alignment4.Name = "alignment4";
-            this.alignment4.LeftPadding = ((uint)(200));
+            this.alignment4.LeftPadding = ((uint)(230));
             this.alignment4.BorderWidth = ((uint)(6));
             // Container child alignment4.Gtk.Container+ContainerChild
             this.btn_manage_plugins = new Gtk.Button();
@@ -60,7 +60,7 @@ namespace Do.UI {
             w3.Add(w4);
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w6 = new Gtk.Label();
-            w6.LabelProp = Mono.Unix.Catalog.GetString("Add/remove plugins...");
+            w6.LabelProp = Mono.Unix.Catalog.GetString("Advanced...");
             w6.UseUnderline = true;
             w3.Add(w6);
             w2.Add(w3);

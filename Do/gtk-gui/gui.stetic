@@ -223,7 +223,7 @@
           <widget class="Gtk.Alignment" id="alignment4">
             <property name="MemberName" />
             <property name="Xalign">1</property>
-            <property name="LeftPadding">200</property>
+            <property name="LeftPadding">230</property>
             <property name="BorderWidth">6</property>
             <child>
               <widget class="Gtk.Button" id="btn_manage_plugins">
@@ -231,7 +231,7 @@
                 <property name="CanFocus">True</property>
                 <property name="Type">TextAndIcon</property>
                 <property name="Icon">stock:gtk-execute Button</property>
-                <property name="Label" translatable="yes">Add/remove plugins...</property>
+                <property name="Label" translatable="yes">Advanced...</property>
                 <property name="UseUnderline">True</property>
                 <signal name="Clicked" handler="OnBtnManagePluginsClicked" />
               </widget>
