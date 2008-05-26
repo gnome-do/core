@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Threading;
 
 using Gtk;
 using Mono.Addins;
@@ -55,25 +56,29 @@ namespace Do.UI
 		
 		private void OnPluginToggle (string id, bool enabled)
 		{
-			// If the addin isn't found, install it.
-			if (null == AddinManager.Registry.GetAddin (id)) {
-				IAddinInstaller installer;
-				
-				installer = new ConsoleAddinInstaller ();
-				installer.InstallAddins (AddinManager.Registry,
-				    string.Format ("Installing \"{0}\" addin...", id),
-				    new string[] { id });
-			}
-			
-			// Now enable or disable the plugin.
-			if (enabled)
-				AddinManager.Registry.EnableAddin (id);
-			else
-				AddinManager.Registry.DisableAddin (id);
-			
-			// For now...
-			// TODO: remove this
-			Do.UniverseManager.Reload ();
+            new Thread ((ThreadStart) delegate {
+                // If the addin isn't found, install it.
+                if (null == AddinManager.Registry.GetAddin (id)) {
+                    IAddinInstaller installer;
+                    
+                    installer = new ConsoleAddinInstaller ();
+                    installer.InstallAddins (AddinManager.Registry,
+                        string.Format ("Installing \"{0}\" addin...", id),
+                        new string[] { id });
+                }
+                
+                // Now enable or disable the plugin.
+                if (enabled)
+                    AddinManager.Registry.EnableAddin (id);
+                else
+                    AddinManager.Registry.DisableAddin (id);
+                
+                // For now...
+                // TODO: remove this
+                Gtk.Application.Invoke (delegate {
+                    Do.UniverseManager.Reload ();
+                });
+            }).Start ();
 		}
 	}
 }
