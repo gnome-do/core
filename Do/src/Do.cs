@@ -35,7 +35,6 @@ namespace Do {
 		static Controller controller;
 		static PluginManager plugin_manager;
 		static UniverseManager universe_manager;
-		static SettingsWindow preferences_window;
 
 		public static void Main (string[] args)
 		{
@@ -90,19 +89,6 @@ namespace Do {
 
 		public static Preferences Preferences {
 			get { return preferences; }
-		}
-		
-		public static SettingsWindow PreferencesWindow {
-			get {
-				if (null == preferences_window) {
-					preferences_window = new SettingsWindow ();
-					preferences_window.Destroyed +=
-						delegate {
-							preferences_window = null;
-						};
-				}
-				return preferences_window;
-			}
 		}
 
 		public static Controller Controller {

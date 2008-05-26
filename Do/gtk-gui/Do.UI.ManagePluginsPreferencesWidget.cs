@@ -13,7 +13,11 @@ namespace Do.UI {
     
     public partial class ManagePluginsPreferencesWidget {
         
-        private Gtk.Fixed fixed1;
+        private Gtk.VBox vbox3;
+        
+        private Gtk.ScrolledWindow scrollw;
+        
+        private Gtk.Alignment alignment4;
         
         private Gtk.Button btn_manage_plugins;
         
@@ -23,35 +27,51 @@ namespace Do.UI {
             Stetic.BinContainer.Attach(this);
             this.Name = "Do.UI.ManagePluginsPreferencesWidget";
             // Container child Do.UI.ManagePluginsPreferencesWidget.Gtk.Container+ContainerChild
-            this.fixed1 = new Gtk.Fixed();
-            this.fixed1.Name = "fixed1";
-            this.fixed1.HasWindow = false;
-            // Container child fixed1.Gtk.Fixed+FixedChild
+            this.vbox3 = new Gtk.VBox();
+            this.vbox3.Name = "vbox3";
+            this.vbox3.Spacing = 6;
+            this.vbox3.BorderWidth = ((uint)(6));
+            // Container child vbox3.Gtk.Box+BoxChild
+            this.scrollw = new Gtk.ScrolledWindow();
+            this.scrollw.CanFocus = true;
+            this.scrollw.Name = "scrollw";
+            this.scrollw.ShadowType = ((Gtk.ShadowType)(1));
+            this.vbox3.Add(this.scrollw);
+            Gtk.Box.BoxChild w1 = ((Gtk.Box.BoxChild)(this.vbox3[this.scrollw]));
+            w1.Position = 0;
+            // Container child vbox3.Gtk.Box+BoxChild
+            this.alignment4 = new Gtk.Alignment(1F, 0.5F, 1F, 1F);
+            this.alignment4.Name = "alignment4";
+            this.alignment4.LeftPadding = ((uint)(200));
+            this.alignment4.BorderWidth = ((uint)(6));
+            // Container child alignment4.Gtk.Container+ContainerChild
             this.btn_manage_plugins = new Gtk.Button();
             this.btn_manage_plugins.CanFocus = true;
             this.btn_manage_plugins.Name = "btn_manage_plugins";
             this.btn_manage_plugins.UseUnderline = true;
             // Container child btn_manage_plugins.Gtk.Container+ContainerChild
-            Gtk.Alignment w1 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
+            Gtk.Alignment w2 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
             // Container child GtkAlignment.Gtk.Container+ContainerChild
-            Gtk.HBox w2 = new Gtk.HBox();
-            w2.Spacing = 2;
+            Gtk.HBox w3 = new Gtk.HBox();
+            w3.Spacing = 2;
             // Container child GtkHBox.Gtk.Container+ContainerChild
-            Gtk.Image w3 = new Gtk.Image();
-            w3.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-execute", Gtk.IconSize.Button, 20);
+            Gtk.Image w4 = new Gtk.Image();
+            w4.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-execute", Gtk.IconSize.Button, 20);
+            w3.Add(w4);
+            // Container child GtkHBox.Gtk.Container+ContainerChild
+            Gtk.Label w6 = new Gtk.Label();
+            w6.LabelProp = Mono.Unix.Catalog.GetString("Add/remove plugins...");
+            w6.UseUnderline = true;
+            w3.Add(w6);
             w2.Add(w3);
-            // Container child GtkHBox.Gtk.Container+ContainerChild
-            Gtk.Label w5 = new Gtk.Label();
-            w5.LabelProp = Mono.Unix.Catalog.GetString("Manage plugins...");
-            w5.UseUnderline = true;
-            w2.Add(w5);
-            w1.Add(w2);
-            this.btn_manage_plugins.Add(w1);
-            this.fixed1.Add(this.btn_manage_plugins);
-            Gtk.Fixed.FixedChild w9 = ((Gtk.Fixed.FixedChild)(this.fixed1[this.btn_manage_plugins]));
-            w9.X = 81;
-            w9.Y = 56;
-            this.Add(this.fixed1);
+            this.btn_manage_plugins.Add(w2);
+            this.alignment4.Add(this.btn_manage_plugins);
+            this.vbox3.Add(this.alignment4);
+            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.vbox3[this.alignment4]));
+            w11.Position = 1;
+            w11.Expand = false;
+            w11.Fill = false;
+            this.Add(this.vbox3);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }

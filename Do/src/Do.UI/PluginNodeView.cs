@@ -29,7 +29,6 @@ namespace Do
 {
 	public class PluginNodeView : NodeView
 	{
-		
 		public PluginNodeView() : base ()
 		{
 			TreeViewColumn column;
@@ -42,7 +41,7 @@ namespace Do
 			cell = new CellRendererToggle ();
 			(cell as CellRendererToggle).Activatable = true;
 			(cell as CellRendererToggle).Toggled += OnPluginToggle;
-			this.AppendColumn (" ", cell, "active", 0);
+			this.AppendColumn ("Enable", cell, "active", 0);
 			
 			cell = new Gtk.CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
@@ -50,25 +49,32 @@ namespace Do
 			
 			ListStore store = this.Model as ListStore;
 			
-			if (!AddinManager.IsInitialized) {
-				AddinManager.Initialize (Paths.UserPlugins);
-
-				AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", Do.PluginManager.OnItemSourceChange);
-				AddinManager.AddExtensionNodeHandler ("/Do/Action", Do.PluginManager.OnActionChange);
-			}
-			
 			foreach (Addin a in AddinManager.Registry.GetAddins ()) {
 				store.AppendValues (a.Enabled, a.Name, a);
 			}
 		}
 		
-		public void OnPluginToggle (object sender, ToggledArgs args)
+		protected void OnPluginToggle (object sender, ToggledArgs args)
 		{
-			PluginToggled (sender, args);
+			Addin addin;
+			bool enabled;
+			TreeIter iter;
+			ListStore store;
+			
+			store = Model as ListStore;
+			if (!store.GetIter (out iter, new TreePath (args.Path)))
+				return;
+			
+			addin = (Addin) store.GetValue (iter, 2);
+			enabled = (bool) store.GetValue (iter, 0);
+			
+			if (null != PluginToggled) {
+				PluginToggled (addin, !enabled);
+			}
+			store.SetValue (iter, 0, !enabled);
 		}
 		
 		public event PluginToggledDelegate PluginToggled;
-		
-		public delegate void PluginToggledDelegate (object sender, Gtk.ToggledArgs args);
+		public delegate void PluginToggledDelegate (Addin addin, bool enabled);
 	}
 }

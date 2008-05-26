@@ -20,6 +20,7 @@
 using System;
 
 using Gtk;
+using Mono.Addins;
 using Mono.Addins.Gui;
 
 using Do;
@@ -28,9 +29,18 @@ namespace Do.UI
 {
 	public partial class ManagePluginsPreferencesWidget : Gtk.Bin
 	{
+		PluginNodeView nview;
+		
 		public ManagePluginsPreferencesWidget()
 		{
 			Build ();
+			
+			nview = new PluginNodeView ();
+			nview.PluginToggled += OnPluginToggle;
+			
+			scrollw.Add (nview);
+			scrollw.ShowAll ();
+			//SetupService setup = new SetupService (AddinManager.Registry);
 		}
 
 		protected virtual void OnBtnManagePluginsClicked (object sender, System.EventArgs e)
@@ -41,6 +51,11 @@ namespace Do.UI
 				Do.UniverseManager.Reload ();
 				Log.Info ("Universe completely refreshed!");
 			};
+		}
+		
+		private void OnPluginToggle (Addin addin, bool enabled)
+		{
+			addin.Enabled = enabled;
 		}
 	}
 }

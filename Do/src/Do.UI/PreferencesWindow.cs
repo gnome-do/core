@@ -47,8 +47,6 @@ namespace Do.UI
 			foreach (KeyValuePair<string, Widget> page in Pages) {
 				notebook.Add (page.Value);
 			}
-			
-			//SetupService setup = new SetupService (AddinManager.Registry);
 		}
 		
 		KeyValuePair<string, Widget>[] pages;
