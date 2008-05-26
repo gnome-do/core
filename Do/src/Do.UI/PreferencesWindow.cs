@@ -48,6 +48,7 @@ namespace Do.UI
 				if (null == nodes) {
 					nodes = new PreferencesTreeNode [] {
 						new PreferencesTreeNode ("General Preferences"),
+						new PreferencesTreeNode ("Shortcut Keys"),
 						new PreferencesTreeNode ("Manage Plugins"),
 					};
 				}
@@ -98,6 +99,11 @@ namespace Do.UI
 		protected virtual void OnBtnHelpClicked (object sender, System.EventArgs e)
 		{
 			Util.Environment.Open ("https://wiki.ubuntu.com/GnomeDo/Use");
+		}
+
+		protected virtual void OnComboSummonKeyChanged (object sender, System.EventArgs e)
+		{
+			Do.Preferences.SummonKeyBinding = (sender as ComboBox).ActiveText;
 		}
 
 	}
