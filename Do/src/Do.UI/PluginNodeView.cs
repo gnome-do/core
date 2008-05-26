@@ -73,7 +73,8 @@ namespace Do
 			if (null != PluginToggled) {
 				PluginToggled (addinId, !enabled);
 			}
-			store.SetValue (iter, 0, !enabled);
+			store.SetValue (iter, 0,
+                AddinManager.Registry.IsAddinEnabled (addinId));
 		}
 		
 		public event PluginToggledDelegate PluginToggled;
