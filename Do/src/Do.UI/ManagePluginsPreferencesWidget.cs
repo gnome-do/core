@@ -59,8 +59,8 @@ namespace Do.UI
 			if (null == AddinManager.Registry.GetAddin (id)) {
 				IAddinInstaller installer;
 				
-				//installer = new ConsoleAddinInstaller ();
-				installer = new Mono.Addins.Gui.AddinInstaller ();
+				installer = new ConsoleAddinInstaller ();
+				//installer = new Mono.Addins.Gui.AddinInstaller ();
                 try {
                     installer.InstallAddins (AddinManager.Registry,
                         string.Format ("Installing \"{0}\" addin...", id),
@@ -79,6 +79,30 @@ namespace Do.UI
 			// For now...
 			// TODO: remove this
 			Do.UniverseManager.Reload ();
+		}
+
+		protected virtual void OnBtnRefreshClicked (object sender, System.EventArgs e)
+		{
+			nview.Refresh ();
+		}
+
+		protected virtual void OnBtnUpdateClicked (object sender, System.EventArgs e)
+		{
+			IAddinInstaller installer;
+			string [] updateIds;
+			SetupService setup;
+			
+			installer = new Mono.Addins.Gui.AddinInstaller ();
+			setup = new SetupService (AddinManager.Registry);
+			setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+			
+			updateIds = Array.ConvertAll<AddinRepositoryEntry, string> (
+			    setup.Repositories.GetAvailableUpdates (),
+			    delegate (AddinRepositoryEntry ae) { return ae.Addin.Id; });
+			if (updateIds.Length > 0) {
+				installer.InstallAddins (AddinManager.Registry, "Installing updates...",
+				    updateIds);
+			}
 		}
 	}
 }

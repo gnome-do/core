@@ -80,14 +80,27 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.Fixed" id="fixed1">
+          <widget class="Gtk.HButtonBox" id="hbuttonbox2">
             <property name="MemberName" />
-            <property name="HeightRequest">36</property>
-            <property name="HasWindow">False</property>
+            <property name="Size">2</property>
+            <child>
+              <widget class="Gtk.Button" id="btn_help">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="UseStock">True</property>
+                <property name="Type">StockItem</property>
+                <property name="StockId">gtk-help</property>
+                <signal name="Clicked" handler="OnBtnHelpClicked" />
+                <property name="label">gtk-help</property>
+              </widget>
+              <packing>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
             <child>
               <widget class="Gtk.Button" id="btn_close">
                 <property name="MemberName" />
-                <property name="WidthRequest">80</property>
                 <property name="CanDefault">True</property>
                 <property name="HasDefault">True</property>
                 <property name="CanFocus">True</property>
@@ -98,20 +111,10 @@
                 <property name="label">gtk-close</property>
               </widget>
               <packing>
-                <property name="X">488</property>
+                <property name="Position">1</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
               </packing>
-            </child>
-            <child>
-              <widget class="Gtk.Button" id="btn_help">
-                <property name="MemberName" />
-                <property name="WidthRequest">80</property>
-                <property name="CanFocus">True</property>
-                <property name="UseStock">True</property>
-                <property name="Type">StockItem</property>
-                <property name="StockId">gtk-help</property>
-                <signal name="Clicked" handler="OnBtnHelpClicked" />
-                <property name="label">gtk-help</property>
-              </widget>
             </child>
           </widget>
           <packing>
@@ -192,7 +195,7 @@
       <placeholder />
     </child>
   </widget>
-  <widget class="Gtk.Bin" id="Do.UI.ManagePluginsPreferencesWidget" design-size="395 300">
+  <widget class="Gtk.Bin" id="Do.UI.ManagePluginsPreferencesWidget" design-size="426 300">
     <property name="MemberName" />
     <child>
       <widget class="Gtk.VBox" id="vbox3">
@@ -220,21 +223,39 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.Alignment" id="alignment4">
+          <widget class="Gtk.HButtonBox" id="hbuttonbox1">
             <property name="MemberName" />
-            <property name="Xalign">1</property>
-            <property name="LeftPadding">230</property>
-            <property name="BorderWidth">6</property>
+            <property name="Size">2</property>
             <child>
-              <widget class="Gtk.Button" id="btn_manage_plugins">
+              <widget class="Gtk.Button" id="btn_refresh">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="UseStock">True</property>
+                <property name="Type">StockItem</property>
+                <property name="StockId">gtk-refresh</property>
+                <signal name="Clicked" handler="OnBtnRefreshClicked" />
+                <property name="label">gtk-refresh</property>
+              </widget>
+              <packing>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Button" id="btn_update">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Type">TextAndIcon</property>
-                <property name="Icon">stock:gtk-execute Button</property>
-                <property name="Label" translatable="yes">Advanced...</property>
+                <property name="Icon">stock:stock_internet Button</property>
+                <property name="Label" translatable="yes">Install Updates</property>
                 <property name="UseUnderline">True</property>
-                <signal name="Clicked" handler="OnBtnManagePluginsClicked" />
+                <signal name="Clicked" handler="OnBtnUpdateClicked" />
               </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
             </child>
           </widget>
           <packing>

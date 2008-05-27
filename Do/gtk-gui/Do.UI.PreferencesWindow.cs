@@ -23,11 +23,11 @@ namespace Do.UI {
         
         private Gtk.HSeparator hseparator1;
         
-        private Gtk.Fixed fixed1;
-        
-        private Gtk.Button btn_close;
+        private Gtk.HButtonBox hbuttonbox2;
         
         private Gtk.Button btn_help;
+        
+        private Gtk.Button btn_close;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
@@ -80,33 +80,34 @@ namespace Do.UI {
             w4.Expand = false;
             w4.Fill = false;
             // Container child vbox1.Gtk.Box+BoxChild
-            this.fixed1 = new Gtk.Fixed();
-            this.fixed1.HeightRequest = 36;
-            this.fixed1.Name = "fixed1";
-            this.fixed1.HasWindow = false;
-            // Container child fixed1.Gtk.Fixed+FixedChild
+            this.hbuttonbox2 = new Gtk.HButtonBox();
+            this.hbuttonbox2.Name = "hbuttonbox2";
+            // Container child hbuttonbox2.Gtk.ButtonBox+ButtonBoxChild
+            this.btn_help = new Gtk.Button();
+            this.btn_help.CanFocus = true;
+            this.btn_help.Name = "btn_help";
+            this.btn_help.UseStock = true;
+            this.btn_help.UseUnderline = true;
+            this.btn_help.Label = "gtk-help";
+            this.hbuttonbox2.Add(this.btn_help);
+            Gtk.ButtonBox.ButtonBoxChild w5 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2[this.btn_help]));
+            w5.Expand = false;
+            w5.Fill = false;
+            // Container child hbuttonbox2.Gtk.ButtonBox+ButtonBoxChild
             this.btn_close = new Gtk.Button();
-            this.btn_close.WidthRequest = 80;
             this.btn_close.CanDefault = true;
             this.btn_close.CanFocus = true;
             this.btn_close.Name = "btn_close";
             this.btn_close.UseStock = true;
             this.btn_close.UseUnderline = true;
             this.btn_close.Label = "gtk-close";
-            this.fixed1.Add(this.btn_close);
-            Gtk.Fixed.FixedChild w5 = ((Gtk.Fixed.FixedChild)(this.fixed1[this.btn_close]));
-            w5.X = 488;
-            // Container child fixed1.Gtk.Fixed+FixedChild
-            this.btn_help = new Gtk.Button();
-            this.btn_help.WidthRequest = 80;
-            this.btn_help.CanFocus = true;
-            this.btn_help.Name = "btn_help";
-            this.btn_help.UseStock = true;
-            this.btn_help.UseUnderline = true;
-            this.btn_help.Label = "gtk-help";
-            this.fixed1.Add(this.btn_help);
-            this.vbox1.Add(this.fixed1);
-            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.vbox1[this.fixed1]));
+            this.hbuttonbox2.Add(this.btn_close);
+            Gtk.ButtonBox.ButtonBoxChild w6 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2[this.btn_close]));
+            w6.Position = 1;
+            w6.Expand = false;
+            w6.Fill = false;
+            this.vbox1.Add(this.hbuttonbox2);
+            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.vbox1[this.hbuttonbox2]));
             w7.Position = 2;
             w7.Expand = false;
             w7.Fill = false;
@@ -118,8 +119,8 @@ namespace Do.UI {
             this.DefaultHeight = 526;
             this.btn_close.HasDefault = true;
             this.Show();
-            this.btn_close.Clicked += new System.EventHandler(this.OnBtnCloseClicked);
             this.btn_help.Clicked += new System.EventHandler(this.OnBtnHelpClicked);
+            this.btn_close.Clicked += new System.EventHandler(this.OnBtnCloseClicked);
         }
     }
 }

@@ -1,8 +1,7 @@
 // PluginNodeView.cs
 //
-//GNOME Do is the legal property of its developers. Please refer to the
-//COPYRIGHT file distributed with this
-//source distribution.
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,6 +20,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 using Gtk;
 using Mono.Addins;
@@ -28,56 +28,77 @@ using Mono.Addins.Setup;
 
 namespace Do
 {
-	public class PluginNodeView : NodeView
-	{
-		public PluginNodeView() : base ()
-		{
-			TreeViewColumn column;
-			CellRenderer cell;
+    public class PluginNodeView : NodeView
+    {
+        public PluginNodeView () :
+            base ()
+        {
+            TreeViewColumn column;
+            CellRenderer cell;
+
+            Model = new ListStore (typeof (bool), typeof (string), typeof (string));
+
+            column = new TreeViewColumn ();
+            cell = new CellRendererToggle ();
+            (cell as CellRendererToggle).Activatable = true;
+            (cell as CellRendererToggle).Toggled += OnPluginToggle;
+            AppendColumn ("Enabled", cell, "active", 0);
+
+            cell = new Gtk.CellRendererText ();
+            (cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
+            AppendColumn ("Plugin", cell, "text", 1);
 			
-			Model  = new ListStore (typeof (bool), typeof (string), typeof (string));
-			
-			column = new TreeViewColumn ();
-			cell = new CellRendererToggle ();
-			(cell as CellRendererToggle).Activatable = true;
-			(cell as CellRendererToggle).Toggled += OnPluginToggle;
-			AppendColumn ("Enabled", cell, "active", 0);
-			
-			cell = new Gtk.CellRendererText ();
-			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
-			AppendColumn ("Plugin", cell, "text", 1);
-			
-			ListStore store = Model as ListStore;
-			SetupService setup = new SetupService (AddinManager.Registry);
-			foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
-				store.AppendValues (AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
-				                    e.Addin.Name,
-				                    e.Addin.Id);
-			}
+			Refresh ();
 		}
 		
-		protected void OnPluginToggle (object sender, ToggledArgs args)
-		{
-			string addinId;
-			bool enabled;
-			TreeIter iter;
-			ListStore store;
+		public void Refresh () {
+            ListStore store;
+            SetupService setup;
+            Dictionary<string, string> seenAddins;
 			
 			store = Model as ListStore;
-			if (!store.GetIter (out iter, new TreePath (args.Path)))
-				return;
+            setup = new SetupService (AddinManager.Registry);
+            seenAddins = new Dictionary<string, string> ();
 			
-			addinId = (string) store.GetValue (iter, 2);
-			enabled = (bool) store.GetValue (iter, 0);
+			setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+			store.Clear ();
 			
-			if (null != PluginToggled) {
-				PluginToggled (addinId, !enabled);
-			}
-			store.SetValue (iter, 0,
+            // Add addins from online repositories.
+            foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
+                store.AppendValues (AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
+                        e.Addin.Name, e.Addin.Id);
+                seenAddins [e.Addin.Id] = e.Addin.Id;
+            }
+            // Add other (non-online) addins.
+            foreach (Addin a in AddinManager.Registry.GetAddins ()) {
+                if (seenAddins.ContainsKey (a.Id)) continue;
+                store.AppendValues (a.Enabled, a.Name, a.Id);
+                seenAddins [a.Id] = a.Id;
+            }
+        }
+
+        protected void OnPluginToggle (object sender, ToggledArgs args)
+        {
+            string addinId;
+            bool enabled;
+            TreeIter iter;
+            ListStore store;
+
+            store = Model as ListStore;
+            if (!store.GetIter (out iter, new TreePath (args.Path)))
+                return;
+
+            addinId = (string) store.GetValue (iter, 2);
+            enabled = (bool) store.GetValue (iter, 0);
+
+            if (null != PluginToggled) {
+                PluginToggled (addinId, !enabled);
+            }
+            store.SetValue (iter, 0,
                 AddinManager.Registry.IsAddinEnabled (addinId));
-		}
-		
-		public event PluginToggledDelegate PluginToggled;
-		public delegate void PluginToggledDelegate (string addinId, bool enabled);
-	}
+        }
+
+        public event PluginToggledDelegate PluginToggled;
+        public delegate void PluginToggledDelegate (string addinId, bool enabled);
+    }
 }
