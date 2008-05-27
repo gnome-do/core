@@ -30,23 +30,33 @@ namespace Do
 {
     public class PluginNodeView : NodeView
     {
+        const string DescriptionFormat = "<b>{0} <small>v{2}</small></b>\n<small>{1}</small>";
+
+        enum Column {
+            Enabled = 0,
+            Description,
+            Id,
+            NumColumns,
+        }
+
         public PluginNodeView () :
             base ()
         {
-            TreeViewColumn column;
+
             CellRenderer cell;
 
-            Model = new ListStore (typeof (bool), typeof (string), typeof (string));
+            Model = new ListStore (typeof (bool),
+                typeof (string),
+                typeof (string));
 
-            column = new TreeViewColumn ();
             cell = new CellRendererToggle ();
             (cell as CellRendererToggle).Activatable = true;
             (cell as CellRendererToggle).Toggled += OnPluginToggle;
-            AppendColumn ("Enabled", cell, "active", 0);
+            AppendColumn ("Enable", cell, "active", Column.Enabled);
 
             cell = new Gtk.CellRendererText ();
             (cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
-            AppendColumn ("Plugin", cell, "text", 1);
+            AppendColumn ("Plugin", cell, "markup", Column.Description);
 			
 			Refresh ();
 		}
@@ -66,16 +76,38 @@ namespace Do
             // Add addins from online repositories.
             foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
                 store.AppendValues (AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
-                        e.Addin.Name, e.Addin.Id);
+                    Description (e),
+                    e.Addin.Id);
                 seenAddins [e.Addin.Id] = e.Addin.Id;
             }
             // Add other (non-online) addins.
             foreach (Addin a in AddinManager.Registry.GetAddins ()) {
                 if (seenAddins.ContainsKey (a.Id)) continue;
-                store.AppendValues (a.Enabled, a.Name, a.Id);
+                store.AppendValues (a.Enabled,
+                    Description (a),
+                    a.Id);
                 seenAddins [a.Id] = a.Id;
             }
-        }
+		}
+		
+		string Description (string name, string desc, string version)
+		{
+			return string.Format (DescriptionFormat, name, desc, version);
+		}
+		string Description (Addin a)
+		{
+			return Description (a.Name, a.Description.ToString (), a.Version);
+		}
+		
+		string Description (AddinRepositoryEntry a)
+		{
+			return Description (a.Addin);
+		}
+		
+		string Description (AddinHeader a)
+		{
+			return Description (a.Name, a.Description, a.Version);
+		}
 
         protected void OnPluginToggle (object sender, ToggledArgs args)
         {
@@ -88,8 +120,8 @@ namespace Do
             if (!store.GetIter (out iter, new TreePath (args.Path)))
                 return;
 
-            addinId = (string) store.GetValue (iter, 2);
-            enabled = (bool) store.GetValue (iter, 0);
+            addinId = (string) store.GetValue (iter, (int)Column.Id);
+            enabled = (bool) store.GetValue (iter, (int)Column.Enabled);
 
             if (null != PluginToggled) {
                 PluginToggled (addinId, !enabled);
