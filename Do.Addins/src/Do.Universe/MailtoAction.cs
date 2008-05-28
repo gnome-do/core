@@ -1,9 +1,9 @@
 /*
  * MailtoAction.cs
  * 
- * GNOME Do is the legal property of its developers, whose names are too numerous
- * to list here.  Please refer to the COPYRIGHT file distributed with this
- * source distribution.
+ * GNOME Do is the legal property of its developers, whose names are too
+ * numerous to list here.  Please refer to the COPYRIGHT file distributed with
+ * this source distribution.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,28 @@
  */
 
 using System;
+using System.Text.RegularExpressions;
 using Mono.Unix;
 
 using Do.Addins;
+using Do.Universe;
 
 namespace Do.Universe
 {
 	public class MailtoAction : AbstractAction
 	{
+		// Regex should conform to RFC2822.
+		private const string EmailPattern = @"[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\."
+            + @"[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*"
+            + @"[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?";
+		
+		private Regex valid_email;
+		
+		public MailtoAction ()
+		{
+			valid_email = new Regex (EmailPattern, RegexOptions.Compiled);
+		}
+
 		public override string Name {
 			get {
                 return Catalog.GetString ("Email");
@@ -44,11 +58,12 @@ namespace Do.Universe
 			get { return "email"; }
 		}
 		
-		public override Type[] SupportedItemTypes {
+		public override Type [] SupportedItemTypes {
 			get {
-				return new Type[] {
+				return new Type [] {
 					typeof (ContactItem),
 					typeof (IContactDetailItem),
+					typeof (ITextItem),
 				};
 			}
 		}
@@ -56,16 +71,19 @@ namespace Do.Universe
 		public override bool SupportsItem (IItem item)
 		{
 			if (item is ContactItem) {
-				foreach (string detail in (item as ContactItem).Details)
+				foreach (string detail in (item as ContactItem).Details) {
 					if (detail.StartsWith ("email"))
                         return true;
+                }
 			} else if (item is IContactDetailItem) {
                 return (item as IContactDetailItem).Key.StartsWith ("email");
-            }
+            } else if (item is ITextItem) {
+				return valid_email.IsMatch ((item as ITextItem).Text);
+			}
 			return false;
 		}
 		
-		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
+		public override IItem [] Perform (IItem [] items, IItem [] modifierItems)
 		{
 			string emails, email;
 			
@@ -73,19 +91,21 @@ namespace Do.Universe
 			foreach (IItem item in items) {
 				if (item is ContactItem) {
 					ContactItem contact = item as ContactItem;
-					email = contact["email"];
+					email = contact ["email"];
 					
 					if (email == null) {
 						foreach (string detail in contact.Details) {
 							if (detail.StartsWith ("email")) {
-								email = contact[detail];
+								email = contact [detail];
 								break;
 							}
 						}
 					}
 				} else if (item is IContactDetailItem) {
 					email = (item as IContactDetailItem).Value;
-                }
+                } else if (item is ITextItem) {
+					email = (item as ITextItem).Text;
+				}
 				emails += email + ",";
 			}
 			Util.Environment.Open ("mailto:" + emails);
