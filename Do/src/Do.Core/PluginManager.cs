@@ -32,6 +32,7 @@ namespace Do.Core {
 	
 	public class PluginManager {
 		
+		const string DefaultPluginIcon = "folder_tar";
 		const string HttpRepo = "http://do.davebsd.com/repository/dev";
 
 		List<DoItemSource> sources;
@@ -164,6 +165,44 @@ namespace Do.Core {
 					Log.Error ("Action failed to unload: {0}", e.Message);
 				}
 			}	
+		}
+		
+		/// <summary>
+		/// Given an Addin ID, returns an icon that may represent that addin.
+		/// </summary>
+		/// <param name="id">
+		/// A <see cref="System.String"/> containing an addin ID.
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/> containing an icon name. Can be loaded
+		/// via IconProvider.
+		/// </returns>
+		public string IconForAddin (string id)
+		{
+			Addin a;
+			
+			a = AddinManager.Registry.GetAddin (id);
+			if (null == a) return DefaultPluginIcon;
+			
+			// First look for an icon among ItemSources:
+			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/ItemSource")) {
+				// This is only an approximate way to check for equality between these ids...
+				// TODO: *really* make sure these ids match (also below).
+				if (id.StartsWith (n.Addin.Id)) {
+					try {
+						return (n.GetInstance () as IItemSource).Icon;
+					} catch { }
+				}
+			}
+			// If no icon found among ItemSources, look for an icon among Actions:
+			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/Actions")) {
+				if (id.StartsWith (n.Addin.Id)) {
+					try {
+						return (n.GetInstance () as IAction).Icon;
+					} catch { }
+				}
+			}
+			return DefaultPluginIcon;
 		}
 		
 	}

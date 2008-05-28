@@ -26,10 +26,13 @@ using Gtk;
 using Mono.Addins;
 using Mono.Addins.Setup;
 
-namespace Do
+using Do.Universe;
+
+namespace Do.UI
 {
     public class PluginNodeView : NodeView
     {
+		const int IconSize = 32;
         const string DescriptionFormat = "<b>{0} <small>v{2}</small></b>\n<small>{1}</small>";
 
         enum Column {
@@ -42,23 +45,37 @@ namespace Do
         public PluginNodeView () :
             base ()
         {
-
             CellRenderer cell;
 
-            Model = new ListStore (typeof (bool),
+			HeadersVisible = false;
+            Model = new ListStore (
+			    typeof (bool),
                 typeof (string),
                 typeof (string));
-
+			
             cell = new CellRendererToggle ();
             (cell as CellRendererToggle).Activatable = true;
             (cell as CellRendererToggle).Toggled += OnPluginToggle;
             AppendColumn ("Enable", cell, "active", Column.Enabled);
 
+			cell = new CellRendererPixbuf ();				
+			cell.SetFixedSize (IconSize + 3, IconSize + 3);
+			AppendColumn ("Icon", cell, new TreeCellDataFunc (IconDataFunc));
+			                     
             cell = new Gtk.CellRendererText ();
-            (cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
+			(cell as CellRendererText).WrapWidth = 290;
+			(cell as CellRendererText).WrapMode = Pango.WrapMode.Word;
             AppendColumn ("Plugin", cell, "markup", Column.Description);
 			
 			Refresh ();
+		}
+		
+		private void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
+		{			
+			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
+			string id = (Model as ListStore).GetValue (iter, (int)Column.Id) as string;
+			string icon = Do.PluginManager.IconForAddin (id);
+			renderer.Pixbuf = IconProvider.PixbufFromIconName (icon, IconSize);
 		}
 		
 		public void Refresh () {

@@ -41,12 +41,16 @@ namespace Do.UI
 
 			scroll_window.Add (ndview);
 			ndview.ShowAll ();
-			ndview.Selection.SelectPath (TreePath.NewFirst ());
 			
 			// Add notebook pages.
 			foreach (KeyValuePair<string, Widget> page in Pages) {
 				notebook.Add (page.Value);
 			}
+			
+			// Select a default preference view.
+			TreePath sel = TreePath.NewFirst ();
+			sel.Next (); sel.Next ();
+			ndview.Selection.SelectPath (sel);
 		}
 		
 		KeyValuePair<string, Widget>[] pages;
