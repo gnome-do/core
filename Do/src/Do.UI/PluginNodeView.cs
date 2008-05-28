@@ -47,6 +47,7 @@ namespace Do.UI
         {
             CellRenderer cell;
 
+			RulesHint = true;
             HeadersVisible = false;
             Model = new ListStore (
                 typeof (bool),
