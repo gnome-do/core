@@ -29,39 +29,29 @@ using Do;
 
 namespace Do.UI
 {
-	public partial class ManagePluginsPreferencesWidget : Gtk.Bin
-	{
-		PluginNodeView nview;
-		
-		public ManagePluginsPreferencesWidget()
-		{
-			Build ();
-			
-			nview = new PluginNodeView ();
-			nview.PluginToggled += OnPluginToggle;
-			
-			scrollw.Add (nview);
-			scrollw.ShowAll ();
-		}
+    public partial class ManagePluginsPreferencesWidget : Gtk.Bin
+    {
+        PluginNodeView nview;
 
-		protected virtual void OnBtnManagePluginsClicked (object sender, System.EventArgs e)
-		{			
-			Window addins = AddinManagerWindow.Show (Do.Controller.PreferencesWindow);
-			addins.DeleteEvent += delegate {
-				Log.Info ("Completely refreshing universe...");
-				Do.UniverseManager.Reload ();
-				Log.Info ("Universe completely refreshed!");
-			};
-		}
-		
-		private void OnPluginToggle (string id, bool enabled)
-		{
-			// If the addin isn't found, install it.
-			if (null == AddinManager.Registry.GetAddin (id)) {
-				IAddinInstaller installer;
-				
-				installer = new ConsoleAddinInstaller ();
-				//installer = new Mono.Addins.Gui.AddinInstaller ();
+        public ManagePluginsPreferencesWidget()
+        {
+            Build ();
+
+            nview = new PluginNodeView ();
+            nview.PluginToggled += OnPluginToggle;
+
+            scrollw.Add (nview);
+            scrollw.ShowAll ();
+        }
+
+        private void OnPluginToggle (string id, bool enabled)
+        {
+            // If the addin isn't found, install it.
+            if (null == AddinManager.Registry.GetAddin (id)) {
+                IAddinInstaller installer;
+
+                installer = new ConsoleAddinInstaller ();
+                //installer = new Mono.Addins.Gui.AddinInstaller ();
                 try {
                     installer.InstallAddins (AddinManager.Registry,
                         string.Format ("Installing \"{0}\" addin...", id),
@@ -69,41 +59,41 @@ namespace Do.UI
                 } catch (InstallException) {
                     return;
                 }
-			}
-			
-			// Now enable or disable the plugin.
-			if (enabled)
-				AddinManager.Registry.EnableAddin (id);
-			else
-				AddinManager.Registry.DisableAddin (id);
-			
-			// For now...
-			// TODO: remove this
-			Do.UniverseManager.Reload ();
-		}
+            }
 
-		protected virtual void OnBtnRefreshClicked (object sender, System.EventArgs e)
-		{
-			nview.Refresh ();
-		}
+            // Now enable or disable the plugin.
+            if (enabled)
+                AddinManager.Registry.EnableAddin (id);
+            else
+                AddinManager.Registry.DisableAddin (id);
 
-		protected virtual void OnBtnUpdateClicked (object sender, System.EventArgs e)
-		{
-			IAddinInstaller installer;
-			string [] updateIds;
-			SetupService setup;
-			
-			installer = new Mono.Addins.Gui.AddinInstaller ();
-			setup = new SetupService (AddinManager.Registry);
-			setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
-			
-			updateIds = Array.ConvertAll<AddinRepositoryEntry, string> (
-			    setup.Repositories.GetAvailableUpdates (),
-			    delegate (AddinRepositoryEntry ae) { return ae.Addin.Id; });
-			if (updateIds.Length > 0) {
-				installer.InstallAddins (AddinManager.Registry, "Installing updates...",
-				    updateIds);
-			}
-		}
-	}
+            // For now...
+            // TODO: remove this
+            Do.UniverseManager.Reload ();
+        }
+
+        protected virtual void OnBtnRefreshClicked (object sender, System.EventArgs e)
+        {
+            nview.Refresh ();
+        }
+
+        protected virtual void OnBtnUpdateClicked (object sender, System.EventArgs e)
+        {
+            IAddinInstaller installer;
+            string [] updateIds;
+            SetupService setup;
+
+            installer = new Mono.Addins.Gui.AddinInstaller ();
+            setup = new SetupService (AddinManager.Registry);
+            setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+
+            updateIds = Array.ConvertAll<AddinRepositoryEntry, string> (
+                setup.Repositories.GetAvailableUpdates (),
+                delegate (AddinRepositoryEntry ae) { return ae.Addin.Id; });
+            if (updateIds.Length > 0) {
+                installer.InstallAddins (AddinManager.Registry, "Installing updates...",
+                    updateIds);
+            }
+        }
+    }
 }

@@ -11,7 +11,7 @@
     <property name="MemberName" />
     <property name="WidthRequest">580</property>
     <property name="HeightRequest">500</property>
-    <property name="Title" translatable="yes">Preferences</property>
+    <property name="Title" translatable="yes">GNOME Do Preferences</property>
     <property name="Icon">stock:gtk-preferences Menu</property>
     <property name="WindowPosition">Center</property>
     <property name="BorderWidth">6</property>
@@ -181,12 +181,6 @@
           <placeholder />
         </child>
       </widget>
-    </child>
-  </widget>
-  <widget class="Gtk.Bin" id="Do.KeybindingsPreferencesWidget" design-size="300 300">
-    <property name="MemberName" />
-    <child>
-      <placeholder />
     </child>
   </widget>
   <widget class="Gtk.Bin" id="Do.UI.GeneralPreferencesWidget" design-size="300 300">

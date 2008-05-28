@@ -35,7 +35,7 @@ namespace Do.UI {
             this.WidthRequest = 580;
             this.HeightRequest = 500;
             this.Name = "Do.UI.PreferencesWindow";
-            this.Title = Mono.Unix.Catalog.GetString("Preferences");
+            this.Title = Mono.Unix.Catalog.GetString("GNOME Do Preferences");
             this.Icon = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Menu, 16);
             this.WindowPosition = ((Gtk.WindowPosition)(1));
             this.BorderWidth = ((uint)(6));

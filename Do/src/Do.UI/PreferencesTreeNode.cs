@@ -24,29 +24,29 @@ using Gtk;
 namespace Do.UI
 {
     [TreeNode (ListOnly=true)]
-    public class PreferencesTreeNode : TreeNode, IEquatable<PreferencesTreeNode> {
+        public class PreferencesTreeNode : TreeNode, IEquatable<PreferencesTreeNode> {
 
-		string label;
-	
-        public PreferencesTreeNode (string label)
-        {
+            string label;
+
+            public PreferencesTreeNode (string label)
+            {
                 this.label = label;
-        }
+            }
 
-        [TreeNodeValue (Column=0)]
-        public string Label {
-			get { return label; }
-		}
-		
-		public bool Equals (PreferencesTreeNode x)
-        {
-        	return label.Equals (x.Label);
-        }
-		
-		public override int GetHashCode ()
-		{
-			return label.GetHashCode ();
-		}
+            [TreeNodeValue (Column=0)]
+                public string Label {
+                    get { return label; }
+                }
 
-    }
+            public bool Equals (PreferencesTreeNode x)
+            {
+                return label.Equals (x.Label);
+            }
+
+            public override int GetHashCode ()
+            {
+                return label.GetHashCode ();
+            }
+
+        }
 }

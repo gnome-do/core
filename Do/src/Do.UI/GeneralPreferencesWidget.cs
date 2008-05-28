@@ -23,12 +23,12 @@ using Do;
 
 namespace Do.UI
 {
-	public partial class GeneralPreferencesWidget : Gtk.Bin
-	{
-		
-		public GeneralPreferencesWidget()
-		{
-			this.Build();
-		}
-	}
+    public partial class GeneralPreferencesWidget : Gtk.Bin
+    {
+
+        public GeneralPreferencesWidget()
+        {
+            this.Build();
+        }
+    }
 }

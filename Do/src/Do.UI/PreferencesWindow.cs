@@ -25,89 +25,89 @@ using Mono.Addins.Gui;
 
 namespace Do.UI
 {	
-	public partial class PreferencesWindow : Gtk.Window
-	{
-		NodeView ndview;
-		
-		public PreferencesWindow () : 
-				base (Gtk.WindowType.Toplevel)
-		{
-			Build ();
-			
-			ndview = new NodeView (Store);
-			ndview.AppendColumn ("", new CellRendererText (), "text", 0);
-			ndview.HeadersVisible = false;
-			ndview.NodeSelection.Changed += OnNodeViewSelectionChanged;
+    public partial class PreferencesWindow : Gtk.Window
+    {
+        NodeView ndview;
 
-			scroll_window.Add (ndview);
-			ndview.ShowAll ();
-			
-			// Add notebook pages.
-			foreach (KeyValuePair<string, Widget> page in Pages) {
-				notebook.Add (page.Value);
-			}
-			
-			// Select a default preference view.
-			TreePath sel = TreePath.NewFirst ();
-			sel.Next (); sel.Next ();
-			ndview.Selection.SelectPath (sel);
-		}
-		
-		KeyValuePair<string, Widget>[] pages;
-		KeyValuePair<string, Widget>[] Pages {
-			get {
-				if (null == pages) {
-					pages = new KeyValuePair<string, Widget> [] {
-						new KeyValuePair<string, Widget> (
-						    "General Preferences", new GeneralPreferencesWidget ()),
-						new KeyValuePair<string, Widget> (
-						    "Shortcut Keys", new KeybindingsPreferencesWidget ()),
-						new KeyValuePair<string, Widget> (
-						    "Manage Plugins", new ManagePluginsPreferencesWidget ()),
-					};
-				}
-				return pages;
-			}
-		}
-		
-		NodeStore store;
-        NodeStore Store {
+        public PreferencesWindow () : 
+            base (Gtk.WindowType.Toplevel)
+        {
+            Build ();
+
+            ndview = new NodeView (Store);
+            ndview.AppendColumn ("", new CellRendererText (), "text", 0);
+            ndview.HeadersVisible = false;
+            ndview.NodeSelection.Changed += OnNodeViewSelectionChanged;
+
+            scroll_window.Add (ndview);
+            ndview.ShowAll ();
+
+            // Add notebook pages.
+            foreach (KeyValuePair<string, Widget> page in Pages) {
+                notebook.Add (page.Value);
+            }
+
+            // Select a default preference view.
+            TreePath sel = TreePath.NewFirst ();
+            sel.Next (); sel.Next ();
+            ndview.Selection.SelectPath (sel);
+        }
+
+        KeyValuePair<string, Widget>[] pages;
+        KeyValuePair<string, Widget>[] Pages {
             get {
-	            if (store == null) {
-                    store = new NodeStore (typeof (PreferencesTreeNode));
-					foreach (KeyValuePair<string, Widget> page in Pages) {
-						store.AddNode (new PreferencesTreeNode (page.Key));
-					}
-	            }
-	            return store;
+                if (null == pages) {
+                    pages = new KeyValuePair<string, Widget> [] {
+                        new KeyValuePair<string, Widget> (
+                            "General Preferences", new GeneralPreferencesWidget ()),
+                        new KeyValuePair<string, Widget> (
+                            "Shortcut Keys", new KeybindingsPreferencesWidget ()),
+                        new KeyValuePair<string, Widget> (
+                            "Manage Plugins", new ManagePluginsPreferencesWidget ()),
+                    };
+                }
+                return pages;
             }
         }
-		
-		void OnNodeViewSelectionChanged (object o, System.EventArgs args)
+
+        NodeStore store;
+        NodeStore Store {
+            get {
+                if (store == null) {
+                    store = new NodeStore (typeof (PreferencesTreeNode));
+                    foreach (KeyValuePair<string, Widget> page in Pages) {
+                        store.AddNode (new PreferencesTreeNode (page.Key));
+                    }
+                }
+                return store;
+            }
+        }
+
+        void OnNodeViewSelectionChanged (object o, System.EventArgs args)
         {
             NodeSelection selection;
             PreferencesTreeNode node;
-			
-			selection = o as NodeSelection;
-			node = selection.SelectedNode as PreferencesTreeNode;
-			
-			// Unsafe for now.
-			for (int i = 0; i < Pages.Length; ++i) {
-				if (Pages [i].Key == node.Label) {
-					notebook.CurrentPage = i;
-					break;
-				}
-			}
+
+            selection = o as NodeSelection;
+            node = selection.SelectedNode as PreferencesTreeNode;
+
+            // Unsafe for now.
+            for (int i = 0; i < Pages.Length; ++i) {
+                if (Pages [i].Key == node.Label) {
+                    notebook.CurrentPage = i;
+                    break;
+                }
+            }
         }
 
-		protected virtual void OnBtnCloseClicked (object sender, System.EventArgs e)
-		{
-			Destroy ();
-		}
+        protected virtual void OnBtnCloseClicked (object sender, System.EventArgs e)
+        {
+            Destroy ();
+        }
 
-		protected virtual void OnBtnHelpClicked (object sender, System.EventArgs e)
-		{
-			Util.Environment.Open ("https://wiki.ubuntu.com/GnomeDo/Use");
-		}
-	}
+        protected virtual void OnBtnHelpClicked (object sender, System.EventArgs e)
+        {
+            Util.Environment.Open ("https://wiki.ubuntu.com/GnomeDo/Use");
+        }
+    }
 }
