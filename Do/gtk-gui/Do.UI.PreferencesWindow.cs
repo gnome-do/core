@@ -64,6 +64,7 @@ namespace Do.UI {
             this.notebook.CanFocus = true;
             this.notebook.Name = "notebook";
             this.notebook.CurrentPage = 0;
+            this.notebook.ShowBorder = false;
             this.notebook.ShowTabs = false;
             this.hbox1.Add(this.notebook);
             Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.hbox1[this.notebook]));

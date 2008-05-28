@@ -32,7 +32,6 @@ namespace Do.UI {
             this.vbox3 = new Gtk.VBox();
             this.vbox3.Name = "vbox3";
             this.vbox3.Spacing = 6;
-            this.vbox3.BorderWidth = ((uint)(6));
             // Container child vbox3.Gtk.Box+BoxChild
             this.scrollw = new Gtk.ScrolledWindow();
             this.scrollw.CanFocus = true;

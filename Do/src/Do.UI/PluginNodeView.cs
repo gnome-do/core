@@ -64,7 +64,7 @@ namespace Do.UI
             AppendColumn ("Icon", cell, new TreeCellDataFunc (IconDataFunc));
 
             cell = new Gtk.CellRendererText ();
-            (cell as CellRendererText).WrapWidth = 290;
+            (cell as CellRendererText).WrapWidth = 315;
             (cell as CellRendererText).WrapMode = Pango.WrapMode.Word;
             AppendColumn ("Plugin", cell, "markup", Column.Description);
 
