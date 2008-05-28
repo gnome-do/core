@@ -32,8 +32,8 @@ namespace Do.UI
 {
     public class PluginNodeView : NodeView
     {
-        const int IconSize = 32;
-        const string DescriptionFormat = "<b>{0} <small>v{2}</small></b>\n<small>{1}</small>";
+        const int IconSize = 26;
+        const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
         enum Column {
             Enabled = 0,
@@ -60,7 +60,7 @@ namespace Do.UI
             AppendColumn ("Enable", cell, "active", Column.Enabled);
 
             cell = new CellRendererPixbuf ();				
-            cell.SetFixedSize (IconSize + 3, IconSize + 3);
+            cell.SetFixedSize (IconSize + 8, -1);
             AppendColumn ("Icon", cell, new TreeCellDataFunc (IconDataFunc));
 
             cell = new Gtk.CellRendererText ();
