@@ -214,17 +214,15 @@ namespace Do.Core {
 			
 			// First look for an icon among ItemSources:
 			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/ItemSource")) {
-				// This is only an approximate way to check for equality between these ids...
-				// TODO: *really* make sure these ids match (also below).
-				if (id.StartsWith (n.Addin.Id)) {
+				if (Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id)) {
 					try {
 						return (n.GetInstance () as IItemSource).Icon;
 					} catch { }
 				}
 			}
 			// If no icon found among ItemSources, look for an icon among Actions:
-			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/Actions")) {
-				if (id.StartsWith (n.Addin.Id)) {
+			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/Action")) {
+				if (Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id)) {
 					try {
 						return (n.GetInstance () as IAction).Icon;
 					} catch { }
