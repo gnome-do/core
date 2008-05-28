@@ -23,6 +23,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Mono.Addins;
+using Mono.Addins.Gui;
 using Mono.Addins.Setup;
 
 using Do;
@@ -69,6 +70,33 @@ namespace Do.Core {
 			}
 		
 			InstallLocalPlugins (setup);
+		}
+		
+		internal bool InstallAvailableUpdates (bool graphical)
+		{
+			SetupService setup;
+            List<string> updates;
+            IAddinInstaller installer;
+
+            updates = new List<string> ();
+            setup = new SetupService (AddinManager.Registry);
+            installer = graphical ? new AddinInstaller () as IAddinInstaller
+                : new ConsoleAddinInstaller () as IAddinInstaller ;
+
+            setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+            foreach (AddinRepositoryEntry rep in setup.Repositories.GetAvailableAddins ()) {
+                Addin installed;
+
+                installed = AddinManager.Registry.GetAddin (Addin.GetIdName (rep.Addin.Id));
+                if (null == installed) continue;
+                if (Addin.CompareVersions (installed.Version, rep.Addin.Version) > 0) {
+                    updates.Add (rep.Addin.Id);
+				}
+            }
+            if (updates.Count > 0) {
+                installer.InstallAddins (AddinManager.Registry, "", updates.ToArray ());
+			}
+			return updates.Count > 0;
 		}
 		
 		/// <summary>

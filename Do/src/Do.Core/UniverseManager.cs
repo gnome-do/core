@@ -289,12 +289,8 @@ namespace Do.Core {
 			foreach (DoItemSource source in Do.PluginManager.ItemSources) {
 				ICollection<IItem> items;
 
-				items = source.Items;
-				if (items.Count == 0) {
-					source.UpdateItems ();
-					items = source.Items;
-				}
-				foreach (DoItem item in items) {
+                source.UpdateItems ();
+				foreach (DoItem item in source.Items) {
 					universe [item] = item;
 				}
 			}

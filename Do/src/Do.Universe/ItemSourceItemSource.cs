@@ -67,8 +67,9 @@ namespace Do.Universe {
 		public void UpdateItems ()
 		{
 			items.Clear ();
-			foreach (DoItemSource source in Do.PluginManager.ItemSources)
+			foreach (DoItemSource source in Do.PluginManager.ItemSources) {
 				items.Add (source);
+            }
 		}
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item)

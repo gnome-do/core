@@ -18,7 +18,7 @@
  */
 
 using System;
-using System.Threading;
+using System.Collections.Generic;
 
 using Gtk;
 using Mono.Addins;
@@ -79,21 +79,8 @@ namespace Do.UI
 
         protected virtual void OnBtnUpdateClicked (object sender, System.EventArgs e)
         {
-            IAddinInstaller installer;
-            string [] updateIds;
-            SetupService setup;
-
-            installer = new Mono.Addins.Gui.AddinInstaller ();
-            setup = new SetupService (AddinManager.Registry);
-            setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
-
-            updateIds = Array.ConvertAll<AddinRepositoryEntry, string> (
-                setup.Repositories.GetAvailableUpdates (),
-                delegate (AddinRepositoryEntry ae) { return ae.Addin.Id; });
-            if (updateIds.Length > 0) {
-                installer.InstallAddins (AddinManager.Registry, "Installing updates...",
-                    updateIds);
-            }
+			if (Do.PluginManager.InstallAvailableUpdates (true))
+				nview.Refresh ();
         }
     }
 }

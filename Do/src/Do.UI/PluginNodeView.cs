@@ -82,30 +82,35 @@ namespace Do.UI
         public void Refresh () {
             ListStore store;
             SetupService setup;
-            Dictionary<string, string> seenAddins;
+            SortedDictionary<string, object[]> seen;
 
             store = Model as ListStore;
             setup = new SetupService (AddinManager.Registry);
-            seenAddins = new Dictionary<string, string> ();
+            seen = new SortedDictionary<string, object[]> ();
 
             setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
             store.Clear ();
 
-            // Add addins from online repositories.
-            foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
-                store.AppendValues (AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
-                    Description (e),
-                    e.Addin.Id);
-                seenAddins [e.Addin.Id] = e.Addin.Id;
-            }
             // Add other (non-online) addins.
             foreach (Addin a in AddinManager.Registry.GetAddins ()) {
-                if (seenAddins.ContainsKey (a.Id)) continue;
-                store.AppendValues (a.Enabled,
+                if (seen.ContainsKey (Addin.GetIdName (a.Id))) continue;
+				seen [Addin.GetIdName (a.Id)]= new object[] {
+					a.Enabled,
                     Description (a),
-                    a.Id);
-                seenAddins [a.Id] = a.Id;
+                    a.Id};
             }
+            // Add addins from online repositories.
+            foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
+                if (seen.ContainsKey (Addin.GetIdName (e.Addin.Id))) continue;
+				seen [Addin.GetIdName (e.Addin.Id)] = new object[] {
+                	AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
+                    Description (e),
+                    e.Addin.Id};
+            }
+			// Add alphabetically sorted plugins.
+			foreach (object[] cols in seen.Values) {
+				store.AppendValues (cols);
+			}
         }
 
         string Description (string name, string desc, string version)
@@ -114,7 +119,7 @@ namespace Do.UI
         }
         string Description (Addin a)
         {
-            return Description (a.Name, a.Description.ToString (), a.Version);
+            return Description (a.Name, a.Description.Description, a.Version);
         }
 
         string Description (AddinRepositoryEntry a)
