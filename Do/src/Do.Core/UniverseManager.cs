@@ -52,7 +52,7 @@ namespace Do.Core {
 		/// <summary>
 		/// How long between update events (seconds).
 		/// </summary>
-		const int UpdateInterval = 60;
+		const int UpdateInterval = 2;
 		
 		/// <summary>
 		/// Maximum amount of time to spend updating (millseconds).
@@ -192,7 +192,7 @@ namespace Do.Core {
 						universe.Remove (oldItem);
 					}
 				}
-				Log.Info ("Updated \"{0}\" Item Source.", source.Name);
+				Log.Info ("Updated \"{0}\" Item Source. ({1})", source.Name, source.Items.Count);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
 		}

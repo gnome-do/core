@@ -30,7 +30,7 @@ namespace Do.Universe {
 	public class ApplicationItem : IRunnableItem {
 		
 		protected DesktopItem item;
-		
+
 		/// <summary>
 		/// Create an application item from a desktop file location.
 		/// </summary>

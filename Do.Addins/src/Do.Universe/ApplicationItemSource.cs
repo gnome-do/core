@@ -26,7 +26,7 @@ namespace Do.Universe {
 
 	public class ApplicationItemSource : IItemSource {
 
-		private List<IItem> apps;
+		private Dictionary<string,IItem> apps;
 
 		bool show_hidden = false;
 		
@@ -54,7 +54,7 @@ namespace Do.Universe {
 
 		public ApplicationItemSource ()
 		{
-			apps = new List<IItem> ();
+			apps = new Dictionary<string,IItem> ();
 		}
 
 		public Type [] SupportedItemTypes {
@@ -93,26 +93,30 @@ namespace Do.Universe {
 			if (!Directory.Exists (dir)) return;
 			foreach (string file in Directory.GetFiles (dir, "*.desktop")) {
                 ApplicationItem app;
+
+                if (apps.ContainsKey (file)) continue;
 				try {
 					app = new ApplicationItem (file);
 				} catch {
 					continue;
 				}
 				if (!app.Hidden || show_hidden)
-					apps.Add (app);
+					apps [file] = app;
 			}
 		}
 
 		public void UpdateItems ()
 		{
-			apps.Clear ();
+			// Updating is turned off because it uses a ridiculous amount of memory.
+			if (apps.Count > 0) return;
+			
 			foreach (string dir in DesktopFilesDirectories) {
 				LoadDesktopFiles (dir.Replace ("~", Paths.UserHome));
 			}
 		}
 
 		public ICollection<IItem> Items {
-			get { return apps; }
+			get { return apps.Values; }
 		}
 
 		public ICollection<IItem> ChildrenOfItem (IItem item)
