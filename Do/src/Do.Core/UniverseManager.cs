@@ -123,8 +123,18 @@ namespace Do.Core {
 		{
 			if (!Do.Controller.IsSummoned) {
 				Gtk.Application.Invoke (delegate {
-					UpdateItemSources ();
-					UpdateFirstResults ();
+                    // We've seen a strange KeyNotFoundException occur in
+                    // UpdateItemSources on occasion, but we've not been able to
+                    // determine where it occurs, as membership in universe is
+                    // always checked with ContainsKey before each access. For
+                    // now, we catch and report the exception to prevent a
+                    // crash.
+                    try {
+                        UpdateItemSources ();
+                    } catch (KeyNotFoundException e) {
+                        Log.Error ("{0}\n{1}", e.Message, e.StackTrace);
+                    }
+                    UpdateFirstResults ();
 				});
 			}
 			return true;
