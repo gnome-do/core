@@ -17,11 +17,17 @@ namespace Do.UI {
         
         private Gtk.ScrolledWindow scrollw;
         
+        private Gtk.HBox hbox1;
+        
         private Gtk.HButtonBox hbuttonbox1;
         
-        private Gtk.Button btn_refresh;
+        private Gtk.Button btn_configure;
         
-        private Gtk.Button btn_update;
+        private Gtk.Button btn_about;
+        
+        private Gtk.HButtonBox hbuttonbox2;
+        
+        private Gtk.Button btn_refresh;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
@@ -32,6 +38,7 @@ namespace Do.UI {
             this.vbox3 = new Gtk.VBox();
             this.vbox3.Name = "vbox3";
             this.vbox3.Spacing = 6;
+            this.vbox3.BorderWidth = ((uint)(6));
             // Container child vbox3.Gtk.Box+BoxChild
             this.scrollw = new Gtk.ScrolledWindow();
             this.scrollw.CanFocus = true;
@@ -41,57 +48,101 @@ namespace Do.UI {
             Gtk.Box.BoxChild w1 = ((Gtk.Box.BoxChild)(this.vbox3[this.scrollw]));
             w1.Position = 0;
             // Container child vbox3.Gtk.Box+BoxChild
+            this.hbox1 = new Gtk.HBox();
+            this.hbox1.Name = "hbox1";
+            this.hbox1.Spacing = 6;
+            // Container child hbox1.Gtk.Box+BoxChild
             this.hbuttonbox1 = new Gtk.HButtonBox();
             this.hbuttonbox1.Name = "hbuttonbox1";
+            this.hbuttonbox1.Spacing = 6;
+            this.hbuttonbox1.LayoutStyle = ((Gtk.ButtonBoxStyle)(3));
             // Container child hbuttonbox1.Gtk.ButtonBox+ButtonBoxChild
+            this.btn_configure = new Gtk.Button();
+            this.btn_configure.Sensitive = false;
+            this.btn_configure.CanFocus = true;
+            this.btn_configure.Name = "btn_configure";
+            this.btn_configure.UseUnderline = true;
+            // Container child btn_configure.Gtk.Container+ContainerChild
+            Gtk.Alignment w2 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
+            // Container child GtkAlignment.Gtk.Container+ContainerChild
+            Gtk.HBox w3 = new Gtk.HBox();
+            w3.Spacing = 2;
+            // Container child GtkHBox.Gtk.Container+ContainerChild
+            Gtk.Image w4 = new Gtk.Image();
+            w4.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Button, 20);
+            w3.Add(w4);
+            // Container child GtkHBox.Gtk.Container+ContainerChild
+            Gtk.Label w6 = new Gtk.Label();
+            w6.LabelProp = Mono.Unix.Catalog.GetString("_Configure Plugin");
+            w6.UseUnderline = true;
+            w3.Add(w6);
+            w2.Add(w3);
+            this.btn_configure.Add(w2);
+            this.hbuttonbox1.Add(this.btn_configure);
+            Gtk.ButtonBox.ButtonBoxChild w10 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox1[this.btn_configure]));
+            w10.Expand = false;
+            w10.Fill = false;
+            // Container child hbuttonbox1.Gtk.ButtonBox+ButtonBoxChild
+            this.btn_about = new Gtk.Button();
+            this.btn_about.Sensitive = false;
+            this.btn_about.CanFocus = true;
+            this.btn_about.Name = "btn_about";
+            this.btn_about.UseUnderline = true;
+            // Container child btn_about.Gtk.Container+ContainerChild
+            Gtk.Alignment w11 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
+            // Container child GtkAlignment.Gtk.Container+ContainerChild
+            Gtk.HBox w12 = new Gtk.HBox();
+            w12.Spacing = 2;
+            // Container child GtkHBox.Gtk.Container+ContainerChild
+            Gtk.Image w13 = new Gtk.Image();
+            w13.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-about", Gtk.IconSize.Menu, 16);
+            w12.Add(w13);
+            // Container child GtkHBox.Gtk.Container+ContainerChild
+            Gtk.Label w15 = new Gtk.Label();
+            w15.LabelProp = Mono.Unix.Catalog.GetString("_About Plugin");
+            w15.UseUnderline = true;
+            w12.Add(w15);
+            w11.Add(w12);
+            this.btn_about.Add(w11);
+            this.hbuttonbox1.Add(this.btn_about);
+            Gtk.ButtonBox.ButtonBoxChild w19 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox1[this.btn_about]));
+            w19.Position = 1;
+            w19.Expand = false;
+            w19.Fill = false;
+            this.hbox1.Add(this.hbuttonbox1);
+            Gtk.Box.BoxChild w20 = ((Gtk.Box.BoxChild)(this.hbox1[this.hbuttonbox1]));
+            w20.Position = 0;
+            // Container child hbox1.Gtk.Box+BoxChild
+            this.hbuttonbox2 = new Gtk.HButtonBox();
+            this.hbuttonbox2.Name = "hbuttonbox2";
+            this.hbuttonbox2.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
+            // Container child hbuttonbox2.Gtk.ButtonBox+ButtonBoxChild
             this.btn_refresh = new Gtk.Button();
             this.btn_refresh.CanFocus = true;
             this.btn_refresh.Name = "btn_refresh";
             this.btn_refresh.UseStock = true;
             this.btn_refresh.UseUnderline = true;
             this.btn_refresh.Label = "gtk-refresh";
-            this.hbuttonbox1.Add(this.btn_refresh);
-            Gtk.ButtonBox.ButtonBoxChild w2 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox1[this.btn_refresh]));
-            w2.Expand = false;
-            w2.Fill = false;
-            // Container child hbuttonbox1.Gtk.ButtonBox+ButtonBoxChild
-            this.btn_update = new Gtk.Button();
-            this.btn_update.CanFocus = true;
-            this.btn_update.Name = "btn_update";
-            this.btn_update.UseUnderline = true;
-            // Container child btn_update.Gtk.Container+ContainerChild
-            Gtk.Alignment w3 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
-            // Container child GtkAlignment.Gtk.Container+ContainerChild
-            Gtk.HBox w4 = new Gtk.HBox();
-            w4.Spacing = 2;
-            // Container child GtkHBox.Gtk.Container+ContainerChild
-            Gtk.Image w5 = new Gtk.Image();
-            w5.Pixbuf = Stetic.IconLoader.LoadIcon(this, "stock_internet", Gtk.IconSize.Button, 20);
-            w4.Add(w5);
-            // Container child GtkHBox.Gtk.Container+ContainerChild
-            Gtk.Label w7 = new Gtk.Label();
-            w7.LabelProp = Mono.Unix.Catalog.GetString("Install Updates");
-            w7.UseUnderline = true;
-            w4.Add(w7);
-            w3.Add(w4);
-            this.btn_update.Add(w3);
-            this.hbuttonbox1.Add(this.btn_update);
-            Gtk.ButtonBox.ButtonBoxChild w11 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox1[this.btn_update]));
-            w11.Position = 1;
-            w11.Expand = false;
-            w11.Fill = false;
-            this.vbox3.Add(this.hbuttonbox1);
-            Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.vbox3[this.hbuttonbox1]));
-            w12.Position = 1;
-            w12.Expand = false;
-            w12.Fill = false;
+            this.hbuttonbox2.Add(this.btn_refresh);
+            Gtk.ButtonBox.ButtonBoxChild w21 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2[this.btn_refresh]));
+            w21.Expand = false;
+            w21.Fill = false;
+            this.hbox1.Add(this.hbuttonbox2);
+            Gtk.Box.BoxChild w22 = ((Gtk.Box.BoxChild)(this.hbox1[this.hbuttonbox2]));
+            w22.Position = 1;
+            this.vbox3.Add(this.hbox1);
+            Gtk.Box.BoxChild w23 = ((Gtk.Box.BoxChild)(this.vbox3[this.hbox1]));
+            w23.Position = 1;
+            w23.Expand = false;
+            w23.Fill = false;
             this.Add(this.vbox3);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
             this.Show();
+            this.btn_configure.Clicked += new System.EventHandler(this.OnBtnConfigurePluginClicked);
+            this.btn_about.Clicked += new System.EventHandler(this.OnBtnAboutClicked);
             this.btn_refresh.Clicked += new System.EventHandler(this.OnBtnRefreshClicked);
-            this.btn_update.Clicked += new System.EventHandler(this.OnBtnUpdateClicked);
         }
     }
 }

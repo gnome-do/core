@@ -29,22 +29,36 @@ using Do;
 
 namespace Do.UI
 {
-    public partial class ManagePluginsPreferencesWidget : Gtk.Bin
+    public partial class ManagePluginsPreferencesWidget : Gtk.Bin, IPreferencePage
     {
         PluginNodeView nview;
+		
+		public Widget Page {
+			get { return this; }
+		}
+		
+		public string Label {
+			get { return "Plugins"; }
+		}
 
         public ManagePluginsPreferencesWidget()
         {
             Build ();
-
+			
             nview = new PluginNodeView ();
-            nview.PluginToggled += OnPluginToggle;
+            nview.PluginToggled += OnPluginToggled;
+			nview.PluginSelected += OnPluginSelected;
 
             scrollw.Add (nview);
             scrollw.ShowAll ();
         }
 
-        private void OnPluginToggle (string id, bool enabled)
+		private void OnPluginSelected (string id)
+        {
+			btn_about.Sensitive = true;
+		}
+		
+        private void OnPluginToggled (string id, bool enabled)
         {
             // If the addin isn't found, install it.
             if (null == AddinManager.Registry.GetAddin (id)) {
@@ -82,5 +96,13 @@ namespace Do.UI
 			if (Do.PluginManager.InstallAvailableUpdates (true))
 				nview.Refresh ();
         }
+		
+		protected virtual void OnBtnConfigurePluginClicked (object sender, System.EventArgs e)
+        {
+        }
+
+		protected virtual void OnBtnAboutClicked (object sender, System.EventArgs e)
+		{
+		}
     }
 }

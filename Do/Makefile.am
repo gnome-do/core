@@ -79,11 +79,11 @@ FILES =  \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
+	src/Do.UI/IPreferencePage.cs \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ManagePluginsPreferencesWidget.cs \
 	src/Do.UI/PluginNodeView.cs \
-	src/Do.UI/PreferencesTreeNode.cs \
 	src/Do.UI/PreferencesWindow.cs \
 	src/Do.Universe/AliasAction.cs \
 	src/Do.Universe/AliasItemSource.cs \

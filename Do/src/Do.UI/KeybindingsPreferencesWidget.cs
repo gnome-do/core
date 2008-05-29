@@ -26,8 +26,16 @@ using Do;
 
 namespace Do.UI
 {
-	public partial class KeybindingsPreferencesWidget : Gtk.Bin
-	{
+	public partial class KeybindingsPreferencesWidget : Gtk.Bin, IPreferencePage
+	{			
+		public Widget Page {
+			get { return this; }
+		}
+		
+		public string Label {
+			get { return "Keyboard"; }
+		}
+		
 		public KeybindingsPreferencesWidget ()
 		{
 			Build ();

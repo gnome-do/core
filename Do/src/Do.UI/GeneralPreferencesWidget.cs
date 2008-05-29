@@ -19,13 +19,22 @@
 
 using System;
 
+using Gtk;
+
 using Do;
 
 namespace Do.UI
 {
-    public partial class GeneralPreferencesWidget : Gtk.Bin
-    {
-
+    public partial class GeneralPreferencesWidget : Gtk.Bin, IPreferencePage
+    {			
+		public Widget Page {
+			get { return this; }
+		}
+		
+		public string Label {
+			get { return "General"; }
+		}
+		
         public GeneralPreferencesWidget()
         {
             this.Build();

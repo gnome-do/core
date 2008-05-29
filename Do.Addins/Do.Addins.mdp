@@ -19,7 +19,6 @@
     <File name="src/Do.Universe/ApplicationItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/BookmarkItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/DefineWordAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/FileItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/FileItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/IItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/IItemSource.cs" subtype="Code" buildaction="Compile" />
@@ -27,7 +26,6 @@
     <File name="src/Do.Universe/ImageFileItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/OpenAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/OpenURLAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/RecentFileItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/RunAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/TextItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/GNOMESpecialLocationsItemSource.cs" subtype="Code" buildaction="Compile" />
@@ -40,7 +38,6 @@
     <File name="src/Do.Universe/IAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/SearchContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/IDoController.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/FileItemActions.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Paths.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IDoWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ResultsWindowSelectionEventArgs.cs" subtype="Code" buildaction="Compile" />
@@ -64,6 +61,7 @@
     <File name="Do.Addins.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="Resources/settings-triangle.png" subtype="Code" buildaction="EmbedAsResource" />
     <File name="AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/IConfigurable.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gnome-sharp, Version=2.16.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />

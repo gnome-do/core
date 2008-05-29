@@ -287,8 +287,6 @@ namespace Do.Core {
 
 			// Hash items.
 			foreach (DoItemSource source in Do.PluginManager.ItemSources) {
-				ICollection<IItem> items;
-
                 source.UpdateItems ();
 				foreach (DoItem item in source.Items) {
 					universe [item] = item;

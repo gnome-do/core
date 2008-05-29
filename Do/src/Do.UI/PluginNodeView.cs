@@ -20,6 +20,7 @@
 //
 
 using System;
+using System.Threading;
 using System.Collections.Generic;
 
 using Gtk;
@@ -55,20 +56,25 @@ namespace Do.UI
                 typeof (string));
 
             cell = new CellRendererToggle ();
+			cell.SetFixedSize (20, 20);
             (cell as CellRendererToggle).Activatable = true;
             (cell as CellRendererToggle).Toggled += OnPluginToggle;
             AppendColumn ("Enable", cell, "active", Column.Enabled);
 
             cell = new CellRendererPixbuf ();				
-            cell.SetFixedSize (IconSize + 8, -1);
+            cell.SetFixedSize (IconSize + 8, IconSize + 8);
             AppendColumn ("Icon", cell, new TreeCellDataFunc (IconDataFunc));
 
             cell = new Gtk.CellRendererText ();
-            (cell as CellRendererText).WrapWidth = 315;
+            (cell as CellRendererText).WrapWidth = 350;
             (cell as CellRendererText).WrapMode = Pango.WrapMode.Word;
             AppendColumn ("Plugin", cell, "markup", Column.Description);
 
-            Refresh ();
+			(Model as ListStore).SetSortColumnId ((int)Column.Description, SortType.Ascending);
+			
+			Selection.Changed += OnSelectionChanged;
+			
+			Refresh ();
         }
 
         private void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
@@ -81,37 +87,41 @@ namespace Do.UI
 
         public void Refresh () {
             ListStore store;
+
+            store = Model as ListStore;
+            store.Clear ();
+            // Add other (non-online) addins.
+            foreach (Addin a in AddinManager.Registry.GetAddins ()) {
+				store.AppendValues (
+					a.Enabled,
+                    Description (a),
+                    a.Id);
+            }
+			// Add online plugins asynchronously so UI doesn't block.
+			RefreshOnlinePluginsAsync ();
+        }
+		
+		void RefreshOnlinePluginsAsync ()
+		{
+			ListStore store;
             SetupService setup;
-            SortedDictionary<string, object[]> seen;
 
             store = Model as ListStore;
             setup = new SetupService (AddinManager.Registry);
-            seen = new SortedDictionary<string, object[]> ();
-
-            setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
-            store.Clear ();
-
-            // Add other (non-online) addins.
-            foreach (Addin a in AddinManager.Registry.GetAddins ()) {
-                if (seen.ContainsKey (Addin.GetIdName (a.Id))) continue;
-				seen [Addin.GetIdName (a.Id)]= new object[] {
-					a.Enabled,
-                    Description (a),
-                    a.Id};
-            }
-            // Add addins from online repositories.
-            foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
-                if (seen.ContainsKey (Addin.GetIdName (e.Addin.Id))) continue;
-				seen [Addin.GetIdName (e.Addin.Id)] = new object[] {
-                	AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
-                    Description (e),
-                    e.Addin.Id};
-            }
-			// Add alphabetically sorted plugins.
-			foreach (object[] cols in seen.Values) {
-				store.AppendValues (cols);
-			}
-        }
+			new Thread ((ThreadStart) delegate {
+				setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+	            // Add addins from online repositories.
+				Application.Invoke (delegate {
+		            foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
+						store.AppendValues (
+		                	AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
+		                    Description (e),
+		                    e.Addin.Id);
+		            }
+					ScrollToCell (TreePath.NewFirst (), Columns [0], true, 0, 0);
+				});
+			}).Start ();
+		}
 
         string Description (string name, string desc, string version)
         {
@@ -152,8 +162,29 @@ namespace Do.UI
             store.SetValue (iter, 0,
                 AddinManager.Registry.IsAddinEnabled (addinId));
         }
+		
+		protected void OnSelectionChanged (object sender, EventArgs args)
+		{
+			string addinId;
+			TreeIter iter;
+			ListStore store;
+			
+			if (Selection.CountSelectedRows () == 0) {
+				return;
+			}
+			
+			store = Model as ListStore;
+			Selection.GetSelected (out iter);
+			addinId = store.GetValue (iter, (int)Column.Id) as string;
+			if (null != PluginSelected) {
+                PluginSelected (addinId);
+            }
+		}
 
         public event PluginToggledDelegate PluginToggled;
+		public event PluginSelectedDelegate PluginSelected;
+		
         public delegate void PluginToggledDelegate (string addinId, bool enabled);
+		public delegate void PluginSelectedDelegate (string addinId);
     }
 }
