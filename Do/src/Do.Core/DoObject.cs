@@ -109,7 +109,6 @@ namespace Do.Core {
 		{
 			if (inner == null)
 				throw new ArgumentNullException ("Inner IObject may not be null.");
-
 			this.inner = inner;
 		}
 
