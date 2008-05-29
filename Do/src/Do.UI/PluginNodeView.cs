@@ -33,9 +33,6 @@ namespace Do.UI
 {
     public class PluginNodeView : NodeView
     {
-        const int IconSize = 26;
-        const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
-
         enum Column {
             Enabled = 0,
             Description,
@@ -43,12 +40,19 @@ namespace Do.UI
             NumColumns,
         }
 
+        const int IconSize = 26;
+        const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
+
+        Dictionary<string, string> addins;
+
         public PluginNodeView () :
             base ()
         {
             CellRenderer cell;
 
-			RulesHint = true;
+            addins = new Dictionary<string,string> ();
+
+            RulesHint = true;
             HeadersVisible = false;
             Model = new ListStore (
                 typeof (bool),
@@ -56,7 +60,7 @@ namespace Do.UI
                 typeof (string));
 
             cell = new CellRendererToggle ();
-			cell.SetFixedSize (20, 20);
+            cell.SetFixedSize (20, 20);
             (cell as CellRendererToggle).Activatable = true;
             (cell as CellRendererToggle).Toggled += OnPluginToggle;
             AppendColumn ("Enable", cell, "active", Column.Enabled);
@@ -70,11 +74,11 @@ namespace Do.UI
             (cell as CellRendererText).WrapMode = Pango.WrapMode.Word;
             AppendColumn ("Plugin", cell, "markup", Column.Description);
 
-			(Model as ListStore).SetSortColumnId ((int)Column.Description, SortType.Ascending);
-			
-			Selection.Changed += OnSelectionChanged;
-			
-			Refresh ();
+            (Model as ListStore).SetSortColumnId ((int)Column.Description, SortType.Ascending);
+
+            Selection.Changed += OnSelectionChanged;
+
+            Refresh ();
         }
 
         private void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
@@ -90,38 +94,47 @@ namespace Do.UI
 
             store = Model as ListStore;
             store.Clear ();
+            addins.Clear ();
             // Add other (non-online) addins.
             foreach (Addin a in AddinManager.Registry.GetAddins ()) {
-				store.AppendValues (
-					a.Enabled,
-                    Description (a),
-                    a.Id);
+                addins [Addin.GetIdName (a.Id)] = a.Id;
+                store.AppendValues (
+                        a.Enabled,
+                        Description (a),
+                        a.Id);
             }
-			// Add online plugins asynchronously so UI doesn't block.
-			RefreshOnlinePluginsAsync ();
+            // Add online plugins asynchronously so UI doesn't block.
+            RefreshOnlinePluginsAsync ();
         }
-		
-		void RefreshOnlinePluginsAsync ()
-		{
-			ListStore store;
+
+        void RefreshOnlinePluginsAsync ()
+        {
+            ListStore store;
             SetupService setup;
 
             store = Model as ListStore;
             setup = new SetupService (AddinManager.Registry);
-			new Thread ((ThreadStart) delegate {
-				setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
-	            // Add addins from online repositories.
-				Application.Invoke (delegate {
-		            foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
-						store.AppendValues (
-		                	AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
-		                    Description (e),
-		                    e.Addin.Id);
-		            }
-					ScrollToCell (TreePath.NewFirst (), Columns [0], true, 0, 0);
-				});
-			}).Start ();
-		}
+
+            new Thread ((ThreadStart) delegate {
+                setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+                // Add addins from online repositories.
+                Application.Invoke (delegate {
+
+                    foreach (AddinRepositoryEntry e in
+                        setup.Repositories.GetAvailableAddins ()) {
+                        // If addin already made its way into the store, skip.
+                        if (addins.ContainsKey (Addin.GetIdName (e.Addin.Id)))
+                            continue;
+                        addins [Addin.GetIdName (e.Addin.Id)] = e.Addin.Id;
+                        store.AppendValues (
+                            AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
+                            Description (e),
+                            e.Addin.Id);
+                    }
+                    ScrollToCell (TreePath.NewFirst (), Columns [0], true, 0, 0);
+                });
+            }).Start ();
+        }
 
         string Description (string name, string desc, string version)
         {
@@ -162,29 +175,29 @@ namespace Do.UI
             store.SetValue (iter, 0,
                 AddinManager.Registry.IsAddinEnabled (addinId));
         }
-		
-		protected void OnSelectionChanged (object sender, EventArgs args)
-		{
-			string addinId;
-			TreeIter iter;
-			ListStore store;
-			
-			if (Selection.CountSelectedRows () == 0) {
-				return;
-			}
-			
-			store = Model as ListStore;
-			Selection.GetSelected (out iter);
-			addinId = store.GetValue (iter, (int)Column.Id) as string;
-			if (null != PluginSelected) {
+
+        protected void OnSelectionChanged (object sender, EventArgs args)
+        {
+            string addinId;
+            TreeIter iter;
+            ListStore store;
+
+            if (Selection.CountSelectedRows () == 0) {
+                return;
+            }
+
+            store = Model as ListStore;
+            Selection.GetSelected (out iter);
+            addinId = store.GetValue (iter, (int)Column.Id) as string;
+            if (null != PluginSelected) {
                 PluginSelected (addinId);
             }
-		}
+        }
 
         public event PluginToggledDelegate PluginToggled;
-		public event PluginSelectedDelegate PluginSelected;
-		
+        public event PluginSelectedDelegate PluginSelected;
+
         public delegate void PluginToggledDelegate (string addinId, bool enabled);
-		public delegate void PluginSelectedDelegate (string addinId);
+        public delegate void PluginSelectedDelegate (string addinId);
     }
 }
