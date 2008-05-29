@@ -33,32 +33,33 @@ namespace Do.UI
     public partial class ManagePluginsPreferencesWidget : Gtk.Bin, IPreferencePage
     {
         PluginNodeView nview;
-		
-		public Widget Page {
-			get { return this; }
-		}
-		
-		public string Label {
-			get { return "Plugins"; }
-		}
+
+        public Widget Page {
+            get { return this; }
+        }
+
+        public string Label {
+            get { return "Plugins"; }
+        }
 
         public ManagePluginsPreferencesWidget()
         {
             Build ();
-			
+
             nview = new PluginNodeView ();
             nview.PluginToggled += OnPluginToggled;
-			nview.PluginSelected += OnPluginSelected;
+            nview.PluginSelected += OnPluginSelected;
 
             scrollw.Add (nview);
             scrollw.ShowAll ();
         }
 
-		private void OnPluginSelected (string id)
+        private void OnPluginSelected (string id)
         {
-			btn_configure.Sensitive = Do.PluginManager.ConfigurablesForAddin (id).Length > 0;
-		}
-		
+            btn_configure.Sensitive =
+                Do.PluginManager.ConfigurablesForAddin (id).Length > 0;
+        }
+
         private void OnPluginToggled (string id, bool enabled)
         {
             // If the addin isn't found, install it.
@@ -87,31 +88,32 @@ namespace Do.UI
             Do.UniverseManager.Reload ();
         }
 
-        protected virtual void OnBtnRefreshClicked (object sender, System.EventArgs e)
+        protected virtual void OnBtnRefreshClicked (object sender, EventArgs e)
         {
             nview.Refresh ();
         }
 
-        protected virtual void OnBtnUpdateClicked (object sender, System.EventArgs e)
+        protected virtual void OnBtnUpdateClicked (object sender, EventArgs e)
         {
-			if (Do.PluginManager.InstallAvailableUpdates (true))
-				nview.Refresh ();
-        }
-		
-		protected virtual void OnBtnConfigurePluginClicked (object sender, System.EventArgs e)
-        {
-			Window win;
-			string[] ids;
-			
-			ids = nview.GetSelectedAddins ();
-			if (ids.Length == 0) return;
-			
-			win = new PluginConfigurationWindow (ids [0]);
-			win.ShowAll ();
+            if (Do.PluginManager.InstallAvailableUpdates (true))
+                nview.Refresh ();
         }
 
-		protected virtual void OnBtnAboutClicked (object sender, System.EventArgs e)
-		{
-		}
+        protected virtual void OnBtnConfigurePluginClicked (object sender,
+                                                            EventArgs e)
+        {
+            Window win;
+            string[] ids;
+
+            ids = nview.GetSelectedAddins ();
+            if (ids.Length == 0) return;
+
+            win = new PluginConfigurationWindow (ids [0]);
+            win.ShowAll ();
+        }
+
+        protected virtual void OnBtnAboutClicked (object sender, EventArgs e)
+        {
+        }
     }
 }
