@@ -354,13 +354,12 @@ namespace Do.Core {
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
-			
 			if (evnt.Key == Gdk.Key.Up) {
 				if (CurrentContext.Cursor <= 0) {
-					ShrinkResults ();
-					return;
-				}
-				CurrentContext.Cursor--;
+                    CurrentContext.Cursor = CurrentContext.Results.Length - 1;
+				} else {
+                    CurrentContext.Cursor--;
+                }
 			} else if (evnt.Key == Gdk.Key.Down) {
 				if (!resultsGrown) {
 					GrowResults ();
@@ -373,7 +372,8 @@ namespace Do.Core {
 				CurrentContext.Cursor = CurrentContext.Results.Length - 1;
 			}
 			
-			//We don't want to search the "default" state if the user presses down
+            // We don't want to search the "default" state if the user presses
+            // down.
 			if (tabbing || CurrentContext.Results.Length == 0) return;
 			UpdatePane (CurrentPane);
 			
