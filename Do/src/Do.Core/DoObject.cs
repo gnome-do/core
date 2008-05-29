@@ -21,11 +21,12 @@
 using System;
 using System.Collections.Generic;
 
+using Do.Addins;
 using Do.Universe;
 
 namespace Do.Core {
 
-	public class DoObject : IObject, IComparable<IObject> {
+	public class DoObject : IObject, IConfigurable, IComparable<IObject> {
 
 		const string DefaultName = "No name";
 		const string DefaultDescription = "No description.";
@@ -162,6 +163,17 @@ namespace Do.Core {
 				}
 				return icon;
 			}
+		}
+		
+		public Gtk.Bin GetConfiguration ()
+		{
+			Gtk.Bin config = null;
+			try {
+				if (Inner is IConfigurable)
+					config = (Inner as IConfigurable).GetConfiguration ();
+			} catch {
+			}
+			return config;
 		}
 		
 		public virtual string UID {

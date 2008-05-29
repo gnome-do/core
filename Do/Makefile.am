@@ -64,6 +64,7 @@ FILES =  \
 	gtk-gui/Do.UI.GeneralPreferencesWidget.cs \
 	gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs \
 	gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs \
+	gtk-gui/Do.UI.PluginConfigurationWindow.cs \
 	gtk-gui/Do.UI.PreferencesWindow.cs \
 	gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
@@ -83,6 +84,7 @@ FILES =  \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ManagePluginsPreferencesWidget.cs \
+	src/Do.UI/PluginConfigurationWindow.cs \
 	src/Do.UI/PluginNodeView.cs \
 	src/Do.UI/PreferencesWindow.cs \
 	src/Do.Universe/AliasAction.cs \

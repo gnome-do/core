@@ -44,7 +44,7 @@ namespace Do.UI
         const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
         Dictionary<string, string> addins;
-
+		
         public PluginNodeView () :
             base ()
         {
@@ -154,6 +154,21 @@ namespace Do.UI
         {
             return Description (a.Name, a.Description, a.Version);
         }
+		
+		public string[] GetSelectedAddins () {
+			string id;
+			TreeIter iter;
+			ListStore store;
+			
+			if (Selection.CountSelectedRows () == 0)
+				return new string [0];
+			
+			store = Model as ListStore;
+			Selection.GetSelected (out iter);
+			id = store.GetValue (iter, (int)Column.Id) as string;
+			return new string[] { id };
+		}
+
 
         protected void OnPluginToggle (object sender, ToggledArgs args)
         {
@@ -178,19 +193,14 @@ namespace Do.UI
 
         protected void OnSelectionChanged (object sender, EventArgs args)
         {
-            string addinId;
-            TreeIter iter;
-            ListStore store;
-
-            if (Selection.CountSelectedRows () == 0) {
+			string[] ids;
+			
+			ids = GetSelectedAddins ();
+            if (ids.Length == 0) {
                 return;
             }
-
-            store = Model as ListStore;
-            Selection.GetSelected (out iter);
-            addinId = store.GetValue (iter, (int)Column.Id) as string;
             if (null != PluginSelected) {
-                PluginSelected (addinId);
+                PluginSelected (ids [0]);
             }
         }
 

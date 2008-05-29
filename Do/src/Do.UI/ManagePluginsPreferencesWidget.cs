@@ -26,6 +26,7 @@ using Mono.Addins.Gui;
 using Mono.Addins.Setup;
 
 using Do;
+using Do.Core;
 
 namespace Do.UI
 {
@@ -55,7 +56,7 @@ namespace Do.UI
 
 		private void OnPluginSelected (string id)
         {
-			btn_about.Sensitive = true;
+			btn_configure.Sensitive = Do.PluginManager.ConfigurablesForAddin (id).Length > 0;
 		}
 		
         private void OnPluginToggled (string id, bool enabled)
@@ -99,6 +100,14 @@ namespace Do.UI
 		
 		protected virtual void OnBtnConfigurePluginClicked (object sender, System.EventArgs e)
         {
+			Window win;
+			string[] ids;
+			
+			ids = nview.GetSelectedAddins ();
+			if (ids.Length == 0) return;
+			
+			win = new PluginConfigurationWindow (ids [0]);
+			win.ShowAll ();
         }
 
 		protected virtual void OnBtnAboutClicked (object sender, System.EventArgs e)

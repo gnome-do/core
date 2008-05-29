@@ -27,6 +27,7 @@ using Mono.Addins.Gui;
 using Mono.Addins.Setup;
 
 using Do;
+using Do.Addins;
 using Do.Universe;
 
 namespace Do.Core {
@@ -229,6 +230,40 @@ namespace Do.Core {
 				}
 			}
 			return DefaultPluginIcon;
+		}
+		
+		public DoObject[] ConfigurablesForAddin (string id)
+		{
+			Addin a;
+			List<DoObject> configs;
+
+			configs = new List<DoObject> ();
+			a = AddinManager.Registry.GetAddin (id);
+			if (null == a) return new DoObject [0];
+
+			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/ItemSource")) {
+				if (Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id)) {
+					try {
+						if (n.GetInstance () is IConfigurable) {
+							IItemSource inner = n.GetInstance () as IItemSource;
+							DoItemSource source = new DoItemSource (inner);
+							configs.Add (source);
+						}
+					} catch { }
+				}
+			}
+			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/Action")) {
+				if (Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id)) {
+					try {
+						if (n.GetInstance () is IConfigurable) {
+							IAction inner = n.GetInstance () as IAction;
+							DoAction action = new DoAction (inner);
+							configs.Add (action);
+						}
+					} catch { }
+				}
+			}
+			return configs.ToArray ();
 		}
 		
 	}
