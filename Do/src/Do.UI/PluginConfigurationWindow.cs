@@ -19,11 +19,13 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 using Gtk;
 using Mono.Addins;
 
 using Do.Core;
+using Do.Addins;
 
 namespace Do.UI
 {
@@ -33,7 +35,7 @@ namespace Do.UI
             base(Gtk.WindowType.Toplevel)
         {
             Addin addin;
-            DoObject[] configs;
+            ICollection<IConfigurable> configs;
 
             Build ();
 
@@ -41,9 +43,9 @@ namespace Do.UI
             configs = Do.PluginManager.ConfigurablesForAddin (id);
             Title = string.Format ("{0} Configuration", addin.Name);
             notebook.RemovePage (0);
-            notebook.ShowTabs = configs.Length > 1;
+            notebook.ShowTabs = configs.Count > 1;
 
-            foreach (DoObject configurable in configs) {
+            foreach (IConfigurable configurable in configs) {
                 Bin config;
 
                 config = configurable.GetConfiguration ();

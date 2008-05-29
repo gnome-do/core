@@ -144,9 +144,11 @@ namespace Do.Core {
 		{
 			int t_update;
 			IEnumerator sourceE;
+			ICollection<DoItemSource> sources;
 		
 			t_update = 0;
-			sourceE = Do.PluginManager.ItemSources.GetEnumerator ();	
+			sources = Do.PluginManager.GetItemSources ();
+			sourceE = sources.GetEnumerator ();	
 			// Advance enum to remembered position.
 			for (int i = 0; i < sources_i; ++i)
 				sourceE.MoveNext ();
@@ -161,8 +163,7 @@ namespace Do.Core {
 
 				if (sourceE.MoveNext ()) {
 					source = sourceE.Current as DoItemSource;
-					sources_i = (sources_i + 1) %
-						Do.PluginManager.ItemSources.Count;
+					sources_i = (sources_i + 1) % sources.Count;
 				} else {
 					sourceE.Reset ();
 					sources_i = 0;
@@ -281,12 +282,12 @@ namespace Do.Core {
 			universe.Clear ();
 			
 			// Hash actions.
-			foreach (DoAction action in Do.PluginManager.Actions) {
+			foreach (DoAction action in Do.PluginManager.GetActions ()) {
 				universe [action] = action;
 			}
 
 			// Hash items.
-			foreach (DoItemSource source in Do.PluginManager.ItemSources) {
+			foreach (DoItemSource source in Do.PluginManager.GetItemSources ()) {
                 source.UpdateItems ();
 				foreach (DoItem item in source.Items) {
 					universe [item] = item;
@@ -542,7 +543,7 @@ namespace Do.Core {
 			List<IObject> item_actions;
 
 			item_actions = new List<IObject> ();
-			foreach (IAction action in Do.PluginManager.Actions) {
+			foreach (IAction action in Do.PluginManager.GetActions ()) {
 				if (action.SupportsItem (item)) {
 					item_actions.Add (action);
 				}
@@ -555,7 +556,7 @@ namespace Do.Core {
 			List<IObject> children;
 
 			children = new List<IObject> ();
-			foreach (DoItemSource source in Do.PluginManager.ItemSources) {
+			foreach (DoItemSource source in Do.PluginManager.GetItemSources ()) {
 				foreach (IObject child in source.ChildrenOfItem (parent))
 					children.Add (child);
 			}

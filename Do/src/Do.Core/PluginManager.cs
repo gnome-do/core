@@ -37,21 +37,39 @@ namespace Do.Core {
 		const string DefaultPluginIcon = "folder_tar";
 		const string HttpRepo = "http://do.davebsd.com/repository/dev";
 
-		List<DoItemSource> sources;
-		List<DoAction> actions;
-
 		public PluginManager()
 		{
+		}
+		
+		public string[] ExtensionPaths {
+			get {
+				return new string[] {
+					"/Do/ItemSource",
+					"/Do/Action",
+				};
+			}
+		}
+
+		public ICollection<DoItemSource> GetItemSources () {
+			List<DoItemSource> sources;
+			
 			sources = new List<DoItemSource> ();
+			foreach (IItemSource source in
+			    AddinManager.GetExtensionObjects ("/Do/ItemSource")) {
+				sources.Add (new DoItemSource (source));
+			}
+			return sources;
+		}
+
+		public ICollection<DoAction> GetActions () {
+			List<DoAction> actions;
+			
 			actions = new List<DoAction> ();
-		}
-
-		public ICollection<DoItemSource> ItemSources {
-			get { return sources; }
-		}
-
-		public ICollection<DoAction> Actions {
-			get { return actions; }
+			foreach (IAction action in
+			    AddinManager.GetExtensionObjects ("/Do/Action")) {
+				actions.Add (new DoAction (action));
+			}
+			return actions;
 		}
 
 		internal void Initialize ()
@@ -152,8 +170,7 @@ namespace Do.Core {
 			node = args.ExtensionNode as TypeExtensionNode;
 			if (args.Change == ExtensionChange.Add) {
 				try {
-					source = new DoItemSource (node.CreateInstance () as IItemSource);
-					sources.Add (source);
+					source = new DoItemSource (node.GetInstance () as IItemSource);
 					Log.Info ("Successfully loaded \"{0}\" item source.",
 						source.Name);
 				} catch (Exception e) {
@@ -162,7 +179,6 @@ namespace Do.Core {
 			} else {
 				try {
 					source = new DoItemSource (node.GetInstance () as IItemSource);
-					sources.Remove (source);
 					Log.Info ("Successfully unloaded \"{0}\" item source.",
 						source.Name);
 				} catch (Exception e) {
@@ -179,8 +195,7 @@ namespace Do.Core {
 			node = args.ExtensionNode as TypeExtensionNode;
 			if (args.Change == ExtensionChange.Add) {
 				try {
-					action = new DoAction (node.CreateInstance () as IAction);
-					actions.Add (action);
+					action = new DoAction (node.GetInstance () as IAction);
 					Log.Info ("Successfully loaded \"{0}\" action.", action.Name);
 				} catch (Exception e) {
 					Log.Error ("Action failed to load: {0}.", e.Message);
@@ -188,7 +203,6 @@ namespace Do.Core {
 			} else {
 				try {
 					action = new DoAction (node.GetInstance () as IAction);
-					actions.Remove (action);
 					Log.Info ("Successfully unloaded \"{0}\" action.", action.Name);
 				} catch (Exception e) {
 					Log.Error ("Action failed to unload: {0}", e.Message);
@@ -208,62 +222,47 @@ namespace Do.Core {
 		/// </returns>
 		public string IconForAddin (string id)
 		{
-			Addin a;
-			
-			a = AddinManager.Registry.GetAddin (id);
-			if (null == a) return DefaultPluginIcon;
-			
 			// First look for an icon among ItemSources:
-			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/ItemSource")) {
-				if (Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id)) {
-					try {
-						return (n.GetInstance () as IItemSource).Icon;
-					} catch { }
-				}
+			foreach (IItemSource obj in ObjectsForAddin<IItemSource> (id)) {
+				return obj.Icon;
 			}
-			// If no icon found among ItemSources, look for an icon among Actions:
-			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/Action")) {
-				if (Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id)) {
-					try {
-						return (n.GetInstance () as IAction).Icon;
-					} catch { }
-				}
+			// If no icon found among ItemSources, look for an icon among Actions:		
+			foreach (IAction obj in ObjectsForAddin<IAction> (id)) {
+				return obj.Icon;
 			}
 			return DefaultPluginIcon;
 		}
 		
-		public DoObject[] ConfigurablesForAddin (string id)
+		public ICollection<T> ObjectsForAddin<T> (string id)
 		{
-			Addin a;
-			List<DoObject> configs;
-
-			configs = new List<DoObject> ();
-			a = AddinManager.Registry.GetAddin (id);
-			if (null == a) return new DoObject [0];
-
-			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/ItemSource")) {
-				if (Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id)) {
-					try {
-						if (n.GetInstance () is IConfigurable) {
-							IItemSource inner = n.GetInstance () as IItemSource;
-							DoItemSource source = new DoItemSource (inner);
-							configs.Add (source);
-						}
-					} catch { }
+			List<T> obs;
+			
+			obs = new List<T> ();
+			foreach (string path in ExtensionPaths) {
+				foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes (path)) {
+					bool addinMatch = Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id);
+					bool typeMatch = typeof (T).IsAssignableFrom (n.GetInstance ().GetType ());
+					if (addinMatch && typeMatch) {
+						obs.Add ((T) n.GetInstance ());
+					}
 				}
 			}
-			foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes ("/Do/Action")) {
-				if (Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id)) {
-					try {
-						if (n.GetInstance () is IConfigurable) {
-							IAction inner = n.GetInstance () as IAction;
-							DoAction action = new DoAction (inner);
-							configs.Add (action);
-						}
-					} catch { }
+			return obs;
+		}
+		
+		public ICollection<IConfigurable> ConfigurablesForAddin (string id)
+		{
+			List<IConfigurable> cons;
+
+			cons = new List<IConfigurable> ();	
+			foreach (IConfigurable con in ObjectsForAddin<IConfigurable> (id)) {
+				if (con is IItemSource) {
+					cons.Add (new DoItemSource (con as IItemSource));
+				} else if (con is IAction) {
+					cons.Add (new DoAction (con as IAction));
 				}
 			}
-			return configs.ToArray ();
+			return cons;
 		}
 		
 	}

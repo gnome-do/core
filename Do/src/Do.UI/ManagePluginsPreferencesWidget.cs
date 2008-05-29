@@ -57,7 +57,7 @@ namespace Do.UI
         private void OnPluginSelected (string id)
         {
             btn_configure.Sensitive =
-                Do.PluginManager.ConfigurablesForAddin (id).Length > 0;
+                Do.PluginManager.ConfigurablesForAddin (id).Count > 0;
         }
 
         private void OnPluginToggled (string id, bool enabled)

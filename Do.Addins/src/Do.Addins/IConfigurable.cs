@@ -23,7 +23,7 @@ using Gtk;
 
 namespace Do.Addins
 {
-	public interface IConfigurable
+	public interface IConfigurable : Do.Universe.IObject
 	{
         Bin GetConfiguration ();
     }
