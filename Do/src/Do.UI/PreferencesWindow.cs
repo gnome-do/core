@@ -25,42 +25,42 @@ using Mono.Addins.Gui;
 
 namespace Do.UI
 {	
-    public partial class PreferencesWindow : Window
-    {
-        public PreferencesWindow () : 
-            base (WindowType.Toplevel)
-        {
-            Build ();
-			
-			btn_close.IsFocus = true;
-            // Add notebook pages.
-            foreach (IPreferencePage page in Pages) {
-				notebook.AppendPage (page.Page, new Label (page.Label));
-            }
-        }
+	public partial class PreferencesWindow : Window
+	{
+		public PreferencesWindow () : 
+			base (WindowType.Toplevel)
+		{
+			Build ();
 
-		IPreferencePage[] pages;
-        IPreferencePage[] Pages {
-            get {
-                if (null == pages) {
-                    pages = new IPreferencePage[] {
-                        new GeneralPreferencesWidget (),
-                        new KeybindingsPreferencesWidget (),
-                        new ManagePluginsPreferencesWidget (),
-                    };
-                }
-                return pages;
-            }
+			btn_close.IsFocus = true;
+			// Add notebook pages.
+			foreach (IPreferencePage page in Pages) {
+				notebook.AppendPage (page.Page, new Label (page.Label));
+			}
 		}
 
-        protected virtual void OnBtnCloseClicked (object sender, System.EventArgs e)
-        {
-            Destroy ();
-        }
+		IPreferencePage[] pages;
+		IPreferencePage[] Pages {
+			get {
+				if (null == pages) {
+					pages = new IPreferencePage[] {
+						new GeneralPreferencesWidget (),
+						new KeybindingsPreferencesWidget (),
+						new ManagePluginsPreferencesWidget (),
+					};
+				}
+				return pages;
+			}
+		}
 
-        protected virtual void OnBtnHelpClicked (object sender, System.EventArgs e)
-        {
-            Util.Environment.Open ("https://wiki.ubuntu.com/GnomeDo/Use");
-        }
-    }
+		protected virtual void OnBtnCloseClicked (object sender, EventArgs e)
+		{
+			Destroy ();
+		}
+
+		protected virtual void OnBtnHelpClicked (object sender, EventArgs e)
+		{
+			Util.Environment.Open ("https://wiki.ubuntu.com/GnomeDo/Use");
+		}
+	}
 }
