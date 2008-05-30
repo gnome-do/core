@@ -41,6 +41,7 @@ namespace Do.UI
 		}
 
 		const int IconSize = 26;
+		const int WrapWidth = 310;
 		const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
 		Dictionary<string, string> addins;
@@ -70,7 +71,7 @@ namespace Do.UI
 			AppendColumn ("Icon", cell, new TreeCellDataFunc (IconDataFunc));
 
 			cell = new Gtk.CellRendererText ();
-			(cell as CellRendererText).WrapWidth = 350;
+			(cell as CellRendererText).WrapWidth = WrapWidth;
 			(cell as CellRendererText).WrapMode = Pango.WrapMode.Word;
 			AppendColumn ("Plugin", cell, "markup", Column.Description);
 

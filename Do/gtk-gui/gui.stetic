@@ -7,10 +7,10 @@
   <import>
     <widget-library name="../bin/Debug/Do.exe" internal="true" />
   </import>
-  <widget class="Gtk.Window" id="Do.UI.PreferencesWindow" design-size="588 576">
+  <widget class="Gtk.Window" id="Do.UI.PreferencesWindow" design-size="510 526">
     <property name="MemberName" />
-    <property name="WidthRequest">500</property>
-    <property name="HeightRequest">550</property>
+    <property name="WidthRequest">430</property>
+    <property name="HeightRequest">500</property>
     <property name="Title" translatable="yes">GNOME Do Preferences</property>
     <property name="Icon">stock:gtk-preferences Menu</property>
     <property name="WindowPosition">Center</property>
@@ -157,7 +157,7 @@
       <placeholder />
     </child>
   </widget>
-  <widget class="Gtk.Bin" id="Do.UI.ManagePluginsPreferencesWidget" design-size="564 446">
+  <widget class="Gtk.Bin" id="Do.UI.ManagePluginsPreferencesWidget" design-size="467 447">
     <property name="MemberName" />
     <child>
       <widget class="Gtk.VBox" id="vbox3">
@@ -201,7 +201,7 @@
                     <property name="CanFocus">True</property>
                     <property name="Type">TextAndIcon</property>
                     <property name="Icon">stock:gtk-preferences Button</property>
-                    <property name="Label" translatable="yes">_Configure Plugin</property>
+                    <property name="Label" translatable="yes">_Configure</property>
                     <property name="UseUnderline">True</property>
                     <signal name="Clicked" handler="OnBtnConfigurePluginClicked" />
                   </widget>
@@ -217,7 +217,7 @@
                     <property name="CanFocus">True</property>
                     <property name="Type">TextAndIcon</property>
                     <property name="Icon">stock:gtk-about Menu</property>
-                    <property name="Label" translatable="yes">_About Plugin</property>
+                    <property name="Label" translatable="yes">_About</property>
                     <property name="UseUnderline">True</property>
                     <signal name="Clicked" handler="OnBtnAboutClicked" />
                   </widget>
@@ -270,8 +270,10 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Window" id="Do.UI.PluginConfigurationWindow" design-size="400 300">
+  <widget class="Gtk.Window" id="Do.UI.PluginConfigurationWindow" design-size="400 386">
     <property name="MemberName" />
+    <property name="WidthRequest">230</property>
+    <property name="HeightRequest">360</property>
     <property name="Title" translatable="yes">PluginConfigurationWindow</property>
     <property name="Icon">stock:gtk-preferences Menu</property>
     <property name="WindowPosition">Center</property>

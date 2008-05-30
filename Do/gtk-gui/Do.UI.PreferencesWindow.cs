@@ -28,8 +28,8 @@ namespace Do.UI {
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.PreferencesWindow
-            this.WidthRequest = 500;
-            this.HeightRequest = 550;
+            this.WidthRequest = 430;
+            this.HeightRequest = 500;
             this.Name = "Do.UI.PreferencesWindow";
             this.Title = Mono.Unix.Catalog.GetString("GNOME Do Preferences");
             this.Icon = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Menu, 16);
@@ -94,8 +94,8 @@ namespace Do.UI {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 588;
-            this.DefaultHeight = 576;
+            this.DefaultWidth = 510;
+            this.DefaultHeight = 526;
             this.btn_close.HasDefault = true;
             this.Show();
             this.btn_help.Clicked += new System.EventHandler(this.OnBtnHelpClicked);

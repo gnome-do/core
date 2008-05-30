@@ -73,7 +73,7 @@ namespace Do.UI {
             w3.Add(w4);
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w6 = new Gtk.Label();
-            w6.LabelProp = Mono.Unix.Catalog.GetString("_Configure Plugin");
+            w6.LabelProp = Mono.Unix.Catalog.GetString("_Configure");
             w6.UseUnderline = true;
             w3.Add(w6);
             w2.Add(w3);
@@ -99,7 +99,7 @@ namespace Do.UI {
             w12.Add(w13);
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w15 = new Gtk.Label();
-            w15.LabelProp = Mono.Unix.Catalog.GetString("_About Plugin");
+            w15.LabelProp = Mono.Unix.Catalog.GetString("_About");
             w15.UseUnderline = true;
             w12.Add(w15);
             w11.Add(w12);
