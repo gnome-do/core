@@ -62,13 +62,16 @@ namespace Do.Core {
 		public ICollection<IItem> Items
 		{
 			get {
-				IItemSource source = Inner as IItemSource;
-				ICollection<IItem> innerItems = null;
 				List<IItem> items;
+				ICollection<IItem> innerItems = null;
+				IItemSource source = Inner as IItemSource;
 				
 				items = new List<IItem> ();
 				try {
 					innerItems = source.Items;
+					// Copy the collection:
+					if (null != innerItems)
+						innerItems = new List<IItem> (innerItems);
 				} catch (Exception e) {
 					LogError ("Items", e);
 				} finally {
@@ -87,9 +90,9 @@ namespace Do.Core {
 		
 		public ICollection<IItem> ChildrenOfItem (IItem item)
 		{
-			IItemSource source = Inner as IItemSource;
-			ICollection<IItem> children = null;
 			List<IItem> doChildren;
+			ICollection<IItem> children = null;
+			IItemSource source = Inner as IItemSource;
 			
 			doChildren = new List<IItem> ();
 			item = EnsureIItem (item);
@@ -99,6 +102,9 @@ namespace Do.Core {
 
 			try {
 				children = source.ChildrenOfItem (item);
+				// Copy the collection:
+				if (null != children)
+					children = new List<IItem> (children);
 			} catch (Exception e) {
 				LogError ("ChildrenOfItem", e);
 			} finally {
