@@ -27,6 +27,7 @@ using Gtk;
 using Mono.Addins;
 using Mono.Addins.Setup;
 
+using Do.Core;
 using Do.Universe;
 
 namespace Do.UI
@@ -82,10 +83,13 @@ namespace Do.UI
         }
 
         private void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
-        {			
-            CellRendererPixbuf renderer = cell as CellRendererPixbuf;
-            string id = (Model as ListStore).GetValue (iter, (int)Column.Id) as string;
-            string icon = Do.PluginManager.IconForAddin (id);
+        {
+			string id, icon;
+            CellRendererPixbuf renderer;
+			
+			renderer = cell as CellRendererPixbuf;
+            id = (Model as ListStore).GetValue (iter, (int)Column.Id) as string;
+            icon = PluginManager.IconForAddin (id);
             renderer.Pixbuf = IconProvider.PixbufFromIconName (icon, IconSize);
         }
 

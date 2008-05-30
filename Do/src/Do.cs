@@ -33,7 +33,6 @@ namespace Do {
 		
 		static Preferences preferences;
 		static Controller controller;
-		static PluginManager plugin_manager;
 		static UniverseManager universe_manager;
 
 		public static void Main (string[] args)
@@ -95,13 +94,6 @@ namespace Do {
 			get {
 				return controller ??
 					controller = new Controller ();
-			}
-		}
-
-		public static PluginManager PluginManager {
-			get {
-				return plugin_manager ??
-					plugin_manager = new PluginManager ();
 			}
 		}
 

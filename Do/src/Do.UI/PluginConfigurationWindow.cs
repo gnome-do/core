@@ -40,7 +40,7 @@ namespace Do.UI
             Build ();
 
             addin = AddinManager.Registry.GetAddin (id);
-            configs = Do.PluginManager.ConfigurablesForAddin (id);
+            configs = PluginManager.ConfigurablesForAddin (id);
             Title = string.Format ("{0} Configuration", addin.Name);
             notebook.RemovePage (0);
             notebook.ShowTabs = configs.Count > 1;

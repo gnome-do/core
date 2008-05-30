@@ -32,16 +32,15 @@ using Do.Universe;
 
 namespace Do.Core {
 
-    public class PluginManager {
+	/// <summary>
+	/// PluginManager serves as Do's primary interface to Mono.Addins.
+	/// </summary>
+    public static class PluginManager {
 
-        const string DefaultPluginIcon = "folder_tar";
-        const string HttpRepo = "http://do.davebsd.com/repository/dev";
+        private const string DefaultPluginIcon = "folder_tar";
+        private const string HttpRepo = "http://do.davebsd.com/repository/dev";
 
-        public PluginManager()
-        {
-        }
-
-        public string[] ExtensionPaths {
+        private static string[] ExtensionPaths {
             get {
                 return new string[] {
                     "/Do/ItemSource",
@@ -49,30 +48,8 @@ namespace Do.Core {
                 };
             }
         }
-
-        public ICollection<DoItemSource> GetItemSources () {
-            List<DoItemSource> sources;
-
-            sources = new List<DoItemSource> ();
-            foreach (IItemSource source in
-                AddinManager.GetExtensionObjects ("/Do/ItemSource")) {
-                sources.Add (new DoItemSource (source));
-            }
-            return sources;
-        }
-
-        public ICollection<DoAction> GetActions () {
-            List<DoAction> actions;
-
-            actions = new List<DoAction> ();
-            foreach (IAction action in
-                AddinManager.GetExtensionObjects ("/Do/Action")) {
-                actions.Add (new DoAction (action));
-            }
-            return actions;
-        }
-
-        internal void Initialize ()
+		
+		internal static void Initialize ()
         {
             // Initialize the registry
             AddinManager.Initialize (Paths.UserPlugins);
@@ -89,8 +66,54 @@ namespace Do.Core {
             }
             InstallLocalPlugins (setup);
         }
+		
+		/// <summary>
+        /// Given an Addin ID, returns an icon that may represent that addin.
+        /// </summary>
+        /// <param name="id">
+        /// A <see cref="System.String"/> containing an addin ID.
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.String"/> containing an icon name. Can be loaded
+        /// via IconProvider.
+        /// </returns>
+        public static string IconForAddin (string id)
+        {
+            // First look for an icon among ItemSources:
+            foreach (IItemSource obj in ObjectsForAddin<IItemSource> (id)) {
+                return obj.Icon;
+            }
+            // If no icon found among ItemSources, look for an icon among
+            // Actions:		
+            foreach (IAction obj in ObjectsForAddin<IAction> (id)) {
+                return obj.Icon;
+            }
+            return DefaultPluginIcon;
+        }
 
-        internal bool InstallAvailableUpdates (bool graphical)
+        internal static ICollection<DoItemSource> GetItemSources () {
+            List<DoItemSource> sources;
+
+            sources = new List<DoItemSource> ();
+            foreach (IItemSource source in
+                AddinManager.GetExtensionObjects ("/Do/ItemSource")) {
+                sources.Add (new DoItemSource (source));
+            }
+            return sources;
+        }
+
+        internal static ICollection<DoAction> GetActions () {
+            List<DoAction> actions;
+
+            actions = new List<DoAction> ();
+            foreach (IAction action in
+                AddinManager.GetExtensionObjects ("/Do/Action")) {
+                actions.Add (new DoAction (action));
+            }
+            return actions;
+        }
+
+        internal static bool InstallAvailableUpdates (bool graphical)
         {
             SetupService setup;
             List<string> updates;
@@ -129,7 +152,7 @@ namespace Do.Core {
         /// <param name="setup">
         /// A <see cref="SetupService"/>
         /// </param>
-        public void InstallLocalPlugins (SetupService setup)
+        internal static void InstallLocalPlugins (SetupService setup)
         {
             // Load local items into repo
             if (!Directory.Exists (Paths.UserPlugins)) return;
@@ -169,7 +192,7 @@ namespace Do.Core {
         /// <param name="args">
         /// A <see cref="ExtensionNodeEventArgs"/>
         /// </param>
-        public void OnItemSourceChange (object s, ExtensionNodeEventArgs args)
+        private static void OnItemSourceChange (object s, ExtensionNodeEventArgs args)
         {
             DoItemSource source;
             TypeExtensionNode node;
@@ -194,7 +217,7 @@ namespace Do.Core {
             }
         }
 
-        public void OnActionChange (object s, ExtensionNodeEventArgs args)
+        internal static void OnActionChange (object s, ExtensionNodeEventArgs args)
         {
             DoAction action;
             TypeExtensionNode node;
@@ -217,31 +240,7 @@ namespace Do.Core {
             }	
         }
 
-        /// <summary>
-        /// Given an Addin ID, returns an icon that may represent that addin.
-        /// </summary>
-        /// <param name="id">
-        /// A <see cref="System.String"/> containing an addin ID.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.String"/> containing an icon name. Can be loaded
-        /// via IconProvider.
-        /// </returns>
-        public string IconForAddin (string id)
-        {
-            // First look for an icon among ItemSources:
-            foreach (IItemSource obj in ObjectsForAddin<IItemSource> (id)) {
-                return obj.Icon;
-            }
-            // If no icon found among ItemSources, look for an icon among
-            // Actions:		
-            foreach (IAction obj in ObjectsForAddin<IAction> (id)) {
-                return obj.Icon;
-            }
-            return DefaultPluginIcon;
-        }
-
-        public ICollection<T> ObjectsForAddin<T> (string id)
+        private static ICollection<T> ObjectsForAddin<T> (string id)
         {
             List<T> obs;
 
@@ -263,7 +262,7 @@ namespace Do.Core {
             return obs;
         }
 
-        public ICollection<IConfigurable> ConfigurablesForAddin (string id)
+        internal static ICollection<IConfigurable> ConfigurablesForAddin (string id)
         {
             List<IConfigurable> cons;
 
@@ -272,6 +271,5 @@ namespace Do.Core {
                 cons.Add (new DoObject (con));
             return cons;
         }
-
     }
 }

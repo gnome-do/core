@@ -57,7 +57,7 @@ namespace Do.UI
         private void OnPluginSelected (string id)
         {
             btn_configure.Sensitive =
-                Do.PluginManager.ConfigurablesForAddin (id).Count > 0;
+                PluginManager.ConfigurablesForAddin (id).Count > 0;
         }
 
         private void OnPluginToggled (string id, bool enabled)
@@ -95,7 +95,7 @@ namespace Do.UI
 
         protected virtual void OnBtnUpdateClicked (object sender, EventArgs e)
         {
-            if (Do.PluginManager.InstallAvailableUpdates (true))
+            if (PluginManager.InstallAvailableUpdates (true))
                 nview.Refresh ();
         }
 

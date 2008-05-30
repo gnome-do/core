@@ -67,7 +67,7 @@ namespace Do.Universe {
 		public void UpdateItems ()
 		{
 			items.Clear ();
-			foreach (DoItemSource source in Do.PluginManager.GetItemSources ()) {
+			foreach (DoItemSource source in PluginManager.GetItemSources ()) {
 				items.Add (source);
             }
 		}
