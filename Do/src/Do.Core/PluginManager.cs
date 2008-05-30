@@ -32,9 +32,9 @@ using Do.Universe;
 
 namespace Do.Core {
 
-	/// <summary>
-	/// PluginManager serves as Do's primary interface to Mono.Addins.
-	/// </summary>
+    /// <summary>
+    /// PluginManager serves as Do's primary interface to Mono.Addins.
+    /// </summary>
     public static class PluginManager {
 
         private const string DefaultPluginIcon = "folder_tar";
@@ -44,20 +44,21 @@ namespace Do.Core {
             get {
                 return new string[] {
                     "/Do/ItemSource",
-                        "/Do/Action",
+                    "/Do/Action",
                 };
             }
         }
-		
-		internal static void Initialize ()
-        {
-            // Initialize the registry
-            AddinManager.Initialize (Paths.UserPlugins);
 
-            AddinManager.AddExtensionNodeHandler ("/Do/ItemSource",
-                OnItemSourceChange);
-            AddinManager.AddExtensionNodeHandler ("/Do/Action",
-                OnActionChange);
+        /// <summary>
+        /// Performs plugin system initialization. Should be called before this
+        /// class or any Mono.Addins class is used.
+        /// </summary>
+        internal static void Initialize ()
+        {
+            // Initialize Mono.Addins.
+            AddinManager.Initialize (Paths.UserPlugins);
+            AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnIObjectChange);
+            AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnIObjectChange);
 
             // Check that HttpRepo is registered in the HttpRepository
             SetupService setup = new SetupService (AddinManager.Registry);
@@ -66,9 +67,9 @@ namespace Do.Core {
             }
             InstallLocalPlugins (setup);
         }
-		
-		/// <summary>
-        /// Given an Addin ID, returns an icon that may represent that addin.
+
+        /// <summary>
+        /// Given an addin ID, returns an icon that may represent that addin.
         /// </summary>
         /// <param name="id">
         /// A <see cref="System.String"/> containing an addin ID.
@@ -91,6 +92,13 @@ namespace Do.Core {
             return DefaultPluginIcon;
         }
 
+        /// <summary>
+        /// Finds all plugged-in item sources.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="ICollection`1"/> of DoItemSource instances loaded from
+        /// plugins.
+        /// </returns>
         internal static ICollection<DoItemSource> GetItemSources () {
             List<DoItemSource> sources;
 
@@ -102,6 +110,13 @@ namespace Do.Core {
             return sources;
         }
 
+        /// <summary>
+        /// Finds all plugged-in actions.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="ICollection`1"/> of DoAction instances loaded from
+        /// plugins.
+        /// </returns>
         internal static ICollection<DoAction> GetActions () {
             List<DoAction> actions;
 
@@ -113,6 +128,18 @@ namespace Do.Core {
             return actions;
         }
 
+        /// <summary>
+        /// Install all available plugin updates, either
+        /// graphically or non-graphically.
+        /// </summary>
+        /// <param name="graphical">
+        /// A <see cref="System.Boolean"/> to determine whether installer should
+        /// be graphical (true iff graphical installer should be used).
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.Boolean"/> indicating whether any updates were
+        /// performed.
+        /// </returns>
         internal static bool InstallAvailableUpdates (bool graphical)
         {
             SetupService setup;
@@ -154,92 +181,59 @@ namespace Do.Core {
         /// </param>
         internal static void InstallLocalPlugins (SetupService setup)
         {
-            // Load local items into repo
-            if (!Directory.Exists (Paths.UserPlugins)) return;
-
             // Create mpack (addin packages) out of dlls. Delete each dll
             // when finished creating package.
             foreach (string file in 
                 Directory.GetFiles (Paths.UserPlugins, "*.dll")) {
                 string path;
-                
+
                 path = Path.Combine (Paths.UserPlugins, file);
                 setup.BuildPackage (new ConsoleProgressStatus (false),
                     Paths.UserPlugins, new string [] { path });
                 File.Delete (path);
             }
-
             // Install each mpack file, deleting each file when finished
             // installing it.
             foreach (string file in 
-                Directory.GetFiles (Paths.UserPlugins, "*.mpack")) {
+                    Directory.GetFiles (Paths.UserPlugins, "*.mpack")) {
                 string path;
-                
+
                 path = Path.Combine (Paths.UserPlugins, file);
-                //Log.Info ("Installing local plugin {0}...", path);
                 setup.Install (new ConsoleProgressStatus (false),
                     new string [] { path });
                 File.Delete (path);
             }
         }
 
-        /// <summary>
-        /// Called when a node is added or removed
-        /// </summary>
-        /// <param name="s">
-        /// A <see cref="System.Object"/>
-        /// </param>
-        /// <param name="args">
-        /// A <see cref="ExtensionNodeEventArgs"/>
-        /// </param>
-        private static void OnItemSourceChange (object s, ExtensionNodeEventArgs args)
+        internal static void OnIObjectChange (object s,
+                                              ExtensionNodeEventArgs args)
         {
-            DoItemSource source;
             TypeExtensionNode node;
 
             node = args.ExtensionNode as TypeExtensionNode;
             if (args.Change == ExtensionChange.Add) {
                 try {
-                    source = new DoItemSource (node.GetInstance () as IItemSource);
-                    Log.Info ("Successfully loaded \"{0}\" item source.",
-                        source.Name);
+                    IObject o = new DoObject (node.GetInstance () as IObject);
+                    Log.Info ("Loaded \"{0}\".", o.Name);
                 } catch (Exception e) {
-                    Log.Error ("Failed to load item source: {0}", e.Message);
+                    Log.Info ("Encountered error loading \"{0}\": {0}",
+                        e.Message);
                 }
             } else {
-                try {
-                    source = new DoItemSource (node.GetInstance () as IItemSource);
-                    Log.Info ("Successfully unloaded \"{0}\" item source.",
-                        source.Name);
-                } catch (Exception e) {
-                    Log.Error ("Failed to unload item source: {0}", e.Message);
-                }
-            }
-        }
-
-        internal static void OnActionChange (object s, ExtensionNodeEventArgs args)
-        {
-            DoAction action;
-            TypeExtensionNode node;
-
-            node = args.ExtensionNode as TypeExtensionNode;
-            if (args.Change == ExtensionChange.Add) {
-                try {
-                    action = new DoAction (node.GetInstance () as IAction);
-                    Log.Info ("Successfully loaded \"{0}\" action.", action.Name);
-                } catch (Exception e) {
-                    Log.Error ("Action failed to load: {0}.", e.Message);
-                }
-            } else {
-                try {
-                    action = new DoAction (node.GetInstance () as IAction);
-                    Log.Info ("Successfully unloaded \"{0}\" action.", action.Name);
-                } catch (Exception e) {
-                    Log.Error ("Action failed to unload: {0}", e.Message);
-                }
+                IObject o = new DoObject (node.GetInstance () as IObject);
+                Log.Info ("Unloaded \"{0}\".", o.Name);
             }	
         }
 
+		/// <summary>
+		/// Get all objects conforming to type T provided by a given addin.
+		/// </summary>
+		/// <param name="id">
+		/// A <see cref="System.String"/> containing an addin id.
+		/// </param>
+		/// <returns>
+		/// A <see cref="ICollection`1"/> of instances of type T.
+		/// </returns>
         private static ICollection<T> ObjectsForAddin<T> (string id)
         {
             List<T> obs;
@@ -262,6 +256,16 @@ namespace Do.Core {
             return obs;
         }
 
+		/// <summary>
+		/// Get all IConfigurable instances loaded from plugins.
+		/// </summary>
+		/// <param name="id">
+		/// A <see cref="System.String"/> containing an addin id.
+		/// </param>
+		/// <returns>
+		/// A <see cref="ICollection`1"/> of <see cref="IConfigurable"/>
+		/// provided by the addin for that id.
+		/// </returns>
         internal static ICollection<IConfigurable> ConfigurablesForAddin (string id)
         {
             List<IConfigurable> cons;
