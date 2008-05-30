@@ -82,10 +82,6 @@ namespace Do.UI
                 AddinManager.Registry.EnableAddin (id);
             else
                 AddinManager.Registry.DisableAddin (id);
-
-            // For now...
-            // TODO: remove this
-            Do.UniverseManager.Reload ();
         }
 
         protected virtual void OnBtnRefreshClicked (object sender, EventArgs e)
@@ -109,6 +105,7 @@ namespace Do.UI
             if (ids.Length == 0) return;
 
             win = new PluginConfigurationWindow (ids [0]);
+			win.Modal = true;
             win.ShowAll ();
         }
 

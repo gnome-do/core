@@ -35,9 +35,9 @@ namespace Do.Core {
 	public class Controller : IController, IDoController {
 
 		protected IDoWindow window;
-		protected Gtk.Window addinWindow;
-		protected Gtk.AboutDialog aboutWindow;
-		protected PreferencesWindow prefsWindow;
+		protected Gtk.Window addin_window;
+		protected Gtk.AboutDialog about_window;
+		protected PreferencesWindow prefs_window;
 		protected SearchContext[] context;
 		
 		const int SearchDelay = 250;
@@ -52,7 +52,7 @@ namespace Do.Core {
 		
 		public Controller ()
 		{
-			aboutWindow = null;
+			about_window = null;
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			searchTimeout = new uint[3];
@@ -77,7 +77,7 @@ namespace Do.Core {
 
 		bool IsSummonable {
 			get {
-				return aboutWindow == null;
+				return prefs_window == null && about_window == null;
 			}
 		}
 
@@ -186,7 +186,7 @@ namespace Do.Core {
 		}
 
 		internal PreferencesWindow PreferencesWindow {
-			get { return prefsWindow; }
+			get { return prefs_window; }
 		}
 		
 		/// <summary>
@@ -744,11 +744,14 @@ namespace Do.Core {
 			Vanish ();
 			Reset ();
 
-			if (null == prefsWindow) {
-				prefsWindow = new PreferencesWindow ();
-				prefsWindow.Destroyed += delegate { prefsWindow = null; };
+			if (null == prefs_window) {
+				prefs_window = new PreferencesWindow ();
+				prefs_window.Destroyed += delegate {
+					Do.UniverseManager.Reload ();
+					prefs_window = null;
+				};
 			}
-			prefsWindow.Show ();
+			prefs_window.Show ();
 		}
 
 		public void ShowAbout ()
@@ -772,15 +775,15 @@ namespace Do.Core {
 				"Volker Braun"
 			};
 
-			aboutWindow = new Gtk.AboutDialog ();
-			aboutWindow.Name = "GNOME Do";
+			about_window = new Gtk.AboutDialog ();
+			about_window.Name = "GNOME Do";
 
 			try {
 				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
-				aboutWindow.Version = String.Format ("{0}.{1}.{2}",
+				about_window.Version = String.Format ("{0}.{1}.{2}",
 					name.Version.Major, name.Version.Minor, name.Version.Build);
 			} catch {
-				aboutWindow.Version = Catalog.GetString ("Unknown");
+				about_window.Version = Catalog.GetString ("Unknown");
 			}
 			
 			logos = new string[] {
@@ -793,23 +796,23 @@ namespace Do.Core {
 				logo = l;
 			}
 
-			aboutWindow.Logo = UI.IconProvider.PixbufFromIconName (logo, 140);
-			aboutWindow.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
-			aboutWindow.Comments = "Do things as quickly as possible\n" +
+			about_window.Logo = UI.IconProvider.PixbufFromIconName (logo, 140);
+			about_window.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
+			about_window.Comments = "Do things as quickly as possible\n" +
 				"(but no quicker) with your files, bookmarks,\n" +
 				"applications, music, contacts, and more!";
-			aboutWindow.Website = "http://do.davebsd.com/";
-			aboutWindow.WebsiteLabel = "Visit Homepage";
-			aboutWindow.Authors = authors;
-			aboutWindow.IconName = "gnome-run";
+			about_window.Website = "http://do.davebsd.com/";
+			about_window.WebsiteLabel = "Visit Homepage";
+			about_window.Authors = authors;
+			about_window.IconName = "gnome-run";
 
-			if (null != aboutWindow.Screen.RgbaColormap) {
-				Gtk.Widget.DefaultColormap = aboutWindow.Screen.RgbaColormap;
+			if (null != about_window.Screen.RgbaColormap) {
+				Gtk.Widget.DefaultColormap = about_window.Screen.RgbaColormap;
 			}
 
-			aboutWindow.Run ();
-			aboutWindow.Destroy ();
-			aboutWindow = null;
+			about_window.Run ();
+			about_window.Destroy ();
+			about_window = null;
 		}
 		
 		/////////////////////////////
