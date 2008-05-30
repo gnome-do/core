@@ -25,13 +25,14 @@ using Mono.Addins.Gui;
 
 namespace Do.UI
 {	
-    public partial class PreferencesWindow : Gtk.Window
+    public partial class PreferencesWindow : Window
     {
         public PreferencesWindow () : 
-            base (Gtk.WindowType.Toplevel)
+            base (WindowType.Toplevel)
         {
             Build ();
 			
+			btn_close.IsFocus = true;
             // Add notebook pages.
             foreach (IPreferencePage page in Pages) {
 				notebook.AppendPage (page.Page, new Label (page.Label));

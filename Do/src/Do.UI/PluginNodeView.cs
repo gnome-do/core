@@ -17,7 +17,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
-//
 
 using System;
 using System.Threading;
@@ -45,7 +44,7 @@ namespace Do.UI
         const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
         Dictionary<string, string> addins;
-		
+
         public PluginNodeView () :
             base ()
         {
@@ -75,19 +74,22 @@ namespace Do.UI
             (cell as CellRendererText).WrapMode = Pango.WrapMode.Word;
             AppendColumn ("Plugin", cell, "markup", Column.Description);
 
-            (Model as ListStore).SetSortColumnId ((int)Column.Description, SortType.Ascending);
-
+            (Model as ListStore).SetSortColumnId ((int)Column.Description,
+                SortType.Ascending);
             Selection.Changed += OnSelectionChanged;
 
             Refresh ();
         }
 
-        private void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
+        private void IconDataFunc (TreeViewColumn column,
+                                   CellRenderer cell,
+                                   TreeModel model,
+                                   TreeIter iter)
         {
-			string id, icon;
+            string id, icon;
             CellRendererPixbuf renderer;
-			
-			renderer = cell as CellRendererPixbuf;
+
+            renderer = cell as CellRendererPixbuf;
             id = (Model as ListStore).GetValue (iter, (int)Column.Id) as string;
             icon = PluginManager.IconForAddin (id);
             renderer.Pixbuf = IconProvider.PixbufFromIconName (icon, IconSize);
@@ -102,10 +104,7 @@ namespace Do.UI
             // Add other (non-online) addins.
             foreach (Addin a in AddinManager.Registry.GetAddins ()) {
                 addins [Addin.GetIdName (a.Id)] = a.Id;
-                store.AppendValues (
-                        a.Enabled,
-                        Description (a),
-                        a.Id);
+                store.AppendValues ( a.Enabled, Description (a), a.Id);
             }
             // Add online plugins asynchronously so UI doesn't block.
             RefreshOnlinePluginsAsync ();
@@ -120,13 +119,16 @@ namespace Do.UI
             setup = new SetupService (AddinManager.Registry);
 
             new Thread ((ThreadStart) delegate {
-                setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+                setup.Repositories.UpdateAllRepositories (
+                    new ConsoleProgressStatus (true));
                 // Add addins from online repositories.
                 Application.Invoke (delegate {
-
+                    try {
+                    /// >>>>>>
                     foreach (AddinRepositoryEntry e in
                         setup.Repositories.GetAvailableAddins ()) {
-                        // If addin already made its way into the store, skip.
+                        // If addin already made its way into the store,
+                        // skip.
                         if (addins.ContainsKey (Addin.GetIdName (e.Addin.Id)))
                             continue;
                         addins [Addin.GetIdName (e.Addin.Id)] = e.Addin.Id;
@@ -135,7 +137,12 @@ namespace Do.UI
                             Description (e),
                             e.Addin.Id);
                     }
-                    ScrollToCell (TreePath.NewFirst (), Columns [0], true, 0, 0);
+                    ScrollToCell (TreePath.NewFirst (), Columns[0], true, 0, 0);
+                    /// >>>>>>
+                    } catch {
+                        // A crash may result if window is closed before this
+                        // event occurs.
+                    }
                 });
             }).Start ();
         }
@@ -158,20 +165,20 @@ namespace Do.UI
         {
             return Description (a.Name, a.Description, a.Version);
         }
-		
-		public string[] GetSelectedAddins () {
-			string id;
-			TreeIter iter;
-			ListStore store;
-			
-			if (Selection.CountSelectedRows () == 0)
-				return new string [0];
-			
-			store = Model as ListStore;
-			Selection.GetSelected (out iter);
-			id = store.GetValue (iter, (int)Column.Id) as string;
-			return new string[] { id };
-		}
+
+        public string[] GetSelectedAddins () {
+            string id;
+            TreeIter iter;
+            ListStore store;
+
+            if (Selection.CountSelectedRows () == 0)
+                return new string [0];
+
+            store = Model as ListStore;
+            Selection.GetSelected (out iter);
+            id = store.GetValue (iter, (int)Column.Id) as string;
+            return new string[] { id };
+        }
 
 
         protected void OnPluginToggle (object sender, ToggledArgs args)
@@ -197,9 +204,9 @@ namespace Do.UI
 
         protected void OnSelectionChanged (object sender, EventArgs args)
         {
-			string[] ids;
-			
-			ids = GetSelectedAddins ();
+            string[] ids;
+
+            ids = GetSelectedAddins ();
             if (ids.Length == 0) {
                 return;
             }
@@ -211,7 +218,7 @@ namespace Do.UI
         public event PluginToggledDelegate PluginToggled;
         public event PluginSelectedDelegate PluginSelected;
 
-        public delegate void PluginToggledDelegate (string addinId, bool enabled);
-        public delegate void PluginSelectedDelegate (string addinId);
+        public delegate void PluginToggledDelegate (string id, bool enabled);
+        public delegate void PluginSelectedDelegate (string id);
     }
 }
