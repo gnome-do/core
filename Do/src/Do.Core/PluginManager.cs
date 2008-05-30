@@ -211,7 +211,7 @@ namespace Do.Core {
             TypeExtensionNode node;
 
             node = args.ExtensionNode as TypeExtensionNode;
-            if (args.Change == ExtensionChange.Add) {
+            if (args.Change.Equals (ExtensionChange.Add)) {
                 try {
                     IObject o = new DoObject (node.GetInstance () as IObject);
                     Log.Info ("Loaded \"{0}\".", o.Name);
@@ -220,8 +220,11 @@ namespace Do.Core {
                         e.Message);
                 }
             } else {
-                IObject o = new DoObject (node.GetInstance () as IObject);
-                Log.Info ("Unloaded \"{0}\".", o.Name);
+                try {
+                    IObject o = new DoObject (node.GetInstance () as IObject);
+                    Log.Info ("Unloaded \"{0}\".", o.Name);
+                } catch {
+                }
             }	
         }
 
@@ -242,14 +245,20 @@ namespace Do.Core {
             foreach (string path in ExtensionPaths) {
                 foreach (TypeExtensionNode n in
                     AddinManager.GetExtensionNodes (path)) {
+                    object instance;
                     bool addinMatch, typeMatch;
 
+                    try {
+                        instance = n.GetInstance ();
+                    } catch {
+                        continue;
+                    }
                     addinMatch =
                         Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id);
                     typeMatch =
-                        typeof (T).IsAssignableFrom (n.GetInstance().GetType());
+                        typeof (T).IsAssignableFrom (instance.GetType ());
                     if (addinMatch && typeMatch) {
-                        obs.Add ((T) n.GetInstance ());
+                        obs.Add ((T) instance);
                     }
                 }
             }

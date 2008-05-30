@@ -70,8 +70,7 @@ namespace Do.Universe {
 					BinaryFormatter f = new BinaryFormatter ();
 					aliases = f.Deserialize (s) as List<AliasRecord>;
 				}
-			} catch (Exception e) {
-				Log.Error (e.Message);
+			} catch {
 				aliases = new List<AliasRecord> ();
 			}
 		}
