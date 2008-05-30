@@ -82,12 +82,18 @@ namespace Do.Core {
         {
             // First look for an icon among ItemSources:
             foreach (IItemSource obj in ObjectsForAddin<IItemSource> (id)) {
-                return obj.Icon;
+				try {
+					if (null != obj.Icon)
+						return obj.Icon;
+				} catch { }
             }
             // If no icon found among ItemSources, look for an icon among
             // Actions:		
             foreach (IAction obj in ObjectsForAddin<IAction> (id)) {
-                return obj.Icon;
+				try {
+					if (null != obj.Icon)
+						return obj.Icon;
+				} catch { }
             }
             return DefaultPluginIcon;
         }
