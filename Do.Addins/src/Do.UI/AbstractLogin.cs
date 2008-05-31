@@ -27,10 +27,26 @@ namespace Do.Addins
 	public abstract partial class AbstractLogin : Gtk.Bin
 	{		
 		private LinkButton newAcct_btn;
-		public AbstractLogin()
+		
+		public AbstractLogin ()
 		{
-			this.Build();
-			newAcct_btn = new LinkButton ("", "Get account");
+			this.Build ();
+			
+			newAcct_btn = new LinkButton ("", "");
+			this.hbox1.Add (newAcct_btn);
+			Gtk.Box.BoxChild wInt = ((Gtk.Box.BoxChild)(this.hbox1[this.newAcct_btn]));
+			wInt.Position = 1;
+			
+			newAcct_btn.Clicked += OnNewAcctBtnClicked;
+			this.ShowAll ();
+		}
+		
+		public AbstractLogin (string service)
+		{
+			this.Build ();
+			get_account_lbl.Markup = String.Format ("<i>Dont have {0}?</i>",service);
+			newAcct_btn = new LinkButton ("", String.Format ("Sign up for {0}",
+			                                                 service));
 			this.hbox1.Add (newAcct_btn);
 			Gtk.Box.BoxChild wInt = ((Gtk.Box.BoxChild)(this.hbox1[this.newAcct_btn]));
 			wInt.Position = 1;
@@ -45,9 +61,21 @@ namespace Do.Addins
 			}
 		}
 		
+		protected Gtk.Label UsernameLabel {
+			get {
+				return username_lbl;
+			}
+		}
+		
 		protected Gtk.Entry Password {
 			get {
 				return password_entry;
+			}
+		}
+		
+		protected Gtk.Label PasswordLabel {
+			get {
+				return password_lbl;
 			}
 		}
 		
