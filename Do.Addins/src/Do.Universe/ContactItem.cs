@@ -31,12 +31,12 @@ namespace Do.Universe
 	
 	public class ContactItem : IItem
 	{
-		static Dictionary<string, ContactItem> contactsByName, contactsByEmail;
+		static Dictionary<string, ContactItem> contacts_name, contacts_email;
 		
 		static ContactItem ()
 		{
-			contactsByName = new Dictionary<string, ContactItem> ();
-			contactsByEmail = new Dictionary<string, ContactItem> ();
+			contacts_name = new Dictionary<string, ContactItem> ();
+			contacts_email = new Dictionary<string, ContactItem> ();
 		}
 		
 		public static ContactItem Create (string name)
@@ -48,9 +48,9 @@ namespace Do.Universe
 		{
 			ContactItem contact;
 			
-			contactsByName.TryGetValue (name.ToLower (), out contact);
+			contacts_name.TryGetValue (name.ToLower (), out contact);
 			if (null == contact) {
-				contactsByName[name.ToLower ()] = contact = new ContactItem ();
+				contacts_name[name.ToLower ()] = contact = new ContactItem ();
 				contact["name"] = name;
 			}
 			return contact;
@@ -60,9 +60,9 @@ namespace Do.Universe
 		{
 			ContactItem contact;
 			
-			contactsByEmail.TryGetValue (email.ToLower (), out contact);
+			contacts_email.TryGetValue (email.ToLower (), out contact);
 			if (null == contact) {
-				contactsByEmail[email.ToLower ()] = contact = new ContactItem ();
+				contacts_email[email.ToLower ()] = contact = new ContactItem ();
 				contact["email"] = email;
 			}
 			return contact;
@@ -75,25 +75,24 @@ namespace Do.Universe
 			details = new Dictionary<string,string> ();
 		}
 
-		public IEnumerable<string> Details
-		{
+		public IEnumerable<string> Details {
 			get { return details.Keys; }
 		}
 		
-		public string this [string key]
-		{
+		public string this [string key] {
 			get {
 				string detail;
 				details.TryGetValue (key, out detail);
 				return detail;
 			}
 			set {
-				if (string.IsNullOrEmpty (key) || string.IsNullOrEmpty (value)) return;
+				if (string.IsNullOrEmpty (key) || string.IsNullOrEmpty (value))
+					return;
 				
 				if (key.StartsWith ("email"))
-					contactsByEmail[value.ToLower ()] = this;
+					contacts_email[value.ToLower ()] = this;
 				else if (key == "name")
-					contactsByName[value.ToLower ()] = this;
+					contacts_name[value.ToLower ()] = this;
 				
 				switch (key) {
 				case "photo":
@@ -106,18 +105,15 @@ namespace Do.Universe
 			}
 		}
 		
-		public string Name
-		{
-			get { return this["name"] ?? this["email"]; }
+		public string Name {
+			get { return this ["name"] ?? this ["email"]; }
 		}
 		
-		public string Photo
-		{
-			get { return this["photo"]; }
+		public string Photo {
+			get { return this ["photo"]; }
 		}
 		
-		public string Description
-		{
+		public string Description {
 			get {
 				return AnEmailAddress ?? this ["description"] ??
 					"No description.";
@@ -131,11 +127,11 @@ namespace Do.Universe
 				
 				email = this ["email"] ?? this ["email.work"] ??
 					this ["email.home"];
-				if (email == null) {
-					foreach (string detail in Details) {
-						if (detail.StartsWith ("email"))
-							return this [detail];
-					}
+				if (null != email) return email;
+
+				foreach (string detail in Details) {
+					if (detail.StartsWith ("email"))
+						return this [detail];
 				}
 				return null;
 			}
@@ -157,8 +153,9 @@ namespace Do.Universe
 			} else if (!File.Exists (Photo)) {
 				details["photo"] = photo;
 			} else if (File.Exists (photo)) {
-				// If there's already a photo file in place for this contact, replace it
-				// if the new photo is larger (heuristic for highest quality).
+				// If there's already a photo file in place for this contact,
+				// replace it if the new photo is larger (heuristic for highest
+				// quality).
 				if (new FileInfo (Photo).Length < new FileInfo (photo).Length) {
 					details["photo"] = photo;
 				}
