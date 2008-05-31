@@ -115,13 +115,12 @@ namespace Do.Universe
 		
 		public string Description {
 			get {
-				return AnEmailAddress ?? this ["description"] ??
+				return this ["description"] ?? AnEmailAddress ??
 					"No description.";
 			}
 		}
 
-		public string AnEmailAddress
-		{
+		public string AnEmailAddress {
 			get {
 				string email;
 				
