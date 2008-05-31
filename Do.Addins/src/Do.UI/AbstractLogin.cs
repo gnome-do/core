@@ -35,6 +35,7 @@ namespace Do.Addins
 			Gtk.Box.BoxChild wInt = ((Gtk.Box.BoxChild)(this.hbox1[this.newAcct_btn]));
 			wInt.Position = 1;
 			
+			newAcct_btn.Clicked += OnNewAcctBtnClicked;
 			this.ShowAll ();
 		}
 		
@@ -73,12 +74,19 @@ namespace Do.Addins
 				return newAcct_btn;
 			}
 		}
+		
+		
+		
+		protected abstract void Validate ();
 
-		protected virtual void OnValidateBtnClicked (object sender, System.EventArgs e)
+		protected virtual void OnApplyBtnClicked (object sender, System.EventArgs e)
 		{
 			Validate ();
 		}
 		
-		protected abstract void Validate ();
+		protected virtual void OnNewAcctBtnClicked (object sender, System.EventArgs e)
+		{
+			Util.Environment.Open (newAcct_btn.Uri);
+		}
 	}
 }
