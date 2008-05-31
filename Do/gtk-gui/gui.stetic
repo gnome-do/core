@@ -5,6 +5,7 @@
     <target-gtk-version>2.12.0</target-gtk-version>
   </configuration>
   <import>
+    <widget-library name="../../Do.Addins/bin/Debug/Do.Addins.dll" />
     <widget-library name="../bin/Debug/Do.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="Do.UI.PreferencesWindow" design-size="510 526">
@@ -270,7 +271,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Window" id="Do.UI.PluginConfigurationWindow" design-size="400 386">
+  <widget class="Gtk.Window" id="Do.UI.PluginConfigurationWindow" design-size="400 389">
     <property name="MemberName" />
     <property name="WidthRequest">230</property>
     <property name="HeightRequest">360</property>
@@ -282,6 +283,43 @@
       <widget class="Gtk.VBox" id="vbox2">
         <property name="MemberName" />
         <property name="Spacing">6</property>
+        <child>
+          <widget class="Gtk.HBox" id="hbox2">
+            <property name="MemberName" />
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.Image" id="addin_title_img">
+                <property name="MemberName" />
+                <property name="Pixbuf">stock:gtk-dialog-info Menu</property>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="addin_title_lbl">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">&lt;span size="large" weight="heavy"&gt;Plugin name here&lt;/span&gt;</property>
+                <property name="UseMarkup">True</property>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="Position">0</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
         <child>
           <widget class="Gtk.Notebook" id="notebook">
             <property name="MemberName" />
@@ -301,7 +339,7 @@
             </child>
           </widget>
           <packing>
-            <property name="Position">0</property>
+            <property name="Position">1</property>
             <property name="AutoSize">True</property>
           </packing>
         </child>
@@ -327,7 +365,7 @@
             </child>
           </widget>
           <packing>
-            <property name="Position">1</property>
+            <property name="Position">2</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>

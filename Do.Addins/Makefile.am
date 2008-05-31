@@ -37,10 +37,13 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
+	gtk-gui/Do.Addins.AbstractLogin.cs \
+	gtk-gui/generated.cs \
 	src/Do.Addins/IConfigurable.cs \
 	src/Do.Addins/IDoController.cs \
 	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/Util.cs \
+	src/Do.UI/AbstractLogin.cs \
 	src/Do.UI/BaseWidgets/DefaultObjects.cs \
 	src/Do.UI/BaseWidgets/Frame.cs \
 	src/Do.UI/BaseWidgets/GlossyRoundedFrame.cs \
@@ -87,6 +90,8 @@ DATA_FILES =
 
 RESOURCES =  \
 	Do.Addins.addin.xml \
+	gtk-gui/gui.stetic \
+	gtk-gui/objects.xml \
 	Resources/settings-triangle.png 
 
 EXTRAS = \
