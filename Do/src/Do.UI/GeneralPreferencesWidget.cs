@@ -25,19 +25,28 @@ using Do;
 
 namespace Do.UI
 {
-    public partial class GeneralPreferencesWidget : Gtk.Bin, IPreferencePage
+    public partial class GeneralPreferencesWidget : Bin, Addins.IConfigurable
     {			
-		public Widget Page {
-			get { return this; }
-		}
-		
-		public string Label {
+		public string Name {
 			get { return "General"; }
 		}
 		
-        public GeneralPreferencesWidget()
+        public string Description {
+        	get { return ""; }
+        }
+        
+        public string Icon {
+        	get { return ""; }
+        }
+		
+        public GeneralPreferencesWidget ()
         {
-            this.Build();
+            Build ();
+        }
+        
+        public Bin GetConfiguration ()
+        {
+        	return this;
         }
     }
 }

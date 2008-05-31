@@ -26,15 +26,19 @@ using Do;
 
 namespace Do.UI
 {
-	public partial class KeybindingsPreferencesWidget : Gtk.Bin, IPreferencePage
+	public partial class KeybindingsPreferencesWidget : Bin, Addins.IConfigurable
 	{			
-		public Widget Page {
-			get { return this; }
-		}
-		
-		public string Label {
+		public string Name {
 			get { return "Keyboard"; }
 		}
+		
+        public string Description {
+        	get { return ""; }
+        }
+        
+        public string Icon {
+        	get { return ""; }
+        }
 		
 		public KeybindingsPreferencesWidget ()
 		{
@@ -49,6 +53,11 @@ namespace Do.UI
 			}
 			combo_summon.Active = SummonKeyBindings.IndexOf (Do.Preferences.SummonKeyBinding);
 		}
+		
+		public Bin GetConfiguration ()
+        {
+        	return this;
+        }
 
 		protected virtual void OnComboSummonChanged (object sender, System.EventArgs e)
 		{

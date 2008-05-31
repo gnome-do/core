@@ -80,7 +80,6 @@ FILES =  \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
-	src/Do.UI/IPreferencePage.cs \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ManagePluginsPreferencesWidget.cs \

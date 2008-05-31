@@ -30,16 +30,20 @@ using Do.Core;
 
 namespace Do.UI
 {
-    public partial class ManagePluginsPreferencesWidget : Gtk.Bin, IPreferencePage
+    public partial class ManagePluginsPreferencesWidget : Bin, Addins.IConfigurable
     {
         PluginNodeView nview;
 
-        public Widget Page {
-            get { return this; }
+        public string Name {
+			get { return "Plugins"; }
+		}
+		
+        public string Description {
+        	get { return ""; }
         }
-
-        public string Label {
-            get { return "Plugins"; }
+        
+        public string Icon {
+        	get { return ""; }
         }
 
         public ManagePluginsPreferencesWidget()
@@ -52,6 +56,11 @@ namespace Do.UI
 
             scrollw.Add (nview);
             scrollw.ShowAll ();
+        }
+        
+        public Bin GetConfiguration ()
+        {
+        	return this;
         }
 
         private void OnPluginSelected (string id)

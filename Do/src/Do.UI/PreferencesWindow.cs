@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using Gtk;
 using Mono.Addins.Gui;
 
+using Do.Addins;
+
 namespace Do.UI
 {	
 	public partial class PreferencesWindow : Window
@@ -34,16 +36,17 @@ namespace Do.UI
 
 			btn_close.IsFocus = true;
 			// Add notebook pages.
-			foreach (IPreferencePage page in Pages) {
-				notebook.AppendPage (page.Page, new Label (page.Label));
+			foreach (IConfigurable page in Pages) {
+				notebook.AppendPage (
+					page.GetConfiguration (), new Label (page.Name));
 			}
 		}
 
-		IPreferencePage[] pages;
-		IPreferencePage[] Pages {
+		IConfigurable[] pages;
+		IConfigurable[] Pages {
 			get {
 				if (null == pages) {
-					pages = new IPreferencePage[] {
+					pages = new IConfigurable [] {
 						new GeneralPreferencesWidget (),
 						new KeybindingsPreferencesWidget (),
 						new ManagePluginsPreferencesWidget (),
