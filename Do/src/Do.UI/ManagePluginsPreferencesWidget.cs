@@ -34,7 +34,7 @@ namespace Do.UI
     {
         PluginNodeView nview;
 
-        public string Name {
+        new public string Name {
 			get { return "Plugins"; }
 		}
 		

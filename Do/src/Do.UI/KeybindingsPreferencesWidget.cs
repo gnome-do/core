@@ -28,7 +28,7 @@ namespace Do.UI
 {
 	public partial class KeybindingsPreferencesWidget : Bin, Addins.IConfigurable
 	{			
-		public string Name {
+		new public string Name {
 			get { return "Keyboard"; }
 		}
 		
