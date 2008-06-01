@@ -81,7 +81,7 @@ namespace Do.Core {
             SetupService setup = new SetupService (AddinManager.Registry);
 			foreach (string repo in Repositories) {
 				if (!setup.Repositories.ContainsRepository (repo)) {
-					setup.Repositories.RegisterRepository (null, repo, true);
+					setup.Repositories.RegisterRepository (null, repo, false);
 				}
 			}
             InstallLocalPlugins (setup);
