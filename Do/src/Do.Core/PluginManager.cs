@@ -38,7 +38,6 @@ namespace Do.Core {
     public static class PluginManager {
 
         private const string DefaultPluginIcon = "folder_tar";
-        private const string HttpRepo = "http://do.davebsd.com/repository/dev";
 
         private static string[] ExtensionPaths {
             get {
@@ -48,6 +47,24 @@ namespace Do.Core {
                 };
             }
         }
+
+        private static string[] Repositories {
+            get {
+                return new string[] {
+					"http://do.davebsd.com/repo/" + Version +"/official",
+					"http://do.davebsd.com/repo/" + Version +"/community",
+                };
+            }
+        }
+
+		private static string Version {
+			get {
+				System.Reflection.AssemblyName name;
+				
+				name = typeof (PluginManager).Assembly.GetName ();
+				return String.Format ("{0}.{1}", name.Version.Major, name.Version.Minor);
+			}
+		}
 
         /// <summary>
         /// Performs plugin system initialization. Should be called before this
@@ -60,11 +77,13 @@ namespace Do.Core {
             AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnIObjectChange);
             AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnIObjectChange);
 
-            // Check that HttpRepo is registered in the HttpRepository
+            // Register repositories.
             SetupService setup = new SetupService (AddinManager.Registry);
-            if (!setup.Repositories.ContainsRepository (HttpRepo)) {
-                setup.Repositories.RegisterRepository (null, HttpRepo, true);
-            }
+			foreach (string repo in Repositories) {
+				if (!setup.Repositories.ContainsRepository (repo)) {
+					setup.Repositories.RegisterRepository (null, repo, true);
+				}
+			}
             InstallLocalPlugins (setup);
         }
 
