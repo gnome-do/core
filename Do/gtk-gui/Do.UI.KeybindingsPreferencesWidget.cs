@@ -54,7 +54,6 @@ namespace Do.UI {
             this.table2.Add(this.help_icn);
             Gtk.Table.TableChild w2 = ((Gtk.Table.TableChild)(this.table2[this.help_icn]));
             w2.XOptions = ((Gtk.AttachOptions)(4));
-            w2.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.help_lbl = new Gtk.Label();
             this.help_lbl.Name = "help_lbl";
@@ -65,7 +64,6 @@ namespace Do.UI {
             w3.LeftAttach = ((uint)(1));
             w3.RightAttach = ((uint)(2));
             w3.XOptions = ((Gtk.AttachOptions)(4));
-            w3.YOptions = ((Gtk.AttachOptions)(4));
             this.vbox2.Add(this.table2);
             Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox2[this.table2]));
             w4.Position = 1;

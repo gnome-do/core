@@ -1,0 +1,6 @@
+<objects>
+  <object type="Do.Addins.AbstractLoginWidget" palette-category="Do.Addins" allow-children="false" base-type="Gtk.Bin">
+    <itemgroups />
+    <signals />
+  </object>
+</objects>

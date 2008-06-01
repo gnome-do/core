@@ -37,13 +37,13 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
-	gtk-gui/Do.Addins.AbstractLogin.cs \
+	gtk-gui/Do.Addins.AbstractLoginWidget.cs \
 	gtk-gui/generated.cs \
 	src/Do.Addins/IConfigurable.cs \
 	src/Do.Addins/IDoController.cs \
 	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/Util.cs \
-	src/Do.UI/AbstractLogin.cs \
+	src/Do.UI/AbstractLoginWidget.cs \
 	src/Do.UI/BaseWidgets/DefaultObjects.cs \
 	src/Do.UI/BaseWidgets/Frame.cs \
 	src/Do.UI/BaseWidgets/GlossyRoundedFrame.cs \

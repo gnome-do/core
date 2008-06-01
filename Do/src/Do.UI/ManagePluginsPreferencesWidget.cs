@@ -1,4 +1,4 @@
-/* ManagePluginsPreferencesWidget.cs
+ /* ManagePluginsPreferencesWidget.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -33,7 +33,7 @@ namespace Do.UI
     public partial class ManagePluginsPreferencesWidget : Bin, Addins.IConfigurable
     {
         PluginNodeView nview;
-
+		
         public string Name {
 			get { return "Plugins"; }
 		}

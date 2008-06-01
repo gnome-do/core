@@ -24,11 +24,11 @@ using Gtk;
 
 namespace Do.Addins
 {
-	public abstract partial class AbstractLogin : Gtk.Bin
+	public abstract partial class AbstractLoginWidget : Gtk.Bin
 	{		
 		private LinkButton newAcct_btn;
 		
-		public AbstractLogin ()
+		public AbstractLoginWidget ()
 		{
 			this.Build ();
 			
@@ -41,7 +41,7 @@ namespace Do.Addins
 			this.ShowAll ();
 		}
 		
-		public AbstractLogin (string service)
+		public AbstractLoginWidget (string service)
 		{
 			this.Build ();
 			get_account_lbl.Markup = String.Format ("<i>Dont have {0}?</i>",service);

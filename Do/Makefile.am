@@ -79,6 +79,7 @@ FILES =  \
 	src/Do.Core/RelevanceProvider.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
+	src/Do.UI/BindingsNodeView.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \
 	src/Do.UI/MainMenu.cs \
