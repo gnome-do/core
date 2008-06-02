@@ -25,7 +25,7 @@ using System.Collections;
 using Gnome.Keyring;
 using Gtk;
 
-namespace Do.Addins
+namespace Do.UI
 {
 	/// <summary>
 	/// A class providing a generic login widget for plugins that will need
@@ -47,26 +47,25 @@ namespace Do.Addins
 		/// </param>
 		public AbstractLoginWidget (string service)
 		{
-			this.Build ();
+			Build ();
 			
 			get_account_lbl.Markup = String.Format ("<i>Don't have {0}?</i>",service);
 			new_acct_btn = new LinkButton ("", String.Format ("Sign up for {0}",
 				service));
-			this.hbox1.Add (new_acct_btn);
-			Box.BoxChild wInt = hbox1 [new_acct_btn] as Box.BoxChild;
+			new_acct_hbox.Add (new_acct_btn);
+			Box.BoxChild wInt = new_acct_hbox [new_acct_btn] as Box.BoxChild;
 			wInt.Position = 1;
 			
 			new_acct_btn.Clicked += OnNewAcctBtnClicked;
 			
 			string username, password;
 			username = password = "";
-			GetValidatedAccountData (out username, out password,
-				this.GetType ().FullName);
+			GetAccountData (out username, out password, GetType ());
 			
 			username_entry.Text = username;
 			password_entry.Text = password;
 			
-			this.ShowAll ();
+			ShowAll ();
 		}
 		
 		/// <summary>
@@ -173,7 +172,8 @@ namespace Do.Addins
 				Gtk.Application.Invoke (delegate {
 					if (Validate ()) {
 						StatusLabel.Markup = "<i>Account validation succeeded</i>!";
-						SaveAccountData (username_entry.Text, password_entry.Text);
+						SaveAccountData (username_entry.Text, password_entry.Text,
+						GetType ());
 					} else {
 						StatusLabel.Markup = "<i>Account validation failed!</i>";
 					}
@@ -195,26 +195,27 @@ namespace Do.Addins
 		protected virtual void OnNewAcctBtnClicked (object sender, EventArgs e)
 		{
 			if (!String.IsNullOrEmpty (new_acct_btn.Uri))
-				Util.Environment.Open (new_acct_btn.Uri);
+				Do.Addins.Util.Environment.Open (new_acct_btn.Uri);
 		}
 		
 		/// <summary>
-		/// Method to save account data to permanant storage whether it be
+		/// Saves account data to permanant storage whether it be
 		/// GConf, gnome-keyring, or a flat file.
 		/// </summary>
-		protected void SaveAccountData (string username, string password)
+		public static void SaveAccountData (string username, string password,
+			Type type)
 		{
-			string keyringItemName = this.GetType ().FullName;
+			string keyName = type.FullName;
 			string keyring;
 			Hashtable ht;
 			
 			try {
 				keyring = Ring.GetDefaultKeyring ();
 				ht = new Hashtable ();
-				ht["name"] = keyringItemName;
+				ht["name"] = keyName;
 				ht["username"] = username;
 				
-				Ring.CreateItem (keyring, ItemType.GenericSecret, keyringItemName,
+				Ring.CreateItem (keyring, ItemType.GenericSecret, keyName,
 					ht, password, true);
 				                 
 			} catch (Exception e) {
@@ -223,20 +224,20 @@ namespace Do.Addins
 		}
 		
 		/// <summary>
-		/// Method to load validated account data from gnome-keyring
+		/// Loads account data from gnome-keyring
 		/// </summary>
-		protected static void GetValidatedAccountData (out string username, 
-		                                               out string password,
-		                                               string keyringItemName)
+		public static void GetAccountData (out string username, 
+			out string password, Type type)
 		{
+			string keyName = type.FullName;
 			username = password = "";
 			Hashtable ht = new Hashtable ();
-			ht ["name"] = keyringItemName;
+			ht ["name"] = keyName;
 			
 			try {
 				foreach (ItemData s in Ring.Find (ItemType.GenericSecret, ht)) {
 					if (s.Attributes.ContainsKey ("name") && s.Attributes.ContainsKey ("username")
-					    && (s.Attributes ["name"] as string).Equals (keyringItemName)) {
+					    && (s.Attributes ["name"] as string).Equals (keyName)) {
 						username = s.Attributes ["username"] as string;
 						password = s.Secret;
 						return;
@@ -244,13 +245,12 @@ namespace Do.Addins
 				}
 			} catch (Exception) {
 				Console.Error.WriteLine ("No account info stored for {0}",
-					keyringItemName);
+					keyName);
 			}
 		}
 		
 		/// <summary>
-		/// Makes validation call with account credentials passed in
-		/// through the username and password entry fields.
+		/// Makes validation call to service
 		/// </summary>
 		protected abstract bool Validate ();
 	}

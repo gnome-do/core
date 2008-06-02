@@ -7,7 +7,7 @@
   <import>
     <widget-library name="../bin/Debug/Do.Addins.dll" internal="true" />
   </import>
-  <widget class="Gtk.Bin" id="Do.Addins.AbstractLoginWidget" design-size="300 300">
+  <widget class="Gtk.Bin" id="Do.UI.AbstractLoginWidget" design-size="300 300">
     <property name="MemberName" />
     <child>
       <widget class="Gtk.VBox" id="vbox1">
@@ -281,7 +281,7 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.HBox" id="hbox1">
+              <widget class="Gtk.HBox" id="new_acct_hbox">
                 <property name="MemberName" />
                 <property name="Spacing">6</property>
                 <child>

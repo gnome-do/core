@@ -37,7 +37,7 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 
 FILES =  \
 	AssemblyInfo.cs \
-	gtk-gui/Do.Addins.AbstractLoginWidget.cs \
+	gtk-gui/Do.UI.AbstractLoginWidget.cs \
 	gtk-gui/generated.cs \
 	src/Do.Addins/IConfigurable.cs \
 	src/Do.Addins/IDoController.cs \
