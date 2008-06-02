@@ -81,7 +81,9 @@ FILES =  \
 	src/Do.cs \
 	src/Do.UI/BindingsNodeView.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
+	src/Do.UI/KeyBindingManager.cs \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \
+	src/Do.UI/KeyCommand.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ManagePluginsPreferencesWidget.cs \
 	src/Do.UI/PluginConfigurationWindow.cs \
@@ -122,6 +124,7 @@ REFERENCES =  \
 	-pkg:gconf-sharp-2.0 \
 	-pkg:glade-sharp-2.0 \
 	-pkg:glib-sharp-2.0 \
+	-pkg:gnome-keyring-sharp \
 	-pkg:gtk-sharp-2.0 \
 	-pkg:mono-addins \
 	-pkg:mono-addins-gui \

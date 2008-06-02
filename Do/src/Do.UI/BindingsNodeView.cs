@@ -34,7 +34,11 @@ namespace Do.UI
 			Binding,
 			NumColumns,
 		}
-				
+		
+		bool accelIncomplete = false;
+		bool accelComplete = false;
+		string mode, binding;
+		
 		public BindingsNodeView() :
 			base ()
 		{
@@ -50,11 +54,11 @@ namespace Do.UI
 			AppendColumn ("Action", cell, "text", Column.Action);
 			
 			cell = new CellRendererText ();
-			cell.Editable = true;
-			cell.Edited += OnBindingEdited;
+			cell.Editable = false;
+			//cell.Edited += OnBindingEdited;
 			AppendColumn ("Binding", cell, "text", Column.Binding);
 			
-			//Selection.Changed += OnSelectionChanged;
+			Selection.Changed += new EventHandler (OnKeysTreeViewSelectionChange);
 			
 			AddBindings ();
 		}
@@ -69,16 +73,98 @@ namespace Do.UI
 			store.AppendValues ("Summon", Do.Preferences.SummonKeyBinding);
 		}
 		
-		private void artistNameCell_Edited (object o, Gtk.EditedArgs args)
+		void OnKeysTreeViewSelectionChange (object sender, EventArgs e)
+		{
+			TreeSelection sel = sender as TreeSelection;
+			TreeModel model;
+			TreeIter iter;
+			ListStore store;
+			
+			accelComplete = false;
+			
+			if (sel.GetSelected (out model, out iter)) {
+				store = Model as ListStore;
+				//TreePath path = model.GetPath (iter);
+				store.GetIter (out iter, model.GetPath (iter));
+				KeyPressEvent += new KeyPressEventHandler (OnAccelEntryKeyPress);
+				//this.KeyReleaseEvent += new KeyReleaseEventHandler (OnAccelEntryKeyRelease);
+				store.SetValue (iter, (int)Column.Binding, binding);
+			}
+		}
+		
+		private void OnBindingEdited (object o, Gtk.EditedArgs args)
 		{
 			TreeIter iter;
 			ListStore store;
 			
 			store = Model as ListStore;
 			store.GetIter (out iter, new Gtk.TreePath (args.Path));
-		 
-			string binding = musicListStore.GetValue (iter, Column.Binding) as string;
-			binding = args.NewText;
+			
+			this.KeyPressEvent += new KeyPressEventHandler (OnAccelEntryKeyPress);
+			//this.KeyReleaseEvent += new KeyReleaseEventHandler (OnAccelEntryKeyRelease);
+			
+			store.SetValue (iter, (int)Column.Binding, binding);
 		}
+		
+		[GLib.ConnectBefore]
+		void OnAccelEntryKeyPress (object sender, KeyPressEventArgs e)
+		{
+			Gdk.ModifierType mod = e.Event.State;
+			Gdk.Key key = e.Event.Key;
+			string accel;
+			
+			e.RetVal = true;
+			
+			if (accelComplete) {
+				accelIncomplete = false;
+				accelComplete = false;
+				mode = null;
+				
+				if (key.Equals (Gdk.Key.BackSpace))
+					return;
+			}
+			
+			accelComplete = false;
+			if ((accel = KeyBindingManager.AccelFromKey (key, mod)) != null) {
+				binding = KeyBindingManager.Binding (mode, accel);
+				accelIncomplete = false;
+				if (mode != null)
+					accelComplete = true;
+				else
+					mode = accel;
+			} else {
+				//accel = mode != null ? mode + "|" : String.Empty;
+				accelIncomplete = true;
+				
+				if ((mod & Gdk.ModifierType.ControlMask) != 0)
+					accel += "<Control>";
+				if ((mod & Gdk.ModifierType.Mod1Mask) != 0 ||
+				    (key.Equals (Gdk.Key.Meta_L) || key.Equals (Gdk.Key.Meta_R)))
+					accel += "<Alt>";
+				if ((mod & Gdk.ModifierType.ShiftMask) != 0)
+					accel += "<Shift>";
+				if ((mod & Gdk.ModifierType.SuperMask) != 0)
+					accel += "<Super>";
+				
+				if (key.Equals (Gdk.Key.Control_L) || key.Equals (Gdk.Key.Control_R))
+					accel += "<Control>";
+				else if (key.Equals (Gdk.Key.Alt_L) || key.Equals (Gdk.Key.Alt_R))
+					accel += "<Alt>";
+				else if (key.Equals (Gdk.Key.Shift_L) || key.Equals (Gdk.Key.Shift_R))
+					accel += "<Shift>";
+				else if (key.Equals (Gdk.Key.Super_L) || key.Equals (Gdk.Key.Super_R))
+					accel += "<Super>";
+				
+				Console.Error.WriteLine (accel);
+				binding = accel;
+			}
+		}
+		/*
+		void OnAccelEntryKeyRelease (object sender, KeyReleaseEventArgs e)
+		{
+			if (accelIncomplete)
+				binding = mode != null ? mode : String.Empty;
+		}
+		*/
 	}
 }
