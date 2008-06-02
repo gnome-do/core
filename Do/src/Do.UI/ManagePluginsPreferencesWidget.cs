@@ -79,6 +79,7 @@ namespace Do.UI
         			break;
         		}
         	}
+        	btn_about.Sensitive = nview.GetSelectedAddins ().Length > 0;
         }
 
         private void OnPluginToggled (string id, bool enabled)
@@ -136,6 +137,13 @@ namespace Do.UI
 
         protected virtual void OnBtnAboutClicked (object sender, EventArgs e)
         {
+        	foreach (string id in nview.GetSelectedAddins ()) {
+        		try {
+	        		string name = Addin.GetIdName (id).Split ('.')[1];
+	        		Util.Environment.Open (
+	        			"http://wiki.ubuntu.com/GnomeDo/Plugins/" + name);
+	        	} catch { }
+        	}
         }
     }
 }

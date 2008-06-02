@@ -104,7 +104,7 @@ namespace Do.UI
 			// Add other (non-online) addins.
 			foreach (Addin a in AddinManager.Registry.GetAddins ()) {
 				addins [Addin.GetIdName (a.Id)] = a.Id;
-				store.AppendValues ( a.Enabled, Description (a), a.Id);
+				store.AppendValues (a.Enabled, Description (a), a.Id);
 			}
 			// Add online plugins asynchronously so UI doesn't block.
 			RefreshOnlinePluginsAsync ();
