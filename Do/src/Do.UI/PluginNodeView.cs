@@ -61,7 +61,6 @@ namespace Do.UI
 				typeof (string));
 
 			cell = new CellRendererToggle ();
-			cell.SetFixedSize (20, 20);
 			(cell as CellRendererToggle).Activatable = true;
 			(cell as CellRendererToggle).Toggled += OnPluginToggle;
 			AppendColumn ("Enable", cell, "active", Column.Enabled);
@@ -152,6 +151,7 @@ namespace Do.UI
 		{
 			return string.Format (DescriptionFormat, name, desc, version);
 		}
+		
 		string Description (Addin a)
 		{
 			return Description (a.Name, a.Description.Description, a.Version);
@@ -181,7 +181,6 @@ namespace Do.UI
 			return new string[] { id };
 		}
 
-
 		protected void OnPluginToggle (object sender, ToggledArgs args)
 		{
 			string addinId;
@@ -205,14 +204,9 @@ namespace Do.UI
 
 		protected void OnSelectionChanged (object sender, EventArgs args)
 		{
-			string[] ids;
-
-			ids = GetSelectedAddins ();
-			if (ids.Length == 0) {
-				return;
-			}
 			if (null != PluginSelected) {
-				PluginSelected (ids [0]);
+				PluginSelected (this,
+					new PluginSelectionEventArgs (GetSelectedAddins ()));
 			}
 		}
 
@@ -220,6 +214,6 @@ namespace Do.UI
 		public event PluginSelectedDelegate PluginSelected;
 
 		public delegate void PluginToggledDelegate (string id, bool enabled);
-		public delegate void PluginSelectedDelegate (string id);
+		public delegate void PluginSelectedDelegate (object sender, PluginSelectionEventArgs args);
 	}
 }

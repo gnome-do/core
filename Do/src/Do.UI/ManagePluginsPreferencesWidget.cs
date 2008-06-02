@@ -63,10 +63,22 @@ namespace Do.UI
         	return this;
         }
 
-        private void OnPluginSelected (string id)
+        private void OnPluginSelected (object sender, PluginSelectionEventArgs args)
         {
-            btn_configure.Sensitive =
-                PluginManager.ConfigurablesForAddin (id).Count > 0;
+        	UpdateButtonState ();
+        }
+        
+        protected void UpdateButtonState ()
+        {
+        	btn_configure.Sensitive = false;
+        	btn_about.Sensitive = false;
+        	
+        	foreach (string id in nview.GetSelectedAddins ()) {
+        		if (PluginManager.ConfigurablesForAddin (id).Count > 0) {
+        			btn_configure.Sensitive = true;
+        			break;
+        		}
+        	}
         }
 
         private void OnPluginToggled (string id, bool enabled)
@@ -87,15 +99,19 @@ namespace Do.UI
             }
 
             // Now enable or disable the plugin.
-            if (enabled)
+            if (enabled) {
                 AddinManager.Registry.EnableAddin (id);
-            else
+            } else {
                 AddinManager.Registry.DisableAddin (id);
+            }
+             
+        	UpdateButtonState ();
         }
 
         protected virtual void OnBtnRefreshClicked (object sender, EventArgs e)
         {
             nview.Refresh ();
+            UpdateButtonState ();
         }
 
         protected virtual void OnBtnUpdateClicked (object sender, EventArgs e)
