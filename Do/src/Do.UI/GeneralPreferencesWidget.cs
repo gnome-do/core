@@ -27,7 +27,7 @@ namespace Do.UI
 {
     public partial class GeneralPreferencesWidget : Bin, Addins.IConfigurable
     {			
-		public string Name {
+		new public string Name {
 			get { return "General"; }
 		}
 		

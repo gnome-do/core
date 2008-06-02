@@ -47,9 +47,10 @@ namespace Do.UI
 		void Build ()
 		{
 			UseMarkup = true;
-			Ellipsize = Pango.EllipsizeMode.End;
+			Ellipsize = Pango.EllipsizeMode.Middle;
 			Justify = Justification.Center;
-			ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
+			ModifyFg (StateType.Normal,
+				new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 		}
 		
 		public IObject DisplayObject

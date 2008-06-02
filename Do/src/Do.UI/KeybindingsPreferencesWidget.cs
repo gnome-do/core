@@ -31,7 +31,7 @@ namespace Do.UI
 		private int IconSize = 32;
 		private BindingsNodeView kbNodeView;
 		
-		public string Name {
+		new public string Name {
 			get { return "Keyboard"; }
 		}
 		

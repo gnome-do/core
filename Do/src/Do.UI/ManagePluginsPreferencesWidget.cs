@@ -33,8 +33,8 @@ namespace Do.UI
     public partial class ManagePluginsPreferencesWidget : Bin, Addins.IConfigurable
     {
         PluginNodeView nview;
-		
-        public string Name {
+
+		new public string Name {
 			get { return "Plugins"; }
 		}
 		
@@ -63,10 +63,23 @@ namespace Do.UI
         	return this;
         }
 
-        private void OnPluginSelected (string id)
+        private void OnPluginSelected (object sender, PluginSelectionEventArgs args)
         {
-            btn_configure.Sensitive =
-                PluginManager.ConfigurablesForAddin (id).Count > 0;
+        	UpdateButtonState ();
+        }
+        
+        protected void UpdateButtonState ()
+        {
+        	btn_configure.Sensitive = false;
+        	btn_about.Sensitive = false;
+        	
+        	foreach (string id in nview.GetSelectedAddins ()) {
+        		if (PluginManager.ConfigurablesForAddin (id).Count > 0) {
+        			btn_configure.Sensitive = true;
+        			break;
+        		}
+        	}
+        	btn_about.Sensitive = nview.GetSelectedAddins ().Length > 0;
         }
 
         private void OnPluginToggled (string id, bool enabled)
@@ -87,15 +100,19 @@ namespace Do.UI
             }
 
             // Now enable or disable the plugin.
-            if (enabled)
+            if (enabled) {
                 AddinManager.Registry.EnableAddin (id);
-            else
+            } else {
                 AddinManager.Registry.DisableAddin (id);
+            }
+             
+        	UpdateButtonState ();
         }
 
         protected virtual void OnBtnRefreshClicked (object sender, EventArgs e)
         {
             nview.Refresh ();
+            UpdateButtonState ();
         }
 
         protected virtual void OnBtnUpdateClicked (object sender, EventArgs e)
@@ -120,6 +137,13 @@ namespace Do.UI
 
         protected virtual void OnBtnAboutClicked (object sender, EventArgs e)
         {
+        	foreach (string id in nview.GetSelectedAddins ()) {
+        		try {
+	        		string name = Addin.GetIdName (id).Split ('.')[1];
+	        		Util.Environment.Open (
+	        			"http://wiki.ubuntu.com/GnomeDo/Plugins/" + name);
+	        	} catch { }
+        	}
         }
     }
 }
