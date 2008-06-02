@@ -27,7 +27,10 @@ using Do;
 namespace Do.UI
 {
 	public partial class KeybindingsPreferencesWidget : Bin, Addins.IConfigurable
-	{			
+	{
+		private int IconSize = 32;
+		private BindingsNodeView kbNodeView;
+		
 		new public string Name {
 			get { return "Keyboard"; }
 		}
@@ -44,6 +47,15 @@ namespace Do.UI
 		{
 			Build ();
 			
+			kbNodeView = new BindingsNodeView ();
+			kbNodeView.ColumnsAutosize ();
+            action_scroll.Add (kbNodeView);
+            action_scroll.ShowAll ();
+			
+			help_icn.Pixbuf = IconProvider.PixbufFromIconName ("gtk-dialog-info",
+			                                                    IconSize);
+			
+			/*
 			// Initialize combo_summon
 			if (!SummonKeyBindings.Contains (Do.Preferences.SummonKeyBinding)) {
 				SummonKeyBindings.Insert (0, Do.Preferences.SummonKeyBinding);
@@ -52,32 +64,12 @@ namespace Do.UI
 				combo_summon.AppendText (combo);
 			}
 			combo_summon.Active = SummonKeyBindings.IndexOf (Do.Preferences.SummonKeyBinding);
+			*/
 		}
 		
 		public Bin GetConfiguration ()
         {
         	return this;
         }
-
-		protected virtual void OnComboSummonChanged (object sender, System.EventArgs e)
-		{
-			Do.Preferences.SummonKeyBinding = (sender as ComboBox).ActiveText;
-		}
-		
-		List<string> summonKeyBindings;		
-		List<string> SummonKeyBindings {
-			get {
-				if (null == summonKeyBindings) {
-					summonKeyBindings = new List<string> (
-					    new string [] {
-						    "<Super>space",
-						    "<Ctrl>space",
-					    }
-					);
-				}
-				return summonKeyBindings;
-			}
-		}
-		
 	}
 }

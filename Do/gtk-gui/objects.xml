@@ -1,0 +1,14 @@
+<objects>
+  <object type="Do.UI.KeybindingsPreferencesWidget" palette-category="Do" allow-children="false" base-type="Gtk.Bin">
+    <itemgroups />
+    <signals />
+  </object>
+  <object type="Do.UI.ManagePluginsPreferencesWidget" palette-category="Do" allow-children="false" base-type="Gtk.Bin">
+    <itemgroups />
+    <signals />
+  </object>
+  <object type="Do.UI.GeneralPreferencesWidget" palette-category="Do" allow-children="false" base-type="Gtk.Bin">
+    <itemgroups />
+    <signals />
+  </object>
+</objects>

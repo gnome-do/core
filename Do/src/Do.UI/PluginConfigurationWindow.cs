@@ -44,6 +44,13 @@ namespace Do.UI
             Title = string.Format ("{0} Configuration", addin.Name);
             notebook.RemovePage (0);
             notebook.ShowTabs = configs.Count > 1;
+			
+			string title_markup = "<span weight=" + (char)34 + "heavy" + (char)34
+				+ " size=" + (char)34 + "large" + (char)34 + ">{0}</span>";
+			
+			addin_title_img.Pixbuf = IconProvider.PixbufFromIconName (PluginManager.IconForAddin (id), 32);
+			addin_title_lbl.Markup = String.Format (title_markup, addin.Name +
+			                                        " Configuration");
 
             foreach (IConfigurable configurable in configs) {
                 Bin config;

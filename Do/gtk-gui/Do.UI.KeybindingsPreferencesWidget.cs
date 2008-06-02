@@ -13,15 +13,15 @@ namespace Do.UI {
     
     public partial class KeybindingsPreferencesWidget {
         
-        private Gtk.VBox vbox1;
+        private Gtk.VBox vbox2;
         
-        private Gtk.HBox hbox2;
+        private Gtk.ScrolledWindow action_scroll;
         
-        private Gtk.Label label1;
+        private Gtk.Table table2;
         
-        private Gtk.Alignment alignment1;
+        private Gtk.Image help_icn;
         
-        private Gtk.ComboBox combo_summon;
+        private Gtk.Label help_lbl;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
@@ -29,46 +29,52 @@ namespace Do.UI {
             Stetic.BinContainer.Attach(this);
             this.Name = "Do.UI.KeybindingsPreferencesWidget";
             // Container child Do.UI.KeybindingsPreferencesWidget.Gtk.Container+ContainerChild
-            this.vbox1 = new Gtk.VBox();
-            this.vbox1.Name = "vbox1";
-            this.vbox1.Spacing = 6;
-            this.vbox1.BorderWidth = ((uint)(6));
-            // Container child vbox1.Gtk.Box+BoxChild
-            this.hbox2 = new Gtk.HBox();
-            this.hbox2.Name = "hbox2";
-            this.hbox2.Spacing = 6;
-            // Container child hbox2.Gtk.Box+BoxChild
-            this.label1 = new Gtk.Label();
-            this.label1.Name = "label1";
-            this.label1.LabelProp = Mono.Unix.Catalog.GetString("Summon:");
-            this.hbox2.Add(this.label1);
-            Gtk.Box.BoxChild w1 = ((Gtk.Box.BoxChild)(this.hbox2[this.label1]));
+            this.vbox2 = new Gtk.VBox();
+            this.vbox2.Name = "vbox2";
+            this.vbox2.Spacing = 6;
+            // Container child vbox2.Gtk.Box+BoxChild
+            this.action_scroll = new Gtk.ScrolledWindow();
+            this.action_scroll.CanFocus = true;
+            this.action_scroll.Name = "action_scroll";
+            this.action_scroll.ShadowType = ((Gtk.ShadowType)(1));
+            this.action_scroll.BorderWidth = ((uint)(5));
+            this.vbox2.Add(this.action_scroll);
+            Gtk.Box.BoxChild w1 = ((Gtk.Box.BoxChild)(this.vbox2[this.action_scroll]));
             w1.Position = 0;
-            w1.Expand = false;
-            w1.Fill = false;
-            // Container child hbox2.Gtk.Box+BoxChild
-            this.alignment1 = new Gtk.Alignment(0.5F, 0.5F, 1F, 1F);
-            this.alignment1.Name = "alignment1";
-            this.alignment1.LeftPadding = ((uint)(10));
-            this.alignment1.RightPadding = ((uint)(80));
-            // Container child alignment1.Gtk.Container+ContainerChild
-            this.combo_summon = Gtk.ComboBox.NewText();
-            this.combo_summon.Name = "combo_summon";
-            this.alignment1.Add(this.combo_summon);
-            this.hbox2.Add(this.alignment1);
-            Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(this.hbox2[this.alignment1]));
-            w3.Position = 1;
-            this.vbox1.Add(this.hbox2);
-            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox1[this.hbox2]));
-            w4.Position = 0;
+            w1.Padding = ((uint)(5));
+            // Container child vbox2.Gtk.Box+BoxChild
+            this.table2 = new Gtk.Table(((uint)(1)), ((uint)(2)), false);
+            this.table2.Name = "table2";
+            this.table2.RowSpacing = ((uint)(6));
+            this.table2.ColumnSpacing = ((uint)(6));
+            this.table2.BorderWidth = ((uint)(5));
+            // Container child table2.Gtk.Table+TableChild
+            this.help_icn = new Gtk.Image();
+            this.help_icn.Name = "help_icn";
+            this.table2.Add(this.help_icn);
+            Gtk.Table.TableChild w2 = ((Gtk.Table.TableChild)(this.table2[this.help_icn]));
+            w2.XOptions = ((Gtk.AttachOptions)(4));
+            // Container child table2.Gtk.Table+TableChild
+            this.help_lbl = new Gtk.Label();
+            this.help_lbl.Name = "help_lbl";
+            this.help_lbl.LabelProp = Mono.Unix.Catalog.GetString("To edit a shortcut key, click on the corresponding row and type a new accelerator, or press backspace to clear.\n");
+            this.help_lbl.Wrap = true;
+            this.table2.Add(this.help_lbl);
+            Gtk.Table.TableChild w3 = ((Gtk.Table.TableChild)(this.table2[this.help_lbl]));
+            w3.LeftAttach = ((uint)(1));
+            w3.RightAttach = ((uint)(2));
+            w3.XOptions = ((Gtk.AttachOptions)(4));
+            this.vbox2.Add(this.table2);
+            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox2[this.table2]));
+            w4.Position = 1;
             w4.Expand = false;
             w4.Fill = false;
-            this.Add(this.vbox1);
+            w4.Padding = ((uint)(5));
+            this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
             this.Show();
-            this.combo_summon.Changed += new System.EventHandler(this.OnComboSummonChanged);
         }
     }
 }
