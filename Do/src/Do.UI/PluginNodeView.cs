@@ -118,6 +118,11 @@ namespace Do.UI
         	
 			if (string.IsNullOrEmpty (repA) || string.IsNullOrEmpty (repB))
         		return 0;
+
+			if (filter == "") {
+				return string.Compare (repB, repA,
+					StringComparison.CurrentCultureIgnoreCase);
+			}
         	
         	scoreA = repA.IndexOf (filter,
 				StringComparison.CurrentCultureIgnoreCase);

@@ -154,8 +154,8 @@ namespace Do.UI
 
         protected virtual void OnShowComboChanged (object sender, EventArgs e)
         {
-        	//if (string.IsNullOrEmpty (show_combo.ActiveText)) return;
         	nview.ShowRepository = show_combo.ActiveText;
+        	nview.Filter = search_entry.Text = "";
         }
 
         protected virtual void OnSearchEntryChanged (object sender, EventArgs e)
