@@ -56,6 +56,7 @@ namespace Do.UI
 			Box.BoxChild wInt = new_acct_hbox [new_acct_btn] as Box.BoxChild;
 			wInt.Position = 1;
 			
+			password_entry.Activated += OnPasswordEntryActivated;
 			new_acct_btn.Clicked += OnNewAcctBtnClicked;
 			
 			string username, password;
@@ -268,5 +269,10 @@ namespace Do.UI
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
 		protected abstract bool Validate (string username, string password);
+
+		protected virtual void OnPasswordEntryActivated (object sender, System.EventArgs e)
+		{
+			validate_btn.Click ();
+		}
 	}
 }
