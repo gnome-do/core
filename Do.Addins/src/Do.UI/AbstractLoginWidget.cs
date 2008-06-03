@@ -56,9 +56,6 @@ namespace Do.UI
 			Box.BoxChild wInt = new_acct_hbox [new_acct_btn] as Box.BoxChild;
 			wInt.Position = 1;
 			
-			validate_ani.PixbufAnimation = new PixbufAnimation
-				("/usr/share/icons/Tango/32x32/animations/process-loading.png");
-			
 			new_acct_btn.Clicked += OnNewAcctBtnClicked;
 			
 			string username, password;
@@ -171,18 +168,22 @@ namespace Do.UI
 		/// </param>
 		protected virtual void OnApplyBtnClicked (object sender, EventArgs e)
 		{
-			new Thread ((ThreadStart) delegate {					
-				Gtk.Application.Invoke (delegate {
-					StatusLabel.Markup = "<i>Validating...</i>";
-					ValidateButton.Sensitive = false;
-					if (Validate ()) {
-						StatusLabel.Markup = "<i>Account validation succeeded!</i>";
+			validate_lbl.Markup = "<i>Validating...</i>";
+			validate_btn.Sensitive = false;
+			string username = username_entry.Text;
+			string password = password_entry.Text;
+			
+			new Thread ((ThreadStart) delegate {
+				bool valid = Validate (username, password);
+				Gtk.Application.Invoke (delegate {		
+					if (valid) {
+						validate_lbl.Markup = "<i>Account validation succeeded!</i>";
 						SaveAccountData (username_entry.Text, password_entry.Text,
 						GetType ());
 					} else {
-						StatusLabel.Markup = "<i>Account validation failed!</i>";
+						validate_lbl.Markup = "<i>Account validation failed!</i>";
 					}
-					ValidateButton.Sensitive = true;
+					validate_btn.Sensitive = true;
 				});
 			}).Start ();
 		}
@@ -257,6 +258,15 @@ namespace Do.UI
 		/// <summary>
 		/// Makes validation call to service
 		/// </summary>
-		protected abstract bool Validate ();
+		/// <param name="username">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="password">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/>
+		/// </returns>
+		protected abstract bool Validate (string username, string password);
 	}
 }

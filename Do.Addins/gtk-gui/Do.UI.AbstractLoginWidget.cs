@@ -27,10 +27,6 @@ namespace Do.UI {
         
         private Gtk.VBox vbox3;
         
-        private Gtk.HBox hbox1;
-        
-        private Gtk.Image validate_ani;
-        
         private Gtk.Label validate_lbl;
         
         private Gtk.Table table4;
@@ -129,32 +125,15 @@ namespace Do.UI {
             this.vbox3.Name = "vbox3";
             this.vbox3.Spacing = 6;
             // Container child vbox3.Gtk.Box+BoxChild
-            this.hbox1 = new Gtk.HBox();
-            this.hbox1.Name = "hbox1";
-            this.hbox1.Spacing = 6;
-            // Container child hbox1.Gtk.Box+BoxChild
-            this.validate_ani = new Gtk.Image();
-            this.validate_ani.Name = "validate_ani";
-            this.hbox1.Add(this.validate_ani);
-            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.hbox1[this.validate_ani]));
-            w6.Position = 0;
-            w6.Expand = false;
-            w6.Fill = false;
-            // Container child hbox1.Gtk.Box+BoxChild
             this.validate_lbl = new Gtk.Label();
             this.validate_lbl.Name = "validate_lbl";
             this.validate_lbl.LabelProp = Mono.Unix.Catalog.GetString("<i>Verify and save account information</i>");
             this.validate_lbl.UseMarkup = true;
-            this.hbox1.Add(this.validate_lbl);
-            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.hbox1[this.validate_lbl]));
-            w7.Position = 1;
-            w7.Expand = false;
-            w7.Fill = false;
-            this.vbox3.Add(this.hbox1);
-            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(this.vbox3[this.hbox1]));
-            w8.Position = 0;
-            w8.Expand = false;
-            w8.Fill = false;
+            this.vbox3.Add(this.validate_lbl);
+            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox3[this.validate_lbl]));
+            w6.Position = 0;
+            w6.Expand = false;
+            w6.Fill = false;
             // Container child vbox3.Gtk.Box+BoxChild
             this.table4 = new Gtk.Table(((uint)(1)), ((uint)(2)), false);
             this.table4.Name = "table4";
@@ -166,8 +145,8 @@ namespace Do.UI {
             this.fixed5.Name = "fixed5";
             this.fixed5.HasWindow = false;
             this.table4.Add(this.fixed5);
-            Gtk.Table.TableChild w9 = ((Gtk.Table.TableChild)(this.table4[this.fixed5]));
-            w9.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w7 = ((Gtk.Table.TableChild)(this.table4[this.fixed5]));
+            w7.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table4.Gtk.Table+TableChild
             this.validate_btn = new Gtk.Button();
             this.validate_btn.WidthRequest = 40;
@@ -178,18 +157,18 @@ namespace Do.UI {
             this.validate_btn.BorderWidth = ((uint)(7));
             this.validate_btn.Label = "gtk-apply";
             this.table4.Add(this.validate_btn);
-            Gtk.Table.TableChild w10 = ((Gtk.Table.TableChild)(this.table4[this.validate_btn]));
-            w10.LeftAttach = ((uint)(1));
-            w10.RightAttach = ((uint)(2));
-            w10.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w8 = ((Gtk.Table.TableChild)(this.table4[this.validate_btn]));
+            w8.LeftAttach = ((uint)(1));
+            w8.RightAttach = ((uint)(2));
+            w8.YOptions = ((Gtk.AttachOptions)(4));
             this.vbox3.Add(this.table4);
-            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.vbox3[this.table4]));
-            w11.Position = 1;
-            w11.Expand = false;
-            w11.Fill = false;
+            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(this.vbox3[this.table4]));
+            w9.Position = 1;
+            w9.Expand = false;
+            w9.Fill = false;
             this.vbox1.Add(this.vbox3);
-            Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.vbox1[this.vbox3]));
-            w12.Position = 1;
+            Gtk.Box.BoxChild w10 = ((Gtk.Box.BoxChild)(this.vbox1[this.vbox3]));
+            w10.Position = 1;
             // Container child vbox1.Gtk.Box+BoxChild
             this.vbox4 = new Gtk.VBox();
             this.vbox4.Name = "vbox4";
@@ -204,41 +183,41 @@ namespace Do.UI {
             this.fixed1.Name = "fixed1";
             this.fixed1.HasWindow = false;
             this.table5.Add(this.fixed1);
-            Gtk.Table.TableChild w13 = ((Gtk.Table.TableChild)(this.table5[this.fixed1]));
-            w13.LeftAttach = ((uint)(2));
-            w13.RightAttach = ((uint)(3));
-            w13.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w11 = ((Gtk.Table.TableChild)(this.table5[this.fixed1]));
+            w11.LeftAttach = ((uint)(2));
+            w11.RightAttach = ((uint)(3));
+            w11.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table5.Gtk.Table+TableChild
             this.fixed2 = new Gtk.Fixed();
             this.fixed2.Name = "fixed2";
             this.fixed2.HasWindow = false;
             this.table5.Add(this.fixed2);
-            Gtk.Table.TableChild w14 = ((Gtk.Table.TableChild)(this.table5[this.fixed2]));
-            w14.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w12 = ((Gtk.Table.TableChild)(this.table5[this.fixed2]));
+            w12.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table5.Gtk.Table+TableChild
             this.hseparator1 = new Gtk.HSeparator();
             this.hseparator1.WidthRequest = 190;
             this.hseparator1.Name = "hseparator1";
             this.table5.Add(this.hseparator1);
-            Gtk.Table.TableChild w15 = ((Gtk.Table.TableChild)(this.table5[this.hseparator1]));
-            w15.LeftAttach = ((uint)(1));
-            w15.RightAttach = ((uint)(2));
-            w15.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w13 = ((Gtk.Table.TableChild)(this.table5[this.hseparator1]));
+            w13.LeftAttach = ((uint)(1));
+            w13.RightAttach = ((uint)(2));
+            w13.YOptions = ((Gtk.AttachOptions)(4));
             this.vbox4.Add(this.table5);
-            Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.vbox4[this.table5]));
-            w16.Position = 0;
-            w16.Expand = false;
-            w16.Fill = false;
+            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.vbox4[this.table5]));
+            w14.Position = 0;
+            w14.Expand = false;
+            w14.Fill = false;
             // Container child vbox4.Gtk.Box+BoxChild
             this.get_account_lbl = new Gtk.Label();
             this.get_account_lbl.Name = "get_account_lbl";
             this.get_account_lbl.LabelProp = "";
             this.get_account_lbl.UseMarkup = true;
             this.vbox4.Add(this.get_account_lbl);
-            Gtk.Box.BoxChild w17 = ((Gtk.Box.BoxChild)(this.vbox4[this.get_account_lbl]));
-            w17.Position = 1;
-            w17.Expand = false;
-            w17.Fill = false;
+            Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.vbox4[this.get_account_lbl]));
+            w15.Position = 1;
+            w15.Expand = false;
+            w15.Fill = false;
             // Container child vbox4.Gtk.Box+BoxChild
             this.new_acct_hbox = new Gtk.HBox();
             this.new_acct_hbox.Name = "new_acct_hbox";
@@ -248,25 +227,25 @@ namespace Do.UI {
             this.fixed3.Name = "fixed3";
             this.fixed3.HasWindow = false;
             this.new_acct_hbox.Add(this.fixed3);
-            Gtk.Box.BoxChild w18 = ((Gtk.Box.BoxChild)(this.new_acct_hbox[this.fixed3]));
-            w18.Position = 0;
+            Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.new_acct_hbox[this.fixed3]));
+            w16.Position = 0;
             // Container child new_acct_hbox.Gtk.Box+BoxChild
             this.fixed4 = new Gtk.Fixed();
             this.fixed4.Name = "fixed4";
             this.fixed4.HasWindow = false;
             this.new_acct_hbox.Add(this.fixed4);
-            Gtk.Box.BoxChild w19 = ((Gtk.Box.BoxChild)(this.new_acct_hbox[this.fixed4]));
-            w19.Position = 2;
+            Gtk.Box.BoxChild w17 = ((Gtk.Box.BoxChild)(this.new_acct_hbox[this.fixed4]));
+            w17.Position = 2;
             this.vbox4.Add(this.new_acct_hbox);
-            Gtk.Box.BoxChild w20 = ((Gtk.Box.BoxChild)(this.vbox4[this.new_acct_hbox]));
-            w20.Position = 2;
-            w20.Expand = false;
-            w20.Fill = false;
+            Gtk.Box.BoxChild w18 = ((Gtk.Box.BoxChild)(this.vbox4[this.new_acct_hbox]));
+            w18.Position = 2;
+            w18.Expand = false;
+            w18.Fill = false;
             this.vbox1.Add(this.vbox4);
-            Gtk.Box.BoxChild w21 = ((Gtk.Box.BoxChild)(this.vbox1[this.vbox4]));
-            w21.Position = 2;
-            w21.Expand = false;
-            w21.Fill = false;
+            Gtk.Box.BoxChild w19 = ((Gtk.Box.BoxChild)(this.vbox1[this.vbox4]));
+            w19.Position = 2;
+            w19.Expand = false;
+            w19.Fill = false;
             this.Add(this.vbox1);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
