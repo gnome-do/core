@@ -37,6 +37,12 @@ namespace Do.Core {
     /// </summary>
     public static class PluginManager {
 
+		public static string AllPluginsRepository {
+			get {
+				return "All Available Plugins";
+			}
+		}
+		
         private const string DefaultPluginIcon = "folder_tar";
 
         private static string[] ExtensionPaths {
@@ -47,13 +53,19 @@ namespace Do.Core {
                 };
             }
         }
-
-        private static string[] Repositories {
+        
+        private static Dictionary<string,string> repository_urls;
+        public static IDictionary<string,string> RepositoryUrls {
             get {
-                return new string[] {
-					"http://do.davebsd.com/repo/" + Version +"/official",
-					"http://do.davebsd.com/repo/" + Version +"/community",
-                };
+            	if (null == repository_urls) {
+            		repository_urls = new Dictionary<string,string> ();
+         
+            		repository_urls ["Official Plugins"] = 
+            			"http://do.davebsd.com/repo/" + Version +"/official";
+            		repository_urls ["Community Plugins"] = 
+            			"http://do.davebsd.com/repo/" + Version +"/community";
+            	}
+            	return repository_urls;;
             }
         }
 
@@ -79,13 +91,32 @@ namespace Do.Core {
 
             // Register repositories.
             SetupService setup = new SetupService (AddinManager.Registry);
-			foreach (string repo in Repositories) {
-				if (!setup.Repositories.ContainsRepository (repo)) {
-					setup.Repositories.RegisterRepository (null, repo, false);
+			foreach (string url in RepositoryUrls.Values) {
+				if (!setup.Repositories.ContainsRepository (url)) {
+					setup.Repositories.RegisterRepository (null, url, false);
 				}
 			}
             InstallLocalPlugins (setup);
         }
+        
+        public static bool AddinIsFromRepository (Addin a, string name)
+		{
+			string url;
+		
+			if (name == AllPluginsRepository) return true;
+			RepositoryUrls.TryGetValue (name, out url);
+			return null != url && a.Description.Url.StartsWith (url);
+		}
+		
+		public static bool AddinIsFromRepository (AddinRepositoryEntry e,
+												  string name)
+		{
+			string url;
+		
+			if (name == AllPluginsRepository) return true;
+			RepositoryUrls.TryGetValue (name, out url);
+			return null != url && e.RepositoryUrl.StartsWith (url);
+		}
 
         /// <summary>
         /// Given an addin ID, returns an icon that may represent that addin.

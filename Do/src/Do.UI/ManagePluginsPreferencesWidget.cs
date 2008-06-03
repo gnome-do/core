@@ -56,6 +56,12 @@ namespace Do.UI
 
             scrollw.Add (nview);
             scrollw.ShowAll ();
+            
+            foreach (string repoName in PluginManager.RepositoryUrls.Keys) {
+            	show_combo.AppendText (repoName);
+            }
+            show_combo.AppendText (PluginManager.AllPluginsRepository);
+            show_combo.Active = 0;
         }
         
         public Bin GetConfiguration ()
@@ -144,6 +150,17 @@ namespace Do.UI
 	        			"http://wiki.ubuntu.com/GnomeDo/Plugins/" + name);
 	        	} catch { }
         	}
+        }
+
+        protected virtual void OnShowComboChanged (object sender, EventArgs e)
+        {
+        	//if (string.IsNullOrEmpty (show_combo.ActiveText)) return;
+        	nview.ShowRepository = show_combo.ActiveText;
+        }
+
+        protected virtual void OnSearchEntryChanged (object sender, EventArgs e)
+        {
+        	nview.Filter = search_entry.Text;
         }
     }
 }
