@@ -24,6 +24,7 @@ using System.Collections;
 
 using Gnome.Keyring;
 using Gtk;
+using Gdk;
 
 namespace Do.UI
 {
@@ -48,13 +49,15 @@ namespace Do.UI
 		public AbstractLoginWidget (string service)
 		{
 			Build ();
-			
 			get_account_lbl.Markup = String.Format ("<i>Don't have {0}?</i>",service);
 			new_acct_btn = new LinkButton ("", String.Format ("Sign up for {0}",
 				service));
 			new_acct_hbox.Add (new_acct_btn);
 			Box.BoxChild wInt = new_acct_hbox [new_acct_btn] as Box.BoxChild;
 			wInt.Position = 1;
+			
+			validate_ani.PixbufAnimation = new PixbufAnimation
+				("/usr/share/icons/Tango/32x32/animations/process-loading.png");
 			
 			new_acct_btn.Clicked += OnNewAcctBtnClicked;
 			
@@ -170,8 +173,10 @@ namespace Do.UI
 		{
 			new Thread ((ThreadStart) delegate {					
 				Gtk.Application.Invoke (delegate {
+					StatusLabel.Markup = "<i>Validating...</i>";
+					ValidateButton.Sensitive = false;
 					if (Validate ()) {
-						StatusLabel.Markup = "<i>Account validation succeeded</i>!";
+						StatusLabel.Markup = "<i>Account validation succeeded!</i>";
 						SaveAccountData (username_entry.Text, password_entry.Text,
 						GetType ());
 					} else {
