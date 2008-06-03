@@ -42,23 +42,46 @@ namespace Do.UI
 
 		const int IconSize = 26;
 		const int WrapWidth = 310;
-		const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
+		const string DescriptionFormat =
+			"<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
-		Dictionary<string, string> addins;
+		protected string repository;
+		protected string filter;
+		protected Dictionary<string, string> addins;
+		
+		public string Filter {
+			get { return filter; }
+			set {
+				filter = value;
+				Refresh (false);
+			}
+		}
+		
+		public string ShowRepository {
+			get { return repository; }
+			set {
+				repository = value;
+				Refresh (false);
+			}
+		}
 
 		public PluginNodeView () :
 			base ()
 		{
+			ListStore store;
 			CellRenderer cell;
 
+			filter = "";
+			repository = PluginManager.AllPluginsRepository;
 			addins = new Dictionary<string,string> ();
 
 			RulesHint = true;
 			HeadersVisible = false;
-			Model = new ListStore (
+			store = new ListStore (
 				typeof (bool),
 				typeof (string),
 				typeof (string));
+			Model = store;
 
 			cell = new CellRendererToggle ();
 			(cell as CellRendererToggle).Activatable = true;
@@ -74,12 +97,40 @@ namespace Do.UI
 			(cell as CellRendererText).WrapMode = Pango.WrapMode.Word;
 			AppendColumn ("Plugin", cell, "markup", Column.Description);
 
-			(Model as ListStore).SetSortColumnId ((int)Column.Description,
-					SortType.Ascending);
+			store.SetSortFunc ((int) Column.Id,
+				new TreeIterCompareFunc (DefaultTreeIterCompareFunc));
+			store.SetSortColumnId ((int) Column.Id, SortType.Descending);
+			
 			Selection.Changed += OnSelectionChanged;
 
 			Refresh ();
 		}
+		
+		public int DefaultTreeIterCompareFunc(TreeModel model, TreeIter a, 
+            TreeIter b)
+        {
+        	string repA, repB;
+        	int scoreA, scoreB;
+			ListStore store = Model as ListStore;
+        	
+        	repA = store.GetValue (a, (int)Column.Description) as string;
+        	repB = store.GetValue (b, (int)Column.Description) as string;
+        	
+			if (string.IsNullOrEmpty (repA) || string.IsNullOrEmpty (repB))
+        		return 0;
+
+			if (filter == "") {
+				return string.Compare (repB, repA,
+					StringComparison.CurrentCultureIgnoreCase);
+			}
+        	
+        	scoreA = repA.IndexOf (filter,
+				StringComparison.CurrentCultureIgnoreCase);
+        	scoreB = repB.IndexOf (filter,
+				StringComparison.CurrentCultureIgnoreCase);
+
+            return scoreB - scoreA;
+        }
 
 		private void IconDataFunc (TreeViewColumn column,
 								   CellRenderer cell,
@@ -94,8 +145,24 @@ namespace Do.UI
 			icon = PluginManager.IconForAddin (id);
 			renderer.Pixbuf = IconProvider.PixbufFromIconName (icon, IconSize);
 		}
+		
+		bool AddinShouldShow (Addin a)
+		{
+			return a.Name.ToLower ().Contains (filter.ToLower ()) &&
+				PluginManager.AddinIsFromRepository (a, ShowRepository);
+		}
+		
+		bool AddinShouldShow (AddinRepositoryEntry e)
+		{
+			return e.Addin.Name.ToLower ().Contains (filter.ToLower ()) &&
+				PluginManager.AddinIsFromRepository (e, ShowRepository);
+		}
 
 		public void Refresh () {
+			Refresh (true);
+		}
+		
+		public void Refresh (bool goOnline) {
 			ListStore store;
 
 			store = Model as ListStore;
@@ -103,14 +170,15 @@ namespace Do.UI
 			addins.Clear ();
 			// Add other (non-online) addins.
 			foreach (Addin a in AddinManager.Registry.GetAddins ()) {
+				if (!AddinShouldShow (a)) continue;
 				addins [Addin.GetIdName (a.Id)] = a.Id;
 				store.AppendValues (a.Enabled, Description (a), a.Id);
 			}
 			// Add online plugins asynchronously so UI doesn't block.
-			RefreshOnlinePluginsAsync ();
+			RefreshOnlinePluginsAsync (goOnline);
 		}
 
-		void RefreshOnlinePluginsAsync ()
+		void RefreshOnlinePluginsAsync (bool goOnline)
 		{
 			ListStore store;
 			SetupService setup;
@@ -119,14 +187,17 @@ namespace Do.UI
 			setup = new SetupService (AddinManager.Registry);
 
 			new Thread ((ThreadStart) delegate {
-				setup.Repositories.UpdateAllRepositories (
-					new ConsoleProgressStatus (true));
+				if (goOnline) {
+					setup.Repositories.UpdateAllRepositories (
+						new ConsoleProgressStatus (true));
+				}
 				// Add addins from online repositories.
 				Application.Invoke (delegate {
 					try {
 					/// >>>>>>
 					foreach (AddinRepositoryEntry e in
 						setup.Repositories.GetAvailableAddins ()) {
+					if (!AddinShouldShow (e)) continue;
 					// If addin already made its way into the store,
 					// skip.
 					if (addins.ContainsKey (Addin.GetIdName (e.Addin.Id)))
@@ -137,7 +208,10 @@ namespace Do.UI
 						Description (e),
 						e.Addin.Id);
 					}
-					ScrollToCell (TreePath.NewFirst (), Columns[0], true, 0, 0);
+					if (addins.Count > 0) {
+						ScrollToCell (TreePath.NewFirst (), Columns [0], true,
+							0, 0);
+					}
 					/// >>>>>>
 					} catch {
 						// A crash may result if window is closed before this
