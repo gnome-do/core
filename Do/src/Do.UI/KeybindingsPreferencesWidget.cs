@@ -29,7 +29,7 @@ namespace Do.UI
 	public partial class KeybindingsPreferencesWidget : Bin, Addins.IConfigurable
 	{
 		private int IconSize = 32;
-		private BindingsNodeView kbNodeView;
+		private KeybindingTreeView kbview;
 		
 		new public string Name {
 			get { return "Keyboard"; }
@@ -47,9 +47,9 @@ namespace Do.UI
 		{
 			Build ();
 			
-			kbNodeView = new BindingsNodeView ();
-			kbNodeView.ColumnsAutosize ();
-            action_scroll.Add (kbNodeView);
+			kbview = new KeybindingTreeView ();
+			kbview.ColumnsAutosize ();
+            action_scroll.Add (kbview);
             action_scroll.ShowAll ();
 			
 			help_icn.Pixbuf = IconProvider.PixbufFromIconName ("gtk-dialog-info",
