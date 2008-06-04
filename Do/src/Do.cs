@@ -67,7 +67,7 @@ namespace Do {
 			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
 
-			if (!Preferences.BeQuiet) Controller.Summon ();
+			if (!Preferences.QuietStart) Controller.Summon ();
 			
 			Gtk.Application.Run ();
 		}

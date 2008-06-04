@@ -79,15 +79,23 @@ namespace Do {
 		}
 
 		/// <value>
-		/// Whether Do should display its window when it first starts. Enable
-		/// with the command line options -q or --quiet.
+		/// Whether Do should display its window when it first starts.
 		/// </value>
-		public bool BeQuiet {
+		public bool QuietStart {
 			get {
-				return Get<bool> ("BeQuiet", false);
+				return Get<bool> ("QuietStart", false);
 			}
 			set {
-				Set<bool> ("BeQuiet", value);
+				Set<bool> ("QuietStart", value);
+			}
+		}
+
+		public bool StartAtLogin {
+			get {
+				return Get<bool> ("StartAtLogin", false);
+			}
+			set {
+				Set<bool> ("StartAtLogin", value);
 			}
 		}
 

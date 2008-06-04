@@ -135,9 +135,10 @@ namespace Do.Universe
 			try {
 				using (Stream s = File.OpenRead (ShelfFile)) {
 					BinaryFormatter f = new BinaryFormatter ();
-					Dictionary<string,ShelfItem> rec = f.Deserialize (s) as Dictionary<string,ShelfItem>;
-					shelf = rec;
+					shelf = f.Deserialize (s) as Dictionary<string,ShelfItem>;
 				}
+			} catch (FileNotFoundException) {
+				shelf = new Dictionary<string,ShelfItem> ();
 			} catch (Exception e) {
 				Log.Error (e.Message);
 			}
