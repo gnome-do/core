@@ -41,7 +41,7 @@ namespace Do.UI
 		}
 
 		const int IconSize = 26;
-		const int WrapWidth = 310;
+		const int WrapWidth = 330;
 		const string DescriptionFormat =
 			"<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
@@ -77,11 +77,10 @@ namespace Do.UI
 
 			RulesHint = true;
 			HeadersVisible = false;
-			store = new ListStore (
+			Model = store = new ListStore (
 				typeof (bool),
 				typeof (string),
 				typeof (string));
-			Model = store;
 
 			cell = new CellRendererToggle ();
 			(cell as CellRendererToggle).Activatable = true;

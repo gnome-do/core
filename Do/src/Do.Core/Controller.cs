@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using Gdk;
 using Mono.Unix;
 
+using Do;
 using Do.UI;
 using Do.Addins;
 using Do.Universe;
@@ -62,13 +63,32 @@ namespace Do.Core {
 		
 		public void Initialize ()
 		{
-			if (Do.Preferences.UseMiniMode) {
-				window = new MiniWindow (this);
-			} else if (Do.Preferences.UseGlassFrame) {
-				window = new GlassWindow (this);
-			} else {
-				window = new ClassicWindow (this);
+			ThemeChanged ();
+			Do.Preferences.PreferenceChanged += OnPreferenceChanged;
+		}
+		
+		private void OnPreferenceChanged (object sender,
+										  PreferenceChangedEventArgs args)
+		{
+			if (args.Key == "Theme")
+				ThemeChanged ();
+		}
+		
+		void ThemeChanged ()
+		{
+			if (null != window) Vanish ();
+			switch (Do.Preferences.Theme) {
+				case "Mini":
+					window = new MiniWindow (this);
+					break;
+				case "Glass Frame":
+					window = new GlassWindow (this);
+					break;
+				default:
+					window = new ClassicWindow (this);
+					break;
 			}
+			
 			// Get key press events from window since we want to control that
 			// here.
 			window.KeyPressEvent += KeyPressWrap;

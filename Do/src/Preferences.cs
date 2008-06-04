@@ -27,34 +27,32 @@ using Do.Universe;
 
 namespace Do {
 	
+	public class PreferenceChangedEventArgs : EventArgs {
+		public readonly string Key;
+		public readonly object Value;
+		public PreferenceChangedEventArgs (string key, object value)
+		{
+			Key = key; Value = value;
+		}
+	}
+	
 	/// <summary>
 	/// A class providing generic functionality for dealing with preferences,
 	/// whether those preferences are provided by gconf, command line options,
 	/// etc.
 	/// </summary>
 	public class Preferences {
+	
+		public delegate void PreferenceChangedDelegate (object sender, PreferenceChangedEventArgs args);
+		public event PreferenceChangedDelegate PreferenceChanged;
+		
 		const string GConfRootPath = "/apps/gnome-do/preferences/";
 
 		GConf.Client client;
-		
-		/// <summary>
-		/// Command line options as passed to the application's Main method.
-		/// </summary>
-		/// <param name="args">
-		/// A <see cref="System.String"/> array.
-		/// </param>
-		string [] options;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="args">
-		/// A <see cref="System.String"/>
-		/// </param>
-		public Preferences (string [] args)
+		public Preferences ()
 		{
 			client = new GConf.Client();
-			options = args;
 		}
 
 		/// <value>
@@ -64,32 +62,19 @@ namespace Do {
 		public string SummonKeyBinding
 		{
 			get {
-				return Get<string> ("key_binding", "<Super>space");
+				return Get<string> ("SummonKeyBinding", "<Super>space");
 			}
 			set {
-				Set<string> ("key_binding", value);
+				Set<string> ("SummonKeyBinding", value);
 			}
 		}
 
-		/// <value>
-		/// Whether Do should use a miniature user interface better suited
-		/// for smaller displays. Enabled with the command line option --mini.
-		/// </value>
-		public bool UseMiniMode
-		{
+		public string Theme {
 			get {
-				return HasOption ("--mini");
+				return Get<string> ("Theme", "Classic");
 			}
-		}
-		
-		/// <value>
-		/// Whether Do should use a darkframe user interface better suited
-		/// for smaller displays. Enabled with the command line option --mini.
-		/// </value>
-		public bool UseGlassFrame
-		{
-			get {
-				return HasOption ("--glassframe");
+			set {
+				Set<string> ("Theme", value);
 			}
 		}
 
@@ -99,29 +84,11 @@ namespace Do {
 		/// </value>
 		public bool BeQuiet {
 			get {
-				return HasOption ("--quiet") || HasOption ("-q");
+				return Get<bool> ("BeQuiet", false);
 			}
-		}
-
-		/// <summary>
-		/// Determines whether an option was among those passed to Do at the
-		/// command line. If Do is started from a command line with these
-		/// options:
-		/// 
-		///   $ gnome-do --quiet --mini
-		/// 
-		/// Only HasOption ("--quiet") and HasOption ("--mini") will be true.
-		/// </summary>
-		/// <param name="option">
-		/// A <see cref="System.String"/> option (e.g. "--quiet).
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.Boolean"/> telling whether the option was
-		/// passed.
-		/// </returns>
-		protected bool HasOption (string option)
-		{
-			return Array.IndexOf (options, option) != -1;
+			set {
+				Set<bool> ("BeQuiet", value);
+			}
 		}
 
 		/// <summary>
@@ -165,6 +132,10 @@ namespace Do {
 			success = true;
 			try {
 				client.Set (MakeKeyPath (key), val);
+				if (null != PreferenceChanged) {
+					PreferenceChanged (this,
+						new PreferenceChangedEventArgs (key, val));
+				}
 			} catch {
 				success = false;
 			}
