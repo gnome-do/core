@@ -79,11 +79,9 @@ FILES =  \
 	src/Do.Core/RelevanceProvider.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
-	src/Do.UI/BindingsNodeView.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
-	src/Do.UI/KeyBindingManager.cs \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \
-	src/Do.UI/KeyCommand.cs \
+	src/Do.UI/KeybindingTreeView.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ManagePluginsPreferencesWidget.cs \
 	src/Do.UI/PluginConfigurationWindow.cs \

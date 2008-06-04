@@ -55,7 +55,7 @@ namespace Do.Universe
 		}
 		
 		public override string Icon {
-			get { return "email"; }
+			get { return "stock_mail-compose"; }
 		}
 		
 		public override Type [] SupportedItemTypes {
