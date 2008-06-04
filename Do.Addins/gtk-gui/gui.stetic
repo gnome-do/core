@@ -29,6 +29,7 @@
                 <property name="IsEditable">True</property>
                 <property name="Visibility">False</property>
                 <property name="InvisibleChar">●</property>
+                <signal name="Activated" handler="OnPasswordEntryActivated" />
               </widget>
               <packing>
                 <property name="TopAttach">1</property>

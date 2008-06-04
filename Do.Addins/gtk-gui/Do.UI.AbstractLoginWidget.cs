@@ -252,6 +252,7 @@ namespace Do.UI {
             }
             this.password_entry.Hide();
             this.Show();
+            this.password_entry.Activated += new System.EventHandler(this.OnPasswordEntryActivated);
             this.validate_btn.Clicked += new System.EventHandler(this.OnApplyBtnClicked);
         }
     }
