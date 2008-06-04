@@ -105,8 +105,8 @@ namespace Do {
 		
 		static Log ()
 		{
-			level = Do.Preferences.BeQuiet ? LogEntryType.Error
-										   : LogEntryType.Info;
+			level = Do.Preferences.QuietStart ? LogEntryType.Error
+											  : LogEntryType.Info;
 			logs = new List<ILog> ();
 		}
 		

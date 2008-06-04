@@ -55,9 +55,14 @@ namespace Do.UI
         	
             Build ();
             
+			// Setup theme combo
             themeI = Array.IndexOf (Themes, Do.Preferences.Theme);
             themeI = themeI >= 0 ? themeI : 0;
             theme_combo.Active = themeI;
+
+			// Setup checkboxes
+        	hide_check.Active = Do.Preferences.QuietStart;
+        	login_check.Active = Do.Preferences.StartAtLogin;
         }
         
         public Bin GetConfiguration ()
@@ -67,12 +72,12 @@ namespace Do.UI
 
         protected virtual void OnLoginCheckClicked (object sender, EventArgs e)
         {
-        	//Do.Preferences = login_check.Active.ToString ();
+        	Do.Preferences.StartAtLogin = login_check.Active;
         }
 
         protected virtual void OnHideCheckClicked (object sender, EventArgs e)
         {
-        	Do.Preferences.BeQuiet = hide_check.Active;
+        	Do.Preferences.QuietStart = hide_check.Active;
         }
 
         protected virtual void OnThemeComboChanged (object sender, EventArgs e)

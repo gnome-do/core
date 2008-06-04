@@ -776,27 +776,14 @@ namespace Do.Core {
 
 		public void ShowAbout ()
 		{
-			string[] authors;
 			string[] logos;
 			string logo;
 
 			Vanish ();
 			Reset ();
 
-			authors = new string[] {
-				"Chris Halse Rogers <chalserogers@gmail.com>",
-				"David Siegel <djsiegel@gmail.com>",
-				"DR Colkitt <douglas.colkitt@gmail.com>",
-				"James Walker",
-				"Jason Smith",
-				"Miguel de Icaza",
-				"Rick Harding",
-				"Thomsen Anders",
-				"Volker Braun"
-			};
-
 			about_window = new Gtk.AboutDialog ();
-			about_window.Name = "GNOME Do";
+			about_window.ProgramName = "GNOME Do";
 
 			try {
 				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
@@ -823,7 +810,6 @@ namespace Do.Core {
 				"applications, music, contacts, and more!";
 			about_window.Website = "http://do.davebsd.com/";
 			about_window.WebsiteLabel = "Visit Homepage";
-			about_window.Authors = authors;
 			about_window.IconName = "gnome-run";
 
 			if (null != about_window.Screen.RgbaColormap) {

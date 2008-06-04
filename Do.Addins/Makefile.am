@@ -67,31 +67,27 @@ FILES =  \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/BookmarkItem.cs \
 	src/Do.Universe/ContactItem.cs \
-	src/Do.Universe/DefineWordAction.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Universe/IAction.cs \
 	src/Do.Universe/IItem.cs \
 	src/Do.Universe/IItemSource.cs \
-	src/Do.Universe/ImageFileItem.cs \
 	src/Do.Universe/IObject.cs \
 	src/Do.Universe/MailtoAction.cs \
 	src/Do.Universe/OpenAction.cs \
-	src/Do.Universe/OpenTerminalHereAction.cs \
 	src/Do.Universe/OpenURLAction.cs \
 	src/Do.Universe/OpenWithAction.cs \
 	src/Do.Universe/RevealAction.cs \
 	src/Do.Universe/RunAction.cs \
-	src/Do.Universe/RunInTerminalAction.cs \
 	src/Do.Universe/TextItem.cs \
 	src/Paths.cs 
 
 DATA_FILES = 
 
 RESOURCES =  \
-	Do.Addins.addin.xml \
 	gtk-gui/gui.stetic \
 	gtk-gui/objects.xml \
+	Resources/Do.Addins.addin.xml \
 	Resources/settings-triangle.png 
 
 EXTRAS = \
