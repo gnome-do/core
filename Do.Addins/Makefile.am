@@ -85,9 +85,9 @@ FILES =  \
 DATA_FILES = 
 
 RESOURCES =  \
-	Do.Addins.addin.xml \
 	gtk-gui/gui.stetic \
 	gtk-gui/objects.xml \
+	Resources/Do.Addins.addin.xml \
 	Resources/settings-triangle.png 
 
 EXTRAS = \
