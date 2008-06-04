@@ -105,10 +105,8 @@ namespace Do {
 		
 		static Log ()
 		{
-			if (Do.Preferences.BeQuiet)
-				level = LogEntryType.Error;
-			else
-				level = LogEntryType.Info;
+			level = Do.Preferences.BeQuiet ? LogEntryType.Error
+										   : LogEntryType.Info;
 			logs = new List<ILog> ();
 		}
 		

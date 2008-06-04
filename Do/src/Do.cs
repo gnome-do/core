@@ -39,8 +39,6 @@ namespace Do {
 		{
 			Catalog.Init ("gnome-do", "/usr/local/share/locale");
 			Gtk.Application.Init ();
-			
-			preferences = new Preferences (args);
 
 			DetectInstanceAndExit ();
 			Log.Initialize ();
@@ -69,9 +67,7 @@ namespace Do {
 			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
 
-			if (!Preferences.BeQuiet) {
-				Controller.Summon ();
-			}
+			if (!Preferences.BeQuiet) Controller.Summon ();
 			
 			Gtk.Application.Run ();
 		}
@@ -87,7 +83,8 @@ namespace Do {
 		}
 
 		public static Preferences Preferences {
-			get { return preferences; }
+			get { return preferences ?? 
+					preferences = new Preferences (); }
 		}
 
 		public static Controller Controller {

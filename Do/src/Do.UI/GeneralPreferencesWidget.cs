@@ -38,15 +38,46 @@ namespace Do.UI
         public string Icon {
         	get { return ""; }
         }
+        
+        public string[] Themes {
+        	get {
+        		return new string[] {
+        			"Classic",
+        			"Glass Frame",
+        			"Mini",
+        		};
+        	}
+        }
 		
         public GeneralPreferencesWidget ()
         {
+        	int themeI;
+        	
             Build ();
+            
+            themeI = Array.IndexOf (Themes, Do.Preferences.Theme);
+            themeI = themeI >= 0 ? themeI : 0;
+            theme_combo.Active = themeI;
         }
         
         public Bin GetConfiguration ()
         {
         	return this;
+        }
+
+        protected virtual void OnLoginCheckClicked (object sender, EventArgs e)
+        {
+        	//Do.Preferences = login_check.Active.ToString ();
+        }
+
+        protected virtual void OnHideCheckClicked (object sender, EventArgs e)
+        {
+        	Do.Preferences.BeQuiet = hide_check.Active;
+        }
+
+        protected virtual void OnThemeComboChanged (object sender, EventArgs e)
+        {
+        	Do.Preferences.Theme = theme_combo.ActiveText;
         }
     }
 }
