@@ -10,36 +10,20 @@
 	
 	<!-- Extensions included in this assembly -->
 	<!-- Sources -->
-	<Extension path = "/Do/ItemSource">
-		<ItemSource type="Do.Universe.ItemSourceItemSource" />
-	</Extension>
-	<Extension path = "/Do/ItemSource">
-		<ItemSource type="Do.Universe.InternalItemSource" />
-	</Extension>
-	<Extension path = "/Do/ItemSource">
+	<Extension path="/Do/ItemSource">
 		<ItemSource type="Do.Universe.AliasItemSource" />
-	</Extension>
-	<Extension path = "/Do/ItemSource">
+		<ItemSource type="Do.Universe.InternalItemSource" />
+		<ItemSource type="Do.Universe.ItemSourceItemSource" />
 		<ItemSource type="Do.Universe.ShelfItemSource" />
 	</Extension>
 
 	<!-- Actions -->
-	<Extension path = "/Do/Action">
+	<Extension path="/Do/Action">
 		<Action type="Do.Universe.AliasAction" />
-	</Extension>
-	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.DeleteAliasAction" />
-	</Extension>
-	<Extension path = "/Do/Action">
-		<Action type="Do.Universe.ShelfAddAction" />
-	</Extension>
-	<Extension path = "/Do/Action">
-		<Action type="Do.Universe.ShelfRemoveAction" />
-	</Extension>
-	<Extension path = "/Do/Action">
-		<Action type="Do.Universe.ShelfExploreAction" />
-	</Extension>
-	<Extension path = "/Do/Action">
 		<Action type="Do.Universe.NewShelfAction" />
+		<Action type="Do.Universe.ShelfAddAction" />
+		<Action type="Do.Universe.ShelfExploreAction" />
+		<Action type="Do.Universe.ShelfRemoveAction" />
 	</Extension>
 </Addin>
