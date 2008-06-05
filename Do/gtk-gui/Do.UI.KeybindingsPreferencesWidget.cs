@@ -32,6 +32,7 @@ namespace Do.UI {
             this.vbox2 = new Gtk.VBox();
             this.vbox2.Name = "vbox2";
             this.vbox2.Spacing = 6;
+            this.vbox2.BorderWidth = ((uint)(8));
             // Container child vbox2.Gtk.Box+BoxChild
             this.action_scroll = new Gtk.ScrolledWindow();
             this.action_scroll.CanFocus = true;
@@ -41,7 +42,7 @@ namespace Do.UI {
             this.vbox2.Add(this.action_scroll);
             Gtk.Box.BoxChild w1 = ((Gtk.Box.BoxChild)(this.vbox2[this.action_scroll]));
             w1.Position = 0;
-            w1.Padding = ((uint)(5));
+            w1.Padding = ((uint)(8));
             // Container child vbox2.Gtk.Box+BoxChild
             this.hbox1 = new Gtk.HBox();
             this.hbox1.Name = "hbox1";

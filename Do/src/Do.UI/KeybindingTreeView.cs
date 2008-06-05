@@ -35,7 +35,8 @@ namespace Do.UI
 		public KeybindingTreeView()
 		{
 			RowActivated += new RowActivatedHandler (OnRowActivated);
-
+			ButtonPressEvent += new ButtonPressEventHandler (OnButtonPress);
+			
 			TreeViewColumn actionCol = new TreeViewColumn ();
 			actionCol.Title = "Action";
 			actionCol.Expand = true;
@@ -76,6 +77,20 @@ namespace Do.UI
 			iter = store.Append ();
 			store.SetValue (iter, (int)Column.Action, "Summon");
 			store.SetValue (iter, (int)Column.Binding, Do.Preferences.SummonKeyBinding);
+		}
+		
+		[GLib.ConnectBefore]
+		private void OnButtonPress (object o, ButtonPressEventArgs args)
+		{
+			TreePath path;
+			TreeViewColumn column;
+			if (!args.Event.Window.Equals (BinWindow))
+				return;
+				
+			if (GetPathAtPos ((int)args.Event.X,(int)args.Event.Y,out path)) {
+				GrabFocus ();
+				SetCursor (args.Path, GetColumn ((int)Column.Binding), true);
+			}				
 		}
 		
 		private void OnRowActivated (object o, RowActivatedArgs args)
