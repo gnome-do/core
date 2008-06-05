@@ -17,7 +17,7 @@ namespace Do.UI {
         
         private Gtk.ScrolledWindow action_scroll;
         
-        private Gtk.Table table2;
+        private Gtk.HBox hbox1;
         
         private Gtk.Image help_icn;
         
@@ -43,29 +43,29 @@ namespace Do.UI {
             w1.Position = 0;
             w1.Padding = ((uint)(5));
             // Container child vbox2.Gtk.Box+BoxChild
-            this.table2 = new Gtk.Table(((uint)(1)), ((uint)(2)), false);
-            this.table2.Name = "table2";
-            this.table2.RowSpacing = ((uint)(6));
-            this.table2.ColumnSpacing = ((uint)(6));
-            this.table2.BorderWidth = ((uint)(5));
-            // Container child table2.Gtk.Table+TableChild
+            this.hbox1 = new Gtk.HBox();
+            this.hbox1.Name = "hbox1";
+            this.hbox1.Spacing = 6;
+            // Container child hbox1.Gtk.Box+BoxChild
             this.help_icn = new Gtk.Image();
             this.help_icn.Name = "help_icn";
-            this.table2.Add(this.help_icn);
-            Gtk.Table.TableChild w2 = ((Gtk.Table.TableChild)(this.table2[this.help_icn]));
-            w2.XOptions = ((Gtk.AttachOptions)(4));
-            // Container child table2.Gtk.Table+TableChild
+            this.help_icn.Yalign = 0F;
+            this.hbox1.Add(this.help_icn);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.hbox1[this.help_icn]));
+            w2.Position = 0;
+            w2.Expand = false;
+            // Container child hbox1.Gtk.Box+BoxChild
             this.help_lbl = new Gtk.Label();
             this.help_lbl.Name = "help_lbl";
+            this.help_lbl.Ypad = 1;
+            this.help_lbl.Xalign = 0F;
             this.help_lbl.LabelProp = Mono.Unix.Catalog.GetString("To edit a shortcut key, click on the corresponding row and type a new accelerator, or press backspace to clear.\n");
             this.help_lbl.Wrap = true;
-            this.table2.Add(this.help_lbl);
-            Gtk.Table.TableChild w3 = ((Gtk.Table.TableChild)(this.table2[this.help_lbl]));
-            w3.LeftAttach = ((uint)(1));
-            w3.RightAttach = ((uint)(2));
-            w3.XOptions = ((Gtk.AttachOptions)(4));
-            this.vbox2.Add(this.table2);
-            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox2[this.table2]));
+            this.hbox1.Add(this.help_lbl);
+            Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(this.hbox1[this.help_lbl]));
+            w3.Position = 1;
+            this.vbox2.Add(this.hbox1);
+            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox1]));
             w4.Position = 1;
             w4.Expand = false;
             w4.Fill = false;

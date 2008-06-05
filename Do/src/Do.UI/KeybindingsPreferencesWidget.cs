@@ -28,7 +28,7 @@ namespace Do.UI
 {
 	public partial class KeybindingsPreferencesWidget : Bin, Addins.IConfigurable
 	{
-		private int IconSize = 32;
+		private int IconSize = 48;
 		private KeybindingTreeView kbview;
 		
 		new public string Name {
@@ -52,8 +52,8 @@ namespace Do.UI
             action_scroll.Add (kbview);
             action_scroll.ShowAll ();
 			
-			help_icn.Pixbuf = IconProvider.PixbufFromIconName ("gtk-dialog-info",
-			                                                    IconSize);
+			help_icn.Pixbuf = IconProvider.PixbufFromIconName ("gtk-dialog-info", 
+				IconSize);
 			
 			/*
 			// Initialize combo_summon

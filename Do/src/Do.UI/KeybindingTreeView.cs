@@ -34,12 +34,15 @@ namespace Do.UI
 		
 		public KeybindingTreeView()
 		{
+			RowActivated += new RowActivatedHandler (OnRowActivated);
+
 			TreeViewColumn actionCol = new TreeViewColumn ();
 			actionCol.Title = "Action";
 			actionCol.Expand = true;
 			actionCol.Resizable = true;
-			
+
 			CellRendererText actionCell = new CellRendererText ();
+			actionCell.Width = 150;
 			actionCol.PackStart (actionCell, true);
 			
 			TreeViewColumn bindingCol = new TreeViewColumn ();
@@ -53,8 +56,8 @@ namespace Do.UI
 			bindingCell.Visible = true;
 			bindingCell.Sensitive = true;
 			
-			this.InsertColumn (-1, "Action", actionCell, "text", (int)Column.Action);
-			this.InsertColumn (-1, "Binding", bindingCell, "text", (int)Column.Binding);
+			InsertColumn (-1, "Action", actionCell, "text", (int)Column.Action);
+			InsertColumn (-1, "Binding", bindingCell, "text", (int)Column.Binding);
 			
 			ListStore store = new ListStore (typeof (string), typeof (string));
 			Model = store;
@@ -73,6 +76,12 @@ namespace Do.UI
 			iter = store.Append ();
 			store.SetValue (iter, (int)Column.Action, "Summon");
 			store.SetValue (iter, (int)Column.Binding, Do.Preferences.SummonKeyBinding);
+		}
+		
+		private void OnRowActivated (object o, RowActivatedArgs args)
+		{
+			GrabFocus ();
+			SetCursor (args.Path, GetColumn ((int)Column.Binding), true);
 		}
 		
 		private void OnAccelEdited (object o, AccelEditedArgs args)

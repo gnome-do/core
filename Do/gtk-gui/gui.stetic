@@ -102,6 +102,7 @@
       <widget class="Gtk.VBox" id="vbox2">
         <property name="MemberName" />
         <property name="Spacing">6</property>
+        <property name="BorderWidth">8</property>
         <child>
           <widget class="Gtk.ScrolledWindow" id="action_scroll">
             <property name="MemberName" />
@@ -121,50 +122,36 @@
           <packing>
             <property name="Position">0</property>
             <property name="AutoSize">True</property>
-            <property name="Padding">5</property>
+            <property name="Padding">8</property>
           </packing>
         </child>
         <child>
-          <widget class="Gtk.Table" id="table2">
+          <widget class="Gtk.HBox" id="hbox1">
             <property name="MemberName" />
-            <property name="NRows">1</property>
-            <property name="NColumns">2</property>
-            <property name="RowSpacing">6</property>
-            <property name="ColumnSpacing">6</property>
-            <property name="BorderWidth">5</property>
+            <property name="Spacing">6</property>
             <child>
               <widget class="Gtk.Image" id="help_icn">
                 <property name="MemberName" />
+                <property name="Yalign">0</property>
               </widget>
               <packing>
+                <property name="Position">0</property>
                 <property name="AutoSize">False</property>
-                <property name="XOptions">Fill</property>
-                <property name="XExpand">False</property>
-                <property name="XFill">True</property>
-                <property name="XShrink">False</property>
-                <property name="YExpand">True</property>
-                <property name="YFill">True</property>
-                <property name="YShrink">False</property>
+                <property name="Expand">False</property>
               </packing>
             </child>
             <child>
               <widget class="Gtk.Label" id="help_lbl">
                 <property name="MemberName" />
+                <property name="Ypad">1</property>
+                <property name="Xalign">0</property>
                 <property name="LabelProp" translatable="yes">To edit a shortcut key, click on the corresponding row and type a new accelerator, or press backspace to clear.
 </property>
                 <property name="Wrap">True</property>
               </widget>
               <packing>
-                <property name="LeftAttach">1</property>
-                <property name="RightAttach">2</property>
+                <property name="Position">1</property>
                 <property name="AutoSize">False</property>
-                <property name="XOptions">Fill</property>
-                <property name="XExpand">False</property>
-                <property name="XFill">True</property>
-                <property name="XShrink">False</property>
-                <property name="YExpand">True</property>
-                <property name="YFill">True</property>
-                <property name="YShrink">False</property>
               </packing>
             </child>
           </widget>
