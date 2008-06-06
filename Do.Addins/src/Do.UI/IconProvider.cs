@@ -19,8 +19,8 @@
 
 using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Reflection;
+using System.Collections.Generic;
 
 using Gtk;
 using Gdk;
@@ -30,15 +30,14 @@ namespace Do.UI
 	public static class IconProvider
 	{
 		public static readonly Pixbuf UnknownPixbuf;
-		const int MaxCacheSize = 50;
 		const int DefaultIconSize = 80;
 		
 		// Cache of loaded icons: key is "iconname_size".
-		static Dictionary<string, Pixbuf> cache;
+		static IconCache cache;
 
 		static IconProvider ()
 		{
-			cache = new Dictionary<string, Pixbuf> ();
+			cache = new IconCache ();
 						
 			UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
 			UnknownPixbuf.Fill (0x00000000);
@@ -195,11 +194,6 @@ namespace Do.UI
 			
 			// Cache icon pixbuf.
 			if (pixbuf != null && pixbuf != UnknownPixbuf) {
-				// Clear the icon cache when it grows too large.
-				// TODO: Implement a LRU eviction policy for better performance.
-				if (cache.Count > MaxCacheSize) {
-					cache.Clear ();
-				}
 				cache [iconKey] = pixbuf;
 			}
 			
