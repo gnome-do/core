@@ -45,18 +45,18 @@ namespace Do.UI
 		const string DescriptionFormat =
 			"<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
-		protected string repository;
 		protected string filter;
+		protected string repository;
 		protected Dictionary<string, string> addins;
-		
+
 		public string Filter {
 			get { return filter; }
 			set {
-				filter = value;
+				filter = value ?? "";
 				Refresh (false);
 			}
 		}
-		
+
 		public string ShowRepository {
 			get { return repository; }
 			set {
@@ -99,42 +99,42 @@ namespace Do.UI
 			store.SetSortFunc ((int) Column.Id,
 				new TreeIterCompareFunc (DefaultTreeIterCompareFunc));
 			store.SetSortColumnId ((int) Column.Id, SortType.Descending);
-			
+
 			Selection.Changed += OnSelectionChanged;
 
 			Refresh ();
 		}
-		
+
 		public int DefaultTreeIterCompareFunc(TreeModel model, TreeIter a, 
-            TreeIter b)
-        {
-        	string repA, repB;
-        	int scoreA, scoreB;
+				TreeIter b)
+		{
+			string repA, repB;
+			int scoreA, scoreB;
 			ListStore store = Model as ListStore;
-        	
-        	repA = store.GetValue (a, (int)Column.Description) as string;
-        	repB = store.GetValue (b, (int)Column.Description) as string;
-        	
+
+			repA = store.GetValue (a, (int)Column.Description) as string;
+			repB = store.GetValue (b, (int)Column.Description) as string;
+
 			if (string.IsNullOrEmpty (repA) || string.IsNullOrEmpty (repB))
-        		return 0;
+				return 0;
 
 			if (filter == "") {
 				return string.Compare (repB, repA,
-					StringComparison.CurrentCultureIgnoreCase);
+						StringComparison.CurrentCultureIgnoreCase);
 			}
-        	
-        	scoreA = repA.IndexOf (filter,
-				StringComparison.CurrentCultureIgnoreCase);
-        	scoreB = repB.IndexOf (filter,
-				StringComparison.CurrentCultureIgnoreCase);
 
-            return scoreB - scoreA;
-        }
+			scoreA = repA.IndexOf (filter,
+					StringComparison.CurrentCultureIgnoreCase);
+			scoreB = repB.IndexOf (filter,
+					StringComparison.CurrentCultureIgnoreCase);
+
+			return scoreB - scoreA;
+		}
 
 		private void IconDataFunc (TreeViewColumn column,
-								   CellRenderer cell,
-								   TreeModel model,
-								   TreeIter iter)
+				CellRenderer cell,
+				TreeModel model,
+				TreeIter iter)
 		{
 			string id, icon;
 			CellRendererPixbuf renderer;
@@ -144,13 +144,13 @@ namespace Do.UI
 			icon = PluginManager.IconForAddin (id);
 			renderer.Pixbuf = IconProvider.PixbufFromIconName (icon, IconSize);
 		}
-		
+
 		bool AddinShouldShow (Addin a)
 		{
 			return a.Name.ToLower ().Contains (filter.ToLower ()) &&
 				PluginManager.AddinIsFromRepository (a, ShowRepository);
 		}
-		
+
 		bool AddinShouldShow (AddinRepositoryEntry e)
 		{
 			return e.Addin.Name.ToLower ().Contains (filter.ToLower ()) &&
@@ -160,7 +160,7 @@ namespace Do.UI
 		public void Refresh () {
 			Refresh (true);
 		}
-		
+
 		public void Refresh (bool goOnline) {
 			ListStore store;
 
@@ -173,11 +173,20 @@ namespace Do.UI
 				addins [Addin.GetIdName (a.Id)] = a.Id;
 				store.AppendValues (a.Enabled, Description (a), a.Id);
 			}
+			ScrollFirst (false);
 			// Add online plugins asynchronously so UI doesn't block.
 			RefreshOnlinePluginsAsync (goOnline);
 		}
 
-		void RefreshOnlinePluginsAsync (bool goOnline)
+		protected void ScrollFirst (bool select)
+		{
+			if (addins.Count > 0) {
+				ScrollToCell (TreePath.NewFirst (), Columns [0], true, 0, 0);
+				if (select) Selection.SelectPath (TreePath.NewFirst ());
+			}
+		}
+
+		protected void RefreshOnlinePluginsAsync (bool goOnline)
 		{
 			ListStore store;
 			SetupService setup;
@@ -187,31 +196,27 @@ namespace Do.UI
 
 			new Thread ((ThreadStart) delegate {
 				if (goOnline) {
-					setup.Repositories.UpdateAllRepositories (
-						new ConsoleProgressStatus (true));
+				setup.Repositories.UpdateAllRepositories (
+					new ConsoleProgressStatus (true));
 				}
 				// Add addins from online repositories.
 				Application.Invoke (delegate {
 					try {
-					/// >>>>>>
-					foreach (AddinRepositoryEntry e in
-						setup.Repositories.GetAvailableAddins ()) {
-					if (!AddinShouldShow (e)) continue;
-					// If addin already made its way into the store,
-					// skip.
-					if (addins.ContainsKey (Addin.GetIdName (e.Addin.Id)))
-						continue;
-					addins [Addin.GetIdName (e.Addin.Id)] = e.Addin.Id;
-					store.AppendValues (
-						AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
-						Description (e),
-						e.Addin.Id);
-					}
-					if (addins.Count > 0) {
-						ScrollToCell (TreePath.NewFirst (), Columns [0], true,
-							0, 0);
-					}
-					/// >>>>>>
+						foreach (AddinRepositoryEntry e in
+							setup.Repositories.GetAvailableAddins ()) {
+							if (!AddinShouldShow (e)) continue;
+							// If addin already made its way into the store,
+							// skip.
+							string id = e.Addin.Id;
+							if (addins.ContainsKey (Addin.GetIdName (id)))
+								continue;
+							addins [Addin.GetIdName (id)] = id;
+							store.AppendValues (
+								AddinManager.Registry.IsAddinEnabled (id),
+								Description (e),
+								id);
+						}
+						ScrollFirst (false);
 					} catch {
 						// A crash may result if window is closed before this
 						// event occurs.
@@ -224,7 +229,7 @@ namespace Do.UI
 		{
 			return string.Format (DescriptionFormat, name, desc, version);
 		}
-		
+
 		string Description (Addin a)
 		{
 			return Description (a.Name, a.Description.Description, a.Version);
@@ -272,14 +277,14 @@ namespace Do.UI
 				PluginToggled (addinId, !enabled);
 			}
 			store.SetValue (iter, 0,
-				AddinManager.Registry.IsAddinEnabled (addinId));
+					AddinManager.Registry.IsAddinEnabled (addinId));
 		}
 
 		protected void OnSelectionChanged (object sender, EventArgs args)
 		{
 			if (null != PluginSelected) {
 				PluginSelected (this,
-					new PluginSelectionEventArgs (GetSelectedAddins ()));
+						new PluginSelectionEventArgs (GetSelectedAddins ()));
 			}
 		}
 

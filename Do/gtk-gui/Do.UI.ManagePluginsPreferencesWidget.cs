@@ -95,6 +95,7 @@ namespace Do.UI {
             w5.Fill = false;
             // Container child hbox1.Gtk.Box+BoxChild
             this.search_entry = new Gtk.Entry();
+            this.search_entry.CanDefault = true;
             this.search_entry.CanFocus = true;
             this.search_entry.Name = "search_entry";
             this.search_entry.IsEditable = true;
