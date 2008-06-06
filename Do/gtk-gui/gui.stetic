@@ -102,13 +102,12 @@
       <widget class="Gtk.VBox" id="vbox2">
         <property name="MemberName" />
         <property name="Spacing">6</property>
-        <property name="BorderWidth">8</property>
+        <property name="BorderWidth">6</property>
         <child>
           <widget class="Gtk.ScrolledWindow" id="action_scroll">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
             <property name="ShadowType">In</property>
-            <property name="BorderWidth">5</property>
             <child>
               <widget class="Gtk.Viewport" id="GtkViewport">
                 <property name="MemberName" />
@@ -122,7 +121,6 @@
           <packing>
             <property name="Position">0</property>
             <property name="AutoSize">True</property>
-            <property name="Padding">8</property>
           </packing>
         </child>
         <child>
@@ -133,6 +131,7 @@
               <widget class="Gtk.Image" id="help_icn">
                 <property name="MemberName" />
                 <property name="Yalign">0</property>
+                <property name="Pixbuf">stock:gtk-dialog-info Dnd</property>
               </widget>
               <packing>
                 <property name="Position">0</property>
@@ -145,13 +144,13 @@
                 <property name="MemberName" />
                 <property name="Ypad">1</property>
                 <property name="Xalign">0</property>
-                <property name="LabelProp" translatable="yes">To edit a shortcut key, click on the corresponding row and type a new accelerator, or press backspace to clear.
-</property>
+                <property name="LabelProp" translatable="yes">To edit a shortcut, double-click it and type a new one.</property>
                 <property name="Wrap">True</property>
               </widget>
               <packing>
                 <property name="Position">1</property>
                 <property name="AutoSize">False</property>
+                <property name="Padding">10</property>
               </packing>
             </child>
           </widget>

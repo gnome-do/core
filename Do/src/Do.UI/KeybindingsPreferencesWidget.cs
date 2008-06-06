@@ -23,12 +23,12 @@ using System.Collections.Generic;
 using Gtk;
 
 using Do;
+using Do.Addins;
 
 namespace Do.UI
 {
-	public partial class KeybindingsPreferencesWidget : Bin, Addins.IConfigurable
+	public partial class KeybindingsPreferencesWidget : Bin, IConfigurable
 	{
-		private int IconSize = 48;
 		private KeybindingTreeView kbview;
 		
 		new public string Name {
@@ -51,20 +51,6 @@ namespace Do.UI
 			kbview.ColumnsAutosize ();
             action_scroll.Add (kbview);
             action_scroll.ShowAll ();
-			
-			help_icn.Pixbuf = IconProvider.PixbufFromIconName ("gtk-dialog-info", 
-				IconSize);
-			
-			/*
-			// Initialize combo_summon
-			if (!SummonKeyBindings.Contains (Do.Preferences.SummonKeyBinding)) {
-				SummonKeyBindings.Insert (0, Do.Preferences.SummonKeyBinding);
-			}
-			foreach (string combo in SummonKeyBindings) {
-				combo_summon.AppendText (combo);
-			}
-			combo_summon.Active = SummonKeyBindings.IndexOf (Do.Preferences.SummonKeyBinding);
-			*/
 		}
 		
 		public Bin GetConfiguration ()

@@ -32,58 +32,39 @@ namespace Do.UI
 			NumColumns
 		}
 		
-		public KeybindingTreeView()
-		{
-			RowActivated += new RowActivatedHandler (OnRowActivated);
-			ButtonPressEvent += new ButtonPressEventHandler (OnButtonPress);
+		public KeybindingTreeView ()
+		{	
+			Model = new ListStore (typeof (string), typeof (string));
 			
-			TreeViewColumn actionCol = new TreeViewColumn ();
-			actionCol.Title = "Action";
-			actionCol.Expand = true;
-			actionCol.Resizable = true;
-
 			CellRendererText actionCell = new CellRendererText ();
 			actionCell.Width = 150;
-			actionCol.PackStart (actionCell, true);
-			
-			TreeViewColumn bindingCol = new TreeViewColumn ();
-			bindingCol.Title = "Binding";
-			bindingCol.Resizable = true;
+			InsertColumn (-1, "Action", actionCell, "text", (int)Column.Action);
 			
 			CellRendererAccel bindingCell = new CellRendererAccel ();
 			bindingCell.Editable = true;
 			bindingCell.AccelEdited += new AccelEditedHandler (OnAccelEdited);
 			bindingCell.AccelCleared += new AccelClearedHandler (OnAccelCleared);
-			bindingCell.Visible = true;
-			bindingCell.Sensitive = true;
+			InsertColumn (-1, "Shortcut", bindingCell, "text", (int)Column.Binding);
 			
-			InsertColumn (-1, "Action", actionCell, "text", (int)Column.Action);
-			InsertColumn (-1, "Binding", bindingCell, "text", (int)Column.Binding);
-			
-			ListStore store = new ListStore (typeof (string), typeof (string));
-			Model = store;
+			RowActivated += new RowActivatedHandler (OnRowActivated);
+			ButtonPressEvent += new ButtonPressEventHandler (OnButtonPress);
 			
 			AddBindings ();
+			Selection.SelectPath (TreePath.NewFirst ());
 		}
 		
 		private void AddBindings ()
 		{
-			ListStore store;
-			TreeIter iter;
-			
-			store = Model as ListStore;
+			ListStore store = Model as ListStore;
 			store.Clear ();
 			
-			iter = store.Append ();
-			store.SetValue (iter, (int)Column.Action, "Summon");
-			store.SetValue (iter, (int)Column.Binding, Do.Preferences.SummonKeyBinding);
+			store.AppendValues ("Summon", Do.Preferences.SummonKeyBinding);
 		}
 		
 		[GLib.ConnectBefore]
 		private void OnButtonPress (object o, ButtonPressEventArgs args)
 		{
 			TreePath path;
-			TreeViewColumn column;
 			if (!args.Event.Window.Equals (BinWindow))
 				return;
 				

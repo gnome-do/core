@@ -27,19 +27,18 @@ using Gdk;
 
 namespace Do.UI
 {
-		
 	public static class IconProvider
 	{
-	
 		public static readonly Pixbuf UnknownPixbuf;
-		public const int DefaultIconSize = 80;
+		const int MaxCacheSize = 50;
+		const int DefaultIconSize = 80;
 		
 		// Cache of loaded icons: key is "iconname_size".
-		static Dictionary<string, Pixbuf> pixbufCache;
+		static Dictionary<string, Pixbuf> cache;
 
 		static IconProvider ()
 		{
-			pixbufCache = new Dictionary<string, Pixbuf> ();
+			cache = new Dictionary<string, Pixbuf> ();
 						
 			UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
 			UnknownPixbuf.Fill (0x00000000);
@@ -159,12 +158,12 @@ namespace Do.UI
 
 			// Is the icon name in cache?
 			iconKey = string.Format ("{0}_{1}", name, size);
-			if (pixbufCache.TryGetValue (iconKey, out pixbuf)) {				
+			if (cache.TryGetValue (iconKey, out pixbuf)) {				
 				return pixbuf;
 			}
 			
 			do {
-				// The icon can be loaded from a loaded assembly if the icon has 
+				// The icon can be loaded from a loaded assembly if the icon has
 				// the format: "resource@assemblyname".
 				if (IconIsEmbeddedResource (name)) {
 					pixbuf = IconFromEmbeddedResource (name, size);
@@ -195,15 +194,21 @@ namespace Do.UI
 				pixbuf = UnknownPixbuf;
 			
 			// Cache icon pixbuf.
-			if (pixbuf != null && pixbuf != UnknownPixbuf)
-				pixbufCache [iconKey] = pixbuf;
+			if (pixbuf != null && pixbuf != UnknownPixbuf) {
+				// Clear the icon cache when it grows too large.
+				// TODO: Implement a LRU eviction policy for better performance.
+				if (cache.Count > MaxCacheSize) {
+					cache.Clear ();
+				}
+				cache [iconKey] = pixbuf;
+			}
 			
 			return pixbuf;
 		}
 							
 		static void OnDefaultIconThemeChanged (object sender, EventArgs args)
 		{
-			pixbufCache.Clear ();
+			cache.Clear ();
 		}
 	}
 }
