@@ -156,7 +156,7 @@ namespace Do
 				try {
 					key_sequence = (string) parent.client.Get (gconf_path);
 				} catch {
-					Log.Info ("GConf key '{0}' does not exist, using default.", gconf_path);
+					Log.Debug ("GConf key '{0}' does not exist, using default.", gconf_path);
 				}
 
 				SetBinding ();
@@ -169,7 +169,7 @@ namespace Do
 			void BindingChanged (object sender, GConf.NotifyEventArgs args)
 			{
 				if (args.Key == gconf_path) {
-					Log.Info ("Binding for '{0}' changed to '{1}'!", gconf_path, args.Value);
+					Log.Debug ("Binding for '{0}' changed to '{1}'!", gconf_path, args.Value);
 
 					UnsetBinding ();
 
@@ -185,7 +185,7 @@ namespace Do
 				    key_sequence == "disabled")
 					return;
 
-				Log.Info ("Binding key '{0}' for '{1}'.",
+				Log.Debug ("Binding key '{0}' for '{1}'.",
 				          key_sequence, gconf_path);
 
 				parent.Bind (key_sequence, handler);
@@ -196,7 +196,7 @@ namespace Do
 				if (key_sequence == null)
 					return;
 
-				Log.Info ("Unbinding key '{0}' for '{1}'",
+				Log.Debug ("Unbinding key '{0}' for '{1}'",
 				          key_sequence,
 				          gconf_path);
 
