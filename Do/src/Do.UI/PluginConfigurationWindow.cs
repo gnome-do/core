@@ -36,7 +36,7 @@ namespace Do.UI
 			"<span weight=\"heavy\" size=\"large\">{0}</span>";
 
         public PluginConfigurationWindow (string id) : 
-            base(Gtk.WindowType.Toplevel)
+            base (WindowType.Toplevel)
         {
             Addin addin;
             ICollection<IConfigurable> configs;
@@ -56,9 +56,14 @@ namespace Do.UI
             foreach (IConfigurable configurable in configs) {
                 Bin config;
 
-                config = configurable.GetConfiguration ();
-                notebook.AppendPage (config, new Label (configurable.Name));
-                config.ShowAll ();
+				try {
+					config = configurable.GetConfiguration ();
+					notebook.AppendPage (config, new Label (configurable.Name));
+					config.ShowAll ();
+				} catch (Exception e) {
+					Log.Error ("Failed to load configuration: {0}", e.Message);
+					Log.Debug (e.StackTrace);
+				}
             }
         }
 
