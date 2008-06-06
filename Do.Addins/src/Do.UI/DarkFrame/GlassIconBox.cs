@@ -1,7 +1,5 @@
 // GlassIconBox.cs
 //
-//  Copyright (C) 2008 Jason Smith
-//
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-//
 //
 
 using System;
@@ -34,10 +31,10 @@ namespace Do.UI
 	{
 		protected HBox hbox;
 		
-		public GlassIconBox(int iconBoxSize) : base (iconBoxSize)
+		public GlassIconBox (int iconBoxSize) : base (iconBoxSize)
 		{
-			focusedTransparency = .25;
-			unfocusedTransparency = 0;
+			focused_transparency = 0.25f;
+			unfocused_transparency = 0.0f;
 			
 			drawGradient = true;
 		}
@@ -45,7 +42,7 @@ namespace Do.UI
 		public int Width
 		{
 			get {
-				return (iconSize * 3) + 4 + 12;
+				return icon_size * 3 + 4 + 12;
 			}
 		}
 		
@@ -54,15 +51,15 @@ namespace Do.UI
 			Alignment label_align;
 
 			caption = "";
-			pixbuf = emptyPixbuf;
+			pixbuf = empty_pixbuf;
 
 			hbox = new HBox (false, 4);
 			hbox.BorderWidth = 6;
 			Add (hbox);
 			hbox.Show ();
 
-			emptyPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, iconSize, iconSize);
-			emptyPixbuf.Fill (uint.MinValue);
+			empty_pixbuf = new Pixbuf (Colorspace.Rgb, true, 8, icon_size, icon_size);
+			empty_pixbuf.Fill (uint.MinValue);
 
 			image = new Gtk.Image ();
 			hbox.PackStart (image, false, false, 0);
@@ -78,8 +75,8 @@ namespace Do.UI
 			label.Show ();
 			label_align.Show ();
 
-			image.SetSizeRequest (iconSize, iconSize);
-			label.SetSizeRequest ((int) (iconSize * 2), -1);
+			image.SetSizeRequest (icon_size, icon_size);
+			label.SetSizeRequest ((int) (icon_size * 2), -1);
 
 			DrawFill = DrawFrame = true;
 			FrameColor = FillColor = new Color (byte.MaxValue, byte.MaxValue, byte.MaxValue);

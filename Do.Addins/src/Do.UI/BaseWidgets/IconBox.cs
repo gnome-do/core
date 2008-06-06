@@ -29,25 +29,25 @@ namespace Do.UI
 {
 	public class IconBox : Frame
 	{
-		const string captionFormat = "{0}";
-		const string highlightFormat = "<span weight=\"bold\" underline=\"single\">{0}</span>";
+		const string CaptionFormat = "{0}";
+		const string HighlightFormat = "<span weight=\"bold\" underline=\"single\">{0}</span>";
 
-		protected bool isFocused;
+		protected bool focused;
 
-		protected string caption, iconName;
-		protected Pixbuf pixbuf, emptyPixbuf;
-		protected int iconSize;
+		protected string caption, icon_name;
+		protected Pixbuf pixbuf, empty_pixbuf;
+		protected int icon_size;
 
 		protected VBox vbox;
 		protected Gtk.Image image;
 		protected Label label;
 
-		protected double focusedTransparency = 0.4;
-		protected double unfocusedTransparency = 0.1;
+		protected float focused_transparency = 0.4f;
+		protected float unfocused_transparency = 0.1f;
 
-		public IconBox (int iconSize) : base ()
+		public IconBox (int icon_size) : base ()
 		{
-			this.iconSize = iconSize;
+			this.icon_size = icon_size;
 			Build ();
 		}
 		
@@ -56,15 +56,15 @@ namespace Do.UI
 			Alignment label_align;
 
 			caption = "";
-			pixbuf = emptyPixbuf;
+			pixbuf = empty_pixbuf;
 
 			vbox = new VBox (false, 4);
 			vbox.BorderWidth = 6;
 			Add (vbox);
 			vbox.Show ();
 
-			emptyPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, iconSize, iconSize);
-			emptyPixbuf.Fill (uint.MinValue);
+			empty_pixbuf = new Pixbuf (Colorspace.Rgb, true, 8, icon_size, icon_size);
+			empty_pixbuf.Fill (uint.MinValue);
 
 			image = new Gtk.Image ();
 			vbox.PackStart (image, false, false, 0);
@@ -80,9 +80,9 @@ namespace Do.UI
 			label.Show ();
 			label_align.Show ();
 
-			image.SetSizeRequest (iconSize, iconSize);
-			label.SetSizeRequest (iconSize / 4 * 5, -1);
-			// SetSizeRequest (iconSize * 2, iconSize * 2);
+			image.SetSizeRequest (icon_size, icon_size);
+			label.SetSizeRequest (icon_size / 4 * 5, -1);
+			// SetSizeRequest (icon_size * 2, icon_size * 2);
 
 			DrawFrame = DrawFill = true;
 			FrameColor = FillColor = new Color (byte.MaxValue, byte.MaxValue, byte.MaxValue);
@@ -93,7 +93,7 @@ namespace Do.UI
 
 		public virtual void Clear ()
 		{
-			Pixbuf = emptyPixbuf;
+			Pixbuf = empty_pixbuf;
 			Caption = "";
 		}
 
@@ -104,9 +104,9 @@ namespace Do.UI
 
 		public bool IsFocused
 		{
-			get { return isFocused; }
+			get { return focused; }
 			set {
-				isFocused = value;
+				focused = value;
 				UpdateFocus ();
 			}
 		}
@@ -116,15 +116,16 @@ namespace Do.UI
 			get { return caption; }
 			set {
 				caption = value ?? "";
-				label.Markup = string.Format (captionFormat, Util.Appearance.MarkupSafeString (caption));
+				caption = caption.Replace ("\n", " ");
+				label.Markup = string.Format (CaptionFormat, Util.Appearance.MarkupSafeString (caption));
 			}
 		}
 
 		public string Icon
 		{
 			set {
-				iconName = value;
-				Pixbuf = IconProvider.PixbufFromIconName (value, iconSize);
+				icon_name = value;
+				Pixbuf = IconProvider.PixbufFromIconName (value, icon_size);
 			}
 		}
 
@@ -132,7 +133,7 @@ namespace Do.UI
 		{
 			get { return pixbuf; }
 			set {
-				pixbuf = value ?? emptyPixbuf;
+				pixbuf = value ?? empty_pixbuf;
 				image.Pixbuf = pixbuf;
 			}
 		}
@@ -159,7 +160,7 @@ namespace Do.UI
 				string highlight;
 
 				if (value != null) {
-					highlight = Util.FormatCommonSubstrings (caption, value, highlightFormat);
+					highlight = Util.FormatCommonSubstrings (caption, value, HighlightFormat);
 				} else {
 					highlight = caption;
 				}
@@ -169,7 +170,7 @@ namespace Do.UI
 
 		protected virtual void UpdateFocus ()
 		{
-			FrameAlpha = FillAlpha = (isFocused ? focusedTransparency : unfocusedTransparency);
+			FrameAlpha = FillAlpha = (focused ? focused_transparency : unfocused_transparency);
 		}
 
 	}

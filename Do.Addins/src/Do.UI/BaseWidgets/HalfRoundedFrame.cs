@@ -21,8 +21,6 @@ using System;
 
 namespace Do.UI
 {
-	
-	
 	public class HalfRoundedFrame : Frame
 	{
 		protected Cairo.Context outline;
@@ -34,8 +32,7 @@ namespace Do.UI
 		protected override void GetFrame (Cairo.Context cairo)
 		{
 			cairo.MoveTo (x, y);
-			if (radius == 0)
-			{
+			if (radius == 0) {
 				cairo.Rectangle (x, y, width, height);
 			} else {
 				cairo.LineTo (x+width, y);
@@ -47,8 +44,7 @@ namespace Do.UI
 		
 		protected void SemiOutline (Cairo.Context outline)
 		{
-			if (radius == 0)
-			{
+			if (radius == 0) {
 				outline.MoveTo (x+width, y);
 				outline.LineTo (x+width, y+height);
 				outline.LineTo (x, y+height);

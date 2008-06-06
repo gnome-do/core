@@ -29,10 +29,7 @@ namespace Do.UI
 {
 	public class SymbolDisplayLabel : Label
 	{
-		// const string displayFormat = " <big>{0}</big> \n {1} ";
-		
-		// Description only:
-		const string displayFormat = "<span size=\"medium\"> {1} </span>";
+		const string DisplayFormat = "<span size=\"medium\"> {1} </span>";
 		
 		string highlight;
 		string name, description;
@@ -49,6 +46,7 @@ namespace Do.UI
 			UseMarkup = true;
 			Ellipsize = Pango.EllipsizeMode.Middle;
 			Justify = Justification.Center;
+			
 			ModifyFg (StateType.Normal,
 				new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 		}
@@ -70,8 +68,8 @@ namespace Do.UI
 		
 		public void SetDisplayLabel (string name, string description)
 		{
-			this.name = name ?? "";
-			this.description = description ?? "";
+			this.name = (name ?? "").Replace ("\n", " ");
+			this.description = (description ?? "").Replace ("\n", " ");
 			highlight = "";
 			UpdateText ();
 		}
@@ -92,7 +90,7 @@ namespace Do.UI
 			safe_name = Util.Appearance.MarkupSafeString (name);
 			safe_description = Util.Appearance.MarkupSafeString (description);
 			highlighted = Util.FormatCommonSubstrings(safe_name, highlight, "<u>{0}</u>");
-			Markup = string.Format (displayFormat, highlighted, safe_description);
+			Markup = string.Format (DisplayFormat, highlighted, safe_description);
 		}
 		
 	}
