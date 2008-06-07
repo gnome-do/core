@@ -28,6 +28,7 @@ using Gdk;
 
 using Mono.Unix;
 using Do.UI;
+using Do.Addins;
 
 namespace Do
 {
@@ -41,6 +42,7 @@ namespace Do
 		{
 			// Misc
 			Addins.Util.FormatCommonSubstrings = FormatCommonSubstrings;
+			Addins.Util.GetPreferences = GetPreferences;
 
 			// Environment utilities
 			Addins.Util.Environment.Open = Environment.Open;
@@ -48,8 +50,12 @@ namespace Do
 			// Appearance utilities			
 			Addins.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
 			Addins.Util.Appearance.PresentWindow = Appearance.PresentWindow;
-			//
 			Addins.Util.Appearance.PopupMainMenuAtPosition = MainMenu.Instance.PopupAtPosition;
+		}
+		
+		public static IPreferences GetPreferences (string id)
+		{
+			return new Preferences (id);
 		}
 
 		public class Environment

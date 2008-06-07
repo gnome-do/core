@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Collections.Generic;
 
 using Do;
+using Do.Addins;
 using Do.Universe;
 
 namespace Do {
@@ -41,7 +42,7 @@ namespace Do {
 	/// whether those preferences are provided by gconf, command line options,
 	/// etc.
 	/// </summary>
-	public class Preferences {
+	public class Preferences : IPreferences {
 	
 		public delegate void PreferenceChangedDelegate (object sender, PreferenceChangedEventArgs args);
 		public event PreferenceChangedDelegate PreferenceChanged;
@@ -56,6 +57,15 @@ namespace Do {
 		public Preferences (IPreferencesBackend backend)
 		{
 			this.backend = backend;
+		}
+		
+		public string this [string key] {
+			get {
+				return Get<string> (key, "");
+			}
+			set {
+				Set<string> (key, value);
+			}
 		}
 		
 		/// <summary>

@@ -41,6 +41,7 @@ FILES =  \
 	gtk-gui/generated.cs \
 	src/Do.Addins/IConfigurable.cs \
 	src/Do.Addins/IDoController.cs \
+	src/Do.Addins/IPreferences.cs \
 	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/Util.cs \
 	src/Do.UI/AbstractLoginWidget.cs \
