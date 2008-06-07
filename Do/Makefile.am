@@ -88,6 +88,7 @@ FILES =  \
 	src/Do.UI/PluginNodeView.cs \
 	src/Do.UI/PluginSelectionEventArgs.cs \
 	src/Do.UI/PreferencesWindow.cs \
+	src/Do.UI/TrayNotificationArea.cs \
 	src/Do.Universe/AliasAction.cs \
 	src/Do.Universe/AliasItemSource.cs \
 	src/Do.Universe/DeleteAliasAction.cs \

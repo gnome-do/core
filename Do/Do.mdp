@@ -61,6 +61,7 @@
     <File name="src/Do.UI/KeybindingTreeView.cs" subtype="Code" buildaction="Compile" />
     <File name="gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
     <File name="gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="src/Do.UI/TrayNotificationArea.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
