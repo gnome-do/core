@@ -22,8 +22,6 @@ using System.IO;
 using System.Reflection;
 
 using Gtk;
-using Gdk;
-using Gnome;
 
 using Do;
 
@@ -79,18 +77,18 @@ namespace Do.UI
         	return this;
         }
         
+        /// <value>
+        /// This property sacrifies much efficiency to eschew the gnomedesktop
+        /// dependency and to work more reliably.
+        /// </value>
         protected bool AutostartEnabled {
         	get {
-        		if (!File.Exists (AutostartFile)) return false;
         		try {
-					using (DesktopItem item = DesktopItem.NewFromFile (
-						AutostartFile, DesktopItemLoadFlags.OnlyIfExists)) {
-						return item != null &&
-							(!item.AttrExists (AutostartAttribute) ||
-							item.GetBoolean (AutostartAttribute));
-					}
+        			return File.Exists (AutostartFile) &&
+        				File.ReadAllText (AutostartFile)
+        					.Contains (AutostartAttribute + "=true");
 				} catch (Exception e) {
-					Log.Error("Failed to get AutostartEnabled: {0}", e.Message);
+					Log.Error ("Failed to get autostart: {0}", e.Message);
 				}
 				return false;
 			}
@@ -106,7 +104,7 @@ namespace Do.UI
 						
 					}
 				} catch (Exception e) {
-					Log.Error("Failed to set AutostartEnabled: {0}", e.Message);
+					Log.Error ("Failed to set autostart: {0}", e.Message);
 				}
 			}
    
