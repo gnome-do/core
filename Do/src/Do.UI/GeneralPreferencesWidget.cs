@@ -85,8 +85,8 @@ namespace Do.UI
         	get {
         		try {
         			return File.Exists (AutostartFile) &&
-        				File.ReadAllText (AutostartFile)
-        					.Contains (AutostartAttribute + "=true");
+        				!File.ReadAllText (AutostartFile)
+        					.Contains (AutostartAttribute + "=false");
 				} catch (Exception e) {
 					Log.Error ("Failed to get autostart: {0}", e.Message);
 				}
