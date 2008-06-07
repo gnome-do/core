@@ -20,13 +20,18 @@
 using System;
 
 using Gtk;
+using Gdk;
+using Gnome;
 
 using Do;
 
 namespace Do.UI
 {
     public partial class GeneralPreferencesWidget : Bin, Addins.IConfigurable
-    {			
+    {
+    	static readonly string AutostartPath =
+    		Paths.Combine(Paths.UserHome, ".config/autostart/gnome-do.desktop");
+    		
 		new public string Name {
 			get { return "General"; }
 		}
@@ -62,17 +67,44 @@ namespace Do.UI
 
 			// Setup checkboxes
         	hide_check.Active = Do.Preferences.QuietStart;
-        	login_check.Active = Do.Preferences.StartAtLogin;
+        	login_check.Active = AutostartEnabled;
         }
         
         public Bin GetConfiguration ()
         {
         	return this;
         }
+        
+        protected bool AutostartEnabled {
+        	get {
+        		try {
+					using (DesktopItem item = DesktopItem.NewFromFile (
+						AutostartPath, DesktopItemLoadFlags.OnlyIfExists)) {
+						return item != null &&
+							item.GetBoolean ("X-GNOME-Autostart-enabled");
+					}
+				} catch (Exception e) {
+					Log.Error("Failed to get AutostartEnabled: {0}", e.Message);
+				}
+				return false;
+			}
+			set {
+				try {
+					using (DesktopItem item = DesktopItem.NewFromFile (
+						AutostartPath, DesktopItemLoadFlags.OnlyIfExists)) {
+						if (item != null)
+							item.SetBoolean("X-GNOME-Autostart-enabled", value);
+					}
+				} catch (Exception e) {
+					Log.Error("Failed to set AutostartEnabled: {0}", e.Message);
+				}
+			}
+   
+        }
 
         protected virtual void OnLoginCheckClicked (object sender, EventArgs e)
         {
-        	Do.Preferences.StartAtLogin = login_check.Active;
+        	AutostartEnabled = login_check.Active;
         }
 
         protected virtual void OnHideCheckClicked (object sender, EventArgs e)

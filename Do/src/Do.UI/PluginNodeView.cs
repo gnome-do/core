@@ -272,11 +272,12 @@ namespace Do.UI
 
 			addinId = (string) store.GetValue (iter, (int)Column.Id);
 			enabled = (bool) store.GetValue (iter, (int)Column.Enabled);
-
+			store.SetValue (iter, (int)Column.Enabled, !enabled);
+			
 			if (null != PluginToggled) {
 				PluginToggled (addinId, !enabled);
 			}
-			store.SetValue (iter, 0,
+			store.SetValue (iter, (int)Column.Enabled,
 					AddinManager.Registry.IsAddinEnabled (addinId));
 		}
 

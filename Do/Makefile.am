@@ -123,6 +123,7 @@ REFERENCES =  \
 	-pkg:gconf-sharp-2.0 \
 	-pkg:glade-sharp-2.0 \
 	-pkg:glib-sharp-2.0 \
+	-pkg:gnome-desktop-sharp-2.0 \
 	-pkg:gnome-keyring-sharp \
 	-pkg:gtk-sharp-2.0 \
 	-pkg:mono-addins \
