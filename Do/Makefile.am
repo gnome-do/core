@@ -99,6 +99,9 @@ FILES =  \
 	src/Do.Universe/SelectedTextItem.cs \
 	src/Do.Universe/ShelfActions.cs \
 	src/Do.Universe/ShelfItemSource.cs \
+	src/DoPreferences.cs \
+	src/GconfPreferencesBackend.cs \
+	src/IPreferencesBackend.cs \
 	src/Log.cs \
 	src/Preferences.cs \
 	src/Util.cs \
