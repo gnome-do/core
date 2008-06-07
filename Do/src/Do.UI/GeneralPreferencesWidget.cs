@@ -18,6 +18,8 @@
  */
 
 using System;
+using System.IO;
+using System.Reflection;
 
 using Gtk;
 using Gdk;
@@ -29,7 +31,9 @@ namespace Do.UI
 {
     public partial class GeneralPreferencesWidget : Bin, Addins.IConfigurable
     {
-    	static readonly string AutostartPath =
+    	const string AutostartAttribute = "X-GNOME-Autostart-enabled";
+    	
+    	static readonly string AutostartFile =
     		Paths.Combine(Paths.UserHome, ".config/autostart/gnome-do.desktop");
     		
 		new public string Name {
@@ -77,11 +81,13 @@ namespace Do.UI
         
         protected bool AutostartEnabled {
         	get {
+        		if (!File.Exists (AutostartFile)) return false;
         		try {
 					using (DesktopItem item = DesktopItem.NewFromFile (
-						AutostartPath, DesktopItemLoadFlags.OnlyIfExists)) {
+						AutostartFile, DesktopItemLoadFlags.OnlyIfExists)) {
 						return item != null &&
-							item.GetBoolean ("X-GNOME-Autostart-enabled");
+							(!item.AttrExists (AutostartAttribute) ||
+							item.GetBoolean (AutostartAttribute));
 					}
 				} catch (Exception e) {
 					Log.Error("Failed to get AutostartEnabled: {0}", e.Message);
@@ -90,10 +96,14 @@ namespace Do.UI
 			}
 			set {
 				try {
-					using (DesktopItem item = DesktopItem.NewFromFile (
-						AutostartPath, DesktopItemLoadFlags.OnlyIfExists)) {
-						if (item != null)
-							item.SetBoolean("X-GNOME-Autostart-enabled", value);
+					if (File.Exists (AutostartFile))
+						File.Delete (AutostartFile);
+					if (value) {
+						Stream s = Assembly.GetExecutingAssembly ()
+							.GetManifestResourceStream ("gnome-do.desktop");
+						using (StreamReader sr = new StreamReader (s))
+							File.AppendAllText (AutostartFile, sr.ReadToEnd ());
+						
 					}
 				} catch (Exception e) {
 					Log.Error("Failed to set AutostartEnabled: {0}", e.Message);
