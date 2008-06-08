@@ -47,24 +47,7 @@ namespace Do.UI
 		}
 		
 		void OnTrayIconPopup (object o, EventArgs args) {
-			Menu popupMenu = new Menu ();
-			
-			ImageMenuItem menuItemAbout = new ImageMenuItem ("_About");
-			menuItemAbout.Image = new Image (Stock.About, IconSize.Menu);
-			menuItemAbout.Activated += OnAboutClicked;
-			popupMenu.Add (menuItemAbout);
-			
-			ImageMenuItem menuItemPrefs = new ImageMenuItem ("_Preferences");
-			menuItemPrefs.Image = new Image (Stock.Preferences, IconSize.Menu);
-			menuItemPrefs.Activated += OnPreferencesClicked;
-			popupMenu.Add (menuItemPrefs);
-			
-			ImageMenuItem menuItemQuit = new ImageMenuItem ("_Quit");
-			menuItemQuit.Image = new Image (Stock.Quit, IconSize.Menu);
-			menuItemQuit.Activated += OnQuitClicked;
-			popupMenu.Add (menuItemQuit);
-			
-			popupMenu.ShowAll ();
+			Menu popupMenu = new MainMenu () as Menu;
 			popupMenu.Popup ();
 		}
 		
