@@ -96,10 +96,14 @@ FILES =  \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/InternalItemSource.cs \
 	src/Do.Universe/ItemSourceItemSource.cs \
+	src/Do.Universe/PreferencesItem.cs \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
 	src/Do.Universe/ShelfActions.cs \
 	src/Do.Universe/ShelfItemSource.cs \
+	src/DoPreferences.cs \
+	src/GconfPreferencesBackend.cs \
+	src/IPreferencesBackend.cs \
 	src/Log.cs \
 	src/Preferences.cs \
 	src/Util.cs \
@@ -109,6 +113,7 @@ DATA_FILES = \
 	gnome-do.desktop 
 
 RESOURCES = \
+	gnome-do.desktop \
 	gtk-gui/gui.stetic \
 	Resources/Do.addin.xml
 
@@ -119,16 +124,14 @@ EXTRAS = \
 REFERENCES =  \
 	../Do.Addins/bin/Debug/Do.Addins.dll \
 	../Do.DBus/bin/Debug/Do.DBus.dll \
-	Mono.Cairo \
 	Mono.Posix \
 	-pkg:gconf-sharp-2.0 \
-	-pkg:glade-sharp-2.0 \
 	-pkg:glib-sharp-2.0 \
-	-pkg:gnome-keyring-sharp \
 	-pkg:gtk-sharp-2.0 \
 	-pkg:mono-addins \
 	-pkg:mono-addins-gui \
 	-pkg:mono-addins-setup \
+	-pkg:notify-sharp \
 	System
 
 DLL_REFERENCES = 

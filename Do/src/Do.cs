@@ -31,7 +31,7 @@ namespace Do {
 		
 		static GConfXKeybinder keybinder;
 		
-		static Preferences preferences;
+		static DoPreferences preferences;
 		static Controller controller;
 		static UniverseManager universe_manager;
 
@@ -79,9 +79,9 @@ namespace Do {
 			}
 		}
 
-		public static Preferences Preferences {
+		public static DoPreferences Preferences {
 			get { return preferences ?? 
-					preferences = new Preferences (); }
+					preferences = new DoPreferences (); }
 		}
 
 		public static Controller Controller {

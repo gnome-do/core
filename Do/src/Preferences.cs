@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Collections.Generic;
 
 using Do;
+using Do.Addins;
 using Do.Universe;
 
 namespace Do {
@@ -41,80 +42,30 @@ namespace Do {
 	/// whether those preferences are provided by gconf, command line options,
 	/// etc.
 	/// </summary>
-	public class Preferences {
+	public class Preferences : IPreferences {
 	
 		public delegate void PreferenceChangedDelegate (object sender, PreferenceChangedEventArgs args);
 		public event PreferenceChangedDelegate PreferenceChanged;
 		
-		const string GConfRootPath = "/apps/gnome-do/preferences/";
-
-		GConf.Client client;
-
-		public Preferences ()
+		IPreferencesBackend backend;
+		
+		public Preferences (string name)
+			: this (new GconfPreferencesBackend (name))
 		{
-			client = new GConf.Client();
 		}
-
-		/// <value>
-		/// The keybinding used to summon Do. Stored as the gconf key
-		/// "key_binding".
-		/// </value>
-		public string SummonKeyBinding
+		
+		public Preferences (IPreferencesBackend backend)
 		{
+			this.backend = backend;
+		}
+		
+		public string this [string key] {
 			get {
-				return Get<string> ("SummonKeyBinding", "<Super>space");
+				return Get<string> (key, "");
 			}
 			set {
-				Set<string> ("SummonKeyBinding", value);
+				Set<string> (key, value);
 			}
-		}
-
-		public string Theme {
-			get {
-				return Get<string> ("Theme", "Classic");
-			}
-			set {
-				Set<string> ("Theme", value);
-			}
-		}
-
-		/// <value>
-		/// Whether Do should display its window when it first starts.
-		/// </value>
-		public bool QuietStart {
-			get {
-				return Get<bool> ("QuietStart", false);
-			}
-			set {
-				Set<bool> ("QuietStart", value);
-			}
-		}
-
-		public bool StartAtLogin {
-			get {
-				return Get<bool> ("StartAtLogin", false);
-			}
-			set {
-				Set<bool> ("StartAtLogin", value);
-			}
-		}
-
-		/// <summary>
-		/// If key contains an absolute path, return it; otherwise, return
-		/// an absolute path for the key by appending it to Do's root gconf path.
-		/// </summary>
-		/// <param name="key">
-		/// A <see cref="System.String"/> gconf key, containing either an
-		/// absolute path or a key relative to Do's root path (e.g "key_binding"
-		/// or "ui/color").
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.String"/> containing an absolute gconf path.
-		/// </returns>
-		private string MakeKeyPath (string key)
-		{
-			if (key.StartsWith ("/")) return key;
-			return GConfRootPath + key;
 		}
 		
 		/// <summary>
@@ -135,29 +86,20 @@ namespace Do {
 		/// </returns>
 		public bool Set<T> (string key, T val)
 		{
-			bool success;
-
-			success = true;
-			try {
-				client.Set (MakeKeyPath (key), val);
-				if (null != PreferenceChanged) {
-					PreferenceChanged (this,
-						new PreferenceChangedEventArgs (key, val));
-				}
-			} catch {
-				success = false;
+			bool success = backend.Set<T> (key, val);
+			if (success && null != PreferenceChanged) {
+				PreferenceChanged (this,
+					new PreferenceChangedEventArgs (key, val));
 			}
 			return success;
 		}
 
 		/// <summary>
-		/// Read a value stored in Gconf for a given key. Return the default if
+		/// Read a value stored for a given key. Return the default if
 		/// no value exists for that key.
 		/// </summary>
 		/// <param name="key">
-		/// A <see cref="System.String"/> gconf key (e.g. "key_binding") stored
-		/// under Do's root gconf path. You may also specify an absoulte gconf
-		/// path if you want to read any other key.
+		/// A <see cref="System.String"/> key (e.g. "key_binding").
 		/// </param>
 		/// <param name="def">
 		/// A defaukt <see cref="T"/> value to be returned if the key is not
@@ -175,12 +117,10 @@ namespace Do {
 		}
 
 		/// <summary>
-		/// Try to read a value from gconf for a given key.
+		/// Try to read a value for a given key.
 		/// </summary>
 		/// <param name="key">
-		/// A <see cref="System.String"/> gconf key (e.g. "key_binding") stored
-		/// under Do's root gconf path. You may also specify an absoulte gconf
-		/// path if you want to read any other key.
+		/// A <see cref="System.String"/> key (e.g. "key_binding").
 		/// </param>
 		/// <param name="val">
 		/// A <see cref="T"/> value if the key was found.
@@ -191,24 +131,14 @@ namespace Do {
 		/// </returns>
 		public bool TryGet<T> (string key, out T val)
 		{
-			bool success;
-
-			success = true;
-			try {
-				val = (T) client.Get (MakeKeyPath (key));
-			} catch {
-				success = false;
-			}
-			return success;
+			return backend.TryGet<T> (key, out val);
 		}
 		
 		/// <summary>
-		/// Try to read a value from gconf for a given key.
+		/// Try to read a value for a given key.
 		/// </summary>
 		/// <param name="key">
-		/// A <see cref="System.String"/> gconf key (e.g. "key_binding") stored
-		/// under Do's root gconf path. You may also specify an absoulte gconf
-		/// path if you want to read any other key.
+		/// A <see cref="System.String"/> key (e.g. "key_binding").
 		/// </param>
 		/// <param name="def">
 		/// A default <see cref="T"/> value to be returned if the key is not

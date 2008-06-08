@@ -1,4 +1,4 @@
-/* InternalItemSource.cs
+/* PreferencesItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,44 +19,26 @@
  */
 
 using System;
-using System.Collections.Generic;
 
 namespace Do.Universe {
-	
-	public class InternalItemSource : IItemSource {
-		
-		public Type[] SupportedItemTypes {
-			get { return null; }
-		}
+
+	public class PreferencesItem : IRunnableItem {		
 		
 		public string Name {
-			get { return "Internal GNOME Do Items"; }
+			get { return "GNOME Do Preferences"; }
 		}
 		
 		public string Description {
-			get { return "Special items relevant to the inner-workings of GNOME Do."; }
+			get { return "Adjust settings, manage plugins, etc."; }
 		}
 		
 		public string Icon {
-			get { return "gnome-system"; }
+			get { return "gtk-preferences"; }
 		}
 		
-		public void UpdateItems ()
+		public void Run ()
 		{
-		}
-		
-		public ICollection<IItem> Items {
-			get {
-				return new IItem[] {
-					new SelectedTextItem (),
-					new PreferencesItem (),
-				};
-			}
-		}
-		
-		public ICollection<IItem> ChildrenOfItem (IItem item)
-		{
-			return null;
+			Do.Controller.ShowPreferences ();
 		}
 	}
 }
