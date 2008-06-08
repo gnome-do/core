@@ -45,8 +45,12 @@ namespace Do.UI
 				else
 					c.Vanish ();
 			};
-			
 			trayIcon.PopupMenu += OnTrayIconPopup;
+			Preferences prefs = new Preferences ("core-preferences");
+			if (prefs.Get<bool> ("StatusIconVisible", true))
+				Show ();
+			else
+				Hide ();
 		}
 		
 		/// <summary>
