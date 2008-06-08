@@ -95,6 +95,7 @@ FILES =  \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/InternalItemSource.cs \
 	src/Do.Universe/ItemSourceItemSource.cs \
+	src/Do.Universe/PreferencesItem.cs \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
 	src/Do.Universe/ShelfActions.cs \
@@ -113,7 +114,6 @@ DATA_FILES = \
 RESOURCES = \
 	gnome-do.desktop \
 	gtk-gui/gui.stetic \
-	Resources/Shelf.addin.xml \
 	Resources/Do.addin.xml
 
 EXTRAS = \
