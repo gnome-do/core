@@ -4,6 +4,6 @@ Type=Application
 Exec=gnome-do
 Terminal=false
 Icon=gnome-run
-Comment=Do things quickly with objects in your GNOME desktop enviornment
+Comment=Do things as quickly as possible (but no quicker) with your files, bookmarks, applications, music, contacts, and more!
 Categories=Utility;
 OnlyShowIn=GNOME;

@@ -18,6 +18,8 @@
  */
 
 using System;
+using System.IO;
+using System.Reflection;
 
 using Gtk;
 
@@ -26,7 +28,12 @@ using Do;
 namespace Do.UI
 {
     public partial class GeneralPreferencesWidget : Bin, Addins.IConfigurable
-    {			
+    {
+    	const string AutostartAttribute = "X-GNOME-Autostart-enabled";
+    	
+    	static readonly string AutostartFile =
+    		Paths.Combine(Paths.UserHome, ".config/autostart/gnome-do.desktop");
+    		
 		new public string Name {
 			get { return "General"; }
 		}
@@ -62,17 +69,50 @@ namespace Do.UI
 
 			// Setup checkboxes
         	hide_check.Active = Do.Preferences.QuietStart;
-        	login_check.Active = Do.Preferences.StartAtLogin;
+        	login_check.Active = AutostartEnabled;
         }
         
         public Bin GetConfiguration ()
         {
         	return this;
         }
+        
+        /// <value>
+        /// This property sacrifies much efficiency to eschew the gnomedesktop
+        /// dependency and to work more reliably.
+        /// </value>
+        protected bool AutostartEnabled {
+        	get {
+        		try {
+        			return File.Exists (AutostartFile) &&
+        				!File.ReadAllText (AutostartFile)
+        					.Contains (AutostartAttribute + "=false");
+				} catch (Exception e) {
+					Log.Error ("Failed to get autostart: {0}", e.Message);
+				}
+				return false;
+			}
+			set {
+				try {
+					if (File.Exists (AutostartFile))
+						File.Delete (AutostartFile);
+					if (value) {
+						Stream s = Assembly.GetExecutingAssembly ()
+							.GetManifestResourceStream ("gnome-do.desktop");
+						using (StreamReader sr = new StreamReader (s))
+							File.AppendAllText (AutostartFile, sr.ReadToEnd ());
+						
+					}
+				} catch (Exception e) {
+					Log.Error ("Failed to set autostart: {0}", e.Message);
+				}
+			}
+   
+        }
 
         protected virtual void OnLoginCheckClicked (object sender, EventArgs e)
         {
-        	Do.Preferences.StartAtLogin = login_check.Active;
+        	AutostartEnabled = login_check.Active;
         }
 
         protected virtual void OnHideCheckClicked (object sender, EventArgs e)

@@ -1,4 +1,4 @@
-/* InternalItemSource.cs
+/* DoPreferences.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,44 +19,34 @@
  */
 
 using System;
-using System.Collections.Generic;
 
-namespace Do.Universe {
+namespace Do
+{
+	public class DoPreferences : Preferences {
 	
-	public class InternalItemSource : IItemSource {
-		
-		public Type[] SupportedItemTypes {
-			get { return null; }
-		}
-		
-		public string Name {
-			get { return "Internal GNOME Do Items"; }
-		}
-		
-		public string Description {
-			get { return "Special items relevant to the inner-workings of GNOME Do."; }
-		}
-		
-		public string Icon {
-			get { return "gnome-system"; }
-		}
-		
-		public void UpdateItems ()
+		public DoPreferences ()
+			: base ("core-preferences")
 		{
 		}
 		
-		public ICollection<IItem> Items {
-			get {
-				return new IItem[] {
-					new SelectedTextItem (),
-					new PreferencesItem (),
-				};
-			}
+		public string SummonKeyBinding {
+			get { return Get<string> ("SummonKeyBinding", "<Super>space"); }
+			set { Set<string> ("SummonKeyBinding", value); }
 		}
-		
-		public ICollection<IItem> ChildrenOfItem (IItem item)
-		{
-			return null;
+
+		public string Theme {
+			get { return Get<string> ("Theme", "Classic"); }
+			set { Set<string> ("Theme", value); }
+		}
+
+		public bool QuietStart {
+			get { return Get<bool> ("QuietStart", false); }
+			set { Set<bool> ("QuietStart", value); }
+		}
+
+		public bool StartAtLogin {
+			get { return Get<bool> ("StartAtLogin", false); }
+			set { Set<bool> ("StartAtLogin", value); }
 		}
 	}
 }
