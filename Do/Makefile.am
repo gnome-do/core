@@ -113,6 +113,7 @@ DATA_FILES = \
 RESOURCES = \
 	gnome-do.desktop \
 	gtk-gui/gui.stetic \
+	Resources/Shelf.addin.xml \
 	Resources/Do.addin.xml
 
 EXTRAS = \
