@@ -226,6 +226,22 @@ namespace Do.Core {
             }
             return updates.Count > 0;
         }
+        /// <summary>
+        /// Checks if there are any updates available for download/installatition
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.Boolean"/> representing whether or not there
+        /// are any updates available for install
+        /// </returns>
+        public static bool UpdatesAvailable ()
+        {
+        	SetupService setup;
+			setup = new SetupService (AddinManager.Registry);
+			setup.Repositories.UpdateAllRepositories (
+				new ConsoleProgressStatus (true));
+			
+            return setup.Repositories.GetAvailableUpdates ().Length > 0;
+        }
 
         /// <summary>
         /// Installs plugins that are located in the <see

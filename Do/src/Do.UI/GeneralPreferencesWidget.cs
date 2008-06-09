@@ -70,6 +70,7 @@ namespace Do.UI
 			// Setup checkboxes
         	hide_check.Active = Do.Preferences.QuietStart;
         	login_check.Active = AutostartEnabled;
+        	notification_check.Active = Do.Preferences.StatusIconVisible;
         }
         
         public Bin GetConfiguration ()
@@ -123,6 +124,16 @@ namespace Do.UI
         protected virtual void OnThemeComboChanged (object sender, EventArgs e)
         {
         	Do.Preferences.Theme = theme_combo.ActiveText;
+        }
+
+        protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)
+        {	
+        	NotificationIcon trayIcon = Do.NotificationIcon;
+        	Do.Preferences.StatusIconVisible = notification_check.Active;
+        	if (notification_check.Active)
+        		trayIcon.Show ();
+        	else
+        		trayIcon.Hide ();
         }
     }
 }

@@ -18,6 +18,7 @@
 //
 
 using System;
+using System.Threading;
 
 using Mono.Unix;
 
@@ -34,6 +35,7 @@ namespace Do {
 		static DoPreferences preferences;
 		static Controller controller;
 		static UniverseManager universe_manager;
+		static NotificationIcon notification_icon;
 
 		public static void Main (string[] args)
 		{
@@ -59,12 +61,16 @@ namespace Do {
 			
 			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
+			
+			notification_icon = new NotificationIcon ();
 
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
 				
 			if (Array.IndexOf (args, "--update") != -1)
 				PluginManager.InstallAvailableUpdates (false);
+			
+			CheckForUpdates ();
 			
 			Gtk.Application.Run ();
 		}
@@ -98,6 +104,13 @@ namespace Do {
 			}
 		}
 		
+		public static NotificationIcon NotificationIcon {
+			get {
+				return notification_icon ??
+					notification_icon = new NotificationIcon ();
+			}
+		}
+		
 		static void SetupKeybindings ()
 		{
 			keybinder.Bind ("/apps/gnome-do/preferences/SummonKeyBinding",
@@ -107,6 +120,21 @@ namespace Do {
 		static void OnActivate (object sender, EventArgs args)
 		{
 			controller.Summon ();
+		}
+		
+		private static void CheckForUpdates ()
+		{
+			//Sets a timer to check for updates after 5 minutes
+			// and again every 30 minutes
+			Timer timer = new Timer (CheckForUpdatesCb, null,300000,18000000);
+		}
+		
+		private static void CheckForUpdatesCb (object state)
+		{
+			new Thread ((ThreadStart) delegate {
+				if (PluginManager.UpdatesAvailable ())
+					NotificationIcon.NotifyUpdatesAvailable ();
+			}).Start ();
 		}
 	}
 }

@@ -48,5 +48,10 @@ namespace Do
 			get { return Get<bool> ("StartAtLogin", false); }
 			set { Set<bool> ("StartAtLogin", value); }
 		}
+		
+		public bool StatusIconVisible {
+			get { return Get<bool> ("StatusIconVisible", true); }
+			set { Set<bool> ("StatusIconVisible", value); }
+		}
 	}
 }

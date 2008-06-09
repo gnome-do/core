@@ -92,7 +92,7 @@ namespace Do.UI
 		}
 
 		private void OnPluginToggled (string id, bool enabled)
-		{
+		{	
 			// If the addin isn't found, install it.
 			if (null == AddinManager.Registry.GetAddin (id)) {
 				IAddinInstaller installer;

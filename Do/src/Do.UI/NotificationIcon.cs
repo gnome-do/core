@@ -1,4 +1,4 @@
-/* TrayNotificationArea.cs
+/* NotificationIcon.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -30,27 +30,27 @@ namespace Do.UI
 	/// Provides a notification area icon for GNOME Do allowing easy
 	/// access to menus, and a way for GNOME Do to alert users of status changes.
 	/// </summary>
-	public class TrayNotificationArea
+	public class NotificationIcon
 	{
 		private StatusIcon trayIcon;
+		private bool updates_available;
 		
-		public TrayNotificationArea()
+		public NotificationIcon()
 		{
 			trayIcon = new StatusIcon (
-				IconProvider.PixbufFromIconName ("gnome-run", 32));
-			trayIcon.Activate += delegate {
-				Controller c = Do.Controller;
-				if (!c.IsSummoned)
-					c.Summon ();
-				else
-					c.Vanish ();
-			};
-			trayIcon.PopupMenu += OnTrayIconPopup;
-			Preferences prefs = new Preferences ("core-preferences");
-			if (prefs.Get<bool> ("StatusIconVisible", true))
+				IconProvider.PixbufFromIconName ("gnome-run", (int)IconSize.Menu));
+			trayIcon.Tooltip = "Summon GNOME Do with " + 
+				Do.Preferences.SummonKeyBinding;
+	
+			trayIcon.Activate += new EventHandler (OnActivateSummonDo);			
+			trayIcon.PopupMenu += new PopupMenuHandler (OnTrayIconPopup);
+			
+			if (Do.Preferences.StatusIconVisible)
 				Show ();
 			else
 				Hide ();
+				
+			updates_available = false;
 		}
 		
 		/// <summary>
@@ -70,51 +70,46 @@ namespace Do.UI
 		}
 		
 		/// <summary>
-		/// Alerts the user of something by making the icon blink.
-		/// Passing 'true' starts the blinking, and 'false' will stop blinking.
+		/// Sets some properties when new plugin updates are available
 		/// </summary>
-		/// <param name="notify">
-		/// A <see cref="System.Boolean"/>
-		/// </param>
-		public void IconNotify (bool notify)
+		public void NotifyUpdatesAvailable ()
 		{
-			trayIcon.Blinking = notify;
+			updates_available = true;
+			Show ();
+			trayIcon.FromPixbuf = IconProvider.PixbufFromIconName 
+				("dialog-information", (int)IconSize.Menu);
+			Notifications.SendNotification ("Plugin updates are available for download",
+				"Updates Available", IconProvider.PixbufFromIconName 
+				("software-update-available", (int)IconSize.Dialog));
 		}
 		
-		/// <summary>
-		/// Sends a message via libnotify
-		/// </summary>
-		/// <param name="title">
-		/// A <see cref="System.String"/>
-		/// </param>
-		/// <param name="message">
-		/// A <see cref="System.String"/>
-		/// </param>
-		/// <param name="icon">
-		/// A <see cref="Gdk.Pixbuf"/>
-		/// </param>
-		public void SendNotification (string title, string message, Gdk.Pixbuf icon)
+		public void GetLocationOnScreen (out Gdk.Screen screen, out int x, out int y)
 		{
-			//Get the x and y coordinates of the icon
-			Gdk.Screen screen;
+			Gtk.Orientation orientation;
 			Gdk.Rectangle area;
-			GetGeometry (out screen, out area);
-			
-			Notification n = new Notification (title, message, icon);
-			n.Timeout = 8000; //show for 8 seconds
-			n.SetGeometryHints (screen, area.Left, area.Bottom);
-			n.Show ();
+			trayIcon.GetGeometry (out screen, out area, out orientation);
+			x = area.Left;
+			y = area.Bottom;
+		}
+		
+		protected void OnActivateSummonDo (object sender, EventArgs args)
+		{
+			Controller c = Do.Controller;
+			if (!c.IsSummoned)
+				c.Summon ();
+			else
+				c.Vanish ();
 		}
 				
 		protected void OnTrayIconPopup (object o, EventArgs args) 
 		{
 			//Get the x and y coordinates of the icon
 			Gdk.Screen screen;
-			Gdk.Rectangle area;
-			GetGeometry (out screen, out area);
+			int x, y;
+			GetLocationOnScreen (out screen, out x, out y);
 			
 			MainMenu menu = MainMenu.Instance;
-			menu.PopupAtPosition (area.Left,area.Bottom + 1);
+			menu.PopupAtPosition (x,y);
 		}
 		
 		protected void OnAboutClicked (object o, EventArgs args)
@@ -131,12 +126,6 @@ namespace Do.UI
 		{
 			Do.Controller.Vanish ();
 			Application.Quit ();
-		}
-		
-		private void GetGeometry (out Gdk.Screen screen, out Gdk.Rectangle area)
-		{
-			Gtk.Orientation orientation;
-			trayIcon.GetGeometry (out screen, out area, out orientation);
 		}
 	}
 }

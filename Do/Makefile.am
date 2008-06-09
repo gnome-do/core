@@ -84,11 +84,11 @@ FILES =  \
 	src/Do.UI/KeybindingTreeView.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ManagePluginsPreferencesWidget.cs \
+	src/Do.UI/NotificationIcon.cs \
 	src/Do.UI/PluginConfigurationWindow.cs \
 	src/Do.UI/PluginNodeView.cs \
 	src/Do.UI/PluginSelectionEventArgs.cs \
 	src/Do.UI/PreferencesWindow.cs \
-	src/Do.UI/TrayNotificationArea.cs \
 	src/Do.Universe/AliasAction.cs \
 	src/Do.Universe/AliasItemSource.cs \
 	src/Do.Universe/DeleteAliasAction.cs \
@@ -105,6 +105,7 @@ FILES =  \
 	src/GconfPreferencesBackend.cs \
 	src/IPreferencesBackend.cs \
 	src/Log.cs \
+	src/Notifications.cs \
 	src/Preferences.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 

@@ -40,7 +40,6 @@ namespace Do.Core {
 		protected Gtk.AboutDialog about_window;
 		protected PreferencesWindow prefs_window;
 		protected SearchContext[] context;
-		protected TrayNotificationArea status_icon;
 		
 		const int SearchDelay = 250;
 		
@@ -55,7 +54,6 @@ namespace Do.Core {
 		public Controller ()
 		{
 			about_window = null;
-			status_icon = new TrayNotificationArea ();
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			searchTimeout = new uint[3];

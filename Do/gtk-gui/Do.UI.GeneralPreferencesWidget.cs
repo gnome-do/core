@@ -21,11 +21,13 @@ namespace Do.UI {
         
         private Gtk.Alignment alignment2;
         
-        private Gtk.VBox vbox2;
+        private Gtk.VBox vbox4;
         
         private Gtk.CheckButton login_check;
         
         private Gtk.CheckButton hide_check;
+        
+        private Gtk.CheckButton notification_check;
         
         private Gtk.Label label2;
         
@@ -38,6 +40,8 @@ namespace Do.UI {
         private Gtk.Label label3;
         
         private Gtk.ComboBox theme_combo;
+        
+        private Gtk.VBox vbox2;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
@@ -69,39 +73,51 @@ namespace Do.UI {
             this.alignment2.LeftPadding = ((uint)(20));
             this.alignment2.BottomPadding = ((uint)(10));
             // Container child alignment2.Gtk.Container+ContainerChild
-            this.vbox2 = new Gtk.VBox();
-            this.vbox2.Name = "vbox2";
-            this.vbox2.Spacing = 6;
-            // Container child vbox2.Gtk.Box+BoxChild
+            this.vbox4 = new Gtk.VBox();
+            this.vbox4.Name = "vbox4";
+            this.vbox4.Spacing = 6;
+            // Container child vbox4.Gtk.Box+BoxChild
             this.login_check = new Gtk.CheckButton();
             this.login_check.CanFocus = true;
             this.login_check.Name = "login_check";
             this.login_check.Label = Mono.Unix.Catalog.GetString("Start GNOME Do at login.");
             this.login_check.DrawIndicator = true;
             this.login_check.UseUnderline = true;
-            this.vbox2.Add(this.login_check);
-            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.vbox2[this.login_check]));
+            this.vbox4.Add(this.login_check);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.vbox4[this.login_check]));
             w2.Position = 0;
             w2.Expand = false;
             w2.Fill = false;
-            // Container child vbox2.Gtk.Box+BoxChild
+            // Container child vbox4.Gtk.Box+BoxChild
             this.hide_check = new Gtk.CheckButton();
             this.hide_check.CanFocus = true;
             this.hide_check.Name = "hide_check";
             this.hide_check.Label = Mono.Unix.Catalog.GetString("Hide window on first launch (quiet mode).");
             this.hide_check.DrawIndicator = true;
             this.hide_check.UseUnderline = true;
-            this.vbox2.Add(this.hide_check);
-            Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(this.vbox2[this.hide_check]));
+            this.vbox4.Add(this.hide_check);
+            Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(this.vbox4[this.hide_check]));
             w3.Position = 1;
             w3.Expand = false;
             w3.Fill = false;
-            this.alignment2.Add(this.vbox2);
+            // Container child vbox4.Gtk.Box+BoxChild
+            this.notification_check = new Gtk.CheckButton();
+            this.notification_check.CanFocus = true;
+            this.notification_check.Name = "notification_check";
+            this.notification_check.Label = Mono.Unix.Catalog.GetString("Show notifcation icon");
+            this.notification_check.DrawIndicator = true;
+            this.notification_check.UseUnderline = true;
+            this.vbox4.Add(this.notification_check);
+            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox4[this.notification_check]));
+            w4.Position = 2;
+            w4.Expand = false;
+            w4.Fill = false;
+            this.alignment2.Add(this.vbox4);
             this.vbox1.Add(this.alignment2);
-            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vbox1[this.alignment2]));
-            w5.Position = 1;
-            w5.Expand = false;
-            w5.Fill = false;
+            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox1[this.alignment2]));
+            w6.Position = 1;
+            w6.Expand = false;
+            w6.Fill = false;
             // Container child vbox1.Gtk.Box+BoxChild
             this.label2 = new Gtk.Label();
             this.label2.Name = "label2";
@@ -109,10 +125,10 @@ namespace Do.UI {
             this.label2.LabelProp = Mono.Unix.Catalog.GetString("<b>Appearance</b>");
             this.label2.UseMarkup = true;
             this.vbox1.Add(this.label2);
-            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox1[this.label2]));
-            w6.Position = 2;
-            w6.Expand = false;
-            w6.Fill = false;
+            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.vbox1[this.label2]));
+            w7.Position = 2;
+            w7.Expand = false;
+            w7.Fill = false;
             // Container child vbox1.Gtk.Box+BoxChild
             this.alignment3 = new Gtk.Alignment(0.5F, 0.5F, 1F, 1F);
             this.alignment3.Name = "alignment3";
@@ -130,10 +146,10 @@ namespace Do.UI {
             this.label3.Name = "label3";
             this.label3.LabelProp = Mono.Unix.Catalog.GetString("Theme:");
             this.hbox1.Add(this.label3);
-            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.hbox1[this.label3]));
-            w7.Position = 0;
-            w7.Expand = false;
-            w7.Fill = false;
+            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(this.hbox1[this.label3]));
+            w8.Position = 0;
+            w8.Expand = false;
+            w8.Fill = false;
             // Container child hbox1.Gtk.Box+BoxChild
             this.theme_combo = Gtk.ComboBox.NewText();
             this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Classic"));
@@ -143,19 +159,26 @@ namespace Do.UI {
             this.theme_combo.Name = "theme_combo";
             this.theme_combo.Active = 0;
             this.hbox1.Add(this.theme_combo);
-            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(this.hbox1[this.theme_combo]));
-            w8.Position = 1;
-            w8.Expand = false;
-            w8.Fill = false;
-            this.vbox3.Add(this.hbox1);
-            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(this.vbox3[this.hbox1]));
-            w9.Position = 0;
+            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(this.hbox1[this.theme_combo]));
+            w9.Position = 1;
             w9.Expand = false;
             w9.Fill = false;
+            this.vbox3.Add(this.hbox1);
+            Gtk.Box.BoxChild w10 = ((Gtk.Box.BoxChild)(this.vbox3[this.hbox1]));
+            w10.Position = 0;
+            w10.Expand = false;
+            w10.Fill = false;
+            // Container child vbox3.Gtk.Box+BoxChild
+            this.vbox2 = new Gtk.VBox();
+            this.vbox2.Name = "vbox2";
+            this.vbox2.Spacing = 6;
+            this.vbox3.Add(this.vbox2);
+            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox2]));
+            w11.Position = 1;
             this.alignment3.Add(this.vbox3);
             this.vbox1.Add(this.alignment3);
-            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.vbox1[this.alignment3]));
-            w11.Position = 3;
+            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.vbox1[this.alignment3]));
+            w13.Position = 3;
             this.alignment4.Add(this.vbox1);
             this.Add(this.alignment4);
             if ((this.Child != null)) {
@@ -164,6 +187,7 @@ namespace Do.UI {
             this.Show();
             this.login_check.Clicked += new System.EventHandler(this.OnLoginCheckClicked);
             this.hide_check.Clicked += new System.EventHandler(this.OnHideCheckClicked);
+            this.notification_check.Clicked += new System.EventHandler(this.OnNotificationCheckClicked);
             this.theme_combo.Changed += new System.EventHandler(this.OnThemeComboChanged);
         }
     }
