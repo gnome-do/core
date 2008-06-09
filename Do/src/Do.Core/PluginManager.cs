@@ -226,6 +226,7 @@ namespace Do.Core {
             }
             return updates.Count > 0;
         }
+        
         /// <summary>
         /// Checks if there are any updates available for download/installatition
         /// </summary>
