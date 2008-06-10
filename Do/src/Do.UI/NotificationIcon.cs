@@ -21,6 +21,7 @@
 
 using System;
 using Gtk;
+using Gdk;
 using Do.Core;
 using Notifications;
 
@@ -34,11 +35,15 @@ namespace Do.UI
 	{
 		private StatusIcon trayIcon;
 		private bool updates_available;
-		
+		private Pixbuf normal_icon = IconProvider.PixbufFromIconName 
+			("gnome-run", (int)IconSize.Menu);
+		private Pixbuf alert_icon = IconProvider.PixbufFromIconName 
+				("dialog-information", (int)IconSize.Menu);
+				
 		public NotificationIcon()
 		{
-			trayIcon = new StatusIcon (
-				IconProvider.PixbufFromIconName ("gnome-run", (int)IconSize.Menu));
+			trayIcon = new StatusIcon ();
+			trayIcon.FromPixbuf = normal_icon;
 			trayIcon.Tooltip = "Summon GNOME Do with " + 
 				Do.Preferences.SummonKeyBinding;
 	
@@ -49,7 +54,6 @@ namespace Do.UI
 				Show ();
 			else
 				Hide ();
-				
 			updates_available = false;
 		}
 		
@@ -66,7 +70,8 @@ namespace Do.UI
 		/// </summary>
 		public void Hide ()
 		{
-			trayIcon.Visible = false;
+			if (!updates_available)
+				trayIcon.Visible = false;
 		}
 		
 		/// <summary>
@@ -76,13 +81,27 @@ namespace Do.UI
 		{
 			updates_available = true;
 			Show ();
-			trayIcon.FromPixbuf = IconProvider.PixbufFromIconName 
-				("dialog-information", (int)IconSize.Menu);
-			Notifications.SendNotification ("Plugin updates are available for download",
-				"Updates Available", IconProvider.PixbufFromIconName 
-				("software-update-available", (int)IconSize.Dialog));
+			trayIcon.Activate -= OnActivateSummonDo;
+			trayIcon.Activate += new EventHandler (OnActivateStartUpdates);
+			trayIcon.FromPixbuf = alert_icon;
+			Notifications.SendNotification ("Plugin updates are available for download, "
+				+ "Click here to update.", "Updates Available", 
+				IconProvider.PixbufFromIconName ("software-update-available", (int)IconSize.Dialog));
 		}
 		
+		/// <summary>
+		/// Returns the location of the notification icon on the screen.
+		/// </summary>
+		/// <param name="screen">
+		/// A <see cref="Gdk.Screen"/> to be set to the screen that the icon
+		/// is currently on
+		/// </param>
+		/// <param name="x">
+		/// A <see cref="System.Int32"/> that gets set to the X location of the icon
+		/// </param>
+		/// <param name="y">
+		/// A <see cref="System.Int32"/> that gets set to the Y location of the icon
+		/// </param>
 		public void GetLocationOnScreen (out Gdk.Screen screen, out int x, out int y)
 		{
 			Gtk.Orientation orientation;
@@ -99,6 +118,16 @@ namespace Do.UI
 				c.Summon ();
 			else
 				c.Vanish ();
+		}
+		
+		protected void OnActivateStartUpdates (object sender, EventArgs args)
+		{
+			Console.Error.WriteLine ("updater launching...");
+			PluginManager.InstallAvailableUpdates (true);
+			trayIcon.Activate -= new EventHandler (OnActivateStartUpdates);
+			updates_available = false;
+			if (!Do.Preferences.StatusIconVisible)
+				Hide ();
 		}
 				
 		protected void OnTrayIconPopup (object o, EventArgs args) 
