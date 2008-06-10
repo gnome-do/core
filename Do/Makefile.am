@@ -115,6 +115,7 @@ DATA_FILES = \
 
 RESOURCES = \
 	gtk-gui/gui.stetic \
+	gnome-do.desktop \
 	Resources/Do.addin.xml
 
 EXTRAS = \
