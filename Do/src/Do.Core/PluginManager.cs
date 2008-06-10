@@ -237,11 +237,22 @@ namespace Do.Core {
         public static bool UpdatesAvailable ()
         {
         	SetupService setup;
-			setup = new SetupService (AddinManager.Registry);
-			setup.Repositories.UpdateAllRepositories (
-				new ConsoleProgressStatus (true));
-			
-            return setup.Repositories.GetAvailableUpdates ().Length > 0;
+            setup = new SetupService (AddinManager.Registry);
+
+            setup.Repositories.UpdateAllRepositories (
+                new ConsoleProgressStatus (true));
+            foreach (AddinRepositoryEntry rep in
+                setup.Repositories.GetAvailableAddins ()) {
+                Addin installed;
+
+                installed = AddinManager.Registry.GetAddin (Addin.GetIdName (
+                    rep.Addin.Id));
+                if (null == installed) continue;
+                if (Addin.CompareVersions (installed.Version, rep.Addin.Version) > 0) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
