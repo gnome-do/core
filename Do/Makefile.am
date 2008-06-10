@@ -1,5 +1,7 @@
-
 EXTRA_DIST = 
+include $(top_srcdir)/Makefile.include
+
+CLEANFILES += gnome-do.desktop
 
 # Warning: This is an automatically generated file, do not edit!
 
@@ -109,10 +111,9 @@ FILES =  \
 	src/XKeybinder.cs 
 
 DATA_FILES = \
-	gnome-do.desktop 
+	gnome-do.desktop.in 
 
 RESOURCES = \
-	gnome-do.desktop \
 	gtk-gui/gui.stetic \
 	Resources/Do.addin.xml
 
@@ -139,6 +140,8 @@ GNOME_DO_DESKTOP = $(BUILD_DIR)/gnome-do.desktop
 DO_DBUS_DLL = $(BUILD_DIR)/Do.DBus.dll
 GNOME_DO = $(BUILD_DIR)/gnome-do
 DO_EXE_CONFIG = $(BUILD_DIR)/Do.exe.config
+
+@INTLTOOL_DESKTOP_RULE@
 
 $(DO_ADDINS_DLL): $(DO_ADDINS_DLL_SOURCE)
 	mkdir -p $(BUILD_DIR)
@@ -180,4 +183,3 @@ $(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafil
 	mkdir -p $(dir $(ASSEMBLY))
 	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)
 
-include $(top_srcdir)/Makefile.include
