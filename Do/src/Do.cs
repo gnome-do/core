@@ -100,7 +100,7 @@ namespace Do {
 		
 		static void SetupKeybindings ()
 		{
-			keybinder.Bind ("/apps/gnome-do/preferences/SummonKeyBinding",
+			keybinder.Bind ("/apps/gnome-do/preferences/core-preferences/SummonKeyBinding",
 					Preferences.SummonKeyBinding, OnActivate);
 		}
 		
