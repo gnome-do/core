@@ -544,14 +544,14 @@ Mini</property>
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Window" id="Do.UI.PluginConfigurationWindow" design-size="400 404">
+  <widget class="Gtk.Window" id="Do.UI.PluginConfigurationWindow" design-size="418 524">
     <property name="MemberName" />
-    <property name="WidthRequest">250</property>
-    <property name="HeightRequest">380</property>
     <property name="Title" translatable="yes">PluginConfigurationWindow</property>
     <property name="Icon">stock:gtk-preferences Menu</property>
     <property name="WindowPosition">Center</property>
     <property name="BorderWidth">6</property>
+    <property name="DefaultWidth">400</property>
+    <property name="DefaultHeight">450</property>
     <child>
       <widget class="Gtk.VBox" id="vbox2">
         <property name="MemberName" />

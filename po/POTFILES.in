@@ -1,13 +1,19 @@
 [encoding: UTF-8]
+Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs
 Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs
 Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs
 Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs
 Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs
-Do.Addins/src/Do.Universe/DefineWordAction.cs
 Do.Addins/src/Do.Universe/MailtoAction.cs
 Do.Addins/src/Do.Universe/OpenAction.cs
-Do.Addins/src/Do.Universe/OpenTerminalHereAction.cs
 Do.Addins/src/Do.Universe/OpenURLAction.cs
 Do.Addins/src/Do.Universe/RunAction.cs
-Do.Addins/src/Do.Universe/RunInTerminalAction.cs
+Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs
+Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs
+Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs
+Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs
+Do/gtk-gui/Do.UI.PreferencesWindow.cs
+Do/src/Do.Core/Controller.cs
 Do/src/Do.UI/MainMenu.cs
+# files added by intltool-prepare
+Do/gnome-do.desktop.in

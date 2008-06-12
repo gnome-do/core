@@ -32,13 +32,13 @@ namespace Do.UI {
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.PluginConfigurationWindow
-            this.WidthRequest = 250;
-            this.HeightRequest = 380;
             this.Name = "Do.UI.PluginConfigurationWindow";
             this.Title = Mono.Unix.Catalog.GetString("PluginConfigurationWindow");
             this.Icon = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Menu, 16);
             this.WindowPosition = ((Gtk.WindowPosition)(1));
             this.BorderWidth = ((uint)(6));
+            this.DefaultWidth = 400;
+            this.DefaultHeight = 450;
             // Container child Do.UI.PluginConfigurationWindow.Gtk.Container+ContainerChild
             this.vbox2 = new Gtk.VBox();
             this.vbox2.Name = "vbox2";
@@ -112,8 +112,6 @@ namespace Do.UI {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 400;
-            this.DefaultHeight = 404;
             this.Show();
             this.btn_close.Clicked += new System.EventHandler(this.OnBtnCloseClicked);
         }
