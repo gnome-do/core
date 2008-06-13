@@ -60,12 +60,10 @@ namespace Do.Core {
             	if (null == repository_urls) {
             		repository_urls = new Dictionary<string,string> ();
          
-            		/*repository_urls ["Official Plugins"] = 
+            		repository_urls ["Official Plugins"] = 
             			"http://do.davebsd.com/repo/" + Version +"/official";
             		repository_urls ["Community Plugins"] = 
-            			"http://do.davebsd.com/repo/" + Version +"/community"; */
-            		repository_urls ["Local Test"] = "/home/alex/.local/share/" 
-            			+ "gnome-do/repo";
+            			"http://do.davebsd.com/repo/" + Version +"/community";
             	}
             	return repository_urls;;
             }
