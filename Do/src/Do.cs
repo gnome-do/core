@@ -126,14 +126,17 @@ namespace Do {
 		{
 			//Sets a timer to check for updates after 5 minutes
 			// and again every 30 minutes
-			Timer timer = new Timer (CheckForUpdatesCb, null, 30000, 18000000);
+			Timer timer = new Timer (CheckForUpdatesCb, null, 600000, 86400000);
 		}
 		
 		private static void CheckForUpdatesCb (object state)
 		{
 			new Thread ((ThreadStart) delegate {
-				if (PluginManager.UpdatesAvailable ())
-					NotificationIcon.NotifyUpdatesAvailable ();
+				bool updatesAvailable = PluginManager.UpdatesAvailable ();
+				Gtk.Application.Invoke (delegate {
+					if (updatesAvailable)
+						NotificationIcon.NotifyUpdatesAvailable ();
+				});
 			}).Start ();
 		}
 	}

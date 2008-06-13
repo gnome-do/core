@@ -122,10 +122,11 @@ namespace Do.UI
 		
 		protected void OnActivateStartUpdates (object sender, EventArgs args)
 		{
-			Console.Error.WriteLine ("updater launching...");
 			PluginManager.InstallAvailableUpdates (true);
 			trayIcon.Activate -= new EventHandler (OnActivateStartUpdates);
 			updates_available = false;
+			Notifications.SendNotification ("Please restart Do after installing" 
+				+ " updated plugins.");
 			if (!Do.Preferences.StatusIconVisible)
 				Hide ();
 		}
