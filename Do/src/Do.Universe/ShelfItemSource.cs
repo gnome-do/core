@@ -232,16 +232,5 @@ namespace Do.Universe
 			shelf[defaultName].RemoveItem (item);
 			Serialize ();
 		}
-		
-		static public ShelfItem NewShelf (string name)
-		{
-			ShelfItem newShelf = new ShelfItem (name);
-			shelf.Add (name, newShelf);
-			Do.UniverseManager.AddItems (new IItem[] { newShelf });
-
-			Serialize ();
-			
-			return newShelf;
-		}
 	}
 }

@@ -21,7 +21,6 @@
 	<Extension path="/Do/Action">
 		<Action type="Do.Universe.AliasAction" />
 		<Action type="Do.Universe.DeleteAliasAction" />
-		<Action type="Do.Universe.NewShelfAction" />
 		<Action type="Do.Universe.ShelfAddAction" />
 		<Action type="Do.Universe.ShelfExploreAction" />
 		<Action type="Do.Universe.ShelfRemoveAction" />
