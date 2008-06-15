@@ -124,9 +124,9 @@ namespace Do {
 		
 		private static void CheckForUpdates ()
 		{
-			//Sets a timer to check for updates after 5 minutes
-			// and again every 30 minutes
-			Timer timer = new Timer (CheckForUpdatesCb, null, 600000, 86400000);
+			// Sets a timer to check for updates after 5 minutes
+			// and again every 2 hours
+			Timer timer = new Timer (CheckForUpdatesCb, null, 300000, 72000000);
 		}
 		
 		private static void CheckForUpdatesCb (object state)

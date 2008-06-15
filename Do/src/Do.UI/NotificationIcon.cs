@@ -18,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 using System;
 using Gtk;
 using Gdk;
@@ -46,7 +45,6 @@ namespace Do.UI
 			trayIcon.FromPixbuf = normal_icon;
 			trayIcon.Tooltip = "Summon GNOME Do with " + 
 				Do.Preferences.SummonKeyBinding;
-	
 			trayIcon.Activate += new EventHandler (OnActivateSummonDo);			
 			trayIcon.PopupMenu += new PopupMenuHandler (OnTrayIconPopup);
 			
@@ -54,20 +52,15 @@ namespace Do.UI
 				Show ();
 			else
 				Hide ();
+			
 			updates_available = false;
 		}
 		
-		/// <summary>
-		/// Makes the icon visible in the notification area
-		/// </summary>
 		public void Show ()
 		{
 			trayIcon.Visible = true;
 		}
 		
-		/// <summary>
-		/// Makes the icon invisible in the notifcation area
-		/// </summary>
 		public void Hide ()
 		{
 			if (!updates_available)
@@ -79,36 +72,63 @@ namespace Do.UI
 		/// </summary>
 		public void NotifyUpdatesAvailable ()
 		{
-			updates_available = true;
 			Show ();
 			trayIcon.Activate -= OnActivateSummonDo;
 			trayIcon.Activate += new EventHandler (OnActivateStartUpdates);
 			trayIcon.FromPixbuf = alert_icon;
-			Notifications.SendNotification ("Plugin updates are available for download, "
-				+ "Click here to update.", "Updates Available", 
-				IconProvider.PixbufFromIconName ("software-update-available", (int)IconSize.Dialog));
+			if (!updates_available)
+				SendNotification ("Plugin updates are available for download, "
+					+ "Click here to update.", "Updates Available",
+					"software-update-available");
+			updates_available = true;
 		}
 		
-		/// <summary>
-		/// Returns the location of the notification icon on the screen.
-		/// </summary>
-		/// <param name="screen">
-		/// A <see cref="Gdk.Screen"/> to be set to the screen that the icon
-		/// is currently on
-		/// </param>
-		/// <param name="x">
-		/// A <see cref="System.Int32"/> that gets set to the X location of the icon
-		/// </param>
-		/// <param name="y">
-		/// A <see cref="System.Int32"/> that gets set to the Y location of the icon
-		/// </param>
+		public static void SendNotification (string message)
+		{
+			SendNotification (message, "GNOME Do", null);
+		}
+		
+		public static void SendNotification (string message, string title)
+		{
+			SendNotification (message, title, null);
+		}
+		
+		//I took some of this from DBO's branch.
+		public static void SendNotification (string message, string title, string icon)
+		{
+			NotificationIcon trayIcon = Do.NotificationIcon;
+			trayIcon.Show ();
+			
+			//We need to make sure that the icon is visible first, otherwise placement can
+			//become eratic.
+			GLib.Timeout.Add (200, delegate {
+				Gdk.Screen screen;
+				int x, y;
+				trayIcon.GetLocationOnScreen (out screen, out x, out y);
+
+				Notification msg = new Notification ();
+				msg.Closed += new EventHandler (OnNotificationClosed); 
+				msg.Summary = title;
+				msg.Body = message;
+				if (icon != null)
+					msg.Icon = IconProvider.PixbufFromIconName (icon,
+						(int)IconSize.Menu);
+				msg.Timeout = 5000;
+				msg.SetGeometryHints (screen, x, y);
+				msg.Show ();
+				
+				return false;
+			});
+		}
+		
 		public void GetLocationOnScreen (out Gdk.Screen screen, out int x, out int y)
 		{
-			Gtk.Orientation orientation;
 			Gdk.Rectangle area;
-			trayIcon.GetGeometry (out screen, out area, out orientation);
-			x = area.Left;
-			y = area.Bottom;
+			Gtk.Orientation orien;
+			
+			trayIcon.GetGeometry (out screen, out area, out orien);
+			x = area.X + area.Width / 2;
+			y = area.Y + area.Height - 5;
 		}
 		
 		protected void OnActivateSummonDo (object sender, EventArgs args)
@@ -122,11 +142,14 @@ namespace Do.UI
 		
 		protected void OnActivateStartUpdates (object sender, EventArgs args)
 		{
-			PluginManager.InstallAvailableUpdates (true);
-			trayIcon.Activate -= new EventHandler (OnActivateStartUpdates);
-			updates_available = false;
-			Notifications.SendNotification ("Please restart Do after installing" 
-				+ " updated plugins.");
+			try {
+				PluginManager.InstallAvailableUpdates (true);
+				trayIcon.Activate -= new EventHandler (OnActivateStartUpdates);
+				updates_available = false;
+				trayIcon.Pixbuf = normal_icon;
+				SendNotification ("Please restart Do after installing updated plugins.");
+			} catch { }
+			
 			if (!Do.Preferences.StatusIconVisible)
 				Hide ();
 		}
@@ -156,6 +179,13 @@ namespace Do.UI
 		{
 			Do.Controller.Vanish ();
 			Application.Quit ();
+		}
+		
+		private static void OnNotificationClosed (object sender, EventArgs args)
+		{
+			NotificationIcon trayIcon = Do.NotificationIcon;
+			if (!Do.Preferences.StatusIconVisible)
+				trayIcon.Hide ();
 		}
 	}
 }

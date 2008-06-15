@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *
 
 
 using System;
@@ -66,7 +66,7 @@ namespace Do
 			//x and y to initialize.
 			tray_icon.GetLocationOnScreen (out screen, out x, out y);
 			msg.SetGeometryHints (screen, x, y);
-			
+						
 			msg.Show ();
 		}
 		
@@ -77,3 +77,4 @@ namespace Do
 		}
 	}
 }
+*/

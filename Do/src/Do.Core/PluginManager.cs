@@ -65,6 +65,7 @@ namespace Do.Core {
             		repository_urls ["Community Plugins"] = 
             			"http://do.davebsd.com/repo/" + Version +"/community";
             	}
+            	
             	return repository_urls;;
             }
         }
@@ -206,7 +207,7 @@ namespace Do.Core {
             setup = new SetupService (AddinManager.Registry);
             installer = graphical ? new AddinInstaller () as IAddinInstaller
                 : new ConsoleAddinInstaller () as IAddinInstaller ;
-
+			
             setup.Repositories.UpdateAllRepositories (
                 new ConsoleProgressStatus (true));
             foreach (AddinRepositoryEntry rep in

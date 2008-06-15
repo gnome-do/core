@@ -108,7 +108,6 @@ namespace Do.UI
 					Log.Error ("Failed to set autostart: {0}", e.Message);
 				}
 			}
-   
         }
 
         protected virtual void OnLoginCheckClicked (object sender, EventArgs e)

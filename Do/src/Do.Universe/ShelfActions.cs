@@ -77,13 +77,6 @@ namespace Do.Universe
 				};
 			}
 		}
-		
-		public override Type[] SupportedModifierItemTypes {
-			get { return new Type[] {
-				typeof (ShelfItem),
-				};
-			}
-		}
 
 		public override bool SupportsItem (IItem item)
 		{
@@ -125,14 +118,6 @@ namespace Do.Universe
 				};
 			}
 		}
-		
-		public override Type[] SupportedModifierItemTypes {
-			get { return new Type[] {
-				typeof (ShelfItem),
-				};
-			}
-		}
-
 
 		public override bool SupportsItem (IItem item)
 		{
@@ -146,46 +131,6 @@ namespace Do.Universe
 			} else {
 				(modItems[0] as ShelfItem).AddItem (items[0]);
 			}
-			return null;
-		}
-
-	}
-	
-	public class NewShelfAction : AbstractAction
-	{
-		public override string Name {
-			get { return "New Shelf"; }
-		}
-		
-		public override string Description {
-			get { return "Create a new Shelf"; }
-		}
-
-		public override string Icon {
-			get { return "document-new"; }
-		}
-
-		public override bool ModifierItemsOptional {
-			get { return true; }
-		}
-
-		public override Type[] SupportedItemTypes {
-			get { return new Type[] {
-				typeof (ITextItem),
-				};
-			}
-		}
-		
-		public override bool SupportsItem (IItem item)
-		{
-			return (item is TextItem);
-		}
-
-
-		public override IItem[] Perform (IItem[] items, IItem[] modItems)
-		{
-			if (items[0] is ITextItem)
-				return new IItem[] {ShelfItemSource.NewShelf ((items[0] as ITextItem).Text)};
 			return null;
 		}
 

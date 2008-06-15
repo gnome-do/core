@@ -107,7 +107,6 @@ FILES =  \
 	src/GconfPreferencesBackend.cs \
 	src/IPreferencesBackend.cs \
 	src/Log.cs \
-	src/Notifications.cs \
 	src/Preferences.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 
