@@ -34,6 +34,7 @@ namespace Do.Addins
 		
 		string query;
 		Type[] searchTypes;
+		Type[] previousSearchTypes;
 		int cursor;
 		IObject[] results;
 		
@@ -154,6 +155,49 @@ namespace Do.Addins
 				return !(ActionSearch || ItemsSearch || ModifierItemsSearch);
 			}
 		}
+	
+		public bool DefaultFilter
+		{
+			get {
+				return (SearchTypes.Length == 2 && (
+				          SearchTypes[0] == typeof (IItem) && SearchTypes[1] == typeof (IAction) ||
+				          SearchTypes[0] == typeof (IAction) && SearchTypes[1] == typeof (IItem)));
+			}
+		}
+		
+		public bool TextMode
+		{
+			get {
+				if (SearchTypes.Length == 1 && SearchTypes[0] == typeof (ITextItem)) {
+				    return true;
+				}
+				return false;
+			}
+			set {
+				if (value == true && SupportsTextMode) {
+					PreviousSearchTypes = SearchTypes;
+					SearchTypes = new Type[] {typeof (ITextItem)};
+				} else if (value == false) {
+					if (PreviousSearchTypes != null)
+						SearchTypes = PreviousSearchTypes;
+					else
+						SearchTypes = new Type[] {typeof (IItem), typeof (IAction)};
+				}
+			}
+		}
+		
+		private bool SupportsTextMode
+		{
+			get {
+				if (results.Length == 0) return true;
+				foreach (IObject i in results) {
+					if (i is ITextItem) {
+						return true;
+					}
+				}
+				return false;
+			}
+		}
 		
 		public IObject Selection
 		{
@@ -168,8 +212,21 @@ namespace Do.Addins
 		
 		public Type[] SearchTypes
 		{
-			get { return searchTypes; }
-			set { searchTypes = value; }
+			get { return searchTypes ??
+					searchTypes = new Type[] {typeof (IItem), typeof (IAction)}; }
+			set {
+				PreviousSearchTypes = searchTypes;
+				searchTypes = value;
+			}
+		}
+		
+		private Type[] PreviousSearchTypes
+		{
+			get { return previousSearchTypes ??
+					previousSearchTypes = new Type[] {typeof (IItem), typeof (IAction)}; }
+			set {
+				previousSearchTypes = value;
+			}
 		}
 		
 		public int Cursor
@@ -200,6 +257,7 @@ namespace Do.Addins
 			clone.Results = results.Clone () as IObject[];
 			clone.ChildrenSearch = childrenSearch;
 			clone.ParentSearch = parentSearch;
+			clone.SearchTypes = searchTypes;
 			return clone;
 		}
 		

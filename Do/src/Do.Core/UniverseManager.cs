@@ -60,6 +60,8 @@ namespace Do.Core {
 		const int MaxUpdateTime = 250;
 
 		const int MaxSearchResults = 1000;
+		
+		Type[] DefaultFilter = new Type[] {typeof (IItem), typeof (IAction)};
 
 		Dictionary<string, List<IObject>> firstResults;
 		Dictionary<IObject, IObject> universe;
@@ -231,7 +233,7 @@ namespace Do.Core {
 					firstResults.Remove (key);
 				}
 				firstResults [key] =
-					SortAndNarrowResults (universe.Values, key, null);
+					SortAndNarrowResults (universe.Values, key, null, DefaultFilter);
 				Log.Info ("Updated first results for '{0}'.", key);
 				t_update += (DateTime.Now - then).Milliseconds;
 			}
@@ -239,16 +241,21 @@ namespace Do.Core {
 
 		protected List<IObject> SortResults (IEnumerable<IObject> broadResults,
 											 string query,
-											 IObject other)
+											 IObject other,
+		                                     Type[] filter)
 		{
 			List<IObject> results;
 			float epsilon = 0.00001f;
-
+			
 			results	= new List<IObject> ();
 			foreach (DoObject obj in broadResults) {
 				obj.UpdateRelevance (query, other as DoObject);
 				if (Math.Abs (obj.Relevance) > epsilon) {
-					results.Add (obj);
+					foreach (Type t in filter) {
+						if (t.IsInstanceOfType (obj)) {
+							results.Add (obj);
+						}
+					}
 				}
 			}
 			results.Sort ();
@@ -256,18 +263,19 @@ namespace Do.Core {
 		}
 
 		protected List<IObject>
-			SortAndNarrowResults (IEnumerable<IObject> broadResults,
-								  string query,
-								  IObject other)
-			{
-				List<IObject> results;
+		SortAndNarrowResults (IEnumerable<IObject> broadResults,
+							  string query,
+							  IObject other,
+		                      Type[] filter)
+		{
+			List<IObject> results;
 
-				results = SortResults (broadResults, query, other);
-				// Shorten the list if neccessary.
-				if (results.Count > MaxSearchResults)
-					results = results.GetRange (0, MaxSearchResults);
-				return results;
-			}
+			results = SortResults (broadResults, query, other, filter);
+			// Shorten the list if neccessary.
+			if (results.Count > MaxSearchResults)
+				results = results.GetRange (0, MaxSearchResults);
+			return results;
+		}
 
 		private void BuildFirstResults ()
 		{
@@ -277,7 +285,7 @@ namespace Do.Core {
 			// character.
 			for (char key = 'a'; key <= 'z'; key++) {
 				firstResults [key.ToString ()] = SortAndNarrowResults (
-					universe.Values, key.ToString (), null);
+					universe.Values, key.ToString (), null, DefaultFilter);
 			}
 		}
 
@@ -362,7 +370,7 @@ namespace Do.Core {
 				context.ChildrenSearch = false;
 				return context;
 			}
-			children = SortResults (children, "", null);
+			children = SortResults (children, "", null, context.SearchTypes);
 
 			// Increase relevance of the parent.
 			parent = context.Selection as DoObject;
@@ -422,11 +430,11 @@ namespace Do.Core {
 				results = GetModItemsFromList (context, results);
 				// We need to sort because we added the out-of-order dynamic
 				// modifier items.
-				results = SortResults (results, context.Query, context.Items[0]);
+				results = SortResults (results, context.Query, context.Items[0], context.SearchTypes);
 			} else {
 				// These are items:
 				results = GetItemsFromList (context, results);
-				results = SortResults (results, context.Query, null);
+				results = SortResults (results, context.Query, null, context.SearchTypes);
 			}
 
 			return results;
@@ -493,7 +501,7 @@ namespace Do.Core {
 		// the current query
 		private List<IObject> FilterPreviousWithContinuedContext (SearchContext context)
 		{
-			return SortResults (context.LastContext.Results, context.Query, null);
+			return SortResults (context.LastContext.Results, context.Query, null, context.SearchTypes);
 		}
 
 		private List<IObject> IndependentResults (SearchContext context)
@@ -508,10 +516,25 @@ namespace Do.Core {
 				results = FilterPreviousWithContinuedContext (context);
 			} else if (firstResults.ContainsKey (query)) {
 				// If someone typed a single key, BOOM we're done.
-				results = new List<IObject> (firstResults[query]);
+				//
+				// We need to expand this to allow for text mode.  Only
+				// do this is the default filter is applied, otherwise
+				// apply the filter to the list.
+				if (context.DefaultFilter) {
+					results = new List<IObject> (firstResults[query]);
+				} else {
+					results = new List<IObject> ();
+					foreach (IObject o in firstResults[query]) {
+						foreach (Type t in context.SearchTypes) {
+							if (t.IsInstanceOfType (o)) {
+							    results.Add (o);
+							}
+						}
+					}
+				}
 			} else {
 				// Or we just have to do an expensive search...
-				results = SortAndNarrowResults (universe.Values, query, null);
+				results = SortAndNarrowResults (universe.Values, query, null, context.SearchTypes);
 			}
 			return results;
 		}
@@ -545,7 +568,7 @@ namespace Do.Core {
 			}
 			foreach (IObject rm in actions_to_remove)
 				actions.Remove (rm);
-			return SortResults (actions, context.Query, context.Items[0]);
+			return SortResults (actions, context.Query, context.Items[0], context.SearchTypes);
 		}
 
 		public List<IObject> ActionsForItem (IItem item)

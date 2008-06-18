@@ -99,9 +99,7 @@ namespace Do.UI
 			NotificationIcon trayIcon = Do.NotificationIcon;
 			trayIcon.Show ();
 			
-			//We need to make sure that the icon is visible first, otherwise placement can
-			//become eratic.
-			GLib.Timeout.Add (200, delegate {
+			Gtk.Application.Invoke (delegate {
 				Gdk.Screen screen;
 				int x, y;
 				trayIcon.GetLocationOnScreen (out screen, out x, out y);
@@ -116,8 +114,6 @@ namespace Do.UI
 				msg.Timeout = 5000;
 				msg.SetGeometryHints (screen, x, y);
 				msg.Show ();
-				
-				return false;
 			});
 		}
 		

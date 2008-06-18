@@ -38,7 +38,7 @@ namespace Do.Core {
 		DateTime oldest_hit;
 		Dictionary<string, RelevanceRecord> hits;
 
-		Timer serializeTimer;
+		//Timer serializeTimer;
 		const int SerializeInterval = 15*60;
 
 		public HistogramRelevanceProvider ()
@@ -56,8 +56,10 @@ namespace Do.Core {
 			}
 
 			// Serialize every few minutes.
-			serializeTimer = new Timer (OnSerializeTimer);
-			serializeTimer.Change (SerializeInterval*1000, SerializeInterval*1000);
+			//serializeTimer = new Timer (OnSerializeTimer);
+			//serializeTimer.Change (SerializeInterval*1000, SerializeInterval*1000);
+			
+			GLib.Timeout.Add (SerializeInterval*1000, OnSerializeTimer);
 		}
 		
 		void UpdateMaxHits (RelevanceRecord rec)
@@ -80,13 +82,14 @@ namespace Do.Core {
 		/// <summary>
 		/// Serialize timer target.
 		/// </summary>
-		private void OnSerializeTimer (object state)
+		private bool OnSerializeTimer ()
 		{
 			Gtk.Application.Invoke (
 			    delegate {
 				    Serialize ();
 			    }
 			);
+			return true;
 		}
 
 		/// <summary>

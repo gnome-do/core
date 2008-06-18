@@ -250,7 +250,8 @@ namespace Do.Core {
 
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
-			if ((evnt.State & ModifierType.ControlMask) != 0) {
+			//why are we doing this anyway?
+			if ((evnt.State & ModifierType.ControlMask) != 0 && evnt.Key != Key.period) {
 					return;
 			}
 
@@ -280,6 +281,9 @@ namespace Do.Core {
 			case Gdk.Key.Home:
 			case Gdk.Key.End:
 				OnUpDownKeyPressEvent (evnt);
+				break;
+			case Gdk.Key.period:
+				OnTextModePressEvent (evnt);
 				break;
 			case Gdk.Key.Right:
 			case Gdk.Key.Left:
@@ -372,13 +376,32 @@ namespace Do.Core {
 			tabbing = false;
 		}
 		
+		void OnTextModePressEvent (EventKey evnt)
+		{
+			Console.WriteLine (evnt.State);
+			if (!CurrentContext.TextMode && 
+			    (evnt.State & ModifierType.ControlMask) == ModifierType.ControlMask) {
+				ClearSearchResults ();
+				CurrentContext.TextMode = true;
+				if (!CurrentContext.TextMode) {
+					NotificationIcon.SendNotification ("Text Mode Error", "Do could not enter text mode " +
+					                      "because the current action does not support it.");
+				}
+			} else {
+				OnInputKeyPressEvent (evnt);
+			}
+		}
+		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
 			if (evnt.Key == Gdk.Key.Up) {
-				if (CurrentContext.Cursor <= 0) {
-                    CurrentContext.Cursor = CurrentContext.Results.Length - 1;
+				if (!resultsGrown) {
+                    GrowResults ();
+					return;
 				} else {
-                    CurrentContext.Cursor--;
+					if (CurrentContext.Cursor <= 0)
+						return;
+					CurrentContext.Cursor--;
                 }
 			} else if (evnt.Key == Gdk.Key.Down) {
 				if (!resultsGrown) {
@@ -522,7 +545,6 @@ namespace Do.Core {
 				return;
 			}
 
-			context[0].SearchTypes = new Type[] { typeof (IItem), typeof (IAction) };
 			Do.UniverseManager.Search (ref context[0]);
 			UpdatePane (Pane.First);
 

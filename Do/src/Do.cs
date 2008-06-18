@@ -126,10 +126,12 @@ namespace Do {
 		{
 			// Sets a timer to check for updates after 5 minutes
 			// and again every 2 hours
-			Timer timer = new Timer (CheckForUpdatesCb, null, 300000, 72000000);
+			//Timer timer = new Timer (CheckForUpdatesCb, null, 300000, 72000000);
+			GLib.Timeout.Add (30000, delegate { CheckForUpdates (); return false; });
+			GLib.Timeout.Add (72000000, delegate { CheckForUpdates (); return true; });
 		}
 		
-		private static void CheckForUpdatesCb (object state)
+		private static void CheckForUpdatesCb ()
 		{
 			new Thread ((ThreadStart) delegate {
 				bool updatesAvailable = PluginManager.UpdatesAvailable ();
