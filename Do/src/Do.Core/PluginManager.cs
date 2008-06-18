@@ -266,8 +266,7 @@ namespace Do.Core {
         /// </param>
         internal static void InstallLocalPlugins (SetupService setup)
         {
-            // Create mpack (addin packages) out of dlls. Delete each dll
-            // when finished creating package.
+            // Create mpack (addin packages) out of dlls.
             foreach (string file in 
                 Directory.GetFiles (Paths.UserPlugins, "*.dll")) {
                 string path;
@@ -275,6 +274,15 @@ namespace Do.Core {
                 path = Path.Combine (Paths.UserPlugins, file);
                 setup.BuildPackage (new ConsoleProgressStatus (false),
                     Paths.UserPlugins, new string [] { path });
+            }
+			
+			//Delete dlls.  If we do it earlier why might delete dll's brought in as
+			//dependancies.  Doing it now has the same effect without breakage.
+			foreach (string file in 
+                Directory.GetFiles (Paths.UserPlugins, "*.dll")) {
+                string path;
+
+                path = Path.Combine (Paths.UserPlugins, file);
                 File.Delete (path);
             }
             // Install each mpack file, deleting each file when finished

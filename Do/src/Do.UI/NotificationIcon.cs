@@ -54,6 +54,7 @@ namespace Do.UI
 				Hide ();
 			
 			updates_available = false;
+			Addins.NotificationBridge.MessageRequested += SendNotification;
 		}
 		
 		public void Show ()

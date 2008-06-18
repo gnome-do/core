@@ -63,6 +63,7 @@ FILES =  \
 	src/Do.UI/MiniWindow/MiniIconBox.cs \
 	src/Do.UI/MiniWindow/MiniWindow.cs \
 	src/Do.UI/MiniWindow/MiniWindowFrame.cs \
+	src/Do.UI/NotificationBridge.cs \
 	src/Do.UI/PositionWindow.cs \
 	src/Do.UI/ResultsWindowSelectionEventArgs.cs \
 	src/Do.Universe/ApplicationItem.cs \
