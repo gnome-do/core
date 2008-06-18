@@ -86,16 +86,16 @@ namespace Do.UI
 		
 		public static void SendNotification (string message)
 		{
-			SendNotification (message, "GNOME Do", null);
+			SendNotification ("Gnome-Do", message, null);
 		}
 		
-		public static void SendNotification (string message, string title)
+		public static void SendNotification (string title, string message)
 		{
-			SendNotification (message, title, null);
+			SendNotification (title, message, null);
 		}
 		
 		//I took some of this from DBO's branch.
-		public static void SendNotification (string message, string title, string icon)
+		public static void SendNotification (string title, string message, string icon)
 		{
 			NotificationIcon trayIcon = Do.NotificationIcon;
 			trayIcon.Show ();
