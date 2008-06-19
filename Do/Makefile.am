@@ -101,8 +101,6 @@ FILES =  \
 	src/Do.Universe/PreferencesItem.cs \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
-	src/Do.Universe/ShelfActions.cs \
-	src/Do.Universe/ShelfItemSource.cs \
 	src/DoPreferences.cs \
 	src/GconfPreferencesBackend.cs \
 	src/IPreferencesBackend.cs \
