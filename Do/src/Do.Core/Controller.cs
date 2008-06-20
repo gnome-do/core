@@ -338,7 +338,7 @@ namespace Do.Core {
 			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
 			if (char.IsLetterOrDigit (c)
 					|| char.IsPunctuation (c)
-					|| c == ' '
+					|| (c == ' ' && CurrentContext.Query.Length > 0)
 					|| char.IsSymbol (c)) {
 				CurrentContext.Query += c;
 				QueueSearch (false);
