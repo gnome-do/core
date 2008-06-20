@@ -174,7 +174,7 @@ namespace Do.UI
 			string username = username_entry.Text;
 			string password = password_entry.Text;
 			
-			new Thread ((ThreadStart) delegate {
+			Thread thread = new Thread ((ThreadStart) delegate {
 				bool valid = Validate (username, password);
 				Gtk.Application.Invoke (delegate {		
 					if (valid) {
@@ -186,7 +186,9 @@ namespace Do.UI
 					}
 					validate_btn.Sensitive = true;
 				});
-			}).Start ();
+			});
+			thread.IsBackground = true; //don't hang on exit if fail
+			thread.Start ();
 		}
 		
 		/// <summary>
