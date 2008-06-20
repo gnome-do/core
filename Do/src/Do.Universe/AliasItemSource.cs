@@ -186,6 +186,5 @@ namespace Do.Universe {
 		public void UpdateItems ()
 		{
 		}
-
 	}
 }

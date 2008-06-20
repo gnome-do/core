@@ -312,8 +312,6 @@ namespace Do.Core {
 						((Pluggable)plugin).Load();					
                     Log.Info ("Loaded \"{0}\".", o.Name);
                 } catch (Exception e) {
-					Console.WriteLine(e.Message);
-					Console.WriteLine(e.StackTrace);
                     Log.Info ("Encountered error loading \"{0}\": {0}",
                         e.Message);
                 }

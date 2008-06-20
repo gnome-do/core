@@ -89,6 +89,5 @@ namespace Do.Universe {
 			} 
 			return children;
 		}
-
 	}
 }

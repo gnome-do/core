@@ -231,7 +231,6 @@ namespace Do.Universe
 		{
 			shelf[defaultName].RemoveItem (item);
 			Serialize ();
-		}
-		
+		}		
 	}
 }
