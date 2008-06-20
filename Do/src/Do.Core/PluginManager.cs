@@ -75,7 +75,8 @@ namespace Do.Core {
 				System.Reflection.AssemblyName name;
 				
 				name = typeof (PluginManager).Assembly.GetName ();
-				return String.Format ("{0}.{1}", name.Version.Major, name.Version.Minor);
+				return String.Format ("{0}.{1}.{2}",
+					name.Version.Major, name.Version.Minor, name.Version.Build);
 			}
 		}
 
