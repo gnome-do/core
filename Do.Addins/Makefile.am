@@ -81,6 +81,7 @@ FILES =  \
 	src/Do.Universe/OpenAction.cs \
 	src/Do.Universe/OpenURLAction.cs \
 	src/Do.Universe/OpenWithAction.cs \
+	src/Do.Universe/Pluggable.cs \
 	src/Do.Universe/RevealAction.cs \
 	src/Do.Universe/RunAction.cs \
 	src/Do.Universe/TextItem.cs \

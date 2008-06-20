@@ -62,7 +62,7 @@ namespace Do.Universe
 		void UpdateItems ();
 	}
 
-	public abstract class AbstractItemSource : IItemSource
+	public abstract class AbstractItemSource : Pluggable, IItemSource
 	{
 
 		public abstract string Name { get; }
@@ -89,6 +89,7 @@ namespace Do.Universe
 		public virtual void UpdateItems ()
 		{
 		}
+		
 	}
 
 }
