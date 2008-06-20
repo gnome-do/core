@@ -57,6 +57,6 @@ namespace Do.Universe {
 		public ICollection<IItem> ChildrenOfItem (IItem item)
 		{
 			return null;
-		}
+		}		
 	}
 }

@@ -307,7 +307,10 @@ namespace Do.Core {
             node = args.ExtensionNode as TypeExtensionNode;
             if (args.Change.Equals (ExtensionChange.Add)) {
                 try {
-                    IObject o = new DoObject (node.GetInstance () as IObject);
+					IObject plugin = node.GetInstance() as IObject;
+                    IObject o = new DoObject (plugin);
+					if (plugin is Pluggable)
+						((Pluggable)plugin).Load();					
                     Log.Info ("Loaded \"{0}\".", o.Name);
                 } catch (Exception e) {
                     Log.Info ("Encountered error loading \"{0}\": {0}",
@@ -315,7 +318,10 @@ namespace Do.Core {
                 }
             } else {
                 try {
-                    IObject o = new DoObject (node.GetInstance () as IObject);
+					IObject plugin = node.GetInstance() as IObject;
+                    IObject o = new DoObject (plugin);
+					if (plugin is Pluggable)
+						((Pluggable)plugin).Unload();
                     Log.Info ("Unloaded \"{0}\".", o.Name);
                 } catch {
                 }

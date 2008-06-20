@@ -82,6 +82,6 @@ namespace Do.Universe {
 		public IItem[] DynamicModifierItemsForItem (IItem item)
 		{
 			return null;
-		}
+		}		
 	}
 }
