@@ -78,6 +78,7 @@ namespace Do.Universe {
 		public void UpdateItems ()
 		{
 		}
+
 	}
 	
 	class GNOMETrashFileItem : IFileItem, IOpenableItem {

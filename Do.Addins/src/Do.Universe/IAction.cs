@@ -118,7 +118,7 @@ namespace Do.Universe
 	/// This class is for your convenience. It stubs some less-frequently
 	/// implemented IAction members with default values.
 	/// </summary>
-	public abstract class AbstractAction : IAction
+	public abstract class AbstractAction : Pluggable, IAction
 	{
 		
 		public abstract string Name { get; }
@@ -153,5 +153,7 @@ namespace Do.Universe
 		}
 		
 		public abstract IItem[] Perform (IItem[] items, IItem[] modItems);
+		
+
 	}
 }

@@ -257,7 +257,7 @@ namespace Do.Core {
 
 			switch ((Gdk.Key) evnt.KeyValue) {
 			// Throwaway keys
-			case Gdk.Key.Shift_L:
+			
 			case Gdk.Key.Control_L:
 				break;
 			case Gdk.Key.Escape:
@@ -283,6 +283,7 @@ namespace Do.Core {
 				OnUpDownKeyPressEvent (evnt);
 				break;
 			case Gdk.Key.period:
+			case Gdk.Key.Shift_L:
 				OnTextModePressEvent (evnt);
 				break;
 			case Gdk.Key.Right:
@@ -337,7 +338,7 @@ namespace Do.Core {
 			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
 			if (char.IsLetterOrDigit (c)
 					|| char.IsPunctuation (c)
-					|| c == ' '
+					|| (c == ' ' && CurrentContext.Query.Length > 0)
 					|| char.IsSymbol (c)) {
 				CurrentContext.Query += c;
 				QueueSearch (false);
@@ -378,9 +379,9 @@ namespace Do.Core {
 		
 		void OnTextModePressEvent (EventKey evnt)
 		{
-			Console.WriteLine (evnt.State);
-			if (!CurrentContext.TextMode && 
-			    (evnt.State & ModifierType.ControlMask) == ModifierType.ControlMask) {
+			bool controlPeriod = ((evnt.State & ModifierType.ControlMask) == ModifierType.ControlMask);
+			bool shiftPress = ((evnt.Key == Key.Shift_L) && CurrentContext.Query.Length == 0);
+			if (!CurrentContext.TextMode && (shiftPress || controlPeriod)) {
 				ClearSearchResults ();
 				CurrentContext.TextMode = true;
 				if (!CurrentContext.TextMode) {

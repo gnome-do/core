@@ -1,8 +1,7 @@
-/* InternalItemSource.cs
+/* IPlugable.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
+ * COPYRIGHT file distributed with this source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,42 +20,28 @@
 using System;
 using System.Collections.Generic;
 
-namespace Do.Universe {
+namespace Do.Universe
+{
+	/// <summary>
+	/// A base class for IAction / IItemSource which gives support for hooks
+	/// on load and unload (in the plugin page)
+	/// </summary>
+	public class Pluggable
+	{
+		public delegate void LoadEventHandler ();		
 	
-	public class InternalItemSource : IItemSource {
+		public event LoadEventHandler OnLoadHandlers;
+		public event LoadEventHandler OnUnloadHandlers;
 		
-		public Type[] SupportedItemTypes {
-			get { return null; }
+		public void Load(){
+			if (OnLoadHandlers != null)
+				OnLoadHandlers();
 		}
 		
-		public string Name {
-			get { return "Internal GNOME Do Items"; }
+		public void Unload(){
+			if (OnUnloadHandlers != null)
+				OnUnloadHandlers();
 		}
-		
-		public string Description {
-			get { return "Special items relevant to the inner-workings of GNOME Do."; }
-		}
-		
-		public string Icon {
-			get { return "gnome-system"; }
-		}
-		
-		public void UpdateItems ()
-		{
-		}
-		
-		public ICollection<IItem> Items {
-			get {
-				return new IItem[] {
-					new SelectedTextItem (),
-					new PreferencesItem (),
-				};
-			}
-		}
-		
-		public ICollection<IItem> ChildrenOfItem (IItem item)
-		{
-			return null;
-		}		
 	}
+
 }
