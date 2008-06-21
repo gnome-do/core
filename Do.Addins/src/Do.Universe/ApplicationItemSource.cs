@@ -41,6 +41,7 @@ namespace Do.Universe {
 					"/usr/share/gdm/applications",
 					"/usr/local/share/applications",
 					"~/.local/share/applications",
+					"~/.local/share/applications/wine",
 					Desktop,
 				};
 			}
