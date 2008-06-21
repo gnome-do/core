@@ -130,12 +130,15 @@ namespace Do {
 		
 		private static void CheckForUpdates ()
 		{
-			new Thread ((ThreadStart) delegate {
+			Thread th = new Thread ((ThreadStart) delegate {
 				if (PluginManager.UpdatesAvailable ())
 					Gtk.Application.Invoke (delegate {
 						NotificationIcon.NotifyUpdatesAvailable ();
 					});
-			}).Start ();
+			});
+			
+			th.IsBackground = true;
+			th.Start ();
 		}
 	}
 }
