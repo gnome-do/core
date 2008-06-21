@@ -307,23 +307,29 @@ namespace Do.Core {
             node = args.ExtensionNode as TypeExtensionNode;
             if (args.Change.Equals (ExtensionChange.Add)) {
                 try {
-					IObject plugin = node.GetInstance() as IObject;
+					// plugin is to be used only for inspection here.
+					IObject plugin = node.GetInstance () as IObject;
+					// Wrap in a DoObject for safety.
                     IObject o = new DoObject (plugin);
 					if (plugin is Pluggable)
-						((Pluggable)plugin).Load();					
+						(plugin as Pluggable).NotifyLoad ();					
                     Log.Info ("Loaded \"{0}\".", o.Name);
                 } catch (Exception e) {
-                    Log.Info ("Encountered error loading \"{0}\": {0}",
+                    Log.Error ("Encountered error loading \"{0}\": {0}",
                         e.Message);
+					Log.Debug (e.StackTrace);
                 }
             } else {
                 try {
 					IObject plugin = node.GetInstance() as IObject;
                     IObject o = new DoObject (plugin);
 					if (plugin is Pluggable)
-						((Pluggable)plugin).Unload();
+						(plugin as Pluggable).NotifyUnload ();
                     Log.Info ("Unloaded \"{0}\".", o.Name);
-                } catch {
+                } catch (Exception e) {
+                    Log.Error ("Encountered error unloading plugin: {0}",
+                        e.Message);
+					Log.Debug (e.StackTrace);
                 }
             }	
         }

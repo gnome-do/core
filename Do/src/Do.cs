@@ -48,6 +48,9 @@ namespace Do {
 
 			Gdk.Threads.Init ();			
 
+			if (Array.IndexOf (args, "--debug") != -1)
+				Log.LogLevel = LogEntryType.Debug;
+
 			try {
 				Util.SetProcessName ("gnome-do");
 			} catch (Exception e) {
@@ -62,16 +65,19 @@ namespace Do {
 			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
 			
-			notification_icon = new NotificationIcon ();
+			// Kick-off update timers.
+			GLib.Timeout.Add (5 * 60 * 100, delegate {
+				CheckForUpdates ();
+				return false;
+			});
+			GLib.Timeout.Add (2 * 60 * 60 * 100, delegate {
+				CheckForUpdates ();
+				return true;
+			});
 
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
 				
-			if (Array.IndexOf (args, "--update") != -1)
-				PluginManager.InstallAvailableUpdates (false);
-			
-			CheckForUpdates ();
-			
 			Gtk.Application.Run ();
 		}
 
@@ -124,22 +130,15 @@ namespace Do {
 		
 		private static void CheckForUpdates ()
 		{
-			// Sets a timer to check for updates after 5 minutes
-			// and again every 2 hours
-			//Timer timer = new Timer (CheckForUpdatesCb, null, 300000, 72000000);
-			GLib.Timeout.Add (30000, delegate { CheckForUpdates (); return false; });
-			GLib.Timeout.Add (72000000, delegate { CheckForUpdates (); return true; });
-		}
-		
-		private static void CheckForUpdatesCb ()
-		{
-			new Thread ((ThreadStart) delegate {
-				bool updatesAvailable = PluginManager.UpdatesAvailable ();
-				Gtk.Application.Invoke (delegate {
-					if (updatesAvailable)
+			Thread th = new Thread ((ThreadStart) delegate {
+				if (PluginManager.UpdatesAvailable ())
+					Gtk.Application.Invoke (delegate {
 						NotificationIcon.NotifyUpdatesAvailable ();
-				});
-			}).Start ();
+					});
+			});
+			
+			th.IsBackground = true;
+			th.Start ();
 		}
 	}
 }

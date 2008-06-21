@@ -50,6 +50,7 @@ namespace Do.Core {
 		bool thirdPaneVisible;
 		bool tabbing = false;
 		bool resultsGrown;
+		bool shiftPressed = false;
 		
 		public Controller ()
 		{
@@ -251,10 +252,12 @@ namespace Do.Core {
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
 			//why are we doing this anyway?
-			if ((evnt.State & ModifierType.ControlMask) != 0 && evnt.Key != Key.period) {
+			if ((evnt.State & ModifierType.ControlMask) != 0) {
 					return;
 			}
 
+			if (evnt.Key != Key.Shift_L) shiftPressed = false;
+			
 			switch ((Gdk.Key) evnt.KeyValue) {
 			// Throwaway keys
 			
@@ -282,7 +285,6 @@ namespace Do.Core {
 			case Gdk.Key.End:
 				OnUpDownKeyPressEvent (evnt);
 				break;
-			case Gdk.Key.period:
 			case Gdk.Key.Shift_L:
 				OnTextModePressEvent (evnt);
 				break;
@@ -379,9 +381,7 @@ namespace Do.Core {
 		
 		void OnTextModePressEvent (EventKey evnt)
 		{
-			bool controlPeriod = ((evnt.State & ModifierType.ControlMask) == ModifierType.ControlMask);
-			bool shiftPress = ((evnt.Key == Key.Shift_L) && CurrentContext.Query.Length == 0);
-			if (!CurrentContext.TextMode && (shiftPress || controlPeriod)) {
+			if (!CurrentContext.TextMode && shiftPressed) {
 				ClearSearchResults ();
 				CurrentContext.TextMode = true;
 				if (!CurrentContext.TextMode) {
@@ -389,7 +389,7 @@ namespace Do.Core {
 					                      "because the current action does not support it.");
 				}
 			} else {
-				OnInputKeyPressEvent (evnt);
+				shiftPressed = true;
 			}
 		}
 		

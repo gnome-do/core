@@ -1,4 +1,4 @@
-/* IPlugable.cs
+/* Plugable.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -23,24 +23,26 @@ using System.Collections.Generic;
 namespace Do.Universe
 {
 	/// <summary>
-	/// A base class for IAction / IItemSource which gives support for hooks
-	/// on load and unload (in the plugin page)
+	/// A base class for AbstractAction and AbstractItemSource which gives
+	/// support for hooks on load and unload (in the plugin page)
 	/// </summary>
 	public class Pluggable
 	{
 		public delegate void LoadEventHandler ();		
 	
-		public event LoadEventHandler OnLoadHandlers;
-		public event LoadEventHandler OnUnloadHandlers;
+		public event LoadEventHandler OnLoad;
+		public event LoadEventHandler OnUnload;
 		
-		public void Load(){
-			if (OnLoadHandlers != null)
-				OnLoadHandlers();
+		public void NotifyLoad ()
+		{
+			if (OnLoad != null)
+				OnLoad ();
 		}
 		
-		public void Unload(){
-			if (OnUnloadHandlers != null)
-				OnUnloadHandlers();
+		public void NotifyUnload ()
+		{
+			if (OnUnload != null)
+				OnUnload ();
 		}
 	}
 
