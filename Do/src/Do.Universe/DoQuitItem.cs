@@ -1,4 +1,4 @@
-/* InternalItemSource.cs
+/* QuitDoItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -18,46 +18,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
 
-namespace Do.Universe {
-	
-	public class InternalItemSource : IItemSource {
-		
-		public Type[] SupportedItemTypes {
-			get { return null; }
-		}
-		
+using System;
+using Mono.Unix;
+using Gtk;
+
+namespace Do.Universe
+{	
+	public class DoQuitItem : IRunnableItem
+	{		
 		public string Name {
-			get { return "Internal GNOME Do Items"; }
+			get { return Catalog.GetString ("Quit GNOME Do"); }
 		}
 		
 		public string Description {
-			get { return "Special items relevant to the inner-workings of GNOME Do."; }
+			get { return Catalog.GetString ("Quit GNOME Do"); }
 		}
 		
 		public string Icon {
-			get { return "gnome-system"; }
+			get { return "process-stop"; }
 		}
 		
-		public void UpdateItems ()
+		public void Run ()
 		{
+			Do.Controller.Vanish ();
+			Application.Quit ();
 		}
-		
-		public ICollection<IItem> Items {
-			get {
-				return new IItem[] {
-					new SelectedTextItem (),
-					new PreferencesItem (),
-					new DoQuitItem (),
-				};
-			}
-		}
-		
-		public ICollection<IItem> ChildrenOfItem (IItem item)
-		{
-			return null;
-		}		
 	}
 }
