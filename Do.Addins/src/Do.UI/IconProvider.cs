@@ -152,8 +152,6 @@ namespace Do.UI
 			
 			if (null == name)
 				throw new ArgumentNullException ("name");
-			if (name.Equals (string.Empty))
-				throw new ArgumentException ("name cannot be empty");
 
 			// Is the icon name in cache?
 			iconKey = string.Format ("{0}_{1}", name, size);
