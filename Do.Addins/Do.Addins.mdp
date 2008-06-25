@@ -68,21 +68,6 @@
     <File name="src/Do.Universe/CopyToClipboard.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/NotificationBridge.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Pluggable.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music" subtype="Directory" buildaction="Compile" />
-    <File name="src/Do.Music/BrowseMusicItems.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/Configuration.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/ControlActionActions.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/ControlActionSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/DefaultingActions.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/DoMusic.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/EnqueueAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/EnqueueModifier.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/IMusicSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/InternalMusicItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/MusicItems.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/MusicItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/PlayAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Music/PlayModifier.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
