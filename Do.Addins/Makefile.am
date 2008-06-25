@@ -44,6 +44,20 @@ FILES =  \
 	src/Do.Addins/IPreferences.cs \
 	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/Util.cs \
+	src/Do.Music/BrowseMusicItems.cs \
+	src/Do.Music/Configuration.cs \
+	src/Do.Music/ControlActionActions.cs \
+	src/Do.Music/ControlActionSource.cs \
+	src/Do.Music/DefaultingActions.cs \
+	src/Do.Music/DoMusic.cs \
+	src/Do.Music/EnqueueAction.cs \
+	src/Do.Music/EnqueueModifier.cs \
+	src/Do.Music/IMusicSource.cs \
+	src/Do.Music/InternalMusicItem.cs \
+	src/Do.Music/MusicItems.cs \
+	src/Do.Music/MusicItemSource.cs \
+	src/Do.Music/PlayAction.cs \
+	src/Do.Music/PlayModifier.cs \
 	src/Do.UI/AbstractLoginWidget.cs \
 	src/Do.UI/BaseWidgets/DefaultObjects.cs \
 	src/Do.UI/BaseWidgets/Frame.cs \

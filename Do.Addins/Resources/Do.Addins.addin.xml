@@ -17,6 +17,8 @@
 	<Extension path="/Do/ItemSource">
 		<ItemSource type="Do.Universe.ApplicationItemSource" />
 		<ItemSource type="Do.Universe.GNOMESpecialLocationsItemSource" />
+		<ItemSource type="Do.Addins.DoMusic.ControlActionSource" />
+		<ItemSource type="Do.Addins.DoMusic.MusicItemSource" />
 	</Extension>
 	
 	<!-- Actions -->
@@ -28,5 +30,12 @@
 		<Action type="Do.Universe.RevealAction" />
 		<Action type="Do.Universe.RunAction" />
 		<Action type="Do.Universe.CopyToClipboard" />
+		<Action type="Do.Addins.DoMusic.ControlActionPlay" />
+		<Action type="Do.Addins.DoMusic.ControlActionPauseResume" />
+		<Action type="Do.Addins.DoMusic.ControlActionNext" />
+		<Action type="Do.Addins.DoMusic.ControlActionPrevious" />
+		<Action type="Do.Addins.DoMusic.DoMusicPlayAction" />
+		<Action type="Do.Addins.DoMusic.DoMusicEnqueueAction" />
+		<Action type="Do.Addins.DoMusic.SetDefaultAction" />
 	</Extension>
 </Addin>
