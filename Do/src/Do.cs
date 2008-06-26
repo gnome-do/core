@@ -65,6 +65,9 @@ namespace Do {
 			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
 			
+			//whoever keeps pulling this out. STOP.
+			notification_icon = NotificationIcon;
+			
 			// Kick-off update timers.
 			GLib.Timeout.Add (5 * 60 * 100, delegate {
 				CheckForUpdates ();

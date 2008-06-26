@@ -26,7 +26,7 @@ using Do.Core;
 
 namespace Do.UI
 {
-	public class MainMenu
+	public class MainMenu : Gtk.Menu
 	{
 		static MainMenu instance;
 
@@ -37,36 +37,32 @@ namespace Do.UI
 			}
 		}
 
-		Menu menu;
 		int mainMenuX, mainMenuY;
 
 		public MainMenu ()
 		{
 			MenuItem item;
-
-			menu = new Menu ();
-
 			// About menu item
-			item = new ImageMenuItem  (Catalog.GetString ("_About Do"));
+			item = new ImageMenuItem (Catalog.GetString ("_About Do"));
 			(item as ImageMenuItem).Image = new Image (Stock.About, IconSize.Menu);
-			menu.Add (item);
+			Add (item);
 			item.CanFocus = false;
 			item.Activated += OnMainMenuAboutClicked;
 			
 			// Preferences menu item
-			item = new ImageMenuItem  ("_Preferences");
+			item = new ImageMenuItem (Catalog.GetString ("_Preferences"));
 			(item as ImageMenuItem).Image = new Image (Stock.Preferences, IconSize.Menu);
-			menu.Add (item);
+			Add (item);
 			item.CanFocus = false;
 			item.Activated += OnMainMenuPreferencesClicked;
 			
 			// Quit menu item
 			item = new ImageMenuItem (Catalog.GetString ("_Quit"));
 			(item as ImageMenuItem).Image = new Image (Stock.Quit, IconSize.Menu);
-			menu.Add (item);
+			Add (item);
 			item.Activated += OnMainMenuQuitClicked;
 
-			menu.ShowAll ();
+			ShowAll ();
 		}
 
 		protected void OnMainMenuQuitClicked (object o, EventArgs args)
@@ -89,7 +85,7 @@ namespace Do.UI
 		{
 			mainMenuX = x;
 			mainMenuY = y;	
-			menu.Popup (null, null, PositionMainMenu, 3, Gtk.Global.CurrentEventTime);
+			Popup (null, null, PositionMainMenu, 3, Gtk.Global.CurrentEventTime);
 		}
 
 		private void PositionMainMenu (Menu menu, out int x, out int y, out bool push_in)

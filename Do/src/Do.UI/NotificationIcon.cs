@@ -19,6 +19,7 @@
  */
 
 using System;
+using Mono.Unix;
 using Gtk;
 using Gdk;
 using Do.Core;
@@ -30,23 +31,21 @@ namespace Do.UI
 	/// Provides a notification area icon for GNOME Do allowing easy
 	/// access to menus, and a way for GNOME Do to alert users of status changes.
 	/// </summary>
-	public class NotificationIcon
+	public class NotificationIcon : StatusIcon
 	{
-		private StatusIcon tray;
 		private bool updates_available;
 		private Pixbuf normal_icon = IconProvider.PixbufFromIconName 
 			("gnome-run", (int)IconSize.Menu);
-		private Pixbuf alert_icon = IconProvider.PixbufFromIconName 
-				("dialog-information", (int)IconSize.Menu);
+		private Pixbuf update_icon = IconProvider.PixbufFromIconName
+			("software-update-available", (int)IconSize.Menu);
 				
 		public NotificationIcon()
 		{
-			tray = new StatusIcon ();
-			tray.FromPixbuf = normal_icon;
-			tray.Tooltip = "Summon GNOME Do with " + 
-				Do.Preferences.SummonKeyBinding;
-			tray.Activate += new EventHandler (OnActivateSummonDo);			
-			tray.PopupMenu += new PopupMenuHandler (OnTrayIconPopup);
+			FromPixbuf = normal_icon;
+			Tooltip = Catalog.GetString ("Summon GNOME Do with " + 
+				Do.Preferences.SummonKeyBinding);
+			Activate += new EventHandler (OnActivateSummonDo);			
+			PopupMenu += new PopupMenuHandler (OnTrayIconPopup);
 			
 			if (Do.Preferences.StatusIconVisible)
 				Show ();
@@ -59,13 +58,13 @@ namespace Do.UI
 		
 		public void Show ()
 		{
-			tray.Visible = true;
+			Visible = true;
 		}
 		
 		public void Hide ()
 		{
 			if (!updates_available)
-				tray.Visible = false;
+				Visible = false;
 		}
 		
 		/// <summary>
@@ -74,9 +73,9 @@ namespace Do.UI
 		public void NotifyUpdatesAvailable ()
 		{
 			Show ();
-			tray.Activate -= OnActivateSummonDo;
-			tray.Activate += OnActivateStartUpdates;
-			tray.FromPixbuf = alert_icon;
+			Activate -= OnActivateSummonDo;
+			Activate += OnActivateStartUpdates;
+			FromPixbuf = update_icon;
 			if (!updates_available)
 				SendNotification ("Plugin updates are available, "
 					+ "Click here to update.", "Updates Available",
@@ -106,8 +105,8 @@ namespace Do.UI
 
 				Notification msg = new Notification ();
 				msg.Closed += new EventHandler (OnNotificationClosed); 
-				msg.Summary = title;
-				msg.Body = message;
+				msg.Summary = Catalog.GetString (title);
+				msg.Body = Catalog.GetString (message);
 				if (icon != null)
 					msg.Icon = IconProvider.PixbufFromIconName (icon,
 						(int)IconSize.Menu);
@@ -122,7 +121,7 @@ namespace Do.UI
 			Gdk.Rectangle area;
 			Gtk.Orientation orien;
 			
-			tray.GetGeometry (out screen, out area, out orien);
+			GetGeometry (out screen, out area, out orien);
 			x = area.X + area.Width / 2;
 			y = area.Y + area.Height - 5;
 		}
@@ -137,9 +136,9 @@ namespace Do.UI
 		{
 			try {
 				PluginManager.InstallAvailableUpdates (true);
-				tray.Activate -= new EventHandler (OnActivateStartUpdates);
+				Activate -= new EventHandler (OnActivateStartUpdates);
 				updates_available = false;
-				tray.Pixbuf = normal_icon;
+				Pixbuf = normal_icon;
 				SendNotification ("Plugins successfully updated. " +
 					"Please restart GNOME Do.");
 			} catch (Exception e){
@@ -154,9 +153,8 @@ namespace Do.UI
 		protected void OnTrayIconPopup (object o, EventArgs args) 
 		{
 			int x, y;
-			Gdk.Screen screen;
-
-			GetLocationOnScreen (out screen, out x, out y);
+			bool push_in;
+			StatusIcon.PositionMenu (MainMenu.Instance, out x, out y, out push_in, Handle);
 			MainMenu.Instance.PopupAtPosition (x, y);
 		}
 		
