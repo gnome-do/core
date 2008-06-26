@@ -32,7 +32,7 @@ namespace Do.UI
 	/// </summary>
 	public class NotificationIcon
 	{
-		private StatusIcon trayIcon;
+		private StatusIcon tray;
 		private bool updates_available;
 		private Pixbuf normal_icon = IconProvider.PixbufFromIconName 
 			("gnome-run", (int)IconSize.Menu);
@@ -41,12 +41,12 @@ namespace Do.UI
 				
 		public NotificationIcon()
 		{
-			trayIcon = new StatusIcon ();
-			trayIcon.FromPixbuf = normal_icon;
-			trayIcon.Tooltip = "Summon GNOME Do with " + 
+			tray = new StatusIcon ();
+			tray.FromPixbuf = normal_icon;
+			tray.Tooltip = "Summon GNOME Do with " + 
 				Do.Preferences.SummonKeyBinding;
-			trayIcon.Activate += new EventHandler (OnActivateSummonDo);			
-			trayIcon.PopupMenu += new PopupMenuHandler (OnTrayIconPopup);
+			tray.Activate += new EventHandler (OnActivateSummonDo);			
+			tray.PopupMenu += new PopupMenuHandler (OnTrayIconPopup);
 			
 			if (Do.Preferences.StatusIconVisible)
 				Show ();
@@ -59,13 +59,13 @@ namespace Do.UI
 		
 		public void Show ()
 		{
-			trayIcon.Visible = true;
+			tray.Visible = true;
 		}
 		
 		public void Hide ()
 		{
 			if (!updates_available)
-				trayIcon.Visible = false;
+				tray.Visible = false;
 		}
 		
 		/// <summary>
@@ -74,11 +74,11 @@ namespace Do.UI
 		public void NotifyUpdatesAvailable ()
 		{
 			Show ();
-			trayIcon.Activate -= OnActivateSummonDo;
-			trayIcon.Activate += new EventHandler (OnActivateStartUpdates);
-			trayIcon.FromPixbuf = alert_icon;
+			tray.Activate -= OnActivateSummonDo;
+			tray.Activate += OnActivateStartUpdates;
+			tray.FromPixbuf = alert_icon;
 			if (!updates_available)
-				SendNotification ("Plugin updates are available for download, "
+				SendNotification ("Plugin updates are available, "
 					+ "Click here to update.", "Updates Available",
 					"software-update-available");
 			updates_available = true;
@@ -94,16 +94,15 @@ namespace Do.UI
 			SendNotification (title, message, null);
 		}
 		
-		//I took some of this from DBO's branch.
 		public static void SendNotification (string title, string message, string icon)
 		{
-			NotificationIcon trayIcon = Do.NotificationIcon;
-			trayIcon.Show ();
-			
+			Do.NotificationIcon.Show ();
 			Gtk.Application.Invoke (delegate {
-				Gdk.Screen screen;
 				int x, y;
-				trayIcon.GetLocationOnScreen (out screen, out x, out y);
+				Gdk.Screen screen;
+
+				Do.NotificationIcon.GetLocationOnScreen (
+					out screen, out x, out y);
 
 				Notification msg = new Notification ();
 				msg.Closed += new EventHandler (OnNotificationClosed); 
@@ -123,29 +122,30 @@ namespace Do.UI
 			Gdk.Rectangle area;
 			Gtk.Orientation orien;
 			
-			trayIcon.GetGeometry (out screen, out area, out orien);
+			tray.GetGeometry (out screen, out area, out orien);
 			x = area.X + area.Width / 2;
 			y = area.Y + area.Height - 5;
 		}
 		
 		protected void OnActivateSummonDo (object sender, EventArgs args)
 		{
-			Controller c = Do.Controller;
-			if (!c.IsSummoned)
-				c.Summon ();
-			else
-				c.Vanish ();
+			if (!Do.Controller.IsSummoned)
+				Do.Controller.Summon ();
 		}
 		
 		protected void OnActivateStartUpdates (object sender, EventArgs args)
 		{
 			try {
 				PluginManager.InstallAvailableUpdates (true);
-				trayIcon.Activate -= new EventHandler (OnActivateStartUpdates);
+				tray.Activate -= new EventHandler (OnActivateStartUpdates);
 				updates_available = false;
-				trayIcon.Pixbuf = normal_icon;
-				SendNotification ("Please restart Do after installing updated plugins.");
-			} catch { }
+				tray.Pixbuf = normal_icon;
+				SendNotification ("Plugins successfully updated. " +
+					"Please restart GNOME Do.");
+			} catch (Exception e){
+				Log.Error ("{0}: {1}", e.GetType (), e.Message);
+				Log.Debug (e.StackTrace);
+			}
 			
 			if (!Do.Preferences.StatusIconVisible)
 				Hide ();
@@ -153,36 +153,17 @@ namespace Do.UI
 				
 		protected void OnTrayIconPopup (object o, EventArgs args) 
 		{
-			//Get the x and y coordinates of the icon
-			Gdk.Screen screen;
 			int x, y;
+			Gdk.Screen screen;
+
 			GetLocationOnScreen (out screen, out x, out y);
-			
-			MainMenu menu = MainMenu.Instance;
-			menu.PopupAtPosition (x,y);
-		}
-		
-		protected void OnAboutClicked (object o, EventArgs args)
-		{
-			Do.Controller.ShowAbout ();
-		}
-		
-		protected void OnPreferencesClicked (object o, EventArgs args)
-		{
-			Do.Controller.ShowPreferences ();
-		}
-		
-		protected void OnQuitClicked (object o, EventArgs args)
-		{
-			Do.Controller.Vanish ();
-			Application.Quit ();
+			MainMenu.Instance.PopupAtPosition (x, y);
 		}
 		
 		private static void OnNotificationClosed (object sender, EventArgs args)
 		{
-			NotificationIcon trayIcon = Do.NotificationIcon;
 			if (!Do.Preferences.StatusIconVisible)
-				trayIcon.Hide ();
+				Do.NotificationIcon.Hide ();
 		}
 	}
 }
