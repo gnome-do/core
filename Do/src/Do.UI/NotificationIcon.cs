@@ -162,22 +162,6 @@ namespace Do.UI
 			menu.PopupAtPosition (x,y);
 		}
 		
-		protected void OnAboutClicked (object o, EventArgs args)
-		{
-			Do.Controller.ShowAbout ();
-		}
-		
-		protected void OnPreferencesClicked (object o, EventArgs args)
-		{
-			Do.Controller.ShowPreferences ();
-		}
-		
-		protected void OnQuitClicked (object o, EventArgs args)
-		{
-			Do.Controller.Vanish ();
-			Application.Quit ();
-		}
-		
 		private static void OnNotificationClosed (object sender, EventArgs args)
 		{
 			NotificationIcon trayIcon = Do.NotificationIcon;
