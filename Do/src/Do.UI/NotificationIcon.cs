@@ -135,17 +135,17 @@ namespace Do.UI
 		
 		protected void OnActivateStartUpdates (object sender, EventArgs args)
 		{
+			tray.Activate -= OnActivateStartUpdates;
 			try {
 				PluginManager.InstallAvailableUpdates (true);
-				tray.Activate -= new EventHandler (OnActivateStartUpdates);
-				updates_available = false;
-				tray.Pixbuf = normal_icon;
-				SendNotification ("Plugins successfully updated. " +
-					"Please restart GNOME Do.");
 			} catch (Exception e){
 				Log.Error ("{0}: {1}", e.GetType (), e.Message);
 				Log.Debug (e.StackTrace);
 			}
+			updates_available = false;
+			tray.Pixbuf = normal_icon;
+			SendNotification ("Plugins successfully updated. " +
+				"Please restart GNOME Do.");
 			
 			if (!Do.Preferences.StatusIconVisible)
 				Hide ();

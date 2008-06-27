@@ -1,29 +1,27 @@
-/* GeneralPreferencesWidget.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this source distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// GeneralPreferencesWidget.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.IO;
 using System.Reflection;
 
-using Gtk;
-
 using Do;
+using Gtk;
 
 namespace Do.UI
 {
@@ -31,8 +29,17 @@ namespace Do.UI
     {
     	const string AutostartAttribute = "X-GNOME-Autostart-enabled";
     	
-    	static readonly string AutostartFile =
-    		Paths.Combine(Paths.UserHome, ".config/autostart/gnome-do.desktop");
+    	string AutostartDir {
+			get {
+				return Paths.Combine (Paths.UserHome, ".config/autostart");
+			}
+		}
+
+    	string AutostartFile {
+			get {
+				return Paths.Combine (AutostartDir, "gnome-do.desktop");
+			}
+		}
     		
 		new public string Name {
 			get { return "General"; }
@@ -86,8 +93,8 @@ namespace Do.UI
         	get {
         		try {
         			return File.Exists (AutostartFile) &&
-        				!File.ReadAllText (AutostartFile)
-        					.Contains (AutostartAttribute + "=false");
+        				!File.ReadAllText (AutostartFile).Contains (
+							AutostartAttribute + "=false");
 				} catch (Exception e) {
 					Log.Error ("Failed to get autostart: {0}", e.Message);
 				}
@@ -98,6 +105,7 @@ namespace Do.UI
 					if (File.Exists (AutostartFile))
 						File.Delete (AutostartFile);
 					if (value) {
+						Directory.CreateDirectory (AutostartDir);
 						Stream s = Assembly.GetExecutingAssembly ()
 							.GetManifestResourceStream ("gnome-do.desktop");
 						using (StreamReader sr = new StreamReader (s))
