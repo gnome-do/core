@@ -1,25 +1,23 @@
-/* HistogramRelevanceProvider.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this source distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// HistogramRelevanceProvider.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.IO;
-using System.Threading;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -37,8 +35,6 @@ namespace Do.Core {
 		uint max_item_hits, max_action_hits;
 		DateTime oldest_hit;
 		Dictionary<string, RelevanceRecord> hits;
-
-		//Timer serializeTimer;
 		const int SerializeInterval = 15*60;
 
 		public HistogramRelevanceProvider ()
@@ -54,11 +50,6 @@ namespace Do.Core {
 				oldest_hit = oldest_hit.CompareTo (rec.LastHit) < 0 ?
 					oldest_hit : rec.LastHit;
 			}
-
-			// Serialize every few minutes.
-			//serializeTimer = new Timer (OnSerializeTimer);
-			//serializeTimer.Change (SerializeInterval*1000, SerializeInterval*1000);
-			
 			GLib.Timeout.Add (SerializeInterval*1000, OnSerializeTimer);
 		}
 		
@@ -102,9 +93,10 @@ namespace Do.Core {
 					BinaryFormatter f = new BinaryFormatter ();
 					hits = f.Deserialize (s) as Dictionary<string, RelevanceRecord>;
 				}
-				Log.Debug ("Successfully deserialized Histogram Relevance Provider.");
+				Log.Debug ("Successfully loaded learned usage data.");
+			} catch (FileNotFoundException) {
 			} catch (Exception e) {
-				Log.Error ("Deserializing Histogram Relevance Provider failed: {0}", e.Message);
+				Log.Error ("Failed to load learned usage data: {0}", e.Message);
 			}
 		}
 
@@ -118,9 +110,9 @@ namespace Do.Core {
 					BinaryFormatter f = new BinaryFormatter ();
 					f.Serialize (s, hits);
 				}
-				Log.Debug ("Successfully serialized Histogram Relevance Provider.");
+				Log.Debug ("Successfully saved learned usage data.");
 			} catch (Exception e) {
-				Log.Error ("Serializing Histogram Relevance Provider failed: {0}", e.Message);
+				Log.Error ("Failed to save learned usage data: {0}", e.Message);
 			}
 		}
 
@@ -196,7 +188,10 @@ namespace Do.Core {
 			    o.Inner is OpenURLAction ||
 			    o.Inner is RunAction)
 				relevance += 0.1f;
-			
+			if (o.Inner is AliasAction ||
+				o.Inner is DeleteAliasAction)
+				relevance = 0f;
+
 			return BalanceRelevanceWithScore (o, relevance, score);
 		}
 
