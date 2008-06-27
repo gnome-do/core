@@ -32,15 +32,15 @@ namespace Do {
 
 		static Paths ()
 		{
-			if (File.Exists (Temp)) {
+			if (Directory.Exists (Temp)) {
 				try {
-					File.Delete (Temp);
+					Directory.Delete (Temp, true);
 				} catch (Exception e) {
-					Console.Error.WriteLine ("Could not delete temporary directory {0}: {1}",
+					Console.Error.WriteLine (
+						"Could not delete temporary directory {0}: {1}",
 						Temp, e.Message);
 				}
 			}
-
 			CreateDirs (ApplicationData, UserData, UserPlugins, Temp);
 		}
 
@@ -50,7 +50,8 @@ namespace Do {
 				try {
 					Directory.CreateDirectory (first);
 				} catch (Exception e) {
-					Console.Error.WriteLine ("Failed to create directory {0}: {1}",
+					Console.Error.WriteLine (
+						"Failed to create directory {0}: {1}",
 						first, e.Message);
 				}
 			}
@@ -60,7 +61,8 @@ namespace Do {
 					try {
 						Directory.CreateDirectory (dir);
 					} catch (Exception e) {
-						Console.Error.WriteLine ("Failed to create directory {0}: {1}",
+						Console.Error.WriteLine (
+							"Failed to create directory {0}: {1}",
 							dir, e.Message);
 					}
 				}
@@ -136,7 +138,6 @@ namespace Do {
 
 		public static string UserHome {
 			get {
-
 				string home = Environment.GetEnvironmentVariable ("HOME");
 				if (string.IsNullOrEmpty (home))
 					home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
