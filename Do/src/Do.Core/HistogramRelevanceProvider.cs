@@ -190,7 +190,8 @@ namespace Do.Core {
 			    o.Inner is EmailAction)
 				relevance += 0.1f;
 			if (o.Inner is AliasAction ||
-				o.Inner is DeleteAliasAction)
+				o.Inner is DeleteAliasAction ||
+				o.Inner is CopyToClipboard)
 				relevance = -0.1f;
 
 			return BalanceRelevanceWithScore (o, relevance, score);
