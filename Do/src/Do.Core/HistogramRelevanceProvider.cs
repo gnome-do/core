@@ -177,7 +177,7 @@ namespace Do.Core {
 			
 			// Penalize actions that require modifier items.
 			// other != null ==> we're getting relevance for second pane.
-			if (other != null && o is IAction &&
+			if (o is IAction &&
 			    (o as IAction).SupportedModifierItemTypes.Length > 0)
 				relevance -= 0.1f;
 			// Penalize item sources so that items are preferred.
@@ -190,7 +190,7 @@ namespace Do.Core {
 				relevance += 0.1f;
 			if (o.Inner is AliasAction ||
 				o.Inner is DeleteAliasAction)
-				relevance = 0f;
+				relevance = -0.1f;
 
 			return BalanceRelevanceWithScore (o, relevance, score);
 		}

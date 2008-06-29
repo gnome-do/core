@@ -66,13 +66,10 @@ namespace Do.Universe
 
 		public override bool SupportsItem (IItem item)
 		{
-			string path;
-		
-			// Check if typed text is a valid path.
 			if (item is ITextItem) {	
-				path = (item as ITextItem).Text;
-				path = path.Replace ("~",
-						Environment.GetFolderPath (Environment.SpecialFolder.Personal));
+				// Check if typed text is a valid path.
+				string path = (item as ITextItem).Text
+					.Replace ("~", Paths.UserHome);
 				return Directory.Exists (path) || File.Exists (path);
 			}
 			return true;
@@ -81,9 +78,7 @@ namespace Do.Universe
 		
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
-			string open_item;
-			
-			open_item = null;
+			string toOpen = null;
 			foreach (IItem item in items) {
 				if (item is IOpenableItem) {
 					(item as IOpenableItem).Open ();
@@ -91,14 +86,13 @@ namespace Do.Universe
 				}
 
 				if (item is IURIItem) {
-					open_item = (item as IURIItem).URI;
+					toOpen = (item as IURIItem).URI;
 				} else if (item is ITextItem) {
-					// open_item is a valid file or folder path.
-					open_item = (item as ITextItem).Text;
-					open_item = open_item.Replace (" ", "\\ ");
+					// item is a valid file or folder path.
+					toOpen = (item as ITextItem).Text
+						.Replace (" ", "\\ ");
 				}
-
-				Util.Environment.Open (open_item);
+				Util.Environment.Open (toOpen);
 			}
 			return null;
 		}
