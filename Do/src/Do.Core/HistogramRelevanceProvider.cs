@@ -186,7 +186,8 @@ namespace Do.Core {
 			// Give the most popular actions a little leg up.
 			if (o.Inner is OpenAction ||
 			    o.Inner is OpenURLAction ||
-			    o.Inner is RunAction)
+			    o.Inner is RunAction ||
+			    o.Inner is EmailAction)
 				relevance += 0.1f;
 			if (o.Inner is AliasAction ||
 				o.Inner is DeleteAliasAction)

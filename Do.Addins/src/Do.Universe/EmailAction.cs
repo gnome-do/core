@@ -1,4 +1,4 @@
-// MailtoAction.cs
+// EmailAction.cs
 // 
 // GNOME Do is the legal property of its developers, whose names are too
 // numerous to list here.  Please refer to the COPYRIGHT file distributed with
@@ -26,12 +26,8 @@ using Do.Universe;
 
 namespace Do.Universe
 {
-	public class MailtoAction : AbstractAction
+	public class EmailAction : AbstractAction
 	{
-		public MailtoAction ()
-		{
-		}
-
 		public override string Name {
 			get {
 				return Catalog.GetString ("Email");

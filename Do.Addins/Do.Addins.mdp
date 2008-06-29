@@ -28,7 +28,7 @@
     <File name="src/Do.Universe/TextItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/GNOMESpecialLocationsItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ContactItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/MailtoAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/EmailAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/OpenWithAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/RevealAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/IAction.cs" subtype="Code" buildaction="Compile" />
