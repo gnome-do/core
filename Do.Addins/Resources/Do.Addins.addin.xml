@@ -21,7 +21,7 @@
 	
 	<!-- Actions -->
 	<Extension path="/Do/Action">
-		<Action type="Do.Universe.MailtoAction" />
+		<Action type="Do.Universe.EmailAction" />
 		<Action type="Do.Universe.OpenAction" />
 		<Action type="Do.Universe.OpenURLAction" />
 		<Action type="Do.Universe.OpenWithAction" />
