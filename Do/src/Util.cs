@@ -72,7 +72,7 @@ namespace Do
 				start_proc.StartInfo.FileName = "xdg-open";
 				start_proc.StartInfo.Arguments = open_item;
 				try {
-					Log.Info ("Opening \"{0}\"...", open_item);
+					Log.Debug ("Opening \"{0}\"...", open_item);
 					start_proc.Start ();
 				} catch (Exception e) {
 					Log.Error ("Failed to open {0}: {1}", open_item, e.Message);

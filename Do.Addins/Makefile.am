@@ -71,13 +71,13 @@ FILES =  \
 	src/Do.Universe/BookmarkItem.cs \
 	src/Do.Universe/ContactItem.cs \
 	src/Do.Universe/CopyToClipboard.cs \
+	src/Do.Universe/EmailAction.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Universe/IAction.cs \
 	src/Do.Universe/IItem.cs \
 	src/Do.Universe/IItemSource.cs \
 	src/Do.Universe/IObject.cs \
-	src/Do.Universe/MailtoAction.cs \
 	src/Do.Universe/OpenAction.cs \
 	src/Do.Universe/OpenURLAction.cs \
 	src/Do.Universe/OpenWithAction.cs \
