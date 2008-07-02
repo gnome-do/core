@@ -33,11 +33,12 @@ namespace Do.UI
 	/// </summary>
 	public class NotificationIcon : StatusIcon
 	{
+		private const int IconSize = 32;
 		private bool updates_available;
 		private Pixbuf normal_icon = IconProvider.PixbufFromIconName 
-			("gnome-run", (int)IconSize.Menu);
+			("gnome-run", IconSize);
 		private Pixbuf update_icon = IconProvider.PixbufFromIconName
-			("software-update-available", (int)IconSize.Menu);
+			("software-update-available", IconSize);
 				
 		public NotificationIcon()
 		{
@@ -77,15 +78,15 @@ namespace Do.UI
 			Activate += OnActivateStartUpdates;
 			FromPixbuf = update_icon;
 			if (!updates_available)
-				SendNotification ("Plugin updates are available, "
-					+ "Click here to update.", "Updates Available",
+				SendNotification ("GNOME Do",
+					"Updated plugins are available. Click here to update.",
 					"software-update-available");
 			updates_available = true;
 		}
 		
 		public static void SendNotification (string message)
 		{
-			SendNotification ("Gnome-Do", message, null);
+			SendNotification ("GNOME Do", message, null);
 		}
 		
 		public static void SendNotification (string title, string message)
@@ -96,24 +97,32 @@ namespace Do.UI
 		public static void SendNotification (string title, string message, string icon)
 		{
 			Do.NotificationIcon.Show ();
-			Gtk.Application.Invoke (delegate {
-				int x, y;
-				Gdk.Screen screen;
-
-				Do.NotificationIcon.GetLocationOnScreen (
-					out screen, out x, out y);
-
-				Notification msg = new Notification ();
-				msg.Closed += new EventHandler (OnNotificationClosed); 
-				msg.Summary = Catalog.GetString (title);
-				msg.Body = Catalog.GetString (message);
-				if (icon != null)
-					msg.Icon = IconProvider.PixbufFromIconName (icon,
-						(int)IconSize.Menu);
-				msg.Timeout = 5000;
-				msg.SetGeometryHints (screen, x, y);
-				msg.Show ();
+			GLib.Timeout.Add (1000, delegate {
+				Gtk.Application.Invoke (delegate {
+					ShowNotification (title, message, icon);
+				});
+				return false;
 			});
+		}
+		
+		private static void ShowNotification (string title, string message, string icon)
+		{
+			int x, y;
+			Gdk.Screen screen;
+
+			Do.NotificationIcon.GetLocationOnScreen (
+				out screen, out x, out y);
+
+			Notification msg = new Notification ();
+			msg.Closed += new EventHandler (OnNotificationClosed); 
+			msg.Summary = title;
+			msg.Body = message;
+			if (icon != null)
+				msg.Icon = IconProvider.PixbufFromIconName (icon,
+					IconSize);
+			msg.Timeout = 5000;
+			msg.SetGeometryHints (screen, x, y);
+			msg.Show ();
 		}
 		
 		public void GetLocationOnScreen (out Gdk.Screen screen, out int x, out int y)
@@ -134,18 +143,18 @@ namespace Do.UI
 		
 		protected void OnActivateStartUpdates (object sender, EventArgs args)
 		{
-			Activate -= OnActivateStartUpdates;
 			try {
 				PluginManager.InstallAvailableUpdates (true);
+				Activate -= OnActivateStartUpdates;
+				updates_available = false;
+				Pixbuf = normal_icon;
+				SendNotification ("Plugins successfully updated. " +
+				"Please restart GNOME Do.");
 			} catch (Exception e){
 				Log.Error ("{0}: {1}", e.GetType (), e.Message);
 				Log.Debug (e.StackTrace);
+				SendNotification ("Plugin update failed.");
 			}
-			updates_available = false;
-			Pixbuf = normal_icon;
-			SendNotification ("Plugins successfully updated. " +
-				"Please restart GNOME Do.");
-			
 			if (!Do.Preferences.StatusIconVisible)
 				Hide ();
 		}

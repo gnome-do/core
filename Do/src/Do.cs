@@ -65,7 +65,7 @@ namespace Do {
 			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
 			
-			//whoever keeps pulling this out. STOP.
+			//whoever keeps pulling this out. STOP. PLEASE.
 			notification_icon = NotificationIcon;
 			
 			// Kick-off update timers.
