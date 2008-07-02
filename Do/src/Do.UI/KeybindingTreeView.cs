@@ -20,6 +20,7 @@
 
 
 using System;
+using Mono.Unix;
 using Gtk;
 
 namespace Do.UI
@@ -38,13 +39,15 @@ namespace Do.UI
 			
 			CellRendererText actionCell = new CellRendererText ();
 			actionCell.Width = 150;
-			InsertColumn (-1, "Action", actionCell, "text", (int)Column.Action);
+			InsertColumn (-1, Catalog.GetString ("Action"), actionCell, "text",
+				(int) Column.Action);
 			
 			CellRendererAccel bindingCell = new CellRendererAccel ();
 			bindingCell.Editable = true;
 			bindingCell.AccelEdited += new AccelEditedHandler (OnAccelEdited);
 			bindingCell.AccelCleared += new AccelClearedHandler (OnAccelCleared);
-			InsertColumn (-1, "Shortcut", bindingCell, "text", (int)Column.Binding);
+			InsertColumn (-1, Catalog.GetString ("Shortcut"), bindingCell, "text",
+				(int) Column.Binding);
 			
 			RowActivated += new RowActivatedHandler (OnRowActivated);
 			ButtonPressEvent += new ButtonPressEventHandler (OnButtonPress);
@@ -58,7 +61,8 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 			
-			store.AppendValues ("Summon", Do.Preferences.SummonKeyBinding);
+			store.AppendValues ("Summon",
+				Do.Preferences.SummonKeyBinding);
 		}
 		
 		[GLib.ConnectBefore]
@@ -101,7 +105,7 @@ namespace Do.UI
 			
 			store = Model as ListStore;
 			store.GetIter (out iter, new TreePath (args.PathString));
-			store.SetValue (iter, (int)Column.Binding, "DISABLED");
+			store.SetValue (iter, (int)Column.Binding, Catalog.GetString ("DISABLED"));
 		}
 		
 		private void SaveBindings ()

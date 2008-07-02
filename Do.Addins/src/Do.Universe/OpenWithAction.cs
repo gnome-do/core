@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mono.Unix;
 
 using Do.Addins;
 
@@ -35,11 +36,11 @@ namespace Do.Universe {
 		}
 		
 		public override string Name {
-			get { return "Open With..."; }
+			get { return Catalog.GetString ("Open With..."); }
 		}
 		
 		public override string Description {
-			get { return "Opens files in specific applications."; }
+			get { return Catalog.GetString ("Opens files in specific applications."); }
 		}
 		
 		public override string Icon {

@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using Mono.Unix;
 
 namespace Do.Universe {
 
@@ -67,11 +68,11 @@ namespace Do.Universe {
 		}
 
 		public string Name {
-			get { return "Applications"; }
+			get { return Catalog.GetString ("Applications"); }
 		}
 
 		public string Description {
-			get { return "Finds applications in many locations."; }
+			get { return Catalog.GetString ("Finds applications in many locations."); }
 		}
 
 		public string Icon {

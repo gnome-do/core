@@ -43,8 +43,8 @@ namespace Do.UI
 		public NotificationIcon()
 		{
 			FromPixbuf = normal_icon;
-			Tooltip = Catalog.GetString ("Summon GNOME Do with " + 
-				Do.Preferences.SummonKeyBinding);
+			Tooltip = Catalog.GetString ("Summon GNOME Do with ") + 
+				Do.Preferences.SummonKeyBinding;
 			Activate += new EventHandler (OnActivateSummonDo);			
 			PopupMenu += new PopupMenuHandler (OnTrayIconPopup);
 			
@@ -78,8 +78,8 @@ namespace Do.UI
 			Activate += OnActivateStartUpdates;
 			FromPixbuf = update_icon;
 			if (!updates_available)
-				SendNotification ("GNOME Do",
-					"Updated plugins are available. Click here to update.",
+				SendNotification ("GNOME Do", Catalog.GetString (
+					"Updated plugins are available. Click here to update."),
 					"software-update-available");
 			updates_available = true;
 		}
@@ -150,12 +150,12 @@ namespace Do.UI
 				Activate -= OnActivateStartUpdates;
 				updates_available = false;
 				Pixbuf = normal_icon;
-				SendNotification ("Plugins successfully updated. " +
-				"Please restart GNOME Do.");
+				SendNotification (Catalog.GetString ("Plugins successfully updated. "
+					+ "Please restart GNOME Do."));
 			} catch (Exception e){
 				Log.Error ("{0}: {1}", e.GetType (), e.Message);
 				Log.Debug (e.StackTrace);
-				SendNotification ("Plugin update failed.");
+				SendNotification (Catalog.GetString ("Plugin update failed."));
 			}
 			if (!Do.Preferences.StatusIconVisible)
 				Hide ();

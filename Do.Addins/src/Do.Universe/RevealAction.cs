@@ -19,6 +19,7 @@
  */
 
 using System;
+using Mono.Unix;
 
 using Do.Addins;
 
@@ -31,11 +32,12 @@ namespace Do.Universe
 		}
 		
 		public override string Name {
-			get { return "Reveal"; }
+			get { return Catalog.GetString ("Reveal"); }
 		}
 		
 		public override string Description {
-			get { return "Reveals a file in the file manager."; }
+			get { return 
+				Catalog.GetString ("Reveals a file in the file manager."); }
 		}
 		
 		public override string Icon {

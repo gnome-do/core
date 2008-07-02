@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mono.Unix;
 
 using Gtk;
 
@@ -32,7 +33,7 @@ namespace Do.UI
 		private KeybindingTreeView kbview;
 		
 		new public string Name {
-			get { return "Keyboard"; }
+			get { return Catalog.GetString ("Keyboard"); }
 		}
 		
         public string Description {

@@ -41,8 +41,7 @@ namespace Do.Universe {
 		public ApplicationItem (string desktopFile)
 		{
 			item = DesktopItem.NewFromFile (desktopFile,
-				DesktopItemLoadFlags.NoTranslations);
-
+				DesktopItemLoadFlags.OnlyIfExists);
 			if (null == item)
 				throw new Exception (desktopFile + " not found.");
 		}
@@ -61,7 +60,7 @@ namespace Do.Universe {
 		
 		public string Icon {
 			get {
-				return item.GetString ("Icon");
+				return item.GetIcon (IconTheme.Default);
 			}
 		}
 		

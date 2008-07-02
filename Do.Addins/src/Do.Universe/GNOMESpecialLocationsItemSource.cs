@@ -20,6 +20,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using Mono.Unix;
 
 using Do.Addins;
 
@@ -43,10 +44,16 @@ namespace Do.Universe {
 			virtual public string URI { get { return uri; } }
 		}
 			
-		public string Name { get { return "GNOME Special Locations"; } }
-		public string Description { get {
-			return "Special locations in GNOME, such as Computer and Network.";
-		} }
+		public string Name { 
+			get { return Catalog.GetString ("GNOME Special Locations"); } 
+		}
+		
+		public string Description {
+			get { return Catalog.GetString ("Special locations in GNOME, "
+				+ "such as Computer and Network.");
+			} 
+		}
+		
 		public string Icon { get { return "user-home"; } }
 
 		public Type[] SupportedItemTypes
