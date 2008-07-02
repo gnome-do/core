@@ -120,7 +120,9 @@ namespace Do.UI
 			if (icon != null)
 				msg.Icon = IconProvider.PixbufFromIconName (icon,
 					IconSize);
-			msg.Timeout = 5000;
+			msg.Timeout = message.Length / 10 * 1000;
+			if (msg.Timeout > 10000) msg.Timeout = 10000;
+			if (msg.Timeout < 5000) msg.Timeout = 5000;
 			msg.SetGeometryHints (screen, x, y);
 			msg.Show ();
 		}
