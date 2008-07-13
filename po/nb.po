@@ -1,178 +1,169 @@
-# This file is distributed under the same license as the PACKAGE package.
-#
-# Félix Lefebvre, 2008
-#
+# Norwegian Bokmal translation for do
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the do package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-do\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: do\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-06-12 18:38+1000\n"
-"PO-Revision-Date: 2008-07-11 15:21+0000\n"
-"Last-Translator: TuniX12 <sedra12@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2008-06-21 00:19+0000\n"
+"Last-Translator: Thor Marius K. Høgås <nitrolinken@gmail.com>\n"
+"Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2008-07-13 03:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:90
 msgid "Password"
-msgstr "Mot de passe"
+msgstr "Passord"
 
 #: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:113
 msgid "Username"
-msgstr "Identifiant"
+msgstr "Brukernavn"
 
 #: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:130
-#, fuzzy
 msgid "<i>Verify and save account information</i>"
-msgstr "<i>Vérifier et enregistrer les informations du compte</i>"
+msgstr "<i>Verifiser og lagre kontoinformasjon</i>"
 
 #: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:61
 #: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:327
 #: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:378
 #: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:288
 msgid "Type to begin searching"
-msgstr "Taper pour commencer la recherche"
+msgstr "Skriv for å begynne"
 
 #: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:62
 #: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:328
 #: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:379
 #: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:289
 msgid "Type to start searching."
-msgstr "Taper pour commencer la recherche"
+msgstr "Skriv for å starte"
 
 #: ../Do.Addins/src/Do.Universe/MailtoAction.cs:47
 msgid "Email"
-msgstr "Email"
+msgstr "E-post"
 
 #: ../Do.Addins/src/Do.Universe/MailtoAction.cs:53
 msgid "Compose a new email to a friend."
-msgstr "Ecrire un nouvel email à un ami."
+msgstr "Lag en ny e-post til en venn."
 
 #: ../Do.Addins/src/Do.Universe/OpenAction.cs:42
 msgid "Open"
-msgstr "Ouvrir"
+msgstr "Åpen"
 
 #: ../Do.Addins/src/Do.Universe/OpenAction.cs:47
 msgid "Opens many kinds of items."
-msgstr "Ouvre divers types d'éléments."
+msgstr "Åpner mange forskjellige typer."
 
 #: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:53
 msgid "Open URL"
-msgstr "Ouvrir une URL"
+msgstr "Åpne URL"
 
 #: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:58
-#, fuzzy
 msgid "Opens bookmarks and manually-typed URLs."
-msgstr "Ouvre les marque-pages et les URLs saisies."
+msgstr "Åpner bokmerker og andre URLs."
 
 #: ../Do.Addins/src/Do.Universe/RunAction.cs:34
 msgid "Run"
-msgstr "Exécuter"
+msgstr "Kjør"
 
 #: ../Do.Addins/src/Do.Universe/RunAction.cs:39
 msgid "Run an application, script, or other executable."
-msgstr "Exécuter une application, un script ou un autre exécutable."
+msgstr "Kjør et programm, skript eller en annen type kjørbar."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:59
-#, fuzzy
 msgid "<b>First-launch Behavior</b>"
-msgstr "<b>Comportement lors du premier lancement</b>"
+msgstr "<b>Første-gangs oppførsel</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:79
 msgid "Start GNOME Do at login."
-msgstr "Lancer GNOME Do au démarrage."
+msgstr "Start GNOME Do ved oppstart."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:91
-#, fuzzy
 msgid "Hide window on first launch (quiet mode)."
-msgstr "Cacher la fenêtre au premier lancement (mode silencieux)"
+msgstr "Gjem vinduet ved start (stille modus)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:109
 msgid "<b>Appearance</b>"
-msgstr "<b>Apparence</b>"
+msgstr "<b>Utseende</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:131
 msgid "Theme:"
-msgstr "Thème :"
+msgstr "Tema:"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:139
 msgid "Classic"
-msgstr "Classique"
+msgstr "Klassisk"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:140
-#, fuzzy
 msgid "Glass Frame"
-msgstr "Cadre transparent"
+msgstr "Glassramme"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:141
-#, fuzzy
 msgid "Mini"
-msgstr "Minimal"
+msgstr "Mini"
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-#, fuzzy
 msgid "To edit a shortcut, double-click it and type a new one."
-msgstr ""
-"Pour éditer un raccourci, double-cliquez dessus et tapez-en un nouveau."
+msgstr "For å endre en snarvei, dobbel-klikk på en og skriv inn en ny en."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
 msgid "Show:"
-msgstr "Afficher :"
+msgstr "Vis:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:89
 msgid "Search:"
-msgstr "Rechercher :"
+msgstr "Søk:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:145
 msgid "_Configure"
-msgstr "_Configurer"
+msgstr "_Konfigurer"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:171
 msgid "_About"
-msgstr "À _propos"
+msgstr "_Om"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
-#, fuzzy
 msgid "PluginConfigurationWindow"
-msgstr "Fenêtre de configuration des greffons"
+msgstr "PluginConfigurationWindow"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
-msgstr "<span size=\"large\" weight=\"heavy\">Nom du plugin ici</span>"
+msgstr "<span size=\"large\" weight=\"heavy\">Navn på tillegg her</span>"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
 msgid "page1"
-msgstr "page1"
+msgstr "side1"
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
 msgid "GNOME Do Preferences"
-msgstr "Préférences de GNOME Do"
+msgstr "GNOME Do Instillinger"
 
 #: ../Do/src/Do.Core/Controller.cs:793
 msgid "Unknown"
-msgstr "Inconnu"
+msgstr "Ukjent"
 
 #. About menu item
 #: ../Do/src/Do.UI/MainMenu.cs:50
 msgid "_About Do"
-msgstr "_À propos de Do"
+msgstr "_Om Do"
 
 #. Quit menu item
 #: ../Do/src/Do.UI/MainMenu.cs:64
 msgid "_Quit"
-msgstr "_Quitter"
+msgstr "_Avslutt"
 
 #: ../Do/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr ""
-"Faire  tout avec vos fichiers, marque-pages, applications, musique et "
-"contacts aussi vite que possible, et même plus !"
+"Utfør dine oppgaver så raskt som mulig (men ikke mer) med dine filer, "
+"bokmerker, programmer, musikk, kontakter og mer!"
 
 #: ../Do/gnome-do.desktop.in.h:2
 msgid "GNOME Do"

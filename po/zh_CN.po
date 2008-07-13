@@ -1,178 +1,167 @@
-# This file is distributed under the same license as the PACKAGE package.
-#
-# Félix Lefebvre, 2008
-#
+# Simplified Chinese translation for do
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the do package.
+# Li Linxiao <linxiao.li@yahoo.com>, 2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-do\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: do\n"
+"Report-Msgid-Bugs-To: Li Linxiao <linxiao.li@yahoo.com>\n"
 "POT-Creation-Date: 2008-06-12 18:38+1000\n"
-"PO-Revision-Date: 2008-07-11 15:21+0000\n"
-"Last-Translator: TuniX12 <sedra12@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2008-07-08 11:00+0000\n"
+"Last-Translator: Aron Xu <Unknown>\n"
+"Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2008-07-13 03:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:90
 msgid "Password"
-msgstr "Mot de passe"
+msgstr "密码"
 
 #: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:113
 msgid "Username"
-msgstr "Identifiant"
+msgstr "用户名"
 
 #: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:130
-#, fuzzy
 msgid "<i>Verify and save account information</i>"
-msgstr "<i>Vérifier et enregistrer les informations du compte</i>"
+msgstr "<i>验证并保存帐户信息</i>"
 
 #: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:61
 #: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:327
 #: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:378
 #: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:288
 msgid "Type to begin searching"
-msgstr "Taper pour commencer la recherche"
+msgstr "键入任意字符开始搜索"
 
 #: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:62
 #: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:328
 #: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:379
 #: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:289
 msgid "Type to start searching."
-msgstr "Taper pour commencer la recherche"
+msgstr "键入任意字符开始搜索"
 
 #: ../Do.Addins/src/Do.Universe/MailtoAction.cs:47
 msgid "Email"
-msgstr "Email"
+msgstr "电子邮件"
 
 #: ../Do.Addins/src/Do.Universe/MailtoAction.cs:53
 msgid "Compose a new email to a friend."
-msgstr "Ecrire un nouvel email à un ami."
+msgstr "给朋友撰写一封新邮件"
 
 #: ../Do.Addins/src/Do.Universe/OpenAction.cs:42
 msgid "Open"
-msgstr "Ouvrir"
+msgstr "打开"
 
 #: ../Do.Addins/src/Do.Universe/OpenAction.cs:47
 msgid "Opens many kinds of items."
-msgstr "Ouvre divers types d'éléments."
+msgstr "打开多种条目"
 
 #: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:53
 msgid "Open URL"
-msgstr "Ouvrir une URL"
+msgstr "打开URL"
 
 #: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:58
-#, fuzzy
 msgid "Opens bookmarks and manually-typed URLs."
-msgstr "Ouvre les marque-pages et les URLs saisies."
+msgstr "打开书签和手工键入的URL"
 
 #: ../Do.Addins/src/Do.Universe/RunAction.cs:34
 msgid "Run"
-msgstr "Exécuter"
+msgstr "运行"
 
 #: ../Do.Addins/src/Do.Universe/RunAction.cs:39
 msgid "Run an application, script, or other executable."
-msgstr "Exécuter une application, un script ou un autre exécutable."
+msgstr "运行应用程序、脚本或其他可执行文件"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:59
-#, fuzzy
 msgid "<b>First-launch Behavior</b>"
-msgstr "<b>Comportement lors du premier lancement</b>"
+msgstr "<b>首次启动行为</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:79
 msgid "Start GNOME Do at login."
-msgstr "Lancer GNOME Do au démarrage."
+msgstr "登陆时启动GNOME Do"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:91
-#, fuzzy
 msgid "Hide window on first launch (quiet mode)."
-msgstr "Cacher la fenêtre au premier lancement (mode silencieux)"
+msgstr "首次启动时隐藏窗口(安静模式)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:109
 msgid "<b>Appearance</b>"
-msgstr "<b>Apparence</b>"
+msgstr "<b>外观</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:131
 msgid "Theme:"
-msgstr "Thème :"
+msgstr "主题:"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:139
 msgid "Classic"
-msgstr "Classique"
+msgstr "传统"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:140
-#, fuzzy
 msgid "Glass Frame"
-msgstr "Cadre transparent"
+msgstr "玻璃框"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:141
-#, fuzzy
 msgid "Mini"
-msgstr "Minimal"
+msgstr "迷你"
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-#, fuzzy
 msgid "To edit a shortcut, double-click it and type a new one."
-msgstr ""
-"Pour éditer un raccourci, double-cliquez dessus et tapez-en un nouveau."
+msgstr "欲编辑某个快捷方式，只需双击并键入一组新快捷键."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
 msgid "Show:"
-msgstr "Afficher :"
+msgstr "显示:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:89
 msgid "Search:"
-msgstr "Rechercher :"
+msgstr "搜索:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:145
 msgid "_Configure"
-msgstr "_Configurer"
+msgstr "配置(_C)"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:171
 msgid "_About"
-msgstr "À _propos"
+msgstr "关于(_A)"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
-#, fuzzy
 msgid "PluginConfigurationWindow"
-msgstr "Fenêtre de configuration des greffons"
+msgstr "查检配置窗口"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
-msgstr "<span size=\"large\" weight=\"heavy\">Nom du plugin ici</span>"
+msgstr "<span size=\"large\" weight=\"heavy\">插件名称</span>"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
 msgid "page1"
-msgstr "page1"
+msgstr "页1"
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
 msgid "GNOME Do Preferences"
-msgstr "Préférences de GNOME Do"
+msgstr "GNOME Do首选项"
 
 #: ../Do/src/Do.Core/Controller.cs:793
 msgid "Unknown"
-msgstr "Inconnu"
+msgstr "未知"
 
 #. About menu item
 #: ../Do/src/Do.UI/MainMenu.cs:50
 msgid "_About Do"
-msgstr "_À propos de Do"
+msgstr "关于Do(_A)"
 
 #. Quit menu item
 #: ../Do/src/Do.UI/MainMenu.cs:64
 msgid "_Quit"
-msgstr "_Quitter"
+msgstr "退出(_Q)"
 
 #: ../Do/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
-msgstr ""
-"Faire  tout avec vos fichiers, marque-pages, applications, musique et "
-"contacts aussi vite que possible, et même plus !"
+msgstr "方便快捷的处理你的文件、书签、应用程序、音乐、通讯簿等等..."
 
 #: ../Do/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
