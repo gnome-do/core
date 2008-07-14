@@ -77,8 +77,16 @@ FILES =  \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
+	src/Do.Core/IUniverseManager.cs \
 	src/Do.Core/PluginManager.cs \
 	src/Do.Core/RelevanceProvider.cs \
+	src/Do.Core/SearchControllers/FirstSearchController.cs \
+	src/Do.Core/SearchControllers/ISearchController.cs \
+	src/Do.Core/SearchControllers/SecondSearchController.cs \
+	src/Do.Core/SearchControllers/SimpleSearchContext.cs \
+	src/Do.Core/SearchControllers/SimpleSearchController.cs \
+	src/Do.Core/SearchControllers/ThirdSearchController.cs \
+	src/Do.Core/SimpleUniverseManager.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \

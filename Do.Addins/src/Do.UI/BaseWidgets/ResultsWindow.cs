@@ -56,14 +56,14 @@ namespace Do.UI
 		ScrolledWindow resultsScrolledWindow;
 		TreeView resultsTreeview;
 		IObject[] results;
-		int selectedIndex;
-		bool selectedIndexSet;
-		bool quietSelectionChange;
 		Label queryLabel;
 		Frame frame;
 		string query;
 		Gdk.Color backgroundColor;
 		VBox vbox;
+		
+		int cursor;
+		int[] secondary = new int[0];
 
 
 		public ResultsWindow (Gdk.Color backgroundColor, int NumberResults) 
@@ -74,9 +74,6 @@ namespace Do.UI
 			
 			Build ();
 			results = null;
-			selectedIndex = 0;
-			selectedIndexSet = false;
-			Shown += OnShown;
 		}
 		
 		public ResultsWindow (Gdk.Color backgroundColor, int DefaultIconSize, 
@@ -90,23 +87,6 @@ namespace Do.UI
 			
 			Build ();
 			results = null;
-			selectedIndex = 0;
-			selectedIndexSet = false;
-			Shown += OnShown;
-		}
-
-		protected virtual void OnShown (object sender, EventArgs args)
-		{
-			// setting Results calls Clear(), resets this.
-			int savedSelectedIndex;    
-
-			// Do this to load the icons.
-			savedSelectedIndex = selectedIndex;
-			quietSelectionChange = true;
-			Results = results;
-			selectedIndexSet = false;
-			SelectedIndex = savedSelectedIndex;
-			quietSelectionChange = false;
 		}
 
 		private void NotifySelectionChanged ()
@@ -170,13 +150,14 @@ namespace Do.UI
 			// If this is not set the tree will call IconDataFunc for all rows to 
 			// determine the total height of the tree
 			resultsTreeview.FixedHeightMode = true;
+			//resultsTreeview.Selection.Mode = SelectionMode.Multiple;
 			
 			resultsScrolledWindow.Add (resultsTreeview);
 			resultsTreeview.Show ();
 
 			resultsTreeview.Model = new ListStore (new Type[] {
 				typeof (IObject),				
-				typeof (string)
+				typeof (string), 
 			});
 
 			column = new TreeViewColumn ();			
@@ -193,7 +174,7 @@ namespace Do.UI
 			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
 				
 			vbox.SetSizeRequest (DefaultWindowWidth, 
-				(height + 4) * NumberResultsDisplayed + 10);
+				(4 + height) * NumberResultsDisplayed + 10);
 			
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
@@ -201,6 +182,7 @@ namespace Do.UI
 			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
 			
 			resultsTreeview.AppendColumn (column);
+
 
 			resultsTreeview.Selection.Changed += OnResultRowSelected;
 		}
@@ -215,14 +197,62 @@ namespace Do.UI
 		{			
 			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
 			IObject o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as IObject;
-			renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
+			bool isSecondary = false;
+			foreach (int i in secondary)
+				if (model.GetStringFromIter (iter) == i.ToString ())
+					isSecondary = true;
+			
+			
+			if (isSecondary) {
+				Gdk.Pixbuf source = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
+				Gdk.Pixbuf emblem = IconProvider.PixbufFromIconName ("gtk-add", DefaultResultIconSize / 2);
+				Gdk.Pixbuf dest = new Pixbuf (Colorspace.Rgb, true, 8, DefaultResultIconSize, DefaultResultIconSize);
+				
+				source.Composite (dest, 
+				                  0, 
+				                  0, 
+				                  DefaultResultIconSize, 
+				                  DefaultResultIconSize, 
+				                  0, 
+				                  0, 
+				                  1,
+				                  1, 
+				                  InterpType.Bilinear, 
+				                  255);
+				
+				emblem.Composite (dest, 
+				                  0, 
+				                  0, 
+				                  DefaultResultIconSize, 
+				                  DefaultResultIconSize, 
+				                  0, 
+				                  0, 
+				                  1,
+				                  1, 
+				                  InterpType.Bilinear, 
+				                  255);
+				
+				
+				renderer.Pixbuf = dest;
+			} else {
+				renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
+			}
 		}
 
 		private void OnResultRowSelected (object sender, EventArgs args)
 		{
-			if (!selectedIndexSet || quietSelectionChange) return;
-			if (resultsTreeview.Selection.GetSelectedRows().Length > 0) {
-				selectedIndex = resultsTreeview.Selection.GetSelectedRows()[0].Indices[0];
+			int temp;
+			//cleanup needed
+			try {
+				temp = resultsTreeview.Selection.GetSelectedRows()[0].Indices[0];
+			} catch {
+				return;
+			}
+			
+			if (temp == cursor)	return;		
+			
+			if (resultsTreeview.Selection.GetSelectedRows().Length == 1) {
+				cursor = temp;
 				NotifySelectionChanged ();
 			}
 		}
@@ -230,87 +260,67 @@ namespace Do.UI
 		public virtual void Clear ()
 		{
 			(resultsTreeview.Model as ListStore).Clear ();
-			selectedIndex = 0;
-			selectedIndexSet = false;
+			cursor = 0;
 			results = null;
-			// Query = "";
 		}
 
-		public SearchContext Context
+		public IUIContext Context
 		{
 			set {
-				if (value == null) return;
-
+				if (value == null || value.Results.Length == 0) return;
+				
 				if (Results.GetHashCode () != value.Results.GetHashCode ()) {
 					Results = value.Results;
 					Query = value.Query;
 				}
-				SelectedIndex = value.Cursor;
+				cursor = value.Cursor;
+				secondary = value.SecondaryCursors;
+				
+				UpdateCursors ();
 			}
 		}
 
 		public int SelectedIndex
 		{
-			get { return selectedIndex; }
-			set {
-				TreeModel model;
-				TreeIter iter;
-				TreePath path;
-				int new_selection;
-
-				if (selectedIndexSet &&
-				    value == selectedIndex) return;
-
-				selectedIndexSet = true;
-
-				// Don't bother updating widgets if we're not visible -
-				// instead, do these things on Show.
-				if (!Visible) {
-					selectedIndex = value;
-					return;
-				}
-
-				if (results.Length == 0)
-					return;
-				else if (value >= results.Length)
-					new_selection = results.Length - 1;
-				else if (value < 0)
-					new_selection = 0;
-				else
-					new_selection = value;
-
-				resultsTreeview.Selection.GetSelected (out model, out iter);
-				path = model.GetPath (iter);
-				// TODO: Just jump to new index instead of iterating like this.
-				while (new_selection > selectedIndex) {
-					selectedIndex++;
-					path.Next ();
-				}
-				while (new_selection < selectedIndex) {
-					selectedIndex--;
-					path.Prev ();
-				}
-				resultsTreeview.Selection.SelectPath (path);
-				resultsTreeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
+			get { return cursor; }
+			set { 
+				cursor = value;
+				
+				UpdateCursors ();
 			}
 		}
+		
+		private void UpdateCursors () 
+		{
+			resultsTreeview.Selection.UnselectAll ();
 
+			Gtk.TreePath path;
+			/*foreach (int i in secondary) {
+				path = new TreePath (i.ToString ());
+				resultsTreeview.Selection.SelectPath (path);
+			}*/
+			
+			path = new TreePath (cursor.ToString ());
+			resultsTreeview.Selection.SelectPath (path);
+			resultsTreeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
+		}
+		
 		public IObject SelectedObject
 		{
 			get {
 				try {
-					return results[selectedIndex];
+					return results[SelectedIndex];
 				} catch {
 					return null;
 				}
 			}
 		}
-
+		
 		public IObject[] Results
 		{
 			//Needed for hashing
 			get { return results ?? results = new IObject[0]; }
-			set {				
+			set {			
 				ListStore store;
 				TreeIter iter, first_iter;
 				bool seen_first;				
@@ -321,10 +331,6 @@ namespace Do.UI
 				store = resultsTreeview.Model as ListStore;
 				first_iter = default (TreeIter);
 				seen_first = false;
-
-				// Don't bother updating widgets if we're not visible -
-				// instead, do these things on Show.
-				if (!Visible) return;
 
 				foreach (IObject result in results) {					
 					
@@ -347,6 +353,7 @@ namespace Do.UI
 				}
 			}
 		}
+
 
 		public string Query
 		{

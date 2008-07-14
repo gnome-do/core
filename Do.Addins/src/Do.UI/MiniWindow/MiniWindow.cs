@@ -325,7 +325,7 @@ namespace Do.UI
 				resultsWindow.Hide ();
 		}
 		
-		public void SetPaneContext (Pane pane, SearchContext context)
+		public void SetPaneContext (Pane pane, IUIContext context)
 		{
 			if (context.Results.Length == 0) {
 				NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);

@@ -34,7 +34,7 @@ namespace Do {
 		
 		static DoPreferences preferences;
 		static Controller controller;
-		static UniverseManager universe_manager;
+		static IUniverseManager universe_manager;
 		static NotificationIcon notification_icon;
 
 		public static void Main (string[] args)
@@ -58,8 +58,8 @@ namespace Do {
 			}
 
 			PluginManager.Initialize ();
-			UniverseManager.Initialize ();
 			Controller.Initialize ();
+			UniverseManager.Initialize ();
 			DBusRegistrar.RegisterController (Controller);
 			
 			keybinder = new GConfXKeybinder ();
@@ -106,10 +106,10 @@ namespace Do {
 			}
 		}
 
-		public static UniverseManager UniverseManager {
+		public static IUniverseManager UniverseManager {
 			get {
 				return universe_manager ??
-					universe_manager = new UniverseManager ();
+					universe_manager = new SimpleUniverseManager ();
 			}
 		}
 		

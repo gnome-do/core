@@ -60,12 +60,14 @@ FILES =  \
 	src/Do.UI/IconCache.cs \
 	src/Do.UI/IconProvider.cs \
 	src/Do.UI/IDoWindow.cs \
+	src/Do.UI/IUIContext.cs \
 	src/Do.UI/MiniWindow/MiniIconBox.cs \
 	src/Do.UI/MiniWindow/MiniWindow.cs \
 	src/Do.UI/MiniWindow/MiniWindowFrame.cs \
 	src/Do.UI/NotificationBridge.cs \
 	src/Do.UI/PositionWindow.cs \
 	src/Do.UI/ResultsWindowSelectionEventArgs.cs \
+	src/Do.UI/UIContext.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/BookmarkItem.cs \
@@ -104,7 +106,7 @@ REFERENCES =  \
 	-pkg:gconf-sharp-2.0 \
 	-pkg:glib-sharp-2.0 \
 	-pkg:gnome-desktop-sharp-2.0 \
-	-pkg:gnome-keyring-sharp-1.0 \
+	-pkg:gnome-keyring-sharp \
 	-pkg:gnome-sharp-2.0 \
 	-pkg:gnome-vfs-sharp-2.0 \
 	-pkg:gtk-sharp-2.0 \

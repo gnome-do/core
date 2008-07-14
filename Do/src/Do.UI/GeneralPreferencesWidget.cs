@@ -19,7 +19,6 @@
 using System;
 using System.IO;
 using System.Reflection;
-using Mono.Unix;
 
 using Do;
 using Gtk;
@@ -43,7 +42,7 @@ namespace Do.UI
 		}
     		
 		new public string Name {
-			get { return Catalog.GetString ("General"); }
+			get { return "General"; }
 		}
 		
         public string Description {
@@ -57,9 +56,9 @@ namespace Do.UI
         public string[] Themes {
         	get {
         		return new string[] {
-        			Catalog.GetString ("Classic"),
-        			Catalog.GetString ("Glass Frame"),
-        			Catalog.GetString ("Mini"),
+        			"Classic",
+        			"Glass Frame",
+        			"Mini",
         		};
         	}
         }
