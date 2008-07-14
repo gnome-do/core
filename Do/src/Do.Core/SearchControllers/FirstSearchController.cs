@@ -37,16 +37,21 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
+			Console.WriteLine ("UPDATE FIRST RESULTS");
 			List<IObject> results = InitialResults ();
 			
-			foreach (Type t in SearchTypes) {
-				if (t == typeof (IItem) || t == typeof (ITextItem)) {
-					results.Add (new DoTextItem (Query));
+			Console.WriteLine ("results set");
+			if (DefaultFilter) {
+				results.Add (new DoTextItem (Query));
+			} else {
+				foreach (Type t in SearchTypes) {
+					if (t == typeof (IItem) || t == typeof (ITextItem)) {
+						results.Add (new DoTextItem (Query));
+					}
 				}
 			}
 			
 			context.Results = results.ToArray ();
-			
 			
 			//TODO -- Clean this up.  Too fried to think through proper logic now.
 			try {
