@@ -663,8 +663,9 @@ namespace Do.Core {
 				/////////////////////////////////////////////////////////////
 				
 				// Increase the relevance of the item.
-				// Someday this will need to be moved to allow for >1 item.
-				(items[0] as DoObject).IncreaseRelevance (itemQuery, null);
+				foreach (DoObject item in items) {
+					item.IncreaseRelevance (itemQuery, null);
+				}
 
 				// Increase the relevance of the action alone:
 				(action as DoAction).IncreaseRelevance (actionQuery, null);

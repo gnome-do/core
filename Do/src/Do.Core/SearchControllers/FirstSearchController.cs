@@ -37,10 +37,8 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
-			Console.WriteLine ("UPDATE FIRST RESULTS");
 			List<IObject> results = InitialResults ();
 			
-			Console.WriteLine ("results set");
 			if (DefaultFilter) {
 				results.Add (new DoTextItem (Query));
 			} else {

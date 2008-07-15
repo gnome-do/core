@@ -33,7 +33,10 @@ namespace Do.Core
 	public class SimpleUniverseManager : IUniverseManager
 	{
 		private Dictionary<string, IObject> universe;
+		private Dictionary<char, List<IObject>> quickResults;
+		
 		private object universeLock = new object ();
+		private object quickResultsLock = new object ();
 		
 		/// <summary>
 		/// Maximum amount of time spent doing an updated (milliseconds)
@@ -43,6 +46,11 @@ namespace Do.Core
 		public SimpleUniverseManager()
 		{
 			universe = new Dictionary<string, IObject> ();
+			quickResults = new Dictionary<char,List<IObject>> ();
+			
+			for (char key = 'a'; key <= 'z'; key++) {
+				quickResults [key] = new List<IObject> ();
+			}
 		}
 
 		/// <summary>
@@ -59,10 +67,33 @@ namespace Do.Core
 		/// </returns>
 		public IObject[] Search (string query, Type[] searchFilter)
 		{
+			if (query.Length == 1) {
+				lock (quickResultsLock) {
+					char key = Convert.ToChar (query);
+					if (quickResults.ContainsKey (key))
+						return Search (query, searchFilter, quickResults[key]);
+				}
+			}
+			
 			lock (universeLock) 
 				return Search (query, searchFilter, universe.Values);
 		}
 		
+		/// <summary>
+		/// Returns a basic search based on the base array and relevance scores
+		/// </summary>
+		/// <param name="query">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="searchFilter">
+		/// A <see cref="Type"/>
+		/// </param>
+		/// <param name="baseArray">
+		/// A <see cref="IEnumerable`1"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="IObject"/>
+		/// </returns>
 		public IObject[] Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray)
 		{
 			List<IObject> results = new List<IObject> ();
@@ -86,6 +117,9 @@ namespace Do.Core
 			return results.ToArray ();
 		}
 		
+		/// <summary>
+		/// Threaded universe building
+		/// </summary>
 		private void BuildUniverse ()
 		{
 			//Originally i had threaded the loading of each plugin, but they dont seem to like this...
@@ -98,15 +132,19 @@ namespace Do.Core
 		private void LoadUniverse ()
 		{
 			Dictionary<string, IObject> loc_universe;
+			Dictionary<char, List<IObject>> loc_quick;
 			if (universe.Values.Count > 0) {
 				loc_universe = new Dictionary<string,IObject> ();
+				loc_quick = new Dictionary<char,List<IObject>> ();
 			} else {
 				loc_universe = universe;
+				loc_quick = quickResults;
 			}
 			
 			foreach (DoAction action in PluginManager.GetActions ()) {
 				lock (universeLock)
 					loc_universe[action.UID] = action;
+				RegisterQuickResults (loc_quick, action);
 			}
 			
 			foreach (DoItemSource source in PluginManager.GetItemSources ()) {
@@ -114,13 +152,36 @@ namespace Do.Core
 				foreach (DoItem item in source.Items) {
 					lock (universeLock)
 						loc_universe[item.UID] = item;
+					RegisterQuickResults (loc_quick, item);
 				}
 			}
 			
-			lock (universeLock) {
+			lock (universeLock)
 				universe = loc_universe;
-			}
+			lock (quickResultsLock)
+				quickResults = loc_quick;
+			
 			loc_universe = null;
+			loc_quick = null;
+		}
+		
+		private void RegisterQuickResults (Dictionary<char, List<IObject>> quickResults, IObject result)
+		{
+			if (quickResults == null) return;
+			
+			lock (quickResultsLock) {
+				foreach (char key in quickResults.Keys) {
+					if ((result.Name + result.Description).ToLower ().Contains (key.ToString ()))
+						quickResults[key].Add (result);
+				}
+			}
+		}
+		
+		private void DeleteQuickResult (IObject result)
+		{
+			lock (quickResultsLock) 
+				foreach (List<IObject> list in quickResults.Values)
+					list.Remove (result);
 		}
 		
 		/// <summary>
@@ -135,10 +196,13 @@ namespace Do.Core
 				foreach (IItem i in items) {
 					if (i is DoItem && !universe.ContainsKey ((i as DoItem).UID)) {
 						universe.Add ((i as DoItem).UID, i);
+						RegisterQuickResults (quickResults, i);
 					} else {
 						DoItem di = new DoItem (i);
-						if (!universe.ContainsKey (di.UID))
+						if (!universe.ContainsKey (di.UID)) {
 							universe.Add (di.UID, di);
+							RegisterQuickResults (quickResults, di);
+						}
 					}
 				}
 			}
@@ -160,6 +224,7 @@ namespace Do.Core
 					} else {
 						universe.Remove (new DoItem (i).UID);
 					}
+					DeleteQuickResult (i);
 				}
 			}
 		}
@@ -189,7 +254,7 @@ namespace Do.Core
 		public void Initialize ()
 		{
 			BuildUniverse ();
-			GLib.Timeout.Add (2 * 60 * 1000, delegate {
+			GLib.Timeout.Add (2 * 10 * 1000, delegate {
 				BuildUniverse ();
 				return true;
 			});
