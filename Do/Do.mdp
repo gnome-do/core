@@ -63,7 +63,6 @@
     <File name="src/DoPreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/PreferencesItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/DoQuitItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/SearchControllers" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Core/SearchControllers/FirstSearchController.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/SearchControllers/ISearchController.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/SearchControllers/SecondSearchController.cs" subtype="Code" buildaction="Compile" />

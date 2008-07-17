@@ -59,7 +59,7 @@ namespace Do.Core
 		public string Query
 		{
 			get { return query ?? query = ""; }
-			set { query = value.ToLower (); }
+			set { query = value; }
 		}
 
 		public IObject[] Results

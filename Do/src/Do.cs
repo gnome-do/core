@@ -80,8 +80,23 @@ namespace Do {
 
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
+			
+			AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 				
 			Gtk.Application.Run ();
+		}
+		
+		static void OnProcessExit (object o, EventArgs args)
+		{
+			Thread th = new Thread (new ThreadStart (delegate {
+				System.Threading.Thread.Sleep (1000);
+				Console.WriteLine ("Process failed to exit cleanly, hard killing");
+				System.Diagnostics.Process process =  System.Diagnostics.Process.GetCurrentProcess ();
+				process.Kill ();
+			}));
+			
+			th.IsBackground = true;
+			th.Start ();
 		}
 
 		static void DetectInstanceAndExit ()

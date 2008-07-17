@@ -30,7 +30,7 @@ namespace Do.Universe {
 	public class ApplicationItem : IRunnableItem {
 		
 		protected DesktopItem item;
-		string name, description;
+		string name, description, icon;
 
 		/// <summary>
 		/// Create an application item from a desktop file location.
@@ -48,6 +48,7 @@ namespace Do.Universe {
 			
 			name = item.GetLocalestring ("Name");
 			description = item.GetLocalestring ("Comment");
+			icon = item.GetIcon (IconTheme.Default);
 		}
 		
 		public string Name {
@@ -64,7 +65,7 @@ namespace Do.Universe {
 		
 		public string Icon {
 			get {
-				return item.GetIcon (IconTheme.Default);
+				return icon;
 			}
 		}
 		

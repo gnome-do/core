@@ -317,7 +317,9 @@ namespace Do.Core {
 		
 		void OnCommaKeyPressEvent (EventKey evnt)
 		{
-			if (CurrentContext.AddSecondaryCursor (CurrentContext.Cursor))
+			if (CurrentContext.Selection is ITextItem)
+				OnInputKeyPressEvent (evnt);
+			else if (CurrentContext.AddSecondaryCursor (CurrentContext.Cursor))
 				UpdatePane (CurrentPane);
 		}
 		

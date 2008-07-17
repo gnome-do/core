@@ -38,10 +38,7 @@ namespace Do.Core
 		private object universeLock = new object ();
 		private object quickResultsLock = new object ();
 		
-		/// <summary>
-		/// Maximum amount of time spent doing an updated (milliseconds)
-		/// </summary>
-		const int updateTimeout = 250;
+		const int maxResults = 1000;
 		
 		public SimpleUniverseManager()
 		{
@@ -69,7 +66,7 @@ namespace Do.Core
 		{
 			if (query.Length == 1) {
 				lock (quickResultsLock) {
-					char key = Convert.ToChar (query);
+					char key = Convert.ToChar (query.ToLower ());
 					if (quickResults.ContainsKey (key))
 						return Search (query, searchFilter, quickResults[key]);
 				}
@@ -114,6 +111,8 @@ namespace Do.Core
 			}
 			results.Sort ();
 			
+			if (results.Count > maxResults)
+				return results.GetRange (0, maxResults).ToArray ();
 			return results.ToArray ();
 		}
 		

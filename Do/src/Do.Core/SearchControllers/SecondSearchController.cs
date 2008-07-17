@@ -37,7 +37,7 @@ namespace Do.Core
 			this.FirstController = FirstController;
 			FirstController.SelectionChanged += OnUpstreamSelectionChanged;
 		}
-
+		
 		protected override void UpdateResults ()
 		{
 			List<IObject> initresults = InitialResults ();
@@ -75,10 +75,16 @@ namespace Do.Core
 
 		public override Type[] SearchTypes {
 			get { 
-				if (FirstController.Selection is IAction)
-					return new Type[] {typeof (IItem)};
-				else 
+				if (FirstController.Selection is IAction) {
+					// ok so the basic idea here is that if the first controller selection is an action
+					// we can move right to filtering on what it supports.  This is not strictly needed,
+					// but speeds up searches since we get more specific results back.  Returning a
+					// typeof (IItem) would have the same effect here and MUST be used to debug.
+					//return new Type[] {typeof (IItem)};
+					return (FirstController.Selection as IAction).SupportedItemTypes;
+				} else {
 					return new Type[] {typeof (IAction)};
+				}
 			}
 		}
 
