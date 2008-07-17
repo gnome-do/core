@@ -151,7 +151,7 @@ namespace Do.Core {
 			float relevance, score;
 			
 			relevance = 0f;			
-			// Get string similarity score. Return immediately if 0.
+			// Get string similarity score.
 			score = StringScoreForAbbreviation (o.Name, match);
 			if (score == 0) return 0;
 			

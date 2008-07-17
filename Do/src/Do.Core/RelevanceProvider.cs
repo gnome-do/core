@@ -32,67 +32,97 @@ namespace Do.Core {
             return new HistogramRelevanceProvider ();
 		}
 
-		// Quicksilver algorithm.
-		// http://docs.blacktree.com/quicksilver/development/string_ranking?DokuWiki=10df5a965790f5b8cc9ef63be6614516
-		public static float StringScoreForAbbreviation (string s, string ab)
+		//Scores a string based on closeness to a query
+		public static float StringScoreForAbbreviation (string s, string query)
 		{
-			return StringScoreForAbbreviationInRanges (s, ab,
-			                                           new int[] {0, s.Length},
-			                                           new int[] {0, ab.Length});
-		}
+			if(query.Length == 0)
+				return 1;
+			
+			float score;
+			string ls = s.ToLower();
+			string lquery = query.ToLower();
 
-		protected static float
-		StringScoreForAbbreviationInRanges (string s, string ab, int[] s_range, int[] ab_range)
-		{
-			float score, remainingScore;
-			int i, j;
-			int[] remainingSearchRange = {0, 0};
-
-			if (ab_range[1] == 0) return 0.9F;
-			if (ab_range[1] > s_range[1]) return 0.0F;
-			for (i = ab_range[1]; i > 0; i--) {
-				// Search for steadily smaller portions of the abbreviation.
-				// TODO Turn this into a dynamic algorithm.
-				string ab_substring = ab.Substring (ab_range[0], i);
-				string s_substring = s.Substring (s_range[0], s_range[1]);
-				int loc = s_substring.IndexOf (ab_substring, StringComparison.CurrentCultureIgnoreCase);
-				if (loc < 0) continue;
-				remainingSearchRange[0] = loc + i;
-				remainingSearchRange[1] = s_range[1] - remainingSearchRange[0];
-				remainingScore = StringScoreForAbbreviationInRanges (s, ab,
-				                                                     remainingSearchRange,
-				                                                     new int[] {ab_range[0]+i, ab_range[1]-i});
-				if (remainingScore != 0) {
-					score = remainingSearchRange[0] - s_range[0];
-					if (loc > s_range[0]) {
-						// If some letters were skipped.
-						if (s[loc-1] == ' ') {
-							for (j = loc-2; j >= s_range[0]; j--) {
-								if (s[j] == ' ')
-									score--;
-								else
-									score -= 0.15F;
-							}
-						}
-						// Else if word is uppercase (?)
-						else if (s[loc] >= 'A') {
-							for (j = loc-1; j >= s_range[0]; j--) {
-								if (s[j] >= 'A')
-									score--;
-								else
-									score -= 0.15F;
-							}
-						}
-						else {
-							score -= loc - s_range[0];
-						}
-					}
-					score += remainingScore * remainingSearchRange[1];
-					score /= s_range[1];
-					return score;
+			//Find the shortest possible substring that matches the query
+			//and get the ration of their lengths for a base score
+			int[] match = findBestSubstringMatchIndices(ls, lquery);
+			if ((match[1] - match[0]) == 0) return 0;
+			score = query.Length / (float)(match[1] - match[0]);
+			if (score == 0) return 0;
+			
+			//Bonus points if the characters start words
+			float good = 0, bad = 1;
+			int firstCount = 0;
+			for(int i=match[0]; i<match[1]-1; i++)
+			{
+				if(s[i] == ' ')
+				{
+					if(lquery.Contains(ls[i+1].ToString()))
+						firstCount++;
+					else
+						bad++;
 				}
 			}
-			return 0;
+						
+			//A first character match counts extra
+			if(lquery[0] == ls[0])
+				firstCount += 2;
+			
+			//The longer the acronym, the better it scores
+			good += firstCount*firstCount*4;
+			
+			//Better yet if the match itself started there
+			if(match[0] == 0)
+				good += 2;
+			
+			//Super bonus if the whole match is at the beginning
+			if(match[1] == (query.Length - 1))
+				good += match[1] + 4;
+			
+			//Super-duper bonus if it is a perfect match
+			if(lquery == ls)
+				good += match[1] * 2 + 4;			
+			
+			if(good+bad > 0)
+				score = (score + 3*good/(good+bad)) / 4;
+			
+			
+			return score;
+		}
+
+		//Finds the shortest substring of s that contains all the characters of query in order
+		//If none is found, returns {-1, -1}
+		protected static int[] findBestSubstringMatchIndices(string s, string query)
+		{
+			int index=-1;
+			int[] bestMatch = {-1,-1};
+			
+			if(query.Length == 0) {
+				int[] noQueryRet = {0,0};
+				return noQueryRet;
+			}
+			
+			//Loop through each instance of the first character in query
+			while ((index = s.IndexOf(query[0], index+1)) >= 0) {
+				//Is there even room for a match?
+				if(index > s.Length - query.Length) break;
+				
+				//Look for the best match in the tail
+				int cur = index;
+				int qcur = 0;
+				while(qcur < query.Length && cur < s.Length)
+					if(query[qcur] == s[cur++])
+						qcur++;
+				
+				if((qcur == query.Length) && (((cur - index) < (bestMatch[1] - bestMatch[0])) || (bestMatch[0] == -1))) {
+					bestMatch[0] = index;
+					bestMatch[1] = cur;
+				}
+				
+				if(index == s.Length - 1)
+					break;
+			}
+			
+			return bestMatch;
 		}
 
 		public virtual void IncreaseRelevance (DoObject r, string match, DoObject other)
