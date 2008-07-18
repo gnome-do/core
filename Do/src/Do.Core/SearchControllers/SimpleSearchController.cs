@@ -162,10 +162,9 @@ namespace Do.Core
 			OnSearchStarted ();
 		}
 
-		public void DeleteChar ()
+		public virtual void DeleteChar ()
 		{
 			if (context.LastContext == null) {
-				Reset ();
 				return;
 			}
 			
