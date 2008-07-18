@@ -72,12 +72,16 @@ namespace Do.Core {
 			// and we shouldn't be, we will need to reset these too.  However controllers
 			// provide a resetting mechanism.
 			controllers[0].SelectionChanged += OnFirstSelectionChanged;
-			controllers[1].SelectionChanged += OnSecondSelectionChanged;
-			controllers[2].SelectionChanged += OnThirdSelectionChanged;
+			controllers[1].SelectionChanged += OnSecondSelectionQueryChanged;
+			controllers[2].SelectionChanged += OnThirdSelectionQueryChanged;
 			
 			controllers[0].QueryChanged += OnFirstQueryChanged;
-			controllers[1].QueryChanged += OnSecondQueryChanged;
-			controllers[2].QueryChanged += OnThirdQueryChanged;
+			controllers[1].QueryChanged += OnSecondSelectionQueryChanged;
+			controllers[2].QueryChanged += OnThirdSelectionQueryChanged;
+			
+			controllers[0].SearchStarted += OnFirstSearchStarted;
+			controllers[1].SearchStarted += OnSecondSearchStarted;
+			controllers[2].SearchStarted += OnThirdSearchStarted;
 		}
 		
 		public void Initialize ()
@@ -487,55 +491,25 @@ namespace Do.Core {
 			}
 		}
 		
+		void OnFirstSearchStarted ()
+		{
+		}
+		
+		void OnSecondSearchStarted ()
+		{
+			window.ClearPane (Pane.Second);
+		}
+		
+		void OnThirdSearchStarted ()
+		{
+			window.ClearPane (Pane.Third);
+		}
+		
 		void OnFirstSelectionChanged ()
 		{
 			//Do.PrintPerf ("FirstSelectionChanged");
 			UpdatePane (Pane.First);
 			//Do.PrintPerf ("UpdatePaneFinished");
-		}
-		
-		void OnSecondSelectionChanged ()
-		{
-			if (!scrollPress[1]) {
-				window.ClearPane (Pane.Second);
-				
-				if (searchTimeout[1] > 0) 
-					GLib.Source.Remove (searchTimeout[1]);
-				
-				searchTimeout[1] = GLib.Timeout.Add (SearchDelay,
-					delegate {
-						Gdk.Threads.Enter ();
-						UpdatePane (Pane.Second);
-						Gdk.Threads.Leave ();
-						return false;
-					}
-				);
-			} else {
-				OnSecondQueryChanged ();
-				scrollPress[1] = false;
-			}
-		}
-		
-		void OnThirdSelectionChanged ()
-		{
-			if (!scrollPress[2]) {
-				window.ClearPane (Pane.Third);
-				
-				if (searchTimeout[2] > 0) 
-					GLib.Source.Remove (searchTimeout[2]);
-				
-				searchTimeout[2] = GLib.Timeout.Add (SearchDelay,
-					delegate {
-						Gdk.Threads.Enter ();
-						UpdatePane (Pane.Third);
-						Gdk.Threads.Leave ();
-						return false;
-					}
-				);
-			} else {
-				OnThirdQueryChanged ();
-				scrollPress[2] = false;
-			}
 		}
 		
 		void OnFirstQueryChanged ()
@@ -548,13 +522,18 @@ namespace Do.Core {
 			UpdatePane (Pane.First);
 		}
 		
-		void OnSecondQueryChanged ()
+		void OnSecondSelectionQueryChanged ()
 		{
+			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0)
+				return;
+			
 			UpdatePane (Pane.Second);
 		}
 		
-		void OnThirdQueryChanged ()
+		void OnThirdSelectionQueryChanged ()
 		{
+			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0)
+				return;
 			UpdatePane (Pane.Third);
 		}
 		

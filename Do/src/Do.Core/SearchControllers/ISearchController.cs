@@ -134,5 +134,10 @@ namespace Do.Core
 		/// Triggered when the result has changed
 		/// </summary>
 		event NullEventHandler SelectionChanged;
+		
+		/// <summary>
+		/// The controller has started a search
+		/// </summary>
+		event NullEventHandler SearchStarted;
 	}
 }

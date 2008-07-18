@@ -51,6 +51,8 @@ namespace Do.Core
 
 		protected override void UpdateResults ()
 		{
+			base.UpdateResults ();
+			DateTime time = DateTime.Now;
 			
 			IAction action;
 			IItem item;
@@ -74,7 +76,7 @@ namespace Do.Core
 				}
 				
 			} else {
-				Log.Error ("Something Very Strange Has Happened");
+				//Log.Error ("Something Very Strange Has Happened");
 				return;
 			}
 
@@ -100,8 +102,16 @@ namespace Do.Core
 			
 			try {
 				if (((context.LastContext == null || context.LastContext.Selection == null) && context.Selection != null) ||
-					context.LastContext.Selection != context.Selection)
-					base.OnSelectionChanged ();
+					context.LastContext.Selection != context.Selection) {
+					uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
+					if (ms > Timeout)
+						base.OnSelectionChanged ();
+					else
+						GLib.Timeout.Add (Timeout - ms, delegate {
+							base.OnSelectionChanged ();
+							return false;
+						});
+				}
 			} catch { }
 		}
 

@@ -103,7 +103,6 @@ EXTRAS = \
 REFERENCES =  \
 	Mono.Cairo \
 	Mono.Posix \
-	-pkg:clutter-sharp \
 	-pkg:gconf-sharp-2.0 \
 	-pkg:glib-sharp-2.0 \
 	-pkg:gnome-desktop-sharp-2.0 \

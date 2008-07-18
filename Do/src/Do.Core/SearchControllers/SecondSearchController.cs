@@ -59,6 +59,8 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
+			base.UpdateResults ();
+			DateTime time = DateTime.Now;
 			//Do.PrintPerf ("SecondUpdate Start");
 			List<IObject> initresults = InitialResults ();
 			
@@ -88,8 +90,16 @@ namespace Do.Core
 			//TODO -- Clean this up.  Too fried to think through proper logic now.
 			try {
 				if (((context.LastContext == null || context.LastContext.Selection == null) && context.Selection != null) ||
-					context.LastContext.Selection != context.Selection)
-					base.OnSelectionChanged ();
+					context.LastContext.Selection != context.Selection) {
+					uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
+					if (ms > Timeout)
+						base.OnSelectionChanged ();
+					else
+						GLib.Timeout.Add (Timeout - ms, delegate {
+							base.OnSelectionChanged ();
+							return false;
+						});
+				}
 			} catch { }
 			
 			//Do.PrintPerf ("SecondUpdate Stop");

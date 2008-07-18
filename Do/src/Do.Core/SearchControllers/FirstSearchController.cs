@@ -37,6 +37,7 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
+			base.UpdateResults ();
 			//Do.PrintPerf ("FirstControlerUpdate Start");
 			List<IObject> results = InitialResults ();
 			

@@ -34,6 +34,7 @@ namespace Do.Core
 		protected ISearchController upstreamController;
 		protected Type[] searchFilter;
 		protected Type[] defaultFilter = new Type[0];
+		protected const int Timeout = 300;
 		
 		public virtual IUIContext UIContext {
 			get {
@@ -156,7 +157,10 @@ namespace Do.Core
 			}
 		}
 		
-		protected abstract void UpdateResults ();
+		protected virtual void UpdateResults ()
+		{
+			OnSearchStarted ();
+		}
 
 		public void DeleteChar ()
 		{
@@ -240,7 +244,13 @@ namespace Do.Core
 			SelectionChanged ();
 		}
 		
+		protected void OnSearchStarted ()
+		{
+			SearchStarted ();
+		}
+		
 		public event NullEventHandler SelectionChanged;
 		public event NullEventHandler QueryChanged;
+		public event NullEventHandler SearchStarted;
 	}
 }

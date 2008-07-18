@@ -33,7 +33,7 @@ namespace Do.Core
 	public class SimpleUniverseManager : IUniverseManager
 	{
 		private Dictionary<string, IObject> universe;
-		private Dictionary<char, List<IObject>> quickResults;
+		private Dictionary<char, Dictionary<string, IObject>> quickResults;
 		
 		private object universeLock = new object ();
 		private object quickResultsLock = new object ();
@@ -46,10 +46,10 @@ namespace Do.Core
 		public SimpleUniverseManager()
 		{
 			universe = new Dictionary<string, IObject> ();
-			quickResults = new Dictionary<char,List<IObject>> ();
+			quickResults = new Dictionary<char,Dictionary<string,IObject>> ();
 			
 			for (char key = 'a'; key <= 'z'; key++) {
-				quickResults [key] = new List<IObject> ();
+				quickResults [key] = new Dictionary<string,IObject> ();
 			}
 		}
 
@@ -59,7 +59,7 @@ namespace Do.Core
 				lock (quickResultsLock) {
 					char key = Convert.ToChar (query.ToLower ());
 					if (quickResults.ContainsKey (key))
-						return Search (query, searchFilter, quickResults[key]);
+						return Search (query, searchFilter, quickResults[key].Values);
 				}
 			}
 			
@@ -73,7 +73,7 @@ namespace Do.Core
 				lock (quickResultsLock) {
 					char key = Convert.ToChar (query.ToLower ());
 					if (quickResults.ContainsKey (key))
-						return Search (query, searchFilter, quickResults[key]);
+						return Search (query, searchFilter, quickResults[key].Values);
 				}
 			}
 			
@@ -88,7 +88,7 @@ namespace Do.Core
 		
 		public IObject[] Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray, IObject compareObj)
 		{
-			Do.PrintPerf ("Search Start");
+			//Do.PrintPerf ("Search Start");
 			List<IObject> results = new List<IObject> ();
 			query = query.ToLower ();
 			
@@ -108,10 +108,10 @@ namespace Do.Core
 				}
 				//Do.PrintPerf ("Loop Continue");
 			}
-			Do.PrintPerf ("Search PreSort");
+			//Do.PrintPerf ("Search PreSort");
 			results.Sort ();
 			
-			Do.PrintPerf ("Search Stop");
+			//Do.PrintPerf ("Search Stop");
 			if (results.Count > maxResults)
 				return results.GetRange (0, maxResults).ToArray ();
 			return results.ToArray ();
@@ -132,10 +132,10 @@ namespace Do.Core
 		private void LoadUniverse ()
 		{
 			Dictionary<string, IObject> loc_universe;
-			Dictionary<char, List<IObject>> loc_quick;
+			Dictionary<char, Dictionary<string, IObject>> loc_quick;
 			if (universe.Values.Count > 0) {
 				loc_universe = new Dictionary<string,IObject> ();
-				loc_quick = new Dictionary<char,List<IObject>> ();
+				loc_quick = new Dictionary<char,Dictionary<string,IObject>> ();
 			} else {
 				loc_universe = universe;
 				loc_quick = quickResults;
@@ -176,14 +176,14 @@ namespace Do.Core
 		/// <param name="result">
 		/// A <see cref="IObject"/>
 		/// </param>
-		private void RegisterQuickResults (Dictionary<char, List<IObject>> quickResults, IObject result)
+		private void RegisterQuickResults (Dictionary<char, Dictionary<string, IObject>> quickResults, IObject result)
 		{
 			if (quickResults == null) return;
 			
 			lock (quickResultsLock) {
 				foreach (char key in quickResults.Keys) {
 					if ((result.Name + result.Description).ToLower ().Contains (key.ToString ()))
-						quickResults[key].Add (result);
+						quickResults[key][(result as DoObject).UID] = result;
 				}
 			}
 		}
@@ -196,9 +196,10 @@ namespace Do.Core
 		/// </param>
 		private void DeleteQuickResult (IObject result)
 		{
+			string UID = new DoObject (result).UID;
 			lock (quickResultsLock) 
-				foreach (List<IObject> list in quickResults.Values)
-					list.Remove (result);
+				foreach (Dictionary<string, IObject> list in quickResults.Values)
+					list.Remove (UID);
 		}
 		
 		/// <summary>
