@@ -562,6 +562,8 @@ namespace Do.Core {
 			if (pane == Pane.Third) {
 				if (ThirdPaneRequired)
 					ThirdPaneVisible = true;
+				else if (!ThirdPaneAllowed || controllers[2].Cursor == 0 && string.IsNullOrEmpty (controllers[2].Query))
+					ThirdPaneVisible = false;
 			} else if (pane == Pane.Second && (!ThirdPaneAllowed)) {
 				ThirdPaneVisible = false;
 			}

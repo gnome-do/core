@@ -121,14 +121,14 @@ namespace Do.Core
 			try {
 				if (((context.LastContext == null || context.LastContext.Selection == null) && context.Selection != null) ||
 					context.LastContext.Selection != context.Selection) {
-					uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
-					if (ms > Timeout)
+					//uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
+					//if (ms > Timeout)
 						base.OnSelectionChanged ();
-					else
-						GLib.Timeout.Add (Timeout - ms, delegate {
-							base.OnSelectionChanged ();
-							return false;
-						});
+					//else
+					//	GLib.Timeout.Add (Timeout - ms, delegate {
+					//		base.OnSelectionChanged ();
+					//		return false;
+					//	});
 				}
 			} catch { }
 		}
