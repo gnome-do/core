@@ -59,7 +59,7 @@ namespace Do.Core
 			if (query.Length == 1) {
 				lock (quickResultsLock) {
 					char key = Convert.ToChar (query.ToLower ());
-					if (char.IsLetter (key)) {
+					if (quickResults.ContainsKey (key)) {
 						//Do.PrintPerf ("Search2 End");
 						return Search (query, searchFilter, quickResults[key].Values, null);
 					}
@@ -76,7 +76,7 @@ namespace Do.Core
 			if (query.Length == 1) {
 				lock (quickResultsLock) {
 					char key = Convert.ToChar (query.ToLower ());
-					if (char.IsLetter (key))
+					if (quickResults.ContainsKey (key))
 						return Search (query, searchFilter, quickResults[key].Values, null);
 				}
 			}
