@@ -331,7 +331,7 @@ namespace Do.Core {
 		/// </param>
 		void OnCommaKeyPressEvent (EventKey evnt)
 		{
-			if (CurrentContext.Selection is ITextItem)
+			if (CurrentContext.Selection is ITextItem || !resultsGrown)
 				OnInputKeyPressEvent (evnt);
 			else if (CurrentContext.AddSecondaryCursor (CurrentContext.Cursor))
 				UpdatePane (CurrentPane);
