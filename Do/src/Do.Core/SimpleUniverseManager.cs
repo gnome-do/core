@@ -93,7 +93,7 @@ namespace Do.Core
 			query = query.ToLower ();
 			
 			float epsilon = 0.00001f;
-		
+			
 			foreach (DoObject obj in baseArray) {
 				//Do.PrintPerf ("Update Relevance Start");
 				obj.UpdateRelevance (query, compareObj as DoObject);
@@ -108,6 +108,7 @@ namespace Do.Core
 				}
 				//Do.PrintPerf ("Loop Continue");
 			}
+			
 			//Do.PrintPerf ("Search PreSort");
 			results.Sort ();
 			
@@ -129,6 +130,10 @@ namespace Do.Core
 			thread.Start ();
 		}
 		
+		
+		/// <summary>
+		/// Do not call inside main thread unless you really like a locked Do.
+		/// </summary>
 		private void LoadUniverse ()
 		{
 			Dictionary<string, IObject> loc_universe;

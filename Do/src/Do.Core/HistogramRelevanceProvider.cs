@@ -30,7 +30,7 @@ namespace Do.Core {
 	/// HistogramRelevanceProvider maintains item and action relevance using
 	/// a histogram of "hit values."
 	/// </summary>
-	class HistogramRelevanceProvider : RelevanceProvider {
+	sealed class HistogramRelevanceProvider : RelevanceProvider {
 		
 		uint max_item_hits, max_action_hits;
 		DateTime oldest_hit;
@@ -64,7 +64,7 @@ namespace Do.Core {
 		/// <value>
 		/// Path of file where relevance data is serialized.
 		/// </value>
-		protected string RelevanceFile {
+		private string RelevanceFile {
 			get {
 				return Paths.Combine (Paths.ApplicationData, "relevance5");
 			}
@@ -86,7 +86,7 @@ namespace Do.Core {
 		/// <summary>
 		/// Deserializes relevance data.
 		/// </summary>
-		protected void Deserialize ()
+		private void Deserialize ()
 		{
 			try {
 				using (Stream s = File.OpenRead (RelevanceFile)) {
@@ -103,7 +103,7 @@ namespace Do.Core {
 		/// <summary>
 		/// Serializes relevance data.
 		/// </summary>
-		protected void Serialize ()
+		private void Serialize ()
 		{
 			try {
 				using (Stream s = File.OpenWrite (RelevanceFile)) {

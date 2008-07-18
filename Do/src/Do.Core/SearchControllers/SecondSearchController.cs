@@ -59,6 +59,9 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
+			if (FirstController.Selection == null)
+				return;
+			
 			base.UpdateResults ();
 			DateTime time = DateTime.Now;
 			//Do.PrintPerf ("SecondUpdate Start");
