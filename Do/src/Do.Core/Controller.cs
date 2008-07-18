@@ -558,7 +558,6 @@ namespace Do.Core {
 
 		protected void UpdatePane (Pane pane)
 		{
-			Console.WriteLine ("Update Pane " + pane);
 			//Lets see if we need to play with Third pane visibility
 			if (pane == Pane.Third) {
 				if (ThirdPaneRequired)
