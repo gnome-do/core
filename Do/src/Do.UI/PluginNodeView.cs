@@ -194,7 +194,7 @@ namespace Do.UI
 			store = Model as ListStore;
 			setup = new SetupService (AddinManager.Registry);
 
-			new Thread ((ThreadStart) delegate {
+			Thread th = new Thread ((ThreadStart) delegate {
 				if (goOnline) {
 				setup.Repositories.UpdateAllRepositories (
 					new ConsoleProgressStatus (true));
@@ -222,7 +222,10 @@ namespace Do.UI
 						// event occurs.
 					}
 				});
-			}).Start ();
+			});
+			
+			th.IsBackground = true;
+			th.Start ();
 		}
 
 		string Description (string name, string desc, string version)

@@ -35,6 +35,9 @@ namespace Do.UI
 		private int DefaultResultIconSize = 32;
 		private int DefaultWindowWidth = 352;
 		private int NumberResultsDisplayed = 6;
+		private IUIContext context;
+		
+		private int offset;
 		
 		public string ResultInfoFormat
 		{
@@ -56,14 +59,17 @@ namespace Do.UI
 		ScrolledWindow resultsScrolledWindow;
 		TreeView resultsTreeview;
 		IObject[] results;
-		int selectedIndex;
-		bool selectedIndexSet;
-		bool quietSelectionChange;
+		int startResult, endResult;
 		Label queryLabel;
 		Frame frame;
 		string query;
 		Gdk.Color backgroundColor;
 		VBox vbox;
+		
+		int cursor;
+		int[] secondary = new int[0];
+		
+		bool pushedUpdate, clearing = false;
 
 
 		public ResultsWindow (Gdk.Color backgroundColor, int NumberResults) 
@@ -73,10 +79,7 @@ namespace Do.UI
 			this.NumberResultsDisplayed = NumberResults;
 			
 			Build ();
-			results = null;
-			selectedIndex = 0;
-			selectedIndexSet = false;
-			Shown += OnShown;
+			results = new IObject[0];
 		}
 		
 		public ResultsWindow (Gdk.Color backgroundColor, int DefaultIconSize, 
@@ -89,28 +92,17 @@ namespace Do.UI
 			this.NumberResultsDisplayed = NumberResults;
 			
 			Build ();
-			results = null;
-			selectedIndex = 0;
-			selectedIndexSet = false;
-			Shown += OnShown;
-		}
-
-		protected virtual void OnShown (object sender, EventArgs args)
-		{
-			// setting Results calls Clear(), resets this.
-			int savedSelectedIndex;    
-
-			// Do this to load the icons.
-			savedSelectedIndex = selectedIndex;
-			quietSelectionChange = true;
-			Results = results;
-			selectedIndexSet = false;
-			SelectedIndex = savedSelectedIndex;
-			quietSelectionChange = false;
+			results = new IObject[0];
 		}
 
 		private void NotifySelectionChanged ()
 		{
+			TreeIter iter;
+			if (!resultsTreeview.Selection.GetSelected (out iter)) return;
+			try {
+				cursor = Convert.ToInt32 (resultsTreeview.Model.GetStringFromIter (iter));
+			} catch { return; }
+			
 			ResultsWindowSelectionEventArgs args;
 
 			args = new ResultsWindowSelectionEventArgs (SelectedIndex, SelectedObject);
@@ -159,7 +151,7 @@ namespace Do.UI
 			// align.Show ();
 			
 			resultsScrolledWindow = new ScrolledWindow ();
-			resultsScrolledWindow.SetPolicy (PolicyType.Automatic, PolicyType.Automatic);
+			resultsScrolledWindow.SetPolicy (PolicyType.Never, PolicyType.Never);
 			resultsScrolledWindow.ShadowType = ShadowType.In;
 			vbox.PackStart (resultsScrolledWindow, true, true, 0);
 			resultsScrolledWindow.Show ();
@@ -170,13 +162,15 @@ namespace Do.UI
 			// If this is not set the tree will call IconDataFunc for all rows to 
 			// determine the total height of the tree
 			resultsTreeview.FixedHeightMode = true;
+			// resultsTreeview.RulesHint = true;
+			// resultsTreeview.Selection.Mode = SelectionMode.Multiple;
 			
 			resultsScrolledWindow.Add (resultsTreeview);
 			resultsTreeview.Show ();
 
 			resultsTreeview.Model = new ListStore (new Type[] {
 				typeof (IObject),				
-				typeof (string)
+				typeof (string), 
 			});
 
 			column = new TreeViewColumn ();			
@@ -193,7 +187,8 @@ namespace Do.UI
 			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
 				
 			vbox.SetSizeRequest (DefaultWindowWidth, 
-				(height + 4) * NumberResultsDisplayed + 10);
+			                     (height + 2) * NumberResultsDisplayed + 
+			                     (int) (vbox.BorderWidth * 2) + 2);
 			
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
@@ -202,8 +197,11 @@ namespace Do.UI
 			
 			resultsTreeview.AppendColumn (column);
 
+
 			resultsTreeview.Selection.Changed += OnResultRowSelected;
+			Shown += OnShown;
 		}
+		
 			
 		public void UpdateColors (Gdk.Color backgroundColor)
 		{
@@ -215,14 +213,51 @@ namespace Do.UI
 		{			
 			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
 			IObject o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as IObject;
-			renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
+			bool isSecondary = false;
+			foreach (int i in secondary)
+				if (model.GetStringFromIter (iter) == i.ToString ())
+					isSecondary = true;
+			
+			
+			if (isSecondary) {
+				Gdk.Pixbuf source = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
+				Gdk.Pixbuf emblem = IconProvider.PixbufFromIconName ("gtk-add", DefaultResultIconSize / 2);
+				Gdk.Pixbuf dest = new Pixbuf (Colorspace.Rgb, true, 8, DefaultResultIconSize, DefaultResultIconSize);
+				
+				source.Composite (dest, 
+				                  0, 
+				                  0, 
+				                  DefaultResultIconSize, 
+				                  DefaultResultIconSize, 
+				                  0, 
+				                  0, 
+				                  1,
+				                  1, 
+				                  InterpType.Bilinear, 
+				                  255);
+				
+				emblem.Composite (dest, 
+				                  0, 
+				                  0, 
+				                  DefaultResultIconSize, 
+				                  DefaultResultIconSize, 
+				                  0, 
+				                  0, 
+				                  1,
+				                  1, 
+				                  InterpType.Bilinear, 
+				                  255);
+				
+				
+				renderer.Pixbuf = dest;
+			} else {
+				renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
+			}
 		}
 
 		private void OnResultRowSelected (object sender, EventArgs args)
 		{
-			if (!selectedIndexSet || quietSelectionChange) return;
-			if (resultsTreeview.Selection.GetSelectedRows().Length > 0) {
-				selectedIndex = resultsTreeview.Selection.GetSelectedRows()[0].Indices[0];
+			if (!clearing && !pushedUpdate) {
 				NotifySelectionChanged ();
 			}
 		}
@@ -230,123 +265,127 @@ namespace Do.UI
 		public virtual void Clear ()
 		{
 			(resultsTreeview.Model as ListStore).Clear ();
-			selectedIndex = 0;
-			selectedIndexSet = false;
-			results = null;
-			// Query = "";
+			cursor = 0;
 		}
 
-		public SearchContext Context
+		public IUIContext Context
 		{
 			set {
-				if (value == null) return;
-
-				if (Results.GetHashCode () != value.Results.GetHashCode ()) {
-					Results = value.Results;
-					Query = value.Query;
+				pushedUpdate = true;
+				if (value == null || value.Results.Length == 0) return;
+				
+				if (results.GetHashCode () != value.Results.GetHashCode ()) {
+					results = value.Results;
 				}
-				SelectedIndex = value.Cursor;
+
+				startResult = value.Cursor - 4;
+				
+				if (startResult < 0)
+					startResult = 0;
+				endResult = startResult + 7;
+				offset = startResult;
+				
+				if (endResult > results.Length)
+					endResult = results.Length;
+				
+				IObject[] resultsArray = new IObject[endResult - startResult];
+				Array.Copy (results, startResult, resultsArray, 0, resultsArray.Length); 
+				Results = resultsArray;
+				Query = value.Query;
+				
+				cursor = value.Cursor - offset;
+				
+				int[] secArray = new int[value.SecondaryCursors.Length];
+				for (int i=0; i<secArray.Length; i++) {
+					secArray[i] = value.SecondaryCursors[i] - offset;
+				}
+				
+				secondary = secArray;
+				
+				
+				UpdateCursors ();
+				Gtk.Application.Invoke (delegate {
+					pushedUpdate = false;
+				});
 			}
 		}
 
 		public int SelectedIndex
 		{
-			get { return selectedIndex; }
-			set {
-				TreeModel model;
-				TreeIter iter;
-				TreePath path;
-				int new_selection;
-
-				if (selectedIndexSet &&
-				    value == selectedIndex) return;
-
-				selectedIndexSet = true;
-
-				// Don't bother updating widgets if we're not visible -
-				// instead, do these things on Show.
-				if (!Visible) {
-					selectedIndex = value;
-					return;
-				}
-
-				if (results.Length == 0)
-					return;
-				else if (value >= results.Length)
-					new_selection = results.Length - 1;
-				else if (value < 0)
-					new_selection = 0;
-				else
-					new_selection = value;
-
-				resultsTreeview.Selection.GetSelected (out model, out iter);
-				path = model.GetPath (iter);
-				// TODO: Just jump to new index instead of iterating like this.
-				while (new_selection > selectedIndex) {
-					selectedIndex++;
-					path.Next ();
-				}
-				while (new_selection < selectedIndex) {
-					selectedIndex--;
-					path.Prev ();
-				}
-				resultsTreeview.Selection.SelectPath (path);
-				resultsTreeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
+			get { return cursor + offset; }
+			set { 
+				cursor = value - offset;
+				
+				UpdateCursors ();
 			}
 		}
+		
+		private void UpdateCursors () 
+		{
+			resultsTreeview.Selection.UnselectAll ();
 
+			Gtk.TreePath path;
+			
+			path = new TreePath (cursor.ToString ());
+			
+			//makes this just a tiny bit smoother overall
+			Gtk.Application.Invoke (delegate {
+				resultsTreeview.ScrollToCell (path, null, true, 0.5F, 0.0F);
+				resultsTreeview.Selection.SelectPath (path);
+			});
+		}
+		
 		public IObject SelectedObject
 		{
 			get {
 				try {
-					return results[selectedIndex];
+					return results[SelectedIndex];
 				} catch {
 					return null;
 				}
 			}
 		}
-
+		
 		public IObject[] Results
 		{
 			//Needed for hashing
-			get { return results ?? results = new IObject[0]; }
-			set {				
+			//get { return results ?? results = new IObject[0]; }
+			set {
 				ListStore store;
 				TreeIter iter, first_iter;
 				bool seen_first;				
 				string info;
 
+				clearing = true;
 				Clear ();
-				results = value ?? new IObject[0];
+				//results = value ?? new IObject[0];
 				store = resultsTreeview.Model as ListStore;
 				first_iter = default (TreeIter);
-				seen_first = false;
+				//seen_first = false;
 
-				// Don't bother updating widgets if we're not visible -
-				// instead, do these things on Show.
-				if (!Visible) return;
-
-				foreach (IObject result in results) {					
+				foreach (IObject result in value) {					
 					
 					info = string.Format (ResultInfoFormat, result.Name, result.Description);
 					info = Util.Appearance.MarkupSafeString (info);
 					iter = store.AppendValues (new object[] {
 						result,
-						info
+						info,
 					});
 							
-					if (!seen_first) {
+					/*if (!seen_first) {
 						first_iter = iter;
 						seen_first = true;
-					}
+					}*/
 				}
-				if (seen_first) {
+				/*if (seen_first) {
 					resultsTreeview.ScrollToCell (resultsTreeview.Model.GetPath (first_iter),
 					                              null, false, 0.0F, 0.0F);
 					resultsTreeview.Selection.SelectIter (first_iter);
-				}
+				}*/
+				clearing = false;
 			}
 		}
+
 
 		public string Query
 		{
@@ -355,6 +394,10 @@ namespace Do.UI
 				queryLabel.Markup = string.Format (QueryLabelFormat, value ?? "");
 			}
 			get { return query; }
+		}
+		
+		protected void OnShown (object o, EventArgs args)
+		{
 		}
 
 		// Draw a border around the window.

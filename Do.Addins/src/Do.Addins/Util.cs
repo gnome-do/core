@@ -32,6 +32,7 @@ namespace Do.Addins
 	public delegate string FormatCommonSubstringsDelegate (string main, string highlight, string format);
 	public delegate void PresentWindowDelegate (Gtk.Window window);
 	public delegate void DoEventKeyDelegate (Gdk.EventKey key);
+	public delegate void NullEventHandler ();
 	
 	/// <summary>
 	/// Useful functionality for plugins. See <see cref="Do.Util"/>.

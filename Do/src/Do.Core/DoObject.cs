@@ -104,12 +104,16 @@ namespace Do.Core {
 		
 		protected IObject inner;
 		protected float relevance;
+		protected string uid;
 		
 		internal DoObject (IObject inner)
 		{
 			if (inner == null)
 				throw new ArgumentNullException ("Inner IObject may not be null.");
 			this.inner = inner;
+			
+			uid = string.Format ("{0}{1}{2}",
+					inner.GetType (), Name, Description);
 		}
 
 		public virtual IObject Inner {
@@ -177,8 +181,7 @@ namespace Do.Core {
 		
 		public virtual string UID {
 			get {
-				return string.Format ("{0}{1}{2}",
-					inner.GetType (), Name, Description);
+				return uid;
 			}
 		}
 		

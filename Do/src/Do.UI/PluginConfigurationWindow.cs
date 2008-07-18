@@ -23,7 +23,6 @@ using System.Collections.Generic;
 
 using Gtk;
 using Mono.Addins;
-using Mono.Unix;
 
 using Do.Core;
 using Do.Addins;
@@ -46,7 +45,7 @@ namespace Do.UI
 
             addin = AddinManager.Registry.GetAddin (id);
             configs = PluginManager.ConfigurablesForAddin (id);
-            Title = string.Format (Catalog.GetString  ("{0} Configuration"), addin.Name);
+            Title = string.Format ("{0} Configuration", addin.Name);
             notebook.RemovePage (0);
             notebook.ShowTabs = configs.Count > 1;
 			

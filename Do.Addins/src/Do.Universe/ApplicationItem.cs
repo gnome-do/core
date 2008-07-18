@@ -30,6 +30,7 @@ namespace Do.Universe {
 	public class ApplicationItem : IRunnableItem {
 		
 		protected DesktopItem item;
+		string name, description, icon;
 
 		/// <summary>
 		/// Create an application item from a desktop file location.
@@ -44,23 +45,27 @@ namespace Do.Universe {
 				DesktopItemLoadFlags.OnlyIfExists);
 			if (null == item)
 				throw new Exception (desktopFile + " not found.");
+			
+			name = item.GetLocalestring ("Name");
+			description = item.GetLocalestring ("Comment");
+			icon = item.GetIcon (IconTheme.Default);
 		}
 		
 		public string Name {
 			get {
-				return item.GetLocalestring ("Name");
+				return name;
 			}
 		}
 
 		public string Description {
 			get {
-				return item.GetLocalestring ("Comment");
+				return description;
 			}
 		}
 		
 		public string Icon {
 			get {
-				return item.GetIcon (IconTheme.Default);
+				return icon;
 			}
 		}
 		

@@ -98,7 +98,7 @@ namespace Do.UI
 		/// <param name="context">
 		/// A <see cref="SearchContext"/>
 		/// </param>
-		void SetPaneContext (Pane pane, SearchContext context);
+		void SetPaneContext (Pane pane, IUIContext context);
 		
 		/// <summary>
 		/// Clear out the context of a pane.

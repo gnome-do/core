@@ -314,12 +314,12 @@ namespace Do.UI
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
 			switch (evnt.Key) {
-				case Gdk.Key.Page_Up:
+				/*case Gdk.Key.Page_Up:
 					resultsWindow.SelectedIndex -= NumberResultsDisplayed;
 					break;
 				case Gdk.Key.Page_Down:
 					resultsWindow.SelectedIndex += NumberResultsDisplayed;
-					break;
+					break;*/
 				default:
 					KeyPressEvent (evnt);
 					break;
@@ -438,7 +438,7 @@ namespace Do.UI
 		/// <param name="context">
 		/// A <see cref="SearchContext"/>
 		/// </param>
-		public void SetPaneContext (Pane pane, SearchContext context)
+		public void SetPaneContext (Pane pane, IUIContext context)
 		{
 			if (context.Results.Length == 0) {
 				NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);

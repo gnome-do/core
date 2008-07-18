@@ -34,11 +34,15 @@ namespace Do {
 		
 		static DoPreferences preferences;
 		static Controller controller;
-		static UniverseManager universe_manager;
+		static IUniverseManager universe_manager;
 		static NotificationIcon notification_icon;
+		
+		static DateTime perfTime;
 
 		public static void Main (string[] args)
 		{
+			perfTime = DateTime.Now;
+			
 			Catalog.Init ("gnome-do", "/usr/local/share/locale");
 			Gtk.Application.Init ();
 
@@ -58,8 +62,8 @@ namespace Do {
 			}
 
 			PluginManager.Initialize ();
-			UniverseManager.Initialize ();
 			Controller.Initialize ();
+			UniverseManager.Initialize ();
 			DBusRegistrar.RegisterController (Controller);
 			
 			keybinder = new GConfXKeybinder ();
@@ -80,8 +84,23 @@ namespace Do {
 
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
+			
+			AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 				
 			Gtk.Application.Run ();
+		}
+		
+		static void OnProcessExit (object o, EventArgs args)
+		{
+			Thread th = new Thread (new ThreadStart (delegate {
+				System.Threading.Thread.Sleep (1000);
+				Console.WriteLine ("Process failed to exit cleanly, hard killing");
+				System.Diagnostics.Process process =  System.Diagnostics.Process.GetCurrentProcess ();
+				process.Kill ();
+			}));
+			
+			th.IsBackground = true;
+			th.Start ();
 		}
 
 		static void DetectInstanceAndExit ()
@@ -106,10 +125,10 @@ namespace Do {
 			}
 		}
 
-		public static UniverseManager UniverseManager {
+		public static IUniverseManager UniverseManager {
 			get {
 				return universe_manager ??
-					universe_manager = new UniverseManager ();
+					universe_manager = new SimpleUniverseManager ();
 			}
 		}
 		
@@ -118,6 +137,14 @@ namespace Do {
 				return notification_icon ??
 					notification_icon = new NotificationIcon ();
 			}
+		}
+		
+		public static void PrintPerf (string caller)
+		{
+			TimeSpan ts = DateTime.Now.Subtract (perfTime);
+			Console.WriteLine(caller + ": " + ts.TotalMilliseconds);
+			
+			perfTime = DateTime.Now;
 		}
 		
 		static void SetupKeybindings ()

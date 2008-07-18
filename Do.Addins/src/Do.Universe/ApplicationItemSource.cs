@@ -102,6 +102,9 @@ namespace Do.Universe {
 				} catch {
 					continue;
 				}
+				if (string.IsNullOrEmpty (app.Exec) || string.IsNullOrEmpty (app.Name))
+					continue;
+				
 				if (!app.Hidden || show_hidden)
 					apps [file] = app;
 			}

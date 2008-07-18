@@ -24,7 +24,6 @@ using Gtk;
 using Mono.Addins;
 using Mono.Addins.Gui;
 using Mono.Addins.Setup;
-using Mono.Unix;
 
 using Do;
 using Do.Core;
@@ -37,7 +36,7 @@ namespace Do.UI
 		PluginNodeView nview;
 
 		new public string Name {
-			get { return Catalog.GetString ("Plugins"); }
+			get { return "Plugins"; }
 		}
 
 		public string Description {
