@@ -48,7 +48,6 @@ namespace Do.Core {
 		List<IItem> items;
 		List<IItem> modItems;
 		bool thirdPaneVisible;
-		bool[] scrollPress = new bool[] {false, false, false};
 		bool resultsGrown;
 		bool shiftPressed = false;
 		
@@ -421,12 +420,6 @@ namespace Do.Core {
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
-			//This is an unfortunate side effect of the new event based system.
-			//Basically we have an issue where we no longer really know if the selection change
-			//was caused by a scroll press or a key press.  Ideally we should modify the
-			//callback to contain this information.
-			scrollPress[(int) CurrentPane] = true;
-			
 			if (evnt.Key == Gdk.Key.Up) {
 				if (!resultsGrown) {
                     GrowResults ();
