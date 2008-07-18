@@ -558,14 +558,13 @@ namespace Do.Core {
 
 		protected void UpdatePane (Pane pane)
 		{
+			Console.WriteLine ("Update Pane " + pane);
 			//Lets see if we need to play with Third pane visibility
-			if (pane == Pane.Second) {
-				if (ThirdPaneRequired) {
+			if (pane == Pane.Third) {
+				if (ThirdPaneRequired)
 					ThirdPaneVisible = true;
-				} else if (!ThirdPaneAllowed || 
-				           (controllers[2].Query.Length == 0 && CurrentPane != Pane.Third)) {
-					ThirdPaneVisible = false;
-				}
+			} else if (pane == Pane.Second && (!ThirdPaneAllowed)) {
+				ThirdPaneVisible = false;
 			}
 			window.SetPaneContext (pane, controllers[(int) pane].UIContext);
 		}

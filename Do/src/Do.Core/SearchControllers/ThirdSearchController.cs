@@ -31,6 +31,7 @@ namespace Do.Core
 	public class ThirdSearchController : SimpleSearchController
 	{
 		private ISearchController FirstController, SecondController;
+		private uint timer;
 		
 		public ThirdSearchController(ISearchController FirstController, ISearchController SecondController) : base ()
 		{
@@ -47,6 +48,23 @@ namespace Do.Core
 		public override bool TextMode {
 			get { return false; }
 			set {  }
+		}
+		
+		protected override void OnUpstreamSelectionChanged ()
+		{
+			if (timer > 0) {
+				GLib.Source.Remove (timer);
+			}
+			base.UpdateResults ();//trigger our search start now
+			timer = GLib.Timeout.Add (60, delegate {
+				Gdk.Threads.Enter ();
+				try { 
+					base.OnUpstreamSelectionChanged (); 
+				} finally { 
+					Gdk.Threads.Leave (); 
+				}
+				return false;
+			});
 		}
 
 		protected override void UpdateResults ()
