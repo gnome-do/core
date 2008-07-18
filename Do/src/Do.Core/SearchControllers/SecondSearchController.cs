@@ -31,12 +31,24 @@ namespace Do.Core
 	public class SecondSearchController : SimpleSearchController
 	{
 		private ISearchController FirstController;
+		private uint timer = 0;
 		
 		public SecondSearchController(ISearchController FirstController) : base ()
 		{
 			this.FirstController = FirstController;
 			FirstController.SelectionChanged += OnUpstreamSelectionChanged;
 		}
+		
+		protected override void OnUpstreamSelectionChanged ()
+		{
+			if (timer != 0)
+				GLib.Source.Remove (timer);
+			timer = GLib.Timeout.Add (50, delegate {
+				base.OnUpstreamSelectionChanged ();
+				return false;
+			});
+		}
+
 		
 		protected override List<IObject> InitialResults ()
 		{

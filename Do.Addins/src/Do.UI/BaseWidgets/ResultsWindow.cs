@@ -35,6 +35,8 @@ namespace Do.UI
 		private int DefaultResultIconSize = 32;
 		private int DefaultWindowWidth = 352;
 		private int NumberResultsDisplayed = 6;
+		private IUIContext context;
+		private bool queueShow = false;
 		
 		public string ResultInfoFormat
 		{
@@ -185,7 +187,9 @@ namespace Do.UI
 
 
 			resultsTreeview.Selection.Changed += OnResultRowSelected;
+			Shown += OnShown;
 		}
+		
 			
 		public void UpdateColors (Gdk.Color backgroundColor)
 		{
@@ -269,6 +273,12 @@ namespace Do.UI
 			set {
 				if (value == null || value.Results.Length == 0) return;
 				
+				if (!Visible) {
+					context = value;
+					queueShow = true;
+					return;
+				}
+				
 				if (Results.GetHashCode () != value.Results.GetHashCode ()) {
 					Results = value.Results;
 					Query = value.Query;
@@ -277,6 +287,7 @@ namespace Do.UI
 				secondary = value.SecondaryCursors;
 				
 				UpdateCursors ();
+				queueShow = false;
 			}
 		}
 
@@ -338,7 +349,7 @@ namespace Do.UI
 					info = Util.Appearance.MarkupSafeString (info);
 					iter = store.AppendValues (new object[] {
 						result,
-						info
+						info,
 					});
 							
 					if (!seen_first) {
@@ -362,6 +373,13 @@ namespace Do.UI
 				queryLabel.Markup = string.Format (QueryLabelFormat, value ?? "");
 			}
 			get { return query; }
+		}
+		
+		protected void OnShown (object o, EventArgs args)
+		{
+			if (!queueShow) return;
+			Context = context;
+			context = null;
 		}
 
 		// Draw a border around the window.

@@ -55,13 +55,17 @@ namespace Do.Core
 
 		public IObject[] Search (string query, Type[] searchFilter)
 		{
+			//Do.PrintPerf ("Search2 Start");
 			if (query.Length == 1) {
 				lock (quickResultsLock) {
 					char key = Convert.ToChar (query.ToLower ());
-					if (quickResults.ContainsKey (key))
-						return Search (query, searchFilter, quickResults[key].Values);
+					if (char.IsLetter (key)) {
+						//Do.PrintPerf ("Search2 End");
+						return Search (query, searchFilter, quickResults[key].Values, null);
+					}
 				}
 			}
+			
 			
 			lock (universeLock) 
 				return Search (query, searchFilter, universe.Values, null);
@@ -72,8 +76,8 @@ namespace Do.Core
 			if (query.Length == 1) {
 				lock (quickResultsLock) {
 					char key = Convert.ToChar (query.ToLower ());
-					if (quickResults.ContainsKey (key))
-						return Search (query, searchFilter, quickResults[key].Values);
+					if (char.IsLetter (key))
+						return Search (query, searchFilter, quickResults[key].Values, null);
 				}
 			}
 			

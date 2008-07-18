@@ -136,7 +136,7 @@ namespace Do.Core
 			QueryChanged ();
 		}
 		
-		protected void OnUpstreamSelectionChanged ()
+		protected virtual void OnUpstreamSelectionChanged ()
 		{
 			context.Destroy ();
 			context = new SimpleSearchContext ();
