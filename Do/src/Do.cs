@@ -36,9 +36,13 @@ namespace Do {
 		static Controller controller;
 		static IUniverseManager universe_manager;
 		static NotificationIcon notification_icon;
+		
+		static DateTime perfTime;
 
 		public static void Main (string[] args)
 		{
+			perfTime = DateTime.Now;
+			
 			Catalog.Init ("gnome-do", "/usr/local/share/locale");
 			Gtk.Application.Init ();
 
@@ -133,6 +137,14 @@ namespace Do {
 				return notification_icon ??
 					notification_icon = new NotificationIcon ();
 			}
+		}
+		
+		public static void PrintPerf (string caller)
+		{
+			TimeSpan ts = DateTime.Now.Subtract (perfTime);
+			Console.WriteLine(caller + ": " + ts.TotalMilliseconds);
+			
+			perfTime = DateTime.Now;
 		}
 		
 		static void SetupKeybindings ()

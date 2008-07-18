@@ -373,7 +373,7 @@ namespace Do.UI {
 					iconbox[i].DisplayObject = noRes;
 					if (i == (int) CurrentPane) {
 						label.SetDisplayLabel (noRes.Name, noRes.Description);
-						resultsWindow.Context = context;
+						resultsWindow.Clear ();
 					}
 				}
 				return;

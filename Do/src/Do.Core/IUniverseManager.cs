@@ -44,6 +44,23 @@ namespace Do.Core
 		IObject[] Search (string query, Type[] searchFilter);
 		
 		/// <summary>
+		/// Returns search results based on they query, the search filter, and a comparison object.
+		/// </summary>
+		/// <param name="query">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="searchFilter">
+		/// A <see cref="Type"/>
+		/// </param>
+		/// <param name="compareObj">
+		/// A <see cref="IObject"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="IObject"/>
+		/// </returns>
+		IObject[] Search (string query, Type[] searchFilter, IObject compareObj);
+		
+		/// <summary>
 		/// Returns search results based on a query and the search filter form a specified array.
 		/// </summary>
 		/// <param name="query">
@@ -59,6 +76,27 @@ namespace Do.Core
 		/// A <see cref="IObject"/>
 		/// </returns>
 		IObject[] Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray);
+		
+		/// <summary>
+		/// Returns search results based on a query, search filter, a defined array, and has relevancy adjusticated
+		/// for a secondary object.
+		/// </summary>
+		/// <param name="query">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="searchFilter">
+		/// A <see cref="Type"/>
+		/// </param>
+		/// <param name="baseArray">
+		/// A <see cref="IEnumerable`1"/>
+		/// </param>
+		/// <param name="compareObj">
+		/// A <see cref="IObject"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="IObject"/>
+		/// </returns>
+		IObject[] Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray, IObject compareObj);
 		
 		/// <summary>
 		/// Directly adds items to the universe repository

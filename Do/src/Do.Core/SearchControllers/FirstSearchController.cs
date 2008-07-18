@@ -37,6 +37,7 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
+			//Do.PrintPerf ("FirstControlerUpdate Start");
 			List<IObject> results = InitialResults ();
 			
 			if (DefaultFilter) {
@@ -50,6 +51,7 @@ namespace Do.Core
 			}
 			
 			context.Results = results.ToArray ();
+			//Do.PrintPerf ("FirstControllerResultsAssigned");
 			
 			//TODO -- Clean this up.  Too fried to think through proper logic now.
 			try {
@@ -58,6 +60,8 @@ namespace Do.Core
 					base.OnSelectionChanged ();
 			} catch {
 			}
+			
+			//Do.PrintPerf ("FirstControlerUpdate Stop");
 		}
 
 		public override Type[] SearchTypes {

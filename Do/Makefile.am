@@ -87,7 +87,6 @@ FILES =  \
 	src/Do.Core/SearchControllers/SimpleSearchController.cs \
 	src/Do.Core/SearchControllers/ThirdSearchController.cs \
 	src/Do.Core/SimpleUniverseManager.cs \
-	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \

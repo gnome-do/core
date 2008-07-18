@@ -107,7 +107,7 @@ namespace Do.Core {
 				if(index > s.Length - query.Length) break;
 				
 				//Look for the best match in the tail
-				int cur = index;
+				int cur  = index;
 				int qcur = 0;
 				while(qcur < query.Length && cur < s.Length)
 					if(query[qcur] == s[cur++])

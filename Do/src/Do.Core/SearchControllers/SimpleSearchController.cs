@@ -142,7 +142,7 @@ namespace Do.Core
 			UpdateResults ();
 		}
 		
-		protected List<IObject> InitialResults ()
+		protected virtual List<IObject> InitialResults ()
 		{
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Length != 0) {

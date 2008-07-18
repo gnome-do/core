@@ -38,8 +38,28 @@ namespace Do.Core
 			FirstController.SelectionChanged += OnUpstreamSelectionChanged;
 		}
 		
+		protected override List<IObject> InitialResults ()
+		{
+			//We continue off our previous results if possible
+			if (context.LastContext != null && context.LastContext.Results.Length != 0) {
+				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				                                                     SearchTypes, 
+				                                                     context.LastContext.Results, 
+				                                                     FirstController.Selection));
+			} else if (context.ParentContext != null && context.Results.Length != 0) {
+				return new List<IObject> (context.Results);
+			} else { 
+				//else we do things the slow way
+				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				                                                     SearchTypes, 
+				                                                     FirstController.Selection));
+			}
+		}
+
+		
 		protected override void UpdateResults ()
 		{
+			//Do.PrintPerf ("SecondUpdate Start");
 			List<IObject> initresults = InitialResults ();
 			
 			List<IObject> results = new List<IObject> ();
@@ -71,6 +91,8 @@ namespace Do.Core
 					context.LastContext.Selection != context.Selection)
 					base.OnSelectionChanged ();
 			} catch { }
+			
+			//Do.PrintPerf ("SecondUpdate Stop");
 		}
 
 		public override Type[] SearchTypes {

@@ -38,6 +38,9 @@ namespace Do.Core
 		private object universeLock = new object ();
 		private object quickResultsLock = new object ();
 		
+		/// <summary>
+		/// Maximum number of results from a search
+		/// </summary>
 		const int maxResults = 1000;
 		
 		public SimpleUniverseManager()
@@ -50,18 +53,6 @@ namespace Do.Core
 			}
 		}
 
-		/// <summary>
-		/// Provides search functionality for Universe.  Pass a null for searchFilter for default filtering
-		/// </summary>
-		/// <param name="query">
-		/// A <see cref="System.String"/>
-		/// </param>
-		/// <param name="searchFilter">
-		/// A <see cref="Type"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="IObject"/>
-		/// </returns>
 		public IObject[] Search (string query, Type[] searchFilter)
 		{
 			if (query.Length == 1) {
@@ -73,33 +64,40 @@ namespace Do.Core
 			}
 			
 			lock (universeLock) 
-				return Search (query, searchFilter, universe.Values);
+				return Search (query, searchFilter, universe.Values, null);
 		}
 		
-		/// <summary>
-		/// Returns a basic search based on the base array and relevance scores
-		/// </summary>
-		/// <param name="query">
-		/// A <see cref="System.String"/>
-		/// </param>
-		/// <param name="searchFilter">
-		/// A <see cref="Type"/>
-		/// </param>
-		/// <param name="baseArray">
-		/// A <see cref="IEnumerable`1"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="IObject"/>
-		/// </returns>
+		public IObject[] Search (string query, Type[] searchFilter, IObject otherObj)
+		{
+			if (query.Length == 1) {
+				lock (quickResultsLock) {
+					char key = Convert.ToChar (query.ToLower ());
+					if (quickResults.ContainsKey (key))
+						return Search (query, searchFilter, quickResults[key]);
+				}
+			}
+			
+			lock (universeLock) 
+				return Search (query, searchFilter, universe.Values, otherObj);
+		}
+		
 		public IObject[] Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray)
 		{
+			return Search (query, searchFilter, baseArray, null);
+		}
+		
+		public IObject[] Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray, IObject compareObj)
+		{
+			Do.PrintPerf ("Search Start");
 			List<IObject> results = new List<IObject> ();
 			query = query.ToLower ();
 			
 			float epsilon = 0.00001f;
 		
 			foreach (DoObject obj in baseArray) {
-				obj.UpdateRelevance (query, null);
+				//Do.PrintPerf ("Update Relevance Start");
+				obj.UpdateRelevance (query, compareObj as DoObject);
+				//Do.PrintPerf ("Update Relevance Stop");				
 				if (Math.Abs (obj.Relevance) > epsilon) {
 					if (searchFilter.Length == 0)
 						results.Add (obj);
@@ -108,9 +106,12 @@ namespace Do.Core
 							if (t.IsInstanceOfType (obj.Inner))
 								results.Add (obj);
 				}
+				//Do.PrintPerf ("Loop Continue");
 			}
+			Do.PrintPerf ("Search PreSort");
 			results.Sort ();
 			
+			Do.PrintPerf ("Search Stop");
 			if (results.Count > maxResults)
 				return results.GetRange (0, maxResults).ToArray ();
 			return results.ToArray ();
@@ -162,8 +163,19 @@ namespace Do.Core
 			
 			loc_universe = null;
 			loc_quick = null;
+			
+			Console.WriteLine ("Universe contains {0} items.", universe.Count);
 		}
 		
+		/// <summary>
+		/// Registers quickResults into the passed dictionary of the result passed
+		/// </summary>
+		/// <param name="quickResults">
+		/// A <see cref="Dictionary`2"/>
+		/// </param>
+		/// <param name="result">
+		/// A <see cref="IObject"/>
+		/// </param>
 		private void RegisterQuickResults (Dictionary<char, List<IObject>> quickResults, IObject result)
 		{
 			if (quickResults == null) return;
@@ -176,6 +188,12 @@ namespace Do.Core
 			}
 		}
 		
+		/// <summary>
+		/// Deletes a result from the global quickresults dictionary
+		/// </summary>
+		/// <param name="result">
+		/// A <see cref="IObject"/>
+		/// </param>
 		private void DeleteQuickResult (IObject result)
 		{
 			lock (quickResultsLock) 
@@ -228,6 +246,15 @@ namespace Do.Core
 			}
 		}
 
+		/// <summary>
+		/// Returns the UID for an object
+		/// </summary>
+		/// <param name="o">
+		/// A <see cref="IObject"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/>
+		/// </returns>
 		public string UIDForObject (IObject o)
 		{
 			if (o is DoObject)
@@ -235,6 +262,15 @@ namespace Do.Core
 			return new DoObject (o).UID;
 		}
 		
+		/// <summary>
+		/// Attempts to get an Object for a given UID.
+		/// </summary>
+		/// <param name="UID">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="item">
+		/// A <see cref="IObject"/>
+		/// </param>
 		public void TryGetObjectForUID (string UID, out IObject item)
 		{
 			lock (universeLock) {
@@ -245,15 +281,19 @@ namespace Do.Core
 			}
 		}
 		
+		/// <summary>
+		/// Causes the universe to be rebuilt in the background
+		/// </summary>
 		public void Reload ()
 		{
+			Console.WriteLine ("Reload");
 			BuildUniverse ();
 		}
 		
 		public void Initialize ()
 		{
 			BuildUniverse ();
-			GLib.Timeout.Add (2 * 10 * 1000, delegate {
+			GLib.Timeout.Add (2 * 60 * 1000, delegate {
 				BuildUniverse ();
 				return true;
 			});

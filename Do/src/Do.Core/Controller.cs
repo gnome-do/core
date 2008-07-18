@@ -62,11 +62,15 @@ namespace Do.Core {
 			
 			controllers = new SimpleSearchController[3];
 			
+			// Each controller needs to be aware of the controllers before it.
+			// Going down the line however is not needed at current.
 			controllers[0] = new FirstSearchController  ();
 			controllers[1] = new SecondSearchController (controllers[0]);
 			controllers[2] = new ThirdSearchController  (controllers[0], controllers[1]);
 			
-			
+			// Set up our callbacks here.  If we ever reconstruct these controllers, 
+			// and we shouldn't be, we will need to reset these too.  However controllers
+			// provide a resetting mechanism.
 			controllers[0].SelectionChanged += OnFirstSelectionChanged;
 			controllers[1].SelectionChanged += OnSecondSelectionChanged;
 			controllers[2].SelectionChanged += OnThirdSelectionChanged;
@@ -315,6 +319,13 @@ namespace Do.Core {
 			PerformAction (!shift_pressed);
 		}
 		
+		/// <summary>
+		/// This will set a secondary cursor unless we are operating on a text item, in which case we
+		/// pass the event to the input key handler
+		/// </summary>
+		/// <param name="evnt">
+		/// A <see cref="EventKey"/>
+		/// </param>
 		void OnCommaKeyPressEvent (EventKey evnt)
 		{
 			if (CurrentContext.Selection is ITextItem)
@@ -349,7 +360,7 @@ namespace Do.Core {
 		void OnInputKeyPressEvent (EventKey evnt)
 		{
 			char c;
-
+			//Do.PrintPerf ("InputKeyPress Start");
 			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
 			if (char.IsLetterOrDigit (c)
 					|| char.IsPunctuation (c)
@@ -359,6 +370,7 @@ namespace Do.Core {
 				//Console.WriteLine (CurrentContext);
 				//QueueSearch (false);
 			}
+			//Do.PrintPerf ("InputKeyPress Stop");
 		}
 		
 		void OnRightLeftKeyPressEvent (EventKey evnt)
@@ -405,6 +417,10 @@ namespace Do.Core {
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
+			//This is an unfortunate side effect of the new event based system.
+			//Basically we have an issue where we no longer really know if the selection change
+			//was caused by a scroll press or a key press.  Ideally we should modify the
+			//callback to contain this information.
 			scrollPress[(int) CurrentPane] = true;
 			
 			if (evnt.Key == Gdk.Key.Up) {
@@ -473,7 +489,9 @@ namespace Do.Core {
 		
 		void OnFirstSelectionChanged ()
 		{
+			//Do.PrintPerf ("FirstSelectionChanged");
 			UpdatePane (Pane.First);
+			//Do.PrintPerf ("UpdatePaneFinished");
 		}
 		
 		void OnSecondSelectionChanged ()
@@ -522,6 +540,7 @@ namespace Do.Core {
 		
 		void OnFirstQueryChanged ()
 		{
+			//Do.PrintPerf ("FirstQueryChanged");
 			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0) {
 			    Reset ();
 				return;
