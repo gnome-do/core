@@ -111,7 +111,7 @@ namespace Do.Universe {
 				.Replace ("'", "\\'");
         }
 		
-		protected string path;
+		protected string path, name, description, icon;
 		
 		/// <summary>
 		/// Create a new FileItem for a given file.
@@ -122,51 +122,53 @@ namespace Do.Universe {
 		public FileItem (string path)
 		{	
 			this.path = path;
+			this.name = System.IO.Path.GetFileName (Path);
+			
+			string short_path;
+				
+			short_path = ShortPath (Path);
+			if (short_path == "~")
+				// Sowing only "~" looks too abbreviated.
+				description = Path;
+			else
+				description = short_path;
+			
+			icon = MimeType;
+			try {
+				if (icon == "x-directory/normal") {
+					icon = "folder";
+				} else if (icon.StartsWith ("image")) {
+					icon = "gnome-mime-image";
+				} else {
+					icon = icon.Replace ('/', '-');
+					icon = string.Format ("gnome-mime-{0}", icon);
+				}
+			} catch (NullReferenceException) {
+				icon = "gtk-file";
+			}
 		}
 		
 		public virtual string Name {
 			get {
-				return System.IO.Path.GetFileName (Path);
+				return name;
 			}
 		}
 		
 		public virtual string Description {
 			get {
-				string short_path;
-				
-				short_path = ShortPath (Path);
-				if (short_path == "~")
-					// Sowing only "~" looks too abbreviated.
-					return Path;
-				else
-					return short_path;
+				return description;
 			}
 		}
 		
 		public virtual string Icon {
 			get {
-				string icon;
-
-				icon = MimeType;
-				try {
-					if (icon == "x-directory/normal") {
-						icon = "folder";
-					} else if (icon.StartsWith ("image")) {
-						icon = "gnome-mime-image";
-					} else {
-						icon = icon.Replace ('/', '-');
-						icon = string.Format ("gnome-mime-{0}", icon);
-					}
-				} catch (NullReferenceException) {
-					icon = "gtk-file";
-				}
 				return icon;
 			}
 		}
 		
 		public string Path {
 			get { return path; }
-			set { path = value; }
+			//set { path = value; }
 		}
 		
 		public string URI {

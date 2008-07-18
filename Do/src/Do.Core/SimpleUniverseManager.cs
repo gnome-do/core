@@ -38,11 +38,6 @@ namespace Do.Core
 		private object universeLock = new object ();
 		private object quickResultsLock = new object ();
 		
-		/// <summary>
-		/// Maximum number of results from a search
-		/// </summary>
-		const int maxResults = 1000;
-		
 		public SimpleUniverseManager()
 		{
 			universe = new Dictionary<string, IObject> ();
@@ -117,8 +112,8 @@ namespace Do.Core
 			results.Sort ();
 			
 			//Do.PrintPerf ("Search Stop");
-			if (results.Count > maxResults)
-				return results.GetRange (0, maxResults).ToArray ();
+			//if (results.Count > maxResults)
+			//	return results.GetRange (0, maxResults).ToArray ();
 			return results.ToArray ();
 		}
 		
@@ -173,6 +168,7 @@ namespace Do.Core
 			loc_universe = null;
 			loc_quick = null;
 			
+			//maxResults = (int)universe.Count/7;
 			Console.WriteLine ("Universe contains {0} items.", universe.Count);
 		}
 		
@@ -303,7 +299,7 @@ namespace Do.Core
 		public void Initialize ()
 		{
 			BuildUniverse ();
-			GLib.Timeout.Add (2 * 60 * 1000, delegate {
+			GLib.Timeout.Add (5 * 60 * 1000, delegate {
 				BuildUniverse ();
 				return true;
 			});

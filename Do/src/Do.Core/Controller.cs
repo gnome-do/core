@@ -297,6 +297,8 @@ namespace Do.Core {
 			case Gdk.Key.Down:
 			case Gdk.Key.Home:
 			case Gdk.Key.End:
+			case Gdk.Key.Page_Up:
+			case Gdk.Key.Page_Down:
 				OnUpDownKeyPressEvent (evnt);
 				break;
 			case Gdk.Key.Shift_L:
@@ -439,6 +441,10 @@ namespace Do.Core {
 				CurrentContext.Cursor = 0;
 			} else if (evnt.Key == Gdk.Key.End) {
 				CurrentContext.Cursor = CurrentContext.Results.Length - 1;
+			} else if (evnt.Key == Gdk.Key.Page_Down) {
+				CurrentContext.Cursor += 5;
+			} else if (evnt.Key == Gdk.Key.Page_Up) {
+				CurrentContext.Cursor -= 5;
 			}
 		}
 		
@@ -757,7 +763,7 @@ namespace Do.Core {
 		
 		public void NewContextSelection (Pane pane, int index)
 		{
-			if (controllers[(int) pane].Results.Length == 0) return;
+			if (controllers[(int) pane].Results.Length == 0 || index == controllers[(int) pane].Cursor) return;
 			
 			controllers[(int) pane].Cursor = index;
 			window.SetPaneContext (pane, controllers[(int) pane].UIContext);

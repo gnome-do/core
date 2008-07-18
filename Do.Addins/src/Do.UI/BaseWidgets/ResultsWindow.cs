@@ -36,7 +36,8 @@ namespace Do.UI
 		private int DefaultWindowWidth = 352;
 		private int NumberResultsDisplayed = 6;
 		private IUIContext context;
-		private bool queueShow = false;
+		
+		private int offset;
 		
 		public string ResultInfoFormat
 		{
@@ -58,6 +59,7 @@ namespace Do.UI
 		ScrolledWindow resultsScrolledWindow;
 		TreeView resultsTreeview;
 		IObject[] results;
+		int startResult, endResult;
 		Label queryLabel;
 		Frame frame;
 		string query;
@@ -66,6 +68,8 @@ namespace Do.UI
 		
 		int cursor;
 		int[] secondary = new int[0];
+		
+		bool pushedUpdate, clearing = false;
 
 
 		public ResultsWindow (Gdk.Color backgroundColor, int NumberResults) 
@@ -75,7 +79,7 @@ namespace Do.UI
 			this.NumberResultsDisplayed = NumberResults;
 			
 			Build ();
-			results = null;
+			results = new IObject[0];
 		}
 		
 		public ResultsWindow (Gdk.Color backgroundColor, int DefaultIconSize, 
@@ -88,11 +92,17 @@ namespace Do.UI
 			this.NumberResultsDisplayed = NumberResults;
 			
 			Build ();
-			results = null;
+			results = new IObject[0];
 		}
 
 		private void NotifySelectionChanged ()
 		{
+			TreeIter iter;
+			if (!resultsTreeview.Selection.GetSelected (out iter)) return;
+			try {
+				cursor = Convert.ToInt32 (resultsTreeview.Model.GetStringFromIter (iter));
+			} catch { return; }
+			
 			ResultsWindowSelectionEventArgs args;
 
 			args = new ResultsWindowSelectionEventArgs (SelectedIndex, SelectedObject);
@@ -141,7 +151,7 @@ namespace Do.UI
 			// align.Show ();
 			
 			resultsScrolledWindow = new ScrolledWindow ();
-			resultsScrolledWindow.SetPolicy (PolicyType.Automatic, PolicyType.Automatic);
+			resultsScrolledWindow.SetPolicy (PolicyType.Never, PolicyType.Never);
 			resultsScrolledWindow.ShadowType = ShadowType.In;
 			vbox.PackStart (resultsScrolledWindow, true, true, 0);
 			resultsScrolledWindow.Show ();
@@ -152,7 +162,8 @@ namespace Do.UI
 			// If this is not set the tree will call IconDataFunc for all rows to 
 			// determine the total height of the tree
 			resultsTreeview.FixedHeightMode = true;
-			//resultsTreeview.Selection.Mode = SelectionMode.Multiple;
+			// resultsTreeview.RulesHint = true;
+			// resultsTreeview.Selection.Mode = SelectionMode.Multiple;
 			
 			resultsScrolledWindow.Add (resultsTreeview);
 			resultsTreeview.Show ();
@@ -176,7 +187,8 @@ namespace Do.UI
 			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
 				
 			vbox.SetSizeRequest (DefaultWindowWidth, 
-				(4 + height) * NumberResultsDisplayed + 10);
+			                     (height + 2) * NumberResultsDisplayed + 
+			                     (int) (vbox.BorderWidth * 2) + 2);
 			
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
@@ -245,18 +257,7 @@ namespace Do.UI
 
 		private void OnResultRowSelected (object sender, EventArgs args)
 		{
-			int temp;
-			//cleanup needed
-			try {
-				temp = resultsTreeview.Selection.GetSelectedRows()[0].Indices[0];
-			} catch {
-				return;
-			}
-			
-			if (temp == cursor)	return;		
-			
-			if (resultsTreeview.Selection.GetSelectedRows().Length == 1) {
-				cursor = temp;
+			if (!clearing && !pushedUpdate) {
 				NotifySelectionChanged ();
 			}
 		}
@@ -265,37 +266,55 @@ namespace Do.UI
 		{
 			(resultsTreeview.Model as ListStore).Clear ();
 			cursor = 0;
-			results = null;
 		}
 
 		public IUIContext Context
 		{
 			set {
+				pushedUpdate = true;
 				if (value == null || value.Results.Length == 0) return;
 				
-				if (!Visible) {
-					context = value;
-					queueShow = true;
-					return;
+				if (results.GetHashCode () != value.Results.GetHashCode ()) {
+					results = value.Results;
+				}
+
+				startResult = value.Cursor - 4;
+				
+				if (startResult < 0)
+					startResult = 0;
+				endResult = startResult + 7;
+				offset = startResult;
+				
+				if (endResult > results.Length)
+					endResult = results.Length;
+				
+				IObject[] resultsArray = new IObject[endResult - startResult];
+				Array.Copy (results, startResult, resultsArray, 0, resultsArray.Length); 
+				Results = resultsArray;
+				Query = value.Query;
+				
+				cursor = value.Cursor - offset;
+				
+				int[] secArray = new int[value.SecondaryCursors.Length];
+				for (int i=0; i<secArray.Length; i++) {
+					secArray[i] = value.SecondaryCursors[i] - offset;
 				}
 				
-				if (Results.GetHashCode () != value.Results.GetHashCode ()) {
-					Results = value.Results;
-					Query = value.Query;
-				}
-				cursor = value.Cursor;
-				secondary = value.SecondaryCursors;
+				secondary = secArray;
+				
 				
 				UpdateCursors ();
-				queueShow = false;
+				Gtk.Application.Invoke (delegate {
+					pushedUpdate = false;
+				});
 			}
 		}
 
 		public int SelectedIndex
 		{
-			get { return cursor; }
+			get { return cursor + offset; }
 			set { 
-				cursor = value;
+				cursor = value - offset;
 				
 				UpdateCursors ();
 			}
@@ -306,14 +325,14 @@ namespace Do.UI
 			resultsTreeview.Selection.UnselectAll ();
 
 			Gtk.TreePath path;
-			/*foreach (int i in secondary) {
-				path = new TreePath (i.ToString ());
-				resultsTreeview.Selection.SelectPath (path);
-			}*/
 			
 			path = new TreePath (cursor.ToString ());
-			resultsTreeview.Selection.SelectPath (path);
-			resultsTreeview.ScrollToCell (path, null, false, 0.0F, 0.0F);
+			
+			//makes this just a tiny bit smoother overall
+			Gtk.Application.Invoke (delegate {
+				resultsTreeview.ScrollToCell (path, null, true, 0.5F, 0.0F);
+				resultsTreeview.Selection.SelectPath (path);
+			});
 		}
 		
 		public IObject SelectedObject
@@ -330,20 +349,21 @@ namespace Do.UI
 		public IObject[] Results
 		{
 			//Needed for hashing
-			get { return results ?? results = new IObject[0]; }
-			set {			
+			//get { return results ?? results = new IObject[0]; }
+			set {
 				ListStore store;
 				TreeIter iter, first_iter;
 				bool seen_first;				
 				string info;
 
+				clearing = true;
 				Clear ();
-				results = value ?? new IObject[0];
+				//results = value ?? new IObject[0];
 				store = resultsTreeview.Model as ListStore;
 				first_iter = default (TreeIter);
-				seen_first = false;
+				//seen_first = false;
 
-				foreach (IObject result in results) {					
+				foreach (IObject result in value) {					
 					
 					info = string.Format (ResultInfoFormat, result.Name, result.Description);
 					info = Util.Appearance.MarkupSafeString (info);
@@ -352,16 +372,17 @@ namespace Do.UI
 						info,
 					});
 							
-					if (!seen_first) {
+					/*if (!seen_first) {
 						first_iter = iter;
 						seen_first = true;
-					}
+					}*/
 				}
-				if (seen_first) {
+				/*if (seen_first) {
 					resultsTreeview.ScrollToCell (resultsTreeview.Model.GetPath (first_iter),
 					                              null, false, 0.0F, 0.0F);
 					resultsTreeview.Selection.SelectIter (first_iter);
-				}
+				}*/
+				clearing = false;
 			}
 		}
 
@@ -377,9 +398,6 @@ namespace Do.UI
 		
 		protected void OnShown (object o, EventArgs args)
 		{
-			if (!queueShow) return;
-			Context = context;
-			context = null;
 		}
 
 		// Draw a border around the window.

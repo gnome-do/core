@@ -39,17 +39,6 @@ namespace Do.Core
 			FirstController.SelectionChanged += OnUpstreamSelectionChanged;
 		}
 		
-		protected override void OnUpstreamSelectionChanged ()
-		{
-			if (timer != 0)
-				GLib.Source.Remove (timer);
-			timer = GLib.Timeout.Add (50, delegate {
-				base.OnUpstreamSelectionChanged ();
-				return false;
-			});
-		}
-
-		
 		protected override List<IObject> InitialResults ()
 		{
 			//We continue off our previous results if possible
@@ -68,6 +57,23 @@ namespace Do.Core
 			}
 		}
 
+		protected override void OnUpstreamSelectionChanged ()
+		{
+			if (timer > 0) {
+				GLib.Source.Remove (timer);
+			}
+			base.UpdateResults ();//trigger our search start now
+			timer = GLib.Timeout.Add (60, delegate {
+				Gdk.Threads.Enter ();
+				try { 
+					base.OnUpstreamSelectionChanged (); 
+				} finally { 
+					Gdk.Threads.Leave (); 
+				}
+				return false;
+			});
+		}
+
 		
 		protected override void UpdateResults ()
 		{
@@ -75,6 +81,7 @@ namespace Do.Core
 				return;
 			
 			base.UpdateResults ();
+			
 			DateTime time = DateTime.Now;
 			//Do.PrintPerf ("SecondUpdate Start");
 			List<IObject> initresults = InitialResults ();
@@ -90,9 +97,10 @@ namespace Do.Core
 			} else if (FirstController.Selection is IAction) {
 				//We need to find items for this action
 				IAction action = FirstController.Selection as IAction;
-				foreach (IItem item in initresults)
+				foreach (IItem item in initresults) {
 					if (action.SupportsItem (item))
 						results.Add (item);
+				}
 				
 				IItem textItem = new DoTextItem (Query);
 				if (action.SupportsItem (textItem))
@@ -101,21 +109,23 @@ namespace Do.Core
 			
 			context.Results = results.ToArray ();
 			
-			
 			//TODO -- Clean this up.  Too fried to think through proper logic now.
 			try {
 				if (((context.LastContext == null || context.LastContext.Selection == null) && context.Selection != null) ||
 					context.LastContext.Selection != context.Selection) {
 					uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
-					if (ms > Timeout)
+					if (ms > Timeout) {
 						base.OnSelectionChanged ();
-					else
+					} else {
 						GLib.Timeout.Add (Timeout - ms, delegate {
 							base.OnSelectionChanged ();
 							return false;
 						});
+					}
 				}
-			} catch { }
+			} catch {
+				base.OnSelectionChanged ();
+			}
 			
 			//Do.PrintPerf ("SecondUpdate Stop");
 		}

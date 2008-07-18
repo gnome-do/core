@@ -81,7 +81,7 @@ namespace Do.Core
 			}
 
 			//If we support nothing, dont search.
-			if (action.SupportedModifierItemTypes.Length == 0) return;
+			if (action.SupportedModifierItemTypes.Length == 0)  return;
 			List<IObject> initresults = InitialResults ();
 			
 			List<IObject> results = new List<IObject> ();

@@ -177,12 +177,12 @@ namespace Do.UI {
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
 			switch (evnt.Key) {
-				case Gdk.Key.Page_Up:
+				/*case Gdk.Key.Page_Up:
 					resultsWindow.SelectedIndex -= NumberResultsDisplayed;
 					break;
 				case Gdk.Key.Page_Down:
 					resultsWindow.SelectedIndex += NumberResultsDisplayed;
-					break;
+					break;*/
 				default:
 					KeyPressEvent (evnt);
 					break;
