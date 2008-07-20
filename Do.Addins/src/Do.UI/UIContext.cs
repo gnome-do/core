@@ -34,6 +34,8 @@ namespace Do.UI
 		private int cursor;
 		private int[] secondary;
 		private string query;
+		
+		private bool largeText;
 			
 		public IObject Selection {
 			get {
@@ -65,13 +67,21 @@ namespace Do.UI
 			}
 		}
 		
-		public UIContext(IObject selection, IObject[] results, int cursor, int[] secondaryCursors, string query)
+		public bool LargeTextDisplay {
+			get {
+				return largeText;
+			}
+		}
+		
+		public UIContext(IObject selection, IObject[] results, int cursor, 
+		                 int[] secondaryCursors, string query, bool largeTextDisplay)
 		{
 			this.selection  = selection;
 			this.results    = results;
 			this.cursor     = cursor;
 			this.secondary  = secondaryCursors;
 			this.query      = query;
+			this.largeText  = largeTextDisplay;
 		}
 	}
 }

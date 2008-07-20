@@ -32,11 +32,13 @@ namespace Do.UI
 		const string CaptionFormat = "{0}";
 		const string HighlightFormat = "<span weight=\"bold\" underline=\"single\">{0}</span>";
 
-		protected bool focused;
+		protected bool focused, textOverlay;
 
 		protected string caption, icon_name;
 		protected Pixbuf pixbuf, empty_pixbuf;
 		protected int icon_size;
+		
+		protected Frame frame;
 
 		protected VBox vbox;
 		protected Gtk.Image image;
@@ -58,9 +60,19 @@ namespace Do.UI
 			caption = "";
 			pixbuf = empty_pixbuf;
 
+			frame = new Frame ();
+			frame.FillAlpha = 0;
+			frame.DrawFill = true;
+			frame.Radius = 20;
+			frame.FillColor = new Gdk.Color (0x00, 0x00, 0x00);
+			
+			Add (frame);
+			frame.Show ();
+			
 			vbox = new VBox (false, 4);
 			vbox.BorderWidth = 6;
-			Add (vbox);
+			
+			frame.Add (vbox);
 			vbox.Show ();
 
 			empty_pixbuf = new Pixbuf (Colorspace.Rgb, true, 8, icon_size, icon_size);
@@ -95,6 +107,7 @@ namespace Do.UI
 		{
 			Pixbuf = empty_pixbuf;
 			Caption = "";
+			TextOverlay = false;
 		}
 
 		protected virtual void OnRealized (object o, EventArgs args)
@@ -110,6 +123,25 @@ namespace Do.UI
 				UpdateFocus ();
 			}
 		}
+		
+		public bool TextOverlay
+		{
+			get { return textOverlay; }
+			set { 
+				textOverlay = value;
+				if (value) {
+					frame.FillAlpha = 0.5;
+					image.Hide ();
+					label.Wrap = true;
+					label.Ellipsize = Pango.EllipsizeMode.None;
+				} else {
+					frame.FillAlpha = 0.0;
+					image.Show ();
+					label.Wrap = false;
+					label.Ellipsize = Pango.EllipsizeMode.End;
+				}
+			}
+		}
 
 		public string Caption
 		{
@@ -117,7 +149,8 @@ namespace Do.UI
 			set {
 				caption = value ?? "";
 				caption = caption.Replace ("\n", " ");
-				label.Markup = string.Format (CaptionFormat, Util.Appearance.MarkupSafeString (caption));
+				label.Markup = string.Format (CaptionFormat, 
+				                              Util.Appearance.MarkupSafeString (caption));
 			}
 		}
 

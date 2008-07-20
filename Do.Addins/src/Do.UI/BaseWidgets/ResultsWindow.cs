@@ -28,14 +28,15 @@ using Do.Universe;
 
 namespace Do.UI
 {
-	public delegate void OnSelectionChanged (object sender, ResultsWindowSelectionEventArgs args);
+	public delegate void OnSelectionChanged (object sender, 
+	                                         ResultsWindowSelectionEventArgs args);
 
 	public class ResultsWindow : Gtk.Window
 	{
 		private int DefaultResultIconSize = 32;
 		private int DefaultWindowWidth = 352;
 		private int NumberResultsDisplayed = 6;
-		private IUIContext context;
+//		private IUIContext context;
 		
 		private int offset;
 		
@@ -209,7 +210,8 @@ namespace Do.UI
 			frame.FillColor = backgroundColor;
 		}
 						
-		private void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
+		private void IconDataFunc (TreeViewColumn column, CellRenderer cell, 
+		                           TreeModel model, TreeIter iter)
 		{			
 			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
 			IObject o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as IObject;
@@ -220,9 +222,15 @@ namespace Do.UI
 			
 			
 			if (isSecondary) {
-				Gdk.Pixbuf source = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
-				Gdk.Pixbuf emblem = IconProvider.PixbufFromIconName ("gtk-add", DefaultResultIconSize / 2);
-				Gdk.Pixbuf dest = new Pixbuf (Colorspace.Rgb, true, 8, DefaultResultIconSize, DefaultResultIconSize);
+				Gdk.Pixbuf source = 
+					IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
+				Gdk.Pixbuf emblem = 
+					IconProvider.PixbufFromIconName ("gtk-add", DefaultResultIconSize / 2);
+				Gdk.Pixbuf dest = new Pixbuf (Colorspace.Rgb, 
+				                              true, 
+				                              8,
+				                              DefaultResultIconSize,
+				                              DefaultResultIconSize);
 				
 				source.Composite (dest, 
 				                  0, 
@@ -352,36 +360,22 @@ namespace Do.UI
 			//get { return results ?? results = new IObject[0]; }
 			set {
 				ListStore store;
-				TreeIter iter, first_iter;
-				bool seen_first;				
 				string info;
 
 				clearing = true;
 				Clear ();
-				//results = value ?? new IObject[0];
 				store = resultsTreeview.Model as ListStore;
-				first_iter = default (TreeIter);
-				//seen_first = false;
 
 				foreach (IObject result in value) {					
 					
 					info = string.Format (ResultInfoFormat, result.Name, result.Description);
 					info = Util.Appearance.MarkupSafeString (info);
-					iter = store.AppendValues (new object[] {
+					store.AppendValues (new object[] {
 						result,
 						info,
 					});
 							
-					/*if (!seen_first) {
-						first_iter = iter;
-						seen_first = true;
-					}*/
 				}
-				/*if (seen_first) {
-					resultsTreeview.ScrollToCell (resultsTreeview.Model.GetPath (first_iter),
-					                              null, false, 0.0F, 0.0F);
-					resultsTreeview.Selection.SelectIter (first_iter);
-				}*/
 				clearing = false;
 			}
 		}

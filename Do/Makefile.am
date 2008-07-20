@@ -87,6 +87,8 @@ FILES =  \
 	src/Do.Core/SearchControllers/SimpleSearchController.cs \
 	src/Do.Core/SearchControllers/ThirdSearchController.cs \
 	src/Do.Core/SimpleUniverseManager.cs \
+	src/Do.Core/Tests/UniverseAddItemTest.cs \
+	src/Do.Core/Tests/UniverseRemoveItem.cs \
 	src/Do.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \
@@ -140,6 +142,7 @@ REFERENCES =  \
 	-pkg:mono-addins-gui \
 	-pkg:mono-addins-setup \
 	-pkg:notify-sharp \
+	-pkg:nunit-2.2 \
 	System
 
 DLL_REFERENCES = 

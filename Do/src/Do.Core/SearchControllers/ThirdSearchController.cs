@@ -31,7 +31,7 @@ namespace Do.Core
 	public class ThirdSearchController : SimpleSearchController
 	{
 		private ISearchController FirstController, SecondController;
-		private uint timer;
+		private uint timer = 0;
 		
 		public ThirdSearchController(ISearchController FirstController, ISearchController SecondController) : base ()
 		{
@@ -70,7 +70,6 @@ namespace Do.Core
 		protected override void UpdateResults ()
 		{
 			base.UpdateResults ();
-			DateTime time = DateTime.Now;
 			
 			IAction action;
 			IItem item;

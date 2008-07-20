@@ -366,7 +366,7 @@ namespace Do.UI {
 		
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
-			if (context.Results.Length == 0) {
+			if (context.Results.Length == 0 && !context.LargeTextDisplay) {
 				NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
 				for (int i = (int) pane; i < 3; i++) {
 					iconbox[i].Clear ();
@@ -377,9 +377,16 @@ namespace Do.UI {
 					}
 				}
 				return;
+			} else if (context.Results.Length == 0 && context.LargeTextDisplay) {
+				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
+				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text");
+				return;
 			}
+			
+			iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
 			iconbox[(int) pane].DisplayObject = context.Selection;
 			iconbox[(int) pane].Highlight = context.Query;
+			
 			
 			if (pane == CurrentPane) {
 				resultsWindow.Context = context;

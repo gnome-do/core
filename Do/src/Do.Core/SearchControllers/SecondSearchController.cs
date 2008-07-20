@@ -31,7 +31,7 @@ namespace Do.Core
 	public class SecondSearchController : SimpleSearchController
 	{
 		private ISearchController FirstController;
-		private uint timer = 0;
+		private uint timer = 0, wait_timer = 0;
 		
 		public SecondSearchController(ISearchController FirstController) : base ()
 		{
@@ -117,7 +117,9 @@ namespace Do.Core
 					if (ms > Timeout) {
 						base.OnSelectionChanged ();
 					} else {
-						GLib.Timeout.Add (Timeout - ms, delegate {
+						if (wait_timer > 0)
+							GLib.Source.Remove (wait_timer);
+						wait_timer = GLib.Timeout.Add (Timeout - ms, delegate {
 							base.OnSelectionChanged ();
 							return false;
 						});

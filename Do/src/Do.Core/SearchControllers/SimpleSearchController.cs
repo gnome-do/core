@@ -38,7 +38,8 @@ namespace Do.Core
 		
 		public virtual IUIContext UIContext {
 			get {
-				return new UIContext (Selection, Results, Cursor, SecondaryCursors, Query);
+				return new UIContext (Selection, Results, Cursor, 
+				                      SecondaryCursors, Query, textMode);
 			}
 		}
 		
@@ -146,14 +147,18 @@ namespace Do.Core
 		protected virtual List<IObject> InitialResults ()
 		{
 			//We continue off our previous results if possible
-			if (context.LastContext != null && context.LastContext.Results.Length != 0) {
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, SearchTypes, 
-				                                                     context.LastContext.Results));
-			} else if (context.ParentContext != null && context.Results.Length != 0) {
+			if (context.LastContext != null && 
+			    context.LastContext.Results.Length != 0) {
+				return new List<IObject> (Do.UniverseManager.
+				                          Search (context.Query, SearchTypes, 
+				                                  context.LastContext.Results));
+			} else if (context.ParentContext != null && 
+			           context.Results.Length != 0) {
 				return new List<IObject> (context.Results);
 			} else { 
 				//else we do things the slow way
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, SearchTypes));
+				return new List<IObject> (Do.UniverseManager.
+				                          Search (context.Query, SearchTypes));
 			}
 		}
 		
@@ -181,7 +186,8 @@ namespace Do.Core
 		{
 			if (Results.Length - 1 < cursorLocation) return false;
 			
-			List<IObject> secondary = new List<IObject> (context.SecondaryCursors);
+			List<IObject> secondary;
+			secondary = new List<IObject> (context.SecondaryCursors);
 			
 			IObject newObject = Results[cursorLocation];
 			if (secondary.Contains (newObject))

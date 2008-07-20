@@ -39,7 +39,12 @@ namespace Do.Core
 		{
 			base.UpdateResults ();
 			//Do.PrintPerf ("FirstControlerUpdate Start");
-			List<IObject> results = InitialResults ();
+			List<IObject> results;
+			if (!textMode)
+				results = InitialResults ();
+			else
+				results = new List<IObject> ();
+				
 			
 			if (DefaultFilter) {
 				results.Add (new DoTextItem (Query));
@@ -83,6 +88,8 @@ namespace Do.Core
 				textMode = value; 
 				if (Query.Length > 0)
 					BuildNewContextFromQuery ();
+				else
+					base.OnSelectionChanged ();
 			}
 		}
 		

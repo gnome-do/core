@@ -507,6 +507,7 @@ namespace Do.Core {
 		void OnFirstSelectionChanged ()
 		{
 			//Do.PrintPerf ("FirstSelectionChanged");
+			//Console.WriteLine ("Selection Changed");
 			UpdatePane (Pane.First);
 			//Do.PrintPerf ("UpdatePaneFinished");
 		}

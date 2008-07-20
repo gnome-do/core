@@ -27,10 +27,34 @@ namespace Do.UI
 {
 	public interface IUIContext
 	{
+		/// <value>
+		/// The current selection
+		/// </value>
 		IObject Selection {get;}
+		
+		/// <value>
+		/// The results list
+		/// </value>
 		IObject[] Results {get;}
+		
+		/// <value>
+		/// Integer index of the selection in the results list
+		/// </value>
 		int Cursor {get;}
+		
+		/// <value>
+		/// Secondary selections indicies
+		/// </value>
 		int[] SecondaryCursors {get;}
+		
+		/// <value>
+		/// The query that got us here
+		/// </value>
 		string Query {get;}
+		
+		/// <value>
+		/// Tells the controller to present text in a larger box
+		/// </value>
+		bool LargeTextDisplay {get;}
 	}
 }
