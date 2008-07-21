@@ -32,7 +32,22 @@ namespace Do.Core {
             return new HistogramRelevanceProvider ();
 		}
 
-		//Scores a string based on closeness to a query
+		/// <summary>
+		/// Scores a string based on similarity to a query.  Bonuses are given for things like
+		/// perfect matches and letters from the query starting words.
+		/// </summary>
+		/// <param name="s">
+		/// A <see cref="System.String"/>
+		/// String to be scored
+		/// </param>
+		/// <param name="query">
+		/// A <see cref="System.String"/>
+		/// Query to score against
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Single"/>
+		/// A relevancy score for the string ranging from 0 to 1
+		/// </returns>
 		public static float StringScoreForAbbreviation (string s, string query)
 		{
 			if(query.Length == 0)
@@ -48,6 +63,9 @@ namespace Do.Core {
 			if ((match[1] - match[0]) == 0) return 0;
 			score = query.Length / (float)(match[1] - match[0]);
 			if (score == 0) return 0;
+			
+			//Now we weight by string length so shorter strings are better
+			score = score * .7F + query.Length / s.Length * .3F;
 			
 			//Bonus points if the characters start words
 			float good = 0, bad = 1;
@@ -85,12 +103,34 @@ namespace Do.Core {
 			if(good+bad > 0)
 				score = (score + 3*good/(good+bad)) / 4;
 			
+			//This fix makes sure that perfect matches always rank higher
+			//than split matches.  Perfect matches get the .9 - 1.0 range
+			//everything else goes lower
+			
+			if(ls.Contains(lquery))
+				score = .9f + .1f * score;
+			else
+				score = .9f * score;
 			
 			return score;
 		}
 
-		//Finds the shortest substring of s that contains all the characters of query in order
-		//If none is found, returns {-1, -1}
+		/// <summary>
+		/// Finds the shortest substring of s that contains all the characters of query in order
+		/// </summary>
+		/// <param name="s">
+		/// A <see cref="System.String"/>
+		/// String to search
+		/// </param>
+		/// <param name="query">
+		/// A <see cref="System.String"/>
+		/// Query to search for
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Int32"/>
+		/// A two item array containing the start and end indices of the match.
+		/// No match returns {-1.-1}
+		/// </returns>
 		protected static int[] findBestSubstringMatchIndices(string s, string query)
 		{
 			int index=-1;
@@ -101,10 +141,20 @@ namespace Do.Core {
 				return noQueryRet;
 			}
 			
+			//Find the last instance of the last character of the query
+			//since we never need to search beyond that
+			int lastChar = s.Length - 1;
+			while((lastChar >= 0) && (s[lastChar] != query[query.Length - 1]))
+				lastChar--;
+			
+			//No instance of the character?
+			if(lastChar == -1)
+				return bestMatch;
+			
 			//Loop through each instance of the first character in query
-			while ((index = s.IndexOf(query[0], index+1)) >= 0) {
+			while ((index = s.IndexOf(query[0], index+1, lastChar-index)) >= 0) {
 				//Is there even room for a match?
-				if(index > s.Length - query.Length) break;
+				if(index > lastChar + 1 - query.Length) break;
 				
 				//Look for the best match in the tail
 				int cur  = index;
