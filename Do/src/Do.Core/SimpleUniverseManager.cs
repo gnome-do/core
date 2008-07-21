@@ -133,7 +133,7 @@ namespace Do.Core
 		private void BuildUniverse ()
 		{
 			//Originally i had threaded the loading of each plugin, but they dont seem to like this...
-			if (thread.IsAlive) return;
+			if (thread != null && thread.IsAlive) return;
 			
 			thread = new Thread (new ThreadStart (LoadUniverse));
 			thread.IsBackground = true;
