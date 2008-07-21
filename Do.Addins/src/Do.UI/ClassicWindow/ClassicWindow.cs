@@ -367,13 +367,20 @@ namespace Do.UI {
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
 			if (context.Results.Length == 0 && !context.LargeTextDisplay) {
-				NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
-				for (int i = (int) pane; i < 3; i++) {
-					iconbox[i].Clear ();
-					iconbox[i].DisplayObject = noRes;
-					if (i == (int) CurrentPane) {
-						label.SetDisplayLabel (noRes.Name, noRes.Description);
-						resultsWindow.Clear ();
+				if (pane == Pane.First) {
+					iconbox[0].TextOverlay = context.LargeTextDisplay;
+					iconbox[0].DisplayObject = new Do.Addins.DefaultIconBoxObject ();
+					label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 
+					                       Catalog.GetString ("Type to start searching."));
+				} else {
+					NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
+					for (int i = (int) pane; i < 3; i++) {
+						iconbox[i].Clear ();
+						iconbox[i].DisplayObject = noRes;
+						if (i == (int) CurrentPane) {
+							label.SetDisplayLabel (noRes.Name, noRes.Description);
+							resultsWindow.Clear ();
+						}
 					}
 				}
 				return;

@@ -34,6 +34,8 @@ namespace Do.Core
 	{
 		private Dictionary<string, IObject> universe;
 		private Dictionary<char, Dictionary<string, IObject>> quickResults;
+		private List<IObject> actions;
+		private Thread thread;
 		
 		private object universeLock = new object ();
 		private object quickResultsLock = new object ();
@@ -42,6 +44,7 @@ namespace Do.Core
 		{
 			universe = new Dictionary<string, IObject> ();
 			quickResults = new Dictionary<char,Dictionary<string,IObject>> ();
+			actions = new List<IObject> ();
 			
 			for (char key = 'a'; key <= 'z'; key++) {
 				quickResults [key] = new Dictionary<string,IObject> ();
@@ -61,6 +64,9 @@ namespace Do.Core
 				}
 			}
 			
+			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
+				lock (quickResultsLock)
+					return Search (query, searchFilter, actions, null);
 			
 			lock (universeLock) 
 				return Search (query, searchFilter, universe.Values, null);
@@ -75,6 +81,10 @@ namespace Do.Core
 						return Search (query, searchFilter, quickResults[key].Values, null);
 				}
 			}
+			
+			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
+				lock (quickResultsLock)
+					return Search (query, searchFilter, actions, otherObj);
 			
 			lock (universeLock) 
 				return Search (query, searchFilter, universe.Values, otherObj);
@@ -123,7 +133,8 @@ namespace Do.Core
 		private void BuildUniverse ()
 		{
 			//Originally i had threaded the loading of each plugin, but they dont seem to like this...
-			Thread thread;
+			if (thread.IsAlive) return;
+			
 			thread = new Thread (new ThreadStart (LoadUniverse));
 			thread.IsBackground = true;
 			thread.Start ();
@@ -137,18 +148,23 @@ namespace Do.Core
 		{
 			Dictionary<string, IObject> loc_universe;
 			Dictionary<char, Dictionary<string, IObject>> loc_quick;
+			List<IObject> loc_actions;
 			if (universe.Values.Count > 0) {
 				loc_universe = new Dictionary<string,IObject> ();
-				loc_quick = new Dictionary<char,Dictionary<string,IObject>> ();
+				loc_quick    = new Dictionary<char,Dictionary<string,IObject>> ();
+				loc_actions  = new List<IObject> ();
 			} else {
 				loc_universe = universe;
-				loc_quick = quickResults;
+				loc_quick    = quickResults;
+				loc_actions  = actions;
 			}
 			
 			foreach (DoAction action in PluginManager.GetActions ()) {
 				lock (universeLock)
 					loc_universe[action.UID] = action;
 				RegisterQuickResults (loc_quick, action);
+				lock (quickResultsLock)
+					loc_actions.Add (action);
 			}
 			
 			foreach (DoItemSource source in PluginManager.GetItemSources ()) {
@@ -162,11 +178,14 @@ namespace Do.Core
 			
 			lock (universeLock)
 				universe = loc_universe;
-			lock (quickResultsLock)
+			lock (quickResultsLock) {
 				quickResults = loc_quick;
+				loc_actions = actions;
+			}
 			
 			loc_universe = null;
-			loc_quick = null;
+			loc_quick    = null;
+			loc_actions  = null;
 			
 			//maxResults = (int)universe.Count/7;
 			Console.WriteLine ("Universe contains {0} items.", universe.Count);

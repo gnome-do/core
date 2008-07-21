@@ -32,6 +32,7 @@ namespace Do.Core
 	{
 		private ISearchController FirstController;
 		private uint timer = 0, wait_timer = 0;
+		private const int type_wait = 200;
 		
 		public SecondSearchController(ISearchController FirstController) : base ()
 		{
@@ -63,7 +64,7 @@ namespace Do.Core
 				GLib.Source.Remove (timer);
 			}
 			base.UpdateResults ();//trigger our search start now
-			timer = GLib.Timeout.Add (60, delegate {
+			timer = GLib.Timeout.Add (type_wait, delegate {
 				Gdk.Threads.Enter ();
 				try { 
 					base.OnUpstreamSelectionChanged (); 
@@ -119,7 +120,7 @@ namespace Do.Core
 					} else {
 						if (wait_timer > 0)
 							GLib.Source.Remove (wait_timer);
-						wait_timer = GLib.Timeout.Add (Timeout - ms, delegate {
+						wait_timer = GLib.Timeout.Add (Timeout - ms - type_wait, delegate {
 							base.OnSelectionChanged ();
 							return false;
 						});
