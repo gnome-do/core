@@ -46,12 +46,15 @@ namespace Do.Core
 				results = new List<IObject> ();
 				
 			
-			if (DefaultFilter) {
-				results.Add (new DoTextItem (Query));
-			} else {
-				foreach (Type t in SearchTypes) {
-					if (t == typeof (IItem) || t == typeof (ITextItem)) {
-						results.Add (new DoTextItem (Query));
+			if (context.ParentContext == null) {
+				if (DefaultFilter) {
+					results.Add (new DoTextItem (Query));
+					Console.WriteLine ("Add Text Item");
+				} else {
+					foreach (Type t in SearchTypes) {
+						if (t == typeof (IItem) || t == typeof (ITextItem)) {
+							results.Add (new DoTextItem (Query));
+						}
 					}
 				}
 			}
@@ -85,6 +88,7 @@ namespace Do.Core
 		public override bool TextMode {
 			get { return textMode; }
 			set { 
+				if (context.ParentContext != null) return;
 				textMode = value; 
 				if (Query.Length > 0)
 					BuildNewContextFromQuery ();
