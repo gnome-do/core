@@ -38,7 +38,8 @@ all: $(ASSEMBLY) $(LINUX_PKGCONFIG)
 FILES =  \
 	src/AssemblyInfo.cs \
 	src/DBusRegistrar.cs \
-	src/IController.cs 
+	src/IController.cs \
+	src/PowerState.cs 
 
 DATA_FILES = 
 

@@ -132,6 +132,7 @@ namespace Do.Core
 		/// </summary>
 		private void BuildUniverse ()
 		{
+			Console.WriteLine (DBus.PowerState.OnBattery ());
 			//Originally i had threaded the loading of each plugin, but they dont seem to like this...
 			if (thread != null && thread.IsAlive) return;
 			
@@ -319,6 +320,8 @@ namespace Do.Core
 		{
 			BuildUniverse ();
 			GLib.Timeout.Add (5 * 60 * 1000, delegate {
+				Console.WriteLine (DBus.PowerState.OnBattery ());
+				if (DBus.PowerState.OnBattery ()) return true;
 				BuildUniverse ();
 				return true;
 			});
