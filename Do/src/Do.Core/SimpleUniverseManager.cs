@@ -36,6 +36,7 @@ namespace Do.Core
 		private Dictionary<char, Dictionary<string, IObject>> quickResults;
 		private List<IObject> actions;
 		private Thread thread;
+		private DateTime last_update = DateTime.Now;
 		
 		private object universeLock = new object ();
 		private object quickResultsLock = new object ();
@@ -189,6 +190,7 @@ namespace Do.Core
 			loc_actions  = null;
 			
 			//maxResults = (int)universe.Count/7;
+			last_update = DateTime.Now;
 			Console.WriteLine ("Universe contains {0} items.", universe.Count);
 		}
 		
@@ -320,8 +322,10 @@ namespace Do.Core
 		{
 			BuildUniverse ();
 			GLib.Timeout.Add (5 * 60 * 1000, delegate {
-				Console.WriteLine (DBus.PowerState.OnBattery ());
-				if (DBus.PowerState.OnBattery ()) return true;
+				if (DBus.PowerState.OnBattery () && 
+				    DateTime.Now.Subtract (last_update).TotalMinutes < 15) 
+					return true;
+				
 				BuildUniverse ();
 				return true;
 			});
