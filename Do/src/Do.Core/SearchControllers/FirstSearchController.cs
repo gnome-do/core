@@ -49,7 +49,6 @@ namespace Do.Core
 			if (context.ParentContext == null) {
 				if (DefaultFilter) {
 					results.Add (new DoTextItem (Query));
-					Console.WriteLine ("Add Text Item");
 				} else {
 					foreach (Type t in SearchTypes) {
 						if (t == typeof (IItem) || t == typeof (ITextItem)) {
