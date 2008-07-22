@@ -70,17 +70,17 @@ namespace Do.Core {
 			// Set up our callbacks here.  If we ever reconstruct these controllers, 
 			// and we shouldn't be, we will need to reset these too.  However controllers
 			// provide a resetting mechanism.
-			controllers[0].SelectionChanged += OnFirstSelectionChanged;
-			controllers[1].SelectionChanged += OnSecondSelectionQueryChanged;
-			controllers[2].SelectionChanged += OnThirdSelectionQueryChanged;
+			controllers[0].SelectionChanged += () => { UpdatePane (Pane.First); };
+			controllers[1].SelectionChanged += () => { OnSelectionQueryChanged (Pane.Second); };
+			controllers[2].SelectionChanged += () => { OnSelectionQueryChanged (Pane.Third); };
 			
 			controllers[0].QueryChanged += OnFirstQueryChanged;
-			controllers[1].QueryChanged += OnSecondSelectionQueryChanged;
-			controllers[2].QueryChanged += OnThirdSelectionQueryChanged;
+			controllers[1].QueryChanged += () => { OnSelectionQueryChanged (Pane.Second); };
+			controllers[2].QueryChanged += () => { OnSelectionQueryChanged (Pane.Third); };
 			
-			controllers[0].SearchStarted += OnFirstSearchStarted;
-			controllers[1].SearchStarted += OnSecondSearchStarted;
-			controllers[2].SearchStarted += OnThirdSearchStarted;
+			controllers[0].SearchStarted += () => { };
+			controllers[1].SearchStarted += () => { window.ClearPane (Pane.Second); };
+			controllers[2].SearchStarted += () => { window.ClearPane (Pane.Third); };
 		}
 		
 		public void Initialize ()
@@ -526,28 +526,6 @@ namespace Do.Core {
 			}
 		}
 		
-		void OnFirstSearchStarted ()
-		{
-		}
-		
-		void OnSecondSearchStarted ()
-		{
-			window.ClearPane (Pane.Second);
-		}
-		
-		void OnThirdSearchStarted ()
-		{
-			window.ClearPane (Pane.Third);
-		}
-		
-		void OnFirstSelectionChanged ()
-		{
-			//Do.PrintPerf ("FirstSelectionChanged");
-			//Console.WriteLine ("Selection Changed");
-			UpdatePane (Pane.First);
-			//Do.PrintPerf ("UpdatePaneFinished");
-		}
-		
 		void OnFirstQueryChanged ()
 		{
 			//Do.PrintPerf ("FirstQueryChanged");
@@ -558,19 +536,12 @@ namespace Do.Core {
 			UpdatePane (Pane.First);
 		}
 		
-		void OnSecondSelectionQueryChanged ()
+		void OnSelectionQueryChanged (Pane pane)
 		{
 			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0)
 				return;
 			
-			UpdatePane (Pane.Second);
-		}
-		
-		void OnThirdSelectionQueryChanged ()
-		{
-			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0)
-				return;
-			UpdatePane (Pane.Third);
+			UpdatePane (pane);
 		}
 		
 		protected void ClearSearchResults ()
