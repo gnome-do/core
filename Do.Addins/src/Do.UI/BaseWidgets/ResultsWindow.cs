@@ -279,6 +279,8 @@ namespace Do.UI
 		{
 			(resultsTreeview.Model as ListStore).Clear ();
 			cursor = 0;
+			resultsLabel.Markup = "--/--";
+			queryLabel.Markup = string.Empty;
 		}
 
 		public IUIContext Context
