@@ -140,7 +140,7 @@ namespace Do.UI
 			vbox = new VBox (false, 0);
 			Add (frame);
 			frame.Add (vbox);
-			vbox.BorderWidth = 1;
+			vbox.BorderWidth = 2;
 			vbox.Show ();
 			
 			hbox = new HBox ();
