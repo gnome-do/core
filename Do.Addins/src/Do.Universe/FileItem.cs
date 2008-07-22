@@ -168,7 +168,7 @@ namespace Do.Universe {
 		
 		public string Path {
 			get { return path; }
-			//set { path = value; }
+			set { path = value; }
 		}
 		
 		public string URI {
