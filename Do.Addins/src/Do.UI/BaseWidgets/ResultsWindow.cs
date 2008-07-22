@@ -61,11 +61,12 @@ namespace Do.UI
 		TreeView resultsTreeview;
 		IObject[] results;
 		int startResult, endResult;
-		Label queryLabel;
 		Frame frame;
 		string query;
 		Gdk.Color backgroundColor;
 		VBox vbox;
+		Toolbar toolbar;
+		Label resultsLabel, queryLabel;
 		
 		int cursor;
 		int[] secondary = new int[0];
@@ -117,6 +118,7 @@ namespace Do.UI
 			Alignment align;
 			TreeViewColumn column;
 			CellRenderer   cell;
+			HBox hbox;
 
 			KeepAbove = true;
 			AppPaintable = true;
@@ -138,22 +140,25 @@ namespace Do.UI
 			vbox = new VBox (false, 0);
 			Add (frame);
 			frame.Add (vbox);
-			vbox.BorderWidth = 4;
+			vbox.BorderWidth = 1;
 			vbox.Show ();
-
-			align = new Alignment (0.0F, 0.0F, 0, 0);
-			align.SetPadding (1, 2, 1, 1);
+			
+			hbox = new HBox ();
+			toolbar = new Toolbar ();
+			align = new Alignment (0, .5f, 0, 0);
+			resultsLabel = new Label ();
 			queryLabel = new Label ();
-			queryLabel.UseMarkup = true;
-			queryLabel.SingleLineMode = true;
 			align.Add (queryLabel);
-			vbox.PackStart (align, false, false, 0);
-			// queryLabel.Show ();
-			// align.Show ();
+			hbox.PackStart (align, true, true, 4);
+			hbox.PackStart (resultsLabel, false, false, 0);
+			hbox.WidthRequest = DefaultWindowWidth - 10;
+			toolbar.Add (hbox);
+			toolbar.ShowAll ();
+			vbox.PackStart (toolbar, false, false, 0);
 			
 			resultsScrolledWindow = new ScrolledWindow ();
 			resultsScrolledWindow.SetPolicy (PolicyType.Never, PolicyType.Never);
-			resultsScrolledWindow.ShadowType = ShadowType.In;
+			resultsScrolledWindow.ShadowType = ShadowType.None;
 			vbox.PackStart (resultsScrolledWindow, true, true, 0);
 			resultsScrolledWindow.Show ();
 
@@ -189,7 +194,7 @@ namespace Do.UI
 				
 			vbox.SetSizeRequest (DefaultWindowWidth, 
 			                     (height + 2) * NumberResultsDisplayed + 
-			                     (int) (vbox.BorderWidth * 2) + 2);
+			                     (int) (vbox.BorderWidth * 2) + 20);
 			
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
@@ -312,6 +317,11 @@ namespace Do.UI
 				
 				
 				UpdateCursors ();
+				resultsLabel.Markup = string.Format ("{1}/{0}", 
+				                                     value.Results.Length, 
+				                                     value.Cursor + 1);
+				queryLabel.Markup = string.Format ("<b>{0}</b>", value.Query);
+				
 				Gtk.Application.Invoke (delegate {
 					pushedUpdate = false;
 				});
