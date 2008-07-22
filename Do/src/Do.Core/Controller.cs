@@ -265,6 +265,9 @@ namespace Do.Core {
 
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
+			if (KeyEventToString(evnt).Equals (Do.Preferences.SummonKeyBinding)) {
+				OnSummonKeyPressEvent (evnt);
+			} 
 			//why are we doing this anyway?
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
 					return;
@@ -342,6 +345,12 @@ namespace Do.Core {
 		void OnDeleteKeyPressEvent (EventKey evnt)
 		{
 			CurrentContext.DeleteChar ();
+		}
+		
+		void OnSummonKeyPressEvent (EventKey evnt)
+		{
+			Reset ();
+			Vanish ();
 		}
 		
 		void OnEscapeKeyPressEvent (EventKey evnt)
@@ -446,6 +455,33 @@ namespace Do.Core {
 			} else if (evnt.Key == Gdk.Key.Page_Up) {
 				CurrentContext.Cursor -= 5;
 			}
+		}
+		
+		/// <summary>
+		/// Converts a keypress into a human readable string for comparing
+		/// against values in GConf.
+		/// </summary>
+		/// <param name="evnt">
+		/// A <see cref="EventKey"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/> in the form "<Modifier>key"
+		/// </returns>
+		string KeyEventToString (EventKey evnt) {
+			string modifier = "";
+			if ((evnt.State & ModifierType.ShiftMask) != 0) {
+				modifier += "<Shift>";
+			}
+			if ((evnt.State & ModifierType.ControlMask) != 0) {
+				modifier += "<Control>";
+			}
+			if ((evnt.State & ModifierType.SuperMask) != 0) {
+				modifier += "<Super>";
+			}
+			if ((evnt.State & ModifierType.Mod1Mask) != 0) {
+				modifier += "<Alt>";
+			}
+			return modifier + evnt.Key.ToString ();
 		}
 		
 		/// <summary>
