@@ -140,8 +140,9 @@ namespace Do.Core
 				return new List<IObject> (Do.UniverseManager.
 				                          Search (context.Query, SearchTypes, 
 				                                  context.LastContext.Results));
-			} else if (context.ParentContext != null && 
-			           context.Results.Length != 0) {
+			} else if (context.ParentContext != null) {
+				//If we have a parent context we NEVER do a full search.  Just return
+				//the results as they are.
 				return new List<IObject> (context.Results);
 			} else { 
 				//else we do things the slow way

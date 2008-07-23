@@ -367,7 +367,7 @@ namespace Do.UI {
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
 			if (context.Results.Length == 0 && !context.LargeTextDisplay) {
-				if (pane == Pane.First) {
+				if (pane == Pane.First && context.ParentContext == null) {
 					iconbox[0].TextOverlay = context.LargeTextDisplay;
 					iconbox[0].DisplayObject = new Do.Addins.DefaultIconBoxObject ();
 					label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 

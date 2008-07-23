@@ -144,6 +144,7 @@ namespace Do.UI
 			vbox.BorderWidth = 2;
 			vbox.Show ();
 			
+			//---------The breadcrum bar---------
 			hbox = new HBox ();
 			toolbar = new Toolbar ();
 			align = new Alignment (0, .5f, 0, 0);
@@ -157,6 +158,8 @@ namespace Do.UI
 			toolbar.ShowAll ();
 			vbox.PackStart (toolbar, false, false, 0);
 			
+			
+			//---------Results Window
 			resultsScrolledWindow = new ScrolledWindow ();
 			resultsScrolledWindow.SetPolicy (PolicyType.Never, PolicyType.Never);
 			resultsScrolledWindow.ShadowType = ShadowType.None;
@@ -169,8 +172,6 @@ namespace Do.UI
 			// If this is not set the tree will call IconDataFunc for all rows to 
 			// determine the total height of the tree
 			resultsTreeview.FixedHeightMode = true;
-			// resultsTreeview.RulesHint = true;
-			// resultsTreeview.Selection.Mode = SelectionMode.Multiple;
 			
 			resultsScrolledWindow.Add (resultsTreeview);
 			resultsTreeview.Show ();
@@ -347,10 +348,12 @@ namespace Do.UI
 		{
 			string query = context.Query;
 			StringBuilder builder = new StringBuilder ();
-			while (context.ParentContext != null) {
-				Console.WriteLine ("Loop");
+			
+			int count = 0;
+			while (context.ParentContext != null && count < 2) {
 				builder.Insert (0, context.ParentContext.Selection.Name + " > ");
 				context = context.ParentContext;
+				count++;
 			}
 			queryLabel.Markup = string.Format ("{0}<b>{1}</b>", builder.ToString (), query);
 		}
