@@ -18,6 +18,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 using Do.Addins;
 using Do.Universe;
@@ -56,5 +57,10 @@ namespace Do.UI
 		/// Tells the controller to present text in a larger box
 		/// </value>
 		bool LargeTextDisplay {get;}
+		
+		/// <value>
+		/// The parent context of the current UI context if it exists.
+		/// </value>
+		IUIContext ParentContext {get;}
 	}
 }

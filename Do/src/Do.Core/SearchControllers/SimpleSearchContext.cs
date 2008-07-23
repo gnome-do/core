@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 
 using Do.Universe;
+using Do.UI;
 
 namespace Do.Core
 {
@@ -29,32 +30,19 @@ namespace Do.Core
 	{
 		string query;
 		int cursor;
-		IObject[] secondaryCursors;
 		IObject[] results;
-		
-		SimpleSearchContext lastContext;
-		SimpleSearchContext parentContext;
 		
 		public SimpleSearchContext ()
 		{
-			secondaryCursors = new IObject[0];
-			
+			SecondaryCursors = new IObject[0];
 			query = "";
 			results = new IObject[0];
 			cursor = 0;
 		}
 		
-		public SimpleSearchContext LastContext
-		{
-			get { return lastContext; }
-			set { lastContext = value; }
-		}
-		
-		public SimpleSearchContext ParentContext
-		{
-			get { return parentContext; }
-			set { parentContext = value; }
-		}
+		public SimpleSearchContext LastContext   { get; set; }
+		public SimpleSearchContext ParentContext { get; set; }
+		public IObject[] SecondaryCursors        { get; set; }
 		
 		public string Query
 		{
@@ -123,14 +111,47 @@ namespace Do.Core
 			}
 		}
 		
-		public IObject[] SecondaryCursors
+		/// <summary>
+		/// Creates a new IUIContext from the current context.  Contexts however are not away if
+		/// the controller wishes for them to be displayed in Large Text Mode, so this value must
+		/// be passed in.  Parent contexts are always assumed to not use large text mode.
+		/// </summary>
+		/// <param name="textMode">
+		/// A <see cref="System.Boolean"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="IUIContext"/>
+		/// </returns>
+		public IUIContext GetIUIContext (bool textMode)
 		{
-			get {
-				return secondaryCursors;
+			if (ParentContext == null)
+				return new UIContext (Selection, Results, Cursor, SecondaryCursorsToIntArray (), 
+				                      Query, textMode, null);
+			else
+				return new UIContext (Selection, Results, Cursor, SecondaryCursorsToIntArray (), 
+				                      Query, textMode, ParentContext.GetIUIContext (false));
+		}
+		
+		/// <summary>
+		/// It is very convinient to convert to an int array.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.Int32"/>
+		/// </returns>
+		public int[] SecondaryCursorsToIntArray () 
+		{
+			List<int> cursors = new List<int> ();
+			if (SecondaryCursors.Length == 0)
+				return cursors.ToArray ();
+				
+			foreach (IObject obj in SecondaryCursors) {
+				for (int i = 0; i < Results.Length; i++) {
+					if (Results[i] == obj)
+						cursors.Add (i);
+				}
 			}
-			set {
-				secondaryCursors = value;
-			}
+			
+			return cursors.ToArray ();
 		}
 		
 		public object Clone ()
@@ -139,8 +160,8 @@ namespace Do.Core
 			
 			clone = new SimpleSearchContext ();
 			clone.Query = query;
-			clone.LastContext = lastContext;
-			clone.ParentContext = parentContext;
+			clone.LastContext = LastContext;
+			clone.ParentContext = ParentContext;
 			clone.Cursor = Cursor;
 			clone.SecondaryCursors = SecondaryCursors; //Cloning these makes no sense
 			clone.Results = results.Clone () as IObject[];
@@ -176,8 +197,8 @@ namespace Do.Core
 		{
 			return "SearchContext " + base.ToString () + 
 			"\n\tQuery: \"" + query + "\"" +
-			"\n\tHas last context: " + (lastContext != null) +
-			"\n\tHas parent context: " + (parentContext != null) +
+			"\n\tHas last context: " + (LastContext != null) +
+			"\n\tHas parent context: " + (ParentContext != null) +
 			"\n\tCursor: " + cursor +
 			"\n\tResults: " + results;
 		}

@@ -19,6 +19,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 using Gtk;
 using Gdk;
@@ -319,10 +320,12 @@ namespace Do.UI
 				
 				
 				UpdateCursors ();
+				
+				UpdateQueryLabel (value);
+				
 				resultsLabel.Markup = string.Format ("{1}/{0}", 
 				                                     value.Results.Length, 
 				                                     value.Cursor + 1);
-				queryLabel.Markup = string.Format ("<b>{0}</b>", value.Query);
 				
 				Gtk.Application.Invoke (delegate {
 					pushedUpdate = false;
@@ -338,6 +341,18 @@ namespace Do.UI
 				
 				UpdateCursors ();
 			}
+		}
+			
+		private void UpdateQueryLabel (IUIContext context)
+		{
+			string query = context.Query;
+			StringBuilder builder = new StringBuilder ();
+			while (context.ParentContext != null) {
+				Console.WriteLine ("Loop");
+				builder.Insert (0, context.ParentContext.Selection.Name + " > ");
+				context = context.ParentContext;
+			}
+			queryLabel.Markup = string.Format ("{0}<b>{1}</b>", builder.ToString (), query);
 		}
 		
 		private void UpdateCursors () 

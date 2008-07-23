@@ -36,10 +36,9 @@ namespace Do.Core
 		protected Type[] defaultFilter = new Type[0];
 		protected const int Timeout = 300;
 		
-		public virtual IUIContext UIContext {
+		public IUIContext UIContext {
 			get {
-				return new UIContext (Selection, Results, Cursor, 
-				                      SecondaryCursors, Query, textMode);
+				return context.GetIUIContext (TextMode);
 			}
 		}
 		
@@ -80,20 +79,9 @@ namespace Do.Core
 			}
 		}
 
-		public int[] SecondaryCursors {
-			get {
-				List<int> cursors = new List<int> ();
-				if (context.SecondaryCursors.Length == 0)
-					return cursors.ToArray ();
-				
-				foreach (IObject obj in context.SecondaryCursors) {
-					for (int i = 0; i < Results.Length; i++) {
-						if (Results[i] == obj)
-							cursors.Add (i);
-					}
-				}
-				
-				return cursors.ToArray ();
+		public int[] SecondaryCursors { 
+			get { 
+				return context.SecondaryCursorsToIntArray (); 
 			}
 		}
 
