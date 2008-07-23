@@ -122,8 +122,9 @@ namespace Do.UI
 					FillAlpha = FrameAlpha = 0.4;
 					FillColor = FrameColor = new Color (0x00, 0x00, 0x00);
 					image.Hide ();
-					label.Wrap = true;
 					label.Ellipsize = Pango.EllipsizeMode.None;
+					label.LineWrapMode = Pango.WrapMode.WordChar;
+					label.LineWrap = true;
 				} else {
 					FillColor = FrameColor = new Color (0xff, 0xff, 0xff);
 					UpdateFocus ();

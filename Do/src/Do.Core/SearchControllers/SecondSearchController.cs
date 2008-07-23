@@ -33,7 +33,23 @@ namespace Do.Core
 		private ISearchController FirstController;
 		private uint timer = 0, wait_timer = 0;
 		private const int type_wait = 200;
+		private bool no_wait = false;
 		
+		public override IObject Selection {
+			get {
+				if (context.Selection == null) {
+					GLib.Source.Remove (timer);
+					GLib.Source.Remove (wait_timer);
+					
+					no_wait = true;
+					base.OnUpstreamSelectionChanged ();
+					no_wait = false;
+				}
+				
+				return context.Selection;
+			}
+		}
+
 		public SecondSearchController(ISearchController FirstController) : base ()
 		{
 			this.FirstController = FirstController;
@@ -61,6 +77,8 @@ namespace Do.Core
 		protected override void OnUpstreamSelectionChanged ()
 		{
 			if (timer > 0) {
+				if (wait_timer > 0) //also remove anything simply in update wait
+					GLib.Source.Remove (wait_timer);
 				GLib.Source.Remove (timer);
 			}
 			base.UpdateResults ();//trigger our search start now
@@ -110,25 +128,19 @@ namespace Do.Core
 			
 			context.Results = results.ToArray ();
 			
-			//TODO -- Clean this up.  Too fried to think through proper logic now.
-			try {
-				if (((context.LastContext == null || context.LastContext.Selection == null) && context.Selection != null) ||
-					context.LastContext.Selection != context.Selection) {
-					uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
-					if (ms > Timeout) {
-						base.OnSelectionChanged ();
-					} else {
-						if (wait_timer > 0)
-							GLib.Source.Remove (wait_timer);
-						wait_timer = GLib.Timeout.Add (Timeout - ms - type_wait, delegate {
-							base.OnSelectionChanged ();
-							return false;
-						});
-					}
-				}
-			} catch {
+			uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
+			if (ms > Timeout || no_wait) {
 				base.OnSelectionChanged ();
+			} else {
+				if (wait_timer > 0) {
+					GLib.Source.Remove (wait_timer);
+				}
+				wait_timer = GLib.Timeout.Add (Timeout - ms - type_wait, delegate {
+					base.OnSelectionChanged ();
+					return false;
+				});
 			}
+			base.OnSelectionChanged ();
 			
 			//Do.PrintPerf ("SecondUpdate Stop");
 		}
