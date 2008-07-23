@@ -37,7 +37,6 @@ namespace Do.UI
 		private int DefaultResultIconSize = 32;
 		private int DefaultWindowWidth = 352;
 		private int NumberResultsDisplayed = 6;
-//		private IUIContext context;
 		
 		private int offset;
 		

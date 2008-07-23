@@ -78,6 +78,7 @@ namespace Do.UI
         	hide_check.Active = Do.Preferences.QuietStart;
         	login_check.Active = AutostartEnabled;
         	notification_check.Active = Do.Preferences.StatusIconVisible;
+			pin_check.Active = Do.Preferences.AlwaysShowResults;
         }
         
         public Bin GetConfiguration ()
@@ -141,6 +142,11 @@ namespace Do.UI
         		trayIcon.Show ();
         	else
         		trayIcon.Hide ();
+        }
+
+        protected virtual void OnPinChecklicked (object sender, System.EventArgs e)
+        {
+			Do.Preferences.AlwaysShowResults = pin_check.Active;
         }
     }
 }

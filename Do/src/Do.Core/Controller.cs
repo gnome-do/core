@@ -86,6 +86,8 @@ namespace Do.Core {
 		public void Initialize ()
 		{
 			ThemeChanged ();
+			if (Do.Preferences.AlwaysShowResults)
+				window.GrowResults ();
 			Do.Preferences.PreferenceChanged += OnPreferenceChanged;
 		}
 		
@@ -613,6 +615,7 @@ namespace Do.Core {
 		/// </summary>
 		void ShrinkResults ()
 		{
+			if (Do.Preferences.AlwaysShowResults) return;
 			window.ShrinkResults ();
 			resultsGrown = false;
 		}
@@ -696,11 +699,14 @@ namespace Do.Core {
 		{
 			if (!IsSummonable) return;
 			window.Summon ();
+			if (Do.Preferences.AlwaysShowResults)
+				GrowResults ();
 		}
 		
 		public void Vanish ()
 		{
-			ShrinkResults ();
+			window.ShrinkResults ();
+			resultsGrown = false;
 			window.Vanish ();
 		}	
 

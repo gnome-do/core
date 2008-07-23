@@ -53,5 +53,10 @@ namespace Do
 			get { return Get<bool> ("StatusIconVisible", true); }
 			set { Set<bool> ("StatusIconVisible", value); }
 		}
+		
+		public bool AlwaysShowResults {
+			get { return Get<bool> ("AlwaysShowResults", false); }
+			set { Set<bool> ("AlwaysShowResults", value); }
+		}
 	}
 }

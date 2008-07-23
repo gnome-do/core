@@ -55,7 +55,6 @@ namespace Do.UI {
             this.vbox3.BorderWidth = ((uint)(6));
             // Container child vbox3.Gtk.Box+BoxChild
             this.hbox1 = new Gtk.HBox();
-            this.hbox1.Name = "hbox1";
             this.hbox1.Spacing = 6;
             // Container child hbox1.Gtk.Box+BoxChild
             this.alignment1 = new Gtk.Alignment(0.5F, 0.5F, 1F, 1F);

@@ -43,6 +43,8 @@ namespace Do.UI {
         
         private Gtk.VBox vbox2;
         
+        private Gtk.CheckButton pin_check;
+        
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.GeneralPreferencesWidget
@@ -139,7 +141,6 @@ namespace Do.UI {
             this.vbox3.Spacing = 6;
             // Container child vbox3.Gtk.Box+BoxChild
             this.hbox1 = new Gtk.HBox();
-            this.hbox1.Name = "hbox1";
             this.hbox1.Spacing = 6;
             // Container child hbox1.Gtk.Box+BoxChild
             this.label3 = new Gtk.Label();
@@ -172,13 +173,25 @@ namespace Do.UI {
             this.vbox2 = new Gtk.VBox();
             this.vbox2.Name = "vbox2";
             this.vbox2.Spacing = 6;
+            // Container child vbox2.Gtk.Box+BoxChild
+            this.pin_check = new Gtk.CheckButton();
+            this.pin_check.CanFocus = true;
+            this.pin_check.Name = "pin_check";
+            this.pin_check.Label = Mono.Unix.Catalog.GetString("Always show results window");
+            this.pin_check.DrawIndicator = true;
+            this.pin_check.UseUnderline = true;
+            this.vbox2.Add(this.pin_check);
+            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.vbox2[this.pin_check]));
+            w11.Position = 0;
+            w11.Expand = false;
+            w11.Fill = false;
             this.vbox3.Add(this.vbox2);
-            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox2]));
-            w11.Position = 1;
+            Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox2]));
+            w12.Position = 1;
             this.alignment3.Add(this.vbox3);
             this.vbox1.Add(this.alignment3);
-            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.vbox1[this.alignment3]));
-            w13.Position = 3;
+            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.vbox1[this.alignment3]));
+            w14.Position = 3;
             this.alignment4.Add(this.vbox1);
             this.Add(this.alignment4);
             if ((this.Child != null)) {
@@ -189,6 +202,7 @@ namespace Do.UI {
             this.hide_check.Clicked += new System.EventHandler(this.OnHideCheckClicked);
             this.notification_check.Clicked += new System.EventHandler(this.OnNotificationCheckClicked);
             this.theme_combo.Changed += new System.EventHandler(this.OnThemeComboChanged);
+            this.pin_check.Clicked += new System.EventHandler(this.OnPinChecklicked);
         }
     }
 }
