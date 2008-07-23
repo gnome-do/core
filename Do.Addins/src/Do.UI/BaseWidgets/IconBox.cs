@@ -38,8 +38,6 @@ namespace Do.UI
 		protected Pixbuf pixbuf, empty_pixbuf;
 		protected int icon_size;
 		
-		protected Frame frame;
-
 		protected VBox vbox;
 		protected Gtk.Image image;
 		protected Label label;
@@ -59,20 +57,11 @@ namespace Do.UI
 
 			caption = "";
 			pixbuf = empty_pixbuf;
-
-			frame = new Frame ();
-			frame.FillAlpha = 0;
-			frame.DrawFill = true;
-			frame.Radius = 20;
-			frame.FillColor = new Gdk.Color (0x00, 0x00, 0x00);
-			
-			Add (frame);
-			frame.Show ();
 			
 			vbox = new VBox (false, 4);
 			vbox.BorderWidth = 6;
+			Add (vbox);
 			
-			frame.Add (vbox);
 			vbox.Show ();
 
 			empty_pixbuf = new Pixbuf (Colorspace.Rgb, true, 8, icon_size, icon_size);
@@ -130,12 +119,14 @@ namespace Do.UI
 			set { 
 				textOverlay = value;
 				if (value) {
-					frame.FillAlpha = 0.5;
+					FillAlpha = FrameAlpha = 0.4;
+					FillColor = FrameColor = new Color (0x00, 0x00, 0x00);
 					image.Hide ();
 					label.Wrap = true;
 					label.Ellipsize = Pango.EllipsizeMode.None;
 				} else {
-					frame.FillAlpha = 0.0;
+					FillColor = FrameColor = new Color (0xff, 0xff, 0xff);
+					UpdateFocus ();
 					image.Show ();
 					label.Wrap = false;
 					label.Ellipsize = Pango.EllipsizeMode.End;
