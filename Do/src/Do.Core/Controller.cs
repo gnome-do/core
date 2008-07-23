@@ -70,17 +70,17 @@ namespace Do.Core {
 			// Set up our callbacks here.  If we ever reconstruct these controllers, 
 			// and we shouldn't be, we will need to reset these too.  However controllers
 			// provide a resetting mechanism.
-			controllers[0].SelectionChanged += () => { UpdatePane (Pane.First); };
-			controllers[1].SelectionChanged += () => { OnSelectionQueryChanged (Pane.Second); };
-			controllers[2].SelectionChanged += () => { OnSelectionQueryChanged (Pane.Third); };
+			controllers[0].SelectionChanged += delegate { UpdatePane (Pane.First); };
+			controllers[1].SelectionChanged += delegate { OnSelectionQueryChanged (Pane.Second); };
+			controllers[2].SelectionChanged += delegate { OnSelectionQueryChanged (Pane.Third); };
 			
 			controllers[0].QueryChanged += OnFirstQueryChanged;
-			controllers[1].QueryChanged += () => { OnSelectionQueryChanged (Pane.Second); };
-			controllers[2].QueryChanged += () => { OnSelectionQueryChanged (Pane.Third); };
+			controllers[1].QueryChanged += delegate { OnSelectionQueryChanged (Pane.Second); };
+			controllers[2].QueryChanged += delegate { OnSelectionQueryChanged (Pane.Third); };
 			
-			controllers[0].SearchStarted += () => { };
-			controllers[1].SearchStarted += () => { window.ClearPane (Pane.Second); };
-			controllers[2].SearchStarted += () => { window.ClearPane (Pane.Third); };
+			controllers[0].SearchStarted += delegate { };
+			controllers[1].SearchStarted += delegate { window.ClearPane (Pane.Second); };
+			controllers[2].SearchStarted += delegate { window.ClearPane (Pane.Third); };
 		}
 		
 		public void Initialize ()
