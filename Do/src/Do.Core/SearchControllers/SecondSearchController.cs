@@ -34,10 +34,43 @@ namespace Do.Core
 		private uint timer = 0, wait_timer = 0;
 		private const int type_wait = 200;
 		
+		private bool IsSearching {
+			get {
+				return (timer > 0 || wait_timer > 0);
+			}
+		}
+		
+		public override IObject Selection {
+			get { 
+				if (IsSearching)
+					FastSearch ();
+				return context.Selection;
+			}
+		}
+
+		
 		public SecondSearchController(ISearchController FirstController) : base ()
 		{
 			this.FirstController = FirstController;
 			FirstController.SelectionChanged += OnUpstreamSelectionChanged;
+		}
+		
+		//Similar to running UpdateResults (), except we dont have any timeouts
+		private void FastSearch ()
+		{
+			if (FirstController.Selection == null)
+				return;
+			
+			if (timer > 0) {
+				GLib.Source.Remove (timer);
+				timer = 0;
+			}
+			if (wait_timer > 0) {
+				GLib.Source.Remove (wait_timer);
+				wait_timer = 0;
+			}
+			context.Results = GetContextResults ();
+			base.OnSelectionChanged ();
 		}
 		
 		protected override List<IObject> InitialResults ()
@@ -71,19 +104,21 @@ namespace Do.Core
 				} finally { 
 					Gdk.Threads.Leave (); 
 				}
+				timer = 0;
 				return false;
 			});
 		}
 
-		
-		protected override void UpdateResults ()
+		/// <summary>
+		/// Set up our results list.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="IObject"/>
+		/// </returns>
+		private IObject[] GetContextResults ()
 		{
-			if (FirstController.Selection == null)
-				return;
-			
 			base.UpdateResults ();
 			
-			DateTime time = DateTime.Now;
 			//Do.PrintPerf ("SecondUpdate Start");
 			List<IObject> initresults = InitialResults ();
 			
@@ -108,29 +143,30 @@ namespace Do.Core
 					results.Add (textItem);
 			}
 			
-			context.Results = results.ToArray ();
+			return results.ToArray ();
+		}
+		
+		protected override void UpdateResults ()
+		{
+			DateTime time = DateTime.Now;
+			if (FirstController.Selection == null)
+				return;
 			
-			//TODO -- Clean this up.  Too fried to think through proper logic now.
-			try {
-				if (((context.LastContext == null || context.LastContext.Selection == null) && context.Selection != null) ||
-					context.LastContext.Selection != context.Selection) {
-					uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
-					if (ms > Timeout) {
-						base.OnSelectionChanged ();
-					} else {
-						if (wait_timer > 0)
-							GLib.Source.Remove (wait_timer);
-						wait_timer = GLib.Timeout.Add (Timeout - ms - type_wait, delegate {
-							base.OnSelectionChanged ();
-							return false;
-						});
-					}
-				}
-			} catch {
+			context.Results = GetContextResults ();
+			
+			uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
+			if (ms > Timeout) {
 				base.OnSelectionChanged ();
+			} else {
+				if (wait_timer > 0)
+					GLib.Source.Remove (wait_timer);
+				
+				wait_timer = GLib.Timeout.Add (Timeout - ms - type_wait, delegate {
+					base.OnSelectionChanged ();
+					wait_timer = 0;
+					return false;
+				});
 			}
-			
-			//Do.PrintPerf ("SecondUpdate Stop");
 		}
 
 		public override Type[] SearchTypes {
