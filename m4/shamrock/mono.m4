@@ -25,6 +25,19 @@ AC_DEFUN([SHAMROCK_CHECK_MONO_MODULE_NOBAIL],
 	AC_SUBST(HAVE_MONO_MODULE)
 ])
 
+AC_DEFUN([SHAMROCK_CHECK_LINQ_FLAG],
+[
+	AC_MSG_CHECKING([for LINQ flag for mcs])
+	if $PKG_CONFIG --atleast-version=1.9 mono ; then
+	   AC_MSG_RESULT([none needed])
+	   MCS_LINQ_FLAG=
+	else
+	   AC_MSG_RESULT([-langversion:linq])
+	   MCS_LINQ_FLAG=-langversion:linq
+	fi
+	AC_SUBST(MCS_LINQ_FLAG)		
+])
+
 AC_DEFUN([_SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES],
 [
 	for asm in $(echo "$*" | cut -d, -f2- | sed 's/\,/ /g')

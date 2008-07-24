@@ -4,8 +4,8 @@ EXTRA_DIST =
 # Warning: This is an automatically generated file, do not edit!
 
 if ENABLE_DEBUG
-ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -langversion:linq -noconfig -codepage:utf8 -warn:4 -debug -d:DEBUG
+ASSEMBLY_COMPILER_COMMAND = $(MCS)
+ASSEMBLY_COMPILER_FLAGS =  $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4 -debug -d:DEBUG
 ASSEMBLY = ./bin/Debug/Do.Addins.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = library
@@ -16,8 +16,8 @@ BUILD_DIR = ./bin/Debug
 endif
 
 if ENABLE_RELEASE
-ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -langversion:linq -noconfig -codepage:utf8 -warn:4
+ASSEMBLY_COMPILER_COMMAND = $(MCS)
+ASSEMBLY_COMPILER_FLAGS =  $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
 ASSEMBLY = ./bin/Release/Do.Addins.dll
 ASSEMBLY_MDB = 
 COMPILE_TARGET = library
@@ -103,13 +103,13 @@ EXTRAS = \
 REFERENCES =  \
 	Mono.Cairo \
 	Mono.Posix \
-	-pkg:gconf-sharp-2.0 \
-	-pkg:glib-sharp-2.0 \
-	-pkg:gnome-desktop-sharp-2.0 \
-	-pkg:gnome-keyring-sharp \
-	-pkg:gnome-sharp-2.0 \
-	-pkg:gnome-vfs-sharp-2.0 \
-	-pkg:gtk-sharp-2.0 \
+	$(GCONF_SHARP_20_LIBS) \
+	$(GLIB_SHARP_20_LIBS) \
+	$(GNOME_DESKTOP_SHARP_20_LIBS) \
+	$(GNOME_KEYRING_SHARP_LIBS) \
+	$(GNOME_SHARP_20_LIBS) \
+	$(GNOME_VFS_SHARP_20_LIBS) \
+	$(GTK_SHARP_20_LIBS) \
 	System
 
 DLL_REFERENCES = 

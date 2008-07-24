@@ -6,8 +6,8 @@ CLEANFILES += gnome-do.desktop
 # Warning: This is an automatically generated file, do not edit!
 
 if ENABLE_DEBUG
-ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -langversion:linq -noconfig -codepage:utf8 -warn:4 -debug -d:DEBUG
+ASSEMBLY_COMPILER_COMMAND = $(MCS)
+ASSEMBLY_COMPILER_FLAGS =  $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4 -debug -d:DEBUG
 ASSEMBLY = ./bin/Debug/Do.exe
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = exe
@@ -27,8 +27,8 @@ DO_ADDINS_DLL_MDB=$(BUILD_DIR)/Do.Addins.dll.mdb
 endif
 
 if ENABLE_RELEASE
-ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -langversion:linq -noconfig -codepage:utf8 -warn:4
+ASSEMBLY_COMPILER_COMMAND = $(MCS)
+ASSEMBLY_COMPILER_FLAGS =  $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
 ASSEMBLY = ./bin/Release/Do.exe
 ASSEMBLY_MDB = 
 COMPILE_TARGET = exe
@@ -89,8 +89,6 @@ FILES =  \
 	src/Do.Core/SearchControllers/SimpleSearchController.cs \
 	src/Do.Core/SearchControllers/ThirdSearchController.cs \
 	src/Do.Core/SimpleUniverseManager.cs \
-	src/Do.Core/Tests/UniverseAddItemTest.cs \
-	src/Do.Core/Tests/UniverseRemoveItem.cs \
 	src/Do.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
@@ -123,6 +121,12 @@ FILES =  \
 	src/Util.cs \
 	src/XKeybinder.cs 
 
+if HAVE_NUNIT
+FILES += \
+	 src/Do.Core/Tests/UniverseAddItemTest.cs \
+	 src/Do.Core/Tests/UniverseRemoveItem.cs
+endif
+
 DATA_FILES = \
 	gnome-do.desktop.in 
 
@@ -139,14 +143,14 @@ REFERENCES =  \
 	../Do.Addins/bin/Debug/Do.Addins.dll \
 	../Do.DBus/bin/Debug/Do.DBus.dll \
 	Mono.Posix \
-	-pkg:gconf-sharp-2.0 \
-	-pkg:glib-sharp-2.0 \
-	-pkg:gtk-sharp-2.0 \
-	-pkg:mono-addins \
-	-pkg:mono-addins-gui \
-	-pkg:mono-addins-setup \
-	-pkg:notify-sharp \
-	-pkg:nunit-2.2 \
+	$(GCONF_SHARP_20_LIBS) \
+	$(GLIB_SHARP_20_LIBS) \
+	$(GTK_SHARP_20_LIBS) \
+	$(MONO_ADDINS_LIBS) \
+	$(MONO_ADDINS_GUI_LIBS) \
+	$(MONO_ADDINS_SETUP_LIBS) \
+	$(NOTIFY_SHARP_LIBS) \
+	$(NUNIT_LIBS) \
 	System
 
 DLL_REFERENCES = 
