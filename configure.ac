@@ -7,6 +7,8 @@ dnl ...give or take!
 AC_INIT([gnome-do], [0.5.1.0])
 AM_INIT_AUTOMAKE([foreign])
 
+AC_CONFIG_MACRO_DIR([m4])
+
 ASM_VERSION="$VERSION"
 AC_SUBST(ASM_VERSION)
 
