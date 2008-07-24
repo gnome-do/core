@@ -4,9 +4,13 @@ Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs
 Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs
 Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs
 Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs
-Do.Addins/src/Do.Universe/MailtoAction.cs
+Do.Addins/src/Do.Universe/ApplicationItemSource.cs
+Do.Addins/src/Do.Universe/EmailAction.cs
+Do.Addins/src/Do.Universe/GNOMESpecialLocationsItemSource.cs
 Do.Addins/src/Do.Universe/OpenAction.cs
 Do.Addins/src/Do.Universe/OpenURLAction.cs
+Do.Addins/src/Do.Universe/OpenWithAction.cs
+Do.Addins/src/Do.Universe/RevealAction.cs
 Do.Addins/src/Do.Universe/RunAction.cs
 Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs
 Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs
@@ -15,5 +19,7 @@ Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs
 Do/gtk-gui/Do.UI.PreferencesWindow.cs
 Do/src/Do.Core/Controller.cs
 Do/src/Do.UI/MainMenu.cs
+Do/src/Do.UI/NotificationIcon.cs
+Do/src/Do.Universe/DoQuitItem.cs
 # files added by intltool-prepare
 Do/gnome-do.desktop.in
