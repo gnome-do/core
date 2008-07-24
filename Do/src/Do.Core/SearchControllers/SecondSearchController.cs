@@ -148,21 +148,37 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
+			// We will use this time later, but we want to know it now.
 			DateTime time = DateTime.Now;
+			
+			// if we dont have a first controller selection, we can stop now.
 			if (FirstController.Selection == null)
 				return;
 			
 			context.Results = GetContextResults ();
 			
+			// we now want to know how many ms have elapsed since we started this process
 			uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
+			ms += type_wait; // we also know we waited this long at the start
 			if (ms > Timeout) {
+				//we were too slow, our engine has been defeated and we must return results as
+				//quickly as possible
 				base.OnSelectionChanged ();
 			} else {
-				if (wait_timer > 0)
+				//yay, we beat the user with a stick
+				if (wait_timer > 0) {
 					GLib.Source.Remove (wait_timer);
+				}
 				
-				wait_timer = GLib.Timeout.Add (Timeout - ms - type_wait, delegate {
-					base.OnSelectionChanged ();
+				// So the idea here is that we will wait long enough that we still go the full
+				// 250ms before showing results.
+				wait_timer = GLib.Timeout.Add (Timeout - ms, delegate {
+					Gdk.Threads.Enter ();
+					try {
+						base.OnSelectionChanged ();
+					} finally {
+						Gdk.Threads.Leave ();
+					}
 					wait_timer = 0;
 					return false;
 				});
@@ -172,11 +188,11 @@ namespace Do.Core
 		public override Type[] SearchTypes {
 			get { 
 				if (FirstController.Selection is IAction) {
-					// ok so the basic idea here is that if the first controller selection is an action
+					// the basic idea here is that if the first controller selection is an action
 					// we can move right to filtering on what it supports.  This is not strictly needed,
 					// but speeds up searches since we get more specific results back.  Returning a
 					// typeof (IItem) would have the same effect here and MUST be used to debug.
-					//return new Type[] {typeof (IItem)};
+					// ----return new Type[] {typeof (IItem)};
 					return (FirstController.Selection as IAction).SupportedItemTypes;
 				} else {
 					return new Type[] {typeof (IAction)};
@@ -184,7 +200,10 @@ namespace Do.Core
 			}
 		}
 
-		public override bool TextMode {
+		/// <value>
+		/// Set text mode.
+		/// </value>
+		public override bool TextMode { //FIXME
 			get { 
 				return false;
 			}
