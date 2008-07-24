@@ -75,7 +75,7 @@ AC_SUBST([NDESK_DBUS_GLIB_10_LIBS])
 AC_SUBST([NOTIFY_SHARP_LIBS])
 
 
-PKG_CHECK_MODULES([NUNIT], [nunit-2.2], have_nunit=yes, have_nunit=no)
+PKG_CHECK_MODULES([NUNIT], [nunit], have_nunit=yes, have_nunit=no)
 AM_CONDITIONAL(HAVE_NUNIT, test "$have_nunit" = "yes")
 if test "$have_nunit" != "yes" ; then
    NUNIT_LIBS=
