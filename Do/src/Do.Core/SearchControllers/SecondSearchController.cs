@@ -38,8 +38,10 @@ namespace Do.Core
 		public override IObject Selection {
 			get {
 				if (context.Selection == null) {
-					GLib.Source.Remove (timer);
-					GLib.Source.Remove (wait_timer);
+					if (timer > 0)
+						GLib.Source.Remove (timer);
+					if (wait_timer > 0)
+						GLib.Source.Remove (wait_timer);
 					
 					no_wait = true;
 					base.OnUpstreamSelectionChanged ();
