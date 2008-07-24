@@ -58,7 +58,7 @@ namespace Do.Core
 			}
 		}
 
-		public virtual IObject Selection {
+		public IObject Selection {
 			get {
 				return context.Selection;
 			}
