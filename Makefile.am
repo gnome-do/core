@@ -1,5 +1,4 @@
-EXTRA_DIST = intltool-update.in intltool-extract.in intltool-merge.in COPYRIGHT
-CLEANFILES = intltool-update intltool-extract intltool-merge
+EXTRA_DIST = COPYRIGHT
 
 ACLOCAL_AMFLAGS = -I m4
 

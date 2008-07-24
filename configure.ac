@@ -9,10 +9,14 @@ AM_INIT_AUTOMAKE([foreign])
 
 AC_CONFIG_MACRO_DIR([m4])
 
+dnl -- Intl
+
+IT_PROG_INTLTOOL([0.35.0])
+SHAMROCK_CONFIGURE_I18N(gnome-do)
+
+
 ASM_VERSION="$VERSION"
 AC_SUBST(ASM_VERSION)
-
-AC_PROG_INTLTOOL([0.35])
 
 dnl pkg-config
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
@@ -79,10 +83,6 @@ if test "$have_nunit" != "yes" ; then
    NUNIT_LIBS=
 fi
 AC_SUBST([NUNIT_LIBS])
-
-dnl -- Intl
-
-SHAMROCK_CONFIGURE_I18N(gnome-do)
 
 
 AC_ARG_ENABLE(debug,
