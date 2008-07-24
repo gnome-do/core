@@ -58,12 +58,16 @@ namespace Do.Core {
         public static IDictionary<string,string> RepositoryUrls {
             get {
             	if (null == repository_urls) {
+            	
             		repository_urls = new Dictionary<string,string> ();
-         
+         		/*
             		repository_urls ["Official Plugins"] = 
             			"http://do.davebsd.com/repo/" + Version +"/official";
             		repository_urls ["Community Plugins"] = 
             			"http://do.davebsd.com/repo/" + Version +"/community";
+            	*/
+            		repository_urls ["Local Plugins"] = 
+            			"/home/alex/Desktop/plugin-repo";
             	}
             	
             	return repository_urls;;
@@ -206,7 +210,7 @@ namespace Do.Core {
 
             updates = new List<string> ();
             setup = new SetupService (AddinManager.Registry);
-            installer = graphical ? new AddinInstaller () as IAddinInstaller
+            installer = graphical ? new DoAddinInstaller () as IAddinInstaller
                 : new ConsoleAddinInstaller () as IAddinInstaller ;
 			
             setup.Repositories.UpdateAllRepositories (

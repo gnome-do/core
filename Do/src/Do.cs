@@ -72,7 +72,7 @@ namespace Do {
 			//whoever keeps pulling this out. STOP. PLEASE.
 			notification_icon = NotificationIcon;
 			
-			// Kick-off update timers.
+			// Kick-off update timers.			
 			GLib.Timeout.Add (5 * 60 * 100, delegate {
 				CheckForUpdates ();
 				return false;

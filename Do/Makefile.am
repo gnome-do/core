@@ -63,6 +63,7 @@ BINARIES = \
 all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_DESKTOPAPPLICATIONS) $(BINARIES) 
 
 FILES =  \
+	gtk-gui/Do.UI.DoAddinInstallerDialog.cs \
 	gtk-gui/Do.UI.GeneralPreferencesWidget.cs \
 	gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs \
 	gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs \
@@ -73,6 +74,7 @@ FILES =  \
 	src/ConsoleCrayon.cs \
 	src/Do.Core/Controller.cs \
 	src/Do.Core/DoAction.cs \
+	src/Do.Core/DoAddinInstaller.cs \
 	src/Do.Core/DoItem.cs \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
@@ -90,6 +92,7 @@ FILES =  \
 	src/Do.Core/Tests/UniverseAddItemTest.cs \
 	src/Do.Core/Tests/UniverseRemoveItem.cs \
 	src/Do.cs \
+	src/Do.UI/DoAddinInstallerDialog.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \
 	src/Do.UI/KeybindingTreeView.cs \
@@ -99,6 +102,7 @@ FILES =  \
 	src/Do.UI/PluginConfigurationWindow.cs \
 	src/Do.UI/PluginNodeView.cs \
 	src/Do.UI/PluginSelectionEventArgs.cs \
+	src/Do.UI/PluginUpdateNodeView.cs \
 	src/Do.UI/PreferencesWindow.cs \
 	src/Do.Universe/AliasAction.cs \
 	src/Do.Universe/AliasItemSource.cs \

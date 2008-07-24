@@ -141,6 +141,7 @@ namespace Do.UI {
             this.vbox3.Spacing = 6;
             // Container child vbox3.Gtk.Box+BoxChild
             this.hbox1 = new Gtk.HBox();
+            this.hbox1.Name = "hbox1";
             this.hbox1.Spacing = 6;
             // Container child hbox1.Gtk.Box+BoxChild
             this.label3 = new Gtk.Label();

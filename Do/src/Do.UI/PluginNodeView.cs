@@ -1,22 +1,22 @@
-// PluginNodeView.cs
-//
-// GNOME Do is the legal property of its developers. Please refer to the
-// COPYRIGHT file distributed with this source distribution.
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-//
+/* PluginNodeView.cs
+ *
+ * GNOME Do is the legal property of its developers. Please refer to the
+ * COPYRIGHT file distributed with this
+ * source distribution.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using System;
 using System.Threading;
@@ -131,7 +131,7 @@ namespace Do.UI
 			return scoreB - scoreA;
 		}
 
-		private void IconDataFunc (TreeViewColumn column,
+		protected virtual void IconDataFunc (TreeViewColumn column,
 				CellRenderer cell,
 				TreeModel model,
 				TreeIter iter)
@@ -157,11 +157,11 @@ namespace Do.UI
 				PluginManager.AddinIsFromRepository (e, ShowRepository);
 		}
 
-		public void Refresh () {
+		public virtual void Refresh () {
 			Refresh (true);
 		}
 
-		public void Refresh (bool goOnline) {
+		public virtual void Refresh (bool goOnline) {
 			ListStore store;
 
 			store = Model as ListStore;
@@ -228,22 +228,22 @@ namespace Do.UI
 			th.Start ();
 		}
 
-		string Description (string name, string desc, string version)
+		protected string Description (string name, string desc, string version)
 		{
 			return string.Format (DescriptionFormat, name, desc, version);
 		}
 
-		string Description (Addin a)
+		protected string Description (Addin a)
 		{
 			return Description (a.Name, a.Description.Description, a.Version);
 		}
 
-		string Description (AddinRepositoryEntry a)
+		protected string Description (AddinRepositoryEntry a)
 		{
 			return Description (a.Addin);
 		}
 
-		string Description (AddinHeader a)
+		protected string Description (AddinHeader a)
 		{
 			return Description (a.Name, a.Description, a.Version);
 		}
