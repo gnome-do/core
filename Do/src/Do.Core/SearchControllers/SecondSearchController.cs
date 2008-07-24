@@ -162,7 +162,12 @@ namespace Do.Core
 					GLib.Source.Remove (wait_timer);
 				
 				wait_timer = GLib.Timeout.Add (Timeout - ms - type_wait, delegate {
-					base.OnSelectionChanged ();
+					Gdk.Threads.Enter ();
+					try {
+						base.OnSelectionChanged ();
+					} finally {
+						Gdk.Threads.Leave ();
+					}
 					wait_timer = 0;
 					return false;
 				});
