@@ -155,12 +155,14 @@ namespace Do.Core
 			context.Results = GetContextResults ();
 			
 			uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
-			if (ms > Timeout) {
+			if (ms + type_wait > Timeout) {
 				base.OnSelectionChanged ();
 			} else {
-				if (wait_timer > 0)
+				if (wait_timer > 0) {
 					GLib.Source.Remove (wait_timer);
+				}
 				
+				Console.WriteLine (Timeout - ms - type_wait);
 				wait_timer = GLib.Timeout.Add (Timeout - ms - type_wait, delegate {
 					Gdk.Threads.Enter ();
 					try {
