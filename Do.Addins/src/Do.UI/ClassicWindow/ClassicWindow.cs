@@ -384,18 +384,17 @@ namespace Do.UI {
 					}
 				}
 				return;
-			} else if (context.Results.Length == 0 && context.LargeTextDisplay) {
-				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
-				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text");
-				return;
 			}
 			
-			iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
-			iconbox[(int) pane].DisplayObject = context.Selection;
-			
-			if (!context.LargeTextDisplay)
+			if (context.Query.Length == 0 && context.LargeTextDisplay) {
+				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
+				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text");
+				if (context.Results.Length == 0) return;
+			} else {
+				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
+				iconbox[(int) pane].DisplayObject = context.Selection;
 				iconbox[(int) pane].Highlight = context.Query;
-			
+			}
 			
 			if (pane == CurrentPane) {
 				resultsWindow.Context = context;

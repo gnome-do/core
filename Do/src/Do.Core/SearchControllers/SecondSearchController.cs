@@ -137,11 +137,12 @@ namespace Do.Core
 			} else if (FirstController.Selection is IAction) {
 				//We need to find items for this action
 				IAction action = FirstController.Selection as IAction;
-				foreach (IItem item in initresults) {
-					if (action.SupportsItem (item))
-						results.Add (item);
+				if (!textMode) {
+					foreach (IItem item in initresults) {
+						if (action.SupportsItem (item))
+							results.Add (item);
+					}
 				}
-				
 				IItem textItem = new DoTextItem (Query);
 				if (action.SupportsItem (textItem))
 					results.Add (textItem);

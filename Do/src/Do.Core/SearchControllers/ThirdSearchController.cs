@@ -125,17 +125,22 @@ namespace Do.Core
 
 			//If we support nothing, dont search.
 			if (action.SupportedModifierItemTypes.Length == 0)  return null;
-			List<IObject> initresults = InitialResults ();
+			
+			
+			
 			
 			List<IObject> results = new List<IObject> ();
+
+			if (!textMode) {
+				List<IObject> initresults = InitialResults ();
+				foreach (IItem moditem in initresults) {
+					if (action.SupportsModifierItemForItems (items.ToArray (), moditem))
+						results.Add (moditem);
+				}
 			
-			foreach (IItem moditem in initresults) {
-				if (action.SupportsModifierItemForItems (items.ToArray (), moditem))
-					results.Add (moditem);
+				results.AddRange (action.DynamicModifierItemsForItem (item));
+				results.Sort ();
 			}
-			
-			results.AddRange (action.DynamicModifierItemsForItem (item));
-			results.Sort ();
 			
 			IItem textItem = new DoTextItem (Query);
 			if (action.SupportsModifierItemForItems (items.ToArray (), textItem))
