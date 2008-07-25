@@ -62,7 +62,7 @@ namespace Do.Core
 					else if (SecondController.Selection is IAction)
 						action = SecondController.Selection as IAction;
 					else
-						return;
+						return; //you have done something weird, ignore it!
 					
 					foreach (Type t in action.SupportedModifierItemTypes) {
 						if (t == typeof (ITextItem))

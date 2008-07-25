@@ -61,6 +61,7 @@ namespace Do.Core
 			if (FirstController.Selection == null)
 				return;
 			
+			//Clear our timers
 			if (timer > 0) {
 				GLib.Source.Remove (timer);
 				timer = 0;
@@ -149,6 +150,11 @@ namespace Do.Core
 			return results.ToArray ();
 		}
 		
+		/// <summary>
+		/// This method is pretty much a wrapper around GetContextResults () with a timer at the
+		/// end.  This is very useful since we might not want this timer and adding a bool to turn
+		/// this on is more stateful than i would like.
+		/// </summary>
 		protected override void UpdateResults ()
 		{
 			// We will use this time later, but we want to know it now.
@@ -230,6 +236,9 @@ namespace Do.Core
 			}
 		}
 
+		/// <summary>
+		/// Builds up a new context from a query from scratch.  Useful after changing filters.
+		/// </summary>
 		private void BuildNewContextFromQuery ()
 		{
 			string query = Query;
