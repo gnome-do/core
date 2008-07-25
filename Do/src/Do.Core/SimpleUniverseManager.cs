@@ -133,7 +133,6 @@ namespace Do.Core
 		/// </summary>
 		private void BuildUniverse ()
 		{
-			Console.WriteLine (DBus.PowerState.OnBattery ());
 			//Originally i had threaded the loading of each plugin, but they dont seem to like this...
 			if (thread != null && thread.IsAlive) return;
 			

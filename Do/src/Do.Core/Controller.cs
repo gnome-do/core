@@ -582,10 +582,8 @@ namespace Do.Core {
 					ThirdPaneVisible = true;
 				} else if (CurrentPane != Pane.Third && (!ThirdPaneAllowed || ThirdPaneCanClose)) {
 					ThirdPaneVisible = false;
-					Console.WriteLine ("close pane");
 				}
 			} else if (pane == Pane.Second && (!ThirdPaneAllowed)) {
-				Console.WriteLine ("close pane second");
 				ThirdPaneVisible = false;
 			}
 			window.SetPaneContext (pane, controllers[(int) pane].UIContext);
