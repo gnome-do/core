@@ -59,15 +59,11 @@ namespace Do.Core {
             get {
             	if (null == repository_urls) {
             	
-            		repository_urls = new Dictionary<string,string> ();
-         		/*
+            		repository_urls = new Dictionary<string,string> ();      
             		repository_urls ["Official Plugins"] = 
             			"http://do.davebsd.com/repo/" + Version +"/official";
             		repository_urls ["Community Plugins"] = 
             			"http://do.davebsd.com/repo/" + Version +"/community";
-            	*/
-            		repository_urls ["Local Plugins"] = 
-            			"/home/alex/Desktop/plugin-repo";
             	}
             	
             	return repository_urls;;

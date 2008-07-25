@@ -152,10 +152,12 @@ namespace Do.UI
 				Pixbuf = normal_icon;
 				SendNotification ("Plugins successfully updated. " +
 				"Please restart GNOME Do.");
-			} catch (Exception e){
+			} catch (Exception e) {
 				Log.Error ("{0}: {1}", e.GetType (), e.Message);
-				Log.Debug (e.StackTrace);
-				SendNotification ("Plugin update failed.");
+				//I removed these due to a bug in Mono.Addins, once that bug
+				//is fixed i will reinstate user error reporting.
+				//Log.Debug (e.StackTrace);
+				//SendNotification ("Plugin update failed.");
 			}
 			if (!Do.Preferences.StatusIconVisible)
 				Hide ();
