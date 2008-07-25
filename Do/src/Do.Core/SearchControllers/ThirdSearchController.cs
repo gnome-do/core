@@ -46,8 +46,25 @@ namespace Do.Core
 		}
 
 		public override bool TextMode {
-			get { return false; }
-			set {  }
+			get { return textMode; }
+			set { 
+				if (!value) { //if its false, no problems!  We can always leave text mode
+					textMode = value;
+				} else {
+					IAction action;
+					if (FirstController.Selection is IAction)
+						action = FirstController.Selection as IAction;
+					else if (SecondController.Selection is IAction)
+						action = SecondController.Selection as IAction;
+					else
+						return;
+					
+					foreach (Type t in action.SupportedModifierItemTypes) {
+						if (t == typeof (ITextItem))
+							textMode = value;
+					}
+				}
+			}
 		}
 		
 		protected override void OnUpstreamSelectionChanged ()

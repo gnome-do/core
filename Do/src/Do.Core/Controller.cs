@@ -424,6 +424,8 @@ namespace Do.Core {
 				if (CurrentContext.TextMode == tmp) {
 					NotificationIcon.SendNotification ("Text Mode Error", "Do could not enter text mode " +
 					                      "because the current action does not support it.");
+				} else {
+					UpdatePane (CurrentPane);
 				}
 				shiftPressed = false;
 			} else {

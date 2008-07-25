@@ -26,8 +26,9 @@ using Do.UI;
 
 namespace Do.Core
 {
-	
-	
+	/// <summary>
+	/// A search controller most useful in the second pane of Gnome-Do
+	/// </summary>
 	public class SecondSearchController : SimpleSearchController
 	{
 		private ISearchController FirstController;
@@ -48,7 +49,6 @@ namespace Do.Core
 			}
 		}
 
-		
 		public SecondSearchController(ISearchController FirstController) : base ()
 		{
 			this.FirstController = FirstController;
@@ -75,6 +75,8 @@ namespace Do.Core
 		
 		protected override List<IObject> InitialResults ()
 		{
+			if (textMode)
+				return new List<IObject> ();
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Length != 0) {
 				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
@@ -93,6 +95,7 @@ namespace Do.Core
 
 		protected override void OnUpstreamSelectionChanged ()
 		{
+			textMode = false;
 			if (timer > 0) {
 				GLib.Source.Remove (timer);
 			}
@@ -205,9 +208,19 @@ namespace Do.Core
 		/// </value>
 		public override bool TextMode { //FIXME
 			get { 
-				return false;
+				return textMode;
 			}
-			set {  }
+			set {
+				if (!value) {
+					textMode = value;
+				} else if (FirstController.Selection is IAction) {
+					IAction action = FirstController.Selection as IAction;
+					foreach (Type t in action.SupportedItemTypes) {
+						if (t == typeof (ITextItem))
+							textMode = value;
+					}
+				}
+			}
 		}
 
 	}

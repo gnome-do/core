@@ -91,8 +91,6 @@ namespace Do.Core
 				textMode = value; 
 				if (Query.Length > 0)
 					BuildNewContextFromQuery ();
-				else
-					base.OnSelectionChanged ();
 			}
 		}
 		
