@@ -103,13 +103,13 @@ EXTRAS = \
 REFERENCES =  \
 	Mono.Cairo \
 	Mono.Posix \
-	$(GCONF_SHARP_20_LIBS) \
-	$(GLIB_SHARP_20_LIBS) \
-	$(GNOME_DESKTOP_SHARP_20_LIBS) \
-	$(GNOME_KEYRING_SHARP_LIBS) \
-	$(GNOME_SHARP_20_LIBS) \
-	$(GNOME_VFS_SHARP_20_LIBS) \
-	$(GTK_SHARP_20_LIBS) \
+	-pkg:gconf-sharp-2.0 \
+	-pkg:glib-sharp-2.0 \
+	-pkg:gnome-desktop-sharp-2.0 \
+	-pkg:gnome-keyring-sharp \
+	-pkg:gnome-sharp-2.0 \
+	-pkg:gnome-vfs-sharp-2.0 \
+	-pkg:gtk-sharp-2.0 \
 	System
 
 DLL_REFERENCES = 

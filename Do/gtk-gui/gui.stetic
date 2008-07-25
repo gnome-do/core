@@ -670,7 +670,7 @@ Mini</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
-        <property name="BorderWidth">2</property>
+        <property name="BorderWidth">5</property>
         <child>
           <widget class="Gtk.VBox" id="vbox2">
             <property name="MemberName" />
@@ -682,7 +682,7 @@ Mini</property>
                 <property name="Ypad">3</property>
                 <property name="Xalign">0</property>
                 <property name="Yalign">0</property>
-                <property name="LabelProp" translatable="yes">&lt;span size="large"&gt;&lt;b&gt;New plugins are available!&lt;/b&gt;&lt;/span&gt;</property>
+                <property name="LabelProp" translatable="yes">&lt;span size="large"&gt;&lt;b&gt;Updated plugins are available!&lt;/b&gt;&lt;/span&gt;</property>
                 <property name="UseMarkup">True</property>
               </widget>
               <packing>
@@ -690,7 +690,6 @@ Mini</property>
                 <property name="AutoSize">True</property>
                 <property name="Expand">False</property>
                 <property name="Fill">False</property>
-                <property name="Padding">3</property>
               </packing>
             </child>
             <child>
@@ -711,6 +710,7 @@ Mini</property>
               <packing>
                 <property name="Position">1</property>
                 <property name="AutoSize">True</property>
+                <property name="Padding">8</property>
               </packing>
             </child>
             <child>
@@ -722,6 +722,7 @@ Mini</property>
                 <property name="AutoSize">True</property>
                 <property name="Expand">False</property>
                 <property name="Fill">False</property>
+                <property name="Padding">2</property>
               </packing>
             </child>
           </widget>
