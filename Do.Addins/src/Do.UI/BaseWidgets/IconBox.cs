@@ -149,6 +149,7 @@ namespace Do.UI
 		public string Icon
 		{
 			set {
+				if (value == null) return;
 				icon_name = value;
 				Pixbuf = IconProvider.PixbufFromIconName (value, icon_size);
 			}

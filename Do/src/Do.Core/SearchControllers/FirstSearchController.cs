@@ -30,9 +30,48 @@ namespace Do.Core
 	
 	public class FirstSearchController : SimpleSearchController
 	{
-		
 		public FirstSearchController() : base ()
 		{
+		}
+		
+		public override bool AddSecondaryCursor (int cursorLocation)
+		{
+			bool update = (SecondaryCursors.Length == 0);
+			bool result = base.AddSecondaryCursor (cursorLocation);
+			
+			if (update && result) {
+				UpdateResults ();
+			}
+			
+			return result;
+		}
+		
+		public override void Reset ()
+		{
+			base.Reset ();
+			textMode = false;
+		}
+
+		public override Type[] SearchTypes {
+			get {
+				if (textMode) {
+					return new Type[] {typeof (ITextItem)};
+				} else if (context.SecondaryCursors.Length > 0) {
+					return new Type[] {(Results[SecondaryCursors[0]] as DoItem).Inner.GetType ()};
+				} else {
+					return defaultFilter;
+				}
+			}
+		}
+
+		public override bool TextMode {
+			get { return textMode; }
+			set { 
+				if (context.ParentContext != null) return;
+				textMode = value; 
+				if (Query.Length > 0)
+					BuildNewContextFromQuery ();
+			}
 		}
 		
 		protected override void UpdateResults ()
@@ -71,47 +110,6 @@ namespace Do.Core
 			
 			//Do.PrintPerf ("FirstControlerUpdate Stop");
 		}
-
-		public override Type[] SearchTypes {
-			get {
-				if (textMode) {
-					return new Type[] {typeof (ITextItem)};
-				} else if (context.SecondaryCursors.Length > 0) {
-					return new Type[] {(Results[SecondaryCursors[0]] as DoItem).Inner.GetType ()};
-				} else {
-					return defaultFilter;
-				}
-			}
-		}
-
-		public override bool TextMode {
-			get { return textMode; }
-			set { 
-				if (context.ParentContext != null) return;
-				textMode = value; 
-				if (Query.Length > 0)
-					BuildNewContextFromQuery ();
-			}
-		}
-		
-		public override void Reset ()
-		{
-			base.Reset ();
-			textMode = false;
-		}
-		
-		public override bool AddSecondaryCursor (int cursorLocation)
-		{
-			bool update = (SecondaryCursors.Length == 0);
-			bool result = base.AddSecondaryCursor (cursorLocation);
-			
-			if (update && result) {
-				UpdateResults ();
-			}
-			
-			return result;
-		}
-
 		
 		private void BuildNewContextFromQuery ()
 		{

@@ -238,8 +238,9 @@ namespace Do.Core
 				} else if (FirstController.Selection is IAction) {
 					IAction action = FirstController.Selection as IAction;
 					foreach (Type t in action.SupportedItemTypes) {
-						if (t == typeof (ITextItem))
+						if (t == typeof (ITextItem) && action.SupportsItem (new DoTextItem (Query))) {
 							textMode = value;
+						}
 					}
 				}
 				

@@ -393,8 +393,12 @@ namespace Do.UI {
 			} else {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
 				iconbox[(int) pane].DisplayObject = context.Selection;
-				iconbox[(int) pane].Highlight = context.Query;
+				
+				if (!context.LargeTextDisplay)
+					iconbox[(int) pane].Highlight = context.Query;
 			}
+			
+			if (context.Selection == null) return;
 			
 			if (pane == CurrentPane) {
 				resultsWindow.Context = context;
