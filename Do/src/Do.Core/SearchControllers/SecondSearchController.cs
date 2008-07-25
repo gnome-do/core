@@ -212,6 +212,17 @@ namespace Do.Core
 				}
 			}
 		}
+		
+		public override void Reset ()
+		{
+			while (context.LastContext != null) {
+				context = context.LastContext;
+			}
+			textMode = false;
+			
+			base.OnSelectionChanged ();
+		}
+
 
 		/// <value>
 		/// Set text mode.

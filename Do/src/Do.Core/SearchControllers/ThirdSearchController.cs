@@ -150,6 +150,16 @@ namespace Do.Core
 			
 		}
 		
+		public override void Reset ()
+		{
+			while (context.LastContext != null) {
+				context = context.LastContext;
+			}
+			textMode = false;
+			
+			base.OnSelectionChanged ();
+		}
+		
 		protected override void UpdateResults ()
 		{
 			context.Results = GetContextResults ();
