@@ -661,7 +661,7 @@ Mini</property>
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="Do.UI.DoAddinInstallerDialog" design-size="400 463">
+  <widget class="Gtk.Dialog" id="Do.UI.DoAddinInstallerDialog" design-size="443 463">
     <property name="MemberName" />
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -670,7 +670,7 @@ Mini</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
-        <property name="BorderWidth">5</property>
+        <property name="BorderWidth">2</property>
         <child>
           <widget class="Gtk.VBox" id="vbox2">
             <property name="MemberName" />
@@ -687,7 +687,7 @@ Mini</property>
               </widget>
               <packing>
                 <property name="Position">0</property>
-                <property name="AutoSize">True</property>
+                <property name="AutoSize">False</property>
                 <property name="Expand">False</property>
                 <property name="Fill">False</property>
               </packing>
@@ -722,7 +722,7 @@ Mini</property>
                 <property name="AutoSize">True</property>
                 <property name="Expand">False</property>
                 <property name="Fill">False</property>
-                <property name="Padding">2</property>
+                <property name="Padding">5</property>
               </packing>
             </child>
           </widget>
@@ -741,9 +741,8 @@ Mini</property>
         <property name="Size">2</property>
         <property name="LayoutStyle">End</property>
         <child>
-          <widget class="Gtk.Button" id="buttonCancel">
+          <widget class="Gtk.Button" id="button_cancel">
             <property name="MemberName" />
-            <property name="CanDefault">True</property>
             <property name="CanFocus">True</property>
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
@@ -761,12 +760,12 @@ Mini</property>
             <property name="MemberName" />
             <property name="CanDefault">True</property>
             <property name="CanFocus">True</property>
-            <property name="UseStock">True</property>
-            <property name="Type">StockItem</property>
-            <property name="StockId">gtk-ok</property>
+            <property name="Type">TextAndIcon</property>
+            <property name="Icon">stock:gtk-ok Button</property>
+            <property name="Label" translatable="yes">_Install Updates</property>
+            <property name="UseUnderline">True</property>
             <property name="ResponseId">-5</property>
             <signal name="Clicked" handler="OnButtonOKClick" />
-            <property name="label">gtk-ok</property>
           </widget>
           <packing>
             <property name="Position">1</property>
