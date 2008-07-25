@@ -158,10 +158,7 @@ namespace Do.Core {
 				}
 
 				// Determine if third pane needed
-				if (!ThirdPaneAllowed || 
-				    (!ThirdPaneRequired &&
-					 controllers[2].Query.Length == 0 &&
-					 controllers[2].Cursor == 0))
+				if (!ThirdPaneAllowed || ThirdPaneCanClose)
 					ThirdPaneVisible = false;
 				
 				if ((ThirdPaneAllowed && window.CurrentPane == Pane.Third) ||
@@ -188,6 +185,15 @@ namespace Do.Core {
 			
 			get {
 				return thirdPaneVisible;
+			}
+		}
+		
+		bool ThirdPaneCanClose {
+			get {
+				return (!ThirdPaneRequired &&
+				        controllers[2].Cursor == 0 && 
+				        string.IsNullOrEmpty (controllers[2].Query) && 
+				        !controllers[2].TextMode);
 			}
 		}
 		
@@ -572,11 +578,14 @@ namespace Do.Core {
 		{
 			//Lets see if we need to play with Third pane visibility
 			if (pane == Pane.Third) {
-				if (ThirdPaneRequired)
+				if (ThirdPaneRequired) {
 					ThirdPaneVisible = true;
-				else if (!ThirdPaneAllowed || controllers[2].Cursor == 0 && string.IsNullOrEmpty (controllers[2].Query))
+				} else if (CurrentPane != Pane.Third && (!ThirdPaneAllowed || ThirdPaneCanClose)) {
 					ThirdPaneVisible = false;
+					Console.WriteLine ("close pane");
+				}
 			} else if (pane == Pane.Second && (!ThirdPaneAllowed)) {
+				Console.WriteLine ("close pane second");
 				ThirdPaneVisible = false;
 			}
 			window.SetPaneContext (pane, controllers[(int) pane].UIContext);
