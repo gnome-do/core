@@ -77,6 +77,7 @@ namespace Do.Core
 		
 		protected override void OnUpstreamSelectionChanged ()
 		{
+			textMode = false;
 			if (timer > 0) {
 				GLib.Source.Remove (timer);
 			}
