@@ -190,6 +190,7 @@ namespace Do.Core
 
 		public override Type[] SearchTypes {
 			get { 
+				
 				if (FirstController.Selection is IAction) {
 					// the basic idea here is that if the first controller selection is an action
 					// we can move right to filtering on what it supports.  This is not strictly needed,
@@ -198,6 +199,8 @@ namespace Do.Core
 					// ----return new Type[] {typeof (IItem)};
 					return (FirstController.Selection as IAction).SupportedItemTypes;
 				} else {
+					if (textMode)
+						return new Type[] {typeof (ITextItem)};
 					return new Type[] {typeof (IAction)};
 				}
 			}
@@ -211,6 +214,7 @@ namespace Do.Core
 				return textMode;
 			}
 			set {
+				if (context.ParentContext != null) return;
 				if (!value) {
 					textMode = value;
 				} else if (FirstController.Selection is IAction) {
@@ -220,8 +224,26 @@ namespace Do.Core
 							textMode = value;
 					}
 				}
+				
+				if (textMode == value)
+					BuildNewContextFromQuery ();
 			}
 		}
 
+		private void BuildNewContextFromQuery ()
+		{
+			string query = Query;
+			
+			context = new SimpleSearchContext ();
+			context.Results = GetContextResults ();
+			
+			foreach (char c in query.ToCharArray ()) {
+				context.LastContext = context.Clone () as SimpleSearchContext;
+				context.Query += c;
+
+				context.Results = GetContextResults ();
+			}
+			base.OnSelectionChanged ();
+		}	
 	}
 }

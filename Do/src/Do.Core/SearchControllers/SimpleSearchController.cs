@@ -241,7 +241,7 @@ namespace Do.Core
 		protected void OnSearchStarted ()
 		{
 			SearchStarted ();
-		}
+		}	
 		
 		public event NullEventHandler SelectionChanged;
 		public event NullEventHandler QueryChanged;

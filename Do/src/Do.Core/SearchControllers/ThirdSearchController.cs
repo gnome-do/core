@@ -42,12 +42,17 @@ namespace Do.Core
 		}
 		
 		public override Type[] SearchTypes {
-			get { return new Type[] {typeof (IItem)}; }
+			get { 
+				if (textMode)
+					return new Type[] {typeof (ITextItem)};
+				return new Type[] {typeof (IItem)}; 
+			}
 		}
 
 		public override bool TextMode {
 			get { return textMode; }
 			set { 
+				if (context.ParentContext != null) return;
 				if (!value) { //if its false, no problems!  We can always leave text mode
 					textMode = value;
 				} else {
@@ -64,6 +69,9 @@ namespace Do.Core
 							textMode = value;
 					}
 				}
+				
+				if (textMode == value)
+					BuildNewContextFromQuery ();
 			}
 		}
 		
@@ -84,7 +92,7 @@ namespace Do.Core
 			});
 		}
 
-		protected override void UpdateResults ()
+		private IObject[] GetContextResults ()
 		{
 			base.UpdateResults ();
 			
@@ -111,11 +119,11 @@ namespace Do.Core
 				
 			} else {
 				//Log.Error ("Something Very Strange Has Happened");
-				return;
+				return null;
 			}
 
 			//If we support nothing, dont search.
-			if (action.SupportedModifierItemTypes.Length == 0)  return;
+			if (action.SupportedModifierItemTypes.Length == 0)  return null;
 			List<IObject> initresults = InitialResults ();
 			
 			List<IObject> results = new List<IObject> ();
@@ -132,22 +140,38 @@ namespace Do.Core
 			if (action.SupportsModifierItemForItems (items.ToArray (), textItem))
 				results.Add (textItem);
 			
-			context.Results = results.ToArray ();
+			return results.ToArray ();
+			
+		}
+		
+		protected override void UpdateResults ()
+		{
+			context.Results = GetContextResults ();
+			if (context.Results == null)
+				return;
 			
 			try {
 				if (((context.LastContext == null || context.LastContext.Selection == null) && context.Selection != null) ||
 					context.LastContext.Selection != context.Selection) {
-					//uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
-					//if (ms > Timeout)
-						base.OnSelectionChanged ();
-					//else
-					//	GLib.Timeout.Add (Timeout - ms, delegate {
-					//		base.OnSelectionChanged ();
-					//		return false;
-					//	});
+					base.OnSelectionChanged ();
 				}
 			} catch { }
 		}
 
+		private void BuildNewContextFromQuery ()
+		{
+			string query = Query;
+			
+			context = new SimpleSearchContext ();
+
+			context.Results = GetContextResults ();
+			foreach (char c in query.ToCharArray ()) {
+				context.LastContext = context.Clone () as SimpleSearchContext;
+				context.Query += c;
+
+				context.Results = GetContextResults ();
+			}
+			base.OnSelectionChanged ();
+		}	
 	}
 }
