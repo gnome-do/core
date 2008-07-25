@@ -26,8 +26,9 @@ using Do.UI;
 
 namespace Do.Core
 {
-	
-	
+	/// <summary>
+	/// A search controller most useful in the second pane of Gnome-Do
+	/// </summary>
 	public class SecondSearchController : SimpleSearchController
 	{
 		private ISearchController FirstController;
@@ -48,7 +49,6 @@ namespace Do.Core
 			}
 		}
 
-		
 		public SecondSearchController(ISearchController FirstController) : base ()
 		{
 			this.FirstController = FirstController;
@@ -61,6 +61,7 @@ namespace Do.Core
 			if (FirstController.Selection == null)
 				return;
 			
+			//Clear our timers
 			if (timer > 0) {
 				GLib.Source.Remove (timer);
 				timer = 0;
@@ -75,6 +76,8 @@ namespace Do.Core
 		
 		protected override List<IObject> InitialResults ()
 		{
+			if (textMode)
+				return new List<IObject> ();
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Length != 0) {
 				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
@@ -93,6 +96,7 @@ namespace Do.Core
 
 		protected override void OnUpstreamSelectionChanged ()
 		{
+			textMode = false;
 			if (timer > 0) {
 				GLib.Source.Remove (timer);
 			}
@@ -146,6 +150,11 @@ namespace Do.Core
 			return results.ToArray ();
 		}
 		
+		/// <summary>
+		/// This method is pretty much a wrapper around GetContextResults () with a timer at the
+		/// end.  This is very useful since we might not want this timer and adding a bool to turn
+		/// this on is more stateful than i would like.
+		/// </summary>
 		protected override void UpdateResults ()
 		{
 			// We will use this time later, but we want to know it now.
@@ -187,6 +196,7 @@ namespace Do.Core
 
 		public override Type[] SearchTypes {
 			get { 
+				
 				if (FirstController.Selection is IAction) {
 					// the basic idea here is that if the first controller selection is an action
 					// we can move right to filtering on what it supports.  This is not strictly needed,
@@ -195,6 +205,8 @@ namespace Do.Core
 					// ----return new Type[] {typeof (IItem)};
 					return (FirstController.Selection as IAction).SupportedItemTypes;
 				} else {
+					if (textMode)
+						return new Type[] {typeof (ITextItem)};
 					return new Type[] {typeof (IAction)};
 				}
 			}
@@ -205,10 +217,42 @@ namespace Do.Core
 		/// </value>
 		public override bool TextMode { //FIXME
 			get { 
-				return false;
+				return textMode;
 			}
-			set {  }
+			set {
+				if (context.ParentContext != null) return;
+				if (!value) {
+					textMode = value;
+				} else if (FirstController.Selection is IAction) {
+					IAction action = FirstController.Selection as IAction;
+					foreach (Type t in action.SupportedItemTypes) {
+						if (t == typeof (ITextItem))
+							textMode = value;
+					}
+				}
+				
+				if (textMode == value)
+					BuildNewContextFromQuery ();
+			}
 		}
 
+		/// <summary>
+		/// Builds up a new context from a query from scratch.  Useful after changing filters.
+		/// </summary>
+		private void BuildNewContextFromQuery ()
+		{
+			string query = Query;
+			
+			context = new SimpleSearchContext ();
+			context.Results = GetContextResults ();
+			
+			foreach (char c in query.ToCharArray ()) {
+				context.LastContext = context.Clone () as SimpleSearchContext;
+				context.Query += c;
+
+				context.Results = GetContextResults ();
+			}
+			base.OnSelectionChanged ();
+		}	
 	}
 }
