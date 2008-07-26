@@ -249,10 +249,10 @@ namespace Do.Core {
 			
 			Reset ();
 			
+			Summon ();
+			
 			//Someone is going to need to explain this to me -- Now with less stupid!
 			controllers[0].Results = objects;
-			
-			Summon ();
 
 			// If there are multiple results, show results window after a short
 			// delay.
@@ -578,6 +578,8 @@ namespace Do.Core {
 
 		protected void UpdatePane (Pane pane)
 		{
+			if (!window.Visible) return;
+			
 			//Lets see if we need to play with Third pane visibility
 			if (pane == Pane.Third) {
 				if (ThirdPaneRequired) {
