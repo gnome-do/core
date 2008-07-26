@@ -77,7 +77,6 @@ namespace Do.Core
 		protected override void UpdateResults ()
 		{
 			base.UpdateResults ();
-			//Do.PrintPerf ("FirstControlerUpdate Start");
 			List<IObject> results;
 			if (!textMode)
 				results = InitialResults ();
@@ -108,7 +107,6 @@ namespace Do.Core
 			} catch {
 			}
 			
-			//Do.PrintPerf ("FirstControlerUpdate Stop");
 		}
 		
 		private void BuildNewContextFromQuery ()

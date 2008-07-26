@@ -123,7 +123,6 @@ namespace Do.Core
 		{
 			base.UpdateResults ();
 			
-			//Do.PrintPerf ("SecondUpdate Start");
 			List<IObject> initresults = InitialResults ();
 			
 			List<IObject> results = new List<IObject> ();

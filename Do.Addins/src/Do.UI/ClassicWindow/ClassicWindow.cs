@@ -47,6 +47,7 @@ namespace Do.UI {
 
 		const double WindowTransparency = 0.91;
 		
+		int height;
 		Pane currentPane;
 		
 		//-------------------Events-----------------------
@@ -172,6 +173,7 @@ namespace Do.UI {
 			ConfigureEvent += OnConfigureEvent;
 
 			Reposition ();
+			height = this.HeightRequest;
 		}
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
@@ -302,16 +304,20 @@ namespace Do.UI {
 
 		public void Vanish ()
 		{
+			ReshowWithInitialSize ();
 			Hide ();
 		}
 
 		public void Reset ()
 		{
+			
 			resultsWindow.Clear ();
 			
 			iconbox[0].Clear ();
 			iconbox[1].Clear ();
 			iconbox[2].Clear ();
+			
+			Reposition ();
 			
 			iconbox[0].DisplayObject = new Do.Addins.DefaultIconBoxObject ();
 			label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 

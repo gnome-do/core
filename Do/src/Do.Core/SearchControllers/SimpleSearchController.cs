@@ -120,8 +120,9 @@ namespace Do.Core
 			context.LastContext = (SimpleSearchContext) context.Clone ();
 			context.Query += character;
 			
-			UpdateResults ();
 			QueryChanged ();
+			UpdateResults ();
+			
 		}
 		
 		protected virtual void OnUpstreamSelectionChanged ()
