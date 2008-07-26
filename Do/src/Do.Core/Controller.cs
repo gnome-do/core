@@ -140,6 +140,7 @@ namespace Do.Core {
 		/// </value>
 		public Pane CurrentPane {
 			set {
+				//If we have no results, we can't go to the second pane
 				if (window.CurrentPane == Pane.First &&
 					CurrentContext.Results.Length == 0)
 					return;
@@ -418,6 +419,7 @@ namespace Do.Core {
 			} else if (evnt.Key == Key.ISO_Left_Tab) {
 				PrevPane ();
 			}
+			// Seems to avoid a crash by passing bad contexts.  May not be needed.
 			if (!(CurrentPane == Pane.First && CurrentContext.Results.Length == 0))
 				window.SetPaneContext (CurrentPane, CurrentContext.UIContext);
 		}

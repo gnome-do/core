@@ -31,7 +31,7 @@ namespace Do.UI {
 	public class ClassicWindow : Gtk.Window, IDoWindow {
 		
 		//-------------------Class Members------------------
-		GlossyRoundedFrame frame;
+		Frame frame;
 		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
 		PositionWindow positionWindow;
@@ -176,17 +176,7 @@ namespace Do.UI {
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
-			switch (evnt.Key) {
-				/*case Gdk.Key.Page_Up:
-					resultsWindow.SelectedIndex -= NumberResultsDisplayed;
-					break;
-				case Gdk.Key.Page_Down:
-					resultsWindow.SelectedIndex += NumberResultsDisplayed;
-					break;*/
-				default:
-					KeyPressEvent (evnt);
-					break;
-			}
+			KeyPressEvent (evnt);
 
 			return base.OnKeyPressEvent (evnt);
 		}

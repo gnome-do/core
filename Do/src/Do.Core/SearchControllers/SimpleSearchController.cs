@@ -31,7 +31,6 @@ namespace Do.Core
 		protected bool textMode = false;
 		
 		protected SimpleSearchContext context;
-		protected ISearchController upstreamController;
 		protected Type[] searchFilter;
 		protected Type[] defaultFilter = new Type[0];
 		protected const int Timeout = 300;

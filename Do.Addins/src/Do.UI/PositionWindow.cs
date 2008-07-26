@@ -62,11 +62,18 @@ namespace Do.UI
 			w.Move (main.X, main.Y);
 			
 			//position resultsWindow
-			r.GetSize (out results.Width, out results.Height);
-			results.Y = main.Y + main.Height + resultsOffset.Y;
-			results.X = main.X + iconboxWidth * (int) currentPane + 
-				resultsOffset.X;
-			r.Move (results.X, results.Y);
+			//set to false for testing purposes
+			if (true) {
+				r.GetSize (out results.Width, out results.Height);
+				results.Y = main.Y + main.Height + resultsOffset.Y;
+				results.X = main.X + iconboxWidth * (int) currentPane + resultsOffset.X;
+				r.Move (results.X, results.Y);
+			} else {
+				r.GetSize (out results.Width, out results.Height);
+				results.Y = main.Y + main.Height + resultsOffset.Y;
+				results.X = ((geo.Width - results.Width) / 2) + geo.X;
+				r.Move (results.X, results.Y);
+			}
 			
 			//uncomment here to get debug output
 			//Console.WriteLine ("Repostion Started For Montior {0}:", monitor);

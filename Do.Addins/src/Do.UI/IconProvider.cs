@@ -155,7 +155,7 @@ namespace Do.UI
 
 			// Is the icon name in cache?
 			iconKey = string.Format ("{0}_{1}", name, size);
-			if (cache.TryGetValue (iconKey, out pixbuf)) {				
+			if (cache.TryGetValue (iconKey, out pixbuf)) {
 				return pixbuf;
 			}
 			
@@ -172,12 +172,7 @@ namespace Do.UI
 				}
 				// Try to load icon from defaul theme.
 				pixbuf = IconFromTheme (name, size, IconTheme.Default);
-				// Try to load from Tango if no icon found in default theme.
-				if (pixbuf == null) {
-					IconTheme tango = new IconTheme ();
-				    tango.CustomTheme = "Tango";
-					pixbuf = IconFromTheme (name, size, tango);
-				}
+
 				// Try to load a generic file icon.
 				if (pixbuf == null && name.StartsWith ("gnome-mime"))
 					pixbuf = GenericFileIcon (size);

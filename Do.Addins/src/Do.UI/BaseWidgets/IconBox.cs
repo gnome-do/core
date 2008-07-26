@@ -108,6 +108,7 @@ namespace Do.UI
 		{
 			get { return focused; }
 			set {
+				if (focused == value) return;
 				focused = value;
 				UpdateFocus ();
 			}
@@ -127,7 +128,6 @@ namespace Do.UI
 					label.LineWrap = true;
 				} else {
 					FillColor = FrameColor = new Color (0xff, 0xff, 0xff);
-					UpdateFocus ();
 					image.Show ();
 					label.Wrap = false;
 					label.Ellipsize = Pango.EllipsizeMode.End;
