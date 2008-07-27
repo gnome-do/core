@@ -121,8 +121,6 @@ namespace Do.Core
 		/// </returns>
 		private IObject[] GetContextResults ()
 		{
-			base.UpdateResults ();
-			
 			List<IObject> initresults = InitialResults ();
 			
 			List<IObject> results = new List<IObject> ();
@@ -157,7 +155,6 @@ namespace Do.Core
 		/// </summary>
 		protected override void UpdateResults ()
 		{
-			// We will use this time later, but we want to know it now.
 			DateTime time = DateTime.Now;
 			
 			// if we dont have a first controller selection, we can stop now.
