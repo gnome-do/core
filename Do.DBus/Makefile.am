@@ -49,8 +49,8 @@ EXTRAS = \
 	do.dbus.pc.in 
 
 REFERENCES =  \
-	-pkg:ndesk-dbus-1.0 \
-	-pkg:ndesk-dbus-glib-1.0 \
+	$(NDESK_DBUS_10_LIBS) \
+	$(NDESK_DBUS_GLIB_10_LIBS) \
 	System
 
 DLL_REFERENCES = 
