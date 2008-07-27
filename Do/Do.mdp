@@ -95,9 +95,10 @@
     <ProjectReference type="Gac" localcopy="True" refto="nunit.core, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
     <ProjectReference type="Gac" localcopy="True" refto="nunit.util, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
     <ProjectReference type="Gac" localcopy="True" refto="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+    <ProjectReference type="Gac" localcopy="True" refto="nunit.core.interfaces, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
   </References>
   <Deployment.LinuxDeployData scriptName="gnome-do" />
-  <GtkDesignInfo isWidgetLibrary="True" gtkVersion="2.12.0">
+  <GtkDesignInfo isWidgetLibrary="True">
     <ExportedWidgets>
       <Widget>Do.UI.PluginView</Widget>
       <Widget>Do.PluginNodeView</Widget>
@@ -106,7 +107,7 @@
       <Widget>Do.UI.GeneralPreferencesWidget</Widget>
     </ExportedWidgets>
   </GtkDesignInfo>
-  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">
+  <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">
     <BuildFilesVar Sync="True" Name="FILES" />
     <DeployFilesVar />
     <ResourcesVar Sync="True" Name="REFERENCES" />
