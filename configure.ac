@@ -4,7 +4,7 @@ AC_PREREQ([2.54])
 
 dnl A change in the plugin API/ABI should be accompanied by a Minor/Major revision bump
 dnl ...give or take!
-AC_INIT([gnome-do], [0.5.97.0])
+AC_INIT([gnome-do], [0.5.97.1])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_CONFIG_MACRO_DIR([m4])
