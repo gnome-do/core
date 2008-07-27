@@ -143,14 +143,14 @@ REFERENCES =  \
 	../Do.Addins/bin/Debug/Do.Addins.dll \
 	../Do.DBus/bin/Debug/Do.DBus.dll \
 	Mono.Posix \
-	-pkg:gconf-sharp-2.0 \
-	-pkg:glib-sharp-2.0 \
-	-pkg:gtk-sharp-2.0 \
-	-pkg:mono-addins \
-	-pkg:mono-addins-gui \
-	-pkg:mono-addins-setup \
-	-pkg:notify-sharp \
-	-pkg:nunit \
+	$(GCONF_SHARP_20_LIBS) \
+	$(GLIB_SHARP_20_LIBS) \
+	$(GTK_SHARP_20_LIBS) \
+	$(MONO_ADDINS_LIBS) \
+	$(MONO_ADDINS_GUI_LIBS) \
+	$(MONO_ADDINS_SETUP_LIBS) \
+	$(NOTIFY_SHARP_LIBS) \
+	$(NUNIT_LIBS) \
 	System
 
 DLL_REFERENCES = 
