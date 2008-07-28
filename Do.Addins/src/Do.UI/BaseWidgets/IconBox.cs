@@ -178,9 +178,11 @@ namespace Do.UI
 				if (value != null) {
 					icon = value.Icon;
 					name = value.Name;
+					
+					if (name == Caption && icon == this.Icon)
+						return;
 				}
-				if (value.Name == Caption && value.Icon == this.Icon)
-					return;
+				
 				
 				Icon = icon;
 				Caption = name;
