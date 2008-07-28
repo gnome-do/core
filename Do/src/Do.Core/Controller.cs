@@ -296,7 +296,7 @@ namespace Do.Core {
 					return;
 			}
 
-			if (evnt.Key != Key.Shift_L) shiftPressed = false;
+			if (evnt.Key != Key.Shift_L && evnt.Key != Key.Shift_R) shiftPressed = false;
 			
 			switch ((Gdk.Key) evnt.KeyValue) {
 			// Throwaway keys
