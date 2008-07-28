@@ -96,6 +96,7 @@ namespace Do.UI
 		{
 			Pixbuf = empty_pixbuf;
 			Caption = "";
+			icon_name = "";
 			TextOverlay = false;
 		}
 
@@ -148,6 +149,9 @@ namespace Do.UI
 
 		public string Icon
 		{
+			get {
+				return icon_name;
+			}
 			set {
 				if (value == null) return;
 				icon_name = value;
@@ -174,7 +178,10 @@ namespace Do.UI
 				if (value != null) {
 					icon = value.Icon;
 					name = value.Name;
-				}				
+				}
+				if (value.Name == Caption && value.Icon == this.Icon)
+					return;
+				
 				Icon = icon;
 				Caption = name;
 			}

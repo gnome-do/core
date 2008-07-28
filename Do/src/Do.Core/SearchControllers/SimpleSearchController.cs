@@ -120,7 +120,7 @@ namespace Do.Core
 			context.LastContext = (SimpleSearchContext) context.Clone ();
 			context.Query += character;
 			
-			QueryChanged ();
+			OnQueryChanged ();
 			UpdateResults ();
 			
 		}
@@ -164,7 +164,7 @@ namespace Do.Core
 			
 			if (tmp != context.Selection)
 				SelectionChanged ();
-			QueryChanged ();
+			OnQueryChanged ();
 		}
 
 		public virtual bool AddSecondaryCursor (int cursorLocation)
@@ -242,6 +242,12 @@ namespace Do.Core
 		protected void OnSearchFinished (bool selection_changed)
 		{
 			SearchFinished (selection_changed);
+		}
+		
+		protected void OnQueryChanged ()
+		{
+			if (QueryChanged != null)
+				QueryChanged ();
 		}
 		
 		public event NullEventHandler SelectionChanged;

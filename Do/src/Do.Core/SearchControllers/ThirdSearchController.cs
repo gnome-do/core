@@ -33,6 +33,27 @@ namespace Do.Core
 		private ISearchController FirstController, SecondController;
 		private uint timer = 0;
 		
+		private bool SearchNeeded {
+			get {
+				if (FirstController.Selection == null || SecondController.Selection == null)
+					return false;
+				
+				IAction action;
+				IItem item;
+				if (FirstController.Selection is IAction) {
+					action = FirstController.Selection as IAction;
+					item   = SecondController.Selection as IItem;
+				} else if (SecondController.Selection is IAction) {
+					action = SecondController.Selection as IAction;
+					item   = FirstController.Selection as IItem;
+				} else {
+					return false;
+				}
+				
+				return (action.SupportedModifierItemTypes.Length > 0);
+			}
+		}
+		
 		public ThirdSearchController(ISearchController FirstController, ISearchController SecondController) : base ()
 		{
 			this.FirstController  = FirstController;
@@ -77,6 +98,9 @@ namespace Do.Core
 		
 		private void OnUpstreamSelectionChanged ()
 		{
+			if (!SearchNeeded)
+				return;
+			
 			textMode = false;
 			if (timer > 0) {
 				GLib.Source.Remove (timer);

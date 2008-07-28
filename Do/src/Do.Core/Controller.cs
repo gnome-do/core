@@ -71,13 +71,13 @@ namespace Do.Core {
 			// and we shouldn't be, we will need to reset these too.  However controllers
 			// provide a resetting mechanism.
 			controllers[0].SelectionChanged += delegate { UpdatePane (Pane.First); };
-			controllers[1].SelectionChanged += delegate { OnSelectionQueryChanged (Pane.Second); };
-			controllers[2].SelectionChanged += delegate { OnSelectionQueryChanged (Pane.Third); };
+			controllers[1].SelectionChanged += delegate { SmartUpdatePane (Pane.Second); };
+			controllers[2].SelectionChanged += delegate { SmartUpdatePane (Pane.Third); };
 			
 			//Usually when the query changes we want to reflect this immediately
 			controllers[0].QueryChanged += OnFirstQueryChanged;
-			controllers[1].QueryChanged += delegate { OnSelectionQueryChanged (Pane.Second); };
-			controllers[2].QueryChanged += delegate { OnSelectionQueryChanged (Pane.Third); };
+			controllers[1].QueryChanged += delegate { SmartUpdatePane (Pane.Second); };
+			controllers[2].QueryChanged += delegate { SmartUpdatePane (Pane.Third); };
 			
 			//We want to show a blank box during our searches
 			controllers[0].SearchStarted += delegate { };
@@ -86,9 +86,9 @@ namespace Do.Core {
 			
 			
 			//Brings back our boxes after the search
-			controllers[0].SearchFinished += delegate (bool c) { if (!c) OnSearchFinished (Pane.First); };
-			controllers[1].SearchFinished += delegate (bool c) { if (!c) OnSearchFinished (Pane.Second); };
-			controllers[2].SearchFinished += delegate (bool c) { if (!c) OnSearchFinished (Pane.Third); };
+			controllers[0].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.First); };
+			controllers[1].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Second); };
+			controllers[2].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Third); };
 		}
 		
 		public void Initialize ()
@@ -177,6 +177,12 @@ namespace Do.Core {
 			
 			get {
 				return window.CurrentPane;
+			}
+		}
+		
+		bool FirstControllerIsReset {
+			get {
+				return (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0);
 			}
 		}
 		
@@ -548,28 +554,23 @@ namespace Do.Core {
 		
 		void OnFirstQueryChanged ()
 		{
-			//Do.PrintPerf ("FirstQueryChanged");
-			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0) {
+			if (FirstControllerIsReset) {
 			    Reset ();
 				return;
 			}
 			UpdatePane (Pane.First);
 		}
-		
-		void OnSearchFinished (Pane pane)
+
+		/// <summary>
+		/// Intended to wrap UpdatePane with smart conditionals to avoid excess/unexpected updates
+		/// </summary>
+		/// <param name="pane">
+		/// A <see cref="Pane"/>
+		/// </param>
+		void SmartUpdatePane (Pane pane)
 		{
-			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0)
-				return;
-			
-			UpdatePane (pane);
-		}
-		
-		void OnSelectionQueryChanged (Pane pane)
-		{
-			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0)
-				return;
-			
-			UpdatePane (pane);
+			if (!FirstControllerIsReset)
+				UpdatePane (pane);
 		}
 		
 		protected void ClearSearchResults ()
