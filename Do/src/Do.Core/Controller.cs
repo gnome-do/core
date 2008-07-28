@@ -328,6 +328,7 @@ namespace Do.Core {
 				OnUpDownKeyPressEvent (evnt);
 				break;
 			case Gdk.Key.Shift_L:
+			case Gdk.Key.Shift_R:
 				OnTextModePressEvent (evnt);
 				break;
 			case Gdk.Key.Right:
