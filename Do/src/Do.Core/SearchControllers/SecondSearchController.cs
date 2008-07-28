@@ -152,7 +152,6 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
-			base.OnSearchStarted (false);
 			UpdateResults (false);
 		}
 
@@ -162,16 +161,19 @@ namespace Do.Core
 		/// end.  This is very useful since we might not want this timer and adding a bool to turn
 		/// this on is more stateful than i would like.
 		/// </summary>
-		private void UpdateResults (bool upstreamSearch)
+		private void UpdateResults (bool upstream_search)
 		{
 			DateTime time = DateTime.Now;
+			
+			if (!upstream_search)
+				base.OnSearchStarted (false);
 			
 			// if we dont have a first controller selection, we can stop now.
 			if (FirstController.Selection == null)
 				return;
 			
 			//we only do this if its false because we already did it up before the timeout
-			if (!upstreamSearch)
+			if (!upstream_search)
 				base.OnSearchStarted (false);
 			
 			context.Results = GetContextResults ();
@@ -179,11 +181,11 @@ namespace Do.Core
 			// we now want to know how many ms have elapsed since we started this process
 			uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
 			ms += type_wait; // we also know we waited this long at the start
-			if (ms > Timeout || !upstreamSearch) {
+			if (ms > Timeout || !upstream_search) {
 				//we were too slow, our engine has been defeated and we must return results as
 				//quickly as possible
 				
-				//FIX ME!!!
+				//Check and see if our selection changed
 				if (context.LastContext != null && context.Selection != context.LastContext.Selection) {
 					base.OnSelectionChanged ();
 					base.OnSearchFinished (true);
@@ -201,7 +203,6 @@ namespace Do.Core
 				wait_timer = GLib.Timeout.Add (Timeout - ms, delegate {
 					Gdk.Threads.Enter ();
 					try {
-						//FIXME!!!
 						if (context.LastContext != null && context.Selection != context.LastContext.Selection) {
 							base.OnSelectionChanged ();
 							base.OnSearchFinished (true);

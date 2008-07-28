@@ -162,23 +162,19 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
-			base.OnSearchStarted (false);
 			UpdateResults (false);
 		}
 		
 		private void UpdateResults (bool upstream_search)
 		{
+			if (!upstream_search)
+				base.OnSearchStarted (false);
+			
 			context.Results = GetContextResults ();
 			if (context.Results == null)
 				return;
 			
 			
-			/*try {
-				if (((context.LastContext == null || context.LastContext.Selection == null) && context.Selection != null) ||
-					context.LastContext.Selection != context.Selection) {
-					base.OnSelectionChanged ();
-				}
-			} catch { }*/
 			if (context.LastContext == null || 
 			    (context.LastContext != null && context.LastContext.Selection != context.Selection)) {
 				base.OnSelectionChanged ();

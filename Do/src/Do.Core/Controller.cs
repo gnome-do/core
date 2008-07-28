@@ -556,12 +556,6 @@ namespace Do.Core {
 			UpdatePane (Pane.First);
 		}
 		
-		void OnResultsChanged (Pane pane)
-		{
-			if (resultsGrown)
-				UpdatePane (pane);
-		}
-		
 		void OnSearchFinished (Pane pane)
 		{
 			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0)
