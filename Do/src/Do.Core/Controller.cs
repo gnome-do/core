@@ -74,13 +74,21 @@ namespace Do.Core {
 			controllers[1].SelectionChanged += delegate { OnSelectionQueryChanged (Pane.Second); };
 			controllers[2].SelectionChanged += delegate { OnSelectionQueryChanged (Pane.Third); };
 			
+			//Usually when the query changes we want to reflect this immediately
 			controllers[0].QueryChanged += OnFirstQueryChanged;
 			controllers[1].QueryChanged += delegate { OnSelectionQueryChanged (Pane.Second); };
 			controllers[2].QueryChanged += delegate { OnSelectionQueryChanged (Pane.Third); };
 			
+			//We want to show a blank box during our searches
 			controllers[0].SearchStarted += delegate { };
-			controllers[1].SearchStarted += delegate { window.ClearPane (Pane.Second); };
-			controllers[2].SearchStarted += delegate { window.ClearPane (Pane.Third); };
+			controllers[1].SearchStarted += delegate (bool u) { if (u) window.ClearPane (Pane.Second); };
+			controllers[2].SearchStarted += delegate (bool u) { if (u) window.ClearPane (Pane.Third); };
+			
+			
+			//Brings back our boxes after the search
+			controllers[0].SearchFinished += delegate (bool c) { if (!c) OnSearchFinished (Pane.First); };
+			controllers[1].SearchFinished += delegate (bool c) { if (!c) OnSearchFinished (Pane.Second); };
+			controllers[2].SearchFinished += delegate (bool c) { if (!c) OnSearchFinished (Pane.Third); };
 		}
 		
 		public void Initialize ()
@@ -548,6 +556,20 @@ namespace Do.Core {
 			UpdatePane (Pane.First);
 		}
 		
+		void OnResultsChanged (Pane pane)
+		{
+			if (resultsGrown)
+				UpdatePane (pane);
+		}
+		
+		void OnSearchFinished (Pane pane)
+		{
+			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0)
+				return;
+			
+			UpdatePane (pane);
+		}
+		
 		void OnSelectionQueryChanged (Pane pane)
 		{
 			if (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0)
@@ -619,6 +641,7 @@ namespace Do.Core {
 		/// </summary>
 		void GrowResults ()
 		{
+			UpdatePane (CurrentPane);
 			window.GrowResults ();
 			resultsGrown = true;	
 		}

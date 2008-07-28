@@ -94,17 +94,19 @@ namespace Do.Core
 			}
 		}
 
-		protected override void OnUpstreamSelectionChanged ()
+		private void OnUpstreamSelectionChanged ()
 		{
 			textMode = false;
 			if (timer > 0) {
 				GLib.Source.Remove (timer);
 			}
-			base.UpdateResults ();//trigger our search start now
+			base.OnSearchStarted (true);//trigger our search start now
 			timer = GLib.Timeout.Add (type_wait, delegate {
 				Gdk.Threads.Enter ();
 				try { 
-					base.OnUpstreamSelectionChanged (); 
+					context.Destroy ();
+					context = new SimpleSearchContext ();
+					UpdateResults (true);
 				} finally { 
 					Gdk.Threads.Leave (); 
 				}
@@ -148,12 +150,19 @@ namespace Do.Core
 			return results.ToArray ();
 		}
 		
+		protected override void UpdateResults ()
+		{
+			base.OnSearchStarted (false);
+			UpdateResults (false);
+		}
+
+		
 		/// <summary>
 		/// This method is pretty much a wrapper around GetContextResults () with a timer at the
 		/// end.  This is very useful since we might not want this timer and adding a bool to turn
 		/// this on is more stateful than i would like.
 		/// </summary>
-		protected override void UpdateResults ()
+		private void UpdateResults (bool upstreamSearch)
 		{
 			DateTime time = DateTime.Now;
 			
@@ -161,15 +170,26 @@ namespace Do.Core
 			if (FirstController.Selection == null)
 				return;
 			
+			//we only do this if its false because we already did it up before the timeout
+			if (!upstreamSearch)
+				base.OnSearchStarted (false);
+			
 			context.Results = GetContextResults ();
 			
 			// we now want to know how many ms have elapsed since we started this process
 			uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
 			ms += type_wait; // we also know we waited this long at the start
-			if (ms > Timeout) {
+			if (ms > Timeout || !upstreamSearch) {
 				//we were too slow, our engine has been defeated and we must return results as
 				//quickly as possible
-				base.OnSelectionChanged ();
+				
+				//FIX ME!!!
+				if (context.LastContext != null && context.Selection != context.LastContext.Selection) {
+					base.OnSelectionChanged ();
+					base.OnSearchFinished (true);
+				} else {
+					base.OnSearchFinished (false);
+				}
 			} else {
 				//yay, we beat the user with a stick
 				if (wait_timer > 0) {
@@ -181,7 +201,13 @@ namespace Do.Core
 				wait_timer = GLib.Timeout.Add (Timeout - ms, delegate {
 					Gdk.Threads.Enter ();
 					try {
-						base.OnSelectionChanged ();
+						//FIXME!!!
+						if (context.LastContext != null && context.Selection != context.LastContext.Selection) {
+							base.OnSelectionChanged ();
+							base.OnSearchFinished (true);
+						} else {
+							base.OnSearchFinished (false);
+						}
 					} finally {
 						Gdk.Threads.Leave ();
 					}

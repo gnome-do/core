@@ -288,12 +288,15 @@ namespace Do.UI
 		{
 			set {
 				pushedUpdate = true;
-				if (value == null || value.Results.Length == 0) return;
+				if (value == null || value.Results.Length == 0) {
+					Results = new IObject [0];
+					return;
+				}
 				
 				if (results.GetHashCode () != value.Results.GetHashCode ()) {
 					results = value.Results;
 				}
-
+				
 				startResult = value.Cursor - 4;
 				
 				if (startResult < 0)

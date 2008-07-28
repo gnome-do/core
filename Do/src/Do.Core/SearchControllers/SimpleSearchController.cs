@@ -125,12 +125,13 @@ namespace Do.Core
 			
 		}
 		
-		protected virtual void OnUpstreamSelectionChanged ()
-		{
+		protected abstract void UpdateResults ();
+		//protected a void OnUpstreamSelectionChanged ()
+		/*{
 			context.Destroy ();
 			context = new SimpleSearchContext ();
 			UpdateResults ();
-		}
+		}*/
 		
 		protected virtual List<IObject> InitialResults ()
 		{
@@ -151,11 +152,6 @@ namespace Do.Core
 			}
 		}
 		
-		protected virtual void UpdateResults ()
-		{
-			OnSearchStarted ();
-		}
-
 		public virtual void DeleteChar ()
 		{
 			if (context.LastContext == null) {
@@ -238,13 +234,19 @@ namespace Do.Core
 			SelectionChanged ();
 		}
 		
-		protected void OnSearchStarted ()
+		protected void OnSearchStarted (bool upstream_search)
 		{
-			SearchStarted ();
+			SearchStarted (upstream_search);
 		}	
+		
+		protected void OnSearchFinished (bool selection_changed)
+		{
+			SearchFinished (selection_changed);
+		}
 		
 		public event NullEventHandler SelectionChanged;
 		public event NullEventHandler QueryChanged;
-		public event NullEventHandler SearchStarted;
+		public event SearchStartedEventHandler SearchStarted;
+		public event SearchFinishedEventHandler SearchFinished;
 	}
 }

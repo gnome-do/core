@@ -131,13 +131,18 @@ namespace Do.Core
 		event NullEventHandler QueryChanged;
 		
 		/// <summary>
-		/// Triggered when the result has changed
+		/// Triggered when the result has changed.  This may not fire after every search.
 		/// </summary>
 		event NullEventHandler SelectionChanged;
 		
 		/// <summary>
-		/// The controller has started a search
+		/// The controller has started a search due to upstream results changing
 		/// </summary>
-		event NullEventHandler SearchStarted;
+		event SearchStartedEventHandler SearchStarted;
+		
+		/// <summary>
+		/// The controllers search has finished.
+		/// </summary>
+		event SearchFinishedEventHandler SearchFinished;
 	}
 }

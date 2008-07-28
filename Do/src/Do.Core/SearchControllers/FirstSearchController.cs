@@ -76,7 +76,6 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
-			base.UpdateResults ();
 			List<IObject> results;
 			if (!textMode)
 				results = InitialResults ();
@@ -99,14 +98,13 @@ namespace Do.Core
 			context.Results = results.ToArray ();
 			//Do.PrintPerf ("FirstControllerResultsAssigned");
 			
-			//TODO -- Clean this up.  Too fried to think through proper logic now.
-			try {
-				if (((context.LastContext == null || context.LastContext.Selection == null) && context.Selection != null) ||
-					context.LastContext.Selection != context.Selection)
-					base.OnSelectionChanged ();
-			} catch {
+			if (context.LastContext == null || 
+			    (context.LastContext != null && context.LastContext.Selection != context.Selection)) {
+				base.OnSelectionChanged ();
+				base.OnSearchFinished (true);
+			} else {
+				base.OnSearchFinished (false);
 			}
-			
 		}
 		
 		private void BuildNewContextFromQuery ()

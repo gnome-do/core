@@ -75,17 +75,19 @@ namespace Do.Core
 			}
 		}
 		
-		protected override void OnUpstreamSelectionChanged ()
+		private void OnUpstreamSelectionChanged ()
 		{
 			textMode = false;
 			if (timer > 0) {
 				GLib.Source.Remove (timer);
 			}
-			base.UpdateResults ();//trigger our search start now
-			timer = GLib.Timeout.Add (60, delegate {
+			base.OnSearchStarted (true);//trigger our search start now
+			timer = GLib.Timeout.Add (200, delegate {
 				Gdk.Threads.Enter ();
 				try { 
-					base.OnUpstreamSelectionChanged (); 
+					context.Destroy ();
+					context = new SimpleSearchContext ();
+					UpdateResults (true);
 				} finally { 
 					Gdk.Threads.Leave (); 
 				}
@@ -95,8 +97,6 @@ namespace Do.Core
 
 		private IObject[] GetContextResults ()
 		{
-			base.UpdateResults ();
-			
 			IAction action;
 			IItem item;
 			List<IItem> items = new List<IItem> ();
@@ -162,16 +162,30 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
+			base.OnSearchStarted (false);
+			UpdateResults (false);
+		}
+		
+		private void UpdateResults (bool upstream_search)
+		{
 			context.Results = GetContextResults ();
 			if (context.Results == null)
 				return;
 			
-			try {
+			
+			/*try {
 				if (((context.LastContext == null || context.LastContext.Selection == null) && context.Selection != null) ||
 					context.LastContext.Selection != context.Selection) {
 					base.OnSelectionChanged ();
 				}
-			} catch { }
+			} catch { }*/
+			if (context.LastContext == null || 
+			    (context.LastContext != null && context.LastContext.Selection != context.Selection)) {
+				base.OnSelectionChanged ();
+				base.OnSearchFinished (true);
+			} else {
+				base.OnSearchFinished (false);
+			}
 		}
 
 		private void BuildNewContextFromQuery ()
