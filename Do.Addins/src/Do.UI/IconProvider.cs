@@ -153,8 +153,6 @@ namespace Do.UI
 			if (null == name)
 				throw new ArgumentNullException ("name");
 			
-			Console.WriteLine (name);
-
 			// Is the icon name in cache?
 			iconKey = string.Format ("{0}_{1}", name, size);
 			if (cache.TryGetValue (iconKey, out pixbuf)) {
