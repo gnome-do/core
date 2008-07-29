@@ -172,6 +172,7 @@ namespace Do.UI
 
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
+			SizeAllocated += delegate { Reposition (); };
 			
 			Reposition ();
 		}
@@ -293,24 +294,12 @@ namespace Do.UI
 		{
 			iconbox[2].Show ();
 			Resize (1, 1);
-			GLib.Timeout.Add (70, delegate {
-				Gdk.Threads.Enter ();
-				Reposition ();
-				Gdk.Threads.Leave ();
-				return false;
-			});
 		}
 
 		public void Shrink ()
 		{
 			iconbox[2].Hide ();
 			Resize (1, 1);
-			GLib.Timeout.Add (70, delegate {
-				Gdk.Threads.Enter ();
-				Reposition ();
-				Gdk.Threads.Leave ();
-				return false;
-			});
 		}
 		
 		public void GrowResults ()
