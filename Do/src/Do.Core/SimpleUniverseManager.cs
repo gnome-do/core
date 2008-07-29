@@ -264,15 +264,15 @@ namespace Do.Core
 		/// </param>
 		public void DeleteItems (IEnumerable<IItem> items)
 		{
-			lock (universeLock) {
-				foreach (IItem i in items) {
-					if (i is DoItem) {
+			foreach (IItem i in items) {
+				if (i is DoItem) {
+					lock (universeLock)
 						universe.Remove ((i as DoItem).UID);
-					} else {
+				} else {
+					lock (universeLock)
 						universe.Remove (new DoItem (i).UID);
-					}
-					DeleteQuickResult (i);
 				}
+				DeleteQuickResult (i);
 			}
 		}
 
