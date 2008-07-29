@@ -33,13 +33,17 @@ namespace Do.DBus
 	{
 		public static bool OnBattery  ()
 		{
-			if (!Bus.Session.NameHasOwner ("org.freedesktop.PowerManagement")) return false;
-			
-			IPowerManagement power = 
-				Bus.Session.GetObject<IPowerManagement> ("org.freedesktop.PowerManagement", 
-				                                         new ObjectPath ("/org/freedesktop/PowerManagement"));
-			
-			return power.GetOnBattery ();
+			try {
+				if (!Bus.Session.NameHasOwner ("org.freedesktop.PowerManagement")) return false;
+				
+				IPowerManagement power = 
+					Bus.Session.GetObject<IPowerManagement> ("org.freedesktop.PowerManagement", 
+					                                         new ObjectPath ("/org/freedesktop/PowerManagement"));
+				
+				return power.GetOnBattery ();
+			} catch {
+				return false;
+			}
 		}
 	}
 }
