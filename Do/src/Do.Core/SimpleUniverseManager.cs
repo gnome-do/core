@@ -303,12 +303,10 @@ namespace Do.Core
 		/// </param>
 		public void TryGetObjectForUID (string UID, out IObject item)
 		{
-			lock (universeLock) {
-				if (universe.ContainsKey (UID))
-					item = universe[UID];
-				else
-					item = null;
-			}
+			if (universe.ContainsKey (UID))
+				item = universe[UID];
+			else
+				item = null;
 		}
 		
 		/// <summary>
