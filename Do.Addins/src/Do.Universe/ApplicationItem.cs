@@ -48,7 +48,7 @@ namespace Do.Universe {
 			
 			name = item.GetLocalestring ("Name");
 			description = item.GetLocalestring ("Comment");
-			icon = item.GetIcon (IconTheme.Default);
+			icon = item.GetString ("Icon");
 		}
 		
 		public string Name {

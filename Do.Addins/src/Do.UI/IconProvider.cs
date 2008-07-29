@@ -152,6 +152,8 @@ namespace Do.UI
 			
 			if (null == name)
 				throw new ArgumentNullException ("name");
+			
+			Console.WriteLine (name);
 
 			// Is the icon name in cache?
 			iconKey = string.Format ("{0}_{1}", name, size);
@@ -168,6 +170,7 @@ namespace Do.UI
 				} 
 				if (IconIsFile (name)) {
 					pixbuf = IconFromFile (name, size);
+					Console.WriteLine (name);
 					break;
 				}
 				// Try to load icon from defaul theme.
