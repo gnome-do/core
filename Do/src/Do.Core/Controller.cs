@@ -94,8 +94,6 @@ namespace Do.Core {
 		public void Initialize ()
 		{
 			ThemeChanged ();
-			if (Do.Preferences.AlwaysShowResults)
-				window.GrowResults ();
 			Do.Preferences.PreferenceChanged += OnPreferenceChanged;
 		}
 		
