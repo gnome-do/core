@@ -247,13 +247,15 @@ namespace Do.UI {
 		
 		public virtual void Reposition ()
 		{
-			Gdk.Rectangle offset;
-			int iconboxWidth;
-
-			offset = new Rectangle (IconBoxRadius, 0, 0 ,0);
-			iconboxWidth = IconBoxIconSize + 60;
-			
-			PositionWindow.UpdatePosition (iconboxWidth, currentPane, offset);
+			Gtk.Application.Invoke (delegate {
+				Gdk.Rectangle offset;
+				int iconboxWidth;
+				
+				offset = new Rectangle (IconBoxRadius, 0, 0 ,0);
+				iconboxWidth = IconBoxIconSize + 60;
+				
+				PositionWindow.UpdatePosition (iconboxWidth, currentPane, offset);
+			});
 		}
 		
 		protected override bool OnButtonPressEvent (EventButton evnt)

@@ -183,7 +183,6 @@ namespace Do.UI
 						return;
 				}
 				
-				
 				Icon = icon;
 				Caption = name;
 			}
@@ -206,6 +205,38 @@ namespace Do.UI
 		protected virtual void UpdateFocus ()
 		{
 			FrameAlpha = FillAlpha = (focused ? focused_transparency : unfocused_transparency);
+		}
+		
+		protected override void PaintFill ()
+		{
+			if (!textOverlay) {
+				base.PaintFill ();
+				return;
+			}
+			// Gtk doesn't allow stacking elements, so we can't use a standard GTK interface here
+			// To work around this we will instead draw our own icon and gtk will be none the wiser.
+			// We are very clever.
+			
+			double r, g, b;
+			
+			r = (double) fillColor.Red / ushort.MaxValue;
+			g = (double) fillColor.Green / ushort.MaxValue;
+			b = (double) fillColor.Blue / ushort.MaxValue;
+			
+			cairo.Save ();
+			GetFrame (cairo);
+			
+			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName ("gnome-mime-text", 128);
+			Gdk.CairoHelper.SetSourcePixbuf (cairo, 
+			                                 pixbuf, 
+			                                 (int) (width / 2) - (int) (pixbuf.Width / 2) + x, 
+			                                 (int) (height / 2) - (int) (pixbuf.Height / 2) + y);
+			cairo.PaintWithAlpha (fillAlpha);
+			
+			cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
+			cairo.FillPreserve ();
+			
+			cairo.Restore ();
 		}
 
 	}

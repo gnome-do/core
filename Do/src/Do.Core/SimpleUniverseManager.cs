@@ -324,7 +324,6 @@ namespace Do.Core
 				if (DBus.PowerState.OnBattery () && 
 				    DateTime.Now.Subtract (last_update).TotalMinutes < 15) 
 					return true;
-				
 				BuildUniverse ();
 				return true;
 			});
