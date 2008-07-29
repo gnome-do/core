@@ -47,7 +47,6 @@ namespace Do.UI {
 
 		const double WindowTransparency = 0.91;
 		
-		int height;
 		Pane currentPane;
 		
 		//-------------------Events-----------------------
@@ -174,7 +173,6 @@ namespace Do.UI {
 			SizeAllocated += delegate { Reposition (); };
 
 			Reposition ();
-			height = this.HeightRequest;
 		}
 		
 		protected override bool OnKeyPressEvent (EventKey evnt)

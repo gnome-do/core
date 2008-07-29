@@ -39,13 +39,10 @@ namespace Do.Core
 					return false;
 				
 				IAction action;
-				IItem item;
 				if (FirstController.Selection is IAction) {
 					action = FirstController.Selection as IAction;
-					item   = SecondController.Selection as IItem;
 				} else if (SecondController.Selection is IAction) {
 					action = SecondController.Selection as IAction;
-					item   = FirstController.Selection as IItem;
 				} else {
 					return false;
 				}
