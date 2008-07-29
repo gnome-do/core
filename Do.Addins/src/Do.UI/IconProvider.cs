@@ -168,7 +168,6 @@ namespace Do.UI
 				} 
 				if (IconIsFile (name)) {
 					pixbuf = IconFromFile (name, size);
-					Console.WriteLine (name);
 					break;
 				}
 				// Try to load icon from defaul theme.

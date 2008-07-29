@@ -28,7 +28,9 @@ using Do.Universe;
 
 namespace Do.Core
 {
-	
+	// Threading Heirarchy:
+	// universeLock may be locked within quickResultsLock and actionLock
+	// No other nested locks should be allowed
 	
 	public class SimpleUniverseManager : IUniverseManager
 	{
@@ -40,6 +42,7 @@ namespace Do.Core
 		
 		private object universeLock = new object ();
 		private object quickResultsLock = new object ();
+		private object actionLock = new object ();
 		
 		public SimpleUniverseManager()
 		{
@@ -66,7 +69,7 @@ namespace Do.Core
 			}
 			
 			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
-				lock (quickResultsLock)
+				lock (actionLock)
 					return Search (query, searchFilter, actions, null);
 			
 			lock (universeLock) 
@@ -164,7 +167,7 @@ namespace Do.Core
 				lock (universeLock)
 					loc_universe[action.UID] = action;
 				RegisterQuickResults (loc_quick, action);
-				lock (quickResultsLock)
+				lock (actionLock)
 					loc_actions.Add (action);
 			}
 			
@@ -179,10 +182,10 @@ namespace Do.Core
 			
 			lock (universeLock)
 				universe = loc_universe;
-			lock (quickResultsLock) {
+			lock (quickResultsLock)
 				quickResults = loc_quick;
+			lock (actionLock)
 				loc_actions = actions;
-			}
 			
 			loc_universe = null;
 			loc_quick    = null;
@@ -236,17 +239,17 @@ namespace Do.Core
 		/// </param>
 		public void AddItems (IEnumerable<IItem> items)
 		{
-			lock (universeLock) {
-				foreach (IItem i in items) {
-					if (i is DoItem && !universe.ContainsKey ((i as DoItem).UID)) {
+			foreach (IItem i in items) {
+				if (i is DoItem && !universe.ContainsKey ((i as DoItem).UID)) {
+					lock (universeLock)
 						universe.Add ((i as DoItem).UID, i);
-						RegisterQuickResults (quickResults, i);
-					} else {
-						DoItem di = new DoItem (i);
-						if (!universe.ContainsKey (di.UID)) {
+					RegisterQuickResults (quickResults, i);
+				} else {
+					DoItem di = new DoItem (i);
+					if (!universe.ContainsKey (di.UID)) {
+						lock (universeLock)
 							universe.Add (di.UID, di);
-							RegisterQuickResults (quickResults, di);
-						}
+						RegisterQuickResults (quickResults, di);
 					}
 				}
 			}
