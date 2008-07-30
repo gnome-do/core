@@ -23,6 +23,13 @@ Do/src/Do.Core/DoAddinInstaller.cs
 Do/src/Do.UI/DoAddinInstallerDialog.cs
 Do/src/Do.UI/MainMenu.cs
 Do/src/Do.UI/NotificationIcon.cs
+Do/src/Do.Universe/AliasAction.cs
+Do/src/Do.Universe/AliasItemSource.cs
+Do/src/Do.Universe/DeleteAliasAction.cs
 Do/src/Do.Universe/DoQuitItem.cs
+Do/src/Do.Universe/InternalItemSource.cs
+Do/src/Do.Universe/ItemSourceItemSource.cs
+Do/src/Do.Universe/PreferencesItem.cs
+Do/src/Do.Universe/SelectedTextItem.cs
 # files added by intltool-prepare
 Do/gnome-do.desktop.in

@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mono.Unix;
 
 namespace Do.Universe {
 	
@@ -27,13 +28,13 @@ namespace Do.Universe {
 		
 		public string Name {
 			get {
-				return "Assign Alias...";
+				return Catalog.GetString ("Assign Alias...");
 			}
 		}
 
 		public string Description {
 			get {
-				return "Give an item an alternate name.";
+				return Catalog.GetString ("Give an item an alternate name.");
 			}
 		}
 

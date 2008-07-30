@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 
 using Do.Core;
+using Mono.Unix;
 
 namespace Do.Universe {
 	
@@ -44,13 +45,13 @@ namespace Do.Universe {
 		
 		public string Name {
 			get {
-				return "GNOME Do Item Sources";
+				return Catalog.GetString ("GNOME Do Item Sources");
 			}
 		}
 		
 		public string Description {
 			get {
-				return "Item Sources providing all items GNOME Do knows about.";
+				return Catalog.GetString ("Item Sources providing all items GNOME Do knows about.");
 			}
 		}
 		

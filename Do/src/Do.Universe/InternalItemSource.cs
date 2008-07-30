@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mono.Unix;
 
 namespace Do.Universe {
 	
@@ -30,11 +31,11 @@ namespace Do.Universe {
 		}
 		
 		public string Name {
-			get { return "Internal GNOME Do Items"; }
+			get { return Catalog.GetString ("Internal GNOME Do Items"); }
 		}
 		
 		public string Description {
-			get { return "Special items relevant to the inner-workings of GNOME Do."; }
+			get { return Catalog.GetString ("Special items relevant to the inner-workings of GNOME Do."); }
 		}
 		
 		public string Icon {

@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
+using Mono.Unix;
 using Do;
 
 namespace Do.Universe {	
@@ -64,13 +65,14 @@ namespace Do.Universe {
 		}
 		
 		static void Deserialize ()
-		{			
+		{
 			try {
 				using (Stream s = File.OpenRead (AliasFile)) {
 					BinaryFormatter f = new BinaryFormatter ();
 					aliases = f.Deserialize (s) as List<AliasRecord>;
 				}
-			} catch {
+			} catch (Exception e) {
+				Log.Warn (e.Message);
 				aliases = new List<AliasRecord> ();
 			}
 		}
@@ -137,13 +139,13 @@ namespace Do.Universe {
 		
 		public string Name {
 			get {
-				return "Alias items";
+				return Catalog.GetString ("Alias items");
 			}
 		}
 
 		public string Description {
 			get {
-				return "Aliased items from Do's universe.";
+				return Catalog.GetString ("Aliased items from Do's universe.");
 			}
 		}
 
