@@ -98,8 +98,7 @@ namespace Do.Core
 			context.Results = results.ToArray ();
 			//Do.PrintPerf ("FirstControllerResultsAssigned");
 			
-			if (context.LastContext == null || 
-			    (context.LastContext != null && context.LastContext.Selection != context.Selection)) {
+			if (context.LastContext == null || context.LastContext.Selection != context.Selection) {
 				base.OnSelectionChanged ();
 				base.OnSearchFinished (true);
 			} else {

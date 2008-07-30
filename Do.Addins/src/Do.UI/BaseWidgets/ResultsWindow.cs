@@ -297,11 +297,11 @@ namespace Do.UI
 					results = value.Results;
 				}
 				
-				startResult = value.Cursor - 4;
+				startResult = value.Cursor - 5;
 				
 				if (startResult < 0)
 					startResult = 0;
-				endResult = startResult + 7;
+				endResult = startResult + 8;
 				offset = startResult;
 				
 				if (endResult > results.Length)

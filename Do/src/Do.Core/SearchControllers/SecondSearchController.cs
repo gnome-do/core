@@ -96,6 +96,7 @@ namespace Do.Core
 
 		private void OnUpstreamSelectionChanged ()
 		{
+			//return;
 			textMode = false;
 			if (timer > 0) {
 				GLib.Source.Remove (timer);
@@ -127,11 +128,20 @@ namespace Do.Core
 			
 			List<IObject> results = new List<IObject> ();
 			if (FirstController.Selection is IItem) {
+				IItem item = FirstController.Selection as IItem;
+				
 				//We need to find actions for this item
 				//TODO -- Make this work for multiple items
-				foreach (IAction action in initresults)
-					if (action.SupportsItem (FirstController.Selection as IItem))
-						results.Add (action);
+				foreach (IAction action in initresults) {
+					foreach (Type t in action.SupportedItemTypes) {
+						if (t.IsInstanceOfType (DoObject.EnsureIItem(item))) {
+							if (action.SupportsItem (item)) {
+								results.Add (action);
+								break;
+							}
+						}
+					}
+				}
 				
 			} else if (FirstController.Selection is IAction) {
 				//We need to find items for this action
@@ -201,9 +211,10 @@ namespace Do.Core
 				// So the idea here is that we will wait long enough that we still go the full
 				// 250ms before showing results.
 				wait_timer = GLib.Timeout.Add (Timeout - ms, delegate {
+					wait_timer = 0;
 					Gdk.Threads.Enter ();
 					try {
-						if (context.LastContext != null && context.Selection != context.LastContext.Selection) {
+						if (context.LastContext == null || context.Selection != context.LastContext.Selection) {
 							base.OnSelectionChanged ();
 							base.OnSearchFinished (true);
 						} else {
@@ -212,7 +223,6 @@ namespace Do.Core
 					} finally {
 						Gdk.Threads.Leave ();
 					}
-					wait_timer = 0;
 					return false;
 				});
 			}

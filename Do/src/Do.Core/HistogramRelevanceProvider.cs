@@ -121,7 +121,6 @@ namespace Do.Core {
 												DoObject other)
 		{
 			RelevanceRecord rec;
-			
 			if (!hits.TryGetValue (o.UID, out rec)) {
 				rec = new RelevanceRecord (o);
 				hits [o.UID] = rec;

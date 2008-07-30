@@ -55,6 +55,7 @@ namespace Do.Core
 			get { return results ?? results = new IObject[0]; }
 			set {
 				results = value ?? new IObject[0];
+				
 				cursor = 0;
 				
 				if (SecondaryCursors.Length == 0) return;

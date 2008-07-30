@@ -69,8 +69,9 @@ namespace Do.Core
 			}
 			set {
 				IObject tmp = Selection;
+				int ctmp = context.Cursor;
 				context.Cursor = value;
-				if (tmp != Selection) {
+				if (tmp != Selection || context.Cursor != ctmp) {
 					try {
 						OnSelectionChanged ();
 					} catch {}

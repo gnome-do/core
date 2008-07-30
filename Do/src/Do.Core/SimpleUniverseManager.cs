@@ -87,7 +87,7 @@ namespace Do.Core
 			}
 			
 			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
-				lock (quickResultsLock)
+				lock (actionLock)
 					return Search (query, searchFilter, actions, otherObj);
 			
 			lock (universeLock) 
@@ -101,33 +101,31 @@ namespace Do.Core
 		
 		public IObject[] Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray, IObject compareObj)
 		{
-			//Do.PrintPerf ("Search Start");
+//			Do.PrintPerf ("Search Start");
 			List<IObject> results = new List<IObject> ();
 			query = query.ToLower ();
 			
 			float epsilon = 0.00001f;
 			
+
+			
 			foreach (DoObject obj in baseArray) {
-				//Do.PrintPerf ("Update Relevance Start");
 				obj.UpdateRelevance (query, compareObj as DoObject);
-				//Do.PrintPerf ("Update Relevance Stop");				
 				if (Math.Abs (obj.Relevance) > epsilon) {
-					if (searchFilter.Length == 0)
+					if (searchFilter.Length == 0) {
 						results.Add (obj);
-					else
-						foreach (Type t in searchFilter)
+					} else {
+						foreach (Type t in searchFilter) {
 							if (t.IsInstanceOfType (obj.Inner))
 								results.Add (obj);
+						}
+					}
 				}
-				//Do.PrintPerf ("Loop Continue");
 			}
 			
-			//Do.PrintPerf ("Search PreSort");
 			results.Sort ();
 			
-			//Do.PrintPerf ("Search Stop");
-			//if (results.Count > maxResults)
-			//	return results.GetRange (0, maxResults).ToArray ();
+//			Do.PrintPerf ("Search Stop");
 			return results.ToArray ();
 		}
 		
@@ -209,10 +207,16 @@ namespace Do.Core
 		{
 			if (quickResults == null) return;
 			
+			DoObject do_result;
+			if (result is DoObject)
+				do_result = result as DoObject;
+			else
+				do_result = new DoObject (result);
+			
 			lock (quickResultsLock) {
 				foreach (char key in quickResults.Keys) {
-					if ((result.Name + result.Description).ToLower ().Contains (key.ToString ()))
-						quickResults[key][(result as DoObject).UID] = result;
+					if ((do_result.Name + do_result.Description).ToLower ().Contains (key.ToString ()))
+						quickResults[key][do_result.UID] = do_result;
 				}
 			}
 		}
@@ -303,10 +307,12 @@ namespace Do.Core
 		/// </param>
 		public void TryGetObjectForUID (string UID, out IObject item)
 		{
-			if (universe.ContainsKey (UID))
+			if (universe.ContainsKey (UID)) {
 				item = universe[UID];
-			else
+			} else {
 				item = null;
+			}
+			
 		}
 		
 		/// <summary>

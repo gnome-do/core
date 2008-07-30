@@ -95,8 +95,13 @@ namespace Do.Core
 		
 		private void OnUpstreamSelectionChanged ()
 		{
-			if (!SearchNeeded)
+			if (!SearchNeeded) {
+				context.Destroy ();
+				context = new SimpleSearchContext ();
+				
+				base.OnSelectionChanged ();
 				return;
+			}
 			
 			textMode = false;
 			if (timer > 0) {
@@ -173,6 +178,12 @@ namespace Do.Core
 		
 		public override void Reset ()
 		{
+			if (context.LastContext == null) {
+				context.Destroy ();
+				context = new SimpleSearchContext ();
+				return;
+			}
+			
 			while (context.LastContext != null) {
 				context = context.LastContext;
 			}
@@ -196,8 +207,7 @@ namespace Do.Core
 				return;
 			
 			
-			if (context.LastContext == null || 
-			    (context.LastContext != null && context.LastContext.Selection != context.Selection)) {
+			if (context.LastContext == null || context.LastContext.Selection != context.Selection) {
 				base.OnSelectionChanged ();
 				base.OnSearchFinished (true);
 			} else {

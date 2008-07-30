@@ -43,7 +43,6 @@ namespace Do.Core {
 		
 		const int SearchDelay = 250;
 		
-		uint[] searchTimeout;
 		IAction action;
 		List<IItem> items;
 		List<IItem> modItems;
@@ -56,7 +55,6 @@ namespace Do.Core {
 			about_window = null;
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
-			searchTimeout = new uint[3];
 			resultsGrown = false;
 			
 			controllers = new SimpleSearchController[3];
@@ -168,8 +166,7 @@ namespace Do.Core {
 				if (!ThirdPaneAllowed || ThirdPaneCanClose)
 					ThirdPaneVisible = false;
 				
-				if ((ThirdPaneAllowed && window.CurrentPane == Pane.Third) ||
-						ThirdPaneRequired)
+				if ((ThirdPaneAllowed && window.CurrentPane == Pane.Third) || ThirdPaneRequired)
 					ThirdPaneVisible = true;
 			}
 			
@@ -189,7 +186,7 @@ namespace Do.Core {
 				if (value == thirdPaneVisible)
 					return;
 				
-				if (value == true)
+				if (value)
 					window.Grow ();
 				else
 					window.Shrink ();
@@ -384,13 +381,14 @@ namespace Do.Core {
 			
 			ClearSearchResults ();
 			
-			if (!ThirdPaneAllowed)
-				ThirdPaneVisible = false;
-			
 			ShrinkResults ();
 			
 			if (CurrentPane == Pane.First && !results) Vanish ();
 			else if (!something_typed) Reset ();
+			
+			if (GetSelection (Pane.Third) == null || !ThirdPaneAllowed) {
+				ThirdPaneVisible = false;
+			}
 		}
 		
 		void OnInputKeyPressEvent (EventKey evnt)
@@ -603,9 +601,9 @@ namespace Do.Core {
 				} else if (CurrentPane != Pane.Third && (!ThirdPaneAllowed || ThirdPaneCanClose)) {
 					ThirdPaneVisible = false;
 				}
-			} else if (pane == Pane.Second && (!ThirdPaneAllowed)) {
-				ThirdPaneVisible = false;
-			}
+			}// else if (pane == Pane.Second && (!ThirdPaneAllowed)) {
+			//	ThirdPaneVisible = false;
+			//}
 			window.SetPaneContext (pane, controllers[(int) pane].UIContext);
 		}
 		
@@ -614,11 +612,6 @@ namespace Do.Core {
 		/// </summary>
 		void Reset ()
 		{
-			for (int i = 0; i < 3; ++i) {
-				if (searchTimeout[i] > 0) 
-					GLib.Source.Remove (searchTimeout[i]);
-				searchTimeout[i] = 0;
-			}
 			ThirdPaneVisible = false;
 			
 			foreach (ISearchController controller in controllers)

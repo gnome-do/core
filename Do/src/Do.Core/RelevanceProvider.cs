@@ -55,11 +55,10 @@ namespace Do.Core {
 			
 			float score;
 			string ls = s.ToLower();
-			string lquery = query.ToLower();
 
 			//Find the shortest possible substring that matches the query
 			//and get the ration of their lengths for a base score
-			int[] match = findBestSubstringMatchIndices(ls, lquery);
+			int[] match = findBestSubstringMatchIndices(ls, query);
 			if ((match[1] - match[0]) == 0) return 0;
 			score = query.Length / (float)(match[1] - match[0]);
 			if (score == 0) return 0;
@@ -74,7 +73,7 @@ namespace Do.Core {
 			{
 				if(s[i] == ' ')
 				{
-					if(lquery.Contains(ls[i+1].ToString()))
+					if(query.Contains(ls[i+1].ToString()))
 						firstCount++;
 					else
 						bad++;
@@ -82,7 +81,7 @@ namespace Do.Core {
 			}
 						
 			//A first character match counts extra
-			if(lquery[0] == ls[0])
+			if(query[0] == ls[0])
 				firstCount += 2;
 			
 			//The longer the acronym, the better it scores
@@ -97,7 +96,7 @@ namespace Do.Core {
 				good += match[1] + 4;
 			
 			//Super-duper bonus if it is a perfect match
-			if(lquery == ls)
+			if(query == ls)
 				good += match[1] * 2 + 4;			
 			
 			if(good+bad > 0)
@@ -107,7 +106,7 @@ namespace Do.Core {
 			//than split matches.  Perfect matches get the .9 - 1.0 range
 			//everything else goes lower
 			
-			if(ls.Contains(lquery))
+			if(match[1] - match[0] + 1 == query.Length)
 				score = .9f + .1f * score;
 			else
 				score = .9f * score;
@@ -157,8 +156,9 @@ namespace Do.Core {
 				if(index > lastChar + 1 - query.Length) break;
 				
 				//Look for the best match in the tail
-				int cur  = index;
-				int qcur = 0;
+				//We know the first char matches, so we dont check it.
+				int cur  = index + 1;
+				int qcur = 1;
 				while(qcur < query.Length && cur < s.Length)
 					if(query[qcur] == s[cur++])
 						qcur++;
