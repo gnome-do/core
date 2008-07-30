@@ -19,17 +19,18 @@
  */
 
 using System;
+using Mono.Unix;
 
 namespace Do.Universe {
 
 	public class PreferencesItem : IRunnableItem {		
 		
 		public string Name {
-			get { return "GNOME Do Preferences"; }
+			get { return Catalog.GetString ("GNOME Do Preferences"); }
 		}
 		
 		public string Description {
-			get { return "Adjust settings, manage plugins, etc."; }
+			get { return Catalog.GetString ("Adjust settings, manage plugins, etc."); }
 		}
 		
 		public string Icon {

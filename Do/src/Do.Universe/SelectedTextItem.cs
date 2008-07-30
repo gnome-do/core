@@ -19,6 +19,7 @@
  */
 
 using System;
+using Mono.Unix;
 
 namespace Do.Universe {
 
@@ -31,11 +32,11 @@ namespace Do.Universe {
 		}
 		
 		public string Name {
-			get { return "Selected text"; }
+			get { return Catalog.GetString ("Selected text"); }
 		}
 		
 		public string Description {
-			get { return "Currently selected text."; }
+			get { return Catalog.GetString ("Currently selected text."); }
 		}
 		
 		public string Icon {

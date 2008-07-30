@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mono.Unix;
 
 namespace Do.Universe {
 	
@@ -27,13 +28,13 @@ namespace Do.Universe {
 		
 		public string Name {
 			get {
-				return "Delete Alias";
+				return Catalog.GetString ("Delete Alias");
 			}
 		}
 
 		public string Description {
 			get {
-				return "Deletes an alias.";
+				return Catalog.GetString ("Deletes an alias.");
 			}
 		}
 
