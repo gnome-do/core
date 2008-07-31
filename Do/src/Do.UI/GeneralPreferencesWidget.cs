@@ -25,6 +25,8 @@ using Gtk;
 
 namespace Do.UI
 {
+    [System.ComponentModel.Category("Do")]
+    [System.ComponentModel.ToolboxItem(true)]
     public partial class GeneralPreferencesWidget : Bin, Addins.IConfigurable
     {
     	const string AutostartAttribute = "X-GNOME-Autostart-enabled";

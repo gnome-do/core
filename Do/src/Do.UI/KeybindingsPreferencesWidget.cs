@@ -27,6 +27,8 @@ using Do.Addins;
 
 namespace Do.UI
 {
+	[System.ComponentModel.Category("Do")]
+	[System.ComponentModel.ToolboxItem(true)]
 	public partial class KeybindingsPreferencesWidget : Bin, IConfigurable
 	{
 		private KeybindingTreeView kbview;

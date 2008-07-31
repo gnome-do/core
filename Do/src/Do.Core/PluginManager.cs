@@ -54,18 +54,26 @@ namespace Do.Core {
             }
         }
         
-        private static Dictionary<string,string> repository_urls;
-        public static IDictionary<string,string> RepositoryUrls {
+        private static Dictionary<string, List<string>> repository_urls;
+        public static IDictionary<string, List<string>> RepositoryUrls {
             get {
             	if (null == repository_urls) {
-            	
-            		repository_urls = new Dictionary<string,string> ();      
-            		repository_urls ["Official Plugins"] = 
-            			"http://do.davebsd.com/repo/" + Version +"/official";
-            		repository_urls ["Community Plugins"] = 
-            			"http://do.davebsd.com/repo/" + Version +"/community";
-					repository_urls ["Local Plugins"] =
-						"file:///usr/local/share/gnome-do/repo";
+            		repository_urls = new Dictionary<string, List<string>> ();      
+            		
+            		repository_urls ["Official Plugins"] = new List<string> ();
+            		repository_urls ["Official Plugins"].Add 
+            			("http://do.davebsd.com/repo/" + Version +"/official");
+            				
+            		repository_urls ["Community Plugins"] = new List<string> ();
+            		repository_urls ["Community Plugins"].Add
+            			("http://do.davebsd.com/repo/" + Version +"/community");
+            		
+            		repository_urls ["Local Plugins"] = new List<string> ();
+            		foreach (string repo in Paths.SystemPlugins) {
+            			if (Directory.Exists (repo)) {
+							repository_urls ["Local Plugins"].Add ("file://" + repo);
+						}
+					}
             	}
             	
             	return repository_urls;;
@@ -95,9 +103,11 @@ namespace Do.Core {
 
             // Register repositories.
             SetupService setup = new SetupService (AddinManager.Registry);
-			foreach (string url in RepositoryUrls.Values) {
-				if (!setup.Repositories.ContainsRepository (url)) {
-					setup.Repositories.RegisterRepository (null, url, false);
+			foreach (List<string> urls in RepositoryUrls.Values) {
+				foreach (string url in urls) {
+					if (!setup.Repositories.ContainsRepository (url)) {
+						setup.Repositories.RegisterRepository (null, url, false);
+					}
 				}
 			}
             InstallLocalPlugins (setup);
@@ -105,21 +115,29 @@ namespace Do.Core {
         
         public static bool AddinIsFromRepository (Addin a, string name)
 		{
-			string url;
-		
+			List<string> urls;
 			if (name == AllPluginsRepository) return true;
-			RepositoryUrls.TryGetValue (name, out url);
-			return null != url && a.Description.Url.StartsWith (url);
+			RepositoryUrls.TryGetValue (name, out urls);
+			Console.Error.WriteLine (a.Description.Url);
+			foreach (string url in urls) {
+				if (a.Description.Url.StartsWith (url))
+					return true;
+			}
+			return false;
 		}
 		
 		public static bool AddinIsFromRepository (AddinRepositoryEntry e,
 												  string name)
 		{
-			string url;
-		
+			List<string> urls;
 			if (name == AllPluginsRepository) return true;
-			RepositoryUrls.TryGetValue (name, out url);
-			return null != url && e.RepositoryUrl.StartsWith (url);
+			RepositoryUrls.TryGetValue (name, out urls);
+			Console.Error.WriteLine (e.RepositoryUrl);
+			foreach (string url in urls) {
+				if (e.RepositoryUrl.StartsWith (url))
+					return true;
+			}
+			return false;
 		}
 
         /// <summary>
@@ -242,9 +260,8 @@ namespace Do.Core {
         {
         	SetupService setup;
             setup = new SetupService (AddinManager.Registry);
-
-            setup.Repositories.UpdateAllRepositories (
-                new ConsoleProgressStatus (true));
+            	setup.Repositories.UpdateAllRepositories (
+                	new ConsoleProgressStatus (true));
             foreach (AddinRepositoryEntry rep in
                 setup.Repositories.GetAvailableAddins ()) {
                 Addin installed;
