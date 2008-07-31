@@ -308,7 +308,7 @@ namespace Do.Core
 		public void TryGetObjectForUID (string UID, out IObject item)
 		{
 			if (universe.ContainsKey (UID)) {
-				item = universe[UID];
+				item = (universe[UID] as DoObject).Inner;
 			} else {
 				item = null;
 			}

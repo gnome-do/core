@@ -129,12 +129,13 @@ namespace Do.Core
 			List<IObject> results = new List<IObject> ();
 			if (FirstController.Selection is IItem) {
 				IItem item = FirstController.Selection as IItem;
+				IItem ritem = DoObject.EnsureIItem (FirstController.Selection as IItem);
 				
 				//We need to find actions for this item
 				//TODO -- Make this work for multiple items
 				foreach (IAction action in initresults) {
 					foreach (Type t in action.SupportedItemTypes) {
-						if (t.IsInstanceOfType (DoObject.EnsureIItem(item))) {
+						if (t.IsInstanceOfType (ritem)) {
 							if (action.SupportsItem (item)) {
 								results.Add (action);
 								break;
