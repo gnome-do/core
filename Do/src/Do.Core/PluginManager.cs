@@ -118,7 +118,6 @@ namespace Do.Core {
 			List<string> urls;
 			if (name == AllPluginsRepository) return true;
 			RepositoryUrls.TryGetValue (name, out urls);
-			Console.Error.WriteLine (a.Description.Url);
 			foreach (string url in urls) {
 				if (a.Description.Url.StartsWith (url))
 					return true;
@@ -132,7 +131,6 @@ namespace Do.Core {
 			List<string> urls;
 			if (name == AllPluginsRepository) return true;
 			RepositoryUrls.TryGetValue (name, out urls);
-			Console.Error.WriteLine (e.RepositoryUrl);
 			foreach (string url in urls) {
 				if (e.RepositoryUrl.StartsWith (url))
 					return true;
