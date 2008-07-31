@@ -64,6 +64,8 @@ namespace Do.Core {
             			"http://do.davebsd.com/repo/" + Version +"/official";
             		repository_urls ["Community Plugins"] = 
             			"http://do.davebsd.com/repo/" + Version +"/community";
+					repository_urls ["Local Plugins"] =
+						"/usr/local/share/gnome-do/repo";
             	}
             	
             	return repository_urls;;

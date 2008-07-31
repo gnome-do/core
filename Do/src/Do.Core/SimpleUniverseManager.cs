@@ -78,6 +78,10 @@ namespace Do.Core
 		
 		public IObject[] Search (string query, Type[] searchFilter, IObject otherObj)
 		{
+			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
+				lock (actionLock)
+					return Search (query, searchFilter, actions, otherObj);
+			
 			if (query.Length == 1) {
 				lock (quickResultsLock) {
 					char key = Convert.ToChar (query.ToLower ());
@@ -85,10 +89,6 @@ namespace Do.Core
 						return Search (query, searchFilter, quickResults[key].Values, null);
 				}
 			}
-			
-			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
-				lock (actionLock)
-					return Search (query, searchFilter, actions, otherObj);
 			
 			lock (universeLock) 
 				return Search (query, searchFilter, universe.Values, otherObj);
@@ -106,8 +106,6 @@ namespace Do.Core
 			query = query.ToLower ();
 			
 			float epsilon = 0.00001f;
-			
-
 			
 			foreach (DoObject obj in baseArray) {
 				obj.UpdateRelevance (query, compareObj as DoObject);
@@ -183,7 +181,7 @@ namespace Do.Core
 			lock (quickResultsLock)
 				quickResults = loc_quick;
 			lock (actionLock)
-				loc_actions = actions;
+				actions = loc_actions;
 			
 			loc_universe = null;
 			loc_quick    = null;
@@ -230,9 +228,10 @@ namespace Do.Core
 		private void DeleteQuickResult (IObject result)
 		{
 			string UID = new DoObject (result).UID;
-			lock (quickResultsLock) 
+			lock (quickResultsLock) {
 				foreach (Dictionary<string, IObject> list in quickResults.Values)
 					list.Remove (UID);
+			}
 		}
 		
 		/// <summary>
@@ -245,14 +244,16 @@ namespace Do.Core
 		{
 			foreach (IItem i in items) {
 				if (i is DoItem && !universe.ContainsKey ((i as DoItem).UID)) {
-					lock (universeLock)
+					lock (universeLock) {
 						universe.Add ((i as DoItem).UID, i);
+					}
 					RegisterQuickResults (quickResults, i);
 				} else {
 					DoItem di = new DoItem (i);
 					if (!universe.ContainsKey (di.UID)) {
-						lock (universeLock)
+						lock (universeLock) {
 							universe.Add (di.UID, di);
+						}
 						RegisterQuickResults (quickResults, di);
 					}
 				}
@@ -270,11 +271,13 @@ namespace Do.Core
 		{
 			foreach (IItem i in items) {
 				if (i is DoItem) {
-					lock (universeLock)
+					lock (universeLock) {
 						universe.Remove ((i as DoItem).UID);
+					}
 				} else {
-					lock (universeLock)
+					lock (universeLock) {
 						universe.Remove (new DoItem (i).UID);
+					}
 				}
 				DeleteQuickResult (i);
 			}
