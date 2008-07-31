@@ -174,6 +174,7 @@ namespace Do.Core {
 				relevance *= 0.5f * (1f + age);
 		    }
 			
+			
 			// Penalize actions that require modifier items.
 			// other != null ==> we're getting relevance for second pane.
 			if (o is IAction &&
@@ -192,7 +193,7 @@ namespace Do.Core {
 				o.Inner is DeleteAliasAction ||
 				o.Inner is CopyToClipboard)
 				relevance = -0.1f;
-
+			
 			return BalanceRelevanceWithScore (o, relevance, score);
 		}
 
@@ -200,8 +201,8 @@ namespace Do.Core {
 		{
 			float reward;
 		   
-			reward = o is IItem ? 1.0f : 0f;
-			return reward * .10f +
+			reward = o is IItem ? .1f : 0f;
+			return reward +
 				   rel    * .20f +
 				   score  * .70f;
 		}
