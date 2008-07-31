@@ -195,10 +195,8 @@ namespace Do.UI
 			setup = new SetupService (AddinManager.Registry);
 
 			Thread th = new Thread ((ThreadStart) delegate {
-				if (goOnline) {
-				setup.Repositories.UpdateAllRepositories (
-					new ConsoleProgressStatus (true));
-				}
+				if (goOnline)
+					setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
 				// Add addins from online repositories.
 				Application.Invoke (delegate {
 					try {

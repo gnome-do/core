@@ -87,5 +87,10 @@ namespace Do.Universe {
 		public override string Icon {
 			get { return icon ?? base.Icon; }
 		}
+		
+		public override string UID {
+			get { return base.Inner.GetType ().ToString ()+Name+Description; }
+		}
+
 	}
 }
