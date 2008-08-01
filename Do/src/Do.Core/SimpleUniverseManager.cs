@@ -160,16 +160,8 @@ namespace Do.Core
 			}
 			
 			foreach (DoAction action in PluginManager.GetActions ()) {
-				lock (universeLock) {
-					if (loc_universe.ContainsKey (action.UID)) {
-						if (loc_universe[action.UID].Name != action.Name)
-							Log.Error ("Universe has detected a UID collision for objects: " +
-							           action.Name + " and " +
-							           loc_universe[action.UID].Name);
-					}
+				lock (universeLock)
 					loc_universe[action.UID] = action;
-					
-				}
 				RegisterQuickResults (loc_quick, action);
 				lock (actionLock)
 					loc_actions.Add (action);
@@ -178,15 +170,8 @@ namespace Do.Core
 			foreach (DoItemSource source in PluginManager.GetItemSources ()) {
 				source.UpdateItems ();
 				foreach (DoItem item in source.Items) {
-					lock (universeLock) {
-						if (loc_universe.ContainsKey (item.UID)) {
-							if (loc_universe[item.UID].Name != item.Name)
-								Log.Error ("Universe has detected a UID collision for objects: " +
-								           item.Name + " and " +
-								           loc_universe[item.UID].Name);
-						}
+					lock (universeLock)
 						loc_universe[item.UID] = item;
-					}
 					RegisterQuickResults (loc_quick, item);
 				}
 			}

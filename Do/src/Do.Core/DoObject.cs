@@ -112,13 +112,8 @@ namespace Do.Core {
 				throw new ArgumentNullException ("Inner IObject may not be null.");
 			this.inner = inner;
 			
-			int hash1 = inner.GetType ().GetHashCode () ^ Description.GetHashCode ();
-			int hash2 = (int) Math.Sqrt (Math.Abs (Name.GetHashCode ()));
-			long hash3 = (long) hash1 << 32 | (long) hash2;
-			byte[] bytes = BitConverter.GetBytes (hash3);
-			
-			foreach (byte b in bytes)
-				uid += Convert.ToChar (b);
+			uid = string.Format ("{0}{1}{2}",
+					inner.GetType (), Name, Description);
 		}
 
 		public virtual IObject Inner {
