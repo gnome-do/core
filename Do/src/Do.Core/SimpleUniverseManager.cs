@@ -44,6 +44,8 @@ namespace Do.Core
 		private object quickResultsLock = new object ();
 		private object actionLock = new object ();
 		
+		private float epsilon = 0.00001f;
+		
 		public SimpleUniverseManager()
 		{
 			universe = new Dictionary<string, IObject> ();
@@ -103,8 +105,6 @@ namespace Do.Core
 		{
 			List<IObject> results = new List<IObject> ();
 			query = query.ToLower ();
-			
-			float epsilon = 0.00001f;
 			
 			foreach (DoObject obj in baseArray) {
 				obj.UpdateRelevance (query, compareObj as DoObject);
@@ -214,7 +214,8 @@ namespace Do.Core
 			
 			lock (quickResultsLock) {
 				foreach (char key in quickResults.Keys) {
-					if ((do_result.Name + do_result.Description).ToLower ().Contains (key.ToString ()))
+					do_result.UpdateRelevance (key.ToString (), null);
+					if (do_result.Relevance > epsilon)
 						quickResults[key][do_result.UID] = do_result;
 				}
 			}
