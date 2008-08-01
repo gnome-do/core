@@ -96,7 +96,6 @@ namespace Do.Core
 
 		private void OnUpstreamSelectionChanged ()
 		{
-			//return;
 			textMode = false;
 			if (timer > 0) {
 				GLib.Source.Remove (timer);

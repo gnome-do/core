@@ -46,12 +46,12 @@ namespace Do.Core
 		
 		public SimpleUniverseManager()
 		{
-			universe = new Dictionary<string, IObject> ();
-			quickResults = new Dictionary<char,Dictionary<string,IObject>> ();
-			actions = new List<IObject> ();
+			universe = new Dictionary<string, IObject> (1000);
+			quickResults = new Dictionary<char,Dictionary<string,IObject>> (26);
+			actions = new List<IObject> (200);
 			
 			for (char key = 'a'; key <= 'z'; key++) {
-				quickResults [key] = new Dictionary<string,IObject> ();
+				quickResults [key] = new Dictionary<string,IObject> (300);
 			}
 		}
 
@@ -101,7 +101,6 @@ namespace Do.Core
 		
 		public IObject[] Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray, IObject compareObj)
 		{
-//			Do.PrintPerf ("Search Start");
 			List<IObject> results = new List<IObject> ();
 			query = query.ToLower ();
 			
@@ -123,7 +122,6 @@ namespace Do.Core
 			
 			results.Sort ();
 			
-//			Do.PrintPerf ("Search Stop");
 			return results.ToArray ();
 		}
 		
@@ -150,9 +148,12 @@ namespace Do.Core
 			Dictionary<char, Dictionary<string, IObject>> loc_quick;
 			List<IObject> loc_actions;
 			if (universe.Values.Count > 0) {
-				loc_universe = new Dictionary<string,IObject> ();
-				loc_quick    = new Dictionary<char,Dictionary<string,IObject>> ();
-				loc_actions  = new List<IObject> ();
+				loc_universe = new Dictionary<string,IObject> (1000);
+				loc_quick    = new Dictionary<char,Dictionary<string,IObject>> (26);
+				for (char key = 'a'; key <= 'z'; key++) {
+					loc_quick [key] = new Dictionary<string,IObject> (300);
+				}
+				loc_actions  = new List<IObject> (200);
 			} else {
 				loc_universe = universe;
 				loc_quick    = quickResults;
