@@ -66,7 +66,7 @@ namespace Do.Core {
 		/// </value>
 		private string RelevanceFile {
 			get {
-				return Paths.Combine (Paths.ApplicationData, "relevance5");
+				return Paths.Combine (Paths.ApplicationData, "relevance6");
 			}
 		}
 

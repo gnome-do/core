@@ -170,8 +170,15 @@ namespace Do.Core
 			foreach (DoItemSource source in PluginManager.GetItemSources ()) {
 				source.UpdateItems ();
 				foreach (DoItem item in source.Items) {
-					lock (universeLock)
+					lock (universeLock) {
+						if (loc_universe.ContainsKey (item.UID)) {
+							if (loc_universe[item.UID].Name != item.Name)
+								Log.Error ("Universe has detected a UID collision for objects: " +
+								           item.Name + " and " +
+								           loc_universe[item.UID].Name);
+						}
 						loc_universe[item.UID] = item;
+					}
 					RegisterQuickResults (loc_quick, item);
 				}
 			}
