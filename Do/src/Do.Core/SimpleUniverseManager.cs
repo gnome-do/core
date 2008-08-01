@@ -160,8 +160,16 @@ namespace Do.Core
 			}
 			
 			foreach (DoAction action in PluginManager.GetActions ()) {
-				lock (universeLock)
+				lock (universeLock) {
+					if (loc_universe.ContainsKey (action.UID)) {
+						if (loc_universe[action.UID].Name != action.Name)
+							Log.Error ("Universe has detected a UID collision for objects: " +
+							           action.Name + " and " +
+							           loc_universe[action.UID].Name);
+					}
 					loc_universe[action.UID] = action;
+					
+				}
 				RegisterQuickResults (loc_quick, action);
 				lock (actionLock)
 					loc_actions.Add (action);
