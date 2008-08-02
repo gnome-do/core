@@ -164,7 +164,8 @@ namespace Do.Core
 						results.Add (moditem);
 				}
 			
-				results.AddRange (action.DynamicModifierItemsForItem (item));
+				if (Query.Length == 0)
+					results.AddRange (action.DynamicModifierItemsForItem (item));
 				results.Sort ();
 			}
 			
