@@ -49,7 +49,6 @@ namespace Do.UI
 			Alignment label_align;
 
 			caption = "";
-			pixbuf = empty_pixbuf;
 
 			hbox = new HBox (false, 4);
 			hbox.BorderWidth = 6;

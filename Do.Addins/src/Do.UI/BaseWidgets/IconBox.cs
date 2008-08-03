@@ -35,7 +35,7 @@ namespace Do.UI
 		protected bool focused, textOverlay;
 
 		protected string caption, icon_name;
-		protected Pixbuf pixbuf, empty_pixbuf;
+		protected Pixbuf empty_pixbuf;
 		protected int icon_size;
 		
 		protected VBox vbox;
@@ -56,7 +56,6 @@ namespace Do.UI
 			Alignment label_align;
 
 			caption = "";
-			pixbuf = empty_pixbuf;
 			
 			vbox = new VBox (false, 4);
 			vbox.BorderWidth = 6;
