@@ -242,7 +242,7 @@ namespace Do.Core {
             }
             if (updates.Count > 0) {
                 installer.InstallAddins (
-                    AddinManager.Registry, "", updates.ToArray ());
+                    AddinManager.Registry, string.Empty, updates.ToArray ());
             }
             return updates.Count > 0;
         }

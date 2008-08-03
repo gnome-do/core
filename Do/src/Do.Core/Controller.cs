@@ -491,7 +491,7 @@ namespace Do.Core {
 		/// A <see cref="System.String"/> in the form "<Modifier>key"
 		/// </returns>
 		string KeyEventToString (EventKey evnt) {
-			string modifier = "";
+			string modifier = string.Empty;
 			if ((evnt.State & ModifierType.ShiftMask) != 0) {
 				modifier += "<Shift>";
 			}

@@ -61,7 +61,7 @@ namespace Do {
 		
 		public string this [string key] {
 			get {
-				return Get<string> (key, "");
+				return Get<string> (key, string.Empty);
 			}
 			set {
 				Set<string> (key, value);

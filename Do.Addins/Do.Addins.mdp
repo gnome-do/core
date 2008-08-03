@@ -32,7 +32,6 @@
     <File name="src/Do.Universe/OpenWithAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/RevealAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/IAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/SearchContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/IDoController.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Paths.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IDoWindow.cs" subtype="Code" buildaction="Compile" />

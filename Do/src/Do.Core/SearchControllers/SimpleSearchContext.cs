@@ -35,7 +35,7 @@ namespace Do.Core
 		public SimpleSearchContext ()
 		{
 			SecondaryCursors = new IObject[0];
-			query = "";
+			query = string.Empty;
 			results = new IObject[0];
 			cursor = 0;
 		}

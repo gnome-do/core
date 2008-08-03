@@ -51,8 +51,8 @@ namespace Do.Addins
 	public class DefaultIconBoxObject : IObject
 	{
 		public string Icon { get { return "search"; } }
-		public string Name { get { return ""; } }
-		public string Description { get { return ""; } }
+		public string Name { get { return string.Empty; } }
+		public string Description { get { return string.Empty; } }
 	}
 	
 	public class DefaultLabelBoxObject : IObject

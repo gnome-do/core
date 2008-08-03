@@ -47,7 +47,7 @@ namespace Do.UI
 		public TextFrame ()
 		{
 			Build ();
-			this.LabelText = "";
+			this.LabelText = string.Empty;
 			drawGradient = true;
 		}
 		

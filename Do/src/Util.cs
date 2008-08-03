@@ -85,7 +85,7 @@ namespace Do
 
 			public static string MarkupSafeString (string s)
 			{
-				if (s == null) return "";
+				if (s == null) return string.Empty;
 				s = s.Replace ("&", "&amp;");
 				return s;
 			}
@@ -137,7 +137,7 @@ namespace Do
 			string skipped, matched, remainder;
 			bool matchedTermination;
 
-			result = "";
+			result = string.Empty;
 			match_pos = last_main_cut = 0;
 			lower_main = main.ToLower ();
 			other = other.ToLower ();
@@ -166,13 +166,13 @@ namespace Do
 						remainder = FormatCommonSubstrings ( main.Substring (match_pos + len), other.Substring (pos + len), format);
 					}
 					else {
-						remainder = "";
+						remainder = string.Empty;
 					}
 					result = string.Format ("{0}{1}{2}", skipped, string.Format(format, matched), remainder);
 					break;
 				}
 			}
-			if (result == "") {
+			if (result == string.Empty) {
 				// no matches
 				result = main;
 			}

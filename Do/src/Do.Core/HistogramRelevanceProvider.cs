@@ -165,7 +165,7 @@ namespace Do.Core {
 					
 				// Relevance is non-zero only if the record contains first char
 				// relevance for the item.
-				if (match == "" || rec.HasFirstChar (match [0]))
+				if (match == string.Empty || rec.HasFirstChar (match [0]))
 					relevance = (float) rec.Hits / 
 						(float) (rec.IsAction ? max_action_hits : max_item_hits);
 				else
@@ -224,7 +224,7 @@ namespace Do.Core {
 		{
 			LastHit = DateTime.Now;
 			Hits = 0;
-			FirstChars = "";
+			FirstChars = string.Empty;
 			IsAction = o is IAction;
 		}
 		
@@ -253,7 +253,7 @@ namespace Do.Core {
 		{
 			if (!FirstChars.Contains (c.ToString ().ToLower ()))
 			    return;
-			FirstChars = FirstChars.Replace (c.ToString ().ToLower (), "");
+			FirstChars = FirstChars.Replace (c.ToString ().ToLower (), string.Empty);
 		}
 		
 		/// <summary>

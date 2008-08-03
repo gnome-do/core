@@ -55,7 +55,7 @@ namespace Do.UI
 		{
 			Alignment label_align;
 
-			caption = "";
+			caption = string.Empty;
 			
 			vbox = new VBox (false, 4);
 			vbox.BorderWidth = 6;
@@ -94,8 +94,8 @@ namespace Do.UI
 		public virtual void Clear ()
 		{
 			Pixbuf = empty_pixbuf;
-			Caption = "";
-			icon_name = "";
+			Caption = string.Empty;
+			icon_name = string.Empty;
 			TextOverlay = false;
 		}
 
@@ -139,7 +139,7 @@ namespace Do.UI
 		{
 			get { return caption; }
 			set {
-				caption = value ?? "";
+				caption = value ?? string.Empty;
 				caption = caption.Replace ("\n", " ");
 				label.Markup = string.Format (CaptionFormat, 
 				                              Util.Appearance.MarkupSafeString (caption));

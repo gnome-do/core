@@ -417,7 +417,7 @@ namespace Do.UI
 		{
 			set {
 				query = value;
-				queryLabel.Markup = string.Format (QueryLabelFormat, value ?? "");
+				queryLabel.Markup = string.Format (QueryLabelFormat, value ?? string.Empty);
 			}
 			get { return query; }
 		}

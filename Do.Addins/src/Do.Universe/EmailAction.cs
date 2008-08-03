@@ -88,7 +88,7 @@ namespace Do.Universe
 		{
 			string emails, email, body;
 
-			emails = email = "";
+			emails = email = string.Empty;
 			foreach (IItem item in items) {
 				if (item is ContactItem) {
 					ContactItem contact = item as ContactItem;
@@ -110,7 +110,7 @@ namespace Do.Universe
 				emails += email + ",";
 			}
 
-			body = "";
+			body = string.Empty;
 			if (modItems.Length > 0) {
 				body = "?body=" + (modItems [0] as ITextItem).Text
 					.Replace ("\"", "\\\""); // Try to escape quotes...

@@ -64,8 +64,8 @@ namespace Do {
 		{
 			int maxWidth   = 80;
 			int lineWidth  = 0;
-			string aligned = "";
-			string padding = "";
+			string aligned = string.Empty;
+			string padding = string.Empty;
 			string[] words = msg.Split (' ');
 
 			while (padding.Length < margin)
