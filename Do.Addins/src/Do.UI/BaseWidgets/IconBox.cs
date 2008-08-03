@@ -161,10 +161,8 @@ namespace Do.UI
 
 		public Pixbuf Pixbuf
 		{
-			get { return pixbuf; }
 			set {
-				pixbuf = value ?? empty_pixbuf;
-				image.Pixbuf = pixbuf;
+				image.Pixbuf = value ?? empty_pixbuf;
 			}
 		}
 
@@ -226,12 +224,13 @@ namespace Do.UI
 			cairo.Save ();
 			GetFrame (cairo);
 			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName ("gnome-mime-text", 128);
-			Gdk.CairoHelper.SetSourcePixbuf (cairo, 
-			                                 pixbuf, 
-			                                 (int) (width / 2) - (int) (pixbuf.Width / 2) + x, 
-			                                 (int) (height / 2) - (int) (pixbuf.Height / 2) + y);
-			cairo.PaintWithAlpha (fillAlpha);
+			using (Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName ("gnome-mime-text", 128)) {
+				Gdk.CairoHelper.SetSourcePixbuf (cairo, 
+				                                 pixbuf, 
+				                                 (int) (width / 2) - (int) (pixbuf.Width / 2) + x, 
+				                                 (int) (height / 2) - (int) (pixbuf.Height / 2) + y);
+				cairo.PaintWithAlpha (fillAlpha);
+			}
 			
 			cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
 			cairo.FillPreserve ();

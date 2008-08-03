@@ -127,12 +127,6 @@ namespace Do.Core
 		}
 		
 		protected abstract void UpdateResults ();
-		//protected a void OnUpstreamSelectionChanged ()
-		/*{
-			context.Destroy ();
-			context = new SimpleSearchContext ();
-			UpdateResults ();
-		}*/
 		
 		protected virtual List<IObject> InitialResults ()
 		{

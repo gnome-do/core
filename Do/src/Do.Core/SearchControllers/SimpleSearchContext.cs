@@ -46,7 +46,7 @@ namespace Do.Core
 		
 		public string Query
 		{
-			get { return query ?? query = ""; }
+			get { return query ?? query = string.Empty; }
 			set { query = value; }
 		}
 
