@@ -44,7 +44,7 @@ namespace Do.Core {
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
 				} finally {
-					types = types ?? new Type [0];
+					types = types ?? Type.EmptyTypes;
 				}
 				return types;
 			}

@@ -31,13 +31,8 @@ namespace Do.Universe
 	
 	public class ContactItem : IItem
 	{
-		static Dictionary<string, ContactItem> contacts_name, contacts_email;
-		
-		static ContactItem ()
-		{
-			contacts_name = new Dictionary<string, ContactItem> ();
-			contacts_email = new Dictionary<string, ContactItem> ();
-		}
+		static Dictionary<string, ContactItem> contacts_name = new Dictionary<string, ContactItem> ();
+		static Dictionary<string, ContactItem> contacts_email = new Dictionary<string, ContactItem> ();
 		
 		public static ContactItem Create (string name)
 		{

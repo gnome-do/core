@@ -32,7 +32,7 @@ namespace Do.Core
 		
 		protected SimpleSearchContext context;
 		protected Type[] searchFilter;
-		protected Type[] defaultFilter = new Type[0];
+		protected Type[] defaultFilter = Type.EmptyTypes;
 		protected const int Timeout = 300;
 		
 		public IUIContext UIContext {
@@ -89,9 +89,7 @@ namespace Do.Core
 			get {
 				return textMode;
 			}
-			set { //fixme
-				return;
-			}
+			set { }
 		}
 
 		public bool DefaultFilter {
@@ -110,7 +108,7 @@ namespace Do.Core
 			}
 		}
 
-		public SimpleSearchController ()
+		protected SimpleSearchController ()
 		{
 			context = new SimpleSearchContext ();
 			searchFilter = defaultFilter;
@@ -220,7 +218,6 @@ namespace Do.Core
 		{
 			searchFilter = defaultFilter;
 			context.Destroy ();
-			GC.Collect ();
 			context = new SimpleSearchContext ();
 		}
 		

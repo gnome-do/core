@@ -52,7 +52,6 @@ namespace Do.Core {
 		
 		public Controller ()
 		{
-			about_window = null;
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			resultsGrown = false;

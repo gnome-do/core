@@ -39,7 +39,7 @@ namespace Do.Addins
 	/// <summary>
 	/// Useful functionality for plugins. See <see cref="Do.Util"/>.
 	/// </summary>
-	public class Util
+	public static class Util
 	{
 		public static GetPreferencesDelegate GetPreferences;
 		public static FormatCommonSubstringsDelegate FormatCommonSubstrings;
@@ -49,7 +49,7 @@ namespace Do.Addins
 			public static EnvironmentOpenDelegate Open;
 		}
 		
-		public class Appearance
+		public static class Appearance
 		{
 			public static PresentWindowDelegate PresentWindow;
 			public static PixbufFromIconNameDelegate PixbufFromIconName;

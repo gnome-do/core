@@ -32,12 +32,7 @@ namespace Do.Core {
 		const string DefaultDescription = "No description.";
 		const string DefaultIcon = "emblem-noread";
 		
-		static RelevanceProvider relevanceProvider;
-
-		static DoObject ()
-		{
-			relevanceProvider = RelevanceProvider.GetProvider ();
-		}
+		static RelevanceProvider relevanceProvider = RelevanceProvider.GetProvider ();
 
 		public static bool IObjectTypeCheck (IObject o, Type [] types)
 		{
@@ -109,7 +104,7 @@ namespace Do.Core {
 		internal DoObject (IObject inner)
 		{
 			if (inner == null)
-				throw new ArgumentNullException ("Inner IObject may not be null.");
+				throw new ArgumentNullException ("inner","Inner IObject may not be null.");
 			this.inner = inner;
 			
 			uid = string.Format ("{0}{1}{2}",

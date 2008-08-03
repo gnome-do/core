@@ -165,7 +165,7 @@ namespace Do.Core {
 					
 				// Relevance is non-zero only if the record contains first char
 				// relevance for the item.
-				if (match == string.Empty || rec.HasFirstChar (match [0]))
+				if (match.Length == 0 || rec.HasFirstChar (match [0]))
 					relevance = (float) rec.Hits / 
 						(float) (rec.IsAction ? max_action_hits : max_item_hits);
 				else
@@ -223,7 +223,6 @@ namespace Do.Core {
 		public RelevanceRecord (IObject o)
 		{
 			LastHit = DateTime.Now;
-			Hits = 0;
 			FirstChars = string.Empty;
 			IsAction = o is IAction;
 		}

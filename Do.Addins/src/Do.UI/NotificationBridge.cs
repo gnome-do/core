@@ -26,7 +26,7 @@ namespace Do.Addins
 {
 	
 	
-	public class NotificationBridge
+	public static class NotificationBridge
 	{
 		
 		public static void ShowMessage (string summary, string body, string icon)

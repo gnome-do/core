@@ -37,7 +37,6 @@ namespace Do.Core
 			SecondaryCursors = new IObject[0];
 			query = string.Empty;
 			results = new IObject[0];
-			cursor = 0;
 		}
 		
 		public SimpleSearchContext LastContext   { get; set; }
@@ -141,9 +140,9 @@ namespace Do.Core
 		/// </returns>
 		public int[] SecondaryCursorsToIntArray () 
 		{
-			List<int> cursors = new List<int> ();
 			if (SecondaryCursors.Length == 0)
-				return cursors.ToArray ();
+				return new int[0];
+			List<int> cursors = new List<int> ();
 				
 			foreach (IObject obj in SecondaryCursors) {
 				for (int i = 0; i < Results.Length; i++) {
