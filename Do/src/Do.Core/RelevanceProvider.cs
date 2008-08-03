@@ -106,7 +106,7 @@ namespace Do.Core {
 			//than split matches.  Perfect matches get the .9 - 1.0 range
 			//everything else goes lower
 			
-			if(match[1] - match[0] + 1 == query.Length)
+			if(match[1] - match[0] == query.Length)
 				score = .9f + .1f * score;
 			else
 				score = .9f * score;
