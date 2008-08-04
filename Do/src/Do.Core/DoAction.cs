@@ -56,7 +56,7 @@ namespace Do.Core {
 				} catch (Exception e) {
 					LogError ("SupportedModifierItemTypes", e);
 				} finally {
-					types = Type.EmptyTypes;
+					types = types ?? Type.EmptyTypes;
 				}
 				return types;
 			}
