@@ -164,6 +164,9 @@ namespace Do.UI
 				if (drawFrame) {
 					PaintBorder ();
 				}
+				
+				if (drawGradient)
+					((IDisposable)cairo.Target).Dispose ();
 			}
 		}
 		

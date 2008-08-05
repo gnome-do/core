@@ -154,7 +154,9 @@ namespace Do.UI
 			set {
 				if (value == null) return;
 				icon_name = value;
-				Pixbuf = IconProvider.PixbufFromIconName (value, icon_size);
+				Gdk.Pixbuf pix = IconProvider.PixbufFromIconName (value, icon_size);
+				Pixbuf = pix;
+				pix.Dispose ();
 			}
 		}
 

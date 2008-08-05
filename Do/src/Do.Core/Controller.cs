@@ -600,9 +600,7 @@ namespace Do.Core {
 				} else if (CurrentPane != Pane.Third && (!ThirdPaneAllowed || ThirdPaneCanClose)) {
 					ThirdPaneVisible = false;
 				}
-			}// else if (pane == Pane.Second && (!ThirdPaneAllowed)) {
-			//	ThirdPaneVisible = false;
-			//}
+			}
 			window.SetPaneContext (pane, controllers[(int) pane].UIContext);
 		}
 		

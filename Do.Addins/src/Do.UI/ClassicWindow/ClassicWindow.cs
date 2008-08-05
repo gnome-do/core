@@ -193,6 +193,7 @@ namespace Do.UI {
 			}
 			
 			Colormap = colormap;
+			colormap.Dispose ();
 		}
 		
 		private Gdk.Color BackgroundColor
@@ -201,7 +202,9 @@ namespace Do.UI {
 				byte r, g, b;
 				Gdk.Color bgColor;
 
-				bgColor = Gtk.Rc.GetStyle (this).Backgrounds[(int) StateType.Selected];
+				using (Gtk.Style style = Gtk.Rc.GetStyle (this)) {
+					bgColor = style.Backgrounds[(int) StateType.Selected];
+				}
 				r = (byte) ((bgColor.Red) >> 8);
 				g = (byte) ((bgColor.Green) >> 8);
 				b = (byte) ((bgColor.Blue) >> 8);

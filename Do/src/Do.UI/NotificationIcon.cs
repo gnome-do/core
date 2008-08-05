@@ -113,7 +113,13 @@ namespace Do.UI
 			Do.NotificationIcon.GetLocationOnScreen (
 				out screen, out x, out y);
 
-			Notification msg = new Notification ();
+			Notification msg;
+			try {
+				msg = new Notification ();
+			} catch (Exception e) {
+				Log.Error ("Could not show notification: " + e.Message);
+				return;
+			}
 			msg.Closed += new EventHandler (OnNotificationClosed); 
 			msg.Summary = title;
 			msg.Body = message;

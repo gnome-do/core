@@ -38,8 +38,6 @@ namespace Do.UI
 		private int DefaultWindowWidth = 352;
 		private int NumberResultsDisplayed = 6;
 		
-		private int offset;
-		
 		public string ResultInfoFormat
 		{
 			set { resultInfoFormat = value; }
@@ -60,7 +58,6 @@ namespace Do.UI
 		ScrolledWindow resultsScrolledWindow;
 		TreeView resultsTreeview;
 		IObject[] results;
-		int startResult, endResult;
 		Frame frame;
 		string query;
 		Gdk.Color backgroundColor;
@@ -160,7 +157,7 @@ namespace Do.UI
 			
 			//---------Results Window
 			resultsScrolledWindow = new ScrolledWindow ();
-			resultsScrolledWindow.SetPolicy (PolicyType.Never, PolicyType.Never);
+			resultsScrolledWindow.SetPolicy (PolicyType.Never, PolicyType.Always);
 			resultsScrolledWindow.ShadowType = ShadowType.None;
 			vbox.PackStart (resultsScrolledWindow, true, true, 0);
 			resultsScrolledWindow.Show ();
@@ -226,19 +223,19 @@ namespace Do.UI
 				if (model.GetStringFromIter (iter) == i.ToString ())
 					isSecondary = true;
 			
-			
+			Gdk.Pixbuf final;
 			if (isSecondary) {
 				Gdk.Pixbuf source = 
 					IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
 				Gdk.Pixbuf emblem = 
 					IconProvider.PixbufFromIconName ("gtk-add", DefaultResultIconSize / 2);
-				Gdk.Pixbuf dest = new Pixbuf (Colorspace.Rgb, 
+				final = new Pixbuf (Colorspace.Rgb, 
 				                              true, 
 				                              8,
 				                              DefaultResultIconSize,
 				                              DefaultResultIconSize);
 				
-				source.Composite (dest, 
+				source.Composite (final, 
 				                  0, 
 				                  0, 
 				                  DefaultResultIconSize, 
@@ -250,7 +247,7 @@ namespace Do.UI
 				                  InterpType.Bilinear, 
 				                  255);
 				
-				emblem.Composite (dest, 
+				emblem.Composite (final, 
 				                  0, 
 				                  0, 
 				                  DefaultResultIconSize, 
@@ -262,11 +259,11 @@ namespace Do.UI
 				                  InterpType.Bilinear, 
 				                  255);
 				
-				
-				renderer.Pixbuf = dest;
 			} else {
-				renderer.Pixbuf = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
+				final = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
 			}
+			renderer.Pixbuf = final;
+			final.Dispose ();
 		}
 
 		private void OnResultRowSelected (object sender, EventArgs args)
@@ -295,31 +292,15 @@ namespace Do.UI
 				
 				if (results.GetHashCode () != value.Results.GetHashCode ()) {
 					results = value.Results;
+					Results = results;
 				}
 				
-				startResult = value.Cursor - 5;
-				
-				if (startResult < 0)
-					startResult = 0;
-				endResult = startResult + 8;
-				offset = startResult;
-				
-				if (endResult > results.Length)
-					endResult = results.Length;
-				
-				IObject[] resultsArray = new IObject[endResult - startResult];
-				Array.Copy (results, startResult, resultsArray, 0, resultsArray.Length); 
-				Results = resultsArray;
 				Query = value.Query;
 				
-				cursor = value.Cursor - offset;
+				cursor = value.Cursor;// - offset;
+
 				
-				int[] secArray = new int[value.SecondaryCursors.Length];
-				for (int i=0; i<secArray.Length; i++) {
-					secArray[i] = value.SecondaryCursors[i] - offset;
-				}
-				
-				secondary = secArray;
+				secondary = value.SecondaryCursors;
 				
 				
 				UpdateCursors ();
@@ -338,9 +319,9 @@ namespace Do.UI
 
 		public int SelectedIndex
 		{
-			get { return cursor + offset; }
+			get { return cursor; }
 			set { 
-				cursor = value - offset;
+				cursor = value;
 				
 				UpdateCursors ();
 			}
@@ -370,7 +351,7 @@ namespace Do.UI
 			
 			//makes this just a tiny bit smoother overall
 			Gtk.Application.Invoke (delegate {
-				resultsTreeview.ScrollToCell (path, null, true, 0.5F, 0.0F);
+				resultsTreeview.ScrollToCell (path, null, false, 0.5F, 0.0F);
 				resultsTreeview.Selection.SelectPath (path);
 			});
 		}
@@ -451,6 +432,7 @@ namespace Do.UI
 				Console.Error.WriteLine ("No alpha support.");
 			}
 			Colormap = colormap;
+			colormap.Dispose ();
 		}
 	}
 }
