@@ -64,11 +64,12 @@ namespace Do.UI
 		VBox vbox;
 		Toolbar toolbar;
 		Label resultsLabel, queryLabel;
+		IUIContext context = null;
 		
 		int cursor;
 		int[] secondary = new int[0];
 		
-		bool pushedUpdate, clearing = false;
+		bool pushedUpdate, clearing, update_needed = false;
 
 
 		public ResultsWindow (Gdk.Color backgroundColor, int NumberResults) 
@@ -272,6 +273,12 @@ namespace Do.UI
 		public IUIContext Context
 		{
 			set {
+				context = value;
+				if (!Visible) {
+					update_needed = true;
+					return;
+				}
+				
 				pushedUpdate = true;
 				if (value == null || value.Results.Length == 0) {
 					Results = new IObject [0];
@@ -393,6 +400,9 @@ namespace Do.UI
 		
 		protected void OnShown (object o, EventArgs args)
 		{
+			if (update_needed)
+				Context = context;
+			update_needed = false;
 		}
 
 		// Draw a border around the window.

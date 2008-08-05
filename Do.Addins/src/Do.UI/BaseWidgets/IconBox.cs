@@ -93,7 +93,7 @@ namespace Do.UI
 
 		public virtual void Clear ()
 		{
-			Pixbuf = empty_pixbuf;
+			Pixbuf = null;
 			Caption = string.Empty;
 			icon_name = string.Empty;
 			TextOverlay = false;
@@ -117,7 +117,10 @@ namespace Do.UI
 		public bool TextOverlay
 		{
 			get { return textOverlay; }
-			set { 
+			set {
+				if (textOverlay == value)
+					return;
+				
 				textOverlay = value;
 				if (value) {
 					FillAlpha = FrameAlpha = 0.4;
