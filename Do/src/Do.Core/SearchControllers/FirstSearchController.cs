@@ -57,7 +57,7 @@ namespace Do.Core
 				if (textMode) {
 					return new Type[] {typeof (ITextItem)};
 				} else if (context.SecondaryCursors.Length > 0) {
-					return new Type[] {(Results[SecondaryCursors[0]] as DoItem).Inner.GetType ()};
+					return new Type[] {(Results[SecondaryCursors[0]] as DoObject).Inner.GetType ()};
 				} else {
 					return defaultFilter;
 				}

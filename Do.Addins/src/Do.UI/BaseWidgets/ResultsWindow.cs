@@ -284,21 +284,15 @@ namespace Do.UI
 				}
 				
 				Query = value.Query;
-				
 				cursor = value.Cursor;// - offset;
-
-				
 				secondary = value.SecondaryCursors;
 				
 				
 				UpdateCursors ();
-				
 				UpdateQueryLabel (value);
-				
 				resultsLabel.Markup = string.Format ("{1}/{0}", 
 				                                     value.Results.Length, 
 				                                     value.Cursor + 1);
-				
 				Gtk.Application.Invoke (delegate {
 					pushedUpdate = false;
 				});
@@ -357,9 +351,15 @@ namespace Do.UI
 		
 		public IObject[] Results
 		{
-			//Needed for hashing
-			//get { return results ?? results = new IObject[0]; }
 			set {
+				//some memory hacks.
+				foreach (CellRenderer rend in resultsTreeview.Columns[0].CellRenderers) {
+					if (rend is CellRendererPixbuf && (rend as CellRendererPixbuf).Pixbuf != null) {
+						(rend as CellRendererPixbuf).Pixbuf.Dispose ();
+					}
+					rend.Dispose ();
+				}
+				
 				ListStore store;
 				string info;
 

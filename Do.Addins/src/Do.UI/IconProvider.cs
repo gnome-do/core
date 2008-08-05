@@ -32,17 +32,11 @@ namespace Do.UI
 		public static readonly Pixbuf UnknownPixbuf;
 		const int DefaultIconSize = 80;
 		
-		// Cache of loaded icons: key is "iconname_size".
-//		static IconCache cache;
 
 		static IconProvider ()
 		{
-//			cache = new IconCache ();
-						
 			UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
 			UnknownPixbuf.Fill (0x00000000);
-			
-//			IconTheme.Default.Changed += OnDefaultIconThemeChanged;
 		}
 		
 		static bool IconIsEmbeddedResource (string name)
@@ -155,12 +149,6 @@ namespace Do.UI
 			if (null == name)
 				throw new ArgumentNullException ("name");
 			
-			// Is the icon name in cache?
-//			iconKey = string.Format ("{0}_{1}", name, size);
-//			if (cache.TryGetValue (iconKey, out pixbuf)) {
-//				return pixbuf;
-//			}
-			
 			do {
 				// The icon can be loaded from a loaded assembly if the icon has
 				// the format: "resource@assemblyname".
@@ -187,17 +175,7 @@ namespace Do.UI
 			if (pixbuf == null)
 				pixbuf = UnknownPixbuf;
 			
-			// Cache icon pixbuf.
-//			if (pixbuf != null && pixbuf != UnknownPixbuf) {
-//				cache [iconKey] = pixbuf;
-//			}
-			
 			return pixbuf;
 		}
-							
-//		static void OnDefaultIconThemeChanged (object sender, EventArgs args)
-//		{
-//			cache.Clear ();
-//		}
 	}
 }
