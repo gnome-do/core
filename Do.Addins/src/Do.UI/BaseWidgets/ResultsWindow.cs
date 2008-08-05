@@ -38,6 +38,8 @@ namespace Do.UI
 		private int DefaultWindowWidth = 352;
 		private int NumberResultsDisplayed = 6;
 		
+		private int offset;
+		
 		public string ResultInfoFormat
 		{
 			set { resultInfoFormat = value; }
@@ -58,6 +60,7 @@ namespace Do.UI
 		ScrolledWindow resultsScrolledWindow;
 		TreeView resultsTreeview;
 		IObject[] results;
+		int startResult, endResult;
 		Frame frame;
 		string query;
 		Gdk.Color backgroundColor;
@@ -158,7 +161,7 @@ namespace Do.UI
 			
 			//---------Results Window
 			resultsScrolledWindow = new ScrolledWindow ();
-			resultsScrolledWindow.SetPolicy (PolicyType.Never, PolicyType.Always);
+			resultsScrolledWindow.SetPolicy (PolicyType.Never, PolicyType.Never);
 			resultsScrolledWindow.ShadowType = ShadowType.None;
 			vbox.PackStart (resultsScrolledWindow, true, true, 0);
 			resultsScrolledWindow.Show ();
@@ -201,7 +204,6 @@ namespace Do.UI
 			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
 			
 			resultsTreeview.AppendColumn (column);
-
 
 			resultsTreeview.Selection.Changed += OnResultRowSelected;
 			Shown += OnShown;
@@ -287,12 +289,31 @@ namespace Do.UI
 				
 				if (results.GetHashCode () != value.Results.GetHashCode ()) {
 					results = value.Results;
-					Results = results;
 				}
 				
+				startResult = value.Cursor - 5;
+				
+				if (startResult < 0)
+					startResult = 0;
+				endResult = startResult + 8;
+				offset = startResult;
+				
+				if (endResult > results.Length)
+					endResult = results.Length;
+				
+				IObject[] resultsArray = new IObject[endResult - startResult];
+				Array.Copy (results, startResult, resultsArray, 0, resultsArray.Length); 
+				Results = resultsArray;
 				Query = value.Query;
-				cursor = value.Cursor;// - offset;
-				secondary = value.SecondaryCursors;
+				
+				cursor = value.Cursor - offset;
+				
+				int[] secArray = new int[value.SecondaryCursors.Length];
+				for (int i=0; i<secArray.Length; i++) {
+					secArray[i] = value.SecondaryCursors[i] - offset;
+				}
+				
+				secondary = secArray;
 				
 				
 				UpdateCursors ();
@@ -308,9 +329,9 @@ namespace Do.UI
 
 		public int SelectedIndex
 		{
-			get { return cursor; }
+			get { return cursor + offset; }
 			set { 
-				cursor = value;
+				cursor = value - offset;
 				
 				UpdateCursors ();
 			}
@@ -340,7 +361,7 @@ namespace Do.UI
 			
 			//makes this just a tiny bit smoother overall
 			Gtk.Application.Invoke (delegate {
-				resultsTreeview.ScrollToCell (path, null, false, 0.5F, 0.0F);
+				resultsTreeview.ScrollToCell (path, null, true, 0.5F, 0.0F);
 				resultsTreeview.Selection.SelectPath (path);
 			});
 		}
