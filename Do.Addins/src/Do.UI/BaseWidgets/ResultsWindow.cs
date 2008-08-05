@@ -225,39 +225,23 @@ namespace Do.UI
 			
 			Gdk.Pixbuf final;
 			if (isSecondary) {
-				Gdk.Pixbuf source = 
+				final = 
 					IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
 				Gdk.Pixbuf emblem = 
 					IconProvider.PixbufFromIconName ("gtk-add", DefaultResultIconSize / 2);
-				final = new Pixbuf (Colorspace.Rgb, 
-				                              true, 
-				                              8,
-				                              DefaultResultIconSize,
-				                              DefaultResultIconSize);
-				
-				source.Composite (final, 
-				                  0, 
-				                  0, 
-				                  DefaultResultIconSize, 
-				                  DefaultResultIconSize, 
-				                  0, 
-				                  0, 
-				                  1,
-				                  1, 
-				                  InterpType.Bilinear, 
-				                  255);
 				
 				emblem.Composite (final, 
 				                  0, 
 				                  0, 
-				                  DefaultResultIconSize, 
-				                  DefaultResultIconSize, 
+				                  DefaultResultIconSize / 2, 
+				                  DefaultResultIconSize / 2, 
 				                  0, 
 				                  0, 
 				                  1,
 				                  1, 
 				                  InterpType.Bilinear, 
 				                  255);
+				emblem.Dispose ();
 				
 			} else {
 				final = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
