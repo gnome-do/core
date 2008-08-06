@@ -285,7 +285,8 @@ namespace Do.Core {
 				OnSummonKeyPressEvent (evnt);
 				return;
 			} 
-			if (KeyEventToString(evnt).Equals (Do.Preferences.TextModeKeyBinding)) {
+			if (KeyEventToString(evnt).Equals (Do.Preferences.TextModeKeyBinding) && 
+			    CurrentContext.Query.Length == 0) {
 				OnTextModePressEvent (evnt);
 				return;
 			}

@@ -239,7 +239,7 @@ namespace Do.Core
 					// ----return new Type[] {typeof (IItem)};
 					return (FirstController.Selection as IAction).SupportedItemTypes;
 				} else {
-					if (textMode)
+					if (TextMode)
 						return new Type[] {typeof (ITextItem)};
 					return new Type[] {typeof (IAction)};
 				}
@@ -262,7 +262,16 @@ namespace Do.Core
 		/// </value>
 		public override bool TextMode { //FIXME
 			get { 
-				return textMode;
+				bool implicit_text_mode = false;
+				if (Query.Contains (".") && FirstController.Selection is IAction) {
+					IAction action = FirstController.Selection as IAction;
+					foreach (Type t in action.SupportedItemTypes) {
+						if (t == typeof (ITextItem) && action.SupportsItem (new DoTextItem (Query))) {
+							implicit_text_mode = true;
+						}
+					}
+				}
+				return (textMode || implicit_text_mode);
 			}
 			set {
 				if (context.ParentContext != null) return;

@@ -54,7 +54,7 @@ namespace Do.Core
 
 		public override Type[] SearchTypes {
 			get {
-				if (textMode) {
+				if (TextMode) {
 					return new Type[] {typeof (ITextItem)};
 				} else if (context.SecondaryCursors.Length > 0) {
 					return new Type[] {(Results[SecondaryCursors[0]] as DoObject).Inner.GetType ()};
@@ -65,7 +65,7 @@ namespace Do.Core
 		}
 
 		public override bool TextMode {
-			get { return textMode; }
+			get { return (textMode || Query.Contains (".")); }
 			set { 
 				if (context.ParentContext != null) return;
 				textMode = value; 

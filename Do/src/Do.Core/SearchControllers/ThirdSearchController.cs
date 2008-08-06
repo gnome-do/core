@@ -61,14 +61,31 @@ namespace Do.Core
 		
 		public override Type[] SearchTypes {
 			get { 
-				if (textMode)
+				if (TextMode)
 					return new Type[] {typeof (ITextItem)};
 				return new Type[] {typeof (IItem)}; 
 			}
 		}
 
 		public override bool TextMode {
-			get { return textMode; }
+			get { 
+				bool implicit_text_mode = false;
+				if (Query.Contains (".")) {
+					IAction action;
+					if (FirstController.Selection is IAction)
+						action = FirstController.Selection as IAction;
+					else if (SecondController.Selection is IAction)
+						action = SecondController.Selection as IAction;
+					else
+						return textMode; //you have done something weird, ignore it!
+					
+					foreach (Type t in action.SupportedModifierItemTypes) {
+						if (t == typeof (ITextItem))
+							implicit_text_mode = true;
+					}
+				}
+				return textMode || implicit_text_mode; 
+			}
 			set { 
 				if (context.ParentContext != null) return;
 				if (!value) { //if its false, no problems!  We can always leave text mode
