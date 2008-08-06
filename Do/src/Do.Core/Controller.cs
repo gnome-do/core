@@ -48,7 +48,6 @@ namespace Do.Core {
 		List<IItem> modItems;
 		bool thirdPaneVisible;
 		bool resultsGrown;
-		bool shiftPressed = false;
 		
 		public Controller ()
 		{
@@ -290,7 +289,7 @@ namespace Do.Core {
 					return;
 			}
 
-			if (evnt.Key != Key.Shift_L && evnt.Key != Key.Shift_R) shiftPressed = false;
+			//if (evnt.Key != Key.Shift_L && evnt.Key != Key.Shift_R) shiftPressed = false;
 			
 			switch ((Gdk.Key) evnt.KeyValue) {
 			// Throwaway keys
@@ -321,8 +320,7 @@ namespace Do.Core {
 			case Gdk.Key.Page_Down:
 				OnUpDownKeyPressEvent (evnt);
 				break;
-			case Gdk.Key.Shift_L:
-			case Gdk.Key.Shift_R:
+			case Gdk.Key.period:
 				OnTextModePressEvent (evnt);
 				break;
 			case Gdk.Key.Right:
@@ -436,18 +434,13 @@ namespace Do.Core {
 		
 		void OnTextModePressEvent (EventKey evnt)
 		{
-			if (shiftPressed) {
-				bool tmp = CurrentContext.TextMode;
-				CurrentContext.TextMode = !CurrentContext.TextMode;
-				if (CurrentContext.TextMode == tmp) {
-					NotificationIcon.SendNotification ("Text Mode Error", "Do could not enter text mode " +
-					                      "because the current action does not support it.");
-				} else {
-					UpdatePane (CurrentPane);
-				}
-				shiftPressed = false;
+			bool tmp = CurrentContext.TextMode;
+			CurrentContext.TextMode = !CurrentContext.TextMode;
+			if (CurrentContext.TextMode == tmp) {
+				NotificationIcon.SendNotification ("Text Mode Error", "Do could not enter text mode " +
+				                                   "because the current action does not support it.");
 			} else {
-				shiftPressed = true;
+				UpdatePane (CurrentPane);
 			}
 		}
 		
