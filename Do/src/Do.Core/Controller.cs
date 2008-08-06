@@ -356,7 +356,7 @@ namespace Do.Core {
 		{
 			if (CurrentContext.Selection is ITextItem || !resultsGrown)
 				OnInputKeyPressEvent (evnt);
-			else if (CurrentContext.AddSecondaryCursor (CurrentContext.Cursor))
+			else if (CurrentContext.ToggleSecondaryCursor (CurrentContext.Cursor))
 				UpdatePane (CurrentPane);
 		}
 		

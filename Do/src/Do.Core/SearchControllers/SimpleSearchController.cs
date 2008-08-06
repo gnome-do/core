@@ -160,7 +160,7 @@ namespace Do.Core
 			OnQueryChanged ();
 		}
 
-		public virtual bool AddSecondaryCursor (int cursorLocation)
+		public virtual bool ToggleSecondaryCursor (int cursorLocation)
 		{
 			if (Results.Length - 1 < cursorLocation) return false;
 			
@@ -168,10 +168,13 @@ namespace Do.Core
 			secondary = new List<IObject> (context.SecondaryCursors);
 			
 			IObject newObject = Results[cursorLocation];
+			
 			if (secondary.Contains (newObject))
 				secondary.Remove (newObject);
-			else
+			else if (newObject is IItem)
 				secondary.Add (newObject);
+			else
+				return false;
 			
 			context.SecondaryCursors = secondary.ToArray ();
 			

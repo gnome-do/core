@@ -102,7 +102,7 @@ namespace Do.Core
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		bool AddSecondaryCursor (int cursorLocation);
+		bool ToggleSecondaryCursor (int cursorLocation);
 		
 		/// <summary>
 		/// Return true if item child search was possible

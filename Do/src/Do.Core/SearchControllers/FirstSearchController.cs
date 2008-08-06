@@ -34,10 +34,10 @@ namespace Do.Core
 		{
 		}
 		
-		public override bool AddSecondaryCursor (int cursorLocation)
+		public override bool ToggleSecondaryCursor (int cursorLocation)
 		{
 			bool update = (SecondaryCursors.Length == 0);
-			bool result = base.AddSecondaryCursor (cursorLocation);
+			bool result = base.ToggleSecondaryCursor (cursorLocation);
 			
 			if (update && result) {
 				UpdateResults ();
