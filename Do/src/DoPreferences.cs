@@ -33,6 +33,11 @@ namespace Do
 			get { return Get<string> ("SummonKeyBinding", "<Super>space"); }
 			set { Set<string> ("SummonKeyBinding", value); }
 		}
+		
+		public string TextModeKeyBinding {
+			get { return Get<string> ("TextModeKeyBinding", "period"); }
+			set { Set<string> ("TextModeKeyBinding", value); }
+		}
 
 		public string Theme {
 			get { return Get<string> ("Theme", "Classic"); }

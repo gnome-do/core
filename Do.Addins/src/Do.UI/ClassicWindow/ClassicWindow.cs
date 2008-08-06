@@ -376,6 +376,7 @@ namespace Do.UI {
 			if (context.Query.Length == 0 && context.LargeTextDisplay) {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
 				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text");
+				
 				if (context.Results.Length == 0) return;
 			} else {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
@@ -389,7 +390,10 @@ namespace Do.UI {
 			
 			if (pane == CurrentPane) {
 				resultsWindow.Context = context;
-				label.SetDisplayLabel (context.Selection.Name, context.Selection.Description);
+				if (!context.LargeTextDisplay)
+					label.SetDisplayLabel (context.Selection.Name, context.Selection.Description);
+				else
+					label.SetDisplayLabel ("", "Raw Text Mode");
 			}
 		}
 

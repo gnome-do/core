@@ -80,7 +80,6 @@ namespace Do.Core {
 			controllers[1].SearchStarted += delegate (bool u) { if (u) window.ClearPane (Pane.Second); };
 			controllers[2].SearchStarted += delegate (bool u) { if (u) window.ClearPane (Pane.Third); };
 			
-			
 			//Brings back our boxes after the search
 			controllers[0].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.First); };
 			controllers[1].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Second); };
@@ -281,19 +280,22 @@ namespace Do.Core {
 
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
+			// User set keybindings
 			if (KeyEventToString(evnt).Equals (Do.Preferences.SummonKeyBinding)) {
 				OnSummonKeyPressEvent (evnt);
+				return;
 			} 
-			//why are we doing this anyway?
+			if (KeyEventToString(evnt).Equals (Do.Preferences.TextModeKeyBinding)) {
+				OnTextModePressEvent (evnt);
+				return;
+			}
+			
+			// Things pressed with ctrl are mistakes?
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
 					return;
 			}
 
-			//if (evnt.Key != Key.Shift_L && evnt.Key != Key.Shift_R) shiftPressed = false;
-			
 			switch ((Gdk.Key) evnt.KeyValue) {
-			// Throwaway keys
-			
 			case Gdk.Key.Control_L:
 				break;
 			case Gdk.Key.Escape:
@@ -320,15 +322,12 @@ namespace Do.Core {
 			case Gdk.Key.Page_Down:
 				OnUpDownKeyPressEvent (evnt);
 				break;
-			case Gdk.Key.period:
-				OnTextModePressEvent (evnt);
-				break;
 			case Gdk.Key.Right:
 			case Gdk.Key.Left:
 				OnRightLeftKeyPressEvent (evnt);
 				break;
 			case Gdk.Key.comma:
-				OnCommaKeyPressEvent (evnt);
+				OnSelectionKeyPressEvent (evnt);
 				break;
 			default:
 				OnInputKeyPressEvent (evnt);
@@ -350,7 +349,7 @@ namespace Do.Core {
 		/// <param name="evnt">
 		/// A <see cref="EventKey"/>
 		/// </param>
-		void OnCommaKeyPressEvent (EventKey evnt)
+		void OnSelectionKeyPressEvent (EventKey evnt)
 		{
 			if (CurrentContext.Selection is ITextItem || !resultsGrown)
 				OnInputKeyPressEvent (evnt);
@@ -391,17 +390,13 @@ namespace Do.Core {
 		void OnInputKeyPressEvent (EventKey evnt)
 		{
 			char c;
-			//Do.PrintPerf ("InputKeyPress Start");
 			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
 			if (char.IsLetterOrDigit (c)
 					|| char.IsPunctuation (c)
 					|| (c == ' ' && CurrentContext.Query.Length > 0)
 					|| char.IsSymbol (c)) {
 				CurrentContext.AddChar (c);
-				//Console.WriteLine (CurrentContext);
-				//QueueSearch (false);
 			}
-			//Do.PrintPerf ("InputKeyPress Stop");
 		}
 		
 		void OnRightLeftKeyPressEvent (EventKey evnt)
@@ -484,9 +479,6 @@ namespace Do.Core {
 		/// </returns>
 		string KeyEventToString (EventKey evnt) {
 			string modifier = string.Empty;
-			if ((evnt.State & ModifierType.ShiftMask) != 0) {
-				modifier += "<Shift>";
-			}
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
 				modifier += "<Control>";
 			}

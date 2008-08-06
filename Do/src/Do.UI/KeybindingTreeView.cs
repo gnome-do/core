@@ -59,6 +59,7 @@ namespace Do.UI
 			store.Clear ();
 			
 			store.AppendValues ("Summon", Do.Preferences.SummonKeyBinding);
+			store.AppendValues ("Text Mode", Do.Preferences.TextModeKeyBinding);
 		}
 		
 		[GLib.ConnectBefore]
@@ -118,6 +119,10 @@ namespace Do.UI
 			case "summon":
 				binding = model.GetValue (iter, (int)Column.Binding) as string;
 				Do.Preferences.SummonKeyBinding = binding;
+				break;
+			case "text mode":
+				binding = model.GetValue (iter, (int)Column.Binding) as string;
+				Do.Preferences.TextModeKeyBinding = binding;
 				break;
 			}
 			return false;
