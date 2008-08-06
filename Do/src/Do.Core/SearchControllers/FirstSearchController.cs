@@ -65,7 +65,11 @@ namespace Do.Core
 		}
 
 		public override bool TextMode {
-			get { return (textMode || Query.Contains (".")); }
+			get { 
+				bool implicit_text_mode = false;
+				implicit_text_mode = Query.Contains (((char) Gdk.Keyval.FromName (Do.Preferences.TextModeKeyBinding)).ToString ());
+				return (textMode || implicit_text_mode); 
+			}
 			set { 
 				if (context.ParentContext != null) return;
 				textMode = value; 

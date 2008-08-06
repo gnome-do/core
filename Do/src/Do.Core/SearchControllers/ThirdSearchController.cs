@@ -70,7 +70,7 @@ namespace Do.Core
 		public override bool TextMode {
 			get { 
 				bool implicit_text_mode = false;
-				if (Query.Contains (".")) {
+				if (Query.Contains (((char) Gdk.Keyval.FromName (Do.Preferences.TextModeKeyBinding)).ToString ())) {
 					IAction action;
 					if (FirstController.Selection is IAction)
 						action = FirstController.Selection as IAction;

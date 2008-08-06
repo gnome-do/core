@@ -263,7 +263,7 @@ namespace Do.Core
 		public override bool TextMode { //FIXME
 			get { 
 				bool implicit_text_mode = false;
-				if (Query.Contains (".") && FirstController.Selection is IAction) {
+				if (Query.Contains (((char) Gdk.Keyval.FromName (Do.Preferences.TextModeKeyBinding)).ToString ()) && FirstController.Selection is IAction) {
 					IAction action = FirstController.Selection as IAction;
 					foreach (Type t in action.SupportedItemTypes) {
 						if (t == typeof (ITextItem) && action.SupportsItem (new DoTextItem (Query))) {

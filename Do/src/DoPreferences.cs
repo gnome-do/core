@@ -38,6 +38,12 @@ namespace Do
 			get { return Get<string> ("TextModeKeyBinding", "period"); }
 			set { Set<string> ("TextModeKeyBinding", value); }
 		}
+		
+		public Gdk.Key TextModeKeyVal {
+			get {
+				return (Gdk.Key)Enum.Parse (typeof (Gdk.Key), TextModeKeyBinding);
+			}
+		}
 
 		public string Theme {
 			get { return Get<string> ("Theme", "Classic"); }
