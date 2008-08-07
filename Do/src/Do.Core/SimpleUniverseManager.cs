@@ -113,8 +113,10 @@ namespace Do.Core
 						results.Add (obj);
 					} else {
 						foreach (Type t in searchFilter) {
-							if (t.IsInstanceOfType (obj.Inner))
+							if (t.IsInstanceOfType (obj.Inner)) {
 								results.Add (obj);
+								break;
+							}
 						}
 					}
 				}
