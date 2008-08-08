@@ -171,7 +171,9 @@ namespace Do.UI {
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
 			SizeAllocated += delegate { Reposition (); };
-
+			iconbox[0].LinesChanged += OnLineChangedEvent;
+			iconbox[1].LinesChanged += OnLineChangedEvent;
+			iconbox[2].LinesChanged += OnLineChangedEvent;
 			Reposition ();
 		}
 		
@@ -260,6 +262,14 @@ namespace Do.UI {
 			});
 		}
 		
+		protected void OnLineChangedEvent (object o, EventArgs a)
+		{
+			if ((int) o <= 2) return;
+			this.QueueDraw ();
+			this.Resize (1, 1);
+			Reposition ();
+		}
+		
 		protected override bool OnButtonPressEvent (EventButton evnt)
 		{
 			int start_x, start_y, end_x, end_y;
@@ -313,13 +323,14 @@ namespace Do.UI {
 
 		public void Reset ()
 		{
-			
 			resultsWindow.Clear ();
 			
 			iconbox[0].Clear ();
 			iconbox[1].Clear ();
 			iconbox[2].Clear ();
 			
+			QueueDraw ();
+			Resize (1, 1);
 			Reposition ();
 			
 			iconbox[0].DisplayObject = new Do.Addins.DefaultIconBoxObject ();

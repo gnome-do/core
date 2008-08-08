@@ -76,7 +76,7 @@ namespace Do.Core
 		
 		protected override List<IObject> InitialResults ()
 		{
-			if (textMode)
+			if (TextMode)
 				return new List<IObject> ();
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Length != 0) {

@@ -41,6 +41,7 @@ namespace Do.UI
 		protected VBox vbox;
 		protected Gtk.Image image;
 		protected Label label;
+		protected Gdk.Pixbuf overlay_pixbuf;
 
 		protected float focused_transparency = 0.4f;
 		protected float unfocused_transparency = 0.1f;
@@ -48,6 +49,7 @@ namespace Do.UI
 		public IconBox (int icon_size) : base ()
 		{
 			this.icon_size = icon_size;
+			overlay_pixbuf = IconProvider.PixbufFromIconName ("gnome-mime-text", icon_size);
 			Build ();
 		}
 		
@@ -144,8 +146,11 @@ namespace Do.UI
 			set {
 				caption = value ?? string.Empty;
 				caption = caption.Replace ("\n", " ");
+				int lines = label.Layout.LineCount;
 				label.Markup = string.Format (CaptionFormat, 
 				                              Util.Appearance.MarkupSafeString (caption));
+				if (lines != label.Layout.LineCount && LinesChanged != null)
+					LinesChanged (label.Layout.LineCount, new EventArgs ());
 			}
 		}
 
@@ -155,7 +160,7 @@ namespace Do.UI
 				return icon_name;
 			}
 			set {
-				if (value == null) return;
+				if (value == null || textOverlay) return;
 				icon_name = value;
 				using (Gdk.Pixbuf pix = IconProvider.PixbufFromIconName (value, icon_size)) {
 					Pixbuf = pix;
@@ -228,11 +233,10 @@ namespace Do.UI
 			cairo.Save ();
 			GetFrame (cairo);
 			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName ("gnome-mime-text", icon_size);
 			Gdk.CairoHelper.SetSourcePixbuf (cairo, 
-			                                 pixbuf, 
-			                                 (int) (width / 2) - (int) (pixbuf.Width / 2) + x, 
-			                                 (int) (height / 2) - (int) (pixbuf.Height / 2) + y);
+			                                 overlay_pixbuf, 
+			                                 (int) (width / 2) - (int) (overlay_pixbuf.Width / 2) + x, 
+			                                 (int) (height / 2) - (int) (overlay_pixbuf.Height / 2) + y);
 			cairo.PaintWithAlpha (fillAlpha);
 			
 			cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
@@ -241,5 +245,6 @@ namespace Do.UI
 			cairo.Restore ();
 		}
 
+		public event EventHandler LinesChanged;
 	}
 }

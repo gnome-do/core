@@ -70,6 +70,8 @@ namespace Do.Universe
 				// Check if typed text is a valid path.
 				string path = (item as ITextItem).Text
 					.Replace ("~", Paths.UserHome);
+				//avoid crashies
+				if (path.Length >= 256) return false;
 				return Directory.Exists (path) || File.Exists (path);
 			}
 			return true;

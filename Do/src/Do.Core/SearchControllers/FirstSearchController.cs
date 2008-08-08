@@ -81,7 +81,7 @@ namespace Do.Core
 		protected override void UpdateResults ()
 		{
 			List<IObject> results;
-			if (!textMode)
+			if (!TextMode)
 				results = InitialResults ();
 			else
 				results = new List<IObject> ();
