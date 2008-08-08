@@ -17,6 +17,10 @@ namespace Do.UI {
         
         private Gtk.Label addinList;
         
+        private Gtk.Alignment alignment1;
+        
+        private Gtk.VBox vbox3;
+        
         private Gtk.ScrolledWindow plugin_scroll;
         
         private Gtk.ProgressBar progressBar;
@@ -54,32 +58,46 @@ namespace Do.UI {
             w2.Expand = false;
             w2.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
+            this.alignment1 = new Gtk.Alignment(0.5F, 0.5F, 1F, 1F);
+            this.alignment1.Name = "alignment1";
+            this.alignment1.LeftPadding = ((uint)(12));
+            this.alignment1.TopPadding = ((uint)(12));
+            this.alignment1.RightPadding = ((uint)(12));
+            this.alignment1.BottomPadding = ((uint)(24));
+            // Container child alignment1.Gtk.Container+ContainerChild
+            this.vbox3 = new Gtk.VBox();
+            this.vbox3.Name = "vbox3";
+            this.vbox3.Spacing = 6;
+            // Container child vbox3.Gtk.Box+BoxChild
             this.plugin_scroll = new Gtk.ScrolledWindow();
             this.plugin_scroll.CanFocus = true;
             this.plugin_scroll.Name = "plugin_scroll";
             this.plugin_scroll.ShadowType = ((Gtk.ShadowType)(1));
-            this.vbox2.Add(this.plugin_scroll);
-            Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(this.vbox2[this.plugin_scroll]));
-            w3.Position = 1;
-            w3.Padding = ((uint)(8));
-            // Container child vbox2.Gtk.Box+BoxChild
+            this.vbox3.Add(this.plugin_scroll);
+            Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(this.vbox3[this.plugin_scroll]));
+            w3.Position = 0;
+            // Container child vbox3.Gtk.Box+BoxChild
             this.progressBar = new Gtk.ProgressBar();
             this.progressBar.Name = "progressBar";
-            this.vbox2.Add(this.progressBar);
-            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox2[this.progressBar]));
-            w4.Position = 2;
+            this.progressBar.Ellipsize = ((Pango.EllipsizeMode)(2));
+            this.vbox3.Add(this.progressBar);
+            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox3[this.progressBar]));
+            w4.Position = 1;
             w4.Expand = false;
             w4.Fill = false;
-            w4.Padding = ((uint)(5));
+            this.alignment1.Add(this.vbox3);
+            this.vbox2.Add(this.alignment1);
+            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox2[this.alignment1]));
+            w6.Position = 1;
             w1.Add(this.vbox2);
-            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(w1[this.vbox2]));
-            w5.Position = 0;
+            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(w1[this.vbox2]));
+            w7.Position = 0;
             // Internal child Do.UI.DoAddinInstallerDialog.ActionArea
-            Gtk.HButtonBox w6 = this.ActionArea;
-            w6.Name = "dialog1_ActionArea";
-            w6.Spacing = 6;
-            w6.BorderWidth = ((uint)(5));
-            w6.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
+            Gtk.HButtonBox w8 = this.ActionArea;
+            w8.Name = "dialog1_ActionArea";
+            w8.Spacing = 6;
+            w8.BorderWidth = ((uint)(5));
+            w8.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.button_cancel = new Gtk.Button();
             this.button_cancel.CanFocus = true;
@@ -88,9 +106,9 @@ namespace Do.UI {
             this.button_cancel.UseUnderline = true;
             this.button_cancel.Label = "gtk-cancel";
             this.AddActionWidget(this.button_cancel, -6);
-            Gtk.ButtonBox.ButtonBoxChild w7 = ((Gtk.ButtonBox.ButtonBoxChild)(w6[this.button_cancel]));
-            w7.Expand = false;
-            w7.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w9 = ((Gtk.ButtonBox.ButtonBoxChild)(w8[this.button_cancel]));
+            w9.Expand = false;
+            w9.Fill = false;
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonOk = new Gtk.Button();
             this.buttonOk.CanDefault = true;
@@ -98,31 +116,32 @@ namespace Do.UI {
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.UseUnderline = true;
             // Container child buttonOk.Gtk.Container+ContainerChild
-            Gtk.Alignment w8 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
+            Gtk.Alignment w10 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
             // Container child GtkAlignment1.Gtk.Container+ContainerChild
-            Gtk.HBox w9 = new Gtk.HBox();
-            w9.Spacing = 2;
+            Gtk.HBox w11 = new Gtk.HBox();
+            w11.Spacing = 2;
             // Container child GtkHBox1.Gtk.Container+ContainerChild
-            Gtk.Image w10 = new Gtk.Image();
-            w10.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-ok", Gtk.IconSize.Button, 20);
-            w9.Add(w10);
+            Gtk.Image w12 = new Gtk.Image();
+            w12.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-ok", Gtk.IconSize.Button, 20);
+            w11.Add(w12);
             // Container child GtkHBox1.Gtk.Container+ContainerChild
-            Gtk.Label w12 = new Gtk.Label();
-            w12.LabelProp = Mono.Unix.Catalog.GetString("_Install Updates");
-            w12.UseUnderline = true;
-            w9.Add(w12);
-            w8.Add(w9);
-            this.buttonOk.Add(w8);
+            Gtk.Label w14 = new Gtk.Label();
+            w14.LabelProp = Mono.Unix.Catalog.GetString("_Install Updates");
+            w14.UseUnderline = true;
+            w11.Add(w14);
+            w10.Add(w11);
+            this.buttonOk.Add(w10);
             this.AddActionWidget(this.buttonOk, -5);
-            Gtk.ButtonBox.ButtonBoxChild w16 = ((Gtk.ButtonBox.ButtonBoxChild)(w6[this.buttonOk]));
-            w16.Position = 1;
-            w16.Expand = false;
-            w16.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w18 = ((Gtk.ButtonBox.ButtonBoxChild)(w8[this.buttonOk]));
+            w18.Position = 1;
+            w18.Expand = false;
+            w18.Fill = false;
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
             this.DefaultWidth = 443;
             this.DefaultHeight = 463;
+            this.progressBar.Hide();
             this.Show();
             this.buttonOk.Clicked += new System.EventHandler(this.OnButtonOKClick);
         }

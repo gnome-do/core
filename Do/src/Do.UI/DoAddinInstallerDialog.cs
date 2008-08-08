@@ -160,6 +160,7 @@ namespace Do.UI
 				Respond (Gtk.ResponseType.Ok);
 			}
 			else {
+				progressBar.Visible = true;
 				err_message = null;
 				progressBar.Show ();
 				progressBar.Fraction = 0;
