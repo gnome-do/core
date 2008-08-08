@@ -106,7 +106,7 @@ namespace Do.UI {
             this.notification_check = new Gtk.CheckButton();
             this.notification_check.CanFocus = true;
             this.notification_check.Name = "notification_check";
-            this.notification_check.Label = Mono.Unix.Catalog.GetString("Show notifcation icon");
+            this.notification_check.Label = Mono.Unix.Catalog.GetString("Show notification icon");
             this.notification_check.DrawIndicator = true;
             this.notification_check.UseUnderline = true;
             this.vbox4.Add(this.notification_check);
