@@ -23,11 +23,11 @@ namespace Do.UI {
         
         private Gtk.ScrolledWindow plugin_scroll;
         
-        private Gtk.ProgressBar progressBar;
+        private Gtk.ProgressBar progress_bar;
         
         private Gtk.Button button_cancel;
         
-        private Gtk.Button buttonOk;
+        private Gtk.Button button_ok;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
@@ -77,11 +77,11 @@ namespace Do.UI {
             Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(this.vbox3[this.plugin_scroll]));
             w3.Position = 0;
             // Container child vbox3.Gtk.Box+BoxChild
-            this.progressBar = new Gtk.ProgressBar();
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Ellipsize = ((Pango.EllipsizeMode)(2));
-            this.vbox3.Add(this.progressBar);
-            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox3[this.progressBar]));
+            this.progress_bar = new Gtk.ProgressBar();
+            this.progress_bar.Name = "progress_bar";
+            this.progress_bar.Ellipsize = ((Pango.EllipsizeMode)(2));
+            this.vbox3.Add(this.progress_bar);
+            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox3[this.progress_bar]));
             w4.Position = 1;
             w4.Expand = false;
             w4.Fill = false;
@@ -110,12 +110,12 @@ namespace Do.UI {
             w9.Expand = false;
             w9.Fill = false;
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
-            this.buttonOk = new Gtk.Button();
-            this.buttonOk.CanDefault = true;
-            this.buttonOk.CanFocus = true;
-            this.buttonOk.Name = "buttonOk";
-            this.buttonOk.UseUnderline = true;
-            // Container child buttonOk.Gtk.Container+ContainerChild
+            this.button_ok = new Gtk.Button();
+            this.button_ok.CanDefault = true;
+            this.button_ok.CanFocus = true;
+            this.button_ok.Name = "button_ok";
+            this.button_ok.UseUnderline = true;
+            // Container child button_ok.Gtk.Container+ContainerChild
             Gtk.Alignment w10 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
             // Container child GtkAlignment1.Gtk.Container+ContainerChild
             Gtk.HBox w11 = new Gtk.HBox();
@@ -130,9 +130,9 @@ namespace Do.UI {
             w14.UseUnderline = true;
             w11.Add(w14);
             w10.Add(w11);
-            this.buttonOk.Add(w10);
-            this.AddActionWidget(this.buttonOk, -5);
-            Gtk.ButtonBox.ButtonBoxChild w18 = ((Gtk.ButtonBox.ButtonBoxChild)(w8[this.buttonOk]));
+            this.button_ok.Add(w10);
+            this.AddActionWidget(this.button_ok, -5);
+            Gtk.ButtonBox.ButtonBoxChild w18 = ((Gtk.ButtonBox.ButtonBoxChild)(w8[this.button_ok]));
             w18.Position = 1;
             w18.Expand = false;
             w18.Fill = false;
@@ -141,9 +141,9 @@ namespace Do.UI {
             }
             this.DefaultWidth = 443;
             this.DefaultHeight = 463;
-            this.progressBar.Hide();
+            this.progress_bar.Hide();
             this.Show();
-            this.buttonOk.Clicked += new System.EventHandler(this.OnButtonOKClick);
+            this.button_ok.Clicked += new System.EventHandler(this.OnButtonOKClick);
         }
     }
 }

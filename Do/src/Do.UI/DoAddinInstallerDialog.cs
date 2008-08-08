@@ -88,9 +88,9 @@ namespace Do.UI
 		
 		void UpdateRepos ()
 		{
-			progressBar.Show ();
+			progress_bar.Show ();
 			setup.Repositories.UpdateAllRepositories (this);
-			progressBar.Hide ();
+			progress_bar.Hide ();
 			addins_not_found = CheckAddins (false);
 			if (err_message != null) {
 				err_message = null;
@@ -123,14 +123,14 @@ namespace Do.UI
 
 		public void SetMessage (string msg)
 		{
-			progressBar.Text = msg;
+			progress_bar.Text = msg;
 			while (Gtk.Application.EventsPending ())
 				Gtk.Application.RunIteration ();
 		}
 			       
 		public void SetProgress (double progress)
 		{
-			progressBar.Fraction = progress;
+			progress_bar.Fraction = progress;
 			while (Gtk.Application.EventsPending ())
 				Gtk.Application.RunIteration ();
 		}
@@ -160,14 +160,14 @@ namespace Do.UI
 				Respond (Gtk.ResponseType.Ok);
 			}
 			else {
-				progressBar.Visible = true;
+				progress_bar.Visible = true;
 				err_message = null;
-				progressBar.Show ();
-				progressBar.Fraction = 0;
-				progressBar.Text = "";
+				progress_bar.Show ();
+				progress_bar.Fraction = 0;
+				progress_bar.Text = "";
 				bool res = setup.Install (this, entries);
 				if (!res) {
-					button_cancel.Sensitive = buttonOk.Sensitive = false;
+					button_cancel.Sensitive = button_ok.Sensitive = false;
 					if (err_message == null)
 						Catalog.GetString ("Installation failed");
 				}
