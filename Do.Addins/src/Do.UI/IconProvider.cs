@@ -144,7 +144,6 @@ namespace Do.UI
 		public static Pixbuf PixbufFromIconName (string name, int size)
 		{			
 			Pixbuf pixbuf;									
-			string iconKey;
 			
 			if (null == name)
 				throw new ArgumentNullException ("name");

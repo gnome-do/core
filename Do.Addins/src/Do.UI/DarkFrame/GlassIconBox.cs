@@ -46,7 +46,7 @@ namespace Do.UI
 			}
 		}
 		
-		public virtual bool TextOverlay
+		public override bool TextOverlay
 		{
 			get { return textOverlay; }
 			set {
@@ -74,8 +74,6 @@ namespace Do.UI
 
 		protected override void Build ()
 		{
-			Alignment label_align;
-
 			caption = "";
 
 			hbox = new HBox (false, 4);
