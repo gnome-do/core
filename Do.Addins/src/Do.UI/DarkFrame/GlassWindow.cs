@@ -159,22 +159,20 @@ namespace Do.UI
 			iconbox[0] = new GlassIconBox (IconBoxIconSize);
 			iconbox[0].IsFocused = true;
 			iconbox[0].Radius = IconBoxRadius;
-			resultsHBox.PackStart (iconbox[0], false, false, 0);
+			resultsHBox.PackStart (iconbox[0], true, true, 0);
 			iconbox[0].Show ();
 
 			iconbox[1] = new GlassIconBox (IconBoxIconSize);
 			iconbox[1].IsFocused = false;
 			iconbox[1].Radius = IconBoxRadius;
-			resultsHBox.PackStart (iconbox[1], false, false, 0);
+			resultsHBox.PackStart (iconbox[1], true, true, 0);
 			iconbox[1].Show ();
 
 			iconbox[2] = new GlassIconBox (IconBoxIconSize);
 			iconbox[2].IsFocused = false;
 			iconbox[2].Radius = IconBoxRadius;
-			resultsHBox.PackStart (iconbox[2], false, false, 0);
-
+			resultsHBox.PackStart (iconbox[2], true, true, 0);
 			
-
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
 			SizeAllocated += delegate { Reposition (); };
@@ -429,34 +427,50 @@ namespace Do.UI
 		/// </param>
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
-			if (context.Results.Length == 0) {
-				NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
-				for (int i = (int) pane; i < 3; i++) {
-					iconbox[i].Clear ();
-					iconbox[i].DisplayObject = noRes;
-					if (i == (int) CurrentPane) {
-						label.SetDisplayLabel (noRes.Name, noRes.Description);
-						resultsWindow.Context = context;
+			if (context.Results.Length == 0 && !context.LargeTextDisplay) {
+				if (pane == Pane.First && context.ParentContext == null) {
+					iconbox[0].TextOverlay = context.LargeTextDisplay;
+					iconbox[0].DisplayObject = new Do.Addins.DefaultIconBoxObject ();
+					label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 
+					                       Catalog.GetString ("Type to start searching."));
+				} else {
+					NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
+					for (int i = (int) pane; i < 3; i++) {
+						iconbox[i].Clear ();
+						iconbox[i].DisplayObject = noRes;
+						if (i == (int) CurrentPane) {
+							label.SetDisplayLabel (noRes.Name, noRes.Description);
+							resultsWindow.Clear ();
+						}
 					}
 				}
 				return;
 			}
-			iconbox[(int) pane].DisplayObject = context.Selection;
-			iconbox[(int) pane].Highlight = context.Query;
+			
+			if (context.Query.Length == 0 && context.LargeTextDisplay) {
+				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
+				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text");
+				
+				if (context.Results.Length == 0) return;
+			} else {
+				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
+				iconbox[(int) pane].DisplayObject = context.Selection;
+				
+				if (!context.LargeTextDisplay)
+					iconbox[(int) pane].Highlight = context.Query;
+			}
+			
+			if (context.Selection == null) return;
 			
 			if (pane == CurrentPane) {
 				resultsWindow.Context = context;
-				label.SetDisplayLabel (context.Selection.Name, context.Selection.Description);
+				if (!context.LargeTextDisplay)
+					label.SetDisplayLabel (context.Selection.Name, context.Selection.Description);
+				else
+					label.SetDisplayLabel ("", "Raw Text Mode");
 			}
 		}
 
-		/// <summary>
-		/// Controller will occasionally ask for a specific pane to be cleared.  We must also
-		/// clear the results window if the pane that is cleared is the current pane.
-		/// </summary>
-		/// <param name="pane">
-		/// A <see cref="Pane"/>
-		/// </param>
 		public void ClearPane (Pane pane)
 		{
 			iconbox[(int) pane].Clear ();

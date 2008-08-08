@@ -46,6 +46,32 @@ namespace Do.UI
 			}
 		}
 		
+		public virtual bool TextOverlay
+		{
+			get { return textOverlay; }
+			set {
+				if (textOverlay == value)
+					return;
+				
+				textOverlay = value;
+				if (value) {
+					FillAlpha = FrameAlpha = 0.4;
+					FillColor = FrameColor = new Color (0x00, 0x00, 0x00);
+					image.Hide ();
+					label.Ellipsize = Pango.EllipsizeMode.None;
+					label.LineWrapMode = Pango.WrapMode.WordChar;
+					label.LineWrap = true;
+					label.WidthRequest = (int) icon_size * 3;
+				} else {
+					FillColor = FrameColor = new Color (0xff, 0xff, 0xff);
+					image.Show ();
+					label.Wrap = false;
+					label.Ellipsize = Pango.EllipsizeMode.End;
+					label.WidthRequest = -1;
+				}
+			}
+		}
+
 		protected override void Build ()
 		{
 			Alignment label_align;
@@ -67,15 +93,11 @@ namespace Do.UI
 			label = new Label ();
 			label.Ellipsize = Pango.EllipsizeMode.End;
 			label.ModifyFg (StateType.Normal, Style.White);
-			label_align = new Alignment (1.0F, 0.5F, 0, 0);
-			label_align.SetPadding (0, 0, 0, 0);
-			label_align.Add (label);
-			hbox.PackStart (label_align, true, true, 0);
+			hbox.PackStart (label, true, true, 0);
 			label.Show ();
-			label_align.Show ();
 
 			image.SetSizeRequest (icon_size, icon_size);
-			label.SetSizeRequest ((int) (icon_size * 2), -1);
+			this.SetSizeRequest ((int) (icon_size * 3) + (int) hbox.BorderWidth * 2, -1);
 
 			DrawFill = DrawFrame = true;
 			FrameColor = FillColor = new Color (byte.MaxValue, byte.MaxValue, byte.MaxValue);

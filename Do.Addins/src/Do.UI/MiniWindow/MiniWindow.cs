@@ -160,6 +160,7 @@ namespace Do.UI
 			iconbox[2].IsFocused = false;
 			iconbox[2].Radius = IconBoxRadius;
 			resultsHBox.PackStart (iconbox[2], false, false, 0);
+			
 			// iconbox[2].Show ();
 
 			align = new Alignment (0.5F, 0.5F, 1, 1);
@@ -316,24 +317,47 @@ namespace Do.UI
 		
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
-			if (context.Results.Length == 0) {
-				NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
-				for (int i = (int) pane; i < 3; i++) {
-					iconbox[i].Clear ();
-					iconbox[i].DisplayObject = noRes;
-					if (i == (int) CurrentPane) {
-						label.SetDisplayLabel (noRes.Name, noRes.Description);
-						resultsWindow.Context = context;
+			if (context.Results.Length == 0 && !context.LargeTextDisplay) {
+				if (pane == Pane.First && context.ParentContext == null) {
+					iconbox[0].TextOverlay = context.LargeTextDisplay;
+					iconbox[0].DisplayObject = new Do.Addins.DefaultIconBoxObject ();
+					label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 
+					                       Catalog.GetString ("Type to start searching."));
+				} else {
+					NoResultsFoundObject noRes = new NoResultsFoundObject (context.Query);
+					for (int i = (int) pane; i < 3; i++) {
+						iconbox[i].Clear ();
+						iconbox[i].DisplayObject = noRes;
+						if (i == (int) CurrentPane) {
+							label.SetDisplayLabel (noRes.Name, noRes.Description);
+							resultsWindow.Clear ();
+						}
 					}
 				}
 				return;
 			}
-			iconbox[(int) pane].DisplayObject = context.Selection;
-			iconbox[(int) pane].Highlight = context.Query;
+			
+			if (context.Query.Length == 0 && context.LargeTextDisplay) {
+				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
+				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text");
+				
+				if (context.Results.Length == 0) return;
+			} else {
+				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
+				iconbox[(int) pane].DisplayObject = context.Selection;
+				
+				if (!context.LargeTextDisplay)
+					iconbox[(int) pane].Highlight = context.Query;
+			}
+			
+			if (context.Selection == null) return;
 			
 			if (pane == CurrentPane) {
 				resultsWindow.Context = context;
-				label.SetDisplayLabel (context.Selection.Name, context.Selection.Description);
+				if (!context.LargeTextDisplay)
+					label.SetDisplayLabel (context.Selection.Name, context.Selection.Description);
+				else
+					label.SetDisplayLabel ("", "Raw Text Mode");
 			}
 		}
 

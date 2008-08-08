@@ -114,7 +114,7 @@ namespace Do.UI
 			}
 		}
 		
-		public bool TextOverlay
+		public virtual bool TextOverlay
 		{
 			get { return textOverlay; }
 			set {
@@ -228,7 +228,7 @@ namespace Do.UI
 			cairo.Save ();
 			GetFrame (cairo);
 			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName ("gnome-mime-text", 128);
+			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName ("gnome-mime-text", icon_size);
 			Gdk.CairoHelper.SetSourcePixbuf (cairo, 
 			                                 pixbuf, 
 			                                 (int) (width / 2) - (int) (pixbuf.Width / 2) + x, 
