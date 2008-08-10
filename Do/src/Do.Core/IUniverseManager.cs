@@ -132,6 +132,15 @@ namespace Do.Core
 		/// </summary>
 		void Reload ();
 		
+		/// <summary>
+		/// Returns an object for a given UID
+		/// </summary>
+		/// <param name="UID">
+		/// A <see cref="System.String"/> representing the UID of the desired object
+		/// </param>
+		/// <param name="item">
+		/// A <see cref="IObject"/>
+		/// </param>
 		void TryGetObjectForUID (string UID, out IObject item);
 	}
 }

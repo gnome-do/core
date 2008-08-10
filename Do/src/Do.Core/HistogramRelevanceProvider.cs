@@ -149,11 +149,11 @@ namespace Do.Core {
 			// These should all be between 0 and 1.
 			float relevance, score;
 			
-			relevance = 0f;			
 			// Get string similarity score.
 			score = StringScoreForAbbreviation (o.Name, match);
 			if (score == 0) return 0;
 			
+			relevance = 0f;	
 			if (hits.ContainsKey (o.UID)) {
 				float age;
 				RelevanceRecord rec = hits [o.UID];

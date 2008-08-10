@@ -132,13 +132,11 @@ namespace Do.Core {
 		/// </returns>
 		protected static int[] findBestSubstringMatchIndices(string s, string query)
 		{
+			if(query.Length == 0)
+				return new int[] {0,0};
+			
 			int index=-1;
 			int[] bestMatch = {-1,-1};
-			
-			if(query.Length == 0) {
-				int[] noQueryRet = {0,0};
-				return noQueryRet;
-			}
 			
 			//Find the last instance of the last character of the query
 			//since we never need to search beyond that

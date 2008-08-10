@@ -201,7 +201,7 @@ namespace Do.Core
 			newContext.ParentContext = context;
 			context = newContext;
 			
-			context.Results = children.ToArray ();
+			context.Results = Do.UniverseManager.Search (Query, defaultFilter, children);
 			OnSelectionChanged ();
 			return true;
 		}
