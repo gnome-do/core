@@ -174,7 +174,9 @@ namespace Do.UI
 			ScreenChanged += OnScreenChanged;
 			ConfigureEvent += OnConfigureEvent;
 			SizeAllocated += delegate { Reposition (); };
-			
+			iconbox[0].LinesChanged += OnLineChangedEvent;
+			iconbox[1].LinesChanged += OnLineChangedEvent;
+			iconbox[2].LinesChanged += OnLineChangedEvent;
 			Reposition ();
 		}
 		
@@ -220,13 +222,23 @@ namespace Do.UI
 		
 		public void Reposition ()
 		{		
-			Gdk.Rectangle offset;
-			int iconboxWidth;
-
-			offset = new Rectangle (MainRadius, 0, 0 ,0);
-			iconboxWidth = (iconbox[0].Width + ((int) IconBoxPadding * 2));
-			
-			PositionWindow.UpdatePosition (iconboxWidth, currentPane, offset);
+			Gtk.Application.Invoke (delegate {
+				Gdk.Rectangle offset;
+				int iconboxWidth;
+				
+				offset = new Rectangle (IconBoxRadius, 0, 0 ,0);
+				iconboxWidth = IconBoxIconSize + 60;
+				
+				PositionWindow.UpdatePosition (iconboxWidth, currentPane, offset);
+			});
+		}
+		
+		protected void OnLineChangedEvent (object o, EventArgs a)
+		{
+			if ((int) o <= 2) return;
+			this.QueueDraw ();
+			this.Resize (1, 1);
+			Reposition ();
 		}
 		
 		protected override bool OnButtonPressEvent (EventButton evnt)
