@@ -24,7 +24,7 @@ using org.freedesktop.DBus;
 namespace Do.DBus
 {
 	[Interface("org.freedesktop.PowerManagement")]
-	public interface IPowerManagement
+	public interface IPowerManagementCore
 	{
 		bool GetOnBattery ();
 	}
@@ -36,8 +36,8 @@ namespace Do.DBus
 			try {
 				if (!Bus.Session.NameHasOwner ("org.freedesktop.PowerManagement")) return false;
 				
-				IPowerManagement power = 
-					Bus.Session.GetObject<IPowerManagement> ("org.freedesktop.PowerManagement", 
+				IPowerManagementCore power = 
+					Bus.Session.GetObject<IPowerManagementCore> ("org.freedesktop.PowerManagement", 
 					                                         new ObjectPath ("/org/freedesktop/PowerManagement"));
 				
 				return power.GetOnBattery ();

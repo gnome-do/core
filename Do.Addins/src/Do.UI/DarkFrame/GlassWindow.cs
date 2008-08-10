@@ -106,7 +106,6 @@ namespace Do.UI
 		protected void Build ()
 		{
 			VBox      vbox;
-//			Alignment align;
 
 			AppPaintable = true;
 			KeepAbove = true;
@@ -141,13 +140,7 @@ namespace Do.UI
 			vbox.BorderWidth = (uint) (IconBoxPadding + frameoffset);
 			vbox.Show ();
 			
-//			align = new Alignment (0.5F, 0.5F, 1, 1);
-//			align.SetPadding (0, 0, 0, 0);
 			label = new SymbolDisplayLabel ();
-//			align.Add (label);
-//			vbox.PackStart (align, false, false, 0);
-//			label.Show ();
-//			align.Show ();
 
 			resultsHBox = new HBox (false, (int) IconBoxPadding * 2);
 			resultsHBox.BorderWidth = IconBoxPadding;
