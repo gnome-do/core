@@ -227,7 +227,7 @@ namespace Do.UI
 				int iconboxWidth;
 				
 				offset = new Rectangle (IconBoxRadius, 0, 0 ,0);
-				iconboxWidth = IconBoxIconSize + 60;
+				iconboxWidth = IconBoxIconSize + 115;
 				
 				PositionWindow.UpdatePosition (iconboxWidth, currentPane, offset);
 			});
@@ -280,6 +280,7 @@ namespace Do.UI
 		public void Summon ()
 		{
 			PositionWindow.GetMonitor ();
+			Resize (1, 1);
 			Reposition ();
 			Show ();
 			Util.Appearance.PresentWindow (this);

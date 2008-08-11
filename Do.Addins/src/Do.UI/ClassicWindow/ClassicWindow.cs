@@ -312,6 +312,7 @@ namespace Do.UI {
 
 			PositionWindow.GetMonitor ();
 			Resize (1, 1);
+			Reposition ();
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}

@@ -332,7 +332,7 @@ namespace Do.UI
 				int iconboxWidth;
 				
 				offset = new Rectangle (IconBoxRadius, 0, 0 ,0);
-				iconboxWidth = IconBoxIconSize + 60;
+				iconboxWidth = IconBoxIconSize + 150;
 				
 				PositionWindow.UpdatePosition (iconboxWidth, currentPane, offset);
 			});
@@ -354,6 +354,7 @@ namespace Do.UI
 		{
 			//needed to know where our monitor sits...
 			PositionWindow.GetMonitor ();
+			Resize (1, 1);
 			Reposition ();
 			Show ();
 			Util.Appearance.PresentWindow (this);
