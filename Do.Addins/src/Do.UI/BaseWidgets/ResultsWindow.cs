@@ -270,6 +270,7 @@ namespace Do.UI
 			cursor = 0;
 			resultsLabel.Markup = "--/--";
 			queryLabel.Markup = string.Empty;
+			update_needed = false;
 		}
 
 		public IUIContext Context
