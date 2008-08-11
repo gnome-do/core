@@ -173,7 +173,7 @@ namespace Do {
 		}
 
 		public static string UserPlugins {
-			get { return Combine (UserData, "plugins"); }
+			get { return Combine (UserData, "plugins2"); }
 		}
 
 		public static string[] SystemData {
