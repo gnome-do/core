@@ -299,6 +299,10 @@ namespace Do.UI
 			iconbox[1].Clear ();
 			iconbox[2].Clear ();
 			
+			QueueDraw ();
+			Resize (1, 1);
+			Reposition ();
+			
 			iconbox[0].DisplayObject = new Do.Addins.DefaultIconBoxObject ();
 			label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 
 			                       Catalog.GetString ("Type to start searching."));
