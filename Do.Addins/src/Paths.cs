@@ -173,7 +173,7 @@ namespace Do {
 		}
 
 		public static string UserPlugins {
-			get { return Combine (UserData, "plugins2"); }
+			get { return Combine (UserData, "plugins-" + Version); }
 		}
 
 		public static string[] SystemData {
@@ -200,6 +200,16 @@ namespace Do {
 				for (int i = 0; i < dirs.Length; ++i)
 					dirs [i] = Combine (dirs [i], "plugins");
 				return dirs;
+			}
+		}
+
+		private static string Version {
+			get {
+				System.Reflection.AssemblyName name;
+
+				name = typeof (Paths).Assembly.GetName ();
+				return string.Format ("{0}.{1}.{2}",
+					name.Version.Major, name.Version.Minor, name.Version.Build);
 			}
 		}
 	}
