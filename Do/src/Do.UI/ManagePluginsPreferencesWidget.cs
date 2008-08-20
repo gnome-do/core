@@ -152,7 +152,7 @@ namespace Do.UI
 				try {
 					string name = Addin.GetIdName (id).Split ('.')[1];
 					Util.Environment.Open (
-							"http://wiki.ubuntu.com/GnomeDo/Plugins/" + name);
+							"http://www.gnomedo.com/wiki/index.php?title=" + name + "_Plugin");
 				} catch { }
 			}
 		}
