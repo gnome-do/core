@@ -77,6 +77,8 @@ namespace Do.UI
 			AppPaintable = true;
 			KeepAbove = true;
 			
+			TypeHint = WindowTypeHint.Splashscreen;
+			
 			SetColormap ();
 			
 			VBox vbox = new VBox ();
