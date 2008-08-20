@@ -34,11 +34,11 @@ namespace Do.UI
 
 	public class ResultsWindow : Gtk.Window
 	{
-		private int DefaultResultIconSize = 32;
-		private int DefaultWindowWidth = 352;
-		private int NumberResultsDisplayed = 6;
+		protected int DefaultResultIconSize = 32;
+		protected int DefaultWindowWidth = 352;
+		protected int NumberResultsDisplayed = 6;
 		
-		private int offset;
+		protected int offset;
 		
 		public string ResultInfoFormat
 		{
@@ -46,7 +46,7 @@ namespace Do.UI
 			get { return resultInfoFormat; }
 		}
 		
-		private string resultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
+		protected string resultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
 		const string QueryLabelFormat = "<b>{0}</b>";
 
 		public event OnSelectionChanged SelectionChanged;
@@ -57,22 +57,22 @@ namespace Do.UI
 			NumberColumns = 2
 		}
 
-		ScrolledWindow resultsScrolledWindow;
-		TreeView resultsTreeview;
-		IObject[] results;
-		int startResult, endResult;
-		Frame frame;
-		string query;
-		Gdk.Color backgroundColor;
-		VBox vbox;
-		Toolbar toolbar;
-		Label resultsLabel, queryLabel;
-		IUIContext context = null;
+		protected ScrolledWindow resultsScrolledWindow;
+		protected TreeView resultsTreeview;
+		protected IObject[] results, stunted_results;
+		protected int startResult, endResult;
+		protected Frame frame;
+		protected string query;
+		protected Gdk.Color backgroundColor;
+		protected VBox vbox;
+		protected Toolbar toolbar;
+		protected Label resultsLabel, queryLabel;
+		protected IUIContext context = null;
 		
-		int cursor;
-		int[] secondary = new int[0];
+		protected int cursor;
+		protected int[] secondary = new int[0];
 		
-		bool pushedUpdate, clearing, update_needed = false;
+		protected bool pushedUpdate, clearing, update_needed = false;
 
 
 		public ResultsWindow (Gdk.Color backgroundColor, int NumberResults) 
@@ -98,7 +98,7 @@ namespace Do.UI
 			results = new IObject[0];
 		}
 
-		private void NotifySelectionChanged ()
+		protected void NotifySelectionChanged ()
 		{
 			TreeIter iter;
 			if (!resultsTreeview.Selection.GetSelected (out iter)) return;
@@ -114,7 +114,7 @@ namespace Do.UI
 			}
 		}
 
-		protected void Build ()
+		protected virtual void Build ()
 		{
 			Alignment align;
 			TreeViewColumn column;
@@ -216,7 +216,7 @@ namespace Do.UI
 			frame.FillColor = backgroundColor;
 		}
 						
-		private void IconDataFunc (TreeViewColumn column, CellRenderer cell, 
+		protected void IconDataFunc (TreeViewColumn column, CellRenderer cell, 
 		                           TreeModel model, TreeIter iter)
 		{			
 			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
@@ -257,7 +257,7 @@ namespace Do.UI
 			final.Dispose ();
 		}
 
-		private void OnResultRowSelected (object sender, EventArgs args)
+		protected void OnResultRowSelected (object sender, EventArgs args)
 		{
 			if (!clearing && !pushedUpdate) {
 				NotifySelectionChanged ();
@@ -304,10 +304,27 @@ namespace Do.UI
 				
 				IObject[] resultsArray = new IObject[endResult - startResult];
 				Array.Copy (results, startResult, resultsArray, 0, resultsArray.Length); 
-				Results = resultsArray;
-				Query = value.Query;
 				
 				cursor = value.Cursor - offset;
+				
+				bool update_small_array = false;
+				if (resultsArray.Length == Results.Length) {
+					for (int i=0; i<resultsArray.Length; i++) {
+						if (resultsArray[i].GetHashCode () != Results[i].GetHashCode ()) {
+							update_small_array = true;
+							break;
+						}
+					}
+				} else {
+					update_small_array = true;
+				}
+				if (update_small_array) {
+					Results = resultsArray;
+				}
+				
+				Query = value.Query;
+				
+				
 				
 				int[] secArray = new int[value.SecondaryCursors.Length];
 				for (int i=0; i<secArray.Length; i++) {
@@ -338,7 +355,7 @@ namespace Do.UI
 			}
 		}
 			
-		private void UpdateQueryLabel (IUIContext context)
+		protected void UpdateQueryLabel (IUIContext context)
 		{
 			string query = context.Query;
 			StringBuilder builder = new StringBuilder ();
@@ -354,16 +371,15 @@ namespace Do.UI
 		
 		private void UpdateCursors () 
 		{
-			resultsTreeview.Selection.UnselectAll ();
-
 			Gtk.TreePath path;
 			
 			path = new TreePath (cursor.ToString ());
 			
 			//makes this just a tiny bit smoother overall
 			Gtk.Application.Invoke (delegate {
-				resultsTreeview.ScrollToCell (path, null, true, 0.5F, 0.0F);
+				resultsTreeview.Selection.UnselectAll ();
 				resultsTreeview.Selection.SelectPath (path);
+				resultsTreeview.ScrollToCell (path, null, true, 0.5F, 0.0F);
 			});
 		}
 		
@@ -380,7 +396,11 @@ namespace Do.UI
 		
 		public IObject[] Results
 		{
+			get {
+				return stunted_results ?? stunted_results = new IObject[0];
+			}
 			set {
+				stunted_results = value;
 				//some memory hacks.
 				foreach (CellRenderer rend in resultsTreeview.Columns[0].CellRenderers) {
 					if (rend is CellRendererPixbuf && (rend as CellRendererPixbuf).Pixbuf != null) {
@@ -393,20 +413,23 @@ namespace Do.UI
 				string info;
 
 				clearing = true;
-				Clear ();
-				store = resultsTreeview.Model as ListStore;
-
-				foreach (IObject result in value) {					
+				Gtk.Application.Invoke (delegate {
+					store = resultsTreeview.Model as ListStore;
+					store.Clear ();
 					
-					info = string.Format (ResultInfoFormat, result.Name, result.Description);
-					info = Util.Appearance.MarkupSafeString (info);
-					store.AppendValues (new object[] {
-						result,
-						info,
-					});
-							
-				}
-				clearing = false;
+					foreach (IObject result in value) {					
+						
+						info = string.Format (ResultInfoFormat, result.Name, result.Description);
+						info = Util.Appearance.MarkupSafeString (info);
+						store.AppendValues (new object[] {
+							result,
+							info,
+						});
+						
+					}
+					clearing = false;
+				});
+//				UpdateCursors ();
 			}
 		}
 

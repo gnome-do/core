@@ -217,9 +217,8 @@ namespace Do.UI
 		{
 			if (IsDrawable) {
 				Paint (evnt.Area);
-				base.OnExposeEvent (evnt);
 			}
-			return false;
+			return base.OnExposeEvent (evnt);
 		}
 
 		protected override void OnSizeRequested (ref Requisition requisition)

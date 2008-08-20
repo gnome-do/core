@@ -69,6 +69,12 @@
     <File name="src/Do.Universe/Pluggable.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IUIContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/UIContext.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/ShowCase" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.UI/ShowCase/ShowCase.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/ShowCase/ShowCaseDrawingArea.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/ShowCase/ShowCaseIconBox.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/ShowCase/ShowCaseDrawingContext.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/ShowCase/ShowCaseResultsWindow.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

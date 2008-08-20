@@ -77,8 +77,12 @@ namespace Do.Core {
 			
 			//We want to show a blank box during our searches
 			controllers[0].SearchStarted += delegate { };
-			controllers[1].SearchStarted += delegate (bool u) { if (u) window.ClearPane (Pane.Second); };
-			controllers[2].SearchStarted += delegate (bool u) { if (u) window.ClearPane (Pane.Third); };
+			controllers[1].SearchStarted += delegate (bool u) { 
+				if (u && !controllers[0].TextMode) window.ClearPane (Pane.Second); 
+			};
+			controllers[2].SearchStarted += delegate (bool u) { 
+				if (u && !controllers[1].TextMode) window.ClearPane (Pane.Third); 
+			};
 			
 			//Brings back our boxes after the search
 			controllers[0].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.First); };
@@ -104,7 +108,7 @@ namespace Do.Core {
 			if (null != window) Vanish ();
 			switch (Do.Preferences.Theme) {
 				case "Mini":
-					window = new MiniWindow (this);
+					window = new ShowCase (this);
 					break;
 				case "Glass Frame":
 					window = new GlassWindow (this);
@@ -425,8 +429,8 @@ namespace Do.Core {
 				PrevPane ();
 			}
 			// Seems to avoid a crash by passing bad contexts.  May not be needed.
-			if (!(CurrentPane == Pane.First && CurrentContext.Results.Length == 0))
-				window.SetPaneContext (CurrentPane, CurrentContext.UIContext);
+//			if (!(CurrentPane == Pane.First && CurrentContext.Results.Length == 0))
+//				window.SetPaneContext (CurrentPane, CurrentContext.UIContext);
 		}
 		
 		void OnTextModePressEvent (EventKey evnt)
@@ -445,11 +449,13 @@ namespace Do.Core {
 		{
 			if (evnt.Key == Gdk.Key.Up) {
 				if (!resultsGrown) {
-                    GrowResults ();
+//                    GrowResults ();
 					return;
 				} else {
-					if (CurrentContext.Cursor <= 0)
+					if (CurrentContext.Cursor <= 0) {
+						ShrinkResults ();
 						return;
+					}
 					CurrentContext.Cursor--;
                 }
 			} else if (evnt.Key == Gdk.Key.Down) {
