@@ -61,6 +61,7 @@ namespace Do.UI
 				main.Y = (int)((geo.Height + geo.Y - main.Height) / 2.5) + geo.Y;
 				w.Move (main.X, main.Y);
 				
+				if (r == null) return;
 				//position resultsWindow
 				//set to false for testing purposes
 				if (true) {

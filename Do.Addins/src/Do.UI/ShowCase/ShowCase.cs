@@ -32,7 +32,7 @@ namespace Do.UI
 	{
 		Pane currentPane;
 		ShowCaseDrawingArea drawing_area;
-		ShowCaseResultsWindow resultsWindow;
+		ShowCaseResultsWidget resultsWindow;
 		PositionWindow positionWindow;
 		Gtk.Label display_label;
 		string[] queries;
@@ -48,7 +48,7 @@ namespace Do.UI
 				currentPane = value;
 				drawing_area.Focus = value;
 				
-				Reposition ();
+//				Reposition ();
 			}
 		}
 		
@@ -59,7 +59,7 @@ namespace Do.UI
 		private PositionWindow PositionWindow {
 			get {
 				return positionWindow ??
-					positionWindow = new PositionWindow (this, resultsWindow);
+					positionWindow = new PositionWindow (this, null);
 			}
 		}
 		
@@ -82,28 +82,19 @@ namespace Do.UI
 			SetColormap ();
 			
 			VBox vbox = new VBox ();
+			this.BorderWidth = 15;
 			
-			Alignment top_label_align = new Alignment (0, .5f, 0, 0);
-			top_label_align.LeftPadding = 12;
-			display_label = new Label ();
-			top_label_align.Add (display_label);
-			vbox.PackStart (top_label_align, false, false, 2);
-			
-			
-			Alignment show_draw_align = new Gtk.Alignment (.5f, .5f, 0, 0);
 			drawing_area = new ShowCaseDrawingArea (500, 200);
 			
-			show_draw_align.Add (drawing_area);
-			show_draw_align.LeftPadding = show_draw_align.RightPadding = 12;
-			show_draw_align.BottomPadding = 15;
-			vbox.PackStart (show_draw_align, false, false, 0);
+			vbox.PackStart (drawing_area, false, false, 0);
+			
+			resultsWindow = new ShowCaseResultsWidget ();
+			vbox.PackStart (resultsWindow, true, true, 0);
 			
 			vbox.BorderWidth = 0;
 			vbox.ShowAll ();
 			
 			Add (vbox);
-			
-			resultsWindow = new ShowCaseResultsWindow (500);
 			
 			Reposition ();
 		}
@@ -165,7 +156,8 @@ namespace Do.UI
 				cairo.Arc (x+rect.Width-radius, y+rect.Height-radius, radius, 0, (Math.PI*0.5));
 				cairo.Arc (x+radius, y+rect.Height-radius, radius, (Math.PI*0.5), Math.PI);
 				cairo.Arc (x+radius, y+radius, radius, Math.PI, (Math.PI*1.5));
-				Cairo.LinearGradient pattern = new LinearGradient (0, 0, 0, rect.Height);
+				
+				Cairo.LinearGradient pattern = new LinearGradient (0, 0, 0, 250);
 				pattern.AddColorStop (0, new Cairo.Color (1, 1, 1, .85));
 				pattern.AddColorStop (1, new Cairo.Color (.6, .6, .6, .85));
 				cairo.Pattern = pattern;
@@ -266,6 +258,7 @@ namespace Do.UI
 		public void ShrinkResults ()
 		{
 			resultsWindow.Hide ();
+			Resize (1, 1);
 			return;
 		}
 

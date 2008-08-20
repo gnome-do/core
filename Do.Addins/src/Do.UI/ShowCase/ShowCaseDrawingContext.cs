@@ -31,7 +31,7 @@ namespace Do.UI
 		
 		public string[] Queries {
 			get {
-				return queries ?? queries = new string[3];
+				return queries ?? queries = new string[] {"", "", ""};
 			}
 			set {
 				queries = value;
@@ -81,7 +81,7 @@ namespace Do.UI
 			this.Main = Main;
 			this.Secondary = Secondary;
 			this.Tertiary = Tertiary;
-			Queries = new string [3];
+			Queries = new string [] {"", "", ""};
 		}
 	}
 }

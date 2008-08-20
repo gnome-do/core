@@ -301,11 +301,11 @@ namespace Do.UI
 		void RenderReflectedIcon (Cairo.Context cr, string icon, int size, int x, int y, double alpha)
 		{
 			Surface surface;
-			if (surface_buffer.ContainsKey (icon)) {
-				surface = surface_buffer[icon];
+			if (surface_buffer.ContainsKey (icon + size.ToString ())) {
+				surface = surface_buffer[icon + size.ToString ()];
 			} else {
 				surface = CreateReflectedSurface (icon, size);
-				surface_buffer[icon] = surface;
+				surface_buffer[icon + size.ToString ()] = surface;
 			}
 			cr.Save ();
 			cr.SetSource (surface, x, y);
