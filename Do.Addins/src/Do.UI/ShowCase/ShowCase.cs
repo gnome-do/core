@@ -48,8 +48,6 @@ namespace Do.UI
 					return;
 				currentPane = value;
 				drawing_area.Focus = value;
-				
-//				Reposition ();
 			}
 		}
 		

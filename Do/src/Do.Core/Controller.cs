@@ -108,10 +108,13 @@ namespace Do.Core {
 			if (null != window) Vanish ();
 			switch (Do.Preferences.Theme) {
 				case "Mini":
-					window = new ShowCase (this);
+					window = new MiniWindow (this);
 					break;
 				case "Glass Frame":
 					window = new GlassWindow (this);
+					break;
+				case "ShowCase":
+					window = new ShowCase (this);
 					break;
 				default:
 					window = new ClassicWindow (this);
