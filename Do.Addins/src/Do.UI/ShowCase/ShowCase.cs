@@ -20,6 +20,7 @@ using Gtk;
 using Gdk;
 using Cairo;
 using System;
+using System.Collections.Generic;
 
 using Do.Addins;
 using Do.Universe;
@@ -34,9 +35,9 @@ namespace Do.UI
 		ShowCaseDrawingArea drawing_area;
 		ShowCaseResultsWidget resultsWindow;
 		PositionWindow positionWindow;
-		Gtk.Label display_label;
-		string[] queries;
 		IDoController controller;
+		Dictionary<string, Surface> surface_buffer;
+		int results_offset = 50;
 
 		public Pane CurrentPane {
 			get {
@@ -65,10 +66,11 @@ namespace Do.UI
 		
 		public ShowCase(IDoController controller) : base (Gtk.WindowType.Toplevel)
 		{
+			surface_buffer = new Dictionary<string,Surface> ();
+			
 			this.controller = controller;
 			Build ();
 			DrawingContext = new ShowCaseDrawingContext (null, null, null, Pane.First);
-			queries = new string[3];
 		}
 
 		private void Build ()
@@ -78,20 +80,19 @@ namespace Do.UI
 			KeepAbove = true;
 			
 			TypeHint = WindowTypeHint.Splashscreen;
+			BorderWidth = 15;
 			
 			SetColormap ();
 			
 			VBox vbox = new VBox ();
-			this.BorderWidth = 15;
-			
 			drawing_area = new ShowCaseDrawingArea (500, 200);
-			
 			vbox.PackStart (drawing_area, false, false, 0);
 			
+			HBox hbox = new HBox ();
 			resultsWindow = new ShowCaseResultsWidget ();
-			vbox.PackStart (resultsWindow, true, true, 0);
+			hbox.PackStart (resultsWindow, true, true, (uint) results_offset);
+			vbox.PackStart (hbox, true, true, 0);
 			
-			vbox.BorderWidth = 0;
 			vbox.ShowAll ();
 			
 			Add (vbox);
@@ -135,54 +136,91 @@ namespace Do.UI
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			Cairo.Context cairo;
-			int radius = 5;
-			double x=.5, y=.5;
 			
 			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
-				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-				cairo.Color = new Cairo.Color (0, 0, 0, 0);
-				cairo.Operator = Cairo.Operator.Source;
-				cairo.Paint ();
-				
-				cairo.Operator = Cairo.Operator.Over;
 				Gdk.Rectangle rect = new Gdk.Rectangle ();
 				GetSize (out rect.Width, out rect.Height);
-				rect.Width--;
-				rect.Height--;
 				
-				cairo.NewPath ();
-				cairo.MoveTo (x+radius, y);
-				cairo.Arc (x+rect.Width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
-				cairo.Arc (x+rect.Width-radius, y+rect.Height-radius, radius, 0, (Math.PI*0.5));
-				cairo.Arc (x+radius, y+rect.Height-radius, radius, (Math.PI*0.5), Math.PI);
-				cairo.Arc (x+radius, y+radius, radius, Math.PI, (Math.PI*1.5));
-				
-				Cairo.LinearGradient pattern = new LinearGradient (0, 0, 0, 250);
-				pattern.AddColorStop (0, new Cairo.Color (1, 1, 1, .85));
-				pattern.AddColorStop (1, new Cairo.Color (.6, .6, .6, .85));
-				cairo.Pattern = pattern;
-				
-				cairo.FillPreserve ();
-				
-				pattern = new LinearGradient (0, 0, rect.Width, rect.Height);
-				pattern.AddColorStop (0.0, new Cairo.Color (0.0, 0.0, 0.0, .75));
-				pattern.AddColorStop (0.2, new Cairo.Color (0.2, 0.2, 0.2, .20));
-				pattern.AddColorStop (0.8, new Cairo.Color (0.2, 0.2, 0.2, .20));
-				pattern.AddColorStop (1.0, new Cairo.Color (0.0, 0.0, 0.0, .75));
-				
-				cairo.Pattern = pattern;
-				cairo.LineWidth = 1;
-				cairo.Stroke ();
-				
-				cairo.NewPath ();
-				cairo.MoveTo (rect.Width - 26, 5);
-				cairo.LineTo (rect.Width - 14, 5);
-				cairo.LineTo (rect.Width - 20, 11);
-				cairo.ClosePath ();
-				cairo.Color = new Cairo.Color (0.3, 0.3, 0.3);
-				cairo.Fill ();
+				cairo.SetSource (GetSurfaceForSize (rect.Width, rect.Height));
+				cairo.Operator = Cairo.Operator.Source;
+				cairo.Paint ();
 			}
 			return base.OnExposeEvent (evnt);
+		}
+		
+		private Surface GetSurfaceForSize (int width, int height)
+		{
+			string uid = width.ToString () + ":" + height.ToString ();
+			if (!surface_buffer.ContainsKey (uid)) {
+				int radius = 5;
+				double x=.5, y=.5;
+				
+				Cairo.Context cr = CairoHelper.Create (GdkWindow);
+				Cairo.Surface surface = cr.Target.CreateSimilar (cr.Target.Content, width, height);
+				(cr as IDisposable).Dispose ();
+				
+				cr = new Context (surface);
+				
+				cr.Rectangle (0, 0, width, height);
+				cr.Color = new Cairo.Color (0, 0, 0, 0);
+				cr.Operator = Cairo.Operator.Source;
+				cr.Paint ();
+				
+				cr.Operator = Cairo.Operator.Over;
+				
+				width--;
+				height--;
+				
+				cr.NewPath ();
+				if (!resultsWindow.Visible) {
+					cr.MoveTo (x+radius, y);
+					cr.Arc (x+width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
+					cr.Arc (x+width-radius, y+height-radius, radius, 0, (Math.PI*0.5));
+					cr.Arc (x+radius, y+height-radius, radius, (Math.PI*0.5), Math.PI);
+					cr.Arc (x+radius, y+radius, radius, Math.PI, (Math.PI*1.5));
+				} else {
+					int offset_line = 200 + 30 - 1;
+					cr.MoveTo (x+radius, y);
+					cr.Arc (x+width-radius, y+radius, radius, (Math.PI*1.5), (Math.PI*2));
+					cr.Arc (x+width-radius, y+offset_line-radius, radius, 0, (Math.PI*0.5));
+					cr.ArcNegative (x+width-results_offset+radius, y+offset_line+radius, radius, Math.PI*1.5, Math.PI);
+					cr.Arc (x+width-results_offset-radius, y+height-radius, radius, 0, (Math.PI*0.5));
+					cr.Arc (x+results_offset+radius, y+height-radius, radius, (Math.PI*0.5), Math.PI);
+					cr.ArcNegative (x+results_offset-radius, y+offset_line+radius, radius, 0, Math.PI*1.5);
+					cr.Arc (x+radius, y+offset_line-radius, radius, (Math.PI*0.5), Math.PI);
+					cr.Arc (x+radius, y+radius, radius, Math.PI, (Math.PI*1.5));
+					cr.ClosePath ();
+				}
+					
+				Cairo.LinearGradient pattern = new LinearGradient (0, 0, 0, height);
+				pattern.AddColorStop (0, new Cairo.Color (1, 1, 1, .85));
+				pattern.AddColorStop (1, new Cairo.Color (.6, .6, .6, .85));
+				cr.Pattern = pattern;
+				
+				cr.FillPreserve ();
+				
+				pattern = new LinearGradient (0, 0, width, 230);
+				pattern.AddColorStop (0.0, new Cairo.Color (0.0, 0.0, 0.0, .75));
+				pattern.AddColorStop (0.2, new Cairo.Color (0.2, 0.2, 0.2, .50));
+				pattern.AddColorStop (0.8, new Cairo.Color (0.2, 0.2, 0.2, .50));
+				pattern.AddColorStop (1.0, new Cairo.Color (0.0, 0.0, 0.0, .75));
+				
+				cr.Pattern = pattern;
+				cr.LineWidth = 1;
+				cr.Stroke ();
+				
+				cr.NewPath ();
+				cr.MoveTo (width - 26, 5);
+				cr.LineTo (width - 14, 5);
+				cr.LineTo (width - 20, 11);
+				cr.ClosePath ();
+				cr.Color = new Cairo.Color (0.3, 0.3, 0.3);
+				cr.Fill ();
+				
+				(cr as IDisposable).Dispose ();
+				surface_buffer[uid] = surface;
+			}
+			return surface_buffer[uid];
 		}
 		
 		private void Reposition ()
@@ -204,14 +242,6 @@ namespace Do.UI
 			colormap.Dispose ();
 		}
 		
-		private void UpdateTopLabel ()
-		{
-//			if (queries[(int) CurrentPane] != null && queries[(int) CurrentPane].Length > 0)
-//				display_label.Markup = "<b>Search: " + queries[(int) CurrentPane] + "</b>";
-//			else
-//				display_label.Markup = "";
-		}
-		
 		//****************IDoWindow******************
 		public void Summon ()
 		{
@@ -230,7 +260,6 @@ namespace Do.UI
 			resultsWindow.Clear ();
 			
 			DrawingContext = new ShowCaseDrawingContext (null, null, null, Pane.First);
-			queries = new string [3];
 			drawing_area.Clear ();
 			return;
 		}
@@ -252,6 +281,7 @@ namespace Do.UI
 		public void GrowResults ()
 		{
 			resultsWindow.Show ();
+			QueueDraw ();
 			return;
 		}
 
@@ -279,6 +309,6 @@ namespace Do.UI
 			drawing_area.SetQuery (pane, "");
 		}
 		
-		public event DoEventKeyDelegate KeyPressEvent;
+		public new event DoEventKeyDelegate KeyPressEvent;
 	}
 }

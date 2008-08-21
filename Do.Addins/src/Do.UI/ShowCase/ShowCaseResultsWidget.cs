@@ -131,7 +131,7 @@ namespace Do.UI
 			resultsTreeview.AppendColumn (column);
 
 //			resultsTreeview.Selection.Changed += OnResultRowSelected;
-//			Shown += OnShown;
+			Shown += OnShown;
 			
 			HeightRequest = height * NumberResultsDisplayed + 25;
 			
@@ -152,10 +152,10 @@ namespace Do.UI
 		{
 			set {
 				context = value;
-//				if (!Visible) {
-//					update_needed = true;
-//					return;
-//				}
+				if (!Visible) {
+					update_needed = true;
+					return;
+				}
 				
 				pushedUpdate = true;
 				if (value == null || value.Results.Length == 0) {
@@ -167,15 +167,19 @@ namespace Do.UI
 					results = value.Results;
 				}
 				
-				startResult = value.Cursor - 5;
+				startResult = value.Cursor - 2;
 				
 				if (startResult < 0)
 					startResult = 0;
-				endResult = startResult + 8;
-				offset = startResult;
+				endResult = startResult + 5;
+
+				while (endResult > value.Results.Length) {
+					endResult--;
+					if (startResult > 0)
+						startResult--;
+				}
 				
-				if (endResult > results.Length)
-					endResult = results.Length;
+				offset = startResult;
 				
 				IObject[] resultsArray = new IObject[endResult - startResult];
 				Array.Copy (results, startResult, resultsArray, 0, resultsArray.Length); 
@@ -307,6 +311,13 @@ namespace Do.UI
 				});
 //				UpdateCursors ();
 			}
+		}
+		
+		protected void OnShown (object o, EventArgs args)
+		{
+			if (update_needed)
+				Context = context;
+			update_needed = false;
 		}
 		
 		private void UpdateCursors () 

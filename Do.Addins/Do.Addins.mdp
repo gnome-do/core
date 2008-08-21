@@ -72,7 +72,6 @@
     <File name="src/Do.UI/ShowCase" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.UI/ShowCase/ShowCase.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ShowCase/ShowCaseDrawingArea.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/ShowCase/ShowCaseIconBox.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ShowCase/ShowCaseDrawingContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ShowCase/ShowCaseResultsWidget.cs" subtype="Code" buildaction="Compile" />
   </Contents>
