@@ -213,7 +213,7 @@ namespace Do.UI
 						if (OldContext.Main != null)
 							RenderReflectedIcon (cr, OldContext.Main.Icon, 96, width - 120, 10, alpha * fade_alpha[0]);
 					}
-					text = (Context.Queries[0] != string.Empty) ? 
+					text = (!string.IsNullOrEmpty (Context.Queries[0])) ? 
 						Util.FormatCommonSubstrings 
 							(Context.Main.Name, Context.Queries[0], HighlightFormat) : Context.Main.Name;
 					
@@ -246,7 +246,7 @@ namespace Do.UI
 						if (OldContext.Secondary != null)
 							RenderReflectedIcon (cr, OldContext.Secondary.Icon, 48, 20, height - 70, alpha * fade_alpha[1]);
 					}
-					text = (Context.Queries[1] != string.Empty) ? 
+					text = (!string.IsNullOrEmpty (Context.Queries[1])) ? 
 						Util.FormatCommonSubstrings 
 							(Context.Secondary.Name, Context.Queries[1], HighlightFormat) : Context.Secondary.Name;
 					RenderText (cr, color, text, small_text_height,
@@ -278,7 +278,7 @@ namespace Do.UI
 						if (OldContext.Tertiary != null)
 							RenderReflectedIcon (cr, OldContext.Tertiary.Icon, 48, third_pane_startx, height - 70, alpha * fade_alpha[2]);
 					}
-					text = (Context.Queries[2] != string.Empty) ? 
+					text = (!string.IsNullOrEmpty (Context.Queries[2])) ? 
 						Util.FormatCommonSubstrings 
 							(Context.Tertiary.Name, Context.Queries[2], HighlightFormat) : Context.Tertiary.Name;				
 					RenderText (cr, color, text, small_text_height, 

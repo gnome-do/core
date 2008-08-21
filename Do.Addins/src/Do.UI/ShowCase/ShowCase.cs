@@ -34,7 +34,6 @@ namespace Do.UI
 		Pane currentPane;
 		ShowCaseDrawingArea drawing_area;
 		ShowCaseResultsWidget resultsWindow;
-		PositionWindow positionWindow;
 		IDoController controller;
 		Dictionary<string, Surface> surface_buffer;
 		int results_offset = 50;
@@ -53,13 +52,6 @@ namespace Do.UI
 		
 		private ShowCaseDrawingContext DrawingContext {
 			get; set;
-		}
-		
-		private PositionWindow PositionWindow {
-			get {
-				return positionWindow ??
-					positionWindow = new PositionWindow (this, null);
-			}
 		}
 		
 		public ShowCase(IDoController controller) : base (Gtk.WindowType.Toplevel)
@@ -223,7 +215,24 @@ namespace Do.UI
 		
 		private void Reposition ()
 		{
-			PositionWindow.UpdatePosition (0, Pane.First, new Gdk.Rectangle (11, -17, 0, 0));
+			Gtk.Application.Invoke (delegate {
+				Gdk.Rectangle geo, main, results;
+				
+				GetPosition (out main.X, out main.Y);
+				GetSize (out main.Width, out main.Height);
+				
+				Gdk.Rectangle point;
+			
+				Display disp = this.Screen.Display;
+				disp.GetPointer (out point.X, out point.Y);
+			
+				int monitor = this.Screen.GetMonitorAtPoint (point.X, point.Y);
+				
+				geo = Screen.GetMonitorGeometry (monitor);
+				main.X = ((geo.Width - main.Width) / 2) + geo.X;
+				main.Y = (int)((geo.Height + geo.Y - 300) / 2.5) + geo.Y;
+				Move (main.X, main.Y);
+			});
 		}
 		
 		protected virtual void SetColormap ()
