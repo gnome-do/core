@@ -119,7 +119,6 @@ namespace Do.UI
 				
 				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
 				delta_time = DateTime.Now;
-				Console.WriteLine (change);
 				fade_alpha[0] -= change;
 				fade_alpha[1] -= change;
 				fade_alpha[2] -= change;
