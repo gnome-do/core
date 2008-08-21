@@ -307,20 +307,7 @@ namespace Do.UI
 				
 				cursor = value.Cursor - offset;
 				
-				bool update_small_array = false;
-				if (resultsArray.Length == Results.Length) {
-					for (int i=0; i<resultsArray.Length; i++) {
-						if (resultsArray[i].GetHashCode () != Results[i].GetHashCode ()) {
-							update_small_array = true;
-							break;
-						}
-					}
-				} else {
-					update_small_array = true;
-				}
-				if (update_small_array) {
-					Results = resultsArray;
-				}
+				Results = resultsArray;
 				
 				Query = value.Query;
 				

@@ -34,6 +34,9 @@ namespace Do.UI
 		int width, height;
 		uint timer;
 		
+		const uint fade_ms = 150;
+		
+		DateTime delta_time;
 		ShowCaseDrawingContext context;
 		ShowCaseDrawingContext old_context;
 		Pango.Color focused_color, unfocused_color;
@@ -111,16 +114,24 @@ namespace Do.UI
 				return;
 			
 			QueueDraw ();
-			timer = GLib.Timeout.Add (50, delegate {
-				fade_alpha[0] -= .25;
-				fade_alpha[1] -= .25;
-				fade_alpha[2] -= .25;
+			delta_time = DateTime.Now;
+			timer = GLib.Timeout.Add (20, delegate {
+				
+				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
+				delta_time = DateTime.Now;
+				Console.WriteLine (change);
+				fade_alpha[0] -= change;
+				fade_alpha[1] -= change;
+				fade_alpha[2] -= change;
+				
+//				Console.WriteLine (change);
 				
 				fade_alpha[0] = (fade_alpha[0] < 0) ? 0 : fade_alpha[0];
 				fade_alpha[1] = (fade_alpha[1] < 0) ? 0 : fade_alpha[1];
 				fade_alpha[2] = (fade_alpha[2] < 0) ? 0 : fade_alpha[2];
 
 				QueueDraw ();
+				
 				
 				if (fade_alpha[0] > 0 || fade_alpha[1] > 0 || fade_alpha[2] > 0) {
 					return true;
@@ -379,6 +390,7 @@ namespace Do.UI
 		
 		Surface CreateReflectedSurface (string icon, int size)
 		{
+			// Based on the work of Aaron Bockover <abockover@novell.com> in Banshee
 			Gdk.Pixbuf pbuf;
 			pbuf = IconProvider.PixbufFromIconName (icon, size);
 

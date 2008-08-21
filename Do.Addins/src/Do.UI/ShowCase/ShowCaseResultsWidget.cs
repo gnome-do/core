@@ -304,7 +304,6 @@ namespace Do.UI
 		{
 			if (update_needed) {
 				Context = context;
-				Console.WriteLine ("Set Context");
 			}
 			update_needed = false;
 		}
