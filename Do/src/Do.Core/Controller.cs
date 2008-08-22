@@ -452,7 +452,7 @@ namespace Do.Core {
 		{
 			if (evnt.Key == Gdk.Key.Up) {
 				if (!resultsGrown) {
-//                    GrowResults ();
+                    GrowResults ();
 					return;
 				} else {
 					if (CurrentContext.Cursor <= 0) {

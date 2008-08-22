@@ -31,10 +31,15 @@ namespace Do.UI
 	
 	public class ShowCaseDrawingArea : Gtk.DrawingArea
 	{
-		int width, height;
-		uint timer;
+		enum DrawState {
+			NoDraw,
+			NoResultFoundDraw,
+			NormalDraw,
+			TextMode,
+		}
 		
-		const uint fade_ms = 150;
+		int width, height, small_text_height, third_pane_startx;
+		uint timer;
 		
 		DateTime delta_time;
 		ShowCaseDrawingContext context;
@@ -42,14 +47,18 @@ namespace Do.UI
 		Pango.Color focused_color, unfocused_color;
 		
 		double[] fade_alpha;
+		double focus_size;
 		bool draw_tertiary;
 		
 		Dictionary<string, Surface> surface_buffer;
 		Surface background_surface;
+		Surface highlight_surface;
 		
 		Pane focus;
 	
 		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
+		const int HighlightHeight = 4;
+		const uint fade_ms = 150;
 		
 		public bool DrawTertiary {
 			get {
@@ -67,7 +76,8 @@ namespace Do.UI
 			}
 			set {
 				focus = value;
-				QueueDraw ();
+				focus_size = .01;
+				AnimatedDraw ();
 			}
 		}
 		
@@ -87,6 +97,8 @@ namespace Do.UI
 		{
 			this.width = width;
 			this.height = height;
+			small_text_height = height - 55;
+			third_pane_startx = width / 2;
 			fade_alpha = new double[3];
 			surface_buffer = new Dictionary<string,Surface> ();
 			
@@ -110,6 +122,11 @@ namespace Do.UI
 			
 			fade_alpha[(int) pane] = 1;
 			
+			AnimatedDraw ();
+		}
+		
+		private void AnimatedDraw ()
+		{
 			if (timer > 0)
 				return;
 			
@@ -122,17 +139,17 @@ namespace Do.UI
 				fade_alpha[0] -= change;
 				fade_alpha[1] -= change;
 				fade_alpha[2] -= change;
-				
-//				Console.WriteLine (change);
+				focus_size += change;
 				
 				fade_alpha[0] = (fade_alpha[0] < 0) ? 0 : fade_alpha[0];
 				fade_alpha[1] = (fade_alpha[1] < 0) ? 0 : fade_alpha[1];
 				fade_alpha[2] = (fade_alpha[2] < 0) ? 0 : fade_alpha[2];
+				focus_size = (focus_size > 1) ? 1 : focus_size;
 
 				QueueDraw ();
 				
 				
-				if (fade_alpha[0] > 0 || fade_alpha[1] > 0 || fade_alpha[2] > 0) {
+				if (fade_alpha[0] > 0 || fade_alpha[1] > 0 || fade_alpha[2] > 0 || focus_size < 1) {
 					return true;
 				} else {
 					timer = 0;
@@ -171,7 +188,23 @@ namespace Do.UI
 			}
 			surface_buffer.Clear ();
 			
-			this.QueueDraw ();
+			QueueDraw ();
+		}
+		
+		private DrawState GetPaneDrawState (Pane pane) {
+			if (pane == Pane.Third && !DrawTertiary)
+				return DrawState.NoDraw;
+			
+			if (Context.TextMode[(int) pane])
+				return DrawState.TextMode;
+			
+			if (Context.GetObjectForPane (pane) != null)
+				return DrawState.NormalDraw;
+			
+			if (!string.IsNullOrEmpty (Context.Queries[(int) pane]))
+				return DrawState.NoResultFoundDraw;
+			
+			return DrawState.NoDraw;
 		}
 		
 		void OnRealized (object o, EventArgs args)
@@ -181,126 +214,203 @@ namespace Do.UI
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			Context cr = CairoHelper.Create (GdkWindow);
-			cr.Save ();
+			
 			cr.SetSource (GetBackgroundSurface ());
 			cr.Operator = Cairo.Operator.Source;
-			cr.Paint ();
-			cr.Restore ();
+			cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+			cr.Fill ();
+			cr.Operator = Cairo.Operator.Over;
 			
 			do {
 				if (Context == null) continue;
 				Pango.Color color;
-				int third_pane_startx = width / 2;
-				int small_text_height = height - 55;
-				string text;
 				double alpha;
 				
 				/***************First Icon***************/
 				color = (Focus == Pane.First) ? focused_color : unfocused_color;
 				alpha = (Focus == Pane.First) ? 1 : .8;
-				if (Context.Main == null && !Context.TextMode[0]) {
-					if (string.IsNullOrEmpty (Context.Queries[0])) {
-						RenderReflectedIcon (cr, "search", 128, width / 3 * 2, 20);
-						RenderText (cr, focused_color, "Type To Begin Searching", height / 2 - 8, 16, 
-						            width / 3 * 2, 18, Pango.Alignment.Right);
-					} else {
-						RenderReflectedIcon (cr, "gtk-question-dialog", 96, width - 120, 10, alpha);
-						RenderText (cr, color, "No results for: " +Context.Queries[0], 
-						            height / 4, 0, width - 130, 16, Pango.Alignment.Right);
-					}
-					continue;
-				}
 				
-				if (Context.TextMode[0]) {
-					RenderReflectedIcon (cr, "gnome-mime-text", 96, (width / 2) - 48, 10, .35 * alpha);
-					text = (string.IsNullOrEmpty (Context.Queries[0])) ? "" : Context.Queries[0];
-					RenderText (cr, color, text, 10, 10, width - 10, 12, Pango.Alignment.Left, true);
-				} else {
-					if (OldContext.Main != null && Context.Main.Icon == OldContext.Main.Icon) {
-						RenderReflectedIcon (cr, Context.Main.Icon, 96, width - 120, 10, alpha);
-					} else {
-						RenderReflectedIcon (cr, Context.Main.Icon, 96, width - 120, 10, alpha - (alpha * fade_alpha[0]));
-						if (OldContext.Main != null)
-							RenderReflectedIcon (cr, OldContext.Main.Icon, 96, width - 120, 10, alpha * fade_alpha[0]);
-					}
-					text = (!string.IsNullOrEmpty (Context.Queries[0])) ? 
-						Util.FormatCommonSubstrings 
-							(Context.Main.Name, Context.Queries[0], HighlightFormat) : Context.Main.Name;
-					
-					RenderText (cr, color, text, height / 4, 10, width - 130, 16, Pango.Alignment.Right);
-					RenderText (cr, color, Context.Main.Description, height / 4 + 20, 10, width-130, 12, Pango.Alignment.Right);
+				RenderFirstPane (cr, evnt.Area, color, alpha);
+				switch (GetPaneDrawState (Pane.First)) {
+				case DrawState.NoResultFoundDraw:
+				case DrawState.NoDraw:
+					Console.WriteLine ("Skip");
+					continue;
 				}
 				
 				/***************Second Icon***************/
-				int right_bound = (!DrawTertiary) ? width : third_pane_startx;
 				color = (Focus == Pane.Second) ? focused_color : unfocused_color;
 				alpha = (Focus == Pane.Second) ? 1 : .8;
-				if (Context.Secondary == null && !Context.TextMode[1]) {
-					if (Context.Queries[1] != null && Context.Queries[1].Length > 0) {
-						RenderReflectedIcon (cr, "gtk-dialog-question", 48, 20, height - 70, alpha);
-						RenderText (cr, color, "No results for: " + Context.Queries[1], small_text_height,
-						            78, right_bound, 13, Pango.Alignment.Left);
-					}
-					continue;
-				}
-
-				if (Context.TextMode[1]) {
-					RenderReflectedIcon (cr, "gnome-mime-text", 48, 20, height - 70, .35 * alpha);
-					text = (string.IsNullOrEmpty (Context.Queries[1])) ? "" : Context.Queries[1];
-					RenderText (cr, color, text, small_text_height-15, 20, right_bound, 10, Pango.Alignment.Left, true);
-				} else {
-					if (OldContext.Secondary != null && Context.Secondary.Icon == OldContext.Secondary.Icon) {
-						RenderReflectedIcon (cr, Context.Secondary.Icon, 48, 20, height - 70, alpha);
-					} else {
-						RenderReflectedIcon (cr, Context.Secondary.Icon, 48, 20, height - 70, alpha - (alpha * fade_alpha[1]));
-						if (OldContext.Secondary != null)
-							RenderReflectedIcon (cr, OldContext.Secondary.Icon, 48, 20, height - 70, alpha * fade_alpha[1]);
-					}
-					text = (!string.IsNullOrEmpty (Context.Queries[1])) ? 
-						Util.FormatCommonSubstrings 
-							(Context.Secondary.Name, Context.Queries[1], HighlightFormat) : Context.Secondary.Name;
-					RenderText (cr, color, text, small_text_height,
-					            78, right_bound, 13, Pango.Alignment.Left);
-					RenderText (cr, color, Context.Secondary.Description, small_text_height + 15,
-				            78, right_bound, 10, Pango.Alignment.Left);
-				}
-				/***************Third Icon***************/
-				color = (Focus == Pane.Third) ? focused_color : unfocused_color;
-				alpha = (Focus == Pane.Third) ? 1 : .8;
-				if ((Context.Tertiary == null && !Context.TextMode[2]) || !DrawTertiary) {
-					if (Context.Queries[2].Length > 0 && DrawTertiary) {
-						RenderReflectedIcon (cr, "gtk-dialog-question", 48, third_pane_startx, height - 70, alpha);
-						RenderText (cr, color, "No results for: " + Context.Queries[2], small_text_height,
-						            third_pane_startx + 58, width, 13, Pango.Alignment.Left);
-					}
+				
+				RenderSecondPane (cr, evnt.Area, color, alpha);
+				switch (GetPaneDrawState (Pane.Second)) {
+				case DrawState.NoDraw:
+				case DrawState.NoResultFoundDraw:
+					Console.WriteLine ("skip");
 					continue;
 				}
 				
-				if (Context.TextMode[2]) {
-					RenderReflectedIcon (cr, "gnome-mime-text", 48, third_pane_startx, height - 70, .35 * alpha);
-					text = (string.IsNullOrEmpty (Context.Queries[2])) ? "" : Context.Queries[2];
-					RenderText (cr, color, text, small_text_height-15, third_pane_startx, width, 10, Pango.Alignment.Left, true);
-				} else {
-					if (OldContext.Tertiary != null && Context.Tertiary.Icon == OldContext.Tertiary.Icon) {
-						RenderReflectedIcon (cr, Context.Tertiary.Icon, 48, third_pane_startx, height - 70, alpha);
-					} else {
-						RenderReflectedIcon (cr, Context.Tertiary.Icon, 48, third_pane_startx, height - 70, alpha - (alpha * fade_alpha[2]));
-						if (OldContext.Tertiary != null)
-							RenderReflectedIcon (cr, OldContext.Tertiary.Icon, 48, third_pane_startx, height - 70, alpha * fade_alpha[2]);
-					}
-					text = (!string.IsNullOrEmpty (Context.Queries[2])) ? 
-						Util.FormatCommonSubstrings 
-							(Context.Tertiary.Name, Context.Queries[2], HighlightFormat) : Context.Tertiary.Name;				
-					RenderText (cr, color, text, small_text_height, 
-					            third_pane_startx + 58, width, 13, Pango.Alignment.Left);
-					RenderText (cr, color, Context.Tertiary.Description, small_text_height + 15,
-					            third_pane_startx + 58, width, 10, Pango.Alignment.Left);
-				}
-					
+				/***************Third Icon***************/
+				color = (Focus == Pane.Third) ? focused_color : unfocused_color;
+				alpha = (Focus == Pane.Third) ? 1 : .8;
+				
+				if (DrawTertiary)
+					RenderThirdPane (cr, evnt.Area, color, alpha);
 			} while (false);
 			
 			(cr as IDisposable).Dispose ();
 			return base.OnExposeEvent (evnt);
+		}
+		
+		void RenderFirstPane (Cairo.Context cr, Gdk.Rectangle evntRegion, Pango.Color color, double alpha)
+		{
+			int icon_size = 96;
+			Gdk.Rectangle rectp = new Gdk.Rectangle (width-120, 10, icon_size, icon_size*2);
+			Gdk.Rectangle rectt = new Gdk.Rectangle (10, height / 4, width - 130 - 10, 40);
+			string text;
+			
+			switch (GetPaneDrawState (Pane.First)) {
+			case DrawState.NormalDraw:
+				if (evntRegion.IntersectsWith (rectp)) {
+					RenderReflectedIcon (cr, Context.Main.Icon, icon_size, rectp.X, 
+					                     rectp.Y, alpha - (alpha * fade_alpha[0]));
+					if (OldContext.Main != null && fade_alpha[0] > 0)
+						RenderReflectedIcon (cr, OldContext.Main.Icon, icon_size, rectp.X, 
+						                     rectp.Y, alpha * fade_alpha[0]);
+				}
+				text = (!string.IsNullOrEmpty (Context.Queries[0])) ? 
+					Util.FormatCommonSubstrings 
+						(Context.Main.Name, Context.Queries[0], HighlightFormat) : Context.Main.Name;
+				
+				if (evntRegion.IntersectsWith (rectt)) {
+					RenderText (cr, color, text, rectt.Y, rectt.X, 
+					            rectt.X + rectt.Width, 16, Pango.Alignment.Right);
+					int highlight = 
+						RenderText (cr, color, Context.Main.Description, rectt.Y+20, rectt.X, 
+						            rectt.X + rectt.Width, 12, Pango.Alignment.Right);
+					if (highlight > 0 && Focus == Pane.First) {
+						Gdk.Rectangle highlight_area 
+							= new Gdk.Rectangle (width - 130 - highlight, height / 4 + 34, highlight, HighlightHeight);
+						if (evntRegion.IntersectsWith (highlight_area))
+							RenderHighlightRegion (cr, highlight_area);
+					}
+				}
+				break;
+			case DrawState.TextMode:
+				RenderReflectedIcon (cr, "gnome-mime-text", icon_size, (width / 2) - 48, 10, .35 * alpha);
+				text = (string.IsNullOrEmpty (Context.Queries[0])) ? "" : Context.Queries[0];
+				RenderText (cr, color, text, 10, 10, width - 10, 12, Pango.Alignment.Left, true);
+				break;
+			case DrawState.NoResultFoundDraw:
+				RenderReflectedIcon (cr, "gtk-question-dialog", icon_size, rectp.X, rectp.Y, alpha);
+				RenderText (cr, color, "No results for: " +Context.Queries[0], rectt.Y, 
+				            rectt.X, rectt.X + rectt.Width, 16, Pango.Alignment.Right);
+				break;
+			case DrawState.NoDraw:
+				RenderReflectedIcon (cr, "search", 128, width / 3 * 2, 20);
+				RenderText (cr, focused_color, "Type To Begin Searching", height / 2 - 8, 16, 
+				            width / 3 * 2, 18, Pango.Alignment.Right);
+				break;
+			}
+		}
+		
+		void RenderSecondPane (Cairo.Context cr, Gdk.Rectangle evntRegion, Pango.Color color, double alpha)
+		{
+			int icon_size = 48;
+			Gdk.Rectangle rectp;
+			Gdk.Rectangle rectt;
+			
+			rectp = new Gdk.Rectangle (20, height - 70, icon_size, icon_size * 2);
+			
+			int right_bound = (GetPaneDrawState (Pane.Third) != DrawState.NoDraw) ? third_pane_startx - 10 : width - 10;
+			rectt = new Gdk.Rectangle (78, small_text_height, right_bound - 78, height - small_text_height);
+			
+			RenderPane (Pane.Second, cr, evntRegion, rectt, rectp, color, alpha, icon_size);
+		}
+		
+		void RenderThirdPane (Cairo.Context cr, Gdk.Rectangle evntRegion, Pango.Color color, double alpha)
+		{
+			int icon_size = 48;
+			Gdk.Rectangle rectp;
+			Gdk.Rectangle rectt;
+			
+			rectp = new Gdk.Rectangle (third_pane_startx, height - 70, icon_size, icon_size * 2);
+			rectt = new Gdk.Rectangle (third_pane_startx + 58, small_text_height, 
+			                           width - (third_pane_startx + 58), height - small_text_height);
+			
+			RenderPane (Pane.Third, cr, evntRegion, rectt, rectp, color, alpha, icon_size);
+		}
+		
+		void RenderPane (Pane pane, Cairo.Context cr, Gdk.Rectangle evntRegion, Gdk.Rectangle rectt,
+		                 Gdk.Rectangle rectp, Pango.Color color, double alpha, int icon_size)
+		{
+			string text;
+			
+			switch (GetPaneDrawState (pane)) {
+			case DrawState.NormalDraw:
+				RenderReflectedIcon (cr, Context.GetObjectForPane (pane).Icon, icon_size, rectp.X, 
+				                     rectp.Y, alpha - (alpha * fade_alpha[(int) pane]));
+				if (OldContext.GetObjectForPane (pane) != null && fade_alpha[(int) pane] > 0)
+					RenderReflectedIcon (cr, OldContext.GetObjectForPane (pane).Icon, icon_size, 
+					                     rectp.X, rectp.Y, alpha * fade_alpha[(int) pane]);
+				
+				text = (!string.IsNullOrEmpty (Context.Queries[(int) pane])) ? 
+					Util.FormatCommonSubstrings 
+						(Context.GetObjectForPane (pane).Name, 
+						 Context.Queries[(int) pane], HighlightFormat) : Context.GetObjectForPane (pane).Name;
+					
+				RenderText (cr, color, text, rectt.Y,  rectt.X, rectt.X + rectt.Width, 13, Pango.Alignment.Left);
+				int highlight = 
+					RenderText (cr, color, Context.GetObjectForPane (pane).Description, rectt.Y + 15,
+					            rectt.X, rectt.X + rectt.Width, 10, Pango.Alignment.Left);
+				
+				if (highlight > 0 && Focus == pane)
+					RenderHighlightRegion (cr, new Gdk.Rectangle (rectt.X, rectt.Y + 27, highlight, HighlightHeight));
+				break;
+			case DrawState.TextMode:
+				RenderReflectedIcon (cr, "gnome-mime-text", icon_size, rectp.X, rectp.Y, .35 * alpha);
+				text = (string.IsNullOrEmpty (Context.Queries[2])) ? "" : Context.Queries[(int) pane];
+				RenderText (cr, color, text, rectt.Y-15, rectp.X, rectt.X + rectt.Width, 10, Pango.Alignment.Left, true);
+				break;
+			case DrawState.NoResultFoundDraw:
+				RenderReflectedIcon (cr, "gtk-dialog-question", icon_size, rectp.X, rectp.Y, alpha);
+				RenderText (cr, color, "No results for: " + Context.Queries[(int) pane], rectt.Y,
+				            rectt.X, rectt.X + rectt.Width, 13, Pango.Alignment.Left);
+				break;
+			}
+		}
+		
+		void RenderHighlightRegion (Cairo.Context cr, Gdk.Rectangle region) 
+		{
+			if (highlight_surface == null) {
+				highlight_surface = cr.Target.CreateSimilar (cr.Target.Content, region.Height * 3, region.Height);
+				Cairo.Context cr2 = new Context (highlight_surface);
+				cr2.Scale (3, 1);
+				double ht = region.Height / 2;
+				cr2.Arc (ht, ht, ht, 0, Math.PI * 2);
+				RadialGradient rad = new RadialGradient (ht, ht, 0, ht, ht, ht);
+				rad.AddColorStop (0, new Cairo.Color (.9, .95, 1, 1));
+				rad.AddColorStop (.3, new Cairo.Color (.7, .85, 1, 1));
+				rad.AddColorStop (1, new Cairo.Color (.7, .85, 1, 0));
+				cr2.Pattern = rad;
+				
+				cr2.Fill ();
+				(cr2 as IDisposable).Dispose ();
+			}
+			cr.Save ();
+			cr.Scale ((double) region.Width/((double) region.Height * 3 * focus_size), 1);
+			cr.SetSource (highlight_surface, 0, 0);
+			
+			Matrix matrix = new Matrix ();
+			matrix.InitTranslate (-((double) region.X / ((double) region.Width/((double) region.Height * 3 * focus_size))), -region.Y);
+			
+			cr.Source.Matrix = matrix;
+			
+			cr.Scale ((double) (region.Height * 3)/(double) region.Width, 1);
+			cr.Rectangle (region.X, region.Y, region.Width, region.Height);
+			cr.Fill ();
+			
+			cr.Restore ();
 		}
 		
 		void RenderReflectedIcon (Cairo.Context cr, string icon, int size, int x, int y)
@@ -317,23 +427,22 @@ namespace Do.UI
 				surface = CreateReflectedSurface (icon, size);
 				surface_buffer[icon + size.ToString ()] = surface;
 			}
-			cr.Save ();
+			
 			cr.SetSource (surface, x, y);
 			cr.PaintWithAlpha (alpha);
-			cr.Restore ();
 		}
 		
-		void RenderText (Context cr, Pango.Color color, string text, int heightOffset, 
+		int RenderText (Context cr, Pango.Color color, string text, int heightOffset, 
 		                 int leftBound, int rightBound, int size, Pango.Alignment align)
 		{
-			RenderText (cr, color, text, heightOffset, leftBound, rightBound, size, align, false);
+			return RenderText (cr, color, text, heightOffset, leftBound, rightBound, size, align, false);
 		}
 		
-		void RenderText (Context cr, Pango.Color color, string text, int heightOffset, 
+		int RenderText (Context cr, Pango.Color color, string text, int heightOffset, 
 		                 int leftBound, int rightBound, int size, Pango.Alignment align, bool wrap)
 		{
-			if (text.Length == 0) return;
-			cr.Save ();
+			if (text.Length == 0) return 0;
+//			cr.Save ();
 			
 			int max_width = rightBound - leftBound;
 			
@@ -357,8 +466,12 @@ namespace Do.UI
 			
 			GdkWindow.DrawLayout (this.Style.TextGC (StateType.Normal), leftBound, heightOffset, layout);
 			
+			int width, height;
+			layout.GetSize (out width, out height);
 			layout.FontDescription.Dispose ();
-			cr.Restore ();
+			
+			return Pango.Units.ToPixels (width);
+//			cr.Restore ();
 		}
 		
 		Surface GetBackgroundSurface ()
