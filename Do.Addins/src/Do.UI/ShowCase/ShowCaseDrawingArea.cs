@@ -299,11 +299,16 @@ namespace Do.UI
 				RenderReflectedIcon (cr, "gnome-mime-text", icon_size, (width / 2) - 48, 10, .35 * alpha);
 				text = (string.IsNullOrEmpty (Context.Queries[0])) ? "" : Context.Queries[0];
 				RenderText (cr, color, text, 10, 10, width - 10, 12, Pango.Alignment.Left, true);
+				if (Focus == Pane.First)
+					RenderHighlightRegion (cr, new Gdk.Rectangle (10, height - 80, width - 20, HighlightHeight));
 				break;
 			case DrawState.NoResultFoundDraw:
 				RenderReflectedIcon (cr, "gtk-question-dialog", icon_size, rectp.X, rectp.Y, alpha);
-				RenderText (cr, color, "No results for: " +Context.Queries[0], rectt.Y, 
+				int highlight = RenderText (cr, color, "No results for: " +Context.Queries[0], rectt.Y, 
 				            rectt.X, rectt.X + rectt.Width, 16, Pango.Alignment.Right);
+				if (Focus == Pane.First)
+					RenderHighlightRegion (cr, new Gdk.Rectangle (rectt.X +rectt.Width - highlight, 
+					                                              rectt.Y+18, highlight, HighlightHeight));
 				break;
 			case DrawState.NoDraw:
 				RenderReflectedIcon (cr, "search", 128, width / 3 * 2, 20);
@@ -370,11 +375,15 @@ namespace Do.UI
 				RenderReflectedIcon (cr, "gnome-mime-text", icon_size, rectp.X, rectp.Y, .35 * alpha);
 				text = (string.IsNullOrEmpty (Context.Queries[(int) pane])) ? "" : Context.Queries[(int) pane];
 				RenderText (cr, color, text, rectt.Y-15, rectp.X, rectt.X + rectt.Width, 10, Pango.Alignment.Left, true);
+				if (Focus == pane)
+					RenderHighlightRegion (cr, new Gdk.Rectangle (rectp.X, rectt.Y+40, rectp.Width+rectt.Width, HighlightHeight));
 				break;
 			case DrawState.NoResultFoundDraw:
 				RenderReflectedIcon (cr, "gtk-dialog-question", icon_size, rectp.X, rectp.Y, alpha);
-				RenderText (cr, color, "No results for: " + Context.Queries[(int) pane], rectt.Y,
+				highlight = RenderText (cr, color, "No results for: " + Context.Queries[(int) pane], rectt.Y,
 				            rectt.X, rectt.X + rectt.Width, 13, Pango.Alignment.Left);
+				if (Focus == pane)
+					RenderHighlightRegion (cr, new Gdk.Rectangle (rectt.X, rectt.Y+15, highlight, HighlightHeight));
 				break;
 			}
 		}
