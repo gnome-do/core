@@ -400,7 +400,7 @@ namespace Do.UI
 			cr.Save ();
 			double scale_no_focus = (double) region.Width/((double) region.Height * 3);
 			double scale = (double) region.Width/((double) region.Height * 3 * focus_size);
-			cr.Scale (scale, 1);
+			cr.Scale (scale_no_focus, 1);
 			cr.SetSource (highlight_surface, 0, 0);
 			
 			Matrix matrix = new Matrix ();
@@ -408,7 +408,7 @@ namespace Do.UI
 			
 			cr.Source.Matrix = matrix;
 			
-			cr.Scale ((double) (1/scale_no_focus), 1);
+			cr.Scale ((double) (1/scale), 1);
 			cr.Rectangle (region.X, region.Y, region.Width, region.Height);
 			cr.Fill ();
 			
