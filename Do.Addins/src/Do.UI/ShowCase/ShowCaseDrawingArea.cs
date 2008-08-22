@@ -368,7 +368,7 @@ namespace Do.UI
 				break;
 			case DrawState.TextMode:
 				RenderReflectedIcon (cr, "gnome-mime-text", icon_size, rectp.X, rectp.Y, .35 * alpha);
-				text = (string.IsNullOrEmpty (Context.Queries[2])) ? "" : Context.Queries[(int) pane];
+				text = (string.IsNullOrEmpty (Context.Queries[(int) pane])) ? "" : Context.Queries[(int) pane];
 				RenderText (cr, color, text, rectt.Y-15, rectp.X, rectt.X + rectt.Width, 10, Pango.Alignment.Left, true);
 				break;
 			case DrawState.NoResultFoundDraw:
