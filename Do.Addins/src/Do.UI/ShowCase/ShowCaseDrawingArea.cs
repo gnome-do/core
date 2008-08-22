@@ -234,7 +234,6 @@ namespace Do.UI
 				switch (GetPaneDrawState (Pane.First)) {
 				case DrawState.NoResultFoundDraw:
 				case DrawState.NoDraw:
-					Console.WriteLine ("Skip");
 					continue;
 				}
 				
@@ -246,7 +245,6 @@ namespace Do.UI
 				switch (GetPaneDrawState (Pane.Second)) {
 				case DrawState.NoDraw:
 				case DrawState.NoResultFoundDraw:
-					Console.WriteLine ("skip");
 					continue;
 				}
 				
