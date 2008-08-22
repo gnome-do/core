@@ -269,13 +269,7 @@ namespace Do.UI
 			
 			switch (GetPaneDrawState (Pane.First)) {
 			case DrawState.NormalDraw:
-				if (evntRegion.IntersectsWith (rectp)) {
-					RenderReflectedIcon (cr, Context.Main.Icon, icon_size, rectp.X, 
-					                     rectp.Y, alpha - (alpha * fade_alpha[0]));
-					if (OldContext.Main != null && fade_alpha[0] > 0)
-						RenderReflectedIcon (cr, OldContext.Main.Icon, icon_size, rectp.X, 
-						                     rectp.Y, alpha * fade_alpha[0]);
-				}
+				
 				text = (!string.IsNullOrEmpty (Context.Queries[0])) ? 
 					Util.FormatCommonSubstrings 
 						(Context.Main.Name, Context.Queries[0], HighlightFormat) : Context.Main.Name;
@@ -292,6 +286,13 @@ namespace Do.UI
 						if (evntRegion.IntersectsWith (highlight_area))
 							RenderHighlightRegion (cr, highlight_area);
 					}
+				}
+				if (evntRegion.IntersectsWith (rectp)) {
+					RenderReflectedIcon (cr, Context.Main.Icon, icon_size, rectp.X, 
+					                     rectp.Y, alpha - (alpha * fade_alpha[0]));
+					if (OldContext.Main != null && fade_alpha[0] > 0)
+						RenderReflectedIcon (cr, OldContext.Main.Icon, icon_size, rectp.X, 
+						                     rectp.Y, alpha * fade_alpha[0]);
 				}
 				break;
 			case DrawState.TextMode:
@@ -395,16 +396,19 @@ namespace Do.UI
 				cr2.Fill ();
 				(cr2 as IDisposable).Dispose ();
 			}
+			
 			cr.Save ();
-			cr.Scale ((double) region.Width/((double) region.Height * 3 * focus_size), 1);
+			double scale_no_focus = (double) region.Width/((double) region.Height * 3);
+			double scale = (double) region.Width/((double) region.Height * 3 * focus_size);
+			cr.Scale (scale, 1);
 			cr.SetSource (highlight_surface, 0, 0);
 			
 			Matrix matrix = new Matrix ();
-			matrix.InitTranslate (-((double) region.X / ((double) region.Width/((double) region.Height * 3 * focus_size))), -region.Y);
+			matrix.InitTranslate (-((double) region.X / scale) - ((double) region.X * (1 - focus_size) / scale), -region.Y);
 			
 			cr.Source.Matrix = matrix;
 			
-			cr.Scale ((double) (region.Height * 3)/(double) region.Width, 1);
+			cr.Scale ((double) (1/scale_no_focus), 1);
 			cr.Rectangle (region.X, region.Y, region.Width, region.Height);
 			cr.Fill ();
 			
