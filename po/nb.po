@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2008-06-12 18:38+1000\n"
-"PO-Revision-Date: 2008-06-21 00:19+0000\n"
-"Last-Translator: Thor Marius K. Høgås <nitrolinken@gmail.com>\n"
+"POT-Creation-Date: 2008-08-02 13:05+1000\n"
+"PO-Revision-Date: 2008-08-17 17:34+0000\n"
+"Last-Translator: Tommy Mikkelsen <tommy@haugalandit.no>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-07-13 03:12+0000\n"
+"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:90
@@ -30,26 +30,44 @@ msgid "<i>Verify and save account information</i>"
 msgstr "<i>Verifiser og lagre kontoinformasjon</i>"
 
 #: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:61
-#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:327
-#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:378
-#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:288
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:323
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:357
+#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:379
+#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:289
 msgid "Type to begin searching"
 msgstr "Skriv for å begynne"
 
 #: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:62
-#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:328
-#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:379
-#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:289
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:324
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:358
+#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:380
+#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:290
 msgid "Type to start searching."
 msgstr "Skriv for å starte"
 
-#: ../Do.Addins/src/Do.Universe/MailtoAction.cs:47
+#: ../Do.Addins/src/Do.Universe/ApplicationItemSource.cs:71
+msgid "Applications"
+msgstr "Programmer"
+
+#: ../Do.Addins/src/Do.Universe/ApplicationItemSource.cs:75
+msgid "Finds applications in many locations."
+msgstr "Finner programmer fra flere plasseringer"
+
+#: ../Do.Addins/src/Do.Universe/EmailAction.cs:33
 msgid "Email"
 msgstr "E-post"
 
-#: ../Do.Addins/src/Do.Universe/MailtoAction.cs:53
+#: ../Do.Addins/src/Do.Universe/EmailAction.cs:39
 msgid "Compose a new email to a friend."
 msgstr "Lag en ny e-post til en venn."
+
+#: ../Do.Addins/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:55
+msgid "GNOME Special Locations"
+msgstr "GNOME Spesielle plasseringer"
+
+#: ../Do.Addins/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:59
+msgid "Special locations in GNOME, such as Computer and Network."
+msgstr "Spesielle plasseringer i GNOME, sånn som Datamaskin og Nettverk."
 
 #: ../Do.Addins/src/Do.Universe/OpenAction.cs:42
 msgid "Open"
@@ -67,45 +85,78 @@ msgstr "Åpne URL"
 msgid "Opens bookmarks and manually-typed URLs."
 msgstr "Åpner bokmerker og andre URLs."
 
+#: ../Do.Addins/src/Do.Universe/OpenWithAction.cs:39
+msgid "Open With..."
+msgstr "Åpne med..."
+
+#: ../Do.Addins/src/Do.Universe/OpenWithAction.cs:43
+msgid "Opens files in specific applications."
+msgstr "Åpner filer i spesifikke programmer."
+
+#: ../Do.Addins/src/Do.Universe/RevealAction.cs:35
+msgid "Reveal"
+msgstr "Avslør"
+
+#: ../Do.Addins/src/Do.Universe/RevealAction.cs:40
+msgid "Reveals a file in the file manager."
+msgstr "Avslører en fil i fil behandleren."
+
 #: ../Do.Addins/src/Do.Universe/RunAction.cs:34
 msgid "Run"
 msgstr "Kjør"
 
 #: ../Do.Addins/src/Do.Universe/RunAction.cs:39
 msgid "Run an application, script, or other executable."
-msgstr "Kjør et programm, skript eller en annen type kjørbar."
+msgstr "Kjør et program, skript eller en annen type kjørbar."
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:59
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:49
+msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
+msgstr ""
+"<span size=\"large\"><b>Oppdaterte tillegg er tilgjengelige!</b></span>"
+
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:111
+msgid "_Install Updates"
+msgstr "_Installer oppdateringer"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:65
 msgid "<b>First-launch Behavior</b>"
 msgstr "<b>Første-gangs oppførsel</b>"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:79
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:85
 msgid "Start GNOME Do at login."
 msgstr "Start GNOME Do ved oppstart."
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:91
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:97
 msgid "Hide window on first launch (quiet mode)."
 msgstr "Gjem vinduet ved start (stille modus)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:109
+msgid "Show notifcation icon"
+msgstr "Vis meldings ikon"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:127
 msgid "<b>Appearance</b>"
 msgstr "<b>Utseende</b>"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:131
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:149
 msgid "Theme:"
 msgstr "Tema:"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:139
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:157
 msgid "Classic"
 msgstr "Klassisk"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:140
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:158
 msgid "Glass Frame"
 msgstr "Glassramme"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:141
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:159
 msgid "Mini"
 msgstr "Mini"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:181
+msgid "Always show results window"
+msgstr "Alltid vis resultat vindu"
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
 msgid "To edit a shortcut, double-click it and type a new one."
@@ -119,11 +170,11 @@ msgstr "Vis:"
 msgid "Search:"
 msgstr "Søk:"
 
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:145
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:144
 msgid "_Configure"
 msgstr "_Konfigurer"
 
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:171
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:170
 msgid "_About"
 msgstr "_Om"
 
@@ -140,30 +191,109 @@ msgid "page1"
 msgstr "side1"
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
+#: ../Do/src/Do.Universe/PreferencesItem.cs:29
 msgid "GNOME Do Preferences"
 msgstr "GNOME Do Instillinger"
 
-#: ../Do/src/Do.Core/Controller.cs:793
+#: ../Do/src/Do.Core/Controller.cs:767
 msgid "Unknown"
 msgstr "Ukjent"
 
+#: ../Do/src/Do.Core/DoAddinInstaller.cs:37
+msgid "Installation cancelled"
+msgstr "Installering avbrutt"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
+msgid "Some of the required add-ins were not found"
+msgstr "Noen av de påkrevde tilleggene ble ikke funnet"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:171
+msgid "Installation failed"
+msgstr "Installasjonen feilet"
+
 #. About menu item
-#: ../Do/src/Do.UI/MainMenu.cs:50
+#: ../Do/src/Do.UI/MainMenu.cs:46
 msgid "_About Do"
 msgstr "_Om Do"
 
+#. Preferences menu item
+#: ../Do/src/Do.UI/MainMenu.cs:53
+msgid "_Preferences"
+msgstr "_Brukervalg"
+
 #. Quit menu item
-#: ../Do/src/Do.UI/MainMenu.cs:64
+#: ../Do/src/Do.UI/MainMenu.cs:60
 msgid "_Quit"
 msgstr "_Avslutt"
+
+#: ../Do/src/Do.UI/NotificationIcon.cs:46
+msgid "Summon GNOME Do with "
+msgstr "Få frem GNOME Do med "
+
+#: ../Do/src/Do.Universe/AliasAction.cs:31
+msgid "Assign Alias..."
+msgstr "Tildel alias..."
+
+#: ../Do/src/Do.Universe/AliasAction.cs:37
+msgid "Give an item an alternate name."
+msgstr "Gi ett alternativt navn."
+
+#: ../Do/src/Do.Universe/AliasItemSource.cs:142
+msgid "Alias items"
+msgstr "Alias innhold"
+
+#: ../Do/src/Do.Universe/AliasItemSource.cs:148
+msgid "Aliased items from Do's universe."
+msgstr "Innhold med aliaser fra Do's univers."
+
+#: ../Do/src/Do.Universe/DeleteAliasAction.cs:31
+msgid "Delete Alias"
+msgstr "Slett alias"
+
+#: ../Do/src/Do.Universe/DeleteAliasAction.cs:37
+msgid "Deletes an alias."
+msgstr "Sletter ett alias."
+
+#: ../Do/src/Do.Universe/DoQuitItem.cs:31
+#: ../Do/src/Do.Universe/DoQuitItem.cs:35
+msgid "Quit GNOME Do"
+msgstr "Avslutt GNOME Do"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:34
+msgid "Internal GNOME Do Items"
+msgstr "Internt GNOME Do innhold"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:38
+msgid "Special items relevant to the inner-workings of GNOME Do."
+msgstr "Spesielle saker relevante til interne deler av GNOME Do."
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:48
+msgid "GNOME Do Item Sources"
+msgstr "GNOME Do Innhold Kilder"
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:54
+msgid "Item Sources providing all items GNOME Do knows about."
+msgstr "Innhold Kilder tilfører all innhold GNOME Do kjenner til."
+
+#: ../Do/src/Do.Universe/PreferencesItem.cs:33
+msgid "Adjust settings, manage plugins, etc."
+msgstr "Forandre brukervalg, håndter tillegg, osv."
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:35
+msgid "Selected text"
+msgstr "Merket tekst"
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:39
+msgid "Currently selected text."
+msgstr "Nåværende merket tekst."
 
 #: ../Do/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr ""
-"Utfør dine oppgaver så raskt som mulig (men ikke mer) med dine filer, "
-"bokmerker, programmer, musikk, kontakter og mer!"
+"Jobb så raskt som mulig (men ikke mer) med filer, bokmerker, programmer, "
+"musikk, kontakter og mer!"
 
 #: ../Do/gnome-do.desktop.in.h:2
 msgid "GNOME Do"

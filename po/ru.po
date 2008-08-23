@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2008-06-12 18:38+1000\n"
-"PO-Revision-Date: 2008-07-11 20:37+0000\n"
-"Last-Translator: consolamentor <Unknown>\n"
+"POT-Creation-Date: 2008-08-02 13:05+1000\n"
+"PO-Revision-Date: 2008-08-05 15:43+0000\n"
+"Last-Translator: zhandarm <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-07-13 03:12+0000\n"
+"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:90
@@ -30,27 +30,48 @@ msgid "<i>Verify and save account information</i>"
 msgstr "<i>Подтвердить и сохранить информацию об аккаунте</i>"
 
 #: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:61
-#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:327
-#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:378
-#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:288
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:323
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:357
+#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:379
+#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:289
 #, fuzzy
 msgid "Type to begin searching"
 msgstr "Набирайте для начала поиска"
 
 #: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:62
-#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:328
-#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:379
-#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:289
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:324
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:358
+#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:380
+#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:290
 msgid "Type to start searching."
 msgstr "Наберите, чтобы начать поиск"
 
-#: ../Do.Addins/src/Do.Universe/MailtoAction.cs:47
+#: ../Do.Addins/src/Do.Universe/ApplicationItemSource.cs:71
+msgid "Applications"
+msgstr "Приложения"
+
+#: ../Do.Addins/src/Do.Universe/ApplicationItemSource.cs:75
+#, fuzzy
+msgid "Finds applications in many locations."
+msgstr "Исчет приложения во всех папках."
+
+#: ../Do.Addins/src/Do.Universe/EmailAction.cs:33
 msgid "Email"
 msgstr "E-mail"
 
-#: ../Do.Addins/src/Do.Universe/MailtoAction.cs:53
+#: ../Do.Addins/src/Do.Universe/EmailAction.cs:39
 msgid "Compose a new email to a friend."
 msgstr "Написать новое письмо другу"
+
+#: ../Do.Addins/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:55
+#, fuzzy
+msgid "GNOME Special Locations"
+msgstr "Настройки GNOME"
+
+#: ../Do.Addins/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:59
+#, fuzzy
+msgid "Special locations in GNOME, such as Computer and Network."
+msgstr "Настройки GNOME, такие как Компьютер и Сеть"
 
 #: ../Do.Addins/src/Do.Universe/OpenAction.cs:42
 msgid "Open"
@@ -69,6 +90,26 @@ msgstr "Открыть URL"
 msgid "Opens bookmarks and manually-typed URLs."
 msgstr "Открывает закладки и набранные вручную URL'ы."
 
+#: ../Do.Addins/src/Do.Universe/OpenWithAction.cs:39
+#, fuzzy
+msgid "Open With..."
+msgstr "Открыть с помощью..."
+
+#: ../Do.Addins/src/Do.Universe/OpenWithAction.cs:43
+#, fuzzy
+msgid "Opens files in specific applications."
+msgstr "Открыть файл в выбранном приложении."
+
+#: ../Do.Addins/src/Do.Universe/RevealAction.cs:35
+#, fuzzy
+msgid "Reveal"
+msgstr "Показать"
+
+#: ../Do.Addins/src/Do.Universe/RevealAction.cs:40
+#, fuzzy
+msgid "Reveals a file in the file manager."
+msgstr "Показывает файл в файловом менеджере."
+
 #: ../Do.Addins/src/Do.Universe/RunAction.cs:34
 msgid "Run"
 msgstr "Выполнить"
@@ -77,37 +118,57 @@ msgstr "Выполнить"
 msgid "Run an application, script, or other executable."
 msgstr "Выполнить как приложение, скрипт, или другое исполняемое."
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:59
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:49
+#, fuzzy
+msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
+msgstr "<span size=\"large\"><b>Доступные новые версии плагинов!</b></span>"
+
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:111
+#, fuzzy
+msgid "_Install Updates"
+msgstr "_Установить Обновления"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:65
 msgid "<b>First-launch Behavior</b>"
 msgstr "<b>Настройка после первого запуска</b>"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:79
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:85
 msgid "Start GNOME Do at login."
 msgstr "Запускать GNOME Do при входе."
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:91
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:97
 msgid "Hide window on first launch (quiet mode)."
 msgstr "Не открывать окно при первом запуске (тихий режим)"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:109
+#, fuzzy
+msgid "Show notifcation icon"
+msgstr "Показать иконку напоминания"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:127
 msgid "<b>Appearance</b>"
 msgstr "<b>Внешний вид</b>"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:131
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:149
 msgid "Theme:"
 msgstr "Тема:"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:139
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:157
 msgid "Classic"
 msgstr "Классическая"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:140
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:158
 msgid "Glass Frame"
 msgstr "Стеклянное Окошко"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:141
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:159
 msgid "Mini"
 msgstr "Мини"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:181
+#, fuzzy
+msgid "Always show results window"
+msgstr "Всегда показывать окно с результатами"
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
 msgid "To edit a shortcut, double-click it and type a new one."
@@ -121,11 +182,11 @@ msgstr "Показать:"
 msgid "Search:"
 msgstr "Поиск:"
 
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:145
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:144
 msgid "_Configure"
 msgstr "_Настройка"
 
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:171
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:170
 msgid "_About"
 msgstr "_О программе"
 
@@ -143,23 +204,122 @@ msgid "page1"
 msgstr "page1"
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
+#: ../Do/src/Do.Universe/PreferencesItem.cs:29
 msgid "GNOME Do Preferences"
 msgstr "Параметры GNOME Do"
 
-#: ../Do/src/Do.Core/Controller.cs:793
+#: ../Do/src/Do.Core/Controller.cs:767
 msgid "Unknown"
 msgstr "Неизвестный"
 
+#: ../Do/src/Do.Core/DoAddinInstaller.cs:37
+#, fuzzy
+msgid "Installation cancelled"
+msgstr "Установка отменена"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
+#, fuzzy
+msgid "Some of the required add-ins were not found"
+msgstr "Необходимые дополнения не найдены"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:171
+#, fuzzy
+msgid "Installation failed"
+msgstr "Установка неудалась"
+
 #. About menu item
-#: ../Do/src/Do.UI/MainMenu.cs:50
+#: ../Do/src/Do.UI/MainMenu.cs:46
 #, fuzzy
 msgid "_About Do"
 msgstr "_О программе"
 
+#. Preferences menu item
+#: ../Do/src/Do.UI/MainMenu.cs:53
+#, fuzzy
+msgid "_Preferences"
+msgstr "_Параметры"
+
 #. Quit menu item
-#: ../Do/src/Do.UI/MainMenu.cs:64
+#: ../Do/src/Do.UI/MainMenu.cs:60
 msgid "_Quit"
 msgstr "_Выход"
+
+#: ../Do/src/Do.UI/NotificationIcon.cs:46
+#, fuzzy
+msgid "Summon GNOME Do with "
+msgstr "Запустить GNOME Do с "
+
+#: ../Do/src/Do.Universe/AliasAction.cs:31
+#, fuzzy
+msgid "Assign Alias..."
+msgstr "Назначить названия..."
+
+#: ../Do/src/Do.Universe/AliasAction.cs:37
+#, fuzzy
+msgid "Give an item an alternate name."
+msgstr "Дать предмету другое имя."
+
+#: ../Do/src/Do.Universe/AliasItemSource.cs:142
+#, fuzzy
+msgid "Alias items"
+msgstr "Назначить предметы"
+
+#: ../Do/src/Do.Universe/AliasItemSource.cs:148
+#, fuzzy
+msgid "Aliased items from Do's universe."
+msgstr "Назначеные предметы из Do"
+
+#: ../Do/src/Do.Universe/DeleteAliasAction.cs:31
+#, fuzzy
+msgid "Delete Alias"
+msgstr "Удалить названия"
+
+#: ../Do/src/Do.Universe/DeleteAliasAction.cs:37
+#, fuzzy
+msgid "Deletes an alias."
+msgstr "Удалить имя."
+
+#: ../Do/src/Do.Universe/DoQuitItem.cs:31
+#: ../Do/src/Do.Universe/DoQuitItem.cs:35
+#, fuzzy
+msgid "Quit GNOME Do"
+msgstr "Выйти из GNOME Do"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:34
+#, fuzzy
+msgid "Internal GNOME Do Items"
+msgstr "Внешние предметы GNOME Do"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:38
+#, fuzzy
+msgid "Special items relevant to the inner-workings of GNOME Do."
+msgstr "Особые предметы GNOME Do."
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:48
+#, fuzzy
+msgid "GNOME Do Item Sources"
+msgstr "Исходники предметов Gnome Do"
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:54
+#, fuzzy
+msgid "Item Sources providing all items GNOME Do knows about."
+msgstr ""
+"Исходники предметов обеспечивают все предметы, которые распознает GNOME Do"
+
+#: ../Do/src/Do.Universe/PreferencesItem.cs:33
+#, fuzzy
+msgid "Adjust settings, manage plugins, etc."
+msgstr "Изменить параметры, настроить плагины и т.д."
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:35
+#, fuzzy
+msgid "Selected text"
+msgstr "Выбранный текст"
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:39
+#, fuzzy
+msgid "Currently selected text."
+msgstr "Выбранный текст"
 
 #: ../Do/gnome-do.desktop.in.h:1
 #, fuzzy

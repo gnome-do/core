@@ -1,108 +1,304 @@
-# This file is distributed under the same license as the PACKAGE package.
+# Traducció del gnome-do al Català
+# This file is distributed under the same license as the gnome-do package.
 #
-# Jordi Mas i Heranàndez, 2008
+# Jordi Mas i Heranàndez <jmas@softcatala.org>, 2008
+# Joan Duran <jodufi@gmail.com>, 2008.
 #
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-do\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-06 14:19+0100\n"
-"PO-Revision-Date: 2008-01-06 14:15+0100\n"
-"Last-Translator: Jordi Mas <jmas@softcatala.org>\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2008-08-02 13:05+1000\n"
+"PO-Revision-Date: 2008-08-12 23:01+0000\n"
+"Last-Translator: Joan Duran <jodufi@gmail.com>\n"
+"Language-Team: Catalan <ubuntu-l10n-ca@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
-#: ../Do/src/Do.UI/SymbolWindow.cs:54
-msgid "No results found."
-msgstr "No s'han trobat resultats."
+#: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:90
+msgid "Password"
+msgstr "Contrasenya"
 
-#: ../Do/src/Do.UI/SymbolWindow.cs:59
-#, csharp-format
-msgid "No results found for \"{0}\"."
-msgstr "No s'han trobat resultats per a «{0}»."
+#: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:113
+msgid "Username"
+msgstr "Nom d'usuari"
 
-#: ../Do/src/Do.UI/SymbolWindow.cs:157
+#: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:130
+msgid "<i>Verify and save account information</i>"
+msgstr "<i>Verifica i desa la informació del compte</i>"
+
+#: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:61
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:323
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:357
+#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:379
+#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:289
 msgid "Type to begin searching"
 msgstr "Teclegeu per a començar a cercar"
 
-#: ../Do/src/Do.UI/SymbolWindow.cs:157
+#: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:62
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:324
+#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:358
+#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:380
+#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:290
 msgid "Type to start searching."
-msgstr "Teclegeu per a començar a cercar"
+msgstr "Teclegeu per a iniciar la cerca."
 
-#. Separator
-#. menu.Add (new SeparatorMenuItem ());
-#. About menu item
-#: ../Do/src/Do.UI/MainMenu.cs:68
-msgid "_About Do"
-msgstr "_En quant a Do"
+#: ../Do.Addins/src/Do.Universe/ApplicationItemSource.cs:71
+msgid "Applications"
+msgstr "Aplicacions"
 
-#. Quit menu item
-#: ../Do/src/Do.UI/MainMenu.cs:75
-msgid "_Quit"
-msgstr "_Surt"
+#: ../Do.Addins/src/Do.Universe/ApplicationItemSource.cs:75
+msgid "Finds applications in many locations."
+msgstr "Troba aplicacions en moltes ubicacions."
 
-#. about.Copyright = "Copyright \xa9 2008 David Siegel";
-#: ../Do/src/Do.UI/MainMenu.cs:112
-msgid ""
-"Do things as quickly as possible\n"
-"in your GNOME desktop environment."
-msgstr ""
-
-#: ../Do.Addins/src/Do.Universe/RunAction.cs:32
-msgid "Run"
-msgstr "Executa"
-
-#: ../Do.Addins/src/Do.Universe/RunAction.cs:37
-msgid "Run an application, script, or other executable."
-msgstr "Executa una aplicació, script o executable."
-
-#: ../Do.Addins/src/Do.Universe/DefineWordAction.cs:48
-msgid "Define"
-msgstr "Defineix"
-
-#: ../Do.Addins/src/Do.Universe/DefineWordAction.cs:53
-msgid "Define a given word."
-msgstr "Defineix una paraula."
-
-#: ../Do.Addins/src/Do.Universe/OpenAction.cs:39
-msgid "Open"
-msgstr "Obre"
-
-#: ../Do.Addins/src/Do.Universe/OpenAction.cs:44
-msgid "Opens many kinds of items."
-msgstr "Obre molts tipus d'elements."
-
-#: ../Do.Addins/src/Do.Universe/MailtoAction.cs:31
+#: ../Do.Addins/src/Do.Universe/EmailAction.cs:33
 msgid "Email"
 msgstr "Correu electrònic"
 
-#: ../Do.Addins/src/Do.Universe/MailtoAction.cs:36
+#: ../Do.Addins/src/Do.Universe/EmailAction.cs:39
 msgid "Compose a new email to a friend."
 msgstr "Compon un correu electrònic i envia'l a un amic."
 
-#: ../Do.Addins/src/Do.Universe/OpenTerminalHereAction.cs:37
-msgid "Open Terminal Here"
-msgstr "Obre un terminal aquí"
+#: ../Do.Addins/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:55
+msgid "GNOME Special Locations"
+msgstr "Ubicacions especials del GNOME"
 
-#: ../Do.Addins/src/Do.Universe/OpenTerminalHereAction.cs:42
-msgid "Opens a Terminal in a given location."
-msgstr "Obre un terminal en la ubicació donada."
+#: ../Do.Addins/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:59
+msgid "Special locations in GNOME, such as Computer and Network."
+msgstr "Ubicacions especials del GNOME, com ara Ordinador i Xarxa."
 
-#: ../Do.Addins/src/Do.Universe/RunInTerminalAction.cs:143
-msgid "Run in Terminal"
-msgstr "Executa en un terminal"
+#: ../Do.Addins/src/Do.Universe/OpenAction.cs:42
+msgid "Open"
+msgstr "Obre"
 
-#: ../Do.Addins/src/Do.Universe/RunInTerminalAction.cs:148
-msgid "Run a command in a terminal."
-msgstr "Executa una ordre en un terminal."
+#: ../Do.Addins/src/Do.Universe/OpenAction.cs:47
+msgid "Opens many kinds of items."
+msgstr "Obre molts tipus d'elements."
 
-#: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:42
+#: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:53
 msgid "Open URL"
 msgstr "Obre una URL"
 
-#: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:47
+#: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:58
 msgid "Opens bookmarks and manually-typed URLs."
 msgstr "Obre adreces d'interès i URL teclejades manualment."
+
+#: ../Do.Addins/src/Do.Universe/OpenWithAction.cs:39
+msgid "Open With..."
+msgstr "Obre amb..."
+
+#: ../Do.Addins/src/Do.Universe/OpenWithAction.cs:43
+msgid "Opens files in specific applications."
+msgstr "Obre fitxers en aplicacions específiques."
+
+#: ../Do.Addins/src/Do.Universe/RevealAction.cs:35
+msgid "Reveal"
+msgstr "Mostra"
+
+#: ../Do.Addins/src/Do.Universe/RevealAction.cs:40
+msgid "Reveals a file in the file manager."
+msgstr "Mostra un fitxer en el gestor de fitxers."
+
+#: ../Do.Addins/src/Do.Universe/RunAction.cs:34
+msgid "Run"
+msgstr "Executa"
+
+#: ../Do.Addins/src/Do.Universe/RunAction.cs:39
+msgid "Run an application, script, or other executable."
+msgstr "Executa una aplicació, script o executable."
+
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:49
+msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
+msgstr ""
+"<span size=\"large\"><b>Hi ha disponibles connectors actualitzats.</b></span>"
+
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:111
+msgid "_Install Updates"
+msgstr "_Instal·la les actualitzacions"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:65
+msgid "<b>First-launch Behavior</b>"
+msgstr "<b>Comportament de la primera execució</b>"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:85
+msgid "Start GNOME Do at login."
+msgstr "Inicia el GNOME Do en entrar."
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:97
+msgid "Hide window on first launch (quiet mode)."
+msgstr "Oculta la finestra en executar per primer cop (mode silenciós)."
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:109
+msgid "Show notifcation icon"
+msgstr "Mostra la icona de notificació"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:127
+msgid "<b>Appearance</b>"
+msgstr "<b>Aparença</b>"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:149
+msgid "Theme:"
+msgstr "Tema:"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:157
+msgid "Classic"
+msgstr "Clàssic"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:158
+msgid "Glass Frame"
+msgstr "Marc de vidre"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:159
+msgid "Mini"
+msgstr "Mini"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:181
+msgid "Always show results window"
+msgstr "Mostra sempre la finestra de resultats"
+
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
+msgid "To edit a shortcut, double-click it and type a new one."
+msgstr "Per a editar una drecera, feu doble clic i teclegeu la nova."
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
+msgid "Show:"
+msgstr "Mostra:"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:89
+msgid "Search:"
+msgstr "Cerca:"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:144
+msgid "_Configure"
+msgstr "_Configura"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:170
+msgid "_About"
+msgstr "_Quant a"
+
+#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
+msgid "PluginConfigurationWindow"
+msgstr "Finestra de configuració dels connectors"
+
+#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
+msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
+msgstr "<span size=\"large\" weight=\"heavy\">Nom del connector aquí</span>"
+
+#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
+msgid "page1"
+msgstr "pàgina1"
+
+#: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
+#: ../Do/src/Do.Universe/PreferencesItem.cs:29
+msgid "GNOME Do Preferences"
+msgstr "Preferències del GNOME Do"
+
+#: ../Do/src/Do.Core/Controller.cs:767
+msgid "Unknown"
+msgstr "Desconegut"
+
+#: ../Do/src/Do.Core/DoAddinInstaller.cs:37
+msgid "Installation cancelled"
+msgstr "Instal·lació cancel·lada"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
+msgid "Some of the required add-ins were not found"
+msgstr "No s'han trobat alguns dels complements necessaris"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:171
+msgid "Installation failed"
+msgstr "Ha fallat l'instal·lació"
+
+#. About menu item
+#: ../Do/src/Do.UI/MainMenu.cs:46
+msgid "_About Do"
+msgstr "_En quant al Do"
+
+#. Preferences menu item
+#: ../Do/src/Do.UI/MainMenu.cs:53
+msgid "_Preferences"
+msgstr "_Preferències"
+
+#. Quit menu item
+#: ../Do/src/Do.UI/MainMenu.cs:60
+msgid "_Quit"
+msgstr "_Surt"
+
+#: ../Do/src/Do.UI/NotificationIcon.cs:46
+msgid "Summon GNOME Do with "
+msgstr "Invoca el GNOME Do amb "
+
+#: ../Do/src/Do.Universe/AliasAction.cs:31
+msgid "Assign Alias..."
+msgstr "Assigna àlies..."
+
+#: ../Do/src/Do.Universe/AliasAction.cs:37
+msgid "Give an item an alternate name."
+msgstr "Dóna a un element un nom alternatiu."
+
+#: ../Do/src/Do.Universe/AliasItemSource.cs:142
+msgid "Alias items"
+msgstr "Elements àlies"
+
+#: ../Do/src/Do.Universe/AliasItemSource.cs:148
+msgid "Aliased items from Do's universe."
+msgstr "Elements àlies de l'univers del Do."
+
+#: ../Do/src/Do.Universe/DeleteAliasAction.cs:31
+msgid "Delete Alias"
+msgstr "Suprimeix àlies"
+
+#: ../Do/src/Do.Universe/DeleteAliasAction.cs:37
+msgid "Deletes an alias."
+msgstr "Suprimeix un àlies."
+
+#: ../Do/src/Do.Universe/DoQuitItem.cs:31
+#: ../Do/src/Do.Universe/DoQuitItem.cs:35
+msgid "Quit GNOME Do"
+msgstr "Surt del GNOME Do"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:34
+msgid "Internal GNOME Do Items"
+msgstr "Elements interns del GNOME Do"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:38
+msgid "Special items relevant to the inner-workings of GNOME Do."
+msgstr ""
+"Elements especials rellevants per al funcionament intern del GNOME Do."
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:48
+msgid "GNOME Do Item Sources"
+msgstr "Fonts d'elements del GNOME Do"
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:54
+msgid "Item Sources providing all items GNOME Do knows about."
+msgstr ""
+"Fonts d'elements que proporcionen tots els elements que coneix el GNOME Do."
+
+#: ../Do/src/Do.Universe/PreferencesItem.cs:33
+msgid "Adjust settings, manage plugins, etc."
+msgstr "Ajusta el paràmetres, gestiona el connectors, etc."
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:35
+msgid "Selected text"
+msgstr "Text seleccionat"
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:39
+msgid "Currently selected text."
+msgstr "Text seleccionat actualment."
+
+#: ../Do/gnome-do.desktop.in.h:1
+msgid ""
+"Do things as quickly as possible (but no quicker) with your files, "
+"bookmarks, applications, music, contacts, and more!"
+msgstr ""
+"Feu les coses tan ràpid com podeu (però no més ràpid) amb els vostres "
+"fitxers, adreces d'interès, aplicacions, música, contactes i més!"
+
+#: ../Do/gnome-do.desktop.in.h:2
+msgid "GNOME Do"
+msgstr "GNOME Do"
