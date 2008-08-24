@@ -21,6 +21,7 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Threading;
 
 using Gdk;
 using Mono.Unix;
@@ -34,6 +35,17 @@ using Do.DBusLib;
 namespace Do.Core {
 
 	public class Controller : IController, IDoController {
+		
+		struct DoPerformState {
+			public List<IItem> Items, ModItems;
+			public IAction Action;
+			
+			public DoPerformState (IAction action, List<IItem> items, List<IItem> moditems) {
+				Items = items;
+				ModItems = moditems;
+				Action = action;
+			}
+		}
 
 		protected IDoWindow window;
 		protected Gtk.Window addin_window;
@@ -690,13 +702,27 @@ namespace Do.Core {
 				foreach (DoObject item in items)
 					(action as DoObject).IncreaseRelevance (actionQuery, item);
 
-				action.Perform (items.ToArray (), modItems.ToArray ());
+				DoPerformState state = new DoPerformState (action, items, modItems);
+				Thread th = new Thread (new ParameterizedThreadStart (DoPerformWork));
+				th.Start (state);
+				
+				if (!th.Join (4000)) {
+					th.Abort ();
+				}
 			}
 
 			if (vanish) {
 				Reset ();
 			}
 		}
+				
+		private void DoPerformWork (object o)
+		{
+			DoPerformState state = (DoPerformState) o;
+			
+			state.Action.Perform (state.Items.ToArray (), state.ModItems.ToArray ());
+		}
+					
 
 		///////////////////////////
 		/// IController Members ///
