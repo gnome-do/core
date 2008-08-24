@@ -706,7 +706,7 @@ namespace Do.Core {
 				Thread th = new Thread (new ParameterizedThreadStart (DoPerformWork));
 				th.Start (state);
 				
-				if (!th.Join (4000)) {
+				if (!th.Join (7000)) {
 					th.Abort ();
 				}
 			}
