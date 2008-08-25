@@ -716,9 +716,7 @@ namespace Do.Core {
 		private void DoPerformWork (object o)
 		{
 			DoPerformState state = (DoPerformState) o;
-			Console.WriteLine ("Perform");
 			state.Action.Perform (state.Items.ToArray (), state.ModItems.ToArray ());
-			Console.WriteLine ("Perform Over");
 		}
 					
 
