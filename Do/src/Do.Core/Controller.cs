@@ -52,6 +52,7 @@ namespace Do.Core {
 		protected Gtk.AboutDialog about_window;
 		protected PreferencesWindow prefs_window;
 		protected ISearchController[] controllers;
+		protected Thread th;
 		
 		const int SearchDelay = 250;
 		
@@ -703,12 +704,8 @@ namespace Do.Core {
 					(action as DoObject).IncreaseRelevance (actionQuery, item);
 
 				DoPerformState state = new DoPerformState (action, items, modItems);
-				Thread th = new Thread (new ParameterizedThreadStart (DoPerformWork));
+				th = new Thread (new ParameterizedThreadStart (DoPerformWork));
 				th.Start (state);
-				
-				if (!th.Join (7000)) {
-					th.Abort ();
-				}
 			}
 
 			if (vanish) {
@@ -719,8 +716,9 @@ namespace Do.Core {
 		private void DoPerformWork (object o)
 		{
 			DoPerformState state = (DoPerformState) o;
-			
+			Console.WriteLine ("Perform");
 			state.Action.Perform (state.Items.ToArray (), state.ModItems.ToArray ());
+			Console.WriteLine ("Perform Over");
 		}
 					
 
@@ -731,6 +729,14 @@ namespace Do.Core {
 		public void Summon ()
 		{
 			if (!IsSummonable) return;
+
+			if (th != null && th.IsAlive) {
+				NotificationIcon.SendNotification ("Do Error:", "A previous action is still " + 
+				                                   "running.  Please wait for this action to " +
+				                                   "finish running");
+				return;
+			}
+			
 			window.Summon ();
 			if (Do.Preferences.AlwaysShowResults)
 				GrowResults ();
