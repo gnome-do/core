@@ -64,8 +64,6 @@ FILES =  \
 	src/Do.UI/ShowCase/ShowCase.cs \
 	src/Do.UI/ShowCase/ShowCaseDrawingArea.cs \
 	src/Do.UI/ShowCase/ShowCaseDrawingContext.cs \
-	src/Do.UI/ShowCase/ShowCaseIconBox.cs \
-	src/Do.UI/ShowCase/ShowCaseResultsWindow.cs \
 	src/Do.UI/ShowCase/ShowCaseResultsWidget.cs \
 	src/Do.UI/IconCache.cs \
 	src/Do.UI/IconProvider.cs \
