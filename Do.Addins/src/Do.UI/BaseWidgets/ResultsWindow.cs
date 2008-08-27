@@ -358,6 +358,7 @@ namespace Do.UI
 		
 		private void UpdateCursors () 
 		{
+
 			Gtk.TreePath path;
 			
 			path = new TreePath (cursor.ToString ());

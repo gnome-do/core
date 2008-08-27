@@ -78,9 +78,9 @@ namespace Do.UI
 		{
 			double r, g, b, brighten = .2;
 			
-			r = (double) frameColor.Red / ushort.MaxValue;
-			g = (double) frameColor.Green / ushort.MaxValue;
-			b = (double) frameColor.Blue / ushort.MaxValue;
+			r = (double) fillColor.Red / ushort.MaxValue;
+			g = (double) fillColor.Green / ushort.MaxValue;
+			b = (double) fillColor.Blue / ushort.MaxValue;
 			
 			cairo.Save ();
 			SemiOutline (cairo);
