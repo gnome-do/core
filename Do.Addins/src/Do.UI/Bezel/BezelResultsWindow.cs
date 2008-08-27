@@ -213,6 +213,7 @@ namespace Do.UI
 				cr.Fill ();
 				(cr as IDisposable).Dispose ();
 			}
+			cr2.Operator = Operator.Source;
 			cr2.SetSource (buffered_surface);
 			cr2.Paint ();
 			(cr2 as IDisposable).Dispose ();

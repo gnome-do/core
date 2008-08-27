@@ -62,7 +62,8 @@ namespace Do.UI
 		
 		Gdk.Rectangle drawing_area;
 		Dictionary <string, Cairo.Color> colors;
-		Dictionary<string, Surface> surface_buffer;
+		Dictionary <string, Surface> surface_buffer;
+		Surface border_buffer;
 		Surface surface;
 		
 		double text_box_scale;
@@ -101,7 +102,7 @@ namespace Do.UI
 		
 		public BezelDrawingArea() : base ()
 		{
-			surface_buffer = new Dictionary<string,Surface> ();
+			surface_buffer = new Dictionary <string,Surface> ();
 			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, 0, TwoPaneWidth, WindowHeight);
 			icon_fade = new double [3];
 			
@@ -306,10 +307,9 @@ namespace Do.UI
 		private void SetTitlePath (Cairo.Context cr)
 		{
 			int radius = WindowRadius;
-			double x = drawing_area.X +.5;
-			double y = drawing_area.Y +.5;
-			double width = drawing_area.Width - 1;
-			double hight = drawing_area.Height - 1;
+			double x = .5;
+			double y = .5;
+			double width = TwoPaneWidth - 1;
 			cr.MoveTo (x+radius, y);
 			cr.Arc (x+width-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
 			cr.LineTo (x+width, TitleBarHeight);
@@ -341,29 +341,9 @@ namespace Do.UI
 			cr.LineWidth = 1;
 			cr.Stroke ();
 			
-			SetTitlePath (cr);
-			cr.Operator = Cairo.Operator.Source;
-			LinearGradient title_grad = new LinearGradient (0, 0, 0, TitleBarHeight);
-			title_grad.AddColorStop (0.0, colors["titlebar_step1"]);
-			title_grad.AddColorStop (0.5, colors["titlebar_step2"]);
-			title_grad.AddColorStop (0.5, colors["titlebar_step3"]);
-			cr.Pattern = title_grad;
-			cr.FillPreserve ();
-			cr.Operator = Cairo.Operator.Over;
-			
-			LinearGradient grad = new LinearGradient (0, 0, 0, TitleBarHeight);
-			grad.AddColorStop (0, new Cairo.Color (1, 1, 1, .6));
-			grad.AddColorStop (.6, new Cairo.Color (1, 1, 1, 0));
-			cr.Pattern = grad;
-			cr.LineWidth = 1;
-			cr.Stroke ();
-			
-			RenderTitleText (cr);
-			RenderDownCircle (cr);
-			RenderCloseCircle (cr);
+			RenderTitleBar (cr);
 			
 			do {
-				
 				
 				RenderDescriptionText (cr);
 				//--------------First Pane---------------
@@ -408,15 +388,15 @@ namespace Do.UI
 		
 		private void RenderCloseCircle (Context cr)
 		{
-			cr.Arc (drawing_area.X + 12,
+			cr.Arc (12,
 			        TitleBarHeight / 2, 6, 0, Math.PI*2);
 			cr.Color = new Cairo.Color (1, 1, 1, .8);
 			cr.Fill ();
 			
-			cr.MoveTo (drawing_area.X + 15, (TitleBarHeight / 2) - 3);
-			cr.LineTo (drawing_area.X + 9, (TitleBarHeight / 2) + 3);
-			cr.MoveTo (drawing_area.X + 9, (TitleBarHeight / 2) - 3);
-			cr.LineTo (drawing_area.X + 15, (TitleBarHeight / 2) + 3);
+			cr.MoveTo (15, (TitleBarHeight / 2) - 3);
+			cr.LineTo (9, (TitleBarHeight / 2) + 3);
+			cr.MoveTo (9, (TitleBarHeight / 2) - 3);
+			cr.LineTo (15, (TitleBarHeight / 2) + 3);
 			
 			cr.Color = new Cairo.Color (0.2, 0.2, 0.2, .8);
 			cr.LineWidth = 2;
@@ -425,14 +405,14 @@ namespace Do.UI
 		
 		private void RenderDownCircle (Context cr)
 		{
-			cr.Arc (drawing_area.X + drawing_area.Width - 12,
+			cr.Arc (TwoPaneWidth - 12,
 			        TitleBarHeight / 2, 6, 0, Math.PI*2);
 			cr.Color = new Cairo.Color (1, 1, 1, .8);
 			cr.Fill ();
 			
-			cr.MoveTo (drawing_area.X + drawing_area.Width - 15, (TitleBarHeight / 2) - 2);
-			cr.LineTo (drawing_area.X + drawing_area.Width - 9, (TitleBarHeight / 2) - 2);
-			cr.LineTo (drawing_area.X + drawing_area.Width - 12, (TitleBarHeight / 2) + 3);
+			cr.MoveTo (TwoPaneWidth - 15, (TitleBarHeight / 2) - 2);
+			cr.LineTo (TwoPaneWidth - 9, (TitleBarHeight / 2) - 2);
+			cr.LineTo (TwoPaneWidth - 12, (TitleBarHeight / 2) + 3);
 			cr.Color = new Cairo.Color (0.2, 0.2, 0.2, .8);
 			cr.Fill ();
 		}
@@ -650,6 +630,53 @@ namespace Do.UI
 			                            colors["focused_text"].B, 
 			                            colors["focused_text"].A * text_box_scale);
 			cr.Fill ();
+		}
+		
+		void RenderTitleBar (Context cr)
+		{
+			if (border_buffer == null) {
+				
+				Surface surface = cr.Target.CreateSimilar (cr.Target.Content, TwoPaneWidth, TitleBarHeight);
+				Context cr2 = new Context (surface);
+				
+				SetTitlePath (cr2);
+				cr2.Operator = Cairo.Operator.Source;
+				LinearGradient title_grad = new LinearGradient (0, 0, 0, TitleBarHeight);
+				title_grad.AddColorStop (0.0, colors["titlebar_step1"]);
+				title_grad.AddColorStop (0.5, colors["titlebar_step2"]);
+				title_grad.AddColorStop (0.5, colors["titlebar_step3"]);
+				cr2.Pattern = title_grad;
+				cr2.FillPreserve ();
+				cr2.Operator = Cairo.Operator.Over;
+			
+				LinearGradient grad = new LinearGradient (0, 0, 0, TitleBarHeight);
+				grad.AddColorStop (0, new Cairo.Color (1, 1, 1, .6));
+				grad.AddColorStop (.6, new Cairo.Color (1, 1, 1, 0));
+				cr2.Pattern = grad;
+				cr2.LineWidth = 1;
+				cr2.Stroke ();
+			
+				RenderDownCircle (cr2);
+				RenderCloseCircle (cr2);
+				
+				border_buffer = surface;
+				(cr2 as IDisposable).Dispose ();
+			}
+			
+			if (drawing_area.Width == TwoPaneWidth) {
+				cr.SetSource (border_buffer, drawing_area.X, drawing_area.Y);
+				cr.Rectangle (drawing_area.X, drawing_area.Y, drawing_area.Width, TitleBarHeight);
+				cr.Fill ();
+			} else {
+				cr.SetSource (border_buffer, drawing_area.X, drawing_area.Y);
+				cr.Rectangle (drawing_area.X, drawing_area.Y, 200, TitleBarHeight);
+				cr.Fill ();
+				
+				cr.SetSource (border_buffer, drawing_area.X + drawing_area.Width - TwoPaneWidth, drawing_area.Y);
+				cr.Rectangle (drawing_area.X + 200, drawing_area.Y, drawing_area.Width - 200, TitleBarHeight);
+				cr.Fill ();
+			}
+			RenderTitleText (cr);
 		}
 	}
 }
