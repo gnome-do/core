@@ -64,6 +64,11 @@ namespace Do.Core
 		/// Get or Set text mode on a search context
 		/// </value>
 		bool TextMode {get; set;}
+
+		/// <value>
+		/// The reason for which text mode was entered
+		/// </value>
+		TextModeType TextType {get;}
 		
 		/// <value>
 		/// Determines if the default filter is applied to the context or not

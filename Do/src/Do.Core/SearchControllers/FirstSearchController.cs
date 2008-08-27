@@ -66,9 +66,7 @@ namespace Do.Core
 
 		public override bool TextMode {
 			get { 
-				bool implicit_text_mode = false;
-				implicit_text_mode = Results.Length == 1 && Results[0] is ITextItem;
-				return (textMode || implicit_text_mode); 
+				return (textMode || ImplicitTextMode); 
 			}
 			set { 
 				if (context.ParentContext != null) return;

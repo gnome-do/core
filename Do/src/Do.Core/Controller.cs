@@ -108,7 +108,7 @@ namespace Do.Core {
 			if (null != window) Vanish ();
 			switch (Do.Preferences.Theme) {
 				case "Mini":
-					window = new MiniWindow (this);
+					window = new Bezel (this);
 					break;
 				case "Glass Frame":
 					window = new GlassWindow (this);
@@ -347,6 +347,10 @@ namespace Do.Core {
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
 		{
+			if (CurrentContext.TextType == TextModeType.Explicit) {
+				OnInputKeyPressEvent (evnt);
+				return;
+			}
 			bool shift_pressed = (evnt.State & ModifierType.ShiftMask) != 0;
 			PerformAction (!shift_pressed);
 		}
@@ -379,6 +383,11 @@ namespace Do.Core {
 		
 		void OnEscapeKeyPressEvent (EventKey evnt)
 		{
+			if (CurrentContext.TextType == TextModeType.Explicit) {
+				CurrentContext.TextMode = false;
+				return;
+			}
+			
 			bool results, something_typed;
 
 			something_typed = CurrentContext.Query.Length > 0;
@@ -399,9 +408,14 @@ namespace Do.Core {
 		void OnInputKeyPressEvent (EventKey evnt)
 		{
 			char c;
-			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
+			if (evnt.Key == Key.Return) {
+				c = '\n';
+			} else {
+				c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
+			}
 			if (char.IsLetterOrDigit (c)
 					|| char.IsPunctuation (c)
+			    	|| c == '\n'
 					|| (c == ' ' && CurrentContext.Query.Length > 0)
 					|| char.IsSymbol (c)) {
 				CurrentContext.AddChar (c);
@@ -438,9 +452,13 @@ namespace Do.Core {
 		
 		void OnTextModePressEvent (EventKey evnt)
 		{
-			bool tmp = CurrentContext.TextMode;
-			CurrentContext.TextMode = !CurrentContext.TextMode;
-			if (CurrentContext.TextMode == tmp) {
+			TextModeType tmp = CurrentContext.TextType;
+			if (tmp == TextModeType.Implicit || tmp == TextModeType.None)
+				CurrentContext.TextMode = true;
+			else 
+				CurrentContext.TextMode = false;
+			
+			if (CurrentContext.TextType == tmp) {
 				NotificationIcon.SendNotification ("Text Mode Error", "Do could not enter text mode " +
 				                                   "because the current action does not support it.");
 			} else {

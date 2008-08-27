@@ -76,7 +76,7 @@ namespace Do.UI
 			}
 			set {
 				focus = value;
-				focus_size = .01;
+				focus_size = .1;
 				AnimatedDraw ();
 			}
 		}
@@ -100,7 +100,7 @@ namespace Do.UI
 			small_text_height = height - 55;
 			third_pane_startx = width / 2;
 			fade_alpha = new double[3];
-			surface_buffer = new Dictionary<string,Surface> ();
+			surface_buffer = new Dictionary<string, Surface> ();
 			
 			focused_color = new Pango.Color ();
 			focused_color.Blue = focused_color.Red = focused_color.Green = ushort.MaxValue * 1;

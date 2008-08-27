@@ -37,7 +37,23 @@ namespace Do.Core
 		
 		public IUIContext UIContext {
 			get {
-				return context.GetIUIContext (TextMode);
+				return context.GetIUIContext (TextMode, TextType);
+			}
+		}
+		
+		protected bool ImplicitTextMode {
+			get {
+				return Results.Length == 1 && Results[0] is ITextItem && !textMode;
+			}
+		}
+		
+		public TextModeType TextType {
+			get {
+				if (textMode)
+					return TextModeType.Explicit;
+				if (ImplicitTextMode)
+					return TextModeType.Implicit;
+				return TextModeType.None;
 			}
 		}
 		

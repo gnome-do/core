@@ -26,6 +26,12 @@ using Do.Universe;
 
 namespace Do.UI
 {
+	public enum TextModeType {
+		None,
+		Explicit,
+		Implicit,
+	}
+	
 	public interface IUIContext
 	{
 		/// <value>
@@ -57,6 +63,9 @@ namespace Do.UI
 		/// Tells the controller to present text in a larger box
 		/// </value>
 		bool LargeTextDisplay {get;}
+		
+		
+		TextModeType LargeTextModeType {get;}
 		
 		/// <value>
 		/// The parent context of the current UI context if it exists.

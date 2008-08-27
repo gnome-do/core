@@ -74,6 +74,11 @@
     <File name="src/Do.UI/ShowCase/ShowCaseDrawingArea.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ShowCase/ShowCaseDrawingContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ShowCase/ShowCaseResultsWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/Bezel" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.UI/Bezel/Bezel.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/Bezel/BezelDrawingArea.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/Bezel/BezelDrawingContext.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/Bezel/BezelResultsWindow.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

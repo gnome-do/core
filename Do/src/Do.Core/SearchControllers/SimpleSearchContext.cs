@@ -122,14 +122,14 @@ namespace Do.Core
 		/// <returns>
 		/// A <see cref="IUIContext"/>
 		/// </returns>
-		public IUIContext GetIUIContext (bool textMode)
+		public IUIContext GetIUIContext (bool textMode, TextModeType type)
 		{
 			if (ParentContext == null)
 				return new UIContext (Selection, Results, Cursor, SecondaryCursorsToIntArray (), 
-				                      Query, textMode, null);
+				                      Query, textMode, type, null);
 			else
 				return new UIContext (Selection, Results, Cursor, SecondaryCursorsToIntArray (), 
-				                      Query, textMode, ParentContext.GetIUIContext (false));
+				                      Query, textMode, type, ParentContext.GetIUIContext (false, TextModeType.None));
 		}
 		
 		/// <summary>
