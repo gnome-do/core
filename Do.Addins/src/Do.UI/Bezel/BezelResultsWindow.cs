@@ -70,6 +70,8 @@ namespace Do.UI
 		
 		protected bool pushedUpdate, clearing, update_needed = false;
 		
+		protected Surface buffered_surface;
+		
 		public BezelResultsWindow () : base (Gtk.WindowType.Toplevel)
 		{
 			Build ();
@@ -174,37 +176,46 @@ namespace Do.UI
 		
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
-			Context cr = Gdk.CairoHelper.Create (GdkWindow);
-			cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-			cr.Color = new Cairo.Color (0, 0, 0, 0);
-			cr.Operator = Operator.Source;
-			cr.Fill ();
-			
-			Gdk.Rectangle geo;
-			GetSize (out geo.Width, out geo.Height);
-			
-			geo.X = geo.Y = 0;
-			
-			cr.MoveTo (geo.X + WindowRadius, geo.Y);
-			cr.Arc (geo.X + geo.Width - WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI*1.5, Math.PI*2);
-			cr.LineTo (geo.X + geo.Width, geo.Y + geo.Height);
-			cr.LineTo (geo.X, geo.Y + geo.Height);
-			cr.Arc (geo.X + WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI, Math.PI*1.5);
-			cr.Color = new Cairo.Color (.15, .15, .15, .95);
-			cr.Fill ();
-			
-			cr.MoveTo (geo.X + WindowRadius, geo.Y);
-			cr.Arc (geo.X + geo.Width - WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI*1.5, Math.PI*2);
-			cr.LineTo (geo.X + geo.Width, geo.Y + TitleBarHeight);
-			cr.LineTo (geo.X, geo.Y + TitleBarHeight);
-			cr.Arc (geo.X + WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI, Math.PI*1.5);
-			LinearGradient title_grad = new LinearGradient (0, 0, 0, TitleBarHeight);
-			title_grad.AddColorStop (0.0, new Cairo.Color (0.45, 0.45, 0.45));
-			title_grad.AddColorStop (0.5, new Cairo.Color (0.33, 0.33, 0.33));
-			title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
-			cr.Pattern = title_grad;
-			cr.Fill ();
-			(cr as IDisposable).Dispose ();
+			Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
+			if (buffered_surface == null) {
+				Gdk.Rectangle geo;
+				GetSize (out geo.Width, out geo.Height);
+				
+				geo.X = geo.Y = 0;
+				
+				buffered_surface = cr2.Target.CreateSimilar (cr2.Target.Content, geo.Width, geo.Height);
+				Context cr = new Context (buffered_surface);
+				cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+				cr.Color = new Cairo.Color (0, 0, 0, 0);
+				cr.Operator = Operator.Source;
+				cr.Fill ();
+				
+				
+				
+				cr.MoveTo (geo.X + WindowRadius, geo.Y);
+				cr.Arc (geo.X + geo.Width - WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI*1.5, Math.PI*2);
+				cr.LineTo (geo.X + geo.Width, geo.Y + geo.Height);
+				cr.LineTo (geo.X, geo.Y + geo.Height);
+				cr.Arc (geo.X + WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI, Math.PI*1.5);
+				cr.Color = new Cairo.Color (.15, .15, .15, .95);
+				cr.Fill ();
+				
+				cr.MoveTo (geo.X + WindowRadius, geo.Y);
+				cr.Arc (geo.X + geo.Width - WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI*1.5, Math.PI*2);
+				cr.LineTo (geo.X + geo.Width, geo.Y + TitleBarHeight);
+				cr.LineTo (geo.X, geo.Y + TitleBarHeight);
+				cr.Arc (geo.X + WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI, Math.PI*1.5);
+				LinearGradient title_grad = new LinearGradient (0, 0, 0, TitleBarHeight);
+				title_grad.AddColorStop (0.0, new Cairo.Color (0.45, 0.45, 0.45));
+				title_grad.AddColorStop (0.5, new Cairo.Color (0.33, 0.33, 0.33));
+				title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
+				cr.Pattern = title_grad;
+				cr.Fill ();
+				(cr as IDisposable).Dispose ();
+			}
+			cr2.SetSource (buffered_surface);
+			cr2.Paint ();
+			(cr2 as IDisposable).Dispose ();
 			
 			return base.OnExposeEvent (evnt);
 		}

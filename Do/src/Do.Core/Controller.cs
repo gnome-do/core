@@ -383,10 +383,10 @@ namespace Do.Core {
 		
 		void OnEscapeKeyPressEvent (EventKey evnt)
 		{
-			if (CurrentContext.TextType == TextModeType.Explicit) {
-				CurrentContext.TextMode = false;
-				return;
-			}
+//			if (CurrentContext.TextType == TextModeType.Explicit) {
+//				CurrentContext.TextMode = false;
+//				return;
+//			}
 			
 			bool results, something_typed;
 

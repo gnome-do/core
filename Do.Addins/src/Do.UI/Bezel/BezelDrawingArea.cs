@@ -451,7 +451,8 @@ namespace Do.UI
 				RenderPaneText (pane, cr, "No results for: " + Context.GetPaneQuery (pane));
 				break;
 			case DrawState.Text:
-				RenderPaneText (pane, cr);
+				if (text_box_scale < 1)
+					RenderPaneText (pane, cr);
 				break;
 			case DrawState.None:
 				if (pane == Pane.First) {
