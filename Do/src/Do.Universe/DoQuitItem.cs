@@ -41,8 +41,10 @@ namespace Do.Universe
 		
 		public void Run ()
 		{
-			Do.Controller.Vanish ();
-			Application.Quit ();
+			Gtk.Application.Invoke (delegate {
+				Do.Controller.Vanish ();
+				Application.Quit ();
+			});
 		}
 	}
 }
