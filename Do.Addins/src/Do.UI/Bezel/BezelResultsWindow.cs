@@ -29,6 +29,19 @@ using Do.Universe;
 
 namespace Do.UI
 {
+	public class CustomTreeView : Gtk.TreeView
+	{
+		protected override bool OnExposeEvent (EventExpose evnt)
+		{
+			Cairo.Context cr = Gdk.CairoHelper.Create (GdkWindow);
+			cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+			cr.Color = new Cairo.Color (0, 0, 0, 0);
+			cr.Fill ();
+			(cr as IDisposable).Dispose ();
+			return base.OnExposeEvent (evnt);
+		}
+
+	}
 	
 	
 	public class BezelResultsWindow : Gtk.Window
@@ -116,7 +129,7 @@ namespace Do.UI
 			vbox.PackStart (resultsScrolledWindow, true, true, 0);
 			resultsScrolledWindow.Show ();
 
-			resultsTreeview = new TreeView ();
+			resultsTreeview = new CustomTreeView ();
 			resultsTreeview.EnableSearch = false;
 			resultsTreeview.HeadersVisible = false;
 			// If this is not set the tree will call IconDataFunc for all rows to 
@@ -137,6 +150,7 @@ namespace Do.UI
 				
 			cell = new CellRendererPixbuf ();				
 			cell.SetFixedSize (-1, 4 + DefaultResultIconSize - (int) cell.Ypad);
+			cell.CellBackgroundGdk = new Gdk.Color (0x00, 0x00, 0x00);
 
 			int width, height;
 			cell.GetFixedSize (out width, out height);
@@ -146,6 +160,7 @@ namespace Do.UI
 				
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
+			cell.CellBackgroundGdk = new Gdk.Color (0x00, 0x00, 0x00);
 			column.PackStart (cell, true);
 			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
 			
