@@ -116,6 +116,7 @@ namespace Do.UI
 				
 			cell = new CellRendererPixbuf ();				
 			cell.SetFixedSize (-1, 4 + DefaultResultIconSize - (int) cell.Ypad);
+			cell.CellBackgroundGdk = new Gdk.Color (0x00, 0x00, 0x00);
 
 			int width, height;
 			cell.GetFixedSize (out width, out height);
@@ -125,6 +126,7 @@ namespace Do.UI
 				
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
+			cell.CellBackgroundGdk = new Gdk.Color (0x00, 0x00, 0x00);
 			column.PackStart (cell, true);
 			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
 			
