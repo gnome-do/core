@@ -690,6 +690,9 @@ namespace Do.Core {
 				foreach (DoObject item in items)
 					(action as DoObject).IncreaseRelevance (actionQuery, item);
 
+				while (Gtk.Application.EventsPending ())
+					Gtk.Application.RunIteration ();
+				
 				action.Perform (items.ToArray (), modItems.ToArray ());
 			}
 
