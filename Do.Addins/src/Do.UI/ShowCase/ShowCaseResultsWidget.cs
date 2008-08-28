@@ -116,7 +116,6 @@ namespace Do.UI
 				
 			cell = new CellRendererPixbuf ();				
 			cell.SetFixedSize (-1, 4 + DefaultResultIconSize - (int) cell.Ypad);
-			cell.CellBackgroundGdk = new Gdk.Color (0x00, 0x00, 0x00);
 
 			int width, height;
 			cell.GetFixedSize (out width, out height);
@@ -126,7 +125,6 @@ namespace Do.UI
 				
 			cell = new CellRendererText ();
 			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
-			cell.CellBackgroundGdk = new Gdk.Color (0x00, 0x00, 0x00);
 			column.PackStart (cell, true);
 			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
 			
@@ -137,8 +135,11 @@ namespace Do.UI
 			
 			HeightRequest = height * NumberResultsDisplayed + 25;
 			
-			resultsTreeview.ModifyText (StateType.Normal, new Gdk.Color (0xff, 0xff, 0xff));
-			resultsTreeview.ModifyBase (StateType.Normal, new Gdk.Color (0x00, 0x00, 0x00));
+			Gtk.Style style = resultsTreeview.Style;
+			resultsTreeview.ModifyBase (StateType.Active, style.Base       (StateType.Selected));
+			resultsTreeview.ModifyBg   (StateType.Active, style.Background (StateType.Selected));
+			resultsTreeview.ModifyFg   (StateType.Active, style.Foreground (StateType.Selected));
+			resultsTreeview.ModifyText (StateType.Active, style.Text       (StateType.Selected));
 		}
 		
 		public virtual void Clear ()
@@ -161,7 +162,7 @@ namespace Do.UI
 				
 				pushedUpdate = true;
 				if (value == null || value.Results.Length == 0) {
-					Results = new IObject [0];
+					Clear ();
 					return;
 				}
 				

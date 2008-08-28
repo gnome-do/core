@@ -53,7 +53,6 @@ namespace Do.UI
 			Decorated = false;
 			AppPaintable = true;
 			KeepAbove = true;
-//			DoubleBuffered = false;
 			
 			TypeHint = WindowTypeHint.Splashscreen;
 			SetColormap ();
@@ -183,6 +182,9 @@ namespace Do.UI
 			bda.BezelSetEntryMode (pane, false);
 			
 			bda.Draw ();
+			if (pane == CurrentPane) {
+				results_window.Clear ();
+			}
 		}
 
 		
