@@ -28,7 +28,12 @@ using Do.Universe;
 
 namespace Do.UI
 {
-	
+	public enum PointLocation {
+		Window,
+		Close,
+		Preferences,
+		Outside,
+	}
 	
 	public class BezelDrawingArea : Gtk.DrawingArea
 	{
@@ -677,6 +682,21 @@ namespace Do.UI
 				cr.Fill ();
 			}
 			RenderTitleText (cr);
+		}
+		
+		public PointLocation GetPointLocation (Gdk.Point point)
+		{
+			Gdk.Rectangle close_circle = new Gdk.Rectangle (drawing_area.X + 6, drawing_area.Y + 2,
+			                                                12, 15);
+			Gdk.Rectangle pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - 18, 
+			                                               drawing_area.Y + 2, 12, 15);
+			if (!drawing_area.Contains (point))
+				return PointLocation.Outside;
+			if (close_circle.Contains (point))
+				return PointLocation.Close;
+			if (pref_circle.Contains (point))
+				return PointLocation.Preferences;
+			return PointLocation.Window;
 		}
 	}
 }

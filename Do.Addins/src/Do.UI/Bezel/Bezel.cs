@@ -68,6 +68,26 @@ namespace Do.UI
 			pw = new PositionWindow (this, results_window);
 		}
 		
+		protected override bool OnButtonPressEvent (EventButton evnt)
+		{
+			Gdk.Point global_point = new Gdk.Point ((int) evnt.XRoot, (int) evnt.YRoot);
+			Gdk.Point local_point = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
+			
+			switch (bda.GetPointLocation (local_point)) {
+			case PointLocation.Close:
+			case PointLocation.Outside:
+				controller.ButtonPressOffWindow ();
+				break;
+			case PointLocation.Preferences:
+				Addins.Util.Appearance.PopupMainMenuAtPosition (global_point.X, global_point.Y);
+//				// Have to re-grab the pane from the menu.
+				Addins.Util.Appearance.PresentWindow (this);
+				break;
+			}
+
+			return base.OnButtonPressEvent (evnt);
+		}
+		
 		protected override bool OnKeyPressEvent (EventKey evnt)
 		{
 			KeyPressEvent (evnt);
