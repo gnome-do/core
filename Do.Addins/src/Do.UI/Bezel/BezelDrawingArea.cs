@@ -62,7 +62,7 @@ namespace Do.UI
 		bool third_pane_visible;
 		BezelDrawingContext context, old_context;
 		Pane focus;
-		DateTime delta_time, debug_time;
+		DateTime delta_time;
 		uint timer;
 		
 		Gdk.Rectangle drawing_area;
@@ -172,7 +172,7 @@ namespace Do.UI
 			if (!AnimationNeeded)
 				return;
 			
-			delta_time = debug_time = DateTime.Now;
+			delta_time = DateTime.Now;
 			timer = GLib.Timeout.Add (20, delegate {
 				
 				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
@@ -239,7 +239,7 @@ namespace Do.UI
 		
 		public void BezelSetPaneObject (Pane pane, IObject obj)
 		{
-			if (Context.GetPaneObject (pane) == obj)
+			if (Context.GetPaneObject (pane) == obj && obj != null)
 				return;
 			
 			OldContext.SetPaneObject (pane, Context.GetPaneObject (pane));

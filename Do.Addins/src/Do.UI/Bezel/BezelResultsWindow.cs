@@ -31,42 +31,23 @@ namespace Do.UI
 {
 	public class BezelResultsWindow : Gtk.Window
 	{
-		protected int DefaultResultIconSize = 32;
-		protected int NumberResultsDisplayed = 5;
+		protected int DefaultResultIconSize = 16;
+		protected int NumberResultsDisplayed = 8;
 		protected int offset;
 		
-		public string ResultInfoFormat
-		{
-			set { resultInfoFormat = value; }
-			get { return resultInfoFormat; }
-		}
-		
-		protected string resultInfoFormat = "<b>{0}</b>\n<small>{1}</small>";
 		const string QueryLabelFormat = "<b>{0}</b>";
-		
 		const int WindowRadius = 6;
 		const uint TitleBarHeight = 22;
 
-//		public event OnSelectionChanged SelectionChanged;
 
-		protected enum Column {
-			ItemColumn = 0,
-			NameColumn = 1,
-			NumberColumns = 2
-		}
-
-		protected ScrolledWindow resultsScrolledWindow;
-		protected TreeView resultsTreeview;
-		protected IObject[] results, stunted_results;
-		protected int startResult, endResult;
+		protected BezelResultsDrawingArea brda;
+		protected IObject[] results;
 		protected string query;
 		protected Label resultsLabel, queryLabel;
 		protected IUIContext context = null;
 		
 		protected int cursor;
 		protected int[] secondary = new int[0];
-		
-		protected bool pushedUpdate, clearing, update_needed = false;
 		
 		protected Surface buffered_surface;
 		
@@ -95,12 +76,10 @@ namespace Do.UI
 			Colormap = colormap;
 			colormap.Dispose ();
 			
-			TreeViewColumn column;
-			CellRenderer   cell;
-			HBox hbox;
 			VBox vbox;
 			
 			vbox = new VBox ();
+			vbox.WidthRequest = 340;
 			vbox.Show ();
 			Add(vbox);
 			
@@ -108,75 +87,31 @@ namespace Do.UI
 			vbox.PackStart (new HBox (), false, false, 10);
 
 			//---------Results Window
-			resultsScrolledWindow = new ScrolledWindow ();
-			resultsScrolledWindow.SetPolicy (PolicyType.Never, PolicyType.Never);
-			resultsScrolledWindow.ShadowType = ShadowType.None;
-			vbox.PackStart (resultsScrolledWindow, true, true, 0);
-			resultsScrolledWindow.Show ();
-			resultsScrolledWindow.BorderWidth = 2;
-
-			resultsTreeview = new TreeView ();
-			resultsTreeview.EnableSearch = false;
-			resultsTreeview.HeadersVisible = false;
-			// If this is not set the tree will call IconDataFunc for all rows to 
-			// determine the total height of the tree
-			resultsTreeview.FixedHeightMode = true;
-			
-			resultsScrolledWindow.Add (resultsTreeview);
-			resultsTreeview.Show ();
-
-			resultsTreeview.Model = new ListStore (new Type[] {
-				typeof (IObject),				
-				typeof (string), 
-			});
-
-			column = new TreeViewColumn ();			
-			column.Sizing = Gtk.TreeViewColumnSizing.Fixed; 
-				// because resultsTreeview.FixedHeightMode = true:  
-				
-			cell = new CellRendererPixbuf ();				
-			cell.SetFixedSize (-1, 4 + DefaultResultIconSize - (int) cell.Ypad);
-//			cell.CellBackgroundGdk = new Gdk.Color (0x00, 0x00, 0x00);
-
-			int width, height;
-			cell.GetFixedSize (out width, out height);
-				
-			column.PackStart (cell, false);
-			column.SetCellDataFunc (cell, new TreeCellDataFunc (IconDataFunc));
-				
-			cell = new CellRendererText ();
-			(cell as CellRendererText).Ellipsize = Pango.EllipsizeMode.End;
-//			cell.CellBackgroundGdk = new Gdk.Color (0x00, 0x00, 0x00);
-			column.PackStart (cell, true);
-			column.AddAttribute (cell, "markup", (int) Column.NameColumn);
-			
-			resultsTreeview.AppendColumn (column);
-
-//			resultsTreeview.Selection.Changed += OnResultRowSelected;
-			Shown += OnShown;
-			
-			HeightRequest = height * NumberResultsDisplayed + 25 + 
-				(int) TitleBarHeight + (int) (resultsScrolledWindow.BorderWidth);
+			brda = new BezelResultsDrawingArea (9, 340);
+			vbox.PackStart (brda, false, false, 0);
 			
 			//---------The breadcrum bar---------
-			hbox = new HBox ();
 			resultsLabel = new Label ();
 			queryLabel = new Label ();
-			hbox.PackStart (queryLabel, false, false, 4);
-			hbox.PackStart (new HBox (), true, true, 0);
-			hbox.PackStart (resultsLabel, false, false, 4);
-			vbox.PackStart (hbox, false, false, 0);
-		
-			Gtk.Style style = resultsTreeview.Style;
-			resultsTreeview.ModifyBase (StateType.Active, style.Base       (StateType.Selected));
-			resultsTreeview.ModifyBg   (StateType.Active, style.Background (StateType.Selected));
-			resultsTreeview.ModifyFg   (StateType.Active, style.Foreground (StateType.Selected));
-			resultsTreeview.ModifyText (StateType.Active, style.Text       (StateType.Selected));
+			queryLabel.Ellipsize = Pango.EllipsizeMode.End;
+			queryLabel.WidthRequest = 332;
+			queryLabel.Xalign = 0f;
+			queryLabel.HeightRequest = 25;
 			
+			resultsLabel.Ellipsize = Pango.EllipsizeMode.Middle;
+			resultsLabel.WidthRequest = 332;
+			resultsLabel.Xalign = 0f;
+			resultsLabel.Xpad = 4;
+			resultsLabel.HeightRequest = 25;
+			
+			vbox.PackStart (resultsLabel, true, true, 0);
+		
 			resultsLabel.ModifyFg (StateType.Normal, new Gdk.Color (0xff, 0xff, 0xff));
 			queryLabel.ModifyFg   (StateType.Normal, new Gdk.Color (0xff, 0xff, 0xff));
 			
 			vbox.ShowAll ();
+			
+			Shown += OnShown;
 		}
 		
 		protected override bool OnExposeEvent (EventExpose evnt)
@@ -194,17 +129,17 @@ namespace Do.UI
 				cr.Color = new Cairo.Color (0, 0, 0, 0);
 				cr.Operator = Operator.Source;
 				cr.Fill ();
-				
-				
-				
+
+				//Main Window Outline
 				cr.MoveTo (geo.X + WindowRadius, geo.Y);
 				cr.Arc (geo.X + geo.Width - WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI*1.5, Math.PI*2);
-				cr.LineTo (geo.X + geo.Width, geo.Y + geo.Height);
-				cr.LineTo (geo.X, geo.Y + geo.Height);
+				cr.Arc (geo.X + geo.Width - WindowRadius, geo.Y + geo.Height - WindowRadius, WindowRadius, 0, Math.PI*.5);
+				cr.Arc (geo.X + WindowRadius, geo.Y + geo.Height - WindowRadius, WindowRadius, Math.PI*.5, Math.PI);
 				cr.Arc (geo.X + WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI, Math.PI*1.5);
 				cr.Color = new Cairo.Color (.15, .15, .15, .95);
 				cr.Fill ();
 				
+				//Titlebar
 				cr.MoveTo (geo.X + WindowRadius, geo.Y);
 				cr.Arc (geo.X + geo.Width - WindowRadius, geo.Y + WindowRadius, WindowRadius, Math.PI*1.5, Math.PI*2);
 				cr.LineTo (geo.X + geo.Width, geo.Y + TitleBarHeight);
@@ -216,6 +151,14 @@ namespace Do.UI
 				title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
 				cr.Pattern = title_grad;
 				cr.Fill ();
+				
+				//Base Line
+				cr.MoveTo (geo.X, geo.Y + geo.Height - 24.5);
+				cr.LineTo (geo.X + geo.Width, geo.Y + geo.Height - 24.5);
+				cr.Operator = Operator.Over;
+				cr.Color = new Cairo.Color (1, 1, 1, .35);
+				cr.LineWidth = 1;
+				cr.Stroke ();
 				(cr as IDisposable).Dispose ();
 			}
 			cr2.Operator = Operator.Source;
@@ -229,112 +172,50 @@ namespace Do.UI
 		
 		public virtual void Clear ()
 		{
-			(resultsTreeview.Model as ListStore).Clear ();
-			cursor = 0;
-			resultsLabel.Markup = "--/--";
+			brda.Clear ();
+			resultsLabel.Markup = string.Empty;
 			queryLabel.Markup = string.Empty;
-			update_needed = false;
 		}
 		
 		public IUIContext Context
 		{
 			set {
+				IUIContext tmp = context;
 				context = value;
-				if (!Visible) {
-					update_needed = true;
-					return;
-				}
 				
-				pushedUpdate = true;
+				if (!Visible)
+					return;
+
 				if (value == null || value.Results.Length == 0) {
 					Clear ();
 					return;
 				}
 				
-				if (results.GetHashCode () != value.Results.GetHashCode ()) {
-					results = value.Results;
+				if (context.ParentContext != null && tmp != null &&
+				    context.ParentContext.Query == tmp.Query && 
+				    tmp.Results.GetHashCode () == context.ParentContext.Results.GetHashCode ()) {
+					brda.InitChildInAnimation ();
+				} else if (tmp.ParentContext != null && context != null &&
+				    tmp.ParentContext.Query == context.Query && 
+				    tmp.ParentContext.Results.GetHashCode () == context.Results.GetHashCode ()) {
+					brda.InitChildOutAnimation ();
 				}
 				
-				startResult = value.Cursor - 2;
-				
-				if (startResult < 0)
-					startResult = 0;
-				endResult = startResult + 5;
-
-				while (endResult > value.Results.Length) {
-					endResult--;
-					if (startResult > 0)
-						startResult--;
-				}
-				
-				offset = startResult;
-				
-				IObject[] resultsArray = new IObject[endResult - startResult];
-				Array.Copy (results, startResult, resultsArray, 0, resultsArray.Length); 
-				
-				cursor = value.Cursor - offset;
-				
-				Results = resultsArray;
-				
+				brda.Cursor = value.Cursor;
+				brda.Results = value.Results;
 				Query = value.Query;
+				secondary = value.SecondaryCursors;
 				
-				int[] secArray = new int[value.SecondaryCursors.Length];
-				for (int i=0; i<secArray.Length; i++) {
-					secArray[i] = value.SecondaryCursors[i] - offset;
-				}
-				
-				secondary = secArray;
-				
-				UpdateCursors ();
 				UpdateQueryLabel (value);
-				resultsLabel.Markup = string.Format ("{1}/{0}", 
+				string desc = "";
+				if (value.Selection != null)
+					desc = value.Selection.Description;
+				resultsLabel.Markup = string.Format ("<b>{1} of {0}  ▸  {2}</b>", 
 				                                     value.Results.Length, 
-				                                     value.Cursor + 1);
-				Gtk.Application.Invoke (delegate {
-					pushedUpdate = false;
-				});
+				                                     value.Cursor + 1,
+				                                     desc);
+				brda.Draw ();
 			}
-		}
-		
-		protected void IconDataFunc (TreeViewColumn column, CellRenderer cell, 
-		                           TreeModel model, TreeIter iter)
-		{			
-			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
-			IObject o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as IObject;
-			bool isSecondary = false;
-			foreach (int i in secondary)
-				if (model.GetStringFromIter (iter) == i.ToString ())
-					isSecondary = true;
-			
-			Gdk.Pixbuf final;
-			if (isSecondary) {
-				using (Gdk.Pixbuf source = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize))
-				using (Gdk.Pixbuf emblem = IconProvider.PixbufFromIconName ("gtk-add", DefaultResultIconSize)) {
-					final = new Pixbuf (Colorspace.Rgb, 
-					                    true, 
-					                    8,
-					                    DefaultResultIconSize,
-					                    DefaultResultIconSize);
-					
-					source.CopyArea (0, 0, source.Width, source.Height, final, 0, 0);
-					
-					emblem.Composite (final, 
-					                  0, 
-					                  0, 
-					                  DefaultResultIconSize, 
-					                  DefaultResultIconSize, 
-					                  0, 
-					                  0, 
-					                  1,
-					                  1, 
-					                  InterpType.Bilinear, 
-					                  220);
-				}
-			} else {
-				final = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
-			}
-			renderer.Pixbuf = final;
-			final.Dispose ();
 		}
 		
 		public string Query
@@ -346,65 +227,10 @@ namespace Do.UI
 			get { return query; }
 		}
 		
-		public IObject[] Results
-		{
-			get {
-				return stunted_results ?? stunted_results = new IObject[0];
-			}
-			set {
-				stunted_results = value;
-				//some memory hacks.
-				foreach (CellRenderer rend in resultsTreeview.Columns[0].CellRenderers) {
-					if (rend is CellRendererPixbuf && (rend as CellRendererPixbuf).Pixbuf != null) {
-						(rend as CellRendererPixbuf).Pixbuf.Dispose ();
-					}
-					rend.Dispose ();
-				}
-				
-				ListStore store;
-				string info;
-
-				clearing = true;
-				Gtk.Application.Invoke (delegate {
-					store = resultsTreeview.Model as ListStore;
-					store.Clear ();
-					
-					foreach (IObject result in value) {					
-						
-						info = string.Format (ResultInfoFormat, result.Name, result.Description);
-						info = Util.Appearance.MarkupSafeString (info);
-						store.AppendValues (new object[] {
-							result,
-							info,
-						});
-						
-					}
-					clearing = false;
-				});
-//				UpdateCursors ();
-			}
-		}
-		
 		protected void OnShown (object o, EventArgs args)
 		{
-			if (update_needed) {
-				Context = context;
-			}
-			update_needed = false;
-		}
-		
-		private void UpdateCursors () 
-		{
-			Gtk.TreePath path;
-			
-			path = new TreePath (cursor.ToString ());
-			
-			//makes this just a tiny bit smoother overall
-			Gtk.Application.Invoke (delegate {
-				resultsTreeview.Selection.UnselectAll ();
-				resultsTreeview.Selection.SelectPath (path);
-				resultsTreeview.ScrollToCell (path, null, true, 0.5F, 0.0F);
-			});
+			Context = context;
+			brda.Draw ();
 		}
 		
 		protected void UpdateQueryLabel (IUIContext context)

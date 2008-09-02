@@ -62,7 +62,6 @@ namespace Do.UI
 			bda.Show ();
 			
 			results_window = new BezelResultsWindow ();
-			results_window.WidthRequest = 325;
 			
 			pw = new PositionWindow (this, results_window);
 		}
@@ -123,7 +122,9 @@ namespace Do.UI
 			int width, height;
 			GetSize (out width, out height);
 			
-			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle ((int) (width / 2) - (int) (325/2), 0, 0, 0));
+			int result_w, result_h;
+			results_window.GetSize (out result_w, out result_h);
+			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle ((int) (width / 2) - (int) (result_w/2), 0, 0, 0));
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}
@@ -136,6 +137,7 @@ namespace Do.UI
 		public void Reset ()
 		{
 			bda.Clear ();
+			results_window.Clear ();
 		}
 
 		public void Grow ()
@@ -171,8 +173,9 @@ namespace Do.UI
 			
 			bda.Draw ();
 			
-			if (CurrentPane == pane)
+			if (CurrentPane == pane) {
 				results_window.Context = context;
+			}
 		}
 
 		public void ClearPane (Pane pane)

@@ -216,7 +216,7 @@ namespace Do.UI
 		private void Reposition ()
 		{
 			Gtk.Application.Invoke (delegate {
-				Gdk.Rectangle geo, main, results;
+				Gdk.Rectangle geo, main;
 				
 				GetPosition (out main.X, out main.Y);
 				GetSize (out main.Width, out main.Height);
