@@ -64,6 +64,11 @@ namespace Do.Core
 		/// Get or Set text mode on a search context
 		/// </value>
 		bool TextMode {get; set;}
+		
+		/// <summary>
+		/// Finalize explicit text mode entry
+		/// </summary>
+		void FinalizeTextMode ();
 
 		/// <value>
 		/// The reason for which text mode was entered

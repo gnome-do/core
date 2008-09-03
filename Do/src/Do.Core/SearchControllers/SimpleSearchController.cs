@@ -29,6 +29,7 @@ namespace Do.Core
 	public abstract class SimpleSearchController : ISearchController
 	{	
 		protected bool textMode = false;
+		protected bool textModeFinalize = false;
 		
 		protected SimpleSearchContext context;
 		protected Type[] searchFilter;
@@ -49,8 +50,11 @@ namespace Do.Core
 		
 		public TextModeType TextType {
 			get {
-				if (textMode)
+				if (textMode) {
+					if (textModeFinalize)
+						return TextModeType.ExplicitFinalized;
 					return TextModeType.Explicit;
+				}
 				if (ImplicitTextMode)
 					return TextModeType.Implicit;
 				return TextModeType.None;
@@ -138,6 +142,11 @@ namespace Do.Core
 			OnQueryChanged ();
 			UpdateResults ();
 			
+		}
+		
+		public void FinalizeTextMode () {
+			if (TextType == TextModeType.Explicit)
+				textModeFinalize = true;
 		}
 		
 		protected abstract void UpdateResults ();
@@ -238,6 +247,7 @@ namespace Do.Core
 			searchFilter = defaultFilter;
 			context.Destroy ();
 			context = new SimpleSearchContext ();
+			textModeFinalize = false;
 		}
 		
 		protected void OnSelectionChanged ()

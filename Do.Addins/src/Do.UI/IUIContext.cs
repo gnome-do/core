@@ -29,6 +29,7 @@ namespace Do.UI
 	public enum TextModeType {
 		None,
 		Explicit,
+		ExplicitFinalized,
 		Implicit,
 	}
 	

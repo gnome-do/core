@@ -71,6 +71,7 @@ namespace Do.Core
 			set { 
 				if (context.ParentContext != null) return;
 				textMode = value; 
+				textModeFinalize = false;
 				if (Query.Length > 0)
 					BuildNewContextFromQuery ();
 			}

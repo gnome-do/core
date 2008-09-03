@@ -91,10 +91,10 @@ namespace Do.Core {
 			//We want to show a blank box during our searches
 			controllers[0].SearchStarted += delegate { };
 			controllers[1].SearchStarted += delegate (bool u) { 
-				if (u && !controllers[0].TextMode) window.ClearPane (Pane.Second); 
+				if (u && !ControllerExplicitTextMode (Pane.Second)) window.ClearPane (Pane.Second); 
 			};
 			controllers[2].SearchStarted += delegate (bool u) { 
-				if (u && !controllers[1].TextMode) window.ClearPane (Pane.Third); 
+				if (u && !ControllerExplicitTextMode (Pane.Third)) window.ClearPane (Pane.Third); 
 			};
 			
 			//Brings back our boxes after the search
@@ -220,7 +220,7 @@ namespace Do.Core {
 				return (!ThirdPaneRequired &&
 				        controllers[2].Cursor == 0 && 
 				        string.IsNullOrEmpty (controllers[2].Query) && 
-				        !controllers[2].TextMode);
+				        !ControllerExplicitTextMode (Pane.Third));
 			}
 		}
 		
@@ -252,7 +252,7 @@ namespace Do.Core {
 					controllers[1].Results.Length > 0;
 			}
 		}
-
+		
 		public bool IsSummoned {
 			get {
 				return null != window && window.Visible;
@@ -294,6 +294,11 @@ namespace Do.Core {
 			}
 		}
 		
+		public bool ControllerExplicitTextMode (Pane pane) {
+			return controllers[(int) pane].TextType == TextModeType.Explicit ||
+				controllers[(int) pane].TextType == TextModeType.ExplicitFinalized;
+		}
+		
 		/////////////////////////
 		/// Key Handling ////////
 		/////////////////////////
@@ -306,8 +311,7 @@ namespace Do.Core {
 				return;
 			} 
 			
-			if (KeyEventToString(evnt).Equals (Do.Preferences.TextModeKeyBinding) && 
-			    CurrentContext.Query.Length == 0) {
+			if (KeyEventToString(evnt).Equals (Do.Preferences.TextModeKeyBinding)) {
 				OnTextModePressEvent (evnt);
 				return;
 			}
@@ -396,10 +400,11 @@ namespace Do.Core {
 		
 		void OnEscapeKeyPressEvent (EventKey evnt)
 		{
-//			if (CurrentContext.TextType == TextModeType.Explicit) {
-//				CurrentContext.TextMode = false;
-//				return;
-//			}
+			if (CurrentContext.TextType == TextModeType.Explicit) {
+				CurrentContext.FinalizeTextMode ();
+				UpdatePane (CurrentPane);
+				return;
+			}
 			
 			bool results, something_typed;
 
@@ -466,15 +471,16 @@ namespace Do.Core {
 		void OnTextModePressEvent (EventKey evnt)
 		{
 			TextModeType tmp = CurrentContext.TextType;
-			if (tmp == TextModeType.Implicit || tmp == TextModeType.None)
+			if (CurrentContext.TextType == TextModeType.ExplicitFinalized) {
 				CurrentContext.TextMode = true;
-			else 
-				CurrentContext.TextMode = false;
-			
-			if (CurrentContext.TextType == tmp) {
-				NotificationIcon.SendNotification ("Text Mode Error", "Do could not enter text mode " +
-				                                   "because the current action does not support it.");
+			} else if (CurrentContext.TextType != TextModeType.Explicit && CurrentContext.Query.Length == 0) {
+				CurrentContext.TextMode = true;
 			} else {
+				OnInputKeyPressEvent (evnt);
+				return;
+			}
+			
+			if (CurrentContext.TextType != tmp) {
 				UpdatePane (CurrentPane);
 			}
 		}

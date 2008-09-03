@@ -268,11 +268,13 @@ namespace Do.Core
 				if (context.ParentContext != null) return;
 				if (!value) {
 					textMode = value;
+					textModeFinalize = false;
 				} else if (FirstController.Selection is IAction) {
 					IAction action = FirstController.Selection as IAction;
 					foreach (Type t in action.SupportedItemTypes) {
 						if (t == typeof (ITextItem) && action.SupportsItem (new DoTextItem (Query))) {
 							textMode = value;
+							textModeFinalize = false;
 						}
 					}
 				}

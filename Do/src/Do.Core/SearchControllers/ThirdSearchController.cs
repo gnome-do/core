@@ -75,6 +75,7 @@ namespace Do.Core
 				if (context.ParentContext != null) return;
 				if (!value) { //if its false, no problems!  We can always leave text mode
 					textMode = value;
+					textModeFinalize = false;
 				} else {
 					IAction action;
 					if (FirstController.Selection is IAction)
@@ -85,8 +86,10 @@ namespace Do.Core
 						return; //you have done something weird, ignore it!
 					
 					foreach (Type t in action.SupportedModifierItemTypes) {
-						if (t == typeof (ITextItem))
+						if (t == typeof (ITextItem)) {
 							textMode = value;
+							textModeFinalize = false;
+						}
 					}
 				}
 				
