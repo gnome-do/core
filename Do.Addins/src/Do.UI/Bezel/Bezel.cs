@@ -95,10 +95,11 @@ namespace Do.UI
 		
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
-			Cairo.Context cr = Gdk.CairoHelper.Create (GdkWindow);
-//			cr.Color = new Cairo.Color (0, 0, 0, 0);
-			cr.Operator = Cairo.Operator.Source;
-			cr.Paint ();
+			if (IsDrawable) {
+				Cairo.Context cr = Gdk.CairoHelper.Create (GdkWindow);
+				cr.Operator = Cairo.Operator.Source;
+				cr.Paint ();
+			}
 			return base.OnExposeEvent (evnt);
 		}
 
