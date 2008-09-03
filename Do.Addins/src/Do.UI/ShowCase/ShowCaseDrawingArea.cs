@@ -213,6 +213,8 @@ namespace Do.UI
 		
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
+			if (!IsDrawable)
+				return base.OnExposeEvent (evnt);
 			Context cr = CairoHelper.Create (GdkWindow);
 			
 			cr.SetSource (GetBackgroundSurface ());
