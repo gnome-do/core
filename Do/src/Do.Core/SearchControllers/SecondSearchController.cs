@@ -100,11 +100,11 @@ namespace Do.Core
 		private void OnUpstreamSelectionChanged ()
 		{
 			textMode = false;
-			if (timer > 0) {
+			if (timer > 0)
 				GLib.Source.Remove (timer);
-			}
 			if (wait_timer > 0)
 				GLib.Source.Remove (wait_timer);
+			
 			base.OnSearchStarted (true);//trigger our search start now
 			timer = GLib.Timeout.Add (type_wait, delegate {
 				Gdk.Threads.Enter ();

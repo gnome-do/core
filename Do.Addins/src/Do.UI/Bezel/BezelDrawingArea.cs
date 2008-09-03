@@ -349,6 +349,13 @@ namespace Do.UI
 			RenderTitleBar (cr);
 			
 			do {
+				if (text_box_scale > 0) {
+					RenderTextModeOverlay (cr);
+					if (text_box_scale == 1) {
+						RenderTextModeText (cr);
+						continue;
+					}
+				}
 				
 				RenderDescriptionText (cr);
 				//--------------First Pane---------------
@@ -361,13 +368,6 @@ namespace Do.UI
 				if (ThirdPaneVisible && drawing_area.Width == WindowWidth) {
 					RenderPane (Pane.Third, cr);
 				}
-			
-				if (text_box_scale > 0) {
-					RenderTextModeOverlay (cr);
-					if (text_box_scale == 1)
-						RenderTextModeText (cr);
-				}
-				
 			} while (false);
 
 			cr2.SetSourceSurface (surface, 0, 0);
@@ -375,7 +375,6 @@ namespace Do.UI
 			cr2.Paint ();
 			
 			(cr2 as IDisposable).Dispose ();
-//			(surface as IDisposable).Dispose ();
 			(cr as IDisposable).Dispose ();
 		}
 		
