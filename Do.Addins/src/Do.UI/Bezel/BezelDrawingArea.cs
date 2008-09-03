@@ -432,16 +432,18 @@ namespace Do.UI
 				RenderPaneText (pane, cr);
 				break;
 			case DrawState.NoResult:
-				RenderPixbuf (pane, cr, "gtk-question-dialog");
+				RenderPixbuf (pane, cr, "gtk-question-dialog", 1);
 				RenderPaneText (pane, cr, "No results for: " + Context.GetPaneQuery (pane));
 				break;
 			case DrawState.Text:
-				if (text_box_scale < 1)
+				if (text_box_scale < 1) {
+					RenderPixbuf (pane, cr, "gnome-mime-text", .2);
 					RenderPaneText (pane, cr);
+				}
 				break;
 			case DrawState.None:
 				if (pane == Pane.First) {
-					RenderPixbuf (pane, cr, "search");
+					RenderPixbuf (pane, cr, "search", 1);
 					RenderPaneText (pane, cr, "Type To Search");
 				}
 				break;
@@ -463,10 +465,10 @@ namespace Do.UI
 		
 		private void RenderPixbuf (Pane pane, Context cr)
 		{
-			RenderPixbuf (pane, cr, Context.GetPaneObject (pane).Icon);
+			RenderPixbuf (pane, cr, Context.GetPaneObject (pane).Icon, 1);
 		}
 		
-		private void RenderPixbuf (Pane pane, Context cr, string icon)
+		private void RenderPixbuf (Pane pane, Context cr, string icon, double alpha)
 		{
 			int offset = PaneOffset (pane);
 			if (!surface_buffer.ContainsKey (icon)) {
@@ -477,18 +479,18 @@ namespace Do.UI
 			if (OldContext.GetPaneObject (pane) != null)
 				sec_icon = OldContext.GetPaneObject (pane).Icon;
 			
-			double alpha = (sec_icon != icon) ? icon_fade[(int) pane] : 1;
+			double calc_alpha = (sec_icon != icon) ? icon_fade[(int) pane] : 1;
 			cr.SetSource (surface_buffer[icon], drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
 				                                 drawing_area.Y + WindowBorder + TitleBarHeight + 3);
-			cr.PaintWithAlpha (alpha);
+			cr.PaintWithAlpha (calc_alpha * alpha);
 			
-			if (!string.IsNullOrEmpty (sec_icon) && alpha < 1) {
+			if (!string.IsNullOrEmpty (sec_icon) && calc_alpha < 1) {
 				if (!surface_buffer.ContainsKey (OldContext.GetPaneObject (pane).Icon)) {
 					BufferIcon (cr, OldContext.GetPaneObject (pane).Icon);
 				}
 				cr.SetSource (surface_buffer[OldContext.GetPaneObject (pane).Icon], drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
 				                                 drawing_area.Y + WindowBorder + TitleBarHeight + 3);
-				cr.PaintWithAlpha (1 - alpha);
+				cr.PaintWithAlpha (alpha * (1 - calc_alpha));
 			}
 		}
 		
