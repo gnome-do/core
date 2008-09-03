@@ -34,7 +34,7 @@ namespace Do.Addins
 	public delegate void DoEventKeyDelegate (Gdk.EventKey key);
 	public delegate void NullEventHandler ();
 	public delegate void SearchStartedEventHandler (bool upstream_search);
-	public delegate void SearchFinishedEventHandler (bool selection_changed);
+	public delegate void SearchFinishedEventHandler (object controller, SearchFinishState state);
 	
 	/// <summary>
 	/// Useful functionality for plugins. See <see cref="Do.Util"/>.

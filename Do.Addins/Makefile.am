@@ -43,6 +43,7 @@ FILES =  \
 	src/Do.Addins/IDoController.cs \
 	src/Do.Addins/IPreferences.cs \
 	src/Do.Addins/SearchContext.cs \
+	src/Do.Addins/SearchFinishState.cs \
 	src/Do.Addins/Util.cs \
 	src/Do.UI/AbstractLoginWidget.cs \
 	src/Do.UI/BaseWidgets/DefaultObjects.cs \

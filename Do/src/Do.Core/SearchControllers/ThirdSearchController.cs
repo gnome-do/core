@@ -56,7 +56,11 @@ namespace Do.Core
 			this.FirstController  = FirstController;
 			this.SecondController = SecondController;
 			
-			SecondController.SelectionChanged += OnUpstreamSelectionChanged;
+//			SecondController.SelectionChanged += OnUpstreamSelectionChanged;
+			SecondController.SearchFinished += delegate (object o, SearchFinishState state) {
+				if (state.SelectionChanged)
+					OnUpstreamSelectionChanged ();
+			};
 		}
 		
 		public override Type[] SearchTypes {
@@ -104,7 +108,7 @@ namespace Do.Core
 				context.Destroy ();
 				context = new SimpleSearchContext ();
 				
-				base.OnSelectionChanged ();
+				base.OnSearchFinished (true, true, Selection, Query);
 				return;
 			}
 			
@@ -195,7 +199,7 @@ namespace Do.Core
 			}
 			textMode = false;
 			
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}
 		
 		protected override void UpdateResults ()
@@ -213,12 +217,9 @@ namespace Do.Core
 				return;
 			
 			
-			if (context.LastContext == null || context.LastContext.Selection != context.Selection) {
-				base.OnSelectionChanged ();
-				base.OnSearchFinished (true);
-			} else {
-				base.OnSearchFinished (false);
-			}
+			bool selection_changed = (context.LastContext == null || 
+			                          context.LastContext.Selection != context.Selection);
+			base.OnSearchFinished (selection_changed, true, Selection, Query);
 		}
 
 		private void BuildNewContextFromQuery ()
@@ -234,7 +235,7 @@ namespace Do.Core
 
 				context.Results = GetContextResults ();
 			}
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}	
 	}
 }

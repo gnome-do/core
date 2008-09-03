@@ -101,12 +101,8 @@ namespace Do.Core
 			context.Results = results.ToArray ();
 			//Do.PrintPerf ("FirstControllerResultsAssigned");
 			
-			if (context.LastContext == null || context.LastContext.Selection != context.Selection) {
-				base.OnSelectionChanged ();
-				base.OnSearchFinished (true);
-			} else {
-				base.OnSearchFinished (false);
-			}
+			bool search_changed = (context.LastContext == null || context.LastContext.Selection != context.Selection);
+			base.OnSearchFinished (search_changed, true, Selection, Query);
 		}
 		
 		private void BuildNewContextFromQuery ()
@@ -124,7 +120,7 @@ namespace Do.Core
 				results.Add (new DoTextItem (Query));
 				context.Results = results.ToArray ();
 			}
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}
 
 	}

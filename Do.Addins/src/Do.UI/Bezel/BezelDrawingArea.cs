@@ -437,7 +437,7 @@ namespace Do.UI
 				break;
 			case DrawState.Text:
 				if (text_box_scale < 1) {
-					RenderPixbuf (pane, cr, "gnome-mime-text", .2);
+					RenderPixbuf (pane, cr, "gnome-mime-text", .1);
 					RenderPaneText (pane, cr);
 				}
 				break;

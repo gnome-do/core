@@ -67,7 +67,7 @@ namespace Do.Core
 			}
 			set {
 				context.Results = value;
-				OnSelectionChanged ();
+				OnSearchFinished (true, false, Selection, Query);
 			}
 		}
 
@@ -92,9 +92,10 @@ namespace Do.Core
 				int ctmp = context.Cursor;
 				context.Cursor = value;
 				if (tmp != Selection || context.Cursor != ctmp) {
-					try {
-						OnSelectionChanged ();
-					} catch {}
+//					try {
+//						OnSelectionChanged ();
+//					} catch {}
+					OnSearchFinished (true, false, Selection, Query);
 				}
 			}
 		}
@@ -139,7 +140,6 @@ namespace Do.Core
 			context.LastContext = (SimpleSearchContext) context.Clone ();
 			context.Query += character;
 			
-			OnQueryChanged ();
 			UpdateResults ();
 			
 		}
@@ -178,11 +178,7 @@ namespace Do.Core
 			
 			IObject tmp = context.Selection;
 			context = context.LastContext;
-			
-			
-			if (tmp != context.Selection)
-				SelectionChanged ();
-			OnQueryChanged ();
+			OnSearchFinished (tmp != context.Selection, true, Selection, Query);
 		}
 
 		public virtual bool ToggleSecondaryCursor (int cursorLocation)
@@ -227,7 +223,7 @@ namespace Do.Core
 			context = newContext;
 			
 			context.Results = Do.UniverseManager.Search (Query, defaultFilter, children);
-			OnSelectionChanged ();
+			OnSearchFinished (true, context.ParentContext.Query != context.Query, Selection, Query);
 			return true;
 		}
 		
@@ -235,10 +231,11 @@ namespace Do.Core
 		{
 			if (context.ParentContext == null) return false;
 			
+			string old_query = Query;
 			SimpleSearchContext parent = context.ParentContext;
 			context.Destroy (true);
 			context = parent;
-			OnSelectionChanged ();
+			OnSearchFinished (true, old_query != Query, Selection, Query);
 			return true;
 		}
 		
@@ -250,25 +247,14 @@ namespace Do.Core
 			textModeFinalize = false;
 		}
 		
-		protected void OnSelectionChanged ()
-		{
-			SelectionChanged ();
-		}
-		
 		protected void OnSearchStarted (bool upstream_search)
 		{
 			SearchStarted (upstream_search);
 		}	
 		
-		protected void OnSearchFinished (bool selection_changed)
+		protected void OnSearchFinished (bool selection_changed, bool query_changed, IObject selection, string query)
 		{
-			SearchFinished (selection_changed);
-		}
-		
-		protected void OnQueryChanged ()
-		{
-			if (QueryChanged != null)
-				QueryChanged ();
+			SearchFinished (this, new SearchFinishState (selection_changed, query_changed, selection, query));
 		}
 		
 		public event NullEventHandler SelectionChanged;

@@ -136,16 +136,6 @@ namespace Do.Core
 		void Reset ();
 		
 		/// <summary>
-		/// The controllers Query has changed
-		/// </summary>
-		event NullEventHandler QueryChanged;
-		
-		/// <summary>
-		/// Triggered when the result has changed.  This may not fire after every search.
-		/// </summary>
-		event NullEventHandler SelectionChanged;
-		
-		/// <summary>
 		/// The controller has started a search due to upstream results changing
 		/// </summary>
 		event SearchStartedEventHandler SearchStarted;

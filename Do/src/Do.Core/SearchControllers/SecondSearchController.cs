@@ -52,7 +52,10 @@ namespace Do.Core
 		public SecondSearchController(ISearchController FirstController) : base ()
 		{
 			this.FirstController = FirstController;
-			FirstController.SelectionChanged += OnUpstreamSelectionChanged;
+			FirstController.SearchFinished += delegate (object o, SearchFinishState state) {
+				if (state.SelectionChanged)
+					OnUpstreamSelectionChanged ();
+			};
 		}
 		
 		//Similar to running UpdateResults (), except we dont have any timeouts
@@ -71,7 +74,7 @@ namespace Do.Core
 				wait_timer = 0;
 			}
 			context.Results = GetContextResults ();
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}
 		
 		protected override List<IObject> InitialResults ()
@@ -196,12 +199,9 @@ namespace Do.Core
 				//quickly as possible
 				
 				//Check and see if our selection changed
-				if (context.LastContext != null && context.Selection != context.LastContext.Selection) {
-					base.OnSelectionChanged ();
-					base.OnSearchFinished (true);
-				} else {
-					base.OnSearchFinished (false);
-				}
+				bool selection_changed = (context.LastContext != null && 
+				                          context.Selection != context.LastContext.Selection);
+				base.OnSearchFinished (selection_changed, true, Selection, Query);
 			} else {
 				//yay, we beat the user with a stick
 				if (wait_timer > 0) {
@@ -214,12 +214,9 @@ namespace Do.Core
 					wait_timer = 0;
 					Gdk.Threads.Enter ();
 					try {
-						if (context.LastContext == null || context.Selection != context.LastContext.Selection) {
-							base.OnSelectionChanged ();
-							base.OnSearchFinished (true);
-						} else {
-							base.OnSearchFinished (false);
-						}
+						bool search_changed = (context.LastContext == null || 
+						                       context.Selection != context.LastContext.Selection);
+						base.OnSearchFinished (search_changed, true, Selection, Query);
 					} finally {
 						Gdk.Threads.Leave ();
 					}
@@ -253,7 +250,7 @@ namespace Do.Core
 			}
 			textMode = false;
 			
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}
 
 
@@ -300,7 +297,7 @@ namespace Do.Core
 
 				context.Results = GetContextResults ();
 			}
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}	
 	}
 }

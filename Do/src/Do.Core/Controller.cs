@@ -79,14 +79,14 @@ namespace Do.Core {
 			// Set up our callbacks here.  If we ever reconstruct these controllers, 
 			// and we shouldn't be, we will need to reset these too.  However controllers
 			// provide a resetting mechanism.
-			controllers[0].SelectionChanged += delegate { UpdatePane (Pane.First); };
-			controllers[1].SelectionChanged += delegate { SmartUpdatePane (Pane.Second); };
-			controllers[2].SelectionChanged += delegate { SmartUpdatePane (Pane.Third); };
+//			controllers[0].SelectionChanged += delegate { UpdatePane (Pane.First); };
+//			controllers[1].SelectionChanged += delegate { SmartUpdatePane (Pane.Second); };
+//			controllers[2].SelectionChanged += delegate { SmartUpdatePane (Pane.Third); };
 			
 			//Usually when the query changes we want to reflect this immediately
-			controllers[0].QueryChanged += OnFirstQueryChanged;
-			controllers[1].QueryChanged += delegate { SmartUpdatePane (Pane.Second); };
-			controllers[2].QueryChanged += delegate { SmartUpdatePane (Pane.Third); };
+//			controllers[0].QueryChanged += OnFirstQueryChanged;
+//			controllers[1].QueryChanged += delegate { SmartUpdatePane (Pane.Second); };
+//			controllers[2].QueryChanged += delegate { SmartUpdatePane (Pane.Third); };
 			
 			//We want to show a blank box during our searches
 			controllers[0].SearchStarted += delegate { };
@@ -98,9 +98,16 @@ namespace Do.Core {
 			};
 			
 			//Brings back our boxes after the search
-			controllers[0].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.First); };
-			controllers[1].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Second); };
-			controllers[2].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Third); };
+//			controllers[0].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.First); };
+//			controllers[1].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Second); };
+//			controllers[2].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Third); };
+			
+			controllers[0].SearchFinished += delegate (object o, SearchFinishState state) 
+			{ SearchFinished (o, state, Pane.First); };
+			controllers[1].SearchFinished += delegate (object o, SearchFinishState state) 
+			{ SearchFinished (o, state, Pane.Second); };
+			controllers[2].SearchFinished += delegate (object o, SearchFinishState state) 
+			{ SearchFinished (o, state, Pane.Third); };
 		}
 		
 		public void Initialize ()
@@ -589,6 +596,17 @@ namespace Do.Core {
 				return;
 			}
 			UpdatePane (Pane.First);
+		}
+		
+		void SearchFinished (object o, SearchFinishState state, Pane pane)
+		{
+			if (pane == Pane.First && FirstControllerIsReset) {
+				Reset ();
+				return;
+			}
+			
+			if (state.QueryChanged || state.SelectionChanged)
+				SmartUpdatePane (pane);
 		}
 
 		/// <summary>
