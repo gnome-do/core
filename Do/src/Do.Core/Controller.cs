@@ -774,9 +774,9 @@ namespace Do.Core {
 			about_window.ProgramName = "GNOME Do";
 
 			try {
-				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
-				about_window.Version = String.Format ("{0}.{1}.{2}",
-					name.Version.Major, name.Version.Minor, name.Version.Build);
+				Assembly asm = Assembly.GetEntryAssembly ();
+				ProgramVersion ver = asm.GetCustomAttributes (typeof (ProgramVersion), false)[0] as ProgramVersion;
+				about_window.Version = ver.Version + "\n" + ver.Details;
 			} catch {
 				about_window.Version = Catalog.GetString ("Unknown");
 			}

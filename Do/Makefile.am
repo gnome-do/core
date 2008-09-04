@@ -118,6 +118,7 @@ FILES =  \
 	src/IPreferencesBackend.cs \
 	src/Log.cs \
 	src/Preferences.cs \
+	src/ProgramVersion.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 
 
