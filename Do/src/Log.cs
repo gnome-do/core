@@ -18,6 +18,9 @@
  */
 
 using System;
+using System.IO;
+
+using Do.Addins;
 using System.Collections.Generic;
 
 namespace Do {
@@ -26,15 +29,79 @@ namespace Do {
 		void Log (LogEntryType level, string msg);
 	}
 	
-	public class ConsoleLog : ILog {
-
-		public void Log (LogEntryType type, string msg)
+	public enum LogEntryType {
+		Debug,
+		Info,
+		Warn,
+		Error,
+		Fatal,
+	}
+	
+	public abstract class AbstractLog : ILog {
+		/// <value>
+		/// A string to make printing the current time simpler
+		/// </value>
+		protected const string Timef   = "{0:00}:{1:00}:{2:00}.{3:000}";
+		
+		/// <value>
+		/// A consistent way of printing [Time LogLevel]
+		/// </value>
+		protected const string Promptf = "[{0} {1}]";
+		
+		/// <value>
+		/// the current time using the Timef format.
+		/// </value>
+		protected string Time {
+			get { 
+				return string.Format (Timef, DateTime.Now.Hour, DateTime.Now.Minute,
+					DateTime.Now.Second, DateTime.Now.Millisecond);
+			}
+		}
+		
+		protected string AlignMessage (string msg, int margin)
 		{
-		    string time = string.Format ("{0:00}:{1:00}:{2:00}.{3:000}",
-				DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second,
-				DateTime.Now.Millisecond);
+			int maxWidth   = 80;
+			int lineWidth  = 0;
+			string aligned = string.Empty;
+			string padding = string.Empty;
+			string[] words = msg.Split (' ');
+
+			while (padding.Length < margin)
+				padding += " ";
+
+			lineWidth = margin;
+			foreach (string word in words) {
+				if (lineWidth + word.Length < maxWidth) {
+					aligned = string.Format ("{0}{1} ", aligned, word);
+					lineWidth += word.Length + 1;
+				} else {
+					aligned = string.Format ("{0}\n    {1} ", aligned, word);
+					lineWidth = 4 + word.Length + 1;
+				}
+			}
+			return aligned;
+		}
+		
+		abstract public void Log (LogEntryType level, string msg);
+	}
+	
+	public class FileLog : AbstractLog {
+		public override void Log (LogEntryType level, string msg) {
+			string stype = Enum.GetName (typeof (LogEntryType), level);
+			string prompt = string.Format (Promptf, stype, Time);
+			
+			TextWriter writer = new StreamWriter (Paths.Log, true);
+			writer.WriteLine (prompt + " " + AlignMessage (msg, prompt.Length + 1));
+			writer.Close ();
+		}
+	}
+
+
+	public class ConsoleLog : AbstractLog {
+		public override void Log (LogEntryType type, string msg)
+		{
 			string stype  = Enum.GetName (typeof (LogEntryType), type);
-			string prompt = string.Format ("[{0} {1}]", stype, time);
+			string prompt = string.Format (Promptf, stype, Time);
 
 			switch (type) {
 			case LogEntryType.Fatal:
@@ -59,38 +126,6 @@ namespace Do {
 			Console.Write (" ");
 			Console.WriteLine (AlignMessage (msg, prompt.Length + 1));
 		}
-
-		string AlignMessage (string msg, int margin)
-		{
-			int maxWidth   = 80;
-			int lineWidth  = 0;
-			string aligned = string.Empty;
-			string padding = string.Empty;
-			string[] words = msg.Split (' ');
-
-			while (padding.Length < margin)
-				padding += " ";
-
-			lineWidth = margin;
-			foreach (string word in words) {
-				if (lineWidth + word.Length < maxWidth) {
-					aligned = string.Format ("{0}{1} ", aligned, word);
-					lineWidth += word.Length + 1;
-				} else {
-					aligned = string.Format ("{0}\n    {1} ", aligned, word);
-					lineWidth = 4 + word.Length + 1;
-				}
-			}
-			return aligned;
-		}
-	}
-	
-	public enum LogEntryType {
-		Debug,
-		Info,
-		Warn,
-		Error,
-		Fatal,
 	}
 
 	public static class Log {
@@ -101,6 +136,10 @@ namespace Do {
 		public static void Initialize ()
 		{
 			AddLog (new ConsoleLog ());
+			
+			if (File.Exists (Paths.Log))
+				File.Delete (Paths.Log);
+			AddLog (new FileLog ());
 		}
 		
 		static Log ()
