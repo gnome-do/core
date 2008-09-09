@@ -134,12 +134,14 @@ namespace Do {
 		static LogEntryType level;
 
 		public static void Initialize ()
-		{
+		{			
 			AddLog (new ConsoleLog ());
 			
-			if (File.Exists (Paths.Log))
-				File.Delete (Paths.Log);
-			AddLog (new FileLog ());
+			if (Do.CLIPrefs.WriteLogToFile) {
+				if (File.Exists (Paths.Log))
+					File.Delete (Paths.Log);
+				AddLog (new FileLog ());
+			}
 		}
 		
 		static Log ()
