@@ -23,9 +23,7 @@
 using System;
 
 namespace Do.Addins
-{
-	
-	
+{	
 	public static class NotificationBridge
 	{
 		

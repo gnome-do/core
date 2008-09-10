@@ -149,6 +149,12 @@ namespace Do {
 			level = Do.Preferences.QuietStart ? LogEntryType.Error
 											  : LogEntryType.Info;
 			logs = new List<ILog> ();
+			
+			Addins.LogBridge.DebugLogRequested += Debug;
+			Addins.LogBridge.InfoLogRequested  += Info;
+			Addins.LogBridge.WarnLogRequested  += Warn;
+			Addins.LogBridge.ErrorLogRequested += Error;
+			Addins.LogBridge.FatalLogRequested += LogFatal;
 		}
 		
 		public static LogEntryType LogLevel {
