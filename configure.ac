@@ -18,7 +18,7 @@ AC_SUBST(ABI_VERSION)
 
 RELEASE="false"
 if [ $RELEASE = "true" ] ; then
-   VERSION_INFO="ReleaseB1;1702;0c"
+   VERSION_INFO="Release"
 else
    VERSION_INFO=`bzr version-info --custom \
    --template="bzr {branch_nick} r{revno}"`
@@ -125,6 +125,21 @@ Do.Addins/do.addins.pc
 Do.DBus/do.dbus.pc
 m4/Makefile
 po/Makefile.in
+data/Makefile
+data/icons/Makefile
+data/icons/hicolor/Makefile
+data/icons/hicolor/16x16/Makefile
+data/icons/hicolor/16x16/apps/Makefile
+data/icons/hicolor/22x22/Makefile
+data/icons/hicolor/22x22/apps/Makefile
+data/icons/hicolor/24x24/Makefile
+data/icons/hicolor/24x24/apps/Makefile
+data/icons/hicolor/32x32/Makefile
+data/icons/hicolor/32x32/apps/Makefile
+data/icons/hicolor/48x48/Makefile
+data/icons/hicolor/48x48/apps/Makefile
+data/icons/hicolor/scalable/Makefile
+data/icons/hicolor/scalable/apps/Makefile
 ])
 
 AC_OUTPUT
