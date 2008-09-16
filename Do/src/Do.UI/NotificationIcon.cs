@@ -36,7 +36,7 @@ namespace Do.UI
 		private const int IconSize = 32;
 		private bool updates_available;
 		private Pixbuf normal_icon = IconProvider.PixbufFromIconName 
-			("gnome-run", IconSize);
+			("gnome-do", IconSize);
 		private Pixbuf update_icon = IconProvider.PixbufFromIconName
 			("software-update-available", IconSize);
 				

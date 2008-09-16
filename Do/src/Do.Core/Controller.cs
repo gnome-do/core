@@ -764,7 +764,6 @@ namespace Do.Core {
 
 		public void ShowAbout ()
 		{
-			string[] logos;
 			string logo;
 
 			Vanish ();
@@ -780,16 +779,8 @@ namespace Do.Core {
 			} catch {
 				about_window.Version = Catalog.GetString ("Unknown");
 			}
-			
-			logos = new string[] {
-				"/usr/share/icons/gnome/scalable/actions/search.svg",
-			};
 
-			logo = "gnome-run";
-			foreach (string l in logos) {
-				if (!System.IO.File.Exists (l)) continue;
-				logo = l;
-			}
+			logo = "gnome-do.svg";
 
 			about_window.Logo = UI.IconProvider.PixbufFromIconName (logo, 140);
 			about_window.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
@@ -798,7 +789,7 @@ namespace Do.Core {
 				"applications, music, contacts, and more!";
 			about_window.Website = "http://do.davebsd.com/";
 			about_window.WebsiteLabel = "Visit Homepage";
-			about_window.IconName = "gnome-run";
+			about_window.IconName = "gnome-do";
 
 			if (null != about_window.Screen.RgbaColormap)
 				Gtk.Widget.DefaultColormap = about_window.Screen.RgbaColormap;

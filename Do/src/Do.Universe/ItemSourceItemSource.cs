@@ -57,7 +57,7 @@ namespace Do.Universe {
 		
 		public string Icon {
 			get {
-				return "gnome-run";
+				return "gnome-do";
 			}
 		}
 		
