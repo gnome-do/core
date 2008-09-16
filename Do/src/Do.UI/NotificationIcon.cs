@@ -33,7 +33,7 @@ namespace Do.UI
 	/// </summary>
 	public class NotificationIcon : StatusIcon
 	{
-		private const int IconSize = 32;
+		private const int IconSize = 24;
 		private bool updates_available;
 		private Pixbuf normal_icon = IconProvider.PixbufFromIconName 
 			("gnome-do", IconSize);
