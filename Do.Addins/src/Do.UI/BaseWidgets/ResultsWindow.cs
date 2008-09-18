@@ -349,7 +349,9 @@ namespace Do.UI
 				context = context.ParentContext;
 				count++;
 			}
-			queryLabel.Markup = string.Format ("{0}<b>{1}</b>", builder.ToString (), query);
+			queryLabel.Markup = string.Format ("{0}<b>{1}</b>", 
+			                                   GLib.Markup.EscapeText (builder.ToString ()),
+			                                   GLib.Markup.EscapeText (query));
 		}
 		
 		private void UpdateCursors () 
@@ -398,8 +400,9 @@ namespace Do.UI
 
 				foreach (IObject result in value) {					
 					
-					info = string.Format (ResultInfoFormat, result.Name, result.Description);
-					info = Util.Appearance.MarkupSafeString (info);
+					info = string.Format (ResultInfoFormat, 
+					                      GLib.Markup.EscapeText (result.Name), 
+					                      GLib.Markup.EscapeText (result.Description));
 					store.AppendValues (new object[] {
 						result,
 						info,
@@ -415,7 +418,8 @@ namespace Do.UI
 		{
 			set {
 				query = value;
-				queryLabel.Markup = string.Format (QueryLabelFormat, value ?? string.Empty);
+				queryLabel.Markup = string.Format (QueryLabelFormat, 
+				                                   GLib.Markup.EscapeText (value ?? string.Empty));
 			}
 			get { return query; }
 		}
