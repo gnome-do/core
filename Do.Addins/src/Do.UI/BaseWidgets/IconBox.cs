@@ -43,8 +43,10 @@ namespace Do.UI
 		protected Label label;
 		protected Gdk.Pixbuf overlay_pixbuf;
 
-		protected float focused_transparency = 0.4f;
-		protected float unfocused_transparency = 0.1f;
+		protected float focused_fill_transparency = 0.4f;
+		protected float unfocused_fill_transparency = 0.1f;
+		protected float focused_frame_transparency = 0.3f;
+		protected float unfocused_frame_transparency = 0.075f;
 
 		public IconBox (int icon_size) : base ()
 		{
@@ -127,7 +129,8 @@ namespace Do.UI
 				
 				textOverlay = value;
 				if (value) {
-					FillAlpha = FrameAlpha = 0.4;
+					FillAlpha = focused_fill_transparency;
+					FrameAlpha = focused_frame_transparency;
 					FillColor = FrameColor = new Color (0x00, 0x00, 0x00);
 					image.Hide ();
 					label.Ellipsize = Pango.EllipsizeMode.None;
@@ -213,7 +216,8 @@ namespace Do.UI
 
 		protected virtual void UpdateFocus ()
 		{
-			FrameAlpha = FillAlpha = (focused ? focused_transparency : unfocused_transparency);
+			FillAlpha = (focused ? focused_fill_transparency : unfocused_fill_transparency);
+			FrameAlpha = (focused ? focused_frame_transparency : unfocused_frame_transparency);
 		}
 		
 		protected override void PaintFill ()

@@ -128,7 +128,29 @@ namespace Do.UI
 				cairo.Arc (x+radius, y+radius, radius, Math.PI, (Math.PI*1.5));
 			}
 		}
-		
+
+		protected virtual void GetBorderFrame (Cairo.Context cairo)
+		{
+			/* Override coordinates to align to the cairo grid */
+			double X, Y, Width, Height;
+			X = x + cairo.LineWidth/2.0;
+			Y = y + cairo.LineWidth/2.0;
+			Width = width - cairo.LineWidth;
+			Height = height - cairo.LineWidth;
+	
+			if (radius == 0)
+			{
+				cairo.MoveTo (X, Y);
+				cairo.Rectangle (X, Y, Width, Height);
+			} else {
+				cairo.MoveTo (X+radius, Y);
+				cairo.Arc (X+Width-radius, Y+radius, radius, (Math.PI*1.5), (Math.PI*2));
+				cairo.Arc (X+Width-radius, Y+Height-radius, radius, 0, (Math.PI*0.5));
+				cairo.Arc (X+radius, Y+Height-radius, radius, (Math.PI*0.5), Math.PI);
+				cairo.Arc (X+radius, Y+radius, radius, Math.PI, (Math.PI*1.5));
+			}
+		}
+
 		protected virtual void Paint (Gdk.Rectangle area)
 		{
 			if (!IsDrawable) {
@@ -139,14 +161,25 @@ namespace Do.UI
 				return;
 			}
 
-			// Why thickness?? Isn't it useless?
-			x = childAlloc.X + Style.XThickness;
-			y = childAlloc.Y + Style.YThickness;
+			/* You shouldn't change the size of the drawing area
+			 * to avoid glitches when switching panes, though
+			 * you can enlarge the big frame.
+			 * This workaround is enlarging only the frame which has
+			 * radius == 0, so when the window is not composited.
+			 * Pretty ugly, I should think on something better.
+			 *
+			 * int offset = radius == 0 ? 1 : 0;
+			 *
+			 * x = childAlloc.X - offset;
+			 * y = childAlloc.Y - offset;
+			 * width  = childAlloc.Width + offset * 2;
+			 * height = childAlloc.Height + offset * 2;
+			 */
 
-			
-			//FIXME
-			width  = childAlloc.Width - 2 * Style.XThickness;
-			height = childAlloc.Height - 2 * Style.Ythickness;
+			x = childAlloc.X;
+			y = childAlloc.Y;
+			width  = childAlloc.Width;
+			height = childAlloc.Height;
 
 			if (this.radius < 0.0) {
 				radius = Math.Min (width, height);
@@ -204,12 +237,11 @@ namespace Do.UI
 			b = (double) frameColor.Blue / ushort.MaxValue;
 			
 			cairo.Save ();
-			GetFrame (cairo);
-			
 			cairo.LineWidth = 2;
+			GetBorderFrame (cairo);
+
 			cairo.Color = new Cairo.Color (r, g, b, frameAlpha);
 			cairo.Stroke ();
-			
 			cairo.Restore ();
 		}
 
@@ -232,21 +264,18 @@ namespace Do.UI
 				requisition.Width = Math.Max (requisition.Width, cr.Width);
 				requisition.Height += cr.Height;
 			}
-			requisition.Width += (int)(BorderWidth + Style.XThickness * 2);
-			requisition.Height += (int)(BorderWidth + Style.Ythickness * 2);
+			requisition.Width += (int)(BorderWidth + 2);
+			requisition.Height += (int)(BorderWidth + 2);
 		}
 
 		protected override void OnSizeAllocated (Rectangle allocation)
 		{
 			Rectangle new_alloc;
 
-			new_alloc.X = (int) BorderWidth + Style.XThickness;
+			new_alloc.X = (int) BorderWidth + 1;
 			new_alloc.Width = Math.Max (1, allocation.Width - new_alloc.X * 2);
-			new_alloc.Y = (int) BorderWidth  + Style.Ythickness;
-			new_alloc.Height = Math.Max (1, allocation.Height
-			                                - new_alloc.Y
-			                                - (int) BorderWidth
-			                                - Style.Ythickness);
+			new_alloc.Y = (int) BorderWidth + 1;
+			new_alloc.Height = Math.Max (1, allocation.Height - new_alloc.Y * 2);
 			new_alloc.X += allocation.X;
 			new_alloc.Y += allocation.Y;
 			if (IsMapped && new_alloc != childAlloc) {
