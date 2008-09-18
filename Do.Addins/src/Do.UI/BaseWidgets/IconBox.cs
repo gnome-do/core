@@ -34,7 +34,7 @@ namespace Do.UI
 
 		protected bool focused, textOverlay;
 
-		protected string caption, icon_name;
+		protected string caption, icon_name, highlight;
 		protected Pixbuf empty_pixbuf;
 		protected int icon_size;
 		
@@ -58,6 +58,7 @@ namespace Do.UI
 			Alignment label_align;
 
 			caption = string.Empty;
+			highlight = string.Empty;
 			
 			vbox = new VBox (false, 4);
 			vbox.BorderWidth = 6;
@@ -96,6 +97,7 @@ namespace Do.UI
 		public virtual void Clear ()
 		{
 			Pixbuf = null;
+			highlight = string.Empty;
 			Caption = string.Empty;
 			icon_name = string.Empty;
 			TextOverlay = false;
@@ -144,14 +146,19 @@ namespace Do.UI
 		{
 			get { return caption; }
 			set {
-				caption = value ?? string.Empty;
+				caption = GLib.Markup.EscapeText (value ?? string.Empty);
 				caption = caption.Replace ("\n", " ");
+				UpdateLabel ();
+			}
+		}
+		
+		private void UpdateLabel ()
+		{
 				int lines = label.Layout.LineCount;
 				label.Markup = string.Format (CaptionFormat, 
-				                              Util.Appearance.MarkupSafeString (caption));
+				                              Util.FormatCommonSubstrings (caption, highlight, HighlightFormat));
 				if (lines != label.Layout.LineCount && LinesChanged != null)
 					LinesChanged (label.Layout.LineCount, new EventArgs ());
-			}
 		}
 
 		public string Icon
@@ -198,14 +205,8 @@ namespace Do.UI
 		public string Highlight
 		{
 			set {
-				string highlight;
-
-				if (value != null) {
-					highlight = Util.FormatCommonSubstrings (caption, value, HighlightFormat);
-				} else {
-					highlight = caption;
-				}
-				Caption = highlight;
+				highlight = (value ?? string.Empty);
+				UpdateLabel ();
 			}
 		}
 
