@@ -32,8 +32,10 @@ namespace Do.UI
 		protected string labelText;
 		protected bool isFocused;
 		
-		protected double focusedTransparency = 0.4;
-		protected double unfocusedTransparency = 0.1;
+		protected float focused_fill_transparency = 0.4f;
+		protected float unfocused_fill_transparency = 0.1f;
+		protected float focused_frame_transparency = 0.3f;
+		protected float unfocused_frame_transparency = 0.075f;
 		
 		public string LabelText
 		{
@@ -90,7 +92,8 @@ namespace Do.UI
 		
 		protected virtual void UpdateFocus ()
 		{
-			FrameAlpha = FillAlpha = (isFocused ? focusedTransparency : unfocusedTransparency);
+			FillAlpha = (IsFocused ? focused_fill_transparency : unfocused_fill_transparency);
+			FrameAlpha = (IsFocused ? focused_frame_transparency : unfocused_frame_transparency);
 		}
 	}
 }
