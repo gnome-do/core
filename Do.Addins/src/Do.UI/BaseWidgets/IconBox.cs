@@ -133,6 +133,7 @@ namespace Do.UI
 					label.Ellipsize = Pango.EllipsizeMode.None;
 					label.LineWrapMode = Pango.WrapMode.WordChar;
 					label.LineWrap = true;
+					highlight = string.Empty;
 				} else {
 					FillColor = FrameColor = new Color (0xff, 0xff, 0xff);
 					image.Show ();
