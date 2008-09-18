@@ -60,6 +60,7 @@ namespace Do.UI
 					label.LineWrapMode = Pango.WrapMode.WordChar;
 					label.LineWrap = true;
 					label.WidthRequest = (int) icon_size * 3;
+					highlight = string.Empty;
 				} else {
 					FillColor = FrameColor = new Color (0xff, 0xff, 0xff);
 					image.Show ();
