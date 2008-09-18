@@ -111,9 +111,9 @@ namespace Do.UI
 		protected override void PaintBorder ()
 		{
 			cairo.Save ();
-			GetFrame (cairo);
-			
-			cairo.LineWidth = 2;
+			cairo.LineWidth = 1;
+			GetBorderFrame (cairo);
+
 			cairo.Pattern = GetGradient (.2);
 			cairo.Stroke ();
 			

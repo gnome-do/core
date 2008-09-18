@@ -123,30 +123,6 @@ namespace Do.UI
 			cairo.Restore ();
 		}
 		
-		protected virtual void GetBorderFrame (Cairo.Context cairo)
-		{
-			double X,Y,Width,Height;
-			X = x+.5;
-			Y = y+.5;
-			Width = width - 1;
-			Height = height - 1;
-			if (radius == 0)
-			{
-				cairo.MoveTo (X, Y);
-				cairo.Rectangle (X, Y, Width, Height);
-			} else {
-				cairo.MoveTo (X+radius, Y);
-				cairo.Arc (X+Width-radius, Y+radius, 
-				           radius, (Math.PI*1.5), (Math.PI*2));
-				cairo.Arc (X+Width-radius, Y+Height-radius, 
-				           radius, 0, (Math.PI*0.5));
-				cairo.Arc (X+radius, Y+Height-radius, 
-				           radius, (Math.PI*0.5), Math.PI);
-				cairo.Arc (X+radius, Y+radius, radius, 
-				           Math.PI, (Math.PI*1.5));
-			}
-		}
-		
 		protected override void PaintBorder ()
 		{
 			double r, g, b;
@@ -156,9 +132,9 @@ namespace Do.UI
 			b = (double) frameColor.Blue / ushort.MaxValue;
 			
 			cairo.Save ();
-			GetBorderFrame (cairo);
-			
 			cairo.LineWidth = 1;
+			GetBorderFrame (cairo);
+
 			cairo.Color = new Cairo.Color (r, g, b, frameAlpha);
 			cairo.Stroke ();
 			
