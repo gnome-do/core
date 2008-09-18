@@ -86,8 +86,7 @@ namespace Do
 			public static string MarkupSafeString (string s)
 			{
 				if (s == null) return string.Empty;
-				s = s.Replace ("&", "&amp;");
-				return s;
+				return GLib.Markup.EscapeText (s);
 			}
 
 			
