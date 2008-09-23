@@ -214,7 +214,7 @@ namespace Do.Core
 			
 			//maxResults = (int)universe.Count/7;
 			last_update = DateTime.Now;
-			Console.WriteLine ("Universe contains {0} items.", universe.Count);
+			Log.Info ("Universe contains {0} items.", universe.Count);
 		}
 		
 		/// <summary>
