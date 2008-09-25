@@ -59,7 +59,6 @@ namespace Do.Universe {
 			} else {
 				text = string.Empty;
 			}
-			Console.WriteLine (text);
 		}
 	}
 }
