@@ -31,10 +31,11 @@ namespace Do.UI
 		
 		protected override void GetFrame (Cairo.Context cairo)
 		{
-			cairo.MoveTo (x, y);
 			if (radius == 0) {
+				cairo.MoveTo (x, y);
 				cairo.Rectangle (x, y, width, height);
 			} else {
+				cairo.MoveTo (x, y);
 				cairo.LineTo (x+width, y);
 				cairo.Arc (x+width-radius, y+height-radius, radius, 0, (Math.PI*0.5));
 				cairo.Arc (x+radius, y+height-radius, radius, (Math.PI*0.5), Math.PI);
@@ -44,16 +45,23 @@ namespace Do.UI
 		
 		protected void SemiOutline (Cairo.Context outline)
 		{
+			/* Override coordinates to align to the cairo grid */
+			double X, Y, Width, Height;
+			X = x + cairo.LineWidth/2.0;
+			Y = y + cairo.LineWidth/2.0;
+			Width = width - cairo.LineWidth;
+			Height = height - cairo.LineWidth;
+
 			if (radius == 0) {
-				outline.MoveTo (x+width, y);
-				outline.LineTo (x+width, y+height);
-				outline.LineTo (x, y+height);
-				outline.LineTo (x, y);
+				outline.MoveTo (X+Width, Y);
+				outline.LineTo (X+Width, Y+Height);
+				outline.LineTo (X, Y+Height);
+				outline.LineTo (X, Y);
 			} else {
-				outline.MoveTo (x+width, y);
-				outline.Arc (x+width-radius, y+height-radius, radius, 0, (Math.PI*0.5));
-				outline.Arc (x+radius, y+height-radius, radius, (Math.PI*0.5), Math.PI);
-				outline.LineTo (x, y);
+				outline.MoveTo (X+width, y);
+				outline.Arc (X+Width-radius, Y+Height-radius, radius, 0, (Math.PI*0.5));
+				outline.Arc (x+radius, Y+Height-radius, radius, (Math.PI*0.5), Math.PI);
+				outline.LineTo (X, Y);
 			}
 		}
 		
@@ -83,10 +91,10 @@ namespace Do.UI
 			b = (double) fillColor.Blue / ushort.MaxValue;
 			
 			cairo.Save ();
+			cairo.LineWidth = 2;
 			SemiOutline (cairo);
 			
 			cairo.Color = new Cairo.Color (r+brighten, g+brighten, b+brighten, frameAlpha);
-			cairo.LineWidth = 2;
 			cairo.Stroke ();
 			
 			cairo.Restore ();

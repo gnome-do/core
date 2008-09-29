@@ -25,13 +25,7 @@ namespace Do.Universe {
 
 	public class SelectedTextItem : IProxyItem, ITextItem {		
 		
-		string text = string.Empty;
-		Gtk.Clipboard primary;
-		
-		public SelectedTextItem () {
-			primary = Gtk.Clipboard.Get (Gdk.Selection.Primary);
-			primary.OwnerChange += new Gtk.OwnerChangeHandler(OnOwnerChange);
-		}
+		private static string text;
 		
 		public IObject Inner {
 			get {
@@ -55,14 +49,16 @@ namespace Do.Universe {
 			get { return text; }
 		}
 		
-		private void OnOwnerChange (object s, Gtk.OwnerChangeArgs args) {
-			if (args.Event.Reason == Gdk.OwnerChange.NewOwner && primary.Owner != primary) {
-				primary.RequestText (OnClipboardTextReceived);
+		public static void UpdateText ()
+		{
+			Gtk.Clipboard primary;
+			
+			primary = Gtk.Clipboard.Get (Gdk.Selection.Primary);
+			if (primary.WaitIsTextAvailable ()) {
+				text = primary.WaitForText ();
+			} else {
+				text = string.Empty;
 			}
-		}
-		
-		private void OnClipboardTextReceived (Gtk.Clipboard clipboard, string clipboardText) {
-			text = clipboardText;
 		}
 	}
 }

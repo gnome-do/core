@@ -2,9 +2,7 @@ dnl Warning: This is an automatically generated file, do not edit!
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.54])
 
-dnl A change in the plugin API/ABI should be accompanied by a Minor/Major revision bump
-dnl ...give or take!
-AC_INIT([gnome-do], [0.6.0.0])
+AC_INIT([gnome-do], [0.6.0.1])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -14,9 +12,18 @@ dnl -- Intl
 IT_PROG_INTLTOOL([0.35.0])
 SHAMROCK_CONFIGURE_I18N(gnome-do)
 
+dnl Plugin ABI version; bump whenever plugin interface changes
+ABI_VERSION=0.6
+AC_SUBST(ABI_VERSION)
 
-ASM_VERSION="$VERSION"
-AC_SUBST(ASM_VERSION)
+RELEASE="false"
+if [ $RELEASE = "true" ] ; then
+   VERSION_INFO="Release"
+else
+   VERSION_INFO=`bzr version-info --custom \
+   --template="bzr {branch_nick} r{revno}"`
+fi
+AC_SUBST(VERSION_INFO)
 
 dnl pkg-config
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
@@ -118,6 +125,21 @@ Do.Addins/do.addins.pc
 Do.DBus/do.dbus.pc
 m4/Makefile
 po/Makefile.in
+data/Makefile
+data/icons/Makefile
+data/icons/hicolor/Makefile
+data/icons/hicolor/16x16/Makefile
+data/icons/hicolor/16x16/apps/Makefile
+data/icons/hicolor/22x22/Makefile
+data/icons/hicolor/22x22/apps/Makefile
+data/icons/hicolor/24x24/Makefile
+data/icons/hicolor/24x24/apps/Makefile
+data/icons/hicolor/32x32/Makefile
+data/icons/hicolor/32x32/apps/Makefile
+data/icons/hicolor/48x48/Makefile
+data/icons/hicolor/48x48/apps/Makefile
+data/icons/hicolor/scalable/Makefile
+data/icons/hicolor/scalable/apps/Makefile
 ])
 
 AC_OUTPUT

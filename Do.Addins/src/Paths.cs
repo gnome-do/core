@@ -149,6 +149,10 @@ namespace Do {
 			get { return Combine (Paths.ApplicationData, "tmp"); }
 		}
 		
+		public static string Log {
+			get { return Combine (Paths.ApplicationData, "Log"); }
+		}
+		
 		public static string GetTemporaryFilePath ()
 		{
 			int fileId;

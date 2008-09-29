@@ -31,8 +31,8 @@ namespace Do.UI
 		
 		public MiniIconBox(int iconBoxSize) : base (iconBoxSize)
 		{
-			focused_transparency = 0.25f;
-			unfocused_transparency = 0.0f;
+			focused_fill_transparency = focused_frame_transparency =  0.25f;
+			unfocused_fill_transparency = unfocused_frame_transparency = 0.0f;
 			
 			drawGradient = true;
 		}
@@ -53,13 +53,14 @@ namespace Do.UI
 				
 				textOverlay = value;
 				if (value) {
-					FillAlpha = FrameAlpha = 0.4;
+					FillAlpha = FrameAlpha = 0.5;
 					FillColor = FrameColor = new Color (0x00, 0x00, 0x00);
 					image.Hide ();
 					label.Ellipsize = Pango.EllipsizeMode.None;
 					label.LineWrapMode = Pango.WrapMode.WordChar;
 					label.LineWrap = true;
 					label.WidthRequest = (int) icon_size * 3;
+					highlight = string.Empty;
 				} else {
 					FillColor = FrameColor = new Color (0xff, 0xff, 0xff);
 					image.Show ();

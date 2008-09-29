@@ -34,7 +34,7 @@ namespace Do.UI
 
 		protected bool focused, textOverlay;
 
-		protected string caption, icon_name;
+		protected string caption, icon_name, highlight;
 		protected Pixbuf empty_pixbuf;
 		protected int icon_size;
 		
@@ -43,8 +43,10 @@ namespace Do.UI
 		protected Label label;
 		protected Gdk.Pixbuf overlay_pixbuf;
 
-		protected float focused_transparency = 0.4f;
-		protected float unfocused_transparency = 0.1f;
+		protected float focused_fill_transparency = 0.4f;
+		protected float unfocused_fill_transparency = 0.1f;
+		protected float focused_frame_transparency = 0.3f;
+		protected float unfocused_frame_transparency = 0.075f;
 
 		public IconBox (int icon_size) : base ()
 		{
@@ -58,6 +60,7 @@ namespace Do.UI
 			Alignment label_align;
 
 			caption = string.Empty;
+			highlight = string.Empty;
 			
 			vbox = new VBox (false, 4);
 			vbox.BorderWidth = 6;
@@ -96,6 +99,7 @@ namespace Do.UI
 		public virtual void Clear ()
 		{
 			Pixbuf = null;
+			highlight = string.Empty;
 			Caption = string.Empty;
 			icon_name = string.Empty;
 			TextOverlay = false;
@@ -125,12 +129,14 @@ namespace Do.UI
 				
 				textOverlay = value;
 				if (value) {
-					FillAlpha = FrameAlpha = 0.4;
+					FillAlpha = focused_fill_transparency;
+					FrameAlpha = focused_frame_transparency;
 					FillColor = FrameColor = new Color (0x00, 0x00, 0x00);
 					image.Hide ();
 					label.Ellipsize = Pango.EllipsizeMode.None;
 					label.LineWrapMode = Pango.WrapMode.WordChar;
 					label.LineWrap = true;
+					highlight = string.Empty;
 				} else {
 					FillColor = FrameColor = new Color (0xff, 0xff, 0xff);
 					image.Show ();
@@ -144,14 +150,19 @@ namespace Do.UI
 		{
 			get { return caption; }
 			set {
-				caption = value ?? string.Empty;
+				caption = GLib.Markup.EscapeText (value ?? string.Empty);
 				caption = caption.Replace ("\n", " ");
+				UpdateLabel ();
+			}
+		}
+		
+		private void UpdateLabel ()
+		{
 				int lines = label.Layout.LineCount;
 				label.Markup = string.Format (CaptionFormat, 
-				                              Util.Appearance.MarkupSafeString (caption));
+				                              Util.FormatCommonSubstrings (caption, highlight, HighlightFormat));
 				if (lines != label.Layout.LineCount && LinesChanged != null)
 					LinesChanged (label.Layout.LineCount, new EventArgs ());
-			}
 		}
 
 		public string Icon
@@ -198,20 +209,15 @@ namespace Do.UI
 		public string Highlight
 		{
 			set {
-				string highlight;
-
-				if (value != null) {
-					highlight = Util.FormatCommonSubstrings (caption, value, HighlightFormat);
-				} else {
-					highlight = caption;
-				}
-				Caption = highlight;
+				highlight = (value ?? string.Empty);
+				UpdateLabel ();
 			}
 		}
 
 		protected virtual void UpdateFocus ()
 		{
-			FrameAlpha = FillAlpha = (focused ? focused_transparency : unfocused_transparency);
+			FillAlpha = (focused ? focused_fill_transparency : unfocused_fill_transparency);
+			FrameAlpha = (focused ? focused_frame_transparency : unfocused_frame_transparency);
 		}
 		
 		protected override void PaintFill ()

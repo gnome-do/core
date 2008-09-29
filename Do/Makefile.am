@@ -116,8 +116,11 @@ FILES =  \
 	src/DoPreferences.cs \
 	src/GconfPreferencesBackend.cs \
 	src/IPreferencesBackend.cs \
+	src/CommandLinePreferences.cs \
+	src/CommandLinePreferencesBackend.cs \
 	src/Log.cs \
 	src/Preferences.cs \
+	src/ProgramVersion.cs \
 	src/Util.cs \
 	src/XKeybinder.cs 
 

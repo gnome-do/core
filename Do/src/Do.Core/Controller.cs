@@ -432,6 +432,13 @@ namespace Do.Core {
 		
 		void OnInputKeyPressEvent (EventKey evnt)
 		{
+			//Horrible hack:
+			//The reason this exists and exists here is to update the clipboard in a place that
+			//we know will always be safe for GTK.  Unfortunately due to the way we have designed
+			//Do, this has proven extremely difficult to put some place more logical.  We NEED to
+			//rethink how we handle Summon () and audit our usage of Gdk.Threads.Enter ()
+			SelectedTextItem.UpdateText ();
+			
 			char c;
 			if (evnt.Key == Key.Return) {
 				c = '\n';
@@ -816,7 +823,6 @@ namespace Do.Core {
 
 		public void ShowAbout ()
 		{
-			string[] logos;
 			string logo;
 
 			Vanish ();
@@ -826,22 +832,14 @@ namespace Do.Core {
 			about_window.ProgramName = "GNOME Do";
 
 			try {
-				AssemblyName name = Assembly.GetEntryAssembly ().GetName ();
-				about_window.Version = String.Format ("{0}.{1}.{2}",
-					name.Version.Major, name.Version.Minor, name.Version.Build);
+				Assembly asm = Assembly.GetEntryAssembly ();
+				ProgramVersion ver = asm.GetCustomAttributes (typeof (ProgramVersion), false)[0] as ProgramVersion;
+				about_window.Version = ver.Version + "\n" + ver.Details;
 			} catch {
 				about_window.Version = Catalog.GetString ("Unknown");
 			}
-			
-			logos = new string[] {
-				"/usr/share/icons/gnome/scalable/actions/search.svg",
-			};
 
-			logo = "gnome-run";
-			foreach (string l in logos) {
-				if (!System.IO.File.Exists (l)) continue;
-				logo = l;
-			}
+			logo = "gnome-do.svg";
 
 			about_window.Logo = UI.IconProvider.PixbufFromIconName (logo, 140);
 			about_window.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
@@ -850,7 +848,7 @@ namespace Do.Core {
 				"applications, music, contacts, and more!";
 			about_window.Website = "http://do.davebsd.com/";
 			about_window.WebsiteLabel = "Visit Homepage";
-			about_window.IconName = "gnome-run";
+			about_window.IconName = "gnome-do";
 
 			if (null != about_window.Screen.RgbaColormap)
 				Gtk.Widget.DefaultColormap = about_window.Screen.RgbaColormap;

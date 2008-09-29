@@ -30,9 +30,11 @@ namespace Do {
 
 	public static class Do {
 		
+		static string [] args;
 		static GConfXKeybinder keybinder;
 		
 		static DoPreferences preferences;
+		static CommandLinePreferences cliprefs;
 		static Controller controller;
 		static IUniverseManager universe_manager;
 		static NotificationIcon notification_icon;
@@ -42,6 +44,7 @@ namespace Do {
 		public static void Main (string[] args)
 		{
 			perfTime = DateTime.Now;
+			Do.args = args;
 			
 			Catalog.Init ("gnome-do", "/usr/local/share/locale");
 			Gtk.Application.Init ();
@@ -51,8 +54,8 @@ namespace Do {
 			Util.Initialize ();
 
 			Gdk.Threads.Init ();			
-
-			if (Array.IndexOf (args, "--debug") != -1)
+			
+			if (CLIPrefs.Debug)
 				Log.LogLevel = LogEntryType.Debug;
 
 			try {
@@ -115,7 +118,14 @@ namespace Do {
 
 		public static DoPreferences Preferences {
 			get { return preferences ?? 
-					preferences = new DoPreferences (); }
+					preferences = new DoPreferences (); 
+			}
+		}
+		
+		public static CommandLinePreferences CLIPrefs {
+			get { return cliprefs ?? 
+					cliprefs = new CommandLinePreferences (args); 
+			}
 		}
 
 		public static Controller Controller {

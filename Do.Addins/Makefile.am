@@ -45,6 +45,7 @@ FILES =  \
 	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/SearchFinishState.cs \
 	src/Do.Addins/Util.cs \
+	src/Do.Addins/LogBridge.cs \
 	src/Do.UI/AbstractLoginWidget.cs \
 	src/Do.UI/BaseWidgets/DefaultObjects.cs \
 	src/Do.UI/BaseWidgets/Frame.cs \
