@@ -305,7 +305,8 @@
                             <property name="Items" translatable="yes">Classic
 Glass Frame
 Mini
-ShowCase</property>
+ShowCase
+HUD</property>
                             <property name="Active">0</property>
                             <signal name="Changed" handler="OnThemeComboChanged" />
                           </widget>

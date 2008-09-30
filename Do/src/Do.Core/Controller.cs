@@ -76,18 +76,6 @@ namespace Do.Core {
 			controllers[1] = new SecondSearchController (controllers[0]);
 			controllers[2] = new ThirdSearchController  (controllers[0], controllers[1]);
 			
-			// Set up our callbacks here.  If we ever reconstruct these controllers, 
-			// and we shouldn't be, we will need to reset these too.  However controllers
-			// provide a resetting mechanism.
-//			controllers[0].SelectionChanged += delegate { UpdatePane (Pane.First); };
-//			controllers[1].SelectionChanged += delegate { SmartUpdatePane (Pane.Second); };
-//			controllers[2].SelectionChanged += delegate { SmartUpdatePane (Pane.Third); };
-			
-			//Usually when the query changes we want to reflect this immediately
-//			controllers[0].QueryChanged += OnFirstQueryChanged;
-//			controllers[1].QueryChanged += delegate { SmartUpdatePane (Pane.Second); };
-//			controllers[2].QueryChanged += delegate { SmartUpdatePane (Pane.Third); };
-			
 			//We want to show a blank box during our searches
 			controllers[0].SearchStarted += delegate { };
 			controllers[1].SearchStarted += delegate (bool u) { 
@@ -96,11 +84,6 @@ namespace Do.Core {
 			controllers[2].SearchStarted += delegate (bool u) { 
 				if (u && !ControllerExplicitTextMode (Pane.Third)) window.ClearPane (Pane.Third); 
 			};
-			
-			//Brings back our boxes after the search
-//			controllers[0].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.First); };
-//			controllers[1].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Second); };
-//			controllers[2].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Third); };
 			
 			controllers[0].SearchFinished += delegate (object o, SearchFinishState state) 
 			{ SearchFinished (o, state, Pane.First); };
@@ -128,13 +111,16 @@ namespace Do.Core {
 			if (null != window) Vanish ();
 			switch (Do.Preferences.Theme) {
 				case "Mini":
-					window = new Bezel (this);
+					window = new MiniWindow (this);
 					break;
 				case "Glass Frame":
 					window = new GlassWindow (this);
 					break;
 				case "ShowCase":
 					window = new ShowCase (this);
+					break;
+				case "HUD":
+					window = new Bezel (this);
 					break;
 				default:
 					window = new ClassicWindow (this);
