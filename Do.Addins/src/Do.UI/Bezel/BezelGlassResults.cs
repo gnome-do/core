@@ -42,7 +42,7 @@ namespace Do.UI
 		int width, height, x;
 		int border_width;
 		Dictionary <IObject, Surface> surface_buffer;
-		Surface highlight_surface, backbuffer, child_inout_surface, triplebuffer;
+		Surface highlight_surface, backbuffer, child_inout_surface, triplebuffer, background;
 		
 		DateTime delta_time;
 		double scroll_offset, highlight_offset, child_scroll_offset, slide_offset;
@@ -315,27 +315,39 @@ namespace Do.UI
 		private void DrawContextOnSurface (Surface sr)
 		{
 			Context cr = new Context (sr);
-			cr.Operator = Operator.Source;
-			cr.Rectangle (0, 0, width, height);
-			cr.Color = new Cairo.Color (0, 0, 0, 0);
-			cr.Fill ();
-			cr.Operator = Operator.Over;
+			if (background == null) {
+				background = cr.Target.CreateSimilar (cr.Target.Content, width, height);
+				Context cr2 = new Context (background);
 				
-			int c_size = 10;
+				cr2.Operator = Operator.Source;
+				cr2.Rectangle (0, 0, width, height);
+				cr2.Color = new Cairo.Color (0, 0, 0, 0);
+				cr2.Fill ();
+				cr2.Operator = Operator.Over;
+					
+				int c_size = 10;
+				
+				cr2.MoveTo (0.5, 0.5);
+				cr2.LineTo (width-0.5, 0.5);
+				cr2.LineTo (width-0.5, height-c_size-0.5);
+				cr2.LineTo (width-c_size-0.5, height-0.5);
+				cr2.LineTo (c_size+0.5, height-0.5);
+				cr2.LineTo (0.5, height-c_size-0.5);
+				cr2.ClosePath ();
+				cr2.Color = new Cairo.Color (1, 1, 1, .8);
+				cr2.FillPreserve ();
+				
+				cr2.LineWidth = 1;
+				cr2.Color = new Cairo.Color (.4, .4, .4, 1);
+				cr2.Stroke ();
+				
+				(cr2 as IDisposable).Dispose ();
+			}
 			
-			cr.MoveTo (0.5, 0.5);
-			cr.LineTo (width-0.5, 0.5);
-			cr.LineTo (width-0.5, height-c_size-0.5);
-			cr.LineTo (width-c_size-0.5, height-0.5);
-			cr.LineTo (c_size+0.5, height-0.5);
-			cr.LineTo (0.5, height-c_size-0.5);
-			cr.ClosePath ();
-			cr.Color = new Cairo.Color (1, 1, 1, .8);
-			cr.FillPreserve ();
-			
-			cr.LineWidth = 1;
-			cr.Color = new Cairo.Color (.4, .4, .4, 1);
-			cr.Stroke ();
+			cr.Operator = Operator.Source;
+			cr.SetSource (background);
+			cr.Paint ();
+			cr.Operator = Operator.Over;
 			
 			if (Results != null) {
 				int start_result = StartResult-(int) Math.Ceiling (scroll_offset);
