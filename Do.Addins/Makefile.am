@@ -60,6 +60,7 @@ FILES =  \
 	src/Do.UI/Bezel/BezelDrawingContext.cs \
 	src/Do.UI/Bezel/BezelResultsWindow.cs \
 	src/Do.UI/Bezel/BezelResultsDrawingArea.cs \
+	src/Do.UI/Bezel/BezelGlassResults.cs \
 	src/Do.UI/ClassicWindow/ClassicWindow.cs \
 	src/Do.UI/DarkFrame/GlassFrame.cs \
 	src/Do.UI/DarkFrame/GlassIconBox.cs \
