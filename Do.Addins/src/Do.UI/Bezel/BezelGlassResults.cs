@@ -289,7 +289,7 @@ namespace Do.UI
 				
 				DrawSlideContexts (child_inout_surface, backbuffer, triplebuffer, old_x, new_x);
 
-				cr.SetSource (triplebuffer, x, 0);
+				cr.SetSource (triplebuffer, x, -(height*(1-slide_offset)));
 				cr.Operator = Operator.Source;
 				cr.Paint ();
 			}
@@ -472,14 +472,11 @@ namespace Do.UI
 				lg.AddColorStop (.5, new Cairo.Color (.2, .2, .2, .4));
 				lg.AddColorStop (1, new Cairo.Color (.2, .2, .2, 0));
 				cr.Pattern = lg;
-			} else {
-				cr.Color = new Cairo.Color (.2, .2, .2, 0);
+				cr.Operator = Operator.DestOver;
+				cr.FillPreserve ();
 			}
-			cr.Operator = Operator.DestOver;
-			cr.FillPreserve ();
 			
 			cr.Operator = Operator.Over;
-			
 			cr.SetSource (surface_buffer[Results[item]], border_width, offset+(item-StartResult)*SurfaceHeight);
 			cr.Fill ();
 		}
