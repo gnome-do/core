@@ -96,12 +96,12 @@ namespace Do
 				window.Present ();
 				window.GdkWindow.Raise ();
 
-//				for (int i = 0; i < 100; i++) {
-//					if (TryGrabWindow (window)) {
-//						break;
-//					}
-//					Thread.Sleep (100);
-//				}
+				for (int i = 0; i < 100; i++) {
+					if (TryGrabWindow (window)) {
+						break;
+					}
+					Thread.Sleep (100);
+				}
 			}
 
 			private static bool TryGrabWindow (Gtk.Window window)

@@ -36,7 +36,7 @@ namespace Do.UI
 //		BezelResultsWindow results_window;
 		BezelGlassResults bgr;
 		IDoController controller;
-//		PositionWindow pw;
+		PositionWindow pw;
 		
 		public Pane CurrentPane {
 			get { return bda.Focus; }
@@ -66,13 +66,13 @@ namespace Do.UI
 			
 			bgr = new BezelGlassResults (8, 340);
 			vbox.PackStart (bgr, true, true, 0);
-//			bgr.Show ();
+			bgr.Show ();
 	
 			Add (vbox);
 			vbox.Show ();
 //			results_window = new BezelResultsWindow ();
 			
-//			pw = new PositionWindow (this, null);
+			pw = new PositionWindow (this, null);
 		}
 		
 		protected override bool OnButtonPressEvent (EventButton evnt)
@@ -135,7 +135,7 @@ namespace Do.UI
 			
 //			int result_w, result_h;
 //			results_window.GetSize (out result_w, out result_h);
-//			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle ((int) (width / 2) - (int) (result_w/2), 0, 0, 0));
+			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle ());
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}
@@ -165,13 +165,15 @@ namespace Do.UI
 		public void GrowResults ()
 		{
 //			results_window.Show ();
-			bgr.Show ();
+//			bgr.Show ();
+			bgr.SlideIn ();
 		}
 
 		public void ShrinkResults ()
 		{
 //			results_window.Hide ();
-			bgr.Hide ();
+//			bgr.Hide ();
+			bgr.SlideOut ();
 		}
 
 		public void SetPaneContext (Pane pane, IUIContext context)

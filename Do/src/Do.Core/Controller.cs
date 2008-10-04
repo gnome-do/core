@@ -436,7 +436,8 @@ namespace Do.Core {
 			//we know will always be safe for GTK.  Unfortunately due to the way we have designed
 			//Do, this has proven extremely difficult to put some place more logical.  We NEED to
 			//rethink how we handle Summon () and audit our usage of Gdk.Threads.Enter ()
-			SelectedTextItem.UpdateText ();
+			if (CurrentContext.Query.Length <= 1)
+				SelectedTextItem.UpdateText ();
 			
 		}
 		
@@ -451,7 +452,6 @@ namespace Do.Core {
 						GrowResults ();
 				}
 			}
-			
 		}
 		
 		void OnTabKeyPressEvent (EventKey evnt)
