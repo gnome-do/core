@@ -33,9 +33,10 @@ namespace Do.UI
 	public class Bezel : Gtk.Window, IDoWindow
 	{
 		BezelDrawingArea bda;
-		BezelResultsWindow results_window;
+//		BezelResultsWindow results_window;
+		BezelGlassResults bgr;
 		IDoController controller;
-		PositionWindow pw;
+//		PositionWindow pw;
 		
 		public Pane CurrentPane {
 			get { return bda.Focus; }
@@ -57,13 +58,21 @@ namespace Do.UI
 			TypeHint = WindowTypeHint.Splashscreen;
 			SetColormap ();
 			
+			VBox vbox = new VBox ();
+			
 			bda = new BezelDrawingArea ();
-			Add (bda);
+			vbox.PackStart (bda, true, true, 0);
 			bda.Show ();
 			
-			results_window = new BezelResultsWindow ();
+			bgr = new BezelGlassResults (8, 340);
+			vbox.PackStart (bgr, true, true, 0);
+//			bgr.Show ();
+	
+			Add (vbox);
+			vbox.Show ();
+//			results_window = new BezelResultsWindow ();
 			
-			pw = new PositionWindow (this, results_window);
+//			pw = new PositionWindow (this, null);
 		}
 		
 		protected override bool OnButtonPressEvent (EventButton evnt)
@@ -99,6 +108,7 @@ namespace Do.UI
 				Cairo.Context cr = Gdk.CairoHelper.Create (GdkWindow);
 				cr.Operator = Cairo.Operator.Source;
 				cr.Paint ();
+				(cr as IDisposable).Dispose ();
 			}
 			return base.OnExposeEvent (evnt);
 		}
@@ -123,9 +133,9 @@ namespace Do.UI
 			int width, height;
 			GetSize (out width, out height);
 			
-			int result_w, result_h;
-			results_window.GetSize (out result_w, out result_h);
-			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle ((int) (width / 2) - (int) (result_w/2), 0, 0, 0));
+//			int result_w, result_h;
+//			results_window.GetSize (out result_w, out result_h);
+//			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle ((int) (width / 2) - (int) (result_w/2), 0, 0, 0));
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}
@@ -138,7 +148,8 @@ namespace Do.UI
 		public void Reset ()
 		{
 			bda.Clear ();
-			results_window.Clear ();
+//			results_window.Clear ();
+			bgr.Clear ();
 		}
 
 		public void Grow ()
@@ -153,12 +164,14 @@ namespace Do.UI
 
 		public void GrowResults ()
 		{
-			results_window.Show ();
+//			results_window.Show ();
+			bgr.Show ();
 		}
 
 		public void ShrinkResults ()
 		{
-			results_window.Hide ();
+//			results_window.Hide ();
+			bgr.Hide ();
 		}
 
 		public void SetPaneContext (Pane pane, IUIContext context)
@@ -175,7 +188,8 @@ namespace Do.UI
 			bda.Draw ();
 			
 			if (CurrentPane == pane) {
-				results_window.Context = context;
+//				results_window.Context = context;
+				bgr.Context = context;
 			}
 		}
 
@@ -187,7 +201,8 @@ namespace Do.UI
 			
 			bda.Draw ();
 			if (pane == CurrentPane) {
-				results_window.Clear ();
+//				results_window.Clear ();
+				bgr.Clear ();
 			}
 		}
 
