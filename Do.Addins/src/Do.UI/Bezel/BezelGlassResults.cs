@@ -173,7 +173,7 @@ namespace Do.UI
 			surface_buffer = new Dictionary <IObject,Surface> ();
 			
 			x=105;
-			border_width = 15;
+			border_width = 12;
 			top_border_width = 30;
 			this.width = width;
 			height = num_results * SurfaceHeight + top_border_width + border_width;
