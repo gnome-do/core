@@ -219,9 +219,9 @@ namespace Do.UI
 				
 				if (ChildScrollNeeded) {
 					if (child_scroll_offset > 0)
-						child_scroll_offset = Math.Max (0, child_scroll_offset - change*.7);
+						child_scroll_offset = Math.Max (0, child_scroll_offset - change*0.7);
 					else
-						child_scroll_offset = Math.Min (0, child_scroll_offset + change*.7);
+						child_scroll_offset = Math.Min (0, child_scroll_offset + change*0.7);
 				}
 				
 				if (SlideNeeded) {

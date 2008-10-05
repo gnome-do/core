@@ -245,6 +245,7 @@ namespace Do.Core
 			context.Destroy ();
 			context = new SimpleSearchContext ();
 			textModeFinalize = false;
+			textMode = false;
 		}
 		
 		protected void OnSearchStarted (bool upstream_search)

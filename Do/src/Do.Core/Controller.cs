@@ -235,11 +235,13 @@ namespace Do.Core {
 			get {
 				IObject first, second;
 				IAction action;
+				IItem item;
 
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
 				action = (first as IAction) ?? (second as IAction);
-				return action != null &&
+				item = (first as IItem) ?? (second as IItem);
+				return action != null && item != null &&
 					action.SupportedModifierItemTypes.Length > 0 &&
 					!action.ModifierItemsOptional &&
 					controllers[1].Results.Length > 0;
