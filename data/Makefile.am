@@ -1,5 +1,7 @@
 SUBDIRS = icons
 
+EXTRA_DIST = $(schemas_in_files)
+
 schemasdir	 = $(GCONF_SCHEMA_FILE_DIR)
 schemas_in_files = gnome-do.schemas.in
 schemas_DATA     = $(schemas_in_files:.schemas.in=.schemas)
