@@ -33,3 +33,4 @@ Do/src/Do.Universe/PreferencesItem.cs
 Do/src/Do.Universe/SelectedTextItem.cs
 # files added by intltool-prepare
 Do/gnome-do.desktop.in
+data/gnome-do.schemas.in
