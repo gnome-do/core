@@ -502,7 +502,7 @@ namespace Do.UI
 		
 		void RenderItem (Context cr, int item)
 		{
-			if (item >= Results.Length)
+			if (item >= Results.Length || item < 0)
 				return;
 			int offset = (int) (SurfaceHeight*scroll_offset) + top_border_width;
 			if (!surface_buffer.ContainsKey (Results[item])) {
