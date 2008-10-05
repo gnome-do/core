@@ -404,13 +404,6 @@ namespace Do.Core {
 		
 		void OnInputKeyPressEvent (EventKey evnt)
 		{
-			//Horrible hack:
-			//The reason this exists and exists here is to update the clipboard in a place that
-			//we know will always be safe for GTK.  Unfortunately due to the way we have designed
-			//Do, this has proven extremely difficult to put some place more logical.  We NEED to
-			//rethink how we handle Summon () and audit our usage of Gdk.Threads.Enter ()
-			SelectedTextItem.UpdateText ();
-			
 			char c;
 			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
 			if (char.IsLetterOrDigit (c)
@@ -419,6 +412,14 @@ namespace Do.Core {
 					|| char.IsSymbol (c)) {
 				CurrentContext.AddChar (c);
 			}
+			
+			//Horrible hack:
+			//The reason this exists and exists here is to update the clipboard in a place that
+			//we know will always be safe for GTK.  Unfortunately due to the way we have designed
+			//Do, this has proven extremely difficult to put some place more logical.  We NEED to
+			//rethink how we handle Summon () and audit our usage of Gdk.Threads.Enter ()
+			if (CurrentContext.Query.Length <= 1)
+				SelectedTextItem.UpdateText ();
 		}
 		
 		void OnRightLeftKeyPressEvent (EventKey evnt)
