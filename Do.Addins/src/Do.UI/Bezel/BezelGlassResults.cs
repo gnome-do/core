@@ -330,12 +330,14 @@ namespace Do.UI
 				
 				cr2.MoveTo (0.5, -1);
 				cr2.LineTo (width-0.5, -1);
-				cr2.LineTo (width-0.5, height-c_size-0.5);
-				cr2.LineTo (width-c_size-0.5, height-0.5);
-				cr2.LineTo (c_size+0.5, height-0.5);
-				cr2.LineTo (0.5, height-c_size-0.5);
+//				cr2.LineTo (width-0.5, height-c_size-0.5);
+//				cr2.LineTo (width-c_size-0.5, height-0.5);
+//				cr2.LineTo (c_size+0.5, height-0.5);
+//				cr2.LineTo (0.5, height-c_size-0.5);
+				cr2.Arc (width-0.5-c_size,height-c_size-0.5, c_size, 0, Math.PI*.5);
+				cr2.Arc (0.5+c_size, height-c_size-0.5, c_size, Math.PI*.5, Math.PI);
 				cr2.ClosePath ();
-				cr2.Color = new Cairo.Color (0, 0, 0, .75);
+				cr2.Color = new Cairo.Color (0, 0, 0, .8);
 				cr2.FillPreserve ();
 				
 				cr2.LineWidth = 1;
@@ -351,13 +353,24 @@ namespace Do.UI
 				
 				cr2.Rectangle (border_width, top_border_width, InternalWidth, height-top_border_width);
 				
-				cr2.Color = new Cairo.Color (.9, .9, .9, .1);
+				cr2.Color = new Cairo.Color (.9, .9, .9, .05);
 				cr2.Fill ();
 				
 				cr2.Rectangle (0, height-border_width, width, border_width);
 				cr2.Operator = Operator.Atop;
 				cr2.Color = new Cairo.Color (.5, .5, .5, .1);
 				cr2.Fill ();
+				
+				cr2.MoveTo (border_width + .5, top_border_width);
+				cr2.LineTo (border_width + .5, height);
+				cr2.MoveTo (width - border_width - .5, top_border_width);
+				cr2.LineTo (width - border_width - .5, height);
+				cr2.MoveTo (0, height-border_width-.5);
+				cr2.LineTo (width, height-border_width-.5);
+				
+				cr2.LineWidth = 1;
+				cr2.Color = new Cairo.Color (.6, .6, .6, .15);
+				cr2.Stroke ();
 				
 				(cr2 as IDisposable).Dispose ();
 			}
@@ -498,16 +511,16 @@ namespace Do.UI
 			cr.Clip ();
 			
 			cr.Rectangle (border_width, offset+(item-StartResult)*SurfaceHeight, InternalWidth, SurfaceHeight);
-			if (item%2 == 1) {
-//				LinearGradient lg = new LinearGradient (border_width, 0, InternalWidth + border_width, 0);
-//				lg.AddColorStop (0, new Cairo.Color (.2, .2, .2, 0));
-//				lg.AddColorStop (.5, new Cairo.Color (.2, .2, .2, .4));
-//				lg.AddColorStop (1, new Cairo.Color (.2, .2, .2, 0));
-//				cr.Pattern = lg;
-				cr.Color = new Cairo.Color (.2, .2, .2, .2);
-				cr.Operator = Operator.DestOver;
-				cr.FillPreserve ();
-			}
+//			if (item%2 == 1) {
+////				LinearGradient lg = new LinearGradient (border_width, 0, InternalWidth + border_width, 0);
+////				lg.AddColorStop (0, new Cairo.Color (.2, .2, .2, 0));
+////				lg.AddColorStop (.5, new Cairo.Color (.2, .2, .2, .4));
+////				lg.AddColorStop (1, new Cairo.Color (.2, .2, .2, 0));
+////				cr.Pattern = lg;
+//				cr.Color = new Cairo.Color (.2, .2, .2, .2);
+//				cr.Operator = Operator.DestOver;
+//				cr.FillPreserve ();
+//			}
 			
 			cr.Operator = Operator.Over;
 			cr.SetSource (surface_buffer[Results[item]], border_width, offset+(item-StartResult)*SurfaceHeight);
