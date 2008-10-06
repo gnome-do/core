@@ -174,7 +174,7 @@ namespace Do.UI
 			
 			x=105;
 			border_width = 12;
-			top_border_width = 30;
+			top_border_width = 22;
 			this.width = width;
 			height = num_results * SurfaceHeight + top_border_width + border_width;
 			SetSizeRequest (width, height);
@@ -328,28 +328,38 @@ namespace Do.UI
 					
 				int c_size = border_width - 2;
 				
-				cr2.MoveTo (0.5, -1);
-				cr2.LineTo (width-0.5, -1);
-//				cr2.LineTo (width-0.5, height-c_size-0.5);
-//				cr2.LineTo (width-c_size-0.5, height-0.5);
-//				cr2.LineTo (c_size+0.5, height-0.5);
-//				cr2.LineTo (0.5, height-c_size-0.5);
-				cr2.Arc (width-0.5-c_size,height-c_size-0.5, c_size, 0, Math.PI*.5);
+				cr2.MoveTo (0.5+c_size, -1);
+//				cr2.LineTo (width-0.5, -1);
+				cr2.Arc (width-c_size-0.5, c_size-1, c_size, Math.PI*1.5, Math.PI*2);
+				cr2.Arc (width-0.5-c_size, height-c_size-0.5, c_size, 0, Math.PI*.5);
 				cr2.Arc (0.5+c_size, height-c_size-0.5, c_size, Math.PI*.5, Math.PI);
+				cr2.Arc (0.5+c_size, c_size-1, c_size, Math.PI, Math.PI*1.5);
 				cr2.ClosePath ();
 				cr2.Color = new Cairo.Color (0, 0, 0, .8);
 				cr2.FillPreserve ();
 				
 				cr2.LineWidth = 1;
-				cr2.Color = new Cairo.Color (.6, .6, .6, 1);
+				cr2.Color = new Cairo.Color (.3, .3, .3, 1);
 				cr2.Stroke ();
 				
-				cr2.Rectangle (0, 0, width, top_border_width);
-				LinearGradient lg = new LinearGradient (0, top_border_width, 0, 0);
-				lg.AddColorStop (0, new Cairo.Color (0.7, 0.7, 0.7, .7));
-				lg.AddColorStop (0.18, new Cairo.Color (1, 1, 1, .04));
-				cr2.Pattern = lg;
+				cr2.MoveTo (0 + c_size, 0);
+				cr2.Arc (0 + width - c_size, 0 + c_size, c_size, Math.PI*1.5, Math.PI*2);
+				cr2.LineTo (0 + width, 0 + top_border_width);
+				cr2.LineTo (0, 0 + top_border_width);
+				cr2.Arc (0 + c_size, 0 + c_size, c_size, Math.PI, Math.PI*1.5);
+				LinearGradient title_grad = new LinearGradient (0, 0, 0, top_border_width);
+				title_grad.AddColorStop (0.0, new Cairo.Color (0.45, 0.45, 0.45));
+				title_grad.AddColorStop (0.5, new Cairo.Color (0.33, 0.33, 0.33));
+				title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
+				cr2.Pattern = title_grad;
 				cr2.Fill ();
+//				cr2.Rectangle (0, 0, width, top_border_width);
+//				LinearGradient lg = new LinearGradient (0, top_border_width, 0, 0);
+////				lg.AddColorStop (0, new Cairo.Color (0.9, 0.9, 0.9, 1));
+//				lg.AddColorStop (0.04, new Cairo.Color (0.7, 0.7, 0.7, .5));
+//				lg.AddColorStop (0.18, new Cairo.Color (1, 1, 1, .04));
+//				cr2.Pattern = lg;
+//				cr2.Fill ();
 				
 				cr2.Rectangle (border_width, top_border_width, InternalWidth, height-top_border_width);
 				
@@ -474,9 +484,9 @@ namespace Do.UI
 				cr2.Pattern = grad;
 //				cr2.Rectangle (0, 0, width, SurfaceHeight);
 				double radius=(SurfaceHeight-2)/2;
-				double x=4.5, y=0.5;
+				double x=4.5, y=1.5;
 				int r_width = width-9;
-				int r_height = SurfaceHeight-1;
+				int r_height = SurfaceHeight-3;
 				
 				cr2.MoveTo (x, y + radius);
 				cr2.Arc (x + radius, y + radius, radius, Math.PI, -Math.PI / 2);
