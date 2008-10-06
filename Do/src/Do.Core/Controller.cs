@@ -61,9 +61,11 @@ namespace Do.Core {
 		List<IItem> modItems;
 		bool thirdPaneVisible;
 		bool resultsGrown;
+		Gtk.IMContext im;
 		
 		public Controller ()
 		{
+			im = new Gtk.IMMulticontext ();
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			resultsGrown = false;
@@ -91,6 +93,16 @@ namespace Do.Core {
 			{ SearchFinished (o, state, Pane.Second); };
 			controllers[2].SearchFinished += delegate (object o, SearchFinishState state) 
 			{ SearchFinished (o, state, Pane.Third); };
+			
+			im.UsePreedit = false;
+			im.Commit += OnIMCommit;
+			im.FocusIn ();
+		}
+		
+		private void OnIMCommit (object o, Gtk.CommitArgs args)
+		{
+			foreach (char c in args.Str.ToCharArray ())
+				CurrentContext.AddChar (c);
 		}
 		
 		public void Initialize ()
@@ -313,7 +325,9 @@ namespace Do.Core {
 			
 			// Things pressed with ctrl are mistakes?
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
-					return;
+				if (evnt.Key == Key.v)
+					OnPasteEvent ();
+				return;
 			}
 
 			switch ((Gdk.Key) evnt.KeyValue) {
@@ -355,6 +369,16 @@ namespace Do.Core {
 				break;
 			}
 			return;
+		}
+		
+		void OnPasteEvent ()
+		{
+			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Primary);
+			if (!clip.WaitIsTextAvailable ())
+				return;
+			string str = clip.WaitForText ();
+			foreach (char c in str.ToCharArray ())
+				CurrentContext.AddChar (c);
 		}
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
@@ -420,6 +444,9 @@ namespace Do.Core {
 		
 		void OnInputKeyPressEvent (EventKey evnt)
 		{
+			if (im.FilterKeypress (evnt))
+				return;
+			im.Reset ();
 			char c;
 			if (evnt.Key == Key.Return) {
 				c = '\n';
@@ -582,15 +609,6 @@ namespace Do.Core {
 				CurrentPane = Pane.Second;
 				break;
 			}
-		}
-		
-		void OnFirstQueryChanged ()
-		{
-			if (FirstControllerIsReset) {
-			    Reset ();
-				return;
-			}
-			UpdatePane (Pane.First);
 		}
 		
 		void SearchFinished (object o, SearchFinishState state, Pane pane)

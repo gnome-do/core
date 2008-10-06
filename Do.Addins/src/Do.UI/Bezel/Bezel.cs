@@ -33,7 +33,6 @@ namespace Do.UI
 	public class Bezel : Gtk.Window, IDoWindow
 	{
 		BezelDrawingArea bda;
-//		BezelResultsWindow results_window;
 		BezelGlassResults bgr;
 		IDoController controller;
 		PositionWindow pw;

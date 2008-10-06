@@ -258,8 +258,6 @@ namespace Do.Core
 			SearchFinished (this, new SearchFinishState (selection_changed, query_changed, selection, query));
 		}
 		
-		public event NullEventHandler SelectionChanged;
-		public event NullEventHandler QueryChanged;
 		public event SearchStartedEventHandler SearchStarted;
 		public event SearchFinishedEventHandler SearchFinished;
 	}
