@@ -40,7 +40,7 @@ namespace Do.UI
 		
 		int num_results;
 		int width, height, x;
-		int border_width, top_border_width;
+		int border_width, top_border_width, bottom_border_width;
 		Dictionary <IObject, Surface> surface_buffer;
 		Surface highlight_surface, backbuffer, child_inout_surface, triplebuffer, background;
 		
@@ -174,9 +174,10 @@ namespace Do.UI
 			
 			x=105;
 			border_width = 12;
+			bottom_border_width = 25;
 			top_border_width = 22;
 			this.width = width;
-			height = num_results * SurfaceHeight + top_border_width + border_width;
+			height = num_results * SurfaceHeight + top_border_width + bottom_border_width;
 			SetSizeRequest (width, height);
 			
 			DoubleBuffered = false;
@@ -328,8 +329,8 @@ namespace Do.UI
 					
 				int c_size = border_width - 2;
 				
+				//Draw rounded rectange around whole border
 				cr2.MoveTo (0.5+c_size, -1);
-//				cr2.LineTo (width-0.5, -1);
 				cr2.Arc (width-c_size-0.5, c_size-1, c_size, Math.PI*1.5, Math.PI*2);
 				cr2.Arc (width-0.5-c_size, height-c_size-0.5, c_size, 0, Math.PI*.5);
 				cr2.Arc (0.5+c_size, height-c_size-0.5, c_size, Math.PI*.5, Math.PI);
@@ -342,6 +343,7 @@ namespace Do.UI
 				cr2.Color = new Cairo.Color (.3, .3, .3, 1);
 				cr2.Stroke ();
 				
+				//draw header
 				cr2.MoveTo (0 + c_size, 0);
 				cr2.Arc (0 + width - c_size, 0 + c_size, c_size, Math.PI*1.5, Math.PI*2);
 				cr2.LineTo (0 + width, 0 + top_border_width);
@@ -353,30 +355,31 @@ namespace Do.UI
 				title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
 				cr2.Pattern = title_grad;
 				cr2.Fill ();
-//				cr2.Rectangle (0, 0, width, top_border_width);
-//				LinearGradient lg = new LinearGradient (0, top_border_width, 0, 0);
-////				lg.AddColorStop (0, new Cairo.Color (0.9, 0.9, 0.9, 1));
-//				lg.AddColorStop (0.04, new Cairo.Color (0.7, 0.7, 0.7, .5));
-//				lg.AddColorStop (0.18, new Cairo.Color (1, 1, 1, .04));
-//				cr2.Pattern = lg;
-//				cr2.Fill ();
+				
 				
 				cr2.Rectangle (border_width, top_border_width, InternalWidth, height-top_border_width);
 				
 				cr2.Color = new Cairo.Color (.9, .9, .9, .05);
 				cr2.Fill ();
 				
-				cr2.Rectangle (0, height-border_width, width, border_width);
-				cr2.Operator = Operator.Atop;
-				cr2.Color = new Cairo.Color (.5, .5, .5, .1);
-				cr2.Fill ();
+//				cr2.Rectangle (0, height-bottom_border_width, width, bottom_border_width);
+				cr2.MoveTo (.5, height-bottom_border_width+.5);
+				cr2.LineTo (width-1, height-bottom_border_width+.5);
+				cr2.Arc (width-c_size-.5, height-c_size-.5, c_size, 0, Math.PI*.5);
+				cr2.Arc (c_size+.5, height-c_size-.5, c_size, Math.PI*.5, Math.PI);
+				cr2.ClosePath ();
+				cr2.Color = new Cairo.Color (.33, .33, .33, 1);
+				cr2.FillPreserve ();
+				cr2.LineWidth=1;
+				cr2.Color = new Cairo.Color (.6, .6, .6, .4);
+				cr2.Stroke ();
 				
 				cr2.MoveTo (border_width + .5, top_border_width);
-				cr2.LineTo (border_width + .5, height);
+				cr2.LineTo (border_width + .5, height-bottom_border_width);
 				cr2.MoveTo (width - border_width - .5, top_border_width);
-				cr2.LineTo (width - border_width - .5, height);
-				cr2.MoveTo (0, height-border_width-.5);
-				cr2.LineTo (width, height-border_width-.5);
+				cr2.LineTo (width - border_width - .5, height-bottom_border_width);
+				cr2.MoveTo (0, height-bottom_border_width-.5);
+				cr2.LineTo (width, height-bottom_border_width-.5);
 				
 				cr2.LineWidth = 1;
 				cr2.Color = new Cairo.Color (.6, .6, .6, .15);
@@ -390,7 +393,19 @@ namespace Do.UI
 			cr.Paint ();
 			cr.Operator = Operator.Over;
 			
+			if (context != null && !string.IsNullOrEmpty (context.Query))
+				RenderText (cr, new Gdk.Rectangle (10, 5, width-60, 20), 12, context.Query, "dddddd");
+			
 			if (Results != null) {
+				string render_string = context.Cursor+1 + " of " + Results.Length + "  ▸  ";
+				if (context.ParentContext != null && context.ParentContext.Selection != null) {
+					if (context.ParentContext.ParentContext != null && context.ParentContext.ParentContext.Selection != null) {
+						render_string += context.ParentContext.ParentContext.Selection.Name + " > ";
+					}
+					render_string += context.ParentContext.Selection.Name + " > ";
+				}
+				
+				RenderText (cr, new Gdk.Rectangle (10, height-21, width-20, 20), 11, render_string);
 				int start_result = StartResult-(int) Math.Ceiling (scroll_offset);
 				RenderHighlight (cr);
 				for (int i = start_result; i < start_result+num_results+1 && i < Results.Length; i++) {
@@ -469,6 +484,23 @@ namespace Do.UI
 			(cr as IDisposable).Dispose ();
 		}
 		
+		void RenderText (Context cr, Gdk.Rectangle region, int size, string text)
+		{
+			RenderText (cr, region, size, text, "ffffff");
+		}
+		
+		void RenderText (Context cr, Gdk.Rectangle region, int size, string text, string color_string)
+		{
+			Pango.Layout layout = new Pango.Layout (this.PangoContext);
+			layout.Width = Pango.Units.FromPixels (region.Width);
+			layout.Ellipsize = Pango.EllipsizeMode.End;
+			layout.SetMarkup ("<span foreground=\"#" + color_string + "\">"+text+"</span>");
+			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
+			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (size);
+			cr.MoveTo (region.X, region.Y);
+			Pango.CairoHelper.ShowLayout (cr, layout);
+		}
+		
 		Surface GetHighlightSource () 
 		{
 			if (highlight_surface == null) {
@@ -519,7 +551,7 @@ namespace Do.UI
 				BufferItem (Results[item]);
 			}
 			
-			cr.Rectangle (border_width, top_border_width, InternalWidth, height-top_border_width-border_width);
+			cr.Rectangle (border_width, top_border_width, InternalWidth, height-top_border_width-bottom_border_width);
 			cr.Clip ();
 			
 			cr.Rectangle (border_width, offset+(item-StartResult)*SurfaceHeight, InternalWidth, SurfaceHeight);
