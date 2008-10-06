@@ -175,7 +175,7 @@ namespace Do.UI
 			x=105;
 			border_width = 12;
 			bottom_border_width = 25;
-			top_border_width = 22;
+			top_border_width = 20;
 			this.width = width;
 			height = num_results * SurfaceHeight + top_border_width + bottom_border_width;
 			SetSizeRequest (width, height);
@@ -368,7 +368,7 @@ namespace Do.UI
 				cr2.Arc (width-c_size-.5, height-c_size-.5, c_size, 0, Math.PI*.5);
 				cr2.Arc (c_size+.5, height-c_size-.5, c_size, Math.PI*.5, Math.PI);
 				cr2.ClosePath ();
-				cr2.Color = new Cairo.Color (.33, .33, .33, 1);
+				cr2.Color = new Cairo.Color (.22, .22, .22, 1);
 				cr2.FillPreserve ();
 				cr2.LineWidth=1;
 				cr2.Color = new Cairo.Color (.6, .6, .6, .4);
@@ -514,7 +514,6 @@ namespace Do.UI
 				grad.AddColorStop (1, new Cairo.Color (.55, .55, .55, .5));
 				
 				cr2.Pattern = grad;
-//				cr2.Rectangle (0, 0, width, SurfaceHeight);
 				double radius=(SurfaceHeight-2)/2;
 				double x=4.5, y=1.5;
 				int r_width = width-9;
@@ -555,16 +554,16 @@ namespace Do.UI
 			cr.Clip ();
 			
 			cr.Rectangle (border_width, offset+(item-StartResult)*SurfaceHeight, InternalWidth, SurfaceHeight);
-//			if (item%2 == 1) {
-////				LinearGradient lg = new LinearGradient (border_width, 0, InternalWidth + border_width, 0);
-////				lg.AddColorStop (0, new Cairo.Color (.2, .2, .2, 0));
-////				lg.AddColorStop (.5, new Cairo.Color (.2, .2, .2, .4));
-////				lg.AddColorStop (1, new Cairo.Color (.2, .2, .2, 0));
-////				cr.Pattern = lg;
-//				cr.Color = new Cairo.Color (.2, .2, .2, .2);
-//				cr.Operator = Operator.DestOver;
-//				cr.FillPreserve ();
-//			}
+			if (item%2 == 1) {
+//				LinearGradient lg = new LinearGradient (border_width, 0, InternalWidth + border_width, 0);
+//				lg.AddColorStop (0, new Cairo.Color (.2, .2, .2, 0));
+//				lg.AddColorStop (.5, new Cairo.Color (.2, .2, .2, .4));
+//				lg.AddColorStop (1, new Cairo.Color (.2, .2, .2, 0));
+//				cr.Pattern = lg;
+				cr.Color = new Cairo.Color (.2, .2, .2, .2);
+				cr.Operator = Operator.DestOver;
+				cr.FillPreserve ();
+			}
 			
 			cr.Operator = Operator.Over;
 			cr.SetSource (surface_buffer[Results[item]], border_width, offset+(item-StartResult)*SurfaceHeight);
