@@ -324,9 +324,8 @@ namespace Do.Core {
 			}
 			
 			// Things pressed with ctrl are mistakes?
-			if ((evnt.State & ModifierType.ControlMask) != 0) {
-				if (evnt.Key == Key.v)
-					OnPasteEvent ();
+			if ((evnt.State & ModifierType.ControlMask) != 0 && evnt.Key == Key.v) {
+				OnPasteEvent ();
 				return;
 			}
 
@@ -383,6 +382,7 @@ namespace Do.Core {
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			if (CurrentContext.TextType == TextModeType.Explicit) {
 				OnInputKeyPressEvent (evnt);
 				return;
@@ -400,6 +400,7 @@ namespace Do.Core {
 		/// </param>
 		void OnSelectionKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			if (CurrentContext.Selection is ITextItem || !resultsGrown)
 				OnInputKeyPressEvent (evnt);
 			else if (CurrentContext.ToggleSecondaryCursor (CurrentContext.Cursor))
@@ -408,6 +409,7 @@ namespace Do.Core {
 		
 		void OnDeleteKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			CurrentContext.DeleteChar ();
 		}
 		
@@ -419,6 +421,7 @@ namespace Do.Core {
 		
 		void OnEscapeKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			if (CurrentContext.TextType == TextModeType.Explicit) {
 				CurrentContext.FinalizeTextMode ();
 				UpdatePane (CurrentPane);
@@ -444,9 +447,9 @@ namespace Do.Core {
 		
 		void OnInputKeyPressEvent (EventKey evnt)
 		{
-			if (im.FilterKeypress (evnt))
+			if (im.FilterKeypress (evnt) || ((evnt.State & ModifierType.ControlMask) != 0))
 				return;
-			im.Reset ();
+//			im.Reset ();
 			char c;
 			if (evnt.Key == Key.Return) {
 				c = '\n';
@@ -472,6 +475,7 @@ namespace Do.Core {
 		
 		void OnRightLeftKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			if (CurrentContext.Results.Length > 0) {
 				if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
 					if (CurrentContext.ItemChildSearch ())
@@ -485,6 +489,7 @@ namespace Do.Core {
 		
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			ShrinkResults ();
 
 			if (evnt.Key == Key.Tab) {
@@ -499,6 +504,7 @@ namespace Do.Core {
 		
 		void OnTextModePressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			TextModeType tmp = CurrentContext.TextType;
 			if (CurrentContext.TextType == TextModeType.ExplicitFinalized) {
 				CurrentContext.TextMode = true;
@@ -516,6 +522,7 @@ namespace Do.Core {
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			if (evnt.Key == Gdk.Key.Up) {
 				if (!resultsGrown) {
 					if (CurrentContext.Cursor > 0)

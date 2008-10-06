@@ -163,15 +163,11 @@ namespace Do.UI
 
 		public void GrowResults ()
 		{
-//			results_window.Show ();
-//			bgr.Show ();
 			bgr.SlideIn ();
 		}
 
 		public void ShrinkResults ()
 		{
-//			results_window.Hide ();
-//			bgr.Hide ();
 			bgr.SlideOut ();
 		}
 
@@ -189,7 +185,6 @@ namespace Do.UI
 			bda.Draw ();
 			
 			if (CurrentPane == pane) {
-//				results_window.Context = context;
 				bgr.Context = context;
 			}
 		}
