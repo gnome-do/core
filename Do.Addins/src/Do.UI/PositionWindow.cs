@@ -44,7 +44,12 @@ namespace Do.UI
 			monitor = w.Screen.GetMonitorAtPoint (point.X, point.Y);
 		}
 		
-		public void UpdatePosition (int iconboxWidth, Pane currentPane, Rectangle resultsOffset) {
+		public void UpdatePosition (int iconboxWidth, Pane currentPane, Rectangle resultsOffset)
+		{
+			UpdatePosition (iconboxWidth, currentPane, resultsOffset, new Gdk.Rectangle ());
+		}
+		
+		public void UpdatePosition (int iconboxWidth, Pane currentPane, Rectangle resultsOffset, Rectangle normalOffset) {
 			Gtk.Application.Invoke (delegate {
 				Gdk.Rectangle geo, main, results;
 				
@@ -57,8 +62,8 @@ namespace Do.UI
 				}
 				
 				geo = w.Screen.GetMonitorGeometry (monitor);
-				main.X = ((geo.Width - main.Width) / 2) + geo.X;
-				main.Y = (int)((geo.Height + geo.Y - main.Height) / 2.5) + geo.Y;
+				main.X = ((geo.Width - main.Width) / 2) + geo.X + normalOffset.X;
+				main.Y = (int)((geo.Height + geo.Y - main.Height) / 2.5) + geo.Y + normalOffset.Y;
 				w.Move (main.X, main.Y);
 				
 				if (r == null) return;

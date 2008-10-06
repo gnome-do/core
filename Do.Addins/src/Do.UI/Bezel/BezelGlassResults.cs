@@ -157,7 +157,8 @@ namespace Do.UI
 				Cursor = value.Cursor;
 				Results = value.Results;
 //				secondary = value.SecondaryCursors;
-				Draw ();
+				if (visible)
+					Draw ();
 			}
 		}
 		
@@ -198,7 +199,7 @@ namespace Do.UI
 				return;
 			
 			delta_time = DateTime.Now;
-			timer = GLib.Timeout.Add (20, delegate {
+			timer = GLib.Timeout.Add (17, delegate {
 				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / FadeTime;
 				delta_time = DateTime.Now;
 				
@@ -263,7 +264,6 @@ namespace Do.UI
 		private void Paint ()
 		{
 			if (!IsDrawable) return;
-			
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			
 			if (backbuffer == null)
@@ -394,7 +394,7 @@ namespace Do.UI
 			cr.Operator = Operator.Over;
 			
 			if (context != null && !string.IsNullOrEmpty (context.Query))
-				RenderText (cr, new Gdk.Rectangle (10, 5, width-60, 20), 12, context.Query, "dddddd");
+				RenderText (cr, new Gdk.Rectangle (10, 3, width-60, 20), 12, context.Query, "dddddd");
 			
 			if (Results != null) {
 				string render_string = context.Cursor+1 + " of " + Results.Length + "  ▸  ";
@@ -453,7 +453,6 @@ namespace Do.UI
 		{
 			if (!IsDrawable)
 				return;
-			
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			Surface surface = cr.Target.CreateSimilar (cr.Target.Content, InternalWidth, SurfaceHeight);
 			Context cr2 = new Context (surface);
@@ -555,11 +554,6 @@ namespace Do.UI
 			
 			cr.Rectangle (border_width, offset+(item-StartResult)*SurfaceHeight, InternalWidth, SurfaceHeight);
 			if (item%2 == 1) {
-//				LinearGradient lg = new LinearGradient (border_width, 0, InternalWidth + border_width, 0);
-//				lg.AddColorStop (0, new Cairo.Color (.2, .2, .2, 0));
-//				lg.AddColorStop (.5, new Cairo.Color (.2, .2, .2, .4));
-//				lg.AddColorStop (1, new Cairo.Color (.2, .2, .2, 0));
-//				cr.Pattern = lg;
 				cr.Color = new Cairo.Color (.2, .2, .2, .2);
 				cr.Operator = Operator.DestOver;
 				cr.FillPreserve ();

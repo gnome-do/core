@@ -135,7 +135,7 @@ namespace Do.UI
 			
 //			int result_w, result_h;
 //			results_window.GetSize (out result_w, out result_h);
-			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle ());
+			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (), new Gdk.Rectangle (0, 100, 0, 0));
 			Show ();
 			Util.Appearance.PresentWindow (this);
 		}
