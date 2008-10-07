@@ -397,7 +397,8 @@ namespace Do.Core {
 		void OnCopyEvent ()
 		{
 			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
-			clip.Text = CurrentContext.Selection.Name;
+			if (CurrentContext.Selection != null)
+				clip.Text = CurrentContext.Selection.Name;
 		}
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
