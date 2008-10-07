@@ -299,6 +299,24 @@ namespace Do.UI
 			(cr as IDisposable).Dispose ();
 		}
 		
+		/// <summary>
+		/// Draws two surfaces offset onto a singel surface.  Useful for making left/right slide animations
+		/// </summary>
+		/// <param name="old_surface">
+		/// A <see cref="Surface"/>
+		/// </param>
+		/// <param name="new_surface">
+		/// A <see cref="Surface"/>
+		/// </param>
+		/// <param name="target_surface">
+		/// A <see cref="Surface"/>
+		/// </param>
+		/// <param name="old_x">
+		/// A <see cref="System.Int32"/>
+		/// </param>
+		/// <param name="new_x">
+		/// A <see cref="System.Int32"/>
+		/// </param>
 		private void DrawSlideContexts (Surface old_surface, Surface new_surface, Surface target_surface,
 		                                int old_x, int new_x)
 		{
@@ -314,6 +332,16 @@ namespace Do.UI
 			(cr as IDisposable).Dispose ();
 		}
 		
+		/// <summary>
+		/// Draws a header.  Currently this relies on being drown on top of the background surface to
+		/// look correct
+		/// </summary>
+		/// <param name="cr">
+		/// A <see cref="Context"/>
+		/// </param>
+		/// <param name="radius">
+		/// A <see cref="System.Int32"/>
+		/// </param>
 		private void DrawHeaderOnContext (Context cr, int radius)
 		{
 			cr.MoveTo (0 + radius, 0);
@@ -329,6 +357,16 @@ namespace Do.UI
 			cr.Fill ();
 		}
 		
+		/// <summary>
+		/// Draws a footer.  Currently this relies on being drawn on top of the background surface to
+		/// look correct
+		/// </summary>
+		/// <param name="cr">
+		/// A <see cref="Context"/>
+		/// </param>
+		/// <param name="radius">
+		/// A <see cref="System.Int32"/>
+		/// </param>
 		private void DrawFooterOnContext (Context cr, int radius)
 		{
 			cr.MoveTo (.5, height-bottom_border_width+.5);
@@ -343,6 +381,12 @@ namespace Do.UI
 			cr.Stroke ();
 		}
 		
+		/// <summary>
+		/// Draws the background theme on the passed context
+		/// </summary>
+		/// <param name="cr">
+		/// A <see cref="Context"/>
+		/// </param>
 		private void DrawBackgroundOnContext (Context cr)
 		{
 			cr.Operator = Operator.Source;
@@ -387,6 +431,12 @@ namespace Do.UI
 			cr.Stroke ();
 		}
 		
+		/// <summary>
+		/// Draws the entire view of the results window now on the surface passed in
+		/// </summary>
+		/// <param name="sr">
+		/// A <see cref="Surface"/>
+		/// </param>
 		private void DrawContextOnSurface (Surface sr)
 		{
 			Context cr = new Context (sr);
@@ -409,9 +459,9 @@ namespace Do.UI
 				string render_string = context.Cursor+1 + " of " + Results.Length + "  ▸  ";
 				if (context.ParentContext != null && context.ParentContext.Selection != null) {
 					if (context.ParentContext.ParentContext != null && context.ParentContext.ParentContext.Selection != null) {
-						render_string += context.ParentContext.ParentContext.Selection.Name + " > ";
+						render_string += context.ParentContext.ParentContext.Selection.Name + " ▸ ";
 					}
-					render_string += context.ParentContext.Selection.Name + " > ";
+					render_string += context.ParentContext.Selection.Name + " ▸ ";
 				}
 				
 				RenderText (cr, new Gdk.Rectangle (10, height-21, width-20, 20), 11, render_string);
