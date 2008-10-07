@@ -124,7 +124,7 @@ namespace Do.Core
 			
 			// Ideally we would do stable sorts all the time, but quicksort is... quickest
 			// so we do a stable sort only on small lists
-			if (results.Count < 40)
+			if (results.Count < 100)
 				InsertionSort (results);
 			else
 				results.Sort ();
