@@ -368,6 +368,10 @@ namespace Do.UI
 				if (ThirdPaneVisible && drawing_area.Width == WindowWidth) {
 					RenderPane (Pane.Third, cr);
 				}
+				
+				if (text_box_scale > 0) {
+					RenderTextModeOverlay (cr);
+				}
 			} while (false);
 
 			cr2.SetSourceSurface (surface, 0, 0);

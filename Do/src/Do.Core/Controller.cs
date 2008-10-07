@@ -422,7 +422,10 @@ namespace Do.Core {
 		{
 			im.Reset ();
 			if (CurrentContext.TextType == TextModeType.Explicit) {
-				CurrentContext.FinalizeTextMode ();
+				if (CurrentContext.Query.Length > 0)
+					CurrentContext.FinalizeTextMode ();
+				else 
+					CurrentContext.TextMode = false;
 				UpdatePane (CurrentPane);
 				return;
 			}
