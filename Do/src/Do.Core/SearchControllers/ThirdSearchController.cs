@@ -221,6 +221,12 @@ namespace Do.Core
 			                          context.LastContext.Selection != context.Selection);
 			base.OnSearchFinished (selection_changed, true, Selection, Query);
 		}
+		
+		public override void SetString (string str)
+		{
+			context.Query = str;
+			BuildNewContextFromQuery ();
+		}
 
 		private void BuildNewContextFromQuery ()
 		{

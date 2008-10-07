@@ -258,6 +258,8 @@ namespace Do.Core
 			SearchFinished (this, new SearchFinishState (selection_changed, query_changed, selection, query));
 		}
 		
+		public abstract void SetString (string str);
+		
 		public event SearchStartedEventHandler SearchStarted;
 		public event SearchFinishedEventHandler SearchFinished;
 	}

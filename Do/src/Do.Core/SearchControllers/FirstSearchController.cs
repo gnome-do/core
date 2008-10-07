@@ -105,6 +105,13 @@ namespace Do.Core
 			base.OnSearchFinished (search_changed, true, Selection, Query);
 		}
 		
+		public override void SetString (string str)
+		{
+			context.Query = str;
+			BuildNewContextFromQuery ();
+		}
+
+		
 		private void BuildNewContextFromQuery ()
 		{
 			string query = Query;

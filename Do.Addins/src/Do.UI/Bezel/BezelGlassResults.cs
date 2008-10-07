@@ -314,77 +314,86 @@ namespace Do.UI
 			(cr as IDisposable).Dispose ();
 		}
 		
+		private void DrawHeaderOnContext (Context cr, int radius)
+		{
+			cr.MoveTo (0 + radius, 0);
+			cr.Arc (0 + width - radius, 0 + radius, radius, Math.PI*1.5, Math.PI*2);
+			cr.LineTo (0 + width, 0 + top_border_width);
+			cr.LineTo (0, 0 + top_border_width);
+			cr.Arc (0 + radius, 0 + radius, radius, Math.PI, Math.PI*1.5);
+			LinearGradient title_grad = new LinearGradient (0, 0, 0, top_border_width);
+			title_grad.AddColorStop (0.0, new Cairo.Color (0.45, 0.45, 0.45));
+			title_grad.AddColorStop (0.5, new Cairo.Color (0.33, 0.33, 0.33));
+			title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
+			cr.Pattern = title_grad;
+			cr.Fill ();
+		}
+		
+		private void DrawFooterOnContext (Context cr, int radius)
+		{
+			cr.MoveTo (.5, height-bottom_border_width+.5);
+			cr.LineTo (width-1, height-bottom_border_width+.5);
+			cr.Arc (width-radius-.5, height-radius-.5, radius, 0, Math.PI*.5);
+			cr.Arc (radius+.5, height-radius-.5, radius, Math.PI*.5, Math.PI);
+			cr.ClosePath ();
+			cr.Color = new Cairo.Color (.22, .22, .22, 1);
+			cr.FillPreserve ();
+			cr.LineWidth=1;
+			cr.Color = new Cairo.Color (.6, .6, .6, .4);
+			cr.Stroke ();
+		}
+		
+		private void DrawBackgroundOnContext (Context cr)
+		{
+			cr.Operator = Operator.Source;
+			cr.Rectangle (0, 0, width, height);
+			cr.Color = new Cairo.Color (0, 0, 0, 0);
+			cr.Fill ();
+			cr.Operator = Operator.Over;
+				
+			int c_size = border_width - 2;
+			
+			//Draw rounded rectange around whole border
+			cr.MoveTo (0.5+c_size, -1);
+			cr.Arc (width-c_size-0.5, c_size-1, c_size, Math.PI*1.5, Math.PI*2);
+			cr.Arc (width-0.5-c_size, height-c_size-0.5, c_size, 0, Math.PI*.5);
+			cr.Arc (0.5+c_size, height-c_size-0.5, c_size, Math.PI*.5, Math.PI);
+			cr.Arc (0.5+c_size, c_size-1, c_size, Math.PI, Math.PI*1.5);
+			cr.ClosePath ();
+			cr.Color = new Cairo.Color (0, 0, 0, .8);
+			cr.FillPreserve ();
+			
+			cr.LineWidth = 1;
+			cr.Color = new Cairo.Color (.3, .3, .3, 1);
+			cr.Stroke ();
+
+			DrawHeaderOnContext (cr, c_size);
+			
+			cr.Rectangle (border_width, top_border_width, InternalWidth, height-top_border_width);
+			cr.Color = new Cairo.Color (.9, .9, .9, .05);
+			cr.Fill ();
+			
+			DrawFooterOnContext (cr, c_size);
+			
+			cr.MoveTo (border_width + .5, top_border_width);
+			cr.LineTo (border_width + .5, height-bottom_border_width);
+			cr.MoveTo (width - border_width - .5, top_border_width);
+			cr.LineTo (width - border_width - .5, height-bottom_border_width);
+			cr.MoveTo (0, height-bottom_border_width-.5);
+			cr.LineTo (width, height-bottom_border_width-.5);
+			
+			cr.LineWidth = 1;
+			cr.Color = new Cairo.Color (.6, .6, .6, .15);
+			cr.Stroke ();
+		}
+		
 		private void DrawContextOnSurface (Surface sr)
 		{
 			Context cr = new Context (sr);
 			if (background == null) {
 				background = cr.Target.CreateSimilar (cr.Target.Content, width, height);
 				Context cr2 = new Context (background);
-				
-				cr2.Operator = Operator.Source;
-				cr2.Rectangle (0, 0, width, height);
-				cr2.Color = new Cairo.Color (0, 0, 0, 0);
-				cr2.Fill ();
-				cr2.Operator = Operator.Over;
-					
-				int c_size = border_width - 2;
-				
-				//Draw rounded rectange around whole border
-				cr2.MoveTo (0.5+c_size, -1);
-				cr2.Arc (width-c_size-0.5, c_size-1, c_size, Math.PI*1.5, Math.PI*2);
-				cr2.Arc (width-0.5-c_size, height-c_size-0.5, c_size, 0, Math.PI*.5);
-				cr2.Arc (0.5+c_size, height-c_size-0.5, c_size, Math.PI*.5, Math.PI);
-				cr2.Arc (0.5+c_size, c_size-1, c_size, Math.PI, Math.PI*1.5);
-				cr2.ClosePath ();
-				cr2.Color = new Cairo.Color (0, 0, 0, .8);
-				cr2.FillPreserve ();
-				
-				cr2.LineWidth = 1;
-				cr2.Color = new Cairo.Color (.3, .3, .3, 1);
-				cr2.Stroke ();
-				
-				//draw header
-				cr2.MoveTo (0 + c_size, 0);
-				cr2.Arc (0 + width - c_size, 0 + c_size, c_size, Math.PI*1.5, Math.PI*2);
-				cr2.LineTo (0 + width, 0 + top_border_width);
-				cr2.LineTo (0, 0 + top_border_width);
-				cr2.Arc (0 + c_size, 0 + c_size, c_size, Math.PI, Math.PI*1.5);
-				LinearGradient title_grad = new LinearGradient (0, 0, 0, top_border_width);
-				title_grad.AddColorStop (0.0, new Cairo.Color (0.45, 0.45, 0.45));
-				title_grad.AddColorStop (0.5, new Cairo.Color (0.33, 0.33, 0.33));
-				title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
-				cr2.Pattern = title_grad;
-				cr2.Fill ();
-				
-				
-				cr2.Rectangle (border_width, top_border_width, InternalWidth, height-top_border_width);
-				
-				cr2.Color = new Cairo.Color (.9, .9, .9, .05);
-				cr2.Fill ();
-				
-//				cr2.Rectangle (0, height-bottom_border_width, width, bottom_border_width);
-				cr2.MoveTo (.5, height-bottom_border_width+.5);
-				cr2.LineTo (width-1, height-bottom_border_width+.5);
-				cr2.Arc (width-c_size-.5, height-c_size-.5, c_size, 0, Math.PI*.5);
-				cr2.Arc (c_size+.5, height-c_size-.5, c_size, Math.PI*.5, Math.PI);
-				cr2.ClosePath ();
-				cr2.Color = new Cairo.Color (.22, .22, .22, 1);
-				cr2.FillPreserve ();
-				cr2.LineWidth=1;
-				cr2.Color = new Cairo.Color (.6, .6, .6, .4);
-				cr2.Stroke ();
-				
-				cr2.MoveTo (border_width + .5, top_border_width);
-				cr2.LineTo (border_width + .5, height-bottom_border_width);
-				cr2.MoveTo (width - border_width - .5, top_border_width);
-				cr2.LineTo (width - border_width - .5, height-bottom_border_width);
-				cr2.MoveTo (0, height-bottom_border_width-.5);
-				cr2.LineTo (width, height-bottom_border_width-.5);
-				
-				cr2.LineWidth = 1;
-				cr2.Color = new Cairo.Color (.6, .6, .6, .15);
-				cr2.Stroke ();
-				
+				DrawBackgroundOnContext (cr2);
 				(cr2 as IDisposable).Dispose ();
 			}
 			

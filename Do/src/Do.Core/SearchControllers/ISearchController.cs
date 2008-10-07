@@ -144,5 +144,14 @@ namespace Do.Core
 		/// The controllers search has finished.
 		/// </summary>
 		event SearchFinishedEventHandler SearchFinished;
+
+		/// <summary>
+		/// In the unlikely event we wish to set an entire string at once without having to do the
+		/// whole thing incrementally.  Useful for things like paste.
+		/// </summary>
+		/// <param name="s">
+		/// A <see cref="System.String"/> to be added to the controllers query
+		/// </param>
+		void SetString (string s);
 	}
 }

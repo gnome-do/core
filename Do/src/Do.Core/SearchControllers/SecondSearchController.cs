@@ -282,6 +282,12 @@ namespace Do.Core
 					BuildNewContextFromQuery ();
 			}
 		}
+		
+		public override void SetString (string str)
+		{
+			context.Query = str;
+			BuildNewContextFromQuery ();
+		}
 
 		/// <summary>
 		/// Builds up a new context from a query from scratch.  Useful after changing filters.

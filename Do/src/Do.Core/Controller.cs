@@ -376,8 +376,7 @@ namespace Do.Core {
 			if (!clip.WaitIsTextAvailable ())
 				return;
 			string str = clip.WaitForText ();
-			foreach (char c in str.ToCharArray ())
-				CurrentContext.AddChar (c);
+			CurrentContext.SetString (CurrentContext.Query + str);
 		}
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
@@ -810,6 +809,7 @@ namespace Do.Core {
 			window.Summon ();
 			if (Do.Preferences.AlwaysShowResults)
 				GrowResults ();
+			im.FocusIn ();
 		}
 		
 		public void Vanish ()
