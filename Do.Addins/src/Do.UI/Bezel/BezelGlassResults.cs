@@ -322,12 +322,21 @@ namespace Do.UI
 		{
 			Context cr = new Context (target_surface);
 			cr.Operator = Operator.Source;
+
+			// redraw our top and bottom border separately.  This makes the slide only appear to affect
+			// the center.
+			cr.Rectangle (0, 0, width, top_border_width);
+			cr.Rectangle (0, height-bottom_border_width, width, bottom_border_width);
+			cr.SetSource (new_surface, 0, 0);
+			cr.Fill ();
+			
+			cr.Rectangle (0, top_border_width, width, height-top_border_width-bottom_border_width);
 			cr.SetSource (old_surface, old_x, 0);
-			cr.Paint ();
+			cr.FillPreserve ();
 			
 			cr.Operator = Operator.Over;
 			cr.SetSource (new_surface, new_x, 0);
-			cr.Paint ();
+			cr.FillPreserve ();
 			
 			(cr as IDisposable).Dispose ();
 		}
