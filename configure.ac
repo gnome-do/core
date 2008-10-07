@@ -2,7 +2,7 @@ dnl Warning: This is an automatically generated file, do not edit!
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.54])
 
-AC_INIT([gnome-do], [0.7.0.0])
+AC_INIT([gnome-do], [0.6.1.0])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -16,7 +16,7 @@ dnl Plugin ABI version; bump whenever plugin interface changes
 ABI_VERSION=0.6
 AC_SUBST(ABI_VERSION)
 
-RELEASE="false"
+RELEASE="true"
 if [ $RELEASE = "true" ] ; then
    VERSION_INFO="Release"
 else
@@ -38,6 +38,12 @@ AC_HEADER_STDC
 SHAMROCK_FIND_MONO_2_0_COMPILER
 SHAMROCK_CHECK_LINQ_FLAG
 
+
+dnl Find gconftool-2
+AC_PATH_PROG(GCONFTOOL, gconftool-2)
+AM_GCONF_SOURCE_2
+
+dnl libtool for libdo
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
 

@@ -1,0 +1,88 @@
+<gconfschemafile>
+  <schemalist>
+    <schema>
+      <key>/schemas/apps/gnome-do/preferences/core-preferences/AlwaysShowResults</key>
+      <applyto>/apps/gnome-do/preferences/core-preferences/AlwaysShowResults</applyto>
+      <owner>gnome-do</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Always show results window.</short>
+         <long>
+	   If true, the results window will be shown on summon.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-do/preferences/core-preferences/QuietStart</key>
+      <applyto>/apps/gnome-do/preferences/core-preferences/QuietStart</applyto>
+      <owner>gnome-do</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Don't show Do window when Do starts.</short>
+         <long>
+	   Enable this option to keep Do from poping up as soon as it starts. It also suppresses some log output.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-do/preferences/core-preferences/StatusIconVisible</key>
+      <applyto>/apps/gnome-do/preferences/core-preferences/StatusIconVisible</applyto>
+      <owner>gnome-do</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Show Do icon in panel</short>
+         <long>
+         Enable this icon if you would like a status Icon in your gnome-panel.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-do/preferences/core-preferences/SummonKeyBinding</key>
+      <applyto>/apps/gnome-do/preferences/core-preferences/SummonKeyBinding</applyto>
+      <owner>gnome-do</owner>
+      <type>string</type>
+      <default>&lt;Super&gt;space</default>
+      <locale name="C">
+         <short>Do summon keybinding.</short>
+         <long>
+         Set this to the key command you would like to use to summon Do.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-do/preferences/core-preferences/TextModeKeyBinding</key>
+      <applyto>/apps/gnome-do/preferences/core-preferences/TextModeKeyBinding</applyto>
+      <owner>gnome-do</owner>
+      <type>string</type>
+      <default>period</default>
+      <locale name="C">
+         <short>Key used to enter text mode.</short>
+         <long>
+	   Set this to the character that should be used to enter text mode.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-do/preferences/core-preferences/Theme</key>
+      <applyto>/apps/gnome-do/preferences/core-preferences/Theme</applyto>
+      <owner>gnome-do</owner>
+      <type>string</type>
+      <default>Classic</default>
+      <locale name="C">
+         <short>Do UI theme</short>
+         <long>
+	   Changes the appearence of Do. Valid entries are Classic, Glass Frame, and Mini.
+         </long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>
