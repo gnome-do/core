@@ -331,10 +331,16 @@ namespace Do.Core {
 				return;
 			}
 			
-			// Things pressed with ctrl are mistakes?
-			if ((evnt.State & ModifierType.ControlMask) != 0 && evnt.Key == Key.v) {
-				OnPasteEvent ();
-				return;
+			// Check for paste
+			if ((evnt.State & ModifierType.ControlMask) != 0) {
+				if (evnt.Key == Key.v) {
+					OnPasteEvent ();
+					return;
+				}
+				if (evnt.Key == Key.c) {
+					OnCopyEvent ();
+					return;
+				}
 			}
 
 			switch ((Gdk.Key) evnt.KeyValue) {
@@ -386,6 +392,12 @@ namespace Do.Core {
 			}
 			string str = clip.WaitForText ();
 			CurrentContext.SetString (CurrentContext.Query + str);
+		}
+		
+		void OnCopyEvent ()
+		{
+			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
+			clip.Text = CurrentContext.Selection.Name;
 		}
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
