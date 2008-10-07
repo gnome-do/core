@@ -380,9 +380,10 @@ namespace Do.Core {
 		
 		void OnPasteEvent ()
 		{
-			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Primary);
-			if (!clip.WaitIsTextAvailable ())
+			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
+			if (!clip.WaitIsTextAvailable ()) {
 				return;
+			}
 			string str = clip.WaitForText ();
 			CurrentContext.SetString (CurrentContext.Query + str);
 		}
