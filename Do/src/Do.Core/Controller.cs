@@ -83,17 +83,17 @@ namespace Do.Core {
 			controllers[1].SelectionChanged += delegate { SmartUpdatePane (Pane.Second); };
 			controllers[2].SelectionChanged += delegate { SmartUpdatePane (Pane.Third); };
 			
-			//Usually when the query changes we want to reflect this immediately
+			// Usually when the query changes we want to reflect this immediately
 			controllers[0].QueryChanged += OnFirstQueryChanged;
 			controllers[1].QueryChanged += delegate { SmartUpdatePane (Pane.Second); };
 			controllers[2].QueryChanged += delegate { SmartUpdatePane (Pane.Third); };
 			
-			//We want to show a blank box during our searches
+			// We want to show a blank box during our searches
 			controllers[0].SearchStarted += delegate { };
 			controllers[1].SearchStarted += delegate (bool u) { if (u) window.ClearPane (Pane.Second); };
 			controllers[2].SearchStarted += delegate (bool u) { if (u) window.ClearPane (Pane.Third); };
 			
-			//Brings back our boxes after the search
+			// Brings back our boxes after the search
 			controllers[0].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.First); };
 			controllers[1].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Second); };
 			controllers[2].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Third); };
@@ -115,16 +115,17 @@ namespace Do.Core {
 		void ThemeChanged ()
 		{
 			if (null != window) Vanish ();
+			
 			switch (Do.Preferences.Theme) {
-				case "Mini":
-					window = new MiniWindow (this);
-					break;
-				case "Glass Frame":
-					window = new GlassWindow (this);
-					break;
-				default:
-					window = new ClassicWindow (this);
-					break;
+			case "Mini":
+				window = new MiniWindow (this);
+				break;
+			case "Glass Frame":
+				window = new GlassWindow (this);
+				break;
+			default:
+				window = new ClassicWindow (this);
+				break;
 			}
 			
 			// Get key press events from window since we want to control that
@@ -142,7 +143,7 @@ namespace Do.Core {
 		/// <value>
 		/// Convenience Method
 		/// </value>
-		ISearchController CurrentContext {
+		ISearchController SearchController {
 			get {
 				return controllers[(int) CurrentPane];
 			}
@@ -156,7 +157,7 @@ namespace Do.Core {
 			set {
 				//If we have no results, we can't go to the second pane
 				if (window.CurrentPane == Pane.First &&
-					CurrentContext.Results.Length == 0)
+					SearchController.Results.Length == 0)
 					return;
 				
 				switch (value) {
@@ -300,7 +301,7 @@ namespace Do.Core {
 			} 
 			
 			if (KeyEventToString(evnt).Equals (Do.Preferences.TextModeKeyBinding) && 
-			    CurrentContext.Query.Length == 0) {
+			    SearchController.Query.Length == 0) {
 				OnTextModePressEvent (evnt);
 				return;
 			}
@@ -366,15 +367,15 @@ namespace Do.Core {
 		/// </param>
 		void OnSelectionKeyPressEvent (EventKey evnt)
 		{
-			if (CurrentContext.Selection is ITextItem || !resultsGrown)
+			if (SearchController.Selection is ITextItem || !resultsGrown)
 				OnInputKeyPressEvent (evnt);
-			else if (CurrentContext.ToggleSecondaryCursor (CurrentContext.Cursor))
+			else if (SearchController.ToggleSecondaryCursor (SearchController.Cursor))
 				UpdatePane (CurrentPane);
 		}
 		
 		void OnDeleteKeyPressEvent (EventKey evnt)
 		{
-			CurrentContext.DeleteChar ();
+			SearchController.DeleteChar ();
 		}
 		
 		void OnSummonKeyPressEvent (EventKey evnt)
@@ -387,8 +388,8 @@ namespace Do.Core {
 		{
 			bool results, something_typed;
 
-			something_typed = CurrentContext.Query.Length > 0;
-			results = CurrentContext.Results.Length > 0;
+			something_typed = SearchController.Query.Length > 0;
+			results = SearchController.Results.Length > 0;
 			
 			ClearSearchResults ();
 			
@@ -408,32 +409,42 @@ namespace Do.Core {
 			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
 			if (char.IsLetterOrDigit (c)
 					|| char.IsPunctuation (c)
-					|| (c == ' ' && CurrentContext.Query.Length > 0)
+					|| (c == ' ' && SearchController.Query.Length > 0)
 					|| char.IsSymbol (c)) {
-				CurrentContext.AddChar (c);
+				SearchController.AddChar (c);
 			}
 			
-			//Horrible hack:
-			//The reason this exists and exists here is to update the clipboard in a place that
-			//we know will always be safe for GTK.  Unfortunately due to the way we have designed
-			//Do, this has proven extremely difficult to put some place more logical.  We NEED to
-			//rethink how we handle Summon () and audit our usage of Gdk.Threads.Enter ()
-			if (CurrentContext.Query.Length <= 1)
+			// Horrible hack: The reason this exists and exists here is to update the
+			// clipboard in a place that we know will always be safe for GTK.
+			// Unfortunately due to the way we have designed Do, this has proven
+			// extremely difficult to put some place more logical.  We NEED to rethink
+			// how we handle Summon () and audit our usage of Gdk.Threads.Enter ()
+			if (SearchController.Query.Length <= 1)
 				SelectedTextItem.UpdateText ();
 		}
 		
 		void OnRightLeftKeyPressEvent (EventKey evnt)
 		{
-			if (CurrentContext.Results.Length > 0) {
-				if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
-					if (CurrentContext.ItemChildSearch ())
-						GrowResults ();
-				} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {
-					if (CurrentContext.ItemParentSearch ())
-						GrowResults ();
-				}
+			if (SearchController.Results.Length == 0) return;
+
+			switch ((Gdk.Key) evnt.KeyValue) {
+			case Gdk.Key.Right:
+				// We're attempting to browse the contents of an item, so increase its
+				// relevance.
+				(SearchController.Selection as DoObject)
+					.IncreaseRelevance (SearchController.Query, null);
+				if (SearchController.ItemChildSearch ()) GrowResults ();
+				break;
+			case Gdk.Key.Left:
+				// We're attempting to browse the parent of an item, so decrease its
+				// relevance. This makes it so we can merely visit an item's children,
+				// and navigate back out of the item, and leave that item's relevance
+				// unchanged.
+				(SearchController.Selection as DoObject)
+					.DecreaseRelevance (SearchController.Query, null);
+				if (SearchController.ItemParentSearch ()) GrowResults ();
+				break;
 			}
-			
 		}
 		
 		void OnTabKeyPressEvent (EventKey evnt)
@@ -446,15 +457,15 @@ namespace Do.Core {
 				PrevPane ();
 			}
 			// Seems to avoid a crash by passing bad contexts.  May not be needed.
-			if (!(CurrentPane == Pane.First && CurrentContext.Results.Length == 0))
-				window.SetPaneContext (CurrentPane, CurrentContext.UIContext);
+			if (!(CurrentPane == Pane.First && SearchController.Results.Length == 0))
+				window.SetPaneContext (CurrentPane, SearchController.UIContext);
 		}
 		
 		void OnTextModePressEvent (EventKey evnt)
 		{
-			bool tmp = CurrentContext.TextMode;
-			CurrentContext.TextMode = !CurrentContext.TextMode;
-			if (CurrentContext.TextMode == tmp) {
+			bool tmp = SearchController.TextMode;
+			SearchController.TextMode = !SearchController.TextMode;
+			if (SearchController.TextMode == tmp) {
 				NotificationIcon.SendNotification ("Text Mode Error", "Do could not enter text mode " +
 				                                   "because the current action does not support it.");
 			} else {
@@ -469,24 +480,24 @@ namespace Do.Core {
                     GrowResults ();
 					return;
 				} else {
-					if (CurrentContext.Cursor <= 0)
+					if (SearchController.Cursor <= 0)
 						return;
-					CurrentContext.Cursor--;
+					SearchController.Cursor--;
                 }
 			} else if (evnt.Key == Gdk.Key.Down) {
 				if (!resultsGrown) {
 					GrowResults ();
 					return;
 				}
-				CurrentContext.Cursor++;
+				SearchController.Cursor++;
 			} else if (evnt.Key == Gdk.Key.Home) {
-				CurrentContext.Cursor = 0;
+				SearchController.Cursor = 0;
 			} else if (evnt.Key == Gdk.Key.End) {
-				CurrentContext.Cursor = CurrentContext.Results.Length - 1;
+				SearchController.Cursor = SearchController.Results.Length - 1;
 			} else if (evnt.Key == Gdk.Key.Page_Down) {
-				CurrentContext.Cursor += 5;
+				SearchController.Cursor += 5;
 			} else if (evnt.Key == Gdk.Key.Page_Up) {
-				CurrentContext.Cursor -= 5;
+				SearchController.Cursor -= 5;
 			}
 		}
 		
