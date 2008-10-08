@@ -673,32 +673,41 @@ namespace Do.UI
 				highlight_surface = cr.Target.CreateSimilar (cr.Target.Content, width, SurfaceHeight);
 				
 				Context cr2 = new Context (highlight_surface);
-				LinearGradient grad = new LinearGradient (0, 0, 0, SurfaceHeight);
-				
-				grad.AddColorStop (0, new Cairo.Color (.85, .85, .85, .2));
-				grad.AddColorStop (1, new Cairo.Color (.95, .95, .95, .2));
-				
-				cr2.Pattern = grad;
-				double radius=(SurfaceHeight-2)/2;
-				double x=4.5, y=1.5;
-				int r_width = width-9;
-				int r_height = SurfaceHeight-3;
-				
-				cr2.MoveTo (x, y + radius);
-				cr2.Arc (x + radius, y + radius, radius, Math.PI, -Math.PI / 2);
-				cr2.LineTo (x + r_width - radius, y);
-				cr2.Arc (x + r_width - radius, y + radius, radius, -Math.PI / 2, 0);
-				cr2.LineTo (x + r_width, y + r_height - radius);
-				cr2.Arc (x + r_width - radius, y + r_height - radius, radius, 0, Math.PI / 2);
-				cr2.LineTo (x + radius, y + r_height);
-				cr2.Arc (x + radius, y + r_height - radius, radius, Math.PI / 2, Math.PI);
-				cr2.ClosePath ();
+				switch (style) {
+				case HUDStyle.HUD:
+					LinearGradient grad = new LinearGradient (0, 0, 0, SurfaceHeight);
+					grad.AddColorStop (0, new Cairo.Color (.85, .85, .85, .2));
+					grad.AddColorStop (1, new Cairo.Color (.95, .95, .95, .2));
+					
+					cr2.Pattern = grad;
+					double radius=(SurfaceHeight-2)/2;
+					double x=4.5, y=1.5;
+					int r_width = width-9;
+					int r_height = SurfaceHeight-3;
+					
+					cr2.MoveTo (x, y + radius);
+					cr2.Arc (x + radius, y + radius, radius, Math.PI, -Math.PI / 2);
+					cr2.LineTo (x + r_width - radius, y);
+					cr2.Arc (x + r_width - radius, y + radius, radius, -Math.PI / 2, 0);
+					cr2.LineTo (x + r_width, y + r_height - radius);
+					cr2.Arc (x + r_width - radius, y + r_height - radius, radius, 0, Math.PI / 2);
+					cr2.LineTo (x + radius, y + r_height);
+					cr2.Arc (x + radius, y + r_height - radius, radius, Math.PI / 2, Math.PI);
+					cr2.ClosePath ();
 
-				cr2.FillPreserve ();
+					cr2.FillPreserve ();
+					
+					cr2.LineWidth = 1;
+					cr2.Color = new Cairo.Color (0.9, 0.9, 0.9, 1);
+					cr2.Stroke ();
+					break;
+				case HUDStyle.Classic:
+					cr2.Rectangle (1, 0, width-2, SurfaceHeight);
+					cr2.Color = new Cairo.Color (.8, .9, 1, .8);
+					cr2.Fill ();
+					break;
+				}
 				
-				cr2.LineWidth = 1;
-				cr2.Color = new Cairo.Color (0.9, 0.9, 0.9, 1);
-				cr2.Stroke ();
 				
 				(cr as IDisposable).Dispose ();
 				(cr2 as IDisposable).Dispose ();
