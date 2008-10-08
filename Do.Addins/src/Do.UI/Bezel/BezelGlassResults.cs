@@ -87,6 +87,19 @@ namespace Do.UI
 			}
 		}				
 		
+		string QueryColor {
+			get {
+				switch (style) {
+				case HUDStyle.HUD:
+					return "dddddd";
+				case HUDStyle.Classic:
+					return "777777";
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+		}
+		
 		public IObject[] Results {
 			get {
 				return results;
@@ -402,6 +415,18 @@ namespace Do.UI
 				cr.Pattern = title_grad;
 				cr.Fill ();
 				break;
+			case HUDStyle.Classic:
+				cr.Rectangle (0.5, -0.5, width-1, top_border_width);
+				LinearGradient title_grad1 = new LinearGradient (0, 0, 0, top_border_width);
+				title_grad1.AddColorStop (0, new Cairo.Color (0.95, 0.95, 0.95));
+				title_grad1.AddColorStop (1, new Cairo.Color (0.75, 0.75, 0.75));
+				cr.Pattern = title_grad1;
+				cr.FillPreserve ();
+				
+				cr.LineWidth = 1;
+				cr.Color = new Cairo.Color (0.4, 0.4, 0.4);
+				cr.Stroke ();
+				break;
 			}
 		}
 		
@@ -503,7 +528,7 @@ namespace Do.UI
 			cr.Operator = Operator.Over;
 			
 			if (context != null && !string.IsNullOrEmpty (context.Query))
-				RenderText (cr, new Gdk.Rectangle (10, 3, width-60, 20), 12, context.Query, "dddddd");
+				RenderText (cr, new Gdk.Rectangle (10, 3, width-60, 20), 12, context.Query, QueryColor);
 			
 			if (Results != null) {
 				string render_string = context.Cursor+1 + " of " + Results.Length + "  ▸  ";

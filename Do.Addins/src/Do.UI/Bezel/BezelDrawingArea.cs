@@ -450,7 +450,7 @@ namespace Do.UI
 			cr.MoveTo (x+radius, y);
 			cr.Arc (x+width-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
 			cr.LineTo (x+width, TitleBarHeight);
-			cr.LineTo (x, TitleBarHeight);RenderTitleText (cr);
+			cr.LineTo (x, TitleBarHeight);
 			cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
 		}
 		
