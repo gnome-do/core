@@ -35,6 +35,11 @@ namespace Do.UI
 		Outside,
 	}
 	
+	public enum HUDStyle {
+		HUD,
+		Classic,
+	}
+	
 	public class BezelDrawingArea : Gtk.DrawingArea
 	{
 		enum DrawState {
@@ -44,20 +49,91 @@ namespace Do.UI
 			None,
 		}
 		
+		private HUDStyle style;
+		
 		const int IconSize     = 128;
-		const int BoxWidth     = 160;
-		const int BoxHeight    = IconSize + 15 + TextHeight;
 		const int BoxLineWidth = 1;
 		const int TextHeight   = 11;
 		const int BorderWidth  = 15;
-		const int WindowWidth  = (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 3);
-		const int TwoPaneWidth = (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2);
-		const int TitleBarHeight = 21;
-		const int WindowRadius = 6;
-		const int WindowHeight = BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight;
 		const int WindowBorder = 21;
 		const int fade_ms      = 150;
-		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
+		
+		int BoxWidth {
+			get {
+				switch (style) {
+				case HUDStyle.HUD:
+					return 160;
+				case HUDStyle.Classic:
+					return 170;
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+		}
+		
+		int BoxHeight { 
+			get { 
+				switch (style) {
+				case HUDStyle.HUD:
+					return IconSize + 15 + TextHeight;
+				case HUDStyle.Classic:
+					return IconSize + 20 + TextHeight;
+				default:
+					throw new NotImplementedException ();
+				}
+			} 
+		}
+
+		int WindowWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 3); } }
+		
+		int TwoPaneWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2); } }
+		
+		string HighlightFormat {
+			get {
+				switch (style) {
+				case HUDStyle.HUD:
+					return "<span foreground=\"#5599ff\">{0}</span>";
+				case HUDStyle.Classic:
+					return "<span foreground=\"#2255dd\">{0}</span>";
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+		}
+		
+		int WindowRadius {
+			get {
+				switch (style) {
+				case HUDStyle.HUD:
+					return 6;
+				case HUDStyle.Classic:
+					return 20;
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+		}
+		
+		int TitleBarHeight {
+			get {
+				switch (style) {
+				case HUDStyle.HUD:
+					return 21;
+				case HUDStyle.Classic:
+					return 0;
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+		}
+		
+		int WindowHeight {
+			get {
+				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight;
+			}
+		}
+		
+		int TextModeOffset { get { return Math.Max (TitleBarHeight, WindowRadius); } }
 		
 		bool third_pane_visible;
 		BezelDrawingContext context, old_context;
@@ -74,6 +150,34 @@ namespace Do.UI
 		double text_box_scale;
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
+		
+		private Gdk.Color BackgroundColor
+		{
+			get {
+				byte r, g, b;
+				Gdk.Color bgColor;
+
+				using (Gtk.Style style = Gtk.Rc.GetStyle (this)) {
+					bgColor = style.Backgrounds[(int) StateType.Selected];
+				}
+				r = (byte) ((bgColor.Red) >> 8);
+				g = (byte) ((bgColor.Green) >> 8);
+				b = (byte) ((bgColor.Blue) >> 8);
+				
+				// Useful for making overbright themes less ugly. Still trying
+				// to find a happy balance between 50 and 90...
+				byte maxLum = 60;
+				double hue, sat, val;
+				Addins.Util.Appearance.RGBToHSV(r, g, b, out hue, 
+				                                out sat, out val);
+				val = Math.Min (val, maxLum);
+				
+				Addins.Util.Appearance.HSVToRGB(hue, sat, val, out r,
+				                                out g, out b);
+				
+				return new Gdk.Color (r, g, b);
+			}
+		}		
 		
 		private BezelDrawingContext Context {
 			get {
@@ -105,8 +209,9 @@ namespace Do.UI
 			}
 		}
 		
-		public BezelDrawingArea() : base ()
+		public BezelDrawingArea(HUDStyle style) : base ()
 		{
+			this.style = style;
 			surface_buffer = new Dictionary <string,Surface> ();
 			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, 0, TwoPaneWidth, WindowHeight);
 			icon_fade = new double [3];
@@ -118,15 +223,42 @@ namespace Do.UI
 		private void BuildColors ()
 		{
 			colors = new Dictionary<string,Cairo.Color> ();
-			colors["focused_box"]    = new Cairo.Color (0.3, 0.3, 0.3, 0.6);
-			colors["unfocused_box"]  = new Cairo.Color (0.0, 0.0, 0.0, 0.2);
-			colors["focused_line"]   = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
-			colors["unfocused_line"] = new Cairo.Color (1.0, 1.0, 1.0, 0.2);
-			colors["focused_text"]   = new Cairo.Color (0.0, 0.0, 0.0, 0.85);
-			colors["unfocused_text"] = new Cairo.Color (0.3, 0.3, 0.3, 0.7);
-			colors["titlebar_step1"] = new Cairo.Color (0.45, 0.45, 0.45);
-			colors["titlebar_step2"] = new Cairo.Color (0.33, 0.33, 0.33);
-			colors["titlebar_step3"] = new Cairo.Color (0.28, 0.28, 0.28);
+			switch (style) {
+			case HUDStyle.HUD:
+				colors["focused_box"]    = new Cairo.Color (0.3, 0.3, 0.3, 0.6);
+				colors["unfocused_box"]  = new Cairo.Color (0.0, 0.0, 0.0, 0.2);
+				colors["focused_line"]   = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
+				colors["unfocused_line"] = new Cairo.Color (1.0, 1.0, 1.0, 0.2);
+				colors["focused_text"]   = new Cairo.Color (0.0, 0.0, 0.0, 0.85);
+				colors["unfocused_text"] = new Cairo.Color (0.3, 0.3, 0.3, 0.7);
+				colors["titlebar_step1"] = new Cairo.Color (0.45, 0.45, 0.45);
+				colors["titlebar_step2"] = new Cairo.Color (0.33, 0.33, 0.33);
+				colors["titlebar_step3"] = new Cairo.Color (0.28, 0.28, 0.28);
+				colors["background"]     = new Cairo.Color (.15, .15, .15, .95);
+				colors["outline"]        = new Cairo.Color (.35, .35, .35);
+				break;
+			case HUDStyle.Classic:
+				colors["focused_box"]    = new Cairo.Color (1.0, 1.0, 1.0, 0.4);
+				colors["unfocused_box"]  = new Cairo.Color (1.0, 1.0, 1.0, 0.1);
+				colors["focused_line"]   = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
+				colors["unfocused_line"] = new Cairo.Color (1.0, 1.0, 1.0, 0.2);
+				colors["focused_text"]   = new Cairo.Color (0.0, 0.0, 0.0, 0.85);
+				colors["unfocused_text"] = new Cairo.Color (0.3, 0.3, 0.3, 0.7);
+				colors["titlebar_step1"] = new Cairo.Color (0.45, 0.45, 0.45);
+				colors["titlebar_step2"] = new Cairo.Color (0.33, 0.33, 0.33);
+				colors["titlebar_step3"] = new Cairo.Color (0.28, 0.28, 0.28);
+				
+				Gdk.Color clr = BackgroundColor;
+				colors["background"]     = new Cairo.Color ((double) clr.Red/ushort.MaxValue, 
+				                                            (double) clr.Green/ushort.MaxValue, 
+				                                            (double) clr.Blue/ushort.MaxValue, .95);
+				colors["background_lt"]  = new Cairo.Color (colors["background"].R + .25, 
+				                                            colors["background"].G + .25, 
+				                                            colors["background"].B + .25, 
+				                                            .95);
+				colors["outline"] = colors["background"];
+				break;
+			}
 		}
 		
 		private bool AnimationNeeded {
@@ -318,7 +450,7 @@ namespace Do.UI
 			cr.MoveTo (x+radius, y);
 			cr.Arc (x+width-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
 			cr.LineTo (x+width, TitleBarHeight);
-			cr.LineTo (x, TitleBarHeight);
+			cr.LineTo (x, TitleBarHeight);RenderTitleText (cr);
 			cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
 		}
 		
@@ -333,16 +465,27 @@ namespace Do.UI
 			Context cr = new Context (surface);
 			cr.Save ();
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
+			
 			cr.Operator = Cairo.Operator.Source;
 			cr.Paint ();
 			
 			cr.Operator = Cairo.Operator.Over;
 			SetRoundedPath (cr, false);
-			cr.Color = new Cairo.Color (.15, .15, .15, .95);
+			switch (style) {
+			case HUDStyle.HUD:
+				cr.Color = colors["background"];
+				break;
+			case HUDStyle.Classic:
+				LinearGradient lg = new LinearGradient (0, drawing_area.Y, 0, drawing_area.Height);
+				lg.AddColorStop (0, colors["background"]);
+				lg.AddColorStop (1, colors["background_lt"]);
+				cr.Pattern = lg;
+				break;
+			}
 			cr.Fill ();
 			
 			SetRoundedPath (cr, true);
-			cr.Color = new Cairo.Color (.35, .35, .35);
+			cr.Color = colors["outline"];
 			cr.LineWidth = 1;
 			cr.Stroke ();
 			
@@ -457,13 +600,43 @@ namespace Do.UI
 		private void RenderPaneOutline (Pane pane, Context cr)
 		{
 			int offset = PaneOffset (pane);
-			cr.Rectangle (drawing_area.X + offset, WindowBorder + TitleBarHeight, BoxWidth, BoxHeight);
-			cr.Color = (Focus == pane) ? colors["focused_box"] : colors["unfocused_box"];
-			cr.Fill ();
-			cr.Rectangle (drawing_area.X + offset - .5, WindowBorder + TitleBarHeight - .5, BoxWidth + 1, BoxHeight + 1);
-			cr.Color = (Focus == pane) ? colors["focused_line"] : colors["unfocused_line"];
-			cr.LineWidth = BoxLineWidth;
-			cr.Stroke ();
+			switch (style) {
+			case HUDStyle.Classic:
+				cr.MoveTo (drawing_area.X + offset + WindowRadius, WindowBorder + TitleBarHeight);
+				cr.Arc (drawing_area.X + offset + BoxWidth - WindowRadius, 
+				        WindowBorder + TitleBarHeight + WindowRadius, 
+				        WindowRadius, 
+				        Math.PI*1.5, 
+				        Math.PI*2);
+				cr.Arc (drawing_area.X + offset + BoxWidth - WindowRadius,
+				        WindowBorder + TitleBarHeight + BoxHeight - WindowRadius,
+				        WindowRadius,
+				        0,
+				        Math.PI*.5);
+				cr.Arc (drawing_area.X + offset + WindowRadius,
+				        WindowBorder + TitleBarHeight + BoxHeight - WindowRadius,
+				        WindowRadius,
+				        Math.PI*.5,
+				        Math.PI);
+				cr.Arc (drawing_area.X + offset + WindowRadius,
+				        WindowBorder + TitleBarHeight + WindowRadius, 
+				        WindowRadius,
+				        Math.PI,
+				        Math.PI*1.5);
+				cr.Color = (Focus == pane) ? colors["focused_box"] : colors["unfocused_box"];
+				cr.Fill ();
+				break;
+			case HUDStyle.HUD:
+				cr.Rectangle (drawing_area.X + offset, WindowBorder + TitleBarHeight, BoxWidth, BoxHeight);
+				cr.Color = (Focus == pane) ? colors["focused_box"] : colors["unfocused_box"];
+				cr.Fill ();
+				cr.Rectangle (drawing_area.X + offset - .5, WindowBorder + TitleBarHeight - .5, BoxWidth + 1, BoxHeight + 1);
+				cr.Color = (Focus == pane) ? colors["focused_line"] : colors["unfocused_line"];
+				cr.LineWidth = BoxLineWidth;
+				cr.Stroke ();
+				break;
+			}
+			
 		}
 		
 		private void RenderPixbuf (Pane pane, Context cr)
@@ -555,7 +728,7 @@ namespace Do.UI
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = (ushort) (ushort.MaxValue * text_box_scale);
 			Gdk.Rectangle cursor = RenderLayoutText (cr, Context.GetPaneQuery (Focus), 
-			                                         drawing_area.X + 10, TitleBarHeight + 5, 
+			                                         drawing_area.X + 10, TextModeOffset + 5, 
 			                                         drawing_area.Width - 20, color, 
 			                                         Pango.Alignment.Left, Pango.EllipsizeMode.None);
 			
@@ -633,8 +806,8 @@ namespace Do.UI
 		
 		void RenderTextModeOverlay (Context cr) 
 		{
-			cr.Rectangle (drawing_area.X, drawing_area.Y + TitleBarHeight, drawing_area.Width,
-			              (WindowHeight - TitleBarHeight - 10)); 
+			cr.Rectangle (drawing_area.X, drawing_area.Y + TextModeOffset, drawing_area.Width,
+			              (WindowHeight - TextModeOffset - WindowRadius)); 
 			cr.Color = new Cairo.Color (colors["focused_text"].R, 
 			                            colors["focused_text"].G, 
 			                            colors["focused_text"].B, 
@@ -649,44 +822,72 @@ namespace Do.UI
 				Surface surface = cr.Target.CreateSimilar (cr.Target.Content, TwoPaneWidth, TitleBarHeight);
 				Context cr2 = new Context (surface);
 				
-				SetTitlePath (cr2);
-				cr2.Operator = Cairo.Operator.Source;
-				LinearGradient title_grad = new LinearGradient (0, 0, 0, TitleBarHeight);
-				title_grad.AddColorStop (0.0, colors["titlebar_step1"]);
-				title_grad.AddColorStop (0.5, colors["titlebar_step2"]);
-				title_grad.AddColorStop (0.5, colors["titlebar_step3"]);
-				cr2.Pattern = title_grad;
-				cr2.FillPreserve ();
-				cr2.Operator = Cairo.Operator.Over;
-			
-				LinearGradient grad = new LinearGradient (0, 0, 0, TitleBarHeight);
-				grad.AddColorStop (0, new Cairo.Color (1, 1, 1, .6));
-				grad.AddColorStop (.6, new Cairo.Color (1, 1, 1, 0));
-				cr2.Pattern = grad;
-				cr2.LineWidth = 1;
-				cr2.Stroke ();
-			
-				RenderDownCircle (cr2);
-				RenderCloseCircle (cr2);
+				if (style == HUDStyle.HUD) {
+					SetTitlePath (cr2);
+					cr2.Operator = Cairo.Operator.Source;
+					LinearGradient title_grad = new LinearGradient (0, 0, 0, TitleBarHeight);
+					title_grad.AddColorStop (0.0, colors["titlebar_step1"]);
+					title_grad.AddColorStop (0.5, colors["titlebar_step2"]);
+					title_grad.AddColorStop (0.5, colors["titlebar_step3"]);
+					cr2.Pattern = title_grad;
+					cr2.FillPreserve ();
+					cr2.Operator = Cairo.Operator.Over;
+				
+					LinearGradient grad = new LinearGradient (0, 0, 0, TitleBarHeight);
+					grad.AddColorStop (0, new Cairo.Color (1, 1, 1, .6));
+					grad.AddColorStop (.6, new Cairo.Color (1, 1, 1, 0));
+					cr2.Pattern = grad;
+					cr2.LineWidth = 1;
+					cr2.Stroke ();
+				
+					RenderDownCircle (cr2);
+					RenderCloseCircle (cr2);
+				} else if (style == HUDStyle.Classic) {
+					//add code to render arrow
+				}
 				
 				border_buffer = surface;
 				(cr2 as IDisposable).Dispose ();
 			}
 			
-			if (drawing_area.Width == TwoPaneWidth) {
-				cr.SetSource (border_buffer, drawing_area.X, drawing_area.Y);
-				cr.Rectangle (drawing_area.X, drawing_area.Y, drawing_area.Width, TitleBarHeight);
+			switch (style) {
+			case HUDStyle.HUD:
+				if (drawing_area.Width == TwoPaneWidth) {
+					cr.SetSource (border_buffer, drawing_area.X, drawing_area.Y);
+					cr.Rectangle (drawing_area.X, drawing_area.Y, drawing_area.Width, TitleBarHeight);
+					cr.Fill ();
+				} else {
+					cr.SetSource (border_buffer, drawing_area.X, drawing_area.Y);
+					cr.Rectangle (drawing_area.X, drawing_area.Y, 200, TitleBarHeight);
+					cr.Fill ();
+					
+					cr.SetSource (border_buffer, drawing_area.X + drawing_area.Width - TwoPaneWidth, drawing_area.Y);
+					cr.Rectangle (drawing_area.X + 200, drawing_area.Y, drawing_area.Width - 200, TitleBarHeight);
+					cr.Fill ();
+				}
+				RenderTitleText (cr);
+				break;
+			case HUDStyle.Classic:
+				int radius = WindowRadius;
+				double x = drawing_area.X;
+				double y = drawing_area.Y;
+				double h = drawing_area.Height;
+				double w = drawing_area.Width;
+
+				cr.MoveTo (x+radius, y);
+				cr.Arc (x+w-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
+				cr.LineTo (x+w, y+100);
+				cr.CurveTo (x+2*(w/3), y+65, 
+				            x+(w/3), y+65,
+				            x, y+100);
+				cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
+				LinearGradient lg = new LinearGradient (x, y, x, y+100);
+				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .2));
+				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .5));
+				cr.Pattern = lg;
 				cr.Fill ();
-			} else {
-				cr.SetSource (border_buffer, drawing_area.X, drawing_area.Y);
-				cr.Rectangle (drawing_area.X, drawing_area.Y, 200, TitleBarHeight);
-				cr.Fill ();
-				
-				cr.SetSource (border_buffer, drawing_area.X + drawing_area.Width - TwoPaneWidth, drawing_area.Y);
-				cr.Rectangle (drawing_area.X + 200, drawing_area.Y, drawing_area.Width - 200, TitleBarHeight);
-				cr.Fill ();
+				break;
 			}
-			RenderTitleText (cr);
 		}
 		
 		public PointLocation GetPointLocation (Gdk.Point point)

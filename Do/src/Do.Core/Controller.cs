@@ -140,7 +140,7 @@ namespace Do.Core {
 					window = new ShowCase (this);
 					break;
 				case "HUD":
-					window = new Bezel (this);
+					window = new Bezel (this, HUDStyle.HUD);
 					break;
 				default:
 					window = new ClassicWindow (this);

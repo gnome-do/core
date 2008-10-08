@@ -33,6 +33,7 @@ namespace Do.UI
 	
 	public class BezelGlassResults : Gtk.DrawingArea
 	{
+		HUDStyle style;
 		
 		const int SurfaceHeight = 20;
 		const int IconSize = 16;
@@ -168,8 +169,10 @@ namespace Do.UI
 			}
 		}
 		
-		public BezelGlassResults(int numberResults, int width) : base ()
+		public BezelGlassResults(int numberResults, int width, HUDStyle style) : base ()
 		{
+			this.style = style;
+			
 			num_results = numberResults;
 			surface_buffer = new Dictionary <IObject,Surface> ();
 			

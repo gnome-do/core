@@ -36,14 +36,16 @@ namespace Do.UI
 		BezelGlassResults bgr;
 		IDoController controller;
 		PositionWindow pw;
+		HUDStyle style;
 		
 		public Pane CurrentPane {
 			get { return bda.Focus; }
 			set { bda.Focus = value; }
 		}
 		
-		public Bezel(IDoController controller) : base (Gtk.WindowType.Toplevel)
+		public Bezel(IDoController controller, HUDStyle style) : base (Gtk.WindowType.Toplevel)
 		{
+			this.style = style;
 			this.controller = controller;
 			Build ();
 		}
@@ -59,11 +61,11 @@ namespace Do.UI
 			
 			VBox vbox = new VBox ();
 			
-			bda = new BezelDrawingArea ();
+			bda = new BezelDrawingArea (style);
 			vbox.PackStart (bda, true, true, 0);
 			bda.Show ();
 			
-			bgr = new BezelGlassResults (8, 340);
+			bgr = new BezelGlassResults (8, 340, style);
 			vbox.PackStart (bgr, true, true, 0);
 			bgr.Show ();
 	
