@@ -52,6 +52,7 @@ namespace Do.UI
 		
 		IObject[] results;
 		
+		
 		public IObject[] Results {
 			get {
 				return results;

@@ -40,7 +40,7 @@ namespace Do.UI
 		const int FadeTime = 100;
 		
 		int num_results;
-		int width, height, x;
+		int width, height;
 		int border_width, top_border_width, bottom_border_width;
 		Dictionary <IObject, Surface> surface_buffer;
 		Surface highlight_surface, backbuffer, child_inout_surface, triplebuffer, background;
@@ -54,6 +54,38 @@ namespace Do.UI
 		IUIContext context = null;
 		
 		IObject[] results;
+
+		public int X { get; set; }
+
+		private Cairo.Color BackgroundColor
+		{
+			get {
+				if (style != HUDStyle.Classic)
+					return new Cairo.Color (0, 0, 0, .8);
+				byte r, g, b;
+				Gdk.Color bgColor;
+
+				using (Gtk.Style g_style = Gtk.Rc.GetStyle (this)) {
+					bgColor = g_style.Backgrounds[(int) StateType.Selected];
+				}
+				r = (byte) ((bgColor.Red) >> 8);
+				g = (byte) ((bgColor.Green) >> 8);
+				b = (byte) ((bgColor.Blue) >> 8);
+				
+				// Useful for making overbright themes less ugly. Still trying
+				// to find a happy balance between 50 and 90...
+				byte maxLum = 70;
+				double hue, sat, val;
+				Addins.Util.Appearance.RGBToHSV(r, g, b, out hue, 
+				                                out sat, out val);
+				val = Math.Min (val, maxLum);
+				
+				Addins.Util.Appearance.HSVToRGB(hue, sat, val, out r,
+				                                out g, out b);
+				
+				return new Cairo.Color ((double) r/byte.MaxValue, (double) g/byte.MaxValue, (double) b/byte.MaxValue, .9);
+			}
+		}				
 		
 		public IObject[] Results {
 			get {
@@ -176,7 +208,7 @@ namespace Do.UI
 			num_results = numberResults;
 			surface_buffer = new Dictionary <IObject,Surface> ();
 			
-			x=105;
+			X=105;
 			border_width = 12;
 			bottom_border_width = 25;
 			top_border_width = 20;
@@ -275,7 +307,7 @@ namespace Do.UI
 			
 			DrawContextOnSurface (backbuffer);
 			if (child_scroll_offset == 0) {
-				cr.SetSource (backbuffer, x, -(height*(1-slide_offset)));
+				cr.SetSource (backbuffer, X, -(height*(1-slide_offset)));
 				cr.Operator = Operator.Source;
 				cr.Paint ();
 			} else {
@@ -294,7 +326,7 @@ namespace Do.UI
 				
 				DrawSlideContexts (child_inout_surface, backbuffer, triplebuffer, old_x, new_x);
 
-				cr.SetSource (triplebuffer, x, -(height*(1-slide_offset)));
+				cr.SetSource (triplebuffer, X, -(height*(1-slide_offset)));
 				cr.Operator = Operator.Source;
 				cr.Paint ();
 			}
@@ -356,17 +388,21 @@ namespace Do.UI
 		/// </param>
 		private void DrawHeaderOnContext (Context cr, int radius)
 		{
-			cr.MoveTo (0 + radius, 0);
-			cr.Arc (0 + width - radius, 0 + radius, radius, Math.PI*1.5, Math.PI*2);
-			cr.LineTo (0 + width, 0 + top_border_width);
-			cr.LineTo (0, 0 + top_border_width);
-			cr.Arc (0 + radius, 0 + radius, radius, Math.PI, Math.PI*1.5);
-			LinearGradient title_grad = new LinearGradient (0, 0, 0, top_border_width);
-			title_grad.AddColorStop (0.0, new Cairo.Color (0.45, 0.45, 0.45));
-			title_grad.AddColorStop (0.5, new Cairo.Color (0.33, 0.33, 0.33));
-			title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
-			cr.Pattern = title_grad;
-			cr.Fill ();
+			switch (style) {
+			case HUDStyle.HUD:
+				cr.MoveTo (0 + radius, 0);
+				cr.Arc (0 + width - radius, 0 + radius, radius, Math.PI*1.5, Math.PI*2);
+				cr.LineTo (0 + width, 0 + top_border_width);
+				cr.LineTo (0, 0 + top_border_width);
+				cr.Arc (0 + radius, 0 + radius, radius, Math.PI, Math.PI*1.5);
+				LinearGradient title_grad = new LinearGradient (0, 0, 0, top_border_width);
+				title_grad.AddColorStop (0.0, new Cairo.Color (0.45, 0.45, 0.45));
+				title_grad.AddColorStop (0.5, new Cairo.Color (0.33, 0.33, 0.33));
+				title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
+				cr.Pattern = title_grad;
+				cr.Fill ();
+				break;
+			}
 		}
 		
 		/// <summary>
@@ -381,6 +417,8 @@ namespace Do.UI
 		/// </param>
 		private void DrawFooterOnContext (Context cr, int radius)
 		{
+			if (style == HUDStyle.Classic)
+				return;
 			cr.MoveTo (.5, height-bottom_border_width+.5);
 			cr.LineTo (width-1, height-bottom_border_width+.5);
 			cr.Arc (width-radius-.5, height-radius-.5, radius, 0, Math.PI*.5);
@@ -416,7 +454,7 @@ namespace Do.UI
 			cr.Arc (0.5+c_size, height-c_size-0.5, c_size, Math.PI*.5, Math.PI);
 			cr.Arc (0.5+c_size, c_size-1, c_size, Math.PI, Math.PI*1.5);
 			cr.ClosePath ();
-			cr.Color = new Cairo.Color (0, 0, 0, .8);
+			cr.Color = BackgroundColor;
 			cr.FillPreserve ();
 			
 			cr.LineWidth = 1;
@@ -580,8 +618,8 @@ namespace Do.UI
 				Context cr2 = new Context (highlight_surface);
 				LinearGradient grad = new LinearGradient (0, 0, 0, SurfaceHeight);
 				
-				grad.AddColorStop (0, new Cairo.Color (.35, .35, .35, .5));
-				grad.AddColorStop (1, new Cairo.Color (.55, .55, .55, .5));
+				grad.AddColorStop (0, new Cairo.Color (.85, .85, .85, .2));
+				grad.AddColorStop (1, new Cairo.Color (.95, .95, .95, .2));
 				
 				cr2.Pattern = grad;
 				double radius=(SurfaceHeight-2)/2;
@@ -602,7 +640,7 @@ namespace Do.UI
 				cr2.FillPreserve ();
 				
 				cr2.LineWidth = 1;
-				cr2.Color = new Cairo.Color (0.7, 0.7, 0.7, 1);
+				cr2.Color = new Cairo.Color (0.9, 0.9, 0.9, 1);
 				cr2.Stroke ();
 				
 				(cr as IDisposable).Dispose ();

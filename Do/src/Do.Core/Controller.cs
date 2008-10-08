@@ -137,7 +137,7 @@ namespace Do.Core {
 					window = new GlassWindow (this);
 					break;
 				case "ShowCase":
-					window = new ShowCase (this);
+					window = new Bezel (this, HUDStyle.Classic);
 					break;
 				case "HUD":
 					window = new Bezel (this, HUDStyle.HUD);

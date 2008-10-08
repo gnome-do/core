@@ -84,7 +84,7 @@ namespace Do.UI
 			} 
 		}
 
-		int WindowWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 3); } }
+		public int WindowWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 3); } }
 		
 		int TwoPaneWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2); } }
 		
