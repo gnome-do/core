@@ -41,7 +41,7 @@ namespace Do.UI
 		
 		int num_results;
 		int width, height;
-		int border_width, top_border_width, bottom_border_width;
+		int border_width, top_border_width;
 		Dictionary <IObject, Surface> surface_buffer;
 		Surface highlight_surface, backbuffer, child_inout_surface, triplebuffer, background;
 		
@@ -56,6 +56,19 @@ namespace Do.UI
 		IObject[] results;
 
 		public int X { get; set; }
+		
+		int BottomBorderWidth {
+			get {
+				switch (style) {
+				case HUDStyle.HUD:
+					return 25;
+				case HUDStyle.Classic:
+					return 20;
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+		}
 
 		private Cairo.Color BackgroundColor
 		{
@@ -223,10 +236,9 @@ namespace Do.UI
 			
 			X=105;
 			border_width = 12;
-			bottom_border_width = 25;
 			top_border_width = 20;
 			this.width = width;
-			height = num_results * SurfaceHeight + top_border_width + bottom_border_width;
+			height = num_results * SurfaceHeight + top_border_width + BottomBorderWidth;
 			SetSizeRequest (width, height);
 			
 			DoubleBuffered = false;
@@ -374,11 +386,11 @@ namespace Do.UI
 			// redraw our top and bottom border separately.  This makes the slide only appear to affect
 			// the center.
 			cr.Rectangle (0, 0, width, top_border_width);
-			cr.Rectangle (0, height-bottom_border_width, width, bottom_border_width);
+			cr.Rectangle (0, height-BottomBorderWidth, width, BottomBorderWidth);
 			cr.SetSource (new_surface, 0, 0);
 			cr.Fill ();
 			
-			cr.Rectangle (0, top_border_width, width, height-top_border_width-bottom_border_width);
+			cr.Rectangle (0, top_border_width, width, height-top_border_width-BottomBorderWidth);
 			cr.SetSource (old_surface, old_x, 0);
 			cr.FillPreserve ();
 			
@@ -442,18 +454,32 @@ namespace Do.UI
 		/// </param>
 		private void DrawFooterOnContext (Context cr, int radius)
 		{
-			if (style == HUDStyle.Classic)
-				return;
-			cr.MoveTo (.5, height-bottom_border_width+.5);
-			cr.LineTo (width-1, height-bottom_border_width+.5);
-			cr.Arc (width-radius-.5, height-radius-.5, radius, 0, Math.PI*.5);
-			cr.Arc (radius+.5, height-radius-.5, radius, Math.PI*.5, Math.PI);
-			cr.ClosePath ();
-			cr.Color = new Cairo.Color (.22, .22, .22, 1);
-			cr.FillPreserve ();
-			cr.LineWidth=1;
-			cr.Color = new Cairo.Color (.6, .6, .6, .4);
-			cr.Stroke ();
+			switch (style) {
+			case HUDStyle.HUD:
+				cr.MoveTo (.5, height-BottomBorderWidth+.5);
+				cr.LineTo (width-1, height-BottomBorderWidth+.5);
+				cr.Arc (width-radius-.5, height-radius-.5, radius, 0, Math.PI*.5);
+				cr.Arc (radius+.5, height-radius-.5, radius, Math.PI*.5, Math.PI);
+				cr.ClosePath ();
+				cr.Color = new Cairo.Color (.22, .22, .22, 1);
+				cr.FillPreserve ();
+				cr.LineWidth=1;
+				cr.Color = new Cairo.Color (.6, .6, .6, .4);
+				cr.Stroke ();
+				break;
+			case HUDStyle.Classic:
+				cr.Rectangle (.5, height-BottomBorderWidth+.5, width-1, BottomBorderWidth-1);
+				LinearGradient title_grad1 = new LinearGradient (0, height-BottomBorderWidth, 0, height);
+				title_grad1.AddColorStop (0, new Cairo.Color (0.95, 0.95, 0.95));
+				title_grad1.AddColorStop (1, new Cairo.Color (0.75, 0.75, 0.75));
+				cr.Pattern = title_grad1;
+				cr.FillPreserve ();
+				
+				cr.LineWidth = 1;
+				cr.Color = new Cairo.Color (0.4, 0.4, 0.4);
+				cr.Stroke ();
+				break;
+			}
 		}
 		
 		/// <summary>
@@ -495,11 +521,11 @@ namespace Do.UI
 			DrawFooterOnContext (cr, c_size);
 			
 			cr.MoveTo (border_width + .5, top_border_width);
-			cr.LineTo (border_width + .5, height-bottom_border_width);
+			cr.LineTo (border_width + .5, height-BottomBorderWidth);
 			cr.MoveTo (width - border_width - .5, top_border_width);
-			cr.LineTo (width - border_width - .5, height-bottom_border_width);
-			cr.MoveTo (0, height-bottom_border_width-.5);
-			cr.LineTo (width, height-bottom_border_width-.5);
+			cr.LineTo (width - border_width - .5, height-BottomBorderWidth);
+			cr.MoveTo (0, height-BottomBorderWidth-.5);
+			cr.LineTo (width, height-BottomBorderWidth-.5);
 			
 			cr.LineWidth = 1;
 			cr.Color = new Cairo.Color (.6, .6, .6, .15);
@@ -539,7 +565,7 @@ namespace Do.UI
 					render_string += context.ParentContext.Selection.Name + " ▸ ";
 				}
 				
-				RenderText (cr, new Gdk.Rectangle (10, height-21, width-20, 20), 11, render_string);
+				RenderText (cr, new Gdk.Rectangle (10, height-BottomBorderWidth+3, width-20, 20), 11, render_string);
 				int start_result = StartResult-(int) Math.Ceiling (scroll_offset);
 				RenderHighlight (cr);
 				for (int i = start_result; i < start_result+num_results+1 && i < Results.Length; i++) {
@@ -619,7 +645,16 @@ namespace Do.UI
 		
 		void RenderText (Context cr, Gdk.Rectangle region, int size, string text)
 		{
-			RenderText (cr, region, size, text, "ffffff");
+			switch (style) {
+			case HUDStyle.HUD:
+				RenderText (cr, region, size, text, "ffffff");
+				break;
+			case HUDStyle.Classic:
+				RenderText (cr, region, size, text, "333333");
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
 		}
 		
 		void RenderText (Context cr, Gdk.Rectangle region, int size, string text, string color_string)
@@ -683,7 +718,7 @@ namespace Do.UI
 				BufferItem (Results[item]);
 			}
 			
-			cr.Rectangle (border_width, top_border_width, InternalWidth, height-top_border_width-bottom_border_width);
+			cr.Rectangle (border_width, top_border_width, InternalWidth, height-top_border_width-BottomBorderWidth);
 			cr.Clip ();
 			
 			cr.Rectangle (border_width, offset+(item-StartResult)*SurfaceHeight, InternalWidth, SurfaceHeight);
