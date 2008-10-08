@@ -73,32 +73,29 @@ namespace Do.UI
 		private Cairo.Color BackgroundColor
 		{
 			get {
-				if (style != HUDStyle.Classic)
+				switch (style) {
+				case HUDStyle.HUD:
 					return new Cairo.Color (0, 0, 0, .8);
-				byte r, g, b;
-				Gdk.Color bgColor;
-
-				using (Gtk.Style g_style = Gtk.Rc.GetStyle (this)) {
-					bgColor = g_style.Backgrounds[(int) StateType.Selected];
+				case HUDStyle.Classic:
+					return new Cairo.Color (1, 1, 1);
+				default:
+					throw new NotImplementedException ();
 				}
-				r = (byte) ((bgColor.Red) >> 8);
-				g = (byte) ((bgColor.Green) >> 8);
-				b = (byte) ((bgColor.Blue) >> 8);
-				
-				// Useful for making overbright themes less ugly. Still trying
-				// to find a happy balance between 50 and 90...
-				byte maxLum = 70;
-				double hue, sat, val;
-				Addins.Util.Appearance.RGBToHSV(r, g, b, out hue, 
-				                                out sat, out val);
-				val = Math.Min (val, maxLum);
-				
-				Addins.Util.Appearance.HSVToRGB(hue, sat, val, out r,
-				                                out g, out b);
-				
-				return new Cairo.Color ((double) r/byte.MaxValue, (double) g/byte.MaxValue, (double) b/byte.MaxValue, .9);
 			}
 		}				
+		
+		string ItemTextColor {
+			get {
+				switch (style) {
+				case HUDStyle.HUD:
+					return "ffffff";
+				case HUDStyle.Classic:
+					return "333333";
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+		}
 		
 		string QueryColor {
 			get {
@@ -629,7 +626,7 @@ namespace Do.UI
 			Pango.Layout layout = new Pango.Layout (this.PangoContext);
 			layout.Width = Pango.Units.FromPixels (InternalWidth - IconSize - 10);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
-			layout.SetMarkup ("<span foreground=\"#ffffff\">"+item.Name+"</span>");
+			layout.SetMarkup ("<span foreground=\"#" + ItemTextColor + "\">"+item.Name+"</span>");
 			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (10);
 				
