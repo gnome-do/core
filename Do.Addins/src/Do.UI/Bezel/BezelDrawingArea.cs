@@ -800,7 +800,10 @@ namespace Do.UI
 		void RenderTitleText (Context cr) {
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
-			RenderLayoutText (cr, "GNOME Do", 0, 5, WindowWidth, color, 
+			string s = "GNOME Do";
+			if (DateTime.Now.Day == 25 && DateTime.Now.Month == 12)
+				s = "Merry Christmas!!!";
+			RenderLayoutText (cr, s, 0, 5, WindowWidth, color, 
 			                  Pango.Alignment.Center, Pango.EllipsizeMode.End);
 		}
 		
