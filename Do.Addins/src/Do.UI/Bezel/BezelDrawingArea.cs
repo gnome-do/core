@@ -885,8 +885,8 @@ namespace Do.UI
 				            x, y+100);
 				cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
 				LinearGradient lg = new LinearGradient (x, y, x, y+100);
-				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .2));
-				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .5));
+				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .1));
+				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .35));
 				cr.Pattern = lg;
 				cr.Fill ();
 				break;
