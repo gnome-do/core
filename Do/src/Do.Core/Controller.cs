@@ -817,6 +817,10 @@ namespace Do.Core {
 			if (!IsSummonable) return;
 
 			if (th != null && th.IsAlive) {
+				Thread.Sleep (100);
+			}
+			
+			if (th != null && th.IsAlive) {
 				NotificationIcon.SendNotification ("Do Error:", "A previous action is still " + 
 				                                   "running.  Please wait for this action to " +
 				                                   "finish running");
