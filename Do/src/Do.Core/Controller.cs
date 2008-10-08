@@ -426,8 +426,11 @@ namespace Do.Core {
 		{
 			if (CurrentContext.Results.Length > 0) {
 				if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Right) {
-					if (CurrentContext.ItemChildSearch ())
+					IObject tmp = CurrentContext.Selection;
+					if (CurrentContext.ItemChildSearch ()) {
+						(tmp as DoObject).IncreaseRelevance ("", null);
 						GrowResults ();
+					}
 				} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Left) {
 					if (CurrentContext.ItemParentSearch ())
 						GrowResults ();
