@@ -809,13 +809,27 @@ namespace Do.UI
 		
 		void RenderTextModeOverlay (Context cr) 
 		{
-			cr.Rectangle (drawing_area.X, drawing_area.Y + TextModeOffset, drawing_area.Width,
-			              (WindowHeight - TextModeOffset - WindowRadius)); 
-			cr.Color = new Cairo.Color (colors["focused_text"].R, 
-			                            colors["focused_text"].G, 
-			                            colors["focused_text"].B, 
-			                            colors["focused_text"].A * text_box_scale);
-			cr.Fill ();
+			switch (style) {
+			case HUDStyle.HUD:
+				cr.Rectangle (drawing_area.X, drawing_area.Y + TextModeOffset, drawing_area.Width,
+				              (WindowHeight - TextModeOffset - WindowRadius)); 
+				cr.Color = new Cairo.Color (colors["focused_text"].R, 
+				                            colors["focused_text"].G, 
+				                            colors["focused_text"].B, 
+				                            colors["focused_text"].A * text_box_scale);
+				cr.Fill ();
+				break;
+			case HUDStyle.Classic:
+				SetRoundedPath (cr, false);
+				cr.Color = new Cairo.Color (colors["focused_text"].R, 
+				                            colors["focused_text"].G, 
+				                            colors["focused_text"].B, 
+				                            colors["focused_text"].A * text_box_scale);
+				cr.Fill ();
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
 		}
 		
 		void RenderTitleBar (Context cr)
