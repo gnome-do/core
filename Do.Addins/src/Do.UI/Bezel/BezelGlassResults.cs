@@ -711,7 +711,11 @@ namespace Do.UI
 					break;
 				case HUDStyle.Classic:
 					cr2.Rectangle (1, 0, width-2, SurfaceHeight);
-					cr2.Color = new Cairo.Color (.8, .9, 1, .8);
+					Gdk.Color gdkColor;
+					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
+						gdkColor = rcstyle.Backgrounds[(int) StateType.Selected];
+					}
+					cr2.Color = Util.Appearance.ConvertToCairo (gdkColor, .8);
 					cr2.Fill ();
 					break;
 				}
