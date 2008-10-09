@@ -77,7 +77,11 @@ namespace Do.UI
 				case HUDStyle.HUD:
 					return new Cairo.Color (0, 0, 0, .8);
 				case HUDStyle.Classic:
-					return new Cairo.Color (1, 1, 1);
+					Gdk.Color bgColor;
+					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
+						bgColor = rcstyle.BaseColors[(int) StateType.Normal];
+					}
+					return Util.Appearance.ConvertToCairo (bgColor, 1);
 				default:
 					throw new NotImplementedException ();
 				}
@@ -90,7 +94,11 @@ namespace Do.UI
 				case HUDStyle.HUD:
 					return "ffffff";
 				case HUDStyle.Classic:
-					return "333333";
+					Gdk.Color bgColor;
+					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
+						bgColor = rcstyle.Foregrounds[(int) StateType.Normal];
+					}
+					return Util.Appearance.ColorToHexString (bgColor);
 				default:
 					throw new NotImplementedException ();
 				}

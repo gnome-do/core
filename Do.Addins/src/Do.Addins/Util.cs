@@ -79,7 +79,7 @@ namespace Do.Addins
 				val = max / 255.0 * 100.0;
 				
 				if (Math.Abs (delta) < 0.0001) {
-					val = 0;
+//					val = 0;
 					sat = 0;
 				} else {
 					sat = (delta / max) * 100;
@@ -118,7 +118,7 @@ namespace Do.Addins
 					p = v * (1 - s);
 					q = v * (1 - s*fracSec);
 					t = v * (1 - s*(1 - fracSec));
-
+					
 					switch (secNum) {
 						case 0:
 							r = v;
@@ -252,6 +252,16 @@ namespace Do.Addins
 				HSVToRGB (h, s, v, out r, out g, out b);
 				
 				return new Gdk.Color (r, g, b);
+			}
+			
+			public static string ColorToHexString (Gdk.Color gdk_color)
+			{
+				byte r, g, b;
+				r = (byte) ((gdk_color.Red)   >> 8);
+				g = (byte) ((gdk_color.Green) >> 8);
+				b = (byte) ((gdk_color.Blue)  >> 8);
+				
+				return string.Format ("{0:X}{1:X}{2:X}", r, g, b);
 			}
 		}
 	}
