@@ -50,6 +50,7 @@ namespace Do.UI
 		int cursor, prev_cursor, delta;
 		uint timer, delta_reset;
 		bool visible;
+		int[] secondary;
 		
 		IUIContext context = null;
 		
@@ -220,7 +221,7 @@ namespace Do.UI
 				
 				Cursor = value.Cursor;
 				Results = value.Results;
-//				secondary = value.SecondaryCursors;
+				Secondary = value.SecondaryCursors;
 				if (visible)
 					Draw ();
 			}
@@ -231,6 +232,18 @@ namespace Do.UI
 				return width - 2*border_width;
 			}
 		}
+
+		public int[] Secondary {
+			get {
+				return secondary;
+			}
+			set {
+				if (value == secondary)
+					return;
+				surface_buffer.Clear ();
+				secondary = value;
+			}
+		}
 		
 		public BezelGlassResults(int numberResults, int width, HUDStyle style) : base ()
 		{
@@ -238,7 +251,7 @@ namespace Do.UI
 			
 			num_results = numberResults;
 			surface_buffer = new Dictionary <IObject,Surface> ();
-			
+			Secondary = new int[0];
 			X=105;
 			border_width = 12;
 			top_border_width = 20;
@@ -630,6 +643,16 @@ namespace Do.UI
 			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.Icon, IconSize);
 			Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 2, 2);
 			cr2.Paint ();
+			
+			pixbuf.Dispose ();
+			
+			foreach (int i in Secondary) {
+				if (results[i] == item) {
+					pixbuf = IconProvider.PixbufFromIconName ("gtk-add", IconSize);
+					Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 2, 2);
+					cr2.PaintWithAlpha (.5);
+				}
+			}
 				
 			Pango.Layout layout = new Pango.Layout (this.PangoContext);
 			layout.Width = Pango.Units.FromPixels (InternalWidth - IconSize - 10);
