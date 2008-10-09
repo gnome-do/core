@@ -457,24 +457,27 @@ namespace Do.UI
 			cr.Paint ();
 			
 			cr.Operator = Cairo.Operator.Over;
-			SetRoundedPath (cr, false);
+			
 			switch (style) {
 			case HUDStyle.HUD:
+				SetRoundedPath (cr, false);
 				cr.Color = colors["background"];
+				cr.Fill ();
+				
+				SetRoundedPath (cr, true);
+				cr.Color = colors["outline"];
+				cr.LineWidth = 1;
+				cr.Stroke ();
 				break;
 			case HUDStyle.Classic:
+				SetRoundedPath (cr, false);
 				LinearGradient lg = new LinearGradient (0, drawing_area.Y, 0, drawing_area.Height);
 				lg.AddColorStop (0, colors["background_dk"]);
 				lg.AddColorStop (1, colors["background_lt"]);
 				cr.Pattern = lg;
+				cr.Fill ();
 				break;
 			}
-			cr.Fill ();
-			
-			SetRoundedPath (cr, true);
-			cr.Color = colors["outline"];
-			cr.LineWidth = 1;
-			cr.Stroke ();
 			
 			RenderTitleBar (cr);
 			
