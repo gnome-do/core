@@ -93,7 +93,7 @@ namespace Do.UI
 				case HUDStyle.HUD:
 					return "<span foreground=\"#5599ff\">{0}</span>";
 				case HUDStyle.Classic:
-					return "<span foreground=\"#99ddff\">{0}</span>";
+					return "<span underline=\"single\">{0}</span>";
 				default:
 					throw new NotImplementedException ();
 				}
