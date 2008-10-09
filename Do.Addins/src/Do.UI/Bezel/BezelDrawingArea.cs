@@ -914,16 +914,37 @@ namespace Do.UI
 				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .25));
 				cr.Pattern = lg;
 				cr.Fill ();
+
+				cr.MoveTo (x + w - 30, y + 7);
+				cr.LineTo (x + w - 20,  y + 7);
+				cr.LineTo (x + w - 25, y + 12);
+				cr.Color = new Cairo.Color (1, 1, 1, .95);
+				cr.Fill ();
+				
 				break;
 			}
 		}
 		
 		public PointLocation GetPointLocation (Gdk.Point point)
 		{
-			Gdk.Rectangle close_circle = new Gdk.Rectangle (drawing_area.X + 6, drawing_area.Y + 2,
-			                                                12, 15);
-			Gdk.Rectangle pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - 18, 
-			                                               drawing_area.Y + 2, 12, 15);
+			Gdk.Rectangle close_circle, pref_circle;
+
+			switch (style) {
+			case HUDStyle.HUD:
+				close_circle = new Gdk.Rectangle (drawing_area.X + 6, drawing_area.Y + 2,
+				                                  12, 15);
+				pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - 18, 
+				                                 drawing_area.Y + 2, 12, 15);
+				break;
+			case HUDStyle.Classic:
+				close_circle = new Gdk.Rectangle ();
+				pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - 32,
+				                                 drawing_area.Y +5, 15, 15);
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+			
 			if (!drawing_area.Contains (point))
 				return PointLocation.Outside;
 			if (close_circle.Contains (point))
