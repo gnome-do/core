@@ -446,16 +446,16 @@ namespace Do.UI
 				cr.Fill ();
 				break;
 			case HUDStyle.Classic:
-				cr.Rectangle (0.5, -0.5, width-1, top_border_width);
+				cr.Rectangle (0, 0, width, top_border_width);
 				LinearGradient title_grad1 = new LinearGradient (0, 0, 0, top_border_width);
 				title_grad1.AddColorStop (0, new Cairo.Color (0.95, 0.95, 0.95));
 				title_grad1.AddColorStop (1, new Cairo.Color (0.75, 0.75, 0.75));
 				cr.Pattern = title_grad1;
-				cr.FillPreserve ();
+				cr.Fill ();
 				
-				cr.LineWidth = 1;
-				cr.Color = new Cairo.Color (0.4, 0.4, 0.4);
-				cr.Stroke ();
+//				cr.LineWidth = 1;
+//				cr.Color = new Cairo.Color (0.4, 0.4, 0.4);
+//				cr.Stroke ();
 				break;
 			}
 		}
@@ -486,16 +486,13 @@ namespace Do.UI
 				cr.Stroke ();
 				break;
 			case HUDStyle.Classic:
-				cr.Rectangle (.5, height-BottomBorderWidth+.5, width-1, BottomBorderWidth-1);
+				cr.Rectangle (0, height-BottomBorderWidth, width, BottomBorderWidth);
 				LinearGradient title_grad1 = new LinearGradient (0, height-BottomBorderWidth, 0, height);
 				title_grad1.AddColorStop (0, new Cairo.Color (0.95, 0.95, 0.95));
 				title_grad1.AddColorStop (1, new Cairo.Color (0.75, 0.75, 0.75));
 				cr.Pattern = title_grad1;
-				cr.FillPreserve ();
+				cr.Fill ();
 				
-				cr.LineWidth = 1;
-				cr.Color = new Cairo.Color (0.4, 0.4, 0.4);
-				cr.Stroke ();
 				break;
 			}
 		}
@@ -517,18 +514,27 @@ namespace Do.UI
 			int c_size = border_width - 2;
 			
 			//Draw rounded rectange around whole border
-			cr.MoveTo (0.5+c_size, -1);
-			cr.Arc (width-c_size-0.5, c_size-1, c_size, Math.PI*1.5, Math.PI*2);
-			cr.Arc (width-0.5-c_size, height-c_size-0.5, c_size, 0, Math.PI*.5);
-			cr.Arc (0.5+c_size, height-c_size-0.5, c_size, Math.PI*.5, Math.PI);
-			cr.Arc (0.5+c_size, c_size-1, c_size, Math.PI, Math.PI*1.5);
-			cr.ClosePath ();
-			cr.Color = BackgroundColor;
-			cr.FillPreserve ();
-			
-			cr.LineWidth = 1;
-			cr.Color = new Cairo.Color (.3, .3, .3, 1);
-			cr.Stroke ();
+			switch (style) {
+			case HUDStyle.HUD:
+				cr.MoveTo (0.5+c_size, -1);
+				cr.Arc (width-c_size-0.5, c_size-1, c_size, Math.PI*1.5, Math.PI*2);
+				cr.Arc (width-0.5-c_size, height-c_size-0.5, c_size, 0, Math.PI*.5);
+				cr.Arc (0.5+c_size, height-c_size-0.5, c_size, Math.PI*.5, Math.PI);
+				cr.Arc (0.5+c_size, c_size-1, c_size, Math.PI, Math.PI*1.5);
+				cr.ClosePath ();
+				cr.Color = BackgroundColor;
+				cr.FillPreserve ();
+				
+				cr.LineWidth = 1;
+				cr.Color = new Cairo.Color (.3, .3, .3, 1);
+				cr.Stroke ();
+				break;
+			case HUDStyle.Classic:
+				cr.Rectangle (0, 0, width, height);
+				cr.Color = BackgroundColor;
+				cr.Fill ();
+				break;
+			}
 
 			DrawHeaderOnContext (cr, c_size);
 			
@@ -733,7 +739,7 @@ namespace Do.UI
 					cr2.Stroke ();
 					break;
 				case HUDStyle.Classic:
-					cr2.Rectangle (1, 0, width-2, SurfaceHeight);
+					cr2.Rectangle (0, 0, width, SurfaceHeight);
 					Gdk.Color gdkColor;
 					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
 						gdkColor = rcstyle.BaseColors[(int) StateType.Selected];
