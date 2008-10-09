@@ -55,7 +55,6 @@ namespace Do.UI
 		const int BoxLineWidth = 1;
 		const int TextHeight   = 11;
 		const int BorderWidth  = 15;
-		const int WindowBorder = 21;
 		const int fade_ms      = 150;
 		
 		int BoxWidth {
@@ -64,7 +63,7 @@ namespace Do.UI
 				case HUDStyle.HUD:
 					return 160;
 				case HUDStyle.Classic:
-					return 170;
+					return 175;
 				default:
 					throw new NotImplementedException ();
 				}
@@ -77,7 +76,7 @@ namespace Do.UI
 				case HUDStyle.HUD:
 					return IconSize + 15 + TextHeight;
 				case HUDStyle.Classic:
-					return IconSize + 20 + TextHeight;
+					return IconSize + 25 + TextHeight;
 				default:
 					throw new NotImplementedException ();
 				}
@@ -94,7 +93,20 @@ namespace Do.UI
 				case HUDStyle.HUD:
 					return "<span foreground=\"#5599ff\">{0}</span>";
 				case HUDStyle.Classic:
-					return "<span foreground=\"#2255dd\">{0}</span>";
+					return "<span foreground=\"#99ddff\">{0}</span>";
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+		}
+		
+		int WindowBorder {
+			get {
+				switch (style) {
+				case HUDStyle.HUD:
+					return 21;
+				case HUDStyle.Classic:
+					return 17;
 				default:
 					throw new NotImplementedException ();
 				}
@@ -120,7 +132,7 @@ namespace Do.UI
 				case HUDStyle.HUD:
 					return 21;
 				case HUDStyle.Classic:
-					return 0;
+					return 7;
 				default:
 					throw new NotImplementedException ();
 				}
@@ -238,23 +250,21 @@ namespace Do.UI
 				colors["outline"]        = new Cairo.Color (.35, .35, .35);
 				break;
 			case HUDStyle.Classic:
-				colors["focused_box"]    = new Cairo.Color (1.0, 1.0, 1.0, 0.4);
+				colors["focused_box"]    = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
 				colors["unfocused_box"]  = new Cairo.Color (1.0, 1.0, 1.0, 0.1);
 				colors["focused_line"]   = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
 				colors["unfocused_line"] = new Cairo.Color (1.0, 1.0, 1.0, 0.2);
 				colors["focused_text"]   = new Cairo.Color (0.0, 0.0, 0.0, 0.85);
 				colors["unfocused_text"] = new Cairo.Color (0.3, 0.3, 0.3, 0.7);
-				colors["titlebar_step1"] = new Cairo.Color (0.45, 0.45, 0.45);
-				colors["titlebar_step2"] = new Cairo.Color (0.33, 0.33, 0.33);
-				colors["titlebar_step3"] = new Cairo.Color (0.28, 0.28, 0.28);
 				
 				Gdk.Color clr = BackgroundColor;
-				colors["background"]     = new Cairo.Color ((double) clr.Red/ushort.MaxValue, 
-				                                            (double) clr.Green/ushort.MaxValue, 
-				                                            (double) clr.Blue/ushort.MaxValue, .95);
-				colors["background_lt"]  = new Cairo.Color (colors["background"].R + .25, 
-				                                            colors["background"].G + .25, 
-				                                            colors["background"].B + .25, 
+				colors["background"]     = new Cairo.Color (((double) clr.Red/ushort.MaxValue) - .1, 
+				                                            ((double) clr.Green/ushort.MaxValue) - .1, 
+				                                            ((double) clr.Blue/ushort.MaxValue) - .1, 
+				                                            .95);
+				colors["background_lt"]  = new Cairo.Color (colors["background"].R + .2, 
+				                                            colors["background"].G + .2, 
+				                                            colors["background"].B + .2, 
 				                                            .95);
 				colors["outline"] = colors["background"];
 				break;
@@ -695,7 +705,7 @@ namespace Do.UI
 				return;
 			
 			RenderLayoutText (cr, Context.GetPaneObject (Focus).Description, drawing_area.X + 10,
-			                  WindowHeight - 25, drawing_area.Width - 20);
+			                  WindowHeight - WindowBorder - 4, drawing_area.Width - 20);
 		}
 		
 		void RenderPaneText (Pane pane, Context cr)
@@ -718,7 +728,7 @@ namespace Do.UI
 				text = (!string.IsNullOrEmpty (Context.GetPaneQuery (pane))) ? 
 					Util.FormatCommonSubstrings 
 						(text, Context.GetPaneQuery (pane), HighlightFormat) : text;
-				int y = drawing_area.Y + WindowBorder + TitleBarHeight + IconSize + 6;
+				int y = drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - TextHeight - 9;
 				RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10);
 			}
 		}
@@ -890,17 +900,18 @@ namespace Do.UI
 				double y = drawing_area.Y;
 				double h = drawing_area.Height;
 				double w = drawing_area.Width;
+				int glaze_offset = 90;
 
 				cr.MoveTo (x+radius, y);
 				cr.Arc (x+w-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
-				cr.LineTo (x+w, y+100);
-				cr.CurveTo (x+2*(w/3), y+65, 
-				            x+(w/3), y+65,
-				            x, y+100);
+				cr.LineTo (x+w, y+glaze_offset);
+				cr.CurveTo (x+2*(w/3), glaze_offset-25,
+				            x+(w/3), glaze_offset-25,
+				            x, glaze_offset);
 				cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
-				LinearGradient lg = new LinearGradient (x, y, x, y+100);
-				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .1));
-				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .35));
+				LinearGradient lg = new LinearGradient (x, y, x, glaze_offset);
+				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
+				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .25));
 				cr.Pattern = lg;
 				cr.Fill ();
 				break;
