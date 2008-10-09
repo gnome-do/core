@@ -121,6 +121,7 @@ namespace Do.Core {
 												DoObject other)
 		{
 			RelevanceRecord rec;
+			
 			if (!hits.TryGetValue (o.UID, out rec)) {
 				rec = new RelevanceRecord (o);
 				hits [o.UID] = rec;
@@ -138,8 +139,11 @@ namespace Do.Core {
 		{
 			RelevanceRecord rec;
 			
-			if (hits.TryGetValue (o.UID, out rec))
+			if (hits.TryGetValue (o.UID, out rec)) {
 				rec.Hits--;
+				if (rec.Hits == 0)
+					hits.Remove (o.UID);
+			}
 		}
 
 		public override float GetRelevance (DoObject o,
@@ -250,8 +254,6 @@ namespace Do.Core {
 		/// </param>
 		public void RemoveFirstChar (char c)
 		{
-			if (!FirstChars.Contains (c.ToString ().ToLower ()))
-			    return;
 			FirstChars = FirstChars.Replace (c.ToString ().ToLower (), string.Empty);
 		}
 		
