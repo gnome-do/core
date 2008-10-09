@@ -97,7 +97,7 @@ namespace Do.UI
 				case HUDStyle.Classic:
 					Gdk.Color bgColor;
 					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
-						bgColor = rcstyle.Foregrounds[(int) StateType.Normal];
+						bgColor = rcstyle.TextColors[(int) StateType.Normal];
 					}
 					return Util.Appearance.ColorToHexString (bgColor);
 				default:
@@ -736,7 +736,7 @@ namespace Do.UI
 					cr2.Rectangle (1, 0, width-2, SurfaceHeight);
 					Gdk.Color gdkColor;
 					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
-						gdkColor = rcstyle.Backgrounds[(int) StateType.Selected];
+						gdkColor = rcstyle.BaseColors[(int) StateType.Selected];
 					}
 					cr2.Color = Util.Appearance.ConvertToCairo (gdkColor, .8);
 					cr2.Fill ();
