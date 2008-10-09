@@ -626,7 +626,7 @@ namespace Do.UI
 			Pango.Layout layout = new Pango.Layout (this.PangoContext);
 			layout.Width = Pango.Units.FromPixels (InternalWidth - IconSize - 10);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
-			layout.SetMarkup ("<span foreground=\"#" + ItemTextColor + "\">"+item.Name+"</span>");
+			layout.SetMarkup ("<span foreground=\"#" + ItemTextColor + "\">"+GLib.Markup.EscapeText (item.Name)+"</span>");
 			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (10);
 				
@@ -659,7 +659,7 @@ namespace Do.UI
 			Pango.Layout layout = new Pango.Layout (this.PangoContext);
 			layout.Width = Pango.Units.FromPixels (region.Width);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
-			layout.SetMarkup ("<span foreground=\"#" + color_string + "\">"+text+"</span>");
+			layout.SetMarkup ("<span foreground=\"#" + color_string + "\">"+GLib.Markup.EscapeText (text)+"</span>");
 			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (size);
 			cr.MoveTo (region.X, region.Y);

@@ -166,28 +166,11 @@ namespace Do.UI
 		private Gdk.Color BackgroundColor
 		{
 			get {
-				byte r, g, b;
 				Gdk.Color bgColor;
-
 				using (Gtk.Style style = Gtk.Rc.GetStyle (this)) {
 					bgColor = style.Backgrounds[(int) StateType.Selected];
 				}
-				r = (byte) ((bgColor.Red) >> 8);
-				g = (byte) ((bgColor.Green) >> 8);
-				b = (byte) ((bgColor.Blue) >> 8);
-				
-				// Useful for making overbright themes less ugly. Still trying
-				// to find a happy balance between 50 and 90...
-				byte maxLum = 60;
-				double hue, sat, val;
-				Addins.Util.Appearance.RGBToHSV(r, g, b, out hue, 
-				                                out sat, out val);
-				val = Math.Min (val, maxLum);
-				
-				Addins.Util.Appearance.HSVToRGB(hue, sat, val, out r,
-				                                out g, out b);
-				
-				return new Gdk.Color (r, g, b);
+				return Util.Appearance.SetMaximumValue (bgColor, 65);
 			}
 		}		
 		
@@ -257,15 +240,9 @@ namespace Do.UI
 				colors["focused_text"]   = new Cairo.Color (0.0, 0.0, 0.0, 0.85);
 				colors["unfocused_text"] = new Cairo.Color (0.3, 0.3, 0.3, 0.7);
 				
-				Gdk.Color clr = BackgroundColor;
-				colors["background"]     = new Cairo.Color (((double) clr.Red/ushort.MaxValue) - .1, 
-				                                            ((double) clr.Green/ushort.MaxValue) - .1, 
-				                                            ((double) clr.Blue/ushort.MaxValue) - .1, 
-				                                            .95);
-				colors["background_lt"]  = new Cairo.Color (colors["background"].R + .2, 
-				                                            colors["background"].G + .2, 
-				                                            colors["background"].B + .2, 
-				                                            .95);
+				colors["background"]     = Util.Appearance.ConvertToCairo (BackgroundColor, .95);
+				colors["background_dk"]  = Util.Appearance.ShadeColor (colors["background"], .9);
+				colors["background_lt"]  = Util.Appearance.ShadeColor (colors["background"], 1.15);
 				colors["outline"] = colors["background"];
 				break;
 			}
@@ -487,7 +464,7 @@ namespace Do.UI
 				break;
 			case HUDStyle.Classic:
 				LinearGradient lg = new LinearGradient (0, drawing_area.Y, 0, drawing_area.Height);
-				lg.AddColorStop (0, colors["background"]);
+				lg.AddColorStop (0, colors["background_dk"]);
 				lg.AddColorStop (1, colors["background_lt"]);
 				cr.Pattern = lg;
 				break;
@@ -704,14 +681,14 @@ namespace Do.UI
 			if (Context.GetPaneObject (Focus) == null)
 				return;
 			
-			RenderLayoutText (cr, Context.GetPaneObject (Focus).Description, drawing_area.X + 10,
+			RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
 			                  WindowHeight - WindowBorder - 4, drawing_area.Width - 20);
 		}
 		
 		void RenderPaneText (Pane pane, Context cr)
 		{
 			if (Context.GetPaneObject (pane) != null)
-				RenderPaneText (pane, cr, Context.GetPaneObject (pane).Name);
+				RenderPaneText (pane, cr, GLib.Markup.EscapeText (Context.GetPaneObject (pane).Name));
 		}
 		
 		void RenderPaneText (Pane pane, Context cr, string text)
@@ -737,7 +714,7 @@ namespace Do.UI
 		{
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = (ushort) (ushort.MaxValue * text_box_scale);
-			Gdk.Rectangle cursor = RenderLayoutText (cr, Context.GetPaneQuery (Focus), 
+			Gdk.Rectangle cursor = RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
 			                                         drawing_area.X + 10, TextModeOffset + 5, 
 			                                         drawing_area.Width - 20, color, 
 			                                         Pango.Alignment.Left, Pango.EllipsizeMode.None);
