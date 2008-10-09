@@ -650,7 +650,7 @@ namespace Do.UI
 				if (results[i] == item) {
 					pixbuf = IconProvider.PixbufFromIconName ("gtk-add", IconSize);
 					Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 2, 2);
-					cr2.PaintWithAlpha (.5);
+					cr2.PaintWithAlpha (.7);
 				}
 			}
 				
