@@ -56,6 +56,7 @@ FILES =  \
 	src/Do.UI/BaseWidgets/SymbolDisplayLabel.cs \
 	src/Do.UI/BaseWidgets/TextFrame.cs \
 	src/Do.UI/Bezel/Bezel.cs \
+	src/Do.UI/Bezel/BezelDefaults.cs \
 	src/Do.UI/Bezel/BezelDrawingArea.cs \
 	src/Do.UI/Bezel/BezelDrawingContext.cs \
 	src/Do.UI/Bezel/BezelGlassResults.cs \
