@@ -133,7 +133,7 @@ namespace Do.UI
 
         protected virtual void OnThemeComboChanged (object sender, EventArgs e)
         {
-        	Do.Preferences.Theme = theme_combo.ActiveText;
+        	Do.Preferences.Theme = Themes[theme_combo.Active];
         }
 
         protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)
