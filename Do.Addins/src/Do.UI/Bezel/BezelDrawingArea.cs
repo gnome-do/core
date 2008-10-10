@@ -309,7 +309,7 @@ namespace Do.UI
 				return;
 			
 			delta_time = DateTime.Now;
-			timer = GLib.Idle.Add (delegate {
+			timer = GLib.Timeout.Add (17, delegate {
 				
 				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
 				delta_time = DateTime.Now;
