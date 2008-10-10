@@ -56,8 +56,9 @@ namespace Do.UI
 		const int TextHeight   = 11;
 		const int BorderWidth  = 15;
 		const int fade_ms      = 150;
+		const int ShadowRadius = 10;
 		
-		int BoxWidth {
+		public int BoxWidth {
 			get {
 				switch (style) {
 				case HUDStyle.HUD:
@@ -70,7 +71,7 @@ namespace Do.UI
 			}
 		}
 		
-		int BoxHeight { 
+		public int BoxHeight { 
 			get { 
 				switch (style) {
 				case HUDStyle.HUD:
@@ -83,7 +84,17 @@ namespace Do.UI
 			} 
 		}
 
-		public int WindowWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 3); } }
+		public int WindowWidth { 
+			get { 
+				return ((2 * WindowBorder) - BorderWidth) + ((BoxWidth + (BorderWidth)) * 3) + (2*ShadowRadius); 
+			} 
+		}
+		
+		public int ThreePaneWidth { 
+			get { 
+				return ((2 * WindowBorder) - BorderWidth) + ((BoxWidth + (BorderWidth)) * 3); 
+			} 
+		}
 		
 		int TwoPaneWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2); } }
 		
@@ -100,7 +111,7 @@ namespace Do.UI
 			}
 		}
 		
-		int WindowBorder {
+		public int WindowBorder {
 			get {
 				switch (style) {
 				case HUDStyle.HUD:
@@ -140,6 +151,12 @@ namespace Do.UI
 		}
 		
 		int WindowHeight {
+			get {
+				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight + 2*ShadowRadius;
+			}
+		}
+		
+		int InternalHeight {
 			get {
 				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight;
 			}
@@ -208,7 +225,7 @@ namespace Do.UI
 		{
 			this.style = style;
 			surface_buffer = new Dictionary <string,Surface> ();
-			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, 0, TwoPaneWidth, WindowHeight);
+			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
 			icon_fade = new double [3];
 			
 			BuildColors ();
@@ -233,7 +250,7 @@ namespace Do.UI
 				colors["outline"]        = new Cairo.Color (.35, .35, .35);
 				break;
 			case HUDStyle.Classic:
-				colors["focused_box"]    = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
+				colors["focused_box"]    = new Cairo.Color (1.0, 1.0, 1.0, 0.4);
 				colors["unfocused_box"]  = new Cairo.Color (1.0, 1.0, 1.0, 0.1);
 				colors["focused_line"]   = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
 				colors["unfocused_line"] = new Cairo.Color (1.0, 1.0, 1.0, 0.2);
@@ -257,7 +274,7 @@ namespace Do.UI
 		private bool ExpandNeeded {
 			get {
 				return (ThirdPaneVisible || entry_mode[(int) Focus]) && 
-					drawing_area.Width != WindowWidth; 
+					drawing_area.Width != ThreePaneWidth; 
 			}
 		}
 		
@@ -298,11 +315,11 @@ namespace Do.UI
 				delta_time = DateTime.Now;
 				
 				if (ExpandNeeded) {
-					drawing_area.Width += (int)((WindowWidth-TwoPaneWidth)*change);
-					drawing_area.Width = (drawing_area.Width > WindowWidth) ? WindowWidth : drawing_area.Width;
+					drawing_area.Width += (int)((ThreePaneWidth-TwoPaneWidth)*change);
+					drawing_area.Width = (drawing_area.Width > ThreePaneWidth) ? ThreePaneWidth : drawing_area.Width;
 					drawing_area.X = (WindowWidth - drawing_area.Width) / 2;
 				} else if (ShrinkNeeded) {
-					drawing_area.Width -= (int)((WindowWidth-TwoPaneWidth)*change);
+					drawing_area.Width -= (int)((ThreePaneWidth-TwoPaneWidth)*change);
 					drawing_area.Width = (drawing_area.Width < TwoPaneWidth) ? TwoPaneWidth : drawing_area.Width;
 					drawing_area.X = (WindowWidth - drawing_area.Width) / 2;
 				}
@@ -423,8 +440,8 @@ namespace Do.UI
 			}
 			cr.MoveTo (x+radius, y);
 			cr.Arc (x+w-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
-			cr.Arc (x+w-radius, h-radius, radius, 0, Math.PI*.5);
-			cr.Arc (x+radius, h-radius, radius, Math.PI*.5, Math.PI);
+			cr.Arc (x+w-radius, y+h-radius, radius, 0, Math.PI*.5);
+			cr.Arc (x+radius, y+h-radius, radius, Math.PI*.5, Math.PI);
 			cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
 		}
 		
@@ -498,7 +515,7 @@ namespace Do.UI
 				RenderPane (Pane.Second, cr);
 			
 				//------------Third Pane-----------------
-				if (ThirdPaneVisible && drawing_area.Width == WindowWidth) {
+				if (ThirdPaneVisible && drawing_area.Width == ThreePaneWidth) {
 					RenderPane (Pane.Third, cr);
 				}
 				
@@ -507,6 +524,9 @@ namespace Do.UI
 				}
 			} while (false);
 
+			Util.Appearance.DrawShadow (cr, drawing_area.X, drawing_area.Y, drawing_area.Width, 
+			                            drawing_area.Height, WindowRadius, new Util.ShadowParameters (.5, ShadowRadius));
+			
 			cr2.SetSourceSurface (surface, 0, 0);
 			cr2.Operator = Operator.Source;
 			cr2.Paint ();
@@ -592,24 +612,25 @@ namespace Do.UI
 			int offset = PaneOffset (pane);
 			switch (style) {
 			case HUDStyle.Classic:
-				cr.MoveTo (drawing_area.X + offset + WindowRadius, WindowBorder + TitleBarHeight);
+				cr.MoveTo (drawing_area.X + offset + WindowRadius, 
+				           drawing_area.Y + WindowBorder + TitleBarHeight);
 				cr.Arc (drawing_area.X + offset + BoxWidth - WindowRadius, 
-				        WindowBorder + TitleBarHeight + WindowRadius, 
+				        drawing_area.Y + WindowBorder + TitleBarHeight + WindowRadius, 
 				        WindowRadius, 
 				        Math.PI*1.5, 
 				        Math.PI*2);
 				cr.Arc (drawing_area.X + offset + BoxWidth - WindowRadius,
-				        WindowBorder + TitleBarHeight + BoxHeight - WindowRadius,
+				        drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - WindowRadius,
 				        WindowRadius,
 				        0,
 				        Math.PI*.5);
 				cr.Arc (drawing_area.X + offset + WindowRadius,
-				        WindowBorder + TitleBarHeight + BoxHeight - WindowRadius,
+				        drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - WindowRadius,
 				        WindowRadius,
 				        Math.PI*.5,
 				        Math.PI);
 				cr.Arc (drawing_area.X + offset + WindowRadius,
-				        WindowBorder + TitleBarHeight + WindowRadius, 
+				        drawing_area.Y + WindowBorder + TitleBarHeight + WindowRadius, 
 				        WindowRadius,
 				        Math.PI,
 				        Math.PI*1.5);
@@ -617,10 +638,16 @@ namespace Do.UI
 				cr.Fill ();
 				break;
 			case HUDStyle.HUD:
-				cr.Rectangle (drawing_area.X + offset, WindowBorder + TitleBarHeight, BoxWidth, BoxHeight);
+				cr.Rectangle (drawing_area.X + offset, 
+				              drawing_area.Y + WindowBorder + TitleBarHeight, 
+				              BoxWidth, 
+				              BoxHeight);
 				cr.Color = (Focus == pane) ? colors["focused_box"] : colors["unfocused_box"];
 				cr.Fill ();
-				cr.Rectangle (drawing_area.X + offset - .5, WindowBorder + TitleBarHeight - .5, BoxWidth + 1, BoxHeight + 1);
+				cr.Rectangle (drawing_area.X + offset - .5, 
+				              drawing_area.Y + WindowBorder + TitleBarHeight - .5, 
+				              BoxWidth + 1, 
+				              BoxHeight + 1);
 				cr.Color = (Focus == pane) ? colors["focused_line"] : colors["unfocused_line"];
 				cr.LineWidth = BoxLineWidth;
 				cr.Stroke ();
@@ -685,7 +712,7 @@ namespace Do.UI
 				return;
 			
 			RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
-			                  WindowHeight - WindowBorder - 4, drawing_area.Width - 20);
+			                  drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20);
 		}
 		
 		void RenderPaneText (Pane pane, Context cr)
@@ -794,7 +821,7 @@ namespace Do.UI
 			string s = "GNOME Do";
 			if (DateTime.Now.Day == 25 && DateTime.Now.Month == 12)
 				s = "Merry Christmas!!!";
-			RenderLayoutText (cr, s, 0, 5, WindowWidth, color, 
+			RenderLayoutText (cr, s, 0, drawing_area.Y + 5, WindowWidth, color, 
 			                  Pango.Alignment.Center, Pango.EllipsizeMode.End);
 		}
 		
@@ -803,7 +830,7 @@ namespace Do.UI
 			switch (style) {
 			case HUDStyle.HUD:
 				cr.Rectangle (drawing_area.X, drawing_area.Y + TextModeOffset, drawing_area.Width,
-				              (WindowHeight - TextModeOffset - WindowRadius)); 
+				              (InternalHeight - TextModeOffset - WindowRadius)); 
 				cr.Color = new Cairo.Color (colors["focused_text"].R, 
 				                            colors["focused_text"].G, 
 				                            colors["focused_text"].B, 
@@ -850,8 +877,6 @@ namespace Do.UI
 				
 					RenderDownCircle (cr2);
 					RenderCloseCircle (cr2);
-				} else if (style == HUDStyle.Classic) {
-					//add code to render arrow
 				}
 				
 				border_buffer = surface;

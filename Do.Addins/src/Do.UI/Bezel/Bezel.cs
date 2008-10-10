@@ -34,6 +34,7 @@ namespace Do.UI
 	{
 		BezelDrawingArea bda;
 		BezelGlassResults bgr;
+		BezelGlassWindow bgw;
 		IDoController controller;
 		PositionWindow pw;
 		HUDStyle style;
@@ -66,14 +67,16 @@ namespace Do.UI
 			bda.Show ();
 			
 			bgr = new BezelGlassResults (8, 340, style);
-			bgr.X = (int) (bda.WindowWidth / 2) - 170;
-			vbox.PackStart (bgr, true, true, 0);
-			bgr.Show ();
+//			bgr.X = (int) (bda.WindowWidth / 2) - 170;
+//			bgr.X = 0;
+//			vbox.PackStart (bgr, true, true, 0);
+//			bgr.Show ();
+			bgw = new BezelGlassWindow (bgr);
 	
 			Add (vbox);
 			vbox.Show ();
 			
-			pw = new PositionWindow (this, null);
+			pw = new PositionWindow (this, bgw);
 		}
 		
 		protected override bool OnButtonPressEvent (EventButton evnt)
@@ -134,14 +137,16 @@ namespace Do.UI
 			int width, height;
 			GetSize (out width, out height);
 			
-			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (), new Gdk.Rectangle (0, 100, 0, 0));
+			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (133, -10, 0, 0));
 			Show ();
+			bgw.Show ();
 			Util.Appearance.PresentWindow (this);
 		}
 
 		public void Vanish ()
 		{
 			Hide ();
+			bgw.Hide ();
 		}
 
 		public void Reset ()

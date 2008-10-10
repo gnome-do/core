@@ -252,7 +252,6 @@ namespace Do.UI
 			num_results = numberResults;
 			surface_buffer = new Dictionary <IObject,Surface> ();
 			Secondary = new int[0];
-			X=105;
 			border_width = 12;
 			top_border_width = 20;
 			this.width = width;
