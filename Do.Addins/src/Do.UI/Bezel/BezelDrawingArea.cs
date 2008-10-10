@@ -781,6 +781,7 @@ namespace Do.UI
 			                     layout.Lines [layout.LineCount-1].Length, 
 			                     out strong, out weak);
 			layout.FontDescription.Dispose ();
+			layout.Dispose ();
 			return new Gdk.Rectangle (Pango.Units.ToPixels (weak.X) + x,
 			                          Pango.Units.ToPixels (weak.Y) + y,
 			                          Pango.Units.ToPixels (weak.Width),

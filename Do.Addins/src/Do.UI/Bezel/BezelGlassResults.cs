@@ -679,6 +679,7 @@ namespace Do.UI
 			surface_buffer[item] = surface;
 			
 			layout.FontDescription.Dispose ();
+			layout.Dispose ();
 			(cr2 as IDisposable).Dispose ();
 			(cr as IDisposable).Dispose ();
 		}
@@ -707,6 +708,8 @@ namespace Do.UI
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (size);
 			cr.MoveTo (region.X, region.Y);
 			Pango.CairoHelper.ShowLayout (cr, layout);
+			layout.FontDescription.Dispose ();
+			layout.Dispose ();
 		}
 		
 		Surface GetHighlightSource () 
