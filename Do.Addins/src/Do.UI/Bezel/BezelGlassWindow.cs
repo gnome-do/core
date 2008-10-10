@@ -37,6 +37,7 @@ namespace Do.UI
 			Decorated = false;
 			AppPaintable = true;
 			KeepAbove = true;
+			DoubleBuffered = false;
 			
 			TypeHint = WindowTypeHint.Splashscreen;
 			Util.Appearance.SetColormap (this);
