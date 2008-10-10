@@ -662,6 +662,7 @@ namespace Do.UI
 					pixbuf = IconProvider.PixbufFromIconName ("gtk-add", IconSize);
 					Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 2, 2);
 					cr2.PaintWithAlpha (.7);
+					pixbuf.Dispose ();
 				}
 			}
 				
