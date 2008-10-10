@@ -51,36 +51,28 @@ namespace Do.UI
 		
 		private HUDStyle style;
 		
-		const int IconSize     = 128;
+		public const int IconSize     = 128;
 		const int BoxLineWidth = 1;
 		const int TextHeight   = 11;
 		const int BorderWidth  = 15;
 		const int fade_ms      = 150;
 		const int ShadowRadius = 10;
 		
+		IBezelWindowRenderElement  TitleBarRenderer;
+		IBezelWindowRenderElement  BackgroundRenderer;
+		IBezelPaneRenderElement    PaneOutlineRenderer;
+		IBezelOverlayRenderElement TextModeOverlayRenderer;
+		IBezelDefaults BezelDefaults;
+		
 		public int BoxWidth {
 			get {
-				switch (style) {
-				case HUDStyle.HUD:
-					return 160;
-				case HUDStyle.Classic:
-					return 175;
-				default:
-					throw new NotImplementedException ();
-				}
+				return PaneOutlineRenderer.Width;
 			}
 		}
 		
 		public int BoxHeight { 
 			get { 
-				switch (style) {
-				case HUDStyle.HUD:
-					return IconSize + 15 + TextHeight;
-				case HUDStyle.Classic:
-					return IconSize + 25 + TextHeight;
-				default:
-					throw new NotImplementedException ();
-				}
+				return PaneOutlineRenderer.Height;
 			} 
 		}
 
@@ -96,73 +88,45 @@ namespace Do.UI
 			} 
 		}
 		
-		int TwoPaneWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2); } }
+		public int TwoPaneWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2); } }
 		
 		string HighlightFormat {
 			get {
-				switch (style) {
-				case HUDStyle.HUD:
-					return "<span foreground=\"#5599ff\">{0}</span>";
-				case HUDStyle.Classic:
-					return "<span underline=\"single\">{0}</span>";
-				default:
-					throw new NotImplementedException ();
-				}
+				return BezelDefaults.HighlightFormat;
 			}
 		}
 		
 		public int WindowBorder {
 			get {
-				switch (style) {
-				case HUDStyle.HUD:
-					return 21;
-				case HUDStyle.Classic:
-					return 17;
-				default:
-					throw new NotImplementedException ();
-				}
+				return BezelDefaults.WindowBorder;
 			}
 		}
 		
-		int WindowRadius {
+		public int WindowRadius {
 			get {
-				switch (style) {
-				case HUDStyle.HUD:
-					return 6;
-				case HUDStyle.Classic:
-					return 20;
-				default:
-					throw new NotImplementedException ();
-				}
+				return BezelDefaults.WindowRadius;
 			}
 		}
 		
-		int TitleBarHeight {
+		public int TitleBarHeight {
 			get {
-				switch (style) {
-				case HUDStyle.HUD:
-					return 21;
-				case HUDStyle.Classic:
-					return 7;
-				default:
-					throw new NotImplementedException ();
-				}
+				return TitleBarRenderer.Height;
 			}
 		}
 		
-		int WindowHeight {
+		public int WindowHeight {
 			get {
 				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight + 2*ShadowRadius;
 			}
 		}
 		
-		int InternalHeight {
+		public int InternalHeight {
 			get {
 				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight;
 			}
 		}
 		
-		int TextModeOffset { get { return Math.Max (TitleBarHeight, WindowRadius); } }
+		public int TextModeOffset { get { return Math.Max (TitleBarHeight, WindowRadius); } }
 		
 		bool third_pane_visible;
 		BezelDrawingContext context, old_context;
@@ -171,25 +135,12 @@ namespace Do.UI
 		uint timer;
 		
 		Gdk.Rectangle drawing_area;
-		Dictionary <string, Cairo.Color> colors;
 		Dictionary <string, Surface> surface_buffer;
-		Surface border_buffer;
 		Surface surface;
 		
 		double text_box_scale;
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
-		
-		private Gdk.Color BackgroundColor
-		{
-			get {
-				Gdk.Color bgColor;
-				using (Gtk.Style style = Gtk.Rc.GetStyle (this)) {
-					bgColor = style.Backgrounds[(int) StateType.Selected];
-				}
-				return Util.Appearance.SetMaximumValue (bgColor, 65);
-			}
-		}		
 		
 		private BezelDrawingContext Context {
 			get {
@@ -224,45 +175,31 @@ namespace Do.UI
 		public BezelDrawingArea(HUDStyle style) : base ()
 		{
 			this.style = style;
+			BezelColors.InitColors (style, this);
+			switch (style) {
+			case HUDStyle.HUD:
+				TitleBarRenderer        = new HUDTopBar (this);
+				PaneOutlineRenderer     = new HUDPaneOutlineRenderer (this);
+				BackgroundRenderer      = new HUDBackgroundRenderer (this);
+				TextModeOverlayRenderer = new HUDTextOverlayRenderer (this);
+				BezelDefaults           = new HUDBezelDefaults ();
+				break;
+			case HUDStyle.Classic:
+				TitleBarRenderer        = new ClassicTopBar (this);
+				PaneOutlineRenderer     = new ClassicPaneOutlineRenderer (this);
+				BackgroundRenderer      = new ClassicBackgroundRenderer (this);
+				TextModeOverlayRenderer = new ClassicTextOverlayRenderer (this);
+				BezelDefaults           = new ClassicBezelDefaults ();
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+			
 			surface_buffer = new Dictionary <string,Surface> ();
 			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
 			icon_fade = new double [3];
 			
-			BuildColors ();
 			SetSizeRequest (WindowWidth, WindowHeight);
-		}
-		
-		private void BuildColors ()
-		{
-			colors = new Dictionary<string,Cairo.Color> ();
-			switch (style) {
-			case HUDStyle.HUD:
-				colors["focused_box"]    = new Cairo.Color (0.3, 0.3, 0.3, 0.6);
-				colors["unfocused_box"]  = new Cairo.Color (0.0, 0.0, 0.0, 0.2);
-				colors["focused_line"]   = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
-				colors["unfocused_line"] = new Cairo.Color (1.0, 1.0, 1.0, 0.2);
-				colors["focused_text"]   = new Cairo.Color (0.0, 0.0, 0.0, 0.85);
-				colors["unfocused_text"] = new Cairo.Color (0.3, 0.3, 0.3, 0.7);
-				colors["titlebar_step1"] = new Cairo.Color (0.45, 0.45, 0.45);
-				colors["titlebar_step2"] = new Cairo.Color (0.33, 0.33, 0.33);
-				colors["titlebar_step3"] = new Cairo.Color (0.28, 0.28, 0.28);
-				colors["background"]     = new Cairo.Color (.15, .15, .15, .95);
-				colors["outline"]        = new Cairo.Color (.35, .35, .35);
-				break;
-			case HUDStyle.Classic:
-				colors["focused_box"]    = new Cairo.Color (1.0, 1.0, 1.0, 0.4);
-				colors["unfocused_box"]  = new Cairo.Color (1.0, 1.0, 1.0, 0.1);
-				colors["focused_line"]   = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
-				colors["unfocused_line"] = new Cairo.Color (1.0, 1.0, 1.0, 0.2);
-				colors["focused_text"]   = new Cairo.Color (0.0, 0.0, 0.0, 0.85);
-				colors["unfocused_text"] = new Cairo.Color (0.3, 0.3, 0.3, 0.7);
-				
-				colors["background"]     = Util.Appearance.ConvertToCairo (BackgroundColor, .95);
-				colors["background_dk"]  = Util.Appearance.ShadeColor (colors["background"], .9);
-				colors["background_lt"]  = Util.Appearance.ShadeColor (colors["background"], 1.15);
-				colors["outline"] = colors["background"];
-				break;
-			}
 		}
 		
 		private bool AnimationNeeded {
@@ -335,6 +272,9 @@ namespace Do.UI
 				}
 				
 				if (FadeNeeded) {
+					if (text_box_scale == 1) {
+						icon_fade[0] = icon_fade[1] = icon_fade[2] = 1;
+					}
 					icon_fade[0] += change;
 					icon_fade[1] += change;
 					icon_fade[2] += change;
@@ -424,40 +364,6 @@ namespace Do.UI
 			AnimatedDraw ();
 		}
 		
-		private void SetRoundedPath (Cairo.Context cr, bool strokePath)
-		{
-			int radius = WindowRadius;
-			double x = drawing_area.X;
-			double y = drawing_area.Y;
-			double h = drawing_area.Height;
-			double w = drawing_area.Width;
-			
-			if (strokePath) {
-				x += .5;
-				y += .5;
-				h--;
-				w--;
-			}
-			cr.MoveTo (x+radius, y);
-			cr.Arc (x+w-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
-			cr.Arc (x+w-radius, y+h-radius, radius, 0, Math.PI*.5);
-			cr.Arc (x+radius, y+h-radius, radius, Math.PI*.5, Math.PI);
-			cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
-		}
-		
-		private void SetTitlePath (Cairo.Context cr)
-		{
-			int radius = WindowRadius;
-			double x = .5;
-			double y = .5;
-			double width = TwoPaneWidth - 1;
-			cr.MoveTo (x+radius, y);
-			cr.Arc (x+width-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
-			cr.LineTo (x+width, TitleBarHeight);
-			cr.LineTo (x, TitleBarHeight);
-			cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
-		}
-		
 		void Paint () 
 		{
 			Cairo.Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
@@ -469,32 +375,11 @@ namespace Do.UI
 			Context cr = new Context (surface);
 			cr.Save ();
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
-			
 			cr.Operator = Cairo.Operator.Source;
 			cr.Paint ();
-			
 			cr.Operator = Cairo.Operator.Over;
 			
-			switch (style) {
-			case HUDStyle.HUD:
-				SetRoundedPath (cr, false);
-				cr.Color = colors["background"];
-				cr.Fill ();
-				
-				SetRoundedPath (cr, true);
-				cr.Color = colors["outline"];
-				cr.LineWidth = 1;
-				cr.Stroke ();
-				break;
-			case HUDStyle.Classic:
-				SetRoundedPath (cr, false);
-				LinearGradient lg = new LinearGradient (0, drawing_area.Y, 0, drawing_area.Height);
-				lg.AddColorStop (0, colors["background_dk"]);
-				lg.AddColorStop (1, colors["background_lt"]);
-				cr.Pattern = lg;
-				cr.Fill ();
-				break;
-			}
+			BackgroundRenderer.RenderElement (cr, drawing_area);
 			
 			RenderTitleBar (cr);
 			
@@ -542,42 +427,11 @@ namespace Do.UI
 			return base.OnExposeEvent (evnt);
 		}
 		
-		private int PaneOffset (Pane pane) 
+		public int PaneOffset (Pane pane) 
 		{
 			return WindowBorder + ((int) pane * (BoxWidth + BorderWidth));
 		}
 		
-		private void RenderCloseCircle (Context cr)
-		{
-			cr.Arc (12,
-			        TitleBarHeight / 2, 6, 0, Math.PI*2);
-			cr.Color = new Cairo.Color (1, 1, 1, .8);
-			cr.Fill ();
-			
-			cr.MoveTo (15, (TitleBarHeight / 2) - 3);
-			cr.LineTo (9, (TitleBarHeight / 2) + 3);
-			cr.MoveTo (9, (TitleBarHeight / 2) - 3);
-			cr.LineTo (15, (TitleBarHeight / 2) + 3);
-			
-			cr.Color = new Cairo.Color (0.2, 0.2, 0.2, .8);
-			cr.LineWidth = 2;
-			cr.Stroke ();
-		}
-		
-		private void RenderDownCircle (Context cr)
-		{
-			cr.Arc (TwoPaneWidth - 12,
-			        TitleBarHeight / 2, 6, 0, Math.PI*2);
-			cr.Color = new Cairo.Color (1, 1, 1, .8);
-			cr.Fill ();
-			
-			cr.MoveTo (TwoPaneWidth - 15, (TitleBarHeight / 2) - 2);
-			cr.LineTo (TwoPaneWidth - 9, (TitleBarHeight / 2) - 2);
-			cr.LineTo (TwoPaneWidth - 12, (TitleBarHeight / 2) + 3);
-			cr.Color = new Cairo.Color (0.2, 0.2, 0.2, .8);
-			cr.Fill ();
-		}
-
 		private void RenderPane (Pane pane, Context cr)
 		{
 			RenderPaneOutline (pane, cr);
@@ -609,51 +463,7 @@ namespace Do.UI
 		
 		private void RenderPaneOutline (Pane pane, Context cr)
 		{
-			int offset = PaneOffset (pane);
-			switch (style) {
-			case HUDStyle.Classic:
-				cr.MoveTo (drawing_area.X + offset + WindowRadius, 
-				           drawing_area.Y + WindowBorder + TitleBarHeight);
-				cr.Arc (drawing_area.X + offset + BoxWidth - WindowRadius, 
-				        drawing_area.Y + WindowBorder + TitleBarHeight + WindowRadius, 
-				        WindowRadius, 
-				        Math.PI*1.5, 
-				        Math.PI*2);
-				cr.Arc (drawing_area.X + offset + BoxWidth - WindowRadius,
-				        drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - WindowRadius,
-				        WindowRadius,
-				        0,
-				        Math.PI*.5);
-				cr.Arc (drawing_area.X + offset + WindowRadius,
-				        drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - WindowRadius,
-				        WindowRadius,
-				        Math.PI*.5,
-				        Math.PI);
-				cr.Arc (drawing_area.X + offset + WindowRadius,
-				        drawing_area.Y + WindowBorder + TitleBarHeight + WindowRadius, 
-				        WindowRadius,
-				        Math.PI,
-				        Math.PI*1.5);
-				cr.Color = (Focus == pane) ? colors["focused_box"] : colors["unfocused_box"];
-				cr.Fill ();
-				break;
-			case HUDStyle.HUD:
-				cr.Rectangle (drawing_area.X + offset, 
-				              drawing_area.Y + WindowBorder + TitleBarHeight, 
-				              BoxWidth, 
-				              BoxHeight);
-				cr.Color = (Focus == pane) ? colors["focused_box"] : colors["unfocused_box"];
-				cr.Fill ();
-				cr.Rectangle (drawing_area.X + offset - .5, 
-				              drawing_area.Y + WindowBorder + TitleBarHeight - .5, 
-				              BoxWidth + 1, 
-				              BoxHeight + 1);
-				cr.Color = (Focus == pane) ? colors["focused_line"] : colors["unfocused_line"];
-				cr.LineWidth = BoxLineWidth;
-				cr.Stroke ();
-				break;
-			}
-			
+			PaneOutlineRenderer.RenderElement (cr, drawing_area, pane, (Focus == pane));
 		}
 		
 		private void RenderPixbuf (Pane pane, Context cr)
@@ -711,8 +521,8 @@ namespace Do.UI
 			if (Context.GetPaneObject (Focus) == null)
 				return;
 			
-			RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
-			                  drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20);
+			BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
+			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20, this);
 		}
 		
 		void RenderPaneText (Pane pane, Context cr)
@@ -729,14 +539,14 @@ namespace Do.UI
 				Pango.Color color = new Pango.Color ();
 				color.Blue = color.Green = color.Red = ushort.MaxValue;
 				int y = drawing_area.Y + WindowBorder + TitleBarHeight + 6;
-				RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, 
-				                  color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
+				BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, 
+				                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
 			} else {
 				text = (!string.IsNullOrEmpty (Context.GetPaneQuery (pane))) ? 
 					Util.FormatCommonSubstrings 
 						(text, Context.GetPaneQuery (pane), HighlightFormat) : text;
 				int y = drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - TextHeight - 9;
-				RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10);
+				BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, this);
 			}
 		}
 		
@@ -744,10 +554,10 @@ namespace Do.UI
 		{
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = (ushort) (ushort.MaxValue * text_box_scale);
-			Gdk.Rectangle cursor = RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
-			                                         drawing_area.X + 10, TextModeOffset + 5, 
-			                                         drawing_area.Width - 20, color, 
-			                                         Pango.Alignment.Left, Pango.EllipsizeMode.None);
+			Gdk.Rectangle cursor = BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
+			                                                        drawing_area.X + 10, TextModeOffset + 5, 
+			                                                        drawing_area.Width - 20, color, 
+			                                                        Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
 			
 			if (cursor.X == cursor.Y && cursor.X == 0) return;
 			
@@ -756,179 +566,14 @@ namespace Do.UI
 			cr.Fill ();
 		}
 		
-		void RenderLayoutText (Context cr, string text, int x, int y, int width)
-		{
-			Pango.Color color = new Pango.Color ();
-			color.Blue = color.Red = color.Green = ushort.MaxValue;
-			RenderLayoutText (cr, text, x, y, width, color, Pango.Alignment.Center, Pango.EllipsizeMode.End);
-		}
-		
-		Gdk.Rectangle RenderLayoutText (Context cr, string text, int x, int y, int width, 
-		                       Pango.Color color, Pango.Alignment align, Pango.EllipsizeMode ellipse)
-		{
-			if (string.IsNullOrEmpty (text)) return new Gdk.Rectangle ();
-	
-			Pango.Layout layout = new Pango.Layout (this.PangoContext);
-			layout.Width = Pango.Units.FromPixels (width);
-			layout.SetMarkup (text);
-			
-			layout.Ellipsize = ellipse;
-				
-			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
-			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (TextHeight);
-			layout.Alignment = align;
-			
-			if (ellipse == Pango.EllipsizeMode.None) {
-				layout.Wrap = Pango.WrapMode.WordChar;
-				int offset = 0;
-				int count = 10;
-				bool modified = (layout.LineCount > 10);
-				
-				while (layout.LineCount > 10) {
-					offset += count;
-					layout.SetMarkup (text.Substring (0, text.Length - offset) + "...");
-					if (layout.LineCount == 10 && count != 1) {
-						offset -= count;
-						layout.SetMarkup (text.Substring (0, text.Length - offset) + "...");
-						count = 1;
-					}
-				}
-				if (modified) {
-					text = text.Substring (0, text.Length - offset) + "...";
-				}
-			}
-			
-			text = string.Format ("<span foreground=\"{0}\">{1}</span>", color, text);
-			layout.SetMarkup (text);
-			
-			cr.MoveTo (x, y);
-			Pango.CairoHelper.ShowLayout (cr, layout);
-			Pango.Rectangle strong, weak;
-			layout.GetCursorPos (layout.Lines [layout.LineCount-1].StartIndex + 
-			                     layout.Lines [layout.LineCount-1].Length, 
-			                     out strong, out weak);
-			layout.FontDescription.Dispose ();
-			layout.Dispose ();
-			return new Gdk.Rectangle (Pango.Units.ToPixels (weak.X) + x,
-			                          Pango.Units.ToPixels (weak.Y) + y,
-			                          Pango.Units.ToPixels (weak.Width),
-			                          Pango.Units.ToPixels (weak.Height));
-		}
-		
-		void RenderTitleText (Context cr) {
-			Pango.Color color = new Pango.Color ();
-			color.Blue = color.Red = color.Green = ushort.MaxValue;
-			string s = "GNOME Do";
-			if (DateTime.Now.Day == 25 && DateTime.Now.Month == 12)
-				s = "Merry Christmas!!!";
-			RenderLayoutText (cr, s, 0, drawing_area.Y + 5, WindowWidth, color, 
-			                  Pango.Alignment.Center, Pango.EllipsizeMode.End);
-		}
-		
 		void RenderTextModeOverlay (Context cr) 
 		{
-			switch (style) {
-			case HUDStyle.HUD:
-				cr.Rectangle (drawing_area.X, drawing_area.Y + TextModeOffset, drawing_area.Width,
-				              (InternalHeight - TextModeOffset - WindowRadius)); 
-				cr.Color = new Cairo.Color (colors["focused_text"].R, 
-				                            colors["focused_text"].G, 
-				                            colors["focused_text"].B, 
-				                            colors["focused_text"].A * text_box_scale);
-				cr.Fill ();
-				break;
-			case HUDStyle.Classic:
-				SetRoundedPath (cr, false);
-				cr.Color = new Cairo.Color (colors["focused_text"].R, 
-				                            colors["focused_text"].G, 
-				                            colors["focused_text"].B, 
-				                            colors["focused_text"].A * text_box_scale);
-				cr.Fill ();
-				break;
-			default:
-				throw new NotImplementedException ();
-			}
+			TextModeOverlayRenderer.RenderElement (cr, drawing_area, text_box_scale);
 		}
 		
 		void RenderTitleBar (Context cr)
 		{
-			if (border_buffer == null) {
-				
-				Surface surface = cr.Target.CreateSimilar (cr.Target.Content, TwoPaneWidth, TitleBarHeight);
-				Context cr2 = new Context (surface);
-				
-				if (style == HUDStyle.HUD) {
-					SetTitlePath (cr2);
-					cr2.Operator = Cairo.Operator.Source;
-					LinearGradient title_grad = new LinearGradient (0, 0, 0, TitleBarHeight);
-					title_grad.AddColorStop (0.0, colors["titlebar_step1"]);
-					title_grad.AddColorStop (0.5, colors["titlebar_step2"]);
-					title_grad.AddColorStop (0.5, colors["titlebar_step3"]);
-					cr2.Pattern = title_grad;
-					cr2.FillPreserve ();
-					cr2.Operator = Cairo.Operator.Over;
-				
-					LinearGradient grad = new LinearGradient (0, 0, 0, TitleBarHeight);
-					grad.AddColorStop (0, new Cairo.Color (1, 1, 1, .6));
-					grad.AddColorStop (.6, new Cairo.Color (1, 1, 1, 0));
-					cr2.Pattern = grad;
-					cr2.LineWidth = 1;
-					cr2.Stroke ();
-				
-					RenderDownCircle (cr2);
-					RenderCloseCircle (cr2);
-				}
-				
-				border_buffer = surface;
-				(cr2 as IDisposable).Dispose ();
-			}
-			
-			switch (style) {
-			case HUDStyle.HUD:
-				if (drawing_area.Width == TwoPaneWidth) {
-					cr.SetSource (border_buffer, drawing_area.X, drawing_area.Y);
-					cr.Rectangle (drawing_area.X, drawing_area.Y, drawing_area.Width, TitleBarHeight);
-					cr.Fill ();
-				} else {
-					cr.SetSource (border_buffer, drawing_area.X, drawing_area.Y);
-					cr.Rectangle (drawing_area.X, drawing_area.Y, 200, TitleBarHeight);
-					cr.Fill ();
-					
-					cr.SetSource (border_buffer, drawing_area.X + drawing_area.Width - TwoPaneWidth, drawing_area.Y);
-					cr.Rectangle (drawing_area.X + 200, drawing_area.Y, drawing_area.Width - 200, TitleBarHeight);
-					cr.Fill ();
-				}
-				RenderTitleText (cr);
-				break;
-			case HUDStyle.Classic:
-				int radius = WindowRadius;
-				double x = drawing_area.X;
-				double y = drawing_area.Y;
-				double h = drawing_area.Height;
-				double w = drawing_area.Width;
-				int glaze_offset = 90;
-
-				cr.MoveTo (x+radius, y);
-				cr.Arc (x+w-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
-				cr.LineTo (x+w, y+glaze_offset);
-				cr.CurveTo (x+2*(w/3), glaze_offset-25,
-				            x+(w/3), glaze_offset-25,
-				            x, glaze_offset);
-				cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
-				LinearGradient lg = new LinearGradient (x, y, x, glaze_offset);
-				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
-				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .25));
-				cr.Pattern = lg;
-				cr.Fill ();
-
-				cr.MoveTo (x + w - 30, y + 7);
-				cr.LineTo (x + w - 20,  y + 7);
-				cr.LineTo (x + w - 25, y + 12);
-				cr.Color = new Cairo.Color (1, 1, 1, .95);
-				cr.Fill ();
-				
-				break;
-			}
+			TitleBarRenderer.RenderElement (cr, drawing_area);
 		}
 		
 		public PointLocation GetPointLocation (Gdk.Point point)
