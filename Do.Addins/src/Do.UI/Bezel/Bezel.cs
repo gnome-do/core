@@ -137,7 +137,7 @@ namespace Do.UI
 			int width, height;
 			GetSize (out width, out height);
 			
-			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (133, -10, 0, 0));
+			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (((int)(bda.WindowWidth-340)/2), -10, 0, 0));
 			Show ();
 			bgw.Show ();
 			Util.Appearance.PresentWindow (this);
