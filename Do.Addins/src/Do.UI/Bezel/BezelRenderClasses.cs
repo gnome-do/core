@@ -108,6 +108,7 @@ namespace Do.UI
 				cr2.Pattern = title_grad;
 				cr2.FillPreserve ();
 				cr2.Operator = Cairo.Operator.Over;
+				title_grad.Destroy ();
 			
 				LinearGradient grad = new LinearGradient (0, 0, 0, Height);
 				grad.AddColorStop (0, new Cairo.Color (1, 1, 1, .6));
@@ -115,6 +116,7 @@ namespace Do.UI
 				cr2.Pattern = grad;
 				cr2.LineWidth = 1;
 				cr2.Stroke ();
+				grad.Destroy ();
 			
 				RenderDownCircle (cr2);
 				RenderCloseCircle (cr2);
@@ -193,7 +195,6 @@ namespace Do.UI
 			int radius = parent.WindowRadius;
 			double x = drawing_area.X;
 			double y = drawing_area.Y;
-//			double h = drawing_area.Height;
 			double w = drawing_area.Width;
 			int glaze_offset = 90;
 
@@ -209,6 +210,7 @@ namespace Do.UI
 			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .25));
 			cr.Pattern = lg;
 			cr.Fill ();
+			lg.Destroy ();
 
 			cr.MoveTo (x + w - 30, y + 7);
 			cr.LineTo (x + w - 20,  y + 7);
@@ -383,6 +385,7 @@ namespace Do.UI
 			lg.AddColorStop (0, BezelColors.Colors["background_dk"]);
 			lg.AddColorStop (1, BezelColors.Colors["background_lt"]);
 			cr.Pattern = lg;
+			lg.Destroy ();
 			cr.Fill ();
 		}
 		

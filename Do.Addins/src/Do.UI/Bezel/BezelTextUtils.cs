@@ -70,6 +70,7 @@ namespace Do.UI
 			                     layout.Lines [layout.LineCount-1].Length, 
 			                     out strong, out weak);
 			cr.ResetClip ();
+			layout.Context.Dispose ();
 			layout.FontDescription.Dispose ();
 			layout.Dispose ();
 			return new Gdk.Rectangle (Pango.Units.ToPixels (weak.X) + x,

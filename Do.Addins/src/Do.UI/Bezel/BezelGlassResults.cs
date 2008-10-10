@@ -240,6 +240,8 @@ namespace Do.UI
 			set {
 				if (value == secondary)
 					return;
+				foreach (Surface s in surface_buffer.Values)
+					s.Destroy ();
 				surface_buffer.Clear ();
 				secondary = value;
 			}
@@ -333,7 +335,7 @@ namespace Do.UI
 			Results = null;
 			Cursor = 0;
 			foreach (Surface s in surface_buffer.Values)
-				(s as IDisposable).Dispose ();
+				s.Destroy ();
 			
 			surface_buffer = new Dictionary<IObject,Surface> ();
 		}
@@ -443,6 +445,7 @@ namespace Do.UI
 				title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
 				cr.Pattern = title_grad;
 				cr.Fill ();
+				title_grad.Destroy ();
 				break;
 			case HUDStyle.Classic:
 				cr.Rectangle (0.5, -0.5, width-1, top_border_width);
@@ -451,6 +454,7 @@ namespace Do.UI
 				title_grad1.AddColorStop (1, new Cairo.Color (0.75, 0.75, 0.75));
 				cr.Pattern = title_grad1;
 				cr.FillPreserve ();
+				title_grad1.Destroy ();
 				
 				cr.LineWidth = 1;
 				cr.Color = new Cairo.Color (0.3, 0.3, 0.3, 0.5);
@@ -491,6 +495,7 @@ namespace Do.UI
 				title_grad1.AddColorStop (1, new Cairo.Color (0.75, 0.75, 0.75));
 				cr.Pattern = title_grad1;
 				cr.FillPreserve ();
+				title_grad1.Destroy ();
 				
 				cr.LineWidth = 1;
 				cr.Color = new Cairo.Color (0.3, 0.3, 0.3, 0.5);
@@ -711,6 +716,7 @@ namespace Do.UI
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (size);
 			cr.MoveTo (region.X, region.Y);
 			Pango.CairoHelper.ShowLayout (cr, layout);
+			layout.Context.Dispose ();
 			layout.FontDescription.Dispose ();
 			layout.Dispose ();
 		}
@@ -745,6 +751,7 @@ namespace Do.UI
 					cr2.ClosePath ();
 
 					cr2.FillPreserve ();
+					grad.Destroy ();
 					
 					cr2.LineWidth = 1;
 					cr2.Color = new Cairo.Color (0.9, 0.9, 0.9, 1);

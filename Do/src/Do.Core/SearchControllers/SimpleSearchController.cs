@@ -92,9 +92,6 @@ namespace Do.Core
 				int ctmp = context.Cursor;
 				context.Cursor = value;
 				if (tmp != Selection || context.Cursor != ctmp) {
-//					try {
-//						OnSelectionChanged ();
-//					} catch {}
 					OnSearchFinished (true, false, Selection, Query);
 				}
 			}

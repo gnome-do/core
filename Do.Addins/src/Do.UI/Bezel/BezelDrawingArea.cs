@@ -51,12 +51,12 @@ namespace Do.UI
 		
 		private HUDStyle style;
 		
-		public const int IconSize     = 128;
-		const int BoxLineWidth = 1;
-		const int TextHeight   = 11;
-		const int BorderWidth  = 15;
-		const int fade_ms      = 150;
-		const int ShadowRadius = 10;
+		public const int IconSize = 128;
+		const int BoxLineWidth    = 1;
+		const int TextHeight      = 11;
+		const int BorderWidth     = 15;
+		const int fade_ms         = 150;
+		const int ShadowRadius    = 10;
 		
 		IBezelWindowRenderElement  TitleBarRenderer;
 		IBezelWindowRenderElement  BackgroundRenderer;
@@ -353,10 +353,10 @@ namespace Do.UI
 			old_context = new BezelDrawingContext ();
 			entry_mode = new bool [3];
 			foreach (Surface s in surface_buffer.Values)
-				(s as IDisposable).Dispose ();
+				s.Destroy ();
 			
 			surface_buffer = new Dictionary<string,Surface> ();
-			AnimatedDraw ();
+			Draw ();
 		}
 		
 		public void Draw ()
@@ -373,7 +373,7 @@ namespace Do.UI
 				surface = cr2.Target.CreateSimilar (cr2.Target.Content, WindowWidth, WindowHeight);
 			
 			Context cr = new Context (surface);
-			cr.Save ();
+//			cr.Save ();
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
 			cr.Operator = Cairo.Operator.Source;
 			cr.Paint ();
@@ -400,7 +400,7 @@ namespace Do.UI
 				RenderPane (Pane.Second, cr);
 			
 				//------------Third Pane-----------------
-				if (ThirdPaneVisible && drawing_area.Width == ThreePaneWidth) {
+				if (ThirdPaneVisible /*&& drawing_area.Width == ThreePaneWidth*/) {
 					RenderPane (Pane.Third, cr);
 				}
 				
@@ -423,7 +423,7 @@ namespace Do.UI
 		
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
-			AnimatedDraw ();
+			Draw ();
 			return base.OnExposeEvent (evnt);
 		}
 		
@@ -434,6 +434,10 @@ namespace Do.UI
 		
 		private void RenderPane (Pane pane, Context cr)
 		{
+			if (pane == Pane.Third) {
+				cr.Rectangle (drawing_area.X, drawing_area.Y, drawing_area.Width, drawing_area.Height);
+				cr.Clip ();
+			}
 			RenderPaneOutline (pane, cr);
 			
 			switch (PaneDrawState (pane)) {
@@ -458,7 +462,7 @@ namespace Do.UI
 				}
 				break;
 			}
-			
+			cr.ResetClip ();
 		}
 		
 		private void RenderPaneOutline (Pane pane, Context cr)
@@ -468,7 +472,10 @@ namespace Do.UI
 		
 		private void RenderPixbuf (Pane pane, Context cr)
 		{
-			RenderPixbuf (pane, cr, Context.GetPaneObject (pane).Icon, 1);
+			IObject obj = Context.GetPaneObject (pane);
+//			if (obj.Name.EndsWith ("pdf"))
+//				Console.WriteLine ("File Item");
+			RenderPixbuf (pane, cr, obj.Icon, 1);
 		}
 		
 		private void RenderPixbuf (Pane pane, Context cr, string icon, double alpha)
