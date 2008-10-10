@@ -445,7 +445,7 @@ namespace Do.UI
 				cr.Fill ();
 				break;
 			case HUDStyle.Classic:
-				cr.Rectangle (-0.5, -0.5, width+1, top_border_width);
+				cr.Rectangle (0.5, -0.5, width-1, top_border_width);
 				LinearGradient title_grad1 = new LinearGradient (0, 0, 0, top_border_width);
 				title_grad1.AddColorStop (0, new Cairo.Color (0.95, 0.95, 0.95));
 				title_grad1.AddColorStop (1, new Cairo.Color (0.75, 0.75, 0.75));
@@ -453,7 +453,7 @@ namespace Do.UI
 				cr.FillPreserve ();
 				
 				cr.LineWidth = 1;
-				cr.Color = new Cairo.Color (0.4, 0.4, 0.4, 0.7);
+				cr.Color = new Cairo.Color (0.3, 0.3, 0.3, 0.5);
 				cr.Stroke ();
 				break;
 			}
@@ -485,7 +485,7 @@ namespace Do.UI
 				cr.Stroke ();
 				break;
 			case HUDStyle.Classic:
-				cr.Rectangle (-0.5, height-BottomBorderWidth+.5, width+1, BottomBorderWidth);
+				cr.Rectangle (0.5, height-BottomBorderWidth+.5, width-1, BottomBorderWidth);
 				LinearGradient title_grad1 = new LinearGradient (0, height-BottomBorderWidth, 0, height);
 				title_grad1.AddColorStop (0, new Cairo.Color (0.95, 0.95, 0.95));
 				title_grad1.AddColorStop (1, new Cairo.Color (0.75, 0.75, 0.75));
@@ -493,7 +493,7 @@ namespace Do.UI
 				cr.FillPreserve ();
 				
 				cr.LineWidth = 1;
-				cr.Color = new Cairo.Color (0.4, 0.4, 0.4, 0.7);
+				cr.Color = new Cairo.Color (0.3, 0.3, 0.3, 0.5);
 				cr.Stroke ();
 				break;
 			}
@@ -532,9 +532,13 @@ namespace Do.UI
 				cr.Stroke ();
 				break;
 			case HUDStyle.Classic:
-				cr.Rectangle (0, 0, width, height);
+				cr.Rectangle (0.5, 0, width-1, height);
 				cr.Color = BackgroundColor;
-				cr.Fill ();
+				cr.FillPreserve ();
+				
+				cr.Color = new Cairo.Color (.3, .3, .3, .5);
+				cr.LineWidth = 1;
+				cr.Stroke ();
 				break;
 			}
 
