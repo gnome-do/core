@@ -32,6 +32,7 @@ namespace Do.UI
 		int Height {get;}
 		
 		void RenderElement (Context cr, Gdk.Rectangle drawing_area);
+		PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point);
 	}
 	
 	public interface IBezelOverlayRenderElement
@@ -160,6 +161,20 @@ namespace Do.UI
 			cr.LineTo (x, Height);
 			cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
 		}
+		
+		public PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point)
+		{
+			Gdk.Rectangle close_circle = new Gdk.Rectangle (drawing_area.X + 6, drawing_area.Y + 2,
+			                                                12, 15);
+			Gdk.Rectangle pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - 18, 
+			                                               drawing_area.Y + 2, 12, 15);
+			if (close_circle.Contains (point))
+				return PointLocation.Close;
+			else if (pref_circle.Contains (point))
+				return PointLocation.Preferences;
+			else
+				return PointLocation.Window;
+		}
 	}
 	
 	public class ClassicTopBar: IBezelWindowRenderElement
@@ -200,6 +215,15 @@ namespace Do.UI
 			cr.LineTo (x + w - 25, y + 12);
 			cr.Color = new Cairo.Color (1, 1, 1, .95);
 			cr.Fill ();
+		}
+		
+		public PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point)
+		{
+			Gdk.Rectangle pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - 32,
+				                                 drawing_area.Y +5, 15, 15);
+			if (pref_circle.Contains (point))
+				return PointLocation.Preferences;
+			return PointLocation.Window;
 		}
 	}
 	
@@ -328,6 +352,13 @@ namespace Do.UI
 			cr.Arc (x+radius, y+h-radius, radius, Math.PI*.5, Math.PI);
 			cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
 		}
+		
+		public PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point)
+		{
+			if (drawing_area.Contains (point))
+				return PointLocation.Window;
+			return PointLocation.Outside;
+		}
 	}
 	
 	public class ClassicBackgroundRenderer : IBezelWindowRenderElement
@@ -374,6 +405,13 @@ namespace Do.UI
 			cr.Arc (x+w-radius, y+h-radius, radius, 0, Math.PI*.5);
 			cr.Arc (x+radius, y+h-radius, radius, Math.PI*.5, Math.PI);
 			cr.Arc (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
+		}
+		
+		public PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point)
+		{
+			if (drawing_area.Contains (point))
+				return PointLocation.Window;
+			return PointLocation.Outside;
 		}
 	}
 	

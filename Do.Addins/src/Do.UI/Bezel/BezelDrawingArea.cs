@@ -577,31 +577,9 @@ namespace Do.UI
 		
 		public PointLocation GetPointLocation (Gdk.Point point)
 		{
-			Gdk.Rectangle close_circle, pref_circle;
-
-			switch (style) {
-			case HUDStyle.HUD:
-				close_circle = new Gdk.Rectangle (drawing_area.X + 6, drawing_area.Y + 2,
-				                                  12, 15);
-				pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - 18, 
-				                                 drawing_area.Y + 2, 12, 15);
-				break;
-			case HUDStyle.Classic:
-				close_circle = new Gdk.Rectangle ();
-				pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - 32,
-				                                 drawing_area.Y +5, 15, 15);
-				break;
-			default:
-				throw new NotImplementedException ();
-			}
-			
-			if (!drawing_area.Contains (point))
+			if (BackgroundRenderer.GetPointLocation (drawing_area, point) == PointLocation.Outside)
 				return PointLocation.Outside;
-			if (close_circle.Contains (point))
-				return PointLocation.Close;
-			if (pref_circle.Contains (point))
-				return PointLocation.Preferences;
-			return PointLocation.Window;
+			return TitleBarRenderer.GetPointLocation (drawing_area, point);
 		}
 	}
 }
