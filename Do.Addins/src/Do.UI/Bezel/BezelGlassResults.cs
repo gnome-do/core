@@ -446,16 +446,16 @@ namespace Do.UI
 				cr.Fill ();
 				break;
 			case HUDStyle.Classic:
-				cr.Rectangle (0, 0, width, top_border_width);
+				cr.Rectangle (-0.5, -0.5, width+1, top_border_width);
 				LinearGradient title_grad1 = new LinearGradient (0, 0, 0, top_border_width);
 				title_grad1.AddColorStop (0, new Cairo.Color (0.95, 0.95, 0.95));
 				title_grad1.AddColorStop (1, new Cairo.Color (0.75, 0.75, 0.75));
 				cr.Pattern = title_grad1;
-				cr.Fill ();
+				cr.FillPreserve ();
 				
-//				cr.LineWidth = 1;
-//				cr.Color = new Cairo.Color (0.4, 0.4, 0.4);
-//				cr.Stroke ();
+				cr.LineWidth = 1;
+				cr.Color = new Cairo.Color (0.4, 0.4, 0.4, 0.7);
+				cr.Stroke ();
 				break;
 			}
 		}
@@ -486,13 +486,16 @@ namespace Do.UI
 				cr.Stroke ();
 				break;
 			case HUDStyle.Classic:
-				cr.Rectangle (0, height-BottomBorderWidth, width, BottomBorderWidth);
+				cr.Rectangle (-0.5, height-BottomBorderWidth+.5, width+1, BottomBorderWidth);
 				LinearGradient title_grad1 = new LinearGradient (0, height-BottomBorderWidth, 0, height);
 				title_grad1.AddColorStop (0, new Cairo.Color (0.95, 0.95, 0.95));
 				title_grad1.AddColorStop (1, new Cairo.Color (0.75, 0.75, 0.75));
 				cr.Pattern = title_grad1;
-				cr.Fill ();
+				cr.FillPreserve ();
 				
+				cr.LineWidth = 1;
+				cr.Color = new Cairo.Color (0.4, 0.4, 0.4, 0.7);
+				cr.Stroke ();
 				break;
 			}
 		}
@@ -548,8 +551,10 @@ namespace Do.UI
 			cr.LineTo (border_width + .5, height-BottomBorderWidth);
 			cr.MoveTo (width - border_width - .5, top_border_width);
 			cr.LineTo (width - border_width - .5, height-BottomBorderWidth);
-			cr.MoveTo (0, height-BottomBorderWidth-.5);
-			cr.LineTo (width, height-BottomBorderWidth-.5);
+			if (style != HUDStyle.Classic) {			
+				cr.MoveTo (0, height-BottomBorderWidth-.5);
+				cr.LineTo (width, height-BottomBorderWidth-.5);
+			}
 			
 			cr.LineWidth = 1;
 			cr.Color = new Cairo.Color (.6, .6, .6, .15);
