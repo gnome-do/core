@@ -42,6 +42,7 @@ FILES =  \
 	src/Do.Addins/IConfigurable.cs \
 	src/Do.Addins/IDoController.cs \
 	src/Do.Addins/IPreferences.cs \
+	src/Do.Addins/PixbufSurfaceCache.cs \
 	src/Do.Addins/SearchContext.cs \
 	src/Do.Addins/SearchFinishState.cs \
 	src/Do.Addins/Util.cs \

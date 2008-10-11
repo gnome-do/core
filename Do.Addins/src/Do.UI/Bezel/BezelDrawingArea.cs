@@ -130,12 +130,14 @@ namespace Do.UI
 		
 		bool third_pane_visible;
 		BezelDrawingContext context, old_context;
+		PixbufSurfaceCache surface_cache;
 		Pane focus;
 		DateTime delta_time;
 		uint timer;
+		int frame;
 		
 		Gdk.Rectangle drawing_area;
-		Dictionary <string, Surface> surface_buffer;
+//		Dictionary <string, Surface> surface_buffer;
 		Surface surface;
 		
 		double text_box_scale;
@@ -195,7 +197,7 @@ namespace Do.UI
 				throw new NotImplementedException ();
 			}
 			
-			surface_buffer = new Dictionary <string,Surface> ();
+//			surface_buffer = new Dictionary <string,Surface> ();
 			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
 			icon_fade = new double [3];
 			
@@ -234,29 +236,47 @@ namespace Do.UI
 					(!entry_mode[(int) Focus] && text_box_scale != 0);
 			}
 		}
+
+		public PixbufSurfaceCache SurfaceCache {
+			get {
+				if (surface_cache == null) {
+					using (Context cr = CairoHelper.Create (GdkWindow))
+						surface_cache = new PixbufSurfaceCache (50, IconSize, IconSize, cr.Target);
+				}
+				return surface_cache;
+			}
+		}
 		
 		private void AnimatedDraw ()
 		{
 			if (!IsDrawable || timer > 0)
 				return;
-			
+
+			delta_time = DateTime.Now;
 			Paint ();
+			frame = 0;
 			
 			if (!AnimationNeeded)
 				return;
 			
-			delta_time = DateTime.Now;
-			timer = GLib.Timeout.Add (17, delegate {
+			
+			timer = GLib.Timeout.Add (1000/60, delegate {
 				
 				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
 				delta_time = DateTime.Now;
+//				DateTime time = DateTime.Now;
+//				double fps = Math.Round (1000 / (change*fade_ms));
+//				if (fps < 30)
+//				Console.WriteLine (frame + ": " + fps);
+//				Console.WriteLine (change);
+//				frame++;
 				
 				if (ExpandNeeded) {
-					drawing_area.Width += (int)((ThreePaneWidth-TwoPaneWidth)*change);
+					drawing_area.Width += (int) ((ThreePaneWidth-TwoPaneWidth)*change);
 					drawing_area.Width = (drawing_area.Width > ThreePaneWidth) ? ThreePaneWidth : drawing_area.Width;
 					drawing_area.X = (WindowWidth - drawing_area.Width) / 2;
 				} else if (ShrinkNeeded) {
-					drawing_area.Width -= (int)((ThreePaneWidth-TwoPaneWidth)*change);
+					drawing_area.Width -= (int) ((ThreePaneWidth-TwoPaneWidth)*change);
 					drawing_area.Width = (drawing_area.Width < TwoPaneWidth) ? TwoPaneWidth : drawing_area.Width;
 					drawing_area.X = (WindowWidth - drawing_area.Width) / 2;
 				}
@@ -284,6 +304,7 @@ namespace Do.UI
 					icon_fade[2] = (icon_fade[2] > 1) ? 1 : icon_fade[2];
 				}
 				
+//				Console.WriteLine (DateTime.Now.Subtract (time).TotalMilliseconds);
 				Paint ();
 				
 				if (AnimationNeeded) {
@@ -352,10 +373,10 @@ namespace Do.UI
 			context = new BezelDrawingContext ();
 			old_context = new BezelDrawingContext ();
 			entry_mode = new bool [3];
-			foreach (Surface s in surface_buffer.Values)
-				s.Destroy ();
+//			foreach (Surface s in surface_buffer.Values)
+//				s.Destroy ();
 			
-			surface_buffer = new Dictionary<string,Surface> ();
+//			surface_buffer = new Dictionary<string,Surface> ();
 			Draw ();
 		}
 		
@@ -473,15 +494,13 @@ namespace Do.UI
 		private void RenderPixbuf (Pane pane, Context cr)
 		{
 			IObject obj = Context.GetPaneObject (pane);
-//			if (obj.Name.EndsWith ("pdf"))
-//				Console.WriteLine ("File Item");
 			RenderPixbuf (pane, cr, obj.Icon, 1);
 		}
 		
 		private void RenderPixbuf (Pane pane, Context cr, string icon, double alpha)
 		{
 			int offset = PaneOffset (pane);
-			if (!surface_buffer.ContainsKey (icon)) {
+			if (!SurfaceCache.ContainsKey (icon)) {
 				BufferIcon (cr, icon);
 			}
 			
@@ -490,37 +509,24 @@ namespace Do.UI
 				sec_icon = OldContext.GetPaneObject (pane).Icon;
 			
 			double calc_alpha = (sec_icon != icon) ? icon_fade[(int) pane] : 1;
-			cr.SetSource (surface_buffer[icon], drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
+			cr.SetSource (SurfaceCache.GetSurface (icon), drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
 				                                 drawing_area.Y + WindowBorder + TitleBarHeight + 3);
 			cr.PaintWithAlpha (calc_alpha * alpha);
 			
 			if (!string.IsNullOrEmpty (sec_icon) && calc_alpha < 1) {
-				if (!surface_buffer.ContainsKey (OldContext.GetPaneObject (pane).Icon)) {
+				if (!SurfaceCache.ContainsKey (OldContext.GetPaneObject (pane).Icon)) {
 					BufferIcon (cr, OldContext.GetPaneObject (pane).Icon);
 				}
-				cr.SetSource (surface_buffer[OldContext.GetPaneObject (pane).Icon], drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
-				                                 drawing_area.Y + WindowBorder + TitleBarHeight + 3);
+				cr.SetSource (SurfaceCache.GetSurface (OldContext.GetPaneObject (pane).Icon), 
+				              drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
+				              drawing_area.Y + WindowBorder + TitleBarHeight + 3);
 				cr.PaintWithAlpha (alpha * (1 - calc_alpha));
 			}
 		}
 		
 		private void BufferIcon (Context cr, string icon)
 		{
-			Surface sr;
-			Gdk.Pixbuf pixbuf;
-			pixbuf = IconProvider.PixbufFromIconName (icon, IconSize);
-			if (pixbuf.Height != IconSize && pixbuf.Width != IconSize) {
-				Gdk.Pixbuf temp = pixbuf.ScaleSimple (IconSize, IconSize, InterpType.Bilinear);
-				pixbuf.Dispose ();
-				pixbuf = temp;
-			}
-			sr = cr.Target.CreateSimilar (cr.Target.Content, IconSize, IconSize);
-			Context cr2 = new Context (sr);
-			Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 0, 0);
-			cr2.Paint ();
-			surface_buffer[icon] = sr;
-			(cr2 as IDisposable).Dispose ();
-			pixbuf.Dispose ();
+			SurfaceCache.AddPixbufSurface (icon, icon);
 		}
 		
 		void RenderDescriptionText (Context cr)
