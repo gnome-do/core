@@ -43,7 +43,8 @@ namespace Do.UI
 			Util.Appearance.SetColormap (this);
 			
 			Add (results);
-			ShowAll ();
+			results.Show ();
+//			ShowAll ();
 		}
 		
 		protected override bool OnExposeEvent (EventExpose evnt)

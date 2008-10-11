@@ -345,6 +345,14 @@ namespace Do.UI
 			if (!IsDrawable) return;
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			
+			if (slide_offset == 0) {
+				cr.Operator = Operator.Source;
+				cr.Color = new Cairo.Color (0, 0, 0, 0);
+				cr.Paint ();
+				(cr as IDisposable).Dispose ();
+				return;
+			}
+			
 			if (backbuffer == null)
 				backbuffer = cr.Target.CreateSimilar (cr.Target.Content, width, height);
 			
