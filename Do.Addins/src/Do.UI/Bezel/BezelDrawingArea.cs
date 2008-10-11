@@ -134,7 +134,7 @@ namespace Do.UI
 		Pane focus;
 		DateTime delta_time;
 		uint timer;
-		int frame;
+//		int frame;
 		
 		Gdk.Rectangle drawing_area;
 //		Dictionary <string, Surface> surface_buffer;
@@ -252,14 +252,14 @@ namespace Do.UI
 			if (!IsDrawable || timer > 0)
 				return;
 
-			delta_time = DateTime.Now;
+			
 			Paint ();
-			frame = 0;
+//			frame = 0;
 			
 			if (!AnimationNeeded)
 				return;
 			
-			
+			delta_time = DateTime.Now;
 			timer = GLib.Timeout.Add (1000/60, delegate {
 				
 				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;

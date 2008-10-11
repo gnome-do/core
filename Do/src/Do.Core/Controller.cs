@@ -301,9 +301,9 @@ namespace Do.Core {
 			if (objects.Length > 1) {
 				GLib.Timeout.Add (50,
 					delegate {
-						Gdk.Threads.Enter ();
+//						Gdk.Threads.Enter ();
 						GrowResults ();
-						Gdk.Threads.Leave ();
+//						Gdk.Threads.Leave ();
 						return false;
 					}
 				);
