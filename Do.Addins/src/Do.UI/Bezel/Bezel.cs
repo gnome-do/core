@@ -66,7 +66,7 @@ namespace Do.UI
 			vbox.PackStart (bda, true, true, 0);
 			bda.Show ();
 			
-			bgr = new BezelGlassResults (8, 340, style);
+			bgr = new BezelGlassResults (340, style);
 			bgw = new BezelGlassWindow (bgr);
 	
 			Add (vbox);

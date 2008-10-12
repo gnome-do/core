@@ -56,7 +56,6 @@ namespace Do.Core
 			this.FirstController  = FirstController;
 			this.SecondController = SecondController;
 			
-//			SecondController.SelectionChanged += OnUpstreamSelectionChanged;
 			SecondController.SearchFinished += delegate (object o, SearchFinishState state) {
 				if (state.SelectionChanged)
 					OnUpstreamSelectionChanged ();

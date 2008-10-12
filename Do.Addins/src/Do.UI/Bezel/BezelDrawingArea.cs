@@ -134,10 +134,8 @@ namespace Do.UI
 		Pane focus;
 		DateTime delta_time;
 		uint timer;
-//		int frame;
 		
 		Gdk.Rectangle drawing_area;
-//		Dictionary <string, Surface> surface_buffer;
 		Surface surface;
 		
 		double text_box_scale;
@@ -424,7 +422,7 @@ namespace Do.UI
 				if (ThirdPaneVisible /*&& drawing_area.Width == ThreePaneWidth*/) {
 					RenderPane (Pane.Third, cr);
 				}
-				
+
 				if (text_box_scale > 0) {
 					RenderTextModeOverlay (cr);
 				}

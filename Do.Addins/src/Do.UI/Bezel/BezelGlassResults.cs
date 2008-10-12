@@ -34,9 +34,10 @@ namespace Do.UI
 	public class BezelGlassResults : Gtk.DrawingArea
 	{
 		HUDStyle style;
+		IBezelResultItemRenderer ItemRenderer;
 		
-		const int SurfaceHeight = 20;
-		const int IconSize = 16;
+//		const int SurfaceHeight = 20;
+//		const int IconSize = 16;
 		const int FadeTime = 100;
 		
 		int num_results;
@@ -70,7 +71,9 @@ namespace Do.UI
 				}
 			}
 		}
-
+		
+		int SurfaceHeight { get { return ItemRenderer.Height; } }
+		
 		private Cairo.Color BackgroundColor
 		{
 			get {
@@ -89,7 +92,7 @@ namespace Do.UI
 			}
 		}				
 		
-		string ItemTextColor {
+		public string ItemTextColor {
 			get {
 				switch (style) {
 				case HUDStyle.HUD:
@@ -106,7 +109,7 @@ namespace Do.UI
 			}
 		}
 		
-		string QueryColor {
+		public string QueryColor {
 			get {
 				switch (style) {
 				case HUDStyle.HUD:
@@ -238,7 +241,18 @@ namespace Do.UI
 				return secondary;
 			}
 			set {
-				if (value == secondary)
+				bool ident = true;
+				if (secondary.Length == value.Length) {
+					for (int i = 0; i<secondary.Length; i++) {
+						if (secondary[i] != value[i]) {
+							ident = false;
+							break;
+						}
+					}
+				} else {
+					ident = false;
+				}
+				if (ident)
 					return;
 				foreach (Surface s in surface_buffer.Values)
 					s.Destroy ();
@@ -247,13 +261,23 @@ namespace Do.UI
 			}
 		}
 		
-		public BezelGlassResults(int numberResults, int width, HUDStyle style) : base ()
+		public BezelGlassResults(int width, HUDStyle style) : base ()
 		{
 			this.style = style;
+			switch (style) {
+			case HUDStyle.Classic:
+				ItemRenderer = new BezelFullResultItemRenderer (this);
+				num_results = 5;
+				break;
+			case HUDStyle.HUD:
+				ItemRenderer = new BezelHalfResultItemRenderer (this);
+				num_results = 8;
+				break;
+			}
+//			ItemRenderer = new BezelFullResultItemRenderer (this);
 			
-			num_results = numberResults;
 			surface_buffer = new Dictionary <IObject,Surface> ();
-			Secondary = new int[0];
+			secondary = new int[0];
 			border_width = 12;
 			top_border_width = 20;
 			this.width = width;
@@ -661,41 +685,10 @@ namespace Do.UI
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			Surface surface = cr.Target.CreateSimilar (cr.Target.Content, InternalWidth, SurfaceHeight);
 			Context cr2 = new Context (surface);
-			cr2.Rectangle (border_width, 0, InternalWidth, SurfaceHeight);
-			cr2.Color = new Cairo.Color (0, 0, 0, 0);
-			cr2.Operator = Operator.Source;
-			cr2.Fill ();
-			cr2.Operator = Operator.Over;
-			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.Icon, IconSize);
-			Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 2, 2);
-			cr2.Paint ();
-			
-			pixbuf.Dispose ();
-			
-			foreach (int i in Secondary) {
-				if (results[i] == item) {
-					pixbuf = IconProvider.PixbufFromIconName ("gtk-add", IconSize);
-					Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 2, 2);
-					cr2.PaintWithAlpha (.7);
-					pixbuf.Dispose ();
-				}
-			}
-				
-			Pango.Layout layout = new Pango.Layout (this.PangoContext);
-			layout.Width = Pango.Units.FromPixels (InternalWidth - IconSize - 10);
-			layout.Ellipsize = Pango.EllipsizeMode.End;
-			layout.SetMarkup ("<span foreground=\"#" + ItemTextColor + "\">"+GLib.Markup.EscapeText (item.Name)+"</span>");
-			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
-			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (10);
-				
-			cr2.MoveTo (IconSize + 6, 4);
-			Pango.CairoHelper.ShowLayout (cr2, layout);
+			ItemRenderer.RenderElement (cr2, new Gdk.Point (border_width, 0), InternalWidth, item);
 			
 			surface_buffer[item] = surface;
 			
-			layout.FontDescription.Dispose ();
-			layout.Dispose ();
 			(cr2 as IDisposable).Dispose ();
 			(cr as IDisposable).Dispose ();
 		}
