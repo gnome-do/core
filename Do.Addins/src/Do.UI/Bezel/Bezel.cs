@@ -67,10 +67,6 @@ namespace Do.UI
 			bda.Show ();
 			
 			bgr = new BezelGlassResults (8, 340, style);
-//			bgr.X = (int) (bda.WindowWidth / 2) - 170;
-//			bgr.X = 0;
-//			vbox.PackStart (bgr, true, true, 0);
-//			bgr.Show ();
 			bgw = new BezelGlassWindow (bgr);
 	
 			Add (vbox);
