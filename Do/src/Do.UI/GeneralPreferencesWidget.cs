@@ -84,13 +84,13 @@ namespace Do.UI
         	notification_check.Active = Do.Preferences.StatusIconVisible;
 			pin_check.Active = Do.Preferences.AlwaysShowResults;
 			
-			Addins.Util.Appearance.SetColormap (this);
+//			Addins.Util.Appearance.SetColormap (this);
 //			AppPaintable = true;
-			BezelDrawingArea bda = new BezelDrawingArea (HUDStyle.Classic, true);
-			bda.PaneOutlineRenderer = new HUDPaneOutlineRenderer (bda);
-			bda.TitleBarRenderer = new HUDTopBar (bda);
-			vbox2.PackStart (bda);
-			bda.Show ();
+//			BezelDrawingArea bda = new BezelDrawingArea (HUDStyle.Classic, true);
+//			bda.PaneOutlineRenderer = new HUDPaneOutlineRenderer (bda);
+//			bda.TitleBarRenderer = new HUDTopBar (bda);
+//			vbox2.PackStart (bda);
+//			bda.Show ();
         }
         
         public Bin GetConfiguration ()

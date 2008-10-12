@@ -45,20 +45,6 @@ namespace Do.UI {
         
         private Gtk.CheckButton pin_check;
         
-        private Gtk.Table table1;
-        
-        private Gtk.ComboBox combobox1;
-        
-        private Gtk.ComboBox combobox2;
-        
-        private Gtk.ComboBox combobox3;
-        
-        private Gtk.Label label4;
-        
-        private Gtk.Label label5;
-        
-        private Gtk.Label label6;
-        
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.GeneralPreferencesWidget
@@ -204,89 +190,15 @@ namespace Do.UI {
             w11.Position = 0;
             w11.Expand = false;
             w11.Fill = false;
-            // Container child vbox2.Gtk.Box+BoxChild
-            this.table1 = new Gtk.Table(((uint)(3)), ((uint)(2)), false);
-            this.table1.Name = "table1";
-            this.table1.RowSpacing = ((uint)(6));
-            this.table1.ColumnSpacing = ((uint)(6));
-            // Container child table1.Gtk.Table+TableChild
-            this.combobox1 = Gtk.ComboBox.NewText();
-            this.combobox1.AppendText(Mono.Unix.Catalog.GetString("HUD Style"));
-            this.combobox1.AppendText(Mono.Unix.Catalog.GetString("Classic Style"));
-            this.combobox1.Name = "combobox1";
-            this.table1.Add(this.combobox1);
-            Gtk.Table.TableChild w12 = ((Gtk.Table.TableChild)(this.table1[this.combobox1]));
-            w12.LeftAttach = ((uint)(1));
-            w12.RightAttach = ((uint)(2));
-            w12.XOptions = ((Gtk.AttachOptions)(4));
-            w12.YOptions = ((Gtk.AttachOptions)(4));
-            // Container child table1.Gtk.Table+TableChild
-            this.combobox2 = Gtk.ComboBox.NewText();
-            this.combobox2.AppendText(Mono.Unix.Catalog.GetString("HUD Style"));
-            this.combobox2.AppendText(Mono.Unix.Catalog.GetString("Classic Style"));
-            this.combobox2.Name = "combobox2";
-            this.table1.Add(this.combobox2);
-            Gtk.Table.TableChild w13 = ((Gtk.Table.TableChild)(this.table1[this.combobox2]));
-            w13.TopAttach = ((uint)(1));
-            w13.BottomAttach = ((uint)(2));
-            w13.LeftAttach = ((uint)(1));
-            w13.RightAttach = ((uint)(2));
-            w13.XOptions = ((Gtk.AttachOptions)(4));
-            w13.YOptions = ((Gtk.AttachOptions)(4));
-            // Container child table1.Gtk.Table+TableChild
-            this.combobox3 = Gtk.ComboBox.NewText();
-            this.combobox3.AppendText(Mono.Unix.Catalog.GetString("HUD Style"));
-            this.combobox3.AppendText(Mono.Unix.Catalog.GetString("Classic Style"));
-            this.combobox3.Name = "combobox3";
-            this.table1.Add(this.combobox3);
-            Gtk.Table.TableChild w14 = ((Gtk.Table.TableChild)(this.table1[this.combobox3]));
-            w14.TopAttach = ((uint)(2));
-            w14.BottomAttach = ((uint)(3));
-            w14.LeftAttach = ((uint)(1));
-            w14.RightAttach = ((uint)(2));
-            w14.YOptions = ((Gtk.AttachOptions)(4));
-            // Container child table1.Gtk.Table+TableChild
-            this.label4 = new Gtk.Label();
-            this.label4.Name = "label4";
-            this.label4.LabelProp = Mono.Unix.Catalog.GetString("Pane Style");
-            this.table1.Add(this.label4);
-            Gtk.Table.TableChild w15 = ((Gtk.Table.TableChild)(this.table1[this.label4]));
-            w15.TopAttach = ((uint)(2));
-            w15.BottomAttach = ((uint)(3));
-            w15.XOptions = ((Gtk.AttachOptions)(4));
-            w15.YOptions = ((Gtk.AttachOptions)(4));
-            // Container child table1.Gtk.Table+TableChild
-            this.label5 = new Gtk.Label();
-            this.label5.Name = "label5";
-            this.label5.LabelProp = Mono.Unix.Catalog.GetString("Top Bar Style");
-            this.table1.Add(this.label5);
-            Gtk.Table.TableChild w16 = ((Gtk.Table.TableChild)(this.table1[this.label5]));
-            w16.XOptions = ((Gtk.AttachOptions)(4));
-            w16.YOptions = ((Gtk.AttachOptions)(4));
-            // Container child table1.Gtk.Table+TableChild
-            this.label6 = new Gtk.Label();
-            this.label6.Name = "label6";
-            this.label6.LabelProp = Mono.Unix.Catalog.GetString("Background Style");
-            this.table1.Add(this.label6);
-            Gtk.Table.TableChild w17 = ((Gtk.Table.TableChild)(this.table1[this.label6]));
-            w17.TopAttach = ((uint)(1));
-            w17.BottomAttach = ((uint)(2));
-            w17.XOptions = ((Gtk.AttachOptions)(4));
-            w17.YOptions = ((Gtk.AttachOptions)(4));
-            this.vbox2.Add(this.table1);
-            Gtk.Box.BoxChild w18 = ((Gtk.Box.BoxChild)(this.vbox2[this.table1]));
-            w18.Position = 1;
-            w18.Expand = false;
-            w18.Fill = false;
             this.vbox3.Add(this.vbox2);
-            Gtk.Box.BoxChild w19 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox2]));
-            w19.Position = 1;
-            w19.Expand = false;
-            w19.Fill = false;
+            Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox2]));
+            w12.Position = 1;
+            w12.Expand = false;
+            w12.Fill = false;
             this.alignment3.Add(this.vbox3);
             this.vbox1.Add(this.alignment3);
-            Gtk.Box.BoxChild w21 = ((Gtk.Box.BoxChild)(this.vbox1[this.alignment3]));
-            w21.Position = 3;
+            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.vbox1[this.alignment3]));
+            w14.Position = 3;
             this.alignment4.Add(this.vbox1);
             this.Add(this.alignment4);
             if ((this.Child != null)) {
