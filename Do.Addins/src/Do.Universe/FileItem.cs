@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
+using Gnome;
 using Mono.Unix;
 
 namespace Do.Universe {
@@ -32,10 +33,13 @@ namespace Do.Universe {
 	/// in the factory method FileItem.Create.
 	/// </summary>
 	public class FileItem : IFileItem, IOpenableItem {
-		
+
+		static ThumbnailFactory thumb_factory;
+
 		static FileItem ()
 		{
 			Gnome.Vfs.Vfs.Initialize ();
+			thumb_factory = new ThumbnailFactory (ThumbnailSize.Large);
 		}
 
 		/// <summary>
@@ -49,37 +53,42 @@ namespace Do.Universe {
 		/// </returns>
 		public static string ShortPath (string path)
 		{
-			if (null == path)
-				throw new ArgumentNullException ();
+			if (null == path) throw new ArgumentNullException ();
 
 			return path.Replace (Paths.UserHome, "~");
 		}
-		
+
 		public static bool IsExecutable (IFileItem fi)
 		{
-			if (fi == null) return false;
+			if (null == fi) throw new ArgumentNullException ();
+
 			return IsExecutable (fi.Path);
 		}
 
 		public static bool IsExecutable (string path)
 		{
+			if (null == path) throw new ArgumentNullException ();
+
 			UnixFileInfo info;
 
 			if (Directory.Exists (path)) return false;
 
 			info = new UnixFileInfo (path);
 			return (info.FileAccessPermissions &
-				FileAccessPermissions.UserExecute) != 0;
+					FileAccessPermissions.UserExecute) != 0;
 		}
-		
+
 		public static bool IsHidden (IFileItem fi)
 		{
-			if (fi == null) return false;
+			if (null == fi) throw new ArgumentNullException ();
+
 			return IsHidden (fi.Path);
 		}
 
 		public static bool IsHidden (string path)
 		{
+			if (null == path) throw new ArgumentNullException ();
+
 			FileInfo info;
 
 			if (path.EndsWith ("~")) return true;
@@ -90,28 +99,35 @@ namespace Do.Universe {
 
 		public static bool IsDirectory (IFileItem fi)
 		{
+			if (null == fi) throw new ArgumentNullException ();
+
 			return IsDirectory (fi.Path);
 		}
 
-
 		public static bool IsDirectory (string path)
 		{
+			if (null == path) throw new ArgumentNullException ();
+
 			return Directory.Exists (path);
 		}
 
-        public static string EscapedPath (IFileItem fi)
-        {
-            return EscapedPath (fi.Path);
-        }
+		public static string EscapedPath (IFileItem fi)
+		{
+			if (null == fi) throw new ArgumentNullException ();
 
-        public static string EscapedPath (string path)
-        {
-            return path
+			return EscapedPath (fi.Path);
+		}
+
+		public static string EscapedPath (string path)
+		{
+			if (null == path) throw new ArgumentNullException ();
+
+			return path
 				.Replace (" ", "\\ ")
 				.Replace ("'", "\\'");
-        }
-		
-		protected string path, name, description, icon;
+		}
+
+		string path, name, description, icon;
 		
 		/// <summary>
 		/// Create a new FileItem for a given file.
@@ -123,60 +139,67 @@ namespace Do.Universe {
 		{	
 			this.path = path;
 			this.name = System.IO.Path.GetFileName (Path);
-			
-			string short_path;
-				
-			short_path = ShortPath (Path);
-			if (short_path == "~")
+
+			if (ShortPath (Path) == "~")
 				// Sowing only "~" looks too abbreviated.
 				description = Path;
 			else
-				description = short_path;
-			
-			icon = MimeType;
-			try {
-				if (icon == "x-directory/normal") {
-					icon = "folder";
-				} else if (icon.StartsWith ("image")) {
-					icon = "gnome-mime-image";
-				} else {
-					icon = icon.Replace ('/', '-');
-					icon = string.Format ("gnome-mime-{0}", icon);
-				}
-			} catch (NullReferenceException) {
-				icon = "gtk-file";
-			}
+				description = ShortPath (Path);
 		}
-		
+
 		public virtual string Name {
 			get {
 				return name;
 			}
 		}
-		
+
 		public virtual string Description {
 			get {
 				return description;
 			}
 		}
-		
+
 		public virtual string Icon {
 			get {
+				if (null != icon) return icon;
+
+				if (thumb_factory.CanThumbnail (URI, MimeType, DateTime.MinValue)) {
+					icon = Thumbnail.PathForUri (URI, ThumbnailSize.Large);
+					if (!System.IO.File.Exists (icon)) {
+						using (Gdk.Pixbuf thumb = 
+								thumb_factory.GenerateThumbnail (URI, MimeType)) {
+							thumb_factory.SaveThumbnail (thumb, URI, DateTime.Now);
+						}
+					}
+				} else {
+					try {
+						if (MimeType == "x-directory/normal") {
+							icon = "folder";
+						} else if (MimeType.StartsWith ("image")) {
+							icon = "gnome-mime-image";
+						} else {
+							icon = MimeType.Replace ('/', '-');
+							icon = string.Format ("gnome-mime-{0}", icon);
+						}
+					} catch (NullReferenceException) {
+						icon = "gtk-file";
+					}
+				}
 				return icon;
 			}
 		}
-		
+
 		public string Path {
 			get { return path; }
 			set { path = value; }
 		}
-		
+
 		public string URI {
 			get {
 				return "file://" + Path;
 			}
 		}
-		
+
 		public string MimeType {
 			get {
 				return Gnome.Vfs.Global.GetMimeType (Path);
