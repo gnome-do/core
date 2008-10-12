@@ -35,8 +35,6 @@ namespace Do.UI {
             this.Icon = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Menu, 16);
             this.WindowPosition = ((Gtk.WindowPosition)(1));
             this.BorderWidth = ((uint)(6));
-            this.Resizable = false;
-            this.AllowGrow = false;
             // Container child Do.UI.PreferencesWindow.Gtk.Container+ContainerChild
             this.vbox1 = new Gtk.VBox();
             this.vbox1.Name = "vbox1";
@@ -95,7 +93,7 @@ namespace Do.UI {
                 this.Child.ShowAll();
             }
             this.DefaultWidth = 510;
-            this.DefaultHeight = 526;
+            this.DefaultHeight = 527;
             this.btn_close.HasDefault = true;
             this.Show();
             this.btn_help.Clicked += new System.EventHandler(this.OnBtnHelpClicked);

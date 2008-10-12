@@ -49,8 +49,6 @@ namespace Do.UI
 			None,
 		}
 		
-		private HUDStyle style;
-		
 		public const int IconSize = 128;
 		const int BoxLineWidth    = 1;
 		const int TextHeight      = 11;
@@ -58,11 +56,11 @@ namespace Do.UI
 		const int fade_ms         = 150;
 		const int ShadowRadius    = 10;
 		
-		IBezelWindowRenderElement  TitleBarRenderer;
-		IBezelWindowRenderElement  BackgroundRenderer;
-		IBezelPaneRenderElement    PaneOutlineRenderer;
-		IBezelOverlayRenderElement TextModeOverlayRenderer;
-		IBezelDefaults BezelDefaults;
+		IBezelWindowRenderElement  titleBarRenderer;
+		IBezelWindowRenderElement  backgroundRenderer;
+		IBezelPaneRenderElement    paneOutlineRenderer;
+		IBezelOverlayRenderElement textModeOverlayRenderer;
+		IBezelDefaults bezelDefaults;
 		
 		public int BoxWidth {
 			get {
@@ -128,7 +126,7 @@ namespace Do.UI
 		
 		public int TextModeOffset { get { return Math.Max (TitleBarHeight, WindowRadius); } }
 		
-		bool third_pane_visible;
+		bool third_pane_visible, preview;
 		BezelDrawingContext context, old_context;
 		PixbufSurfaceCache surface_cache;
 		Pane focus;
@@ -172,32 +170,35 @@ namespace Do.UI
 			}
 		}
 		
-		public BezelDrawingArea(HUDStyle style) : base ()
+		public BezelDrawingArea(HUDStyle style, bool preview) : base ()
 		{
-			this.style = style;
+//			this.style = style;
+			this.preview = preview;
 			BezelColors.InitColors (style, this);
 			switch (style) {
 			case HUDStyle.HUD:
-				TitleBarRenderer        = new HUDTopBar (this);
-				PaneOutlineRenderer     = new HUDPaneOutlineRenderer (this);
-				BackgroundRenderer      = new HUDBackgroundRenderer (this);
-				TextModeOverlayRenderer = new HUDTextOverlayRenderer (this);
-				BezelDefaults           = new HUDBezelDefaults ();
+				titleBarRenderer        = new HUDTopBar (this);
+				paneOutlineRenderer     = new HUDPaneOutlineRenderer (this);
+				backgroundRenderer      = new HUDBackgroundRenderer (this);
+				textModeOverlayRenderer = new HUDTextOverlayRenderer (this);
+				bezelDefaults           = new HUDBezelDefaults ();
 				break;
 			case HUDStyle.Classic:
-				TitleBarRenderer        = new ClassicTopBar (this);
-				PaneOutlineRenderer     = new ClassicPaneOutlineRenderer (this);
-				BackgroundRenderer      = new ClassicBackgroundRenderer (this);
-				TextModeOverlayRenderer = new ClassicTextOverlayRenderer (this);
-				BezelDefaults           = new ClassicBezelDefaults ();
+				titleBarRenderer        = new ClassicTopBar (this);
+				paneOutlineRenderer     = new ClassicPaneOutlineRenderer (this);
+				backgroundRenderer      = new ClassicBackgroundRenderer (this);
+				textModeOverlayRenderer = new ClassicTextOverlayRenderer (this);
+				bezelDefaults           = new ClassicBezelDefaults ();
 				break;
 			default:
 				throw new NotImplementedException ();
 			}
 			
-//			surface_buffer = new Dictionary <string,Surface> ();
 			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
 			icon_fade = new double [3];
+			
+			if (preview)
+				drawing_area.X = ShadowRadius;
 			
 			SetSizeRequest (WindowWidth, WindowHeight);
 		}
@@ -244,17 +245,73 @@ namespace Do.UI
 				return surface_cache;
 			}
 		}
+
+		public IBezelWindowRenderElement TitleBarRenderer {
+			get {
+				return titleBarRenderer;
+			}
+			set {
+				titleBarRenderer = value;
+				SetSizeRequest (WindowWidth, WindowHeight);
+				drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
+				if (preview)
+					drawing_area.X = ShadowRadius;
+			}
+		}
+
+		public IBezelWindowRenderElement BackgroundRenderer {
+			get {
+				return backgroundRenderer;
+			}
+			set {
+				backgroundRenderer = value;
+			}
+		}
+
+		public IBezelPaneRenderElement PaneOutlineRenderer {
+			get {
+				return paneOutlineRenderer;
+			}
+			set {
+				paneOutlineRenderer = value;
+				SetSizeRequest (WindowWidth, WindowHeight);
+				drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
+				if (preview)
+					drawing_area.X = ShadowRadius;
+			}
+		}
+
+		public IBezelOverlayRenderElement TextModeOverlayRenderer {
+			get {
+				return textModeOverlayRenderer;
+			}
+			set {
+				textModeOverlayRenderer = value;
+			}
+		}
+
+		public IBezelDefaults BezelDefaults {
+			get {
+				return bezelDefaults;
+			}
+			set {
+				bezelDefaults = value;
+				SetSizeRequest (WindowWidth, WindowHeight);
+				drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
+				if (preview)
+				drawing_area.X = ShadowRadius;
+			}
+		}
 		
 		private void AnimatedDraw ()
 		{
 			if (!IsDrawable || timer > 0)
 				return;
 
-			
 			Paint ();
 //			frame = 0;
 			
-			if (!AnimationNeeded)
+			if (!AnimationNeeded || preview)
 				return;
 			
 			delta_time = DateTime.Now;
@@ -371,10 +428,6 @@ namespace Do.UI
 			context = new BezelDrawingContext ();
 			old_context = new BezelDrawingContext ();
 			entry_mode = new bool [3];
-//			foreach (Surface s in surface_buffer.Values)
-//				s.Destroy ();
-			
-//			surface_buffer = new Dictionary<string,Surface> ();
 			Draw ();
 		}
 		
@@ -404,6 +457,7 @@ namespace Do.UI
 			
 			do {
 				if (text_box_scale > 0) {
+					
 					RenderTextModeOverlay (cr);
 					if (text_box_scale == 1) {
 						RenderTextModeText (cr);
@@ -442,8 +496,9 @@ namespace Do.UI
 		
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
+			bool ret = base.OnExposeEvent (evnt);
 			Draw ();
-			return base.OnExposeEvent (evnt);
+			return ret;
 		}
 		
 		public int PaneOffset (Pane pane) 

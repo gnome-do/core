@@ -44,7 +44,6 @@ namespace Do.UI
 			
 			Add (results);
 			results.Show ();
-//			ShowAll ();
 		}
 		
 		protected override bool OnExposeEvent (EventExpose evnt)

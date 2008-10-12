@@ -62,7 +62,7 @@ namespace Do.UI
 			
 			VBox vbox = new VBox ();
 			
-			bda = new BezelDrawingArea (style);
+			bda = new BezelDrawingArea (style, false);
 			vbox.PackStart (bda, true, true, 0);
 			bda.Show ();
 			

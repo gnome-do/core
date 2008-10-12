@@ -56,6 +56,9 @@ namespace Do.UI
 				Colors["unfocused_line"] = new Cairo.Color (1.0, 1.0, 1.0, 0.2);
 				Colors["focused_text"]   = new Cairo.Color (0.0, 0.0, 0.0, 0.85);
 				Colors["unfocused_text"] = new Cairo.Color (0.3, 0.3, 0.3, 0.7);
+				Colors["titlebar_step1"] = new Cairo.Color (0.45, 0.45, 0.45);
+				Colors["titlebar_step2"] = new Cairo.Color (0.33, 0.33, 0.33);
+				Colors["titlebar_step3"] = new Cairo.Color (0.28, 0.28, 0.28);
 				
 				Gdk.Color bgColor;
 				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (widget)) {

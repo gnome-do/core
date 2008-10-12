@@ -61,6 +61,7 @@ FILES =  \
 	src/Do.UI/Bezel/BezelDrawingArea.cs \
 	src/Do.UI/Bezel/BezelDrawingContext.cs \
 	src/Do.UI/Bezel/BezelGlassResults.cs \
+	src/Do.UI/Bezel/BezelGlassRenderClasses.cs \
 	src/Do.UI/Bezel/BezelGlassWindow.cs \
 	src/Do.UI/Bezel/BezelColors.cs \
 	src/Do.UI/Bezel/BezelRenderClasses.cs \
