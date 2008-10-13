@@ -163,14 +163,17 @@ namespace Do.Universe {
 			get {
 				if (null != icon) return icon;
 
-				if (thumb_factory.CanThumbnail (URI, MimeType, DateTime.MinValue)) {
-					icon = Thumbnail.PathForUri (URI, ThumbnailSize.Large);
-					if (!System.IO.File.Exists (icon)) {
-						using (Gdk.Pixbuf thumb = 
-								thumb_factory.GenerateThumbnail (URI, MimeType)) {
-							thumb_factory.SaveThumbnail (thumb, URI, DateTime.Now);
-						}
-					}
+				string thumb = Thumbnail.PathForUri (URI, ThumbnailSize.Large);
+				if (thumb_factory.CanThumbnail (URI, MimeType, DateTime.MinValue) && System.IO.File.Exists (thumb)) {
+					icon = thumb;	
+					// Generating the thumbnail ourself is too slow for large files.
+					// Suggestion: generate thumbnails asynchronously. Banshee's
+					// notion of job queues may be useful.
+//					if (!System.IO.File.Exists (icon)) {
+//						using (Gdk.Pixbuf thumb = thumb_factory.GenerateThumbnail (URI, MimeType)) {
+//							thumb_factory.SaveThumbnail (thumb, URI, DateTime.Now);
+//						}
+//					}
 				} else {
 					try {
 						if (MimeType == "x-directory/normal") {
