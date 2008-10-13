@@ -50,6 +50,7 @@ namespace Do.UI
 		}
 		
 		IPreferences prefs;
+		HUDStyle style;
 		
 		public const int IconSize = 128;
 		const int BoxLineWidth    = 1;
@@ -70,6 +71,10 @@ namespace Do.UI
 			}
 			set {
 				prefs.Set<string> ("TitleRenderer", value);
+				BuildRenderers (style);
+				BezelColors.InitColors (style, backgroundRenderer.BackgroundColor);
+				SetDrawingArea ();
+				Draw ();
 			}
 		}
 		
@@ -79,6 +84,10 @@ namespace Do.UI
 			}
 			set {
 				prefs.Set<string> ("PaneRenderer", value);
+				BuildRenderers (style);
+				BezelColors.InitColors (style, backgroundRenderer.BackgroundColor);
+				SetDrawingArea ();
+				Draw ();
 			}
 		}
 		
@@ -88,6 +97,19 @@ namespace Do.UI
 			}
 			set {
 				prefs.Set<string> ("WindowRenderer", value);
+				BuildRenderers (style);
+				BezelColors.InitColors (style, backgroundRenderer.BackgroundColor);
+				SetDrawingArea ();
+				Draw ();
+			}
+		}
+		
+		public string DefaultOptions {
+			get {
+				return prefs.Get<string> ("DefaultOptions", "default");
+			}
+			set {
+				prefs.Set<string> ("DefaultOptions", value);
 			}
 		}
 		
@@ -203,33 +225,86 @@ namespace Do.UI
 		{
 			prefs = Addins.Util.GetPreferences ("Bezel");
 			this.preview = preview;
-			BezelColors.InitColors (style, this);
-			switch (style) {
-			case HUDStyle.HUD:
-				titleBarRenderer        = new HUDTopBar (this);
-				paneOutlineRenderer     = new HUDPaneOutlineRenderer (this);
-				backgroundRenderer      = new HUDBackgroundRenderer (this);
-				textModeOverlayRenderer = new HUDTextOverlayRenderer (this);
-				bezelDefaults           = new HUDBezelDefaults ();
-				break;
-			case HUDStyle.Classic:
-				titleBarRenderer        = new ClassicTopBar (this);
-				paneOutlineRenderer     = new ClassicPaneOutlineRenderer (this);
-				backgroundRenderer      = new ClassicBackgroundRenderer (this);
-				textModeOverlayRenderer = new ClassicTextOverlayRenderer (this);
-				bezelDefaults           = new ClassicBezelDefaults ();
-				break;
-			default:
-				throw new NotImplementedException ();
-			}
+			this.style = style;
+			
+			BuildRenderers (style);
+			BezelColors.InitColors (style, backgroundRenderer.BackgroundColor);
+			SetDrawingArea ();
 			
 			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
 			icon_fade = new double [3];
 			
+			SetSizeRequest (WindowWidth, WindowHeight);
+		}
+		
+		private void SetDrawingArea ()
+		{
+			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
 			if (preview)
 				drawing_area.X = ShadowRadius;
+		}
+		
+		private void BuildRenderers (HUDStyle style)
+		{
+			switch (TitleRenderer) {
+			case "hud":
+				titleBarRenderer = new HUDTopBar (this);
+				textModeOverlayRenderer = new HUDTextOverlayRenderer (this);
+				break;
+			case "classic":
+				titleBarRenderer = new ClassicTopBar (this);
+				textModeOverlayRenderer = new ClassicTextOverlayRenderer (this);
+				break;
+			default:
+				titleBarRenderer = (style == HUDStyle.HUD) ? (IBezelWindowRenderElement) new HUDTopBar (this) : 
+					(IBezelWindowRenderElement) new ClassicTopBar (this);
+				
+				textModeOverlayRenderer = (style == HUDStyle.HUD) ? (IBezelOverlayRenderElement) new HUDTextOverlayRenderer (this) : 
+					(IBezelOverlayRenderElement) new ClassicTextOverlayRenderer (this);
+				break;
+			}
 			
-			SetSizeRequest (WindowWidth, WindowHeight);
+			switch (WindowRenderer) {
+			case "hud":
+				backgroundRenderer = new HUDBackgroundRenderer (this);
+				bezelDefaults = new HUDBezelDefaults ();
+				break;
+			case "classic":
+				backgroundRenderer = new ClassicBackgroundRenderer (this);
+				bezelDefaults = new ClassicBezelDefaults ();
+				break;
+			default:
+				backgroundRenderer = (style == HUDStyle.HUD) ? (IBezelWindowRenderElement) new HUDBackgroundRenderer (this) : 
+					(IBezelWindowRenderElement) new ClassicBackgroundRenderer (this);
+				bezelDefaults = (style == HUDStyle.HUD) ? (IBezelDefaults) new HUDBezelDefaults () : 
+					(IBezelDefaults) new ClassicBezelDefaults ();
+				break;
+			}
+			
+			switch (PaneRenderer) {
+			case "hud":
+				paneOutlineRenderer = new HUDPaneOutlineRenderer (this);
+				break;
+			case "classic":
+				paneOutlineRenderer = new ClassicPaneOutlineRenderer (this);
+				break;
+			default:
+				paneOutlineRenderer = (style == HUDStyle.HUD) ? (IBezelPaneRenderElement) new HUDPaneOutlineRenderer (this) : 
+					(IBezelPaneRenderElement) new ClassicPaneOutlineRenderer (this);
+				break;
+			}
+			
+//			switch (DefaultOptions) {
+//			case "hud":
+//				
+//				break;
+//			case "classic":
+//				
+//				break;
+//			default:
+//				
+//				break;
+//			}
 		}
 		
 		private bool AnimationNeeded {
@@ -338,7 +413,6 @@ namespace Do.UI
 				return;
 
 			Paint ();
-//			frame = 0;
 			
 			if (!AnimationNeeded || preview)
 				return;
@@ -348,12 +422,6 @@ namespace Do.UI
 				
 				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
 				delta_time = DateTime.Now;
-//				DateTime time = DateTime.Now;
-//				double fps = Math.Round (1000 / (change*fade_ms));
-//				if (fps < 30)
-//				Console.WriteLine (frame + ": " + fps);
-//				Console.WriteLine (change);
-//				frame++;
 				
 				if (ExpandNeeded) {
 					drawing_area.Width += (int) ((ThreePaneWidth-TwoPaneWidth)*change);

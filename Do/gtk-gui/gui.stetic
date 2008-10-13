@@ -841,9 +841,11 @@ HUD</property>
               <widget class="Gtk.ComboBox" id="background_combo">
                 <property name="MemberName" />
                 <property name="IsTextCombo">True</property>
-                <property name="Items" translatable="yes">HUD Style
-Classic Style</property>
+                <property name="Items" translatable="yes">Default
+HUD
+Classic</property>
                 <property name="Active">0</property>
+                <signal name="Changed" handler="OnBackgroundComboChanged" />
               </widget>
               <packing>
                 <property name="TopAttach">1</property>
@@ -1039,9 +1041,11 @@ Classic Style</property>
               <widget class="Gtk.ComboBox" id="outline_combo">
                 <property name="MemberName" />
                 <property name="IsTextCombo">True</property>
-                <property name="Items" translatable="yes">HUD Style
-Classic Style</property>
+                <property name="Items" translatable="yes">Default
+HUD
+Classic</property>
                 <property name="Active">0</property>
+                <signal name="Changed" handler="OnOutlineComboChanged" />
               </widget>
               <packing>
                 <property name="TopAttach">2</property>
@@ -1088,9 +1092,11 @@ Classic Style</property>
               <widget class="Gtk.ComboBox" id="title_combo">
                 <property name="MemberName" />
                 <property name="IsTextCombo">True</property>
-                <property name="Items" translatable="yes">HUD Style
-Classic Style</property>
+                <property name="Items" translatable="yes">Default
+HUD
+Classic</property>
                 <property name="Active">0</property>
+                <signal name="Changed" handler="OnTitleComboChanged" />
               </widget>
               <packing>
                 <property name="LeftAttach">2</property>
@@ -1115,23 +1121,7 @@ Classic Style</property>
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HBox" id="hbox1">
-            <property name="MemberName" />
-            <property name="Spacing">6</property>
-            <child>
-              <placeholder />
-            </child>
-            <child>
-              <placeholder />
-            </child>
-            <child>
-              <placeholder />
-            </child>
-          </widget>
-          <packing>
-            <property name="Position">1</property>
-            <property name="AutoSize">True</property>
-          </packing>
+          <placeholder />
         </child>
         <child>
           <widget class="Gtk.Frame" id="preview_frame">

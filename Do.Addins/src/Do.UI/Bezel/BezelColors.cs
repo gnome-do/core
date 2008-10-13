@@ -32,7 +32,7 @@ namespace Do.UI
 	{
 		public static Dictionary<string, Cairo.Color> Colors = new Dictionary<string,Cairo.Color> ();
 
-		public static void InitColors (HUDStyle style, Gtk.Widget widget)
+		public static void InitColors (HUDStyle style, Cairo.Color bgColor)
 		{
 			Colors = new Dictionary<string,Cairo.Color> ();
 			switch (style) {
@@ -46,7 +46,9 @@ namespace Do.UI
 				Colors["titlebar_step1"] = new Cairo.Color (0.45, 0.45, 0.45);
 				Colors["titlebar_step2"] = new Cairo.Color (0.33, 0.33, 0.33);
 				Colors["titlebar_step3"] = new Cairo.Color (0.28, 0.28, 0.28);
-				Colors["background"]     = new Cairo.Color (.15, .15, .15, .95);
+				Colors["background"]     = bgColor;
+				Colors["background_dk"]  = Util.Appearance.ShadeColor (Colors["background"], .9);
+				Colors["background_lt"]  = Util.Appearance.ShadeColor (Colors["background"], 1.15);
 				Colors["outline"]        = new Cairo.Color (.35, .35, .35);
 				break;
 			case HUDStyle.Classic:
@@ -60,13 +62,7 @@ namespace Do.UI
 				Colors["titlebar_step2"] = new Cairo.Color (0.33, 0.33, 0.33);
 				Colors["titlebar_step3"] = new Cairo.Color (0.28, 0.28, 0.28);
 				
-				Gdk.Color bgColor;
-				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (widget)) {
-					bgColor = rcstyle.Backgrounds[(int) StateType.Selected];
-				}
-				bgColor = Util.Appearance.SetMaximumValue (bgColor, 65);
-				
-				Colors["background"]     = Util.Appearance.ConvertToCairo (bgColor, .95);
+				Colors["background"]     = bgColor;
 				Colors["background_dk"]  = Util.Appearance.ShadeColor (Colors["background"], .9);
 				Colors["background_lt"]  = Util.Appearance.ShadeColor (Colors["background"], 1.15);
 				Colors["outline"] = Colors["background"];

@@ -83,14 +83,6 @@ namespace Do.UI
         	login_check.Active = AutostartEnabled;
         	notification_check.Active = Do.Preferences.StatusIconVisible;
 			pin_check.Active = Do.Preferences.AlwaysShowResults;
-			
-//			Addins.Util.Appearance.SetColormap (this);
-//			AppPaintable = true;
-//			BezelDrawingArea bda = new BezelDrawingArea (HUDStyle.Classic, true);
-//			bda.PaneOutlineRenderer = new HUDPaneOutlineRenderer (bda);
-//			bda.TitleBarRenderer = new HUDTopBar (bda);
-//			vbox2.PackStart (bda);
-//			bda.Show ();
         }
         
         public Bin GetConfiguration ()

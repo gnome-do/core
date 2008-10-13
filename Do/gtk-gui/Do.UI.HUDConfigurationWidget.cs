@@ -41,8 +41,6 @@ namespace Do.UI {
         
         private Gtk.ComboBox title_combo;
         
-        private Gtk.HBox hbox1;
-        
         private Gtk.Frame preview_frame;
         
         private Gtk.Alignment preview_align;
@@ -66,8 +64,9 @@ namespace Do.UI {
             this.table2.BorderWidth = ((uint)(15));
             // Container child table2.Gtk.Table+TableChild
             this.background_combo = Gtk.ComboBox.NewText();
-            this.background_combo.AppendText(Mono.Unix.Catalog.GetString("HUD Style"));
-            this.background_combo.AppendText(Mono.Unix.Catalog.GetString("Classic Style"));
+            this.background_combo.AppendText(Mono.Unix.Catalog.GetString("Default"));
+            this.background_combo.AppendText(Mono.Unix.Catalog.GetString("HUD"));
+            this.background_combo.AppendText(Mono.Unix.Catalog.GetString("Classic"));
             this.background_combo.Name = "background_combo";
             this.background_combo.Active = 0;
             this.table2.Add(this.background_combo);
@@ -180,8 +179,9 @@ namespace Do.UI {
             w9.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.outline_combo = Gtk.ComboBox.NewText();
-            this.outline_combo.AppendText(Mono.Unix.Catalog.GetString("HUD Style"));
-            this.outline_combo.AppendText(Mono.Unix.Catalog.GetString("Classic Style"));
+            this.outline_combo.AppendText(Mono.Unix.Catalog.GetString("Default"));
+            this.outline_combo.AppendText(Mono.Unix.Catalog.GetString("HUD"));
+            this.outline_combo.AppendText(Mono.Unix.Catalog.GetString("Classic"));
             this.outline_combo.Name = "outline_combo";
             this.outline_combo.Active = 0;
             this.table2.Add(this.outline_combo);
@@ -208,8 +208,9 @@ namespace Do.UI {
             w11.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.title_combo = Gtk.ComboBox.NewText();
-            this.title_combo.AppendText(Mono.Unix.Catalog.GetString("HUD Style"));
-            this.title_combo.AppendText(Mono.Unix.Catalog.GetString("Classic Style"));
+            this.title_combo.AppendText(Mono.Unix.Catalog.GetString("Default"));
+            this.title_combo.AppendText(Mono.Unix.Catalog.GetString("HUD"));
+            this.title_combo.AppendText(Mono.Unix.Catalog.GetString("Classic"));
             this.title_combo.Name = "title_combo";
             this.title_combo.Active = 0;
             this.table2.Add(this.title_combo);
@@ -223,13 +224,6 @@ namespace Do.UI {
             w13.Position = 0;
             w13.Expand = false;
             w13.Fill = false;
-            // Container child vbox2.Gtk.Box+BoxChild
-            this.hbox1 = new Gtk.HBox();
-            this.hbox1.Name = "hbox1";
-            this.hbox1.Spacing = 6;
-            this.vbox2.Add(this.hbox1);
-            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox1]));
-            w14.Position = 1;
             // Container child vbox2.Gtk.Box+BoxChild
             this.preview_frame = new Gtk.Frame();
             this.preview_frame.Name = "preview_frame";
@@ -246,14 +240,17 @@ namespace Do.UI {
             this.GtkLabel.UseMarkup = true;
             this.preview_frame.LabelWidget = this.GtkLabel;
             this.vbox2.Add(this.preview_frame);
-            Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.vbox2[this.preview_frame]));
-            w16.Position = 2;
-            w16.Expand = false;
+            Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.vbox2[this.preview_frame]));
+            w15.Position = 2;
+            w15.Expand = false;
             this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
             this.Show();
+            this.title_combo.Changed += new System.EventHandler(this.OnTitleComboChanged);
+            this.outline_combo.Changed += new System.EventHandler(this.OnOutlineComboChanged);
+            this.background_combo.Changed += new System.EventHandler(this.OnBackgroundComboChanged);
         }
     }
 }

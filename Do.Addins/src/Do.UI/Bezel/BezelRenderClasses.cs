@@ -30,6 +30,7 @@ namespace Do.UI
 	public interface IBezelWindowRenderElement
 	{
 		int Height {get;}
+		Cairo.Color BackgroundColor {get;}
 		
 		void RenderElement (Context cr, Gdk.Rectangle drawing_area);
 		PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point);
@@ -56,6 +57,7 @@ namespace Do.UI
 		Surface border_buffer;
 		
 		public int Height { get { return 21; } }
+		public Cairo.Color BackgroundColor {get { return new Cairo.Color (0, 0, 0); } }
 		
 		public HUDTopBar (BezelDrawingArea parent)
 		{
@@ -184,6 +186,8 @@ namespace Do.UI
 		BezelDrawingArea parent;
 		
 		public int Height { get { return 7; } }
+		public Cairo.Color BackgroundColor {get { return new Cairo.Color (0, 0, 0); } }
+		
 		
 		public ClassicTopBar (BezelDrawingArea parent)
 		{
@@ -316,6 +320,7 @@ namespace Do.UI
 				return 0;
 			}
 		}
+		public Cairo.Color BackgroundColor {get { return new Cairo.Color (.15, .15, .15, .95); } }
 
 		public HUDBackgroundRenderer (BezelDrawingArea parent)
 		{
@@ -370,6 +375,18 @@ namespace Do.UI
 		public int Height {
 			get {
 				return 0;
+			}
+		}
+		
+		public Cairo.Color BackgroundColor {
+			get {
+				Gdk.Color bgColor;
+				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (parent)) {
+					bgColor = rcstyle.Backgrounds[(int) StateType.Selected];
+				}
+				bgColor = Util.Appearance.SetMaximumValue (bgColor, 65);
+				
+				return Util.Appearance.ConvertToCairo (bgColor, .95);
 			}
 		}
 

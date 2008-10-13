@@ -29,21 +29,46 @@ namespace Do.UI
 	
 	public partial class HUDConfigurationWidget : Gtk.Bin, IConfigurable
 	{
-		
+		BezelDrawingArea bda;
 		public HUDConfigurationWidget()
 		{
 			this.Build();
-			
-			BezelDrawingArea bda = new BezelDrawingArea (HUDStyle.Classic, true);
+			bda = new BezelDrawingArea (HUDStyle.Classic, true);
 			AppPaintable = true;
 			Addins.Util.Appearance.SetColormap (this);
 			this.preview_align.Add (bda);
 			bda.Show ();
+			
+			SetupButtons ();
+		}
+		
+		string [] option_list { get { return new string[] {"default", "hud", "classic"}; } }
+		
+		private void SetupButtons ()
+		{
+			title_combo.Active = Array.IndexOf<string> (option_list, bda.TitleRenderer);
+			background_combo.Active = Array.IndexOf<string> (option_list, bda.WindowRenderer);
+			outline_combo.Active = Array.IndexOf<string> (option_list, bda.PaneRenderer);
 		}
 		
 		public Gtk.Bin GetConfiguration ()
 		{
 			return this;
+		}
+
+		protected virtual void OnTitleComboChanged (object sender, System.EventArgs e)
+		{
+			bda.TitleRenderer = title_combo.ActiveText.ToLower ();
+		}
+
+		protected virtual void OnBackgroundComboChanged (object sender, System.EventArgs e)
+		{
+			bda.WindowRenderer = background_combo.ActiveText.ToLower ();
+		}
+
+		protected virtual void OnOutlineComboChanged (object sender, System.EventArgs e)
+		{
+			bda.PaneRenderer = outline_combo.ActiveText.ToLower ();
 		}
 		
 		public string Description {
