@@ -76,6 +76,7 @@ namespace Do.UI
 		Surface surface;
 		
 		double text_box_scale;
+		
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
 		
