@@ -202,7 +202,6 @@ namespace Do.Addins
 				
 				RGBToHSV (r, g, b, out h, out s, out v);
 				v = Math.Min (100, v * brightness);
-				Console.WriteLine (v);
 				HSVToRGB (h, s, v, out r, out g, out b);
 				
 				return new Cairo.Color ((double) r/byte.MaxValue,

@@ -75,8 +75,8 @@ namespace Do.Addins
 				pixbuf = temp;
 			}
 			
-			Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 0, 0);
-			cr.Operator = Operator.Source;
+			Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 0, (int) ((surface_height - pixbuf.Height)/2));
+			cr.Operator = Operator.Over;
 			cr.Paint ();
 			pixbuf.Dispose ();
 			(cr as IDisposable).Dispose ();
