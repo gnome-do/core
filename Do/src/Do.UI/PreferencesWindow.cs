@@ -50,6 +50,7 @@ namespace Do.UI
 						new GeneralPreferencesWidget (),
 						new KeybindingsPreferencesWidget (),
 						new ManagePluginsPreferencesWidget (),
+						new HUDConfigurationWidget (),
 					};
 				}
 				return pages;

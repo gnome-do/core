@@ -49,6 +49,8 @@ namespace Do.UI
 			None,
 		}
 		
+		IPreferences prefs;
+		
 		public const int IconSize = 128;
 		const int BoxLineWidth    = 1;
 		const int TextHeight      = 11;
@@ -61,6 +63,33 @@ namespace Do.UI
 		IBezelPaneRenderElement    paneOutlineRenderer;
 		IBezelOverlayRenderElement textModeOverlayRenderer;
 		IBezelDefaults bezelDefaults;
+		
+		public string TitleRenderer {
+			get {
+				return prefs.Get<string> ("TitleRenderer", "default");
+			}
+			set {
+				prefs.Set<string> ("TitleRenderer", value);
+			}
+		}
+		
+		public string PaneRenderer {
+			get {
+				return prefs.Get<string> ("PaneRenderer", "default");
+			}
+			set {
+				prefs.Set<string> ("PaneRenderer", value);
+			}
+		}
+		
+		public string WindowRenderer {
+			get {
+				return prefs.Get<string> ("WindowRenderer", "default");
+			}
+			set {
+				prefs.Set<string> ("WindowRenderer", value);
+			}
+		}
 		
 		public int BoxWidth {
 			get {
@@ -172,7 +201,7 @@ namespace Do.UI
 		
 		public BezelDrawingArea(HUDStyle style, bool preview) : base ()
 		{
-//			this.style = style;
+			prefs = Addins.Util.GetPreferences ("Bezel");
 			this.preview = preview;
 			BezelColors.InitColors (style, this);
 			switch (style) {
@@ -446,7 +475,15 @@ namespace Do.UI
 			
 			Context cr = new Context (surface);
 //			cr.Save ();
-			cr.Color = new Cairo.Color (0, 0, 0, 0);
+			if (preview) {
+				Gdk.Color bgColor;
+				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
+					bgColor = rcstyle.Backgrounds[(int) StateType.Normal];
+				}
+				cr.Color = Util.Appearance.ConvertToCairo (bgColor, 1);
+			} else {
+				cr.Color = new Cairo.Color (0, 0, 0, 0);
+			}			
 			cr.Operator = Cairo.Operator.Source;
 			cr.Paint ();
 			cr.Operator = Cairo.Operator.Over;

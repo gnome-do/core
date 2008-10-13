@@ -79,6 +79,8 @@
     <File name="src/ProgramVersion.cs" subtype="Code" buildaction="Compile" />
     <File name="src/CommandLinePreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/CommandLinePreferencesBackend.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/HUDConfigurationWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="gtk-gui/Do.UI.HUDConfigurationWidget.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -109,6 +111,7 @@
       <Widget>Do.UI.KeybindingsPreferencesWidget</Widget>
       <Widget>Do.UI.ManagePluginsPreferencesWidget</Widget>
       <Widget>Do.UI.GeneralPreferencesWidget</Widget>
+      <Widget>Do.UI.HUDConfigurationWidget</Widget>
     </ExportedWidgets>
   </GtkDesignInfo>
   <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">

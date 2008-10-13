@@ -69,7 +69,8 @@ namespace Do.Addins
 			Gdk.Pixbuf pixbuf;
 			pixbuf = UI.IconProvider.PixbufFromIconName (icon, surface_width);
 			if (pixbuf.Height != surface_width && pixbuf.Width != surface_width) {
-				Gdk.Pixbuf temp = pixbuf.ScaleSimple (surface_width, surface_width, InterpType.Bilinear);
+				double scale = surface_width / Math.Max (pixbuf.Width, pixbuf.Height);
+				Gdk.Pixbuf temp = pixbuf.ScaleSimple ((int) (pixbuf.Width * scale), (int) (pixbuf.Height * scale), InterpType.Bilinear);
 				pixbuf.Dispose ();
 				pixbuf = temp;
 			}
