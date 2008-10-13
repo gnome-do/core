@@ -64,16 +64,18 @@ namespace Do.UI
 			this.parent = parent;
 		}
 		
+		private int buttons_offset { get { return Math.Min (10, parent.WindowRadius + 3); } }
+		
 		private void RenderCloseCircle (Context cr)
 		{
-			cr.Arc (12, Height / 2, 6, 0, Math.PI*2);
+			cr.Arc (buttons_offset+6, Height / 2, 6, 0, Math.PI*2);
 			cr.Color = new Cairo.Color (1, 1, 1, .8);
 			cr.Fill ();
 			
-			cr.MoveTo (15, (Height / 2) - 3);
-			cr.LineTo (9,  (Height / 2) + 3);
-			cr.MoveTo (9,  (Height / 2) - 3);
-			cr.LineTo (15, (Height / 2) + 3);
+			cr.MoveTo (buttons_offset+9, (Height / 2) - 3);
+			cr.LineTo (buttons_offset+3,  (Height / 2) + 3);
+			cr.MoveTo (buttons_offset+3,  (Height / 2) - 3);
+			cr.LineTo (buttons_offset+9, (Height / 2) + 3);
 			
 			cr.Color = new Cairo.Color (0.2, 0.2, 0.2, .8);
 			cr.LineWidth = 2;
@@ -82,14 +84,14 @@ namespace Do.UI
 		
 		private void RenderDownCircle (Context cr)
 		{
-			cr.Arc (parent.TwoPaneWidth - 12,
+			cr.Arc (parent.ThreePaneWidth - (buttons_offset + 6),
 			        Height / 2, 6, 0, Math.PI*2);
 			cr.Color = new Cairo.Color (1, 1, 1, .8);
 			cr.Fill ();
 			
-			cr.MoveTo (parent.TwoPaneWidth - 15, (Height / 2) - 2);
-			cr.LineTo (parent.TwoPaneWidth - 9,  (Height / 2) - 2);
-			cr.LineTo (parent.TwoPaneWidth - 12, (Height / 2) + 3);
+			cr.MoveTo (parent.ThreePaneWidth - (buttons_offset + 9), (Height / 2) - 2);
+			cr.LineTo (parent.ThreePaneWidth - (buttons_offset + 3),  (Height / 2) - 2);
+			cr.LineTo (parent.ThreePaneWidth - (buttons_offset + 6), (Height / 2) + 3);
 			cr.Color = new Cairo.Color (0.2, 0.2, 0.2, .8);
 			cr.Fill ();
 		}
@@ -98,7 +100,7 @@ namespace Do.UI
 		{
 			if (border_buffer == null) {
 				
-				Surface surface = cr.Target.CreateSimilar (cr.Target.Content, parent.TwoPaneWidth, Height);
+				Surface surface = cr.Target.CreateSimilar (cr.Target.Content, parent.ThreePaneWidth, Height);
 				Context cr2 = new Context (surface);
 				
 				SetTitlePath (cr2);
@@ -127,16 +129,17 @@ namespace Do.UI
 				(cr2 as IDisposable).Dispose ();
 			}
 			
-			if (drawing_area.Width == parent.TwoPaneWidth) {
+			if (drawing_area.Width == parent.ThreePaneWidth) {
 				cr.SetSource (border_buffer, drawing_area.X, drawing_area.Y);
 				cr.Rectangle (drawing_area.X, drawing_area.Y, drawing_area.Width, Height);
 				cr.Fill ();
 			} else {
+				//sliding door effect
 				cr.SetSource (border_buffer, drawing_area.X, drawing_area.Y);
 				cr.Rectangle (drawing_area.X, drawing_area.Y, 200, Height);
 				cr.Fill ();
 				
-				cr.SetSource (border_buffer, drawing_area.X + drawing_area.Width - parent.TwoPaneWidth, drawing_area.Y);
+				cr.SetSource (border_buffer, drawing_area.X + drawing_area.Width - parent.ThreePaneWidth, drawing_area.Y);
 				cr.Rectangle (drawing_area.X + 200, drawing_area.Y, drawing_area.Width - 200, Height);
 				cr.Fill ();
 			}
@@ -158,7 +161,7 @@ namespace Do.UI
 			int radius = parent.WindowRadius;
 			double x = .5;
 			double y = .5;
-			double width = parent.TwoPaneWidth - 1;
+			double width = parent.ThreePaneWidth - 1;
 			cr.MoveTo (x+radius, y);
 			cr.Arc (x+width-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
 			cr.LineTo (x+width, Height);
@@ -168,9 +171,9 @@ namespace Do.UI
 		
 		public PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point)
 		{
-			Gdk.Rectangle close_circle = new Gdk.Rectangle (drawing_area.X + 6, drawing_area.Y + 2,
+			Gdk.Rectangle close_circle = new Gdk.Rectangle (drawing_area.X + buttons_offset, drawing_area.Y + 2,
 			                                                12, 15);
-			Gdk.Rectangle pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - 18, 
+			Gdk.Rectangle pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - (buttons_offset + 12), 
 			                                               drawing_area.Y + 2, 12, 15);
 			if (close_circle.Contains (point))
 				return PointLocation.Close;
