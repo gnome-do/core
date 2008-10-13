@@ -5,7 +5,6 @@
     <target-gtk-version>2.12.1</target-gtk-version>
   </configuration>
   <import>
-    <widget-library name="../../Do.Addins/bin/Debug/Do.Addins.dll" />
     <widget-library name="../bin/Debug/Do.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="Do.UI.PreferencesWindow" design-size="510 527">
