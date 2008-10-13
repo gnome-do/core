@@ -115,32 +115,14 @@ namespace Do.UI
 		public int BoxWidth { get { return PaneOutlineRenderer.Width; } }
 		
 		public int BoxHeight { get { return PaneOutlineRenderer.Height; } }
-
-		public int WindowWidth { 
-			get { 
-				return ((2 * WindowBorder) - BorderWidth) + ((BoxWidth + (BorderWidth)) * 3) + (2*ShadowRadius); 
-			} 
-		}
 		
-		public int ThreePaneWidth { 
-			get { 
-				return ((2 * WindowBorder) - BorderWidth) + ((BoxWidth + (BorderWidth)) * 3); 
-			} 
-		}
-		
-		public int TwoPaneWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2); } }
-		
-		public string HighlightFormat { get { return BezelDefaults.HighlightFormat; } }
-		
-		public int WindowBorder { get { return BezelDefaults.WindowBorder; } }
-		
-		public int WindowRadius { get { return BezelDefaults.WindowRadius; } }
-		
-		public int TitleBarHeight { get { return TitleBarRenderer.Height; } }
-		
-		public int WindowHeight {
-			get {
-				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight + 2*ShadowRadius;
+		public Pane Focus {
+			get { return focus; }
+			set { 
+				if (focus == value)
+					return;
+				focus = value;
+				AnimatedDraw ();
 			}
 		}
 		
@@ -149,8 +131,77 @@ namespace Do.UI
 				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight;
 			}
 		}
-		
+
 		public int TextModeOffset { get { return Math.Max (TitleBarHeight, WindowRadius); } }
+		
+		public bool ThirdPaneVisible {
+			get { return third_pane_visible; }
+			set { 
+				third_pane_visible = value; 
+				AnimatedDraw ();
+			}
+		}
+		
+		public int ThreePaneWidth { 
+			get { 
+				return ((2 * WindowBorder) - BorderWidth) + ((BoxWidth + (BorderWidth)) * 3); 
+			} 
+		}
+		
+		public int TitleBarHeight { get { return TitleBarRenderer.Height; } }
+		
+		public int TwoPaneWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2); } }
+		
+		public string HighlightFormat { get { return BezelDefaults.HighlightFormat; } }
+		
+		public int WindowBorder { get { return BezelDefaults.WindowBorder; } }
+		
+		public int WindowHeight {
+			get {
+				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight + 2*ShadowRadius;
+			}
+		}
+		
+		public int WindowRadius { get { return BezelDefaults.WindowRadius; } }
+		
+		public int WindowWidth { 
+			get { 
+				return ((2 * WindowBorder) - BorderWidth) + ((BoxWidth + (BorderWidth)) * 3) + (2*ShadowRadius); 
+			} 
+		}
+		
+		private bool AnimationNeeded {
+			get {
+				return ExpandNeeded || ShrinkNeeded || TextScaleNeeded || FadeNeeded;
+			}
+		}
+		
+		private bool ExpandNeeded {
+			get {
+				return (ThirdPaneVisible || entry_mode[(int) Focus]) && 
+					drawing_area.Width != ThreePaneWidth; 
+			}
+		}
+		
+		private bool ShrinkNeeded {
+			get {
+				return (!ThirdPaneVisible && !entry_mode[(int) focus])  && 
+					drawing_area.Width != TwoPaneWidth && Focus != Pane.Third;
+			}
+		}
+		
+		private bool FadeNeeded {
+			get {
+				return (icon_fade[0] != 1 || icon_fade[1] != 1 || icon_fade[2] != 1);
+			}
+		}
+		
+		private bool TextScaleNeeded {
+			get {
+				return (entry_mode[(int) Focus] && text_box_scale != 1) ||
+					(!entry_mode[(int) Focus] && text_box_scale != 0);
+			}
+		}
 		
 		private BezelDrawingContext Context {
 			get {
@@ -164,23 +215,15 @@ namespace Do.UI
 			}
 		}
 		
-		public bool ThirdPaneVisible {
-			get { return third_pane_visible; }
-			set { 
-				third_pane_visible = value; 
-				AnimatedDraw ();
-			}
-		}
-		
-		public Pane Focus {
-			get { return focus; }
-			set { 
-				if (focus == value)
-					return;
-				focus = value;
-				AnimatedDraw ();
-			}
-		}
+		public IBezelWindowRenderElement TitleBarRenderer { get { return titleBarRenderer; } }
+
+		public IBezelWindowRenderElement BackgroundRenderer { get { return backgroundRenderer; } }
+
+		public IBezelPaneRenderElement PaneOutlineRenderer { get { return paneOutlineRenderer; } }
+
+		public IBezelOverlayRenderElement TextModeOverlayRenderer {	get { return textModeOverlayRenderer; }	}
+
+		public IBezelDefaults BezelDefaults { get { return bezelDefaults; }	}
 		
 		public BezelDrawingArea(HUDStyle style, bool preview) : base ()
 		{
@@ -260,39 +303,6 @@ namespace Do.UI
 			}
 		}
 		
-		private bool AnimationNeeded {
-			get {
-				return ExpandNeeded || ShrinkNeeded || TextScaleNeeded || FadeNeeded;
-			}
-		}
-		
-		private bool ExpandNeeded {
-			get {
-				return (ThirdPaneVisible || entry_mode[(int) Focus]) && 
-					drawing_area.Width != ThreePaneWidth; 
-			}
-		}
-		
-		private bool ShrinkNeeded {
-			get {
-				return (!ThirdPaneVisible && !entry_mode[(int) focus])  && 
-					drawing_area.Width != TwoPaneWidth && Focus != Pane.Third;
-			}
-		}
-		
-		private bool FadeNeeded {
-			get {
-				return (icon_fade[0] != 1 || icon_fade[1] != 1 || icon_fade[2] != 1);
-			}
-		}
-		
-		private bool TextScaleNeeded {
-			get {
-				return (entry_mode[(int) Focus] && text_box_scale != 1) ||
-					(!entry_mode[(int) Focus] && text_box_scale != 0);
-			}
-		}
-
 		public PixbufSurfaceCache SurfaceCache {
 			get {
 				if (surface_cache == null) {
@@ -303,63 +313,6 @@ namespace Do.UI
 			}
 		}
 
-		public IBezelWindowRenderElement TitleBarRenderer {
-			get {
-				return titleBarRenderer;
-			}
-			set {
-				titleBarRenderer = value;
-				SetSizeRequest (WindowWidth, WindowHeight);
-				drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
-				if (preview)
-					drawing_area.X = ShadowRadius;
-			}
-		}
-
-		public IBezelWindowRenderElement BackgroundRenderer {
-			get {
-				return backgroundRenderer;
-			}
-			set {
-				backgroundRenderer = value;
-			}
-		}
-
-		public IBezelPaneRenderElement PaneOutlineRenderer {
-			get {
-				return paneOutlineRenderer;
-			}
-			set {
-				paneOutlineRenderer = value;
-				SetSizeRequest (WindowWidth, WindowHeight);
-				drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
-				if (preview)
-					drawing_area.X = ShadowRadius;
-			}
-		}
-
-		public IBezelOverlayRenderElement TextModeOverlayRenderer {
-			get {
-				return textModeOverlayRenderer;
-			}
-			set {
-				textModeOverlayRenderer = value;
-			}
-		}
-
-		public IBezelDefaults BezelDefaults {
-			get {
-				return bezelDefaults;
-			}
-			set {
-				bezelDefaults = value;
-				SetSizeRequest (WindowWidth, WindowHeight);
-				drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
-				if (preview)
-				drawing_area.X = ShadowRadius;
-			}
-		}
-		
 		private void AnimatedDraw ()
 		{
 			if (!IsDrawable || timer > 0)
