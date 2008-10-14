@@ -829,6 +829,15 @@ HUD</property>
               <placeholder />
             </child>
             <child>
+              <placeholder />
+            </child>
+            <child>
+              <placeholder />
+            </child>
+            <child>
+              <placeholder />
+            </child>
+            <child>
               <widget class="Gtk.ColorButton" id="background_colorbutton">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
@@ -915,32 +924,6 @@ Classic</property>
                 <property name="label">gtk-clear</property>
               </widget>
               <packing>
-                <property name="LeftAttach">6</property>
-                <property name="RightAttach">7</property>
-                <property name="AutoSize">True</property>
-                <property name="XOptions">Fill</property>
-                <property name="YOptions">Fill</property>
-                <property name="XExpand">False</property>
-                <property name="XFill">True</property>
-                <property name="XShrink">False</property>
-                <property name="YExpand">False</property>
-                <property name="YFill">True</property>
-                <property name="YShrink">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="Gtk.Button" id="clear_text">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="UseStock">True</property>
-                <property name="Type">StockItem</property>
-                <property name="StockId">gtk-clear</property>
-                <signal name="Clicked" handler="OnClearTextClicked" />
-                <property name="label">gtk-clear</property>
-              </widget>
-              <packing>
-                <property name="TopAttach">2</property>
-                <property name="BottomAttach">3</property>
                 <property name="LeftAttach">6</property>
                 <property name="RightAttach">7</property>
                 <property name="AutoSize">True</property>
@@ -1061,28 +1044,6 @@ Classic</property>
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Label" id="label9">
-                <property name="MemberName" />
-                <property name="Xalign">0</property>
-                <property name="LabelProp" translatable="yes">Text Color:</property>
-              </widget>
-              <packing>
-                <property name="TopAttach">2</property>
-                <property name="BottomAttach">3</property>
-                <property name="LeftAttach">4</property>
-                <property name="RightAttach">5</property>
-                <property name="AutoSize">True</property>
-                <property name="XOptions">Fill</property>
-                <property name="YOptions">Fill</property>
-                <property name="XExpand">False</property>
-                <property name="XFill">True</property>
-                <property name="XShrink">False</property>
-                <property name="YExpand">False</property>
-                <property name="YFill">True</property>
-                <property name="YShrink">False</property>
-              </packing>
-            </child>
-            <child>
               <widget class="Gtk.ComboBox" id="outline_combo">
                 <property name="MemberName" />
                 <property name="IsTextCombo">True</property>
@@ -1121,30 +1082,6 @@ Classic</property>
                 <signal name="ValueChanged" handler="OnRadiusSpinValueChanged" />
               </widget>
               <packing>
-                <property name="LeftAttach">5</property>
-                <property name="RightAttach">6</property>
-                <property name="AutoSize">True</property>
-                <property name="XOptions">Fill</property>
-                <property name="YOptions">Fill</property>
-                <property name="XExpand">False</property>
-                <property name="XFill">True</property>
-                <property name="XShrink">False</property>
-                <property name="YExpand">False</property>
-                <property name="YFill">True</property>
-                <property name="YShrink">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="Gtk.ColorButton" id="text_colorbutton">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="Events">ButtonMotionMask, ButtonPressMask, ButtonReleaseMask</property>
-                <property name="Alpha">-1</property>
-                <signal name="ColorSet" handler="OnTextColorbuttonColorSet" />
-              </widget>
-              <packing>
-                <property name="TopAttach">2</property>
-                <property name="BottomAttach">3</property>
                 <property name="LeftAttach">5</property>
                 <property name="RightAttach">6</property>
                 <property name="AutoSize">True</property>

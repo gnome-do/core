@@ -25,8 +25,6 @@ namespace Do.UI {
         
         private Gtk.Button clear_radius;
         
-        private Gtk.Button clear_text;
-        
         private Gtk.Label label4;
         
         private Gtk.Label label5;
@@ -37,13 +35,9 @@ namespace Do.UI {
         
         private Gtk.Label label8;
         
-        private Gtk.Label label9;
-        
         private Gtk.ComboBox outline_combo;
         
         private Gtk.SpinButton radius_spin;
-        
-        private Gtk.ColorButton text_colorbutton;
         
         private Gtk.ComboBox title_combo;
         
@@ -125,94 +119,66 @@ namespace Do.UI {
             w4.XOptions = ((Gtk.AttachOptions)(4));
             w4.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
-            this.clear_text = new Gtk.Button();
-            this.clear_text.CanFocus = true;
-            this.clear_text.Name = "clear_text";
-            this.clear_text.UseStock = true;
-            this.clear_text.UseUnderline = true;
-            this.clear_text.Label = "gtk-clear";
-            this.table2.Add(this.clear_text);
-            Gtk.Table.TableChild w5 = ((Gtk.Table.TableChild)(this.table2[this.clear_text]));
-            w5.TopAttach = ((uint)(2));
-            w5.BottomAttach = ((uint)(3));
-            w5.LeftAttach = ((uint)(6));
-            w5.RightAttach = ((uint)(7));
-            w5.XOptions = ((Gtk.AttachOptions)(4));
-            w5.YOptions = ((Gtk.AttachOptions)(4));
-            // Container child table2.Gtk.Table+TableChild
             this.label4 = new Gtk.Label();
             this.label4.Name = "label4";
             this.label4.Xalign = 0F;
             this.label4.LabelProp = Mono.Unix.Catalog.GetString("Title Bar Style:");
             this.table2.Add(this.label4);
-            Gtk.Table.TableChild w6 = ((Gtk.Table.TableChild)(this.table2[this.label4]));
-            w6.LeftAttach = ((uint)(1));
-            w6.RightAttach = ((uint)(2));
-            w6.XOptions = ((Gtk.AttachOptions)(4));
-            w6.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w5 = ((Gtk.Table.TableChild)(this.table2[this.label4]));
+            w5.LeftAttach = ((uint)(1));
+            w5.RightAttach = ((uint)(2));
+            w5.XOptions = ((Gtk.AttachOptions)(4));
+            w5.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.label5 = new Gtk.Label();
             this.label5.Name = "label5";
             this.label5.Xalign = 0F;
             this.label5.LabelProp = Mono.Unix.Catalog.GetString("Background Style:");
             this.table2.Add(this.label5);
-            Gtk.Table.TableChild w7 = ((Gtk.Table.TableChild)(this.table2[this.label5]));
-            w7.TopAttach = ((uint)(1));
-            w7.BottomAttach = ((uint)(2));
-            w7.LeftAttach = ((uint)(1));
-            w7.RightAttach = ((uint)(2));
-            w7.XOptions = ((Gtk.AttachOptions)(4));
-            w7.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w6 = ((Gtk.Table.TableChild)(this.table2[this.label5]));
+            w6.TopAttach = ((uint)(1));
+            w6.BottomAttach = ((uint)(2));
+            w6.LeftAttach = ((uint)(1));
+            w6.RightAttach = ((uint)(2));
+            w6.XOptions = ((Gtk.AttachOptions)(4));
+            w6.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.label6 = new Gtk.Label();
             this.label6.Name = "label6";
             this.label6.Xalign = 0F;
             this.label6.LabelProp = Mono.Unix.Catalog.GetString("Outline Style:");
             this.table2.Add(this.label6);
-            Gtk.Table.TableChild w8 = ((Gtk.Table.TableChild)(this.table2[this.label6]));
-            w8.TopAttach = ((uint)(2));
-            w8.BottomAttach = ((uint)(3));
-            w8.LeftAttach = ((uint)(1));
-            w8.RightAttach = ((uint)(2));
-            w8.XOptions = ((Gtk.AttachOptions)(4));
-            w8.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w7 = ((Gtk.Table.TableChild)(this.table2[this.label6]));
+            w7.TopAttach = ((uint)(2));
+            w7.BottomAttach = ((uint)(3));
+            w7.LeftAttach = ((uint)(1));
+            w7.RightAttach = ((uint)(2));
+            w7.XOptions = ((Gtk.AttachOptions)(4));
+            w7.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.label7 = new Gtk.Label();
             this.label7.Name = "label7";
             this.label7.Xalign = 0F;
             this.label7.LabelProp = Mono.Unix.Catalog.GetString("Rounding Radius:");
             this.table2.Add(this.label7);
-            Gtk.Table.TableChild w9 = ((Gtk.Table.TableChild)(this.table2[this.label7]));
-            w9.LeftAttach = ((uint)(4));
-            w9.RightAttach = ((uint)(5));
-            w9.XOptions = ((Gtk.AttachOptions)(4));
-            w9.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w8 = ((Gtk.Table.TableChild)(this.table2[this.label7]));
+            w8.LeftAttach = ((uint)(4));
+            w8.RightAttach = ((uint)(5));
+            w8.XOptions = ((Gtk.AttachOptions)(4));
+            w8.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.label8 = new Gtk.Label();
             this.label8.Name = "label8";
             this.label8.Xalign = 0F;
             this.label8.LabelProp = Mono.Unix.Catalog.GetString("Background Color:");
             this.table2.Add(this.label8);
-            Gtk.Table.TableChild w10 = ((Gtk.Table.TableChild)(this.table2[this.label8]));
-            w10.TopAttach = ((uint)(1));
-            w10.BottomAttach = ((uint)(2));
-            w10.LeftAttach = ((uint)(4));
-            w10.RightAttach = ((uint)(5));
-            w10.XOptions = ((Gtk.AttachOptions)(4));
-            w10.YOptions = ((Gtk.AttachOptions)(4));
-            // Container child table2.Gtk.Table+TableChild
-            this.label9 = new Gtk.Label();
-            this.label9.Name = "label9";
-            this.label9.Xalign = 0F;
-            this.label9.LabelProp = Mono.Unix.Catalog.GetString("Text Color:");
-            this.table2.Add(this.label9);
-            Gtk.Table.TableChild w11 = ((Gtk.Table.TableChild)(this.table2[this.label9]));
-            w11.TopAttach = ((uint)(2));
-            w11.BottomAttach = ((uint)(3));
-            w11.LeftAttach = ((uint)(4));
-            w11.RightAttach = ((uint)(5));
-            w11.XOptions = ((Gtk.AttachOptions)(4));
-            w11.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w9 = ((Gtk.Table.TableChild)(this.table2[this.label8]));
+            w9.TopAttach = ((uint)(1));
+            w9.BottomAttach = ((uint)(2));
+            w9.LeftAttach = ((uint)(4));
+            w9.RightAttach = ((uint)(5));
+            w9.XOptions = ((Gtk.AttachOptions)(4));
+            w9.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.outline_combo = Gtk.ComboBox.NewText();
             this.outline_combo.AppendText(Mono.Unix.Catalog.GetString("Default"));
@@ -221,13 +187,13 @@ namespace Do.UI {
             this.outline_combo.Name = "outline_combo";
             this.outline_combo.Active = 0;
             this.table2.Add(this.outline_combo);
-            Gtk.Table.TableChild w12 = ((Gtk.Table.TableChild)(this.table2[this.outline_combo]));
-            w12.TopAttach = ((uint)(2));
-            w12.BottomAttach = ((uint)(3));
-            w12.LeftAttach = ((uint)(2));
-            w12.RightAttach = ((uint)(3));
-            w12.XOptions = ((Gtk.AttachOptions)(4));
-            w12.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w10 = ((Gtk.Table.TableChild)(this.table2[this.outline_combo]));
+            w10.TopAttach = ((uint)(2));
+            w10.BottomAttach = ((uint)(3));
+            w10.LeftAttach = ((uint)(2));
+            w10.RightAttach = ((uint)(3));
+            w10.XOptions = ((Gtk.AttachOptions)(4));
+            w10.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.radius_spin = new Gtk.SpinButton(0, 25, 1);
             this.radius_spin.CanFocus = true;
@@ -237,24 +203,11 @@ namespace Do.UI {
             this.radius_spin.Numeric = true;
             this.radius_spin.Value = 6;
             this.table2.Add(this.radius_spin);
-            Gtk.Table.TableChild w13 = ((Gtk.Table.TableChild)(this.table2[this.radius_spin]));
-            w13.LeftAttach = ((uint)(5));
-            w13.RightAttach = ((uint)(6));
-            w13.XOptions = ((Gtk.AttachOptions)(4));
-            w13.YOptions = ((Gtk.AttachOptions)(4));
-            // Container child table2.Gtk.Table+TableChild
-            this.text_colorbutton = new Gtk.ColorButton();
-            this.text_colorbutton.CanFocus = true;
-            this.text_colorbutton.Events = ((Gdk.EventMask)(784));
-            this.text_colorbutton.Name = "text_colorbutton";
-            this.table2.Add(this.text_colorbutton);
-            Gtk.Table.TableChild w14 = ((Gtk.Table.TableChild)(this.table2[this.text_colorbutton]));
-            w14.TopAttach = ((uint)(2));
-            w14.BottomAttach = ((uint)(3));
-            w14.LeftAttach = ((uint)(5));
-            w14.RightAttach = ((uint)(6));
-            w14.XOptions = ((Gtk.AttachOptions)(4));
-            w14.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w11 = ((Gtk.Table.TableChild)(this.table2[this.radius_spin]));
+            w11.LeftAttach = ((uint)(5));
+            w11.RightAttach = ((uint)(6));
+            w11.XOptions = ((Gtk.AttachOptions)(4));
+            w11.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.title_combo = Gtk.ComboBox.NewText();
             this.title_combo.AppendText(Mono.Unix.Catalog.GetString("Default"));
@@ -263,16 +216,16 @@ namespace Do.UI {
             this.title_combo.Name = "title_combo";
             this.title_combo.Active = 0;
             this.table2.Add(this.title_combo);
-            Gtk.Table.TableChild w15 = ((Gtk.Table.TableChild)(this.table2[this.title_combo]));
-            w15.LeftAttach = ((uint)(2));
-            w15.RightAttach = ((uint)(3));
-            w15.XOptions = ((Gtk.AttachOptions)(4));
-            w15.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w12 = ((Gtk.Table.TableChild)(this.table2[this.title_combo]));
+            w12.LeftAttach = ((uint)(2));
+            w12.RightAttach = ((uint)(3));
+            w12.XOptions = ((Gtk.AttachOptions)(4));
+            w12.YOptions = ((Gtk.AttachOptions)(4));
             this.vbox2.Add(this.table2);
-            Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.vbox2[this.table2]));
-            w16.Position = 0;
-            w16.Expand = false;
-            w16.Fill = false;
+            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.vbox2[this.table2]));
+            w13.Position = 0;
+            w13.Expand = false;
+            w13.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
             this.preview_frame = new Gtk.Frame();
             this.preview_frame.Name = "preview_frame";
@@ -289,19 +242,17 @@ namespace Do.UI {
             this.GtkLabel2.UseMarkup = true;
             this.preview_frame.LabelWidget = this.GtkLabel2;
             this.vbox2.Add(this.preview_frame);
-            Gtk.Box.BoxChild w18 = ((Gtk.Box.BoxChild)(this.vbox2[this.preview_frame]));
-            w18.Position = 1;
-            w18.Expand = false;
+            Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.vbox2[this.preview_frame]));
+            w15.Position = 1;
+            w15.Expand = false;
             this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
             this.Show();
             this.title_combo.Changed += new System.EventHandler(this.OnTitleComboChanged);
-            this.text_colorbutton.ColorSet += new System.EventHandler(this.OnTextColorbuttonColorSet);
             this.radius_spin.ValueChanged += new System.EventHandler(this.OnRadiusSpinValueChanged);
             this.outline_combo.Changed += new System.EventHandler(this.OnOutlineComboChanged);
-            this.clear_text.Clicked += new System.EventHandler(this.OnClearTextClicked);
             this.clear_radius.Clicked += new System.EventHandler(this.OnClearRadiusClicked);
             this.clear_background.Clicked += new System.EventHandler(this.OnClearBackgroundClicked);
             this.background_combo.Changed += new System.EventHandler(this.OnBackgroundComboChanged);

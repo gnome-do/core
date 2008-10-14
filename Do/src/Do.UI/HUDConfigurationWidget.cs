@@ -73,11 +73,6 @@ namespace Do.UI
 			bda.PaneRenderer = outline_combo.ActiveText.ToLower ();
 		}
 
-		protected virtual void OnTextColorbuttonColorSet (object sender, System.EventArgs e)
-		{
-			bda.TextColor = Addins.Util.Appearance.ColorToHexString (text_colorbutton.Color);
-		}
-
 		protected virtual void OnBackgroundColorbuttonColorSet (object sender, System.EventArgs e)
 		{
 			bda.BackgroundColor = background_colorbutton.Color;
@@ -90,14 +85,8 @@ namespace Do.UI
 
 		protected virtual void OnClearBackgroundClicked (object sender, System.EventArgs e)
 		{
-//			bda.BackgroundColor = "default";
 			bda.ResetBackgroundStyle ();
 			background_colorbutton.Color = bda.BackgroundColor;
-		}
-
-		protected virtual void OnClearTextClicked (object sender, System.EventArgs e)
-		{
-			bda.TextColor = "default";
 		}
 
 		protected virtual void OnClearRadiusClicked (object sender, System.EventArgs e)
