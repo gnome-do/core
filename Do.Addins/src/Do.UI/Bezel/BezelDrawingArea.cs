@@ -274,6 +274,7 @@ namespace Do.UI
 		
 		public BezelDrawingArea(HUDStyle style, bool preview) : base ()
 		{
+			DoubleBuffered = false;
 			prefs = Addins.Util.GetPreferences ("Bezel");
 			this.preview = preview;
 			this.style = style;
