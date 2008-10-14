@@ -23,34 +23,64 @@ using Do.Universe;
 
 namespace Do.UI
 {
-
-
-	
-	
 	public partial class HUDConfigurationWidget : Gtk.Bin, IConfigurable
 	{
 		BezelDrawingArea bda;
 		public HUDConfigurationWidget()
 		{
 			this.Build();
-			bda = new BezelDrawingArea (HUDStyle.Classic, true);
 			AppPaintable = true;
 			Addins.Util.Appearance.SetColormap (this);
-			this.preview_align.Add (bda);
-			bda.Show ();
+			BuildPreview ();
 			
-			SetupButtons ();
+			Do.Preferences.PreferenceChanged += delegate (object o, PreferenceChangedEventArgs args) {
+				if (args.Key == "Theme")
+					BuildPreview ();
+			};
 		}
 		
 		string [] option_list { get { return new string[] {"default", "hud", "classic"}; } }
+		bool setup = false;
+		
+		private void BuildPreview ()
+		{
+			if (bda != null) {
+				preview_align.Remove (bda);
+				bda.Dispose ();
+			}
+			
+			switch (Do.Preferences.Theme) {
+				case "ShowCase":
+					bda = new BezelDrawingArea (HUDStyle.Classic, true);
+					break;
+				case "HUD":
+					bda = new BezelDrawingArea (HUDStyle.HUD, true);
+					break;
+			}
+			if (bda != null) {
+				this.preview_align.Add (bda);
+				bda.Show ();
+				
+				SetupButtons ();
+			} else {
+				DisableButtons ();
+			}
+		}
+		
+		private void DisableButtons ()
+		{
+			
+		}
 		
 		private void SetupButtons ()
 		{
-			title_combo.Active = Array.IndexOf<string> (option_list, bda.TitleRenderer);
-			background_combo.Active = Array.IndexOf<string> (option_list, bda.WindowRenderer);
-			outline_combo.Active = Array.IndexOf<string> (option_list, bda.PaneRenderer);
+			setup = true;
+			title_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.TitleRenderer);
+			background_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.WindowRenderer);
+			outline_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.PaneRenderer);
 			radius_spin.Value = bda.WindowRadius;
-			background_colorbutton.Color = bda.BackgroundColor;
+			background_colorbutton.Color = Addins.Util.Appearance.ConvertToGdk (bda.BackgroundColor);
+			Gtk.Application.Invoke (delegate { setup = false; });
 		}
 		
 		public Gtk.Bin GetConfiguration ()
@@ -60,38 +90,43 @@ namespace Do.UI
 
 		protected virtual void OnTitleComboChanged (object sender, System.EventArgs e)
 		{
-			bda.TitleRenderer = title_combo.ActiveText.ToLower ();
+			if (setup) return;
+			BezelDrawingArea.TitleRenderer = title_combo.ActiveText.ToLower ();
 		}
 
 		protected virtual void OnBackgroundComboChanged (object sender, System.EventArgs e)
 		{
-			bda.WindowRenderer = background_combo.ActiveText.ToLower ();
+			if (setup) return;
+			BezelDrawingArea.WindowRenderer = background_combo.ActiveText.ToLower ();
 		}
 
 		protected virtual void OnOutlineComboChanged (object sender, System.EventArgs e)
 		{
-			bda.PaneRenderer = outline_combo.ActiveText.ToLower ();
+			if (setup) return;
+			BezelDrawingArea.PaneRenderer = outline_combo.ActiveText.ToLower ();
 		}
 
 		protected virtual void OnBackgroundColorbuttonColorSet (object sender, System.EventArgs e)
 		{
-			bda.BackgroundColor = background_colorbutton.Color;
+			if (setup) return;
+			BezelDrawingArea.BgColor = Addins.Util.Appearance.ColorToHexString (background_colorbutton.Color);
 		}
 
 		protected virtual void OnRadiusSpinValueChanged (object sender, System.EventArgs e)
 		{
-			bda.WindowRadius = (int) radius_spin.Value;
+			if (setup) return;
+			BezelDrawingArea.RoundingRadius = (int) radius_spin.Value;
 		}
 
 		protected virtual void OnClearBackgroundClicked (object sender, System.EventArgs e)
 		{
-			bda.ResetBackgroundStyle ();
-			background_colorbutton.Color = bda.BackgroundColor;
+			BezelDrawingArea.ResetBackgroundStyle ();
+			background_colorbutton.Color = Addins.Util.Appearance.ConvertToGdk (bda.BackgroundColor);
 		}
 
 		protected virtual void OnClearRadiusClicked (object sender, System.EventArgs e)
 		{
-			bda.WindowRadius = -1;
+			BezelDrawingArea.RoundingRadius = -1;
 			radius_spin.Value = bda.WindowRadius;
 		}
 		

@@ -48,8 +48,77 @@ namespace Do.UI
 			NoResult,
 			None,
 		}
+#region Static Area
+		static IPreferences prefs = Util.GetPreferences ("Bezel");
+		static event EventHandler ThemeChanged;
 		
-		IPreferences prefs;
+		public static string TitleRenderer {
+			get {
+				return prefs.Get<string> ("TitleRenderer", "default");
+			}
+			set {
+				prefs.Set<string> ("TitleRenderer", value);
+				OnThemeChanged ();
+			}
+		}
+		
+		public static string PaneRenderer {
+			get {
+				return prefs.Get<string> ("PaneRenderer", "default");
+			}
+			set {
+				prefs.Set<string> ("PaneRenderer", value);
+				OnThemeChanged ();
+			}
+		}
+		
+		public static string WindowRenderer {
+			get {
+				return prefs.Get<string> ("WindowRenderer", "default");
+			}
+			set {
+				prefs.Set<string> ("WindowRenderer", value);
+				OnThemeChanged ();
+			}
+		}
+		
+		public static string BgColor {
+			get {
+				return prefs.Get<string> ("BackgroundColor", "default");
+			}
+			set {
+				prefs.Set<string> ("BackgroundColor", value);
+				OnThemeChanged ();
+			}
+		}
+		
+		public static int RoundingRadius { 
+			get { 
+				return prefs.Get<int> ("WindowRadius", -1);
+			} 
+			set {
+				prefs.Set<int> ("WindowRadius", Math.Max (-1, value));
+				OnThemeChanged ();
+			}
+		}
+		
+		public static void SetDefaultStyle ()
+		{
+			
+		}
+		
+		public static void ResetBackgroundStyle ()
+		{
+			prefs.Set<string> ("BackgroundColor", "default");
+			OnThemeChanged ();
+		}
+		
+		private static void OnThemeChanged ()
+		{
+			if (ThemeChanged != null)
+				ThemeChanged (new System.Object (), new EventArgs ());
+		}
+#endregion
 		HUDStyle style;
 		
 		public const int IconSize = 128;
@@ -80,66 +149,15 @@ namespace Do.UI
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
 		
-		public string TitleRenderer {
+		public Cairo.Color BackgroundColor {
 			get {
-				return prefs.Get<string> ("TitleRenderer", "default");
-			}
-			set {
-				prefs.Set<string> ("TitleRenderer", value);
-				ResetRenderStyle ();
-				Draw ();
+				Gdk.Color color = new Gdk.Color ();
+				if (Gdk.Color.Parse ("#" + BgColor, ref color))
+					return Util.Appearance.ConvertToCairo (color, .95);
+				return backgroundRenderer.BackgroundColor;
 			}
 		}
 		
-		public string PaneRenderer {
-			get {
-				return prefs.Get<string> ("PaneRenderer", "default");
-			}
-			set {
-				prefs.Set<string> ("PaneRenderer", value);
-				ResetRenderStyle ();
-				Draw ();
-			}
-		}
-		
-		public string WindowRenderer {
-			get {
-				return prefs.Get<string> ("WindowRenderer", "default");
-			}
-			set {
-				prefs.Set<string> ("WindowRenderer", value);
-				ResetRenderStyle ();
-				Draw ();
-			}
-		}
-		
-		public Gdk.Color BackgroundColor {
-			get {
-				string color = prefs.Get<string> ("BackgroundColor", "default");
-				if (color == "default")
-					return Util.Appearance.ConvertToGdk (backgroundRenderer.BackgroundColor);
-				Gdk.Color gdk_color = new Gdk.Color ();
-				Gdk.Color.Parse ("#" + color, ref gdk_color);
-				return gdk_color;
-			}
-			set {
-				prefs.Set<string> ("BackgroundColor", Addins.Util.Appearance.ColorToHexString (value));
-				ResetRenderStyle ();
-				Draw ();
-			}
-		}
-		
-		public string TextColor {
-			get {
-				return prefs.Get<string> ("TextColor", "default");
-			}
-			set {
-				prefs.Set<string> ("TextColor", value);
-				ResetRenderStyle ();
-				Draw ();
-			}
-		}
-			
 		public int BoxWidth { get { return PaneOutlineRenderer.Width; } }
 		
 		public int BoxHeight { get { return PaneOutlineRenderer.Height; } }
@@ -200,16 +218,12 @@ namespace Do.UI
 		
 		public int WindowRadius { 
 			get { 
-				if (prefs.Get<int> ("WindowRadius", -1) <= -1)
+				if (RoundingRadius <= -1)
 					return BezelDefaults.WindowRadius; 
 				return Math.Max (1, prefs.Get<int> ("WindowRadius", -1));
 			} 
-			set {
-				prefs.Set<int> ("WindowRadius", Math.Max (-1, value));
-				ResetRenderStyle ();
-				Draw ();
-			}
 		}
+		
 		
 		public int WindowWidth { 
 			get { 
@@ -283,6 +297,11 @@ namespace Do.UI
 			SetDrawingArea ();
 			
 			icon_fade = new double [3];
+			
+			BezelDrawingArea.ThemeChanged += delegate {
+				ResetRenderStyle ();
+				Draw ();
+			};
 		}
 		
 		private void SetDrawingArea ()
@@ -296,15 +315,8 @@ namespace Do.UI
 		private void ResetRenderStyle ()
 		{
 			BuildRenderers (style);
-			BezelColors.InitColors (style, Util.Appearance.ConvertToCairo (BackgroundColor, .95));
+			BezelColors.InitColors (style, BackgroundColor);
 			SetDrawingArea ();
-		}
-		
-		public void ResetBackgroundStyle ()
-		{
-			prefs.Set<string> ("BackgroundColor", "default");
-			ResetRenderStyle ();
-			Draw ();
 		}
 		
 		private void BuildRenderers (HUDStyle style)
