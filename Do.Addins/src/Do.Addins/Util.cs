@@ -278,7 +278,7 @@ namespace Do.Addins
 				g = (byte) ((gdk_color.Green) >> 8);
 				b = (byte) ((gdk_color.Blue)  >> 8);
 				
-				return string.Format ("{0:X}{1:X}{2:X}", r, g, b);
+				return string.Format ("{0:X2}{1:X2}{2:X2}", r, g, b);
 			}
 
 			static void GetFrame (Cairo.Context cairo, double x, double y, double width, double height, double radius)

@@ -180,7 +180,15 @@ namespace Do.UI
 		
 		public int TwoPaneWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2); } }
 		
-		public string HighlightFormat { get { return BezelDefaults.HighlightFormat; } }
+		public string HighlightFormat { 
+			get { 
+				if (BezelColors.Colors["background"].B == BezelColors.Colors["background"].G && 
+				    BezelColors.Colors["background"].B == BezelColors.Colors["background"].R)
+					return BezelDefaults.HighlightFormat; 
+				else
+					return "<span underline=\"single\">{0}</span>";
+			} 
+		}
 		
 		public int WindowBorder { get { return BezelDefaults.WindowBorder; } }
 		
