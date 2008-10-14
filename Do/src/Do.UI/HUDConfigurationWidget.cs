@@ -104,6 +104,7 @@ namespace Do.UI
 		{
 			if (setup) return;
 			BezelDrawingArea.WindowRenderer = background_combo.ActiveText.ToLower ();
+			SetupButtons ();
 		}
 
 		protected virtual void OnOutlineComboChanged (object sender, System.EventArgs e)
@@ -132,8 +133,10 @@ namespace Do.UI
 
 		protected virtual void OnClearRadiusClicked (object sender, System.EventArgs e)
 		{
+			setup = true;
 			BezelDrawingArea.RoundingRadius = -1;
 			radius_spin.Value = bda.WindowRadius;
+			Gtk.Application.Invoke (delegate { setup = false; });
 		}
 		
 		public string Description {
