@@ -34,12 +34,9 @@ namespace Do.Universe {
 	/// </summary>
 	public class FileItem : IFileItem, IOpenableItem {
 
-		static ThumbnailFactory thumb_factory;
-
 		static FileItem ()
 		{
 			Gnome.Vfs.Vfs.Initialize ();
-			thumb_factory = new ThumbnailFactory (ThumbnailSize.Large);
 		}
 
 		/// <summary>
@@ -163,17 +160,15 @@ namespace Do.Universe {
 			get {
 				if (null != icon) return icon;
 
-				string thumb = Thumbnail.PathForUri (URI, ThumbnailSize.Large);
-				if (thumb_factory.CanThumbnail (URI, MimeType, DateTime.MinValue) && System.IO.File.Exists (thumb)) {
-					icon = thumb;	
-					// Generating the thumbnail ourself is too slow for large files.
-					// Suggestion: generate thumbnails asynchronously. Banshee's
-					// notion of job queues may be useful.
-//					if (!System.IO.File.Exists (icon)) {
-//						using (Gdk.Pixbuf thumb = thumb_factory.GenerateThumbnail (URI, MimeType)) {
-//							thumb_factory.SaveThumbnail (thumb, URI, DateTime.Now);
-//						}
-//					}
+				string large_thumb = Thumbnail.PathForUri (URI, ThumbnailSize.Large);
+				string normal_thumb = Thumbnail.PathForUri (URI, ThumbnailSize.Normal);
+				// Generating the thumbnail ourself is too slow for large files.
+				// Suggestion: generate thumbnails asynchronously. Banshee's
+				// notion of job queues may be useful.
+				if (System.IO.File.Exists (large_thumb)) {
+					icon = large_thumb;	
+				} else if (System.IO.File.Exists (normal_thumb)) {
+					icon = normal_thumb;	
 				} else {
 					try {
 						if (MimeType == "x-directory/normal") {
