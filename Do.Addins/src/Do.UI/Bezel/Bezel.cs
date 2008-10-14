@@ -75,6 +75,15 @@ namespace Do.UI
 			pw = new PositionWindow (this, bgw);
 		}
 		
+		protected override void OnDestroyed ()
+		{
+			base.OnDestroyed ();
+			bda.Destroy ();
+			bda = null;
+			bgr.Destroy ();
+			bgr = null;
+		}
+
 		protected override bool OnButtonPressEvent (EventButton evnt)
 		{
 			Gdk.Point global_point = new Gdk.Point ((int) evnt.XRoot, (int) evnt.YRoot);

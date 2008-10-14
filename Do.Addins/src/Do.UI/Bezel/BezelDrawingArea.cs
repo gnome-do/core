@@ -299,15 +299,22 @@ namespace Do.UI
 			
 			icon_fade = new double [3];
 			
-			BezelDrawingArea.ThemeChanged += delegate {
-				ResetRenderStyle ();
-				Draw ();
-			};
+			BezelDrawingArea.ThemeChanged += OnThemeChanged;
 		}
 		
-		~BezelDrawingArea ()
+		private void OnThemeChanged (object o, System.EventArgs args)
 		{
-			surface.Destroy ();
+			ResetRenderStyle ();
+			Draw ();
+		}
+		
+		protected override void OnDestroyed ()
+		{
+			base.OnDestroyed ();
+			BezelDrawingArea.ThemeChanged -= OnThemeChanged;
+			if (surface != null)
+				surface.Destroy ();
+			context = old_context = null;
 		}
 		
 		private void SetDrawingArea ()
@@ -321,7 +328,7 @@ namespace Do.UI
 		private void ResetRenderStyle ()
 		{
 			BuildRenderers (style);
-			BezelColors.InitColors (style, BackgroundColor);
+			BezelColors.InitColors (BackgroundColor);
 			SetDrawingArea ();
 		}
 		

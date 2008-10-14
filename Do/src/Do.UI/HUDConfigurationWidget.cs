@@ -51,7 +51,8 @@ namespace Do.UI
 		{
 			if (bda != null) {
 				preview_align.Remove (bda);
-				bda.Dispose ();
+				bda.Destroy ();
+				bda = null;
 			}
 			
 			switch (Do.Preferences.Theme) {

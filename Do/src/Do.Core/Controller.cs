@@ -130,22 +130,29 @@ namespace Do.Core {
 		{
 			if (null != window) Vanish ();
 			
+			if (window != null)
+				window.KeyPressEvent -= KeyPressWrap;
+			if (window is Gtk.Widget)
+				(window as Gtk.Widget).Destroy ();
+			
+			window = null;
+			
 			switch (Do.Preferences.Theme) {
-				case "Mini":
-					window = new MiniWindow (this);
-					break;
-				case "Glass Frame":
-					window = new GlassWindow (this);
-					break;
-				case "ShowCase":
-					window = new Bezel (this, HUDStyle.Classic);
-					break;
-				case "HUD":
-					window = new Bezel (this, HUDStyle.HUD);
-					break;
-				default:
-					window = new ClassicWindow (this);
-					break;
+			case "Mini":
+				window = new MiniWindow (this);
+				break;
+			case "Glass Frame":
+				window = new GlassWindow (this);
+				break;
+			case "ShowCase":
+				window = new Bezel (this, HUDStyle.Classic);
+				break;
+			case "HUD":
+				window = new Bezel (this, HUDStyle.HUD);
+				break;
+			default:
+				window = new ClassicWindow (this);
+				break;
 			}
 			
 			// Get key press events from window since we want to control that
