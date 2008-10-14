@@ -137,6 +137,12 @@ namespace Do.Core {
 			
 			window = null;
 			
+			if (!Gdk.Screen.Default.IsComposited) {
+				window = new ClassicWindow (this);
+				window.KeyPressEvent += KeyPressWrap;
+				Reset ();
+				return;
+			}
 			switch (Do.Preferences.Theme) {
 			case "Mini":
 				window = new MiniWindow (this);

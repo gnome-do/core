@@ -23,10 +23,10 @@ using Do.Universe;
 
 namespace Do.UI
 {
-	public partial class HUDConfigurationWidget : Gtk.Bin, IConfigurable
+	public partial class ColorConfigurationWidget : Gtk.Bin, IConfigurable
 	{
 		BezelDrawingArea bda;
-		public HUDConfigurationWidget ()
+		public ColorConfigurationWidget ()
 		{
 			this.Build();
 			AppPaintable = true;
@@ -37,12 +37,17 @@ namespace Do.UI
 				if (args.Key == "Theme")
 					BuildPreview ();
 			};
+			
+			table2.HideAll ();
 		}
 		
-		~HUDConfigurationWidget ()
+		protected override void OnDestroyed ()
 		{
-			bda.Dispose ();
+			base.OnDestroyed ();
+			if (bda != null)
+				bda.Destroy ();
 		}
+
 		
 		string [] option_list { get { return new string[] {"default", "hud", "classic"}; } }
 		bool setup = false;
@@ -81,10 +86,10 @@ namespace Do.UI
 		private void SetupButtons ()
 		{
 			setup = true;
-			title_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.TitleRenderer);
-			background_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.WindowRenderer);
-			outline_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.PaneRenderer);
-			radius_spin.Value = bda.WindowRadius;
+//			title_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.TitleRenderer);
+//			background_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.WindowRenderer);
+//			outline_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.PaneRenderer);
+//			radius_spin.Value = bda.WindowRadius;
 			background_colorbutton.Color = Addins.Util.Appearance.ConvertToGdk (bda.BackgroundColor);
 			Gtk.Application.Invoke (delegate { setup = false; });
 		}
@@ -94,24 +99,24 @@ namespace Do.UI
 			return this;
 		}
 
-		protected virtual void OnTitleComboChanged (object sender, System.EventArgs e)
-		{
-			if (setup) return;
-			BezelDrawingArea.TitleRenderer = title_combo.ActiveText.ToLower ();
-		}
-
-		protected virtual void OnBackgroundComboChanged (object sender, System.EventArgs e)
-		{
-			if (setup) return;
-			BezelDrawingArea.WindowRenderer = background_combo.ActiveText.ToLower ();
-			SetupButtons ();
-		}
-
-		protected virtual void OnOutlineComboChanged (object sender, System.EventArgs e)
-		{
-			if (setup) return;
-			BezelDrawingArea.PaneRenderer = outline_combo.ActiveText.ToLower ();
-		}
+//		protected virtual void OnTitleComboChanged (object sender, System.EventArgs e)
+//		{
+//			if (setup) return;
+//			BezelDrawingArea.TitleRenderer = title_combo.ActiveText.ToLower ();
+//		}
+//
+//		protected virtual void OnBackgroundComboChanged (object sender, System.EventArgs e)
+//		{
+//			if (setup) return;
+//			BezelDrawingArea.WindowRenderer = background_combo.ActiveText.ToLower ();
+//			SetupButtons ();
+//		}
+//
+//		protected virtual void OnOutlineComboChanged (object sender, System.EventArgs e)
+//		{
+//			if (setup) return;
+//			BezelDrawingArea.PaneRenderer = outline_combo.ActiveText.ToLower ();
+//		}
 
 		protected virtual void OnBackgroundColorbuttonColorSet (object sender, System.EventArgs e)
 		{
@@ -119,11 +124,11 @@ namespace Do.UI
 			BezelDrawingArea.BgColor = Addins.Util.Appearance.ColorToHexString (background_colorbutton.Color);
 		}
 
-		protected virtual void OnRadiusSpinValueChanged (object sender, System.EventArgs e)
-		{
-			if (setup) return;
-			BezelDrawingArea.RoundingRadius = (int) radius_spin.Value;
-		}
+//		protected virtual void OnRadiusSpinValueChanged (object sender, System.EventArgs e)
+//		{
+//			if (setup) return;
+//			BezelDrawingArea.RoundingRadius = (int) radius_spin.Value;
+//		}
 
 		protected virtual void OnClearBackgroundClicked (object sender, System.EventArgs e)
 		{
@@ -131,23 +136,23 @@ namespace Do.UI
 			background_colorbutton.Color = Addins.Util.Appearance.ConvertToGdk (bda.BackgroundColor);
 		}
 
-		protected virtual void OnClearRadiusClicked (object sender, System.EventArgs e)
-		{
-			setup = true;
-			BezelDrawingArea.RoundingRadius = -1;
-			radius_spin.Value = bda.WindowRadius;
-			Gtk.Application.Invoke (delegate { setup = false; });
-		}
+//		protected virtual void OnClearRadiusClicked (object sender, System.EventArgs e)
+//		{
+//			setup = true;
+//			BezelDrawingArea.RoundingRadius = -1;
+//			radius_spin.Value = bda.WindowRadius;
+//			Gtk.Application.Invoke (delegate { setup = false; });
+//		}
 		
 		public string Description {
 			get {
-				return "HUD Configuration";
+				return "Color Configuration";
 			}
 		}
 		
 		public string Name {
 			get {
-				return "HUD Configuration";
+				return "Color Configuration";
 			}
 		}
 		

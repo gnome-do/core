@@ -73,6 +73,8 @@ namespace Do.UI
         	
             Build ();
             
+			if (!Screen.IsComposited)
+				theme_combo.Sensitive = false;
 			// Setup theme combo
             themeI = Array.IndexOf (Themes, Do.Preferences.Theme);
             themeI = themeI >= 0 ? themeI : 0;

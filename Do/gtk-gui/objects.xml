@@ -11,7 +11,7 @@
     <itemgroups />
     <signals />
   </object>
-  <object type="Do.UI.HUDConfigurationWidget" palette-category="Do" allow-children="false" base-type="Gtk.Bin">
+  <object type="Do.UI.ColorConfigurationWidget" palette-category="Do" allow-children="false" base-type="Gtk.Bin">
     <itemgroups />
     <signals />
   </object>
