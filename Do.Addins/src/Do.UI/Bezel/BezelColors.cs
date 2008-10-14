@@ -34,6 +34,7 @@ namespace Do.UI
 
 		public static void InitColors (HUDStyle style, Cairo.Color bgColor)
 		{
+			
 			Colors = new Dictionary<string,Cairo.Color> ();
 			Colors["background"]     = bgColor;
 			Colors["focused_line"]   = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
@@ -45,7 +46,6 @@ namespace Do.UI
 			Colors["titlebar_step3"] = Util.Appearance.ShadeColor (Colors["titlebar_step1"], .60);
 			Colors["background_dk"]  = Util.Appearance.ShadeColor (Colors["background"], .9);
 			Colors["background_lt"]  = Util.Appearance.ShadeColor (Colors["background"], 1.15);
-			
 			switch (style) {
 			case HUDStyle.HUD:
 				Colors["focused_box"]    = new Cairo.Color (0.3, 0.3, 0.3, 0.6);

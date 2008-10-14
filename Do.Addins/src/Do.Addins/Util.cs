@@ -106,7 +106,7 @@ namespace Do.Addins
 					if (blue == max)  hue = 4 + (red - green) / delta;
 					
 					hue *= 60;
-					if (hue <= 0) hue += 360;
+					if (hue < 0) hue += 360;
 				}
 			}
 			

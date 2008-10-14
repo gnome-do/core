@@ -113,12 +113,17 @@ namespace Do.UI
 			}
 		}
 		
-		public string BackgroundColor {
+		public Gdk.Color BackgroundColor {
 			get {
-				return prefs.Get<string> ("BackgroundColor", "default");
+				string color = prefs.Get<string> ("BackgroundColor", "default");
+				if (color == "default")
+					return Util.Appearance.ConvertToGdk (backgroundRenderer.BackgroundColor);
+				Gdk.Color gdk_color = new Gdk.Color ();
+				Gdk.Color.Parse ("#" + color, ref gdk_color);
+				return gdk_color;
 			}
 			set {
-				prefs.Set<string> ("BackgroundColor", value);
+				prefs.Set<string> ("BackgroundColor", Addins.Util.Appearance.ColorToHexString (value));
 				ResetRenderStyle ();
 				Draw ();
 			}
@@ -282,8 +287,15 @@ namespace Do.UI
 		private void ResetRenderStyle ()
 		{
 			BuildRenderers (style);
-			BezelColors.InitColors (style, backgroundRenderer.BackgroundColor);
+			BezelColors.InitColors (style, Util.Appearance.ConvertToCairo (BackgroundColor, .95));
 			SetDrawingArea ();
+		}
+		
+		public void ResetBackgroundStyle ()
+		{
+			prefs.Set<string> ("BackgroundColor", "default");
+			ResetRenderStyle ();
+			Draw ();
 		}
 		
 		private void BuildRenderers (HUDStyle style)
@@ -396,7 +408,6 @@ namespace Do.UI
 					icon_fade[2] = (icon_fade[2] > 1) ? 1 : icon_fade[2];
 				}
 				
-//				Console.WriteLine (DateTime.Now.Subtract (time).TotalMilliseconds);
 				Paint ();
 				
 				if (AnimationNeeded) {

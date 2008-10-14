@@ -50,6 +50,7 @@ namespace Do.UI
 			background_combo.Active = Array.IndexOf<string> (option_list, bda.WindowRenderer);
 			outline_combo.Active = Array.IndexOf<string> (option_list, bda.PaneRenderer);
 			radius_spin.Value = bda.WindowRadius;
+			background_colorbutton.Color = bda.BackgroundColor;
 		}
 		
 		public Gtk.Bin GetConfiguration ()
@@ -79,7 +80,7 @@ namespace Do.UI
 
 		protected virtual void OnBackgroundColorbuttonColorSet (object sender, System.EventArgs e)
 		{
-			bda.BackgroundColor = Addins.Util.Appearance.ColorToHexString (background_colorbutton.Color);
+			bda.BackgroundColor = background_colorbutton.Color;
 		}
 
 		protected virtual void OnRadiusSpinValueChanged (object sender, System.EventArgs e)
@@ -89,7 +90,9 @@ namespace Do.UI
 
 		protected virtual void OnClearBackgroundClicked (object sender, System.EventArgs e)
 		{
-			bda.BackgroundColor = "default";
+//			bda.BackgroundColor = "default";
+			bda.ResetBackgroundStyle ();
+			background_colorbutton.Color = bda.BackgroundColor;
 		}
 
 		protected virtual void OnClearTextClicked (object sender, System.EventArgs e)
