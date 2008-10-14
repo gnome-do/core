@@ -829,13 +829,28 @@ HUD</property>
               <placeholder />
             </child>
             <child>
-              <placeholder />
-            </child>
-            <child>
-              <placeholder />
-            </child>
-            <child>
-              <placeholder />
+              <widget class="Gtk.ColorButton" id="background_colorbutton">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Events">ButtonMotionMask, ButtonPressMask, ButtonReleaseMask</property>
+                <property name="Alpha">-1</property>
+                <signal name="ColorSet" handler="OnBackgroundColorbuttonColorSet" />
+              </widget>
+              <packing>
+                <property name="TopAttach">1</property>
+                <property name="BottomAttach">2</property>
+                <property name="LeftAttach">5</property>
+                <property name="RightAttach">6</property>
+                <property name="AutoSize">True</property>
+                <property name="XOptions">Fill</property>
+                <property name="YOptions">Fill</property>
+                <property name="XExpand">False</property>
+                <property name="XFill">True</property>
+                <property name="XShrink">False</property>
+                <property name="YExpand">False</property>
+                <property name="YFill">True</property>
+                <property name="YShrink">False</property>
+              </packing>
             </child>
             <child>
               <widget class="Gtk.ComboBox" id="background_combo">
@@ -864,17 +879,20 @@ Classic</property>
               </packing>
             </child>
             <child>
-              <widget class="Gtk.ColorButton" id="colorbutton1">
+              <widget class="Gtk.Button" id="clear_background">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
-                <property name="Events">ButtonMotionMask, ButtonPressMask, ButtonReleaseMask</property>
-                <property name="Alpha">-1</property>
+                <property name="UseStock">True</property>
+                <property name="Type">StockItem</property>
+                <property name="StockId">gtk-clear</property>
+                <signal name="Clicked" handler="OnClearBackgroundClicked" />
+                <property name="label">gtk-clear</property>
               </widget>
               <packing>
                 <property name="TopAttach">1</property>
                 <property name="BottomAttach">2</property>
-                <property name="LeftAttach">5</property>
-                <property name="RightAttach">6</property>
+                <property name="LeftAttach">6</property>
+                <property name="RightAttach">7</property>
                 <property name="AutoSize">True</property>
                 <property name="XOptions">Fill</property>
                 <property name="YOptions">Fill</property>
@@ -887,17 +905,44 @@ Classic</property>
               </packing>
             </child>
             <child>
-              <widget class="Gtk.ColorButton" id="colorbutton2">
+              <widget class="Gtk.Button" id="clear_radius">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
-                <property name="Events">ButtonMotionMask, ButtonPressMask, ButtonReleaseMask</property>
-                <property name="Alpha">-1</property>
+                <property name="UseStock">True</property>
+                <property name="Type">StockItem</property>
+                <property name="StockId">gtk-clear</property>
+                <signal name="Clicked" handler="OnClearRadiusClicked" />
+                <property name="label">gtk-clear</property>
+              </widget>
+              <packing>
+                <property name="LeftAttach">6</property>
+                <property name="RightAttach">7</property>
+                <property name="AutoSize">True</property>
+                <property name="XOptions">Fill</property>
+                <property name="YOptions">Fill</property>
+                <property name="XExpand">False</property>
+                <property name="XFill">True</property>
+                <property name="XShrink">False</property>
+                <property name="YExpand">False</property>
+                <property name="YFill">True</property>
+                <property name="YShrink">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Button" id="clear_text">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="UseStock">True</property>
+                <property name="Type">StockItem</property>
+                <property name="StockId">gtk-clear</property>
+                <signal name="Clicked" handler="OnClearTextClicked" />
+                <property name="label">gtk-clear</property>
               </widget>
               <packing>
                 <property name="TopAttach">2</property>
                 <property name="BottomAttach">3</property>
-                <property name="LeftAttach">5</property>
-                <property name="RightAttach">6</property>
+                <property name="LeftAttach">6</property>
+                <property name="RightAttach">7</property>
                 <property name="AutoSize">True</property>
                 <property name="XOptions">Fill</property>
                 <property name="YOptions">Fill</property>
@@ -1073,8 +1118,33 @@ Classic</property>
                 <property name="ClimbRate">1</property>
                 <property name="Numeric">True</property>
                 <property name="Value">6</property>
+                <signal name="ValueChanged" handler="OnRadiusSpinValueChanged" />
               </widget>
               <packing>
+                <property name="LeftAttach">5</property>
+                <property name="RightAttach">6</property>
+                <property name="AutoSize">True</property>
+                <property name="XOptions">Fill</property>
+                <property name="YOptions">Fill</property>
+                <property name="XExpand">False</property>
+                <property name="XFill">True</property>
+                <property name="XShrink">False</property>
+                <property name="YExpand">False</property>
+                <property name="YFill">True</property>
+                <property name="YShrink">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.ColorButton" id="text_colorbutton">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Events">ButtonMotionMask, ButtonPressMask, ButtonReleaseMask</property>
+                <property name="Alpha">-1</property>
+                <signal name="ColorSet" handler="OnTextColorbuttonColorSet" />
+              </widget>
+              <packing>
+                <property name="TopAttach">2</property>
+                <property name="BottomAttach">3</property>
                 <property name="LeftAttach">5</property>
                 <property name="RightAttach">6</property>
                 <property name="AutoSize">True</property>
@@ -1121,9 +1191,6 @@ Classic</property>
           </packing>
         </child>
         <child>
-          <placeholder />
-        </child>
-        <child>
           <widget class="Gtk.Frame" id="preview_frame">
             <property name="MemberName" />
             <child>
@@ -1140,7 +1207,7 @@ Classic</property>
               </widget>
             </child>
             <child>
-              <widget class="Gtk.Label" id="GtkLabel">
+              <widget class="Gtk.Label" id="GtkLabel2">
                 <property name="MemberName" />
                 <property name="LabelProp" translatable="yes">&lt;b&gt;Preview&lt;/b&gt;</property>
                 <property name="UseMarkup">True</property>
@@ -1151,7 +1218,7 @@ Classic</property>
             </child>
           </widget>
           <packing>
-            <property name="Position">2</property>
+            <property name="Position">1</property>
             <property name="AutoSize">False</property>
             <property name="Expand">False</property>
           </packing>

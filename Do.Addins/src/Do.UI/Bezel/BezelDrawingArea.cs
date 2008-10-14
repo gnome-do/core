@@ -113,6 +113,28 @@ namespace Do.UI
 			}
 		}
 		
+		public string BackgroundColor {
+			get {
+				return prefs.Get<string> ("BackgroundColor", "default");
+			}
+			set {
+				prefs.Set<string> ("BackgroundColor", value);
+				ResetRenderStyle ();
+				Draw ();
+			}
+		}
+		
+		public string TextColor {
+			get {
+				return prefs.Get<string> ("TextColor", "default");
+			}
+			set {
+				prefs.Set<string> ("TextColor", value);
+				ResetRenderStyle ();
+				Draw ();
+			}
+		}
+			
 		public int BoxWidth { get { return PaneOutlineRenderer.Width; } }
 		
 		public int BoxHeight { get { return PaneOutlineRenderer.Height; } }
@@ -163,7 +185,18 @@ namespace Do.UI
 			}
 		}
 		
-		public int WindowRadius { get { return BezelDefaults.WindowRadius; } }
+		public int WindowRadius { 
+			get { 
+				if (prefs.Get<int> ("WindowRadius", -1) <= -1)
+					return BezelDefaults.WindowRadius; 
+				return Math.Max (1, prefs.Get<int> ("WindowRadius", -1));
+			} 
+			set {
+				prefs.Set<int> ("WindowRadius", Math.Max (-1, value));
+				ResetRenderStyle ();
+				Draw ();
+			}
+		}
 		
 		public int WindowWidth { 
 			get { 
@@ -240,10 +273,10 @@ namespace Do.UI
 		
 		private void SetDrawingArea ()
 		{
+			SetSizeRequest (WindowWidth, WindowHeight);
 			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
 			if (preview)
 				drawing_area.X = ShadowRadius;
-			SetSizeRequest (WindowWidth, WindowHeight);
 		}
 		
 		private void ResetRenderStyle ()

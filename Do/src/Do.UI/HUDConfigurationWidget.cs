@@ -49,6 +49,7 @@ namespace Do.UI
 			title_combo.Active = Array.IndexOf<string> (option_list, bda.TitleRenderer);
 			background_combo.Active = Array.IndexOf<string> (option_list, bda.WindowRenderer);
 			outline_combo.Active = Array.IndexOf<string> (option_list, bda.PaneRenderer);
+			radius_spin.Value = bda.WindowRadius;
 		}
 		
 		public Gtk.Bin GetConfiguration ()
@@ -69,6 +70,37 @@ namespace Do.UI
 		protected virtual void OnOutlineComboChanged (object sender, System.EventArgs e)
 		{
 			bda.PaneRenderer = outline_combo.ActiveText.ToLower ();
+		}
+
+		protected virtual void OnTextColorbuttonColorSet (object sender, System.EventArgs e)
+		{
+			bda.TextColor = Addins.Util.Appearance.ColorToHexString (text_colorbutton.Color);
+		}
+
+		protected virtual void OnBackgroundColorbuttonColorSet (object sender, System.EventArgs e)
+		{
+			bda.BackgroundColor = Addins.Util.Appearance.ColorToHexString (background_colorbutton.Color);
+		}
+
+		protected virtual void OnRadiusSpinValueChanged (object sender, System.EventArgs e)
+		{
+			bda.WindowRadius = (int) radius_spin.Value;
+		}
+
+		protected virtual void OnClearBackgroundClicked (object sender, System.EventArgs e)
+		{
+			bda.BackgroundColor = "default";
+		}
+
+		protected virtual void OnClearTextClicked (object sender, System.EventArgs e)
+		{
+			bda.TextColor = "default";
+		}
+
+		protected virtual void OnClearRadiusClicked (object sender, System.EventArgs e)
+		{
+			bda.WindowRadius = -1;
+			radius_spin.Value = bda.WindowRadius;
 		}
 		
 		public string Description {
