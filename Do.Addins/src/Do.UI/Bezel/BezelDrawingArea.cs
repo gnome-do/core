@@ -119,6 +119,7 @@ namespace Do.UI
 				ThemeChanged (new System.Object (), new EventArgs ());
 		}
 #endregion
+		
 		HUDStyle style;
 		
 		public const int IconSize = 128;
@@ -302,6 +303,11 @@ namespace Do.UI
 				ResetRenderStyle ();
 				Draw ();
 			};
+		}
+		
+		~BezelDrawingArea ()
+		{
+			surface.Destroy ();
 		}
 		
 		private void SetDrawingArea ()

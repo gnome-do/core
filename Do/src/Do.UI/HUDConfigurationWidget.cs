@@ -26,7 +26,7 @@ namespace Do.UI
 	public partial class HUDConfigurationWidget : Gtk.Bin, IConfigurable
 	{
 		BezelDrawingArea bda;
-		public HUDConfigurationWidget()
+		public HUDConfigurationWidget ()
 		{
 			this.Build();
 			AppPaintable = true;
@@ -37,6 +37,11 @@ namespace Do.UI
 				if (args.Key == "Theme")
 					BuildPreview ();
 			};
+		}
+		
+		~HUDConfigurationWidget ()
+		{
+			bda.Dispose ();
 		}
 		
 		string [] option_list { get { return new string[] {"default", "hud", "classic"}; } }

@@ -64,6 +64,11 @@ namespace Do.UI
 			this.parent = parent;
 		}
 		
+		~HUDTopBar ()
+		{
+			border_buffer.Destroy ();
+		}
+		
 		private int buttons_offset { get { return Math.Min (10, parent.WindowRadius + 3); } }
 		
 		private void RenderCloseCircle (Context cr)

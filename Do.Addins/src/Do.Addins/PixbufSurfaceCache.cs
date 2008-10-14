@@ -47,6 +47,12 @@ namespace Do.Addins
 			}
 		}
 		
+		~PixbufSurfaceCache ()
+		{
+			foreach (Entry e in surface_cache.Values)
+				e.surface.Destroy ();
+		}
+		
 		public Surface AddPixbufSurface (string id, string icon)
 		{
 			Surface sr = EvictLRU ();
