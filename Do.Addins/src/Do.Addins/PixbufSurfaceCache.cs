@@ -30,13 +30,13 @@ namespace Do.Addins
 	public class PixbufSurfaceCache
 	{
 		Dictionary <string, Entry> surface_cache;
-		int count;
+//		int count;
 		int surface_width;
 		int surface_height;
 		
 		public PixbufSurfaceCache(int count, int surface_width, int surface_height, Surface sourceSurface)
 		{
-			this.count = count;
+//			this.count = count;
 			this.surface_width = surface_width;
 			this.surface_height = surface_height;
 			surface_cache = new Dictionary<string, Entry> ();

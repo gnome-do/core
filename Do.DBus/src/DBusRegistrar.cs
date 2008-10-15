@@ -84,7 +84,7 @@ namespace Do.DBusLib
 		{
 			try {
 				Bus.Session.RequestName (BusName);
-				Bus.Session.Register (BusName, new ObjectPath (objectPath), busItem);
+				Bus.Session.Register (new ObjectPath (objectPath), busItem);
 			} catch {
 				return default (T);
 			}

@@ -52,7 +52,7 @@ namespace Do.UI
 		}
 
 		
-		string [] option_list { get { return new string[] {"default", "hud", "classic"}; } }
+//		string [] option_list { get { return new string[] {"default", "hud", "classic"}; } }
 		bool setup = false;
 		
 		private void BuildPreview ()
@@ -154,7 +154,7 @@ namespace Do.UI
 			}
 		}
 		
-		public string Name {
+		public new string Name {
 			get {
 				return "Color Configuration";
 			}
