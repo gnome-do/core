@@ -97,7 +97,7 @@ namespace Do.UI
 		public static void SendNotification (string title, string message, string icon)
 		{
 			Do.NotificationIcon.Show ();
-			GLib.Timeout.Add (1000, delegate {
+			GLib.Timeout.Add (500, delegate {
 				Gtk.Application.Invoke (delegate {
 					ShowNotification (title, message, icon);
 				});
@@ -130,6 +130,30 @@ namespace Do.UI
 			if (msg.Timeout > 10000) msg.Timeout = 10000;
 			if (msg.Timeout < 5000) msg.Timeout = 5000;
 			msg.SetGeometryHints (screen, x, y);
+			msg.Show ();
+		}
+		
+		internal static void ShowKillNotification (ActionHandler handler)
+		{
+			int x, y;
+			Gdk.Screen screen;
+
+			Do.NotificationIcon.GetLocationOnScreen (
+				out screen, out x, out y);
+
+			Notification msg;
+			try {
+				msg = new Notification ();
+			} catch (Exception e) {
+				Log.Error ("Could not show notification: " + e.Message);
+				return;
+			}
+			msg.Closed += new EventHandler (OnNotificationClosed); 
+			msg.Summary = "Do Error";
+			msg.Body = "Do is still executing the last requested task, please wait for this to finish";
+			msg.Timeout = 10000;
+			msg.SetGeometryHints (screen, x, y);
+			msg.AddAction ("Stop", "Stop Action", handler);
 			msg.Show ();
 		}
 		

@@ -150,9 +150,6 @@ namespace Do.Core {
 			case "Glass Frame":
 				window = new GlassWindow (this);
 				break;
-//			case "ShowCase":
-//				window = new Bezel (this, HUDStyle.Classic);
-//				break;
 			case "HUD":
 				window = new Bezel (this, HUDStyle.HUD);
 				break;
@@ -848,9 +845,13 @@ namespace Do.Core {
 			}
 			
 			if (th != null && th.IsAlive) {
-				NotificationIcon.SendNotification ("Do Error:", "A previous action is still " + 
-				                                   "running.  Please wait for this action to " +
-				                                   "finish running");
+				NotificationIcon.ShowKillNotification (delegate {
+					th.Abort ();
+					if (!th.Join (1500))
+						NotificationIcon.SendNotification ("Unrecovorable Error:", "Do has suffered an " +
+						                                   "error which can not be recovered.  Please " +
+						                                   "restart Do.");
+				});
 				return;
 			}
 			
