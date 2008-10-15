@@ -79,7 +79,7 @@ namespace Do.UI
 			get {
 				switch (style) {
 				case HUDStyle.HUD:
-					return new Cairo.Color (0, 0, 0, .8);
+					return BezelColors.Colors["background_dk"];
 				case HUDStyle.Classic:
 					Gdk.Color bgColor;
 					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
@@ -472,9 +472,9 @@ namespace Do.UI
 				cr.LineTo (0, 0 + top_border_width);
 				cr.Arc (0 + radius, 0 + radius, radius, Math.PI, Math.PI*1.5);
 				LinearGradient title_grad = new LinearGradient (0, 0, 0, top_border_width);
-				title_grad.AddColorStop (0.0, new Cairo.Color (0.45, 0.45, 0.45));
-				title_grad.AddColorStop (0.5, new Cairo.Color (0.33, 0.33, 0.33));
-				title_grad.AddColorStop (0.5, new Cairo.Color (0.28, 0.28, 0.28));
+				title_grad.AddColorStop (0.0, BezelColors.Colors["titlebar_step1"]);
+				title_grad.AddColorStop (0.5, BezelColors.Colors["titlebar_step2"]);
+				title_grad.AddColorStop (0.5, BezelColors.Colors["titlebar_step3"]);
 				cr.Pattern = title_grad;
 				cr.Fill ();
 				title_grad.Destroy ();
@@ -514,7 +514,7 @@ namespace Do.UI
 				cr.Arc (width-radius-.5, height-radius-.5, radius, 0, Math.PI*.5);
 				cr.Arc (radius+.5, height-radius-.5, radius, Math.PI*.5, Math.PI);
 				cr.ClosePath ();
-				cr.Color = new Cairo.Color (.22, .22, .22, 1);
+				cr.Color = BezelColors.Colors["titlebar_step3"];
 				cr.FillPreserve ();
 				cr.LineWidth=1;
 				cr.Color = new Cairo.Color (.6, .6, .6, .4);
@@ -565,7 +565,7 @@ namespace Do.UI
 				cr.FillPreserve ();
 				
 				cr.LineWidth = 1;
-				cr.Color = new Cairo.Color (.3, .3, .3, 1);
+				cr.Color = BezelColors.Colors["background_lt"];
 				cr.Stroke ();
 				break;
 			case HUDStyle.Classic:
