@@ -33,16 +33,19 @@ namespace Do.UI
 			Addins.Util.Appearance.SetColormap (this);
 			BuildPreview ();
 			
-			Do.Preferences.PreferenceChanged += delegate (object o, PreferenceChangedEventArgs args) {
-				if (args.Key == "Theme")
-					BuildPreview ();
-			};
+			Do.Preferences.PreferenceChanged += OnPrefsChanged;
 			
 			table2.HideAll ();
 		}
 		
+		private void OnPrefsChanged (object o, PreferenceChangedEventArgs args) {
+			if (args.Key == "Theme")
+					BuildPreview ();
+		}
+		
 		protected override void OnDestroyed ()
 		{
+			Do.Preferences.PreferenceChanged -= OnPrefsChanged;
 			base.OnDestroyed ();
 			if (bda != null)
 				bda.Destroy ();
