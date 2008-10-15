@@ -73,7 +73,7 @@ namespace Do {
 			SetupKeybindings ();
 			
 			//whoever keeps pulling this out. STOP. PLEASE.
-			notification_icon = NotificationIcon;
+			notification_icon = new NotificationIcon ();
 			
 			// Kick-off update timers.			
 			GLib.Timeout.Add (5 * 60 * 100, delegate {
