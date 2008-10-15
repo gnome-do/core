@@ -61,7 +61,7 @@ namespace Do.UI
         			"Classic",
         			"Glass Frame",
         			"Mini",
-					"ShowCase",
+//					"ShowCase",
 					"HUD",
         		};
         	}

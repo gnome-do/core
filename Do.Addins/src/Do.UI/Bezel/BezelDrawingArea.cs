@@ -294,6 +294,9 @@ namespace Do.UI
 			this.preview = preview;
 			this.style = style;
 			
+			if (style == HUDStyle.HUD)
+				BgColor = "default";
+			
 			ResetRenderStyle ();
 			SetDrawingArea ();
 			

@@ -61,12 +61,13 @@ namespace Do.UI
 			}
 			
 			switch (Do.Preferences.Theme) {
-				case "ShowCase":
+			case "Classic":
+				if (Screen.IsComposited)
 					bda = new BezelDrawingArea (HUDStyle.Classic, true);
-					break;
-				case "HUD":
-					bda = new BezelDrawingArea (HUDStyle.HUD, true);
-					break;
+				break;
+			case "HUD":
+				bda = new BezelDrawingArea (HUDStyle.HUD, true);
+				break;
 			}
 			if (bda != null) {
 				this.preview_align.Add (bda);

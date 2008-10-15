@@ -305,7 +305,6 @@
                             <property name="Items" translatable="yes">Classic
 Glass Frame
 Mini
-ShowCase
 HUD</property>
                             <property name="Active">0</property>
                             <signal name="Changed" handler="OnThemeComboChanged" />
@@ -1060,54 +1059,59 @@ Classic</property>
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HBox" id="hbox1">
+          <widget class="Gtk.Alignment" id="alignment1">
             <property name="MemberName" />
-            <property name="Spacing">6</property>
             <child>
-              <widget class="Gtk.Label" id="label8">
+              <widget class="Gtk.HBox" id="hbox1">
                 <property name="MemberName" />
-                <property name="Xalign">0</property>
-                <property name="LabelProp" translatable="yes">Background Color:</property>
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.Label" id="label8">
+                    <property name="MemberName" />
+                    <property name="Xalign">0</property>
+                    <property name="LabelProp" translatable="yes">Background Color:</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ColorButton" id="background_colorbutton">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Events">ButtonMotionMask, ButtonPressMask, ButtonReleaseMask</property>
+                    <property name="Alpha">-1</property>
+                    <signal name="ColorSet" handler="OnBackgroundColorbuttonColorSet" />
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="clear_background">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="UseStock">True</property>
+                    <property name="Type">StockItem</property>
+                    <property name="StockId">gtk-clear</property>
+                    <property name="Relief">None</property>
+                    <signal name="Clicked" handler="OnClearBackgroundClicked" />
+                    <property name="label">gtk-clear</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">2</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
               </widget>
-              <packing>
-                <property name="Position">0</property>
-                <property name="AutoSize">True</property>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="Gtk.ColorButton" id="background_colorbutton">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="Events">ButtonMotionMask, ButtonPressMask, ButtonReleaseMask</property>
-                <property name="Alpha">-1</property>
-                <signal name="ColorSet" handler="OnBackgroundColorbuttonColorSet" />
-              </widget>
-              <packing>
-                <property name="Position">1</property>
-                <property name="AutoSize">True</property>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="Gtk.Button" id="clear_background">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="UseStock">True</property>
-                <property name="Type">StockItem</property>
-                <property name="StockId">gtk-clear</property>
-                <property name="Relief">None</property>
-                <signal name="Clicked" handler="OnClearBackgroundClicked" />
-                <property name="label">gtk-clear</property>
-              </widget>
-              <packing>
-                <property name="Position">2</property>
-                <property name="AutoSize">True</property>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
-              </packing>
             </child>
           </widget>
           <packing>

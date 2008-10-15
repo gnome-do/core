@@ -159,7 +159,6 @@ namespace Do.UI {
             this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Classic"));
             this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Glass Frame"));
             this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Mini"));
-            this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("ShowCase"));
             this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("HUD"));
             this.theme_combo.WidthRequest = 150;
             this.theme_combo.Name = "theme_combo";

@@ -35,6 +35,8 @@ namespace Do.UI {
         
         private Gtk.ComboBox title_combo;
         
+        private Gtk.Alignment alignment1;
+        
         private Gtk.HBox hbox1;
         
         private Gtk.Label label8;
@@ -188,6 +190,9 @@ namespace Do.UI {
             w10.Expand = false;
             w10.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
+            this.alignment1 = new Gtk.Alignment(0.5F, 0.5F, 1F, 1F);
+            this.alignment1.Name = "alignment1";
+            // Container child alignment1.Gtk.Container+ContainerChild
             this.hbox1 = new Gtk.HBox();
             this.hbox1.Name = "hbox1";
             this.hbox1.Spacing = 6;
@@ -224,11 +229,12 @@ namespace Do.UI {
             w13.Position = 2;
             w13.Expand = false;
             w13.Fill = false;
-            this.vbox2.Add(this.hbox1);
-            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox1]));
-            w14.Position = 1;
-            w14.Expand = false;
-            w14.Fill = false;
+            this.alignment1.Add(this.hbox1);
+            this.vbox2.Add(this.alignment1);
+            Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.vbox2[this.alignment1]));
+            w15.Position = 1;
+            w15.Expand = false;
+            w15.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
             this.preview_frame = new Gtk.Frame();
             this.preview_frame.Name = "preview_frame";
@@ -245,9 +251,9 @@ namespace Do.UI {
             this.GtkLabel2.UseMarkup = true;
             this.preview_frame.LabelWidget = this.GtkLabel2;
             this.vbox2.Add(this.preview_frame);
-            Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.vbox2[this.preview_frame]));
-            w16.Position = 2;
-            w16.Expand = false;
+            Gtk.Box.BoxChild w17 = ((Gtk.Box.BoxChild)(this.vbox2[this.preview_frame]));
+            w17.Position = 2;
+            w17.Expand = false;
             this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
