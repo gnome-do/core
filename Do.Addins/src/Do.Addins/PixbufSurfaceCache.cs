@@ -61,7 +61,7 @@ namespace Do.Addins
 			cr.Operator = Operator.Source;
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
 			cr.Paint ();
-
+			
 			DrawIconOnSurface (sr, icon);
 			
 			surface_cache.Add (id, new Entry (sr));

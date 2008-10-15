@@ -278,6 +278,8 @@ namespace Do.UI
 	public class ClassicPaneOutlineRenderer : IBezelPaneRenderElement
 	{
 		BezelDrawingArea parent;
+		Surface sr_active, sr_inactive;
+		int surface_height = 0;
 		
 		public int Width { get { return 175; } }
 
@@ -290,31 +292,68 @@ namespace Do.UI
 		
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area, Pane pane, bool focused)
 		{
+			if (sr_active == null || sr_inactive == null || surface_height != Height) {
+				surface_height = Height;
+				sr_active = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
+				sr_inactive = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
+				Context c2 = new Context (sr_active);
+				c2.MoveTo (parent.WindowRadius, 0);
+				c2.Arc (Width - parent.WindowRadius, 
+				        parent.WindowRadius, 
+				        parent.WindowRadius, 
+				        Math.PI*1.5, 
+				        Math.PI*2);
+				c2.Arc (Width - parent.WindowRadius,
+				        Height - parent.WindowRadius,
+				        parent.WindowRadius,
+				        0,
+				        Math.PI*.5);
+				c2.Arc (parent.WindowRadius,
+				        Height - parent.WindowRadius,
+				        parent.WindowRadius,
+				        Math.PI*.5,
+				        Math.PI);
+				c2.Arc (parent.WindowRadius,
+				        parent.WindowRadius, 
+				        parent.WindowRadius,
+				        Math.PI,
+				        Math.PI*1.5);
+				c2.Color = BezelColors.Colors["focused_box"];
+				c2.Fill ();
+				(c2 as IDisposable).Dispose ();
+				
+				c2 = new Context (sr_inactive);
+				c2.MoveTo (parent.WindowRadius, 0);
+				c2.Arc (Width - parent.WindowRadius, 
+				        parent.WindowRadius, 
+				        parent.WindowRadius, 
+				        Math.PI*1.5, 
+				        Math.PI*2);
+				c2.Arc (Width - parent.WindowRadius,
+				        Height - parent.WindowRadius,
+				        parent.WindowRadius,
+				        0,
+				        Math.PI*.5);
+				c2.Arc (parent.WindowRadius,
+				        Height - parent.WindowRadius,
+				        parent.WindowRadius,
+				        Math.PI*.5,
+				        Math.PI);
+				c2.Arc (parent.WindowRadius,
+				        parent.WindowRadius, 
+				        parent.WindowRadius,
+				        Math.PI,
+				        Math.PI*1.5);
+				c2.Color = BezelColors.Colors["unfocused_box"];
+				c2.Fill ();
+				(c2 as IDisposable).Dispose ();
+			}
 			int offset = parent.PaneOffset (pane);
-			cr.MoveTo (drawing_area.X + offset + parent.WindowRadius, 
-			           drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight);
-			cr.Arc (drawing_area.X + offset + Width - parent.WindowRadius, 
-			        drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight + parent.WindowRadius, 
-			        parent.WindowRadius, 
-			        Math.PI*1.5, 
-			        Math.PI*2);
-			cr.Arc (drawing_area.X + offset + Width - parent.WindowRadius,
-			        drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight + Height - parent.WindowRadius,
-			        parent.WindowRadius,
-			        0,
-			        Math.PI*.5);
-			cr.Arc (drawing_area.X + offset + parent.WindowRadius,
-			        drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight + Height - parent.WindowRadius,
-			        parent.WindowRadius,
-			        Math.PI*.5,
-			        Math.PI);
-			cr.Arc (drawing_area.X + offset + parent.WindowRadius,
-			        drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight + parent.WindowRadius, 
-			        parent.WindowRadius,
-			        Math.PI,
-			        Math.PI*1.5);
-			cr.Color = (focused) ? BezelColors.Colors["focused_box"] : BezelColors.Colors["unfocused_box"];
-			cr.Fill ();
+			if (pane == parent.Focus)
+				cr.SetSource (sr_active, drawing_area.X + offset, drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight);
+			else
+				cr.SetSource (sr_inactive, drawing_area.X + offset, drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight);
+			cr.Paint ();
 		}
 
 	}

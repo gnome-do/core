@@ -149,7 +149,7 @@ namespace Do.UI
 		
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
-		
+
 		public Cairo.Color BackgroundColor {
 			get {
 				Gdk.Color color = new Gdk.Color ();
@@ -185,6 +185,7 @@ namespace Do.UI
 			get { return third_pane_visible; }
 			set { 
 				third_pane_visible = value; 
+				if (third_pane_visible)
 				AnimatedDraw ();
 			}
 		}
@@ -404,7 +405,7 @@ namespace Do.UI
 				return;
 			
 			delta_time = DateTime.Now;
-			timer = GLib.Timeout.Add (1000/60, delegate {
+			timer = GLib.Timeout.Add (1000/65, delegate {
 				
 				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
 				delta_time = DateTime.Now;
@@ -522,7 +523,6 @@ namespace Do.UI
 		{
 			if (!IsDrawable)
 				return;
-			DateTime time = DateTime.Now;
 			Cairo.Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
 			
 			//Much kudos to Ian McIntosh
@@ -547,8 +547,6 @@ namespace Do.UI
 			BackgroundRenderer.RenderElement (cr, drawing_area);
 			
 			RenderTitleBar (cr);
-			Console.WriteLine ("TitleBar Point Render Time: " + DateTime.Now.Subtract (time).TotalMilliseconds);
-			DateTime time2 = DateTime.Now;
 			do {
 				if (text_box_scale > 0) {
 					
@@ -562,10 +560,8 @@ namespace Do.UI
 				RenderDescriptionText (cr);
 				//--------------First Pane---------------
 				RenderPane (Pane.First, cr);
-			
 				//------------Second Pane----------------
 				RenderPane (Pane.Second, cr);
-			
 				//------------Third Pane-----------------
 				if (ThirdPaneVisible /*&& drawing_area.Width == ThreePaneWidth*/) {
 					RenderPane (Pane.Third, cr);
@@ -576,17 +572,14 @@ namespace Do.UI
 				}
 				
 			} while (false);
-			Console.WriteLine ("Boxes Render Time: " + DateTime.Now.Subtract (time2).TotalMilliseconds);
 			Util.Appearance.DrawShadow (cr, drawing_area.X, drawing_area.Y, drawing_area.Width, 
 			                            drawing_area.Height, WindowRadius, new Util.ShadowParameters (.5, ShadowRadius));
-			
 			cr2.SetSourceSurface (surface, 0, 0);
 			cr2.Operator = Operator.Source;
 			cr2.Paint ();
 			
 			(cr2 as IDisposable).Dispose ();
 			(cr as IDisposable).Dispose ();
-			Console.WriteLine ("Total Render Time: " + DateTime.Now.Subtract (time).TotalMilliseconds);
 		}
 		
 		
@@ -632,7 +625,8 @@ namespace Do.UI
 				}
 				break;
 			}
-			cr.ResetClip ();
+			if (pane == Pane.Third)
+				cr.ResetClip ();
 		}
 		
 		private void RenderPaneOutline (Pane pane, Context cr)
@@ -662,15 +656,16 @@ namespace Do.UI
 				                                 drawing_area.Y + WindowBorder + TitleBarHeight + 3);
 			cr.PaintWithAlpha (calc_alpha * alpha);
 			
-			if (!string.IsNullOrEmpty (sec_icon) && calc_alpha < 1) {
-				if (!SurfaceCache.ContainsKey (OldContext.GetPaneObject (pane).Icon)) {
-					BufferIcon (cr, OldContext.GetPaneObject (pane).Icon);
-				}
-				cr.SetSource (SurfaceCache.GetSurface (OldContext.GetPaneObject (pane).Icon), 
-				              drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
-				              drawing_area.Y + WindowBorder + TitleBarHeight + 3);
-				cr.PaintWithAlpha (alpha * (1 - calc_alpha));
+			if (string.IsNullOrEmpty (sec_icon) || calc_alpha < 1) 
+				return;
+			
+			if (!SurfaceCache.ContainsKey (OldContext.GetPaneObject (pane).Icon)) {
+				BufferIcon (cr, OldContext.GetPaneObject (pane).Icon);
 			}
+			cr.SetSource (SurfaceCache.GetSurface (OldContext.GetPaneObject (pane).Icon), 
+			              drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
+			              drawing_area.Y + WindowBorder + TitleBarHeight + 3);
+			cr.PaintWithAlpha (alpha * (1 - calc_alpha));
 		}
 		
 		private void BufferIcon (Context cr, string icon)
@@ -682,7 +677,6 @@ namespace Do.UI
 		{
 			if (Context.GetPaneObject (Focus) == null)
 				return;
-			
 			BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
 			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20, this);
 		}

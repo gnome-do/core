@@ -31,7 +31,20 @@ namespace Do.UI
 	
 	public class BezelTextUtils
 	{
-		public static int TextHeight = 11;
+		public static int textHeight = 11;
+		private static Pango.Layout layout;
+		private static Gtk.Widget widget;
+		
+		public static int TextHeight {
+			get {
+				return textHeight;
+			}
+			set {
+				if (value == textHeight) return;
+				textHeight = value;
+				widget = null;
+			}
+		}
 		
 		public static void RenderLayoutText (Context cr, string text, int x, int y, int width, Gtk.Widget w)
 		{
@@ -45,14 +58,19 @@ namespace Do.UI
 		{
 			if (string.IsNullOrEmpty (text)) return new Gdk.Rectangle ();
 	
-			Pango.Layout layout = new Pango.Layout (w.PangoContext);
+			if (layout == null || widget == null || w != widget) {
+				widget = w;
+				if (layout != null) {
+					layout.Context.Dispose ();
+					layout.FontDescription.Dispose ();
+					layout.Dispose ();
+				}
+				layout = new Pango.Layout (widget.PangoContext);
+				layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
+				layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (TextHeight);
+			}
 			layout.Width = Pango.Units.FromPixels (width);
-			layout.SetMarkup (text);
-			
 			layout.Ellipsize = ellipse;
-				
-			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
-			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (TextHeight);
 			layout.Alignment = align;
 			
 			if (ellipse == Pango.EllipsizeMode.None)
@@ -70,9 +88,6 @@ namespace Do.UI
 			                     layout.Lines [layout.LineCount-1].Length, 
 			                     out strong, out weak);
 			cr.ResetClip ();
-			layout.Context.Dispose ();
-			layout.FontDescription.Dispose ();
-			layout.Dispose ();
 			return new Gdk.Rectangle (Pango.Units.ToPixels (weak.X) + x,
 			                          Pango.Units.ToPixels (weak.Y) + y,
 			                          Pango.Units.ToPixels (weak.Width),

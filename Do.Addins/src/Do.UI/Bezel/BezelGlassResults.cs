@@ -56,7 +56,7 @@ namespace Do.UI
 		IUIContext context = null;
 		
 		IObject[] results;
-
+		
 		public int X { get; set; }
 		
 		int BottomBorderWidth {
