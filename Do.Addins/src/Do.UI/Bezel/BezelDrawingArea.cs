@@ -294,9 +294,6 @@ namespace Do.UI
 			this.preview = preview;
 			this.style = style;
 			
-			if (style == HUDStyle.HUD)
-				BgColor = "default";
-			
 			ResetRenderStyle ();
 			SetDrawingArea ();
 			
@@ -523,6 +520,9 @@ namespace Do.UI
 		
 		void Paint () 
 		{
+			if (!IsDrawable)
+				return;
+			
 			Cairo.Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
 			
 			//Much kudos to Ian McIntosh
