@@ -240,14 +240,14 @@ namespace Do.UI
 		
 		private bool ExpandNeeded {
 			get {
-				return (ThirdPaneVisible || entry_mode[(int) Focus]) && 
+				return surface_cache.UseIdleHandler = (ThirdPaneVisible || entry_mode[(int) Focus]) && 
 					drawing_area.Width != ThreePaneWidth; 
 			}
 		}
 		
 		private bool ShrinkNeeded {
 			get {
-				return (!ThirdPaneVisible && !entry_mode[(int) focus])  && 
+				return surface_cache.UseIdleHandler = (!ThirdPaneVisible && !entry_mode[(int) focus])  && 
 					drawing_area.Width != TwoPaneWidth && Focus != Pane.Third;
 			}
 		}

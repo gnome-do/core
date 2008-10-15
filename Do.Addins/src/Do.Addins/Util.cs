@@ -319,6 +319,7 @@ namespace Do.Addins
 			public static void DrawShadow (Cairo.Context cr, double x, double y, double width, 
 			                                  double height, double radius, ShadowParameters shadowParams)
 			{
+//				DateTime time = DateTime.Now;
 				Surface sr = cr.Target.CreateSimilar (cr.Target.Content, (int)width + (int)(2*shadowParams.shadowRadius) + (int)x, 
 				                                      (int)height + (int)(2*shadowParams.shadowRadius) + (int)y);
 				Context cairo = new Context (sr);
@@ -396,7 +397,8 @@ namespace Do.Addins
 				cr.Paint ();
 				
 				(cairo as IDisposable).Dispose ();
-				(sr as IDisposable).Dispose ();
+				sr.Destroy ();
+//				Console.WriteLine (DateTime.Now.Subtract (time).TotalMilliseconds);
 			}
 		}
 		

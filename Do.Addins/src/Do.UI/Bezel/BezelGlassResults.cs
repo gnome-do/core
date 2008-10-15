@@ -302,7 +302,7 @@ namespace Do.UI
 				return;
 			
 			delta_time = DateTime.Now;
-			timer = GLib.Timeout.Add (17, delegate {
+			timer = GLib.Timeout.Add (1000/100, delegate {
 				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / FadeTime;
 				delta_time = DateTime.Now;
 				
@@ -367,6 +367,7 @@ namespace Do.UI
 		private void Paint ()
 		{
 			if (!IsDrawable) return;
+//			DateTime time = DateTime.Now;
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			
 			if (slide_offset == 0) {
@@ -408,6 +409,7 @@ namespace Do.UI
 			}
 			
 			(cr as IDisposable).Dispose ();
+//			Console.WriteLine (DateTime.Now.Subtract (time).TotalMilliseconds);
 		}
 		
 		/// <summary>

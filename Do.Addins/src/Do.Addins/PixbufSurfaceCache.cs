@@ -34,6 +34,8 @@ namespace Do.Addins
 		int surface_width;
 		int surface_height;
 		
+		public bool UseIdleHandler = false;
+		
 		public PixbufSurfaceCache(int count, int surface_width, int surface_height, Surface sourceSurface)
 		{
 //			this.count = count;
@@ -62,7 +64,14 @@ namespace Do.Addins
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
 			cr.Paint ();
 			
-			DrawIconOnSurface (sr, icon);
+			if (UseIdleHandler) {
+				GLib.Idle.Add (delegate {
+					DrawIconOnSurface (sr, icon);
+					return false;
+				});
+			} else {
+				DrawIconOnSurface (sr, icon);
+			}
 			
 			surface_cache.Add (id, new Entry (sr));
 			(cr as IDisposable).Dispose ();

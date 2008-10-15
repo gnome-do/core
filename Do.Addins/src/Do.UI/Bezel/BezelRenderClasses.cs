@@ -378,7 +378,9 @@ namespace Do.UI
 	
 	public class ClassicBackgroundRenderer : IBezelWindowRenderElement
 	{
-		private BezelDrawingArea parent;
+		BezelDrawingArea parent;
+		Surface surface;
+		int surface_height;
 		
 		public int Height {
 			get {
@@ -405,6 +407,7 @@ namespace Do.UI
 		
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
 		{
+//			DateTime time = DateTime.Now;
 			SetRoundedPath (cr, drawing_area, false);
 			LinearGradient lg = new LinearGradient (0, drawing_area.Y, 0, drawing_area.Height);
 			lg.AddColorStop (0, BezelColors.Colors["background_dk"]);
@@ -412,6 +415,30 @@ namespace Do.UI
 			cr.Pattern = lg;
 			lg.Destroy ();
 			cr.Fill ();
+//			Console.WriteLine (DateTime.Now.Subtract (time).TotalMilliseconds);
+//			DateTime time = DateTime.Now;
+//			if (surface == null || surface_height != drawing_area.Height) {
+//				if (surface != null)
+//					surface.Destroy ();
+//				Console.WriteLine ("Create");
+//				surface = cr.Target.CreateSimilar (cr.Target.Content, parent.WindowWidth, drawing_area.Height);
+//				surface_height = drawing_area.Height;
+//				
+//				Context cr2 = new Context (surface);
+//				cr2.Rectangle (0, 0, parent.WindowWidth, drawing_area.Height);
+//				LinearGradient lg = new LinearGradient (0, drawing_area.Y, 0, drawing_area.Height);
+//				lg.AddColorStop (0, BezelColors.Colors["background_dk"]);
+//				lg.AddColorStop (1, BezelColors.Colors["background_lt"]);
+//				cr2.Pattern = lg;
+//				lg.Destroy ();
+//				cr2.Fill ();
+//				
+//				(cr2 as IDisposable).Dispose ();
+//			}
+//			SetRoundedPath (cr, drawing_area, false);
+//			cr.SetSource (surface, 0, drawing_area.Y);
+//			cr.Fill ();
+//			Console.WriteLine (DateTime.Now.Subtract(time).TotalMilliseconds);
 		}
 		
 		private void SetRoundedPath (Cairo.Context cr, Gdk.Rectangle drawing_area, bool strokePath)
