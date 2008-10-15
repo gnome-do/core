@@ -240,14 +240,14 @@ namespace Do.UI
 		
 		private bool ExpandNeeded {
 			get {
-				return surface_cache.UseIdleHandler = (ThirdPaneVisible || entry_mode[(int) Focus]) && 
+				return (ThirdPaneVisible || entry_mode[(int) Focus]) && 
 					drawing_area.Width != ThreePaneWidth; 
 			}
 		}
 		
 		private bool ShrinkNeeded {
 			get {
-				return surface_cache.UseIdleHandler = (!ThirdPaneVisible && !entry_mode[(int) focus])  && 
+				return (!ThirdPaneVisible && !entry_mode[(int) focus])  && 
 					drawing_area.Width != TwoPaneWidth && Focus != Pane.Third;
 			}
 		}
@@ -522,7 +522,7 @@ namespace Do.UI
 		{
 			if (!IsDrawable)
 				return;
-			
+			DateTime time = DateTime.Now;
 			Cairo.Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
 			
 			//Much kudos to Ian McIntosh
@@ -547,7 +547,8 @@ namespace Do.UI
 			BackgroundRenderer.RenderElement (cr, drawing_area);
 			
 			RenderTitleBar (cr);
-			
+			Console.WriteLine ("TitleBar Point Render Time: " + DateTime.Now.Subtract (time).TotalMilliseconds);
+			DateTime time2 = DateTime.Now;
 			do {
 				if (text_box_scale > 0) {
 					
@@ -573,8 +574,9 @@ namespace Do.UI
 				if (text_box_scale > 0) {
 					RenderTextModeOverlay (cr);
 				}
+				
 			} while (false);
-
+			Console.WriteLine ("Boxes Render Time: " + DateTime.Now.Subtract (time2).TotalMilliseconds);
 			Util.Appearance.DrawShadow (cr, drawing_area.X, drawing_area.Y, drawing_area.Width, 
 			                            drawing_area.Height, WindowRadius, new Util.ShadowParameters (.5, ShadowRadius));
 			
@@ -584,6 +586,7 @@ namespace Do.UI
 			
 			(cr2 as IDisposable).Dispose ();
 			(cr as IDisposable).Dispose ();
+			Console.WriteLine ("Total Render Time: " + DateTime.Now.Subtract (time).TotalMilliseconds);
 		}
 		
 		
