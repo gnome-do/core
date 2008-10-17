@@ -114,7 +114,8 @@ namespace Do.UI
 		
 		public static void SetDefaultStyle ()
 		{
-			
+			DrawShadow = true;
+			prefs.Set<int> ("WindowRadius", -1);
 		}
 		
 		public static void ResetBackgroundStyle ()

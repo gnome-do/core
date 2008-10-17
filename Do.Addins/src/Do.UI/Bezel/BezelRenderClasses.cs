@@ -261,7 +261,7 @@ namespace Do.UI
 			              drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight, 
 			              Width, 
 			              Height);
-			cr.Color = (focused) ? BezelColors.Colors["focused_box"] : BezelColors.Colors["unfocused_box"];
+			cr.Color = (focused) ? new Cairo.Color (0.3, 0.3, 0.3, 0.6) : new Cairo.Color (0.0, 0.0, 0.0, 0.2);
 			cr.Fill ();
 			cr.Rectangle (drawing_area.X + offset - .5, 
 			              drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight - .5, 
