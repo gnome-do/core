@@ -1122,6 +1122,23 @@ Classic</property>
           </packing>
         </child>
         <child>
+          <widget class="Gtk.CheckButton" id="shadow_check">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="Label" translatable="yes">Draw Shadow</property>
+            <property name="DrawIndicator">True</property>
+            <property name="HasLabel">True</property>
+            <property name="UseUnderline">True</property>
+            <signal name="Clicked" handler="OnShadowCheckClicked" />
+          </widget>
+          <packing>
+            <property name="Position">2</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
           <widget class="Gtk.Frame" id="preview_frame">
             <property name="MemberName" />
             <child>
@@ -1138,7 +1155,7 @@ Classic</property>
               </widget>
             </child>
             <child>
-              <widget class="Gtk.Label" id="GtkLabel2">
+              <widget class="Gtk.Label" id="GtkLabel3">
                 <property name="MemberName" />
                 <property name="LabelProp" translatable="yes">&lt;b&gt;Preview&lt;/b&gt;</property>
                 <property name="UseMarkup">True</property>
@@ -1149,7 +1166,7 @@ Classic</property>
             </child>
           </widget>
           <packing>
-            <property name="Position">2</property>
+            <property name="Position">3</property>
             <property name="AutoSize">False</property>
             <property name="Expand">False</property>
           </packing>

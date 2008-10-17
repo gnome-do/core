@@ -45,11 +45,13 @@ namespace Do.UI {
         
         private Gtk.Button clear_background;
         
+        private Gtk.CheckButton shadow_check;
+        
         private Gtk.Frame preview_frame;
         
         private Gtk.Alignment preview_align;
         
-        private Gtk.Label GtkLabel2;
+        private Gtk.Label GtkLabel3;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
@@ -236,6 +238,18 @@ namespace Do.UI {
             w15.Expand = false;
             w15.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
+            this.shadow_check = new Gtk.CheckButton();
+            this.shadow_check.CanFocus = true;
+            this.shadow_check.Name = "shadow_check";
+            this.shadow_check.Label = Mono.Unix.Catalog.GetString("Draw Shadow");
+            this.shadow_check.DrawIndicator = true;
+            this.shadow_check.UseUnderline = true;
+            this.vbox2.Add(this.shadow_check);
+            Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.vbox2[this.shadow_check]));
+            w16.Position = 2;
+            w16.Expand = false;
+            w16.Fill = false;
+            // Container child vbox2.Gtk.Box+BoxChild
             this.preview_frame = new Gtk.Frame();
             this.preview_frame.Name = "preview_frame";
             // Container child preview_frame.Gtk.Container+ContainerChild
@@ -245,15 +259,15 @@ namespace Do.UI {
             this.preview_align.RightPadding = ((uint)(12));
             this.preview_align.BottomPadding = ((uint)(6));
             this.preview_frame.Add(this.preview_align);
-            this.GtkLabel2 = new Gtk.Label();
-            this.GtkLabel2.Name = "GtkLabel2";
-            this.GtkLabel2.LabelProp = Mono.Unix.Catalog.GetString("<b>Preview</b>");
-            this.GtkLabel2.UseMarkup = true;
-            this.preview_frame.LabelWidget = this.GtkLabel2;
+            this.GtkLabel3 = new Gtk.Label();
+            this.GtkLabel3.Name = "GtkLabel3";
+            this.GtkLabel3.LabelProp = Mono.Unix.Catalog.GetString("<b>Preview</b>");
+            this.GtkLabel3.UseMarkup = true;
+            this.preview_frame.LabelWidget = this.GtkLabel3;
             this.vbox2.Add(this.preview_frame);
-            Gtk.Box.BoxChild w17 = ((Gtk.Box.BoxChild)(this.vbox2[this.preview_frame]));
-            w17.Position = 2;
-            w17.Expand = false;
+            Gtk.Box.BoxChild w18 = ((Gtk.Box.BoxChild)(this.vbox2[this.preview_frame]));
+            w18.Position = 3;
+            w18.Expand = false;
             this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
@@ -261,6 +275,7 @@ namespace Do.UI {
             this.Show();
             this.background_colorbutton.ColorSet += new System.EventHandler(this.OnBackgroundColorbuttonColorSet);
             this.clear_background.Clicked += new System.EventHandler(this.OnClearBackgroundClicked);
+            this.shadow_check.Clicked += new System.EventHandler(this.OnShadowCheckClicked);
         }
     }
 }

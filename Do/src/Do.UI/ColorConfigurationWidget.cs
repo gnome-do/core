@@ -90,11 +90,8 @@ namespace Do.UI
 		private void SetupButtons ()
 		{
 			setup = true;
-//			title_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.TitleRenderer);
-//			background_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.WindowRenderer);
-//			outline_combo.Active = Array.IndexOf<string> (option_list, BezelDrawingArea.PaneRenderer);
-//			radius_spin.Value = bda.WindowRadius;
 			background_colorbutton.Color = Addins.Util.Appearance.ConvertToGdk (bda.BackgroundColor);
+			shadow_check.Active = BezelDrawingArea.DrawShadow;
 			Gtk.Application.Invoke (delegate { setup = false; });
 		}
 		
@@ -103,36 +100,11 @@ namespace Do.UI
 			return this;
 		}
 
-//		protected virtual void OnTitleComboChanged (object sender, System.EventArgs e)
-//		{
-//			if (setup) return;
-//			BezelDrawingArea.TitleRenderer = title_combo.ActiveText.ToLower ();
-//		}
-//
-//		protected virtual void OnBackgroundComboChanged (object sender, System.EventArgs e)
-//		{
-//			if (setup) return;
-//			BezelDrawingArea.WindowRenderer = background_combo.ActiveText.ToLower ();
-//			SetupButtons ();
-//		}
-//
-//		protected virtual void OnOutlineComboChanged (object sender, System.EventArgs e)
-//		{
-//			if (setup) return;
-//			BezelDrawingArea.PaneRenderer = outline_combo.ActiveText.ToLower ();
-//		}
-
 		protected virtual void OnBackgroundColorbuttonColorSet (object sender, System.EventArgs e)
 		{
 			if (setup) return;
 			BezelDrawingArea.BgColor = Addins.Util.Appearance.ColorToHexString (background_colorbutton.Color);
 		}
-
-//		protected virtual void OnRadiusSpinValueChanged (object sender, System.EventArgs e)
-//		{
-//			if (setup) return;
-//			BezelDrawingArea.RoundingRadius = (int) radius_spin.Value;
-//		}
 
 		protected virtual void OnClearBackgroundClicked (object sender, System.EventArgs e)
 		{
@@ -140,14 +112,12 @@ namespace Do.UI
 			background_colorbutton.Color = Addins.Util.Appearance.ConvertToGdk (bda.BackgroundColor);
 		}
 
-//		protected virtual void OnClearRadiusClicked (object sender, System.EventArgs e)
-//		{
-//			setup = true;
-//			BezelDrawingArea.RoundingRadius = -1;
-//			radius_spin.Value = bda.WindowRadius;
-//			Gtk.Application.Invoke (delegate { setup = false; });
-//		}
-		
+		protected virtual void OnShadowCheckClicked (object sender, System.EventArgs e)
+		{
+			if (setup) return;
+			BezelDrawingArea.DrawShadow = shadow_check.Active;
+		}
+
 		public string Description {
 			get {
 				return "Color Configuration";

@@ -102,6 +102,16 @@ namespace Do.UI
 			}
 		}
 		
+		public static bool DrawShadow {
+			get {
+				return prefs.Get<bool> ("Shadow", true);
+			}
+			set {
+				prefs.Set<bool> ("Shadow", value);
+				OnThemeChanged ();
+			}
+		}
+		
 		public static void SetDefaultStyle ()
 		{
 			
@@ -298,24 +308,7 @@ namespace Do.UI
 			ResetRenderStyle ();
 			SetDrawingArea ();
 			
-			icon_fade = new double [3];
-			
 			BezelDrawingArea.ThemeChanged += OnThemeChanged;
-		}
-		
-		private void OnThemeChanged (object o, System.EventArgs args)
-		{
-			ResetRenderStyle ();
-			Draw ();
-		}
-		
-		protected override void OnDestroyed ()
-		{
-			base.OnDestroyed ();
-			BezelDrawingArea.ThemeChanged -= OnThemeChanged;
-			if (surface != null)
-				surface.Destroy ();
-			context = old_context = null;
 		}
 		
 		private void SetDrawingArea ()
@@ -399,59 +392,13 @@ namespace Do.UI
 			if (!IsDrawable || timer > 0)
 				return;
 
-			Paint ();
-			
-			if (!AnimationNeeded || preview)
+			if (preview) {
+				Paint ();
 				return;
+			}
 			
 			delta_time = DateTime.Now;
-			timer = GLib.Timeout.Add (1000/65, delegate {
-				
-				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
-				delta_time = DateTime.Now;
-				
-				if (ExpandNeeded) {
-					drawing_area.Width += (int) ((ThreePaneWidth-TwoPaneWidth)*change);
-					drawing_area.Width = (drawing_area.Width > ThreePaneWidth) ? ThreePaneWidth : drawing_area.Width;
-					drawing_area.X = (WindowWidth - drawing_area.Width) / 2;
-				} else if (ShrinkNeeded) {
-					drawing_area.Width -= (int) ((ThreePaneWidth-TwoPaneWidth)*change);
-					drawing_area.Width = (drawing_area.Width < TwoPaneWidth) ? TwoPaneWidth : drawing_area.Width;
-					drawing_area.X = (WindowWidth - drawing_area.Width) / 2;
-				}
-				
-				if (TextScaleNeeded) {
-					if (entry_mode[(int) Focus]) {
-						text_box_scale += change;
-						text_box_scale = (text_box_scale > 1) ? 1 : text_box_scale;
-					} else {
-						text_box_scale -= change;
-						text_box_scale = (text_box_scale < 0) ? 0 : text_box_scale;
-					}
-				}
-				
-				if (FadeNeeded) {
-					if (text_box_scale == 1) {
-						icon_fade[0] = icon_fade[1] = icon_fade[2] = 1;
-					}
-					icon_fade[0] += change;
-					icon_fade[1] += change;
-					icon_fade[2] += change;
-					
-					icon_fade[0] = (icon_fade[0] > 1) ? 1 : icon_fade[0];
-					icon_fade[1] = (icon_fade[1] > 1) ? 1 : icon_fade[1];
-					icon_fade[2] = (icon_fade[2] > 1) ? 1 : icon_fade[2];
-				}
-				
-				Paint ();
-				
-				if (AnimationNeeded) {
-					return true;
-				} else {
-					timer = 0;
-					return false;
-				}
-			});
+			timer = GLib.Timeout.Add (1000/65, OnDrawTimeoutElapsed);
 		}
 		
 		private DrawState PaneDrawState (Pane pane)
@@ -481,6 +428,7 @@ namespace Do.UI
 			Context.SetPaneObject (pane, obj);
 			
 			icon_fade[(int) pane] = 0;
+			Draw ();
 		}
 		
 		public void BezelSetTextMode (Pane pane, bool textMode)
@@ -490,11 +438,14 @@ namespace Do.UI
 			
 			OldContext.SetPaneTextMode (pane, Context.GetPaneTextMode (pane));
 			Context.SetPaneTextMode (pane, textMode);
+			
+			Draw ();
 		}
 		
 		public void BezelSetEntryMode (Pane pane, bool entryMode)
 		{
 			entry_mode[(int) pane] = entryMode;
+			Draw ();
 		}
 		
 		public void BezelSetQuery (Pane pane, string query)
@@ -504,6 +455,7 @@ namespace Do.UI
 			
 			OldContext.SetPaneQuery (pane, Context.GetPaneQuery (pane));
 			Context.SetPaneQuery (pane, query);
+			Draw ();
 		}
 		
 		public void Clear ()
@@ -514,7 +466,7 @@ namespace Do.UI
 			Draw ();
 		}
 		
-		public void Draw ()
+		void Draw ()
 		{
 			AnimatedDraw ();
 		}
@@ -572,8 +524,11 @@ namespace Do.UI
 				}
 				
 			} while (false);
-			Util.Appearance.DrawShadow (cr, drawing_area.X, drawing_area.Y, drawing_area.Width, 
-			                            drawing_area.Height, WindowRadius, new Util.ShadowParameters (.5, ShadowRadius));
+			
+			if (DrawShadow)
+				Util.Appearance.DrawShadow (cr, drawing_area.X, drawing_area.Y, drawing_area.Width, 
+				                            drawing_area.Height, WindowRadius, new Util.ShadowParameters (.5, ShadowRadius));
+
 			cr2.SetSourceSurface (surface, 0, 0);
 			cr2.Operator = Operator.Source;
 			cr2.Paint ();
@@ -582,12 +537,75 @@ namespace Do.UI
 			(cr as IDisposable).Dispose ();
 		}
 		
+		protected override void OnDestroyed ()
+		{
+			base.OnDestroyed ();
+			BezelDrawingArea.ThemeChanged -= OnThemeChanged;
+			if (surface != null)
+				surface.Destroy ();
+			context = old_context = null;
+		}
+		
+		protected bool OnDrawTimeoutElapsed ()
+		{
+			double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
+			delta_time = DateTime.Now;
+			
+			if (ExpandNeeded) {
+				drawing_area.Width += (int) ((ThreePaneWidth-TwoPaneWidth)*change);
+				drawing_area.Width = (drawing_area.Width > ThreePaneWidth) ? ThreePaneWidth : drawing_area.Width;
+				drawing_area.X = (WindowWidth - drawing_area.Width) / 2;
+			} else if (ShrinkNeeded) {
+				drawing_area.Width -= (int) ((ThreePaneWidth-TwoPaneWidth)*change);
+				drawing_area.Width = (drawing_area.Width < TwoPaneWidth) ? TwoPaneWidth : drawing_area.Width;
+				drawing_area.X = (WindowWidth - drawing_area.Width) / 2;
+			}
+			
+			if (TextScaleNeeded) {
+				if (entry_mode[(int) Focus]) {
+					text_box_scale += change;
+					text_box_scale = (text_box_scale > 1) ? 1 : text_box_scale;
+				} else {
+					text_box_scale -= change;
+					text_box_scale = (text_box_scale < 0) ? 0 : text_box_scale;
+				}
+			}
+			
+			if (FadeNeeded) {
+				if (text_box_scale == 1) {
+					icon_fade[0] = icon_fade[1] = icon_fade[2] = 1;
+				}
+				icon_fade[0] += change;
+				icon_fade[1] += change;
+				icon_fade[2] += change;
+				
+				icon_fade[0] = (icon_fade[0] > 1) ? 1 : icon_fade[0];
+				icon_fade[1] = (icon_fade[1] > 1) ? 1 : icon_fade[1];
+				icon_fade[2] = (icon_fade[2] > 1) ? 1 : icon_fade[2];
+			}
+			
+			QueueDraw ();
+			
+			if (AnimationNeeded) {
+				return true;
+			} else {
+				timer = 0;
+				return false;
+			}
+		}
 		
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			bool ret = base.OnExposeEvent (evnt);
-			Draw ();
+//			Draw ();
+			Paint ();
 			return ret;
+		}
+		
+		private void OnThemeChanged (object o, System.EventArgs args)
+		{
+			ResetRenderStyle ();
+			QueueDraw ();
 		}
 		
 		public int PaneOffset (Pane pane) 
@@ -655,7 +673,6 @@ namespace Do.UI
 			cr.SetSource (SurfaceCache.GetSurface (icon), drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
 				                                 drawing_area.Y + WindowBorder + TitleBarHeight + 3);
 			cr.PaintWithAlpha (calc_alpha * alpha);
-			
 			if (string.IsNullOrEmpty (sec_icon) || calc_alpha < 1) 
 				return;
 			
