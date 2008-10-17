@@ -50,7 +50,7 @@ namespace Do.UI
 		}
 #region Static Area
 		static IPreferences prefs = Util.GetPreferences ("Bezel");
-		static event EventHandler ThemeChanged;
+		public static event EventHandler ThemeChanged;
 		
 		public static string TitleRenderer {
 			get {
@@ -140,11 +140,14 @@ namespace Do.UI
 		const int fade_ms         = 150;
 		const int ShadowRadius    = 10;
 		
-		IBezelWindowRenderElement  titleBarRenderer;
-		IBezelWindowRenderElement  backgroundRenderer;
-		IBezelPaneRenderElement    paneOutlineRenderer;
-		IBezelOverlayRenderElement textModeOverlayRenderer;
-		IBezelDefaults bezelDefaults;
+		IBezelTitleBarRenderElement  titleBarRenderer;
+		IBezelWindowRenderElement    backgroundRenderer;
+		IBezelPaneRenderElement      paneOutlineRenderer;
+		IBezelOverlayRenderElement   textModeOverlayRenderer;
+		IBezelDefaults               bezelDefaults;
+		
+		BezelColors colors;
+		BezelGlassResults bezel_results;
 		
 		bool third_pane_visible, preview;
 		BezelDrawingContext context, old_context;
@@ -165,7 +168,7 @@ namespace Do.UI
 			get {
 				Gdk.Color color = new Gdk.Color ();
 				if (Gdk.Color.Parse ("#" + BgColor, ref color))
-					return Util.Appearance.ConvertToCairo (color, .95);
+					return CairoUtils.ConvertToCairo (color, .95);
 				return backgroundRenderer.BackgroundColor;
 			}
 		}
@@ -184,12 +187,25 @@ namespace Do.UI
 			}
 		}
 		
+		public BezelColors Colors {
+			get {
+				return colors;
+			}
+		}
+		
 		public int InternalHeight {
 			get {
 				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight;
 			}
 		}
 
+		public BezelGlassResults Results {
+			get {
+				return bezel_results ?? 
+					bezel_results = new BezelGlassResults (TwoPaneWidth-(2*WindowRadius), style, colors);
+			}
+		}
+		
 		public int TextModeOffset { get { return Math.Max (TitleBarHeight, WindowRadius); } }
 		
 		public bool ThirdPaneVisible {
@@ -213,8 +229,8 @@ namespace Do.UI
 		
 		public string HighlightFormat { 
 			get { 
-				if (BezelColors.Colors["background"].B == BezelColors.Colors["background"].G && 
-				    BezelColors.Colors["background"].B == BezelColors.Colors["background"].R)
+				if (colors.Background.B == colors.Background.G && 
+				    colors.Background.B == colors.Background.R)
 					return BezelDefaults.HighlightFormat; 
 				else
 					return "<span underline=\"single\">{0}</span>";
@@ -289,7 +305,7 @@ namespace Do.UI
 			}
 		}
 		
-		public IBezelWindowRenderElement TitleBarRenderer { get { return titleBarRenderer; } }
+		public IBezelTitleBarRenderElement TitleBarRenderer { get { return titleBarRenderer; } }
 
 		public IBezelWindowRenderElement BackgroundRenderer { get { return backgroundRenderer; } }
 
@@ -323,7 +339,10 @@ namespace Do.UI
 		private void ResetRenderStyle ()
 		{
 			BuildRenderers (style);
-			BezelColors.InitColors (BackgroundColor);
+			if (colors == null)
+				colors = new BezelColors (BackgroundColor);
+			else
+				colors.RebuildColors (BackgroundColor);
 			SetDrawingArea ();
 		}
 		
@@ -339,8 +358,8 @@ namespace Do.UI
 				textModeOverlayRenderer = new ClassicTextOverlayRenderer (this);
 				break;
 			default:
-				titleBarRenderer = (style == HUDStyle.HUD) ? (IBezelWindowRenderElement) new HUDTopBar (this) : 
-					(IBezelWindowRenderElement) new ClassicTopBar (this);
+				titleBarRenderer = (style == HUDStyle.HUD) ? (IBezelTitleBarRenderElement) new HUDTopBar (this) : 
+					(IBezelTitleBarRenderElement) new ClassicTopBar (this);
 				
 				textModeOverlayRenderer = (style == HUDStyle.HUD) ? (IBezelOverlayRenderElement) new HUDTextOverlayRenderer (this) : 
 					(IBezelOverlayRenderElement) new ClassicTextOverlayRenderer (this);
@@ -489,7 +508,7 @@ namespace Do.UI
 				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
 					bgColor = rcstyle.Backgrounds[(int) StateType.Normal];
 				}
-				cr.Color = Util.Appearance.ConvertToCairo (bgColor, 1);
+				cr.Color = CairoUtils.ConvertToCairo (bgColor, 1);
 			} else {
 				cr.Color = new Cairo.Color (0, 0, 0, 0);
 			}			

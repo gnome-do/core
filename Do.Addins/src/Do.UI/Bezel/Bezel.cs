@@ -66,7 +66,7 @@ namespace Do.UI
 			vbox.PackStart (bda, true, true, 0);
 			bda.Show ();
 			
-			bgr = new BezelGlassResults (340, style);
+			bgr = bda.Results;
 			bgw = new BezelGlassWindow (bgr);
 	
 			Add (vbox);
@@ -142,7 +142,7 @@ namespace Do.UI
 			int width, height;
 			GetSize (out width, out height);
 			
-			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (((int)(bda.WindowWidth-340)/2), -10, 0, 0));
+			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (((int)(bda.WindowWidth-bgr.WidthRequest)/2), -10, 0, 0));
 			Show ();
 			bgw.Show ();
 			Util.Appearance.PresentWindow (this);

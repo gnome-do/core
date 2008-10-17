@@ -27,28 +27,88 @@ using Do.Addins;
 
 namespace Do.UI
 {
-	//FIXME!!!
 	public class BezelColors
 	{
-		public static Dictionary<string, Cairo.Color> Colors = new Dictionary<string,Cairo.Color> ();
+		Dictionary<string, Cairo.Color> Colors = new Dictionary<string,Cairo.Color> ();
 
-		public static void InitColors (Cairo.Color bgColor)
-		{
+		public Cairo.Color Background {
+			get {
+				return Colors["background"];
+			}
+		}			
 			
+		public Cairo.Color BackgroundLight {
+			get {
+				return Colors["background_lt"];
+			}
+		}
+		
+		public Cairo.Color BackgroundDark {
+			get {
+				return Colors["background_dk"];
+			}
+		}
+		
+		public Cairo.Color TitleBarBase {
+			get {
+				return Colors["titlebar_step3"];
+			}
+		}
+		
+		public Cairo.Color TitleBarGlossLight {
+			get {
+				return Colors["titlebar_step1"];
+			}
+		}
+		
+		public Cairo.Color TitleBarGlossDark {
+			get {
+				return Colors["titlebar_step2"];
+			}
+		}
+		
+		public Cairo.Color FocusedLine {
+			get {
+				return Colors["focused_line"];
+			}
+		}
+		
+		public Cairo.Color UnfocusedLine {
+			get {
+				return Colors["unfocused_line"];
+			}
+		}
+		
+		public Cairo.Color FocusedText {
+			get {
+				return Colors["focused_text"];
+			}
+		}
+		
+		public Cairo.Color UnfocusedText {
+			get {
+				return Colors["unfocused_text"];
+			}
+		}
+		
+		public BezelColors (Cairo.Color bgColor)
+		{
+			RebuildColors (bgColor);
+		}
+		
+		public void RebuildColors (Cairo.Color bgColor)
+		{
 			Colors = new Dictionary<string,Cairo.Color> ();
 			Colors["background"]     = bgColor;
 			Colors["focused_line"]   = new Cairo.Color (1.0, 1.0, 1.0, 0.3);
 			Colors["unfocused_line"] = new Cairo.Color (1.0, 1.0, 1.0, 0.2);
 			Colors["focused_text"]   = new Cairo.Color (0.0, 0.0, 0.0, 0.85);
 			Colors["unfocused_text"] = new Cairo.Color (0.3, 0.3, 0.3, 0.7);
-			Colors["titlebar_step1"] = Util.Appearance.ShadeColor (Colors["background"], 3);
-			Colors["titlebar_step2"] = Util.Appearance.ShadeColor (Colors["titlebar_step1"], .72);
-			Colors["titlebar_step3"] = Util.Appearance.ShadeColor (Colors["titlebar_step1"], .60);
-			Colors["background_dk"]  = Util.Appearance.ShadeColor (Colors["background"], .9);
-			Colors["background_lt"]  = Util.Appearance.ShadeColor (Colors["background"], 1.15);
-			Colors["outline"]        = new Cairo.Color (.35, .35, .35);
-			Colors["focused_box"]    = new Cairo.Color (1.0, 1.0, 1.0, 0.4);
-			Colors["unfocused_box"]  = new Cairo.Color (1.0, 1.0, 1.0, 0.1);
+			Colors["titlebar_step1"] = CairoUtils.ShadeColor (Colors["background"], 3);
+			Colors["titlebar_step2"] = CairoUtils.ShadeColor (Colors["titlebar_step1"], .72);
+			Colors["titlebar_step3"] = CairoUtils.ShadeColor (Colors["titlebar_step1"], .60);
+			Colors["background_dk"]  = CairoUtils.ShadeColor (Colors["background"], .9);
+			Colors["background_lt"]  = CairoUtils.ShadeColor (Colors["background"], 1.15);
 		}
 	}
 }

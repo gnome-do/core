@@ -39,6 +39,7 @@ FILES =  \
 	AssemblyInfo.cs \
 	gtk-gui/Do.UI.AbstractLoginWidget.cs \
 	gtk-gui/generated.cs \
+	src/Do.Addins/CairoUtils.cs \
 	src/Do.Addins/IConfigurable.cs \
 	src/Do.Addins/IDoController.cs \
 	src/Do.Addins/IPreferences.cs \
@@ -61,11 +62,13 @@ FILES =  \
 	src/Do.UI/Bezel/BezelDrawingArea.cs \
 	src/Do.UI/Bezel/BezelDrawingContext.cs \
 	src/Do.UI/Bezel/BezelGlassResults.cs \
-	src/Do.UI/Bezel/BezelGlassRenderClasses.cs \
 	src/Do.UI/Bezel/BezelGlassWindow.cs \
 	src/Do.UI/Bezel/BezelColors.cs \
-	src/Do.UI/Bezel/BezelRenderClasses.cs \
 	src/Do.UI/Bezel/BezelTextUtils.cs \
+	src/Do.UI/Bezel/Renderers/BezelGlassRenderClasses.cs \
+	src/Do.UI/Bezel/Renderers/ClassicRenderer.cs \
+	src/Do.UI/Bezel/Renderers/HUDRenderer.cs \
+	src/Do.UI/Bezel/Renderers/IRenderInterfaces.cs \
 	src/Do.UI/ClassicWindow/ClassicWindow.cs \
 	src/Do.UI/DarkFrame/GlassFrame.cs \
 	src/Do.UI/DarkFrame/GlassIconBox.cs \

@@ -54,6 +54,7 @@ namespace Do.UI
 		int[] secondary;
 		
 		IUIContext context = null;
+		BezelColors colors;
 		
 		IObject[] results;
 		
@@ -79,13 +80,13 @@ namespace Do.UI
 			get {
 				switch (style) {
 				case HUDStyle.HUD:
-					return BezelColors.Colors["background_dk"];
+					return colors.BackgroundDark;
 				case HUDStyle.Classic:
 					Gdk.Color bgColor;
 					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
 						bgColor = rcstyle.BaseColors[(int) StateType.Normal];
 					}
-					return Util.Appearance.ConvertToCairo (bgColor, 1);
+					return CairoUtils.ConvertToCairo (bgColor, 1);
 				default:
 					throw new NotImplementedException ();
 				}
@@ -102,7 +103,7 @@ namespace Do.UI
 					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
 						bgColor = rcstyle.TextColors[(int) StateType.Normal];
 					}
-					return Util.Appearance.ColorToHexString (bgColor);
+					return CairoUtils.ColorToHexString (bgColor);
 				default:
 					throw new NotImplementedException ();
 				}
@@ -261,9 +262,10 @@ namespace Do.UI
 			}
 		}
 		
-		public BezelGlassResults(int width, HUDStyle style) : base ()
+		public BezelGlassResults(int width, HUDStyle style, BezelColors colors) : base ()
 		{
 			this.style = style;
+			this.colors = colors;
 			switch (style) {
 			case HUDStyle.Classic:
 				ItemRenderer = new BezelFullResultItemRenderer (this);
@@ -289,6 +291,21 @@ namespace Do.UI
 			this.Shown += delegate {
 				Context = context;
 				Draw ();
+			};
+			
+			BezelDrawingArea.ThemeChanged += delegate {
+				if (background != null)
+					background.Destroy ();
+				if (highlight_surface != null)
+					highlight_surface.Destroy ();
+				if (child_inout_surface != null)
+					child_inout_surface.Destroy ();
+				if (triplebuffer != null)
+					triplebuffer.Destroy ();
+				if (backbuffer != null)
+					backbuffer.Destroy ();
+				
+				highlight_surface = backbuffer = child_inout_surface = triplebuffer = background = null;
 			};
 		}
 		
@@ -474,9 +491,9 @@ namespace Do.UI
 				cr.LineTo (0, 0 + top_border_width);
 				cr.Arc (0 + radius, 0 + radius, radius, Math.PI, Math.PI*1.5);
 				LinearGradient title_grad = new LinearGradient (0, 0, 0, top_border_width);
-				title_grad.AddColorStop (0.0, BezelColors.Colors["titlebar_step1"]);
-				title_grad.AddColorStop (0.5, BezelColors.Colors["titlebar_step2"]);
-				title_grad.AddColorStop (0.5, BezelColors.Colors["titlebar_step3"]);
+				title_grad.AddColorStop (0.0, colors.TitleBarGlossLight);
+				title_grad.AddColorStop (0.5, colors.TitleBarGlossDark);
+				title_grad.AddColorStop (0.5, colors.TitleBarBase);
 				cr.Pattern = title_grad;
 				cr.Fill ();
 				title_grad.Destroy ();
@@ -516,7 +533,7 @@ namespace Do.UI
 				cr.Arc (width-radius-.5, height-radius-.5, radius, 0, Math.PI*.5);
 				cr.Arc (radius+.5, height-radius-.5, radius, Math.PI*.5, Math.PI);
 				cr.ClosePath ();
-				cr.Color = BezelColors.Colors["titlebar_step3"];
+				cr.Color = colors.TitleBarBase;
 				cr.FillPreserve ();
 				cr.LineWidth=1;
 				cr.Color = new Cairo.Color (.6, .6, .6, .4);
@@ -567,7 +584,7 @@ namespace Do.UI
 				cr.FillPreserve ();
 				
 				cr.LineWidth = 1;
-				cr.Color = BezelColors.Colors["background_lt"];
+				cr.Color = colors.BackgroundLight;
 				cr.Stroke ();
 				break;
 			case HUDStyle.Classic:
@@ -766,7 +783,7 @@ namespace Do.UI
 					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
 						gdkColor = rcstyle.BaseColors[(int) StateType.Selected];
 					}
-					cr2.Color = Util.Appearance.ConvertToCairo (gdkColor, .8);
+					cr2.Color = CairoUtils.ConvertToCairo (gdkColor, .8);
 					cr2.Fill ();
 					break;
 				}

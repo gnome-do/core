@@ -38,19 +38,10 @@ namespace Do.UI
 	public class BezelFullResultItemRenderer : IBezelResultItemRenderer
 	{
 		BezelGlassResults parent;
-//		int text_height = 10;
 		
-		public int Height {
-			get {
-				return 36;
-			}
-		}
+		public int Height { get { return 36; } }
 		
-		public int IconSize {
-			get {
-				return 32;
-			}
-		}
+		public int IconSize { get { return 32; } }
 
 		public BezelFullResultItemRenderer (BezelGlassResults parent)
 		{
@@ -110,17 +101,9 @@ namespace Do.UI
 		BezelGlassResults parent;
 //		int text_height = 10;
 		
-		public int Height {
-			get {
-				return 20;
-			}
-		}
+		public int Height { get { return 20; } }
 		
-		public int IconSize {
-			get {
-				return 16;
-			}
-		}
+		public int IconSize { get { return 16; } }
 
 		public BezelHalfResultItemRenderer (BezelGlassResults parent)
 		{

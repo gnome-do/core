@@ -174,113 +174,6 @@ namespace Do.Addins
 				blue  = Convert.ToByte(b*255);
 			}
 			
-			public static Cairo.Color ConvertToCairo (Gdk.Color color, double alpha)
-			{
-				return new Cairo.Color ((double) color.Red/ushort.MaxValue,
-				                        (double) color.Green/ushort.MaxValue,
-				                        (double) color.Blue/ushort.MaxValue,
-				                        alpha);
-			}
-			
-			public static Gdk.Color ConvertToGdk (Cairo.Color color)
-			{
-				return new Gdk.Color (Convert.ToByte (color.R*byte.MaxValue),
-				                      Convert.ToByte (color.G*byte.MaxValue),
-				                      Convert.ToByte (color.B*byte.MaxValue));
-			}
-			
-			public static Cairo.Color ShadeColor (Cairo.Color color, double brightness)
-			{
-				Gdk.Color gdk_color = ConvertToGdk (color);
-				
-				byte r, g, b; 
-				double h, s, v;
-				
-				r = (byte) ((gdk_color.Red)   >> 8);
-				g = (byte) ((gdk_color.Green) >> 8);
-				b = (byte) ((gdk_color.Blue)  >> 8);
-				
-				RGBToHSV (r, g, b, out h, out s, out v);
-				v = Math.Min (100, v * brightness);
-				HSVToRGB (h, s, v, out r, out g, out b);
-				
-				return new Cairo.Color ((double) r/byte.MaxValue,
-				                        (double) g/byte.MaxValue,
-				                        (double) b/byte.MaxValue,
-				                        color.A);
-			}
-			
-			public static Cairo.Color SaturateColor (Cairo.Color color, double saturation)
-			{
-				Gdk.Color gdk_color = ConvertToGdk (color);
-				
-				byte r, g, b; 
-				double h, s, v;
-				
-				r = (byte) ((gdk_color.Red)   >> 8);
-				g = (byte) ((gdk_color.Green) >> 8);
-				b = (byte) ((gdk_color.Blue)  >> 8);
-				
-				RGBToHSV (r, g, b, out h, out s, out v);
-				s *= saturation;
-				HSVToRGB (h, s, v, out r, out g, out b);
-				
-				return new Cairo.Color ((double) r/byte.MaxValue,
-				                        (double) g/byte.MaxValue,
-				                        (double) b/byte.MaxValue,
-				                        color.A);
-			}
-			
-			public static Cairo.Color SetHue (Cairo.Color color, double hue)
-			{
-				if (hue <= 0 || hue > 360)
-					return color;
-				
-				Gdk.Color gdk_color = ConvertToGdk (color);
-				
-				byte r, g, b; 
-				double h, s, v;
-				
-				r = (byte) ((gdk_color.Red)   >> 8);
-				g = (byte) ((gdk_color.Green) >> 8);
-				b = (byte) ((gdk_color.Blue)  >> 8);
-				
-				RGBToHSV (r, g, b, out h, out s, out v);
-				h = hue;
-				HSVToRGB (h, s, v, out r, out g, out b);
-				
-				return new Cairo.Color ((double) r/byte.MaxValue,
-				                        (double) g/byte.MaxValue,
-				                        (double) b/byte.MaxValue,
-				                        color.A);
-			}
-			
-			public static Gdk.Color SetMaximumValue (Gdk.Color gdk_color, double max_value)
-			{
-				byte r, g, b; 
-				double h, s, v;
-				
-				r = (byte) ((gdk_color.Red)   >> 8);
-				g = (byte) ((gdk_color.Green) >> 8);
-				b = (byte) ((gdk_color.Blue)  >> 8);
-				
-				RGBToHSV (r, g, b, out h, out s, out v);
-				v = Math.Min (v, max_value);
-				HSVToRGB (h, s, v, out r, out g, out b);
-				
-				return new Gdk.Color (r, g, b);
-			}
-			
-			public static string ColorToHexString (Gdk.Color gdk_color)
-			{
-				byte r, g, b;
-				r = (byte) ((gdk_color.Red)   >> 8);
-				g = (byte) ((gdk_color.Green) >> 8);
-				b = (byte) ((gdk_color.Blue)  >> 8);
-				
-				return string.Format ("{0:X2}{1:X2}{2:X2}", r, g, b);
-			}
-
 			static void GetFrame (Cairo.Context cairo, double x, double y, double width, double height, double radius)
 			{
 				if (radius == 0)
@@ -319,11 +212,12 @@ namespace Do.Addins
 			public static void DrawShadow (Cairo.Context cr, double x, double y, double width, 
 			                                  double height, double radius, ShadowParameters shadowParams)
 			{
-//				DateTime time = DateTime.Now;
 				Surface sr = cr.Target.CreateSimilar (cr.Target.Content, (int)width + (int)(2*shadowParams.shadowRadius) + (int)x, 
 				                                      (int)height + (int)(2*shadowParams.shadowRadius) + (int)y);
 				Context cairo = new Context (sr);
 				
+				y++;
+				height--;
 				Cairo.Gradient shadow;
 				/* Top Left */
 				shadow = new Cairo.RadialGradient (x+radius, y+radius, radius,
@@ -388,6 +282,8 @@ namespace Do.Addins
 				FillShadowPattern (cairo, shadow, shadowParams);
 				shadow.Destroy ();
 				
+				y--;
+				height++;
 				/* Clear inner rectangle */
 				GetFrame (cairo, x, y, width, height, radius);
 				cairo.Operator = Cairo.Operator.Clear;
@@ -398,7 +294,6 @@ namespace Do.Addins
 				
 				(cairo as IDisposable).Dispose ();
 				sr.Destroy ();
-//				Console.WriteLine (DateTime.Now.Subtract (time).TotalMilliseconds);
 			}
 		}
 		

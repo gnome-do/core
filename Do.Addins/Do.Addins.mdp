@@ -77,12 +77,16 @@
     <File name="src/Do.Addins/SearchFinishState.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/BezelGlassResults.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/BezelGlassWindow.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/Bezel/BezelRenderClasses.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/BezelColors.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/BezelTextUtils.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/BezelDefaults.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/PixbufSurfaceCache.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/Bezel/BezelGlassRenderClasses.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/Bezel/Renderers" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.UI/Bezel/Renderers/IRenderInterfaces.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/Bezel/Renderers/BezelGlassRenderClasses.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/Bezel/Renderers/HUDRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/Bezel/Renderers/ClassicRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/CairoUtils.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
