@@ -40,6 +40,10 @@ namespace Do.UI
 				notebook.AppendPage (
 					page.GetConfiguration (), new Label (page.Name));
 			}
+			
+			//Search Pages for the first tab with the name "Plugins"
+			notebook.CurrentPage = Array.FindIndex (Pages, (delegate (IConfigurable page) {
+				return page.Name == "Plugins";}));
 		}
 
 		IConfigurable[] pages;
