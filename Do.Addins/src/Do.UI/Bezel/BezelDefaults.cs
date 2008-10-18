@@ -69,7 +69,5 @@ namespace Do.Addins
 				return "<span underline=\"single\">{0}</span>";
 			}
 		}
-
-		
 	}
 }

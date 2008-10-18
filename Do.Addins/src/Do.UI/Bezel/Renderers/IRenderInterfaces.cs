@@ -10,7 +10,7 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU General Public License for more details.bz
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
@@ -63,16 +63,46 @@ namespace Do.UI
 		PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point);
 	}
 	
+	/// <summary>
+	/// Renders a titlebar like element.  This render can optionally do nothing.
+	/// </summary>
 	public interface IBezelTitleBarRenderElement
 	{
+		/// <value>
+		/// Will be used by BezelDrawingArea to calculate an additional offset at the top of the rendering area.
+		/// </value>
 		int Height {get;}
 		
+		/// <summary>
+		/// Renders the element in the given region
+		/// </summary>
+		/// <param name="cr">
+		/// A <see cref="Context"/>
+		/// </param>
+		/// <param name="drawing_area">
+		/// A <see cref="Gdk.Rectangle"/>
+		/// </param>
 		void RenderElement (Context cr, Gdk.Rectangle drawing_area);
 		PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point);
 	}
-	
+
+	/// <summary>
+	/// An element primarily used
+	/// </summary>
 	public interface IBezelOverlayRenderElement
 	{
+		/// <summary>
+		/// Render the text mode overlay.  Generally this will not render over a titlebar.
+		/// </summary>
+		/// <param name="cr">
+		/// A <see cref="Context"/>
+		/// </param>
+		/// <param name="drawing_area">
+		/// A <see cref="Gdk.Rectangle"/>
+		/// </param>
+		/// <param name="overlay">
+		/// A <see cref="System.Double"/>
+		/// </param>
 		void RenderElement (Context cr, Gdk.Rectangle drawing_area, double overlay);
 	}
 	
