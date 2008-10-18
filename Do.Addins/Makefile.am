@@ -77,6 +77,7 @@ FILES =  \
 	src/Do.UI/IconProvider.cs \
 	src/Do.UI/IDoWindow.cs \
 	src/Do.UI/IUIContext.cs \
+	src/Do.UI/IRenderTheme.cs \
 	src/Do.UI/MiniWindow/MiniIconBox.cs \
 	src/Do.UI/MiniWindow/MiniWindow.cs \
 	src/Do.UI/MiniWindow/MiniWindowFrame.cs \

@@ -11,6 +11,9 @@
 	<ExtensionPoint path="/Do/Action">
 		<ExtensionNode name="Action" objectType="Do.Universe.IAction"/>
 	</ExtensionPoint>
+	<ExtensionPoint path="/Do/RenderProvider">
+		<ExtensionNode name="RenderProvider" objectType="Do.UI.IRenderTheme"/>
+	</ExtensionPoint>
 	
 	<!-- Extensions included in the main assemblies -->
 	<!-- Sources -->
