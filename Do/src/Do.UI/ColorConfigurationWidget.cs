@@ -63,15 +63,15 @@ namespace Do.UI
 				bda = null;
 			}
 			
-			switch (Do.Preferences.Theme) {
-			case "Classic":
-				if (Screen.IsComposited)
-					bda = new BezelDrawingArea (HUDStyle.Classic, true);
-				break;
-			case "HUD":
-				bda = new BezelDrawingArea (HUDStyle.HUD, true);
-				break;
-			}
+//			switch (Do.Preferences.Theme) {
+//			case "Classic":
+//				if (Screen.IsComposited)
+//					bda = new BezelDrawingArea (HUDStyle.Classic, true);
+//				break;
+//			case "HUD":
+//				bda = new BezelDrawingArea (HUDStyle.HUD, true);
+//				break;
+//			}
 			if (bda != null) {
 				this.preview_align.Add (bda);
 				bda.Show ();

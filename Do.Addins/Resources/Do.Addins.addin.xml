@@ -32,4 +32,8 @@
 		<Action type="Do.Universe.RunAction" />
 		<Action type="Do.Universe.CopyToClipboard" />
 	</Extension>
+	<Extension path= "/Do/RenderProvider">
+		<RenderProvider type="Do.UI.HUDTheme" />
+		<RenderProvider type="Do.UI.ClassicTheme" />	
+	</Extension>
 </Addin>

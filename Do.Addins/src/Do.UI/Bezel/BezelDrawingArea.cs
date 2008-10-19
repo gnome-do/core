@@ -317,18 +317,18 @@ namespace Do.UI
 
 		public IBezelDefaults BezelDefaults { get { return bezelDefaults; }	}
 		
-		public BezelDrawingArea(HUDStyle style, bool preview) : base ()
-		{
-			DoubleBuffered = false;
-			prefs = Addins.Util.GetPreferences ("Bezel");
-			this.preview = preview;
-			this.style = style;
-			
-			ResetRenderStyle ();
-			SetDrawingArea ();
-			
-			BezelDrawingArea.ThemeChanged += OnThemeChanged;
-		}
+//		public BezelDrawingArea(HUDStyle style, bool preview) : base ()
+//		{
+//			DoubleBuffered = false;
+//			prefs = Addins.Util.GetPreferences ("Bezel");
+//			this.preview = preview;
+//			this.style = style;
+//			
+//			ResetRenderStyle ();
+//			SetDrawingArea ();
+//			
+//			BezelDrawingArea.ThemeChanged += OnThemeChanged;
+//		}
 		
 		public BezelDrawingArea(IRenderTheme theme, bool preview) : base ()
 		{
@@ -373,6 +373,7 @@ namespace Do.UI
 				this.paneOutlineRenderer     = theme.GetPane (this);
 				return;
 			}
+			
 			switch (TitleRenderer) {
 			case "hud":
 				titleBarRenderer = new HUDTopBar (this);

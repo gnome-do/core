@@ -33,10 +33,10 @@ namespace Do.UI
     	const string AutostartAttribute = "X-GNOME-Autostart-enabled";
 		
 		List<string> themes = new List<string> (new string[] {
-			"Classic",
+//			"Classic",
 			"Glass Frame",
 			"Mini",
-			"HUD",
+//			"HUD",
 		});
     	
     	string AutostartDir {

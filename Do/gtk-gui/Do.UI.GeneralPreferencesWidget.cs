@@ -156,10 +156,8 @@ namespace Do.UI {
             w8.Fill = false;
             // Container child hbox1.Gtk.Box+BoxChild
             this.theme_combo = Gtk.ComboBox.NewText();
-            this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Classic"));
             this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Glass Frame"));
             this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Mini"));
-            this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("HUD"));
             this.theme_combo.WidthRequest = 150;
             this.theme_combo.Name = "theme_combo";
             this.theme_combo.Active = 0;

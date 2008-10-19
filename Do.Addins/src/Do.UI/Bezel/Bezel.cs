@@ -43,40 +43,10 @@ namespace Do.UI
 			set { bda.Focus = value; }
 		}
 		
-		public Bezel(IDoController controller, HUDStyle style) : base (Gtk.WindowType.Toplevel)
-		{
-			this.controller = controller;
-			Build (style);
-		}
-		
 		public Bezel(IDoController controller, IRenderTheme theme) : base (Gtk.WindowType.Toplevel)
 		{
 			this.controller = controller;
 			Build (theme);
-		}
-		
-		void Build (HUDStyle style)
-		{
-			Decorated = false;
-			AppPaintable = true;
-			KeepAbove = true;
-			
-			TypeHint = WindowTypeHint.Splashscreen;
-			SetColormap ();
-			
-			VBox vbox = new VBox ();
-			
-			bda = new BezelDrawingArea (style, false);
-			vbox.PackStart (bda, true, true, 0);
-			bda.Show ();
-			
-			bgr = bda.Results;
-			bgw = new BezelGlassWindow (bgr);
-	
-			Add (vbox);
-			vbox.Show ();
-			
-			pw = new PositionWindow (this, bgw);
 		}
 		
 		void Build (IRenderTheme theme)

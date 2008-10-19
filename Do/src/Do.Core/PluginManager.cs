@@ -214,14 +214,15 @@ namespace Do.Core {
 		/// <returns>
 		/// A <see cref="ICollection`1"/> of IRenderTheme instances from plugins
 		/// </returns>
+		static List<IRenderTheme> themes;
 		internal static ICollection<IRenderTheme> GetThemes () 
 		{
-			List<IRenderTheme> themes;
-			
-			themes = new List<IRenderTheme> ();
-			foreach (IRenderTheme theme in
-			         AddinManager.GetExtensionObjects ("/Do/RenderProvider")) {
-				themes.Add (theme);
+			if (themes == null) {
+				themes = new List<IRenderTheme> ();
+				foreach (IRenderTheme theme in
+				         AddinManager.GetExtensionObjects ("/Do/RenderProvider")) {
+					themes.Add (theme);
+				}
 			}
 			return themes;
 		}
@@ -376,6 +377,7 @@ namespace Do.Core {
 		internal static void OnIRenderThemeChange (object s, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node;
+			themes = null; //reset our cached list of themes;
 			
 			node = args.ExtensionNode as TypeExtensionNode;
 			if (args.Change == ExtensionChange.Add) {

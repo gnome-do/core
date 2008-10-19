@@ -150,9 +150,9 @@ namespace Do.Core {
 			case "Glass Frame":
 				window = new GlassWindow (this);
 				break;
-			case "HUD":
-				window = new Bezel (this, HUDStyle.HUD);
-				break;
+//			case "HUD":
+//				window = new Bezel (this, HUDStyle.HUD);
+//				break;
 			default:
 				foreach (IRenderTheme theme in PluginManager.GetThemes ()) {
 					if (theme.Name == Do.Preferences.Theme) {
@@ -161,7 +161,7 @@ namespace Do.Core {
 					}
 				}
 				if (window == null)
-					window = new Bezel (this, HUDStyle.Classic);
+					window = new Bezel (this, new ClassicTheme ());
 				break;
 			}
 			

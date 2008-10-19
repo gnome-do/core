@@ -302,10 +302,8 @@
                             <property name="MemberName" />
                             <property name="WidthRequest">150</property>
                             <property name="IsTextCombo">True</property>
-                            <property name="Items" translatable="yes">Classic
-Glass Frame
-Mini
-HUD</property>
+                            <property name="Items" translatable="yes">Glass Frame
+Mini</property>
                             <property name="Active">0</property>
                             <signal name="Changed" handler="OnThemeComboChanged" />
                           </widget>
