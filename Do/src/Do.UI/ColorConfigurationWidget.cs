@@ -63,15 +63,12 @@ namespace Do.UI
 				bda = null;
 			}
 			
-//			switch (Do.Preferences.Theme) {
-//			case "Classic":
-//				if (Screen.IsComposited)
-//					bda = new BezelDrawingArea (HUDStyle.Classic, true);
-//				break;
-//			case "HUD":
-//				bda = new BezelDrawingArea (HUDStyle.HUD, true);
-//				break;
-//			}
+			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
+				if (theme.Name == Do.Preferences.Theme) {
+					bda = new BezelDrawingArea (theme, true);
+					break;
+				}
+			}
 			if (bda != null) {
 				this.preview_align.Add (bda);
 				bda.Show ();
@@ -84,12 +81,16 @@ namespace Do.UI
 		
 		private void DisableButtons ()
 		{
-			
+			clear_background.Sensitive = false;
+			background_colorbutton.Sensitive = false;
+			shadow_check.Sensitive = false;
 		}
 		
 		private void SetupButtons ()
 		{
 			setup = true;
+			clear_background.Sensitive = true;
+			background_colorbutton.Sensitive = shadow_check.Sensitive = true;
 			background_colorbutton.Color = Addins.CairoUtils.ConvertToGdk (bda.BackgroundColor);
 			shadow_check.Active = BezelDrawingArea.DrawShadow;
 			Gtk.Application.Invoke (delegate { setup = false; });
