@@ -39,26 +39,26 @@ namespace Do.UI
 		/// <value>
 		/// Values that are not specific to any one renderer
 		/// </value>
-		IBezelDefaults Defaults { get; }
+		IBezelDefaults GetDefaults (BezelDrawingArea parent);
 		
 		/// <value>
 		/// Text mode overlay renderer
 		/// </value>
-		IBezelOverlayRenderElement Overlay { get; }
+		IBezelOverlayRenderElement GetOverlay (BezelDrawingArea parent);
 		
 		/// <value>
 		/// Pane background renderer
 		/// </value>
-		IBezelPaneRenderElement Pane { get; }
+		IBezelPaneRenderElement GetPane (BezelDrawingArea parent);
 		
 		/// <value>
 		/// Text mode renderer
 		/// </value>
-		IBezelTitleBarRenderElement TitleBar { get; }
+		IBezelTitleBarRenderElement GetTitleBar (BezelDrawingArea parent);
 		
 		/// <value>
 		/// Window background renderer
 		/// </value>
-		IBezelWindowRenderElement Window { get; }
+		IBezelWindowRenderElement GetWindow (BezelDrawingArea parent);
 	}
 }
