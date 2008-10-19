@@ -146,6 +146,8 @@ namespace Do.UI
 		IBezelOverlayRenderElement   textModeOverlayRenderer;
 		IBezelDefaults               bezelDefaults;
 		
+		IRenderTheme theme;
+		
 		BezelColors colors;
 		BezelGlassResults bezel_results;
 		
@@ -328,6 +330,21 @@ namespace Do.UI
 			BezelDrawingArea.ThemeChanged += OnThemeChanged;
 		}
 		
+		public BezelDrawingArea(IRenderTheme theme, bool preview) : base ()
+		{
+			Console.WriteLine (theme.Description);
+			DoubleBuffered = false;
+			prefs = Addins.Util.GetPreferences ("Bezel");
+			this.preview = preview;
+			this.theme = theme;
+			style = HUDStyle.Classic; //gets us the classic results list
+			
+			ResetRenderStyle ();
+			SetDrawingArea ();
+			
+			BezelDrawingArea.ThemeChanged += OnThemeChanged;
+		}
+		
 		private void SetDrawingArea ()
 		{
 			SetSizeRequest (WindowWidth, WindowHeight);
@@ -348,6 +365,14 @@ namespace Do.UI
 		
 		private void BuildRenderers (HUDStyle style)
 		{
+			if (theme != null) {
+				this.bezelDefaults           = theme.GetDefaults (this);
+				this.titleBarRenderer        = theme.GetTitleBar (this);
+				this.textModeOverlayRenderer = theme.GetOverlay (this);
+				this.backgroundRenderer      = theme.GetWindow (this);
+				this.paneOutlineRenderer     = theme.GetPane (this);
+				return;
+			}
 			switch (TitleRenderer) {
 			case "hud":
 				titleBarRenderer = new HUDTopBar (this);

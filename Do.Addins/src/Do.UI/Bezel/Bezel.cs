@@ -37,7 +37,6 @@ namespace Do.UI
 		BezelGlassWindow bgw;
 		IDoController controller;
 		PositionWindow pw;
-		HUDStyle style;
 		
 		public Pane CurrentPane {
 			get { return bda.Focus; }
@@ -46,12 +45,17 @@ namespace Do.UI
 		
 		public Bezel(IDoController controller, HUDStyle style) : base (Gtk.WindowType.Toplevel)
 		{
-			this.style = style;
 			this.controller = controller;
-			Build ();
+			Build (style);
 		}
 		
-		void Build ()
+		public Bezel(IDoController controller, IRenderTheme theme) : base (Gtk.WindowType.Toplevel)
+		{
+			this.controller = controller;
+			Build (theme);
+		}
+		
+		void Build (HUDStyle style)
 		{
 			Decorated = false;
 			AppPaintable = true;
@@ -63,6 +67,30 @@ namespace Do.UI
 			VBox vbox = new VBox ();
 			
 			bda = new BezelDrawingArea (style, false);
+			vbox.PackStart (bda, true, true, 0);
+			bda.Show ();
+			
+			bgr = bda.Results;
+			bgw = new BezelGlassWindow (bgr);
+	
+			Add (vbox);
+			vbox.Show ();
+			
+			pw = new PositionWindow (this, bgw);
+		}
+		
+		void Build (IRenderTheme theme)
+		{
+			Decorated = false;
+			AppPaintable = true;
+			KeepAbove = true;
+			
+			TypeHint = WindowTypeHint.Splashscreen;
+			SetColormap ();
+			
+			VBox vbox = new VBox ();
+			
+			bda = new BezelDrawingArea (theme, false);
 			vbox.PackStart (bda, true, true, 0);
 			bda.Show ();
 			

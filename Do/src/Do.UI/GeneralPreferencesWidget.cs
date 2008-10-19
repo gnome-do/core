@@ -17,6 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -30,6 +31,13 @@ namespace Do.UI
     public partial class GeneralPreferencesWidget : Bin, Addins.IConfigurable
     {
     	const string AutostartAttribute = "X-GNOME-Autostart-enabled";
+		
+		List<string> themes = new List<string> (new string[] {
+			"Classic",
+			"Glass Frame",
+			"Mini",
+			"HUD",
+		});
     	
     	string AutostartDir {
 			get {
@@ -57,13 +65,7 @@ namespace Do.UI
         
         public string[] Themes {
         	get {
-        		return new string[] {
-        			"Classic",
-        			"Glass Frame",
-        			"Mini",
-//					"ShowCase",
-					"HUD",
-        		};
+				return themes.ToArray ();
         	}
         }
 		
@@ -72,7 +74,13 @@ namespace Do.UI
         	int themeI;
         	
             Build ();
-            
+			
+			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
+				System.Console.WriteLine(theme.Name);
+				theme_combo.AppendText (theme.Name);
+				themes.Add (theme.Name);
+			}
+			
 			if (!Screen.IsComposited)
 				theme_combo.Sensitive = false;
 			// Setup theme combo

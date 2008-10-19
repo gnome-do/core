@@ -154,7 +154,14 @@ namespace Do.Core {
 				window = new Bezel (this, HUDStyle.HUD);
 				break;
 			default:
-				window = new Bezel (this, HUDStyle.Classic);
+				foreach (IRenderTheme theme in PluginManager.GetThemes ()) {
+					if (theme.Name == Do.Preferences.Theme) {
+						window = new Bezel (this, theme);
+						break;
+					}
+				}
+				if (window == null)
+					window = new Bezel (this, HUDStyle.Classic);
 				break;
 			}
 			
