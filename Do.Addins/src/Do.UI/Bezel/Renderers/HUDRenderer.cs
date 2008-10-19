@@ -179,8 +179,8 @@ namespace Do.UI
 		BezelDrawingArea parent;
 		
 		public int Width { get { return 160; } }
-
-		public int Height { get { return BezelDrawingArea.IconSize + 15 + BezelTextUtils.TextHeight; } }
+		public int IconSize { get { return 128; } }
+		public int Height { get { return IconSize + 15 + BezelTextUtils.TextHeight; } }
 
 		public HUDPaneOutlineRenderer (BezelDrawingArea parent)
 		{

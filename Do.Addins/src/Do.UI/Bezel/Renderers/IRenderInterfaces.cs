@@ -108,8 +108,9 @@ namespace Do.UI
 	
 	public interface IBezelPaneRenderElement
 	{
-		int Width  {get;}
-		int Height {get;}
+		int Width    { get; }
+		int Height   { get; }
+		int IconSize { get; }
 		
 		void RenderElement (Context cr, Gdk.Rectangle drawing_area, Pane pane, bool focused);
 	}

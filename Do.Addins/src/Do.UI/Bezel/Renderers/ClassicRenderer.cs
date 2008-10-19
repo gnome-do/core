@@ -84,10 +84,10 @@ namespace Do.UI
 		Surface sr_active, sr_inactive;
 		int surface_height = 0;
 		
-		public int Width { get { return 175; } }
-
-		public int Height { get { return BezelDrawingArea.IconSize + 25 + BezelTextUtils.TextHeight; } }
-
+		public int Width { get { return IconSize+47; } }
+		public int Height { get { return IconSize + 25 + BezelTextUtils.TextHeight; } }
+		public int IconSize { get { return 128; } }
+		
 		public ClassicPaneOutlineRenderer (BezelDrawingArea parent)
 		{
 			this.parent = parent;

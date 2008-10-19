@@ -76,7 +76,6 @@ namespace Do.UI
             Build ();
 			
 			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
-				System.Console.WriteLine(theme.Name);
 				theme_combo.AppendText (theme.Name);
 				themes.Add (theme.Name);
 			}

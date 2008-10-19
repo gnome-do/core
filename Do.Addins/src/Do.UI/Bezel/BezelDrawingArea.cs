@@ -133,7 +133,7 @@ namespace Do.UI
 		
 		HUDStyle style;
 		
-		public const int IconSize = 128;
+//		public const int IconSize = 128;
 		const int BoxLineWidth    = 1;
 		const int TextHeight      = 11;
 		const int BorderWidth     = 15;
@@ -192,6 +192,12 @@ namespace Do.UI
 		public BezelColors Colors {
 			get {
 				return colors;
+			}
+		}
+		
+		public int IconSize {
+			get {
+				return paneOutlineRenderer.IconSize;
 			}
 		}
 		
@@ -317,22 +323,9 @@ namespace Do.UI
 
 		public IBezelDefaults BezelDefaults { get { return bezelDefaults; }	}
 		
-//		public BezelDrawingArea(HUDStyle style, bool preview) : base ()
-//		{
-//			DoubleBuffered = false;
-//			prefs = Addins.Util.GetPreferences ("Bezel");
-//			this.preview = preview;
-//			this.style = style;
-//			
-//			ResetRenderStyle ();
-//			SetDrawingArea ();
-//			
-//			BezelDrawingArea.ThemeChanged += OnThemeChanged;
-//		}
 		
 		public BezelDrawingArea(IRenderTheme theme, bool preview) : base ()
 		{
-			Console.WriteLine (theme.Description);
 			DoubleBuffered = false;
 			prefs = Addins.Util.GetPreferences ("Bezel");
 			this.preview = preview;
