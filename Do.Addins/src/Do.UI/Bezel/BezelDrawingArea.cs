@@ -170,7 +170,7 @@ namespace Do.UI
 			get {
 				Gdk.Color color = new Gdk.Color ();
 				if (Gdk.Color.Parse ("#" + BgColor, ref color))
-					return CairoUtils.ConvertToCairo (color, .95);
+					return CairoUtils.ConvertToCairo (color, backgroundRenderer.BackgroundColor.A);
 				return backgroundRenderer.BackgroundColor;
 			}
 		}
