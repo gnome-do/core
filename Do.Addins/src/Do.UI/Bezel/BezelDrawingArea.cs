@@ -344,7 +344,8 @@ namespace Do.UI
 			};
 			
 			StyleSet += delegate {
-				GdkWindow.SetBackPixmap (null, false);
+				if (IsRealized)
+					GdkWindow.SetBackPixmap (null, false);
 			};
 		}
 		
