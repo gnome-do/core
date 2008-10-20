@@ -133,7 +133,6 @@ namespace Do.UI
 		
 		HUDStyle style;
 		
-//		public const int IconSize = 128;
 		const int BoxLineWidth    = 1;
 		const int TextHeight      = 11;
 		const int BorderWidth     = 15;
@@ -777,10 +776,13 @@ namespace Do.UI
 		{
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = (ushort) (ushort.MaxValue * text_box_scale);
+			int tmp = BezelTextUtils.TextHeight;
+			BezelTextUtils.TextHeight = 22;
 			Gdk.Rectangle cursor = BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
 			                                                        drawing_area.X + 10, drawing_area.Y + TextModeOffset + 5, 
 			                                                        drawing_area.Width - 20, color, 
 			                                                        Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
+			BezelTextUtils.TextHeight = tmp;
 			if (cursor.X == cursor.Y && cursor.X == 0) return;
 			
 			cr.Rectangle (cursor.X, cursor.Y, 2, cursor.Height);

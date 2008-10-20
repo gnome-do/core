@@ -31,7 +31,7 @@ namespace Do.UI
 	
 	public class BezelTextUtils
 	{
-		public static int textHeight = 11;
+		static int textHeight = 11;
 		private static Pango.Layout layout;
 		private static Gtk.Widget widget;
 		
