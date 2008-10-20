@@ -12,6 +12,7 @@ Do.Addins/src/Do.Universe/OpenURLAction.cs
 Do.Addins/src/Do.Universe/OpenWithAction.cs
 Do.Addins/src/Do.Universe/RevealAction.cs
 Do.Addins/src/Do.Universe/RunAction.cs
+Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs
 Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs
 Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs
 Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs

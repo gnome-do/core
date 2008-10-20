@@ -29,6 +29,9 @@ namespace Do.UI
 {	
 	public partial class PreferencesWindow : Window
 	{
+
+		const string HelpUrl = "http://do.davebsd.com/wiki/index.php?title=Using_Do";
+
 		public PreferencesWindow () : 
 			base (WindowType.Toplevel)
 		{
@@ -68,7 +71,7 @@ namespace Do.UI
 
 		protected virtual void OnBtnHelpClicked (object sender, EventArgs e)
 		{
-			Util.Environment.Open ("https://wiki.ubuntu.com/GnomeDo/Use");
+			Util.Environment.Open (HelpUrl);
 		}
 	}
 }
