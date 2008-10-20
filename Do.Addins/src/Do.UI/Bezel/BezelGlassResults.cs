@@ -379,10 +379,12 @@ namespace Do.UI
 		{
 			Results = null;
 			Cursor = 0;
+			context = null;
 			foreach (Surface s in surface_buffer.Values)
 				s.Destroy ();
 			
 			surface_buffer = new Dictionary<IObject,Surface> ();
+			Draw ();
 		}
 		
 		private void Paint ()
