@@ -329,7 +329,11 @@ namespace Do.UI
 			prefs = Addins.Util.GetPreferences ("Bezel");
 			this.preview = preview;
 			this.theme = theme;
-			style = HUDStyle.Classic; //gets us the classic results list
+			
+			if (theme.Name == "Nouveau") //this is a temporary hack
+				style = HUDStyle.HUD;
+			else
+				style = HUDStyle.Classic; //gets us the classic results list
 			
 			ResetRenderStyle ();
 			SetDrawingArea ();
