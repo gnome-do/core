@@ -32,13 +32,6 @@ namespace Do.UI
     {
     	const string AutostartAttribute = "X-GNOME-Autostart-enabled";
 		
-		List<string> themes = new List<string> (new string[] {
-//			"Classic",
-			"Glass Frame",
-			"Mini",
-//			"HUD",
-		});
-    	
     	string AutostartDir {
 			get {
 				return Paths.Combine (Paths.UserHome, ".config/autostart");
@@ -62,36 +55,15 @@ namespace Do.UI
         public string Icon {
         	get { return ""; }
         }
-        
-        public string[] Themes {
-        	get {
-				return themes.ToArray ();
-        	}
-        }
-		
+	
         public GeneralPreferencesWidget ()
         {
-        	int themeI;
-        	
             Build ();
 			
-			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
-				theme_combo.AppendText (theme.Name);
-				themes.Add (theme.Name);
-			}
-			
-			if (!Screen.IsComposited)
-				theme_combo.Sensitive = false;
-			// Setup theme combo
-            themeI = Array.IndexOf (Themes, Do.Preferences.Theme);
-            themeI = themeI >= 0 ? themeI : 0;
-            theme_combo.Active = themeI;
-
 			// Setup checkboxes
         	hide_check.Active = Do.Preferences.QuietStart;
         	login_check.Active = AutostartEnabled;
         	notification_check.Active = Do.Preferences.StatusIconVisible;
-			pin_check.Active = Do.Preferences.AlwaysShowResults;
         }
         
         public Bin GetConfiguration ()
@@ -142,11 +114,6 @@ namespace Do.UI
         	Do.Preferences.QuietStart = hide_check.Active;
         }
 
-        protected virtual void OnThemeComboChanged (object sender, EventArgs e)
-        {
-        	Do.Preferences.Theme = Themes[theme_combo.Active];
-        }
-
         protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)
         {	
         	NotificationIcon trayIcon = Do.NotificationIcon;
@@ -155,11 +122,6 @@ namespace Do.UI
         		trayIcon.Show ();
         	else
         		trayIcon.Hide ();
-        }
-
-        protected virtual void OnPinChecklicked (object sender, System.EventArgs e)
-        {
-			Do.Preferences.AlwaysShowResults = pin_check.Active;
         }
     }
 }

@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 using Do.Addins;
 using Do.Universe;
@@ -26,13 +27,37 @@ namespace Do.UI
 	public partial class ColorConfigurationWidget : Gtk.Bin, IConfigurable
 	{
 		BezelDrawingArea bda;
+		
+		List<string> themes = new List<string> (new string[] {
+			"Glass Frame",
+			"Mini",
+		});
+		
 		public ColorConfigurationWidget ()
 		{
-			this.Build();
+			int themeI;
+			Build();
 			AppPaintable = true;
 			Addins.Util.Appearance.SetColormap (this);
+			
+			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
+				theme_combo.AppendText (theme.Name);
+				themes.Add (theme.Name);
+				Console.Error.WriteLine (theme.Name);
+			}
+			
+			if (!Screen.IsComposited)
+				theme_combo.Sensitive = false;
+				
+			// Setup theme combo
+            themeI = Array.IndexOf (Themes, Do.Preferences.Theme);
+            themeI = themeI >= 0 ? themeI : 0;
+            Console.Error.WriteLine (themeI);
+            theme_combo.Active = themeI;            
+
 			BuildPreview ();
 			
+			pin_check.Active = Do.Preferences.AlwaysShowResults;
 			Do.Preferences.PreferenceChanged += OnPrefsChanged;
 			
 			table2.HideAll ();
@@ -119,6 +144,16 @@ namespace Do.UI
 			BezelDrawingArea.DrawShadow = shadow_check.Active;
 		}
 
+		protected virtual void OnPinCheckClicked (object sender, System.EventArgs e)
+		{
+			Do.Preferences.AlwaysShowResults = pin_check.Active;
+		}
+
+		protected virtual void OnThemeComboChanged (object sender, System.EventArgs e)
+		{
+			Do.Preferences.Theme = Themes[theme_combo.Active];
+		}
+
 		public string Description {
 			get {
 				return "Color Configuration";
@@ -127,7 +162,7 @@ namespace Do.UI
 		
 		public new string Name {
 			get {
-				return "Color Configuration";
+				return "Appearance";
 			}
 		}
 		
@@ -136,5 +171,11 @@ namespace Do.UI
 				return "";
 			}
 		}
+		
+		public string[] Themes {
+        	get {
+				return themes.ToArray ();
+        	}
+        }
 	}
 }

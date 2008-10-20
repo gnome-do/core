@@ -29,22 +29,6 @@ namespace Do.UI {
         
         private Gtk.CheckButton notification_check;
         
-        private Gtk.Label label2;
-        
-        private Gtk.Alignment alignment3;
-        
-        private Gtk.VBox vbox3;
-        
-        private Gtk.HBox hbox1;
-        
-        private Gtk.Label label3;
-        
-        private Gtk.ComboBox theme_combo;
-        
-        private Gtk.VBox vbox2;
-        
-        private Gtk.CheckButton pin_check;
-        
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.GeneralPreferencesWidget
@@ -122,80 +106,6 @@ namespace Do.UI {
             w6.Position = 1;
             w6.Expand = false;
             w6.Fill = false;
-            // Container child vbox1.Gtk.Box+BoxChild
-            this.label2 = new Gtk.Label();
-            this.label2.Name = "label2";
-            this.label2.Xalign = 0F;
-            this.label2.LabelProp = Mono.Unix.Catalog.GetString("<b>Appearance</b>");
-            this.label2.UseMarkup = true;
-            this.vbox1.Add(this.label2);
-            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.vbox1[this.label2]));
-            w7.Position = 2;
-            w7.Expand = false;
-            w7.Fill = false;
-            // Container child vbox1.Gtk.Box+BoxChild
-            this.alignment3 = new Gtk.Alignment(0.5F, 0.5F, 1F, 1F);
-            this.alignment3.Name = "alignment3";
-            this.alignment3.LeftPadding = ((uint)(20));
-            // Container child alignment3.Gtk.Container+ContainerChild
-            this.vbox3 = new Gtk.VBox();
-            this.vbox3.Name = "vbox3";
-            this.vbox3.Spacing = 6;
-            // Container child vbox3.Gtk.Box+BoxChild
-            this.hbox1 = new Gtk.HBox();
-            this.hbox1.Name = "hbox1";
-            this.hbox1.Spacing = 6;
-            // Container child hbox1.Gtk.Box+BoxChild
-            this.label3 = new Gtk.Label();
-            this.label3.Name = "label3";
-            this.label3.LabelProp = Mono.Unix.Catalog.GetString("Theme:");
-            this.hbox1.Add(this.label3);
-            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(this.hbox1[this.label3]));
-            w8.Position = 0;
-            w8.Expand = false;
-            w8.Fill = false;
-            // Container child hbox1.Gtk.Box+BoxChild
-            this.theme_combo = Gtk.ComboBox.NewText();
-            this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Glass Frame"));
-            this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Mini"));
-            this.theme_combo.WidthRequest = 150;
-            this.theme_combo.Name = "theme_combo";
-            this.theme_combo.Active = 0;
-            this.hbox1.Add(this.theme_combo);
-            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(this.hbox1[this.theme_combo]));
-            w9.Position = 1;
-            w9.Expand = false;
-            w9.Fill = false;
-            this.vbox3.Add(this.hbox1);
-            Gtk.Box.BoxChild w10 = ((Gtk.Box.BoxChild)(this.vbox3[this.hbox1]));
-            w10.Position = 0;
-            w10.Expand = false;
-            w10.Fill = false;
-            // Container child vbox3.Gtk.Box+BoxChild
-            this.vbox2 = new Gtk.VBox();
-            this.vbox2.Name = "vbox2";
-            this.vbox2.Spacing = 6;
-            // Container child vbox2.Gtk.Box+BoxChild
-            this.pin_check = new Gtk.CheckButton();
-            this.pin_check.CanFocus = true;
-            this.pin_check.Name = "pin_check";
-            this.pin_check.Label = Mono.Unix.Catalog.GetString("Always show results window");
-            this.pin_check.DrawIndicator = true;
-            this.pin_check.UseUnderline = true;
-            this.vbox2.Add(this.pin_check);
-            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.vbox2[this.pin_check]));
-            w11.Position = 0;
-            w11.Expand = false;
-            w11.Fill = false;
-            this.vbox3.Add(this.vbox2);
-            Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox2]));
-            w12.Position = 1;
-            w12.Expand = false;
-            w12.Fill = false;
-            this.alignment3.Add(this.vbox3);
-            this.vbox1.Add(this.alignment3);
-            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.vbox1[this.alignment3]));
-            w14.Position = 3;
             this.alignment4.Add(this.vbox1);
             this.Add(this.alignment4);
             if ((this.Child != null)) {
@@ -205,8 +115,6 @@ namespace Do.UI {
             this.login_check.Clicked += new System.EventHandler(this.OnLoginCheckClicked);
             this.hide_check.Clicked += new System.EventHandler(this.OnHideCheckClicked);
             this.notification_check.Clicked += new System.EventHandler(this.OnNotificationCheckClicked);
-            this.theme_combo.Changed += new System.EventHandler(this.OnThemeComboChanged);
-            this.pin_check.Clicked += new System.EventHandler(this.OnPinChecklicked);
         }
     }
 }
