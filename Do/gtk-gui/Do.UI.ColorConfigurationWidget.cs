@@ -71,8 +71,6 @@ namespace Do.UI {
         
         private Gtk.Label GtkLabel4;
         
-        private Gtk.Label GtkLabel5;
-        
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.ColorConfigurationWidget
@@ -149,6 +147,8 @@ namespace Do.UI {
             // Container child vbox3.Gtk.Box+BoxChild
             this.table2 = new Gtk.Table(((uint)(4)), ((uint)(7)), false);
             this.table2.Name = "table2";
+            this.table2.RowSpacing = ((uint)(6));
+            this.table2.ColumnSpacing = ((uint)(6));
             this.table2.BorderWidth = ((uint)(15));
             // Container child table2.Gtk.Table+TableChild
             this.background_combo = Gtk.ComboBox.NewText();
@@ -375,11 +375,6 @@ namespace Do.UI {
             this.alignment2.Add(this.vbox1);
             this.GtkAlignment.Add(this.alignment2);
             this.frame1.Add(this.GtkAlignment);
-            this.GtkLabel5 = new Gtk.Label();
-            this.GtkLabel5.Name = "GtkLabel5";
-            this.GtkLabel5.LabelProp = Mono.Unix.Catalog.GetString("<b>Appearance</b>");
-            this.GtkLabel5.UseMarkup = true;
-            this.frame1.LabelWidget = this.GtkLabel5;
             this.vbox2.Add(this.frame1);
             Gtk.Box.BoxChild w35 = ((Gtk.Box.BoxChild)(this.vbox2[this.frame1]));
             w35.Position = 0;

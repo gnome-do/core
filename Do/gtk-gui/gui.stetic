@@ -783,6 +783,8 @@ Mini</property>
                                 <property name="MemberName" />
                                 <property name="NRows">4</property>
                                 <property name="NColumns">7</property>
+                                <property name="RowSpacing">6</property>
+                                <property name="ColumnSpacing">6</property>
                                 <property name="BorderWidth">15</property>
                                 <child>
                                   <placeholder />
@@ -1190,14 +1192,7 @@ Classic</property>
               </widget>
             </child>
             <child>
-              <widget class="Gtk.Label" id="GtkLabel5">
-                <property name="MemberName" />
-                <property name="LabelProp" translatable="yes">&lt;b&gt;Appearance&lt;/b&gt;</property>
-                <property name="UseMarkup">True</property>
-              </widget>
-              <packing>
-                <property name="type">label_item</property>
-              </packing>
+              <placeholder />
             </child>
           </widget>
           <packing>
