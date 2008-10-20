@@ -366,6 +366,7 @@ namespace Do.UI {
             this.vbox4.Add(this.preview_frame);
             Gtk.Box.BoxChild w29 = ((Gtk.Box.BoxChild)(this.vbox4[this.preview_frame]));
             w29.Position = 0;
+            w29.Expand = false;
             this.vbox3.Add(this.vbox4);
             Gtk.Box.BoxChild w30 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox4]));
             w30.Position = 2;
