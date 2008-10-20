@@ -87,7 +87,7 @@ namespace Do.UI {
             // Container child frame1.Gtk.Container+ContainerChild
             this.GtkAlignment = new Gtk.Alignment(0F, 0F, 1F, 1F);
             this.GtkAlignment.Name = "GtkAlignment";
-            this.GtkAlignment.LeftPadding = ((uint)(25));
+            this.GtkAlignment.LeftPadding = ((uint)(5));
             this.GtkAlignment.TopPadding = ((uint)(5));
             this.GtkAlignment.RightPadding = ((uint)(5));
             this.GtkAlignment.BottomPadding = ((uint)(10));

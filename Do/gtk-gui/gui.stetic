@@ -705,7 +705,7 @@
                 <property name="MemberName" />
                 <property name="Xalign">0</property>
                 <property name="Yalign">0</property>
-                <property name="LeftPadding">25</property>
+                <property name="LeftPadding">5</property>
                 <property name="TopPadding">5</property>
                 <property name="RightPadding">5</property>
                 <property name="BottomPadding">10</property>
