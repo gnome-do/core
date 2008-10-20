@@ -307,6 +307,10 @@ namespace Do.UI
 				
 				highlight_surface = backbuffer = child_inout_surface = triplebuffer = background = null;
 			};
+			
+			Realized += delegate {
+				this.GdkWindow.SetBackPixmap (null, false);
+			};
 		}
 		
 		private void AnimatedDraw ()

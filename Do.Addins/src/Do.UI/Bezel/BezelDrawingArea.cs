@@ -335,6 +335,9 @@ namespace Do.UI
 			SetDrawingArea ();
 			
 			BezelDrawingArea.ThemeChanged += OnThemeChanged;
+			Realized += delegate {
+				this.GdkWindow.SetBackPixmap (null, false);
+			};
 		}
 		
 		private void SetDrawingArea ()
