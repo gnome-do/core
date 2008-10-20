@@ -340,7 +340,11 @@ namespace Do.UI
 			
 			BezelDrawingArea.ThemeChanged += OnThemeChanged;
 			Realized += delegate {
-				this.GdkWindow.SetBackPixmap (null, false);
+				GdkWindow.SetBackPixmap (null, false);
+			};
+			
+			StyleSet += delegate {
+				GdkWindow.SetBackPixmap (null, false);
 			};
 		}
 		

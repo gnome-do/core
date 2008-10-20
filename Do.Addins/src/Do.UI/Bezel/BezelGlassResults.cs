@@ -311,6 +311,10 @@ namespace Do.UI
 			Realized += delegate {
 				this.GdkWindow.SetBackPixmap (null, false);
 			};
+			
+			StyleSet += delegate {
+				GdkWindow.SetBackPixmap (null, false);
+			};
 		}
 		
 		private void AnimatedDraw ()
