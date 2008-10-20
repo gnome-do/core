@@ -150,11 +150,11 @@ namespace Do {
 											  : LogEntryType.Info;
 			logs = new List<ILog> ();
 			
-			Addins.LogBridge.DebugLogRequested += Debug;
-			Addins.LogBridge.InfoLogRequested  += Info;
-			Addins.LogBridge.WarnLogRequested  += Warn;
-			Addins.LogBridge.ErrorLogRequested += Error;
-			Addins.LogBridge.FatalLogRequested += LogFatal;
+			Addins.Log.DebugLogRequested += Debug;
+			Addins.Log.InfoLogRequested  += Info;
+			Addins.Log.WarnLogRequested  += Warn;
+			Addins.Log.ErrorLogRequested += Error;
+			Addins.Log.FatalLogRequested += LogFatal;
 		}
 		
 		public static LogEntryType LogLevel {
