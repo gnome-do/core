@@ -1191,9 +1191,6 @@ Classic</property>
                 </child>
               </widget>
             </child>
-            <child>
-              <placeholder />
-            </child>
           </widget>
           <packing>
             <property name="Position">0</property>
