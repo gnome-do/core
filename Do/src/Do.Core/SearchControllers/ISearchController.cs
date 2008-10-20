@@ -65,6 +65,16 @@ namespace Do.Core
 		/// </value>
 		bool TextMode {get; set;}
 		
+		/// <summary>
+		/// Finalize explicit text mode entry
+		/// </summary>
+		void FinalizeTextMode ();
+
+		/// <value>
+		/// The reason for which text mode was entered
+		/// </value>
+		TextModeType TextType {get;}
+		
 		/// <value>
 		/// Determines if the default filter is applied to the context or not
 		/// </value>
@@ -126,16 +136,6 @@ namespace Do.Core
 		void Reset ();
 		
 		/// <summary>
-		/// The controllers Query has changed
-		/// </summary>
-		event NullEventHandler QueryChanged;
-		
-		/// <summary>
-		/// Triggered when the result has changed.  This may not fire after every search.
-		/// </summary>
-		event NullEventHandler SelectionChanged;
-		
-		/// <summary>
 		/// The controller has started a search due to upstream results changing
 		/// </summary>
 		event SearchStartedEventHandler SearchStarted;
@@ -144,5 +144,14 @@ namespace Do.Core
 		/// The controllers search has finished.
 		/// </summary>
 		event SearchFinishedEventHandler SearchFinished;
+
+		/// <summary>
+		/// In the unlikely event we wish to set an entire string at once without having to do the
+		/// whole thing incrementally.  Useful for things like paste.
+		/// </summary>
+		/// <param name="s">
+		/// A <see cref="System.String"/> to be added to the controllers query
+		/// </param>
+		void SetString (string s);
 	}
 }

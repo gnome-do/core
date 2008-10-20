@@ -11,6 +11,9 @@
 	<ExtensionPoint path="/Do/Action">
 		<ExtensionNode name="Action" objectType="Do.Universe.IAction"/>
 	</ExtensionPoint>
+	<ExtensionPoint path="/Do/RenderProvider">
+		<ExtensionNode name="RenderProvider" objectType="Do.UI.IRenderTheme"/>
+	</ExtensionPoint>
 	
 	<!-- Extensions included in the main assemblies -->
 	<!-- Sources -->
@@ -28,5 +31,9 @@
 		<Action type="Do.Universe.RevealAction" />
 		<Action type="Do.Universe.RunAction" />
 		<Action type="Do.Universe.CopyToClipboard" />
+	</Extension>
+	<Extension path= "/Do/RenderProvider">
+		<RenderProvider type="Do.UI.HUDTheme" />
+		<RenderProvider type="Do.UI.ClassicTheme" />	
 	</Extension>
 </Addin>

@@ -54,6 +54,7 @@ namespace Do.UI
 						new GeneralPreferencesWidget (),
 						new KeybindingsPreferencesWidget (),
 						new ManagePluginsPreferencesWidget (),
+						new ColorConfigurationWidget (),
 					};
 				}
 				return pages;

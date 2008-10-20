@@ -211,7 +211,6 @@ namespace Do.UI {
             // Container child vbox4.Gtk.Box+BoxChild
             this.get_account_lbl = new Gtk.Label();
             this.get_account_lbl.Name = "get_account_lbl";
-            this.get_account_lbl.LabelProp = "";
             this.get_account_lbl.UseMarkup = true;
             this.vbox4.Add(this.get_account_lbl);
             Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.vbox4[this.get_account_lbl]));

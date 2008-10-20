@@ -65,6 +65,7 @@ all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_DESKTOPAPPLICATIONS) $(BINARIES)
 FILES =  \
 	gtk-gui/Do.UI.DoAddinInstallerDialog.cs \
 	gtk-gui/Do.UI.GeneralPreferencesWidget.cs \
+	gtk-gui/Do.UI.ColorConfigurationWidget.cs \
 	gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs \
 	gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs \
 	gtk-gui/Do.UI.PluginConfigurationWindow.cs \
@@ -92,6 +93,7 @@ FILES =  \
 	src/Do.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
+	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \
 	src/Do.UI/KeybindingTreeView.cs \
 	src/Do.UI/MainMenu.cs \

@@ -52,7 +52,10 @@ namespace Do.Core
 		public SecondSearchController(ISearchController FirstController) : base ()
 		{
 			this.FirstController = FirstController;
-			FirstController.SelectionChanged += OnUpstreamSelectionChanged;
+			FirstController.SearchFinished += delegate (object o, SearchFinishState state) {
+				if (state.SelectionChanged)
+					OnUpstreamSelectionChanged ();
+			};
 		}
 		
 		//Similar to running UpdateResults (), except we dont have any timeouts
@@ -71,7 +74,7 @@ namespace Do.Core
 				wait_timer = 0;
 			}
 			context.Results = GetContextResults ();
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}
 		
 		protected override List<IObject> InitialResults ()
@@ -97,19 +100,21 @@ namespace Do.Core
 		private void OnUpstreamSelectionChanged ()
 		{
 			textMode = false;
-			if (timer > 0) {
+			if (timer > 0)
 				GLib.Source.Remove (timer);
-			}
+			if (wait_timer > 0)
+				GLib.Source.Remove (wait_timer);
+			
 			base.OnSearchStarted (true);//trigger our search start now
 			timer = GLib.Timeout.Add (type_wait, delegate {
-				Gdk.Threads.Enter ();
-				try { 
+//				Gdk.Threads.Enter ();
+//				try { 
 					context.Destroy ();
 					context = new SimpleSearchContext ();
 					UpdateResults (true);
-				} finally { 
-					Gdk.Threads.Leave (); 
-				}
+//				} finally { 
+//					Gdk.Threads.Leave (); 
+//				}
 				timer = 0;
 				return false;
 			});
@@ -196,12 +201,9 @@ namespace Do.Core
 				//quickly as possible
 				
 				//Check and see if our selection changed
-				if (context.LastContext != null && context.Selection != context.LastContext.Selection) {
-					base.OnSelectionChanged ();
-					base.OnSearchFinished (true);
-				} else {
-					base.OnSearchFinished (false);
-				}
+				bool selection_changed = (context.LastContext != null && 
+				                          context.Selection != context.LastContext.Selection);
+				base.OnSearchFinished (selection_changed, true, Selection, Query);
 			} else {
 				//yay, we beat the user with a stick
 				if (wait_timer > 0) {
@@ -214,12 +216,9 @@ namespace Do.Core
 					wait_timer = 0;
 					Gdk.Threads.Enter ();
 					try {
-						if (context.LastContext == null || context.Selection != context.LastContext.Selection) {
-							base.OnSelectionChanged ();
-							base.OnSearchFinished (true);
-						} else {
-							base.OnSearchFinished (false);
-						}
+						bool search_changed = (context.LastContext == null || 
+						                       context.Selection != context.LastContext.Selection);
+						base.OnSearchFinished (search_changed, true, Selection, Query);
 					} finally {
 						Gdk.Threads.Leave ();
 					}
@@ -253,7 +252,7 @@ namespace Do.Core
 			}
 			textMode = false;
 			
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}
 
 
@@ -262,19 +261,19 @@ namespace Do.Core
 		/// </value>
 		public override bool TextMode { //FIXME
 			get { 
-				bool implicit_text_mode = false;
-				implicit_text_mode = Results.Length == 1 && Results[0] is ITextItem;
-				return (textMode || implicit_text_mode);
+				return (textMode || ImplicitTextMode);
 			}
 			set {
 				if (context.ParentContext != null) return;
 				if (!value) {
 					textMode = value;
+					textModeFinalize = false;
 				} else if (FirstController.Selection is IAction) {
 					IAction action = FirstController.Selection as IAction;
 					foreach (Type t in action.SupportedItemTypes) {
 						if (t == typeof (ITextItem) && action.SupportsItem (new DoTextItem (Query))) {
 							textMode = value;
+							textModeFinalize = false;
 						}
 					}
 				}
@@ -282,6 +281,12 @@ namespace Do.Core
 				if (textMode == value)
 					BuildNewContextFromQuery ();
 			}
+		}
+		
+		public override void SetString (string str)
+		{
+			context.Query = str;
+			BuildNewContextFromQuery ();
 		}
 
 		/// <summary>
@@ -300,7 +305,7 @@ namespace Do.Core
 
 				context.Results = GetContextResults ();
 			}
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}	
 	}
 }

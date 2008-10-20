@@ -61,9 +61,11 @@ namespace Do.Core {
 		List<IItem> modItems;
 		bool thirdPaneVisible;
 		bool resultsGrown;
+		Gtk.IMContext im;
 		
 		public Controller ()
 		{
+			im = new Gtk.IMMulticontext ();
 			items = new List<IItem> ();
 			modItems = new List<IItem> ();
 			resultsGrown = false;
@@ -76,27 +78,39 @@ namespace Do.Core {
 			controllers[1] = new SecondSearchController (controllers[0]);
 			controllers[2] = new ThirdSearchController  (controllers[0], controllers[1]);
 			
-			// Set up our callbacks here.  If we ever reconstruct these controllers, 
-			// and we shouldn't be, we will need to reset these too.  However controllers
-			// provide a resetting mechanism.
-			controllers[0].SelectionChanged += delegate { UpdatePane (Pane.First); };
-			controllers[1].SelectionChanged += delegate { SmartUpdatePane (Pane.Second); };
-			controllers[2].SelectionChanged += delegate { SmartUpdatePane (Pane.Third); };
-			
-			// Usually when the query changes we want to reflect this immediately
-			controllers[0].QueryChanged += OnFirstQueryChanged;
-			controllers[1].QueryChanged += delegate { SmartUpdatePane (Pane.Second); };
-			controllers[2].QueryChanged += delegate { SmartUpdatePane (Pane.Third); };
-			
-			// We want to show a blank box during our searches
+			//We want to show a blank box during our searches
 			controllers[0].SearchStarted += delegate { };
-			controllers[1].SearchStarted += delegate (bool u) { if (u) window.ClearPane (Pane.Second); };
-			controllers[2].SearchStarted += delegate (bool u) { if (u) window.ClearPane (Pane.Third); };
+			controllers[1].SearchStarted += delegate (bool u) { 
+				if (u && !ControllerExplicitTextMode (Pane.Second)) window.ClearPane (Pane.Second); 
+			};
+			controllers[2].SearchStarted += delegate (bool u) { 
+				if (u && !ControllerExplicitTextMode (Pane.Third)) window.ClearPane (Pane.Third); 
+			};
 			
-			// Brings back our boxes after the search
-			controllers[0].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.First); };
-			controllers[1].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Second); };
-			controllers[2].SearchFinished += delegate (bool c) { if (!c) SmartUpdatePane (Pane.Third); };
+			controllers[0].SearchFinished += delegate (object o, SearchFinishState state) 
+			{ SearchFinished (o, state, Pane.First); };
+			controllers[1].SearchFinished += delegate (object o, SearchFinishState state) 
+			{ SearchFinished (o, state, Pane.Second); };
+			controllers[2].SearchFinished += delegate (object o, SearchFinishState state) 
+			{ SearchFinished (o, state, Pane.Third); };
+			
+			im.UsePreedit = false;
+			im.Commit += OnIMCommit;
+			im.FocusIn ();
+		}
+		
+		private void OnIMCommit (object o, Gtk.CommitArgs args)
+		{
+			foreach (char c in args.Str.ToCharArray ())
+				SearchController.AddChar (c);
+			
+			//Horrible hack:
+			//The reason this exists and exists here is to update the clipboard in a place that
+			//we know will always be safe for GTK.  Unfortunately due to the way we have designed
+			//Do, this has proven extremely difficult to put some place more logical.  We NEED to
+			//rethink how we handle Summon () and audit our usage of Gdk.Threads.Enter ()
+			if (SearchController.Query.Length <= 1)
+				SelectedTextItem.UpdateText ();
 		}
 		
 		public void Initialize ()
@@ -116,6 +130,19 @@ namespace Do.Core {
 		{
 			if (null != window) Vanish ();
 			
+			if (window != null)
+				window.KeyPressEvent -= KeyPressWrap;
+			if (window is Gtk.Widget)
+				(window as Gtk.Widget).Destroy ();
+			
+			window = null;
+			
+			if (!Gdk.Screen.Default.IsComposited) {
+				window = new ClassicWindow (this);
+				window.KeyPressEvent += KeyPressWrap;
+				Reset ();
+				return;
+			}
 			switch (Do.Preferences.Theme) {
 			case "Mini":
 				window = new MiniWindow (this);
@@ -123,8 +150,18 @@ namespace Do.Core {
 			case "Glass Frame":
 				window = new GlassWindow (this);
 				break;
+//			case "HUD":
+//				window = new Bezel (this, HUDStyle.HUD);
+//				break;
 			default:
-				window = new ClassicWindow (this);
+				foreach (IRenderTheme theme in PluginManager.GetThemes ()) {
+					if (theme.Name == Do.Preferences.Theme) {
+						window = new Bezel (this, theme);
+						break;
+					}
+				}
+				if (window == null)
+					window = new Bezel (this, new ClassicTheme ());
 				break;
 			}
 			
@@ -214,7 +251,7 @@ namespace Do.Core {
 				return (!ThirdPaneRequired &&
 				        controllers[2].Cursor == 0 && 
 				        string.IsNullOrEmpty (controllers[2].Query) && 
-				        !controllers[2].TextMode);
+				        !ControllerExplicitTextMode (Pane.Third));
 			}
 		}
 		
@@ -236,11 +273,13 @@ namespace Do.Core {
 			get {
 				IObject first, second;
 				IAction action;
+				IItem item;
 
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
 				action = (first as IAction) ?? (second as IAction);
-				return action != null &&
+				item = (first as IItem) ?? (second as IItem);
+				return action != null && item != null &&
 					action.SupportedModifierItemTypes.Length > 0 &&
 					!action.ModifierItemsOptional &&
 					controllers[1].Results.Length > 0;
@@ -279,13 +318,18 @@ namespace Do.Core {
 			if (objects.Length > 1) {
 				GLib.Timeout.Add (50,
 					delegate {
-						Gdk.Threads.Enter ();
+//						Gdk.Threads.Enter ();
 						GrowResults ();
-						Gdk.Threads.Leave ();
+//						Gdk.Threads.Leave ();
 						return false;
 					}
 				);
 			}
+		}
+		
+		public bool ControllerExplicitTextMode (Pane pane) {
+			return controllers[(int) pane].TextType == TextModeType.Explicit ||
+				controllers[(int) pane].TextType == TextModeType.ExplicitFinalized;
 		}
 		
 		/////////////////////////
@@ -306,9 +350,16 @@ namespace Do.Core {
 				return;
 			}
 			
-			// Things pressed with ctrl are mistakes?
+			// Check for paste
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
+				if (evnt.Key == Key.v) {
+					OnPasteEvent ();
 					return;
+				}
+				if (evnt.Key == Key.c) {
+					OnCopyEvent ();
+					return;
+				}
 			}
 
 			switch ((Gdk.Key) evnt.KeyValue) {
@@ -352,8 +403,30 @@ namespace Do.Core {
 			return;
 		}
 		
+		void OnPasteEvent ()
+		{
+			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
+			if (!clip.WaitIsTextAvailable ()) {
+				return;
+			}
+			string str = clip.WaitForText ();
+			SearchController.SetString (SearchController.Query + str);
+		}
+		
+		void OnCopyEvent ()
+		{
+			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
+			if (SearchController.Selection != null)
+				clip.Text = SearchController.Selection.Name;
+		}
+		
 		void OnActivateKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
+			if (SearchController.TextType == TextModeType.Explicit) {
+				OnInputKeyPressEvent (evnt);
+				return;
+			}
 			bool shift_pressed = (evnt.State & ModifierType.ShiftMask) != 0;
 			PerformAction (!shift_pressed);
 		}
@@ -367,6 +440,7 @@ namespace Do.Core {
 		/// </param>
 		void OnSelectionKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			if (SearchController.Selection is ITextItem || !resultsGrown)
 				OnInputKeyPressEvent (evnt);
 			else if (SearchController.ToggleSecondaryCursor (SearchController.Cursor))
@@ -375,6 +449,7 @@ namespace Do.Core {
 		
 		void OnDeleteKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			SearchController.DeleteChar ();
 		}
 		
@@ -386,6 +461,16 @@ namespace Do.Core {
 		
 		void OnEscapeKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
+			if (SearchController.TextType == TextModeType.Explicit) {
+				if (SearchController.Query.Length > 0)
+					SearchController.FinalizeTextMode ();
+				else 
+					SearchController.TextMode = false;
+				UpdatePane (CurrentPane);
+				return;
+			}
+			
 			bool results, something_typed;
 
 			something_typed = SearchController.Query.Length > 0;
@@ -405,26 +490,27 @@ namespace Do.Core {
 		
 		void OnInputKeyPressEvent (EventKey evnt)
 		{
+			if (im.FilterKeypress (evnt) || ((evnt.State & ModifierType.ControlMask) != 0))
+				return;
+//			im.Reset ();
 			char c;
-			c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
+			if (evnt.Key == Key.Return) {
+				c = '\n';
+			} else {
+				c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
+			}
 			if (char.IsLetterOrDigit (c)
 					|| char.IsPunctuation (c)
+					|| c == '\n'
 					|| (c == ' ' && SearchController.Query.Length > 0)
 					|| char.IsSymbol (c)) {
 				SearchController.AddChar (c);
 			}
-			
-			// Horrible hack: The reason this exists and exists here is to update the
-			// clipboard in a place that we know will always be safe for GTK.
-			// Unfortunately due to the way we have designed Do, this has proven
-			// extremely difficult to put some place more logical.  We NEED to rethink
-			// how we handle Summon () and audit our usage of Gdk.Threads.Enter ()
-			if (SearchController.Query.Length <= 1)
-				SelectedTextItem.UpdateText ();
 		}
 		
 		void OnRightLeftKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			if (SearchController.Results.Length == 0) return;
 
 			switch ((Gdk.Key) evnt.KeyValue) {
@@ -449,6 +535,7 @@ namespace Do.Core {
 		
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			ShrinkResults ();
 
 			if (evnt.Key == Key.Tab) {
@@ -457,31 +544,41 @@ namespace Do.Core {
 				PrevPane ();
 			}
 			// Seems to avoid a crash by passing bad contexts.  May not be needed.
-			if (!(CurrentPane == Pane.First && SearchController.Results.Length == 0))
-				window.SetPaneContext (CurrentPane, SearchController.UIContext);
+//			if (!(CurrentPane == Pane.First && SearchController.Results.Length == 0))
+//				window.SetPaneContext (CurrentPane, SearchController.UIContext);
 		}
 		
 		void OnTextModePressEvent (EventKey evnt)
 		{
-			bool tmp = SearchController.TextMode;
-			SearchController.TextMode = !SearchController.TextMode;
-			if (SearchController.TextMode == tmp) {
-				NotificationIcon.SendNotification ("Text Mode Error", "Do could not enter text mode " +
-				                                   "because the current action does not support it.");
+			im.Reset ();
+			TextModeType tmp = SearchController.TextType;
+			if (SearchController.TextType == TextModeType.ExplicitFinalized) {
+				SearchController.TextMode = true;
+			} else if (SearchController.TextType != TextModeType.Explicit && SearchController.Query.Length == 0) {
+				SearchController.TextMode = true;
 			} else {
+				OnInputKeyPressEvent (evnt);
+				return;
+			}
+			
+			if (SearchController.TextType != tmp) {
 				UpdatePane (CurrentPane);
 			}
 		}
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
+			im.Reset ();
 			if (evnt.Key == Gdk.Key.Up) {
 				if (!resultsGrown) {
-                    GrowResults ();
+					if (SearchController.Cursor > 0)
+						GrowResults ();
 					return;
 				} else {
-					if (SearchController.Cursor <= 0)
+					if (SearchController.Cursor <= 0) {
+						ShrinkResults ();
 						return;
+					}
 					SearchController.Cursor--;
                 }
 			} else if (evnt.Key == Gdk.Key.Down) {
@@ -567,13 +664,15 @@ namespace Do.Core {
 			}
 		}
 		
-		void OnFirstQueryChanged ()
+		void SearchFinished (object o, SearchFinishState state, Pane pane)
 		{
-			if (FirstControllerIsReset) {
-			    Reset ();
+			if (pane == Pane.First && FirstControllerIsReset) {
+				Reset ();
 				return;
 			}
-			UpdatePane (Pane.First);
+			
+			if (state.QueryChanged || state.SelectionChanged)
+				SmartUpdatePane (pane);
 		}
 
 		/// <summary>
@@ -725,6 +824,7 @@ namespace Do.Core {
 				DoPerformState state = new DoPerformState (action, items, modItems);
 				th = new Thread (new ParameterizedThreadStart (DoPerformWork));
 				th.Start (state);
+				th.Join (100);
 			}
 
 			if (vanish) {
@@ -748,15 +848,24 @@ namespace Do.Core {
 			if (!IsSummonable) return;
 
 			if (th != null && th.IsAlive) {
-				NotificationIcon.SendNotification ("Do Error:", "A previous action is still " + 
-				                                   "running.  Please wait for this action to " +
-				                                   "finish running");
+				Thread.Sleep (100);
+			}
+			
+			if (th != null && th.IsAlive) {
+				NotificationIcon.ShowKillNotification (delegate {
+					th.Abort ();
+					if (!th.Join (1500))
+						NotificationIcon.SendNotification ("Unrecovorable Error:", "Do has suffered an " +
+						                                   "error which can not be recovered.  Please " +
+						                                   "restart Do.");
+				});
 				return;
 			}
 			
 			window.Summon ();
 			if (Do.Preferences.AlwaysShowResults)
 				GrowResults ();
+			im.FocusIn ();
 		}
 		
 		public void Vanish ()

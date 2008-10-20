@@ -36,6 +36,7 @@ namespace Do.UI
 		private string query;
 		
 		private bool largeText;
+		private TextModeType textType;
 		
 		private IUIContext parentContext;
 			
@@ -75,14 +76,20 @@ namespace Do.UI
 			}
 		}
 		
+		public TextModeType LargeTextModeType {
+			get {
+				return textType;
+			}
+		}
+		
 		public IUIContext ParentContext {
 			get {
 				return parentContext;
 			}
 		}
 		
-		public UIContext(IObject selection, IObject[] results, int cursor, 
-		                 int[] secondaryCursors, string query, bool largeTextDisplay, IUIContext parentContext)
+		public UIContext(IObject selection, IObject[] results, int cursor, int[] secondaryCursors, 
+		                 string query, bool largeTextDisplay, TextModeType type, IUIContext parentContext)
 		{
 			this.selection  = selection;
 			this.results    = results;
@@ -91,6 +98,7 @@ namespace Do.UI
 			this.query      = query;
 			this.largeText  = largeTextDisplay;
 			this.parentContext = parentContext;
+			this.textType   = type;
 		}
 	}
 }

@@ -66,13 +66,12 @@ namespace Do.Core
 
 		public override bool TextMode {
 			get { 
-				bool implicit_text_mode = false;
-				implicit_text_mode = Results.Length == 1 && Results[0] is ITextItem;
-				return (textMode || implicit_text_mode); 
+				return (textMode || ImplicitTextMode); 
 			}
 			set { 
 				if (context.ParentContext != null) return;
 				textMode = value; 
+				textModeFinalize = false;
 				if (Query.Length > 0)
 					BuildNewContextFromQuery ();
 			}
@@ -102,13 +101,16 @@ namespace Do.Core
 			context.Results = results.ToArray ();
 			//Do.PrintPerf ("FirstControllerResultsAssigned");
 			
-			if (context.LastContext == null || context.LastContext.Selection != context.Selection) {
-				base.OnSelectionChanged ();
-				base.OnSearchFinished (true);
-			} else {
-				base.OnSearchFinished (false);
-			}
+			bool search_changed = (context.LastContext == null || context.LastContext.Selection != context.Selection);
+			base.OnSearchFinished (search_changed, true, Selection, Query);
 		}
+		
+		public override void SetString (string str)
+		{
+			context.Query = str;
+			BuildNewContextFromQuery ();
+		}
+
 		
 		private void BuildNewContextFromQuery ()
 		{
@@ -125,7 +127,7 @@ namespace Do.Core
 				results.Add (new DoTextItem (Query));
 				context.Results = results.ToArray ();
 			}
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}
 
 	}

@@ -56,7 +56,10 @@ namespace Do.Core
 			this.FirstController  = FirstController;
 			this.SecondController = SecondController;
 			
-			SecondController.SelectionChanged += OnUpstreamSelectionChanged;
+			SecondController.SearchFinished += delegate (object o, SearchFinishState state) {
+				if (state.SelectionChanged)
+					OnUpstreamSelectionChanged ();
+			};
 		}
 		
 		public override Type[] SearchTypes {
@@ -69,14 +72,13 @@ namespace Do.Core
 
 		public override bool TextMode {
 			get { 
-				bool implicit_text_mode = false;
-				implicit_text_mode = Results.Length == 1 && Results[0] is ITextItem;
-				return textMode || implicit_text_mode; 
+				return textMode || ImplicitTextMode; 
 			}
 			set { 
 				if (context.ParentContext != null) return;
 				if (!value) { //if its false, no problems!  We can always leave text mode
 					textMode = value;
+					textModeFinalize = false;
 				} else {
 					IAction action;
 					if (FirstController.Selection is IAction)
@@ -87,8 +89,10 @@ namespace Do.Core
 						return; //you have done something weird, ignore it!
 					
 					foreach (Type t in action.SupportedModifierItemTypes) {
-						if (t == typeof (ITextItem))
+						if (t == typeof (ITextItem)) {
 							textMode = value;
+							textModeFinalize = false;
+						}
 					}
 				}
 				
@@ -103,7 +107,7 @@ namespace Do.Core
 				context.Destroy ();
 				context = new SimpleSearchContext ();
 				
-				base.OnSelectionChanged ();
+				base.OnSearchFinished (true, true, Selection, Query);
 				return;
 			}
 			
@@ -113,14 +117,14 @@ namespace Do.Core
 			}
 			base.OnSearchStarted (true);//trigger our search start now
 			timer = GLib.Timeout.Add (200, delegate {
-				Gdk.Threads.Enter ();
-				try { 
+//				Gdk.Threads.Enter ();
+//				try { 
 					context.Destroy ();
 					context = new SimpleSearchContext ();
 					UpdateResults (true);
-				} finally { 
-					Gdk.Threads.Leave (); 
-				}
+//				} finally { 
+//					Gdk.Threads.Leave (); 
+//				}
 				return false;
 			});
 		}
@@ -194,7 +198,7 @@ namespace Do.Core
 			}
 			textMode = false;
 			
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}
 		
 		protected override void UpdateResults ()
@@ -212,12 +216,15 @@ namespace Do.Core
 				return;
 			
 			
-			if (context.LastContext == null || context.LastContext.Selection != context.Selection) {
-				base.OnSelectionChanged ();
-				base.OnSearchFinished (true);
-			} else {
-				base.OnSearchFinished (false);
-			}
+			bool selection_changed = (context.LastContext == null || 
+			                          context.LastContext.Selection != context.Selection);
+			base.OnSearchFinished (selection_changed, true, Selection, Query);
+		}
+		
+		public override void SetString (string str)
+		{
+			context.Query = str;
+			BuildNewContextFromQuery ();
 		}
 
 		private void BuildNewContextFromQuery ()
@@ -233,7 +240,7 @@ namespace Do.Core
 
 				context.Results = GetContextResults ();
 			}
-			base.OnSelectionChanged ();
+			base.OnSearchFinished (true, true, Selection, Query);
 		}	
 	}
 }

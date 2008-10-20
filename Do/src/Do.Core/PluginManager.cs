@@ -29,6 +29,7 @@ using Mono.Addins.Setup;
 using Do;
 using Do.Addins;
 using Do.Universe;
+using Do.UI;
 
 namespace Do.Core {
 
@@ -50,6 +51,7 @@ namespace Do.Core {
                 return new string[] {
                     "/Do/ItemSource",
                     "/Do/Action",
+					"/Do/RenderProvider",
                 };
             }
         }
@@ -100,6 +102,7 @@ namespace Do.Core {
             AddinManager.Initialize (Paths.UserPlugins);
             AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnIObjectChange);
             AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnIObjectChange);
+			AddinManager.AddExtensionNodeHandler ("/Do/RenderProvider", OnIRenderThemeChange);
 
             // Register repositories.
             SetupService setup = new SetupService (AddinManager.Registry);
@@ -193,7 +196,8 @@ namespace Do.Core {
         /// A <see cref="ICollection`1"/> of DoAction instances loaded from
         /// plugins.
         /// </returns>
-        internal static ICollection<DoAction> GetActions () {
+        internal static ICollection<DoAction> GetActions () 
+		{
             List<DoAction> actions;
 
             actions = new List<DoAction> ();
@@ -203,6 +207,25 @@ namespace Do.Core {
             }
             return actions;
         }
+		
+		/// <summary>
+		/// Finds all UI themes
+		/// </summary>
+		/// <returns>
+		/// A <see cref="ICollection`1"/> of IRenderTheme instances from plugins
+		/// </returns>
+		static List<IRenderTheme> themes;
+		internal static ICollection<IRenderTheme> GetThemes () 
+		{
+			if (themes == null) {
+				themes = new List<IRenderTheme> ();
+				foreach (IRenderTheme theme in
+				         AddinManager.GetExtensionObjects ("/Do/RenderProvider")) {
+					themes.Add (theme);
+				}
+			}
+			return themes;
+		}
 
         /// <summary>
         /// Install all available plugin updates, either
@@ -350,6 +373,26 @@ namespace Do.Core {
                 }
             }	
         }
+		
+		internal static void OnIRenderThemeChange (object s, ExtensionNodeEventArgs args)
+		{
+			TypeExtensionNode node;
+			themes = null; //reset our cached list of themes;
+			
+			node = args.ExtensionNode as TypeExtensionNode;
+			if (args.Change == ExtensionChange.Add) {
+				try {
+					IRenderTheme plugin = node.GetInstance () as IRenderTheme;
+					Log.Info ("Loaded UI Plugin \"{0}\" Successfully", plugin.Name);
+				} catch (Exception e) {
+					Log.Error ("Encounted error loading \"{0}\": {0}",
+					           e.Message);
+					Log.Debug (e.StackTrace);
+				}
+			} else {
+				
+			}
+		}
 
 		/// <summary>
 		/// Get all objects conforming to type T provided by a given addin.

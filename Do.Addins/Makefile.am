@@ -39,10 +39,13 @@ FILES =  \
 	AssemblyInfo.cs \
 	gtk-gui/Do.UI.AbstractLoginWidget.cs \
 	gtk-gui/generated.cs \
+	src/Do.Addins/CairoUtils.cs \
 	src/Do.Addins/IConfigurable.cs \
 	src/Do.Addins/IDoController.cs \
 	src/Do.Addins/IPreferences.cs \
+	src/Do.Addins/PixbufSurfaceCache.cs \
 	src/Do.Addins/SearchContext.cs \
+	src/Do.Addins/SearchFinishState.cs \
 	src/Do.Addins/Util.cs \
 	src/Do.Addins/LogBridge.cs \
 	src/Do.UI/AbstractLoginWidget.cs \
@@ -54,6 +57,20 @@ FILES =  \
 	src/Do.UI/BaseWidgets/ResultsWindow.cs \
 	src/Do.UI/BaseWidgets/SymbolDisplayLabel.cs \
 	src/Do.UI/BaseWidgets/TextFrame.cs \
+	src/Do.UI/Bezel/Bezel.cs \
+	src/Do.UI/Bezel/BezelDefaults.cs \
+	src/Do.UI/Bezel/BezelDrawingArea.cs \
+	src/Do.UI/Bezel/BezelDrawingContext.cs \
+	src/Do.UI/Bezel/BezelGlassResults.cs \
+	src/Do.UI/Bezel/BezelGlassWindow.cs \
+	src/Do.UI/Bezel/BezelColors.cs \
+	src/Do.UI/Bezel/BezelTextUtils.cs \
+	src/Do.UI/Bezel/Renderers/BezelGlassRenderClasses.cs \
+	src/Do.UI/Bezel/Renderers/ClassicRenderer.cs \
+	src/Do.UI/Bezel/Renderers/ClassicTheme.cs \
+	src/Do.UI/Bezel/Renderers/HUDRenderer.cs \
+	src/Do.UI/Bezel/Renderers/HUDTheme.cs \
+	src/Do.UI/Bezel/Renderers/IRenderInterfaces.cs \
 	src/Do.UI/ClassicWindow/ClassicWindow.cs \
 	src/Do.UI/DarkFrame/GlassFrame.cs \
 	src/Do.UI/DarkFrame/GlassIconBox.cs \
@@ -62,6 +79,7 @@ FILES =  \
 	src/Do.UI/IconProvider.cs \
 	src/Do.UI/IDoWindow.cs \
 	src/Do.UI/IUIContext.cs \
+	src/Do.UI/IRenderTheme.cs \
 	src/Do.UI/MiniWindow/MiniIconBox.cs \
 	src/Do.UI/MiniWindow/MiniWindow.cs \
 	src/Do.UI/MiniWindow/MiniWindowFrame.cs \

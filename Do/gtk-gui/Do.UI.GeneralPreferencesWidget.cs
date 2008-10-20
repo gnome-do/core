@@ -49,6 +49,8 @@ namespace Do.UI {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.GeneralPreferencesWidget
             Stetic.BinContainer.Attach(this);
+            this.WidthRequest = 500;
+            this.HeightRequest = 580;
             this.Name = "Do.UI.GeneralPreferencesWidget";
             // Container child Do.UI.GeneralPreferencesWidget.Gtk.Container+ContainerChild
             this.alignment4 = new Gtk.Alignment(0.5F, 0.5F, 1F, 1F);
@@ -154,7 +156,6 @@ namespace Do.UI {
             w8.Fill = false;
             // Container child hbox1.Gtk.Box+BoxChild
             this.theme_combo = Gtk.ComboBox.NewText();
-            this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Classic"));
             this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Glass Frame"));
             this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Mini"));
             this.theme_combo.WidthRequest = 150;
@@ -189,6 +190,8 @@ namespace Do.UI {
             this.vbox3.Add(this.vbox2);
             Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox2]));
             w12.Position = 1;
+            w12.Expand = false;
+            w12.Fill = false;
             this.alignment3.Add(this.vbox3);
             this.vbox1.Add(this.alignment3);
             Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.vbox1[this.alignment3]));

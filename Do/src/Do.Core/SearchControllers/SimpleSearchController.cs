@@ -29,6 +29,7 @@ namespace Do.Core
 	public abstract class SimpleSearchController : ISearchController
 	{	
 		protected bool textMode = false;
+		protected bool textModeFinalize = false;
 		
 		protected SimpleSearchContext context;
 		protected Type[] searchFilter;
@@ -37,7 +38,26 @@ namespace Do.Core
 		
 		public IUIContext UIContext {
 			get {
-				return context.GetIUIContext (TextMode);
+				return context.GetIUIContext (TextMode, TextType);
+			}
+		}
+		
+		protected bool ImplicitTextMode {
+			get {
+				return Results.Length == 1 && Results[0] is ITextItem && !textMode;
+			}
+		}
+		
+		public TextModeType TextType {
+			get {
+				if (textMode) {
+					if (textModeFinalize)
+						return TextModeType.ExplicitFinalized;
+					return TextModeType.Explicit;
+				}
+				if (ImplicitTextMode)
+					return TextModeType.Implicit;
+				return TextModeType.None;
 			}
 		}
 		
@@ -47,7 +67,7 @@ namespace Do.Core
 			}
 			set {
 				context.Results = value;
-				OnSelectionChanged ();
+				OnSearchFinished (true, false, Selection, Query);
 			}
 		}
 
@@ -72,9 +92,7 @@ namespace Do.Core
 				int ctmp = context.Cursor;
 				context.Cursor = value;
 				if (tmp != Selection || context.Cursor != ctmp) {
-					try {
-						OnSelectionChanged ();
-					} catch {}
+					OnSearchFinished (true, false, Selection, Query);
 				}
 			}
 		}
@@ -119,9 +137,13 @@ namespace Do.Core
 			context.LastContext = (SimpleSearchContext) context.Clone ();
 			context.Query += character;
 			
-			OnQueryChanged ();
 			UpdateResults ();
 			
+		}
+		
+		public void FinalizeTextMode () {
+			if (TextType == TextModeType.Explicit)
+				textModeFinalize = true;
 		}
 		
 		protected abstract void UpdateResults ();
@@ -153,11 +175,7 @@ namespace Do.Core
 			
 			IObject tmp = context.Selection;
 			context = context.LastContext;
-			
-			
-			if (tmp != context.Selection)
-				SelectionChanged ();
-			OnQueryChanged ();
+			OnSearchFinished (tmp != context.Selection, true, Selection, Query);
 		}
 
 		public virtual bool ToggleSecondaryCursor (int cursorLocation)
@@ -202,7 +220,7 @@ namespace Do.Core
 			context = newContext;
 			
 			context.Results = Do.UniverseManager.Search (Query, defaultFilter, children);
-			OnSelectionChanged ();
+			OnSearchFinished (true, context.ParentContext.Query != context.Query, Selection, Query);
 			return true;
 		}
 		
@@ -210,10 +228,11 @@ namespace Do.Core
 		{
 			if (context.ParentContext == null) return false;
 			
+			string old_query = Query;
 			SimpleSearchContext parent = context.ParentContext;
 			context.Destroy (true);
 			context = parent;
-			OnSelectionChanged ();
+			OnSearchFinished (true, old_query != Query, Selection, Query);
 			return true;
 		}
 		
@@ -222,11 +241,8 @@ namespace Do.Core
 			searchFilter = defaultFilter;
 			context.Destroy ();
 			context = new SimpleSearchContext ();
-		}
-		
-		protected void OnSelectionChanged ()
-		{
-			SelectionChanged ();
+			textModeFinalize = false;
+			textMode = false;
 		}
 		
 		protected void OnSearchStarted (bool upstream_search)
@@ -234,19 +250,13 @@ namespace Do.Core
 			SearchStarted (upstream_search);
 		}	
 		
-		protected void OnSearchFinished (bool selection_changed)
+		protected void OnSearchFinished (bool selection_changed, bool query_changed, IObject selection, string query)
 		{
-			SearchFinished (selection_changed);
+			SearchFinished (this, new SearchFinishState (selection_changed, query_changed, selection, query));
 		}
 		
-		protected void OnQueryChanged ()
-		{
-			if (QueryChanged != null)
-				QueryChanged ();
-		}
+		public abstract void SetString (string str);
 		
-		public event NullEventHandler SelectionChanged;
-		public event NullEventHandler QueryChanged;
 		public event SearchStartedEventHandler SearchStarted;
 		public event SearchFinishedEventHandler SearchFinished;
 	}

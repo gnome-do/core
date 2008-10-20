@@ -1,7 +1,6 @@
-// IUIContext.cs
+// IRenderTheme.cs
 // 
-// GNOME Do is the legal property of its developers. Please refer to the
-// COPYRIGHT file distributed with this source distribution.
+// Copyright (C) 2008 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,59 +17,48 @@
 //
 
 using System;
-using System.Collections.Generic;
 
 using Do.Addins;
-using Do.Universe;
-
 
 namespace Do.UI
 {
-	public enum TextModeType {
-		None,
-		Explicit,
-		ExplicitFinalized,
-		Implicit,
-	}
 	
-	public interface IUIContext
+	
+	public interface IRenderTheme
 	{
 		/// <value>
-		/// The current selection
+		/// Theme Name
 		/// </value>
-		IObject Selection {get;}
+		string Name { get; }
 		
 		/// <value>
-		/// The results list
+		/// Theme description
 		/// </value>
-		IObject[] Results {get;}
+		string Description { get; }
 		
 		/// <value>
-		/// Integer index of the selection in the results list
+		/// Values that are not specific to any one renderer
 		/// </value>
-		int Cursor {get;}
+		IBezelDefaults GetDefaults (BezelDrawingArea parent);
 		
 		/// <value>
-		/// Secondary selections indicies
+		/// Text mode overlay renderer
 		/// </value>
-		int[] SecondaryCursors {get;}
+		IBezelOverlayRenderElement GetOverlay (BezelDrawingArea parent);
 		
 		/// <value>
-		/// The query that got us here
+		/// Pane background renderer
 		/// </value>
-		string Query {get;}
+		IBezelPaneRenderElement GetPane (BezelDrawingArea parent);
 		
 		/// <value>
-		/// Tells the controller to present text in a larger box
+		/// Text mode renderer
 		/// </value>
-		bool LargeTextDisplay {get;}
-		
-		
-		TextModeType LargeTextModeType {get;}
+		IBezelTitleBarRenderElement GetTitleBar (BezelDrawingArea parent);
 		
 		/// <value>
-		/// The parent context of the current UI context if it exists.
+		/// Window background renderer
 		/// </value>
-		IUIContext ParentContext {get;}
+		IBezelWindowRenderElement GetWindow (BezelDrawingArea parent);
 	}
 }
