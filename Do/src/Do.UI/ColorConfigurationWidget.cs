@@ -51,15 +51,12 @@ namespace Do.UI
 			// Setup theme combo
             themeI = Array.IndexOf (Themes, Do.Preferences.Theme);
             themeI = themeI >= 0 ? themeI : 0;
-            Console.Error.WriteLine (themeI);
             theme_combo.Active = themeI;            
 
 			BuildPreview ();
 			
 			pin_check.Active = Do.Preferences.AlwaysShowResults;
 			Do.Preferences.PreferenceChanged += OnPrefsChanged;
-			
-			table2.HideAll ();
 		}
 		
 		private void OnPrefsChanged (object o, PreferenceChangedEventArgs args) {
@@ -76,7 +73,6 @@ namespace Do.UI
 		}
 
 		
-//		string [] option_list { get { return new string[] {"default", "hud", "classic"}; } }
 		bool setup = false;
 		
 		private void BuildPreview ()
