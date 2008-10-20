@@ -709,8 +709,16 @@ namespace Do.UI
 				sec_icon = OldContext.GetPaneObject (pane).Icon;
 			
 			double calc_alpha = (sec_icon != icon) ? icon_fade[(int) pane] : 1;
-			cr.SetSource (SurfaceCache.GetSurface (icon), drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
-				                                 drawing_area.Y + WindowBorder + TitleBarHeight + 3);
+			int x;
+			int y;
+			if (PaneOutlineRenderer.StackIconText) {
+				x = drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2));
+				y = drawing_area.Y + WindowBorder + TitleBarHeight + 3;
+			} else {
+				x = drawing_area.X + offset + 5;
+				y = drawing_area.Y + WindowBorder + TitleBarHeight + ((BoxHeight-IconSize)/2);
+			}
+			cr.SetSource (SurfaceCache.GetSurface (icon), x, y);
 			cr.PaintWithAlpha (calc_alpha * alpha);
 			if (string.IsNullOrEmpty (sec_icon) || calc_alpha < 1) 
 				return;
@@ -718,9 +726,7 @@ namespace Do.UI
 			if (!SurfaceCache.ContainsKey (OldContext.GetPaneObject (pane).Icon)) {
 				BufferIcon (cr, OldContext.GetPaneObject (pane).Icon);
 			}
-			cr.SetSource (SurfaceCache.GetSurface (OldContext.GetPaneObject (pane).Icon), 
-			              drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2)),
-			              drawing_area.Y + WindowBorder + TitleBarHeight + 3);
+			cr.SetSource (SurfaceCache.GetSurface (OldContext.GetPaneObject (pane).Icon), x, y);
 			cr.PaintWithAlpha (alpha * (1 - calc_alpha));
 		}
 		
@@ -757,8 +763,13 @@ namespace Do.UI
 				text = (!string.IsNullOrEmpty (Context.GetPaneQuery (pane))) ? 
 					Util.FormatCommonSubstrings 
 						(text, Context.GetPaneQuery (pane), HighlightFormat) : text;
-				int y = drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - TextHeight - 9;
-				BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, this);
+				if (PaneOutlineRenderer.StackIconText) {
+					int y = drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - TextHeight - 9;
+					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, this);
+				} else {
+					int y = drawing_area.Y + WindowBorder + TitleBarHeight + (int)(BoxHeight/2);
+					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + IconSize + 10, y, BoxWidth - IconSize - 20, this);
+				}
 			}
 		}
 		

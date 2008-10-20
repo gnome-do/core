@@ -106,11 +106,30 @@ namespace Do.UI
 		void RenderElement (Context cr, Gdk.Rectangle drawing_area, double overlay);
 	}
 	
+	/// <summary>
+	/// Interface to render Panes
+	/// </summary>
 	public interface IBezelPaneRenderElement
 	{
+		/// <value>
+		/// Width of a pane
+		/// </value>
 		int Width    { get; }
+		
+		/// <value>
+		/// Height of a pane
+		/// </value>
 		int Height   { get; }
+		
+		/// <value>
+		/// Icon size of a pane
+		/// </value>
 		int IconSize { get; }
+		
+		/// <value>
+		/// true if the icon and text are stacked, false if the text is designed to be to the right of the icon
+		/// </value>
+		bool StackIconText { get; }
 		
 		void RenderElement (Context cr, Gdk.Rectangle drawing_area, Pane pane, bool focused);
 	}
