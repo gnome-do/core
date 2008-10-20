@@ -43,7 +43,6 @@ namespace Do.UI
 			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
 				theme_combo.AppendText (theme.Name);
 				themes.Add (theme.Name);
-				Console.Error.WriteLine (theme.Name);
 			}
 			
 			if (!Screen.IsComposited)
