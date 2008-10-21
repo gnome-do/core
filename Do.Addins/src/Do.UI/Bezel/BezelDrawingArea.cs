@@ -453,14 +453,14 @@ namespace Do.UI
 				return;
 			}
 			
-			if (!parent_configured) {
-				Parent.Shown += delegate {
-//					Console.WriteLine ("Set");
-					window_fade = 0;
-					Draw ();
-				};
-				parent_configured = true;
-			}
+//			if (!parent_configured) {
+//				Parent.Shown += delegate {
+////					Console.WriteLine ("Set");
+//					window_fade = 0;
+//					Draw ();
+//				};
+//				parent_configured = true;
+//			}
 			
 			delta_time = DateTime.Now;
 			timer = GLib.Timeout.Add (1000/65, OnDrawTimeoutElapsed);
@@ -596,8 +596,8 @@ namespace Do.UI
 
 			cr2.SetSourceSurface (surface, 0, 0);
 			cr2.Operator = Operator.Source;
-			cr2.PaintWithAlpha (window_fade);
-//			Console.WriteLine (window_fade);
+//			cr2.PaintWithAlpha (window_fade);
+			cr2.Paint ();
 			
 			(cr2 as IDisposable).Dispose ();
 			(cr as IDisposable).Dispose ();
