@@ -1,4 +1,4 @@
-/* LogBridge.cs
+/* Log.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -28,7 +28,7 @@ namespace Do.Addins
 	/// Provides a way for plugins to offer debugging info the Do log.
 	/// Uses reflection to determine which plugin is requesting a log write.
 	/// </summary>
-	public static class LogBridge
+	public static class Log
 	{
 		/// <summary>
 		/// Print a Log message with Debug severity.

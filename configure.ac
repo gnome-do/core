@@ -13,7 +13,7 @@ IT_PROG_INTLTOOL([0.35.0])
 SHAMROCK_CONFIGURE_I18N(gnome-do)
 
 dnl Plugin ABI version; bump whenever plugin interface changes
-ABI_VERSION=0.6
+ABI_VERSION=0.7
 AC_SUBST(ABI_VERSION)
 
 RELEASE="false"
