@@ -150,7 +150,7 @@ namespace Do.UI
 		BezelColors colors;
 		BezelGlassResults bezel_results;
 		
-		bool third_pane_visible, preview;
+		bool third_pane_visible, preview, parent_configured;
 		BezelDrawingContext context, old_context;
 		PixbufSurfaceCache surface_cache;
 		Pane focus;
@@ -160,7 +160,7 @@ namespace Do.UI
 		Gdk.Rectangle drawing_area;
 		Surface surface;
 		
-		double text_box_scale;
+		double text_box_scale, window_fade = 1;
 		
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
@@ -269,7 +269,7 @@ namespace Do.UI
 		
 		private bool AnimationNeeded {
 			get {
-				return ExpandNeeded || ShrinkNeeded || TextScaleNeeded || FadeNeeded;
+				return ExpandNeeded || ShrinkNeeded || TextScaleNeeded || FadeNeeded || WindowFadeNeeded;
 			}
 		}
 		
@@ -297,6 +297,12 @@ namespace Do.UI
 			get {
 				return (entry_mode[(int) Focus] && text_box_scale != 1) ||
 					(!entry_mode[(int) Focus] && text_box_scale != 0);
+			}
+		}
+		
+		private bool WindowFadeNeeded {
+			get {
+				return window_fade != 1;
 			}
 		}
 		
@@ -447,6 +453,15 @@ namespace Do.UI
 				return;
 			}
 			
+			if (!parent_configured) {
+				Parent.Shown += delegate {
+//					Console.WriteLine ("Set");
+					window_fade = 0;
+					Draw ();
+				};
+				parent_configured = true;
+			}
+			
 			delta_time = DateTime.Now;
 			timer = GLib.Timeout.Add (1000/65, OnDrawTimeoutElapsed);
 		}
@@ -581,7 +596,8 @@ namespace Do.UI
 
 			cr2.SetSourceSurface (surface, 0, 0);
 			cr2.Operator = Operator.Source;
-			cr2.Paint ();
+			cr2.PaintWithAlpha (window_fade);
+//			Console.WriteLine (window_fade);
 			
 			(cr2 as IDisposable).Dispose ();
 			(cr as IDisposable).Dispose ();
@@ -632,6 +648,11 @@ namespace Do.UI
 				icon_fade[0] = (icon_fade[0] > 1) ? 1 : icon_fade[0];
 				icon_fade[1] = (icon_fade[1] > 1) ? 1 : icon_fade[1];
 				icon_fade[2] = (icon_fade[2] > 1) ? 1 : icon_fade[2];
+			}
+			
+			if (WindowFadeNeeded) {
+				window_fade += (change*.1)+(window_fade/2);
+				window_fade = Math.Min (window_fade, 1);
 			}
 			
 			QueueDraw ();

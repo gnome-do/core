@@ -58,17 +58,17 @@ namespace Do.UI
 			TypeHint = WindowTypeHint.Splashscreen;
 			SetColormap ();
 			
-			VBox vbox = new VBox ();
+//			VBox vbox = new VBox ();
 			
 			bda = new BezelDrawingArea (theme, false);
-			vbox.PackStart (bda, true, true, 0);
+//			vbox.PackStart (bda, true, true, 0);
 			bda.Show ();
 			
 			bgr = bda.Results;
 			bgw = new BezelGlassWindow (bgr);
 	
-			Add (vbox);
-			vbox.Show ();
+			Add (bda);
+//			vbox.Show ();
 			
 			pw = new PositionWindow (this, bgw);
 		}
