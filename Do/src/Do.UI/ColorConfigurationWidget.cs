@@ -78,7 +78,8 @@ namespace Do.UI
 		private void BuildPreview ()
 		{
 			if (bda != null) {
-				preview_align.Remove (bda);
+//				preview_align.Remove (bda);
+				preview_align.Remove (preview_align.Child);
 				bda.Destroy ();
 				bda = null;
 			}
@@ -89,12 +90,17 @@ namespace Do.UI
 					break;
 				}
 			}
+			if (preview_align.Child != null)
+					preview_align.Remove (preview_align.Child);
+				
 			if (bda != null) {
 				this.preview_align.Add (bda);
 				bda.Show ();
 				
 				SetupButtons ();
 			} else {
+				this.preview_align.Add (new Gtk.Label ("No Preview Available"));
+				this.preview_align.Child.Show ();
 				DisableButtons ();
 			}
 		}
