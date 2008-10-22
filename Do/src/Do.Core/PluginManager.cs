@@ -79,7 +79,7 @@ namespace Do.Core {
 
 				name = typeof (PluginManager).Assembly.GetName ();
 				return String.Format ("{0}.{1}.{2}",
-						name.Version.Major, name.Version.Minor, name.Version.Build);
+					name.Version.Major, name.Version.Minor, name.Version.Build);
 			}
 		}
 
@@ -216,7 +216,7 @@ namespace Do.Core {
 
 			if (updates.Any ()) {
 				IAddinInstaller installer = graphical ?
-					new DoAddinInstaller () as IAddinInstaller
+						new DoAddinInstaller () as IAddinInstaller
 					: new ConsoleAddinInstaller () as IAddinInstaller;
 
 				installer.InstallAddins (AddinManager.Registry, "", updates.ToArray ());
@@ -286,8 +286,7 @@ namespace Do.Core {
 			}
 		}
 
-		internal static void OnIObjectChange (object s,
-				ExtensionNodeEventArgs args)
+		internal static void OnIObjectChange (object s, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node;
 
@@ -302,8 +301,7 @@ namespace Do.Core {
 						(plugin as Pluggable).NotifyLoad ();					
 					Log.Info ("Loaded \"{0}\".", o.Name);
 				} catch (Exception e) {
-					Log.Error ("Encountered error loading \"{0}\": {0}",
-							e.Message);
+					Log.Error ("Encountered error loading \"{0}\": {0}", e.Message);
 					Log.Debug (e.StackTrace);
 				}
 			} else {
@@ -314,8 +312,7 @@ namespace Do.Core {
 						(plugin as Pluggable).NotifyUnload ();
 					Log.Info ("Unloaded \"{0}\".", o.Name);
 				} catch (Exception e) {
-					Log.Error ("Encountered error unloading plugin: {0}",
-							e.Message);
+					Log.Error ("Encountered error unloading plugin: {0}", e.Message);
 					Log.Debug (e.StackTrace);
 				}
 			}	
@@ -331,12 +328,9 @@ namespace Do.Core {
 					IRenderTheme plugin = node.GetInstance () as IRenderTheme;
 					Log.Info ("Loaded UI Plugin \"{0}\" Successfully", plugin.Name);
 				} catch (Exception e) {
-					Log.Error ("Encounted error loading \"{0}\": {0}",
-							e.Message);
+					Log.Error ("Encounted error loading \"{0}\": {0}", e.Message);
 					Log.Debug (e.StackTrace);
 				}
-			} else {
-
 			}
 		}
 
@@ -347,16 +341,15 @@ namespace Do.Core {
 		/// A <see cref="System.String"/> containing an addin id.
 		/// </param>
 		/// <returns>
-		/// A <see cref="ICollection`1"/> of instances of type T.
+		/// A <see cref="IEnumerable`1"/> of instances of type T.
 		/// </returns>
-		private static ICollection<T> ObjectsForAddin<T> (string id)
+		private static IEnumerable<T> ObjectsForAddin<T> (string id)
 		{
 			List<T> obs;
 
 			obs = new List<T> ();
 			foreach (string path in ExtensionPaths) {
-				foreach (TypeExtensionNode n in
-						AddinManager.GetExtensionNodes (path)) {
+				foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes (path)) {
 					object instance;
 					bool addinMatch, typeMatch;
 
@@ -365,10 +358,8 @@ namespace Do.Core {
 					} catch {
 						continue;
 					}
-					addinMatch =
-						Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id);
-					typeMatch =
-						typeof (T).IsAssignableFrom (instance.GetType ());
+					addinMatch = Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id);
+					typeMatch = typeof (T).IsAssignableFrom (instance.GetType ());
 					if (addinMatch && typeMatch) {
 						obs.Add ((T) instance);
 					}
@@ -384,17 +375,12 @@ namespace Do.Core {
 		/// A <see cref="System.String"/> containing an addin id.
 		/// </param>
 		/// <returns>
-		/// A <see cref="ICollection`1"/> of <see cref="IConfigurable"/>
+		/// A <see cref="IEnumerable`1"/> of <see cref="IConfigurable"/>
 		/// provided by the addin for that id.
 		/// </returns>
-		internal static ICollection<IConfigurable> ConfigurablesForAddin (string id)
+		internal static IEnumerable<IConfigurable> ConfigurablesForAddin (string id)
 		{
-			List<IConfigurable> cons;
-
-			cons = new List<IConfigurable> ();	
-			foreach (IConfigurable con in ObjectsForAddin<IConfigurable> (id))
-				cons.Add (new DoObject (con));
-			return cons;
+			return ObjectsForAddin<IConfigurable> (id).Select (con => new DoObject (con) as IConfigurable);
 		}
 	}
 }

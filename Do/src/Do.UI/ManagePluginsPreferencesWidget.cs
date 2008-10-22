@@ -81,16 +81,10 @@ namespace Do.UI
 
 		protected void UpdateButtonState ()
 		{
-			btn_configure.Sensitive = false;
-			btn_about.Sensitive = false;
-
-			foreach (string id in nview.GetSelectedAddins ()) {
-				if (PluginManager.ConfigurablesForAddin (id).Count > 0) {
-					btn_configure.Sensitive = true;
-					break;
-				}
-			}
-			btn_about.Sensitive = nview.GetSelectedAddins ().Length > 0;
+			string[] selected = nview.GetSelectedAddins ();
+			btn_configure.Sensitive = 
+				selected.Any (id => PluginManager.ConfigurablesForAddin (id).Any ());	
+			btn_about.Sensitive = selected.Length > 0;
 		}
 
 		private void OnPluginToggled (string id, bool enabled)

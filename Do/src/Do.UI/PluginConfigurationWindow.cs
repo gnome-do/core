@@ -39,7 +39,7 @@ namespace Do.UI
             base (WindowType.Toplevel)
         {
             Addin addin;
-            ICollection<IConfigurable> configs;
+            IEnumerable<IConfigurable> configs;
 
             Build ();
 
@@ -47,7 +47,7 @@ namespace Do.UI
             configs = PluginManager.ConfigurablesForAddin (id);
             Title = string.Format ("{0} Configuration", addin.Name);
             notebook.RemovePage (0);
-            notebook.ShowTabs = configs.Count > 1;
+            notebook.ShowTabs = configs.Count () > 1;
 			
 			addin_title_img.Pixbuf = IconProvider.PixbufFromIconName
 				(PluginManager.IconForAddin (id), 32);

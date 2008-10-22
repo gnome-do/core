@@ -56,6 +56,14 @@ namespace Do
 			return false;
 		}
 
+		public static int Count<T> (this IEnumerable<T> self)
+		{
+			int count = 0;
+			foreach (T x in self)
+				count++;
+			return count;
+		}
+
 		public static IEnumerable<T> ForEach<T> (this IEnumerable<T> self, Action<T> f)
 		{
 			foreach (T x in self)
