@@ -61,9 +61,8 @@ namespace Do.UI
 			scrollw.Add (nview);
 			scrollw.ShowAll ();
 
-			foreach (string repoName in PluginManager.RepositoryUrls.Keys) {
-				if (PluginManager.RepositoryUrls [repoName].Count > 0)
-					show_combo.AppendText (repoName);
+			foreach (string repo in PluginManager.RepositoryUrls.Keys) {
+				show_combo.AppendText (repo);
 			}
 			show_combo.AppendText (PluginManager.AllPluginsRepository);
 			show_combo.Active = 0;

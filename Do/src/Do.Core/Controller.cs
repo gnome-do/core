@@ -165,8 +165,7 @@ namespace Do.Core {
 			if (window is Gtk.Window)
 				(window as Gtk.Window).Title = "Do";
 			
-			// Get key press events from window since we want to control that
-			// here.
+			// Get key press events from window since we want to control that here.
 			window.KeyPressEvent += KeyPressWrap;
 			Reset ();
 		}

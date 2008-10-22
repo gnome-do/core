@@ -11,8 +11,4 @@
     <itemgroups />
     <signals />
   </object>
-  <object type="Do.UI.ColorConfigurationWidget" palette-category="Do" allow-children="false" base-type="Gtk.Bin">
-    <itemgroups />
-    <signals />
-  </object>
 </objects>

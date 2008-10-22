@@ -48,36 +48,25 @@ namespace Do.Core {
 
         private static string[] ExtensionPaths {
             get {
-                return new string[] {
+                return new[] {
                     "/Do/ItemSource",
                     "/Do/Action",
 					"/Do/RenderProvider",
                 };
             }
         }
-        
-        private static Dictionary<string, List<string>> repository_urls;
-        public static IDictionary<string, List<string>> RepositoryUrls {
+
+        private static Dictionary<string, IEnumerable<string>> repository_urls;
+        public static IDictionary<string, IEnumerable<string>> RepositoryUrls {
             get {
             	if (null == repository_urls) {
-            		repository_urls = new Dictionary<string, List<string>> ();      
-            		
-            		repository_urls ["Official Plugins"] = new List<string> ();
-            		repository_urls ["Official Plugins"].Add 
-            			("http://do.davebsd.com/repo/" + Version +"/official");
-            				
-            		repository_urls ["Community Plugins"] = new List<string> ();
-            		repository_urls ["Community Plugins"].Add
-            			("http://do.davebsd.com/repo/" + Version +"/community");
-            		
-            		repository_urls ["Local Plugins"] = new List<string> ();
-            		foreach (string repo in Paths.SystemPlugins) {
-            			if (Directory.Exists (repo)) {
-							repository_urls ["Local Plugins"].Add ("file://" + repo);
-						}
-					}
+            		repository_urls = new Dictionary<string, IEnumerable<string>> ();      
+            		repository_urls ["Official Plugins"] = new[] { OfficialRepo };
+            		repository_urls ["Community Plugins"] = new[] { CommunityRepo };
+            		repository_urls ["Local Plugins"] = Paths.SystemPlugins
+						.Where (Directory.Exists)
+						.Select (repo => "file://" + repo);
             	}
-            	
             	return repository_urls;;
             }
         }
@@ -89,6 +78,18 @@ namespace Do.Core {
 				name = typeof (PluginManager).Assembly.GetName ();
 				return String.Format ("{0}.{1}.{2}",
 					name.Version.Major, name.Version.Minor, name.Version.Build);
+			}
+		}
+
+		private static string OfficialRepo {
+			get {
+				return "http://do.davebsd.com/repo/" + Version + "/official";
+			}
+		}
+
+		private static string CommunityRepo {
+			get {
+				return "http://do.davebsd.com/repo/" + Version + "/community";
 			}
 		}
 
@@ -106,7 +107,7 @@ namespace Do.Core {
 
             // Register repositories.
             SetupService setup = new SetupService (AddinManager.Registry);
-			foreach (List<string> urls in RepositoryUrls.Values) {
+			foreach (IEnumerable<string> urls in RepositoryUrls.Values) {
 				foreach (string url in urls) {
 					if (!setup.Repositories.ContainsRepository (url)) {
 						setup.Repositories.RegisterRepository (null, url, false);
@@ -118,27 +119,15 @@ namespace Do.Core {
         
         public static bool AddinIsFromRepository (Addin a, string name)
 		{
-			List<string> urls;
-			if (name == AllPluginsRepository) return true;
-			RepositoryUrls.TryGetValue (name, out urls);
-			foreach (string url in urls) {
-				if (a.Description.Url.StartsWith (url))
-					return true;
-			}
-			return false;
+			return name == AllPluginsRepository ||
+				RepositoryUrls [name].Any (url => a.Description.Url.StartsWith (url));
 		}
 		
 		public static bool AddinIsFromRepository (AddinRepositoryEntry e,
 												  string name)
 		{
-			List<string> urls;
-			if (name == AllPluginsRepository) return true;
-			RepositoryUrls.TryGetValue (name, out urls);
-			foreach (string url in urls) {
-				if (e.RepositoryUrl.StartsWith (url))
-					return true;
-			}
-			return false;
+			return name == AllPluginsRepository ||
+				RepositoryUrls [name].Any (url => e.RepositoryUrl.StartsWith (url));
 		}
 
         /// <summary>
