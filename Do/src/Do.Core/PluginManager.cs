@@ -380,7 +380,8 @@ namespace Do.Core {
 		/// </returns>
 		internal static IEnumerable<IConfigurable> ConfigurablesForAddin (string id)
 		{
-			return ObjectsForAddin<IConfigurable> (id).Select (con => new DoObject (con) as IConfigurable);
+			return ObjectsForAddin<IConfigurable> (id)
+				.Select (con => new DoObject (con) as IConfigurable);
 		}
 	}
 }
