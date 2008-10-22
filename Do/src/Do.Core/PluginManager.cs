@@ -39,12 +39,7 @@ namespace Do.Core {
 	/// </summary>
 	public static class PluginManager {
 
-		public static string AllPluginsRepository {
-			get {
-				return "All Available Plugins";
-			}
-		}
-
+		public  const string AllPluginsRepository = "All Available Plugins";
 		private const string DefaultPluginIcon = "folder_tar";
 
 		private static string[] ExtensionPaths {
