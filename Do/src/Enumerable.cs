@@ -56,12 +56,24 @@ namespace Do
 			return false;
 		}
 
+		public static IEnumerable<T> ForEach<T> (this IEnumerable<T> self, Action<T> f)
+		{
+			foreach (T x in self)
+				f (x);
+			return self;
+		}
+
 		public static IEnumerable<T2> Select<T1, T2> (this IEnumerable<T1> self, Func<T1, T2> f)
 		{
 			List<T2> xs = new List<T2> ();
 			foreach (T1 x in self)
 				xs.Add (f (x));
 			return xs;
+		}
+
+		public static T[] ToArray<T> (this IEnumerable<T> self)
+		{
+			return new List<T> (self).ToArray ();
 		}
 
 		public static IEnumerable<T> Where<T> (this IEnumerable<T> self, Func<T, bool> p)

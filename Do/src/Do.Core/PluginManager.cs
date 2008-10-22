@@ -63,9 +63,11 @@ namespace Do.Core {
             		repository_urls = new Dictionary<string, IEnumerable<string>> ();      
             		repository_urls ["Official Plugins"] = new[] { OfficialRepo };
             		repository_urls ["Community Plugins"] = new[] { CommunityRepo };
-            		repository_urls ["Local Plugins"] = Paths.SystemPlugins
-						.Where (Directory.Exists)
-						.Select (repo => "file://" + repo);
+					
+            		repository_urls ["Local Plugins"] =
+						Paths.SystemPlugins
+							.Where (Directory.Exists)
+							.Select (repo => "file://" + repo);
             	}
             	return repository_urls;;
             }
@@ -123,8 +125,7 @@ namespace Do.Core {
 				RepositoryUrls [name].Any (url => a.Description.Url.StartsWith (url));
 		}
 		
-		public static bool AddinIsFromRepository (AddinRepositoryEntry e,
-												  string name)
+		public static bool AddinIsFromRepository (AddinRepositoryEntry e, string name)
 		{
 			return name == AllPluginsRepository ||
 				RepositoryUrls [name].Any (url => e.RepositoryUrl.StartsWith (url));
@@ -164,56 +165,37 @@ namespace Do.Core {
         /// Finds all plugged-in item sources.
         /// </summary>
         /// <returns>
-        /// A <see cref="ICollection`1"/> of DoItemSource instances loaded from
+        /// A <see cref="IEnumerable`1"/> of DoItemSource instances loaded from
         /// plugins.
         /// </returns>
-        internal static ICollection<DoItemSource> GetItemSources () {
-            List<DoItemSource> sources;
-
-            sources = new List<DoItemSource> ();
-            foreach (IItemSource source in
-                AddinManager.GetExtensionObjects ("/Do/ItemSource")) {
-                sources.Add (new DoItemSource (source));
-            }
-            return sources;
+        internal static IEnumerable<DoItemSource> GetItemSources () {
+            return AddinManager.GetExtensionObjects ("/Do/ItemSource")
+				.Select (source => new DoItemSource (source as IItemSource));
         }
 
         /// <summary>
         /// Finds all plugged-in actions.
         /// </summary>
         /// <returns>
-        /// A <see cref="ICollection`1"/> of DoAction instances loaded from
+        /// A <see cref="IEnumerable`1"/> of DoAction instances loaded from
         /// plugins.
         /// </returns>
-        internal static ICollection<DoAction> GetActions () 
+        internal static IEnumerable<DoAction> GetActions () 
 		{
-            List<DoAction> actions;
-
-            actions = new List<DoAction> ();
-            foreach (IAction action in
-                AddinManager.GetExtensionObjects ("/Do/Action")) {
-                actions.Add (new DoAction (action));
-            }
-            return actions;
+            return AddinManager.GetExtensionObjects ("/Do/Action")
+				.Select (action => new DoAction (action as IAction));
         }
 		
 		/// <summary>
 		/// Finds all UI themes
 		/// </summary>
 		/// <returns>
-		/// A <see cref="ICollection`1"/> of IRenderTheme instances from plugins
+		/// A <see cref="IEnumerable`1"/> of IRenderTheme instances from plugins
 		/// </returns>
-		static List<IRenderTheme> themes;
-		internal static ICollection<IRenderTheme> GetThemes () 
+		internal static IEnumerable<IRenderTheme> GetThemes () 
 		{
-			if (themes == null) {
-				themes = new List<IRenderTheme> ();
-				foreach (IRenderTheme theme in
-				         AddinManager.GetExtensionObjects ("/Do/RenderProvider")) {
-					themes.Add (theme);
-				}
-			}
-			return themes;
+			return AddinManager.GetExtensionObjects ("/Do/RenderProvider")
+				.Select (theme => theme as IRenderTheme);
 		}
 
         /// <summary>
@@ -230,36 +212,39 @@ namespace Do.Core {
         /// </returns>
         internal static bool InstallAvailableUpdates (bool graphical)
         {
-            SetupService setup;
-            List<string> updates;
-            IAddinInstaller installer;
-
-            updates = new List<string> ();
-            setup = new SetupService (AddinManager.Registry);
-            installer = graphical ? new DoAddinInstaller () as IAddinInstaller
-                : new ConsoleAddinInstaller () as IAddinInstaller ;
-			
-            setup.Repositories.UpdateAllRepositories (
-                new ConsoleProgressStatus (true));
-            foreach (AddinRepositoryEntry rep in
-                setup.Repositories.GetAvailableAddins ()) {
-                Addin installed;
-
-                installed = AddinManager.Registry.GetAddin (Addin.GetIdName (
-                    rep.Addin.Id));
-                if (null == installed) continue;
-                if (Addin.CompareVersions (installed.Version, rep.Addin.Version) > 0) {
-                    updates.Add (rep.Addin.Id);
-                }
+            IEnumerable<string> updates = GetAvailableUpdates ();
+          
+            if (updates.Any ()) {
+				IAddinInstaller installer = graphical ?
+					new DoAddinInstaller () as IAddinInstaller
+                  : new ConsoleAddinInstaller () as IAddinInstaller;
+				
+                installer.InstallAddins (AddinManager.Registry, "", updates.ToArray ());
             }
-            if (updates.Count > 0) {
-                installer.InstallAddins (
-                    AddinManager.Registry, string.Empty, updates.ToArray ());
-            }
-            return updates.Count > 0;
+            return updates.Any (); 
         }
-        
-        /// <summary>
+
+		internal static IEnumerable<string> GetAvailableUpdates ()
+        {
+            SetupService setup;
+            
+            setup = new SetupService (AddinManager.Registry);
+            setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+            return setup.Repositories.GetAvailableAddins ()
+				.Where (AddinUpdateAvailable)
+				.Select (are => are.Addin.Id);
+        }
+
+		internal static bool AddinUpdateAvailable (AddinRepositoryEntry are)
+		{
+			Addin installed;
+			
+			installed = AddinManager.Registry.GetAddin (Addin.GetIdName (are.Addin.Id));
+            return null != installed &&
+				0 < Addin.CompareVersions (installed.Version, are.Addin.Version);
+		}
+
+		/// <summary>
         /// Checks if there are any updates available for download/installatition
         /// </summary>
         /// <returns>
@@ -268,22 +253,7 @@ namespace Do.Core {
         /// </returns>
         public static bool UpdatesAvailable ()
         {
-        	SetupService setup;
-            setup = new SetupService (AddinManager.Registry);
-            	setup.Repositories.UpdateAllRepositories (
-                	new ConsoleProgressStatus (true));
-            foreach (AddinRepositoryEntry rep in
-                setup.Repositories.GetAvailableAddins ()) {
-                Addin installed;
-
-                installed = AddinManager.Registry.GetAddin (Addin.GetIdName (
-                    rep.Addin.Id));
-                if (null == installed) continue;
-                if (Addin.CompareVersions (installed.Version, rep.Addin.Version) > 0) {
-                    return true;
-                }
-            }
-            return false;
+        	return GetAvailableUpdates ().Any ();
         }
 
         /// <summary>
@@ -297,35 +267,21 @@ namespace Do.Core {
         internal static void InstallLocalPlugins (SetupService setup)
         {
             // Create mpack (addin packages) out of dlls.
-            foreach (string file in 
-                Directory.GetFiles (Paths.UserPlugins, "*.dll")) {
-                string path;
-
-                path = Path.Combine (Paths.UserPlugins, file);
-                setup.BuildPackage (new ConsoleProgressStatus (false),
-                    Paths.UserPlugins, new string [] { path });
-            }
+			Directory.GetFiles (Paths.UserPlugins, "*.dll")
+				.Select (file => Path.Combine (Paths.UserPlugins, file))
+				.ForEach (path =>
+					setup.BuildPackage (new ConsoleProgressStatus (false), Paths.UserPlugins, new[] { path })
+				)
+				.ForEach (File.Delete);
 			
-			//Delete dlls.  If we do it earlier why might delete dll's brought in as
-			//dependancies.  Doing it now has the same effect without breakage.
-			foreach (string file in 
-                Directory.GetFiles (Paths.UserPlugins, "*.dll")) {
-                string path;
-
-                path = Path.Combine (Paths.UserPlugins, file);
-                File.Delete (path);
-            }
             // Install each mpack file, deleting each file when finished
             // installing it.
-            foreach (string file in 
-                    Directory.GetFiles (Paths.UserPlugins, "*.mpack")) {
-                string path;
-
-                path = Path.Combine (Paths.UserPlugins, file);
-                setup.Install (new ConsoleProgressStatus (false),
-                    new string [] { path });
-                File.Delete (path);
-            }
+			Directory.GetFiles (Paths.UserPlugins, "*.mpack")
+				.Select (file => Path.Combine (Paths.UserPlugins, file))
+				.ForEach (path =>
+					setup.Install (new ConsoleProgressStatus (false), new[] { path })
+				)
+				.ForEach (File.Delete);
         }
 
         internal static void OnIObjectChange (object s,
@@ -366,7 +322,6 @@ namespace Do.Core {
 		internal static void OnIRenderThemeChange (object s, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node;
-			themes = null; //reset our cached list of themes;
 			
 			node = args.ExtensionNode as TypeExtensionNode;
 			if (args.Change == ExtensionChange.Add) {
