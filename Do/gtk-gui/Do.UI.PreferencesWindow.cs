@@ -28,7 +28,7 @@ namespace Do.UI {
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.PreferencesWindow
-            this.WidthRequest = 300;
+            this.WidthRequest = 360;
             this.HeightRequest = 500;
             this.Name = "Do.UI.PreferencesWindow";
             this.Title = Mono.Unix.Catalog.GetString("GNOME Do Preferences");
@@ -91,7 +91,7 @@ namespace Do.UI {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 510;
+            this.DefaultWidth = 480;
             this.DefaultHeight = 527;
             this.btn_close.HasDefault = true;
             this.Show();

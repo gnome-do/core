@@ -122,6 +122,7 @@ namespace Do.UI {
             this.hbox2.Spacing = 6;
             // Container child hbox2.Gtk.Box+BoxChild
             this.hbuttonbox1 = new Gtk.HButtonBox();
+            this.hbuttonbox1.Name = "hbuttonbox1";
             this.hbuttonbox1.Spacing = 6;
             this.hbuttonbox1.LayoutStyle = ((Gtk.ButtonBoxStyle)(3));
             // Container child hbuttonbox1.Gtk.ButtonBox+ButtonBoxChild

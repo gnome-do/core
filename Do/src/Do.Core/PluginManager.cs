@@ -271,10 +271,10 @@ namespace Do.Core {
 				.ForEach (File.Delete);
 
 			// Install each mpack file, deleting each file when finished installing it.
-			GetFilePaths (Paths.UserPlugins, "*.mpack").ForEach (path => {
+			foreach (string path in GetFilePaths (Paths.UserPlugins, "*.mpack")) {
 				setup.Install (status, new[] { path });
 				File.Delete (path);
-			});
+			};
 		}
 
 		internal static void OnIObjectChange (object s, ExtensionNodeEventArgs args)

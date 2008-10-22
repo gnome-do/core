@@ -10,9 +10,9 @@
     <widget-library name="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a" />
     <widget-library name="../bin/Debug/Do.exe" internal="true" />
   </import>
-  <widget class="Gtk.Window" id="Do.UI.PreferencesWindow" design-size="510 527">
+  <widget class="Gtk.Window" id="Do.UI.PreferencesWindow" design-size="480 527">
     <property name="MemberName" />
-    <property name="WidthRequest">300</property>
+    <property name="WidthRequest">360</property>
     <property name="HeightRequest">500</property>
     <property name="Title" translatable="yes">GNOME Do Preferences</property>
     <property name="Icon">stock:gtk-preferences Menu</property>
@@ -691,7 +691,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Bin" id="Do.UI.ColorConfigurationWidget" design-size="533 539">
+  <widget class="Gtk.Bin" id="Do.UI.ColorConfigurationWidget" design-size="492 539">
     <property name="MemberName" />
     <child>
       <widget class="Gtk.VBox" id="vbox2">

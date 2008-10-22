@@ -42,8 +42,7 @@ namespace Do.UI
 
 		const int IconSize = 26;
 		const int WrapWidth = 305;
-		const string DescriptionFormat =
-			"<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
+		const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 			
 		string [] addinIds;
 		SetupService setup;
@@ -95,13 +94,11 @@ namespace Do.UI
 			foreach (string addin in addinIds) {
 				string name = Addin.GetIdName (addin);
 				string version = Addin.GetIdVersion (addin);
-				AddinRepositoryEntry[] ares = 
-					setup.Repositories.GetAvailableAddin (name, version);
+				AddinRepositoryEntry[] ares = setup.Repositories.GetAvailableAddin (name, version);
 				if (ares.Length == 0) return;
-				string desc = 
-					String.Format (DescriptionFormat, ares[0].Addin.Name,
-						ares[0].Addin.Description, ares[0].Addin.Version);
-				store.AppendValues (addin, desc);
+				AddinHeader header = ares[0].Addin;
+				store.AppendValues (addin,
+					String.Format (DescriptionFormat, header.Name, header.Description, header.Version));
 			}
 		}
 	}

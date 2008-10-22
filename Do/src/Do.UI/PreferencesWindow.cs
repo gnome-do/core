@@ -18,11 +18,13 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Gtk;
 using Mono.Addins.Gui;
 
+using Do;
 using Do.Addins;
 
 namespace Do.UI
@@ -38,29 +40,21 @@ namespace Do.UI
 			Build ();
 
 			btn_close.IsFocus = true;
-			// Add notebook pages.
-			foreach (IConfigurable page in Pages) {
-				notebook.AppendPage (
-					page.GetConfiguration (), new Label (page.Name));
+			foreach (IConfigurable p in Pages) {
+				notebook.AppendPage (p.GetConfiguration (), new Label (p.Name));
 			}
-			
-			//Search Pages for the first tab with the name "Plugins"
-			notebook.CurrentPage = Array.FindIndex (Pages, (delegate (IConfigurable page) {
-				return page.Name == "Plugins";}));
+			notebook.CurrentPage = Pages.FindIndex (p => p.Name == "Plugins");
 		}
 
 		IConfigurable[] pages;
 		IConfigurable[] Pages {
 			get {
-				if (null == pages) {
-					pages = new IConfigurable [] {
-						new GeneralPreferencesWidget (),
-						new KeybindingsPreferencesWidget (),
-						new ManagePluginsPreferencesWidget (),
-						new ColorConfigurationWidget (),
-					};
-				}
-				return pages;
+				return pages ?? pages = new IConfigurable[] {
+					new GeneralPreferencesWidget (),
+					new KeybindingsPreferencesWidget (),
+					new ManagePluginsPreferencesWidget (),
+					new ColorConfigurationWidget (),
+				};
 			}
 		}
 
