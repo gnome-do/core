@@ -71,11 +71,8 @@ namespace Do.Core {
 
 		private static string Version {
 			get {
-				System.Reflection.AssemblyName name;
-
-				name = typeof (PluginManager).Assembly.GetName ();
-				return String.Format ("{0}.{1}.{2}",
-					name.Version.Major, name.Version.Minor, name.Version.Build);
+				System.Version v = typeof (PluginManager).Assembly.GetName ().Version;
+				return String.Format ("{0}.{1}.{2}", v.Major, v.Minor, v.Build);
 			}
 		}
 
@@ -262,24 +259,22 @@ namespace Do.Core {
 		/// </param>
 		internal static void InstallLocalPlugins (SetupService setup)
 		{
+			IProgressStatus status = new ConsoleProgressStatus (false);
+			// GetFilePaths is like Directory.GetFiles but returned files have directory prefixed.
+			Func<string, string, IEnumerable<string>> GetFilePaths = (dir, pattern) =>
+				Directory.GetFiles (dir, pattern).Select (f => Path.Combine (dir, f));
+			
 			// Create mpack (addin packages) out of dlls.
-			foreach (string file in Directory.GetFiles (Paths.UserPlugins, "*.dll")) {
-				string path = Path.Combine (Paths.UserPlugins, file);
-				setup.BuildPackage (new ConsoleProgressStatus (false), Paths.UserPlugins, new[] { path });
-			}
-
-			// We delete the dlls after creating mpacks so we don't delete any dlls prematurely.
-			Directory.GetFiles (Paths.UserPlugins, "*.dll")
-				.Select (file => Path.Combine (Paths.UserPlugins, file))
+			GetFilePaths (Paths.UserPlugins, "*.dll")
+				.ForEach (path => setup.BuildPackage (status, Paths.UserPlugins, new[] { path }))
+				// We delete the dlls after creating mpacks so we don't delete any dlls prematurely.
 				.ForEach (File.Delete);
 
-			// Install each mpack file, deleting each file when finished installing
-			// it.
-			foreach (string file in Directory.GetFiles (Paths.UserPlugins, "*.mpack")) {
-				string path = Path.Combine (Paths.UserPlugins, file);
-				setup.Install (new ConsoleProgressStatus (false), new[] { path });
+			// Install each mpack file, deleting each file when finished installing it.
+			GetFilePaths (Paths.UserPlugins, "*.mpack").ForEach (path => {
+				setup.Install (status, new[] { path });
 				File.Delete (path);
-			}
+			});
 		}
 
 		internal static void OnIObjectChange (object s, ExtensionNodeEventArgs args)
