@@ -116,6 +116,7 @@ FILES =  \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
 	src/DoPreferences.cs \
+	src/Enumerable.cs \
 	src/GconfPreferencesBackend.cs \
 	src/IPreferencesBackend.cs \
 	src/CommandLinePreferences.cs \
@@ -156,7 +157,8 @@ REFERENCES =  \
 	$(MONO_ADDINS_SETUP_LIBS) \
 	$(NOTIFY_SHARP_LIBS) \
 	$(NUNIT_LIBS) \
-	System
+	System \
+	System.Core
 
 DLL_REFERENCES = 
 
