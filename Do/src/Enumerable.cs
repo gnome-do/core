@@ -34,7 +34,7 @@ namespace Do
 		{
 			return f2 (Aggregate (self, acc, f));
 		}
-			
+
 		public static bool All<T> (this IEnumerable<T> self, Func<T, bool> p)
 		{
 			foreach (T x in self)
@@ -48,7 +48,7 @@ namespace Do
 				return true;
 			return false;
 		}
-		
+
 		public static bool Any<T> (this IEnumerable<T> self, Func<T, bool> p)
 		{
 			foreach (T x in self)
