@@ -810,7 +810,7 @@ namespace Do.UI
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = (ushort) (ushort.MaxValue * text_box_scale);
 			int tmp = BezelTextUtils.TextHeight;
-			BezelTextUtils.TextHeight = 22;
+			BezelTextUtils.TextHeight = 18;
 			Gdk.Rectangle cursor = BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
 			                                                        drawing_area.X + 10, drawing_area.Y + TextModeOffset + 5, 
 			                                                        drawing_area.Width - 20, color, 
