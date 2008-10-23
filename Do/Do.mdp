@@ -4,6 +4,7 @@
       <Output directory="bin/Debug" assemblyKeyFile="." assembly="Do" />
       <Build debugmode="True" target="Exe" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
+      <EnvironmentVariables />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" win32Icon="." ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
@@ -39,8 +40,6 @@
     <File name="src/Do.Universe/AliasItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/AliasAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/DeleteAliasAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="../Do.Addins/bin/Debug/Do.Addins.dll" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="../Do.DBus/bin/Debug/Do.DBus.dll" subtype="Code" buildaction="EmbedAsResource" />
     <File name="src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/PluginNodeView.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/PreferencesWindow.cs" subtype="Code" buildaction="Compile" />
@@ -56,7 +55,7 @@
     <File name="src/Do.UI/PluginSelectionEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/KeybindingTreeView.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/NotificationIcon.cs" subtype="Code" buildaction="Compile" />
-    <File name="gnome-do.desktop" subtype="Code" buildaction="FileCopy" DeployService.TargetDirectoryId="Linux.DesktopApplications" />
+    <File name="gnome-do.desktop" subtype="Code" DeployService.TargetDirectoryId="Linux.DesktopApplications" buildaction="FileCopy" />
     <File name="src/IPreferencesBackend.cs" subtype="Code" buildaction="Compile" />
     <File name="src/GconfPreferencesBackend.cs" subtype="Code" buildaction="Compile" />
     <File name="src/DoPreferences.cs" subtype="Code" buildaction="Compile" />
@@ -97,23 +96,10 @@
     <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a" />
-    <ProjectReference type="Gac" localcopy="True" refto="nunit.core, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    <ProjectReference type="Gac" localcopy="True" refto="nunit.util, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    <ProjectReference type="Gac" localcopy="True" refto="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    <ProjectReference type="Gac" localcopy="True" refto="nunit.core.interfaces, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.GetOptions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </References>
   <Deployment.LinuxDeployData scriptName="gnome-do" />
-  <GtkDesignInfo isWidgetLibrary="True">
-    <ExportedWidgets>
-      <Widget>Do.UI.PluginView</Widget>
-      <Widget>Do.PluginNodeView</Widget>
-      <Widget>Do.UI.KeybindingsPreferencesWidget</Widget>
-      <Widget>Do.UI.ManagePluginsPreferencesWidget</Widget>
-      <Widget>Do.UI.GeneralPreferencesWidget</Widget>
-      <Widget>Do.UI.ColorConfigurationWidget</Widget>
-    </ExportedWidgets>
-  </GtkDesignInfo>
+  <GtkDesignInfo />
   <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">
     <BuildFilesVar Sync="True" Name="FILES" />
     <DeployFilesVar />

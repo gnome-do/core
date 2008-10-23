@@ -45,13 +45,13 @@ namespace Do.UI
 			double x = drawing_area.X;
 			double y = drawing_area.Y;
 			double w = drawing_area.Width;
-			int glaze_offset = 90;
+			int glaze_offset = 85;
 
 			cr.MoveTo  (x+radius, y);
 			cr.Arc     (x+w-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
 			cr.LineTo  (x+w, y+glaze_offset);
-			cr.CurveTo (x+2*(w/3), glaze_offset-25,
-			            x+(w/3), glaze_offset-25,
+			cr.CurveTo (x+2*(w/3), glaze_offset-15,
+			            x+(w/3), glaze_offset-15,
 			            x, y+glaze_offset);
 			cr.Arc     (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
 			LinearGradient lg = new LinearGradient (x, y, x, glaze_offset);
