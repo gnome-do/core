@@ -213,7 +213,7 @@ namespace Do.UI
 		public BezelGlassResults Results {
 			get {
 				return bezel_results ?? 
-					bezel_results = new BezelGlassResults (TwoPaneWidth-(2*WindowRadius), style, colors);
+					bezel_results = new BezelGlassResults (Math.Min (TwoPaneWidth-(2*WindowRadius), 360), style, colors);
 			}
 		}
 		
