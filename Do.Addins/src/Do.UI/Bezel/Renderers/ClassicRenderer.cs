@@ -52,7 +52,7 @@ namespace Do.UI
 			cr.LineTo  (x+w, y+glaze_offset);
 			cr.CurveTo (x+2*(w/3), glaze_offset-25,
 			            x+(w/3), glaze_offset-25,
-			            x, glaze_offset);
+			            x, y+glaze_offset);
 			cr.Arc     (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
 			LinearGradient lg = new LinearGradient (x, y, x, glaze_offset);
 			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
