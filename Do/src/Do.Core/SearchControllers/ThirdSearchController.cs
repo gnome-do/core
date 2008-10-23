@@ -117,14 +117,9 @@ namespace Do.Core
 			}
 			base.OnSearchStarted (true);//trigger our search start now
 			timer = GLib.Timeout.Add (200, delegate {
-//				Gdk.Threads.Enter ();
-//				try { 
-					context.Destroy ();
-					context = new SimpleSearchContext ();
-					UpdateResults (true);
-//				} finally { 
-//					Gdk.Threads.Leave (); 
-//				}
+				context.Destroy ();
+				context = new SimpleSearchContext ();
+				UpdateResults (true);
 				return false;
 			});
 		}
