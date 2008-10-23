@@ -1,4 +1,4 @@
-// GlassFrameRenderer.cs
+// MiniRenderer.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -28,42 +28,38 @@ using Do.Universe;
 
 namespace Do.UI
 {
-	public class GlassFrameTopBar: IBezelTitleBarRenderElement
+	public class MiniTopBar: IBezelTitleBarRenderElement
 	{
 		BezelDrawingArea parent;
 		
-		public int Height { get { return 0; } }
+		public int Height { get { return 7; } }
 		
-		public GlassFrameTopBar (BezelDrawingArea parent)
+		public MiniTopBar (BezelDrawingArea parent)
 		{
 			this.parent = parent;
 		}
 		
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
 		{
-//			int radius = parent.WindowRadius;
+			int radius = parent.WindowRadius;
 			double x = drawing_area.X;
 			double y = drawing_area.Y;
 			double w = drawing_area.Width;
-//			int glaze_offset = 85;
-//
-//			cr.MoveTo  (x+radius, y);
-//			cr.Arc     (x+w-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
-//			cr.LineTo  (x+w, y+glaze_offset);
-//			cr.CurveTo (x+2*(w/3), glaze_offset-15,
-//			            x+(w/3), glaze_offset-15,
-//			            x, y+glaze_offset);
-//			cr.Arc     (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
-//			LinearGradient lg = new LinearGradient (x, y, x, glaze_offset);
-//			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
-//			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .25));
-//			cr.Pattern = lg;
-//			cr.Fill ();
-//			lg.Destroy ();
+			int glaze_offset = 15;
 
-			cr.MoveTo (x + w - 30, y + 17);
-			cr.LineTo (x + w - 20,  y + 17);
-			cr.LineTo (x + w - 25, y + 22);
+			cr.MoveTo  (x+radius, y);
+			cr.Arc     (x+w-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
+			cr.LineTo  (x+w, y+glaze_offset);
+			cr.CurveTo (x+2*(w/3), glaze_offset+15,
+			            x+(w/3), glaze_offset+15,
+			            x, y+glaze_offset);
+			cr.Arc     (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
+			cr.Color = new Cairo.Color (1, 1, 1, .2);
+			cr.Fill ();
+
+			cr.MoveTo (x + w - 30, y + 7);
+			cr.LineTo (x + w - 20,  y + 7);
+			cr.LineTo (x + w - 25, y + 12);
 			cr.Color = new Cairo.Color (1, 1, 1, .95);
 			cr.Fill ();
 		}
@@ -71,25 +67,25 @@ namespace Do.UI
 		public PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point)
 		{
 			Gdk.Rectangle pref_circle = new Gdk.Rectangle (drawing_area.X + drawing_area.Width - 32,
-				                                 drawing_area.Y +15, 15, 15);
+				                                 drawing_area.Y +5, 15, 15);
 			if (pref_circle.Contains (point))
 				return PointLocation.Preferences;
 			return PointLocation.Window;
 		}
 	}
 	
-	public class GlassFramePaneOutlineRenderer : IBezelPaneRenderElement
+	public class MiniPaneOutlineRenderer : IBezelPaneRenderElement
 	{
 		BezelDrawingArea parent;
 		Surface sr_active;
 		int surface_height = 0;
 		
-		public int Width { get { return IconSize+140; } }
-		public int Height { get { return IconSize + 16; } }
-		public int IconSize { get { return 64; } }
+		public int Width { get { return IconSize+125; } }
+		public int Height { get { return IconSize + 20; } }
+		public int IconSize { get { return 48; } }
 		public bool StackIconText { get { return false; } }
 		
-		public GlassFramePaneOutlineRenderer (BezelDrawingArea parent)
+		public MiniPaneOutlineRenderer (BezelDrawingArea parent)
 		{
 			this.parent = parent;
 		}
@@ -100,17 +96,16 @@ namespace Do.UI
 				surface_height = Height;
 				sr_active = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				Context c2 = new Context (sr_active);
-				CairoUtils.SetRoundedRectanglePath (c2, 0, 0, Width, Height, parent.WindowRadius*.6);
+				CairoUtils.SetRoundedRectanglePath (c2, 0, 0, Width, Height, parent.WindowRadius);
 				LinearGradient lg = new LinearGradient (0, 0, 0, Height);
 				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
 				lg.AddColorStop (0.4, new Cairo.Color (1, 1, 1, 0));
 				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .3));
 				c2.Pattern = lg;
 				c2.Fill ();
-				lg.Destroy ();
 				(c2 as IDisposable).Dispose ();
+				lg.Destroy ();
 			}
-			
 			
 			if (pane != parent.Focus)
 				return;
@@ -121,42 +116,36 @@ namespace Do.UI
 
 	}
 	
-	public class GlassFrameBackgroundRenderer : IBezelWindowRenderElement
+	public class MiniBackgroundRenderer : IBezelWindowRenderElement
 	{
 		BezelDrawingArea parent;
 		
 		public Cairo.Color BackgroundColor {
 			get {
-				return new Cairo.Color (.13, .13, .13, 1);
+				Gdk.Color bgColor;
+				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (parent)) {
+					bgColor = rcstyle.Backgrounds[(int) StateType.Selected];
+				}
+				bgColor = CairoUtils.SetMaximumValue (bgColor, 65);
+				
+				return CairoUtils.ConvertToCairo (bgColor, .95);
 			}
 		}
 
-		public GlassFrameBackgroundRenderer (BezelDrawingArea parent)
+		public MiniBackgroundRenderer (BezelDrawingArea parent)
 		{
 			this.parent = parent;
 		}
 		
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
 		{
-			CairoUtils.SetRoundedRectanglePath (cr, drawing_area, parent.WindowRadius, true);
-			cr.Color = new Cairo.Color (.7, .7, .7, .55);
-			cr.FillPreserve ();
-			
-			cr.LineWidth = 1;
-			cr.Color = new Cairo.Color (0, 0, 0, .4);
-			cr.Stroke ();
-			
-			Gdk.Rectangle inter_rect = new Gdk.Rectangle (drawing_area.X+parent.WindowBorder-5,
-			                                              drawing_area.Y+parent.WindowBorder-5,
-			                                              drawing_area.Width-(2*parent.WindowBorder)+10,
-			                                              drawing_area.Height-(2*parent.WindowBorder)+10);
-			CairoUtils.SetRoundedRectanglePath (cr, inter_rect, parent.WindowRadius*.7, false);
-			LinearGradient lg = new LinearGradient (0, inter_rect.Y, 0, inter_rect.Y+inter_rect.Height);
-			lg.AddColorStop (0, CairoUtils.ShadeColor (parent.Colors.Background, 2));
-			lg.AddColorStop (1, CairoUtils.ShadeColor (parent.Colors.Background, .3));
+			CairoUtils.SetRoundedRectanglePath (cr, drawing_area, parent.WindowRadius, false);
+			LinearGradient lg = new LinearGradient (0, drawing_area.Y, 0, drawing_area.Height);
+			lg.AddColorStop (0, parent.Colors.BackgroundDark);
+			lg.AddColorStop (1, parent.Colors.BackgroundLight);
 			cr.Pattern = lg;
-			cr.Fill ();
 			lg.Destroy ();
+			cr.Fill ();
 		}
 		
 		public PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point)
@@ -167,11 +156,11 @@ namespace Do.UI
 		}
 	}
 	
-	public class GlassFrameTextOverlayRenderer : IBezelOverlayRenderElement
+	public class MiniTextOverlayRenderer : IBezelOverlayRenderElement
 	{
 		BezelDrawingArea parent;
 		
-		public GlassFrameTextOverlayRenderer (BezelDrawingArea parent)
+		public MiniTextOverlayRenderer (BezelDrawingArea parent)
 		{
 			this.parent = parent;
 		}
@@ -187,13 +176,15 @@ namespace Do.UI
 		}
 	}
 	
-	public class GlassFrameDefaults : IBezelDefaults
+	public class MiniDefaults : IBezelDefaults
 	{
+		
+		
 		#region IBezelDefaults implementation 
 		
 		public int WindowBorder {
 			get {
-				return 17;
+				return 5;
 			}
 		}
 		
@@ -216,6 +207,8 @@ namespace Do.UI
 		}
 		
 		#endregion 
+		
+
 		
 	}
 }

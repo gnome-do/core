@@ -803,7 +803,7 @@
                                   <widget class="Gtk.ComboBox" id="theme_combo">
                                     <property name="MemberName" />
                                     <property name="IsTextCombo">True</property>
-                                    <property name="Items" translatable="yes">Mini</property>
+                                    <property name="Items" translatable="yes" />
                                     <property name="Active">0</property>
                                     <signal name="Changed" handler="OnThemeComboChanged" />
                                   </widget>

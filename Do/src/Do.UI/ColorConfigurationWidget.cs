@@ -28,9 +28,7 @@ namespace Do.UI
 	{
 		BezelDrawingArea bda;
 		
-		List<string> themes = new List<string> (new string[] {
-			"Mini",
-		});
+		List<string> themes = new List<string> ();
 		
 		public ColorConfigurationWidget ()
 		{

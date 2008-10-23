@@ -36,5 +36,6 @@
 		<RenderProvider type="Do.UI.HUDTheme" />
 		<RenderProvider type="Do.UI.ClassicTheme" />
 		<RenderProvider type="Do.UI.GlassFrameTheme" />
+		<RenderProvider type="Do.UI.MiniTheme" />
 	</Extension>
 </Addin>

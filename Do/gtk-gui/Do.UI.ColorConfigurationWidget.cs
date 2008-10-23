@@ -150,7 +150,6 @@ namespace Do.UI {
             w12.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table1.Gtk.Table+TableChild
             this.theme_combo = Gtk.ComboBox.NewText();
-            this.theme_combo.AppendText(Mono.Unix.Catalog.GetString("Mini"));
             this.theme_combo.Name = "theme_combo";
             this.theme_combo.Active = 0;
             this.table1.Add(this.theme_combo);

@@ -72,6 +72,8 @@ FILES =  \
 	src/Do.UI/Bezel/Renderers/GlassFrameRenderer.cs \
 	src/Do.UI/Bezel/Renderers/HUDRenderer.cs \
 	src/Do.UI/Bezel/Renderers/HUDTheme.cs \
+	src/Do.UI/Bezel/Renderers/MiniRenderer.cs \
+        src/Do.UI/Bezel/Renderers/MiniTheme.cs \
 	src/Do.UI/Bezel/Renderers/IRenderInterfaces.cs \
 	src/Do.UI/ClassicWindow/ClassicWindow.cs \
 	src/Do.UI/DarkFrame/GlassFrame.cs \
