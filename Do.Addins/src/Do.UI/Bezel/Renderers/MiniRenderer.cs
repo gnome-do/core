@@ -1,4 +1,4 @@
-// ClassicRenderer.cs
+// MiniRenderer.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -28,13 +28,13 @@ using Do.Universe;
 
 namespace Do.UI
 {
-	public class ClassicTopBar: IBezelTitleBarRenderElement
+	public class MiniTopBar: IBezelTitleBarRenderElement
 	{
 		BezelDrawingArea parent;
 		
 		public int Height { get { return 7; } }
 		
-		public ClassicTopBar (BezelDrawingArea parent)
+		public MiniTopBar (BezelDrawingArea parent)
 		{
 			this.parent = parent;
 		}
@@ -45,21 +45,17 @@ namespace Do.UI
 			double x = drawing_area.X;
 			double y = drawing_area.Y;
 			double w = drawing_area.Width;
-			int glaze_offset = 85;
+			int glaze_offset = 15;
 
 			cr.MoveTo  (x+radius, y);
 			cr.Arc     (x+w-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
 			cr.LineTo  (x+w, y+glaze_offset);
-			cr.CurveTo (x+2*(w/3), glaze_offset-15,
-			            x+(w/3), glaze_offset-15,
+			cr.CurveTo (x+2*(w/3), glaze_offset+15,
+			            x+(w/3), glaze_offset+15,
 			            x, y+glaze_offset);
 			cr.Arc     (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
-			LinearGradient lg = new LinearGradient (x, y, x, glaze_offset);
-			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
-			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .25));
-			cr.Pattern = lg;
+			cr.Color = new Cairo.Color (1, 1, 1, .2);
 			cr.Fill ();
-			lg.Destroy ();
 
 			cr.MoveTo (x + w - 30, y + 7);
 			cr.LineTo (x + w - 20,  y + 7);
@@ -78,51 +74,49 @@ namespace Do.UI
 		}
 	}
 	
-	public class ClassicPaneOutlineRenderer : IBezelPaneRenderElement
+	public class MiniPaneOutlineRenderer : IBezelPaneRenderElement
 	{
 		BezelDrawingArea parent;
-		Surface sr_active, sr_inactive;
+		Surface sr_active;
 		int surface_height = 0;
 		
-		public int Width { get { return IconSize+47; } }
-		public int Height { get { return IconSize + 25 + BezelTextUtils.TextHeight; } }
-		public int IconSize { get { return 128; } }
-		public bool StackIconText { get { return true; } }
+		public int Width { get { return IconSize+125; } }
+		public int Height { get { return IconSize + 20; } }
+		public int IconSize { get { return 48; } }
+		public bool StackIconText { get { return false; } }
 		
-		public ClassicPaneOutlineRenderer (BezelDrawingArea parent)
+		public MiniPaneOutlineRenderer (BezelDrawingArea parent)
 		{
 			this.parent = parent;
 		}
 		
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area, Pane pane, bool focused)
 		{
-			if (sr_active == null || sr_inactive == null || surface_height != Height) {
+			if (sr_active == null || surface_height != Height) {
 				surface_height = Height;
 				sr_active = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
-				sr_inactive = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				Context c2 = new Context (sr_active);
 				CairoUtils.SetRoundedRectanglePath (c2, 0, 0, Width, Height, parent.WindowRadius);
-				c2.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.4);
+				LinearGradient lg = new LinearGradient (0, 0, 0, Height);
+				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
+				lg.AddColorStop (0.4, new Cairo.Color (1, 1, 1, 0));
+				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .3));
+				c2.Pattern = lg;
 				c2.Fill ();
 				(c2 as IDisposable).Dispose ();
-				
-				c2 = new Context (sr_inactive);
-				CairoUtils.SetRoundedRectanglePath (c2, 0, 0, Width, Height, parent.WindowRadius);
-				c2.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.1);
-				c2.Fill ();
-				(c2 as IDisposable).Dispose ();
+				lg.Destroy ();
 			}
+			
+			if (pane != parent.Focus)
+				return;
 			int offset = parent.PaneOffset (pane);
-			if (pane == parent.Focus)
-				cr.SetSource (sr_active, drawing_area.X + offset, drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight);
-			else
-				cr.SetSource (sr_inactive, drawing_area.X + offset, drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight);
+			cr.SetSource (sr_active, drawing_area.X + offset, drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight);
 			cr.Paint ();
 		}
 
 	}
 	
-	public class ClassicBackgroundRenderer : IBezelWindowRenderElement
+	public class MiniBackgroundRenderer : IBezelWindowRenderElement
 	{
 		BezelDrawingArea parent;
 		
@@ -138,7 +132,7 @@ namespace Do.UI
 			}
 		}
 
-		public ClassicBackgroundRenderer (BezelDrawingArea parent)
+		public MiniBackgroundRenderer (BezelDrawingArea parent)
 		{
 			this.parent = parent;
 		}
@@ -162,11 +156,11 @@ namespace Do.UI
 		}
 	}
 	
-	public class ClassicTextOverlayRenderer : IBezelOverlayRenderElement
+	public class MiniTextOverlayRenderer : IBezelOverlayRenderElement
 	{
 		BezelDrawingArea parent;
 		
-		public ClassicTextOverlayRenderer (BezelDrawingArea parent)
+		public MiniTextOverlayRenderer (BezelDrawingArea parent)
 		{
 			this.parent = parent;
 		}
@@ -180,5 +174,41 @@ namespace Do.UI
 			                            parent.Colors.FocusedText.A * overlay);
 			cr.Fill ();
 		}
+	}
+	
+	public class MiniDefaults : IBezelDefaults
+	{
+		
+		
+		#region IBezelDefaults implementation 
+		
+		public int WindowBorder {
+			get {
+				return 5;
+			}
+		}
+		
+		public int WindowRadius {
+			get {
+				return 10;
+			}
+		}
+		
+		public string HighlightFormat {
+			get {
+				return "<span underline=\"single\">{0}</span>";
+			}
+		}
+		
+		public bool RenderDescriptionText {
+			get {
+				return false;
+			}
+		}
+		
+		#endregion 
+		
+
+		
 	}
 }

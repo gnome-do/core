@@ -131,6 +131,7 @@ namespace Do.UI
 		}
 #endregion
 		
+#region LocalVariables
 		HUDStyle style;
 		
 		const int BoxLineWidth    = 1;
@@ -164,7 +165,8 @@ namespace Do.UI
 		
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
-
+#endregion
+		
 		public Cairo.Color BackgroundColor {
 			get {
 				Gdk.Color color = new Gdk.Color ();
@@ -202,14 +204,16 @@ namespace Do.UI
 		
 		public int InternalHeight {
 			get {
-				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight;
+				if (BezelDefaults.RenderDescriptionText)
+					return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight;
+				return BoxHeight + (2 * WindowBorder) + TitleBarHeight;
 			}
 		}
 
 		public BezelGlassResults Results {
 			get {
 				return bezel_results ?? 
-					bezel_results = new BezelGlassResults (TwoPaneWidth-(2*WindowRadius), style, colors);
+					bezel_results = new BezelGlassResults (Math.Min (TwoPaneWidth-(2*WindowRadius), 360), style, colors);
 			}
 		}
 		
@@ -248,7 +252,7 @@ namespace Do.UI
 		
 		public int WindowHeight {
 			get {
-				return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight + 2*ShadowRadius;
+				return InternalHeight + 2*ShadowRadius;
 			}
 		}
 		
@@ -574,7 +578,8 @@ namespace Do.UI
 					}
 				}
 				
-				RenderDescriptionText (cr);
+				if (BezelDefaults.RenderDescriptionText)
+					RenderDescriptionText (cr);
 				//--------------First Pane---------------
 				RenderPane (Pane.First, cr);
 				//------------Second Pane----------------
@@ -810,7 +815,7 @@ namespace Do.UI
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = (ushort) (ushort.MaxValue * text_box_scale);
 			int tmp = BezelTextUtils.TextHeight;
-			BezelTextUtils.TextHeight = 22;
+			BezelTextUtils.TextHeight = 18;
 			Gdk.Rectangle cursor = BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
 			                                                        drawing_area.X + 10, drawing_area.Y + TextModeOffset + 5, 
 			                                                        drawing_area.Width - 20, color, 

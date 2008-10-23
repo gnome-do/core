@@ -25,6 +25,7 @@ namespace Do.Addins
 		int WindowBorder { get; }
 		int WindowRadius { get; }
 		string HighlightFormat { get; }
+		bool RenderDescriptionText { get; }
 	}
 	
 	public class HUDBezelDefaults : IBezelDefaults
@@ -47,6 +48,12 @@ namespace Do.Addins
 				return "<span foreground=\"#5599ff\">{0}</span>";
 			}
 		}
+		
+		public bool RenderDescriptionText {
+			get {
+				return true;
+			}
+		}
 	}
 	
 	public class ClassicBezelDefaults : IBezelDefaults
@@ -67,6 +74,12 @@ namespace Do.Addins
 		public string HighlightFormat {
 			get {
 				return "<span underline=\"single\">{0}</span>";
+			}
+		}
+		
+		public bool RenderDescriptionText {
+			get {
+				return true;
 			}
 		}
 	}

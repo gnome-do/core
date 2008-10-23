@@ -143,24 +143,15 @@ namespace Do.Core {
 				Reset ();
 				return;
 			}
-			switch (Do.Preferences.Theme) {
-			case "Mini":
-				window = new MiniWindow (this);
-				break;
-			case "Glass Frame":
-				window = new GlassWindow (this);
-				break;
-			default:
-				foreach (IRenderTheme theme in PluginManager.GetThemes ()) {
-					if (theme.Name == Do.Preferences.Theme) {
-						window = new Bezel (this, theme);
-						break;
-					}
+
+			foreach (IRenderTheme theme in PluginManager.GetThemes ()) {
+				if (theme.Name == Do.Preferences.Theme) {
+					window = new Bezel (this, theme);
+					break;
 				}
-				if (window == null)
-					window = new Bezel (this, new ClassicTheme ());
-				break;
 			}
+			if (window == null)
+				window = new Bezel (this, new ClassicTheme ());
 			
 			if (window is Gtk.Window)
 				(window as Gtk.Window).Title = "Do";
