@@ -68,6 +68,8 @@ FILES =  \
 	src/Do.UI/Bezel/Renderers/BezelGlassRenderClasses.cs \
 	src/Do.UI/Bezel/Renderers/ClassicRenderer.cs \
 	src/Do.UI/Bezel/Renderers/ClassicTheme.cs \
+	src/Do.UI/Bezel/Renderers/GlassFrameTheme.cs \
+	src/Do.UI/Bezel/Renderers/GlassFrameRenderer.cs \
 	src/Do.UI/Bezel/Renderers/HUDRenderer.cs \
 	src/Do.UI/Bezel/Renderers/HUDTheme.cs \
 	src/Do.UI/Bezel/Renderers/IRenderInterfaces.cs \
