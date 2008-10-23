@@ -34,6 +34,7 @@
 	</Extension>
 	<Extension path= "/Do/RenderProvider">
 		<RenderProvider type="Do.UI.HUDTheme" />
-		<RenderProvider type="Do.UI.ClassicTheme" />	
+		<RenderProvider type="Do.UI.ClassicTheme" />
+		<RenderProvider type="Do.UI.GlassFrameTheme" />
 	</Extension>
 </Addin>

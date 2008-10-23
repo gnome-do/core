@@ -29,7 +29,6 @@ namespace Do.UI
 		BezelDrawingArea bda;
 		
 		List<string> themes = new List<string> (new string[] {
-			"Glass Frame",
 			"Mini",
 		});
 		

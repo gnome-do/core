@@ -93,6 +93,9 @@ namespace Do {
 			Gtk.Application.Run ();
 		}
 		
+		/// <summary>
+		/// Used to deal with older versions of mono hanging on exit.
+		/// </summary>
 		static void OnProcessExit (object o, EventArgs args)
 		{
 			Thread th = new Thread (new ThreadStart (delegate {

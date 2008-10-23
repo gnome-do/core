@@ -147,9 +147,6 @@ namespace Do.Core {
 			case "Mini":
 				window = new MiniWindow (this);
 				break;
-			case "Glass Frame":
-				window = new GlassWindow (this);
-				break;
 			default:
 				foreach (IRenderTheme theme in PluginManager.GetThemes ()) {
 					if (theme.Name == Do.Preferences.Theme) {
