@@ -20,6 +20,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 using Do;
@@ -105,9 +106,10 @@ namespace Do.Core
 		{
 			List<IObject> results = new List<IObject> ();
 			query = query.ToLower ();
-			
+
 			foreach (DoObject obj in baseArray) {
 				obj.UpdateRelevance (query, compareObj as DoObject);
+
 				if (Math.Abs (obj.Relevance) > epsilon) {
 					if (searchFilter.Length == 0) {
 						results.Add (obj);
@@ -231,9 +233,8 @@ namespace Do.Core
 			if (quickResults == null) return;
 			
 			DoObject do_result;
-			if (result is DoObject)
-				do_result = result as DoObject;
-			else
+			do_result = result as DoObject;
+			if (do_result == null)
 				do_result = new DoObject (result);
 			
 			lock (quickResultsLock) {
@@ -269,20 +270,17 @@ namespace Do.Core
 		public void AddItems (IEnumerable<IItem> items)
 		{
 			foreach (IItem i in items) {
-				if (i is DoItem && !universe.ContainsKey ((i as DoItem).UID)) {
-					lock (universeLock) {
-						universe.Add ((i as DoItem).UID, i);
-					}
-					RegisterQuickResults (quickResults, i);
-				} else {
-					DoItem di = new DoItem (i);
-					if (!universe.ContainsKey (di.UID)) {
-						lock (universeLock) {
-							universe.Add (di.UID, di);
-						}
-						RegisterQuickResults (quickResults, di);
-					}
+				DoItem tmp = i as DoItem;
+				if (tmp == null)
+					tmp = new DoItem (i);
+				
+				if (universe.ContainsKey (tmp.UID))
+					continue;
+				
+				lock (universeLock) {
+					universe.Add (tmp.UID, i);
 				}
+				RegisterQuickResults (quickResults, i);
 			}
 		}
 
@@ -296,14 +294,11 @@ namespace Do.Core
 		public void DeleteItems (IEnumerable<IItem> items)
 		{
 			foreach (IItem i in items) {
-				if (i is DoItem) {
-					lock (universeLock) {
-						universe.Remove ((i as DoItem).UID);
-					}
-				} else {
-					lock (universeLock) {
-						universe.Remove (new DoItem (i).UID);
-					}
+				DoItem tmp = i as DoItem;
+				if (tmp == null)
+					tmp = new DoItem (i);
+				lock (universeLock) {
+					universe.Remove (tmp.UID);
 				}
 				DeleteQuickResult (i);
 			}
@@ -320,9 +315,10 @@ namespace Do.Core
 		/// </returns>
 		public string UIDForObject (IObject o)
 		{
-			if (o is DoObject)
-				return (o as DoObject).UID;
-			return new DoObject (o).UID;
+			DoObject tmp = o as DoObject;
+			if (tmp == null)
+				tmp = new DoObject (o);
+			return tmp.UID;
 		}
 		
 		/// <summary>

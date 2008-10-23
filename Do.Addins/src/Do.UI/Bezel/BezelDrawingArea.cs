@@ -166,7 +166,7 @@ namespace Do.UI
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
 #endregion
-		
+
 		public Cairo.Color BackgroundColor {
 			get {
 				Gdk.Color color = new Gdk.Color ();
@@ -457,15 +457,6 @@ namespace Do.UI
 				return;
 			}
 			
-//			if (!parent_configured) {
-//				Parent.Shown += delegate {
-////					Console.WriteLine ("Set");
-//					window_fade = 0;
-//					Draw ();
-//				};
-//				parent_configured = true;
-//			}
-			
 			delta_time = DateTime.Now;
 			timer = GLib.Timeout.Add (1000/65, OnDrawTimeoutElapsed);
 		}
@@ -545,7 +536,6 @@ namespace Do.UI
 			if (!IsDrawable)
 				return;
 			Cairo.Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
-			
 			//Much kudos to Ian McIntosh
 			if (surface == null)
 				surface = cr2.Target.CreateSimilar (cr2.Target.Content, WindowWidth, WindowHeight);
