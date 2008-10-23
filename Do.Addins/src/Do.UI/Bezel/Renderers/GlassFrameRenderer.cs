@@ -104,6 +104,7 @@ namespace Do.UI
 //				c2.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.4);
 				LinearGradient lg = new LinearGradient (0, 0, 0, Height);
 				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
+				lg.AddColorStop (0.4, new Cairo.Color (1, 1, 1, 0));
 				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .3));
 				c2.Pattern = lg;
 				c2.Fill ();
@@ -127,7 +128,7 @@ namespace Do.UI
 		
 		public Cairo.Color BackgroundColor {
 			get {
-				return new Cairo.Color (.1, .1, .1, 1);
+				return new Cairo.Color (.13, .13, .13, 1);
 			}
 		}
 
