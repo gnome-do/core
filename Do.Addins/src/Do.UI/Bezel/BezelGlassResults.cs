@@ -53,6 +53,8 @@ namespace Do.UI
 		bool visible;
 		int[] secondary;
 		
+		IDoController controller;
+		
 		IUIContext context = null;
 		BezelColors colors;
 		
@@ -262,8 +264,9 @@ namespace Do.UI
 			}
 		}
 		
-		public BezelGlassResults(int width, HUDStyle style, BezelColors colors) : base ()
+		public BezelGlassResults(IDoController controller, int width, HUDStyle style, BezelColors colors) : base ()
 		{
+			this.controller = controller;
 			this.style = style;
 			this.colors = colors;
 			switch (style) {
@@ -715,7 +718,7 @@ namespace Do.UI
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			Surface surface = cr.Target.CreateSimilar (cr.Target.Content, InternalWidth, SurfaceHeight);
 			Context cr2 = new Context (surface);
-			ItemRenderer.RenderElement (cr2, new Gdk.Point (border_width, 0), InternalWidth, item);
+			ItemRenderer.RenderElement (cr2, new Gdk.Point (border_width, 0), InternalWidth, item, controller.ObjectHasChildren (item));
 			
 			surface_buffer[item] = surface;
 			

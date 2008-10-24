@@ -83,7 +83,7 @@ namespace Do.UI
 			
 			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
 				if (theme.Name == Do.Preferences.Theme) {
-					bda = new BezelDrawingArea (theme, true);
+					bda = new BezelDrawingArea (null, theme, true);
 					break;
 				}
 			}

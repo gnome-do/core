@@ -32,7 +32,7 @@ namespace Do.UI
 	public interface IBezelResultItemRenderer
 	{
 		int Height { get; }
-		void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item);
+		void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item, bool drawArrow);
 	}
 	
 	public class BezelFullResultItemRenderer : IBezelResultItemRenderer
@@ -48,7 +48,7 @@ namespace Do.UI
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item)
+		public void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item, bool drawArrow)
 		{
 			cr.Rectangle (renderAnchor.X, renderAnchor.Y, width, Height);
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
@@ -88,7 +88,16 @@ namespace Do.UI
 			cr.MoveTo (IconSize + 8, 19);
 			Pango.CairoHelper.ShowLayout (cr, layout);
 			
-//			surface_buffer[item] = surface;
+			if (drawArrow) {
+				cr.MoveTo (width - IconSize, 13);
+				cr.LineTo (width - IconSize+7, 17);
+				cr.LineTo (width - IconSize, 21);
+				Gdk.Color gc = new Gdk.Color ();
+				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
+				cr.Color = CairoUtils.ConvertToCairo (gc, 1);
+				cr.Fill ();
+			}
+			
 			
 			layout.FontDescription.Dispose ();
 			layout.Dispose ();
@@ -110,7 +119,7 @@ namespace Do.UI
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item)
+		public void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item, bool drawArrow)
 		{
 			cr.Rectangle (renderAnchor.X, renderAnchor.Y, width, Height);
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
@@ -143,7 +152,15 @@ namespace Do.UI
 			cr.MoveTo (IconSize + 6, 4);
 			Pango.CairoHelper.ShowLayout (cr, layout);
 			
-//			surface_buffer[item] = surface;
+			if (drawArrow) {
+				cr.MoveTo (width - IconSize, 6);
+				cr.LineTo (width - IconSize+7, 10);
+				cr.LineTo (width - IconSize, 14);
+				Gdk.Color gc = new Gdk.Color ();
+				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
+				cr.Color = CairoUtils.ConvertToCairo (gc, 1);
+				cr.Fill ();
+			}
 			
 			layout.FontDescription.Dispose ();
 			layout.Dispose ();

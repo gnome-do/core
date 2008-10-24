@@ -37,12 +37,14 @@ namespace Do.Core
 		private Dictionary<string, IObject> universe;
 		private Dictionary<char, Dictionary<string, IObject>> quickResults;
 		private List<IObject> actions;
+		private List<string> items_with_children;
 		private Thread thread;
 		private DateTime last_update = DateTime.Now;
 		
 		private object universeLock = new object ();
 		private object quickResultsLock = new object ();
 		private object actionLock = new object ();
+		private object childrenLock = new object ();
 		
 		private float epsilon = 0.00001f;
 		
@@ -51,6 +53,7 @@ namespace Do.Core
 			universe = new Dictionary<string, IObject> ();
 			quickResults = new Dictionary<char,Dictionary<string,IObject>> ();
 			actions = new List<IObject> ();
+			items_with_children = new List<string> ();
 			
 			for (char key = 'a'; key <= 'z'; key++) {
 				quickResults [key] = new Dictionary<string,IObject> ();
@@ -59,12 +62,10 @@ namespace Do.Core
 
 		public IObject[] Search (string query, Type[] searchFilter)
 		{
-			//Do.PrintPerf ("Search2 Start");
 			if (query.Length == 1) {
 				lock (quickResultsLock) {
 					char key = Convert.ToChar (query.ToLower ());
 					if (quickResults.ContainsKey (key)) {
-						//Do.PrintPerf ("Search2 End");
 						return Search (query, searchFilter, quickResults[key].Values, null);
 					}
 				}
@@ -132,6 +133,29 @@ namespace Do.Core
 			return results.ToArray ();
 		}
 		
+		public bool ObjectHasChildren (IObject o)
+		{
+			IItem item = o as IItem;
+			if (item == null) return false;
+			
+			string uid = UIDForObject (item);
+			bool known = (universe.ContainsKey (uid) || items_with_children.Contains (uid));
+			if (known) {
+				lock (childrenLock)
+					return (items_with_children.Contains (uid));
+			} else {
+				//hack, fixme
+				foreach (DoItemSource s in PluginManager.GetItemSources ()) {
+					if (s.ChildrenOfItem (item).Count > 0) {
+						lock (childrenLock)
+							items_with_children.Add (uid);
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		
 		private void InsertionSort (List<IObject> list)
 		{
 			if (list == null)
@@ -171,6 +195,7 @@ namespace Do.Core
 			Dictionary<string, IObject> loc_universe;
 			Dictionary<char, Dictionary<string, IObject>> loc_quick;
 			List<IObject> loc_actions;
+			List<string> loc_children;
 			if (universe.Values.Count > 0) {
 				loc_universe = new Dictionary<string,IObject> ();
 				loc_quick    = new Dictionary<char,Dictionary<string,IObject>> ();
@@ -178,10 +203,12 @@ namespace Do.Core
 					loc_quick [key] = new Dictionary<string,IObject> ();
 				}
 				loc_actions  = new List<IObject> ();
+				loc_children = new List<string> ();
 			} else {
 				loc_universe = universe;
 				loc_quick    = quickResults;
 				loc_actions  = actions;
+				loc_children = items_with_children;
 			}
 			
 			foreach (DoAction action in PluginManager.GetActions ()) {
@@ -198,6 +225,14 @@ namespace Do.Core
 					lock (universeLock)
 						loc_universe[item.UID] = item;
 					RegisterQuickResults (loc_quick, item);
+					
+					foreach (DoItemSource s in PluginManager.GetItemSources ()) {
+						if (s.ChildrenOfItem (item).Count > 0) {
+							lock (childrenLock)
+								items_with_children.Add (item.UID);
+							break;
+						}
+					}
 				}
 			}
 			

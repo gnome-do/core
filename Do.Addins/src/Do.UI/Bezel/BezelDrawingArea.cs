@@ -148,6 +148,8 @@ namespace Do.UI
 		
 		IRenderTheme theme;
 		
+		IDoController controller;
+		
 		BezelColors colors;
 		BezelGlassResults bezel_results;
 		
@@ -213,7 +215,7 @@ namespace Do.UI
 		public BezelGlassResults Results {
 			get {
 				return bezel_results ?? 
-					bezel_results = new BezelGlassResults (Math.Min (TwoPaneWidth-(2*WindowRadius), 360), style, colors);
+					bezel_results = new BezelGlassResults (controller, Math.Min (TwoPaneWidth-(2*WindowRadius), 360), style, colors);
 			}
 		}
 		
@@ -333,8 +335,10 @@ namespace Do.UI
 		public IBezelDefaults BezelDefaults { get { return bezelDefaults; }	}
 		
 		
-		public BezelDrawingArea(IRenderTheme theme, bool preview) : base ()
+		public BezelDrawingArea(IDoController controller, IRenderTheme theme, bool preview) : base ()
 		{
+			this.controller = controller;
+			
 			DoubleBuffered = false;
 			prefs = Addins.Util.GetPreferences ("Bezel");
 			this.preview = preview;

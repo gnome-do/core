@@ -918,10 +918,7 @@ namespace Do.Core {
 			about_window = null;
 		}
 		
-		/////////////////////////////
-		/// IDoController Members ///
-		/////////////////////////////
-		
+#region IDoController
 		public void NewContextSelection (Pane pane, int index)
 		{
 			if (controllers[(int) pane].Results.Length == 0 || index == controllers[(int) pane].Cursor) return;
@@ -935,5 +932,11 @@ namespace Do.Core {
 			Vanish ();
 			Reset ();
 		}
+		
+		public bool ObjectHasChildren (IObject o)
+		{
+			return Do.UniverseManager.ObjectHasChildren (o);
+		}
+#endregion
 	}
 }
