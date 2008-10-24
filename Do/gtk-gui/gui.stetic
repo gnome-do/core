@@ -940,6 +940,23 @@
                                     <property name="Fill">False</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <widget class="Gtk.CheckButton" id="animation_checkbutton">
+                                    <property name="MemberName" />
+                                    <property name="CanFocus">True</property>
+                                    <property name="Label" translatable="yes">Animate window</property>
+                                    <property name="DrawIndicator">True</property>
+                                    <property name="HasLabel">True</property>
+                                    <property name="UseUnderline">True</property>
+                                    <signal name="Clicked" handler="OnAnimationCheckbuttonClicked" />
+                                  </widget>
+                                  <packing>
+                                    <property name="Position">3</property>
+                                    <property name="AutoSize">True</property>
+                                    <property name="Expand">False</property>
+                                    <property name="Fill">False</property>
+                                  </packing>
+                                </child>
                               </widget>
                               <packing>
                                 <property name="Position">0</property>

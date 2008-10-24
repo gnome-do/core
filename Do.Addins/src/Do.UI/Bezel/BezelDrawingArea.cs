@@ -52,6 +52,15 @@ namespace Do.UI
 		static IPreferences prefs = Util.GetPreferences ("Bezel");
 		public static event EventHandler ThemeChanged;
 		
+		public static bool Animated {
+			get {
+				return prefs.Get<bool> ("Animated", true);
+			}
+			set {
+				prefs.Set<bool> ("Animated", value);
+			}
+		}
+		
 		public static string TitleRenderer {
 			get {
 				return prefs.Get<string> ("TitleRenderer", "default");
@@ -623,9 +632,9 @@ namespace Do.UI
 		
 		protected bool OnDrawTimeoutElapsed ()
 		{
-			double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
-			delta_time = DateTime.Now;
+			double change = (Animated) ? DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms : 10;
 			
+			delta_time = DateTime.Now;
 			if (ExpandNeeded) {
 				drawing_area.Width += (int) ((ThreePaneWidth-TwoPaneWidth)*change);
 				drawing_area.Width = (drawing_area.Width > ThreePaneWidth) ? ThreePaneWidth : drawing_area.Width;

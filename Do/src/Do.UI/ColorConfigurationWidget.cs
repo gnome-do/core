@@ -116,6 +116,7 @@ namespace Do.UI
 			background_colorbutton.Sensitive = shadow_check.Sensitive = true;
 			background_colorbutton.Color = Addins.CairoUtils.ConvertToGdk (bda.BackgroundColor);
 			shadow_check.Active = BezelDrawingArea.DrawShadow;
+			animation_checkbutton.Active = BezelDrawingArea.Animated;
 			Gtk.Application.Invoke (delegate { setup = false; });
 		}
 		
@@ -150,6 +151,11 @@ namespace Do.UI
 		protected virtual void OnThemeComboChanged (object sender, System.EventArgs e)
 		{
 			Do.Preferences.Theme = Themes[theme_combo.Active];
+		}
+
+		protected virtual void OnAnimationCheckbuttonClicked (object sender, System.EventArgs e)
+		{
+			BezelDrawingArea.Animated = animation_checkbutton.Active;
 		}
 
 		public string Description {

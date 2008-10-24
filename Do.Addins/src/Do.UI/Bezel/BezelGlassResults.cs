@@ -332,7 +332,7 @@ namespace Do.UI
 			
 			delta_time = DateTime.Now;
 			timer = GLib.Timeout.Add (1000/100, delegate {
-				double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / FadeTime;
+				double change = (BezelDrawingArea.Animated) ? DateTime.Now.Subtract (delta_time).TotalMilliseconds / FadeTime : 10;
 				delta_time = DateTime.Now;
 				
 				double move = Math.Max (change*delta, change);

@@ -229,7 +229,7 @@ namespace Do.Core
 					foreach (DoItemSource s in PluginManager.GetItemSources ()) {
 						if (s.ChildrenOfItem (item).Count > 0) {
 							lock (childrenLock)
-								items_with_children.Add (item.UID);
+								loc_children.Add (item.UID);
 							break;
 						}
 					}
@@ -242,10 +242,13 @@ namespace Do.Core
 				quickResults = loc_quick;
 			lock (actionLock)
 				actions = loc_actions;
+			lock (childrenLock)
+				items_with_children = loc_children;
 			
 			loc_universe = null;
 			loc_quick    = null;
 			loc_actions  = null;
+			loc_children = null;
 			
 			//maxResults = (int)universe.Count/7;
 			last_update = DateTime.Now;

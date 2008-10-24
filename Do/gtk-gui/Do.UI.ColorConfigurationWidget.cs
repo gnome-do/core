@@ -55,6 +55,8 @@ namespace Do.UI {
         
         private Gtk.CheckButton shadow_check;
         
+        private Gtk.CheckButton animation_checkbutton;
+        
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.ColorConfigurationWidget
@@ -234,18 +236,30 @@ namespace Do.UI {
             w21.Position = 2;
             w21.Expand = false;
             w21.Fill = false;
+            // Container child vbox4.Gtk.Box+BoxChild
+            this.animation_checkbutton = new Gtk.CheckButton();
+            this.animation_checkbutton.CanFocus = true;
+            this.animation_checkbutton.Name = "animation_checkbutton";
+            this.animation_checkbutton.Label = Mono.Unix.Catalog.GetString("Animate window");
+            this.animation_checkbutton.DrawIndicator = true;
+            this.animation_checkbutton.UseUnderline = true;
+            this.vbox4.Add(this.animation_checkbutton);
+            Gtk.Box.BoxChild w22 = ((Gtk.Box.BoxChild)(this.vbox4[this.animation_checkbutton]));
+            w22.Position = 3;
+            w22.Expand = false;
+            w22.Fill = false;
             this.vbox3.Add(this.vbox4);
-            Gtk.Box.BoxChild w22 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox4]));
-            w22.Position = 0;
+            Gtk.Box.BoxChild w23 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox4]));
+            w23.Position = 0;
             this.vbox1.Add(this.vbox3);
-            Gtk.Box.BoxChild w23 = ((Gtk.Box.BoxChild)(this.vbox1[this.vbox3]));
-            w23.Position = 1;
+            Gtk.Box.BoxChild w24 = ((Gtk.Box.BoxChild)(this.vbox1[this.vbox3]));
+            w24.Position = 1;
             this.alignment2.Add(this.vbox1);
             this.GtkAlignment.Add(this.alignment2);
             this.frame1.Add(this.GtkAlignment);
             this.vbox2.Add(this.frame1);
-            Gtk.Box.BoxChild w27 = ((Gtk.Box.BoxChild)(this.vbox2[this.frame1]));
-            w27.Position = 0;
+            Gtk.Box.BoxChild w28 = ((Gtk.Box.BoxChild)(this.vbox2[this.frame1]));
+            w28.Position = 0;
             this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
@@ -256,6 +270,7 @@ namespace Do.UI {
             this.clear_background.Clicked += new System.EventHandler(this.OnClearBackgroundClicked);
             this.pin_check.Clicked += new System.EventHandler(this.OnPinCheckClicked);
             this.shadow_check.Clicked += new System.EventHandler(this.OnShadowCheckClicked);
+            this.animation_checkbutton.Clicked += new System.EventHandler(this.OnAnimationCheckbuttonClicked);
         }
     }
 }
