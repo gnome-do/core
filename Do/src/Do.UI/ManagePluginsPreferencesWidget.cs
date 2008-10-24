@@ -57,7 +57,14 @@ namespace Do.UI
 			nview = new PluginNodeView ();
 			nview.PluginToggled += OnPluginToggled;
 			nview.PluginSelected += OnPluginSelected;
-
+			
+			TargetEntry[] targets = {
+				new TargetEntry ("text/uri-list", TargetFlags.App, 0), 
+			};
+			
+			Gtk.Drag.DestSet (nview, DestDefaults.All, targets, Gdk.DragAction.Copy);
+			nview.DragDataReceived += new DragDataReceivedHandler (OnDragDataReceived);
+			
 			scrollw.Add (nview);
 			scrollw.ShowAll ();
 
@@ -67,6 +74,11 @@ namespace Do.UI
 			}
 			show_combo.AppendText (PluginManager.AllPluginsRepository);
 			show_combo.Active = 0;
+		}
+		
+		protected void OnDragDataReceived (object sender, DragDataReceivedArgs args)
+		{
+			Console.Error.WriteLine ("HEY!");
 		}
 
 		public Bin GetConfiguration ()
@@ -121,6 +133,11 @@ namespace Do.UI
 			UpdateButtonState ();
 		}
 
+		protected void OnDragDataGet (object sender, DragDataGetArgs e)
+		{
+			Console.Error.WriteLine (e.SelectionData.ToString ());
+		}
+		
 		protected virtual void OnBtnRefreshClicked (object sender, EventArgs e)
 		{
 			nview.Refresh ();
