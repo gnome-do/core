@@ -191,6 +191,12 @@ namespace Do.Core
 			return false;
 		}
 		
+		/// <summary>
+		/// A simple and naive implementation of Insertion sort.
+		/// </summary>
+		/// <param name="list">
+		/// A <see cref="List"/>
+		/// </param>
 		private void InsertionSort (List<IObject> list)
 		{
 			if (list == null)
