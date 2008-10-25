@@ -122,6 +122,7 @@ namespace Do.UI {
             this.hbox2.Spacing = 6;
             // Container child hbox2.Gtk.Box+BoxChild
             this.hbuttonbox1 = new Gtk.HButtonBox();
+            this.hbuttonbox1.Name = "hbuttonbox1";
             this.hbuttonbox1.Spacing = 6;
             this.hbuttonbox1.LayoutStyle = ((Gtk.ButtonBoxStyle)(3));
             // Container child hbuttonbox1.Gtk.ButtonBox+ButtonBoxChild
@@ -135,11 +136,11 @@ namespace Do.UI {
             // Container child GtkAlignment.Gtk.Container+ContainerChild
             Gtk.HBox w10 = new Gtk.HBox();
             w10.Spacing = 2;
-            // Container child GtkHBox.Gtk.Container+ContainerChild
+            // Container child GtkHBox1.Gtk.Container+ContainerChild
             Gtk.Image w11 = new Gtk.Image();
             w11.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Button, 20);
             w10.Add(w11);
-            // Container child GtkHBox.Gtk.Container+ContainerChild
+            // Container child GtkHBox1.Gtk.Container+ContainerChild
             Gtk.Label w13 = new Gtk.Label();
             w13.LabelProp = Mono.Unix.Catalog.GetString("_Configure");
             w13.UseUnderline = true;
@@ -158,14 +159,14 @@ namespace Do.UI {
             this.btn_about.UseUnderline = true;
             // Container child btn_about.Gtk.Container+ContainerChild
             Gtk.Alignment w18 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
-            // Container child GtkAlignment.Gtk.Container+ContainerChild
+            // Container child GtkAlignment1.Gtk.Container+ContainerChild
             Gtk.HBox w19 = new Gtk.HBox();
             w19.Spacing = 2;
-            // Container child GtkHBox.Gtk.Container+ContainerChild
+            // Container child GtkHBox2.Gtk.Container+ContainerChild
             Gtk.Image w20 = new Gtk.Image();
             w20.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-about", Gtk.IconSize.Menu, 16);
             w19.Add(w20);
-            // Container child GtkHBox.Gtk.Container+ContainerChild
+            // Container child GtkHBox2.Gtk.Container+ContainerChild
             Gtk.Label w22 = new Gtk.Label();
             w22.LabelProp = Mono.Unix.Catalog.GetString("_About");
             w22.UseUnderline = true;
@@ -210,6 +211,7 @@ namespace Do.UI {
             this.Show();
             this.show_combo.Changed += new System.EventHandler(this.OnShowComboChanged);
             this.search_entry.Changed += new System.EventHandler(this.OnSearchEntryChanged);
+            this.scrollw.DragDataReceived += new Gtk.DragDataReceivedHandler(this.OnScrollwDragDataReceived);
             this.btn_configure.Clicked += new System.EventHandler(this.OnBtnConfigurePluginClicked);
             this.btn_about.Clicked += new System.EventHandler(this.OnBtnAboutClicked);
             this.btn_refresh.Clicked += new System.EventHandler(this.OnBtnRefreshClicked);

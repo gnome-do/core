@@ -64,26 +64,7 @@ namespace Do.UI
         	hide_check.Active = Do.Preferences.QuietStart;
         	login_check.Active = AutostartEnabled;
         	notification_check.Active = Do.Preferences.StatusIconVisible;
-        	
-        	Gtk.Window win = new Gtk.Window ("GPW");
-        	win.Resize (400, 400);
-        	Gtk.ScrolledWindow scroll = new ScrolledWindow ();
-        	
-        	PluginNodeView nview = new PluginNodeView ();
-        	TargetEntry[] target_table = new TargetEntry[] { new TargetEntry ("text/uri-list", 0, 0), };
-        	Gtk.Drag.DestSet (nview, DestDefaults.All, target_table, Gdk.DragAction.Copy);
-		    nview.DragDataReceived += new DragDataReceivedHandler (OnDragDataReceived);
-		    
-		    scroll.Add (nview);
-        	win.Add (scroll);
-
-		    win.ShowAll ();
         }
-        
-        protected void OnDragDataReceived (object o, DragDataReceivedArgs args)
-        {
-        	Console.Error.WriteLine ("FUCK BINZ");
-       	}
         
         public Bin GetConfiguration ()
         {

@@ -890,6 +890,7 @@ namespace Do.Core {
 
 			about_window = new Gtk.AboutDialog ();
 			about_window.ProgramName = "GNOME Do";
+			about_window.Modal = false;
 
 			try {
 				Assembly asm = Assembly.GetEntryAssembly ();
