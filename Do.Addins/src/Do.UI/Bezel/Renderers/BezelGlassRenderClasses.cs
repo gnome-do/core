@@ -108,7 +108,6 @@ namespace Do.UI
 	public class BezelHalfResultItemRenderer : IBezelResultItemRenderer
 	{
 		BezelGlassResults parent;
-//		int text_height = 10;
 		
 		public int Height { get { return 20; } }
 		
