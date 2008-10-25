@@ -43,6 +43,8 @@ namespace Do.UI {
         
         private Gtk.VBox vbox4;
         
+        private Gtk.VBox vbox5;
+        
         private Gtk.Frame preview_frame;
         
         private Gtk.Alignment preview_align;
@@ -185,6 +187,10 @@ namespace Do.UI {
             this.vbox4.Name = "vbox4";
             this.vbox4.Spacing = 6;
             // Container child vbox4.Gtk.Box+BoxChild
+            this.vbox5 = new Gtk.VBox();
+            this.vbox5.Name = "vbox5";
+            this.vbox5.Spacing = 6;
+            // Container child vbox5.Gtk.Box+BoxChild
             this.preview_frame = new Gtk.Frame();
             this.preview_frame.Name = "preview_frame";
             this.preview_frame.ShadowType = ((Gtk.ShadowType)(0));
@@ -200,10 +206,13 @@ namespace Do.UI {
             this.GtkLabel4.LabelProp = Mono.Unix.Catalog.GetString("<b>Preview</b>");
             this.GtkLabel4.UseMarkup = true;
             this.preview_frame.LabelWidget = this.GtkLabel4;
-            this.vbox4.Add(this.preview_frame);
-            Gtk.Box.BoxChild w18 = ((Gtk.Box.BoxChild)(this.vbox4[this.preview_frame]));
+            this.vbox5.Add(this.preview_frame);
+            Gtk.Box.BoxChild w18 = ((Gtk.Box.BoxChild)(this.vbox5[this.preview_frame]));
             w18.Position = 0;
             w18.Expand = false;
+            this.vbox4.Add(this.vbox5);
+            Gtk.Box.BoxChild w19 = ((Gtk.Box.BoxChild)(this.vbox4[this.vbox5]));
+            w19.Position = 0;
             // Container child vbox4.Gtk.Box+BoxChild
             this.hbox2 = new Gtk.HBox();
             this.hbox2.Name = "hbox2";
@@ -217,13 +226,13 @@ namespace Do.UI {
             this.pin_check.DrawIndicator = true;
             this.pin_check.UseUnderline = true;
             this.hbox2.Add(this.pin_check);
-            Gtk.Box.BoxChild w19 = ((Gtk.Box.BoxChild)(this.hbox2[this.pin_check]));
-            w19.Position = 0;
+            Gtk.Box.BoxChild w20 = ((Gtk.Box.BoxChild)(this.hbox2[this.pin_check]));
+            w20.Position = 0;
             this.vbox4.Add(this.hbox2);
-            Gtk.Box.BoxChild w20 = ((Gtk.Box.BoxChild)(this.vbox4[this.hbox2]));
-            w20.Position = 1;
-            w20.Expand = false;
-            w20.Fill = false;
+            Gtk.Box.BoxChild w21 = ((Gtk.Box.BoxChild)(this.vbox4[this.hbox2]));
+            w21.Position = 1;
+            w21.Expand = false;
+            w21.Fill = false;
             // Container child vbox4.Gtk.Box+BoxChild
             this.shadow_check = new Gtk.CheckButton();
             this.shadow_check.CanFocus = true;
@@ -232,10 +241,10 @@ namespace Do.UI {
             this.shadow_check.DrawIndicator = true;
             this.shadow_check.UseUnderline = true;
             this.vbox4.Add(this.shadow_check);
-            Gtk.Box.BoxChild w21 = ((Gtk.Box.BoxChild)(this.vbox4[this.shadow_check]));
-            w21.Position = 2;
-            w21.Expand = false;
-            w21.Fill = false;
+            Gtk.Box.BoxChild w22 = ((Gtk.Box.BoxChild)(this.vbox4[this.shadow_check]));
+            w22.Position = 2;
+            w22.Expand = false;
+            w22.Fill = false;
             // Container child vbox4.Gtk.Box+BoxChild
             this.animation_checkbutton = new Gtk.CheckButton();
             this.animation_checkbutton.CanFocus = true;
@@ -244,22 +253,22 @@ namespace Do.UI {
             this.animation_checkbutton.DrawIndicator = true;
             this.animation_checkbutton.UseUnderline = true;
             this.vbox4.Add(this.animation_checkbutton);
-            Gtk.Box.BoxChild w22 = ((Gtk.Box.BoxChild)(this.vbox4[this.animation_checkbutton]));
-            w22.Position = 3;
-            w22.Expand = false;
-            w22.Fill = false;
+            Gtk.Box.BoxChild w23 = ((Gtk.Box.BoxChild)(this.vbox4[this.animation_checkbutton]));
+            w23.Position = 3;
+            w23.Expand = false;
+            w23.Fill = false;
             this.vbox3.Add(this.vbox4);
-            Gtk.Box.BoxChild w23 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox4]));
-            w23.Position = 0;
+            Gtk.Box.BoxChild w24 = ((Gtk.Box.BoxChild)(this.vbox3[this.vbox4]));
+            w24.Position = 0;
             this.vbox1.Add(this.vbox3);
-            Gtk.Box.BoxChild w24 = ((Gtk.Box.BoxChild)(this.vbox1[this.vbox3]));
-            w24.Position = 1;
+            Gtk.Box.BoxChild w25 = ((Gtk.Box.BoxChild)(this.vbox1[this.vbox3]));
+            w25.Position = 1;
             this.alignment2.Add(this.vbox1);
             this.GtkAlignment.Add(this.alignment2);
             this.frame1.Add(this.GtkAlignment);
             this.vbox2.Add(this.frame1);
-            Gtk.Box.BoxChild w28 = ((Gtk.Box.BoxChild)(this.vbox2[this.frame1]));
-            w28.Position = 0;
+            Gtk.Box.BoxChild w29 = ((Gtk.Box.BoxChild)(this.vbox2[this.frame1]));
+            w29.Position = 0;
             this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
