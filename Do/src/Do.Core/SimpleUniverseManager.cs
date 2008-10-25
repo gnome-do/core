@@ -133,18 +133,39 @@ namespace Do.Core
 			return results.ToArray ();
 		}
 		
+		/// <summary>
+		/// Returns if an object likely contains children.
+		/// </summary>
+		/// <param name="o">
+		/// A <see cref="IObject"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/>
+		/// </returns>
 		public bool ObjectHasChildren (IObject o)
 		{
 			IItem item = o as IItem;
 			if (item == null) return false;
 			
 			string uid = UIDForObject (item);
-			bool known = (universe.ContainsKey (uid) || items_with_children.Contains (uid));
+			
+			// First we need to check and see if we already know this item has children
+			lock (childrenLock) {
+				if (items_with_children.Contains (uid))
+					return true;
+			}
+			
+			// It did not, lets check and see if we even know about this object in universe
+			bool known; 
+			lock (universeLock)
+				known = universe.ContainsKey (uid);
+			
 			if (known) {
-				lock (childrenLock)
-					return (items_with_children.Contains (uid));
+				// If we know the item in universe, but its not in the item list, we can
+				// assume with relative safety that the item has no children items
+				return false;
 			} else {
-				//hack, fixme
+				// The item is not in universe, we need to check it by hand now
 				foreach (DoItemSource s in PluginManager.GetItemSources ()) {
 					bool IsType = false;
 					
@@ -158,6 +179,9 @@ namespace Do.Core
 					if (!IsType) continue;
 					
 					if (s.ChildrenOfItem (item).Count > 0) {
+						// remember what we have already seen, this is not a memory leak because every
+						// time universe is loaded, this list gets recreated and every remembered item
+						// that was not in universe is forgotten again.
 						lock (childrenLock)
 							items_with_children.Add (uid);
 						return true;
