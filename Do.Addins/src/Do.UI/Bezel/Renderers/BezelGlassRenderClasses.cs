@@ -89,9 +89,9 @@ namespace Do.UI
 			Pango.CairoHelper.ShowLayout (cr, layout);
 			
 			if (drawArrow) {
-				cr.MoveTo (width - IconSize, 13);
-				cr.LineTo (width - IconSize+7, 17);
-				cr.LineTo (width - IconSize, 21);
+				cr.MoveTo (width - 15, 13);
+				cr.LineTo (width - 15+7, 17);
+				cr.LineTo (width - 15, 21);
 				Gdk.Color gc = new Gdk.Color ();
 				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
 				cr.Color = CairoUtils.ConvertToCairo (gc, 1);
