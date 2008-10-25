@@ -146,6 +146,17 @@ namespace Do.Core
 			} else {
 				//hack, fixme
 				foreach (DoItemSource s in PluginManager.GetItemSources ()) {
+					bool IsType = false;
+					
+					foreach (Type t in s.SupportedItemTypes) {
+						if (t.IsInstanceOfType (o)) {
+							IsType = true;
+							break;
+						}
+					}
+					
+					if (!IsType) continue;
+					
 					if (s.ChildrenOfItem (item).Count > 0) {
 						lock (childrenLock)
 							items_with_children.Add (uid);
@@ -227,6 +238,15 @@ namespace Do.Core
 					RegisterQuickResults (loc_quick, item);
 					
 					foreach (DoItemSource s in PluginManager.GetItemSources ()) {
+						bool isType = false;
+						foreach (Type t in s.SupportedItemTypes) {
+							if (t.IsInstanceOfType (item.Inner)) {
+								isType = true;
+								break;
+							}
+						}
+						if (!isType) continue;
+						
 						if (s.ChildrenOfItem (item).Count > 0) {
 							lock (childrenLock)
 								loc_children.Add (item.UID);

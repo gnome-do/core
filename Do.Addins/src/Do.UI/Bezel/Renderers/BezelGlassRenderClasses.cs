@@ -72,7 +72,7 @@ namespace Do.UI
 			}
 				
 			Pango.Layout layout = new Pango.Layout (parent.PangoContext);
-			layout.Width = Pango.Units.FromPixels (width - IconSize - 10);
+			layout.Width = Pango.Units.FromPixels (width - IconSize - 25);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
 			layout.SetMarkup ("<span foreground=\"#" + parent.ItemTextColor + "\">"+GLib.Markup.EscapeText (item.Name)+"</span>");
 			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
@@ -89,13 +89,17 @@ namespace Do.UI
 			Pango.CairoHelper.ShowLayout (cr, layout);
 			
 			if (drawArrow) {
-				cr.MoveTo (width - IconSize, 13);
-				cr.LineTo (width - IconSize+7, 17);
-				cr.LineTo (width - IconSize, 21);
+				cr.MoveTo (width - 15+6, 12);
+				cr.LineTo (width - 15+10, 17);
+				cr.LineTo (width - 15+6, 22);
+				
+				cr.MoveTo (width - 15+2, 12);
+				cr.LineTo (width - 15+6, 17);
+				cr.LineTo (width - 15+2, 22);
 				Gdk.Color gc = new Gdk.Color ();
 				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
 				cr.Color = CairoUtils.ConvertToCairo (gc, 1);
-				cr.Fill ();
+				cr.Stroke ();
 			}
 			
 			
@@ -143,7 +147,7 @@ namespace Do.UI
 			}
 				
 			Pango.Layout layout = new Pango.Layout (parent.PangoContext);
-			layout.Width = Pango.Units.FromPixels (width - IconSize - 10);
+			layout.Width = Pango.Units.FromPixels (width - IconSize - 25);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
 			layout.SetMarkup ("<span foreground=\"#" + parent.ItemTextColor + "\">"+GLib.Markup.EscapeText (item.Name)+"</span>");
 			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
@@ -153,13 +157,17 @@ namespace Do.UI
 			Pango.CairoHelper.ShowLayout (cr, layout);
 			
 			if (drawArrow) {
-				cr.MoveTo (width - IconSize, 6);
-				cr.LineTo (width - IconSize+7, 10);
-				cr.LineTo (width - IconSize, 14);
+				cr.MoveTo (width - IconSize+6, 5);
+				cr.LineTo (width - IconSize+10, 10);
+				cr.LineTo (width - IconSize+6, 15);
+				
+				cr.MoveTo (width - IconSize+2, 5);
+				cr.LineTo (width - IconSize+6, 10);
+				cr.LineTo (width - IconSize+2, 15);
 				Gdk.Color gc = new Gdk.Color ();
 				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
 				cr.Color = CairoUtils.ConvertToCairo (gc, 1);
-				cr.Fill ();
+				cr.Stroke ();
 			}
 			
 			layout.FontDescription.Dispose ();
