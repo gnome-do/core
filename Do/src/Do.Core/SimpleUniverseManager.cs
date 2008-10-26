@@ -380,15 +380,9 @@ namespace Do.Core
 		public void DeleteItems (IEnumerable<IItem> items)
 		{
 			foreach (IItem i in items) {
-				if (i is DoItem) {
-					lock (universeLock) {
-						universe.Remove ((i as DoItem).UID);
-					}
-				} else {
-					lock (universeLock) {
-						universe.Remove (new DoItem (i).UID);
-					}
-				}
+				DoItem item = (i as DoItem) ?? new DoItem (i);
+				lock (universeLock)
+				      universe.Remove (item.UID);
 				DeleteQuickResult (i);
 			}
 		}
