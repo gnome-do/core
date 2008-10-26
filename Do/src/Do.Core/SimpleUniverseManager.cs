@@ -261,7 +261,14 @@ namespace Do.Core
 			}
 			
 			foreach (DoItemSource source in PluginManager.GetItemSources ()) {
-				source.UpdateItems ();
+				try {
+					source.UpdateItems ();
+				} 
+				catch (Exception e)
+				{
+					Log.Error ("There was an error updating items in {0}: {1}", source.Name, e.Message);
+				}
+				
 				foreach (DoItem item in source.Items) {
 					lock (universeLock)
 						loc_universe[item.UID] = item;
