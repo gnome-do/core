@@ -65,13 +65,12 @@ namespace Do.Core {
 			
 			//Now we weight by string length so shorter strings are better
 			score = score * .7F + query.Length / s.Length * .3F;
-			
 			//Bonus points if the characters start words
 			float good = 0, bad = 1;
 			int firstCount = 0;
-			for(int i=match[0]; i<match[1]-1; i++)
+			for(int i=Math.Max (match[0]-1,0); i<match[1]-1; i++)
 			{
-				if(s[i] == ' ')
+				if(char.IsWhiteSpace (s[i]))
 				{
 					if(query.Contains(ls[i+1].ToString()))
 						firstCount++;
@@ -82,18 +81,10 @@ namespace Do.Core {
 						
 			//A first character match counts extra
 			if(query[0] == ls[0])
-				firstCount += 2;
+				firstCount ++;
 			
 			//The longer the acronym, the better it scores
 			good += firstCount*firstCount*4;
-			
-			//Better yet if the match itself started there
-			if(match[0] == 0)
-				good += 2;
-			
-			//Super bonus if the whole match is at the beginning
-			if(match[1] == (query.Length - 1))
-				good += match[1] + 4;
 			
 			//Super-duper bonus if it is a perfect match
 			if(query == ls)
