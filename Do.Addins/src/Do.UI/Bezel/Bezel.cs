@@ -181,8 +181,6 @@ namespace Do.UI
 			bda.BezelSetTextMode   (pane, context.LargeTextDisplay);
 			bda.BezelSetEntryMode (pane, context.LargeTextModeType == TextModeType.Explicit);
 			
-//			bda.Draw ();
-			
 			if (CurrentPane == pane) {
 				bgr.Context = context;
 			}
@@ -194,7 +192,6 @@ namespace Do.UI
 			bda.BezelSetQuery (pane, string.Empty);
 			bda.BezelSetEntryMode (pane, false);
 			
-//			bda.Draw ();
 			if (pane == CurrentPane) {
 				bgr.Clear ();
 			}

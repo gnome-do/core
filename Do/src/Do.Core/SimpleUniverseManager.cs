@@ -318,11 +318,7 @@ namespace Do.Core
 		{
 			if (quickResults == null) return;
 			
-			DoObject do_result;
-			if (result is DoObject)
-				do_result = result as DoObject;
-			else
-				do_result = new DoObject (result);
+			DoObject do_result = (result as DoObject) ?? new DoObject (result);
 			
 			lock (quickResultsLock) {
 				foreach (char key in quickResults.Keys) {
@@ -408,9 +404,8 @@ namespace Do.Core
 		/// </returns>
 		public string UIDForObject (IObject o)
 		{
-			if (o is DoObject)
-				return (o as DoObject).UID;
-			return new DoObject (o).UID;
+			DoObject ob  = (o as DoObject) ?? new DoObject (o);
+			return ob.UID;
 		}
 		
 		/// <summary>
@@ -445,9 +440,9 @@ namespace Do.Core
 		{
 			BuildUniverse ();
 			GLib.Timeout.Add (5 * 60 * 1000, delegate {
-				if (DBus.PowerState.OnBattery () && 
-				    DateTime.Now.Subtract (last_update).TotalMinutes < 15) 
+				if (DBus.PowerState.OnBattery () && DateTime.Now.Subtract (last_update).TotalMinutes < 15) 
 					return true;
+				
 				BuildUniverse ();
 				return true;
 			});

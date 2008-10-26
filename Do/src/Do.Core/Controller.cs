@@ -483,6 +483,7 @@ namespace Do.Core {
 		{
 			if (im.FilterKeypress (evnt) || ((evnt.State & ModifierType.ControlMask) != 0))
 				return;
+//			im.Reset ();
 			char c;
 			if (evnt.Key == Key.Return) {
 				c = '\n';
@@ -733,7 +734,7 @@ namespace Do.Core {
 		/// </summary>
 		void GrowResults ()
 		{
-//			UpdatePane (CurrentPane);
+			UpdatePane (CurrentPane);
 			window.GrowResults ();
 			resultsGrown = true;	
 		}
