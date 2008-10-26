@@ -36,7 +36,13 @@ namespace Do.UI
 			base (WindowType.Toplevel)
 		{
 			Build ();
-
+			
+			TargetEntry[] targets = {
+				new TargetEntry ("text/uri-list", 0, 0), 
+			};
+			
+			Gtk.Drag.DestSet (this, DestDefaults.All, targets, Gdk.DragAction.Copy);
+			
 			btn_close.IsFocus = true;
 			// Add notebook pages.
 			foreach (IConfigurable page in Pages) {
@@ -44,7 +50,8 @@ namespace Do.UI
 					page.GetConfiguration (), new Label (page.Name));
 			}
 			
-			//Search Pages for the first tab with the name "Plugins"
+			//Sets default page to the plugins tab, since this is the most common reason to
+			//open the prefs UI for most users.
 			notebook.CurrentPage = Array.FindIndex (Pages, (delegate (IConfigurable page) {
 				return page.Name == "Plugins";}));
 		}
@@ -63,7 +70,7 @@ namespace Do.UI
 				return pages;
 			}
 		}
-
+		
 		protected virtual void OnBtnCloseClicked (object sender, EventArgs e)
 		{
 			Destroy ();

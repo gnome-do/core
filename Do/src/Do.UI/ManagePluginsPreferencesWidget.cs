@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 using Gtk;
@@ -57,7 +58,14 @@ namespace Do.UI
 			nview = new PluginNodeView ();
 			nview.PluginToggled += OnPluginToggled;
 			nview.PluginSelected += OnPluginSelected;
-
+			
+			TargetEntry[] targets = {
+				new TargetEntry ("text/uri-list", 0, 0), 
+			};
+			
+			Gtk.Drag.DestSet (nview, DestDefaults.All, targets, Gdk.DragAction.Copy);
+			nview.DragDataReceived += new DragDataReceivedHandler (OnDragDataReceived);
+			
 			scrollw.Add (nview);
 			scrollw.ShowAll ();
 
@@ -67,6 +75,36 @@ namespace Do.UI
 			}
 			show_combo.AppendText (PluginManager.AllPluginsRepository);
 			show_combo.Active = 0;
+		}
+		
+		protected void OnDragDataReceived (object sender, DragDataReceivedArgs args)
+		{
+			string data = System.Text.Encoding.UTF8.GetString ( args.SelectionData.Data );
+			data = data.TrimEnd ('\0'); //sometimes we get a null at the end, and it crashes us
+			
+			string[] uriList = Regex.Split (data, "\r\n");
+			List<string> errors = new List<string> ();
+			foreach (string uri in uriList) {
+				string file;
+				string path;
+				
+				try {
+					file = uri.Remove (0, 7);
+					if (!file.EndsWith (".dll")) {
+						errors.Add (file.Substring (file.LastIndexOf ('/') + 1));
+						continue;
+					}
+					
+					path = Paths.Combine (Paths.UserPlugins, file.Substring (file.LastIndexOf ('/') + 1));
+					System.IO.File.Copy (file, path, true);
+				} catch { }
+			} 
+			
+			if (errors.Count > 0)
+				new PluginErrorDialog (errors.ToArray ());
+			
+			SetupService setup = new SetupService (AddinManager.Registry);
+			PluginManager.InstallLocalPlugins (setup);
 		}
 
 		public Bin GetConfiguration ()
@@ -121,6 +159,11 @@ namespace Do.UI
 			UpdateButtonState ();
 		}
 
+		protected void OnDragDataGet (object sender, DragDataGetArgs e)
+		{
+			Console.Error.WriteLine (e.SelectionData.ToString ());
+		}
+		
 		protected virtual void OnBtnRefreshClicked (object sender, EventArgs e)
 		{
 			nview.Refresh ();
@@ -166,6 +209,10 @@ namespace Do.UI
 		protected virtual void OnSearchEntryChanged (object sender, EventArgs e)
 		{
 			nview.Filter = search_entry.Text;
+		}
+
+		protected virtual void OnScrollwDragDataReceived (object o, Gtk.DragDataReceivedArgs args)
+		{
 		}
 	}
 }

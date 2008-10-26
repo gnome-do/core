@@ -4,12 +4,6 @@
     <images-root-path>..</images-root-path>
     <target-gtk-version>2.12.1</target-gtk-version>
   </configuration>
-  <import>
-    <widget-library name="../../Do.Addins/bin/Debug/Do.Addins.dll" />
-    <widget-library name="Mono.Addins.Gui, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
-    <widget-library name="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a" />
-    <widget-library name="../bin/Debug/Do.exe" internal="true" />
-  </import>
   <widget class="Gtk.Window" id="Do.UI.PreferencesWindow" design-size="510 527">
     <property name="MemberName" />
     <property name="WidthRequest">300</property>
@@ -353,6 +347,7 @@
             <property name="MemberName" />
             <property name="CanFocus">True</property>
             <property name="ShadowType">In</property>
+            <signal name="DragDataReceived" handler="OnScrollwDragDataReceived" />
             <child>
               <widget class="Gtk.Viewport" id="GtkViewport">
                 <property name="MemberName" />
@@ -989,6 +984,147 @@
           <packing>
             <property name="Position">0</property>
             <property name="AutoSize">True</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="Gtk.Dialog" id="Do.UI.PluginErrorDialog" design-size="462 163">
+    <property name="MemberName" />
+    <property name="WindowPosition">CenterOnParent</property>
+    <property name="Buttons">1</property>
+    <property name="HelpButton">False</property>
+    <property name="HasSeparator">False</property>
+    <child internal-child="VBox">
+      <widget class="Gtk.VBox" id="dialog1_VBox">
+        <property name="MemberName" />
+        <property name="BorderWidth">5</property>
+        <child>
+          <widget class="Gtk.VBox" id="vbox2">
+            <property name="MemberName" />
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.HBox" id="hbox2">
+                <property name="MemberName" />
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.Table" id="table1">
+                    <property name="MemberName" />
+                    <property name="NRows">2</property>
+                    <property name="NColumns">2</property>
+                    <property name="RowSpacing">6</property>
+                    <property name="ColumnSpacing">6</property>
+                    <child>
+                      <placeholder />
+                    </child>
+                    <child>
+                      <widget class="Gtk.Label" id="file_lbl">
+                        <property name="MemberName" />
+                        <property name="Xalign">0</property>
+                        <property name="Wrap">True</property>
+                        <property name="Selectable">True</property>
+                      </widget>
+                      <packing>
+                        <property name="TopAttach">1</property>
+                        <property name="BottomAttach">2</property>
+                        <property name="LeftAttach">1</property>
+                        <property name="RightAttach">2</property>
+                        <property name="AutoSize">False</property>
+                        <property name="XExpand">True</property>
+                        <property name="XFill">True</property>
+                        <property name="XShrink">False</property>
+                        <property name="YExpand">True</property>
+                        <property name="YFill">True</property>
+                        <property name="YShrink">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Label" id="header_lbl">
+                        <property name="MemberName" />
+                        <property name="Xalign">0</property>
+                        <property name="UseMarkup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="LeftAttach">1</property>
+                        <property name="RightAttach">2</property>
+                        <property name="AutoSize">False</property>
+                        <property name="XOptions">Fill</property>
+                        <property name="YOptions">Expand</property>
+                        <property name="XExpand">False</property>
+                        <property name="XFill">True</property>
+                        <property name="XShrink">False</property>
+                        <property name="YExpand">True</property>
+                        <property name="YFill">False</property>
+                        <property name="YShrink">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Image" id="image33">
+                        <property name="MemberName" />
+                        <property name="Xalign">1</property>
+                        <property name="Pixbuf">stock:gtk-dialog-error Dialog</property>
+                      </widget>
+                      <packing>
+                        <property name="AutoSize">False</property>
+                        <property name="XOptions">Fill</property>
+                        <property name="YOptions">Expand</property>
+                        <property name="XExpand">False</property>
+                        <property name="XFill">True</property>
+                        <property name="XShrink">False</property>
+                        <property name="YExpand">True</property>
+                        <property name="YFill">False</property>
+                        <property name="YShrink">False</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="Position">0</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+            <property name="Padding">6</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+    <child internal-child="ActionArea">
+      <widget class="Gtk.HButtonBox" id="dialog1_ActionArea">
+        <property name="MemberName" />
+        <property name="Spacing">10</property>
+        <property name="BorderWidth">5</property>
+        <property name="Size">1</property>
+        <property name="LayoutStyle">End</property>
+        <child>
+          <widget class="Gtk.Button" id="buttonOk">
+            <property name="MemberName" />
+            <property name="CanDefault">True</property>
+            <property name="CanFocus">True</property>
+            <property name="UseStock">True</property>
+            <property name="Type">StockItem</property>
+            <property name="StockId">gtk-ok</property>
+            <property name="ResponseId">-5</property>
+            <signal name="Clicked" handler="OnButtonOkClicked" />
+            <property name="label">gtk-ok</property>
+          </widget>
+          <packing>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
           </packing>
         </child>
       </widget>

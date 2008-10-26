@@ -68,6 +68,7 @@ FILES =  \
 	gtk-gui/Do.UI.ColorConfigurationWidget.cs \
 	gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs \
 	gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs \
+	gtk-gui/Do.UI.PluginErrorDialog.cs \
 	gtk-gui/Do.UI.PluginConfigurationWindow.cs \
 	gtk-gui/Do.UI.PreferencesWindow.cs \
 	gtk-gui/generated.cs \
@@ -98,6 +99,7 @@ FILES =  \
 	src/Do.UI/KeybindingTreeView.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ManagePluginsPreferencesWidget.cs \
+	src/Do.UI/PluginErrorDialog.cs \
 	src/Do.UI/NotificationIcon.cs \
 	src/Do.UI/PluginConfigurationWindow.cs \
 	src/Do.UI/PluginNodeView.cs \
