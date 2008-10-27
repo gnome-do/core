@@ -50,8 +50,8 @@ namespace Do.Universe {
 			// away certain items that are not useful to the current DE.  We are using the same check
 			// that xdg-open uses.
 			if (item.AttrExists ("OnlyShowIn")) {
+				string show_areas = item.GetString ("OnlyShowIn").ToLower ();
 				if (System.Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true") { //in KDE
-					string show_areas = item.GetString ("OnlyShowIn").ToLower ();
 					if (!show_areas.Contains ("kde"))
 						throw new Exception ("Non-KDE Item in KDE");
 				} else { //not in KDE
