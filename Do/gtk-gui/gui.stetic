@@ -4,6 +4,12 @@
     <images-root-path>..</images-root-path>
     <target-gtk-version>2.12.1</target-gtk-version>
   </configuration>
+  <import>
+    <widget-library name="../../Do.Addins/bin/Debug/Do.Addins.dll" />
+    <widget-library name="Mono.Addins.Gui, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <widget-library name="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a" />
+    <widget-library name="../bin/Debug/Do.exe" internal="true" />
+  </import>
   <widget class="Gtk.Window" id="Do.UI.PreferencesWindow" design-size="510 527">
     <property name="MemberName" />
     <property name="WidthRequest">300</property>

@@ -51,13 +51,15 @@ namespace Do.Universe {
 			// that xdg-open uses.
 			if (item.AttrExists ("OnlyShowIn")) {
 				if (System.Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true") { //in KDE
-					if (!item.GetString ("OnlyShowIn").ToLower ().Contains ("kde"))
+					string show_areas = item.GetString ("OnlyShowIn").ToLower ();
+					if (!show_areas.Contains ("kde"))
 						throw new Exception ("Non-KDE Item in KDE");
 				} else { //not in KDE
-					if (item.GetString ("OnlyShowIn").ToLower () == "kde;")
+					if (show_areas.Contains ("kde") && !show_areas.Contains ("gnome") && !show_areas.Contains ("xfce"))
 						throw new Exception ("KDE Item in GNOME");
 				}
 			}
+			Console.WriteLine (desktopFile);
 			
 			name = item.GetLocalestring ("Name");
 			description = item.GetLocalestring ("Comment");
