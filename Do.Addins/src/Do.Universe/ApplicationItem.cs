@@ -59,7 +59,6 @@ namespace Do.Universe {
 						throw new Exception ("KDE Item in GNOME");
 				}
 			}
-			Console.WriteLine (desktopFile);
 			
 			name = item.GetLocalestring ("Name");
 			description = item.GetLocalestring ("Comment");
