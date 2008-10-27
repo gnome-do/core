@@ -844,11 +844,12 @@ namespace Do.Core {
 			
 			if (th != null && th.IsAlive) {
 				NotificationIcon.ShowKillNotification (delegate {
-					th.Abort ();
-					if (!th.Join (1500))
-						NotificationIcon.SendNotification ("Unrecovorable Error:", "Do has suffered an " +
-						                                   "error which can not be recovered.  Please " +
-						                                   "restart Do.");
+//					th.Abort ();
+//					if (!th.Join (1500))
+//						NotificationIcon.SendNotification ("Unrecovorable Error:", "Do has suffered an " +
+//						                                   "error which can not be recovered.  Please " +
+//						                                   "restart Do.");
+					System.Environment.Exit (20);
 				});
 				return;
 			}
