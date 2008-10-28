@@ -38,11 +38,24 @@ namespace Do.UI
 			base (WindowType.Toplevel)
 		{
 			Build ();
-
+			
+			TargetEntry[] targets = {
+				new TargetEntry ("text/uri-list", 0, 0), 
+			};
+			
+			Gtk.Drag.DestSet (this, DestDefaults.All, targets, Gdk.DragAction.Copy);
+			
 			btn_close.IsFocus = true;
-			foreach (IConfigurable p in Pages) {
-				notebook.AppendPage (p.GetConfiguration (), new Label (p.Name));
+			// Add notebook pages.
+			foreach (IConfigurable page in Pages) {
+				notebook.AppendPage (
+					page.GetConfiguration (), new Label (page.Name));
 			}
+			
+			//Sets default page to the plugins tab, since this is the most common reason to
+			//open the prefs UI for most users.
+			//notebook.CurrentPage = Array.FindIndex (Pages, (delegate (IConfigurable page) {
+			//	return page.Name == "Plugins";}));
 			notebook.CurrentPage = Pages.FindIndex (p => p.Name == "Plugins");
 		}
 

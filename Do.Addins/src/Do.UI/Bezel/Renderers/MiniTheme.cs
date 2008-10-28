@@ -57,7 +57,7 @@ namespace Do.UI
 		
 		public string Name {
 			get {
-				return "Tiny";
+				return "Mini";
 			}
 		}
 		

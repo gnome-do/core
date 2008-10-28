@@ -50,5 +50,8 @@ namespace Do.Addins
 		/// pane setting through mouse events.
 		/// </value>
 		Pane CurrentPane { set; }
+		
+		
+		bool ObjectHasChildren (IObject o);
 	}
 }

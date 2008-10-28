@@ -32,7 +32,7 @@ namespace Do.UI
 	public interface IBezelResultItemRenderer
 	{
 		int Height { get; }
-		void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item);
+		void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item, bool drawArrow);
 	}
 	
 	public class BezelFullResultItemRenderer : IBezelResultItemRenderer
@@ -48,7 +48,7 @@ namespace Do.UI
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item)
+		public void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item, bool drawArrow)
 		{
 			cr.Rectangle (renderAnchor.X, renderAnchor.Y, width, Height);
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
@@ -72,7 +72,7 @@ namespace Do.UI
 			}
 				
 			Pango.Layout layout = new Pango.Layout (parent.PangoContext);
-			layout.Width = Pango.Units.FromPixels (width - IconSize - 10);
+			layout.Width = Pango.Units.FromPixels (width - IconSize - 25);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
 			layout.SetMarkup ("<span foreground=\"#" + parent.ItemTextColor + "\">"+GLib.Markup.EscapeText (item.Name)+"</span>");
 			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
@@ -88,7 +88,16 @@ namespace Do.UI
 			cr.MoveTo (IconSize + 8, 19);
 			Pango.CairoHelper.ShowLayout (cr, layout);
 			
-//			surface_buffer[item] = surface;
+			if (drawArrow) {
+				cr.MoveTo (width - 15, 13);
+				cr.LineTo (width - 15+7, 17);
+				cr.LineTo (width - 15, 21);
+				Gdk.Color gc = new Gdk.Color ();
+				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
+				cr.Color = CairoUtils.ConvertToCairo (gc, 1);
+				cr.Fill ();
+			}
+			
 			
 			layout.FontDescription.Dispose ();
 			layout.Dispose ();
@@ -99,7 +108,6 @@ namespace Do.UI
 	public class BezelHalfResultItemRenderer : IBezelResultItemRenderer
 	{
 		BezelGlassResults parent;
-//		int text_height = 10;
 		
 		public int Height { get { return 20; } }
 		
@@ -110,7 +118,7 @@ namespace Do.UI
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item)
+		public void RenderElement (Context cr, Gdk.Point renderAnchor, int width, IObject item, bool drawArrow)
 		{
 			cr.Rectangle (renderAnchor.X, renderAnchor.Y, width, Height);
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
@@ -134,7 +142,7 @@ namespace Do.UI
 			}
 				
 			Pango.Layout layout = new Pango.Layout (parent.PangoContext);
-			layout.Width = Pango.Units.FromPixels (width - IconSize - 10);
+			layout.Width = Pango.Units.FromPixels (width - IconSize - 25);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
 			layout.SetMarkup ("<span foreground=\"#" + parent.ItemTextColor + "\">"+GLib.Markup.EscapeText (item.Name)+"</span>");
 			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
@@ -143,7 +151,19 @@ namespace Do.UI
 			cr.MoveTo (IconSize + 6, 4);
 			Pango.CairoHelper.ShowLayout (cr, layout);
 			
-//			surface_buffer[item] = surface;
+			if (drawArrow) {
+				cr.MoveTo (width - IconSize+6, 5);
+				cr.LineTo (width - IconSize+10, 10);
+				cr.LineTo (width - IconSize+6, 15);
+				
+				cr.MoveTo (width - IconSize+2, 5);
+				cr.LineTo (width - IconSize+6, 10);
+				cr.LineTo (width - IconSize+2, 15);
+				Gdk.Color gc = new Gdk.Color ();
+				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
+				cr.Color = CairoUtils.ConvertToCairo (gc, 1);
+				cr.Stroke ();
+			}
 			
 			layout.FontDescription.Dispose ();
 			layout.Dispose ();

@@ -188,22 +188,18 @@ namespace Do.UI
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Rectangle drawing_area, Pane pane, bool focused)
+		public void RenderElement (Context cr, Gdk.Rectangle render_region, bool focused)
 		{
-			int offset = parent.PaneOffset (pane);
-			cr.Rectangle (drawing_area.X + offset, 
-			              drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight, 
-			              Width, 
-			              Height);
+			cr.Rectangle (render_region.X, render_region.Y, render_region.Width, render_region.Height); 
 			if (focused)
 				cr.Color = CairoUtils.ColorizeColor (new Cairo.Color (0.3, 0.3, 0.3, 0.6), parent.Colors.Background);
 			else
 				cr.Color = CairoUtils.ColorizeColor (new Cairo.Color (0.0, 0.0, 0.0, 0.2), parent.Colors.Background);
 			cr.Fill ();
-			cr.Rectangle (drawing_area.X + offset - .5, 
-			              drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight - .5, 
-			              Width + 1, 
-			              Height + 1);
+			cr.Rectangle (render_region.X + .5, 
+			              render_region.Y + .5, 
+			              render_region.Width - 1, 
+			              render_region.Height - 1);
 			cr.Color = (focused) ? parent.Colors.FocusedLine : parent.Colors.UnfocusedLine;
 			cr.LineWidth = 1;
 			cr.Stroke ();

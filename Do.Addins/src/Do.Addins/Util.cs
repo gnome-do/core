@@ -216,6 +216,7 @@ namespace Do.Addins
 				                                      (int)height + (int)(2*shadowParams.shadowRadius) + (int)y);
 				Context cairo = new Context (sr);
 				
+				radius++;
 				y++;
 				height--;
 				Cairo.Gradient shadow;

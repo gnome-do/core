@@ -58,17 +58,13 @@ namespace Do.UI
 			TypeHint = WindowTypeHint.Splashscreen;
 			SetColormap ();
 			
-//			VBox vbox = new VBox ();
-			
-			bda = new BezelDrawingArea (theme, false);
-//			vbox.PackStart (bda, true, true, 0);
+			bda = new BezelDrawingArea (controller, theme, false);
 			bda.Show ();
 			
 			bgr = bda.Results;
 			bgw = new BezelGlassWindow (bgr);
 	
 			Add (bda);
-//			vbox.Show ();
 			
 			pw = new PositionWindow (this, bgw);
 		}
@@ -185,8 +181,6 @@ namespace Do.UI
 			bda.BezelSetTextMode   (pane, context.LargeTextDisplay);
 			bda.BezelSetEntryMode (pane, context.LargeTextModeType == TextModeType.Explicit);
 			
-//			bda.Draw ();
-			
 			if (CurrentPane == pane) {
 				bgr.Context = context;
 			}
@@ -198,7 +192,6 @@ namespace Do.UI
 			bda.BezelSetQuery (pane, string.Empty);
 			bda.BezelSetEntryMode (pane, false);
 			
-//			bda.Draw ();
 			if (pane == CurrentPane) {
 				bgr.Clear ();
 			}
