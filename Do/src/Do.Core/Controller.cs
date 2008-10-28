@@ -334,8 +334,7 @@ namespace Do.Core {
 				return;
 			} 
 			
-			if (KeyEventToString(evnt).Equals (Do.Preferences.TextModeKeyBinding) && 
-			    SearchController.Query.Length == 0) {
+			if (KeyEventToString(evnt).Equals (Do.Preferences.TextModeKeyBinding)) {
 				OnTextModePressEvent (evnt);
 				return;
 			}
@@ -528,6 +527,11 @@ namespace Do.Core {
 			im.Reset ();
 			ShrinkResults ();
 
+			if (SearchController.TextType == TextModeType.Explicit) {
+				SearchController.FinalizeTextMode ();
+				UpdatePane (CurrentPane);
+			}
+				
 			if (evnt.Key == Key.Tab) {
 				NextPane ();
 			} else if (evnt.Key == Key.ISO_Left_Tab) {
