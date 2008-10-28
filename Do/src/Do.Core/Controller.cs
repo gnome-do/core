@@ -329,12 +329,12 @@ namespace Do.Core {
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
 			// User set keybindings
-			if (KeyEventToString(evnt).Equals (Do.Preferences.SummonKeyBinding)) {
+			if (KeyEventToString (evnt).Equals (Do.Preferences.SummonKeyBinding)) {
 				OnSummonKeyPressEvent (evnt);
 				return;
 			} 
 			
-			if (KeyEventToString(evnt).Equals (Do.Preferences.TextModeKeyBinding)) {
+			if (KeyEventToString (evnt).Equals (Do.Preferences.TextModeKeyBinding)) {
 				OnTextModePressEvent (evnt);
 				return;
 			}
@@ -545,19 +545,15 @@ namespace Do.Core {
 		void OnTextModePressEvent (EventKey evnt)
 		{
 			im.Reset ();
-			TextModeType tmp = SearchController.TextType;
-			if (SearchController.TextType == TextModeType.ExplicitFinalized) {
-				SearchController.TextMode = true;
-			} else if (SearchController.TextType != TextModeType.Explicit && SearchController.Query.Length == 0) {
-				SearchController.TextMode = true;
-			} else {
+
+			// If this isn't the first keypress in text mode (we just entered text
+			// mode) or if we're already in text mode, treat keypress as normal
+			// input.
+			if (0 < SearchController.Query.Length || SearchController.TextMode) {
 				OnInputKeyPressEvent (evnt);
-				return;
 			}
-			
-			if (SearchController.TextType != tmp) {
-				UpdatePane (CurrentPane);
-			}
+			SearchController.TextMode = true;
+			UpdatePane (CurrentPane);
 		}
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
