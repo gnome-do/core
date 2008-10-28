@@ -37,12 +37,12 @@ namespace Do.Universe {
 		static string [] DesktopFilesDirectories {
 			get {
 				return new string [] {
+					"~/.local/share/applications/wine",
+					"~/.local/share/applications",
 					"/usr/share/applications",
 					"/usr/share/applications/kde",
 					"/usr/share/gdm/applications",
 					"/usr/local/share/applications",
-					"~/.local/share/applications",
-					"~/.local/share/applications/wine",
 					Desktop,
 				};
 			}
@@ -105,8 +105,8 @@ namespace Do.Universe {
 				if (string.IsNullOrEmpty (app.Exec) || string.IsNullOrEmpty (app.Name))
 					continue;
 				
-				if (!app.Hidden || show_hidden)
-					apps [file] = app;
+				if (!apps.ContainsKey (app.Exec) && (!app.Hidden || show_hidden))
+					apps [app.Exec] = app;
 			}
 		}
 

@@ -94,7 +94,7 @@ namespace Do.UI
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Rectangle drawing_area, Pane pane, bool focused)
+		public void RenderElement (Context cr, Gdk.Rectangle render_region, bool focused)
 		{
 			if (sr_active == null || sr_inactive == null || surface_height != Height) {
 				surface_height = Height;
@@ -112,11 +112,10 @@ namespace Do.UI
 				c2.Fill ();
 				(c2 as IDisposable).Dispose ();
 			}
-			int offset = parent.PaneOffset (pane);
-			if (pane == parent.Focus)
-				cr.SetSource (sr_active, drawing_area.X + offset, drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight);
+			if (focused)
+				cr.SetSource (sr_active, render_region.X, render_region.Y);
 			else
-				cr.SetSource (sr_inactive, drawing_area.X + offset, drawing_area.Y + parent.WindowBorder + parent.TitleBarHeight);
+				cr.SetSource (sr_inactive, render_region.X, render_region.Y);
 			cr.Paint ();
 		}
 

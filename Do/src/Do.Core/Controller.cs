@@ -847,11 +847,12 @@ namespace Do.Core {
 			
 			if (th != null && th.IsAlive) {
 				NotificationIcon.ShowKillNotification (delegate {
-					th.Abort ();
-					if (!th.Join (1500))
-						NotificationIcon.SendNotification ("Unrecovorable Error:", "Do has suffered an " +
-						                                   "error which can not be recovered.  Please " +
-						                                   "restart Do.");
+//					th.Abort ();
+//					if (!th.Join (1500))
+//						NotificationIcon.SendNotification ("Unrecovorable Error:", "Do has suffered an " +
+//						                                   "error which can not be recovered.  Please " +
+//						                                   "restart Do.");
+					System.Environment.Exit (20);
 				});
 				return;
 			}
@@ -893,6 +894,7 @@ namespace Do.Core {
 
 			about_window = new Gtk.AboutDialog ();
 			about_window.ProgramName = "GNOME Do";
+			about_window.Modal = false;
 
 			try {
 				Assembly asm = Assembly.GetEntryAssembly ();
@@ -921,10 +923,7 @@ namespace Do.Core {
 			about_window = null;
 		}
 		
-		/////////////////////////////
-		/// IDoController Members ///
-		/////////////////////////////
-		
+#region IDoController
 		public void NewContextSelection (Pane pane, int index)
 		{
 			if (controllers[(int) pane].Results.Length == 0 || index == controllers[(int) pane].Cursor) return;
@@ -938,5 +937,11 @@ namespace Do.Core {
 			Vanish ();
 			Reset ();
 		}
+		
+		public bool ObjectHasChildren (IObject o)
+		{
+			return Do.UniverseManager.ObjectHasChildren (o);
+		}
+#endregion
 	}
 }

@@ -131,6 +131,6 @@ namespace Do.UI
 		/// </value>
 		bool StackIconText { get; }
 		
-		void RenderElement (Context cr, Gdk.Rectangle drawing_area, Pane pane, bool focused);
+		void RenderElement (Context cr, Gdk.Rectangle render_area, bool focused);
 	}
 }

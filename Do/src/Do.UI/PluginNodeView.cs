@@ -289,7 +289,7 @@ namespace Do.UI
 						new PluginSelectionEventArgs (GetSelectedAddins ()));
 			}
 		}
-
+		
 		public event PluginToggledDelegate PluginToggled;
 		public event PluginSelectedDelegate PluginSelected;
 

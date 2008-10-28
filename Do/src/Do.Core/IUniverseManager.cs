@@ -142,5 +142,16 @@ namespace Do.Core
 		/// A <see cref="IObject"/>
 		/// </param>
 		void TryGetObjectForUID (string UID, out IObject item);
+		
+		/// <summary>
+		/// Checks to see if an IObject LIKELY has child items.  This list is not authoritive.
+		/// </summary>
+		/// <param name="o">
+		/// A <see cref="IObject"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/>
+		/// </returns>
+		bool ObjectHasChildren (IObject o);
 	}
 }

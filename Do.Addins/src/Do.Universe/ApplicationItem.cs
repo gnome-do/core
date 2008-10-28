@@ -46,6 +46,20 @@ namespace Do.Universe {
 			if (null == item)
 				throw new Exception (desktopFile + " not found.");
 			
+			// This check should eventually account for xfce too.  Ideally here though, we wish to throw
+			// away certain items that are not useful to the current DE.  We are using the same check
+			// that xdg-open uses.
+			if (item.AttrExists ("OnlyShowIn")) {
+				string show_areas = item.GetString ("OnlyShowIn").ToLower ();
+				if (System.Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true") { //in KDE
+					if (!show_areas.Contains ("kde"))
+						throw new Exception ("Non-KDE Item in KDE");
+				} else { //not in KDE
+					if (show_areas.Contains ("kde") && !show_areas.Contains ("gnome") && !show_areas.Contains ("xfce"))
+						throw new Exception ("KDE Item in GNOME");
+				}
+			}
+			
 			name = item.GetLocalestring ("Name");
 			description = item.GetLocalestring ("Comment");
 			icon = item.GetString ("Icon");

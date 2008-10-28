@@ -52,6 +52,15 @@ namespace Do.UI
 		static IPreferences prefs = Util.GetPreferences ("Bezel");
 		public static event EventHandler ThemeChanged;
 		
+		public static bool Animated {
+			get {
+				return prefs.Get<bool> ("Animated", true);
+			}
+			set {
+				prefs.Set<bool> ("Animated", value);
+			}
+		}
+		
 		public static string TitleRenderer {
 			get {
 				return prefs.Get<string> ("TitleRenderer", "default");
@@ -148,6 +157,8 @@ namespace Do.UI
 		
 		IRenderTheme theme;
 		
+		IDoController controller;
+		
 		BezelColors colors;
 		BezelGlassResults bezel_results;
 		
@@ -161,12 +172,14 @@ namespace Do.UI
 		Gdk.Rectangle drawing_area;
 		Surface surface;
 		
-		double text_box_scale, window_fade = 1;
+		double text_box_scale, window_fade = 1, window_scale=1;
 		
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
 #endregion
-
+		
+#region Properties
+#region Box Format
 		public Cairo.Color BackgroundColor {
 			get {
 				Gdk.Color color = new Gdk.Color ();
@@ -213,7 +226,7 @@ namespace Do.UI
 		public BezelGlassResults Results {
 			get {
 				return bezel_results ?? 
-					bezel_results = new BezelGlassResults (Math.Min (TwoPaneWidth-(2*WindowRadius), 360), style, colors);
+					bezel_results = new BezelGlassResults (controller, Math.Min (TwoPaneWidth-(2*WindowRadius), 360), style, colors);
 			}
 		}
 		
@@ -264,13 +277,13 @@ namespace Do.UI
 			} 
 		}
 		
-		
 		public int WindowWidth { 
 			get { 
 				return ((2 * WindowBorder) - BorderWidth) + ((BoxWidth + (BorderWidth)) * 3) + (2*ShadowRadius); 
 			} 
 		}
-		
+#endregion
+#region Animation Properties
 		private bool AnimationNeeded {
 			get {
 				return ExpandNeeded || ShrinkNeeded || TextScaleNeeded || FadeNeeded || WindowFadeNeeded;
@@ -309,7 +322,8 @@ namespace Do.UI
 				return window_fade != 1;
 			}
 		}
-		
+#endregion
+#region Contexts
 		private BezelDrawingContext Context {
 			get {
 				return context ?? context = new BezelDrawingContext ();
@@ -321,7 +335,8 @@ namespace Do.UI
 				return old_context ?? old_context = new BezelDrawingContext ();
 			}
 		}
-		
+#endregion
+#region Renderers
 		public IBezelTitleBarRenderElement TitleBarRenderer { get { return titleBarRenderer; } }
 
 		public IBezelWindowRenderElement BackgroundRenderer { get { return backgroundRenderer; } }
@@ -331,10 +346,12 @@ namespace Do.UI
 		public IBezelOverlayRenderElement TextModeOverlayRenderer {	get { return textModeOverlayRenderer; }	}
 
 		public IBezelDefaults BezelDefaults { get { return bezelDefaults; }	}
-		
-		
-		public BezelDrawingArea(IRenderTheme theme, bool preview) : base ()
+#endregion
+#endregion
+		public BezelDrawingArea(IDoController controller, IRenderTheme theme, bool preview) : base ()
 		{
+			this.controller = controller;
+			
 			DoubleBuffered = false;
 			prefs = Addins.Util.GetPreferences ("Bezel");
 			this.preview = preview;
@@ -361,7 +378,10 @@ namespace Do.UI
 		
 		private void SetDrawingArea ()
 		{
-			SetSizeRequest (WindowWidth, WindowHeight);
+			if (preview && TwoPaneWidth > 400) {
+				window_scale = 400.0/TwoPaneWidth;
+			}
+			SetSizeRequest ((int)Math.Floor (WindowWidth*window_scale), (int)Math.Floor (WindowHeight*window_scale));
 			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
 			if (preview)
 				drawing_area.X = ShadowRadius;
@@ -369,7 +389,7 @@ namespace Do.UI
 		
 		private void ResetRenderStyle ()
 		{
-			BuildRenderers (style);
+			BuildRenderers ();
 			if (colors == null)
 				colors = new BezelColors (BackgroundColor);
 			else
@@ -377,64 +397,13 @@ namespace Do.UI
 			SetDrawingArea ();
 		}
 		
-		private void BuildRenderers (HUDStyle style)
+		private void BuildRenderers ()
 		{
-			if (theme != null) {
-				this.bezelDefaults           = theme.GetDefaults (this);
-				this.titleBarRenderer        = theme.GetTitleBar (this);
-				this.textModeOverlayRenderer = theme.GetOverlay (this);
-				this.backgroundRenderer      = theme.GetWindow (this);
-				this.paneOutlineRenderer     = theme.GetPane (this);
-				return;
-			}
-			
-			switch (TitleRenderer) {
-			case "hud":
-				titleBarRenderer = new HUDTopBar (this);
-				textModeOverlayRenderer = new HUDTextOverlayRenderer (this);
-				break;
-			case "classic":
-				titleBarRenderer = new ClassicTopBar (this);
-				textModeOverlayRenderer = new ClassicTextOverlayRenderer (this);
-				break;
-			default:
-				titleBarRenderer = (style == HUDStyle.HUD) ? (IBezelTitleBarRenderElement) new HUDTopBar (this) : 
-					(IBezelTitleBarRenderElement) new ClassicTopBar (this);
-				
-				textModeOverlayRenderer = (style == HUDStyle.HUD) ? (IBezelOverlayRenderElement) new HUDTextOverlayRenderer (this) : 
-					(IBezelOverlayRenderElement) new ClassicTextOverlayRenderer (this);
-				break;
-			}
-			
-			switch (WindowRenderer) {
-			case "hud":
-				backgroundRenderer = new HUDBackgroundRenderer (this);
-				bezelDefaults = new HUDBezelDefaults ();
-				break;
-			case "classic":
-				backgroundRenderer = new ClassicBackgroundRenderer (this);
-				bezelDefaults = new ClassicBezelDefaults ();
-				break;
-			default:
-				backgroundRenderer = (style == HUDStyle.HUD) ? (IBezelWindowRenderElement) new HUDBackgroundRenderer (this) : 
-					(IBezelWindowRenderElement) new ClassicBackgroundRenderer (this);
-				bezelDefaults = (style == HUDStyle.HUD) ? (IBezelDefaults) new HUDBezelDefaults () : 
-					(IBezelDefaults) new ClassicBezelDefaults ();
-				break;
-			}
-			
-			switch (PaneRenderer) {
-			case "hud":
-				paneOutlineRenderer = new HUDPaneOutlineRenderer (this);
-				break;
-			case "classic":
-				paneOutlineRenderer = new ClassicPaneOutlineRenderer (this);
-				break;
-			default:
-				paneOutlineRenderer = (style == HUDStyle.HUD) ? (IBezelPaneRenderElement) new HUDPaneOutlineRenderer (this) : 
-					(IBezelPaneRenderElement) new ClassicPaneOutlineRenderer (this);
-				break;
-			}
+			this.bezelDefaults           = theme.GetDefaults (this);
+			this.titleBarRenderer        = theme.GetTitleBar (this);
+			this.textModeOverlayRenderer = theme.GetOverlay (this);
+			this.backgroundRenderer      = theme.GetWindow (this);
+			this.paneOutlineRenderer     = theme.GetPane (this);
 		}
 		
 		public PixbufSurfaceCache SurfaceCache {
@@ -536,12 +505,13 @@ namespace Do.UI
 			if (!IsDrawable)
 				return;
 			Cairo.Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
+			
 			//Much kudos to Ian McIntosh
 			if (surface == null)
 				surface = cr2.Target.CreateSimilar (cr2.Target.Content, WindowWidth, WindowHeight);
 			
 			Context cr = new Context (surface);
-//			cr.Save ();
+			
 			if (preview) {
 				Gdk.Color bgColor;
 				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
@@ -589,6 +559,8 @@ namespace Do.UI
 				Util.Appearance.DrawShadow (cr, drawing_area.X, drawing_area.Y, drawing_area.Width, 
 				                            drawing_area.Height, WindowRadius, new Util.ShadowParameters (.5, ShadowRadius));
 
+			if (window_scale != 1) //we are likely in preview mode, though this can be set on the fly
+				cr2.Scale (window_scale, window_scale);
 			cr2.SetSourceSurface (surface, 0, 0);
 			cr2.Operator = Operator.Source;
 //			cr2.PaintWithAlpha (window_fade);
@@ -609,9 +581,9 @@ namespace Do.UI
 		
 		protected bool OnDrawTimeoutElapsed ()
 		{
-			double change = DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms;
-			delta_time = DateTime.Now;
+			double change = (Animated) ? DateTime.Now.Subtract (delta_time).TotalMilliseconds / fade_ms : 10;
 			
+			delta_time = DateTime.Now;
 			if (ExpandNeeded) {
 				drawing_area.Width += (int) ((ThreePaneWidth-TwoPaneWidth)*change);
 				drawing_area.Width = (drawing_area.Width > ThreePaneWidth) ? ThreePaneWidth : drawing_area.Width;
@@ -715,7 +687,13 @@ namespace Do.UI
 		
 		private void RenderPaneOutline (Pane pane, Context cr)
 		{
-			PaneOutlineRenderer.RenderElement (cr, drawing_area, pane, (Focus == pane));
+			Gdk.Rectangle render_region = new Gdk.Rectangle () {
+				Width = BoxWidth,
+				Height = BoxHeight,
+				X = drawing_area.X + PaneOffset (pane),
+				Y = drawing_area.Y + WindowBorder + TitleBarHeight,
+			};
+			PaneOutlineRenderer.RenderElement (cr, render_region, (Focus == pane));
 		}
 		
 		private void RenderPixbuf (Pane pane, Context cr)
