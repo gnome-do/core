@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Threading;
@@ -144,12 +145,11 @@ namespace Do.Core {
 				return;
 			}
 
-			foreach (IRenderTheme theme in PluginManager.GetThemes ()) {
-				if (theme.Name == Do.Preferences.Theme) {
-					window = new Bezel (this, theme);
-					break;
-				}
-			}
+			window = PluginManager.GetThemes ()
+				.Where (theme => theme.Name == Do.Preferences.Theme)
+				.Select (theme => new Bezel (this, theme))
+				.FirstOrDefault ();
+
 			if (window == null)
 				window = new Bezel (this, new ClassicTheme ());
 			
