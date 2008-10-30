@@ -268,15 +268,13 @@ namespace Do.Core
 						loc_universe[item.UID] = item;
 					RegisterQuickResults (loc_quick, item);
 					
-					foreach (DoItemSource s in PluginManager.GetItemSources ()) {
-						if (!SourceSupportsItem (s, item.Inner as IItem)) continue;
-						
-						if (s.ChildrenOfItem (item).Count > 0) {
-							lock (childrenLock)
-								loc_children.Add (item.UID);
-							break;
-						}
-					}
+					bool supported = PluginManager.GetItemSources ()
+						.Where (s => SourceSupportsItem (s, item) && source.ChildrenOfItem (item).Any ())
+						.Any ();
+			
+					if (supported)
+						lock (childrenLock)
+							items_with_children.Add (item.UID);
 				}
 			}
 			
@@ -424,7 +422,7 @@ namespace Do.Core
 		public void Initialize ()
 		{
 			BuildUniverse ();
-			GLib.Timeout.Add (5 * 60 * 1000, delegate {
+			GLib.Timeout.Add (5 * 60 * 1000, () => {
 				if (DBus.PowerState.OnBattery () && DateTime.Now.Subtract (last_update).TotalMinutes < 15) 
 					return true;
 				
