@@ -151,47 +151,38 @@ namespace Do.Core
 			string uid = UIDForObject (item);
 			
 			// First we need to check and see if we already know this item has children
-			lock (childrenLock) {
+			lock (childrenLock)
 				if (items_with_children.Contains (uid))
 					return true;
-			}
 			
 			// It did not, lets check and see if we even know about this object in universe
 			bool known; 
 			lock (universeLock)
 				known = universe.ContainsKey (uid);
 			
-			if (known) {
-				// If we know the item in universe, but its not in the item list, we can
-				// assume with relative safety that the item has no children items
+			// If we know the item in universe, but its not in the item list, we can
+			// assume with relative safety that the item has no children items
+			if (known) 
 				return false;
-			} else {
-				while (item is DoItem)
-					item = (item as DoItem).Inner as IItem;
-				// The item is not in universe, we need to check it by hand now
-				foreach (DoItemSource s in PluginManager.GetItemSources ()) {
-					bool IsType = false;
-					
-					foreach (Type t in s.SupportedItemTypes) {
-						if (t.IsInstanceOfType (item)) {
-							IsType = true;
-							break;
-						}
-					}
-					
-					if (!IsType) continue;
-					
-					if (s.ChildrenOfItem (item).Count > 0) {
-						// remember what we have already seen, this is not a memory leak because every
-						// time universe is loaded, this list gets recreated and every remembered item
-						// that was not in universe is forgotten again.
-						lock (childrenLock)
-							items_with_children.Add (uid);
-						return true;
-					}
-				}
-			}
-			return false;
+			
+			bool supported = PluginManager.GetItemSources ()
+				.Where (source => SourceSupportsItem (item, source) && source.ChildrenOfItem (item).Count > 0)
+				.Any ();
+			
+			if (supported)
+				lock (childrenLock)
+					items_with_children.Add (uid);
+			return supported;
+		}
+		
+		internal static bool SourceSupportsItem (IItem item, IItemSource source)
+		{
+			while (item is DoItem)
+				item = (item as DoItem).Inner as IItem;
+			
+			return source.SupportedItemTypes
+				.Where (t => t.IsInstanceOfType (item))
+				.Any ();
 		}
 		
 		/// <summary>
