@@ -269,14 +269,7 @@ namespace Do.Core
 					RegisterQuickResults (loc_quick, item);
 					
 					foreach (DoItemSource s in PluginManager.GetItemSources ()) {
-						bool isType = false;
-						foreach (Type t in s.SupportedItemTypes) {
-							if (t.IsInstanceOfType (item.Inner)) {
-								isType = true;
-								break;
-							}
-						}
-						if (!isType) continue;
+						if (!SourceSupportsItem (s, item.Inner as IItem)) continue;
 						
 						if (s.ChildrenOfItem (item).Count > 0) {
 							lock (childrenLock)
