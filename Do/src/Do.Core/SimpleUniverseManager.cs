@@ -166,7 +166,7 @@ namespace Do.Core
 				return false;
 			
 			bool supported = PluginManager.GetItemSources ()
-				.Where (source => SourceSupportsItem (item, source) && source.ChildrenOfItem (item).Count > 0)
+				.Where (source => SourceSupportsItem (item, source) && source.ChildrenOfItem (item).Any ())
 				.Any ();
 			
 			if (supported)
