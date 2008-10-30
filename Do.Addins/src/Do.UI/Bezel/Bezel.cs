@@ -176,8 +176,17 @@ namespace Do.UI
 
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
+			// This prevents the odd situation of nothing drawing in the third pane.  Ultimately what has
+			// happened is the universe has "nulled" the pane by fluke.  We detect this and replace the
+			// query with an invisible space.
+			string query;
+			if (pane == Pane.Third && context.Selection == null && string.IsNullOrEmpty (context.Query) && context.Results.Length == 0) {
+				query = " ";
+			} else {
+				query = context.Query;
+			}
 			bda.BezelSetPaneObject (pane, context.Selection);
-			bda.BezelSetQuery      (pane, context.Query);
+			bda.BezelSetQuery      (pane, query);
 			bda.BezelSetTextMode   (pane, context.LargeTextDisplay);
 			bda.BezelSetEntryMode (pane, context.LargeTextModeType == TextModeType.Explicit);
 			

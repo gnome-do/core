@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 
 using Gnome;
@@ -30,7 +31,7 @@ namespace Do.Universe {
 	public class ApplicationItem : IRunnableItem {
 		
 		protected DesktopItem item;
-		string name, description, icon;
+		string name, description, icon, mimetype;
 
 		/// <summary>
 		/// Create an application item from a desktop file location.
@@ -58,6 +59,10 @@ namespace Do.Universe {
 					if (show_areas.Contains ("kde") && !show_areas.Contains ("gnome") && !show_areas.Contains ("xfce"))
 						throw new Exception ("KDE Item in GNOME");
 				}
+			}
+			if (item.AttrExists ("NoDisplay")) {
+				if (item.GetBoolean ("NoDisplay"))
+					throw new Exception ("No Display item detected");
 			}
 			
 			name = item.GetLocalestring ("Name");
@@ -100,8 +105,32 @@ namespace Do.Universe {
 				if (!item.AttrExists ("MimeType")) {
 					return null;
 				}
+				
+				if (!string.IsNullOrEmpty (mimetype))
+					return mimetype.Split (';');
+				
+				string s = item.GetString ("MimeType");
+				if (s.Length >= 1000) {
+					mimetype = ManualMimeParse () ?? item.GetString ("MimeType");
+					return mimetype.Split (';');
+				}
 				return item.GetString ("MimeType").Split (';');
 			}
+		}
+		
+		private string ManualMimeParse ()
+		{
+			StreamReader reader = new StreamReader (item.Location.Replace ("file://",""));
+			while (!reader.EndOfStream) {
+				string s = reader.ReadLine ();
+				if (!s.Trim ().StartsWith ("MimeType"))
+					continue;
+				s = s.Replace ("MimeType=", "");
+				reader.Dispose ();
+				return s.Trim ();
+			}
+			reader.Dispose ();
+			return null;
 		}
 		
 		/// <summary>

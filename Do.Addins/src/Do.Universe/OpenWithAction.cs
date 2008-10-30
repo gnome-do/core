@@ -69,15 +69,13 @@ namespace Do.Universe {
 				return false;
 			return !(item as FileItem).MimeType.Contains ("directory");
 		}
-
 		
 		public override bool SupportsModifierItemForItems(IItem[] items, IItem modItem)
 		{
 			FileItem file = items[0] as FileItem;
 			ApplicationItem app = modItem as ApplicationItem;
-			if (file == null || app == null) {
+			if (file == null || app == null)
 				return true;
-			}
 			
 			if (app.MimeTypes == null)
 				return false;
