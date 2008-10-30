@@ -539,7 +539,7 @@ namespace Do.Core {
 			// If this isn't the first keypress in text mode (we just entered text
 			// mode) or if we're already in text mode, treat keypress as normal
 			// input.
-			if (0 < SearchController.Query.Length || SearchController.TextMode) {
+			if (SearchController.TextType == TextModeType.Explicit) {
 				OnInputKeyPressEvent (evnt);
 			}
 			SearchController.TextMode = true;
