@@ -80,20 +80,17 @@ namespace Do.Core {
 			controllers[2] = new ThirdSearchController  (controllers[0], controllers[1]);
 			
 			//We want to show a blank box during our searches
-			controllers[0].SearchStarted += delegate { };
-			controllers[1].SearchStarted += delegate (bool u) { 
+//			controllers[0].SearchStarted += (u) => { };
+			controllers[1].SearchStarted += (u) => {
 				if (u && !ControllerExplicitTextMode (Pane.Second)) window.ClearPane (Pane.Second); 
 			};
-			controllers[2].SearchStarted += delegate (bool u) { 
+			controllers[2].SearchStarted += (u) => { 
 				if (u && !ControllerExplicitTextMode (Pane.Third)) window.ClearPane (Pane.Third); 
 			};
 			
-			controllers[0].SearchFinished += delegate (object o, SearchFinishState state) 
-			{ SearchFinished (o, state, Pane.First); };
-			controllers[1].SearchFinished += delegate (object o, SearchFinishState state) 
-			{ SearchFinished (o, state, Pane.Second); };
-			controllers[2].SearchFinished += delegate (object o, SearchFinishState state) 
-			{ SearchFinished (o, state, Pane.Third); };
+			controllers[0].SearchFinished += (o, state) => { SearchFinished (o, state, Pane.First); };
+			controllers[1].SearchFinished += (o, state) => { SearchFinished (o, state, Pane.Second); };
+			controllers[2].SearchFinished += (o, state) => { SearchFinished (o, state, Pane.Third); };
 			
 			im.UsePreedit = false;
 			im.Commit += OnIMCommit;
@@ -842,14 +839,7 @@ namespace Do.Core {
 			}
 			
 			if (th != null && th.IsAlive) {
-				NotificationIcon.ShowKillNotification (delegate {
-//					th.Abort ();
-//					if (!th.Join (1500))
-//						NotificationIcon.SendNotification ("Unrecovorable Error:", "Do has suffered an " +
-//						                                   "error which can not be recovered.  Please " +
-//						                                   "restart Do.");
-					System.Environment.Exit (20);
-				});
+				NotificationIcon.ShowKillNotification ((o, a) => System.Environment.Exit (20));
 				return;
 			}
 			
