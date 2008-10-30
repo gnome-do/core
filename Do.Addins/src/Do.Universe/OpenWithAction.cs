@@ -65,7 +65,7 @@ namespace Do.Universe {
 		
 		public override bool SupportsItem(IItem item)
 		{
-			if (!item is FileItem)
+			if (!(item is FileItem))
 				return false;
 			return !(item as FileItem).MimeType.Contains ("directory");
 		}
