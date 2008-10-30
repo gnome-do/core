@@ -166,12 +166,14 @@ namespace Do.Core
 				// assume with relative safety that the item has no children items
 				return false;
 			} else {
+				while (item is DoItem)
+					item = (item as DoItem).Inner as IItem;
 				// The item is not in universe, we need to check it by hand now
 				foreach (DoItemSource s in PluginManager.GetItemSources ()) {
 					bool IsType = false;
 					
 					foreach (Type t in s.SupportedItemTypes) {
-						if (t.IsInstanceOfType (o)) {
+						if (t.IsInstanceOfType (item)) {
 							IsType = true;
 							break;
 						}

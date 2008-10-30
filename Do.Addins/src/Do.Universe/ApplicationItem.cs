@@ -95,6 +95,15 @@ namespace Do.Universe {
 			}
 		}
 		
+		public string[] MimeTypes {
+			get {
+				if (!item.AttrExists ("MimeType")) {
+					return null;
+				}
+				return item.GetString ("MimeType").Split (';');
+			}
+		}
+		
 		/// <summary>
 		/// Executes the application.
 		/// </summary>

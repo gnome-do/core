@@ -114,14 +114,7 @@ namespace Do.Core {
 		public void Initialize ()
 		{
 			ThemeChanged ();
-			Do.Preferences.PreferenceChanged += OnPreferenceChanged;
-		}
-		
-		private void OnPreferenceChanged (object sender,
-										  PreferenceChangedEventArgs args)
-		{
-			if (args.Key == "Theme")
-				ThemeChanged ();
+			Do.Preferences.PreferenceChanged += (sender, args) => { if (args.Key == "Theme") ThemeChanged (); };
 		}
 		
 		void ThemeChanged ()

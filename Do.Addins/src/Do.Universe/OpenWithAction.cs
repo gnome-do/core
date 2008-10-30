@@ -63,6 +63,33 @@ namespace Do.Universe {
 			}
 		}
 		
+		public override bool SupportsItem(IItem item)
+		{
+			if (!item is FileItem)
+				return false;
+			return !(item as FileItem).MimeType.Contains ("directory");
+		}
+
+		
+		public override bool SupportsModifierItemForItems(IItem[] items, IItem modItem)
+		{
+			FileItem file = items[0] as FileItem;
+			ApplicationItem app = modItem as ApplicationItem;
+			if (file == null || app == null) {
+				return true;
+			}
+			
+			if (app.MimeTypes == null)
+				return false;
+			
+			foreach (string s in app.MimeTypes) {
+				if (s.ToLower () == file.MimeType.ToLower ())
+					return true;
+			}
+			return false;
+		}
+
+		
 		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
 		{
 			List<string> uris;
