@@ -423,10 +423,9 @@ namespace Do.Core
 		{
 			BuildUniverse ();
 			GLib.Timeout.Add (5 * 60 * 1000, () => {
-				if (DBus.PowerState.OnBattery () && DateTime.Now.Subtract (last_update).TotalMinutes < 15) 
-					return true;
-				
-				BuildUniverse ();
+				if (!DBus.PowerState.OnBattery () || (DateTime.Now - last_update).TotalMinutes > 15) {
+					BuildUniverse ();
+				}
 				return true;
 			});
 		}

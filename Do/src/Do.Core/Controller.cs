@@ -113,7 +113,7 @@ namespace Do.Core {
 			if (SearchController.Query.Length <= 1)
 				SelectedTextItem.UpdateText ();
 		}
-		
+
 		public void Initialize ()
 		{
 			ThemeChanged ();
