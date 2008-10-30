@@ -527,9 +527,6 @@ namespace Do.Core {
 			} else if (evnt.Key == Key.ISO_Left_Tab) {
 				PrevPane ();
 			}
-			// Seems to avoid a crash by passing bad contexts.  May not be needed.
-//			if (!(CurrentPane == Pane.First && SearchController.Results.Length == 0))
-//				window.SetPaneContext (CurrentPane, SearchController.UIContext);
 		}
 		
 		void OnTextModePressEvent (EventKey evnt)
@@ -539,10 +536,11 @@ namespace Do.Core {
 			// If this isn't the first keypress in text mode (we just entered text
 			// mode) or if we're already in text mode, treat keypress as normal
 			// input.
-			if (SearchController.TextType == TextModeType.Explicit) {
-				OnInputKeyPressEvent (evnt);
-			}
+			bool in_explicit = (SearchController.TextType == TextModeType.Explicit);
 			SearchController.TextMode = true;
+			
+			if (in_explicit || SearchController.TextMode == false)
+				OnInputKeyPressEvent (evnt);
 			UpdatePane (CurrentPane);
 		}
 		
