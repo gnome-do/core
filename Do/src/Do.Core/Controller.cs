@@ -536,10 +536,10 @@ namespace Do.Core {
 			// If this isn't the first keypress in text mode (we just entered text
 			// mode) or if we're already in text mode, treat keypress as normal
 			// input.
-			bool in_explicit = (SearchController.TextType == TextModeType.Explicit);
+			bool pass_keypress = (0 < SearchController.Query.Length || SearchController.TextType == TextModeType.Explicit);
 			SearchController.TextMode = true;
 			
-			if (in_explicit || SearchController.TextMode == false)
+			if (pass_keypress || SearchController.TextMode == false)
 				OnInputKeyPressEvent (evnt);
 			UpdatePane (CurrentPane);
 		}
