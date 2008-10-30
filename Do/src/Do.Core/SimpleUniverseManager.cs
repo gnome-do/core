@@ -166,7 +166,7 @@ namespace Do.Core
 				return false;
 			
 			bool supported = PluginManager.GetItemSources ()
-				.Where (source => SourceSupportsItem (item, source) && source.ChildrenOfItem (item).Any ())
+				.Where (source => SourceSupportsItem (source, item) && source.ChildrenOfItem (item).Any ())
 				.Any ();
 			
 			if (supported)
@@ -175,7 +175,7 @@ namespace Do.Core
 			return supported;
 		}
 		
-		internal static bool SourceSupportsItem (IItem item, IItemSource source)
+		internal static bool SourceSupportsItem (IItemSource source, IItem item)
 		{
 			while (item is DoItem)
 				item = (item as DoItem).Inner as IItem;
