@@ -18,6 +18,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Universe;
@@ -58,6 +59,8 @@ namespace Do.Core {
 				rec = new RelevanceRecord (o);
 				hits [o.UID] = rec;
 			}
+
+			if (other == null) rec.FirstPaneHits++;
 			rec.Hits++;
 			rec.LastHit = DateTime.Now;
 			if (match.Length > 0)
@@ -70,6 +73,7 @@ namespace Do.Core {
 			RelevanceRecord rec;
 			
 			if (hits.TryGetValue (o.UID, out rec)) {
+				if (other == null) rec.FirstPaneHits--;
 				rec.Hits--;
 				if (rec.Hits == 0)
 					hits.Remove (o.UID);
@@ -78,18 +82,21 @@ namespace Do.Core {
 
 		public override float GetRelevance (DoObject o, string match, DoObject other)
 		{
-			// These should all be between 0 and 1.
+			RelevanceRecord rec;
 			float relevance, score;
+			bool usedInFirstPaneOften = false;
+
+			if (!hits.TryGetValue (o.UID, out rec))
+				rec = new RelevanceRecord (o);
 			
 			// Get string similarity score.
 			score = StringScoreForAbbreviation (o.Name, match);
 			if (score == 0) return 0;
 			
 			relevance = 0f;	
-			if (hits.ContainsKey (o.UID)) {
+			if (0 < rec.Hits) {
 				float age;
-				RelevanceRecord rec = hits [o.UID];
-	
+
 				// On a scale of 0 to 1, how old is the item?
 				age = 1 -
 					(float) (DateTime.Now - rec.LastHit).TotalSeconds /
@@ -104,39 +111,40 @@ namespace Do.Core {
 					relevance = 0f;
 				
 				relevance *= 0.5f * (1f + age);
-		    }
-			
+			}
 			
 			// Penalize actions that require modifier items.
 			// other != null ==> we're getting relevance for second pane.
-			if (o is IAction &&
-			    (o as IAction).SupportedModifierItemTypes.Length > 0)
-				relevance -= 0.1f;
+			if (o is IAction && (o as IAction).SupportedModifierItemTypes.Any ())
+				relevance -= 1.0f;
+
+			// We penalize actions, but only if they're not used in the first pane often.
+			if (o is IAction && rec.FirstPaneHits < 3)
+				relevance -= 0.5f;
+
 			// Penalize item sources so that items are preferred.
 			if (o.Inner is IItemSource)
-				relevance -= 0.1f;
+				relevance -= 1.0f;
+
 			// Give the most popular actions a little leg up.
 			if (o.Inner is OpenAction ||
 			    o.Inner is OpenURLAction ||
 			    o.Inner is RunAction ||
 			    o.Inner is EmailAction)
-				relevance += 0.1f;
+				relevance += 1.0f;
+
 			if (o.Inner is AliasAction ||
 				o.Inner is DeleteAliasAction ||
 				o.Inner is CopyToClipboard)
-				relevance = -0.1f;
+				relevance -= 1.0f;
 			
 			return BalanceRelevanceWithScore (o, relevance, score);
 		}
 
 		float BalanceRelevanceWithScore (IObject o, float rel, float score)
 		{
-			float reward;
-		   
-			reward = o is IItem ? .1f : 0f;
-			return reward +
-				   rel    * .20f +
-				   score  * .70f;
+			return rel   * .30f +
+						 score * .70f;
 		}
 	}
 	
@@ -147,16 +155,19 @@ namespace Do.Core {
 	/// </summary>
 	[Serializable]
 	class RelevanceRecord {
-		public DateTime LastHit;
+
 		public uint Hits;
-		public string FirstChars;
+		public uint FirstPaneHits;
+
 		public bool IsAction;
+		public DateTime LastHit;
+		public string FirstChars;
 		
 		public RelevanceRecord (IObject o)
 		{
 			LastHit = DateTime.Now;
-			FirstChars = string.Empty;
 			IsAction = o is IAction;
+			FirstChars = string.Empty;
 		}
 		
 		/// <summary>

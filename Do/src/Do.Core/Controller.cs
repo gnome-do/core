@@ -767,6 +767,7 @@ namespace Do.Core {
 			third  = GetSelection (Pane.Third);
 
 			if (first != null && second != null) {
+
 				if (first is IItem) {
 					foreach (IItem item in controllers[0].FullSelection)
 						items.Add (item);
@@ -780,27 +781,40 @@ namespace Do.Core {
 					itemQuery = controllers[1].Query;
 					actionQuery = controllers[0].Query;
 				}
+
+				modItemQuery = null;
 				if (third != null && ThirdPaneVisible) {
 					foreach (IItem item in controllers[2].FullSelection)
 						modItems.Add (item);
 					modItemQuery = controllers[2].Query;
-					(third as DoObject).IncreaseRelevance (modItemQuery, null);
 				}
 
 				/////////////////////////////////////////////////////////////
 				/// Relevance accounting
 				/////////////////////////////////////////////////////////////
 				
-				// Increase the relevance of the item.
-				foreach (DoObject item in items) {
-					item.IncreaseRelevance (itemQuery, null);
+				if (first is IItem) {
+					// Action is in second pane.
+
+					// Increase the relevance of the items.
+					foreach (DoObject item in items)
+						item.IncreaseRelevance (itemQuery, null);
+
+					// Increase the relevance of the action /for each item/:
+					foreach (DoObject item in items)
+						(action as DoObject).IncreaseRelevance (actionQuery, item as DoObject);
+				} else {
+					// Action is in first pane.
+
+					// Increase the relevance of each item for the action.
+					foreach (DoObject item in items)
+						item.IncreaseRelevance (itemQuery, action as DoObject);
+
+					(action as DoObject).IncreaseRelevance (actionQuery, null);
 				}
 
-				// Increase the relevance of the action alone:
-				(action as DoAction).IncreaseRelevance (actionQuery, null);
-				// Increase the relevance of the action /for each item/:
-				foreach (DoObject item in items)
-					(action as DoObject).IncreaseRelevance (actionQuery, item);
+				if (third != null && ThirdPaneVisible)
+					(third as DoObject).IncreaseRelevance (modItemQuery, action as DoObject);
 
 				DoPerformState state = new DoPerformState (action, items, modItems);
 				th = new Thread (new ParameterizedThreadStart (DoPerformWork));

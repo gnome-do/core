@@ -19,6 +19,7 @@
     <Execute type="None" entry="Do.Addins" />
     <Execute type="None" entry="Do.DBus" />
   </StartMode>
+  <MonoDevelop.ChangeLogAddIn.ChangeLogInfo policy="UpdateNearestChangeLog" />
   <Entries>
     <Entry filename="Do/Do.mdp" />
     <Entry filename="Do.Addins/Do.Addins.mdp" />
