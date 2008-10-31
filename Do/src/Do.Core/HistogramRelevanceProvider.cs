@@ -19,8 +19,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 using Do.Universe;
 
@@ -30,27 +28,18 @@ namespace Do.Core {
 	/// HistogramRelevanceProvider maintains item and action relevance using
 	/// a histogram of "hit values."
 	/// </summary>
+	[Serializable]
 	sealed class HistogramRelevanceProvider : RelevanceProvider {
-		
-		uint max_item_hits, max_action_hits;
+
 		DateTime oldest_hit;
+		uint max_item_hits, max_action_hits;
 		Dictionary<string, RelevanceRecord> hits;
-		const int SerializeInterval = 15*60;
 
 		public HistogramRelevanceProvider ()
 		{
-			max_item_hits = max_action_hits = 1;
 			oldest_hit = DateTime.Now;
+			max_item_hits = max_action_hits = 1;
 			hits = new Dictionary<string, RelevanceRecord> ();
-
-			Deserialize ();
-			
-			foreach (RelevanceRecord rec in hits.Values) {
-				UpdateMaxHits (rec);
-				oldest_hit = oldest_hit.CompareTo (rec.LastHit) < 0 ?
-					oldest_hit : rec.LastHit;
-			}
-			GLib.Timeout.Add (SerializeInterval*1000, OnSerializeTimer);
 		}
 		
 		void UpdateMaxHits (RelevanceRecord rec)
@@ -61,64 +50,7 @@ namespace Do.Core {
 				max_item_hits = Math.Max (max_item_hits, rec.Hits);
 		}
 
-		/// <value>
-		/// Path of file where relevance data is serialized.
-		/// </value>
-		private string RelevanceFile {
-			get {
-				return Paths.Combine (Paths.ApplicationData, "relevance5");
-			}
-		}
-
-		/// <summary>
-		/// Serialize timer target.
-		/// </summary>
-		private bool OnSerializeTimer ()
-		{
-			Gtk.Application.Invoke (
-			    delegate {
-				    Serialize ();
-			    }
-			);
-			return true;
-		}
-
-		/// <summary>
-		/// Deserializes relevance data.
-		/// </summary>
-		private void Deserialize ()
-		{
-			try {
-				using (Stream s = File.OpenRead (RelevanceFile)) {
-					BinaryFormatter f = new BinaryFormatter ();
-					hits = f.Deserialize (s) as Dictionary<string, RelevanceRecord>;
-				}
-				Log.Debug ("Successfully loaded learned usage data.");
-			} catch (FileNotFoundException) {
-			} catch (Exception e) {
-				Log.Error ("Failed to load learned usage data: {0}", e.Message);
-			}
-		}
-
-		/// <summary>
-		/// Serializes relevance data.
-		/// </summary>
-		private void Serialize ()
-		{
-			try {
-				using (Stream s = File.OpenWrite (RelevanceFile)) {
-					BinaryFormatter f = new BinaryFormatter ();
-					f.Serialize (s, hits);
-				}
-				Log.Debug ("Successfully saved learned usage data.");
-			} catch (Exception e) {
-				Log.Error ("Failed to save learned usage data: {0}", e.Message);
-			}
-		}
-
-		public override void IncreaseRelevance (DoObject o,
-												string match,
-												DoObject other)
+		public override void IncreaseRelevance (DoObject o, string match, DoObject other)
 		{
 			RelevanceRecord rec;
 			
@@ -133,9 +65,7 @@ namespace Do.Core {
 			UpdateMaxHits (rec);
 		}
 
-		public override void DecreaseRelevance (DoObject o,
-												string match,
-												DoObject other)
+		public override void DecreaseRelevance (DoObject o, string match, DoObject other)
 		{
 			RelevanceRecord rec;
 			
@@ -146,9 +76,7 @@ namespace Do.Core {
 			}
 		}
 
-		public override float GetRelevance (DoObject o,
-											string match,
-											DoObject other)
+		public override float GetRelevance (DoObject o, string match, DoObject other)
 		{
 			// These should all be between 0 and 1.
 			float relevance, score;

@@ -124,14 +124,7 @@ namespace Do.Core
 					}
 				}
 			}
-			
-			// Ideally we would do stable sorts all the time, but quicksort is... quickest
-			// so we do a stable sort only on small lists
-			if (results.Count < 100)
-				InsertionSort (results);
-			else
-				results.Sort ();
-			
+			results.Sort ();
 			return results.ToArray ();
 		}
 		
@@ -178,35 +171,12 @@ namespace Do.Core
 		
 		internal static bool SourceSupportsItem (IItemSource source, IItem item)
 		{
-			while (item is DoItem)
+			if (item is DoItem)
 				item = (item as DoItem).Inner as IItem;
 			
 			return source.SupportedItemTypes
 				.Where (t => t.IsInstanceOfType (item))
 				.Any ();
-		}
-		
-		/// <summary>
-		/// A simple and naive implementation of Insertion sort.
-		/// </summary>
-		/// <param name="list">
-		/// A <see cref="List"/>
-		/// </param>
-		private void InsertionSort (List<IObject> list)
-		{
-			if (list == null)
-				throw new ArgumentNullException( "list" );
-			
-			IObject key;
-			for (int j = 1; j < list.Count; j++) {
-				key = list[j];
-				
-				int i = j - 1;
-				for (; i >= 0 && (list[i] as DoObject).CompareTo (key as DoObject) > 0; i--) {
-					list[i + 1] = list[i];
-				}
-				list[i + 1] = key;
-			}
 		}
 		
 		/// <summary>

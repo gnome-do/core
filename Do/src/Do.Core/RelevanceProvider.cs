@@ -19,17 +19,79 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 using Do.Universe;
 
 namespace Do.Core {
 
-	class RelevanceProvider {
+	[Serializable]
+	abstract class RelevanceProvider {
 
-		public static RelevanceProvider GetProvider ()
+		const int SerializeInterval = 15 * 60 * 1000;
+		static RelevanceProvider default_provider;
+
+		static RelevanceProvider ()
 		{
-            return new HistogramRelevanceProvider ();
+			default_provider = Deserialize () ?? new HistogramRelevanceProvider ();
+			GLib.Timeout.Add (SerializeInterval, OnSerializeTimer);
+		}
+		
+		public static RelevanceProvider DefaultProvider {
+			get {
+				return default_provider;
+			}
+		}
+
+		public static string RelevanceFile {
+			get {
+				return Paths.Combine (Paths.ApplicationData, "relevance6");
+			}
+		}
+
+		static bool OnSerializeTimer () {
+			Gtk.Application.Invoke ((sender, args) => Serialize (default_provider));
+			return true;
+		}
+
+		/// <summary>
+		/// Deserializes relevance data.
+		/// </summary>
+		private static RelevanceProvider Deserialize ()
+		{
+			RelevanceProvider provider = null;
+			
+			try {
+				using (Stream s = File.OpenRead (RelevanceFile)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					provider = f.Deserialize (s) as RelevanceProvider;
+				}
+				Log.Debug ("Successfully loaded learned usage data.");
+			} catch (FileNotFoundException) {
+			} catch (Exception e) {
+				Log.Error ("Failed to load learned usage data: {0}", e.Message);
+			}
+
+			return provider;
+		}
+
+		/// <summary>
+		/// Serializes relevance data.
+		/// </summary>
+		private static void Serialize (RelevanceProvider provider)
+		{
+			try {
+				using (Stream s = File.OpenWrite (RelevanceFile)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					f.Serialize (s, provider);
+				}
+				Log.Debug ("Successfully saved learned usage data.");
+			} catch (Exception e) {
+				Log.Error ("Failed to save learned usage data: {0}", e.Message);
+			}
 		}
 
 		/// <summary>
@@ -54,11 +116,11 @@ namespace Do.Core {
 				return 1;
 			
 			float score;
-			string ls = s.ToLower();
+			string ls = s.ToLower ();
 
 			//Find the shortest possible substring that matches the query
 			//and get the ration of their lengths for a base score
-			int[] match = findBestSubstringMatchIndices(ls, query);
+			int[] match = findBestSubstringMatchIndices (ls, query);
 			if ((match[1] - match[0]) == 0) return 0;
 			score = query.Length / (float)(match[1] - match[0]);
 			if (score == 0) return 0;
@@ -70,9 +132,9 @@ namespace Do.Core {
 			int firstCount = 0;
 			for(int i=Math.Max (match[0]-1,0); i<match[1]-1; i++)
 			{
-				if(char.IsWhiteSpace (s[i]))
+				if (char.IsWhiteSpace (s[i]))
 				{
-					if(query.Contains(ls[i+1].ToString()))
+					if (query.Contains (ls[i + 1].ToString ()))
 						firstCount++;
 					else
 						bad++;
@@ -84,7 +146,7 @@ namespace Do.Core {
 				firstCount ++;
 			
 			//The longer the acronym, the better it scores
-			good += firstCount*firstCount*4;
+			good += firstCount * firstCount * 4;
 			
 			//Super-duper bonus if it is a perfect match
 			if(query == ls)
@@ -121,43 +183,43 @@ namespace Do.Core {
 		/// A two item array containing the start and end indices of the match.
 		/// No match returns {-1.-1}
 		/// </returns>
-		protected static int[] findBestSubstringMatchIndices(string s, string query)
+		protected static int[] findBestSubstringMatchIndices (string s, string query)
 		{
-			if(query.Length == 0)
-				return new int[] {0,0};
+			if (query.Length == 0)
+				return new int[] {0, 0};
 			
-			int index=-1;
-			int[] bestMatch = {-1,-1};
+			int index = -1;
+			int[] bestMatch = {-1, -1};
 			
 			//Find the last instance of the last character of the query
 			//since we never need to search beyond that
 			int lastChar = s.Length - 1;
-			while((lastChar >= 0) && (s[lastChar] != query[query.Length - 1]))
+			while (0 <= lastChar && s[lastChar] != query[query.Length - 1])
 				lastChar--;
 			
 			//No instance of the character?
-			if(lastChar == -1)
+			if (lastChar == -1)
 				return bestMatch;
 			
 			//Loop through each instance of the first character in query
-			while ((index = s.IndexOf(query[0], index+1, lastChar-index)) >= 0) {
+			while ( 0 <= (index = s.IndexOf (query[0], index + 1, lastChar - index))) {
 				//Is there even room for a match?
-				if(index > lastChar + 1 - query.Length) break;
+				if (index > lastChar + 1 - query.Length) break;
 				
 				//Look for the best match in the tail
 				//We know the first char matches, so we dont check it.
 				int cur  = index + 1;
 				int qcur = 1;
-				while(qcur < query.Length && cur < s.Length)
-					if(query[qcur] == s[cur++])
+				while (qcur < query.Length && cur < s.Length)
+					if (query[qcur] == s[cur++])
 						qcur++;
 				
-				if((qcur == query.Length) && (((cur - index) < (bestMatch[1] - bestMatch[0])) || (bestMatch[0] == -1))) {
+				if (qcur == query.Length && (cur - index < bestMatch[1] - bestMatch[0] || bestMatch[0] == -1)) {
 					bestMatch[0] = index;
 					bestMatch[1] = cur;
 				}
 				
-				if(index == s.Length - 1)
+				if (index == s.Length - 1)
 					break;
 			}
 			
@@ -175,11 +237,6 @@ namespace Do.Core {
 		public virtual float GetRelevance (DoObject r, string match, DoObject other)
 		{
 			return StringScoreForAbbreviation (r.Name, match);
-		}
-
-		public virtual bool CanBeFirstResultForKeypress (DoObject r, char a)
-		{
-			return true;
 		}
 	}
 }

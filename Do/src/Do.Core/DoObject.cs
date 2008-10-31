@@ -31,8 +31,6 @@ namespace Do.Core {
 		const string DefaultName = "No name";
 		const string DefaultDescription = "No description.";
 		const string DefaultIcon = "emblem-noread";
-		
-		static RelevanceProvider relevanceProvider = RelevanceProvider.GetProvider ();
 
 		public static bool IObjectTypeCheck (IObject o, Type [] types)
 		{
@@ -107,8 +105,7 @@ namespace Do.Core {
 				throw new ArgumentNullException ("inner","Inner IObject may not be null.");
 			this.inner = inner;
 			
-			uid = string.Format ("{0}{1}{2}",
-					inner.GetType (), Name, Description);
+			uid = string.Format ("{0}{1}{2}", inner.GetType (), Name, Description);
 		}
 
 		public virtual IObject Inner {
@@ -196,26 +193,6 @@ namespace Do.Core {
 		public override string ToString ()
 		{
 			return Name;
-		}
-
-		public void IncreaseRelevance (string match, DoObject other)
-		{
-			relevanceProvider.IncreaseRelevance (this, match, other);
-		}
-
-		public void DecreaseRelevance (string match, DoObject other)
-		{
-			relevanceProvider.DecreaseRelevance (this, match, other);
-		}
-
-		public void UpdateRelevance (string match, DoObject other)
-		{
-			relevance = relevanceProvider.GetRelevance (this, match, other);
-		}
-
-		public bool CanBeFirstResultForKeypress (char a)
-		{
-			return relevanceProvider.CanBeFirstResultForKeypress (this, a);
 		}
 
 		// Only compare with DoObjects.
