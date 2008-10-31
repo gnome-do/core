@@ -127,7 +127,8 @@ REFERENCES =  \
 	$(GNOME_SHARP_20_LIBS) \
 	$(GNOME_VFS_SHARP_20_LIBS) \
 	$(GTK_SHARP_20_LIBS) \
-	System
+	System \
+	System.Core
 
 DLL_REFERENCES = 
 

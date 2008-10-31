@@ -19,9 +19,9 @@
 
 using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Collections.Generic;
 
 using Do;
 using Do.Addins;
@@ -30,71 +30,72 @@ using Do.Universe;
 namespace Do.Core
 {
 	// Threading Heirarchy:
-	// universeLock may be locked within quickResultsLock and actionLock
+	// universe_lock may be locked within quick_results_lock and action_lock
 	// No other nested locks should be allowed
 	
 	public class SimpleUniverseManager : IUniverseManager
 	{
-		private Dictionary<string, IObject> universe;
-		private Dictionary<char, Dictionary<string, IObject>> quickResults;
-		private List<IObject> actions;
-		private List<string> items_with_children;
-		private Thread thread;
-		private DateTime last_update = DateTime.Now;
+
+		Thread thread;
+		List<IObject> actions;
+		List<string> items_with_children;
+		DateTime last_update = DateTime.Now;
+		Dictionary<string, IObject> universe;
+		Dictionary<char, Dictionary<string, IObject>> quick_results;
 		
-		private object universeLock = new object ();
-		private object quickResultsLock = new object ();
-		private object actionLock = new object ();
-		private object childrenLock = new object ();
+		object action_lock = new object ();
+		object children_lock = new object ();
+		object universe_lock = new object ();
+		object quick_results_lock = new object ();
 		
-		private float epsilon = 0.00001f;
+		float epsilon = 0.00001f;
 		
-		public SimpleUniverseManager()
+		public SimpleUniverseManager ()
 		{
-			universe = new Dictionary<string, IObject> ();
-			quickResults = new Dictionary<char,Dictionary<string,IObject>> ();
 			actions = new List<IObject> ();
 			items_with_children = new List<string> ();
+			universe = new Dictionary<string, IObject> ();
+			quick_results = new Dictionary<char,Dictionary<string,IObject>> ();
 			
 			for (char key = 'a'; key <= 'z'; key++) {
-				quickResults [key] = new Dictionary<string,IObject> ();
+				quick_results [key] = new Dictionary<string,IObject> ();
 			}
 		}
 
 		public IObject[] Search (string query, Type[] searchFilter)
 		{
 			if (query.Length == 1) {
-				lock (quickResultsLock) {
+				lock (quick_results_lock) {
 					char key = Convert.ToChar (query.ToLower ());
-					if (quickResults.ContainsKey (key)) {
-						return Search (query, searchFilter, quickResults[key].Values, null);
+					if (quick_results.ContainsKey (key)) {
+						return Search (query, searchFilter, quick_results[key].Values, null);
 					}
 				}
 			}
 			
 			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
-				lock (actionLock)
+				lock (action_lock)
 					return Search (query, searchFilter, actions, null);
 			
-			lock (universeLock) 
+			lock (universe_lock) 
 				return Search (query, searchFilter, universe.Values, null);
 		}
 		
 		public IObject[] Search (string query, Type[] searchFilter, IObject otherObj)
 		{
 			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
-				lock (actionLock)
+				lock (action_lock)
 					return Search (query, searchFilter, actions, otherObj);
 			
 			if (query.Length == 1) {
-				lock (quickResultsLock) {
+				lock (quick_results_lock) {
 					char key = Convert.ToChar (query.ToLower ());
-					if (quickResults.ContainsKey (key))
-						return Search (query, searchFilter, quickResults[key].Values, null);
+					if (quick_results.ContainsKey (key))
+						return Search (query, searchFilter, quick_results[key].Values, null);
 				}
 			}
 			
-			lock (universeLock) 
+			lock (universe_lock) 
 				return Search (query, searchFilter, universe.Values, otherObj);
 		}
 		
@@ -151,13 +152,13 @@ namespace Do.Core
 			string uid = UIDForObject (item);
 			
 			// First we need to check and see if we already know this item has children
-			lock (childrenLock)
+			lock (children_lock)
 				if (items_with_children.Contains (uid))
 					return true;
 			
 			// It did not, lets check and see if we even know about this object in universe
 			bool known; 
-			lock (universeLock)
+			lock (universe_lock)
 				known = universe.ContainsKey (uid);
 			
 			// If we know the item in universe, but its not in the item list, we can
@@ -170,7 +171,7 @@ namespace Do.Core
 				.Any ();
 			
 			if (supported)
-				lock (childrenLock)
+				lock (children_lock)
 					items_with_children.Add (uid);
 			return supported;
 		}
@@ -241,16 +242,16 @@ namespace Do.Core
 				loc_children = new List<string> ();
 			} else {
 				loc_universe = universe;
-				loc_quick    = quickResults;
+				loc_quick    = quick_results;
 				loc_actions  = actions;
 				loc_children = items_with_children;
 			}
 			
 			foreach (DoAction action in PluginManager.GetActions ()) {
-				lock (universeLock)
+				lock (universe_lock)
 					loc_universe[action.UID] = action;
 				RegisterQuickResults (loc_quick, action);
-				lock (actionLock)
+				lock (action_lock)
 					loc_actions.Add (action);
 			}
 			
@@ -264,7 +265,7 @@ namespace Do.Core
 				}
 				
 				foreach (DoItem item in source.Items) {
-					lock (universeLock)
+					lock (universe_lock)
 						loc_universe[item.UID] = item;
 					RegisterQuickResults (loc_quick, item);
 					
@@ -273,18 +274,18 @@ namespace Do.Core
 						.Any ();
 			
 					if (supported)
-						lock (childrenLock)
+						lock (children_lock)
 							items_with_children.Add (item.UID);
 				}
 			}
 			
-			lock (universeLock)
+			lock (universe_lock)
 				universe = loc_universe;
-			lock (quickResultsLock)
-				quickResults = loc_quick;
-			lock (actionLock)
+			lock (quick_results_lock)
+				quick_results = loc_quick;
+			lock (action_lock)
 				actions = loc_actions;
-			lock (childrenLock)
+			lock (children_lock)
 				items_with_children = loc_children;
 			
 			loc_universe = null;
@@ -298,25 +299,25 @@ namespace Do.Core
 		}
 		
 		/// <summary>
-		/// Registers quickResults into the passed dictionary of the result passed
+		/// Registers quick_results into the passed dictionary of the result passed
 		/// </summary>
-		/// <param name="quickResults">
+		/// <param name="quick_results">
 		/// A <see cref="Dictionary`2"/>
 		/// </param>
 		/// <param name="result">
 		/// A <see cref="IObject"/>
 		/// </param>
-		private void RegisterQuickResults (Dictionary<char, Dictionary<string, IObject>> quickResults, IObject result)
+		private void RegisterQuickResults (Dictionary<char, Dictionary<string, IObject>> quick_results, IObject result)
 		{
-			if (quickResults == null) return;
+			if (quick_results == null) return;
 			
 			DoObject do_result = (result as DoObject) ?? new DoObject (result);
 			
-			lock (quickResultsLock) {
-				foreach (char key in quickResults.Keys) {
+			lock (quick_results_lock) {
+				foreach (char key in quick_results.Keys) {
 					do_result.UpdateRelevance (key.ToString (), null);
 					if (do_result.Relevance > epsilon)
-						quickResults[key][do_result.UID] = do_result;
+						quick_results[key][do_result.UID] = do_result;
 				}
 			}
 		}
@@ -330,8 +331,8 @@ namespace Do.Core
 		private void DeleteQuickResult (IObject result)
 		{
 			string UID = new DoObject (result).UID;
-			lock (quickResultsLock) {
-				foreach (Dictionary<string, IObject> list in quickResults.Values)
+			lock (quick_results_lock) {
+				foreach (Dictionary<string, IObject> list in quick_results.Values)
 					list.Remove (UID);
 			}
 		}
@@ -352,10 +353,10 @@ namespace Do.Core
 				if (universe.ContainsKey (tmp.UID))
 					continue;
 				
-				lock (universeLock) {
+				lock (universe_lock) {
 					universe.Add (tmp.UID, i);
 				}
-				RegisterQuickResults (quickResults, i);
+				RegisterQuickResults (quick_results, i);
 			}
 		}
 
@@ -370,7 +371,7 @@ namespace Do.Core
 		{
 			foreach (IItem i in items) {
 				DoItem item = (i as DoItem) ?? new DoItem (i);
-				lock (universeLock)
+				lock (universe_lock)
 				      universe.Remove (item.UID);
 				DeleteQuickResult (i);
 			}
