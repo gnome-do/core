@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Cairo;
 using Gdk;
@@ -42,8 +43,8 @@ namespace Do.Addins
 			surface_cache = new Dictionary<string, Entry> ();
 			Entry e;
 			for (int i=0; i<count; i++) {
-				e = new Entry (sourceSurface.CreateSimilar (sourceSurface.Content, surface_width, surface_height));
-				surface_cache.Add ("null"+i, e);
+				e = new Entry (sourceSurface.CreateSimilar (sourceSurface.Content, surface_width, surface_height), "null"+i);
+				surface_cache.Add (e.ID, e);
 			}
 		}
 		
@@ -64,7 +65,7 @@ namespace Do.Addins
 			
 			DrawIconOnSurface (sr, icon);
 			
-			surface_cache.Add (id, new Entry (sr));
+			surface_cache.Add (id, new Entry (sr, id));
 			(cr as IDisposable).Dispose ();
 			return sr;
 		}
@@ -111,24 +112,26 @@ namespace Do.Addins
 		
 		private Surface EvictLRU ()
 		{
-			Entry lru = null;
-			string lru_id = null;
-			foreach (KeyValuePair<string, Entry> kvp in surface_cache) {
-				if (lru == null || kvp.Value.time < lru.time) {
-					lru = kvp.Value;
-					lru_id = kvp.Key;
-				}
-			}
-			surface_cache.Remove (lru_id);
+			Entry lru = surface_cache.Values.Min ();
+			surface_cache.Remove (lru.ID);
 			return lru.surface;
 		}
 		
-		class Entry {
+		class Entry : IComparable<Entry> {
 			public Surface surface;
 			public DateTime time;
+			public string ID;
 			
-			public Entry (Surface s)
+			#region IComparable[PixbufSurfaceCache.Entry] implementation 
+			public int CompareTo (Entry other)
 			{
+				return time.CompareTo (other.time);
+			}
+			#endregion 
+			
+			public Entry (Surface s, string id)
+			{
+				ID = id;
 				surface = s;
 				time = DateTime.Now;
 			}
