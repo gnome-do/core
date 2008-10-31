@@ -28,11 +28,18 @@ using Do.Universe;
 
 namespace Do.Core {
 
+	interface IRelevanceProvider {
+		void IncreaseRelevance (DoObject target, string match, DoObject other);
+		void DecreaseRelevance (DoObject target, string match, DoObject other);
+		float GetRelevance (DoObject target, string match, DoObject other);
+	}
+
 	[Serializable]
-	abstract class RelevanceProvider {
+	abstract class RelevanceProvider : IRelevanceProvider {
 
 		const int SerializeInterval = 15 * 60 * 1000;
-		static RelevanceProvider default_provider;
+
+		static readonly IRelevanceProvider default_provider;
 
 		static RelevanceProvider ()
 		{
@@ -40,7 +47,7 @@ namespace Do.Core {
 			GLib.Timeout.Add (SerializeInterval, OnSerializeTimer);
 		}
 		
-		public static RelevanceProvider DefaultProvider {
+		public static IRelevanceProvider DefaultProvider {
 			get {
 				return default_provider;
 			}
@@ -60,14 +67,14 @@ namespace Do.Core {
 		/// <summary>
 		/// Deserializes relevance data.
 		/// </summary>
-		private static RelevanceProvider Deserialize ()
+		private static IRelevanceProvider Deserialize ()
 		{
-			RelevanceProvider provider = null;
+			IRelevanceProvider provider = null;
 			
 			try {
 				using (Stream s = File.OpenRead (RelevanceFile)) {
 					BinaryFormatter f = new BinaryFormatter ();
-					provider = f.Deserialize (s) as RelevanceProvider;
+					provider = f.Deserialize (s) as IRelevanceProvider;
 				}
 				Log.Debug ("Successfully loaded learned usage data.");
 			} catch (FileNotFoundException) {
@@ -81,7 +88,7 @@ namespace Do.Core {
 		/// <summary>
 		/// Serializes relevance data.
 		/// </summary>
-		private static void Serialize (RelevanceProvider provider)
+		private static void Serialize (IRelevanceProvider provider)
 		{
 			try {
 				using (Stream s = File.OpenWrite (RelevanceFile)) {

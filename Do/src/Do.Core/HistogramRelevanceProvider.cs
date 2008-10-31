@@ -29,7 +29,7 @@ namespace Do.Core {
 	/// a histogram of "hit values."
 	/// </summary>
 	[Serializable]
-	sealed class HistogramRelevanceProvider : RelevanceProvider {
+	class HistogramRelevanceProvider : RelevanceProvider {
 
 		DateTime oldest_hit;
 		uint max_item_hits, max_action_hits;

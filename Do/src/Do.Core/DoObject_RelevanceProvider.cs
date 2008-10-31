@@ -28,7 +28,7 @@ namespace Do.Core
 	public static class DoObject_RelevanceProvider
 	{
 
-		static readonly RelevanceProvider provider = RelevanceProvider.DefaultProvider;
+		static readonly IRelevanceProvider provider = RelevanceProvider.DefaultProvider;
 
 		/// <summary>
 		/// Increase the relevance of receiver for string match and other DoObject.
