@@ -41,7 +41,7 @@ namespace Do {
 		
 		static DateTime perfTime;
 
-		public static void Main (string[] args)
+		internal static void Main (string[] args)
 		{
 			perfTime = DateTime.Now;
 			Do.args = args;
