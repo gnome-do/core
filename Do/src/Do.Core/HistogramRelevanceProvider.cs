@@ -126,11 +126,12 @@ namespace Do.Core {
 			if (o.Inner is IItemSource)
 				relevance -= 1.0f;
 
-			// Give the most popular actions a little leg up.
-			if (o.Inner is OpenAction ||
+			// Give the most popular actions a little leg up in the second pane.
+			if (other != null && (
+			    o.Inner is OpenAction ||
 			    o.Inner is OpenURLAction ||
 			    o.Inner is RunAction ||
-			    o.Inner is EmailAction)
+			    o.Inner is EmailAction))
 				relevance += 1.0f;
 
 			if (o.Inner is AliasAction ||
@@ -138,13 +139,12 @@ namespace Do.Core {
 				o.Inner is CopyToClipboard)
 				relevance -= 1.0f;
 			
-			return BalanceRelevanceWithScore (o, relevance, score);
+			return BalanceRelevanceWithScore (relevance, score);
 		}
 
-		float BalanceRelevanceWithScore (IObject o, float rel, float score)
+		float BalanceRelevanceWithScore (float rel, float score)
 		{
-			return rel   * .30f +
-						 score * .70f;
+			return (rel * .30f) + (score * .70f);
 		}
 	}
 	

@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Do.Addins;
 using Do.Universe;
@@ -150,20 +151,12 @@ namespace Do.Core
 		
 		protected virtual List<IObject> InitialResults ()
 		{
-			//We continue off our previous results if possible
-			if (context.LastContext != null && 
-			    context.LastContext.Results.Length != 0) {
-				return new List<IObject> (Do.UniverseManager.
-				                          Search (context.Query, SearchTypes, 
-				                                  context.LastContext.Results));
-			} else if (context.ParentContext != null) {
-				//If we have a parent context we NEVER do a full search.  Just return
-				//the results as they are.
+			if (context.ParentContext != null) {
+				if (context.LastContext != null && context.LastContext.Results.Any ())
+					return new List<IObject> (Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results));
 				return new List<IObject> (context.Results);
-			} else { 
-				//else we do things the slow way
-				return new List<IObject> (Do.UniverseManager.
-				                          Search (context.Query, SearchTypes));
+			} else {
+				return new List<IObject> (Do.UniverseManager.Search (context.Query, SearchTypes));
 			}
 		}
 		
@@ -212,7 +205,7 @@ namespace Do.Core
 					children.Add (child);
 			}
 			
-			if (children.Count == 0)
+			if (!children.Any ())
 				return false;
 			
 			SimpleSearchContext newContext = new SimpleSearchContext ();
