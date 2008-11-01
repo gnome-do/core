@@ -115,7 +115,9 @@ namespace Do.Core {
 			
 			// Penalize actions that require modifier items.
 			// other != null ==> we're getting relevance for second pane.
-			if (o is IAction && (o as IAction).SupportedModifierItemTypes.Any ())
+			if ((o is IAction) && 
+			    (o as IAction).SupportedModifierItemTypes.Any () &&
+			    !(o as IAction).ModifierItemsOptional)
 				relevance -= 1.0f;
 
 			// We penalize actions, but only if they're not used in the first pane often.
