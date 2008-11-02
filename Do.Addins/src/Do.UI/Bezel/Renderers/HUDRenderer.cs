@@ -24,6 +24,7 @@ using Gdk;
 using Gtk;
 
 using Do.Addins;
+using Do.Addins.CairoUtils;
 
 namespace Do.UI
 {
@@ -192,9 +193,9 @@ namespace Do.UI
 		{
 			cr.Rectangle (render_region.X, render_region.Y, render_region.Width, render_region.Height); 
 			if (focused)
-				cr.Color = CairoUtils.ColorizeColor (new Cairo.Color (0.3, 0.3, 0.3, 0.6), parent.Colors.Background);
+				cr.Color = new Cairo.Color (0.3, 0.3, 0.3, 0.6).ColorizeColor (parent.Colors.Background);
 			else
-				cr.Color = CairoUtils.ColorizeColor (new Cairo.Color (0.0, 0.0, 0.0, 0.2), parent.Colors.Background);
+				cr.Color = new Cairo.Color (0.0, 0.0, 0.0, 0.2).ColorizeColor (parent.Colors.Background);
 			cr.Fill ();
 			cr.Rectangle (render_region.X + .5, 
 			              render_region.Y + .5, 

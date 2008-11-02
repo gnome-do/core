@@ -24,6 +24,7 @@ using Gdk;
 using Gtk;
 
 using Do.Addins;
+using Do.Addins.CairoUtils;
 using Do.Universe;
 
 namespace Do.UI
@@ -184,7 +185,7 @@ namespace Do.UI
 			get {
 				Gdk.Color color = new Gdk.Color ();
 				if (Gdk.Color.Parse ("#" + BgColor, ref color))
-					return CairoUtils.ConvertToCairo (color, backgroundRenderer.BackgroundColor.A);
+					return color.ConvertToCairo (backgroundRenderer.BackgroundColor.A);
 				return backgroundRenderer.BackgroundColor;
 			}
 		}
@@ -517,7 +518,7 @@ namespace Do.UI
 				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
 					bgColor = rcstyle.Backgrounds[(int) StateType.Normal];
 				}
-				cr.Color = CairoUtils.ConvertToCairo (bgColor, 1);
+				cr.Color = bgColor.ConvertToCairo (1);
 			} else {
 				cr.Color = new Cairo.Color (0, 0, 0, 0);
 			}			

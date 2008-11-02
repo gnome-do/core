@@ -24,6 +24,7 @@ using Gdk;
 using Gtk;
 
 using Do.Addins;
+using Do.Addins.CairoUtils;
 using Do.Universe;
 
 namespace Do.UI
@@ -96,7 +97,7 @@ namespace Do.UI
 				surface_height = Height;
 				sr_active = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				Context c2 = new Context (sr_active);
-				CairoUtils.SetRoundedRectanglePath (c2, 0, 0, Width, Height, parent.WindowRadius);
+				c2.SetRoundedRectanglePath (0, 0, Width, Height, parent.WindowRadius);
 				LinearGradient lg = new LinearGradient (0, 0, 0, Height);
 				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
 				lg.AddColorStop (0.4, new Cairo.Color (1, 1, 1, 0));

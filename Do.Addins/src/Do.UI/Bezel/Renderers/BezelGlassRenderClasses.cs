@@ -24,6 +24,7 @@ using Gtk;
 using Cairo;
 
 using Do.Addins;
+using Do.Addins.CairoUtils;
 using Do.Universe;
 
 namespace Do.UI
@@ -94,7 +95,7 @@ namespace Do.UI
 				cr.LineTo (width - 15, 21);
 				Gdk.Color gc = new Gdk.Color ();
 				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
-				cr.Color = CairoUtils.ConvertToCairo (gc, 1);
+				cr.Color = gc.ConvertToCairo (1);
 				cr.Fill ();
 			}
 			

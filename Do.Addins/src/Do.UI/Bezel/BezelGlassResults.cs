@@ -25,6 +25,7 @@ using Gdk;
 using Gtk;
 
 using Do.Addins;
+using Do.Addins.CairoUtils;
 using Do.Universe;
 
 namespace Do.UI

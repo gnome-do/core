@@ -24,6 +24,7 @@ using Gtk;
 using Cairo;
 
 using Do.Addins;
+using Do.Addins.CairoUtils;
 
 namespace Do.UI
 {
@@ -104,11 +105,11 @@ namespace Do.UI
 			Colors["unfocused_line"] = new Cairo.Color (1.0, 1.0, 1.0, 0.2);
 			Colors["focused_text"]   = new Cairo.Color (0.0, 0.0, 0.0, 0.85);
 			Colors["unfocused_text"] = new Cairo.Color (0.3, 0.3, 0.3, 0.7);
-			Colors["titlebar_step1"] = CairoUtils.ShadeColor (Colors["background"], 3);
-			Colors["titlebar_step2"] = CairoUtils.ShadeColor (Colors["titlebar_step1"], .72);
-			Colors["titlebar_step3"] = CairoUtils.ShadeColor (Colors["titlebar_step1"], .60);
-			Colors["background_dk"]  = CairoUtils.ShadeColor (Colors["background"], .9);
-			Colors["background_lt"]  = CairoUtils.ShadeColor (Colors["background"], 1.15);
+			Colors["titlebar_step1"] = Colors["background"].ShadeColor (3);
+			Colors["titlebar_step2"] = Colors["titlebar_step1"].ShadeColor (.72);
+			Colors["titlebar_step3"] = Colors["titlebar_step1"].ShadeColor (.60);
+			Colors["background_dk"]  = Colors["background"].ShadeColor (.9);
+			Colors["background_lt"]  = Colors["background"].ShadeColor (1.15);
 		}
 	}
 }

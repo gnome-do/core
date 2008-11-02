@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 
 using Do.Addins;
+using Do.Addins.CairoUtils;
 using Do.Universe;
 
 namespace Do.UI
@@ -114,7 +115,7 @@ namespace Do.UI
 			setup = true;
 			clear_background.Sensitive = true;
 			background_colorbutton.Sensitive = shadow_check.Sensitive = true;
-			background_colorbutton.Color = Addins.CairoUtils.ConvertToGdk (bda.BackgroundColor);
+			background_colorbutton.Color = bda.BackgroundColor.ConvertToGdk ();
 			shadow_check.Active = BezelDrawingArea.DrawShadow;
 			animation_checkbutton.Active = BezelDrawingArea.Animated;
 			Gtk.Application.Invoke (delegate { setup = false; });
@@ -128,13 +129,13 @@ namespace Do.UI
 		protected virtual void OnBackgroundColorbuttonColorSet (object sender, System.EventArgs e)
 		{
 			if (setup) return;
-			BezelDrawingArea.BgColor = Addins.CairoUtils.ColorToHexString (background_colorbutton.Color);
+			BezelDrawingArea.BgColor = background_colorbutton.Color.ColorToHexString ();
 		}
 
 		protected virtual void OnClearBackgroundClicked (object sender, System.EventArgs e)
 		{
 			BezelDrawingArea.ResetBackgroundStyle ();
-			background_colorbutton.Color = Addins.CairoUtils.ConvertToGdk (bda.BackgroundColor);
+			background_colorbutton.Color = bda.BackgroundColor.ConvertToGdk ();
 		}
 
 		protected virtual void OnShadowCheckClicked (object sender, System.EventArgs e)
