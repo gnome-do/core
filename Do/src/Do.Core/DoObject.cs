@@ -99,7 +99,7 @@ namespace Do.Core {
 		protected float relevance;
 		protected string uid;
 		
-		internal DoObject (IObject inner)
+		public DoObject (IObject inner)
 		{
 			if (inner == null)
 				throw new ArgumentNullException ("inner","Inner IObject may not be null.");

@@ -28,14 +28,14 @@ using Do.Universe;
 
 namespace Do.Core {
 
-	interface IRelevanceProvider {
+	public interface IRelevanceProvider {
 		void IncreaseRelevance (DoObject target, string match, DoObject other);
 		void DecreaseRelevance (DoObject target, string match, DoObject other);
 		float GetRelevance (DoObject target, string match, DoObject other);
 	}
 
 	[Serializable]
-	abstract class RelevanceProvider : IRelevanceProvider {
+	public abstract class RelevanceProvider : IRelevanceProvider {
 
 		const int SerializeInterval = 15 * 60 * 1000;
 

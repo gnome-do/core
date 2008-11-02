@@ -92,7 +92,7 @@ namespace Do.Core {
 		/// Performs plugin system initialization. Should be called before this
 		/// class or any Mono.Addins class is used.
 		/// </summary>
-		internal static void Initialize ()
+		public static void Initialize ()
 		{
 			// Initialize Mono.Addins.
 			AddinManager.Initialize (Paths.UserPlugins);
