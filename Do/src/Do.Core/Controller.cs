@@ -206,12 +206,18 @@ namespace Do.Core {
 			}
 		}
 		
+		/// <value>
+		/// Check if First Controller is in a reset state
+		/// </value>
 		bool FirstControllerIsReset {
 			get {
 				return (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0);
 			}
 		}
 		
+		/// <summary>
+		/// Sets/Unsets third pane visibility if possible.
+		/// </summary>
 		bool ThirdPaneVisible {
 			set {
 				if (value == thirdPaneVisible)
@@ -229,6 +235,10 @@ namespace Do.Core {
 			}
 		}
 		
+		/// <value>
+		/// Check if the third pane is capable of closing.  When actions require the third pane, this will
+		/// return false
+		/// </value>
 		bool ThirdPaneCanClose {
 			get {
 				return (!ThirdPaneRequired &&
@@ -238,6 +248,10 @@ namespace Do.Core {
 			}
 		}
 		
+		/// <summary>
+		/// Determine if the third pane is allowed.  If allowed, tabbing will result in
+		/// third pane opening when tabbing from the second pane.
+		/// </summary>
 		bool ThirdPaneAllowed {
 			get {
 				IObject first, second;
@@ -252,6 +266,10 @@ namespace Do.Core {
 			}
 		}
 
+		/// <value>
+		/// Third pane required states that the current controller state requires that the third pane 
+		/// be visible
+		/// </value>
 		bool ThirdPaneRequired {
 			get {
 				IObject first, second;
@@ -269,6 +287,9 @@ namespace Do.Core {
 			}
 		}
 
+		/// <value>
+		/// Check if the symbol window is currently visible to the user
+		/// </value>
 		public bool IsSummoned {
 			get {
 				return null != window && window.Visible;
@@ -310,6 +331,15 @@ namespace Do.Core {
 			}
 		}
 		
+		/// <summary>
+		/// Determines if the user has requested Text Mode explicitly, even if he has finalized that input
+		/// </summary>
+		/// <param name="pane">
+		/// The <see cref="Pane"/> for which you wish to check
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/>
+		/// </returns>
 		public bool ControllerExplicitTextMode (Pane pane) {
 			return controllers[(int) pane].TextType == TextModeType.Explicit ||
 				controllers[(int) pane].TextType == TextModeType.ExplicitFinalized;
@@ -694,10 +724,6 @@ namespace Do.Core {
 			}
 		}
 		
-		/////////////////////////
-		// Pane Update Methods //
-		/////////////////////////
-
 		protected void UpdatePane (Pane pane)
 		{
 			if (!window.Visible) return;
