@@ -47,12 +47,18 @@ namespace Do.Core
 		
 		float epsilon = 0.00001f;
 		
+		/// <value>
+		/// The amount of time between updates in ms
+		/// </value>
 		int UpdateTimeout {
 			get {
 				return (DBus.PowerState.OnBattery ()) ? 120*1000 : 30*1000;
 			}
 		}
 		
+		/// <value>
+		/// The amount of time spent on each update in ms
+		/// </value>
 		int UpdateRunTime {
 			get {
 				return (DBus.PowerState.OnBattery ()) ? 600 : 200;
