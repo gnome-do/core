@@ -153,5 +153,12 @@ namespace Do.Core
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
 		bool ObjectHasChildren (IObject o);
+		
+		/// <value>
+		/// Enables/Disables background updates for universe.  This should be used primarily for power saving
+		/// or cpu saving purposes.  This is does not clear memory associated with the background update
+		/// thread.
+		/// </value>
+		bool UpdatesEnabled { get; set; }
 	}
 }

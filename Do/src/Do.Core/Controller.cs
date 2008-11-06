@@ -47,6 +47,8 @@ namespace Do.Core {
 				Action = action;
 			}
 		}
+		
+		const int SearchDelay = 250;
 
 		protected IDoWindow window;
 		protected Gtk.Window addin_window;
@@ -54,8 +56,6 @@ namespace Do.Core {
 		protected PreferencesWindow prefs_window;
 		protected ISearchController[] controllers;
 		protected Thread th;
-		
-		const int SearchDelay = 250;
 		
 		IAction action;
 		List<IItem> items;
@@ -315,10 +315,7 @@ namespace Do.Core {
 				controllers[(int) pane].TextType == TextModeType.ExplicitFinalized;
 		}
 		
-		/////////////////////////
-		/// Key Handling ////////
-		/////////////////////////
-
+#region KeyPress Handling
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
 			// User set keybindings
@@ -602,6 +599,7 @@ namespace Do.Core {
 			}
 			return modifier + evnt.Key.ToString ();
 		}
+#endregion
 		
 		/// <summary>
 		/// Selects the logical next pane in the UI left to right
@@ -645,6 +643,18 @@ namespace Do.Core {
 			}
 		}
 		
+		/// <summary>
+		/// This method determines what to do when a search is completed and takes the appropriate action
+		/// </summary>
+		/// <param name="o">
+		/// A <see cref="System.Object"/>
+		/// </param>
+		/// <param name="state">
+		/// A <see cref="SearchFinishState"/>
+		/// </param>
+		/// <param name="pane">
+		/// A <see cref="Pane"/>
+		/// </param>
 		void SearchFinished (object o, SearchFinishState state, Pane pane)
 		{
 			if (pane == Pane.First && FirstControllerIsReset) {
@@ -833,11 +843,7 @@ namespace Do.Core {
 			state.Action.Perform (state.Items.ToArray (), state.ModItems.ToArray ());
 		}
 					
-
-		///////////////////////////
-		/// IController Members ///
-		///////////////////////////
-		
+#region IController Implementation
 		public void Summon ()
 		{
 			if (!IsSummonable) return;
@@ -851,6 +857,10 @@ namespace Do.Core {
 				return;
 			}
 			
+			// We want to disable updates so that any updates to universe dont happen while controller is
+			// summoned.  We will disable this on vanish.  This way we can be sure to dedicate our CPU
+			// resources to searching and leave updating to a more reasonable time.
+			Do.UniverseManager.UpdatesEnabled = false;
 			window.Summon ();
 			if (Do.Preferences.AlwaysShowResults)
 				GrowResults ();
@@ -862,6 +872,7 @@ namespace Do.Core {
 			window.ShrinkResults ();
 			resultsGrown = false;
 			window.Vanish ();
+			Do.UniverseManager.UpdatesEnabled = true;
 		}	
 
 		public void ShowPreferences ()
@@ -916,6 +927,7 @@ namespace Do.Core {
 			about_window.Destroy ();
 			about_window = null;
 		}
+#endregion
 		
 #region IDoController
 		public void NewContextSelection (Pane pane, int index)

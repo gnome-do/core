@@ -59,13 +59,14 @@ namespace Do.Core
 			}
 		}
 		
-		internal bool UpdatesEnabled { get; set; }
+		public bool UpdatesEnabled { get; set; }
 		
 		public SimpleUniverseManager ()
 		{
 			actions = new List<IObject> ();
 			items_with_children = new List<string> ();
 			universe = new Dictionary<string, IObject> ();
+			UpdatesEnabled = true;
 		}
 
 		public IObject[] Search (string query, Type[] searchFilter)
@@ -199,29 +200,31 @@ namespace Do.Core
 			DateTime last_action_update = DateTime.Now;
 			char source_char = 'a';
 			while (true) {
-				if (thread.IsAlive)
-					thread.Join ();
-				
-				if (!UpdatesEnabled) {
-					Thread.Sleep (UpdateTimeout*3);
-					continue;
-				}
+				Thread.Sleep (UpdateTimeout);
 				
 				time = DateTime.Now;
+				if (!UpdatesEnabled)
+					continue;
+				
+				if (thread.IsAlive)
+					thread.Join ();
 				
 				if (DateTime.Now.Subtract (last_action_update).TotalMinutes > 4) {
 					Log.Info ("Updating Actions");
 					ReloadActions ();
 					last_action_update = DateTime.Now;
-					Thread.Sleep (UpdateTimeout);
 					continue;
 				}
 				
 				while (DateTime.Now.Subtract (time).TotalMilliseconds < UpdateRunTime) {
-					var sources = PluginManager.GetItemSources ()
+					IEnumerable<DoItemSource> sources = PluginManager.GetItemSources ()
 						.Where ((DoItemSource s) => s.Name.ToLower ().StartsWith (source_char.ToString ()));
 					
 					foreach (DoItemSource item_source in sources) {
+						// if one of these item sources takes a long time, we should fall asleep instead of 
+						// continuing on.  We however do need to pick up where we left off later.
+						if (DateTime.Now.Subtract (time).TotalMilliseconds > UpdateRunTime)
+							Thread.Sleep (UpdateTimeout);
 						Log.Info ("Updating Item Source: {0}", item_source.Name);
 						UpdateSource (item_source);
 					}
@@ -231,15 +234,20 @@ namespace Do.Core
 					else
 						source_char++;
 				}
-				
-				Thread.Sleep (UpdateTimeout);
 			}
 		}
 		
+		/// <summary>
+		/// Reloads all actions into the universe.  This is a straight reload, no intelligent 
+		/// reloading is done.
+		/// </summary>
 		void ReloadActions ()
 		{
-			lock (action_lock)
+			lock (action_lock) {
+				foreach (DoAction action in actions)
+					universe.Remove (action.UID);
 				actions.Clear ();
+			}
 			
 			foreach (DoAction action in PluginManager.GetActions ()) {
 				lock (action_lock)
@@ -249,6 +257,9 @@ namespace Do.Core
 			}
 		}
 		
+		/// <summary>
+		/// Updates an item source and syncs it into the universe
+		/// </summary>
 		void UpdateSource (DoItemSource item_source)
 		{
 			lock (universe_lock) {
