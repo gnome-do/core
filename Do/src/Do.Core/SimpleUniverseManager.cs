@@ -40,12 +40,10 @@ namespace Do.Core
 		List<IObject> actions;
 		List<string> items_with_children;
 		Dictionary<string, IObject> universe;
-//		Dictionary<char, Dictionary<string, IObject>> quick_results;
 		
 		object action_lock = new object ();
 		object children_lock = new object ();
 		object universe_lock = new object ();
-//		object quick_results_lock = new object ();
 		
 		float epsilon = 0.00001f;
 		
@@ -68,23 +66,10 @@ namespace Do.Core
 			actions = new List<IObject> ();
 			items_with_children = new List<string> ();
 			universe = new Dictionary<string, IObject> ();
-//			quick_results = new Dictionary<char,Dictionary<string,IObject>> ();
-			
-//			for (char key = 'a'; key <= 'z'; key++)
-//				quick_results [key] = new Dictionary<string,IObject> ();
 		}
 
 		public IObject[] Search (string query, Type[] searchFilter)
-		{
-//			if (query.Length == 1) {
-//				lock (quick_results_lock) {
-//					char key = Convert.ToChar (query.ToLower ());
-//					if (quick_results.ContainsKey (key)) {
-//						return Search (query, searchFilter, quick_results[key].Values, null);
-//					}
-//				}
-//			}
-			
+		{	
 			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
 				lock (action_lock)
 					return Search (query, searchFilter, actions, null);
@@ -98,14 +83,6 @@ namespace Do.Core
 			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
 				lock (action_lock)
 					return Search (query, searchFilter, actions, otherObj);
-			
-//			if (query.Length == 1) {
-//				lock (quick_results_lock) {
-//					char key = Convert.ToChar (query.ToLower ());
-//					if (quick_results.ContainsKey (key))
-//						return Search (query, searchFilter, quick_results[key].Values, null);
-//				}
-//			}
 			
 			lock (universe_lock) 
 				return Search (query, searchFilter, universe.Values, otherObj);
@@ -264,20 +241,9 @@ namespace Do.Core
 			lock (action_lock)
 				actions.Clear ();
 			
-			// Since we are updating all of our actions right now, we need to clear them all out
-			// of the quick results so we can re-register them.
-//			lock (quick_results_lock) {
-//				foreach (Dictionary<string, IObject> dict in quick_results.Values) {
-//					var tmpactions = dict.Values.Where (iobj => iobj is IAction);
-//					foreach (IObject action in tmpactions)
-//						DeleteQuickResult (action);
-//				}
-//			}
-			
 			foreach (DoAction action in PluginManager.GetActions ()) {
 				lock (action_lock)
 					actions.Add (action);
-//				RegisterQuickResults (quick_results, action);
 				lock (universe_lock)
 					universe[action.UID] = action;			
 			}
@@ -289,7 +255,6 @@ namespace Do.Core
 				foreach (DoItem item in item_source.Items) {
 					if (universe.ContainsKey (item.UID))
 						universe.Remove (item.UID);
-//					DeleteQuickResult (item);
 				}
 				try {
 					item_source.UpdateItems ();
@@ -298,7 +263,6 @@ namespace Do.Core
 				}
 				foreach (DoItem item in item_source.Items) {
 					universe[item.UID] = item;
-//					RegisterQuickResults (quick_results, item);
 					
 					bool supported = PluginManager.GetItemSources ()
 						.Where (s => SourceSupportsItem (s, item) && s.ChildrenOfItem (item).Any ())
@@ -325,45 +289,6 @@ namespace Do.Core
 		}
 		
 		/// <summary>
-		/// Registers quick_results into the passed dictionary of the result passed
-		/// </summary>
-		/// <param name="quick_results">
-		/// A <see cref="Dictionary`2"/>
-		/// </param>
-		/// <param name="result">
-		/// A <see cref="IObject"/>
-		/// </param>
-//		void RegisterQuickResults (Dictionary<char, Dictionary<string, IObject>> quick_results, IObject result)
-//		{
-//			if (quick_results == null) return;
-//			
-//			DoObject do_result = (result as DoObject) ?? new DoObject (result);
-//			
-//			lock (quick_results_lock) {
-//				foreach (char key in quick_results.Keys) {
-//					do_result.UpdateRelevance (key.ToString (), null);
-//					if (do_result.Relevance > epsilon)
-//						quick_results[key][do_result.UID] = do_result;
-//				}
-//			}
-//		}
-		
-		/// <summary>
-		/// Deletes a result from the global quickresults dictionary
-		/// </summary>
-		/// <param name="result">
-		/// A <see cref="IObject"/>
-		/// </param>
-//		void DeleteQuickResult (IObject result)
-//		{
-//			string UID = new DoObject (result).UID;
-//			lock (quick_results_lock) {
-//				foreach (Dictionary<string, IObject> list in quick_results.Values)
-//					list.Remove (UID);
-//			}
-//		}
-		
-		/// <summary>
 		/// Add a list of IItems to the universe
 		/// </summary>
 		/// <param name="items">
@@ -382,7 +307,6 @@ namespace Do.Core
 				lock (universe_lock) {
 					universe.Add (tmp.UID, i);
 				}
-//				RegisterQuickResults (quick_results, i);
 			}
 		}
 
@@ -399,7 +323,6 @@ namespace Do.Core
 				DoItem item = (i as DoItem) ?? new DoItem (i);
 				lock (universe_lock)
 				      universe.Remove (item.UID);
-//				DeleteQuickResult (i);
 			}
 		}
 
