@@ -102,7 +102,7 @@ namespace Do.Core
 		[Test ()]
 		public void TestDecreaseRelevance ()
 		{
-			DoObject obj = new DoObject (new TextItem ("Unique Test Item 1"));
+			DoObject obj = new DoObject (new TextItem ("Unique Test Item 2"));
 			string filter = "test";
 			
 			DoObject_RelevanceProvider.UpdateRelevance (obj, filter, null);

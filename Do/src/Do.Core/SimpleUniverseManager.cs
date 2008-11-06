@@ -36,42 +36,54 @@ namespace Do.Core
 	public class SimpleUniverseManager : IUniverseManager
 	{
 
-		Thread thread;
+		Thread thread, update_thread;
 		List<IObject> actions;
 		List<string> items_with_children;
-		DateTime last_update = DateTime.Now;
 		Dictionary<string, IObject> universe;
-		Dictionary<char, Dictionary<string, IObject>> quick_results;
+//		Dictionary<char, Dictionary<string, IObject>> quick_results;
 		
 		object action_lock = new object ();
 		object children_lock = new object ();
 		object universe_lock = new object ();
-		object quick_results_lock = new object ();
+//		object quick_results_lock = new object ();
 		
 		float epsilon = 0.00001f;
+		
+		int UpdateTimeout {
+			get {
+				return (DBus.PowerState.OnBattery ()) ? 120*1000 : 30*1000;
+			}
+		}
+		
+		int UpdateRunTime {
+			get {
+				return (DBus.PowerState.OnBattery ()) ? 600 : 200;
+			}
+		}
+		
+		internal bool UpdatesEnabled { get; set; }
 		
 		public SimpleUniverseManager ()
 		{
 			actions = new List<IObject> ();
 			items_with_children = new List<string> ();
 			universe = new Dictionary<string, IObject> ();
-			quick_results = new Dictionary<char,Dictionary<string,IObject>> ();
+//			quick_results = new Dictionary<char,Dictionary<string,IObject>> ();
 			
-			for (char key = 'a'; key <= 'z'; key++) {
-				quick_results [key] = new Dictionary<string,IObject> ();
-			}
+//			for (char key = 'a'; key <= 'z'; key++)
+//				quick_results [key] = new Dictionary<string,IObject> ();
 		}
 
 		public IObject[] Search (string query, Type[] searchFilter)
 		{
-			if (query.Length == 1) {
-				lock (quick_results_lock) {
-					char key = Convert.ToChar (query.ToLower ());
-					if (quick_results.ContainsKey (key)) {
-						return Search (query, searchFilter, quick_results[key].Values, null);
-					}
-				}
-			}
+//			if (query.Length == 1) {
+//				lock (quick_results_lock) {
+//					char key = Convert.ToChar (query.ToLower ());
+//					if (quick_results.ContainsKey (key)) {
+//						return Search (query, searchFilter, quick_results[key].Values, null);
+//					}
+//				}
+//			}
 			
 			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
 				lock (action_lock)
@@ -87,13 +99,13 @@ namespace Do.Core
 				lock (action_lock)
 					return Search (query, searchFilter, actions, otherObj);
 			
-			if (query.Length == 1) {
-				lock (quick_results_lock) {
-					char key = Convert.ToChar (query.ToLower ());
-					if (quick_results.ContainsKey (key))
-						return Search (query, searchFilter, quick_results[key].Values, null);
-				}
-			}
+//			if (query.Length == 1) {
+//				lock (quick_results_lock) {
+//					char key = Convert.ToChar (query.ToLower ());
+//					if (quick_results.ContainsKey (key))
+//						return Search (query, searchFilter, quick_results[key].Values, null);
+//				}
+//			}
 			
 			lock (universe_lock) 
 				return Search (query, searchFilter, universe.Values, otherObj);
@@ -183,7 +195,7 @@ namespace Do.Core
 		/// <summary>
 		/// Threaded universe building
 		/// </summary>
-		private void BuildUniverse ()
+		void BuildUniverse ()
 		{
 			//Originally i had threaded the loading of each plugin, but they dont seem to like this...
 			if (thread != null && thread.IsAlive) return;
@@ -191,81 +203,124 @@ namespace Do.Core
 			thread = new Thread (new ThreadStart (LoadUniverse));
 			thread.IsBackground = true;
 			thread.Start ();
+			
+			if (update_thread != null && update_thread.IsAlive)
+				return;
+			
+			update_thread = new Thread (new ThreadStart (UniverseUpdateStart));
+			update_thread.IsBackground = true;
+			update_thread.Priority = ThreadPriority.Lowest;
+			update_thread.Start ();
 		}
 		
-		
 		/// <summary>
-		/// Do not call inside main thread unless you really like a locked Do.
+		/// A continuous method that will update universe until a flag is set for it to stop.
 		/// </summary>
-		private void LoadUniverse ()
+		void UniverseUpdateStart ()
 		{
-			Dictionary<string, IObject> loc_universe;
-			Dictionary<char, Dictionary<string, IObject>> loc_quick;
-			List<IObject> loc_actions;
-			List<string> loc_children;
-			if (universe.Values.Count > 0) {
-				loc_universe = new Dictionary<string,IObject> ();
-				loc_quick    = new Dictionary<char,Dictionary<string,IObject>> ();
-				for (char key = 'a'; key <= 'z'; key++) {
-					loc_quick [key] = new Dictionary<string,IObject> ();
-				}
-				loc_actions  = new List<IObject> ();
-				loc_children = new List<string> ();
-			} else {
-				loc_universe = universe;
-				loc_quick    = quick_results;
-				loc_actions  = actions;
-				loc_children = items_with_children;
-			}
-			
-			foreach (DoAction action in PluginManager.GetActions ()) {
-				lock (universe_lock)
-					loc_universe[action.UID] = action;
-				RegisterQuickResults (loc_quick, action);
-				lock (action_lock)
-					loc_actions.Add (action);
-			}
-			
-			foreach (DoItemSource source in PluginManager.GetItemSources ()) {
-				try {
-					source.UpdateItems ();
-				} 
-				catch (Exception e)
-				{
-					Log.Error ("There was an error updating items in {0}: {1}", source.Name, e.Message);
+			DateTime time;
+			DateTime last_action_update = DateTime.Now;
+			char source_char = 'a';
+			while (true) {
+				if (thread.IsAlive)
+					thread.Join ();
+				
+				if (!UpdatesEnabled) {
+					Thread.Sleep (UpdateTimeout*3);
+					continue;
 				}
 				
-				foreach (DoItem item in source.Items) {
-					lock (universe_lock)
-						loc_universe[item.UID] = item;
-					RegisterQuickResults (loc_quick, item);
+				time = DateTime.Now;
+				
+				if (DateTime.Now.Subtract (last_action_update).TotalMinutes > 4) {
+					Log.Info ("Updating Actions");
+					ReloadActions ();
+					last_action_update = DateTime.Now;
+					Thread.Sleep (UpdateTimeout);
+					continue;
+				}
+				
+				while (DateTime.Now.Subtract (time).TotalMilliseconds < UpdateRunTime) {
+					var sources = PluginManager.GetItemSources ()
+						.Where ((DoItemSource s) => s.Name.ToLower ().StartsWith (source_char.ToString ()));
+					
+					foreach (DoItemSource item_source in sources) {
+						Log.Info ("Updating Item Source: {0}", item_source.Name);
+						UpdateSource (item_source);
+					}
+					
+					if (source_char == 'z')
+						source_char = 'a';
+					else
+						source_char++;
+				}
+				
+				Thread.Sleep (UpdateTimeout);
+			}
+		}
+		
+		void ReloadActions ()
+		{
+			lock (action_lock)
+				actions.Clear ();
+			
+			// Since we are updating all of our actions right now, we need to clear them all out
+			// of the quick results so we can re-register them.
+//			lock (quick_results_lock) {
+//				foreach (Dictionary<string, IObject> dict in quick_results.Values) {
+//					var tmpactions = dict.Values.Where (iobj => iobj is IAction);
+//					foreach (IObject action in tmpactions)
+//						DeleteQuickResult (action);
+//				}
+//			}
+			
+			foreach (DoAction action in PluginManager.GetActions ()) {
+				lock (action_lock)
+					actions.Add (action);
+//				RegisterQuickResults (quick_results, action);
+				lock (universe_lock)
+					universe[action.UID] = action;			
+			}
+		}
+		
+		void UpdateSource (DoItemSource item_source)
+		{
+			lock (universe_lock) {
+				foreach (DoItem item in item_source.Items) {
+					if (universe.ContainsKey (item.UID))
+						universe.Remove (item.UID);
+//					DeleteQuickResult (item);
+				}
+				try {
+					item_source.UpdateItems ();
+				} catch {
+					Log.Error ("There was an error updated items for {0}", item_source.Name);
+				}
+				foreach (DoItem item in item_source.Items) {
+					universe[item.UID] = item;
+//					RegisterQuickResults (quick_results, item);
 					
 					bool supported = PluginManager.GetItemSources ()
-						.Where (s => SourceSupportsItem (s, item) && source.ChildrenOfItem (item).Any ())
+						.Where (s => SourceSupportsItem (s, item) && s.ChildrenOfItem (item).Any ())
 						.Any ();
-			
+					
 					if (supported)
 						lock (children_lock)
 							items_with_children.Add (item.UID);
 				}
 			}
+		}
+		
+		/// <summary>
+		/// Used to perform and intialization of Do's universe and related indexes
+		/// </summary>
+		void LoadUniverse ()
+		{
+			ReloadActions ();
 			
-			lock (universe_lock)
-				universe = loc_universe;
-			lock (quick_results_lock)
-				quick_results = loc_quick;
-			lock (action_lock)
-				actions = loc_actions;
-			lock (children_lock)
-				items_with_children = loc_children;
+			foreach (DoItemSource source in PluginManager.GetItemSources ())
+				UpdateSource (source);
 			
-			loc_universe = null;
-			loc_quick    = null;
-			loc_actions  = null;
-			loc_children = null;
-			
-			//maxResults = (int)universe.Count/7;
-			last_update = DateTime.Now;
 			Log.Info ("Universe contains {0} items.", universe.Count);
 		}
 		
@@ -278,20 +333,20 @@ namespace Do.Core
 		/// <param name="result">
 		/// A <see cref="IObject"/>
 		/// </param>
-		private void RegisterQuickResults (Dictionary<char, Dictionary<string, IObject>> quick_results, IObject result)
-		{
-			if (quick_results == null) return;
-			
-			DoObject do_result = (result as DoObject) ?? new DoObject (result);
-			
-			lock (quick_results_lock) {
-				foreach (char key in quick_results.Keys) {
-					do_result.UpdateRelevance (key.ToString (), null);
-					if (do_result.Relevance > epsilon)
-						quick_results[key][do_result.UID] = do_result;
-				}
-			}
-		}
+//		void RegisterQuickResults (Dictionary<char, Dictionary<string, IObject>> quick_results, IObject result)
+//		{
+//			if (quick_results == null) return;
+//			
+//			DoObject do_result = (result as DoObject) ?? new DoObject (result);
+//			
+//			lock (quick_results_lock) {
+//				foreach (char key in quick_results.Keys) {
+//					do_result.UpdateRelevance (key.ToString (), null);
+//					if (do_result.Relevance > epsilon)
+//						quick_results[key][do_result.UID] = do_result;
+//				}
+//			}
+//		}
 		
 		/// <summary>
 		/// Deletes a result from the global quickresults dictionary
@@ -299,14 +354,14 @@ namespace Do.Core
 		/// <param name="result">
 		/// A <see cref="IObject"/>
 		/// </param>
-		private void DeleteQuickResult (IObject result)
-		{
-			string UID = new DoObject (result).UID;
-			lock (quick_results_lock) {
-				foreach (Dictionary<string, IObject> list in quick_results.Values)
-					list.Remove (UID);
-			}
-		}
+//		void DeleteQuickResult (IObject result)
+//		{
+//			string UID = new DoObject (result).UID;
+//			lock (quick_results_lock) {
+//				foreach (Dictionary<string, IObject> list in quick_results.Values)
+//					list.Remove (UID);
+//			}
+//		}
 		
 		/// <summary>
 		/// Add a list of IItems to the universe
@@ -327,7 +382,7 @@ namespace Do.Core
 				lock (universe_lock) {
 					universe.Add (tmp.UID, i);
 				}
-				RegisterQuickResults (quick_results, i);
+//				RegisterQuickResults (quick_results, i);
 			}
 		}
 
@@ -344,7 +399,7 @@ namespace Do.Core
 				DoItem item = (i as DoItem) ?? new DoItem (i);
 				lock (universe_lock)
 				      universe.Remove (item.UID);
-				DeleteQuickResult (i);
+//				DeleteQuickResult (i);
 			}
 		}
 
@@ -387,19 +442,13 @@ namespace Do.Core
 		/// </summary>
 		public void Reload ()
 		{
-			Console.WriteLine ("Reload");
+			Log.Info ("Reloading Universe");
 			BuildUniverse ();
 		}
 		
 		public void Initialize ()
 		{
 			BuildUniverse ();
-			GLib.Timeout.Add (5 * 60 * 1000, () => {
-				if (!DBus.PowerState.OnBattery () || (DateTime.Now - last_update).TotalMinutes > 15) {
-					BuildUniverse ();
-				}
-				return true;
-			});
 		}
 	}
 }
