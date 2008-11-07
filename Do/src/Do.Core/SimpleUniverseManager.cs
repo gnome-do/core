@@ -52,7 +52,7 @@ namespace Do.Core
 		/// </value>
 		int UpdateTimeout {
 			get {
-				return (DBus.PowerState.OnBattery ()) ? 120*1000 : 30*1000;
+				return (DBus.PowerState.OnBattery ()) ? 10*60*1000 : 2*60*1000;
 			}
 		}
 		
