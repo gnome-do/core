@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 using Cairo;
@@ -59,7 +60,7 @@ namespace Do.UI
 		IUIContext context = null;
 		BezelColors colors;
 		
-		IObject[] results;
+		IList<IObject> results;
 		
 		public int X { get; set; }
 		
@@ -126,7 +127,7 @@ namespace Do.UI
 			}
 		}
 		
-		public IObject[] Results {
+		public IList<IObject> Results {
 			get {
 				return results;
 			}
@@ -164,7 +165,7 @@ namespace Do.UI
 				int result = Math.Max (Cursor - (num_results / 2), 0);
 				if (results == null)
 					return 0;
-				while (result+num_results > results.Length && result > 1)
+				while (result+num_results > results.Count && result > 1)
 					result--;
 				return result;
 			}
@@ -209,7 +210,7 @@ namespace Do.UI
 				if (!Visible)
 					return;
 
-				if (value == null || value.Results.Length == 0) {
+				if (value == null || !value.Results.Any ()) {
 					Clear ();
 					return;
 				}
@@ -660,7 +661,7 @@ namespace Do.UI
 				RenderText (cr, new Gdk.Rectangle (10, 3, width-60, 20), 12, context.Query, QueryColor);
 			
 			if (Results != null) {
-				string render_string = context.Cursor+1 + " of " + Results.Length + "  ▸  ";
+				string render_string = context.Cursor+1 + " of " + Results.Count + "  ▸  ";
 				if (context.ParentContext != null && context.ParentContext.Selection != null) {
 					if (context.ParentContext.ParentContext != null && context.ParentContext.ParentContext.Selection != null) {
 						render_string += context.ParentContext.ParentContext.Selection.Name + " ▸ ";
@@ -671,7 +672,7 @@ namespace Do.UI
 				RenderText (cr, new Gdk.Rectangle (10, height-BottomBorderWidth+3, width-20, 20), 11, render_string);
 				int start_result = StartResult-(int) Math.Ceiling (scroll_offset);
 				RenderHighlight (cr);
-				for (int i = start_result; i < start_result+num_results+1 && i < Results.Length; i++) {
+				for (int i = start_result; i < start_result+num_results+1 && i < Results.Count; i++) {
 					RenderItem (cr, i);
 				}
 			}
@@ -812,7 +813,7 @@ namespace Do.UI
 		
 		void RenderItem (Context cr, int item)
 		{
-			if (item >= Results.Length || item < 0)
+			if (item >= Results.Count || item < 0)
 				return;
 			int offset = (int) (SurfaceHeight*scroll_offset) + top_border_width;
 			if (!surface_buffer.ContainsKey (Results[item])) {

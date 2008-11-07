@@ -38,12 +38,12 @@ namespace Do.Core
 		/// <value>
 		/// IObject Results from the current Query
 		/// </value>
-		IObject[] Results {get; set;}
+		IList<IObject> Results {get; set;}
 		
 		/// <value>
 		/// The full selection, including secondary selections
 		/// </value>
-		IObject[] FullSelection {get;}
+		IList<IObject> FullSelection {get;}
 		
 		/// <value>
 		/// The primary selection from the user curosr

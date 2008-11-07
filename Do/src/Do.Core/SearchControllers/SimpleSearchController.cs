@@ -45,7 +45,7 @@ namespace Do.Core
 		
 		protected bool ImplicitTextMode {
 			get {
-				return Results.Length == 1 && Results[0] is ITextItem && !textMode;
+				return Results.Count == 1 && Results[0] is ITextItem && !textMode;
 			}
 		}
 		
@@ -62,7 +62,7 @@ namespace Do.Core
 			}
 		}
 		
-		public IObject[] Results {
+		public IList<IObject> Results {
 			get {
 				return context.Results;
 			}
@@ -72,7 +72,7 @@ namespace Do.Core
 			}
 		}
 
-		public IObject[] FullSelection {
+		public IList<IObject> FullSelection {
 			get {
 				return context.FullSelection;
 			}
@@ -173,7 +173,7 @@ namespace Do.Core
 
 		public virtual bool ToggleSecondaryCursor (int cursorLocation)
 		{
-			if (Results.Length - 1 < cursorLocation) return false;
+			if (Results.Count - 1 < cursorLocation) return false;
 			
 			List<IObject> secondary;
 			secondary = new List<IObject> (context.SecondaryCursors);

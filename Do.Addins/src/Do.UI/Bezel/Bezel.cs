@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Cairo;
 using Gdk;
@@ -180,7 +181,7 @@ namespace Do.UI
 			// happened is the universe has "nulled" the pane by fluke.  We detect this and replace the
 			// query with an invisible space.
 			string query;
-			if (pane == Pane.Third && context.Selection == null && string.IsNullOrEmpty (context.Query) && context.Results.Length == 0) {
+			if (pane == Pane.Third && context.Selection == null && string.IsNullOrEmpty (context.Query) && !context.Results.Any ()) {
 				query = " ";
 			} else {
 				query = context.Query;

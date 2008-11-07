@@ -30,7 +30,7 @@ namespace Do.Core
 	{
 		string query;
 		int cursor;
-		IObject[] results;
+		IList<IObject> results;
 		
 		public SimpleSearchContext ()
 		{
@@ -49,11 +49,11 @@ namespace Do.Core
 			set { query = value; }
 		}
 
-		public IObject[] Results
+		public IList<IObject> Results
 		{
 			get { return results ?? results = new IObject[0]; }
 			set {
-				results = value ?? new IObject[0];
+				results = value ?? new List<IObject> (0);
 				
 				cursor = 0;
 				
@@ -102,8 +102,8 @@ namespace Do.Core
 		{
 			get { return cursor; }
 			set { 
-				if (value > Results.Length - 1)
-					cursor = Results.Length - 1;
+				if (value > Results.Count - 1)
+					cursor = Results.Count - 1;
 				else if ( value <= 0 )
 					cursor = 0;
 				else
@@ -145,7 +145,7 @@ namespace Do.Core
 			List<int> cursors = new List<int> ();
 				
 			foreach (IObject obj in SecondaryCursors) {
-				for (int i = 0; i < Results.Length; i++) {
+				for (int i = 0; i < Results.Count; i++) {
 					if (Results[i] == obj)
 						cursors.Add (i);
 				}
@@ -164,7 +164,8 @@ namespace Do.Core
 			clone.ParentContext = ParentContext;
 			clone.Cursor = Cursor;
 			clone.SecondaryCursors = SecondaryCursors; //Cloning these makes no sense
-			clone.Results = results.Clone () as IObject[];
+//			clone.Results = results.Clone () as IObject[];
+			clone.Results = new List<IObject> (results);
 			return clone;
 		}
 		

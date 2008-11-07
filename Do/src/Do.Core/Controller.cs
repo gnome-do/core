@@ -177,7 +177,7 @@ namespace Do.Core {
 			set {
 				//If we have no results, we can't go to the second pane
 				if (window.CurrentPane == Pane.First &&
-					SearchController.Results.Length == 0)
+					!SearchController.Results.Any ())
 					return;
 				
 				switch (value) {
@@ -211,7 +211,7 @@ namespace Do.Core {
 		/// </value>
 		bool FirstControllerIsReset {
 			get {
-				return (string.IsNullOrEmpty(controllers[0].Query) && controllers[0].Results.Length == 0);
+				return (string.IsNullOrEmpty(controllers[0].Query) && !controllers[0].Results.Any ());
 			}
 		}
 		
@@ -262,7 +262,7 @@ namespace Do.Core {
 				action = (first as IAction) ?? (second as IAction);
 				return action != null &&
 					action.SupportedModifierItemTypes.Length > 0 &&
-					controllers[1].Results.Length > 0;
+					controllers[1].Results.Any ();
 			}
 		}
 
@@ -283,7 +283,7 @@ namespace Do.Core {
 				return action != null && item != null &&
 					action.SupportedModifierItemTypes.Length > 0 &&
 					!action.ModifierItemsOptional &&
-					controllers[1].Results.Length > 0;
+					controllers[1].Results.Any ();
 			}
 		}
 
@@ -483,7 +483,7 @@ namespace Do.Core {
 			bool results, something_typed;
 
 			something_typed = SearchController.Query.Length > 0;
-			results = SearchController.Results.Length > 0;
+			results = SearchController.Results.Any ();
 			
 			ClearSearchResults ();
 			
@@ -520,7 +520,7 @@ namespace Do.Core {
 		void OnRightLeftKeyPressEvent (EventKey evnt)
 		{
 			im.Reset ();
-			if (SearchController.Results.Length == 0) return;
+			if (!SearchController.Results.Any ()) return;
 
 			switch ((Gdk.Key) evnt.KeyValue) {
 			case Gdk.Key.Right:
@@ -598,7 +598,7 @@ namespace Do.Core {
 			} else if (evnt.Key == Gdk.Key.Home) {
 				SearchController.Cursor = 0;
 			} else if (evnt.Key == Gdk.Key.End) {
-				SearchController.Cursor = SearchController.Results.Length - 1;
+				SearchController.Cursor = SearchController.Results.Count - 1;
 			} else if (evnt.Key == Gdk.Key.Page_Down) {
 				SearchController.Cursor += 5;
 			} else if (evnt.Key == Gdk.Key.Page_Up) {
@@ -958,7 +958,7 @@ namespace Do.Core {
 #region IDoController
 		public void NewContextSelection (Pane pane, int index)
 		{
-			if (controllers[(int) pane].Results.Length == 0 || index == controllers[(int) pane].Cursor) return;
+			if (!controllers[(int) pane].Results.Any () || index == controllers[(int) pane].Cursor) return;
 			
 			controllers[(int) pane].Cursor = index;
 			window.SetPaneContext (pane, controllers[(int) pane].UIContext);

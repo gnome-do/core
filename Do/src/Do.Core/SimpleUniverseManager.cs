@@ -75,7 +75,7 @@ namespace Do.Core
 			UpdatesEnabled = true;
 		}
 
-		public IObject[] Search (string query, Type[] searchFilter)
+		public IList<IObject> Search (string query, Type[] searchFilter)
 		{	
 			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
 				lock (action_lock)
@@ -85,7 +85,7 @@ namespace Do.Core
 				return Search (query, searchFilter, universe.Values, null);
 		}
 		
-		public IObject[] Search (string query, Type[] searchFilter, IObject otherObj)
+		public IList<IObject> Search (string query, Type[] searchFilter, IObject otherObj)
 		{
 			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
 				lock (action_lock)
@@ -95,12 +95,12 @@ namespace Do.Core
 				return Search (query, searchFilter, universe.Values, otherObj);
 		}
 		
-		public IObject[] Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray)
+		public IList<IObject> Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray)
 		{
 			return Search (query, searchFilter, baseArray, null);
 		}
 		
-		public IObject[] Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray, IObject compareObj)
+		public IList<IObject> Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray, IObject compareObj)
 		{
 			List<IObject> results = new List<IObject> ();
 			query = query.ToLower ();

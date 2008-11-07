@@ -43,7 +43,7 @@ namespace Do.UI
 		/// <value>
 		/// The results list
 		/// </value>
-		IObject[] Results {get;}
+		IList<IObject> Results {get;}
 		
 		/// <value>
 		/// Integer index of the selection in the results list

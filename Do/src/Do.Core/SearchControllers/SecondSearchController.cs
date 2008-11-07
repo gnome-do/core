@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Do.Addins;
 using Do.Universe;
@@ -82,12 +83,12 @@ namespace Do.Core
 			if (TextMode)
 				return new List<IObject> ();
 			//We continue off our previous results if possible
-			if (context.LastContext != null && context.LastContext.Results.Length != 0) {
+			if (context.LastContext != null && context.LastContext.Results.Any ()) {
 				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
 				                                                     SearchTypes, 
 				                                                     context.LastContext.Results, 
 				                                                     FirstController.Selection));
-			} else if (context.ParentContext != null && context.Results.Length != 0) {
+			} else if (context.ParentContext != null && context.Results.Any ()) {
 				return new List<IObject> (context.Results);
 			} else { 
 				//else we do things the slow way
