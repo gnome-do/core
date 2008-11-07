@@ -76,11 +76,11 @@ namespace Do {
 			notification_icon = new NotificationIcon ();
 			
 			// Kick-off update timers.			
-			GLib.Timeout.Add (5 * 60 * 100, delegate {
+			GLib.Timeout.Add (5 * 60 * 1000, delegate {
 				CheckForUpdates ();
 				return false;
 			});
-			GLib.Timeout.Add (2 * 60 * 60 * 100, delegate {
+			GLib.Timeout.Add (2 * 60 * 60 * 1000, delegate {
 				CheckForUpdates ();
 				return true;
 			});
