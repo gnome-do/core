@@ -100,6 +100,12 @@ namespace Do.Universe {
 			}
 		}
 		
+		public bool IsUserCustomItem {
+			get {
+				return item.Location.StartsWith ("file:///home");
+			}
+		}
+		
 		public string[] MimeTypes {
 			get {
 				if (!item.AttrExists ("MimeType")) {

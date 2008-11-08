@@ -77,6 +77,9 @@ namespace Do.Universe {
 			if (file == null || app == null)
 				return true;
 			
+			if (app.IsUserCustomItem)
+				return true;
+			
 			if (app.MimeTypes == null)
 				return false;
 			
