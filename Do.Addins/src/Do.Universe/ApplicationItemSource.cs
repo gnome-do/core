@@ -41,13 +41,14 @@ namespace Do.Universe {
 					"~/.local/share/applications",
 					"/usr/share/applications",
 					"/usr/share/applications/kde",
+					"/usr/share/applications/kde4",
 					"/usr/share/gdm/applications",
 					"/usr/local/share/applications",
 					Desktop,
 				};
 			}
 		}
-
+		
 		static string Desktop {
 			get {
 				return Paths.ReadXdgUserDir ("XDG_DESKTOP_DIR", "Desktop");
