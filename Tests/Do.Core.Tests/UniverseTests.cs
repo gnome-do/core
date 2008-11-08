@@ -44,7 +44,7 @@ namespace Do.Core
 			IUniverseManager universe = new SimpleUniverseManager ();
 			universe.Initialize ();
 			
-			Assert.IsTrue (universe.Search ("e", new Type[] {}).Length > 0);
+			Assert.IsTrue (universe.Search ("e", new Type[] {}).Count > 0);
 		}
 		
 		[TestFixtureSetUp]

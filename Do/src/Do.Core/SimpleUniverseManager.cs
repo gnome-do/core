@@ -30,7 +30,7 @@ using Do.Universe;
 namespace Do.Core
 {
 	// Threading Heirarchy:
-	// universe_lock may be locked within quick_results_lock and action_lock
+	// universe_lock may be locked within and action_lock
 	// No other nested locks should be allowed
 	
 	public class SimpleUniverseManager : IUniverseManager

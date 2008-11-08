@@ -386,7 +386,7 @@ namespace Do.UI {
 				return;
 			}
 			
-			if (context.Query.Length == 0 && context.LargeTextDisplay) {
+			if (string.IsNullOrEmpty (context.Query) && context.LargeTextDisplay) {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
 				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text");
 				
