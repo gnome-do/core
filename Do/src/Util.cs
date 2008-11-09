@@ -119,6 +119,7 @@ namespace Do
 				                  time) == GrabStatus.Success)
 				{
 					if (Keyboard.Grab (window.GdkWindow, true, time) == GrabStatus.Success) {
+						Gtk.Grab.Add (window);
 						return true;
 					} else {
 						Pointer.Ungrab (time);
