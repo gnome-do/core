@@ -177,6 +177,8 @@ namespace Do.UI
 		
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
+		
+		GConf.Client gconfClient;
 #endregion
 		
 #region Properties
@@ -349,6 +351,9 @@ namespace Do.UI
 		public IBezelDefaults BezelDefaults { get { return bezelDefaults; }	}
 #endregion
 #endregion
+		
+		public event EventHandler GtkThemeChanged;
+		
 		public BezelDrawingArea(IDoController controller, IRenderTheme theme, bool preview) : base ()
 		{
 			this.controller = controller;
@@ -365,6 +370,9 @@ namespace Do.UI
 			
 			ResetRenderStyle ();
 			SetDrawingArea ();
+			
+			gconfClient = new GConf.Client ();
+			gconfClient.AddNotify ("/desktop/gnome/interface", OnGtkThemeChanged);
 			
 			BezelDrawingArea.ThemeChanged += OnThemeChanged;
 			Realized += delegate {
@@ -639,6 +647,16 @@ namespace Do.UI
 //			Draw ();
 			Paint ();
 			return ret;
+		}
+		
+		private void OnGtkThemeChanged (object o, GConf.NotifyEventArgs args)
+		{
+			GLib.Timeout.Add (3000, () => {
+				if (GtkThemeChanged != null)
+					GtkThemeChanged (o, args);
+				Colors.RebuildColors (BackgroundColor);
+				return false;
+			});
 		}
 		
 		private void OnThemeChanged (object o, System.EventArgs args)

@@ -55,8 +55,6 @@ namespace Do.Addins
 		
 		public static class Appearance
 		{
-			
-			
 			public static PresentWindowDelegate PresentWindow;
 			public static PixbufFromIconNameDelegate PixbufFromIconName;
 			public static StringTransformationDelegate MarkupSafeString;
