@@ -738,7 +738,8 @@
                                         <property name="MemberName" />
                                         <property name="CanFocus">True</property>
                                         <property name="Events">ButtonMotionMask, ButtonPressMask, ButtonReleaseMask</property>
-                                        <property name="Alpha">-1</property>
+                                        <property name="UseAlpha">True</property>
+                                        <property name="Alpha">65535</property>
                                         <signal name="ColorSet" handler="OnBackgroundColorbuttonColorSet" />
                                       </widget>
                                       <packing>

@@ -129,7 +129,11 @@ namespace Do.UI
 		public Cairo.Color BackgroundColor {
 			get {
 				Gdk.Color bgColor;
-				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (parent)) {
+				Gtk.Widget top_level_widget = parent;
+				while (top_level_widget.Parent != null)
+					top_level_widget = top_level_widget.Parent;
+				
+				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (top_level_widget)) {
 					bgColor = rcstyle.Backgrounds[(int) StateType.Selected];
 				}
 				bgColor = CairoUtils.SetMaximumValue (bgColor, 65);

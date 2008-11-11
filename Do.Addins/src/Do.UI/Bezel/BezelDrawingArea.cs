@@ -186,8 +186,14 @@ namespace Do.UI
 		public Cairo.Color BackgroundColor {
 			get {
 				Gdk.Color color = new Gdk.Color ();
-				if (Gdk.Color.Parse ("#" + BgColor, ref color))
+				if (Gdk.Color.Parse ("#" + BgColor.Substring (0, 6), ref color)) {
+					if (BgColor.Length == 8) {
+						double alpha = Convert.ToInt32 (BgColor.Substring (6, 2), 16);
+						alpha = alpha / 255;
+						return color.ConvertToCairo (alpha);
+					}
 					return color.ConvertToCairo (backgroundRenderer.BackgroundColor.A);
+				}
 				return backgroundRenderer.BackgroundColor;
 			}
 		}

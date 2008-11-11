@@ -116,6 +116,7 @@ namespace Do.UI
 			clear_background.Sensitive = true;
 			background_colorbutton.Sensitive = shadow_check.Sensitive = true;
 			background_colorbutton.Color = bda.BackgroundColor.ConvertToGdk ();
+			background_colorbutton.Alpha = (ushort) (bda.BackgroundColor.A * ushort.MaxValue);
 			shadow_check.Active = BezelDrawingArea.DrawShadow;
 			animation_checkbutton.Active = BezelDrawingArea.Animated;
 			Gtk.Application.Invoke (delegate { setup = false; });
@@ -129,13 +130,15 @@ namespace Do.UI
 		protected virtual void OnBackgroundColorbuttonColorSet (object sender, System.EventArgs e)
 		{
 			if (setup) return;
-			BezelDrawingArea.BgColor = background_colorbutton.Color.ColorToHexString ();
+			string hex_string = string.Format ("{0}{1:X}", background_colorbutton.Color.ColorToHexString (), (byte) (background_colorbutton.Alpha >> 8));
+			BezelDrawingArea.BgColor = hex_string;
 		}
 
 		protected virtual void OnClearBackgroundClicked (object sender, System.EventArgs e)
 		{
 			BezelDrawingArea.ResetBackgroundStyle ();
 			background_colorbutton.Color = bda.BackgroundColor.ConvertToGdk ();
+			background_colorbutton.Alpha = (ushort) (bda.BackgroundColor.A * ushort.MaxValue);
 		}
 
 		protected virtual void OnShadowCheckClicked (object sender, System.EventArgs e)
