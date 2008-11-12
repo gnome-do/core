@@ -43,6 +43,9 @@ namespace Do.UI
 				themes.Add (theme.Name);
 			}
 			
+			theme_combo.AppendText ("MonoDock");
+			themes.Add ("MonoDock");
+			
 			if (!Screen.IsComposited)
 				theme_combo.Sensitive = false;
 				

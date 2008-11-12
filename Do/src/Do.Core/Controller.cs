@@ -138,10 +138,15 @@ namespace Do.Core {
 				return;
 			}
 
+			
+			
 			window = PluginManager.GetThemes ()
 				.Where (theme => theme.Name == Do.Preferences.Theme)
 				.Select (theme => new Bezel (this, theme))
 				.FirstOrDefault ();
+			
+			if (Do.Preferences.Theme == "MonoDock")
+				window = new MonoDock.UI.DockWindow ();
 
 			if (window == null)
 				window = new Bezel (this, new ClassicTheme ());
