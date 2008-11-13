@@ -53,6 +53,13 @@ namespace MonoDock.UI
 				return 2*IconSize + 10;
 			}
 		}
+		
+		public int DockHeight {
+			get {
+				Console.WriteLine (MinimumDockArea.Height);
+				return MinimumDockArea.Height;
+			}
+		}
 #endregion
 		
 		double ZoomIn {
@@ -105,7 +112,7 @@ namespace MonoDock.UI
 		Gdk.Rectangle MinimumDockArea {
 			get {
 				if (minimum_dock_size.X == -1)
-					minimum_dock_size = new Gdk.Rectangle ((ZoomSize/2), Height-IconSize, Width - ZoomSize, Height);
+					minimum_dock_size = new Gdk.Rectangle ((ZoomSize/2), Height-IconSize, Width - ZoomSize, IconSize);
 				return minimum_dock_size;
 			}
 		}
@@ -202,7 +209,7 @@ namespace MonoDock.UI
 			int x = start_x - (int)(start_zoom*(IconSize/2));
 			int end = end_x + (int)(end_zoom*(IconSize/2));
 			
-			return new Gdk.Rectangle (x, Height-IconSize, end-x, Height);
+			return new Gdk.Rectangle (x, Height-IconSize, end-x, IconSize);
 		}
 		
 		protected override bool OnExposeEvent(EventExpose evnt)

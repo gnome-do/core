@@ -1,16 +1,16 @@
 <Project name="Do.Addins" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="bin/Debug" assemblyKeyFile="." assembly="Do.Addins" />
+      <Output directory="bin/Debug" assemblyKeyFile="/home/jason/do/do-future/Do.Addins/." assembly="Do.Addins" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
-      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="True" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
       <Output directory="bin/Release" assembly="Do.Addins" />
       <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
-      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="True" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
   </Configurations>
   <Contents>
@@ -96,6 +96,9 @@
     <File name="src/Do.UI/MonoDock/MonoDock.UI/DockWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.Util/GtkUtils.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.Util/Preferences.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/XLib" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/XLib/X11Atoms.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/XLib/Xlib.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

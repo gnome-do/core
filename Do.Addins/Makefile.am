@@ -90,6 +90,8 @@ FILES =  \
 	src/Do.UI/MonoDock/MonoDock.UI/DockWindow.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/GtkUtils.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/Preferences.cs \
+	src/Do.UI/MonoDock/XLib/X11Atoms.cs \
+	src/Do.UI/MonoDock/XLib/Xlib.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/BookmarkItem.cs \
