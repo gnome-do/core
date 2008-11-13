@@ -41,6 +41,10 @@ namespace MonoDock.UI
 			AppPaintable = true;
 			KeepAbove = true;
 			Decorated = false;
+			SkipPagerHint = true;
+			SkipTaskbarHint = true;
+			Resizable = false;
+			TypeHint = WindowTypeHint.Splashscreen;
 			
 			this.SetCompositeColormap ();
 			
@@ -97,6 +101,17 @@ namespace MonoDock.UI
 			
 			return base.OnExposeEvent (evnt);
 		}
+		
+		protected override void OnShown ()
+		{
+			base.OnShown ();
+			Gdk.Rectangle geo, main;
+			
+			GetSize (out main.Width, out main.Height);
+			geo = Screen.GetMonitorGeometry (0);
+			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-main.Height);
+		}
+
 
 		#region IDoWindow implementation 
 		bool visible = false;
