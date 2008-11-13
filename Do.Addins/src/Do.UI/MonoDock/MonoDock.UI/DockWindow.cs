@@ -40,6 +40,7 @@ namespace MonoDock.UI
 		{
 			AppPaintable = true;
 			KeepAbove = true;
+			Decorated = false;
 			
 			this.SetCompositeColormap ();
 			
@@ -48,10 +49,24 @@ namespace MonoDock.UI
 		
 		void Build ()
 		{
-			dock_area = new DockArea (GetItems ());
+			dock_area = new DockArea (this, GetItems ());
 			
 			Add (dock_area);
 			ShowAll ();
+		}
+		
+		public void SetInputMask (int heightOffset)
+		{
+			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, dock_area.Width, dock_area.Height-heightOffset, 1);
+			Context cr = Gdk.CairoHelper.Create (pixmap);
+			
+			cr.Color = new Cairo.Color (0, 0, 0, 1);
+			cr.Paint ();
+			
+			InputShapeCombineMask (pixmap, 0, heightOffset);
+			
+			(cr as IDisposable).Dispose ();
+			pixmap.Dispose ();
 		}
 		
 		IEnumerable<DockItem> GetItems ()

@@ -35,9 +35,11 @@ namespace MonoDock.UI
 		IList<DockItem> dock_items;
 		Gdk.Point cursor;
 		DateTime enter_time = DateTime.Now;
+		DateTime last_render = DateTime.Now;
 		Gdk.Rectangle minimum_dock_size = new Gdk.Rectangle (-1, -1, -1, -1);
 		
 		Surface backbuffer;
+		DockWindow window;
 		
 #region Public properties
 		public int Width {
@@ -85,6 +87,12 @@ namespace MonoDock.UI
 				bool tmp = CursorIsOverDockArea;
 				cursor = value;
 				if (CursorIsOverDockArea != tmp) {
+					if (CursorIsOverDockArea) {
+						window.SetInputMask (0);
+					} else {
+						window.SetInputMask (Height-IconSize);
+					}
+						
 					enter_time = DateTime.Now;
 					GLib.Timeout.Add (20, delegate {
 						QueueDraw ();
@@ -94,7 +102,6 @@ namespace MonoDock.UI
 			}
 		}
 		
-		//for the love of GOD fixme
 		Gdk.Rectangle MinimumDockArea {
 			get {
 				if (minimum_dock_size.X == -1)
@@ -106,13 +113,14 @@ namespace MonoDock.UI
 		bool CursorIsOverDockArea {
 			get {
 				Gdk.Rectangle rect = MinimumDockArea;
-				rect.Inflate (0, 35);
+				rect.Inflate (0, 55);
 				return rect.Contains (Cursor); 
 			}
 		}
 		
-		public DockArea(IEnumerable<DockItem> baseItems) : base ()
+		public DockArea(DockWindow window, IEnumerable<DockItem> baseItems) : base ()
 		{
+			this.window = window;
 			dock_items = new List<DockItem> (baseItems);
 			cursor = new Gdk.Point (-1, -1);
 			
@@ -131,7 +139,7 @@ namespace MonoDock.UI
 		{
 			Gdk.Rectangle dock_area = GetDockArea ();
 			cr.Rectangle (dock_area.X, dock_area.Y, dock_area.Width, dock_area.Height);
-			cr.Color = new Cairo.Color (.5, .5, 1, .4);
+			cr.Color = new Cairo.Color (.3, .3, .3, .7);
 			cr.Fill ();
 			
 			DrawIcons (cr);
@@ -202,6 +210,7 @@ namespace MonoDock.UI
 			bool ret_val = base.OnExposeEvent (evnt);
 			if (!IsDrawable)
 				return ret_val;
+			last_render = DateTime.Now;
 			
 			if (backbuffer == null) {
 				Context tmp = Gdk.CairoHelper.Create (GdkWindow);
@@ -229,8 +238,11 @@ namespace MonoDock.UI
  
 		protected override bool OnMotionNotifyEvent(EventMotion evnt)
 		{
+			bool tmp = CursorIsOverDockArea;
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
-			QueueDraw ();
+			
+			if (tmp != CursorIsOverDockArea || CursorIsOverDockArea && DateTime.Now.Subtract (last_render).TotalMilliseconds > 20) 
+				QueueDraw ();
 			return base.OnMotionNotifyEvent (evnt);
 		}
 	}
