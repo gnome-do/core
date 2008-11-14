@@ -237,7 +237,7 @@ namespace MonoDock.UI
 				cr.Scale (1/(zoom/DockItem.IconQuality), 1/(zoom/DockItem.IconQuality));
 				
 				if (DockItemForX (Cursor.X) == i && CursorIsOverDockArea) {
-					cr.SetSource (dock_items[i].GetTextSurface (), center-(DockItem.TextWidth/2), 10);
+					cr.SetSource (dock_items[i].GetTextSurface (), IconNormalCenterX (i)-(DockItem.TextWidth/2), 15);
 					cr.Paint ();
 				}
 			}
@@ -336,6 +336,8 @@ namespace MonoDock.UI
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			int item = DockItemForX ((int) evnt.X);
+			if (item < 0 || item >= dock_items.Count)
+				return base.OnButtonReleaseEvent (evnt);
 			if ((DateTime.Now - dock_items[item].LastClick).TotalMilliseconds > BounceTime) {
 				last_click = dock_items[item].LastClick = DateTime.Now;
 				IItem doItem = dock_items[item].IObject as IItem;

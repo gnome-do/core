@@ -1015,13 +1015,21 @@ namespace Do.Core {
 		public IEnumerable<IItem> GetMostUsedItems ()
 		{
 			IList<IObject> search_results = Do.UniverseManager.Search ("", new Type[] {typeof (IItem),});
-			return search_results.Take (15).Select (item => item as IItem);
+			return search_results
+				.Take (15)
+				.OrderBy (item => (item as DoObject).Inner.GetType ().ToString ())
+				.ThenByDescending (item1 => (item1 as DoObject).Relevance)
+				.Select (item => item as IItem);
 		}
 		
 		public IEnumerable<IAction> GetMostUsedActions ()
 		{
 			IList<IObject> search_results = Do.UniverseManager.Search ("", new Type[] {typeof (IAction),});
-			return search_results.Take (15).Select (items => items as IAction);
+			return search_results
+				.Take (15)
+				.OrderBy (item => (item as DoObject).Inner.GetType ().ToString ())
+				.ThenByDescending (item1 => (item1 as DoObject).Relevance)
+				.Select (item => item as IAction);
 		}
 		
 		#endregion 
