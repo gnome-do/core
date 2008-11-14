@@ -36,7 +36,7 @@ namespace MonoDock.UI
 	{
 		const int BounceTime = 700;
 		const int BaseAnimationTime = 150;
-		const int YBuffer = 5;
+		const int YBuffer = 3;
 		const int XBuffer = 5;
 		
 		IList<DockItem> dock_items;
@@ -235,6 +235,11 @@ namespace MonoDock.UI
 				Gdk.CairoHelper.SetSourcePixbuf (cr, dock_items[i].Pixbuf, x*DockItem.IconQuality, y*DockItem.IconQuality);
 				cr.PaintWithAlpha (DockIconOpacity);
 				cr.Scale (1/(zoom/DockItem.IconQuality), 1/(zoom/DockItem.IconQuality));
+				
+				if (DockItemForX (Cursor.X) == i && CursorIsOverDockArea) {
+					cr.SetSource (dock_items[i].GetTextSurface (), center-(DockItem.TextWidth/2), 10);
+					cr.Paint ();
+				}
 			}
 		}
 		
@@ -245,6 +250,7 @@ namespace MonoDock.UI
 		
 		int DockItemForX (int x)
 		{
+			x -= XBuffer;
 			return (x-MinimumDockArea.X)/IconSize;
 		}
 		
@@ -283,7 +289,7 @@ namespace MonoDock.UI
 			int x = start_x - (int)(start_zoom*(IconSize/2)) - XBuffer;
 			int end = end_x + (int)(end_zoom*(IconSize/2)) + XBuffer;
 			
-			return new Gdk.Rectangle (x, Height-IconSize-10, end-x, IconSize+10);
+			return new Gdk.Rectangle (x, Height-IconSize-2*YBuffer, end-x, IconSize+2*YBuffer);
 		}
 		
 		protected override bool OnExposeEvent(EventExpose evnt)

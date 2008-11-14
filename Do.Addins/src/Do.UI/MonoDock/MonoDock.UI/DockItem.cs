@@ -19,9 +19,11 @@
 using System;
 
 using Gdk;
+using Cairo;
 
 using Do.UI;
 using Do.Universe;
+using Do.Addins.CairoUtils;
 
 namespace MonoDock.UI
 {
@@ -42,9 +44,14 @@ namespace MonoDock.UI
 			get { return icon_quality; }
 			set { icon_quality = value; }
 		}
+		
+		public static int TextWidth {
+			get { return 350; }
+		}
 #endregion
 		
 		IObject item;
+		Surface sr;
 		
 		public string Icon { get { return item.Icon; } }
 		public string Description { get { return item.Name; } }
@@ -77,6 +84,41 @@ namespace MonoDock.UI
 			}
 			
 			return pbuf;
+		}
+		
+		public Surface GetTextSurface ()
+		{
+			if (sr == null) {
+				sr = new Cairo.ImageSurface (Cairo.Format.Argb32, TextWidth, 20);
+				
+				Context cr = new Context (sr);
+				
+				Pango.Layout layout = Pango.CairoHelper.CreateLayout (cr);
+				layout.Width = Pango.Units.FromPixels (TextWidth);
+				layout.SetMarkup ("<b>" + item.Name + "</b>");
+				layout.Alignment = Pango.Alignment.Center;
+				
+				Pango.Rectangle rect1, rect2;
+				layout.GetExtents (out rect1, out rect2);
+				
+				cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) - 10, 0, Pango.Units.ToPixels (rect2.Width) + 18, 20, 6);
+				cr.Color = new Cairo.Color (0, 0, 0, .7);
+				cr.Fill ();
+				
+				Pango.CairoHelper.LayoutPath (cr, layout);
+				
+				cr.Color = new Cairo.Color (0, 0, 0);
+				cr.Fill ();
+				
+				cr.Translate (-2, -1);
+				Pango.CairoHelper.LayoutPath (cr, layout);
+				cr.Color = new Cairo.Color (1, 1, 1);
+				cr.Fill ();
+				
+				(cr as IDisposable).Dispose ();
+				layout.Dispose ();
+			}
+			return sr;
 		}
 	}
 }
