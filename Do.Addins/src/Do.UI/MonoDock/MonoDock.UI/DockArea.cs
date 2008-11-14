@@ -32,6 +32,8 @@ namespace MonoDock.UI
 	
 	public class DockArea : Gtk.DrawingArea
 	{
+		const int BounceTime = 700;
+		
 		IList<DockItem> dock_items;
 		Gdk.Point cursor;
 		DateTime enter_time = DateTime.Now;
@@ -50,7 +52,7 @@ namespace MonoDock.UI
 		
 		public int Height {
 			get {
-				return 2*IconSize + 10;
+				return 2*IconSize + 40;
 			}
 		}
 		
@@ -99,12 +101,8 @@ namespace MonoDock.UI
 					} else {
 						window.SetInputMask (Height-IconSize);
 					}
-						
 					enter_time = DateTime.Now;
-					GLib.Timeout.Add (20, delegate {
-						QueueDraw ();
-						return !((CursorIsOverDockArea && ZoomIn == 1) || (!CursorIsOverDockArea && ZoomIn == 0));
-					});
+					AnimatedDraw ();
 				}
 			}
 		}
@@ -125,6 +123,15 @@ namespace MonoDock.UI
 			}
 		}
 		
+		bool ZoomAnimationNeeded {
+			get { return !((CursorIsOverDockArea && ZoomIn == 1) || (!CursorIsOverDockArea && ZoomIn == 0)); }
+		}
+		
+		DateTime last_click = DateTime.Now;
+		bool BounceAnimationNeeded {
+			get { return (DateTime.Now - last_click).TotalMilliseconds < BounceTime; }
+		}
+		
 		public DockArea(DockWindow window, IEnumerable<DockItem> baseItems) : base ()
 		{
 			this.window = window;
@@ -133,18 +140,41 @@ namespace MonoDock.UI
 			
 			SetSizeRequest (Width, Height);
 			this.SetCompositeColormap ();
-			AddEvents ((int) Gdk.EventMask.PointerMotionMask | (int) Gdk.EventMask.LeaveNotifyMask);
-			AddEvents ((int) Gdk.EventMask.ButtonPressMask | (int) Gdk.EventMask.ButtonReleaseMask);
+			
+			AddEvents ((int) Gdk.EventMask.PointerMotionMask | (int) Gdk.EventMask.LeaveNotifyMask |
+			           (int) Gdk.EventMask.ButtonPressMask | (int) Gdk.EventMask.ButtonReleaseMask);
 			
 			DoubleBuffered = false;
+		}
+		
+		uint timer = 0;
+		void AnimatedDraw ()
+		{
+			if (timer > 0)
+				return;
+			
+			QueueDraw ();
+			
+			timer = GLib.Timeout.Add (20, delegate {
+				QueueDraw ();
+				if (ZoomAnimationNeeded || BounceAnimationNeeded)
+					return true;
+				
+				timer = 0;
+				return false;
+			});
 		}
 		
 		void DrawDrock (Context cr)
 		{
 			Gdk.Rectangle dock_area = GetDockArea ();
-			cr.Rectangle (dock_area.X, dock_area.Y, dock_area.Width, dock_area.Height);
-			cr.Color = new Cairo.Color (.3, .3, .3, .7);
-			cr.Fill ();
+			cr.Rectangle (dock_area.X+.5, dock_area.Y+.5, dock_area.Width-1, dock_area.Height);
+			cr.Color = new Cairo.Color (.1, .1, .1, .7);
+			cr.FillPreserve ();
+			
+			cr.Color = new Cairo.Color (1, 1, 1, .4);
+			cr.LineWidth = 1;
+			cr.Stroke ();
 			
 			DrawIcons (cr);
 		}
@@ -159,6 +189,11 @@ namespace MonoDock.UI
 				
 				double x = (1/zoom)*(center - zoom*IconSize/2);
 				double y = (1/zoom)*(Height-(zoom*IconSize)) + IconBorderWidth/2;
+				
+				int total_ms = (int) (DateTime.Now - dock_items[i].LastClick).TotalMilliseconds;
+				if (total_ms < BounceTime) {
+					y -= Math.Abs (20*Math.Sin (total_ms*Math.PI/(BounceTime/2)));
+				}
 				
 				cr.Scale (zoom/DockItem.IconQuality, zoom/DockItem.IconQuality);
 				cr.Rectangle (x*DockItem.IconQuality, y*DockItem.IconQuality, IconSize*DockItem.IconQuality, IconSize*DockItem.IconQuality);
@@ -253,14 +288,14 @@ namespace MonoDock.UI
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
 			
 			if (tmp != CursorIsOverDockArea || CursorIsOverDockArea && DateTime.Now.Subtract (last_render).TotalMilliseconds > 20) 
-				QueueDraw ();
+				AnimatedDraw ();
 			return base.OnMotionNotifyEvent (evnt);
 		}
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
-			Console.WriteLine (DockItemForX ((int) evnt.X));
-				
+			last_click = dock_items[DockItemForX ((int) evnt.X)].LastClick = DateTime.Now;
+			AnimatedDraw ();
 			return base.OnButtonReleaseEvent (evnt);
 		}
 

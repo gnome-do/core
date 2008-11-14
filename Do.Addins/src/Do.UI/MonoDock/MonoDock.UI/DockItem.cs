@@ -49,6 +49,8 @@ namespace MonoDock.UI
 		public string Icon { get { return item.Icon; } }
 		public string Description { get { return item.Name; } }
 		
+		public DateTime LastClick { get; set; }
+		
 		Gdk.Pixbuf pixbuf;
 		public Gdk.Pixbuf Pixbuf {
 			get {
@@ -58,6 +60,7 @@ namespace MonoDock.UI
 		
 		public DockItem(IObject item)
 		{
+			LastClick = DateTime.Now - new TimeSpan (0, 10, 0);
 			this.item = item;
 		}
 		
