@@ -24,6 +24,8 @@ using Cairo;
 using Gdk;
 using Gtk;
 
+using Do.Universe;
+
 using MonoDock.Util;
 
 namespace MonoDock.UI
@@ -33,6 +35,8 @@ namespace MonoDock.UI
 	public class DockArea : Gtk.DrawingArea
 	{
 		const int BounceTime = 700;
+		const int YBuffer = 5;
+		const int XBuffer = 5;
 		
 		IList<DockItem> dock_items;
 		Gdk.Point cursor;
@@ -46,7 +50,7 @@ namespace MonoDock.UI
 		#region Public properties
 		public int Width {
 			get {
-				return (dock_items.Count * IconSize) + Preferences.ZoomSize;
+				return (dock_items.Count * IconSize) + Preferences.ZoomSize + 2*XBuffer;
 			}
 		}
 		
@@ -110,7 +114,7 @@ namespace MonoDock.UI
 		Gdk.Rectangle MinimumDockArea {
 			get {
 				if (minimum_dock_size.X == -1)
-					minimum_dock_size = new Gdk.Rectangle ((ZoomSize/2), Height-IconSize, Width - ZoomSize, IconSize);
+					minimum_dock_size = new Gdk.Rectangle ((ZoomSize/2)-XBuffer, Height-IconSize-2*YBuffer, Width - ZoomSize, IconSize+2*YBuffer);
 				return minimum_dock_size;
 			}
 		}
@@ -188,7 +192,7 @@ namespace MonoDock.UI
 				IconPositionedCenterX (i, out center, out zoom);
 				
 				double x = (1/zoom)*(center - zoom*IconSize/2);
-				double y = (1/zoom)*(Height-(zoom*IconSize)) + IconBorderWidth/2;
+				double y = (1/zoom)*(Height-(zoom*IconSize)) + IconBorderWidth/2 - YBuffer;
 				
 				int total_ms = (int) (DateTime.Now - dock_items[i].LastClick).TotalMilliseconds;
 				if (total_ms < BounceTime) {
@@ -205,7 +209,7 @@ namespace MonoDock.UI
 		
 		int IconNormalCenterX (int icon)
 		{
-			return MinimumDockArea.X + (IconSize/2) + (IconSize * icon);
+			return MinimumDockArea.X + XBuffer + (IconSize/2) + (IconSize * icon);
 		}
 		
 		int DockItemForX (int x)
@@ -245,10 +249,10 @@ namespace MonoDock.UI
 			IconPositionedCenterX (0, out start_x, out start_zoom);
 			IconPositionedCenterX (dock_items.Count - 1, out end_x, out end_zoom);
 			
-			int x = start_x - (int)(start_zoom*(IconSize/2));
-			int end = end_x + (int)(end_zoom*(IconSize/2));
+			int x = start_x - (int)(start_zoom*(IconSize/2)) - XBuffer;
+			int end = end_x + (int)(end_zoom*(IconSize/2)) + XBuffer;
 			
-			return new Gdk.Rectangle (x, Height-IconSize, end-x, IconSize);
+			return new Gdk.Rectangle (x, Height-IconSize-10, end-x, IconSize+10);
 		}
 		
 		protected override bool OnExposeEvent(EventExpose evnt)
@@ -294,8 +298,14 @@ namespace MonoDock.UI
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
-			last_click = dock_items[DockItemForX ((int) evnt.X)].LastClick = DateTime.Now;
-			AnimatedDraw ();
+			int item = DockItemForX ((int) evnt.X);
+			if ((DateTime.Now - dock_items[item].LastClick).TotalMilliseconds > BounceTime) {
+				last_click = dock_items[item].LastClick = DateTime.Now;
+				IItem doItem = dock_items[item].IObject as IItem;
+				if (doItem != null)
+					window.Controller.PerformDefaultAction (dock_items[item].IObject as IItem);
+				AnimatedDraw ();
+			}
 			return base.OnButtonReleaseEvent (evnt);
 		}
 

@@ -48,6 +48,7 @@ namespace MonoDock.UI
 		
 		public string Icon { get { return item.Icon; } }
 		public string Description { get { return item.Name; } }
+		public IObject IObject { get { return item; } }
 		
 		public DateTime LastClick { get; set; }
 		

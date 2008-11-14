@@ -51,9 +51,22 @@ namespace Do.Addins
 		/// </value>
 		Pane CurrentPane { set; }
 		
-		
+		/// <summary>
+		/// Check and see if an object likely has children
+		/// </summary>
+		/// <param name="o">
+		/// A <see cref="IObject"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/>
+		/// </returns>
 		bool ObjectHasChildren (IObject o);
 		
+		/// <value>
+		/// Get ahold of the current statistics for Do
+		/// </value>
 		IStatistics Statistics { get; }
+		
+		void PerformDefaultAction (IItem item);
 	}
 }

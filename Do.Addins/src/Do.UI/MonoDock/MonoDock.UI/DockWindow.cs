@@ -40,6 +40,10 @@ namespace MonoDock.UI
 		DockArea dock_area;
 		IDoController controller;
 		
+		public IDoController Controller {
+			get { return controller; }
+		}
+		
 		public DockWindow(IDoController controller) : base (Gtk.WindowType.Toplevel)
 		{
 			this.controller = controller;

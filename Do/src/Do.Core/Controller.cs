@@ -867,7 +867,7 @@ namespace Do.Core {
 				Reset ();
 			}
 		}
-				
+		
 		private void DoPerformWork (object o)
 		{
 			DoPerformState state = (DoPerformState) o;
@@ -984,6 +984,20 @@ namespace Do.Core {
 			get {
 				return this as IStatistics;
 			}
+		}
+		
+		public void PerformDefaultAction (IItem item) 
+		{
+			IList<IObject> objects = Do.UniverseManager.Search ("", new Type[0], item);
+			
+			if (!(objects[0] is IAction))
+				return;
+			
+			DoPerformState state = new DoPerformState (objects[0] as IAction, new List<IItem> (new IItem[] {item}), new List<IItem> (0));
+			th = new Thread (new ParameterizedThreadStart (DoPerformWork));
+			th.Start (state);
+			th.Join (100);
+			
 		}
 		#endregion
 
