@@ -188,6 +188,8 @@ namespace MonoDock.UI
 				zoom = (zoom-1)*ZoomIn+1;
 			}
 			
+			offset = (int) (offset*Math.Sin ((Math.PI/4)*zoom));
+			
 			if (Cursor.X > center) {
 				center -= offset;
 			} else {
