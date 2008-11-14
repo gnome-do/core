@@ -101,7 +101,7 @@ namespace MonoDock.UI
 				Pango.Rectangle rect1, rect2;
 				layout.GetExtents (out rect1, out rect2);
 				
-				cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) - 10, 0, Pango.Units.ToPixels (rect2.Width) + 18, 20, 6);
+				cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) - 10, 0, Pango.Units.ToPixels (rect2.Width) + 16, 20, 6);
 				cr.Color = new Cairo.Color (0, 0, 0, .7);
 				cr.Fill ();
 				
