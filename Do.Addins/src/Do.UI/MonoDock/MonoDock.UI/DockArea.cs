@@ -266,6 +266,8 @@ namespace MonoDock.UI
 
 		protected override bool OnLeaveNotifyEvent (Gdk.EventCrossing evnt)
 		{
+			Console.WriteLine (evnt.X);
+			Console.WriteLine (evnt.Y);
 			Cursor = new Gdk.Point (Cursor.X, -1);
 			return base.OnLeaveNotifyEvent (evnt);
 		}
