@@ -990,10 +990,19 @@ namespace Do.Core {
 		{
 			IList<IObject> objects = Do.UniverseManager.Search ("", new Type[0], item);
 			
-			if (!(objects[0] is IAction))
+			IAction action = null;
+			foreach (IObject ob in objects) {
+				if (!(ob is IAction))
+				    continue;
+				if ((ob as IAction).SupportsItem (item)) {
+					action = ob as IAction;
+					break;
+				}
+			}
+			if (action == null)
 				return;
 			
-			DoPerformState state = new DoPerformState (objects[0] as IAction, new List<IItem> (new IItem[] {item}), new List<IItem> (0));
+			DoPerformState state = new DoPerformState (action, new List<IItem> (new IItem[] {item}), new List<IItem> (0));
 			th = new Thread (new ParameterizedThreadStart (DoPerformWork));
 			th.Start (state);
 			th.Join (100);
