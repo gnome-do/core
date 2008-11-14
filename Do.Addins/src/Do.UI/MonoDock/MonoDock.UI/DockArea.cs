@@ -41,7 +41,7 @@ namespace MonoDock.UI
 		Surface backbuffer;
 		DockWindow window;
 		
-#region Public properties
+		#region Public properties
 		public int Width {
 			get {
 				return (dock_items.Count * IconSize) + Preferences.ZoomSize;
@@ -60,7 +60,7 @@ namespace MonoDock.UI
 				return MinimumDockArea.Height;
 			}
 		}
-#endregion
+		#endregion
 		
 		double ZoomIn {
 			get {
@@ -82,9 +82,9 @@ namespace MonoDock.UI
 			}
 		}
 		
-		int IconBorderWidth {get{ return 2; }}
-		int IconSize { get { return DockItem.IconSize + IconBorderWidth; } }
+		int IconBorderWidth {get{ return 4; }}
 		
+		int IconSize { get { return DockItem.IconSize + IconBorderWidth; } }
 		
 		Gdk.Point Cursor {
 			get {
@@ -133,11 +133,8 @@ namespace MonoDock.UI
 			
 			SetSizeRequest (Width, Height);
 			this.SetCompositeColormap ();
-			this.AddEvents ((int) Gdk.EventMask.PointerMotionMask);
-			
-			this.EnterNotifyEvent += delegate {
-				Console.WriteLine ("Enter");
-			};
+			AddEvents ((int) Gdk.EventMask.PointerMotionMask | (int) Gdk.EventMask.LeaveNotifyMask);
+			AddEvents ((int) Gdk.EventMask.ButtonPressMask | (int) Gdk.EventMask.ButtonReleaseMask);
 			
 			DoubleBuffered = false;
 		}
@@ -161,7 +158,7 @@ namespace MonoDock.UI
 				IconPositionedCenterX (i, out center, out zoom);
 				
 				double x = (1/zoom)*(center - zoom*IconSize/2);
-				double y = (1/zoom)*(Height-(zoom*IconSize));
+				double y = (1/zoom)*(Height-(zoom*IconSize)) + IconBorderWidth/2;
 				
 				cr.Scale (zoom/DockItem.IconQuality, zoom/DockItem.IconQuality);
 				cr.Rectangle (x*DockItem.IconQuality, y*DockItem.IconQuality, IconSize*DockItem.IconQuality, IconSize*DockItem.IconQuality);
@@ -174,6 +171,11 @@ namespace MonoDock.UI
 		int IconNormalCenterX (int icon)
 		{
 			return MinimumDockArea.X + (IconSize/2) + (IconSize * icon);
+		}
+		
+		int DockItemForX (int x)
+		{
+			return (x-MinimumDockArea.X)/IconSize;
 		}
 		
 		void IconPositionedCenterX (int icon, out int x, out double zoom)
@@ -253,6 +255,32 @@ namespace MonoDock.UI
 			if (tmp != CursorIsOverDockArea || CursorIsOverDockArea && DateTime.Now.Subtract (last_render).TotalMilliseconds > 20) 
 				QueueDraw ();
 			return base.OnMotionNotifyEvent (evnt);
+		}
+		
+		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
+		{
+			Console.WriteLine (DockItemForX ((int) evnt.X));
+				
+			return base.OnButtonReleaseEvent (evnt);
+		}
+
+		protected override bool OnLeaveNotifyEvent (Gdk.EventCrossing evnt)
+		{
+			Cursor = new Gdk.Point (Cursor.X, -1);
+			return base.OnLeaveNotifyEvent (evnt);
+		}
+
+		
+		public void SetIcons (IEnumerable<DockItem> items)
+		{
+			dock_items.Clear ();
+			foreach (DockItem i in items)
+				dock_items.Add (i);
+			minimum_dock_size = new Gdk.Rectangle (-1, -1, -1, -1);
+			backbuffer.Destroy ();
+			backbuffer = null;
+			
+			SetSizeRequest (Width, Height);
 		}
 	}
 }

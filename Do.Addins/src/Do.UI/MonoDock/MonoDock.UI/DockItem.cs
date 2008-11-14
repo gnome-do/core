@@ -18,7 +18,10 @@
 
 using System;
 
+using Gdk;
+
 using Do.UI;
+using Do.Universe;
 
 namespace MonoDock.UI
 {
@@ -41,20 +44,35 @@ namespace MonoDock.UI
 		}
 #endregion
 		
-		public string Icon { get; private set; }
-		public string Description { get; private set; }
+		IObject item;
+		
+		public string Icon { get { return item.Icon; } }
+		public string Description { get { return item.Name; } }
 		
 		Gdk.Pixbuf pixbuf;
 		public Gdk.Pixbuf Pixbuf {
 			get {
-				return pixbuf ?? pixbuf = IconProvider.PixbufFromIconName (Icon, (int) (IconSize*IconQuality));
+				return pixbuf ?? pixbuf = GetPixbuf ();
 			}
 		}
 		
-		public DockItem(string icon, string description)
+		public DockItem(IObject item)
 		{
-			this.Icon = icon;
-			this.Description = description;
+			this.item = item;
+		}
+		
+		Gdk.Pixbuf GetPixbuf ()
+		{
+			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, (int) (IconSize*IconQuality));
+			
+			if (pbuf.Height != IconSize*IconQuality && pbuf.Width != IconSize*IconQuality) {
+				double scale = (double)IconSize*IconQuality / Math.Max (pbuf.Width, pbuf.Height);
+				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), InterpType.Bilinear);
+				pbuf.Dispose ();
+				pbuf = temp;
+			}
+			
+			return pbuf;
 		}
 	}
 }

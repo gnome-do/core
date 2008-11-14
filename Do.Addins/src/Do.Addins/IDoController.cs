@@ -53,5 +53,7 @@ namespace Do.Addins
 		
 		
 		bool ObjectHasChildren (IObject o);
+		
+		IStatistics Statistics { get; }
 	}
 }

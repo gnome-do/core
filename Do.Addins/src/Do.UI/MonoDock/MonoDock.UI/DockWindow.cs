@@ -27,7 +27,9 @@ using Cairo;
 using MonoDock.Util;
 using MonoDock.XLib;
 
+using Do.Addins;
 using Do.UI;
+using Do.Universe;
 
 namespace MonoDock.UI
 {
@@ -36,9 +38,12 @@ namespace MonoDock.UI
 	public class DockWindow : Gtk.Window, IDoWindow
 	{
 		DockArea dock_area;
+		IDoController controller;
 		
-		public DockWindow() : base (Gtk.WindowType.Toplevel)
+		public DockWindow(IDoController controller) : base (Gtk.WindowType.Toplevel)
 		{
+			this.controller = controller;
+			
 			AppPaintable = true;
 			KeepAbove = true;
 			Decorated = false;
@@ -58,6 +63,11 @@ namespace MonoDock.UI
 			
 			Add (dock_area);
 			ShowAll ();
+			
+			GLib.Timeout.Add (3000, delegate {
+				dock_area.SetIcons (GetItems ());
+				return false;
+			});
 		}
 		
 		public void SetInputMask (int heightOffset)
@@ -78,16 +88,9 @@ namespace MonoDock.UI
 		{
 			List<DockItem> items = new List<DockItem> ();
 			
-			items.Add (new DockItem ("epiphany", "Firefox Web Browser"));
-			items.Add (new DockItem ("monodevelop", "Falling Bricks"));
-			items.Add (new DockItem ("gnome-terminal", "It's your terminal, bitch"));
-			items.Add (new DockItem ("rhythmbox", "It's your terminal, bitch"));
-			items.Add (new DockItem ("evolution", "It's your terminal, bitch"));
-			items.Add (new DockItem ("xchat", "It's your terminal, bitch"));
-			items.Add (new DockItem ("transmission", "It's your terminal, bitch"));
-			items.Add (new DockItem ("cheese", "It's your terminal, bitch"));
-			items.Add (new DockItem ("gtk-home", "It's your terminal, bitch"));
-			items.Add (new DockItem ("empathy", "It's your terminal, bitch"));
+			foreach (IItem item in controller.Statistics.GetMostUsedItems ()) {
+				items.Add (new DockItem (item));
+			}
 			
 			
 			return items;
@@ -106,11 +109,7 @@ namespace MonoDock.UI
 		protected override void OnShown ()
 		{
 			base.OnShown ();
-			Gdk.Rectangle geo, main;
-			
-			GetSize (out main.Width, out main.Height);
-			geo = Screen.GetMonitorGeometry (0);
-			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-main.Height);
+			Reposition ();
 			
 			IntPtr display = Xlib.gdk_x11_drawable_get_xdisplay (GdkWindow.Handle);
 			X11Atoms atoms = new X11Atoms (display);
@@ -124,6 +123,23 @@ namespace MonoDock.UI
 			Xlib.XChangeProperty (display, Xlib.gdk_x11_drawable_get_xid (GdkWindow.Handle), atoms._NET_WM_STRUT, 
 			                      atoms.XA_CARDINAL, 32, (int) XLib.PropertyMode.PropModeAppend, struts, 4);
 		}
+		
+		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
+		{
+			base.OnSizeAllocated (allocation);
+			
+			Reposition ();
+		}
+		
+		void Reposition ()
+		{
+			Gdk.Rectangle geo, main;
+			
+			GetSize (out main.Width, out main.Height);
+			geo = Screen.GetMonitorGeometry (0);
+			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-main.Height);
+		}
+
 
 
 		#region IDoWindow implementation 

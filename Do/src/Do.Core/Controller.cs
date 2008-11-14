@@ -35,7 +35,7 @@ using Do.DBusLib;
 
 namespace Do.Core {
 
-	public class Controller : IController, IDoController {
+	public class Controller : IController, IDoController, IStatistics {
 		
 		struct DoPerformState {
 			public List<IItem> Items, ModItems;
@@ -146,7 +146,7 @@ namespace Do.Core {
 				.FirstOrDefault ();
 			
 			if (Do.Preferences.Theme == "MonoDock")
-				window = new MonoDock.UI.DockWindow ();
+				window = new MonoDock.UI.DockWindow (this);
 
 			if (window == null)
 				window = new Bezel (this, new ClassicTheme ());
@@ -874,7 +874,7 @@ namespace Do.Core {
 			state.Action.Perform (state.Items.ToArray (), state.ModItems.ToArray ());
 		}
 					
-#region IController Implementation
+		#region IController Implementation
 		public void Summon ()
 		{
 			if (!IsSummonable) return;
@@ -958,9 +958,9 @@ namespace Do.Core {
 			about_window.Destroy ();
 			about_window = null;
 		}
-#endregion
+		#endregion
 		
-#region IDoController
+		#region IDoController implementation
 		public void NewContextSelection (Pane pane, int index)
 		{
 			if (!controllers[(int) pane].Results.Any () || index == controllers[(int) pane].Cursor) return;
@@ -979,6 +979,28 @@ namespace Do.Core {
 		{
 			return Do.UniverseManager.ObjectHasChildren (o);
 		}
-#endregion
+		
+		public IStatistics Statistics {
+			get {
+				return this as IStatistics;
+			}
+		}
+		#endregion
+
+		#region IStatistics implementation 
+		
+		public IEnumerable<IItem> GetMostUsedItems ()
+		{
+			IList<IObject> search_results = Do.UniverseManager.Search ("", new Type[] {typeof (IItem),});
+			return search_results.Take (15).Select (item => item as IItem);
+		}
+		
+		public IEnumerable<IAction> GetMostUsedActions ()
+		{
+			IList<IObject> search_results = Do.UniverseManager.Search ("", new Type[] {typeof (IAction),});
+			return search_results.Take (15).Select (items => items as IAction);
+		}
+		
+		#endregion 
 	}
 }
