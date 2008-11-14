@@ -35,6 +35,7 @@ namespace MonoDock.UI
 	public class DockArea : Gtk.DrawingArea
 	{
 		const int BounceTime = 700;
+		const int BaseAnimationTime = 150;
 		const int YBuffer = 5;
 		const int XBuffer = 5;
 		
@@ -66,6 +67,12 @@ namespace MonoDock.UI
 				return MinimumDockArea.Height;
 			}
 		}
+		
+		public bool InputInterfaceVisible {
+			get {
+				return input_interface;
+			}
+		}
 		#endregion
 		
 		double ZoomIn {
@@ -85,6 +92,23 @@ namespace MonoDock.UI
 		int ZoomSize {
 			get {
 				return Preferences.ZoomSize;
+			}
+		}
+		
+		double DockIconOpacity {
+			get {
+				double total_time = (DateTime.Now - interface_change_time).TotalMilliseconds;
+				if (total_time > BaseAnimationTime) {
+					if (input_interface)
+						return 0;
+					return 1;
+				}
+				
+				if (input_interface) {
+					return 1-(total_time/BaseAnimationTime);
+				} else {
+					return total_time/BaseAnimationTime;
+				}
 			}
 		}
 		
@@ -119,6 +143,7 @@ namespace MonoDock.UI
 			}
 		}
 		
+		#region Animation properties
 		bool CursorIsOverDockArea {
 			get {
 				Gdk.Rectangle rect = MinimumDockArea;
@@ -135,6 +160,11 @@ namespace MonoDock.UI
 		bool BounceAnimationNeeded {
 			get { return (DateTime.Now - last_click).TotalMilliseconds < BounceTime; }
 		}
+		
+		bool InputModeChangeAnimationNeeded {
+			get { return (DateTime.Now - interface_change_time).TotalMilliseconds < BaseAnimationTime; }
+		}
+		#endregion
 		
 		public DockArea(DockWindow window, IEnumerable<DockItem> baseItems) : base ()
 		{
@@ -161,7 +191,7 @@ namespace MonoDock.UI
 			
 			timer = GLib.Timeout.Add (20, delegate {
 				QueueDraw ();
-				if (ZoomAnimationNeeded || BounceAnimationNeeded)
+				if (ZoomAnimationNeeded || BounceAnimationNeeded || InputModeChangeAnimationNeeded)
 					return true;
 				
 				timer = 0;
@@ -179,6 +209,7 @@ namespace MonoDock.UI
 			cr.Color = new Cairo.Color (1, 1, 1, .4);
 			cr.LineWidth = 1;
 			cr.Stroke ();
+			
 			
 			DrawIcons (cr);
 		}
@@ -202,7 +233,7 @@ namespace MonoDock.UI
 				cr.Scale (zoom/DockItem.IconQuality, zoom/DockItem.IconQuality);
 				cr.Rectangle (x*DockItem.IconQuality, y*DockItem.IconQuality, IconSize*DockItem.IconQuality, IconSize*DockItem.IconQuality);
 				Gdk.CairoHelper.SetSourcePixbuf (cr, dock_items[i].Pixbuf, x*DockItem.IconQuality, y*DockItem.IconQuality);
-				cr.Fill ();
+				cr.PaintWithAlpha (DockIconOpacity);
 				cr.Scale (1/(zoom/DockItem.IconQuality), 1/(zoom/DockItem.IconQuality));
 			}
 		}
@@ -326,6 +357,24 @@ namespace MonoDock.UI
 			backbuffer = null;
 			
 			SetSizeRequest (Width, Height);
+		}
+		
+		DateTime interface_change_time = DateTime.Now;
+		bool input_interface = false;
+		public void ShowInputInterface ()
+		{
+			interface_change_time = DateTime.Now;
+			input_interface = true;
+			
+			AnimatedDraw ();
+		}
+		
+		public void HideInputInterface ()
+		{
+			interface_change_time = DateTime.Now;
+			input_interface = false;
+			
+			AnimatedDraw ();
 		}
 	}
 }

@@ -110,6 +110,13 @@ namespace MonoDock.UI
 			return base.OnExposeEvent (evnt);
 		}
 		
+		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
+		{
+			KeyPressEvent (evnt);
+			return base.OnKeyPressEvent (evnt);
+		}
+
+		
 		protected override void OnShown ()
 		{
 			base.OnShown ();
@@ -147,18 +154,23 @@ namespace MonoDock.UI
 
 
 		#region IDoWindow implementation 
-		bool visible = false;
 		
 		public event Do.Addins.DoEventKeyDelegate KeyPressEvent;
 		
 		public void Summon ()
 		{
-			visible = true;
+			Do.Addins.Util.Appearance.PresentWindow (this);
+			if (!dock_area.InputInterfaceVisible)
+				dock_area.ShowInputInterface ();
 		}
 		
 		public void Vanish ()
 		{
-			visible = false;
+			uint current_time = Gtk.Global.CurrentEventTime;
+			Gdk.Pointer.Ungrab (current_time);
+			Gdk.Keyboard.Ungrab (current_time);
+			if (dock_area.InputInterfaceVisible)
+				dock_area.HideInputInterface ();
 		}
 		
 		public void Reset ()
@@ -198,7 +210,7 @@ namespace MonoDock.UI
 		
 		public bool Visible {
 			get {
-				return visible;
+				return dock_area.InputInterfaceVisible;
 			}
 		}
 		
