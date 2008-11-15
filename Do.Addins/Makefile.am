@@ -103,6 +103,7 @@ FILES =  \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Universe/IAction.cs \
+	src/Do.Universe/AbstractAction.cs \
 	src/Do.Universe/IItem.cs \
 	src/Do.Universe/IItemSource.cs \
 	src/Do.Universe/IObject.cs \

@@ -20,7 +20,9 @@
 
 
 using System;
-using Do.Universe;
+using System.Linq;
+using System.Collections.Generic;
+
 using Gtk;
 using Gdk;
 
@@ -40,19 +42,19 @@ namespace Do.Universe
 			get { return "edit-paste"; }
 		}
 		
-		public override Type[] SupportedItemTypes {
-			get { return new Type [] { typeof (IItem), }; }
+		public override IEnumerable<Type> SupportedItemTypes {
+			get { yield return typeof (IItem); }
 		}
 		
-		public override bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		public override bool SupportsModifierItemForItems (IEnumerable<IItem> items, IItem modItem)
 		{
 			return false;
 		}
 		
-		public override IItem[] Perform (IItem[] items, IItem[] modItems)
+		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
 		{
 			Gtk.Clipboard main = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
-			main.Text = items [0].Description;
+			main.Text = items.First ().Description;
 			return null;
 		}
 	}

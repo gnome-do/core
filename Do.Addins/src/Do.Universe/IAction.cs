@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Do.Universe
 {	
@@ -31,7 +32,7 @@ namespace Do.Universe
 		/// An array of IItem sub-interfaces that this action supports.
 		/// null is ok--it signifies that NO types are supported.
 		/// </value>
-		Type[] SupportedItemTypes { get; }
+		IEnumerable<Type> SupportedItemTypes { get; }
 		
 		/// <value>
 		/// An array of IItem sub-interfaces that this action supports as modifier
@@ -41,7 +42,7 @@ namespace Do.Universe
 		/// here, your action will not work with modifier items.
 		/// null is ok--it signifies that NO types are supported.
 		/// </value>
-		Type[] SupportedModifierItemTypes { get; }
+		IEnumerable<Type> SupportedModifierItemTypes { get; }
 		
 		/// <value>
 		/// Whether modifier items are optional (if you indicate that modifier
@@ -62,7 +63,7 @@ namespace Do.Universe
 		/// A <see cref="IItem[]"/> of result items to present to the user.
 		/// You may return null--this is the same as returning an empty array.
 		/// </returns>
-		IItem[] Perform (IItem[] items, IItem[] modItems);
+		IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems);
 
 		/// <summary>
 		/// Indicate whether the action can operate on the given item.  The item is
@@ -97,7 +98,7 @@ namespace Do.Universe
 		/// A <see cref="System.Boolean"/> indicating whether this action supports
 		/// the particular modifier item for the items in the IItem array.
 		/// </returns>
-		bool SupportsModifierItemForItems (IItem[] items, IItem modItem);
+		bool SupportsModifierItemForItems (IEnumerable<IItem> items, IItem modItem);
 		
 		/// <summary>
 		/// If you would like to supply modifier items dynamically, do
@@ -111,49 +112,7 @@ namespace Do.Universe
 		/// An <see cref="IItem[]"/> containing items to use as modifier items.
 		/// null is ok--it signifies that no modifier items are provided.
 		/// </returns>
-		IItem[] DynamicModifierItemsForItem (IItem item);
+		IEnumerable<IItem> DynamicModifierItemsForItem (IItem item);
 	}
-	
-	/// <summary>
-	/// This class is for your convenience. It stubs some less-frequently
-	/// implemented IAction members with default values.
-	/// </summary>
-	public abstract class AbstractAction : Pluggable, IAction
-	{
-		
-		public abstract string Name { get; }
-		public abstract string Icon { get; }
-		public abstract string Description { get; }
-		
-		public abstract Type[] SupportedItemTypes { get; }
-		
-		public virtual Type[] SupportedModifierItemTypes
-		{
-			get { return null; }
-		}
-		
-		public virtual bool ModifierItemsOptional
-		{
-			get { return false; }
-		}
 
-		public virtual bool SupportsItem (IItem item)
-		{
-			return true;
-		}
-
-		public virtual bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
-		{
-			return true;
-		}
-		
-		public virtual IItem[] DynamicModifierItemsForItem (IItem item)
-		{
-			return null;
-		}
-		
-		public abstract IItem[] Perform (IItem[] items, IItem[] modItems);
-		
-
-	}
 }

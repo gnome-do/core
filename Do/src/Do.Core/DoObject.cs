@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Addins;
@@ -32,67 +33,10 @@ namespace Do.Core {
 		const string DefaultDescription = "No description.";
 		const string DefaultIcon = "emblem-noread";
 
-		public static bool IObjectTypeCheck (IObject o, Type [] types)
+		public static bool IObjectTypeCheck (IObject o, IEnumerable<Type> types)
 		{
-			foreach (Type type in types) {
-				if (type.IsAssignableFrom (o.GetType ()))
-					return true;
-			}
-			return false;
-		}
-
-		/// <summary>
-		/// Returns the inner item if the static type of given item is an DoItem
-		/// subtype. Returns the argument otherwise.
-		/// </summary>
-		/// <param name="items">
-		/// A <see cref="IItem"/> that may or may not be an DoItem subtype.
-		/// </param>
-		/// <returns>
-		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem
-		/// of an DoItem).
-		/// </returns>
-		public static IItem EnsureIItem (IItem item)
-		{
-			if (item is DoItem)
-				item = (item as DoItem).Inner as IItem;
-			return item;
-		}
-
-		/// <summary>
-		/// Like EnsureItem but for arrays of IItems.
-		/// </summary>
-		/// <param name="items">
-		/// A <see cref="IItem []"/> that may contain
-		/// DoItem subtypes.
-		/// </param>
-		/// <returns>
-		/// A <see cref="IItem []"/> of inner IItems.
-		/// </returns>
-		public static IItem [] EnsureIItemArray (IItem [] items)
-		{
-			IItem [] inner_items;
-
-			inner_items = items.Clone () as IItem [];
-			for (int i = 0; i < items.Length; ++i) {
-				if (items [i] is DoItem) {
-					inner_items [i] = (items [i] as DoItem).Inner as IItem;
-				}
-			}
-			return inner_items;
-		}
-
-		public static IItem [] EnsureDoItemArray (IItem [] items)
-		{
-			IItem [] do_items;
-
-			do_items = items.Clone () as IItem [];
-			for (int i = 0; i < items.Length; ++i) {
-				if (!(items [i] is DoItem)) {
-					do_items [i] = new DoItem (items [i]);
-				}
-			}
-			return do_items;
+			Type oType = o.GetType ();
+			return types.Any (type => type.IsAssignableFrom (oType));
 		}
 		
 		protected IObject inner;

@@ -264,9 +264,9 @@ namespace Do.Core {
 
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
-				action = (first as IAction) ?? (second as IAction);
+				action = first as IAction ?? second as IAction;
 				return action != null &&
-					action.SupportedModifierItemTypes.Length > 0 &&
+					action.SupportedModifierItemTypes.Any () &&
 					controllers[1].Results.Any ();
 			}
 		}
@@ -286,7 +286,7 @@ namespace Do.Core {
 				action = (first as IAction) ?? (second as IAction);
 				item = (first as IItem) ?? (second as IItem);
 				return action != null && item != null &&
-					action.SupportedModifierItemTypes.Length > 0 &&
+					action.SupportedModifierItemTypes.Any () &&
 					!action.ModifierItemsOptional &&
 					controllers[1].Results.Any ();
 			}
@@ -311,7 +311,7 @@ namespace Do.Core {
 		/// <param name="objects">
 		/// A <see cref="IObject"/>
 		/// </param>
-		public void SummonWithObjects (IObject[] objects)
+		public void SummonWithObjects (IEnumerable<IObject> objects)
 		{
 			if (!IsSummonable) return;
 			
@@ -320,11 +320,11 @@ namespace Do.Core {
 			Summon ();
 			
 			//Someone is going to need to explain this to me -- Now with less stupid!
-			controllers[0].Results = objects;
+			controllers[0].Results = objects.ToList ();
 
 			// If there are multiple results, show results window after a short
 			// delay.
-			if (objects.Length > 1) {
+			if (objects.Any ()) {
 				GLib.Timeout.Add (50,
 					delegate {
 //						Gdk.Threads.Enter ();

@@ -26,7 +26,7 @@ namespace Do.Universe {
 	
 	public class InternalItemSource : IItemSource {
 		
-		public Type[] SupportedItemTypes {
+		public IEnumerable<Type> SupportedItemTypes {
 			get { return null; }
 		}
 		
@@ -46,7 +46,7 @@ namespace Do.Universe {
 		{
 		}
 		
-		public ICollection<IItem> Items {
+		public IEnumerable<IItem> Items {
 			get {
 				return new IItem[] {
 					new SelectedTextItem (),
@@ -56,7 +56,7 @@ namespace Do.Universe {
 			}
 		}
 		
-		public ICollection<IItem> ChildrenOfItem (IItem item)
+		public IEnumerable<IItem> ChildrenOfItem (IItem item)
 		{
 			return null;
 		}		

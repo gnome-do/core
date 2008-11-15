@@ -20,6 +20,8 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
+
 using Mono.Unix;
 using Do.Addins;
 
@@ -29,22 +31,19 @@ namespace Do.Universe {
 
 		static string last_command_found;
 
-		public override string Name
-		{
+		public override string Name {
 			get { return Catalog.GetString ("Run"); }
 		}
 		
-		public override string Description
-		{
+		public override string Description {
 			get { return Catalog.GetString ("Run an application, script, or other executable."); }
 		}
 		
-		public override string Icon
-		{
+		public override string Icon {
 			get { return "gnome-run"; }
 		}
 		
-		public override Type[] SupportedItemTypes
+		public override IEnumerable<Type> SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -67,7 +66,7 @@ namespace Do.Universe {
 			return true;
 		}
 		
-		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
+		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
 		{
 			foreach (IItem item in items) {
 				if (item is IRunnableItem) {

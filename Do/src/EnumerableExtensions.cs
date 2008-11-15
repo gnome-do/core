@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Do
 {
-	public static class Enumerable
+	public static class EnumerableExtensions
 	{
 		public static int Count<T> (this IEnumerable<T> self)
 		{

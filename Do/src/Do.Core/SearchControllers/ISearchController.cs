@@ -83,7 +83,7 @@ namespace Do.Core
 		/// <value>
 		/// The search types used to filter results
 		/// </value>
-		Type[] SearchTypes {get;}
+		IEnumerable<Type> SearchTypes {get;}
 		
 		/// <value>
 		/// Returns the current Query

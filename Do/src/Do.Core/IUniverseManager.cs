@@ -41,7 +41,7 @@ namespace Do.Core
 		/// <returns>
 		/// A <see cref="IObject"/>
 		/// </returns>
-		IList<IObject> Search (string query, Type[] searchFilter);
+		IList<IObject> Search (string query, IEnumerable<Type> searchFilter);
 		
 		/// <summary>
 		/// Returns search results based on they query, the search filter, and a comparison object.
@@ -58,7 +58,7 @@ namespace Do.Core
 		/// <returns>
 		/// A <see cref="IObject"/>
 		/// </returns>
-		IList<IObject> Search (string query, Type[] searchFilter, IObject compareObj);
+		IList<IObject> Search (string query, IEnumerable<Type> searchFilter, IObject compareObj);
 		
 		/// <summary>
 		/// Returns search results based on a query and the search filter form a specified array.
@@ -75,7 +75,7 @@ namespace Do.Core
 		/// <returns>
 		/// A <see cref="IObject"/>
 		/// </returns>
-		IList<IObject> Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray);
+		IList<IObject> Search (string query, IEnumerable<Type> searchFilter, IEnumerable<IObject> baseArray);
 		
 		/// <summary>
 		/// Returns search results based on a query, search filter, a defined array, and has relevancy adjusticated
@@ -96,7 +96,7 @@ namespace Do.Core
 		/// <returns>
 		/// A <see cref="IObject"/>
 		/// </returns>
-		IList<IObject> Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray, IObject compareObj);
+		IList<IObject> Search (string query, IEnumerable<Type> searchFilter, IEnumerable<IObject> baseArray, IObject compareObj);
 		
 		/// <summary>
 		/// Directly adds items to the universe repository

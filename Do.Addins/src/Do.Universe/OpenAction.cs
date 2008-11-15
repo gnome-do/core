@@ -52,7 +52,7 @@ namespace Do.Universe
 			get { return "gtk-open"; }
 		}
 		
-		public override Type[] SupportedItemTypes
+		public override IEnumerable<Type> SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -78,7 +78,7 @@ namespace Do.Universe
 		}
 
 		
-		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
+		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modifierItems)
 		{
 			string toOpen = null;
 			foreach (IItem item in items) {

@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Mono.Unix;
 
@@ -44,15 +45,13 @@ namespace Do.Universe {
 			}
 		}
 
-		public Type [] SupportedItemTypes {
+		public IEnumerable<Type> SupportedItemTypes {
 			get {
-				return new Type [] {
-					typeof (IItem),
-				};
+				yield return typeof (IItem);
 			}
 		}
 
-		public Type[] SupportedModifierItemTypes {
+		public IEnumerable<Type> SupportedModifierItemTypes {
 			get {
 				return null;
 			}
@@ -64,9 +63,9 @@ namespace Do.Universe {
 			}
 		}
 
-		public IItem [] Perform (IItem[] items, IItem[] modItems)
+		public IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
 		{
-			AliasItemSource.Unalias (items [0]);
+			AliasItemSource.Unalias (items.First ());
 			return null;
 		}
 
@@ -75,12 +74,12 @@ namespace Do.Universe {
 			return AliasItemSource.ItemHasAlias (item);
 		}
 
-		public bool SupportsModifierItemForItems (IItem[] items, IItem modItem)
+		public bool SupportsModifierItemForItems (IEnumerable<IItem> items, IItem modItem)
 		{
 			return true;
 		}
 
-		public IItem[] DynamicModifierItemsForItem (IItem item)
+		public IEnumerable<IItem> DynamicModifierItemsForItem (IItem item)
 		{
 			return null;
 		}		

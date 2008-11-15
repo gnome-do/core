@@ -19,7 +19,9 @@
  */
 
 using System;
+using System.Linq;
 using System.Threading;
+using System.Collections.Generic;
 
 using Do.Universe;
 
@@ -32,31 +34,33 @@ namespace Do.Core {
 		{
 		}
 	
-		public Type [] SupportedItemTypes
+		public IEnumerable<Type> SupportedItemTypes
 		{
 			get {
-				Type [] types = null;
+				IEnumerable<Type> types = null;
+				
 				try {
 					types = (Inner as IAction).SupportedItemTypes;
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
 				} finally {
-					types = types ?? Type.EmptyTypes;
+					types = types ?? Enumerable.Empty<Type> ();
 				}
 				return types;
 			}
 		}
 
-		public Type [] SupportedModifierItemTypes
+		public IEnumerable<Type> SupportedModifierItemTypes
 		{
 			get {
-				Type [] types = null;
+				IEnumerable<Type> types = null;
+				
 				try {
 					types = (Inner as IAction).SupportedModifierItemTypes;
 				} catch (Exception e) {
 					LogError ("SupportedModifierItemTypes", e);
 				} finally {
-					types = types ?? Type.EmptyTypes;
+					types = types ?? Enumerable.Empty<Type> ();
 				}
 				return types;
 			}
@@ -75,84 +79,78 @@ namespace Do.Core {
 			}
 		}
 		
-		public IItem [] DynamicModifierItemsForItem (IItem item)
+		public IEnumerable<IItem> DynamicModifierItemsForItem (IItem item)
 		{
-			IAction action = Inner as IAction;
-			IItem [] modItems;
+			IEnumerable<IItem> modItems  = null;
 			
-			modItems = null;
-			item = EnsureIItem (item);
 			try {
-				modItems = action.DynamicModifierItemsForItem (item);
+				modItems = (Inner as IAction).DynamicModifierItemsForItem (DoItem.EnsureIItem (item));
 			} catch (Exception e) {
 				LogError ("DynamicModifierItemsForItem", e);
 			} finally {
-				modItems = modItems ?? new IItem [0];
+				modItems = modItems ?? Enumerable.Empty<IItem> ();
 			}
-			return EnsureDoItemArray (modItems);
+			return modItems.Select (i => DoItem.EnsureDoItem (i) as IItem);
 		}
 
 		public bool SupportsItem (IItem item)
 		{
-			IAction action = Inner as IAction;
 			bool supports = false;
 			
-			item = EnsureIItem (item);
+			item = DoItem.EnsureIItem (item);
 			if (!IObjectTypeCheck (item, SupportedItemTypes))
 				return false;
 
 			try {
-				supports = action.SupportsItem (item);
+				supports = (Inner as IAction).SupportsItem (item);
 			} catch (Exception e) {
 				LogError ("SupportsItem", e);
 			}
 			return supports;
 		}
 
-		public bool SupportsModifierItemForItems (IItem [] items, IItem modItem)
+		public bool SupportsModifierItemForItems (IEnumerable<IItem> items, IItem modItem)
 		{
-			IAction action = Inner as IAction;
 			bool supports = false;
 
-			items = EnsureIItemArray (items);
-			modItem = EnsureIItem (modItem);
+			items = items.Select (i => DoItem.EnsureIItem (i));
+			modItem = DoItem.EnsureIItem (modItem);
 			if (!IObjectTypeCheck (modItem, SupportedModifierItemTypes))
 				return false;
 
 			try {
-				supports = action.SupportsModifierItemForItems (items, modItem);
+				supports = (Inner as IAction).SupportsModifierItemForItems (items, modItem);
 			} catch (Exception e) {
 				LogError ("SupportsModifierItemForItems", e);
 			}
 			return supports;
 		}
 
-		public IItem [] Perform (IItem [] items, IItem [] modItems)
+		public IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
 		{
-			IAction action = Inner as IAction;
-			IItem [] resultItems = null;
-			
-			items = EnsureIItemArray (items);
-			modItems = EnsureIItemArray (modItems);
+			IEnumerable<IItem> results = null;
 			
 			try {
-				resultItems = action.Perform (items, modItems);
+				results = (Inner as IAction).Perform (
+					items.Select (i => DoItem.EnsureIItem (i)),
+				    modItems.Select (i => DoItem.EnsureIItem (i))
+				);
 			} catch (Exception e) {
 				LogError ("Perform", e);
 			} finally {
-				resultItems = resultItems ?? new IItem [0];
+				results = results ?? Enumerable.Empty<IItem> ();
 			}
-			resultItems = EnsureDoItemArray (resultItems);
+			results = results.Select (i => DoItem.EnsureDoItem (i) as IItem);
 			
 			// If we have results to feed back into the window, do so in a new
 			// iteration.
-			if (resultItems.Length > 0) {
+			if (results.Any ()) {
 				GLib.Timeout.Add (10, delegate {
-					Do.Controller.SummonWithObjects (resultItems);
+					Do.Controller.SummonWithObjects (results.Cast<IObject> ());
 					return false;
 				});
 			}
-			return resultItems;
+			return results;
 		}
 		
 	}	

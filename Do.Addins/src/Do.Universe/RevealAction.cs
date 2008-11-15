@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+
 using Mono.Unix;
 
 using Do.Addins;
@@ -27,32 +29,24 @@ namespace Do.Universe
 {
 	public class RevealAction : AbstractAction
 	{
-		public RevealAction ()
-		{
-		}
 		
 		public override string Name {
 			get { return Catalog.GetString ("Reveal"); }
 		}
 		
 		public override string Description {
-			get { return 
-				Catalog.GetString ("Reveals a file in the file manager."); }
+			get { return Catalog.GetString ("Reveals a file in the file manager."); }
 		}
 		
 		public override string Icon {
 			get { return "file-manager"; }
 		}
 		
-		public override Type[] SupportedItemTypes {
-			get {
-				return new Type[] {
-					typeof (IFileItem),
-				};
-			}
+		public override IEnumerable<Type> SupportedItemTypes {
+			get { yield return typeof (IFileItem); }
 		}
 		
-		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
+		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
 		{
 			foreach (IFileItem file in items) {
 				String escapedPath;

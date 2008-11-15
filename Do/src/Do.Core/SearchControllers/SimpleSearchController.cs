@@ -113,13 +113,11 @@ namespace Do.Core
 
 		public bool DefaultFilter {
 			get {
-				return (SearchTypes == defaultFilter);
+				return SearchTypes == defaultFilter;
 			}
 		}
 
-		public abstract Type[] SearchTypes {
-			get;
-		}
+		public abstract IEnumerable<Type> SearchTypes { get; }
 		
 		public string Query {
 			get {
@@ -142,7 +140,8 @@ namespace Do.Core
 			
 		}
 		
-		public void FinalizeTextMode () {
+		public void FinalizeTextMode ()
+		{
 			if (TextType == TextModeType.Explicit)
 				textModeFinalize = true;
 		}

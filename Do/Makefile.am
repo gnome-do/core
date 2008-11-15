@@ -119,7 +119,7 @@ FILES =  \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
 	src/DoPreferences.cs \
-	src/Enumerable.cs \
+	src/EnumerableExtensions.cs \
 	src/GconfPreferencesBackend.cs \
 	src/IPreferencesBackend.cs \
 	src/CommandLinePreferences.cs \

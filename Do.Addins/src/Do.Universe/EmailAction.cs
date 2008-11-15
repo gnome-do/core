@@ -18,7 +18,10 @@
 // this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+
 using Mono.Unix;
 
 using Do.Addins;
@@ -44,7 +47,7 @@ namespace Do.Universe
 			get { return "stock_mail-compose"; }
 		}
 
-		public override Type [] SupportedItemTypes {
+		public override IEnumerable<Type> SupportedItemTypes {
 			get {
 				return new Type [] {
 					typeof (ContactItem),
@@ -54,11 +57,9 @@ namespace Do.Universe
 			}
 		}
 
-		public override Type [] SupportedModifierItemTypes {
+		public override IEnumerable<Type> SupportedModifierItemTypes {
 			get {
-				return new Type [] {
-					typeof (ITextItem),
-				};
+				yield return typeof (ITextItem);
 			}
 		}
 
@@ -84,7 +85,7 @@ namespace Do.Universe
 			return false;
 		}
 
-		public override IItem [] Perform (IItem [] items, IItem [] modItems)
+		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
 		{
 			string emails, email, body;
 
@@ -111,8 +112,8 @@ namespace Do.Universe
 			}
 
 			body = string.Empty;
-			if (modItems.Length > 0) {
-				body = "?body=" + (modItems [0] as ITextItem).Text
+			if (modItems.Any ()) {
+				body = "?body=" + (modItems.First () as ITextItem).Text
 					.Replace ("\"", "\\\""); // Try to escape quotes...
 			}
 			Util.Environment.Open ("\"mailto:" + emails + body + "\"");

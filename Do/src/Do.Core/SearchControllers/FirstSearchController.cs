@@ -52,12 +52,12 @@ namespace Do.Core
 			textMode = false;
 		}
 
-		public override Type[] SearchTypes {
+		public override IEnumerable<Type> SearchTypes {
 			get {
 				if (TextMode) {
-					return new Type[] {typeof (ITextItem)};
+					return new Type[] { typeof (ITextItem) };
 				} else if (context.SecondaryCursors.Length > 0) {
-					return new Type[] {(Results[SecondaryCursors[0]] as DoObject).Inner.GetType ()};
+					return new Type[] { (Results[SecondaryCursors[0]] as DoObject).Inner.GetType () };
 				} else {
 					return defaultFilter;
 				}

@@ -60,7 +60,7 @@ namespace Do.Universe {
 			apps = new Dictionary<string,IItem> ();
 		}
 
-		public Type [] SupportedItemTypes {
+		public IEnumerable<Type> SupportedItemTypes {
 			get {
 				return new Type [] {
 					typeof (ApplicationItem),
@@ -121,11 +121,11 @@ namespace Do.Universe {
 			}
 		}
 
-		public ICollection<IItem> Items {
+		public IEnumerable<IItem> Items {
 			get { return apps.Values; }
 		}
 
-		public ICollection<IItem> ChildrenOfItem (IItem item)
+		public IEnumerable<IItem> ChildrenOfItem (IItem item)
 		{
 			return null;
 		}

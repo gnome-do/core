@@ -37,13 +37,13 @@ namespace Do.Universe
 		/// provides/supports (e.g.  FirefoxBookmarkItem instead of IItem or
 		/// BookmarkItem).
 		/// </value>
-		Type[] SupportedItemTypes { get; }
+		IEnumerable<Type> SupportedItemTypes { get; }
 		
 		/// <value>
 		/// The IItems provided by this source.
 		/// null is ok---it signifies that no items are provided.
 		/// </value>
-		ICollection<IItem> Items { get; }
+		IEnumerable<IItem> Items { get; }
 		
 		/// <summary>
 		/// Provides a collection of children of an item. Item is guaranteed to be a
@@ -51,7 +51,7 @@ namespace Do.Universe
 		/// null is ok---it signifies that no children are provided for the IItem
 		/// argument.
 		/// </summary>
-		ICollection<IItem> ChildrenOfItem (IItem item);
+		IEnumerable<IItem> ChildrenOfItem (IItem item);
 		
 		/// <summary>
 		/// When called, the source should make sure the collection of IItems
@@ -74,14 +74,14 @@ namespace Do.Universe
 			get { return null; }
 		}
 
-		public abstract Type[] SupportedItemTypes { get; }
+		public abstract IEnumerable<Type> SupportedItemTypes { get; }
 		
-		public virtual ICollection<IItem> Items
+		public virtual IEnumerable<IItem> Items
 		{
 			get { return null; }
 		}
 		
-		public virtual ICollection<IItem> ChildrenOfItem (IItem item)
+		public virtual IEnumerable<IItem> ChildrenOfItem (IItem item)
 		{
 			return null;
 		}

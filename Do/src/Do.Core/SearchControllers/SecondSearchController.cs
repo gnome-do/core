@@ -129,7 +129,7 @@ namespace Do.Core
 			List<IObject> results = new List<IObject> ();
 			if (FirstController.Selection is IItem) {
 				IItem item = FirstController.Selection as IItem;
-				IItem ritem = DoObject.EnsureIItem (FirstController.Selection as IItem);
+				IItem ritem = DoItem.EnsureIItem (FirstController.Selection as IItem);
 				
 				//We need to find actions for this item
 				//TODO -- Make this work for multiple items
@@ -223,9 +223,8 @@ namespace Do.Core
 			}
 		}
 
-		public override Type[] SearchTypes {
+		public override IEnumerable<Type> SearchTypes {
 			get { 
-				
 				if (FirstController.Selection is IAction) {
 					// the basic idea here is that if the first controller selection is an action
 					// we can move right to filtering on what it supports.  This is not strictly needed,
@@ -235,8 +234,8 @@ namespace Do.Core
 					return (FirstController.Selection as IAction).SupportedItemTypes;
 				} else {
 					if (TextMode)
-						return new Type[] {typeof (ITextItem)};
-					return new Type[] {typeof (IAction)};
+						return new Type[] { typeof (ITextItem) };
+					return new Type[] { typeof (IAction) };
 				}
 			}
 		}

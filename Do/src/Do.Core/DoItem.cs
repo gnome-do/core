@@ -28,6 +28,32 @@ namespace Do.Core {
 
 	public class DoItem : DoObject, IItem {
 
+		/// <summary>
+		/// Returns the inner item if the static type of given item is an DoItem
+		/// subtype. Returns the argument otherwise.
+		/// </summary>
+		/// <param name="items">
+		/// A <see cref="IItem"/> that may or may not be an DoItem subtype.
+		/// </param>
+		/// <returns>
+		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem
+		/// of an DoItem).
+		/// </returns>
+		public static IItem EnsureIItem (IItem item)
+		{
+			while (item is DoItem)
+				item = (item as DoItem).Inner as IItem;
+			return item;
+		}
+
+		public static DoItem EnsureDoItem (IItem item)
+		{
+			if (item is DoItem)
+				return item as DoItem;
+			else
+				return new DoItem (item);;
+		}
+		
 		public DoItem (IItem item):
 			base (item)
 		{

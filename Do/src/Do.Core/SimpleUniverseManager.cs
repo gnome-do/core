@@ -52,7 +52,7 @@ namespace Do.Core
 		/// </value>
 		int UpdateTimeout {
 			get {
-				return (DBus.PowerState.OnBattery ()) ? 10*60*1000 : 2*60*1000;
+				return DBus.PowerState.OnBattery () ? 10*60*1000 : 2*60*1000;
 			}
 		}
 		
@@ -61,7 +61,7 @@ namespace Do.Core
 		/// </value>
 		int UpdateRunTime {
 			get {
-				return (DBus.PowerState.OnBattery ()) ? 600 : 200;
+				return DBus.PowerState.OnBattery () ? 600 : 200;
 			}
 		}
 		
@@ -75,9 +75,9 @@ namespace Do.Core
 			UpdatesEnabled = true;
 		}
 
-		public IList<IObject> Search (string query, Type[] searchFilter)
+		public IList<IObject> Search (string query, IEnumerable<Type> searchFilter)
 		{	
-			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
+			if (searchFilter.Count () == 1 && searchFilter.First () == typeof (IAction))
 				lock (action_lock)
 					return Search (query, searchFilter, actions, null);
 			
@@ -85,9 +85,9 @@ namespace Do.Core
 				return Search (query, searchFilter, universe.Values, null);
 		}
 		
-		public IList<IObject> Search (string query, Type[] searchFilter, IObject otherObj)
+		public IList<IObject> Search (string query, IEnumerable<Type> searchFilter, IObject otherObj)
 		{
-			if (searchFilter.Length == 1 && searchFilter[0] == typeof (IAction))
+			if (searchFilter.Count () == 1 && searchFilter.First () == typeof (IAction))
 				lock (action_lock)
 					return Search (query, searchFilter, actions, otherObj);
 			
@@ -95,12 +95,12 @@ namespace Do.Core
 				return Search (query, searchFilter, universe.Values, otherObj);
 		}
 		
-		public IList<IObject> Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray)
+		public IList<IObject> Search (string query, IEnumerable<Type> searchFilter, IEnumerable<IObject> baseArray)
 		{
 			return Search (query, searchFilter, baseArray, null);
 		}
 		
-		public IList<IObject> Search (string query, Type[] searchFilter, IEnumerable<IObject> baseArray, IObject compareObj)
+		public IList<IObject> Search (string query, IEnumerable<Type> searchFilter, IEnumerable<IObject> baseArray, IObject compareObj)
 		{
 			List<IObject> results = new List<IObject> ();
 			query = query.ToLower ();
@@ -108,7 +108,7 @@ namespace Do.Core
 			foreach (DoObject obj in baseArray) {
 				obj.UpdateRelevance (query, compareObj as DoObject);
 				if (Math.Abs (obj.Relevance) > epsilon) {
-					if (searchFilter.Length == 0) {
+					if (!searchFilter.Any ()) {
 						results.Add (obj);
 					} else {
 						foreach (Type t in searchFilter) {
