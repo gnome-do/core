@@ -32,6 +32,8 @@ namespace Do.Core {
 	[Serializable]
 	class HistogramRelevanceProvider : RelevanceProvider {
 
+		const float DefaultRelevance = 0.1f;
+
 		DateTime newest_hit, oldest_hit;
 		uint max_item_hits, max_action_hits;
 		Dictionary<string, RelevanceRecord> hits;
@@ -95,7 +97,7 @@ namespace Do.Core {
 			
 			// We must give a base, non-zero relevance to make scoring rules take
 			// effect.	
-			relevance = 0.1f;
+			relevance = DefaultRelevance;
 
 			if (0 < rec.Hits) {
 				float age;
@@ -107,8 +109,6 @@ namespace Do.Core {
 				if (rec.IsRelevantForMatch (match))
 					relevance = (float) rec.Hits /
 						(float) (rec.IsAction ? max_action_hits : max_item_hits);
-				else
-					relevance = 0f;
 
 				// Newer objects (age -> 0) get scaled by factor -> 1.
 				// Older objects (age -> 1) get scaled by factor -> .5.
@@ -131,7 +131,7 @@ namespace Do.Core {
 				relevance *= 0.8f;
 			
 			// Give the most popular actions a little leg up in the second pane.
-			if (other != null && relevance == 0f && (
+			if (other != null && rec.Hits == 0 && (
 				    o.Inner is OpenAction ||
 				    o.Inner is OpenURLAction ||
 				    o.Inner is RunAction ||
