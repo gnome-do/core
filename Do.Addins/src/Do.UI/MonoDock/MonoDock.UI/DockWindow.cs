@@ -189,7 +189,7 @@ namespace MonoDock.UI
 		
 		public void Reset ()
 		{
-//			throw new System.NotImplementedException();
+			dock_area.Reset ();
 		}
 		
 		public void Grow ()

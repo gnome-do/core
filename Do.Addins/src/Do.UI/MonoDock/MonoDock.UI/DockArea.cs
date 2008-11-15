@@ -117,6 +117,12 @@ namespace MonoDock.UI
 			}
 		}
 		
+		string HighlightFormat { 
+			get { 
+				return "<span underline=\"single\">{0}</span>";
+			} 
+		}
+		
 		double InputAreaOpacity {
 			get {
 				return 1-DockIconOpacity;
@@ -286,7 +292,7 @@ namespace MonoDock.UI
 		void DrawFirstPane (Context cr)
 		{
 			Gdk.Rectangle dock_area = GetDockArea ();
-			cr.SetRoundedRectanglePath (dock_area.X+20, Height - 140, 136, 136, 20);
+			cr.SetRoundedRectanglePath (dock_area.X+10, Height - 162, 158, 158, 20);
 			cr.Color = new Cairo.Color (0, 0, 0, .7);
 			cr.FillPreserve ();
 			
@@ -297,8 +303,12 @@ namespace MonoDock.UI
 				if (!FirstPaneCache.ContainsKey (State.First.Icon)) {
 					FirstPaneCache.AddPixbufSurface (State.First.Icon, State.First.Icon);
 				}
-				cr.SetSource (FirstPaneCache.GetSurface (State.First.Icon), dock_area.X + 22, Height - 138);
+				cr.SetSource (FirstPaneCache.GetSurface (State.First.Icon), dock_area.X + 25, Height - 158);
 				cr.Paint ();
+				
+				string text = GLib.Markup.EscapeText (State.First.Name);
+				text = Do.Addins.Util.FormatCommonSubstrings (text, State.FirstQuery, HighlightFormat);
+				BezelTextUtils.RenderLayoutText (cr, text, dock_area.X + 15, Height-25, 148, this);
 			}
 		}
 		
@@ -427,6 +437,7 @@ namespace MonoDock.UI
 		public void SetPaneContext (IUIContext context, Pane pane)
 		{
 			State[pane] = context.Selection;
+			State.SetPaneQuery (context.Query, pane);
 			AnimatedDraw ();
 		}
 		
@@ -445,6 +456,12 @@ namespace MonoDock.UI
 			interface_change_time = DateTime.Now;
 			input_interface = false;
 			
+			AnimatedDraw ();
+		}
+		
+		public void Reset ()
+		{
+			State.Clear ();
 			AnimatedDraw ();
 		}
 	}

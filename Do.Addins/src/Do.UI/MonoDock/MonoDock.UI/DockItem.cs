@@ -97,11 +97,12 @@ namespace MonoDock.UI
 				layout.Width = Pango.Units.FromPixels (TextWidth);
 				layout.SetMarkup ("<b>" + item.Name + "</b>");
 				layout.Alignment = Pango.Alignment.Center;
+				layout.Ellipsize = Pango.EllipsizeMode.End;
 				
 				Pango.Rectangle rect1, rect2;
 				layout.GetExtents (out rect1, out rect2);
 				
-				cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) - 10, 0, Pango.Units.ToPixels (rect2.Width) + 16, 20, 6);
+				cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) - 10, 0, Pango.Units.ToPixels (rect2.Width) + 16, 20, 10);
 				cr.Color = new Cairo.Color (0, 0, 0, .6);
 				cr.Fill ();
 				

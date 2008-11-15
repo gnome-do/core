@@ -30,6 +30,7 @@ namespace MonoDock.UI
 	{
 		IObject[] current_items = new IObject[3];
 		IObject[] old_items = new IObject[3];
+		string [] queries = new string[3];
 		DateTime[] timestamps = new DateTime[3];
 		
 		#region First Pane
@@ -43,6 +44,10 @@ namespace MonoDock.UI
 			get {
 				return old_items[0];
 			}
+		}
+		
+		public string FirstQuery {
+			get { return queries[0]; }
 		}
 		#endregion
 		
@@ -58,6 +63,10 @@ namespace MonoDock.UI
 				return old_items[1];
 			}
 		}
+		
+		public string SecondQuery {
+			get { return queries[1]; }
+		}
 		#endregion
 		
 		#region Third Pane
@@ -71,6 +80,10 @@ namespace MonoDock.UI
 			get {
 				return old_items[2];
 			}
+		}
+		
+		public string ThirdQuery {
+			get { return queries[2]; }
 		}
 		#endregion
 		
@@ -111,6 +124,11 @@ namespace MonoDock.UI
 			old_items[(int) pane] = current_items[(int) pane];
 			current_items[(int) pane] = item;
 			timestamps[(int) pane] = DateTime.Now;
+		}
+		
+		public void SetPaneQuery (string query, Pane pane)
+		{
+			queries[(int) pane] = query;
 		}
 		
 		public IObject GetPaneItem (Pane pane)
