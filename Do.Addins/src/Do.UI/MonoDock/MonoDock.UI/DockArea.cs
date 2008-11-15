@@ -51,6 +51,7 @@ namespace MonoDock.UI
 		DockState state;
 		Surface backbuffer, input_area_buffer;
 		DockWindow window;
+		PixbufSurfaceCache first_pane_cache;
 		
 		#region Public properties
 		public int Width {
@@ -150,6 +151,12 @@ namespace MonoDock.UI
 				if (minimum_dock_size.X == -1)
 					minimum_dock_size = new Gdk.Rectangle ((ZoomSize/2)-XBuffer, Height-IconSize-2*YBuffer, Width - ZoomSize, IconSize+2*YBuffer);
 				return minimum_dock_size;
+			}
+		}
+		
+		PixbufSurfaceCache FirstPaneCache {
+			get {
+				return first_pane_cache ?? first_pane_cache = new PixbufSurfaceCache (10, 128, 128);
 			}
 		}
 		
@@ -273,15 +280,10 @@ namespace MonoDock.UI
 		
 		void DrawInputArea (Context cr)
 		{
-			DrawFirstPaneOutline (cr);
-			
-			if (State.First == null)
-				return;
-			
-			
+			DrawFirstPane (cr);
 		}
 		
-		void DrawFirstPaneOutline (Context cr)
+		void DrawFirstPane (Context cr)
 		{
 			Gdk.Rectangle dock_area = GetDockArea ();
 			cr.SetRoundedRectanglePath (dock_area.X+20, Height - 140, 136, 136, 20);
@@ -290,6 +292,14 @@ namespace MonoDock.UI
 			
 			cr.Color = new Cairo.Color (1, 1, 1, .8);
 			cr.Stroke ();
+			
+			if (State.First != null) {
+				if (!FirstPaneCache.ContainsKey (State.First.Icon)) {
+					FirstPaneCache.AddPixbufSurface (State.First.Icon, State.First.Icon);
+				}
+				cr.SetSource (FirstPaneCache.GetSurface (State.First.Icon), dock_area.X + 22, Height - 138);
+				cr.Paint ();
+			}
 		}
 		
 		int IconNormalCenterX (int icon)
@@ -417,6 +427,7 @@ namespace MonoDock.UI
 		public void SetPaneContext (IUIContext context, Pane pane)
 		{
 			State[pane] = context.Selection;
+			AnimatedDraw ();
 		}
 		
 		DateTime interface_change_time = DateTime.Now;

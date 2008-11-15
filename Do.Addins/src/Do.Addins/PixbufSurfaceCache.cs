@@ -46,6 +46,18 @@ namespace Do.Addins
 			}
 		}
 		
+		public PixbufSurfaceCache(int count, int surface_width, int surface_height)
+		{
+			this.surface_width = surface_width;
+			this.surface_height = surface_height;
+			surface_cache = new Dictionary<string, Entry> ();
+			Entry e;
+			for (int i=0; i<count; i++) {
+				e = new Entry (new ImageSurface (Format.Argb32, surface_width, surface_height), "null"+i);
+				surface_cache.Add (e.ID, e);
+			}
+		}
+		
 		~PixbufSurfaceCache ()
 		{
 			foreach (Entry e in surface_cache.Values)

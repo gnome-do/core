@@ -100,6 +100,20 @@ namespace MonoDock.UI
 			return items;
 		}
 		
+		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
+		{
+			Gdk.Rectangle rect;
+			GetSize (out rect.Width, out rect.Height);
+			GetPosition (out rect.X, out rect.Y);
+			
+			if (!rect.Contains ((int) evnt.XRoot, (int) evnt.YRoot) && dock_area.InputInterfaceVisible) {
+				controller.ButtonPressOffWindow ();
+			}
+			
+			return base.OnButtonReleaseEvent (evnt);
+		}
+
+		
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
