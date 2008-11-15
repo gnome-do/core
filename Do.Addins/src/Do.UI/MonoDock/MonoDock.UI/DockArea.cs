@@ -551,8 +551,11 @@ namespace MonoDock.UI
 			foreach (DockItem i in items)
 				dock_items.Add (i);
 			minimum_dock_size = new Gdk.Rectangle (-1, -1, -1, -1);
-			input_area_buffer.Destroy ();
-			input_area_buffer = null;
+			
+			if (input_area_buffer != null) {
+				input_area_buffer.Destroy ();
+				input_area_buffer = null;
+			}
 			
 			backbuffer.Destroy ();
 			backbuffer = null;
