@@ -89,6 +89,7 @@ FILES =  \
 	src/Do.UI/MonoDock/MonoDock.UI/DockArea.cs \
 	src/Do.UI/MonoDock/MonoDock.UI/DockItem.cs \
 	src/Do.UI/MonoDock/MonoDock.UI/DockWindow.cs \
+	src/Do.UI/MonoDock/MonoDock.UI/DockState.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/GtkUtils.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/Preferences.cs \
 	src/Do.UI/MonoDock/XLib/X11Atoms.cs \
