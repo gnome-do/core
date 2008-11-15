@@ -86,6 +86,15 @@ namespace Do.Addins.CairoUtils
 				SetRoundedRectanglePath (cr, region.X, region.Y, region.Width, region.Height, radius);
 		}
 		
+		public static void AlphaFill (this Context cr)
+		{
+			cr.Save ();
+			cr.Color = new Cairo.Color (0, 0, 0, 0);
+			cr.Operator = Operator.Source;
+			cr.Paint ();
+			cr.Restore ();
+		}
+		
 		/// <summary>
 		/// Convert a Gdk.Color to Cairo.Colo
 		/// </summary>

@@ -24,7 +24,10 @@ using Cairo;
 using Gdk;
 using Gtk;
 
+using Do.Addins;
 using Do.Universe;
+using Do.UI;
+using Do.Addins.CairoUtils;
 
 using MonoDock.Util;
 
@@ -45,7 +48,8 @@ namespace MonoDock.UI
 		DateTime last_render = DateTime.Now;
 		Gdk.Rectangle minimum_dock_size = new Gdk.Rectangle (-1, -1, -1, -1);
 		
-		Surface backbuffer;
+		DockState state;
+		Surface backbuffer, input_area_buffer;
 		DockWindow window;
 		
 		#region Public properties
@@ -112,6 +116,12 @@ namespace MonoDock.UI
 			}
 		}
 		
+		double InputAreaOpacity {
+			get {
+				return 1-DockIconOpacity;
+			}
+		}
+		
 		int IconBorderWidth {get{ return 4; }}
 		
 		int IconSize { get { return DockItem.IconSize + IconBorderWidth; } }
@@ -141,6 +151,10 @@ namespace MonoDock.UI
 					minimum_dock_size = new Gdk.Rectangle ((ZoomSize/2)-XBuffer, Height-IconSize-2*YBuffer, Width - ZoomSize, IconSize+2*YBuffer);
 				return minimum_dock_size;
 			}
+		}
+		
+		DockState State {
+			get { return state ?? state = new DockState (); }
 		}
 		
 		#region Animation properties
@@ -210,8 +224,22 @@ namespace MonoDock.UI
 			cr.LineWidth = 1;
 			cr.Stroke ();
 			
+			if (InputAreaOpacity > 0) {
+				if (input_area_buffer == null)
+					input_area_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
+				
+				using (Context input_cr = new Context (input_area_buffer)) {
+					input_cr.AlphaFill ();
+					DrawInputArea (input_cr);
+				}
+				
+				cr.SetSource (input_area_buffer);
+				cr.PaintWithAlpha (InputAreaOpacity);
+			}
 			
-			DrawIcons (cr);
+			if (DockIconOpacity > 0) {
+				DrawIcons (cr);
+			}
 		}
 		
 		void DrawIcons (Context cr)
@@ -241,6 +269,27 @@ namespace MonoDock.UI
 					cr.Paint ();
 				}
 			}
+		}
+		
+		void DrawInputArea (Context cr)
+		{
+			DrawFirstPaneOutline (cr);
+			
+			if (State.First == null)
+				return;
+			
+			
+		}
+		
+		void DrawFirstPaneOutline (Context cr)
+		{
+			Gdk.Rectangle dock_area = GetDockArea ();
+			cr.SetRoundedRectanglePath (dock_area.X+20, Height - 140, 136, 136, 20);
+			cr.Color = new Cairo.Color (0, 0, 0, .7);
+			cr.FillPreserve ();
+			
+			cr.Color = new Cairo.Color (1, 1, 1, .8);
+			cr.Stroke ();
 		}
 		
 		int IconNormalCenterX (int icon)
@@ -306,9 +355,7 @@ namespace MonoDock.UI
 			}
 			
 			Context cr = new Cairo.Context (backbuffer);
-			cr.Color = new Cairo.Color (0, 0, 0, 0);
-			cr.Operator = Operator.Source;
-			cr.Paint ();
+			cr.AlphaFill ();
 			cr.Operator = Operator.Over;
 			
 			DrawDrock (cr);
@@ -365,6 +412,11 @@ namespace MonoDock.UI
 			backbuffer = null;
 			
 			SetSizeRequest (Width, Height);
+		}
+		
+		public void SetPaneContext (IUIContext context, Pane pane)
+		{
+			State[pane] = context.Selection;
 		}
 		
 		DateTime interface_change_time = DateTime.Now;

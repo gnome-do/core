@@ -200,7 +200,7 @@ namespace MonoDock.UI
 		
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
-//			throw new System.NotImplementedException();
+			dock_area.SetPaneContext (context, pane);
 		}
 		
 		public void ClearPane (Pane pane)
