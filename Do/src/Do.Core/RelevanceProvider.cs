@@ -55,7 +55,7 @@ namespace Do.Core {
 
 		public static string RelevanceFile {
 			get {
-				return Paths.Combine (Paths.ApplicationData, "relevance6");
+				return Paths.Combine (Paths.ApplicationData, "relevance7");
 			}
 		}
 

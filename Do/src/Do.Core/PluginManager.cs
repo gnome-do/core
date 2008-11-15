@@ -135,7 +135,7 @@ namespace Do.Core {
 		/// via IconProvider.
 		/// </returns>
 		public static string IconForAddin (string id)
-		{
+		{   
 			// First look for an icon among ItemSources:
 			foreach (IItemSource obj in ObjectsForAddin<IItemSource> (id)) {
 				try {
@@ -208,11 +208,10 @@ namespace Do.Core {
 			IEnumerable<string> updates = GetAvailableUpdates ();
 
 			if (updates.Any ()) {
-				IAddinInstaller installer = graphical ?
-						new DoAddinInstaller () as IAddinInstaller
-					: new ConsoleAddinInstaller () as IAddinInstaller;
-
-				installer.InstallAddins (AddinManager.Registry, "", updates.ToArray ());
+				(graphical
+					? new DoAddinInstaller () as IAddinInstaller
+					: new ConsoleAddinInstaller () as IAddinInstaller
+				).InstallAddins (AddinManager.Registry, "", updates.ToArray ());
 			}
 			return updates.Any (); 
 		}
@@ -289,7 +288,7 @@ namespace Do.Core {
 					// Wrap in a DoObject for safety.
 					IObject o = new DoObject (plugin);
 					if (plugin is Pluggable)
-						(plugin as Pluggable).NotifyLoad ();					
+						(plugin as Pluggable).NotifyLoad ();
 					Log.Info ("Loaded \"{0}\".", o.Name);
 				} catch (Exception e) {
 					Log.Error ("Encountered error loading \"{0}\": {0}", e.Message);

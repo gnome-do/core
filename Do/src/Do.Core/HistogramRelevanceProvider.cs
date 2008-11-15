@@ -32,13 +32,13 @@ namespace Do.Core {
 	[Serializable]
 	class HistogramRelevanceProvider : RelevanceProvider {
 
-		DateTime oldest_hit;
+		DateTime newest_hit, oldest_hit;
 		uint max_item_hits, max_action_hits;
 		Dictionary<string, RelevanceRecord> hits;
 
 		public HistogramRelevanceProvider ()
 		{
-			oldest_hit = DateTime.Now;
+			oldest_hit = newest_hit = DateTime.Now;
 			max_item_hits = max_action_hits = 1;
 			hits = new Dictionary<string, RelevanceRecord> ();
 		}
@@ -54,16 +54,18 @@ namespace Do.Core {
 		public override void IncreaseRelevance (DoObject o, string match, DoObject other)
 		{
 			RelevanceRecord rec;
-			
+
+			newest_hit = DateTime.Now;
 			if (!hits.TryGetValue (o.UID, out rec)) {
 				rec = new RelevanceRecord (o);
 				hits [o.UID] = rec;
 			}
-
+				
+			if (rec.IsAction) Console.WriteLine ("Increase action relevance for " + o.Name);
 			if (other == null) rec.FirstPaneHits++;
 			rec.Hits++;
 			rec.LastHit = DateTime.Now;
-			if (match.Length > 0)
+			if (0 < match.Length)
 				rec.AddFirstChar (match [0]);
 			UpdateMaxHits (rec);
 		}
@@ -75,8 +77,7 @@ namespace Do.Core {
 			if (hits.TryGetValue (o.UID, out rec)) {
 				if (other == null) rec.FirstPaneHits--;
 				rec.Hits--;
-				if (rec.Hits == 0)
-					hits.Remove (o.UID);
+				if (rec.Hits == 0) 	hits.Remove (o.UID);
 			}
 		}
 
@@ -91,62 +92,58 @@ namespace Do.Core {
 			
 			// Get string similarity score.
 			score = StringScoreForAbbreviation (o.Name, match);
-			if (score == 0) return 0;
+			if (score == 0f) return 0f;
 			
 			relevance = 0f;	
 			if (0 < rec.Hits) {
 				float age;
 
-				// On a scale of 0 to 1, how old is the item?
-				age = 1 -
-					(float) (DateTime.Now - rec.LastHit).TotalSeconds /
-					(float) (DateTime.Now - oldest_hit).TotalSeconds;
-					
+				// On a scale of 0 (new) to 1 (old), how old is the item?
+				age = (float) (newest_hit - rec.LastHit).TotalSeconds /
+					  (float) (newest_hit - oldest_hit).TotalSeconds;
+				
 				// Relevance is non-zero only if the record contains first char
 				// relevance for the item.
-				if (match.Length == 0 || rec.HasFirstChar (match [0]))
-					relevance = (float) rec.Hits / 
-						(float) (rec.IsAction ? max_action_hits : max_item_hits);
+				if (rec.IsRelevantForMatch (match))
+					relevance = (float) rec.Hits /  (float) (rec.IsAction ? max_action_hits : max_item_hits);
 				else
 					relevance = 0f;
-				
-				relevance *= 0.5f * (1f + age);
+
+				// Newer objects (age -> 0) get scaled by factor -> 1.
+				// Older objects (age -> 1) get scaled by factor -> .5.
+				relevance *= 1f - (age / 2f);
 			}
-			
+
 			// Penalize actions that require modifier items.
 			// other != null ==> we're getting relevance for second pane.
-			if ((o is IAction) && 
+			if (o is IAction && 
 			    (o as IAction).SupportedModifierItemTypes.Any () &&
 			    !(o as IAction).ModifierItemsOptional)
-				relevance -= 1.0f;
+				relevance *= 0.8f;
 
 			// We penalize actions, but only if they're not used in the first pane often.
 			if (o is IAction && rec.FirstPaneHits < 3)
-				relevance -= 0.5f;
+				relevance *= 0.8f;
 
 			// Penalize item sources so that items are preferred.
 			if (o.Inner is IItemSource)
-				relevance -= 1.0f;
-
+				relevance *= 0.8f;
+			
 			// Give the most popular actions a little leg up in the second pane.
-			if (other != null && (
-			    o.Inner is OpenAction ||
-			    o.Inner is OpenURLAction ||
-			    o.Inner is RunAction ||
-			    o.Inner is EmailAction))
-				relevance += 1.0f;
+			if (other != null && relevance == 0f && (
+				    o.Inner is OpenAction ||
+				    o.Inner is OpenURLAction ||
+				    o.Inner is RunAction ||
+				    o.Inner is EmailAction
+			    ))
+				relevance = 1f;
 
 			if (o.Inner is AliasAction ||
 				o.Inner is DeleteAliasAction ||
 				o.Inner is CopyToClipboard)
-				relevance -= 1.0f;
-			
-			return BalanceRelevanceWithScore (relevance, score);
-		}
+				relevance *= 0.5f;
 
-		float BalanceRelevanceWithScore (float rel, float score)
-		{
-			return (rel * .30f) + (score * .70f);
+			return relevance * 0.30f + score * 0.70f;
 		}
 	}
 	
@@ -161,15 +158,26 @@ namespace Do.Core {
 		public uint Hits;
 		public uint FirstPaneHits;
 
-		public bool IsAction;
+		public Type Type;
 		public DateTime LastHit;
 		public string FirstChars;
 		
 		public RelevanceRecord (IObject o)
 		{
 			LastHit = DateTime.Now;
-			IsAction = o is IAction;
+			Type = o.GetType ();
 			FirstChars = string.Empty;
+		}
+
+		public bool IsAction {
+			get {
+				return typeof (IAction).IsAssignableFrom (Type);
+			}
+		}
+
+		public bool IsRelevantForMatch (string match)
+		{
+			return null == match || match.Length == 0 || HasFirstChar (match [0]);
 		}
 		
 		/// <summary>
