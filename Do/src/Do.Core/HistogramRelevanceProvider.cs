@@ -60,11 +60,10 @@ namespace Do.Core {
 				rec = new RelevanceRecord (o);
 				hits [o.UID] = rec;
 			}
-				
-			if (rec.IsAction) Console.WriteLine ("Increase action relevance for " + o.Name);
-			if (other == null) rec.FirstPaneHits++;
+			
 			rec.Hits++;
 			rec.LastHit = DateTime.Now;
+			if (other == null) rec.FirstPaneHits++;
 			if (0 < match.Length)
 				rec.AddFirstChar (match [0]);
 			UpdateMaxHits (rec);
@@ -75,8 +74,8 @@ namespace Do.Core {
 			RelevanceRecord rec;
 			
 			if (hits.TryGetValue (o.UID, out rec)) {
-				if (other == null) rec.FirstPaneHits--;
 				rec.Hits--;
+				if (other == null) rec.FirstPaneHits--;
 				if (rec.Hits == 0) 	hits.Remove (o.UID);
 			}
 		}
