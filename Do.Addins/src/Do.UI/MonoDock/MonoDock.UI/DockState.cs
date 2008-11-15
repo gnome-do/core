@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 using Do.Universe;
 using Do.Addins;
@@ -31,7 +32,32 @@ namespace MonoDock.UI
 		IObject[] current_items = new IObject[3];
 		IObject[] old_items = new IObject[3];
 		string [] queries = new string[3];
+		int[] cursors = new int[3];
 		DateTime[] timestamps = new DateTime[3];
+		DateTime[] result_timestamps = new DateTime[3];
+		IList<IObject>[] results = new IList<IObject>[3];
+		
+		Pane currentPane, previousPane;
+		DateTime current_pane_change;
+		
+		public Pane CurrentPane {
+			get {
+				return currentPane;
+			}
+			set {
+				if (currentPane == value)
+					return;
+				previousPane = currentPane;
+				currentPane = value;
+				current_pane_change = DateTime.Now;
+			}
+		}
+		
+		public Pane PreviousPane {
+			get {
+				return previousPane;
+			}
+		}
 		
 		#region First Pane
 		public IObject First {
@@ -48,6 +74,10 @@ namespace MonoDock.UI
 		
 		public string FirstQuery {
 			get { return queries[0]; }
+		}
+		
+		public IList<IObject> FirstResults {
+			get { return results[0]; }
 		}
 		#endregion
 		
@@ -67,6 +97,10 @@ namespace MonoDock.UI
 		public string SecondQuery {
 			get { return queries[1]; }
 		}
+		
+		public IList<IObject> SecondResults {
+			get { return results[1]; }
+		}
 		#endregion
 		
 		#region Third Pane
@@ -85,24 +119,34 @@ namespace MonoDock.UI
 		public string ThirdQuery {
 			get { return queries[2]; }
 		}
+		
+		public IList<IObject> ThirdResults {
+			get { return results[2]; }
+		}
 		#endregion
 		
 		#region Timestamps
-		public DateTime ThirdChangeTime {
+		public DateTime FirstChangeTime {
 			get {
-				return timestamps[2];
+				return timestamps[0];
 			}
 		}
-
+		
 		public DateTime SecondChangeTime {
 			get {
 				return timestamps[1];
 			}
 		}
-
-		public DateTime FirstChangeTime {
+		
+		public DateTime ThirdChangeTime {
 			get {
-				return timestamps[0];
+				return timestamps[2];
+			}
+		}
+		
+		public DateTime CurrentPaneTime {
+			get {
+				return current_pane_change;
 			}
 		}
 		#endregion
@@ -131,6 +175,17 @@ namespace MonoDock.UI
 			queries[(int) pane] = query;
 		}
 		
+		public void SetPaneResults (IList<IObject> resultList, Pane pane)
+		{
+			results[(int) pane] = resultList;
+			result_timestamps[(int) pane] = DateTime.Now;
+		}
+		
+		public void SetPaneCursor (int cursor, Pane pane)
+		{
+			cursors[(int) pane] = cursor;
+		}
+		
 		public IObject GetPaneItem (Pane pane)
 		{
 			return current_items[(int) pane];
@@ -141,11 +196,39 @@ namespace MonoDock.UI
 			return old_items[(int) pane];
 		}
 		
+		public string GetPaneQuery (Pane pane)
+		{
+			return queries[(int) pane];
+		}
+		
+		public IList<IObject> GetPaneResults (Pane pane)
+		{
+			return results[(int) pane];
+		}
+		
+		public int GetPaneCursor (Pane pane)
+		{
+			return cursors[(int) pane];
+		}
+		
 		public void Clear ()
 		{
 			current_items = new IObject[3];
+			results = new IList<IObject>[3];
+			result_timestamps = new DateTime[3];
+			queries = new string[3];
 			old_items = new IObject[3];
 			timestamps = new DateTime[3];
+		}
+		
+		public void ClearPane (Pane pane)
+		{
+			int i = (int) pane;
+			
+			current_items[i] = null;
+			results[i] = null;
+			result_timestamps[i] = timestamps[i] =DateTime.Now;
+			queries[i] = null;
 		}
 	}
 }

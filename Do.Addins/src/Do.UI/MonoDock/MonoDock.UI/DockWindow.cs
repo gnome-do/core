@@ -194,12 +194,12 @@ namespace MonoDock.UI
 		
 		public void Grow ()
 		{
-//			throw new System.NotImplementedException();
+			dock_area.ThirdPaneVisible = true;
 		}
 		
 		public void Shrink ()
 		{
-//			throw new System.NotImplementedException();
+			dock_area.ThirdPaneVisible = false;
 		}
 		
 		public void GrowResults ()
@@ -228,13 +228,12 @@ namespace MonoDock.UI
 			}
 		}
 		
-		Pane current_pane = Pane.First;
 		public Pane CurrentPane {
 			get {
-				return current_pane;
+				return dock_area.CurrentPane;
 			}
 			set {
-				current_pane = value;
+				dock_area.CurrentPane = value;
 			}
 		}
 		

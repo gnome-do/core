@@ -138,7 +138,6 @@ namespace MonoDock.XLib {
 		public readonly IntPtr _NET_FRAME_EXTENTS;
 		public readonly IntPtr _NET_WM_PING;
 		public readonly IntPtr _NET_WM_SYNC_REQUEST;
-		public readonly IntPtr _NET_SYSTEM_TRAY_S;
 		public readonly IntPtr _NET_SYSTEM_TRAY_ORIENTATION;
 		public readonly IntPtr _NET_SYSTEM_TRAY_OPCODE;
 		public readonly IntPtr _NET_WM_STATE_MAXIMIZED_HORZ;

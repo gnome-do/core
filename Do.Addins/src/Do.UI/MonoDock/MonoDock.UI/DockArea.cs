@@ -41,6 +41,7 @@ namespace MonoDock.UI
 		const int BaseAnimationTime = 150;
 		const int YBuffer = 3;
 		const int XBuffer = 5;
+		const int PaneSize = 168;
 		
 		IList<DockItem> dock_items;
 		Gdk.Point cursor;
@@ -51,7 +52,8 @@ namespace MonoDock.UI
 		DockState state;
 		Surface backbuffer, input_area_buffer;
 		DockWindow window;
-		PixbufSurfaceCache first_pane_cache;
+		PixbufSurfaceCache large_icon_cache, small_icon_cache;
+		
 		
 		#region Public properties
 		public int Width {
@@ -78,6 +80,18 @@ namespace MonoDock.UI
 				return input_interface;
 			}
 		}
+		
+		public Pane CurrentPane {
+			get {
+				return State.CurrentPane;
+			}
+			set {
+				State.CurrentPane = value;
+				AnimatedDraw ();
+			}
+		}
+		
+		public bool ThirdPaneVisible { get; set; }
 		#endregion
 		
 		double ZoomIn {
@@ -129,9 +143,17 @@ namespace MonoDock.UI
 			}
 		}
 		
+		double InputAreaSlideStatus {
+			get {
+				return Math.Min (1,(DateTime.Now - State.CurrentPaneTime).TotalMilliseconds / BaseAnimationTime);
+			}
+		}
+		
 		int IconBorderWidth {get{ return 4; }}
 		
 		int IconSize { get { return DockItem.IconSize + IconBorderWidth; } }
+		
+		int GapSize { get { return GetDockArea ().Width - 10 - PaneSize*3; } }
 		
 		Gdk.Point Cursor {
 			get {
@@ -160,9 +182,15 @@ namespace MonoDock.UI
 			}
 		}
 		
-		PixbufSurfaceCache FirstPaneCache {
+		PixbufSurfaceCache LargeIconCache {
 			get {
-				return first_pane_cache ?? first_pane_cache = new PixbufSurfaceCache (10, 128, 128);
+				return large_icon_cache ?? large_icon_cache = new PixbufSurfaceCache (10, 128, 128);
+			}
+		}
+		
+		PixbufSurfaceCache SmallIconCache {
+			get {
+				return small_icon_cache ?? small_icon_cache = new PixbufSurfaceCache (40, 64, 64);
 			}
 		}
 		
@@ -179,6 +207,12 @@ namespace MonoDock.UI
 			}
 		}
 		
+		bool PaneChangeAnimationNeeded {
+			get {
+				return (DateTime.Now - State.CurrentPaneTime).TotalMilliseconds < BaseAnimationTime;
+			}
+		}
+		
 		bool ZoomAnimationNeeded {
 			get { return !((CursorIsOverDockArea && ZoomIn == 1) || (!CursorIsOverDockArea && ZoomIn == 0)); }
 		}
@@ -190,6 +224,10 @@ namespace MonoDock.UI
 		
 		bool InputModeChangeAnimationNeeded {
 			get { return (DateTime.Now - interface_change_time).TotalMilliseconds < BaseAnimationTime; }
+		}
+		
+		bool AnimationNeeded {
+			get { return PaneChangeAnimationNeeded || ZoomAnimationNeeded || BounceAnimationNeeded || InputModeChangeAnimationNeeded; }
 		}
 		#endregion
 		
@@ -218,7 +256,7 @@ namespace MonoDock.UI
 			
 			timer = GLib.Timeout.Add (20, delegate {
 				QueueDraw ();
-				if (ZoomAnimationNeeded || BounceAnimationNeeded || InputModeChangeAnimationNeeded)
+				if (AnimationNeeded)
 					return true;
 				
 				timer = 0;
@@ -284,33 +322,118 @@ namespace MonoDock.UI
 			}
 		}
 		
+		#region Input Area drawing code
 		void DrawInputArea (Context cr)
 		{
-			DrawFirstPane (cr);
+			DrawPane (cr, Pane.First);
+			DrawResultIcons (cr, Pane.First);
+			
+			DrawPane (cr, Pane.Second);
+			DrawResultIcons (cr, Pane.Second);
+			
+			if (ThirdPaneVisible) {
+				DrawPane (cr, Pane.Third);
+				DrawResultIcons (cr, Pane.Third);
+			}
 		}
 		
-		void DrawFirstPane (Context cr)
+		void DrawPane (Context cr, Pane pane)
 		{
-			Gdk.Rectangle dock_area = GetDockArea ();
-			cr.SetRoundedRectanglePath (dock_area.X+10, Height - 162, 158, 158, 20);
-			cr.Color = new Cairo.Color (0, 0, 0, .7);
+			int start_x = GetXForPane (pane);
+			cr.SetRoundedRectanglePath (start_x, Height - 162, 158, 158, 20);
+			if (pane == CurrentPane)
+				cr.Color = new Cairo.Color (.15, .15, .15, .8);
+			else
+				cr.Color = new Cairo.Color (0, 0, 0, .4);
 			cr.FillPreserve ();
 			
 			cr.Color = new Cairo.Color (1, 1, 1, .8);
 			cr.Stroke ();
 			
-			if (State.First != null) {
-				if (!FirstPaneCache.ContainsKey (State.First.Icon)) {
-					FirstPaneCache.AddPixbufSurface (State.First.Icon, State.First.Icon);
+			if (State.GetPaneItem (pane) != null) {
+				if (!LargeIconCache.ContainsKey (State.GetPaneItem (pane).Icon)) {
+					LargeIconCache.AddPixbufSurface (State.GetPaneItem (pane).Icon, State.GetPaneItem (pane).Icon);
 				}
-				cr.SetSource (FirstPaneCache.GetSurface (State.First.Icon), dock_area.X + 25, Height - 158);
+				cr.SetSource (LargeIconCache.GetSurface (State.GetPaneItem (pane).Icon), start_x+15, Height - (PaneSize - 10));
 				cr.Paint ();
 				
-				string text = GLib.Markup.EscapeText (State.First.Name);
-				text = Do.Addins.Util.FormatCommonSubstrings (text, State.FirstQuery, HighlightFormat);
-				BezelTextUtils.RenderLayoutText (cr, text, dock_area.X + 15, Height-25, 148, this);
+				string text = GLib.Markup.EscapeText (State.GetPaneItem (pane).Name);
+				text = Do.Addins.Util.FormatCommonSubstrings (text, State.GetPaneQuery (pane), HighlightFormat);
+				BezelTextUtils.RenderLayoutText (cr, text, start_x + 5, Height-25, PaneSize-20, this);
 			}
 		}
+		
+		void DrawResultIcons (Context cr, Pane pane)
+		{
+			if ((pane != State.CurrentPane && pane != State.PreviousPane) || State.GetPaneResults (pane) == null)
+				return;
+			
+			int num_icons = GapSize/IconSize;
+			int pane_x = GetXForPane (pane);
+			int cursor = State.GetPaneCursor (pane)+1;
+			double transit_state = InputAreaSlideStatus;
+			
+			if (pane == State.PreviousPane)
+				transit_state = 1-transit_state;
+			
+			cr.Rectangle (pane_x+PaneSize, 0, GapSize*transit_state, Height);
+			cr.Clip ();
+			for (int i=cursor; i<num_icons+cursor && i<State.GetPaneResults (pane).Count; i++) {
+				IObject item = State.GetPaneResults (pane)[i];
+				if (!SmallIconCache.ContainsKey (item.Icon))
+					SmallIconCache.AddPixbufSurface (item.Icon, item.Icon);
+				
+				cr.SetSource (SmallIconCache.GetSurface (item.Icon), pane_x + PaneSize + IconSize*(i-cursor)*transit_state, Height-IconSize-YBuffer);
+				cr.Paint ();
+			}
+			cr.ResetClip ();
+		}
+		
+		int GetXForPane (Pane pane)
+		{
+			Gdk.Rectangle dock_area = GetDockArea ();
+			
+			double transit_state = InputAreaSlideStatus;
+			if (transit_state == 1 || pane == Pane.First) {
+				switch (pane) {
+				case Pane.First:
+					return dock_area.X + 10;
+				case Pane.Second:
+					if (CurrentPane == Pane.First)
+						return dock_area.X + 10 + PaneSize + GapSize;
+					return dock_area.X + 10 + PaneSize;
+				default:
+					if (CurrentPane == Pane.Third)
+						return dock_area.X + 10 + 2*PaneSize;
+					return dock_area.X + 10 + GapSize + 2*PaneSize;
+				}
+			}
+			
+			//It should be impossible to get to this point with a Pane.First
+			if (pane == Pane.First)
+				throw new Exception ("You have beat the programmer");
+			
+			if (pane == Pane.Second) {
+				if (State.PreviousPane == Pane.First) {
+					return dock_area.X + 10 + PaneSize + (int) (GapSize*(1-transit_state));
+				} else if (State.CurrentPane == Pane.First) {
+					return dock_area.X + 10 + PaneSize + (int) (GapSize*transit_state);
+				} else {
+					return dock_area.X + 10 + PaneSize;
+				}
+			} else {
+				if (State.CurrentPane == Pane.Third) {
+					return dock_area.X + 10 + (int) (GapSize*(1-transit_state)) + 2*PaneSize;
+				} else if (State.PreviousPane == Pane.Third) {
+					return dock_area.X + 10 + (int) (GapSize*transit_state) + 2*PaneSize;
+				} else {
+					return dock_area.X + 10 + GapSize + 2*PaneSize;
+				}
+			}
+			
+		}
+		
+		#endregion
 		
 		int IconNormalCenterX (int icon)
 		{
@@ -438,6 +561,8 @@ namespace MonoDock.UI
 		{
 			State[pane] = context.Selection;
 			State.SetPaneQuery (context.Query, pane);
+			State.SetPaneResults (context.Results, pane);
+			State.SetPaneCursor (context.Cursor, pane);
 			AnimatedDraw ();
 		}
 		
@@ -463,6 +588,11 @@ namespace MonoDock.UI
 		{
 			State.Clear ();
 			AnimatedDraw ();
+		}
+		
+		public void ClearPane (Pane pane)
+		{
+			State.ClearPane (pane);
 		}
 	}
 }
