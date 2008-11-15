@@ -93,7 +93,10 @@ namespace Do.Core {
 			score = StringScoreForAbbreviation (o.Name, match);
 			if (score == 0f) return 0f;
 			
-			relevance = 0f;	
+			// We must give a base, non-zero relevance to make scoring rules take
+			// effect.	
+			relevance = 0.1f;
+
 			if (0 < rec.Hits) {
 				float age;
 
@@ -102,7 +105,8 @@ namespace Do.Core {
 					  (float) (newest_hit - oldest_hit).TotalSeconds;
 				
 				if (rec.IsRelevantForMatch (match))
-					relevance = (float) rec.Hits /  (float) (rec.IsAction ? max_action_hits : max_item_hits);
+					relevance = (float) rec.Hits /
+						(float) (rec.IsAction ? max_action_hits : max_item_hits);
 				else
 					relevance = 0f;
 
@@ -112,13 +116,13 @@ namespace Do.Core {
 			}
 
 			// Penalize actions that require modifier items.
-			// other != null ==> we're getting relevance for second pane.
 			if (o is IAction && 
 			    (o as IAction).SupportedModifierItemTypes.Any () &&
 			    !(o as IAction).ModifierItemsOptional)
 				relevance *= 0.8f;
 
-			// We penalize actions, but only if they're not used in the first pane often.
+			// We penalize actions, but only if they're not used in the first pane
+			// often.
 			if (o is IAction && rec.FirstPaneHits < 3)
 				relevance *= 0.8f;
 
