@@ -102,8 +102,6 @@ namespace Do.Core {
 				age = (float) (newest_hit - rec.LastHit).TotalSeconds /
 					  (float) (newest_hit - oldest_hit).TotalSeconds;
 				
-				// Relevance is non-zero only if the record contains first char
-				// relevance for the item.
 				if (rec.IsRelevantForMatch (match))
 					relevance = (float) rec.Hits /  (float) (rec.IsAction ? max_action_hits : max_item_hits);
 				else
