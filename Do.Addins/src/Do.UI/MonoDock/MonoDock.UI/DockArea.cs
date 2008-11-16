@@ -37,6 +37,13 @@ namespace MonoDock.UI
 	
 	public class DockArea : Gtk.DrawingArea
 	{
+		enum DrawState {
+			Normal,
+			Text,
+			NoResult,
+			None,
+		}
+		
 		const int BounceTime = 700;
 		const int BaseAnimationTime = 150;
 		const int YBuffer = 3;
@@ -50,7 +57,7 @@ namespace MonoDock.UI
 		Gdk.Rectangle minimum_dock_size = new Gdk.Rectangle (-1, -1, -1, -1);
 		
 		DockState state;
-		Surface backbuffer, input_area_buffer;
+		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		DockWindow window;
 		PixbufSurfaceCache large_icon_cache, small_icon_cache;
 		
@@ -94,6 +101,7 @@ namespace MonoDock.UI
 		public bool ThirdPaneVisible { get; set; }
 		#endregion
 		
+		#region Zoom Properties
 		double ZoomIn {
 			get {
 				if (!CursorIsOverDockArea)
@@ -113,6 +121,7 @@ namespace MonoDock.UI
 				return Preferences.ZoomSize;
 			}
 		}
+		#endregion
 		
 		double DockIconOpacity {
 			get {
@@ -226,8 +235,15 @@ namespace MonoDock.UI
 			get { return (DateTime.Now - interface_change_time).TotalMilliseconds < BaseAnimationTime; }
 		}
 		
+		bool InputModeSlideAnimationNeeded {
+			get {
+				return (DateTime.Now - State.LastCursorChange).TotalMilliseconds < BaseAnimationTime;
+			}
+		}
+		
 		bool AnimationNeeded {
-			get { return PaneChangeAnimationNeeded || ZoomAnimationNeeded || BounceAnimationNeeded || InputModeChangeAnimationNeeded; }
+			get { return PaneChangeAnimationNeeded || ZoomAnimationNeeded || BounceAnimationNeeded || 
+				InputModeChangeAnimationNeeded || InputModeSlideAnimationNeeded; }
 		}
 		#endregion
 		
@@ -289,7 +305,16 @@ namespace MonoDock.UI
 			}
 			
 			if (DockIconOpacity > 0) {
-				DrawIcons (cr);
+				if (dock_icon_buffer == null)
+					dock_icon_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
+				
+				using (Context input_cr = new Context (dock_icon_buffer)) {
+					input_cr.AlphaFill ();
+					DrawIcons (input_cr);
+				}
+				
+				cr.SetSource (dock_icon_buffer, 0, IconSize * (1-DockIconOpacity));
+				cr.Paint ();
 			}
 		}
 		
@@ -326,21 +351,19 @@ namespace MonoDock.UI
 		void DrawInputArea (Context cr)
 		{
 			DrawPane (cr, Pane.First);
-			DrawResultIcons (cr, Pane.First);
 			
 			DrawPane (cr, Pane.Second);
-			DrawResultIcons (cr, Pane.Second);
 			
 			if (ThirdPaneVisible) {
 				DrawPane (cr, Pane.Third);
-				DrawResultIcons (cr, Pane.Third);
 			}
 		}
 		
 		void DrawPane (Context cr, Pane pane)
 		{
 			int start_x = GetXForPane (pane);
-			cr.SetRoundedRectanglePath (start_x, Height - 162, 158, 158, 20);
+			
+			cr.SetRoundedRectanglePath (start_x, Height - 162, PaneSize - 10, PaneSize - 10, 20);
 			if (pane == CurrentPane)
 				cr.Color = new Cairo.Color (.15, .15, .15, .8);
 			else
@@ -350,41 +373,69 @@ namespace MonoDock.UI
 			cr.Color = new Cairo.Color (1, 1, 1, .8);
 			cr.Stroke ();
 			
-			if (State.GetPaneItem (pane) != null) {
-				if (!LargeIconCache.ContainsKey (State.GetPaneItem (pane).Icon)) {
-					LargeIconCache.AddPixbufSurface (State.GetPaneItem (pane).Icon, State.GetPaneItem (pane).Icon);
-				}
-				cr.SetSource (LargeIconCache.GetSurface (State.GetPaneItem (pane).Icon), start_x+15, Height - (PaneSize - 10));
-				cr.Paint ();
-				
-				string text = GLib.Markup.EscapeText (State.GetPaneItem (pane).Name);
-				text = Do.Addins.Util.FormatCommonSubstrings (text, State.GetPaneQuery (pane), HighlightFormat);
-				BezelTextUtils.RenderLayoutText (cr, text, start_x + 5, Height-25, PaneSize-20, this);
-			}
-		}
-		
-		void DrawResultIcons (Context cr, Pane pane)
-		{
-			if ((pane != State.CurrentPane && pane != State.PreviousPane) || State.GetPaneResults (pane) == null)
+			if (State.GetPaneResults (pane) == null)
 				return;
 			
-			int num_icons = GapSize/IconSize;
-			int pane_x = GetXForPane (pane);
-			int cursor = State.GetPaneCursor (pane)+1;
-			double transit_state = InputAreaSlideStatus;
+			double results_slide_state = GetResultSlidePercentage (pane);
 			
-			if (pane == State.PreviousPane)
-				transit_state = 1-transit_state;
+			int num_icons = GapSize/IconSize+1;
+			int cursor = State.GetPaneCursor (pane);
+			if (State.GetPanePreviousCursor (pane) > State.GetPaneCursor (pane)) {
+			    results_slide_state = 1-results_slide_state;
+				cursor++;
+				num_icons--;
+			}
 			
-			cr.Rectangle (pane_x+PaneSize, 0, GapSize*transit_state, Height);
+			double gap_offset;
+			if (State.CurrentPane != pane && State.PreviousPane != pane)
+				gap_offset = 0;
+			else if (State.CurrentPane == pane)
+				gap_offset = Math.Min (1, (DateTime.Now-State.CurrentPaneTime).TotalMilliseconds/BaseAnimationTime);
+			else
+				gap_offset = 1-Math.Min (1, (DateTime.Now-State.CurrentPaneTime).TotalMilliseconds/BaseAnimationTime);
+			
+			int animation_start_x = start_x+15+PaneSize+IconSize/2;
+			int pane_center = start_x+30+IconSize;
+			double cursor_center_x = animation_start_x-IconSize*results_slide_state;
+			//fixme the extra plus 10 in here is due to a calculation error.
+			cr.Rectangle (start_x+10, 0, PaneSize+GapSize*gap_offset, Height);
 			cr.Clip ();
-			for (int i=cursor; i<num_icons+cursor && i<State.GetPaneResults (pane).Count; i++) {
+			
+			for (int i=cursor-1; i<State.GetPaneResults (pane).Count && i < cursor+num_icons; i++) {
+				if (i<0)
+					continue;
+				double base_center_x = cursor_center_x + (i-cursor)*IconSize;
+				if (base_center_x < 0)
+					continue;
+				double icon_size;
+				if (base_center_x < animation_start_x) {
+					base_center_x -= IconSize*results_slide_state + (IconSize)*(cursor-i);
+					icon_size = Math.Min (2, 1+((animation_start_x-base_center_x)/(animation_start_x-(double)pane_center)));
+				} else {
+					icon_size=1;
+				}
+					
 				IObject item = State.GetPaneResults (pane)[i];
-				if (!SmallIconCache.ContainsKey (item.Icon))
-					SmallIconCache.AddPixbufSurface (item.Icon, item.Icon);
 				
-				cr.SetSource (SmallIconCache.GetSurface (item.Icon), pane_x + PaneSize + IconSize*(i-cursor)*transit_state, Height-IconSize-YBuffer);
+				double scale;
+				Surface sr;
+				if (icon_size < 1.5) {
+					if (!SmallIconCache.ContainsKey (item.Icon))
+						SmallIconCache.AddPixbufSurface (item.Icon, item.Icon);
+					scale = icon_size;
+					sr = SmallIconCache.GetSurface (item.Icon);
+				} else {
+					if (!LargeIconCache.ContainsKey (item.Icon))
+						LargeIconCache.AddPixbufSurface (item.Icon, item.Icon);
+					scale = icon_size/2;
+					sr = LargeIconCache.GetSurface (item.Icon);
+				}
+					
+				cr.Scale (scale, scale);
+				cr.SetSource (sr, (base_center_x-(IconSize*icon_size)/2)/scale, (Height-IconSize*icon_size-YBuffer)/scale);
 				cr.Paint ();
+				
+				cr.Scale (1/scale, 1/scale);
 			}
 			cr.ResetClip ();
 		}
@@ -433,6 +484,30 @@ namespace MonoDock.UI
 			
 		}
 		
+		DrawState PaneDrawState (Pane pane)
+		{
+			if (pane == Pane.Third && !ThirdPaneVisible)
+				return DrawState.None;
+			
+//			if (Context.GetPaneTextMode (pane))
+//				return DrawState.Text;
+			
+			if (State[pane] != null)
+				return DrawState.Normal;
+			
+			if (!string.IsNullOrEmpty (State.GetPaneQuery (pane))) {
+				return DrawState.NoResult;
+			}
+			
+			return DrawState.None;
+		}
+		
+		double GetResultSlidePercentage (Pane pane)
+		{
+			if (State.GetPaneCursor (pane) == State.GetPanePreviousCursor (pane))
+				return 1;
+			return Math.Min ((DateTime.Now - State.GetPaneCursorTime (pane)).TotalMilliseconds/BaseAnimationTime,1);
+		}
 		#endregion
 		
 		int IconNormalCenterX (int icon)
@@ -557,8 +632,15 @@ namespace MonoDock.UI
 				input_area_buffer = null;
 			}
 			
-			backbuffer.Destroy ();
-			backbuffer = null;
+			if (dock_icon_buffer != null) {
+				dock_icon_buffer.Destroy ();
+				dock_icon_buffer = null;
+			}
+			
+			if (backbuffer != null) {
+				backbuffer.Destroy ();
+				backbuffer = null;
+			}
 			
 			SetSizeRequest (Width, Height);
 		}

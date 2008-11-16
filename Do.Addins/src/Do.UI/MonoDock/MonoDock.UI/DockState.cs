@@ -31,14 +31,20 @@ namespace MonoDock.UI
 	{
 		IObject[] current_items = new IObject[3];
 		IObject[] old_items = new IObject[3];
+		
 		string [] queries = new string[3];
+		
 		int[] cursors = new int[3];
+		int[] previous_cursors = new int[3];
+		
 		DateTime[] timestamps = new DateTime[3];
 		DateTime[] result_timestamps = new DateTime[3];
+		DateTime[] cursor_timestamps = new DateTime[3];
+		
 		IList<IObject>[] results = new IList<IObject>[3];
 		
-		Pane currentPane, previousPane;
-		DateTime current_pane_change;
+		Pane currentPane, previousPane = Pane.Second;
+		DateTime current_pane_change, last_cusor_change;
 		
 		public Pane CurrentPane {
 			get {
@@ -149,6 +155,12 @@ namespace MonoDock.UI
 				return current_pane_change;
 			}
 		}
+		
+		public DateTime LastCursorChange {
+			get {
+				return last_cusor_change;
+			}
+		}
 		#endregion
 		
 		public IObject this [Pane pane] {
@@ -183,7 +195,9 @@ namespace MonoDock.UI
 		
 		public void SetPaneCursor (int cursor, Pane pane)
 		{
+			previous_cursors[(int) pane] = cursors[(int) pane];
 			cursors[(int) pane] = cursor;
+			cursor_timestamps[(int) pane] = last_cusor_change = DateTime.Now;
 		}
 		
 		public IObject GetPaneItem (Pane pane)
@@ -211,6 +225,16 @@ namespace MonoDock.UI
 			return cursors[(int) pane];
 		}
 		
+		public int GetPanePreviousCursor (Pane pane)
+		{
+			return previous_cursors[(int) pane];
+		}
+		
+		public DateTime GetPaneCursorTime (Pane pane)
+		{
+			return cursor_timestamps[(int) pane];
+		}
+		
 		public void Clear ()
 		{
 			current_items = new IObject[3];
@@ -227,7 +251,7 @@ namespace MonoDock.UI
 			
 			current_items[i] = null;
 			results[i] = null;
-			result_timestamps[i] = timestamps[i] =DateTime.Now;
+			result_timestamps[i] = timestamps[i] = DateTime.Now;
 			queries[i] = null;
 		}
 	}
