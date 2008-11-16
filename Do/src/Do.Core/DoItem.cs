@@ -29,15 +29,15 @@ namespace Do.Core {
 	public class DoItem : DoObject, IItem {
 
 		/// <summary>
-		/// Returns the inner item if the static type of given item is an DoItem
-		/// subtype. Returns the argument otherwise.
+		/// Returns the inner item if the static type of given item is a DoItem
+		/// subtype. Returns the argument otherwise. This is used to get at the
+		/// instance wrapped by a DoItem.
 		/// </summary>
-		/// <param name="items">
-		/// A <see cref="IItem"/> that may or may not be an DoItem subtype.
+		/// <param name="item">
+		/// A <see cref="IItem"/> that may or may not be a DoItem subtype.
 		/// </param>
 		/// <returns>
-		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem
-		/// of an DoItem).
+		/// A <see cref="IItem"/> that is NOT a DoItem subtype.
 		/// </returns>
 		public static IItem EnsureIItem (IItem item)
 		{
@@ -46,6 +46,16 @@ namespace Do.Core {
 			return item;
 		}
 
+		/// <summary>
+		/// The converse of EnsureIItem, this ensures that the item passed is
+		/// a DoItem. This is used to wrap an IItem inside a DoItem.
+		/// </summary>
+		/// <param name="item">
+		/// A <see cref="IItem"/> that may or may not be a DoItem subtype.
+		/// </param>
+		/// <returns>
+		/// A <see cref="IItem"/> that is a DoItem.
+		/// </returns>
 		public static IItem EnsureDoItem (IItem item)
 		{
 			return item is DoItem ? item : new DoItem (item);
