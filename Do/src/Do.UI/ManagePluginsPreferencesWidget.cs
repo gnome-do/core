@@ -37,6 +37,10 @@ namespace Do.UI
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class ManagePluginsPreferencesWidget : Bin, IConfigurable
 	{
+
+		const string PluginWikiPageFormat
+			= "http://www.gnomedo.com/wiki/index.php?title={0}_Plugin";
+
 		PluginNodeView nview;
 
 		new public string Name {
@@ -201,8 +205,7 @@ namespace Do.UI
 			foreach (string id in nview.GetSelectedAddins ()) {
 				try {
 					string name = Addin.GetIdName (id).Split ('.')[1];
-					Util.Environment.Open (
-							"http://www.gnomedo.com/wiki/index.php?title=" + name + "_Plugin");
+					Util.Environment.Open (string.Format (PluginWikiPageFormat, name));
 				} catch { }
 			}
 		}
