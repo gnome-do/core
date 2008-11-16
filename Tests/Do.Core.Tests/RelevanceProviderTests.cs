@@ -19,7 +19,6 @@
 using System;
 
 using Do;
-using Do.Core;
 using Do.Addins;
 using Do.Universe;
 

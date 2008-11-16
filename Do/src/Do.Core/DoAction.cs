@@ -90,7 +90,7 @@ namespace Do.Core {
 			} finally {
 				modItems = modItems ?? Enumerable.Empty<IItem> ();
 			}
-			return modItems.Select (i => DoItem.EnsureDoItem (i) as IItem);
+			return modItems.Select (i => DoItem.EnsureDoItem (i));
 		}
 
 		public bool SupportsItem (IItem item)
@@ -140,7 +140,7 @@ namespace Do.Core {
 			} finally {
 				results = results ?? Enumerable.Empty<IItem> ();
 			}
-			results = results.Select (i => DoItem.EnsureDoItem (i) as IItem);
+			results = results.Select (i => DoItem.EnsureDoItem (i));
 			
 			// If we have results to feed back into the window, do so in a new
 			// iteration.
