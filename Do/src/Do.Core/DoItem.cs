@@ -46,12 +46,9 @@ namespace Do.Core {
 			return item;
 		}
 
-		public static DoItem EnsureDoItem (IItem item)
+		public static IItem EnsureDoItem (IItem item)
 		{
-			if (item is DoItem)
-				return item as DoItem;
-			else
-				return new DoItem (item);;
+			return item is DoItem ? item : new DoItem (item);
 		}
 		
 		public DoItem (IItem item):
