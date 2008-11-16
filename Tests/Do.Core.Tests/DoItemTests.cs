@@ -70,7 +70,8 @@ namespace Do.Core
 		public void EnsureDoItem_Basic ()
 		{
 			IItem item = new SimpleItem ();
-			Assert.AreEqual (typeof (DoItem), DoItem.EnsureDoItem (item).GetType ());
+			Type wrapperT = DoItem.EnsureDoItem (item).GetType ();
+			Assert.IsTrue (typeof (DoItem).IsAssignableFrom (wrapperT));
 		}
 	}
 }
