@@ -345,6 +345,10 @@ namespace MonoDock.UI
 			
 			DoubleBuffered = false;
 			
+			Realized += delegate {
+				GdkWindow.SetBackPixmap (null, false);
+			};
+			
 			StyleSet += delegate {
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);

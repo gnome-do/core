@@ -59,6 +59,15 @@ namespace MonoDock.UI
 			
 			this.SetCompositeColormap ();
 			
+			Realized += delegate {
+				GdkWindow.SetBackPixmap (null, false);
+			};
+			
+			StyleSet += delegate {
+				if (IsRealized)
+					GdkWindow.SetBackPixmap (null, false);
+			};
+			
 			Build ();
 		}
 		
@@ -95,17 +104,6 @@ namespace MonoDock.UI
 			}
 			
 			return base.OnButtonReleaseEvent (evnt);
-		}
-
-		
-		protected override bool OnExposeEvent(EventExpose evnt)
-		{
-			Context cr = Gdk.CairoHelper.Create (GdkWindow);
-			cr.Color = new Cairo.Color (0, 0, 0, 0);
-			cr.Paint ();
-			(cr as IDisposable).Dispose ();
-			
-			return base.OnExposeEvent (evnt);
 		}
 		
 		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
