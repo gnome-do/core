@@ -83,17 +83,13 @@ namespace Do.Universe {
 		public bool IsAppropriateForCurrentDesktop {
 			get {
 				// This check should eventually account for xfce too.  Ideally here
-				// though, we wish to throw away certain items that are not useful to the
-				// current DE.  We are using the same check that xdg-open uses.
+				// though, we wish to throw away certain items that are not useful to
+				// the current DE.  We are using the same check that xdg-open uses.
 				if (!item.AttrExists ("OnlyShowIn")) return true;
 
 				string show_in = item.GetString ("OnlyShowIn").ToLower ();
-				return
-						(System.Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true" &&
-						!show_in.Contains ("kde"))
-					||
-						(!show_in.Contains ("gnome") &&
-						 !show_in.Contains ("xfce"));
+				return !show_in.Contains ("kde") || 
+					Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true";
 			}
 		}
 		
