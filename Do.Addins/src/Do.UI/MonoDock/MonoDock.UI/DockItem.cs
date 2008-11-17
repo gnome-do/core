@@ -150,6 +150,9 @@ namespace MonoDock.UI
 			if (sr != null)
 				sr.Destroy ();
 			
+			if (icon_surface != null)
+				icon_surface.Destroy ();
+			
 			if (pixbuf != null)
 				pixbuf.Dispose ();
 		}
