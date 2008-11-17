@@ -68,7 +68,7 @@ namespace MonoDock.UI
 		
 		public DockItem(IObject item)
 		{
-			LastClick = DateTime.Now - new TimeSpan (0, 10, 0);
+			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			this.item = item;
 		}
 		
