@@ -20,23 +20,25 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
+
 using Mono.Unix;
 
 namespace Do.Universe {
 
 	public class ApplicationItemSource : IItemSource {
 
-		private Dictionary<string,IItem> apps;
+		const bool show_hidden = false;
 
-		bool show_hidden = false;
-		
+		private IEnumerable<IItem> app_items;
+
 		/// <summary>
 		/// Locations to search for .desktop files.
 		/// </summary>
-		static string [] DesktopFilesDirectories {
+		static IEnumerable<String> DesktopFilesDirectories {
 			get {
-				return new string [] {
+				return new string[] {
 					"~/.local/share/applications/wine",
 					"~/.local/share/applications",
 					"/usr/share/applications",
@@ -50,22 +52,16 @@ namespace Do.Universe {
 		}
 		
 		static string Desktop {
-			get {
-				return Paths.ReadXdgUserDir ("XDG_DESKTOP_DIR", "Desktop");
-			}
+			get { return Paths.ReadXdgUserDir ("XDG_DESKTOP_DIR", "Desktop"); }
 		}
 
 		public ApplicationItemSource ()
 		{
-			apps = new Dictionary<string,IItem> ();
+			app_items = new List<IItem> ();
 		}
 
 		public IEnumerable<Type> SupportedItemTypes {
-			get {
-				return new Type [] {
-					typeof (ApplicationItem),
-				};
-			}
+			get { yield return typeof (ApplicationItem); }
 		}
 
 		public string Name {
@@ -91,38 +87,33 @@ namespace Do.Universe {
 		/// directory
 		/// where .desktop files can be found.
 		/// </param>
-		private void LoadDesktopFiles (string dir)
+		private static IEnumerable<ApplicationItem> LoadDesktopFiles (string dir)
 		{
-			if (!Directory.Exists (dir)) return;
-			foreach (string file in Directory.GetFiles (dir, "*.desktop")) {
-                ApplicationItem app;
+			if (!Directory.Exists (dir))
+				return Enumerable.Empty<ApplicationItem> ();
 
-                if (apps.ContainsKey (file)) continue;
-				try {
-					app = new ApplicationItem (file);
-				} catch {
-					continue;
-				}
-				if (string.IsNullOrEmpty (app.Exec) || string.IsNullOrEmpty (app.Name))
-					continue;
-				
-				if (!apps.ContainsKey (app.Exec) && (!app.Hidden || show_hidden))
-					apps [app.Exec] = app;
-			}
+			return Directory.GetFiles (dir, "*.desktop")
+				.Select (file => new ApplicationItem (file))
+				.Where (app => app.IsAppropriateForCurrentDesktop)
+				.Where (app => show_hidden || !app.NoDisplay)
+				.Where (app => !string.IsNullOrEmpty (app.Name) &&
+											 !string.IsNullOrEmpty (app.Exec));
 		}
 
 		public void UpdateItems ()
 		{
 			// Updating is turned off because it uses a ridiculous amount of memory.
-			if (apps.Count > 0) return;
+			if (app_items.Any ()) return;
 			
-			foreach (string dir in DesktopFilesDirectories) {
-				LoadDesktopFiles (dir.Replace ("~", Paths.UserHome));
-			}
+			app_items = DesktopFilesDirectories
+				.Select (dir => dir.Replace ("~", Paths.UserHome))
+				.Select (dir => LoadDesktopFiles (dir))
+				.Aggregate ((a, b) => Enumerable.Concat (a, b))
+				.Cast<IItem> ();
 		}
 
 		public IEnumerable<IItem> Items {
-			get { return apps.Values; }
+			get { return app_items; }
 		}
 
 		public IEnumerable<IItem> ChildrenOfItem (IItem item)

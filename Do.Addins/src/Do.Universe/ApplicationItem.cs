@@ -19,8 +19,9 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using Gnome;
@@ -42,67 +43,57 @@ namespace Do.Universe {
 		/// </param>
 		public ApplicationItem (string desktopFile)
 		{
-			item = DesktopItem.NewFromFile (desktopFile,
-				DesktopItemLoadFlags.OnlyIfExists);
-			if (null == item)
-				throw new Exception (desktopFile + " not found.");
-			
-			// This check should eventually account for xfce too.  Ideally here though, we wish to throw
-			// away certain items that are not useful to the current DE.  We are using the same check
-			// that xdg-open uses.
-			if (item.AttrExists ("OnlyShowIn")) {
-				string show_areas = item.GetString ("OnlyShowIn").ToLower ();
-				if (System.Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true") { //in KDE
-					if (!show_areas.Contains ("kde"))
-						throw new Exception ("Non-KDE Item in KDE");
-				} else { //not in KDE
-					if (show_areas.Contains ("kde") && !show_areas.Contains ("gnome") && !show_areas.Contains ("xfce"))
-						throw new Exception ("KDE Item in GNOME");
-				}
-			}
-			if (item.AttrExists ("NoDisplay")) {
-				if (item.GetBoolean ("NoDisplay"))
-					throw new Exception ("No Display item detected");
-			}
-			
+			item = DesktopItem.NewFromFile (desktopFile, DesktopItemLoadFlags.OnlyIfExists);
+
 			name = item.GetLocalestring ("Name");
 			description = item.GetLocalestring ("Comment");
 			icon = item.GetString ("Icon");
 		}
 		
 		public string Name {
-			get {
-				return name;
-			}
+			get { return name; }
 		}
 
 		public string Description {
-			get {
-				return description;
-			}
+			get { return description; }
 		}
 		
 		public string Icon {
+			get { return icon; }
+		}
+
+		public bool NoDisplay {
 			get {
-				return icon;
+				return item.AttrExists ("NoDisplay") && item.GetBoolean ("NoDisplay");
 			}
 		}
 		
 		public string Exec {
-			get {
-				return item.GetString ("Exec");
-			}
+			get { return item.GetString ("Exec"); }
 		}
 
 		public bool Hidden {
-			get {
-				return item.GetBoolean ("NoDisplay");
-			}
+			get { return item.GetBoolean ("NoDisplay"); }
 		}
 		
 		public bool IsUserCustomItem {
+			get { return item.Location.StartsWith ("file:///home"); }
+		}
+
+		public bool IsAppropriateForCurrentDesktop {
 			get {
-				return item.Location.StartsWith ("file:///home");
+				// This check should eventually account for xfce too.  Ideally here
+				// though, we wish to throw away certain items that are not useful to the
+				// current DE.  We are using the same check that xdg-open uses.
+				if (!item.AttrExists ("OnlyShowIn")) return true;
+
+				string show_in = item.GetString ("OnlyShowIn").ToLower ();
+				return
+						(System.Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true" &&
+						!show_in.Contains ("kde"))
+					||
+						(!show_in.Contains ("gnome") &&
+						 !show_in.Contains ("xfce"));
 			}
 		}
 		
@@ -149,26 +140,8 @@ namespace Do.Universe {
 
 		public void RunWithUris (IEnumerable<string> uris)
 		{
-			item.Launch (IEnumerableToList<string> (uris),
-			             DesktopItemLaunchFlags.OnlyOne);
-		}
-		
-		/// <summary>
-		/// Simple helper function to convert an IEnumerable<T> to a
-		/// GLib.List.
-		/// </summary>
-		/// <param name="es">
-		/// A <see cref="IEnumerable`1"/>.
-		/// </param>
-		/// <returns>
-		/// A <see cref="GLib.List"/> representation of the IEnumerable.
-		/// </returns>
-		GLib.List IEnumerableToList<T> (IEnumerable<T> es)
-		{
-			object [] arr;
-	
-			arr = new List<T> (es).ToArray ();
-			return new GLib.List (arr, typeof (T), false, true);
+			GLib.List glist = new GLib.List (uris.ToArray (), typeof (string), false, true);
+			item.Launch (glist, DesktopItemLaunchFlags.OnlyOne);
 		}
 	}
 }

@@ -36,9 +36,7 @@ namespace Do {
 				try {
 					Directory.Delete (Temp, true);
 				} catch (Exception e) {
-					Console.Error.WriteLine (
-						"Could not delete temporary directory {0}: {1}",
-						Temp, e.Message);
+					Console.Error.WriteLine ("Could not delete temporary directory {0}: {1}", Temp, e.Message);
 				}
 			}
 			CreateDirs (ApplicationData, UserData, UserPlugins, Temp);
@@ -50,9 +48,7 @@ namespace Do {
 				try {
 					Directory.CreateDirectory (first);
 				} catch (Exception e) {
-					Console.Error.WriteLine (
-						"Failed to create directory {0}: {1}",
-						first, e.Message);
+					Console.Error.WriteLine ("Failed to create directory {0}: {1}", first, e.Message);
 				}
 			}
 
@@ -61,9 +57,7 @@ namespace Do {
 					try {
 						Directory.CreateDirectory (dir);
 					} catch (Exception e) {
-						Console.Error.WriteLine (
-							"Failed to create directory {0}: {1}",
-							dir, e.Message);
+						Console.Error.WriteLine ("Failed to create directory {0}: {1}", dir, e.Message);
 					}
 				}
 			}
