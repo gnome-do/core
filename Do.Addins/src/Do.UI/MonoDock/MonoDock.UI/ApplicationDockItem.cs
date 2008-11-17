@@ -34,6 +34,12 @@ namespace MonoDock.UI
 	
 	public class ApplicationDockItem : IDockItem
 	{
+		enum ClickAction {
+			Focus,
+			Minimize,
+			Restore,
+		}
+		
 		Wnck.Application application;
 		Surface sr, icon_surface;
 		
@@ -146,15 +152,49 @@ namespace MonoDock.UI
 		public void Clicked ()
 		{
 			foreach (Wnck.Window window in application.Windows) {
-				if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-					window.Activate (Gtk.Global.CurrentEventTime);
+				switch (GetClickAction ()) {
+				case ClickAction.Focus:
+					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+						window.Activate (Gtk.Global.CurrentEventTime);
+					break;
+				case ClickAction.Minimize:
+					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+						window.Minimize ();
+					break;
+				case ClickAction.Restore:
+					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+						window.Unminimize (Gtk.Global.CurrentEventTime);
+					break;
+				}
 			}
+		}
+		
+		ClickAction GetClickAction ()
+		{
+			foreach (Wnck.Window window in application.Windows) {
+				if (window.IsMinimized)
+					return ClickAction.Restore;
+			}
+			
+			foreach (Wnck.Window window in application.Windows) {
+				if (window.IsActive)
+					return ClickAction.Minimize;
+			}
+			
+			return ClickAction.Focus;
 		}
 
 		#region IDisposable implementation 
 		
 		public void Dispose ()
 		{
+			application.Dispose ();
+			
+			if (sr != null)
+				sr.Destroy ();
+			
+			if (icon_surface != null)
+				icon_surface.Destroy ();
 		}
 		
 		#endregion 

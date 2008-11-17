@@ -125,10 +125,7 @@ namespace MonoDock.UI
 				out_items.Add (new SeperatorItem ());
 				out_items.AddRange (window_items);
 				
-				return out_items;
-			}
-			set {
-				dock_items = value;
+				return out_items.ToArray ();
 			}
 		}
 		
@@ -321,7 +318,7 @@ namespace MonoDock.UI
 		{
 			Statistics = statistics;
 			this.window = window;
-			DockItems = new List<IDockItem> ();
+			dock_items = new List<IDockItem> ();
 			window_items = new List<IDockItem> ();
 			
 			
@@ -770,10 +767,10 @@ namespace MonoDock.UI
 				if (!is_set)
 					di.DockAddItem = DateTime.UtcNow;
 			}
-			foreach (IDockItem dock_item in DockItems)
+			foreach (IDockItem dock_item in dock_items)
 				dock_item.Dispose ();
 			
-			DockItems = new_items;
+			dock_items = new_items;
 			AnimatedDraw ();
 		}
 		
@@ -815,13 +812,13 @@ namespace MonoDock.UI
 		
 		public void SetIcons (IEnumerable<IDockItem> items)
 		{
-			foreach (IDockItem ditem in DockItems)
+			foreach (IDockItem ditem in dock_items)
 				ditem.Dispose ();
 			
 			foreach (IDockItem i in items) {
 				i.DockAddItem = DateTime.UtcNow;
 			}
-			DockItems = new List<IDockItem> (items);
+			dock_items = new List<IDockItem> (items);
 			AnimatedDraw ();
 		}
 		
