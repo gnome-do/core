@@ -149,8 +149,6 @@ EXTRAS = \
 	Do.exe.config.in
 
 REFERENCES =  \
-	../Do.Addins/bin/Debug/Do.Addins.dll \
-	../Do.DBus/bin/Debug/Do.DBus.dll \
 	Mono.Posix \
 	$(GCONF_SHARP_20_LIBS) \
 	$(GLIB_SHARP_20_LIBS) \
@@ -163,7 +161,8 @@ REFERENCES =  \
 	System \
 	System.Core
 
-DLL_REFERENCES = 
+DLL_REFERENCES =	$(DO_ADDINS_DLL) \
+			$(DO_DBUS_DLL)
 
 DO_ADDINS_DLL = $(BUILD_DIR)/Do.Addins.dll
 GNOME_DO_DESKTOP = $(BUILD_DIR)/gnome-do.desktop
