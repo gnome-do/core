@@ -401,7 +401,8 @@ namespace MonoDock.UI
 				
 				double scale = zoom/DockItem.IconQuality;
 				cr.Scale (scale, scale);
-				Gdk.CairoHelper.SetSourcePixbuf (cr, dock_items[i].Pixbuf, x*DockItem.IconQuality, y*DockItem.IconQuality);
+//				Gdk.CairoHelper.SetSourcePixbuf (cr, dock_items[i].Pixbuf, x*DockItem.IconQuality, y*DockItem.IconQuality);
+				cr.SetSource (dock_items[i].GetIconSurface (), x*DockItem.IconQuality, y*DockItem.IconQuality);
 				cr.Paint ();
 				cr.Scale (1/scale, 1/scale);
 				

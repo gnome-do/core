@@ -51,7 +51,7 @@ namespace MonoDock.UI
 #endregion
 		
 		IObject item;
-		Surface sr;
+		Surface sr, icon_surface;
 		
 		public string Icon { get { return item.Icon; } }
 		public string Description { get { return item.Name; } }
@@ -61,7 +61,7 @@ namespace MonoDock.UI
 		public DateTime DockAddItem { get; set; }
 		
 		Gdk.Pixbuf pixbuf;
-		public Gdk.Pixbuf Pixbuf {
+		Gdk.Pixbuf Pixbuf {
 			get {
 				return pixbuf ?? pixbuf = GetPixbuf ();
 			}
@@ -85,6 +85,21 @@ namespace MonoDock.UI
 			}
 			
 			return pbuf;
+		}
+		
+		public Surface GetIconSurface ()
+		{
+			if (icon_surface == null) {
+				icon_surface = new ImageSurface (Cairo.Format.Argb32, (int) (IconSize*IconQuality), (int) (IconSize*IconQuality));
+				Context cr = new Context (icon_surface);
+				Gdk.CairoHelper.SetSourcePixbuf (cr, Pixbuf, 0, 0);
+				cr.Paint ();
+				
+				(cr as IDisposable).Dispose ();
+				pixbuf.Dispose ();
+				pixbuf = null;
+			}
+			return icon_surface;
 		}
 		
 		public Surface GetTextSurface ()
