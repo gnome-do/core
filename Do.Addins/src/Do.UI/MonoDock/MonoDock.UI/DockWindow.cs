@@ -47,6 +47,7 @@ namespace MonoDock.UI
 		public DockWindow(IDoController controller) : base (Gtk.WindowType.Toplevel)
 		{
 			this.controller = controller;
+			controller.Orientation = ControlOrientation.Horizontal;
 			
 			AppPaintable = true;
 			KeepAbove = true;

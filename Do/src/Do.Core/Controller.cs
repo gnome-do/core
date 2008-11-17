@@ -351,6 +351,11 @@ namespace Do.Core {
 		}
 		
 #region KeyPress Handling
+		Gdk.Key UpKey    { get { return (Orientation == ControlOrientation.Vertical) ? Gdk.Key.Up    : Gdk.Key.Left;  } }
+		Gdk.Key DownKey  { get { return (Orientation == ControlOrientation.Vertical) ? Gdk.Key.Down  : Gdk.Key.Right; } }
+		Gdk.Key LeftKey  { get { return (Orientation == ControlOrientation.Vertical) ? Gdk.Key.Left  : Gdk.Key.Up;    } }
+		Gdk.Key RightKey { get { return (Orientation == ControlOrientation.Vertical) ? Gdk.Key.Right : Gdk.Key.Down;  } }
+		
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
 			// User set keybindings
@@ -376,45 +381,33 @@ namespace Do.Core {
 				}
 			}
 
-			switch ((Gdk.Key) evnt.KeyValue) {
-			case Gdk.Key.Control_L:
-				break;
-			case Gdk.Key.Escape:
+			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Escape) {
 				OnEscapeKeyPressEvent (evnt);
-				break;
-			case Gdk.Key.Return:
-			case Gdk.Key.ISO_Enter:
-			case Gdk.Key.KP_Enter:
+			} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Return ||
+			           (Gdk.Key) evnt.KeyValue == Gdk.Key.ISO_Enter ||
+			           (Gdk.Key) evnt.KeyValue == Gdk.Key.KP_Enter) {
 				OnActivateKeyPressEvent (evnt);
-				break;
-			case Gdk.Key.Delete:
-			case Gdk.Key.BackSpace:
+			} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Delete ||
+			           (Gdk.Key) evnt.KeyValue == Gdk.Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-				break;
-			case Gdk.Key.Tab:
-			case Gdk.Key.ISO_Left_Tab:
+			} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Tab ||
+			           (Gdk.Key) evnt.KeyValue == Gdk.Key.ISO_Left_Tab) {
 				OnTabKeyPressEvent (evnt);
-				break;
-			case Gdk.Key.Up:
-			case Gdk.Key.Down:
-			case Gdk.Key.Home:
-			case Gdk.Key.End:
-			case Gdk.Key.Page_Up:
-			case Gdk.Key.Page_Down:
+			} else if ((Gdk.Key) evnt.KeyValue == UpKey ||
+			           (Gdk.Key) evnt.KeyValue == DownKey ||
+			           (Gdk.Key) evnt.KeyValue == Gdk.Key.Home ||
+			           (Gdk.Key) evnt.KeyValue == Gdk.Key.End ||
+			           (Gdk.Key) evnt.KeyValue == Gdk.Key.Page_Up ||
+			           (Gdk.Key) evnt.KeyValue == Gdk.Key.Page_Down) {
 				OnUpDownKeyPressEvent (evnt);
-				break;
-			case Gdk.Key.Right:
-			case Gdk.Key.Left:
+			} else if ((Gdk.Key) evnt.KeyValue == RightKey ||
+			           (Gdk.Key) evnt.KeyValue == LeftKey) {
 				OnRightLeftKeyPressEvent (evnt);
-				break;
-			case Gdk.Key.comma:
+			} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.comma) {
 				OnSelectionKeyPressEvent (evnt);
-				break;
-			default:
+			} else {
 				OnInputKeyPressEvent (evnt);
-				break;
 			}
-			return;
 		}
 		
 		void OnPasteEvent ()
@@ -527,15 +520,13 @@ namespace Do.Core {
 			im.Reset ();
 			if (!SearchController.Results.Any ()) return;
 
-			switch ((Gdk.Key) evnt.KeyValue) {
-			case Gdk.Key.Right:
+			if ((Gdk.Key) evnt.KeyValue == RightKey) {
 				// We're attempting to browse the contents of an item, so increase its
 				// relevance.
 				(SearchController.Selection as DoObject)
 					.IncreaseRelevance (SearchController.Query, null);
 				if (SearchController.ItemChildSearch ()) GrowResults ();
-				break;
-			case Gdk.Key.Left:
+			} else if ((Gdk.Key) evnt.KeyValue == LeftKey) {
 				// We're attempting to browse the parent of an item, so decrease its
 				// relevance. This makes it so we can merely visit an item's children,
 				// and navigate back out of the item, and leave that item's relevance
@@ -543,7 +534,6 @@ namespace Do.Core {
 				(SearchController.Selection as DoObject)
 					.DecreaseRelevance (SearchController.Query, null);
 				if (SearchController.ItemParentSearch ()) GrowResults ();
-				break;
 			}
 		}
 		
@@ -582,7 +572,7 @@ namespace Do.Core {
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
 			im.Reset ();
-			if (evnt.Key == Gdk.Key.Up) {
+			if (evnt.Key == UpKey) {
 				if (!resultsGrown) {
 					if (SearchController.Cursor > 0)
 						GrowResults ();
@@ -594,7 +584,7 @@ namespace Do.Core {
 					}
 					SearchController.Cursor--;
                 }
-			} else if (evnt.Key == Gdk.Key.Down) {
+			} else if (evnt.Key == DownKey) {
 				if (!resultsGrown) {
 					GrowResults ();
 					return;
@@ -974,6 +964,8 @@ namespace Do.Core {
 			Vanish ();
 			Reset ();
 		}
+		
+		public ControlOrientation Orientation { get; set; }
 		
 		public bool ObjectHasChildren (IObject o)
 		{
