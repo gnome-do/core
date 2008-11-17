@@ -141,6 +141,7 @@ REFERENCES =  \
 	$(GNOME_SHARP_20_LIBS) \
 	$(GNOME_VFS_SHARP_20_LIBS) \
 	$(GTK_SHARP_20_LIBS) \
+	$(WNCK_SHARP_10_LIBS) \
 	System \
 	System.Core
 
