@@ -102,6 +102,10 @@
     <File name="src/Do.Addins/IStatistics.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/DockState.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/AbstractAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/SeperatorItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/IDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.Util/WindowUtils.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/ApplicationDockItem.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -119,6 +123,7 @@
     <ProjectReference type="Gac" localcopy="True" refto="Gnome.Keyring, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1a73e1bde00c9b66" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="True" refto="wnck-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
   <GtkDesignInfo />
   <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="./Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">

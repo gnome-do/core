@@ -54,6 +54,7 @@ namespace MonoDock.UI
 			SkipPagerHint = true;
 			SkipTaskbarHint = true;
 			Resizable = false;
+			CanFocus = false;
 			TypeHint = WindowTypeHint.Dock;
 			
 			this.SetCompositeColormap ();

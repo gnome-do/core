@@ -29,7 +29,7 @@ namespace MonoDock.UI
 {
 	
 	
-	public class DockItem : IEquatable<DockItem>, IDisposable
+	public class DockItem : IDockItem, IDoDockItem
 	{
 #region Static Area
 		static int icon_size = 64;
@@ -59,6 +59,10 @@ namespace MonoDock.UI
 		
 		public DateTime LastClick { get; set; }
 		public DateTime DockAddItem { get; set; }
+		
+		public int Width { get { return IconSize; } }
+		public int Height { get { return IconSize; } }
+		public bool Scalable { get { return true; } }
 		
 		Gdk.Pixbuf pixbuf;
 		Gdk.Pixbuf Pixbuf {
@@ -138,9 +142,16 @@ namespace MonoDock.UI
 			return sr;
 		}
 		
-		public bool Equals (DockItem other)
+		public void Clicked ()
 		{
-			return (other.IObject == IObject);
+			
+		}
+		
+		public bool Equals (IDockItem other)
+		{
+			if (other is DockItem)
+				return ((other as DockItem).IObject == IObject);
+			return false;
 		}
 
 		#region IDisposable implementation 

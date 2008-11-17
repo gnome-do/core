@@ -90,6 +90,10 @@ FILES =  \
 	src/Do.UI/MonoDock/MonoDock.UI/DockItem.cs \
 	src/Do.UI/MonoDock/MonoDock.UI/DockWindow.cs \
 	src/Do.UI/MonoDock/MonoDock.UI/DockState.cs \
+	src/Do.UI/MonoDock/MonoDock.UI/ApplicationDockItem.cs \
+	src/Do.UI/MonoDock/MonoDock.UI/IDockItem.cs \
+	src/Do.UI/MonoDock/MonoDock.UI/SeperatorItem.cs \
+	src/Do.UI/MonoDock/MonoDock.Util/WindowUtils.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/GtkUtils.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/Preferences.cs \
 	src/Do.UI/MonoDock/XLib/X11Atoms.cs \
