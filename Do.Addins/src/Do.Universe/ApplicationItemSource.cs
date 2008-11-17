@@ -57,7 +57,7 @@ namespace Do.Universe {
 
 		public ApplicationItemSource ()
 		{
-			app_items = new List<IItem> ();
+			app_items = Enumerable.Empty<IItem> ();
 		}
 
 		public IEnumerable<Type> SupportedItemTypes {
@@ -96,8 +96,7 @@ namespace Do.Universe {
 				.Select (file => new ApplicationItem (file))
 				.Where (app => app.IsAppropriateForCurrentDesktop)
 				.Where (app => show_hidden || !app.NoDisplay)
-				.Where (app => !string.IsNullOrEmpty (app.Name) &&
-											 !string.IsNullOrEmpty (app.Exec));
+				.Where (app => !string.IsNullOrEmpty (app.Name));
 		}
 
 		public void UpdateItems ()
