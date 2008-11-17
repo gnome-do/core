@@ -62,6 +62,7 @@ namespace MonoDock.UI
 		DockWindow window;
 		PixbufSurfaceCache large_icon_cache, small_icon_cache;
 		
+		bool autohide = true;
 		
 		#region Public properties
 		public int Width {
@@ -78,7 +79,8 @@ namespace MonoDock.UI
 		
 		public int DockHeight {
 			get {
-				Console.WriteLine (MinimumDockArea.Height);
+				if (autohide)
+					return 0;
 				return MinimumDockArea.Height;
 			}
 		}
@@ -108,8 +110,8 @@ namespace MonoDock.UI
 		double ZoomIn {
 			get {
 				if (!CursorIsOverDockArea)
-					return Math.Max (0, 1-DateTime.UtcNow.Subtract (enter_time).TotalMilliseconds/150.0);
-				return Math.Min (1, DateTime.UtcNow.Subtract (enter_time).TotalMilliseconds/150.0);
+					return Math.Max (0, 1-DateTime.UtcNow.Subtract (enter_time).TotalMilliseconds/BaseAnimationTime);
+				return Math.Min (1, DateTime.UtcNow.Subtract (enter_time).TotalMilliseconds/BaseAnimationTime);
 			}
 		}
 		
@@ -125,6 +127,24 @@ namespace MonoDock.UI
 			}
 		}
 		#endregion
+		
+		int YOffset {
+			get {
+				if (!autohide)
+					return 0;
+				double offset = 0;
+				if (CursorIsOverDockArea) {
+					offset = 1 - Math.Min (1,(DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
+					return (int) (offset*MinimumDockArea.Height);
+				} else {
+					offset = Math.Min (Math.Min (1,(DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime),
+					                  Math.Min (1, (DateTime.UtcNow - interface_change_time).TotalMilliseconds / BaseAnimationTime));
+					if (input_interface)
+						offset = 1-offset;
+					return (int) (offset*MinimumDockArea.Height);
+				}
+			}
+		}
 		
 		double DockIconOpacity {
 			get {
@@ -178,7 +198,10 @@ namespace MonoDock.UI
 					if (CursorIsOverDockArea) {
 						window.SetInputMask (0);
 					} else {
-						window.SetInputMask (Height-IconSize);
+						if (autohide)
+							window.SetInputMask (Height-1);
+						else
+							window.SetInputMask (Height-IconSize);
 					}
 					enter_time = DateTime.UtcNow;
 					AnimatedDraw ();
@@ -239,6 +262,12 @@ namespace MonoDock.UI
 			get { return !((CursorIsOverDockArea && ZoomIn == 1) || (!CursorIsOverDockArea && ZoomIn == 0)); }
 		}
 		
+		bool OpenAnimationNeeded {
+			get { return (DateTime.UtcNow - enter_time).TotalMilliseconds < BaseAnimationTime ||
+				(DateTime.UtcNow - interface_change_time).TotalMilliseconds < BaseAnimationTime;
+			}
+		}
+		
 		DateTime last_click = DateTime.UtcNow;
 		bool BounceAnimationNeeded {
 			get { return (DateTime.UtcNow - last_click).TotalMilliseconds < BounceTime; }
@@ -256,7 +285,7 @@ namespace MonoDock.UI
 		
 		bool AnimationNeeded {
 			get { return PaneChangeAnimationNeeded || ZoomAnimationNeeded || BounceAnimationNeeded || 
-				InputModeChangeAnimationNeeded || InputModeSlideAnimationNeeded || IconInsertionAnimationNeeded; }
+				InputModeChangeAnimationNeeded || InputModeSlideAnimationNeeded || IconInsertionAnimationNeeded || OpenAnimationNeeded; }
 		}
 		#endregion
 		
@@ -299,7 +328,7 @@ namespace MonoDock.UI
 			
 			QueueDraw ();
 			
-			timer = GLib.Timeout.Add (20, delegate {
+			timer = GLib.Timeout.Add (16, delegate {
 				QueueDraw ();
 				if (AnimationNeeded)
 					return true;
@@ -343,7 +372,7 @@ namespace MonoDock.UI
 				}
 				
 				cr.SetSource (dock_icon_buffer, 0, IconSize * (1-DockIconOpacity));
-				cr.Paint ();
+				cr.PaintWithAlpha (DockIconOpacity);
 			}
 		}
 		
@@ -373,7 +402,7 @@ namespace MonoDock.UI
 				double scale = zoom/DockItem.IconQuality;
 				cr.Scale (scale, scale);
 				Gdk.CairoHelper.SetSourcePixbuf (cr, dock_items[i].Pixbuf, x*DockItem.IconQuality, y*DockItem.IconQuality);
-				cr.PaintWithAlpha (DockIconOpacity);
+				cr.Paint ();
 				cr.Scale (1/scale, 1/scale);
 				
 				if (DockItemForX (Cursor.X) == i && CursorIsOverDockArea) {
@@ -623,7 +652,8 @@ namespace MonoDock.UI
 			(cr as IDisposable).Dispose ();
 			
 			Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
-			cr2.SetSource (backbuffer, 0, 0);
+//			cr2.AlphaFill ();
+			cr2.SetSource (backbuffer, 0, YOffset);
 			cr2.Operator = Operator.Source;
 			cr2.Paint ();
 			(cr2 as IDisposable).Dispose ();
