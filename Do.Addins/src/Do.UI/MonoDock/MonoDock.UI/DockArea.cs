@@ -122,9 +122,10 @@ namespace MonoDock.UI
 				List<IDockItem> out_items = new List<IDockItem> (dock_items);
 				
 				
-				out_items.Add (new SeperatorItem ());
-				out_items.AddRange (window_items);
-				
+				if (window_items.Any ()) {
+					out_items.Add (new SeperatorItem ());
+					out_items.AddRange (window_items);
+				}
 				return out_items.ToArray ();
 			}
 		}
@@ -648,7 +649,7 @@ namespace MonoDock.UI
 					return i;
 				start_x += DockItems[i].Width;
 			}
-			return 0;
+			return -1;
 		}
 		
 		void IconPositionedCenterX (int icon, out int x, out double zoom)
