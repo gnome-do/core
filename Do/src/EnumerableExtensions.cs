@@ -11,14 +11,6 @@ namespace Do
 {
 	public static class EnumerableExtensions
 	{
-		public static int Count<T> (this IEnumerable<T> self)
-		{
-			int count = 0;
-			foreach (T x in self)
-				count++;
-			return count;
-		}
-
 		public static int FindIndex<T> (this IEnumerable<T> self, Func<T, bool> p)
 		{
 			int index = 0;
