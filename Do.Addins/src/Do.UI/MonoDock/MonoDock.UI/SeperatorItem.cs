@@ -99,7 +99,8 @@ namespace MonoDock.UI
 		
 		public void Dispose ()
 		{
-			return;
+			if (sr != null)
+				sr.Destroy ();
 		}
 		
 		#endregion 
