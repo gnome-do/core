@@ -172,12 +172,12 @@ namespace MonoDock.UI
 		ClickAction GetClickAction ()
 		{
 			foreach (Wnck.Window window in application.Windows) {
-				if (window.IsMinimized)
+				if (window.IsMinimized && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
 					return ClickAction.Restore;
 			}
 			
 			foreach (Wnck.Window window in application.Windows) {
-				if (window.IsActive)
+				if (window.IsActive && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
 					return ClickAction.Minimize;
 			}
 			
