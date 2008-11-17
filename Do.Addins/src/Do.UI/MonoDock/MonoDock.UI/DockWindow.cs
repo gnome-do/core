@@ -63,15 +63,10 @@ namespace MonoDock.UI
 		
 		void Build ()
 		{
-			dock_area = new DockArea (this, GetItems ());
+			dock_area = new DockArea (this, Controller.Statistics);
 			
 			Add (dock_area);
 			ShowAll ();
-			
-			GLib.Timeout.Add (3000, delegate {
-				dock_area.SetIcons (GetItems ());
-				return false;
-			});
 		}
 		
 		public void SetInputMask (int heightOffset)
@@ -86,18 +81,6 @@ namespace MonoDock.UI
 			
 			(cr as IDisposable).Dispose ();
 			pixmap.Dispose ();
-		}
-		
-		IEnumerable<DockItem> GetItems ()
-		{
-			List<DockItem> items = new List<DockItem> ();
-			
-			foreach (IItem item in controller.Statistics.GetMostUsedItems ()) {
-				items.Add (new DockItem (item));
-			}
-			
-			
-			return items;
 		}
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)

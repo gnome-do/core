@@ -1012,21 +1012,22 @@ namespace Do.Core {
 
 		#region IStatistics implementation 
 		
-		public IEnumerable<IItem> GetMostUsedItems ()
+		public IEnumerable<IItem> GetMostUsedItems (int numItems)
 		{
 			IList<IObject> search_results = Do.UniverseManager.Search ("", new Type[] {typeof (IItem),});
 			return search_results
-				.Take (15)
-				.OrderBy (item => (item as DoObject).Inner.GetType ().ToString ())
+				.Take (numItems)
+				.OrderByDescending (item => (item as DoObject).Inner is ApplicationItem)
+				.ThenBy (item => (item as DoObject).Inner.GetType ().ToString ())
 				.ThenByDescending (item1 => (item1 as DoObject).Relevance)
 				.Select (item => item as IItem);
 		}
 		
-		public IEnumerable<IAction> GetMostUsedActions ()
+		public IEnumerable<IAction> GetMostUsedActions (int numItems)
 		{
 			IList<IObject> search_results = Do.UniverseManager.Search ("", new Type[] {typeof (IAction),});
 			return search_results
-				.Take (15)
+				.Take (numItems)
 				.OrderBy (item => (item as DoObject).Inner.GetType ().ToString ())
 				.ThenByDescending (item1 => (item1 as DoObject).Relevance)
 				.Select (item => item as IAction);

@@ -27,8 +27,8 @@ namespace Do.Addins
 	
 	public interface IStatistics
 	{
-		IEnumerable<IItem> GetMostUsedItems ();
+		IEnumerable<IItem> GetMostUsedItems (int numItems);
 		
-		IEnumerable<IAction> GetMostUsedActions ();
+		IEnumerable<IAction> GetMostUsedActions (int numItems);
 	}
 }
