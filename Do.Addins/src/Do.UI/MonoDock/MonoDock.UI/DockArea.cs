@@ -491,7 +491,7 @@ namespace MonoDock.UI
 				cr.Color = new Cairo.Color (1, 1, 1, .3);
 			cr.Stroke ();
 			
-			if (State.GetPaneResults (pane) == null)
+			if (State.GetPaneResults (pane) == null || State[pane] == null)
 				return;
 			
 			double results_slide_state = GetResultSlidePercentage (pane);

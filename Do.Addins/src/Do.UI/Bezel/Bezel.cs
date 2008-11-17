@@ -207,6 +207,7 @@ namespace Do.UI
 			}
 		}
 
+		public bool ResultsCanHide { get { return true; } }
 		
 		public new event DoEventKeyDelegate KeyPressEvent;
 	}

@@ -418,6 +418,8 @@ namespace Do.UI {
 				resultsWindow.Clear ();
 		}
 		
+		public bool ResultsCanHide { get { return true; } }
+		
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			Cairo.Context cairo;

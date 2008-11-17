@@ -107,5 +107,7 @@ namespace Do.UI
 		/// A <see cref="Pane"/>
 		/// </param>
 		void ClearPane (Pane pane);
+		
+		bool ResultsCanHide { get; }
 	}
 }

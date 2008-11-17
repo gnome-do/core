@@ -291,6 +291,10 @@ namespace Do.Core {
 					controllers[1].Results.Any ();
 			}
 		}
+		
+		bool AlwaysShowResults {
+			get { return Do.Preferences.AlwaysShowResults || !window.ResultsCanHide; }
+		}
 
 		/// <value>
 		/// Check if the symbol window is currently visible to the user
@@ -765,7 +769,7 @@ namespace Do.Core {
 		/// </summary>
 		void ShrinkResults ()
 		{
-			if (Do.Preferences.AlwaysShowResults) return;
+			if (AlwaysShowResults) return;
 			window.ShrinkResults ();
 			resultsGrown = false;
 		}
@@ -883,7 +887,7 @@ namespace Do.Core {
 			// resources to searching and leave updating to a more reasonable time.
 			Do.UniverseManager.UpdatesEnabled = false;
 			window.Summon ();
-			if (Do.Preferences.AlwaysShowResults)
+			if (AlwaysShowResults)
 				GrowResults ();
 			im.FocusIn ();
 		}

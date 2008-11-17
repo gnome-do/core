@@ -220,6 +220,8 @@ namespace MonoDock.UI
 			}
 		}
 		
+		public bool ResultsCanHide { get { return false; } }
+		
 		#endregion 
 		
 
