@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Do.Universe;
 using Do.Addins;
@@ -42,6 +43,10 @@ namespace MonoDock.UI
 		DateTime[] cursor_timestamps = new DateTime[3];
 		
 		IList<IObject>[] results = new IList<IObject>[3];
+		IList<IObject>[] results_prev = new IList<IObject>[3];
+		
+		IList<DockItem>[] dock_results = new IList<DockItem>[3];
+		IList<DockItem>[] dock_results_prev = new IList<DockItem>[3];
 		
 		Pane currentPane, previousPane = Pane.Second;
 		DateTime current_pane_change, last_cusor_change;
@@ -189,12 +194,36 @@ namespace MonoDock.UI
 		
 		public void SetPaneResults (IList<IObject> resultList, Pane pane)
 		{
+			if (results[(int) pane] != null && resultList.Count == results[(int) pane].Count) {
+				bool same = true;
+				for (int i=0; i<resultList.Count; i++) {
+					if (results[(int) pane][i] != resultList[i]) {
+						same = false;
+						break;
+					}
+				}
+				if (same)
+					return;
+			}
+			
+			results_prev[(int) pane] = results[(int) pane];
+			dock_results_prev[(int) pane] = dock_results[(int) pane];
+			
 			results[(int) pane] = resultList;
+			
+			dock_results[(int) pane] = new List<DockItem> ();
+			foreach (IObject o in resultList) {
+				dock_results[(int) pane].Add (new DockItem (o));
+			}
+			
 			result_timestamps[(int) pane] = DateTime.UtcNow;
 		}
 		
 		public void SetPaneCursor (int cursor, Pane pane)
 		{
+			if (cursor == cursors[(int) pane])
+				return;
+			
 			previous_cursors[(int) pane] = cursors[(int) pane];
 			cursors[(int) pane] = cursor;
 			cursor_timestamps[(int) pane] = last_cusor_change = DateTime.UtcNow;
@@ -218,6 +247,26 @@ namespace MonoDock.UI
 		public IList<IObject> GetPaneResults (Pane pane)
 		{
 			return results[(int) pane];
+		}
+		
+		public IList<IObject> GetPanePreviousResults (Pane pane)
+		{
+			return results_prev[(int) pane];
+		}
+		
+		public IList<DockItem> GetPaneResultsAsDockItems (Pane pane, int numResults)
+		{
+			return new List<DockItem> (dock_results[(int) pane].Take (numResults));
+		}
+		
+		public IList<DockItem> GetPanePreviousResultsAsDockItems (Pane pane, int numResults)
+		{
+			return new List<DockItem> (dock_results_prev[(int) pane].Take (numResults));
+		}
+		
+		public DateTime GetPaneResultsTime (Pane pane)
+		{
+			return result_timestamps[(int) pane];
 		}
 		
 		public int GetPaneCursor (Pane pane)
