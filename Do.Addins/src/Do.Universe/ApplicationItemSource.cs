@@ -94,9 +94,9 @@ namespace Do.Universe {
 
 			return Directory.GetFiles (dir, "*.desktop")
 				.Select (file => new ApplicationItem (file))
-				.Where (app => app.IsAppropriateForCurrentDesktop)
-				.Where (app => show_hidden || !app.NoDisplay)
-				.Where (app => !string.IsNullOrEmpty (app.Name));
+				.Where (app => !string.IsNullOrEmpty (app.Name) &&
+											 app.IsAppropriateForCurrentDesktop &&
+											 (show_hidden || !app.NoDisplay));
 		}
 
 		public void UpdateItems ()

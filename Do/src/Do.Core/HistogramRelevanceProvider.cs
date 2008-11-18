@@ -146,8 +146,11 @@ namespace Do.Core {
 					relevance *= 0.8f;
 			}
 
+			if (o.Inner is IItemSource)
+				relevance *= 0.8f;
+
 			if (PenalizedTypes.Contains (o.Inner.GetType ()))
-				relevance *= 0.5f;
+				relevance *= 0.8f;
 
 			return relevance * 0.30f + score * 0.70f;
 		}
