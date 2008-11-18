@@ -401,6 +401,12 @@ namespace MonoDock.UI
 				int x, y;
 				Display.GetPointer (out x, out y);
 				
+				Gdk.Rectangle geo;
+				window.GetPosition (out geo.X, out geo.Y);
+				
+				x -= geo.X;
+				y -= geo.Y;
+				
 				Cursor = new Gdk.Point (x, y);
 				AnimatedDraw ();
 			};
