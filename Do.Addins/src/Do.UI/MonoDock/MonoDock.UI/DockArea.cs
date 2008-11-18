@@ -396,13 +396,20 @@ namespace MonoDock.UI
 		void DrawDrock (Context cr)
 		{
 			Gdk.Rectangle dock_area = GetDockArea ();
-			cr.Rectangle (dock_area.X+.5, dock_area.Y+.5, dock_area.Width-1, dock_area.Height);
-			cr.Color = new Cairo.Color (.1, .1, .1, .7);
-			cr.FillPreserve ();
+			cr.SetRoundedRectanglePath (dock_area.X, dock_area.Y, dock_area.Width, dock_area.Height+40, 5); //fall off the bottom
+			cr.Color = new Cairo.Color (.15, .15, .15, .75);
+			cr.Fill ();
 			
-			cr.Color = new Cairo.Color (1, 1, 1, .4);
+			cr.SetRoundedRectanglePath (dock_area.X+1.5, dock_area.Y+1.5, dock_area.Width-3, dock_area.Height+40, 5);
+//			cr.Color = new Cairo.Color (1, 1, 1, .4);
+			LinearGradient lg = new LinearGradient (0, dock_area.Y+1.5, 0, dock_area.Y+10);
+			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .4));
+			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
+			cr.Pattern = lg;
 			cr.LineWidth = 1;
 			cr.Stroke ();
+			
+			lg.Destroy ();
 			
 			if (InputAreaOpacity > 0) {
 				if (input_area_buffer == null)

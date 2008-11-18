@@ -42,7 +42,7 @@ namespace MonoDock.UI
 				cr.LineTo (10, 64);
 				LinearGradient lg = new LinearGradient (0, 0, 0, 64);
 				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
-				lg.AddColorStop (.5, new Cairo.Color (1, 1, 1, .8));
+				lg.AddColorStop (.5, new Cairo.Color (1, 1, 1, .5));
 				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
 				cr.Pattern = lg;
 				
