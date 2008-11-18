@@ -711,7 +711,6 @@ namespace MonoDock.UI
 			(cr as IDisposable).Dispose ();
 			
 			Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
-//			cr2.AlphaFill ();
 			cr2.SetSource (backbuffer, 0, YOffset);
 			cr2.Operator = Operator.Source;
 			cr2.Paint ();
