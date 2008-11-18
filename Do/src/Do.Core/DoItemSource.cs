@@ -39,6 +39,9 @@ namespace Do.Core {
 				IEnumerable<Type> types = null;
 				try {
 					types = (Inner as IItemSource).SupportedItemTypes;
+					// Call ToList to strictly evaluate the IEnumerable before we leave
+					// the try block.
+					if (types != null) types = types.ToList ();
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
 				} finally {
@@ -64,6 +67,9 @@ namespace Do.Core {
 				
 				try {
 					items = (Inner as IItemSource).Items;
+					// Call ToList to strictly evaluate the IEnumerable before we leave
+					// the try block.
+					if (items != null) items = items.ToList ();
 				} catch (Exception e) {
 					LogError ("Items", e);
 				} finally {
@@ -84,6 +90,9 @@ namespace Do.Core {
 
 			try {
 				children = (Inner as IItemSource).ChildrenOfItem (item);
+				// Call ToList to strictly evaluate the IEnumerable before we leave
+				// the try block.
+				if (children != null) children = children.ToList ();
 			} catch (Exception e) {
 				LogError ("ChildrenOfItem", e);
 			} finally {

@@ -41,6 +41,9 @@ namespace Do.Core {
 				
 				try {
 					types = (Inner as IAction).SupportedItemTypes;
+					// Call ToList to strictly evaluate the IEnumerable before we leave
+					// the try block.
+					if (types != null) types = types.ToList ();
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
 				} finally {
@@ -57,6 +60,9 @@ namespace Do.Core {
 				
 				try {
 					types = (Inner as IAction).SupportedModifierItemTypes;
+					// Call ToList to strictly evaluate the IEnumerable before we leave
+					// the try block.
+					if (types != null) types = types.ToList ();
 				} catch (Exception e) {
 					LogError ("SupportedModifierItemTypes", e);
 				} finally {
@@ -84,7 +90,11 @@ namespace Do.Core {
 			IEnumerable<IItem> modItems  = null;
 			
 			try {
-				modItems = (Inner as IAction).DynamicModifierItemsForItem (DoItem.EnsureIItem (item));
+				modItems = (Inner as IAction)
+					.DynamicModifierItemsForItem (DoItem.EnsureIItem (item));
+				// Call ToList to strictly evaluate the IEnumerable before we leave
+				// the try block.
+				if (modItems != null) modItems = modItems.ToList ();
 			} catch (Exception e) {
 				LogError ("DynamicModifierItemsForItem", e);
 			} finally {
@@ -133,8 +143,11 @@ namespace Do.Core {
 			try {
 				results = (Inner as IAction).Perform (
 					items.Select (i => DoItem.EnsureIItem (i)),
-				    modItems.Select (i => DoItem.EnsureIItem (i))
+					modItems.Select (i => DoItem.EnsureIItem (i))
 				);
+				// Call ToList to strictly evaluate the IEnumerable before we leave
+				// the try block.
+				if (results != null) results = results.ToList ();
 			} catch (Exception e) {
 				LogError ("Perform", e);
 			} finally {
