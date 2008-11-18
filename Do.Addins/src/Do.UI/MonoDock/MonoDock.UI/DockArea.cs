@@ -549,9 +549,11 @@ namespace MonoDock.UI
 			cr.Color = new Cairo.Color (1, 1, 1, opacity);
 			cr.Stroke ();
 			
-			cr.Arc (center.X, center.Y, 1.5, 0, Math.PI*2);
-			cr.Color = new Cairo.Color (1, 1, 1, opacity);
-			cr.Fill ();
+			if (autohide) {
+				cr.Arc (center.X, center.Y, 1.5, 0, Math.PI*2);
+				cr.Color = new Cairo.Color (1, 1, 1, opacity);
+				cr.Fill ();
+			}
 		}
 		
 		#region Input Area drawing code
@@ -864,6 +866,7 @@ namespace MonoDock.UI
 			if (stick_rect.Contains (Cursor)) {
 				autohide = !autohide;
 				window.SetStruts ();
+				AnimatedDraw ();
 				return ret_val;
 			}
 			
