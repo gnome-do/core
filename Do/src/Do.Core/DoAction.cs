@@ -29,6 +29,8 @@ namespace Do.Core {
 
 	public class DoAction : DoObject, IAction {
 
+		IEnumerable<Type> item_types, moditem_types;
+
 		public DoAction (IAction action):
 			base (action)
 		{
@@ -37,38 +39,38 @@ namespace Do.Core {
 		public IEnumerable<Type> SupportedItemTypes
 		{
 			get {
-				IEnumerable<Type> types = null;
-				
+				if (item_types != null) return item_types;
+
 				try {
-					types = (Inner as IAction).SupportedItemTypes;
+					item_types = (Inner as IAction).SupportedItemTypes;
 					// Call ToList to strictly evaluate the IEnumerable before we leave
 					// the try block.
-					if (types != null) types = types.ToList ();
+					if (item_types != null) item_types = item_types.ToList ();
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
 				} finally {
-					types = types ?? Enumerable.Empty<Type> ();
+					item_types = item_types ?? Enumerable.Empty<Type> ();
 				}
-				return types;
+				return item_types;
 			}
 		}
 
 		public IEnumerable<Type> SupportedModifierItemTypes
 		{
 			get {
-				IEnumerable<Type> types = null;
+				if (moditem_types != null) return moditem_types;
 				
 				try {
-					types = (Inner as IAction).SupportedModifierItemTypes;
+					moditem_types = (Inner as IAction).SupportedModifierItemTypes;
 					// Call ToList to strictly evaluate the IEnumerable before we leave
 					// the try block.
-					if (types != null) types = types.ToList ();
+					if (moditem_types != null) moditem_types = moditem_types.ToList ();
 				} catch (Exception e) {
 					LogError ("SupportedModifierItemTypes", e);
 				} finally {
-					types = types ?? Enumerable.Empty<Type> ();
+					moditem_types = moditem_types ?? Enumerable.Empty<Type> ();
 				}
-				return types;
+				return moditem_types;
 			}
 		}
 		

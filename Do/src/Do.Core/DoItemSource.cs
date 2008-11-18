@@ -27,6 +27,8 @@ using Do.Universe;
 namespace Do.Core {
 
 	public class DoItemSource : DoObject, IItemSource, IItem {
+
+		IEnumerable<Type> item_types;
 		
 		public DoItemSource (IItemSource source):
 			base (source)
@@ -36,18 +38,19 @@ namespace Do.Core {
 		public IEnumerable<Type> SupportedItemTypes
 		{
 			get {
-				IEnumerable<Type> types = null;
+				if (item_types != null) return item_types;
+
 				try {
-					types = (Inner as IItemSource).SupportedItemTypes;
+					item_types = (Inner as IItemSource).SupportedItemTypes;
 					// Call ToList to strictly evaluate the IEnumerable before we leave
 					// the try block.
-					if (types != null) types = types.ToList ();
+					if (item_types != null) item_types = item_types.ToList ();
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
 				} finally {
-					types = types ?? Type.EmptyTypes;
+					item_types = item_types ?? Enumerable.Empty<Type> ();
 				}
-				return types;
+				return item_types;
 			}
 		}
 
