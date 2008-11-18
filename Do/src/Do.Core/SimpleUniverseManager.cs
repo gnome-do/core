@@ -215,7 +215,7 @@ namespace Do.Core
 				if (thread.IsAlive)
 					thread.Join ();
 				
-				if (DateTime.Now.Subtract (last_action_update).TotalMinutes > 4) {
+				if (DateTime.Now.Subtract (last_action_update).TotalMinutes > 10) {
 					Log.Info ("Updating Actions");
 					ReloadActions ();
 					last_action_update = DateTime.Now;
