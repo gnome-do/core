@@ -511,6 +511,16 @@ namespace MonoDock.UI
 					cr.Paint ();
 				}
 				
+				if (GetIconSource (DockItems[i]) == IconSource.Application) {
+					cr.MoveTo (center, Height - 6);
+					cr.LineTo (center+4, Height);
+					cr.LineTo (center-4, Height);
+					cr.ClosePath ();
+					
+					cr.Color = new Cairo.Color (1, 1, 1, .7);
+					cr.Fill ();
+				}
+				
 				if (DockItemForX (Cursor.X) == i && CursorIsOverDockArea && DockItems[i].GetTextSurface () != null) {
 					cr.SetSource (DockItems[i].GetTextSurface (), IconNormalCenterX (i)-(DockItem.TextWidth/2), 15);
 					cr.Paint ();
