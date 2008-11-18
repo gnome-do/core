@@ -45,6 +45,13 @@ namespace MonoDock.UI
 			None,
 		}
 		
+		enum IconSource {
+			Statistics,
+			Custom,
+			Application,
+			Unknown,
+		}
+		
 		const int BounceTime = 700;
 		const int BaseAnimationTime = 150;
 		const int InsertAnimationTime = BaseAnimationTime*5;
@@ -122,6 +129,10 @@ namespace MonoDock.UI
 			get {
 				List<IDockItem> out_items = new List<IDockItem> (dock_items);
 				
+				if (CustomDockItems.DockItems.Any ()) {
+					out_items.Add (Separator);
+					out_items.AddRange (CustomDockItems.DockItems);
+				}
 				
 				if (window_items.Any ()) {
 					out_items.Add (Separator);
@@ -330,7 +341,6 @@ namespace MonoDock.UI
 			dock_items = new List<IDockItem> ();
 			window_items = new List<IDockItem> ();
 			
-			
 			GLib.Timeout.Add (3000, delegate {
 				UpdateWindowItems ();
 				List<IDockItem> items = new List<IDockItem> ();
@@ -373,6 +383,13 @@ namespace MonoDock.UI
 			
 			Wnck.Screen.Default.ViewportsChanged += delegate {
 				UpdateWindowItems ();
+			};
+			
+			ItemMenu.Instance.RemoveClicked += delegate (Gdk.Point point) {
+				int item = DockItemForX (point.X);
+				if (GetIconSource (DockItems[item]) == IconSource.Custom)
+					CustomDockItems.RemoveApplication (DockItems[item]);
+				AnimatedDraw ();
 			};
 		}
 		
@@ -667,6 +684,19 @@ namespace MonoDock.UI
 			return -1;
 		}
 		
+		IconSource GetIconSource (IDockItem item) {
+			if (window_items.Contains (item))
+				return IconSource.Application;
+			
+			if (dock_items.Contains (item))
+				return IconSource.Statistics;
+			
+			if (CustomDockItems.DockItems.Contains (item))
+				return IconSource.Custom;
+			
+			return IconSource.Unknown;
+		}
+		
 		void IconPositionedCenterX (int icon, out int x, out double zoom)
 		{
 			int center = IconNormalCenterX (icon);
@@ -705,6 +735,7 @@ namespace MonoDock.UI
 			return new Gdk.Rectangle (x, Height-IconSize-2*YBuffer, end-x, IconSize+2*YBuffer);
 		}
 		
+		#region Drag To Code
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time_)
 		{
 			Cursor = new Gdk.Point (x, y);
@@ -712,7 +743,6 @@ namespace MonoDock.UI
 			return base.OnDragMotion (context, x, y, time_);
 		}
 
-		
 		protected override void OnDragDataReceived (Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint info, uint time_)
 		{
 			string data = System.Text.Encoding.UTF8.GetString ( selection_data.Data );
@@ -720,12 +750,14 @@ namespace MonoDock.UI
 			
 			string[] uriList = Regex.Split (data, "\r\n");
 			foreach (string uri in uriList) {
-				Console.WriteLine (uri);
+				if (uri.EndsWith (".desktop")) {
+					AddCustomItem (uri.Substring (7));
+				}
 			} 
 			
 			base.OnDragDataReceived (context, x, y, selection_data, info, time_);
 		}
-
+		#endregion
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
 			bool ret_val = base.OnExposeEvent (evnt);
@@ -768,8 +800,14 @@ namespace MonoDock.UI
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			int item = DockItemForX ((int) evnt.X);
-			if (item < 0 || item >= DockItems.Count)
+			if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea)
 				return base.OnButtonReleaseEvent (evnt);
+			if (evnt.Button == 3) {
+				if (GetIconSource (DockItems[item]) == IconSource.Custom)
+					ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
+				return base.OnButtonPressEvent (evnt);
+			}
+			
 			if ((DateTime.UtcNow - DockItems[item].LastClick).TotalMilliseconds > BounceTime) {
 				last_click = DockItems[item].LastClick = DateTime.UtcNow;
 				if (DockItems[item] is DockItem) {
@@ -789,6 +827,12 @@ namespace MonoDock.UI
 			return base.OnLeaveNotifyEvent (evnt);
 		}
 		
+		void AddCustomItem (string desktopFile)
+		{
+			CustomDockItems.AddApplication (desktopFile);
+			AnimatedDraw ();
+		}
+		
 		void UpdateIcons ()
 		{
 			List<IDockItem> new_items = new List<IDockItem> ();
@@ -797,7 +841,7 @@ namespace MonoDock.UI
 				new_items.Add (di);
 				
 				bool is_set = false;
-				foreach (IDockItem item in DockItems) {
+				foreach (IDockItem item in dock_items) {
 					if (item.Equals (di)) {
 						di.DockAddItem = item.DockAddItem;
 						is_set = true;
