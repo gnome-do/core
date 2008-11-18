@@ -25,7 +25,7 @@ namespace MonoDock.UI
 {
 	
 	
-	public class SeperatorItem : IDockItem
+	public class SeparatorItem : IDockItem
 	{
 		
 		Surface sr;
@@ -86,11 +86,7 @@ namespace MonoDock.UI
 		
 
 		
-		public SeperatorItem()
-		{
-		}
-		
-		public void Clicked ()
+		public void Clicked (uint button)
 		{
 			
 		}

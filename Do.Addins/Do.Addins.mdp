@@ -58,7 +58,6 @@
     <File name="Resources/Do.Addins.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="src/Do.UI/IconCache.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/IPreferences.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/CopyToClipboard.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/NotificationBridge.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Pluggable.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IUIContext.cs" subtype="Code" buildaction="Compile" />
@@ -102,10 +101,11 @@
     <File name="src/Do.Addins/IStatistics.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/DockState.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/AbstractAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/MonoDock/MonoDock.UI/SeperatorItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/SeparatorItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/IDockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.Util/WindowUtils.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/ApplicationDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/CopyToClipboardAction.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

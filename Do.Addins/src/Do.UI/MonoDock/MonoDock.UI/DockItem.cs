@@ -142,7 +142,7 @@ namespace MonoDock.UI
 			return sr;
 		}
 		
-		public void Clicked ()
+		public void Clicked (uint button)
 		{
 			
 		}

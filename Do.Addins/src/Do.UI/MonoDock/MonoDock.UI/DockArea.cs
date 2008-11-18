@@ -123,10 +123,17 @@ namespace MonoDock.UI
 				
 				
 				if (window_items.Any ()) {
-					out_items.Add (new SeperatorItem ());
+					out_items.Add (Separator);
 					out_items.AddRange (window_items);
 				}
 				return out_items.ToArray ();
+			}
+		}
+		
+		SeparatorItem separator;
+		SeparatorItem Separator {
+			get {
+				return separator ?? separator = new SeparatorItem ();
 			}
 		}
 		
@@ -741,7 +748,7 @@ namespace MonoDock.UI
 					if (doItem != null)
 						window.Controller.PerformDefaultAction (doItem);
 				}
-				DockItems[item].Clicked ();
+				DockItems[item].Clicked (evnt.Button);
 				AnimatedDraw ();
 			}
 			return base.OnButtonReleaseEvent (evnt);
@@ -780,10 +787,7 @@ namespace MonoDock.UI
 		
 		void UpdateWindowItems ()
 		{
-			foreach (IDockItem item in window_items)
-				item.Dispose ();
-			
-			window_items.Clear ();
+			IList<IDockItem> out_items = new List<IDockItem> ();
 			
 			foreach (Wnck.Application app in WindowUtils.GetApplications ()) {
 				bool good = false;
@@ -791,12 +795,29 @@ namespace MonoDock.UI
 					if (!w.IsSkipTasklist && w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
 						good = true;
 				}
-				if (good)
-					window_items.Add (new ApplicationDockItem (app));
+				if (good) {
+					ApplicationDockItem api = new ApplicationDockItem (app);
+					bool is_set = false;
+					foreach (ApplicationDockItem di in window_items) {
+						if (api.Equals (di)) {
+							api.DockAddItem = di.DockAddItem;
+							is_set = true;
+							break;
+						}
+					}
+					if (!is_set)
+						api.DockAddItem = DateTime.UtcNow;
+					out_items.Add (new ApplicationDockItem (app));
+				}
 			}
 			
 			foreach (IDockItem item in window_items)
-				item.DockAddItem = DateTime.UtcNow;
+				item.Dispose ();
+					
+			window_items = out_items;
+			
+//			foreach (IDockItem item in window_items)
+//				item.DockAddItem = DateTime.UtcNow;
 			
 			Gdk.Rectangle geo, main;
 			geo = Gdk.Screen.Default.GetMonitorGeometry (0);

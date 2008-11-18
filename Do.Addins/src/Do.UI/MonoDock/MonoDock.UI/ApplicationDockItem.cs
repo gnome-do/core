@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Cairo;
 
@@ -40,11 +41,24 @@ namespace MonoDock.UI
 			Restore,
 		}
 		
+		static IEnumerable<String> DesktopFilesDirectories {
+			get {
+				return new string[] {
+					"~/.local/share/applications/wine",
+					"~/.local/share/applications",
+					"/usr/share/applications",
+					"/usr/share/applications/kde",
+					"/usr/share/applications/kde4",
+					"/usr/share/gdm/applications",
+					"/usr/local/share/applications",
+				};
+			}
+		}
+		
 		Wnck.Application application;
 		Surface sr, icon_surface;
 		
 		#region IDockItem implementation 
-		
 		public Surface GetIconSurface ()
 		{
 			if (icon_surface == null) {
@@ -52,15 +66,29 @@ namespace MonoDock.UI
 				                                 (int) (DockItem.IconSize*DockItem.IconQuality));
 				Context cr = new Context (icon_surface);
 				string icon_guess = application.Name.ToLower ().Replace (' ','-');
-				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (icon_guess, (int) (DockItem.IconSize*DockItem.IconQuality));
-				if (pbuf.Width != (int) (DockItem.IconSize*DockItem.IconQuality) && pbuf.Height != (int) (DockItem.IconSize*DockItem.IconQuality)) {
-					string desktop_path = "/usr/share/applications/" + icon_guess + ".desktop";
-					if (System.IO.File.Exists (desktop_path)) {
-					    Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists);
-						pbuf.Dispose ();
+				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (icon_guess, (int) (DockItem.IconSize*DockItem.IconQuality), false);
+				if (pbuf == null || pbuf.Width != (int) (DockItem.IconSize*DockItem.IconQuality) && pbuf.Height != (int) (DockItem.IconSize*DockItem.IconQuality)) {
+					string desktop_path = GetDesktopFile (icon_guess);
+					if (!string.IsNullOrEmpty (desktop_path)) {
+						Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists);
+						if (pbuf != null)
+							pbuf.Dispose ();
 						pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), (int) (DockItem.IconSize*DockItem.IconQuality));
 						di.Dispose ();
+					} else {
+						icon_guess = "gnome-" + icon_guess;
+						Gdk.Pixbuf pbuf2 = IconProvider.PixbufFromIconName (icon_guess, (int) (DockItem.IconSize*DockItem.IconQuality));
+						if (pbuf2.Width != (int) (DockItem.IconSize*DockItem.IconQuality) && pbuf2.Height != (int) (DockItem.IconSize*DockItem.IconQuality)) {
+							pbuf2.Dispose ();
+						} else {
+							if (pbuf != null)
+								pbuf.Dispose ();
+							pbuf = pbuf2;
+						}
 					}
+				}
+				if (pbuf == null) {
+					pbuf =  IconProvider.PixbufFromIconName (icon_guess, (int) (DockItem.IconSize*DockItem.IconQuality));
 				}
 				Gdk.CairoHelper.SetSourcePixbuf (cr, pbuf, 0, 0);
 				cr.Paint ();
@@ -69,6 +97,17 @@ namespace MonoDock.UI
 				(cr as IDisposable).Dispose ();
 			}
 			return icon_surface;
+		}
+		
+		string GetDesktopFile (string base_name)
+		{
+			foreach (string dir in DesktopFilesDirectories) {
+				if (File.Exists (System.IO.Path.Combine (dir, base_name+".desktop")))
+					return System.IO.Path.Combine (dir, base_name+".desktop");
+				if (File.Exists (System.IO.Path.Combine (dir, "gnome-"+base_name+".desktop")))
+					return System.IO.Path.Combine (dir, "gnome-"+base_name+".desktop");
+			}
+			return null;
 		}
 		
 		public Surface GetTextSurface ()
@@ -138,10 +177,7 @@ namespace MonoDock.UI
 		public DateTime LastClick { get; set; }
 		
 		public DateTime DockAddItem { get; set; }
-		
 		#endregion 
-		
-
 		
 		public ApplicationDockItem(Wnck.Application application)
 		{
@@ -149,22 +185,30 @@ namespace MonoDock.UI
 			this.application = application;
 		}
 		
-		public void Clicked ()
+		public void Clicked (uint button)
 		{
-			foreach (Wnck.Window window in application.Windows) {
-				switch (GetClickAction ()) {
-				case ClickAction.Focus:
-					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-						window.Activate (Gtk.Global.CurrentEventTime);
-					break;
-				case ClickAction.Minimize:
-					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-						window.Minimize ();
-					break;
-				case ClickAction.Restore:
-					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-						window.Unminimize (Gtk.Global.CurrentEventTime);
-					break;
+			if (button == 1) {
+				foreach (Wnck.Window window in application.Windows) {
+					switch (GetClickAction ()) {
+					case ClickAction.Focus:
+						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+							window.Activate (Gtk.Global.CurrentEventTime);
+						break;
+					case ClickAction.Minimize:
+						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+							window.Minimize ();
+						break;
+					case ClickAction.Restore:
+						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+							window.Unminimize (Gtk.Global.CurrentEventTime);
+						break;
+					}
+				}
+			} else if (button == 2) {
+				foreach (Wnck.Window window in application.Windows) {
+					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)) {
+						window.Close (Gtk.Global.CurrentEventTime);
+					}
 				}
 			}
 		}
@@ -188,7 +232,7 @@ namespace MonoDock.UI
 		
 		public void Dispose ()
 		{
-			application.Dispose ();
+//			application.Dispose ();
 			
 			if (sr != null)
 				sr.Destroy ();

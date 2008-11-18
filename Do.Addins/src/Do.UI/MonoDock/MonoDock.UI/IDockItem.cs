@@ -40,7 +40,7 @@ namespace MonoDock.UI
 		Surface GetIconSurface ();
 		Surface GetTextSurface ();
 		
-		void Clicked ();
+		void Clicked (uint button);
 	}
 	
 	public interface IDoDockItem
