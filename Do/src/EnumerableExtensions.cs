@@ -5,6 +5,7 @@
 //
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Do
@@ -27,5 +28,25 @@ namespace Do
 				f (x);
 			return self;
 		}
+
+		public static IEnumerable<T> ToSafeEnumerable<T> (this IEnumerable<T> self)
+			where T : class
+		{
+			IEnumerator enumerator = self.GetEnumerator ();
+			while (true) {
+				T current;
+				try {
+					if (enumerator.MoveNext ())
+						current = enumerator.Current as T;
+					else break;
+				} catch (InvalidOperationException e) {
+					throw e;
+				} catch (Exception) {
+					continue;
+				}
+				yield return current;
+			}
+		}
+
 	}
 }
