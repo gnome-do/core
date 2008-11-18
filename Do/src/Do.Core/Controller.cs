@@ -138,7 +138,8 @@ namespace Do.Core {
 				return;
 			}
 
-			
+			//reset our Orientation to vertical
+			Orientation = ControlOrientation.Vertical;
 			
 			window = PluginManager.GetThemes ()
 				.Where (theme => theme.Name == Do.Preferences.Theme)
