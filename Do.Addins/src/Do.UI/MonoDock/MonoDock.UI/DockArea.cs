@@ -877,6 +877,8 @@ namespace MonoDock.UI
 		
 		void UpdateWindowItems ()
 		{
+			if (Wnck.Screen.Default.ActiveWorkspace == null)
+				return;
 			IList<IDockItem> out_items = new List<IDockItem> ();
 			
 			foreach (Wnck.Application app in WindowUtils.GetApplications ()) {
