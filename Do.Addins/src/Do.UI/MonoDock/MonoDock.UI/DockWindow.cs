@@ -79,7 +79,7 @@ namespace MonoDock.UI
 			TargetEntry[] targets = {
 				new TargetEntry ("text/uri-list", 0, 0), 
 			};
-			Gtk.Drag.DestSet (dock_area, DestDefaults.All, targets, Gdk.DragAction.Copy);
+			Gtk.Drag.DestSet (dock_area, DestDefaults.Motion | DestDefaults.Drop, targets, Gdk.DragAction.Copy);
 			
 			Add (dock_area);
 			ShowAll ();

@@ -705,6 +705,14 @@ namespace MonoDock.UI
 			return new Gdk.Rectangle (x, Height-IconSize-2*YBuffer, end-x, IconSize+2*YBuffer);
 		}
 		
+		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time_)
+		{
+			Cursor = new Gdk.Point (x, y);
+			AnimatedDraw ();
+			return base.OnDragMotion (context, x, y, time_);
+		}
+
+		
 		protected override void OnDragDataReceived (Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint info, uint time_)
 		{
 			string data = System.Text.Encoding.UTF8.GetString ( selection_data.Data );
@@ -718,7 +726,6 @@ namespace MonoDock.UI
 			base.OnDragDataReceived (context, x, y, selection_data, info, time_);
 		}
 
-		
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
 			bool ret_val = base.OnExposeEvent (evnt);
@@ -837,9 +844,6 @@ namespace MonoDock.UI
 				item.Dispose ();
 					
 			window_items = out_items;
-			
-//			foreach (IDockItem item in window_items)
-//				item.DockAddItem = DateTime.UtcNow;
 			
 			Gdk.Rectangle geo, main;
 			geo = Gdk.Screen.Default.GetMonitorGeometry (0);
