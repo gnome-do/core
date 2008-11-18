@@ -32,7 +32,7 @@ namespace Do.Core {
 	[Serializable]
 	class HistogramRelevanceProvider : RelevanceProvider {
 
-		const float DefaultRelevance = 0.1f;
+		const float DefaultRelevance = 0.01f;
 
 		DateTime newest_hit, oldest_hit;
 		uint max_item_hits, max_action_hits;
@@ -86,7 +86,6 @@ namespace Do.Core {
 		{
 			RelevanceRecord rec;
 			float relevance, score;
-			bool usedInFirstPaneOften = false;
 
 			if (!hits.TryGetValue (o.UID, out rec))
 				rec = new RelevanceRecord (o);
@@ -95,10 +94,7 @@ namespace Do.Core {
 			score = StringScoreForAbbreviation (o.Name, match);
 			if (score == 0f) return 0f;
 			
-			// We must give a base, non-zero relevance to make scoring rules take
-			// effect.	
-			relevance = DefaultRelevance;
-
+			relevance = 0;
 			if (0 < rec.Hits) {
 				float age;
 
@@ -113,7 +109,15 @@ namespace Do.Core {
 				// Newer objects (age -> 0) get scaled by factor -> 1.
 				// Older objects (age -> 1) get scaled by factor -> .5.
 				relevance *= 1f - (age / 2f);
+			} else {
+				// We must give a base, non-zero relevance to make scoring rules take
+				// effect. We divide by length so that if two objects have default
+				// relevance, the object with the shorter name comes first. Objects
+				// with shorter names tend to be simpler, and more often what the
+				// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
+				relevance = DefaultRelevance / Math.Max (1, o.Name.Length);
 			}
+
 
 			// Penalize actions that require modifier items.
 			if (o is IAction && 
