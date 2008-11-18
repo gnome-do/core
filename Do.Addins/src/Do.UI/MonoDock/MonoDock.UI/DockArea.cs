@@ -363,7 +363,10 @@ namespace MonoDock.UI
 			           (int) Gdk.EventMask.ButtonPressMask | (int) Gdk.EventMask.ButtonReleaseMask);
 			
 			DoubleBuffered = false;
-			
+		}
+		
+		void RegisterEvents ()
+		{
 			Realized += delegate {
 				GdkWindow.SetBackPixmap (null, false);
 			};
@@ -391,6 +394,14 @@ namespace MonoDock.UI
 					CustomDockItems.RemoveApplication (DockItems[item]);
 				AnimatedDraw ();
 			};
+			
+			ItemMenu.Instance.Hidden += delegate {
+				int x, y;
+				Display.GetPointer (out x, out y);
+				
+				Cursor = new Gdk.Point (x, y);
+				AnimatedDraw ();
+			};
 		}
 		
 		uint timer = 0;
@@ -414,12 +425,16 @@ namespace MonoDock.UI
 		void DrawDrock (Context cr)
 		{
 			Gdk.Rectangle dock_area = GetDockArea ();
-			cr.SetRoundedRectanglePath (dock_area.X, dock_area.Y, dock_area.Width, dock_area.Height+40, 5); //fall off the bottom
+			cr.SetRoundedRectanglePath (dock_area.X+.5, dock_area.Y+.5, dock_area.Width-1, dock_area.Height+40, 5); //fall off the bottom
 			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
-			cr.Fill ();
+			cr.FillPreserve ();
+			
+			//gives the dock a "lifted" look and feel
+			cr.Color = new Cairo.Color (0, 0, 0, .6);
+			cr.LineWidth = 1;
+			cr.Stroke ();
 			
 			cr.SetRoundedRectanglePath (dock_area.X+1.5, dock_area.Y+1.5, dock_area.Width-3, dock_area.Height+40, 5);
-//			cr.Color = new Cairo.Color (1, 1, 1, .4);
 			LinearGradient lg = new LinearGradient (0, dock_area.Y+1.5, 0, dock_area.Y+10);
 			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .4));
 			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
