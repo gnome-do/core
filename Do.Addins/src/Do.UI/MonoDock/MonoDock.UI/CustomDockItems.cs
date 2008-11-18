@@ -89,6 +89,7 @@ namespace MonoDock.UI
 			}
 			if (!string.IsNullOrEmpty (s))
 				items.Remove (s);
+			Serialize ();
 		}
 		
 		static IDockItem CreatDockItem (string desktopFile)
