@@ -196,12 +196,10 @@ namespace MonoDock.UI
 		
 		public void GrowResults ()
 		{
-//			throw new System.NotImplementedException();
 		}
 		
 		public void ShrinkResults ()
 		{
-//			throw new System.NotImplementedException();
 		}
 		
 		public void SetPaneContext (Pane pane, IUIContext context)
@@ -211,7 +209,7 @@ namespace MonoDock.UI
 		
 		public void ClearPane (Pane pane)
 		{
-//			throw new System.NotImplementedException();
+			dock_area.ClearPane (pane);
 		}
 		
 		public bool Visible {

@@ -480,7 +480,8 @@ namespace MonoDock.UI
 					input_cr.AlphaFill ();
 					DrawIcons (input_cr);
 					
-					DrawThumbnailIcon (input_cr);
+					if (CursorIsOverDockArea)
+						DrawThumbnailIcon (input_cr);
 				}
 				
 				cr.SetSource (dock_icon_buffer, 0, IconSize * (1-DockIconOpacity));
@@ -541,7 +542,7 @@ namespace MonoDock.UI
 		{
 			Gdk.Point center = StickIconCenter;
 			
-			double opacity = 1.0/Math.Abs (center.X-Cursor.X)*15 - .2;
+			double opacity = 1.0/Math.Abs (center.X-Cursor.X)*30 - .2;
 			
 			cr.Arc (center.X, center.Y, 3.5, 0, Math.PI*2);
 			cr.LineWidth = 1;
