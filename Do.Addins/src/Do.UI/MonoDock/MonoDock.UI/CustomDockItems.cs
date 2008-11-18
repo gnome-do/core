@@ -71,6 +71,7 @@ namespace MonoDock.UI
 		{
 			try {
 				IDockItem di = CreatDockItem (desktopFile);
+				di.DockAddItem = DateTime.UtcNow;
 				if (di != null)
 					items[desktopFile] = di;
 			} catch {
