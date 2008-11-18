@@ -34,14 +34,14 @@ namespace Do.Core {
 
 		const float DefaultRelevance = 0.01f;
 
-		static readonly IEnumerable<Type> RewardedTypes = new Type[] {
+		static readonly IEnumerable<Type> RewardedActionTypes = new Type[] {
 			typeof (OpenAction),
 			typeof (OpenURLAction),
 			typeof (RunAction),
 			typeof (EmailAction),
 		};
 
-		static readonly IEnumerable<Type> PenalizedTypes = new Type[] {
+		static readonly IEnumerable<Type> PenalizedActionTypes = new Type[] {
 			typeof (AliasAction),
 			typeof (DeleteAliasAction),
 			typeof (CopyToClipboardAction),
@@ -130,7 +130,7 @@ namespace Do.Core {
 				relevance = DefaultRelevance / Math.Max (1, o.Name.Length);
 
 				// Give the most popular actions a little leg up in the second pane.
-				if (other != null && RewardedTypes.Contains (o.Inner.GetType ()))
+				if (other != null && RewardedActionTypes.Contains (o.Inner.GetType ()))
 					relevance = 1f;
 			}
 
@@ -147,9 +147,9 @@ namespace Do.Core {
 			}
 
 			if (o.Inner is IItemSource)
-				relevance *= 0.8f;
+				relevance *= 0.4f;
 
-			if (PenalizedTypes.Contains (o.Inner.GetType ()))
+			if (PenalizedActionTypes.Contains (o.Inner.GetType ()))
 				relevance *= 0.8f;
 
 			return relevance * 0.30f + score * 0.70f;
