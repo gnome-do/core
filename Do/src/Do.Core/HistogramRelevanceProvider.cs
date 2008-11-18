@@ -34,6 +34,19 @@ namespace Do.Core {
 
 		const float DefaultRelevance = 0.01f;
 
+		static readonly IEnumerable<Type> RewardedTypes = new Type[] {
+			typeof (OpenAction),
+			typeof (OpenURLAction),
+			typeof (RunAction),
+			typeof (EmailAction),
+		};
+
+		static readonly IEnumerable<Type> PenalizedTypes = new Type[] {
+			typeof (AliasAction),
+			typeof (DeleteAliasAction),
+			typeof (CopyToClipboardAction),
+		};
+
 		DateTime newest_hit, oldest_hit;
 		uint max_item_hits, max_action_hits;
 		Dictionary<string, RelevanceRecord> hits;
@@ -85,7 +98,7 @@ namespace Do.Core {
 		public override float GetRelevance (DoObject o, string match, DoObject other)
 		{
 			RelevanceRecord rec;
-			float relevance, score;
+			float relevance = 0f, score = 0f;
 
 			if (!hits.TryGetValue (o.UID, out rec))
 				rec = new RelevanceRecord (o);
@@ -94,7 +107,6 @@ namespace Do.Core {
 			score = StringScoreForAbbreviation (o.Name, match);
 			if (score == 0f) return 0f;
 			
-			relevance = 0;
 			if (0 < rec.Hits) {
 				float age;
 
@@ -116,36 +128,25 @@ namespace Do.Core {
 				// with shorter names tend to be simpler, and more often what the
 				// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
 				relevance = DefaultRelevance / Math.Max (1, o.Name.Length);
+
+				// Give the most popular actions a little leg up in the second pane.
+				if (other != null && RewardedTypes.Contains (o.Inner.GetType ()))
+					relevance = 1f;
 			}
 
+			IAction oa = o as IAction;
+			if (oa != null) {
+				// We penalize actions, but only if they're not used in the first pane
+				// often.
+				if (rec.FirstPaneHits < 3)
+					relevance *= 0.8f;
 
-			// Penalize actions that require modifier items.
-			if (o is IAction && 
-			    (o as IAction).SupportedModifierItemTypes.Any () &&
-			    !(o as IAction).ModifierItemsOptional)
-				relevance *= 0.8f;
+				// Penalize actions that require modifier items.
+				if (!oa.ModifierItemsOptional)
+					relevance *= 0.8f;
+			}
 
-			// We penalize actions, but only if they're not used in the first pane
-			// often.
-			if (o is IAction && rec.FirstPaneHits < 3)
-				relevance *= 0.8f;
-
-			// Penalize item sources so that items are preferred.
-			if (o.Inner is IItemSource)
-				relevance *= 0.8f;
-			
-			// Give the most popular actions a little leg up in the second pane.
-			if (other != null && rec.Hits == 0 && (
-				    o.Inner is OpenAction ||
-				    o.Inner is OpenURLAction ||
-				    o.Inner is RunAction ||
-				    o.Inner is EmailAction
-			    ))
-				relevance = 1f;
-
-			if (o.Inner is AliasAction ||
-				o.Inner is DeleteAliasAction ||
-				o.Inner is CopyToClipboard)
+			if (PenalizedTypes.Contains (o.Inner.GetType ()))
 				relevance *= 0.5f;
 
 			return relevance * 0.30f + score * 0.70f;

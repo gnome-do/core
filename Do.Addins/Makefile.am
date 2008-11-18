@@ -102,7 +102,7 @@ FILES =  \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/BookmarkItem.cs \
 	src/Do.Universe/ContactItem.cs \
-	src/Do.Universe/CopyToClipboard.cs \
+	src/Do.Universe/CopyToClipboardAction.cs \
 	src/Do.Universe/EmailAction.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \

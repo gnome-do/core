@@ -1,4 +1,4 @@
-/* CopyToClipboard.cs
+/* CopyToClipboardAction.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -26,16 +26,18 @@ using System.Collections.Generic;
 using Gtk;
 using Gdk;
 
+using Mono.Unix;
+
 namespace Do.Universe
 {
-	public class CopyToClipboard : AbstractAction
+	public class CopyToClipboardAction : AbstractAction
 	{
 		public override string Name {
-			get { return "Copy to Clipboard"; }
+			get { return Catalog.GetString ("Copy to Clipboard"); }
 		}
 		
 		public override string Description {
-			get { return "Copy current text to clipboard"; }
+			get { return Catalog.GetString ("Copy current text to clipboard"); }
 		}
 		
 		public override string Icon {
@@ -44,11 +46,6 @@ namespace Do.Universe
 		
 		public override IEnumerable<Type> SupportedItemTypes {
 			get { yield return typeof (IItem); }
-		}
-		
-		public override bool SupportsModifierItemForItems (IEnumerable<IItem> items, IItem modItem)
-		{
-			return false;
 		}
 		
 		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
