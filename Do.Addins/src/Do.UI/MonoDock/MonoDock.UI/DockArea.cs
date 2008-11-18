@@ -730,6 +730,7 @@ namespace MonoDock.UI
 			return IconSource.Unknown;
 		}
 		
+		double zoom_percent = 2;
 		void IconPositionedCenterX (int icon, out int x, out double zoom)
 		{
 			int center = IconNormalCenterX (icon);
@@ -738,11 +739,11 @@ namespace MonoDock.UI
 			if (ZoomPixels/2 == 0)
 				zoom = 1;
 			else {
-				zoom = 2 - (offset/(double)(ZoomPixels/2));
+				zoom = zoom_percent - (offset/(double)(ZoomPixels/2))*(zoom_percent-1);
 				zoom = (zoom-1)*ZoomIn+1;
 			}
 			
-			offset = (int) (offset*Math.Sin ((Math.PI/4)*zoom));
+			offset = (int) ((offset*Math.Sin ((Math.PI/4)*zoom)) * (zoom_percent-1));
 			
 			if (Cursor.X > center) {
 				center -= offset;
