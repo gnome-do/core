@@ -363,6 +363,8 @@ namespace MonoDock.UI
 			           (int) Gdk.EventMask.ButtonPressMask | (int) Gdk.EventMask.ButtonReleaseMask);
 			
 			DoubleBuffered = false;
+			
+			RegisterEvents ();
 		}
 		
 		void RegisterEvents ()
