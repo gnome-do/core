@@ -180,7 +180,6 @@ namespace Do.Core
 
 			if (!textMode) {
 				List<IObject> initresults = InitialResults ();
-				Console.WriteLine (initresults.Count);
 				foreach (IItem moditem in initresults) {
 					if (action.SupportsModifierItemForItems (items.ToArray (), moditem))
 						results.Add (moditem);
