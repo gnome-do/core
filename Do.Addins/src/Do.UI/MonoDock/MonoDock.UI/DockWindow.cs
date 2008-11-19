@@ -125,17 +125,7 @@ namespace MonoDock.UI
 			base.OnShown ();
 			Reposition ();
 			
-			IntPtr display = Xlib.gdk_x11_drawable_get_xdisplay (GdkWindow.Handle);
-			X11Atoms atoms = new X11Atoms (display);
-			uint[] struts = new uint[12];
-			
-			struts[(int) XLib.Struts.Bottom] = (uint) dock_area.DockHeight;
-			
-			if (!IsRealized)
-				return;
-			
-			Xlib.XChangeProperty (display, Xlib.gdk_x11_drawable_get_xid (GdkWindow.Handle), atoms._NET_WM_STRUT, 
-			                      atoms.XA_CARDINAL, 32, (int) XLib.PropertyMode.PropModeAppend, struts, 4);
+			SetStruts ();
 		}
 		
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
@@ -152,6 +142,21 @@ namespace MonoDock.UI
 			GetSize (out main.Width, out main.Height);
 			geo = Screen.GetMonitorGeometry (0);
 			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-main.Height);
+		}
+		
+		public void SetStruts ()
+		{
+			IntPtr display = Xlib.gdk_x11_drawable_get_xdisplay (GdkWindow.Handle);
+			X11Atoms atoms = new X11Atoms (display);
+			uint[] struts = new uint[12];
+			
+			struts[(int) XLib.Struts.Bottom] = (uint) dock_area.DockHeight;
+			
+			if (!IsRealized)
+				return;
+			
+			Xlib.XChangeProperty (display, Xlib.gdk_x11_drawable_get_xid (GdkWindow.Handle), atoms._NET_WM_STRUT, 
+			                      atoms.XA_CARDINAL, 32, (int) XLib.PropertyMode.PropModeReplace, struts, 4);
 		}
 
 		#region IDoWindow implementation 
@@ -191,12 +196,10 @@ namespace MonoDock.UI
 		
 		public void GrowResults ()
 		{
-//			throw new System.NotImplementedException();
 		}
 		
 		public void ShrinkResults ()
 		{
-//			throw new System.NotImplementedException();
 		}
 		
 		public void SetPaneContext (Pane pane, IUIContext context)
@@ -206,7 +209,7 @@ namespace MonoDock.UI
 		
 		public void ClearPane (Pane pane)
 		{
-//			throw new System.NotImplementedException();
+			dock_area.ClearPane (pane);
 		}
 		
 		public bool Visible {

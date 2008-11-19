@@ -252,6 +252,13 @@ namespace MonoDock.UI
 			}
 		}
 		
+		Gdk.Point StickIconCenter {
+			get {
+				Gdk.Rectangle rect = GetDockArea ();
+				return new Gdk.Point (rect.X+rect.Width-7, rect.Y+8);
+			}
+		}
+		
 		Gdk.Rectangle MinimumDockArea {
 			get {
 				int x_offset = (Width-DockWidth)/2;
@@ -472,6 +479,9 @@ namespace MonoDock.UI
 				using (Context input_cr = new Context (dock_icon_buffer)) {
 					input_cr.AlphaFill ();
 					DrawIcons (input_cr);
+					
+					if (CursorIsOverDockArea)
+						DrawThumbnailIcon (input_cr);
 				}
 				
 				cr.SetSource (dock_icon_buffer, 0, IconSize * (1-DockIconOpacity));
@@ -525,6 +535,24 @@ namespace MonoDock.UI
 					cr.SetSource (DockItems[i].GetTextSurface (), IconNormalCenterX (i)-(DockItem.TextWidth/2), 15);
 					cr.Paint ();
 				}
+			}
+		}
+		
+		void DrawThumbnailIcon (Context cr)
+		{
+			Gdk.Point center = StickIconCenter;
+			
+			double opacity = 1.0/Math.Abs (center.X-Cursor.X)*30 - .2;
+			
+			cr.Arc (center.X, center.Y, 3.5, 0, Math.PI*2);
+			cr.LineWidth = 1;
+			cr.Color = new Cairo.Color (1, 1, 1, opacity);
+			cr.Stroke ();
+			
+			if (autohide) {
+				cr.Arc (center.X, center.Y, 1.5, 0, Math.PI*2);
+				cr.Color = new Cairo.Color (1, 1, 1, opacity);
+				cr.Fill ();
 			}
 		}
 		
@@ -833,13 +861,22 @@ namespace MonoDock.UI
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
+			bool ret_val = base.OnButtonPressEvent (evnt);
+			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X-4, StickIconCenter.Y-4, 8, 8);
+			if (stick_rect.Contains (Cursor)) {
+				autohide = !autohide;
+				window.SetStruts ();
+				AnimatedDraw ();
+				return ret_val;
+			}
+			
 			int item = DockItemForX ((int) evnt.X);
 			if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea)
-				return base.OnButtonReleaseEvent (evnt);
+				return ret_val;
 			if (evnt.Button == 3) {
 				if (GetIconSource (DockItems[item]) == IconSource.Custom)
 					ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
-				return base.OnButtonPressEvent (evnt);
+				return ret_val;
 			}
 			
 			if ((DateTime.UtcNow - DockItems[item].LastClick).TotalMilliseconds > BounceTime) {
@@ -852,7 +889,7 @@ namespace MonoDock.UI
 				DockItems[item].Clicked (evnt.Button);
 				AnimatedDraw ();
 			}
-			return base.OnButtonReleaseEvent (evnt);
+			return ret_val;
 		}
 
 		protected override bool OnLeaveNotifyEvent (Gdk.EventCrossing evnt)
