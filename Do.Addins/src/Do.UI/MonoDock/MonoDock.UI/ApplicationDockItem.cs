@@ -112,37 +112,8 @@ namespace MonoDock.UI
 		
 		public Surface GetTextSurface ()
 		{
-			if (sr == null) {
-				sr = new Cairo.ImageSurface (Cairo.Format.Argb32, DockItem.TextWidth, 20);
-				
-				Context cr = new Context (sr);
-				
-				Pango.Layout layout = Pango.CairoHelper.CreateLayout (cr);
-				layout.Width = Pango.Units.FromPixels (DockItem.TextWidth);
-				layout.SetMarkup ("<b>" + application.Name + "</b>");
-				layout.Alignment = Pango.Alignment.Center;
-				layout.Ellipsize = Pango.EllipsizeMode.End;
-				
-				Pango.Rectangle rect1, rect2;
-				layout.GetExtents (out rect1, out rect2);
-				
-				cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) - 10, 0, Pango.Units.ToPixels (rect2.Width) + 16, 20, 10);
-				cr.Color = new Cairo.Color (0, 0, 0, .6);
-				cr.Fill ();
-				
-				Pango.CairoHelper.LayoutPath (cr, layout);
-				
-				cr.Color = new Cairo.Color (0, 0, 0);
-				cr.Fill ();
-				
-				cr.Translate (-2, -1);
-				Pango.CairoHelper.LayoutPath (cr, layout);
-				cr.Color = new Cairo.Color (1, 1, 1);
-				cr.Fill ();
-				
-				(cr as IDisposable).Dispose ();
-				layout.Dispose ();
-			}
+			if (sr == null)
+				sr = MonoDock.UI.Util.GetBorderedTextSurface (application.Name, DockItem.TextWidth);
 			return sr;
 		}
 		

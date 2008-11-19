@@ -95,6 +95,7 @@ FILES =  \
 	src/Do.UI/MonoDock/MonoDock.UI/SeparatorItem.cs \
 	src/Do.UI/MonoDock/MonoDock.UI/CustomDockItems.cs \
 	src/Do.UI/MonoDock/MonoDock.UI/ItemMenu.cs \
+	src/Do.UI/MonoDock/MonoDock.UI/Util.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/WindowUtils.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/GtkUtils.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/Preferences.cs \

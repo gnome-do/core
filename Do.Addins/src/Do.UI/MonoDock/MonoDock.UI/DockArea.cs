@@ -218,17 +218,9 @@ namespace MonoDock.UI
 			}
 		}
 		
-		double InputAreaSlideStatus {
-			get {
-				return Math.Min (1,(DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds / BaseAnimationTime);
-			}
-		}
-		
 		int IconBorderWidth {get{ return 4; }}
 		
 		int IconSize { get { return DockItem.IconSize + IconBorderWidth; } }
-		
-		int GapSize { get { return GetDockArea ().Width - 10 - PaneSize*3; } }
 		
 		Gdk.Point Cursor {
 			get {
@@ -570,134 +562,63 @@ namespace MonoDock.UI
 		
 		void DrawPane (Context cr, Pane pane)
 		{
-			int start_x = GetXForPane (pane);
-			
-			cr.SetRoundedRectanglePath (start_x, Height - 162, PaneSize - 10, PaneSize - 10, 20);
-			if (pane == CurrentPane)
-				cr.Color = new Cairo.Color (.15, .15, .15, .8);
-			else
-				cr.Color = new Cairo.Color (0, 0, 0, .4);
-			cr.FillPreserve ();
-			
-			if (pane == State.CurrentPane)
-				cr.Color = new Cairo.Color (1, 1, 1, .8);
-			else
-				cr.Color = new Cairo.Color (1, 1, 1, .3);
-			cr.Stroke ();
-			
-			if (State.GetPaneResults (pane) == null || State[pane] == null)
+			if (State[pane] == null || State.GetPaneResults (pane) == null)
 				return;
-			
-			double results_slide_state = GetResultSlidePercentage (pane);
-			
-			int num_icons = GapSize/IconSize+1;
+			int center = (int) GetXForPane (pane);
+			IObject item = State[pane];
 			int cursor = State.GetPaneCursor (pane);
-			if (State.GetPanePreviousCursor (pane) > State.GetPaneCursor (pane)) {
-			    results_slide_state = 1-results_slide_state;
-				cursor++;
-				num_icons--;
-			}
+			IObject[] results = State.GetPaneResults (pane).ToArray ();
+			double alpha = (pane == CurrentPane) ? 1 : .7;
 			
-			double gap_offset;
-			if (State.CurrentPane != pane && State.PreviousPane != pane)
-				gap_offset = 0;
-			else if (State.CurrentPane == pane)
-				gap_offset = Math.Min (1, (DateTime.UtcNow-State.CurrentPaneTime).TotalMilliseconds/BaseAnimationTime);
-			else
-				gap_offset = 1-Math.Min (1, (DateTime.UtcNow-State.CurrentPaneTime).TotalMilliseconds/BaseAnimationTime);
-			
-			int animation_start_x = start_x+15+PaneSize+IconSize/2;
-			int pane_center = start_x+30+IconSize;
-			double cursor_center_x = animation_start_x-IconSize*results_slide_state;
-			//fixme the extra plus 10 in here is due to a calculation error.
-			cr.Rectangle (start_x+10, 0, PaneSize+GapSize*gap_offset, Height);
+			cr.Rectangle (center-150, 0, 300, Height);
 			cr.Clip ();
 			
-			for (int i=cursor-1; i<State.GetPaneResults (pane).Count && i < cursor+num_icons; i++) {
-				if (i<0)
-					continue;
-				double base_center_x = cursor_center_x + (i-cursor)*IconSize;
-				if (base_center_x < 0)
-					continue;
-				double icon_size;
-				if (base_center_x < animation_start_x) {
-					base_center_x -= IconSize*results_slide_state + (IconSize)*(cursor-i);
-					icon_size = Math.Min (2, 1+((animation_start_x-base_center_x)/(animation_start_x-(double)pane_center)));
-				} else {
-					icon_size=1;
-				}
-					
-				IObject item = State.GetPaneResults (pane)[i];
-				
-				double scale;
-				Surface sr;
-				if (icon_size < 1.5) {
-					if (!SmallIconCache.ContainsKey (item.Icon))
-						SmallIconCache.AddPixbufSurface (item.Icon, item.Icon);
-					scale = icon_size;
-					sr = SmallIconCache.GetSurface (item.Icon);
-				} else {
+			for (int i=Math.Max (0, cursor-2); i<= cursor+2 && i<results.Length; i++) {
+				int offset = (cursor-i)*100;
+				if (i == cursor) {
 					if (!LargeIconCache.ContainsKey (item.Icon))
 						LargeIconCache.AddPixbufSurface (item.Icon, item.Icon);
-					scale = icon_size/2;
-					sr = LargeIconCache.GetSurface (item.Icon);
-				}
 					
-				cr.Scale (scale, scale);
-				cr.SetSource (sr, (base_center_x-(IconSize*icon_size)/2)/scale, (Height-IconSize*icon_size-YBuffer)/scale);
-				cr.Paint ();
-				
-				cr.Scale (1/scale, 1/scale);
+					cr.SetSource (LargeIconCache.GetSurface (item.Icon), center-64, Height-YBuffer/2-128);
+					cr.PaintWithAlpha (alpha);
+				} else {
+					if (!SmallIconCache.ContainsKey (results[i].Icon))
+						SmallIconCache.AddPixbufSurface (results[i].Icon, results[i].Icon);
+					
+					cr.SetSource (SmallIconCache.GetSurface (results[i].Icon), (center-offset)-32, Height-YBuffer/2-64);
+					cr.PaintWithAlpha (alpha);
+				}
 			}
-			cr.ResetClip ();
 			
-			string text = GLib.Markup.EscapeText (State.GetPaneItem (pane).Name);
+			
+			cr.ResetClip ();
+			string text = GLib.Markup.EscapeText (item.Name);
 			text = Do.Addins.Util.FormatCommonSubstrings (text, State.GetPaneQuery (pane), HighlightFormat);
-			BezelTextUtils.RenderLayoutText (cr, text, start_x + 5, Height-PaneSize+12, PaneSize-20, this);
+			Surface text_surface = UI.Util.GetBorderedTextSurface (text, 300);
+			cr.SetSource (text_surface, center-150, Height-128-30);
+			cr.Paint ();
 		}
 		
-		int GetXForPane (Pane pane)
+		double GetXForPane (Pane pane)
 		{
-			Gdk.Rectangle dock_area = GetDockArea ();
-			
-			double transit_state = InputAreaSlideStatus;
-			if (transit_state == 1 || pane == Pane.First) {
-				switch (pane) {
-				case Pane.First:
-					return dock_area.X + 10;
-				case Pane.Second:
-					if (CurrentPane == Pane.First)
-						return dock_area.X + 10 + PaneSize + GapSize;
-					return dock_area.X + 10 + PaneSize;
-				default:
-					if (CurrentPane == Pane.Third)
-						return dock_area.X + 10 + 2*PaneSize;
-					return dock_area.X + 10 + GapSize + 2*PaneSize;
-				}
-			}
-			
-			//It should be impossible to get to this point with a Pane.First
-			if (pane == Pane.First)
-				throw new Exception ("You have beat the programmer");
-			
-			if (pane == Pane.Second) {
-				if (State.PreviousPane == Pane.First) {
-					return dock_area.X + 10 + PaneSize + (int) (GapSize*(1-transit_state));
-				} else if (State.CurrentPane == Pane.First) {
-					return dock_area.X + 10 + PaneSize + (int) (GapSize*transit_state);
-				} else {
-					return dock_area.X + 10 + PaneSize;
-				}
+			int position;
+			if (ThirdPaneVisible) {
+				if (pane == Pane.First)
+					position = 1;
+				else if (pane == Pane.Second)
+					position = 3;
+				else
+					position = 5;
 			} else {
-				if (State.CurrentPane == Pane.Third) {
-					return dock_area.X + 10 + (int) (GapSize*(1-transit_state)) + 2*PaneSize;
-				} else if (State.PreviousPane == Pane.Third) {
-					return dock_area.X + 10 + (int) (GapSize*transit_state) + 2*PaneSize;
-				} else {
-					return dock_area.X + 10 + GapSize + 2*PaneSize;
-				}
+				if (pane == Pane.First)
+					position = 2;
+				else if (pane == Pane.Second)
+					position = 4;
+				else
+					position = 10;
 			}
-			
+			Gdk.Rectangle dock_area = GetDockArea ();
+			return dock_area.X + position * dock_area.Width/6.0;
 		}
 		
 		DrawState PaneDrawState (Pane pane)
