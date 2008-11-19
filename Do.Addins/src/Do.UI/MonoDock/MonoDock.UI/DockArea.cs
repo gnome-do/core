@@ -680,13 +680,6 @@ namespace MonoDock.UI
 			
 			return DrawState.None;
 		}
-		
-		double GetResultSlidePercentage (Pane pane)
-		{
-			if (State.GetPaneCursor (pane) == State.GetPanePreviousCursor (pane))
-				return 1;
-			return Math.Min ((DateTime.UtcNow - State.GetPaneCursorTime (pane)).TotalMilliseconds/BaseAnimationTime,1);
-		}
 		#endregion
 		
 		int IconNormalCenterX (int icon)

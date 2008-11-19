@@ -61,6 +61,8 @@ namespace MonoDock.UI
 			}
 			
 			foreach (string s in filenames) {
+				if (!File.Exists (s))
+					continue;
 				IDockItem di = CreatDockItem (s);
 				if (di != null)
 					items[s] = di;
