@@ -62,23 +62,23 @@ namespace MonoDock.UI
 		public Surface GetIconSurface ()
 		{
 			if (icon_surface == null) {
-				icon_surface = new ImageSurface (Cairo.Format.Argb32, (int) (DockItem.IconSize*DockItem.IconQuality), 
-				                                 (int) (DockItem.IconSize*DockItem.IconQuality));
+				icon_surface = new ImageSurface (Cairo.Format.Argb32, (int) (Preferences.IconSize*Preferences.IconQuality), 
+				                                 (int) (Preferences.IconSize*Preferences.IconQuality));
 				Context cr = new Context (icon_surface);
 				string icon_guess = application.Name.ToLower ().Replace (' ','-');
-				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (icon_guess, (int) (DockItem.IconSize*DockItem.IconQuality), false);
-				if (pbuf == null || pbuf.Width != (int) (DockItem.IconSize*DockItem.IconQuality) && pbuf.Height != (int) (DockItem.IconSize*DockItem.IconQuality)) {
+				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (icon_guess, (int) (Preferences.IconSize*Preferences.IconQuality), false);
+				if (pbuf == null || pbuf.Width != (int) (Preferences.IconSize*Preferences.IconQuality) && pbuf.Height != (int) (Preferences.IconSize*Preferences.IconQuality)) {
 					string desktop_path = GetDesktopFile (icon_guess);
 					if (!string.IsNullOrEmpty (desktop_path)) {
 						Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists);
 						if (pbuf != null)
 							pbuf.Dispose ();
-						pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), (int) (DockItem.IconSize*DockItem.IconQuality));
+						pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), (int) (Preferences.IconSize*Preferences.IconQuality));
 						di.Dispose ();
 					} else {
 						icon_guess = "gnome-" + icon_guess;
-						Gdk.Pixbuf pbuf2 = IconProvider.PixbufFromIconName (icon_guess, (int) (DockItem.IconSize*DockItem.IconQuality));
-						if (pbuf2.Width != (int) (DockItem.IconSize*DockItem.IconQuality) && pbuf2.Height != (int) (DockItem.IconSize*DockItem.IconQuality)) {
+						Gdk.Pixbuf pbuf2 = IconProvider.PixbufFromIconName (icon_guess, (int) (Preferences.IconSize*Preferences.IconQuality));
+						if (pbuf2.Width != (int) (Preferences.IconSize*Preferences.IconQuality) && pbuf2.Height != (int) (Preferences.IconSize*Preferences.IconQuality)) {
 							pbuf2.Dispose ();
 						} else {
 							if (pbuf != null)
@@ -88,7 +88,7 @@ namespace MonoDock.UI
 					}
 				}
 				if (pbuf == null) {
-					pbuf =  IconProvider.PixbufFromIconName (icon_guess, (int) (DockItem.IconSize*DockItem.IconQuality));
+					pbuf =  IconProvider.PixbufFromIconName (icon_guess, (int) (Preferences.IconSize*Preferences.IconQuality));
 				}
 				Gdk.CairoHelper.SetSourcePixbuf (cr, pbuf, 0, 0);
 				cr.Paint ();
@@ -113,7 +113,7 @@ namespace MonoDock.UI
 		public Surface GetTextSurface ()
 		{
 			if (sr == null)
-				sr = MonoDock.UI.Util.GetBorderedTextSurface (application.Name, DockItem.TextWidth);
+				sr = MonoDock.UI.Util.GetBorderedTextSurface (application.Name, Preferences.TextWidth);
 			return sr;
 		}
 		
@@ -125,13 +125,13 @@ namespace MonoDock.UI
 		
 		public int Width {
 			get {
-				return DockItem.IconSize;
+				return Preferences.IconSize;
 			}
 		}
 		
 		public int Height {
 			get {
-				return DockItem.IconSize;
+				return Preferences.IconSize;
 			}
 		}
 		

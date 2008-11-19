@@ -231,7 +231,7 @@ namespace MonoDock.UI
 		
 		int IconBorderWidth {get{ return 4; }}
 		
-		int IconSize { get { return DockItem.IconSize + IconBorderWidth; } }
+		int IconSize { get { return Preferences.IconSize + IconBorderWidth; } }
 		
 		Gdk.Point Cursor {
 			get {
@@ -520,10 +520,10 @@ namespace MonoDock.UI
 					y -= Math.Abs (20*Math.Sin (total_ms*Math.PI/(BounceTime/2)));
 				}
 				
-				double scale = zoom/DockItem.IconQuality;
+				double scale = zoom/Preferences.IconQuality;
 				if (DockItems[i].Scalable) {
 					cr.Scale (scale, scale);
-					cr.SetSource (DockItems[i].GetIconSurface (), x*DockItem.IconQuality, y*DockItem.IconQuality);
+					cr.SetSource (DockItems[i].GetIconSurface (), x*Preferences.IconQuality, y*Preferences.IconQuality);
 					cr.Paint ();
 					cr.Scale (1/scale, 1/scale);
 				} else {
@@ -542,7 +542,7 @@ namespace MonoDock.UI
 				}
 				
 				if (DockItemForX (Cursor.X) == i && CursorIsOverDockArea && DockItems[i].GetTextSurface () != null) {
-					cr.SetSource (DockItems[i].GetTextSurface (), IconNormalCenterX (i)-(DockItem.TextWidth/2), 15);
+					cr.SetSource (DockItems[i].GetTextSurface (), IconNormalCenterX (i)-(Preferences.TextWidth/2), 15);
 					cr.Paint ();
 				}
 			}
