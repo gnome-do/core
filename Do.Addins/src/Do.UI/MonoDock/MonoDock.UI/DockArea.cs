@@ -659,7 +659,7 @@ namespace MonoDock.UI
 				break;
 			}
 			Gdk.Rectangle dock_area = GetDockArea ();
-			return dock_area.X + position * dock_area.Width/6.0;
+			return dock_area.X + (position * dock_area.Width/6.0);
 		}
 		
 		DrawState PaneDrawState (Pane pane)
@@ -738,7 +738,7 @@ namespace MonoDock.UI
 		
 		Gdk.Rectangle GetDockArea ()
 		{
-			if (!CursorIsOverDockArea && ZoomIn == 0)
+			if (!CursorIsOverDockArea && ZoomIn == 0 && InputAreaOpacity == 0)
 				return MinimumDockArea;
 
 			int start_x, end_x;
@@ -748,6 +748,12 @@ namespace MonoDock.UI
 			
 			int x = start_x - (int)(start_zoom*(IconSize/2)) - XBuffer;
 			int end = end_x + (int)(end_zoom*(IconSize/2));
+			
+			if (InputAreaOpacity > 0) {
+				int width = end-x;
+				x -= Math.Max (0, (int) (InputAreaOpacity*(1024-width)/2));
+				end += Math.Max (0, (int) (InputAreaOpacity*(1024-width)/2));
+			}
 			
 			return new Gdk.Rectangle (x, Height-IconSize-2*YBuffer, end-x, IconSize+2*YBuffer);
 		}
