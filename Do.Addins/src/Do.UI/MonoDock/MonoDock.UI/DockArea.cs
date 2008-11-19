@@ -71,7 +71,6 @@ namespace MonoDock.UI
 		DockWindow window;
 		PixbufSurfaceCache large_icon_cache, small_icon_cache;
 		
-		bool autohide = true;
 		
 		#region Public properties
 		public int Width {
@@ -98,7 +97,7 @@ namespace MonoDock.UI
 		
 		public int DockHeight {
 			get {
-				if (autohide)
+				if (Preferences.AutoHide)
 					return 0;
 				return MinimumDockArea.Height;
 			}
@@ -184,7 +183,7 @@ namespace MonoDock.UI
 		
 		int YOffset {
 			get {
-				if (!autohide)
+				if (!Preferences.AutoHide)
 					return 0;
 				double offset = 0;
 				if (CursorIsOverDockArea) {
@@ -244,7 +243,7 @@ namespace MonoDock.UI
 					if (CursorIsOverDockArea) {
 						window.SetInputMask (0);
 					} else {
-						if (autohide)
+						if (Preferences.AutoHide)
 							window.SetInputMask (Height-1);
 						else
 							window.SetInputMask (Height-IconSize);
@@ -559,7 +558,7 @@ namespace MonoDock.UI
 			cr.Color = new Cairo.Color (1, 1, 1, opacity);
 			cr.Stroke ();
 			
-			if (autohide) {
+			if (Preferences.AutoHide) {
 				cr.Arc (center.X, center.Y, 1.5, 0, Math.PI*2);
 				cr.Color = new Cairo.Color (1, 1, 1, opacity);
 				cr.Fill ();
@@ -820,7 +819,7 @@ namespace MonoDock.UI
 			bool ret_val = base.OnButtonPressEvent (evnt);
 			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X-4, StickIconCenter.Y-4, 8, 8);
 			if (stick_rect.Contains (Cursor)) {
-				autohide = !autohide;
+				Preferences.AutoHide = !Preferences.AutoHide;
 				window.SetStruts ();
 				AnimatedDraw ();
 				return ret_val;

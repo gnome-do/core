@@ -66,5 +66,14 @@ namespace MonoDock.Util
 				icon_quality = value;
 			}
 		}
+		
+		static bool autohide = prefs.Get<bool> ("AutoHide", false);
+		public static bool AutoHide {
+			get { return autohide; }
+			set {
+				prefs.Set<bool> ("AutoHide", value);
+				autohide = value;
+			}
+		}
 	}
 }
