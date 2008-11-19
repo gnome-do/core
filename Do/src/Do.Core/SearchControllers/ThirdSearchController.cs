@@ -124,6 +124,26 @@ namespace Do.Core
 				return false;
 			});
 		}
+		
+		protected override List<IObject> InitialResults ()
+		{
+			if (TextMode)
+				return new List<IObject> ();
+			//We continue off our previous results if possible
+			if (context.LastContext != null && context.LastContext.Results.Any ()) {
+				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				                                                     SearchTypes, 
+				                                                     context.LastContext.Results, 
+				                                                     FirstController.Selection));
+			} else if (context.ParentContext != null && context.Results.Any ()) {
+				return new List<IObject> (context.Results);
+			} else { 
+				//else we do things the slow way
+				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				                                                     SearchTypes, 
+				                                                     FirstController.Selection));
+			}
+		}
 
 		private IObject[] GetContextResults ()
 		{
@@ -160,6 +180,7 @@ namespace Do.Core
 
 			if (!textMode) {
 				List<IObject> initresults = InitialResults ();
+				Console.WriteLine (initresults.Count);
 				foreach (IItem moditem in initresults) {
 					if (action.SupportsModifierItemForItems (items.ToArray (), moditem))
 						results.Add (moditem);
