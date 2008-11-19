@@ -564,34 +564,54 @@ namespace MonoDock.UI
 		{
 			if (State[pane] == null || State.GetPaneResults (pane) == null)
 				return;
+			
 			int center = (int) GetXForPane (pane);
 			IObject item = State[pane];
 			int cursor = State.GetPaneCursor (pane);
 			IObject[] results = State.GetPaneResults (pane).ToArray ();
 			double alpha = (pane == CurrentPane) ? 1 : .7;
+			double slide_state = Math.Min (1,(DateTime.UtcNow - State.GetPaneCursorTime (pane)).TotalMilliseconds / BaseAnimationTime); 
+			int slide_offset; 
+			if (State.GetPaneCursor (pane) > State.GetPanePreviousCursor (pane))  { 
+				//we moved right, the animation should slide the right hand object to the center.
+				//the cursor object therefor needs to be offset to the right
+				slide_offset = (int) (100*(1-slide_state));
+			} else {
+				slide_offset = (int) (-100*(1-slide_state));
+			}
 			
 			cr.Rectangle (center-150, 0, 300, Height);
 			cr.Clip ();
 			
 			for (int i=Math.Max (0, cursor-2); i<= cursor+2 && i<results.Length; i++) {
-				int offset = (cursor-i)*100;
-				if (i == cursor) {
-					if (!LargeIconCache.ContainsKey (item.Icon))
-						LargeIconCache.AddPixbufSurface (item.Icon, item.Icon);
-					
-					cr.SetSource (LargeIconCache.GetSurface (item.Icon), center-64, Height-YBuffer/2-128);
-					cr.PaintWithAlpha (alpha);
-				} else {
-					if (!SmallIconCache.ContainsKey (results[i].Icon))
-						SmallIconCache.AddPixbufSurface (results[i].Icon, results[i].Icon);
-					
-					cr.SetSource (SmallIconCache.GetSurface (results[i].Icon), (center-offset)-32, Height-YBuffer/2-64);
-					cr.PaintWithAlpha (alpha);
-				}
+				int offset = (i-cursor)*100+slide_offset;
+				if (!LargeIconCache.ContainsKey (results[i].Icon))
+					LargeIconCache.AddPixbufSurface (results[i].Icon, results[i].Icon);
+				
+				double zoom = 1 - Math.Min (.5, Math.Min (1,((Math.Abs (offset)/100.0) * .5)));
+//				cr.Save ();
+				cr.Scale (zoom, zoom);
+				cr.SetSource (LargeIconCache.GetSurface (results[i].Icon), (1/zoom)*((center+offset)-(64*zoom)), (1/zoom)*(Height-YBuffer/2-128*zoom));
+				cr.PaintWithAlpha (alpha);
+				cr.Scale (1/zoom, 1/zoom);
+//				cr.Restore ();
 			}
 			
+			cr.Rectangle (center-150, 0, 300, Height);
+			LinearGradient lg = new LinearGradient (center-150, 0, center+150, 0);
+			lg.AddColorStop (0, new Cairo.Color (0, 0, 0, 1));
+			lg.AddColorStop (.1, new Cairo.Color (0, 0, 0, 0));
+			lg.AddColorStop (.9, new Cairo.Color (0, 0, 0, 0));
+			lg.AddColorStop (1, new Cairo.Color (0, 0, 0, 1));
+			cr.Operator = Operator.DestOut;
+			cr.Pattern = lg;
+			cr.Fill ();
+			cr.Operator = Operator.Over;
+			
+			lg.Destroy ();
 			
 			cr.ResetClip ();
+			
 			string text = GLib.Markup.EscapeText (item.Name);
 			text = Do.Addins.Util.FormatCommonSubstrings (text, State.GetPaneQuery (pane), HighlightFormat);
 			Surface text_surface = UI.Util.GetBorderedTextSurface (text, 300);
