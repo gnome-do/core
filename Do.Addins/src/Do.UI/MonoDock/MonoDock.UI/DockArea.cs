@@ -120,7 +120,18 @@ namespace MonoDock.UI
 			}
 		}
 		
-		public bool ThirdPaneVisible { get; set; }
+		bool third_pane_visible = false;
+		DateTime third_pane_visibility_change = DateTime.UtcNow;
+		public bool ThirdPaneVisible { 
+			get { return third_pane_visible; }
+			set { 
+				if (third_pane_visible == value)
+					return;
+				third_pane_visible = value;
+				third_pane_visibility_change = DateTime.UtcNow;
+				AnimatedDraw ();
+			}
+		}
 		#endregion
 		
 		IStatistics Statistics { get; set; }
@@ -327,9 +338,16 @@ namespace MonoDock.UI
 			}
 		}
 		
+		bool ThirdPaneVisibilityAnimationNeeded {
+			get {
+				return (DateTime.UtcNow - third_pane_visibility_change).TotalMilliseconds < BaseAnimationTime;
+			}
+		}
+		
 		bool AnimationNeeded {
 			get { return PaneChangeAnimationNeeded || ZoomAnimationNeeded || BounceAnimationNeeded || 
-				InputModeChangeAnimationNeeded || InputModeSlideAnimationNeeded || IconInsertionAnimationNeeded || OpenAnimationNeeded; }
+				InputModeChangeAnimationNeeded || InputModeSlideAnimationNeeded || IconInsertionAnimationNeeded || 
+				OpenAnimationNeeded || ThirdPaneVisibilityAnimationNeeded; }
 		}
 		#endregion
 		
@@ -589,12 +607,10 @@ namespace MonoDock.UI
 					LargeIconCache.AddPixbufSurface (results[i].Icon, results[i].Icon);
 				
 				double zoom = 1 - Math.Min (.5, Math.Min (1,((Math.Abs (offset)/100.0) * .5)));
-//				cr.Save ();
 				cr.Scale (zoom, zoom);
 				cr.SetSource (LargeIconCache.GetSurface (results[i].Icon), (1/zoom)*((center+offset)-(64*zoom)), (1/zoom)*(Height-YBuffer/2-128*zoom));
 				cr.PaintWithAlpha (alpha);
 				cr.Scale (1/zoom, 1/zoom);
-//				cr.Restore ();
 			}
 			
 			cr.Rectangle (center-150, 0, 300, Height);
@@ -621,21 +637,27 @@ namespace MonoDock.UI
 		
 		double GetXForPane (Pane pane)
 		{
-			int position;
-			if (ThirdPaneVisible) {
-				if (pane == Pane.First)
-					position = 1;
-				else if (pane == Pane.Second)
-					position = 3;
+			double position;
+			double slide_state = Math.Min (1,(DateTime.UtcNow - third_pane_visibility_change).TotalMilliseconds/BaseAnimationTime);
+			switch (pane) {
+			case Pane.First:
+				if (ThirdPaneVisible)
+					position = 1+(1-slide_state);
 				else
-					position = 5;
-			} else {
-				if (pane == Pane.First)
-					position = 2;
-				else if (pane == Pane.Second)
-					position = 4;
+					position = 1+slide_state;
+				break;
+			case Pane.Second:
+				if (ThirdPaneVisible)
+					position = 3+(1-slide_state);
 				else
-					position = 10;
+					position = 3+slide_state;
+			break;
+			default:
+				if (ThirdPaneVisible)
+					position = 5 + (5*(1-slide_state));
+				else
+					position = 5 + 5*slide_state;
+				break;
 			}
 			Gdk.Rectangle dock_area = GetDockArea ();
 			return dock_area.X + position * dock_area.Width/6.0;
@@ -812,7 +834,7 @@ namespace MonoDock.UI
 			}
 			
 			int item = DockItemForX ((int) evnt.X);
-			if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea)
+			if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea || input_interface)
 				return ret_val;
 			if (evnt.Button == 3) {
 				if (GetIconSource (DockItems[item]) == IconSource.Custom)
