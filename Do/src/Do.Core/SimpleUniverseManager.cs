@@ -167,13 +167,8 @@ namespace Do.Core
 		
 		internal static bool SourceSupportsItem (IItemSource source, IItem item)
 		{
-			// While is used to get to the innermost wrapped IItem.
-			while (item is DoItem)
-				item = (item as DoItem).Inner as IItem;
-			
-			return source.SupportedItemTypes
-				.Where (t => t.IsInstanceOfType (item))
-				.Any ();
+			item = DoItem.EnsureIItem (item);;
+			return source.SupportedItemTypes.Any (t => t.IsInstanceOfType (item));
 		}
 		
 		/// <summary>
