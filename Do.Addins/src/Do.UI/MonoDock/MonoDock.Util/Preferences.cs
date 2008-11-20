@@ -55,9 +55,9 @@ namespace MonoDock.Util
 			set { 
 				if (value < 24 || value > 128)
 					return;
-				if (Math.Abs (value - 64) < 8)
+				if (Math.Abs (value - 64) < 4)
 					value = 64;
-				if (Math.Abs (value - 32) < 8)
+				if (Math.Abs (value - 32) < 4)
 					value = 32;
 				
 				if (value == icon_size)

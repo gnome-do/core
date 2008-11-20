@@ -180,7 +180,7 @@ namespace MonoDock.UI
 		
 		int YOffset {
 			get {
-				if (!Preferences.AutoHide)
+				if (!Preferences.AutoHide || cursor_is_handle)
 					return 0;
 				double offset = 0;
 				if (CursorIsOverDockArea) {
