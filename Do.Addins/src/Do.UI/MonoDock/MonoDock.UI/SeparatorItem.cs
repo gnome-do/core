@@ -34,13 +34,13 @@ namespace MonoDock.UI
 		public Surface GetIconSurface ()
 		{
 			if (sr == null) {
-				sr = new ImageSurface (Cairo.Format.Argb32, 20, 64);
+				sr = new ImageSurface (Cairo.Format.Argb32, 20, MonoDock.Util.Preferences.IconSize);
 				Context cr = new Context (sr);
 				cr.AlphaFill ();
 				
 				cr.MoveTo (10, 0);
-				cr.LineTo (10, 64);
-				LinearGradient lg = new LinearGradient (0, 0, 0, 64);
+				cr.LineTo (10, MonoDock.Util.Preferences.IconSize);
+				LinearGradient lg = new LinearGradient (0, 0, 0, MonoDock.Util.Preferences.IconSize);
 				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
 				lg.AddColorStop (.5, new Cairo.Color (1, 1, 1, .5));
 				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
@@ -67,13 +67,13 @@ namespace MonoDock.UI
 		
 		public int Width {
 			get {
-				return 20;
+				return (int) (MonoDock.Util.Preferences.IconSize * .3);
 			}
 		}
 		
 		public int Height {
 			get {
-				return 64;
+				return MonoDock.Util.Preferences.IconSize;
 			}
 		}
 		
@@ -84,7 +84,14 @@ namespace MonoDock.UI
 		
 		#endregion 
 		
-
+		public SeparatorItem ()
+		{
+			MonoDock.Util.Preferences.IconSizeChanged += delegate {
+				if (sr != null)
+					sr.Destroy ();
+				sr = null;
+			};
+		}
 		
 		public void Clicked (uint button)
 		{

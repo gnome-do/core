@@ -58,6 +58,7 @@ namespace MonoDock.UI
 		{
 			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			this.item = item;
+			Preferences.IconSizeChanged += Dispose;
 		}
 		
 		Gdk.Pixbuf GetPixbuf ()
@@ -112,14 +113,20 @@ namespace MonoDock.UI
 		
 		public void Dispose ()
 		{
-			if (sr != null)
+			if (sr != null) {
 				sr.Destroy ();
+				sr = null;
+			}
 			
-			if (icon_surface != null)
+			if (icon_surface != null) {
 				icon_surface.Destroy ();
+				icon_surface = null;
+			}
 			
-			if (pixbuf != null)
+			if (pixbuf != null) {
 				pixbuf.Dispose ();
+				pixbuf = null;
+			}
 		}
 		
 		#endregion 

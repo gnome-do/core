@@ -90,6 +90,14 @@ namespace MonoDock.UI
 				if (pbuf == null) {
 					pbuf =  IconProvider.PixbufFromIconName (icon_guess, (int) (Preferences.IconSize*Preferences.IconQuality));
 				}
+				
+				if (pbuf.Height != Preferences.IconSize*Preferences.IconQuality && pbuf.Width != Preferences.IconSize*Preferences.IconQuality) {
+					double scale = (double)Preferences.IconSize*Preferences.IconQuality / Math.Max (pbuf.Width, pbuf.Height);
+					Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
+					pbuf.Dispose ();
+					pbuf = temp;
+				}
+				
 				Gdk.CairoHelper.SetSourcePixbuf (cr, pbuf, 0, 0);
 				cr.Paint ();
 				
@@ -154,6 +162,7 @@ namespace MonoDock.UI
 		{
 			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			this.application = application;
+			Preferences.IconSizeChanged += Dispose;
 		}
 		
 		public void Clicked (uint button)
@@ -205,11 +214,15 @@ namespace MonoDock.UI
 		{
 //			application.Dispose ();
 			
-			if (sr != null)
+			if (sr != null) {
 				sr.Destroy ();
+				sr = null;
+			}
 			
-			if (icon_surface != null)
+			if (icon_surface != null) {
 				icon_surface.Destroy ();
+				icon_surface = null;
+			}
 		}
 		
 		#endregion 

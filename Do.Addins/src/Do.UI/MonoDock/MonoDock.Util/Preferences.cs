@@ -27,7 +27,7 @@ namespace MonoDock.Util
 	
 	public static class Preferences
 	{
-		static IPreferences prefs = Do.Addins.Util.GetPreferences ("Bezel");
+		static IPreferences prefs = Do.Addins.Util.GetPreferences ("Dock");
 		
 		// we can not store these in gconf all the time since we query these a LOT
 		// so we have to use a half and half solution
@@ -53,8 +53,15 @@ namespace MonoDock.Util
 		public static int IconSize {
 			get { return icon_size; }
 			set { 
+				if (value < 24 || value > 128)
+					return;
+				if (Math.Abs (value - 64) < 8)
+					value = 64;
+				if (Math.Abs (value - 32) < 8)
+					value = 32;
 				prefs.Set<int> ("IconSize", value); 
 				icon_size = value;
+				IconSizeChanged ();
 			}
 		}
 		
@@ -75,5 +82,7 @@ namespace MonoDock.Util
 				autohide = value;
 			}
 		}
+		
+		public static event NullEventHandler IconSizeChanged;
 	}
 }

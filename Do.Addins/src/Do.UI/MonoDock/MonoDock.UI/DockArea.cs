@@ -80,14 +80,12 @@ namespace MonoDock.UI
 		}
 		
 		public int Height {
-			get {
-				return 2*IconSize + 40;
-			}
+			get; set;
 		}
 		
 		public int DockWidth {
 			get {
-				int out_width = 2*XBuffer;//(2*XBuffer)+(dock_items.Count*IconBorderWidth);
+				int out_width = 2*XBuffer;
 				foreach (IDockItem di in DockItems) {
 					out_width += di.Width;
 				}
@@ -218,7 +216,7 @@ namespace MonoDock.UI
 		
 		string HighlightFormat { 
 			get { 
-				return "<span underline=\"single\">{0}</span>";
+				return "<span foreground=\"#5599ff\">{0}</span>";
 			} 
 		}
 		
@@ -228,9 +226,7 @@ namespace MonoDock.UI
 			}
 		}
 		
-		int IconBorderWidth {get{ return 4; }}
-		
-		int IconSize { get { return Preferences.IconSize + IconBorderWidth; } }
+		int IconSize { get { return Preferences.IconSize; } }
 		
 		Gdk.Point Cursor {
 			get {
@@ -239,6 +235,7 @@ namespace MonoDock.UI
 			set {
 				bool tmp = CursorIsOverDockArea;
 				cursor = value;
+				
 				if (CursorIsOverDockArea != tmp) {
 					if (CursorIsOverDockArea) {
 						window.SetInputMask (0);
@@ -352,6 +349,7 @@ namespace MonoDock.UI
 		
 		public DockArea(DockWindow window, IStatistics statistics) : base ()
 		{
+			Height = 300;
 			Statistics = statistics;
 			this.window = window;
 			dock_items = new List<IDockItem> ();
@@ -512,7 +510,7 @@ namespace MonoDock.UI
 				}
 				
 				double x = (1/zoom)*(center - zoom*IconSize/2);
-				double y = (1/zoom)*(Height-(zoom*IconSize)) + IconBorderWidth/2 - YBuffer;
+				double y = (1/zoom)*(Height-(zoom*IconSize)) - YBuffer;
 				
 				int total_ms = (int) (DateTime.UtcNow - DockItems[i].LastClick).TotalMilliseconds;
 				if (total_ms < BounceTime) {
@@ -541,7 +539,7 @@ namespace MonoDock.UI
 				}
 				
 				if (DockItemForX (Cursor.X) == i && CursorIsOverDockArea && DockItems[i].GetTextSurface () != null) {
-					cr.SetSource (DockItems[i].GetTextSurface (), IconNormalCenterX (i)-(Preferences.TextWidth/2), 15);
+					cr.SetSource (DockItems[i].GetTextSurface (), IconNormalCenterX (i)-(Preferences.TextWidth/2), Height-2*IconSize-25);
 					cr.Paint ();
 				}
 			}
@@ -558,7 +556,7 @@ namespace MonoDock.UI
 			cr.Color = new Cairo.Color (1, 1, 1, opacity);
 			cr.Stroke ();
 			
-			if (Preferences.AutoHide) {
+			if (!Preferences.AutoHide) {
 				cr.Arc (center.X, center.Y, 1.5, 0, Math.PI*2);
 				cr.Color = new Cairo.Color (1, 1, 1, opacity);
 				cr.Fill ();
@@ -568,98 +566,119 @@ namespace MonoDock.UI
 		#region Input Area drawing code
 		void DrawInputArea (Context cr)
 		{
-			DrawPane (cr, Pane.First);
-			
-			DrawPane (cr, Pane.Second);
-			
-			if (ThirdPaneVisible) {
-				DrawPane (cr, Pane.Third);
-			}
+			DrawPanes (cr);
+//			DrawPane (cr, Pane.First);
+//			
+//			DrawPane (cr, Pane.Second);
+//			
+//			if (ThirdPaneVisible) {
+//				DrawPane (cr, Pane.Third);
+//			}
 		}
 		
-		void DrawPane (Context cr, Pane pane)
+		void DrawPanes (Context cr)
 		{
-			if (State[pane] == null || State.GetPaneResults (pane) == null)
-				return;
-			
-			int center = (int) GetXForPane (pane);
-			IObject item = State[pane];
-			int cursor = State.GetPaneCursor (pane);
-			IObject[] results = State.GetPaneResults (pane).ToArray ();
-			double alpha = (pane == CurrentPane) ? 1 : .7;
-			double slide_state = Math.Min (1,(DateTime.UtcNow - State.GetPaneCursorTime (pane)).TotalMilliseconds / BaseAnimationTime); 
-			int slide_offset; 
-			if (State.GetPaneCursor (pane) > State.GetPanePreviousCursor (pane))  { 
-				//we moved right, the animation should slide the right hand object to the center.
-				//the cursor object therefor needs to be offset to the right
-				slide_offset = (int) (100*(1-slide_state));
-			} else {
-				slide_offset = (int) (-100*(1-slide_state));
-			}
-			
-			cr.Rectangle (center-150, 0, 300, Height);
-			cr.Clip ();
-			
-			for (int i=Math.Max (0, cursor-2); i<= cursor+2 && i<results.Length; i++) {
-				int offset = (i-cursor)*100+slide_offset;
-				if (!LargeIconCache.ContainsKey (results[i].Icon))
-					LargeIconCache.AddPixbufSurface (results[i].Icon, results[i].Icon);
+			int base_x = GetDockArea ().X + 100;
+			double slide_state = Math.Min (1,(DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds/BaseAnimationTime);
+//			if (!LargeIconCache.ContainsKey (State.First.Icon))
+//				LargeIconCache.AddPixbufSurface (State.First.Icon, State.First.Icon);
+			for (int i=2; i>=0; i--) {
+				Pane pane  = (Pane)i;
+				int left_x;
+				double zoom;
+				GetXForPane (pane, out left_x, out zoom);
 				
-				double zoom = 1 - Math.Min (.5, Math.Min (1,((Math.Abs (offset)/100.0) * .5)));
+				if (State[pane] == null || (pane == Pane.Third && !ThirdPaneVisible))
+					continue;
+				if (!LargeIconCache.ContainsKey (State[pane].Icon))
+				    LargeIconCache.AddPixbufSurface (State[pane].Icon, State[pane].Icon);
+				
 				cr.Scale (zoom, zoom);
-				cr.SetSource (LargeIconCache.GetSurface (results[i].Icon), (1/zoom)*((center+offset)-(64*zoom)), (1/zoom)*(Height-YBuffer/2-128*zoom));
-				cr.PaintWithAlpha (alpha);
+				cr.SetSource (LargeIconCache.GetSurface (State[pane].Icon), left_x*(1/zoom), (Height-IconSize*2*zoom-YBuffer)*(1/zoom));
+				cr.Paint ();
 				cr.Scale (1/zoom, 1/zoom);
 			}
 			
-			cr.Rectangle (center-150, 0, 300, Height);
-			LinearGradient lg = new LinearGradient (center-150, 0, center+150, 0);
-			lg.AddColorStop (0, new Cairo.Color (0, 0, 0, 1));
-			lg.AddColorStop (.1, new Cairo.Color (0, 0, 0, 0));
-			lg.AddColorStop (.9, new Cairo.Color (0, 0, 0, 0));
-			lg.AddColorStop (1, new Cairo.Color (0, 0, 0, 1));
-			cr.Operator = Operator.DestOut;
-			cr.Pattern = lg;
-			cr.Fill ();
-			cr.Operator = Operator.Over;
-			
-			lg.Destroy ();
-			
-			cr.ResetClip ();
-			
-			string text = GLib.Markup.EscapeText (item.Name);
-			text = Do.Addins.Util.FormatCommonSubstrings (text, State.GetPaneQuery (pane), HighlightFormat);
-			Surface text_surface = UI.Util.GetBorderedTextSurface (text, 300);
-			cr.SetSource (text_surface, center-150, Height-128-30);
-			cr.Paint ();
+			if (State[CurrentPane] == null)
+				return;
+			string text = GLib.Markup.EscapeText (State[CurrentPane].Name);
+			text = Do.Addins.Util.FormatCommonSubstrings (text, State.GetPaneQuery (CurrentPane), HighlightFormat);
+			int tmp = BezelTextUtils.TextHeight;
+			BezelTextUtils.TextHeight = 20;
+			Pango.Color color = new Pango.Color ();
+			color.Blue = color.Red = color.Green = ushort.MaxValue;
+			BezelTextUtils.RenderLayoutText (cr, text, base_x + 110, Height - MinimumDockArea.Height + 15, 500, 
+			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End, this);
+			BezelTextUtils.TextHeight = tmp;
+			BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (State[CurrentPane].Description), 
+			                                 base_x + 110, Height - MinimumDockArea.Height + 42, 500, color, 
+			                                 Pango.Alignment.Left, Pango.EllipsizeMode.End, this);
 		}
 		
-		double GetXForPane (Pane pane)
+		void GetXForPane (Pane pane, out int left_x, out double zoom)
 		{
-			double position;
-			double slide_state = Math.Min (1,(DateTime.UtcNow - third_pane_visibility_change).TotalMilliseconds/BaseAnimationTime);
+			int base_x = GetDockArea ().X + 15;
+			double zoom_value = .2;
+			double slide_state = Math.Min (1,(DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds/BaseAnimationTime);
+			
+			double growing_zoom = zoom_value + slide_state*(1-zoom_value);
+			double shrinking_zoom = zoom_value + (1-slide_state)*(1-zoom_value);
 			switch (pane) {
 			case Pane.First:
-				if (ThirdPaneVisible)
-					position = 1+(1-slide_state);
-				else
-					position = 1+slide_state;
+				left_x = base_x;
+				if (State.CurrentPane == Pane.First && (State.PreviousPane == Pane.Second || State.PreviousPane == Pane.Third)) {
+					zoom = growing_zoom;
+				} else if (State.PreviousPane == Pane.First && (State.CurrentPane == Pane.Second || State.CurrentPane == Pane.Third)) {
+					zoom = shrinking_zoom;
+				} else {
+					zoom = zoom_value;
+				}
 				break;
 			case Pane.Second:
-				if (ThirdPaneVisible)
-					position = 3+(1-slide_state);
-				else
-					position = 3+slide_state;
-			break;
+				if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.First) {
+					zoom = shrinking_zoom;
+					left_x = base_x + (int) ((IconSize*2) * (growing_zoom));
+				} else if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.Third) {
+					zoom = shrinking_zoom;
+					left_x = base_x + (int) (IconSize*2*zoom_value);
+				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Second) {
+					zoom = growing_zoom;
+					left_x = base_x + (int) ((IconSize*2) * (shrinking_zoom));
+				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Third) {
+					zoom = zoom_value;
+					left_x = base_x + (int) ((IconSize*2) * (shrinking_zoom));
+				} else if (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.First) {
+					zoom = zoom_value;
+					left_x = base_x + (int) ((IconSize*2) * (growing_zoom));
+				} else {// (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.Second) {
+					zoom = growing_zoom;
+					left_x = base_x + (int) (IconSize*2*zoom_value);
+				}
+				break;
 			default:
-				if (ThirdPaneVisible)
-					position = 5 + (5*(1-slide_state));
-				else
-					position = 5 + 5*slide_state;
+				if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.First) {
+					zoom = zoom_value;
+					left_x = base_x + (int) (IconSize*2*(1+zoom_value));
+				} else if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.Third) {
+					zoom = growing_zoom;
+					left_x = base_x + (int) (IconSize*2*zoom_value) + (int) ((IconSize*2) * (shrinking_zoom));
+				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Second) {
+					zoom = zoom_value;
+					left_x = base_x + (int) (IconSize*2*(1+zoom_value));
+				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Third) {
+					zoom = growing_zoom;
+					left_x = base_x + (int) (IconSize*2*zoom_value) + (int) ((IconSize*2) * (shrinking_zoom));
+				} else if (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.First) {
+					zoom = shrinking_zoom;
+					left_x = base_x + (int) (IconSize*2*zoom_value) + (int) ((IconSize*2) * (growing_zoom));
+				} else {// (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.Second) {
+					zoom = shrinking_zoom;
+					left_x = base_x + (int) (IconSize*2*zoom_value) + (int) ((IconSize*2) * (growing_zoom));
+				}
 				break;
 			}
-			Gdk.Rectangle dock_area = GetDockArea ();
-			return dock_area.X + (position * dock_area.Width/6.0);
+			double offset_scale = .9;
+			left_x = (int) (left_x *offset_scale + base_x*(1-offset_scale));
 		}
 		
 		DrawState PaneDrawState (Pane pane)
@@ -693,7 +712,7 @@ namespace MonoDock.UI
 		{
 			int start_x = MinimumDockArea.X + XBuffer;
 			for (int i=0; i<DockItems.Count; i++) {
-				if (x >= start_x && x < start_x+DockItems[i].Width)
+				if (x >= start_x && x <= start_x+DockItems[i].Width)
 					return i;
 				start_x += DockItems[i].Width;
 			}
@@ -810,10 +829,26 @@ namespace MonoDock.UI
 			return ret_val;
 		}
  
+		bool cursor_is_handle = false;
+		int drag_start_y = 0;
+		int drag_start_icon_size = 0;
 		protected override bool OnMotionNotifyEvent(EventMotion evnt)
 		{
 			bool tmp = CursorIsOverDockArea;
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
+			
+			if (Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 || (cursor_is_handle && (evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask)) {
+				int item = DockItemForX (Cursor.X);
+				if (!cursor_is_handle && item > 0 && DockItems[item] is SeparatorItem) {
+					GdkWindow.Cursor = new Gdk.Cursor (CursorType.TopSide);
+					cursor_is_handle = true;
+					drag_start_y = Cursor.Y;
+					drag_start_icon_size = Preferences.IconSize;
+				}
+			}
+			if (cursor_is_handle && (evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask) {
+				Preferences.IconSize = drag_start_icon_size + (drag_start_y - Cursor.Y);
+			}
 			
 			if (tmp != CursorIsOverDockArea || CursorIsOverDockArea && DateTime.UtcNow.Subtract (last_render).TotalMilliseconds > 20) 
 				AnimatedDraw ();
@@ -823,6 +858,11 @@ namespace MonoDock.UI
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			bool ret_val = base.OnButtonPressEvent (evnt);
+			if (cursor_is_handle) {
+				GdkWindow.Cursor = new Gdk.Cursor (CursorType.Arrow);
+				cursor_is_handle = false;
+				return ret_val;
+			}
 			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X-4, StickIconCenter.Y-4, 8, 8);
 			if (stick_rect.Contains (Cursor)) {
 				Preferences.AutoHide = !Preferences.AutoHide;
