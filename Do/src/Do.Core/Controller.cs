@@ -999,6 +999,9 @@ namespace Do.Core {
 			if (action == null)
 				return;
 			
+			if (item is DoItem)
+				(item as DoItem).IncreaseRelevance ("", null);
+			
 			DoPerformState state = new DoPerformState (action, new List<IItem> (new IItem[] {item}), new List<IItem> (0));
 			th = new Thread (new ParameterizedThreadStart (DoPerformWork));
 			th.Start (state);
@@ -1018,7 +1021,7 @@ namespace Do.Core {
 				.OrderByDescending (item => (item as DoObject).Inner is ApplicationItem)
 				.ThenBy (item => (item as DoObject).Inner.GetType ().ToString ())
 				.ThenByDescending (item1 => (item1 as DoObject).Relevance)
-				.Select (item => (IItem) (item as DoItem).Inner);
+				.Select (item => item as IItem);
 		}
 		
 		public IEnumerable<IAction> GetMostUsedActions (int numItems)
