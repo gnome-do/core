@@ -985,7 +985,7 @@ namespace Do.Core {
 		
 		public void PerformDefaultAction (IItem item) 
 		{
-			IList<IObject> objects = Do.UniverseManager.Search ("", new Type[0], item);
+			IList<IObject> objects = Do.UniverseManager.Search ("", new Type[] {typeof (IAction),}, item);
 			
 			IAction action = null;
 			foreach (IObject ob in objects) {
@@ -1020,7 +1020,7 @@ namespace Do.Core {
 				.Take (numItems)
 				.OrderByDescending (item => (item as DoObject).Inner is ApplicationItem)
 				.ThenBy (item => (item as DoObject).Inner.GetType ().ToString ())
-				.ThenByDescending (item1 => (item1 as DoObject).Relevance)
+				.ThenBy (item => item.Name)
 				.Select (item => item as IItem);
 		}
 		
@@ -1030,7 +1030,7 @@ namespace Do.Core {
 			return search_results
 				.Take (numItems)
 				.OrderBy (item => (item as DoObject).Inner.GetType ().ToString ())
-				.ThenByDescending (item1 => (item1 as DoObject).Relevance)
+				.ThenByDescending (item => item.Name)
 				.Select (item => item as IAction);
 		}
 		
