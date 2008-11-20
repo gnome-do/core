@@ -127,19 +127,21 @@ namespace Do.Core {
 				// Objects we don't know about are treated as old.
 				age = DefaultAge;
 
+				// Give the most popular actions a little leg up in the second pane.
+				if (isAction && other != null && RewardedActionTypes.Contains (o.Inner.GetType ()))
+					relevance = 1f;
+
+				// Give the most popular items a leg up
+				else if (RewardedItemTypes.Contains (o.Inner.GetType ()))
+					relevance = 1f;
+
 				// We must give a base, non-zero relevance to make scoring rules take
 				// effect. We divide by length so that if two objects have default
 				// relevance, the object with the shorter name comes first. Objects
 				// with shorter names tend to be simpler, and more often what the
 				// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
-				relevance = DefaultRelevance / Math.Max (1, o.Name.Length);
-
-				// Give the most popular actions a little leg up in the second pane.
-				if (isAction && other != null && RewardedActionTypes.Contains (o.Inner.GetType ()))
-					relevance = 1f;
-				// Give the most popular actions a little leg up in the second pane.
-				else if (RewardedItemTypes.Contains (o.Inner.GetType ()))
-					relevance = 1f;
+				else
+					relevance = DefaultRelevance / Math.Max (1, o.Name.Length);
 			}
 
 			// Newer objects (age -> 0) get scaled by factor -> 1.
