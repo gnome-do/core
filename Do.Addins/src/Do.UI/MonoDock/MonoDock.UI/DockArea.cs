@@ -578,7 +578,7 @@ namespace MonoDock.UI
 		
 		void DrawPanes (Context cr)
 		{
-			int base_x = GetDockArea ().X + 100;
+			int base_x = GetDockArea ().X + 15;
 			
 			for (int i=0; i<3; i++) {
 				Pane pane  = (Pane)i;
@@ -599,18 +599,32 @@ namespace MonoDock.UI
 			
 			if (State[CurrentPane] == null)
 				return;
+			
 			string text = GLib.Markup.EscapeText (State[CurrentPane].Name);
 			text = Do.Addins.Util.FormatCommonSubstrings (text, State.GetPaneQuery (CurrentPane), HighlightFormat);
+			
 			int tmp = BezelTextUtils.TextHeight;
-			BezelTextUtils.TextHeight = 20;
+			double text_scale = (IconSize/64.0);
+			int text_offset = (int) (IconSize*3);
+			
+			if ((int) (12*text_scale) > 8)
+				BezelTextUtils.TextHeight = (int) (20 * text_scale);
+			else
+				BezelTextUtils.TextHeight = (int) (35 * text_scale);
+				
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
-			BezelTextUtils.RenderLayoutText (cr, text, base_x + 110, Height - MinimumDockArea.Height + 15, 500, 
+			
+			BezelTextUtils.RenderLayoutText (cr, text, base_x + text_offset, 
+			                                 Height - MinimumDockArea.Height + (int) (15*text_scale), (int) (500*text_scale), 
 			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End, this);
+			if ((int) (12*text_scale) > 8) {
+				BezelTextUtils.TextHeight = (int) (12*text_scale);
+				BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (State[CurrentPane].Description), 
+				                                 base_x + text_offset, Height - MinimumDockArea.Height + (int) (42*text_scale), 
+				                                 (int) (500*text_scale), color, Pango.Alignment.Left, Pango.EllipsizeMode.End, this);
+			}
 			BezelTextUtils.TextHeight = tmp;
-			BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (State[CurrentPane].Description), 
-			                                 base_x + 110, Height - MinimumDockArea.Height + 42, 500, color, 
-			                                 Pango.Alignment.Left, Pango.EllipsizeMode.End, this);
 		}
 		
 		void GetXForPane (Pane pane, out int left_x, out double zoom)
