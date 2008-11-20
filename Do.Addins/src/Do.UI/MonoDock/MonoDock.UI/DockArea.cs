@@ -57,7 +57,6 @@ namespace MonoDock.UI
 		const int InsertAnimationTime = BaseAnimationTime*5;
 		const int YBuffer = 3;
 		const int XBuffer = 5;
-		const int PaneSize = 168;
 		
 		IList<IDockItem> dock_items;
 		IList<IDockItem> window_items;
@@ -69,7 +68,7 @@ namespace MonoDock.UI
 		DockState state;
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		DockWindow window;
-		PixbufSurfaceCache large_icon_cache, small_icon_cache;
+		PixbufSurfaceCache large_icon_cache;
 		
 		
 		#region Public properties
@@ -580,7 +579,6 @@ namespace MonoDock.UI
 		void DrawPanes (Context cr)
 		{
 			int base_x = GetDockArea ().X + 100;
-			double slide_state = Math.Min (1,(DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds/BaseAnimationTime);
 			
 			for (int i=0; i<3; i++) {
 				Pane pane  = (Pane)i;
