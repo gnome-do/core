@@ -82,7 +82,12 @@ namespace MonoDock.UI
 			Serialize ();
 		}
 		
-		public static void RemoveApplication (IDockItem item)
+		public static void AddFile (string file)
+		{
+			
+		}
+		
+		public static void RemoveItem (IDockItem item)
 		{
 			string s = null;
 			foreach (KeyValuePair<string, IDockItem> kvp in items) {

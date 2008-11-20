@@ -400,7 +400,7 @@ namespace MonoDock.UI
 			ItemMenu.Instance.RemoveClicked += delegate (Gdk.Point point) {
 				int item = DockItemForX (point.X);
 				if (GetIconSource (DockItems[item]) == IconSource.Custom)
-					CustomDockItems.RemoveApplication (DockItems[item]);
+					CustomDockItems.RemoveItem (DockItems[item]);
 				AnimatedDraw ();
 			};
 			
@@ -780,9 +780,9 @@ namespace MonoDock.UI
 			
 			string[] uriList = Regex.Split (data, "\r\n");
 			foreach (string uri in uriList) {
-				if (uri.EndsWith (".desktop")) {
+//				if (uri.EndsWith (".desktop")) {
 					AddCustomItem (uri.Substring (7));
-				}
+//				}
 			} 
 			
 			base.OnDragDataReceived (context, x, y, selection_data, info, time_);
@@ -891,13 +891,16 @@ namespace MonoDock.UI
 		
 		void EndDrag ()
 		{
-			GdkWindow.Cursor = new Gdk.Cursor (CursorType.Arrow);
+			GdkWindow.Cursor = new Gdk.Cursor (CursorType.LeftPtr);
 			cursor_is_handle = false;
 		}
 		
-		void AddCustomItem (string desktopFile)
+		void AddCustomItem (string file)
 		{
-			CustomDockItems.AddApplication (desktopFile);
+			if (file.EndsWith (".desktop"))
+			    CustomDockItems.AddApplication (file);
+			else
+				CustomDockItems.AddFile (file);
 			AnimatedDraw ();
 		}
 		
