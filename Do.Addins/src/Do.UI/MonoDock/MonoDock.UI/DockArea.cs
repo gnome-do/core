@@ -56,7 +56,7 @@ namespace MonoDock.UI
 		const int BaseAnimationTime = 150;
 		const int InsertAnimationTime = BaseAnimationTime*5;
 		const int YBuffer = 3;
-		const int XBuffer = 5;
+		const int XBuffer = 7;
 		
 		IList<IDockItem> dock_items;
 		IList<IDockItem> window_items;
@@ -746,7 +746,7 @@ namespace MonoDock.UI
 			IconPositionedCenterX (DockItems.Count - 1, out end_x, out end_zoom);
 			
 			int x = start_x - (int)(start_zoom*(IconSize/2)) - XBuffer;
-			int end = end_x + (int)(end_zoom*(IconSize/2));
+			int end = end_x + (int)(end_zoom*(IconSize/2)) + XBuffer;
 			
 			return new Gdk.Rectangle (x, Height-IconSize-2*YBuffer, end-x, IconSize+2*YBuffer);
 		}
