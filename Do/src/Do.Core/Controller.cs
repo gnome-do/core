@@ -1016,7 +1016,7 @@ namespace Do.Core {
 		{
 			IList<IObject> search_results = Do.UniverseManager.Search ("", new Type[] {typeof (IItem),});
 			return search_results
-				.Where (item => !(item is ITextItem))
+				.Where (item => !((item as DoObject).Inner is ITextItem))
 				.Take (numItems)
 				.OrderByDescending (item => (item as DoObject).Inner is ApplicationItem)
 				.ThenBy (item => (item as DoObject).Inner.GetType ().ToString ())
