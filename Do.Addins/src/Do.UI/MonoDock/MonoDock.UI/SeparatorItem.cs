@@ -34,12 +34,12 @@ namespace MonoDock.UI
 		public Surface GetIconSurface ()
 		{
 			if (sr == null) {
-				sr = new ImageSurface (Cairo.Format.Argb32, 20, MonoDock.Util.Preferences.IconSize);
+				sr = new ImageSurface (Cairo.Format.Argb32, Width, MonoDock.Util.Preferences.IconSize);
 				Context cr = new Context (sr);
 				cr.AlphaFill ();
 				
-				cr.MoveTo (10, 0);
-				cr.LineTo (10, MonoDock.Util.Preferences.IconSize);
+				cr.MoveTo (Width/2, 0);
+				cr.LineTo (Width/2, MonoDock.Util.Preferences.IconSize);
 				LinearGradient lg = new LinearGradient (0, 0, 0, MonoDock.Util.Preferences.IconSize);
 				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
 				lg.AddColorStop (.5, new Cairo.Color (1, 1, 1, .5));
