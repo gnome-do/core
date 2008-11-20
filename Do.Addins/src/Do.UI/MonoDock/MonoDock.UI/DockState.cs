@@ -45,9 +45,6 @@ namespace MonoDock.UI
 		IList<IObject>[] results = new IList<IObject>[3];
 		IList<IObject>[] results_prev = new IList<IObject>[3];
 		
-		IList<DockItem>[] dock_results = new IList<DockItem>[3];
-		IList<DockItem>[] dock_results_prev = new IList<DockItem>[3];
-		
 		Pane currentPane, previousPane = Pane.Second;
 		DateTime current_pane_change, last_cusor_change;
 		
@@ -212,14 +209,7 @@ namespace MonoDock.UI
 			}
 			
 			results_prev[(int) pane] = results[(int) pane];
-			dock_results_prev[(int) pane] = dock_results[(int) pane];
-			
 			results[(int) pane] = resultList;
-			
-			dock_results[(int) pane] = new List<DockItem> ();
-			foreach (IObject o in resultList) {
-				dock_results[(int) pane].Add (new DockItem (o));
-			}
 			
 			result_timestamps[(int) pane] = DateTime.UtcNow;
 		}
@@ -259,16 +249,6 @@ namespace MonoDock.UI
 		public IList<IObject> GetPanePreviousResults (Pane pane)
 		{
 			return results_prev[(int) pane];
-		}
-		
-		public IList<DockItem> GetPaneResultsAsDockItems (Pane pane, int numResults)
-		{
-			return new List<DockItem> (dock_results[(int) pane].Take (numResults));
-		}
-		
-		public IList<DockItem> GetPanePreviousResultsAsDockItems (Pane pane, int numResults)
-		{
-			return new List<DockItem> (dock_results_prev[(int) pane].Take (numResults));
 		}
 		
 		public DateTime GetPaneResultsTime (Pane pane)
