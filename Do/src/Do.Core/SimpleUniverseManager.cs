@@ -82,7 +82,7 @@ namespace Do.Core
 		
 		public IList<IObject> Search (string query, IEnumerable<Type> filter, IObject other)
 		{
-			if (filter.Any () && filter.All (t => t == typeof (IAction)))
+			if (filter.Count () == 1 && filter.First () == typeof (IAction))
 				lock (action_lock)
 					return Search (query, filter, actions, other);
 			else
