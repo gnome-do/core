@@ -133,7 +133,7 @@ namespace Do.Core {
 
 				// Give the most popular items a leg up
 				else if (RewardedItemTypes.Contains (o.Inner.GetType ()))
-					relevance = 1f;
+					relevance = DefaultRelevance * 2;
 
 				// We must give a base, non-zero relevance to make scoring rules take
 				// effect. We divide by length so that if two objects have default
