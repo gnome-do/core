@@ -35,6 +35,10 @@ namespace Do.Core {
 		const float DefaultRelevance = 0.01f;
 		const float DefaultAge = 1f;
 
+		static readonly IEnumerable<Type> RewardedItemTypes = new Type[] {
+			typeof (ApplicationItem),
+		};
+
 		static readonly IEnumerable<Type> RewardedActionTypes = new Type[] {
 			typeof (OpenAction),
 			typeof (OpenURLAction),
@@ -99,10 +103,13 @@ namespace Do.Core {
 		public override float GetRelevance (DoObject o, string match, DoObject other)
 		{
 			RelevanceRecord rec;
+			bool isAction;
 			float relevance = 0f, age = 0f, score = 0f;
 
 			if (!hits.TryGetValue (o.UID, out rec))
 				rec = new RelevanceRecord (o);
+
+			isAction = rec.IsAction;
 			
 			// Get string similarity score.
 			score = StringScoreForAbbreviation (o.Name, match);
@@ -115,7 +122,7 @@ namespace Do.Core {
 				
 				if (rec.IsRelevantForMatch (match))
 					relevance = (float) rec.Hits /
-						(float) (rec.IsAction ? max_action_hits : max_item_hits);
+						(float) (isAction ? max_action_hits : max_item_hits);
 			} else {
 				// Objects we don't know about are treated as old.
 				age = DefaultAge;
@@ -128,7 +135,10 @@ namespace Do.Core {
 				relevance = DefaultRelevance / Math.Max (1, o.Name.Length);
 
 				// Give the most popular actions a little leg up in the second pane.
-				if (other != null && RewardedActionTypes.Contains (o.Inner.GetType ()))
+				if (isAction && other != null && RewardedActionTypes.Contains (o.Inner.GetType ()))
+					relevance = 1f;
+				// Give the most popular actions a little leg up in the second pane.
+				else if (RewardedItemTypes.Contains (o.Inner.GetType ()))
 					relevance = 1f;
 			}
 
@@ -136,8 +146,8 @@ namespace Do.Core {
 			// Older objects (age -> 1) get scaled by factor -> .5.
 			relevance *= 1f - (age / 2f);
 
-			IAction oa = o as IAction;
-			if (oa != null) {
+			if (isAction) {
+				IAction oa = o as IAction;
 				// We penalize actions, but only if they're not used in the first pane
 				// often.
 				if (rec.FirstPaneHits < 3)
