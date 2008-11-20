@@ -618,7 +618,7 @@ namespace MonoDock.UI
 		void GetXForPane (Pane pane, out int left_x, out double zoom)
 		{
 			int base_x = GetDockArea ().X + 15;
-			double zoom_value = .2;
+			double zoom_value = .3;
 			double slide_state = Math.Min (1,(DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds/BaseAnimationTime);
 			
 			double growing_zoom = zoom_value + slide_state*(1-zoom_value);
@@ -768,12 +768,6 @@ namespace MonoDock.UI
 			int x = start_x - (int)(start_zoom*(IconSize/2)) - XBuffer;
 			int end = end_x + (int)(end_zoom*(IconSize/2));
 			
-			if (InputAreaOpacity > 0) {
-				int width = end-x;
-				x -= Math.Max (0, (int) (InputAreaOpacity*(1024-width)/2));
-				end += Math.Max (0, (int) (InputAreaOpacity*(1024-width)/2));
-			}
-			
 			return new Gdk.Rectangle (x, Height-IconSize-2*YBuffer, end-x, IconSize+2*YBuffer);
 		}
 		
@@ -837,6 +831,9 @@ namespace MonoDock.UI
 			bool tmp = CursorIsOverDockArea;
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
 			
+			if (cursor_is_handle && !((evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask))
+				EndDrag ();
+			
 			if (Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 || (cursor_is_handle && (evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask)) {
 				int item = DockItemForX (Cursor.X);
 				if (!cursor_is_handle && item > 0 && DockItems[item] is SeparatorItem) {
@@ -859,8 +856,7 @@ namespace MonoDock.UI
 		{
 			bool ret_val = base.OnButtonPressEvent (evnt);
 			if (cursor_is_handle) {
-				GdkWindow.Cursor = new Gdk.Cursor (CursorType.Arrow);
-				cursor_is_handle = false;
+				EndDrag ();
 				return ret_val;
 			}
 			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X-4, StickIconCenter.Y-4, 8, 8);
@@ -897,6 +893,12 @@ namespace MonoDock.UI
 		{
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
 			return base.OnLeaveNotifyEvent (evnt);
+		}
+		
+		void EndDrag ()
+		{
+			GdkWindow.Cursor = new Gdk.Cursor (CursorType.Arrow);
+			cursor_is_handle = false;
 		}
 		
 		void AddCustomItem (string desktopFile)
