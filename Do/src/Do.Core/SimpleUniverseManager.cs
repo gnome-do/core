@@ -38,11 +38,9 @@ namespace Do.Core
 
 		Thread thread, update_thread;
 		List<IObject> actions;
-		List<string> items_with_children;
 		Dictionary<string, IObject> universe;
 		
 		object action_lock = new object ();
-		object children_lock = new object ();
 		object universe_lock = new object ();
 		
 		float epsilon = 0.00001f;
@@ -70,7 +68,6 @@ namespace Do.Core
 		public SimpleUniverseManager ()
 		{
 			actions = new List<IObject> ();
-			items_with_children = new List<string> ();
 			universe = new Dictionary<string, IObject> ();
 			UpdatesEnabled = true;
 		}
@@ -119,40 +116,7 @@ namespace Do.Core
 		/// </returns>
 		public bool ObjectHasChildren (IObject o)
 		{
-			IItem item = o as IItem;
-			if (item == null) return false;
-			
-			string uid = UIDForObject (item);
-			
-			// First we need to check and see if we already know this item has children
-			lock (children_lock)
-				if (items_with_children.Contains (uid))
-					return true;
-			
-			// It did not, lets check and see if we even know about this object in universe
-			bool known; 
-			lock (universe_lock)
-				known = universe.ContainsKey (uid);
-			
-			// If we know the item in universe, but its not in the item list, we can
-			// assume with relative safety that the item has no children items
-			if (known) 
-				return false;
-			
-			bool supported = PluginManager.GetItemSources ()
-				.Where (source => SourceSupportsItem (source, item) && source.ChildrenOfItem (item).Any ())
-				.Any ();
-			
-			if (supported)
-				lock (children_lock)
-					items_with_children.Add (uid);
-			return supported;
-		}
-		
-		internal static bool SourceSupportsItem (IItemSource source, IItem item)
-		{
-			item = DoItem.EnsureIItem (item);;
-			return source.SupportedItemTypes.Any (t => t.IsInstanceOfType (item));
+			return o is DoItem && (o as DoItem).HasChildren;
 		}
 		
 		/// <summary>
@@ -258,15 +222,7 @@ namespace Do.Core
 					Log.Error ("There was an error updated items for {0}", item_source.Name);
 				}
 				foreach (DoItem item in item_source.Items) {
-					universe[item.UID] = item;
-					
-					bool supported = PluginManager.GetItemSources ()
-						.Where (s => SourceSupportsItem (s, item) && s.ChildrenOfItem (item).Any ())
-						.Any ();
-					
-					if (supported)
-						lock (children_lock)
-							items_with_children.Add (item.UID);
+					universe  [item.UID] = item;
 				}
 			}
 		}

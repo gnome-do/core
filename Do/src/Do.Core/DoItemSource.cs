@@ -82,7 +82,13 @@ namespace Do.Core {
 				return items.Select (i => DoItem.EnsureDoItem (i) as IItem);
 			}
 		}
-		
+
+		public bool SupportsItem (IItem item)
+		{
+			item = DoItem.EnsureIItem (item);;
+			return SupportedItemTypes.Any (t => t.IsInstanceOfType (item));
+		}
+
 		public IEnumerable<IItem> ChildrenOfItem (IItem item)
 		{
 			IEnumerable<IItem> children = null;

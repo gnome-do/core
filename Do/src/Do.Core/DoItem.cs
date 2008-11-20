@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -27,6 +28,13 @@ using Do.Universe;
 namespace Do.Core {
 
 	public class DoItem : DoObject, IItem {
+
+		protected static IDictionary<IItem, bool> has_children;
+
+		static DoItem ()
+		{
+			has_children = new Dictionary<IItem, bool> ();
+		}
 
 		/// <summary>
 		/// Returns the inner item if the static type of given item is a DoItem
@@ -64,6 +72,18 @@ namespace Do.Core {
 		public DoItem (IItem item):
 			base (item)
 		{
+		}
+
+		public bool HasChildren {
+			get {
+				if (!has_children.ContainsKey (this)) {
+					has_children [this] =
+						PluginManager.GetItemSources ()
+							.Any (s => s.SupportsItem (this) &&
+												 s.ChildrenOfItem (this).Any ());
+				}
+				return has_children [this];
+			}
 		}
 
 	}
