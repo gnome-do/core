@@ -33,12 +33,6 @@ namespace Do.Core {
 		const string DefaultDescription = "No description.";
 		const string DefaultIcon = "emblem-noread";
 
-		public static bool IObjectTypeCheck (IObject o, IEnumerable<Type> types)
-		{
-			Type oType = o.GetType ();
-			return types.Any (type => type.IsAssignableFrom (oType));
-		}
-		
 		protected IObject inner;
 		protected float relevance;
 		protected string uid;

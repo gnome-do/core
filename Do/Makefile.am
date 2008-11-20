@@ -81,6 +81,7 @@ FILES =  \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
 	src/Do.Core/DoObject_RelevanceProvider.cs \
+	src/Do.Core/IObjectExtensions.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
 	src/Do.Core/IUniverseManager.cs \
 	src/Do.Core/PluginManager.cs \

@@ -88,7 +88,7 @@ namespace Do.Core {
 			IEnumerable<IItem> children = null;
 			item = DoItem.EnsureIItem (item);
 
-			if (!IObjectTypeCheck (item, SupportedItemTypes))
+			if (!item.IsAssignableToAny (SupportedItemTypes))
 				return Enumerable.Empty<IItem> ();
 
 			try {

@@ -75,53 +75,37 @@ namespace Do.Core
 			UpdatesEnabled = true;
 		}
 
-		public IList<IObject> Search (string query, IEnumerable<Type> searchFilter)
+		public IList<IObject> Search (string query, IEnumerable<Type> filter)
 		{	
-			if (searchFilter.Count () == 1 && searchFilter.First () == typeof (IAction))
+				return Search (query, filter, (IObject) null);
+		}
+		
+		public IList<IObject> Search (string query, IEnumerable<Type> filter, IObject other)
+		{
+			if (filter.Any () && filter.All (t => t == typeof (IAction)))
 				lock (action_lock)
-					return Search (query, searchFilter, actions, null);
-			
-			lock (universe_lock) 
-				return Search (query, searchFilter, universe.Values, null);
+					return Search (query, filter, actions, other);
+			else
+				lock (universe_lock) 
+					return Search (query, filter, universe.Values, other);
 		}
 		
-		public IList<IObject> Search (string query, IEnumerable<Type> searchFilter, IObject otherObj)
+		public IList<IObject> Search (string query, IEnumerable<Type> filter, IEnumerable<IObject> objects)
 		{
-			if (searchFilter.Count () == 1 && searchFilter.First () == typeof (IAction))
-				lock (action_lock)
-					return Search (query, searchFilter, actions, otherObj);
-			
-			lock (universe_lock) 
-				return Search (query, searchFilter, universe.Values, otherObj);
+			return Search (query, filter, objects, null);
 		}
 		
-		public IList<IObject> Search (string query, IEnumerable<Type> searchFilter, IEnumerable<IObject> baseArray)
+		public IList<IObject> Search (string query, IEnumerable<Type> filter, IEnumerable<IObject> objects, IObject other)
 		{
-			return Search (query, searchFilter, baseArray, null);
-		}
-		
-		public IList<IObject> Search (string query, IEnumerable<Type> searchFilter, IEnumerable<IObject> baseArray, IObject compareObj)
-		{
-			List<IObject> results = new List<IObject> ();
-			query = query.ToLower ();
-			
-			foreach (DoObject obj in baseArray) {
-				obj.UpdateRelevance (query, compareObj as DoObject);
-				if (Math.Abs (obj.Relevance) > epsilon) {
-					if (!searchFilter.Any ()) {
-						results.Add (obj);
-					} else {
-						foreach (Type t in searchFilter) {
-							if (t.IsInstanceOfType (obj.Inner)) {
-								results.Add (obj);
-								break;
-							}
-						}
-					}
-				}
-			}
-			results.Sort ();
-			return results.ToArray ();
+			return objects
+				.Where (iobj => {
+					DoObject o = iobj as DoObject;
+					o.UpdateRelevance (query, other as DoObject);
+					return epsilon < Math.Abs (o.Relevance) && 
+						(!filter.Any () || o.Inner.IsAssignableToAny (filter));
+				})
+				.OrderByDescending (o => (o as DoObject).Relevance)
+				.ToArray ();
 		}
 		
 		/// <summary>

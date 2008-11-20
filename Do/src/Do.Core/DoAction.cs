@@ -23,6 +23,7 @@ using System.Linq;
 using System.Threading;
 using System.Collections.Generic;
 
+using Do;
 using Do.Universe;
 
 namespace Do.Core {
@@ -110,7 +111,7 @@ namespace Do.Core {
 			bool supports = false;
 			
 			item = DoItem.EnsureIItem (item);
-			if (!IObjectTypeCheck (item, SupportedItemTypes))
+			if (!item.IsAssignableToAny (SupportedItemTypes))
 				return false;
 
 			try {
@@ -127,7 +128,7 @@ namespace Do.Core {
 
 			items = items.Select (i => DoItem.EnsureIItem (i));
 			modItem = DoItem.EnsureIItem (modItem);
-			if (!IObjectTypeCheck (modItem, SupportedModifierItemTypes))
+			if (!modItem.IsAssignableToAny (SupportedModifierItemTypes))
 				return false;
 
 			try {
