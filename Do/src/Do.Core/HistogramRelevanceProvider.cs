@@ -33,6 +33,7 @@ namespace Do.Core {
 	class HistogramRelevanceProvider : RelevanceProvider {
 
 		const float DefaultRelevance = 0.01f;
+		const float DefaultAge = 1f;
 
 		static readonly IEnumerable<Type> RewardedActionTypes = new Type[] {
 			typeof (OpenAction),
@@ -98,7 +99,7 @@ namespace Do.Core {
 		public override float GetRelevance (DoObject o, string match, DoObject other)
 		{
 			RelevanceRecord rec;
-			float relevance = 0f, score = 0f;
+			float relevance = 0f, age = 0f, score = 0f;
 
 			if (!hits.TryGetValue (o.UID, out rec))
 				rec = new RelevanceRecord (o);
@@ -108,8 +109,6 @@ namespace Do.Core {
 			if (score == 0f) return 0f;
 			
 			if (0 < rec.Hits) {
-				float age;
-
 				// On a scale of 0 (new) to 1 (old), how old is the item?
 				age = (float) (newest_hit - rec.LastHit).TotalSeconds /
 					  (float) (newest_hit - oldest_hit).TotalSeconds;
@@ -117,11 +116,10 @@ namespace Do.Core {
 				if (rec.IsRelevantForMatch (match))
 					relevance = (float) rec.Hits /
 						(float) (rec.IsAction ? max_action_hits : max_item_hits);
-
-				// Newer objects (age -> 0) get scaled by factor -> 1.
-				// Older objects (age -> 1) get scaled by factor -> .5.
-				relevance *= 1f - (age / 2f);
 			} else {
+				// Objects we don't know about are treated as old.
+				age = DefaultAge;
+
 				// We must give a base, non-zero relevance to make scoring rules take
 				// effect. We divide by length so that if two objects have default
 				// relevance, the object with the shorter name comes first. Objects
@@ -133,6 +131,10 @@ namespace Do.Core {
 				if (other != null && RewardedActionTypes.Contains (o.Inner.GetType ()))
 					relevance = 1f;
 			}
+
+			// Newer objects (age -> 0) get scaled by factor -> 1.
+			// Older objects (age -> 1) get scaled by factor -> .5.
+			relevance *= 1f - (age / 2f);
 
 			IAction oa = o as IAction;
 			if (oa != null) {
