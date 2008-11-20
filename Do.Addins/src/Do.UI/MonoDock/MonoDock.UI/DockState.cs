@@ -51,6 +51,11 @@ namespace MonoDock.UI
 		Pane currentPane, previousPane = Pane.Second;
 		DateTime current_pane_change, last_cusor_change;
 		
+		IObject intro_object;
+		IObject IntroObject {
+			get { return intro_object ?? intro_object = new DefaultLabelBoxObject (); }
+		}
+		
 		public Pane CurrentPane {
 			get {
 				return currentPane;
@@ -73,7 +78,7 @@ namespace MonoDock.UI
 		#region First Pane
 		public IObject First {
 			get {
-				return current_items[0];
+				return GetPaneItem (Pane.First);
 			}
 		}
 		
@@ -95,7 +100,7 @@ namespace MonoDock.UI
 		#region Second Pane
 		public IObject Second {
 			get {
-				return current_items[1];
+				return GetPaneItem (Pane.Second);
 			}
 		}
 		
@@ -117,7 +122,7 @@ namespace MonoDock.UI
 		#region Third Pane
 		public IObject Third {
 			get {
-				return current_items[2];
+				return GetPaneItem (Pane.Third);
 			}
 		}
 		
@@ -231,6 +236,8 @@ namespace MonoDock.UI
 		
 		public IObject GetPaneItem (Pane pane)
 		{
+			if (pane == Pane.First && current_items[(int) pane] == null)
+				return IntroObject;
 			return current_items[(int) pane];
 		}
 		
@@ -241,7 +248,7 @@ namespace MonoDock.UI
 		
 		public string GetPaneQuery (Pane pane)
 		{
-			return queries[(int) pane];
+			return queries[(int) pane] ?? "";
 		}
 		
 		public IList<IObject> GetPaneResults (Pane pane)

@@ -59,6 +59,10 @@ namespace MonoDock.Util
 					value = 64;
 				if (Math.Abs (value - 32) < 8)
 					value = 32;
+				
+				if (value == icon_size)
+					return;
+				
 				prefs.Set<int> ("IconSize", value); 
 				icon_size = value;
 				IconSizeChanged ();

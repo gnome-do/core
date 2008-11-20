@@ -270,13 +270,7 @@ namespace MonoDock.UI
 		
 		PixbufSurfaceCache LargeIconCache {
 			get {
-				return large_icon_cache ?? large_icon_cache = new PixbufSurfaceCache (10, 128, 128);
-			}
-		}
-		
-		PixbufSurfaceCache SmallIconCache {
-			get {
-				return small_icon_cache ?? small_icon_cache = new PixbufSurfaceCache (40, 64, 64);
+				return large_icon_cache ?? large_icon_cache = new PixbufSurfaceCache (10, 2*IconSize, 2*IconSize);
 			}
 		}
 		
@@ -423,6 +417,13 @@ namespace MonoDock.UI
 				
 				Cursor = new Gdk.Point (x, y);
 				AnimatedDraw ();
+			};
+			
+			Preferences.IconSizeChanged += delegate {
+				if (large_icon_cache != null) {
+					large_icon_cache.Dispose ();
+					large_icon_cache = null;
+				}
 			};
 		}
 		
@@ -580,9 +581,8 @@ namespace MonoDock.UI
 		{
 			int base_x = GetDockArea ().X + 100;
 			double slide_state = Math.Min (1,(DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds/BaseAnimationTime);
-//			if (!LargeIconCache.ContainsKey (State.First.Icon))
-//				LargeIconCache.AddPixbufSurface (State.First.Icon, State.First.Icon);
-			for (int i=2; i>=0; i--) {
+			
+			for (int i=0; i<3; i++) {
 				Pane pane  = (Pane)i;
 				int left_x;
 				double zoom;
@@ -679,24 +679,6 @@ namespace MonoDock.UI
 			}
 			double offset_scale = .9;
 			left_x = (int) (left_x *offset_scale + base_x*(1-offset_scale));
-		}
-		
-		DrawState PaneDrawState (Pane pane)
-		{
-			if (pane == Pane.Third && !ThirdPaneVisible)
-				return DrawState.None;
-			
-//			if (Context.GetPaneTextMode (pane))
-//				return DrawState.Text;
-			
-			if (State[pane] != null)
-				return DrawState.Normal;
-			
-			if (!string.IsNullOrEmpty (State.GetPaneQuery (pane))) {
-				return DrawState.NoResult;
-			}
-			
-			return DrawState.None;
 		}
 		#endregion
 		

@@ -28,7 +28,7 @@ namespace Do.Addins
 {
 	
 	
-	public class PixbufSurfaceCache
+	public class PixbufSurfaceCache : IDisposable
 	{
 		Dictionary <string, Entry> surface_cache;
 		int surface_width;
@@ -126,6 +126,17 @@ namespace Do.Addins
 			surface_cache.Remove (lru.ID);
 			return lru.surface;
 		}
+
+		#region IDisposable implementation 
+		
+		public void Dispose ()
+		{
+			foreach (Entry en in surface_cache.Values)
+				en.surface.Destroy ();
+		}
+		
+		#endregion 
+		
 		
 		class Entry : IComparable<Entry> {
 			public Surface surface;

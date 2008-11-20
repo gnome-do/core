@@ -1018,7 +1018,7 @@ namespace Do.Core {
 				.OrderByDescending (item => (item as DoObject).Inner is ApplicationItem)
 				.ThenBy (item => (item as DoObject).Inner.GetType ().ToString ())
 				.ThenByDescending (item1 => (item1 as DoObject).Relevance)
-				.Select (item => item as IItem);
+				.Select (item => (IItem) (item as DoItem).Inner);
 		}
 		
 		public IEnumerable<IAction> GetMostUsedActions (int numItems)

@@ -54,6 +54,8 @@ namespace MonoDock.UI
 			}
 		}
 		
+		string exec;
+		
 		public DockItem(IObject item)
 		{
 			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
@@ -104,9 +106,11 @@ namespace MonoDock.UI
 		
 		public bool Equals (IDockItem other)
 		{
-			if (other is DockItem)
-				return ((other as DockItem).IObject == IObject);
-			return false;
+			DockItem di = other as DockItem;
+			if (di == null)
+				return false;
+			
+			return di.IObject.Name+di.IObject.Description+di.IObject.Icon == IObject.Name+IObject.Description+IObject.Icon;
 		}
 
 		#region IDisposable implementation 
