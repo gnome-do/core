@@ -86,9 +86,14 @@ namespace MonoDock.UI
 			string exec;
 			try {
 				exec = System.Diagnostics.Process.GetProcessById (application.Pid).ProcessName.Split (' ')[0];
-			} catch {
-				exec = WindowUtils.CmdLineForPid (application.Pid).Split (' ')[0];
+			} catch { exec = null; }
+			
+			if (string.IsNullOrEmpty (exec)) {
+				try {
+					exec = WindowUtils.CmdLineForPid (application.Pid).Split (' ')[0];
+				} catch { }
 			}
+			
 			if (!string.IsNullOrEmpty (exec)) {
 				guesses.Add (exec);
 				guesses.Add (exec.Split ('-')[0]);
