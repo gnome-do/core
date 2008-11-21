@@ -17,6 +17,8 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Gdk;
 using Cairo;
@@ -36,7 +38,7 @@ namespace MonoDock.UI
 	{
 		IObject item;
 		Surface sr, icon_surface;
-		Wnck.Application app;
+		List<Wnck.Application> apps;
 		
 		public string Icon { get { return item.Icon; } }
 		public string Description { get { return item.Name; } }
@@ -48,9 +50,10 @@ namespace MonoDock.UI
 		public int Width { get { return Preferences.IconSize; } }
 		public int Height { get { return Preferences.IconSize; } }
 		public bool Scalable { get { return true; } }
-		public bool DrawIndicator { get { return app != null; } }
+		public bool DrawIndicator { get { return apps.Any (); } }
 		
-		public Wnck.Application App { get { return app; } }
+		public Wnck.Application[] Apps { get { return apps.ToArray (); } }
+		public IEnumerable<int> Pids { get { return apps.Select (item => item.Pid); } }
 		
 		Gdk.Pixbuf pixbuf;
 		Gdk.Pixbuf Pixbuf {
@@ -61,6 +64,7 @@ namespace MonoDock.UI
 		
 		public DockItem(IObject item)
 		{
+			apps =  new List<Wnck.Application> ();
 			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			this.item = item;
 			Preferences.IconSizeChanged += Dispose;
@@ -71,7 +75,7 @@ namespace MonoDock.UI
 		public void UpdateApplication ()
 		{
 			if (item is ApplicationItem) {
-				app = WindowUtils.GetApplication ((item as ApplicationItem).Exec);
+				apps = WindowUtils.GetApplicationList ((item as ApplicationItem).Exec);
 			}
 		}
 		
@@ -113,37 +117,41 @@ namespace MonoDock.UI
 		
 		public void Clicked (uint button, IDoController controller)
 		{
-			if (app == null || button == 2) {
+			if (!apps.Any () || button == 2) {
 				controller.PerformDefaultAction (IObject as IItem);
 				return;
 			}
 				
 			if (button == 1) {
 				bool not_in_viewport = true;
-				foreach (Wnck.Window window in app.Windows) {
-					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-						not_in_viewport = false;
+				foreach (Wnck.Application app in apps) {
+					foreach (Wnck.Window window in app.Windows) {
+						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+							not_in_viewport = false;
+					}
 				}
 				
 				if (not_in_viewport) {
-					app.Windows[0].CenterAndFocusWindow ();
+					apps[0].Windows[0].CenterAndFocusWindow ();
 					return;
 				}
 				
-				foreach (Wnck.Window window in app.Windows) {
-					switch (GetClickAction ()) {
-					case ClickAction.Focus:
-						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-							window.Activate (Gtk.Global.CurrentEventTime);
-						break;
-					case ClickAction.Minimize:
-						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-							window.Minimize ();
-						break;
-					case ClickAction.Restore:
-						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-							window.Unminimize (Gtk.Global.CurrentEventTime);
-						break;
+				foreach (Wnck.Application app in apps) {
+					foreach (Wnck.Window window in app.Windows) {
+						switch (GetClickAction ()) {
+						case ClickAction.Focus:
+							if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+								window.Activate (Gtk.Global.CurrentEventTime);
+							break;
+						case ClickAction.Minimize:
+							if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+								window.Minimize ();
+							break;
+						case ClickAction.Restore:
+							if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+								window.Unminimize (Gtk.Global.CurrentEventTime);
+							break;
+						}
 					}
 				}
 			}
@@ -151,17 +159,21 @@ namespace MonoDock.UI
 		
 		ClickAction GetClickAction ()
 		{
-			if (app == null)
+			if (!apps.Any ())
 				return ClickAction.None;
 			
-			foreach (Wnck.Window window in app.Windows) {
-				if (window.IsMinimized && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-					return ClickAction.Restore;
+			foreach (Wnck.Application app in apps) {
+				foreach (Wnck.Window window in app.Windows) {
+					if (window.IsMinimized && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+						return ClickAction.Restore;
+				}
 			}
 			
-			foreach (Wnck.Window window in app.Windows) {
-				if (window.IsActive && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-					return ClickAction.Minimize;
+			foreach (Wnck.Application app in apps) {
+				foreach (Wnck.Window window in app.Windows) {
+					if (window.IsActive && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+						return ClickAction.Minimize;
+				}
 			}
 			
 			return ClickAction.Focus;

@@ -42,19 +42,25 @@ namespace MonoDock.Util
 			return apps.ToArray ();
 		}
 		
-		public static Application GetApplication (string exec)
+		public static List<Application> GetApplicationList (string exec)
 		{
 			exec = exec.Split (' ')[0];
+			List<Application> apps = new List<Application> ();
 			Application out_app = null;
 			StreamReader reader;
 			foreach (string dir in Directory.GetDirectories ("/proc")) {
 				int pid;
+				out_app = null;
 				try { pid = Convert.ToInt32 (dir.Substring (6)); } 
 				catch { continue; }
 				
-				reader = new StreamReader (Do.Paths.Combine ("/proc", dir, "cmdline"));
+				try {
+					reader = new StreamReader (Do.Paths.Combine ("/proc", dir, "cmdline"));
+				} catch { continue; }
 				
 				string exec_line = reader.ReadLine ();
+				reader.Close ();
+				reader.Dispose ();
 				if (string.IsNullOrEmpty (exec_line))
 					continue;
 				
@@ -68,10 +74,9 @@ namespace MonoDock.Util
 				}
 				
 				if (out_app != null)
-					break;
+					apps.Add (out_app);
 			}
-			
-			return out_app;
+			return apps;
 		}
 		
 		public static void CenterAndFocusWindow (this Window w) 

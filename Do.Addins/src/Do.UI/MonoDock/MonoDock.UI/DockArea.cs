@@ -393,9 +393,9 @@ namespace MonoDock.UI
 				UpdateWindowItems ();
 			};
 			
-			Wnck.Screen.Default.ViewportsChanged += delegate {
-				UpdateWindowItems ();
-			};
+//			Wnck.Screen.Default.ViewportsChanged += delegate {
+//				UpdateWindowItems ();
+//			};
 			
 			ItemMenu.Instance.RemoveClicked += delegate (Gdk.Point point) {
 				int item = DockItemForX (point.X);
@@ -567,13 +567,6 @@ namespace MonoDock.UI
 		void DrawInputArea (Context cr)
 		{
 			DrawPanes (cr);
-//			DrawPane (cr, Pane.First);
-//			
-//			DrawPane (cr, Pane.Second);
-//			
-//			if (ThirdPaneVisible) {
-//				DrawPane (cr, Pane.Third);
-//			}
 		}
 		
 		void DrawPanes (Context cr)
@@ -911,6 +904,8 @@ namespace MonoDock.UI
 			List<IDockItem> new_items = new List<IDockItem> ();
 			foreach (IItem i in Statistics.GetMostUsedItems (10)) {
 				IDockItem di = new DockItem (i);
+				if (CustomDockItems.DockItems.Contains (di))
+					continue;
 				new_items.Add (di);
 				
 				bool is_set = false;
@@ -928,12 +923,13 @@ namespace MonoDock.UI
 				dock_item.Dispose ();
 			
 			dock_items = new_items;
+			UpdateWindowItems ();
 			AnimatedDraw ();
 		}
 		
 		void UpdateWindowItems ()
 		{
-			foreach (IDockItem di in dock_items) {
+			foreach (IDockItem di in dock_items.Concat (CustomDockItems.DockItems)) {
 				if (!(di is DockItem))
 					continue;
 				(di as DockItem).UpdateApplication ();
@@ -946,14 +942,14 @@ namespace MonoDock.UI
 			foreach (Wnck.Application app in WindowUtils.GetApplications ()) {
 				bool good = false;
 				foreach (Wnck.Window w in app.Windows) {
-					if (!w.IsSkipTasklist && w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+					if (!w.IsSkipTasklist)
 						good = true;
 				}
 				
-				foreach (IDockItem di in dock_items) {
-					if (!(di is DockItem) || (di as DockItem).App == null)
+				foreach (IDockItem di in dock_items.Concat (CustomDockItems.DockItems)) {
+					if (!(di is DockItem) || (di as DockItem).Apps.Count () == 0)
 						continue;
-					if ((di as DockItem).App.Pid == app.Pid) {
+					if ((di as DockItem).Pids.Contains (app.Pid)) {
 						good = false;
 						break;
 					}
@@ -986,6 +982,19 @@ namespace MonoDock.UI
 			window.GetSize (out main.Width, out main.Height);
 			window.GetPosition (out main.X, out main.Y);
 			
+			foreach (IDockItem idi in DockItems) {
+				DockItem di = (idi as DockItem);
+				if (di == null)
+					continue;
+				foreach (Wnck.Application app in di.Apps) {
+					foreach (Wnck.Window w in app.Windows) {
+						w.SetIconGeometry (geo.X + main.X + IconNormalCenterX (DockItems.IndexOf (di))-IconSize/2, 
+						                   geo.Y + main.Y + (Height-DockHeight),
+						                   IconSize, IconSize);
+					}
+				}
+			}
+			
 			foreach (ApplicationDockItem di in window_items) {
 				foreach (Wnck.Window w in di.App.Windows) {
 					w.SetIconGeometry (geo.X + main.X + IconNormalCenterX (DockItems.IndexOf (di))-IconSize/2, 
@@ -1006,6 +1015,7 @@ namespace MonoDock.UI
 				i.DockAddItem = DateTime.UtcNow;
 			}
 			dock_items = new List<IDockItem> (items);
+			UpdateWindowItems ();
 			AnimatedDraw ();
 		}
 		

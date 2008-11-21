@@ -164,6 +164,17 @@ namespace MonoDock.UI
 		public void Clicked (uint button, IDoController controller)
 		{
 			if (button == 1) {
+				bool not_in_viewport = true;
+				foreach (Wnck.Window window in application.Windows) {
+					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+						not_in_viewport = false;
+				}
+				
+				if (not_in_viewport) {
+					application.Windows[0].CenterAndFocusWindow ();
+					return;
+				}
+				
 				foreach (Wnck.Window window in application.Windows) {
 					switch (GetClickAction ()) {
 					case ClickAction.Focus:
