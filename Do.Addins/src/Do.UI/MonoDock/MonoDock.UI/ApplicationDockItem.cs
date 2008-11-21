@@ -59,38 +59,8 @@ namespace MonoDock.UI
 				icon_surface = new ImageSurface (Cairo.Format.Argb32, (int) (Preferences.IconSize*Preferences.IconQuality), 
 				                                 (int) (Preferences.IconSize*Preferences.IconQuality));
 				Context cr = new Context (icon_surface);
-				string icon_guess = application.Name.ToLower ().Replace (' ','-');
-				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (icon_guess, (int) (Preferences.IconSize*Preferences.IconQuality), false);
-				if (pbuf == null || pbuf.Width != (int) (Preferences.IconSize*Preferences.IconQuality) && pbuf.Height != (int) (Preferences.IconSize*Preferences.IconQuality)) {
-					string desktop_path = GetDesktopFile (icon_guess);
-					if (!string.IsNullOrEmpty (desktop_path)) {
-						Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists);
-						if (pbuf != null)
-							pbuf.Dispose ();
-						pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), (int) (Preferences.IconSize*Preferences.IconQuality));
-						di.Dispose ();
-					} else {
-						icon_guess = "gnome-" + icon_guess;
-						Gdk.Pixbuf pbuf2 = IconProvider.PixbufFromIconName (icon_guess, (int) (Preferences.IconSize*Preferences.IconQuality));
-						if (pbuf2.Width != (int) (Preferences.IconSize*Preferences.IconQuality) && pbuf2.Height != (int) (Preferences.IconSize*Preferences.IconQuality)) {
-							pbuf2.Dispose ();
-						} else {
-							if (pbuf != null)
-								pbuf.Dispose ();
-							pbuf = pbuf2;
-						}
-					}
-				}
-				if (pbuf == null) {
-					pbuf =  IconProvider.PixbufFromIconName (icon_guess, (int) (Preferences.IconSize*Preferences.IconQuality));
-				}
 				
-				if (pbuf.Height != Preferences.IconSize*Preferences.IconQuality && pbuf.Width != Preferences.IconSize*Preferences.IconQuality) {
-					double scale = (double)Preferences.IconSize*Preferences.IconQuality / Math.Max (pbuf.Width, pbuf.Height);
-					Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
-					pbuf.Dispose ();
-					pbuf = temp;
-				}
+				Gdk.Pixbuf pbuf = GetIcon ();
 				
 				Gdk.CairoHelper.SetSourcePixbuf (cr, pbuf, 0, 0);
 				cr.Paint ();
@@ -99,6 +69,56 @@ namespace MonoDock.UI
 				(cr as IDisposable).Dispose ();
 			}
 			return icon_surface;
+		}
+		
+		Gdk.Pixbuf GetIcon ()
+		{
+			string[] guesses = new string[10];
+			guesses[0] = application.Name.ToLower ().Replace (' ','-');
+			guesses[1] = application.IconName.ToLower ().Replace (' ','-');
+			guesses[2] = application.Windows[0].Name.ToLower ().Replace (' ','-');
+			guesses[3] = application.Windows[0].IconName.ToLower ().Replace (' ','-');
+			guesses[4] = "gnome-" + guesses[0];
+			guesses[5] = "gnome-" + guesses[1];
+			guesses[6] = "gnome-" + guesses[2];
+			guesses[7] = "gnome-" + guesses[3];
+			guesses[8] = System.Diagnostics.Process.GetProcessById (application.Pid).ProcessName;
+			guesses[9] = System.Diagnostics.Process.GetProcessById (application.Pid).ProcessName.Split ('-')[0];
+			
+			Gdk.Pixbuf pbuf = null;
+			foreach (string guess in guesses) {
+				Console.WriteLine (guess);
+				string icon_guess = guess;
+				if (pbuf != null)
+					pbuf.Dispose ();
+				
+				pbuf = IconProvider.PixbufFromIconName (icon_guess, (int) (Preferences.IconSize*Preferences.IconQuality), false);
+				if (pbuf != null && (pbuf.Width == (int) (Preferences.IconSize*Preferences.IconQuality) || 
+				                     pbuf.Height == (int) (Preferences.IconSize*Preferences.IconQuality)))
+					return pbuf;
+			
+				string desktop_path = GetDesktopFile (icon_guess);
+				if (!string.IsNullOrEmpty (desktop_path)) {
+					Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists);
+					if (pbuf != null)
+						pbuf.Dispose ();
+					pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), (int) (Preferences.IconSize*Preferences.IconQuality));
+					di.Dispose ();
+					return pbuf;
+				}
+			}
+			
+			if (pbuf == null) {
+				pbuf =  IconProvider.PixbufFromIconName (guesses[0], (int) (Preferences.IconSize*Preferences.IconQuality));
+			}
+			
+			if (pbuf.Height != Preferences.IconSize*Preferences.IconQuality && pbuf.Width != Preferences.IconSize*Preferences.IconQuality) {
+				double scale = (double)Preferences.IconSize*Preferences.IconQuality / Math.Max (pbuf.Width, pbuf.Height);
+				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
+				pbuf.Dispose ();
+				pbuf = temp;
+			}
+			return pbuf;
 		}
 		
 		string GetDesktopFile (string base_name)
