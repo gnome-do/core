@@ -191,12 +191,6 @@ namespace MonoDock.UI
 						break;
 					}
 				}
-			} else if (button == 2) {
-				foreach (Wnck.Window window in application.Windows) {
-					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)) {
-						window.Close (Gtk.Global.CurrentEventTime);
-					}
-				}
 			}
 		}
 		
