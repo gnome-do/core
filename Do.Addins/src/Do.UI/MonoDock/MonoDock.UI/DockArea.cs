@@ -102,7 +102,7 @@ namespace MonoDock.UI
 		
 		public int IconBorderWidth {
 			get {
-				return 3;
+				return 2;
 			}
 		}
 		
