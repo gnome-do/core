@@ -528,7 +528,7 @@ namespace MonoDock.UI
 					cr.Paint ();
 				}
 				
-				if (GetIconSource (DockItems[i]) == IconSource.Application) {
+				if (DockItems[i].DrawIndicator) {
 					cr.MoveTo (center, Height - 6);
 					cr.LineTo (center+4, Height);
 					cr.LineTo (center-4, Height);
@@ -849,10 +849,14 @@ namespace MonoDock.UI
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			bool ret_val = base.OnButtonPressEvent (evnt);
+			
+			// lets not do anything in this case
 			if (cursor_is_handle) {
 				EndDrag ();
 				return ret_val;
 			}
+			
+			// we are hovering over the pin icon
 			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X-4, StickIconCenter.Y-4, 8, 8);
 			if (stick_rect.Contains (Cursor)) {
 				Preferences.AutoHide = !Preferences.AutoHide;
@@ -861,23 +865,21 @@ namespace MonoDock.UI
 				return ret_val;
 			}
 			
-			int item = DockItemForX ((int) evnt.X);
+			int item = DockItemForX ((int) evnt.X); //sometimes clicking is not good!
 			if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea || input_interface)
 				return ret_val;
+			
+			//handling right clicks
 			if (evnt.Button == 3) {
 				if (GetIconSource (DockItems[item]) == IconSource.Custom)
 					ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
 				return ret_val;
 			}
 			
+			//send off the clicks
 			if ((DateTime.UtcNow - DockItems[item].LastClick).TotalMilliseconds > BounceTime) {
 				last_click = DockItems[item].LastClick = DateTime.UtcNow;
-				if (DockItems[item] is DockItem) {
-					IItem doItem = (DockItems[item] as DockItem).IObject as IItem;
-					if (doItem != null)
-						window.Controller.PerformDefaultAction (doItem);
-				}
-				DockItems[item].Clicked (evnt.Button);
+				DockItems[item].Clicked (evnt.Button, window.Controller);
 				AnimatedDraw ();
 			}
 			return ret_val;
@@ -931,6 +933,12 @@ namespace MonoDock.UI
 		
 		void UpdateWindowItems ()
 		{
+			foreach (IDockItem di in dock_items) {
+				if (!(di is DockItem))
+					continue;
+				(di as DockItem).UpdateApplication ();
+			}
+			
 			if (Wnck.Screen.Default.ActiveWorkspace == null)
 				return;
 			IList<IDockItem> out_items = new List<IDockItem> ();
@@ -941,20 +949,31 @@ namespace MonoDock.UI
 					if (!w.IsSkipTasklist && w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
 						good = true;
 				}
-				if (good) {
-					ApplicationDockItem api = new ApplicationDockItem (app);
-					bool is_set = false;
-					foreach (ApplicationDockItem di in window_items) {
-						if (api.Equals (di)) {
-							api.DockAddItem = di.DockAddItem;
-							is_set = true;
-							break;
-						}
+				
+				foreach (IDockItem di in dock_items) {
+					if (!(di is DockItem) || (di as DockItem).App == null)
+						continue;
+					if ((di as DockItem).App.Pid == app.Pid) {
+						good = false;
+						break;
 					}
-					if (!is_set)
-						api.DockAddItem = DateTime.UtcNow;
-					out_items.Add (new ApplicationDockItem (app));
 				}
+						
+				if (!good) 
+					continue;
+				
+				ApplicationDockItem api = new ApplicationDockItem (app);
+				bool is_set = false;
+				foreach (ApplicationDockItem di in window_items) {
+					if (api.Equals (di)) {
+						api.DockAddItem = di.DockAddItem;
+						is_set = true;
+						break;
+					}
+				}
+				if (!is_set)
+					api.DockAddItem = DateTime.UtcNow;
+				out_items.Add (new ApplicationDockItem (app));
 			}
 			
 			foreach (IDockItem item in window_items)

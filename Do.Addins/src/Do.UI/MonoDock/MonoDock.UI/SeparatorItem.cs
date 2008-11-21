@@ -19,6 +19,7 @@
 using System;
 
 using Cairo;
+using Do.Addins;
 using Do.Addins.CairoUtils;
 
 namespace MonoDock.UI
@@ -65,6 +66,8 @@ namespace MonoDock.UI
 			}
 		}
 		
+		public bool DrawIndicator { get { return false; } }
+		
 		public int Width {
 			get {
 				return (int) (MonoDock.Util.Preferences.IconSize * .3);
@@ -93,7 +96,7 @@ namespace MonoDock.UI
 			};
 		}
 		
-		public void Clicked (uint button)
+		public void Clicked (uint button, IDoController controller)
 		{
 			
 		}

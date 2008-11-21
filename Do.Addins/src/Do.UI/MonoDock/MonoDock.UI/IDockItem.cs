@@ -33,6 +33,7 @@ namespace MonoDock.UI
 		int Width { get; }
 		int Height { get; }
 		bool Scalable { get; }
+		bool DrawIndicator { get; }
 		
 		DateTime LastClick { get; set; }
 		DateTime DockAddItem { get; set; }
@@ -40,7 +41,7 @@ namespace MonoDock.UI
 		Surface GetIconSurface ();
 		Surface GetTextSurface ();
 		
-		void Clicked (uint button);
+		void Clicked (uint button, IDoController controller);
 	}
 	
 	public interface IDoDockItem

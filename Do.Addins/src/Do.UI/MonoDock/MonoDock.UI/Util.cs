@@ -25,7 +25,12 @@ using Gdk;
 
 namespace MonoDock.UI
 {
-	
+	public enum ClickAction {
+		Focus,
+		Minimize,
+		Restore,
+		None,
+	}
 	
 	public static class Util
 	{

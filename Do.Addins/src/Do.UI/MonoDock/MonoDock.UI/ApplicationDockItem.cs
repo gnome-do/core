@@ -35,12 +35,6 @@ namespace MonoDock.UI
 	
 	public class ApplicationDockItem : IDockItem
 	{
-		enum ClickAction {
-			Focus,
-			Minimize,
-			Restore,
-		}
-		
 		static IEnumerable<String> DesktopFilesDirectories {
 			get {
 				return new string[] {
@@ -131,6 +125,8 @@ namespace MonoDock.UI
 			}
 		}
 		
+		public bool DrawIndicator { get { return true; } }
+		
 		public int Width {
 			get {
 				return Preferences.IconSize;
@@ -165,7 +161,7 @@ namespace MonoDock.UI
 			Preferences.IconSizeChanged += Dispose;
 		}
 		
-		public void Clicked (uint button)
+		public void Clicked (uint button, IDoController controller)
 		{
 			if (button == 1) {
 				foreach (Wnck.Window window in application.Windows) {
