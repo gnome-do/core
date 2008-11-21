@@ -87,7 +87,6 @@ namespace MonoDock.UI
 			
 			Gdk.Pixbuf pbuf = null;
 			foreach (string guess in guesses) {
-				Console.WriteLine (guess);
 				string icon_guess = guess;
 				if (pbuf != null)
 					pbuf.Dispose ();

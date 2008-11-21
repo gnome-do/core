@@ -385,12 +385,14 @@ namespace MonoDock.UI
 					GdkWindow.SetBackPixmap (null, false);
 			};
 			
-			Wnck.Screen.Default.WindowOpened += delegate {
-				UpdateWindowItems ();
+			Wnck.Screen.Default.WindowOpened += delegate (object o, Wnck.WindowOpenedArgs args) {
+				if (!args.Window.IsSkipTasklist)
+					UpdateWindowItems ();
 			};
 			
-			Wnck.Screen.Default.WindowClosed += delegate {
-				UpdateWindowItems ();
+			Wnck.Screen.Default.WindowClosed += delegate(object o, Wnck.WindowClosedArgs args) {
+				if (!args.Window.IsSkipTasklist)
+					UpdateWindowItems ();
 			};
 			
 			ItemMenu.Instance.RemoveClicked += delegate (Gdk.Point point) {
