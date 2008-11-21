@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Do.Addins;
 using Do.Universe;
@@ -119,6 +120,69 @@ namespace MonoDock.Util
 			}
 			
 			w.Activate (Gtk.Global.CurrentEventTime);
+		}
+		
+		public static void PerformLogicalClick (IEnumerable<Application> apps)
+		{
+			bool not_in_viewport = true;
+			foreach (Wnck.Application application in apps) {
+				foreach (Wnck.Window window in application.Windows) {
+					if (!window.IsSkipTasklist && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+						not_in_viewport = false;
+				}
+			}
+			
+			if (not_in_viewport) {
+				foreach (Wnck.Application application in apps) {
+					foreach (Wnck.Window window in application.Windows) {
+						if (!window.IsSkipTasklist) {
+							window.CenterAndFocusWindow ();
+							return;
+						}
+					}
+				}
+			}
+			
+			foreach (Wnck.Application app in apps) {
+				foreach (Wnck.Window window in app.Windows) {
+					switch (GetClickAction (apps)) {
+					case ClickAction.Focus:
+						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+							window.Activate (Gtk.Global.CurrentEventTime);
+						break;
+					case ClickAction.Minimize:
+						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+							window.Minimize ();
+						break;
+					case ClickAction.Restore:
+						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+							window.Unminimize (Gtk.Global.CurrentEventTime);
+						break;
+					}
+				}
+			}
+		}
+		
+		static ClickAction GetClickAction (IEnumerable<Application> apps)
+		{
+			if (!apps.Any ())
+				return ClickAction.None;
+			
+			foreach (Wnck.Application app in apps) {
+				foreach (Wnck.Window window in app.Windows) {
+					if (window.IsMinimized && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+						return ClickAction.Restore;
+				}
+			}
+			
+			foreach (Wnck.Application app in apps) {
+				foreach (Wnck.Window window in app.Windows) {
+					if (window.IsActive && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+						return ClickAction.Minimize;
+				}
+			}
+			
+			return ClickAction.Focus;
 		}
 	}
 }
