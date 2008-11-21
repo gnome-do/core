@@ -987,7 +987,7 @@ namespace Do.Core {
 		{
 			IEnumerable<IObject> objects =
 				Do.UniverseManager.Search ("", new Type[] { typeof (IAction) }, item);
-			
+
 			IAction action = null;
 			foreach (IObject ob in objects) {
 				if (!(ob is IAction))
@@ -1002,8 +1002,11 @@ namespace Do.Core {
 			
 			if (item is DoItem) {
 				(item as DoItem).IncreaseRelevance ("", null);
+				(item as DoItem).IncreaseRelevance ("", action as DoObject);
 			} else {
-				new DoItem (item).IncreaseRelevance ("", null);
+				DoItem di = new DoItem (item);
+				di.IncreaseRelevance ("", null);
+				di.IncreaseRelevance ("", action as DoObject);
 			}
 			
 			DoPerformState state = new DoPerformState (action, new List<IItem> (new IItem[] {item}), new List<IItem> (0));

@@ -171,8 +171,12 @@ namespace MonoDock.UI
 				}
 				
 				if (not_in_viewport) {
-					application.Windows[0].CenterAndFocusWindow ();
-					return;
+					foreach (Wnck.Window window in application.Windows) {
+						if (!window.IsSkipTasklist) {
+							window.CenterAndFocusWindow ();
+							return;
+						}
+					}
 				}
 				
 				foreach (Wnck.Window window in application.Windows) {
