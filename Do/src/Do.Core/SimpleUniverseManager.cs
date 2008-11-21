@@ -100,7 +100,7 @@ namespace Do.Core
 					return epsilon < Math.Abs (o.Relevance) && 
 						(!filter.Any () || o.Inner.IsAssignableToAny (filter));
 				})
-				.OrderByDescending (o => (o as DoObject).Relevance);
+				.OrderByDescending (o => (o as DoObject).Relevance).ToArray ();
 		}
 		
 		/// <summary>
