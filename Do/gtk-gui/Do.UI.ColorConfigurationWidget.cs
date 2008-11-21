@@ -104,6 +104,8 @@ namespace Do.UI {
             this.background_colorbutton.CanFocus = true;
             this.background_colorbutton.Events = ((Gdk.EventMask)(784));
             this.background_colorbutton.Name = "background_colorbutton";
+            this.background_colorbutton.UseAlpha = true;
+            this.background_colorbutton.Alpha = 65535;
             this.hbox1.Add(this.background_colorbutton);
             Gtk.Box.BoxChild w1 = ((Gtk.Box.BoxChild)(this.hbox1[this.background_colorbutton]));
             w1.Position = 0;

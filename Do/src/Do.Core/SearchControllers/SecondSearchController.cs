@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Do.Addins;
 using Do.Universe;
@@ -82,12 +83,12 @@ namespace Do.Core
 			if (TextMode)
 				return new List<IObject> ();
 			//We continue off our previous results if possible
-			if (context.LastContext != null && context.LastContext.Results.Length != 0) {
+			if (context.LastContext != null && context.LastContext.Results.Any ()) {
 				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
 				                                                     SearchTypes, 
 				                                                     context.LastContext.Results, 
 				                                                     FirstController.Selection));
-			} else if (context.ParentContext != null && context.Results.Length != 0) {
+			} else if (context.ParentContext != null && context.Results.Any ()) {
 				return new List<IObject> (context.Results);
 			} else { 
 				//else we do things the slow way
@@ -128,7 +129,7 @@ namespace Do.Core
 			List<IObject> results = new List<IObject> ();
 			if (FirstController.Selection is IItem) {
 				IItem item = FirstController.Selection as IItem;
-				IItem ritem = DoObject.EnsureIItem (FirstController.Selection as IItem);
+				IItem ritem = DoItem.EnsureIItem (FirstController.Selection as IItem);
 				
 				//We need to find actions for this item
 				//TODO -- Make this work for multiple items
@@ -222,9 +223,8 @@ namespace Do.Core
 			}
 		}
 
-		public override Type[] SearchTypes {
+		public override IEnumerable<Type> SearchTypes {
 			get { 
-				
 				if (FirstController.Selection is IAction) {
 					// the basic idea here is that if the first controller selection is an action
 					// we can move right to filtering on what it supports.  This is not strictly needed,
@@ -234,8 +234,8 @@ namespace Do.Core
 					return (FirstController.Selection as IAction).SupportedItemTypes;
 				} else {
 					if (TextMode)
-						return new Type[] {typeof (ITextItem)};
-					return new Type[] {typeof (IAction)};
+						return new Type[] { typeof (ITextItem) };
+					return new Type[] { typeof (IAction) };
 				}
 			}
 		}

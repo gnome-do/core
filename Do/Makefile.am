@@ -80,6 +80,8 @@ FILES =  \
 	src/Do.Core/DoItem.cs \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
+	src/Do.Core/DoObject_RelevanceProvider.cs \
+	src/Do.Core/IObjectExtensions.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
 	src/Do.Core/IUniverseManager.cs \
 	src/Do.Core/PluginManager.cs \
@@ -118,6 +120,7 @@ FILES =  \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
 	src/DoPreferences.cs \
+	src/EnumerableExtensions.cs \
 	src/GconfPreferencesBackend.cs \
 	src/IPreferencesBackend.cs \
 	src/CommandLinePreferences.cs \
@@ -147,8 +150,6 @@ EXTRAS = \
 	Do.exe.config.in
 
 REFERENCES =  \
-	../Do.Addins/bin/Debug/Do.Addins.dll \
-	../Do.DBus/bin/Debug/Do.DBus.dll \
 	Mono.Posix \
 	$(GCONF_SHARP_20_LIBS) \
 	$(GLIB_SHARP_20_LIBS) \
@@ -158,9 +159,11 @@ REFERENCES =  \
 	$(MONO_ADDINS_SETUP_LIBS) \
 	$(NOTIFY_SHARP_LIBS) \
 	$(NUNIT_LIBS) \
-	System
+	System \
+	System.Core
 
-DLL_REFERENCES = 
+DLL_REFERENCES =	$(DO_ADDINS_DLL) \
+			$(DO_DBUS_DLL)
 
 DO_ADDINS_DLL = $(BUILD_DIR)/Do.Addins.dll
 GNOME_DO_DESKTOP = $(BUILD_DIR)/gnome-do.desktop

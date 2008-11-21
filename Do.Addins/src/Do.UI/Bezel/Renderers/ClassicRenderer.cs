@@ -24,6 +24,7 @@ using Gdk;
 using Gtk;
 
 using Do.Addins;
+using Do.Addins.CairoUtils;
 using Do.Universe;
 
 namespace Do.UI
@@ -101,13 +102,13 @@ namespace Do.UI
 				sr_active = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				sr_inactive = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				Context c2 = new Context (sr_active);
-				CairoUtils.SetRoundedRectanglePath (c2, 0, 0, Width, Height, parent.WindowRadius);
+				c2.SetRoundedRectanglePath (0, 0, Width, Height, parent.WindowRadius);
 				c2.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.4);
 				c2.Fill ();
 				(c2 as IDisposable).Dispose ();
 				
 				c2 = new Context (sr_inactive);
-				CairoUtils.SetRoundedRectanglePath (c2, 0, 0, Width, Height, parent.WindowRadius);
+				c2.SetRoundedRectanglePath (0, 0, Width, Height, parent.WindowRadius);
 				c2.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.1);
 				c2.Fill ();
 				(c2 as IDisposable).Dispose ();
@@ -128,7 +129,11 @@ namespace Do.UI
 		public Cairo.Color BackgroundColor {
 			get {
 				Gdk.Color bgColor;
-				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (parent)) {
+				Gtk.Widget top_level_widget = parent;
+				while (top_level_widget.Parent != null)
+					top_level_widget = top_level_widget.Parent;
+				
+				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (top_level_widget)) {
 					bgColor = rcstyle.Backgrounds[(int) StateType.Selected];
 				}
 				bgColor = CairoUtils.SetMaximumValue (bgColor, 65);

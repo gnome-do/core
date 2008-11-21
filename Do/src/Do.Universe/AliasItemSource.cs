@@ -54,8 +54,7 @@ namespace Do.Universe {
 		
 		static string AliasFile {
 			get {
-				return Paths.Combine (Paths.UserData,
-				    typeof (AliasItemSource).FullName);
+				return Paths.Combine (Paths.UserData, typeof (AliasItemSource).FullName);
 			}
 		}
 		
@@ -155,15 +154,13 @@ namespace Do.Universe {
 			}
 		}
 
-		public Type [] SupportedItemTypes {
+		public IEnumerable<Type> SupportedItemTypes {
 			get {
-				return new Type [] {
-					typeof (AliasItem),
-				};
+				yield return typeof (AliasItem);
 			}
 		}
 
-		public ICollection<IItem> Items {
+		public IEnumerable<IItem> Items {
 			get {
 				List<IItem> items;
 				
@@ -180,7 +177,7 @@ namespace Do.Universe {
 			}
 		}
 		
-		public ICollection<IItem> ChildrenOfItem (IItem item)
+		public IEnumerable<IItem> ChildrenOfItem (IItem item)
 		{
 			return null;
 		}

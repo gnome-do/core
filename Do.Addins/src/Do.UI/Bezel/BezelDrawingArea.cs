@@ -24,6 +24,7 @@ using Gdk;
 using Gtk;
 
 using Do.Addins;
+using Do.Addins.CairoUtils;
 using Do.Universe;
 
 namespace Do.UI
@@ -176,6 +177,8 @@ namespace Do.UI
 		
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
+		
+		GConf.Client gconfClient;
 #endregion
 		
 #region Properties
@@ -183,8 +186,14 @@ namespace Do.UI
 		public Cairo.Color BackgroundColor {
 			get {
 				Gdk.Color color = new Gdk.Color ();
-				if (Gdk.Color.Parse ("#" + BgColor, ref color))
-					return CairoUtils.ConvertToCairo (color, backgroundRenderer.BackgroundColor.A);
+				if (Gdk.Color.Parse ("#" + BgColor.Substring (0, 6), ref color)) {
+					if (BgColor.Length == 8) {
+						double alpha = Convert.ToInt32 (BgColor.Substring (6, 2), 16);
+						alpha = alpha / 255;
+						return color.ConvertToCairo (alpha);
+					}
+					return color.ConvertToCairo (backgroundRenderer.BackgroundColor.A);
+				}
 				return backgroundRenderer.BackgroundColor;
 			}
 		}
@@ -348,6 +357,9 @@ namespace Do.UI
 		public IBezelDefaults BezelDefaults { get { return bezelDefaults; }	}
 #endregion
 #endregion
+		
+		public event EventHandler GtkThemeChanged;
+		
 		public BezelDrawingArea(IDoController controller, IRenderTheme theme, bool preview) : base ()
 		{
 			this.controller = controller;
@@ -364,6 +376,9 @@ namespace Do.UI
 			
 			ResetRenderStyle ();
 			SetDrawingArea ();
+			
+			gconfClient = new GConf.Client ();
+			gconfClient.AddNotify ("/desktop/gnome/interface", OnGtkThemeChanged);
 			
 			BezelDrawingArea.ThemeChanged += OnThemeChanged;
 			Realized += delegate {
@@ -517,7 +532,7 @@ namespace Do.UI
 				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
 					bgColor = rcstyle.Backgrounds[(int) StateType.Normal];
 				}
-				cr.Color = CairoUtils.ConvertToCairo (bgColor, 1);
+				cr.Color = bgColor.ConvertToCairo (1);
 			} else {
 				cr.Color = new Cairo.Color (0, 0, 0, 0);
 			}			
@@ -638,6 +653,16 @@ namespace Do.UI
 //			Draw ();
 			Paint ();
 			return ret;
+		}
+		
+		private void OnGtkThemeChanged (object o, GConf.NotifyEventArgs args)
+		{
+			GLib.Timeout.Add (3000, () => {
+				if (GtkThemeChanged != null)
+					GtkThemeChanged (o, args);
+				Colors.RebuildColors (BackgroundColor);
+				return false;
+			});
 		}
 		
 		private void OnThemeChanged (object o, System.EventArgs args)

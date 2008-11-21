@@ -41,7 +41,7 @@ namespace Do.UI
 		}
 
 		const int IconSize = 26;
-		const int WrapWidth = 305;
+		const int WrapWidth = 350;
 		const string DescriptionFormat =
 			"<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 

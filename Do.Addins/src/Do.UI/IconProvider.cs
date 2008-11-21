@@ -142,6 +142,11 @@ namespace Do.UI
 		}
 
 		public static Pixbuf PixbufFromIconName (string name, int size)
+		{
+			return PixbufFromIconName (name, size, true);
+		}
+		
+		public static Pixbuf PixbufFromIconName (string name, int size, bool defaultIcon)
 		{			
 			Pixbuf pixbuf;									
 			
@@ -168,10 +173,10 @@ namespace Do.UI
 		    } while (false);
 			
 			// Try to load a pretty "no icon found" icon.
-			if (pixbuf == null)
+			if (pixbuf == null && defaultIcon)
 				pixbuf = UnknownIcon (size);
 			// If all else fails, use the UnknownPixbuf.
-			if (pixbuf == null)
+			if (pixbuf == null && defaultIcon)
 				pixbuf = UnknownPixbuf;
 			
 			return pixbuf;

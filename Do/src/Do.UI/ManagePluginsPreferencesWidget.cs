@@ -19,6 +19,7 @@
 
 using System;
 using System.Text.RegularExpressions;
+using System.Linq;
 using System.Collections.Generic;
 
 using Gtk;
@@ -36,6 +37,10 @@ namespace Do.UI
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class ManagePluginsPreferencesWidget : Bin, IConfigurable
 	{
+
+		const string PluginWikiPageFormat
+			= "http://www.gnomedo.com/wiki/index.php?title={0}_Plugin";
+
 		PluginNodeView nview;
 
 		new public string Name {
@@ -69,8 +74,10 @@ namespace Do.UI
 			scrollw.Add (nview);
 			scrollw.ShowAll ();
 
+			//foreach (string repo in PluginManager.RepositoryUrls.Keys) {
+			//	show_combo.AppendText (repo);
 			foreach (string repoName in PluginManager.RepositoryUrls.Keys) {
-				if (PluginManager.RepositoryUrls [repoName].Count > 0)
+				if (PluginManager.RepositoryUrls [repoName].Any ())
 					show_combo.AppendText (repoName);
 			}
 			show_combo.AppendText (PluginManager.AllPluginsRepository);
@@ -120,11 +127,15 @@ namespace Do.UI
 
 		protected void UpdateButtonState ()
 		{
+			//string[] selected = nview.GetSelectedAddins ();
+			//btn_configure.Sensitive = 
+			//	selected.Any (id => PluginManager.ConfigurablesForAddin (id).Any ());	
+			//btn_about.Sensitive = selected.Length > 0;
 			btn_configure.Sensitive = false;
 			btn_about.Sensitive = false;
 
 			foreach (string id in nview.GetSelectedAddins ()) {
-				if (PluginManager.ConfigurablesForAddin (id).Count > 0) {
+				if (PluginManager.ConfigurablesForAddin (id).Any ()) {
 					btn_configure.Sensitive = true;
 					break;
 				}
@@ -194,8 +205,7 @@ namespace Do.UI
 			foreach (string id in nview.GetSelectedAddins ()) {
 				try {
 					string name = Addin.GetIdName (id).Split ('.')[1];
-					Util.Environment.Open (
-							"http://www.gnomedo.com/wiki/index.php?title=" + name + "_Plugin");
+					Util.Environment.Open (string.Format (PluginWikiPageFormat, name));
 				} catch { }
 			}
 		}

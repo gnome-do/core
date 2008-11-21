@@ -18,9 +18,8 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 using Do.Universe;
 
@@ -30,27 +29,38 @@ namespace Do.Core {
 	/// HistogramRelevanceProvider maintains item and action relevance using
 	/// a histogram of "hit values."
 	/// </summary>
-	sealed class HistogramRelevanceProvider : RelevanceProvider {
-		
+	[Serializable]
+	class HistogramRelevanceProvider : RelevanceProvider {
+
+		const float DefaultRelevance = 0.01f;
+		const float DefaultAge = 1f;
+
+		static readonly IEnumerable<Type> RewardedItemTypes = new Type[] {
+			typeof (ApplicationItem),
+		};
+
+		static readonly IEnumerable<Type> RewardedActionTypes = new Type[] {
+			typeof (OpenAction),
+			typeof (OpenURLAction),
+			typeof (RunAction),
+			typeof (EmailAction),
+		};
+
+		static readonly IEnumerable<Type> PenalizedActionTypes = new Type[] {
+			typeof (AliasAction),
+			typeof (DeleteAliasAction),
+			typeof (CopyToClipboardAction),
+		};
+
+		DateTime newest_hit, oldest_hit;
 		uint max_item_hits, max_action_hits;
-		DateTime oldest_hit;
 		Dictionary<string, RelevanceRecord> hits;
-		const int SerializeInterval = 15*60;
 
 		public HistogramRelevanceProvider ()
 		{
+			oldest_hit = newest_hit = DateTime.Now;
 			max_item_hits = max_action_hits = 1;
-			oldest_hit = DateTime.Now;
 			hits = new Dictionary<string, RelevanceRecord> ();
-
-			Deserialize ();
-			
-			foreach (RelevanceRecord rec in hits.Values) {
-				UpdateMaxHits (rec);
-				oldest_hit = oldest_hit.CompareTo (rec.LastHit) < 0 ?
-					oldest_hit : rec.LastHit;
-			}
-			GLib.Timeout.Add (SerializeInterval*1000, OnSerializeTimer);
 		}
 		
 		void UpdateMaxHits (RelevanceRecord rec)
@@ -61,154 +71,102 @@ namespace Do.Core {
 				max_item_hits = Math.Max (max_item_hits, rec.Hits);
 		}
 
-		/// <value>
-		/// Path of file where relevance data is serialized.
-		/// </value>
-		private string RelevanceFile {
-			get {
-				return Paths.Combine (Paths.ApplicationData, "relevance5");
-			}
-		}
-
-		/// <summary>
-		/// Serialize timer target.
-		/// </summary>
-		private bool OnSerializeTimer ()
-		{
-			Gtk.Application.Invoke (
-			    delegate {
-				    Serialize ();
-			    }
-			);
-			return true;
-		}
-
-		/// <summary>
-		/// Deserializes relevance data.
-		/// </summary>
-		private void Deserialize ()
-		{
-			try {
-				using (Stream s = File.OpenRead (RelevanceFile)) {
-					BinaryFormatter f = new BinaryFormatter ();
-					hits = f.Deserialize (s) as Dictionary<string, RelevanceRecord>;
-				}
-				Log.Debug ("Successfully loaded learned usage data.");
-			} catch (FileNotFoundException) {
-			} catch (Exception e) {
-				Log.Error ("Failed to load learned usage data: {0}", e.Message);
-			}
-		}
-
-		/// <summary>
-		/// Serializes relevance data.
-		/// </summary>
-		private void Serialize ()
-		{
-			try {
-				using (Stream s = File.OpenWrite (RelevanceFile)) {
-					BinaryFormatter f = new BinaryFormatter ();
-					f.Serialize (s, hits);
-				}
-				Log.Debug ("Successfully saved learned usage data.");
-			} catch (Exception e) {
-				Log.Error ("Failed to save learned usage data: {0}", e.Message);
-			}
-		}
-
-		public override void IncreaseRelevance (DoObject o,
-												string match,
-												DoObject other)
+		public override void IncreaseRelevance (DoObject o, string match, DoObject other)
 		{
 			RelevanceRecord rec;
-			
+
+			newest_hit = DateTime.Now;
 			if (!hits.TryGetValue (o.UID, out rec)) {
 				rec = new RelevanceRecord (o);
 				hits [o.UID] = rec;
 			}
+			
 			rec.Hits++;
 			rec.LastHit = DateTime.Now;
-			if (match.Length > 0)
+			if (other == null) rec.FirstPaneHits++;
+			if (0 < match.Length)
 				rec.AddFirstChar (match [0]);
 			UpdateMaxHits (rec);
 		}
 
-		public override void DecreaseRelevance (DoObject o,
-												string match,
-												DoObject other)
+		public override void DecreaseRelevance (DoObject o, string match, DoObject other)
 		{
 			RelevanceRecord rec;
 			
 			if (hits.TryGetValue (o.UID, out rec)) {
 				rec.Hits--;
-				if (rec.Hits == 0)
-					hits.Remove (o.UID);
+				if (other == null) rec.FirstPaneHits--;
+				if (rec.Hits == 0) 	hits.Remove (o.UID);
 			}
 		}
 
-		public override float GetRelevance (DoObject o,
-											string match,
-											DoObject other)
+		public override float GetRelevance (DoObject o, string match, DoObject other)
 		{
-			// These should all be between 0 and 1.
-			float relevance, score;
+			RelevanceRecord rec;
+			bool isAction;
+			float relevance = 0f, age = 0f, score = 0f;
+
+			if (!hits.TryGetValue (o.UID, out rec))
+				rec = new RelevanceRecord (o);
+
+			isAction = rec.IsAction;
 			
 			// Get string similarity score.
 			score = StringScoreForAbbreviation (o.Name, match);
-			if (score == 0) return 0;
+			if (score == 0f) return 0f;
 			
-			relevance = 0f;	
-			if (hits.ContainsKey (o.UID)) {
-				float age;
-				RelevanceRecord rec = hits [o.UID];
-	
-				// On a scale of 0 to 1, how old is the item?
-				age = 1 -
-					(float) (DateTime.Now - rec.LastHit).TotalSeconds /
-					(float) (DateTime.Now - oldest_hit).TotalSeconds;
-					
-				// Relevance is non-zero only if the record contains first char
-				// relevance for the item.
-				if (match.Length == 0 || rec.HasFirstChar (match [0]))
-					relevance = (float) rec.Hits / 
-						(float) (rec.IsAction ? max_action_hits : max_item_hits);
-				else
-					relevance = 0f;
+			if (0 < rec.Hits) {
+				// On a scale of 0 (new) to 1 (old), how old is the item?
+				age = (float) (newest_hit - rec.LastHit).TotalSeconds /
+					  (float) (newest_hit - oldest_hit).TotalSeconds;
 				
-				relevance *= 0.5f * (1f + age);
-		    }
-			
-			
-			// Penalize actions that require modifier items.
-			// other != null ==> we're getting relevance for second pane.
-			if (o is IAction &&
-			    (o as IAction).SupportedModifierItemTypes.Length > 0)
-				relevance -= 0.1f;
-			// Penalize item sources so that items are preferred.
-			if (o.Inner is IItemSource)
-				relevance -= 0.1f;
-			// Give the most popular actions a little leg up.
-			if (o.Inner is OpenAction ||
-			    o.Inner is OpenURLAction ||
-			    o.Inner is RunAction ||
-			    o.Inner is EmailAction)
-				relevance += 0.1f;
-			if (o.Inner is AliasAction ||
-				o.Inner is DeleteAliasAction ||
-				o.Inner is CopyToClipboard)
-				relevance = -0.1f;
-			
-			return BalanceRelevanceWithScore (o, relevance, score);
-		}
+				if (rec.IsRelevantForMatch (match))
+					relevance = (float) rec.Hits /
+						(float) (isAction ? max_action_hits : max_item_hits);
+			} else {
+				// Objects we don't know about are treated as old.
+				age = DefaultAge;
 
-		float BalanceRelevanceWithScore (IObject o, float rel, float score)
-		{
-			float reward;
-		   
-			reward = o is IItem ? .1f : 0f;
-			return reward +
-				   rel    * .20f +
-				   score  * .70f;
+				// Give the most popular actions a little leg up in the second pane.
+				if (isAction && other != null && RewardedActionTypes.Contains (o.Inner.GetType ()))
+					relevance = 1f;
+
+				// Give the most popular items a leg up
+				else if (RewardedItemTypes.Contains (o.Inner.GetType ()))
+					relevance = DefaultRelevance * 2;
+
+				// We must give a base, non-zero relevance to make scoring rules take
+				// effect. We divide by length so that if two objects have default
+				// relevance, the object with the shorter name comes first. Objects
+				// with shorter names tend to be simpler, and more often what the
+				// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
+				else
+					relevance = DefaultRelevance / Math.Max (1, o.Name.Length);
+			}
+
+			// Newer objects (age -> 0) get scaled by factor -> 1.
+			// Older objects (age -> 1) get scaled by factor -> .5.
+			relevance *= 1f - (age / 2f);
+
+			if (isAction) {
+				IAction oa = o as IAction;
+				// We penalize actions, but only if they're not used in the first pane
+				// often.
+				if (rec.FirstPaneHits < 3)
+					relevance *= 0.8f;
+
+				// Penalize actions that require modifier items.
+				if (!oa.ModifierItemsOptional)
+					relevance *= 0.8f;
+			}
+
+			if (o.Inner is IItemSource)
+				relevance *= 0.4f;
+
+			if (PenalizedActionTypes.Contains (o.Inner.GetType ()))
+				relevance *= 0.8f;
+
+			return relevance * 0.30f + score * 0.70f;
 		}
 	}
 	
@@ -219,16 +177,30 @@ namespace Do.Core {
 	/// </summary>
 	[Serializable]
 	class RelevanceRecord {
-		public DateTime LastHit;
+
 		public uint Hits;
+		public uint FirstPaneHits;
+
+		public Type Type;
+		public DateTime LastHit;
 		public string FirstChars;
-		public bool IsAction;
 		
 		public RelevanceRecord (IObject o)
 		{
 			LastHit = DateTime.Now;
+			Type = o.GetType ();
 			FirstChars = string.Empty;
-			IsAction = o is IAction;
+		}
+
+		public bool IsAction {
+			get {
+				return typeof (IAction).IsAssignableFrom (Type);
+			}
+		}
+
+		public bool IsRelevantForMatch (string match)
+		{
+			return null == match || match.Length == 0 || HasFirstChar (match [0]);
 		}
 		
 		/// <summary>

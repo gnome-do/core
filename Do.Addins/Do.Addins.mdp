@@ -1,16 +1,16 @@
 <Project name="Do.Addins" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="bin/Debug" assemblyKeyFile="." assembly="Do.Addins" />
+      <Output directory="bin/Debug" assemblyKeyFile="/home/jason/do/do-future/Do.Addins/." assembly="Do.Addins" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
-      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="True" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
       <Output directory="bin/Release" assembly="Do.Addins" />
       <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
-      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="True" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
   </Configurations>
   <Contents>
@@ -58,7 +58,6 @@
     <File name="Resources/Do.Addins.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="src/Do.UI/IconCache.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/IPreferences.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/CopyToClipboard.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/NotificationBridge.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Pluggable.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IUIContext.cs" subtype="Code" buildaction="Compile" />
@@ -88,6 +87,28 @@
     <File name="src/Do.UI/Bezel/Renderers/GlassFrameTheme.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/Renderers/MiniRenderer.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/Renderers/MiniTheme.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.Util" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/DockArea.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/DockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/DockWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.Util/GtkUtils.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.Util/Preferences.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/XLib" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/XLib/X11Atoms.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/XLib/Xlib.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Addins/IStatistics.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/DockState.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/AbstractAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/SeparatorItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/IDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.Util/WindowUtils.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/ApplicationDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/CopyToClipboardAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/CustomDockItems.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/ItemMenu.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.UI/Util.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -103,6 +124,9 @@
     <ProjectReference type="Gac" localcopy="True" refto="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="Gnome.Keyring, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1a73e1bde00c9b66" />
+    <ProjectReference type="Gac" localcopy="True" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="True" refto="wnck-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
   <GtkDesignInfo />
   <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="./Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">

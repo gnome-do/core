@@ -18,6 +18,7 @@
 //
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Addins;
@@ -47,7 +48,7 @@ namespace Do.Core
 					return false;
 				}
 				
-				return (action.SupportedModifierItemTypes.Length > 0);
+				return action.SupportedModifierItemTypes.Any ();
 			}
 		}
 		
@@ -62,11 +63,11 @@ namespace Do.Core
 			};
 		}
 		
-		public override Type[] SearchTypes {
+		public override IEnumerable<Type> SearchTypes {
 			get { 
 				if (TextMode)
-					return new Type[] {typeof (ITextItem)};
-				return new Type[] {typeof (IItem)}; 
+					return new Type[] { typeof (ITextItem) };
+				return new Type[] { typeof (IItem) }; 
 			}
 		}
 
@@ -123,6 +124,26 @@ namespace Do.Core
 				return false;
 			});
 		}
+		
+		protected override List<IObject> InitialResults ()
+		{
+			if (TextMode)
+				return new List<IObject> ();
+			//We continue off our previous results if possible
+			if (context.LastContext != null && context.LastContext.Results.Any ()) {
+				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				                                                     SearchTypes, 
+				                                                     context.LastContext.Results, 
+				                                                     FirstController.Selection));
+			} else if (context.ParentContext != null && context.Results.Any ()) {
+				return new List<IObject> (context.Results);
+			} else { 
+				//else we do things the slow way
+				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				                                                     SearchTypes, 
+				                                                     FirstController.Selection));
+			}
+		}
 
 		private IObject[] GetContextResults ()
 		{
@@ -148,15 +169,12 @@ namespace Do.Core
 				}
 				
 			} else {
-				//Log.Error ("Something Very Strange Has Happened");
+				// Log.Error ("Something Very Strange Has Happened");
 				return null;
 			}
 
-			//If we support nothing, dont search.
-			if (action.SupportedModifierItemTypes.Length == 0)  return null;
-			
-			
-			
+			// If we support nothing, dont search.
+			if (!action.SupportedModifierItemTypes.Any ()) return null;
 			
 			List<IObject> results = new List<IObject> ();
 
@@ -168,7 +186,7 @@ namespace Do.Core
 				}
 			
 				if (Query.Length == 0)
-					results.AddRange (action.DynamicModifierItemsForItem (item));
+					results.AddRange (action.DynamicModifierItemsForItem (item).Cast<IObject> ());
 				results.Sort ();
 			}
 			

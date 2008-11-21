@@ -30,8 +30,9 @@
 		<Action type="Do.Universe.OpenWithAction" />
 		<Action type="Do.Universe.RevealAction" />
 		<Action type="Do.Universe.RunAction" />
-		<Action type="Do.Universe.CopyToClipboard" />
+		<Action type="Do.Universe.CopyToClipboardAction" />
 	</Extension>
+	
 	<Extension path= "/Do/RenderProvider">
 		<RenderProvider type="Do.UI.HUDTheme" />
 		<RenderProvider type="Do.UI.ClassicTheme" />

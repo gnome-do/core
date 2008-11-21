@@ -18,6 +18,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 using Do.Addins;
 using Do.Universe;
@@ -29,7 +30,7 @@ namespace Do.UI
 	public class UIContext : IUIContext
 	{
 		private IObject selection;
-		private IObject[] results;
+		private IList<IObject> results;
 		
 		private int cursor;
 		private int[] secondary;
@@ -46,7 +47,7 @@ namespace Do.UI
 			}
 		}
 
-		public IObject[] Results {
+		public IList<IObject> Results {
 			get {
 				return results;
 			}
@@ -88,7 +89,7 @@ namespace Do.UI
 			}
 		}
 		
-		public UIContext(IObject selection, IObject[] results, int cursor, int[] secondaryCursors, 
+		public UIContext(IObject selection, IList<IObject> results, int cursor, int[] secondaryCursors, 
 		                 string query, bool largeTextDisplay, TextModeType type, IUIContext parentContext)
 		{
 			this.selection  = selection;

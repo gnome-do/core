@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Mono.Unix;
 
@@ -47,32 +48,23 @@ namespace Do.Universe {
 			get { return "gtk-open"; }
 		}
 		
-		public override Type[] SupportedItemTypes {
+		public override IEnumerable<Type> SupportedItemTypes {
 			get {
-				return new Type[] {
-					typeof (IFileItem),
-				};
+				yield return typeof (IFileItem);
 			}
 		}
 		
-		public override Type[] SupportedModifierItemTypes {
+		public override IEnumerable<Type> SupportedModifierItemTypes {
 			get {
-				return new Type[] {
-					typeof (ApplicationItem),
-				};
+				yield return typeof (ApplicationItem);
 			}
 		}
 		
-		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
+		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
 		{
-			List<string> uris;
-
-			uris = new List<string> ();
-			foreach (IItem item in items) {
-				uris.Add ((item as IFileItem).URI);
-			}
-			(modifierItems [0] as ApplicationItem).RunWithUris (uris);
-			return null;
+			(modItems.First () as ApplicationItem)
+				.RunWithUris (items.Cast<IFileItem> ().Select (file => file.URI));
+			return Enumerable.Empty<IItem> ();
 		}
 	}
 }

@@ -18,11 +18,13 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Gtk;
 using Mono.Addins.Gui;
 
+using Do;
 using Do.Addins;
 
 namespace Do.UI
@@ -52,25 +54,23 @@ namespace Do.UI
 			
 			//Sets default page to the plugins tab, since this is the most common reason to
 			//open the prefs UI for most users.
-			notebook.CurrentPage = Array.FindIndex (Pages, (delegate (IConfigurable page) {
-				return page.Name == "Plugins";}));
+			//notebook.CurrentPage = Array.FindIndex (Pages, (delegate (IConfigurable page) {
+			//	return page.Name == "Plugins";}));
+			notebook.CurrentPage = Pages.FindIndex (p => p.Name == "Plugins");
 		}
 
 		IConfigurable[] pages;
 		IConfigurable[] Pages {
 			get {
-				if (null == pages) {
-					pages = new IConfigurable [] {
-						new GeneralPreferencesWidget (),
-						new KeybindingsPreferencesWidget (),
-						new ManagePluginsPreferencesWidget (),
-						new ColorConfigurationWidget (),
-					};
-				}
-				return pages;
+				return pages ?? pages = new IConfigurable[] {
+					new GeneralPreferencesWidget (),
+					new KeybindingsPreferencesWidget (),
+					new ManagePluginsPreferencesWidget (),
+					new ColorConfigurationWidget (),
+				};
 			}
 		}
-		
+
 		protected virtual void OnBtnCloseClicked (object sender, EventArgs e)
 		{
 			Destroy ();

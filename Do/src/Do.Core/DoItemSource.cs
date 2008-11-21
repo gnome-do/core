@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Universe;
@@ -27,26 +28,29 @@ namespace Do.Core {
 
 	public class DoItemSource : DoObject, IItemSource, IItem {
 
-		private bool enabled;
+		IEnumerable<Type> item_types;
 		
 		public DoItemSource (IItemSource source):
 			base (source)
 		{
-			enabled = true;
 		}
 
-		public Type [] SupportedItemTypes
+		public IEnumerable<Type> SupportedItemTypes
 		{
 			get {
-				Type [] types = null;
+				if (item_types != null) return item_types;
+
 				try {
-					types = (Inner as IItemSource).SupportedItemTypes;
+					item_types = (Inner as IItemSource).SupportedItemTypes;
+					// Call ToList to strictly evaluate the IEnumerable before we leave
+					// the try block.
+					if (item_types != null) item_types = item_types.ToList ();
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
 				} finally {
-					types = types ?? Type.EmptyTypes;
+					item_types = item_types ?? Enumerable.Empty<Type> ();
 				}
-				return types;
+				return item_types;
 			}
 		}
 
@@ -59,71 +63,52 @@ namespace Do.Core {
 			}
 		}
 		
-		public ICollection<IItem> Items
+		public IEnumerable<IItem> Items
 		{
 			get {
-				List<IItem> items;
-				ICollection<IItem> innerItems = null;
-				IItemSource source = Inner as IItemSource;
+				IEnumerable<IItem> items = null;
 				
-				items = new List<IItem> ();
 				try {
-					innerItems = source.Items;
-					// Copy the collection:
-					if (null != innerItems)
-						innerItems = new List<IItem> (innerItems);
+					items = (Inner as IItemSource).Items;
+					// Call ToList to strictly evaluate the IEnumerable before we leave
+					// the try block.
+					if (items != null) items = items.ToList ();
 				} catch (Exception e) {
 					LogError ("Items", e);
 				} finally {
-					innerItems = innerItems ?? new IItem [0];
+					items = items ?? Enumerable.Empty<IItem> ();
 				}
-
-				foreach (IItem item in innerItems) {
-					if (item is DoItem)
-						items.Add (item);
-					else
-						items.Add (new DoItem (item));
-				}
-				return items;
+				
+				return items.Select (i => DoItem.EnsureDoItem (i) as IItem);
 			}
 		}
-		
-		public ICollection<IItem> ChildrenOfItem (IItem item)
-		{
-			List<IItem> doChildren;
-			ICollection<IItem> children = null;
-			IItemSource source = Inner as IItemSource;
-			
-			doChildren = new List<IItem> ();
-			item = EnsureIItem (item);
 
-			if (!IObjectTypeCheck (item, SupportedItemTypes))
-				return doChildren;
+		public bool SupportsItem (IItem item)
+		{
+			item = DoItem.EnsureIItem (item);;
+			return SupportedItemTypes.Any (t => t.IsInstanceOfType (item));
+		}
+
+		public IEnumerable<IItem> ChildrenOfItem (IItem item)
+		{
+			IEnumerable<IItem> children = null;
+			item = DoItem.EnsureIItem (item);
+
+			if (!item.IsAssignableToAny (SupportedItemTypes))
+				return Enumerable.Empty<IItem> ();
 
 			try {
-				children = source.ChildrenOfItem (item);
-				// Copy the collection:
-				if (null != children)
-					children = new List<IItem> (children);
+				children = (Inner as IItemSource).ChildrenOfItem (item);
+				// Call ToList to strictly evaluate the IEnumerable before we leave
+				// the try block.
+				if (children != null) children = children.ToList ();
 			} catch (Exception e) {
 				LogError ("ChildrenOfItem", e);
 			} finally {
-				children = children ?? new IItem [0];
+				children = children ?? Enumerable.Empty<IItem> ();
 			}
-			
-			foreach (IItem child in children) {
-				if (child is DoItem)
-					doChildren.Add (child);
-				else
-					doChildren.Add (new DoItem (child));
-			}
-			return doChildren;
-		}
-		
-		public bool Enabled
-		{
-			get { return enabled; }
-			set { enabled = value; }
+
+			return children.Select (i => DoItem.EnsureDoItem (i) as IItem);
 		}
 	}
 }

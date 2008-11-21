@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Gtk;
 using Mono.Addins;
@@ -29,32 +30,32 @@ using Do.Addins;
 
 namespace Do.UI
 {
-    public partial class PluginConfigurationWindow : Gtk.Window
-    {
+	public partial class PluginConfigurationWindow : Gtk.Window
+	{
 
 		const string TitleMarkup =
 			"<span weight=\"heavy\" size=\"large\">{0}</span>";
 
-        public PluginConfigurationWindow (string id) : 
-            base (WindowType.Toplevel)
-        {
-            Addin addin;
-            ICollection<IConfigurable> configs;
+		public PluginConfigurationWindow (string id) : 
+			base (WindowType.Toplevel)
+		{
+			Addin addin;
+			IEnumerable<IConfigurable> configs;
 
-            Build ();
+			Build ();
 
-            addin = AddinManager.Registry.GetAddin (id);
-            configs = PluginManager.ConfigurablesForAddin (id);
-            Title = string.Format ("{0} Configuration", addin.Name);
-            notebook.RemovePage (0);
-            notebook.ShowTabs = configs.Count > 1;
-			
+			addin = AddinManager.Registry.GetAddin (id);
+			configs = PluginManager.ConfigurablesForAddin (id);
+			Title = string.Format ("{0} Configuration", addin.Name);
+			notebook.RemovePage (0);
+			notebook.ShowTabs = configs.Count () > 1;
+
 			addin_title_img.Pixbuf = IconProvider.PixbufFromIconName
 				(PluginManager.IconForAddin (id), 32);
 			addin_title_lbl.Markup = String.Format (TitleMarkup, Title);
 
-            foreach (IConfigurable configurable in configs) {
-                Bin config;
+			foreach (IConfigurable configurable in configs) {
+				Bin config;
 
 				try {
 					config = configurable.GetConfiguration ();
@@ -64,12 +65,12 @@ namespace Do.UI
 					Log.Error ("Failed to load configuration: {0}", e.Message);
 					Log.Debug (e.StackTrace);
 				}
-            }
-        }
+			}
+		}
 
-        protected virtual void OnBtnCloseClicked (object sender, EventArgs e)
-        {
-            Hide ();
-        }
-    }
+		protected virtual void OnBtnCloseClicked (object sender, EventArgs e)
+		{
+			Hide ();
+		}
+	}
 }

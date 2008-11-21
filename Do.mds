@@ -4,11 +4,13 @@
       <Entry build="True" name="Do" configuration="Debug" />
       <Entry build="True" name="Do.Addins" configuration="Debug" />
       <Entry build="True" name="Do.DBus" configuration="Debug" />
+      <Entry build="True" name="Tests" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Release" />
       <Entry build="True" name="Do.Addins" configuration="Release" />
       <Entry build="True" name="Do.DBus" configuration="Release" />
+      <Entry build="True" name="Tests" configuration="Release" />
       <CustomCommands>
         <Command type="BeforeBuild" command="autogen.sh --enable-release=YES" workingdir="${CombineDir}" />
       </CustomCommands>
@@ -18,10 +20,13 @@
     <Execute type="None" entry="Do" />
     <Execute type="None" entry="Do.Addins" />
     <Execute type="None" entry="Do.DBus" />
+    <Execute type="None" entry="Tests" />
   </StartMode>
+  <MonoDevelop.ChangeLogAddIn.ChangeLogInfo policy="UpdateNearestChangeLog" />
   <Entries>
     <Entry filename="Do/Do.mdp" />
     <Entry filename="Do.Addins/Do.Addins.mdp" />
     <Entry filename="Do.DBus/Do.DBus.mdp" />
+    <Entry filename="Tests/Tests.mdp" />
   </Entries>
 </Combine>

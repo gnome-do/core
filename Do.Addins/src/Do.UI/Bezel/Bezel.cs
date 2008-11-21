@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Cairo;
 using Gdk;
@@ -32,15 +33,15 @@ namespace Do.UI
 	
 	public class Bezel : Gtk.Window, IDoWindow
 	{
-		BezelDrawingArea bda;
-		BezelGlassResults bgr;
-		BezelGlassWindow bgw;
+		BezelDrawingArea bezel_drawing_area;
+		BezelGlassResults bezel_glass_results;
+		BezelGlassWindow bezel_glass_window;
 		IDoController controller;
 		PositionWindow pw;
 		
 		public Pane CurrentPane {
-			get { return bda.Focus; }
-			set { bda.Focus = value; }
+			get { return bezel_drawing_area.Focus; }
+			set { bezel_drawing_area.Focus = value; }
 		}
 		
 		public Bezel(IDoController controller, IRenderTheme theme) : base (Gtk.WindowType.Toplevel)
@@ -58,24 +59,24 @@ namespace Do.UI
 			TypeHint = WindowTypeHint.Splashscreen;
 			SetColormap ();
 			
-			bda = new BezelDrawingArea (controller, theme, false);
-			bda.Show ();
+			bezel_drawing_area = new BezelDrawingArea (controller, theme, false);
+			bezel_drawing_area.Show ();
 			
-			bgr = bda.Results;
-			bgw = new BezelGlassWindow (bgr);
+			bezel_glass_results = bezel_drawing_area.Results;
+			bezel_glass_window = new BezelGlassWindow (bezel_glass_results);
 	
-			Add (bda);
+			Add (bezel_drawing_area);
 			
-			pw = new PositionWindow (this, bgw);
+			pw = new PositionWindow (this, bezel_glass_window);
 		}
 		
 		protected override void OnDestroyed ()
 		{
 			base.OnDestroyed ();
-			bda.Destroy ();
-			bda = null;
-			bgr.Destroy ();
-			bgr = null;
+			bezel_drawing_area.Destroy ();
+			bezel_drawing_area = null;
+			bezel_glass_results.Destroy ();
+			bezel_glass_results = null;
 		}
 
 		protected override bool OnButtonPressEvent (EventButton evnt)
@@ -83,7 +84,7 @@ namespace Do.UI
 			Gdk.Point global_point = new Gdk.Point ((int) evnt.XRoot, (int) evnt.YRoot);
 			Gdk.Point local_point = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
 			
-			switch (bda.GetPointLocation (local_point)) {
+			switch (bezel_drawing_area.GetPointLocation (local_point)) {
 			case PointLocation.Close:
 			case PointLocation.Outside:
 				controller.ButtonPressOffWindow ();
@@ -136,67 +137,77 @@ namespace Do.UI
 			int width, height;
 			GetSize (out width, out height);
 			
-			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (((int)(bda.WindowWidth-bgr.WidthRequest)/2), -10, 0, 0));
+			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (((int)(bezel_drawing_area.WindowWidth-bezel_glass_results.WidthRequest)/2), -10, 0, 0));
 			Show ();
-			bgw.Show ();
+			bezel_glass_window.Show ();
 			Util.Appearance.PresentWindow (this);
 		}
 
 		public void Vanish ()
 		{
 			Hide ();
-			bgw.Hide ();
+			bezel_glass_window.Hide ();
 		}
 
 		public void Reset ()
 		{
-			bda.Clear ();
-			bgr.Clear ();
+			bezel_drawing_area.Clear ();
+			bezel_glass_results.Clear ();
 		}
 
 		public void Grow ()
 		{
-			bda.ThirdPaneVisible = true;
+			bezel_drawing_area.ThirdPaneVisible = true;
 		}
 
 		public void Shrink ()
 		{
-			bda.ThirdPaneVisible = false;
+			bezel_drawing_area.ThirdPaneVisible = false;
 		}
 
 		public void GrowResults ()
 		{
-			bgr.SlideIn ();
+			bezel_glass_results.SlideIn ();
 		}
 
 		public void ShrinkResults ()
 		{
-			bgr.SlideOut ();
+			bezel_glass_results.SlideOut ();
 		}
 
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
-			bda.BezelSetPaneObject (pane, context.Selection);
-			bda.BezelSetQuery      (pane, context.Query);
-			bda.BezelSetTextMode   (pane, context.LargeTextDisplay);
-			bda.BezelSetEntryMode (pane, context.LargeTextModeType == TextModeType.Explicit);
+			// This prevents the odd situation of nothing drawing in the third pane.  Ultimately what has
+			// happened is the universe has "nulled" the pane by fluke.  We detect this and replace the
+			// query with an invisible space.
+			string query;
+			if (pane == Pane.Third && context.Selection == null && string.IsNullOrEmpty (context.Query) && !context.Results.Any ()) {
+				query = " ";
+			} else {
+				query = context.Query;
+			}
+			bezel_drawing_area.BezelSetPaneObject (pane, context.Selection);
+			bezel_drawing_area.BezelSetQuery      (pane, query);
+			bezel_drawing_area.BezelSetTextMode   (pane, context.LargeTextDisplay);
+			bezel_drawing_area.BezelSetEntryMode (pane, context.LargeTextModeType == TextModeType.Explicit);
 			
 			if (CurrentPane == pane) {
-				bgr.Context = context;
+				bezel_glass_results.Context = context;
 			}
 		}
 
 		public void ClearPane (Pane pane)
 		{
-			bda.BezelSetPaneObject (pane, null);
-			bda.BezelSetQuery (pane, string.Empty);
-			bda.BezelSetEntryMode (pane, false);
+			bezel_drawing_area.BezelSetPaneObject (pane, null);
+			bezel_drawing_area.BezelSetQuery (pane, string.Empty);
+			bezel_drawing_area.BezelSetEntryMode (pane, false);
 			
 			if (pane == CurrentPane) {
-				bgr.Clear ();
+				bezel_glass_results.Clear ();
 			}
 		}
 
+		public bool ResultsCanHide { get { return true; } }
 		
 		public new event DoEventKeyDelegate KeyPressEvent;
 	}

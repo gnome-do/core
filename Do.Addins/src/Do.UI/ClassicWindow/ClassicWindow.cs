@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mono.Unix;
 
 using Do.Universe;
@@ -365,7 +366,7 @@ namespace Do.UI {
 		
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
-			if (context.Results.Length == 0 && !context.LargeTextDisplay) {
+			if (!context.Results.Any () && !context.LargeTextDisplay) {
 				if (pane == Pane.First && context.ParentContext == null) {
 					iconbox[0].TextOverlay = context.LargeTextDisplay;
 					iconbox[0].DisplayObject = new Do.Addins.DefaultIconBoxObject ();
@@ -385,11 +386,11 @@ namespace Do.UI {
 				return;
 			}
 			
-			if (context.Query.Length == 0 && context.LargeTextDisplay) {
+			if (string.IsNullOrEmpty (context.Query) && context.LargeTextDisplay) {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
 				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text");
 				
-				if (context.Results.Length == 0) return;
+				if (!context.Results.Any ()) return;
 			} else {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
 				iconbox[(int) pane].DisplayObject = context.Selection;
@@ -416,6 +417,8 @@ namespace Do.UI {
 			if (pane == CurrentPane)
 				resultsWindow.Clear ();
 		}
+		
+		public bool ResultsCanHide { get { return true; } }
 		
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{

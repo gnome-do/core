@@ -18,6 +18,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -59,7 +61,7 @@ namespace Do.UI
 
 		protected ScrolledWindow resultsScrolledWindow;
 		protected TreeView resultsTreeview;
-		protected IObject[] results, stunted_results;
+		protected IList<IObject> results, stunted_results;
 		protected int startResult, endResult;
 		protected Frame frame;
 		protected string query;
@@ -283,7 +285,7 @@ namespace Do.UI
 				}
 				
 				pushedUpdate = true;
-				if (value == null || value.Results.Length == 0) {
+				if (value == null || !value.Results.Any ()) {
 					Results = new IObject [0];
 					return;
 				}
@@ -299,11 +301,11 @@ namespace Do.UI
 				endResult = startResult + 8;
 				offset = startResult;
 				
-				if (endResult > results.Length)
-					endResult = results.Length;
+				if (endResult > results.Count)
+					endResult = results.Count;
 				
 				IObject[] resultsArray = new IObject[endResult - startResult];
-				Array.Copy (results, startResult, resultsArray, 0, resultsArray.Length); 
+				Array.Copy (results.ToArray (), startResult, resultsArray, 0, resultsArray.Length); 
 				
 				cursor = value.Cursor - offset;
 				
@@ -324,7 +326,7 @@ namespace Do.UI
 				UpdateCursors ();
 				UpdateQueryLabel (value);
 				resultsLabel.Markup = string.Format ("{1}/{0}", 
-				                                     value.Results.Length, 
+				                                     value.Results.Count, 
 				                                     value.Cursor + 1);
 				Gtk.Application.Invoke (delegate {
 					pushedUpdate = false;
@@ -384,10 +386,10 @@ namespace Do.UI
 			}
 		}
 		
-		public IObject[] Results
+		public IList<IObject> Results
 		{
 			get {
-				return stunted_results ?? stunted_results = new IObject[0];
+				return stunted_results ?? stunted_results = new List<IObject> (0);
 			}
 			set {
 				stunted_results = value;

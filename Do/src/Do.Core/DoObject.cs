@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Addins;
@@ -31,84 +32,18 @@ namespace Do.Core {
 		const string DefaultName = "No name";
 		const string DefaultDescription = "No description.";
 		const string DefaultIcon = "emblem-noread";
-		
-		static RelevanceProvider relevanceProvider = RelevanceProvider.GetProvider ();
 
-		public static bool IObjectTypeCheck (IObject o, Type [] types)
-		{
-			foreach (Type type in types) {
-				if (type.IsAssignableFrom (o.GetType ()))
-					return true;
-			}
-			return false;
-		}
-
-		/// <summary>
-		/// Returns the inner item if the static type of given item is an DoItem
-		/// subtype. Returns the argument otherwise.
-		/// </summary>
-		/// <param name="items">
-		/// A <see cref="IItem"/> that may or may not be an DoItem subtype.
-		/// </param>
-		/// <returns>
-		/// A <see cref="IItem"/> that is NOT an DoItem subtype (the inner IItem
-		/// of an DoItem).
-		/// </returns>
-		public static IItem EnsureIItem (IItem item)
-		{
-			if (item is DoItem)
-				item = (item as DoItem).Inner as IItem;
-			return item;
-		}
-
-		/// <summary>
-		/// Like EnsureItem but for arrays of IItems.
-		/// </summary>
-		/// <param name="items">
-		/// A <see cref="IItem []"/> that may contain
-		/// DoItem subtypes.
-		/// </param>
-		/// <returns>
-		/// A <see cref="IItem []"/> of inner IItems.
-		/// </returns>
-		public static IItem [] EnsureIItemArray (IItem [] items)
-		{
-			IItem [] inner_items;
-
-			inner_items = items.Clone () as IItem [];
-			for (int i = 0; i < items.Length; ++i) {
-				if (items [i] is DoItem) {
-					inner_items [i] = (items [i] as DoItem).Inner as IItem;
-				}
-			}
-			return inner_items;
-		}
-
-		public static IItem [] EnsureDoItemArray (IItem [] items)
-		{
-			IItem [] do_items;
-
-			do_items = items.Clone () as IItem [];
-			for (int i = 0; i < items.Length; ++i) {
-				if (!(items [i] is DoItem)) {
-					do_items [i] = new DoItem (items [i]);
-				}
-			}
-			return do_items;
-		}
-		
 		protected IObject inner;
 		protected float relevance;
 		protected string uid;
 		
-		internal DoObject (IObject inner)
+		public DoObject (IObject inner)
 		{
 			if (inner == null)
 				throw new ArgumentNullException ("inner","Inner IObject may not be null.");
 			this.inner = inner;
 			
-			uid = string.Format ("{0}{1}{2}",
-					inner.GetType (), Name, Description);
+			uid = string.Format ("{0}{1}{2}", inner.GetType (), Name, Description);
 		}
 
 		public virtual IObject Inner {
@@ -196,26 +131,6 @@ namespace Do.Core {
 		public override string ToString ()
 		{
 			return Name;
-		}
-
-		public void IncreaseRelevance (string match, DoObject other)
-		{
-			relevanceProvider.IncreaseRelevance (this, match, other);
-		}
-
-		public void DecreaseRelevance (string match, DoObject other)
-		{
-			relevanceProvider.DecreaseRelevance (this, match, other);
-		}
-
-		public void UpdateRelevance (string match, DoObject other)
-		{
-			relevance = relevanceProvider.GetRelevance (this, match, other);
-		}
-
-		public bool CanBeFirstResultForKeypress (char a)
-		{
-			return relevanceProvider.CanBeFirstResultForKeypress (this, a);
 		}
 
 		// Only compare with DoObjects.

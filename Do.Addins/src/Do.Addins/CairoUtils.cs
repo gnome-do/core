@@ -24,10 +24,10 @@ using Gdk;
 using Do.UI;
 using Do.Universe;
 
-namespace Do.Addins
+namespace Do.Addins.CairoUtils
 {
 	
-	public class CairoUtils
+	public static class CairoUtils
 	{
 		/// <summary>
 		/// Sets a rounded rectangle path of the context
@@ -50,7 +50,7 @@ namespace Do.Addins
 		/// <param name="radius">
 		/// A <see cref="System.Double"/>
 		/// </param>
-		public static void SetRoundedRectanglePath (Context cr, double x, double y, 
+		public static void SetRoundedRectanglePath (this Context cr, double x, double y, 
 		                                            double width, double height, double radius)
 		{
 			cr.MoveTo (x+radius, y);
@@ -77,13 +77,22 @@ namespace Do.Addins
 		/// <param name="stroke">
 		/// A <see cref="System.Boolean"/>
 		/// </param>
-		public static void SetRoundedRectanglePath (Context cr, Gdk.Rectangle region, double radius, bool stroke)
+		public static void SetRoundedRectanglePath (this Context cr, Gdk.Rectangle region, double radius, bool stroke)
 		{
 			if (stroke)
 				SetRoundedRectanglePath (cr, (double)region.X+.5, (double)region.Y+.5, (double)region.Width-1,
 				                         (double)region.Height-1, radius);
 			else
 				SetRoundedRectanglePath (cr, region.X, region.Y, region.Width, region.Height, radius);
+		}
+		
+		public static void AlphaFill (this Context cr)
+		{
+			cr.Save ();
+			cr.Color = new Cairo.Color (0, 0, 0, 0);
+			cr.Operator = Operator.Source;
+			cr.Paint ();
+			cr.Restore ();
 		}
 		
 		/// <summary>
@@ -98,7 +107,7 @@ namespace Do.Addins
 		/// <returns>
 		/// A <see cref="Cairo.Color"/>
 		/// </returns>
-		public static Cairo.Color ConvertToCairo (Gdk.Color color, double alpha)
+		public static Cairo.Color ConvertToCairo (this Gdk.Color color, double alpha)
 		{
 			return new Cairo.Color ((double) color.Red/ushort.MaxValue,
 			                        (double) color.Green/ushort.MaxValue,
@@ -115,7 +124,7 @@ namespace Do.Addins
 		/// <returns>
 		/// A <see cref="Gdk.Color"/>
 		/// </returns>
-		public static Gdk.Color ConvertToGdk (Cairo.Color color)
+		public static Gdk.Color ConvertToGdk (this Cairo.Color color)
 		{
 			return new Gdk.Color (Convert.ToByte (color.R*byte.MaxValue),
 			                      Convert.ToByte (color.G*byte.MaxValue),
@@ -134,7 +143,7 @@ namespace Do.Addins
 		/// <returns>
 		/// A <see cref="Cairo.Color"/>
 		/// </returns>
-		public static Cairo.Color ShadeColor (Cairo.Color color, double brightness)
+		public static Cairo.Color ShadeColor (this Cairo.Color color, double brightness)
 		{
 			Gdk.Color gdk_color = ConvertToGdk (color);
 			
@@ -167,7 +176,7 @@ namespace Do.Addins
 		/// <returns>
 		/// A <see cref="Cairo.Color"/>
 		/// </returns>
-		public static Cairo.Color SaturateColor (Cairo.Color color, double saturation)
+		public static Cairo.Color SaturateColor (this Cairo.Color color, double saturation)
 		{
 			Gdk.Color gdk_color = ConvertToGdk (color);
 			
@@ -200,7 +209,7 @@ namespace Do.Addins
 		/// <returns>
 		/// A <see cref="Cairo.Color"/>
 		/// </returns>
-		public static Cairo.Color SetHue (Cairo.Color color, double hue)
+		public static Cairo.Color SetHue (this Cairo.Color color, double hue)
 		{
 			if (hue <= 0 || hue > 360)
 				return color;
@@ -237,7 +246,7 @@ namespace Do.Addins
 		/// <returns>
 		/// A <see cref="Cairo.Color"/>
 		/// </returns>
-		public static Cairo.Color ColorizeColor (Cairo.Color color, Cairo.Color reference_color)
+		public static Cairo.Color ColorizeColor (this Cairo.Color color, Cairo.Color reference_color)
 		{
 			//Color has no saturation to it, we need to give it some
 			if (color.B == color.G && color.B == color.R) {
@@ -280,7 +289,7 @@ namespace Do.Addins
 		/// <returns>
 		/// A <see cref="Gdk.Color"/>
 		/// </returns>
-		public static Gdk.Color SetMaximumValue (Gdk.Color gdk_color, double max_value)
+		public static Gdk.Color SetMaximumValue (this Gdk.Color gdk_color, double max_value)
 		{
 			byte r, g, b; 
 			double h, s, v;
@@ -305,7 +314,7 @@ namespace Do.Addins
 		/// <returns>
 		/// A <see cref="System.String"/>
 		/// </returns>
-		public static string ColorToHexString (Gdk.Color gdk_color)
+		public static string ColorToHexString (this Gdk.Color gdk_color)
 		{
 			byte r, g, b;
 			r = (byte) ((gdk_color.Red)   >> 8);

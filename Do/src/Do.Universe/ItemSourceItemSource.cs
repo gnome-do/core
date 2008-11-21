@@ -34,12 +34,10 @@ namespace Do.Universe {
 			items = new List<IItem> ();
 		}
 		
-		public Type[] SupportedItemTypes
+		public IEnumerable<Type> SupportedItemTypes
 		{
 			get {
-				return new Type[] {
-					typeof (DoItemSource),
-				};
+				yield return typeof (DoItemSource);
 			}
 		}
 		
@@ -61,7 +59,7 @@ namespace Do.Universe {
 			}
 		}
 		
-		public ICollection<IItem> Items {
+		public IEnumerable<IItem> Items {
 			get { return items; }
 		}
 
@@ -73,7 +71,7 @@ namespace Do.Universe {
             }
 		}
 		
-		public ICollection<IItem> ChildrenOfItem (IItem item)
+		public IEnumerable<IItem> ChildrenOfItem (IItem item)
 		{
 			List<IItem> children;
 			bool parent_is_this;

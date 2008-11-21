@@ -58,30 +58,26 @@ namespace Do {
 			}
 		}
 		
-		protected string AlignMessage (string msg, int margin)
+		protected string AlignMessage (string msg)
 		{
-			int maxWidth   = 80;
 			int lineWidth  = 0;
+			const int maxWidth = 80;
+			const string tab = "    ";
 			string aligned = string.Empty;
-			string padding = string.Empty;
-			string[] words = msg.Split (' ');
+			IEnumerable<string> words = msg.Split (' ');
 
-			while (padding.Length < margin)
-				padding += " ";
-
-			lineWidth = margin;
 			foreach (string word in words) {
 				if (lineWidth + word.Length < maxWidth) {
 					aligned = string.Format ("{0}{1} ", aligned, word);
 					lineWidth += word.Length + 1;
 				} else {
-					aligned = string.Format ("{0}\n    {1} ", aligned, word);
-					lineWidth = 4 + word.Length + 1;
+					aligned = string.Format ("{0}\n{1}{2} ", aligned, tab, word);
+					lineWidth = tab.Length + word.Length + 1;
 				}
 			}
 			return aligned;
 		}
-		
+
 		abstract public void Log (LogEntryType level, string msg);
 	}
 	
@@ -91,7 +87,7 @@ namespace Do {
 			string prompt = string.Format (Promptf, stype, Time);
 			
 			TextWriter writer = new StreamWriter (Paths.Log, true);
-			writer.WriteLine (prompt + " " + AlignMessage (msg, prompt.Length + 1));
+			writer.WriteLine (prompt + " " + AlignMessage (msg));
 			writer.Close ();
 		}
 	}
@@ -124,7 +120,7 @@ namespace Do {
 			Console.Write (prompt);
 			ConsoleCrayon.ResetColor ();
 			Console.Write (" ");
-			Console.WriteLine (AlignMessage (msg, prompt.Length + 1));
+			Console.WriteLine (AlignMessage (msg));
 		}
 	}
 

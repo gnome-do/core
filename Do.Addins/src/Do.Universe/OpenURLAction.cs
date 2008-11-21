@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Mono.Unix;
 
@@ -63,7 +64,7 @@ namespace Do.Universe
 			get { return "web-browser"; }
 		}
 		
-		public override Type[] SupportedItemTypes
+		public override IEnumerable<Type> SupportedItemTypes
 		{
 			get {
 				return new Type[] {
@@ -81,7 +82,7 @@ namespace Do.Universe
 			return true;
 		}
 		
-		public override IItem[] Perform (IItem[] items, IItem[] modifierItems)
+		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modifierItems)
 		{
 			string url;
 			

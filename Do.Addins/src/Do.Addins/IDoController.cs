@@ -25,7 +25,10 @@ using Do.Universe;
 
 namespace Do.Addins
 {
-	
+	public enum ControlOrientation {
+		Vertical,
+		Horizontal,
+	}
 	
 	public interface IDoController
 	{
@@ -51,7 +54,33 @@ namespace Do.Addins
 		/// </value>
 		Pane CurrentPane { set; }
 		
+		/// <value>
+		/// Set the control layout orientation
+		/// </value>
+		ControlOrientation Orientation { get; set; }
 		
+		/// <summary>
+		/// Check and see if an object likely has children
+		/// </summary>
+		/// <param name="o">
+		/// A <see cref="IObject"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/>
+		/// </returns>
 		bool ObjectHasChildren (IObject o);
+		
+		/// <value>
+		/// Get ahold of the current statistics for Do
+		/// </value>
+		IStatistics Statistics { get; }
+		
+		/// <summary>
+		/// Performs the default action on the provided IItem
+		/// </summary>
+		/// <param name="item">
+		/// A <see cref="IItem"/>
+		/// </param>
+		void PerformDefaultAction (IItem item);
 	}
 }

@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -28,9 +29,61 @@ namespace Do.Core {
 
 	public class DoItem : DoObject, IItem {
 
+		protected static IDictionary<IItem, bool> has_children;
+
+		static DoItem ()
+		{
+			has_children = new Dictionary<IItem, bool> ();
+		}
+
+		/// <summary>
+		/// Returns the inner item if the static type of given item is a DoItem
+		/// subtype. Returns the argument otherwise. This is used to get at the
+		/// instance wrapped by a DoItem.
+		/// </summary>
+		/// <param name="item">
+		/// A <see cref="IItem"/> that may or may not be a DoItem subtype.
+		/// </param>
+		/// <returns>
+		/// A <see cref="IItem"/> that is NOT a DoItem subtype.
+		/// </returns>
+		public static IItem EnsureIItem (IItem item)
+		{
+			while (item is DoItem)
+				item = (item as DoItem).Inner as IItem;
+			return item;
+		}
+
+		/// <summary>
+		/// The converse of EnsureIItem, this ensures that the item passed is
+		/// a DoItem. This is used to wrap an IItem inside a DoItem.
+		/// </summary>
+		/// <param name="item">
+		/// A <see cref="IItem"/> that may or may not be a DoItem subtype.
+		/// </param>
+		/// <returns>
+		/// A <see cref="IItem"/> that is a DoItem.
+		/// </returns>
+		public static IItem EnsureDoItem (IItem item)
+		{
+			return item is DoItem ? item : new DoItem (item);
+		}
+		
 		public DoItem (IItem item):
 			base (item)
 		{
+		}
+
+		public bool HasChildren {
+			get {
+				if (!has_children.ContainsKey (this)) {
+					has_children [this] =
+						PluginManager.GetItemSources ()
+							.Any (s => s.SupportsItem (this) &&
+												 s.ChildrenOfItem (this).Any ());
+				}
+				return has_children [this];
+			}
 		}
 
 	}
