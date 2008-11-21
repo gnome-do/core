@@ -43,6 +43,19 @@ namespace MonoDock.Util
 			return apps.ToArray ();
 		}
 		
+		public static string CmdLineForPid (int pid)
+		{
+			StreamReader reader;
+			try {
+				reader = new StreamReader (Do.Paths.Combine ("/proc", pid.ToString (), "cmdline"));
+			} catch { return null; }
+			
+			string cmdline = reader.ReadLine ();
+			reader.Close ();
+			reader.Dispose ();
+			return cmdline;
+		}
+		
 		public static List<Application> GetApplicationList (string exec)
 		{
 			exec = exec.Split (' ')[0];
@@ -55,13 +68,7 @@ namespace MonoDock.Util
 				try { pid = Convert.ToInt32 (dir.Substring (6)); } 
 				catch { continue; }
 				
-				try {
-					reader = new StreamReader (Do.Paths.Combine ("/proc", dir, "cmdline"));
-				} catch { continue; }
-				
-				string exec_line = reader.ReadLine ();
-				reader.Close ();
-				reader.Dispose ();
+				string exec_line = CmdLineForPid (pid);
 				if (string.IsNullOrEmpty (exec_line))
 					continue;
 				

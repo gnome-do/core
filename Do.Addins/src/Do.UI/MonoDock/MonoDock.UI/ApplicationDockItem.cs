@@ -73,17 +73,24 @@ namespace MonoDock.UI
 		
 		Gdk.Pixbuf GetIcon ()
 		{
-			string[] guesses = new string[10];
-			guesses[0] = application.Name.ToLower ().Replace (' ','-');
-			guesses[1] = application.IconName.ToLower ().Replace (' ','-');
-			guesses[2] = application.Windows[0].Name.ToLower ().Replace (' ','-');
-			guesses[3] = application.Windows[0].IconName.ToLower ().Replace (' ','-');
-			guesses[4] = "gnome-" + guesses[0];
-			guesses[5] = "gnome-" + guesses[1];
-			guesses[6] = "gnome-" + guesses[2];
-			guesses[7] = "gnome-" + guesses[3];
-			guesses[8] = System.Diagnostics.Process.GetProcessById (application.Pid).ProcessName;
-			guesses[9] = System.Diagnostics.Process.GetProcessById (application.Pid).ProcessName.Split ('-')[0];
+			List<string> guesses = new List<string> ();
+			guesses.Add (application.Name.ToLower ().Replace (' ','-'));
+			guesses.Add (application.IconName.ToLower ().Replace (' ','-'));
+			guesses.Add (application.Windows[0].Name.ToLower ().Replace (' ','-'));
+			guesses.Add (application.Windows[0].IconName.ToLower ().Replace (' ','-'));
+			guesses.Add ("gnome-" + guesses[0]);
+			guesses.Add ("gnome-" + guesses[1]);
+			guesses.Add ("gnome-" + guesses[2]);
+			guesses.Add ("gnome-" + guesses[3]);
+			
+			string exec;
+			try {
+				exec = System.Diagnostics.Process.GetProcessById (application.Pid).ProcessName.Split (' ')[0];
+			} catch {
+				exec = WindowUtils.CmdLineForPid (application.Pid).Split (' ')[0];
+			}
+			guesses.Add (exec);
+			guesses.Add (exec.Split ('-')[0]);
 			
 			Gdk.Pixbuf pbuf = null;
 			foreach (string guess in guesses) {
