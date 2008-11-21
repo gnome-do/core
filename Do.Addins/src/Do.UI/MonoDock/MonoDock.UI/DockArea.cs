@@ -694,6 +694,8 @@ namespace MonoDock.UI
 		int IconNormalCenterX (int icon)
 		{
 			//the first icons center is at dock X + border + IconBorder + half its width
+			if (DockItems.Count == 0)
+				return 0;
 			int start_x = MinimumDockArea.X + XBuffer + IconBorderWidth + (DockItems[0].Width/2);
 			for (int i=0; i<icon; i++)
 				start_x += DockItems[i].Width + 2*IconBorderWidth;
@@ -704,9 +706,9 @@ namespace MonoDock.UI
 		{
 			int start_x = MinimumDockArea.X + XBuffer;
 			for (int i=0; i<DockItems.Count; i++) {
-				if (x >= start_x && x <= start_x+DockItems[i].Width)
+				if (x >= start_x && x <= start_x+DockItems[i].Width+2*IconBorderWidth)
 					return i;
-				start_x += DockItems[i].Width;
+				start_x += DockItems[i].Width + 2*IconBorderWidth;
 			}
 			return -1;
 		}
