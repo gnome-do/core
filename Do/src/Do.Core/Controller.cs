@@ -1018,10 +1018,10 @@ namespace Do.Core {
 		public IEnumerable<IItem> GetMostUsedItems (int n)
 		{
 			return Do.UniverseManager.Search ("", new Type[] { typeof (IItem) })
-				.Where (i => !((i as DoObject).Inner is SelectedTextItem))
+				.Where (i => !((i as DoItem).Inner is SelectedTextItem))
 				.Take (n)
 				.OrderByDescending (i => (i as DoObject).Inner is ApplicationItem)
-				.ThenBy (i => (i as DoObject).Inner.GetType ())
+				.ThenBy (i => (i as DoObject).Inner.GetType ().GetHashCode ())
 				.ThenBy (i => i.Name)
 				.Select (i => DoItem.EnsureIItem (i as IItem));
 		}
