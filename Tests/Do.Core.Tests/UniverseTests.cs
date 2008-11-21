@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Linq;
 using NUnit.Framework;
 
 using Mono.Unix;
@@ -44,7 +45,7 @@ namespace Do.Core
 			IUniverseManager universe = new SimpleUniverseManager ();
 			universe.Initialize ();
 			
-			Assert.IsTrue (universe.Search ("e", new Type[] {}).Count > 0);
+			Assert.IsTrue (universe.Search ("e", new Type[] {}).Any ());
 		}
 		
 		[TestFixtureSetUp]

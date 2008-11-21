@@ -124,16 +124,22 @@ namespace MonoDock.UI
 				
 			if (button == 1) {
 				bool not_in_viewport = true;
-				foreach (Wnck.Application app in apps) {
-					foreach (Wnck.Window window in app.Windows) {
-						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+				foreach (Wnck.Application application in apps) {
+					foreach (Wnck.Window window in application.Windows) {
+						if (!window.IsSkipTasklist && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
 							not_in_viewport = false;
 					}
 				}
 				
 				if (not_in_viewport) {
-					apps[0].Windows[0].CenterAndFocusWindow ();
-					return;
+					foreach (Wnck.Application application in apps) {
+						foreach (Wnck.Window window in application.Windows) {
+							if (!window.IsSkipTasklist) {
+								window.CenterAndFocusWindow ();
+								return;
+							}
+						}
+					}
 				}
 				
 				foreach (Wnck.Application app in apps) {

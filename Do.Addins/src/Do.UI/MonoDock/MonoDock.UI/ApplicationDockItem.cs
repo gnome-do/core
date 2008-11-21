@@ -166,7 +166,7 @@ namespace MonoDock.UI
 			if (button == 1) {
 				bool not_in_viewport = true;
 				foreach (Wnck.Window window in application.Windows) {
-					if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+					if (!window.IsSkipTasklist && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
 						not_in_viewport = false;
 				}
 				
