@@ -39,17 +39,13 @@ namespace MonoDock.UI
 				Context cr = new Context (sr);
 				cr.AlphaFill ();
 				
-				cr.MoveTo (Width/2, 0);
-				cr.LineTo (Width/2, MonoDock.Util.Preferences.IconSize);
-				LinearGradient lg = new LinearGradient (0, 0, 0, MonoDock.Util.Preferences.IconSize);
-				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
-				lg.AddColorStop (.5, new Cairo.Color (1, 1, 1, .5));
-				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
-				cr.Pattern = lg;
+				for (int i=1; i*6+2 < Height; i++) {
+					cr.Rectangle (Width/2-2, i*6, 4, 2);
+				}
 				
-				cr.Stroke ();
+				cr.Color = new Cairo.Color (1, 1, 1, .3);
+				cr.Fill ();
 				
-				lg.Destroy ();
 				(cr as IDisposable).Dispose ();
 			}
 			return sr;

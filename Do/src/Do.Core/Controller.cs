@@ -985,7 +985,11 @@ namespace Do.Core {
 		
 		public void PerformDefaultAction (IItem item) 
 		{
-			IList<IObject> objects = Do.UniverseManager.Search ("", new Type[] {typeof (IAction),}, item);
+			IList<IObject> objects;
+			if (item is IFileItem)
+				objects = Do.UniverseManager.Search ("", new Type[] {typeof (OpenAction),}, item);
+			else
+				objects = Do.UniverseManager.Search ("", new Type[] {typeof (IAction),}, item);
 			
 			IAction action = null;
 			foreach (IObject ob in objects) {
@@ -1001,8 +1005,11 @@ namespace Do.Core {
 			
 			if (item is DoItem) {
 				(item as DoItem).IncreaseRelevance ("", null);
+				(item as DoItem).IncreaseRelevance ("", action as DoObject);
 			} else {
-				new DoItem (item).IncreaseRelevance ("", null);
+				DoItem di = new DoItem (item);
+				di.IncreaseRelevance ("", null);
+				di.IncreaseRelevance ("", action as DoObject);
 			}
 			
 			DoPerformState state = new DoPerformState (action, new List<IItem> (new IItem[] {item}), new List<IItem> (0));
