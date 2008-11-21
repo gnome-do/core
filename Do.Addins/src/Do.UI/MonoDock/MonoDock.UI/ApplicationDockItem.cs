@@ -89,8 +89,10 @@ namespace MonoDock.UI
 			} catch {
 				exec = WindowUtils.CmdLineForPid (application.Pid).Split (' ')[0];
 			}
-			guesses.Add (exec);
-			guesses.Add (exec.Split ('-')[0]);
+			if (!string.IsNullOrEmpty (exec)) {
+				guesses.Add (exec);
+				guesses.Add (exec.Split ('-')[0]);
+			}
 			
 			Gdk.Pixbuf pbuf = null;
 			foreach (string guess in guesses) {
