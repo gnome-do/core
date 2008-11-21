@@ -878,10 +878,13 @@ namespace MonoDock.UI
 			return ret_val;
 		}
 
+		ModifierType leave_mask = ModifierType.Button1Mask | ModifierType.Button2Mask | 
+				ModifierType.Button3Mask | ModifierType.Button4Mask | ModifierType.Button5Mask;
 		protected override bool OnLeaveNotifyEvent (Gdk.EventCrossing evnt)
 		{
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
-			if (CursorIsOverDockArea)
+			
+			if (CursorIsOverDockArea && (int) (evnt.State & leave_mask) == 0 && evnt.Mode == CrossingMode.Normal)
 				Cursor = new Gdk.Point ((int) evnt.X, -1);
 			return base.OnLeaveNotifyEvent (evnt);
 		}
