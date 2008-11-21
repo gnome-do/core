@@ -393,10 +393,6 @@ namespace MonoDock.UI
 				UpdateWindowItems ();
 			};
 			
-//			Wnck.Screen.Default.ViewportsChanged += delegate {
-//				UpdateWindowItems ();
-//			};
-			
 			ItemMenu.Instance.RemoveClicked += delegate (Gdk.Point point) {
 				int item = DockItemForX (point.X);
 				if (GetIconSource (DockItems[item]) == IconSource.Custom)

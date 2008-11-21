@@ -999,8 +999,11 @@ namespace Do.Core {
 			if (action == null)
 				return;
 			
-			if (item is DoItem)
+			if (item is DoItem) {
 				(item as DoItem).IncreaseRelevance ("", null);
+			} else {
+				new DoItem (item).IncreaseRelevance ("", null);
+			}
 			
 			DoPerformState state = new DoPerformState (action, new List<IItem> (new IItem[] {item}), new List<IItem> (0));
 			th = new Thread (new ParameterizedThreadStart (DoPerformWork));
