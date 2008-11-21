@@ -42,9 +42,9 @@ namespace Do.Core {
 
 				try {
 					item_types = (Inner as IItemSource).SupportedItemTypes;
-					// Call ToList to strictly evaluate the IEnumerable before we leave
+					// Call ToArray to strictly evaluate the IEnumerable before we leave
 					// the try block.
-					if (item_types != null) item_types = item_types.ToList ();
+					if (item_types != null) item_types = item_types.ToArray ();
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
 				} finally {

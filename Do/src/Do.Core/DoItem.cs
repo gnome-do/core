@@ -77,10 +77,8 @@ namespace Do.Core {
 		public bool HasChildren {
 			get {
 				if (!has_children.ContainsKey (this)) {
-					has_children [this] =
-						PluginManager.GetItemSources ()
-							.Any (s => s.SupportsItem (this) &&
-												 s.ChildrenOfItem (this).Any ());
+					has_children [this] = PluginManager.GetItemSources ()
+						.Any (s => s.SupportsItem (this) && s.ChildrenOfItem (this).Any ());
 				}
 				return has_children [this];
 			}

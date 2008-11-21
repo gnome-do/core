@@ -72,12 +72,12 @@ namespace Do.Core
 			UpdatesEnabled = true;
 		}
 
-		public IList<IObject> Search (string query, IEnumerable<Type> filter)
+		public IEnumerable<IObject> Search (string query, IEnumerable<Type> filter)
 		{	
 				return Search (query, filter, (IObject) null);
 		}
 		
-		public IList<IObject> Search (string query, IEnumerable<Type> filter, IObject other)
+		public IEnumerable<IObject> Search (string query, IEnumerable<Type> filter, IObject other)
 		{
 			if (filter.Count () == 1 && filter.First () == typeof (IAction))
 				lock (action_lock)
@@ -87,22 +87,20 @@ namespace Do.Core
 					return Search (query, filter, universe.Values, other);
 		}
 		
-		public IList<IObject> Search (string query, IEnumerable<Type> filter, IEnumerable<IObject> objects)
+		public IEnumerable<IObject> Search (string query, IEnumerable<Type> filter, IEnumerable<IObject> objects)
 		{
 			return Search (query, filter, objects, null);
 		}
 		
-		public IList<IObject> Search (string query, IEnumerable<Type> filter, IEnumerable<IObject> objects, IObject other)
+		public IEnumerable<IObject> Search (string query, IEnumerable<Type> filter, IEnumerable<IObject> objects, IObject other)
 		{
-			return objects
-				.Where (iobj => {
+			return objects.Where (iobj => {
 					DoObject o = iobj as DoObject;
 					o.UpdateRelevance (query, other as DoObject);
 					return epsilon < Math.Abs (o.Relevance) && 
 						(!filter.Any () || o.Inner.IsAssignableToAny (filter));
 				})
-				.OrderByDescending (o => (o as DoObject).Relevance)
-				.ToArray ();
+				.OrderByDescending (o => (o as DoObject).Relevance);
 		}
 		
 		/// <summary>

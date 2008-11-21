@@ -211,7 +211,10 @@ namespace Do.Core
 			newContext.ParentContext = context;
 			context = newContext;
 			
-			context.Results = Do.UniverseManager.Search (Query, defaultFilter, children);
+			context.Results =
+				Do.UniverseManager.Search (Query, defaultFilter, children)
+				.ToList ();
+
 			OnSearchFinished (true, context.ParentContext.Query != context.Query, Selection, Query);
 			return true;
 		}

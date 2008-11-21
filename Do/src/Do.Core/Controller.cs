@@ -985,7 +985,8 @@ namespace Do.Core {
 		
 		public void PerformDefaultAction (IItem item) 
 		{
-			IList<IObject> objects = Do.UniverseManager.Search ("", new Type[] {typeof (IAction),}, item);
+			IEnumerable<IObject> objects =
+				Do.UniverseManager.Search ("", new Type[] { typeof (IAction) }, item);
 			
 			IAction action = null;
 			foreach (IObject ob in objects) {
@@ -1009,32 +1010,20 @@ namespace Do.Core {
 			th = new Thread (new ParameterizedThreadStart (DoPerformWork));
 			th.Start (state);
 			th.Join (100);
-			
 		}
 		#endregion
 
 		#region IStatistics implementation 
 		
-		public IEnumerable<IItem> GetMostUsedItems (int numItems)
+		public IEnumerable<IItem> GetMostUsedItems (int n)
 		{
-			IList<IObject> search_results = Do.UniverseManager.Search ("", new Type[] {typeof (IItem),});
-			return search_results
-				.Where (item => !((item as DoObject).Inner is ITextItem))
-				.Take (numItems)
-				.OrderByDescending (item => (item as DoObject).Inner is ApplicationItem)
-				.ThenBy (item => (item as DoObject).Inner.GetType ().ToString ())
-				.ThenBy (item => item.Name)
-				.Select (item => (item as DoItem).Inner as IItem);
-		}
-		
-		public IEnumerable<IAction> GetMostUsedActions (int numItems)
-		{
-			IList<IObject> search_results = Do.UniverseManager.Search ("", new Type[] {typeof (IAction),});
-			return search_results
-				.Take (numItems)
-				.OrderBy (item => (item as DoObject).Inner.GetType ().ToString ())
-				.ThenByDescending (item => item.Name)
-				.Select (item => item as IAction);
+			return Do.UniverseManager.Search ("", new Type[] { typeof (IItem) })
+				.Where (i => !((i as DoObject).Inner is SelectedTextItem))
+				.Take (n)
+				.OrderByDescending (i => (i as DoObject).Inner is ApplicationItem)
+				.ThenBy (i => (i as DoObject).Inner.GetType ())
+				.ThenBy (i => i.Name)
+				.Select (i => DoItem.EnsureIItem (i as IItem));
 		}
 		
 		#endregion 

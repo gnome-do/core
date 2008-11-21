@@ -44,9 +44,9 @@ namespace Do.Core {
 
 				try {
 					item_types = (Inner as IAction).SupportedItemTypes;
-					// Call ToList to strictly evaluate the IEnumerable before we leave
+					// Call ToArray to strictly evaluate the IEnumerable before we leave
 					// the try block.
-					if (item_types != null) item_types = item_types.ToList ();
+					if (item_types != null) item_types = item_types.ToArray ();
 				} catch (Exception e) {
 					LogError ("SupportedItemTypes", e);
 				} finally {
@@ -63,9 +63,9 @@ namespace Do.Core {
 				
 				try {
 					moditem_types = (Inner as IAction).SupportedModifierItemTypes;
-					// Call ToList to strictly evaluate the IEnumerable before we leave
+					// Call ToArray to strictly evaluate the IEnumerable before we leave
 					// the try block.
-					if (moditem_types != null) moditem_types = moditem_types.ToList ();
+					if (moditem_types != null) moditem_types = moditem_types.ToArray ();
 				} catch (Exception e) {
 					LogError ("SupportedModifierItemTypes", e);
 				} finally {
