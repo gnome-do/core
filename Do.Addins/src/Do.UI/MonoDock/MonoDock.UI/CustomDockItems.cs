@@ -84,7 +84,15 @@ namespace MonoDock.UI
 		
 		public static void AddFile (string file)
 		{
-			
+			try {
+				IDockItem di = CreateDockFile (file);
+				di.DockAddItem = DateTime.UtcNow;
+				if (di != null)
+					items[file] = di;
+			} catch {
+				Console.Error.WriteLine ("Failed loading {0}", file);
+			}
+			Serialize ();
 		}
 		
 		public static void RemoveItem (IDockItem item)
@@ -108,6 +116,17 @@ namespace MonoDock.UI
 				return null;
 			}
 			return new DockItem (appItem);
+		}
+		
+		static IDockItem CreateDockFile (string file)
+		{
+			FileItem fileItem;
+			try {
+				fileItem = new FileItem (file);
+			} catch {
+				return null;
+			}
+			return new DockItem (fileItem);
 		}
 		
 		static void Serialize ()

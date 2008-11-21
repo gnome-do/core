@@ -780,9 +780,9 @@ namespace MonoDock.UI
 			
 			string[] uriList = Regex.Split (data, "\r\n");
 			foreach (string uri in uriList) {
-//				if (uri.EndsWith (".desktop")) {
+				if (uri.StartsWith ("file://")) {
 					AddCustomItem (uri.Substring (7));
-//				}
+				}
 			} 
 			
 			base.OnDragDataReceived (context, x, y, selection_data, info, time_);
