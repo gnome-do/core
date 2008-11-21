@@ -86,7 +86,7 @@ namespace MonoDock.UI
 			get {
 				int out_width = 2*XBuffer;
 				foreach (IDockItem di in DockItems) {
-					out_width += di.Width;
+					out_width += di.Width + 2*IconBorderWidth; //each icon has a left and right border
 				}
 				return out_width;
 			}
@@ -97,6 +97,12 @@ namespace MonoDock.UI
 				if (Preferences.AutoHide)
 					return 0;
 				return MinimumDockArea.Height;
+			}
+		}
+		
+		public int IconBorderWidth {
+			get {
+				return 3;
 			}
 		}
 		
@@ -687,9 +693,10 @@ namespace MonoDock.UI
 		
 		int IconNormalCenterX (int icon)
 		{
-			int start_x = MinimumDockArea.X + XBuffer + (IconSize/2);
+			//the first icons center is at dock X + border + IconBorder + half its width
+			int start_x = MinimumDockArea.X + XBuffer + IconBorderWidth + (DockItems[0].Width/2);
 			for (int i=0; i<icon; i++)
-				start_x += DockItems[i].Width;
+				start_x += DockItems[i].Width + 2*IconBorderWidth;
 			return start_x;
 		}
 		
