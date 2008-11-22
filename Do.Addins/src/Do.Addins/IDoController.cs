@@ -18,9 +18,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 
-using Do.Addins;
 using Do.UI;
+using Do.Addins;
 using Do.Universe;
 
 namespace Do.Addins
@@ -81,6 +82,6 @@ namespace Do.Addins
 		/// <param name="item">
 		/// A <see cref="IItem"/>
 		/// </param>
-		void PerformDefaultAction (IItem item, Type[] filter);
+		void PerformDefaultAction (IItem item, IEnumerable<Type> filter);
 	}
 }

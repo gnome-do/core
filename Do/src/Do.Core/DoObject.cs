@@ -36,6 +36,30 @@ namespace Do.Core {
 		protected IObject inner;
 		protected float relevance;
 		protected string uid;
+
+		public static IObject Wrap (IObject o)
+		{
+			return o is DoObject ? o : new DoObject (o);
+		}
+
+		public static IAction Wrap (IAction a)
+		{
+			return a is DoAction ? a : new DoAction (a);
+		}
+
+		public static IItem Wrap (IItem i)
+		{
+			return i is DoItem ? i : new DoItem (i);
+		}
+		
+		public static T Unwrap<T> (T o) where T : IObject
+		{
+			IObject inner = (IObject) o;
+			
+			while (inner is DoObject)
+				inner = (inner as DoObject).Inner;
+			return (T) inner;
+		}
 		
 		public DoObject (IObject inner)
 		{

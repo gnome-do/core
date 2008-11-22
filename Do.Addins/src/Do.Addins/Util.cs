@@ -47,6 +47,8 @@ namespace Do.Addins
 	{
 		public static GetPreferencesDelegate GetPreferences;
 		public static FormatCommonSubstringsDelegate FormatCommonSubstrings;
+
+		public static Func<IObject, Type> GetInnerType;
 		
 		public static class Environment
 		{

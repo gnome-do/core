@@ -135,7 +135,7 @@ namespace MonoDock.UI
 				if (IObject is IFileItem)
 					controller.PerformDefaultAction (IObject as IItem, new Type[] { typeof (OpenAction), });
 				else
-					controller.PerformDefaultAction (IObject as IItem, null);
+					controller.PerformDefaultAction (IObject as IItem, Type.EmptyTypes);
 				return;
 			}
 				

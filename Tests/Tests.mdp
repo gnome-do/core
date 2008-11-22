@@ -19,6 +19,7 @@
     <File name="Do.Core.Tests/UniverseTests.cs" subtype="Code" buildaction="Compile" />
     <File name="Do.Core.Tests/RelevanceProviderTests.cs" subtype="Code" buildaction="Compile" />
     <File name="Do.Core.Tests/DoItemTests.cs" subtype="Code" buildaction="Compile" />
+    <File name="Do.Core.Tests/DoObjectTests.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

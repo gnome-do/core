@@ -919,11 +919,28 @@ namespace MonoDock.UI
 					window.SetInputMask (GetDockArea ().Height);
 			}
 		}
+
+		IEnumerable<IItem> MostUsedItems ()
+		{
+			Func<IItem, bool> isNotSelectedText = item =>
+				Do.Addins.Util.GetInnerType (item).Name != "SelectedTextItem";
+			Func<IItem, bool> isApplication = item =>
+				Do.Addins.Util.GetInnerType (item).Name == "ApplicationItem";
+			Func<IItem, int> typeComparison = item =>
+				Do.Addins.Util.GetInnerType (item).GetHashCode ();
+
+			return Statistics.GetMostUsedItems (Preferences.AutomaticIcons + 1)
+				.Where (isNotSelectedText)
+				.OrderByDescending (isApplication)
+				.ThenBy (typeComparison)
+				.ThenBy (item => item.Name)
+				.Take (Preferences.AutomaticIcons);
+		}
 		
 		void UpdateIcons ()
 		{
 			List<IDockItem> new_items = new List<IDockItem> ();
-			foreach (IItem i in Statistics.GetMostUsedItems (Preferences.AutomaticIcons)) {
+			foreach (IItem i in MostUsedItems ()) {
 				if (Preferences.ItemBlacklist.Contains (i.Name + i.Description + i.Icon))
 					continue;
 				IDockItem di = new DockItem (i);

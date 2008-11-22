@@ -129,7 +129,7 @@ namespace Do.Core
 			List<IObject> results = new List<IObject> ();
 			if (FirstController.Selection is IItem) {
 				IItem item = FirstController.Selection as IItem;
-				IItem ritem = DoItem.EnsureIItem (FirstController.Selection as IItem);
+				IItem ritem = DoItem.Unwrap (FirstController.Selection as IItem);
 				
 				//We need to find actions for this item
 				//TODO -- Make this work for multiple items

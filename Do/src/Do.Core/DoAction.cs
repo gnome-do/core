@@ -93,8 +93,7 @@ namespace Do.Core {
 			IEnumerable<IItem> modItems  = null;
 			
 			try {
-				modItems = (Inner as IAction)
-					.DynamicModifierItemsForItem (DoItem.EnsureIItem (item));
+				modItems = (Inner as IAction).DynamicModifierItemsForItem (DoItem.Unwrap (item));
 				// Call ToList to strictly evaluate the IEnumerable before we leave
 				// the try block.
 				if (modItems != null) modItems = modItems.ToList ();
@@ -103,14 +102,14 @@ namespace Do.Core {
 			} finally {
 				modItems = modItems ?? Enumerable.Empty<IItem> ();
 			}
-			return modItems.Select (i => DoItem.EnsureDoItem (i));
+			return modItems.Select (i => DoItem.Wrap (i));
 		}
 
 		public bool SupportsItem (IItem item)
 		{
 			bool supports = false;
 			
-			item = DoItem.EnsureIItem (item);
+			item = DoItem.Unwrap (item);
 			if (!item.IsAssignableToAny (SupportedItemTypes))
 				return false;
 
@@ -126,8 +125,8 @@ namespace Do.Core {
 		{
 			bool supports = false;
 
-			items = items.Select (i => DoItem.EnsureIItem (i));
-			modItem = DoItem.EnsureIItem (modItem);
+			items = items.Select (i => DoItem.Unwrap (i));
+			modItem = DoItem.Unwrap (modItem);
 			if (!modItem.IsAssignableToAny (SupportedModifierItemTypes))
 				return false;
 
@@ -145,8 +144,8 @@ namespace Do.Core {
 			
 			try {
 				results = (Inner as IAction).Perform (
-					items.Select (i => DoItem.EnsureIItem (i)),
-					modItems.Select (i => DoItem.EnsureIItem (i))
+					items.Select (i => DoItem.Unwrap (i)),
+					modItems.Select (i => DoItem.Unwrap (i))
 				);
 				// Call ToList to strictly evaluate the IEnumerable before we leave
 				// the try block.
@@ -156,7 +155,7 @@ namespace Do.Core {
 			} finally {
 				results = results ?? Enumerable.Empty<IItem> ();
 			}
-			results = results.Select (i => DoItem.EnsureDoItem (i));
+			results = results.Select (i => DoItem.Wrap (i));
 			
 			// If we have results to feed back into the window, do so in a new
 			// iteration.

@@ -79,20 +79,20 @@ namespace Do.Core {
 					items = items ?? Enumerable.Empty<IItem> ();
 				}
 				
-				return items.Select (i => DoItem.EnsureDoItem (i) as IItem);
+				return items.Select (i => DoItem.Wrap (i) as IItem);
 			}
 		}
 
 		public bool SupportsItem (IItem item)
 		{
-			item = DoItem.EnsureIItem (item);;
+			item = DoItem.Unwrap (item);;
 			return SupportedItemTypes.Any (t => t.IsInstanceOfType (item));
 		}
 
 		public IEnumerable<IItem> ChildrenOfItem (IItem item)
 		{
 			IEnumerable<IItem> children = null;
-			item = DoItem.EnsureIItem (item);
+			item = DoItem.Unwrap (item);
 
 			if (!item.IsAssignableToAny (SupportedItemTypes))
 				return Enumerable.Empty<IItem> ();
@@ -108,7 +108,7 @@ namespace Do.Core {
 				children = children ?? Enumerable.Empty<IItem> ();
 			}
 
-			return children.Select (i => DoItem.EnsureDoItem (i) as IItem);
+			return children.Select (i => DoItem.Wrap (i) as IItem);
 		}
 	}
 }

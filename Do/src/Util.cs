@@ -24,11 +24,13 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using Gdk;
-
-using Mono.Unix;
 using Do.UI;
+using Do.Core;
 using Do.Addins;
+using Do.Universe;
+
+using Gdk;
+using Mono.Unix;
 
 namespace Do
 {
@@ -40,6 +42,8 @@ namespace Do
 
 		public static void Initialize ()
 		{
+			Addins.Util.GetInnerType = o => DoObject.Unwrap (o).GetType ();
+			
 			// Misc
 			Addins.Util.FormatCommonSubstrings = FormatCommonSubstrings;
 			Addins.Util.GetPreferences = GetPreferences;

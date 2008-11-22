@@ -28,50 +28,5 @@ namespace Do.Core
 	[TestFixture()]
 	public class DoItemTests
 	{
-
-		class SimpleItem : IItem
-		{
-			public string Name { get; set; }
-			public string Description { get; set; }
-			public string Icon { get; set; }
-		}
-		
-		[Test()]
-		public void EnsureIItem_Identity ()
-		{
-			IItem item = new SimpleItem ();
-			Assert.AreSame (item, DoItem.EnsureIItem (item));
-		}
-
-		[Test()]
-		public void EnsureIItem_Basic ()
-		{
-			IItem item = new SimpleItem ();
-			IItem doItem = new DoItem (item);
-			Assert.AreSame (item, DoItem.EnsureIItem (doItem));
-		}
-
-		[Test()]
-		public void EnsureIItem_Recursive ()
-		{
-			IItem item = new SimpleItem ();
-			IItem doItem = new DoItem (new DoItem (item));
-			Assert.AreSame (item, DoItem.EnsureIItem (doItem));
-		}
-
-		[Test()]
-		public void EnsureDoItem_Identity ()
-		{
-			IItem doItem = new DoItem (new SimpleItem ());
-			Assert.AreSame (doItem, DoItem.EnsureDoItem (doItem));
-		}
-
-		[Test()]
-		public void EnsureDoItem_Basic ()
-		{
-			IItem item = new SimpleItem ();
-			Type wrapperT = DoItem.EnsureDoItem (item).GetType ();
-			Assert.IsTrue (typeof (DoItem).IsAssignableFrom (wrapperT));
-		}
 	}
 }

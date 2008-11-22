@@ -29,6 +29,16 @@ namespace Do
 			return self;
 		}
 
+		// TODO: move this to ObjectExtensions.cs (?)
+		public static IEnumerable<T> Cons<T> (this T t, IEnumerable<T> ts)
+		{
+			yield return t;
+
+			if (ts != null)
+				foreach (T x in ts)
+					yield return x;
+		}
+
 		public static IEnumerable<T> ToSafeEnumerable<T> (this IEnumerable<T> self)
 			where T : class
 		{

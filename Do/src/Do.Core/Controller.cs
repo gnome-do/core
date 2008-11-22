@@ -37,14 +37,20 @@ namespace Do.Core {
 
 	public class Controller : IController, IDoController, IStatistics {
 		
-		struct DoPerformState {
-			public List<IItem> Items, ModItems;
-			public IAction Action;
+		class PerformState {
+			public IAction Action { get; set; }
+			public IEnumerable<IItem> Items { get; set; }
+			public IEnumerable<IItem> ModifierItems { get; set; }
 			
-			public DoPerformState (IAction action, List<IItem> items, List<IItem> moditems) {
-				Items = items;
-				ModItems = moditems;
+			public PerformState ()
+			{
+			}
+
+			public PerformState (IAction action, IEnumerable<IItem> items, IEnumerable<IItem> modItems)
+			{
 				Action = action;
+				Items = items;
+				ModifierItems = modItems;
 			}
 		}
 		
@@ -852,7 +858,7 @@ namespace Do.Core {
 				if (third != null && ThirdPaneVisible)
 					(third as DoObject).IncreaseRelevance (modItemQuery, action as DoObject);
 
-				DoPerformState state = new DoPerformState (action, items, modItems);
+				PerformState state = new PerformState (action, items, modItems);
 				th = new Thread (new ParameterizedThreadStart (DoPerformWork));
 				th.Start (state);
 				th.Join (100);
@@ -865,8 +871,8 @@ namespace Do.Core {
 		
 		private void DoPerformWork (object o)
 		{
-			DoPerformState state = (DoPerformState) o;
-			state.Action.Perform (state.Items.ToArray (), state.ModItems.ToArray ());
+			PerformState state = o as PerformState;
+			state.Action.Perform (state.Items, state.ModifierItems);
 		}
 					
 		#region IController Implementation
@@ -983,36 +989,21 @@ namespace Do.Core {
 			}
 		}
 		
-		public void PerformDefaultAction (IItem item, Type[] filter) 
+		public void PerformDefaultAction (IItem item, IEnumerable<Type> filter) 
 		{
-			IEnumerable<IObject> objects;
-			if (filter == null)
-				objects = Do.UniverseManager.Search ("", new Type[] { typeof (IAction) }, item);
-			else
-				objects = Do.UniverseManager.Search ("", filter, item);
+			IAction action =
+				Do.UniverseManager.Search ("", typeof (IAction).Cons (filter), item)
+					.Cast<IAction> ()
+					.Where (a => a.SupportsItem (item))
+					.FirstOrDefault ();
 
-			IAction action = null;
-			foreach (IObject ob in objects) {
-				if (!(ob is IAction))
-				    continue;
-				if ((ob as IAction).SupportsItem (item)) {
-					action = ob as IAction;
-					break;
-				}
-			}
-			if (action == null)
-				return;
+			if (action == null) return;
 			
-			if (item is DoItem) {
-				(item as DoItem).IncreaseRelevance ("", null);
-				(item as DoItem).IncreaseRelevance ("", action as DoObject);
-			} else {
-				DoItem di = new DoItem (item);
-				di.IncreaseRelevance ("", null);
-				di.IncreaseRelevance ("", action as DoObject);
-			}
+			DoItem ditem = DoItem.Wrap (item) as DoItem;
+			ditem.IncreaseRelevance ("", null);
 			
-			DoPerformState state = new DoPerformState (action, new List<IItem> (new IItem[] {item}), new List<IItem> (0));
+			PerformState state =
+				new PerformState (action, item.Cons (null), Enumerable.Empty<IItem> ());
 			th = new Thread (new ParameterizedThreadStart (DoPerformWork));
 			th.Start (state);
 			th.Join (100);
@@ -1021,15 +1012,11 @@ namespace Do.Core {
 
 		#region IStatistics implementation 
 		
-		public IEnumerable<IItem> GetMostUsedItems (int n)
+		public IEnumerable<IItem> GetMostUsedItems (int numItems)
 		{
-			return Do.UniverseManager.Search ("", new Type[] { typeof (IItem) })
-				.Where (i => !((i as DoItem).Inner is SelectedTextItem))
-				.Take (n)
-				.OrderByDescending (i => (i as DoObject).Inner is ApplicationItem)
-				.ThenBy (i => (i as DoObject).Inner.GetType ().GetHashCode ())
-				.ThenBy (i => i.Name)
-				.Select (i => DoItem.EnsureIItem (i as IItem));
+			return Do.UniverseManager.Search ("", typeof (IItem).Cons (null))
+				.Cast<IItem> ()
+				.Take (numItems);
 		}
 		
 		#endregion 
