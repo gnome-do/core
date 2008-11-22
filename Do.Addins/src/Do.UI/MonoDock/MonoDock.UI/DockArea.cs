@@ -724,7 +724,6 @@ namespace MonoDock.UI
 			return IconSource.Unknown;
 		}
 		
-		double zoom_percent = 2;
 		void IconPositionedCenterX (int icon, out int x, out double zoom)
 		{
 			int center = IconNormalCenterX (icon);
@@ -733,11 +732,11 @@ namespace MonoDock.UI
 			if (ZoomPixels/2 == 0)
 				zoom = 1;
 			else {
-				zoom = zoom_percent - (offset/(double)(ZoomPixels/2))*(zoom_percent-1);
+				zoom = Preferences.ZoomPercent - (offset/(double)(ZoomPixels/2))*(Preferences.ZoomPercent-1);
 				zoom = (zoom-1)*ZoomIn+1;
 			}
 			
-			offset = (int) ((offset*Math.Sin ((Math.PI/4)*zoom)) * (zoom_percent-1));
+			offset = (int) ((offset*Math.Sin ((Math.PI/4)*zoom)) * (Preferences.ZoomPercent-1));
 			
 			if (Cursor.X > center) {
 				center -= offset;
@@ -875,11 +874,11 @@ namespace MonoDock.UI
 			}
 			
 			//send off the clicks
-			if ((DateTime.UtcNow - DockItems[item].LastClick).TotalMilliseconds > BounceTime) {
-				last_click = DockItems[item].LastClick = DateTime.UtcNow;
-				DockItems[item].Clicked (evnt.Button, window.Controller);
-				AnimatedDraw ();
-			}
+			DockItems[item].Clicked (evnt.Button, window.Controller);
+			if (DockItems[item].LastClick > last_click)
+				last_click = DockItems[item].LastClick;
+			AnimatedDraw ();
+			
 			return ret_val;
 		}
 
@@ -1044,10 +1043,7 @@ namespace MonoDock.UI
 		
 		public void SetPaneContext (IUIContext context, Pane pane)
 		{
-			State[pane] = context.Selection;
-			State.SetPaneQuery (context.Query, pane);
-			State.SetPaneResults (context.Results, pane);
-			State.SetPaneCursor (context.Cursor, pane);
+			State.SetContext (context, pane);
 			AnimatedDraw ();
 		}
 		

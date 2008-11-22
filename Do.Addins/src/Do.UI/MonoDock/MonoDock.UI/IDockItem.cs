@@ -35,7 +35,7 @@ namespace MonoDock.UI
 		bool Scalable { get; }
 		bool DrawIndicator { get; }
 		
-		DateTime LastClick { get; set; }
+		DateTime LastClick { get; }
 		DateTime DockAddItem { get; set; }
 		
 		Surface GetIconSurface ();

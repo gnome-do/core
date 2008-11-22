@@ -290,5 +290,13 @@ namespace MonoDock.UI
 			result_timestamps[i] = timestamps[i] = DateTime.UtcNow;
 			queries[i] = null;
 		}
+		
+		public void SetContext (IUIContext context, Pane pane)
+		{
+			this[pane] = context.Selection;
+			SetPaneQuery (context.Query, pane);
+			SetPaneResults (context.Results, pane);
+			SetPaneCursor (context.Cursor, pane);
+		}
 	}
 }

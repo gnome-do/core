@@ -118,6 +118,7 @@ namespace MonoDock.UI
 		public void Clicked (uint button, IDoController controller)
 		{
 			if (!apps.Any () || button == 2) {
+				LastClick = DateTime.UtcNow;
 				if (IObject is IFileItem)
 					controller.PerformDefaultAction (IObject as IItem, new Type[] { typeof (OpenAction), });
 				else

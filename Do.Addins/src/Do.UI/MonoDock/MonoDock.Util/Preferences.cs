@@ -49,6 +49,15 @@ namespace MonoDock.Util
 			}
 		}
 		
+		static double zoom_percent = prefs.Get<double> ("ZoomPercent", 2);
+		public static double ZoomPercent {
+			get { return zoom_percent; }
+			set {
+				prefs.Set<double> ("ZoomPercent", value);
+				zoom_percent = value;
+			}
+		}
+		
 		static int icon_size = prefs.Get<int> ("IconSize", 64);
 		public static int IconSize {
 			get { return icon_size; }
