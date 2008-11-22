@@ -543,7 +543,7 @@ namespace MonoDock.UI
 				}
 				
 				if (DockItemForX (Cursor.X) == i && CursorIsOverDockArea && DockItems[i].GetTextSurface () != null) {
-					cr.SetSource (DockItems[i].GetTextSurface (), IconNormalCenterX (i)-(Preferences.TextWidth/2), Height-2*IconSize-25);
+					cr.SetSource (DockItems[i].GetTextSurface (), IconNormalCenterX (i)-(Preferences.TextWidth/2), Height-2*IconSize-28);
 					cr.Paint ();
 				}
 			}

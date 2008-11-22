@@ -137,10 +137,12 @@ namespace MonoDock.UI
 		string GetDesktopFile (string base_name)
 		{
 			foreach (string dir in DesktopFilesDirectories) {
-				if (File.Exists (System.IO.Path.Combine (dir, base_name+".desktop")))
-					return System.IO.Path.Combine (dir, base_name+".desktop");
-				if (File.Exists (System.IO.Path.Combine (dir, "gnome-"+base_name+".desktop")))
-					return System.IO.Path.Combine (dir, "gnome-"+base_name+".desktop");
+				try {
+					if (File.Exists (System.IO.Path.Combine (dir, base_name+".desktop")))
+						return System.IO.Path.Combine (dir, base_name+".desktop");
+					if (File.Exists (System.IO.Path.Combine (dir, "gnome-"+base_name+".desktop")))
+						return System.IO.Path.Combine (dir, "gnome-"+base_name+".desktop");
+				} catch { return null; }
 			}
 			return null;
 		}
