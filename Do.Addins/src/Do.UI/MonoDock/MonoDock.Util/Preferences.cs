@@ -17,6 +17,11 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 using Do.Addins;
 using Do.Universe;
@@ -96,6 +101,64 @@ namespace MonoDock.Util
 			}
 		}
 		
+		static int automatic_icons = prefs.Get<int> ("AutomaticIcons", 10);
+		public static int AutomaticIcons {
+			get { return automatic_icons; }
+			set {
+				prefs.Set<int> ("AutomaticIcons", value);
+				automatic_icons = value;
+			}
+		}
+		
+		#region blacklists
+		static List<string> item_blacklist = DeserializeBlacklist ();
+		public static IEnumerable<string> ItemBlacklist {
+			get {
+				return item_blacklist;
+			}
+		}
+		
+		public static void AddBlacklistItem (string item) 
+		{
+			item_blacklist.Add (item);
+			SerializeBlacklist ();
+		}
+		
+		public static void RemoveBlacklistItem (string item)
+		{
+			item_blacklist.Remove (item);
+			SerializeBlacklist ();
+		}
+		
+		static List<string> DeserializeBlacklist ()
+		{
+			string file = Do.Paths.Combine (Do.Paths.UserData, "dock_blacklist");
+			if (!File.Exists (file))
+				return new List<string> ();
+			
+			try {
+				Stream s = File.OpenRead (file);
+				BinaryFormatter bf = new BinaryFormatter ();
+				List<string> out_list = bf.Deserialize (s) as List<string>;
+				s.Close ();
+				s.Dispose ();
+				return out_list;
+			} catch { return new List<string> (); }
+		}
+		
+		static void SerializeBlacklist ()
+		{
+			string file = Do.Paths.Combine (Do.Paths.UserData, "dock_blacklist");
+			
+			try {
+				Stream s = File.Open (file, FileMode.OpenOrCreate);
+				BinaryFormatter bf = new BinaryFormatter ();
+				bf.Serialize (s, item_blacklist);
+				s.Close ();
+				s.Dispose ();
+			} catch { }
+		}
+		#endregion
 		public static event NullEventHandler IconSizeChanged;
 	}
 }

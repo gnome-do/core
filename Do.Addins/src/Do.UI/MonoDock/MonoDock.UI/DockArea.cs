@@ -70,7 +70,6 @@ namespace MonoDock.UI
 		DockWindow window;
 		PixbufSurfaceCache large_icon_cache;
 		
-		
 		#region Public properties
 		public int Width {
 			get {
@@ -348,12 +347,7 @@ namespace MonoDock.UI
 			window_items = new List<IDockItem> ();
 			
 			GLib.Timeout.Add (3000, delegate {
-				UpdateWindowItems ();
-				List<IDockItem> items = new List<IDockItem> ();
-				foreach (IItem item in Statistics.GetMostUsedItems (10)) {
-					items.Add (new DockItem (item));
-				}
-				SetIcons (items);
+				UpdateIcons ();
 				return false;
 			});
 			
@@ -401,8 +395,14 @@ namespace MonoDock.UI
 			
 			ItemMenu.Instance.RemoveClicked += delegate (Gdk.Point point) {
 				int item = DockItemForX (point.X);
-				if (GetIconSource (DockItems[item]) == IconSource.Custom)
+				if (GetIconSource (DockItems[item]) == IconSource.Custom) {
 					CustomDockItems.RemoveItem (DockItems[item]);
+				} else if (GetIconSource (DockItems[item]) == IconSource.Statistics) {
+					DockItem di = DockItems[item] as DockItem;
+					if (di != null)
+						Preferences.AddBlacklistItem (di.IObject.Name + di.IObject.Description + di.IObject.Icon);
+					UpdateIcons ();
+				}
 				AnimatedDraw ();
 			};
 			
@@ -868,7 +868,7 @@ namespace MonoDock.UI
 			
 			//handling right clicks
 			if (evnt.Button == 3) {
-				if (GetIconSource (DockItems[item]) == IconSource.Custom)
+				if (GetIconSource (DockItems[item]) == IconSource.Custom || GetIconSource (DockItems[item]) == IconSource.Statistics)
 					ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
 				return ret_val;
 			}
@@ -923,7 +923,9 @@ namespace MonoDock.UI
 		void UpdateIcons ()
 		{
 			List<IDockItem> new_items = new List<IDockItem> ();
-			foreach (IItem i in Statistics.GetMostUsedItems (10)) {
+			foreach (IItem i in Statistics.GetMostUsedItems (Preferences.AutomaticIcons)) {
+				if (Preferences.ItemBlacklist.Contains (i.Name + i.Description + i.Icon))
+					continue;
 				IDockItem di = new DockItem (i);
 				if (CustomDockItems.DockItems.Contains (di))
 					continue;
@@ -1024,20 +1026,6 @@ namespace MonoDock.UI
 				}
 			}
 			
-			AnimatedDraw ();
-		}
-		
-		public void SetIcons (IEnumerable<IDockItem> items)
-		{
-			foreach (IDockItem ditem in dock_items)
-				ditem.Dispose ();
-			
-			foreach (IDockItem i in items) {
-				i.DockAddItem = DateTime.UtcNow;
-			}
-			dock_items = new List<IDockItem> (items);
-			UpdateWindowItems ();
-			SetParentInputMask ();
 			AnimatedDraw ();
 		}
 		
