@@ -18,6 +18,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Core;
@@ -27,17 +28,31 @@ namespace Do.Universe {
 	
 	public class ItemSourceItemSource : IItemSource {
 
-		List<IItem> items;
+		class ItemSourceItem : IItem {
+
+			public IItemSource Source { get; private set; }
+
+			public string Name { get { return Source.Name; } }
+			public string Description { get { return Source.Description; } }
+			public string Icon { get { return Source.Icon; } }
+
+			public ItemSourceItem (DoItemSource source)
+			{
+				Source = source;
+			}
+		}
+
+		IEnumerable<IItem> items;
 
 		public ItemSourceItemSource ()
 		{
-			items = new List<IItem> ();
+			items = Enumerable.Empty<IItem> ();
 		}
 		
 		public IEnumerable<Type> SupportedItemTypes
 		{
 			get {
-				yield return typeof (DoItemSource);
+				yield return typeof (ItemSourceItem);
 			}
 		}
 		
@@ -65,28 +80,14 @@ namespace Do.Universe {
 
 		public void UpdateItems ()
 		{
-			items.Clear ();
-			foreach (DoItemSource source in PluginManager.GetItemSources ()) {
-				items.Add (source);
-            }
+			items = PluginManager.GetItemSources ()
+				.Select (source => new ItemSourceItem (source))
+				.Cast<IItem> ();
 		}
 		
 		public IEnumerable<IItem> ChildrenOfItem (IItem item)
 		{
-			List<IItem> children;
-			bool parent_is_this;
-		
-			children = new List<IItem> ();
-			parent_is_this = item is DoItemSource &&
-				(item as DoItemSource).Inner == this;
-			if (parent_is_this) {
-				children = items;
-			} else if (item is DoItemSource) {
-				foreach (DoItem child in (item as DoItemSource).Items) {
-					children.Add (child);
-				}
-			} 
-			return children;
+			return (item as ItemSourceItem).Source.Items;
 		}
 	}
 }

@@ -35,6 +35,11 @@ namespace Do.Core {
 		{
 			has_children = new Dictionary<IItem, bool> ();
 		}
+
+		public static IItem Wrap (IItem i)
+		{
+			return i is DoItem ? i : new DoItem (i);
+		}
 		
 		public DoItem (IItem item):
 			base (item)

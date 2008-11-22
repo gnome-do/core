@@ -42,25 +42,13 @@ namespace Do.Core {
 			return o is DoObject ? o : new DoObject (o);
 		}
 
-		public static IAction Wrap (IAction a)
-		{
-			return a is DoAction ? a : new DoAction (a);
-		}
-
-		public static IItem Wrap (IItem i)
-		{
-			return i is DoItem ? i : new DoItem (i);
-		}
-		
 		public static T Unwrap<T> (T o) where T : IObject
 		{
-			IObject inner = (IObject) o;
-			
-			while (inner is DoObject)
-				inner = (inner as DoObject).Inner;
-			return (T) inner;
+			while (o is DoObject && typeof (T).IsInstanceOfType (o))
+				o = (T) (o as DoObject).Inner;
+			return o;
 		}
-		
+
 		public DoObject (IObject inner)
 		{
 			if (inner == null)

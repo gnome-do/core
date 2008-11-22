@@ -30,6 +30,11 @@ namespace Do.Core {
 
 	public class DoAction : DoObject, IAction {
 
+		public static IAction Wrap (IAction a)
+		{
+			return a is DoAction ? a : new DoAction (a);
+		}
+
 		IEnumerable<Type> item_types, moditem_types;
 
 		public DoAction (IAction action):

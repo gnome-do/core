@@ -26,7 +26,12 @@ using Do.Universe;
 
 namespace Do.Core {
 
-	public class DoItemSource : DoObject, IItemSource, IItem {
+	public class DoItemSource : DoObject, IItemSource {
+
+		public static IItemSource Wrap (IItemSource o)
+		{
+			return o is DoItemSource ? o : new DoItemSource (o);
+		}
 
 		IEnumerable<Type> item_types;
 		
