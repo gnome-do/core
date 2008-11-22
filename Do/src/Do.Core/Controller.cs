@@ -983,10 +983,13 @@ namespace Do.Core {
 			}
 		}
 		
-		public void PerformDefaultAction (IItem item) 
+		public void PerformDefaultAction (IItem item, Type[] filter) 
 		{
-			IEnumerable<IObject> objects =
-				Do.UniverseManager.Search ("", new Type[] { typeof (IAction) }, item);
+			IEnumerable<IObject> objects;
+			if (filter == null)
+				objects = Do.UniverseManager.Search ("", new Type[] { typeof (IAction) }, item);
+			else
+				objects = Do.UniverseManager.Search ("", filter, item);
 
 			IAction action = null;
 			foreach (IObject ob in objects) {

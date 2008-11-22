@@ -118,7 +118,10 @@ namespace MonoDock.UI
 		public void Clicked (uint button, IDoController controller)
 		{
 			if (!apps.Any () || button == 2) {
-				controller.PerformDefaultAction (IObject as IItem);
+				if (IObject is IFileItem)
+					controller.PerformDefaultAction (IObject as IItem, new Type[] { typeof (OpenAction), });
+				else
+					controller.PerformDefaultAction (IObject as IItem, null);
 				return;
 			}
 				

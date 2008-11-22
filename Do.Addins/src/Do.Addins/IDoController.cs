@@ -81,6 +81,6 @@ namespace Do.Addins
 		/// <param name="item">
 		/// A <see cref="IItem"/>
 		/// </param>
-		void PerformDefaultAction (IItem item);
+		void PerformDefaultAction (IItem item, Type[] filter);
 	}
 }
