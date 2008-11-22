@@ -42,10 +42,10 @@ namespace Do.Core {
 			return o is DoObject ? o : new DoObject (o);
 		}
 
-		public static T Unwrap<T> (T o) where T : IObject
+		public static T Unwrap<T> (T o) where T : class, IObject
 		{
-			while (o is DoObject && typeof (T).IsInstanceOfType (o))
-				o = (T) (o as DoObject).Inner;
+			while (o is DoObject)
+				o = (o as DoObject).Inner as T;
 			return o;
 		}
 
