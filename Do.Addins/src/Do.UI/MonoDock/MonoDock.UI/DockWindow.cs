@@ -80,7 +80,6 @@ namespace MonoDock.UI
 				new TargetEntry ("text/uri-list", 0, 0), 
 			};
 			Gtk.Drag.DestSet (dock_area, DestDefaults.Motion | DestDefaults.Drop, targets, Gdk.DragAction.Copy);
-//			Gtk.Drag.SourceSet (dock_area, ModifierType.Button1Mask, new TargetEntry[0], DragAction.Private);
 			
 			Add (dock_area);
 			ShowAll ();
@@ -88,13 +87,13 @@ namespace MonoDock.UI
 		
 		public void SetInputMask (int heightOffset)
 		{
-			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, dock_area.DockWidth, dock_area.Height-heightOffset, 1);
+			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, dock_area.DockWidth, heightOffset, 1);
 			Context cr = Gdk.CairoHelper.Create (pixmap);
 			
 			cr.Color = new Cairo.Color (0, 0, 0, 1);
 			cr.Paint ();
 			
-			InputShapeCombineMask (pixmap, (dock_area.Width-dock_area.DockWidth)/2, heightOffset);
+			InputShapeCombineMask (pixmap, (dock_area.Width-dock_area.DockWidth)/2, dock_area.Height-heightOffset);
 			
 			(cr as IDisposable).Dispose ();
 			pixmap.Dispose ();

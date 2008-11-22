@@ -242,14 +242,7 @@ namespace MonoDock.UI
 				cursor = value;
 				
 				if (CursorIsOverDockArea != tmp) {
-					if (CursorIsOverDockArea) {
-						window.SetInputMask (0);
-					} else {
-						if (Preferences.AutoHide)
-							window.SetInputMask (Height-1);
-						else
-							window.SetInputMask (Height-IconSize);
-					}
+					SetParentInputMask ();
 					enter_time = DateTime.UtcNow;
 					AnimatedDraw ();
 				}
@@ -378,6 +371,11 @@ namespace MonoDock.UI
 			DoubleBuffered = false;
 			
 			RegisterEvents ();
+			
+			GLib.Timeout.Add (20, delegate {
+				SetParentInputMask ();
+				return false;
+			});
 		}
 		
 		void RegisterEvents ()
@@ -911,6 +909,18 @@ namespace MonoDock.UI
 			AnimatedDraw ();
 		}
 		
+		void SetParentInputMask ()
+		{
+			if (CursorIsOverDockArea) {
+				window.SetInputMask (GetDockArea ().Height*2 + 10);
+			} else {
+				if (Preferences.AutoHide)
+					window.SetInputMask (1);
+				else
+					window.SetInputMask (GetDockArea ().Height);
+			}
+		}
+		
 		void UpdateIcons ()
 		{
 			List<IDockItem> new_items = new List<IDockItem> ();
@@ -1028,6 +1038,7 @@ namespace MonoDock.UI
 			}
 			dock_items = new List<IDockItem> (items);
 			UpdateWindowItems ();
+			SetParentInputMask ();
 			AnimatedDraw ();
 		}
 		

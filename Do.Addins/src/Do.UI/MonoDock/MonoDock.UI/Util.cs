@@ -32,6 +32,12 @@ namespace MonoDock.UI
 		None,
 	}
 	
+	public enum ClickAnimation {
+		Bounce,
+		Zoom,
+		Saturate,
+	}
+	
 	public static class Util
 	{
 		
