@@ -50,7 +50,7 @@ namespace MonoDock.UI
 		public int Width { get { return Preferences.IconSize; } }
 		public int Height { get { return Preferences.IconSize; } }
 		public bool Scalable { get { return true; } }
-		public bool DrawIndicator { get { return apps.Any (); } }
+		public bool DrawIndicator { get { return HasVisibleApps; } }
 		
 		public Wnck.Application[] Apps { get { return apps.ToArray (); } }
 		public IEnumerable<int> Pids { get { return apps.Select (item => item.Pid); } }
@@ -61,6 +61,19 @@ namespace MonoDock.UI
 				return pixbuf ?? pixbuf = GetPixbuf ();
 			}
 		}
+		
+		bool HasVisibleApps {
+			get {
+				if (apps == null)
+					return false;
+				return apps
+					.Select ((Wnck.Application app) => app.Windows)
+					.Where ((Wnck.Window[] wins) => (wins as Wnck.Window[])
+					        .Where ((Wnck.Window win) => !win.IsSkipTasklist)
+					        .Any())
+					.Any ();
+			}
+		}	
 		
 		public DockItem(IObject item)
 		{
@@ -117,7 +130,7 @@ namespace MonoDock.UI
 		
 		public void Clicked (uint button, IDoController controller)
 		{
-			if (!apps.Any () || button == 2) {
+			if (!apps.Any () || !HasVisibleApps || button == 2) {
 				LastClick = DateTime.UtcNow;
 				if (IObject is IFileItem)
 					controller.PerformDefaultAction (IObject as IItem, new Type[] { typeof (OpenAction), });

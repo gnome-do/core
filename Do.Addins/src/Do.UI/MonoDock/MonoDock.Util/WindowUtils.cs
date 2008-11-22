@@ -75,7 +75,8 @@ namespace MonoDock.Util
 				if (exec_line.Contains (exec)) {
 					foreach (Application app in GetApplications ()) {
 						if (app.Pid == pid) {
-							out_app = app;
+							if (app.Windows.Select (win => !win.IsSkipTasklist).Any ())
+								out_app = app;
 							break;
 						}
 					}
