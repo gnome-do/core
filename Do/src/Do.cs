@@ -19,22 +19,19 @@
 
 using System;
 using System.Threading;
+using System.Collections.Generic;
 
 using Mono.Unix;
 
 using Do.UI;
 using Do.Core;
 using Do.DBusLib;
+using Do.Platform;
 
 namespace Do {
 
 	public static class Do {
-		
-		static string [] args;
 		static GConfXKeybinder keybinder;
-		
-		static DoPreferences preferences;
-		static CommandLinePreferences cliprefs;
 		static Controller controller;
 		static IUniverseManager universe_manager;
 		static NotificationIcon notification_icon;
@@ -44,19 +41,14 @@ namespace Do {
 		internal static void Main (string[] args)
 		{
 			perfTime = DateTime.Now;
-			Do.args = args;
-			
 			Catalog.Init ("gnome-do", "/usr/local/share/locale");
 			Gtk.Application.Init ();
 
 			DetectInstanceAndExit ();
-			Log.Initialize ();
+			PlatformInitializer.Initialize ();
 			Util.Initialize ();
 
 			Gdk.Threads.Init ();			
-			
-			if (CLIPrefs.Debug)
-				Log.LogLevel = LogEntryType.Debug;
 
 			try {
 				Util.SetProcessName ("gnome-do");
@@ -72,7 +64,7 @@ namespace Do {
 			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
 			
-			//whoever keeps pulling this out. STOP. PLEASE.
+			// whoever keeps pulling this out. STOP. PLEASE.
 			notification_icon = new NotificationIcon ();
 			
 			// Kick-off update timers.			
@@ -85,7 +77,7 @@ namespace Do {
 				return true;
 			});
 
-			if (!Preferences.QuietStart)
+			if (!CorePreferences.QuietStart)
 				Controller.Summon ();
 			
 			AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
@@ -116,18 +108,6 @@ namespace Do {
 			if (dbus_controller != null) {
 				dbus_controller.Summon ();
 				System.Environment.Exit (0);
-			}
-		}
-
-		public static DoPreferences Preferences {
-			get { return preferences ?? 
-					preferences = new DoPreferences (); 
-			}
-		}
-		
-		public static CommandLinePreferences CLIPrefs {
-			get { return cliprefs ?? 
-					cliprefs = new CommandLinePreferences (args); 
 			}
 		}
 
@@ -162,8 +142,8 @@ namespace Do {
 		
 		static void SetupKeybindings ()
 		{
-			keybinder.Bind ("/apps/gnome-do/preferences/core-preferences/SummonKeyBinding",
-					Preferences.SummonKeyBinding, OnActivate);
+			keybinder.Bind ("/apps/gnome-do/CorePreferences/core-CorePreferences/SummonKeyBinding",
+					CorePreferences.SummonKeyBinding, OnActivate);
 		}
 		
 		static void OnActivate (object sender, EventArgs args)

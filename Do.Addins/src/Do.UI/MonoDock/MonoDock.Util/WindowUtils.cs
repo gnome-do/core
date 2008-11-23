@@ -23,6 +23,8 @@ using System.Linq;
 
 using Do.Addins;
 using Do.Universe;
+using Do.Platform;
+
 using MonoDock.UI;
 
 using Wnck;
@@ -47,7 +49,7 @@ namespace MonoDock.Util
 		{
 			StreamReader reader;
 			try {
-				reader = new StreamReader (Do.Paths.Combine ("/proc", pid.ToString (), "cmdline"));
+				reader = new StreamReader (Paths.Combine ("/proc", pid.ToString (), "cmdline"));
 			} catch { return null; }
 			
 			string cmdline = reader.ReadLine ();

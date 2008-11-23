@@ -17,7 +17,6 @@
   <Contents>
     <File name="gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Util.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/DoAction.cs" subtype="Code" buildaction="Compile" />
@@ -31,11 +30,9 @@
     <File name="src/Do.Universe/ItemSourceItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/Controller.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/SelectedTextItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Preferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/HistogramRelevanceProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/RelevanceProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MainMenu.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/ConsoleCrayon.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/PluginManager.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/AliasItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/AliasAction.cs" subtype="Code" buildaction="Compile" />
@@ -55,9 +52,7 @@
     <File name="src/Do.UI/KeybindingTreeView.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/NotificationIcon.cs" subtype="Code" buildaction="Compile" />
     <File name="gnome-do.desktop" subtype="Code" DeployService.TargetDirectoryId="Linux.DesktopApplications" buildaction="FileCopy" />
-    <File name="src/IPreferencesBackend.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/GconfPreferencesBackend.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/DoPreferences.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/CorePreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/PreferencesItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/DoQuitItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/SearchControllers/FirstSearchController.cs" subtype="Code" buildaction="Compile" />
@@ -75,15 +70,16 @@
     <File name="gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
     <File name="gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="src/ProgramVersion.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/CommandLinePreferences.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/CommandLinePreferencesBackend.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ColorConfigurationWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="gtk-gui/Do.UI.ColorConfigurationWidget.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/EnumerableExtensions.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/PluginErrorDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="gtk-gui/Do.UI.PluginErrorDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/DoObject_RelevanceProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/IObjectExtensions.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Platform/CoreImplementation.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/PlatformInitializer.cs" subtype="Code" buildaction="Compile" />
+    <File name="Resources/Do.addin.xml" subtype="Code" buildaction="Nothing" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -93,7 +89,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins, Version=0.2.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins.Gui, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins.Setup, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
-    <ProjectReference type="Gac" localcopy="True" refto="gconf-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
@@ -102,6 +97,9 @@
     <ProjectReference type="Gac" localcopy="True" refto="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.GetOptions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Project" localcopy="True" refto="Do.Platform" />
+    <ProjectReference type="Project" localcopy="True" refto="Do.Platform.Linux" />
+    <ProjectReference type="Gac" localcopy="True" refto="gconf-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
   <Deployment.LinuxDeployData scriptName="gnome-do" />
   <GtkDesignInfo />

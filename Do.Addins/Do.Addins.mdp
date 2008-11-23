@@ -15,25 +15,7 @@
   </Configurations>
   <Contents>
     <File name="src/Do.Addins/Util.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/ApplicationItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/ApplicationItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/BookmarkItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/FileItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IObject.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/OpenAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/OpenURLAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/RunAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/TextItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/GNOMESpecialLocationsItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/ContactItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/EmailAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/OpenWithAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/RevealAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/IDoController.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Paths.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IDoWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ResultsWindowSelectionEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IconProvider.cs" subtype="Code" buildaction="Compile" />
@@ -57,12 +39,9 @@
     <File name="gtk-gui/Do.UI.AbstractLoginWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="Resources/Do.Addins.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="src/Do.UI/IconCache.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/IPreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/NotificationBridge.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Pluggable.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IUIContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/UIContext.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Addins/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/Bezel.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/BezelDrawingArea.cs" subtype="Code" buildaction="Compile" />
@@ -94,18 +73,16 @@
     <File name="src/Do.UI/MonoDock/MonoDock.UI/DockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/DockWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.Util/GtkUtils.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/MonoDock/MonoDock.Util/Preferences.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.UI/MonoDock/MonoDock.Util/DockPreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/XLib" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/XLib/X11Atoms.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/XLib/Xlib.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/IStatistics.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/DockState.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/AbstractAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/SeparatorItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/IDockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.Util/WindowUtils.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/ApplicationDockItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/CopyToClipboardAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/CustomDockItems.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/ItemMenu.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/MonoDock/MonoDock.UI/Util.cs" subtype="Code" buildaction="Compile" />
@@ -127,6 +104,7 @@
     <ProjectReference type="Gac" localcopy="True" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="wnck-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Project" localcopy="True" refto="Do.Platform" />
   </References>
   <GtkDesignInfo />
   <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="./Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">

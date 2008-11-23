@@ -26,6 +26,7 @@ using Gtk;
 using Do.Addins;
 using Do.Addins.CairoUtils;
 using Do.Universe;
+using Do.Platform;
 
 namespace Do.UI
 {
@@ -49,8 +50,9 @@ namespace Do.UI
 			NoResult,
 			None,
 		}
+		
 #region Static Area
-		static IPreferences prefs = Util.GetPreferences ("Bezel");
+		static Preferences prefs = Preferences.Get ("Bezel");
 		public static event EventHandler ThemeChanged;
 		
 		public static bool Animated {
@@ -365,7 +367,7 @@ namespace Do.UI
 			this.controller = controller;
 			
 			DoubleBuffered = false;
-			prefs = Addins.Util.GetPreferences ("Bezel");
+			prefs = Preferences.Get ("Bezel");
 			this.preview = preview;
 			this.theme = theme;
 			

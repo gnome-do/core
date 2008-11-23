@@ -28,9 +28,10 @@ using Mono.Addins.Gui;
 using Mono.Addins.Setup;
 
 using Do;
-using Do.Addins;
-using Do.Universe;
 using Do.UI;
+using Do.Addins;
+using Do.Platform;
+using Do.Universe;
 
 namespace Do.Core {
 
@@ -287,8 +288,6 @@ namespace Do.Core {
 					IObject plugin = node.GetInstance () as IObject;
 					// Wrap in a DoObject for safety.
 					IObject o = new DoObject (plugin);
-					if (plugin is Pluggable)
-						(plugin as Pluggable).NotifyLoad ();
 					Log.Info ("Loaded \"{0}\".", o.Name);
 				} catch (Exception e) {
 					Log.Error ("Encountered error loading \"{0}\": {0}", e.Message);
@@ -298,8 +297,6 @@ namespace Do.Core {
 				try {
 					IObject plugin = node.GetInstance() as IObject;
 					IObject o = new DoObject (plugin);
-					if (plugin is Pluggable)
-						(plugin as Pluggable).NotifyUnload ();
 					Log.Info ("Unloaded \"{0}\".", o.Name);
 				} catch (Exception e) {
 					Log.Error ("Encountered error unloading plugin: {0}", e.Message);

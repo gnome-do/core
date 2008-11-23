@@ -23,9 +23,10 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-using Do.Addins;
 using Do.UI;
+using Do.Addins;
 using Do.Universe;
+using Do.Platform;
 
 namespace MonoDock.UI
 {
@@ -35,7 +36,7 @@ namespace MonoDock.UI
 		
 		static string DesktopFilesPath {
 			get {
-				return Do.Paths.Combine (Do.Paths.UserData, "dock_desktop_files");
+				return Paths.Combine (Paths.UserData, "dock_desktop_files");
 			}
 		}
 		
@@ -109,9 +110,9 @@ namespace MonoDock.UI
 		
 		static IDockItem CreatDockItem (string desktopFile)
 		{
-			ApplicationItem appItem;
+			IApplicationItem appItem;
 			try {
-				appItem = new ApplicationItem (desktopFile);
+				appItem = UniverseFactory.NewApplicationItem (desktopFile);
 			} catch {
 				return null;
 			}
@@ -120,9 +121,9 @@ namespace MonoDock.UI
 		
 		static IDockItem CreateDockFile (string file)
 		{
-			FileItem fileItem;
+			IFileItem fileItem;
 			try {
-				fileItem = new FileItem (file);
+				fileItem = UniverseFactory.NewFileItem (file);
 			} catch {
 				return null;
 			}

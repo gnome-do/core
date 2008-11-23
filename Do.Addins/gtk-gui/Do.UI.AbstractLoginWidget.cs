@@ -135,7 +135,7 @@ namespace Do.UI {
             w6.Expand = false;
             w6.Fill = false;
             // Container child vbox3.Gtk.Box+BoxChild
-            this.table4 = new Gtk.Table(((uint)(1)), ((uint)(2)), false);
+            this.table4 = new Gtk.Table(((uint)(3)), ((uint)(2)), false);
             this.table4.Name = "table4";
             this.table4.RowSpacing = ((uint)(6));
             this.table4.ColumnSpacing = ((uint)(6));
@@ -174,7 +174,7 @@ namespace Do.UI {
             this.vbox4.Name = "vbox4";
             this.vbox4.Spacing = 6;
             // Container child vbox4.Gtk.Box+BoxChild
-            this.table5 = new Gtk.Table(((uint)(1)), ((uint)(3)), false);
+            this.table5 = new Gtk.Table(((uint)(3)), ((uint)(3)), false);
             this.table5.Name = "table5";
             this.table5.RowSpacing = ((uint)(6));
             this.table5.ColumnSpacing = ((uint)(6));

@@ -22,6 +22,8 @@ using System.IO;
 using System.Reflection;
 
 using Do;
+using Do.Platform;
+
 using Gtk;
 
 namespace Do.UI
@@ -61,9 +63,9 @@ namespace Do.UI
             Build ();
 			
 			// Setup checkboxes
-        	hide_check.Active = Do.Preferences.QuietStart;
+        	hide_check.Active = CorePreferences.QuietStart;
         	login_check.Active = AutostartEnabled;
-        	notification_check.Active = Do.Preferences.StatusIconVisible;
+        	notification_check.Active = CorePreferences.StatusIconVisible;
         }
         
         public Bin GetConfiguration ()
@@ -111,13 +113,13 @@ namespace Do.UI
 
         protected virtual void OnHideCheckClicked (object sender, EventArgs e)
         {
-        	Do.Preferences.QuietStart = hide_check.Active;
+        	CorePreferences.QuietStart = hide_check.Active;
         }
 
         protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)
         {	
         	NotificationIcon trayIcon = Do.NotificationIcon;
-        	Do.Preferences.StatusIconVisible = notification_check.Active;
+        	CorePreferences.StatusIconVisible = notification_check.Active;
         	if (notification_check.Active)
         		trayIcon.Show ();
         	else

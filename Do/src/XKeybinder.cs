@@ -22,6 +22,7 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using Mono.Unix;
 
+using Do.Platform;
 
 namespace Do
 {

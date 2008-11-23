@@ -123,7 +123,7 @@ namespace Do.Core {
 		public void Initialize ()
 		{
 			ThemeChanged ();
-			Do.Preferences.PreferenceChanged += (sender, args) => { if (args.Key == "Theme") ThemeChanged (); };
+			CorePreferences.PreferenceChanged += (sender, args) => { if (args.Key == "Theme") ThemeChanged (); };
 		}
 		
 		void ThemeChanged ()
@@ -148,11 +148,11 @@ namespace Do.Core {
 			Orientation = ControlOrientation.Vertical;
 			
 			window = PluginManager.GetThemes ()
-				.Where (theme => theme.Name == Do.Preferences.Theme)
+				.Where (theme => theme.Name == CorePreferences.Theme)
 				.Select (theme => new Bezel (this, theme))
 				.FirstOrDefault ();
 			
-			if (Do.Preferences.Theme == "MonoDock")
+			if (CorePreferences.Theme == "MonoDock")
 				window = new MonoDock.UI.DockWindow (this);
 
 			if (window == null)
@@ -300,7 +300,7 @@ namespace Do.Core {
 		}
 		
 		bool AlwaysShowResults {
-			get { return Do.Preferences.AlwaysShowResults || !window.ResultsCanHide; }
+			get { return CorePreferences.AlwaysShowResults || !window.ResultsCanHide; }
 		}
 
 		/// <value>
@@ -370,12 +370,12 @@ namespace Do.Core {
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
 			// User set keybindings
-			if (KeyEventToString (evnt).Equals (Do.Preferences.SummonKeyBinding)) {
+			if (KeyEventToString (evnt).Equals (CorePreferences.SummonKeyBinding)) {
 				OnSummonKeyPressEvent (evnt);
 				return;
 			} 
 			
-			if (KeyEventToString (evnt).Equals (Do.Preferences.TextModeKeyBinding)) {
+			if (KeyEventToString (evnt).Equals (CorePreferences.TextModeKeyBinding)) {
 				OnTextModePressEvent (evnt);
 				return;
 			}

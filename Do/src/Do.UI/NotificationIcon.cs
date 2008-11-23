@@ -22,8 +22,11 @@ using System;
 using Mono.Unix;
 using Gtk;
 using Gdk;
-using Do.Core;
+
 using Notifications;
+
+using Do.Core;
+using Do.Platform;
 
 namespace Do.UI
 {
@@ -43,12 +46,11 @@ namespace Do.UI
 		public NotificationIcon()
 		{
 			FromPixbuf = normal_icon;
-			Tooltip = Catalog.GetString ("Summon GNOME Do with " + 
-				Do.Preferences.SummonKeyBinding);
+			Tooltip = Catalog.GetString ("Summon GNOME Do with " + CorePreferences.SummonKeyBinding);
 			Activate += new EventHandler (OnActivateSummonDo);			
 			PopupMenu += new PopupMenuHandler (OnTrayIconPopup);
 			
-			if (Do.Preferences.StatusIconVisible)
+			if (CorePreferences.StatusIconVisible)
 				Show ();
 			else
 				Hide ();
@@ -189,7 +191,7 @@ namespace Do.UI
 				//Log.Debug (e.StackTrace);
 				//SendNotification ("Plugin update failed.");
 			}
-			if (!Do.Preferences.StatusIconVisible)
+			if (!CorePreferences.StatusIconVisible)
 				Hide ();
 		}
 				
@@ -203,7 +205,7 @@ namespace Do.UI
 		
 		private static void OnNotificationClosed (object sender, EventArgs args)
 		{
-			if (!Do.Preferences.StatusIconVisible)
+			if (!CorePreferences.StatusIconVisible)
 				Do.NotificationIcon.Hide ();
 		}
 	}

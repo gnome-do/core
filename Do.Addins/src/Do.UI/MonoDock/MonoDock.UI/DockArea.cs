@@ -25,6 +25,7 @@ using Cairo;
 using Gdk;
 using Gtk;
 
+using Do.Platform;
 using Do.Addins;
 using Do.Universe;
 using Do.UI;
@@ -93,7 +94,7 @@ namespace MonoDock.UI
 		
 		public int DockHeight {
 			get {
-				if (Preferences.AutoHide)
+				if (DockPreferences.AutoHide)
 					return 0;
 				return MinimumDockArea.Height;
 			}
@@ -178,14 +179,14 @@ namespace MonoDock.UI
 		
 		int ZoomSize {
 			get {
-				return Preferences.ZoomSize;
+				return DockPreferences.ZoomSize;
 			}
 		}
 		#endregion
 		
 		int YOffset {
 			get {
-				if (!Preferences.AutoHide || cursor_is_handle)
+				if (!DockPreferences.AutoHide || cursor_is_handle)
 					return 0;
 				double offset = 0;
 				if (CursorIsOverDockArea) {
@@ -230,7 +231,7 @@ namespace MonoDock.UI
 			}
 		}
 		
-		int IconSize { get { return Preferences.IconSize; } }
+		int IconSize { get { return DockPreferences.IconSize; } }
 		
 		Gdk.Point Cursor {
 			get {
@@ -400,7 +401,7 @@ namespace MonoDock.UI
 				} else if (GetIconSource (DockItems[item]) == IconSource.Statistics) {
 					DockItem di = DockItems[item] as DockItem;
 					if (di != null)
-						Preferences.AddBlacklistItem (di.IObject.Name + di.IObject.Description + di.IObject.Icon);
+						DockPreferences.AddBlacklistItem (di.IObject.Name + di.IObject.Description + di.IObject.Icon);
 					UpdateIcons ();
 				}
 				AnimatedDraw ();
@@ -420,7 +421,7 @@ namespace MonoDock.UI
 				AnimatedDraw ();
 			};
 			
-			Preferences.IconSizeChanged += delegate {
+			DockPreferences.IconSizeChanged += delegate {
 				if (large_icon_cache != null) {
 					large_icon_cache.Dispose ();
 					large_icon_cache = null;
@@ -519,10 +520,10 @@ namespace MonoDock.UI
 					y -= Math.Abs (20*Math.Sin (total_ms*Math.PI/(BounceTime/2)));
 				}
 				
-				double scale = zoom/Preferences.IconQuality;
+				double scale = zoom/DockPreferences.IconQuality;
 				if (DockItems[i].Scalable) {
 					cr.Scale (scale, scale);
-					cr.SetSource (DockItems[i].GetIconSurface (), x*Preferences.IconQuality, y*Preferences.IconQuality);
+					cr.SetSource (DockItems[i].GetIconSurface (), x*DockPreferences.IconQuality, y*DockPreferences.IconQuality);
 					cr.Paint ();
 					cr.Scale (1/scale, 1/scale);
 				} else {
@@ -541,7 +542,7 @@ namespace MonoDock.UI
 				}
 				
 				if (DockItemForX (Cursor.X) == i && CursorIsOverDockArea && DockItems[i].GetTextSurface () != null) {
-					cr.SetSource (DockItems[i].GetTextSurface (), IconNormalCenterX (i)-(Preferences.TextWidth/2), Height-2*IconSize-28);
+					cr.SetSource (DockItems[i].GetTextSurface (), IconNormalCenterX (i)-(DockPreferences.TextWidth/2), Height-2*IconSize-28);
 					cr.Paint ();
 				}
 			}
@@ -558,7 +559,7 @@ namespace MonoDock.UI
 			cr.Color = new Cairo.Color (1, 1, 1, opacity);
 			cr.Stroke ();
 			
-			if (!Preferences.AutoHide) {
+			if (!DockPreferences.AutoHide) {
 				cr.Arc (center.X, center.Y, 1.5, 0, Math.PI*2);
 				cr.Color = new Cairo.Color (1, 1, 1, opacity);
 				cr.Fill ();
@@ -732,11 +733,11 @@ namespace MonoDock.UI
 			if (ZoomPixels/2 == 0)
 				zoom = 1;
 			else {
-				zoom = Preferences.ZoomPercent - (offset/(double)(ZoomPixels/2))*(Preferences.ZoomPercent-1);
+				zoom = DockPreferences.ZoomPercent - (offset/(double)(ZoomPixels/2))*(DockPreferences.ZoomPercent-1);
 				zoom = (zoom-1)*ZoomIn+1;
 			}
 			
-			offset = (int) ((offset*Math.Sin ((Math.PI/4)*zoom)) * (Preferences.ZoomPercent-1));
+			offset = (int) ((offset*Math.Sin ((Math.PI/4)*zoom)) * (DockPreferences.ZoomPercent-1));
 			
 			if (Cursor.X > center) {
 				center -= offset;
@@ -831,11 +832,11 @@ namespace MonoDock.UI
 					GdkWindow.Cursor = new Gdk.Cursor (CursorType.TopSide);
 					cursor_is_handle = true;
 					drag_start_y = Cursor.Y;
-					drag_start_icon_size = Preferences.IconSize;
+					drag_start_icon_size = DockPreferences.IconSize;
 				}
 			}
 			if (cursor_is_handle && (evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask) {
-				Preferences.IconSize = drag_start_icon_size + (drag_start_y - Cursor.Y);
+				DockPreferences.IconSize = drag_start_icon_size + (drag_start_y - Cursor.Y);
 			}
 			
 			if (tmp != CursorIsOverDockArea || CursorIsOverDockArea && DateTime.UtcNow.Subtract (last_render).TotalMilliseconds > 20) 
@@ -856,7 +857,7 @@ namespace MonoDock.UI
 			// we are hovering over the pin icon
 			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X-4, StickIconCenter.Y-4, 8, 8);
 			if (stick_rect.Contains (Cursor)) {
-				Preferences.AutoHide = !Preferences.AutoHide;
+				DockPreferences.AutoHide = !DockPreferences.AutoHide;
 				window.SetStruts ();
 				AnimatedDraw ();
 				return ret_val;
@@ -913,7 +914,7 @@ namespace MonoDock.UI
 			if (CursorIsOverDockArea) {
 				window.SetInputMask (GetDockArea ().Height*2 + 10);
 			} else {
-				if (Preferences.AutoHide)
+				if (DockPreferences.AutoHide)
 					window.SetInputMask (1);
 				else
 					window.SetInputMask (GetDockArea ().Height);
@@ -923,25 +924,25 @@ namespace MonoDock.UI
 		IEnumerable<IItem> MostUsedItems ()
 		{
 			Func<IItem, bool> isNotSelectedText = item =>
-				Do.Addins.Util.GetInnerType (item).Name != "SelectedTextItem";
+				Core.GetInnerType (item).Name != "SelectedTextItem";
 			Func<IItem, bool> isApplication = item =>
-				Do.Addins.Util.GetInnerType (item).Name == "ApplicationItem";
+				Core.GetInnerType (item).Name == "ApplicationItem";
 			Func<IItem, int> typeComparison = item =>
-				Do.Addins.Util.GetInnerType (item).GetHashCode ();
+				Core.GetInnerType (item).GetHashCode ();
 
-			return Statistics.GetMostUsedItems (Preferences.AutomaticIcons + 1)
+			return Statistics.GetMostUsedItems (DockPreferences.AutomaticIcons + 1)
 				.Where (isNotSelectedText)
 				.OrderByDescending (isApplication)
 				.ThenBy (typeComparison)
 				.ThenBy (item => item.Name)
-				.Take (Preferences.AutomaticIcons);
+				.Take (DockPreferences.AutomaticIcons);
 		}
 		
 		void UpdateIcons ()
 		{
 			List<IDockItem> new_items = new List<IDockItem> ();
 			foreach (IItem i in MostUsedItems ()) {
-				if (Preferences.ItemBlacklist.Contains (i.Name + i.Description + i.Icon))
+				if (DockPreferences.ItemBlacklist.Contains (i.Name + i.Description + i.Icon))
 					continue;
 				IDockItem di = new DockItem (i);
 				if (CustomDockItems.DockItems.Contains (di))

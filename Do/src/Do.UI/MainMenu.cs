@@ -49,7 +49,7 @@ namespace Do.UI
 			item.CanFocus = false;
 			item.Activated += OnMainMenuAboutClicked;
 			
-			// Preferences menu item
+			// CorePreferences menu item
 			item = new ImageMenuItem (Catalog.GetString ("_Preferences"));
 			(item as ImageMenuItem).Image = new Image (Stock.Preferences, IconSize.Menu);
 			Add (item);

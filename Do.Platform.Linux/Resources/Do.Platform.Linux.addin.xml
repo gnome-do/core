@@ -1,0 +1,22 @@
+<Addin isroot="true" namespace="Do">
+ 
+	<Runtime>
+		<Import assembly="Do.Platform.Linux.dll"/>
+	</Runtime>
+	
+	<Dependencies>
+		<Addin id="Do.Platform" version="1.0" />
+	</Dependencies>
+	
+	<!-- Extensions included in this assembly -->
+	<!-- Item Sources -->
+	<Extension path="/Do/ItemSource">
+		<ItemSource type="Do.Platform.Linux.ApplicationItemSource" />
+		<ItemSource type="Do.Platform.Linux.GNOMESpecialLocationsItemSource" />
+	</Extension>
+
+	<!-- Actions -->
+	<Extension path="/Do/Action">
+		<Action type="Do.Platform.Linux.CopyToClipboardAction" />
+	</Extension>
+</Addin>

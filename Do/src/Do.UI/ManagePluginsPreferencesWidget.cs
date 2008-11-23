@@ -30,6 +30,7 @@ using Mono.Addins.Setup;
 using Do;
 using Do.Core;
 using Do.Addins;
+using Do.Platform;
 
 namespace Do.UI
 {
@@ -205,7 +206,7 @@ namespace Do.UI
 			foreach (string id in nview.GetSelectedAddins ()) {
 				try {
 					string name = Addin.GetIdName (id).Split ('.')[1];
-					Util.Environment.Open (string.Format (PluginWikiPageFormat, name));
+					Platform.Environment.OpenURL (string.Format (PluginWikiPageFormat, name));
 				} catch { }
 			}
 		}

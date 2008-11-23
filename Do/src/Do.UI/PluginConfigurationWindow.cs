@@ -27,6 +27,7 @@ using Mono.Addins;
 
 using Do.Core;
 using Do.Addins;
+using Do.Platform;
 
 namespace Do.UI
 {

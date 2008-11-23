@@ -49,7 +49,7 @@ namespace Do.Core {
 		static readonly IEnumerable<Type> PenalizedActionTypes = new Type[] {
 			typeof (AliasAction),
 			typeof (DeleteAliasAction),
-			typeof (CopyToClipboardAction),
+			//typeof (CopyToClipboardAction),
 		};
 
 		DateTime newest_hit, oldest_hit;

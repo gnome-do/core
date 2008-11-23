@@ -42,14 +42,8 @@ namespace Do
 
 		public static void Initialize ()
 		{
-			Addins.Util.GetInnerType = o => DoObject.Unwrap (o).GetType ();
-			
 			// Misc
 			Addins.Util.FormatCommonSubstrings = FormatCommonSubstrings;
-			Addins.Util.GetPreferences = GetPreferences;
-
-			// Environment utilities
-			Addins.Util.Environment.Open = Environment.Open;
 
 			// Appearance utilities			
 			Addins.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
@@ -57,33 +51,6 @@ namespace Do
 			Addins.Util.Appearance.PopupMainMenuAtPosition = MainMenu.Instance.PopupAtPosition;
 		}
 		
-		public static IPreferences GetPreferences (string id)
-		{
-			return new Preferences (id);
-		}
-
-		public class Environment
-		{
-			public static void Open (string open_item)
-			{
-				if (open_item == null) return;
-
-				using (Process start_proc = new Process ())
-				{
-					// start_proc.StartInfo.FileName = open_item;
-					// start_proc.StartInfo.UseShellExecute = true;
-					start_proc.StartInfo.FileName = "xdg-open";
-					start_proc.StartInfo.Arguments = open_item;
-					try {
-						Log.Debug ("Opening \"{0}\"...", open_item);
-						start_proc.Start ();
-					} catch (Exception e) {
-						Log.Error ("Failed to open {0}: {1}", open_item, e.Message);
-					}
-				}
-			}
-		}
-
 		public class Appearance
 		{			
 
@@ -92,8 +59,6 @@ namespace Do
 				if (s == null) return string.Empty;
 				return GLib.Markup.EscapeText (s);
 			}
-
-			
 
 			public static void PresentWindow (Gtk.Window window)
 			{

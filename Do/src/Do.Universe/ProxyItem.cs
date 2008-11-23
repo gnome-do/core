@@ -24,9 +24,7 @@ using Do.Core;
 namespace Do.Universe {
 	
 	public interface IProxyItem : IItem {
-		IObject Inner {
-			get;
-		}
+		IObject Inner { get; }
 	}
 	
 	public class DoProxyItem : DoItem, IProxyItem {

@@ -1,0 +1,29 @@
+<Addin id="Platform" namespace= "Do" version="1.0" isroot="true">
+ 
+	<Runtime>
+		<Import assembly="Do.Platform.dll"/>
+	</Runtime>
+	
+	<!-- Extension points -->
+	<ExtensionPoint path="/Do/ItemSource">
+		<ExtensionNode name="ItemSource" objectType="Do.Universe.IItemSource"/>
+	</ExtensionPoint>
+	<ExtensionPoint path="/Do/Action">
+		<ExtensionNode name="Action" objectType="Do.Universe.IAction"/>
+	</ExtensionPoint>
+	
+	<!-- Extensions included in the main assemblies -->
+	<!-- Sources -->
+	<Extension path="/Do/ItemSource">
+	</Extension>
+	
+	<!-- Actions -->
+	<Extension path="/Do/Action">
+		<Action type="Do.Universe.Common.EmailAction" />
+		<Action type="Do.Universe.Common.OpenAction" />
+		<Action type="Do.Universe.Common.OpenURLAction" />
+		<Action type="Do.Universe.Common.OpenWithAction" />
+		<Action type="Do.Universe.Common.RevealAction" />
+		<Action type="Do.Universe.Common.RunAction" />
+	</Extension>
+</Addin>

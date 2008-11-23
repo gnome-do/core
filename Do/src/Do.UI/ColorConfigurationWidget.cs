@@ -20,8 +20,9 @@ using System;
 using System.Collections.Generic;
 
 using Do.Addins;
-using Do.Addins.CairoUtils;
 using Do.Universe;
+using Do.Platform;
+using Do.Addins.CairoUtils;
 
 namespace Do.UI
 {
@@ -50,24 +51,24 @@ namespace Do.UI
 				theme_combo.Sensitive = false;
 				
 			// Setup theme combo
-            themeI = Array.IndexOf (Themes, Do.Preferences.Theme);
+            themeI = Array.IndexOf (Themes, CorePreferences.Theme);
             themeI = themeI >= 0 ? themeI : 0;
             theme_combo.Active = themeI;            
 
 			BuildPreview ();
 			
-			pin_check.Active = Do.Preferences.AlwaysShowResults;
-			Do.Preferences.PreferenceChanged += OnPrefsChanged;
+			pin_check.Active = CorePreferences.AlwaysShowResults;
+			CorePreferences.PreferenceChanged += OnPrefsChanged;
 		}
 		
-		private void OnPrefsChanged (object o, PreferenceChangedEventArgs args) {
+		private void OnPrefsChanged (object o, Preferences.ChangedEventArgs args) {
 			if (args.Key == "Theme")
 					BuildPreview ();
 		}
 		
 		protected override void OnDestroyed ()
 		{
-			Do.Preferences.PreferenceChanged -= OnPrefsChanged;
+			CorePreferences.PreferenceChanged -= OnPrefsChanged;
 			base.OnDestroyed ();
 			if (bda != null)
 				bda.Destroy ();
@@ -86,7 +87,7 @@ namespace Do.UI
 			}
 			
 			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
-				if (theme.Name == Do.Preferences.Theme) {
+				if (theme.Name == CorePreferences.Theme) {
 					bda = new BezelDrawingArea (null, theme, true);
 					break;
 				}
@@ -152,12 +153,12 @@ namespace Do.UI
 
 		protected virtual void OnPinCheckClicked (object sender, System.EventArgs e)
 		{
-			Do.Preferences.AlwaysShowResults = pin_check.Active;
+			CorePreferences.AlwaysShowResults = pin_check.Active;
 		}
 
 		protected virtual void OnThemeComboChanged (object sender, System.EventArgs e)
 		{
-			Do.Preferences.Theme = Themes[theme_combo.Active];
+			CorePreferences.Theme = Themes[theme_combo.Active];
 		}
 
 		protected virtual void OnAnimationCheckbuttonClicked (object sender, System.EventArgs e)

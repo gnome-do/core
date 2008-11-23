@@ -47,8 +47,8 @@ namespace MonoDock.UI
 		public DateTime LastClick { get; set; }
 		public DateTime DockAddItem { get; set; }
 		
-		public int Width { get { return Preferences.IconSize; } }
-		public int Height { get { return Preferences.IconSize; } }
+		public int Width { get { return DockPreferences.IconSize; } }
+		public int Height { get { return DockPreferences.IconSize; } }
 		public bool Scalable { get { return true; } }
 		public bool DrawIndicator { get { return HasVisibleApps; } }
 		
@@ -80,24 +80,24 @@ namespace MonoDock.UI
 			apps =  new List<Wnck.Application> ();
 			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			this.item = item;
-			Preferences.IconSizeChanged += Dispose;
+			DockPreferences.IconSizeChanged += Dispose;
 			
 			UpdateApplication ();
 		}
 		
 		public void UpdateApplication ()
 		{
-			if (item is ApplicationItem) {
-				apps = WindowUtils.GetApplicationList ((item as ApplicationItem).Exec);
+			if (item is IApplicationItem) {
+				apps = WindowUtils.GetApplicationList ((item as IApplicationItem).Exec);
 			}
 		}
 		
 		Gdk.Pixbuf GetPixbuf ()
 		{
-			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, (int) (Preferences.IconSize*Preferences.IconQuality));
+			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, (int) (DockPreferences.IconSize*DockPreferences.IconQuality));
 			
-			if (pbuf.Height != Preferences.IconSize*Preferences.IconQuality && pbuf.Width != Preferences.IconSize*Preferences.IconQuality) {
-				double scale = (double)Preferences.IconSize*Preferences.IconQuality / Math.Max (pbuf.Width, pbuf.Height);
+			if (pbuf.Height != DockPreferences.IconSize*DockPreferences.IconQuality && pbuf.Width != DockPreferences.IconSize*DockPreferences.IconQuality) {
+				double scale = (double)DockPreferences.IconSize*DockPreferences.IconQuality / Math.Max (pbuf.Width, pbuf.Height);
 				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), InterpType.Bilinear);
 				pbuf.Dispose ();
 				pbuf = temp;
@@ -109,7 +109,7 @@ namespace MonoDock.UI
 		public Surface GetIconSurface ()
 		{
 			if (icon_surface == null) {
-				icon_surface = new ImageSurface (Cairo.Format.Argb32, (int) (Preferences.IconSize*Preferences.IconQuality), (int) (Preferences.IconSize*Preferences.IconQuality));
+				icon_surface = new ImageSurface (Cairo.Format.Argb32, (int) (DockPreferences.IconSize*DockPreferences.IconQuality), (int) (DockPreferences.IconSize*DockPreferences.IconQuality));
 				Context cr = new Context (icon_surface);
 				Gdk.CairoHelper.SetSourcePixbuf (cr, Pixbuf, 0, 0);
 				cr.Paint ();
@@ -124,7 +124,7 @@ namespace MonoDock.UI
 		public Surface GetTextSurface ()
 		{
 			if (sr == null)
-				sr = Util.GetBorderedTextSurface (item.Name, Preferences.TextWidth);
+				sr = Util.GetBorderedTextSurface (item.Name, DockPreferences.TextWidth);
 			return sr;
 		}
 		

@@ -28,8 +28,6 @@ using Do.Universe;
 
 namespace Do.Addins
 {
-	public delegate IPreferences GetPreferencesDelegate (string id);
-	public delegate void EnvironmentOpenDelegate (string item);
 	public delegate void PopupMainMenuAtPositionDelegate (int x, int y);
 	public delegate Gdk.Pixbuf PixbufFromIconNameDelegate (string icon_name, int size);
 	public delegate string StringTransformationDelegate (string old);
@@ -45,15 +43,7 @@ namespace Do.Addins
 	/// </summary>
 	public static class Util
 	{
-		public static GetPreferencesDelegate GetPreferences;
 		public static FormatCommonSubstringsDelegate FormatCommonSubstrings;
-
-		public static Func<IObject, Type> GetInnerType;
-		
-		public static class Environment
-		{
-			public static EnvironmentOpenDelegate Open;
-		}
 		
 		public static class Appearance
 		{

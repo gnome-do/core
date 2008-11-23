@@ -35,7 +35,7 @@ namespace MonoDock.UI
 		public Surface GetIconSurface ()
 		{
 			if (sr == null) {
-				sr = new ImageSurface (Cairo.Format.Argb32, Width, MonoDock.Util.Preferences.IconSize);
+				sr = new ImageSurface (Cairo.Format.Argb32, Width, MonoDock.Util.DockPreferences.IconSize);
 				Context cr = new Context (sr);
 				cr.AlphaFill ();
 				
@@ -66,13 +66,13 @@ namespace MonoDock.UI
 		
 		public int Width {
 			get {
-				return (int) (MonoDock.Util.Preferences.IconSize * .3);
+				return (int) (MonoDock.Util.DockPreferences.IconSize * .3);
 			}
 		}
 		
 		public int Height {
 			get {
-				return MonoDock.Util.Preferences.IconSize;
+				return MonoDock.Util.DockPreferences.IconSize;
 			}
 		}
 		
@@ -85,7 +85,7 @@ namespace MonoDock.UI
 		
 		public SeparatorItem ()
 		{
-			MonoDock.Util.Preferences.IconSizeChanged += delegate {
+			MonoDock.Util.DockPreferences.IconSizeChanged += delegate {
 				if (sr != null)
 					sr.Destroy ();
 				sr = null;

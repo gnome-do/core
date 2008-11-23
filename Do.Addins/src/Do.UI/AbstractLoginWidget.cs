@@ -26,6 +26,8 @@ using Gnome.Keyring;
 using Gtk;
 using Gdk;
 
+using Do.Platform;
+
 namespace Do.UI
 {
 	/// <summary>
@@ -204,7 +206,7 @@ namespace Do.UI
 		protected virtual void OnNewAcctBtnClicked (object sender, EventArgs e)
 		{
 			if (!String.IsNullOrEmpty (new_acct_btn.Uri))
-				Do.Addins.Util.Environment.Open (new_acct_btn.Uri);
+				Platform.Environment.OpenURL (new_acct_btn.Uri);
 		}
 		
 		/// <summary>

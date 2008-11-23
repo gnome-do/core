@@ -7,6 +7,9 @@
 	<Dependencies>
 		<Addin id="Core" version="1.0" />
 	</Dependencies>
+	<Dependencies>
+		<Addin id="Do.Platform" version="1.0" />
+	</Dependencies>
 	
 	<!-- Extensions included in this assembly -->
 	<!-- Sources -->

@@ -26,7 +26,7 @@ namespace Do.Universe {
 	public class PreferencesItem : IRunnableItem {		
 		
 		public string Name {
-			get { return Catalog.GetString ("GNOME Do Preferences"); }
+			get { return Catalog.GetString ("GNOME Do CorePreferences"); }
 		}
 		
 		public string Description {
@@ -34,7 +34,7 @@ namespace Do.Universe {
 		}
 		
 		public string Icon {
-			get { return "gtk-preferences"; }
+			get { return "gtk-CorePreferences"; }
 		}
 		
 		public void Run ()

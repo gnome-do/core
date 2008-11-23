@@ -78,7 +78,7 @@ namespace Do.UI
 
 		protected virtual void OnBtnHelpClicked (object sender, EventArgs e)
 		{
-			Util.Environment.Open (HelpUrl);
+			Platform.Environment.OpenURL (HelpUrl);
 		}
 	}
 }

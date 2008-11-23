@@ -25,6 +25,8 @@ using System.Collections.Generic;
 using Gtk;
 using Gdk;
 
+using Do.Platform;
+
 namespace Do.UI
 {
 	public static class IconProvider
