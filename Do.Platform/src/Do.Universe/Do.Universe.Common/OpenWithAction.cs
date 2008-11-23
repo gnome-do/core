@@ -26,7 +26,8 @@ using Mono.Unix;
 
 using Do.Platform;
 
-namespace Do.Universe {
+namespace Do.Universe.Common
+{
 
 	/// <summary>
 	/// A command providing "open with..." semantics to file items.

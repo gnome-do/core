@@ -22,10 +22,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Mono.Unix;
 
-using Do.Universe;
-using Do.Addins;
 using Gdk;
 using Gtk;
+
+using Do.Addins;
+using Do.Universe;
 
 namespace Do.UI {
 	
@@ -388,8 +389,8 @@ namespace Do.UI {
 			
 			if (string.IsNullOrEmpty (context.Query) && context.LargeTextDisplay) {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
-				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text");
-				
+				iconbox[(int) pane].DisplayObject = new Universe.Common.TextItem ("Enter Text");
+
 				if (!context.Results.Any ()) return;
 			} else {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;

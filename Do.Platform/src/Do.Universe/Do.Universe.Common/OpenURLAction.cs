@@ -26,7 +26,7 @@ using Mono.Unix;
 
 using Do.Platform;
 
-namespace Do.Universe
+namespace Do.Universe.Common
 {
 	public class OpenURLAction : AbstractAction
 	{

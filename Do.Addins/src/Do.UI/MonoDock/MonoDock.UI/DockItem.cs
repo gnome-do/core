@@ -24,8 +24,9 @@ using Gdk;
 using Cairo;
 
 using Do.UI;
-using Do.Universe;
 using Do.Addins;
+using Do.Universe;
+using Do.Universe.Common;
 using Do.Addins.CairoUtils;
 
 using MonoDock.Util;

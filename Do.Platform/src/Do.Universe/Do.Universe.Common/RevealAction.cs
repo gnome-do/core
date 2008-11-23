@@ -23,7 +23,7 @@ using System.Collections.Generic;
 
 using Mono.Unix;
 
-namespace Do.Universe
+namespace Do.Universe.Common
 {
 	public class RevealAction : AbstractAction
 	{

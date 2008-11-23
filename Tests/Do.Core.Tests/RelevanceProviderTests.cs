@@ -20,6 +20,7 @@ using System;
 
 using Do;
 using Do.Universe;
+using Do.Platform;
 
 using NUnit.Framework;
 
@@ -38,12 +39,12 @@ namespace Do.Core
 			string filter = "abc";
 			
 			//less than 0
-			DoObject obj1 = new DoObject (new TextItem ("def"));
-			DoObject obj2 = new DoObject (new TextItem ("ghe"));
-			DoObject obj3 = new DoObject (new TextItem ("foo"));
+			DoObject obj1 = new DoObject (UniverseFactory.NewTextItem ("def"));
+			DoObject obj2 = new DoObject (UniverseFactory.NewTextItem ("ghe"));
+			DoObject obj3 = new DoObject (UniverseFactory.NewTextItem ("foo"));
 			
 			//greater than 0
-			DoObject obj4 = new DoObject (new TextItem ("abc"));
+			DoObject obj4 = new DoObject (UniverseFactory.NewTextItem ("abc"));
 		
 			//why the HELL wont this compile the right way?
 			// obj1.UpdateRelevance (filter, null) == compile error!  wtf???
@@ -64,7 +65,7 @@ namespace Do.Core
 		{
 			string filter = "";
 			
-			DoObject obj = new DoObject (new TextItem ("Test Item"));
+			DoObject obj = new DoObject (UniverseFactory.NewTextItem ("Test Item"));
 			
 			try {
 				DoObject_RelevanceProvider.UpdateRelevance (obj, filter, null);
@@ -78,7 +79,7 @@ namespace Do.Core
 		[Test ()]
 		public void TestIncreaseRelevance ()
 		{
-			DoObject obj = new DoObject (new TextItem ("Unique Test Item 1"));
+			DoObject obj = new DoObject (UniverseFactory.NewTextItem ("Unique Test Item 1"));
 			string filter = "test";
 			
 			DoObject_RelevanceProvider.UpdateRelevance (obj, filter, null);
@@ -100,7 +101,7 @@ namespace Do.Core
 		[Test ()]
 		public void TestDecreaseRelevance ()
 		{
-			DoObject obj = new DoObject (new TextItem ("Unique Test Item 2"));
+			DoObject obj = new DoObject (UniverseFactory.NewTextItem ("Unique Test Item 2"));
 			string filter = "test";
 			
 			DoObject_RelevanceProvider.UpdateRelevance (obj, filter, null);
@@ -114,8 +115,8 @@ namespace Do.Core
 		[Test ()]
 		public void TestAccronymRelevance ()
 		{
-			DoObject obj1 = new DoObject (new TextItem ("Accronym Item One"));
-			DoObject obj2 = new DoObject (new TextItem ("Accronym Item Two"));
+			DoObject obj1 = new DoObject (UniverseFactory.NewTextItem ("Accronym Item One"));
+			DoObject obj2 = new DoObject (UniverseFactory.NewTextItem ("Accronym Item Two"));
 			
 			string filter = "aio";
 			float rel1 = provider.GetRelevance (obj1, filter, null);
@@ -127,10 +128,10 @@ namespace Do.Core
 		[Test ()]
 		public void TestItemLengthRelevance ()
 		{
-			DoObject obj1 = new DoObject (new TextItem ("Accronym Item Onez"));
-			DoObject obj2 = new DoObject (new TextItem ("Accronym Item Twooz"));
-			DoObject obj3 = new DoObject (new TextItem ("Accronym Item Threez"));
-			DoObject obj4 = new DoObject (new TextItem ("Accronym Item Fourrrz"));
+			DoObject obj1 = new DoObject (UniverseFactory.NewTextItem ("Accronym Item Onez"));
+			DoObject obj2 = new DoObject (UniverseFactory.NewTextItem ("Accronym Item Twooz"));
+			DoObject obj3 = new DoObject (UniverseFactory.NewTextItem ("Accronym Item Threez"));
+			DoObject obj4 = new DoObject (UniverseFactory.NewTextItem ("Accronym Item Fourrrz"));
 			
 			string filter = "az";
 			float rel1 = provider.GetRelevance (obj1, filter, null);

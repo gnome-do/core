@@ -1,4 +1,4 @@
-<Addin id="Core" namespace= "Do" version="1.0" isroot="true">
+<Addin id="Core" namespace="Do" version="1.0" isroot="true">
  
 	<Runtime>
 		<Import assembly="Do.Addins.dll"/>

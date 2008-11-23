@@ -1,11 +1,18 @@
-<Addin isroot="true" namespace="Do">
+<Addin
+	id="Linux"
+	namespace="Do"
+	version="2.0"
+	name="Linux Platform Base"
+	description="Base Linux plugin."
+	author="GNOME Do Core Team"
+	>
  
 	<Runtime>
 		<Import assembly="Do.Platform.Linux.dll"/>
 	</Runtime>
 	
 	<Dependencies>
-		<Addin id="Do.Platform" version="1.0" />
+		<Addin id="Platform" version="1.0" />
 	</Dependencies>
 	
 	<!-- Extensions included in this assembly -->

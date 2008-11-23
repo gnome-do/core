@@ -22,6 +22,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Do.Universe;
+using Do.Universe.Common;
 
 namespace Do.Core {
 

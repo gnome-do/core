@@ -1,4 +1,4 @@
-// UniverseFactory.cs
+// PlatformInitializer.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -18,47 +18,32 @@
 //
 
 using System;
-
-using Do.Universe;
-using Do.Universe.Common;
+using System.IO;
+using Env = System.Environment;
 
 namespace Do.Platform
 {
 	
-	public static class UniverseFactory
+	internal static class PlatformInitializer
 	{
-
-		public interface Implementation
-		{
-			IFileItem NewFileItem (string path);
-			IApplicationItem NewApplicationItem (string path);
-		}
-
-		public static Implementation Imp { get; private set; }
-
-		public static void Initialize (Implementation imp)
-		{
-			if (Imp != null)
-				throw new Exception ("Already has Implementation");
-			if (imp == null)
-				throw new ArgumentNullException ("Implementation may not be null");
-			
-			Imp = imp;
-		}
-
-		public static IFileItem NewFileItem (string path)
-		{
-			return Imp.NewFileItem (path);
-		}
 		
-		public static IApplicationItem NewApplicationItem (string path)
+		public static void Initialize ()
 		{
-			return Imp.NewApplicationItem (path);
-		}
+			Core.Initialize (new CoreImplementation ());
+			UniverseFactory.Initialize (new UniverseFactoryImplementation ());
+			Environment.Initialize (new EnvironmentImplementation ());
+			Paths.Initialize (new PathsImplementation ());
+			Preferences.Initialize (new GConfPreferencesImplementation ());
 
-		public static ITextItem NewTextItem (string text)
-		{
-			return new TextItem (text);
+			#region Log initialization
+			Log.Initialize ();
+			Log.AddImplementation (new ConsoleLogImplementation ());
+			if (CorePreferences.WriteLogToFile) {
+				if (File.Exists (Paths.Log)) File.Delete (Paths.Log);
+				Log.AddImplementation (new Common.FileLogImplementation ());
+			}
+			Log.LogLevel = CorePreferences.QuietStart ? Log.Level.Error : Log.Level.Info;
+			#endregion
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// UniverseFactory.cs
+// CoreImplementation.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -19,46 +19,18 @@
 
 using System;
 
+using Do.Core;
 using Do.Universe;
-using Do.Universe.Common;
 
 namespace Do.Platform
 {
 	
-	public static class UniverseFactory
+	internal class CoreImplementation : Core.Implementation
 	{
-
-		public interface Implementation
+	
+		public Type GetInnerType (IObject o)
 		{
-			IFileItem NewFileItem (string path);
-			IApplicationItem NewApplicationItem (string path);
-		}
-
-		public static Implementation Imp { get; private set; }
-
-		public static void Initialize (Implementation imp)
-		{
-			if (Imp != null)
-				throw new Exception ("Already has Implementation");
-			if (imp == null)
-				throw new ArgumentNullException ("Implementation may not be null");
-			
-			Imp = imp;
-		}
-
-		public static IFileItem NewFileItem (string path)
-		{
-			return Imp.NewFileItem (path);
-		}
-		
-		public static IApplicationItem NewApplicationItem (string path)
-		{
-			return Imp.NewApplicationItem (path);
-		}
-
-		public static ITextItem NewTextItem (string text)
-		{
-			return new TextItem (text);
+			return DoObject.Unwrap (o).GetType ();
 		}
 	}
 }

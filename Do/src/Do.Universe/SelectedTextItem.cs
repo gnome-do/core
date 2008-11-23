@@ -21,6 +21,8 @@
 using System;
 using Mono.Unix;
 
+using Do.Platform;
+
 namespace Do.Universe {
 
 	public class SelectedTextItem : IProxyItem, ITextItem {		
@@ -29,7 +31,7 @@ namespace Do.Universe {
 		
 		public IObject Inner {
 			get {
-				return new TextItem (Text);
+				return UniverseFactory.NewTextItem (Text);
 			}
 		}
 		

@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Do.Universe
+namespace Do.Universe.Common
 {
 	/// <summary>
 	/// A concrete implementation of the ITextItem interface.

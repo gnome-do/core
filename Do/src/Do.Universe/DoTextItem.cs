@@ -21,13 +21,14 @@ using System;
 
 using Do.Core;
 using Do.Universe;
+using Do.Platform;
 
 namespace Do
 {
 	public class DoTextItem: DoItem, ITextItem
 	{
 		public DoTextItem (string text):
-			base (new TextItem (text))
+			base (UniverseFactory.NewTextItem (text))
 		{
 		}
 		

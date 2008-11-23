@@ -26,7 +26,7 @@ using Mono.Unix;
 
 using Do.Platform;
 
-namespace Do.Universe
+namespace Do.Universe.Common
 {
 	/// <summary>
 	/// A command providing "open" semantics to many kinds of items.

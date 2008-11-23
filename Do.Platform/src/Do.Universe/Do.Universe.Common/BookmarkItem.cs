@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Do.Universe
+namespace Do.Universe.Common
 {
 	/// <summary>
 	/// Simple base class for representing bookmarks.
