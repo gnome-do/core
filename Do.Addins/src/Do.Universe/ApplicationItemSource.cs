@@ -108,7 +108,8 @@ namespace Do.Universe {
 				.Select (dir => dir.Replace ("~", Paths.UserHome))
 				.Select (dir => LoadDesktopFiles (dir))
 				.Aggregate ((a, b) => Enumerable.Concat (a, b))
-				.Cast<IItem> ();
+				.Cast<IItem> ()
+				.ToList ();
 		}
 
 		public IEnumerable<IItem> Items {
