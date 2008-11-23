@@ -28,9 +28,9 @@ namespace Do.Platform
 	internal class CoreImplementation : Core.Implementation
 	{
 	
-		public Type GetInnerType (IObject o)
+		public T Unwrap<T> (T o) where T : class, IObject
 		{
-			return DoObject.Unwrap (o).GetType ();
+			return DoObject.Unwrap<T> (o);
 		}
 	}
 }

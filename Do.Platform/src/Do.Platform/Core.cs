@@ -29,7 +29,7 @@ namespace Do.Platform
 
 		public interface Implementation
 		{
-			Type GetInnerType (IObject o);
+			T Unwrap<T> (T o) where T : class, IObject;
 		}
 
 		public static Implementation Imp { get; private set; }
@@ -44,9 +44,14 @@ namespace Do.Platform
 			Imp = imp;
 		}
 
-		public static Type GetInnerType (IObject o)
+		public static T Unwrap<T> (T o) where T : class, IObject
 		{
-			return Imp.GetInnerType (o);
+			return Imp.Unwrap<T> (o);
+		}
+
+		public static Type GetInnerType<T> (T o) where T : class, IObject
+		{
+			return Unwrap<T> (o).GetType ();
 		}
 	}
 }
