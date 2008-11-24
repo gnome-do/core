@@ -396,7 +396,7 @@ namespace MonoDock.UI
 				} else if (GetIconSource (DockItems[item]) == IconSource.Statistics) {
 					DockItem di = DockItems[item] as DockItem;
 					if (di != null)
-						DockPreferences.AddBlacklistItem (di.IObject.Name + di.IObject.Description + di.IObject.Icon);
+						DockPreferences.AddBlacklistItem (MonoDock.UI.Util.UIDForIObject (di.IObject));
 					UpdateIcons ();
 				}
 				AnimatedDraw ();
@@ -937,7 +937,7 @@ namespace MonoDock.UI
 		{
 			List<IDockItem> new_items = new List<IDockItem> ();
 			foreach (IItem i in MostUsedItems ()) {
-				if (DockPreferences.ItemBlacklist.Contains (i.Name + i.Description + i.Icon))
+				if (DockPreferences.ItemBlacklist.Contains (MonoDock.UI.Util.UIDForIObject (i)))
 					continue;
 				IDockItem di = new DockItem (i);
 				if (CustomDockItems.DockItems.Contains (di))

@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 
+using Do.Universe;
+
 using Cairo;
 using Do.Addins.CairoUtils;
 using Gdk;
@@ -65,6 +67,11 @@ namespace MonoDock.UI
 			layout.FontDescription.Dispose ();
 			layout.Dispose ();
 			return sr;
+		}
+		
+		public static string UIDForIObject (IObject obj)
+		{
+			return obj.Name + obj.Description + obj.Icon;
 		}
 	}
 }
