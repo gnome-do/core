@@ -33,7 +33,6 @@ namespace Do.UI
 	{
 		static int textHeight = 11;
 		private static Pango.Layout layout;
-		private static Gtk.Widget widget;
 		
 		public static int TextHeight {
 			get {
@@ -42,33 +41,30 @@ namespace Do.UI
 			set {
 				if (value == textHeight) return;
 				textHeight = value;
-				widget = null;
 			}
 		}
 		
-		public static void RenderLayoutText (Context cr, string text, int x, int y, int width, Gtk.Widget w)
+		public static void RenderLayoutText (Context cr, string text, int x, int y, int width)
 		{
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
-			RenderLayoutText (cr, text, x, y, width, color, Pango.Alignment.Center, Pango.EllipsizeMode.End, w);
+			RenderLayoutText (cr, text, x, y, width, color, Pango.Alignment.Center, Pango.EllipsizeMode.End);
 		}
 		
 		public static Gdk.Rectangle RenderLayoutText (Context cr, string text, int x, int y, int width, 
-		                       Pango.Color color, Pango.Alignment align, Pango.EllipsizeMode ellipse, Gtk.Widget w)
+		                       Pango.Color color, Pango.Alignment align, Pango.EllipsizeMode ellipse)
 		{
 			if (string.IsNullOrEmpty (text)) return new Gdk.Rectangle ();
 	
-			if (layout == null || widget == null || w != widget) {
-				widget = w;
-				if (layout != null) {
-					layout.Context.Dispose ();
-					layout.FontDescription.Dispose ();
-					layout.Dispose ();
-				}
-				layout = new Pango.Layout (widget.PangoContext);
-				layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
-				layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (TextHeight);
+			if (layout != null) {
+				layout.Context.Dispose ();
+				layout.FontDescription.Dispose ();
+				layout.Dispose ();
 			}
+			layout = new Pango.Layout (PangoHelper.ContextGet ());
+			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
+			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (TextHeight);
+			
 			layout.Width = Pango.Units.FromPixels (width);
 			layout.Ellipsize = ellipse;
 			layout.Alignment = align;

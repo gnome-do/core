@@ -63,7 +63,6 @@ namespace MonoDock.Util
 			exec = exec.Split (' ')[0];
 			List<Application> apps = new List<Application> ();
 			Application out_app = null;
-			StreamReader reader;
 			foreach (string dir in Directory.GetDirectories ("/proc")) {
 				int pid;
 				out_app = null;

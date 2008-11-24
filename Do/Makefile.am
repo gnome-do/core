@@ -62,18 +62,17 @@ BINARIES = \
 
 all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_DESKTOPAPPLICATIONS) $(BINARIES) 
 
-FILES =  \
+FILES = \
+	gtk-gui/Do.UI.ColorConfigurationWidget.cs \
 	gtk-gui/Do.UI.DoAddinInstallerDialog.cs \
 	gtk-gui/Do.UI.GeneralPreferencesWidget.cs \
-	gtk-gui/Do.UI.ColorConfigurationWidget.cs \
 	gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs \
 	gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs \
-	gtk-gui/Do.UI.PluginErrorDialog.cs \
 	gtk-gui/Do.UI.PluginConfigurationWindow.cs \
+	gtk-gui/Do.UI.PluginErrorDialog.cs \
 	gtk-gui/Do.UI.PreferencesWindow.cs \
 	gtk-gui/generated.cs \
-	src/AssemblyInfo.cs \
-	src/ConsoleCrayon.cs \
+	src/CorePreferences.cs \
 	src/Do.Core/Controller.cs \
 	src/Do.Core/DoAction.cs \
 	src/Do.Core/DoAddinInstaller.cs \
@@ -81,8 +80,8 @@ FILES =  \
 	src/Do.Core/DoItemSource.cs \
 	src/Do.Core/DoObject.cs \
 	src/Do.Core/DoObject_RelevanceProvider.cs \
-	src/Do.Core/IObjectExtensions.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
+	src/Do.Core/IObjectExtensions.cs \
 	src/Do.Core/IUniverseManager.cs \
 	src/Do.Core/PluginManager.cs \
 	src/Do.Core/RelevanceProvider.cs \
@@ -94,16 +93,18 @@ FILES =  \
 	src/Do.Core/SearchControllers/ThirdSearchController.cs \
 	src/Do.Core/SimpleUniverseManager.cs \
 	src/Do.cs \
+	src/Do.Platform/CoreImplementation.cs \
+	src/Do.Platform/PlatformInitializer.cs \
+	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
-	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/KeybindingsPreferencesWidget.cs \
 	src/Do.UI/KeybindingTreeView.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ManagePluginsPreferencesWidget.cs \
-	src/Do.UI/PluginErrorDialog.cs \
 	src/Do.UI/NotificationIcon.cs \
 	src/Do.UI/PluginConfigurationWindow.cs \
+	src/Do.UI/PluginErrorDialog.cs \
 	src/Do.UI/PluginNodeView.cs \
 	src/Do.UI/PluginSelectionEventArgs.cs \
 	src/Do.UI/PluginUpdateNodeView.cs \
@@ -119,17 +120,9 @@ FILES =  \
 	src/Do.Universe/PreferencesItem.cs \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
-	src/DoPreferences.cs \
-	src/EnumerableExtensions.cs \
-	src/GconfPreferencesBackend.cs \
-	src/IPreferencesBackend.cs \
-	src/CommandLinePreferences.cs \
-	src/CommandLinePreferencesBackend.cs \
-	src/Log.cs \
-	src/Preferences.cs \
 	src/ProgramVersion.cs \
 	src/Util.cs \
-	src/XKeybinder.cs 
+	src/XKeybinder.cs
 
 if HAVE_NUNIT
 FILES += \
@@ -162,8 +155,11 @@ REFERENCES =  \
 	System \
 	System.Core
 
-DLL_REFERENCES =	$(DO_ADDINS_DLL) \
-			$(DO_DBUS_DLL)
+DLL_REFERENCES = \
+	$(DO_ADDINS_DLL) \
+	$(DO_DBUS_DLL) \
+	../Do.Platform/Do.Platform.dll \
+	../Do.Platform.Linux/Do.Platform.Linux.dll
 
 DO_ADDINS_DLL = $(BUILD_DIR)/Do.Addins.dll
 GNOME_DO_DESKTOP = $(BUILD_DIR)/gnome-do.desktop
@@ -209,7 +205,8 @@ $(build_xamlg_list): %.xaml.g.cs: %.xaml
 $(build_resx_resources) : %.resources: %.resx
 	resgen2 '$<' '$@'
 
+export MONO_PATH=$(CURDIR)/../Do.Platform/:$(CURDIR)/../Do.Platform.Linux/
+
 $(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
 	mkdir -p $(dir $(ASSEMBLY))
 	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)
-

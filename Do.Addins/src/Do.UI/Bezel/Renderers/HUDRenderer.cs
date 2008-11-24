@@ -142,7 +142,7 @@ namespace Do.UI
 			if (DateTime.Now.Day == 25 && DateTime.Now.Month == 12)
 				s = "Merry Christmas!!!";
 			BezelTextUtils.RenderLayoutText (cr, s, 0, drawing_area.Y + 5, parent.WindowWidth, color, 
-			                  Pango.Alignment.Center, Pango.EllipsizeMode.End, parent);
+			                  Pango.Alignment.Center, Pango.EllipsizeMode.End);
 		}
 		
 		private void SetTitlePath (Cairo.Context cr)
