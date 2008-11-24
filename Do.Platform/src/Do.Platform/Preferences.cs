@@ -160,9 +160,9 @@ namespace Do.Platform {
 		/// </returns>
 		public bool Set<T> (string key, T val)
 		{
-			// key = Combine (RootKey, key); // uncomment this line to cause freeze in prefs window
-			bool success = Imp.Set<T> (key, val);
+			bool success = Imp.Set<T> (Combine (RootKey, key), val);
 			if (success && null != PreferenceChanged) {
+				// We send the unmodifed key (without RootKey) to subscribers.
 				PreferenceChanged (this, new ChangedEventArgs (key, val));
 			}
 			return success;
@@ -183,8 +183,7 @@ namespace Do.Platform {
 		/// </returns>
 		public bool TryGet<T> (string key, out T val)
 		{
-			key = Combine (RootKey, key);
-			return Imp.TryGet<T> (key, out val);
+			return Imp.TryGet<T> (Combine (RootKey, key), out val);
 		}
 
 		#endregion
