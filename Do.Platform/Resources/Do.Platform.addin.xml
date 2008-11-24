@@ -30,30 +30,4 @@
 		<Action type="Do.Universe.Common.RunAction" />
 	</Extension>
 
-
-	<!-- ROOT EXTENSIONS -->
-	<!-- Sources -->
-	<Extension path="/Do/ItemSource">
-		<ItemSource type="Do.Universe.AliasItemSource" />
-		<ItemSource type="Do.Universe.InternalItemSource" />
-		<ItemSource type="Do.Universe.ItemSourceItemSource" />
-	</Extension>
-
-	<!-- Actions -->
-	<Extension path="/Do/Action">
-		<Action type="Do.Universe.AliasAction" />
-		<Action type="Do.Universe.DeleteAliasAction" />
-	</Extension>
-
-	<!-- PLATFORM.LINUX EXTENSIONS -->
-	<!-- Item Sources -->
-	<Extension path="/Do/ItemSource">
-		<ItemSource type="Do.Platform.Linux.ApplicationItemSource" />
-		<ItemSource type="Do.Platform.Linux.GNOMESpecialLocationsItemSource" />
-	</Extension>
-
-	<!-- Actions -->
-	<Extension path="/Do/Action">
-		<Action type="Do.Platform.Linux.CopyToClipboardAction" />
-	</Extension>
 </Addin>
