@@ -34,7 +34,7 @@ namespace Do.UI {
             // Widget Do.UI.PluginConfigurationWindow
             this.Name = "Do.UI.PluginConfigurationWindow";
             this.Title = Mono.Unix.Catalog.GetString("PluginConfigurationWindow");
-            this.Icon = Stetic.IconLoader.LoadIcon(this, "gtk-CorePreferences", Gtk.IconSize.Menu, 16);
+            this.Icon = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Menu, 16);
             this.WindowPosition = ((Gtk.WindowPosition)(1));
             this.BorderWidth = ((uint)(6));
             this.DefaultWidth = 400;

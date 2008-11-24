@@ -54,7 +54,7 @@ namespace Do.Platform
 		public bool Set<T> (string key, T val)
 		{
 			bool success;
-
+			
 			success = true;
 			try {
 				client.Set (MakeKeyPath (key), val);
@@ -67,7 +67,7 @@ namespace Do.Platform
 		public bool TryGet<T> (string key, out T val)
 		{
 			bool success;
-
+			
 			success = true;
 			try {
 				val = (T) client.Get (MakeKeyPath (key));

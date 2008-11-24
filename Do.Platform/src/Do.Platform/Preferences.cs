@@ -107,7 +107,7 @@ namespace Do.Platform {
 		{
 			T val;
 
-			TryGet (Combine (RootKey, key), def, out val);
+			TryGet (key, def, out val);
 			return val;
 		}
 
@@ -160,8 +160,9 @@ namespace Do.Platform {
 		/// </returns>
 		public bool Set<T> (string key, T val)
 		{
-			bool success = Imp.Set<T> (key, val);
+			bool success = Imp.Set<T> (Combine (RootKey, key), val);
 			if (success && null != PreferenceChanged) {
+				// We send the unmodifed key (without RootKey) to subscribers.
 				PreferenceChanged (this, new ChangedEventArgs (key, val));
 			}
 			return success;

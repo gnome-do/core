@@ -29,7 +29,7 @@ namespace Do
 	
 	public static class CorePreferences  {
 
-		static Preferences prefs = Preferences.Get ("core-CorePreferences");
+		static Preferences prefs = Preferences.Get ("core-preferences");
 
 		public static event Preferences.PreferenceChangedDelegate PreferenceChanged {
 			add { prefs.PreferenceChanged += value; }
