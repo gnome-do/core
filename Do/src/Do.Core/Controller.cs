@@ -32,6 +32,7 @@ using Do.UI;
 using Do.Addins;
 using Do.Universe;
 using Do.DBusLib;
+using Do.Platform;
 
 namespace Do.Core {
 
@@ -885,7 +886,7 @@ namespace Do.Core {
 			}
 			
 			if (th != null && th.IsAlive) {
-				NotificationIcon.ShowKillNotification ((o, a) => System.Environment.Exit (20));
+				Notifications.ShowKillNotification ((o, a) => System.Environment.Exit (20));
 				return;
 			}
 			

@@ -1,8 +1,22 @@
-// NotificationsImplementation.cs created with MonoDevelop
-// User: alex at 7:25 PM 11/23/2008
-//
-// To change standard headers go to Edit->Preferences->Coding->Standard Headers
-//
+/* NotificationsImplementation.cs
+ *
+ * GNOME Do is the legal property of its developers. Please refer to the
+ * COPYRIGHT file distributed with this
+ * source distribution.
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using System;
 using Notifications;
@@ -16,23 +30,13 @@ namespace Do.Platform.Linux
 	{
 		
 		#region Notifications.Implementation
-		
-		public void SendNotification (string message)
-		{
-			SendNotification ("GNOME Do", message, null);
-		}
-		
-		public void SendNotification (string message, string title)
-		{
-			SendNotification (title, message, null);
-		}
-		
+				
 		public void SendNotification (string message, string title, string icon)
 		{
 			ShowNotification (title, message, icon, null, null, null);
 		}
 		
-		internal void ShowKillNotification (object handler)
+		public void ShowKillNotification (object handler)
 		{
 			ActionHandler action = (ActionHandler) handler;
 			if (action == null) throw new ArgumentException ("Must pass a valid ActionHandler");
