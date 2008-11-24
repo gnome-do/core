@@ -78,9 +78,7 @@ namespace MonoDock.UI
 			}
 		}
 		
-		public int Height {
-			get; set;
-		}
+		public int Height { get { return 300; } }
 		
 		public int DockWidth {
 			get {
@@ -106,11 +104,7 @@ namespace MonoDock.UI
 			}
 		}
 		
-		public bool InputInterfaceVisible {
-			get {
-				return input_interface;
-			}
-		}
+		public bool InputInterfaceVisible { get; set; }
 		
 		public Pane CurrentPane {
 			get {
@@ -173,17 +167,15 @@ namespace MonoDock.UI
 		
 		int ZoomPixels {
 			get {
-				return (int) (ZoomSize*ZoomIn);
+				return (int) (DockPreferences.ZoomSize*ZoomIn);
 			}
 		}
 		
-		int ZoomSize {
-			get {
-				return DockPreferences.ZoomSize;
-			}
-		}
 		#endregion
 		
+		//// <value>
+		/// The overall offset of the dock as a whole
+		/// </value>
 		int YOffset {
 			get {
 				if (!DockPreferences.AutoHide || cursor_is_handle)
@@ -195,23 +187,26 @@ namespace MonoDock.UI
 				} else {
 					offset = Math.Min (Math.Min (1,(DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime),
 					                  Math.Min (1, (DateTime.UtcNow - interface_change_time).TotalMilliseconds / BaseAnimationTime));
-					if (input_interface)
+					if (InputInterfaceVisible)
 						offset = 1-offset;
 					return (int) (offset*MinimumDockArea.Height);
 				}
 			}
 		}
 		
+		/// <value>
+		/// Determins the opacity of the icons on the normal dock
+		/// </value>
 		double DockIconOpacity {
 			get {
 				double total_time = (DateTime.UtcNow - interface_change_time).TotalMilliseconds;
 				if (total_time > BaseAnimationTime) {
-					if (input_interface)
+					if (InputInterfaceVisible)
 						return 0;
 					return 1;
 				}
 				
-				if (input_interface) {
+				if (InputInterfaceVisible) {
 					return 1-(total_time/BaseAnimationTime);
 				} else {
 					return total_time/BaseAnimationTime;
@@ -341,7 +336,6 @@ namespace MonoDock.UI
 		
 		public DockArea(DockWindow window, IStatistics statistics) : base ()
 		{
-			Height = 300;
 			Statistics = statistics;
 			this.window = window;
 			dock_items = new List<IDockItem> ();
@@ -368,6 +362,7 @@ namespace MonoDock.UI
 			RegisterEvents ();
 			
 			GLib.Timeout.Add (20, delegate {
+				//must be done after construction is complete
 				SetParentInputMask ();
 				return false;
 			});
@@ -864,7 +859,7 @@ namespace MonoDock.UI
 			}
 			
 			int item = DockItemForX ((int) evnt.X); //sometimes clicking is not good!
-			if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea || input_interface)
+			if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea || InputInterfaceVisible)
 				return ret_val;
 			
 			//handling right clicks
@@ -1054,11 +1049,10 @@ namespace MonoDock.UI
 		}
 		
 		DateTime interface_change_time = DateTime.UtcNow;
-		bool input_interface = false;
 		public void ShowInputInterface ()
 		{
 			interface_change_time = DateTime.UtcNow;
-			input_interface = true;
+			InputInterfaceVisible = true;
 			
 			AnimatedDraw ();
 		}
@@ -1067,7 +1061,7 @@ namespace MonoDock.UI
 		public void HideInputInterface ()
 		{
 			interface_change_time = DateTime.UtcNow;
-			input_interface = false;
+			InputInterfaceVisible = false;
 		
 			if (update_timer != 0)
 				return;
