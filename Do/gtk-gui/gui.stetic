@@ -15,7 +15,7 @@
     <property name="WidthRequest">360</property>
     <property name="HeightRequest">500</property>
     <property name="Title" translatable="yes">GNOME Do Preferences</property>
-    <property name="Icon">stock:gtkCorePreferences Menu</property>
+    <property name="Icon">stock:gtk-preferences Menu</property>
     <property name="WindowPosition">Center</property>
     <property name="BorderWidth">6</property>
     <child>
@@ -385,7 +385,7 @@
                     <property name="Sensitive">False</property>
                     <property name="CanFocus">True</property>
                     <property name="Type">TextAndIcon</property>
-                    <property name="Icon">stock:gtk-CorePreferences Button</property>
+                    <property name="Icon">stock:gtk-preferences Button</property>
                     <property name="Label" translatable="yes">_Configure</property>
                     <property name="UseUnderline">True</property>
                     <signal name="Clicked" handler="OnBtnConfigurePluginClicked" />
@@ -458,7 +458,7 @@
   <widget class="Gtk.Window" id="Do.UI.PluginConfigurationWindow" design-size="418 524">
     <property name="MemberName" />
     <property name="Title" translatable="yes">PluginConfigurationWindow</property>
-    <property name="Icon">stock:gtk-CorePreferences Menu</property>
+    <property name="Icon">stock:gtk-preferences Menu</property>
     <property name="WindowPosition">Center</property>
     <property name="BorderWidth">6</property>
     <property name="DefaultWidth">400</property>
