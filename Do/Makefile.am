@@ -45,12 +45,27 @@ DO_ADDINS_DLL_MDB=
 
 endif
 
+DO_PLATFORM_DLL_SOURCE = ../Do.Platform/Do.Platform.dll
+DO_PLATFORM_DLL_MDB_SOURCE = $(DO_PLATFORM_DLL_SOURCE).mdb
+DO_PLATFORM_LINUX_DLL_SOURCE = ../Do.Platform.Linux/Do.Platform.Linux.dll
+DO_PLATFORM_LINUX_DLL_MDB_SOURCE = $(DO_PLATFORM_LINUX_DLL_SOURCE).mdb
+
+DO_PLATFORM_DLL = $(BUILD_DIR)/$(notdir $(DO_PLATFORM_DLL_SOURCE))
+DO_PLATFORM_DLL_MDB = $(BUILD_DIR)/$(notdir $(DO_PLATFORM_DLL_MDB_SOURCE))
+DO_PLATFORM_LINUX_DLL = $(BUILD_DIR)/$(notdir $(DO_PLATFORM_LINUX_DLL_SOURCE))
+DO_PLATFORM_LINUX_DLL_MDB = $(BUILD_DIR)/$(notdir $(DO_PLATFORM_LINUX_DLL_MDB_SOURCE))
+
+
 
 PROGRAMFILES = \
 	$(DO_ADDINS_DLL) \
 	$(DO_DBUS_DLL) \
 	$(DO_DBUS_DLL_MDB) \
 	$(DO_ADDINS_DLL_MDB) \
+	$(DO_PLATFORM_DLL) \
+	$(DO_PLATFORM_DLL_MDB) \
+	$(DO_PLATFORM_LINUX_DLL) \
+	$(DO_PLATFORM_LINUX_DLL_MDB) \
 	$(DO_EXE_CONFIG)
 
 
@@ -158,8 +173,8 @@ REFERENCES =  \
 DLL_REFERENCES = \
 	$(DO_ADDINS_DLL) \
 	$(DO_DBUS_DLL) \
-	../Do.Platform/Do.Platform.dll \
-	../Do.Platform.Linux/Do.Platform.Linux.dll
+	$(DO_PLATFORM_DLL) \
+	$(DO_PLATFORM_LINUX_DLL)
 
 DO_ADDINS_DLL = $(BUILD_DIR)/Do.Addins.dll
 GNOME_DO_DESKTOP = $(BUILD_DIR)/gnome-do.desktop
@@ -198,14 +213,27 @@ $(DO_ADDINS_DLL_MDB): $(DO_ADDINS_DLL_MDB_SOURCE)
 	mkdir -p $(BUILD_DIR)
 	cp '$<' '$@'
 
+$(DO_PLATFORM_DLL): $(DO_PLATFORM_DLL_SOURCE)
+	mkdir -p $(BUILD_DIR)
+	cp '$<' '$@'
+
+$(DO_PLATFORM_DLL_MDB): $(DO_PLATFORM_DLL_MDB_SOURCE)
+	mkdir -p $(BUILD_DIR)
+	cp '$<' '$@'
+
+$(DO_PLATFORM_LINUX_DLL): $(DO_PLATFORM_LINUX_DLL_SOURCE)
+	mkdir -p $(BUILD_DIR)
+	cp '$<' '$@'
+
+$(DO_PLATFORM_LINUX_DLL_MDB): $(DO_PLATFORM_LINUX_DLL_MDB_SOURCE)
+	mkdir -p $(BUILD_DIR)
+	cp '$<' '$@'
 
 $(build_xamlg_list): %.xaml.g.cs: %.xaml
 	xamlg '$<'
 
 $(build_resx_resources) : %.resources: %.resx
 	resgen2 '$<' '$@'
-
-export MONO_PATH=$(CURDIR)/../Do.Platform/:$(CURDIR)/../Do.Platform.Linux/
 
 $(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
 	mkdir -p $(dir $(ASSEMBLY))
