@@ -34,6 +34,16 @@ namespace MonoDock.UI.Renderers
 	
 	public static class SummonModeRenderer
 	{
+		static SummonModeRenderer ()
+		{
+			DockPreferences.IconSizeChanged += delegate {
+				if (large_icon_cache != null) {
+					large_icon_cache.Dispose ();
+					large_icon_cache = null;
+				}
+			};
+		}
+		
 		static PixbufSurfaceCache large_icon_cache;
 		static PixbufSurfaceCache LargeIconCache {
 			get {

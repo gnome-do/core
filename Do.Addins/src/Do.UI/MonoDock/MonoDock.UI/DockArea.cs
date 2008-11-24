@@ -70,7 +70,6 @@ namespace MonoDock.UI
 		DockState state;
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		DockWindow window;
-		PixbufSurfaceCache large_icon_cache;
 		
 		#region Public properties
 		public int Width {
@@ -262,12 +261,6 @@ namespace MonoDock.UI
 			}
 		}
 		
-		PixbufSurfaceCache LargeIconCache {
-			get {
-				return large_icon_cache ?? large_icon_cache = new PixbufSurfaceCache (10, 2*IconSize, 2*IconSize);
-			}
-		}
-		
 		DockState State {
 			get { return state ?? state = new DockState (); }
 		}
@@ -415,13 +408,6 @@ namespace MonoDock.UI
 				
 				Cursor = new Gdk.Point (x, y);
 				AnimatedDraw ();
-			};
-			
-			DockPreferences.IconSizeChanged += delegate {
-				if (large_icon_cache != null) {
-					large_icon_cache.Dispose ();
-					large_icon_cache = null;
-				}
 			};
 		}
 		
