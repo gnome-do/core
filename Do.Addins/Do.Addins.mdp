@@ -1,7 +1,7 @@
 <Project name="Do.Addins" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="bin/Debug" assemblyKeyFile="/home/jason/do/do-future/Do.Addins/." assembly="Do.Addins" />
+      <Output directory="bin/Debug" assemblyKeyFile="../../../../../jason/do/do-future/Do.Addins" assembly="Do.Addins" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="True" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />

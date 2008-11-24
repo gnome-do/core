@@ -9,15 +9,15 @@
       <Entry build="True" name="Do.Platform.Linux" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
+      <CustomCommands>
+        <Command type="BeforeBuild" command="autogen.sh --enable-release=YES" workingdir="${CombineDir}" />
+      </CustomCommands>
       <Entry build="True" name="Do" configuration="Release" />
       <Entry build="True" name="Do.Addins" configuration="Release" />
       <Entry build="True" name="Do.DBus" configuration="Release" />
       <Entry build="True" name="Tests" configuration="Release" />
       <Entry build="True" name="Do.Platform" configuration="Release" />
       <Entry build="True" name="Do.Platform.Linux" configuration="Release" />
-      <CustomCommands>
-        <Command type="BeforeBuild" command="autogen.sh --enable-release=YES" workingdir="${CombineDir}" />
-      </CustomCommands>
     </Configuration>
   </Configurations>
   <StartMode startupentry="Do" single="True">

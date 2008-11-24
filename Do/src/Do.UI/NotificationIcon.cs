@@ -80,83 +80,10 @@ namespace Do.UI
 			Activate += OnActivateStartUpdates;
 			FromPixbuf = update_icon;
 			if (!updates_available)
-				SendNotification ("GNOME Do",
+				Notifications.SendNotification ("GNOME Do",
 					"Updated plugins are available. Click here to update.",
 					"software-update-available");
 			updates_available = true;
-		}
-		
-		public static void SendNotification (string message)
-		{
-			SendNotification ("GNOME Do", message, null);
-		}
-		
-		public static void SendNotification (string title, string message)
-		{
-			SendNotification (title, message, null);
-		}
-		
-		public static void SendNotification (string title, string message, string icon)
-		{
-			Do.NotificationIcon.Show ();
-			GLib.Timeout.Add (500, delegate {
-				Gtk.Application.Invoke (delegate {
-					ShowNotification (title, message, icon);
-				});
-				return false;
-			});
-		}
-		
-		private static void ShowNotification (string title, string message, string icon)
-		{
-			int x, y;
-			Gdk.Screen screen;
-
-			Do.NotificationIcon.GetLocationOnScreen (
-				out screen, out x, out y);
-
-			Notification msg;
-			try {
-				msg = new Notification ();
-			} catch (Exception e) {
-				Log.Error ("Could not show notification: " + e.Message);
-				return;
-			}
-			msg.Closed += new EventHandler (OnNotificationClosed); 
-			msg.Summary = title;
-			msg.Body = message;
-			if (icon != null)
-				msg.Icon = IconProvider.PixbufFromIconName (icon,
-					IconSize);
-			msg.Timeout = message.Length / 10 * 1000;
-			if (msg.Timeout > 10000) msg.Timeout = 10000;
-			if (msg.Timeout < 5000) msg.Timeout = 5000;
-			msg.SetGeometryHints (screen, x, y);
-			msg.Show ();
-		}
-		
-		internal static void ShowKillNotification (ActionHandler handler)
-		{
-			int x, y;
-			Gdk.Screen screen;
-
-			Do.NotificationIcon.GetLocationOnScreen (
-				out screen, out x, out y);
-
-			Notification msg;
-			try {
-				msg = new Notification ();
-			} catch (Exception e) {
-				Log.Error ("Could not show notification: " + e.Message);
-				return;
-			}
-			msg.Closed += new EventHandler (OnNotificationClosed); 
-			msg.Summary = "Do Error";
-			msg.Body = "Do is still executing the last requested task, please wait for this to finish";
-			msg.Timeout = 10000;
-			msg.SetGeometryHints (screen, x, y);
-			msg.AddAction ("Stop", "Stop Action", handler);
-			msg.Show ();
 		}
 		
 		public void GetLocationOnScreen (out Gdk.Screen screen, out int x, out int y)
