@@ -51,6 +51,7 @@ namespace MonoDock.UI
 		
 		Wnck.Application application;
 		Surface sr, icon_surface;
+		Gdk.Rectangle icon_region;
 		
 		#region IDockItem implementation 
 		public Surface GetIconSurface ()
@@ -201,6 +202,17 @@ namespace MonoDock.UI
 				WindowUtils.PerformLogicalClick (new Wnck.Application[] {application});
 		}
 
+		public void SetIconRegion (Gdk.Rectangle region)
+		{
+			if (icon_region == region)
+				return;
+			icon_region = region;
+			
+			foreach (Wnck.Window window in application.Windows) {
+				window.SetIconGeometry (region.X, region.Y, region.Width, region.Height);
+			}
+		}
+		
 		#region IDisposable implementation 
 		
 		public void Dispose ()

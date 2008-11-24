@@ -42,6 +42,7 @@ namespace MonoDock.UI
 		Surface GetTextSurface ();
 		
 		void Clicked (uint button, IDoController controller);
+		void SetIconRegion (Gdk.Rectangle region);
 	}
 	
 	public interface IDoDockItem

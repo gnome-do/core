@@ -98,6 +98,10 @@ namespace MonoDock.UI
 		{
 			
 		}
+		
+		public void SetIconRegion (Gdk.Rectangle region)
+		{
+		}
 
 		#region IDisposable implementation 
 		
