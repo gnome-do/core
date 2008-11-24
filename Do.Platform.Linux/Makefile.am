@@ -28,6 +28,9 @@ FILES = \
 	src/Plugins/Clipboard/CopyToClipboardAction.cs \
 	src/Plugins/GNOME/GNOMESpecialLocationsItemSource.cs
 
+RESOURCES =  \
+        Resources/Do.Platform.Linux.addin.xml
+
 REFERENCES =  \
 	System \
 	System.Core \
