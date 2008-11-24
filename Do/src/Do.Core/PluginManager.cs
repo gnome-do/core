@@ -58,8 +58,8 @@ namespace Do.Core {
 			get {
 				if (null == repository_urls) {
 					repository_urls = new Dictionary<string, IEnumerable<string>> ();      
-					//repository_urls ["Official Plugins"] = new[] { OfficialRepo };
-					//repository_urls ["Community Plugins"] = new[] { CommunityRepo };
+					repository_urls ["Official Plugins"] = new[] { OfficialRepo };
+					repository_urls ["Community Plugins"] = new[] { CommunityRepo };
 
 					repository_urls ["Local Plugins"] = Paths.SystemPlugins
 						.Where (Directory.Exists)

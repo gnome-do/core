@@ -38,7 +38,7 @@ namespace Do.UI
 			base (WindowType.Toplevel)
 		{
 			Build ();
-			
+
 			TargetEntry[] targets = {
 				new TargetEntry ("text/uri-list", 0, 0), 
 			};
@@ -48,8 +48,7 @@ namespace Do.UI
 			btn_close.IsFocus = true;
 			// Add notebook pages.
 			foreach (IConfigurable page in Pages) {
-				notebook.AppendPage (
-					page.GetConfiguration (), new Label (page.Name));
+				notebook.AppendPage (page.GetConfiguration (), new Label (page.Name));
 			}
 			
 			//Sets default page to the plugins tab, since this is the most common reason to
