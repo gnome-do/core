@@ -12,9 +12,14 @@
 	<!-- Extensions included in this assembly -->
 	<!-- Sources -->
 	<Extension path="/Do/ItemSource">
+		<ItemSource type="Do.Universe.AliasItemSource" />
+		<ItemSource type="Do.Universe.InternalItemSource" />
+		<ItemSource type="Do.Universe.ItemSourceItemSource" />
 	</Extension>
 
 	<!-- Actions -->
 	<Extension path="/Do/Action">
+		<Action type="Do.Universe.AliasAction" />
+		<Action type="Do.Universe.DeleteAliasAction" />
 	</Extension>
 </Addin>
