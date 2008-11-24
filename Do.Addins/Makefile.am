@@ -87,6 +87,8 @@ FILES = \
 	src/Do.UI/MonoDock/MonoDock.UI/ItemMenu.cs \
 	src/Do.UI/MonoDock/MonoDock.UI/SeparatorItem.cs \
 	src/Do.UI/MonoDock/MonoDock.UI/Util.cs \
+	src/Do.UI/MonoDock/MonoDock.UI/MonoDock.UI.Renderers/DockBackgroundRenderer.cs \
+	src/Do.UI/MonoDock/MonoDock.UI/MonoDock.UI.Renderers/SummonModeRenderer.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/DockPreferences.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/GtkUtils.cs \
 	src/Do.UI/MonoDock/MonoDock.Util/WindowUtils.cs \

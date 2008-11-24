@@ -772,7 +772,7 @@ namespace Do.UI
 			if (Context.GetPaneObject (Focus) == null)
 				return;
 			BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
-			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20, this);
+			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20);
 		}
 		
 		void RenderPaneText (Pane pane, Context cr)
@@ -790,17 +790,17 @@ namespace Do.UI
 				color.Blue = color.Green = color.Red = ushort.MaxValue;
 				int y = drawing_area.Y + WindowBorder + TitleBarHeight + 6;
 				BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, 
-				                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
+				                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
 			} else {
 				text = (!string.IsNullOrEmpty (Context.GetPaneQuery (pane))) ? 
 					Util.FormatCommonSubstrings 
 						(text, Context.GetPaneQuery (pane), HighlightFormat) : text;
 				if (PaneOutlineRenderer.StackIconText) {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - TextHeight - 9;
-					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, this);
+					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10);
 				} else {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + (int)(BoxHeight/2);
-					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + IconSize + 10, y, BoxWidth - IconSize - 20, this);
+					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + IconSize + 10, y, BoxWidth - IconSize - 20);
 				}
 			}
 		}
@@ -814,7 +814,7 @@ namespace Do.UI
 			Gdk.Rectangle cursor = BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
 			                                                        drawing_area.X + 10, drawing_area.Y + TextModeOffset + 5, 
 			                                                        drawing_area.Width - 20, color, 
-			                                                        Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
+			                                                        Pango.Alignment.Left, Pango.EllipsizeMode.None);
 			BezelTextUtils.TextHeight = tmp;
 			if (cursor.X == cursor.Y && cursor.X == 0) return;
 			
