@@ -88,8 +88,9 @@ namespace MonoDock.UI
 		
 		public void UpdateApplication ()
 		{
-			if (item is IApplicationItem) {
-				apps = WindowUtils.GetApplicationList ((item as IApplicationItem).Exec);
+			IObject inner = Do.Platform.Core.Unwrap (item);
+			if (inner is IApplicationItem) {
+				apps = WindowUtils.GetApplicationList ((inner as IApplicationItem).Exec);
 			}
 		}
 		
