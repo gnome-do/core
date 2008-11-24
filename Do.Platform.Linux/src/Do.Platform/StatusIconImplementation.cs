@@ -29,11 +29,11 @@ namespace Do.Platform.Linux
 	
 	public class StatusIconImplementation : Gtk.StatusIcon, StatusIcon.Implementation
 	{
-		private const int IconSize = 24;
-		private bool updates_available;
-		private Pixbuf normal_icon = IconProvider.PixbufFromIconName  ("gnome-do", IconSize);
-		private Pixbuf update_icon = IconProvider.PixbufFromIconName ("software-update-available", IconSize);
-		private Preferences prefs;
+		const int IconSize = 24;
+		bool updates_available;
+		Pixbuf normal_icon = IconProvider.PixbufFromIconName  ("gnome-do", IconSize);
+		Pixbuf update_icon = IconProvider.PixbufFromIconName ("software-update-available", IconSize);
+		Preferences prefs;
 		
 		public StatusIconImplementation ()
 		{

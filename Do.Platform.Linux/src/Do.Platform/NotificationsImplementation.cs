@@ -49,7 +49,7 @@ namespace Do.Platform.Linux
 		
 		#endregion
 		
-		private static void ShowNotification (string title, string message, string icon,
+		static void ShowNotification (string title, string message, string icon,
 			string action_name, string action_label, ActionHandler action)
 		{
 		
@@ -93,7 +93,7 @@ namespace Do.Platform.Linux
 		
 		// we might want to remove all of this icon showing code anyway, if the user says not to use
 		// the tray icon, then we shouldn't show it anyway. except for updates.
-		private static void OnNotificationClosed (object sender, EventArgs args)
+		static void OnNotificationClosed (object sender, EventArgs args)
 		{
 			/*
 			if (!CorePreferences.StatusIconVisible)
