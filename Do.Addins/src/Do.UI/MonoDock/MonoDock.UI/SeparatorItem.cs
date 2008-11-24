@@ -22,6 +22,8 @@ using Cairo;
 using Do.Addins;
 using Do.Addins.CairoUtils;
 
+using MonoDock.Util;
+
 namespace MonoDock.UI
 {
 	
@@ -35,7 +37,7 @@ namespace MonoDock.UI
 		public Surface GetIconSurface ()
 		{
 			if (sr == null) {
-				sr = new ImageSurface (Cairo.Format.Argb32, Width, MonoDock.Util.DockPreferences.IconSize);
+				sr = new ImageSurface (Cairo.Format.Argb32, Width, DockPreferences.IconSize);
 				Context cr = new Context (sr);
 				cr.AlphaFill ();
 				

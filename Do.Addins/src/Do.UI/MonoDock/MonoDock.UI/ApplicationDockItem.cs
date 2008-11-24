@@ -56,8 +56,7 @@ namespace MonoDock.UI
 		public Surface GetIconSurface ()
 		{
 			if (icon_surface == null) {
-				icon_surface = new ImageSurface (Cairo.Format.Argb32, (int) (DockPreferences.IconSize*DockPreferences.IconQuality), 
-				                                 (int) (DockPreferences.IconSize*DockPreferences.IconQuality));
+				icon_surface = new ImageSurface (Cairo.Format.Argb32, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
 				Context cr = new Context (icon_surface);
 				
 				Gdk.Pixbuf pbuf = GetIcon ();
@@ -105,9 +104,9 @@ namespace MonoDock.UI
 				if (pbuf != null)
 					pbuf.Dispose ();
 				
-				pbuf = IconProvider.PixbufFromIconName (icon_guess, (int) (DockPreferences.IconSize*DockPreferences.IconQuality), false);
-				if (pbuf != null && (pbuf.Width == (int) (DockPreferences.IconSize*DockPreferences.IconQuality) || 
-				                     pbuf.Height == (int) (DockPreferences.IconSize*DockPreferences.IconQuality)))
+				pbuf = IconProvider.PixbufFromIconName (icon_guess, DockPreferences.FullIconSize, false);
+				if (pbuf != null && (pbuf.Width == DockPreferences.FullIconSize || 
+				                     pbuf.Height == DockPreferences.FullIconSize))
 					return pbuf;
 			
 				string desktop_path = GetDesktopFile (icon_guess);
@@ -115,18 +114,18 @@ namespace MonoDock.UI
 					Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists);
 					if (pbuf != null)
 						pbuf.Dispose ();
-					pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), (int) (DockPreferences.IconSize*DockPreferences.IconQuality));
+					pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
 					di.Dispose ();
 					return pbuf;
 				}
 			}
 			
 			if (pbuf == null) {
-				pbuf =  IconProvider.PixbufFromIconName (guesses[0], (int) (DockPreferences.IconSize*DockPreferences.IconQuality));
+				pbuf =  IconProvider.PixbufFromIconName (guesses[0], DockPreferences.FullIconSize);
 			}
 			
-			if (pbuf.Height != DockPreferences.IconSize*DockPreferences.IconQuality && pbuf.Width != DockPreferences.IconSize*DockPreferences.IconQuality) {
-				double scale = (double)DockPreferences.IconSize*DockPreferences.IconQuality / Math.Max (pbuf.Width, pbuf.Height);
+			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
+				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
 				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
 				pbuf.Dispose ();
 				pbuf = temp;

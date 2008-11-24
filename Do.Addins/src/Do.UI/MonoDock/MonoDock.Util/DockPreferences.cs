@@ -63,6 +63,12 @@ namespace MonoDock.Util
 			}
 		}
 		
+		public static int FullIconSize {
+			get {
+				return (int) (IconSize*IconQuality);
+			}
+		}
+		
 		static int icon_size = prefs.Get<int> ("IconSize", 64);
 		public static int IconSize {
 			get { return icon_size; }
