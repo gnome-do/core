@@ -54,11 +54,13 @@ namespace MonoDock.UI
 			Unknown,
 		}
 		
-		const int BounceTime = 700;
+		
 		public const int BaseAnimationTime = 150;
-		const int InsertAnimationTime = BaseAnimationTime*5;
 		public const int YBuffer = 5;
 		public const int XBuffer = 7;
+		
+		const int BounceTime = 700;
+		const int InsertAnimationTime = BaseAnimationTime*5;
 		
 		IList<IDockItem> dock_items;
 		IList<IDockItem> window_items;
