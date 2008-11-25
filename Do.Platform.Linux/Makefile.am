@@ -41,6 +41,7 @@ REFERENCES =  \
 	$(GNOME_SHARP_20_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
 	$(GCONF_SHARP_20_LIBS) \
+	$(NOTIFY_SHARP_LIBS) \
 	../Do.Platform/Do.Platform.dll
 
 $(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)

@@ -34,7 +34,7 @@ namespace Do
 		[Test()]
 		public void TestCase()
 		{
-			IUniverseManager universe = new SimpleUniverseManager ();
+			UniverseManager universe = new UniverseManager ();
 			IItem[] items = new IItem[1];
 			items[0] = new FileItem ("/etc");
 			
