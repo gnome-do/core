@@ -145,6 +145,20 @@ namespace MonoDock.UI
 				WindowUtils.PerformLogicalClick (apps);
 		}
 		
+		Gdk.Rectangle icon_region;
+		public void SetIconRegion (Gdk.Rectangle region)
+		{
+			if (icon_region == region)
+				return;
+			icon_region = region;
+			
+			foreach (Wnck.Application application in apps) {
+				foreach (Wnck.Window window in application.Windows) {
+					window.SetIconGeometry (region.X, region.Y, region.Width, region.Height);
+				}
+			}
+		}
+		
 		public bool Equals (IDockItem other)
 		{
 			DockItem di = other as DockItem;
