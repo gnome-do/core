@@ -27,7 +27,7 @@ namespace Do.Platform
 	{
 		public interface Implementation
 		{
-			void Notify (string message, string tile, string icon);
+			void Notify (string message, string title, string icon, Action onClick);
 		}
 		
 		public static Implementation Imp { get; private set; }
@@ -46,11 +46,17 @@ namespace Do.Platform
 		
 		public static void Notify (string message, string title)
 		{
-			Notify (message, title, null);
+			Notify (message, title, null, null);
 		}
+		
 		public static void Notify (string message, string title, string icon)
 		{
-			Imp.Notify (message, title, icon);
+			Notify (message, title, icon, null);
+		}
+		
+		public static void Notify (string message, string title, string icon, Action onClick)
+		{
+			Imp.Notify (message, title, icon, onClick);
 		}
 		
 		#endregion

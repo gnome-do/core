@@ -21,6 +21,7 @@
 using System;
 using Notifications;
 using Mono.Unix;
+using Gdk;
 using GLib;
 
 namespace Do.Platform.Linux
@@ -28,29 +29,14 @@ namespace Do.Platform.Linux
 	
 	public class NotificationsImplementation : Notifications.Implementation
 	{
-		const int IconSize = 24;
+		const int IconSize = 24, MinNotifyShow = 5000, MaxNotifyShow = 10000;
+		Pixbuf default_icon = IconProvider.PixbufFromIconName ("gnome-do", IconSize);
 		
 		#region Notifications.Implementation
 		
-		public void Notify (string message, string title, string icon)
+		public void Notify (string title, string message, string icon, Action onClick)
 		{
-			_Notify (title, message, icon);
-		}
-		
-		#endregion
-		
-		static void _Notify (string title, string message, string icon)
-		{
-		
-			/*
-			int x, y;
-			Gdk.Screen screen;
 
-			 put this back when NotifcationIcon gets moved out of core
-			NotificationIcon.GetLocationOnScreen (
-				out screen, out x, out y);
-			*/
-			
 			Notification msg;
 			try {
 				msg = new Notification ();
@@ -63,31 +49,21 @@ namespace Do.Platform.Linux
 			msg.Summary = GLib.Markup.EscapeText (title);
 			msg.Body = GLib.Markup.EscapeText (message);
 			if (icon != null)
-				msg.Icon = IconProvider.PixbufFromIconName (icon,
-					IconSize);
-					
-			//if (action != null && action is ActionHandler) { }
-				//msg.AddAction (action_name, action_label, (action as ActionHandler));
+				msg.Icon = IconProvider.PixbufFromIconName (icon, IconSize);
+			else
+				msg.Icon = default_icon;
+			
+			if (onClick != null)
+				msg.AddAction (action_name, action_label, (o, a) => onClick ());
 				
 			msg.Timeout = message.Length / 10 * 1000;
-			if (msg.Timeout > 10000) msg.Timeout = 10000;
-			if (msg.Timeout < 5000) msg.Timeout = 5000;
-			
-			/* because screen, x and y aren't set!
-			msg.SetGeometryHints (screen, x, y);
-			*/
+			if (msg.Timeout > MaxNotifyShow) msg.Timeout = MaxNotifyShow;
+			if (msg.Timeout < MinNotifyShow) msg.Timeout = MinNotifyShow;
 			
 			msg.Show ();
 		}
 		
-		// we might want to remove all of this icon showing code anyway, if the user says not to use
-		// the tray icon, then we shouldn't show it anyway. except for updates.
-		static void OnNotificationClosed (object sender, EventArgs args)
-		{
-			/*
-			if (!CorePreferences.StatusIconVisible)
-				Do.NotificationIcon.Hide ();
-			*/
-		}
+		#endregion
+		
 	}
 }
