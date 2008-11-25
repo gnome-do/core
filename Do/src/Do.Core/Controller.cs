@@ -26,6 +26,7 @@ using System.Threading;
 
 using Gdk;
 using Mono.Unix;
+using Notifications;
 
 using Do;
 using Do.UI;
@@ -886,7 +887,11 @@ namespace Do.Core {
 			}
 			
 			if (th != null && th.IsAlive) {
-				Notifications.ShowKillNotification ((o, a) => System.Environment.Exit (20));
+				Platform.Notifications.Notify<ActionHandler> (
+					"GNOME Do",
+					"Do is still executing the last requested task, please wait for this to finish",
+					"dialog-error",
+					(o, a) => System.Environment.Exit (20));
 				return;
 			}
 			

@@ -51,7 +51,6 @@
     <File name="src/Do.Platform/Preferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/EnumerableExtensions.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Notifications.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/StatusIcon.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IconProvider.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>

@@ -118,12 +118,11 @@ namespace Do.UI
 
         protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)
         {	
-        	NotificationIcon trayIcon = Do.NotificationIcon;
         	CorePreferences.StatusIconVisible = notification_check.Active;
         	if (notification_check.Active)
-        		trayIcon.Show ();
+        		Platform.StatusIcon.Show ();
         	else
-        		trayIcon.Hide ();
+        		Platform.StatusIcon.Hide ();
         }
     }
 }

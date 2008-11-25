@@ -31,27 +31,16 @@ namespace Do.Platform.Linux
 		const int IconSize = 24;
 		
 		#region Notifications.Implementation
-				
-		public void SendNotification (string message, string title, string icon)
-		{
-			ShowNotification (title, message, icon, null, null, null);
-		}
 		
-		public void ShowKillNotification (object handler)
+		public void Notify<T> (string message, string title, string icon, T onClick)
 		{
-			ActionHandler action = (ActionHandler) handler;
-			if (action == null) throw new ArgumentException ("Must pass a valid ActionHandler");
-			
-			string title = Catalog.GetString ("Do Error");
-			string message = Catalog.GetString ("Do is still executing the last requested task, please wait for this to finish"); 
-			string icon = "dialog-error";
-			ShowNotification (title, message, icon, Catalog.GetString ("Stop"), Catalog.GetString ("Stop Action"), action);
+			Notify<T> (title, message, icon, Catalog.GetString ("Stop"), Catalog.GetString ("Stop Action"), onClick);
 		}
 		
 		#endregion
 		
-		static void ShowNotification (string title, string message, string icon,
-			string action_name, string action_label, ActionHandler action)
+		static void Notify<T> (string title, string message, string icon,
+			string action_name, string action_label, T action)
 		{
 		
 			/*
@@ -78,8 +67,9 @@ namespace Do.Platform.Linux
 				msg.Icon = IconProvider.PixbufFromIconName (icon,
 					IconSize);
 					
-			if (action_name != null && action_label != null && action != null)
-				msg.AddAction (action_name, action_label, action);
+			if (action_name != null && action_label != null && action != null) { }
+			if (action is ActionHandler)
+				msg.AddAction (action_name, action_label, (action as ActionHandler));
 				
 			msg.Timeout = message.Length / 10 * 1000;
 			if (msg.Timeout > 10000) msg.Timeout = 10000;

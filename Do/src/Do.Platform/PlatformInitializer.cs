@@ -44,6 +44,10 @@ namespace Do.Platform
 			}
 			Log.LogLevel = CorePreferences.QuietStart ? Log.Level.Error : Log.Level.Info;
 			#endregion
+			
+			#region StatusIcon initialization
+			StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
+			#endregion
 		}
 	}
 }

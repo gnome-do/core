@@ -34,7 +34,6 @@
     <File name="src/Do.Platform/ConsoleCrayon.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/GConfPreferencesImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/NotificationsImplementation.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/StatusIconImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IconProviderImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Plugins/GNOME" subtype="Directory" buildaction="Compile" />
     <File name="src/Plugins/GNOME/GNOMESpecialLocationsItemSource.cs" subtype="Code" buildaction="Compile" />

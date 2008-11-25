@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Do.Platform
 {
@@ -27,8 +28,7 @@ namespace Do.Platform
 	{
 		public interface Implementation
 		{
-			void SendNotification (string message, string title, string icon);
-			void ShowKillNotification (object handler);
+			void Notify<T> (string message, string tile, string icon, T onClick);
 		}
 		
 		public static Implementation Imp { get; private set; }
@@ -45,14 +45,18 @@ namespace Do.Platform
 		
 		#region Implementation
 		
-		public static void SendNotification (string message, string title, string icon)
+		public static void Notify (string message, string title)
 		{
-			Imp.SendNotification (message, title, icon);
+			Notify (message, title, null);
+		}
+		public static void Notify (string message, string title, string icon)
+		{
+			Notify<object> (message, title, icon, null);
 		}
 		
-		internal static void ShowKillNotification (object handler)
+		public static void Notify<T> (string message, string title, string icon, T onClick)
 		{
-			Imp.ShowKillNotification (handler);
+			Imp.Notify (message, title, icon, onClick);
 		}
 		
 		#endregion
