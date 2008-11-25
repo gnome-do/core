@@ -33,6 +33,7 @@ namespace Do.Platform.Linux
 	{
 		const int IconSize = 24, MinNotifyShow = 5000, MaxNotifyShow = 10000;
 		Pixbuf default_icon = IconProvider.PixbufFromIconName ("gnome-do", IconSize);
+		Preferences prefs = Preferences.Get ("core-preferences");
 		
 		#region Notifications.Implementation
 		
@@ -42,7 +43,7 @@ namespace Do.Platform.Linux
 				Notification msg;
 				
 				msg = new Notification (); 
-				msg.Summary = GLib.Markup.EscapeText (title.StartsWith ("GNOME Do") ? title : ("GNOME Do " + title));
+				msg.Summary = GLib.Markup.EscapeText (prefs.Get<bool> ("StatusIconVisible", true) ? title : ("GNOME Do: " + title));
 				msg.Body = GLib.Markup.EscapeText (message);
 				
 				if (icon != null)
