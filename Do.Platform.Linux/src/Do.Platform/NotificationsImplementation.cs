@@ -32,15 +32,14 @@ namespace Do.Platform.Linux
 		
 		#region Notifications.Implementation
 		
-		public void Notify<T> (string message, string title, string icon, T onClick)
+		public void Notify (string message, string title, string icon)
 		{
-			Notify<T> (title, message, icon, Catalog.GetString ("Stop"), Catalog.GetString ("Stop Action"), onClick);
+			_Notify (title, message, icon);
 		}
 		
 		#endregion
 		
-		static void Notify<T> (string title, string message, string icon,
-			string action_name, string action_label, T action)
+		static void _Notify (string title, string message, string icon)
 		{
 		
 			/*
@@ -67,9 +66,8 @@ namespace Do.Platform.Linux
 				msg.Icon = IconProvider.PixbufFromIconName (icon,
 					IconSize);
 					
-			if (action_name != null && action_label != null && action != null) { }
-			if (action is ActionHandler)
-				msg.AddAction (action_name, action_label, (action as ActionHandler));
+			//if (action != null && action is ActionHandler) { }
+				//msg.AddAction (action_name, action_label, (action as ActionHandler));
 				
 			msg.Timeout = message.Length / 10 * 1000;
 			if (msg.Timeout > 10000) msg.Timeout = 10000;

@@ -46,7 +46,12 @@ namespace Do.Platform
 			#endregion
 			
 			#region StatusIcon initialization
-			StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
+			try {
+				StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
+				Notifications.Initialize (new Platform.Linux.NotificationsImplementation ());
+			} catch (NullReferenceException e) {
+				Console.WriteLine (e);
+			}
 			#endregion
 		}
 	}
