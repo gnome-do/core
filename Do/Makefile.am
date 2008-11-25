@@ -110,6 +110,8 @@ FILES = \
 	src/Do.cs \
 	src/Do.Platform/CoreImplementation.cs \
 	src/Do.Platform/PlatformInitializer.cs \
+	src/Do.Platform/StatusIcon.cs \
+	src/Do.Platform.Linux/StatusIconImplementation.cs \
 	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
@@ -117,7 +119,6 @@ FILES = \
 	src/Do.UI/KeybindingTreeView.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ManagePluginsPreferencesWidget.cs \
-	src/Do.UI/NotificationIcon.cs \
 	src/Do.UI/PluginConfigurationWindow.cs \
 	src/Do.UI/PluginErrorDialog.cs \
 	src/Do.UI/PluginNodeView.cs \

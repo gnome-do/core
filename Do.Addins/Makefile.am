@@ -73,7 +73,6 @@ FILES = \
 	src/Do.UI/Bezel/Renderers/MiniTheme.cs \
 	src/Do.UI/ClassicWindow/ClassicWindow.cs \
 	src/Do.UI/IconCache.cs \
-	src/Do.UI/IconProvider.cs \
 	src/Do.UI/IDoWindow.cs \
 	src/Do.UI/IRenderTheme.cs \
 	src/Do.UI/IUIContext.cs \
@@ -95,7 +94,6 @@ FILES = \
 	src/Do.UI/MonoDock/MonoDock.Util/WindowUtils.cs \
 	src/Do.UI/MonoDock/XLib/X11Atoms.cs \
 	src/Do.UI/MonoDock/XLib/Xlib.cs \
-	src/Do.UI/NotificationBridge.cs \
 	src/Do.UI/PositionWindow.cs \
 	src/Do.UI/ResultsWindowSelectionEventArgs.cs \
 	src/Do.UI/UIContext.cs

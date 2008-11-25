@@ -20,6 +20,8 @@ FILES = \
 	src/Do.Platform/ConsoleLogImplementation.cs \
 	src/Do.Platform/EnvironmentImplementation.cs \
 	src/Do.Platform/GConfPreferencesImplementation.cs \
+	src/Do.Platform/IconProviderImplementation.cs \
+	src/Do.Platform/NotificationsImplementation.cs \
 	src/Do.Platform/PathsImplementation.cs \
 	src/Do.Platform/UniverseFactoryImplementation.cs \
 	src/Do.Universe/ApplicationItem.cs \
