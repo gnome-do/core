@@ -28,6 +28,7 @@ namespace Do.Platform.Linux
 	
 	public class NotificationsImplementation : Notifications.Implementation
 	{
+		const int IconSize = 24;
 		
 		#region Notifications.Implementation
 				

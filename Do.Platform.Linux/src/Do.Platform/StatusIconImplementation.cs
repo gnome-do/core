@@ -40,7 +40,7 @@ namespace Do.Platform.Linux
 			FromPixbuf = normal_icon;
 			Activate += new EventHandler (OnActivateSummonDo);			
 			PopupMenu += new PopupMenuHandler (OnTrayIconPopup);
-			Tooltip = Catalog.GetString ("Summon GNOME Do with " + prefs.Get ["SummonKeyBinding"]);
+			Tooltip = Catalog.GetString ("Summon GNOME Do with " + prefs["SummonKeyBinding"]);
 			
 			prefs = Do.Platform.Preferences.Get ("core-preferences");
 			
@@ -108,8 +108,8 @@ namespace Do.Platform.Linux
 				Activate -= OnActivateStartUpdates;
 				updates_available = false;
 				Pixbuf = normal_icon;
-				SendNotification ("Plugins successfully updated. " +
-				"Please restart GNOME Do.");
+				Notifications.SendNotification ("GNOME Do", "Plugins successfully updated. " +
+				"Please restart GNOME Do.", null);
 			} catch (Exception e) {
 				Log.Error ("{0}: {1}", e.GetType (), e.Message);
 				//I removed these due to a bug in Mono.Addins, once that bug
@@ -117,7 +117,7 @@ namespace Do.Platform.Linux
 				//Log.Debug (e.StackTrace);
 				//SendNotification ("Plugin update failed.");
 			}
-			if (!prefs["StatusIconVisible"])
+			if (!prefs.Get<bool> ("StatusIconVisible", true))
 				Hide ();
 		}
 				
