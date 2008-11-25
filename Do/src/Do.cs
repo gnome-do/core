@@ -33,7 +33,7 @@ namespace Do {
 	public static class Do {
 		static GConfXKeybinder keybinder;
 		static Controller controller;
-		static IUniverseManager universe_manager;
+		static UniverseManager universe_manager;
 		static NotificationIcon notification_icon;
 		
 		static DateTime perfTime;
@@ -118,10 +118,10 @@ namespace Do {
 			}
 		}
 
-		public static IUniverseManager UniverseManager {
+		public static UniverseManager UniverseManager {
 			get {
 				return universe_manager ??
-					universe_manager = new SimpleUniverseManager ();
+					universe_manager = new UniverseManager ();
 			}
 		}
 		

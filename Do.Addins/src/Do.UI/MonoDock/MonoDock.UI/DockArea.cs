@@ -294,9 +294,9 @@ namespace MonoDock.UI
 		}
 		
 		bool AnimationNeeded {
-			get { return PaneChangeAnimationNeeded || ZoomAnimationNeeded || BounceAnimationNeeded || 
+			get { return OpenAnimationNeeded || ZoomAnimationNeeded || BounceAnimationNeeded || 
 				InputModeChangeAnimationNeeded || InputModeSlideAnimationNeeded || IconInsertionAnimationNeeded || 
-				OpenAnimationNeeded || ThirdPaneVisibilityAnimationNeeded; }
+				PaneChangeAnimationNeeded || ThirdPaneVisibilityAnimationNeeded; }
 		}
 		#endregion
 		

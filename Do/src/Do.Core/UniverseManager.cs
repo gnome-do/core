@@ -1,4 +1,4 @@
-// SimpleUniverseManager.cs
+// UniverseManager.cs
 // 
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -34,7 +34,7 @@ namespace Do.Core
 	// universe_lock may be locked within and action_lock
 	// No other nested locks should be allowed
 	
-	public class SimpleUniverseManager : IUniverseManager
+	public class UniverseManager : IUniverseManager
 	{
 
 		Thread thread, update_thread;
@@ -66,7 +66,7 @@ namespace Do.Core
 		
 		public bool UpdatesEnabled { get; set; }
 		
-		public SimpleUniverseManager ()
+		public UniverseManager ()
 		{
 			actions = new List<IObject> ();
 			universe = new Dictionary<string, IObject> ();
@@ -278,21 +278,6 @@ namespace Do.Core
 		}
 
 		/// <summary>
-		/// Returns the UID for an object
-		/// </summary>
-		/// <param name="o">
-		/// A <see cref="IObject"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.String"/>
-		/// </returns>
-		public string UIDForObject (IObject o)
-		{
-			DoObject ob  = (o as DoObject) ?? new DoObject (o);
-			return ob.UID;
-		}
-		
-		/// <summary>
 		/// Attempts to get an Object for a given UID.
 		/// </summary>
 		/// <param name="UID">
@@ -301,14 +286,14 @@ namespace Do.Core
 		/// <param name="item">
 		/// A <see cref="IObject"/>
 		/// </param>
-		public void TryGetObjectForUID (string UID, out IObject item)
+		public bool TryGetObjectForUID (string uid, out IObject o)
 		{
-			if (universe.ContainsKey (UID)) {
-				item = (universe[UID] as DoObject).Inner;
+			if (universe.ContainsKey (uid)) {
+				o = universe [uid];
 			} else {
-				item = null;
+				o = null;
 			}
-			
+			return o == null;
 		}
 		
 		/// <summary>

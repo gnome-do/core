@@ -87,13 +87,14 @@ namespace MonoDock.UI
 		
 		public void SetInputMask (int heightOffset)
 		{
-			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, dock_area.DockWidth, heightOffset, 1);
+			int width = Math.Max (Math.Min (800, dock_area.Width), dock_area.DockWidth);
+			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, width, heightOffset, 1);
 			Context cr = Gdk.CairoHelper.Create (pixmap);
 			
 			cr.Color = new Cairo.Color (0, 0, 0, 1);
 			cr.Paint ();
 			
-			InputShapeCombineMask (pixmap, (dock_area.Width-dock_area.DockWidth)/2, dock_area.Height-heightOffset);
+			InputShapeCombineMask (pixmap, (dock_area.Width-width)/2, dock_area.Height-heightOffset);
 			
 			(cr as IDisposable).Dispose ();
 			pixmap.Dispose ();

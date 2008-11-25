@@ -108,7 +108,7 @@ namespace Do.Platform.Linux {
 				.Select (dir => LoadDesktopFiles (dir))
 				.Aggregate ((a, b) => Enumerable.Concat (a, b))
 				.Cast<IItem> ()
-				.ToList ();
+				.ToArray ();
 		}
 
 		public IEnumerable<IItem> Items {

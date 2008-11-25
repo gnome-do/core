@@ -29,6 +29,9 @@ namespace Do.Platform
 
 		public interface Implementation
 		{
+			string GetUID (IObject o);
+			IObject GetIObject (string uid);
+
 			T Unwrap<T> (T o) where T : class, IObject;
 		}
 
@@ -44,10 +47,24 @@ namespace Do.Platform
 			Imp = imp;
 		}
 
+		#region Implementation
+
+		public static string GetUID (IObject o)
+		{
+			return Imp.GetUID (o);
+		}
+
+		public static IObject GetIObject (string uid)
+		{
+			return Imp.GetIObject (uid);
+		}
+
 		public static T Unwrap<T> (T o) where T : class, IObject
 		{
 			return Imp.Unwrap<T> (o);
 		}
+
+		#endregion
 
 		public static Type GetInnerType<T> (T o) where T : class, IObject
 		{
