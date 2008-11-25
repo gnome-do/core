@@ -24,6 +24,7 @@ using Gdk;
 
 using Do.Addins;
 using Do.Universe;
+using Do.Platform;
 
 namespace Do.UI
 {

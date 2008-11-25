@@ -24,6 +24,7 @@ using Cairo;
 
 using Do.Addins;
 using Do.Addins.CairoUtils;
+using Do.Platform;
 using Do.Universe;
 using Do.UI;
 

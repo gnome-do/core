@@ -1,4 +1,4 @@
-/* Notifications.cs
+/* StatusIcon.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -23,11 +23,12 @@ using System;
 namespace Do.Platform
 {
 	
-	public static class Notifications
+	public static class StatusIcon
 	{
 		public interface Implementation
 		{
-			void Notify (string message, string tile, string icon);
+			void Show ();
+			void Hide ();
 		}
 		
 		public static Implementation Imp { get; private set; }
@@ -44,13 +45,14 @@ namespace Do.Platform
 		
 		#region Implementation
 		
-		public static void Notify (string message, string title)
+		public static void Show ()
 		{
-			Notify (message, title, null);
+			Imp.Show ();
 		}
-		public static void Notify (string message, string title, string icon)
+		
+		public static void Hide ()
 		{
-			Imp.Notify (message, title, icon);
+			Imp.Hide ();
 		}
 		
 		#endregion

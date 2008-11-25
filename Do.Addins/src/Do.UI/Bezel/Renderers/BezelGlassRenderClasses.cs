@@ -26,6 +26,7 @@ using Cairo;
 using Do.Addins;
 using Do.Addins.CairoUtils;
 using Do.Universe;
+using Do.Platform;
 
 namespace Do.UI
 {

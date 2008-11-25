@@ -18,7 +18,6 @@
     <File name="src/Do.Addins/IDoController.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IDoWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ResultsWindowSelectionEventArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/IconProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/BaseWidgets/DefaultObjects.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/BaseWidgets/Frame.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/BaseWidgets/GlossyRoundedFrame.cs" subtype="Code" buildaction="Compile" />

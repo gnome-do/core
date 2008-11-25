@@ -29,24 +29,24 @@ using Do.Platform;
 
 namespace Do.Platform.Linux
 {
-	public static class IconProvider
+	public class IconProviderImplementation : IconProvider.Implementation 
 	{
-		public static readonly Pixbuf UnknownPixbuf;
+		public readonly Pixbuf UnknownPixbuf;
 		const int DefaultIconSize = 80;
 		
 
-		static IconProvider ()
+		public IconProviderImplementation ()
 		{
 			UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
 			UnknownPixbuf.Fill (0x00000000);
 		}
 		
-		static bool IconIsEmbeddedResource (string name)
+		bool IconIsEmbeddedResource (string name)
 		{
 			return name.IndexOf ("@") > 0;
 		}
 		
-		static bool IconIsFile (string name)
+		bool IconIsFile (string name)
 		{
 			return name.StartsWith ("/") ||
 				   name.StartsWith ("~/") || 
@@ -54,7 +54,7 @@ namespace Do.Platform.Linux
 				        StringComparison.OrdinalIgnoreCase);
 		}
 		
-		static Pixbuf IconFromEmbeddedResource (string name, int size)
+		Pixbuf IconFromEmbeddedResource (string name, int size)
 		{
 			Pixbuf pixbuf = null;
 			string resource, assemblyName;
@@ -75,7 +75,7 @@ namespace Do.Platform.Linux
 			return pixbuf;
 		}
 		
-		static Pixbuf IconFromFile (string name, int size)
+		Pixbuf IconFromFile (string name, int size)
 		{
 			Pixbuf pixbuf;
 			
@@ -88,7 +88,7 @@ namespace Do.Platform.Linux
 			return pixbuf;
 		}
 		
-		static Pixbuf IconFromTheme (string name, int size, IconTheme theme)
+		Pixbuf IconFromTheme (string name, int size, IconTheme theme)
 		{
 			Pixbuf pixbuf = null;
 			string name_noext;
@@ -116,7 +116,7 @@ namespace Do.Platform.Linux
 			return pixbuf;
 		}
 		
-		static Pixbuf GenericFileIcon (int size)
+		Pixbuf GenericFileIcon (int size)
 		{
 			Pixbuf pixbuf = null;
 			if (IconTheme.Default.HasIcon ("gtk-file")) {
@@ -129,7 +129,7 @@ namespace Do.Platform.Linux
 			return pixbuf;
 		}
 		
-		static Pixbuf UnknownIcon (int size)
+		Pixbuf UnknownIcon (int size)
 		{
 			Pixbuf pixbuf = null;
 			
@@ -143,12 +143,7 @@ namespace Do.Platform.Linux
 			return pixbuf;
 		}
 
-		public static Pixbuf PixbufFromIconName (string name, int size)
-		{
-			return PixbufFromIconName (name, size, true);
-		}
-		
-		public static Pixbuf PixbufFromIconName (string name, int size, bool defaultIcon)
+		public Pixbuf PixbufFromIconName (string name, int size, bool defaultIcon)
 		{			
 			Pixbuf pixbuf;									
 			

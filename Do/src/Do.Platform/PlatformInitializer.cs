@@ -45,13 +45,16 @@ namespace Do.Platform
 			Log.LogLevel = CorePreferences.QuietStart ? Log.Level.Error : Log.Level.Info;
 			#endregion
 			
+			#region IconProvider initialization
+			IconProvider.Initialize (new Platform.Linux.IconProviderImplementation ());
+			#endregion
+			
 			#region StatusIcon initialization
-			try {
-				StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
-				Notifications.Initialize (new Platform.Linux.NotificationsImplementation ());
-			} catch (NullReferenceException e) {
-				Console.WriteLine (e);
-			}
+			StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
+			#endregion
+			
+			#region Notifications initialization
+			Notifications.Initialize (new Platform.Linux.NotificationsImplementation ());
 			#endregion
 		}
 	}
