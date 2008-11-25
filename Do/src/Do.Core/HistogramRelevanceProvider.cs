@@ -115,6 +115,13 @@ namespace Do.Core {
 			score = StringScoreForAbbreviation (o.Name, match);
 			if (score == 0f) return 0f;
 			
+			// We must give a base, non-zero relevance to make scoring rules take
+			// effect. We divide by length so that if two objects have default
+			// relevance, the object with the shorter name comes first. Objects
+			// with shorter names tend to be simpler, and more often what the
+			// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
+			relevance = DefaultRelevance / Math.Max (1, o.Name.Length);
+
 			if (0 < rec.Hits) {
 				// On a scale of 0 (new) to 1 (old), how old is the item?
 				age = (float) (newest_hit - rec.LastHit).TotalSeconds /
@@ -130,18 +137,9 @@ namespace Do.Core {
 				// Give the most popular actions a little leg up in the second pane.
 				if (isAction && other != null && RewardedActionTypes.Contains (o.Inner.GetType ()))
 					relevance = 1f;
-
 				// Give the most popular items a leg up
 				else if (RewardedItemTypes.Contains (o.Inner.GetType ()))
 					relevance = DefaultRelevance * 2;
-
-				// We must give a base, non-zero relevance to make scoring rules take
-				// effect. We divide by length so that if two objects have default
-				// relevance, the object with the shorter name comes first. Objects
-				// with shorter names tend to be simpler, and more often what the
-				// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
-				else
-					relevance = DefaultRelevance / Math.Max (1, o.Name.Length);
 			}
 
 			// Newer objects (age -> 0) get scaled by factor -> 1.
