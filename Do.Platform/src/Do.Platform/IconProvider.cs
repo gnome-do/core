@@ -20,8 +20,6 @@
 using System;
 using Gdk;
 
-using Do.Platform;
-
 namespace Do.Platform
 {
 	public static class IconProvider
