@@ -19,10 +19,11 @@
  */
 
 using System;
-using Notifications;
-using Mono.Unix;
+
 using Gdk;
 using GLib;
+using Mono.Unix;
+using Notifications;
 
 namespace Do.Platform.Linux
 {
