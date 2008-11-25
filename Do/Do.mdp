@@ -61,7 +61,6 @@
     <File name="src/Do.Core/SearchControllers/SimpleSearchController.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/SearchControllers/ThirdSearchController.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/IUniverseManager.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/SimpleUniverseManager.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/DoAddinInstaller.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/DoAddinInstallerDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="gtk-gui/Do.UI.DoAddinInstallerDialog.cs" subtype="Code" buildaction="Compile" />
@@ -82,6 +81,7 @@
     <File name="src/Do.Platform.Linux" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Platform/StatusIcon.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform.Linux/StatusIconImplementation.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/UniverseManager.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
