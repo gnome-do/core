@@ -139,12 +139,6 @@ FILES = \
 	src/Util.cs \
 	src/XKeybinder.cs
 
-if HAVE_NUNIT
-FILES += \
-	 src/Do.Core/Tests/UniverseAddItemTest.cs \
-	 src/Do.Core/Tests/UniverseRemoveItem.cs
-endif
-
 DATA_FILES = \
 	gnome-do.desktop.in 
 
