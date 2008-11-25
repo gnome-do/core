@@ -7,6 +7,8 @@
       <Entry build="True" name="Tests" configuration="Debug" />
       <Entry build="True" name="Do.Platform" configuration="Debug" />
       <Entry build="True" name="Do.Platform.Linux" configuration="Debug" />
+      <Entry build="True" name="Do.Platform.Windows" configuration="Debug" />
+      <Entry build="True" name="Do.Platform.OSX" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Release" />
@@ -15,6 +17,8 @@
       <Entry build="True" name="Tests" configuration="Release" />
       <Entry build="True" name="Do.Platform" configuration="Release" />
       <Entry build="True" name="Do.Platform.Linux" configuration="Release" />
+      <Entry build="True" name="Do.Platform.Windows" configuration="Release" />
+      <Entry build="True" name="Do.Platform.OSX" configuration="Release" />
       <CustomCommands>
         <Command type="BeforeBuild" command="autogen.sh --enable-release=YES" workingdir="${CombineDir}" />
       </CustomCommands>
@@ -27,6 +31,8 @@
     <Execute type="None" entry="Tests" />
     <Execute type="None" entry="Do.Platform" />
     <Execute type="None" entry="Do.Platform.Linux" />
+    <Execute type="None" entry="Do.Platform.Windows" />
+    <Execute type="None" entry="Do.Platform.OSX" />
   </StartMode>
   <MonoDevelop.ChangeLogAddIn.ChangeLogInfo policy="UpdateNearestChangeLog" />
   <Entries>
@@ -36,5 +42,7 @@
     <Entry filename="Tests/Tests.mdp" />
     <Entry filename="Do.Platform/Do.Platform.mdp" />
     <Entry filename="Do.Platform.Linux/Do.Platform.Linux.mdp" />
+    <Entry filename="Do.Platform.Windows/Do.Platform.Windows.mdp" />
+    <Entry filename="Do.Platform.OSX/Do.Platform.OSX.mdp" />
   </Entries>
 </Combine>
