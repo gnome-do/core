@@ -32,6 +32,7 @@ using Do.UI;
 using Do.Addins.CairoUtils;
 
 using MonoDock.Util;
+using MonoDock.UI.Renderers;
 
 namespace MonoDock.UI
 {
@@ -46,21 +47,13 @@ namespace MonoDock.UI
 			None,
 		}
 		
-		enum IconSource {
-			Statistics,
-			Custom,
-			Application,
-			Unknown,
-		}
+		public const int BaseAnimationTime = 150;
+		public const int YBuffer = 5;
+		public const int XBuffer = 7;
 		
 		const int BounceTime = 700;
-		const int BaseAnimationTime = 150;
 		const int InsertAnimationTime = BaseAnimationTime*5;
-		const int YBuffer = 5;
-		const int XBuffer = 7;
 		
-		IList<IDockItem> dock_items;
-		IList<IDockItem> window_items;
 		Gdk.Point cursor;
 		DateTime enter_time = DateTime.UtcNow;
 		DateTime last_render = DateTime.UtcNow;
@@ -69,7 +62,8 @@ namespace MonoDock.UI
 		DockState state;
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		DockWindow window;
-		PixbufSurfaceCache large_icon_cache;
+		
+		DockItemProvider item_provider;
 		
 		#region Public properties
 		public int Width {
@@ -78,9 +72,7 @@ namespace MonoDock.UI
 			}
 		}
 		
-		public int Height {
-			get; set;
-		}
+		public int Height { get { return 300; } }
 		
 		public int DockWidth {
 			get {
@@ -106,11 +98,7 @@ namespace MonoDock.UI
 			}
 		}
 		
-		public bool InputInterfaceVisible {
-			get {
-				return input_interface;
-			}
-		}
+		public bool InputInterfaceVisible { get; set; }
 		
 		public Pane CurrentPane {
 			get {
@@ -122,15 +110,12 @@ namespace MonoDock.UI
 			}
 		}
 		
-		bool third_pane_visible = false;
-		DateTime third_pane_visibility_change = DateTime.UtcNow;
 		public bool ThirdPaneVisible { 
-			get { return third_pane_visible; }
+			get { return State.ThirdPaneVisible; }
 			set { 
-				if (third_pane_visible == value)
+				if (State.ThirdPaneVisible == value)
 					return;
-				third_pane_visible = value;
-				third_pane_visibility_change = DateTime.UtcNow;
+				State.ThirdPaneVisible = value;
 				AnimatedDraw ();
 			}
 		}
@@ -138,29 +123,7 @@ namespace MonoDock.UI
 		
 		IStatistics Statistics { get; set; }
 		
-		IList<IDockItem> DockItems {
-			get {
-				List<IDockItem> out_items = new List<IDockItem> (dock_items);
-				
-				if (CustomDockItems.DockItems.Any ()) {
-					out_items.Add (Separator);
-					out_items.AddRange (CustomDockItems.DockItems);
-				}
-				
-				if (window_items.Any ()) {
-					out_items.Add (Separator);
-					out_items.AddRange (window_items);
-				}
-				return out_items.ToArray ();
-			}
-		}
-		
-		SeparatorItem separator;
-		SeparatorItem Separator {
-			get {
-				return separator ?? separator = new SeparatorItem ();
-			}
-		}
+		IDockItem[] DockItems { get { return item_provider.DockItems.ToArray (); } }
 		
 		#region Zoom Properties
 		double ZoomIn {
@@ -173,17 +136,15 @@ namespace MonoDock.UI
 		
 		int ZoomPixels {
 			get {
-				return (int) (ZoomSize*ZoomIn);
+				return (int) (DockPreferences.ZoomSize*ZoomIn);
 			}
 		}
 		
-		int ZoomSize {
-			get {
-				return DockPreferences.ZoomSize;
-			}
-		}
 		#endregion
 		
+		//// <value>
+		/// The overall offset of the dock as a whole
+		/// </value>
 		int YOffset {
 			get {
 				if (!DockPreferences.AutoHide || cursor_is_handle)
@@ -195,23 +156,26 @@ namespace MonoDock.UI
 				} else {
 					offset = Math.Min (Math.Min (1,(DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime),
 					                  Math.Min (1, (DateTime.UtcNow - interface_change_time).TotalMilliseconds / BaseAnimationTime));
-					if (input_interface)
+					if (InputInterfaceVisible)
 						offset = 1-offset;
 					return (int) (offset*MinimumDockArea.Height);
 				}
 			}
 		}
 		
+		/// <value>
+		/// Determins the opacity of the icons on the normal dock
+		/// </value>
 		double DockIconOpacity {
 			get {
 				double total_time = (DateTime.UtcNow - interface_change_time).TotalMilliseconds;
 				if (total_time > BaseAnimationTime) {
-					if (input_interface)
+					if (InputInterfaceVisible)
 						return 0;
 					return 1;
 				}
 				
-				if (input_interface) {
+				if (InputInterfaceVisible) {
 					return 1-(total_time/BaseAnimationTime);
 				} else {
 					return total_time/BaseAnimationTime;
@@ -233,6 +197,9 @@ namespace MonoDock.UI
 		
 		int IconSize { get { return DockPreferences.IconSize; } }
 		
+		/// <value>
+		/// The current cursor as known to the dock.
+		/// </value>
 		Gdk.Point Cursor {
 			get {
 				return cursor;
@@ -263,12 +230,6 @@ namespace MonoDock.UI
 					new Gdk.Rectangle (x_offset, Height-IconSize-2*YBuffer, DockWidth, IconSize+2*YBuffer);
 					
 				return minimum_dock_size;
-			}
-		}
-		
-		PixbufSurfaceCache LargeIconCache {
-			get {
-				return large_icon_cache ?? large_icon_cache = new PixbufSurfaceCache (10, 2*IconSize, 2*IconSize);
 			}
 		}
 		
@@ -328,7 +289,7 @@ namespace MonoDock.UI
 		
 		bool ThirdPaneVisibilityAnimationNeeded {
 			get {
-				return (DateTime.UtcNow - third_pane_visibility_change).TotalMilliseconds < BaseAnimationTime;
+				return (DateTime.UtcNow - State.ThirdChangeTime).TotalMilliseconds < BaseAnimationTime;
 			}
 		}
 		
@@ -341,18 +302,12 @@ namespace MonoDock.UI
 		
 		public DockArea(DockWindow window, IStatistics statistics) : base ()
 		{
-			Height = 300;
 			Statistics = statistics;
 			this.window = window;
-			dock_items = new List<IDockItem> ();
-			window_items = new List<IDockItem> ();
-			
-			GLib.Timeout.Add (3000, delegate {
-				UpdateIcons ();
-				return false;
-			});
+			item_provider = new DockItemProvider (statistics);
 			
 			Cursor = new Gdk.Point (-1, -1);
+			
 			
 			Gdk.Rectangle geo;
 			geo = Screen.GetMonitorGeometry (0);
@@ -368,6 +323,7 @@ namespace MonoDock.UI
 			RegisterEvents ();
 			
 			GLib.Timeout.Add (20, delegate {
+				//must be done after construction is complete
 				SetParentInputMask ();
 				return false;
 			});
@@ -384,27 +340,14 @@ namespace MonoDock.UI
 					GdkWindow.SetBackPixmap (null, false);
 			};
 			
-			Wnck.Screen.Default.WindowOpened += delegate (object o, Wnck.WindowOpenedArgs args) {
-				if (!args.Window.IsSkipTasklist)
-					UpdateWindowItems ();
-			};
-			
-			Wnck.Screen.Default.WindowClosed += delegate(object o, Wnck.WindowClosedArgs args) {
-				if (!args.Window.IsSkipTasklist)
-					UpdateWindowItems ();
+			item_provider.DockItemsChanged += delegate(IEnumerable<IDockItem> items) {
+				SetIconRegions ();
+				AnimatedDraw ();
 			};
 			
 			ItemMenu.Instance.RemoveClicked += delegate (Gdk.Point point) {
 				int item = DockItemForX (point.X);
-				if (GetIconSource (DockItems[item]) == IconSource.Custom) {
-					CustomDockItems.RemoveItem (DockItems[item]);
-				} else if (GetIconSource (DockItems[item]) == IconSource.Statistics) {
-					DockItem di = DockItems[item] as DockItem;
-					if (di != null)
-						DockPreferences.AddBlacklistItem (di.IObject.Name + di.IObject.Description + di.IObject.Icon);
-					UpdateIcons ();
-				}
-				AnimatedDraw ();
+				item_provider.RemoveItem (item);
 			};
 			
 			ItemMenu.Instance.Hidden += delegate {
@@ -419,13 +362,6 @@ namespace MonoDock.UI
 				
 				Cursor = new Gdk.Point (x, y);
 				AnimatedDraw ();
-			};
-			
-			DockPreferences.IconSizeChanged += delegate {
-				if (large_icon_cache != null) {
-					large_icon_cache.Dispose ();
-					large_icon_cache = null;
-				}
 			};
 		}
 		
@@ -450,24 +386,7 @@ namespace MonoDock.UI
 		void DrawDrock (Context cr)
 		{
 			Gdk.Rectangle dock_area = GetDockArea ();
-			cr.SetRoundedRectanglePath (dock_area.X+.5, dock_area.Y+.5, dock_area.Width-1, dock_area.Height+40, 5); //fall off the bottom
-			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
-			cr.FillPreserve ();
-			
-			//gives the dock a "lifted" look and feel
-			cr.Color = new Cairo.Color (0, 0, 0, .6);
-			cr.LineWidth = 1;
-			cr.Stroke ();
-			
-			cr.SetRoundedRectanglePath (dock_area.X+1.5, dock_area.Y+1.5, dock_area.Width-3, dock_area.Height+40, 5);
-			LinearGradient lg = new LinearGradient (0, dock_area.Y+1.5, 0, dock_area.Y+10);
-			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .4));
-			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
-			cr.Pattern = lg;
-			cr.LineWidth = 1;
-			cr.Stroke ();
-			
-			lg.Destroy ();
+			DockBackgroundRenderer.RenderDockBackground (cr, dock_area);
 			
 			if (InputAreaOpacity > 0) {
 				if (input_area_buffer == null)
@@ -475,7 +394,7 @@ namespace MonoDock.UI
 				
 				using (Context input_cr = new Context (input_area_buffer)) {
 					input_cr.AlphaFill ();
-					DrawInputArea (input_cr);
+					MonoDock.UI.Renderers.SummonModeRenderer.RenderSummonMode (input_cr, State, dock_area);
 				}
 				
 				cr.SetSource (input_area_buffer);
@@ -501,7 +420,7 @@ namespace MonoDock.UI
 		
 		void DrawIcons (Context cr)
 		{
-			for (int i=0; i<DockItems.Count; i++) {
+			for (int i=0; i<DockItems.Length; i++) {
 				int center;
 				double zoom;
 				
@@ -566,134 +485,10 @@ namespace MonoDock.UI
 			}
 		}
 		
-		#region Input Area drawing code
-		void DrawInputArea (Context cr)
-		{
-			DrawPanes (cr);
-		}
-		
-		void DrawPanes (Context cr)
-		{
-			int base_x = GetDockArea ().X + 15;
-			
-			for (int i=0; i<3; i++) {
-				Pane pane  = (Pane)i;
-				int left_x;
-				double zoom;
-				GetXForPane (pane, out left_x, out zoom);
-				
-				if (State[pane] == null || (pane == Pane.Third && !ThirdPaneVisible))
-					continue;
-				if (!LargeIconCache.ContainsKey (State[pane].Icon))
-				    LargeIconCache.AddPixbufSurface (State[pane].Icon, State[pane].Icon);
-				
-				cr.Scale (zoom, zoom);
-				cr.SetSource (LargeIconCache.GetSurface (State[pane].Icon), left_x*(1/zoom), (Height-IconSize*2*zoom-YBuffer)*(1/zoom));
-				cr.Paint ();
-				cr.Scale (1/zoom, 1/zoom);
-			}
-			
-			if (State[CurrentPane] == null)
-				return;
-			
-			string text = GLib.Markup.EscapeText (State[CurrentPane].Name);
-			text = Do.Addins.Util.FormatCommonSubstrings (text, State.GetPaneQuery (CurrentPane), HighlightFormat);
-			
-			int tmp = BezelTextUtils.TextHeight;
-			double text_scale = (IconSize/64.0);
-			int text_offset = (int) (IconSize*3);
-			
-			if ((int) (12*text_scale) > 8)
-				BezelTextUtils.TextHeight = (int) (20 * text_scale);
-			else
-				BezelTextUtils.TextHeight = (int) (35 * text_scale);
-				
-			Pango.Color color = new Pango.Color ();
-			color.Blue = color.Red = color.Green = ushort.MaxValue;
-			
-			BezelTextUtils.RenderLayoutText (cr, text, base_x + text_offset, 
-			                                 Height - MinimumDockArea.Height + (int) (15*text_scale), (int) (500*text_scale), 
-			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End, this);
-			if ((int) (12*text_scale) > 8) {
-				BezelTextUtils.TextHeight = (int) (12*text_scale);
-				BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (State[CurrentPane].Description), 
-				                                 base_x + text_offset, Height - MinimumDockArea.Height + (int) (42*text_scale), 
-				                                 (int) (500*text_scale), color, Pango.Alignment.Left, Pango.EllipsizeMode.End, this);
-			}
-			BezelTextUtils.TextHeight = tmp;
-		}
-		
-		void GetXForPane (Pane pane, out int left_x, out double zoom)
-		{
-			int base_x = GetDockArea ().X + 15;
-			double zoom_value = .3;
-			double slide_state = Math.Min (1,(DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds/BaseAnimationTime);
-			
-			double growing_zoom = zoom_value + slide_state*(1-zoom_value);
-			double shrinking_zoom = zoom_value + (1-slide_state)*(1-zoom_value);
-			switch (pane) {
-			case Pane.First:
-				left_x = base_x;
-				if (State.CurrentPane == Pane.First && (State.PreviousPane == Pane.Second || State.PreviousPane == Pane.Third)) {
-					zoom = growing_zoom;
-				} else if (State.PreviousPane == Pane.First && (State.CurrentPane == Pane.Second || State.CurrentPane == Pane.Third)) {
-					zoom = shrinking_zoom;
-				} else {
-					zoom = zoom_value;
-				}
-				break;
-			case Pane.Second:
-				if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.First) {
-					zoom = shrinking_zoom;
-					left_x = base_x + (int) ((IconSize*2) * (growing_zoom));
-				} else if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.Third) {
-					zoom = shrinking_zoom;
-					left_x = base_x + (int) (IconSize*2*zoom_value);
-				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Second) {
-					zoom = growing_zoom;
-					left_x = base_x + (int) ((IconSize*2) * (shrinking_zoom));
-				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Third) {
-					zoom = zoom_value;
-					left_x = base_x + (int) ((IconSize*2) * (shrinking_zoom));
-				} else if (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.First) {
-					zoom = zoom_value;
-					left_x = base_x + (int) ((IconSize*2) * (growing_zoom));
-				} else {// (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.Second) {
-					zoom = growing_zoom;
-					left_x = base_x + (int) (IconSize*2*zoom_value);
-				}
-				break;
-			default:
-				if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.First) {
-					zoom = zoom_value;
-					left_x = base_x + (int) (IconSize*2*(1+zoom_value));
-				} else if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.Third) {
-					zoom = growing_zoom;
-					left_x = base_x + (int) (IconSize*2*zoom_value) + (int) ((IconSize*2) * (shrinking_zoom));
-				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Second) {
-					zoom = zoom_value;
-					left_x = base_x + (int) (IconSize*2*(1+zoom_value));
-				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Third) {
-					zoom = growing_zoom;
-					left_x = base_x + (int) (IconSize*2*zoom_value) + (int) ((IconSize*2) * (shrinking_zoom));
-				} else if (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.First) {
-					zoom = shrinking_zoom;
-					left_x = base_x + (int) (IconSize*2*zoom_value) + (int) ((IconSize*2) * (growing_zoom));
-				} else {// (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.Second) {
-					zoom = shrinking_zoom;
-					left_x = base_x + (int) (IconSize*2*zoom_value) + (int) ((IconSize*2) * (growing_zoom));
-				}
-				break;
-			}
-			double offset_scale = .9;
-			left_x = (int) (left_x *offset_scale + base_x*(1-offset_scale));
-		}
-		#endregion
-		
 		int IconNormalCenterX (int icon)
 		{
 			//the first icons center is at dock X + border + IconBorder + half its width
-			if (DockItems.Count == 0)
+			if (!DockItems.Any ())
 				return 0;
 			int start_x = MinimumDockArea.X + XBuffer + IconBorderWidth + (DockItems[0].Width/2);
 			for (int i=0; i<icon; i++)
@@ -704,25 +499,12 @@ namespace MonoDock.UI
 		int DockItemForX (int x)
 		{
 			int start_x = MinimumDockArea.X + XBuffer;
-			for (int i=0; i<DockItems.Count; i++) {
+			for (int i=0; i<DockItems.Length; i++) {
 				if (x >= start_x && x <= start_x+DockItems[i].Width+2*IconBorderWidth)
 					return i;
 				start_x += DockItems[i].Width + 2*IconBorderWidth;
 			}
 			return -1;
-		}
-		
-		IconSource GetIconSource (IDockItem item) {
-			if (window_items.Contains (item))
-				return IconSource.Application;
-			
-			if (dock_items.Contains (item))
-				return IconSource.Statistics;
-			
-			if (CustomDockItems.DockItems.Contains (item))
-				return IconSource.Custom;
-			
-			return IconSource.Unknown;
 		}
 		
 		void IconPositionedCenterX (int icon, out int x, out double zoom)
@@ -755,7 +537,7 @@ namespace MonoDock.UI
 			int start_x, end_x;
 			double start_zoom, end_zoom;
 			IconPositionedCenterX (0, out start_x, out start_zoom);
-			IconPositionedCenterX (DockItems.Count - 1, out end_x, out end_zoom);
+			IconPositionedCenterX (DockItems.Length - 1, out end_x, out end_zoom);
 			
 			int x = start_x - (int)(start_zoom*(IconSize/2)) - XBuffer;
 			int end = end_x + (int)(end_zoom*(IconSize/2)) + XBuffer;
@@ -779,7 +561,7 @@ namespace MonoDock.UI
 			string[] uriList = Regex.Split (data, "\r\n");
 			foreach (string uri in uriList) {
 				if (uri.StartsWith ("file://")) {
-					AddCustomItem (uri.Substring (7));
+					item_provider.AddCustomItemFromFile (uri.Substring (7));
 				}
 			} 
 			
@@ -864,12 +646,12 @@ namespace MonoDock.UI
 			}
 			
 			int item = DockItemForX ((int) evnt.X); //sometimes clicking is not good!
-			if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea || input_interface)
+			if (item < 0 || item >= DockItems.Length || !CursorIsOverDockArea || InputInterfaceVisible)
 				return ret_val;
 			
 			//handling right clicks
 			if (evnt.Button == 3) {
-				if (GetIconSource (DockItems[item]) == IconSource.Custom || GetIconSource (DockItems[item]) == IconSource.Statistics)
+				if (item_provider.GetIconSource (DockItems[item]) == IconSource.Custom || item_provider.GetIconSource (DockItems[item]) == IconSource.Statistics)
 					ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
 				return ret_val;
 			}
@@ -900,13 +682,15 @@ namespace MonoDock.UI
 			cursor_is_handle = false;
 		}
 		
-		void AddCustomItem (string file)
+		void SetIconRegions ()
 		{
-			if (file.EndsWith (".desktop"))
-			    CustomDockItems.AddApplication (file);
-			else
-				CustomDockItems.AddFile (file);
-			AnimatedDraw ();
+			Gdk.Rectangle pos;
+			window.GetPosition (out pos.X, out pos.Y);
+			
+			for (int i=0; i<DockItems.Length; i++) {
+				int x = IconNormalCenterX (i);
+				DockItems[i].SetIconRegion (new Gdk.Rectangle (pos.X + (x-IconSize/2), pos.Y + (Height-YBuffer-IconSize), IconSize, IconSize));
+			}
 		}
 		
 		void SetParentInputMask ()
@@ -920,132 +704,6 @@ namespace MonoDock.UI
 					window.SetInputMask (GetDockArea ().Height);
 			}
 		}
-
-		IEnumerable<IItem> MostUsedItems ()
-		{
-			Func<IItem, bool> isNotSelectedText = item =>
-				Core.GetInnerType (item).Name != "SelectedTextItem";
-			Func<IItem, bool> isApplication = item =>
-				Core.GetInnerType (item).Name == "ApplicationItem";
-			Func<IItem, int> typeComparison = item =>
-				Core.GetInnerType (item).GetHashCode ();
-
-			return Statistics.GetMostUsedItems (DockPreferences.AutomaticIcons + 1)
-				.Where (isNotSelectedText)
-				.OrderByDescending (isApplication)
-				.ThenBy (typeComparison)
-				.ThenBy (item => item.Name)
-				.Take (DockPreferences.AutomaticIcons);
-		}
-		
-		void UpdateIcons ()
-		{
-			List<IDockItem> new_items = new List<IDockItem> ();
-			foreach (IItem i in MostUsedItems ()) {
-				if (DockPreferences.ItemBlacklist.Contains (i.Name + i.Description + i.Icon))
-					continue;
-				IDockItem di = new DockItem (i);
-				if (CustomDockItems.DockItems.Contains (di))
-					continue;
-				new_items.Add (di);
-				
-				bool is_set = false;
-				foreach (IDockItem item in dock_items) {
-					if (item.Equals (di)) {
-						di.DockAddItem = item.DockAddItem;
-						is_set = true;
-						break;
-					}
-				}
-				if (!is_set)
-					di.DockAddItem = DateTime.UtcNow;
-			}
-			foreach (IDockItem dock_item in dock_items)
-				dock_item.Dispose ();
-			
-			dock_items = new_items;
-			UpdateWindowItems ();
-			AnimatedDraw ();
-		}
-		
-		void UpdateWindowItems ()
-		{
-			foreach (IDockItem di in dock_items.Concat (CustomDockItems.DockItems)) {
-				if (!(di is DockItem))
-					continue;
-				(di as DockItem).UpdateApplication ();
-			}
-			
-			if (Wnck.Screen.Default.ActiveWorkspace == null)
-				return;
-			IList<IDockItem> out_items = new List<IDockItem> ();
-			
-			foreach (Wnck.Application app in WindowUtils.GetApplications ()) {
-				bool good = false;
-				foreach (Wnck.Window w in app.Windows) {
-					if (!w.IsSkipTasklist)
-						good = true;
-				}
-				
-				foreach (IDockItem di in dock_items.Concat (CustomDockItems.DockItems)) {
-					if (!(di is DockItem) || (di as DockItem).Apps.Count () == 0)
-						continue;
-					if ((di as DockItem).Pids.Contains (app.Pid)) {
-						good = false;
-						break;
-					}
-				}
-						
-				if (!good) 
-					continue;
-				
-				ApplicationDockItem api = new ApplicationDockItem (app);
-				bool is_set = false;
-				foreach (ApplicationDockItem di in window_items) {
-					if (api.Equals (di)) {
-						api.DockAddItem = di.DockAddItem;
-						is_set = true;
-						break;
-					}
-				}
-				if (!is_set)
-					api.DockAddItem = DateTime.UtcNow;
-				out_items.Add (new ApplicationDockItem (app));
-			}
-			
-			foreach (IDockItem item in window_items)
-				item.Dispose ();
-					
-			window_items = out_items;
-			
-			Gdk.Rectangle geo, main;
-			geo = Gdk.Screen.Default.GetMonitorGeometry (0);
-			window.GetSize (out main.Width, out main.Height);
-			window.GetPosition (out main.X, out main.Y);
-			
-			foreach (IDockItem idi in DockItems) {
-				DockItem di = (idi as DockItem);
-				if (di == null)
-					continue;
-				foreach (Wnck.Application app in di.Apps) {
-					foreach (Wnck.Window w in app.Windows) {
-						w.SetIconGeometry (geo.X + main.X + IconNormalCenterX (DockItems.IndexOf (di))-IconSize/2, 
-						                   geo.Y + main.Y + (Height-DockHeight),
-						                   IconSize, IconSize);
-					}
-				}
-			}
-			
-			foreach (ApplicationDockItem di in window_items) {
-				foreach (Wnck.Window w in di.App.Windows) {
-					w.SetIconGeometry (geo.X + main.X + IconNormalCenterX (DockItems.IndexOf (di))-IconSize/2, 
-					                   geo.Y + main.Y + (Height-DockHeight),
-					                   IconSize, IconSize);
-				}
-			}
-			
-			AnimatedDraw ();
-		}
 		
 		public void SetPaneContext (IUIContext context, Pane pane)
 		{
@@ -1054,29 +712,18 @@ namespace MonoDock.UI
 		}
 		
 		DateTime interface_change_time = DateTime.UtcNow;
-		bool input_interface = false;
 		public void ShowInputInterface ()
 		{
 			interface_change_time = DateTime.UtcNow;
-			input_interface = true;
+			InputInterfaceVisible = true;
 			
 			AnimatedDraw ();
 		}
 		
-		uint update_timer = 0;
 		public void HideInputInterface ()
 		{
 			interface_change_time = DateTime.UtcNow;
-			input_interface = false;
-		
-			if (update_timer != 0)
-				return;
-			
-			update_timer = GLib.Timeout.Add (1000, delegate {
-				UpdateIcons ();
-				update_timer = 0;
-				return false;
-			});
+			InputInterfaceVisible = false;
 		}
 		
 		public void Reset ()

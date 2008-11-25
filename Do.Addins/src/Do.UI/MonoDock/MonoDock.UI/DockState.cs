@@ -72,6 +72,22 @@ namespace MonoDock.UI
 			}
 		}
 		
+		bool third_pane_visible = false;
+		DateTime third_pane_visibility_change = DateTime.UtcNow;
+		public bool ThirdPaneVisible { 
+			get { return third_pane_visible; }
+			set { 
+				if (third_pane_visible == value)
+					return;
+				third_pane_visible = value;
+				third_pane_visibility_change = DateTime.UtcNow;
+			}
+		}
+		
+		public DateTime ThirdPaneVisiblityTime {
+			get { return third_pane_visibility_change; }
+		}
+		
 		#region First Pane
 		public IObject First {
 			get {

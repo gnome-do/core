@@ -96,10 +96,10 @@ namespace MonoDock.UI
 		
 		Gdk.Pixbuf GetPixbuf ()
 		{
-			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, (int) (DockPreferences.IconSize*DockPreferences.IconQuality));
+			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
 			
-			if (pbuf.Height != DockPreferences.IconSize*DockPreferences.IconQuality && pbuf.Width != DockPreferences.IconSize*DockPreferences.IconQuality) {
-				double scale = (double)DockPreferences.IconSize*DockPreferences.IconQuality / Math.Max (pbuf.Width, pbuf.Height);
+			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
+				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
 				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), InterpType.Bilinear);
 				pbuf.Dispose ();
 				pbuf = temp;
@@ -111,7 +111,7 @@ namespace MonoDock.UI
 		public Surface GetIconSurface ()
 		{
 			if (icon_surface == null) {
-				icon_surface = new ImageSurface (Cairo.Format.Argb32, (int) (DockPreferences.IconSize*DockPreferences.IconQuality), (int) (DockPreferences.IconSize*DockPreferences.IconQuality));
+				icon_surface = new ImageSurface (Cairo.Format.Argb32, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
 				Context cr = new Context (icon_surface);
 				Gdk.CairoHelper.SetSourcePixbuf (cr, Pixbuf, 0, 0);
 				cr.Paint ();
@@ -143,6 +143,20 @@ namespace MonoDock.UI
 				
 			if (button == 1)
 				WindowUtils.PerformLogicalClick (apps);
+		}
+		
+		Gdk.Rectangle icon_region;
+		public void SetIconRegion (Gdk.Rectangle region)
+		{
+			if (icon_region == region)
+				return;
+			icon_region = region;
+			
+			foreach (Wnck.Application application in apps) {
+				foreach (Wnck.Window window in application.Windows) {
+					window.SetIconGeometry (region.X, region.Y, region.Width, region.Height);
+				}
+			}
 		}
 		
 		public bool Equals (IDockItem other)
