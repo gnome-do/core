@@ -114,34 +114,12 @@ namespace Do.Core
 		/// </param>
 		void DeleteItems (IEnumerable<IItem> items);
 		
-		/// <summary>
-		/// Returns the string UID of an IObject
-		/// </summary>
-		/// <param name="o">
-		/// A <see cref="IObject"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.String"/>
-		/// </returns>
-		string UIDForObject (IObject o);
-		
 		void Initialize ();
 		
 		/// <summary>
 		/// Tells the universe manager to completely reload its database.  This may be slow.
 		/// </summary>
 		void Reload ();
-		
-		/// <summary>
-		/// Returns an object for a given UID
-		/// </summary>
-		/// <param name="UID">
-		/// A <see cref="System.String"/> representing the UID of the desired object
-		/// </param>
-		/// <param name="item">
-		/// A <see cref="IObject"/>
-		/// </param>
-		void TryGetObjectForUID (string UID, out IObject item);
 		
 		/// <summary>
 		/// Checks to see if an IObject LIKELY has child items.  This list is not authoritive.

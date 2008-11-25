@@ -28,9 +28,22 @@ namespace Do.Platform
 	internal class CoreImplementation : Core.Implementation
 	{
 	
+		public string GetUID (IObject o)
+		{
+			return (DoObject.Wrap (o) as DoObject).UID;
+		}
+
+		public IObject GetIObject (string uid)
+		{
+			IObject o;
+			Do.UniverseManager.TryGetObjectForUID (uid, out o);
+			return o;
+		}
+
 		public T Unwrap<T> (T o) where T : class, IObject
 		{
 			return DoObject.Unwrap<T> (o);
 		}
+
 	}
 }
