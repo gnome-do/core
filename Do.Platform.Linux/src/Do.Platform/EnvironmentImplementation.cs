@@ -47,12 +47,9 @@ namespace Do.Platform
 			if (null == line) throw new ArgumentNullException ();
 
 			if (CommandLineIsFoundOnPath (line)) return true;
-			
-			UnixFileInfo info;
+			if (!File.Exists (line) || Directory.Exists (line)) return false;
 
-			if (Directory.Exists (line)) return false;
-
-			info = new UnixFileInfo (line);
+			UnixFileInfo info = new UnixFileInfo (line);
 			return (info.FileAccessPermissions & FileAccessPermissions.UserExecute) != 0;
 		}
 
