@@ -54,6 +54,24 @@ namespace Do.Platform
 			Notify (message, title, icon, null, null);
 		}
 		
+		/// <summary>
+		/// Shows a notification, generally some sort of pop-up bubble
+		/// </summary>
+		/// <param name="message">
+		/// A <see cref="System.String"/> body of the notification
+		/// </param>
+		/// <param name="title">
+		/// A <see cref="System.String"/> title of the notification
+		/// </param>
+		/// <param name="icon">
+		/// A <see cref="System.String"/> name of the icon to show with the notification
+		/// </param>
+		/// <param name="actionLabel">
+		/// A <see cref="System.String"/> label for the action's button
+		/// </param>
+		/// <param name="onClick">
+		/// An <see cref="Action"/> to perform when notification is clicked
+		/// </param>
 		public static void Notify (string message, string title, string icon, string actionLabel, Action onClick)
 		{
 			Imp.Notify (message, title, icon, actionLabel, onClick);

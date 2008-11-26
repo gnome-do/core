@@ -46,15 +46,19 @@ namespace Do.Platform
 			#endregion
 			
 			#region IconProvider initialization
-			IconProvider.Initialize (new Platform.Linux.IconProviderImplementation ());
+			IconProvider.Initialize (new Linux.IconProviderImplementation ());
+			#endregion
+			
+			#region Windowing initialization
+			Windowing.Initialize (new Linux.WindowingImplementation ());
 			#endregion
 			
 			#region StatusIcon initialization
-			StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
+			StatusIcon.Initialize (new Linux.StatusIconImplementation ());
 			#endregion
 			
 			#region Notifications initialization
-			Notifications.Initialize (new Platform.Linux.NotificationsImplementation ());
+			Notifications.Initialize (new Linux.NotificationsImplementation ());
 			#endregion
 		}
 	}

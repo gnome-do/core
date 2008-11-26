@@ -1,43 +1,59 @@
-// Windowing.cs created with MonoDevelop
-// User: david at 5:35 PM 11/22/2008
-//
-// To change standard headers go to Edit->Preferences->Coding->Standard Headers
-//
+/* Windowing.cs
+ *
+ * GNOME Do is the legal property of its developers. Please refer to the
+ * COPYRIGHT file distributed with this
+ * source distribution.
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using System;
 
 namespace Do.Platform
 {
 	
-	
 	public static class Windowing
 	{
 		public interface Implementation
 		{
-			void Summon ();
-			void Vanish ();
+			void ShowMainMenu (int x, int y);
 		}
 		
-		static Implementation imp;
+		public static Implementation Imp { get; private set; }
 		
-		public static void Initialize (Implementation anImp)
+		public static void Initialize (Implementation imp)
 		{
-			if (imp != null)
+			if (Imp != null)
 				throw new Exception ("Already has Implementation");
-			if (anImp == null)
+			if (imp == null)
 				throw new ArgumentNullException ("Implementation may not be null");
 			
-			imp = anImp;
+			Imp = imp;
 		}
 		
-		public static void Summon ()
+		/// <summary>
+		/// Shows the main menu instance to appear at the given x and y location
+		/// </summary>
+		/// <param name="x">
+		/// A <see cref="System.Int32"/> of the x value on the screen to show the menu
+		/// </param>
+		/// <param name="y">
+		/// A <see cref="System.Int32"/> of the y value on the screen to show the menu
+		/// </param>
+		public static void ShowMainMenu (int x, int y)
 		{
-			imp.Summon ();
-		}
-		
-		public static void Vanish ()
-		{
-			imp.Vanish ();
+			Imp.ShowMainMenu (x, y);
 		}
 	}
 }

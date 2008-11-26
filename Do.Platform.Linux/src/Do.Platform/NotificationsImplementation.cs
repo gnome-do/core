@@ -19,12 +19,13 @@
  */
 
 using System;
+using Mono.Unix;
 
 using Gdk;
-using Gtk;
 using GLib;
-using Mono.Unix;
 using Notifications;
+
+using Do.Platform;
 
 namespace Do.Platform.Linux
 {
@@ -33,36 +34,63 @@ namespace Do.Platform.Linux
 	{
 		const int IconSize = 24, MinNotifyShow = 5000, MaxNotifyShow = 10000;
 		Pixbuf default_icon = IconProvider.PixbufFromIconName ("gnome-do", IconSize);
-		Preferences prefs = Preferences.Get ("core-preferences");
 		
 		#region Notifications.Implementation
 		
-		public void Notify (string title, string message, string icon, string actionLabel, System.Action onClick)
+		/// <summary>
+		/// Shows a libnotify style notification
+		/// </summary>
+		/// <param name="title">
+		/// A <see cref="System.String"/> title of the notification
+		/// </param>
+		/// <param name="message">
+		/// A <see cref="System.String"/> the body text of the notification
+		/// </param>
+		/// <param name="icon">
+		/// A <see cref="System.String"/> icon name. Set this to null or empty to use default Do icon
+		/// </param>
+		/// <param name="actionLabel">
+		/// A <see cref="System.String"/> label for the action's button
+		/// </param>
+		/// <param name="onClick">
+		/// A <see cref="Action"/> action to excecute. Set this to null for no action
+		/// </param>
+		public void Notify (string title, string message, string icon, string actionLabel, Action onClick)
 		{
-			Application.Invoke (delegate {
-				Notification msg;
-				
-				msg = new Notification (); 
-				msg.Summary = GLib.Markup.EscapeText (prefs.Get<bool> ("StatusIconVisible", true) ? title : ("GNOME Do: " + title));
-				msg.Body = GLib.Markup.EscapeText (message);
-				
-				if (icon != null)
-					msg.Icon = IconProvider.PixbufFromIconName (icon, IconSize);
-				else
-					msg.Icon = default_icon;
-				
-				if (onClick != null)
-					msg.AddAction (actionLabel, (actionLabel + "_Action"), (o, a) => onClick ());
+			//Show the status icon so that we can associate our notification with it
+			StatusIcon.Notify ();
+			//we delay this so that the Icon has time to show and we can get its location
+			GLib.Timeout.Add (500, delegate {
+				Gtk.Application.Invoke (delegate {
+					Notification msg;
+					Screen screen;
+					int x, y;
 					
-				msg.Timeout = message.Length / 10 * 1000;
-				if (msg.Timeout > MaxNotifyShow) msg.Timeout = MaxNotifyShow;
-				if (msg.Timeout < MinNotifyShow) msg.Timeout = MinNotifyShow;
-				
-				msg.Show ();
+					(StatusIcon.Imp as StatusIconImplementation).GetLocationOnScreen (out screen, out x, out y);
+					
+					msg = new Notification (); 
+					msg.Summary = title;
+					msg.Body = GLib.Markup.EscapeText (message);
+					msg.Icon = (!string.IsNullOrEmpty (icon) ? IconProvider.PixbufFromIconName (icon, IconSize) : default_icon);
+					// message.Length / 10 * 1000 is an aprox time to read based on number of chars
+					msg.Timeout = Math.Min (Math.Max (message.Length / 10 * 1000, MinNotifyShow), MaxNotifyShow);
+					msg.SetGeometryHints (screen, x, y);
+					msg.Closed += OnNotificationClosed;
+
+					if (onClick != null)
+						msg.AddAction (actionLabel, actionLabel + "_Action", (o, a) => onClick ());
+					
+					msg.Show ();
+				});
+				return false;
 			});
 		}
 		
-		#endregion
+		protected void OnNotificationClosed (object sender, EventArgs args)
+		{
+			StatusIcon.Hide ();
+		}
 		
+		#endregion		
 	}
 }

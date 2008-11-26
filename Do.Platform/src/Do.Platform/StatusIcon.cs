@@ -29,6 +29,7 @@ namespace Do.Platform
 		{
 			void Show ();
 			void Hide ();
+			void Notify ();
 		}
 		
 		public static Implementation Imp { get; private set; }
@@ -45,14 +46,28 @@ namespace Do.Platform
 		
 		#region Implementation
 		
+		/// <summary>
+		/// Show the Status icon
+		/// </summary>
 		public static void Show ()
 		{
 			Imp.Show ();
 		}
 		
+		/// <summary>
+		/// hide the status icon
+		/// </summary>
 		public static void Hide ()
 		{
 			Imp.Hide ();
+		}
+		
+		/// <summary>
+		/// Perform the notification routine to alert the user that something has happened
+		/// </summary>
+		public static void Notify ()
+		{
+			Imp.Notify ();
 		}
 		
 		#endregion

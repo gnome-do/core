@@ -46,6 +46,21 @@ namespace Do.Platform
 			return PixbufFromIconName (name, size, true);
 		}
 		
+		/// <summary>
+		/// Give a Gdk.Pixbuf of the icon from a string name
+		/// </summary>
+		/// <param name="name">
+		/// A <see cref="System.String"/> name of the icon
+		/// </param>
+		/// <param name="size">
+		/// A <see cref="System.Int32"/> size of the pixbuf to return
+		/// </param>
+		/// <param name="defaultIcon">
+		/// A <see cref="System.Boolean"/> to return the default icon
+		/// </param>
+		/// <returns>
+		/// A <see cref="Pixbuf"/>
+		/// </returns>
 		public static Pixbuf PixbufFromIconName (string name, int size, bool defaultIcon)
 		{
 			return Imp.PixbufFromIconName (name, size, defaultIcon);
