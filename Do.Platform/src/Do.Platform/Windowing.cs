@@ -42,6 +42,8 @@ namespace Do.Platform
 			Imp = imp;
 		}
 		
+		#region Implementation
+		
 		/// <summary>
 		/// Shows the main menu instance to appear at the given x and y location
 		/// </summary>
@@ -55,5 +57,7 @@ namespace Do.Platform
 		{
 			Imp.ShowMainMenu (x, y);
 		}
+		
+		#endregion
 	}
 }

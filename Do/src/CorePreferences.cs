@@ -75,10 +75,12 @@ namespace Do
 			set { prefs.Set<bool> ("StartAtLogin", value); }
 		}
 		
+		/*
 		public static bool StatusIconVisible {
 			get { return prefs.Get<bool> ("StatusIconVisible", true); }
 			set { prefs.Set<bool> ("StatusIconVisible", value); }
 		}
+		*/
 		
 		public static bool AlwaysShowResults {
 			get { return prefs.Get<bool> ("AlwaysShowResults", false); }

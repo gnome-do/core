@@ -24,7 +24,7 @@ namespace Do.Platform
 {
 	
 	public static class StatusIcon
-	{
+	{		
 		public interface Implementation
 		{
 			void Show ();
@@ -43,6 +43,25 @@ namespace Do.Platform
 			
 			Imp = imp;
 		}
+		
+		#region Preference key info
+		
+		/// <value>
+		/// StatusIcon root key name.
+		/// </value>
+		public static string RootKey { get { return "StatusIcon"; } }
+		
+		/// <value>
+		/// Key containing whether or not the StatusIcon should be visible
+		/// </value>
+		public static string VisibleKey { get { return "StatusIconVisible"; } }
+		
+		/// <value>
+		/// Default value for StatusIcon visibility.
+		/// </value>
+		public static bool VisibleDefault { get { return true; } }
+		
+		#endregion
 		
 		#region Implementation
 		

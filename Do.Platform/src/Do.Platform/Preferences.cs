@@ -110,7 +110,7 @@ namespace Do.Platform {
 			TryGet (key, def, out val);
 			return val;
 		}
-
+		
 		/// <summary>
 		/// Try to read a value for a given key.
 		/// </summary>
@@ -188,6 +188,59 @@ namespace Do.Platform {
 
 		#endregion
 		
+		/// <summary>
+		/// Read a value stored for a given key from a given root. Return the default if
+		/// no value exists for that key. If you only need one key from an arbitrary root,
+		/// this is a good choice.
+		/// </summary>
+		/// <param name="rootKey">
+		/// A <see cref="System.String"/> root path to find the key in
+		/// </param>
+		/// <param name="key">
+		/// A <see cref="System.String"/> key (e.g. "key_binding").
+		/// </param>
+		/// <param name="def">
+		/// A defaukt <see cref="T"/> value to be returned if the key is not
+		/// found.
+		/// </param>
+		/// <returns>
+		/// A <see cref="T"/> consisting of the found value, or the default.
+		/// </returns>
+		public static T Get<T> (string rootKey, string key, T def)
+		{
+			T val;
+			
+			Preferences prefs = new Preferences (rootKey);
+			prefs.TryGet (key, def, out val);
+			
+			return val;
+		}
+		
+		/// <summary>
+		/// Sets a gconf key to a given value.
+		/// </summary>
+		/// <param name="key">
+		/// A <see cref="System.String"/> gconf key (e.g. "key_binding") stored
+		/// under Do's root gconf path. You may also specify an absoulte gconf
+		/// path if you want to read any other key.
+		/// </param>
+		/// <param name="val">
+		/// A <see cref="T"/> value to set for the given key. Should be a
+		/// simple (value) type or a string.
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/> indicating whether the key was
+		/// successfuly set.
+		/// </returns>
+		public static bool Set<T> (string rootKey, string key, T val)
+		{
+			Preferences prefs = new Preferences (rootKey);
+			bool success = Imp.Set<T> (Combine (prefs.RootKey, key), val);
+			if (success && null != prefs.PreferenceChanged)
+				prefs.PreferenceChanged (prefs, new ChangedEventArgs (key, val));
+			
+			return success;
+		}
 
 	}
 }

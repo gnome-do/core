@@ -24,6 +24,8 @@ namespace Do.Platform
 {
 	public static class IconProvider
 	{
+		// FIXME if someone can please figure out a way to abstract this so we don't need
+		// Gdk in Do.Platform that would be dandy.
 		public interface Implementation
 		{
 			Pixbuf PixbufFromIconName (string name, int size, bool defaultIcon);
@@ -46,6 +48,8 @@ namespace Do.Platform
 			return PixbufFromIconName (name, size, true);
 		}
 		
+		#region Implementation
+		
 		/// <summary>
 		/// Give a Gdk.Pixbuf of the icon from a string name
 		/// </summary>
@@ -65,5 +69,7 @@ namespace Do.Platform
 		{
 			return Imp.PixbufFromIconName (name, size, defaultIcon);
 		}
+		
+		#endregion
 	}
 }

@@ -143,6 +143,8 @@ namespace Do.Platform.Linux
 			return pixbuf;
 		}
 
+		#region IconProvider.Implementation
+		
 		public Pixbuf PixbufFromIconName (string name, int size, bool defaultIcon)
 		{			
 			Pixbuf pixbuf;									
@@ -179,4 +181,6 @@ namespace Do.Platform.Linux
 			return pixbuf;
 		}
 	}
+	
+	#endregion
 }

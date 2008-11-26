@@ -65,7 +65,11 @@ namespace Do.UI
 			// Setup checkboxes
         	hide_check.Active = CorePreferences.QuietStart;
         	login_check.Active = AutostartEnabled;
-        	notification_check.Active = CorePreferences.StatusIconVisible;
+        	notification_check.Active = Preferences.Get<bool> (
+        		Platform.StatusIcon.RootKey, 
+       			Platform.StatusIcon.VisibleKey,
+   				Platform.StatusIcon.VisibleDefault
+   			);
         }
         
         public Bin GetConfiguration ()
@@ -118,11 +122,17 @@ namespace Do.UI
 
         protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)
         {	
-        	CorePreferences.StatusIconVisible = notification_check.Active;
-        	if (notification_check.Active)
+        	Preferences.Set<bool> (
+        		Platform.StatusIcon.RootKey,
+        		Platform.StatusIcon.VisibleKey,
+        		notification_check.Active
+        	);
+        	
+        	if (notification_check.Active) {
         		Platform.StatusIcon.Show ();
-        	else
+        	} else {
         		Platform.StatusIcon.Hide ();
+        	}
         }
     }
 }

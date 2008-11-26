@@ -42,8 +42,6 @@ namespace Do.Platform
 			Imp = imp;
 		}
 		
-		#region Implementation
-		
 		public static void Notify (string message, string title)
 		{
 			Notify (message, title, null, null, null);
@@ -53,6 +51,8 @@ namespace Do.Platform
 		{
 			Notify (message, title, icon, null, null);
 		}
+		
+		#region Implementation
 		
 		/// <summary>
 		/// Shows a notification, generally some sort of pop-up bubble

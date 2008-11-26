@@ -86,11 +86,11 @@ namespace Do.Platform.Linux
 			});
 		}
 		
+		#endregion
+		
 		protected void OnNotificationClosed (object sender, EventArgs args)
 		{
 			StatusIcon.Hide ();
 		}
-		
-		#endregion		
 	}
 }
