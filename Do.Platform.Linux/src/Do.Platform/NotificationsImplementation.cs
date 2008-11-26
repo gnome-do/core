@@ -33,7 +33,13 @@ namespace Do.Platform.Linux
 	public class NotificationsImplementation : Notifications.Implementation
 	{
 		const int IconSize = 24, MinNotifyShow = 5000, MaxNotifyShow = 10000;
-		Pixbuf default_icon = IconProvider.PixbufFromIconName ("gnome-do", IconSize);
+		const int NotifyDelay = 500;
+		static readonly Pixbuf default_icon;
+		
+		static NotificationsImplementation ()
+		{
+			default_icon = IconProvider.PixbufFromIconName ("gnome-do", IconSize);
+		}
 		
 		#region Notifications.Implementation
 		
@@ -57,33 +63,41 @@ namespace Do.Platform.Linux
 		/// </param>
 		public void Notify (string title, string message, string icon, string actionLabel, Action onClick)
 		{
-			//Show the status icon so that we can associate our notification with it
+			Notification msg;
+			Screen screen;
+			int x, y, readableTimeout;
+			
+			x = y = -1;
+			screen = null;
+			
+			// Show the status icon so that we can associate our notification with it
 			StatusIcon.Notify ();
-			//we delay this so that the Icon has time to show and we can get its location
-			GLib.Timeout.Add (500, delegate {
-				Gtk.Application.Invoke (delegate {
-					Notification msg;
-					Screen screen;
-					int x, y;
-					
-					(StatusIcon.Imp as StatusIconImplementation).GetLocationOnScreen (out screen, out x, out y);
-					
-					msg = new Notification (); 
-					msg.Summary = title;
-					msg.Body = GLib.Markup.EscapeText (message);
-					msg.Icon = (!string.IsNullOrEmpty (icon) ? IconProvider.PixbufFromIconName (icon, IconSize) : default_icon);
-					// message.Length / 10 * 1000 is an aprox time to read based on number of chars
-					msg.Timeout = Math.Min (Math.Max (message.Length / 10 * 1000, MinNotifyShow), MaxNotifyShow);
-					msg.SetGeometryHints (screen, x, y);
-					msg.Closed += OnNotificationClosed;
+			
+			if (StatusIcon.Imp is StatusIconImplementation) {
+				(StatusIcon.Imp as StatusIconImplementation).GetLocationOnScreen (out screen, out x, out y);
+			}
+			
+			msg = new Notification ();
+			msg.Icon = string.IsNullOrEmpty (icon) ? default_icon : IconProvider.PixbufFromIconName (icon, IconSize);
+			msg.Body = GLib.Markup.EscapeText (message);
+			msg.Closed += (o, a) => StatusIcon.Hide ();
+			msg.Summary = GLib.Markup.EscapeText (title);
+			
+			// if our StatusIconImplementation check failed, we show the notification not associated with the icon
+			if (screen != null)
+				msg.SetGeometryHints (screen, x, y);
+			
+			// this is an aprox time to read based on number of chars
+			readableTimeout = message.Length / 10 * 1000;	
+			msg.Timeout = Math.Min (Math.Max (readableTimeout, MinNotifyShow), MaxNotifyShow);
 
-					if (onClick != null)
-						msg.AddAction (actionLabel, actionLabel + "_Action", (o, a) => onClick ());
-					
-					msg.Show ();
-				});
-				return false;
-			});
+			if (onClick != null) {
+				string label = GLib.Markup.EscapeText (actionLabel);
+				msg.AddAction (label, actionLabel + "_Action", (o, a) => onClick ());
+			}
+			
+			// we delay this so that the icon has time to show and we can get its location
+			GLib.Timeout.Add (NotifyDelay, () => {Gtk.Application.Invoke ((o, a) => msg.Show ()); return false;});
 		}
 		
 		#endregion
