@@ -22,21 +22,30 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Mono.Unix;
+
 using Do.Addins;
 using Do.Universe;
 using Do.Platform;
 
 namespace Do.Core {
 
-	public class DoObject : IObject, IConfigurable, IComparable<IObject> {
+	/// <summary>
+	/// The root of our wrapper heirarchy (DoObject, DoItem, DoItemSource, DoAction).
+	/// </summary>
+	public class DoObject : IObject, IConfigurable, IEquatable<DoObject>, IComparable<DoObject> {
 
-		const string DefaultName = "No name";
-		const string DefaultDescription = "No description.";
-		const string DefaultIcon = "emblem-noread";
+		const string UIDFormat = "{0}: {1} ({2})";
+		static readonly string DefaultName;
+		static readonly string DefaultDescription;
+		static readonly string DefaultIcon;
 
-		protected IObject inner;
-		protected float relevance;
-		protected string uid;
+		static DoObject ()
+		{
+			DefaultName = Catalog.GetString ("No name");
+			DefaultDescription = Catalog.GetString ("No description.");
+			DefaultIcon = "emblem-noread";
+		}
 
 		public static IObject Wrap (IObject o)
 		{
@@ -52,44 +61,50 @@ namespace Do.Core {
 			return o;
 		}
 
+		public string UID { get; private set; }
+		
+		public float Relevance { get; set; }
+		
+		public IObject Inner { get; private set; }
+		
 		public DoObject (IObject inner)
 		{
 			if (inner == null)
-				throw new ArgumentNullException ("inner","Inner IObject may not be null.");
-			this.inner = inner;
+				throw new ArgumentNullException ("inner", "Inner IObject may not be null.");
 			
-			uid = string.Format ("{0}{1}{2}", inner.GetType (), Name, Description);
+			Inner = inner;
+
+			// In case Name or Description throws when constructing the UID, set it to a default so
+			// something appears in the log message.
+			UID = DefaultName;
+			UID = string.Format (UIDFormat, Name, Description, Inner.GetType ());
 		}
 
-		public virtual IObject Inner {
-			get { return inner; }
-			set { inner = value; }
-		}
-	
-		public float Relevance {
-			get { return relevance; }
-			set { relevance = value; }
-		}
-		
+		//// <value>
+		/// Safe wrapper for inner IObject's Name property.
+		/// </value>
 		public virtual string Name {
 			get {
 				string name = null;
 				try {
-					name = inner.Name;
+					name = Inner.Name;
 				} catch (Exception e) {
-					LogError ("Name", e, "_");
+					LogError ("Name", e);
 				} finally {
 					name = name ?? DefaultName;
 				}
 				return name;
 			}
 		}
-		
+
+		//// <value>
+		/// Safe wrapper for inner IObject's Description property.
+		/// </value>
 		public virtual string Description {
 			get {
 				string description = null;
 				try {
-					description = inner.Description;
+					description = Inner.Description;
 				} catch (Exception e) {
 					LogError ("Description", e);
 				} finally {
@@ -98,12 +113,15 @@ namespace Do.Core {
 				return description;
 			}
 		}
-		
+
+		//// <value>
+		/// Safe wrapper for inner IObject's Icon property.
+		/// </value>
 		public virtual string Icon {
 			get {
 				string icon = null;
 				try {
-					icon = inner.Icon;
+					icon = Inner.Icon;
 				} catch (Exception e) {
 					LogError ("Icon", e);
 				} finally {
@@ -112,22 +130,26 @@ namespace Do.Core {
 				return icon;
 			}
 		}
-		
+
+		/// <summary>
+		/// Safe wrapper for inner IObject's IConfigurable.GetConfiguration method.
+		/// Returns null if inner IObject is not IConfigurable, or an exception is thrown in
+		/// the inner GetConfigurationcall.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="Gtk.Bin"/> containing configuration widgets to be associated with
+		/// this IObject.
+		/// </returns>
 		public Gtk.Bin GetConfiguration ()
 		{
 			Gtk.Bin config = null;
 			try {
 				if (Inner is IConfigurable)
 					config = (Inner as IConfigurable).GetConfiguration ();
-			} catch {
+			} catch (Exception e) {
+				LogError ("GetConfiguration", e);
 			}
 			return config;
-		}
-		
-		public virtual string UID {
-			get {
-				return uid;
-			}
 		}
 		
 		public override int GetHashCode ()
@@ -137,33 +159,31 @@ namespace Do.Core {
 	
 		public override bool Equals (object o)
 		{
-			DoObject other = o as DoObject;
+			if (o is DoObject)
+				return Equals (o as DoObject);
+			return false;
+		}
 
-			if (other == null) return false;
-			return other.UID == UID;
+		public bool Equals (DoObject o)
+		{
+			return o != null && o.UID == UID;
 		}
 
 		public override string ToString ()
 		{
-			return Name;
+			return UID;
 		}
 
-		// Only compare with DoObjects.
-		public int CompareTo (IObject other)
+		public int CompareTo (DoObject other)
 		{
-			return (int) (1000000 * ((other as DoObject).Relevance - Relevance));
+			return (int) (1000000 * (other.Relevance - Relevance));
 		}
 
 		protected void LogError (string where, Exception e)
 		{
-			LogError (where, e, Name);
-		}
-
-		protected void LogError (string where, Exception e, string name)
-		{
-			Type t = inner != null ? inner.GetType () : GetType ();
-			Log.Error ("\"{0}\" ({1}) encountered an error in {2}: {3}",
-				name, t, where, e.Message);
+			Log.Error ("{0} encountered an error in {1}: {2} \"{3}\".",
+				UID, where, e.GetType ().Name, e.Message);
+			Log.Debug (e.StackTrace);
 		}
 	}
 }
