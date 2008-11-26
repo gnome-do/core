@@ -156,13 +156,13 @@ namespace Do.Core {
 				// Penalize actions that require modifier items.
 				if (!oa.ModifierItemsOptional)
 					relevance *= 0.8f;
+
+				if (PenalizedActionTypes.Contains (DoObject.Unwrap (oa).GetType ()))
+					relevance *= 0.8f;
 			}
 
 			if (o.Inner is IItemSource)
 				relevance *= 0.4f;
-
-			if (PenalizedActionTypes.Contains (DoObject.Unwrap (o).GetType ()))
-				relevance *= 0.8f;
 
 			return relevance * 0.30f + score * 0.70f;
 		}
