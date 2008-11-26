@@ -161,7 +161,7 @@ namespace Do.Core {
 			if (o.Inner is IItemSource)
 				relevance *= 0.4f;
 
-			if (PenalizedActionTypes.Contains (o.Inner.GetType ()))
+			if (PenalizedActionTypes.Contains (DoObject.Unwrap (o).GetType ()))
 				relevance *= 0.8f;
 
 			return relevance * 0.30f + score * 0.70f;
