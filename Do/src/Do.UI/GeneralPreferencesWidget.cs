@@ -68,7 +68,6 @@ namespace Do.UI
 	    notification_check.Active = Preferences.Get (Platform.StatusIcon.RootKey).Get<bool> (
 	        Platform.StatusIcon.VisibleKey, Platform.StatusIcon.VisibleDefault
 	    );
-
 	}
         
 	public Bin GetConfiguration ()

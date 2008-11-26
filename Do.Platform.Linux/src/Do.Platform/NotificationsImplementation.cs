@@ -32,15 +32,16 @@ namespace Do.Platform.Linux
 	
 	public class NotificationsImplementation : Notifications.Implementation
 	{
-		const int IconSize = 24, MinNotifyShow = 5000, MaxNotifyShow = 10000;
 		const int NotifyDelay = 500;
+		const int IconSize = 24, MinNotifyShow = 5000, MaxNotifyShow = 10000;
+
 		static readonly Pixbuf default_icon;
 		
 		static NotificationsImplementation ()
 		{
 			default_icon = IconProvider.PixbufFromIconName ("gnome-do", IconSize);
 		}
-		
+
 		#region Notifications.Implementation
 		
 		/// <summary>
@@ -63,8 +64,8 @@ namespace Do.Platform.Linux
 		/// </param>
 		public void Notify (string title, string message, string icon, string actionLabel, Action onClick)
 		{
-			Notification msg;
 			Screen screen;
+			Notification msg;
 			int x, y, readableTimeout;
 			
 			x = y = -1;
@@ -83,14 +84,14 @@ namespace Do.Platform.Linux
 			msg.Closed += (o, a) => StatusIcon.Hide ();
 			msg.Summary = GLib.Markup.EscapeText (title);
 			
-			// if our StatusIconImplementation check failed, we show the notification not associated with the icon
+			// if our status icon check doesn't fail, then we associate the notification with it.
 			if (screen != null)
 				msg.SetGeometryHints (screen, x, y);
 			
 			// this is an aprox time to read based on number of chars
 			readableTimeout = message.Length / 10 * 1000;	
 			msg.Timeout = Math.Min (Math.Max (readableTimeout, MinNotifyShow), MaxNotifyShow);
-
+			
 			if (onClick != null) {
 				string label = GLib.Markup.EscapeText (actionLabel);
 				msg.AddAction (label, actionLabel + "_Action", (o, a) => onClick ());
@@ -99,7 +100,7 @@ namespace Do.Platform.Linux
 			// we delay this so that the icon has time to show and we can get its location
 			GLib.Timeout.Add (NotifyDelay, () => {Gtk.Application.Invoke ((o, a) => msg.Show ()); return false;});
 		}
-		
+
 		#endregion
 		
 		protected void OnNotificationClosed (object sender, EventArgs args)
