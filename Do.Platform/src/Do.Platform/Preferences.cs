@@ -236,11 +236,11 @@ namespace Do.Platform {
 		{
 			Preferences prefs = new Preferences (rootKey);
 			bool success = Imp.Set<T> (Combine (prefs.RootKey, key), val);
+			
 			if (success && null != prefs.PreferenceChanged)
 				prefs.PreferenceChanged (prefs, new ChangedEventArgs (key, val));
 			
 			return success;
 		}
-
 	}
 }
