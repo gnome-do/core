@@ -25,7 +25,9 @@ FILES = \
 	src/Do.Platform/Notifications.cs \
 	src/Do.Platform/Paths.cs \
 	src/Do.Platform/Preferences.cs \
+	src/Do.Platform/StatusIcon.cs \
 	src/Do.Platform/UniverseFactory.cs \
+	src/Do.Platform/Windowing.cs \
 	src/Do.Universe/AbstractAction.cs \
 	src/Do.Universe/Do.Universe.Common/BookmarkItem.cs \
 	src/Do.Universe/Do.Universe.Common/ContactItem.cs \

@@ -110,8 +110,7 @@ FILES = \
 	src/Do.cs \
 	src/Do.Platform/CoreImplementation.cs \
 	src/Do.Platform/PlatformInitializer.cs \
-	src/Do.Platform/StatusIcon.cs \
-	src/Do.Platform.Linux/StatusIconImplementation.cs \
+	src/Do.Platform.Linux/WindowingImplementation.cs \
 	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
