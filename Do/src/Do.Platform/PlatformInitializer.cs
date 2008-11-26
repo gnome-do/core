@@ -43,6 +43,7 @@ namespace Do.Platform
 				Log.AddImplementation (new Common.FileLogImplementation ());
 			}
 			Log.LogLevel = CorePreferences.QuietStart ? Log.Level.Error : Log.Level.Info;
+			if (CorePreferences.Debug) Log.LogLevel = Log.Level.Debug;
 			#endregion
 			
 			#region IconProvider initialization
