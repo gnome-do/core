@@ -45,7 +45,9 @@ namespace Do.Core {
 		public static T Unwrap<T> (T o) where T : class, IObject
 		{
 			while (o is DoObject)
-				o = (o as DoObject).Inner as T;
+				// We do a traditional cast to throw a cast exception if the wrong
+				// dynamic type was passed.
+				o = (T) (o as DoObject).Inner;
 			return o;
 		}
 
