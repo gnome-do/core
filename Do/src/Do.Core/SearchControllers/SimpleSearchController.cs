@@ -45,7 +45,7 @@ namespace Do.Core
 		
 		protected bool ImplicitTextMode {
 			get {
-				return Results.Count == 1 && Results[0] is ITextItem && !textMode;
+				return !textMode && Results.Count == 1 && Results [0] is DoTextItem;
 			}
 		}
 		

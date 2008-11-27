@@ -69,7 +69,7 @@ namespace Do.Core
 
 		public override bool TextMode {
 			get { 
-				return (textMode || ImplicitTextMode); 
+				return textMode || ImplicitTextMode; 
 			}
 			set { 
 				if (context.ParentContext != null) return;
