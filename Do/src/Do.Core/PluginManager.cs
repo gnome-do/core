@@ -43,7 +43,14 @@ namespace Do.Core {
 		public  const string AllPluginsRepository = "All Available Plugins";
 		private const string DefaultPluginIcon = "folder_tar";
 
-		private static string[] ExtensionPaths {
+		static ICollection<DoItemSource> item_sources;
+
+		static PluginManager ()
+		{
+			item_sources = new List<DoItemSource> ();
+		}
+
+		private static IEnumerable<string> ExtensionPaths {
 			get {
 				return new[] {
 					"/Do/ItemSource",
@@ -53,7 +60,7 @@ namespace Do.Core {
 			}
 		}
 
-		private static Dictionary<string, IEnumerable<string>> repository_urls;
+		private static IDictionary<string, IEnumerable<string>> repository_urls;
 		public static IDictionary<string, IEnumerable<string>> RepositoryUrls {
 			get {
 				if (null == repository_urls) {
@@ -96,7 +103,7 @@ namespace Do.Core {
 		{
 			// Initialize Mono.Addins.
 			AddinManager.Initialize (Paths.UserPlugins);
-			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnIObjectChange);
+			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnItemSourceChange);
 			AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnIObjectChange);
 			AddinManager.AddExtensionNodeHandler ("/Do/RenderProvider", OnIRenderThemeChange);
 
@@ -161,9 +168,8 @@ namespace Do.Core {
 		/// A <see cref="IEnumerable`1"/> of DoItemSource instances loaded from
 		/// plugins.
 		/// </returns>
-		internal static IEnumerable<DoItemSource> GetItemSources () {
-			return AddinManager.GetExtensionObjects ("/Do/ItemSource")
-				.Select (source => new DoItemSource (source as IItemSource));
+		internal static IEnumerable<DoItemSource> ItemSources {
+			get { return item_sources; }
 		}
 
 		/// <summary>
@@ -301,6 +307,38 @@ namespace Do.Core {
 					Log.Error ("Encountered error unloading plugin: {0}", e.Message);
 					Log.Debug (e.StackTrace);
 				}
+			}	
+		}
+
+		static void OnItemSourceChange (object s, ExtensionNodeEventArgs args)
+		{
+			TypeExtensionNode node;
+
+			node = args.ExtensionNode as TypeExtensionNode;
+			switch (args.Change) {
+			case ExtensionChange.Add:
+				try {
+					DoItemSource source = new DoItemSource (node.GetInstance () as IItemSource);
+					if (!item_sources.Contains (source))
+						item_sources.Add (source);
+					Log.Info ("Loaded \"{0}\".", source.Name);
+				} catch (Exception e) {
+					Log.Error ("Encountered error loading item source: {0} \"{1}\"",
+							e.GetType ().Name, e.Message);
+					Log.Debug (e.StackTrace);
+				}
+				break;
+			case ExtensionChange.Remove:
+				try {
+					DoItemSource source = new DoItemSource (node.GetInstance () as IItemSource);
+					Log.Info ("Unloaded \"{0}\".", source.Name);
+					item_sources.Remove (source);
+				} catch (Exception e) {
+					Log.Error ("Encountered error unloading item source: {0} \"{1}\"",
+							e.GetType ().Name, e.Message);
+					Log.Debug (e.StackTrace);
+				}
+				break;
 			}	
 		}
 

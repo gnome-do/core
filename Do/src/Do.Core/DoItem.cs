@@ -27,6 +27,9 @@ using Do.Universe;
 
 namespace Do.Core {
 
+	/// <summary>
+	/// <see cref="DoItem"/> is a safe wrapper for an <see cref="IItem"/>.
+	/// </summary>
 	public class DoItem : DoObject, IItem {
 
 		protected static IDictionary<IItem, bool> has_children;
@@ -58,7 +61,7 @@ namespace Do.Core {
 		public bool HasChildren {
 			get {
 				if (!has_children.ContainsKey (this)) {
-					has_children [this] = PluginManager.GetItemSources ()
+					has_children [this] = PluginManager.ItemSources
 						.Any (s => s.SupportsItem (this) && s.ChildrenOfItem (this).Any ());
 				}
 				return has_children [this];

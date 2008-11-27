@@ -166,7 +166,7 @@ namespace Do.Core
 				}
 				
 				while (DateTime.Now.Subtract (time).TotalMilliseconds < UpdateRunTime) {
-					IEnumerable<DoItemSource> sources = PluginManager.GetItemSources ()
+					IEnumerable<DoItemSource> sources = PluginManager.ItemSources
 						.Where ((DoItemSource s) => s.Name.ToLower ().StartsWith (source_char.ToString ()));
 					
 					foreach (DoItemSource item_source in sources) {
@@ -234,7 +234,7 @@ namespace Do.Core
 		{
 			ReloadActions ();
 			
-			foreach (DoItemSource source in PluginManager.GetItemSources ())
+			foreach (DoItemSource source in PluginManager.ItemSources)
 				UpdateSource (source);
 			
 			Log.Info ("Universe contains {0} items.", universe.Count);
