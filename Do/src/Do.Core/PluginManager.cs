@@ -387,7 +387,6 @@ namespace Do.Core {
 						continue; // Does not conform to required type.
 					if (Addin.GetIdName (id) != Addin.GetIdName (node.Addin.Id))
 						continue; // Instances not from same addin. Version mismatch?
-
 					yield return instance as T;
 				}
 			}
