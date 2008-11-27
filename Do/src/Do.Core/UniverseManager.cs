@@ -193,16 +193,16 @@ namespace Do.Core
 		void ReloadActions ()
 		{
 			lock (action_lock) {
-				foreach (DoAction action in actions)
-					universe.Remove (action.UID);
-				actions.Clear ();
-			}
-			
-			foreach (DoAction action in PluginManager.GetActions ()) {
-				lock (action_lock)
-					actions.Add (action);
-				lock (universe_lock)
-					universe[action.UID] = action;			
+				lock (universe_lock) {
+					foreach (DoAction action in actions) {
+						universe.Remove (action.UID);
+					}
+					actions.Clear ();
+					foreach (DoAction action in PluginManager.Actions) {
+							actions.Add (action);
+							universe [action.UID] = action;			
+					}
+				}
 			}
 		}
 		
