@@ -65,16 +65,16 @@ namespace Do.Core {
 		private static IDictionary<string, IEnumerable<string>> repository_urls;
 		public static IDictionary<string, IEnumerable<string>> RepositoryUrls {
 			get {
-				if (null == repository_urls) {
-					repository_urls = new Dictionary<string, IEnumerable<string>> ();      
-					repository_urls ["Official Plugins"] = new[] { OfficialRepo };
-					repository_urls ["Community Plugins"] = new[] { CommunityRepo };
+				if (repository_urls != null) return repository_urls;
 
-					repository_urls ["Local Plugins"] = Paths.SystemPlugins
-						.Where (Directory.Exists)
-						.Select (repo => "file://" + repo)
-						.ToArray ();
-				}
+				repository_urls = new Dictionary<string, IEnumerable<string>> ();      
+				repository_urls ["Official Plugins"] = new[] { OfficialRepo };
+				repository_urls ["Community Plugins"] = new[] { CommunityRepo };
+				repository_urls ["Local Plugins"] = Paths.SystemPlugins
+					.Where (Directory.Exists)
+					.Select (repo => "file://" + repo)
+					.ToArray ();
+
 				return repository_urls;
 			}
 		}
@@ -142,25 +142,25 @@ namespace Do.Core {
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.String"/> containing an icon name. Can be loaded
-		/// via IconProvider.
+		/// via <see cref="IconProvider"/>.
 		/// </returns>
 		public static string IconForAddin (string id)
 		{   
+			string icon;
+
 			// First look for an icon among ItemSources:
-			foreach (IItemSource obj in ObjectsForAddin<IItemSource> (id)) {
-				try {
-					if (null != obj.Icon)
-						return obj.Icon;
-				} catch { }
-			}
+			icon = ObjectsForAddin<IItemSource> (id)
+				.Select (source => DoObject.Wrap (source).Icon)
+				.FirstOrDefault ();
+			if (icon != null) return icon;
+
 			// If no icon found among ItemSources, look for an icon among
 			// Actions:		
-			foreach (IAction obj in ObjectsForAddin<IAction> (id)) {
-				try {
-					if (null != obj.Icon)
-						return obj.Icon;
-				} catch { }
-			}
+			icon = ObjectsForAddin<IAction> (id)
+				.Select (source => DoObject.Wrap (source).Icon)
+				.FirstOrDefault ();
+			if (icon != null) return icon;
+
 			return DefaultPluginIcon;
 		}
 
@@ -271,7 +271,7 @@ namespace Do.Core {
 			foreach (string path in GetFilePaths (Paths.UserPlugins, "*.mpack")) {
 				setup.Install (status, new[] { path });
 				File.Delete (path);
-			};
+			}
 		}
 
 		static void OnActionChange (object s, ExtensionNodeEventArgs args)
