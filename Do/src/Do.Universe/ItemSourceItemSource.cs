@@ -80,7 +80,7 @@ namespace Do.Universe {
 
 		public void UpdateItems ()
 		{
-			items = PluginManager.GetItemSources ()
+			items = PluginManager.ItemSources
 				.Select (source => new ItemSourceItem (source))
 				.Cast<IItem> ();
 		}

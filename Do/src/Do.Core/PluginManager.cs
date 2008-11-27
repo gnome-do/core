@@ -1,26 +1,26 @@
-/* PluginManager.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// PluginManager.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this
+// source distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 
 using Mono.Addins;
@@ -43,7 +43,16 @@ namespace Do.Core {
 		public  const string AllPluginsRepository = "All Available Plugins";
 		private const string DefaultPluginIcon = "folder_tar";
 
-		private static string[] ExtensionPaths {
+		static ICollection<DoAction> actions;
+		static ICollection<DoItemSource> item_sources;
+
+		static PluginManager ()
+		{
+			actions = new List<DoAction> ();
+			item_sources = new List<DoItemSource> ();
+		}
+
+		private static IEnumerable<string> ExtensionPaths {
 			get {
 				return new[] {
 					"/Do/ItemSource",
@@ -53,18 +62,19 @@ namespace Do.Core {
 			}
 		}
 
-		private static Dictionary<string, IEnumerable<string>> repository_urls;
+		private static IDictionary<string, IEnumerable<string>> repository_urls;
 		public static IDictionary<string, IEnumerable<string>> RepositoryUrls {
 			get {
-				if (null == repository_urls) {
-					repository_urls = new Dictionary<string, IEnumerable<string>> ();      
-					repository_urls ["Official Plugins"] = new[] { OfficialRepo };
-					repository_urls ["Community Plugins"] = new[] { CommunityRepo };
+				if (repository_urls != null) return repository_urls;
 
-					repository_urls ["Local Plugins"] = Paths.SystemPlugins
-						.Where (Directory.Exists)
-						.Select (repo => "file://" + repo);
-				}
+				repository_urls = new Dictionary<string, IEnumerable<string>> ();      
+				repository_urls ["Official Plugins"] = new[] { OfficialRepo };
+				repository_urls ["Community Plugins"] = new[] { CommunityRepo };
+				repository_urls ["Local Plugins"] = Paths.SystemPlugins
+					.Where (Directory.Exists)
+					.Select (repo => "file://" + repo)
+					.ToArray ();
+
 				return repository_urls;
 			}
 		}
@@ -96,8 +106,8 @@ namespace Do.Core {
 		{
 			// Initialize Mono.Addins.
 			AddinManager.Initialize (Paths.UserPlugins);
-			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnIObjectChange);
-			AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnIObjectChange);
+			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnItemSourceChange);
+			AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnActionChange);
 			AddinManager.AddExtensionNodeHandler ("/Do/RenderProvider", OnIRenderThemeChange);
 
 			// Register repositories.
@@ -132,51 +142,40 @@ namespace Do.Core {
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.String"/> containing an icon name. Can be loaded
-		/// via IconProvider.
+		/// via <see cref="IconProvider"/>.
 		/// </returns>
 		public static string IconForAddin (string id)
 		{   
+			string icon;
+
 			// First look for an icon among ItemSources:
-			foreach (IItemSource obj in ObjectsForAddin<IItemSource> (id)) {
-				try {
-					if (null != obj.Icon)
-						return obj.Icon;
-				} catch { }
-			}
+			icon = ObjectsForAddin<IItemSource> (id)
+				.Select (source => DoObject.Wrap (source).Icon)
+				.FirstOrDefault ();
+			if (icon != null) return icon;
+
 			// If no icon found among ItemSources, look for an icon among
 			// Actions:		
-			foreach (IAction obj in ObjectsForAddin<IAction> (id)) {
-				try {
-					if (null != obj.Icon)
-						return obj.Icon;
-				} catch { }
-			}
+			icon = ObjectsForAddin<IAction> (id)
+				.Select (source => DoObject.Wrap (source).Icon)
+				.FirstOrDefault ();
+			if (icon != null) return icon;
+
 			return DefaultPluginIcon;
 		}
 
-		/// <summary>
-		/// Finds all plugged-in item sources.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="IEnumerable`1"/> of DoItemSource instances loaded from
-		/// plugins.
-		/// </returns>
-		internal static IEnumerable<DoItemSource> GetItemSources () {
-			return AddinManager.GetExtensionObjects ("/Do/ItemSource")
-				.Select (source => new DoItemSource (source as IItemSource));
+		/// <value>
+		/// All loaded IItemSources.
+		/// </value>
+		internal static IEnumerable<DoItemSource> ItemSources {
+			get { return item_sources; }
 		}
 
-		/// <summary>
-		/// Finds all plugged-in actions.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="IEnumerable`1"/> of DoAction instances loaded from
-		/// plugins.
-		/// </returns>
-		internal static IEnumerable<DoAction> GetActions () 
-		{
-			return AddinManager.GetExtensionObjects ("/Do/Action")
-				.Select (action => new DoAction (action as IAction));
+		/// <value>
+		/// All loaded IActions.
+		/// </value>
+		internal static IEnumerable<DoAction> Actions {
+			get { return actions; }
 		}
 
 		/// <summary>
@@ -187,8 +186,7 @@ namespace Do.Core {
 		/// </returns>
 		internal static IEnumerable<IRenderTheme> GetThemes () 
 		{
-			return AddinManager.GetExtensionObjects ("/Do/RenderProvider")
-				.Select (theme => theme as IRenderTheme);
+			return AddinManager.GetExtensionObjects ("/Do/RenderProvider").Cast<IRenderTheme> ();
 		}
 
 		/// <summary>
@@ -273,34 +271,75 @@ namespace Do.Core {
 			foreach (string path in GetFilePaths (Paths.UserPlugins, "*.mpack")) {
 				setup.Install (status, new[] { path });
 				File.Delete (path);
-			};
+			}
 		}
 
-		internal static void OnIObjectChange (object s, ExtensionNodeEventArgs args)
+		static void OnActionChange (object s, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node;
 
 			node = args.ExtensionNode as TypeExtensionNode;
-			if (args.Change.Equals (ExtensionChange.Add)) {
+			switch (args.Change) {
+			case ExtensionChange.Add:
 				try {
-					// plugin is to be used only for inspection here.
-					IObject plugin = node.GetInstance () as IObject;
-					// Wrap in a DoObject for safety.
-					IObject o = new DoObject (plugin);
-					Log.Info ("Loaded \"{0}\".", o.Name);
+					DoAction action = new DoAction (node.GetInstance () as IAction);
+					if (actions.Contains (action)) {
+						Log.Warn ("\"{0}\" action was loaded twice. Ignoring.", action.Name);
+					} else {
+						actions.Add (action);
+						Log.Info ("Loaded \"{0}\" action.", action.Name);
+					}
 				} catch (Exception e) {
-					Log.Error ("Encountered error loading \"{0}\": {0}", e.Message);
+					Log.Error ("Encountered error loading action: {0} \"{1}\"",
+							e.GetType ().Name, e.Message);
 					Log.Debug (e.StackTrace);
 				}
-			} else {
+				break;
+			case ExtensionChange.Remove:
 				try {
-					IObject plugin = node.GetInstance() as IObject;
-					IObject o = new DoObject (plugin);
-					Log.Info ("Unloaded \"{0}\".", o.Name);
+					DoAction action = new DoAction (node.GetInstance () as IAction);
+					Log.Info ("Unloaded \"{0}\" action.", action.Name);
+					actions.Remove (action);
 				} catch (Exception e) {
-					Log.Error ("Encountered error unloading plugin: {0}", e.Message);
+					Log.Error ("Encountered error unloading action: {0} \"{1}\"",
+							e.GetType ().Name, e.Message);
 					Log.Debug (e.StackTrace);
 				}
+				break;
+			}	
+		}
+		static void OnItemSourceChange (object s, ExtensionNodeEventArgs args)
+		{
+			TypeExtensionNode node;
+
+			node = args.ExtensionNode as TypeExtensionNode;
+			switch (args.Change) {
+			case ExtensionChange.Add:
+				try {
+					DoItemSource source = new DoItemSource (node.GetInstance () as IItemSource);
+					if (item_sources.Contains (source)) {
+						Log.Warn ("\"{0}\" item source was loaded twice. Ignoring.", source.Name);
+					} else {
+						item_sources.Add (source);
+						Log.Info ("Loaded \"{0}\" item source.", source.Name);
+					}
+				} catch (Exception e) {
+					Log.Error ("Encountered error loading item source: {0} \"{1}\"",
+							e.GetType ().Name, e.Message);
+					Log.Debug (e.StackTrace);
+				}
+				break;
+			case ExtensionChange.Remove:
+				try {
+					DoItemSource source = new DoItemSource (node.GetInstance () as IItemSource);
+					Log.Info ("Unloaded \"{0}\".", source.Name);
+					item_sources.Remove (source);
+				} catch (Exception e) {
+					Log.Error ("Encountered error unloading item source: {0} \"{1}\"",
+							e.GetType ().Name, e.Message);
+					Log.Debug (e.StackTrace);
+				}
+				break;
 			}	
 		}
 
@@ -329,29 +368,28 @@ namespace Do.Core {
 		/// <returns>
 		/// A <see cref="IEnumerable`1"/> of instances of type T.
 		/// </returns>
-		private static IEnumerable<T> ObjectsForAddin<T> (string id)
+		private static IEnumerable<T> ObjectsForAddin<T> (string id) where T : class
 		{
-			List<T> obs;
-
-			obs = new List<T> ();
 			foreach (string path in ExtensionPaths) {
-				foreach (TypeExtensionNode n in AddinManager.GetExtensionNodes (path)) {
+				foreach (TypeExtensionNode node in AddinManager.GetExtensionNodes (path)) {
 					object instance;
-					bool addinMatch, typeMatch;
 
 					try {
-						instance = n.GetInstance ();
-					} catch {
+						instance = node.GetInstance ();
+					} catch (Exception e) {
+						Log.Error ("ObjectsForAddin encountered an error: {0} \"{1}\"",
+								e.GetType ().Name, e.Message);
+						Log.Debug (e.StackTrace);
 						continue;
 					}
-					addinMatch = Addin.GetIdName (id) == Addin.GetIdName (n.Addin.Id);
-					typeMatch = typeof (T).IsAssignableFrom (instance.GetType ());
-					if (addinMatch && typeMatch) {
-						obs.Add ((T) instance);
-					}
+
+					if (!(instance is T))
+						continue; // Does not conform to required type.
+					if (Addin.GetIdName (id) != Addin.GetIdName (node.Addin.Id))
+						continue; // Instances not from same addin. Version mismatch?
+					yield return instance as T;
 				}
 			}
-			return obs;
 		}
 
 		/// <summary>

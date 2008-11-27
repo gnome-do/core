@@ -31,18 +31,8 @@ namespace Do.Universe {
 		
 		string name, description, icon;
 		
-		public DoProxyItem ():
-			this (new EmptyItem ())
-		{
-		}
-			
 		public DoProxyItem (IItem item):
 			this (null, null, null, item)
-		{
-		}
-		
-		public DoProxyItem (string name):
-			this (name, new EmptyItem ())
 		{
 		}
 		
@@ -51,18 +41,8 @@ namespace Do.Universe {
 		{
 		}
 		
-		public DoProxyItem (string name, string description):
-			this (name, description, new EmptyItem ())
-		{
-		}
-		
 		public DoProxyItem (string name, string description, IItem item):
 			this (name, description, null, item)
-		{
-		}
-		
-		public DoProxyItem (string name, string description, string icon):
-			this (name, description, icon, new EmptyItem ())
 		{
 		}
 		
@@ -84,10 +64,6 @@ namespace Do.Universe {
 		
 		public override string Icon {
 			get { return icon ?? base.Icon; }
-		}
-		
-		public override string UID {
-			get { return base.Inner.GetType ().ToString ()+Name+Description; }
 		}
 
 	}

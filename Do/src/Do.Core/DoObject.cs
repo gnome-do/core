@@ -1,26 +1,28 @@
-/* DoObject.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * inner distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// DoObject.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this
+// inner distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Linq;
 using System.Collections.Generic;
+
+using Mono.Unix;
 
 using Do.Addins;
 using Do.Universe;
@@ -28,68 +30,103 @@ using Do.Platform;
 
 namespace Do.Core {
 
-	public class DoObject : IObject, IConfigurable, IComparable<IObject> {
+	/// <summary>
+	/// The root of our wrapper heirarchy (DoObject, DoItem, DoItemSource,
+	/// DoAction).
+	/// </summary>
+	public class DoObject :
+		IObject, IConfigurable, IEquatable<DoObject>, IComparable<DoObject> {
 
-		const string DefaultName = "No name";
-		const string DefaultDescription = "No description.";
-		const string DefaultIcon = "emblem-noread";
+		const string UIDFormat = "{0}: {1} ({2})";
+		static readonly string DefaultName;
+		static readonly string DefaultDescription;
+		static readonly string DefaultIcon;
 
-		protected IObject inner;
-		protected float relevance;
-		protected string uid;
+		static DoObject ()
+		{
+			DefaultName = Catalog.GetString ("No name");
+			DefaultDescription = Catalog.GetString ("No description.");
+			DefaultIcon = "emblem-noread";
+		}
 
+		/// <summary>
+		/// Ensures that the dynamic type of <paramref name="o"/> is
+		/// <see cref="DoObject"/>.
+		/// </summary>
+		/// <param name="o">
+		/// An <see cref="IObject"/>.
+		/// </param>
+		/// <returns>
+		/// An <see cref="IObject"/> whose dynamic type is
+		/// <see cref="DoObject"/>.
+		/// </returns>
 		public static IObject Wrap (IObject o)
 		{
 			return o is DoObject ? o : new DoObject (o);
 		}
 
-		public static T Unwrap<T> (T o) where T : class, IObject
+		public static IObject Unwrap (IObject o)
 		{
 			while (o is DoObject)
 				// We do a traditional cast to throw a cast exception if the wrong
 				// dynamic type was passed.
-				o = (T) (o as DoObject).Inner;
+				o = (IObject) (o as DoObject).Inner;
 			return o;
 		}
 
+		/// <value>
+		/// A unique identifier for this <see cref="IObject"/>.
+		/// </value>
+		public string UID { get; private set; }
+		
+		/// <value>
+		/// This <see cref="IObject"/>'s relevance for the most recent search.
+		/// </value>
+		public float Relevance { get; set; }
+		
+		/// <value>
+		/// The inner <see cref="IObject"/> wrapped by this instance.
+		/// </value>
+		protected IObject Inner { get; set; }
+		
 		public DoObject (IObject inner)
 		{
 			if (inner == null)
-				throw new ArgumentNullException ("inner","Inner IObject may not be null.");
-			this.inner = inner;
+				throw new ArgumentNullException ("inner", "Inner IObject may not be null.");
 			
-			uid = string.Format ("{0}{1}{2}", inner.GetType (), Name, Description);
+			Inner = inner;
+
+			// In case Name or Description throws when constructing the UID, set it to a default so
+			// something appears in the log message.
+			UID = DefaultName;
+			UID = string.Format (UIDFormat, Name, Description, Inner.GetType ());
 		}
 
-		public virtual IObject Inner {
-			get { return inner; }
-			set { inner = value; }
-		}
-	
-		public float Relevance {
-			get { return relevance; }
-			set { relevance = value; }
-		}
-		
+		//// <value>
+		/// Safe wrapper for inner <see cref="IObject"/>'s Name property.
+		/// </value>
 		public virtual string Name {
 			get {
 				string name = null;
 				try {
-					name = inner.Name;
+					name = Inner.Name;
 				} catch (Exception e) {
-					LogError ("Name", e, "_");
+					LogError ("Name", e);
 				} finally {
 					name = name ?? DefaultName;
 				}
 				return name;
 			}
 		}
-		
+
+		//// <value>
+		/// Safe wrapper for inner <see cref="IObject"/>'s Description property.
+		/// </value>
 		public virtual string Description {
 			get {
 				string description = null;
 				try {
-					description = inner.Description;
+					description = Inner.Description;
 				} catch (Exception e) {
 					LogError ("Description", e);
 				} finally {
@@ -98,12 +135,15 @@ namespace Do.Core {
 				return description;
 			}
 		}
-		
+
+		//// <value>
+		/// Safe wrapper for inner <see cref="IObject"/>'s Icon property.
+		/// </value>
 		public virtual string Icon {
 			get {
 				string icon = null;
 				try {
-					icon = inner.Icon;
+					icon = Inner.Icon;
 				} catch (Exception e) {
 					LogError ("Icon", e);
 				} finally {
@@ -112,22 +152,27 @@ namespace Do.Core {
 				return icon;
 			}
 		}
-		
+
+		/// <summary>
+		/// Safe wrapper for inner <see cref="IObject"/>'s
+		/// <see cref="IConfigurable"/>.GetConfiguration method.
+		/// Returns null if inner <see cref="IObject"/> is not <see cref="IConfigurable"/>,
+		/// or an exception is thrown in the inner GetConfiguration call.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="Gtk.Bin"/> containing configuration widgets to be associated with
+		/// this IObject.
+		/// </returns>
 		public Gtk.Bin GetConfiguration ()
 		{
 			Gtk.Bin config = null;
 			try {
 				if (Inner is IConfigurable)
 					config = (Inner as IConfigurable).GetConfiguration ();
-			} catch {
+			} catch (Exception e) {
+				LogError ("GetConfiguration", e);
 			}
 			return config;
-		}
-		
-		public virtual string UID {
-			get {
-				return uid;
-			}
 		}
 		
 		public override int GetHashCode ()
@@ -137,33 +182,31 @@ namespace Do.Core {
 	
 		public override bool Equals (object o)
 		{
-			DoObject other = o as DoObject;
+			if (o is DoObject)
+				return Equals (o as DoObject);
+			return false;
+		}
 
-			if (other == null) return false;
-			return other.UID == UID;
+		public bool Equals (DoObject o)
+		{
+			return o != null && o.UID == UID;
 		}
 
 		public override string ToString ()
 		{
-			return Name;
+			return UID;
 		}
 
-		// Only compare with DoObjects.
-		public int CompareTo (IObject other)
+		public int CompareTo (DoObject other)
 		{
-			return (int) (1000000 * ((other as DoObject).Relevance - Relevance));
+			return (int) (1000000 * (other.Relevance - Relevance));
 		}
 
 		protected void LogError (string where, Exception e)
 		{
-			LogError (where, e, Name);
-		}
-
-		protected void LogError (string where, Exception e, string name)
-		{
-			Type t = inner != null ? inner.GetType () : GetType ();
-			Log.Error ("\"{0}\" ({1}) encountered an error in {2}: {3}",
-				name, t, where, e.Message);
+			Log.Error ("{0} encountered an error in {1}: {2} \"{3}\".",
+				UID, where, e.GetType ().Name, e.Message);
+			Log.Debug (e.StackTrace);
 		}
 	}
 }

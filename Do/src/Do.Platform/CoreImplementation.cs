@@ -40,9 +40,9 @@ namespace Do.Platform
 			return o;
 		}
 
-		public T Unwrap<T> (T o) where T : class, IObject
+		public IObject Unwrap (IObject o)
 		{
-			return DoObject.Unwrap<T> (o);
+			return DoObject.Unwrap (o);
 		}
 
 	}

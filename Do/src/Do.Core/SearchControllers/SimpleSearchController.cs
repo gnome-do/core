@@ -45,7 +45,7 @@ namespace Do.Core
 		
 		protected bool ImplicitTextMode {
 			get {
-				return Results.Count == 1 && Results[0] is ITextItem && !textMode;
+				return !textMode && Results.Count == 1 && Results [0] is DoTextItem;
 			}
 		}
 		
@@ -199,7 +199,7 @@ namespace Do.Core
 			IItem item = context.Selection as IItem;
 			List<IObject> children = new List<IObject> ();
 
-			foreach (DoItemSource source in PluginManager.GetItemSources ()) {
+			foreach (DoItemSource source in PluginManager.ItemSources) {
 				foreach (IObject child in source.ChildrenOfItem (item))
 					children.Add (child);
 			}

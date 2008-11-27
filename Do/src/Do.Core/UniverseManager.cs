@@ -99,9 +99,10 @@ namespace Do.Core
 					DoObject o = iobj as DoObject;
 					o.UpdateRelevance (query, other as DoObject);
 					return epsilon < Math.Abs (o.Relevance) && 
-						(!filter.Any () || o.Inner.IsAssignableToAny (filter));
+						(!filter.Any () || DoObject.Unwrap (o).IsAssignableToAny (filter));
 				})
-				.OrderByDescending (o => (o as DoObject).Relevance).ToArray ();
+				.OrderByDescending (o => (o as DoObject).Relevance)
+				.ToArray ();
 		}
 		
 		/// <summary>
@@ -165,7 +166,7 @@ namespace Do.Core
 				}
 				
 				while (DateTime.Now.Subtract (time).TotalMilliseconds < UpdateRunTime) {
-					IEnumerable<DoItemSource> sources = PluginManager.GetItemSources ()
+					IEnumerable<DoItemSource> sources = PluginManager.ItemSources
 						.Where ((DoItemSource s) => s.Name.ToLower ().StartsWith (source_char.ToString ()));
 					
 					foreach (DoItemSource item_source in sources) {
@@ -192,16 +193,16 @@ namespace Do.Core
 		void ReloadActions ()
 		{
 			lock (action_lock) {
-				foreach (DoAction action in actions)
-					universe.Remove (action.UID);
-				actions.Clear ();
-			}
-			
-			foreach (DoAction action in PluginManager.GetActions ()) {
-				lock (action_lock)
-					actions.Add (action);
-				lock (universe_lock)
-					universe[action.UID] = action;			
+				lock (universe_lock) {
+					foreach (DoAction action in actions) {
+						universe.Remove (action.UID);
+					}
+					actions.Clear ();
+					foreach (DoAction action in PluginManager.Actions) {
+							actions.Add (action);
+							universe [action.UID] = action;			
+					}
+				}
 			}
 		}
 		
@@ -233,7 +234,7 @@ namespace Do.Core
 		{
 			ReloadActions ();
 			
-			foreach (DoItemSource source in PluginManager.GetItemSources ())
+			foreach (DoItemSource source in PluginManager.ItemSources)
 				UpdateSource (source);
 			
 			Log.Info ("Universe contains {0} items.", universe.Count);

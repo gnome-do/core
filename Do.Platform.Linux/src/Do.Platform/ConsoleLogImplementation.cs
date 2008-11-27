@@ -52,7 +52,7 @@ namespace Do.Platform {
 			Console.Write (prompt);
 			ConsoleCrayon.ResetColor ();
 			Console.Write (" ");
-			Console.WriteLine (Platform.Log.AlignMessage (msg));
+			Console.WriteLine (msg);
 		}
 	}
 }

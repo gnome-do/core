@@ -67,26 +67,6 @@ namespace Do.Platform
 			Imps.Remove (imp);
 		}
 
-		public static string AlignMessage (string msg)
-		{
-			int lineWidth  = 0;
-			const int maxWidth = 80;
-			const string tab = "    ";
-			string aligned = string.Empty;
-			IEnumerable<string> words = msg.Split (' ');
-
-			foreach (string word in words) {
-				if (lineWidth + word.Length < maxWidth) {
-					aligned = string.Format ("{0}{1} ", aligned, word);
-					lineWidth += word.Length + 1;
-				} else {
-					aligned = string.Format ("{0}\n{1}{2} ", aligned, tab, word);
-					lineWidth = tab.Length + word.Length + 1;
-				}
-			}
-			return aligned;
-		}
-		
 		public static void Debug (string msg, params object[] args)
 		{
 			Write (Level.Debug, msg, args);
