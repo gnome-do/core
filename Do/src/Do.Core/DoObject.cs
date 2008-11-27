@@ -1,22 +1,22 @@
-/* DoObject.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * inner distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// DoObject.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this
+// inner distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Linq;
@@ -31,9 +31,11 @@ using Do.Platform;
 namespace Do.Core {
 
 	/// <summary>
-	/// The root of our wrapper heirarchy (DoObject, DoItem, DoItemSource, DoAction).
+	/// The root of our wrapper heirarchy (DoObject, DoItem, DoItemSource,
+	/// DoAction).
 	/// </summary>
-	public class DoObject : IObject, IConfigurable, IEquatable<DoObject>, IComparable<DoObject> {
+	public class DoObject :
+		IObject, IConfigurable, IEquatable<DoObject>, IComparable<DoObject> {
 
 		const string UIDFormat = "{0}: {1} ({2})";
 		static readonly string DefaultName;
@@ -47,25 +49,45 @@ namespace Do.Core {
 			DefaultIcon = "emblem-noread";
 		}
 
+		/// <summary>
+		/// Ensures that the dynamic type of <paramref name="o"/> is
+		/// <see cref="DoObject"/>.
+		/// </summary>
+		/// <param name="o">
+		/// An <see cref="IObject"/>.
+		/// </param>
+		/// <returns>
+		/// An <see cref="IObject"/> whose dynamic type is
+		/// <see cref="DoObject"/>.
+		/// </returns>
 		public static IObject Wrap (IObject o)
 		{
 			return o is DoObject ? o : new DoObject (o);
 		}
 
-		public static T Unwrap<T> (T o) where T : class, IObject
+		public static IObject Unwrap (IObject o)
 		{
 			while (o is DoObject)
 				// We do a traditional cast to throw a cast exception if the wrong
 				// dynamic type was passed.
-				o = (T) (o as DoObject).Inner;
+				o = (IObject) (o as DoObject).Inner;
 			return o;
 		}
 
+		/// <value>
+		/// A unique identifier for this <see cref="IObject"/>.
+		/// </value>
 		public string UID { get; private set; }
 		
+		/// <value>
+		/// This <see cref="IObject"/>'s relevance for the most recent search.
+		/// </value>
 		public float Relevance { get; set; }
 		
-		public IObject Inner { get; private set; }
+		/// <value>
+		/// The inner <see cref="IObject"/> wrapped by this instance.
+		/// </value>
+		protected IObject Inner { get; set; }
 		
 		public DoObject (IObject inner)
 		{
@@ -81,7 +103,7 @@ namespace Do.Core {
 		}
 
 		//// <value>
-		/// Safe wrapper for inner IObject's Name property.
+		/// Safe wrapper for inner <see cref="IObject"/>'s Name property.
 		/// </value>
 		public virtual string Name {
 			get {
@@ -98,7 +120,7 @@ namespace Do.Core {
 		}
 
 		//// <value>
-		/// Safe wrapper for inner IObject's Description property.
+		/// Safe wrapper for inner <see cref="IObject"/>'s Description property.
 		/// </value>
 		public virtual string Description {
 			get {
@@ -115,7 +137,7 @@ namespace Do.Core {
 		}
 
 		//// <value>
-		/// Safe wrapper for inner IObject's Icon property.
+		/// Safe wrapper for inner <see cref="IObject"/>'s Icon property.
 		/// </value>
 		public virtual string Icon {
 			get {
@@ -132,9 +154,10 @@ namespace Do.Core {
 		}
 
 		/// <summary>
-		/// Safe wrapper for inner IObject's IConfigurable.GetConfiguration method.
-		/// Returns null if inner IObject is not IConfigurable, or an exception is thrown in
-		/// the inner GetConfigurationcall.
+		/// Safe wrapper for inner <see cref="IObject"/>'s
+		/// <see cref="IConfigurable"/>.GetConfiguration method.
+		/// Returns null if inner <see cref="IObject"/> is not <see cref="IConfigurable"/>,
+		/// or an exception is thrown in the inner GetConfiguration call.
 		/// </summary>
 		/// <returns>
 		/// A <see cref="Gtk.Bin"/> containing configuration widgets to be associated with

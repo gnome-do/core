@@ -99,9 +99,10 @@ namespace Do.Core
 					DoObject o = iobj as DoObject;
 					o.UpdateRelevance (query, other as DoObject);
 					return epsilon < Math.Abs (o.Relevance) && 
-						(!filter.Any () || o.Inner.IsAssignableToAny (filter));
+						(!filter.Any () || DoObject.Unwrap (o).IsAssignableToAny (filter));
 				})
-				.OrderByDescending (o => (o as DoObject).Relevance).ToArray ();
+				.OrderByDescending (o => (o as DoObject).Relevance)
+				.ToArray ();
 		}
 		
 		/// <summary>

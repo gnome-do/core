@@ -18,6 +18,7 @@
 //
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Addins;
@@ -55,11 +56,13 @@ namespace Do.Core
 		public override IEnumerable<Type> SearchTypes {
 			get {
 				if (TextMode) {
-					return new Type[] { typeof (ITextItem) };
-				} else if (context.SecondaryCursors.Length > 0) {
-					return new Type[] { (Results[SecondaryCursors[0]] as DoObject).Inner.GetType () };
+					yield return typeof (ITextItem);
+				} else if (context.SecondaryCursors.Any ()) {
+					// This is pretty bad.
+					yield return 
+						Platform.Core.GetInnerType (Results [SecondaryCursors [0]]);
 				} else {
-					return defaultFilter;
+					foreach (Type t in defaultFilter) yield return t;
 				}
 			}
 		}

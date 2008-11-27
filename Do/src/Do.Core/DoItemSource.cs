@@ -33,6 +33,15 @@ namespace Do.Core {
 			return o is DoItemSource ? o : new DoItemSource (o);
 		}
 
+		public static IItemSource Unwrap (IItemSource o)
+		{
+			while (o is DoItemSource)
+				// We do a traditional cast to throw a cast exception if the wrong
+				// dynamic type was passed.
+				o = (IItemSource) (o as DoItemSource).Inner;
+			return o;
+		}
+
 		IEnumerable<Type> item_types;
 		
 		public DoItemSource (IItemSource source):

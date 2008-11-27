@@ -136,10 +136,10 @@ namespace Do.Core {
 				age = DefaultAge;
 
 				// Give the most popular actions a little leg up in the second pane.
-				if (isAction && other != null && RewardedActionTypes.Contains (o.Inner.GetType ()))
+				if (isAction && other != null && RewardedActionTypes.Contains (rec.Type))
 					relevance = 1f;
 				// Give the most popular items a leg up
-				else if (RewardedItemTypes.Contains (o.Inner.GetType ()))
+				else if (RewardedItemTypes.Contains (rec.Type))
 					relevance = DefaultRelevance * 2;
 			}
 
@@ -158,11 +158,11 @@ namespace Do.Core {
 				if (!oa.ModifierItemsOptional)
 					relevance *= 0.8f;
 
-				if (PenalizedActionTypes.Contains (DoObject.Unwrap (oa).GetType ()))
+				if (PenalizedActionTypes.Contains (rec.Type))
 					relevance *= 0.8f;
 			}
 
-			if (o.Inner is IItemSource)
+			if (typeof (IItemSource).IsAssignableFrom (rec.Type))
 				relevance *= 0.4f;
 
 			return relevance * 0.30f + score * 0.70f;
@@ -187,7 +187,7 @@ namespace Do.Core {
 		public RelevanceRecord (IObject o)
 		{
 			LastHit = DateTime.Now;
-			Type = o.GetType ();
+			Type = Platform.Core.GetInnerType (o);
 			FirstChars = string.Empty;
 		}
 

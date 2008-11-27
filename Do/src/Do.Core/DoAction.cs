@@ -28,11 +28,33 @@ using Do.Universe;
 
 namespace Do.Core {
 
+	/// <summary>
+	/// <see cref="DoAction"/> provides a safe wrapper for an <see cref="IAction"/>
+	/// </summary>
 	public class DoAction : DoObject, IAction {
 
+		/// <summary>
+		/// See documentation for <see cref="DoObject"/>'s wrapper method. This is
+		/// the analagous method for <see cref="IAction"/>.
+		/// </summary>
+		/// <param name="a">
+		/// An <see cref="IAction"/> that may not be a <see cref="DoAction"/>.
+		/// </param>
+		/// <returns>
+		/// An <see cref="IAction"/> guaranteed to be a <see cref="DoAction"/>.
+		/// </returns>
 		public static IAction Wrap (IAction a)
 		{
 			return a is DoAction ? a : new DoAction (a);
+		}
+
+		public static IAction Unwrap (IAction o)
+		{
+			while (o is DoAction)
+				// We do a traditional cast to throw a cast exception if the wrong
+				// dynamic type was passed.
+				o = (IAction) (o as DoAction).Inner;
+			return o;
 		}
 
 		IEnumerable<Type> item_types, moditem_types;

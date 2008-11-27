@@ -40,6 +40,15 @@ namespace Do.Core {
 		{
 			return i is DoItem ? i : new DoItem (i);
 		}
+
+		public static IItem Unwrap (IItem o)
+		{
+			while (o is DoItem)
+				// We do a traditional cast to throw a cast exception if the wrong
+				// dynamic type was passed.
+				o = (IItem) (o as DoItem).Inner;
+			return o;
+		}
 		
 		public DoItem (IItem item):
 			base (item)
