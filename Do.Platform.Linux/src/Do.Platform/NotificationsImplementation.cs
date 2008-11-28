@@ -98,7 +98,10 @@ namespace Do.Platform.Linux
 			}
 			
 			// we delay this so that the icon has time to show and we can get its location
-			GLib.Timeout.Add (NotifyDelay, () => {Gtk.Application.Invoke ((o, a) => msg.Show ()); return false;});
+			GLib.Timeout.Add (NotifyDelay, () => {
+			    Gtk.Application.Invoke ((o, a) => msg.Show ()); 
+			    return false;
+			});
 		}
 
 		#endregion
