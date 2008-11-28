@@ -12,6 +12,7 @@ ASSEMBLY = ./bin/Debug/Do.exe
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = exe
 PROJECT_REFERENCES =  \
+	../Do.Interface.Linux/Do.Interface.Linux.dll \
 	../Do.Addins/bin/Debug/Do.Addins.dll \
 	../Do.DBus/bin/Debug/Do.DBus.dll
 BUILD_DIR = ./bin/Debug

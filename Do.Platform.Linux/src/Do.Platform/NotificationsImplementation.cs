@@ -31,7 +31,7 @@ using Do.Interface.Linux;
 namespace Do.Platform.Linux
 {
 	
-	public class NotificationsImplementation : Notifications.Implementation
+	public class NotificationsImplementation : Platform.Notifications.Implementation
 	{
 		const int NotifyDelay = 500;
 		const string DefaultIconName = "gnome-do";

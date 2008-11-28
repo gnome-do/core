@@ -128,6 +128,7 @@ Do.Addins/AssemblyInfo.cs
 Do.DBus/src/AssemblyInfo.cs
 Do.Platform/Makefile
 Do.Platform.Linux/Makefile
+Do.Interface.Linux/Makefile
 Do/Makefile
 Do/gnome-do
 Do/Do.exe.config

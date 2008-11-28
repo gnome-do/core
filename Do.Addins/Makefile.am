@@ -125,7 +125,8 @@ REFERENCES =  \
 
 DLL_REFERENCES = \
 	../Do.Platform/Do.Platform.dll \
-	../Do.Platform.Linux/Do.Platform.Linux.dll
+	../Do.Platform.Linux/Do.Platform.Linux.dll \
+	../Do.Interface.Linux/Do.Interface.Linux.dll
 
 DO_ADDINS_PC = $(BUILD_DIR)/do.addins.pc
 
