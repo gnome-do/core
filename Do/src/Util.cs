@@ -47,8 +47,6 @@ namespace Do
 
 			// Appearance utilities			
 			Addins.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
-			Addins.Util.Appearance.PresentWindow = Appearance.PresentWindow;
-			Addins.Util.Appearance.PopupMainMenuAtPosition = MainMenu.Instance.PopupAtPosition;
 		}
 		
 		public class Appearance
