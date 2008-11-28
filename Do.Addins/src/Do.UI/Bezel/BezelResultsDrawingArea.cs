@@ -325,7 +325,7 @@ namespace Do.UI
 			cr2.Fill ();
 			cr2.Operator = Operator.Over;
 			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.Icon, IconSize);
+			Gdk.Pixbuf pixbuf = Icons.PixbufFromIconName (item.Icon, IconSize);
 			Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 2, 2);
 			cr2.Paint ();
 				

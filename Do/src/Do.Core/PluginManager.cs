@@ -142,7 +142,7 @@ namespace Do.Core {
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.String"/> containing an icon name. Can be loaded
-		/// via <see cref="IconProvider"/>.
+		/// via <see cref="Icons"/>.
 		/// </returns>
 		public static string IconForAddin (string id)
 		{   

@@ -20,7 +20,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Common/AbstractLogImplementation.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogImplementation.cs \
 	src/Do.Platform/Environment.cs \
-	src/Do.Platform/IconProvider.cs \
+	src/Do.Platform/Icons.cs \
 	src/Do.Platform/Log.cs \
 	src/Do.Platform/Notifications.cs \
 	src/Do.Platform/Paths.cs \

@@ -143,7 +143,7 @@ namespace Do.Platform.Linux
 			return pixbuf;
 		}
 
-		#region IconProvider.Implementation
+		#region Icons.Implementation
 		
 		public Pixbuf PixbufFromIconName (string name, int size, bool defaultIcon)
 		{			

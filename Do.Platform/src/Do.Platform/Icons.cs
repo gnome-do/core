@@ -1,4 +1,4 @@
-/* IconProviderImplementation.cs
+/* IconsImplementation.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.

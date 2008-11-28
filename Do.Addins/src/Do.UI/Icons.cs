@@ -1,4 +1,4 @@
-/* IconProvider.cs
+/* Icons.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -29,13 +29,13 @@ using Do.Platform;
 
 namespace Do.UI
 {
-	public static class IconProvider
+	public static class Icons
 	{
 		public static readonly Pixbuf UnknownPixbuf;
 		const int DefaultIconSize = 80;
 		
 
-		static IconProvider ()
+		static Icons ()
 		{
 			UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
 			UnknownPixbuf.Fill (0x00000000);
