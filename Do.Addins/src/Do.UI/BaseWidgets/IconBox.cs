@@ -25,6 +25,7 @@ using Gdk;
 using Do.Addins;
 using Do.Universe;
 using Do.Platform;
+using Do.Interface.Linux;
 
 namespace Do.UI
 {
@@ -52,7 +53,7 @@ namespace Do.UI
 		public IconBox (int icon_size) : base ()
 		{
 			this.icon_size = icon_size;
-			overlay_pixbuf = Icons.PixbufFromIconName ("gnome-mime-text", icon_size);
+			overlay_pixbuf = IconProvider.PixbufFromIconName ("gnome-mime-text", icon_size);
 			Build ();
 		}
 		
@@ -174,7 +175,7 @@ namespace Do.UI
 			set {
 				if (value == null || textOverlay) return;
 				icon_name = value;
-				using (Gdk.Pixbuf pix = Icons.PixbufFromIconName (value, icon_size)) {
+				using (Gdk.Pixbuf pix = IconProvider.PixbufFromIconName (value, icon_size)) {
 					Pixbuf = pix;
 				}
 			}

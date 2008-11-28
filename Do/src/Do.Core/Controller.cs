@@ -33,6 +33,7 @@ using Do.Addins;
 using Do.Universe;
 using Do.DBusLib;
 using Do.Platform;
+using Do.Interface.Linux;
 
 namespace Do.Core {
 
@@ -951,7 +952,7 @@ namespace Do.Core {
 
 			logo = "gnome-do.svg";
 
-			about_window.Logo = Icons.PixbufFromIconName (logo, 140);
+			about_window.Logo = IconProvider.PixbufFromIconName (logo, 140);
 			about_window.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
 			about_window.Comments = "Do things as quickly as possible\n" +
 				"(but no quicker) with your files, bookmarks,\n" +

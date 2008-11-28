@@ -29,6 +29,7 @@ using Gdk;
 using Do.Addins;
 using Do.Universe;
 using Do.Platform;
+using Do.Interface.Linux;
 
 namespace Do.UI
 {
@@ -231,8 +232,8 @@ namespace Do.UI
 			
 			Gdk.Pixbuf final;
 			if (isSecondary) {
-				using (Gdk.Pixbuf source = Icons.PixbufFromIconName (o.Icon, DefaultResultIconSize))
-				using (Gdk.Pixbuf emblem = Icons.PixbufFromIconName ("gtk-add", DefaultResultIconSize)) {
+				using (Gdk.Pixbuf source = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize))
+				using (Gdk.Pixbuf emblem = IconProvider.PixbufFromIconName ("gtk-add", DefaultResultIconSize)) {
 					final = new Pixbuf (Colorspace.Rgb, 
 					                    true, 
 					                    8,
@@ -254,7 +255,7 @@ namespace Do.UI
 					                  220);
 				}
 			} else {
-				final = Icons.PixbufFromIconName (o.Icon, DefaultResultIconSize);
+				final = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
 			}
 			renderer.Pixbuf = final;
 			final.Dispose ();

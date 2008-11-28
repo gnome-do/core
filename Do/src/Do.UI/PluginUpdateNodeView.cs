@@ -29,6 +29,7 @@ using Mono.Addins.Setup;
 using Do.Core;
 using Do.Platform;
 using Do.Universe;
+using Do.Interface.Linux;
 
 namespace Do.UI
 {
@@ -51,7 +52,6 @@ namespace Do.UI
 		public PluginUpdateNodeView (AddinRegistry reg, string [] addinIds) :
 			base ()
 		{
-			ListStore store;
 			CellRenderer cell;
 			
 			setup = new SetupService (reg);			
@@ -59,9 +59,7 @@ namespace Do.UI
 
 			RulesHint = true;
 			HeadersVisible = false;
-			Model = store = new ListStore (
-				typeof (string),
-				typeof (string));
+			Model = new ListStore (typeof (string), typeof (string));
 
 			cell = new CellRendererPixbuf ();				
 			cell.SetFixedSize (IconSize + 8, IconSize + 8);
@@ -83,7 +81,7 @@ namespace Do.UI
 			CellRendererPixbuf renderer;
 
 			renderer = cell as CellRendererPixbuf;
-			renderer.Pixbuf = Icons.PixbufFromIconName ("package-x-generic", IconSize);
+			renderer.Pixbuf = IconProvider.PixbufFromIconName ("package-x-generic", IconSize);
 		}
 
 		void Refresh () 

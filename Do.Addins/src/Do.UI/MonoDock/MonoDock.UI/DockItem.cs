@@ -29,6 +29,7 @@ using Do.Platform;
 using Do.Universe;
 using Do.Universe.Common;
 using Do.Addins.CairoUtils;
+using Do.Interface.Linux;
 
 using MonoDock.Util;
 
@@ -97,7 +98,7 @@ namespace MonoDock.UI
 		
 		Gdk.Pixbuf GetPixbuf ()
 		{
-			Gdk.Pixbuf pbuf = Icons.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
+			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
 			
 			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
 				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);

@@ -1,4 +1,4 @@
-/* IconsImplementation.cs
+/* Icons.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -18,17 +18,14 @@
  */
 
 using System;
-using Gdk;
 
 namespace Do.Platform
 {
 	public static class Icons
 	{
-		// FIXME if someone can please figure out a way to abstract this so we don't need
-		// Gdk in Do.Platform that would be dandy.
 		public interface Implementation
 		{
-			Pixbuf PixbufFromIconName (string name, int size, bool defaultIcon);
+			string MissingIconIcon { get; }
 		}
 
 		public static Implementation Imp { get; private set; }
@@ -43,33 +40,13 @@ namespace Do.Platform
 			Imp = imp;
 		}
 
-		public static Pixbuf PixbufFromIconName (string name, int size)
-		{
-			return PixbufFromIconName (name, size, true);
-		}
-
-		#region Implementation
-
-		/// <summary>
-		/// Give a Gdk.Pixbuf of the icon from a string name
-		/// </summary>
-		/// <param name="name">
-		/// A <see cref="System.String"/> name of the icon
-		/// </param>
-		/// <param name="size">
-		/// A <see cref="System.Int32"/> size of the pixbuf to return
-		/// </param>
-		/// <param name="defaultIcon">
-		/// A <see cref="System.Boolean"/> to return the default icon
-		/// </param>
-		/// <returns>
-		/// A <see cref="Pixbuf"/>
-		/// </returns>
-		public static Pixbuf PixbufFromIconName (string name, int size, bool defaultIcon)
-		{
-			return Imp.PixbufFromIconName (name, size, defaultIcon);
-		}
+#region Implementation
 		
-		#endregion
+		public static string MissingIconIcon {
+			get { return Imp.MissingIconIcon; }
+		}
+
+#endregion
+		
 	}
 }

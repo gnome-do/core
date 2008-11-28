@@ -29,6 +29,7 @@ using Mono.Addins.Setup;
 using Do.Core;
 using Do.Platform;
 using Do.Universe;
+using Do.Interface.Linux;
 
 namespace Do.UI
 {
@@ -143,7 +144,7 @@ namespace Do.UI
 			renderer = cell as CellRendererPixbuf;
 			id = (Model as ListStore).GetValue (iter, (int)Column.Id) as string;
 			icon = PluginManager.IconForAddin (id);
-			renderer.Pixbuf = Icons.PixbufFromIconName (icon, IconSize);
+			renderer.Pixbuf = IconProvider.PixbufFromIconName (icon, IconSize);
 		}
 
 		bool AddinShouldShow (Addin a)

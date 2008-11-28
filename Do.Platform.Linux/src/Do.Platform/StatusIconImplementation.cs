@@ -24,6 +24,7 @@ using Mono.Unix;
 using Gdk;
 
 using Do.Platform;
+using Do.Interface.Linux;
 
 namespace Do.Platform.Linux
 {
@@ -39,7 +40,7 @@ namespace Do.Platform.Linux
 
 		static StatusIconImplementation ()
 		{
-			normal_icon = Icons.PixbufFromIconName  (IconName, IconSize);
+			normal_icon = IconProvider.PixbufFromIconName  (IconName, IconSize);
 		}
 
 		public StatusIconImplementation ()

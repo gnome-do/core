@@ -9,6 +9,7 @@
       <Entry build="True" name="Do.Platform.Linux" configuration="Debug" />
       <Entry build="True" name="Do.Platform.Windows" configuration="Debug" />
       <Entry build="True" name="Do.Platform.OSX" configuration="Debug" />
+      <Entry build="True" name="Do.Interface.Linux" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <CustomCommands>
@@ -22,6 +23,7 @@
       <Entry build="True" name="Do.Platform.Linux" configuration="Release" />
       <Entry build="True" name="Do.Platform.Windows" configuration="Release" />
       <Entry build="True" name="Do.Platform.OSX" configuration="Release" />
+      <Entry build="True" name="Do.Interface.Linux" configuration="Release" />
     </Configuration>
   </Configurations>
   <StartMode startupentry="Do" single="True">
@@ -33,6 +35,7 @@
     <Execute type="None" entry="Do.Platform.Linux" />
     <Execute type="None" entry="Do.Platform.Windows" />
     <Execute type="None" entry="Do.Platform.OSX" />
+    <Execute type="None" entry="Do.Interface.Linux" />
   </StartMode>
   <MonoDevelop.ChangeLogAddIn.ChangeLogInfo policy="UpdateNearestChangeLog" />
   <Entries>
@@ -44,5 +47,6 @@
     <Entry filename="Do.Platform.Linux/Do.Platform.Linux.mdp" />
     <Entry filename="Do.Platform.Windows/Do.Platform.Windows.mdp" />
     <Entry filename="Do.Platform.OSX/Do.Platform.OSX.mdp" />
+    <Entry filename="Do.Interface.Linux/Do.Interface.Linux.mdp" />
   </Entries>
 </Combine>

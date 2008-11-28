@@ -25,6 +25,7 @@ using Cairo;
 using Do.Addins;
 using Do.Addins.CairoUtils;
 using Do.Platform;
+using Do.Interface.Linux;
 using Do.Universe;
 using Do.UI;
 
@@ -106,8 +107,8 @@ namespace MonoDock.UI
 				if (pbuf != null)
 					pbuf.Dispose ();
 				
-				pbuf = Icons.PixbufFromIconName (icon_guess, DockPreferences.FullIconSize, false);
-				if (pbuf != null && (pbuf.Width == DockPreferences.FullIconSize || 
+				bool found = IconProvider.PixbufFromIconName (icon_guess, DockPreferences.FullIconSize, out pbuf);
+				if (found && (pbuf.Width == DockPreferences.FullIconSize || 
 				                     pbuf.Height == DockPreferences.FullIconSize))
 					return pbuf;
 			
@@ -116,14 +117,14 @@ namespace MonoDock.UI
 					Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists);
 					if (pbuf != null)
 						pbuf.Dispose ();
-					pbuf = Icons.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
+					pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
 					di.Dispose ();
 					return pbuf;
 				}
 			}
 			
 			if (pbuf == null) {
-				pbuf =  Icons.PixbufFromIconName (guesses[0], DockPreferences.FullIconSize);
+				pbuf =  IconProvider.PixbufFromIconName (guesses[0], DockPreferences.FullIconSize);
 			}
 			
 			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {

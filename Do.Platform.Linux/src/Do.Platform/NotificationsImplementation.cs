@@ -26,6 +26,7 @@ using GLib;
 using Notifications;
 
 using Do.Platform;
+using Do.Interface.Linux;
 
 namespace Do.Platform.Linux
 {
@@ -40,7 +41,7 @@ namespace Do.Platform.Linux
 		
 		static NotificationsImplementation ()
 		{
-			default_icon = Icons.PixbufFromIconName (DefaultIconName, IconSize);
+			default_icon = IconProvider.PixbufFromIconName (DefaultIconName, IconSize);
 		}
 
 		#region Notifications.Implementation
@@ -80,7 +81,7 @@ namespace Do.Platform.Linux
 			}
 			
 			msg = new Notification ();
-			msg.Icon = string.IsNullOrEmpty (icon) ? default_icon : Icons.PixbufFromIconName (icon, IconSize);
+			msg.Icon = string.IsNullOrEmpty (icon) ? default_icon : IconProvider.PixbufFromIconName (icon, IconSize);
 			msg.Body = GLib.Markup.EscapeText (message);
 			msg.Closed += (o, a) => StatusIcon.Hide ();
 			msg.Summary = GLib.Markup.EscapeText (title);

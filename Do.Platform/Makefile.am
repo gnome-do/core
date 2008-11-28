@@ -57,8 +57,7 @@ RESOURCES = \
 REFERENCES =  \
 	System \
 	System.Core \
-	Mono.Posix \
-	$(GTK_SHARP_20_LIBS) 
+	Mono.Posix
 
 $(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
 	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)

@@ -28,6 +28,7 @@ using Mono.Addins;
 using Do.Core;
 using Do.Addins;
 using Do.Platform;
+using Do.Interface.Linux;
 
 namespace Do.UI
 {
@@ -51,7 +52,7 @@ namespace Do.UI
 			notebook.RemovePage (0);
 			notebook.ShowTabs = configs.Count () > 1;
 
-			addin_title_img.Pixbuf = Icons.PixbufFromIconName
+			addin_title_img.Pixbuf = IconProvider.PixbufFromIconName
 				(PluginManager.IconForAddin (id), 32);
 			addin_title_lbl.Markup = String.Format (TitleMarkup, Title);
 

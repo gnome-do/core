@@ -79,8 +79,7 @@
     <File name="src/Do.Platform/PlatformInitializer.cs" subtype="Code" buildaction="Compile" />
     <File name="Resources/Do.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="src/Do.Core/UniverseManager.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform.Linux" subtype="Directory" buildaction="Compile" />
-    <File name="src/Do.Platform.Linux/WindowingImplementation.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/WindowingImplementation.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -101,6 +100,7 @@
     <ProjectReference type="Project" localcopy="True" refto="Do.Platform" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Platform.Linux" />
     <ProjectReference type="Gac" localcopy="True" refto="gconf-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Project" localcopy="True" refto="Do.Interface.Linux" />
   </References>
   <Deployment.LinuxDeployData scriptName="gnome-do" />
   <GtkDesignInfo />

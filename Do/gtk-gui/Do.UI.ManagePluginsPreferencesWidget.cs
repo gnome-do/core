@@ -122,6 +122,7 @@ namespace Do.UI {
             this.hbox2.Spacing = 6;
             // Container child hbox2.Gtk.Box+BoxChild
             this.hbuttonbox1 = new Gtk.HButtonBox();
+            this.hbuttonbox1.Name = "hbuttonbox1";
             this.hbuttonbox1.Spacing = 6;
             this.hbuttonbox1.LayoutStyle = ((Gtk.ButtonBoxStyle)(3));
             // Container child hbuttonbox1.Gtk.ButtonBox+ButtonBoxChild
@@ -137,7 +138,7 @@ namespace Do.UI {
             w10.Spacing = 2;
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w11 = new Gtk.Image();
-            w11.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Button, 16);
+            w11.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Button, 20);
             w10.Add(w11);
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w13 = new Gtk.Label();
