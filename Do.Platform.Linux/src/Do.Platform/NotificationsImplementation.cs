@@ -33,13 +33,14 @@ namespace Do.Platform.Linux
 	public class NotificationsImplementation : Notifications.Implementation
 	{
 		const int NotifyDelay = 500;
+		const string DefaultIconName = "gnome-do";
 		const int IconSize = 24, MinNotifyShow = 5000, MaxNotifyShow = 10000;
 
 		static readonly Pixbuf default_icon;
 		
 		static NotificationsImplementation ()
 		{
-			default_icon = Icons.PixbufFromIconName ("gnome-do", IconSize);
+			default_icon = Icons.PixbufFromIconName (DefaultIconName, IconSize);
 		}
 
 		#region Notifications.Implementation

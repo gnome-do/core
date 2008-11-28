@@ -44,12 +44,12 @@ namespace Do.Platform
 		
 		public static void Notify (string message, string title)
 		{
-			Notify (message, title, null, null, null);
+		  Notify (message, title, "gnome-do", "", null);
 		}
 		
 		public static void Notify (string message, string title, string icon)
 		{
-			Notify (message, title, icon, null, null);
+		  Notify (message, title, icon, "", null);
 		}
 		
 		#region Implementation
