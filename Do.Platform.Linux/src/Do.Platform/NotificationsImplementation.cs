@@ -39,7 +39,7 @@ namespace Do.Platform.Linux
 		
 		static NotificationsImplementation ()
 		{
-			default_icon = IconProvider.PixbufFromIconName ("gnome-do", IconSize);
+			default_icon = Icons.PixbufFromIconName ("gnome-do", IconSize);
 		}
 
 		#region Notifications.Implementation
@@ -79,7 +79,7 @@ namespace Do.Platform.Linux
 			}
 			
 			msg = new Notification ();
-			msg.Icon = string.IsNullOrEmpty (icon) ? default_icon : IconProvider.PixbufFromIconName (icon, IconSize);
+			msg.Icon = string.IsNullOrEmpty (icon) ? default_icon : Icons.PixbufFromIconName (icon, IconSize);
 			msg.Body = GLib.Markup.EscapeText (message);
 			msg.Closed += (o, a) => StatusIcon.Hide ();
 			msg.Summary = GLib.Markup.EscapeText (title);

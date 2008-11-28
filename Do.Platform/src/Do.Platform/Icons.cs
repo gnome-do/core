@@ -22,7 +22,7 @@ using Gdk;
 
 namespace Do.Platform
 {
-	public static class IconProvider
+	public static class Icons
 	{
 		// FIXME if someone can please figure out a way to abstract this so we don't need
 		// Gdk in Do.Platform that would be dandy.
@@ -30,26 +30,26 @@ namespace Do.Platform
 		{
 			Pixbuf PixbufFromIconName (string name, int size, bool defaultIcon);
 		}
-		
+
 		public static Implementation Imp { get; private set; }
-		
+
 		public static void Initialize (Implementation imp)
 		{
 			if (Imp != null)
 				throw new Exception ("Already has Implementation");
 			if (imp == null)
 				throw new ArgumentNullException ("Implementation may not be null");
-			
+
 			Imp = imp;
 		}
-		
+
 		public static Pixbuf PixbufFromIconName (string name, int size)
 		{
 			return PixbufFromIconName (name, size, true);
 		}
-		
+
 		#region Implementation
-		
+
 		/// <summary>
 		/// Give a Gdk.Pixbuf of the icon from a string name
 		/// </summary>

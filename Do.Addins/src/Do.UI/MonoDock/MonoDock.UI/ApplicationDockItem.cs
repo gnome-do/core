@@ -106,7 +106,7 @@ namespace MonoDock.UI
 				if (pbuf != null)
 					pbuf.Dispose ();
 				
-				pbuf = IconProvider.PixbufFromIconName (icon_guess, DockPreferences.FullIconSize, false);
+				pbuf = Icons.PixbufFromIconName (icon_guess, DockPreferences.FullIconSize, false);
 				if (pbuf != null && (pbuf.Width == DockPreferences.FullIconSize || 
 				                     pbuf.Height == DockPreferences.FullIconSize))
 					return pbuf;
@@ -116,14 +116,14 @@ namespace MonoDock.UI
 					Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists);
 					if (pbuf != null)
 						pbuf.Dispose ();
-					pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
+					pbuf = Icons.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
 					di.Dispose ();
 					return pbuf;
 				}
 			}
 			
 			if (pbuf == null) {
-				pbuf =  IconProvider.PixbufFromIconName (guesses[0], DockPreferences.FullIconSize);
+				pbuf =  Icons.PixbufFromIconName (guesses[0], DockPreferences.FullIconSize);
 			}
 			
 			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {

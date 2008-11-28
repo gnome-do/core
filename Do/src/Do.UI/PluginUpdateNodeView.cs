@@ -83,7 +83,7 @@ namespace Do.UI
 			CellRendererPixbuf renderer;
 
 			renderer = cell as CellRendererPixbuf;
-			renderer.Pixbuf = IconProvider.PixbufFromIconName ("package-x-generic", IconSize);
+			renderer.Pixbuf = Icons.PixbufFromIconName ("package-x-generic", IconSize);
 		}
 
 		void Refresh () 

@@ -58,7 +58,7 @@ namespace Do.UI
 			cr.Fill ();
 			cr.Operator = Operator.Over;
 			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.Icon, IconSize);
+			Gdk.Pixbuf pixbuf = Icons.PixbufFromIconName (item.Icon, IconSize);
 			Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 2, 2);
 			cr.Paint ();
 			
@@ -66,7 +66,7 @@ namespace Do.UI
 			
 			foreach (int i in parent.Secondary) {
 				if (parent.Results[i] == item) {
-					pixbuf = IconProvider.PixbufFromIconName ("gtk-add", IconSize);
+					pixbuf = Icons.PixbufFromIconName ("gtk-add", IconSize);
 					Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 2, 2);
 					cr.PaintWithAlpha (.7);
 					pixbuf.Dispose ();
@@ -128,7 +128,7 @@ namespace Do.UI
 			cr.Fill ();
 			cr.Operator = Operator.Over;
 			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.Icon, IconSize);
+			Gdk.Pixbuf pixbuf = Icons.PixbufFromIconName (item.Icon, IconSize);
 			Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 2, 2);
 			cr.Paint ();
 			
@@ -136,7 +136,7 @@ namespace Do.UI
 			
 			foreach (int i in parent.Secondary) {
 				if (parent.Results[i] == item) {
-					pixbuf = IconProvider.PixbufFromIconName ("gtk-add", IconSize);
+					pixbuf = Icons.PixbufFromIconName ("gtk-add", IconSize);
 					Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 2, 2);
 					cr.PaintWithAlpha (.7);
 					pixbuf.Dispose ();

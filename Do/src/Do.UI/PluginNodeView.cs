@@ -143,7 +143,7 @@ namespace Do.UI
 			renderer = cell as CellRendererPixbuf;
 			id = (Model as ListStore).GetValue (iter, (int)Column.Id) as string;
 			icon = PluginManager.IconForAddin (id);
-			renderer.Pixbuf = IconProvider.PixbufFromIconName (icon, IconSize);
+			renderer.Pixbuf = Icons.PixbufFromIconName (icon, IconSize);
 		}
 
 		bool AddinShouldShow (Addin a)

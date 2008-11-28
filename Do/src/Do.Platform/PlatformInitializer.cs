@@ -46,8 +46,8 @@ namespace Do.Platform
 			if (CorePreferences.Debug) Log.LogLevel = Log.Level.Debug;
 			#endregion
 			
-			#region IconProvider initialization
-			IconProvider.Initialize (new Linux.IconProviderImplementation ());
+			#region Icons initialization
+			Icons.Initialize (new Linux.IconsImplementation ());
 			#endregion
 			
 			#region Windowing initialization

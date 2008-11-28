@@ -26,7 +26,6 @@ using System.Threading;
 
 using Gdk;
 using Mono.Unix;
-using Notifications;
 
 using Do;
 using Do.UI;
@@ -952,7 +951,7 @@ namespace Do.Core {
 
 			logo = "gnome-do.svg";
 
-			about_window.Logo = IconProvider.PixbufFromIconName (logo, 140);
+			about_window.Logo = Icons.PixbufFromIconName (logo, 140);
 			about_window.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
 			about_window.Comments = "Do things as quickly as possible\n" +
 				"(but no quicker) with your files, bookmarks,\n" +

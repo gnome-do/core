@@ -97,7 +97,7 @@ namespace MonoDock.UI
 		
 		Gdk.Pixbuf GetPixbuf ()
 		{
-			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
+			Gdk.Pixbuf pbuf = Icons.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
 			
 			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
 				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);

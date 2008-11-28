@@ -86,7 +86,7 @@ namespace Do.Addins
 		{
 			Context cr = new Context (sr);
 			Gdk.Pixbuf pixbuf;
-			pixbuf = IconProvider.PixbufFromIconName (icon, surface_width);
+			pixbuf = Icons.PixbufFromIconName (icon, surface_width);
 			if (pixbuf.Height != surface_width && pixbuf.Width != surface_width) {
 				double scale = (double)surface_width / Math.Max (pixbuf.Width, pixbuf.Height);
 				Gdk.Pixbuf temp = pixbuf.ScaleSimple ((int) (pixbuf.Width * scale), (int) (pixbuf.Height * scale), InterpType.Bilinear);
