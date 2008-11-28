@@ -34,7 +34,6 @@ namespace Do {
 		static GConfXKeybinder keybinder;
 		static Controller controller;
 		static UniverseManager universe_manager;
-		static NotificationIcon notification_icon;
 		
 		static DateTime perfTime;
 
@@ -63,19 +62,6 @@ namespace Do {
 			
 			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
-			
-			// whoever keeps pulling this out. STOP. PLEASE.
-			notification_icon = new NotificationIcon ();
-			
-			// Kick-off update timers.			
-			GLib.Timeout.Add (5 * 60 * 1000, delegate {
-				CheckForUpdates ();
-				return false;
-			});
-			GLib.Timeout.Add (2 * 60 * 60 * 1000, delegate {
-				CheckForUpdates ();
-				return true;
-			});
 
 			if (!CorePreferences.QuietStart)
 				Controller.Summon ();
@@ -125,13 +111,6 @@ namespace Do {
 			}
 		}
 		
-		public static NotificationIcon NotificationIcon {
-			get {
-				return notification_icon ??
-					notification_icon = new NotificationIcon ();
-			}
-		}
-		
 		public static void PrintPerf (string caller)
 		{
 			TimeSpan ts = DateTime.Now.Subtract (perfTime);
@@ -149,19 +128,6 @@ namespace Do {
 		static void OnActivate (object sender, EventArgs args)
 		{
 			controller.Summon ();
-		}
-		
-		private static void CheckForUpdates ()
-		{
-			Thread th = new Thread ((ThreadStart) delegate {
-				if (PluginManager.UpdatesAvailable ())
-					Gtk.Application.Invoke (delegate {
-						NotificationIcon.NotifyUpdatesAvailable ();
-					});
-			});
-			
-			th.IsBackground = true;
-			th.Start ();
 		}
 	}
 }

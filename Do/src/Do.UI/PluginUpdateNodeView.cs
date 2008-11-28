@@ -27,6 +27,7 @@ using Mono.Addins;
 using Mono.Addins.Setup;
 
 using Do.Core;
+using Do.Platform;
 using Do.Universe;
 
 namespace Do.UI
@@ -82,7 +83,7 @@ namespace Do.UI
 			CellRendererPixbuf renderer;
 
 			renderer = cell as CellRendererPixbuf;
-			renderer.Pixbuf = IconProvider.PixbufFromIconName ("package-x-generic", IconSize);
+			renderer.Pixbuf = Icons.PixbufFromIconName ("package-x-generic", IconSize);
 		}
 
 		void Refresh () 

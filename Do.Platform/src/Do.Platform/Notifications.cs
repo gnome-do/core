@@ -1,4 +1,4 @@
-/* Windowing.cs
+/* Notifications.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -23,11 +23,11 @@ using System;
 namespace Do.Platform
 {
 	
-	public static class Windowing
+	public static class Notifications
 	{
 		public interface Implementation
 		{
-			void ShowMainMenu (int x, int y);
+			void Notify (string message, string title, string icon, string actionLabel, Action onClick);
 		}
 		
 		public static Implementation Imp { get; private set; }
@@ -42,20 +42,39 @@ namespace Do.Platform
 			Imp = imp;
 		}
 		
+		public static void Notify (string message, string title)
+		{
+		  Notify (message, title, "gnome-do", "", null);
+		}
+		
+		public static void Notify (string message, string title, string icon)
+		{
+		  Notify (message, title, icon, "", null);
+		}
+		
 		#region Implementation
 		
 		/// <summary>
-		/// Shows the main menu instance to appear at the given x and y location
+		/// Shows a notification, generally some sort of pop-up bubble
 		/// </summary>
-		/// <param name="x">
-		/// A <see cref="System.Int32"/> of the x value on the screen to show the menu
+		/// <param name="message">
+		/// A <see cref="System.String"/> body of the notification
 		/// </param>
-		/// <param name="y">
-		/// A <see cref="System.Int32"/> of the y value on the screen to show the menu
+		/// <param name="title">
+		/// A <see cref="System.String"/> title of the notification
 		/// </param>
-		public static void ShowMainMenu (int x, int y)
+		/// <param name="icon">
+		/// A <see cref="System.String"/> name of the icon to show with the notification
+		/// </param>
+		/// <param name="actionLabel">
+		/// A <see cref="System.String"/> label for the action's button
+		/// </param>
+		/// <param name="onClick">
+		/// An <see cref="Action"/> to perform when notification is clicked
+		/// </param>
+		public static void Notify (string message, string title, string icon, string actionLabel, Action onClick)
 		{
-			Imp.ShowMainMenu (x, y);
+			Imp.Notify (message, title, icon, actionLabel, onClick);
 		}
 		
 		#endregion

@@ -11,6 +11,9 @@
       <Entry build="True" name="Do.Platform.OSX" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
+      <CustomCommands>
+        <Command type="BeforeBuild" command="autogen.sh --enable-release=YES" workingdir="${CombineDir}" />
+      </CustomCommands>
       <Entry build="True" name="Do" configuration="Release" />
       <Entry build="True" name="Do.Addins" configuration="Release" />
       <Entry build="True" name="Do.DBus" configuration="Release" />
@@ -19,9 +22,6 @@
       <Entry build="True" name="Do.Platform.Linux" configuration="Release" />
       <Entry build="True" name="Do.Platform.Windows" configuration="Release" />
       <Entry build="True" name="Do.Platform.OSX" configuration="Release" />
-      <CustomCommands>
-        <Command type="BeforeBuild" command="autogen.sh --enable-release=YES" workingdir="${CombineDir}" />
-      </CustomCommands>
     </Configuration>
   </Configurations>
   <StartMode startupentry="Do" single="True">

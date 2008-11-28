@@ -20,10 +20,14 @@ FILES = \
 	src/Do.Platform/Do.Platform.Common/AbstractLogImplementation.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogImplementation.cs \
 	src/Do.Platform/Environment.cs \
+	src/Do.Platform/Icons.cs \
 	src/Do.Platform/Log.cs \
+	src/Do.Platform/Notifications.cs \
 	src/Do.Platform/Paths.cs \
 	src/Do.Platform/Preferences.cs \
+	src/Do.Platform/StatusIcon.cs \
 	src/Do.Platform/UniverseFactory.cs \
+	src/Do.Platform/Windowing.cs \
 	src/Do.Universe/AbstractAction.cs \
 	src/Do.Universe/Do.Universe.Common/BookmarkItem.cs \
 	src/Do.Universe/Do.Universe.Common/ContactItem.cs \
@@ -53,7 +57,8 @@ RESOURCES = \
 REFERENCES =  \
 	System \
 	System.Core \
-	Mono.Posix
+	Mono.Posix \
+	$(GTK_SHARP_20_LIBS) 
 
 $(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
 	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)

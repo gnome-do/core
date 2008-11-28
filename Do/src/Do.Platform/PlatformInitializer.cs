@@ -45,6 +45,11 @@ namespace Do.Platform
 			Log.LogLevel = CorePreferences.QuietStart ? Log.Level.Error : Log.Level.Info;
 			if (CorePreferences.Debug) Log.LogLevel = Log.Level.Debug;
 			#endregion
+			
+			Icons.Initialize (new Linux.IconsImplementation ());
+			Windowing.Initialize (new WindowingImplementation ());
+			StatusIcon.Initialize (new Linux.StatusIconImplementation ());
+			Notifications.Initialize (new Linux.NotificationsImplementation ());
 		}
 	}
 }

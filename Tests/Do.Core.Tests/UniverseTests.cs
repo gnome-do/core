@@ -34,7 +34,7 @@ namespace Do.Core
 		[Test ()]
 		public void UniverseCreationTest ()
 		{
-			IUniverseManager universe = new SimpleUniverseManager ();
+			UniverseManager universe = new UniverseManager ();
 			Assert.IsNotNull (universe, "Universe creation has failed");
 			return;
 		}
@@ -42,7 +42,7 @@ namespace Do.Core
 //		[Test ()]
 		public void UniverseInitializationTest ()
 		{
-			IUniverseManager universe = new SimpleUniverseManager ();
+			UniverseManager universe = new UniverseManager ();
 			universe.Initialize ();
 			
 			Assert.IsTrue (universe.Search ("e", new Type[] {}).Any ());

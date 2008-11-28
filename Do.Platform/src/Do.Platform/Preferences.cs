@@ -37,9 +37,9 @@ namespace Do.Platform {
 			public object Value { get; private set; }
 			
 			public ChangedEventArgs (string key, object value)
-			{
-				Key = key; Value = value;
-			}
+				{
+					Key = key; Value = value;
+				}
 		}
 
 		public interface Implementation
@@ -110,7 +110,7 @@ namespace Do.Platform {
 			TryGet (key, def, out val);
 			return val;
 		}
-
+		
 		/// <summary>
 		/// Try to read a value for a given key.
 		/// </summary>
@@ -140,7 +140,7 @@ namespace Do.Platform {
 			return success;
 		}
 
-		#region Implementation
+#region Implementation
 		
 		/// <summary>
 		/// Sets a gconf key to a given value.
@@ -186,8 +186,7 @@ namespace Do.Platform {
 			return Imp.TryGet<T> (Combine (RootKey, key), out val);
 		}
 
-		#endregion
+#endregion
 		
-
 	}
 }

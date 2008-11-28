@@ -1,7 +1,7 @@
 <Project name="Do.Addins" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="bin/Debug" assemblyKeyFile="/home/jason/do/do-future/Do.Addins/." assembly="Do.Addins" />
+      <Output directory="bin/Debug" assemblyKeyFile="../../../../../jason/do/do-future/Do.Addins" assembly="Do.Addins" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="True" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
@@ -18,7 +18,6 @@
     <File name="src/Do.Addins/IDoController.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IDoWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/ResultsWindowSelectionEventArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/IconProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/BaseWidgets/DefaultObjects.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/BaseWidgets/Frame.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/BaseWidgets/GlossyRoundedFrame.cs" subtype="Code" buildaction="Compile" />
@@ -39,7 +38,6 @@
     <File name="gtk-gui/Do.UI.AbstractLoginWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="Resources/Do.Addins.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="src/Do.UI/IconCache.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/NotificationBridge.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/IUIContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/UIContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel" subtype="Directory" buildaction="Compile" />

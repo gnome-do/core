@@ -18,6 +18,7 @@
  */
 
 using System;
+
 using Gtk;
 using Mono.Unix;
 
@@ -39,9 +40,10 @@ namespace Do.UI
 
 		int mainMenuX, mainMenuY;
 
-		public MainMenu ()
+		protected MainMenu ()
 		{
 			MenuItem item;
+
 			// About menu item
 			item = new ImageMenuItem (Catalog.GetString ("_About Do"));
 			(item as ImageMenuItem).Image = new Image (Stock.About, IconSize.Menu);

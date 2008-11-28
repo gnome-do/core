@@ -32,6 +32,7 @@ using Do.UI;
 using Do.Addins;
 using Do.Universe;
 using Do.DBusLib;
+using Do.Platform;
 
 namespace Do.Core {
 
@@ -884,10 +885,17 @@ namespace Do.Core {
 				Thread.Sleep (100);
 			}
 			
+			
 			if (th != null && th.IsAlive) {
-				NotificationIcon.ShowKillNotification ((o, a) => System.Environment.Exit (20));
+				Platform.Notifications.Notify (
+					"GNOME Do",
+					"Do is still executing the last requested task, please wait for this to finish",
+					"dialog-error",
+					"Stop",
+					() => System.Environment.Exit (20));
 				return;
 			}
+			
 			
 			// We want to disable updates so that any updates to universe dont happen while controller is
 			// summoned.  We will disable this on vanish.  This way we can be sure to dedicate our CPU
@@ -943,7 +951,7 @@ namespace Do.Core {
 
 			logo = "gnome-do.svg";
 
-			about_window.Logo = UI.IconProvider.PixbufFromIconName (logo, 140);
+			about_window.Logo = Icons.PixbufFromIconName (logo, 140);
 			about_window.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
 			about_window.Comments = "Do things as quickly as possible\n" +
 				"(but no quicker) with your files, bookmarks,\n" +

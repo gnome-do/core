@@ -32,98 +32,95 @@ namespace Do.UI
     [System.ComponentModel.ToolboxItem(true)]
     public partial class GeneralPreferencesWidget : Bin, Addins.IConfigurable
     {
-    	const string AutostartAttribute = "X-GNOME-Autostart-enabled";
-		
-    	string AutostartDir {
-			get {
-				return Paths.Combine (Paths.UserHome, ".config/autostart");
-			}
-		}
-
-    	string AutostartFile {
-			get {
-				return Paths.Combine (AutostartDir, "gnome-do.desktop");
-			}
-		}
-    		
-		new public string Name {
-			get { return "General"; }
-		}
-		
-        public string Description {
-        	get { return ""; }
-        }
-        
-        public string Icon {
-        	get { return ""; }
-        }
+      const string AutostartAttribute = "X-GNOME-Autostart-enabled";
 	
-        public GeneralPreferencesWidget ()
-        {
-            Build ();
-			
-			// Setup checkboxes
-        	hide_check.Active = CorePreferences.QuietStart;
-        	login_check.Active = AutostartEnabled;
-        	notification_check.Active = CorePreferences.StatusIconVisible;
-        }
+	string AutostartDir {
+	  get {
+	      return Paths.Combine (Paths.UserHome, ".config/autostart");
+	    }
+	}
+	
+	string AutostartFile {
+	  get {
+	      return Paths.Combine (AutostartDir, "gnome-do.desktop");
+	    }
+	}
+	
+	new public string Name {
+	  get { return "General"; }
+	}
+		
+	  public string Description {
+	  get { return ""; }
+	}
         
-        public Bin GetConfiguration ()
-        {
-        	return this;
-        }
+	public string Icon {
+	  get { return ""; }
+	}
+	
+	public GeneralPreferencesWidget ()
+	{
+	  Build ();
+	  
+	  // Setup checkboxes
+	  hide_check.Active = CorePreferences.QuietStart;
+	  login_check.Active = AutostartEnabled;
+	  notification_check.Active = Platform.StatusIcon.VisibilityPreference;
+	}
         
-        /// <value>
-        /// This property sacrifies much efficiency to eschew the gnomedesktop
-        /// dependency and to work more reliably.
-        /// </value>
-        protected bool AutostartEnabled {
-        	get {
-        		try {
-        			return File.Exists (AutostartFile) &&
-        				!File.ReadAllText (AutostartFile).Contains (
-							AutostartAttribute + "=false");
-				} catch (Exception e) {
-					Log.Error ("Failed to get autostart: {0}", e.Message);
-				}
-				return false;
-			}
-			set {
-				try {
-					if (File.Exists (AutostartFile))
-						File.Delete (AutostartFile);
-					if (value) {
-						Directory.CreateDirectory (AutostartDir);
-						Stream s = Assembly.GetExecutingAssembly ()
-							.GetManifestResourceStream ("gnome-do.desktop");
-						using (StreamReader sr = new StreamReader (s))
-							File.AppendAllText (AutostartFile, sr.ReadToEnd ());
-						
-					}
-				} catch (Exception e) {
-					Log.Error ("Failed to set autostart: {0}", e.Message);
-				}
-			}
-        }
-
-        protected virtual void OnLoginCheckClicked (object sender, EventArgs e)
-        {
-        	AutostartEnabled = login_check.Active;
-        }
-
-        protected virtual void OnHideCheckClicked (object sender, EventArgs e)
-        {
-        	CorePreferences.QuietStart = hide_check.Active;
-        }
-
-        protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)
-        {	
-        	NotificationIcon trayIcon = Do.NotificationIcon;
-        	CorePreferences.StatusIconVisible = notification_check.Active;
-        	if (notification_check.Active)
-        		trayIcon.Show ();
-        	else
-        		trayIcon.Hide ();
-        }
+	public Bin GetConfiguration ()
+	{
+	  return this;
+	}
+        
+	/// <value>
+	/// This property sacrifies much efficiency to eschew the gnomedesktop
+	/// dependency and to work more reliably.
+	/// </value>
+	protected bool AutostartEnabled {
+	  get {
+	      try {
+		  return File.Exists (AutostartFile) && !File.ReadAllText (AutostartFile).Contains (AutostartAttribute + "=false");
+		} catch (Exception e) {
+		  Log.Error ("Failed to get autostart: {0}", e.Message);
+		}
+		
+		return false;
+	    }
+	    set {
+	      try {
+		    if (File.Exists (AutostartFile))
+		      File.Delete (AutostartFile);
+		    if (value) {
+		      Directory.CreateDirectory (AutostartDir);
+			Stream s = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("gnome-do.desktop");
+			using (StreamReader sr = new StreamReader (s))
+			  File.AppendAllText (AutostartFile, sr.ReadToEnd ());
+		    }
+		} catch (Exception e) {
+		  Log.Error ("Failed to set autostart: {0}", e.Message);
+		}
+	    }
+	}
+	
+	protected virtual void OnLoginCheckClicked (object sender, EventArgs e)
+	{
+	  AutostartEnabled = login_check.Active;
+	}
+	
+	protected virtual void OnHideCheckClicked (object sender, EventArgs e)
+	{
+	  CorePreferences.QuietStart = hide_check.Active;
+	}
+	
+	protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)
+	{
+	  Platform.StatusIcon.VisibilityPreference = notification_check.Active;
+        	
+	  if (notification_check.Active)
+	    Platform.StatusIcon.Show ();
+	  else
+	    Platform.StatusIcon.Hide ();
+	}
     }
 }

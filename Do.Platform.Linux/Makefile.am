@@ -20,7 +20,10 @@ FILES = \
 	src/Do.Platform/ConsoleLogImplementation.cs \
 	src/Do.Platform/EnvironmentImplementation.cs \
 	src/Do.Platform/GConfPreferencesImplementation.cs \
+	src/Do.Platform/IconsImplementation.cs \
+	src/Do.Platform/NotificationsImplementation.cs \
 	src/Do.Platform/PathsImplementation.cs \
+	src/Do.Platform/StatusIconImplementation.cs \
 	src/Do.Platform/UniverseFactoryImplementation.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/FileItem.cs \
@@ -39,6 +42,7 @@ REFERENCES =  \
 	$(GNOME_SHARP_20_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
 	$(GCONF_SHARP_20_LIBS) \
+	$(NOTIFY_SHARP_LIBS) \
 	../Do.Platform/Do.Platform.dll
 
 $(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
