@@ -25,7 +25,7 @@ using Gdk;
 using Gtk;
 
 using Do.Platform;
-using Do.Interface.Linux;
+using Do.Interface;
 
 namespace Do.Addins
 {

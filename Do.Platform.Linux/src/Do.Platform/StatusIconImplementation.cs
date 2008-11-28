@@ -24,7 +24,7 @@ using Mono.Unix;
 using Gdk;
 
 using Do.Platform;
-using Do.Interface.Linux;
+using Do.Interface;
 
 namespace Do.Platform.Linux
 {

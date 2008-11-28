@@ -27,7 +27,7 @@ using Do.Addins;
 using Do.Addins.CairoUtils;
 using Do.Universe;
 using Do.Platform;
-using Do.Interface.Linux;
+using Do.Interface;
 
 namespace Do.UI
 {

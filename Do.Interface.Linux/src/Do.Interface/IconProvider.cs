@@ -27,7 +27,7 @@ using Gdk;
 
 using Do.Platform;
 
-namespace Do.Interface.Linux
+namespace Do.Interface
 {
 	public static class IconProvider
 	{
@@ -137,41 +137,40 @@ namespace Do.Interface.Linux
 		{
 			if (null == name) throw new ArgumentNullException ("name");
 			
-			do {
-				// The icon can be loaded from a loaded assembly if the icon has
-				// the format: "resource@assemblyname".
-				if (IconIsEmbeddedResource (name)) {
-					pixbuf = IconFromEmbeddedResource (name, size);
-					break;
-				} 
-				if (IconIsFile (name)) {
-					pixbuf = IconFromFile (name, size);
-					break;
-				}
-				// Try to load icon from defaul theme.
-				pixbuf = IconFromTheme (name, size, IconTheme.Default);
+			// The icon can be loaded from a loaded assembly if the icon has
+			// the format: "resource@assemblyname".
+			if (IconIsEmbeddedResource (name)) {
+				pixbuf = IconFromEmbeddedResource (name, size);
+				if (pixbuf != null) return true;
+			} 
 
-				// Try to load a generic file icon.
-				if (pixbuf == null && name.StartsWith ("gnome-mime"))
-					pixbuf = GenericFileIcon (size);
-				
-				return true;
-#pragma warning disable 162
-		    } while (false);
-#pragma warning restore 162
+			if (IconIsFile (name)) {
+				pixbuf = IconFromFile (name, size);
+				if (pixbuf != null) return true;
+			}
+
+			// Try to load icon from defaul theme.
+			pixbuf = IconFromTheme (name, size, IconTheme.Default);
+			if (pixbuf != null) return true;
+
+			// Try to load a generic file icon.
+			if (name.StartsWith ("gnome-mime")) {
+				pixbuf = GenericFileIcon (size);
+				if (pixbuf != null) return true;
+			}
 			
 			// After this point, we assume that the caller's icon cannot be found, so we attempt
 			// to provide a suitable alternative. We return false to indicate that an alternative
 			// icon selection was made.
 			
 			// Try to load a pretty "no icon found" icon.
-			if (pixbuf == null && name != Icons.MissingIconIcon)
+			if (name != Icons.MissingIconIcon) {
 				pixbuf = PixbufFromIconName (Icons.MissingIconIcon, size);
+				if (pixbuf != null) return false;
+			}
 			
 			// If all else fails, use the UnknownPixbuf.
-			if (pixbuf == null)
-				pixbuf = UnknownPixbuf;
-			
+			pixbuf = UnknownPixbuf;
 			return false;
 		}
 	}

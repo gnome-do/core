@@ -26,6 +26,8 @@ using Gtk;
 
 using Do.Addins;
 using Do.Universe;
+using Do.Platform;
+using Do.Interface;
 
 namespace Do.UI
 {
@@ -90,9 +92,9 @@ namespace Do.UI
 				controller.ButtonPressOffWindow ();
 				break;
 			case PointLocation.Preferences:
-				Addins.Util.Appearance.PopupMainMenuAtPosition (global_point.X, global_point.Y);
-//				// Have to re-grab the pane from the menu.
-				Addins.Util.Appearance.PresentWindow (this);
+				Platform.Windowing.ShowMainMenu (global_point.X, global_point.Y);
+				// Have to re-grab the pane from the menu.
+				Interface.Windowing.PresentWindow (this);
 				break;
 			}
 
@@ -140,7 +142,7 @@ namespace Do.UI
 			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (((int)(bezel_drawing_area.WindowWidth-bezel_glass_results.WidthRequest)/2), -10, 0, 0));
 			Show ();
 			bezel_glass_window.Show ();
-			Util.Appearance.PresentWindow (this);
+			Interface.Windowing.PresentWindow (this);
 		}
 
 		public void Vanish ()

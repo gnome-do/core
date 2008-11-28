@@ -33,7 +33,7 @@ using Do.Addins;
 using Do.Universe;
 using Do.DBusLib;
 using Do.Platform;
-using Do.Interface.Linux;
+using Do.Interface;
 
 namespace Do.Core {
 

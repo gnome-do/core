@@ -29,7 +29,7 @@ using Mono.Addins.Setup;
 using Do.Core;
 using Do.Platform;
 using Do.Universe;
-using Do.Interface.Linux;
+using Do.Interface;
 
 namespace Do.UI
 {

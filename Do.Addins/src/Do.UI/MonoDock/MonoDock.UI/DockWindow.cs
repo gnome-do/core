@@ -27,9 +27,11 @@ using Cairo;
 using MonoDock.Util;
 using MonoDock.XLib;
 
-using Do.Addins;
 using Do.UI;
+using Do.Addins;
 using Do.Universe;
+using Do.Platform;
+using Do.Interface;
 
 namespace MonoDock.UI
 {
@@ -165,7 +167,7 @@ namespace MonoDock.UI
 		
 		public void Summon ()
 		{
-			Do.Addins.Util.Appearance.PresentWindow (this);
+			Do.Interface.Windowing.PresentWindow (this);
 			if (!dock_area.InputInterfaceVisible)
 				dock_area.ShowInputInterface ();
 		}

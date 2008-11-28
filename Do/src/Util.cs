@@ -34,11 +34,9 @@ using Mono.Unix;
 
 namespace Do
 {
-	public class Util
+
+	public static class Util
 	{
-		static Util ()
-		{
-		}
 
 		public static void Initialize ()
 		{
@@ -58,43 +56,6 @@ namespace Do
 				return GLib.Markup.EscapeText (s);
 			}
 
-			public static void PresentWindow (Gtk.Window window)
-			{
-				window.Present ();
-				window.GdkWindow.Raise ();
-
-				for (int i = 0; i < 100; i++) {
-					if (TryGrabWindow (window)) {
-						break;
-					}
-					Thread.Sleep (100);
-				}
-			}
-
-			private static bool TryGrabWindow (Gtk.Window window)
-			{
-				uint time;
-
-				time = Gtk.Global.CurrentEventTime;
-				if (Pointer.Grab (window.GdkWindow,
-				                  true,
-				                  EventMask.ButtonPressMask |
-				                  EventMask.ButtonReleaseMask |
-				                  EventMask.PointerMotionMask,
-				                  null,
-				                  null,
-				                  time) == GrabStatus.Success)
-				{
-					if (Keyboard.Grab (window.GdkWindow, true, time) == GrabStatus.Success) {
-						Gtk.Grab.Add (window);
-						return true;
-					} else {
-						Pointer.Ungrab (time);
-						return false;
-					}
-				}
-				return false;
-			}
 		}
 
 		public static string FormatCommonSubstrings (string main, string other, string format)

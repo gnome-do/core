@@ -16,7 +16,8 @@ all: $(ASSEMBLY)
 
 FILES = \
 	src/AssemblyInfo.cs \
-	src/Do.Interface.Linux/IconProvider.cs
+	src/Do.Interface/Windowing.cs \
+	src/Do.Interface/IconProvider.cs
 
 REFERENCES =  \
 	System \

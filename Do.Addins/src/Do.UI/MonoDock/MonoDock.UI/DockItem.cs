@@ -29,7 +29,7 @@ using Do.Platform;
 using Do.Universe;
 using Do.Universe.Common;
 using Do.Addins.CairoUtils;
-using Do.Interface.Linux;
+using Do.Interface;
 
 using MonoDock.Util;
 

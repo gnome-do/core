@@ -28,11 +28,8 @@ using Do.Universe;
 
 namespace Do.Addins
 {
-	public delegate void PopupMainMenuAtPositionDelegate (int x, int y);
-	public delegate Gdk.Pixbuf PixbufFromIconNameDelegate (string icon_name, int size);
 	public delegate string StringTransformationDelegate (string old);
 	public delegate string FormatCommonSubstringsDelegate (string main, string highlight, string format);
-	public delegate void PresentWindowDelegate (Gtk.Window window);
 	public delegate void DoEventKeyDelegate (Gdk.EventKey key);
 	public delegate void NullEventHandler ();
 	public delegate void SearchStartedEventHandler (bool upstream_search);
@@ -47,10 +44,7 @@ namespace Do.Addins
 		
 		public static class Appearance
 		{
-			public static PresentWindowDelegate PresentWindow;
-			public static PixbufFromIconNameDelegate PixbufFromIconName;
 			public static StringTransformationDelegate MarkupSafeString;
-			public static PopupMainMenuAtPositionDelegate PopupMainMenuAtPosition;
 			
 			public static void SetColormap (Gtk.Widget widget)
 			{

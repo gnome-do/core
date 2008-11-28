@@ -26,7 +26,7 @@ using GLib;
 using Notifications;
 
 using Do.Platform;
-using Do.Interface.Linux;
+using Do.Interface;
 
 namespace Do.Platform.Linux
 {
