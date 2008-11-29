@@ -33,9 +33,14 @@ namespace Do.Platform.Linux
 	
 	public class NotificationsImplementation : Platform.Notifications.Implementation
 	{
-		const int NotifyDelay = 250;
 		const string DefaultIconName = "gnome-do";
-		const int IconSize = 24, MinNotifyShow = 5000, MaxNotifyShow = 10000;
+
+		const int LettersPerWord = 7;
+		const int MillisecondsPerWord = 200;
+		const int IconSize = 24;
+		const int NotifyDelay = 250;
+		const int MinNotifyShow = 5000;
+		const int MaxNotifyShow = 10000;
 
 		static readonly Pixbuf default_icon;
 		
@@ -46,7 +51,7 @@ namespace Do.Platform.Linux
 
 		static int ReadableDurationForMessage (string title, string message)
 		{
-			int t = (title.Length + message.Length) / 7 * 1000;	
+			int t = (title.Length + message.Length) / LettersPerWord * MillisecondsPerWord;	
 			return Math.Min (Math.Max (t, MinNotifyShow), MaxNotifyShow);
 		}
 
