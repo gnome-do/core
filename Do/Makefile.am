@@ -141,6 +141,7 @@ FILES = \
 	src/Do.Universe/PreferencesItem.cs \
 	src/Do.Universe/ProxyItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
+	src/Do.Universe/ClearLearningItem.cs \
 	src/ProgramVersion.cs \
 	src/Util.cs \
 	src/XKeybinder.cs

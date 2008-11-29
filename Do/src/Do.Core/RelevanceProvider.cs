@@ -40,19 +40,13 @@ namespace Do.Core {
 
 		const int SerializeInterval = 15 * 60 * 1000;
 
-		static readonly IRelevanceProvider default_provider;
-
 		static RelevanceProvider ()
 		{
-			default_provider = Deserialize () ?? new HistogramRelevanceProvider ();
+			DefaultProvider = Deserialize () ?? new HistogramRelevanceProvider ();
 			GLib.Timeout.Add (SerializeInterval, OnSerializeTimer);
 		}
 		
-		public static IRelevanceProvider DefaultProvider {
-			get {
-				return default_provider;
-			}
-		}
+		public static IRelevanceProvider DefaultProvider { get; private set; }
 
 		public static string RelevanceFile {
 			get {
@@ -61,7 +55,7 @@ namespace Do.Core {
 		}
 
 		static bool OnSerializeTimer () {
-			Gtk.Application.Invoke ((sender, args) => Serialize (default_provider));
+			Gtk.Application.Invoke ((sender, args) => Serialize (DefaultProvider));
 			return true;
 		}
 

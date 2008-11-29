@@ -33,7 +33,7 @@ namespace Do.Platform.Linux
 	
 	public class NotificationsImplementation : Platform.Notifications.Implementation
 	{
-		const int NotifyDelay = 500;
+		const int NotifyDelay = 250;
 		const string DefaultIconName = "gnome-do";
 		const int IconSize = 24, MinNotifyShow = 5000, MaxNotifyShow = 10000;
 
@@ -42,6 +42,12 @@ namespace Do.Platform.Linux
 		static NotificationsImplementation ()
 		{
 			default_icon = IconProvider.PixbufFromIconName (DefaultIconName, IconSize);
+		}
+
+		static int ReadableDurationForMessage (string title, string message)
+		{
+			int t = (title.Length + message.Length) / 7 * 1000;	
+			return Math.Min (Math.Max (t, MinNotifyShow), MaxNotifyShow);
 		}
 
 		#region Notifications.Implementation
@@ -66,40 +72,37 @@ namespace Do.Platform.Linux
 		/// </param>
 		public void Notify (string title, string message, string icon, string actionLabel, Action onClick)
 		{
-			Screen screen;
 			Notification msg;
-			int x, y, readableTimeout;
-			
-			x = y = -1;
-			screen = null;
+			int readableTimeout;
 			
 			// Show the status icon so that we can associate our notification with it
 			StatusIcon.Notify ();
 			
-			if (StatusIcon.Imp is StatusIconImplementation) {
-				(StatusIcon.Imp as StatusIconImplementation).GetLocationOnScreen (out screen, out x, out y);
-			}
-			
 			msg = new Notification ();
-			msg.Icon = string.IsNullOrEmpty (icon) ? default_icon : IconProvider.PixbufFromIconName (icon, IconSize);
+			msg.Icon = string.IsNullOrEmpty (icon)
+				? default_icon
+				: IconProvider.PixbufFromIconName (icon, IconSize);
 			msg.Body = GLib.Markup.EscapeText (message);
-			msg.Closed += (o, a) => StatusIcon.Hide ();
 			msg.Summary = GLib.Markup.EscapeText (title);
+			msg.Timeout = ReadableDurationForMessage (title, message);
+			msg.Closed += (o, a) => StatusIcon.Hide ();
+
+			if (onClick != null)
+				msg.AddAction (GLib.Markup.EscapeText (actionLabel),
+					actionLabel, (o, a) => onClick ());
 			
-			// if our status icon check doesn't fail, then we associate the notification with it.
-			if (screen != null)
+			// If we can successfully get the location, then we associate the
+			// notification with it.
+			if (StatusIcon.Imp is StatusIconImplementation) {
+				int x, y;
+				Screen screen;
+
+				(StatusIcon.Imp as StatusIconImplementation).GetLocationOnScreen (
+					out screen, out x, out y);
 				msg.SetGeometryHints (screen, x, y);
-			
-			// this is an aprox time to read based on number of chars
-			readableTimeout = message.Length / 10 * 1000;	
-			msg.Timeout = Math.Min (Math.Max (readableTimeout, MinNotifyShow), MaxNotifyShow);
-			
-			if (onClick != null) {
-				string label = GLib.Markup.EscapeText (actionLabel);
-				msg.AddAction (label, actionLabel + "_Action", (o, a) => onClick ());
 			}
 			
-			// we delay this so that the icon has time to show and we can get its location
+			// We delay this so that the status icon has time to show.
 			GLib.Timeout.Add (NotifyDelay, () => {
 			    Gtk.Application.Invoke ((o, a) => msg.Show ()); 
 			    return false;
@@ -108,9 +111,5 @@ namespace Do.Platform.Linux
 
 		#endregion
 		
-		protected void OnNotificationClosed (object sender, EventArgs args)
-		{
-			StatusIcon.Hide ();
-		}
 	}
 }

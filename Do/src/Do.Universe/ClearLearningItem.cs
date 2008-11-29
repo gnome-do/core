@@ -1,4 +1,4 @@
-/* InternalItemSource.cs
+/* ClearLearningItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,45 +19,36 @@
  */
 
 using System;
-using System.Collections.Generic;
 using Mono.Unix;
 
+using Do.Platform;
+
 namespace Do.Universe {
-	
-	public class InternalItemSource : IItemSource {
-		
-		public IEnumerable<Type> SupportedItemTypes {
-			get { return null; }
-		}
+
+	public class ClearLearningItem : IRunnableItem {		
 		
 		public string Name {
-			get { return Catalog.GetString ("Internal GNOME Do Items"); }
+			get { return Catalog.GetString ("Clear Learning"); }
 		}
 		
 		public string Description {
-			get { return Catalog.GetString ("Special items relevant to the inner-workings of GNOME Do."); }
+			get { return Catalog.GetString ("Resets Do's learned usage data."); }
 		}
 		
 		public string Icon {
-			get { return "gnome-system"; }
+			get { return "edit-clear"; }
 		}
 		
-		public void UpdateItems ()
+		public void Run ()
 		{
+			Platform.Notifications.Notify (
+				Catalog.GetString ("Clear Learning"),
+				Catalog.GetString ("Are you sure you want to clear Do's learned usage data?"),
+				"edit-clear",
+				Catalog.GetString ("Clear"),
+				() => {}
+			);
 		}
-		
-		public IEnumerable<IItem> Items {
-			get {
-				yield return new SelectedTextItem ();
-				yield return new PreferencesItem ();
-				yield return new DoQuitItem ();
-				//yield return new ClearLearningItem ();
-			}
-		}
-		
-		public IEnumerable<IItem> ChildrenOfItem (IItem item)
-		{
-			return null;
-		}		
+
 	}
 }

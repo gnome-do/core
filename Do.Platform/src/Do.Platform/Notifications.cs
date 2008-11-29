@@ -20,14 +20,19 @@
 
 using System;
 
+using Mono.Unix;
+
 namespace Do.Platform
 {
 	
 	public static class Notifications
 	{
+
+		const string DefaultIcon = "gnome-do";
+
 		public interface Implementation
 		{
-			void Notify (string message, string title, string icon, string actionLabel, Action onClick);
+			void Notify (string title, string message, string icon, string actionLabel, Action onClick);
 		}
 		
 		public static Implementation Imp { get; private set; }
@@ -42,14 +47,14 @@ namespace Do.Platform
 			Imp = imp;
 		}
 		
-		public static void Notify (string message, string title)
+		public static void Notify (string title, string message)
 		{
-		  Notify (message, title, "gnome-do", "", null);
+		  Notify (title, message, DefaultIcon, null, null);
 		}
 		
-		public static void Notify (string message, string title, string icon)
+		public static void Notify (string title, string message, string icon)
 		{
-		  Notify (message, title, icon, "", null);
+		  Notify (title, message, icon, null, null);
 		}
 		
 		#region Implementation
@@ -72,9 +77,9 @@ namespace Do.Platform
 		/// <param name="onClick">
 		/// An <see cref="Action"/> to perform when notification is clicked
 		/// </param>
-		public static void Notify (string message, string title, string icon, string actionLabel, Action onClick)
+		public static void Notify (string title, string message, string icon, string actionLabel, Action onClick)
 		{
-			Imp.Notify (message, title, icon, actionLabel, onClick);
+			Imp.Notify (title, message, icon, actionLabel, onClick);
 		}
 		
 		#endregion
