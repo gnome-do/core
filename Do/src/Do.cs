@@ -121,8 +121,8 @@ namespace Do {
 		
 		static void SetupKeybindings ()
 		{
-			keybinder.Bind ("/apps/gnome-do/CorePreferences/core-CorePreferences/SummonKeyBinding",
-					CorePreferences.SummonKeyBinding, OnActivate);
+			keybinder.Bind (CorePreferences.SummonKeyBindingPath,
+				CorePreferences.SummonKeyBinding, OnActivate);
 		}
 		
 		static void OnActivate (object sender, EventArgs args)

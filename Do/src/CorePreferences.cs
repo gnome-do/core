@@ -29,7 +29,12 @@ namespace Do
 	
 	public static class CorePreferences  {
 
-		static Preferences prefs = Preferences.Get ("core-preferences");
+		const string RootKey = "core";
+		const string SummonKeyBindingName = "SummonKeyBinding";
+		public static readonly string SummonKeyBindingPath =
+			"/apps/gnome-do/preferences/" + RootKey + "/" + SummonKeyBindingName;
+
+		static Preferences prefs = Preferences.Get (RootKey);
 
 		public static event Preferences.PreferenceChangedDelegate PreferenceChanged {
 			add { prefs.PreferenceChanged += value; }
@@ -43,10 +48,10 @@ namespace Do
 		public static bool Debug {
 			get { return Env.GetCommandLineArgs ().Contains ("--debug"); }
 		}
-		
+
 		public static string SummonKeyBinding {
-			get { return prefs.Get<string> ("SummonKeyBinding", "<Super>space"); }
-			set { prefs.Set<string> ("SummonKeyBinding", value); }
+			get { return prefs.Get<string> (SummonKeyBindingName, "<Super>space"); }
+			set { prefs.Set<string> (SummonKeyBindingName, value); }
 		}
 		
 		public static string TextModeKeyBinding {
