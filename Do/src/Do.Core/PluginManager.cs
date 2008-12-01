@@ -81,7 +81,7 @@ namespace Do.Core {
 
 		private static string Version {
 			get {
-				System.Version v = typeof (PluginManager).Assembly.GetName ().Version;
+				System.Version v = typeof (IItem).Assembly.GetName ().Version;
 				return String.Format ("{0}.{1}.{2}", v.Major, v.Minor, v.Build);
 			}
 		}
