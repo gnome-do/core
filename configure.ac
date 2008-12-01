@@ -2,7 +2,7 @@ dnl Warning: This is an automatically generated file, do not edit!
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.54])
 
-AC_INIT([gnome-do], [0.7.0.0])
+AC_INIT([gnome-do], [0.8.0.0])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -13,7 +13,7 @@ IT_PROG_INTLTOOL([0.35.0])
 SHAMROCK_CONFIGURE_I18N(gnome-do)
 
 dnl Plugin ABI version; bump whenever plugin interface changes
-ABI_VERSION=0.7
+ABI_VERSION=0.8
 AC_SUBST(ABI_VERSION)
 
 RELEASE="false"
