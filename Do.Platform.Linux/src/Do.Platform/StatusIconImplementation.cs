@@ -49,7 +49,7 @@ namespace Do.Platform.Linux
 			status_icon.PopupMenu += new Gtk.PopupMenuHandler (OnTrayIconPopup);
 		}
 
-		#region StatusIcon.Implementation
+#region StatusIcon.Implementation
 		
 		public void Show ()
 		{
@@ -66,7 +66,7 @@ namespace Do.Platform.Linux
 			Show ();
 		}
 
-		#endregion
+#endregion
 
 		public void GetLocationOnScreen (out Gdk.Screen screen, out int x, out int y)
 		{

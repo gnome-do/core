@@ -39,6 +39,11 @@ namespace Do.Platform
 		static Preferences Prefs { get; set; }
 		public static Implementation Imp { get; private set; }
 
+		static StatusIcon ()
+		{
+			Prefs = Preferences.Get (RootPreferencesKey);
+		}
+
 		public static void Initialize (Implementation imp)
 		{
 			if (Imp != null)
@@ -47,7 +52,6 @@ namespace Do.Platform
 				throw new ArgumentNullException ("Implementation may not be null");
 
 			Imp = imp;
-			Prefs = Preferences.Get (RootPreferencesKey);
 
 			if (VisibilityPreference) Show ();
 			else Hide ();
