@@ -34,48 +34,34 @@ namespace Do.Platform.Linux
 		const int IconSize = 24;
 		const string IconName = "gnome-do";
 
-		Preferences prefs;
 		Gtk.StatusIcon status_icon;
 		static readonly Pixbuf normal_icon;
 
 		static StatusIconImplementation ()
 		{
-			normal_icon = IconProvider.PixbufFromIconName  (IconName, IconSize);
+			normal_icon = IconProvider.PixbufFromIconName (IconName, IconSize);
 		}
 
 		public StatusIconImplementation ()
 		{
-			prefs = Preferences.Get (RootKey);
-			
 			status_icon = new Gtk.StatusIcon (normal_icon);
 			status_icon.FromPixbuf = normal_icon;
 			status_icon.PopupMenu += new Gtk.PopupMenuHandler (OnTrayIconPopup);
-
-			if (VisibilityPreference)
-				Show ();
-			else
-				Hide ();
 		}
 
 		#region StatusIcon.Implementation
 		
-		public override bool VisibilityPreference {
-			get { return prefs.Get<bool> (VisibleKey, VisibleDefault); }
-			set { prefs.Set<bool> (VisibleKey, value); }
-		}
-
-		public override void Show ()
+		public void Show ()
 		{
 			status_icon.Visible = true;
 		}
 
-		public override void Hide ()
+		public void Hide ()
 		{
-			if (!VisibilityPreference)
-				status_icon.Visible = false;
+			status_icon.Visible = false;
 		}
 
-		public override void Notify ()
+		public void Notify ()
 		{
 			Show ();
 		}

@@ -1,22 +1,22 @@
-/* StatusIcon.cs
-*
-* GNOME Do is the legal property of its developers. Please refer to the
-* COPYRIGHT file distributed with this
-* source distribution.
-*  
-* This program is free software: you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation, either version 3 of the License, or
-*  (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// StatusIcon.cs
+// 
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this
+// source distribution.
+//  
+// This program is free software: you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software
+// Foundation, either version 3 of the License, or (at your option) any later
+// version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
 
 using System;
 
@@ -25,18 +25,18 @@ namespace Do.Platform
 
 	public static class StatusIcon
 	{		
-		public abstract class Implementation
+		public interface Implementation
 		{			
-			protected string RootKey = "StatusIcon";
-			protected string VisibleKey = "StatusIconVisible";
-			protected bool   VisibleDefault = true;			
-			
-			public abstract bool VisibilityPreference { get; set; }
-			public abstract void Show ();
-			public abstract void Hide ();
-			public abstract void Notify ();
+			void Show ();
+			void Hide ();
+			void Notify ();
 		}
 
+		const bool   VisibleDefault = true;			
+		const string RootPreferencesKey = "StatusIcon";
+		const string VisiblePreferenceKey = "StatusIconVisible";
+		
+		static Preferences Prefs { get; set; }
 		public static Implementation Imp { get; private set; }
 
 		public static void Initialize (Implementation imp)
@@ -47,17 +47,13 @@ namespace Do.Platform
 				throw new ArgumentNullException ("Implementation may not be null");
 
 			Imp = imp;
+			Prefs = Preferences.Get (RootPreferencesKey);
+
+			if (VisibilityPreference) Show ();
+			else Hide ();
 		}
 
 		#region Implementation
-
-		/// <summary>
-		/// Whether or not the icon is visible
-		/// </summary>
-		public static bool VisibilityPreference {
-			get { return Imp.VisibilityPreference; }
-			set { Imp.VisibilityPreference = value; }
-		}
 
 		/// <summary>
 		/// Show the Status icon
@@ -72,7 +68,7 @@ namespace Do.Platform
 		/// </summary>
 		public static void Hide ()
 		{
-			Imp.Hide ();
+			if (!VisibilityPreference) Imp.Hide ();
 		}
 
 		/// <summary>
@@ -83,6 +79,15 @@ namespace Do.Platform
 			Imp.Notify ();
 		}
 
-		#endregion
+#endregion
+
+		/// <summary>
+		/// Whether or not the icon is visible
+		/// </summary>
+		public static bool VisibilityPreference {
+			get { return Prefs.Get<bool> (VisiblePreferenceKey, VisibleDefault); }
+			set { Prefs.Set<bool> (VisiblePreferenceKey, value); }
+		}
+
 	}
 }
