@@ -127,6 +127,7 @@ Do/src/AssemblyInfo.cs
 Do.Addins/AssemblyInfo.cs
 Do.DBus/src/AssemblyInfo.cs
 Do.Platform/Makefile
+Do.Platform/src/AssemblyInfo.cs
 Do.Platform.Linux/Makefile
 Do.Interface.Linux/Makefile
 Do/Makefile
