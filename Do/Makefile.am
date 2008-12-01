@@ -93,6 +93,7 @@ FILES = \
 	gtk-gui/Do.UI.PluginErrorDialog.cs \
 	gtk-gui/Do.UI.PreferencesWindow.cs \
 	gtk-gui/generated.cs \
+	src/AssemblyInfo.cs \
 	src/CorePreferences.cs \
 	src/Do.Core/Controller.cs \
 	src/Do.Core/DoAction.cs \
