@@ -1,8 +1,8 @@
 <gconfschemafile>
   <schemalist>
     <schema>
-      <key>/schemas/apps/gnome-do/preferences/core-preferences/AlwaysShowResults</key>
-      <applyto>/apps/gnome-do/preferences/core-preferences/AlwaysShowResults</applyto>
+      <key>/schemas/apps/gnome-do/preferences/core/AlwaysShowResults</key>
+      <applyto>/apps/gnome-do/preferences/core/AlwaysShowResults</applyto>
       <owner>gnome-do</owner>
       <type>bool</type>
       <default>false</default>
@@ -15,8 +15,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-do/preferences/core-preferences/QuietStart</key>
-      <applyto>/apps/gnome-do/preferences/core-preferences/QuietStart</applyto>
+      <key>/schemas/apps/gnome-do/preferences/core/QuietStart</key>
+      <applyto>/apps/gnome-do/preferences/core/QuietStart</applyto>
       <owner>gnome-do</owner>
       <type>bool</type>
       <default>false</default>
@@ -29,8 +29,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-do/preferences/core-preferences/StatusIconVisible</key>
-      <applyto>/apps/gnome-do/preferences/core-preferences/StatusIconVisible</applyto>
+      <key>/schemas/apps/gnome-do/preferences/core/StatusIconVisible</key>
+      <applyto>/apps/gnome-do/preferences/core/StatusIconVisible</applyto>
       <owner>gnome-do</owner>
       <type>bool</type>
       <default>true</default>
@@ -43,8 +43,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-do/preferences/core-preferences/SummonKeyBinding</key>
-      <applyto>/apps/gnome-do/preferences/core-preferences/SummonKeyBinding</applyto>
+      <key>/schemas/apps/gnome-do/preferences/core/SummonKeyBinding</key>
+      <applyto>/apps/gnome-do/preferences/core/SummonKeyBinding</applyto>
       <owner>gnome-do</owner>
       <type>string</type>
       <default>&lt;Super&gt;space</default>
@@ -57,8 +57,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-do/preferences/core-preferences/TextModeKeyBinding</key>
-      <applyto>/apps/gnome-do/preferences/core-preferences/TextModeKeyBinding</applyto>
+      <key>/schemas/apps/gnome-do/preferences/core/TextModeKeyBinding</key>
+      <applyto>/apps/gnome-do/preferences/core/TextModeKeyBinding</applyto>
       <owner>gnome-do</owner>
       <type>string</type>
       <default>period</default>
@@ -71,8 +71,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-do/preferences/core-preferences/Theme</key>
-      <applyto>/apps/gnome-do/preferences/core-preferences/Theme</applyto>
+      <key>/schemas/apps/gnome-do/preferences/core/Theme</key>
+      <applyto>/apps/gnome-do/preferences/core/Theme</applyto>
       <owner>gnome-do</owner>
       <type>string</type>
       <default>Classic</default>
