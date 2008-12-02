@@ -19,12 +19,15 @@ FILES = \
 	src/Do.Platform/Core.cs \
 	src/Do.Platform/Do.Platform.Common/AbstractLogImplementation.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogImplementation.cs \
-	src/Do.Platform/Environment.cs \
+	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
+	src/Do.Platform/Do.Platform.ServiceStack/IEnvironmentService.cs \
+	src/Do.Platform/Do.Platform.ServiceStack/IService.cs \
 	src/Do.Platform/Icons.cs \
 	src/Do.Platform/Log.cs \
 	src/Do.Platform/Notifications.cs \
 	src/Do.Platform/Paths.cs \
 	src/Do.Platform/Preferences.cs \
+	src/Do.Platform/Services.cs \
 	src/Do.Platform/StatusIcon.cs \
 	src/Do.Platform/UniverseFactory.cs \
 	src/Do.Platform/Windowing.cs \
@@ -57,6 +60,7 @@ RESOURCES = \
 REFERENCES =  \
 	System \
 	System.Core \
+	$(MONO_ADDINS_LIBS) \
 	Mono.Posix
 
 $(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)

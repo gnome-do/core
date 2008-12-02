@@ -78,7 +78,6 @@ namespace Do.Platform.Linux
 		public void Notify (string title, string message, string icon, string actionLabel, Action onClick)
 		{
 			Notification msg;
-			int readableTimeout;
 			
 			// Show the status icon so that we can associate our notification with it
 			StatusIcon.Notify ();

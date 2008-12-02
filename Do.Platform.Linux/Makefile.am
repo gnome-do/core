@@ -18,7 +18,7 @@ FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/ConsoleCrayon.cs \
 	src/Do.Platform/ConsoleLogImplementation.cs \
-	src/Do.Platform/EnvironmentImplementation.cs \
+	src/Do.Platform/EnvironmentService.cs \
 	src/Do.Platform/GConfPreferencesImplementation.cs \
 	src/Do.Platform/IconsImplementation.cs \
 	src/Do.Platform/NotificationsImplementation.cs \
