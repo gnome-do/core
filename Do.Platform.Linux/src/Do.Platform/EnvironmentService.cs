@@ -19,12 +19,13 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 using Mono.Unix;
 
 using Do.Platform;
-using Do.Platform.ServiceStack;
 
 namespace Do.Platform.Linux
 {
@@ -50,6 +51,22 @@ namespace Do.Platform.Linux
 		}
 		
 		#endregion
+
+		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
+			string subject, string body,
+			IEnumerable<string> attachments)
+		{
+			string cmd = string.Format ("xdg-email {0} {1} {2} {3} {4} {5}",
+				to.Aggregate ("", (es, e) => string.Format ("{0} '{1}'", es, e)),
+				cc.Aggregate ("", (es, e) => string.Format ("{0} --cc '{1}'", es, e)),
+				bcc.Aggregate ("", (es, e) => string.Format ("{0} --bcc '{1}'", es, e)),
+				subject,
+				body,
+				attachments.Aggregate ("", (es, e) => string.Format ("{0} --attach '{1}'", es, e))
+			);
+
+			Execute (cmd);
+		}
 		
 		public void OpenURL (string url)
 		{
@@ -74,15 +91,14 @@ namespace Do.Platform.Linux
 
 		public void Execute (string line)
 		{
-			if (System.IO.File.Exists (line)) {
-				System.Diagnostics.Process proc;
-				
-				proc = new System.Diagnostics.Process ();
+			Log.Info ("Executing \"{0}\"", line);
+			if (File.Exists (line)) {
+				Process proc = new Process ();
 				proc.StartInfo.FileName = line;
 				proc.StartInfo.UseShellExecute = false;
 				proc.Start ();
 			} else {
-				System.Diagnostics.Process.Start (line);
+				Process.Start (line);
 			}
 		}
 

@@ -48,7 +48,7 @@ namespace Do.Universe.Common
 
 		public override IEnumerable<Type> SupportedItemTypes {
 			get {
-				return new Type [] {
+				return new [] {
 					typeof (ContactItem),
 					typeof (IContactDetailItem),
 					typeof (ITextItem),
@@ -58,6 +58,7 @@ namespace Do.Universe.Common
 
 		public override IEnumerable<Type> SupportedModifierItemTypes {
 			get {
+				yield return typeof (IFileItem);
 				yield return typeof (ITextItem);
 			}
 		}
@@ -69,10 +70,7 @@ namespace Do.Universe.Common
 		public override bool SupportsItem (IItem item)
 		{
 			if (item is ContactItem) {
-				foreach (string detail in (item as ContactItem).Details) {
-					if (detail.StartsWith ("email"))
-						return true;
-				}
+				return (item as ContactItem).Details.Any (d => d.StartsWith ("email"));
 			} else if (item is IContactDetailItem) {
 				return (item as IContactDetailItem).Key.StartsWith ("email");
 			} else if (item is ITextItem) {
@@ -86,36 +84,27 @@ namespace Do.Universe.Common
 
 		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
 		{
-			string emails, email, body;
+			string subject, body;
+			IEnumerable<string> recipients, texts, files;
 
-			emails = email = string.Empty;
-			foreach (IItem item in items) {
-				if (item is ContactItem) {
-					ContactItem contact = item as ContactItem;
-					email = contact ["email"];
+			recipients = items
+				.Select (item => {
+					if (item is ContactItem)
+						return (item as ContactItem).Details.FirstOrDefault (d => d.StartsWith ("email"));
+					else if (item is IContactDetailItem)
+						return (item as IContactDetailItem).Value;
+					else if (item is ITextItem)
+						return (item as ITextItem).Text;
+					else return "";
+				})
+				.Where (email => !string.IsNullOrEmpty (email));
 
-					if (email == null) {
-						foreach (string detail in contact.Details) {
-							if (detail.StartsWith ("email")) {
-								email = contact [detail];
-								break;
-							}
-						}
-					}
-				} else if (item is IContactDetailItem) {
-					email = (item as IContactDetailItem).Value;
-				} else if (item is ITextItem) {
-					email = (item as ITextItem).Text;
-				}
-				emails += email + ",";
-			}
+			texts = modItems.Where (item => item is ITextItem).Select (item => (item as ITextItem).Text);
+			files = modItems.Where (item => item is IFileItem).Select (item => (item as IFileItem).Path);
+			subject = texts.FirstOrDefault () ?? "";
+			body = texts.Aggregate ("", (a, b) => a + "\n\n" + b);
 
-			body = string.Empty;
-			if (modItems.Any ()) {
-				body = "?body=" + (modItems.First () as ITextItem).Text
-					.Replace ("\"", "\\\""); // Try to escape quotes...
-			}
-			Services.Environment.OpenURL ("\"mailto:" + emails + body + "\"");
+			Services.Environment.OpenEmail (recipients, subject, body, files); 
 			return null;
 		}
 	}

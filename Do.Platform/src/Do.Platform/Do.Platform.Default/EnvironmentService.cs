@@ -18,6 +18,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 using Mono.Unix;
 
@@ -45,6 +46,13 @@ namespace Do.Platform.Default
 		}
 
 		#endregion
+
+		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
+			string subject, string body,
+			IEnumerable<string> attachments)
+		{
+			Log.Warn ("Default IEnvironmentService cannot send email.");
+		}
 		
 		public void OpenURL (string url)
 		{

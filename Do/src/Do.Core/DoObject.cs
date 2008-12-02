@@ -35,7 +35,7 @@ namespace Do.Core {
 	/// DoAction).
 	/// </summary>
 	public class DoObject :
-		IObject, IConfigurable, IEquatable<DoObject>, IComparable<DoObject> {
+		IObject, IConfigurable, IEquatable<DoObject>, IComparable, IComparable<DoObject> {
 
 		const string UIDFormat = "{0}: {1} ({2})";
 		static readonly string DefaultName;
@@ -195,6 +195,11 @@ namespace Do.Core {
 		public override string ToString ()
 		{
 			return UID;
+		}
+
+		public int CompareTo (object other)
+		{
+			return other is DoObject ? CompareTo (other as DoObject) : 0;
 		}
 
 		public int CompareTo (DoObject other)
