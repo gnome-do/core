@@ -19,4 +19,8 @@
 	<Extension path="/Do/Action">
 		<Action type="Do.Platform.Linux.CopyToClipboardAction" />
 	</Extension>
+
+	<Extension path="/Do/Service">
+		<Service type="Do.Platform.Linux.EnvironmentService" />
+	</Extension>
 </Addin>

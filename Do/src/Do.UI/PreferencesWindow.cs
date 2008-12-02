@@ -27,6 +27,8 @@ using Mono.Addins.Gui;
 using Do;
 using Do.Addins;
 
+using Do.Platform;
+
 namespace Do.UI
 {	
 	public partial class PreferencesWindow : Window
@@ -75,7 +77,7 @@ namespace Do.UI
 
 		protected virtual void OnBtnHelpClicked (object sender, EventArgs e)
 		{
-			Platform.Environment.OpenURL (HelpUrl);
+			Services.Environment.OpenURL (HelpUrl);
 		}
 	}
 }

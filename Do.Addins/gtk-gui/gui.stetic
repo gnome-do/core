@@ -2,8 +2,14 @@
 <stetic-interface>
   <configuration>
     <images-root-path>..</images-root-path>
-    <target-gtk-version>2.12.1</target-gtk-version>
+    <target-gtk-version>2.12</target-gtk-version>
   </configuration>
+  <import>
+    <widget-library name="gnomedesktop-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <widget-library name="gnome-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <widget-library name="wnck-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <widget-library name="../bin/Debug/Do.Addins.dll" internal="true" />
+  </import>
   <widget class="Gtk.Bin" id="Do.UI.AbstractLoginWidget" design-size="300 300">
     <property name="MemberName" />
     <child>
@@ -131,9 +137,22 @@
             <child>
               <widget class="Gtk.Table" id="table4">
                 <property name="MemberName" />
+                <property name="NRows">3</property>
                 <property name="NColumns">2</property>
                 <property name="RowSpacing">6</property>
                 <property name="ColumnSpacing">6</property>
+                <child>
+                  <placeholder />
+                </child>
+                <child>
+                  <placeholder />
+                </child>
+                <child>
+                  <placeholder />
+                </child>
+                <child>
+                  <placeholder />
+                </child>
                 <child>
                   <widget class="Gtk.Fixed" id="fixed5">
                     <property name="MemberName" />
@@ -200,9 +219,28 @@
             <child>
               <widget class="Gtk.Table" id="table5">
                 <property name="MemberName" />
+                <property name="NRows">3</property>
                 <property name="NColumns">3</property>
                 <property name="RowSpacing">6</property>
                 <property name="ColumnSpacing">6</property>
+                <child>
+                  <placeholder />
+                </child>
+                <child>
+                  <placeholder />
+                </child>
+                <child>
+                  <placeholder />
+                </child>
+                <child>
+                  <placeholder />
+                </child>
+                <child>
+                  <placeholder />
+                </child>
+                <child>
+                  <placeholder />
+                </child>
                 <child>
                   <widget class="Gtk.Fixed" id="fixed1">
                     <property name="MemberName" />

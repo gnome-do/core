@@ -94,7 +94,7 @@ namespace Do.Universe.Common
 					toOpen = (item as ITextItem).Text
 						.Replace (" ", "\\ ");
 				}
-				Platform.Environment.OpenPath (toOpen);
+				Services.Environment.OpenPath (toOpen);
 			}
 			return null;
 		}

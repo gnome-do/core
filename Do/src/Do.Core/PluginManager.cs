@@ -54,7 +54,7 @@ namespace Do.Core {
 
 		private static IEnumerable<string> ExtensionPaths {
 			get {
-				return new[] {
+				return new [] {
 					"/Do/ItemSource",
 					"/Do/Action",
 					"/Do/RenderProvider",
@@ -119,6 +119,9 @@ namespace Do.Core {
 					}
 				}
 			}
+			
+			Services.Initialize ();
+			
 			InstallLocalPlugins (setup);
 		}
 

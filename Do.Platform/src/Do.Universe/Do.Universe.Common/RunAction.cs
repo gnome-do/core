@@ -59,9 +59,9 @@ namespace Do.Universe.Common
 		public override bool SupportsItem (IItem item)
 		{
 			if (item is IFileItem) {
-				return Platform.Environment.IsExecutable ((item as IFileItem).Path);
+				return Services.Environment.IsExecutable ((item as IFileItem).Path);
 			} else if (item is ITextItem) {
-				return Platform.Environment.IsExecutable ((item as ITextItem).Text);
+				return Services.Environment.IsExecutable ((item as ITextItem).Text);
 			}
 			return true;
 		}
@@ -72,9 +72,9 @@ namespace Do.Universe.Common
 				if (item is IRunnableItem) {
 					(item as IRunnableItem).Run ();
 				} else if (item is IFileItem) {
-					Platform.Environment.Execute ((item as IFileItem).Path);
+					Services.Environment.Execute ((item as IFileItem).Path);
 				} else if (item is ITextItem) {
-					Platform.Environment.Execute ((item as ITextItem).Text);
+					Services.Environment.Execute ((item as ITextItem).Text);
 				}
 			}
 			return null;

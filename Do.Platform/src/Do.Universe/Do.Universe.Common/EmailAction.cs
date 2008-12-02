@@ -115,7 +115,7 @@ namespace Do.Universe.Common
 				body = "?body=" + (modItems.First () as ITextItem).Text
 					.Replace ("\"", "\\\""); // Try to escape quotes...
 			}
-			Do.Platform.Environment.OpenURL ("\"mailto:" + emails + body + "\"");
+			Services.Environment.OpenURL ("\"mailto:" + emails + body + "\"");
 			return null;
 		}
 	}

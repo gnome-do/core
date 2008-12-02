@@ -98,7 +98,7 @@ namespace Do.Universe.Common
 				if (!url.Contains ("://")) {
 					url = "http://" + url;
 				}
-				Platform.Environment.OpenURL (url);	
+				Services.Environment.OpenURL (url);	
 			}
 			return null;
 		}

@@ -199,7 +199,7 @@ namespace Do.Platform.Linux {
 
 		public void Open ()
 		{
-			Platform.Environment.OpenURL ("trash://");
+			Services.Environment.OpenURL ("trash://");
 		}
 	}
 
@@ -240,7 +240,7 @@ namespace Do.Platform.Linux {
 		
 		public void Open ()
 		{
-			Platform.Environment.OpenURL (URI + Path);
+			Services.Environment.OpenURL (URI + Path);
 		}	
 	}
 }

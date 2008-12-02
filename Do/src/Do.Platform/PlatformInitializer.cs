@@ -31,7 +31,6 @@ namespace Do.Platform
 		{
 			Core.Initialize (new CoreImplementation ());
 			UniverseFactory.Initialize (new UniverseFactoryImplementation ());
-			Environment.Initialize (new EnvironmentImplementation ());
 			Paths.Initialize (new PathsImplementation ());
 			Preferences.Initialize (new GConfPreferencesImplementation ());
 

@@ -24,6 +24,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 
 using Mono.Unix;
@@ -43,9 +44,9 @@ namespace Do.Platform {
 
 		public string UserHome {
 			get {
-				string home = System.Environment.GetEnvironmentVariable ("HOME");
+				string home = Environment.GetEnvironmentVariable ("HOME");
 				if (string.IsNullOrEmpty (home))
-					home = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+					home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 				return home;
 			}
 		}
@@ -64,30 +65,21 @@ namespace Do.Platform {
 
 		public IEnumerable<string> SystemPlugins {
 			get {
-				string [] dirs = SystemData;
-				for (int i = 0; i < dirs.Length; ++i)
-					dirs [i] = Paths.Combine (dirs [i], "plugins");
-				return dirs;
+				return SystemData.Select (dir => Paths.Combine (dir, "plugins"));
 			}
 		}
 
 		#endregion
 		
-		public static string[] SystemData {
+		public static IEnumerable<string> SystemData {
 			get {
 				string envVal;
-				string [] dirs;
 				
-				envVal = System.Environment.GetEnvironmentVariable ("XDG_DATA_DIRS");
+				envVal = Environment.GetEnvironmentVariable ("XDG_DATA_DIRS");
 				if (string.IsNullOrEmpty (envVal))
 					envVal = "/usr/local/share:/usr/share";
 
-				dirs = envVal.Split (':');
-
-				for (int i = 0; i < dirs.Length; ++i)
-					dirs [i] = Paths.Combine (dirs [i], "gnome-do");
-
-				return dirs;
+				return envVal.Split (':').Select (dir => Paths.Combine (dir, "gnome-do"));
 			}
 		}
 		

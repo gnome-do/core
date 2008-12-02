@@ -23,14 +23,33 @@ using System.Diagnostics;
 
 using Mono.Unix;
 
-namespace Do.Platform
+using Do.Platform;
+using Do.Platform.ServiceStack;
+
+namespace Do.Platform.Linux
 {
-	public class EnvironmentImplementation : Environment.Implementation
+	public class EnvironmentService : IEnvironmentService
 	{
 
 		static string last_command_found;
 
-		#region Environment.Implementation
+		#region IEnvironmentService
+
+		#region IObject
+		
+		public string Name {
+			get { return Catalog.GetString ("Linux Environment Service"); }
+		}
+
+		public string Description {
+			get { return Catalog.GetString ("Various Linux-related user environment services."); }
+		}
+
+		public string Icon {
+			get { return "gnome-do"; }
+		}
+		
+		#endregion
 		
 		public void OpenURL (string url)
 		{

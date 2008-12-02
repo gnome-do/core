@@ -23,6 +23,8 @@ using System.Collections.Generic;
 
 using Mono.Unix;
 
+using Do.Platform;
+
 namespace Do.Universe.Common
 {
 	public class RevealAction : AbstractAction
@@ -53,7 +55,7 @@ namespace Do.Universe.Common
 				escapedPath = System.IO.Path.GetDirectoryName (file.Path)
 					.Replace (" ", "\\ ")
 					.Replace ("'", "\\'");
-				Platform.Environment.OpenPath (escapedPath);
+				Services.Environment.OpenPath (escapedPath);
 			}
 			return null;
 		}

@@ -188,7 +188,7 @@ namespace Do.Universe {
 
 		public virtual void Open ()
 		{
-			Platform.Environment.OpenPath (EscapedPath (this));
+			Services.Environment.OpenPath (EscapedPath (this));
 		}
 	}
 }
