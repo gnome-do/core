@@ -48,7 +48,7 @@ namespace Do.Platform
 
 		public static void OpenEmail (this IEnvironmentService self, string to, string subject, string body)
 		{
-			self.OpenEmail (new string[] { to }, subject, body);
+			self.OpenEmail (new [] { to }, subject, body);
 		}
 
 		public static void OpenEmail (this IEnvironmentService self, IEnumerable<string> to, string subject, string body)
