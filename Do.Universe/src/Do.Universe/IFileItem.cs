@@ -25,7 +25,7 @@ namespace Do.Universe
 	/// <summary>
 	/// An IItem representing a file.
 	/// </summary>
-	public interface IFileItem : IURIItem
+	public interface IFileItem : IUriItem
 	{
 		/// <summary>
 		/// The absolute path of the file.

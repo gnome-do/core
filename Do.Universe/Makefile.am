@@ -18,9 +18,9 @@ FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Universe/IApplicationItem.cs \
 	src/Do.Universe/IBookmarkItem.cs \
-	src/Do.Universe/IURIItem.cs \
+	src/Do.Universe/IUriItem.cs \
 	src/Do.Universe/IItem.cs \
-	src/Do.Universe/IURLItem.cs \
+	src/Do.Universe/IUrlItem.cs \
 	src/Do.Universe/ITextItem.cs \
 	src/Do.Universe/IOpenableItem.cs \
 	src/Do.Universe/IItemSource.cs \

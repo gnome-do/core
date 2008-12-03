@@ -15,7 +15,7 @@
 	<Extension path="/Do/Action">
 		<Action type="Do.Universe.Common.EmailAction" />
 		<Action type="Do.Universe.Common.OpenAction" />
-		<Action type="Do.Universe.Common.OpenURLAction" />
+		<Action type="Do.Universe.Common.OpenUrlAction" />
 		<Action type="Do.Universe.Common.OpenWithAction" />
 		<Action type="Do.Universe.Common.RevealAction" />
 		<Action type="Do.Universe.Common.RunAction" />

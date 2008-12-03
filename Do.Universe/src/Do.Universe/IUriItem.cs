@@ -1,4 +1,4 @@
-/* IURIItem.cs
+/* IUriItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -26,11 +26,11 @@ namespace Do.Universe
 	/// <value>
 	/// An IItem with a URI.
 	/// </value>
-	public interface IURIItem : IItem
+	public interface IUriItem : IItem
 	{
 		/// <value>
 		/// The URI represented by this IItem.
 		/// </value>
-		string URI { get; }
+		string Uri { get; }
 	}
 }

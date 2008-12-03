@@ -29,7 +29,7 @@ namespace Do.Platform
 	
 	public interface IEnvironmentService : IService
 	{
-		void OpenURL (string url);
+		void OpenUrl (string url);
 		void OpenPath (string path);
 
 		void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,

@@ -33,10 +33,6 @@ namespace Do.Universe.Common
 	/// A command providing "open with..." semantics to file items.
 	/// </summary>
 	public class OpenWithAction : AbstractAction {
-
-		public OpenWithAction ()
-		{
-		}
 		
 		public override string Name {
 			get { return Catalog.GetString ("Open With..."); }
@@ -51,21 +47,17 @@ namespace Do.Universe.Common
 		}
 		
 		public override IEnumerable<Type> SupportedItemTypes {
-			get {
-				yield return typeof (IFileItem);
-			}
+			get { yield return typeof (IFileItem); }
 		}
 		
 		public override IEnumerable<Type> SupportedModifierItemTypes {
-			get {
-				yield return typeof (IApplicationItem);
-			}
+			get { yield return typeof (IApplicationItem); }
 		}
 		
 		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
 		{
-			(modItems.First () as IApplicationItem)
-				.RunWithURIs (items.Cast<IFileItem> ().Select (file => file.URI));
+			foreach (IApplicationItem app in modItems)
+				app.LaunchWithFiles (items.Cast<IFileItem> ());
 			return Enumerable.Empty<IItem> ();
 		}
 	}

@@ -206,7 +206,7 @@ namespace Do.UI
 		protected virtual void OnNewAcctBtnClicked (object sender, EventArgs e)
 		{
 			if (!String.IsNullOrEmpty (new_acct_btn.Uri))
-				Services.Environment.OpenURL (new_acct_btn.Uri);
+				Services.Environment.OpenUrl (new_acct_btn.Uri);
 		}
 		
 		/// <summary>

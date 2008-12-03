@@ -22,7 +22,7 @@ using System.Collections.Generic;
 
 namespace Do.Universe
 {
-	public interface IBookmarkItem : IURLItem
+	public interface IBookmarkItem : IUrlItem
 	{
 	}
 }

@@ -1,4 +1,4 @@
-// OpenURLAction.cs
+// OpenUrlAction.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this
@@ -29,7 +29,7 @@ using Do.Platform;
 namespace Do.Universe.Common
 {
 
-	public class OpenURLAction : AbstractAction
+	public class OpenUrlAction : AbstractAction
 	{
 
 		// URL regex taken from http://www.osix.net/modules/article/?id=586
@@ -46,7 +46,7 @@ namespace Do.Universe.Common
 		
 		readonly Regex url_regex;
 		
-		public OpenURLAction ()
+		public OpenUrlAction ()
 		{
 			url_regex = new Regex (UrlPattern, RegexOptions.Compiled);
 		}
@@ -65,7 +65,7 @@ namespace Do.Universe.Common
 		
 		public override IEnumerable<Type> SupportedItemTypes {
 			get {
-				yield return typeof (IURLItem);
+				yield return typeof (IUrlItem);
 				yield return typeof (ITextItem);
 			}
 		}
@@ -82,10 +82,10 @@ namespace Do.Universe.Common
 			IEnvironmentService env = Services.Environment;
 
 			foreach (IItem item in items) {
-				if (item is IURLItem)
-					env.OpenURL ((item as IURLItem).URL);
+				if (item is IUrlItem)
+					env.OpenUrl ((item as IUrlItem).Url);
 				else if (item is ITextItem)
-					env.OpenURL ((item as ITextItem).Text);
+					env.OpenUrl ((item as ITextItem).Text);
 			}
 			return null;
 		}

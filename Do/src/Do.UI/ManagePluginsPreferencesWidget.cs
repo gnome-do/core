@@ -206,7 +206,7 @@ namespace Do.UI
 			foreach (string id in nview.GetSelectedAddins ()) {
 				try {
 					string name = Addin.GetIdName (id).Split ('.')[1];
-					Services.Environment.OpenURL (string.Format (PluginWikiPageFormat, name));
+					Services.Environment.OpenUrl (string.Format (PluginWikiPageFormat, name));
 				} catch { }
 			}
 		}

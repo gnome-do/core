@@ -143,8 +143,8 @@ namespace Do.Universe.Linux {
 			get {
 				if (null != icon) return icon;
 
-				string large_thumb = Thumbnail.PathForUri (URI, ThumbnailSize.Large);
-				string normal_thumb = Thumbnail.PathForUri (URI, ThumbnailSize.Normal);
+				string large_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Large);
+				string normal_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Normal);
 				// Generating the thumbnail ourself is too slow for large files.
 				// Suggestion: generate thumbnails asynchronously. Banshee's
 				// notion of job queues may be useful.
@@ -170,12 +170,9 @@ namespace Do.Universe.Linux {
 			}
 		}
 
-		public string Path {
-			get { return path; }
-			set { path = value; }
-		}
+		public string Path { get; private set; }
 
-		public string URI {
+		public string Uri {
 			get {
 				return "file://" + Path;
 			}

@@ -42,7 +42,7 @@ namespace Do.Core {
 
 		static readonly IEnumerable<Type> RewardedActionTypes = new Type[] {
 			typeof (OpenAction),
-			typeof (OpenURLAction),
+			typeof (OpenUrlAction),
 			typeof (RunAction),
 			typeof (EmailAction),
 		};

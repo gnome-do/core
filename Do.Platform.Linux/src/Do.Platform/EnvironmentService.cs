@@ -65,7 +65,7 @@ namespace Do.Platform.Linux
 			));
 		}
 		
-		public void OpenURL (string url)
+		public void OpenUrl (string url)
 		{
 			if (!url.Contains ("://"))
 				url = "http://" + url;

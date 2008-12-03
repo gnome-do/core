@@ -33,7 +33,7 @@ FILES = \
 	src/Do.Platform/Windowing.cs \
 	src/Do.Universe/Do.Universe.Common/EmailAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenAction.cs \
-	src/Do.Universe/Do.Universe.Common/OpenURLAction.cs \
+	src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenWithAction.cs \
 	src/Do.Universe/Do.Universe.Common/RevealAction.cs \
 	src/Do.Universe/Do.Universe.Common/RunAction.cs \

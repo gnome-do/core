@@ -22,9 +22,9 @@ using System.Collections.Generic;
 
 namespace Do.Universe
 {
-	public interface IApplicationItem : Do.Universe.IRunnableItem
+	public interface IApplicationItem : IRunnableItem
 	{
 		string Exec { get; }
-		void RunWithURIs (IEnumerable<string> uris);
+		void LaunchWithFiles (IEnumerable<IFileItem> files);
 	}
 }

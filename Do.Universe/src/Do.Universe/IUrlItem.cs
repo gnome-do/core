@@ -1,4 +1,4 @@
-/* IURLItem.cs
+/* IUrlItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -24,13 +24,13 @@ namespace Do.Universe
 {
 
 	/// <value>
-	/// An IItem with a URL.
+	/// An IItem with a Url.
 	/// </value>
-	public interface IURLItem : IItem
+	public interface IUrlItem : IItem
 	{
 		/// <value>
 		/// The URL represented by this IItem.
 		/// </value>
-		string URL { get; }
+		string Url { get; }
 	}
 }

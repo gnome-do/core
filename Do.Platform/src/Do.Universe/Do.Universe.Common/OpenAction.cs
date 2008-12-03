@@ -50,7 +50,7 @@ namespace Do.Universe.Common
 			get {
 				return new [] {
 					typeof (IOpenableItem),
-					typeof (IURIItem),
+					typeof (IUriItem),
 					// Support opening manually-typed paths.
 					typeof (ITextItem),
 				};
@@ -75,8 +75,8 @@ namespace Do.Universe.Common
 			foreach (IItem item in items) {
 				if (item is IOpenableItem)
 					(item as IOpenableItem).Open ();
-				else if (item is IURIItem)
-					env.OpenPath ((item as IURIItem).URI);
+				else if (item is IUriItem)
+					env.OpenPath ((item as IUriItem).Uri);
 				else if (item is ITextItem)
 					env.OpenPath ((item as ITextItem).Text);
 			}

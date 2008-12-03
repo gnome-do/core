@@ -40,7 +40,7 @@
     <File name="src/Do.Universe" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Common/EmailAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Common/OpenAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/OpenURLAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Common/OpenWithAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Common/RevealAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Common/RunAction.cs" subtype="Code" buildaction="Compile" />

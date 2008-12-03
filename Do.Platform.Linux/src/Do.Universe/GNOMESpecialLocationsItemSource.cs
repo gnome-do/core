@@ -36,7 +36,7 @@ namespace Do.Universe.Linux {
 			items = new List<IItem> ();
 		}
 		
-		class GNOMEURIItem : IURIItem {
+		class GNOMEURIItem : IUriItem {
 			protected string uri, name, icon;
 			
 			public GNOMEURIItem (string uri, string name, string icon)
@@ -47,9 +47,9 @@ namespace Do.Universe.Linux {
 			}
 			
 			virtual public string Name { get { return name; } }
-			virtual public string Description { get { return URI; } }
+			virtual public string Description { get { return Uri; } }
 			virtual public string Icon { get { return icon; } }
-			virtual public string URI { get { return uri; } }
+			virtual public string Uri { get { return uri; } }
 		}
 			
 		public string Name { 
@@ -68,7 +68,7 @@ namespace Do.Universe.Linux {
 		{
 			get {
 				return new Type[] {
-					typeof (IURIItem),
+					typeof (IUriItem),
 				};
 			}
 		}
@@ -181,7 +181,7 @@ namespace Do.Universe.Linux {
 			get { return "Trash"; }
 		}
 
-		public string URI {
+		public string Uri {
 			get { return "trash://"; }
 		}
 
@@ -199,7 +199,7 @@ namespace Do.Universe.Linux {
 
 		public void Open ()
 		{
-			Services.Environment.OpenURL ("trash://");
+			Services.Environment.OpenUrl ("trash://");
 		}
 	}
 
@@ -230,7 +230,7 @@ namespace Do.Universe.Linux {
 			get { return uri + path; } 
 		}
 
-		public string URI {
+		public string Uri {
 			get { return uri; }
 		}		
 		
@@ -240,7 +240,7 @@ namespace Do.Universe.Linux {
 		
 		public void Open ()
 		{
-			Services.Environment.OpenURL (URI + Path);
+			Services.Environment.OpenUrl (Uri + Path);
 		}	
 	}
 }

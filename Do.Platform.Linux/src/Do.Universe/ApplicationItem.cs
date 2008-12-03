@@ -136,9 +136,10 @@ namespace Do.Universe.Linux {
 			item.Launch (null, DesktopItemLaunchFlags.OnlyOne);
 		}
 
-		public void RunWithURIs (IEnumerable<string> uris)
+		public void LaunchWithFiles (IEnumerable<IFileItem> files)
 		{
-			GLib.List glist = new GLib.List (uris.ToArray (), typeof (string), false, true);
+			string [] uris = files.Select (file => file.Uri).ToArray ();
+			GLib.List glist = new GLib.List (uris as object[], typeof (string), false, true);
 			item.Launch (glist, DesktopItemLaunchFlags.OnlyOne);
 		}
 	}

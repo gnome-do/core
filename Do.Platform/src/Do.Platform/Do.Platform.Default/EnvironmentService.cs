@@ -53,7 +53,7 @@ namespace Do.Platform.Default
 			Log.Warn ("Default IEnvironmentService cannot send email.");
 		}
 		
-		public void OpenURL (string url)
+		public void OpenUrl (string url)
 		{
 			Log.Warn ("Default IEnvironmentService cannot open url \"{0}\".", url);
 		}
