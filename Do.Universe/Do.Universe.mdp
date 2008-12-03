@@ -1,0 +1,39 @@
+<Project name="Do.Universe" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="DotNetProjectConfiguration">
+      <Output directory="bin/Debug" assembly="Do.Universe" />
+      <Build debugmode="True" target="Library" />
+      <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="False" definesymbols="DEBUG" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+    </Configuration>
+    <Configuration name="Release" ctype="DotNetProjectConfiguration">
+      <Output directory="bin/Release" assembly="Do.Universe" />
+      <Build debugmode="False" target="Library" />
+      <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="False" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+    </Configuration>
+  </Configurations>
+  <Contents>
+    <File name="Resources/Do.Universe.addin.xml" subtype="Code" buildaction="Nothing" />
+    <File name="src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/AbstractAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/ContactItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IApplicationItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IBookmarkItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IContactDetailItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IFileItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IObject.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IOpenableItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IRunnableItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/ITextItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IURIItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/IURLItem.cs" subtype="Code" buildaction="Compile" />
+  </Contents>
+  <References>
+    <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  </References>
+  <GtkDesignInfo />
+</Project>
