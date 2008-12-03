@@ -34,8 +34,8 @@ namespace Do.Core {
 	/// The root of our wrapper heirarchy (DoObject, DoItem, DoItemSource,
 	/// DoAction).
 	/// </summary>
-	public class DoObject :
-		IObject, IConfigurable, IEquatable<DoObject>, IComparable, IComparable<DoObject> {
+	public class DoObject : IObject, IConfigurable,
+		IEquatable<DoObject>, IComparable<IObject>, IComparable<DoObject> {
 
 		const string UIDFormat = "{0}: {1} ({2})";
 		static readonly string DefaultName;
@@ -197,9 +197,9 @@ namespace Do.Core {
 			return UID;
 		}
 
-		public int CompareTo (object other)
+		public int CompareTo (IObject other)
 		{
-			return other is DoObject ? CompareTo (other as DoObject) : 0;
+			return CompareTo (Wrap (other) as DoObject);
 		}
 
 		public int CompareTo (DoObject other)
