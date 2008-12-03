@@ -64,10 +64,7 @@ namespace Do.Platform
 		{
 			Log.Info ("Looking for services of type \"{0}\"...", typeof (TService).Name);			
 			return AddinManager.GetExtensionObjects ("/Do/Service", true)
-				// This does not work:
-				//.Where (service => service is TService).Cast<TService> ()
-				// This works:
-				.Select (service => service as TService).Where (service => service != null);
+				.OfType<TService> ();
 		}
 	}
 }
