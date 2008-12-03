@@ -54,13 +54,13 @@ namespace Do.Platform
 		}
 		
 		static TService LocateService<TService> ()
-			where TService : class, IService
+			where TService : IService
 		{
 			return LocateServices<TService> ().FirstOrDefault ();
 		}
 		
 		static IEnumerable<TService> LocateServices<TService> ()
-			where TService : class, IService
+			where TService : IService
 		{
 			Log.Info ("Looking for services of type \"{0}\"...", typeof (TService).Name);			
 			return AddinManager.GetExtensionObjects ("/Do/Service", true)
