@@ -169,11 +169,11 @@ namespace MonoDock.UI
 		IEnumerable<IItem> MostUsedItems ()
 		{
 			Func<IItem, bool> isNotSelectedText = item =>
-				Core.GetInnerType (item).Name != "SelectedTextItem";
+				Services.Core.GetInnerType (item).Name != "SelectedTextItem";
 			Func<IItem, bool> isApplication = item =>
-				Core.GetInnerType (item).Name == "ApplicationItem";
+				Services.Core.Unwrap (item) is IApplicationItem;
 			Func<IItem, int> typeComparison = item =>
-				Core.GetInnerType (item).GetHashCode ();
+				Services.Core.GetInnerType (item).GetHashCode ();
 
 			return statistics.GetMostUsedItems (DockPreferences.AutomaticIcons)
 				.Where (isNotSelectedText)

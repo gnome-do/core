@@ -21,13 +21,13 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Do.UI;
 using Do.Addins;
 using Do.Universe;
-using Do.UI;
+using Do.Platform;
 
 namespace Do.Core
 {
-	
 	
 	public class FirstSearchController : SimpleSearchController
 	{
@@ -60,7 +60,7 @@ namespace Do.Core
 				} else if (context.SecondaryCursors.Any ()) {
 					// This is pretty bad.
 					yield return 
-						Platform.Core.GetInnerType (Results [SecondaryCursors [0]]);
+						Services.Core.GetInnerType (Results [SecondaryCursors [0]]);
 				} else {
 					foreach (Type t in defaultFilter) yield return t;
 				}

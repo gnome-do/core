@@ -95,7 +95,7 @@ namespace Do.Universe {
 			AliasItem aliasItem;
 			
 			if (!ItemHasAlias (item, alias)) {
-				string uid = Platform.Core.GetUID (item);
+				string uid = Services.Core.GetUID (item);
 				aliases.Add (new AliasRecord (uid, alias));
 			}
 			
@@ -129,7 +129,7 @@ namespace Do.Universe {
 		static int IndexOfAlias (IItem item)
 		{
 			int i = 0;
-			string uid = Platform.Core.GetUID (item);
+			string uid = Services.Core.GetUID (item);
 			foreach (AliasRecord alias in aliases) {
 				if (alias.UID == uid)
 					return i;

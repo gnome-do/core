@@ -1,4 +1,4 @@
-// Core.cs
+// CoreService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -19,56 +19,54 @@
 
 using System;
 
+using Mono.Unix;
+
+using Do.Core;
 using Do.Universe;
+using Do.Platform;
 
 namespace Do.Platform
 {
 	
-	public static class Core
+	public class CoreService : ICoreService
 	{
+		#region ICoreService
 
-		public interface Implementation
-		{
-			string GetUID (IObject o);
-			IObject GetIObject (string uid);
-
-			IObject Unwrap (IObject o);
+		#region IObject
+		
+		public string Name {
+			get { return Catalog.GetString ("Do Core Service"); }
 		}
 
-		public static Implementation Imp { get; private set; }
-
-		public static void Initialize (Implementation imp)
-		{
-			if (Imp != null)
-				throw new Exception ("Already has Implementation");
-			if (imp == null)
-				throw new ArgumentNullException ("Implementation may not be null");
-			
-			Imp = imp;
+		public string Description {
+			get { return Catalog.GetString ("Provides plugins with safe access to internal application state."); }
 		}
 
-		#region Implementation
-
-		public static string GetUID (IObject o)
-		{
-			return Imp.GetUID (o);
-		}
-
-		public static IObject GetIObject (string uid)
-		{
-			return Imp.GetIObject (uid);
-		}
-
-		public static IObject Unwrap (IObject o)
-		{
-			return Imp.Unwrap (o);
+		public string Icon {
+			get { return "gnome-do"; }
 		}
 
 		#endregion
-
-		public static Type GetInnerType (IObject o)
+		
+		public string GetUID (IObject o)
 		{
-			return Unwrap (o).GetType ();
+			return (DoObject.Wrap (o) as DoObject).UID;
 		}
+
+		public IObject GetIObject (string uid)
+		{
+			IObject o;
+			Do.UniverseManager.TryGetObjectForUID (uid, out o);
+			return o;
+		}
+
+		public IObject Unwrap (IObject o)
+		{
+			return DoObject.Unwrap (o);
+		}
+
+		#endregion
+		
 	}
+
 }

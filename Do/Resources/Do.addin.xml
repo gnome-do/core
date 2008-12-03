@@ -8,6 +8,10 @@
 		<Addin id="Do.Platform" version="1.0" />
 		<Addin id="Do.Universe" version="1.0" />
 	</Dependencies>
+
+	<Extension path="/Do/Service">
+		<Service type="Do.Platform.CoreService" />
+	</Extension>
 	
 	<Extension path="/Do/ItemSource">
 		<ItemSource type="Do.Universe.AliasItemSource" />
@@ -19,5 +23,6 @@
 		<Action type="Do.Universe.AliasAction" />
 		<Action type="Do.Universe.DeleteAliasAction" />
 	</Extension>
+	
 	
 </Addin>

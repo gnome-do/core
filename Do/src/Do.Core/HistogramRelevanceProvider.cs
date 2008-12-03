@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
+using Do.Platform;
 using Do.Universe;
 using Do.Universe.Common;
 
@@ -187,7 +188,7 @@ namespace Do.Core {
 		public RelevanceRecord (IObject o)
 		{
 			LastHit = DateTime.Now;
-			Type = Platform.Core.GetInnerType (o);
+			Type = Services.Core.GetInnerType (o);
 			FirstChars = string.Empty;
 		}
 

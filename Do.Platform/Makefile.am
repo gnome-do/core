@@ -16,11 +16,12 @@ all: $(ASSEMBLY)
 
 FILES = \
 	src/AssemblyInfo.cs \
-	src/Do.Platform/Core.cs \
 	src/Do.Platform/Do.Platform.Common/AbstractLogImplementation.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogImplementation.cs \
+	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IService.cs \
+	src/Do.Platform/ICoreService.cs \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/Icons.cs \
 	src/Do.Platform/Log.cs \

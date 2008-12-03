@@ -29,7 +29,6 @@ namespace Do.Platform
 		
 		public static void Initialize ()
 		{
-			Core.Initialize (new CoreImplementation ());
 			UniverseFactory.Initialize (new UniverseFactoryImplementation ());
 			Paths.Initialize (new PathsImplementation ());
 			Preferences.Initialize (new GConfPreferencesImplementation ());

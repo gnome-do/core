@@ -90,7 +90,7 @@ namespace MonoDock.UI
 		
 		public void UpdateApplication ()
 		{
-			IObject inner = Do.Platform.Core.Unwrap (item);
+			IObject inner = Services.Core.Unwrap (item);
 			if (inner is IApplicationItem) {
 				apps = WindowUtils.GetApplicationList ((inner as IApplicationItem).Exec);
 			}
