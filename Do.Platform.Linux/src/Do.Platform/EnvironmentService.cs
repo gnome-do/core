@@ -67,12 +67,14 @@ namespace Do.Platform.Linux
 		
 		public void OpenURL (string url)
 		{
+			if (!url.Contains ("://"))
+				url = "http://" + url;
 			Open (url);
 		}
 
 		public void OpenPath (string path)
 		{
-			Open (path);
+			Open (path.Replace ("~", Paths.UserHome));
 		}
 
 		public bool IsExecutable (string line)
@@ -101,21 +103,17 @@ namespace Do.Platform.Linux
 
 		#endregion
 
-		static void Open (string open_item)
+		static void Open (string open)
 		{
-			if (open_item == null) return;
-
-			using (Process start_proc = new Process ())
-			{
-				// start_proc.StartInfo.FileName = open_item;
-				// start_proc.StartInfo.UseShellExecute = true;
-				start_proc.StartInfo.FileName = "xdg-open";
-				start_proc.StartInfo.Arguments = open_item;
+			using (Process p = new Process ()) {
+				p.StartInfo.FileName = open;
+				p.StartInfo.UseShellExecute = true;
 				try {
-					Log.Debug ("Opening \"{0}\"...", open_item);
-					start_proc.Start ();
+					Log.Info ("Opening \"{0}\"...", open);
+					p.Start ();
 				} catch (Exception e) {
-					Log.Error ("Failed to open {0}: {1}", open_item, e.Message);
+					Log.Error ("Failed to open {0}: {1} \"{2}\"", open, e.GetType ().Name, e.Message);
+					Log.Debug (e.StackTrace);
 				}
 			}
 		}
