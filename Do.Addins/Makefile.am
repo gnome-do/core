@@ -124,6 +124,7 @@ REFERENCES =  \
 	$(WNCK_SHARP_10_LIBS)
 
 DLL_REFERENCES = \
+	../Do.Universe/Do.Universe.dll \
 	../Do.Platform/Do.Platform.dll \
 	../Do.Platform.Linux/Do.Platform.Linux.dll \
 	../Do.Interface.Linux/Do.Interface.Linux.dll

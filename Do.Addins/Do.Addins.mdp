@@ -107,6 +107,7 @@
     <ProjectReference type="Gac" localcopy="True" refto="wnck-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Platform" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Interface.Linux" />
+    <ProjectReference type="Project" localcopy="True" refto="Do.Universe" />
   </References>
   <GtkDesignInfo />
   <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="./Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">

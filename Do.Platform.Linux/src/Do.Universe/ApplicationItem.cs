@@ -27,7 +27,9 @@ using System.Runtime.InteropServices;
 using Gnome;
 using Mono.Unix;
 
-namespace Do.Universe {
+using Do.Universe;
+
+namespace Do.Universe.Linux {
 
 	public class ApplicationItem : IApplicationItem {
 		

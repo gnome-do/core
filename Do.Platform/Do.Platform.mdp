@@ -17,32 +17,10 @@
     <File name="src" subtype="Directory" buildaction="Compile" />
     <File name="src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform" subtype="Directory" buildaction="Compile" />
-    <File name="src/Do.Universe" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Platform/Core.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IApplicationItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/UniverseFactory.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IObject.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/ITextItem.cs" subtype="Code" buildaction="Compile" />
     <File name="Resources/Do.Platform.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="src/Do.Universe/AbstractAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/BookmarkItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/ContactItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/EmailAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/OpenAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/OpenURLAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/OpenWithAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/RevealAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/RunAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/TextItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Paths.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IURLItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IURIItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IRunnableItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IOpenableItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/IFileItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Common" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Common/FileLogImplementation.cs" subtype="Code" buildaction="Compile" />
@@ -59,12 +37,21 @@
     <File name="src/Do.Platform/Do.Platform.Default" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/EnvironmentService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IEnvironmentService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/EmailAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/OpenAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/OpenURLAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/OpenWithAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/RevealAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/RunAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/TextItem.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <ProjectReference type="Project" localcopy="True" refto="Do.Universe" />
   </References>
   <GtkDesignInfo />
 </Project>

@@ -6,21 +6,20 @@
 	
 	<Dependencies>
 		<Addin id="Do.Platform" version="1.0" />
+		<Addin id="Do.Universe" version="1.0" />
 	</Dependencies>
 	
-	<!-- Extensions included in this assembly -->
-	<!-- Item Sources -->
 	<Extension path="/Do/ItemSource">
-		<ItemSource type="Do.Platform.Linux.ApplicationItemSource" />
-		<ItemSource type="Do.Platform.Linux.GNOMESpecialLocationsItemSource" />
+		<ItemSource type="Do.Universe.Linux.ApplicationItemSource" />
+		<ItemSource type="Do.Universe.Linux.GNOMESpecialLocationsItemSource" />
 	</Extension>
 
-	<!-- Actions -->
 	<Extension path="/Do/Action">
-		<Action type="Do.Platform.Linux.CopyToClipboardAction" />
+		<Action type="Do.Universe.Linux.CopyToClipboardAction" />
 	</Extension>
 
 	<Extension path="/Do/Service">
 		<Service type="Do.Platform.Linux.EnvironmentService" />
 	</Extension>
+	
 </Addin>

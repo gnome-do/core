@@ -1,8 +1,7 @@
-/* TextItem.cs
+/* IBookmarkItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
+ * COPYRIGHT file distributed with this source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,31 +20,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Do.Universe.Common
+namespace Do.Universe
 {
-	/// <summary>
-	/// A concrete implementation of the ITextItem interface.
-	/// </summary>
-	public class TextItem : ITextItem
+	public interface IBookmarkItem : IURLItem
 	{
-		public string Text { get; private set; }
-		
-		public TextItem (string text)
-		{
-			Text = text;
-		}
-		
-		public string Name {
-			get { return Text; }
-		}
-		
-		public string Description {
-			get { return Text; }
-		}
-		
-		public string Icon {
-			get { return "gnome-mime-text"; }
-		}
-		
 	}
 }

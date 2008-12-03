@@ -37,7 +37,7 @@ namespace Do.Core {
 		const float DefaultAge = 1f;
 
 		static readonly IEnumerable<Type> RewardedItemTypes = new Type[] {
-			typeof (ApplicationItem),
+			typeof (IApplicationItem),
 		};
 
 		static readonly IEnumerable<Type> RewardedActionTypes = new Type[] {

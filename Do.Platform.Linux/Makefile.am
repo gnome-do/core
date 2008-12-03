@@ -27,12 +27,12 @@ FILES = \
 	src/Do.Platform/UniverseFactoryImplementation.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/FileItem.cs \
-	src/Plugins/Applications/ApplicationItemSource.cs \
-	src/Plugins/Clipboard/CopyToClipboardAction.cs \
-	src/Plugins/GNOME/GNOMESpecialLocationsItemSource.cs
+	src/Do.Universe/ApplicationItemSource.cs \
+	src/Do.Universe/CopyToClipboardAction.cs \
+	src/Do.Universe/GNOMESpecialLocationsItemSource.cs
 
 RESOURCES =  \
-        Resources/Do.Platform.Linux.addin.xml
+	Resources/Do.Platform.Linux.addin.xml
 
 REFERENCES =  \
 	System \
@@ -43,6 +43,7 @@ REFERENCES =  \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
 	$(GCONF_SHARP_20_LIBS) \
 	$(NOTIFY_SHARP_LIBS) \
+	../Do.Universe/Do.Universe.dll \
 	../Do.Platform/Do.Platform.dll \
 	../Do.Interface.Linux/Do.Interface.Linux.dll
 

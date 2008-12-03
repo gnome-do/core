@@ -26,8 +26,9 @@ using Gnome;
 using Mono.Unix;
 
 using Do.Platform;
+using Do.Universe;
 
-namespace Do.Universe {
+namespace Do.Universe.Linux {
 
 	/// <summary>
 	/// FileItem is an item describing a file. FileItem subclasses

@@ -1,0 +1,19 @@
+<Addin id="Do.Universe" namespace="Do" version="1.0" isroot="true">
+ 
+	<Runtime>
+		<Import assembly="Do.Universe.dll"/>
+	</Runtime>
+	
+	<ExtensionPoint path="/Do/Action">
+		<ExtensionNode name="Action" objectType="Do.Universe.IAction"/>
+	</ExtensionPoint>
+		<ExtensionPoint path="/Do/ItemSource">
+		<ExtensionNode name="ItemSource" objectType="Do.Universe.IItemSource"/>
+	</ExtensionPoint>
+
+	<Extension path="/Do/ItemSource">
+	</Extension>	
+	<Extension path="/Do/Action">
+	</Extension>
+
+</Addin>

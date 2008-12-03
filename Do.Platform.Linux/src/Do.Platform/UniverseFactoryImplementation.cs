@@ -20,6 +20,7 @@
 using System;
 
 using Do.Universe;
+using Do.Universe.Linux;
 
 namespace Do.Platform
 {

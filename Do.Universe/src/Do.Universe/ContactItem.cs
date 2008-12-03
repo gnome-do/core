@@ -21,13 +21,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-namespace Do.Universe.Common
+namespace Do.Universe
 {
-	public interface IContactDetailItem : IItem
-	{
-		string Key { get; }
-		string Value { get; }
-	}
 	
 	public class ContactItem : IItem
 	{
