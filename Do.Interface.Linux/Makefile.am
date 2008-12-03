@@ -24,6 +24,7 @@ REFERENCES =  \
 	System.Core \
 	$(GTK_SHARP_20_LIBS) \
 	../Do.Platform/Do.Platform.dll \
+	../Do.Universe/Do.Universe.dll \
 	Mono.Posix
 
 $(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
