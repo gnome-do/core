@@ -159,7 +159,7 @@ namespace Do.Core
 					thread.Join ();
 				
 				if (DateTime.Now.Subtract (last_action_update).TotalMilliseconds > 10 * UpdateTimeout) {
-					Log.Info ("Updating Actions");
+					Log.Debug ("Updating Actions");
 					ReloadActions ();
 					last_action_update = DateTime.Now;
 					continue;
@@ -174,7 +174,7 @@ namespace Do.Core
 						// continuing on.  We however do need to pick up where we left off later.
 						if (DateTime.Now.Subtract (time).TotalMilliseconds > UpdateRunTime)
 							Thread.Sleep (UpdateTimeout);
-						Log.Info ("Updating Item Source: {0}", item_source.Name);
+						Log.Debug ("Updating Item Source: {0}", item_source.Name);
 						UpdateSource (item_source);
 					}
 					
