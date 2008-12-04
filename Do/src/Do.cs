@@ -38,7 +38,7 @@ namespace Do {
 
 		internal static void Main (string[] args)
 		{
-			Catalog.Init ("gnome-do", "/usr/local/share/locale");
+			Catalog.Init ("gnome-do", AssemblyInfo.LocaleDir);
 			Gtk.Application.Init ();
 			Gdk.Threads.Init ();
 

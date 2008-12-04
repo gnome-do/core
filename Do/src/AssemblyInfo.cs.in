@@ -40,7 +40,7 @@ namespace Do
 	{
 		public const string Version = "@VERSION@";
 		public const string VersionDetails = "@VERSION_INFO@";
-		public const string LocaleDir = "@LOCALEDIR@";
+		public const string LocaleDir = "@expanded_datadir@/locale";
 	}
 }
 
