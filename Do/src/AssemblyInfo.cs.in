@@ -27,10 +27,20 @@ using System.Runtime.CompilerServices;
 // You can specify all values by your own or you can build default build and revision
 // numbers with the '*' character (the default):
 [assembly: AssemblyVersion("@ABI_VERSION@.0.0")]
-[assembly: Do.ProgramVersion("@VERSION@", "@VERSION_INFO@")]
 
 // The following attributes specify the key for the sign of your assembly. See the
 // .NET Framework documentation for more information about signing.
 // This is not required, if you don't want signing let these attributes like they're.
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
+
+namespace Do
+{
+	internal static class AssemblyInfo
+	{
+		public const string Version = "@VERSION@";
+		public const string VersionDetails = "@VERSION_INFO@";
+		public const string LocaleDir = "@LOCALEDIR@";
+	}
+}
+

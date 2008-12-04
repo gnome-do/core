@@ -942,13 +942,7 @@ namespace Do.Core {
 			about_window.ProgramName = "GNOME Do";
 			about_window.Modal = false;
 
-			try {
-				Assembly asm = Assembly.GetEntryAssembly ();
-				ProgramVersion ver = asm.GetCustomAttributes (typeof (ProgramVersion), false)[0] as ProgramVersion;
-				about_window.Version = ver.Version + "\n" + ver.Details;
-			} catch {
-				about_window.Version = Catalog.GetString ("Unknown");
-			}
+			about_window.Version = AssemblyInfo.Version + "\n" + AssemblyInfo.VersionDetails;
 
 			logo = "gnome-do.svg";
 
