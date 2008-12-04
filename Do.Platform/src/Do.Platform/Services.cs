@@ -30,31 +30,86 @@ namespace Do.Platform
 	
 	public class Services
 	{
-		public static ICoreService Core { get; private set; }
-		public static IEnvironmentService Environment { get; private set; }
-		public static IPreferencesFactory Preferences { get; private set; }
+
+		static ICoreService core;
+		static IEnvironmentService environment;
+		static IPreferencesFactory preferences;
+		static IEnumerable<ILogService> logs;
 		
 		public static void Initialize ()
 		{
-			Core = LocateService<ICoreService, Default.CoreService> ();
-			Environment = LocateService<IEnvironmentService, Default.EnvironmentService> ();
+			if (!AddinManager.IsInitialized) {
+				throw new Exception ("Serivces.Initialize called before AddinManager was initialized.");
+			}
+			AddinManager.AddExtensionNodeHandler ("/Do/Service", OnServiceChanged);
+		}
 
-			IPreferencesService prefs = LocateService<IPreferencesService, Default.PreferencesService> ();
-			Preferences = new PreferencesFactory (prefs);
+		/// <summary>
+		/// When a service is changed, we "dirty the cache".
+		/// </summary>
+		/// <param name="s">
+		/// A <see cref="System.Object"/>
+		/// </param>
+		/// <param name="args">
+		/// A <see cref="ExtensionNodeEventArgs"/>
+		/// </param>
+		static void OnServiceChanged (object s, ExtensionNodeEventArgs args)
+		{
+			IService service = args.ExtensionObject as IService;
+
+			switch (args.Change) {
+			case ExtensionChange.Add:
+				if (service is IInitializedService)
+					(service as IInitializedService).Initialize ();
+				break;
+			case ExtensionChange.Remove:
+				break;
+			}
+
+			// Dirty the appropriate cache.
+			if (service is ICoreService)
+				core = null;
+			if (service is IEnvironmentService)
+				environment = null;
+			if (service is IPreferencesService)
+				preferences = null;
+			if (service is ILogService)
+				logs = null;
+		}
+
+		public static IEnumerable<ILogService> Logs {
+			get {
+				return logs ??
+					logs = LocateServices<ILogService, Default.LogService> ();
+			}
+		}
+
+		public static ICoreService Core {
+			get {
+				return core ??
+					core = LocateService<ICoreService, Default.CoreService> ();
+			}
+		}
+		
+		public static IEnvironmentService Environment {
+			get {
+				return environment ??
+					environment = LocateService<IEnvironmentService, Default.EnvironmentService> ();
+			}
+		}
+			
+		public static IPreferencesFactory Preferences {
+			get {
+				return preferences ??
+					preferences = new PreferencesFactory (LocateService<IPreferencesService, Default.PreferencesService> ());
+			}
 		}
 
 		static TService LocateService<TService, TElse> ()
 			where TService : class, IService
 			where TElse : TService
 		{
-			TService service = LocateService<TService> ();
-			if (service == null) {
-				Log.Fatal ("Service of type \"{0}\" not found. Using default service instead.", typeof (TService).Name);
-				service = Activator.CreateInstance<TElse> () as TService;
-			} else {
-				Log.Info ("Successfully located service of type \"{0}\".", typeof (TService).Name);
-			}
-			return service;
+			return LocateServices<TService, TElse> ().First ();
 		}
 		
 		static TService LocateService<TService> ()
@@ -62,12 +117,25 @@ namespace Do.Platform
 		{
 			return LocateServices<TService> ().FirstOrDefault ();
 		}
+
+		static IEnumerable<TService> LocateServices<TService, TElse> ()
+			where TService : class, IService
+			where TElse : TService
+		{
+			IEnumerable<TService> services = LocateServices<TService> ();
+			if (services.Any ()) {
+				Log.Info ("Successfully located services of type {0}.", typeof (TService).Name);
+			} else {
+				Log.Fatal ("Services of type {0} not found. Using default service instead.", typeof (TService).Name);
+				services = new [] { Activator.CreateInstance<TElse> () as TService };
+			}
+			return services;
+		}
 		
 		static IEnumerable<TService> LocateServices<TService> ()
 			where TService : IService
 		{		
-			return AddinManager.GetExtensionObjects ("/Do/Service", true)
-				.OfType<TService> ();
+			return AddinManager.GetExtensionObjects ("/Do/Service", true).OfType<TService> ();
 		}
 	}
 }

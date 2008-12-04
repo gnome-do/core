@@ -21,6 +21,7 @@
 	<Extension path="/Do/Service">
 		<Service type="Do.Platform.Linux.EnvironmentService" />
 		<Service type="Do.Platform.Linux.GConfPreferencesService" />
+		<Service type="Do.Platform.Linux.ConsoleLogService" />
 	</Extension>
 	
 </Addin>

@@ -44,22 +44,15 @@ namespace Do {
 
 			DetectInstanceAndExit ();
 
-			Log.Initialize ();
-			Log.AddImplementation (new ConsoleLogImplementation ());
-			/*
-			if (CorePreferences.WriteLogToFile) {
-				if (File.Exists (Paths.Log)) File.Delete (Paths.Log);
-				Log.AddImplementation (new Common.FileLogImplementation ());
-			}
-			Log.LogLevel = CorePreferences.QuietStart ? Log.Level.Error : Log.Level.Info;
-			if (CorePreferences.Debug) Log.LogLevel = Log.Level.Debug;
-			*/
 			UniverseFactory.Initialize (new UniverseFactoryImplementation ());
 			Paths.Initialize (new PathsImplementation ());
 			Icons.Initialize (new Platform.Linux.IconsImplementation ());
 			Windowing.Initialize (new WindowingImplementation ());
 
 			PluginManager.Initialize ();
+
+			Log.DisplayLevel = CorePreferences.QuietStart ? LogLevel.Error : LogLevel.Info;
+			if (CorePreferences.Debug) Log.DisplayLevel = LogLevel.Debug;
 			
 			StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
 			Platform.Notifications.Initialize (new Platform.Linux.NotificationsImplementation ());

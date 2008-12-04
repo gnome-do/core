@@ -16,6 +16,8 @@ all: $(ASSEMBLY)
 
 FILES = \
 	src/AssemblyInfo.cs \
+	src/Do.Universe/EmptyItem.cs \
+	src/Do.Universe/EmptyObject.cs \
 	src/Do.Universe/IApplicationItem.cs \
 	src/Do.Universe/IBookmarkItem.cs \
 	src/Do.Universe/IUriItem.cs \

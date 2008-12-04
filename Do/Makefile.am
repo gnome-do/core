@@ -141,7 +141,6 @@ FILES = \
 	src/Do.Universe/DeleteAliasAction.cs \
 	src/Do.Universe/DoQuitItem.cs \
 	src/Do.Universe/DoTextItem.cs \
-	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/InternalItemSource.cs \
 	src/Do.Universe/ItemSourceItemSource.cs \
 	src/Do.Universe/PreferencesItem.cs \

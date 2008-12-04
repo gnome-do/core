@@ -1,4 +1,4 @@
-/* AbstractLogImplementation.cs
+/* AbstractLogService.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -18,32 +18,46 @@
  */
 
 using System;
-using System.IO;
 using System.Collections.Generic;
+
+using Do.Platform;
 
 namespace Do.Platform.Common {
 
-	public abstract class AbstractLogImplementation : Log.Implementation {
+	public abstract class AbstractLogService : ILogService {
+		
 		/// <value>
 		/// A string to make printing the current time simpler
 		/// </value>
-		protected const string Timef   = "{0:00}:{1:00}:{2:00}.{3:000}";
+		protected const string TimeFormat   = "{0:00}:{1:00}:{2:00}.{3:000}";
 		
 		/// <value>
 		/// A consistent way of printing [Time LogLevel]
 		/// </value>
-		protected const string Promptf = "[{0} {1}]";
+		protected const string LogFormat = "[{0} {1}]";
 		
 		/// <value>
-		/// the current time using the Timef format.
+		/// the current time using the TimeFormat format.
 		/// </value>
 		protected string Time {
-			get { 
-				return string.Format (Timef, DateTime.Now.Hour, DateTime.Now.Minute,
-					DateTime.Now.Second, DateTime.Now.Millisecond);
+			get {
+				DateTime now = DateTime.Now;
+				return string.Format (TimeFormat, now.Hour, now.Minute, now.Second, now.Millisecond);
 			}
 		}
 
-		abstract public void Log (Log.Level level, string msg);
+		protected string FormatLogPrompt (LogLevel level)
+		{
+			string levelString = Enum.GetName (typeof (LogLevel), level);
+			return string.Format (LogFormat, levelString, Time);
+		}
+		
+		protected string FormatLogMessage (LogLevel level, string message)
+		{
+			return string.Format ("{0} {1}", FormatLogPrompt (level), message);
+		}
+
+		abstract public void Log (LogLevel level, string msg);
+		
 	}	
 }

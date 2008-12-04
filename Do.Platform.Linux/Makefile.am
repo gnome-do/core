@@ -17,7 +17,7 @@ all: $(ASSEMBLY)
 FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/ConsoleCrayon.cs \
-	src/Do.Platform/ConsoleLogImplementation.cs \
+	src/Do.Platform/ConsoleLogService.cs \
 	src/Do.Platform/EnvironmentService.cs \
 	src/Do.Platform/GConfPreferencesService.cs \
 	src/Do.Platform/IconsImplementation.cs \

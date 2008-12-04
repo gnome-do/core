@@ -18,92 +18,103 @@
 //
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Universe;
 
 namespace Do.Platform
 {
+	public enum LogLevel {
+		Debug,
+		Info,
+		Warn,
+		Error,
+		Fatal,
+	}
+	
 	public static class Log
 	{
 
-		public interface Implementation
-		{
-			void Log (Level level, string msg);
-		}
-	
-		public enum Level {
-			Debug,
-			Info,
-			Warn,
-			Error,
-			Fatal,
-		}
+		class LogCall {
+			public readonly LogLevel Level;
+			public readonly string Message;
 
-		public static Level LogLevel { get; set; }
-		static ICollection<Implementation> imps;
-		
-		static ICollection<Implementation> Imps {
-			get {
-				return imps;
+			public LogCall (LogLevel level, string message)
+			{
+				Level = level;
+				Message = message;
 			}
 		}
 
-		public static void Initialize ()
+		public static LogLevel DisplayLevel { get; set; }
+
+		static bool Writing { get; set; }
+		static ICollection<LogCall> PendingLogCalls { get; set; }
+
+		static Log ()
 		{
-			imps = new List<Implementation> ();
-		}
-		
-		public static void AddImplementation (Implementation imp)
-		{
-			if (imp == null)
-				throw new ArgumentNullException ("Implementation may not be null");
-			
-			Imps.Add (imp);
-		}
-		
-		public static void RemoveImplementation (Implementation imp)
-		{
-			Imps.Remove (imp);
+			Writing = false;
+			PendingLogCalls = new LinkedList<LogCall> ();
 		}
 
 		public static void Debug (string msg, params object[] args)
 		{
-			Write (Level.Debug, msg, args);
+			Write (LogLevel.Debug, msg, args);
 		}
 		
 		public static void Info (string msg, params object[] args)
 		{
-			Write (Level.Info, msg, args);
+			Write (LogLevel.Info, msg, args);
 		}
 		
 		public static void Warn (string msg, params object[] args)
 		{
-			Write (Level.Warn, msg, args);
+			Write (LogLevel.Warn, msg, args);
 		}
 		
 		public static void Error (string msg, params object[] args)
 		{
-			Write (Level.Error, msg, args);
+			Write (LogLevel.Error, msg, args);
 		}
 		
 		public static void Fatal (string msg, params object[] args)
 		{
-			Write (Level.Fatal, msg, args);
+			Write (LogLevel.Fatal, msg, args);
 		}
 		
-		static void Write (Level lvl, string msg, params object[] args)
+		static void Write (LogLevel level, string msg, params object[] args)
 		{
+			if (level < DisplayLevel) return;
+			
 			msg = string.Format (msg, args);
-			if (lvl >= LogLevel) {
-				foreach (Implementation imp in Imps) {
-                    try {
-                        imp.Log (lvl, msg);
-                    } catch (Exception e) {
-                        Console.Error.WriteLine ("Logger {0} encountered an error: {1}", imp, e.Message);
-                    }
+			if (Writing) {
+				// In the process of logging, another log call has been made.
+				// We need to avoid the infinite regress this may cause.
+				PendingLogCalls.Add (new LogCall (level, msg));
+			} else {
+				Writing = true;
+
+				if (PendingLogCalls.Any ()) {
+					// Flush delayed log calls.
+					// First, swap PendingLogCalls with an empty collection so it
+					// is not modified while we enumerate.
+					IEnumerable<LogCall> calls = PendingLogCalls;
+					PendingLogCalls = new LinkedList<LogCall> ();
+	
+					// Log all pending calls.
+					foreach (LogCall call in calls)
+						foreach (ILogService log in Services.Logs)
+							log.Log (call.Level, call.Message);
 				}
+
+				// Log message.
+				foreach (ILogService log in Services.Logs)
+                    log.Log (level, msg);
+				
+				Writing = false;
 			}
 		}
+
 	}
 }

@@ -22,8 +22,6 @@
     <File name="src/Do.Platform/Paths.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Common" subtype="Directory" buildaction="Compile" />
-    <File name="src/Do.Platform/Do.Platform.Common/FileLogImplementation.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Do.Platform.Common/AbstractLogImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Preferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/EnumerableExtensions.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Icons.cs" subtype="Code" buildaction="Compile" />
@@ -52,6 +50,11 @@
     <File name="src/Do.Platform/IPreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/PreferenceChangedEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/PreferencesService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/ILogService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Default/LogService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Common/AbstractLogService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Common/FileLogService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

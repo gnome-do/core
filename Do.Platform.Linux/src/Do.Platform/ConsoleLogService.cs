@@ -1,4 +1,4 @@
-/* FileLogImplementation.cs
+/* ConsoleLogService.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -21,18 +21,38 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-namespace Do.Platform.Common {
-	
-	public class FileLogImplementation : AbstractLogImplementation {
+using Do.Platform;
+
+namespace Do.Platform.Linux {
+
+	public class ConsoleLogService: Common.AbstractLogService
+	{
 		
-		public override void Log (Log.Level level, string msg)
+		public override void Log (LogLevel level, string message)
 		{
-			string stype = Enum.GetName (typeof (Log.Level), level);
-			string prompt = string.Format (Promptf, stype, Time);
+			switch (level) {
+			case LogLevel.Fatal:
+				ConsoleCrayon.BackgroundColor = ConsoleColor.Red;
+				ConsoleCrayon.ForegroundColor = ConsoleColor.White;
+				break;
+			case LogLevel.Error:
+				ConsoleCrayon.ForegroundColor = ConsoleColor.Red;
+				break;
+			case LogLevel.Warn:
+				ConsoleCrayon.ForegroundColor = ConsoleColor.Yellow;
+				break;
+			case LogLevel.Info:
+				ConsoleCrayon.ForegroundColor = ConsoleColor.Green;
+				break;
+			case LogLevel.Debug:
+				ConsoleCrayon.ForegroundColor = ConsoleColor.Blue;
+				break;
+			}
+			Console.Write (FormatLogPrompt (level));
+			ConsoleCrayon.ResetColor ();
 			
-			TextWriter writer = new StreamWriter (Paths.Log, true);
-			writer.WriteLine (prompt + " " + msg);
-			writer.Close ();
+			Console.Write (" ");
+			Console.WriteLine (message);
 		}
 		
 	}
