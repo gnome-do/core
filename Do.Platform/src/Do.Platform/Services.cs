@@ -79,29 +79,29 @@ namespace Do.Platform
 
 		public static IEnumerable<ILogService> Logs {
 			get {
-				return logs ??
-					logs = LocateServices<ILogService, Default.LogService> ();
+				return logs ?? logs =
+					LocateServices<ILogService, Default.LogService> ().ToArray ();
 			}
 		}
 
 		public static ICoreService Core {
 			get {
-				return core ??
-					core = LocateService<ICoreService, Default.CoreService> ();
+				return core ?? core =
+					LocateService<ICoreService, Default.CoreService> ();
 			}
 		}
 		
 		public static IEnvironmentService Environment {
 			get {
-				return environment ??
-					environment = LocateService<IEnvironmentService, Default.EnvironmentService> ();
+				return environment ?? environment =
+					LocateService<IEnvironmentService, Default.EnvironmentService> ();
 			}
 		}
 			
 		public static IPreferencesFactory Preferences {
 			get {
-				return preferences ??
-					preferences = new PreferencesFactory (LocateService<IPreferencesService, Default.PreferencesService> ());
+				return preferences ?? preferences = 
+					new PreferencesFactory (LocateService<IPreferencesService, Default.PreferencesService> ());
 			}
 		}
 
