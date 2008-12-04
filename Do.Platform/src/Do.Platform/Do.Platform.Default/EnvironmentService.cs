@@ -20,32 +20,12 @@
 using System;
 using System.Collections.Generic;
 
-using Mono.Unix;
-
-using Do.Platform.ServiceStack;
-
 namespace Do.Platform.Default
 {
 	
 	class EnvironmentService : IEnvironmentService
 	{
 		#region IEnvironmentService
-
-		#region IObject
-		
-		public string Name {
-			get { return Catalog.GetString ("Default Environment Service"); }
-		}
-
-		public string Description {
-			get { return Catalog.GetString ("Just prints warnings and returns default values."); }
-		}
-
-		public string Icon {
-			get { return "gnome-do"; }
-		}
-
-		#endregion
 
 		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
 			string subject, string body, IEnumerable<string> attachments)

@@ -31,22 +31,6 @@ namespace Do.Platform
 	public class CoreService : ICoreService
 	{
 		#region ICoreService
-
-		#region IObject
-		
-		public string Name {
-			get { return Catalog.GetString ("Do Core Service"); }
-		}
-
-		public string Description {
-			get { return Catalog.GetString ("Provides plugins with safe access to internal application state."); }
-		}
-
-		public string Icon {
-			get { return "gnome-do"; }
-		}
-
-		#endregion
 		
 		public string GetUID (IObject o)
 		{

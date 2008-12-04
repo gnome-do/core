@@ -19,9 +19,6 @@
 
 using System;
 
-using Mono.Unix;
-
-using Do.Universe;
 using Do.Platform;
 
 namespace Do.Platform.Default
@@ -31,22 +28,6 @@ namespace Do.Platform.Default
 	{
 
 		#region IPreferencesService
-
-		#region IObject
-		
-		public string Name {
-			get { return Catalog.GetString ("Default Preference Service"); }
-		}
-
-		public string Description {
-			get { return Catalog.GetString ("Just prints warnings and returns default values."); }
-		}
-
-		public string Icon {
-			get { return "gnome-do"; }
-		}
-
-		#endregion
 		
 		public bool Set<T> (string key, T val)
 		{

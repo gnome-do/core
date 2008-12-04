@@ -19,8 +19,6 @@
 
 using System;
 
-using Mono.Unix;
-
 using Do.Universe;
 using Do.Platform;
 
@@ -31,22 +29,6 @@ namespace Do.Platform.Default
 	{
 		#region ICoreService
 
-		#region IObject
-		
-		public string Name {
-			get { return Catalog.GetString ("Default Core Service"); }
-		}
-
-		public string Description {
-			get { return Catalog.GetString ("Just prints warnings and returns default values."); }
-		}
-
-		public string Icon {
-			get { return "gnome-do"; }
-		}
-
-		#endregion
-		
 		public string GetUID (IObject o)
 		{
 			Log.Debug ("Default ICoreService cannot get UIDs.");
@@ -56,7 +38,7 @@ namespace Do.Platform.Default
 		public IObject GetIObject (string uid)
 		{
 			Log.Debug ("Default ICoreService cannot get IObjects.");
-			return this;
+			return new EmptyObject ();
 		}
 
 		public IObject Unwrap (IObject o)

@@ -27,6 +27,7 @@ using Mono.Unix;
 
 using Do.Platform;
 
+
 namespace Do.Platform.Linux
 {
 	public class EnvironmentService : IEnvironmentService
@@ -35,22 +36,6 @@ namespace Do.Platform.Linux
 		static string last_command_found;
 
 		#region IEnvironmentService
-
-		#region IObject
-		
-		public string Name {
-			get { return Catalog.GetString ("Linux Environment Service"); }
-		}
-
-		public string Description {
-			get { return Catalog.GetString ("Various Linux-related user environment services."); }
-		}
-
-		public string Icon {
-			get { return "gnome-do"; }
-		}
-		
-		#endregion
 
 		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
 			string subject, string body, IEnumerable<string> attachments)

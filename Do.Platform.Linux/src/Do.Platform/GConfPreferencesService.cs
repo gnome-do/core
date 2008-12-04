@@ -20,8 +20,6 @@
 
 using System;
 
-using Mono.Unix;
-
 using Do.Platform;
 
 namespace Do.Platform.Linux
@@ -55,22 +53,6 @@ namespace Do.Platform.Linux
 		}
 
 		#region IPreferencesService
-
-		#region IObject
-		
-		public string Name {
-			get { return Catalog.GetString ("GConf Preference Service"); }
-		}
-
-		public string Description {
-			get { return Catalog.GetString ("Provides generic preferences interface to GConf backend."); }
-		}
-
-		public string Icon {
-			get { return "gnome-do"; }
-		}
-
-		#endregion
 		
 		public bool Set<T> (string key, T val)
 		{

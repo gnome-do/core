@@ -1,4 +1,4 @@
-//  EmptyItem.cs
+//  EmptyObject.cs
 //
 //  GNOME Do is the legal property of its developers, whose names are too numerous
 //  to list here.  Please refer to the COPYRIGHT file distributed with this
@@ -19,11 +19,10 @@
 
 using System;
 
-using Do.Universe;
 
-namespace Do
+namespace Do.Universe
 {
-	public class EmptyItem : IItem
+	public class EmptyObject : IObject
 	{
 		public string Name { get { return string.Empty; } }
 		public string Description { get { return string.Empty; } }
