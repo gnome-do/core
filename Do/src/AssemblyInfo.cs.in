@@ -38,9 +38,9 @@ namespace Do
 {
 	internal static class AssemblyInfo
 	{
-		public const string Version = "@VERSION@";
+		public const string DisplayVersion = "@VERSION@";
 		public const string VersionDetails = "@VERSION_INFO@";
-		public const string LocaleDir = "@expanded_datadir@/locale";
+		public const string LocaleDirectory = "@expanded_datadir@/locale";
 	}
 }
 
