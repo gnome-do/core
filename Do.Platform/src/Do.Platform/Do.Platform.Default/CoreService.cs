@@ -49,19 +49,19 @@ namespace Do.Platform.Default
 		
 		public string GetUID (IObject o)
 		{
-			Log.Warn ("Default ICoreService cannot get UIDs.");
+			Log.Debug ("Default ICoreService cannot get UIDs.");
 			return string.Empty;
 		}
 		
 		public IObject GetIObject (string uid)
 		{
-			Log.Warn ("Default ICoreService cannot get IObjects.");
+			Log.Debug ("Default ICoreService cannot get IObjects.");
 			return this;
 		}
 
 		public IObject Unwrap (IObject o)
 		{
-			Log.Warn ("Default ICoreService cannot unwrap IObjects.");
+			Log.Debug ("Default ICoreService cannot unwrap IObjects.");
 			return o;
 		}
 

@@ -30,32 +30,48 @@ using Do.Platform;
 
 namespace Do {
 
-	public static class Do {
+	static class Do {
+		
 		static GConfXKeybinder keybinder;
 		static Controller controller;
 		static UniverseManager universe_manager;
-		
-		static DateTime perfTime;
 
 		internal static void Main (string[] args)
 		{
-			perfTime = DateTime.Now;
 			Catalog.Init ("gnome-do", "/usr/local/share/locale");
 			Gtk.Application.Init ();
+			Gdk.Threads.Init ();
 
 			DetectInstanceAndExit ();
-			PlatformInitializer.Initialize ();
-			Util.Initialize ();
 
-			Gdk.Threads.Init ();			
+			Log.Initialize ();
+			Log.AddImplementation (new ConsoleLogImplementation ());
+			/*
+			if (CorePreferences.WriteLogToFile) {
+				if (File.Exists (Paths.Log)) File.Delete (Paths.Log);
+				Log.AddImplementation (new Common.FileLogImplementation ());
+			}
+			Log.LogLevel = CorePreferences.QuietStart ? Log.Level.Error : Log.Level.Info;
+			if (CorePreferences.Debug) Log.LogLevel = Log.Level.Debug;
+			*/
+			UniverseFactory.Initialize (new UniverseFactoryImplementation ());
+			Paths.Initialize (new PathsImplementation ());
+			Icons.Initialize (new Platform.Linux.IconsImplementation ());
+			Windowing.Initialize (new WindowingImplementation ());
+
+			PluginManager.Initialize ();
+			
+			StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
+			Platform.Notifications.Initialize (new Platform.Linux.NotificationsImplementation ());
+			
+			Util.Initialize ();
 
 			try {
 				Util.SetProcessName ("gnome-do");
 			} catch (Exception e) {
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
-
-			PluginManager.Initialize ();
+			
 			Controller.Initialize ();
 			UniverseManager.Initialize ();
 			DBusRegistrar.RegisterController (Controller);
@@ -109,14 +125,6 @@ namespace Do {
 				return universe_manager ??
 					universe_manager = new UniverseManager ();
 			}
-		}
-		
-		public static void PrintPerf (string caller)
-		{
-			TimeSpan ts = DateTime.Now.Subtract (perfTime);
-			Console.WriteLine(caller + ": " + ts.TotalMilliseconds);
-			
-			perfTime = DateTime.Now;
 		}
 		
 		static void SetupKeybindings ()

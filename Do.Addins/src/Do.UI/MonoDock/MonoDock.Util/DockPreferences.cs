@@ -32,7 +32,7 @@ namespace MonoDock.Util
 	
 	public static class DockPreferences
 	{
-		static Preferences prefs = Preferences.Get ("Dock");
+		static IPreferences prefs = Services.Preferences.Get ("Dock");
 		
 		// we can not store these in gconf all the time since we query these a LOT
 		// so we have to use a half and half solution

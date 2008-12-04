@@ -61,7 +61,7 @@ namespace Do.UI
 			CorePreferences.PreferenceChanged += OnPrefsChanged;
 		}
 		
-		private void OnPrefsChanged (object o, Preferences.ChangedEventArgs args) {
+		private void OnPrefsChanged (object o, PreferenceChangedEventArgs args) {
 			if (args.Key == "Theme")
 					BuildPreview ();
 		}

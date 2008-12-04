@@ -184,8 +184,7 @@ namespace Do.UI
 
 		protected void OnBtnUpdateClicked (object sender, EventArgs e)
 		{
-			if (PluginManager.InstallAvailableUpdates (true))
-				nview.Refresh (false);
+			nview.Refresh (false);
 		}
 
 		protected void OnBtnConfigurePluginClicked (object sender, EventArgs e)

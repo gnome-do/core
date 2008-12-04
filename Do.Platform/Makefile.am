@@ -20,14 +20,20 @@ FILES = \
 	src/Do.Platform/Do.Platform.Common/FileLogImplementation.cs \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
+	src/Do.Platform/Do.Platform.Default/PreferencesService.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IService.cs \
 	src/Do.Platform/ICoreService.cs \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/Icons.cs \
 	src/Do.Platform/Log.cs \
 	src/Do.Platform/Notifications.cs \
+	src/Do.Platform/IPreferences.cs \
+	src/Do.Platform/IPreferencesFactory.cs \
+	src/Do.Platform/IPreferencesService.cs \
 	src/Do.Platform/Paths.cs \
 	src/Do.Platform/Preferences.cs \
+	src/Do.Platform/PreferenceChangedEventArgs.cs \
+	src/Do.Platform/PreferencesFactory.cs \
 	src/Do.Platform/Services.cs \
 	src/Do.Platform/StatusIcon.cs \
 	src/Do.Platform/UniverseFactory.cs \

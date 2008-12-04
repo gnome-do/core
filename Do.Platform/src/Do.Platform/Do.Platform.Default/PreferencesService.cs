@@ -1,4 +1,4 @@
-// EnvironmentService.cs
+// PreferencesService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -18,23 +18,24 @@
 //
 
 using System;
-using System.Collections.Generic;
 
 using Mono.Unix;
 
-using Do.Platform.ServiceStack;
+using Do.Universe;
+using Do.Platform;
 
 namespace Do.Platform.Default
 {
 	
-	class EnvironmentService : IEnvironmentService
+	public class PreferencesService : IPreferencesService
 	{
-		#region IEnvironmentService
+
+		#region IPreferencesService
 
 		#region IObject
 		
 		public string Name {
-			get { return Catalog.GetString ("Default Environment Service"); }
+			get { return Catalog.GetString ("Default Preference Service"); }
 		}
 
 		public string Description {
@@ -46,34 +47,22 @@ namespace Do.Platform.Default
 		}
 
 		#endregion
-
-		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
-			string subject, string body, IEnumerable<string> attachments)
-		{
-			Log.Debug ("Default IEnvironmentService cannot send email.");
-		}
 		
-		public void OpenUrl (string url)
+		public bool Set<T> (string key, T val)
 		{
-			Log.Debug ("Default IEnvironmentService cannot open url \"{0}\".", url);
-		}
-		
-		public void OpenPath (string path)
-		{
-			Log.Debug ("Default IEnvironmentService cannot open path \"{0}\".", path);
-		}
-			
-		public bool IsExecutable (string line)
-		{
-			Log.Debug ("Default IEnvironmentService cannot determine if \"{0}\" is executable.", line);
+			Log.Debug ("Default IPreferencesService cannot set key \"{0}\"", key);
 			return false;
 		}
 		
-		public void Execute (string line)
+		public bool TryGet<T> (string key, out T val)
 		{
-			Log.Debug ("Default IEnvironmentService cannot execute \"{0}\".", line);
+			Log.Debug ("Default IPreferencesService cannot get key \"{0}\"", key);
+			val = default (T);
+			return false;
 		}
 
 		#endregion
+		
 	}
+
 }

@@ -27,7 +27,7 @@
     <File name="src/Do.Platform/PathsImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/ConsoleLogImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/ConsoleCrayon.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/GConfPreferencesImplementation.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/GConfPreferencesService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IconsImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/NotificationsImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/StatusIconImplementation.cs" subtype="Code" buildaction="Compile" />

@@ -34,9 +34,9 @@ namespace Do
 		public static readonly string SummonKeyBindingPath =
 			"/apps/gnome-do/preferences/" + RootKey + "/" + SummonKeyBindingName;
 
-		static Preferences prefs = Preferences.Get (RootKey);
+		static IPreferences prefs = Services.Preferences.Get (RootKey);
 
-		public static event Preferences.PreferenceChangedDelegate PreferenceChanged {
+		public static event EventHandler<PreferenceChangedEventArgs> PreferenceChanged {
 			add { prefs.PreferenceChanged += value; }
 			remove { prefs.PreferenceChanged -= value; }
 		}

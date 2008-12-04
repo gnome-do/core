@@ -1,4 +1,4 @@
-/* GConfPreferencesImplementation.cs
+/* GConfPreferencesService.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -20,15 +20,19 @@
 
 using System;
 
-namespace Do.Platform
+using Mono.Unix;
+
+using Do.Platform;
+
+namespace Do.Platform.Linux
 {	
-	public class GConfPreferencesImplementation : Preferences.Implementation
+	public class GConfPreferencesService : IPreferencesService
 	{
 		const string GConfRootPath = "/apps/gnome-do/preferences";
 
 		GConf.Client client;
 
-		public GConfPreferencesImplementation ()
+		public GConfPreferencesService ()
 		{
 			client = new GConf.Client ();
 		}
@@ -47,15 +51,30 @@ namespace Do.Platform
 		/// </returns>
 		private string MakeKeyPath (string key)
 		{
-			if (key.StartsWith ("/")) return key;
-			return string.Format ("{0}/{1}", GConfRootPath, key);
+			return GConfRootPath + (key.StartsWith ("/") ? key : "/" + key);
 		}
+
+		#region IPreferencesService
+
+		#region IObject
+		
+		public string Name {
+			get { return Catalog.GetString ("GConf Preference Service"); }
+		}
+
+		public string Description {
+			get { return Catalog.GetString ("Provides generic preferences interface to GConf backend."); }
+		}
+
+		public string Icon {
+			get { return "gnome-do"; }
+		}
+
+		#endregion
 		
 		public bool Set<T> (string key, T val)
 		{
-			bool success;
-			
-			success = true;
+			bool success = true;
 			try {
 				client.Set (MakeKeyPath (key), val);
 			} catch {
@@ -66,9 +85,7 @@ namespace Do.Platform
 
 		public bool TryGet<T> (string key, out T val)
 		{
-			bool success;
-			
-			success = true;
+			bool success = true;
 			try {
 				val = (T) client.Get (MakeKeyPath (key));
 			} catch {
@@ -76,5 +93,7 @@ namespace Do.Platform
 			}
 			return success;
 		}
+
+		#endregion
 	}
 }

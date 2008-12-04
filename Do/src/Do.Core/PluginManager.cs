@@ -100,16 +100,13 @@ namespace Do.Core {
 
 		/// <summary>
 		/// Performs plugin system initialization. Should be called before this
-		/// class or any Mono.Addins class is used.
+		/// class or any Mono.Addins class is used. The ordering is very delicate.
 		/// </summary>
 		public static void Initialize ()
 		{
 			// Initialize Mono.Addins.
 			AddinManager.Initialize (Paths.UserPlugins);
-			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnItemSourceChange);
-			AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnActionChange);
-			AddinManager.AddExtensionNodeHandler ("/Do/RenderProvider", OnIRenderThemeChange);
-
+			
 			// Register repositories.
 			SetupService setup = new SetupService (AddinManager.Registry);
 			foreach (IEnumerable<string> urls in RepositoryUrls.Values) {
@@ -119,9 +116,15 @@ namespace Do.Core {
 					}
 				}
 			}
-			
+
+			// Initialize services before addins that may use them are loaded.
 			Services.Initialize ();
-			
+
+			// Now allow loading of non-services.
+			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnItemSourceChange);
+			AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnActionChange);
+			AddinManager.AddExtensionNodeHandler ("/Do/RenderProvider", OnIRenderThemeChange);
+
 			InstallLocalPlugins (setup);
 		}
 
@@ -189,64 +192,7 @@ namespace Do.Core {
 		/// </returns>
 		internal static IEnumerable<IRenderTheme> GetThemes () 
 		{
-			return AddinManager.GetExtensionObjects ("/Do/RenderProvider").Cast<IRenderTheme> ();
-		}
-
-		/// <summary>
-		/// Install all available plugin updates, either
-		/// graphically or non-graphically.
-		/// </summary>
-		/// <param name="graphical">
-		/// A <see cref="System.Boolean"/> to determine whether installer should
-		/// be graphical (true iff graphical installer should be used).
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.Boolean"/> indicating whether any updates were
-		/// performed.
-		/// </returns>
-		internal static bool InstallAvailableUpdates (bool graphical)
-		{
-			IEnumerable<string> updates = GetAvailableUpdates ();
-
-			if (updates.Any ()) {
-				(graphical
-					? new DoAddinInstaller () as IAddinInstaller
-					: new ConsoleAddinInstaller () as IAddinInstaller
-				).InstallAddins (AddinManager.Registry, "", updates.ToArray ());
-			}
-			return updates.Any (); 
-		}
-
-		internal static IEnumerable<string> GetAvailableUpdates ()
-		{
-			SetupService setup;
-
-			setup = new SetupService (AddinManager.Registry);
-			setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
-			return setup.Repositories.GetAvailableAddins ()
-				.Where (AddinUpdateAvailable)
-				.Select (are => are.Addin.Id);
-		}
-
-		internal static bool AddinUpdateAvailable (AddinRepositoryEntry are)
-		{
-			Addin installed;
-
-			installed = AddinManager.Registry.GetAddin (Addin.GetIdName (are.Addin.Id));
-			return null != installed &&
-				0 < Addin.CompareVersions (installed.Version, are.Addin.Version);
-		}
-
-		/// <summary>
-		/// Checks if there are any updates available for download/installatition
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.Boolean"/> representing whether or not there
-		/// are any updates available for install
-		/// </returns>
-		public static bool UpdatesAvailable ()
-		{
-			return GetAvailableUpdates ().Any ();
+			return AddinManager.GetExtensionObjects ("/Do/RenderProvider", true).Cast<IRenderTheme> ();
 		}
 
 		/// <summary>
@@ -276,16 +222,18 @@ namespace Do.Core {
 				File.Delete (path);
 			}
 		}
-
+		
 		static void OnActionChange (object s, ExtensionNodeEventArgs args)
 		{
-			TypeExtensionNode node;
-
-			node = args.ExtensionNode as TypeExtensionNode;
-			switch (args.Change) {
+			ActionChange (args.ExtensionNode as TypeExtensionNode, args.Change);
+		}
+		
+		static void ActionChange (TypeExtensionNode node, ExtensionChange change)
+		{
+			switch (change) {
 			case ExtensionChange.Add:
 				try {
-					DoAction action = new DoAction (node.GetInstance () as IAction);
+					DoAction action = DoAction.Wrap (node.GetInstance () as IAction) as DoAction;
 					if (actions.Contains (action)) {
 						Log.Warn ("\"{0}\" action was loaded twice. Ignoring.", action.Name);
 					} else {
@@ -300,7 +248,7 @@ namespace Do.Core {
 				break;
 			case ExtensionChange.Remove:
 				try {
-					DoAction action = new DoAction (node.GetInstance () as IAction);
+					DoAction action = DoAction.Wrap (node.GetInstance () as IAction) as DoAction;
 					Log.Info ("Unloaded \"{0}\" action.", action.Name);
 					actions.Remove (action);
 				} catch (Exception e) {
@@ -311,15 +259,18 @@ namespace Do.Core {
 				break;
 			}	
 		}
+		
 		static void OnItemSourceChange (object s, ExtensionNodeEventArgs args)
 		{
-			TypeExtensionNode node;
-
-			node = args.ExtensionNode as TypeExtensionNode;
-			switch (args.Change) {
+			ItemSourceChange (args.ExtensionNode as TypeExtensionNode, args.Change);
+		}
+		
+		static void ItemSourceChange (TypeExtensionNode node, ExtensionChange change)
+		{
+			switch (change) {
 			case ExtensionChange.Add:
 				try {
-					DoItemSource source = new DoItemSource (node.GetInstance () as IItemSource);
+					DoItemSource source = DoItemSource.Wrap (node.GetInstance () as IItemSource) as DoItemSource;
 					if (item_sources.Contains (source)) {
 						Log.Warn ("\"{0}\" item source was loaded twice. Ignoring.", source.Name);
 					} else {
@@ -334,7 +285,7 @@ namespace Do.Core {
 				break;
 			case ExtensionChange.Remove:
 				try {
-					DoItemSource source = new DoItemSource (node.GetInstance () as IItemSource);
+					DoItemSource source = DoItemSource.Wrap (node.GetInstance () as IItemSource) as DoItemSource;
 					Log.Info ("Unloaded \"{0}\".", source.Name);
 					item_sources.Remove (source);
 				} catch (Exception e) {

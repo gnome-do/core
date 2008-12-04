@@ -36,12 +36,12 @@ namespace Do.Platform
 		const string RootPreferencesKey = "StatusIcon";
 		const string VisiblePreferenceKey = "StatusIconVisible";
 		
-		static Preferences Prefs { get; set; }
+		static IPreferences Prefs { get; set; }
 		public static Implementation Imp { get; private set; }
 
 		static StatusIcon ()
 		{
-			Prefs = Preferences.Get (RootPreferencesKey);
+			Prefs = Services.Preferences.Get (RootPreferencesKey);
 		}
 
 		public static void Initialize (Implementation imp)

@@ -20,6 +20,7 @@
 
 	<Extension path="/Do/Service">
 		<Service type="Do.Platform.Linux.EnvironmentService" />
+		<Service type="Do.Platform.Linux.GConfPreferencesService" />
 	</Extension>
 	
 </Addin>

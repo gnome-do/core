@@ -32,11 +32,15 @@ namespace Do.Platform
 	{
 		public static ICoreService Core { get; private set; }
 		public static IEnvironmentService Environment { get; private set; }
+		public static IPreferencesFactory Preferences { get; private set; }
 		
 		public static void Initialize ()
 		{
 			Core = LocateService<ICoreService, Default.CoreService> ();
 			Environment = LocateService<IEnvironmentService, Default.EnvironmentService> ();
+
+			IPreferencesService prefs = LocateService<IPreferencesService, Default.PreferencesService> ();
+			Preferences = new PreferencesFactory (prefs);
 		}
 
 		static TService LocateService<TService, TElse> ()
@@ -61,8 +65,7 @@ namespace Do.Platform
 		
 		static IEnumerable<TService> LocateServices<TService> ()
 			where TService : IService
-		{
-			Log.Info ("Looking for services of type \"{0}\"...", typeof (TService).Name);			
+		{		
 			return AddinManager.GetExtensionObjects ("/Do/Service", true)
 				.OfType<TService> ();
 		}
