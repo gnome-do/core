@@ -273,7 +273,7 @@ namespace Do.UI
 			(resultsTreeview.Model as ListStore).Clear ();
 			cursor = 0;
 			resultsLabel.Markup = "--/--";
-			queryLabel.Markup = string.Empty;
+			queryLabel.Markup = "";
 			update_needed = false;
 		}
 
@@ -381,7 +381,7 @@ namespace Do.UI
 		{
 			get {
 				try {
-					return results[SelectedIndex];
+					return results [SelectedIndex];
 				} catch {
 					return null;
 				}
@@ -391,7 +391,9 @@ namespace Do.UI
 		public IList<IObject> Results
 		{
 			get {
-				return stunted_results ?? stunted_results = new List<IObject> (0);
+				if (stunted_results == null)
+					stunted_results = new List<IObject> (0);
+				return stunted_results;
 			}
 			set {
 				stunted_results = value;
@@ -432,9 +434,8 @@ namespace Do.UI
 		public string Query
 		{
 			set {
-				query = value;
-				queryLabel.Markup = string.Format (QueryLabelFormat, 
-				                                   GLib.Markup.EscapeText (value ?? string.Empty)); 
+				query = value ?? "";
+				queryLabel.Markup = string.Format (QueryLabelFormat, GLib.Markup.EscapeText (query)); 
 			}
 			get { return query; }
 		}

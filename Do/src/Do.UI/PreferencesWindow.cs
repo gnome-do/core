@@ -61,12 +61,14 @@ namespace Do.UI
 		IConfigurable[] pages;
 		IConfigurable[] Pages {
 			get {
-				return pages ?? pages = new IConfigurable[] {
-					new GeneralPreferencesWidget (),
-					new KeybindingsPreferencesWidget (),
-					new ManagePluginsPreferencesWidget (),
-					new ColorConfigurationWidget (),
-				};
+				if (pages == null)
+					pages = new IConfigurable[] {
+						new GeneralPreferencesWidget (),
+						new KeybindingsPreferencesWidget (),
+						new ManagePluginsPreferencesWidget (),
+						new ColorConfigurationWidget (),
+					};
+				return pages;
 			}
 		}
 

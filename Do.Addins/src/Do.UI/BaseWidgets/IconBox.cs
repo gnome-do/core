@@ -61,8 +61,8 @@ namespace Do.UI
 		{
 			Alignment label_align;
 
-			caption = string.Empty;
-			highlight = string.Empty;
+			caption = "";
+			highlight = "";
 			
 			vbox = new VBox (false, 4);
 			vbox.BorderWidth = 6;
@@ -101,9 +101,9 @@ namespace Do.UI
 		public virtual void Clear ()
 		{
 			Pixbuf = null;
-			highlight = string.Empty;
-			Caption = string.Empty;
-			icon_name = string.Empty;
+			highlight = "";
+			Caption = "";
+			icon_name = "";
 			TextOverlay = false;
 		}
 
@@ -138,7 +138,7 @@ namespace Do.UI
 					label.Ellipsize = Pango.EllipsizeMode.None;
 					label.LineWrapMode = Pango.WrapMode.WordChar;
 					label.LineWrap = true;
-					highlight = string.Empty;
+					highlight = "";
 				} else {
 					FillColor = FrameColor = new Color (0xff, 0xff, 0xff);
 					image.Show ();
@@ -152,7 +152,7 @@ namespace Do.UI
 		{
 			get { return caption; }
 			set {
-				caption = GLib.Markup.EscapeText (value ?? string.Empty);
+				caption = GLib.Markup.EscapeText (value ?? "");
 				caption = caption.Replace ("\n", " ");
 				UpdateLabel ();
 			}
@@ -211,15 +211,15 @@ namespace Do.UI
 		public string Highlight
 		{
 			set {
-				highlight = (value ?? string.Empty);
+				highlight = value ?? "";
 				UpdateLabel ();
 			}
 		}
 
 		protected virtual void UpdateFocus ()
 		{
-			FillAlpha = (focused ? focused_fill_transparency : unfocused_fill_transparency);
-			FrameAlpha = (focused ? focused_frame_transparency : unfocused_frame_transparency);
+			FillAlpha = focused ? focused_fill_transparency : unfocused_fill_transparency;
+			FrameAlpha = focused ? focused_frame_transparency : unfocused_frame_transparency;
 		}
 		
 		protected override void PaintFill ()

@@ -234,7 +234,11 @@ namespace MonoDock.UI
 		}
 		
 		DockState State {
-			get { return state ?? state = new DockState (); }
+			get {
+				if (state == null)
+					state = new DockState ();
+				return state;
+			}
 		}
 		
 		#region Animation properties

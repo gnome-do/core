@@ -47,7 +47,9 @@ namespace MonoDock.UI.Renderers
 		static PixbufSurfaceCache large_icon_cache;
 		static PixbufSurfaceCache LargeIconCache {
 			get {
-				return large_icon_cache ?? large_icon_cache = new PixbufSurfaceCache (10, 2*DockPreferences.IconSize, 2*DockPreferences.IconSize);
+				if (large_icon_cache == null)
+					large_icon_cache = new PixbufSurfaceCache (10, 2*DockPreferences.IconSize, 2*DockPreferences.IconSize);
+				return large_icon_cache;
 			}
 		}
 		

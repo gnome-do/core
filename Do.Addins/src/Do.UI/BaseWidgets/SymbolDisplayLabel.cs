@@ -35,9 +35,9 @@ namespace Do.UI
 		string name, description;
 		
 		public SymbolDisplayLabel ():
-			base (string.Empty)
+			base ("")
 		{
-			highlight = name = description = string.Empty;
+			highlight = name = description = "";
 			Build ();
 		}
 		
@@ -57,7 +57,7 @@ namespace Do.UI
 				IObject displayObject;
 				
 				displayObject = value;
-				name = description = highlight = string.Empty;
+				name = description = highlight = "";
 				if (displayObject != null) {
 					name = displayObject.Name;
 					description = displayObject.Description;
@@ -68,9 +68,9 @@ namespace Do.UI
 		
 		public void SetDisplayLabel (string name, string description)
 		{
-			this.name = (name ?? string.Empty).Replace ("\n", " ");
-			this.description = (description ?? string.Empty).Replace ("\n", " ");
-			highlight = string.Empty;
+			this.name = (name ?? "").Replace ("\n", " ");
+			this.description = (description ?? "").Replace ("\n", " ");
+			highlight = "";
 			UpdateText ();
 		}
 		
@@ -78,7 +78,7 @@ namespace Do.UI
 		{
 			get { return highlight; }
 			set {
-				highlight = value ?? string.Empty;
+				highlight = value ?? "";
 				UpdateText ();
 			}
 		}

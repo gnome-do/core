@@ -32,7 +32,7 @@ namespace Do.Platform.Default
 		public string GetUID (IObject o)
 		{
 			Log.Debug ("Default ICoreService cannot get UIDs.");
-			return string.Empty;
+			return "";
 		}
 		
 		public IObject GetIObject (string uid)

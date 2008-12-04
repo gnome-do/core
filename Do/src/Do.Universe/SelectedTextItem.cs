@@ -59,7 +59,7 @@ namespace Do.Universe {
 			if (primary.WaitIsTextAvailable ()) {
 				text = primary.WaitForText ();
 			} else {
-				text = string.Empty;
+				text = "";
 			}
 		}
 	}

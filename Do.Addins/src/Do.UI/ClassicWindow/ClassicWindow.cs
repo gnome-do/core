@@ -65,9 +65,9 @@ namespace Do.UI {
 				if (currentPane == value) return;
 
 				currentPane = value;
-				iconbox[0].IsFocused = (value == Pane.First);
-				iconbox[1].IsFocused = (value == Pane.Second);
-				iconbox[2].IsFocused = (value == Pane.Third);
+				iconbox[0].IsFocused = value == Pane.First;
+				iconbox[1].IsFocused = value == Pane.Second;
+				iconbox[2].IsFocused = value == Pane.Third;
 
 				Reposition ();
 			}
@@ -75,8 +75,9 @@ namespace Do.UI {
 		
 		public PositionWindow PositionWindow {
 			get {
-				return positionWindow ??
+				if (positionWindow == null)
 					positionWindow = new PositionWindow (this, resultsWindow);
+				return positionWindow;
 			}
 		}
 		

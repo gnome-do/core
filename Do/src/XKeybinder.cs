@@ -182,7 +182,7 @@ namespace Do
 			public void SetBinding ()
 			{
 				if (key_sequence == null || 
-				    key_sequence == String.Empty || 
+				    key_sequence == "" || 
 				    key_sequence == "disabled")
 					return;
 

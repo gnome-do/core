@@ -24,8 +24,8 @@ namespace Do.Universe
 {
 	public class EmptyObject : IObject
 	{
-		public string Name { get { return string.Empty; } }
-		public string Description { get { return string.Empty; } }
-		public string Icon { get { return string.Empty; } }
+		public string Name { get { return ""; } }
+		public string Description { get { return ""; } }
+		public string Icon { get { return ""; } }
 	}
 }

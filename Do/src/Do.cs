@@ -108,15 +108,17 @@ namespace Do {
 
 		public static Controller Controller {
 			get {
-				return controller ??
+				if (controller == null)
 					controller = new Controller ();
+				return controller;
 			}
 		}
 
 		public static UniverseManager UniverseManager {
 			get {
-				return universe_manager ??
+				if (universe_manager == null)
 					universe_manager = new UniverseManager ();
+				return universe_manager;
 			}
 		}
 		

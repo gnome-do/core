@@ -61,7 +61,9 @@ namespace MonoDock.UI
 		Gdk.Pixbuf pixbuf;
 		Gdk.Pixbuf Pixbuf {
 			get {
-				return pixbuf ?? pixbuf = GetPixbuf ();
+				if (pixbuf == null)
+					pixbuf = GetPixbuf ();
+				return pixbuf;
 			}
 		}
 		
@@ -70,11 +72,8 @@ namespace MonoDock.UI
 				if (apps == null)
 					return false;
 				return apps
-					.Select ((Wnck.Application app) => app.Windows)
-					.Where ((Wnck.Window[] wins) => (wins as Wnck.Window[])
-					        .Where ((Wnck.Window win) => !win.IsSkipTasklist)
-					        .Any())
-					.Any ();
+					.Select (app => app.Windows)
+					.Any (wins => wins.Any (win => !win.IsSkipTasklist));
 			}
 		}	
 		

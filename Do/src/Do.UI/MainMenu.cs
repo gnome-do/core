@@ -33,8 +33,9 @@ namespace Do.UI
 
 		public static MainMenu Instance {
 			get {
-				return instance ??
+				if (instance == null)
 					instance = new MainMenu ();
+				return instance;
 			}
 		}
 

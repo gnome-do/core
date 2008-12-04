@@ -52,7 +52,7 @@ namespace Do
 
 			public static string MarkupSafeString (string s)
 			{
-				if (s == null) return string.Empty;
+				if (s == null) return "";
 				return GLib.Markup.EscapeText (s);
 			}
 
@@ -65,7 +65,7 @@ namespace Do
 			string skipped, matched, remainder;
 			bool matchedTermination;
 
-			result = string.Empty;
+			result = "";
 			match_pos = last_main_cut = 0;
 			lower_main = main.ToLower ();
 			other = other.ToLower ();
@@ -94,13 +94,13 @@ namespace Do
 						remainder = FormatCommonSubstrings ( main.Substring (match_pos + len), other.Substring (pos + len), format);
 					}
 					else {
-						remainder = string.Empty;
+						remainder = "";
 					}
 					result = string.Format ("{0}{1}{2}", skipped, string.Format(format, matched), remainder);
 					break;
 				}
 			}
-			if (result == string.Empty) {
+			if (result == "") {
 				// no matches
 				result = main;
 			}

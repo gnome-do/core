@@ -271,10 +271,11 @@ namespace Do.Core
 		/// </param>
 		public void DeleteItems (IEnumerable<IItem> items)
 		{
-			foreach (IItem i in items) {
-				DoItem item = (i as DoItem) ?? new DoItem (i);
-				lock (universe_lock)
-				      universe.Remove (item.UID);
+			lock (universe_lock) {
+				foreach (IItem i in items) {
+					DoItem item = DoItem.Wrap (i) as DoItem;
+					universe.Remove (item.UID);
+				}
 			}
 		}
 

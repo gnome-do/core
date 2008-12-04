@@ -60,7 +60,7 @@ namespace MonoDock.UI
 		
 		public string Description {
 			get {
-				return string.Empty;
+				return "";
 			}
 		}
 		

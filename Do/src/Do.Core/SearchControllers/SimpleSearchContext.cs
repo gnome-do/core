@@ -35,7 +35,7 @@ namespace Do.Core
 		public SimpleSearchContext ()
 		{
 			SecondaryCursors = new IObject[0];
-			query = string.Empty;
+			query = "";
 			results = new IObject[0];
 		}
 		
@@ -45,13 +45,21 @@ namespace Do.Core
 		
 		public string Query
 		{
-			get { return query ?? query = string.Empty; }
+			get {
+				if (query == null)
+					query = "";
+				return query;
+			}
 			set { query = value; }
 		}
 
 		public IList<IObject> Results
 		{
-			get { return results ?? results = new IObject[0]; }
+			get {
+				if (results == null)
+					results = new IObject[0];
+				return results;
+			}
 			set {
 				results = value ?? new List<IObject> (0);
 				

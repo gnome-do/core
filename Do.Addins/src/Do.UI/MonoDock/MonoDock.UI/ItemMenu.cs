@@ -29,8 +29,9 @@ namespace Do.UI
 
 		public static ItemMenu Instance {
 			get {
-				return instance ??
+				if (instance == null)
 					instance = new ItemMenu ();
+				return instance;
 			}
 		}
 

@@ -229,19 +229,24 @@ namespace Do.UI
 		public int InternalHeight {
 			get {
 				if (BezelDefaults.RenderDescriptionText)
-					return BoxHeight + (2 * WindowBorder) + TextHeight + TitleBarHeight;
-				return BoxHeight + (2 * WindowBorder) + TitleBarHeight;
+					return BoxHeight + 2 * WindowBorder + TextHeight + TitleBarHeight;
+				return BoxHeight + 2 * WindowBorder + TitleBarHeight;
 			}
 		}
 
 		public BezelGlassResults Results {
 			get {
-				return bezel_results ?? 
-					bezel_results = new BezelGlassResults (controller, Math.Min (TwoPaneWidth-(2*WindowRadius), 360), style, colors);
+				if (bezel_results == null) 
+					bezel_results = new BezelGlassResults (controller, Math.Min (TwoPaneWidth - 2 * WindowRadius, 360), style, colors);
+				return bezel_results;
 			}
 		}
 		
-		public int TextModeOffset { get { return Math.Max (TitleBarHeight, WindowRadius); } }
+		public int TextModeOffset {
+			get {
+				return Math.Max (TitleBarHeight, WindowRadius);
+			}
+		}
 		
 		public bool ThirdPaneVisible {
 			get { return third_pane_visible; }
@@ -337,13 +342,17 @@ namespace Do.UI
 #region Contexts
 		private BezelDrawingContext Context {
 			get {
-				return context ?? context = new BezelDrawingContext ();
+				if (context == null)
+					context = new BezelDrawingContext ();
+				return context;
 			}
 		}
 		
 		private BezelDrawingContext OldContext {
 			get {
-				return old_context ?? old_context = new BezelDrawingContext ();
+				if (old_context == null)
+					old_context = new BezelDrawingContext ();
+				return old_context;
 			}
 		}
 #endregion
@@ -362,7 +371,7 @@ namespace Do.UI
 		
 		public event EventHandler GtkThemeChanged;
 		
-		public BezelDrawingArea(IDoController controller, IRenderTheme theme, bool preview) : base ()
+		public BezelDrawingArea (IDoController controller, IRenderTheme theme, bool preview) : base ()
 		{
 			this.controller = controller;
 			

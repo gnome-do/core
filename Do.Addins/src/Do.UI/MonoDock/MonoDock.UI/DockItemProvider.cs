@@ -76,7 +76,9 @@ namespace MonoDock.UI
 		SeparatorItem separator;
 		SeparatorItem Separator {
 			get {
-				return separator ?? separator = new SeparatorItem ();
+				if (separator == null)
+					separator = new SeparatorItem ();
+				return separator;
 			}
 		}
 		

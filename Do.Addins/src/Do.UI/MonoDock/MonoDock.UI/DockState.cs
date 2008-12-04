@@ -50,7 +50,11 @@ namespace MonoDock.UI
 		
 		IObject intro_object;
 		IObject IntroObject {
-			get { return intro_object ?? intro_object = new DefaultLabelBoxObject (); }
+			get {
+				if (intro_object == null)
+					intro_object = new DefaultLabelBoxObject ();
+				return intro_object;
+			}
 		}
 		
 		public Pane CurrentPane {

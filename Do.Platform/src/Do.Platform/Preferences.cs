@@ -61,7 +61,7 @@ namespace Do.Platform
 		
 		public string this [string key] {
 			get {
-				return Get<string> (key, string.Empty);
+				return Get<string> (key, "");
 			}
 			set {
 				Set<string> (key, value);

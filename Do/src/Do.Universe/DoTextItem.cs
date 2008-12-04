@@ -37,7 +37,7 @@ namespace Do
 				try {
 					return (Inner as ITextItem).Text;
 				} catch {
-					return string.Empty;
+					return "";
 				}
 			}
 		}

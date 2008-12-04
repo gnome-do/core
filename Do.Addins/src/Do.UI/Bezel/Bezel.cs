@@ -201,7 +201,7 @@ namespace Do.UI
 		public void ClearPane (Pane pane)
 		{
 			bezel_drawing_area.BezelSetPaneObject (pane, null);
-			bezel_drawing_area.BezelSetQuery (pane, string.Empty);
+			bezel_drawing_area.BezelSetQuery (pane, "");
 			bezel_drawing_area.BezelSetEntryMode (pane, false);
 			
 			if (pane == CurrentPane) {

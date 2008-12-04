@@ -189,7 +189,7 @@ namespace Do.Core {
 		{
 			LastHit = DateTime.Now;
 			Type = Services.Core.GetInnerType (o);
-			FirstChars = string.Empty;
+			FirstChars = "";
 		}
 
 		public bool IsAction {
@@ -226,7 +226,7 @@ namespace Do.Core {
 		/// </param>
 		public void RemoveFirstChar (char c)
 		{
-			FirstChars = FirstChars.Replace (c.ToString ().ToLower (), string.Empty);
+			FirstChars = FirstChars.Replace (c.ToString ().ToLower (), "");
 		}
 		
 		/// <summary>

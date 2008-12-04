@@ -292,8 +292,8 @@ namespace Do.Core {
 
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
-				action = (first as IAction) ?? (second as IAction);
-				item = (first as IItem) ?? (second as IItem);
+				action = first as IAction ?? second as IAction;
+				item = first as IItem ?? second as IItem;
 				return action != null && item != null &&
 					action.SupportedModifierItemTypes.Any () &&
 					!action.ModifierItemsOptional &&
@@ -625,7 +625,7 @@ namespace Do.Core {
 		/// A <see cref="System.String"/> in the form "<Modifier>key"
 		/// </returns>
 		string KeyEventToString (EventKey evnt) {
-			string modifier = string.Empty;
+			string modifier = "";
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
 				modifier += "<Control>";
 			}
