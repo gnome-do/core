@@ -42,15 +42,15 @@ namespace Do.Universe.Linux {
 		static IEnumerable<String> DesktopFilesDirectories {
 			get {
 				return new [] {
+					Paths.UserDesktop,
+					"~/.local/share/applications",
 					"~/.local/share/applications/wine",
 					"~/.local/share/applications/wine/Programs",
-					"~/.local/share/applications",
 					"/usr/share/applications",
 					"/usr/share/applications/kde",
 					"/usr/share/applications/kde4",
 					"/usr/share/gdm/applications",
 					"/usr/local/share/applications",
-					Paths.UserDesktop,
 				};
 			}
 		}
