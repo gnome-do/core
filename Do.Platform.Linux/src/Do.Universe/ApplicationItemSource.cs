@@ -41,8 +41,9 @@ namespace Do.Universe.Linux {
 		/// </summary>
 		static IEnumerable<String> DesktopFilesDirectories {
 			get {
-				return new string[] {
+				return new [] {
 					"~/.local/share/applications/wine",
+					"~/.local/share/applications/wine/Programs",
 					"~/.local/share/applications",
 					"/usr/share/applications",
 					"/usr/share/applications/kde",
@@ -106,7 +107,7 @@ namespace Do.Universe.Linux {
 			app_items = DesktopFilesDirectories
 				.Select (dir => dir.Replace ("~", Paths.UserHome))
 				.Select (dir => LoadDesktopFiles (dir))
-				.Aggregate ((a, b) => Enumerable.Concat (a, b))
+				.Aggregate ((a, b) => a.Concat (b))
 				.Cast<IItem> ()
 				.ToArray ();
 		}
@@ -117,7 +118,7 @@ namespace Do.Universe.Linux {
 
 		public IEnumerable<IItem> ChildrenOfItem (IItem item)
 		{
-			return null;
+			return Enumerable.Empty<IItem> ();
 		}
 
 	}

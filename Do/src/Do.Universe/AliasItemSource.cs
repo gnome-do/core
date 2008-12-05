@@ -67,14 +67,19 @@ namespace Do.Universe {
 		
 		static void Deserialize ()
 		{
+			aliases = null;
 			try {
 				using (Stream s = File.OpenRead (AliasFile)) {
 					BinaryFormatter f = new BinaryFormatter ();
 					aliases = f.Deserialize (s) as List<AliasRecord>;
 				}
+			} catch (FileNotFoundException) {
 			} catch (Exception e) {
-				Log.Warn (e.Message);
-				aliases = new List<AliasRecord> ();
+				Log.Error (e.Message);
+				Log.Debug (e.StackTrace);
+			} finally {
+				if (aliases == null)
+					aliases = new List<AliasRecord> ();
 			}
 		}
 		
@@ -174,7 +179,7 @@ namespace Do.Universe {
 					if (null != item && item is IItem) {
 						items.Add (new AliasItem (alias.Alias, item as IItem));
 					}
-			    }
+				}
 				return items;
 			}
 		}
