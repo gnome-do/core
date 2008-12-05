@@ -64,7 +64,7 @@ namespace Do.Platform.Linux
 
 		public bool IsExecutable (string line)
 		{
-			if (null == line) throw new ArgumentNullException ();
+			line = line.Replace ("~", Paths.UserHome);
 
 			if (CommandLineIsFoundOnPath (line)) return true;
 			if (!File.Exists (line) || Directory.Exists (line)) return false;
@@ -75,6 +75,8 @@ namespace Do.Platform.Linux
 
 		public void Execute (string line)
 		{
+			line = line.Replace ("~", Paths.UserHome);
+
 			Log.Info ("Executing \"{0}\"", line);
 			if (File.Exists (line)) {
 				Process proc = new Process ();
