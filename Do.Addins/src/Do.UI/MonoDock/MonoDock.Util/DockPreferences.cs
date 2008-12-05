@@ -30,9 +30,9 @@ using Do.Platform;
 namespace MonoDock.Util
 {
 	
-	public static class DockPreferences
+	public class DockPreferences
 	{
-		static IPreferences prefs = Services.Preferences.Get ("Dock");
+		static IPreferences prefs = Services.Preferences.Get<DockPreferences> ();
 		
 		// we can not store these in gconf all the time since we query these a LOT
 		// so we have to use a half and half solution

@@ -35,6 +35,8 @@ namespace Do.Platform
 		T    Get<T>    (string key, T def);
 		bool TryGet<T> (string key, out T val);
 		bool TryGet<T> (string key, T def, out T val);
+
+		string AbsolutePathForKey (string key);
 	}
 
 }

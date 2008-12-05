@@ -24,17 +24,28 @@ using System.Collections.Generic;
 namespace Do.Platform
 {
 	
-	class PreferencesFactory : IPreferencesFactory
+	public class PreferencesFactory
 	{
 		
-		IPreferencesService Service { get; set; }
+		public IPreferencesService Service { get; private set; }
 
 		public PreferencesFactory (IPreferencesService service)
 		{
 			Service = service;
 		}
 
-		public IPreferences Get (string key)
+		/// <summary>
+		/// IPreferences factory method with a little bit of type-level protection.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="IPreferences"/> for exclusive use by type T.
+		/// </returns>
+		public IPreferences Get<T> ()
+		{
+			return Get (typeof (T).Name);
+		}
+
+		protected IPreferences Get (string key)
 		{
 			return new Preferences (Service, key);
 		}

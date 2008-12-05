@@ -31,15 +31,21 @@ namespace Do.Platform.Default
 		
 		public bool Set<T> (string key, T val)
 		{
-			Log.Debug ("Default IPreferencesService cannot set key \"{0}\"", key);
+			Log.Debug ("Default IPreferencesService cannot set key \"{0}\".", key);
 			return false;
 		}
 		
 		public bool TryGet<T> (string key, out T val)
 		{
-			Log.Debug ("Default IPreferencesService cannot get key \"{0}\"", key);
+			Log.Debug ("Default IPreferencesService cannot get key \"{0}\".", key);
 			val = default (T);
 			return false;
+		}
+
+		public string AbsolutePathForKey (string key)
+		{
+			Log.Debug ("Default IPreferencesService cannot find absolute path for key \"{0}\".", key);
+			return "";
 		}
 
 		#endregion

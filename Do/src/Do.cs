@@ -36,6 +36,8 @@ namespace Do {
 		static Controller controller;
 		static UniverseManager universe_manager;
 
+		public static CorePreferences Preferences { get; private set; } 
+
 		internal static void Main (string[] args)
 		{
 			Catalog.Init ("gnome-do", AssemblyInfo.LocaleDirectory);
@@ -50,9 +52,10 @@ namespace Do {
 			Windowing.Initialize (new WindowingImplementation ());
 
 			PluginManager.Initialize ();
+			Preferences = new CorePreferences ();
 
-			Log.DisplayLevel = CorePreferences.QuietStart ? LogLevel.Error : LogLevel.Info;
-			if (CorePreferences.Debug) Log.DisplayLevel = LogLevel.Debug;
+			Log.DisplayLevel = Preferences.QuietStart ? LogLevel.Error : LogLevel.Info;
+			if (Preferences.Debug) Log.DisplayLevel = LogLevel.Debug;
 			
 			StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
 			Platform.Notifications.Initialize (new Platform.Linux.NotificationsImplementation ());
@@ -72,7 +75,7 @@ namespace Do {
 			keybinder = new GConfXKeybinder ();
 			SetupKeybindings ();
 
-			if (!CorePreferences.QuietStart)
+			if (!Preferences.QuietStart)
 				Controller.Summon ();
 			
 			AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
@@ -124,8 +127,7 @@ namespace Do {
 		
 		static void SetupKeybindings ()
 		{
-			keybinder.Bind (CorePreferences.SummonKeyBindingPath,
-				CorePreferences.SummonKeyBinding, OnActivate);
+			keybinder.Bind (Preferences.SummonKeybindingPath, Preferences.SummonKeybinding, OnActivate);
 		}
 		
 		static void OnActivate (object sender, EventArgs args)

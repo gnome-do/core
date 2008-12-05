@@ -46,7 +46,6 @@
     <File name="src/Do.Platform/Do.Platform.Default/CoreService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IPreferencesService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/PreferencesFactory.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/IPreferencesFactory.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IPreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/PreferenceChangedEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/PreferencesService.cs" subtype="Code" buildaction="Compile" />

@@ -23,7 +23,7 @@ using System;
 namespace Do.Platform
 {
 
-	public static class StatusIcon
+	public class StatusIcon
 	{		
 		public interface Implementation
 		{			
@@ -33,7 +33,6 @@ namespace Do.Platform
 		}
 
 		const bool   VisibleDefault = true;			
-		const string RootPreferencesKey = "StatusIcon";
 		const string VisiblePreferenceKey = "StatusIconVisible";
 		
 		static IPreferences Prefs { get; set; }
@@ -41,7 +40,7 @@ namespace Do.Platform
 
 		static StatusIcon ()
 		{
-			Prefs = Services.Preferences.Get (RootPreferencesKey);
+			Prefs = Services.Preferences.Get<StatusIcon> ();
 		}
 
 		public static void Initialize (Implementation imp)

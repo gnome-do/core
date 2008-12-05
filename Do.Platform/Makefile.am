@@ -31,7 +31,6 @@ FILES = \
 	src/Do.Platform/Log.cs \
 	src/Do.Platform/Notifications.cs \
 	src/Do.Platform/IPreferences.cs \
-	src/Do.Platform/IPreferencesFactory.cs \
 	src/Do.Platform/IPreferencesService.cs \
 	src/Do.Platform/Paths.cs \
 	src/Do.Platform/Preferences.cs \

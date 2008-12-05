@@ -33,7 +33,7 @@ namespace Do.Platform
 
 		static ICoreService core;
 		static IEnvironmentService environment;
-		static IPreferencesFactory preferences;
+		static PreferencesFactory preferences;
 		static IEnumerable<ILogService> logs;
 		
 		public static void Initialize ()
@@ -101,7 +101,7 @@ namespace Do.Platform
 			}
 		}
 			
-		public static IPreferencesFactory Preferences {
+		public static PreferencesFactory Preferences {
 			get {
 				if (preferences == null) {
 					IPreferencesService service = LocateService<IPreferencesService, Default.PreferencesService> ();

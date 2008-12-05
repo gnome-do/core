@@ -51,14 +51,14 @@ namespace Do.UI
 				theme_combo.Sensitive = false;
 				
 			// Setup theme combo
-            themeI = Array.IndexOf (Themes, CorePreferences.Theme);
+            themeI = Array.IndexOf (Themes, Do.Preferences.Theme);
             themeI = themeI >= 0 ? themeI : 0;
             theme_combo.Active = themeI;            
 
 			BuildPreview ();
 			
-			pin_check.Active = CorePreferences.AlwaysShowResults;
-			CorePreferences.PreferenceChanged += OnPrefsChanged;
+			pin_check.Active = Do.Preferences.AlwaysShowResults;
+			Do.Preferences.PreferenceChanged += OnPrefsChanged;
 		}
 		
 		private void OnPrefsChanged (object o, PreferenceChangedEventArgs args) {
@@ -68,7 +68,7 @@ namespace Do.UI
 		
 		protected override void OnDestroyed ()
 		{
-			CorePreferences.PreferenceChanged -= OnPrefsChanged;
+			Do.Preferences.PreferenceChanged -= OnPrefsChanged;
 			base.OnDestroyed ();
 			if (bda != null)
 				bda.Destroy ();
@@ -87,7 +87,7 @@ namespace Do.UI
 			}
 			
 			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
-				if (theme.Name == CorePreferences.Theme) {
+				if (theme.Name == Do.Preferences.Theme) {
 					bda = new BezelDrawingArea (null, theme, true);
 					break;
 				}
@@ -153,12 +153,12 @@ namespace Do.UI
 
 		protected virtual void OnPinCheckClicked (object sender, System.EventArgs e)
 		{
-			CorePreferences.AlwaysShowResults = pin_check.Active;
+			Do.Preferences.AlwaysShowResults = pin_check.Active;
 		}
 
 		protected virtual void OnThemeComboChanged (object sender, System.EventArgs e)
 		{
-			CorePreferences.Theme = Themes[theme_combo.Active];
+			Do.Preferences.Theme = Themes[theme_combo.Active];
 		}
 
 		protected virtual void OnAnimationCheckbuttonClicked (object sender, System.EventArgs e)

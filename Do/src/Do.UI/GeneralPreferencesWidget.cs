@@ -63,7 +63,7 @@ namespace Do.UI
 	  Build ();
 	  
 	  // Setup checkboxes
-	  hide_check.Active = CorePreferences.QuietStart;
+	  hide_check.Active = Do.Preferences.QuietStart;
 	  login_check.Active = AutostartEnabled;
 	  notification_check.Active = Platform.StatusIcon.VisibilityPreference;
 	}
@@ -110,7 +110,7 @@ namespace Do.UI
 	
 	protected virtual void OnHideCheckClicked (object sender, EventArgs e)
 	{
-	  CorePreferences.QuietStart = hide_check.Active;
+	  Do.Preferences.QuietStart = hide_check.Active;
 	}
 	
 	protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)

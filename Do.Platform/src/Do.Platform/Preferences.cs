@@ -27,26 +27,20 @@ namespace Do.Platform
 	class Preferences : IPreferences
 	{
 
-		string RootKey { get; set; }
+		string RootPath { get; set; }
 		IPreferencesService Service { get; set; }
 		
 		public Preferences (IPreferencesService service)
-			: this (service, "/")
+			: this (service, "")
 		{
 		}
 
-		public Preferences (IPreferencesService service, string rootKey)
+		public Preferences (IPreferencesService service, string rootPath)
 		{
-			RootKey = rootKey;
+			RootPath = rootPath;
 			Service = service;
 		}
-
-		string RootifyKey (string key)
-		{
-			Func<string, string> slash = s => s.StartsWith ("/") ? s : "/" + s;
-			return slash (RootKey) + slash (key);
-		}
-
+		
 		void OnPreferenceChanged (string key, object oldValue)
 		{
 			if (PreferenceChanged == null) return;
@@ -58,6 +52,11 @@ namespace Do.Platform
 		#region IPreferences
 		
 		public event EventHandler<PreferenceChangedEventArgs> PreferenceChanged;
+
+		public string AbsolutePathForKey (string key)
+		{
+			return Service.AbsolutePathForKey (string.Format ("{0}/{1}", RootPath, key));
+		}
 		
 		public string this [string key] {
 			get {
@@ -106,12 +105,12 @@ namespace Do.Platform
 		public bool Set<T> (string key, T val)
 		{
 			T oldValue;
+			string keypath = AbsolutePathForKey (key);
 			
-			if (!Service.TryGet<T> (RootifyKey (key), out oldValue))
+			if (!Service.TryGet<T> (keypath, out oldValue))
 				oldValue = default (T);
 			
-			if (Service.Set<T> (RootifyKey (key), val)) {
-				// We send the unmodifed key (without RootKey) to subscribers.
+			if (Service.Set<T> (keypath, val)) {
 				OnPreferenceChanged (key, oldValue);
 				return true;
 			}
@@ -133,7 +132,8 @@ namespace Do.Platform
 		/// </returns>
 		public bool TryGet<T> (string key, out T val)
 		{
-			return Service.TryGet<T> (RootifyKey (key), out val);
+			string keypath = AbsolutePathForKey (key);
+			return Service.TryGet<T> (keypath, out val);
 		}
 
 		#endregion

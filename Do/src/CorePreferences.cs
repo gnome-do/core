@@ -27,62 +27,83 @@ using Do.Platform;
 namespace Do
 {
 	
-	public static class CorePreferences  {
+	class CorePreferences  {
 
-		const string RootKey = "core";
-		const string SummonKeyBindingName = "SummonKeyBinding";
-		public static readonly string SummonKeyBindingPath =
-			"/apps/gnome-do/preferences/" + RootKey + "/" + SummonKeyBindingName;
+		#region Key constants and default values
+		const string ThemeKey = "Theme";
+		const string QuietStartKey = "QuietStart";
+		const string StartAtLoginKey = "StartAtLogin";
+		const string SummonKeybindingKey = "SummonKeybinding";
+		const string AlwaysShowResultsKey = "AlwaysShowResults";
+		const string TextModeKeybindingKey = "TextModeKeybinding";
 
-		static IPreferences prefs = Services.Preferences.Get (RootKey);
+		const string ThemeDefaultValue = "Classic";
+		const bool QuietStartDefaultValue = false;
+		const bool StartAtLoginDefaultValue = false;
+		const bool AlwaysShowResultsDefaultValue = false;
+		const string TextModeKeybindingDefaultValue = "period";
+		const string SummonKeybindingDefaultValue = "<Super>space";
 
-		public static event EventHandler<PreferenceChangedEventArgs> PreferenceChanged {
-			add { prefs.PreferenceChanged += value; }
-			remove { prefs.PreferenceChanged -= value; }
+		const string DebugOption = "--debug";
+		const string LogToFileOption = "--log-to-file";
+		#endregion
+
+		IPreferences Preferences { get; set; }
+		
+		public CorePreferences ()
+		{
+			Preferences = Services.Preferences.Get<CorePreferences> ();
+		}
+
+		bool HasOption (string option)
+		{
+			return Env.GetCommandLineArgs ().Contains (option);
+		}
+
+		public event EventHandler<PreferenceChangedEventArgs> PreferenceChanged {
+			add { Preferences.PreferenceChanged += value; }
+			remove { Preferences.PreferenceChanged -= value; }
 		}
 		
-		public static bool WriteLogToFile {
-			get { return Env.GetCommandLineArgs ().Contains ("--log-to-file"); }
+		public bool WriteLogToFile {
+			get { return HasOption (LogToFileOption); }
 		}
 		
-		public static bool Debug {
-			get { return Env.GetCommandLineArgs ().Contains ("--debug"); }
+		public bool Debug {
+			get { return HasOption (DebugOption); }
 		}
 
-		public static string SummonKeyBinding {
-			get { return prefs.Get<string> (SummonKeyBindingName, "<Super>space"); }
-			set { prefs.Set<string> (SummonKeyBindingName, value); }
+		public string SummonKeybindingPath {
+			get { return Preferences.AbsolutePathForKey(SummonKeybindingKey); }
+		}
+		public string SummonKeybinding {
+			get { return Preferences.Get<string> (SummonKeybindingKey, SummonKeybindingDefaultValue); }
+			set { Preferences.Set<string> (SummonKeybindingKey, value); }
 		}
 		
-		public static string TextModeKeyBinding {
-			get { return prefs.Get<string> ("TextModeKeyBinding", "period"); }
-			set { prefs.Set<string> ("TextModeKeyBinding", value); }
+		public string TextModeKeybinding {
+			get { return Preferences.Get<string> (TextModeKeybindingKey, TextModeKeybindingDefaultValue); }
+			set { Preferences.Set<string> (TextModeKeybindingKey, value); }
+		}
+
+		public string Theme {
+			get { return Preferences.Get<string> (ThemeKey, ThemeDefaultValue); }
+			set { Preferences.Set<string> (ThemeKey, value); }
+		}
+
+		public bool QuietStart {
+			get { return Preferences.Get<bool> (QuietStartKey, QuietStartDefaultValue); }
+			set { Preferences.Set<bool> (QuietStartKey, value); }
+		}
+
+		public bool StartAtLogin {
+			get { return Preferences.Get<bool> (StartAtLoginKey, StartAtLoginDefaultValue); }
+			set { Preferences.Set<bool> (StartAtLoginKey, value); }
 		}
 		
-		public static Gdk.Key TextModeKeyVal {
-			get {
-				return (Gdk.Key) Enum.Parse (typeof (Gdk.Key), TextModeKeyBinding);
-			}
-		}
-
-		public static string Theme {
-			get { return prefs.Get<string> ("Theme", "Classic"); }
-			set { prefs.Set<string> ("Theme", value); }
-		}
-
-		public static bool QuietStart {
-			get { return prefs.Get<bool> ("QuietStart", false); }
-			set { prefs.Set<bool> ("QuietStart", value); }
-		}
-
-		public static bool StartAtLogin {
-			get { return prefs.Get<bool> ("StartAtLogin", false); }
-			set { prefs.Set<bool> ("StartAtLogin", value); }
-		}
-		
-		public static bool AlwaysShowResults {
-			get { return prefs.Get<bool> ("AlwaysShowResults", false); }
-			set { prefs.Set<bool> ("AlwaysShowResults", value); }
+		public bool AlwaysShowResults {
+			get { return Preferences.Get<bool> (AlwaysShowResultsKey, AlwaysShowResultsDefaultValue); }
+			set { Preferences.Set<bool> (AlwaysShowResultsKey, value); }
 		}
 	}
 }

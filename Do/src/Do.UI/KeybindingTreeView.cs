@@ -58,8 +58,8 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 			
-			store.AppendValues ("Summon", CorePreferences.SummonKeyBinding);
-			store.AppendValues ("Text Mode", CorePreferences.TextModeKeyBinding);
+			store.AppendValues ("Summon", Do.Preferences.SummonKeybinding);
+			store.AppendValues ("Text Mode", Do.Preferences.TextModeKeybinding);
 		}
 		
 		[GLib.ConnectBefore]
@@ -118,11 +118,11 @@ namespace Do.UI
 			switch (action.ToLower ()) {
 			case "summon":
 				binding = model.GetValue (iter, (int)Column.Binding) as string;
-				CorePreferences.SummonKeyBinding = binding;
+				Do.Preferences.SummonKeybinding = binding;
 				break;
 			case "text mode":
 				binding = model.GetValue (iter, (int)Column.Binding) as string;
-				CorePreferences.TextModeKeyBinding = binding;
+				Do.Preferences.TextModeKeybinding = binding;
 				break;
 			}
 			return false;

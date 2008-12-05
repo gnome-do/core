@@ -52,7 +52,7 @@ namespace Do.UI
 		}
 		
 #region Static Area
-		static IPreferences prefs = Services.Preferences.Get ("Bezel");
+		static IPreferences prefs = Services.Preferences.Get<BezelDrawingArea> ();
 		public static event EventHandler ThemeChanged;
 		
 		public static bool Animated {
@@ -376,7 +376,7 @@ namespace Do.UI
 			this.controller = controller;
 			
 			DoubleBuffered = false;
-			prefs = Services.Preferences.Get ("Bezel");
+			prefs = Services.Preferences.Get<BezelDrawingArea> ();
 			this.preview = preview;
 			this.theme = theme;
 			

@@ -26,7 +26,7 @@ namespace Do.Platform.Linux
 {	
 	public class GConfPreferencesService : IPreferencesService
 	{
-		const string GConfRootPath = "/apps/gnome-do/preferences";
+		const string RootPath = "/apps/gnome-do/preferences";
 
 		GConf.Client client;
 
@@ -35,30 +35,20 @@ namespace Do.Platform.Linux
 			client = new GConf.Client ();
 		}
 
-		/// <summary>
-		/// If key contains an absolute path, return it; otherwise, return
-		/// an absolute path for the key by appending it to Do's root gconf path.
-		/// </summary>
-		/// <param name="key">
-		/// A <see cref="System.String"/> gconf key, containing either an
-		/// absolute path or a key relative to Do's root path (e.g "key_binding"
-		/// or "ui/color").
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.String"/> containing an absolute gconf path.
-		/// </returns>
-		private string MakeKeyPath (string key)
-		{
-			return GConfRootPath + (key.StartsWith ("/") ? key : "/" + key);
-		}
-
 		#region IPreferencesService
+
+		public string AbsolutePathForKey (string key)
+		{
+			if (key.StartsWith ("/"))
+				return key;
+			return string.Format ("{0}/{1}", RootPath, key);
+		}
 		
 		public bool Set<T> (string key, T val)
 		{
 			bool success = true;
 			try {
-				client.Set (MakeKeyPath (key), val);
+				client.Set (key, val);
 			} catch {
 				success = false;
 			}
@@ -69,7 +59,7 @@ namespace Do.Platform.Linux
 		{
 			bool success = true;
 			try {
-				val = (T) client.Get (MakeKeyPath (key));
+				val = (T) client.Get (key);
 			} catch {
 				success = false;
 			}
