@@ -54,8 +54,17 @@ namespace Do.Universe.Linux
 		
 		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
 		{
-			Gtk.Clipboard main = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
-			main.Text = items.First ().Description;
+			string text = "";
+			IItem item = items.First ();
+
+			if (item is ITextItem)
+				text = (item as ITextItem).Text;
+			else
+				text = string.Format ("{0} - {1}", item.Name, item.Description);
+			
+			Clipboard.Get (Gdk.Selection.Clipboard).Text =
+				Clipboard.Get (Gdk.Selection.Primary).Text = text;
+
 			return null;
 		}
 	}
