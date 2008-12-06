@@ -77,33 +77,33 @@ namespace Do
 			get { return Preferences.AbsolutePathForKey(SummonKeybindingKey); }
 		}
 		public string SummonKeybinding {
-			get { return Preferences.Get<string> (SummonKeybindingKey, SummonKeybindingDefaultValue); }
-			set { Preferences.Set<string> (SummonKeybindingKey, value); }
+			get { return Preferences.Get (SummonKeybindingKey, SummonKeybindingDefaultValue); }
+			set { Preferences.Set (SummonKeybindingKey, value); }
 		}
 		
 		public string TextModeKeybinding {
-			get { return Preferences.Get<string> (TextModeKeybindingKey, TextModeKeybindingDefaultValue); }
-			set { Preferences.Set<string> (TextModeKeybindingKey, value); }
+			get { return Preferences.Get (TextModeKeybindingKey, TextModeKeybindingDefaultValue); }
+			set { Preferences.Set (TextModeKeybindingKey, value); }
 		}
 
 		public string Theme {
-			get { return Preferences.Get<string> (ThemeKey, ThemeDefaultValue); }
-			set { Preferences.Set<string> (ThemeKey, value); }
+			get { return Preferences.Get (ThemeKey, ThemeDefaultValue); }
+			set { Preferences.Set (ThemeKey, value); }
 		}
 
 		public bool QuietStart {
-			get { return Preferences.Get<bool> (QuietStartKey, QuietStartDefaultValue); }
-			set { Preferences.Set<bool> (QuietStartKey, value); }
+			get { return Preferences.Get (QuietStartKey, QuietStartDefaultValue); }
+			set { Preferences.Set (QuietStartKey, value); }
 		}
 
 		public bool StartAtLogin {
-			get { return Preferences.Get<bool> (StartAtLoginKey, StartAtLoginDefaultValue); }
-			set { Preferences.Set<bool> (StartAtLoginKey, value); }
+			get { return Preferences.Get(StartAtLoginKey, StartAtLoginDefaultValue); }
+			set { Preferences.Set (StartAtLoginKey, value); }
 		}
 		
 		public bool AlwaysShowResults {
-			get { return Preferences.Get<bool> (AlwaysShowResultsKey, AlwaysShowResultsDefaultValue); }
-			set { Preferences.Set<bool> (AlwaysShowResultsKey, value); }
+			get { return Preferences.Get (AlwaysShowResultsKey, AlwaysShowResultsDefaultValue); }
+			set { Preferences.Set (AlwaysShowResultsKey, value); }
 		}
 	}
 }

@@ -28,10 +28,9 @@ namespace Do.Platform
 	{
 
 		string RootPath { get; set; }
-		IPreferencesService Service { get; set; }
+		public IPreferencesService Service { get; set; }
 		
-		public Preferences (IPreferencesService service)
-			: this (service, "")
+		public Preferences (IPreferencesService service) : this (service, "")
 		{
 		}
 
@@ -41,11 +40,11 @@ namespace Do.Platform
 			Service = service;
 		}
 		
-		void OnPreferenceChanged (string key, object oldValue)
+		void OnPreferenceChanged (string key, object oldValue, object newValue)
 		{
 			if (PreferenceChanged == null) return;
 			
-			PreferenceChangedEventArgs args = new PreferenceChangedEventArgs (key, oldValue, this [key]);
+			PreferenceChangedEventArgs args = new PreferenceChangedEventArgs (key, oldValue, newValue);
 			PreferenceChanged (this, args);
 		}
 
@@ -55,15 +54,17 @@ namespace Do.Platform
 
 		public string AbsolutePathForKey (string key)
 		{
+			if (key.StartsWith ("/"))
+				return Service.AbsolutePathForKey (key);
 			return Service.AbsolutePathForKey (string.Format ("{0}/{1}", RootPath, key));
 		}
 		
 		public string this [string key] {
 			get {
-				return Get<string> (key, "");
+				return Get (key, "");
 			}
 			set {
-				Set<string> (key, value);
+				Set (key, value);
 			}
 		}
 
@@ -79,9 +80,9 @@ namespace Do.Platform
 		{
 			bool success;
 
-			success = TryGet<T> (key, out val);
+			success = TryGet (key, out val);
 			if (!success) {
-				success = Set<T> (key, def);
+				success = Set (key, def);
 				val = def;
 			}
 			return success;
@@ -107,11 +108,11 @@ namespace Do.Platform
 			T oldValue;
 			string keypath = AbsolutePathForKey (key);
 			
-			if (!Service.TryGet<T> (keypath, out oldValue))
+			if (!Service.TryGet (keypath, out oldValue))
 				oldValue = default (T);
 			
-			if (Service.Set<T> (keypath, val)) {
-				OnPreferenceChanged (key, oldValue);
+			if (Service.Set (keypath, val)) {
+				OnPreferenceChanged (key, oldValue, val);
 				return true;
 			}
 			return false;
@@ -133,7 +134,7 @@ namespace Do.Platform
 		public bool TryGet<T> (string key, out T val)
 		{
 			string keypath = AbsolutePathForKey (key);
-			return Service.TryGet<T> (keypath, out val);
+			return Service.TryGet (keypath, out val);
 		}
 
 		#endregion

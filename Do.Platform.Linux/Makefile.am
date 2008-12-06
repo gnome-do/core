@@ -17,9 +17,11 @@ all: $(ASSEMBLY)
 FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/ConsoleCrayon.cs \
-	src/Do.Platform/ConsoleLogService.cs \
-	src/Do.Platform/EnvironmentService.cs \
-	src/Do.Platform/GConfPreferencesService.cs \
+	src/Do.Platform/Do.Platform.Linux/ConsoleLogService.cs \
+	src/Do.Platform/Do.Platform.Linux/EnvironmentService.cs \
+	src/Do.Platform/Do.Platform.Linux/GConfPreferencesService.cs \
+	src/Do.Platform/Do.Platform.Linux/Tests/SetupTests.cs \
+	src/Do.Platform/Do.Platform.Linux/Tests/GConfPreferencesServiceTests.cs \
 	src/Do.Platform/IconsImplementation.cs \
 	src/Do.Platform/NotificationsImplementation.cs \
 	src/Do.Platform/PathsImplementation.cs \
@@ -38,6 +40,7 @@ REFERENCES =  \
 	System \
 	System.Core \
 	Mono.Posix \
+	$(NUNIT_LIBS) \
 	$(GTK_SHARP_20_LIBS) \
 	$(GNOME_SHARP_20_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \

@@ -26,12 +26,18 @@ namespace Do.Platform.Linux
 {	
 	public class GConfPreferencesService : IPreferencesService
 	{
-		const string RootPath = "/apps/gnome-do/preferences";
+		const string ApplicationRootPath = "/apps/gnome-do/preferences";
 
 		GConf.Client client;
+		string RootPath { get; set; }
 
-		public GConfPreferencesService ()
+		public GConfPreferencesService () : this (ApplicationRootPath)
 		{
+		}
+
+		public GConfPreferencesService (string rootPath)
+		{
+			RootPath = rootPath;
 			client = new GConf.Client ();
 		}
 
@@ -48,8 +54,10 @@ namespace Do.Platform.Linux
 		{
 			bool success = true;
 			try {
-				client.Set (key, val);
-			} catch {
+				client.Set (AbsolutePathForKey (key), val);
+			} catch (Exception e) {
+				Log.Error ("Encountered error setting GConf key {0}: {1}", key, e.Message);
+				Log.Debug (e.StackTrace);
 				success = false;
 			}
 			return success;
@@ -59,8 +67,14 @@ namespace Do.Platform.Linux
 		{
 			bool success = true;
 			try {
-				val = (T) client.Get (key);
-			} catch {
+				val = (T) client.Get (AbsolutePathForKey (key));
+			} catch (GConf.NoSuchKeyException) {
+				// We don't need to log this, because many keys that do not
+				// exist are asked for.
+				success = false;
+			} catch (Exception e) {
+				Log.Error ("Encountered error getting GConf key {0}: {1}", key, e.Message);
+				Log.Debug (e.StackTrace);
 				success = false;
 			}
 			return success;

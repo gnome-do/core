@@ -18,6 +18,8 @@ FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/Do.Platform.Common/AbstractLogService.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogService.cs \
+	src/Do.Platform/Do.Platform.Common/DictionaryPreferencesService.cs \
+	src/Do.Platform/Do.Platform.Common/Tests/DictionaryPreferencesServiceTests.cs \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
@@ -40,6 +42,8 @@ FILES = \
 	src/Do.Platform/StatusIcon.cs \
 	src/Do.Platform/UniverseFactory.cs \
 	src/Do.Platform/Windowing.cs \
+	src/Do.Platform/Tests/SetupTests.cs \
+	src/Do.Platform/Tests/PreferencesTests.cs \
 	src/Do.Universe/Do.Universe.Common/EmailAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs \
@@ -55,9 +59,10 @@ RESOURCES = \
 REFERENCES =  \
 	System \
 	System.Core \
+	Mono.Posix \
 	$(MONO_ADDINS_LIBS) \
-	../Do.Universe/Do.Universe.dll \
-	Mono.Posix
+	$(NUNIT_LIBS) \
+	../Do.Universe/Do.Universe.dll
 
 $(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
 	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)

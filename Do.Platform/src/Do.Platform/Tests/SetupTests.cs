@@ -1,4 +1,4 @@
-/* IPreferences.cs
+/* SetupTests.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,22 +19,25 @@
  */
 
 using System;
-using System.Collections.Generic;
-
+using NUnit.Framework;
 
 namespace Do.Platform
 {
 	
-	public interface IPreferences
+	
+	[SetUpFixture]
+	public class SetupTests
 	{
-		event EventHandler<PreferenceChangedEventArgs> PreferenceChanged;
 		
-		string this [string key] { get; set; }
+		[SetUp]
+		public void SetUp ()
+		{
+			Services.Initialize ();
+		}
 
-		bool Set<T>    (string key, T val);
-		T    Get<T>    (string key, T def);
-
-		string AbsolutePathForKey (string key);
+		[TearDown]
+		public void TearDown ()
+		{
+		}
 	}
-
 }

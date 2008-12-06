@@ -27,7 +27,7 @@ using Do.Platform.ServiceStack;
 
 namespace Do.Platform
 {
-	
+
 	public class Services
 	{
 
@@ -39,7 +39,8 @@ namespace Do.Platform
 		public static void Initialize ()
 		{
 			if (!AddinManager.IsInitialized) {
-				throw new Exception ("Serivces.Initialize called before AddinManager was initialized.");
+				AddinManager.Initialize (Paths.UserPlugins);
+				Log.Warn ("Serivces.Initialize called before AddinManager was initialized.");
 			}
 			AddinManager.AddExtensionNodeHandler ("/Do/Service", OnServiceChanged);
 		}

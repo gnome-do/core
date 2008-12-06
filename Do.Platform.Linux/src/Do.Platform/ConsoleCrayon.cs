@@ -27,7 +27,7 @@
 
 using System;
 
-namespace Do
+namespace Do.Platform
 {
 	public static class ConsoleCrayon
 	{

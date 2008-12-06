@@ -54,6 +54,12 @@
     <File name="src/Do.Platform/Do.Platform.Common/AbstractLogService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Common/FileLogService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Tests" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Platform/Tests/SetupTests.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Common/DictionaryPreferencesService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Common/Tests" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Common/Tests/DictionaryPreferencesServiceTests.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Tests/PreferencesTests.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -61,6 +67,7 @@
     <ProjectReference type="Gac" localcopy="True" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Universe" />
+    <ProjectReference type="Gac" localcopy="True" refto="nunit.framework, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
   </References>
   <GtkDesignInfo />
 </Project>
