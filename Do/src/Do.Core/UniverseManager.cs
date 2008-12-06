@@ -47,20 +47,23 @@ namespace Do.Core
 		float epsilon = 0.00001f;
 		
 		/// <value>
-		/// The amount of time between updates in ms
+		/// The amount of time between updates.
 		/// </value>
-		int UpdateTimeout {
+		TimeSpan UpdateTimeout {
 			get {
-				return DBus.PowerState.OnBattery () ? 10*60*1000 : 2*60*1000;
+				return new TimeSpan (0, 0, 1);
+				int minutes = DBus.PowerState.OnBattery () ? 10 : 2;
+				return new TimeSpan (0, minutes, 0);
 			}
 		}
 		
 		/// <value>
-		/// The amount of time spent on each update in ms
+		/// The amount of time spent on each update.
 		/// </value>
-		int UpdateRunTime {
+		TimeSpan UpdateRunTime {
 			get {
-				return DBus.PowerState.OnBattery () ? 600 : 200;
+				int milliseconds = DBus.PowerState.OnBattery () ? 600 : 200;
+				return new TimeSpan (0, 0, 0, 0, milliseconds);
 			}
 		}
 		
@@ -145,37 +148,30 @@ namespace Do.Core
 		/// </summary>
 		void UniverseUpdateStart ()
 		{
-			DateTime time;
-			DateTime last_action_update = DateTime.Now;
-			char source_char = 'a';
+			Random rand = new Random ();
+			DateTime startUpdate = DateTime.Now;
+
 			while (true) {
 				Thread.Sleep (UpdateTimeout);
+				if (!UpdatesEnabled) continue;
 				
-				time = DateTime.Now;
-				if (!UpdatesEnabled)
-					continue;
+				if (thread.IsAlive) thread.Join ();
 				
-				if (thread.IsAlive)
-					thread.Join ();
-				
-				if (DateTime.Now.Subtract (last_action_update).TotalMilliseconds > 10 * UpdateTimeout) {
+				if (rand.Next (10) == 0) {
 					#warning The Log is not threadsafe...
 					Log.Debug ("Updating Actions");
 					ReloadActions ();
-					last_action_update = DateTime.Now;
-					continue;
 				}
 				
-					
 				foreach (DoItemSource source in PluginManager.ItemSources) {
-					// if one of these item sources takes a long time, we should fall asleep instead of 
-					// continuing on.  We however do need to pick up where we left off later.
-					if (UpdateRunTime < (DateTime.Now - time).TotalMilliseconds)
-						break;
-
 					#warning The Log is not threadsafe...
-					Log.Debug ("Updating Item Source: {0}", source.Name);
+					Log.Debug ("Updating item source \"{0}\".", source.Name);
 					UpdateSource (source);
+
+					if (UpdateRunTime < DateTime.Now - startUpdate) {
+						Thread.Sleep (UpdateTimeout);
+						startUpdate = DateTime.Now;
+					}
 				}
 			}
 		}
