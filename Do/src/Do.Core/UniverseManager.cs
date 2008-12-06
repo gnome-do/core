@@ -51,7 +51,6 @@ namespace Do.Core
 		/// </value>
 		TimeSpan UpdateTimeout {
 			get {
-				return new TimeSpan (0, 0, 1);
 				int minutes = DBus.PowerState.OnBattery () ? 10 : 2;
 				return new TimeSpan (0, minutes, 0);
 			}
