@@ -93,10 +93,10 @@ namespace Do.Universe.Linux {
 				return Enumerable.Empty<ApplicationItem> ();
 
 			return Directory.GetFiles (dir, "*.desktop")
-				.Select (file => new ApplicationItem (file))
-				.Where (app => !string.IsNullOrEmpty (app.Name) &&
-											 app.IsAppropriateForCurrentDesktop &&
-											 (show_hidden || !app.NoDisplay));
+				.Select (file => ApplicationItem.MaybeCreate (file))
+				.Where (app => app != null &&
+							   app.IsAppropriateForCurrentDesktop &&
+							   (show_hidden || !app.NoDisplay));
 		}
 
 		public void UpdateItems ()

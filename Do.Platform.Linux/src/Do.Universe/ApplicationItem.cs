@@ -28,6 +28,7 @@ using Gnome;
 using Mono.Unix;
 
 using Do.Universe;
+using Do.Platform;
 
 namespace Do.Universe.Linux {
 
@@ -36,6 +37,15 @@ namespace Do.Universe.Linux {
 		protected DesktopItem item;
 		string name, description, icon, mimetype;
 
+		public static ApplicationItem MaybeCreate (string file)
+		{
+			DesktopItem item = DesktopItem.NewFromFile (file, 0);
+			
+			if (item.Exists ())
+				return new ApplicationItem (item);
+			 return null;
+		}
+
 		/// <summary>
 		/// Create an application item from a desktop file location.
 		/// </summary>
@@ -43,10 +53,9 @@ namespace Do.Universe.Linux {
 		/// A <see cref="System.String"/> containing the absolute path of
 		/// a desktop (.desktop) file.
 		/// </param>
-		public ApplicationItem (string desktopFile)
+		protected ApplicationItem (DesktopItem item)
 		{
-			item = DesktopItem.NewFromFile (desktopFile, DesktopItemLoadFlags.OnlyIfExists);
-
+			this.item = item;
 			name = item.GetLocalestring ("Name");
 			description = item.GetLocalestring ("Comment");
 			icon = item.GetString ("Icon");
