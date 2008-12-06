@@ -159,29 +159,23 @@ namespace Do.Core
 					thread.Join ();
 				
 				if (DateTime.Now.Subtract (last_action_update).TotalMilliseconds > 10 * UpdateTimeout) {
+					#warning The Log is not threadsafe...
 					Log.Debug ("Updating Actions");
 					ReloadActions ();
 					last_action_update = DateTime.Now;
 					continue;
 				}
 				
-				while (DateTime.Now.Subtract (time).TotalMilliseconds < UpdateRunTime) {
-					IEnumerable<DoItemSource> sources = PluginManager.ItemSources
-						.Where ((DoItemSource s) => s.Name.ToLower ().StartsWith (source_char.ToString ()));
 					
-					foreach (DoItemSource item_source in sources) {
-						// if one of these item sources takes a long time, we should fall asleep instead of 
-						// continuing on.  We however do need to pick up where we left off later.
-						if (DateTime.Now.Subtract (time).TotalMilliseconds > UpdateRunTime)
-							Thread.Sleep (UpdateTimeout);
-						Log.Debug ("Updating Item Source: {0}", item_source.Name);
-						UpdateSource (item_source);
-					}
-					
-					if (source_char == 'z')
-						source_char = 'a';
-					else
-						source_char++;
+				foreach (DoItemSource source in PluginManager.ItemSources) {
+					// if one of these item sources takes a long time, we should fall asleep instead of 
+					// continuing on.  We however do need to pick up where we left off later.
+					if (UpdateRunTime < (DateTime.Now - time).TotalMilliseconds)
+						break;
+
+					#warning The Log is not threadsafe...
+					Log.Debug ("Updating Item Source: {0}", source.Name);
+					UpdateSource (source);
 				}
 			}
 		}
@@ -209,19 +203,19 @@ namespace Do.Core
 		/// <summary>
 		/// Updates an item source and syncs it into the universe
 		/// </summary>
-		void UpdateSource (DoItemSource item_source)
+		void UpdateSource (DoItemSource source)
 		{
 			lock (universe_lock) {
-				foreach (DoItem item in item_source.Items) {
+				foreach (DoItem item in source.Items) {
 					if (universe.ContainsKey (item.UID))
 						universe.Remove (item.UID);
 				}
 				try {
-					item_source.UpdateItems ();
+					source.UpdateItems ();
 				} catch {
-					Log.Error ("There was an error updated items for {0}", item_source.Name);
+					Log.Error ("There was an error updated items for {0}", source.Name);
 				}
-				foreach (DoItem item in item_source.Items) {
+				foreach (DoItem item in source.Items) {
 					universe  [item.UID] = item;
 				}
 			}
