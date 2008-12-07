@@ -23,6 +23,7 @@ using System.Collections.Generic;
 
 using Mono.Addins;
 
+using Do.Platform.Preferences;
 using Do.Platform.ServiceStack;
 
 namespace Do.Platform
@@ -39,8 +40,8 @@ namespace Do.Platform
 		public static void Initialize ()
 		{
 			if (!AddinManager.IsInitialized) {
-				AddinManager.Initialize (Paths.UserPlugins);
-				Log.Warn ("Serivces.Initialize called before AddinManager was initialized.");
+				// AddinManager.Initialize (Paths.UserPlugins);
+				throw new Exception ("AddinManager was initialized before Services.");
 			}
 			AddinManager.AddExtensionNodeHandler ("/Do/Service", OnServiceChanged);
 		}
@@ -119,21 +120,15 @@ namespace Do.Platform
 			return LocateServices<TService, TElse> ().First ();
 		}
 		
-		static TService LocateService<TService> ()
-			where TService : IService
-		{
-			return LocateServices<TService> ().FirstOrDefault ();
-		}
-
 		static IEnumerable<TService> LocateServices<TService, TElse> ()
 			where TService : class, IService
 			where TElse : TService
 		{
 			IEnumerable<TService> services = LocateServices<TService> ();
 			if (services.Any ()) {
-				Log.Info ("Successfully located services of type {0}.", typeof (TService).Name);
+				Log.Info ("Successfully located service of type {0}.", typeof (TService).Name);
 			} else {
-				Log.Fatal ("Services of type {0} not found. Using default service instead.", typeof (TService).Name);
+				Log.Fatal ("Service of type {0} not found. Using default service instead.", typeof (TService).Name);
 				services = new [] { Activator.CreateInstance<TElse> () as TService };
 			}
 			return services;
@@ -142,7 +137,12 @@ namespace Do.Platform
 		static IEnumerable<TService> LocateServices<TService> ()
 			where TService : IService
 		{		
-			return AddinManager.GetExtensionObjects ("/Do/Service", true).OfType<TService> ();
+			if (AddinManager.IsInitialized) {
+				return AddinManager.GetExtensionObjects ("/Do/Service", true).OfType<TService> ();
+			} else {
+				Log.Warn ("AddinManager is not initialized; only default services are available.");
+				return Enumerable.Empty<TService> ();
+			}
 		}
 	}
 }

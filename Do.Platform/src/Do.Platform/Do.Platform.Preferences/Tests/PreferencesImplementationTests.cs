@@ -1,42 +1,43 @@
-/* PreferencesTests.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// PreferencesImplementationTests.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this
+// source distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using NUnit.Framework;
 
-namespace Do.Platform
+namespace Do.Platform.Preferences
 {
 	
 	[TestFixture()]
-	public class PreferencesTests
+	public class PreferencesImplementationTests
 	{
 
 		const string RootPath = "/test";
-		Preferences Prefs { get; set; }
+		PreferencesImplementation Prefs { get; set; }
 		bool PrefChanged { get; set; }
 		PreferenceChangedEventArgs PrefChangedArgs { get; set; }
 
 		[SetUp]
 		public void SetUp ()
 		{
-			Prefs = new Preferences (new Common.DictionaryPreferencesService (), RootPath);
+			IPreferencesService service = new Common.DictionaryPreferencesService ();
+			Prefs = new PreferencesImplementation (service, RootPath);
 			PrefChanged = false;
 			Prefs.PreferenceChanged += PrefsChanged;
 		}
