@@ -97,13 +97,20 @@ namespace Do.Core
 		
 		public IEnumerable<IObject> Search (string query, IEnumerable<Type> filter, IEnumerable<IObject> objects, IObject other)
 		{
-			return objects.Where (iobj => {
-					DoObject o = iobj as DoObject;
-					o.UpdateRelevance (query, other as DoObject);
-					return epsilon < Math.Abs (o.Relevance) && 
-						(!filter.Any () || DoObject.Unwrap (o).IsAssignableToAny (filter));
-				})
-				.OrderByDescending (o => (o as DoObject).Relevance)
+			DoObject text = new DoTextItem (query);
+
+			foreach (DoObject o in objects)
+				o.UpdateRelevance (query, other as DoObject);
+
+			return objects
+				.Cast<DoObject> ()
+				.Where (o => epsilon < Math.Abs (o.Relevance) && o.PassesTypeFilter (filter))
+				.OrderByDescending (o => o.Relevance)
+				.Concat (text.PassesTypeFilter (filter)
+						? new [] { text }
+						: Enumerable.Empty<DoObject> ()
+				)
+				.Cast<IObject> ()
 				.ToArray ();
 		}
 		

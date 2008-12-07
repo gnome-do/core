@@ -102,6 +102,11 @@ namespace Do.Core {
 			UID = string.Format (UIDFormat, Name, Description, Inner.GetType ());
 		}
 
+		public bool PassesTypeFilter (IEnumerable<Type> types)
+		{
+			return !types.Any () || Inner.IsAssignableToAny (types);
+		}
+
 		//// <value>
 		/// Safe wrapper for inner <see cref="IObject"/>'s Name property.
 		/// </value>

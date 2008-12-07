@@ -42,10 +42,10 @@ namespace Do.Platform.Linux {
 				ConsoleCrayon.ForegroundColor = ConsoleColor.Yellow;
 				break;
 			case LogLevel.Info:
-				ConsoleCrayon.ForegroundColor = ConsoleColor.Green;
+				ConsoleCrayon.ForegroundColor = ConsoleColor.Blue;
 				break;
 			case LogLevel.Debug:
-				ConsoleCrayon.ForegroundColor = ConsoleColor.Blue;
+				ConsoleCrayon.ForegroundColor = ConsoleColor.Green;
 				break;
 			}
 			Console.Write (FormatLogPrompt (level));
