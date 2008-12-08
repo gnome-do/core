@@ -119,6 +119,10 @@ if test -z "$CONFIG_REQUESTED" ; then
 fi
 
 AC_CONFIG_FILES([
+Do/Do.exe.config
+Do/Makefile
+Do/gnome-do
+Do/src/AssemblyInfo.cs
 Do.Addins/AssemblyInfo.cs
 Do.Addins/Makefile
 Do.Addins/do.addins.pc
@@ -126,15 +130,12 @@ Do.DBus/Makefile
 Do.DBus/do.dbus.pc
 Do.DBus/src/AssemblyInfo.cs
 Do.Interface.Linux/Makefile
-Do.Platform.Linux/Makefile
 Do.Platform/Makefile
 Do.Platform/do.platform.pc
 Do.Platform/src/AssemblyInfo.cs
+Do.Platform.Linux/Makefile
 Do.Universe/Makefile
-Do/Do.exe.config
-Do/Makefile
-Do/gnome-do
-Do/src/AssemblyInfo.cs
+libdo/Makefile
 Makefile
 data/Makefile
 data/icons/Makefile
@@ -151,7 +152,6 @@ data/icons/hicolor/48x48/apps/Makefile
 data/icons/hicolor/Makefile
 data/icons/hicolor/scalable/Makefile
 data/icons/hicolor/scalable/apps/Makefile
-libdo/Makefile
 m4/Makefile
 po/Makefile.in
 ])
