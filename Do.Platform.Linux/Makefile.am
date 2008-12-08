@@ -39,6 +39,9 @@ endif
 RESOURCES =  \
 	Resources/Do.Platform.Linux.addin.xml
 
+EXTRAS := do.platform.linux.pc.in
+LINUX_PKGCONFIG := do.platform.linux.pc
+
 REFERENCES =  \
 	System \
 	System.Core \
