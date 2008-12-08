@@ -19,7 +19,6 @@ FILES = \
 	src/Do.Platform/Do.Platform.Common/AbstractLogService.cs \
 	src/Do.Platform/Do.Platform.Common/DictionaryPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogService.cs \
-	src/Do.Platform/Do.Platform.Common/Tests/DictionaryPreferencesServiceTests.cs \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
@@ -40,7 +39,6 @@ FILES = \
 	src/Do.Platform/PreferenceChangedEventArgs.cs \
 	src/Do.Platform/Services.cs \
 	src/Do.Platform/StatusIcon.cs \
-	src/Do.Platform/Do.Platform.Preferences/Tests/PreferencesImplementationTests.cs \
 	src/Do.Platform/UniverseFactory.cs \
 	src/Do.Platform/Windowing.cs \
 	src/Do.Universe/Do.Universe.Common/EmailAction.cs \
@@ -51,6 +49,14 @@ FILES = \
 	src/Do.Universe/Do.Universe.Common/RunAction.cs \
 	src/Do.Universe/Do.Universe.Common/TextItem.cs \
 	src/EnumerableExtensions.cs
+
+
+if HAVE_NUNIT
+FILES += \
+	src/Do.Platform/Do.Platform.Common/Tests/DictionaryPreferencesServiceTests.cs \
+	src/Do.Platform/Do.Platform.Preferences/Tests/PreferencesImplementationTests.cs
+endif
+
 
 RESOURCES = \
 	Resources/Do.Platform.addin.xml

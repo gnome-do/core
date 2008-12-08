@@ -20,7 +20,6 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/ConsoleLogService.cs \
 	src/Do.Platform/Do.Platform.Linux/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Linux/GConfPreferencesService.cs \
-	src/Do.Platform/Do.Platform.Linux/Tests/GConfPreferencesServiceTests.cs \
 	src/Do.Platform/IconsImplementation.cs \
 	src/Do.Platform/NotificationsImplementation.cs \
 	src/Do.Platform/PathsImplementation.cs \
@@ -31,6 +30,11 @@ FILES = \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/CopyToClipboardAction.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs
+
+if HAVE_NUNIT
+FILES += \
+	src/Do.Platform/Do.Platform.Linux/Tests/GConfPreferencesServiceTests.cs
+endif
 
 RESOURCES =  \
 	Resources/Do.Platform.Linux.addin.xml
