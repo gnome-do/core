@@ -128,6 +128,7 @@ Do.DBus/src/AssemblyInfo.cs
 Do.Interface.Linux/Makefile
 Do.Platform.Linux/Makefile
 Do.Platform/Makefile
+Do.Platform/do.platform.pc
 Do.Platform/src/AssemblyInfo.cs
 Do.Universe/Makefile
 Do/Do.exe.config

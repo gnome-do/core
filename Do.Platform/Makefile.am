@@ -14,6 +14,9 @@ endif
 
 all: $(ASSEMBLY)
 
+EXTRAS := do.platform.pc.in
+LINUX_PKGCONFIG := do.platform.pc
+
 FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/Do.Platform.Common/AbstractLogService.cs \
