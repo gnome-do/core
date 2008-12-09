@@ -7,6 +7,7 @@ ASSEMBLY_COMPILER_FLAGS = $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
 ASSEMBLY = Do.Interface.Linux.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = library
+BUILD_DIR = ./fake
 
 if ENABLE_DEBUG
 ASSEMBLY_COMPILER_FLAGS += -debug -d:DEBUG
