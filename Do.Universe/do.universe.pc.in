@@ -1,0 +1,6 @@
+Name: Do.Universe
+Description: Interfaces for adding Items, Modifiers, and Actions to Universe
+Version: @ABI_VERSION@
+
+Requires: 
+Libs: -r:@expanded_libdir@/@PACKAGE@/Do.Universe.dll

@@ -136,6 +136,7 @@ Do.Platform/src/AssemblyInfo.cs
 Do.Platform.Linux/Makefile
 Do.Platform.Linux/do.platform.linux.pc
 Do.Universe/Makefile
+Do.Universe/do.universe.pc
 libdo/Makefile
 Makefile
 data/Makefile

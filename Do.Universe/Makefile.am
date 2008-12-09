@@ -14,6 +14,9 @@ endif
 
 all: $(ASSEMBLY)
 
+EXTRAS := do.universe.pc.in
+LINUX_PKGCONFIG := do.universe.pc
+
 FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Universe/EmptyItem.cs \
