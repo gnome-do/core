@@ -40,7 +40,7 @@ FILES = \
 	src/Do.Platform/Log.cs \
 	src/Do.Platform/Notifications.cs \
 	src/Do.Platform/Paths.cs \
-	src/Do.Platform/PreferenceChangedEventArgs.cs \
+	src/Do.Platform/PreferencesChangedEventArgs.cs \
 	src/Do.Platform/Services.cs \
 	src/Do.Platform/StatusIcon.cs \
 	src/Do.Platform/UniverseFactory.cs \

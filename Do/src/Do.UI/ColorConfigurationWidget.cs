@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Addins;
@@ -29,46 +30,44 @@ namespace Do.UI
 	public partial class ColorConfigurationWidget : Gtk.Bin, IConfigurable
 	{
 		BezelDrawingArea bda;
-		
-		List<string> themes = new List<string> ();
+
+		IList<string> Themes { get; set; }
 		
 		public ColorConfigurationWidget ()
 		{
-			int themeI;
-			Build();
+			Build ();
 			AppPaintable = true;
+			Themes = new List<string> ();
 			Addins.Util.Appearance.SetColormap (this);
 			
 			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
 				theme_combo.AppendText (theme.Name);
-				themes.Add (theme.Name);
+				Themes.Add (theme.Name);
 			}
-			
+		
 			theme_combo.AppendText ("MonoDock");
-			themes.Add ("MonoDock");
+			Themes.Add ("MonoDock");
 			
 			if (!Screen.IsComposited)
 				theme_combo.Sensitive = false;
 				
 			// Setup theme combo
-            themeI = Array.IndexOf (Themes, Do.Preferences.Theme);
-            themeI = themeI >= 0 ? themeI : 0;
-            theme_combo.Active = themeI;            
+            theme_combo.Active = Math.Max (0, Themes.IndexOf (Do.Preferences.Theme));
 
 			BuildPreview ();
 			
 			pin_check.Active = Do.Preferences.AlwaysShowResults;
-			Do.Preferences.PreferenceChanged += OnPrefsChanged;
+			Do.Preferences.ThemeChanged += OnThemeChanged;
 		}
 		
-		private void OnPrefsChanged (object o, PreferenceChangedEventArgs args) {
-			if (args.Key == "Theme")
-					BuildPreview ();
+		private void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
+		{
+			BuildPreview ();
 		}
 		
 		protected override void OnDestroyed ()
 		{
-			Do.Preferences.PreferenceChanged -= OnPrefsChanged;
+			Do.Preferences.ThemeChanged -= OnThemeChanged;
 			base.OnDestroyed ();
 			if (bda != null)
 				bda.Destroy ();
@@ -183,11 +182,6 @@ namespace Do.UI
 				return "";
 			}
 		}
-		
-		public string[] Themes {
-        	get {
-				return themes.ToArray ();
-        	}
-        }
+	
 	}
 }

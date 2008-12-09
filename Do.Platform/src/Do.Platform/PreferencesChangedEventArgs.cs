@@ -21,19 +21,14 @@
 using System;
 
 namespace Do.Platform {
-	
 
-	public class PreferenceChangedEventArgs : EventArgs
+	public class PreferencesChangedEventArgs : EventArgs
 	{
 		public string Key { get; private set; }
-		public object OldValue { get; private set; }
-		public object NewValue { get; private set; }
 		
-		public PreferenceChangedEventArgs (string key, object oldValue, object newValue)
+		public PreferencesChangedEventArgs (string key)
 		{
 			Key = key;
-			OldValue = oldValue;
-			NewValue = newValue;
 		}
 	}
 	
