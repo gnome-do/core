@@ -124,11 +124,11 @@ namespace Do.Core {
 
 		public void Initialize ()
 		{
-			ThemeChanged ();
-			Do.Preferences.PreferenceChanged += (sender, args) => { if (args.Key == "Theme") ThemeChanged (); };
+			OnThemeChanged (this, null);
+			Do.Preferences.ThemeChanged += OnThemeChanged;
 		}
 		
-		void ThemeChanged ()
+		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
 		{
 			if (null != window) Vanish ();
 			

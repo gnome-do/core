@@ -45,7 +45,6 @@
     <File name="src/Do.Platform/Do.Platform.Default/CoreService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IPreferencesService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IPreferences.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/PreferenceChangedEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/PreferencesService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/ILogService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/LogService.cs" subtype="Code" buildaction="Compile" />
@@ -57,8 +56,9 @@
     <File name="src/Do.Platform/Do.Platform.Common/Tests/DictionaryPreferencesServiceTests.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Preferences" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Preferences/PreferencesFactory.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Preferences/Tests/PreferencesImplementationTests.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/PreferencesChangedEventArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

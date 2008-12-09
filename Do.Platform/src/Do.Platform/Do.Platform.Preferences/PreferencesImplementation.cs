@@ -26,41 +26,40 @@ using Do.Platform;
 namespace Do.Platform.Preferences
 {
 	
-	internal class PreferencesImplementation : IPreferences
+	internal class PreferencesImplementation<TOwner> : IPreferences
+		where TOwner : class
 	{
 
-		string RootPath { get; set; }
-		public IPreferencesService Service { get; set; }
+		IPreferencesService Service { get; set; }
+
+		string OwnerString {
+			get {
+				return typeof (TOwner).Name;
+			}
+		}
 		
 		public PreferencesImplementation (IPreferencesService service)
-			: this (service, "")
 		{
-		}
-
-		public PreferencesImplementation (IPreferencesService service, string rootPath)
-		{
-			RootPath = rootPath;
 			Service = service;
 		}
 		
-		void OnPreferenceChanged (string key, object oldValue, object newValue)
+		void OnPreferencesChanged (string key)
 		{
-			if (PreferenceChanged == null) return;
+			if (PreferencesChanged == null) return;
 			
-			PreferenceChangedEventArgs args
-				= new PreferenceChangedEventArgs (key, oldValue, newValue);
-			PreferenceChanged (this, args);
+			PreferencesChangedEventArgs args = new PreferencesChangedEventArgs (key);
+			PreferencesChanged (this, args);
 		}
 
 		#region IPreferences
 		
-		public event EventHandler<PreferenceChangedEventArgs> PreferenceChanged;
+		public event EventHandler<PreferencesChangedEventArgs> PreferencesChanged;
 
 		public string AbsolutePathForKey (string key)
 		{
 			if (key.StartsWith ("/"))
 				return Service.AbsolutePathForKey (key);
-			return Service.AbsolutePathForKey (string.Format ("{0}/{1}", RootPath, key));
+			return Service.AbsolutePathForKey (string.Format ("{0}/{1}", OwnerString, key));
 		}
 		
 		public string this [string key] {
@@ -116,7 +115,7 @@ namespace Do.Platform.Preferences
 				oldValue = default (T);
 			
 			if (Service.Set (keypath, val)) {
-				OnPreferenceChanged (key, oldValue, val);
+				OnPreferencesChanged (key);
 				return true;
 			}
 			return false;
