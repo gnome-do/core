@@ -32,7 +32,7 @@ using Do.Platform;
 
 namespace Do.Universe.Linux {
 
-	public class ApplicationItem : IApplicationItem {
+	internal class ApplicationItem : IApplicationItem {
 
 		static IDictionary<string, ApplicationItem> Instances { get; set; }
 
@@ -41,25 +41,21 @@ namespace Do.Universe.Linux {
 			Instances = new Dictionary<string, ApplicationItem> ();
 		}
 		
-		public static ApplicationItem MaybeCreate (string path)
+		public static ApplicationItem CreateFromDesktopItem (string path)
 		{
-			if (!Instances.ContainsKey (path)) {
+			string key = path;
+			if (!Instances.ContainsKey (key)) {
 				DesktopItem item = DesktopItem.NewFromFile (path, 0);
-			
-				if (item.Exists ())
-					Instances [path] = new ApplicationItem (item);
-				else
-					// TODO if the item doesn't exist, we should use a non-null
-					return null;
+				Instances [key] = new ApplicationItem (item);
 			}
-			return Instances [path];
+			return Instances [key];
 		}
 
 		protected DesktopItem item;
 		string name, description, icon, mimetype;
 
 		/// <summary>
-		/// Create an application item from a desktop file location.
+		/// Create an application item from a desktop file.
 		/// </summary>
 		/// <param name="desktopFile">
 		/// A <see cref="System.String"/> containing the absolute path of
@@ -68,9 +64,15 @@ namespace Do.Universe.Linux {
 		protected ApplicationItem (DesktopItem item)
 		{
 			this.item = item;
-			name = item.GetLocalestring ("Name");
-			description = item.GetLocalestring ("Comment");
-			icon = item.GetString ("Icon");
+			if (item.Exists ()) {
+				name = item.GetLocalestring ("Name");
+				description = item.GetLocalestring ("Comment");
+				icon = item.GetString ("Icon");
+			} else {
+				name = Path.GetFileName (item.Location);
+				description = Catalog.GetString ("This application could not be indexed.");
+				icon = "";
+			}
 		}
 		
 		public string Name {
