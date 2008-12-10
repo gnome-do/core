@@ -58,15 +58,6 @@ namespace MonoDock.UI
 		public Wnck.Application[] Apps { get { return apps.ToArray (); } }
 		public IEnumerable<int> Pids { get { return apps.Select (item => item.Pid); } }
 		
-		Gdk.Pixbuf pixbuf;
-		Gdk.Pixbuf Pixbuf {
-			get {
-				if (pixbuf == null)
-					pixbuf = GetPixbuf ();
-				return pixbuf;
-			}
-		}
-		
 		bool HasVisibleApps {
 			get {
 				if (apps == null)
@@ -112,9 +103,10 @@ namespace MonoDock.UI
 		public Surface GetIconSurface ()
 		{
 			if (icon_surface == null) {
+				Gdk.Pixbuf pixbuf = GetPixbuf ();
 				icon_surface = new ImageSurface (Cairo.Format.Argb32, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
 				Context cr = new Context (icon_surface);
-				Gdk.CairoHelper.SetSourcePixbuf (cr, Pixbuf, 0, 0);
+				Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 0, 0);
 				cr.Paint ();
 				
 				(cr as IDisposable).Dispose ();
@@ -181,11 +173,6 @@ namespace MonoDock.UI
 			if (icon_surface != null) {
 				icon_surface.Destroy ();
 				icon_surface = null;
-			}
-			
-			if (pixbuf != null) {
-				pixbuf.Dispose ();
-				pixbuf = null;
 			}
 		}
 		

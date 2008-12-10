@@ -48,14 +48,7 @@ namespace MonoDock.UI
 		Pane currentPane, previousPane = Pane.Second;
 		DateTime current_pane_change, last_cusor_change;
 		
-		IObject intro_object;
-		IObject IntroObject {
-			get {
-				if (intro_object == null)
-					intro_object = new DefaultLabelBoxObject ();
-				return intro_object;
-			}
-		}
+		IObject IntroObject { get; set; }
 		
 		public Pane CurrentPane {
 			get {
@@ -197,6 +190,11 @@ namespace MonoDock.UI
 			set {
 				SetPaneItem (value, pane);
 			}
+		}
+		
+		public DockState ()
+		{
+			IntroObject = new DefaultLabelBoxObject ();
 		}
 
 		public void SetPaneItem (IObject item, Pane pane)

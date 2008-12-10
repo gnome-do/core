@@ -73,18 +73,12 @@ namespace MonoDock.UI
 			}
 		}
 		
-		SeparatorItem separator;
-		SeparatorItem Separator {
-			get {
-				if (separator == null)
-					separator = new SeparatorItem ();
-				return separator;
-			}
-		}
+		SeparatorItem Separator { get; set; }
 		
 		public DockItemProvider(IStatistics statistics)
 		{
 			this.statistics = statistics;
+			Separator = new SeparatorItem ();
 			
 			custom_items = new Dictionary<string, IDockItem> ();
 			statistical_items = new List<IDockItem> ();

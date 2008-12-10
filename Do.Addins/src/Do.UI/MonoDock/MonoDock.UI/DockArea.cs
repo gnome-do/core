@@ -59,7 +59,6 @@ namespace MonoDock.UI
 		DateTime last_render = DateTime.UtcNow;
 		int monitor_width;
 		
-		DockState state;
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		DockWindow window;
 		
@@ -233,13 +232,7 @@ namespace MonoDock.UI
 			}
 		}
 		
-		DockState State {
-			get {
-				if (state == null)
-					state = new DockState ();
-				return state;
-			}
-		}
+		DockState State { get; set; }
 		
 		#region Animation properties
 		bool CursorIsOverDockArea {
@@ -309,6 +302,7 @@ namespace MonoDock.UI
 			Statistics = statistics;
 			this.window = window;
 			item_provider = new DockItemProvider (statistics);
+			State = new DockState ();
 			
 			Cursor = new Gdk.Point (-1, -1);
 			
