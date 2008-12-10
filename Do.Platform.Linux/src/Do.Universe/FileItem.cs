@@ -19,7 +19,7 @@
  */
 
 using System;
-using System.IO;
+using IO = System.IO;
 using System.Collections.Generic;
 
 using Gnome;
@@ -51,63 +51,14 @@ namespace Do.Universe.Linux {
 		/// <returns>
 		/// A <see cref="System.String"/> containing the abbreviated path.
 		/// </returns>
-		public static string ShortPath (string path)
+		public static string DisplayPath (string path)
 		{
 			if (null == path) throw new ArgumentNullException ();
 
 			return path.Replace (Paths.UserHome, "~");
 		}
 
-		public static bool IsHidden (IFileItem fi)
-		{
-			if (null == fi) throw new ArgumentNullException ();
-
-			return IsHidden (fi.Path);
-		}
-
-		public static bool IsHidden (string path)
-		{
-			if (null == path) throw new ArgumentNullException ();
-
-			FileInfo info;
-
-			if (path.EndsWith ("~")) return true;
-
-			info = new FileInfo (path);
-			return (info.Attributes & FileAttributes.Hidden) != 0;
-		}
-
-		public static bool IsDirectory (IFileItem fi)
-		{
-			if (null == fi) throw new ArgumentNullException ();
-
-			return IsDirectory (fi.Path);
-		}
-
-		public static bool IsDirectory (string path)
-		{
-			if (null == path) throw new ArgumentNullException ();
-
-			return Directory.Exists (path);
-		}
-
-		public static string EscapedPath (IFileItem fi)
-		{
-			if (null == fi) throw new ArgumentNullException ();
-
-			return EscapedPath (fi.Path);
-		}
-
-		public static string EscapedPath (string path)
-		{
-			if (null == path) throw new ArgumentNullException ();
-
-			return path
-				.Replace (" ", "\\ ")
-				.Replace ("'", "\\'");
-		}
-
-		string path, name, description, icon;
+		string icon;
 		
 		/// <summary>
 		/// Create a new FileItem for a given file.
@@ -117,26 +68,29 @@ namespace Do.Universe.Linux {
 		/// </param>
 		public FileItem (string path)
 		{	
-			this.path = path;
-			this.name = System.IO.Path.GetFileName (Path);
+			if (null == path) throw new ArgumentNullException ("path");
 
-			if (ShortPath (Path) == "~")
-				// Sowing only "~" looks too abbreviated.
-				description = Path;
-			else
-				description = ShortPath (Path);
+			Path = path;
+			// Showing only "~" looks too abbreviated.
+			Description = DisplayPath (Path) == "~"
+				? Path
+				: DisplayPath (Path);
 		}
 
-		public virtual string Name {
-			get {
-				return name;
-			}
+		public string Path { get; private set; }
+
+		public string Name {
+			get { return IO.Path.GetFileName (Path); }
 		}
 
-		public virtual string Description {
-			get {
-				return description;
-			}
+		public string Description { get; protected set; }
+
+		public string Uri {
+			get { return "file://" + Path; }
+		}
+
+		public string MimeType {
+			get { return Gnome.Vfs.Global.GetMimeType (Path); }
 		}
 
 		public virtual string Icon {
@@ -148,9 +102,9 @@ namespace Do.Universe.Linux {
 				// Generating the thumbnail ourself is too slow for large files.
 				// Suggestion: generate thumbnails asynchronously. Banshee's
 				// notion of job queues may be useful.
-				if (System.IO.File.Exists (large_thumb)) {
+				if (IO.File.Exists (large_thumb)) {
 					icon = large_thumb;	
-				} else if (System.IO.File.Exists (normal_thumb)) {
+				} else if (IO.File.Exists (normal_thumb)) {
 					icon = normal_thumb;	
 				} else {
 					try {
@@ -170,23 +124,10 @@ namespace Do.Universe.Linux {
 			}
 		}
 
-		public string Path { get; private set; }
-
-		public string Uri {
-			get {
-				return "file://" + Path;
-			}
-		}
-
-		public string MimeType {
-			get {
-				return Gnome.Vfs.Global.GetMimeType (Path);
-			}
-		}
-
 		public virtual void Open ()
 		{
-			Services.Environment.OpenPath (EscapedPath (this));
+			Services.Environment.OpenPath (Path);
 		}
+
 	}
 }
