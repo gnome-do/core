@@ -71,6 +71,7 @@ namespace Do.Universe.Linux {
 			if (null == path) throw new ArgumentNullException ("path");
 
 			Path = path;
+			Name = IO.Path.GetFileName (Path);
 			// Showing only "~" looks too abbreviated.
 			Description = DisplayPath (Path) == "~"
 				? Path
@@ -78,11 +79,7 @@ namespace Do.Universe.Linux {
 		}
 
 		public string Path { get; private set; }
-
-		public string Name {
-			get { return IO.Path.GetFileName (Path); }
-		}
-
+		public string Name { get; private set; }
 		public string Description { get; protected set; }
 
 		public string Uri {
