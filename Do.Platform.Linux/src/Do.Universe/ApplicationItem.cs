@@ -33,18 +33,30 @@ using Do.Platform;
 namespace Do.Universe.Linux {
 
 	public class ApplicationItem : IApplicationItem {
+
+		static IDictionary<string, ApplicationItem> Instances { get; set; }
+
+		static ApplicationItem ()
+		{
+			Instances = new Dictionary<string, ApplicationItem> ();
+		}
 		
+		public static ApplicationItem MaybeCreate (string path)
+		{
+			if (!Instances.ContainsKey (path)) {
+				DesktopItem item = DesktopItem.NewFromFile (path, 0);
+			
+				if (item.Exists ())
+					Instances [path] = new ApplicationItem (item);
+				else
+					// TODO if the item doesn't exist, we should use a non-null
+					return null;
+			}
+			return Instances [path];
+		}
+
 		protected DesktopItem item;
 		string name, description, icon, mimetype;
-
-		public static ApplicationItem MaybeCreate (string file)
-		{
-			DesktopItem item = DesktopItem.NewFromFile (file, 0);
-			
-			if (item.Exists ())
-				return new ApplicationItem (item);
-			 return null;
-		}
 
 		/// <summary>
 		/// Create an application item from a desktop file location.

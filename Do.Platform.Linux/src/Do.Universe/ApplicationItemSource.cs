@@ -95,19 +95,15 @@ namespace Do.Universe.Linux {
 			return Directory.GetFiles (dir, "*.desktop")
 				.Select (file => ApplicationItem.MaybeCreate (file))
 				.Where (app => app != null &&
-							   app.IsAppropriateForCurrentDesktop &&
-							   (show_hidden || !app.NoDisplay));
+								app.IsAppropriateForCurrentDesktop &&
+								(show_hidden || !app.NoDisplay));
 		}
 
 		public void UpdateItems ()
 		{
-			// Updating is turned off because it uses a ridiculous amount of memory.
-			if (app_items.Any ()) return;
-			
 			app_items = DesktopFilesDirectories
 				.Select (dir => dir.Replace ("~", Paths.UserHome))
-				.Select (dir => LoadDesktopFiles (dir))
-				.Aggregate ((a, b) => a.Concat (b))
+				.SelectMany (dir => LoadDesktopFiles (dir))
 				.Cast<IItem> ()
 				.ToArray ();
 		}
