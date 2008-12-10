@@ -59,7 +59,7 @@ namespace MonoDock.UI.Renderers
 			} 
 		}
 		
-		public static void RenderSummonMode (Context cr, DockState state, Gdk.Rectangle dockArea)
+		public static void RenderSummonMode (Context cr, DockState state, Gdk.Rectangle dockArea, int VerticalBuffer)
 		{
 			int base_x = dockArea.X + 15;
 			
@@ -77,7 +77,7 @@ namespace MonoDock.UI.Renderers
 				cr.Scale (zoom, zoom);
 				cr.SetSource (LargeIconCache.GetSurface (state[pane].Icon), 
 				              left_x*(1/zoom), 
-				              ((dockArea.Y+dockArea.Height)-(DockPreferences.IconSize*2*zoom)-DockArea.YBuffer)*(1/zoom));
+				              ((dockArea.Y+dockArea.Height)-(DockPreferences.IconSize*2*zoom)-VerticalBuffer)*(1/zoom));
 				cr.Paint ();
 				cr.Scale (1/zoom, 1/zoom);
 			}

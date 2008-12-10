@@ -58,7 +58,6 @@ namespace MonoDock.UI
 			cr.Color = new Cairo.Color (0, 0, 0, .6);
 			cr.Fill ();
 			
-//			cr.Translate (-2, -1);
 			Pango.CairoHelper.LayoutPath (cr, layout);
 			cr.Color = new Cairo.Color (1, 1, 1);
 			cr.Fill ();
