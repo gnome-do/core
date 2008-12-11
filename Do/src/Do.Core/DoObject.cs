@@ -68,8 +68,6 @@ namespace Do.Core {
 		public static IObject Unwrap (IObject o)
 		{
 			while (o is DoObject)
-				// We do a traditional cast to throw a cast exception if the wrong
-				// dynamic type was passed.
 				o = (IObject) (o as DoObject).Inner;
 			return o;
 		}
