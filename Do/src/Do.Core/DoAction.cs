@@ -24,6 +24,7 @@ using System.Collections.Generic;
 
 using Do;
 using Do.Universe;
+using Do.Platform;
 
 namespace Do.Core {
 
@@ -45,6 +46,13 @@ namespace Do.Core {
 		public static IAction Wrap (IAction a)
 		{
 			return a is DoAction ? a : new DoAction (a);
+		}
+
+		public static IAction Unwrap (IAction o)
+		{
+			while (o is DoAction)
+				o = (IAction) (o as DoAction).Inner;
+			return o;
 		}
 
 		IEnumerable<Type> item_types, moditem_types;
@@ -160,15 +168,20 @@ namespace Do.Core {
 			IEnumerable<IItem> results = null;
 			
 			try {
-				results = (Inner as IAction).Perform (
-					items.Select (i => DoItem.Unwrap (i)),
-					modItems.Select (i => DoItem.Unwrap (i))
-				);
-				// Call ToList to strictly evaluate the IEnumerable before we leave
-				// the try block.
-				if (results != null) results = results.ToList ();
+				IAction innerAction;
+				IEnumerable<IItem> innerItems, innerModItems;
+
+				innerAction = Unwrap (Inner as IAction);
+				innerItems = items.Select (i => DoItem.Unwrap (i));
+				innerModItems = modItems.Select (i => DoItem.Unwrap (i));
+
+				results = innerAction.Perform (innerItems, innerModItems);
+				// Strictly evaluate results before we leave try block.
+				if (results != null) results = results.ToArray ();
+
 			} catch (Exception e) {
 				LogError ("Perform", e);
+				results = null;
 			} finally {
 				results = results ?? Enumerable.Empty<IItem> ();
 			}

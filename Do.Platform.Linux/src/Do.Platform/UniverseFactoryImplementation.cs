@@ -34,7 +34,7 @@ namespace Do.Platform
 
 		public IApplicationItem NewApplicationItem (string path)
 		{
-			return ApplicationItem.MaybeCreate (path);
+			return ApplicationItem.CreateFromDesktopItem (path);
 		}
 	}
 }

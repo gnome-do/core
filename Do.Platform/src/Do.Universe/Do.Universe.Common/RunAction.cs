@@ -58,12 +58,16 @@ namespace Do.Universe.Common
 
 		public override bool SupportsItem (IItem item)
 		{
-			if (item is IFileItem) {
-				return Services.Environment.IsExecutable ((item as IFileItem).Path);
-			} else if (item is ITextItem) {
-				return Services.Environment.IsExecutable ((item as ITextItem).Text);
-			}
-			return true;
+			string command = "";
+
+			if (item is IRunnableItem) return true;
+
+			if (item is IFileItem)
+				command = (item as IFileItem).Path;
+			else if (item is ITextItem)
+				command = (item as ITextItem).Text;
+
+			return Services.Environment.IsExecutable (command);
 		}
 		
 		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)

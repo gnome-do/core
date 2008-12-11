@@ -65,12 +65,7 @@ namespace Do.Platform.Linux
 		public bool IsExecutable (string line)
 		{
 			line = line.Replace ("~", Paths.UserHome);
-
-			if (CommandLineIsFoundOnPath (line)) return true;
-			if (!File.Exists (line) || Directory.Exists (line)) return false;
-
-			UnixFileInfo info = new UnixFileInfo (line);
-			return (info.FileAccessPermissions & FileAccessPermissions.UserExecute) != 0;
+			return IsExecutableFile (line) || CommandLineIsFoundOnPath (line);
 		}
 
 		public void Execute (string line)
@@ -105,37 +100,41 @@ namespace Do.Platform.Linux
 			}
 		}
 
+		static bool IsExecutableFile (string path)
+		{
+			if (path == null) throw new ArgumentNullException ("path");
+
+			if (!File.Exists (path)) return false;
+
+			UnixFileInfo info = new UnixFileInfo (path);
+			return 0 !=
+				(info.FileAccessPermissions & FileAccessPermissions.UserExecute);
+		}
+
 		static bool CommandLineIsFoundOnPath (string line)
 		{
-			string path, command, command_file;
+			string command;
 			
-			if (line == null) return false;
+			if (line == null) throw new ArgumentNullException ("line");
 			
-			command = line.Trim ();			
-			int space = command.IndexOf (" ");
-			if (space > 0) {
-				command = command.Substring (0, space);
-			}
+			int space = line.IndexOf (" ");
+			if (0 < space)
+				command = line.Substring (0, space);
+			else
+				command = line;
 
 			// If this command is the same as the last, yes.
 			if (command == last_command_found) return true;
-			
-			// If the command is found, fine.
-			if (System.IO.File.Exists (command)) {
+
+			// Otherwise, try to find the command file in path.
+			string PATH = Environment.GetEnvironmentVariable ("PATH") ?? "";
+			command = PATH
+				.Split (':')
+				.Select (path => Path.Combine (path, command))
+				.FirstOrDefault (IsExecutableFile);
+			if (command != null) {
 				last_command_found = command;
 				return true;
-			}
-			
-			// Otherwise, try to find the command file in path.
-			path = System.Environment.GetEnvironmentVariable ("PATH");
-			if (path != null) {
-				foreach (string part in path.Split (':')) {
-					command_file = System.IO.Path.Combine (part, command);
-					if (System.IO.File.Exists (command_file)) {
-						last_command_found = command;
-						return true;
-					}
-				}
 			}
 			return false;
 		}
