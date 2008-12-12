@@ -26,9 +26,10 @@ FILES = \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
-	src/Do.Platform/Do.Platform.Default/PreferencesService.cs \
 	src/Do.Platform/Do.Platform.Default/NotificationsService.cs \
+	src/Do.Platform/Do.Platform.Default/PreferencesService.cs \
 	src/Do.Platform/Do.Platform.Default/UniverseFactoryService.cs \
+	src/Do.Platform/Do.Platform.Default/WindowingService.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesFactory.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs \
@@ -39,13 +40,13 @@ FILES = \
 	src/Do.Platform/INotificationsService.cs \
 	src/Do.Platform/IPreferences.cs \
 	src/Do.Platform/IPreferencesService.cs \
+	src/Do.Platform/IUniverseFactoryService.cs \
+	src/Do.Platform/IWindowingService.cs \
 	src/Do.Platform/Log.cs \
 	src/Do.Platform/Paths.cs \
 	src/Do.Platform/PreferencesChangedEventArgs.cs \
 	src/Do.Platform/Services.cs \
 	src/Do.Platform/StatusIcon.cs \
-	src/Do.Platform/IUniverseFactoryService.cs \
-	src/Do.Platform/Windowing.cs \
 	src/Do.Universe/Do.Universe.Common/EmailAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs \

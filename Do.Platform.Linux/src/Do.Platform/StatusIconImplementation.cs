@@ -84,7 +84,7 @@ namespace Do.Platform.Linux
 			Gdk.Screen screen;
 
 			GetLocationOnScreen (out screen, out x, out y); 
-			Windowing.ShowMainMenu (x, y);
+			Services.Windowing.ShowMainMenu (x, y);
 		}
 	}
 }

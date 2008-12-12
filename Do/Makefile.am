@@ -122,7 +122,7 @@ FILES = \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
 	src/Do.Platform/CoreService.cs \
-	src/Do.Platform/WindowingImplementation.cs \
+	src/Do.Platform/WindowingService.cs \
 	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \

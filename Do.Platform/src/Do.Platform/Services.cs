@@ -33,6 +33,7 @@ namespace Do.Platform
 	{
 
 		static ICoreService core;
+		static IWindowingService windowing;
 		static IEnumerable<ILogService> logs;
 		static PreferencesFactory preferences;
 		static IEnvironmentService environment;
@@ -83,6 +84,8 @@ namespace Do.Platform
 				universe_factory = null;
 			if (service is INotificationsService)
 				notifications = null;
+			if (service is IWindowingService)
+				windowing = null;
 		}
 
 		public static IEnumerable<ILogService> Logs {
@@ -98,6 +101,14 @@ namespace Do.Platform
 				if (core == null)
 					core = LocateService<ICoreService, Default.CoreService> ();
 				return core;
+			}
+		}
+
+		public static IWindowingService Windowing {
+			get {
+				if (windowing == null)
+					windowing = LocateService<IWindowingService, Default.WindowingService> ();
+				return windowing;
 			}
 		}
 		

@@ -38,7 +38,7 @@ namespace Do {
 
 		public static CorePreferences Preferences { get; private set; } 
 
-		internal static void Main (string[] args)
+		internal static void Main (string [] args)
 		{
 			Catalog.Init ("gnome-do", AssemblyInfo.LocaleDirectory);
 			Gtk.Application.Init ();
@@ -47,8 +47,6 @@ namespace Do {
 			DetectInstanceAndExit ();
 
 			Paths.Initialize (new PathsImplementation ());
-			Windowing.Initialize (new WindowingImplementation ());
-
 			PluginManager.Initialize ();
 			Preferences = new CorePreferences ();
 
