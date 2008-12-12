@@ -22,7 +22,12 @@ using Do.Interface.AnimationBase;
 
 namespace Do.Interface
 {
-	
+	public class MiniWindow : AbstractAnimatedInterface
+	{
+		protected override IRenderTheme RenderTheme {
+			get { return new MiniTheme (); }
+		}
+	}
 	
 	public class MiniTheme : IRenderTheme
 	{

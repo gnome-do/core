@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using Do.Addins;
 using Do.Universe;
 using Do.Platform;
+using Do.Interface;
 using Do.Interface.CairoUtils;
 
 namespace Do.UI
@@ -38,10 +39,10 @@ namespace Do.UI
 			Themes = new List<string> ();
 			Interface.Util.Appearance.SetColormap (this);
 			
-//			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
-//				theme_combo.AppendText (theme.Name);
-//				Themes.Add (theme.Name);
-//			}
+			foreach (IDoWindow theme in Core.PluginManager.GetThemes ()) {
+				theme_combo.AppendText (theme.Name);
+				Themes.Add (theme.Name);
+			}
 		
 //			theme_combo.AppendText ("MonoDock");
 //			Themes.Add ("MonoDock");

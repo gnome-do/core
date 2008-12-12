@@ -22,7 +22,12 @@ using Do.Interface.AnimationBase;
 
 namespace Do.Interface
 {
-	
+	public class AnimatedClassicWindow : AbstractAnimatedInterface
+	{
+		protected override IRenderTheme RenderTheme {
+			get { return new ClassicTheme (); }
+		}
+	}
 	
 	public class ClassicTheme : IRenderTheme
 	{

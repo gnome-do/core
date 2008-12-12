@@ -12,4 +12,8 @@
 	<ExtensionPoint path="/Do/InterfaceWindow">
 		<ExtensionNode name="InterfaceWindow" objectType="Do.Interface.Linux.IDoWindow"/>
 	</ExtensionPoint>
+	
+	<Extension path="/Do/InterfaceWindow">
+		<InterfaceWindow type="Do.Interface.ClassicWindow" />
+	</Extension>
 </Addin>

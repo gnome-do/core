@@ -21,7 +21,12 @@ using Do.Interface.AnimationBase;
 
 namespace Do.Interface
 {
-	
+	public class GlassFrameWindow : AbstractAnimatedInterface
+	{
+		protected override IRenderTheme RenderTheme {
+			get { return new GlassFrameTheme (); }
+		}
+	}
 	
 	public class GlassFrameTheme : IRenderTheme
 	{

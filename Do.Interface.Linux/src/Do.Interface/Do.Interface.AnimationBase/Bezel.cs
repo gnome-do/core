@@ -45,6 +45,10 @@ namespace Do.Interface.AnimationBase
 			set { bezel_drawing_area.Focus = value; }
 		}
 		
+		public string Name { 
+			get { return RenderTheme.Name; }
+		}
+		
 		protected abstract IRenderTheme RenderTheme { get; }
 		
 		public AbstractAnimatedInterface () : base (Gtk.WindowType.Toplevel)

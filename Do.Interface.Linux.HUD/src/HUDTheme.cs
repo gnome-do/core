@@ -22,7 +22,12 @@ using Do.Interface.AnimationBase;
 
 namespace Do.Interface
 {
-	
+	public class HUDWindow : AbstractAnimatedInterface
+	{
+		protected override IRenderTheme RenderTheme {
+			get { return new HUDTheme (); }
+		}
+	}
 	
 	public class HUDTheme : IRenderTheme
 	{

@@ -150,10 +150,9 @@ namespace Do.Core {
 			//reset our Orientation to vertical
 			Orientation = ControlOrientation.Vertical;
 			
-//			window = PluginManager.GetThemes ()
-//				.Where (theme => theme.Name == Do.Preferences.Theme)
-//				.Select (theme => new Bezel (this, theme))
-//				.FirstOrDefault ();
+			window = PluginManager.GetThemes ()
+				.Where (theme => theme.Name == Do.Preferences.Theme)
+				.FirstOrDefault ();
 
 			if (window == null)
 				window = new ClassicWindow ();

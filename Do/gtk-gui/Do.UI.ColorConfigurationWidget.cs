@@ -117,14 +117,14 @@ namespace Do.UI {
             this.clear_background.Relief = ((Gtk.ReliefStyle)(2));
             // Container child clear_background.Gtk.Container+ContainerChild
             Gtk.Alignment w2 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
-            // Container child GtkAlignment3.Gtk.Container+ContainerChild
+            // Container child GtkAlignment.Gtk.Container+ContainerChild
             Gtk.HBox w3 = new Gtk.HBox();
             w3.Spacing = 2;
-            // Container child GtkHBox1.Gtk.Container+ContainerChild
+            // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w4 = new Gtk.Image();
             w4.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-clear", Gtk.IconSize.Menu, 16);
             w3.Add(w4);
-            // Container child GtkHBox1.Gtk.Container+ContainerChild
+            // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w6 = new Gtk.Label();
             w6.LabelProp = Mono.Unix.Catalog.GetString("_Reset");
             w6.UseUnderline = true;
