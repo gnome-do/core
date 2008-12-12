@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 
 using Do.Universe;
-using Do.UI;
+using Do.Interface;
 
 namespace Do.Core
 {

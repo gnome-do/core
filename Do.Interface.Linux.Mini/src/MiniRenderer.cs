@@ -23,11 +23,11 @@ using Cairo;
 using Gdk;
 using Gtk;
 
-using Do.Addins;
-using Do.Addins.CairoUtils;
+using Do.Interface.AnimationBase;
+using Do.Interface.CairoUtils;
 using Do.Universe;
 
-namespace Do.UI
+namespace Do.Interface
 {
 	public class MiniTopBar: IBezelTitleBarRenderElement
 	{
@@ -126,9 +126,9 @@ namespace Do.UI
 				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (parent)) {
 					bgColor = rcstyle.Backgrounds[(int) StateType.Selected];
 				}
-				bgColor = CairoUtils.SetMaximumValue (bgColor, 65);
+				bgColor = bgColor.SetMaximumValue (65);
 				
-				return CairoUtils.ConvertToCairo (bgColor, .95);
+				return bgColor.ConvertToCairo (.95);
 			}
 		}
 
@@ -139,7 +139,7 @@ namespace Do.UI
 		
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
 		{
-			CairoUtils.SetRoundedRectanglePath (cr, drawing_area, parent.WindowRadius, false);
+			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, false);
 			LinearGradient lg = new LinearGradient (0, drawing_area.Y, 0, drawing_area.Height);
 			lg.AddColorStop (0, parent.Colors.BackgroundDark);
 			lg.AddColorStop (1, parent.Colors.BackgroundLight);
@@ -167,7 +167,7 @@ namespace Do.UI
 
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area, double overlay)
 		{
-			CairoUtils.SetRoundedRectanglePath (cr, drawing_area, parent.WindowRadius, false);
+			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, false);
 			cr.Color = new Cairo.Color (parent.Colors.FocusedText.R, 
 			                            parent.Colors.FocusedText.G, 
 			                            parent.Colors.FocusedText.B, 

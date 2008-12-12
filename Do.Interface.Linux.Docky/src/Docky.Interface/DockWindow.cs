@@ -40,11 +40,19 @@ namespace Docky.Interface
 		DockArea dock_area;
 		IDoController controller;
 		
+		public string Name {
+			get { return "Docky"; }
+		}
+		
 		public IDoController Controller {
 			get { return controller; }
 		}
 		
-		public DockWindow(IDoController controller) : base (Gtk.WindowType.Toplevel)
+		public DockWindow () : base (Gtk.WindowType.Toplevel)
+		{
+		}
+		
+		public void Initialize (IDoController controller)
 		{
 			this.controller = controller;
 			controller.Orientation = ControlOrientation.Horizontal;

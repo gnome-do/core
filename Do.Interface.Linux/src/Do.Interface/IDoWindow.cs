@@ -38,9 +38,22 @@ namespace Do.Interface
 		bool Visible { get; }
 		
 		/// <value>
+		/// The name of the interface
+		/// </value>
+		string Name { get; }
+		
+		/// <value>
 		/// Set and Get current Pane
 		/// </value>
 		Pane CurrentPane { get; set; }
+		
+		/// <summary>
+		/// Initializes the interface
+		/// </summary>
+		/// <param name="controller">
+		/// A <see cref="IDoController"/>
+		/// </param>
+		void Initialize (IDoController controller);
 		
 		/// <summary>
 		/// Summoning of main window.  Does not imply resetting of normal state

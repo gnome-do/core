@@ -82,7 +82,12 @@ namespace Do.Interface {
 		}
 		
 		//-------------------ctor----------------------
-		public ClassicWindow (IDoController controller) : base (Gtk.WindowType.Toplevel)
+		public ClassicWindow () : base (Gtk.WindowType.Toplevel)
+		{
+			
+		}
+		
+		public void Initialize (IDoController controller)
 		{
 			this.controller = controller;
 			

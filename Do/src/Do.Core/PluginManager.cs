@@ -32,6 +32,7 @@ using Do.UI;
 using Do.Addins;
 using Do.Platform;
 using Do.Universe;
+using Do.Interface;
 
 namespace Do.Core {
 

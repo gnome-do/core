@@ -18,9 +18,9 @@
 
 using System;
 
-using Do.Addins;
+using Do.Interface.AnimationBase;
 
-namespace Do.UI
+namespace Do.Interface
 {
 	
 	
@@ -39,7 +39,7 @@ namespace Do.UI
 			}
 		}
 		
-		public Do.Addins.IBezelDefaults GetDefaults (BezelDrawingArea parent)
+		public IBezelDefaults GetDefaults (BezelDrawingArea parent)
 		{
 			return new ClassicBezelDefaults ();
 		}

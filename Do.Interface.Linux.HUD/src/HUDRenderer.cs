@@ -23,10 +23,10 @@ using Cairo;
 using Gdk;
 using Gtk;
 
-using Do.Addins;
-using Do.Addins.CairoUtils;
+using Do.Interface.AnimationBase;
+using Do.Interface.CairoUtils;
 
-namespace Do.UI
+namespace Do.Interface
 {
 
 	public class HUDTopBar : IBezelTitleBarRenderElement
@@ -227,11 +227,11 @@ namespace Do.UI
 		
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
 		{
-			CairoUtils.SetRoundedRectanglePath (cr, drawing_area, parent.WindowRadius, false);
+			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, false);
 			cr.Color = parent.Colors.Background;
 			cr.Fill ();
 				
-			CairoUtils.SetRoundedRectanglePath (cr, drawing_area, parent.WindowRadius, true);
+			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, true);
 			cr.Color = new Cairo.Color (.35, .35, .35);
 			cr.LineWidth = 1;
 			cr.Stroke ();

@@ -18,9 +18,9 @@
 
 using System;
 
-using Do.Addins;
+using Do.Interface.AnimationBase;
 
-namespace Do.UI
+namespace Do.Interface
 {
 	
 	

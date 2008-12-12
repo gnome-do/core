@@ -32,7 +32,7 @@ namespace Do.Interface.AnimationBase
 {
 	
 	
-	public class Bezel : Gtk.Window, IDoWindow
+	public abstract class AbstractAnimatedInterface : Gtk.Window, IDoWindow
 	{
 		BezelDrawingArea bezel_drawing_area;
 		BezelGlassResults bezel_glass_results;
@@ -45,13 +45,20 @@ namespace Do.Interface.AnimationBase
 			set { bezel_drawing_area.Focus = value; }
 		}
 		
-		public Bezel(IDoController controller, IRenderTheme theme) : base (Gtk.WindowType.Toplevel)
+		protected abstract IRenderTheme RenderTheme { get; }
+		
+		public AbstractAnimatedInterface () : base (Gtk.WindowType.Toplevel)
 		{
 			this.controller = controller;
-			Build (theme);
+			Build ();
 		}
 		
-		void Build (IRenderTheme theme)
+		public void Initialize (IDoController controller)
+		{
+			this.controller = controller;
+		}
+		
+		void Build ()
 		{
 			Decorated = false;
 			AppPaintable = true;
@@ -60,7 +67,7 @@ namespace Do.Interface.AnimationBase
 			TypeHint = WindowTypeHint.Splashscreen;
 			SetColormap ();
 			
-			bezel_drawing_area = new BezelDrawingArea (controller, theme, false);
+			bezel_drawing_area = new BezelDrawingArea (controller, RenderTheme, false);
 			bezel_drawing_area.Show ();
 			
 			bezel_glass_results = bezel_drawing_area.Results;

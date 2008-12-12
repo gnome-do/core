@@ -23,11 +23,11 @@ using Cairo;
 using Gdk;
 using Gtk;
 
-using Do.Addins;
-using Do.Addins.CairoUtils;
+using Do.Interface.CairoUtils;
+using Do.Interface.AnimationBase;
 using Do.Universe;
 
-namespace Do.UI
+namespace Do.Interface
 {
 	public class GlassFrameTopBar: IBezelTitleBarRenderElement
 	{
@@ -138,7 +138,7 @@ namespace Do.UI
 		
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
 		{
-			CairoUtils.SetRoundedRectanglePath (cr, drawing_area, parent.WindowRadius, true);
+			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, true);
 			cr.Color = new Cairo.Color (.7, .7, .7, .55);
 			cr.FillPreserve ();
 			
@@ -150,10 +150,10 @@ namespace Do.UI
 			                                              drawing_area.Y+parent.WindowBorder-5,
 			                                              drawing_area.Width-(2*parent.WindowBorder)+10,
 			                                              drawing_area.Height-(2*parent.WindowBorder)+10);
-			CairoUtils.SetRoundedRectanglePath (cr, inter_rect, parent.WindowRadius*.7, false);
+			cr.SetRoundedRectanglePath (inter_rect, parent.WindowRadius*.7, false);
 			LinearGradient lg = new LinearGradient (0, inter_rect.Y, 0, inter_rect.Y+inter_rect.Height);
-			lg.AddColorStop (0, CairoUtils.ShadeColor (parent.Colors.Background, 2));
-			lg.AddColorStop (1, CairoUtils.ShadeColor (parent.Colors.Background, .3));
+			lg.AddColorStop (0, parent.Colors.Background.ShadeColor (2));
+			lg.AddColorStop (1, parent.Colors.Background.ShadeColor (.3));
 			cr.Pattern = lg;
 			cr.Fill ();
 			lg.Destroy ();
@@ -178,7 +178,7 @@ namespace Do.UI
 
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area, double overlay)
 		{
-			CairoUtils.SetRoundedRectanglePath (cr, drawing_area, parent.WindowRadius, false);
+			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, false);
 			cr.Color = new Cairo.Color (parent.Colors.FocusedText.R, 
 			                            parent.Colors.FocusedText.G, 
 			                            parent.Colors.FocusedText.B, 

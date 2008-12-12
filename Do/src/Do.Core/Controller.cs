@@ -140,7 +140,8 @@ namespace Do.Core {
 			window = null;
 			
 			if (!Gdk.Screen.Default.IsComposited) {
-				window = new ClassicWindow (this);
+				window = new ClassicWindow ();
+				window.Initialize (this);
 				window.KeyPressEvent += KeyPressWrap;
 				Reset ();
 				return;
@@ -149,16 +150,15 @@ namespace Do.Core {
 			//reset our Orientation to vertical
 			Orientation = ControlOrientation.Vertical;
 			
-			window = PluginManager.GetThemes ()
-				.Where (theme => theme.Name == Do.Preferences.Theme)
-				.Select (theme => new Bezel (this, theme))
-				.FirstOrDefault ();
-			
-			if (Do.Preferences.Theme == "MonoDock")
-				window = new MonoDock.UI.DockWindow (this);
+//			window = PluginManager.GetThemes ()
+//				.Where (theme => theme.Name == Do.Preferences.Theme)
+//				.Select (theme => new Bezel (this, theme))
+//				.FirstOrDefault ();
 
 			if (window == null)
-				window = new Bezel (this, new ClassicTheme ());
+				window = new ClassicWindow ();
+			
+			window.Initialize (this);
 			
 			if (window is Gtk.Window)
 				(window as Gtk.Window).Title = "Do";

@@ -18,9 +18,9 @@
 
 using System;
 
-using Do.Addins;
+using Do.Interface.AnimationBase;
 
-namespace Do.UI
+namespace Do.Interface
 {
 	
 	
@@ -32,27 +32,27 @@ namespace Do.UI
 		
 		public IBezelDefaults GetDefaults (BezelDrawingArea parent)
 		{
-			return new UI.MiniDefaults ();
+			return new MiniDefaults ();
 		}
 		
 		public IBezelOverlayRenderElement GetOverlay (BezelDrawingArea parent)
 		{
-			return new UI.MiniTextOverlayRenderer (parent);
+			return new MiniTextOverlayRenderer (parent);
 		}
 		
 		public IBezelPaneRenderElement GetPane (BezelDrawingArea parent)
 		{
-			return new UI.MiniPaneOutlineRenderer (parent);
+			return new MiniPaneOutlineRenderer (parent);
 		}
 		
 		public IBezelTitleBarRenderElement GetTitleBar (BezelDrawingArea parent)
 		{
-			return new UI.MiniTopBar (parent);
+			return new MiniTopBar (parent);
 		}
 		
 		public IBezelWindowRenderElement GetWindow (BezelDrawingArea parent)
 		{
-			return new UI.MiniBackgroundRenderer (parent);
+			return new MiniBackgroundRenderer (parent);
 		}
 		
 		public string Name {
