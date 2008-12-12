@@ -12,6 +12,7 @@
       <Entry build="True" name="Do.Interface.Linux" configuration="Debug" />
       <Entry build="True" name="Do.Universe" configuration="Debug" />
       <Entry build="True" name="Do.Interface.Linux.Docky" configuration="Debug" />
+      <Entry build="True" name="Do.Interface.Linux.Classic" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Release" />
@@ -25,6 +26,7 @@
       <Entry build="True" name="Do.Interface.Linux" configuration="Release" />
       <Entry build="True" name="Do.Universe" configuration="Release" />
       <Entry build="True" name="Do.Interface.Linux.Docky" configuration="Release" />
+      <Entry build="True" name="Do.Interface.Linux.Classic" configuration="Release" />
       <CustomCommands>
         <Command type="BeforeBuild" command="autogen.sh --enable-release=YES" workingdir="${CombineDir}" />
       </CustomCommands>
@@ -42,6 +44,7 @@
     <Execute type="None" entry="Do.Interface.Linux" />
     <Execute type="None" entry="Do.Universe" />
     <Execute type="None" entry="Do.Interface.Linux.Docky" />
+    <Execute type="None" entry="Do.Interface.Linux.Classic" />
   </StartMode>
   <MonoDevelop.ChangeLogAddIn.ChangeLogInfo policy="UpdateNearestChangeLog" />
   <Entries>
@@ -56,5 +59,6 @@
     <Entry filename="Do.Interface.Linux/Do.Interface.Linux.mdp" />
     <Entry filename="Do.Universe/Do.Universe.mdp" />
     <Entry filename="Do.Interface.Linux.Docky/Do.Interface.Linux.Docky.mdp" />
+    <Entry filename="Do.Interface.Linux.Classic/Do.Interface.Linux.Classic.mdp" />
   </Entries>
 </Combine>
