@@ -14,6 +14,7 @@
       <Entry build="True" name="Do.Interface.Linux.Docky" configuration="Debug" />
       <Entry build="True" name="Do.Interface.Linux.Classic" configuration="Debug" />
       <Entry build="True" name="Do.Interface.Linux.GlassFrame" configuration="Debug" />
+      <Entry build="True" name="Do.Interface.Linux.Mini" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Release" />
@@ -29,6 +30,7 @@
       <Entry build="True" name="Do.Interface.Linux.Docky" configuration="Release" />
       <Entry build="True" name="Do.Interface.Linux.Classic" configuration="Release" />
       <Entry build="True" name="Do.Interface.Linux.GlassFrame" configuration="Release" />
+      <Entry build="True" name="Do.Interface.Linux.Mini" configuration="Release" />
       <CustomCommands>
         <Command type="BeforeBuild" command="autogen.sh --enable-release=YES" workingdir="${CombineDir}" />
       </CustomCommands>
@@ -48,6 +50,7 @@
     <Execute type="None" entry="Do.Interface.Linux.Docky" />
     <Execute type="None" entry="Do.Interface.Linux.Classic" />
     <Execute type="None" entry="Do.Interface.Linux.GlassFrame" />
+    <Execute type="None" entry="Do.Interface.Linux.Mini" />
   </StartMode>
   <MonoDevelop.ChangeLogAddIn.ChangeLogInfo policy="UpdateNearestChangeLog" />
   <Entries>
@@ -64,5 +67,6 @@
     <Entry filename="Do.Interface.Linux.Docky/Do.Interface.Linux.Docky.mdp" />
     <Entry filename="Do.Interface.Linux.Classic/Do.Interface.Linux.Classic.mdp" />
     <Entry filename="Do.Interface.Linux.GlassFrame/Do.Interface.Linux.GlassFrame.mdp" />
+    <Entry filename="Do.Interface.Linux.Mini/Do.Interface.Linux.Mini.mdp" />
   </Entries>
 </Combine>
