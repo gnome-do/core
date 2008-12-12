@@ -22,7 +22,7 @@ using System.Linq;
 
 using Do.Universe;
 using Do.Interface;
-using Do.UI;
+using Do.Interface.Widgets;
 
 namespace Docky.Interface
 {

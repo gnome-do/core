@@ -68,13 +68,13 @@ namespace Docky.Interface
 		
 		public int Width {
 			get {
-				return (int) (MonoDock.Util.DockPreferences.IconSize * .3);
+				return (int) (DockPreferences.IconSize * .3);
 			}
 		}
 		
 		public int Height {
 			get {
-				return MonoDock.Util.DockPreferences.IconSize;
+				return DockPreferences.IconSize;
 			}
 		}
 		
@@ -87,7 +87,7 @@ namespace Docky.Interface
 		
 		public SeparatorItem ()
 		{
-			MonoDock.Util.DockPreferences.IconSizeChanged += delegate {
+			DockPreferences.IconSizeChanged += delegate {
 				if (sr != null)
 					sr.Destroy ();
 				sr = null;

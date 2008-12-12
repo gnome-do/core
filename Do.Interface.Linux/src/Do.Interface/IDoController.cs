@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 
-using Do.UI;
+using Do.Interface;
 using Do.Universe;
 
 namespace Do.Interface

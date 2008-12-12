@@ -150,7 +150,7 @@ namespace Docky.Interface
 		public Surface GetTextSurface ()
 		{
 			if (sr == null)
-				sr = MonoDock.UI.Util.GetBorderedTextSurface (application.Name, DockPreferences.TextWidth);
+				sr = Util.GetBorderedTextSurface (application.Name, DockPreferences.TextWidth);
 			return sr;
 		}
 		

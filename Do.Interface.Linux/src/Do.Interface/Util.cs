@@ -26,7 +26,7 @@ using Cairo;
 
 using Do.Universe;
 
-namespace Do.Addins
+namespace Do.Interface
 {
 	public delegate string StringTransformationDelegate (string old);
 	public delegate string FormatCommonSubstringsDelegate (string main, string highlight, string format);

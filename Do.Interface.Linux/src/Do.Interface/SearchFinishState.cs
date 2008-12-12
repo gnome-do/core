@@ -20,7 +20,7 @@ using System;
 
 using Do.Universe;
 
-namespace Do.Addins
+namespace Do.Interface
 {
 	
 	

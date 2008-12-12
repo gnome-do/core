@@ -21,11 +21,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Do.Addins;
+using Do.Interface;
 using Do.Universe;
 using Do.Platform;
 
-using MonoDock.UI;
+using Docky.Interface;
 
 using Wnck;
 

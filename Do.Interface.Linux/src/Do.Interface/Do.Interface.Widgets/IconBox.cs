@@ -22,7 +22,6 @@ using System;
 using Gtk;
 using Gdk;
 
-using Do.Addins;
 using Do.Universe;
 using Do.Platform;
 using Do.Interface;

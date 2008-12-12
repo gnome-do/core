@@ -23,6 +23,7 @@ using Cairo;
 using Gdk;
 
 using Do.Interface;
+using Do.Interface.AnimationBase;
 using Do.Interface.CairoUtils;
 
 using Docky.Utilities;
@@ -85,7 +86,7 @@ namespace Docky.Interface.Renderers
 				return;
 			
 			string text = GLib.Markup.EscapeText (state[state.CurrentPane].Name);
-			text = Do.Addins.Util.FormatCommonSubstrings (text, state.GetPaneQuery (state.CurrentPane), HighlightFormat);
+			text = Do.Interface.Util.FormatCommonSubstrings (text, state.GetPaneQuery (state.CurrentPane), HighlightFormat);
 			
 			int tmp = BezelTextUtils.TextHeight;
 			double text_scale = (DockPreferences.IconSize/64.0);

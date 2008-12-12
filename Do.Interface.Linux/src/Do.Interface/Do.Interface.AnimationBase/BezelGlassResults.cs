@@ -88,7 +88,7 @@ namespace Do.Interface.AnimationBase
 					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
 						bgColor = rcstyle.BaseColors[(int) StateType.Normal];
 					}
-					return CairoUtils.ConvertToCairo (bgColor, 1);
+					return bgColor.ConvertToCairo (1);
 				default:
 					throw new NotImplementedException ();
 				}
@@ -105,7 +105,7 @@ namespace Do.Interface.AnimationBase
 					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
 						bgColor = rcstyle.TextColors[(int) StateType.Normal];
 					}
-					return CairoUtils.ColorToHexString (bgColor);
+					return bgColor.ColorToHexString ();
 				default:
 					throw new NotImplementedException ();
 				}
@@ -797,7 +797,7 @@ namespace Do.Interface.AnimationBase
 					using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
 						gdkColor = rcstyle.BaseColors[(int) StateType.Selected];
 					}
-					cr2.Color = CairoUtils.ConvertToCairo (gdkColor, .8);
+					cr2.Color = gdkColor.ConvertToCairo (.8);
 					cr2.Fill ();
 					break;
 				}

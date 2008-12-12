@@ -27,7 +27,6 @@ using Cairo;
 using Docky.Utilities;
 using Docky.XLib;
 
-using Do.UI;
 using Do.Universe;
 using Do.Platform;
 using Do.Interface;
@@ -162,7 +161,7 @@ namespace Docky.Interface
 
 		#region IDoWindow implementation 
 		
-		public event Do.Addins.DoEventKeyDelegate KeyPressEvent;
+		public event Do.Interface.DoEventKeyDelegate KeyPressEvent;
 		
 		public void Summon ()
 		{

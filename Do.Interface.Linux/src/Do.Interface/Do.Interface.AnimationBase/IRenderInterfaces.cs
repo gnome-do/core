@@ -21,7 +21,7 @@ using System;
 using Cairo;
 using Gdk;
 
-namespace Do.UI
+namespace Do.Interface.AnimationBase
 {
 	/// <summary>
 	/// Provides a Window background rendering element.  Classes of this type are responsible for 

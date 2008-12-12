@@ -23,13 +23,12 @@ using Gdk;
 using Gtk;
 using Cairo;
 
-using Do.Addins;
-using Do.Addins.CairoUtils;
+using Do.Interface;
+using Do.Interface.CairoUtils;
 using Do.Universe;
 using Do.Platform;
-using Do.Interface;
 
-namespace Do.UI
+namespace Do.Interface.AnimationBase
 {
 	
 	public interface IBezelResultItemRenderer
@@ -164,7 +163,7 @@ namespace Do.UI
 				cr.LineTo (width - IconSize+2, 15);
 				Gdk.Color gc = new Gdk.Color ();
 				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
-				cr.Color = CairoUtils.ConvertToCairo (gc, 1);
+				cr.Color = gc.ConvertToCairo (1);
 				cr.Stroke ();
 			}
 			

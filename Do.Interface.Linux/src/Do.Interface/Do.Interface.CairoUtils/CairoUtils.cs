@@ -21,7 +21,7 @@ using System;
 using Cairo;
 using Gdk;
 
-using Do.UI;
+using Do.Interface;
 using Do.Universe;
 
 namespace Do.Interface.CairoUtils

@@ -186,7 +186,7 @@ namespace Docky.Interface
 				SerializeCustomItems ();
 			
 			if (GetIconSource (DockItems[item]) == IconSource.Statistics) {
-				DockPreferences.AddBlacklistItem (MonoDock.UI.Util.UIDForIObject ((DockItems[item] as DockItem).IObject));
+				DockPreferences.AddBlacklistItem (Util.UIDForIObject ((DockItems[item] as DockItem).IObject));
 				UpdateItems ();
 				return true;
 			} else if (GetIconSource (DockItems[item]) == IconSource.Custom) {
@@ -217,7 +217,7 @@ namespace Docky.Interface
 		{
 			List<IDockItem> new_items = new List<IDockItem> ();
 			foreach (IItem i in MostUsedItems ()) {
-				if (DockPreferences.ItemBlacklist.Contains (MonoDock.UI.Util.UIDForIObject (i)))
+				if (DockPreferences.ItemBlacklist.Contains (Util.UIDForIObject (i)))
 					continue;
 				IDockItem di = new DockItem (i);
 				if (custom_items.Values.Contains (di)) {

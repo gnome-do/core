@@ -18,6 +18,8 @@
 
 using System;
 
+using Do.Interface.AnimationBase;
+
 namespace Do.Interface
 {
 	

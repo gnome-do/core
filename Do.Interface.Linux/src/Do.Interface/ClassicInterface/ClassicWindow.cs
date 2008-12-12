@@ -219,11 +219,11 @@ namespace Do.Interface {
 				// to find a happy balance between 50 and 90...
 				byte maxLum = 60;
 				double hue, sat, val;
-				Addins.Util.Appearance.RGBToHSV(r, g, b, out hue, 
+				Interface.Util.Appearance.RGBToHSV(r, g, b, out hue, 
 				                                out sat, out val);
 				val = Math.Min (val, maxLum);
 				
-				Addins.Util.Appearance.HSVToRGB(hue, sat, val, out r,
+				Interface.Util.Appearance.HSVToRGB(hue, sat, val, out r,
 				                                out g, out b);
 				
 				return new Gdk.Color (r, g, b);
@@ -291,7 +291,7 @@ namespace Do.Interface {
 			click_near_settings_icon = (end_x - 27) <= click_x && click_x < end_x &&
 			                            start_y <= click_y && click_y < (start_y + 27);
 			if (click_near_settings_icon) {
-				Windowing.ShowMainMenu (end_x - 21, start_y + 16);
+				Do.Platform.Windowing.ShowMainMenu (end_x - 21, start_y + 16);
 				// Have to re-grab the pane from the menu.
 				Interface.Windowing.PresentWindow (this);
 			} else if (!click_on_window) {
@@ -338,7 +338,7 @@ namespace Do.Interface {
 			Resize (1, 1);
 			Reposition ();
 			
-			iconbox[0].DisplayObject = new Do.Addins.DefaultIconBoxObject ();
+			iconbox[0].DisplayObject = new Do.Interface.Widgets.DefaultIconBoxObject ();
 			label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 
 			                       Catalog.GetString ("Type to start searching."));
 		}
@@ -372,7 +372,7 @@ namespace Do.Interface {
 			if (!context.Results.Any () && !context.LargeTextDisplay) {
 				if (pane == Pane.First && context.ParentContext == null) {
 					iconbox[0].TextOverlay = context.LargeTextDisplay;
-					iconbox[0].DisplayObject = new Do.Addins.DefaultIconBoxObject ();
+					iconbox[0].DisplayObject = new Do.Interface.Widgets.DefaultIconBoxObject ();
 					label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 
 					                       Catalog.GetString ("Type to start searching."));
 				} else {

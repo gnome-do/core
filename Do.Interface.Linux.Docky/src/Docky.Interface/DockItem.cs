@@ -23,7 +23,6 @@ using System.Linq;
 using Gdk;
 using Cairo;
 
-using Do.UI;
 using Do.Interface;
 using Do.Platform;
 using Do.Universe;

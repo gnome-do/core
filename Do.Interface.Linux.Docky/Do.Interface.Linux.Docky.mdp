@@ -54,6 +54,7 @@
     <ProjectReference type="Project" localcopy="True" refto="Do.Interface.Linux" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Platform" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Universe" />
+    <ProjectReference type="Gac" localcopy="True" refto="gnomedesktop-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
   <GtkDesignInfo />
 </Project>

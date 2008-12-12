@@ -28,7 +28,6 @@ using Gtk;
 using Do.Platform;
 using Do.Interface;
 using Do.Universe;
-using Do.UI;
 using Do.Interface.CairoUtils;
 using Do;
 
@@ -393,7 +392,7 @@ namespace Docky.Interface
 				
 				using (Context input_cr = new Context (input_area_buffer)) {
 					input_cr.AlphaFill ();
-					MonoDock.UI.Renderers.SummonModeRenderer.RenderSummonMode (input_cr, State, dockArea, VerticalBuffer);
+					Renderers.SummonModeRenderer.RenderSummonMode (input_cr, State, dockArea, VerticalBuffer);
 				}
 				
 				cr.SetSource (input_area_buffer);
