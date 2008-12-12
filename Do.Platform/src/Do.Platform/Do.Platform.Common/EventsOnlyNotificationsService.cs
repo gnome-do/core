@@ -31,7 +31,6 @@ namespace Do.Platform.Common
 		
 		public void Notify (Notification note)
 		{
-			note.Notify ();
 			if (Notified != null)
 				Notified (this, new NotificationEventArgs (note));
 		}

@@ -24,14 +24,13 @@ namespace Do.Platform
 	
 	public class Notification
 	{
-		public virtual string Title { get; protected set; }
+
 		public virtual string Body { get; protected set; }
 		public virtual string Icon { get; protected set; }
-		public virtual string ActionLabel { get; protected set; }
+		public virtual string Title { get; protected set; }
 		public virtual Action Action { get; protected set; }
+		public virtual string ActionLabel { get; protected set; }
 
-		public event EventHandler Notified;
-		
 		public Notification (string title, string body, string icon, string actionLabel, Action action)
 		{
 			Title = title;
@@ -39,11 +38,6 @@ namespace Do.Platform
 			Icon = icon;
 			ActionLabel = actionLabel;
 			Action = action;
-		}
-
-		public void Notify ()
-		{
-			if (Notified != null) Notified (this, EventArgs.Empty);
 		}
 
 		public override string ToString ()
