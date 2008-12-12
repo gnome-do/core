@@ -20,11 +20,10 @@
 using System;
 using System.Collections.Generic;
 
-using Do.Addins;
 using Do.Universe;
 
 
-namespace Do.UI
+namespace Do.Interface
 {
 	public enum TextModeType {
 		None,

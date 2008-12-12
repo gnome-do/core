@@ -25,11 +25,10 @@ using Mono.Unix;
 using Gdk;
 using Gtk;
 
-using Do.Addins;
 using Do.Universe;
 using Do.Platform;
 
-namespace Do.UI {
+namespace Do.Interface {
 	
 	public class ClassicWindow : Gtk.Window, IDoWindow {
 		

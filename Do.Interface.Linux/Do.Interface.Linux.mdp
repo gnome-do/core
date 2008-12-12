@@ -20,6 +20,23 @@
     <File name="src/Do.Interface/Windowing.cs" subtype="Code" buildaction="Compile" />
     <File name="Resources" subtype="Directory" buildaction="Compile" />
     <File name="Resources/Do.Interface.Linux.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="src/Do.Interface/IDoWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/IRenderTheme.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/IconCache.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/IUIContext.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/ResultsWindowSelectionEventArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/UIContext.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/ClassicInterface" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Interface/ClassicInterface/ClassicWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/BaseWidgets" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Interface/BaseWidgets/DefaultObjects.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/BaseWidgets/Frame.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/BaseWidgets/GlossyRoundedFrame.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/BaseWidgets/HalfRoundedFrame.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/BaseWidgets/IconBox.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/BaseWidgets/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/BaseWidgets/SymbolDisplayLabel.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/BaseWidgets/TextFrame.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

@@ -18,7 +18,7 @@
 using System;
 using Do.Universe;
 
-namespace Do.Addins
+namespace Do.Interface
 {
 	public class ResultsWindowSelectionEventArgs : EventArgs
 	{

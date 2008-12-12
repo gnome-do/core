@@ -18,9 +18,7 @@
 
 using System;
 
-using Do.Addins;
-
-namespace Do.UI
+namespace Do.Interface
 {
 	
 	

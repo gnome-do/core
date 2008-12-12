@@ -21,7 +21,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Do.UI
+namespace Do.Interface
 {
 	public class IconCache
 	{

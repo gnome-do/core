@@ -16,17 +16,6 @@
   <Contents>
     <File name="src/Do.Addins/Util.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/IDoController.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/IDoWindow.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/ResultsWindowSelectionEventArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/BaseWidgets/DefaultObjects.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/BaseWidgets/Frame.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/BaseWidgets/GlossyRoundedFrame.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/BaseWidgets/HalfRoundedFrame.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/BaseWidgets/IconBox.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/BaseWidgets/ResultsWindow.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/BaseWidgets/SymbolDisplayLabel.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/BaseWidgets/TextFrame.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/ClassicWindow/ClassicWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/PositionWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="Resources/settings-triangle.png" subtype="Code" buildaction="EmbedAsResource" />
     <File name="AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
@@ -37,9 +26,6 @@
     <File name="gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="gtk-gui/Do.UI.AbstractLoginWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="Resources/Do.Addins.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="src/Do.UI/IconCache.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/IUIContext.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/UIContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/Bezel.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/BezelDrawingArea.cs" subtype="Code" buildaction="Compile" />
@@ -57,7 +43,6 @@
     <File name="src/Do.UI/Bezel/Renderers/HUDRenderer.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/Renderers/ClassicRenderer.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Addins/CairoUtils.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.UI/IRenderTheme.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/Renderers/ClassicTheme.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/Renderers/HUDTheme.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/Bezel/Renderers/GlassFrameRenderer.cs" subtype="Code" buildaction="Compile" />
