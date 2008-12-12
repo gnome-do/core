@@ -23,6 +23,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Common/AbstractLogService.cs \
 	src/Do.Platform/Do.Platform.Common/DictionaryPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogService.cs \
+	src/Do.Platform/Do.Platform.Common/EventsOnlyNotificationsService.cs \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
@@ -48,7 +49,6 @@ FILES = \
 	src/Do.Platform/Paths.cs \
 	src/Do.Platform/PreferencesChangedEventArgs.cs \
 	src/Do.Platform/Services.cs \
-	src/Do.Platform/StatusIcon.cs \
 	src/Do.Universe/Do.Universe.Common/EmailAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs \
