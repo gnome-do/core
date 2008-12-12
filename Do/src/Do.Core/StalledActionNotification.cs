@@ -1,4 +1,4 @@
-/* NotificationEventArgs.cs
+/* StalledActionNotification.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -19,16 +19,31 @@
 
 using System;
 
-namespace Do.Platform
+using Mono.Unix;
+
+using Do.Platform;
+
+namespace Do.Core
 {
 	
-	public class NotificationEventArgs : EventArgs
+	
+	class StalledActionNotification : Notification
 	{
-		public Notification Notification { get; protected set; }
+		const string Icon = "dialog-error";
+
+		static readonly string Title = Catalog.GetString ("GNOME Do");
+		static readonly string Body = Catalog.GetString (
+			"Do is still performing the last action. Please wait for it to finish or click \"End Now\" to interrupt.");
+		static readonly string ActionLabel = Catalog.GetString ("End Now");
 		
-		public NotificationEventArgs (Notification notification)
+		public StalledActionNotification ()
+			: base (Title, Body, Icon, ActionLabel, Action)
 		{
-			Notification = notification;
+		}
+
+		static void Action ()
+		{
+			Environment.Exit (20);
 		}
 	}
 }

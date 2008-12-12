@@ -31,7 +31,7 @@ namespace Do.Platform
 	{
 		event EventHandler<NotificationEventArgs> Notified;
 		
-		void Notify (string title, string message, string icon, string actionLabel, Action action);
+		void Notify (Notification note);
 	}
 
 	public static class INotificationsServiceExtensions
@@ -45,12 +45,16 @@ namespace Do.Platform
 
 		public static void Notify (this INotificationsService self, string title, string message)
 		{
-		  self.Notify (title, message, DefaultIcon, DefaultActionLabel, DefaultAction);
+			Notification note =
+				new Notification (title, message, DefaultIcon, DefaultActionLabel, DefaultAction);
+			self.Notify (note);
 		}
 		
 		public static void Notify (this INotificationsService self, string title, string message, string icon)
 		{
-		  self.Notify (title, message, icon, DefaultActionLabel, DefaultAction);
+			Notification note =
+				new Notification (title, message, icon, DefaultActionLabel, DefaultAction);
+			self.Notify (note);
 		}
 	}
 }

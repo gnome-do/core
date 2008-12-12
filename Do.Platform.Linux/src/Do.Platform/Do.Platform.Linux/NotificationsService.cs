@@ -21,8 +21,9 @@ using System;
 
 using Mono.Unix;
 
-using Notifications;
 
+using LibNotify = Notifications;
+	
 using Do.Platform;
 using Do.Interface;
 
@@ -73,26 +74,14 @@ namespace Do.Platform.Linux
 		/// <param name="onClick">
 		/// A <see cref="Action"/> action to excecute. Set this to null for no action
 		/// </param>
-		public void Notify (string title, string message, string icon, string actionLabel, Action action)
+		public void Notify (Notification note)
 		{
-			Notification msg;
+			LibNotify.Notification notify = ToNotify (note);
 			
-			// Show the status icon so that we can associate our notification with it
-			//StatusIcon.Notify ();
-			
-			msg = new Notification ();
-			msg.Icon = string.IsNullOrEmpty (icon)
-				? DefaultIcon
-				: IconProvider.PixbufFromIconName (icon, IconSize);
-			msg.Body = GLib.Markup.EscapeText (message);
-			msg.Summary = GLib.Markup.EscapeText (title);
-			msg.Timeout = ReadableDurationForMessage (title, message);
-			msg.Closed += (o, a) => StatusIcon.Hide ();
-
-			msg.AddAction (GLib.Markup.EscapeText (actionLabel),
-			    actionLabel, (sender, e) => action ());
-
 			/*
+			// Show the status icon so that we can associate our notification with it
+			StatusIcon.Notify ();
+		
 			// If we can successfully get the location, then we associate the
 			// notification with it.
 			if (StatusIcon.Imp is StatusIconImplementation) {
@@ -101,26 +90,47 @@ namespace Do.Platform.Linux
 
 				(StatusIcon.Imp as StatusIconImplementation).GetLocationOnScreen (
 					out screen, out x, out y);
-				msg.SetGeometryHints (screen, x, y);
+				notify.SetGeometryHints (screen, x, y);
 			}
 			*/
 			
 			// We delay this so that the status icon has time to show.
 			GLib.Timeout.Add (NotifyDelay, () => {
-			    Gtk.Application.Invoke ((o, a) => msg.Show ()); 
+			    Gtk.Application.Invoke ((o, a) => notify.Show ()); 
 			    return false;
 			});
 
-			OnNotified (title, message, icon);
+			OnNotified (note);
 		}
 
-		void OnNotified (string title, string message, string icon)
+		LibNotify.Notification ToNotify (Notification note)
 		{
-			if (Notified == null) return;
-			Notified (this, new NotificationEventArgs (title, message, icon));
+			LibNotify.Notification notify = new LibNotify.Notification ();
+			
+			notify.Icon = string.IsNullOrEmpty (note.Icon)
+				? DefaultIcon
+				: IconProvider.PixbufFromIconName (note.Icon, IconSize);
+			notify.Body = GLib.Markup.EscapeText (note.Body);
+			notify.Summary = GLib.Markup.EscapeText (note.Title);
+			notify.Timeout = ReadableDurationForMessage (note.Title, note.Body);
+			notify.Closed += (o, a) => StatusIcon.Hide ();
+
+			notify.AddAction (GLib.Markup.EscapeText (note.ActionLabel),
+			    note.ActionLabel, (sender, e) => note.Action ());
+
+			return notify;
+		}
+
+		void OnNotified (Notification note)
+		{
+			note.Notify ();
+			
+			if (Notified != null)
+				Notified (this, new NotificationEventArgs (note));
 		}
 
 		#endregion
 		
 	}
+
 }

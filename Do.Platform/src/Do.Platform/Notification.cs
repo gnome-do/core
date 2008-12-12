@@ -1,4 +1,4 @@
-/* NotificationEventArgs.cs
+/* Notification.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -22,13 +22,28 @@ using System;
 namespace Do.Platform
 {
 	
-	public class NotificationEventArgs : EventArgs
+	public class Notification
 	{
-		public Notification Notification { get; protected set; }
+		public virtual string Title { get; protected set; }
+		public virtual string Body { get; protected set; }
+		public virtual string Icon { get; protected set; }
+		public virtual string ActionLabel { get; protected set; }
+		public virtual Action Action { get; protected set; }
+
+		public event EventHandler Notified;
 		
-		public NotificationEventArgs (Notification notification)
+		public Notification (string title, string body, string icon, string actionLabel, Action action)
 		{
-			Notification = notification;
+			Title = title;
+			Body = body;
+			Icon = icon;
+			ActionLabel = actionLabel;
+			Action = action;
+		}
+
+		public void Notify ()
+		{
+			if (Notified != null) Notified (this, EventArgs.Empty);
 		}
 	}
 }

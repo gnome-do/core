@@ -29,12 +29,13 @@ namespace Do.Platform.Default
 	{
 		public event EventHandler<NotificationEventArgs> Notified;
 		
-		public void Notify (string title, string message, string icon, string actionLabel, Action action)
+		public void Notify (Notification note)
 		{
-			Log.Debug ("Default INotificationsServiceService cannot notify \"{0}: {1}\"", title, message);
-			
+			Log.Debug ("Default INotificationsServiceService cannot notify \"{0}: {1}\"", note.Title, note.Body);
+
+			note.Notify ();
 			if (Notified != null)
-				Notified (this, new NotificationEventArgs (title, message, icon));
+				Notified (this, new NotificationEventArgs (note));
 		}
 	}
 

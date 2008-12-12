@@ -887,13 +887,7 @@ namespace Do.Core {
 			}
 					
 			if (th != null && th.IsAlive) {
-				Services.Notifications.Notify (
-					"GNOME Do",
-					"Do is still performing the last action. "+
-				         "Please wait for it to finish or click \"End Now\" to interrupt.",
-					"dialog-error",
-				    "End Now",
-					() => System.Environment.Exit (20));
+				Services.Notifications.Notify (new StalledActionNotification ());
 				return;
 			}
 			

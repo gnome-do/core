@@ -113,6 +113,7 @@ FILES = \
 	src/Do.Core/IUniverseManager.cs \
 	src/Do.Core/PluginManager.cs \
 	src/Do.Core/RelevanceProvider.cs \
+	src/Do.Core/StalledActionNotification.cs \
 	src/Do.Core/SearchControllers/FirstSearchController.cs \
 	src/Do.Core/SearchControllers/ISearchController.cs \
 	src/Do.Core/SearchControllers/SecondSearchController.cs \
