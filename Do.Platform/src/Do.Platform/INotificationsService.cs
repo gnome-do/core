@@ -29,6 +29,8 @@ namespace Do.Platform
 	
 	public interface INotificationsService : IService
 	{
+		event EventHandler<NotificationEventArgs> Notified;
+		
 		void Notify (string title, string message, string icon, string actionLabel, Action action);
 	}
 

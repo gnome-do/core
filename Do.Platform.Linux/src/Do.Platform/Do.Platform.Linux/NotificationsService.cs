@@ -42,6 +42,8 @@ namespace Do.Platform.Linux
 		const int MaxNotifyShow = 10000;
 
 		Gdk.Pixbuf DefaultIcon { get; set; }
+
+		public event EventHandler<NotificationEventArgs> Notified;
 		
 		public NotificationsService ()
 		{
@@ -108,6 +110,14 @@ namespace Do.Platform.Linux
 			    Gtk.Application.Invoke ((o, a) => msg.Show ()); 
 			    return false;
 			});
+
+			OnNotified (title, message, icon);
+		}
+
+		void OnNotified (string title, string message, string icon)
+		{
+			if (Notified == null) return;
+			Notified (this, new NotificationEventArgs (title, message, icon));
 		}
 
 		#endregion

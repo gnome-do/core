@@ -38,6 +38,7 @@ FILES = \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/ILogService.cs \
 	src/Do.Platform/INotificationsService.cs \
+	src/Do.Platform/NotificationEventArgs.cs \
 	src/Do.Platform/IPreferences.cs \
 	src/Do.Platform/IPreferencesService.cs \
 	src/Do.Platform/IUniverseFactoryService.cs \
