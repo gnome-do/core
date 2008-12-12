@@ -1,4 +1,4 @@
-/* IPreferences.cs
+/* ISecurePreferences.cs 
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -18,22 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
 
+
+using System;
 
 namespace Do.Platform
 {
 	
-	public interface IPreferences
+	public interface ISecurePreferences : IPreferences
 	{
-		event EventHandler<PreferenceChangedEventArgs> PreferenceChanged;
-		
-		string this [string key] { get; set; }
-
-		bool Set<T>    (string key, T val);
-		T    Get<T>    (string key, T def);
-
-		string AbsolutePathForKey (string key);
 	}
 }

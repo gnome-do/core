@@ -26,21 +26,24 @@ using Do.Platform;
 namespace Do.Platform.Preferences
 {
 	
-	internal class PreferencesImplementation : IPreferences
+	internal class PreferencesImplementation : IPreferences, ISecurePreferences
 	{
 
 		string RootPath { get; set; }
 		public IPreferencesService Service { get; set; }
+		public ISecurePreferencesService SecureService { get; set; }
 		
-		public PreferencesImplementation (IPreferencesService service)
-			: this (service, "")
+		public PreferencesImplementation (IPreferencesService service, ISecurePreferencesService secureService)
+			: this (service, secureService, "")
 		{
 		}
 
-		public PreferencesImplementation (IPreferencesService service, string rootPath)
+		public PreferencesImplementation (IPreferencesService service, ISecurePreferencesService secureService, string rootPath)
 		{
 			RootPath = rootPath;
+			
 			Service = service;
+			SecureService = secureService;
 		}
 		
 		void OnPreferenceChanged (string key, object oldValue, object newValue)
@@ -58,11 +61,9 @@ namespace Do.Platform.Preferences
 
 		public string AbsolutePathForKey (string key)
 		{
-			if (key.StartsWith ("/"))
-				return Service.AbsolutePathForKey (key);
-			return Service.AbsolutePathForKey (string.Format ("{0}/{1}", RootPath, key));
+			return AbsolutePathForKey (Service, key);
 		}
-		
+
 		public string this [string key] {
 			get {
 				return Get (key, "");
@@ -80,18 +81,6 @@ namespace Do.Platform.Preferences
 			return val;
 		}
 		
-		public bool TryGet<T> (string key, T def, out T val)
-		{
-			bool success;
-
-			success = TryGet (key, out val);
-			if (!success) {
-				success = Set (key, def);
-				val = def;
-			}
-			return success;
-		}
-
 		/// <summary>
 		/// Sets a gconf key to a given value.
 		/// </summary>
@@ -109,17 +98,7 @@ namespace Do.Platform.Preferences
 		/// </returns>
 		public bool Set<T> (string key, T val)
 		{
-			T oldValue;
-			string keypath = AbsolutePathForKey (key);
-			
-			if (!Service.TryGet (keypath, out oldValue))
-				oldValue = default (T);
-			
-			if (Service.Set (keypath, val)) {
-				OnPreferenceChanged (key, oldValue, val);
-				return true;
-			}
-			return false;
+			return Set<T> (Service, key, val);
 		}
 
 		/// <summary>
@@ -137,12 +116,81 @@ namespace Do.Platform.Preferences
 		/// </returns>
 		public bool TryGet<T> (string key, out T val)
 		{
-			string keypath = AbsolutePathForKey (key);
-			return Service.TryGet (keypath, out val);
+			return TryGet<T> (Service, key, out val);
+		}
+
+		public bool TryGet<T> (string key, T def, out T val)
+		{
+			return TryGet<T> (Service, key, def, out val);
 		}
 
 		#endregion
-		
-	}
 
+		#region ISecurePreferences
+
+		public T SecureGet<T> (string key, T def)
+		{
+			T val;
+
+			SecureTryGet<T> (key, def, out val);
+			return val;
+		}
+
+		public bool SecureSet<T> (string key, T val)
+		{
+			return Set<T> (SecureService, key, val);
+		}
+
+		public bool SecureTryGet<T> (string key, out T val)
+		{
+			return TryGet<T> (SecureService, key, out val);
+		}
+
+		public bool SecureTryGet<T> (string key, T def, out T val)
+		{
+			return TryGet<T> (SecureService, key, def, out val);
+		}
+
+		#endregion
+
+		private string AbsolutePathForKey (IPreferencesService service, string key)
+		{
+			if (key.StartsWith ("/"))
+				return service.AbsolutePathForKey (key);
+			return service.AbsolutePathForKey (string.Format ("{0}/{1}", RootPath, key));
+		}
+
+		private bool Set<T> (IPreferencesService service, string key, T val)
+		{
+			T oldValue;
+			string keypath = AbsolutePathForKey (key);
+			
+			if (!service.TryGet (keypath, out oldValue))
+				oldValue = default (T);
+			
+			if (service.Set (keypath, val)) {
+				OnPreferenceChanged (key, oldValue, val);
+				return true;
+			}
+			return false;
+		}
+
+		private bool TryGet<T> (IPreferencesService service, string key, T def, out T val)
+		{
+			bool success;
+
+			success = TryGet (service, key, out val);
+			if (!success) {
+				success = Set (service, key, def);
+				val = def;
+			}
+			return success;
+		}
+
+		private bool TryGet<T> (IPreferencesService service, string key, out T val)
+		{
+			string keypath = AbsolutePathForKey (service, key);
+			return service.TryGet (keypath, out val);
+		}
+	}
 }

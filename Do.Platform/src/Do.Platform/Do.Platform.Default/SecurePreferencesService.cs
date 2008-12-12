@@ -1,4 +1,4 @@
-/* IPreferences.cs
+/* SecurePreferencesService.cs 
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -19,21 +19,36 @@
  */
 
 using System;
-using System.Collections.Generic;
 
+using Do.Platform;
 
-namespace Do.Platform
+namespace Do.Platform.Default
 {
 	
-	public interface IPreferences
+	public class SecurePreferencesService : ISecurePreferencesService
 	{
-		event EventHandler<PreferenceChangedEventArgs> PreferenceChanged;
+
+		#region ISecurePreferencesService
+
+		public bool Set<T> (string key, T val)
+		{
+			Log.Debug ("Default ISecurePreferencesService cannot set key \"{0}\".", key);
+			return false;
+		}
 		
-		string this [string key] { get; set; }
+		public bool TryGet<T> (string key, out T val)
+		{
+			Log.Debug ("Default ISecurePreferencesService cannot get key \"{0}\".", key);
+			val = default (T);
+			return false;
+		}
 
-		bool Set<T>    (string key, T val);
-		T    Get<T>    (string key, T def);
+		public string AbsolutePathForKey (string key)
+		{
+			Log.Debug ("Default ISecurePreferencesService cannot find absolute path for key \"{0}\".", key);
+			return "";
+		}
 
-		string AbsolutePathForKey (string key);
+		#endregion ISecurePreferencesService
 	}
 }

@@ -37,7 +37,9 @@ namespace Do.Platform.Preferences
 		public void SetUp ()
 		{
 			IPreferencesService service = new Common.DictionaryPreferencesService ();
-			Prefs = new PreferencesImplementation (service, RootPath);
+			
+			//FIXME
+			Prefs = new PreferencesImplementation (service, service as ISecurePreferencesService, RootPath);
 			PrefChanged = false;
 			Prefs.PreferenceChanged += PrefsChanged;
 		}
