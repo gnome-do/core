@@ -25,11 +25,11 @@ using Cairo;
 using Gdk;
 using Gtk;
 
-using Do.Addins;
-using Do.Addins.CairoUtils;
+using Do.Interface;
+using Do.Interface.CairoUtils;
 using Do.Universe;
 
-namespace Do.UI
+namespace Do.Interface.AnimationBase
 {
 	
 	
@@ -38,8 +38,6 @@ namespace Do.UI
 		HUDStyle style;
 		IBezelResultItemRenderer ItemRenderer;
 		
-//		const int SurfaceHeight = 20;
-//		const int IconSize = 16;
 		const int FadeTime = 100;
 		
 		int num_results;

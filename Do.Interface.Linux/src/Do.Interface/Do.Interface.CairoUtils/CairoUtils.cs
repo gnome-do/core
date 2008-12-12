@@ -24,7 +24,7 @@ using Gdk;
 using Do.UI;
 using Do.Universe;
 
-namespace Do.Addins.CairoUtils
+namespace Do.Interface.CairoUtils
 {
 	
 	public static class CairoUtils

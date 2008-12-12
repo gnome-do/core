@@ -23,10 +23,9 @@ using Gdk;
 using Gtk;
 using Cairo;
 
-using Do.Addins;
-using Do.Addins.CairoUtils;
+using Do.Interface.CairoUtils;
 
-namespace Do.UI
+namespace Do.Interface.AnimationBase
 {
 	public class BezelColors
 	{

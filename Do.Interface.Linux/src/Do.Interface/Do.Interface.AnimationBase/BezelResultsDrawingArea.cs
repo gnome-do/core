@@ -24,10 +24,10 @@ using Cairo;
 using Gdk;
 using Gtk;
 
-using Do.Addins;
+using Do.Interface;
 using Do.Universe;
 
-namespace Do.UI
+namespace Do.Interface.AnimationBase
 {
 	
 	

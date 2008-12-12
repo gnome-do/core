@@ -19,10 +19,10 @@
 using System;
 using System.Collections.Generic;
 
-using Do.Addins;
+using Do.Interface;
 using Do.Universe;
 
-namespace Do.UI
+namespace Do.Interface.AnimationBase
 {
 	public class BezelDrawingContext
 	{

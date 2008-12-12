@@ -23,12 +23,12 @@ using Cairo;
 using Gdk;
 using Gtk;
 
-using Do.Addins;
-using Do.Addins.CairoUtils;
+using Do.Interface;
+using Do.Interface.CairoUtils;
 using Do.Universe;
 using Do.Platform;
 
-namespace Do.UI
+namespace Do.Interface.AnimationBase
 {
 	public enum PointLocation {
 		Window,

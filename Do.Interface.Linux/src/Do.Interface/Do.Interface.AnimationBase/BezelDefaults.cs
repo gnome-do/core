@@ -18,7 +18,7 @@
 
 using System;
 
-namespace Do.Addins
+namespace Do.Interface.AnimationBase
 {
 	public interface IBezelDefaults
 	{
