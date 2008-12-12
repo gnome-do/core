@@ -21,7 +21,7 @@ using System;
 using Gtk;
 using Gdk;
 
-namespace Do.UI
+namespace Do.Interface.Widgets
 {
 	public class Frame : Bin
 	{

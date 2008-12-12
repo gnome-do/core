@@ -19,7 +19,7 @@
 
 using System;
 
-namespace Do.UI
+namespace Do.Interface.Widgets
 {
 	public class HalfRoundedFrame : Frame
 	{

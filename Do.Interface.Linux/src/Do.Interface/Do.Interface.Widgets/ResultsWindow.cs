@@ -31,7 +31,7 @@ using Do.Universe;
 using Do.Platform;
 using Do.Interface;
 
-namespace Do.UI
+namespace Do.Interface.Widgets
 {
 	public delegate void OnSelectionChanged (object sender, 
 	                                         ResultsWindowSelectionEventArgs args);

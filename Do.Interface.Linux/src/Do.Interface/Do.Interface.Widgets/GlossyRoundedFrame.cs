@@ -23,7 +23,7 @@ using Cairo;
 using Gtk;
 using Gdk;
 
-namespace Do.UI
+namespace Do.Interface.Widgets
 {
 	public class GlossyRoundedFrame : Frame
 	{

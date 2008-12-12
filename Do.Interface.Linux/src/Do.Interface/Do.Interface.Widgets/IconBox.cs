@@ -27,7 +27,7 @@ using Do.Universe;
 using Do.Platform;
 using Do.Interface;
 
-namespace Do.UI
+namespace Do.Interface.Widgets
 {
 	public class IconBox : Frame
 	{

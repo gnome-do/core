@@ -23,7 +23,7 @@ using Mono.Unix;
 
 using Do.Universe;
 
-namespace Do.Addins
+namespace Do.Interface.Widgets
 {
 	
 	public class NoResultsFoundObject : IObject
