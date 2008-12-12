@@ -22,9 +22,8 @@
 //
 
 using System;
-//using System.Windows.Forms;
 
-namespace MonoDock.XLib {
+namespace Docky.XLib {
 
 	internal class X11Atoms {
 

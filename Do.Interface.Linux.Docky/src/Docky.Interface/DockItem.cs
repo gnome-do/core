@@ -24,16 +24,15 @@ using Gdk;
 using Cairo;
 
 using Do.UI;
-using Do.Addins;
+using Do.Interface;
 using Do.Platform;
 using Do.Universe;
 using Do.Universe.Common;
-using Do.Addins.CairoUtils;
-using Do.Interface;
+using Do.Interface.CairoUtils;
 
-using MonoDock.Util;
+using Docky.Utilities;
 
-namespace MonoDock.UI
+namespace Docky.Interface
 {
 	
 	

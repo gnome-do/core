@@ -1,4 +1,4 @@
-// GtkUtils.cs
+// IDockItem.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -18,27 +18,35 @@
 
 using System;
 
-using Gdk;
-using Gtk;
+using Cairo;
 
-namespace MonoDock.Util
+using Do.Interface;
+using Do.Universe;
+
+namespace Docky.Interface
 {
 	
 	
-	public static class GtkUtils
+	public interface IDockItem : IEquatable<IDockItem>, IDisposable
 	{
-		public static void SetCompositeColormap (this Gtk.Widget self)
-		{
-			Gdk.Colormap colormap;
-
-            colormap = self.Screen.RgbaColormap;
-            if (colormap == null) {
-                    colormap = self.Screen.RgbColormap;
-                    Console.Error.WriteLine ("No alpha support.");
-            }
-            
-            self.Colormap = colormap;
-            colormap.Dispose ();
-		}
+		string Description { get; }
+		int Width { get; }
+		int Height { get; }
+		bool Scalable { get; }
+		bool DrawIndicator { get; }
+		
+		DateTime LastClick { get; }
+		DateTime DockAddItem { get; set; }
+		
+		Surface GetIconSurface ();
+		Surface GetTextSurface ();
+		
+		void Clicked (uint button, IDoController controller);
+		void SetIconRegion (Gdk.Rectangle region);
+	}
+	
+	public interface IDoDockItem
+	{
+		IObject IObject { get; }
 	}
 }

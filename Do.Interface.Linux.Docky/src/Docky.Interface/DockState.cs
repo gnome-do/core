@@ -21,10 +21,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Do.Universe;
-using Do.Addins;
+using Do.Interface;
 using Do.UI;
 
-namespace MonoDock.UI
+namespace Docky.Interface
 {
 	
 	

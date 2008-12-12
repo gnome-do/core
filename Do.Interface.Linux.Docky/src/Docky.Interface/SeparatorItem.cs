@@ -19,12 +19,12 @@
 using System;
 
 using Cairo;
-using Do.Addins;
-using Do.Addins.CairoUtils;
+using Do.Interface;
+using Do.Interface.CairoUtils;
 
-using MonoDock.Util;
+using Docky.Utilities;
 
-namespace MonoDock.UI
+namespace Docky.Interface
 {
 	
 	

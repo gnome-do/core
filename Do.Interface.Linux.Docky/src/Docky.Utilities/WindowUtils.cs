@@ -29,7 +29,7 @@ using MonoDock.UI;
 
 using Wnck;
 
-namespace MonoDock.Util
+namespace Docky.Utilities
 {
 	
 	

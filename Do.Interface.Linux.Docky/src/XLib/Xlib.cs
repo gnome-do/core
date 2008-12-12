@@ -25,7 +25,7 @@ using System;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace MonoDock.XLib {
+namespace Docky.XLib {
 
 	public enum PropertyMode
 	{

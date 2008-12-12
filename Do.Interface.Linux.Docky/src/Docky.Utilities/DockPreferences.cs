@@ -23,11 +23,11 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-using Do.Addins;
+using Do.Interface;
 using Do.Universe;
 using Do.Platform;
 
-namespace MonoDock.Util
+namespace Docky.Utilities
 {
 	
 	public class DockPreferences

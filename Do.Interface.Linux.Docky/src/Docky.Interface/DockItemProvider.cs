@@ -23,15 +23,15 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-using Do.Addins;
+using Do.Interface;
 using Do.Universe;
 using Do.Platform;
 
-using MonoDock.Util;
+using Docky.Utilities;
 
 using Wnck;
 
-namespace MonoDock.UI
+namespace Docky.Interface
 {
 	public enum IconSource {
 		Statistics,

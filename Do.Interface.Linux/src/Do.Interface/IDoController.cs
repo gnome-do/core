@@ -21,10 +21,9 @@ using System;
 using System.Collections.Generic;
 
 using Do.UI;
-using Do.Addins;
 using Do.Universe;
 
-namespace Do.Addins
+namespace Do.Interface
 {
 	public enum ControlOrientation {
 		Vertical,

@@ -24,11 +24,11 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 using Do.UI;
-using Do.Addins;
+using Do.Interface;
 using Do.Universe;
 using Do.Platform;
 
-namespace MonoDock.UI
+namespace Docky.Interface
 {
 	public static class CustomDockItems
 	{

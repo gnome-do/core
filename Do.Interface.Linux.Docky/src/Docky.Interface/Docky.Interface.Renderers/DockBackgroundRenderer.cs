@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using Cairo;
 using Gdk;
 
-using Do.Addins.CairoUtils;
+using Do.Interface.CairoUtils;
 
-namespace MonoDock.UI.Renderers
+namespace Docky.Interface.Renderers
 {
 	
 	

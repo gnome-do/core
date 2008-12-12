@@ -24,7 +24,7 @@ using System;
 using Gdk;
 using Gtk;
 
-namespace Do.UI
+namespace Do.Interface
 {
 	
 	

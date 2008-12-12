@@ -1,4 +1,4 @@
-// IDockItem.cs
+// IStatistics.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -17,36 +17,16 @@
 //
 
 using System;
+using System.Collections.Generic;
 
-using Cairo;
-
-using Do.Addins;
 using Do.Universe;
 
-namespace MonoDock.UI
+namespace Do.Interface
 {
 	
 	
-	public interface IDockItem : IEquatable<IDockItem>, IDisposable
+	public interface IStatistics
 	{
-		string Description { get; }
-		int Width { get; }
-		int Height { get; }
-		bool Scalable { get; }
-		bool DrawIndicator { get; }
-		
-		DateTime LastClick { get; }
-		DateTime DockAddItem { get; set; }
-		
-		Surface GetIconSurface ();
-		Surface GetTextSurface ();
-		
-		void Clicked (uint button, IDoController controller);
-		void SetIconRegion (Gdk.Rectangle region);
-	}
-	
-	public interface IDoDockItem
-	{
-		IObject IObject { get; }
+		IEnumerable<IItem> GetMostUsedItems (int numItems);
 	}
 }

@@ -1,4 +1,4 @@
-// IStatistics.cs
+// GtkUtils.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -17,16 +17,28 @@
 //
 
 using System;
-using System.Collections.Generic;
 
-using Do.Universe;
+using Gdk;
+using Gtk;
 
-namespace Do.Addins
+namespace Docky.Utilities
 {
 	
 	
-	public interface IStatistics
+	public static class GtkUtils
 	{
-		IEnumerable<IItem> GetMostUsedItems (int numItems);
+		public static void SetCompositeColormap (this Gtk.Widget self)
+		{
+			Gdk.Colormap colormap;
+
+            colormap = self.Screen.RgbaColormap;
+            if (colormap == null) {
+                    colormap = self.Screen.RgbColormap;
+                    Console.Error.WriteLine ("No alpha support.");
+            }
+            
+            self.Colormap = colormap;
+            colormap.Dispose ();
+		}
 	}
 }

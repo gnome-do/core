@@ -22,16 +22,14 @@ using System.IO;
 
 using Cairo;
 
-using Do.Addins;
-using Do.Addins.CairoUtils;
+using Do.Interface.CairoUtils;
 using Do.Platform;
 using Do.Interface;
 using Do.Universe;
-using Do.UI;
 
-using MonoDock.Util;
+using Docky.Utilities;
 
-namespace MonoDock.UI
+namespace Docky.Interface
 {
 	
 	

@@ -22,10 +22,10 @@ using System.Collections.Generic;
 using Do.Universe;
 
 using Cairo;
-using Do.Addins.CairoUtils;
+using Do.Interface.CairoUtils;
 using Gdk;
 
-namespace MonoDock.UI
+namespace Docky.Interface
 {
 	public enum ClickAction {
 		Focus,

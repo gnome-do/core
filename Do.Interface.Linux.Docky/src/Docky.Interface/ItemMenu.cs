@@ -21,7 +21,7 @@ using System;
 using Gtk;
 using Mono.Unix;
 
-namespace Do.UI
+namespace Docky.Interface
 {
 	public class ItemMenu : Gtk.Menu
 	{

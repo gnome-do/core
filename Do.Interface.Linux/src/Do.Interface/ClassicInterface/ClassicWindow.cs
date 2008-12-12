@@ -27,13 +27,14 @@ using Gtk;
 
 using Do.Universe;
 using Do.Platform;
+using Do.Interface.Widgets;
 
 namespace Do.Interface {
 	
 	public class ClassicWindow : Gtk.Window, IDoWindow {
 		
 		//-------------------Class Members------------------
-		Frame frame;
+		Do.Interface.Widgets.Frame frame;
 		SymbolDisplayLabel label;
 		ResultsWindow resultsWindow;
 		PositionWindow positionWindow;
