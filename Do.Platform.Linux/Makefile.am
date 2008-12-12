@@ -23,7 +23,8 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/GConfPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Linux/UniverseFactoryService.cs \
 	src/Do.Platform/PathsImplementation.cs \
-	src/Do.Platform/StatusIconImplementation.cs \
+	src/Do.Platform/TrayIconService.cs \
+	src/Do.Platform/TrayIconPreferences.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
