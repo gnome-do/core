@@ -29,19 +29,19 @@ namespace Do.Core
 	
 	class StalledActionNotification : Notification
 	{
-		const string Icon = "dialog-error";
+		const string icon = "dialog-error";
 
-		static readonly string Title = Catalog.GetString ("GNOME Do");
-		static readonly string Body = Catalog.GetString (
+		static readonly string title = Catalog.GetString ("GNOME Do");
+		static readonly string body = Catalog.GetString (
 			"Do is still performing the last action. Please wait for it to finish or click \"End Now\" to interrupt.");
-		static readonly string ActionLabel = Catalog.GetString ("End Now");
+		static readonly string actionLabel = Catalog.GetString ("End Now");
 		
 		public StalledActionNotification ()
-			: base (Title, Body, Icon, ActionLabel, Action)
+			: base (title, body, icon, actionLabel, MyAction)
 		{
 		}
 
-		static void Action ()
+		static void MyAction ()
 		{
 			Environment.Exit (20);
 		}

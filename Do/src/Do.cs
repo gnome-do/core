@@ -57,8 +57,6 @@ namespace Do {
 			else
 				Log.DisplayLevel = LogLevel.Info;
 			
-			StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
-			
 			Util.Initialize ();
 
 			try {

@@ -1,6 +1,7 @@
 <Addin id="Do.Platform.Linux" namespace="Do" version="1.0">
  
 	<Runtime>
+		<Import assembly="Do.Platform.dll" />
 		<Import assembly="Do.Platform.Linux.dll" />
 	</Runtime>
 	
@@ -19,9 +20,11 @@
 	</Extension>
 
 	<Extension path="/Do/Service">
+		<Service type="Do.Platform.Common.EventsOnlyNotificationsService" />
+		
+		<Service type="Do.Platform.Linux.TrayIconService" />
 		<Service type="Do.Platform.Linux.ConsoleLogService" />
 		<Service type="Do.Platform.Linux.EnvironmentService" />
-		<Service type="Do.Platform.Linux.NotificationsService" />
 		<Service type="Do.Platform.Linux.UniverseFactoryService" />
 		<Service type="Do.Platform.Linux.GConfPreferencesService" />
 	</Extension>

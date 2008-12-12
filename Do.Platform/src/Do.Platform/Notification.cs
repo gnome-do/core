@@ -45,5 +45,11 @@ namespace Do.Platform
 		{
 			if (Notified != null) Notified (this, EventArgs.Empty);
 		}
+
+		public override string ToString ()
+		{
+			return string.Format("[Notification: Title={0}, Body={1}, Icon={2}, ActionLabel={3}, Action={4}]", Title, Body, Icon, ActionLabel, Action);
+		}
+
 	}
 }

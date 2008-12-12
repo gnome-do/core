@@ -1,4 +1,4 @@
-/* NotificationsService.cs
+/* EventsOnlyNotificationsService.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -22,16 +22,18 @@ using System;
 
 using Do.Platform;
 
-namespace Do.Platform.Default
+namespace Do.Platform.Common
 {
 	
-	public class NotificationsService : INotificationsService
+	public class EventsOnlyNotificationsService : INotificationsService
 	{
 		public event EventHandler<NotificationEventArgs> Notified;
 		
 		public void Notify (Notification note)
 		{
-			Log.Debug ("Default INotificationsServiceService cannot notify \"{0}: {1}\"", note.Title, note.Body);
+			note.Notify ();
+			if (Notified != null)
+				Notified (this, new NotificationEventArgs (note));
 		}
 	}
 
