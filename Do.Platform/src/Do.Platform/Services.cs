@@ -33,9 +33,10 @@ namespace Do.Platform
 	{
 
 		static ICoreService core;
-		static IEnvironmentService environment;
-		static PreferencesFactory preferences;
 		static IEnumerable<ILogService> logs;
+		static PreferencesFactory preferences;
+		static IEnvironmentService environment;
+		static INotificationsService notifications;
 		static IUniverseFactoryService universe_factory;
 		
 		public static void Initialize ()
@@ -80,6 +81,8 @@ namespace Do.Platform
 				logs = null;
 			if (service is IUniverseFactoryService)
 				universe_factory = null;
+			if (service is INotificationsService)
+				notifications = null;
 		}
 
 		public static IEnumerable<ILogService> Logs {
@@ -103,6 +106,14 @@ namespace Do.Platform
 				if (environment == null)
 					environment = LocateService<IEnvironmentService, Default.EnvironmentService> ();
 				return environment;
+			}
+		}
+
+		public static INotificationsService Notifications {
+			get {
+				if (notifications == null)
+					notifications = LocateService<INotificationsService, Default.NotificationsService> ();
+				return notifications;
 			}
 		}
 

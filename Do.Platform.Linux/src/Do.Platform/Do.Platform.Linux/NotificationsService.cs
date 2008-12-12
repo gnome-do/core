@@ -1,8 +1,7 @@
-/* NotificationsImplementation.cs
+/* NotificationsService.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
+ * COPYRIGHT file distributed with this source distribution.
  *  
  * This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,10 +18,9 @@
  */
 
 using System;
+
 using Mono.Unix;
 
-using Gdk;
-using GLib;
 using Notifications;
 
 using Do.Platform;
@@ -31,9 +29,10 @@ using Do.Interface;
 namespace Do.Platform.Linux
 {
 	
-	public class NotificationsImplementation : Platform.Notifications.Implementation
+	public class NotificationsService : INotificationsService
 	{
 		const string DefaultIconName = "gnome-do";
+		readonly string ActionButtonLabel = Catalog.GetString ("Ok");
 
 		const int LettersPerWord = 7;
 		const int MillisecondsPerWord = 200;
@@ -42,11 +41,11 @@ namespace Do.Platform.Linux
 		const int MinNotifyShow = 5000;
 		const int MaxNotifyShow = 10000;
 
-		static readonly Pixbuf default_icon;
+		Gdk.Pixbuf DefaultIcon { get; set; }
 		
-		static NotificationsImplementation ()
+		public NotificationsService ()
 		{
-			default_icon = IconProvider.PixbufFromIconName (DefaultIconName, IconSize);
+			DefaultIcon = IconProvider.PixbufFromIconName (DefaultIconName, IconSize);
 		}
 
 		static int ReadableDurationForMessage (string title, string message)
@@ -55,7 +54,7 @@ namespace Do.Platform.Linux
 			return Math.Min (Math.Max (t, MinNotifyShow), MaxNotifyShow);
 		}
 
-		#region Notifications.Implementation
+		#region INotificationsService
 		
 		/// <summary>
 		/// Shows a libnotify style notification
@@ -69,32 +68,29 @@ namespace Do.Platform.Linux
 		/// <param name="icon">
 		/// A <see cref="System.String"/> icon name. Set this to null or empty to use default Do icon
 		/// </param>
-		/// <param name="actionLabel">
-		/// A <see cref="System.String"/> label for the action's button
-		/// </param>
 		/// <param name="onClick">
 		/// A <see cref="Action"/> action to excecute. Set this to null for no action
 		/// </param>
-		public void Notify (string title, string message, string icon, string actionLabel, Action onClick)
+		public void Notify (string title, string message, string icon, string actionLabel, Action action)
 		{
 			Notification msg;
 			
 			// Show the status icon so that we can associate our notification with it
-			StatusIcon.Notify ();
+			//StatusIcon.Notify ();
 			
 			msg = new Notification ();
 			msg.Icon = string.IsNullOrEmpty (icon)
-				? default_icon
+				? DefaultIcon
 				: IconProvider.PixbufFromIconName (icon, IconSize);
 			msg.Body = GLib.Markup.EscapeText (message);
 			msg.Summary = GLib.Markup.EscapeText (title);
 			msg.Timeout = ReadableDurationForMessage (title, message);
 			msg.Closed += (o, a) => StatusIcon.Hide ();
 
-			if (onClick != null)
-				msg.AddAction (GLib.Markup.EscapeText (actionLabel),
-					actionLabel, (o, a) => onClick ());
-			
+			msg.AddAction (GLib.Markup.EscapeText (actionLabel),
+			    actionLabel, (sender, e) => action ());
+
+			/*
 			// If we can successfully get the location, then we associate the
 			// notification with it.
 			if (StatusIcon.Imp is StatusIconImplementation) {
@@ -105,6 +101,7 @@ namespace Do.Platform.Linux
 					out screen, out x, out y);
 				msg.SetGeometryHints (screen, x, y);
 			}
+			*/
 			
 			// We delay this so that the status icon has time to show.
 			GLib.Timeout.Add (NotifyDelay, () => {

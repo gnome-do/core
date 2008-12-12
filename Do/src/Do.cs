@@ -47,17 +47,19 @@ namespace Do {
 			DetectInstanceAndExit ();
 
 			Paths.Initialize (new PathsImplementation ());
-			Icons.Initialize (new Platform.Linux.IconsImplementation ());
 			Windowing.Initialize (new WindowingImplementation ());
 
 			PluginManager.Initialize ();
 			Preferences = new CorePreferences ();
 
-			Log.DisplayLevel = Preferences.QuietStart ? LogLevel.Error : LogLevel.Info;
-			if (Preferences.Debug) Log.DisplayLevel = LogLevel.Debug;
+			if (Preferences.Debug)
+				Log.DisplayLevel = LogLevel.Debug;
+			else if (Preferences.QuietStart)
+				Log.DisplayLevel = LogLevel.Error;
+			else
+				Log.DisplayLevel = LogLevel.Info;
 			
 			StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
-			Platform.Notifications.Initialize (new Platform.Linux.NotificationsImplementation ());
 			
 			Util.Initialize ();
 

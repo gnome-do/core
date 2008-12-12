@@ -1,4 +1,4 @@
-<Project name="Do.Platform.Linux" fileversion="2.0" language="C#" clr-version="Net_2_0" targetFramework="2.0" ctype="DotNetProject">
+<Project name="Do.Platform.Linux" fileversion="2.0" language="C#" clr-version="Net_2_0" targetFramework="2.0" targetFramework="2.0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
       <Output directory="bin/Debug" assembly="Do.Platform.Linux" />
@@ -24,8 +24,6 @@
     <File name="src/Do.Universe/FileItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/PathsImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/ConsoleCrayon.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/IconsImplementation.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/NotificationsImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/StatusIconImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ApplicationItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/CopyToClipboardAction.cs" subtype="Code" buildaction="Compile" />
@@ -37,6 +35,7 @@
     <File name="src/Do.Platform/Do.Platform.Linux/Tests" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Linux/Tests/GConfPreferencesServiceTests.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Linux/UniverseFactoryService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Linux/NotificationsService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

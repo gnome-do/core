@@ -885,18 +885,17 @@ namespace Do.Core {
 			if (th != null && th.IsAlive) {
 				Thread.Sleep (100);
 			}
-			
-			
+					
 			if (th != null && th.IsAlive) {
-				Platform.Notifications.Notify (
+				Services.Notifications.Notify (
 					"GNOME Do",
-					"Do is still executing the last requested task, please wait for this to finish",
+					"Do is still performing the last action. "+
+				         "Please wait for it to finish or click \"End Now\" to interrupt.",
 					"dialog-error",
-					"Stop",
+				    "End Now",
 					() => System.Environment.Exit (20));
 				return;
 			}
-			
 			
 			// We want to disable updates so that any updates to universe dont happen while controller is
 			// summoned.  We will disable this on vanish.  This way we can be sure to dedicate our CPU

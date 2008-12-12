@@ -27,6 +27,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
 	src/Do.Platform/Do.Platform.Default/PreferencesService.cs \
+	src/Do.Platform/Do.Platform.Default/NotificationsService.cs \
 	src/Do.Platform/Do.Platform.Default/UniverseFactoryService.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesFactory.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs \
@@ -35,11 +36,10 @@ FILES = \
 	src/Do.Platform/ICoreService.cs \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/ILogService.cs \
+	src/Do.Platform/INotificationsService.cs \
 	src/Do.Platform/IPreferences.cs \
 	src/Do.Platform/IPreferencesService.cs \
-	src/Do.Platform/Icons.cs \
 	src/Do.Platform/Log.cs \
-	src/Do.Platform/Notifications.cs \
 	src/Do.Platform/Paths.cs \
 	src/Do.Platform/PreferencesChangedEventArgs.cs \
 	src/Do.Platform/Services.cs \

@@ -19,10 +19,11 @@
 	</Extension>
 
 	<Extension path="/Do/Service">
-		<Service type="Do.Platform.Linux.EnvironmentService" />
-		<Service type="Do.Platform.Linux.GConfPreferencesService" />
 		<Service type="Do.Platform.Linux.ConsoleLogService" />
+		<Service type="Do.Platform.Linux.EnvironmentService" />
+		<Service type="Do.Platform.Linux.NotificationsService" />
 		<Service type="Do.Platform.Linux.UniverseFactoryService" />
+		<Service type="Do.Platform.Linux.GConfPreferencesService" />
 	</Extension>
 	
 </Addin>

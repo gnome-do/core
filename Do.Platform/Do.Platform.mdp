@@ -1,4 +1,4 @@
-<Project name="Do.Platform" fileversion="2.0" language="C#" clr-version="Net_2_0" targetFramework="2.0" ctype="DotNetProject">
+<Project name="Do.Platform" fileversion="2.0" language="C#" clr-version="Net_2_0" targetFramework="2.0" targetFramework="2.0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
       <Output directory="bin/Debug" assembly="Do.Platform" />
@@ -22,8 +22,6 @@
     <File name="src/Do.Platform/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Common" subtype="Directory" buildaction="Compile" />
     <File name="src/EnumerableExtensions.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Icons.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Notifications.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/StatusIcon.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Windowing.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Services.cs" subtype="Code" buildaction="Compile" />
@@ -60,6 +58,8 @@
     <File name="src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IUniverseFactoryService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/UniverseFactoryService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/INotificationsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Default/NotificationsService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
