@@ -27,6 +27,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
 	src/Do.Platform/Do.Platform.Default/PreferencesService.cs \
+	src/Do.Platform/Do.Platform.Default/UniverseFactoryService.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesFactory.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs \
@@ -43,7 +44,7 @@ FILES = \
 	src/Do.Platform/PreferencesChangedEventArgs.cs \
 	src/Do.Platform/Services.cs \
 	src/Do.Platform/StatusIcon.cs \
-	src/Do.Platform/UniverseFactory.cs \
+	src/Do.Platform/IUniverseFactoryService.cs \
 	src/Do.Platform/Windowing.cs \
 	src/Do.Universe/Do.Universe.Common/EmailAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenAction.cs \

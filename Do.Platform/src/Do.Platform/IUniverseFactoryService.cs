@@ -1,4 +1,4 @@
-// UniverseFactoryImplementation.cs
+// IUniverseFactoryService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -20,21 +20,24 @@
 using System;
 
 using Do.Universe;
-using Do.Universe.Linux;
+using Do.Universe.Common;
+
+using Do.Platform.ServiceStack;
 
 namespace Do.Platform
 {
-	public class UniverseFactoryImplementation : UniverseFactory.Implementation
+	
+	public interface IUniverseFactoryService : IService
 	{
-		
-		public IFileItem NewFileItem (string path)
-		{
-			return new FileItem (path);
-		}
+		IFileItem NewFileItem (string path);
+		IApplicationItem NewApplicationItem (string path);	
+	}
 
-		public IApplicationItem NewApplicationItem (string path)
+	public static class IUniverseFactoryServiceExtensions
+	{
+		public static ITextItem NewTextItem (this IUniverseFactoryService self, string text)
 		{
-			return ApplicationItem.CreateFromDesktopItem (path);
+			return new TextItem (text);
 		}
 	}
 }

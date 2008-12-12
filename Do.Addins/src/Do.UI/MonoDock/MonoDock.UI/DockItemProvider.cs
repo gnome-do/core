@@ -125,10 +125,10 @@ namespace MonoDock.UI
 				return;
 			
 			if (filename.EndsWith (".desktop")) {
-				IObject o = UniverseFactory.NewApplicationItem (filename);
+				IObject o = Services.UniverseFactory.NewApplicationItem (filename);
 				custom_items[filename] = new DockItem (o);
 			} else {
-				IObject o = UniverseFactory.NewFileItem (filename);
+				IObject o = Services.UniverseFactory.NewFileItem (filename);
 				custom_items[filename] = new DockItem (o);
 			}
 			

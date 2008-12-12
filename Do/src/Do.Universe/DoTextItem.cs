@@ -28,7 +28,7 @@ namespace Do
 	public class DoTextItem: DoItem, ITextItem
 	{
 		public DoTextItem (string text):
-			base (UniverseFactory.NewTextItem (text))
+			base (Services.UniverseFactory.NewTextItem (text))
 		{
 		}
 		

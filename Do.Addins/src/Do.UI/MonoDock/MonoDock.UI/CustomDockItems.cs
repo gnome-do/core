@@ -112,7 +112,7 @@ namespace MonoDock.UI
 		{
 			IApplicationItem appItem;
 			try {
-				appItem = UniverseFactory.NewApplicationItem (desktopFile);
+				appItem = Services.UniverseFactory.NewApplicationItem (desktopFile);
 			} catch {
 				return null;
 			}
@@ -123,7 +123,7 @@ namespace MonoDock.UI
 		{
 			IFileItem fileItem;
 			try {
-				fileItem = UniverseFactory.NewFileItem (file);
+				fileItem = Services.UniverseFactory.NewFileItem (file);
 			} catch {
 				return null;
 			}

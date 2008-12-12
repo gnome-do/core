@@ -46,7 +46,6 @@ namespace Do {
 
 			DetectInstanceAndExit ();
 
-			UniverseFactory.Initialize (new UniverseFactoryImplementation ());
 			Paths.Initialize (new PathsImplementation ());
 			Icons.Initialize (new Platform.Linux.IconsImplementation ());
 			Windowing.Initialize (new WindowingImplementation ());
