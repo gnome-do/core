@@ -27,6 +27,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
 	src/Do.Platform/Do.Platform.Default/PreferencesService.cs \
+	src/Do.Platform/Do.Platform.Default/SecurePreferencesService.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesFactory.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs \
@@ -35,7 +36,9 @@ FILES = \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/ILogService.cs \
 	src/Do.Platform/IPreferences.cs \
+	src/Do.Platform/IPreferencesSecureExtensions.cs \
 	src/Do.Platform/IPreferencesService.cs \
+	src/Do.Platform/ISecurePreferencesService.cs \
 	src/Do.Platform/Icons.cs \
 	src/Do.Platform/Log.cs \
 	src/Do.Platform/Notifications.cs \

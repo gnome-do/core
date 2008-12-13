@@ -29,8 +29,8 @@ namespace Do.Platform.Preferences
 	public class PreferencesFactory
 	{
 		
-		IPreferencesService Service { get; set; }
-		ISecurePreferencesService SecureService { get; set; }
+		internal IPreferencesService Service { get; private set; }
+		internal ISecurePreferencesService SecureService { get; private set; }
 		
 		public PreferencesFactory (IPreferencesService service, ISecurePreferencesService secureService)
 		{
@@ -51,7 +51,7 @@ namespace Do.Platform.Preferences
 
 		protected IPreferences Get (string key)
 		{
-			return new PreferencesImplementation (Service, SecureService, key);
+			return new PreferencesImplementation (Service, key);
 		}
 
 	}

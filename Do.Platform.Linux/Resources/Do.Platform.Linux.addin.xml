@@ -19,9 +19,10 @@
 	</Extension>
 
 	<Extension path="/Do/Service">
+		<Service type="Do.Platform.Linux.ConsoleLogService" />
 		<Service type="Do.Platform.Linux.EnvironmentService" />
 		<Service type="Do.Platform.Linux.GConfPreferencesService" />
-		<Service type="Do.Platform.Linux.ConsoleLogService" />
+		<Service type="Do.Platform.Linux.GnomeKeyringSecurePreferencesService" />
 	</Extension>
 	
 </Addin>

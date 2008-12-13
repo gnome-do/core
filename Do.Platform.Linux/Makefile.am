@@ -21,6 +21,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/ConsoleLogService.cs \
 	src/Do.Platform/Do.Platform.Linux/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Linux/GConfPreferencesService.cs \
+	src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs \
 	src/Do.Platform/IconsImplementation.cs \
 	src/Do.Platform/NotificationsImplementation.cs \
 	src/Do.Platform/PathsImplementation.cs \
@@ -49,6 +50,7 @@ REFERENCES =  \
 	Mono.Posix \
 	$(NUNIT_LIBS) \
 	$(GTK_SHARP_20_LIBS) \
+	$(GNOME_KEYRING_SHARP_LIBS) \
 	$(GNOME_SHARP_20_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
 	$(GCONF_SHARP_20_LIBS) \
