@@ -58,7 +58,7 @@ namespace Do.Platform
 		{
 			bool success;
 
-			success = SecureTryGet (self, key, out val);
+			success = self.SecureTryGet<T> (key, out val); 	
 			if (!success) {
 				success = SecureSet (self, key, def);
 				val = def;

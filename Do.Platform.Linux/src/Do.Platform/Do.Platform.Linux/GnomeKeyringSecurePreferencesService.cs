@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.ComponentModel;
 
 using Mono.Unix;
 
@@ -34,15 +35,17 @@ namespace Do.Platform.Linux
 		readonly string ErrorSavingMsg = Catalog.GetString ("Error saving {0}");
 		readonly string KeyringUnavailableMsg = Catalog.GetString ("gnome-keyring-daemon could not be reached!");
 		
+		const string DefaultRootPath = "GnomeDo";
+
 		string root_path;
 
-		public GnomeKeyringSecurePreferencesService () : this ("")
+		public GnomeKeyringSecurePreferencesService () : this (DefaultRootPath)
 		{
 		}
-		
-		public GnomeKeyringSecurePreferencesService (string rootKey)
+
+		public GnomeKeyringSecurePreferencesService (string rootPath)
 		{
-			root_path = rootKey;
+			root_path = rootPath;
 		}
 		
 		#region ISecurePreferencesService
@@ -53,21 +56,21 @@ namespace Do.Platform.Linux
 				return key;
 			return string.Format (root_path + ".{0}", key);
 		}
-		
+	
 		public bool Set<T> (string key, T val)
 		{
 			Hashtable keyData;
-
+			
 			if (!Ring.Available) {
 				Log.Error (KeyringUnavailableMsg);
 				return false;
 			}
-			
+
 			keyData = new Hashtable ();
-			keyData[AbsolutePathForKey (key)] = val;
+			keyData[key] = key;
 			
 			try {
-				Ring.CreateItem (Ring.GetDefaultKeyring (), ItemType.GenericSecret, root_path, keyData, "12341234", true);
+				Ring.CreateItem (Ring.GetDefaultKeyring (), ItemType.GenericSecret, AbsolutePathForKey (key), keyData, val.ToString (), true);
 			} catch (KeyringException e) {
 				Log.Error (ErrorSavingMsg, key, e.Message);
 				Log.Debug (e.StackTrace);
@@ -79,21 +82,35 @@ namespace Do.Platform.Linux
 
 		public bool TryGet<T> (string key, out T val)
 		{
+			Hashtable keyData;
+			TypeConverter converter;
+			
 			if (!Ring.Available) {
 				Log.Error (KeyringUnavailableMsg);
 				return false;
 			}
+
+			converter = new TypeConverter ();
+			keyData = new Hashtable ();
+			keyData[key] = key;
 			
-			foreach (ItemData item in Ring.Find (ItemType.GenericSecret, new Hashtable ())) {
-				Console.Error.WriteLine ("Looking in {0}", item.ItemID, item.Keyring);
-				if (item.Attributes.ContainsKey (AbsolutePathForKey (key))) {
-					val = (T) item.Attributes[AbsolutePathForKey (key)];
-					Console.Error.WriteLine ("Found {0}", item.Attributes[AbsolutePathForKey (key)].ToString ());
-					
-					if (val == null) break;
-					
-					return true;
+			try {
+				foreach (ItemData item in Ring.Find (ItemType.GenericSecret, keyData)) {
+					if (item.Attributes.ContainsKey (AbsolutePathForKey (key))) {
+						val = (T) converter.ConvertFromString (item.Secret);
+						Console.Error.WriteLine ("Found {0}", item.Attributes[AbsolutePathForKey (key)].ToString ());
+						
+						if (val == null) {
+							Log.Error ("Failed to cast secret to type '{0}'", typeof (T).Name);
+							break;
+						}
+						
+						return true;
+					}
 				}
+			} catch (KeyringException e) {
+				Log.Debug ("Key not found in keyring,");
+				Log.Error (e.StackTrace);
 			}
 
 			return false;
