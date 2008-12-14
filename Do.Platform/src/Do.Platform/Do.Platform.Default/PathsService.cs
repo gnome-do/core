@@ -26,8 +26,5 @@ namespace Do.Platform.Default
 	
 	public class PathsService : IPathsService
 	{
-		public IEnumerable<string> GetSystemPluginDirectories () {
-			yield break;
-		}
 	}
 }

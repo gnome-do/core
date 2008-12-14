@@ -110,7 +110,7 @@ namespace Do.Platform
 		public static IPathsService Paths {
 			get {
 				if (paths == null)
-					paths = LocateService<IPathsService, Default.PathsService> ();
+					paths = new Default.PathsService ();
 				return paths;
 			}
 		}

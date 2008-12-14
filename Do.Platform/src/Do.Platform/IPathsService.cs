@@ -29,7 +29,6 @@ namespace Do.Platform
 	
 	public interface IPathsService : IService
 	{
-		IEnumerable<string> GetSystemPluginDirectories ();
 	}
 
 	public static class IPathsServiceExtensions

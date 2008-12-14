@@ -22,7 +22,6 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Linux/GConfPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Linux/NotificationHelper.cs \
-	src/Do.Platform/Do.Platform.Linux/PathsService.cs \
 	src/Do.Platform/Do.Platform.Linux/TrayIconPreferences.cs \
 	src/Do.Platform/Do.Platform.Linux/TrayIconService.cs \
 	src/Do.Platform/Do.Platform.Linux/UniverseFactoryService.cs \

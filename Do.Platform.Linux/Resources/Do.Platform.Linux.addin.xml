@@ -22,7 +22,6 @@
 	<Extension path="/Do/Service">
 		<Service type="Do.Platform.Common.EventsOnlyNotificationsService" />
 
-		<Service type="Do.Platform.Linux.PathsService" />
 		<Service type="Do.Platform.Linux.TrayIconService" />
 		<Service type="Do.Platform.Linux.ConsoleLogService" />
 		<Service type="Do.Platform.Linux.EnvironmentService" />

@@ -70,8 +70,7 @@ namespace Do.Core {
 				repository_urls = new Dictionary<string, IEnumerable<string>> ();      
 				//repository_urls ["Official Plugins"] = new[] { OfficialRepo };
 				//repository_urls ["Community Plugins"] = new[] { CommunityRepo };
-				repository_urls ["Local Plugins"] = Services.Paths.GetSystemPluginDirectories ()
-					.Where (Directory.Exists)
+				repository_urls ["Local Plugins"] = SystemPluginDirectories
 					.Select (repo => "file://" + repo)
 					.ToArray ();
 
@@ -83,6 +82,17 @@ namespace Do.Core {
 			get {
 				string pluginDirectory = "plugins-" + AssemblyInfo.DisplayVersion;
 				return IPathsServiceExtensions.GetUserDataDirectory (null, pluginDirectory);
+			}
+		}
+
+		static IEnumerable<string> SystemPluginDirectories {
+			get {
+				yield return AppDomain.CurrentDomain.BaseDirectory;
+				yield return new [] {
+					Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData),
+					"gnome-do",
+					"plugins",
+				}.Aggregate (Path.Combine);
 			}
 		}
 
