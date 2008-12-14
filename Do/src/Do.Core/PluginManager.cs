@@ -80,8 +80,11 @@ namespace Do.Core {
 
 		public static string UserPluginsDirectory {
 			get {
-				string pluginDirectory = "plugins-" + AssemblyInfo.DisplayVersion;
-				return IPathsServiceExtensions.GetUserDataDirectory (null, pluginDirectory);
+				return new [] {
+					Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData),
+					"gnome-do",
+					"plugins-" + AssemblyInfo.DisplayVersion,
+				}.Aggregate (Path.Combine);
 			}
 		}
 
