@@ -23,15 +23,19 @@ using System.Collections.Generic;
 
 using Do.Platform.ServiceStack;
 
-namespace Do.Platform.Common {
+namespace Do.Platform.Common
+{
 	
-	public class FileLogService : AbstractLogService, IInitializedService {
+	public class FileLogService : AbstractLogService, IInitializedService 
+	{
 
 		TextWriter Writer { get; set; }
 			
 		public void Initialize ()
 		{
-			Writer = new StreamWriter (Paths.Log, true);
+			DateTime now = DateTime.Now;
+			string logName = string.Format ("log-{0}-{1}", now.ToShortDateString (), now.ToShortTimeString ());
+			Writer = new StreamWriter (Services.Paths.GetTemporaryDirectory (logName), true);
 		}
 		
 		public override void Log (LogLevel level, string msg)

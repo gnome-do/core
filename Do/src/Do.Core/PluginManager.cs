@@ -68,9 +68,9 @@ namespace Do.Core {
 				if (repository_urls != null) return repository_urls;
 
 				repository_urls = new Dictionary<string, IEnumerable<string>> ();      
-				repository_urls ["Official Plugins"] = new[] { OfficialRepo };
-				repository_urls ["Community Plugins"] = new[] { CommunityRepo };
-				repository_urls ["Local Plugins"] = Paths.SystemPlugins
+				//repository_urls ["Official Plugins"] = new[] { OfficialRepo };
+				//repository_urls ["Community Plugins"] = new[] { CommunityRepo };
+				repository_urls ["Local Plugins"] = Services.Paths.GetSystemPluginDirectories ()
 					.Where (Directory.Exists)
 					.Select (repo => "file://" + repo)
 					.ToArray ();
@@ -79,22 +79,10 @@ namespace Do.Core {
 			}
 		}
 
-		private static string Version {
+		public static string UserPluginsDirectory {
 			get {
-				System.Version v = typeof (IItem).Assembly.GetName ().Version;
-				return String.Format ("{0}.{1}.{2}", v.Major, v.Minor, v.Build);
-			}
-		}
-
-		private static string OfficialRepo {
-			get {
-				return "http://do.davebsd.com/repo/" + Version + "/official";
-			}
-		}
-
-		private static string CommunityRepo {
-			get {
-				return "http://do.davebsd.com/repo/" + Version + "/community";
+				string pluginDirectory = "plugins-" + AssemblyInfo.DisplayVersion;
+				return IPathsServiceExtensions.GetUserDataDirectory (null, pluginDirectory);
 			}
 		}
 
@@ -105,8 +93,8 @@ namespace Do.Core {
 		public static void Initialize ()
 		{
 			// Initialize Mono.Addins.
-			AddinManager.Initialize (Paths.UserPlugins);
-			
+			AddinManager.Initialize (UserPluginsDirectory);
+
 			// Register repositories.
 			SetupService setup = new SetupService (AddinManager.Registry);
 			foreach (IEnumerable<string> urls in RepositoryUrls.Values) {
@@ -119,7 +107,7 @@ namespace Do.Core {
 
 			// Initialize services before addins that may use them are loaded.
 			Services.Initialize ();
-
+			
 			// Now allow loading of non-services.
 			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnItemSourceChange);
 			AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnActionChange);
@@ -211,13 +199,13 @@ namespace Do.Core {
 				Directory.GetFiles (dir, pattern).Select (f => Path.Combine (dir, f));
 			
 			// Create mpack (addin packages) out of dlls.
-			GetFilePaths (Paths.UserPlugins, "*.dll")
-				.ForEach (path => setup.BuildPackage (status, Paths.UserPlugins, new[] { path }))
+			GetFilePaths (UserPluginsDirectory, "*.dll")
+				.ForEach (path => setup.BuildPackage (status, UserPluginsDirectory, new[] { path }))
 				// We delete the dlls after creating mpacks so we don't delete any dlls prematurely.
 				.ForEach (File.Delete);
 
 			// Install each mpack file, deleting each file when finished installing it.
-			foreach (string path in GetFilePaths (Paths.UserPlugins, "*.mpack")) {
+			foreach (string path in GetFilePaths (UserPluginsDirectory, "*.mpack")) {
 				setup.Install (status, new[] { path });
 				File.Delete (path);
 			}

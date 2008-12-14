@@ -55,7 +55,7 @@ namespace Do.Universe.Linux {
 		{
 			if (null == path) throw new ArgumentNullException ();
 
-			return path.Replace (Paths.UserHome, "~");
+			return path.Replace (Services.Paths.GetUserHomeDirectory (), "~");
 		}
 
 		string icon;

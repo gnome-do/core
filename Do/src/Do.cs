@@ -45,8 +45,7 @@ namespace Do {
 			Gdk.Threads.Init ();
 
 			DetectInstanceAndExit ();
-
-			Paths.Initialize (new PathsImplementation ());
+			
 			PluginManager.Initialize ();
 			Preferences = new CorePreferences ();
 

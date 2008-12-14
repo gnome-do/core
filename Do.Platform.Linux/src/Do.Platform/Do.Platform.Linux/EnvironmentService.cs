@@ -59,18 +59,18 @@ namespace Do.Platform.Linux
 
 		public void OpenPath (string path)
 		{
-			Open (path.Replace ("~", Paths.UserHome));
+			Open (path.Replace ("~", Services.Paths.GetUserHomeDirectory ()));
 		}
 
 		public bool IsExecutable (string line)
 		{
-			line = line.Replace ("~", Paths.UserHome);
+			line = line.Replace ("~", Services.Paths.GetUserHomeDirectory ());
 			return IsExecutableFile (line) || CommandLineIsFoundOnPath (line);
 		}
 
 		public void Execute (string line)
 		{
-			line = line.Replace ("~", Paths.UserHome);
+			line = line.Replace ("~", Services.Paths.GetUserHomeDirectory ());
 
 			Log.Info ("Executing \"{0}\"", line);
 			if (File.Exists (line)) {

@@ -39,14 +39,14 @@ namespace Do.UI
       const string AutostartAttribute = "X-GNOME-Autostart-enabled";
 	
 		string AutostartDir {
-		  get {
-		      return Paths.Combine (Paths.UserHome, ".config/autostart");
+			get {
+				return System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "autostart");
 		    }
 		}
 		
 		string AutostartFile {
 		  get {
-		      return Paths.Combine (AutostartDir, "gnome-do.desktop");
+		      return System.IO.Path.Combine (AutostartDir, "gnome-do.desktop");
 		    }
 		}
 		

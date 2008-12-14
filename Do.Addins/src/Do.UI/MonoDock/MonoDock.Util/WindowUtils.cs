@@ -49,7 +49,8 @@ namespace MonoDock.Util
 		{
 			StreamReader reader;
 			try {
-				reader = new StreamReader (Paths.Combine ("/proc", pid.ToString (), "cmdline"));
+				string procPath = new [] { "/proc", pid.ToString (), "cmdline" }.Aggregate (Path.Combine);
+				reader = new StreamReader (procPath);
 			} catch { return null; }
 			
 			string cmdline = reader.ReadLine ();

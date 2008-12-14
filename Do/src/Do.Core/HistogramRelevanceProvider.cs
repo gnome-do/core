@@ -188,7 +188,7 @@ namespace Do.Core {
 		public RelevanceRecord (IObject o)
 		{
 			LastHit = DateTime.Now;
-			Type = Services.Core.GetInnerType (o);
+			Type = Services.Core.Unwrap (o).GetType ();
 			FirstChars = "";
 		}
 

@@ -36,7 +36,7 @@ namespace MonoDock.UI
 		
 		static string DesktopFilesPath {
 			get {
-				return Paths.Combine (Paths.UserData, "dock_desktop_files");
+				return Services.Paths.GetApplicationDataDirectory ("dock_desktop_files");
 			}
 		}
 		

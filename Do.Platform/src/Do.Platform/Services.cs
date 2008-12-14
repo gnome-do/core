@@ -33,6 +33,7 @@ namespace Do.Platform
 	{
 
 		static ICoreService core;
+		static IPathsService paths;
 		static IWindowingService windowing;
 		static IEnumerable<ILogService> logs;
 		static PreferencesFactory preferences;
@@ -86,6 +87,8 @@ namespace Do.Platform
 				notifications = null;
 			if (service is IWindowingService)
 				windowing = null;
+			if (service is IPathsService)
+				paths = null;
 		}
 
 		public static IEnumerable<ILogService> Logs {
@@ -101,6 +104,14 @@ namespace Do.Platform
 				if (core == null)
 					core = LocateService<ICoreService, Default.CoreService> ();
 				return core;
+			}
+		}
+
+		public static IPathsService Paths {
+			get {
+				if (paths == null)
+					paths = LocateService<IPathsService, Default.PathsService> ();
+				return paths;
 			}
 		}
 

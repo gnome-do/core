@@ -78,8 +78,9 @@ namespace Do.Interface
 		static Pixbuf IconFromFile (string name, int size)
 		{
 			Pixbuf pixbuf;
-			
-			name = name.Replace ("~", Paths.UserHome);
+
+			string home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+			name = name.Replace ("~", home);
 			try	{
 				pixbuf = new Pixbuf (name, size, size);
 			} catch {

@@ -52,7 +52,7 @@ namespace MonoDock.UI
 		
 		string DesktopFilesPath {
 			get {
-				return Paths.Combine (Paths.UserData, "dock_desktop_files");
+				return Services.Paths.GetApplicationDataDirectory ("dock_desktop_files");
 			}
 		}
 		
@@ -171,11 +171,10 @@ namespace MonoDock.UI
 		IEnumerable<IItem> MostUsedItems ()
 		{
 			Func<IItem, bool> isNotSelectedText = item =>
-				Services.Core.GetInnerType (item).Name != "SelectedTextItem";
-			Func<IItem, bool> isApplication = item =>
-				Services.Core.Unwrap (item) is IApplicationItem;
+				Services.Core.Unwrap (item).GetType ().Name != "SelectedTextItem";
+			Func<IItem, bool> isApplication = item => item.Is<IApplicationItem> ();
 			Func<IItem, int> typeComparison = item =>
-				Services.Core.GetInnerType (item).GetHashCode ();
+				Services.Core.Unwrap (item).GetType ().GetHashCode ();
 
 			return statistics.GetMostUsedItems (DockPreferences.AutomaticIcons)
 				.Where (isNotSelectedText)

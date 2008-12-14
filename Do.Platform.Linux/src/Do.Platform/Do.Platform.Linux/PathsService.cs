@@ -1,4 +1,4 @@
-// ICoreService.cs
+// PathsService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -17,28 +17,33 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+
 using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 
-using Do.Universe;
-using Do.Platform.ServiceStack;
-
-namespace Do.Platform
+namespace Do.Platform.Linux
 {
 	
-	public interface ICoreService : IService
+	public class PathsService : IPathsService
 	{
-		string GetUID (IObject o);
-		IObject GetIObject (string uid);
-
-		IObject Unwrap (IObject o);
-	}
-
-	public static class IObjectCoreServiceExtensions
-	{	
-		public static bool Is<T> (this IObject self)
-			where T : IObject
+		
+		public IEnumerable<string> GetSystemPluginDirectories ()
 		{
-			return Services.Core.Unwrap (self) is T;
+			return GetSystemDataDirectories ()
+				.Select (d => Path.Combine (d, "plugins"));
+		}
+		
+		IEnumerable<string> GetSystemDataDirectories ()
+		{
+			string dataDirs;
+			
+			dataDirs = Environment.GetEnvironmentVariable ("XDG_DATA_DIRS");
+			if (string.IsNullOrEmpty (dataDirs))
+				dataDirs = "/usr/local/share:/usr/share";
+
+			return dataDirs.Split (':').Select (d => Path.Combine (d, "gnome-do"));
 		}
 	}
 }
