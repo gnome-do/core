@@ -172,11 +172,13 @@ namespace Do.Universe.Linux {
 			get {
 				if (path != null) return path;
 				
-				return path = new [] {
-					Services.Paths.GetUserDataDirectory (),
+				path = new [] {
+					Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData),
 					"Trash",
 					"files",
 				}.Aggregate (System.IO.Path.Combine);
+				Log.Fatal (path);
+				return path;
 			}
 		}
 
