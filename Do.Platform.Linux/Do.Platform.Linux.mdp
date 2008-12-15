@@ -36,7 +36,6 @@
     <File name="src/Do.Platform/Do.Platform.Linux/TrayIconService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Linux/NotificationHelper.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Linux/TrayIconPreferences.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Do.Platform.Linux/PathsService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

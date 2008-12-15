@@ -102,7 +102,7 @@ namespace Do.Universe.Linux {
 		public void UpdateItems ()
 		{
 			app_items = DesktopFilesDirectories
-				.Select (dir => dir.Replace ("~", Services.Paths.GetUserHomeDirectory ()))
+				.Select (dir => dir.Replace ("~", Environment.GetFolderPath (Environment.SpecialFolder.Personal)))
 				.SelectMany (dir => LoadDesktopFiles (dir))
 				.Cast<IItem> ()
 				.ToArray ();

@@ -96,7 +96,7 @@ namespace Do.Universe.Linux {
 		private void FillGNOMEBookmarkItems ()
 		{
 			// Assemble the path to the bookmarks file.
-			string bookmarks_file = Services.Paths.GetUserHomeDirectory (".gtk-bookmarks");
+			string bookmarks_file = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".gtk-bookmarks");
 
 			try {
 				string line;
@@ -153,7 +153,7 @@ namespace Do.Universe.Linux {
 			if (delimindex > -1) 
 				return fullpath.Substring (delimindex+2, fullpath.Length - delimindex-2);
 			else
-				return Services.Paths.GetUserHomeDirectory ();
+				return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 		}		
 
 		private string GetDirectory (string fullpath)

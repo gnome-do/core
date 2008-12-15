@@ -49,6 +49,10 @@ namespace Do.Platform.Linux
 				attachments.Aggregate ("", (es, e) => string.Format ("{0} --attach '{1}'", es, e))
 			));
 		}
+
+		string UserHome {
+			get { return Environment.GetFolderPath (Environment.SpecialFolder.Personal); }
+		}
 		
 		public void OpenUrl (string url)
 		{
@@ -59,18 +63,18 @@ namespace Do.Platform.Linux
 
 		public void OpenPath (string path)
 		{
-			Open (path.Replace ("~", Services.Paths.GetUserHomeDirectory ()));
+			Open (path.Replace ("~", UserHome));
 		}
 
 		public bool IsExecutable (string line)
 		{
-			line = line.Replace ("~", Services.Paths.GetUserHomeDirectory ());
+			line = line.Replace ("~", UserHome);
 			return IsExecutableFile (line) || CommandLineIsFoundOnPath (line);
 		}
 
 		public void Execute (string line)
 		{
-			line = line.Replace ("~", Services.Paths.GetUserHomeDirectory ());
+			line = line.Replace ("~", UserHome);
 
 			Log.Info ("Executing \"{0}\"", line);
 			if (File.Exists (line)) {

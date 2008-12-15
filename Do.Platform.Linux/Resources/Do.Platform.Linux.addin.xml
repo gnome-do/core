@@ -20,6 +20,7 @@
 	</Extension>
 
 	<Extension path="/Do/Service">
+		<Service type="Do.Platform.Common.PathsService" />
 		<Service type="Do.Platform.Common.EventsOnlyNotificationsService" />
 
 		<Service type="Do.Platform.Linux.TrayIconService" />

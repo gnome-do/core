@@ -122,6 +122,7 @@ FILES = \
 	src/Do.Core/SearchControllers/ThirdSearchController.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
+	src/PathExtensions.cs \
 	src/Do.Platform/CoreService.cs \
 	src/Do.Platform/WindowingService.cs \
 	src/Do.UI/ColorConfigurationWidget.cs \

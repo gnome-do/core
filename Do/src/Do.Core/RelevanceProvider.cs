@@ -50,7 +50,7 @@ namespace Do.Core {
 
 		public static string RelevanceFile {
 			get {
-				return Services.Paths.GetApplicationDataDirectory ("relevance7");
+				return Path.Combine (Services.Paths.UserDataDirectory, "relevance7");
 			}
 		}
 

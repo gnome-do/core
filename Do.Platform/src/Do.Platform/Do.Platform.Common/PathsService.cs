@@ -1,4 +1,4 @@
-// IPathsService.cs
+// PathsService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -17,40 +17,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+
 using System;
-using System.IO;
 
-using Do.Universe;
-using Do.Platform.ServiceStack;
-
-namespace Do.Platform
+namespace Do.Platform.Common
 {
 	
-	public interface IPathsService : IService
-	{
-		string UserDataDirectory { get; }
-		string TemporaryDirectory { get; }
-	}
-
-	public static class IPathsServiceExtensions
-	{
-		
-		public static string GetTemporaryFilePath (this IPathsService self)
-		{
-			int fileId;
-			string fileName;
-			string directory = self.TemporaryDirectory;
-			Random random = new Random ();
-
-			if (!Directory.Exists (directory))
-				Directory.CreateDirectory (directory);
-
-			do {
-				fileId = random.Next ();
-				fileName = Path.Combine (directory, fileId.ToString ());
-			} while (File.Exists (fileName));
-			return fileName;
-		}
-
+	public class PathsService :  Do.Platform.Default.PathsService
+	{	
 	}
 }

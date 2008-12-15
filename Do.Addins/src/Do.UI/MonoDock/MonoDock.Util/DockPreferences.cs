@@ -138,7 +138,7 @@ namespace MonoDock.Util
 
 		static string BlacklistFile {
 			get {
-				return Services.Paths.GetApplicationDataDirectory ("dock_blacklist");
+				return Path.Combine (Services.Paths.UserDataDirectory, "dock_blacklist");
 			}
 		}
 		

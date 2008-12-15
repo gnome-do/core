@@ -19,12 +19,60 @@
 
 
 using System;
+using System.IO;
 using System.Collections.Generic;
+
+using Do.Platform;
+using Do.Platform.ServiceStack;
 
 namespace Do.Platform.Default
 {
 	
-	public class PathsService : IPathsService
+	public class PathsService : IPathsService, IInitializedService
 	{
+		
+		const string TemporaryDirectoryName = "tmp";
+		const string ApplicationDirectoryName = "gnome-do";
+
+		public void Initialize ()
+		{
+			DeleteDirectory (TemporaryDirectory);
+
+			CreateDirectory (UserDataDirectory);
+			CreateDirectory (TemporaryDirectory);
+		}
+
+		static void CreateDirectory (string path)
+		{
+			if (Directory.Exists (path)) return;
+
+			try {
+				Directory.CreateDirectory (path);
+			} catch (Exception e) {
+				Log.Error ("Could not create directory {0}: {1}", path, e.Message);
+				Log.Debug (e.StackTrace);
+			}
+		}
+
+		static void DeleteDirectory (string path)
+		{
+			if (!Directory.Exists (path)) return;
+
+			try {
+				Directory.Delete (path, true);
+			} catch (Exception e) {
+				Log.Error ("Could not delete directory {0}: {1}", path, e.Message);
+				Log.Debug (e.StackTrace);
+			}
+		}
+		
+		public virtual string UserDataDirectory {
+			get { return Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData), ApplicationDirectoryName); }
+		}
+		
+		public virtual string TemporaryDirectory {
+			get { return Path.Combine (UserDataDirectory, TemporaryDirectoryName); }
+		}
+		
 	}
 }

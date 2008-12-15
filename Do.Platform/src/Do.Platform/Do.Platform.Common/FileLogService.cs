@@ -35,7 +35,8 @@ namespace Do.Platform.Common
 		{
 			DateTime now = DateTime.Now;
 			string logName = string.Format ("log-{0}-{1}", now.ToShortDateString (), now.ToShortTimeString ());
-			Writer = new StreamWriter (Services.Paths.GetTemporaryDirectory (logName), true);
+			string logPath = Path.Combine (Services.Paths.TemporaryDirectory, logName);
+			Writer = new StreamWriter (logPath, true);
 		}
 		
 		public override void Log (LogLevel level, string msg)
