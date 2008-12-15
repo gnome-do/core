@@ -1,4 +1,4 @@
-<Addin id="Do.Universe" namespace="Do" version="1.0" isroot="true">
+<Addin id="Universe" namespace="Do" version="1.0" isroot="true">
  
 	<Runtime>
 		<Import assembly="Do.Universe.dll"/>

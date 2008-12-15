@@ -32,6 +32,7 @@ using Do.UI;
 using Do.Addins;
 using Do.Platform;
 using Do.Universe;
+using Do.Interface;
 
 namespace Do.Core {
 
@@ -57,7 +58,7 @@ namespace Do.Core {
 				return new [] {
 					"/Do/ItemSource",
 					"/Do/Action",
-					"/Do/RenderProvider",
+					"/Do/InterfaceWindow",
 				};
 			}
 		}
@@ -103,7 +104,7 @@ namespace Do.Core {
 			// Now allow loading of non-services.
 			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnItemSourceChange);
 			AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnActionChange);
-			AddinManager.AddExtensionNodeHandler ("/Do/RenderProvider", OnIRenderThemeChange);
+			AddinManager.AddExtensionNodeHandler ("/Do/InterfaceWindow", OnInterfaceWindowChange);
 
 			InstallLocalPlugins (setup);
 		}
@@ -170,9 +171,9 @@ namespace Do.Core {
 		/// <returns>
 		/// A <see cref="IEnumerable`1"/> of IRenderTheme instances from plugins
 		/// </returns>
-		internal static IEnumerable<IRenderTheme> GetThemes () 
+		internal static IEnumerable<IDoWindow> GetThemes () 
 		{
-			return AddinManager.GetExtensionObjects ("/Do/RenderProvider", true).Cast<IRenderTheme> ();
+			return AddinManager.GetExtensionObjects ("/Do/InterfaceWindow", true).Cast<IDoWindow> ();
 		}
 
 		/// <summary>
@@ -277,14 +278,14 @@ namespace Do.Core {
 			}	
 		}
 
-		internal static void OnIRenderThemeChange (object s, ExtensionNodeEventArgs args)
+		internal static void OnInterfaceWindowChange (object s, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node;
 
 			node = args.ExtensionNode as TypeExtensionNode;
 			if (args.Change == ExtensionChange.Add) {
 				try {
-					IRenderTheme plugin = node.GetInstance () as IRenderTheme;
+					IDoWindow plugin = node.GetInstance () as IDoWindow;
 					Log.Info ("Loaded UI Plugin \"{0}\" Successfully", plugin.Name);
 				} catch (Exception e) {
 					Log.Error ("Encounted error loading \"{0}\": {0}", e.Message);

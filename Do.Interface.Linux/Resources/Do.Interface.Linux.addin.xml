@@ -1,0 +1,15 @@
+<Addin id="Interface.Linux" namespace="Do" version="1.0" isroot="true">
+ 
+	<Runtime>
+		<Import assembly="Do.Interface.Linux.dll"/>
+	</Runtime>
+
+	<Dependencies>
+		<Addin id="Universe" version="1.0" />
+		<Addin id="Platform" version="1.0" />
+	</Dependencies>
+	
+	<ExtensionPoint path="/Do/InterfaceWindow">
+		<ExtensionNode name="InterfaceWindow" objectType="Do.Interface.IDoWindow"/>
+	</ExtensionPoint>
+</Addin>

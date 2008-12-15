@@ -1,12 +1,12 @@
-<Addin id="Do.Core" namespace="Do" version="1.0">
+<Addin id="Core" namespace="Do" version="1.0">
  
 	<Runtime>
 		<Import assembly="Do.exe" />
 	</Runtime>
 	
 	<Dependencies>
-		<Addin id="Do.Platform" version="1.0" />
-		<Addin id="Do.Universe" version="1.0" />
+		<Addin id="Platform" version="1.0" />
+		<Addin id="Universe" version="1.0" />
 	</Dependencies>
 
 	<Extension path="/Do/Service">
