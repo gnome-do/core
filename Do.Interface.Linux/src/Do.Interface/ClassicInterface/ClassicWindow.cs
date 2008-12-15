@@ -57,6 +57,10 @@ namespace Do.Interface {
 			
 		//-------------------Properties-------------------
 
+		public string Name {
+			get { return "Simple"; }
+		}
+		
 		public Pane CurrentPane {
 			get {
 				return currentPane;

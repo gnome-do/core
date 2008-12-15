@@ -913,7 +913,7 @@ namespace Do.Core {
 			resultsGrown = false;
 			window.Vanish ();
 			Do.UniverseManager.UpdatesEnabled = true;
-		}	
+		}
 
 		public void ShowPreferences ()
 		{

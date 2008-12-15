@@ -12,12 +12,12 @@
 	</Runtime>
 	
 	<Dependencies>
-		<Addin id="Core" version="1.0" />
+		<Addin id="Do.Interface.Linux" version="1.0" />
 	</Dependencies>
 	
 	<!-- Extensions included in this assembly -->
 	<!-- Sources -->
 	<Extension path = "/Do/InterfaceWindow">
-		<InterfaceWindow type="Do.Interface.DockWindow" />
+		<InterfaceWindow type="Docky.Interface.DockWindow" />
 	</Extension>
 </Addin>
