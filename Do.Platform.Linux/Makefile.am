@@ -1,19 +1,8 @@
-EXTRA_DIST = 
+# Simple component buildsystem
+include $(top_srcdir)/build.rules.mk
 
-include $(top_srcdir)/Makefile.include
-
-ASSEMBLY_COMPILER_COMMAND = $(MCS)
-ASSEMBLY_COMPILER_FLAGS = $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
-ASSEMBLY = Do.Platform.Linux.dll
-ASSEMBLY_MDB = $(ASSEMBLY).mdb
-COMPILE_TARGET = library
-BUILD_DIR = ./fake
-
-if ENABLE_DEBUG
-ASSEMBLY_COMPILER_FLAGS += -debug -d:DEBUG
-endif
-
-all: $(ASSEMBLY)
+ASSEMBLY = Do.Platform.Linux
+TARGET = library
 
 FILES = \
 	src/AssemblyInfo.cs \
@@ -40,8 +29,7 @@ endif
 RESOURCES =  \
 	Resources/Do.Platform.Linux.addin.xml
 
-EXTRAS := do.platform.linux.pc.in
-LINUX_PKGCONFIG := do.platform.linux.pc
+PKG_CONFIG_FILES = do.platform.linux.pc
 
 REFERENCES =  \
 	System \
@@ -52,10 +40,9 @@ REFERENCES =  \
 	$(GNOME_SHARP_20_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
 	$(GCONF_SHARP_20_LIBS) \
-	$(NOTIFY_SHARP_LIBS) \
-	../Do.Universe/Do.Universe.dll \
-	../Do.Platform/Do.Platform.dll \
-	../Do.Interface.Linux/Do.Interface.Linux.dll
+	$(NOTIFY_SHARP_LIBS)
 
-$(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
-	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)
+PROJECT_REFERENCES = \
+	Do.Universe \
+	Do.Platform \
+	Do.Interface.Linux

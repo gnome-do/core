@@ -1,22 +1,10 @@
-EXTRA_DIST = 
+# Simple component buildsystem
+include $(top_srcdir)/build.rules.mk
 
-include $(top_srcdir)/Makefile.include
+ASSEMBLY = Do.Platform
+TARGET = library
 
-ASSEMBLY_COMPILER_COMMAND = $(MCS)
-ASSEMBLY_COMPILER_FLAGS = $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
-ASSEMBLY = Do.Platform.dll
-ASSEMBLY_MDB = $(ASSEMBLY).mdb
-COMPILE_TARGET = library
-BUILD_DIR = ./fake
-
-if ENABLE_DEBUG
-ASSEMBLY_COMPILER_FLAGS += -debug -d:DEBUG
-endif
-
-all: $(ASSEMBLY)
-
-EXTRAS := do.platform.pc.in
-LINUX_PKGCONFIG := do.platform.pc
+PKG_CONFIG_FILES = do.platform.pc
 
 FILES = \
 	src/AssemblyInfo.cs \
@@ -54,24 +42,21 @@ FILES = \
 	src/Do.Universe/Do.Universe.Common/TextItem.cs \
 	src/EnumerableExtensions.cs
 
-
 if HAVE_NUNIT
 FILES += \
 	src/Do.Platform/Do.Platform.Common/Tests/DictionaryPreferencesServiceTests.cs \
 	src/Do.Platform/Do.Platform.Preferences/Tests/PreferencesImplementationTests.cs
 endif
 
-
 RESOURCES = \
 	Resources/Do.Platform.addin.xml
+
+PROJECT_REFERENCES= \
+	Do.Universe
 
 REFERENCES =  \
 	System \
 	System.Core \
 	Mono.Posix \
 	$(MONO_ADDINS_LIBS) \
-	$(NUNIT_LIBS) \
-	../Do.Universe/Do.Universe.dll
-
-$(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
-	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)
+	$(NUNIT_LIBS)
