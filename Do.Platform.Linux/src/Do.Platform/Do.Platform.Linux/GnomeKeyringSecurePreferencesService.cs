@@ -33,6 +33,8 @@ namespace Do.Platform.Linux
 	public class GnomeKeyringSecurePreferencesService : ISecurePreferencesService
 	{
 		readonly string ErrorSavingMsg = Catalog.GetString ("Error saving {0}");
+		readonly string KeyNotFoundMsg = Catalog.GetString ("Key \"{0}\" not found in keyring");
+		readonly string FailedCastMsg = Catalog.GetStrring ("Failed to cast secret to type \"{0}\"");
 		readonly string KeyringUnavailableMsg = Catalog.GetString ("gnome-keyring-daemon could not be reached!");
 		
 		const string DefaultRootPath = "gnome-do";
@@ -59,7 +61,6 @@ namespace Do.Platform.Linux
 	
 		public bool Set<T> (string key, T val)
 		{
-			Log.Debug ("Setting \"{0}\" with \"{1}\"", key, val.ToString ());
 			Hashtable keyData;
 			
 			if (!Ring.Available) {
@@ -83,7 +84,6 @@ namespace Do.Platform.Linux
 
 		public bool TryGet<T> (string key, out T val)
 		{
-			Log.Debug ("Trying to get \"{0}\"", key);
 			Hashtable keyData;
 			TypeConverter converter;
 			
@@ -97,14 +97,12 @@ namespace Do.Platform.Linux
 			keyData[AbsolutePathForKey (key)] = key;
 			
 			try {
-				Log.Debug ("starting search for \"{0}\"", AbsolutePathForKey (key));
 				foreach (ItemData item in Ring.Find (ItemType.GenericSecret, keyData)) {
 					if (item.Attributes.ContainsKey (AbsolutePathForKey (key))) {
 						val = (T) Convert.ChangeType (item.Secret, typeof (T));
-						Log.Debug ("Found {0}", AbsolutePathForKey (key));
 						
 						if (val == null) {
-							Log.Error ("Failed to cast secret to type '{0}'", typeof (T).Name);
+							Log.Error (FailedCastMsg, typeof (T).Name);
 							break;
 						}
 						
@@ -112,7 +110,7 @@ namespace Do.Platform.Linux
 					}
 				}
 			} catch (KeyringException e) {
-				Log.Debug ("Key not found in keyring,");
+				Log.Debug (KeyNotFoundMsg, AbsolutePathForKey (key));
 				Log.Error (e.StackTrace);
 			}
 
