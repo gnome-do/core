@@ -1,4 +1,4 @@
-// WindowingImplementation.cs
+// IWindowingService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -22,7 +22,7 @@ using System;
 namespace Do.Platform
 {
 	
-	internal class WindowingImplementation : Windowing.Implementation
+	internal class WindowingService : IWindowingService
 	{
 
 #region Windowing.Implementation

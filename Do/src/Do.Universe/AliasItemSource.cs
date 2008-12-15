@@ -56,7 +56,7 @@ namespace Do.Universe {
 		
 		static string AliasFile {
 			get {
-				return Paths.Combine (Paths.UserData, typeof (AliasItemSource).FullName);
+				return Path.Combine (Services.Paths.UserDataDirectory, typeof (AliasItemSource).FullName);
 			}
 		}
 		

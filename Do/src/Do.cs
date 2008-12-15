@@ -38,27 +38,23 @@ namespace Do {
 
 		public static CorePreferences Preferences { get; private set; } 
 
-		internal static void Main (string[] args)
+		internal static void Main (string [] args)
 		{
 			Catalog.Init ("gnome-do", AssemblyInfo.LocaleDirectory);
 			Gtk.Application.Init ();
 			Gdk.Threads.Init ();
 
 			DetectInstanceAndExit ();
-
-			UniverseFactory.Initialize (new UniverseFactoryImplementation ());
-			Paths.Initialize (new PathsImplementation ());
-			Icons.Initialize (new Platform.Linux.IconsImplementation ());
-			Windowing.Initialize (new WindowingImplementation ());
-
+			
 			PluginManager.Initialize ();
 			Preferences = new CorePreferences ();
 
-			Log.DisplayLevel = Preferences.QuietStart ? LogLevel.Error : LogLevel.Info;
-			if (Preferences.Debug) Log.DisplayLevel = LogLevel.Debug;
-			
-			StatusIcon.Initialize (new Platform.Linux.StatusIconImplementation ());
-			Platform.Notifications.Initialize (new Platform.Linux.NotificationsImplementation ());
+			if (Preferences.Debug)
+				Log.DisplayLevel = LogLevel.Debug;
+			else if (Preferences.QuietStart)
+				Log.DisplayLevel = LogLevel.Error;
+			else
+				Log.DisplayLevel = LogLevel.Info;
 			
 			Util.Initialize ();
 

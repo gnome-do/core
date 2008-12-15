@@ -135,10 +135,16 @@ namespace Docky.Utilities
 			item_blacklist.Remove (item);
 			SerializeBlacklist ();
 		}
+
+		static string BlacklistFile {
+			get {
+				return Path.Combine (Services.Paths.UserDataDirectory, "dock_blacklist");
+			}
+		}
 		
 		static List<string> DeserializeBlacklist ()
 		{
-			string file = Paths.Combine (Paths.UserData, "dock_blacklist");
+			string file = BlacklistFile;
 			if (!File.Exists (file))
 				return new List<string> ();
 			
@@ -154,7 +160,7 @@ namespace Docky.Utilities
 		
 		static void SerializeBlacklist ()
 		{
-			string file = Paths.Combine (Paths.UserData, "dock_blacklist");
+			string file = BlacklistFile;
 			
 			try {
 				Stream s = File.Open (file, FileMode.OpenOrCreate);

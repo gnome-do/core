@@ -300,7 +300,7 @@ namespace Do.Interface {
 			click_near_settings_icon = (end_x - 27) <= click_x && click_x < end_x &&
 			                            start_y <= click_y && click_y < (start_y + 27);
 			if (click_near_settings_icon) {
-				Do.Platform.Windowing.ShowMainMenu (end_x - 21, start_y + 16);
+				Services.Windowing.ShowMainMenu (end_x - 21, start_y + 16);
 				// Have to re-grab the pane from the menu.
 				Interface.Windowing.PresentWindow (this);
 			} else if (!click_on_window) {

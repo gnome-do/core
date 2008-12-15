@@ -35,7 +35,7 @@ namespace Docky.Interface
 		
 		static string DesktopFilesPath {
 			get {
-				return Paths.Combine (Paths.UserData, "dock_desktop_files");
+				return Path.Combine (Services.Paths.UserDataDirectory, "dock_desktop_files");
 			}
 		}
 		
@@ -111,7 +111,7 @@ namespace Docky.Interface
 		{
 			IApplicationItem appItem;
 			try {
-				appItem = UniverseFactory.NewApplicationItem (desktopFile);
+				appItem = Services.UniverseFactory.NewApplicationItem (desktopFile);
 			} catch {
 				return null;
 			}
@@ -122,7 +122,7 @@ namespace Docky.Interface
 		{
 			IFileItem fileItem;
 			try {
-				fileItem = UniverseFactory.NewFileItem (file);
+				fileItem = Services.UniverseFactory.NewFileItem (file);
 			} catch {
 				return null;
 			}

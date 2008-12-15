@@ -31,6 +31,7 @@ namespace Do.Interface
 {
 	public static class IconProvider
 	{
+		const string MissingIconIcon = "embled-noread";
 		static readonly Pixbuf UnknownPixbuf;
 		public const int DefaultIconSize = 80;
 		
@@ -77,8 +78,9 @@ namespace Do.Interface
 		static Pixbuf IconFromFile (string name, int size)
 		{
 			Pixbuf pixbuf;
-			
-			name = name.Replace ("~", Paths.UserHome);
+
+			string home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+			name = name.Replace ("~", home);
 			try	{
 				pixbuf = new Pixbuf (name, size, size);
 			} catch {
@@ -164,8 +166,8 @@ namespace Do.Interface
 			// icon selection was made.
 			
 			// Try to load a pretty "no icon found" icon.
-			if (name != Icons.MissingIconIcon) {
-				pixbuf = PixbufFromIconName (Icons.MissingIconIcon, size);
+			if (name != MissingIconIcon) {
+				pixbuf = PixbufFromIconName (MissingIconIcon, size);
 				if (pixbuf != null) return false;
 			}
 			

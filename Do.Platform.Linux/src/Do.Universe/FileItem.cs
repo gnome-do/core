@@ -35,7 +35,7 @@ namespace Do.Universe.Linux {
 	/// can be created and registered with FileItem for instantiation
 	/// in the factory method FileItem.Create.
 	/// </summary>
-	public class FileItem : IFileItem, IOpenableItem {
+	internal class FileItem : IFileItem, IOpenableItem {
 
 		static FileItem ()
 		{
@@ -55,7 +55,7 @@ namespace Do.Universe.Linux {
 		{
 			if (null == path) throw new ArgumentNullException ();
 
-			return path.Replace (Paths.UserHome, "~");
+			return path.Replace (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "~");
 		}
 
 		string icon;

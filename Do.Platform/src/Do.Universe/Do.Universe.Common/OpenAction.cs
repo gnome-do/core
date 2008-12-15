@@ -61,7 +61,7 @@ namespace Do.Universe.Common
 		{
 			if (item is ITextItem) {	
 				// Check if typed text is a valid path.
-				string path = (item as ITextItem).Text.Replace ("~", Paths.UserHome);
+				string path = (item as ITextItem).Text.Replace ("~", Environment.GetFolderPath (Environment.SpecialFolder.Personal));
 				if (256 < path.Length) return false;
 				return Directory.Exists (path) || File.Exists (path);
 			}

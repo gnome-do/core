@@ -10,11 +10,10 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/ConsoleLogService.cs \
 	src/Do.Platform/Do.Platform.Linux/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Linux/GConfPreferencesService.cs \
-	src/Do.Platform/IconsImplementation.cs \
-	src/Do.Platform/NotificationsImplementation.cs \
-	src/Do.Platform/PathsImplementation.cs \
-	src/Do.Platform/StatusIconImplementation.cs \
-	src/Do.Platform/UniverseFactoryImplementation.cs \
+	src/Do.Platform/Do.Platform.Linux/NotificationHelper.cs \
+	src/Do.Platform/Do.Platform.Linux/TrayIconPreferences.cs \
+	src/Do.Platform/Do.Platform.Linux/TrayIconService.cs \
+	src/Do.Platform/Do.Platform.Linux/UniverseFactoryService.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \

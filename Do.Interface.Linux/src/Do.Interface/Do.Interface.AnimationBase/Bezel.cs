@@ -102,7 +102,7 @@ namespace Do.Interface.AnimationBase
 				controller.ButtonPressOffWindow ();
 				break;
 			case PointLocation.Preferences:
-				Platform.Windowing.ShowMainMenu (global_point.X, global_point.Y);
+				Services.Windowing.ShowMainMenu (global_point.X, global_point.Y);
 				// Have to re-grab the pane from the menu.
 				Interface.Windowing.PresentWindow (this);
 				break;

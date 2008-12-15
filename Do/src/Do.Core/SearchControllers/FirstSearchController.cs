@@ -60,7 +60,7 @@ namespace Do.Core
 				} else if (context.SecondaryCursors.Any ()) {
 					// This is pretty bad.
 					yield return 
-						Services.Core.GetInnerType (Results [SecondaryCursors [0]]);
+						Services.Core.Unwrap (Results [SecondaryCursors [0]]).GetType ();
 				} else {
 					foreach (Type t in defaultFilter) yield return t;
 				}
