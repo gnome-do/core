@@ -20,8 +20,6 @@
 
 using System;
 
-using Do.Platform.ServiceStack;
-
 namespace Do.Platform
 {
 	

@@ -32,20 +32,20 @@ namespace Do.Platform.Default
 
 		public bool Set<T> (string key, T val)
 		{
-			Log.Debug ("Default ISecurePreferencesService cannot set key \"{0}\".", key);
+			Log.Debug ("Default Secure IPreferencesService cannot set key \"{0}\".", key);
 			return false;
 		}
 		
 		public bool TryGet<T> (string key, out T val)
 		{
-			Log.Debug ("Default ISecurePreferencesService cannot get key \"{0}\".", key);
+			Log.Debug ("Default Secure IPreferencesService cannot get key \"{0}\".", key);
 			val = default (T);
 			return false;
 		}
 
 		public string AbsolutePathForKey (string key)
 		{
-			Log.Debug ("Default ISecurePreferencesService cannot find absolute path for key \"{0}\".", key);
+			Log.Debug ("Default Secure IPreferencesService cannot find absolute path for key \"{0}\".", key);
 			return "";
 		}
 

@@ -36,10 +36,9 @@ FILES = \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/ILogService.cs \
 	src/Do.Platform/IPreferences.cs \
-	src/Do.Platform/IPreferencesSecureExtensions.cs \
 	src/Do.Platform/IPreferencesService.cs \
-	src/Do.Platform/ISecurePreferencesService.cs \
 	src/Do.Platform/Icons.cs \
+	src/Do.Platform/ISecurePreferencesService.cs \
 	src/Do.Platform/Log.cs \
 	src/Do.Platform/Notifications.cs \
 	src/Do.Platform/Paths.cs \

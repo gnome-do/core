@@ -107,7 +107,7 @@ namespace Do.Platform
 			get {
 				if (preferences == null) {
 					IPreferencesService service = LocateService<IPreferencesService, Default.PreferencesService> ();
-					ISecurePreferencesService secureService = LocateService<ISecurePreferencesService, Default.SecurePreferencesService> ();
+					IPreferencesService secureService = LocateService<ISecurePreferencesService, Default.SecurePreferencesService> ();
 					preferences = new PreferencesFactory (service, secureService);
 				}
 				return preferences;

@@ -60,6 +60,8 @@ namespace Do
 			return Env.GetCommandLineArgs ().Contains (option);
 		}
 
+		public event EventHandler<PreferenceChangedEventArgs> KeybindingChanged;
+
 		public event EventHandler<PreferenceChangedEventArgs> PreferenceChanged {
 			add { Preferences.PreferenceChanged += value; }
 			remove { Preferences.PreferenceChanged -= value; }
@@ -74,7 +76,7 @@ namespace Do
 		}
 
 		public string SummonKeybindingPath {
-			get { return Preferences.AbsolutePathForKey(SummonKeybindingKey); }
+			get { return Preferences.AbsolutePathForKey (SummonKeybindingKey); }
 		}
 		public string SummonKeybinding {
 			get { return Preferences.Get (SummonKeybindingKey, SummonKeybindingDefaultValue); }
