@@ -70,30 +70,11 @@ namespace Do.Core {
 				repository_urls = new Dictionary<string, IEnumerable<string>> ();      
 				//repository_urls ["Official Plugins"] = new[] { OfficialRepo };
 				//repository_urls ["Community Plugins"] = new[] { CommunityRepo };
-				repository_urls ["Local Plugins"] = SystemPluginDirectories
+				repository_urls ["Local Plugins"] = Paths.SystemPluginDirectories
 					.Select (repo => "file://" + repo)
 					.ToArray ();
 
 				return repository_urls;
-			}
-		}
-
-		public static string UserPluginsDirectory {
-			get {
-				string userData = Environment.GetFolderPath (
-					Environment.SpecialFolder.LocalApplicationData);
-				string pluginDirectory = "plugins-" + AssemblyInfo.DisplayVersion;
-				return userData.Combine ("gnome-do", pluginDirectory);
-			}
-		}
-
-		static IEnumerable<string> SystemPluginDirectories {
-			get {
-				yield return AppDomain.CurrentDomain.BaseDirectory;
-
-				string systemData = Environment.GetFolderPath (
-					Environment.SpecialFolder.CommonApplicationData);
-				yield return systemData.Combine ("gnome-do", "plugins");
 			}
 		}
 
@@ -104,7 +85,7 @@ namespace Do.Core {
 		public static void Initialize ()
 		{
 			// Initialize Mono.Addins.
-			AddinManager.Initialize (UserPluginsDirectory);
+			AddinManager.Initialize (Paths.UserPluginsDirectory);
 
 			// Register repositories.
 			SetupService setup = new SetupService (AddinManager.Registry);
@@ -210,13 +191,13 @@ namespace Do.Core {
 				Directory.GetFiles (dir, pattern).Select (f => Path.Combine (dir, f));
 			
 			// Create mpack (addin packages) out of dlls.
-			GetFilePaths (UserPluginsDirectory, "*.dll")
-				.ForEach (path => setup.BuildPackage (status, UserPluginsDirectory, new[] { path }))
+			GetFilePaths (Paths.UserPluginsDirectory, "*.dll")
+				.ForEach (path => setup.BuildPackage (status, Paths.UserPluginsDirectory, new[] { path }))
 				// We delete the dlls after creating mpacks so we don't delete any dlls prematurely.
 				.ForEach (File.Delete);
 
 			// Install each mpack file, deleting each file when finished installing it.
-			foreach (string path in GetFilePaths (UserPluginsDirectory, "*.mpack")) {
+			foreach (string path in GetFilePaths (Paths.UserPluginsDirectory, "*.mpack")) {
 				setup.Install (status, new[] { path });
 				File.Delete (path);
 			}

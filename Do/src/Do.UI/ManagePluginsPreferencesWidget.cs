@@ -99,12 +99,13 @@ namespace Do.UI
 				
 				try {
 					file = uri.Remove (0, 7);
+					string fileName = System.IO.Path.GetFileName (file);
 					if (!file.EndsWith (".dll")) {
-						errors.Add (System.IO.Path.GetFileName (file));
+						errors.Add (fileName);
 						continue;
 					}
 
-					path = System.IO.Path.Combine (PluginManager.UserPluginsDirectory, System.IO.Path.GetFileName (file));
+					path = Paths.UserPluginsDirectory.Combine (fileName);
 					File.Copy (file, path, true);
 				} catch { }
 			} 

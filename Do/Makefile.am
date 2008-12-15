@@ -111,6 +111,7 @@ FILES = \
 	src/Do.Core/HistogramRelevanceProvider.cs \
 	src/Do.Core/IObjectExtensions.cs \
 	src/Do.Core/IUniverseManager.cs \
+	src/Do.Core/Paths.cs \
 	src/Do.Core/PluginManager.cs \
 	src/Do.Core/RelevanceProvider.cs \
 	src/Do.Core/StalledActionNotification.cs \
