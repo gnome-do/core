@@ -1,4 +1,4 @@
-// IInitializedService.cs
+// IUniverseFactoryService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -19,11 +19,25 @@
 
 using System;
 
-namespace Do.Platform.ServiceStack
+using Do.Universe;
+using Do.Universe.Common;
+
+using Do.Platform.ServiceStack;
+
+namespace Do.Platform
 {
 	
-	public interface IInitializedService : IService
+	public interface IUniverseFactoryService : IService
 	{
-		void Initialize ();
+		IFileItem NewFileItem (string path);
+		IApplicationItem NewApplicationItem (string path);	
+	}
+
+	public static class IUniverseFactoryServiceExtensions
+	{
+		public static ITextItem NewTextItem (this IUniverseFactoryService self, string text)
+		{
+			return new TextItem (text);
+		}
 	}
 }

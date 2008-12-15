@@ -19,6 +19,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Mono.Unix;
@@ -95,7 +96,7 @@ namespace Do.Universe.Linux {
 		private void FillGNOMEBookmarkItems ()
 		{
 			// Assemble the path to the bookmarks file.
-			string bookmarks_file = Paths.Combine (Paths.UserHome, ".gtk-bookmarks");
+			string bookmarks_file = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".gtk-bookmarks");
 
 			try {
 				string line;
@@ -152,7 +153,7 @@ namespace Do.Universe.Linux {
 			if (delimindex > -1) 
 				return fullpath.Substring (delimindex+2, fullpath.Length - delimindex-2);
 			else
-				return Paths.UserHome;
+				return Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 		}		
 
 		private string GetDirectory (string fullpath)
@@ -163,13 +164,19 @@ namespace Do.Universe.Linux {
 		
 	}
 	
-	class GNOMETrashFileItem : IFileItem, IOpenableItem {
-		
+	class GNOMETrashFileItem : IFileItem, IOpenableItem
+	{
+
+		string path;
 		public string Path {
-			get { 
-				return Paths.Combine (
-					PathsImplementation.ReadXdgUserDir ("XDG_DATA_HOME", ".local/share"),
-					"Trash/files");
+			get {
+				if (path != null) return path;
+				
+				return path = new [] {
+					Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData),
+					"Trash",
+					"files",
+				}.Aggregate (System.IO.Path.Combine);
 			}
 		}
 

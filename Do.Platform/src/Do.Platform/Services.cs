@@ -33,9 +33,13 @@ namespace Do.Platform
 	{
 
 		static ICoreService core;
-		static IEnvironmentService environment;
-		static PreferencesFactory preferences;
+		static IPathsService paths;
+		static IWindowingService windowing;
 		static IEnumerable<ILogService> logs;
+		static PreferencesFactory preferences;
+		static IEnvironmentService environment;
+		static INotificationsService notifications;
+		static IUniverseFactoryService universe_factory;
 		
 		public static void Initialize ()
 		{
@@ -77,6 +81,14 @@ namespace Do.Platform
 				preferences = null;
 			if (service is ILogService)
 				logs = null;
+			if (service is IUniverseFactoryService)
+				universe_factory = null;
+			if (service is INotificationsService)
+				notifications = null;
+			if (service is IWindowingService)
+				windowing = null;
+			if (service is IPathsService)
+				paths = null;
 		}
 
 		public static IEnumerable<ILogService> Logs {
@@ -94,12 +106,44 @@ namespace Do.Platform
 				return core;
 			}
 		}
+
+		public static IPathsService Paths {
+			get {
+				if (paths == null)
+					paths = LocateService<IPathsService, Default.PathsService> ();
+				return paths;
+			}
+		}
+
+		public static IWindowingService Windowing {
+			get {
+				if (windowing == null)
+					windowing = LocateService<IWindowingService, Default.WindowingService> ();
+				return windowing;
+			}
+		}
 		
 		public static IEnvironmentService Environment {
 			get {
 				if (environment == null)
 					environment = LocateService<IEnvironmentService, Default.EnvironmentService> ();
 				return environment;
+			}
+		}
+
+		public static INotificationsService Notifications {
+			get {
+				if (notifications == null)
+					notifications = LocateService<INotificationsService, Default.NotificationsService> ();
+				return notifications;
+			}
+		}
+
+		public static IUniverseFactoryService UniverseFactory {
+			get {
+				if (universe_factory == null)
+					universe_factory = LocateService<IUniverseFactoryService, Default.UniverseFactoryService> ();
+				return universe_factory;
 			}
 		}
 			

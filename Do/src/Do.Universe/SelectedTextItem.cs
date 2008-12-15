@@ -31,7 +31,7 @@ namespace Do.Universe {
 		
 		public IObject Inner {
 			get {
-				return UniverseFactory.NewTextItem (Text);
+				return Services.UniverseFactory.NewTextItem (Text);
 			}
 		}
 		

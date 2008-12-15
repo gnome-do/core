@@ -1,4 +1,4 @@
-// IInitializedService.cs
+// PathsService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -17,13 +17,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+
 using System;
 
-namespace Do.Platform.ServiceStack
+namespace Do.Platform.Common
 {
 	
-	public interface IInitializedService : IService
-	{
-		void Initialize ();
+	public class PathsService :  Do.Platform.Default.PathsService
+	{	
 	}
 }

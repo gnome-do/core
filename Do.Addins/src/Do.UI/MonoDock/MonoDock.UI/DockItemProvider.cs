@@ -52,7 +52,7 @@ namespace MonoDock.UI
 		
 		string DesktopFilesPath {
 			get {
-				return Paths.Combine (Paths.UserData, "dock_desktop_files");
+				return Path.Combine (Services.Paths.UserDataDirectory, "dock_desktop_files");
 			}
 		}
 		
@@ -125,10 +125,10 @@ namespace MonoDock.UI
 				return;
 			
 			if (filename.EndsWith (".desktop")) {
-				IObject o = UniverseFactory.NewApplicationItem (filename);
+				IObject o = Services.UniverseFactory.NewApplicationItem (filename);
 				custom_items[filename] = new DockItem (o);
 			} else {
-				IObject o = UniverseFactory.NewFileItem (filename);
+				IObject o = Services.UniverseFactory.NewFileItem (filename);
 				custom_items[filename] = new DockItem (o);
 			}
 			
@@ -171,11 +171,10 @@ namespace MonoDock.UI
 		IEnumerable<IItem> MostUsedItems ()
 		{
 			Func<IItem, bool> isNotSelectedText = item =>
-				Services.Core.GetInnerType (item).Name != "SelectedTextItem";
-			Func<IItem, bool> isApplication = item =>
-				Services.Core.Unwrap (item) is IApplicationItem;
+				Services.Core.Unwrap (item).GetType ().Name != "SelectedTextItem";
+			Func<IItem, bool> isApplication = item => item.Is<IApplicationItem> ();
 			Func<IItem, int> typeComparison = item =>
-				Services.Core.GetInnerType (item).GetHashCode ();
+				Services.Core.Unwrap (item).GetType ().GetHashCode ();
 
 			return statistics.GetMostUsedItems (DockPreferences.AutomaticIcons)
 				.Where (isNotSelectedText)

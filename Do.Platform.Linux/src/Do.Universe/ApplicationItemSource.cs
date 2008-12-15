@@ -42,7 +42,7 @@ namespace Do.Universe.Linux {
 		static IEnumerable<String> DesktopFilesDirectories {
 			get {
 				return new [] {
-					Paths.UserDesktop,
+					Environment.GetFolderPath (Environment.SpecialFolder.Desktop),
 					"~/.local/share/applications",
 					"~/.local/share/applications/wine",
 					"~/.local/share/applications/wine/Programs",
@@ -102,7 +102,7 @@ namespace Do.Universe.Linux {
 		public void UpdateItems ()
 		{
 			app_items = DesktopFilesDirectories
-				.Select (dir => dir.Replace ("~", Paths.UserHome))
+				.Select (dir => dir.Replace ("~", Environment.GetFolderPath (Environment.SpecialFolder.Personal)))
 				.SelectMany (dir => LoadDesktopFiles (dir))
 				.Cast<IItem> ()
 				.ToArray ();

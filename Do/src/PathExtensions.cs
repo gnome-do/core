@@ -1,4 +1,4 @@
-// UniverseFactoryImplementation.cs
+// IPathsService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -18,23 +18,17 @@
 //
 
 using System;
+using System.IO;
+using System.Linq;
 
-using Do.Universe;
-using Do.Universe.Linux;
-
-namespace Do.Platform
+namespace Do
 {
-	public class UniverseFactoryImplementation : UniverseFactory.Implementation
+	
+	public static class PathExtensions
 	{
-		
-		public IFileItem NewFileItem (string path)
+		public static string Combine (this string self, params string [] paths)
 		{
-			return new FileItem (path);
-		}
-
-		public IApplicationItem NewApplicationItem (string path)
-		{
-			return ApplicationItem.CreateFromDesktopItem (path);
+			return Path.Combine (self, paths.Aggregate (Path.Combine));
 		}
 	}
 }

@@ -33,13 +33,12 @@ namespace Do.Platform
 		IObject Unwrap (IObject o);
 	}
 
-
-	public static class ICoreServiceExtensions
-	{
-		
-		public static Type GetInnerType (this ICoreService self, IObject o)
+	public static class IObjectCoreServiceExtensions
+	{	
+		public static bool Is<T> (this IObject self)
+			where T : IObject
 		{
-			return self.Unwrap (o).GetType ();
+			return Services.Core.Unwrap (self) is T;
 		}
 	}
 }

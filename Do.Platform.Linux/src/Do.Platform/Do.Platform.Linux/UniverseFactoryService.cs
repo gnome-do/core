@@ -1,4 +1,4 @@
-// UniverseFactory.cs
+// UniverseFactoryService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -20,45 +20,23 @@
 using System;
 
 using Do.Universe;
-using Do.Universe.Common;
+using Do.Universe.Linux;
+using Do.Platform;
 
-namespace Do.Platform
+namespace Do.Platform.Linux
 {
 	
-	public static class UniverseFactory
+	public class UniverseFactoryService : IUniverseFactoryService
 	{
-
-		public interface Implementation
-		{
-			IFileItem NewFileItem (string path);
-			IApplicationItem NewApplicationItem (string path);
-		}
-
-		public static Implementation Imp { get; private set; }
-
-		public static void Initialize (Implementation imp)
-		{
-			if (Imp != null)
-				throw new Exception ("Already has Implementation");
-			if (imp == null)
-				throw new ArgumentNullException ("Implementation may not be null");
-			
-			Imp = imp;
-		}
-
-		public static IFileItem NewFileItem (string path)
-		{
-			return Imp.NewFileItem (path);
-		}
 		
-		public static IApplicationItem NewApplicationItem (string path)
+		public IFileItem NewFileItem (string path)
 		{
-			return Imp.NewApplicationItem (path);
+			return new FileItem (path);
 		}
 
-		public static ITextItem NewTextItem (string text)
+		public IApplicationItem NewApplicationItem (string path)
 		{
-			return new TextItem (text);
+			return ApplicationItem.CreateFromDesktopItem (path);
 		}
 	}
 }

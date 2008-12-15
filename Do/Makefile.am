@@ -111,8 +111,10 @@ FILES = \
 	src/Do.Core/HistogramRelevanceProvider.cs \
 	src/Do.Core/IObjectExtensions.cs \
 	src/Do.Core/IUniverseManager.cs \
+	src/Do.Core/Paths.cs \
 	src/Do.Core/PluginManager.cs \
 	src/Do.Core/RelevanceProvider.cs \
+	src/Do.Core/StalledActionNotification.cs \
 	src/Do.Core/SearchControllers/FirstSearchController.cs \
 	src/Do.Core/SearchControllers/ISearchController.cs \
 	src/Do.Core/SearchControllers/SecondSearchController.cs \
@@ -121,8 +123,9 @@ FILES = \
 	src/Do.Core/SearchControllers/ThirdSearchController.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.cs \
+	src/PathExtensions.cs \
 	src/Do.Platform/CoreService.cs \
-	src/Do.Platform/WindowingImplementation.cs \
+	src/Do.Platform/WindowingService.cs \
 	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
