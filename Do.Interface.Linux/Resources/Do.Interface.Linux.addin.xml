@@ -5,8 +5,8 @@
 	</Runtime>
 
 	<Dependencies>
-		<Addin id="Do.Universe" version="1.0" />
-		<Addin id="Do.Platform" version="1.0" />
+		<Addin id="Universe" version="1.0" />
+		<Addin id="Platform" version="1.0" />
 	</Dependencies>
 	
 	<ExtensionPoint path="/Do/InterfaceWindow">
