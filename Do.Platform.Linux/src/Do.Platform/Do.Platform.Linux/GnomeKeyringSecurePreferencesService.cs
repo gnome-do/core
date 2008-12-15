@@ -100,7 +100,7 @@ namespace Do.Platform.Linux
 				Log.Debug ("starting search for \"{0}\"", AbsolutePathForKey (key));
 				foreach (ItemData item in Ring.Find (ItemType.GenericSecret, keyData)) {
 					if (item.Attributes.ContainsKey (AbsolutePathForKey (key))) {
-						val = (T) converter.ConvertFromString (item.Secret);
+						val = (T) Convert.ChangeType (item.Secret, typeof (T));
 						Log.Debug ("Found {0}", AbsolutePathForKey (key));
 						
 						if (val == null) {
