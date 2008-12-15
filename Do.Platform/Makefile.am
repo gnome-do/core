@@ -24,6 +24,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Common/DictionaryPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Common/EventsOnlyNotificationsService.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogService.cs \
+	src/Do.Platform/Do.Platform.Common/PathsService.cs \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
