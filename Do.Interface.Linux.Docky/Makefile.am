@@ -15,6 +15,7 @@ FILES = \
 	src/Docky.Interface/DockWindow.cs \
 	src/Docky.Interface/Docky.Interface.Renderers/DockBackgroundRenderer.cs \
 	src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs \
+	src/Docky.Interface/DrawState.cs \
 	src/Docky.Interface/IDockItem.cs \
 	src/Docky.Interface/ItemMenu.cs \
 	src/Docky.Interface/SeparatorItem.cs \
