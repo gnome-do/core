@@ -131,13 +131,13 @@ namespace Do.Platform.Preferences
 		{
 			T val;
 			
-			TryGet<T> (SecureService, key, def, out val);
+			TryGet (SecureService, key, def, out val);
 			return val;
 		}
 
 		public bool SecureSet<T> (string key, T val)
 		{
-			return Set<T> (SecureService, key, val);
+			return Set (SecureService, key, val);
 		}
 
 		public bool SecureTryGet<T> (string key, out T val)

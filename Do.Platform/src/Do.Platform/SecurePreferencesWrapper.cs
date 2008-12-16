@@ -19,11 +19,12 @@
  */
 
 using System;
+using System.ComponentModel;
 
 namespace Do.Platform
 {
 	
-	public class SecurePreferencesServiceWrapper : ISecurePreferencesService
+	public class SecurePreferencesServiceWrapper : IPreferencesService
 	{
 		ISecurePreferencesService SecureService { get; set; }
 		
@@ -39,14 +40,22 @@ namespace Do.Platform
 
 		public bool Set<T> (string key, T val)
 		{
-			return SecureService.Set<T> (key, val);
+			CheckType<T> ();
+			
+			return SecureService.Set (key, val.ToString ());
 		}
 
 		public bool TryGet<T> (string key, out T val)
 		{
+			string retVal;
+			bool success;
+			
 			CheckType<T> ();
 
-			return SecureService.TryGet<T> (key, out val);
+			success = SecureService.TryGet (key, out retVal);
+			val = (T) Convert.ChangeType (retVal, typeof (T));
+			
+			return success;
 		}
 
 		void CheckType<T> ()

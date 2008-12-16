@@ -20,10 +20,15 @@
 
 using System;
 
+using Do.Platform.ServiceStack;
+
 namespace Do.Platform
 {
 	
-	public interface ISecurePreferencesService : IPreferencesService
+	public interface ISecurePreferencesService : IService
 	{
+		bool Set (string key, string val);
+		bool TryGet (string key, out string val);
+		string AbsolutePathForKey (string key);
 	}
 }

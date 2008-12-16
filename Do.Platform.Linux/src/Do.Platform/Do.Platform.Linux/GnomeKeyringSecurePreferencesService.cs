@@ -59,7 +59,7 @@ namespace Do.Platform.Linux
 			return string.Format ("{0}/{1}", RootPath, key);
 		}
 	
-		public bool Set<T> (string key, T val)
+		public bool Set (string key, string val)
 		{
 			Hashtable keyData;
 			
@@ -82,7 +82,7 @@ namespace Do.Platform.Linux
 			return true;
 		}
 
-		public bool TryGet<T> (string key, out T val)
+		public bool TryGet (string key, out string val)
 		{
 			Hashtable keyData;
 			
@@ -98,13 +98,7 @@ namespace Do.Platform.Linux
 				foreach (ItemData item in Ring.Find (ItemType.GenericSecret, keyData)) {
 					if (!item.Attributes.ContainsKey (AbsolutePathForKey (key))) continue;
 
-					val = (T) Convert.ChangeType (item.Secret, typeof (T));
-						
-					if (val == null) {
-						Log.Error (FailedCastMessage, typeof (T).Name);
-						break;
-					}
-						
+					val = item.Secret;
 					return true;
 				}
 			} catch (KeyringException e) {

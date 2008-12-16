@@ -77,6 +77,7 @@ namespace Do.Platform
 				core = null;
 			if (service is IEnvironmentService)
 				environment = null;
+			// Although it is not obvious, this also takes care of the ISecurePreferences service.
 			if (service is IPreferencesService)
 				preferences = null;
 			if (service is ILogService)

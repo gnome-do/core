@@ -32,13 +32,15 @@ namespace Do.Platform.Preferences
 		bool PreferencesDidChange { get; set; }
 		IPreferences Preferences { get; set; }
 		IPreferencesService Service { get; set; }
+		ISecurePreferencesService SecureService { get; set; }
 		PreferencesChangedEventArgs PreferencesChangedArgs { get; set; }
 
 		[SetUp]
 		public void SetUp ()
 		{
 			Service = new Common.DictionaryPreferencesService ();
-			Preferences = new PreferencesImplementation<PreferencesImplementationTests> (Service, Service as ISecurePreferencesService);
+			SecureService = null;
+			Preferences = new PreferencesImplementation<PreferencesImplementationTests> (Service, SecureService);
 			RootPath = "/" + typeof (PreferencesImplementationTests).Name;
 			PreferencesDidChange = false;
 			Preferences.PreferencesChanged += PreferencesChanged;

@@ -30,16 +30,16 @@ namespace Do.Platform.Default
 
 		#region ISecurePreferencesService
 
-		public bool Set<T> (string key, T val)
+		public bool Set (string key, string val)
 		{
 			Log.Debug ("Default Secure IPreferencesService cannot set key \"{0}\".", key);
 			return false;
 		}
 		
-		public bool TryGet<T> (string key, out T val)
+		public bool TryGet (string key, out string val)
 		{
 			Log.Debug ("Default Secure IPreferencesService cannot get key \"{0}\".", key);
-			val = default (T);
+			val = "";
 			return false;
 		}
 
