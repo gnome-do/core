@@ -42,16 +42,13 @@ namespace Do.Platform.Preferences
 		/// IPreferences factory method with a little bit of type-level protection.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="IPreferences"/> for exclusive use by type T.
+		/// A <see cref="IPreferences"/> for exclusive use by type TOwner. TOwner
+		/// should be a type that the caller has exclusive access to (e.g. an
+		/// internal class).
 		/// </returns>
-		public IPreferences Get<T> ()
+		public IPreferences Get<TOwner> () where TOwner : class
 		{
-			return Get (typeof (T).Name);
-		}
-
-		protected IPreferences Get (string key)
-		{
-			return new PreferencesImplementation (Service, SecureService, key);
+			return new PreferencesImplementation<TOwner> (Service, SecureService);
 		}
 	}
 }

@@ -48,23 +48,14 @@ namespace Do
 		const string LogToFileOption = "--log-to-file";
 		#endregion
 
+		public event EventHandler<PreferencesChangedEventArgs> ThemeChanged;
+		
 		IPreferences Preferences { get; set; }
 		
 		public CorePreferences ()
 		{
 			Preferences = Services.Preferences.Get<CorePreferences> ();
-		}
-
-		bool HasOption (string option)
-		{
-			return Env.GetCommandLineArgs ().Contains (option);
-		}
-
-		public event EventHandler<PreferenceChangedEventArgs> KeybindingChanged;
-
-		public event EventHandler<PreferenceChangedEventArgs> PreferenceChanged {
-			add { Preferences.PreferenceChanged += value; }
-			remove { Preferences.PreferenceChanged -= value; }
+			Preferences.PreferencesChanged += PreferencesChanged;
 		}
 		
 		public bool WriteLogToFile {
@@ -106,6 +97,21 @@ namespace Do
 		public bool AlwaysShowResults {
 			get { return Preferences.Get (AlwaysShowResultsKey, AlwaysShowResultsDefaultValue); }
 			set { Preferences.Set (AlwaysShowResultsKey, value); }
+		}
+
+		
+		bool HasOption (string option)
+		{
+			return Env.GetCommandLineArgs ().Contains (option);
+		}
+
+		void PreferencesChanged (object sender, PreferencesChangedEventArgs e)
+		{
+			switch (e.Key) {
+			case ThemeKey:
+				if (ThemeChanged != null) ThemeChanged (this, e);
+				break;
+			}
 		}
 	}
 }

@@ -1,22 +1,10 @@
-EXTRA_DIST = 
+# Simple component buildsystem
+include $(top_srcdir)/build.rules.mk
 
-include $(top_srcdir)/Makefile.include
+ASSEMBLY = Do.Universe
+TARGET = library
 
-ASSEMBLY_COMPILER_COMMAND = $(MCS)
-ASSEMBLY_COMPILER_FLAGS = $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
-ASSEMBLY = Do.Universe.dll
-ASSEMBLY_MDB = $(ASSEMBLY).mdb
-COMPILE_TARGET = library
-BUILD_DIR=./fake
-
-if ENABLE_DEBUG
-ASSEMBLY_COMPILER_FLAGS += -debug -d:DEBUG
-endif
-
-all: $(ASSEMBLY)
-
-EXTRAS := do.universe.pc.in
-LINUX_PKGCONFIG := do.universe.pc
+PKG_CONFIG_FILES = do.universe.pc
 
 FILES = \
 	src/AssemblyInfo.cs \
@@ -45,6 +33,3 @@ REFERENCES =  \
 	System \
 	System.Core \
 	Mono.Posix
-
-$(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
-	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)

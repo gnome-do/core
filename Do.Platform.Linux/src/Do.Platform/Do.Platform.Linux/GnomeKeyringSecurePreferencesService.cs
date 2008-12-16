@@ -34,7 +34,7 @@ namespace Do.Platform.Linux
 	{
 		readonly string ErrorSavingMsg = Catalog.GetString ("Error saving {0}");
 		readonly string KeyNotFoundMsg = Catalog.GetString ("Key \"{0}\" not found in keyring");
-		readonly string FailedCastMsg = Catalog.GetStrring ("Failed to cast secret to type \"{0}\"");
+		readonly string FailedCastMsg = Catalog.GetString ("Failed to cast secret to type \"{0}\"");
 		readonly string KeyringUnavailableMsg = Catalog.GetString ("gnome-keyring-daemon could not be reached!");
 		
 		const string DefaultRootPath = "gnome-do";

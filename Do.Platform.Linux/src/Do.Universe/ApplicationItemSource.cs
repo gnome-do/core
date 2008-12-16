@@ -42,7 +42,7 @@ namespace Do.Universe.Linux {
 		static IEnumerable<String> DesktopFilesDirectories {
 			get {
 				return new [] {
-					Paths.UserDesktop,
+					Environment.GetFolderPath (Environment.SpecialFolder.Desktop),
 					"~/.local/share/applications",
 					"~/.local/share/applications/wine",
 					"~/.local/share/applications/wine/Programs",
@@ -93,21 +93,17 @@ namespace Do.Universe.Linux {
 				return Enumerable.Empty<ApplicationItem> ();
 
 			return Directory.GetFiles (dir, "*.desktop")
-				.Select (file => ApplicationItem.MaybeCreate (file))
+				.Select (file => ApplicationItem.CreateFromDesktopItem (file))
 				.Where (app => app != null &&
-							   app.IsAppropriateForCurrentDesktop &&
-							   (show_hidden || !app.NoDisplay));
+								app.IsAppropriateForCurrentDesktop &&
+								(show_hidden || !app.NoDisplay));
 		}
 
 		public void UpdateItems ()
 		{
-			// Updating is turned off because it uses a ridiculous amount of memory.
-			if (app_items.Any ()) return;
-			
 			app_items = DesktopFilesDirectories
-				.Select (dir => dir.Replace ("~", Paths.UserHome))
-				.Select (dir => LoadDesktopFiles (dir))
-				.Aggregate ((a, b) => a.Concat (b))
+				.Select (dir => dir.Replace ("~", Environment.GetFolderPath (Environment.SpecialFolder.Personal)))
+				.SelectMany (dir => LoadDesktopFiles (dir))
 				.Cast<IItem> ()
 				.ToArray ();
 		}

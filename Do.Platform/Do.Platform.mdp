@@ -1,4 +1,4 @@
-<Project name="Do.Platform" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
+<Project name="Do.Platform" fileversion="2.0" language="C#" clr-version="Net_2_0" targetFramework="2.0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
       <Output directory="bin/Debug" assembly="Do.Platform" />
@@ -17,16 +17,10 @@
     <File name="src" subtype="Directory" buildaction="Compile" />
     <File name="src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform" subtype="Directory" buildaction="Compile" />
-    <File name="src/Do.Platform/UniverseFactory.cs" subtype="Code" buildaction="Compile" />
     <File name="Resources/Do.Platform.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="src/Do.Platform/Paths.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Log.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Common" subtype="Directory" buildaction="Compile" />
     <File name="src/EnumerableExtensions.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Icons.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Notifications.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/StatusIcon.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Windowing.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Services.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.ServiceStack" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.ServiceStack/IService.cs" subtype="Code" buildaction="Compile" />
@@ -45,7 +39,6 @@
     <File name="src/Do.Platform/Do.Platform.Default/CoreService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IPreferencesService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IPreferences.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/PreferenceChangedEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/PreferencesService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/ILogService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/LogService.cs" subtype="Code" buildaction="Compile" />
@@ -57,10 +50,24 @@
     <File name="src/Do.Platform/Do.Platform.Common/Tests/DictionaryPreferencesServiceTests.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Preferences" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Preferences/PreferencesFactory.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Preferences/Tests/PreferencesImplementationTests.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/PreferencesChangedEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Preferences/Tests/PreferencesImplementationTests.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/SecurePreferencesService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/ISecurePreferencesService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/IUniverseFactoryService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Default/UniverseFactoryService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/INotificationsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Default/NotificationsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/IWindowingService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Default/WindowingService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/NotificationEventArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Notification.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Common/EventsOnlyNotificationsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/IPathsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Default/PathsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Common/PathsService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -68,7 +75,7 @@
     <ProjectReference type="Gac" localcopy="True" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Universe" />
-    <ProjectReference type="Gac" localcopy="True" refto="nunit.framework, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+    <ProjectReference type="Gac" localcopy="True" refto="nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
   </References>
   <GtkDesignInfo />
 </Project>

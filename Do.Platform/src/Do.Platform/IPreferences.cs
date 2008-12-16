@@ -27,7 +27,7 @@ namespace Do.Platform
 	
 	public interface IPreferences
 	{
-		event EventHandler<PreferenceChangedEventArgs> PreferenceChanged;
+		event EventHandler<PreferencesChangedEventArgs> PreferencesChanged;
 		
 		string this [string key] { get; set; }
 

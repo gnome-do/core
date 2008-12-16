@@ -41,12 +41,10 @@ namespace Do.Universe {
 		
 		public void Run ()
 		{
-			Platform.Notifications.Notify (
+			Services.Notifications.Notify (
 				Catalog.GetString ("Clear Learning"),
 				Catalog.GetString ("Are you sure you want to clear Do's learned usage data?"),
-				"edit-clear",
-				Catalog.GetString ("Clear"),
-				() => {}
+				"edit-clear"
 			);
 		}
 

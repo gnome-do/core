@@ -28,51 +28,53 @@ namespace Do.Platform.Preferences
 	public class PreferencesImplementationTests
 	{
 
-		const string RootPath = "/test";
-		PreferencesImplementation Prefs { get; set; }
-		bool PrefChanged { get; set; }
-		PreferenceChangedEventArgs PrefChangedArgs { get; set; }
+		string RootPath { get; set; }
+		bool PreferencesDidChange { get; set; }
+		IPreferences Preferences { get; set; }
+		IPreferencesService Service { get; set; }
+		PreferencesChangedEventArgs PreferencesChangedArgs { get; set; }
 
 		[SetUp]
 		public void SetUp ()
 		{
-			IPreferencesService service = new Common.DictionaryPreferencesService ();
-			//FIXME
-			Prefs = new PreferencesImplementation (service, service, RootPath);
-			PrefChanged = false;
-			Prefs.PreferenceChanged += PrefsChanged;
+			Service = new Common.DictionaryPreferencesService ();
+			Preferences = new PreferencesImplementation<PreferencesImplementationTests> (Service, Service);
+			RootPath = "/" + typeof (PreferencesImplementationTests).Name;
+			PreferencesDidChange = false;
+			Preferences.PreferencesChanged += PreferencesChanged;
 		}
 
-		void PrefsChanged (object sender, PreferenceChangedEventArgs args)
+		void PreferencesChanged (object sender, PreferencesChangedEventArgs args)
 		{
-			PrefChangedArgs = args;
-			PrefChanged = true;
+			PreferencesChangedArgs = args;
+			PreferencesDidChange = true;
 		}
 
 		[TearDown]
 		public void TearDown ()
 		{
-			Prefs.PreferenceChanged -= PrefsChanged;
-			Prefs = null;
-			PrefChangedArgs = null;
-			PrefChanged = false;
+			Preferences.PreferencesChanged -= PreferencesChanged;
+			Preferences = null;
+			PreferencesChangedArgs = null;
+			PreferencesDidChange = false;
 		}
 
+		// TODO I would like to remove AbsolutePathForKey from IPreferences.
 		[Test()]
 		public void AbsolutePathForKey_AbsoluteKey ()
 		{
-			string absKey = Prefs.Service.AbsolutePathForKey ("/hello");
+			string absKey = Service.AbsolutePathForKey ("/hello");
 			
-			Assert.AreEqual (Prefs.AbsolutePathForKey (absKey), absKey);
+			Assert.AreEqual (Preferences.AbsolutePathForKey (absKey), absKey);
 		}
 
 		[Test()]
 		public void AbsolutePathForKey_RelativeKey ()
 		{
 			string relKey = "hello";
-			string absKey = RootPath + Prefs.Service.AbsolutePathForKey (relKey);
+			string absKey = RootPath + Service.AbsolutePathForKey (relKey);
 			
-			Assert.AreEqual (Prefs.AbsolutePathForKey (relKey), absKey);
+			Assert.AreEqual (Preferences.AbsolutePathForKey (relKey), absKey);
 		}
 
 		[Test()]
@@ -80,8 +82,8 @@ namespace Do.Platform.Preferences
 		{
 			string key = "hello", val = "world";
 			
-			Prefs [key] = val;
-			Assert.AreEqual (Prefs [key], val);
+			Preferences [key] = val;
+			Assert.AreEqual (Preferences [key], val);
 		}
 
 		[Test()]
@@ -90,8 +92,8 @@ namespace Do.Platform.Preferences
 			string key = "hello";
 			bool val = true;
 			
-			Prefs.Set (key, val);
-			Assert.AreEqual (Prefs.Get (key, false), val);
+			Preferences.Set (key, val);
+			Assert.AreEqual (Preferences.Get (key, false), val);
 		}
 
 		[Test()]
@@ -100,8 +102,8 @@ namespace Do.Platform.Preferences
 			string key = "hello";
 			bool val = true;
 			
-			Assert.IsTrue (Prefs.Set (key, val));
-			Assert.AreEqual (Prefs.Get (key, false), val);
+			Assert.IsTrue (Preferences.Set (key, val));
+			Assert.AreEqual (Preferences.Get (key, false), val);
 		}
 
 		[Test()]
@@ -110,8 +112,8 @@ namespace Do.Platform.Preferences
 			string key = "hello";
 			int val = 1;
 			
-			Prefs.Set (key, val);
-			Assert.AreEqual (Prefs.Get (key, 0), val);
+			Preferences.Set (key, val);
+			Assert.AreEqual (Preferences.Get (key, 0), val);
 		}
 
 		[Test()]
@@ -120,8 +122,8 @@ namespace Do.Platform.Preferences
 			string key = "hello";
 			int val = 1;
 			
-			Assert.IsTrue (Prefs.Set (key, val));
-			Assert.AreEqual (Prefs.Get (key, 0), val);
+			Assert.IsTrue (Preferences.Set (key, val));
+			Assert.AreEqual (Preferences.Get (key, 0), val);
 		}
 
 		[Test()]
@@ -130,8 +132,8 @@ namespace Do.Platform.Preferences
 			string key = "hello";
 			string val = "yes";
 			
-			Prefs.Set (key, val);
-			Assert.AreEqual (Prefs.Get (key, "no"), val);
+			Preferences.Set (key, val);
+			Assert.AreEqual (Preferences.Get (key, "no"), val);
 		}
 
 		[Test()]
@@ -140,30 +142,18 @@ namespace Do.Platform.Preferences
 			string key = "hello";
 			string val = "yes";
 			
-			Assert.IsTrue (Prefs.Set (key, val));
-			Assert.AreEqual (Prefs.Get (key, "no"), val);
+			Assert.IsTrue (Preferences.Set (key, val));
+			Assert.AreEqual (Preferences.Get (key, "no"), val);
 		}
 
 		[Test()]
-		public void PreferenceChanged ()
+		public void PreferencesChanged ()
 		{
-			string key = "hello";
-			string [] vals = new [] { "one", "two", "three" };
+			string key = "hello", val = "world";
 
-			for (int i = 0; i < vals.Length; ++i) {
-				PrefChanged = false;
-				
-				Prefs.Set (key, vals [i]);
-				
-				Assert.IsTrue (PrefChanged);
-				Assert.AreEqual (PrefChangedArgs.Key, key);
-				Assert.AreEqual (PrefChangedArgs.NewValue, vals [i]);
-				if (0 < i) {
-					string lastVal = PrefChangedArgs.OldValue as string;
-					Assert.IsNotNull (lastVal);
-					Assert.AreEqual (lastVal, vals [i-1]);
-				}
-			}
+			Preferences.Set (key, val);
+			Assert.IsTrue (PreferencesDidChange);
+			Assert.AreEqual (PreferencesChangedArgs.Key, key);
 		}
 		
 	}

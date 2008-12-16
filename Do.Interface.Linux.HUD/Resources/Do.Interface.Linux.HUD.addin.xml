@@ -1,0 +1,23 @@
+<Addin
+	id="HUDInterface"
+	namespace="Do"
+	version="1.0"
+	name="Nouveau Interface"
+	description="A clone of the original HUD interface for Quicksilver"
+	author="Jason Smith"
+>
+ 
+	<Runtime>
+		<Import assembly="Do.Interface.Linux.HUD.dll"/>
+	</Runtime>
+	
+	<Dependencies>
+		<Addin id="Interface.Linux" version="1.0" />
+	</Dependencies>
+	
+	<!-- Extensions included in this assembly -->
+	<!-- Sources -->
+	<Extension path = "/Do/InterfaceWindow">
+		<InterfaceWindow type="Do.Interface.HUDWindow" />
+	</Extension>
+</Addin>

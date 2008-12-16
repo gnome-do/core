@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
@@ -87,10 +88,10 @@ namespace Do.UI
 		
 		protected void OnDragDataReceived (object sender, DragDataReceivedArgs args)
 		{
-			string data = System.Text.Encoding.UTF8.GetString ( args.SelectionData.Data );
+			string data = System.Text.Encoding.UTF8.GetString (args.SelectionData.Data);
 			data = data.TrimEnd ('\0'); //sometimes we get a null at the end, and it crashes us
 			
-			string[] uriList = Regex.Split (data, "\r\n");
+			string [] uriList = Regex.Split (data, "\r\n");
 			List<string> errors = new List<string> ();
 			foreach (string uri in uriList) {
 				string file;
@@ -98,13 +99,14 @@ namespace Do.UI
 				
 				try {
 					file = uri.Remove (0, 7);
+					string fileName = System.IO.Path.GetFileName (file);
 					if (!file.EndsWith (".dll")) {
-						errors.Add (file.Substring (file.LastIndexOf ('/') + 1));
+						errors.Add (fileName);
 						continue;
 					}
-					
-					path = Paths.Combine (Paths.UserPlugins, file.Substring (file.LastIndexOf ('/') + 1));
-					System.IO.File.Copy (file, path, true);
+
+					path = Paths.UserPluginsDirectory.Combine (fileName);
+					File.Copy (file, path, true);
 				} catch { }
 			} 
 			

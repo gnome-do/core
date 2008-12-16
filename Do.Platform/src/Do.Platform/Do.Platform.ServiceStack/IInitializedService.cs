@@ -22,7 +22,7 @@ using System;
 namespace Do.Platform.ServiceStack
 {
 	
-	public interface IInitializedService
+	public interface IInitializedService : IService
 	{
 		void Initialize ();
 	}

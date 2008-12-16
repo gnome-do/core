@@ -124,11 +124,11 @@ namespace Do.Core {
 
 		public void Initialize ()
 		{
-			ThemeChanged ();
-			Do.Preferences.PreferenceChanged += (sender, args) => { if (args.Key == "Theme") ThemeChanged (); };
+			OnThemeChanged (this, null);
+			Do.Preferences.ThemeChanged += OnThemeChanged;
 		}
 		
-		void ThemeChanged ()
+		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
 		{
 			if (null != window) Vanish ();
 			
@@ -140,7 +140,8 @@ namespace Do.Core {
 			window = null;
 			
 			if (!Gdk.Screen.Default.IsComposited) {
-				window = new ClassicWindow (this);
+				window = new ClassicWindow ();
+				window.Initialize (this);
 				window.KeyPressEvent += KeyPressWrap;
 				Reset ();
 				return;
@@ -151,14 +152,12 @@ namespace Do.Core {
 			
 			window = PluginManager.GetThemes ()
 				.Where (theme => theme.Name == Do.Preferences.Theme)
-				.Select (theme => new Bezel (this, theme))
 				.FirstOrDefault ();
-			
-			if (Do.Preferences.Theme == "MonoDock")
-				window = new MonoDock.UI.DockWindow (this);
 
 			if (window == null)
-				window = new Bezel (this, new ClassicTheme ());
+				window = new ClassicWindow ();
+			
+			window.Initialize (this);
 			
 			if (window is Gtk.Window)
 				(window as Gtk.Window).Title = "Do";
@@ -885,18 +884,11 @@ namespace Do.Core {
 			if (th != null && th.IsAlive) {
 				Thread.Sleep (100);
 			}
-			
-			
+					
 			if (th != null && th.IsAlive) {
-				Platform.Notifications.Notify (
-					"GNOME Do",
-					"Do is still executing the last requested task, please wait for this to finish",
-					"dialog-error",
-					"Stop",
-					() => System.Environment.Exit (20));
+				Services.Notifications.Notify (new StalledActionNotification ());
 				return;
 			}
-			
 			
 			// We want to disable updates so that any updates to universe dont happen while controller is
 			// summoned.  We will disable this on vanish.  This way we can be sure to dedicate our CPU
@@ -914,7 +906,7 @@ namespace Do.Core {
 			resultsGrown = false;
 			window.Vanish ();
 			Do.UniverseManager.UpdatesEnabled = true;
-		}	
+		}
 
 		public void ShowPreferences ()
 		{
