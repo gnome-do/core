@@ -328,38 +328,11 @@ namespace Docky.Interface
 		
 		void RegisterEvents ()
 		{
-			Realized += delegate {
-				GdkWindow.SetBackPixmap (null, false);
-			};
+			item_provider.DockItemsChanged += OnDockItemsChanged;
 			
-			StyleSet += delegate {
-				if (IsRealized)
-					GdkWindow.SetBackPixmap (null, false);
-			};
+			ItemMenu.Instance.RemoveClicked += OnItemMenuRemoveClicked;
 			
-			item_provider.DockItemsChanged += delegate(IEnumerable<IDockItem> items) {
-				SetIconRegions ();
-				AnimatedDraw ();
-			};
-			
-			ItemMenu.Instance.RemoveClicked += delegate (Gdk.Point point) {
-				int item = DockItemForX (point.X);
-				item_provider.RemoveItem (item);
-			};
-			
-			ItemMenu.Instance.Hidden += delegate {
-				int x, y;
-				Display.GetPointer (out x, out y);
-				
-				Gdk.Rectangle geo;
-				window.GetPosition (out geo.X, out geo.Y);
-				
-				x -= geo.X;
-				y -= geo.Y;
-				
-				Cursor = new Gdk.Point (x, y);
-				AnimatedDraw ();
-			};
+			ItemMenu.Instance.Hidden += OnItemMenuHidden;
 		}
 		
 		void AnimatedDraw ()
@@ -547,6 +520,33 @@ namespace Docky.Interface
 			return new Gdk.Rectangle (x, Height-IconSize-2*VerticalBuffer, end-x, IconSize+2*VerticalBuffer);
 		}
 		
+		void OnDockItemsChanged (IEnumerable<IDockItem> items)
+		{
+			SetIconRegions ();
+			AnimatedDraw ();
+		}
+		
+		void OnItemMenuRemoveClicked (Gdk.Point point)
+		{
+			int item = DockItemForX (point.X);
+			item_provider.RemoveItem (item);
+		}
+		
+		void OnItemMenuHidden (object o, System.EventArgs args)
+		{
+			int x, y;
+			Display.GetPointer (out x, out y);
+			
+			Gdk.Rectangle geo;
+			window.GetPosition (out geo.X, out geo.Y);
+			
+			x -= geo.X;
+			y -= geo.Y;
+			
+			Cursor = new Gdk.Point (x, y);
+			AnimatedDraw ();
+		}
+		
 		#region Drag To Code
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time_)
 		{
@@ -672,6 +672,19 @@ namespace Docky.Interface
 			if (CursorIsOverDockArea && (int) (evnt.State & leave_mask) == 0 && evnt.Mode == CrossingMode.Normal)
 				Cursor = new Gdk.Point ((int) evnt.X, -1);
 			return base.OnLeaveNotifyEvent (evnt);
+		}
+		
+		protected override void OnRealized ()
+		{
+			GdkWindow.SetBackPixmap (null, false);
+			base.OnRealized ();
+		}
+		
+		protected override void OnStyleSet (Gtk.Style previous_style)
+		{
+			if (IsRealized)
+					GdkWindow.SetBackPixmap (null, false);
+			base.OnStyleSet (previous_style);
 		}
 		
 		void EndDrag ()

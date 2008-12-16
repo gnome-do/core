@@ -1,7 +1,7 @@
 <Addin id="Platform" namespace="Do" version="1.0" isroot="true">
  
 	<Runtime>
-		<Import assembly="Do.Platform.dll"/>
+		<Import assembly="Do.Platform.dll" />
 	</Runtime>
 
 	<Dependencies>
@@ -9,7 +9,7 @@
 	</Dependencies>
 	
 	<ExtensionPoint path="/Do/Service">
-		<ExtensionNode name="Service" objectType="Do.Platform.ServiceStack.IService"/>
+		<ExtensionNode name="Service" objectType="Do.Platform.ServiceStack.IService" />
 	</ExtensionPoint>
 
 	<Extension path="/Do/Action">
