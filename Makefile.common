@@ -1,0 +1,24 @@
+# Simple way of adding build-time references to Do components
+PROJECT_REFERENCES = $(foreach ref, $(COMPONENT_REFERENCES), $(BUILD_DIR)/$(ref))
+
+# Common build commands for simple sub-libraries.
+# This will build $(ASSEMBLY) in $(BUILD_DIR)
+
+ASSEMBLY_COMPILER_COMMAND = $(MCS)
+ASSEMBLY_COMPILER_FLAGS = $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
+ASSEMBLY_MDB = $(ASSEMBLY).mdb
+
+BUILD_DIR = ../build
+COMPILE_TARGET = library
+
+if ENABLE_DEBUG
+ASSEMBLY_COMPILER_FLAGS += -debug -d:DEBUG
+endif
+
+pkglib_SCRIPTS = $(BUILD_DIR)/$(ASSEMBLY)
+
+all: $(BUILD_DIR)/$(ASSEMBLY) $(BUILD_DIR)/$(ASSEMBLY_MDB)
+
+$(BUILD_DIR)/$(ASSEMBLY) $(BUILD_DIR)/$(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
+	mkdir -p $(BUILD_DIR)
+	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(BUILD_DIR)/$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)
