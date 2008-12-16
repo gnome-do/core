@@ -278,20 +278,22 @@ namespace Do.Core {
 			}	
 		}
 
-		internal static void OnInterfaceWindowChange (object s, ExtensionNodeEventArgs args)
+		static void OnInterfaceWindowChange (object sender, ExtensionNodeEventArgs e)
 		{
-			TypeExtensionNode node;
+			TypeExtensionNode node = e.ExtensionNode as TypeExtensionNode;
 
-			node = args.ExtensionNode as TypeExtensionNode;
-			if (args.Change == ExtensionChange.Add) {
+			switch (e.Change) {
+			case ExtensionChange.Add: 
 				try {
-					IDoWindow plugin = node.GetInstance () as IDoWindow;
-					Log.Info ("Loaded UI Plugin \"{0}\" Successfully", plugin.Name);
-				} catch (Exception e) {
-					Log.Error ("Encounted error loading \"{0}\": {0}", e.Message);
-					Log.Debug (e.StackTrace);
+					IDoWindow window = node.GetInstance () as IDoWindow;
+					Log.Info ("Loaded \"{0}\" interface.", window.Name);
+				} catch (Exception ex) {
+					Log.Error ("Encounted error loading interface: {0}", ex.Message);
+					Log.Debug (ex.StackTrace);
 				}
+				break;
 			}
+			
 		}
 
 		/// <summary>
