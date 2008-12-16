@@ -676,8 +676,9 @@ namespace Docky.Interface
 		
 		protected override void OnRealized ()
 		{
-			GdkWindow.SetBackPixmap (null, false);
 			base.OnRealized ();
+			if (IsRealized)
+				GdkWindow.SetBackPixmap (null, false);
 		}
 		
 		protected override void OnStyleSet (Gtk.Style previous_style)
