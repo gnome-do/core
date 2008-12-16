@@ -34,7 +34,6 @@ namespace Do.Platform.Linux
 	{
 		readonly string ErrorSavingMessage = Catalog.GetString ("Error saving {0}");
 		readonly string KeyNotFoundMessage = Catalog.GetString ("Key \"{0}\" not found in keyring");
-		readonly string FailedCastMessage = Catalog.GetString ("Failed to cast secret to type \"{0}\"");
 		readonly string KeyringUnavailableMessage = Catalog.GetString ("gnome-keyring-daemon could not be reached!");
 		
 		const string DefaultRootPath = "gnome-do";
@@ -85,6 +84,8 @@ namespace Do.Platform.Linux
 		public bool TryGet (string key, out string val)
 		{
 			Hashtable keyData;
+			
+			val = "";
 			
 			if (!Ring.Available) {
 				Log.Error (KeyringUnavailableMessage);

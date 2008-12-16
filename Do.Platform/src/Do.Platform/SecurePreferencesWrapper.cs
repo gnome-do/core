@@ -23,7 +23,11 @@ using System.ComponentModel;
 
 namespace Do.Platform
 {
-	
+	/// <summary>
+	/// Wrapper class for PreferencesImplementation that allows masquerading an ISecurePreferences
+	/// as an IPreferences object. Only string values are allowed, NotImplementedExceptions are thrown when
+	/// other types are passed.
+	/// </summary>
 	public class SecurePreferencesServiceWrapper : IPreferencesService
 	{
 		ISecurePreferencesService SecureService { get; set; }
@@ -40,25 +44,25 @@ namespace Do.Platform
 
 		public bool Set<T> (string key, T val)
 		{
-			CheckType<T> ();
+			EnsureString<T> ();
 			
 			return SecureService.Set (key, val.ToString ());
 		}
 
 		public bool TryGet<T> (string key, out T val)
 		{
-			string retVal;
+			string secureValue;
 			bool success;
 			
-			CheckType<T> ();
+			EnsureString<T> ();
 
-			success = SecureService.TryGet (key, out retVal);
-			val = (T) Convert.ChangeType (retVal, typeof (T));
+			success = SecureService.TryGet (key, out secureValue);
+			val = (T) Convert.ChangeType (secureValue, typeof (T));
 			
 			return success;
 		}
 
-		void CheckType<T> ()
+		void EnsureString<T> ()
 		{
 			if (typeof (T) != typeof (string)) throw new NotImplementedException ("Unimplemented for non string values");
 		}
