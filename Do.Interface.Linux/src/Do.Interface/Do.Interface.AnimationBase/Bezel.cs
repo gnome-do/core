@@ -53,13 +53,12 @@ namespace Do.Interface.AnimationBase
 		
 		public AbstractAnimatedInterface () : base (Gtk.WindowType.Toplevel)
 		{
-			this.controller = controller;
-			Build ();
 		}
 		
 		public void Initialize (IDoController controller)
 		{
 			this.controller = controller;
+			Build ();
 		}
 		
 		void Build ()
