@@ -30,9 +30,9 @@ namespace Do.Platform.Preferences
 	{
 		
 		internal IPreferencesService Service { get; private set; }
-		internal IPreferencesService SecureService { get; private set; }
+		internal ISecurePreferencesService SecureService { get; private set; }
 		
-		public PreferencesFactory (IPreferencesService service, IPreferencesService secureService)
+		public PreferencesFactory (IPreferencesService service, ISecurePreferencesService secureService)
 		{
 			Service = service;
 			SecureService = secureService;

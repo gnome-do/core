@@ -38,7 +38,7 @@ namespace Do.Platform.Preferences
 		public void SetUp ()
 		{
 			Service = new Common.DictionaryPreferencesService ();
-			Preferences = new PreferencesImplementation<PreferencesImplementationTests> (Service, Service);
+			Preferences = new PreferencesImplementation<PreferencesImplementationTests> (Service, Service as ISecurePreferencesService);
 			RootPath = "/" + typeof (PreferencesImplementationTests).Name;
 			PreferencesDidChange = false;
 			Preferences.PreferencesChanged += PreferencesChanged;

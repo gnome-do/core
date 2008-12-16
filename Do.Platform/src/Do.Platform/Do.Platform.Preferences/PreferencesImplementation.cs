@@ -31,7 +31,7 @@ namespace Do.Platform.Preferences
 	{
 
 		IPreferencesService Service { get; set; }
-		IPreferencesService SecureService { get; set; }
+		SecurePreferencesServiceWrapper SecureService { get; set; }
 
 		string OwnerString {
 			get {
@@ -39,10 +39,10 @@ namespace Do.Platform.Preferences
 			}
 		}
 		
-		public PreferencesImplementation (IPreferencesService service, IPreferencesService secureService)
+		public PreferencesImplementation (IPreferencesService service, ISecurePreferencesService secureService)
 		{
 			Service = service;
-			SecureService = secureService;
+			SecureService = new SecurePreferencesServiceWrapper (secureService);
 		}
 		
 		void OnPreferencesChanged (string key)
