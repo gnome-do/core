@@ -91,7 +91,6 @@ namespace Do.Platform.Linux
 				return false;
 			}
 
-			converter = new TypeConverter ();
 			keyData = new Hashtable ();
 			keyData [AbsolutePathForKey (key)] = key;
 			

@@ -40,6 +40,7 @@ FILES = \
 	src/Do.Platform/NotificationEventArgs.cs \
 	src/Do.Platform/Log.cs \
 	src/Do.Platform/PreferencesChangedEventArgs.cs \
+	src/Do.Platform/SecurePreferencesWrapper.cs \
 	src/Do.Platform/Services.cs \
 	src/Do.Universe/Do.Universe.Common/EmailAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenAction.cs \
