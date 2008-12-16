@@ -61,9 +61,11 @@ endif
 # For reasons which escape me, building the addin.xml as a resource breaks
 # prefix= builds.  Ship it separately instead.
 #
-# RESOURCES = \
-# 	Resources/Do.Platform.addin.xml
-module_DATA += $(srcdir)/Resources/Do.Platform.addin.xml
+# -- (David) but it completely breaks Do for me!
+#
+RESOURCES = \
+	Resources/Do.Platform.addin.xml
+# module_DATA += $(srcdir)/Resources/Do.Platform.addin.xml
 
 PROJECT_REFERENCES= \
 	Do.Universe
