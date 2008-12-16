@@ -62,7 +62,7 @@ namespace Do.Interface.AnimationBase
 				layout.Dispose ();
 			}
 			layout = new Pango.Layout (PangoHelper.ContextGet ());
-			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
+			layout.FontDescription = Pango.FontDescription.FromString ("sans bold");
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (TextHeight);
 			
 			layout.Width = Pango.Units.FromPixels (width);
