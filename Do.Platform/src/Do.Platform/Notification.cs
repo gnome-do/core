@@ -31,6 +31,11 @@ namespace Do.Platform
 		public virtual Action Action { get; protected set; }
 		public virtual string ActionLabel { get; protected set; }
 
+		protected Notification ()
+			: this (null, null, null, null, null)
+		{
+		}
+
 		public Notification (string title, string body, string icon, string actionLabel, Action action)
 		{
 			Title = title;
