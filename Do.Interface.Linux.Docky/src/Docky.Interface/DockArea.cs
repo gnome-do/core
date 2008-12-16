@@ -113,7 +113,7 @@ namespace Docky.Interface
 		
 		IStatistics Statistics { get; set; }
 		
-		DockState State { get; set; }
+		new DockState State { get; set; }
 		
 		IDockItem[] DockItems { 
 			get { return item_provider.DockItems.ToArray (); } 

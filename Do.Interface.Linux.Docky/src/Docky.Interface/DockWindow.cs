@@ -40,7 +40,7 @@ namespace Docky.Interface
 		DockArea dock_area;
 		IDoController controller;
 		
-		public string Name {
+		public new string Name {
 			get { return "Docky"; }
 		}
 		
@@ -169,7 +169,7 @@ namespace Docky.Interface
 
 		#region IDoWindow implementation 
 		
-		public event Do.Interface.DoEventKeyDelegate KeyPressEvent;
+		public new event Do.Interface.DoEventKeyDelegate KeyPressEvent;
 		
 		public void Summon ()
 		{
@@ -220,7 +220,7 @@ namespace Docky.Interface
 			dock_area.ClearPane (pane);
 		}
 		
-		public bool Visible {
+		public new bool Visible {
 			get {
 				return dock_area.InputInterfaceVisible;
 			}

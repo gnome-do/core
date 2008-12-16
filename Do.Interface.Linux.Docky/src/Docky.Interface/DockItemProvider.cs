@@ -138,7 +138,7 @@ namespace Docky.Interface
 					BinaryFormatter f = new BinaryFormatter ();
 					filenames = f.Deserialize (s) as string[];
 				}
-			} catch (Exception e) {
+			} catch {
 				filenames = new string[0];
 			}
 			return filenames;
@@ -208,7 +208,7 @@ namespace Docky.Interface
 					BinaryFormatter f = new BinaryFormatter ();
 					f.Serialize (s, custom_items.Keys.ToArray ());
 				}
-			} catch (Exception e) {
+			} catch {
 			}
 		}
 		
