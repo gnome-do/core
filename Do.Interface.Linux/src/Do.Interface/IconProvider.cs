@@ -31,7 +31,7 @@ namespace Do.Interface
 {
 	public static class IconProvider
 	{
-		const string MissingIconIcon = "embled-noread";
+		const string MissingIconIcon = "emblem-noread";
 		public const int DefaultIconSize = 80;
 		
 		static IconProvider ()
