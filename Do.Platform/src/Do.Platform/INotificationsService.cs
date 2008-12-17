@@ -37,24 +37,15 @@ namespace Do.Platform
 	public static class INotificationsServiceExtensions
 	{
 		const string DefaultIcon = "gnome-do";
-		static readonly string DefaultActionLabel = Catalog.GetString ("Dismiss");
-
-		static void DefaultAction ()
-		{
-		}
 
 		public static void Notify (this INotificationsService self, string title, string message)
 		{
-			Notification note =
-				new Notification (title, message, DefaultIcon, DefaultActionLabel, DefaultAction);
-			self.Notify (note);
+			self.Notify (new Notification (title, message, DefaultIcon));
 		}
 		
 		public static void Notify (this INotificationsService self, string title, string message, string icon)
 		{
-			Notification note =
-				new Notification (title, message, icon, DefaultActionLabel, DefaultAction);
-			self.Notify (note);
+			self.Notify (new Notification (title, message, icon));
 		}
 	}
 }

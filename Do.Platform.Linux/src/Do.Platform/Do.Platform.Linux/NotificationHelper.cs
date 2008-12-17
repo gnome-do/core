@@ -75,8 +75,11 @@ namespace Do.Platform.Linux
 			notify.Timeout = ReadableDurationForMessage (note.Title, note.Body);
 			notify.Closed += (sender, e) => OnNotificationClosed (note);
 
-			notify.AddAction (GLib.Markup.EscapeText (note.ActionLabel),
-			    note.ActionLabel, (sender, e) => note.Action ());
+			if (note is ActionableNotification) {
+				ActionableNotification anote = note as ActionableNotification;
+				notify.AddAction (GLib.Markup.EscapeText (anote.ActionLabel),
+				    anote.ActionLabel, (sender, e) => anote.Action ());
+			}
 
 			return notify;
 		}

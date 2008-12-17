@@ -1,4 +1,4 @@
-/* Notification.cs
+/* ActionableNotification.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -22,34 +22,34 @@ using System;
 namespace Do.Platform
 {
 	
-	public class Notification
+	public class ActionableNotification : Notification
 	{
 
-		protected const string DefaultIcon = "";
+		public virtual Action Action { get; protected set; }
+		public virtual string ActionLabel { get; protected set; }
 
-		public virtual string Body { get; protected set; }
-		public virtual string Icon { get; protected set; }
-		public virtual string Title { get; protected set; }
-
-		protected Notification ()
-			: this ("", "", DefaultIcon)
+		protected ActionableNotification ()
+			: this ("", "", DefaultIcon, "", DefaultAction)
 		{
 		}
 
-		public Notification (string title, string body, string icon)
+		public ActionableNotification (string title, string body, string icon, string actionLabel, Action action)
+			: base (title, body, icon)
 		{
-			if (title == null) throw new ArgumentNullException ("title");
-			if (body == null) throw new ArgumentNullException ("body");
-			if (icon == null) throw new ArgumentNullException ("icon");
+			if (actionLabel == null) throw new ArgumentNullException ("actionLabel");
+			if (action == null) throw new ArgumentNullException ("action");
 			
-			Title = title;
-			Body = body;
-			Icon = icon;
+			ActionLabel = actionLabel;
+			Action = action;
 		}
 
 		public override string ToString ()
 		{
-			return string.Format("[Notification: Title={0}, Body={1}, Icon={2}]", Title, Body, Icon);
+			return string.Format("[ActionableNotification: Title={0}, Body={1}, Icon={2}, ActionLabel={3}, Action={4}]", Title, Body, Icon, ActionLabel, Action);
+		}
+
+		static void DefaultAction ()
+		{
 		}
 
 	}

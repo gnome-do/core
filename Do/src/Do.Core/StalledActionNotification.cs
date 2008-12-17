@@ -27,7 +27,7 @@ namespace Do.Core
 {
 	
 	
-	class StalledActionNotification : Notification
+	class StalledActionNotification : ActionableNotification
 	{
 		
 		public StalledActionNotification ()
