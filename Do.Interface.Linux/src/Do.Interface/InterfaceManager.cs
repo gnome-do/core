@@ -30,7 +30,7 @@ namespace Do.Interface
 	
 	public static class InterfaceManager
 	{
-		static InterfaceManager ()
+		public static void Initialize ()
 		{
 			if (!AddinManager.IsInitialized)
 				throw new Exception ("Addin manager was not initialized before initializing user interfaces");

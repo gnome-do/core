@@ -39,7 +39,7 @@ FILES = \
 	src/Do.Interface/ResultsWindowSelectionEventArgs.cs \
 	src/Do.Interface/SearchFinishState.cs \
 	src/Do.Interface/UIContext.cs \
-	src/Do.Interface/UserInterfaces.cs \
+	src/Do.Interface/InterfaceManager.cs \
 	src/Do.Interface/Util.cs \
 	src/Do.Interface/Windowing.cs
 

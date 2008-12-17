@@ -99,6 +99,7 @@ namespace Do.Core {
 
 			// Initialize services before addins that may use them are loaded.
 			Services.Initialize ();
+			InterfaceManager.Initialize ();
 			
 			// Now allow loading of non-services.
 			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnItemSourceChange);
