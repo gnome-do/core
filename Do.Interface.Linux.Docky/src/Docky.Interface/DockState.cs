@@ -85,71 +85,23 @@ namespace Docky.Interface
 			get { return third_pane_visibility_change; }
 		}
 		
-		#region First Pane
 		public IObject First {
 			get {
 				return GetPaneItem (Pane.First);
 			}
 		}
 		
-		public IObject FirstOld {
-			get {
-				return old_items[0];
-			}
-		}
-		
-		public string FirstQuery {
-			get { return queries[0]; }
-		}
-		
-		public IList<IObject> FirstResults {
-			get { return results[0]; }
-		}
-		#endregion
-		
-		#region Second Pane
 		public IObject Second {
 			get {
 				return GetPaneItem (Pane.Second);
 			}
 		}
 		
-		public IObject SecondOld {
-			get {
-				return old_items[1];
-			}
-		}
-		
-		public string SecondQuery {
-			get { return queries[1]; }
-		}
-		
-		public IList<IObject> SecondResults {
-			get { return results[1]; }
-		}
-		#endregion
-		
-		#region Third Pane
 		public IObject Third {
 			get {
 				return GetPaneItem (Pane.Third);
 			}
 		}
-		
-		public IObject ThirdOld {
-			get {
-				return old_items[2];
-			}
-		}
-		
-		public string ThirdQuery {
-			get { return queries[2]; }
-		}
-		
-		public IList<IObject> ThirdResults {
-			get { return results[2]; }
-		}
-		#endregion
 		
 		#region Timestamps
 		public DateTime FirstChangeTime {

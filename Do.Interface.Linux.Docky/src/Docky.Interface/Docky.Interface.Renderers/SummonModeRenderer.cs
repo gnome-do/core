@@ -177,5 +177,23 @@ namespace Docky.Interface.Renderers
 			double offset_scale = .9;
 			left_x = (int) (left_x *offset_scale + base_x*(1-offset_scale));
 		}
+		
+		static DrawState PaneDrawState (Pane pane, DockState state)
+		{
+			if (pane == Pane.Third && !state.ThirdPaneVisible)
+				return DrawState.None;
+			
+//			if (state.GetTextMode (pane))
+//				return DrawState.Text;
+			
+			if (state.GetPaneItem (pane) != null)
+				return DrawState.Normal;
+			
+			if (!string.IsNullOrEmpty (state.GetPaneQuery (pane))) {
+				return DrawState.NoResult;
+			}
+			
+			return DrawState.None;
+		}
 	}
 }
