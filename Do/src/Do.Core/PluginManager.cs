@@ -172,7 +172,7 @@ namespace Do.Core {
 		/// </returns>
 		internal static IEnumerable<IDoWindow> GetThemes () 
 		{
-			return UserInterfaces.Interfaces;
+			return InterfaceManager.Interfaces;
 		}
 
 		/// <summary>

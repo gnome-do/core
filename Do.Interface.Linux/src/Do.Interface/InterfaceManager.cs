@@ -28,19 +28,19 @@ namespace Do.Interface
 {
 	
 	
-	public static class UserInterfaces
+	public static class InterfaceManager
 	{
-		static UserInterfaces ()
+		static InterfaceManager ()
 		{
 			if (!AddinManager.IsInitialized)
 				throw new Exception ("Addin manager was not initialized before initializing user interfaces");
 			AddinManager.AddExtensionNodeHandler ("/Do/InterfaceWindow", OnInterfaceChanged);
 		}
 		
-		static void OnInterfaceChanged (object s, ExtensionNodeEventArgs args)
+		static void OnInterfaceChanged (object sender, ExtensionNodeEventArgs e)
 		{
 			//fixme: this is very generic but making an instance of the objects at this time wastes LOTS of memory
-			switch (args.Change) {
+			switch (e.Change) {
 			case ExtensionChange.Add:
 				Log.Debug ("User Interface was loaded");
 				break;
