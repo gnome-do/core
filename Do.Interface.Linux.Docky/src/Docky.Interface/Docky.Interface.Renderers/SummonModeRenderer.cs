@@ -168,8 +168,6 @@ namespace Docky.Interface.Renderers
 			else
 				text = GLib.Markup.EscapeText (unwrapped.Name);
 			
-			text = Do.Interface.Util.FormatCommonSubstrings (text, state.GetPaneQuery (state.CurrentPane), HighlightFormat);
-			
 			int tmp = BezelTextUtils.TextHeight;
 			
 			double text_scale = (DockPreferences.IconSize/64.0);
@@ -200,8 +198,6 @@ namespace Docky.Interface.Renderers
 				text = GLib.Markup.EscapeText ((unwrapped as ITextItem).Text);
 			else
 				text = GLib.Markup.EscapeText (unwrapped.Name);
-			
-			text = Do.Interface.Util.FormatCommonSubstrings (text, state.GetPaneQuery (state.CurrentPane), HighlightFormat);
 			
 			int tmp = BezelTextUtils.TextHeight;
 			
