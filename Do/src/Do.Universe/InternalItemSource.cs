@@ -51,7 +51,7 @@ namespace Do.Universe {
 				yield return new SelectedTextItem ();
 				yield return new PreferencesItem ();
 				yield return new DoQuitItem ();
-				//yield return new ClearLearningItem ();
+				yield return new ClearLearningItem ();
 			}
 		}
 		
