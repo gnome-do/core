@@ -80,7 +80,7 @@ namespace Docky.Interface
 		
 		public int DockWidth {
 			get {
-				return DockItems.Sum (di => di.Width + 2*IconBorderWidth) + 2*HorizontalBuffer;
+				return (int) DockItems.Sum (di => di.Width + 2*IconBorderWidth) + 2*HorizontalBuffer;
 			}
 		}
 		
