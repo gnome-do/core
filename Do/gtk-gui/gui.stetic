@@ -861,50 +861,6 @@
                                 <property name="MemberName" />
                                 <property name="Spacing">6</property>
                                 <child>
-                                  <widget class="Gtk.VBox" id="vbox5">
-                                    <property name="MemberName" />
-                                    <property name="Spacing">6</property>
-                                    <child>
-                                      <widget class="Gtk.Frame" id="preview_frame">
-                                        <property name="MemberName" />
-                                        <property name="ShadowType">None</property>
-                                        <child>
-                                          <widget class="Gtk.Alignment" id="preview_align">
-                                            <property name="MemberName" />
-                                            <property name="Xalign">0</property>
-                                            <property name="Yalign">0</property>
-                                            <property name="LeftPadding">12</property>
-                                            <property name="RightPadding">12</property>
-                                            <property name="BottomPadding">6</property>
-                                            <child>
-                                              <placeholder />
-                                            </child>
-                                          </widget>
-                                        </child>
-                                        <child>
-                                          <widget class="Gtk.Label" id="GtkLabel4">
-                                            <property name="MemberName" />
-                                            <property name="LabelProp" translatable="yes">&lt;b&gt;Preview&lt;/b&gt;</property>
-                                            <property name="UseMarkup">True</property>
-                                          </widget>
-                                          <packing>
-                                            <property name="type">label_item</property>
-                                          </packing>
-                                        </child>
-                                      </widget>
-                                      <packing>
-                                        <property name="Position">0</property>
-                                        <property name="AutoSize">False</property>
-                                        <property name="Expand">False</property>
-                                      </packing>
-                                    </child>
-                                  </widget>
-                                  <packing>
-                                    <property name="Position">0</property>
-                                    <property name="AutoSize">True</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <widget class="Gtk.HBox" id="hbox2">
                                     <property name="MemberName" />
                                     <property name="Homogeneous">True</property>
@@ -929,7 +885,7 @@
                                     </child>
                                   </widget>
                                   <packing>
-                                    <property name="Position">1</property>
+                                    <property name="Position">0</property>
                                     <property name="AutoSize">True</property>
                                     <property name="Expand">False</property>
                                     <property name="Fill">False</property>
@@ -946,7 +902,7 @@
                                     <signal name="Clicked" handler="OnShadowCheckClicked" />
                                   </widget>
                                   <packing>
-                                    <property name="Position">2</property>
+                                    <property name="Position">1</property>
                                     <property name="AutoSize">True</property>
                                     <property name="Expand">False</property>
                                     <property name="Fill">False</property>
@@ -963,7 +919,7 @@
                                     <signal name="Clicked" handler="OnAnimationCheckbuttonClicked" />
                                   </widget>
                                   <packing>
-                                    <property name="Position">3</property>
+                                    <property name="Position">2</property>
                                     <property name="AutoSize">True</property>
                                     <property name="Expand">False</property>
                                     <property name="Fill">False</property>
@@ -973,12 +929,16 @@
                               <packing>
                                 <property name="Position">0</property>
                                 <property name="AutoSize">True</property>
+                                <property name="Expand">False</property>
+                                <property name="Fill">False</property>
                               </packing>
                             </child>
                           </widget>
                           <packing>
                             <property name="Position">1</property>
                             <property name="AutoSize">True</property>
+                            <property name="Expand">False</property>
+                            <property name="Fill">False</property>
                           </packing>
                         </child>
                       </widget>
@@ -991,6 +951,8 @@
           <packing>
             <property name="Position">0</property>
             <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
           </packing>
         </child>
       </widget>

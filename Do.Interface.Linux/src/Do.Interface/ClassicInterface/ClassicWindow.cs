@@ -57,7 +57,7 @@ namespace Do.Interface {
 			
 		//-------------------Properties-------------------
 
-		public string Name {
+		public new string Name {
 			get { return "Simple"; }
 		}
 		
