@@ -122,6 +122,7 @@ namespace Do.UI {
             this.hbox2.Spacing = 6;
             // Container child hbox2.Gtk.Box+BoxChild
             this.hbuttonbox1 = new Gtk.HButtonBox();
+            this.hbuttonbox1.Name = "hbuttonbox1";
             this.hbuttonbox1.Spacing = 6;
             this.hbuttonbox1.LayoutStyle = ((Gtk.ButtonBoxStyle)(3));
             // Container child hbuttonbox1.Gtk.ButtonBox+ButtonBoxChild
@@ -182,7 +183,6 @@ namespace Do.UI {
             w27.Position = 0;
             // Container child hbox2.Gtk.Box+BoxChild
             this.hbuttonbox2 = new Gtk.HButtonBox();
-            this.hbuttonbox2.Name = "hbuttonbox2";
             this.hbuttonbox2.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
             // Container child hbuttonbox2.Gtk.ButtonBox+ButtonBoxChild
             this.btn_refresh = new Gtk.Button();
