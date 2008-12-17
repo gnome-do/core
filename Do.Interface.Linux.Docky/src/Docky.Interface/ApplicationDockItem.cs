@@ -102,13 +102,19 @@ namespace Docky.Interface
 			Gdk.Pixbuf pbuf = null;
 			foreach (string guess in guesses) {
 				string icon_guess = guess;
-				if (pbuf != null)
+				if (pbuf != null) {
 					pbuf.Dispose ();
+					pbuf = null;
+				}
 				
 				bool found = IconProvider.PixbufFromIconName (icon_guess, DockPreferences.FullIconSize, out pbuf);
 				if (found && (pbuf.Width == DockPreferences.FullIconSize || 
-				                     pbuf.Height == DockPreferences.FullIconSize))
+				                     pbuf.Height == DockPreferences.FullIconSize)) {
 					return pbuf;
+				} else {
+					pbuf.Dispose ();
+					pbuf = null;
+				}
 			
 				string desktop_path = GetDesktopFile (icon_guess);
 				if (!string.IsNullOrEmpty (desktop_path)) {
@@ -121,9 +127,8 @@ namespace Docky.Interface
 				}
 			}
 			
-			if (pbuf == null) {
-				pbuf =  IconProvider.PixbufFromIconName (guesses[0], DockPreferences.FullIconSize);
-			}
+			if (pbuf == null)
+				pbuf = IconProvider.PixbufFromIconName (guesses[0], DockPreferences.FullIconSize);
 			
 			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
 				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
