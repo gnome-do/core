@@ -58,7 +58,6 @@ namespace Do.Core {
 				return new [] {
 					"/Do/ItemSource",
 					"/Do/Action",
-					"/Do/InterfaceWindow",
 				};
 			}
 		}
