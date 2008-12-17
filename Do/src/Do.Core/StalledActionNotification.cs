@@ -29,11 +29,6 @@ namespace Do.Core
 	
 	class StalledActionNotification : ActionableNotification
 	{
-		
-		public StalledActionNotification ()
-		{
-			Action = Exit;
-		}
 
 		public override string Icon {
 			get { return "dialog-error"; }
@@ -53,7 +48,7 @@ namespace Do.Core
 			get { return Catalog.GetString ("End Now"); }
 		}
 
-		void Exit ()
+		public override void PerformAction ()
 		{
 			Environment.Exit (20);
 		}
