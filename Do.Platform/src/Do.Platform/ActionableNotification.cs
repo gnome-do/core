@@ -22,7 +22,7 @@ using System;
 namespace Do.Platform
 {
 	
-	public class ActionableNotification : Notification
+	public abstract class ActionableNotification : Notification
 	{
 		public virtual string ActionLabel { get; protected set; }
 
@@ -31,7 +31,7 @@ namespace Do.Platform
 		{
 		}
 
-		public ActionableNotification (string title, string body, string icon, string actionLabel)
+		protected ActionableNotification (string title, string body, string icon, string actionLabel)
 			: base (title, body, icon)
 		{
 			if (actionLabel == null) throw new ArgumentNullException ("actionLabel");
@@ -39,14 +39,6 @@ namespace Do.Platform
 			ActionLabel = actionLabel;
 		}
 
-		public override string ToString ()
-		{
-			return string.Format("[ActionableNotification: Title={0}, Body={1}, Icon={2}, ActionLabel={3}]", Title, Body, Icon, ActionLabel);
-		}
-
-		public virtual void PerformAction ()
-		{
-		}
-
+		public abstract void PerformAction ();
 	}
 }

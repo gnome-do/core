@@ -46,28 +46,20 @@ namespace Do.Universe {
 
 		private class ClearLearningNotification : ActionableNotification
 		{
-			
-			public override string Title {
-				get { return Catalog.GetString ("Clear Learning"); }
-			}
 
-			public override string Body {
-				get { return Catalog.GetString ("Are you sure you want to clear Do's learned usage data?"); }
-			}
-
-			public override string Icon {
-				get { return "edit-clear"; }
-			}
-
-			public override string ActionLabel {
-				get { return Catalog.GetString ("Clear"); }
+			public ClearLearningNotification () : base (
+				Catalog.GetString ("Clear Learning"),
+			    Catalog.GetString ("Are you sure you want to clear Do's learned usage data?"),
+			    "edit-clear",
+			    Catalog.GetString ("Clear")
+			)
+			{
 			}
 
 			public override void PerformAction ()
 			{
 				Log.Debug ("Learning cleared (just kidding! this isn't set up yet)");
 			}
-			
 		}
 
 	}
