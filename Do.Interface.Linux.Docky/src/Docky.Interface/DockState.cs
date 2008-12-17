@@ -40,6 +40,8 @@ namespace Docky.Interface
 		
 		bool[] text_mode = new bool[3];
 		
+		TextModeType[] text_mode_types = new TextModeType[3];
+		
 		DateTime[] timestamps = new DateTime[3];
 		DateTime[] result_timestamps = new DateTime[3];
 		DateTime[] cursor_timestamps = new DateTime[3];
@@ -211,6 +213,11 @@ namespace Docky.Interface
 			text_mode_timestamps[(int) pane] = DateTime.UtcNow;
 		}
 		
+		void SetTextModeType (TextModeType type, Pane pane)
+		{
+			text_mode_types[(int) pane] = type;
+		}
+		
 		public IObject GetPaneItem (Pane pane)
 		{
 			if (pane == Pane.First && current_items[(int) pane] == null)
@@ -263,6 +270,11 @@ namespace Docky.Interface
 			return text_mode[(int) pane];
 		}
 		
+		public TextModeType GetTextModeType (Pane pane)
+		{
+			return text_mode_types[(int) pane];
+		}
+		
 		public void Clear ()
 		{
 			current_items = new IObject[3];
@@ -294,6 +306,7 @@ namespace Docky.Interface
 			SetResults (context.Results, pane);
 			SetCursor (context.Cursor, pane);
 			SetTextMode (context.LargeTextDisplay, pane);
+			SetTextModeType (context.LargeTextModeType, pane);
 		}
 	}
 }

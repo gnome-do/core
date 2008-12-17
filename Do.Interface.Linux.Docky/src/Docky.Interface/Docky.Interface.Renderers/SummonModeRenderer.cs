@@ -74,6 +74,7 @@ namespace Docky.Interface.Renderers
 					continue;
 				
 				string icon = null;
+				double opacity = 1;
 				switch (PaneDrawState (pane, state)) {
 				case DrawState.NoResult:
 					icon = "gtk-delete";
@@ -83,6 +84,10 @@ namespace Docky.Interface.Renderers
 					break;
 				case DrawState.Text:
 					icon = "gnome-mime-text";
+					break;
+				case DrawState.ExplicitText:
+					icon = "gnome-mime-text";
+					opacity = .3;
 					break;
 				case DrawState.None:
 					continue;
@@ -98,7 +103,7 @@ namespace Docky.Interface.Renderers
 				cr.SetSource (LargeIconCache.GetSurface (icon), 
 				              left_x*(1/zoom), 
 				              ((dockArea.Y+dockArea.Height)-(DockPreferences.IconSize*2*zoom)-VerticalBuffer)*(1/zoom));
-				cr.Paint ();
+				cr.PaintWithAlpha (opacity);
 				cr.Scale (1/zoom, 1/zoom);
 			}
 			
@@ -112,6 +117,9 @@ namespace Docky.Interface.Renderers
 				break;
 			case DrawState.Text:
 				RenderTextModeText (cr, state, dockArea);
+				break;
+			case DrawState.ExplicitText:
+				RenderExplicitText (cr, state, dockArea);
 				break;
 			case DrawState.None:
 				// do nothing
@@ -147,6 +155,39 @@ namespace Docky.Interface.Renderers
 				                                 (int) (500*text_scale), color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 			}
 			BezelTextUtils.TextHeight = tmp;
+		}
+		
+		static void RenderExplicitText (Context cr, DockState state, Gdk.Rectangle dockArea)
+		{
+			int base_x = dockArea.X + 15;
+			
+			string text;
+			IObject unwrapped = Services.Core.Unwrap (state[state.CurrentPane]);
+			if (unwrapped is ITextItem)
+				text = GLib.Markup.EscapeText ((unwrapped as ITextItem).Text);
+			else
+				text = GLib.Markup.EscapeText (unwrapped.Name);
+			
+			text = Do.Interface.Util.FormatCommonSubstrings (text, state.GetPaneQuery (state.CurrentPane), HighlightFormat);
+			
+			int tmp = BezelTextUtils.TextHeight;
+			
+			double text_scale = (DockPreferences.IconSize/64.0);
+			
+			BezelTextUtils.TextHeight = (int) (15 * text_scale);
+				
+			Pango.Color color = new Pango.Color ();
+			color.Blue = color.Red = color.Green = ushort.MaxValue;
+			
+			Gdk.Rectangle rect = BezelTextUtils.RenderLayoutText (cr, text, base_x, 
+			                                                      dockArea.Y + (int) (15*text_scale), 
+			                                                      (dockArea.X + dockArea.Width) - (base_x + 15), 
+			                                                      color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
+			BezelTextUtils.TextHeight = tmp;
+			
+			cr.Rectangle (rect.X, rect.Y, 2, rect.Height);
+			cr.Color = new Cairo.Color (1, 1, 1);
+			cr.Fill ();
 		}
 		
 		static void RenderTextModeText (Context cr, DockState state, Gdk.Rectangle dockArea)
@@ -266,8 +307,14 @@ namespace Docky.Interface.Renderers
 		
 		static DrawState PaneDrawState (Pane pane, DockState state)
 		{
+			if (pane != state.CurrentPane && (state.GetTextModeType (state.CurrentPane) == TextModeType.Explicit))
+				return DrawState.None;
+			
 			if (pane == Pane.Third && !state.ThirdPaneVisible)
 				return DrawState.None;
+			
+			if (state.GetTextModeType (pane) == TextModeType.Explicit)
+				return DrawState.ExplicitText;
 			
 			if (state.GetTextMode (pane))
 				return DrawState.Text;
