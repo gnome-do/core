@@ -38,15 +38,23 @@ namespace Docky.Interface
 		int[] cursors = new int[3];
 		int[] previous_cursors = new int[3];
 		
+		bool[] text_mode = new bool[3];
+		
 		DateTime[] timestamps = new DateTime[3];
 		DateTime[] result_timestamps = new DateTime[3];
 		DateTime[] cursor_timestamps = new DateTime[3];
+		DateTime[] text_mode_timestamps = new DateTime[3];
 		
 		IList<IObject>[] results = new IList<IObject>[3];
 		IList<IObject>[] results_prev = new IList<IObject>[3];
 		
 		Pane currentPane, previousPane = Pane.Second;
-		DateTime current_pane_change, last_cusor_change;
+		
+		DateTime current_pane_change; 
+		DateTime last_cusor_change;
+		DateTime third_pane_visibility_change;
+		
+		bool third_pane_visible;
 		
 		IObject IntroObject { get; set; }
 		
@@ -69,8 +77,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		bool third_pane_visible = false;
-		DateTime third_pane_visibility_change = DateTime.UtcNow;
+		
 		public bool ThirdPaneVisible { 
 			get { return third_pane_visible; }
 			set { 
@@ -140,16 +147,17 @@ namespace Docky.Interface
 				return GetPaneItem (pane);
 			}
 			set {
-				SetPaneItem (value, pane);
+				SetItem (value, pane);
 			}
 		}
 		
 		public DockState ()
 		{
+			third_pane_visible = false;
 			IntroObject = new DefaultLabelBoxObject ();
 		}
 
-		public void SetPaneItem (IObject item, Pane pane)
+		void SetItem (IObject item, Pane pane)
 		{
 			if (current_items[(int) pane] == item)
 				return;
@@ -159,12 +167,12 @@ namespace Docky.Interface
 			timestamps[(int) pane] = DateTime.UtcNow;
 		}
 		
-		public void SetPaneQuery (string query, Pane pane)
+		void SetQuery (string query, Pane pane)
 		{
 			queries[(int) pane] = query;
 		}
 		
-		public void SetPaneResults (IList<IObject> resultList, Pane pane)
+		void SetResults (IList<IObject> resultList, Pane pane)
 		{
 			if (results[(int) pane] != null && resultList.Count == results[(int) pane].Count) {
 				bool same = true;
@@ -184,7 +192,7 @@ namespace Docky.Interface
 			result_timestamps[(int) pane] = DateTime.UtcNow;
 		}
 		
-		public void SetPaneCursor (int cursor, Pane pane)
+		void SetCursor (int cursor, Pane pane)
 		{
 			if (cursor == cursors[(int) pane])
 				return;
@@ -192,6 +200,15 @@ namespace Docky.Interface
 			previous_cursors[(int) pane] = cursors[(int) pane];
 			cursors[(int) pane] = cursor;
 			cursor_timestamps[(int) pane] = last_cusor_change = DateTime.UtcNow;
+		}
+		
+		void SetTextMode (bool textMode, Pane pane)
+		{
+			if (text_mode[(int) pane] == textMode)
+				return;
+			
+			text_mode[(int) pane] = textMode;
+			text_mode_timestamps[(int) pane] = DateTime.UtcNow;
 		}
 		
 		public IObject GetPaneItem (Pane pane)
@@ -241,6 +258,11 @@ namespace Docky.Interface
 			return cursor_timestamps[(int) pane];
 		}
 		
+		public bool GetTextMode (Pane pane)
+		{
+			return text_mode[(int) pane];
+		}
+		
 		public void Clear ()
 		{
 			current_items = new IObject[3];
@@ -249,6 +271,9 @@ namespace Docky.Interface
 			queries = new string[3];
 			old_items = new IObject[3];
 			timestamps = new DateTime[3];
+			
+			text_mode = new bool[3];
+			text_mode_timestamps = new DateTime[3];
 		}
 		
 		public void ClearPane (Pane pane)
@@ -257,16 +282,18 @@ namespace Docky.Interface
 			
 			current_items[i] = null;
 			results[i] = null;
-			result_timestamps[i] = timestamps[i] = DateTime.UtcNow;
+			text_mode_timestamps[i] = result_timestamps[i] = timestamps[i] = DateTime.UtcNow;
 			queries[i] = null;
+			text_mode[i] = false;
 		}
 		
 		public void SetContext (IUIContext context, Pane pane)
 		{
 			this[pane] = context.Selection;
-			SetPaneQuery (context.Query, pane);
-			SetPaneResults (context.Results, pane);
-			SetPaneCursor (context.Cursor, pane);
+			SetQuery (context.Query, pane);
+			SetResults (context.Results, pane);
+			SetCursor (context.Cursor, pane);
+			SetTextMode (context.LargeTextDisplay, pane);
 		}
 	}
 }
