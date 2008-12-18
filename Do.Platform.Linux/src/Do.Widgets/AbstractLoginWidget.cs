@@ -34,8 +34,6 @@ namespace Do.Platform.Linux
 	/// asynchronous validation so the plugin developer doesn't need to know
 	/// about delegates or any complex concepts. To see an example of this
 	/// class in use, see the Microblogging plugin.
-	/// Things to do when you implement this class:
-	/// 	* Setup default values of username_entry and password_entry
 	/// </summary>
 	[System.ComponentModel.ToolboxItem(true)]
 	public abstract partial class AbstractLoginWidget :   Bin
@@ -44,6 +42,7 @@ namespace Do.Platform.Linux
 		protected readonly string BusyValidatingLabel = Catalog.GetString ("<i>Validating...</i>");
 		protected readonly string NewAccountLabelFormat = Catalog.GetString ("<i>Don't have {0}?</i>");
 		protected readonly string AccountValidationFailedLabel = Catalog.GetString ("<i>Account validation failed!</i>");
+		protected readonly string DefaultValidatingLabel = Catalog.GetString ("<i>Verify and save account information</i>");
 		protected readonly string AccountValidationSucceededLabel = Catalog.GetString ("<i>Account validation succeeded!</i>");
 
 		// our Gtk widgets that we are exposing to subclasses
@@ -94,6 +93,12 @@ namespace Do.Platform.Linux
 
 		}
 
+		/// <summary>
+		/// Puts a widget at the top of the page above the username entry.
+		/// </summary>
+		/// <param name="widget">
+		/// A <see cref="Widget"/>
+		/// </param>
 		protected void InsertWidgetAtTop (Widget widget)
 		{
 			wrapper_vbox.Add (widget);
@@ -104,8 +109,32 @@ namespace Do.Platform.Linux
 			wrapperSpace.Padding = 5;
 		}
 
+		/// <summary>
+		/// Save account data to disk
+		/// </summary>
+		/// <param name="username">
+		/// A <see cref="System.String"/> username
+		/// </param>
+		/// <param name="password">
+		/// A <see cref="System.String"/> password
+		/// </param>
 		abstract protected void SaveAccountData (string username, string password);
 
+		/// <summary>
+		/// Check that username and password entered by user are valid
+		/// This method is executed asychronously so don't be afraid to make slow
+		/// web calls or something, we desensitize the apply button, and alert the
+		/// user that their credentials are being validated.
+		/// </summary>
+		/// <param name="username">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="password">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/>
+		/// </returns>
 		abstract protected bool Validate (string username, string password);
 
 		protected virtual void OnValidateBtnClicked (object sender, System.EventArgs e)
