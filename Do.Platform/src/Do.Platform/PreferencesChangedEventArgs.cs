@@ -25,10 +25,12 @@ namespace Do.Platform {
 	public class PreferencesChangedEventArgs : EventArgs
 	{
 		public string Key { get; private set; }
+		public object OldValue { get; private set; }
 		
-		public PreferencesChangedEventArgs (string key)
+		public PreferencesChangedEventArgs (string key, object oldValue)
 		{
 			Key = key;
+			OldValue = oldValue;
 		}
 	}
 	

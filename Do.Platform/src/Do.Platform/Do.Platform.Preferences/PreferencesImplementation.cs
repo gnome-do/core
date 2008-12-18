@@ -29,14 +29,11 @@ namespace Do.Platform.Preferences
 	internal class PreferencesImplementation<TOwner> : IPreferences
 		where TOwner : class
 	{
-
 		IPreferencesService Service { get; set; }
-		SecurePreferencesServiceWrapper SecureService { get; set; }
+		IPreferencesService SecureService { get; set; }
 
 		string OwnerString {
-			get {
-				return typeof (TOwner).Name;
-			}
+			get { return typeof (TOwner).Name; }
 		}
 		
 		public PreferencesImplementation (IPreferencesService service, ISecurePreferencesService secureService)
@@ -45,48 +42,22 @@ namespace Do.Platform.Preferences
 			SecureService = new SecurePreferencesServiceWrapper (secureService);
 		}
 		
-		void OnPreferencesChanged (string key)
+		void OnPreferencesChanged (string key, object oldValue)
 		{
 			if (PreferencesChanged == null) return;
-			
-			PreferencesChangedEventArgs args = new PreferencesChangedEventArgs (key);
-			PreferencesChanged (this, args);
+			PreferencesChanged (this, new PreferencesChangedEventArgs (key, oldValue));
 		}
 
 		#region IPreferences
 		
 		public event EventHandler<PreferencesChangedEventArgs> PreferencesChanged;
 
-		public string AbsolutePathForKey (string key)
-		{
-			return AbsolutePathForKey (Service, key);
-		}
-
-		public string AbsolutePathForSecureKey (string key)
-		{
-			return AbsolutePathForKey (SecureService, key);
-		}
-				
-		public string this [string key] {
-			get {
-				return Get (key, "");
-			}
-			set {
-				Set (key, value);
-			}
-		}
-
 		public T Get<T> (string key, T def)
 		{
 			T val;
 
-			TryGet (key, def, out val);
+			TryGet (Service, key, def, out val);
 			return val;
-		}
-		
-		public bool TryGet<T> (string key, T def, out T val)
-		{
-			return TryGet (Service, key, def, out val);
 		}
 
 		/// <summary>
@@ -106,27 +77,9 @@ namespace Do.Platform.Preferences
 		/// </returns>
 		public bool Set<T> (string key, T val)
 		{
-			return Set<T> (Service, key, val);
+			return Set (Service, key, val);
 		}
 		
-		/// <summary>
-		/// Try to read a value for a given key.
-		/// </summary>
-		/// <param name="key">
-		/// A <see cref="System.String"/> key (e.g. "key_binding").
-		/// </param>
-		/// <param name="val">
-		/// A <see cref="T"/> value if the key was found.
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.Boolean"/> indicating whether or not the value
-		/// was read successfully.
-		/// </returns>
-		public bool TryGet<T> (string key, out T val)
-		{
-			return TryGet (Service, key, out val);
-		}
-
 		public T SecureGet<T> (string key, T def)
 		{
 			T val;
@@ -140,23 +93,13 @@ namespace Do.Platform.Preferences
 			return Set (SecureService, key, val);
 		}
 
-		public bool SecureTryGet<T> (string key, out T val)
-		{
-			return TryGet (SecureService, key, out val);
-		}
-
-		public bool SecureTryGet<T> (string key, T def, out T val)
-		{
-			return TryGet (SecureService, key, def, out val);
-		}
-
 		#endregion
 
 		string AbsolutePathForKey (IPreferencesService service, string key)
 		{
 			if (key.StartsWith ("/"))
 				return key;
-			return service.AbsolutePathForKey (string.Format ("{0}/{1}", OwnerString , key));
+			return string.Format ("{0}/{1}", OwnerString , key);
 		}
 
 		bool Set<T> (IPreferencesService service, string key, T val)
@@ -168,7 +111,7 @@ namespace Do.Platform.Preferences
 				oldValue = default (T);
 			
 			if (service.Set (keypath, val)) {
-				OnPreferencesChanged (key);
+				OnPreferencesChanged (key, oldValue);
 				return true;
 			}
 			return false;

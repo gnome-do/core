@@ -43,12 +43,6 @@ namespace Do.Platform.Default
 			return false;
 		}
 
-		public string AbsolutePathForKey (string key)
-		{
-			Log.Debug ("Default Secure IPreferencesService cannot find absolute path for key \"{0}\".", key);
-			return "";
-		}
-
-		#endregion ISecurePreferencesService
+		#endregion
 	}
 }
