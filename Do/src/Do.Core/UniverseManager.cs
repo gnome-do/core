@@ -30,9 +30,6 @@ using Do.Platform;
 
 namespace Do.Core
 {
-	// Threading Heirarchy:
-	// universe_lock may be locked within and action_lock
-	// No other nested locks should be allowed
 	
 	public class UniverseManager
 	{
@@ -41,7 +38,6 @@ namespace Do.Core
 		List<Element> actions;
 		Dictionary<string, Element> universe;
 		
-		object action_lock = new object ();
 		object universe_lock = new object ();
 		
 		float epsilon = 0.00001f;
@@ -70,7 +66,6 @@ namespace Do.Core
 		
 		public UniverseManager ()
 		{
-			actions = new List<Element> ();
 			universe = new Dictionary<string, Element> ();
 			UpdatesEnabled = true;
 		}
@@ -83,8 +78,7 @@ namespace Do.Core
 		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, Element other)
 		{
 			if (filter.Count () == 1 && filter.First () == typeof (Universe.Action))
-				lock (action_lock)
-					return Search (query, filter, actions, other);
+				return Search (query, filter, PluginManager.Actions.OfType<Element> (), other);
 			else
 				lock (universe_lock) 
 					return Search (query, filter, universe.Values, other);
@@ -186,16 +180,12 @@ namespace Do.Core
 		/// </summary>
 		void ReloadActions ()
 		{
-			lock (action_lock) {
-				lock (universe_lock) {
-					foreach (Universe.Action action in actions) {
-						universe.Remove (action.UniqueId);
-					}
-					actions.Clear ();
-					foreach (Universe.Action action in PluginManager.Actions) {
-							actions.Add (action);
-							universe [action.UniqueId] = action;			
-					}
+			lock (universe_lock) {
+				foreach (Universe.Action action in PluginManager.Actions) {
+					universe.Remove (action.UniqueId);
+				}
+				foreach (Universe.Action action in PluginManager.Actions) {
+						universe [action.UniqueId] = action;			
 				}
 			}
 		}
