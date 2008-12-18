@@ -124,6 +124,8 @@ namespace Do {
 		static void SetupKeybindings ()
 		{
 			keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+			// Watch preferences for changes to the keybinding so we
+			// can change the binding when the user reassigns it.
 			Preferences.SummonKeybindingChanged += (sender, e) => {
 				if (e.OldValue != null)
 					keybinder.Unbind (e.OldValue as string);
