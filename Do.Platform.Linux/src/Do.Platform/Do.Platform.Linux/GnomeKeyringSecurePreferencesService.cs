@@ -48,15 +48,15 @@ namespace Do.Platform.Linux
 		{
 			RootPath = rootPath;
 		}
-		
-		#region ISecurePreferencesService
 
-		public string AbsolutePathForKey (string key)
+		string AbsolutePathForKey (string key)
 		{
 			if (key.StartsWith ("/"))
 				return key;
 			return string.Format ("{0}/{1}", RootPath, key);
 		}
+		
+		#region ISecurePreferencesService
 	
 		public bool Set (string key, string val)
 		{

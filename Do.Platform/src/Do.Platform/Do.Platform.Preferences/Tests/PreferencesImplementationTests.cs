@@ -61,33 +61,6 @@ namespace Do.Platform.Preferences
 			PreferencesDidChange = false;
 		}
 
-		// TODO I would like to remove AbsolutePathForKey from IPreferences.
-		[Test()]
-		public void AbsolutePathForKey_AbsoluteKey ()
-		{
-			string absKey = Service.AbsolutePathForKey ("/hello");
-			
-			Assert.AreEqual (Preferences.AbsolutePathForKey (absKey), absKey);
-		}
-
-		[Test()]
-		public void AbsolutePathForKey_RelativeKey ()
-		{
-			string relKey = "hello";
-			string absKey = RootPath + Service.AbsolutePathForKey (relKey);
-			
-			Assert.AreEqual (Preferences.AbsolutePathForKey (relKey), absKey);
-		}
-
-		[Test()]
-		public void Indexer ()
-		{
-			string key = "hello", val = "world";
-			
-			Preferences [key] = val;
-			Assert.AreEqual (Preferences [key], val);
-		}
-
 		[Test()]
 		public void Get_bool ()
 		{
@@ -151,11 +124,16 @@ namespace Do.Platform.Preferences
 		[Test()]
 		public void PreferencesChanged ()
 		{
-			string key = "hello", val = "world";
-
+			string key = "hello", val = "world", oldVal = "mars";
+			
+			Preferences.Set (key, oldVal);
+			PreferencesChangedArgs = null;
+			PreferencesDidChange = false;
+			
 			Preferences.Set (key, val);
 			Assert.IsTrue (PreferencesDidChange);
 			Assert.AreEqual (PreferencesChangedArgs.Key, key);
+			Assert.AreEqual (PreferencesChangedArgs.OldValue as string, oldVal);
 		}
 		
 	}

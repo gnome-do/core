@@ -39,27 +39,20 @@ namespace Do.Platform.Common
 		
 		public bool Set<T> (string key, T val)
 		{
-			Store [AbsolutePathForKey (key)] = val;
+			Store [key] = val;
 			return true;
 		}
 		
 		public bool TryGet<T> (string key, out T val)
 		{
 			object val_object;
-			bool success = Store.TryGetValue (AbsolutePathForKey (key), out val_object);
+			bool success = Store.TryGetValue (key, out val_object);
 			
 			if (success)
 				val = (T) val_object;
 			
 			return success;
 			
-		}
-
-		public string AbsolutePathForKey (string key)
-		{
-			if (key.StartsWith ("/"))
-				return key;
-			return "/" + key;
 		}
 
 		#endregion
