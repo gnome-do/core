@@ -33,6 +33,7 @@ namespace Do.Platform.Default
 		{
 			Log.Debug ("Default INotificationsServiceService cannot notify \"{0}: {1}\"", note.Title, note.Body);
 		}
+
 	}
 
 }

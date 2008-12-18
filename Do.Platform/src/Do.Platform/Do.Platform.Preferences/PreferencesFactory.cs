@@ -29,11 +29,13 @@ namespace Do.Platform.Preferences
 	public class PreferencesFactory
 	{
 		
-		IPreferencesService Service { get; set; }
-
-		public PreferencesFactory (IPreferencesService service)
+		internal IPreferencesService Service { get; private set; }
+		internal ISecurePreferencesService SecureService { get; private set; }
+		
+		public PreferencesFactory (IPreferencesService service, ISecurePreferencesService secureService)
 		{
 			Service = service;
+			SecureService = secureService;
 		}
 
 		/// <summary>
@@ -46,9 +48,7 @@ namespace Do.Platform.Preferences
 		/// </returns>
 		public IPreferences Get<TOwner> () where TOwner : class
 		{
-			return new PreferencesImplementation<TOwner> (Service);
+			return new PreferencesImplementation<TOwner> (Service, SecureService);
 		}
-
 	}
-
 }

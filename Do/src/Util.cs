@@ -41,10 +41,10 @@ namespace Do
 		public static void Initialize ()
 		{
 			// Misc
-			Addins.Util.FormatCommonSubstrings = FormatCommonSubstrings;
+			Interface.Util.FormatCommonSubstrings = FormatCommonSubstrings;
 
 			// Appearance utilities			
-			Addins.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
+			Interface.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
 		}
 		
 		public class Appearance

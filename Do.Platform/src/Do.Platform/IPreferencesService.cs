@@ -32,5 +32,4 @@ namespace Do.Platform
 		bool TryGet<T> (string key, out T val);
 		string AbsolutePathForKey (string key);
 	}
-
 }

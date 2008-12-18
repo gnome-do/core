@@ -77,6 +77,7 @@ namespace Do.Platform
 				core = null;
 			if (service is IEnvironmentService)
 				environment = null;
+			// Although it is not obvious, this also takes care of the ISecurePreferences service.
 			if (service is IPreferencesService)
 				preferences = null;
 			if (service is ILogService)
@@ -151,7 +152,8 @@ namespace Do.Platform
 			get {
 				if (preferences == null) {
 					IPreferencesService service = LocateService<IPreferencesService, Default.PreferencesService> ();
-					preferences = new PreferencesFactory (service);
+					ISecurePreferencesService secureService = LocateService<ISecurePreferencesService, Default.SecurePreferencesService> ();
+					preferences = new PreferencesFactory (service, secureService);
 				}
 				return preferences;
 			}

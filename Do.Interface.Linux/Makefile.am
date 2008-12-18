@@ -1,32 +1,61 @@
-EXTRA_DIST = 
+# Simple component buildsystem
+include $(top_srcdir)/build.rules.mk
 
-include $(top_srcdir)/Makefile.include
-
-ASSEMBLY_COMPILER_COMMAND = $(MCS)
-ASSEMBLY_COMPILER_FLAGS = $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
-ASSEMBLY = Do.Interface.Linux.dll
-ASSEMBLY_MDB = $(ASSEMBLY).mdb
-COMPILE_TARGET = library
-BUILD_DIR = ./fake
-
-if ENABLE_DEBUG
-ASSEMBLY_COMPILER_FLAGS += -debug -d:DEBUG
-endif
-
-all: $(ASSEMBLY)
+ASSEMBLY = Do.Interface.Linux
+TARGET = library
 
 FILES = \
 	src/AssemblyInfo.cs \
-	src/Do.Interface/Windowing.cs \
-	src/Do.Interface/IconProvider.cs
+	src/Do.Interface/ClassicInterface/ClassicWindow.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/BezelColors.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/Bezel.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/BezelDefaults.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingContext.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassRenderClasses.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassResults.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassWindow.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/BezelResultsDrawingArea.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/BezelTextUtils.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/IRenderInterfaces.cs \
+	src/Do.Interface/Do.Interface.CairoUtils/CairoUtils.cs \
+	src/Do.Interface/Do.Interface.Widgets/DefaultObjects.cs \
+	src/Do.Interface/Do.Interface.Widgets/Frame.cs \
+	src/Do.Interface/Do.Interface.Widgets/GlossyRoundedFrame.cs \
+	src/Do.Interface/Do.Interface.Widgets/HalfRoundedFrame.cs \
+	src/Do.Interface/Do.Interface.Widgets/IconBox.cs \
+	src/Do.Interface/Do.Interface.Widgets/ResultsWindow.cs \
+	src/Do.Interface/Do.Interface.Widgets/SymbolDisplayLabel.cs \
+	src/Do.Interface/Do.Interface.Widgets/TextFrame.cs \
+	src/Do.Interface/IconCache.cs \
+	src/Do.Interface/IconProvider.cs \
+	src/Do.Interface/IDoController.cs \
+	src/Do.Interface/IDoWindow.cs \
+	src/Do.Interface/IRenderTheme.cs \
+	src/Do.Interface/IStatistics.cs \
+	src/Do.Interface/IUIContext.cs \
+	src/Do.Interface/PixbufSurfaceCache.cs \
+	src/Do.Interface/PositionWindow.cs \
+	src/Do.Interface/ResultsWindowSelectionEventArgs.cs \
+	src/Do.Interface/SearchFinishState.cs \
+	src/Do.Interface/UIContext.cs \
+	src/Do.Interface/InterfaceManager.cs \
+	src/Do.Interface/Util.cs \
+	src/Do.Interface/Windowing.cs
+
+RESOURCES = \
+	Resources/Do.Interface.Linux.addin.xml \
+	Resources/settings-triangle.png
 
 REFERENCES =  \
 	System \
 	System.Core \
+	Mono.Cairo \
+	Mono.Posix \
+	$(GCONF_SHARP_20_LIBS) \
 	$(GTK_SHARP_20_LIBS) \
-	../Do.Platform/Do.Platform.dll \
-	../Do.Universe/Do.Universe.dll \
-	Mono.Posix
+	$(MONO_ADDINS_LIBS) 
 
-$(ASSEMBLY) $(ASSEMBLY_MDB): $(build_sources) $(build_resources) $(build_datafiles) $(DLL_REFERENCES) $(PROJECT_REFERENCES) $(build_xamlg_list)
-	$(ASSEMBLY_COMPILER_COMMAND) $(ASSEMBLY_COMPILER_FLAGS) -out:$(ASSEMBLY) -target:$(COMPILE_TARGET) $(build_sources_embed) $(build_resources_embed) $(build_references_ref)
+PROJECT_REFERENCES = \
+	Do.Platform \
+	Do.Universe

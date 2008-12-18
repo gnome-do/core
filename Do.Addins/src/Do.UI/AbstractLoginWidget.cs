@@ -224,8 +224,7 @@ namespace Do.UI
 				keyring = Ring.GetDefaultKeyring ();
 				ht = new Hashtable ();
 				ht["name"] = keyName;
-				ht["username"] = username;
-				
+				ht["username"] = username; 
 				Ring.CreateItem (keyring, ItemType.GenericSecret, keyName,
 					ht, password, true);
 				                 

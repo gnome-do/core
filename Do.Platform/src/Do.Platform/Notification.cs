@@ -25,24 +25,26 @@ namespace Do.Platform
 	public class Notification
 	{
 
+		protected const string DefaultIcon = "";
+
 		public virtual string Body { get; protected set; }
 		public virtual string Icon { get; protected set; }
 		public virtual string Title { get; protected set; }
-		public virtual Action Action { get; protected set; }
-		public virtual string ActionLabel { get; protected set; }
 
-		public Notification (string title, string body, string icon, string actionLabel, Action action)
+		protected Notification ()
+			: this ("", "", DefaultIcon)
 		{
+		}
+
+		public Notification (string title, string body, string icon)
+		{
+			if (title == null) throw new ArgumentNullException ("title");
+			if (body == null) throw new ArgumentNullException ("body");
+			if (icon == null) throw new ArgumentNullException ("icon");
+			
 			Title = title;
 			Body = body;
 			Icon = icon;
-			ActionLabel = actionLabel;
-			Action = action;
-		}
-
-		public override string ToString ()
-		{
-			return string.Format("[Notification: Title={0}, Body={1}, Icon={2}, ActionLabel={3}, Action={4}]", Title, Body, Icon, ActionLabel, Action);
 		}
 
 	}

@@ -31,14 +31,18 @@ namespace Do.Interface
 {
 	public static class IconProvider
 	{
-		const string MissingIconIcon = "embled-noread";
-		static readonly Pixbuf UnknownPixbuf;
+		const string MissingIconIcon = "emblem-noread";
 		public const int DefaultIconSize = 80;
 		
 		static IconProvider ()
 		{
-			UnknownPixbuf = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
-			UnknownPixbuf.Fill (0x00000000);
+		}
+		
+		static Pixbuf UnknownPixbuf () 
+		{
+			Pixbuf pb = new Pixbuf (Colorspace.Rgb, true, 8, 1, 1);
+			pb.Fill (0x00000000);
+			return pb;
 		}
 		
 		static bool IconIsEmbeddedResource (string name)
@@ -172,7 +176,7 @@ namespace Do.Interface
 			}
 			
 			// If all else fails, use the UnknownPixbuf.
-			pixbuf = UnknownPixbuf;
+			pixbuf = UnknownPixbuf ();
 			return false;
 		}
 	}

@@ -67,7 +67,7 @@ namespace Do
 		}
 
 		public string SummonKeybindingPath {
-			get { return Preferences.AbsolutePathForKey(SummonKeybindingKey); }
+			get { return Preferences.AbsolutePathForKey (SummonKeybindingKey); }
 		}
 		public string SummonKeybinding {
 			get { return Preferences.Get (SummonKeybindingKey, SummonKeybindingDefaultValue); }
