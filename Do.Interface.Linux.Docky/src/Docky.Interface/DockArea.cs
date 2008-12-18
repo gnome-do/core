@@ -81,7 +81,7 @@ namespace Docky.Interface
 		public int DockWidth {
 			get {
 				int val = 2*HorizontalBuffer;
-				foreach (DockItem di in DockItems)
+				foreach (IDockItem di in DockItems)
 					val += 2*IconBorderWidth + di.Width;
 				return val;
 			}
