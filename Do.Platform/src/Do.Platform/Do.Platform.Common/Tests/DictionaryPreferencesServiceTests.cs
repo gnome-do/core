@@ -110,20 +110,5 @@ namespace Do.Platform.Common
 
 			Assert.IsFalse (Service.TryGet (key, out val));
 		}
-
-		[Test()]
-		public void AbsolutePathForKey_AbsoluteKey ()
-		{
-			string absKey = "/hello";
-			Assert.AreEqual (Service.AbsolutePathForKey (absKey), absKey);
-		}
-
-		[Test()]
-		public void AbsolutePathForKey_RelativeKey ()
-		{
-			string relKey = "hello";
-			string absKey = "/hello";
-			Assert.AreEqual (Service.AbsolutePathForKey (relKey), absKey);
-		}
 	}
 }

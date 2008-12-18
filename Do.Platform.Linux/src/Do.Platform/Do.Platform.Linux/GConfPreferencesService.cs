@@ -41,14 +41,14 @@ namespace Do.Platform.Linux
 			client = new GConf.Client ();
 		}
 
-		#region IPreferencesService
-
-		public string AbsolutePathForKey (string key)
+		string AbsolutePathForKey (string key)
 		{
 			if (key.StartsWith ("/"))
 				return key;
 			return string.Format ("{0}/{1}", RootPath, key);
 		}
+
+		#region IPreferencesService
 		
 		public bool Set<T> (string key, T val)
 		{
