@@ -57,6 +57,7 @@ namespace Docky.Interface
 		DateTime interface_change_time = DateTime.UtcNow;
 		
 		bool cursor_is_handle = false;
+		bool drag_resizing = false;
 		
 		int monitor_width;
 		int drag_start_y = 0;
@@ -120,6 +121,13 @@ namespace Docky.Interface
 		
 		IDockItem[] DockItems { 
 			get { return item_provider.DockItems.ToArray (); } 
+		}
+		
+		IDockItem CurrentDockItem {
+			get {
+				try { return DockItems[DockItemForX (Cursor.X)]; }
+				catch { return null; }
+			}
 		}
 		
 		#region Zoom Properties
@@ -227,6 +235,12 @@ namespace Docky.Interface
 			get {
 				int x_offset = (Width - DockWidth)/2;
 				return new Gdk.Rectangle (x_offset, Height-IconSize - 2*VerticalBuffer, DockWidth, IconSize + 2*VerticalBuffer);
+			}
+		}
+		
+		bool CursorNearDraggableEdge {
+			get {
+				return Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 && CurrentDockItem is SeparatorItem;
 			}
 		}
 		
@@ -606,33 +620,39 @@ namespace Docky.Interface
 			bool tmp = CursorIsOverDockArea;
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
 			
-			if (cursor_is_handle && !((evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask))
-				EndDrag ();
-			
-			if (Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 || (cursor_is_handle && (evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask)) {
-				int item = DockItemForX (Cursor.X);
-				if (!cursor_is_handle && item > 0 && DockItems[item] is SeparatorItem) {
-					GdkWindow.Cursor = new Gdk.Cursor (CursorType.TopSide);
-					cursor_is_handle = true;
-					drag_start_y = Cursor.Y;
-					drag_start_icon_size = DockPreferences.IconSize;
-				}
+			if (CursorNearDraggableEdge && !cursor_is_handle) {
+				GdkWindow.Cursor = new Gdk.Cursor (CursorType.TopSide);
+				cursor_is_handle = true;
+			} else if (!CursorNearDraggableEdge && cursor_is_handle && !drag_resizing) {
+				GdkWindow.Cursor = new Gdk.Cursor (CursorType.LeftPtr);
+				cursor_is_handle = false;
 			}
-			if (cursor_is_handle && (evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask) {
+
+			if (drag_resizing)
 				DockPreferences.IconSize = drag_start_icon_size + (drag_start_y - Cursor.Y);
-			}
 			
-			if (tmp != CursorIsOverDockArea || CursorIsOverDockArea && DateTime.UtcNow.Subtract (last_render).TotalMilliseconds > 20) 
+			if (tmp != CursorIsOverDockArea || drag_resizing ||
+			    (CursorIsOverDockArea && (DateTime.UtcNow -last_render).TotalMilliseconds > 20)) 
 				AnimatedDraw ();
+			
 			return base.OnMotionNotifyEvent (evnt);
 		}
+		
+		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
+		{
+			if (CursorNearDraggableEdge)
+				StartDrag ();
+			
+			return base.OnButtonPressEvent (evnt);
+		}
+
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			bool ret_val = base.OnButtonPressEvent (evnt);
 			
 			// lets not do anything in this case
-			if (cursor_is_handle) {
+			if (drag_resizing) {
 				EndDrag ();
 				return ret_val;
 			}
@@ -691,10 +711,16 @@ namespace Docky.Interface
 			base.OnStyleSet (previous_style);
 		}
 		
+		void StartDrag ()
+		{
+			drag_start_y = Cursor.Y;
+			drag_start_icon_size = DockPreferences.IconSize;
+			drag_resizing = true;
+		}
+		
 		void EndDrag ()
 		{
-			GdkWindow.Cursor = new Gdk.Cursor (CursorType.LeftPtr);
-			cursor_is_handle = false;
+			drag_resizing = false;
 		}
 		
 		void SetIconRegions ()
