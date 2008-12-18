@@ -40,20 +40,14 @@ namespace Docky.Interface.Renderers
 		static SummonModeRenderer ()
 		{
 			DockPreferences.IconSizeChanged += delegate {
-				if (large_icon_cache != null) {
-					large_icon_cache.Dispose ();
-					large_icon_cache = null;
-				}
+				if (LargeIconCache != null)
+					LargeIconCache.Dispose ();
+				LargeIconCache = null;
 			};
 		}
 		
-		static PixbufSurfaceCache large_icon_cache;
 		static PixbufSurfaceCache LargeIconCache {
-			get {
-				if (large_icon_cache == null)
-					large_icon_cache = new PixbufSurfaceCache (10, 2*DockPreferences.IconSize, 2*DockPreferences.IconSize);
-				return large_icon_cache;
-			}
+			get; set;
 		}
 		
 		static string HighlightFormat { 
@@ -64,6 +58,9 @@ namespace Docky.Interface.Renderers
 		
 		public static void RenderSummonMode (Context cr, DockState state, Gdk.Rectangle dockArea, int VerticalBuffer)
 		{
+			if (LargeIconCache == null)
+				LargeIconCache = new PixbufSurfaceCache (10, 2*DockPreferences.IconSize, 2*DockPreferences.IconSize, cr.Target);
+				
 			for (int i=0; i<3; i++) {
 				Pane pane  = (Pane)i;
 				int left_x;

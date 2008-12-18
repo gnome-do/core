@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+using System.Diagnostics;
+
 using Cairo;
 using Gdk;
 using Gtk;
@@ -51,9 +53,10 @@ namespace Docky.Interface
 		
 		Gdk.Point cursor;
 		
+		Gdk.Rectangle minimum_dock_area;
+		
 		DateTime last_click = DateTime.UtcNow;
 		DateTime enter_time = DateTime.UtcNow;
-		DateTime last_render = DateTime.UtcNow;
 		DateTime interface_change_time = DateTime.UtcNow;
 		
 		bool cursor_is_handle = false;
@@ -114,8 +117,6 @@ namespace Docky.Interface
 			}
 		}
 		#endregion
-		
-		IStatistics Statistics { get; set; }
 		
 		new DockState State { get; set; }
 		
@@ -233,14 +234,20 @@ namespace Docky.Interface
 		
 		Gdk.Rectangle MinimumDockArea {
 			get {
-				int x_offset = (Width - DockWidth)/2;
-				return new Gdk.Rectangle (x_offset, Height-IconSize - 2*VerticalBuffer, DockWidth, IconSize + 2*VerticalBuffer);
+				if (minimum_dock_area.X == 0 && minimum_dock_area.Y == 0 && 
+				    minimum_dock_area.Width == 0 && minimum_dock_area.Height == 0) {
+					
+					int x_offset = (Width - DockWidth)/2;
+					minimum_dock_area = new Gdk.Rectangle (x_offset, Height-IconSize - 2*VerticalBuffer, DockWidth, 
+					                                       IconSize + 2*VerticalBuffer);
+				}
+				return minimum_dock_area;
 			}
 		}
 		
 		bool CursorNearDraggableEdge {
 			get {
-				return Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 && CurrentDockItem is SeparatorItem;
+				return CursorIsOverDockArea && Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 && CurrentDockItem is SeparatorItem;
 			}
 		}
 		
@@ -312,12 +319,12 @@ namespace Docky.Interface
 		
 		public DockArea (DockWindow window, IStatistics statistics) : base ()
 		{
-			Statistics = statistics;
 			this.window = window;
 			item_provider = new DockItemProvider (statistics);
 			State = new DockState ();
 			
 			Cursor = new Gdk.Point (-1, -1);
+			minimum_dock_area = new Gdk.Rectangle ();
 			
 			Gdk.Rectangle geo;
 			geo = Screen.GetMonitorGeometry (0);
@@ -341,6 +348,13 @@ namespace Docky.Interface
 				SetParentInputMask ();
 				return false;
 			});
+		}
+		
+		public Surface GetSimilar (int width, int height)
+		{
+			if (backbuffer == null)
+				throw new Exception ("DockArea is not fully initialized");
+			return backbuffer.CreateSimilar (backbuffer.Content, width, height);
 		}
 		
 		void RegisterEvents ()
@@ -433,13 +447,14 @@ namespace Docky.Interface
 			}
 			
 			double scale = zoom/DockPreferences.IconQuality;
+			
 			if (DockItems[icon].Scalable) {
 				cr.Scale (scale, scale);
-				cr.SetSource (DockItems[icon].GetIconSurface (), x*DockPreferences.IconQuality, y*DockPreferences.IconQuality);
+				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), x*DockPreferences.IconQuality, y*DockPreferences.IconQuality);
 				cr.Paint ();
 				cr.Scale (1/scale, 1/scale);
 			} else {
-				cr.SetSource (DockItems[icon].GetIconSurface (), x*zoom, Height-DockItems[icon].Height-(MinimumDockArea.Height-DockItems[icon].Height)/2);
+				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), x*zoom, Height-DockItems[icon].Height-(MinimumDockArea.Height-DockItems[icon].Height)/2);
 				cr.Paint ();
 			}
 			
@@ -565,11 +580,11 @@ namespace Docky.Interface
 		}
 		
 		#region Drag To Code
-		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time_)
+		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{
 			Cursor = new Gdk.Point (x, y);
 			AnimatedDraw ();
-			return base.OnDragMotion (context, x, y, time_);
+			return base.OnDragMotion (context, x, y, time);
 		}
 
 		protected override void OnDragDataReceived (Gdk.DragContext context, int x, int y, Gtk.SelectionData selectionData, uint info, uint time)
@@ -589,9 +604,10 @@ namespace Docky.Interface
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
 			bool ret_val = base.OnExposeEvent (evnt);
+			// clear the dock area cache... this will cause it to recalculate.
+			minimum_dock_area = new Gdk.Rectangle ();
 			if (!IsDrawable)
 				return ret_val;
-			last_render = DateTime.UtcNow;
 			
 			if (backbuffer == null) {
 				Context tmp = Gdk.CairoHelper.Create (GdkWindow);
@@ -614,25 +630,33 @@ namespace Docky.Interface
 			
 			return ret_val;
 		}
- 
+		
 		protected override bool OnMotionNotifyEvent(EventMotion evnt)
 		{
 			bool tmp = CursorIsOverDockArea;
+			
+			Gdk.Point old_cursor_location = Cursor;
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
 			
 			if (CursorNearDraggableEdge && !cursor_is_handle) {
-				GdkWindow.Cursor = new Gdk.Cursor (CursorType.TopSide);
+				Gdk.Cursor top_cursor = new Gdk.Cursor (CursorType.TopSide);
+				GdkWindow.Cursor = top_cursor;
+				top_cursor.Dispose ();
 				cursor_is_handle = true;
 			} else if (!CursorNearDraggableEdge && cursor_is_handle && !drag_resizing) {
-				GdkWindow.Cursor = new Gdk.Cursor (CursorType.LeftPtr);
+				Gdk.Cursor normal_cursor = new Gdk.Cursor (CursorType.LeftPtr);
+				GdkWindow.Cursor = normal_cursor;
+				normal_cursor.Dispose ();
 				cursor_is_handle = false;
 			}
 
 			if (drag_resizing)
 				DockPreferences.IconSize = drag_start_icon_size + (drag_start_y - Cursor.Y);
 			
-			if (tmp != CursorIsOverDockArea || drag_resizing ||
-			    (CursorIsOverDockArea && (DateTime.UtcNow -last_render).TotalMilliseconds > 20)) 
+			bool cursor_move_warrants_draw = CursorIsOverDockArea && 
+				old_cursor_location.X != Cursor.X;
+
+			if (tmp != CursorIsOverDockArea || drag_resizing || cursor_move_warrants_draw) 
 				AnimatedDraw ();
 			
 			return base.OnMotionNotifyEvent (evnt);

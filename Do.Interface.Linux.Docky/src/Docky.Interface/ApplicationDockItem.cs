@@ -54,10 +54,10 @@ namespace Docky.Interface
 		Gdk.Rectangle icon_region;
 		
 		#region IDockItem implementation 
-		public Surface GetIconSurface ()
+		public Surface GetIconSurface (Surface sr)
 		{
 			if (icon_surface == null) {
-				icon_surface = new ImageSurface (Cairo.Format.Argb32, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
+				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
 				Context cr = new Context (icon_surface);
 				
 				Gdk.Pixbuf pbuf = GetIcon ();
