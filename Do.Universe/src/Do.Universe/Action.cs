@@ -50,7 +50,7 @@ namespace Do.Universe
 		/// items are /not/ optional, this means that they are required).
 		/// </value>
 		public virtual bool ModifierItemsOptional {
-			get { return true; }
+			get { return false; }
 		}
 		
 		/// <summary>
