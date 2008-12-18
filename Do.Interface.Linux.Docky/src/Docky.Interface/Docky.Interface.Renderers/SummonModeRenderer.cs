@@ -21,6 +21,7 @@ using System.Collections.Generic;
 
 using Cairo;
 using Gdk;
+using Mono.Unix;
 
 using Do.Interface;
 using Do.Interface.AnimationBase;
@@ -107,7 +108,7 @@ namespace Docky.Interface.Renderers
 			switch (PaneDrawState (state.CurrentPane, state))
 			{
 			case DrawState.NoResult:
-				RenderText (cr, "No result found for: " + state.GetPaneQuery (state.CurrentPane), dockArea, widget);
+				RenderText (cr, Catalog.GetString ("No result found for") + ": " + state.GetPaneQuery (state.CurrentPane), dockArea, widget);
 				break;
 			case DrawState.Normal:
 				RenderNormalText (cr, state, dockArea, widget);
