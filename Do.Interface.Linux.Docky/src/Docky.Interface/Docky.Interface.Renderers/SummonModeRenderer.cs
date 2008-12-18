@@ -84,7 +84,7 @@ namespace Docky.Interface.Renderers
 					break;
 				case DrawState.ExplicitText:
 					icon = "gnome-mime-text";
-					opacity = .3;
+					opacity = .2;
 					break;
 				case DrawState.None:
 					continue;

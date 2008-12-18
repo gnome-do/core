@@ -457,8 +457,8 @@ namespace Docky.Interface
 			}
 			
 			// This gives the actual x,y coordinates of the icon 
-			double x = (1 / zoom) * (center - zoom * IconSize / 2);
-			double y = (1 / zoom) * (Height - (zoom * IconSize)) - VerticalBuffer;
+			double x = (center - zoom * IconSize / 2);
+			double y = (Height - (zoom * IconSize)) - VerticalBuffer;
 			
 			int total_ms = (int) (DateTime.UtcNow - DockItems[icon].LastClick).TotalMilliseconds;
 			if (total_ms < BounceTime) {
@@ -469,11 +469,14 @@ namespace Docky.Interface
 			
 			if (DockItems[icon].Scalable) {
 				cr.Scale (scale, scale);
-				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), x * DockPreferences.IconQuality, y * DockPreferences.IconQuality);
+				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom
+				// the icon, not move it around.
+				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), x * (1 / scale), y * (1 / scale));
 				cr.Paint ();
 				cr.Scale (1 / scale, 1 / scale);
 			} else {
-				double startx = x * zoom + (DockItems[icon].Width * zoom - DockItems[icon].Width) / 2;
+				// since these dont scale, we have some extra work to do to keep them centered
+				double startx = x + (zoom*DockItems[icon].Width - DockItems[icon].Width) / 2;
 				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), 
 				              (int) startx, 
 				              Height - DockItems[icon].Height - (MinimumDockArea.Height - DockItems[icon].Height) / 2);
@@ -481,6 +484,7 @@ namespace Docky.Interface
 			}
 			
 			if (DockItems[icon].DrawIndicator) {
+				// draws a simple triangle indicator.  Should be replaced by something nicer some day
 				cr.MoveTo (center, Height - 6);
 				cr.LineTo (center + 4, Height);
 				cr.LineTo (center - 4, Height);
