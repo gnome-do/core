@@ -38,8 +38,8 @@ namespace Do.Core
 	{
 
 		Thread thread, update_thread;
-		List<IObject> actions;
-		Dictionary<string, IObject> universe;
+		List<Element> actions;
+		Dictionary<string, Element> universe;
 		
 		object action_lock = new object ();
 		object universe_lock = new object ();
@@ -70,17 +70,17 @@ namespace Do.Core
 		
 		public UniverseManager ()
 		{
-			actions = new List<IObject> ();
-			universe = new Dictionary<string, IObject> ();
+			actions = new List<Element> ();
+			universe = new Dictionary<string, Element> ();
 			UpdatesEnabled = true;
 		}
 
-		public IEnumerable<IObject> Search (string query, IEnumerable<Type> filter)
+		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter)
 		{	
-				return Search (query, filter, (IObject) null);
+				return Search (query, filter, (Element) null);
 		}
 		
-		public IEnumerable<IObject> Search (string query, IEnumerable<Type> filter, IObject other)
+		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, Element other)
 		{
 			if (filter.Count () == 1 && filter.First () == typeof (IAction))
 				lock (action_lock)
@@ -90,12 +90,12 @@ namespace Do.Core
 					return Search (query, filter, universe.Values, other);
 		}
 		
-		public IEnumerable<IObject> Search (string query, IEnumerable<Type> filter, IEnumerable<IObject> objects)
+		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, IEnumerable<Element> objects)
 		{
 			return Search (query, filter, objects, null);
 		}
 		
-		public IEnumerable<IObject> Search (string query, IEnumerable<Type> filter, IEnumerable<IObject> objects, IObject other)
+		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, IEnumerable<Element> objects, Element other)
 		{
 			DoObject text = new DoTextItem (query);
 
@@ -110,7 +110,7 @@ namespace Do.Core
 						? new [] { text }
 						: Enumerable.Empty<DoObject> ()
 				)
-				.Cast<IObject> ()
+				.Cast<Element> ()
 				.ToArray ();
 		}
 		
@@ -118,12 +118,12 @@ namespace Do.Core
 		/// Returns if an object likely contains children.
 		/// </summary>
 		/// <param name="o">
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		public bool ObjectHasChildren (IObject o)
+		public bool ObjectHasChildren (Element o)
 		{
 			return o is DoItem && (o as DoItem).HasChildren;
 		}
@@ -282,9 +282,9 @@ namespace Do.Core
 		/// A <see cref="System.String"/>
 		/// </param>
 		/// <param name="item">
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </param>
-		public bool TryGetObjectForUID (string uid, out IObject o)
+		public bool TryGetObjectForUID (string uid, out Element o)
 		{
 			if (universe.ContainsKey (uid)) {
 				o = universe [uid];

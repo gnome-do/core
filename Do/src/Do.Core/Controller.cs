@@ -267,7 +267,7 @@ namespace Do.Core {
 		/// </summary>
 		bool ThirdPaneAllowed {
 			get {
-				IObject first, second;
+				Element first, second;
 				IAction action;
 
 				first = GetSelection (Pane.First);
@@ -285,7 +285,7 @@ namespace Do.Core {
 		/// </value>
 		bool ThirdPaneRequired {
 			get {
-				IObject first, second;
+				Element first, second;
 				IAction action;
 				IItem item;
 
@@ -321,9 +321,9 @@ namespace Do.Core {
 		/// Summons a window with objects in it... seems to work
 		/// </summary>
 		/// <param name="objects">
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </param>
-		public void SummonWithObjects (IEnumerable<IObject> objects)
+		public void SummonWithObjects (IEnumerable<Element> objects)
 		{
 			if (!IsSummonable) return;
 			
@@ -782,9 +782,9 @@ namespace Do.Core {
 			resultsGrown = false;
 		}
 		
-		IObject GetSelection (Pane pane)
+		Element GetSelection (Pane pane)
 		{
-			IObject o;
+			Element o;
 
 			try {
 				o = controllers[(int) pane].Selection;
@@ -796,7 +796,7 @@ namespace Do.Core {
 		
 		protected virtual void PerformAction (bool vanish)
 		{
-			IObject first, second, third;
+			Element first, second, third;
 			string actionQuery, itemQuery, modItemQuery;
 
 			items.Clear ();
@@ -973,7 +973,7 @@ namespace Do.Core {
 		
 		public ControlOrientation Orientation { get; set; }
 		
-		public bool ObjectHasChildren (IObject o)
+		public bool ObjectHasChildren (Element o)
 		{
 			return Do.UniverseManager.ObjectHasChildren (o);
 		}

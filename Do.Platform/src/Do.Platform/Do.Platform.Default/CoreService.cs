@@ -28,25 +28,13 @@ namespace Do.Platform.Default
 	public class CoreService : ICoreService
 	{
 		#region ICoreService
-
-		public string GetUID (IObject o)
+		
+		public Element GetElement (string uid)
 		{
-			Log.Debug ("Default ICoreService cannot get UIDs.");
-			return "";
+			Log.Debug ("Default ICoreService cannot get Elements.");
+			return new EmptyElement ();
 		}
 		
-		public IObject GetIObject (string uid)
-		{
-			Log.Debug ("Default ICoreService cannot get IObjects.");
-			return new EmptyObject ();
-		}
-
-		public IObject Unwrap (IObject o)
-		{
-			Log.Debug ("Default ICoreService cannot unwrap IObjects.");
-			return o;
-		}
-
 		#endregion
 		
 	}

@@ -185,7 +185,7 @@ namespace Do.Core {
 		public DateTime LastHit;
 		public string FirstChars;
 		
-		public RelevanceRecord (IObject o)
+		public RelevanceRecord (Element o)
 		{
 			LastHit = DateTime.Now;
 			Type = Services.Core.Unwrap (o).GetType ();

@@ -34,8 +34,8 @@ namespace Do.Core {
 	/// The root of our wrapper heirarchy (DoObject, DoItem, DoItemSource,
 	/// DoAction).
 	/// </summary>
-	public class DoObject : IObject, IConfigurable,
-		IEquatable<DoObject>, IComparable<IObject>, IComparable<DoObject> {
+	public class DoObject : Element, IConfigurable,
+		IEquatable<DoObject>, IComparable<Element>, IComparable<DoObject> {
 
 		const string UIDFormat = "{0}: {1} ({2})";
 		static readonly string DefaultName;
@@ -54,43 +54,43 @@ namespace Do.Core {
 		/// <see cref="DoObject"/>.
 		/// </summary>
 		/// <param name="o">
-		/// An <see cref="IObject"/>.
+		/// An <see cref="Element"/>.
 		/// </param>
 		/// <returns>
-		/// An <see cref="IObject"/> whose dynamic type is
+		/// An <see cref="Element"/> whose dynamic type is
 		/// <see cref="DoObject"/>.
 		/// </returns>
-		public static IObject Wrap (IObject o)
+		public static Element Wrap (Element o)
 		{
 			return o is DoObject ? o : new DoObject (o);
 		}
 
-		public static IObject Unwrap (IObject o)
+		public static Element Unwrap (Element o)
 		{
 			while (o is DoObject)
-				o = (IObject) (o as DoObject).Inner;
+				o = (Element) (o as DoObject).Inner;
 			return o;
 		}
 
 		/// <value>
-		/// A unique identifier for this <see cref="IObject"/>.
+		/// A unique identifier for this <see cref="Element"/>.
 		/// </value>
 		public string UID { get; private set; }
 		
 		/// <value>
-		/// This <see cref="IObject"/>'s relevance for the most recent search.
+		/// This <see cref="Element"/>'s relevance for the most recent search.
 		/// </value>
 		public float Relevance { get; set; }
 		
 		/// <value>
-		/// The inner <see cref="IObject"/> wrapped by this instance.
+		/// The inner <see cref="Element"/> wrapped by this instance.
 		/// </value>
-		protected IObject Inner { get; set; }
+		protected Element Inner { get; set; }
 		
-		public DoObject (IObject inner)
+		public DoObject (Element inner)
 		{
 			if (inner == null)
-				throw new ArgumentNullException ("inner", "Inner IObject may not be null.");
+				throw new ArgumentNullException ("inner", "Inner Element may not be null.");
 			
 			Inner = inner;
 
@@ -106,7 +106,7 @@ namespace Do.Core {
 		}
 
 		//// <value>
-		/// Safe wrapper for inner <see cref="IObject"/>'s Name property.
+		/// Safe wrapper for inner <see cref="Element"/>'s Name property.
 		/// </value>
 		public virtual string Name {
 			get {
@@ -123,7 +123,7 @@ namespace Do.Core {
 		}
 
 		//// <value>
-		/// Safe wrapper for inner <see cref="IObject"/>'s Description property.
+		/// Safe wrapper for inner <see cref="Element"/>'s Description property.
 		/// </value>
 		public virtual string Description {
 			get {
@@ -140,7 +140,7 @@ namespace Do.Core {
 		}
 
 		//// <value>
-		/// Safe wrapper for inner <see cref="IObject"/>'s Icon property.
+		/// Safe wrapper for inner <see cref="Element"/>'s Icon property.
 		/// </value>
 		public virtual string Icon {
 			get {
@@ -157,14 +157,14 @@ namespace Do.Core {
 		}
 
 		/// <summary>
-		/// Safe wrapper for inner <see cref="IObject"/>'s
+		/// Safe wrapper for inner <see cref="Element"/>'s
 		/// <see cref="IConfigurable"/>.GetConfiguration method.
-		/// Returns null if inner <see cref="IObject"/> is not <see cref="IConfigurable"/>,
+		/// Returns null if inner <see cref="Element"/> is not <see cref="IConfigurable"/>,
 		/// or an exception is thrown in the inner GetConfiguration call.
 		/// </summary>
 		/// <returns>
 		/// A <see cref="Gtk.Bin"/> containing configuration widgets to be associated with
-		/// this IObject.
+		/// this Element.
 		/// </returns>
 		public Gtk.Bin GetConfiguration ()
 		{
@@ -200,7 +200,7 @@ namespace Do.Core {
 			return UID;
 		}
 
-		public int CompareTo (IObject other)
+		public int CompareTo (Element other)
 		{
 			return CompareTo (Wrap (other) as DoObject);
 		}

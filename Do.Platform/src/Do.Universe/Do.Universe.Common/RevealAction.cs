@@ -28,7 +28,7 @@ using Do.Platform;
 
 namespace Do.Universe.Common
 {
-	public class RevealAction : AbstractAction
+	public class RevealAction : Action
 	{
 		
 		public override string Name {
@@ -47,7 +47,7 @@ namespace Do.Universe.Common
 			get { yield return typeof (IFileItem); }
 		}
 		
-		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			foreach (IFileItem file in items) {
 				Services.Environment.OpenPath (Path.GetDirectoryName (file.Path));

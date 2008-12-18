@@ -39,9 +39,9 @@ namespace Do.Core
 		/// A <see cref="Type"/>
 		/// </param>
 		/// <returns>
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </returns>
-		IEnumerable<IObject> Search (string query, IEnumerable<Type> searchFilter);
+		IEnumerable<Element> Search (string query, IEnumerable<Type> searchFilter);
 		
 		/// <summary>
 		/// Returns search results based on they query, the search filter, and a comparison object.
@@ -53,12 +53,12 @@ namespace Do.Core
 		/// A <see cref="Type"/>
 		/// </param>
 		/// <param name="compareObj">
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </param>
 		/// <returns>
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </returns>
-		IEnumerable<IObject> Search (string query, IEnumerable<Type> searchFilter, IObject compareObj);
+		IEnumerable<Element> Search (string query, IEnumerable<Type> searchFilter, Element compareObj);
 		
 		/// <summary>
 		/// Returns search results based on a query and the search filter form a specified array.
@@ -70,12 +70,12 @@ namespace Do.Core
 		/// A <see cref="Type"/>
 		/// </param>
 		/// <param name="baseArray">
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </param>
 		/// <returns>
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </returns>
-		IEnumerable<IObject> Search (string query, IEnumerable<Type> searchFilter, IEnumerable<IObject> baseArray);
+		IEnumerable<Element> Search (string query, IEnumerable<Type> searchFilter, IEnumerable<Element> baseArray);
 		
 		/// <summary>
 		/// Returns search results based on a query, search filter, a defined array, and has relevancy adjusticated
@@ -91,12 +91,12 @@ namespace Do.Core
 		/// A <see cref="IEnumerable`1"/>
 		/// </param>
 		/// <param name="compareObj">
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </param>
 		/// <returns>
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </returns>
-		IEnumerable<IObject> Search (string query, IEnumerable<Type> searchFilter, IEnumerable<IObject> baseArray, IObject compareObj);
+		IEnumerable<Element> Search (string query, IEnumerable<Type> searchFilter, IEnumerable<Element> baseArray, Element compareObj);
 		
 		/// <summary>
 		/// Directly adds items to the universe repository
@@ -122,15 +122,15 @@ namespace Do.Core
 		void Reload ();
 		
 		/// <summary>
-		/// Checks to see if an IObject LIKELY has child items.  This list is not authoritive.
+		/// Checks to see if an Element LIKELY has child items.  This list is not authoritive.
 		/// </summary>
 		/// <param name="o">
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		bool ObjectHasChildren (IObject o);
+		bool ObjectHasChildren (Element o);
 		
 		/// <value>
 		/// Enables/Disables background updates for universe.  This should be used primarily for power saving

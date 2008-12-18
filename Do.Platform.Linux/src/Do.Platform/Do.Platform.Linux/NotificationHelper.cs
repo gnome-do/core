@@ -33,11 +33,10 @@ namespace Do.Platform.Linux
 	internal class NotificationHelper
 	{
 		const string DefaultIconName = "gnome-do";
-		static readonly string ActionButtonLabel = Catalog.GetString ("Ok");
 
 		const int IconSize = 24;
 		const int LettersPerWord = 7;
-		const int MillisecondsPerWord = 200;
+		const int MillisecondsPerWord = 250;
 		const int MinNotifyShow = 5000;
 		const int MaxNotifyShow = 10000;
 

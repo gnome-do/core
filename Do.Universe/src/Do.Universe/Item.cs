@@ -1,4 +1,4 @@
-/* IItem.cs
+/* Item.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -21,14 +21,9 @@ using System;
 
 namespace Do.Universe
 {
-	/// <summary>
-	/// The base interface that all classes to be used as items (objects on which
-	/// commands operate) must implement, either directly or indirectly.
-	/// </summary>
-	public interface IItem
+	
+	
+ 	public abstract class Item : Element, IItem
 	{
-		string Name { get; }
-		string Description { get; }
-		string Icon { get; }
 	}
 }

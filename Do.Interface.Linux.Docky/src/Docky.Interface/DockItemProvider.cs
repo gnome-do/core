@@ -119,10 +119,10 @@ namespace Docky.Interface
 				return;
 			
 			if (filename.EndsWith (".desktop")) {
-				IObject o = Services.UniverseFactory.NewApplicationItem (filename);
+				Element o = Services.UniverseFactory.NewApplicationItem (filename) as Element;
 				custom_items[filename] = new DockItem (o);
 			} else {
-				IObject o = Services.UniverseFactory.NewFileItem (filename);
+				Element o = Services.UniverseFactory.NewFileItem (filename) as Element;
 				custom_items[filename] = new DockItem (o);
 			}
 			
@@ -162,18 +162,12 @@ namespace Docky.Interface
 			return IconSource.Unknown;
 		}
 		
-		IEnumerable<IItem> MostUsedItems ()
+		IEnumerable<Item> MostUsedItems ()
 		{
-			Func<IItem, bool> isNotSelectedText = item =>
-				Services.Core.Unwrap (item).GetType ().Name != "SelectedTextItem";
-			Func<IItem, bool> isApplication = item => item.Is<IApplicationItem> ();
-			Func<IItem, int> typeComparison = item =>
-				Services.Core.Unwrap (item).GetType ().GetHashCode ();
-
 			return statistics.GetMostUsedItems (DockPreferences.AutomaticIcons)
-				.Where (isNotSelectedText)
-				.OrderByDescending (isApplication)
-				.ThenBy (typeComparison)
+				.Where (item => item.Name != "SelectedTextItem")
+				.OrderByDescending (item => item is IApplicationItem)
+				.ThenBy (item => item.GetType ())
 				.ThenBy (item => item.Name)
 				.Take (DockPreferences.AutomaticIcons);
 		}
@@ -185,7 +179,7 @@ namespace Docky.Interface
 				SerializeCustomItems ();
 			
 			if (GetIconSource (DockItems[item]) == IconSource.Statistics) {
-				DockPreferences.AddBlacklistItem (Util.UIDForIObject ((DockItems[item] as DockItem).IObject));
+				DockPreferences.AddBlacklistItem (Util.UIDForElement ((DockItems[item] as DockItem).Element));
 				UpdateItems ();
 				return true;
 			} else if (GetIconSource (DockItems[item]) == IconSource.Custom) {
@@ -215,10 +209,10 @@ namespace Docky.Interface
 		void UpdateItems ()
 		{
 			List<IDockItem> new_items = new List<IDockItem> ();
-			foreach (IItem i in MostUsedItems ()) {
-				if (DockPreferences.ItemBlacklist.Contains (Util.UIDForIObject (i)))
+			foreach (Item item in MostUsedItems ()) {
+				if (DockPreferences.ItemBlacklist.Contains (item.UniqueId))
 					continue;
-				IDockItem di = new DockItem (i);
+				IDockItem di = new DockItem (item);
 				if (custom_items.Values.Contains (di)) {
 					di.Dispose ();
 					continue;
@@ -226,9 +220,9 @@ namespace Docky.Interface
 				new_items.Add (di);
 				
 				bool is_set = false;
-				foreach (IDockItem item in statistical_items) {
-					if (item.Equals (di)) {
-						di.DockAddItem = item.DockAddItem;
+				foreach (IDockItem ditem in statistical_items) {
+					if (ditem.Equals (di)) {
+						di.DockAddItem = ditem.DockAddItem;
 						is_set = true;
 						break;
 					}

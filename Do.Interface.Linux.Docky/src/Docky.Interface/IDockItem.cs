@@ -47,6 +47,6 @@ namespace Docky.Interface
 	
 	public interface IDoDockItem
 	{
-		IObject IObject { get; }
+		Element Element { get; }
 	}
 }

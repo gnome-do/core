@@ -173,7 +173,7 @@ namespace Do.Universe {
 				
 				items = new List<IItem> ();
 				foreach (AliasRecord alias in aliases) {
-					IObject item;
+					Element item;
 					
 					Do.UniverseManager.TryGetObjectForUID (alias.UID, out item);
 					if (null != item && item is IItem) {

@@ -29,7 +29,7 @@ namespace Do.Universe {
 		
 		private static string text;
 		
-		public IObject Inner {
+		public Element Inner {
 			get {
 				return Services.UniverseFactory.NewTextItem (Text);
 			}

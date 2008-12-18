@@ -43,7 +43,7 @@ namespace Do.Interface.AnimationBase
 		int num_results;
 		int width, height;
 		int border_width, top_border_width;
-		Dictionary <IObject, Surface> surface_buffer;
+		Dictionary <Element, Surface> surface_buffer;
 		Surface highlight_surface, backbuffer, child_inout_surface, triplebuffer, background;
 		
 		DateTime delta_time;
@@ -58,7 +58,7 @@ namespace Do.Interface.AnimationBase
 		IUIContext context = null;
 		BezelColors colors;
 		
-		IList<IObject> results;
+		IList<Element> results;
 		
 		public int X { get; set; }
 		
@@ -125,7 +125,7 @@ namespace Do.Interface.AnimationBase
 			}
 		}
 		
-		public IList<IObject> Results {
+		public IList<Element> Results {
 			get {
 				return results;
 			}
@@ -281,7 +281,7 @@ namespace Do.Interface.AnimationBase
 			}
 //			ItemRenderer = new BezelFullResultItemRenderer (this);
 			
-			surface_buffer = new Dictionary <IObject,Surface> ();
+			surface_buffer = new Dictionary <Element,Surface> ();
 			secondary = new int[0];
 			border_width = 12;
 			top_border_width = 20;
@@ -391,7 +391,7 @@ namespace Do.Interface.AnimationBase
 			foreach (Surface s in surface_buffer.Values)
 				s.Destroy ();
 			
-			surface_buffer = new Dictionary<IObject,Surface> ();
+			surface_buffer = new Dictionary<Element,Surface> ();
 			Draw ();
 		}
 		
@@ -711,7 +711,7 @@ namespace Do.Interface.AnimationBase
 			return base.OnExposeEvent (evnt);
 		}
 
-		void BufferItem (IObject item) 
+		void BufferItem (Element item) 
 		{
 			if (!IsDrawable)
 				return;

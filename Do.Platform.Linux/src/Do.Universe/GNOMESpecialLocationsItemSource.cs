@@ -29,67 +29,58 @@ using Do.Universe;
 
 namespace Do.Universe.Linux {
 
-	public class GNOMESpecialLocationsItemSource : IItemSource {
-		List<IItem> items;
+	public class GNOMESpecialLocationsItemSource : ItemSource {
+		List<Item> items;
 		
 		public GNOMESpecialLocationsItemSource()
 		{
-			items = new List<IItem> ();
+			items = new List<Item> ();
 		}
 		
-		class GNOMEURIItem : IUriItem {
+		class GNOMEURItem : Item, IUriItem {
 			protected string uri, name, icon;
 			
-			public GNOMEURIItem (string uri, string name, string icon)
+			public GNOMEURItem (string uri, string name, string icon)
 			{
 				this.uri = uri;
 				this.name = name;
 				this.icon = icon;
 			}
 			
-			virtual public string Name { get { return name; } }
-			virtual public string Description { get { return Uri; } }
-			virtual public string Icon { get { return icon; } }
-			virtual public string Uri { get { return uri; } }
+			public override string Name { get { return name; } }
+			public override string Description { get { return Uri; } }
+			public override string Icon { get { return icon; } }
+			public string Uri { get { return uri; } }
 		}
 			
-		public string Name { 
+		public override string Name  { 
 			get { return Catalog.GetString ("GNOME Special Locations"); } 
 		}
 		
-		public string Description {
+		public override string Description  {
 			get { return Catalog.GetString ("Special locations in GNOME, "
 				+ "such as Computer and Network.");
 			} 
 		}
 		
-		public string Icon { get { return "user-home"; } }
+		public override string Icon  { get { return "user-home"; } }
 
-		public IEnumerable<Type> SupportedItemTypes
-		{
+		public override IEnumerable<Type> SupportedItemTypes {
 			get {
-				return new Type[] {
-					typeof (IUriItem),
-				};
+				yield return typeof (IUriItem);
 			}
 		}
 		
-		public IEnumerable<IItem> Items
-		{
+		public override IEnumerable<Item> Items {
 			get { return items; }
 		}
 		
-		public IEnumerable<IItem> ChildrenOfItem (IItem item)
-		{
-			return null;
-		}
-		
-		public void UpdateItems ()
+		public override void UpdateItems ()
 		{
 			items.Clear ();			
 			items.Add (new GNOMETrashFileItem ());
-			items.Add (new GNOMEURIItem ("computer:///", "Computer", "computer"));
-			items.Add (new GNOMEURIItem ("network://", "Network", "network"));
+			items.Add (new GNOMEURItem ("computer:///", "Computer", "computer"));
+			items.Add (new GNOMEURItem ("network://", "Network", "network"));
 			FillGNOMEBookmarkItems ();
 		}
 			
@@ -164,7 +155,7 @@ namespace Do.Universe.Linux {
 		
 	}
 	
-	class GNOMETrashFileItem : IFileItem, IOpenableItem
+	class GNOMETrashFileItem : Item, IFileItem, IOpenableItem
 	{
 
 		string path;
@@ -180,11 +171,11 @@ namespace Do.Universe.Linux {
 			}
 		}
 
-		public string Name {
+		public override string Name  {
 			get { return "Trash"; }
 		}
 
-		public string Description {
+		public override string Description  {
 			get { return "Trash"; }
 		}
 
@@ -192,7 +183,7 @@ namespace Do.Universe.Linux {
 			get { return "trash://"; }
 		}
 
-		public string Icon
+		public override string Icon 
 		{
 			get {
 				if (Directory.Exists (Path) &&
@@ -210,7 +201,7 @@ namespace Do.Universe.Linux {
 		}
 	}
 
-	class GNOMEBookmarkItem : IFileItem, IOpenableItem 
+	class GNOMEBookmarkItem : Item, IFileItem, IOpenableItem 
 	{  
 		private string uri;		
 		private string icon;
@@ -229,11 +220,11 @@ namespace Do.Universe.Linux {
 			get { return path; }
 		}		
 		
-		public string Name {
+		public override string Name  {
 			get { return name; }
 		}		
 		
-		public string Description { 
+		public override string Description  { 
 			get { return uri + path; } 
 		}
 
@@ -241,7 +232,7 @@ namespace Do.Universe.Linux {
 			get { return uri; }
 		}		
 		
-		public string Icon {
+		public override string Icon  {
 			get { return icon; }
 		}
 		

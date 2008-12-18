@@ -1,4 +1,4 @@
-/* IObjectExtensions.cs
+/* ElementExtensions.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -28,8 +28,8 @@ using Do.Universe;
 namespace Do.Core
 {
 
-	public static class IObjectExtensions {
-			public static bool IsAssignableToAny (this IObject self, IEnumerable<Type> ts)
+	public static class ElementExtensions {
+			public static bool IsAssignableToAny (this Element self, IEnumerable<Type> ts)
 			{
 				Type selfT = self.GetType ();
 				return ts.Any (t => t.IsAssignableFrom (selfT));

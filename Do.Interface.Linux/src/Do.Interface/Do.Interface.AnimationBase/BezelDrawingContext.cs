@@ -26,7 +26,7 @@ namespace Do.Interface.AnimationBase
 {
 	public class BezelDrawingContext
 	{
-		private IObject[] objects = new IObject[3];
+		private Element[] objects = new Element[3];
 		private string [] queries = new string[3];
 		private bool [] text_mode = new bool[3];
 		
@@ -38,11 +38,11 @@ namespace Do.Interface.AnimationBase
 			text_mode[(int) pane] = textMode;
 		}
 		
-		public IObject GetPaneObject (Pane pane) {
+		public Element GetPaneObject (Pane pane) {
 			return objects[(int) pane];
 		}
 		
-		public void SetPaneObject (Pane pane, IObject obj) {
+		public void SetPaneObject (Pane pane, Element obj) {
 			objects[(int) pane] = obj;
 		}
 		

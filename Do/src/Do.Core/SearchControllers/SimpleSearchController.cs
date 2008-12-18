@@ -61,7 +61,7 @@ namespace Do.Core
 			}
 		}
 		
-		public IList<IObject> Results {
+		public IList<Element> Results {
 			get {
 				return context.Results;
 			}
@@ -71,13 +71,13 @@ namespace Do.Core
 			}
 		}
 
-		public IList<IObject> FullSelection {
+		public IList<Element> FullSelection {
 			get {
 				return context.FullSelection;
 			}
 		}
 
-		public virtual IObject Selection {
+		public virtual Element Selection {
 			get {
 				return context.Selection;
 			}
@@ -88,7 +88,7 @@ namespace Do.Core
 				return context.Cursor;
 			}
 			set {
-				IObject tmp = Selection;
+				Element tmp = Selection;
 				int ctmp = context.Cursor;
 				context.Cursor = value;
 				if (tmp != Selection || context.Cursor != ctmp) {
@@ -147,14 +147,14 @@ namespace Do.Core
 		
 		protected abstract void UpdateResults ();
 		
-		protected virtual List<IObject> InitialResults ()
+		protected virtual List<Element> InitialResults ()
 		{
 			if (context.ParentContext != null) {
 				if (context.LastContext != null && context.LastContext.Results.Any ())
-					return new List<IObject> (Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results));
-				return new List<IObject> (context.Results);
+					return new List<Element> (Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results));
+				return new List<Element> (context.Results);
 			} else {
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, SearchTypes));
+				return new List<Element> (Do.UniverseManager.Search (context.Query, SearchTypes));
 			}
 		}
 		
@@ -164,7 +164,7 @@ namespace Do.Core
 				return;
 			}
 			
-			IObject tmp = context.Selection;
+			Element tmp = context.Selection;
 			context = context.LastContext;
 			OnSearchFinished (tmp != context.Selection, true, Selection, Query);
 		}
@@ -173,10 +173,10 @@ namespace Do.Core
 		{
 			if (Results.Count - 1 < cursorLocation) return false;
 			
-			List<IObject> secondary;
-			secondary = new List<IObject> (context.SecondaryCursors);
+			List<Element> secondary;
+			secondary = new List<Element> (context.SecondaryCursors);
 			
-			IObject newObject = Results[cursorLocation];
+			Element newObject = Results[cursorLocation];
 			
 			if (secondary.Contains (newObject))
 				secondary.Remove (newObject);
@@ -196,10 +196,10 @@ namespace Do.Core
 				return false;
 			
 			IItem item = context.Selection as IItem;
-			List<IObject> children = new List<IObject> ();
+			List<Element> children = new List<Element> ();
 
 			foreach (DoItemSource source in PluginManager.ItemSources) {
-				foreach (IObject child in source.ChildrenOfItem (item))
+				foreach (Element child in source.ChildrenOfItem (item))
 					children.Add (child);
 			}
 			
@@ -244,7 +244,7 @@ namespace Do.Core
 			SearchStarted (upstream_search);
 		}	
 		
-		protected void OnSearchFinished (bool selection_changed, bool query_changed, IObject selection, string query)
+		protected void OnSearchFinished (bool selection_changed, bool query_changed, Element selection, string query)
 		{
 			SearchFinished (this, new SearchFinishState (selection_changed, query_changed, selection, query));
 		}

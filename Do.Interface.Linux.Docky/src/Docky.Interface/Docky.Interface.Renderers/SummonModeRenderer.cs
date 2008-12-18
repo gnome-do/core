@@ -162,11 +162,11 @@ namespace Docky.Interface.Renderers
 			int base_x = dockArea.X + 15;
 			
 			string text;
-			IObject unwrapped = Services.Core.Unwrap (state[state.CurrentPane]);
-			if (unwrapped is ITextItem)
-				text = GLib.Markup.EscapeText ((unwrapped as ITextItem).Text);
+			Element current = state [state.CurrentPane];
+			if (current is ITextItem)
+				text = GLib.Markup.EscapeText ((current as ITextItem).Text);
 			else
-				text = GLib.Markup.EscapeText (unwrapped.Name);
+				text = GLib.Markup.EscapeText (current.Name);
 			
 			int tmp = BezelTextUtils.TextHeight;
 			
@@ -193,11 +193,11 @@ namespace Docky.Interface.Renderers
 			int base_x = dockArea.X + 15;
 			
 			string text;
-			IObject unwrapped = Services.Core.Unwrap (state[state.CurrentPane]);
-			if (unwrapped is ITextItem)
-				text = GLib.Markup.EscapeText ((unwrapped as ITextItem).Text);
+			Element current = state [state.CurrentPane];
+			if (current is ITextItem)
+				text = GLib.Markup.EscapeText ((current as ITextItem).Text);
 			else
-				text = GLib.Markup.EscapeText (unwrapped.Name);
+				text = GLib.Markup.EscapeText (current.Name);
 			
 			int tmp = BezelTextUtils.TextHeight;
 			

@@ -32,19 +32,19 @@ namespace Do.Platform
 	{
 		#region ICoreService
 		
-		public string GetUID (IObject o)
+		public string GetUID (Element o)
 		{
 			return (DoObject.Wrap (o) as DoObject).UID;
 		}
 
-		public IObject GetIObject (string uid)
+		public Element GetElement (string uid)
 		{
-			IObject o;
+			Element o;
 			Do.UniverseManager.TryGetObjectForUID (uid, out o);
 			return o;
 		}
 
-		public IObject Unwrap (IObject o)
+		public Element Unwrap (Element o)
 		{
 			return DoObject.Unwrap (o);
 		}

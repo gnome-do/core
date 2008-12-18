@@ -68,7 +68,7 @@ namespace Docky.Interface
 			return sr;
 		}
 		
-		public static string UIDForIObject (IObject obj)
+		public static string UIDForElement (Element obj)
 		{
 			return obj.Name + obj.Description + obj.Icon;
 		}

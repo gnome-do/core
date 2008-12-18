@@ -82,11 +82,11 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
-			List<IObject> results;
+			List<Element> results;
 			if (!TextMode)
 				results = InitialResults ();
 			else
-				results = new List<IObject> ();
+				results = new List<Element> ();
 				
 			
 			if (context.ParentContext == null) {
@@ -120,7 +120,7 @@ namespace Do.Core
 			string query = Query;
 			
 			context = new SimpleSearchContext ();
-			List<IObject> results;
+			List<Element> results;
 			foreach (char c in query.ToCharArray ()) {
 				context.LastContext = context.Clone () as SimpleSearchContext;
 				context.Query += c;

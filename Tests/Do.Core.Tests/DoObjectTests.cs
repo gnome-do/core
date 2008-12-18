@@ -17,7 +17,7 @@ namespace Do.Core
 	public class DoObjectTests
 	{
 
-		class SimpleObject : IObject
+		class SimpleObject : Element
 		{
 			public string Name { get; set; }
 			public string Description { get; set; }
@@ -27,37 +27,37 @@ namespace Do.Core
 		[Test()]
 		public void Unwrap_Identity ()
 		{
-			IObject iob = new SimpleObject ();
+			Element iob = new SimpleObject ();
 			Assert.AreSame (iob, DoObject.Unwrap (iob));
 		}
 
 		[Test()]
 		public void Unwrap_Basic ()
 		{
-			IObject iob = new SimpleObject ();
-			IObject dob = new DoObject (iob);
+			Element iob = new SimpleObject ();
+			Element dob = new DoObject (iob);
 			Assert.AreSame (iob, DoObject.Unwrap (dob));
 		}
 
 		[Test()]
 		public void Unwrap_Recursive ()
 		{
-			IObject iob = new SimpleObject ();
-			IObject dob = new DoObject (new DoObject (iob));
+			Element iob = new SimpleObject ();
+			Element dob = new DoObject (new DoObject (iob));
 			Assert.AreSame (iob, DoObject.Unwrap (dob));
 		}
 
 		[Test()]
 		public void Wrap_Identity ()
 		{
-			IObject dob = new DoObject (new SimpleObject ());
+			Element dob = new DoObject (new SimpleObject ());
 			Assert.AreSame (dob, DoObject.Wrap (dob));
 		}
 
 		[Test()]
 		public void Wrap_Basic ()
 		{
-			IObject iob = new SimpleObject ();
+			Element iob = new SimpleObject ();
 			Type wrapperT = DoObject.Wrap (iob).GetType ();
 			Assert.IsTrue (typeof (DoObject).IsAssignableFrom (wrapperT));
 		}

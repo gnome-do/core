@@ -33,7 +33,7 @@ using Do.Universe;
 namespace Do.Universe.Linux
 {
 
-	public class CopyToClipboardAction : Do.Universe.AbstractAction
+	public class CopyToClipboardAction : Action
 	{
 
 		public override string Name {
@@ -49,13 +49,13 @@ namespace Do.Universe.Linux
 		}
 		
 		public override IEnumerable<Type> SupportedItemTypes {
-			get { yield return typeof (IItem); }
+			get { yield return typeof (Item); }
 		}
 		
-		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			string text = "";
-			IItem item = items.First ();
+			Item item = items.First ();
 
 			if (item is ITextItem)
 				text = (item as ITextItem).Text;

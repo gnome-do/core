@@ -27,18 +27,7 @@ namespace Do.Platform
 	
 	public interface ICoreService : IService
 	{
-		string GetUID (IObject o);
-		IObject GetIObject (string uid);
-
-		IObject Unwrap (IObject o);
+		Element GetElement (string uniqueId);
 	}
 
-	public static class IObjectCoreServiceExtensions
-	{	
-		public static bool Is<T> (this IObject self)
-			where T : IObject
-		{
-			return Services.Core.Unwrap (self) is T;
-		}
-	}
 }

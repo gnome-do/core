@@ -32,7 +32,7 @@ using Do.Platform;
 
 namespace Do.Universe.Linux {
 
-	internal class ApplicationItem : IApplicationItem {
+	internal class ApplicationItem : Item, IApplicationItem {
 
 		const string DefaultIcon = "applications-other";
 
@@ -78,15 +78,15 @@ namespace Do.Universe.Linux {
 			}
 		}
 		
-		public string Name {
+		public override string Name {
 			get { return name; }
 		}
 
-		public string Description {
+		public override string Description {
 			get { return description; }
 		}
 		
-		public string Icon {
+		public override string Icon {
 			get { return icon; }
 		}
 

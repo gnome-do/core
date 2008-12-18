@@ -28,7 +28,7 @@ using Do.Platform;
 
 namespace Do.Universe.Common
 {
-	public class EmailAction : AbstractAction
+	public class EmailAction : Action
 	{
 		public override string Name {
 			get {
@@ -48,11 +48,9 @@ namespace Do.Universe.Common
 
 		public override IEnumerable<Type> SupportedItemTypes {
 			get {
-				return new [] {
-					typeof (ContactItem),
-					typeof (IContactDetailItem),
-					typeof (ITextItem),
-				};
+				yield return typeof (ContactItem);
+				yield return typeof (IContactDetailItem);
+				yield return typeof (ITextItem);
 			}
 		}
 
@@ -67,7 +65,7 @@ namespace Do.Universe.Common
 			get { return true; }
 		}
 
-		public override bool SupportsItem (IItem item)
+		public override bool SupportsItem (Item item)
 		{
 			if (item is ContactItem) {
 				return (item as ContactItem).Details.Any (d => d.StartsWith ("email"));
@@ -82,7 +80,7 @@ namespace Do.Universe.Common
 			return false;
 		}
 
-		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			string subject, body;
 			IEnumerable<string> recipients, texts, files;

@@ -27,6 +27,6 @@ namespace Do.Interface
 	
 	public interface IStatistics
 	{
-		IEnumerable<IItem> GetMostUsedItems (int numItems);
+		IEnumerable<Item> GetMostUsedItems (int numItems);
 	}
 }

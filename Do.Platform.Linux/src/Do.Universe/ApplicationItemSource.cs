@@ -30,11 +30,11 @@ using Mono.Unix;
 
 namespace Do.Universe.Linux {
 
-	public class ApplicationItemSource : IItemSource {
+	public class ApplicationItemSource : ItemSource {
 
 		const bool show_hidden = false;
 
-		private IEnumerable<IItem> app_items;
+		private IEnumerable<Item> app_items;
 
 		/// <summary>
 		/// Locations to search for .desktop files.
@@ -57,22 +57,22 @@ namespace Do.Universe.Linux {
 		
 		public ApplicationItemSource ()
 		{
-			app_items = Enumerable.Empty<IItem> ();
+			app_items = Enumerable.Empty<Item> ();
 		}
 
-		public IEnumerable<Type> SupportedItemTypes {
+		public override IEnumerable<Type> SupportedItemTypes {
 			get { yield return typeof (ApplicationItem); }
 		}
 
-		public string Name {
+		public override string Name {
 			get { return Catalog.GetString ("Applications"); }
 		}
 
-		public string Description {
+		public override string Description {
 			get { return Catalog.GetString ("Finds applications in many locations."); }
 		}
 
-		public string Icon {
+		public override string Icon {
 			get { return "gnome-applications"; }
 		}
 
@@ -99,22 +99,17 @@ namespace Do.Universe.Linux {
 								(show_hidden || !app.NoDisplay));
 		}
 
-		public void UpdateItems ()
+		public override void UpdateItems ()
 		{
 			app_items = DesktopFilesDirectories
 				.Select (dir => dir.Replace ("~", Environment.GetFolderPath (Environment.SpecialFolder.Personal)))
 				.SelectMany (dir => LoadDesktopFiles (dir))
-				.Cast<IItem> ()
+				.Cast<Item> ()
 				.ToArray ();
 		}
 
-		public IEnumerable<IItem> Items {
+		public override IEnumerable<Item> Items {
 			get { return app_items; }
-		}
-
-		public IEnumerable<IItem> ChildrenOfItem (IItem item)
-		{
-			return Enumerable.Empty<IItem> ();
 		}
 
 	}

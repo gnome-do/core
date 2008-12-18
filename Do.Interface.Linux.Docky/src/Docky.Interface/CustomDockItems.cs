@@ -115,7 +115,7 @@ namespace Docky.Interface
 			} catch {
 				return null;
 			}
-			return new DockItem (appItem);
+			return new DockItem (appItem as Element);
 		}
 		
 		static IDockItem CreateDockFile (string file)
@@ -126,7 +126,7 @@ namespace Docky.Interface
 			} catch {
 				return null;
 			}
-			return new DockItem (fileItem);
+			return new DockItem (fileItem as Element);
 		}
 		
 		static void Serialize ()

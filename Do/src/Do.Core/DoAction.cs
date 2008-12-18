@@ -191,7 +191,7 @@ namespace Do.Core {
 			// iteration.
 			if (results.Any ()) {
 				GLib.Timeout.Add (10, delegate {
-					Do.Controller.SummonWithObjects (results.Cast<IObject> ());
+					Do.Controller.SummonWithObjects (results.Cast<Element> ());
 					return false;
 				});
 			}

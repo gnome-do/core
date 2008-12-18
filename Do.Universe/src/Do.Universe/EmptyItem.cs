@@ -22,7 +22,7 @@ using System;
 
 namespace Do.Universe
 {
-	public class EmptyItem : EmptyObject, IItem
+	public class EmptyItem : EmptyElement, IItem
 	{
 	}
 }

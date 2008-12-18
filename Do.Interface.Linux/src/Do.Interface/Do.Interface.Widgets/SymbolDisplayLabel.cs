@@ -51,10 +51,10 @@ namespace Do.Interface.Widgets
 				new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 		}
 		
-		public IObject DisplayObject
+		public Element DisplayObject
 		{
 			set {
-				IObject displayObject;
+				Element displayObject;
 				
 				displayObject = value;
 				name = description = highlight = "";

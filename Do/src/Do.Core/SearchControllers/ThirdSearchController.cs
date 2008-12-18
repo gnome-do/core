@@ -124,27 +124,27 @@ namespace Do.Core
 			});
 		}
 		
-		protected override List<IObject> InitialResults ()
+		protected override List<Element> InitialResults ()
 		{
 			if (TextMode)
-				return new List<IObject> ();
+				return new List<Element> ();
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				return new List<Element> (Do.UniverseManager.Search (context.Query, 
 				                                                     SearchTypes, 
 				                                                     context.LastContext.Results, 
 				                                                     FirstController.Selection));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
-				return new List<IObject> (context.Results);
+				return new List<Element> (context.Results);
 			} else { 
 				//else we do things the slow way
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				return new List<Element> (Do.UniverseManager.Search (context.Query, 
 				                                                     SearchTypes, 
 				                                                     FirstController.Selection));
 			}
 		}
 
-		private IObject[] GetContextResults ()
+		private Element[] GetContextResults ()
 		{
 			IAction action;
 			IItem item;
@@ -153,7 +153,7 @@ namespace Do.Core
 				
 				action = FirstController.Selection as IAction;
 				item   = SecondController.Selection as IItem;
-				foreach (IObject obj in SecondController.FullSelection) {
+				foreach (Element obj in SecondController.FullSelection) {
 					if (obj is IItem)
 						items.Add (obj as IItem);
 				}
@@ -162,7 +162,7 @@ namespace Do.Core
 				
 				action = SecondController.Selection as IAction;
 				item   = FirstController.Selection as IItem;
-				foreach (IObject obj in FirstController.FullSelection) {
+				foreach (Element obj in FirstController.FullSelection) {
 					if (obj is IItem)
 						items.Add (obj as IItem);
 				}
@@ -175,17 +175,17 @@ namespace Do.Core
 			// If we support nothing, dont search.
 			if (!action.SupportedModifierItemTypes.Any ()) return null;
 			
-			List<IObject> results = new List<IObject> ();
+			List<Element> results = new List<Element> ();
 
 			if (!textMode) {
-				List<IObject> initresults = InitialResults ();
+				List<Element> initresults = InitialResults ();
 				foreach (IItem moditem in initresults) {
 					if (action.SupportsModifierItemForItems (items.ToArray (), moditem))
 						results.Add (moditem);
 				}
 			
 				if (Query.Length == 0)
-					results.AddRange (action.DynamicModifierItemsForItem (item).Cast<IObject> ());
+					results.AddRange (action.DynamicModifierItemsForItem (item).Cast<Element> ());
 				results.Sort ();
 			}
 			

@@ -63,12 +63,12 @@ namespace Do.Interface
 		/// Check and see if an object likely has children
 		/// </summary>
 		/// <param name="o">
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		bool ObjectHasChildren (IObject o);
+		bool ObjectHasChildren (Element o);
 		
 		/// <value>
 		/// Get ahold of the current statistics for Do

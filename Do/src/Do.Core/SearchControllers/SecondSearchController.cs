@@ -41,7 +41,7 @@ namespace Do.Core
 			}
 		}
 		
-		public override IObject Selection {
+		public override Element Selection {
 			get { 
 				if (IsSearching)
 					FastSearch ();
@@ -77,21 +77,21 @@ namespace Do.Core
 			base.OnSearchFinished (true, true, Selection, Query);
 		}
 		
-		protected override List<IObject> InitialResults ()
+		protected override List<Element> InitialResults ()
 		{
 			if (TextMode)
-				return new List<IObject> ();
+				return new List<Element> ();
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				return new List<Element> (Do.UniverseManager.Search (context.Query, 
 				                                                     SearchTypes, 
 				                                                     context.LastContext.Results, 
 				                                                     FirstController.Selection));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
-				return new List<IObject> (context.Results);
+				return new List<Element> (context.Results);
 			} else { 
 				//else we do things the slow way
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				return new List<Element> (Do.UniverseManager.Search (context.Query, 
 				                                                     SearchTypes, 
 				                                                     FirstController.Selection));
 			}
@@ -119,13 +119,13 @@ namespace Do.Core
 		/// Set up our results list.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </returns>
-		private IObject[] GetContextResults ()
+		private Element[] GetContextResults ()
 		{
-			List<IObject> initresults = InitialResults ();
+			List<Element> initresults = InitialResults ();
 			
-			List<IObject> results = new List<IObject> ();
+			List<Element> results = new List<Element> ();
 			if (FirstController.Selection is IItem) {
 				IItem item = FirstController.Selection as IItem;
 				IItem ritem = DoItem.Unwrap (FirstController.Selection as IItem);
