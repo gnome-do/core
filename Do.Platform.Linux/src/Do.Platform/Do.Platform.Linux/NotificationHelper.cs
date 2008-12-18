@@ -78,7 +78,7 @@ namespace Do.Platform.Linux
 			if (note is ActionableNotification) {
 				ActionableNotification anote = note as ActionableNotification;
 				notify.AddAction (GLib.Markup.EscapeText (anote.ActionLabel),
-				    anote.ActionLabel, (sender, e) => anote.Action ());
+				    anote.ActionLabel, (sender, e) => anote.PerformAction ());
 			}
 
 			return notify;

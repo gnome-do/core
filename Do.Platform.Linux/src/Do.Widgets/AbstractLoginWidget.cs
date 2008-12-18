@@ -36,10 +36,9 @@ namespace Do.Platform.Linux
 	/// class in use, see the Microblogging plugin.
 	/// Things to do when you implement this class:
 	/// 	* Setup default values of username_entry and password_entry
-	/// 	* 
 	/// </summary>
 	[System.ComponentModel.ToolboxItem(true)]
-	public abstract partial class AbstractLoginWidget : Gtk.Bin
+	public abstract partial class AbstractLoginWidget :   Bin
 	{
 		protected readonly string NewAccountButtonFormat = Catalog.GetString ("Sign up for {0}");
 		protected readonly string BusyValidatingLabel = Catalog.GetString ("<i>Validating...</i>");
@@ -63,7 +62,7 @@ namespace Do.Platform.Linux
 
 		public AbstractLoginWidget (string serviceName, string serviceUri)
 		{
-			this.Build();
+			Build();
 
 			// put gtk widgets inside protected wrapper for subclasses
 			UsernameLabel = username_lbl;
@@ -77,9 +76,11 @@ namespace Do.Platform.Linux
 			// setup the link button
 			NewAccountButton = new LinkButton (serviceUri, string.Format (NewAccountButtonFormat, serviceName));
 			new_account_button_box.Add (NewAccountButton);
-			new_account_vbox.Add (NewAccountButton);
 
-			password_entry.Activated += OnPasswordEntryActivated;
+			// masks chars for passwords
+			PasswordEntry.Visibility = false;
+
+			PasswordEntry.Activated += OnPasswordEntryActivated;
 			NewAccountButton.Clicked += OnNewAccountBtnClicked;
 			
 			if (string.IsNullOrEmpty (serviceUri)) {
@@ -88,19 +89,26 @@ namespace Do.Platform.Linux
 			} else {
 				NewAccountLabel.Markup = string.Format (NewAccountLabelFormat, serviceName);
 			}
+
+			ShowAll ();
+
+		}
+
+		protected void InsertWidgetAtTop (Widget widget)
+		{
+			wrapper_vbox.Add (widget);
+			Box.BoxChild wrapperSpace = (Box.BoxChild) wrapper_vbox[widget];
+			wrapperSpace.Position = 0;
+			wrapperSpace.Fill = false;
+			wrapperSpace.Expand = false;
+			wrapperSpace.Padding = 5;
 		}
 
 		abstract protected void SaveAccountData (string username, string password);
 
 		abstract protected bool Validate (string username, string password);
 
-		protected virtual void OnNewAccountBtnClicked (object sender, EventArgs e)
-		{
-			if (!string.IsNullOrEmpty (NewAccountButton.Uri))
-				Services.Environment.OpenUrl (NewAccountButton.Uri);
-		}
-		
-		protected virtual void OnApplyBtnClicked (object sender, EventArgs args)
+		protected virtual void OnValidateBtnClicked (object sender, System.EventArgs e)
 		{
 			validate_lbl.Markup = BusyValidatingLabel;
 			validate_btn.Sensitive = false;
@@ -114,6 +122,12 @@ namespace Do.Platform.Linux
 			thread.Start ();
 		}
 
+		protected virtual void OnNewAccountBtnClicked (object sender, EventArgs e)
+		{
+			if (!string.IsNullOrEmpty (NewAccountButton.Uri))
+				Services.Environment.OpenUrl (NewAccountButton.Uri);
+		}
+		
 		private void ValidateCredentials (string username, string password)
 		{
 			bool valid = Validate (username, password);

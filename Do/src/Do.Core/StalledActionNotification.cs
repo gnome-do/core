@@ -29,31 +29,17 @@ namespace Do.Core
 	
 	class StalledActionNotification : ActionableNotification
 	{
-		
-		public StalledActionNotification ()
+
+		public StalledActionNotification () : base (
+			Catalog.GetString ("GNOME Do"),
+			Catalog.GetString ("Do is still performing the last action. Please wait for it to finish or click \"End Now\" to interrupt."),
+			"dialog-error",
+			Catalog.GetString ("End Now")
+		)
 		{
-			Action = Exit;
 		}
 
-		public override string Icon {
-			get { return "dialog-error"; }
-		}
-
-		public override string Title {
-			get { return Catalog.GetString ("GNOME Do"); }
-		}
-
-		public override string Body {
-			get {
-				return Catalog.GetString ("Do is still performing the last action. Please wait for it to finish or click \"End Now\" to interrupt.");
-			}
-		}
-
-		public override string ActionLabel {
-			get { return Catalog.GetString ("End Now"); }
-		}
-
-		void Exit ()
+		public override void PerformAction ()
 		{
 			Environment.Exit (20);
 		}

@@ -80,7 +80,7 @@ namespace Docky.Interface
 		
 		public int DockWidth {
 			get {
-				return DockItems.Sum (di => di.Width + 2*IconBorderWidth) + 2*HorizontalBuffer;
+				return (int) DockItems.Sum (di => di.Width + 2*IconBorderWidth) + 2*HorizontalBuffer;
 			}
 		}
 		
@@ -156,8 +156,8 @@ namespace Docky.Interface
 					return (int) (offset*MinimumDockArea.Height);
 					
 				} else {
-					offset = Math.Min (Math.Min (1,(DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime),
-					                  Math.Min (1, (DateTime.UtcNow - interface_change_time).TotalMilliseconds / BaseAnimationTime));
+					offset = Math.Min (1, Math.Min ((DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime, 
+					                   (DateTime.UtcNow - interface_change_time).TotalMilliseconds / BaseAnimationTime));
 					
 					if (InputInterfaceVisible)
 						offset = 1 - offset;

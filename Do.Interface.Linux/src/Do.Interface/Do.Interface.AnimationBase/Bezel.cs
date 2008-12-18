@@ -45,7 +45,7 @@ namespace Do.Interface.AnimationBase
 			set { bezel_drawing_area.Focus = value; }
 		}
 		
-		public string Name { 
+		public new string Name { 
 			get { return RenderTheme.Name; }
 		}
 		

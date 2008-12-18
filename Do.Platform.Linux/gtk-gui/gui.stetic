@@ -14,21 +14,12 @@
     <property name="MemberName" />
     <property name="Visible">False</property>
     <child>
-      <widget class="Gtk.VBox" id="vbox1">
+      <widget class="Gtk.VBox" id="wrapper_vbox">
         <property name="MemberName" />
         <property name="Spacing">6</property>
+        <property name="BorderWidth">10</property>
         <child>
-          <widget class="Gtk.VBox" id="top_vbox">
-            <property name="MemberName" />
-            <property name="Spacing">6</property>
-            <child>
-              <placeholder />
-            </child>
-          </widget>
-          <packing>
-            <property name="Position">0</property>
-            <property name="AutoSize">True</property>
-          </packing>
+          <placeholder />
         </child>
         <child>
           <widget class="Gtk.VBox" id="vbox2">
@@ -50,6 +41,7 @@
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
+                        <property name="Visibility">False</property>
                         <property name="InvisibleChar">●</property>
                       </widget>
                       <packing>
@@ -77,8 +69,9 @@
                         <property name="TopAttach">1</property>
                         <property name="BottomAttach">2</property>
                         <property name="AutoSize">False</property>
+                        <property name="XOptions">Fill</property>
                         <property name="YOptions">Fill</property>
-                        <property name="XExpand">True</property>
+                        <property name="XExpand">False</property>
                         <property name="XFill">True</property>
                         <property name="XShrink">False</property>
                         <property name="YExpand">False</property>
@@ -113,11 +106,11 @@
                         <property name="LabelProp" translatable="yes">Username</property>
                       </widget>
                       <packing>
-                        <property name="AutoSize">True</property>
-                        <property name="XOptions">Fill</property>
+                        <property name="AutoSize">False</property>
+                        <property name="XOptions">0</property>
                         <property name="YOptions">Fill</property>
                         <property name="XExpand">False</property>
-                        <property name="XFill">True</property>
+                        <property name="XFill">False</property>
                         <property name="XShrink">False</property>
                         <property name="YExpand">False</property>
                         <property name="YFill">True</property>
@@ -157,6 +150,7 @@
                         <property name="UseStock">True</property>
                         <property name="Type">StockItem</property>
                         <property name="StockId">gtk-apply</property>
+                        <signal name="Clicked" handler="OnValidateBtnClicked" />
                         <property name="label">gtk-apply</property>
                       </widget>
                       <packing>
@@ -229,21 +223,8 @@
             <child>
               <widget class="Gtk.HButtonBox" id="new_account_button_box">
                 <property name="MemberName" />
-                <property name="Size">1</property>
+                <property name="Size">0</property>
                 <property name="LayoutStyle">Spread</property>
-                <child>
-                  <widget class="Gtk.Button" id="button19">
-                    <property name="MemberName" />
-                    <property name="CanFocus">True</property>
-                    <property name="Type">TextOnly</property>
-                    <property name="Label" translatable="yes">button19</property>
-                    <property name="UseUnderline">True</property>
-                  </widget>
-                  <packing>
-                    <property name="Expand">False</property>
-                    <property name="Fill">False</property>
-                  </packing>
-                </child>
               </widget>
               <packing>
                 <property name="Position">2</property>

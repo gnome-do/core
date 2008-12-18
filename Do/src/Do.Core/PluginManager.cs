@@ -58,7 +58,6 @@ namespace Do.Core {
 				return new [] {
 					"/Do/ItemSource",
 					"/Do/Action",
-					"/Do/InterfaceWindow",
 				};
 			}
 		}
@@ -100,11 +99,11 @@ namespace Do.Core {
 
 			// Initialize services before addins that may use them are loaded.
 			Services.Initialize ();
+			InterfaceManager.Initialize ();
 			
 			// Now allow loading of non-services.
 			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnItemSourceChange);
 			AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnActionChange);
-			AddinManager.AddExtensionNodeHandler ("/Do/InterfaceWindow", OnInterfaceWindowChange);
 
 			InstallLocalPlugins (setup);
 		}
@@ -173,7 +172,7 @@ namespace Do.Core {
 		/// </returns>
 		internal static IEnumerable<IDoWindow> GetThemes () 
 		{
-			return AddinManager.GetExtensionObjects ("/Do/InterfaceWindow", true).Cast<IDoWindow> ();
+			return InterfaceManager.Interfaces;
 		}
 
 		/// <summary>
@@ -276,24 +275,6 @@ namespace Do.Core {
 				}
 				break;
 			}	
-		}
-
-		static void OnInterfaceWindowChange (object sender, ExtensionNodeEventArgs e)
-		{
-			TypeExtensionNode node = e.ExtensionNode as TypeExtensionNode;
-
-			switch (e.Change) {
-			case ExtensionChange.Add: 
-				try {
-					IDoWindow window = node.GetInstance () as IDoWindow;
-					Log.Info ("Loaded \"{0}\" interface.", window.Name);
-				} catch (Exception ex) {
-					Log.Error ("Encounted error loading interface: {0}", ex.Message);
-					Log.Debug (ex.StackTrace);
-				}
-				break;
-			}
-			
 		}
 
 		/// <summary>

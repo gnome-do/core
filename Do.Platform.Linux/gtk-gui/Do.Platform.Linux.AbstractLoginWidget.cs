@@ -13,9 +13,7 @@ namespace Do.Platform.Linux {
     
     public partial class AbstractLoginWidget {
         
-        private Gtk.VBox vbox1;
-        
-        private Gtk.VBox top_vbox;
+        private Gtk.VBox wrapper_vbox;
         
         private Gtk.VBox vbox2;
         
@@ -47,25 +45,17 @@ namespace Do.Platform.Linux {
         
         private Gtk.HButtonBox new_account_button_box;
         
-        private Gtk.Button button19;
-        
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
             // Widget Do.Platform.Linux.AbstractLoginWidget
             Stetic.BinContainer.Attach(this);
             this.Name = "Do.Platform.Linux.AbstractLoginWidget";
             // Container child Do.Platform.Linux.AbstractLoginWidget.Gtk.Container+ContainerChild
-            this.vbox1 = new Gtk.VBox();
-            this.vbox1.Name = "vbox1";
-            this.vbox1.Spacing = 6;
-            // Container child vbox1.Gtk.Box+BoxChild
-            this.top_vbox = new Gtk.VBox();
-            this.top_vbox.Name = "top_vbox";
-            this.top_vbox.Spacing = 6;
-            this.vbox1.Add(this.top_vbox);
-            Gtk.Box.BoxChild w1 = ((Gtk.Box.BoxChild)(this.vbox1[this.top_vbox]));
-            w1.Position = 0;
-            // Container child vbox1.Gtk.Box+BoxChild
+            this.wrapper_vbox = new Gtk.VBox();
+            this.wrapper_vbox.Name = "wrapper_vbox";
+            this.wrapper_vbox.Spacing = 6;
+            this.wrapper_vbox.BorderWidth = ((uint)(10));
+            // Container child wrapper_vbox.Gtk.Box+BoxChild
             this.vbox2 = new Gtk.VBox();
             this.vbox2.Name = "vbox2";
             this.vbox2.Spacing = 6;
@@ -83,24 +73,26 @@ namespace Do.Platform.Linux {
             this.password_entry.CanFocus = true;
             this.password_entry.Name = "password_entry";
             this.password_entry.IsEditable = true;
+            this.password_entry.Visibility = false;
             this.password_entry.InvisibleChar = '●';
             this.login_tbl.Add(this.password_entry);
-            Gtk.Table.TableChild w2 = ((Gtk.Table.TableChild)(this.login_tbl[this.password_entry]));
-            w2.TopAttach = ((uint)(1));
-            w2.BottomAttach = ((uint)(2));
-            w2.LeftAttach = ((uint)(1));
-            w2.RightAttach = ((uint)(2));
-            w2.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w1 = ((Gtk.Table.TableChild)(this.login_tbl[this.password_entry]));
+            w1.TopAttach = ((uint)(1));
+            w1.BottomAttach = ((uint)(2));
+            w1.LeftAttach = ((uint)(1));
+            w1.RightAttach = ((uint)(2));
+            w1.YOptions = ((Gtk.AttachOptions)(4));
             // Container child login_tbl.Gtk.Table+TableChild
             this.password_lbl = new Gtk.Label();
             this.password_lbl.Name = "password_lbl";
             this.password_lbl.Xalign = 1F;
             this.password_lbl.LabelProp = Mono.Unix.Catalog.GetString("Password");
             this.login_tbl.Add(this.password_lbl);
-            Gtk.Table.TableChild w3 = ((Gtk.Table.TableChild)(this.login_tbl[this.password_lbl]));
-            w3.TopAttach = ((uint)(1));
-            w3.BottomAttach = ((uint)(2));
-            w3.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w2 = ((Gtk.Table.TableChild)(this.login_tbl[this.password_lbl]));
+            w2.TopAttach = ((uint)(1));
+            w2.BottomAttach = ((uint)(2));
+            w2.XOptions = ((Gtk.AttachOptions)(4));
+            w2.YOptions = ((Gtk.AttachOptions)(4));
             // Container child login_tbl.Gtk.Table+TableChild
             this.username_entry = new Gtk.Entry();
             this.username_entry.CanFocus = true;
@@ -108,37 +100,36 @@ namespace Do.Platform.Linux {
             this.username_entry.IsEditable = true;
             this.username_entry.InvisibleChar = '●';
             this.login_tbl.Add(this.username_entry);
-            Gtk.Table.TableChild w4 = ((Gtk.Table.TableChild)(this.login_tbl[this.username_entry]));
-            w4.LeftAttach = ((uint)(1));
-            w4.RightAttach = ((uint)(2));
-            w4.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w3 = ((Gtk.Table.TableChild)(this.login_tbl[this.username_entry]));
+            w3.LeftAttach = ((uint)(1));
+            w3.RightAttach = ((uint)(2));
+            w3.YOptions = ((Gtk.AttachOptions)(4));
             // Container child login_tbl.Gtk.Table+TableChild
             this.username_lbl = new Gtk.Label();
             this.username_lbl.Name = "username_lbl";
             this.username_lbl.Xalign = 1F;
             this.username_lbl.LabelProp = Mono.Unix.Catalog.GetString("Username");
             this.login_tbl.Add(this.username_lbl);
-            Gtk.Table.TableChild w5 = ((Gtk.Table.TableChild)(this.login_tbl[this.username_lbl]));
-            w5.XOptions = ((Gtk.AttachOptions)(4));
-            w5.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w4 = ((Gtk.Table.TableChild)(this.login_tbl[this.username_lbl]));
+            w4.XOptions = ((Gtk.AttachOptions)(0));
+            w4.YOptions = ((Gtk.AttachOptions)(4));
             this.account_vbox.Add(this.login_tbl);
-            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.account_vbox[this.login_tbl]));
-            w6.Position = 0;
-            w6.Expand = false;
-            w6.Fill = false;
+            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.account_vbox[this.login_tbl]));
+            w5.Position = 0;
+            w5.Expand = false;
+            w5.Fill = false;
             // Container child account_vbox.Gtk.Box+BoxChild
             this.validate_lbl = new Gtk.Label();
             this.validate_lbl.Name = "validate_lbl";
             this.validate_lbl.LabelProp = Mono.Unix.Catalog.GetString("<i>Verify and save account information</i>");
             this.validate_lbl.UseMarkup = true;
             this.account_vbox.Add(this.validate_lbl);
-            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.account_vbox[this.validate_lbl]));
-            w7.Position = 1;
-            w7.Expand = false;
-            w7.Fill = false;
+            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.account_vbox[this.validate_lbl]));
+            w6.Position = 1;
+            w6.Expand = false;
+            w6.Fill = false;
             // Container child account_vbox.Gtk.Box+BoxChild
             this.hbuttonbox1 = new Gtk.HButtonBox();
-            this.hbuttonbox1.Name = "hbuttonbox1";
             this.hbuttonbox1.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
             // Container child hbuttonbox1.Gtk.ButtonBox+ButtonBoxChild
             this.validate_btn = new Gtk.Button();
@@ -148,30 +139,30 @@ namespace Do.Platform.Linux {
             this.validate_btn.UseUnderline = true;
             this.validate_btn.Label = "gtk-apply";
             this.hbuttonbox1.Add(this.validate_btn);
-            Gtk.ButtonBox.ButtonBoxChild w8 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox1[this.validate_btn]));
+            Gtk.ButtonBox.ButtonBoxChild w7 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox1[this.validate_btn]));
+            w7.Expand = false;
+            w7.Fill = false;
+            this.account_vbox.Add(this.hbuttonbox1);
+            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(this.account_vbox[this.hbuttonbox1]));
+            w8.Position = 2;
             w8.Expand = false;
             w8.Fill = false;
-            this.account_vbox.Add(this.hbuttonbox1);
-            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(this.account_vbox[this.hbuttonbox1]));
-            w9.Position = 2;
+            this.vbox2.Add(this.account_vbox);
+            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(this.vbox2[this.account_vbox]));
+            w9.Position = 0;
             w9.Expand = false;
             w9.Fill = false;
-            this.vbox2.Add(this.account_vbox);
-            Gtk.Box.BoxChild w10 = ((Gtk.Box.BoxChild)(this.vbox2[this.account_vbox]));
-            w10.Position = 0;
-            w10.Expand = false;
-            w10.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
             this.middle_box = new Gtk.VBox();
             this.middle_box.Name = "middle_box";
             this.middle_box.Spacing = 6;
             this.vbox2.Add(this.middle_box);
-            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.vbox2[this.middle_box]));
+            Gtk.Box.BoxChild w10 = ((Gtk.Box.BoxChild)(this.vbox2[this.middle_box]));
+            w10.Position = 1;
+            this.wrapper_vbox.Add(this.vbox2);
+            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.wrapper_vbox[this.vbox2]));
             w11.Position = 1;
-            this.vbox1.Add(this.vbox2);
-            Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.vbox1[this.vbox2]));
-            w12.Position = 1;
-            // Container child vbox1.Gtk.Box+BoxChild
+            // Container child wrapper_vbox.Gtk.Box+BoxChild
             this.new_account_vbox = new Gtk.VBox();
             this.new_account_vbox.Name = "new_account_vbox";
             this.new_account_vbox.Spacing = 6;
@@ -179,48 +170,39 @@ namespace Do.Platform.Linux {
             this.hseparator1 = new Gtk.HSeparator();
             this.hseparator1.Name = "hseparator1";
             this.new_account_vbox.Add(this.hseparator1);
-            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.new_account_vbox[this.hseparator1]));
-            w13.Position = 0;
-            w13.Expand = false;
-            w13.Fill = false;
+            Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.new_account_vbox[this.hseparator1]));
+            w12.Position = 0;
+            w12.Expand = false;
+            w12.Fill = false;
             // Container child new_account_vbox.Gtk.Box+BoxChild
             this.new_account_lbl = new Gtk.Label();
             this.new_account_lbl.Name = "new_account_lbl";
             this.new_account_lbl.LabelProp = Mono.Unix.Catalog.GetString("Don't have an account?");
             this.new_account_vbox.Add(this.new_account_lbl);
-            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.new_account_vbox[this.new_account_lbl]));
-            w14.Position = 1;
-            w14.Expand = false;
-            w14.Fill = false;
+            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.new_account_vbox[this.new_account_lbl]));
+            w13.Position = 1;
+            w13.Expand = false;
+            w13.Fill = false;
             // Container child new_account_vbox.Gtk.Box+BoxChild
             this.new_account_button_box = new Gtk.HButtonBox();
             this.new_account_button_box.Name = "new_account_button_box";
             this.new_account_button_box.LayoutStyle = ((Gtk.ButtonBoxStyle)(1));
-            // Container child new_account_button_box.Gtk.ButtonBox+ButtonBoxChild
-            this.button19 = new Gtk.Button();
-            this.button19.CanFocus = true;
-            this.button19.Name = "button19";
-            this.button19.UseUnderline = true;
-            this.button19.Label = Mono.Unix.Catalog.GetString("button19");
-            this.new_account_button_box.Add(this.button19);
-            Gtk.ButtonBox.ButtonBoxChild w15 = ((Gtk.ButtonBox.ButtonBoxChild)(this.new_account_button_box[this.button19]));
+            this.new_account_vbox.Add(this.new_account_button_box);
+            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.new_account_vbox[this.new_account_button_box]));
+            w14.Position = 2;
+            w14.Expand = false;
+            w14.Fill = false;
+            this.wrapper_vbox.Add(this.new_account_vbox);
+            Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.wrapper_vbox[this.new_account_vbox]));
+            w15.Position = 2;
             w15.Expand = false;
             w15.Fill = false;
-            this.new_account_vbox.Add(this.new_account_button_box);
-            Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.new_account_vbox[this.new_account_button_box]));
-            w16.Position = 2;
-            w16.Expand = false;
-            w16.Fill = false;
-            this.vbox1.Add(this.new_account_vbox);
-            Gtk.Box.BoxChild w17 = ((Gtk.Box.BoxChild)(this.vbox1[this.new_account_vbox]));
-            w17.Position = 2;
-            w17.Expand = false;
-            w17.Fill = false;
-            this.Add(this.vbox1);
+            this.Add(this.wrapper_vbox);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
             this.Hide();
+            this.validate_btn.Clicked += new System.EventHandler(this.OnValidateBtnClicked);
         }
     }
 }

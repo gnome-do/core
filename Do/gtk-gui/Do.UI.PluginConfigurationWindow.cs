@@ -90,6 +90,7 @@ namespace Do.UI {
             w5.Position = 1;
             // Container child vbox2.Gtk.Box+BoxChild
             this.hbuttonbox2 = new Gtk.HButtonBox();
+            this.hbuttonbox2.Name = "hbuttonbox2";
             this.hbuttonbox2.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
             // Container child hbuttonbox2.Gtk.ButtonBox+ButtonBoxChild
             this.btn_close = new Gtk.Button();

@@ -22,35 +22,23 @@ using System;
 namespace Do.Platform
 {
 	
-	public class ActionableNotification : Notification
+	public abstract class ActionableNotification : Notification
 	{
-
-		public virtual Action Action { get; protected set; }
 		public virtual string ActionLabel { get; protected set; }
 
 		protected ActionableNotification ()
-			: this ("", "", DefaultIcon, "", DefaultAction)
+			: this ("", "", DefaultIcon, "")
 		{
 		}
 
-		public ActionableNotification (string title, string body, string icon, string actionLabel, Action action)
+		protected ActionableNotification (string title, string body, string icon, string actionLabel)
 			: base (title, body, icon)
 		{
 			if (actionLabel == null) throw new ArgumentNullException ("actionLabel");
-			if (action == null) throw new ArgumentNullException ("action");
 			
 			ActionLabel = actionLabel;
-			Action = action;
 		}
 
-		public override string ToString ()
-		{
-			return string.Format("[ActionableNotification: Title={0}, Body={1}, Icon={2}, ActionLabel={3}, Action={4}]", Title, Body, Icon, ActionLabel, Action);
-		}
-
-		static void DefaultAction ()
-		{
-		}
-
+		public abstract void PerformAction ();
 	}
 }

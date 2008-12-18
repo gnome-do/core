@@ -26,6 +26,7 @@ namespace Docky.Interface
 	{
 		Normal,
 		Text,
+		ExplicitText,
 		NoResult,
 		None,
 	}

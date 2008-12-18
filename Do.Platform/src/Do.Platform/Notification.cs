@@ -47,10 +47,5 @@ namespace Do.Platform
 			Icon = icon;
 		}
 
-		public override string ToString ()
-		{
-			return string.Format("[Notification: Title={0}, Body={1}, Icon={2}]", Title, Body, Icon);
-		}
-
 	}
 }

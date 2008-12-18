@@ -39,6 +39,7 @@ FILES = \
 	src/Do.Interface/ResultsWindowSelectionEventArgs.cs \
 	src/Do.Interface/SearchFinishState.cs \
 	src/Do.Interface/UIContext.cs \
+	src/Do.Interface/InterfaceManager.cs \
 	src/Do.Interface/Util.cs \
 	src/Do.Interface/Windowing.cs
 
@@ -52,7 +53,8 @@ REFERENCES =  \
 	Mono.Cairo \
 	Mono.Posix \
 	$(GCONF_SHARP_20_LIBS) \
-	$(GTK_SHARP_20_LIBS)
+	$(GTK_SHARP_20_LIBS) \
+	$(MONO_ADDINS_LIBS) 
 
 PROJECT_REFERENCES = \
 	Do.Platform \
