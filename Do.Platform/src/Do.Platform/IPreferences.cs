@@ -28,15 +28,10 @@ namespace Do.Platform
 	public interface IPreferences
 	{
 		event EventHandler<PreferencesChangedEventArgs> PreferencesChanged;
-		
-		string this [string key] { get; set; }
 
 		bool Set<T>		  (string key, T val);
 		T    Get<T>		  (string key, T def);
 		bool SecureSet<T> (string key, T def);
 		T    SecureGet<T> (string key, T def);
-
-		string AbsolutePathForKey (string key);
-		string AbsolutePathForSecureKey (string key);
 	}
 }

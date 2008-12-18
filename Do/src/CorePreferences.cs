@@ -49,6 +49,7 @@ namespace Do
 		#endregion
 
 		public event EventHandler<PreferencesChangedEventArgs> ThemeChanged;
+		public event EventHandler<PreferencesChangedEventArgs> SummonKeybindingChanged;
 		
 		IPreferences Preferences { get; set; }
 		
@@ -66,9 +67,6 @@ namespace Do
 			get { return HasOption (DebugOption); }
 		}
 
-		public string SummonKeybindingPath {
-			get { return Preferences.AbsolutePathForKey (SummonKeybindingKey); }
-		}
 		public string SummonKeybinding {
 			get { return Preferences.Get (SummonKeybindingKey, SummonKeybindingDefaultValue); }
 			set { Preferences.Set (SummonKeybindingKey, value); }
@@ -98,7 +96,6 @@ namespace Do
 			get { return Preferences.Get (AlwaysShowResultsKey, AlwaysShowResultsDefaultValue); }
 			set { Preferences.Set (AlwaysShowResultsKey, value); }
 		}
-
 		
 		bool HasOption (string option)
 		{
@@ -109,7 +106,12 @@ namespace Do
 		{
 			switch (e.Key) {
 			case ThemeKey:
-				if (ThemeChanged != null) ThemeChanged (this, e);
+				if (ThemeChanged != null)
+					ThemeChanged (this, e);
+				break;
+			case SummonKeybindingKey:
+				if (SummonKeybindingChanged != null)
+					SummonKeybindingChanged (this, e);
 				break;
 			}
 		}

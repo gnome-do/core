@@ -37,11 +37,6 @@ namespace Do.Platform
 			SecureService = secureService;
 		}
 
-		public string AbsolutePathForKey (string key)
-		{
-			return SecureService.AbsolutePathForKey (key);
-		}
-
 		public bool Set<T> (string key, T val)
 		{
 			EnsureString<T> ();

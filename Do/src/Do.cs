@@ -32,7 +32,7 @@ namespace Do {
 
 	static class Do {
 		
-		static GConfXKeybinder keybinder;
+		static XKeybinder keybinder;
 		static Controller controller;
 		static UniverseManager universe_manager;
 
@@ -68,7 +68,7 @@ namespace Do {
 			UniverseManager.Initialize ();
 			DBusRegistrar.RegisterController (Controller);
 			
-			keybinder = new GConfXKeybinder ();
+			keybinder = new XKeybinder ();
 			SetupKeybindings ();
 
 			if (!Preferences.QuietStart)
@@ -123,7 +123,14 @@ namespace Do {
 		
 		static void SetupKeybindings ()
 		{
-			keybinder.Bind (Preferences.SummonKeybindingPath, Preferences.SummonKeybinding, OnActivate);
+			keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+			// Watch preferences for changes to the keybinding so we
+			// can change the binding when the user reassigns it.
+			Preferences.SummonKeybindingChanged += (sender, e) => {
+				if (e.OldValue != null)
+					keybinder.Unbind (e.OldValue as string);
+				keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+			};
 		}
 		
 		static void OnActivate (object sender, EventArgs args)
