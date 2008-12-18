@@ -40,6 +40,7 @@ namespace Docky.Interface
 		Element item;
 		Surface sr, icon_surface;
 		List<Wnck.Application> apps;
+		Gdk.Pixmap pixmap;
 		
 		public string Icon { get { return item.Icon; } }
 		public string Description { get { return item.Name; } }
@@ -97,11 +98,11 @@ namespace Docky.Interface
 			return pbuf;
 		}
 		
-		public Surface GetIconSurface ()
+		public Surface GetIconSurface (Surface sr)
 		{
 			if (icon_surface == null) {
 				Gdk.Pixbuf pixbuf = GetPixbuf ();
-				icon_surface = new ImageSurface (Cairo.Format.Argb32, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
+				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
 				Context cr = new Context (icon_surface);
 				Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 0, 0);
 				cr.Paint ();
@@ -155,7 +156,7 @@ namespace Docky.Interface
 			if (di == null)
 				return false;
 			
-			return di.Element.Name+di.Element.Description+di.Element.Icon == Element.Name+Element.Description+Element.Icon;
+			return di.Element.UniqueId == Element.UniqueId;
 		}
 
 		#region IDisposable implementation 

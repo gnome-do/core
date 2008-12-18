@@ -38,7 +38,7 @@ namespace Docky.Interface
 		DateTime LastClick { get; }
 		DateTime DockAddItem { get; set; }
 		
-		Surface GetIconSurface ();
+		Surface GetIconSurface (Surface similar);
 		Surface GetTextSurface ();
 		
 		void Clicked (uint button, IDoController controller);

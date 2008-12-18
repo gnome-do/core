@@ -781,7 +781,7 @@ namespace Do.Interface.AnimationBase
 			if (Context.GetPaneObject (Focus) == null)
 				return;
 			BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
-			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20);
+			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20, this);
 		}
 		
 		void RenderPaneText (Pane pane, Context cr)
@@ -799,17 +799,17 @@ namespace Do.Interface.AnimationBase
 				color.Blue = color.Green = color.Red = ushort.MaxValue;
 				int y = drawing_area.Y + WindowBorder + TitleBarHeight + 6;
 				BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, 
-				                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
+				                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
 			} else {
 				text = (!string.IsNullOrEmpty (Context.GetPaneQuery (pane))) ? 
 					Util.FormatCommonSubstrings 
 						(text, Context.GetPaneQuery (pane), HighlightFormat) : text;
 				if (PaneOutlineRenderer.StackIconText) {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - TextHeight - 9;
-					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10);
+					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, this);
 				} else {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + (int)(BoxHeight/2);
-					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + IconSize + 10, y, BoxWidth - IconSize - 20);
+					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + IconSize + 10, y, BoxWidth - IconSize - 20, this);
 				}
 			}
 		}
@@ -823,7 +823,7 @@ namespace Do.Interface.AnimationBase
 			Gdk.Rectangle cursor = BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
 			                                                        drawing_area.X + 10, drawing_area.Y + TextModeOffset + 5, 
 			                                                        drawing_area.Width - 20, color, 
-			                                                        Pango.Alignment.Left, Pango.EllipsizeMode.None);
+			                                                        Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
 			BezelTextUtils.TextHeight = tmp;
 			if (cursor.X == cursor.Y && cursor.X == 0) return;
 			

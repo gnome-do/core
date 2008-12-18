@@ -136,13 +136,13 @@ namespace Do.Interface
 		}
 		
 		void RenderTitleText (Context cr, Gdk.Rectangle drawing_area) {
-			Pango.Color color = new Pango.Color ();
-			color.Blue = color.Red = color.Green = ushort.MaxValue;
-			string s = "GNOME Do";
-			if (DateTime.Now.Day == 25 && DateTime.Now.Month == 12)
-				s = "Merry Christmas!!!";
-			BezelTextUtils.RenderLayoutText (cr, s, 0, drawing_area.Y + 5, parent.WindowWidth, color, 
-			                  Pango.Alignment.Center, Pango.EllipsizeMode.End);
+//			Pango.Color color = new Pango.Color ();
+//			color.Blue = color.Red = color.Green = ushort.MaxValue;
+//			string s = "GNOME Do";
+//			if (DateTime.Now.Day == 25 && DateTime.Now.Month == 12)
+//				s = "Merry Christmas!!!";
+//			BezelTextUtils.RenderLayoutText (cr, s, 0, drawing_area.Y + 5, parent.WindowWidth, color, 
+//			                  Pango.Alignment.Center, Pango.EllipsizeMode.End);
 		}
 		
 		private void SetTitlePath (Cairo.Context cr)
