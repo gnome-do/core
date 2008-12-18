@@ -84,9 +84,9 @@ namespace Docky.Interface
 		
 		public int DockWidth {
 			get {
-				int val = 2*HorizontalBuffer;
+				int val = 2 * HorizontalBuffer;
 				foreach (IDockItem di in DockItems)
-					val += 2*IconBorderWidth + di.Width;
+					val += 2 * IconBorderWidth + di.Width;
 				return val;
 			}
 		}
@@ -237,9 +237,9 @@ namespace Docky.Interface
 				if (minimum_dock_area.X == 0 && minimum_dock_area.Y == 0 && 
 				    minimum_dock_area.Width == 0 && minimum_dock_area.Height == 0) {
 					
-					int x_offset = (Width - DockWidth)/2;
-					minimum_dock_area = new Gdk.Rectangle (x_offset, Height-IconSize - 2*VerticalBuffer, DockWidth, 
-					                                       IconSize + 2*VerticalBuffer);
+					int x_offset = (Width - DockWidth) / 2;
+					minimum_dock_area = new Gdk.Rectangle (x_offset, Height - IconSize - 2 * VerticalBuffer, DockWidth, 
+					                                       IconSize + 2 * VerticalBuffer);
 				}
 				return minimum_dock_area;
 			}
@@ -415,7 +415,7 @@ namespace Docky.Interface
 						DrawThumbnailIcon (input_cr);
 				}
 				
-				cr.SetSource (dock_icon_buffer, 0, IconSize * (1-DockIconOpacity));
+				cr.SetSource (dock_icon_buffer, 0, IconSize * (1 - DockIconOpacity));
 				cr.PaintWithAlpha (DockIconOpacity);
 			}
 		}
@@ -435,34 +435,36 @@ namespace Docky.Interface
 			
 			double insertion_ms = (DateTime.UtcNow - DockItems[icon].DockAddItem).TotalMilliseconds;
 			if (insertion_ms < InsertAnimationTime) {
-				zoom *= insertion_ms/InsertAnimationTime;
+				zoom *= insertion_ms / InsertAnimationTime;
 			}
 			
-			double x = (1/zoom)*(center - zoom*IconSize/2);
-			double y = (1/zoom)*(Height-(zoom*IconSize)) - VerticalBuffer;
+			double x = (1 / zoom) * (center - zoom * IconSize / 2);
+			double y = (1 / zoom) * (Height - (zoom * IconSize)) - VerticalBuffer;
 			
 			int total_ms = (int) (DateTime.UtcNow - DockItems[icon].LastClick).TotalMilliseconds;
 			if (total_ms < BounceTime) {
-				y -= Math.Abs (20*Math.Sin (total_ms*Math.PI/(BounceTime/2)));
+				y -= Math.Abs (20 * Math.Sin (total_ms * Math.PI / (BounceTime / 2)));
 			}
 			
 			double scale = zoom/DockPreferences.IconQuality;
 			
 			if (DockItems[icon].Scalable) {
 				cr.Scale (scale, scale);
-				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), x*DockPreferences.IconQuality, y*DockPreferences.IconQuality);
+				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), x * DockPreferences.IconQuality, y * DockPreferences.IconQuality);
 				cr.Paint ();
-				cr.Scale (1/scale, 1/scale);
+				cr.Scale (1 / scale, 1 / scale);
 			} else {
-				double startx = x*zoom + (DockItems[icon].Width*zoom - DockItems[icon].Width)/2;
-				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), (int) startx, Height-DockItems[icon].Height-(MinimumDockArea.Height-DockItems[icon].Height)/2);
+				double startx = x * zoom + (DockItems[icon].Width * zoom - DockItems[icon].Width) / 2;
+				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), 
+				              (int) startx, 
+				              Height - DockItems[icon].Height - (MinimumDockArea.Height - DockItems[icon].Height) / 2);
 				cr.Paint ();
 			}
 			
 			if (DockItems[icon].DrawIndicator) {
 				cr.MoveTo (center, Height - 6);
-				cr.LineTo (center+4, Height);
-				cr.LineTo (center-4, Height);
+				cr.LineTo (center + 4, Height);
+				cr.LineTo (center - 4, Height);
 				cr.ClosePath ();
 				
 				cr.Color = new Cairo.Color (1, 1, 1, .7);
@@ -470,7 +472,9 @@ namespace Docky.Interface
 			}
 			
 			if (DockItemForX (Cursor.X) == icon && CursorIsOverDockArea && DockItems[icon].GetTextSurface () != null) {
-				cr.SetSource (DockItems[icon].GetTextSurface (), IconNormalCenterX (icon)-(DockPreferences.TextWidth/2), Height-2*IconSize-28);
+				cr.SetSource (DockItems[icon].GetTextSurface (), 
+				              IconNormalCenterX (icon) - (DockPreferences.TextWidth / 2), 
+				              Height - 2 * IconSize - 28);
 				cr.Paint ();
 			}
 		}
@@ -479,7 +483,7 @@ namespace Docky.Interface
 		{
 			Gdk.Point center = StickIconCenter;
 			
-			double opacity = 1.0/Math.Abs (center.X-Cursor.X)*30 - .2;
+			double opacity = 1.0/Math.Abs (center.X - Cursor.X) * 30 - .2;
 			
 			cr.Arc (center.X, center.Y, 3.5, 0, Math.PI*2);
 			cr.LineWidth = 1;
@@ -498,9 +502,9 @@ namespace Docky.Interface
 			//the first icons center is at dock X + border + IconBorder + half its width
 			if (!DockItems.Any ())
 				return 0;
-			int start_x = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth + (DockItems[0].Width/2);
+			int start_x = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth + (DockItems[0].Width / 2);
 			for (int i=0; i<icon; i++)
-				start_x += DockItems[i].Width + 2*IconBorderWidth;
+				start_x += DockItems[i].Width + 2 * IconBorderWidth;
 			return start_x;
 		}
 		
@@ -508,9 +512,9 @@ namespace Docky.Interface
 		{
 			int start_x = MinimumDockArea.X + HorizontalBuffer;
 			for (int i=0; i<DockItems.Length; i++) {
-				if (x >= start_x && x <= start_x+DockItems[i].Width+2*IconBorderWidth)
+				if (x >= start_x && x <= start_x + DockItems[i].Width + 2 * IconBorderWidth)
 					return i;
-				start_x += DockItems[i].Width + 2*IconBorderWidth;
+				start_x += DockItems[i].Width + 2 * IconBorderWidth;
 			}
 			return -1;
 		}
@@ -518,13 +522,13 @@ namespace Docky.Interface
 		void IconPositionedCenterX (int icon, out int x, out double zoom)
 		{
 			int center = IconNormalCenterX (icon);
-			int offset = Math.Min (Math.Abs (Cursor.X - center), ZoomPixels/2);
+			int offset = Math.Min (Math.Abs (Cursor.X - center), ZoomPixels / 2);
 			
 			if (ZoomPixels/2 == 0)
 				zoom = 1;
 			else {
-				zoom = DockPreferences.ZoomPercent - (offset/(double)(ZoomPixels/2))*(DockPreferences.ZoomPercent-1);
-				zoom = (zoom-1)*ZoomIn+1;
+				zoom = DockPreferences.ZoomPercent - (offset / (double)(ZoomPixels / 2)) * (DockPreferences.ZoomPercent - 1);
+				zoom = (zoom - 1) * ZoomIn + 1;
 			}
 			
 			offset = (int) ((offset*Math.Sin ((Math.PI/4)*zoom)) * (DockPreferences.ZoomPercent-1));
@@ -547,10 +551,10 @@ namespace Docky.Interface
 			IconPositionedCenterX (0, out start_x, out start_zoom);
 			IconPositionedCenterX (DockItems.Length - 1, out end_x, out end_zoom);
 			
-			int x = start_x - (int)(start_zoom*(IconSize/2)) - HorizontalBuffer;
-			int end = end_x + (int)(end_zoom*(IconSize/2)) + HorizontalBuffer;
+			int x = start_x - (int)(start_zoom * (IconSize / 2)) - HorizontalBuffer;
+			int end = end_x + (int)(end_zoom * (IconSize / 2)) + HorizontalBuffer;
 			
-			return new Gdk.Rectangle (x, Height-IconSize-2*VerticalBuffer, end-x, IconSize+2*VerticalBuffer);
+			return new Gdk.Rectangle (x, Height - IconSize - 2 * VerticalBuffer, end - x, IconSize + 2 * VerticalBuffer);
 		}
 		
 		void OnDockItemsChanged (IEnumerable<IDockItem> items)
@@ -654,10 +658,10 @@ namespace Docky.Interface
 			if (drag_resizing)
 				DockPreferences.IconSize = drag_start_icon_size + (drag_start_y - Cursor.Y);
 			
-			bool cursor_move_warrants_draw = CursorIsOverDockArea && 
+			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && 
 				old_cursor_location.X != Cursor.X;
 
-			if (tmp != CursorIsOverDockArea || drag_resizing || cursor_move_warrants_draw) 
+			if (tmp != CursorIsOverDockArea || drag_resizing || cursorMoveWarrantsDraw) 
 				AnimatedDraw ();
 			
 			return base.OnMotionNotifyEvent (evnt);
@@ -683,7 +687,7 @@ namespace Docky.Interface
 			}
 			
 			// we are hovering over the pin icon
-			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X-4, StickIconCenter.Y-4, 8, 8);
+			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X - 4, StickIconCenter.Y - 4, 8, 8);
 			if (stick_rect.Contains (Cursor)) {
 				DockPreferences.AutoHide = !DockPreferences.AutoHide;
 				window.SetStruts ();
@@ -755,7 +759,8 @@ namespace Docky.Interface
 			
 			for (int i=0; i<DockItems.Length; i++) {
 				int x = IconNormalCenterX (i);
-				DockItems[i].SetIconRegion (new Gdk.Rectangle (pos.X + (x-IconSize/2), pos.Y + (Height-VerticalBuffer-IconSize), IconSize, IconSize));
+				DockItems[i].SetIconRegion (new Gdk.Rectangle (pos.X + (x - IconSize / 2), 
+				                                               pos.Y + (Height - VerticalBuffer - IconSize), IconSize, IconSize));
 			}
 		}
 		

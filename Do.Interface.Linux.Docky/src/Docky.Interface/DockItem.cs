@@ -157,7 +157,7 @@ namespace Docky.Interface
 			if (di == null)
 				return false;
 			
-			return di.IObject.Name+di.IObject.Description+di.IObject.Icon == IObject.Name+IObject.Description+IObject.Icon;
+			return di.IObject.Name + di.IObject.Description + di.IObject.Icon == IObject.Name + IObject.Description + IObject.Icon;
 		}
 
 		#region IDisposable implementation 
