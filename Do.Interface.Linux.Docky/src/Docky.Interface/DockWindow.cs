@@ -38,6 +38,7 @@ namespace Docky.Interface
 	public class DockWindow : Gtk.Window, IDoWindow
 	{
 		DockArea dock_area;
+		
 		IDoController controller;
 		
 		public new string Name {

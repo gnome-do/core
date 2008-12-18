@@ -21,6 +21,7 @@ using System.Collections.Generic;
 
 using Cairo;
 using Gdk;
+using Mono.Unix;
 
 using Do.Interface;
 using Do.Interface.AnimationBase;
@@ -40,20 +41,14 @@ namespace Docky.Interface.Renderers
 		static SummonModeRenderer ()
 		{
 			DockPreferences.IconSizeChanged += delegate {
-				if (large_icon_cache != null) {
-					large_icon_cache.Dispose ();
-					large_icon_cache = null;
-				}
+				if (LargeIconCache != null)
+					LargeIconCache.Dispose ();
+				LargeIconCache = null;
 			};
 		}
 		
-		static PixbufSurfaceCache large_icon_cache;
 		static PixbufSurfaceCache LargeIconCache {
-			get {
-				if (large_icon_cache == null)
-					large_icon_cache = new PixbufSurfaceCache (10, 2*DockPreferences.IconSize, 2*DockPreferences.IconSize);
-				return large_icon_cache;
-			}
+			get; set;
 		}
 		
 		static string HighlightFormat { 
@@ -62,8 +57,11 @@ namespace Docky.Interface.Renderers
 			} 
 		}
 		
-		public static void RenderSummonMode (Context cr, DockState state, Gdk.Rectangle dockArea, int VerticalBuffer)
+		public static void RenderSummonMode (Context cr, DockState state, Gdk.Rectangle dockArea, int VerticalBuffer, Gtk.Widget widget)
 		{
+			if (LargeIconCache == null)
+				LargeIconCache = new PixbufSurfaceCache (10, 2 * DockPreferences.IconSize, 2 * DockPreferences.IconSize, cr.Target);
+				
 			for (int i=0; i<3; i++) {
 				Pane pane  = (Pane)i;
 				int left_x;
@@ -87,7 +85,7 @@ namespace Docky.Interface.Renderers
 					break;
 				case DrawState.ExplicitText:
 					icon = "gnome-mime-text";
-					opacity = .3;
+					opacity = .2;
 					break;
 				case DrawState.None:
 					continue;
@@ -101,25 +99,25 @@ namespace Docky.Interface.Renderers
 				
 				cr.Scale (zoom, zoom);
 				cr.SetSource (LargeIconCache.GetSurface (icon), 
-				              left_x*(1/zoom), 
-				              ((dockArea.Y+dockArea.Height)-(DockPreferences.IconSize*2*zoom)-VerticalBuffer)*(1/zoom));
+				              left_x * (1 / zoom), 
+				              ((dockArea.Y + dockArea.Height) - (DockPreferences.IconSize * 2 * zoom) - VerticalBuffer) * (1 / zoom));
 				cr.PaintWithAlpha (opacity);
-				cr.Scale (1/zoom, 1/zoom);
+				cr.Scale (1 / zoom, 1 / zoom);
 			}
 			
 			switch (PaneDrawState (state.CurrentPane, state))
 			{
 			case DrawState.NoResult:
-				RenderText (cr, "No result found for: " + state.GetPaneQuery (state.CurrentPane), dockArea);
+				RenderText (cr, Catalog.GetString ("No result found for") + ": " + state.GetPaneQuery (state.CurrentPane), dockArea, widget);
 				break;
 			case DrawState.Normal:
-				RenderNormalText (cr, state, dockArea);
+				RenderNormalText (cr, state, dockArea, widget);
 				break;
 			case DrawState.Text:
-				RenderTextModeText (cr, state, dockArea);
+				RenderTextModeText (cr, state, dockArea, widget);
 				break;
 			case DrawState.ExplicitText:
-				RenderExplicitText (cr, state, dockArea);
+				RenderExplicitText (cr, state, dockArea, widget);
 				break;
 			case DrawState.None:
 				// do nothing
@@ -127,17 +125,17 @@ namespace Docky.Interface.Renderers
 			}
 		}
 		
-		static void RenderNormalText (Context cr, DockState state, Gdk.Rectangle dockArea)
+		static void RenderNormalText (Context cr, DockState state, Gdk.Rectangle dockArea, Gtk.Widget widget)
 		{
 			int base_x = dockArea.X + 15;
 			string text = GLib.Markup.EscapeText (state[state.CurrentPane].Name);
 			text = Do.Interface.Util.FormatCommonSubstrings (text, state.GetPaneQuery (state.CurrentPane), HighlightFormat);
 			
 			int tmp = BezelTextUtils.TextHeight;
-			double text_scale = (DockPreferences.IconSize/64.0);
-			int text_offset = (int) (DockPreferences.IconSize*3);
+			double text_scale = (DockPreferences.IconSize / 64.0);
+			int text_offset = (int) (DockPreferences.IconSize * 3);
 			
-			if ((int) (12*text_scale) > 8)
+			if ((int) (12 * text_scale) > 8)
 				BezelTextUtils.TextHeight = (int) (20 * text_scale);
 			else
 				BezelTextUtils.TextHeight = (int) (35 * text_scale);
@@ -146,18 +144,18 @@ namespace Docky.Interface.Renderers
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
 			
 			BezelTextUtils.RenderLayoutText (cr, text, base_x + text_offset, 
-			                                 dockArea.Y + (int) (15*text_scale), (int) (500*text_scale), 
-			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
-			if ((int) (12*text_scale) > 8) {
-				BezelTextUtils.TextHeight = (int) (12*text_scale);
+			                                 dockArea.Y + (int) (15 * text_scale), (int) (500 * text_scale), 
+			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End, widget);
+			if ((int) (12 * text_scale) > 8) {
+				BezelTextUtils.TextHeight = (int) (12 * text_scale);
 				BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (state[state.CurrentPane].Description), 
-				                                 base_x + text_offset, dockArea.Y + (int) (42*text_scale), 
-				                                 (int) (500*text_scale), color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
+				                                 base_x + text_offset, dockArea.Y + (int) (42 * text_scale), 
+				                                 (int) (500 * text_scale), color, Pango.Alignment.Left, Pango.EllipsizeMode.End, widget);
 			}
 			BezelTextUtils.TextHeight = tmp;
 		}
 		
-		static void RenderExplicitText (Context cr, DockState state, Gdk.Rectangle dockArea)
+		static void RenderExplicitText (Context cr, DockState state, Gdk.Rectangle dockArea, Gtk.Widget widget)
 		{
 			int base_x = dockArea.X + 15;
 			
@@ -170,7 +168,7 @@ namespace Docky.Interface.Renderers
 			
 			int tmp = BezelTextUtils.TextHeight;
 			
-			double text_scale = (DockPreferences.IconSize/64.0);
+			double text_scale = (DockPreferences.IconSize / 64.0);
 			
 			BezelTextUtils.TextHeight = (int) (15 * text_scale);
 				
@@ -178,9 +176,9 @@ namespace Docky.Interface.Renderers
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
 			
 			Gdk.Rectangle rect = BezelTextUtils.RenderLayoutText (cr, text, base_x, 
-			                                                      dockArea.Y + (int) (15*text_scale), 
+			                                                      dockArea.Y + (int) (15 * text_scale), 
 			                                                      (dockArea.X + dockArea.Width) - (base_x + 15), 
-			                                                      color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
+			                                                      color, Pango.Alignment.Left, Pango.EllipsizeMode.None, widget);
 			BezelTextUtils.TextHeight = tmp;
 			
 			cr.Rectangle (rect.X, rect.Y, 2, rect.Height);
@@ -188,7 +186,7 @@ namespace Docky.Interface.Renderers
 			cr.Fill ();
 		}
 		
-		static void RenderTextModeText (Context cr, DockState state, Gdk.Rectangle dockArea)
+		static void RenderTextModeText (Context cr, DockState state, Gdk.Rectangle dockArea, Gtk.Widget widget)
 		{
 			int base_x = dockArea.X + 15;
 			
@@ -201,8 +199,8 @@ namespace Docky.Interface.Renderers
 			
 			int tmp = BezelTextUtils.TextHeight;
 			
-			double text_scale = (DockPreferences.IconSize/64.0);
-			int text_offset = (int) (DockPreferences.IconSize*3);
+			double text_scale = (DockPreferences.IconSize / 64.0);
+			int text_offset = (int) (DockPreferences.IconSize * 3);
 			
 			BezelTextUtils.TextHeight = (int) (15 * text_scale);
 				
@@ -210,19 +208,19 @@ namespace Docky.Interface.Renderers
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
 			
 			BezelTextUtils.RenderLayoutText (cr, text, base_x + text_offset, 
-			                                 dockArea.Y + (int) (15*text_scale), (dockArea.X + dockArea.Width) - (base_x + text_offset + 40), 
-			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
+			                                 dockArea.Y + (int) (15 * text_scale), (dockArea.X + dockArea.Width) - (base_x + text_offset + 40), 
+			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None, widget);
 			BezelTextUtils.TextHeight = tmp;
 		}
 		
-		static void RenderText (Context cr, string text, Gdk.Rectangle dockArea)
+		static void RenderText (Context cr, string text, Gdk.Rectangle dockArea, Gtk.Widget widget)
 		{
 			int base_x = dockArea.X + 15;
 			
 			int tmp = BezelTextUtils.TextHeight;
 			
-			double text_scale = (DockPreferences.IconSize/64.0);
-			int text_offset = (int) (DockPreferences.IconSize*3);
+			double text_scale = (DockPreferences.IconSize / 64.0);
+			int text_offset = (int) (DockPreferences.IconSize * 3);
 			
 			BezelTextUtils.TextHeight = (int) (20 * text_scale);
 				
@@ -230,8 +228,8 @@ namespace Docky.Interface.Renderers
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
 			
 			BezelTextUtils.RenderLayoutText (cr, text, base_x + text_offset, 
-			                                 dockArea.Y + (int) (15*text_scale), (dockArea.X + dockArea.Width) - (base_x + text_offset + 40), 
-			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
+			                                 dockArea.Y + (int) (15 * text_scale), (dockArea.X + dockArea.Width) - (base_x + text_offset + 40), 
+			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End, widget);
 			BezelTextUtils.TextHeight = tmp;
 		}
 		
@@ -239,10 +237,10 @@ namespace Docky.Interface.Renderers
 		{
 			int base_x = dockArea.X + 15;
 			double zoom_value = .3;
-			double slide_state = Math.Min (1,(DateTime.UtcNow - state.CurrentPaneTime).TotalMilliseconds/DockArea.BaseAnimationTime);
+			double slide_state = Math.Min (1, (DateTime.UtcNow - state.CurrentPaneTime).TotalMilliseconds / DockArea.BaseAnimationTime);
 			
-			double growing_zoom = zoom_value + slide_state*(1-zoom_value);
-			double shrinking_zoom = zoom_value + (1-slide_state)*(1-zoom_value);
+			double growing_zoom = zoom_value + slide_state * (1 - zoom_value);
+			double shrinking_zoom = zoom_value + (1 - slide_state) * (1 - zoom_value);
 			switch (pane) {
 			case Pane.First:
 				left_x = base_x;
@@ -257,48 +255,48 @@ namespace Docky.Interface.Renderers
 			case Pane.Second:
 				if (state.PreviousPane == Pane.Second && state.CurrentPane == Pane.First) {
 					zoom = shrinking_zoom;
-					left_x = base_x + (int) ((DockPreferences.IconSize*2) * (growing_zoom));
+					left_x = base_x + (int) ((DockPreferences.IconSize * 2) * (growing_zoom));
 				} else if (state.PreviousPane == Pane.Second && state.CurrentPane == Pane.Third) {
 					zoom = shrinking_zoom;
-					left_x = base_x + (int) (DockPreferences.IconSize*2*zoom_value);
+					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value);
 				} else if (state.PreviousPane == Pane.First && state.CurrentPane == Pane.Second) {
 					zoom = growing_zoom;
-					left_x = base_x + (int) ((DockPreferences.IconSize*2) * (shrinking_zoom));
+					left_x = base_x + (int) ((DockPreferences.IconSize * 2) * (shrinking_zoom));
 				} else if (state.PreviousPane == Pane.First && state.CurrentPane == Pane.Third) {
 					zoom = zoom_value;
-					left_x = base_x + (int) ((DockPreferences.IconSize*2) * (shrinking_zoom));
+					left_x = base_x + (int) ((DockPreferences.IconSize * 2) * (shrinking_zoom));
 				} else if (state.PreviousPane == Pane.Third && state.CurrentPane == Pane.First) {
 					zoom = zoom_value;
-					left_x = base_x + (int) ((DockPreferences.IconSize*2) * (growing_zoom));
+					left_x = base_x + (int) ((DockPreferences.IconSize * 2) * (growing_zoom));
 				} else {// (state.PreviousPane == Pane.Third && state.CurrentPane == Pane.Second) {
 					zoom = growing_zoom;
-					left_x = base_x + (int) (DockPreferences.IconSize*2*zoom_value);
+					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value);
 				}
 				break;
 			default:
 				if (state.PreviousPane == Pane.Second && state.CurrentPane == Pane.First) {
 					zoom = zoom_value;
-					left_x = base_x + (int) (DockPreferences.IconSize*2*(1+zoom_value));
+					left_x = base_x + (int) (DockPreferences.IconSize * 2 * (1 + zoom_value));
 				} else if (state.PreviousPane == Pane.Second && state.CurrentPane == Pane.Third) {
 					zoom = growing_zoom;
-					left_x = base_x + (int) (DockPreferences.IconSize*2*zoom_value) + (int) ((DockPreferences.IconSize*2) * (shrinking_zoom));
+					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value) + (int) ((DockPreferences.IconSize * 2) * (shrinking_zoom));
 				} else if (state.PreviousPane == Pane.First && state.CurrentPane == Pane.Second) {
 					zoom = zoom_value;
-					left_x = base_x + (int) (DockPreferences.IconSize*2*(1+zoom_value));
+					left_x = base_x + (int) (DockPreferences.IconSize * 2 * (1 + zoom_value));
 				} else if (state.PreviousPane == Pane.First && state.CurrentPane == Pane.Third) {
 					zoom = growing_zoom;
-					left_x = base_x + (int) (DockPreferences.IconSize*2*zoom_value) + (int) ((DockPreferences.IconSize*2) * (shrinking_zoom));
+					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value) + (int) ((DockPreferences.IconSize * 2) * (shrinking_zoom));
 				} else if (state.PreviousPane == Pane.Third && state.CurrentPane == Pane.First) {
 					zoom = shrinking_zoom;
-					left_x = base_x + (int) (DockPreferences.IconSize*2*zoom_value) + (int) ((DockPreferences.IconSize*2) * (growing_zoom));
+					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value) + (int) ((DockPreferences.IconSize * 2) * (growing_zoom));
 				} else {// (state.PreviousPane == Pane.Third && state.CurrentPane == Pane.Second) {
 					zoom = shrinking_zoom;
-					left_x = base_x + (int) (DockPreferences.IconSize*2*zoom_value) + (int) ((DockPreferences.IconSize*2) * (growing_zoom));
+					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value) + (int) ((DockPreferences.IconSize * 2) * (growing_zoom));
 				}
 				break;
 			}
 			double offset_scale = .9;
-			left_x = (int) (left_x *offset_scale + base_x*(1-offset_scale));
+			left_x = (int) (left_x * offset_scale + base_x * (1 - offset_scale));
 		}
 		
 		static DrawState PaneDrawState (Pane pane, DockState state)

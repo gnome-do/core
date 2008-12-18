@@ -44,15 +44,15 @@ namespace Do.Interface.AnimationBase
 			}
 		}
 		
-		public static void RenderLayoutText (Context cr, string text, int x, int y, int width)
+		public static void RenderLayoutText (Context cr, string text, int x, int y, int width, Gtk.Widget widget)
 		{
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
-			RenderLayoutText (cr, text, x, y, width, color, Pango.Alignment.Center, Pango.EllipsizeMode.End);
+			RenderLayoutText (cr, text, x, y, width, color, Pango.Alignment.Center, Pango.EllipsizeMode.End, widget);
 		}
 		
 		public static Gdk.Rectangle RenderLayoutText (Context cr, string text, int x, int y, int width, 
-		                       Pango.Color color, Pango.Alignment align, Pango.EllipsizeMode ellipse)
+		                       Pango.Color color, Pango.Alignment align, Pango.EllipsizeMode ellipse, Gtk.Widget widget)
 		{
 			if (string.IsNullOrEmpty (text)) return new Gdk.Rectangle ();
 	
@@ -61,8 +61,8 @@ namespace Do.Interface.AnimationBase
 				layout.FontDescription.Dispose ();
 				layout.Dispose ();
 			}
-			layout = new Pango.Layout (PangoHelper.ContextGet ());
-			layout.FontDescription = Pango.FontDescription.FromString ("sans bold");
+			layout = new Pango.Layout (widget.CreatePangoContext ());
+			layout.FontDescription = new Pango.FontDescription ();
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (TextHeight);
 			
 			layout.Width = Pango.Units.FromPixels (width);
