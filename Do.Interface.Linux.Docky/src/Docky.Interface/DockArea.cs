@@ -396,7 +396,7 @@ namespace Docky.Interface
 				
 				using (Context input_cr = new Context (input_area_buffer)) {
 					input_cr.AlphaFill ();
-					Renderers.SummonModeRenderer.RenderSummonMode (input_cr, State, dockArea, VerticalBuffer);
+					Renderers.SummonModeRenderer.RenderSummonMode (input_cr, State, dockArea, VerticalBuffer, this);
 				}
 				
 				cr.SetSource (input_area_buffer);
@@ -454,7 +454,8 @@ namespace Docky.Interface
 				cr.Paint ();
 				cr.Scale (1/scale, 1/scale);
 			} else {
-				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), x*zoom, Height-DockItems[icon].Height-(MinimumDockArea.Height-DockItems[icon].Height)/2);
+				double startx = x*zoom + (DockItems[icon].Width*zoom - DockItems[icon].Width)/2;
+				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), (int) startx, Height-DockItems[icon].Height-(MinimumDockArea.Height-DockItems[icon].Height)/2);
 				cr.Paint ();
 			}
 			

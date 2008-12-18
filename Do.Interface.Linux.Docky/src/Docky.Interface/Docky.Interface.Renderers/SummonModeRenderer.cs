@@ -56,7 +56,7 @@ namespace Docky.Interface.Renderers
 			} 
 		}
 		
-		public static void RenderSummonMode (Context cr, DockState state, Gdk.Rectangle dockArea, int VerticalBuffer)
+		public static void RenderSummonMode (Context cr, DockState state, Gdk.Rectangle dockArea, int VerticalBuffer, Gtk.Widget widget)
 		{
 			if (LargeIconCache == null)
 				LargeIconCache = new PixbufSurfaceCache (10, 2*DockPreferences.IconSize, 2*DockPreferences.IconSize, cr.Target);
@@ -107,16 +107,16 @@ namespace Docky.Interface.Renderers
 			switch (PaneDrawState (state.CurrentPane, state))
 			{
 			case DrawState.NoResult:
-				RenderText (cr, "No result found for: " + state.GetPaneQuery (state.CurrentPane), dockArea);
+				RenderText (cr, "No result found for: " + state.GetPaneQuery (state.CurrentPane), dockArea, widget);
 				break;
 			case DrawState.Normal:
-				RenderNormalText (cr, state, dockArea);
+				RenderNormalText (cr, state, dockArea, widget);
 				break;
 			case DrawState.Text:
-				RenderTextModeText (cr, state, dockArea);
+				RenderTextModeText (cr, state, dockArea, widget);
 				break;
 			case DrawState.ExplicitText:
-				RenderExplicitText (cr, state, dockArea);
+				RenderExplicitText (cr, state, dockArea, widget);
 				break;
 			case DrawState.None:
 				// do nothing
@@ -124,7 +124,7 @@ namespace Docky.Interface.Renderers
 			}
 		}
 		
-		static void RenderNormalText (Context cr, DockState state, Gdk.Rectangle dockArea)
+		static void RenderNormalText (Context cr, DockState state, Gdk.Rectangle dockArea, Gtk.Widget widget)
 		{
 			int base_x = dockArea.X + 15;
 			string text = GLib.Markup.EscapeText (state[state.CurrentPane].Name);
@@ -144,17 +144,17 @@ namespace Docky.Interface.Renderers
 			
 			BezelTextUtils.RenderLayoutText (cr, text, base_x + text_offset, 
 			                                 dockArea.Y + (int) (15*text_scale), (int) (500*text_scale), 
-			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
+			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End, widget);
 			if ((int) (12*text_scale) > 8) {
 				BezelTextUtils.TextHeight = (int) (12*text_scale);
 				BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (state[state.CurrentPane].Description), 
 				                                 base_x + text_offset, dockArea.Y + (int) (42*text_scale), 
-				                                 (int) (500*text_scale), color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
+				                                 (int) (500*text_scale), color, Pango.Alignment.Left, Pango.EllipsizeMode.End, widget);
 			}
 			BezelTextUtils.TextHeight = tmp;
 		}
 		
-		static void RenderExplicitText (Context cr, DockState state, Gdk.Rectangle dockArea)
+		static void RenderExplicitText (Context cr, DockState state, Gdk.Rectangle dockArea, Gtk.Widget widget)
 		{
 			int base_x = dockArea.X + 15;
 			
@@ -177,7 +177,7 @@ namespace Docky.Interface.Renderers
 			Gdk.Rectangle rect = BezelTextUtils.RenderLayoutText (cr, text, base_x, 
 			                                                      dockArea.Y + (int) (15*text_scale), 
 			                                                      (dockArea.X + dockArea.Width) - (base_x + 15), 
-			                                                      color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
+			                                                      color, Pango.Alignment.Left, Pango.EllipsizeMode.None, widget);
 			BezelTextUtils.TextHeight = tmp;
 			
 			cr.Rectangle (rect.X, rect.Y, 2, rect.Height);
@@ -185,7 +185,7 @@ namespace Docky.Interface.Renderers
 			cr.Fill ();
 		}
 		
-		static void RenderTextModeText (Context cr, DockState state, Gdk.Rectangle dockArea)
+		static void RenderTextModeText (Context cr, DockState state, Gdk.Rectangle dockArea, Gtk.Widget widget)
 		{
 			int base_x = dockArea.X + 15;
 			
@@ -208,11 +208,11 @@ namespace Docky.Interface.Renderers
 			
 			BezelTextUtils.RenderLayoutText (cr, text, base_x + text_offset, 
 			                                 dockArea.Y + (int) (15*text_scale), (dockArea.X + dockArea.Width) - (base_x + text_offset + 40), 
-			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
+			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None, widget);
 			BezelTextUtils.TextHeight = tmp;
 		}
 		
-		static void RenderText (Context cr, string text, Gdk.Rectangle dockArea)
+		static void RenderText (Context cr, string text, Gdk.Rectangle dockArea, Gtk.Widget widget)
 		{
 			int base_x = dockArea.X + 15;
 			
@@ -228,7 +228,7 @@ namespace Docky.Interface.Renderers
 			
 			BezelTextUtils.RenderLayoutText (cr, text, base_x + text_offset, 
 			                                 dockArea.Y + (int) (15*text_scale), (dockArea.X + dockArea.Width) - (base_x + text_offset + 40), 
-			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
+			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End, widget);
 			BezelTextUtils.TextHeight = tmp;
 		}
 		
