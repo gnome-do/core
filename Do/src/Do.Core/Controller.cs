@@ -535,7 +535,7 @@ namespace Do.Core {
 			if ((Gdk.Key) evnt.KeyValue == RightKey) {
 				// We're attempting to browse the contents of an item, so increase its
 				// relevance.
-				(SearchController.Selection as Element)
+				SearchController.Selection
 					.IncreaseRelevance (SearchController.Query, null);
 				if (SearchController.ItemChildSearch ()) GrowResults ();
 			} else if ((Gdk.Key) evnt.KeyValue == LeftKey) {
@@ -543,7 +543,7 @@ namespace Do.Core {
 				// relevance. This makes it so we can merely visit an item's children,
 				// and navigate back out of the item, and leave that item's relevance
 				// unchanged.
-				(SearchController.Selection as Element)
+				SearchController.Selection
 					.DecreaseRelevance (SearchController.Query, null);
 				if (SearchController.ItemParentSearch ()) GrowResults ();
 			}
@@ -845,19 +845,19 @@ namespace Do.Core {
 
 					// Increase the relevance of the action /for each item/:
 					foreach (Element item in items)
-						(action as Element).IncreaseRelevance (actionQuery, item as Element);
+						action.IncreaseRelevance (actionQuery, item);
 				} else {
 					// Universe.Action is in first pane.
 
 					// Increase the relevance of each item for the action.
 					foreach (Element item in items)
-						item.IncreaseRelevance (itemQuery, action as Element);
+						item.IncreaseRelevance (itemQuery, action);
 
-					(action as Element).IncreaseRelevance (actionQuery, null);
+					action.IncreaseRelevance (actionQuery, null);
 				}
 
 				if (third != null && ThirdPaneVisible)
-					(third as Element).IncreaseRelevance (modItemQuery, action as Element);
+					third.IncreaseRelevance (modItemQuery, action);
 
 				PerformState state = new PerformState (action, items, modItems);
 				th = new Thread (new ParameterizedThreadStart (PerformActionAsync));
