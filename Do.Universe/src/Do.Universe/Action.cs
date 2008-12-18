@@ -132,13 +132,18 @@ namespace Do.Universe
 		public IEnumerable<Item> DynamicModifierItemsForItemSafe (Item item)
 		{
 			IEnumerable<Item> modItems = null;
+
+			item = ProxyItem.Unwrap (item);
+
+			if (!SupportedModifierItemTypes.Any (type => type.IsInstanceOfType (item)))
+				return Enumerable.Empty<Item> ();
 			
 			try {
 				// Strictly evaluate the IEnumerable before we leave the try block.
 				modItems = DynamicModifierItemsForItem (item).ToArray ();
 			} catch (Exception e) {
 				modItems = null;
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in DynamicModifierItemsForItem: {2}", GetType (), Name, e.Message);
+				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in DynamicModifierItemsForItem: {2}", GetType (), NameSafe, e.Message);
 				// Log.Debug (e.StackTrace);
 			} finally {
 				modItems = modItems ?? Enumerable.Empty<Item> ();
@@ -148,12 +153,14 @@ namespace Do.Universe
 
 		public bool SupportsItemSafe (Item item)
 		{
-			if (!SupportedItemTypes.Any (t => t.IsInstanceOfType (item))) return false;
+			item = ProxyItem.Unwrap (item);
+			
+			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item))) return false;
 
 			try {
 				return SupportsItem (item);
 			} catch (Exception e) {
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in SupportsItem: {2}", GetType (), Name, e.Message);
+				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in SupportsItem: {2}", GetType (), NameSafe, e.Message);
 				// Log.Debug (e.StackTrace);
 			}
 			return false;
@@ -161,12 +168,15 @@ namespace Do.Universe
 
 		public bool SupportsModifierItemForItemsSafe (IEnumerable<Item> items, Item modItem)
 		{
-			if (!SupportedModifierItemTypes.Any (t => t.IsInstanceOfType (modItem))) return false;
+			items = ProxyItem.Unwrap (items);
+			modItem = ProxyItem.Unwrap (modItem);
+			
+			if (!SupportedModifierItemTypes.Any (type => type.IsInstanceOfType (modItem))) return false;
 
 			try {
 				return SupportsModifierItemForItems (items, modItem);
 			} catch (Exception e) {
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in SupportsModifierItemForItems: {2}", GetType (), Name, e.Message);
+				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in SupportsModifierItemForItems: {2}", GetType (), NameSafe, e.Message);
 				// Log.Debug (e.StackTrace);
 			}
 			return false;
@@ -175,12 +185,17 @@ namespace Do.Universe
 		public IEnumerable<Item> PerformSafe (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			IEnumerable<Item> results = null;
+			
+			items = ProxyItem.Unwrap (items);
+			modItems = ProxyItem.Unwrap (modItems);
+			
 			try {
 				// Strictly evaluate the IEnumerable before we leave the try block.
-				results = Perform (items, modItems).ToArray ();
+				results = Perform (items, modItems);
+				if (results != null) results = results.ToArray ();
 			} catch (Exception e) {
 				results = null;
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Perform: {2}", GetType (), Name, e.Message);
+				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Perform: {2}", GetType (), NameSafe, e.Message);
 				// Log.Debug (e.StackTrace);
 			} finally {
 				results = results ?? Enumerable.Empty<Item> ();

@@ -23,69 +23,43 @@ using System.Linq;
 using System.Collections.Generic;
 using Mono.Unix;
 
-namespace Do.Universe {
+namespace Do.Universe
+{
 	
-	class AliasAction : IAction {
+	class AliasAction : Action
+	{
 		
-		public string Name {
-			get {
-				return Catalog.GetString ("Assign Alias...");
-			}
+		public override string Name {
+			get { return Catalog.GetString ("Assign Alias...");  }
 		}
 
-		public string Description {
-			get {
-				return Catalog.GetString ("Give an item an alternate name.");
-			}
+		public override string Description {
+			get { return Catalog.GetString ("Give an item an alternate name."); }
 		}
 
-		public string Icon {
-			get {
-				return "emblem-symbolic-link";
-			}
+		public override string Icon {
+			get { return "emblem-symbolic-link"; }
 		}
 
-		public IEnumerable<Type> SupportedItemTypes {
-			get {
-				yield return typeof (IItem);
-			}
+		public override IEnumerable<Type> SupportedItemTypes {
+			get { yield return typeof (Item);  }
 		}
 
-		public IEnumerable<Type> SupportedModifierItemTypes {
-			get {
-				yield return typeof (ITextItem);
-			}
+		public override IEnumerable<Type> SupportedModifierItemTypes {
+			get { yield return typeof (ITextItem); }
 		}
 
-		public bool ModifierItemsOptional {
-			get {
-				return false;
-			}
+		public override bool ModifierItemsOptional {
+			get { return false; }
 		}
 
-		public IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			string alias;
 			
 			alias = (modItems.First () as ITextItem).Text;
 			yield return AliasItemSource.Alias (items.First (), alias);;
 		}
-
-		public bool SupportsItem (IItem item)
-		{
-			return !(item is IProxyItem);
-		}
-
-		public bool SupportsModifierItemForItems (IEnumerable<IItem> items, IItem modItem)
-		{
-			return true;
-		}
-
-		public IEnumerable<IItem> DynamicModifierItemsForItem (IItem item)
-		{
-			return null;
-		}
-		
 
 	}
 }

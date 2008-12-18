@@ -22,7 +22,6 @@ using System;
 namespace Do.Universe
 {
 	
-	
  	public abstract class Item : Element, IItem
 	{
 	}

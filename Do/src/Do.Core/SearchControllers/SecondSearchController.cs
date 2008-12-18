@@ -126,34 +126,28 @@ namespace Do.Core
 			List<Element> initresults = InitialResults ();
 			
 			List<Element> results = new List<Element> ();
-			if (FirstController.Selection is IItem) {
-				IItem item = FirstController.Selection as IItem;
-				IItem ritem = DoItem.Unwrap (FirstController.Selection as IItem);
+			if (FirstController.Selection is Item) {
+				Item item = FirstController.Selection as Item;
 				
 				//We need to find actions for this item
 				//TODO -- Make this work for multiple items
-				foreach (IAction action in initresults) {
-					foreach (Type t in action.SupportedItemTypes) {
-						if (t.IsInstanceOfType (ritem)) {
-							if (action.SupportsItem (item)) {
-								results.Add (action);
-								break;
-							}
-						}
+				foreach (Universe.Action action in initresults) {
+					if (action.SupportsItemSafe (item)) {
+						results.Add (action);
 					}
 				}
 				
-			} else if (FirstController.Selection is IAction) {
+			} else if (FirstController.Selection is Universe.Action) {
 				//We need to find items for this action
-				IAction action = FirstController.Selection as IAction;
+				Universe.Action action = FirstController.Selection as Universe.Action;
 				if (!textMode) {
-					foreach (IItem item in initresults) {
-						if (action.SupportsItem (item))
+					foreach (Item item in initresults) {
+						if (action.SupportsItemSafe (item))
 							results.Add (item);
 					}
 				}
-				IItem textItem = new DoTextItem (Query);
-				if (action.SupportsItem (textItem))
+				Item textItem = new ImplicitTextItem (Query);
+				if (action.SupportsItemSafe (textItem))
 					results.Add (textItem);
 			}
 			
@@ -224,17 +218,17 @@ namespace Do.Core
 
 		public override IEnumerable<Type> SearchTypes {
 			get { 
-				if (FirstController.Selection is IAction) {
+				if (FirstController.Selection is Universe.Action) {
 					// the basic idea here is that if the first controller selection is an action
 					// we can move right to filtering on what it supports.  This is not strictly needed,
 					// but speeds up searches since we get more specific results back.  Returning a
-					// typeof (IItem) would have the same effect here and MUST be used to debug.
-					// ----return new Type[] {typeof (IItem)};
-					return (FirstController.Selection as IAction).SupportedItemTypes;
+					// typeof (Item) would have the same effect here and MUST be used to debug.
+					// ----return new Type[] {typeof (Item)};
+					return (FirstController.Selection as Universe.Action).SupportedItemTypes;
 				} else {
 					if (TextMode)
-						return new Type[] { typeof (ITextItem) };
-					return new Type[] { typeof (IAction) };
+						return new [] { typeof (ITextItem) };
+					return new [] { typeof (Universe.Action) };
 				}
 			}
 		}
@@ -262,10 +256,10 @@ namespace Do.Core
 				if (!value) {
 					textMode = value;
 					textModeFinalize = false;
-				} else if (FirstController.Selection is IAction) {
-					IAction action = FirstController.Selection as IAction;
+				} else if (FirstController.Selection is Universe.Action) {
+					Universe.Action action = FirstController.Selection as Universe.Action;
 					foreach (Type t in action.SupportedItemTypes) {
-						if (t == typeof (ITextItem) && action.SupportsItem (new DoTextItem (Query))) {
+						if (t == typeof (ITextItem) && action.SupportsItemSafe (new ImplicitTextItem (Query))) {
 							textMode = value;
 							textModeFinalize = false;
 						}

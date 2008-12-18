@@ -23,65 +23,38 @@ using System.Linq;
 using System.Collections.Generic;
 using Mono.Unix;
 
-namespace Do.Universe {
+namespace Do.Universe
+{
 	
-	class DeleteAliasAction : IAction {
+	class DeleteAliasAction : Action
+	{
 		
-		public string Name {
-			get {
-				return Catalog.GetString ("Delete Alias");
-			}
+		public override string Name {
+			get { return Catalog.GetString ("Delete Alias"); }
 		}
 
-		public string Description {
-			get {
-				return Catalog.GetString ("Deletes an alias.");
-			}
+		public override string Description {
+			get { return Catalog.GetString ("Deletes an alias."); }
 		}
 
-		public string Icon {
-			get {
-				return "gtk-delete";
-			}
+		public override string Icon {
+			get { return "gtk-delete"; }
 		}
 
-		public IEnumerable<Type> SupportedItemTypes {
-			get {
-				yield return typeof (IItem);
-			}
+		public override IEnumerable<Type> SupportedItemTypes {
+			get { yield return typeof (Item); }
 		}
 
-		public IEnumerable<Type> SupportedModifierItemTypes {
-			get {
-				return null;
-			}
-		}
-
-		public bool ModifierItemsOptional {
-			get {
-				return false;
-			}
-		}
-
-		public IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
-		{
-			AliasItemSource.Unalias (items.First ());
-			return null;
-		}
-
-		public bool SupportsItem (IItem item)
+		public override bool SupportsItem (Item item)
 		{
 			return AliasItemSource.ItemHasAlias (item);
 		}
 
-		public bool SupportsModifierItemForItems (IEnumerable<IItem> items, IItem modItem)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
-			return true;
-		}
-
-		public IEnumerable<IItem> DynamicModifierItemsForItem (IItem item)
-		{
+			foreach (Item item in items)
+				AliasItemSource.Unalias (item);
 			return null;
-		}		
+		}
 	}
 }

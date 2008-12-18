@@ -19,6 +19,9 @@
  */
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
+
 using Mono.Unix;
 
 namespace Do.Universe
@@ -39,16 +42,22 @@ namespace Do.Universe
 			DefaultIcon = "emblem-noread";
 		}
 
+		string uniqueId;
+
 		protected Element ()
 		{
-			// TODO GetType might not do what we want here:
-			// In case Name or Description throws when constructing the UID, set it to a default so
-			// something appears in the log message.
-			UniqueId = DefaultName;
-			UniqueId = string.Format (UniqueIdFormat, NameSafe, DescriptionSafe, GetType ());
+			uniqueId = DefaultName;
 		}
 
-		public string UniqueId { get; private set; }
+		public string UniqueId {
+			get {
+				// We have to initialize the UniqueId lazily, because it is not safe
+				// to initialize in the constructor, before subclasses have initialized.
+				if (object.Equals (uniqueId, DefaultName))
+					uniqueId = string.Format (UniqueIdFormat, NameSafe, DescriptionSafe, GetType ());
+				return uniqueId;
+			}
+		}
 		
 		public float Relevance { get; set; }
 		
@@ -85,7 +94,7 @@ namespace Do.Universe
 				try {
 					return Description;
 				} catch (Exception e) {
-					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Description: {2}", GetType (), Name, e.Message);
+					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Description: {2}", GetType (), NameSafe, e.Message);
 					// Log.Debug (e.StackTrace);
 				}
 				return DefaultDescription;
@@ -97,7 +106,7 @@ namespace Do.Universe
 				try {
 					return Icon;
 				} catch (Exception e) {
-					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Icon: {2}", GetType (), Name, e.Message);
+					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Icon: {2}", GetType (), NameSafe, e.Message);
 					// Log.Debug (e.StackTrace);
 				}
 				return DefaultIcon;
@@ -129,6 +138,11 @@ namespace Do.Universe
 		public int CompareTo (Element e)
 		{
 			return (int) (1000000 * (e.Relevance - Relevance));
+		}
+
+		public bool PassesTypeFilter (IEnumerable<Type> types)
+		{
+			return !types.Any () || types.Any (type => type.IsInstanceOfType (this));
 		}
 		
 	}

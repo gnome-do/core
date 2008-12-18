@@ -77,7 +77,7 @@ namespace Do.Universe
 			try {
 				UpdateItems ();
 			} catch (Exception e) {
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in UpdateItems: {2}", GetType (), Name, e.Message);
+				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in UpdateItems: {2}", GetType (), NameSafe, e.Message);
 				// Log.Debug (e.StackTrace);
 			}
 		}
@@ -92,7 +92,7 @@ namespace Do.Universe
 					items = Items.ToArray ();
 				} catch (Exception e) {
 					items = null;
-					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Items: {2}", GetType (), Name, e.Message);
+					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Items: {2}", GetType (), NameSafe, e.Message);
 					// Log.Debug (e.StackTrace);
 				} finally {
 					items = items ?? Enumerable.Empty<Item> ();
@@ -102,21 +102,21 @@ namespace Do.Universe
 			}
 		}
 
-		public bool SupportsItemSafe (Item item)
-		{
-			return SupportedItemTypes.Any (t => t.IsInstanceOfType (item));
-		}
-
 		public IEnumerable<Item> ChildrenOfItemSafe (Item item)
 		{
 			IEnumerable<Item> children = null;
+
+			item = ProxyItem.Unwrap (item);
+
+			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item)))
+			    return Enumerable.Empty<Item> ();
 
 			try {
 				// Strictly evaluate the IEnumerable before we leave the try block.
 				children = ChildrenOfItem (item).ToArray ();
 			} catch (Exception e) {
 				children = null;
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in ChildrenOfItem: {2}", GetType (), Name, e.Message);
+				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in ChildrenOfItem: {2}", GetType (), NameSafe, e.Message);
 				// Log.Debug (e.StackTrace);
 			} finally {
 				children = children ?? Enumerable.Empty<Item> ();

@@ -34,7 +34,7 @@ namespace Do.Core
 	// universe_lock may be locked within and action_lock
 	// No other nested locks should be allowed
 	
-	public class UniverseManager : IUniverseManager
+	public class UniverseManager
 	{
 
 		Thread thread, update_thread;
@@ -82,7 +82,7 @@ namespace Do.Core
 		
 		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, Element other)
 		{
-			if (filter.Count () == 1 && filter.First () == typeof (IAction))
+			if (filter.Count () == 1 && filter.First () == typeof (Universe.Action))
 				lock (action_lock)
 					return Search (query, filter, actions, other);
 			else
@@ -95,22 +95,20 @@ namespace Do.Core
 			return Search (query, filter, objects, null);
 		}
 		
-		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, IEnumerable<Element> objects, Element other)
+		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, IEnumerable<Element> elements, Element other)
 		{
-			DoObject text = new DoTextItem (query);
+			Element text = new ImplicitTextItem (query);
 
-			foreach (DoObject o in objects)
-				o.UpdateRelevance (query, other as DoObject);
+			foreach (Element element in elements)
+				element.UpdateRelevance (query, other);
 
-			return objects
-				.Cast<DoObject> ()
-				.Where (o => epsilon < Math.Abs (o.Relevance) && o.PassesTypeFilter (filter))
-				.OrderByDescending (o => o.Relevance)
+			return elements
+				.Where (element => epsilon < Math.Abs (element.Relevance) && element.PassesTypeFilter (filter))
+				.OrderByDescending (element => element.Relevance)
 				.Concat (text.PassesTypeFilter (filter)
 						? new [] { text }
-						: Enumerable.Empty<DoObject> ()
+						: Enumerable.Empty<Element> ()
 				)
-				.Cast<Element> ()
 				.ToArray ();
 		}
 		
@@ -123,9 +121,9 @@ namespace Do.Core
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		public bool ObjectHasChildren (Element o)
+		public bool ElementHasChildren (Element element)
 		{
-			return o is DoItem && (o as DoItem).HasChildren;
+			return element is Item && (element as Item).HasChildren ();
 		}
 		
 		/// <summary>
@@ -169,9 +167,9 @@ namespace Do.Core
 					ReloadActions ();
 				}
 				
-				foreach (DoItemSource source in PluginManager.ItemSources) {
+				foreach (ItemSource source in PluginManager.ItemSources) {
 					#warning The Log is not threadsafe...
-					Log.Debug ("Updating item source \"{0}\".", source.Name);
+					Log.Debug ("Updating item source \"{0}\".", source.NameSafe);
 					UpdateSource (source);
 
 					if (UpdateRunTime < DateTime.Now - startUpdate) {
@@ -190,13 +188,13 @@ namespace Do.Core
 		{
 			lock (action_lock) {
 				lock (universe_lock) {
-					foreach (DoAction action in actions) {
-						universe.Remove (action.UID);
+					foreach (Universe.Action action in actions) {
+						universe.Remove (action.UniqueId);
 					}
 					actions.Clear ();
-					foreach (DoAction action in PluginManager.Actions) {
+					foreach (Universe.Action action in PluginManager.Actions) {
 							actions.Add (action);
-							universe [action.UID] = action;			
+							universe [action.UniqueId] = action;			
 					}
 				}
 			}
@@ -205,20 +203,16 @@ namespace Do.Core
 		/// <summary>
 		/// Updates an item source and syncs it into the universe
 		/// </summary>
-		void UpdateSource (DoItemSource source)
+		void UpdateSource (ItemSource source)
 		{
 			lock (universe_lock) {
-				foreach (DoItem item in source.Items) {
-					if (universe.ContainsKey (item.UID))
-						universe.Remove (item.UID);
+				foreach (Item item in source.ItemsSafe) {
+					if (universe.ContainsKey (item.UniqueId))
+						universe.Remove (item.UniqueId);
 				}
-				try {
-					source.UpdateItems ();
-				} catch {
-					Log.Error ("There was an error updated items for {0}", source.Name);
-				}
-				foreach (DoItem item in source.Items) {
-					universe  [item.UID] = item;
+				source.UpdateItemsSafe ();
+				foreach (Item item in source.ItemsSafe) {
+					universe  [item.UniqueId] = item;
 				}
 			}
 		}
@@ -230,61 +224,54 @@ namespace Do.Core
 		{
 			ReloadActions ();
 			
-			foreach (DoItemSource source in PluginManager.ItemSources)
+			foreach (ItemSource source in PluginManager.ItemSources)
 				UpdateSource (source);
 			
 			Log.Info ("Universe contains {0} items.", universe.Count);
 		}
 		
 		/// <summary>
-		/// Add a list of IItems to the universe
+		/// Add a list of Items to the universe
 		/// </summary>
 		/// <param name="items">
 		/// A <see cref="IEnumerable`1"/>
 		/// </param>
-		public void AddItems (IEnumerable<IItem> items)
+		public void AddItems (IEnumerable<Item> items)
 		{
-			foreach (IItem i in items) {
-				DoItem tmp = i as DoItem;
-				if (tmp == null)
-					tmp = new DoItem (i);
-				
-				if (universe.ContainsKey (tmp.UID))
-					continue;
-				
-				lock (universe_lock) {
-					universe.Add (tmp.UID, i);
+			lock (universe_lock) {
+				foreach (Item item in items) {
+					if (universe.ContainsKey (item.UniqueId)) continue;
+					universe [item.UniqueId] = item;
 				}
 			}
 		}
 
 		/// <summary>
-		/// Remove a list of IItems from the universe.  This removal does not prevent these
+		/// Remove a list of Items from the universe.  This removal does not prevent these
 		/// items from returning to the universe at a future date.
 		/// </summary>
 		/// <param name="items">
 		/// A <see cref="IEnumerable`1"/>
 		/// </param>
-		public void DeleteItems (IEnumerable<IItem> items)
+		public void DeleteItems (IEnumerable<Item> items)
 		{
 			lock (universe_lock) {
-				foreach (IItem i in items) {
-					DoItem item = DoItem.Wrap (i) as DoItem;
-					universe.Remove (item.UID);
+				foreach (Item item in items) {
+					universe.Remove (item.UniqueId);
 				}
 			}
 		}
 
 		/// <summary>
-		/// Attempts to get an Object for a given UID.
+		/// Attempts to get an Element for a given UniqueId.
 		/// </summary>
-		/// <param name="UID">
+		/// <param name="UniqueId">
 		/// A <see cref="System.String"/>
 		/// </param>
 		/// <param name="item">
 		/// A <see cref="Element"/>
 		/// </param>
-		public bool TryGetObjectForUID (string uid, out Element o)
+		public bool TryGetElementForUniqueId (string uid, out Element o)
 		{
 			if (universe.ContainsKey (uid)) {
 				o = universe [uid];

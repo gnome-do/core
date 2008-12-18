@@ -1,4 +1,4 @@
-/* QuitDoItem.cs
+/* QuitItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -25,17 +25,17 @@ using Gtk;
 
 namespace Do.Universe
 {	
-	public class DoQuitItem : IRunnableItem
+	public class QuitItem : Item, IRunnableItem
 	{		
-		public string Name {
+		public override string Name {
 			get { return Catalog.GetString ("Quit GNOME Do"); }
 		}
 		
-		public string Description {
+		public override string Description {
 			get { return Catalog.GetString ("Quit GNOME Do"); }
 		}
 		
-		public string Icon {
+		public override string Icon {
 			get { return "process-stop"; }
 		}
 		

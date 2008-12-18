@@ -49,8 +49,8 @@ namespace Do.Core {
 		};
 
 		static readonly IEnumerable<Type> PenalizedActionTypes = new Type[] {
-			typeof (AliasAction),
-			typeof (DeleteAliasAction),
+			//typeof (AliasAction),
+			//typeof (DeleteAliasAction),
 			//typeof (CopyToClipboardAction),
 		};
 
@@ -73,14 +73,14 @@ namespace Do.Core {
 				max_item_hits = Math.Max (max_item_hits, rec.Hits);
 		}
 
-		public override void IncreaseRelevance (DoObject o, string match, DoObject other)
+		public override void IncreaseRelevance (Element o, string match, Element other)
 		{
 			RelevanceRecord rec;
 
 			newest_hit = DateTime.Now;
-			if (!hits.TryGetValue (o.UID, out rec)) {
+			if (!hits.TryGetValue (o.UniqueId, out rec)) {
 				rec = new RelevanceRecord (o);
-				hits [o.UID] = rec;
+				hits [o.UniqueId] = rec;
 			}
 			
 			rec.Hits++;
@@ -91,30 +91,30 @@ namespace Do.Core {
 			UpdateMaxHits (rec);
 		}
 
-		public override void DecreaseRelevance (DoObject o, string match, DoObject other)
+		public override void DecreaseRelevance (Element o, string match, Element other)
 		{
 			RelevanceRecord rec;
 			
-			if (hits.TryGetValue (o.UID, out rec)) {
+			if (hits.TryGetValue (o.UniqueId, out rec)) {
 				rec.Hits--;
 				if (other == null) rec.FirstPaneHits--;
-				if (rec.Hits == 0) 	hits.Remove (o.UID);
+				if (rec.Hits == 0) 	hits.Remove (o.UniqueId);
 			}
 		}
 
-		public override float GetRelevance (DoObject o, string match, DoObject other)
+		public override float GetRelevance (Element o, string match, Element other)
 		{
 			RelevanceRecord rec;
 			bool isAction;
 			float relevance = 0f, age = 0f, score = 0f;
 
-			if (!hits.TryGetValue (o.UID, out rec))
+			if (!hits.TryGetValue (o.UniqueId, out rec))
 				rec = new RelevanceRecord (o);
 
 			isAction = rec.IsAction;
 			
 			// Get string similarity score.
-			score = StringScoreForAbbreviation (o.Name, match);
+			score = StringScoreForAbbreviation (o.NameSafe, match);
 			if (score == 0f) return 0f;
 			
 			// We must give a base, non-zero relevance to make scoring rules take
@@ -122,7 +122,7 @@ namespace Do.Core {
 			// relevance, the object with the shorter name comes first. Objects
 			// with shorter names tend to be simpler, and more often what the
 			// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
-			relevance = DefaultRelevance / Math.Max (1, o.Name.Length);
+			relevance = DefaultRelevance / Math.Max (1, o.NameSafe.Length);
 
 			if (0 < rec.Hits) {
 				// On a scale of 0 (new) to 1 (old), how old is the item?
@@ -149,7 +149,7 @@ namespace Do.Core {
 			relevance *= 1f - (age / 2f);
 
 			if (isAction) {
-				IAction oa = o as IAction;
+				Universe.Action oa = o as Universe.Action;
 				// We penalize actions, but only if they're not used in the first pane
 				// often.
 				if (rec.FirstPaneHits < 3)
@@ -163,7 +163,7 @@ namespace Do.Core {
 					relevance *= 0.8f;
 			}
 
-			if (typeof (IItemSource).IsAssignableFrom (rec.Type))
+			if (typeof (ItemSource).IsAssignableFrom (rec.Type))
 				relevance *= 0.4f;
 
 			return relevance * 0.30f + score * 0.70f;
@@ -188,13 +188,13 @@ namespace Do.Core {
 		public RelevanceRecord (Element o)
 		{
 			LastHit = DateTime.Now;
-			Type = Services.Core.Unwrap (o).GetType ();
+			Type = o.GetType ();
 			FirstChars = "";
 		}
 
 		public bool IsAction {
 			get {
-				return typeof (IAction).IsAssignableFrom (Type);
+				return typeof (Universe.Action).IsAssignableFrom (Type);
 			}
 		}
 

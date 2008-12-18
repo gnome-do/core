@@ -718,7 +718,7 @@ namespace Do.Interface.AnimationBase
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			Surface surface = cr.Target.CreateSimilar (cr.Target.Content, InternalWidth, SurfaceHeight);
 			Context cr2 = new Context (surface);
-			ItemRenderer.RenderElement (cr2, new Gdk.Point (border_width, 0), InternalWidth, item, controller.ObjectHasChildren (item));
+			ItemRenderer.RenderElement (cr2, new Gdk.Point (border_width, 0), InternalWidth, item, controller.ElementHasChildren (item));
 			
 			surface_buffer[item] = surface;
 			

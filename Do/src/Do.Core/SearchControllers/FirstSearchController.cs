@@ -59,8 +59,7 @@ namespace Do.Core
 					yield return typeof (ITextItem);
 				} else if (context.SecondaryCursors.Any ()) {
 					// This is pretty bad.
-					yield return 
-						Services.Core.Unwrap (Results [SecondaryCursors [0]]).GetType ();
+					yield return Results [SecondaryCursors [0]].GetType ();
 				} else {
 					foreach (Type t in defaultFilter) yield return t;
 				}
@@ -91,11 +90,11 @@ namespace Do.Core
 			
 			if (context.ParentContext == null) {
 				if (DefaultFilter) {
-					results.Add (new DoTextItem (Query));
+					results.Add (new ImplicitTextItem (Query));
 				} else {
 					foreach (Type t in SearchTypes) {
-						if (t == typeof (IItem) || t == typeof (ITextItem)) {
-							results.Add (new DoTextItem (Query));
+						if (t == typeof (Item) || t == typeof (ITextItem)) {
+							results.Add (new ImplicitTextItem (Query));
 						}
 					}
 				}
@@ -127,7 +126,7 @@ namespace Do.Core
 				
 				results = InitialResults ();
 				
-				results.Add (new DoTextItem (Query));
+				results.Add (new ImplicitTextItem (Query));
 				context.Results = results.ToArray ();
 			}
 			base.OnSearchFinished (true, true, Selection, Query);

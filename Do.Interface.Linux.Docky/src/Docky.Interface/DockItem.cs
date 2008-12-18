@@ -125,9 +125,9 @@ namespace Docky.Interface
 			if (!apps.Any () || !HasVisibleApps || button == 2) {
 				LastClick = DateTime.UtcNow;
 				if (Element is IFileItem)
-					controller.PerformDefaultAction (Element as IItem, new Type[] { typeof (OpenAction), });
+					controller.PerformDefaultAction (Element as Item, new [] { typeof (OpenAction), });
 				else
-					controller.PerformDefaultAction (Element as IItem, Type.EmptyTypes);
+					controller.PerformDefaultAction (Element as Item, Type.EmptyTypes);
 				return;
 			}
 				

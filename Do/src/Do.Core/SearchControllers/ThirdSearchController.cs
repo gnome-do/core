@@ -38,11 +38,11 @@ namespace Do.Core
 				if (FirstController.Selection == null || SecondController.Selection == null)
 					return false;
 				
-				IAction action;
-				if (FirstController.Selection is IAction) {
-					action = FirstController.Selection as IAction;
-				} else if (SecondController.Selection is IAction) {
-					action = SecondController.Selection as IAction;
+				Universe.Action action;
+				if (FirstController.Selection is Universe.Action) {
+					action = FirstController.Selection as Universe.Action;
+				} else if (SecondController.Selection is Universe.Action) {
+					action = SecondController.Selection as Universe.Action;
 				} else {
 					return false;
 				}
@@ -65,8 +65,9 @@ namespace Do.Core
 		public override IEnumerable<Type> SearchTypes {
 			get { 
 				if (TextMode)
-					return new Type[] { typeof (ITextItem) };
-				return new Type[] { typeof (IItem) }; 
+					yield return typeof (ITextItem);
+				else
+					yield return typeof (Item);
 			}
 		}
 
@@ -80,11 +81,11 @@ namespace Do.Core
 					textMode = value;
 					textModeFinalize = false;
 				} else {
-					IAction action;
-					if (FirstController.Selection is IAction)
-						action = FirstController.Selection as IAction;
-					else if (SecondController.Selection is IAction)
-						action = SecondController.Selection as IAction;
+					Universe.Action action;
+					if (FirstController.Selection is Universe.Action)
+						action = FirstController.Selection as Universe.Action;
+					else if (SecondController.Selection is Universe.Action)
+						action = SecondController.Selection as Universe.Action;
 					else
 						return; //you have done something weird, ignore it!
 					
@@ -146,25 +147,25 @@ namespace Do.Core
 
 		private Element[] GetContextResults ()
 		{
-			IAction action;
-			IItem item;
-			List<IItem> items = new List<IItem> ();
-			if (FirstController.Selection is IAction) {
+			Universe.Action action;
+			Item item;
+			List<Item> items = new List<Item> ();
+			if (FirstController.Selection is Universe.Action) {
 				
-				action = FirstController.Selection as IAction;
-				item   = SecondController.Selection as IItem;
+				action = FirstController.Selection as Universe.Action;
+				item   = SecondController.Selection as Item;
 				foreach (Element obj in SecondController.FullSelection) {
-					if (obj is IItem)
-						items.Add (obj as IItem);
+					if (obj is Item)
+						items.Add (obj as Item);
 				}
 				
-			} else if (SecondController.Selection is IAction) {
+			} else if (SecondController.Selection is Universe.Action) {
 				
-				action = SecondController.Selection as IAction;
-				item   = FirstController.Selection as IItem;
+				action = SecondController.Selection as Universe.Action;
+				item   = FirstController.Selection as Item;
 				foreach (Element obj in FirstController.FullSelection) {
-					if (obj is IItem)
-						items.Add (obj as IItem);
+					if (obj is Item)
+						items.Add (obj as Item);
 				}
 				
 			} else {
@@ -179,18 +180,18 @@ namespace Do.Core
 
 			if (!textMode) {
 				List<Element> initresults = InitialResults ();
-				foreach (IItem moditem in initresults) {
-					if (action.SupportsModifierItemForItems (items.ToArray (), moditem))
+				foreach (Item moditem in initresults) {
+					if (action.SupportsModifierItemForItemsSafe (items, moditem))
 						results.Add (moditem);
 				}
 			
 				if (Query.Length == 0)
-					results.AddRange (action.DynamicModifierItemsForItem (item).Cast<Element> ());
+					results.AddRange (action.DynamicModifierItemsForItemSafe (item).Cast<Element> ());
 				results.Sort ();
 			}
 			
-			IItem textItem = new DoTextItem (Query);
-			if (action.SupportsModifierItemForItems (items.ToArray (), textItem))
+			Item textItem = new ImplicitTextItem (Query);
+			if (action.SupportsModifierItemForItemsSafe (items, textItem))
 				results.Add (textItem);
 			
 			return results.ToArray ();

@@ -44,7 +44,7 @@ namespace Do.Core
 		
 		protected bool ImplicitTextMode {
 			get {
-				return !textMode && Results.Count == 1 && Results [0] is DoTextItem;
+				return !textMode && Results.Count == 1 && Results [0] is ImplicitTextItem;
 			}
 		}
 		
@@ -180,7 +180,7 @@ namespace Do.Core
 			
 			if (secondary.Contains (newObject))
 				secondary.Remove (newObject);
-			else if (newObject is IItem)
+			else if (newObject is Item)
 				secondary.Add (newObject);
 			else
 				return false;
@@ -192,14 +192,14 @@ namespace Do.Core
 		
 		public bool ItemChildSearch ()
 		{
-			if (context.Selection is IAction)
+			if (context.Selection is Universe.Action)
 				return false;
 			
-			IItem item = context.Selection as IItem;
+			Item item = context.Selection as Item;
 			List<Element> children = new List<Element> ();
 
-			foreach (DoItemSource source in PluginManager.ItemSources) {
-				foreach (Element child in source.ChildrenOfItem (item))
+			foreach (ItemSource source in PluginManager.ItemSources) {
+				foreach (Element child in source.ChildrenOfItemSafe (item))
 					children.Add (child);
 			}
 			

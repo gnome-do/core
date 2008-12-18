@@ -1,4 +1,4 @@
-// CoreService.cs
+// ItemExtensions.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -18,29 +18,32 @@
 //
 
 using System;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
-using Mono.Unix;
-
-using Do.Core;
 using Do.Universe;
-using Do.Platform;
 
-namespace Do.Platform
+namespace Do.Core
 {
-	
-	public class CoreService : ICoreService
-	{
-		#region ICoreService
 
-		public Element GetElement (string uniqueId)
+	static class ItemExtensions
+	{
+
+		static IDictionary<Item, bool> has_children;
+
+		static ItemExtensions ()
 		{
-			Element element;
-			Do.UniverseManager.TryGetElementForUniqueId (uniqueId, out element);
-			return element;
+			has_children = new Dictionary<Item, bool> ();
 		}
 
-		#endregion
-		
-	}
+		public static bool HasChildren (this Item self) {
+			if (!has_children.ContainsKey (self)) {
+				has_children [self] = PluginManager.ItemSources
+					.Any (source => source.ChildrenOfItemSafe (self).Any ());
+			}
+			return has_children [self];
+		}
 
+	}
 }
