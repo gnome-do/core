@@ -4,7 +4,6 @@
       <Entry build="True" name="Do" configuration="Debug" />
       <Entry build="True" name="Do.Addins" configuration="Debug" />
       <Entry build="True" name="Do.DBus" configuration="Debug" />
-      <Entry build="False" name="Tests" configuration="Debug" />
       <Entry build="True" name="Do.Platform" configuration="Debug" />
       <Entry build="True" name="Do.Platform.Linux" configuration="Debug" />
       <Entry build="True" name="Do.Platform.Windows" configuration="Debug" />
@@ -21,7 +20,6 @@
       <Entry build="True" name="Do" configuration="Release" />
       <Entry build="True" name="Do.Addins" configuration="Release" />
       <Entry build="True" name="Do.DBus" configuration="Release" />
-      <Entry build="True" name="Tests" configuration="Release" />
       <Entry build="True" name="Do.Platform" configuration="Release" />
       <Entry build="True" name="Do.Platform.Linux" configuration="Release" />
       <Entry build="True" name="Do.Platform.Windows" configuration="Release" />
@@ -42,7 +40,6 @@
     <Execute type="None" entry="Do" />
     <Execute type="None" entry="Do.Addins" />
     <Execute type="None" entry="Do.DBus" />
-    <Execute type="None" entry="Tests" />
     <Execute type="None" entry="Do.Platform" />
     <Execute type="None" entry="Do.Platform.Linux" />
     <Execute type="None" entry="Do.Platform.Windows" />
@@ -60,7 +57,6 @@
     <Entry filename="Do/Do.mdp" />
     <Entry filename="Do.Addins/Do.Addins.mdp" />
     <Entry filename="Do.DBus/Do.DBus.mdp" />
-    <Entry filename="Tests/Tests.mdp" />
     <Entry filename="Do.Platform/Do.Platform.mdp" />
     <Entry filename="Do.Platform.Linux/Do.Platform.Linux.mdp" />
     <Entry filename="Do.Platform.Windows/Do.Platform.Windows.mdp" />
