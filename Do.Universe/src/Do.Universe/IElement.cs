@@ -1,4 +1,4 @@
-/* QuitDoItem.cs
+/* IElement.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this
@@ -18,33 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 using System;
 using Mono.Unix;
-using Gtk;
 
 namespace Do.Universe
-{	
-	public class DoQuitItem : IRunnableItem
-	{		
-		public string Name {
-			get { return Catalog.GetString ("Quit GNOME Do"); }
-		}
+{
+
+	public interface IElement 
+	{
 		
-		public string Description {
-			get { return Catalog.GetString ("Quit GNOME Do"); }
-		}
 		
-		public string Icon {
-			get { return "process-stop"; }
-		}
-		
-		public void Run ()
-		{
-			Gtk.Application.Invoke (delegate {
-				Do.Controller.Vanish ();
-				Application.Quit ();
-			});
-		}
+		string UniqueId { get; }
+		float Relevance { get; }
 	}
 }

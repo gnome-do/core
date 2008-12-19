@@ -62,13 +62,13 @@ namespace Do.Interface
 		/// <summary>
 		/// Check and see if an object likely has children
 		/// </summary>
-		/// <param name="o">
-		/// A <see cref="IObject"/>
+		/// <param name="element">
+		/// A <see cref="Element"/>
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		bool ObjectHasChildren (IObject o);
+		bool ElementHasChildren (Element element);
 		
 		/// <value>
 		/// Get ahold of the current statistics for Do
@@ -81,6 +81,6 @@ namespace Do.Interface
 		/// <param name="item">
 		/// A <see cref="IItem"/>
 		/// </param>
-		void PerformDefaultAction (IItem item, IEnumerable<Type> filter);
+		void PerformDefaultAction (Item item, IEnumerable<Type> filter);
 	}
 }

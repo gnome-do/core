@@ -29,7 +29,7 @@ using Do.Platform;
 namespace Do.Universe.Common
 {
 
-	public class OpenUrlAction : AbstractAction
+	public class OpenUrlAction : Act
 	{
 
 		// URL regex taken from http://www.osix.net/modules/article/?id=586
@@ -70,18 +70,18 @@ namespace Do.Universe.Common
 			}
 		}
 
-		public override bool SupportsItem (IItem item)
+		public override bool SupportsItem (Item item)
 		{
 			if (item is ITextItem)
 				return url_regex.IsMatch ((item as ITextItem).Text);
 			return true;
 		}
 		
-		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			IEnvironmentService env = Services.Environment;
 
-			foreach (IItem item in items) {
+			foreach (Item item in items) {
 				if (item is IUrlItem)
 					env.OpenUrl ((item as IUrlItem).Url);
 				else if (item is ITextItem)

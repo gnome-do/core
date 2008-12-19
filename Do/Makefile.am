@@ -17,35 +17,28 @@ FILES = \
 	src/AssemblyInfo.cs \
 	src/CorePreferences.cs \
 	src/Do.Core/Controller.cs \
-	src/Do.Core/DoAction.cs \
 	src/Do.Core/DoAddinInstaller.cs \
-	src/Do.Core/DoItem.cs \
-	src/Do.Core/DoItemSource.cs \
-	src/Do.Core/DoObject.cs \
-	src/Do.Core/DoObject_RelevanceProvider.cs \
+	src/Do.Core/ElementExtensions.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
-	src/Do.Core/IObjectExtensions.cs \
-	src/Do.Core/IUniverseManager.cs \
+	src/Do.Core/ItemExtensions.cs \
 	src/Do.Core/Paths.cs \
 	src/Do.Core/PluginManager.cs \
 	src/Do.Core/RelevanceProvider.cs \
-	src/Do.Core/StalledActionNotification.cs \
 	src/Do.Core/SearchControllers/FirstSearchController.cs \
 	src/Do.Core/SearchControllers/ISearchController.cs \
 	src/Do.Core/SearchControllers/SecondSearchController.cs \
 	src/Do.Core/SearchControllers/SimpleSearchContext.cs \
 	src/Do.Core/SearchControllers/SimpleSearchController.cs \
 	src/Do.Core/SearchControllers/ThirdSearchController.cs \
+	src/Do.Core/StalledActionNotification.cs \
 	src/Do.Core/UniverseManager.cs \
-	src/Do.cs \
-	src/PathExtensions.cs \
 	src/Do.Platform/CoreService.cs \
 	src/Do.Platform/WindowingService.cs \
 	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \
-	src/Do.UI/KeybindingsPreferencesWidget.cs \
 	src/Do.UI/KeybindingTreeView.cs \
+	src/Do.UI/KeybindingsPreferencesWidget.cs \
 	src/Do.UI/MainMenu.cs \
 	src/Do.UI/ManagePluginsPreferencesWidget.cs \
 	src/Do.UI/PluginConfigurationWindow.cs \
@@ -56,15 +49,15 @@ FILES = \
 	src/Do.UI/PreferencesWindow.cs \
 	src/Do.Universe/AliasAction.cs \
 	src/Do.Universe/AliasItemSource.cs \
+	src/Do.Universe/ClearLearningItem.cs \
 	src/Do.Universe/DeleteAliasAction.cs \
-	src/Do.Universe/DoQuitItem.cs \
-	src/Do.Universe/DoTextItem.cs \
 	src/Do.Universe/InternalItemSource.cs \
 	src/Do.Universe/ItemSourceItemSource.cs \
 	src/Do.Universe/PreferencesItem.cs \
-	src/Do.Universe/ProxyItem.cs \
+	src/Do.Universe/QuitItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
-	src/Do.Universe/ClearLearningItem.cs \
+	src/Do.cs \
+	src/PathExtensions.cs \
 	src/Util.cs \
 	src/XKeybinder.cs
 

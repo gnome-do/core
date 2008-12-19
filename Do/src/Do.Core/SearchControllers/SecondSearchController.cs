@@ -41,7 +41,7 @@ namespace Do.Core
 			}
 		}
 		
-		public override IObject Selection {
+		public override Element Selection {
 			get { 
 				if (IsSearching)
 					FastSearch ();
@@ -77,21 +77,21 @@ namespace Do.Core
 			base.OnSearchFinished (true, true, Selection, Query);
 		}
 		
-		protected override List<IObject> InitialResults ()
+		protected override List<Element> InitialResults ()
 		{
 			if (TextMode)
-				return new List<IObject> ();
+				return new List<Element> ();
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				return new List<Element> (Do.UniverseManager.Search (context.Query, 
 				                                                     SearchTypes, 
 				                                                     context.LastContext.Results, 
 				                                                     FirstController.Selection));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
-				return new List<IObject> (context.Results);
+				return new List<Element> (context.Results);
 			} else { 
 				//else we do things the slow way
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				return new List<Element> (Do.UniverseManager.Search (context.Query, 
 				                                                     SearchTypes, 
 				                                                     FirstController.Selection));
 			}
@@ -119,41 +119,35 @@ namespace Do.Core
 		/// Set up our results list.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="IObject"/>
+		/// A <see cref="Element"/>
 		/// </returns>
-		private IObject[] GetContextResults ()
+		private Element[] GetContextResults ()
 		{
-			List<IObject> initresults = InitialResults ();
+			List<Element> initresults = InitialResults ();
 			
-			List<IObject> results = new List<IObject> ();
-			if (FirstController.Selection is IItem) {
-				IItem item = FirstController.Selection as IItem;
-				IItem ritem = DoItem.Unwrap (FirstController.Selection as IItem);
+			List<Element> results = new List<Element> ();
+			if (FirstController.Selection is Item) {
+				Item item = FirstController.Selection as Item;
 				
 				//We need to find actions for this item
 				//TODO -- Make this work for multiple items
-				foreach (IAction action in initresults) {
-					foreach (Type t in action.SupportedItemTypes) {
-						if (t.IsInstanceOfType (ritem)) {
-							if (action.SupportsItem (item)) {
-								results.Add (action);
-								break;
-							}
-						}
+				foreach (Act action in initresults) {
+					if (action.SupportsItemSafe (item)) {
+						results.Add (action);
 					}
 				}
 				
-			} else if (FirstController.Selection is IAction) {
+			} else if (FirstController.Selection is Act) {
 				//We need to find items for this action
-				IAction action = FirstController.Selection as IAction;
+				Act action = FirstController.Selection as Act;
 				if (!textMode) {
-					foreach (IItem item in initresults) {
-						if (action.SupportsItem (item))
+					foreach (Item item in initresults) {
+						if (action.SupportsItemSafe (item))
 							results.Add (item);
 					}
 				}
-				IItem textItem = new DoTextItem (Query);
-				if (action.SupportsItem (textItem))
+				Item textItem = new ImplicitTextItem (Query);
+				if (action.SupportsItemSafe (textItem))
 					results.Add (textItem);
 			}
 			
@@ -224,17 +218,17 @@ namespace Do.Core
 
 		public override IEnumerable<Type> SearchTypes {
 			get { 
-				if (FirstController.Selection is IAction) {
+				if (FirstController.Selection is Act) {
 					// the basic idea here is that if the first controller selection is an action
 					// we can move right to filtering on what it supports.  This is not strictly needed,
 					// but speeds up searches since we get more specific results back.  Returning a
-					// typeof (IItem) would have the same effect here and MUST be used to debug.
-					// ----return new Type[] {typeof (IItem)};
-					return (FirstController.Selection as IAction).SupportedItemTypes;
+					// typeof (Item) would have the same effect here and MUST be used to debug.
+					// ----return new Type[] {typeof (Item)};
+					return (FirstController.Selection as Act).SupportedItemTypes;
 				} else {
 					if (TextMode)
-						return new Type[] { typeof (ITextItem) };
-					return new Type[] { typeof (IAction) };
+						return new [] { typeof (ITextItem) };
+					return new [] { typeof (Act) };
 				}
 			}
 		}
@@ -262,10 +256,10 @@ namespace Do.Core
 				if (!value) {
 					textMode = value;
 					textModeFinalize = false;
-				} else if (FirstController.Selection is IAction) {
-					IAction action = FirstController.Selection as IAction;
+				} else if (FirstController.Selection is Act) {
+					Act action = FirstController.Selection as Act;
 					foreach (Type t in action.SupportedItemTypes) {
-						if (t == typeof (ITextItem) && action.SupportsItem (new DoTextItem (Query))) {
+						if (t == typeof (ITextItem) && action.SupportsItemSafe (new ImplicitTextItem (Query))) {
 							textMode = value;
 							textModeFinalize = false;
 						}

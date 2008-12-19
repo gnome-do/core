@@ -29,11 +29,11 @@ using Mono.Unix;
 using Do;
 using Do.Platform;
 
-namespace Do.Universe {	
+namespace Do.Universe
+{
 	
-	class AliasItem : DoProxyItem	{
-		public AliasItem (string alias, IItem item) :
-			base (alias, item)
+	class AliasItem : ProxyItem	{
+		public AliasItem (Item item, string alias) : base (item, alias)
 		{
 		}
 	}
@@ -41,16 +41,16 @@ namespace Do.Universe {
 	[Serializable]
 	class AliasRecord {
 		
-		public readonly string UID, Alias;
+		public readonly string UniqueId, Alias;
 		
-		public AliasRecord (string uid, string alias)
+		public AliasRecord (string uniqueId, string alias)
 		{
-			UID = uid;
+			UniqueId = uniqueId;
 			Alias = alias;
 		}
 	}
 	
-	public class AliasItemSource : IItemSource {
+	public class AliasItemSource : ItemSource {
 		
 		static List<AliasRecord> aliases;
 		
@@ -95,23 +95,22 @@ namespace Do.Universe {
 			}
 		}
 		
-		public static IItem Alias (IItem item, string alias)
+		public static Item Alias (Item item, string alias)
 		{
 			AliasItem aliasItem;
 			
 			if (!ItemHasAlias (item, alias)) {
-				string uid = Services.Core.GetUID (item);
-				aliases.Add (new AliasRecord (uid, alias));
+				aliases.Add (new AliasRecord (item.UniqueId, alias));
 			}
 			
-			aliasItem = new AliasItem (alias, item);
-			Do.UniverseManager.AddItems (new IItem [] { aliasItem });
+			aliasItem = new AliasItem (item, alias);
+			Do.UniverseManager.AddItems (new Item [] { aliasItem });
 
 			Serialize ();
 			return aliasItem;
 		}
 		
-		public static void Unalias (IItem item)
+		public static void Unalias (Item item)
 		{
 			int i = IndexOfAlias (item);
 			if (i != -1)
@@ -120,77 +119,66 @@ namespace Do.Universe {
 			Serialize ();
 		}
 		
-		public static bool ItemHasAlias (IItem item)
+		public static bool ItemHasAlias (Item item)
 		{
 			return IndexOfAlias (item) != -1;
 		}
 		
-		public static bool ItemHasAlias (IItem item, string alias)
+		public static bool ItemHasAlias (Item item, string alias)
 		{
 			int i = IndexOfAlias (item);
 			return i != -1 && aliases [i].Alias == alias;
 		}
 		
-		static int IndexOfAlias (IItem item)
+		static int IndexOfAlias (Item item)
 		{
 			int i = 0;
-			string uid = Services.Core.GetUID (item);
 			foreach (AliasRecord alias in aliases) {
-				if (alias.UID == uid)
+				if (alias.UniqueId == item.UniqueId)
 					return i;
 				i++;
 			}
 			return -1;
 		}
 		
-		public string Name {
+		public override string Name {
 			get {
 				return Catalog.GetString ("Alias items");
 			}
 		}
 
-		public string Description {
+		public override string Description {
 			get {
 				return Catalog.GetString ("Aliased items from Do's universe.");
 			}
 		}
 
-		public string Icon {
+		public override string Icon {
 			get {
 				return "emblem-symbolic-link";
 			}
 		}
 
-		public IEnumerable<Type> SupportedItemTypes {
-			get {
-				yield return typeof (AliasItem);
-			}
+		public override IEnumerable<Type> SupportedItemTypes {
+			get { yield return typeof (AliasItem); }
 		}
 
-		public IEnumerable<IItem> Items {
+		public override IEnumerable<Item> Items {
 			get {
-				List<IItem> items;
+				List<Item> items;
 				
-				items = new List<IItem> ();
-				foreach (AliasRecord alias in aliases) {
-					IObject item;
+				items = new List<Item> ();
+				foreach (AliasRecord aliasRecord in aliases) {
+					Element item;
 					
-					Do.UniverseManager.TryGetObjectForUID (alias.UID, out item);
-					if (null != item && item is IItem) {
-						items.Add (new AliasItem (alias.Alias, item as IItem));
+					Do.UniverseManager.TryGetElementForUniqueId (aliasRecord.UniqueId, out item);
+					if (null != item && item is Item) {
+						items.Add (new AliasItem (item as Item, aliasRecord.Alias));
 					}
 				}
 				return items;
 			}
 		}
 		
-		public IEnumerable<IItem> ChildrenOfItem (IItem item)
-		{
-			return null;
-		}
-
-		public void UpdateItems ()
-		{
-		}
 	}
 }

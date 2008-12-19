@@ -1,4 +1,4 @@
-//  DoProxyItem.cs
+//  ProxyItem.cs
 //
 //  GNOME Do is the legal property of its developers, whose names are too numerous
 //  to list here.  Please refer to the COPYRIGHT file distributed with this
@@ -18,52 +18,71 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
-using Do.Core;
 
-namespace Do.Universe {
+namespace Do.Universe
+{
 	
-	public interface IProxyItem : IItem {
-		IObject Inner { get; }
-	}
-	
-	public class DoProxyItem : DoItem, IProxyItem {
+	public class ProxyItem : Item
+	{
 		
 		string name, description, icon;
-		
-		public DoProxyItem (IItem item):
-			this (null, null, null, item)
+
+		protected ProxyItem ():
+			this (null, null, null, null)
 		{
 		}
 		
-		public DoProxyItem (string name, IItem item):
-			this (name, null, null, item)
+		public ProxyItem (Item item):
+			this (item, null, null, null)
 		{
 		}
 		
-		public DoProxyItem (string name, string description, IItem item):
-			this (name, description, null, item)
+		public ProxyItem (Item item, string name):
+			this (item, name, null, null)
 		{
 		}
 		
-		public DoProxyItem (string name, string description, string icon, IItem item):
-			base (item)
+		public ProxyItem (Item item, string name, string description):
+			this (item, name, description, null)
 		{
+		}
+		
+		public ProxyItem (Item item, string name, string description, string icon)
+		{
+			Item = item;
 			this.name = name;
 			this.description = description;
 			this.icon = icon;
 		}
 
+		public virtual Item Item {
+			get; protected set;
+		}
+
 		public override string Name {
-			get { return name ?? base.Name; }
+			get { return name ?? Item.Name; }
 		}
 		
 		public override string Description {
-			get { return description ?? base.Description; }
+			get { return description ?? Item.Description; }
 		}
 		
 		public override string Icon {
-			get { return icon ?? base.Icon; }
+			get { return icon ?? Item.Icon; }
+		}
+
+		public static Item Unwrap (Item item)
+		{
+			// WARNING: Infinite loop could occur here (stack will overflow)
+			return item is ProxyItem ? Unwrap ((item as ProxyItem).Item) : item;
+		}
+
+		public static IEnumerable<Item> Unwrap (IEnumerable<Item> items)
+		{
+			return items.Select (item => Unwrap (item));
 		}
 
 	}

@@ -34,35 +34,21 @@ using Do.Platform;
 using Do.Universe;
 using Do.Interface;
 
-namespace Do.Core {
+namespace Do.Core
+{
 
 	/// <summary>
 	/// PluginManager serves as Do's primary interface to Mono.Addins.
 	/// </summary>
-	public static class PluginManager {
+	internal static class PluginManager
+	{
 
-		public  const string AllPluginsRepository = "All Available Plugins";
-		private const string DefaultPluginIcon = "folder_tar";
+		public const string AllPluginsRepository = "All Available Plugins";
+		const string DefaultPluginIcon = "folder_tar";
+		
+		static IEnumerable<string> ExtensionPaths = new [] { "/Do/ItemSource", "/Do/Action", };
 
-		static ICollection<DoAction> actions;
-		static ICollection<DoItemSource> item_sources;
-
-		static PluginManager ()
-		{
-			actions = new List<DoAction> ();
-			item_sources = new List<DoItemSource> ();
-		}
-
-		private static IEnumerable<string> ExtensionPaths {
-			get {
-				return new [] {
-					"/Do/ItemSource",
-					"/Do/Action",
-				};
-			}
-		}
-
-		private static IDictionary<string, IEnumerable<string>> repository_urls;
+		static IDictionary<string, IEnumerable<string>> repository_urls;
 		public static IDictionary<string, IEnumerable<string>> RepositoryUrls {
 			get {
 				if (repository_urls != null) return repository_urls;
@@ -135,15 +121,15 @@ namespace Do.Core {
 			string icon;
 
 			// First look for an icon among ItemSources:
-			icon = ObjectsForAddin<IItemSource> (id)
-				.Select (source => DoObject.Wrap (source).Icon)
+			icon = ObjectsForAddin<ItemSource> (id)
+				.Select (source => source.IconSafe)
 				.FirstOrDefault ();
 			if (icon != null) return icon;
 
 			// If no icon found among ItemSources, look for an icon among
 			// Actions:		
-			icon = ObjectsForAddin<IAction> (id)
-				.Select (source => DoObject.Wrap (source).Icon)
+			icon = ObjectsForAddin<Act> (id)
+				.Select (source => source.IconSafe)
 				.FirstOrDefault ();
 			if (icon != null) return icon;
 
@@ -151,17 +137,17 @@ namespace Do.Core {
 		}
 
 		/// <value>
-		/// All loaded IItemSources.
+		/// All loaded ItemSources.
 		/// </value>
-		internal static IEnumerable<DoItemSource> ItemSources {
-			get { return item_sources; }
+		public static IEnumerable<ItemSource> ItemSources {
+			get { return AddinManager.GetExtensionObjects ("/Do/ItemSource").OfType<ItemSource> (); }
 		}
 
 		/// <value>
-		/// All loaded IActions.
+		/// All loaded Actions.
 		/// </value>
-		internal static IEnumerable<DoAction> Actions {
-			get { return actions; }
+		public static IEnumerable<Act> Actions {
+			get { return AddinManager.GetExtensionObjects ("/Do/Action").OfType<Act> (); }
 		}
 
 		/// <summary>
@@ -170,7 +156,7 @@ namespace Do.Core {
 		/// <returns>
 		/// A <see cref="IEnumerable`1"/> of IRenderTheme instances from plugins
 		/// </returns>
-		internal static IEnumerable<IDoWindow> GetThemes () 
+		public static IEnumerable<IDoWindow> GetThemes () 
 		{
 			return InterfaceManager.Interfaces;
 		}
@@ -183,7 +169,7 @@ namespace Do.Core {
 		/// <param name="setup">
 		/// A <see cref="SetupService"/>
 		/// </param>
-		internal static void InstallLocalPlugins (SetupService setup)
+		public static void InstallLocalPlugins (SetupService setup)
 		{
 			IProgressStatus status = new ConsoleProgressStatus (false);
 			// GetFilePaths is like Directory.GetFiles but returned files have directory prefixed.
@@ -213,13 +199,8 @@ namespace Do.Core {
 			switch (change) {
 			case ExtensionChange.Add:
 				try {
-					DoAction action = DoAction.Wrap (node.GetInstance () as IAction) as DoAction;
-					if (actions.Contains (action)) {
-						Log.Warn ("\"{0}\" action was loaded twice. Ignoring.", action.Name);
-					} else {
-						actions.Add (action);
-						Log.Info ("Loaded \"{0}\" action.", action.Name);
-					}
+					Act action = node.GetInstance () as Act;
+					Log.Info ("Loaded \"{0}\" action.", action.NameSafe);
 				} catch (Exception e) {
 					Log.Error ("Encountered error loading action: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
@@ -228,9 +209,8 @@ namespace Do.Core {
 				break;
 			case ExtensionChange.Remove:
 				try {
-					DoAction action = DoAction.Wrap (node.GetInstance () as IAction) as DoAction;
-					Log.Info ("Unloaded \"{0}\" action.", action.Name);
-					actions.Remove (action);
+					Act action = node.GetInstance () as Act;
+					Log.Info ("Unloaded \"{0}\" action.", action.NameSafe);
 				} catch (Exception e) {
 					Log.Error ("Encountered error unloading action: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
@@ -250,13 +230,8 @@ namespace Do.Core {
 			switch (change) {
 			case ExtensionChange.Add:
 				try {
-					DoItemSource source = DoItemSource.Wrap (node.GetInstance () as IItemSource) as DoItemSource;
-					if (item_sources.Contains (source)) {
-						Log.Warn ("\"{0}\" item source was loaded twice. Ignoring.", source.Name);
-					} else {
-						item_sources.Add (source);
-						Log.Info ("Loaded \"{0}\" item source.", source.Name);
-					}
+					ItemSource source = node.GetInstance () as ItemSource;
+					Log.Info ("Loaded \"{0}\" item source.", source.NameSafe);
 				} catch (Exception e) {
 					Log.Error ("Encountered error loading item source: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
@@ -265,9 +240,8 @@ namespace Do.Core {
 				break;
 			case ExtensionChange.Remove:
 				try {
-					DoItemSource source = DoItemSource.Wrap (node.GetInstance () as IItemSource) as DoItemSource;
-					Log.Info ("Unloaded \"{0}\".", source.Name);
-					item_sources.Remove (source);
+					ItemSource source = node.GetInstance () as ItemSource;
+					Log.Info ("Unloaded \"{0}\".", source.NameSafe);
 				} catch (Exception e) {
 					Log.Error ("Encountered error unloading item source: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
@@ -288,6 +262,7 @@ namespace Do.Core {
 		/// </returns>
 		private static IEnumerable<T> ObjectsForAddin<T> (string id) where T : class
 		{
+			// TODO try using AddinManager.GetExtensionPoints (Type)
 			foreach (string path in ExtensionPaths) {
 				foreach (TypeExtensionNode node in AddinManager.GetExtensionNodes (path)) {
 					object instance;
@@ -320,10 +295,9 @@ namespace Do.Core {
 		/// A <see cref="IEnumerable`1"/> of <see cref="IConfigurable"/>
 		/// provided by the addin for that id.
 		/// </returns>
-		internal static IEnumerable<IConfigurable> ConfigurablesForAddin (string id)
+		public static IEnumerable<IConfigurable> ConfigurablesForAddin (string id)
 		{
-			return ObjectsForAddin<IConfigurable> (id)
-				.Select (con => new DoObject (con) as IConfigurable);
+			return ObjectsForAddin<IConfigurable> (id);
 		}
 	}
 }

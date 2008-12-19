@@ -23,9 +23,9 @@ namespace Do.Interface
 	public class ResultsWindowSelectionEventArgs : EventArgs
 	{
 		int index;
-		IObject selection;
+		Element selection;
 
-		public ResultsWindowSelectionEventArgs (int index, IObject selection)
+		public ResultsWindowSelectionEventArgs (int index, Element selection)
 		{
 			this.index = index;
 			this.selection = selection;
@@ -36,7 +36,7 @@ namespace Do.Interface
 			get { return index; }
 		}
 
-		public IObject SelectedObject
+		public Element SelectedObject
 		{
 			get {
 				return selection;

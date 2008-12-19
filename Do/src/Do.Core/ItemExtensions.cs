@@ -1,6 +1,7 @@
-// IDockItem.cs
-// 
-// Copyright (C) 2008 GNOME Do
+// ItemExtensions.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,36 +18,32 @@
 //
 
 using System;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
-using Cairo;
-
-using Do.Interface;
 using Do.Universe;
 
-namespace Docky.Interface
+namespace Do.Core
 {
-	
-	
-	public interface IDockItem : IEquatable<IDockItem>, IDisposable
+
+	static class ItemExtensions
 	{
-		string Description { get; }
-		int Width { get; }
-		int Height { get; }
-		bool Scalable { get; }
-		bool DrawIndicator { get; }
-		
-		DateTime LastClick { get; }
-		DateTime DockAddItem { get; set; }
-		
-		Surface GetIconSurface (Surface similar);
-		Surface GetTextSurface ();
-		
-		void Clicked (uint button, IDoController controller);
-		void SetIconRegion (Gdk.Rectangle region);
-	}
-	
-	public interface IDoDockItem
-	{
-		Element Element { get; }
+
+		static IDictionary<Item, bool> has_children;
+
+		static ItemExtensions ()
+		{
+			has_children = new Dictionary<Item, bool> ();
+		}
+
+		public static bool HasChildren (this Item self) {
+			if (!has_children.ContainsKey (self)) {
+				has_children [self] = PluginManager.ItemSources
+					.Any (source => source.ChildrenOfItemSafe (self).Any ());
+			}
+			return has_children [self];
+		}
+
 	}
 }

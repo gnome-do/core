@@ -1,4 +1,4 @@
-//  EmptyObject.cs
+// ImplicitTextItem.cs
 //
 //  GNOME Do is the legal property of its developers, whose names are too numerous
 //  to list here.  Please refer to the COPYRIGHT file distributed with this
@@ -19,13 +19,12 @@
 
 using System;
 
-
 namespace Do.Universe
 {
-	public class EmptyObject : IObject
+	public class ImplicitTextItem : Common.TextItem
 	{
-		public string Name { get { return ""; } }
-		public string Description { get { return ""; } }
-		public string Icon { get { return ""; } }
+		public ImplicitTextItem (string text) : base (text)
+		{
+		}
 	}
 }

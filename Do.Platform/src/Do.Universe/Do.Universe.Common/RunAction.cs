@@ -29,7 +29,8 @@ using Do.Platform;
 namespace Do.Universe.Common
 {
 
-	public class RunAction : AbstractAction {
+	public class RunAction : Act
+	{
 
 		public override string Name {
 			get { return Catalog.GetString ("Run"); }
@@ -46,17 +47,15 @@ namespace Do.Universe.Common
 		public override IEnumerable<Type> SupportedItemTypes
 		{
 			get {
-				return new Type[] {
-					typeof (IRunnableItem),
-					// Files can be run if they're executable.
-					typeof (IFileItem),
-					// ITextItems canbe run if they're valid command lines.
-					typeof (ITextItem),
-				};
+				yield return typeof (IRunnableItem);
+				// Files can be run if they're executable.
+				yield return typeof (IFileItem);
+				// ITextItems canbe run if they're valid command lines.
+				yield return typeof (ITextItem);
 			}
 		}
 
-		public override bool SupportsItem (IItem item)
+		public override bool SupportsItem (Item item)
 		{
 			string command = "";
 
@@ -70,9 +69,9 @@ namespace Do.Universe.Common
 			return Services.Environment.IsExecutable (command);
 		}
 		
-		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
-			foreach (IItem item in items) {
+			foreach (Item item in items) {
 				if (item is IRunnableItem) {
 					(item as IRunnableItem).Run ();
 				} else if (item is IFileItem) {

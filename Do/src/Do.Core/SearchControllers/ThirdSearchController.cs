@@ -38,11 +38,11 @@ namespace Do.Core
 				if (FirstController.Selection == null || SecondController.Selection == null)
 					return false;
 				
-				IAction action;
-				if (FirstController.Selection is IAction) {
-					action = FirstController.Selection as IAction;
-				} else if (SecondController.Selection is IAction) {
-					action = SecondController.Selection as IAction;
+				Act action;
+				if (FirstController.Selection is Act) {
+					action = FirstController.Selection as Act;
+				} else if (SecondController.Selection is Act) {
+					action = SecondController.Selection as Act;
 				} else {
 					return false;
 				}
@@ -65,8 +65,9 @@ namespace Do.Core
 		public override IEnumerable<Type> SearchTypes {
 			get { 
 				if (TextMode)
-					return new Type[] { typeof (ITextItem) };
-				return new Type[] { typeof (IItem) }; 
+					yield return typeof (ITextItem);
+				else
+					yield return typeof (Item);
 			}
 		}
 
@@ -80,11 +81,11 @@ namespace Do.Core
 					textMode = value;
 					textModeFinalize = false;
 				} else {
-					IAction action;
-					if (FirstController.Selection is IAction)
-						action = FirstController.Selection as IAction;
-					else if (SecondController.Selection is IAction)
-						action = SecondController.Selection as IAction;
+					Act action;
+					if (FirstController.Selection is Act)
+						action = FirstController.Selection as Act;
+					else if (SecondController.Selection is Act)
+						action = SecondController.Selection as Act;
 					else
 						return; //you have done something weird, ignore it!
 					
@@ -124,47 +125,47 @@ namespace Do.Core
 			});
 		}
 		
-		protected override List<IObject> InitialResults ()
+		protected override List<Element> InitialResults ()
 		{
 			if (TextMode)
-				return new List<IObject> ();
+				return new List<Element> ();
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				return new List<Element> (Do.UniverseManager.Search (context.Query, 
 				                                                     SearchTypes, 
 				                                                     context.LastContext.Results, 
 				                                                     FirstController.Selection));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
-				return new List<IObject> (context.Results);
+				return new List<Element> (context.Results);
 			} else { 
 				//else we do things the slow way
-				return new List<IObject> (Do.UniverseManager.Search (context.Query, 
+				return new List<Element> (Do.UniverseManager.Search (context.Query, 
 				                                                     SearchTypes, 
 				                                                     FirstController.Selection));
 			}
 		}
 
-		private IObject[] GetContextResults ()
+		private Element[] GetContextResults ()
 		{
-			IAction action;
-			IItem item;
-			List<IItem> items = new List<IItem> ();
-			if (FirstController.Selection is IAction) {
+			Act action;
+			Item item;
+			List<Item> items = new List<Item> ();
+			if (FirstController.Selection is Act) {
 				
-				action = FirstController.Selection as IAction;
-				item   = SecondController.Selection as IItem;
-				foreach (IObject obj in SecondController.FullSelection) {
-					if (obj is IItem)
-						items.Add (obj as IItem);
+				action = FirstController.Selection as Act;
+				item   = SecondController.Selection as Item;
+				foreach (Element obj in SecondController.FullSelection) {
+					if (obj is Item)
+						items.Add (obj as Item);
 				}
 				
-			} else if (SecondController.Selection is IAction) {
+			} else if (SecondController.Selection is Act) {
 				
-				action = SecondController.Selection as IAction;
-				item   = FirstController.Selection as IItem;
-				foreach (IObject obj in FirstController.FullSelection) {
-					if (obj is IItem)
-						items.Add (obj as IItem);
+				action = SecondController.Selection as Act;
+				item   = FirstController.Selection as Item;
+				foreach (Element obj in FirstController.FullSelection) {
+					if (obj is Item)
+						items.Add (obj as Item);
 				}
 				
 			} else {
@@ -175,22 +176,22 @@ namespace Do.Core
 			// If we support nothing, dont search.
 			if (!action.SupportedModifierItemTypes.Any ()) return null;
 			
-			List<IObject> results = new List<IObject> ();
+			List<Element> results = new List<Element> ();
 
 			if (!textMode) {
-				List<IObject> initresults = InitialResults ();
-				foreach (IItem moditem in initresults) {
-					if (action.SupportsModifierItemForItems (items.ToArray (), moditem))
+				List<Element> initresults = InitialResults ();
+				foreach (Item moditem in initresults) {
+					if (action.SupportsModifierItemForItemsSafe (items, moditem))
 						results.Add (moditem);
 				}
 			
 				if (Query.Length == 0)
-					results.AddRange (action.DynamicModifierItemsForItem (item).Cast<IObject> ());
+					results.AddRange (action.DynamicModifierItemsForItemSafe (item).Cast<Element> ());
 				results.Sort ();
 			}
 			
-			IItem textItem = new DoTextItem (Query);
-			if (action.SupportsModifierItemForItems (items.ToArray (), textItem))
+			Item textItem = new ImplicitTextItem (Query);
+			if (action.SupportsModifierItemForItemsSafe (items, textItem))
 				results.Add (textItem);
 			
 			return results.ToArray ();

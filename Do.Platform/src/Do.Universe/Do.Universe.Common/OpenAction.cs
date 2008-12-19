@@ -31,7 +31,7 @@ namespace Do.Universe.Common
 	/// <summary>
 	/// A command providing "open" semantics to many kinds of items.
 	/// </summary>
-	public class OpenAction : AbstractAction
+	public class OpenAction : Act
 	{
 
 		public override string Name {
@@ -48,16 +48,14 @@ namespace Do.Universe.Common
 		
 		public override IEnumerable<Type> SupportedItemTypes {
 			get {
-				return new [] {
-					typeof (IOpenableItem),
-					typeof (IUriItem),
-					// Support opening manually-typed paths.
-					typeof (ITextItem),
-				};
+				yield return typeof (IOpenableItem);
+				yield return typeof (IUriItem);
+				// Support opening manually-typed paths.
+				yield return typeof (ITextItem);
 			}
 		}
 
-		public override bool SupportsItem (IItem item)
+		public override bool SupportsItem (Item item)
 		{
 			if (item is ITextItem) {	
 				// Check if typed text is a valid path.
@@ -68,11 +66,11 @@ namespace Do.Universe.Common
 			return true;
 		}
 
-		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			IEnvironmentService env = Services.Environment;
 
-			foreach (IItem item in items) {
+			foreach (Item item in items) {
 				if (item is IOpenableItem)
 					(item as IOpenableItem).Open ();
 				else if (item is IUriItem)

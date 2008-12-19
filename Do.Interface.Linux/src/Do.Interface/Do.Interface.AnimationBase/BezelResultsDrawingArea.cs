@@ -40,7 +40,7 @@ namespace Do.Interface.AnimationBase
 		
 		int num_results;
 		int width, height;
-		Dictionary <IObject, Surface> surface_buffer;
+		Dictionary <Element, Surface> surface_buffer;
 		Surface highlight_surface, backbuffer, child_inout_surface, triplebuffer;
 		
 		DateTime delta_time;
@@ -50,10 +50,10 @@ namespace Do.Interface.AnimationBase
 		
 		Cairo.Color odd_color, even_color;
 		
-		IObject[] results;
+		Element[] results;
 		
 		
-		public IObject[] Results {
+		public Element[] Results {
 			get {
 				return results;
 			}
@@ -124,7 +124,7 @@ namespace Do.Interface.AnimationBase
 		public BezelResultsDrawingArea(int numberResults, int width) : base ()
 		{
 			num_results = numberResults;
-			surface_buffer = new Dictionary <IObject,Surface> ();
+			surface_buffer = new Dictionary <Element,Surface> ();
 			
 			this.width = width;
 			height = num_results * SurfaceHeight;
@@ -198,7 +198,7 @@ namespace Do.Interface.AnimationBase
 			foreach (Surface s in surface_buffer.Values)
 				(s as IDisposable).Dispose ();
 			
-			surface_buffer = new Dictionary<IObject,Surface> ();
+			surface_buffer = new Dictionary<Element,Surface> ();
 		}
 		
 		private void Paint ()
@@ -311,7 +311,7 @@ namespace Do.Interface.AnimationBase
 			return base.OnExposeEvent (evnt);
 		}
 
-		void BufferItem (IObject item) 
+		void BufferItem (Element item) 
 		{
 			if (!IsDrawable)
 				return;

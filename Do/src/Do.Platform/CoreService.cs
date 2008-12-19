@@ -31,22 +31,12 @@ namespace Do.Platform
 	public class CoreService : ICoreService
 	{
 		#region ICoreService
-		
-		public string GetUID (IObject o)
-		{
-			return (DoObject.Wrap (o) as DoObject).UID;
-		}
 
-		public IObject GetIObject (string uid)
+		public Element GetElement (string uniqueId)
 		{
-			IObject o;
-			Do.UniverseManager.TryGetObjectForUID (uid, out o);
-			return o;
-		}
-
-		public IObject Unwrap (IObject o)
-		{
-			return DoObject.Unwrap (o);
+			Element element;
+			Do.UniverseManager.TryGetElementForUniqueId (uniqueId, out element);
+			return element;
 		}
 
 		#endregion

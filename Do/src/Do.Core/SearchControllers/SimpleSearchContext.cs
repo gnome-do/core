@@ -30,18 +30,18 @@ namespace Do.Core
 	{
 		string query;
 		int cursor;
-		IList<IObject> results;
+		IList<Element> results;
 		
 		public SimpleSearchContext ()
 		{
-			SecondaryCursors = new IObject[0];
+			SecondaryCursors = new Element[0];
 			query = "";
-			results = new IObject[0];
+			results = new Element[0];
 		}
 		
 		public SimpleSearchContext LastContext   { get; set; }
 		public SimpleSearchContext ParentContext { get; set; }
-		public IObject[] SecondaryCursors        { get; set; }
+		public Element[] SecondaryCursors        { get; set; }
 		
 		public string Query
 		{
@@ -53,23 +53,23 @@ namespace Do.Core
 			set { query = value; }
 		}
 
-		public IList<IObject> Results
+		public IList<Element> Results
 		{
 			get {
 				if (results == null)
-					results = new IObject[0];
+					results = new Element[0];
 				return results;
 			}
 			set {
-				results = value ?? new List<IObject> (0);
+				results = value ?? new List<Element> (0);
 				
 				cursor = 0;
 				
 				if (SecondaryCursors.Length == 0) return;
 				
-				List<IObject> secondary = new List<IObject> ();
-				foreach (IObject obj in SecondaryCursors) {
-					foreach (IObject robj in Results) {
+				List<Element> secondary = new List<Element> ();
+				foreach (Element obj in SecondaryCursors) {
+					foreach (Element robj in Results) {
 						if (obj == robj) {
 							secondary.Add (obj);
 						}
@@ -80,7 +80,7 @@ namespace Do.Core
 			}
 		}
 		
-		public IObject Selection
+		public Element Selection
 		{
 			get {
 				try {
@@ -91,10 +91,10 @@ namespace Do.Core
 			}
 		}
 		
-		public IObject[] FullSelection
+		public Element[] FullSelection
 		{
 			get {
-				List<IObject> outList = new List<IObject> ();
+				List<Element> outList = new List<Element> ();
 				outList.AddRange (SecondaryCursors);
 				
 				//Juggle our selection to front to give best possible legacy plugin support.  Ideally this
@@ -152,7 +152,7 @@ namespace Do.Core
 				return new int[0];
 			List<int> cursors = new List<int> ();
 				
-			foreach (IObject obj in SecondaryCursors) {
+			foreach (Element obj in SecondaryCursors) {
 				for (int i = 0; i < Results.Count; i++) {
 					if (Results[i] == obj)
 						cursors.Add (i);
@@ -172,8 +172,8 @@ namespace Do.Core
 			clone.ParentContext = ParentContext;
 			clone.Cursor = Cursor;
 			clone.SecondaryCursors = SecondaryCursors; //Cloning these makes no sense
-//			clone.Results = results.Clone () as IObject[];
-			clone.Results = new List<IObject> (results);
+//			clone.Results = results.Clone () as Element[];
+			clone.Results = new List<Element> (results);
 			return clone;
 		}
 		

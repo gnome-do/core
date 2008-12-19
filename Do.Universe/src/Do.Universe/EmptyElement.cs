@@ -1,4 +1,4 @@
-// DoTextItem.cs
+//  EmptyElement.cs
 //
 //  GNOME Do is the legal property of its developers, whose names are too numerous
 //  to list here.  Please refer to the COPYRIGHT file distributed with this
@@ -19,27 +19,13 @@
 
 using System;
 
-using Do.Core;
-using Do.Universe;
-using Do.Platform;
 
-namespace Do
+namespace Do.Universe
 {
-	public class DoTextItem: DoItem, ITextItem
+	public class EmptyElement : Element
 	{
-		public DoTextItem (string text):
-			base (Services.UniverseFactory.NewTextItem (text))
-		{
-		}
-		
-		public string Text {
-			get {
-				try {
-					return (Inner as ITextItem).Text;
-				} catch {
-					return "";
-				}
-			}
-		}
+		public override string Name { get { return ""; } }
+		public override string Description { get { return ""; } }
+		public override string Icon { get { return ""; } }
 	}
 }
