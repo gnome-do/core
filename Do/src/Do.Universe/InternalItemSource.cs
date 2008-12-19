@@ -22,42 +22,36 @@ using System;
 using System.Collections.Generic;
 using Mono.Unix;
 
-namespace Do.Universe {
+namespace Do.Universe
+{
 	
-	public class InternalItemSource : IItemSource {
+	public class InternalItemSource : ItemSource
+	{
 		
-		public IEnumerable<Type> SupportedItemTypes {
-			get { return null; }
+		public override IEnumerable<Type> SupportedItemTypes {
+			get { yield break; }
 		}
 		
-		public string Name {
+		public override string Name {
 			get { return Catalog.GetString ("Internal GNOME Do Items"); }
 		}
 		
-		public string Description {
+		public override string Description {
 			get { return Catalog.GetString ("Special items relevant to the inner-workings of GNOME Do."); }
 		}
 		
-		public string Icon {
+		public override string Icon {
 			get { return "gnome-system"; }
 		}
 		
-		public void UpdateItems ()
-		{
-		}
-		
-		public IEnumerable<IItem> Items {
+		public override IEnumerable<Item> Items {
 			get {
 				yield return new SelectedTextItem ();
 				yield return new PreferencesItem ();
-				yield return new DoQuitItem ();
+				yield return new QuitItem ();
 				yield return new ClearLearningItem ();
 			}
 		}
-		
-		public IEnumerable<IItem> ChildrenOfItem (IItem item)
-		{
-			return null;
-		}		
+			
 	}
 }

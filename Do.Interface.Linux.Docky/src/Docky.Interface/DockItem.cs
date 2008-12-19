@@ -37,14 +37,14 @@ namespace Docky.Interface
 	
 	public class DockItem : IDockItem, IDoDockItem
 	{
-		IObject item;
+		Element item;
 		Surface sr, icon_surface;
 		List<Wnck.Application> apps;
 		Gdk.Pixmap pixmap;
 		
 		public string Icon { get { return item.Icon; } }
 		public string Description { get { return item.Name; } }
-		public IObject IObject { get { return item; } }
+		public Element Element { get { return item; } }
 		
 		public DateTime LastClick { get; set; }
 		public DateTime DockAddItem { get; set; }
@@ -67,7 +67,7 @@ namespace Docky.Interface
 			}
 		}	
 		
-		public DockItem(IObject item)
+		public DockItem (Element item)
 		{
 			apps =  new List<Wnck.Application> ();
 			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
@@ -79,9 +79,8 @@ namespace Docky.Interface
 		
 		public void UpdateApplication ()
 		{
-			IObject inner = Services.Core.Unwrap (item);
-			if (inner is IApplicationItem) {
-				apps = WindowUtils.GetApplicationList ((inner as IApplicationItem).Exec);
+			if (item is IApplicationItem) {
+				apps = WindowUtils.GetApplicationList ((item as IApplicationItem).Exec);
 			}
 		}
 		
@@ -126,10 +125,10 @@ namespace Docky.Interface
 		{
 			if (!apps.Any () || !HasVisibleApps || button == 2) {
 				LastClick = DateTime.UtcNow;
-				if (IObject is IFileItem)
-					controller.PerformDefaultAction (IObject as IItem, new Type[] { typeof (OpenAction), });
+				if (Element is IFileItem)
+					controller.PerformDefaultAction (Element as Item, new [] { typeof (OpenAction), });
 				else
-					controller.PerformDefaultAction (IObject as IItem, Type.EmptyTypes);
+					controller.PerformDefaultAction (Element as Item, Type.EmptyTypes);
 				return;
 			}
 				
@@ -157,7 +156,7 @@ namespace Docky.Interface
 			if (di == null)
 				return false;
 			
-			return di.IObject.Name + di.IObject.Description + di.IObject.Icon == IObject.Name + IObject.Description + IObject.Icon;
+			return di.Element.UniqueId == Element.UniqueId;
 		}
 
 		#region IDisposable implementation 

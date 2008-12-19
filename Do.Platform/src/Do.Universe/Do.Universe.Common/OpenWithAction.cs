@@ -32,7 +32,7 @@ namespace Do.Universe.Common
 	/// <summary>
 	/// A command providing "open with..." semantics to file items.
 	/// </summary>
-	public class OpenWithAction : AbstractAction {
+	public class OpenWithAction : Act {
 		
 		public override string Name {
 			get { return Catalog.GetString ("Open With..."); }
@@ -54,11 +54,11 @@ namespace Do.Universe.Common
 			get { yield return typeof (IApplicationItem); }
 		}
 		
-		public override IEnumerable<IItem> Perform (IEnumerable<IItem> items, IEnumerable<IItem> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			foreach (IApplicationItem app in modItems)
 				app.LaunchWithFiles (items.Cast<IFileItem> ());
-			return Enumerable.Empty<IItem> ();
+			return Enumerable.Empty<Item> ();
 		}
 	}
 }

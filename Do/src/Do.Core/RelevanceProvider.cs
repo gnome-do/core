@@ -30,9 +30,9 @@ using Do.Universe;
 namespace Do.Core {
 
 	public interface IRelevanceProvider {
-		void IncreaseRelevance (DoObject target, string match, DoObject other);
-		void DecreaseRelevance (DoObject target, string match, DoObject other);
-		float GetRelevance (DoObject target, string match, DoObject other);
+		void IncreaseRelevance (Element target, string match, Element other);
+		void DecreaseRelevance (Element target, string match, Element other);
+		float GetRelevance (Element target, string match, Element other);
 	}
 
 	[Serializable]
@@ -228,17 +228,17 @@ namespace Do.Core {
 			return bestMatch;
 		}
 
-		public virtual void IncreaseRelevance (DoObject r, string match, DoObject other)
+		public virtual void IncreaseRelevance (Element r, string match, Element other)
 		{
 		}
 
-		public virtual void DecreaseRelevance (DoObject r, string match, DoObject other)
+		public virtual void DecreaseRelevance (Element r, string match, Element other)
 		{
 		}
 
-		public virtual float GetRelevance (DoObject r, string match, DoObject other)
+		public virtual float GetRelevance (Element r, string match, Element other)
 		{
-			return StringScoreForAbbreviation (r.Name, match);
+			return StringScoreForAbbreviation (r.NameSafe, match);
 		}
 	}
 }

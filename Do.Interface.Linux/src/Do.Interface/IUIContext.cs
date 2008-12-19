@@ -37,12 +37,12 @@ namespace Do.Interface
 		/// <value>
 		/// The current selection
 		/// </value>
-		IObject Selection {get;}
+		Element Selection {get;}
 		
 		/// <value>
 		/// The results list
 		/// </value>
-		IList<IObject> Results {get;}
+		IList<Element> Results {get;}
 		
 		/// <value>
 		/// Integer index of the selection in the results list

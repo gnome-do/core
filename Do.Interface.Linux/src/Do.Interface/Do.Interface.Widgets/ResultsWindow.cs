@@ -62,7 +62,7 @@ namespace Do.Interface.Widgets
 
 		protected ScrolledWindow resultsScrolledWindow;
 		protected TreeView resultsTreeview;
-		protected IList<IObject> results, stunted_results;
+		protected IList<Element> results, stunted_results;
 		protected int startResult, endResult;
 		protected Frame frame;
 		protected string query;
@@ -85,7 +85,7 @@ namespace Do.Interface.Widgets
 			this.NumberResultsDisplayed = NumberResults;
 			
 			Build ();
-			results = new IObject[0];
+			results = new Element[0];
 		}
 		
 		public ResultsWindow (Gdk.Color backgroundColor, int DefaultIconSize, 
@@ -98,7 +98,7 @@ namespace Do.Interface.Widgets
 			this.NumberResultsDisplayed = NumberResults;
 			
 			Build ();
-			results = new IObject[0];
+			results = new Element[0];
 		}
 
 		protected void NotifySelectionChanged ()
@@ -180,7 +180,7 @@ namespace Do.Interface.Widgets
 			resultsTreeview.Show ();
 
 			resultsTreeview.Model = new ListStore (new Type[] {
-				typeof (IObject),				
+				typeof (Element),				
 				typeof (string), 
 			});
 
@@ -223,7 +223,7 @@ namespace Do.Interface.Widgets
 		                           TreeModel model, TreeIter iter)
 		{			
 			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
-			IObject o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as IObject;
+			Element o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as Element;
 			bool isSecondary = false;
 			foreach (int i in secondary)
 				if (model.GetStringFromIter (iter) == i.ToString ())
@@ -287,7 +287,7 @@ namespace Do.Interface.Widgets
 				
 				pushedUpdate = true;
 				if (value == null || !value.Results.Any ()) {
-					Results = new IObject [0];
+					Results = new Element [0];
 					return;
 				}
 				
@@ -305,7 +305,7 @@ namespace Do.Interface.Widgets
 				if (endResult > results.Count)
 					endResult = results.Count;
 				
-				IObject[] resultsArray = new IObject[endResult - startResult];
+				Element[] resultsArray = new Element[endResult - startResult];
 				Array.Copy (results.ToArray (), startResult, resultsArray, 0, resultsArray.Length); 
 				
 				cursor = value.Cursor - offset;
@@ -376,7 +376,7 @@ namespace Do.Interface.Widgets
 			});
 		}
 		
-		public IObject SelectedObject
+		public Element SelectedObject
 		{
 			get {
 				try {
@@ -387,11 +387,11 @@ namespace Do.Interface.Widgets
 			}
 		}
 		
-		public IList<IObject> Results
+		public IList<Element> Results
 		{
 			get {
 				if (stunted_results == null)
-					stunted_results = new List<IObject> (0);
+					stunted_results = new List<Element> (0);
 				return stunted_results;
 			}
 			set {
@@ -412,7 +412,7 @@ namespace Do.Interface.Widgets
 					store = resultsTreeview.Model as ListStore;
 					store.Clear ();
 					
-					foreach (IObject result in value) {					
+					foreach (Element result in value) {					
 						
 						info = string.Format (ResultInfoFormat, 
 						                      GLib.Markup.EscapeText (result.Name), 

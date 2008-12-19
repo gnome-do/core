@@ -35,7 +35,7 @@ namespace Do.Universe.Linux {
 	/// can be created and registered with FileItem for instantiation
 	/// in the factory method FileItem.Create.
 	/// </summary>
-	internal class FileItem : IFileItem, IOpenableItem {
+	internal class FileItem : Item, IFileItem, IOpenableItem {
 
 		static FileItem ()
 		{
@@ -58,7 +58,7 @@ namespace Do.Universe.Linux {
 			return path.Replace (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "~");
 		}
 
-		string icon;
+		string name, description, icon;
 		
 		/// <summary>
 		/// Create a new FileItem for a given file.
@@ -71,16 +71,16 @@ namespace Do.Universe.Linux {
 			if (null == path) throw new ArgumentNullException ("path");
 
 			Path = path;
-			Name = IO.Path.GetFileName (Path);
+			name = IO.Path.GetFileName (Path);
 			// Showing only "~" looks too abbreviated.
-			Description = DisplayPath (Path) == "~"
+			description = DisplayPath (Path) == "~"
 				? Path
 				: DisplayPath (Path);
 		}
 
 		public string Path { get; private set; }
-		public string Name { get; private set; }
-		public string Description { get; protected set; }
+		public override string Name { get { return name; } }
+		public override string Description { get { return description; } }
 
 		public string Uri {
 			get { return "file://" + Path; }
@@ -90,7 +90,7 @@ namespace Do.Universe.Linux {
 			get { return Gnome.Vfs.Global.GetMimeType (Path); }
 		}
 
-		public virtual string Icon {
+		public override string Icon {
 			get {
 				if (null != icon) return icon;
 

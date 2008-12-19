@@ -59,8 +59,7 @@ namespace Do.Core
 					yield return typeof (ITextItem);
 				} else if (context.SecondaryCursors.Any ()) {
 					// This is pretty bad.
-					yield return 
-						Services.Core.Unwrap (Results [SecondaryCursors [0]]).GetType ();
+					yield return Results [SecondaryCursors [0]].GetType ();
 				} else {
 					foreach (Type t in defaultFilter) yield return t;
 				}
@@ -82,20 +81,20 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
-			List<IObject> results;
+			List<Element> results;
 			if (!TextMode)
 				results = InitialResults ();
 			else
-				results = new List<IObject> ();
+				results = new List<Element> ();
 				
 			
 			if (context.ParentContext == null) {
 				if (DefaultFilter) {
-					results.Add (new DoTextItem (Query));
+					results.Add (new ImplicitTextItem (Query));
 				} else {
 					foreach (Type t in SearchTypes) {
-						if (t == typeof (IItem) || t == typeof (ITextItem)) {
-							results.Add (new DoTextItem (Query));
+						if (t == typeof (Item) || t == typeof (ITextItem)) {
+							results.Add (new ImplicitTextItem (Query));
 						}
 					}
 				}
@@ -120,14 +119,14 @@ namespace Do.Core
 			string query = Query;
 			
 			context = new SimpleSearchContext ();
-			List<IObject> results;
+			List<Element> results;
 			foreach (char c in query.ToCharArray ()) {
 				context.LastContext = context.Clone () as SimpleSearchContext;
 				context.Query += c;
 				
 				results = InitialResults ();
 				
-				results.Add (new DoTextItem (Query));
+				results.Add (new ImplicitTextItem (Query));
 				context.Results = results.ToArray ();
 			}
 			base.OnSearchFinished (true, true, Selection, Query);

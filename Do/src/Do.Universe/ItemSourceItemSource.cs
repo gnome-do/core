@@ -24,70 +24,64 @@ using System.Collections.Generic;
 using Do.Core;
 using Mono.Unix;
 
-namespace Do.Universe {
+namespace Do.Universe
+{
 	
-	public class ItemSourceItemSource : IItemSource {
+	internal class ItemSourceItemSource : ItemSource
+	{
 
-		class ItemSourceItem : IItem {
+		class ItemSourceItem : Item {
 
-			public IItemSource Source { get; private set; }
+			public ItemSource Source { get; private set; }
 
-			public string Name { get { return Source.Name; } }
-			public string Description { get { return Source.Description; } }
-			public string Icon { get { return Source.Icon; } }
+			public override string Name { get { return Source.Name; } }
+			public override string Description { get { return Source.Description; } }
+			public override string Icon { get { return Source.Icon; } }
 
-			public ItemSourceItem (DoItemSource source)
+			public ItemSourceItem (ItemSource source)
 			{
 				Source = source;
 			}
 		}
 
-		IEnumerable<IItem> items;
+		IEnumerable<Item> items;
 
 		public ItemSourceItemSource ()
 		{
-			items = Enumerable.Empty<IItem> ();
+			items = Enumerable.Empty<Item> ();
 		}
 		
-		public IEnumerable<Type> SupportedItemTypes
+		public override IEnumerable<Type> SupportedItemTypes
 		{
-			get {
-				yield return typeof (ItemSourceItem);
-			}
+			get { yield return typeof (ItemSourceItem); }
 		}
 		
-		public string Name {
-			get {
-				return Catalog.GetString ("GNOME Do Item Sources");
-			}
+		public override string Name {
+			get { return Catalog.GetString ("GNOME Do Item Sources"); }
 		}
 		
-		public string Description {
-			get {
-				return Catalog.GetString ("Item Sources providing all items GNOME Do knows about.");
-			}
+		public override string Description {
+			get { return Catalog.GetString ("Item Sources providing all items GNOME Do knows about."); }
 		}
 		
-		public string Icon {
-			get {
-				return "gnome-do";
-			}
+		public override string Icon {
+			get { return "gnome-do"; }
 		}
 		
-		public IEnumerable<IItem> Items {
+		public override IEnumerable<Item> Items {
 			get { return items; }
 		}
 
-		public void UpdateItems ()
+		public override void UpdateItems ()
 		{
 			items = PluginManager.ItemSources
 				.Select (source => new ItemSourceItem (source))
-				.Cast<IItem> ();
+				.Cast<Item> ();
 		}
 		
-		public IEnumerable<IItem> ChildrenOfItem (IItem item)
+		public override IEnumerable<Item> ChildrenOfItem (Item item)
 		{
-			return (item as ItemSourceItem).Source.Items;
+			return (item as ItemSourceItem).Source.ItemsSafe;
 		}
 	}
 }

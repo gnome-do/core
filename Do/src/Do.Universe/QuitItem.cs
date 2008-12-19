@@ -1,7 +1,8 @@
-/* IItem.cs
+/* QuitItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this source distribution.
+ * COPYRIGHT file distributed with this
+ * source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +18,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 using System;
+using Mono.Unix;
+using Gtk;
 
 namespace Do.Universe
-{
-	/// <summary>
-	/// The base interface that all classes to be used as items (objects on which
-	/// commands operate) must implement, either directly or indirectly.
-	/// </summary>
-	public interface IItem
-	{
-		string Name { get; }
-		string Description { get; }
-		string Icon { get; }
+{	
+	public class QuitItem : Item, IRunnableItem
+	{		
+		public override string Name {
+			get { return Catalog.GetString ("Quit GNOME Do"); }
+		}
+		
+		public override string Description {
+			get { return Catalog.GetString ("Quit GNOME Do"); }
+		}
+		
+		public override string Icon {
+			get { return "process-stop"; }
+		}
+		
+		public void Run ()
+		{
+			Gtk.Application.Invoke (delegate {
+				Do.Controller.Vanish ();
+				Application.Quit ();
+			});
+		}
 	}
 }

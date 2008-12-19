@@ -23,19 +23,21 @@ using Mono.Unix;
 
 using Do.Platform;
 
-namespace Do.Universe {
+namespace Do.Universe
+{
 
-	public class ClearLearningItem : IRunnableItem {		
+	internal class ClearLearningItem : Item, IRunnableItem
+	{
 		
-		public string Name {
+		public override string Name {
 			get { return Catalog.GetString ("Clear Learning"); }
 		}
 		
-		public string Description {
+		public override string Description {
 			get { return Catalog.GetString ("Resets Do's learned usage data."); }
 		}
 		
-		public string Icon {
+		public override string Icon {
 			get { return "edit-clear"; }
 		}
 		

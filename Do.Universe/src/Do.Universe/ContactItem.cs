@@ -24,7 +24,7 @@ using System.Collections.Generic;
 namespace Do.Universe
 {
 	
-	public class ContactItem : IItem
+	public class ContactItem : Item
 	{
 		static Dictionary<string, ContactItem> contacts_name = new Dictionary<string, ContactItem> ();
 		static Dictionary<string, ContactItem> contacts_email = new Dictionary<string, ContactItem> ();
@@ -95,19 +95,27 @@ namespace Do.Universe
 			}
 		}
 		
-		public string Name {
+		public override string Name {
 			get { return this ["name"] ?? this ["email"]; }
 		}
 		
-		public string Photo {
-			get { return this ["photo"]; }
-		}
-		
-		public string Description {
+		public override string Description {
 			get {
 				return this ["description"] ?? AnEmailAddress ??
 					"No description.";
 			}
+		}
+		
+		public override string Icon {
+			get {
+				if (null != Photo && File.Exists (Photo))
+					return Photo;
+				return "stock_person";
+			}
+		}
+		
+		public string Photo {
+			get { return this ["photo"]; }
 		}
 
 		public string AnEmailAddress {
@@ -123,15 +131,6 @@ namespace Do.Universe
 						return this [detail];
 				}
 				return null;
-			}
-		}
-		
-		public string Icon
-		{
-			get {
-				if (null != Photo && File.Exists (Photo))
-					return Photo;
-				return "stock_person";
 			}
 		}
 		

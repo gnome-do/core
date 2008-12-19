@@ -26,7 +26,7 @@ namespace Do.Universe.Common
 	/// <summary>
 	/// A concrete implementation of the ITextItem interface.
 	/// </summary>
-	public class TextItem : ITextItem
+	public class TextItem : Item, ITextItem
 	{
 		public string Text { get; private set; }
 		
@@ -35,15 +35,15 @@ namespace Do.Universe.Common
 			Text = text;
 		}
 		
-		public string Name {
+		public override string Name {
 			get { return Text; }
 		}
 		
-		public string Description {
+		public override string Description {
 			get { return Text; }
 		}
 		
-		public string Icon {
+		public override string Icon {
 			get { return "gnome-mime-text"; }
 		}
 		

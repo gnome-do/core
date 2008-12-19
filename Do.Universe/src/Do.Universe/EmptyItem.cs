@@ -22,7 +22,10 @@ using System;
 
 namespace Do.Universe
 {
-	public class EmptyItem : EmptyObject, IItem
+	public class EmptyItem : Item
 	{
+		public override string Name { get { return ""; } }
+		public override string Description { get { return ""; } }
+		public override string Icon { get { return ""; } }
 	}
 }
