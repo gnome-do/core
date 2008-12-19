@@ -28,7 +28,7 @@ namespace Do.Universe
 	public class ProxyItem : Item
 	{
 		
-		string name, description, icon;
+		protected string name, description, icon;
 
 		protected ProxyItem ():
 			this (null, null, null, null)

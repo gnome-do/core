@@ -82,8 +82,7 @@ namespace Do.Universe
 				try {
 					return Name;
 				} catch (Exception e) {
-					Console.Error.WriteLine ("{0} encountered an error in Name: {1}", GetType (), e.Message);
-					// Log.Debug (e.StackTrace);
+					LogSafeError ("Name", e, "");
 				}
 				return DefaultName;
 			}
@@ -94,8 +93,7 @@ namespace Do.Universe
 				try {
 					return Description;
 				} catch (Exception e) {
-					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Description: {2}", GetType (), NameSafe, e.Message);
-					// Log.Debug (e.StackTrace);
+					LogSafeError ("Description", e);
 				}
 				return DefaultDescription;
 			}
@@ -106,14 +104,26 @@ namespace Do.Universe
 				try {
 					return Icon;
 				} catch (Exception e) {
-					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Icon: {2}", GetType (), NameSafe, e.Message);
-					// Log.Debug (e.StackTrace);
+					LogSafeError ("Icon", e);
 				}
 				return DefaultIcon;
 			}
 		}
 
 		#endregion
+
+		protected void LogSafeError (string where, Exception e)
+		{
+			LogSafeError (where, e, NameSafe);
+		}
+
+		protected void LogSafeError (string where, Exception e, string name)
+		{
+				string format = "{0} \"{1}\" encountered an error in {2}: {3}.";
+				string message =
+					string.Format (format, GetType (), name, where, e.Message);
+				Console.Error.WriteLine (message);
+		}
 		
 		public override int GetHashCode ()
 		{
