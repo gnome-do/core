@@ -54,7 +54,7 @@ namespace Docky.Interface
 		public bool Scalable { get { return true; } }
 		public bool DrawIndicator { get { return HasVisibleApps; } }
 		
-		public Wnck.Application[] Apps { get { return apps.ToArray (); } }
+		public Wnck.Application [] Apps { get { return apps.ToArray (); } }
 		public IEnumerable<int> Pids { get { return apps.Select (item => item.Pid); } }
 		
 		bool HasVisibleApps {
