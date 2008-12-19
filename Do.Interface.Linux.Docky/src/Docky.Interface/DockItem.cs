@@ -40,7 +40,6 @@ namespace Docky.Interface
 		Element item;
 		Surface sr, icon_surface;
 		List<Wnck.Application> apps;
-		Gdk.Pixmap pixmap;
 		
 		public string Icon { get { return item.Icon; } }
 		public string Description { get { return item.Name; } }
@@ -54,7 +53,7 @@ namespace Docky.Interface
 		public bool Scalable { get { return true; } }
 		public bool DrawIndicator { get { return HasVisibleApps; } }
 		
-		public Wnck.Application[] Apps { get { return apps.ToArray (); } }
+		public Wnck.Application [] Apps { get { return apps.ToArray (); } }
 		public IEnumerable<int> Pids { get { return apps.Select (item => item.Pid); } }
 		
 		bool HasVisibleApps {
@@ -114,10 +113,10 @@ namespace Docky.Interface
 			return icon_surface;
 		}
 		
-		public Surface GetTextSurface ()
+		public Surface GetTextSurface (Surface similar)
 		{
 			if (sr == null)
-				sr = Util.GetBorderedTextSurface (item.Name, DockPreferences.TextWidth);
+				sr = Util.GetBorderedTextSurface (item.Name, DockPreferences.TextWidth, similar);
 			return sr;
 		}
 		

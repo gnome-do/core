@@ -152,10 +152,10 @@ namespace Docky.Interface
 			return null;
 		}
 		
-		public Surface GetTextSurface ()
+		public Surface GetTextSurface (Surface similar)
 		{
 			if (sr == null)
-				sr = Util.GetBorderedTextSurface (application.Name, DockPreferences.TextWidth);
+				sr = Util.GetBorderedTextSurface (application.Name, DockPreferences.TextWidth, similar);
 			return sr;
 		}
 		

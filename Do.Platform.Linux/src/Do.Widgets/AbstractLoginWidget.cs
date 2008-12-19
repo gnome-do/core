@@ -74,26 +74,41 @@ namespace Do.Platform.Linux
 		}
 
 		// give our subclasses access to certain properties of our widgets
+		/// <value>
+		/// Give access to the text in the username entry box
+		/// </value>
 		protected string Username { 
 			get { return username_entry.Text; }
 			set { username_entry.Text = value; }
 		}
-		
+
+		/// <value>
+		/// gives access to the text in the password entry box
+		/// </value>
 		protected string Password { 
 			get { return password_entry.Text; }
 			set { password_entry.Text = value; }
 		}
-		
+
+		/// <value>
+		/// gives access to the label next to the username entry box
+		/// </value>
 		protected string UsernameLabel { 
 			get { return username_lbl.Text; }
 			set { username_lbl.Markup = value; }
 		}
-		
+
+		/// <summary>
+		/// gives access to the label next to the password entry box
+		/// </summary>
 		protected string PasswordLabel { 
 			get { return password_lbl.Text; }
 			set { password_lbl.Markup = value; }
 		}
-		
+
+		/// <value>
+		/// gives access to the label above the validate button
+		/// </value>
 		protected string ValidateLabel { 
 			get { return validate_lbl.Text; }
 			set { validate_lbl.Markup = string.Format (ValidatingFormat, value); }
