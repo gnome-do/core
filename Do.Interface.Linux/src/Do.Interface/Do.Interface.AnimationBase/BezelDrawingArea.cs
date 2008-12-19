@@ -702,7 +702,7 @@ namespace Do.Interface.AnimationBase
 				break;
 			case DrawState.NoResult:
 				RenderPixbuf (pane, cr, "gtk-question-dialog", 1);
-				RenderPaneText (pane, cr, "<b>No results for: " + Context.GetPaneQuery (pane) + "</b>");
+				RenderPaneText (pane, cr, "No results for: " + Context.GetPaneQuery (pane));
 				break;
 			case DrawState.Text:
 				if (text_box_scale < 1) {
@@ -713,7 +713,7 @@ namespace Do.Interface.AnimationBase
 			case DrawState.None:
 				if (pane == Pane.First) {
 					RenderPixbuf (pane, cr, "search", 1);
-					RenderPaneText (pane, cr, "<b>Type To Search</b>");
+					RenderPaneText (pane, cr, "Type To Search");
 				}
 				break;
 			}
@@ -787,12 +787,13 @@ namespace Do.Interface.AnimationBase
 		void RenderPaneText (Pane pane, Context cr)
 		{
 			if (Context.GetPaneObject (pane) != null)
-				RenderPaneText (pane, cr, "<b>" + GLib.Markup.EscapeText (Context.GetPaneObject (pane).Name) + "</b>");
+				RenderPaneText (pane, cr, GLib.Markup.EscapeText (Context.GetPaneObject (pane).Name));
 		}
 		
 		void RenderPaneText (Pane pane, Context cr, string text)
 		{
 			if (text.Length == 0) return;
+			text = string.Format ("<b>{0}</b>", text);
 			
 			if (Context.GetPaneTextMode (pane)) {
 				Pango.Color color = new Pango.Color ();
