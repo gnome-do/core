@@ -46,6 +46,7 @@ namespace Docky.Interface
 		const int VerticalBuffer = 5;
 		const int HorizontalBuffer = 7;
 		const int BounceTime = 700;
+		const int SummonTime = 100;
 		const int InsertAnimationTime = BaseAnimationTime*5;
 		const int WindowHeight = 300;
 		const int IconBorderWidth = 2;
@@ -176,12 +177,12 @@ namespace Docky.Interface
 					return 0;
 				
 				if (CursorIsOverDockArea) {
-					offset = 1 - Math.Min (1,(DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
+					offset = 1 - Math.Min (1,(DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime);
 					return (int) (offset*MinimumDockArea.Height);
 					
 				} else {
-					offset = Math.Min (1, Math.Min ((DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime, 
-					                   (DateTime.UtcNow - interface_change_time).TotalMilliseconds / BaseAnimationTime));
+					offset = Math.Min (1, Math.Min ((DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime, 
+					                   (DateTime.UtcNow - interface_change_time).TotalMilliseconds / SummonTime));
 					
 					if (InputInterfaceVisible)
 						offset = 1 - offset;
@@ -196,16 +197,16 @@ namespace Docky.Interface
 		double DockIconOpacity {
 			get {
 				double total_time = (DateTime.UtcNow - interface_change_time).TotalMilliseconds;
-				if (BaseAnimationTime < total_time) {
+				if (SummonTime < total_time) {
 					if (InputInterfaceVisible)
 						return 0;
 					return 1;
 				}
 				
 				if (InputInterfaceVisible) {
-					return 1 - (total_time/BaseAnimationTime);
+					return 1 - (total_time/SummonTime);
 				} else {
-					return total_time/BaseAnimationTime;
+					return total_time/SummonTime;
 				}
 			}
 		}
@@ -309,7 +310,7 @@ namespace Docky.Interface
 		}
 		
 		bool InputModeChangeAnimationNeeded {
-			get { return (DateTime.UtcNow - interface_change_time).TotalMilliseconds < BaseAnimationTime; }
+			get { return (DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime; }
 		}
 		
 		bool InputModeSlideAnimationNeeded {
