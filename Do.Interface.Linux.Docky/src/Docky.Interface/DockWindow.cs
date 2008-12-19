@@ -154,6 +154,11 @@ namespace Docky.Interface
 			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-main.Height);
 		}
 		
+		public void RequestClickOff ()
+		{
+			Controller.ButtonPressOffWindow ();
+		}
+		
 		public void SetStruts ()
 		{
 			IntPtr display = Xlib.gdk_x11_drawable_get_xdisplay (GdkWindow.Handle);

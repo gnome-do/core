@@ -133,6 +133,8 @@ namespace Docky.Interface
 		
 		new DockState State { get; set; }
 		
+		SummonModeRenderer SummonRenderer { get; set; }
+		
 		IDockItem [] DockItems { 
 			get { return item_provider.DockItems.ToArray (); } 
 		}
@@ -150,9 +152,13 @@ namespace Docky.Interface
 		/// </value>
 		double ZoomIn {
 			get {
-				if (CursorIsOverDockArea)
-					return Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
-				return Math.Max (0, 1 - (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
+				double zoom = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
+				if (!CursorIsOverDockArea)
+					zoom = 1 - zoom;
+				if (InputInterfaceVisible) {
+					zoom = zoom * DockIconOpacity;
+				}
+				return zoom;
 			}
 		}
 		
@@ -175,19 +181,25 @@ namespace Docky.Interface
 				double offset = 0;
 				if (!DockPreferences.AutoHide || cursor_is_handle)
 					return 0;
-				
-				if (CursorIsOverDockArea) {
-					offset = 1 - Math.Min (1,(DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime);
-					return (int) (offset*MinimumDockArea.Height);
-					
-				} else {
-					offset = Math.Min (1, Math.Min ((DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime, 
-					                   (DateTime.UtcNow - interface_change_time).TotalMilliseconds / SummonTime));
+
+				if (InputAreaOpacity == 1) {
+					offset = 0;
+				} else if (InputAreaOpacity > 0) {
+					if (CursorIsOverDockArea) {
+						return 0;
+					} else {
+						offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime);
+						offset = Math.Min (offset, Math.Min (1, (DateTime.UtcNow - interface_change_time).TotalMilliseconds / SummonTime));
+					}
 					
 					if (InputInterfaceVisible)
 						offset = 1 - offset;
-					return (int) (offset*MinimumDockArea.Height);
+				} else {
+					offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime);
+					if (CursorIsOverDockArea)
+						offset = 1 - offset;
 				}
+				return (int) (offset * MinimumDockArea.Height);
 			}
 		}
 		
@@ -340,6 +352,7 @@ namespace Docky.Interface
 			this.window = window;
 			item_provider = new DockItemProvider (statistics);
 			State = new DockState ();
+			SummonRenderer = new SummonModeRenderer (this);
 			
 			Cursor = new Gdk.Point (-1, -1);
 			minimum_dock_area = new Gdk.Rectangle ();
@@ -414,7 +427,7 @@ namespace Docky.Interface
 				
 				using (Context input_cr = new Context (input_area_buffer)) {
 					input_cr.AlphaFill ();
-					Renderers.SummonModeRenderer.RenderSummonMode (input_cr, State, dockArea, VerticalBuffer, this);
+					SummonRenderer.RenderSummonMode (input_cr, State, dockArea, VerticalBuffer);
 				}
 				
 				cr.SetSource (input_area_buffer);
@@ -568,7 +581,7 @@ namespace Docky.Interface
 		
 		Gdk.Rectangle GetDockArea ()
 		{
-			if (!CursorIsOverDockArea && ZoomIn == 0 && InputAreaOpacity == 0)
+			if (DockIconOpacity == 0 || ZoomIn == 0)
 				return MinimumDockArea;
 
 			int start_x, end_x;
@@ -626,7 +639,7 @@ namespace Docky.Interface
 			
 			string [] uriList = Regex.Split (data, "\r\n");
 			uriList.Where (uri => uri.StartsWith ("file://"))
-				.ForEach (uri => item_provider.AddCustomItemFromFile (uri.Substring (7)));
+				.ForEach (uri => item_provider.AddCustomItem (uri.Substring (7)));
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
 		}
@@ -711,33 +724,44 @@ namespace Docky.Interface
 				return ret_val;
 			}
 			
-			// we are hovering over the pin icon
-			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X - 4, StickIconCenter.Y - 4, 8, 8);
-			if (stick_rect.Contains (Cursor)) {
-				DockPreferences.AutoHide = !DockPreferences.AutoHide;
-				window.SetStruts ();
+			if (InputInterfaceVisible) {
+				switch (SummonRenderer.GetClickEvent (new Gdk.Point ((int) evnt.X, (int) evnt.Y), State, GetDockArea ())) {
+				case SummonClickEvent.AddItemToDock:
+					item_provider.AddCustomItem (State [State.CurrentPane]);
+					window.RequestClickOff ();
+					break;
+				case SummonClickEvent.None:
+					// Do nothing
+					break;
+				}
+			} else {
+				// we are hovering over the pin icon
+				Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X - 4, StickIconCenter.Y - 4, 8, 8);
+				if (stick_rect.Contains (Cursor)) {
+					DockPreferences.AutoHide = !DockPreferences.AutoHide;
+					window.SetStruts ();
+					AnimatedDraw ();
+					return ret_val;
+				}
+				
+				int item = DockItemForX ((int) evnt.X); //sometimes clicking is not good!
+				if (item < 0 || item >= DockItems.Length || !CursorIsOverDockArea || InputInterfaceVisible)
+					return ret_val;
+				
+				//handling right clicks
+				if (evnt.Button == 3) {
+					if (item_provider.GetIconSource (DockItems [item]) == IconSource.Custom || 
+					    item_provider.GetIconSource (DockItems [item]) == IconSource.Statistics)
+						ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
+					return ret_val;
+				}
+				
+				//send off the clicks
+				DockItems [item].Clicked (evnt.Button, window.Controller);
+				if (DockItems [item].LastClick > last_click)
+					last_click = DockItems [item].LastClick;
 				AnimatedDraw ();
-				return ret_val;
 			}
-			
-			int item = DockItemForX ((int) evnt.X); //sometimes clicking is not good!
-			if (item < 0 || item >= DockItems.Length || !CursorIsOverDockArea || InputInterfaceVisible)
-				return ret_val;
-			
-			//handling right clicks
-			if (evnt.Button == 3) {
-				if (item_provider.GetIconSource (DockItems [item]) == IconSource.Custom || 
-				    item_provider.GetIconSource (DockItems [item]) == IconSource.Statistics)
-					ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
-				return ret_val;
-			}
-			
-			//send off the clicks
-			DockItems [item].Clicked (evnt.Button, window.Controller);
-			if (DockItems [item].LastClick > last_click)
-				last_click = DockItems [item].LastClick;
-			AnimatedDraw ();
-			
 			return ret_val;
 		}
 		
@@ -792,7 +816,7 @@ namespace Docky.Interface
 		
 		void SetParentInputMask ()
 		{
-			if (CursorIsOverDockArea) {
+			if (CursorIsOverDockArea || InputInterfaceVisible) {
 				window.SetInputMask (GetDockArea ().Height*2 + 10);
 			} else {
 				if (DockPreferences.AutoHide)
@@ -813,6 +837,7 @@ namespace Docky.Interface
 			interface_change_time = DateTime.UtcNow;
 			InputInterfaceVisible = true;
 			
+			SetParentInputMask ();
 			AnimatedDraw ();
 		}
 		
@@ -821,6 +846,7 @@ namespace Docky.Interface
 			interface_change_time = DateTime.UtcNow;
 			InputInterfaceVisible = false;
 			
+			SetParentInputMask ();
 			AnimatedDraw ();
 		}
 		

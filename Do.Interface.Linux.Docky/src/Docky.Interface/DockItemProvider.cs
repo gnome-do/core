@@ -62,11 +62,13 @@ namespace Docky.Interface
 				out_items.AddRange (statistical_items);
 				
 				if (custom_items.Any ()) {
-					out_items.Add (Separator);
+					if (out_items.Any ())
+						out_items.Add (Separator);
 					out_items.AddRange (custom_items.Values);
 				}
 				if (task_items.Any ()) {
-					out_items.Add (Separator);
+					if (out_items.Any ())
+						out_items.Add (Separator);
 					out_items.AddRange (task_items);
 				}
 				return out_items;
@@ -84,13 +86,6 @@ namespace Docky.Interface
 			statistical_items = new List<IDockItem> ();
 			task_items = new List<IDockItem> ();
 			
-			enable_serialization = false;
-			foreach (string s in DeserializeCustomItems ()) {
-				if (!File.Exists (s))
-					continue;
-				AddCustomItemFromFile (s);
-			}
-			enable_serialization = true;
 			
 			Wnck.Screen.Default.WindowClosed += delegate(object o, WindowClosedArgs args) {
 				if (args.Window.IsSkipTasklist)
@@ -105,25 +100,49 @@ namespace Docky.Interface
 			};
 			
 			GLib.Timeout.Add (3000, delegate {
+				enable_serialization = false;
+				foreach (string s in DeserializeCustomItems ())
+					AddCustomItem (s);
+				enable_serialization = true;
+				
 				UpdateItems ();
 				return false;
 			});
 		}
 		
-		public void AddCustomItemFromFile (string filename)
+		public void AddCustomItem (Element item)
 		{
-			if (filename.StartsWith ("file://"))
-				filename = filename.Substring ("file://".Length);
-			
-			if (!File.Exists (filename))
+			if (!(item is Item)) {
+				Log.Error ("Could not add {0} to custom items for dock", item.NameSafe);
 				return;
+			}
+			string id = item.UniqueId;
+			DockItem di = new DockItem (item);
+			custom_items [id] = di;
 			
-			if (filename.EndsWith (".desktop")) {
-				Element o = Services.UniverseFactory.NewApplicationItem (filename) as Element;
-				custom_items[filename] = new DockItem (o);
+			if (enable_serialization)
+				SerializeCustomItems ();
+		}
+		
+		public void AddCustomItem (string identifier)
+		{
+			if (identifier.StartsWith ("file://"))
+				identifier = identifier.Substring ("file://".Length);
+			
+			if (File.Exists (identifier)) {
+				if (identifier.EndsWith (".desktop")) {
+					Element o = Services.UniverseFactory.NewApplicationItem (identifier) as Element;
+					custom_items [identifier] = new DockItem (o);
+				} else {
+					Element o = Services.UniverseFactory.NewFileItem (identifier) as Element;
+					custom_items [identifier] = new DockItem (o);
+				}
 			} else {
-				Element o = Services.UniverseFactory.NewFileItem (filename) as Element;
-				custom_items[filename] = new DockItem (o);
+				Element e = Services.Core.GetElement (identifier);
+				if (e != null)
+					custom_items [identifier] = new DockItem (e);
+				else
+					Log.Error ("Could not add custom item with id: {0}", identifier);
 			}
 			
 			if (enable_serialization)
@@ -139,6 +158,7 @@ namespace Docky.Interface
 					filenames = f.Deserialize (s) as string[];
 				}
 			} catch {
+				Log.Error ("Could not deserialize custom items");
 				filenames = new string[0];
 			}
 			return filenames;

@@ -48,7 +48,7 @@
     <File name="src/Do.Interface/Do.Interface.AnimationBase/BezelGlassResults.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface/Do.Interface.AnimationBase/BezelGlassWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface/Do.Interface.AnimationBase/BezelResultsDrawingArea.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Interface/Do.Interface.AnimationBase/BezelTextUtils.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface/Do.Interface.AnimationBase/TextRenderer.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface/IDoController.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface/IStatistics.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface/PixbufSurfaceCache.cs" subtype="Code" buildaction="Compile" />

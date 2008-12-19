@@ -144,10 +144,11 @@ namespace Do.Interface.AnimationBase
 #endregion
 		
 #region LocalVariables
+		public const int TextHeight = 11;
+		
 		HUDStyle style;
 		
 		const int BoxLineWidth    = 1;
-		const int TextHeight      = 11;
 		const int BorderWidth     = 15;
 		const int fade_ms         = 150;
 		const int ShadowRadius    = 10;
@@ -219,6 +220,8 @@ namespace Do.Interface.AnimationBase
 				return colors;
 			}
 		}
+		
+		public TextRenderer TextUtility { get; set; }
 		
 		public int IconSize {
 			get {
@@ -374,6 +377,7 @@ namespace Do.Interface.AnimationBase
 		public BezelDrawingArea (IDoController controller, IRenderTheme theme, bool preview) : base ()
 		{
 			this.controller = controller;
+			TextUtility = new TextRenderer (this);
 			
 			DoubleBuffered = false;
 			prefs = Services.Preferences.Get<BezelDrawingArea> ();
@@ -780,8 +784,8 @@ namespace Do.Interface.AnimationBase
 		{
 			if (Context.GetPaneObject (Focus) == null)
 				return;
-			BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
-			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20, this);
+			TextUtility.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
+			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20, TextHeight);
 		}
 		
 		void RenderPaneText (Pane pane, Context cr)
@@ -799,18 +803,18 @@ namespace Do.Interface.AnimationBase
 				Pango.Color color = new Pango.Color ();
 				color.Blue = color.Green = color.Red = ushort.MaxValue;
 				int y = drawing_area.Y + WindowBorder + TitleBarHeight + 6;
-				BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, 
-				                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
+				TextUtility.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, 
+				                                 TextHeight, color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
 			} else {
 				text = (!string.IsNullOrEmpty (Context.GetPaneQuery (pane))) ? 
 					Util.FormatCommonSubstrings 
 						(text, Context.GetPaneQuery (pane), HighlightFormat) : text;
 				if (PaneOutlineRenderer.StackIconText) {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - TextHeight - 9;
-					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, this);
+					TextUtility.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, TextHeight);
 				} else {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + (int)(BoxHeight/2);
-					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + IconSize + 10, y, BoxWidth - IconSize - 20, this);
+					TextUtility.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + IconSize + 10, y, BoxWidth - IconSize - 20, TextHeight);
 				}
 			}
 		}
@@ -819,13 +823,10 @@ namespace Do.Interface.AnimationBase
 		{
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = (ushort) (ushort.MaxValue * text_box_scale);
-			int tmp = BezelTextUtils.TextHeight;
-			BezelTextUtils.TextHeight = 18;
-			Gdk.Rectangle cursor = BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
+			Gdk.Rectangle cursor = TextUtility.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
 			                                                        drawing_area.X + 10, drawing_area.Y + TextModeOffset + 5, 
-			                                                        drawing_area.Width - 20, color, 
-			                                                        Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
-			BezelTextUtils.TextHeight = tmp;
+			                                                        drawing_area.Width - 20, 18, color, 
+			                                                        Pango.Alignment.Left, Pango.EllipsizeMode.None);
 			if (cursor.X == cursor.Y && cursor.X == 0) return;
 			
 			cr.Rectangle (cursor.X, cursor.Y, 2, cursor.Height);

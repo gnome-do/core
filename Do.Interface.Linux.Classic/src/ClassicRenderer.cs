@@ -86,7 +86,7 @@ namespace Do.Interface
 		int surface_height = 0;
 		
 		public int Width { get { return IconSize+47; } }
-		public int Height { get { return IconSize + 25 + BezelTextUtils.TextHeight; } }
+		public int Height { get { return IconSize + 25 + BezelDrawingArea.TextHeight; } }
 		public int IconSize { get { return 128; } }
 		public bool StackIconText { get { return true; } }
 		

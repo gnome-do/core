@@ -16,7 +16,7 @@ FILES = \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassResults.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassWindow.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelResultsDrawingArea.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/BezelTextUtils.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/TextRenderer.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/IRenderInterfaces.cs \
 	src/Do.Interface/Do.Interface.CairoUtils/CairoUtils.cs \
 	src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs \

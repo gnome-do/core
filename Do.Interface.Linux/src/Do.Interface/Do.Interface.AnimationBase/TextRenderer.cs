@@ -29,30 +29,26 @@ namespace Do.Interface.AnimationBase
 {
 	
 	
-	public class BezelTextUtils
+	public class TextRenderer
 	{
-		static int textHeight = 11;
-		private static Pango.Layout layout;
+		Pango.Layout layout;
 		
-		public static int TextHeight {
-			get {
-				return textHeight;
-			}
-			set {
-				if (value == textHeight) return;
-				textHeight = value;
-			}
+		public Gtk.Widget ReferenceWidget { private get; set; }
+		
+		public TextRenderer (Gtk.Widget referenceWidget)
+		{
+			ReferenceWidget = referenceWidget;
 		}
 		
-		public static void RenderLayoutText (Context cr, string text, int x, int y, int width, Gtk.Widget widget)
+		public void RenderLayoutText (Context cr, string text, int x, int y, int width, int textHeight)
 		{
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
-			RenderLayoutText (cr, text, x, y, width, color, Pango.Alignment.Center, Pango.EllipsizeMode.End, widget);
+			RenderLayoutText (cr, text, x, y, width, textHeight, color, Pango.Alignment.Center, Pango.EllipsizeMode.End);
 		}
 		
-		public static Gdk.Rectangle RenderLayoutText (Context cr, string text, int x, int y, int width, 
-		                       Pango.Color color, Pango.Alignment align, Pango.EllipsizeMode ellipse, Gtk.Widget widget)
+		public Gdk.Rectangle RenderLayoutText (Context cr, string text, int x, int y, int width, int textHeight,
+		                       Pango.Color color, Pango.Alignment align, Pango.EllipsizeMode ellipse)
 		{
 			if (string.IsNullOrEmpty (text)) return new Gdk.Rectangle ();
 	
@@ -61,9 +57,9 @@ namespace Do.Interface.AnimationBase
 				layout.FontDescription.Dispose ();
 				layout.Dispose ();
 			}
-			layout = new Pango.Layout (widget.CreatePangoContext ());
+			layout = new Pango.Layout (ReferenceWidget.CreatePangoContext ());
 			layout.FontDescription = new Pango.FontDescription ();
-			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (TextHeight);
+			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (textHeight);
 			
 			layout.Width = Pango.Units.FromPixels (width);
 			layout.Ellipsize = ellipse;

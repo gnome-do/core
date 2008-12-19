@@ -181,7 +181,7 @@ namespace Do.Interface
 		
 		public int Width { get { return 160; } }
 		public int IconSize { get { return 128; } }
-		public int Height { get { return IconSize + 15 + BezelTextUtils.TextHeight; } }
+		public int Height { get { return IconSize + 15 + BezelDrawingArea.TextHeight; } }
 		public bool StackIconText { get { return true; } }
 
 		public HUDPaneOutlineRenderer (BezelDrawingArea parent)
