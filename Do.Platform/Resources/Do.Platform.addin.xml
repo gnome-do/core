@@ -1,4 +1,4 @@
-<Addin id="Platform" namespace="Do" version="1.0">
+<Addin id="Platform" namespace="Do" version="1.0" isroot="true">
  
 	<Runtime>
 		<Import assembly="Do.Platform.dll" />
@@ -22,3 +22,4 @@
 	</Extension>
 	
 </Addin>
+

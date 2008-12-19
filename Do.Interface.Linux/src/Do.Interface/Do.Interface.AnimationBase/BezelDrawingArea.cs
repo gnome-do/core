@@ -793,6 +793,7 @@ namespace Do.Interface.AnimationBase
 		void RenderPaneText (Pane pane, Context cr, string text)
 		{
 			if (text.Length == 0) return;
+			text = string.Format ("<b>{0}</b>", text);
 			
 			if (Context.GetPaneTextMode (pane)) {
 				Pango.Color color = new Pango.Color ();

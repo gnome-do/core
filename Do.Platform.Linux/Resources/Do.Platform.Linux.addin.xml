@@ -1,7 +1,6 @@
 <Addin id="Platform.Linux" namespace="Do" version="1.0">
  
 	<Runtime>
-		<Import assembly="Do.Platform.dll" />
 		<Import assembly="Do.Platform.Linux.dll" />
 	</Runtime>
 	

@@ -53,7 +53,7 @@ namespace Docky.Interface
 			return sr;
 		}
 		
-		public Surface GetTextSurface ()
+		public Surface GetTextSurface (Surface similar)
 		{
 			return null;
 		}
