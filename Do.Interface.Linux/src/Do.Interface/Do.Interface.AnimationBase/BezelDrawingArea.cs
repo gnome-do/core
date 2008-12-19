@@ -165,7 +165,7 @@ namespace Do.Interface.AnimationBase
 		BezelColors colors;
 		BezelGlassResults bezel_results;
 		
-		bool third_pane_visible, preview, parent_configured;
+		bool third_pane_visible, preview;
 		BezelDrawingContext context, old_context;
 		PixbufSurfaceCache surface_cache;
 		Pane focus;

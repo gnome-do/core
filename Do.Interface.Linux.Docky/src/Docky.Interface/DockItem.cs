@@ -40,7 +40,6 @@ namespace Docky.Interface
 		Element item;
 		Surface sr, icon_surface;
 		List<Wnck.Application> apps;
-		Gdk.Pixmap pixmap;
 		
 		public string Icon { get { return item.Icon; } }
 		public string Description { get { return item.Name; } }
