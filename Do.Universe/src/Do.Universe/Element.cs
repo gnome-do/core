@@ -28,7 +28,7 @@ namespace Do.Universe
 {
 
 	public abstract class Element :
-		IEquatable<Element>, IComparable<Element>, IComparable
+		IEquatable<Element>, IComparable<Element>
 	{
 		const string UniqueIdFormat = "{0}: {1} ({2})";
 		static readonly string DefaultName;
@@ -133,13 +133,6 @@ namespace Do.Universe
 		public override string ToString ()
 		{
 			return UniqueId;
-		}
-
-		public int CompareTo (object o)
-		{
-			if (o is Element)
-				return CompareTo (o as Element);
-			throw new ArgumentException ("object is not an Element");
 		}
 
 		public int CompareTo (Element e)
