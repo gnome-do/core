@@ -38,22 +38,16 @@ namespace Do.Platform.Linux
 	[System.ComponentModel.ToolboxItem(true)]
 	public abstract partial class AbstractLoginWidget :   Bin
 	{
+		const string ValidatingFormat = "<i>{0}</i>";
+		
 		protected readonly string NewAccountButtonFormat = Catalog.GetString ("Sign up for {0}");
-		protected readonly string BusyValidatingLabel = Catalog.GetString ("<i>Validating...</i>");
-		protected readonly string NewAccountLabelFormat = Catalog.GetString ("<i>Don't have {0}?</i>");
-		protected readonly string AccountValidationFailedLabel = Catalog.GetString ("<i>Account validation failed!</i>");
-		protected readonly string DefaultValidatingLabel = Catalog.GetString ("<i>Verify and save account information</i>");
-		protected readonly string AccountValidationSucceededLabel = Catalog.GetString ("<i>Account validation succeeded!</i>");
+		protected readonly string BusyValidatingLabel = string.Format (ValidatingFormat, Catalog.GetString ("Validating..."));
+		protected readonly string NewAccountLabelFormat = string.Format (ValidatingFormat, Catalog.GetString ("Don't have {0}?"));
+		protected readonly string AccountValidationFailedLabel = string.Format (ValidatingFormat, Catalog.GetString ("Account validation failed!"));
+		protected readonly string DefaultValidatingLabel = string.Format (ValidatingFormat, Catalog.GetString ("Verify and save account information"));
+		protected readonly string AccountValidationSucceededLabel = string.Format (ValidatingFormat, Catalog.GetString ("Account validation succeeded!"));
 
-		// our Gtk widgets that we are exposing to subclasses
-		protected Entry UsernameEntry { get; set; }
-		protected Entry PasswordEntry { get; set; }
-		protected Label UsernameLabel { get; set; }
-		protected Label PasswordLabel { get; set; }
-		protected Label ValidateLabel { get; set; }
-		protected Button ValidateButton { get; set; }
-		protected Label NewAccountLabel { get; set; }
-		protected LinkButton NewAccountButton { get; set; }
+		LinkButton new_account_button;		
 		
 		public AbstractLoginWidget (string serviceName) : this (serviceName, "")
 		{
@@ -63,36 +57,73 @@ namespace Do.Platform.Linux
 		{
 			Build();
 
-			// put gtk widgets inside protected wrapper for subclasses
-			UsernameLabel = username_lbl;
-			PasswordLabel = password_lbl;
-			UsernameEntry = username_entry;
-			PasswordEntry = password_entry;
-			ValidateLabel = validate_lbl;
-			ValidateButton = validate_btn;
-			NewAccountLabel = new_account_lbl;
-
 			// setup the link button
-			NewAccountButton = new LinkButton (serviceUri, string.Format (NewAccountButtonFormat, serviceName));
-			new_account_button_box.Add (NewAccountButton);
+			new_account_button = new LinkButton (serviceUri, string.Format (NewAccountButtonFormat, serviceName));
+			new_account_button_box.Add (new_account_button);
 
 			// masks chars for passwords
-			PasswordEntry.Visibility = false;
+			password_entry.Visibility = false;
 
-			PasswordEntry.Activated += OnPasswordEntryActivated;
-			NewAccountButton.Clicked += OnNewAccountBtnClicked;
-			
-			if (string.IsNullOrEmpty (serviceUri)) {
-				NewAccountLabel.Visible = false;
-				NewAccountButton.Visible = false;
-			} else {
-				NewAccountLabel.Markup = string.Format (NewAccountLabelFormat, serviceName);
-			}
+			password_entry.Activated += OnPasswordEntryActivated;
+			new_account_button.Clicked += OnNewAccountBtnClicked;
+
+			ChangeService (serviceName, serviceUri);
 
 			ShowAll ();
 
 		}
 
+		// give our subclasses access to certain properties of our widgets
+		protected string Username { 
+			get { return username_entry.Text; }
+			set { username_entry.Text = value; }
+		}
+		
+		protected string Password { 
+			get { return password_entry.Text; }
+			set { password_entry.Text = value; }
+		}
+		
+		protected string UsernameLabel { 
+			get { return username_lbl.Text; }
+			set { username_lbl.Markup = value; }
+		}
+		
+		protected string PasswordLabel { 
+			get { return password_lbl.Text; }
+			set { password_lbl.Markup = value; }
+		}
+		
+		protected string ValidateLabel { 
+			get { return validate_lbl.Text; }
+			set { validate_lbl.Markup = string.Format (ValidatingFormat, value); }
+		}
+
+		/// <summary>
+		/// Reset widget properties when the service changes, make sure when you use this
+		/// that you set the password/username entries to new values. When set to empty strting
+		/// this will hide the new account sign up link and label.
+		/// </summary>
+		/// <param name="serviceName">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="serviceUri">
+		/// A <see cref="System.String"/>
+		/// </param>
+		protected void ChangeService (string serviceName, string serviceUri)
+		{
+			if (string.IsNullOrEmpty (serviceName) || string.IsNullOrEmpty (serviceUri)) {
+				new_account_lbl.Visible = false;
+				new_account_button.Visible = false;
+
+				return;
+			}
+
+			new_account_lbl.Markup = string.Format (NewAccountLabelFormat, serviceName);
+			new_account_button.Label = string.Format (NewAccountButtonFormat, serviceName);
+			new_account_button.Uri = serviceUri;
+		}
+		
 		/// <summary>
 		/// Puts a widget at the top of the page above the username entry.
 		/// </summary>
@@ -137,7 +168,7 @@ namespace Do.Platform.Linux
 		/// </returns>
 		abstract protected bool Validate (string username, string password);
 
-		protected virtual void OnValidateBtnClicked (object sender, System.EventArgs e)
+		void OnValidateBtnClicked (object sender, System.EventArgs e)
 		{
 			validate_lbl.Markup = BusyValidatingLabel;
 			validate_btn.Sensitive = false;
@@ -151,19 +182,18 @@ namespace Do.Platform.Linux
 			thread.Start ();
 		}
 
-		protected virtual void OnNewAccountBtnClicked (object sender, EventArgs e)
+		void OnNewAccountBtnClicked (object sender, EventArgs e)
 		{
-			if (!string.IsNullOrEmpty (NewAccountButton.Uri))
-				Services.Environment.OpenUrl (NewAccountButton.Uri);
+			Services.Environment.OpenUrl (new_account_button.Uri);
 		}
 		
-		private void ValidateCredentials (string username, string password)
+		void ValidateCredentials (string username, string password)
 		{
 			bool valid = Validate (username, password);
 			Gtk.Application.Invoke ((o, e) => UpdateInterface (username, password, valid));
 		}
 
-		private void UpdateInterface (string username, string password, bool valid)
+		void UpdateInterface (string username, string password, bool valid)
 		{
 			if (valid) {
 				validate_lbl.Markup = AccountValidationSucceededLabel;
@@ -174,12 +204,12 @@ namespace Do.Platform.Linux
 			validate_btn.Sensitive = true;
 		}
 
-		protected virtual void OnUsernameEntryActivated (object sender, System.EventArgs e)
+		void OnUsernameEntryActivated (object sender, System.EventArgs e)
 		{
 			password_entry.GrabFocus ();
 		}
 
-		protected virtual void OnPasswordEntryActivated (object sender, System.EventArgs e)
+		void OnPasswordEntryActivated (object sender, System.EventArgs e)
 		{
 			validate_btn.Activate ();
 		}
