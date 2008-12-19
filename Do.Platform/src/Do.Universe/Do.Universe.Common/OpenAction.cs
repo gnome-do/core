@@ -31,7 +31,7 @@ namespace Do.Universe.Common
 	/// <summary>
 	/// A command providing "open" semantics to many kinds of items.
 	/// </summary>
-	public class OpenAction : Action
+	public class OpenAction : Act
 	{
 
 		public override string Name {

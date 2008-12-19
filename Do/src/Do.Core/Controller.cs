@@ -40,7 +40,7 @@ namespace Do.Core {
 	public class Controller : IController, IDoController, IStatistics {
 		
 		class PerformState {
-			public Universe.Action Action { get; set; }
+			public Act Action { get; set; }
 			public IEnumerable<Item> Items { get; set; }
 			public IEnumerable<Item> ModifierItems { get; set; }
 			
@@ -48,7 +48,7 @@ namespace Do.Core {
 			{
 			}
 
-			public PerformState (Universe.Action action, IEnumerable<Item> items, IEnumerable<Item> modItems)
+			public PerformState (Act action, IEnumerable<Item> items, IEnumerable<Item> modItems)
 			{
 				Action = action;
 				Items = items;
@@ -65,7 +65,7 @@ namespace Do.Core {
 		protected ISearchController[] controllers;
 		protected Thread th;
 		
-		Universe.Action action;
+		Act action;
 		List<Item> items;
 		List<Item> modItems;
 		bool thirdPaneVisible;
@@ -268,11 +268,11 @@ namespace Do.Core {
 		bool ThirdPaneAllowed {
 			get {
 				Element first, second;
-				Universe.Action action;
+				Act action;
 
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
-				action = first as Universe.Action ?? second as Universe.Action;
+				action = first as Act ?? second as Act;
 				return action != null &&
 					action.SupportedModifierItemTypes.Any () &&
 					controllers[1].Results.Any ();
@@ -286,12 +286,12 @@ namespace Do.Core {
 		bool ThirdPaneRequired {
 			get {
 				Element first, second;
-				Universe.Action action;
+				Act action;
 				Item item;
 
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
-				action = first as Universe.Action ?? second as Universe.Action;
+				action = first as Act ?? second as Act;
 				item = first as Item ?? second as Item;
 				return action != null && item != null &&
 					action.SupportedModifierItemTypes.Any () &&
@@ -814,13 +814,13 @@ namespace Do.Core {
 				if (first is Item) {
 					foreach (Item item in controllers[0].FullSelection)
 						items.Add (item);
-					action = second as Universe.Action;
+					action = second as Act;
 					itemQuery = controllers[0].Query;
 					actionQuery = controllers[1].Query;
 				} else {
 					foreach (Item item in controllers[1].FullSelection)
 						items.Add (item);
-					action = first as Universe.Action;
+					action = first as Act;
 					itemQuery = controllers[1].Query;
 					actionQuery = controllers[0].Query;
 				}
@@ -837,7 +837,7 @@ namespace Do.Core {
 				/////////////////////////////////////////////////////////////
 				
 				if (first is Item) {
-					// Universe.Action is in second pane.
+					// Act is in second pane.
 
 					// Increase the relevance of the items.
 					foreach (Element item in items)
@@ -847,7 +847,7 @@ namespace Do.Core {
 					foreach (Element item in items)
 						action.IncreaseRelevance (actionQuery, item);
 				} else {
-					// Universe.Action is in first pane.
+					// Act is in first pane.
 
 					// Increase the relevance of each item for the action.
 					foreach (Element item in items)
@@ -997,9 +997,9 @@ namespace Do.Core {
 		
 		public void PerformDefaultAction (Item item, IEnumerable<Type> filter) 
 		{
-			Universe.Action action =
-				Do.UniverseManager.Search ("", typeof (Universe.Action).Cons (filter), item)
-					.Cast<Universe.Action> ()
+			Act action =
+				Do.UniverseManager.Search ("", typeof (Act).Cons (filter), item)
+					.Cast<Act> ()
 					.Where (a => a.SupportsItemSafe (item))
 					.FirstOrDefault ();
 

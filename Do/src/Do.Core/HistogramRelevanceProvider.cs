@@ -149,7 +149,7 @@ namespace Do.Core {
 			relevance *= 1f - (age / 2f);
 
 			if (isAction) {
-				Universe.Action oa = o as Universe.Action;
+				Act oa = o as Act;
 				// We penalize actions, but only if they're not used in the first pane
 				// often.
 				if (rec.FirstPaneHits < 3)
@@ -194,7 +194,7 @@ namespace Do.Core {
 
 		public bool IsAction {
 			get {
-				return typeof (Universe.Action).IsAssignableFrom (Type);
+				return typeof (Act).IsAssignableFrom (Type);
 			}
 		}
 

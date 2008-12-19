@@ -8,7 +8,7 @@ PKG_CONFIG_FILES = do.universe.pc
 
 FILES = \
 	src/AssemblyInfo.cs \
-	src/Do.Universe/Action.cs \
+	src/Do.Universe/Act.cs \
 	src/Do.Universe/ContactItem.cs \
 	src/Do.Universe/Element.cs \
 	src/Do.Universe/EmptyElement.cs \

@@ -29,7 +29,8 @@ using Do.Platform;
 namespace Do.Universe.Common
 {
 
-	public class RunAction : Action {
+	public class RunAction : Act
+	{
 
 		public override string Name {
 			get { return Catalog.GetString ("Run"); }

@@ -128,7 +128,7 @@ namespace Do.Core
 
 			// If no icon found among ItemSources, look for an icon among
 			// Actions:		
-			icon = ObjectsForAddin<Universe.Action> (id)
+			icon = ObjectsForAddin<Act> (id)
 				.Select (source => source.IconSafe)
 				.FirstOrDefault ();
 			if (icon != null) return icon;
@@ -146,8 +146,8 @@ namespace Do.Core
 		/// <value>
 		/// All loaded Actions.
 		/// </value>
-		public static IEnumerable<Universe.Action> Actions {
-			get { return AddinManager.GetExtensionObjects ("/Do/Action").OfType<Universe.Action> (); }
+		public static IEnumerable<Act> Actions {
+			get { return AddinManager.GetExtensionObjects ("/Do/Action").OfType<Act> (); }
 		}
 
 		/// <summary>
@@ -199,7 +199,7 @@ namespace Do.Core
 			switch (change) {
 			case ExtensionChange.Add:
 				try {
-					Universe.Action action = node.GetInstance () as Universe.Action;
+					Act action = node.GetInstance () as Act;
 					Log.Info ("Loaded \"{0}\" action.", action.NameSafe);
 				} catch (Exception e) {
 					Log.Error ("Encountered error loading action: {0} \"{1}\"",
@@ -209,7 +209,7 @@ namespace Do.Core
 				break;
 			case ExtensionChange.Remove:
 				try {
-					Universe.Action action = node.GetInstance () as Universe.Action;
+					Act action = node.GetInstance () as Act;
 					Log.Info ("Unloaded \"{0}\" action.", action.NameSafe);
 				} catch (Exception e) {
 					Log.Error ("Encountered error unloading action: {0} \"{1}\"",

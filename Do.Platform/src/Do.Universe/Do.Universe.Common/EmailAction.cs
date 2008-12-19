@@ -28,7 +28,7 @@ using Do.Platform;
 
 namespace Do.Universe.Common
 {
-	public class EmailAction : Action
+	public class EmailAction : Act
 	{
 		public override string Name {
 			get {

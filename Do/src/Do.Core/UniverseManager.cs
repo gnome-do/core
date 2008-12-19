@@ -77,7 +77,7 @@ namespace Do.Core
 		
 		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, Element other)
 		{
-			if (filter.Count () == 1 && filter.First () == typeof (Universe.Action))
+			if (filter.Count () == 1 && filter.First () == typeof (Act))
 				return Search (query, filter, PluginManager.Actions.OfType<Element> (), other);
 			else
 				lock (universe_lock) 
@@ -181,10 +181,10 @@ namespace Do.Core
 		void ReloadActions ()
 		{
 			lock (universe_lock) {
-				foreach (Universe.Action action in PluginManager.Actions) {
+				foreach (Act action in PluginManager.Actions) {
 					universe.Remove (action.UniqueId);
 				}
-				foreach (Universe.Action action in PluginManager.Actions) {
+				foreach (Act action in PluginManager.Actions) {
 						universe [action.UniqueId] = action;			
 				}
 			}

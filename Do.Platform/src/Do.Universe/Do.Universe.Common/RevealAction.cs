@@ -28,7 +28,7 @@ using Do.Platform;
 
 namespace Do.Universe.Common
 {
-	public class RevealAction : Action
+	public class RevealAction : Act
 	{
 		
 		public override string Name {

@@ -24,7 +24,7 @@ using System.Collections.Generic;
 namespace Do.Universe
 {	
 
-	public abstract class Action : Element
+	public abstract class Act : Element
 	{
 		
 		/// <value>

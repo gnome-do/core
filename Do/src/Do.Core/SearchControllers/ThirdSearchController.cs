@@ -38,11 +38,11 @@ namespace Do.Core
 				if (FirstController.Selection == null || SecondController.Selection == null)
 					return false;
 				
-				Universe.Action action;
-				if (FirstController.Selection is Universe.Action) {
-					action = FirstController.Selection as Universe.Action;
-				} else if (SecondController.Selection is Universe.Action) {
-					action = SecondController.Selection as Universe.Action;
+				Act action;
+				if (FirstController.Selection is Act) {
+					action = FirstController.Selection as Act;
+				} else if (SecondController.Selection is Act) {
+					action = SecondController.Selection as Act;
 				} else {
 					return false;
 				}
@@ -81,11 +81,11 @@ namespace Do.Core
 					textMode = value;
 					textModeFinalize = false;
 				} else {
-					Universe.Action action;
-					if (FirstController.Selection is Universe.Action)
-						action = FirstController.Selection as Universe.Action;
-					else if (SecondController.Selection is Universe.Action)
-						action = SecondController.Selection as Universe.Action;
+					Act action;
+					if (FirstController.Selection is Act)
+						action = FirstController.Selection as Act;
+					else if (SecondController.Selection is Act)
+						action = SecondController.Selection as Act;
 					else
 						return; //you have done something weird, ignore it!
 					
@@ -147,21 +147,21 @@ namespace Do.Core
 
 		private Element[] GetContextResults ()
 		{
-			Universe.Action action;
+			Act action;
 			Item item;
 			List<Item> items = new List<Item> ();
-			if (FirstController.Selection is Universe.Action) {
+			if (FirstController.Selection is Act) {
 				
-				action = FirstController.Selection as Universe.Action;
+				action = FirstController.Selection as Act;
 				item   = SecondController.Selection as Item;
 				foreach (Element obj in SecondController.FullSelection) {
 					if (obj is Item)
 						items.Add (obj as Item);
 				}
 				
-			} else if (SecondController.Selection is Universe.Action) {
+			} else if (SecondController.Selection is Act) {
 				
-				action = SecondController.Selection as Universe.Action;
+				action = SecondController.Selection as Act;
 				item   = FirstController.Selection as Item;
 				foreach (Element obj in FirstController.FullSelection) {
 					if (obj is Item)

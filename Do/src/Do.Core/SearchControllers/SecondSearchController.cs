@@ -131,15 +131,15 @@ namespace Do.Core
 				
 				//We need to find actions for this item
 				//TODO -- Make this work for multiple items
-				foreach (Universe.Action action in initresults) {
+				foreach (Act action in initresults) {
 					if (action.SupportsItemSafe (item)) {
 						results.Add (action);
 					}
 				}
 				
-			} else if (FirstController.Selection is Universe.Action) {
+			} else if (FirstController.Selection is Act) {
 				//We need to find items for this action
-				Universe.Action action = FirstController.Selection as Universe.Action;
+				Act action = FirstController.Selection as Act;
 				if (!textMode) {
 					foreach (Item item in initresults) {
 						if (action.SupportsItemSafe (item))
@@ -218,17 +218,17 @@ namespace Do.Core
 
 		public override IEnumerable<Type> SearchTypes {
 			get { 
-				if (FirstController.Selection is Universe.Action) {
+				if (FirstController.Selection is Act) {
 					// the basic idea here is that if the first controller selection is an action
 					// we can move right to filtering on what it supports.  This is not strictly needed,
 					// but speeds up searches since we get more specific results back.  Returning a
 					// typeof (Item) would have the same effect here and MUST be used to debug.
 					// ----return new Type[] {typeof (Item)};
-					return (FirstController.Selection as Universe.Action).SupportedItemTypes;
+					return (FirstController.Selection as Act).SupportedItemTypes;
 				} else {
 					if (TextMode)
 						return new [] { typeof (ITextItem) };
-					return new [] { typeof (Universe.Action) };
+					return new [] { typeof (Act) };
 				}
 			}
 		}
@@ -256,8 +256,8 @@ namespace Do.Core
 				if (!value) {
 					textMode = value;
 					textModeFinalize = false;
-				} else if (FirstController.Selection is Universe.Action) {
-					Universe.Action action = FirstController.Selection as Universe.Action;
+				} else if (FirstController.Selection is Act) {
+					Act action = FirstController.Selection as Act;
 					foreach (Type t in action.SupportedItemTypes) {
 						if (t == typeof (ITextItem) && action.SupportsItemSafe (new ImplicitTextItem (Query))) {
 							textMode = value;

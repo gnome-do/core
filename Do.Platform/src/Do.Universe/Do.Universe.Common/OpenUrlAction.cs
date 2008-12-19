@@ -29,7 +29,7 @@ using Do.Platform;
 namespace Do.Universe.Common
 {
 
-	public class OpenUrlAction : Action
+	public class OpenUrlAction : Act
 	{
 
 		// URL regex taken from http://www.osix.net/modules/article/?id=586

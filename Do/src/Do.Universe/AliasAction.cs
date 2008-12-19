@@ -26,7 +26,7 @@ using Mono.Unix;
 namespace Do.Universe
 {
 	
-	class AliasAction : Action
+	class AliasAction : Act
 	{
 		
 		public override string Name {

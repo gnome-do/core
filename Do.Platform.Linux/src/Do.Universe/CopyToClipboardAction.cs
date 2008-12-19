@@ -33,7 +33,7 @@ using Do.Universe;
 namespace Do.Universe.Linux
 {
 
-	public class CopyToClipboardAction : Action
+	public class CopyToClipboardAction : Act
 	{
 
 		public override string Name {

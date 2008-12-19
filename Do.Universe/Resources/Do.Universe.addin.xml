@@ -5,7 +5,7 @@
 	</Runtime>
 	
 	<ExtensionPoint path="/Do/Action">
-		<ExtensionNode name="Action" objectType="Do.Universe.Action"/>
+		<ExtensionNode name="Action" objectType="Do.Universe.Act"/>
 	</ExtensionPoint>
 		<ExtensionPoint path="/Do/ItemSource">
 		<ExtensionNode name="ItemSource" objectType="Do.Universe.ItemSource"/>

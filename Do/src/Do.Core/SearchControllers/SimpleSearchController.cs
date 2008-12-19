@@ -192,7 +192,7 @@ namespace Do.Core
 		
 		public bool ItemChildSearch ()
 		{
-			if (context.Selection is Universe.Action)
+			if (context.Selection is Act)
 				return false;
 			
 			Item item = context.Selection as Item;

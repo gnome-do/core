@@ -32,7 +32,7 @@ namespace Do.Universe.Common
 	/// <summary>
 	/// A command providing "open with..." semantics to file items.
 	/// </summary>
-	public class OpenWithAction : Action {
+	public class OpenWithAction : Act {
 		
 		public override string Name {
 			get { return Catalog.GetString ("Open With..."); }

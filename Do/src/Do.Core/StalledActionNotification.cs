@@ -26,7 +26,6 @@ using Do.Platform;
 namespace Do.Core
 {
 	
-	
 	class StalledActionNotification : ActionableNotification
 	{
 
