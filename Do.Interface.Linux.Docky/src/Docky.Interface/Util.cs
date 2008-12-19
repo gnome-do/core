@@ -37,10 +37,10 @@ namespace Docky.Interface
 	public static class Util
 	{
 		
-		public static Surface GetBorderedTextSurface (string text, int max_width)
+		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar)
 		{
 			Surface sr;
-			sr = new Cairo.ImageSurface (Cairo.Format.Argb32, max_width, 20);
+			sr = similar.CreateSimilar (similar.Content, max_width, 20);
 			
 			Context cr = new Context (sr);
 			

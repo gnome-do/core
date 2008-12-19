@@ -39,7 +39,7 @@ namespace Docky.Interface
 		DateTime DockAddItem { get; set; }
 		
 		Surface GetIconSurface (Surface similar);
-		Surface GetTextSurface ();
+		Surface GetTextSurface (Surface similar);
 		
 		void Clicked (uint button, IDoController controller);
 		void SetIconRegion (Gdk.Rectangle region);

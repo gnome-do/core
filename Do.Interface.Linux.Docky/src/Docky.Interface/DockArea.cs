@@ -420,7 +420,8 @@ namespace Docky.Interface
 				cr.PaintWithAlpha (InputAreaOpacity);
 			}
 			
-			if (DockIconOpacity > 0) {
+			bool isNotSummonTransition = InputAreaOpacity == 0 || CursorIsOverDockArea || !DockPreferences.AutoHide;
+			if (DockIconOpacity > 0 && isNotSummonTransition) {
 				if (dock_icon_buffer == null)
 					dock_icon_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				
@@ -494,8 +495,8 @@ namespace Docky.Interface
 				cr.Fill ();
 			}
 			
-			if (DockItemForX (Cursor.X) == icon && CursorIsOverDockArea && DockItems[icon].GetTextSurface () != null) {
-				cr.SetSource (DockItems[icon].GetTextSurface (), 
+			if (DockItemForX (Cursor.X) == icon && CursorIsOverDockArea && DockItems[icon].GetTextSurface (cr.Target) != null) {
+				cr.SetSource (DockItems[icon].GetTextSurface (cr.Target), 
 				              IconNormalCenterX (icon) - (DockPreferences.TextWidth / 2), 
 				              Height - 2 * IconSize - 28);
 				cr.Paint ();
@@ -818,6 +819,8 @@ namespace Docky.Interface
 		{
 			interface_change_time = DateTime.UtcNow;
 			InputInterfaceVisible = false;
+			
+			AnimatedDraw ();
 		}
 		
 		public void Reset ()

@@ -115,10 +115,10 @@ namespace Docky.Interface
 			return icon_surface;
 		}
 		
-		public Surface GetTextSurface ()
+		public Surface GetTextSurface (Surface similar)
 		{
 			if (sr == null)
-				sr = Util.GetBorderedTextSurface (item.Name, DockPreferences.TextWidth);
+				sr = Util.GetBorderedTextSurface (item.Name, DockPreferences.TextWidth, similar);
 			return sr;
 		}
 		

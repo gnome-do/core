@@ -103,7 +103,7 @@ namespace Docky.Interface
 			cr.Color = new Cairo.Color (0, 0, 0, 1);
 			cr.Paint ();
 			
-			InputShapeCombineMask (pixmap, (dock_area.Width-width)/2, dock_area.Height-heightOffset);
+			InputShapeCombineMask (pixmap, (dock_area.Width - width) / 2, dock_area.Height - heightOffset);
 			
 			(cr as IDisposable).Dispose ();
 			pixmap.Dispose ();
@@ -124,7 +124,8 @@ namespace Docky.Interface
 		
 		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
 		{
-			KeyPressEvent (evnt);
+			if (dock_area.InputInterfaceVisible)
+				KeyPressEvent (evnt);
 			return base.OnKeyPressEvent (evnt);
 		}
 
@@ -236,7 +237,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public bool ResultsCanHide { get { return false; } }
+		public bool ResultsCanHide { get { return true; } }
 		
 		#endregion 
 		
