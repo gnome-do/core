@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Cairo;
 using Gdk;
@@ -47,9 +48,7 @@ namespace Docky.Interface.Renderers
 			};
 		}
 		
-		static PixbufSurfaceCache LargeIconCache {
-			get; set;
-		}
+		static PixbufSurfaceCache LargeIconCache { get; set; }
 		
 		static string HighlightFormat { 
 			get { 
