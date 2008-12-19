@@ -274,7 +274,7 @@ namespace Do.Core {
 				second = GetSelection (Pane.Second);
 				action = first as Act ?? second as Act;
 				return action != null &&
-					action.SupportedModifierItemTypes.Any () &&
+					action.SupportedModifierItemTypesSafe.Any () &&
 					controllers[1].Results.Any ();
 			}
 		}
@@ -294,8 +294,8 @@ namespace Do.Core {
 				action = first as Act ?? second as Act;
 				item = first as Item ?? second as Item;
 				return action != null && item != null &&
-					action.SupportedModifierItemTypes.Any () &&
-					!action.ModifierItemsOptional &&
+					action.SupportedModifierItemTypesSafe.Any () &&
+					!action.ModifierItemsOptionalSafe &&
 					controllers[1].Results.Any ();
 			}
 		}

@@ -39,7 +39,7 @@ namespace Do.Universe
 		/// provides/supports (e.g.  FirefoxBookmarkItem instead of Item or
 		/// BookmarkItem).
 		/// </value>
-		public abstract IEnumerable<Type> SupportedItemTypes { get; }
+		protected abstract IEnumerable<Type> SupportedItemTypes { get; }
 		
 		/// <value>
 		/// The Items provided by this source.
@@ -71,6 +71,12 @@ namespace Do.Universe
 		}
 
 		#region Safe alternatives
+
+		public IEnumerable<Type> SupportedItemTypesSafe {
+			get {
+				return SupportedItemTypes ?? Type.EmptyTypes;
+			}
+		}
 		
 		public void UpdateItemsSafe ()
 		{

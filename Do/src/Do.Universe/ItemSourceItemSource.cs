@@ -51,7 +51,7 @@ namespace Do.Universe
 			items = Enumerable.Empty<Item> ();
 		}
 		
-		public override IEnumerable<Type> SupportedItemTypes
+		protected override IEnumerable<Type> SupportedItemTypes
 		{
 			get { yield return typeof (ItemSourceItem); }
 		}

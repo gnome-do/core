@@ -156,7 +156,7 @@ namespace Do.Core {
 					relevance *= 0.8f;
 
 				// Penalize actions that require modifier items.
-				if (!oa.ModifierItemsOptional)
+				if (!oa.ModifierItemsOptionalSafe)
 					relevance *= 0.8f;
 
 				if (PenalizedActionTypes.Contains (rec.Type))

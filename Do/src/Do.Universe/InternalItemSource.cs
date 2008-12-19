@@ -28,7 +28,7 @@ namespace Do.Universe
 	public class InternalItemSource : ItemSource
 	{
 		
-		public override IEnumerable<Type> SupportedItemTypes {
+		protected override IEnumerable<Type> SupportedItemTypes {
 			get { yield break; }
 		}
 		

@@ -31,7 +31,7 @@ namespace Do.Universe
 		/// An array of Item sub-interfaces that this action supports.
 		/// null is ok--it signifies that NO types are supported.
 		/// </value>
-		public abstract IEnumerable<Type> SupportedItemTypes { get; }
+		protected abstract IEnumerable<Type> SupportedItemTypes { get; }
 		
 		/// <value>
 		/// An array of Item sub-interfaces that this action supports as modifier
@@ -41,7 +41,7 @@ namespace Do.Universe
 		/// here, your action will not work with modifier items.
 		/// null is ok--it signifies that NO types are supported.
 		/// </value>
-		public virtual IEnumerable<Type> SupportedModifierItemTypes {
+		protected virtual IEnumerable<Type> SupportedModifierItemTypes {
 			get { yield break; }
 		}
 		
@@ -49,7 +49,7 @@ namespace Do.Universe
 		/// Whether modifier items are optional (if you indicate that modifier
 		/// items are /not/ optional, this means that they are required).
 		/// </value>
-		public virtual bool ModifierItemsOptional {
+		protected virtual bool ModifierItemsOptional {
 			get { return false; }
 		}
 		
@@ -128,6 +128,24 @@ namespace Do.Universe
 
 
 		#region Safe alternatives
+
+		public IEnumerable<Type> SupportedItemTypesSafe {
+			get {
+				return SupportedItemTypes ?? Type.EmptyTypes;
+			}
+		}
+		
+		public IEnumerable<Type> SupportedModifierItemTypesSafe {
+			get {
+				return SupportedModifierItemTypes ?? Type.EmptyTypes;
+			}
+		}
+
+		public bool ModifierItemsOptionalSafe {
+			get {
+				return ModifierItemsOptional;
+			}
+		}
 
 		public IEnumerable<Item> DynamicModifierItemsForItemSafe (Item item)
 		{

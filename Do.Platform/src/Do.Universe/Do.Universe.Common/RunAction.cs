@@ -44,7 +44,7 @@ namespace Do.Universe.Common
 			get { return "gnome-run"; }
 		}
 		
-		public override IEnumerable<Type> SupportedItemTypes
+		protected override IEnumerable<Type> SupportedItemTypes
 		{
 			get {
 				yield return typeof (IRunnableItem);

@@ -43,7 +43,7 @@ namespace Do.Universe.Common
 			get { return "file-manager"; }
 		}
 		
-		public override IEnumerable<Type> SupportedItemTypes {
+		protected override IEnumerable<Type> SupportedItemTypes {
 			get { yield return typeof (IFileItem); }
 		}
 		

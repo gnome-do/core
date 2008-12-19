@@ -63,7 +63,7 @@ namespace Do.Universe.Common
 			get { return "web-browser"; }
 		}
 		
-		public override IEnumerable<Type> SupportedItemTypes {
+		protected override IEnumerable<Type> SupportedItemTypes {
 			get {
 				yield return typeof (IUrlItem);
 				yield return typeof (ITextItem);

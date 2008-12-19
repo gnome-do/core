@@ -46,7 +46,7 @@ namespace Do.Universe.Common
 			get { return "gtk-open"; }
 		}
 		
-		public override IEnumerable<Type> SupportedItemTypes {
+		protected override IEnumerable<Type> SupportedItemTypes {
 			get {
 				yield return typeof (IOpenableItem);
 				yield return typeof (IUriItem);

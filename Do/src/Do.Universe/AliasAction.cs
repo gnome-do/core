@@ -41,15 +41,15 @@ namespace Do.Universe
 			get { return "emblem-symbolic-link"; }
 		}
 
-		public override IEnumerable<Type> SupportedItemTypes {
+		protected override IEnumerable<Type> SupportedItemTypes {
 			get { yield return typeof (Item);  }
 		}
 
-		public override IEnumerable<Type> SupportedModifierItemTypes {
+		protected override IEnumerable<Type> SupportedModifierItemTypes {
 			get { yield return typeof (ITextItem); }
 		}
 
-		public override bool ModifierItemsOptional {
+		protected override bool ModifierItemsOptional {
 			get { return false; }
 		}
 

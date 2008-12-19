@@ -41,7 +41,7 @@ namespace Do.Universe
 			get { return "gtk-delete"; }
 		}
 
-		public override IEnumerable<Type> SupportedItemTypes {
+		protected override IEnumerable<Type> SupportedItemTypes {
 			get { yield return typeof (Item); }
 		}
 

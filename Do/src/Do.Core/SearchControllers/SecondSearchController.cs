@@ -224,7 +224,7 @@ namespace Do.Core
 					// but speeds up searches since we get more specific results back.  Returning a
 					// typeof (Item) would have the same effect here and MUST be used to debug.
 					// ----return new Type[] {typeof (Item)};
-					return (FirstController.Selection as Act).SupportedItemTypes;
+					return (FirstController.Selection as Act).SupportedItemTypesSafe;
 				} else {
 					if (TextMode)
 						return new [] { typeof (ITextItem) };
@@ -258,7 +258,7 @@ namespace Do.Core
 					textModeFinalize = false;
 				} else if (FirstController.Selection is Act) {
 					Act action = FirstController.Selection as Act;
-					foreach (Type t in action.SupportedItemTypes) {
+					foreach (Type t in action.SupportedItemTypesSafe) {
 						if (t == typeof (ITextItem) && action.SupportsItemSafe (new ImplicitTextItem (Query))) {
 							textMode = value;
 							textModeFinalize = false;

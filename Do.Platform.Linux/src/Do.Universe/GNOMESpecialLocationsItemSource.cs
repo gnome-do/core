@@ -65,7 +65,7 @@ namespace Do.Universe.Linux {
 		
 		protected override string Icon  { get { return "user-home"; } }
 
-		public override IEnumerable<Type> SupportedItemTypes {
+		protected override IEnumerable<Type> SupportedItemTypes {
 			get {
 				yield return typeof (IUriItem);
 			}

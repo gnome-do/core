@@ -46,7 +46,7 @@ namespace Do.Universe.Common
 			get { return "stock_mail-compose"; }
 		}
 
-		public override IEnumerable<Type> SupportedItemTypes {
+		protected override IEnumerable<Type> SupportedItemTypes {
 			get {
 				yield return typeof (ContactItem);
 				yield return typeof (IContactDetailItem);
@@ -54,14 +54,14 @@ namespace Do.Universe.Common
 			}
 		}
 
-		public override IEnumerable<Type> SupportedModifierItemTypes {
+		protected override IEnumerable<Type> SupportedModifierItemTypes {
 			get {
 				yield return typeof (IFileItem);
 				yield return typeof (ITextItem);
 			}
 		}
 
-		public override bool ModifierItemsOptional {
+		protected override bool ModifierItemsOptional {
 			get { return true; }
 		}
 

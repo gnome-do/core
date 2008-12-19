@@ -47,7 +47,7 @@ namespace Do.Core
 					return false;
 				}
 				
-				return action.SupportedModifierItemTypes.Any ();
+				return action.SupportedModifierItemTypesSafe.Any ();
 			}
 		}
 		
@@ -89,7 +89,7 @@ namespace Do.Core
 					else
 						return; //you have done something weird, ignore it!
 					
-					foreach (Type t in action.SupportedModifierItemTypes) {
+					foreach (Type t in action.SupportedModifierItemTypesSafe) {
 						if (t == typeof (ITextItem)) {
 							textMode = value;
 							textModeFinalize = false;
@@ -174,7 +174,7 @@ namespace Do.Core
 			}
 
 			// If we support nothing, dont search.
-			if (!action.SupportedModifierItemTypes.Any ()) return null;
+			if (!action.SupportedModifierItemTypesSafe.Any ()) return null;
 			
 			List<Element> results = new List<Element> ();
 

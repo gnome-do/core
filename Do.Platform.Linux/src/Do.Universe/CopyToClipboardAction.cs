@@ -48,7 +48,7 @@ namespace Do.Universe.Linux
 			get { return "edit-paste"; }
 		}
 		
-		public override IEnumerable<Type> SupportedItemTypes {
+		protected override IEnumerable<Type> SupportedItemTypes {
 			get { yield return typeof (Item); }
 		}
 		
