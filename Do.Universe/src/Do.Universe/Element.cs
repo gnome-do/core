@@ -137,7 +137,9 @@ namespace Do.Universe
 
 		public int CompareTo (object o)
 		{
-			return o is Element ? CompareTo (o as Element) : 0;
+			if (o is Element)
+				return CompareTo (o as Element);
+			throw new ArgumentException ("object is not an Element");
 		}
 
 		public int CompareTo (Element e)

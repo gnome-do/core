@@ -164,12 +164,12 @@ namespace Docky.Interface
 		
 		IEnumerable<Item> MostUsedItems ()
 		{
-			return statistics.GetMostUsedItems (DockPreferences.AutomaticIcons)
+			return statistics
+				.GetMostUsedItems (DockPreferences.AutomaticIcons)
 				.Where (item => item.GetType ().Name != "SelectedTextItem")
 				.OrderByDescending (item => item is IApplicationItem)
-				.ThenBy (item => item.GetType ())
-				.ThenBy (item => item.Name)
-				.Take (DockPreferences.AutomaticIcons);
+				.ThenBy (item => item.GetType ().Name)
+				.ThenBy (item => item.NameSafe);
 		}
 		
 		public bool RemoveItem (int item)
