@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+using System.Diagnostics;
+
 using Cairo;
 using Gdk;
 using Gtk;
@@ -51,12 +53,14 @@ namespace Docky.Interface
 		
 		Gdk.Point cursor;
 		
+		Gdk.Rectangle minimum_dock_area;
+		
 		DateTime last_click = DateTime.UtcNow;
 		DateTime enter_time = DateTime.UtcNow;
-		DateTime last_render = DateTime.UtcNow;
 		DateTime interface_change_time = DateTime.UtcNow;
 		
 		bool cursor_is_handle = false;
+		bool drag_resizing = false;
 		
 		int monitor_width;
 		int drag_start_y = 0;
@@ -70,23 +74,35 @@ namespace Docky.Interface
 		#region public properties
 		public bool InputInterfaceVisible { get; set; }
 		
+		/// <value>
+		/// The width of the docks window, but not the visible dock
+		/// </value>
 		public int Width {
 			get { return monitor_width; }
 		}
 		
+		/// <value>
+		/// The height of the docks window
+		/// </value>
 		public int Height { 
 			get { return WindowHeight; } 
 		}
 		
+		/// <value>
+		/// The width of the visible dock
+		/// </value>
 		public int DockWidth {
 			get {
-				int val = 2*HorizontalBuffer;
+				int val = 2 * HorizontalBuffer;
 				foreach (IDockItem di in DockItems)
-					val += 2*IconBorderWidth + di.Width;
+					val += 2 * IconBorderWidth + di.Width;
 				return val;
 			}
 		}
 		
+		/// <summary>
+		/// The height of the visible dock
+		/// </summary>
 		public int DockHeight {
 			get {
 				return DockPreferences.AutoHide ? 0 : MinimumDockArea.Height;
@@ -114,12 +130,17 @@ namespace Docky.Interface
 		}
 		#endregion
 		
-		IStatistics Statistics { get; set; }
-		
 		new DockState State { get; set; }
 		
 		IDockItem[] DockItems { 
 			get { return item_provider.DockItems.ToArray (); } 
+		}
+		
+		IDockItem CurrentDockItem {
+			get {
+				try { return DockItems[DockItemForX (Cursor.X)]; }
+				catch { return null; }
+			}
 		}
 		
 		#region Zoom Properties
@@ -129,8 +150,8 @@ namespace Docky.Interface
 		double ZoomIn {
 			get {
 				if (CursorIsOverDockArea)
-					return Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds/BaseAnimationTime);
-				return Math.Max (0, 1 - (DateTime.UtcNow - enter_time).TotalMilliseconds/BaseAnimationTime);
+					return Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
+				return Math.Max (0, 1 - (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
 			}
 		}
 		
@@ -139,7 +160,7 @@ namespace Docky.Interface
 		/// </value>
 		int ZoomPixels {
 			get {
-				return (int) (DockPreferences.ZoomSize*ZoomIn);
+				return (int) (DockPreferences.ZoomSize * ZoomIn);
 			}
 		}
 		
@@ -216,6 +237,9 @@ namespace Docky.Interface
 			}
 		}
 		
+		/// <value>
+		/// The center of the stick icon
+		/// </value>
 		Gdk.Point StickIconCenter {
 			get {
 				Gdk.Rectangle rect = GetDockArea ();
@@ -225,8 +249,22 @@ namespace Docky.Interface
 		
 		Gdk.Rectangle MinimumDockArea {
 			get {
-				int x_offset = (Width - DockWidth)/2;
-				return new Gdk.Rectangle (x_offset, Height-IconSize - 2*VerticalBuffer, DockWidth, IconSize + 2*VerticalBuffer);
+				if (minimum_dock_area.X == 0 && minimum_dock_area.Y == 0 && 
+				    minimum_dock_area.Width == 0 && minimum_dock_area.Height == 0) {
+					// we never have a zero dock area, zeroing it is a signal to force a recalculation.  Since
+					// we use this value a LOT we dont want to recalculate it more than once per draw
+					
+					int x_offset = (Width - DockWidth) / 2;
+					minimum_dock_area = new Gdk.Rectangle (x_offset, Height - IconSize - 2 * VerticalBuffer, DockWidth, 
+					                                       IconSize + 2 * VerticalBuffer);
+				}
+				return minimum_dock_area;
+			}
+		}
+		
+		bool CursorNearDraggableEdge {
+			get {
+				return CursorIsOverDockArea && Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 && CurrentDockItem is SeparatorItem;
 			}
 		}
 		
@@ -298,12 +336,12 @@ namespace Docky.Interface
 		
 		public DockArea (DockWindow window, IStatistics statistics) : base ()
 		{
-			Statistics = statistics;
 			this.window = window;
 			item_provider = new DockItemProvider (statistics);
 			State = new DockState ();
 			
 			Cursor = new Gdk.Point (-1, -1);
+			minimum_dock_area = new Gdk.Rectangle ();
 			
 			Gdk.Rectangle geo;
 			geo = Screen.GetMonitorGeometry (0);
@@ -327,6 +365,13 @@ namespace Docky.Interface
 				SetParentInputMask ();
 				return false;
 			});
+		}
+		
+		public Surface GetSimilar (int width, int height)
+		{
+			if (backbuffer == null)
+				throw new Exception ("DockArea is not fully initialized");
+			return backbuffer.CreateSimilar (backbuffer.Content, width, height);
 		}
 		
 		void RegisterEvents ()
@@ -368,7 +413,7 @@ namespace Docky.Interface
 				
 				using (Context input_cr = new Context (input_area_buffer)) {
 					input_cr.AlphaFill ();
-					Renderers.SummonModeRenderer.RenderSummonMode (input_cr, State, dockArea, VerticalBuffer);
+					Renderers.SummonModeRenderer.RenderSummonMode (input_cr, State, dockArea, VerticalBuffer, this);
 				}
 				
 				cr.SetSource (input_area_buffer);
@@ -387,7 +432,7 @@ namespace Docky.Interface
 						DrawThumbnailIcon (input_cr);
 				}
 				
-				cr.SetSource (dock_icon_buffer, 0, IconSize * (1-DockIconOpacity));
+				cr.SetSource (dock_icon_buffer, 0, IconSize * (1 - DockIconOpacity));
 				cr.PaintWithAlpha (DockIconOpacity);
 			}
 		}
@@ -402,37 +447,47 @@ namespace Docky.Interface
 		{
 			int center;
 			double zoom;
-			
 			IconPositionedCenterX (icon, out center, out zoom);
 			
 			double insertion_ms = (DateTime.UtcNow - DockItems[icon].DockAddItem).TotalMilliseconds;
 			if (insertion_ms < InsertAnimationTime) {
-				zoom *= insertion_ms/InsertAnimationTime;
+				// if we just inserted the icon, we scale it down the newer it is.  This gives the nice
+				// zoom in effect for newly inserted icons
+				zoom *= insertion_ms / InsertAnimationTime;
 			}
 			
-			double x = (1/zoom)*(center - zoom*IconSize/2);
-			double y = (1/zoom)*(Height-(zoom*IconSize)) - VerticalBuffer;
+			// This gives the actual x,y coordinates of the icon 
+			double x = (center - zoom * IconSize / 2);
+			double y = (Height - (zoom * IconSize)) - VerticalBuffer;
 			
 			int total_ms = (int) (DateTime.UtcNow - DockItems[icon].LastClick).TotalMilliseconds;
 			if (total_ms < BounceTime) {
-				y -= Math.Abs (20*Math.Sin (total_ms*Math.PI/(BounceTime/2)));
+				y -= Math.Abs (20 * Math.Sin (total_ms * Math.PI / (BounceTime / 2)));
 			}
 			
 			double scale = zoom/DockPreferences.IconQuality;
+			
 			if (DockItems[icon].Scalable) {
 				cr.Scale (scale, scale);
-				cr.SetSource (DockItems[icon].GetIconSurface (), x*DockPreferences.IconQuality, y*DockPreferences.IconQuality);
+				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom
+				// the icon, not move it around.
+				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), x * (1 / scale), y * (1 / scale));
 				cr.Paint ();
-				cr.Scale (1/scale, 1/scale);
+				cr.Scale (1 / scale, 1 / scale);
 			} else {
-				cr.SetSource (DockItems[icon].GetIconSurface (), x*zoom, Height-DockItems[icon].Height-(MinimumDockArea.Height-DockItems[icon].Height)/2);
+				// since these dont scale, we have some extra work to do to keep them centered
+				double startx = x + (zoom*DockItems[icon].Width - DockItems[icon].Width) / 2;
+				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), 
+				              (int) startx, 
+				              Height - DockItems[icon].Height - (MinimumDockArea.Height - DockItems[icon].Height) / 2);
 				cr.Paint ();
 			}
 			
 			if (DockItems[icon].DrawIndicator) {
+				// draws a simple triangle indicator.  Should be replaced by something nicer some day
 				cr.MoveTo (center, Height - 6);
-				cr.LineTo (center+4, Height);
-				cr.LineTo (center-4, Height);
+				cr.LineTo (center + 4, Height);
+				cr.LineTo (center - 4, Height);
 				cr.ClosePath ();
 				
 				cr.Color = new Cairo.Color (1, 1, 1, .7);
@@ -440,7 +495,9 @@ namespace Docky.Interface
 			}
 			
 			if (DockItemForX (Cursor.X) == icon && CursorIsOverDockArea && DockItems[icon].GetTextSurface () != null) {
-				cr.SetSource (DockItems[icon].GetTextSurface (), IconNormalCenterX (icon)-(DockPreferences.TextWidth/2), Height-2*IconSize-28);
+				cr.SetSource (DockItems[icon].GetTextSurface (), 
+				              IconNormalCenterX (icon) - (DockPreferences.TextWidth / 2), 
+				              Height - 2 * IconSize - 28);
 				cr.Paint ();
 			}
 		}
@@ -449,7 +506,7 @@ namespace Docky.Interface
 		{
 			Gdk.Point center = StickIconCenter;
 			
-			double opacity = 1.0/Math.Abs (center.X-Cursor.X)*30 - .2;
+			double opacity = 1.0/Math.Abs (center.X - Cursor.X) * 30 - .2;
 			
 			cr.Arc (center.X, center.Y, 3.5, 0, Math.PI*2);
 			cr.LineWidth = 1;
@@ -468,9 +525,9 @@ namespace Docky.Interface
 			//the first icons center is at dock X + border + IconBorder + half its width
 			if (!DockItems.Any ())
 				return 0;
-			int start_x = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth + (DockItems[0].Width/2);
+			int start_x = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth + (DockItems[0].Width / 2);
 			for (int i=0; i<icon; i++)
-				start_x += DockItems[i].Width + 2*IconBorderWidth;
+				start_x += DockItems[i].Width + 2 * IconBorderWidth;
 			return start_x;
 		}
 		
@@ -478,9 +535,9 @@ namespace Docky.Interface
 		{
 			int start_x = MinimumDockArea.X + HorizontalBuffer;
 			for (int i=0; i<DockItems.Length; i++) {
-				if (x >= start_x && x <= start_x+DockItems[i].Width+2*IconBorderWidth)
+				if (x >= start_x && x <= start_x + DockItems[i].Width + 2 * IconBorderWidth)
 					return i;
-				start_x += DockItems[i].Width + 2*IconBorderWidth;
+				start_x += DockItems[i].Width + 2 * IconBorderWidth;
 			}
 			return -1;
 		}
@@ -488,13 +545,13 @@ namespace Docky.Interface
 		void IconPositionedCenterX (int icon, out int x, out double zoom)
 		{
 			int center = IconNormalCenterX (icon);
-			int offset = Math.Min (Math.Abs (Cursor.X - center), ZoomPixels/2);
+			int offset = Math.Min (Math.Abs (Cursor.X - center), ZoomPixels / 2);
 			
-			if (ZoomPixels/2 == 0)
+			if (ZoomPixels / 2 == 0) {
 				zoom = 1;
-			else {
-				zoom = DockPreferences.ZoomPercent - (offset/(double)(ZoomPixels/2))*(DockPreferences.ZoomPercent-1);
-				zoom = (zoom-1)*ZoomIn+1;
+			} else {
+				zoom = DockPreferences.ZoomPercent - (offset / (double)(ZoomPixels / 2)) * (DockPreferences.ZoomPercent - 1);
+				zoom = (zoom - 1) * ZoomIn + 1;
 			}
 			
 			offset = (int) ((offset*Math.Sin ((Math.PI/4)*zoom)) * (DockPreferences.ZoomPercent-1));
@@ -517,10 +574,10 @@ namespace Docky.Interface
 			IconPositionedCenterX (0, out start_x, out start_zoom);
 			IconPositionedCenterX (DockItems.Length - 1, out end_x, out end_zoom);
 			
-			int x = start_x - (int)(start_zoom*(IconSize/2)) - HorizontalBuffer;
-			int end = end_x + (int)(end_zoom*(IconSize/2)) + HorizontalBuffer;
+			int x = start_x - (int)(start_zoom * (IconSize / 2)) - HorizontalBuffer;
+			int end = end_x + (int)(end_zoom * (IconSize / 2)) + HorizontalBuffer;
 			
-			return new Gdk.Rectangle (x, Height-IconSize-2*VerticalBuffer, end-x, IconSize+2*VerticalBuffer);
+			return new Gdk.Rectangle (x, Height - IconSize - 2 * VerticalBuffer, end - x, IconSize + 2 * VerticalBuffer);
 		}
 		
 		void OnDockItemsChanged (IEnumerable<IDockItem> items)
@@ -551,14 +608,15 @@ namespace Docky.Interface
 		}
 		
 		#region Drag To Code
-		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time_)
+		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{
 			Cursor = new Gdk.Point (x, y);
 			AnimatedDraw ();
-			return base.OnDragMotion (context, x, y, time_);
+			return base.OnDragMotion (context, x, y, time);
 		}
 
-		protected override void OnDragDataReceived (Gdk.DragContext context, int x, int y, Gtk.SelectionData selectionData, uint info, uint time)
+		protected override void OnDragDataReceived (Gdk.DragContext context, int x, int y, Gtk.SelectionData selectionData, 
+		                                            uint info, uint time)
 		{
 			string data = System.Text.Encoding.UTF8.GetString ( selectionData.Data );
 			//sometimes we get a null at the end, and it crashes us
@@ -575,9 +633,10 @@ namespace Docky.Interface
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
 			bool ret_val = base.OnExposeEvent (evnt);
+			// clear the dock area cache... this will cause it to recalculate.
+			minimum_dock_area = new Gdk.Rectangle ();
 			if (!IsDrawable)
 				return ret_val;
-			last_render = DateTime.UtcNow;
 			
 			if (backbuffer == null) {
 				Context tmp = Gdk.CairoHelper.Create (GdkWindow);
@@ -600,45 +659,58 @@ namespace Docky.Interface
 			
 			return ret_val;
 		}
- 
+		
 		protected override bool OnMotionNotifyEvent(EventMotion evnt)
 		{
 			bool tmp = CursorIsOverDockArea;
+			
+			Gdk.Point old_cursor_location = Cursor;
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
 			
-			if (cursor_is_handle && !((evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask))
-				EndDrag ();
-			
-			if (Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 || (cursor_is_handle && (evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask)) {
-				int item = DockItemForX (Cursor.X);
-				if (!cursor_is_handle && item > 0 && DockItems[item] is SeparatorItem) {
-					GdkWindow.Cursor = new Gdk.Cursor (CursorType.TopSide);
-					cursor_is_handle = true;
-					drag_start_y = Cursor.Y;
-					drag_start_icon_size = DockPreferences.IconSize;
-				}
+			if (CursorNearDraggableEdge && !cursor_is_handle) {
+				Gdk.Cursor top_cursor = new Gdk.Cursor (CursorType.TopSide);
+				GdkWindow.Cursor = top_cursor;
+				top_cursor.Dispose ();
+				cursor_is_handle = true;
+			} else if (!CursorNearDraggableEdge && cursor_is_handle && !drag_resizing) {
+				Gdk.Cursor normal_cursor = new Gdk.Cursor (CursorType.LeftPtr);
+				GdkWindow.Cursor = normal_cursor;
+				normal_cursor.Dispose ();
+				cursor_is_handle = false;
 			}
-			if (cursor_is_handle && (evnt.State & ModifierType.Button1Mask) == ModifierType.Button1Mask) {
+
+			if (drag_resizing)
 				DockPreferences.IconSize = drag_start_icon_size + (drag_start_y - Cursor.Y);
-			}
 			
-			if (tmp != CursorIsOverDockArea || CursorIsOverDockArea && DateTime.UtcNow.Subtract (last_render).TotalMilliseconds > 20) 
+			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && (old_cursor_location.X != Cursor.X);
+
+			if (tmp != CursorIsOverDockArea || drag_resizing || cursorMoveWarrantsDraw) 
 				AnimatedDraw ();
+			
 			return base.OnMotionNotifyEvent (evnt);
 		}
+		
+		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
+		{
+			if (CursorNearDraggableEdge)
+				StartDrag ();
+			
+			return base.OnButtonPressEvent (evnt);
+		}
+
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			bool ret_val = base.OnButtonPressEvent (evnt);
 			
 			// lets not do anything in this case
-			if (cursor_is_handle) {
+			if (drag_resizing) {
 				EndDrag ();
 				return ret_val;
 			}
 			
 			// we are hovering over the pin icon
-			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X-4, StickIconCenter.Y-4, 8, 8);
+			Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X - 4, StickIconCenter.Y - 4, 8, 8);
 			if (stick_rect.Contains (Cursor)) {
 				DockPreferences.AutoHide = !DockPreferences.AutoHide;
 				window.SetStruts ();
@@ -652,7 +724,8 @@ namespace Docky.Interface
 			
 			//handling right clicks
 			if (evnt.Button == 3) {
-				if (item_provider.GetIconSource (DockItems[item]) == IconSource.Custom || item_provider.GetIconSource (DockItems[item]) == IconSource.Statistics)
+				if (item_provider.GetIconSource (DockItems[item]) == IconSource.Custom || 
+				    item_provider.GetIconSource (DockItems[item]) == IconSource.Statistics)
 					ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
 				return ret_val;
 			}
@@ -691,10 +764,16 @@ namespace Docky.Interface
 			base.OnStyleSet (previous_style);
 		}
 		
+		void StartDrag ()
+		{
+			drag_start_y = Cursor.Y;
+			drag_start_icon_size = DockPreferences.IconSize;
+			drag_resizing = true;
+		}
+		
 		void EndDrag ()
 		{
-			GdkWindow.Cursor = new Gdk.Cursor (CursorType.LeftPtr);
-			cursor_is_handle = false;
+			drag_resizing = false;
 		}
 		
 		void SetIconRegions ()
@@ -704,7 +783,8 @@ namespace Docky.Interface
 			
 			for (int i=0; i<DockItems.Length; i++) {
 				int x = IconNormalCenterX (i);
-				DockItems[i].SetIconRegion (new Gdk.Rectangle (pos.X + (x-IconSize/2), pos.Y + (Height-VerticalBuffer-IconSize), IconSize, IconSize));
+				DockItems[i].SetIconRegion (new Gdk.Rectangle (pos.X + (x - IconSize / 2), 
+				                                               pos.Y + (Height - VerticalBuffer - IconSize), IconSize, IconSize));
 			}
 		}
 		

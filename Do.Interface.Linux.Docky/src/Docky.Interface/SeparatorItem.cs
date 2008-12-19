@@ -34,10 +34,10 @@ namespace Docky.Interface
 		Surface sr;
 		#region IDockItem implementation 
 		
-		public Surface GetIconSurface ()
+		public Surface GetIconSurface (Surface buffer)
 		{
 			if (sr == null) {
-				sr = new ImageSurface (Cairo.Format.Argb32, Width, DockPreferences.IconSize);
+				sr = buffer.CreateSimilar (buffer.Content, Width, DockPreferences.IconSize);
 				Context cr = new Context (sr);
 				cr.AlphaFill ();
 				
