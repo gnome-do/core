@@ -128,14 +128,15 @@ namespace Do.Universe
 
 
 		#region Safe alternatives
-		
+
 		public IEnumerable<Item> DynamicModifierItemsForItemSafe (Item item)
 		{
 			IEnumerable<Item> modItems = null;
 
 			item = ProxyItem.Unwrap (item);
 
-			if (!SupportedModifierItemTypes.Any (type => type.IsInstanceOfType (item)))
+			// This is a duplicate check, so we may want to remove it.
+			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item)))
 				return Enumerable.Empty<Item> ();
 			
 			try {
@@ -143,7 +144,7 @@ namespace Do.Universe
 				modItems = DynamicModifierItemsForItem (item).ToArray ();
 			} catch (Exception e) {
 				modItems = null;
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in DynamicModifierItemsForItem: {2}", GetType (), NameSafe, e.Message);
+				LogSafeError ("DynamicModifierItemsForItem", e);
 				// Log.Debug (e.StackTrace);
 			} finally {
 				modItems = modItems ?? Enumerable.Empty<Item> ();
@@ -155,13 +156,13 @@ namespace Do.Universe
 		{
 			item = ProxyItem.Unwrap (item);
 			
-			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item))) return false;
+			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item)))
+				return false;
 
 			try {
 				return SupportsItem (item);
 			} catch (Exception e) {
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in SupportsItem: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
+				LogSafeError ("SupportsItem", e);
 			}
 			return false;
 		}
@@ -171,13 +172,13 @@ namespace Do.Universe
 			items = ProxyItem.Unwrap (items);
 			modItem = ProxyItem.Unwrap (modItem);
 			
-			if (!SupportedModifierItemTypes.Any (type => type.IsInstanceOfType (modItem))) return false;
+			if (!SupportedModifierItemTypes.Any (type => type.IsInstanceOfType (modItem)))
+				return false;
 
 			try {
 				return SupportsModifierItemForItems (items, modItem);
 			} catch (Exception e) {
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in SupportsModifierItemForItems: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
+			 	LogSafeError ("SupportsModifierItemForItems", e);
 			}
 			return false;
 		}
@@ -195,8 +196,7 @@ namespace Do.Universe
 				if (results != null) results = results.ToArray ();
 			} catch (Exception e) {
 				results = null;
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Perform: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
+				LogSafeError ("Perform", e);
 			} finally {
 				results = results ?? Enumerable.Empty<Item> ();
 			}
