@@ -179,7 +179,7 @@ namespace Docky.Interface
 				SerializeCustomItems ();
 			
 			if (GetIconSource (DockItems[item]) == IconSource.Statistics) {
-				DockPreferences.AddBlacklistItem (Util.UIDForElement ((DockItems[item] as DockItem).Element));
+				DockPreferences.AddBlacklistItem ((DockItems[item] as DockItem).Element.UniqueId);
 				UpdateItems ();
 				return true;
 			} else if (GetIconSource (DockItems[item]) == IconSource.Custom) {

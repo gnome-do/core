@@ -29,15 +29,15 @@ namespace Do.Universe
 	internal class ClearLearningItem : Item, IRunnableItem
 	{
 		
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("Clear Learning"); }
 		}
 		
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Resets Do's learned usage data."); }
 		}
 		
-		public override string Icon {
+		protected override string Icon {
 			get { return "edit-clear"; }
 		}
 		

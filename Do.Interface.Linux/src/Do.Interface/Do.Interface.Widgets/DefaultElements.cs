@@ -35,9 +35,9 @@ namespace Do.Interface.Widgets
 			this.query = query;
 		}
 
-		public override string Icon { get { return "gtk-dialog-question"; } }
-		public override string Name { get { return Catalog.GetString (string.Format("No results for {0}", query)); } }
-		public override string Description {
+		protected override string Icon { get { return "gtk-dialog-question"; } }
+		protected override string Name { get { return Catalog.GetString (string.Format("No results for {0}", query)); } }
+		protected override string Description {
 			get {
 				return string.Format (Catalog.GetString (string.Format("No results found for {0}", query)));
 			}
@@ -46,15 +46,15 @@ namespace Do.Interface.Widgets
 	
 	public class DefaultIconBoxElement : Element
 	{
-		public override string Icon { get { return "search"; } }
-		public override string Name { get { return ""; } }
-		public override string Description { get { return ""; } }
+		protected override string Icon { get { return "search"; } }
+		protected override string Name { get { return ""; } }
+		protected override string Description { get { return ""; } }
 	}
 	
 	public class DefaultLabelBoxElement : Element
 	{
-		public override string Icon { get { return "search"; } }
-		public override string Name { get { return Catalog.GetString ("Type to begin searching"); } }
-		public override string Description { get { return Catalog.GetString ("Type to start searching."); } }
+		protected override string Icon { get { return "search"; } }
+		protected override string Name { get { return Catalog.GetString ("Type to begin searching"); } }
+		protected override string Description { get { return Catalog.GetString ("Type to start searching."); } }
 	}
 }

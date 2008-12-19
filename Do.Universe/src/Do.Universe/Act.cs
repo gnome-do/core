@@ -64,7 +64,7 @@ namespace Do.Universe
 		/// A <see cref="System.Boolean"/> indicating whether or not to accept the
 		/// item.
 		/// </returns>
-		public virtual bool SupportsItem (Item item)
+		protected virtual bool SupportsItem (Item item)
 		{
 			return true;
 		}
@@ -89,7 +89,7 @@ namespace Do.Universe
 		/// A <see cref="System.Boolean"/> indicating whether this action supports
 		/// the particular modifier item for the items in the Item array.
 		/// </returns>
-		public virtual bool SupportsModifierItemForItems (IEnumerable<Item> items, Item modItem)
+		protected virtual bool SupportsModifierItemForItems (IEnumerable<Item> items, Item modItem)
 		{
 			return true;
 		}
@@ -106,7 +106,7 @@ namespace Do.Universe
 		/// An <see cref="Item[]"/> containing items to use as modifier items.
 		/// null is ok--it signifies that no modifier items are provided.
 		/// </returns>
-		public virtual IEnumerable<Item> DynamicModifierItemsForItem (Item item)
+		protected virtual IEnumerable<Item> DynamicModifierItemsForItem (Item item)
 		{
 			yield break;
 		}
@@ -124,7 +124,7 @@ namespace Do.Universe
 		/// A <see cref="Item[]"/> of result items to present to the user.
 		/// You may return null--this is the same as returning an empty array.
 		/// </returns>
-		public abstract IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems);
+		protected abstract IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems);
 
 
 		#region Safe alternatives

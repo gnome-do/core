@@ -24,8 +24,8 @@ namespace Do.Universe
 {
 	public class EmptyItem : Item
 	{
-		public override string Name { get { return ""; } }
-		public override string Description { get { return ""; } }
-		public override string Icon { get { return ""; } }
+		protected override string Name { get { return ""; } }
+		protected override string Description { get { return ""; } }
+		protected override string Icon { get { return ""; } }
 	}
 }

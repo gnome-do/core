@@ -45,7 +45,7 @@ namespace Do.Universe
 		/// The Items provided by this source.
 		/// null is ok---it signifies that no items are provided.
 		/// </value>
-		public virtual IEnumerable<Item> Items {
+		protected virtual IEnumerable<Item> Items {
 			get { yield break; }
 		}
 		
@@ -55,7 +55,7 @@ namespace Do.Universe
 		/// null is ok---it signifies that no children are provided for the Item
 		/// argument.
 		/// </summary>
-		public virtual IEnumerable<Item> ChildrenOfItem (Item item)
+		protected virtual IEnumerable<Item> ChildrenOfItem (Item item)
 		{
 			yield break;
 		}
@@ -66,7 +66,7 @@ namespace Do.Universe
 		/// Example: Re-read bookmarks from the filesystem or check for new email,
 		/// etc.
 		/// </summary>
-		public virtual void UpdateItems ()
+		protected virtual void UpdateItems ()
 		{
 		}
 
@@ -77,8 +77,7 @@ namespace Do.Universe
 			try {
 				UpdateItems ();
 			} catch (Exception e) {
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in UpdateItems: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
+				LogSafeError ("UpdateItems", e);
 			}
 		}
 		
@@ -92,8 +91,7 @@ namespace Do.Universe
 					items = Items.ToArray ();
 				} catch (Exception e) {
 					items = null;
-					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Items: {2}", GetType (), NameSafe, e.Message);
-					// Log.Debug (e.StackTrace);
+					LogSafeError ("Items", e);
 				} finally {
 					items = items ?? Enumerable.Empty<Item> ();
 				}
@@ -116,8 +114,7 @@ namespace Do.Universe
 				children = ChildrenOfItem (item).ToArray ();
 			} catch (Exception e) {
 				children = null;
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in ChildrenOfItem: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
+				LogSafeError ("ChildrenOfItem", e);
 			} finally {
 				children = children ?? Enumerable.Empty<Item> ();
 			}

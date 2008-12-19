@@ -32,15 +32,15 @@ namespace Do.Universe.Common
 	public class RunAction : Act
 	{
 
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("Run"); }
 		}
 		
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Run an application, script, or other executable."); }
 		}
 		
-		public override string Icon {
+		protected override string Icon {
 			get { return "gnome-run"; }
 		}
 		
@@ -55,7 +55,7 @@ namespace Do.Universe.Common
 			}
 		}
 
-		public override bool SupportsItem (Item item)
+		protected override bool SupportsItem (Item item)
 		{
 			string command = "";
 
@@ -69,7 +69,7 @@ namespace Do.Universe.Common
 			return Services.Environment.IsExecutable (command);
 		}
 		
-		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			foreach (Item item in items) {
 				if (item is IRunnableItem) {

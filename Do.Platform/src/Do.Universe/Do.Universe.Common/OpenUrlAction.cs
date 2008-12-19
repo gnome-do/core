@@ -51,15 +51,15 @@ namespace Do.Universe.Common
 			url_regex = new Regex (UrlPattern, RegexOptions.Compiled);
 		}
 		
-		public override string Name {
+		protected override string Name {
 			get { return  Catalog.GetString ("Open URL"); }
 		}
 		
-		public override string Description {
+		protected override string Description {
 			get { return  Catalog.GetString ("Opens bookmarks and manually-typed URLs."); }
 		}
 		
-		public override string Icon {
+		protected override string Icon {
 			get { return "web-browser"; }
 		}
 		
@@ -70,14 +70,14 @@ namespace Do.Universe.Common
 			}
 		}
 
-		public override bool SupportsItem (Item item)
+		protected override bool SupportsItem (Item item)
 		{
 			if (item is ITextItem)
 				return url_regex.IsMatch ((item as ITextItem).Text);
 			return true;
 		}
 		
-		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			IEnvironmentService env = Services.Environment;
 

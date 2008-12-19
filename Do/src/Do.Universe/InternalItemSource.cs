@@ -32,19 +32,19 @@ namespace Do.Universe
 			get { yield break; }
 		}
 		
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("Internal GNOME Do Items"); }
 		}
 		
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Special items relevant to the inner-workings of GNOME Do."); }
 		}
 		
-		public override string Icon {
+		protected override string Icon {
 			get { return "gnome-system"; }
 		}
 		
-		public override IEnumerable<Item> Items {
+		protected override IEnumerable<Item> Items {
 			get {
 				yield return new SelectedTextItem ();
 				yield return new PreferencesItem ();

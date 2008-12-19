@@ -34,15 +34,15 @@ namespace Do.Universe.Common
 	/// </summary>
 	public class OpenWithAction : Act {
 		
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("Open With..."); }
 		}
 		
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Opens files in specific applications."); }
 		}
 		
-		public override string Icon {
+		protected override string Icon {
 			get { return "gtk-open"; }
 		}
 		
@@ -54,7 +54,7 @@ namespace Do.Universe.Common
 			get { yield return typeof (IApplicationItem); }
 		}
 		
-		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			foreach (IApplicationItem app in modItems)
 				app.LaunchWithFiles (items.Cast<IFileItem> ());

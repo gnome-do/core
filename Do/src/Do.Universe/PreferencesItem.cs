@@ -27,15 +27,15 @@ namespace Do.Universe
 	public class PreferencesItem : Item, IRunnableItem
 	{
 		
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("GNOME Do Preferences"); }
 		}
 		
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Adjust settings, manage plugins, etc."); }
 		}
 		
-		public override string Icon {
+		protected override string Icon {
 			get { return "gtk-preferences"; }
 		}
 		

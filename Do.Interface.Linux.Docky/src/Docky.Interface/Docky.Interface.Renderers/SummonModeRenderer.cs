@@ -77,7 +77,7 @@ namespace Docky.Interface.Renderers
 					icon = "gtk-delete";
 					break;
 				case DrawState.Normal:
-					icon = state[pane].Icon;
+					icon = state[pane].IconSafe;
 					break;
 				case DrawState.Text:
 					icon = "gnome-mime-text";
@@ -127,7 +127,7 @@ namespace Docky.Interface.Renderers
 		static void RenderNormalText (Context cr, DockState state, Gdk.Rectangle dockArea, Gtk.Widget widget)
 		{
 			int base_x = dockArea.X + 15;
-			string text = GLib.Markup.EscapeText (state[state.CurrentPane].Name);
+			string text = GLib.Markup.EscapeText (state[state.CurrentPane].NameSafe);
 			text = Do.Interface.Util.FormatCommonSubstrings (text, state.GetPaneQuery (state.CurrentPane), HighlightFormat);
 			
 			int tmp = BezelTextUtils.TextHeight;
@@ -147,7 +147,7 @@ namespace Docky.Interface.Renderers
 			                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.End, widget);
 			if ((int) (12 * text_scale) > 8) {
 				BezelTextUtils.TextHeight = (int) (12 * text_scale);
-				BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (state[state.CurrentPane].Description), 
+				BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (state[state.CurrentPane].DescriptionSafe), 
 				                                 base_x + text_offset, dockArea.Y + (int) (42 * text_scale), 
 				                                 (int) (500 * text_scale), color, Pango.Alignment.Left, Pango.EllipsizeMode.End, widget);
 			}
@@ -163,7 +163,7 @@ namespace Docky.Interface.Renderers
 			if (current is ITextItem)
 				text = GLib.Markup.EscapeText ((current as ITextItem).Text);
 			else
-				text = GLib.Markup.EscapeText (current.Name);
+				text = GLib.Markup.EscapeText (current.NameSafe);
 			
 			int tmp = BezelTextUtils.TextHeight;
 			
@@ -194,7 +194,7 @@ namespace Docky.Interface.Renderers
 			if (current is ITextItem)
 				text = GLib.Markup.EscapeText ((current as ITextItem).Text);
 			else
-				text = GLib.Markup.EscapeText (current.Name);
+				text = GLib.Markup.EscapeText (current.NameSafe);
 			
 			int tmp = BezelTextUtils.TextHeight;
 			

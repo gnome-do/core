@@ -662,9 +662,9 @@ namespace Do.Interface.AnimationBase
 				string render_string = context.Cursor+1 + " of " + Results.Count + "  ▸  ";
 				if (context.ParentContext != null && context.ParentContext.Selection != null) {
 					if (context.ParentContext.ParentContext != null && context.ParentContext.ParentContext.Selection != null) {
-						render_string += context.ParentContext.ParentContext.Selection.Name + " ▸ ";
+						render_string += context.ParentContext.ParentContext.Selection.NameSafe + " ▸ ";
 					}
-					render_string += context.ParentContext.Selection.Name + " ▸ ";
+					render_string += context.ParentContext.Selection.NameSafe + " ▸ ";
 				}
 				
 				RenderText (cr, new Gdk.Rectangle (10, height-BottomBorderWidth+3, width-20, 20), 11, render_string);

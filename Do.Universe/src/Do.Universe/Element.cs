@@ -65,15 +65,15 @@ namespace Do.Universe
 		/// The human-readable name of the element.
 		/// Example: The name of an application, like "Pidgin Internet Messenger."
 		/// </value>
-		public abstract string Name { get; }
+		protected abstract string Name { get; }
 		
 		/// <value>
 		/// The human-readable description of the element.
 		/// Example: The URL of a bookmark or absolute path of a file.
 		/// </value>
-		public abstract string Description { get; }
+		protected abstract string Description { get; }
 		
-		public abstract string Icon { get; }
+		protected abstract string Icon { get; }
 
 		#region Safe alternatives
 		

@@ -436,7 +436,7 @@ namespace Do.Core {
 		{
 			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
 			if (SearchController.Selection != null)
-				clip.Text = SearchController.Selection.Name;
+				clip.Text = SearchController.Selection.NameSafe;
 		}
 		
 		void OnActivateKeyPressEvent (EventKey evnt)

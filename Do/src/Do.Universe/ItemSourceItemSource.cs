@@ -34,9 +34,9 @@ namespace Do.Universe
 
 			public ItemSource Source { get; private set; }
 
-			public override string Name { get { return Source.Name; } }
-			public override string Description { get { return Source.Description; } }
-			public override string Icon { get { return Source.Icon; } }
+			protected override string Name { get { return Source.NameSafe; } }
+			protected override string Description { get { return Source.DescriptionSafe; } }
+			protected override string Icon { get { return Source.IconSafe; } }
 
 			public ItemSourceItem (ItemSource source)
 			{
@@ -56,30 +56,30 @@ namespace Do.Universe
 			get { yield return typeof (ItemSourceItem); }
 		}
 		
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("GNOME Do Item Sources"); }
 		}
 		
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Item Sources providing all items GNOME Do knows about."); }
 		}
 		
-		public override string Icon {
+		protected override string Icon {
 			get { return "gnome-do"; }
 		}
 		
-		public override IEnumerable<Item> Items {
+		protected override IEnumerable<Item> Items {
 			get { return items; }
 		}
 
-		public override void UpdateItems ()
+		protected override void UpdateItems ()
 		{
 			items = PluginManager.ItemSources
 				.Select (source => new ItemSourceItem (source))
 				.Cast<Item> ();
 		}
 		
-		public override IEnumerable<Item> ChildrenOfItem (Item item)
+		protected override IEnumerable<Item> ChildrenOfItem (Item item)
 		{
 			return (item as ItemSourceItem).Source.ItemsSafe;
 		}

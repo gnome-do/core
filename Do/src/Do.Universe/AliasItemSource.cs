@@ -141,19 +141,19 @@ namespace Do.Universe
 			return -1;
 		}
 		
-		public override string Name {
+		protected override string Name {
 			get {
 				return Catalog.GetString ("Alias items");
 			}
 		}
 
-		public override string Description {
+		protected override string Description {
 			get {
 				return Catalog.GetString ("Aliased items from Do's universe.");
 			}
 		}
 
-		public override string Icon {
+		protected override string Icon {
 			get {
 				return "emblem-symbolic-link";
 			}
@@ -163,7 +163,7 @@ namespace Do.Universe
 			get { yield return typeof (AliasItem); }
 		}
 
-		public override IEnumerable<Item> Items {
+		protected override IEnumerable<Item> Items {
 			get {
 				List<Item> items;
 				

@@ -29,15 +29,15 @@ namespace Do.Universe
 	class AliasAction : Act
 	{
 		
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("Assign Alias...");  }
 		}
 
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Give an item an alternate name."); }
 		}
 
-		public override string Icon {
+		protected override string Icon {
 			get { return "emblem-symbolic-link"; }
 		}
 
@@ -53,7 +53,7 @@ namespace Do.Universe
 			get { return false; }
 		}
 
-		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			string alias;
 			

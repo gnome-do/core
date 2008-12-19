@@ -325,14 +325,14 @@ namespace Do.Interface.AnimationBase
 			cr2.Fill ();
 			cr2.Operator = Operator.Over;
 			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.Icon, IconSize);
+			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.IconSafe, IconSize);
 			Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 2, 2);
 			cr2.Paint ();
 				
 			Pango.Layout layout = new Pango.Layout (this.PangoContext);
 			layout.Width = Pango.Units.FromPixels (width - IconSize - 10);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
-			layout.SetMarkup ("<span foreground=\"#ffffff\">"+item.Name+"</span>");
+			layout.SetMarkup ("<span foreground=\"#ffffff\">"+item.NameSafe+"</span>");
 			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (10);
 				

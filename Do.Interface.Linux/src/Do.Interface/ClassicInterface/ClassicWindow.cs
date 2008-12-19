@@ -390,7 +390,7 @@ namespace Do.Interface {
 						iconbox[i].Clear ();
 						iconbox[i].DisplayObject = noRes;
 						if (i == (int) CurrentPane) {
-							label.SetDisplayLabel (noRes.Name, noRes.Description);
+							label.SetDisplayLabel (noRes.NameSafe, noRes.DescriptionSafe);
 							resultsWindow.Clear ();
 						}
 					}
@@ -416,7 +416,7 @@ namespace Do.Interface {
 			if (pane == CurrentPane) {
 				resultsWindow.Context = context;
 				if (!context.LargeTextDisplay)
-					label.SetDisplayLabel (context.Selection.Name, context.Selection.Description);
+					label.SetDisplayLabel (context.Selection.NameSafe, context.Selection.DescriptionSafe);
 				else
 					label.SetDisplayLabel ("", "Raw Text Mode");
 			}

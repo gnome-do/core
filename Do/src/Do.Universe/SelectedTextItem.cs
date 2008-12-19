@@ -50,15 +50,15 @@ namespace Do.Universe
 			get { return TextItem; }
 		}
 
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("Selected text"); }
 		}
 
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Currently selected text."); }
 		}
 
-		public override string Icon {
+		protected override string Icon {
 			get { return "gtk-select-all"; }
 		}
 

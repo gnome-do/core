@@ -59,8 +59,8 @@ namespace Do.Interface.Widgets
 				displayObject = value;
 				name = description = highlight = "";
 				if (displayObject != null) {
-					name = displayObject.Name;
-					description = displayObject.Description;
+					name = displayObject.NameSafe;
+					description = displayObject.DescriptionSafe;
 				}
 				SetDisplayLabel (name, description);
 			}

@@ -27,15 +27,15 @@ namespace Do.Universe
 {	
 	public class QuitItem : Item, IRunnableItem
 	{		
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("Quit GNOME Do"); }
 		}
 		
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Quit GNOME Do"); }
 		}
 		
-		public override string Icon {
+		protected override string Icon {
 			get { return "process-stop"; }
 		}
 		

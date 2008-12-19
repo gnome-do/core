@@ -67,10 +67,5 @@ namespace Docky.Interface
 			layout.Dispose ();
 			return sr;
 		}
-		
-		public static string UIDForElement (Element obj)
-		{
-			return obj.Name + obj.Description + obj.Icon;
-		}
 	}
 }

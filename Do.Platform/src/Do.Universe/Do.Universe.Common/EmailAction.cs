@@ -30,19 +30,19 @@ namespace Do.Universe.Common
 {
 	public class EmailAction : Act
 	{
-		public override string Name {
+		protected override string Name {
 			get {
 				return Catalog.GetString ("Email");
 			}
 		}
 
-		public override string Description {
+		protected override string Description {
 			get {
 				return Catalog.GetString ("Compose a new email to a friend.");
 			}
 		}
 
-		public override string Icon {
+		protected override string Icon {
 			get { return "stock_mail-compose"; }
 		}
 
@@ -65,7 +65,7 @@ namespace Do.Universe.Common
 			get { return true; }
 		}
 
-		public override bool SupportsItem (Item item)
+		protected override bool SupportsItem (Item item)
 		{
 			if (item is ContactItem) {
 				return (item as ContactItem).Details.Any (d => d.StartsWith ("email"));
@@ -80,7 +80,7 @@ namespace Do.Universe.Common
 			return false;
 		}
 
-		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			string subject, body;
 			IEnumerable<string> recipients, texts, files;

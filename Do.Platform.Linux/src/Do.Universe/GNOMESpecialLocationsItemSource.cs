@@ -47,23 +47,23 @@ namespace Do.Universe.Linux {
 				this.icon = icon;
 			}
 			
-			public override string Name { get { return name; } }
-			public override string Description { get { return Uri; } }
-			public override string Icon { get { return icon; } }
+			protected override string Name { get { return name; } }
+			protected override string Description { get { return Uri; } }
+			protected override string Icon { get { return icon; } }
 			public string Uri { get { return uri; } }
 		}
 			
-		public override string Name  { 
+		protected override string Name  { 
 			get { return Catalog.GetString ("GNOME Special Locations"); } 
 		}
 		
-		public override string Description  {
+		protected override string Description  {
 			get { return Catalog.GetString ("Special locations in GNOME, "
 				+ "such as Computer and Network.");
 			} 
 		}
 		
-		public override string Icon  { get { return "user-home"; } }
+		protected override string Icon  { get { return "user-home"; } }
 
 		public override IEnumerable<Type> SupportedItemTypes {
 			get {
@@ -71,11 +71,11 @@ namespace Do.Universe.Linux {
 			}
 		}
 		
-		public override IEnumerable<Item> Items {
+		protected override IEnumerable<Item> Items {
 			get { return items; }
 		}
 		
-		public override void UpdateItems ()
+		protected override void UpdateItems ()
 		{
 			items.Clear ();			
 			items.Add (new GNOMETrashFileItem ());
@@ -171,11 +171,11 @@ namespace Do.Universe.Linux {
 			}
 		}
 
-		public override string Name  {
+		protected override string Name  {
 			get { return "Trash"; }
 		}
 
-		public override string Description  {
+		protected override string Description  {
 			get { return "Trash"; }
 		}
 
@@ -183,7 +183,7 @@ namespace Do.Universe.Linux {
 			get { return "trash://"; }
 		}
 
-		public override string Icon 
+		protected override string Icon 
 		{
 			get {
 				if (Directory.Exists (Path) &&
@@ -220,11 +220,11 @@ namespace Do.Universe.Linux {
 			get { return path; }
 		}		
 		
-		public override string Name  {
+		protected override string Name  {
 			get { return name; }
 		}		
 		
-		public override string Description  { 
+		protected override string Description  { 
 			get { return uri + path; } 
 		}
 
@@ -232,7 +232,7 @@ namespace Do.Universe.Linux {
 			get { return uri; }
 		}		
 		
-		public override string Icon  {
+		protected override string Icon  {
 			get { return icon; }
 		}
 		

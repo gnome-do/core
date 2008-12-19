@@ -231,7 +231,7 @@ namespace Do.Interface.Widgets
 			
 			Gdk.Pixbuf final;
 			if (isSecondary) {
-				using (Gdk.Pixbuf source = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize))
+				using (Gdk.Pixbuf source = IconProvider.PixbufFromIconName (o.IconSafe, DefaultResultIconSize))
 				using (Gdk.Pixbuf emblem = IconProvider.PixbufFromIconName ("gtk-add", DefaultResultIconSize)) {
 					final = new Pixbuf (Colorspace.Rgb, 
 					                    true, 
@@ -254,7 +254,7 @@ namespace Do.Interface.Widgets
 					                  220);
 				}
 			} else {
-				final = IconProvider.PixbufFromIconName (o.Icon, DefaultResultIconSize);
+				final = IconProvider.PixbufFromIconName (o.IconSafe, DefaultResultIconSize);
 			}
 			renderer.Pixbuf = final;
 			final.Dispose ();
@@ -352,7 +352,7 @@ namespace Do.Interface.Widgets
 			
 			int count = 0;
 			while (context.ParentContext != null && count < 2) {
-				builder.Insert (0, context.ParentContext.Selection.Name + " > ");
+				builder.Insert (0, context.ParentContext.Selection.NameSafe + " > ");
 				context = context.ParentContext;
 				count++;
 			}
@@ -415,8 +415,8 @@ namespace Do.Interface.Widgets
 					foreach (Element result in value) {					
 						
 						info = string.Format (ResultInfoFormat, 
-						                      GLib.Markup.EscapeText (result.Name), 
-						                      GLib.Markup.EscapeText (result.Description)); 
+						                      GLib.Markup.EscapeText (result.NameSafe), 
+						                      GLib.Markup.EscapeText (result.DescriptionSafe)); 
 						store.AppendValues (new object[] {
 							result,
 							info,

@@ -58,7 +58,7 @@ namespace Do.Interface.AnimationBase
 			cr.Fill ();
 			cr.Operator = Operator.Over;
 			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.Icon, IconSize);
+			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.IconSafe, IconSize);
 			Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 2, 2);
 			cr.Paint ();
 			
@@ -76,14 +76,14 @@ namespace Do.Interface.AnimationBase
 			Pango.Layout layout = new Pango.Layout (parent.PangoContext);
 			layout.Width = Pango.Units.FromPixels (width - IconSize - 25);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
-			layout.SetMarkup ("<span foreground=\"#" + parent.ItemTextColor + "\">"+GLib.Markup.EscapeText (item.Name)+"</span>");
+			layout.SetMarkup ("<span foreground=\"#" + parent.ItemTextColor + "\">"+GLib.Markup.EscapeText (item.NameSafe)+"</span>");
 			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (10);
 				
 			cr.MoveTo (IconSize + 6, 4);
 			Pango.CairoHelper.ShowLayout (cr, layout);
 			
-			layout.SetMarkup ("<span foreground=\"#" + parent.ItemTextColor + "\">"+GLib.Markup.EscapeText (item.Description)+"</span>");
+			layout.SetMarkup ("<span foreground=\"#" + parent.ItemTextColor + "\">"+GLib.Markup.EscapeText (item.DescriptionSafe)+"</span>");
 			layout.FontDescription.Dispose ();
 			layout.FontDescription = Pango.FontDescription.FromString ("normal");
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (10);
@@ -128,7 +128,7 @@ namespace Do.Interface.AnimationBase
 			cr.Fill ();
 			cr.Operator = Operator.Over;
 			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.Icon, IconSize);
+			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.IconSafe, IconSize);
 			Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 2, 2);
 			cr.Paint ();
 			
@@ -146,7 +146,7 @@ namespace Do.Interface.AnimationBase
 			Pango.Layout layout = new Pango.Layout (parent.PangoContext);
 			layout.Width = Pango.Units.FromPixels (width - IconSize - 25);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
-			layout.SetMarkup ("<span foreground=\"#" + parent.ItemTextColor + "\">"+GLib.Markup.EscapeText (item.Name)+"</span>");
+			layout.SetMarkup ("<span foreground=\"#" + parent.ItemTextColor + "\">"+GLib.Markup.EscapeText (item.NameSafe)+"</span>");
 			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
 			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (10);
 				

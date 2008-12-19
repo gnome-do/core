@@ -64,15 +64,15 @@ namespace Do.Universe.Linux {
 			get { yield return typeof (ApplicationItem); }
 		}
 
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("Applications"); }
 		}
 
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Finds applications in many locations."); }
 		}
 
-		public override string Icon {
+		protected override string Icon {
 			get { return "gnome-applications"; }
 		}
 
@@ -99,7 +99,7 @@ namespace Do.Universe.Linux {
 								(show_hidden || !app.NoDisplay));
 		}
 
-		public override void UpdateItems ()
+		protected override void UpdateItems ()
 		{
 			app_items = DesktopFilesDirectories
 				.Select (dir => dir.Replace ("~", Environment.GetFolderPath (Environment.SpecialFolder.Personal)))
@@ -108,7 +108,7 @@ namespace Do.Universe.Linux {
 				.ToArray ();
 		}
 
-		public override IEnumerable<Item> Items {
+		protected override IEnumerable<Item> Items {
 			get { return app_items; }
 		}
 

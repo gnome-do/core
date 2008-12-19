@@ -29,15 +29,15 @@ namespace Do.Universe
 	class DeleteAliasAction : Act
 	{
 		
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("Delete Alias"); }
 		}
 
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Deletes an alias."); }
 		}
 
-		public override string Icon {
+		protected override string Icon {
 			get { return "gtk-delete"; }
 		}
 
@@ -45,12 +45,12 @@ namespace Do.Universe
 			get { yield return typeof (Item); }
 		}
 
-		public override bool SupportsItem (Item item)
+		protected override bool SupportsItem (Item item)
 		{
 			return AliasItemSource.ItemHasAlias (item);
 		}
 
-		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			foreach (Item item in items)
 				AliasItemSource.Unalias (item);

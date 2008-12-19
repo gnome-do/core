@@ -735,7 +735,7 @@ namespace Do.Interface.AnimationBase
 		private void RenderPixbuf (Pane pane, Context cr)
 		{
 			Element obj = Context.GetPaneObject (pane);
-			RenderPixbuf (pane, cr, obj.Icon, 1);
+			RenderPixbuf (pane, cr, obj.IconSafe, 1);
 		}
 		
 		private void RenderPixbuf (Pane pane, Context cr, string icon, double alpha)
@@ -747,7 +747,7 @@ namespace Do.Interface.AnimationBase
 			
 			string sec_icon = "";
 			if (OldContext.GetPaneObject (pane) != null)
-				sec_icon = OldContext.GetPaneObject (pane).Icon;
+				sec_icon = OldContext.GetPaneObject (pane).IconSafe;
 			
 			double calc_alpha = (sec_icon != icon) ? icon_fade[(int) pane] : 1;
 			int x;
@@ -764,10 +764,10 @@ namespace Do.Interface.AnimationBase
 			if (string.IsNullOrEmpty (sec_icon) || calc_alpha < 1) 
 				return;
 			
-			if (!SurfaceCache.ContainsKey (OldContext.GetPaneObject (pane).Icon)) {
-				BufferIcon (cr, OldContext.GetPaneObject (pane).Icon);
+			if (!SurfaceCache.ContainsKey (OldContext.GetPaneObject (pane).IconSafe)) {
+				BufferIcon (cr, OldContext.GetPaneObject (pane).IconSafe);
 			}
-			cr.SetSource (SurfaceCache.GetSurface (OldContext.GetPaneObject (pane).Icon), x, y);
+			cr.SetSource (SurfaceCache.GetSurface (OldContext.GetPaneObject (pane).IconSafe), x, y);
 			cr.PaintWithAlpha (alpha * (1 - calc_alpha));
 		}
 		
@@ -780,14 +780,14 @@ namespace Do.Interface.AnimationBase
 		{
 			if (Context.GetPaneObject (Focus) == null)
 				return;
-			BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
+			BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).DescriptionSafe), drawing_area.X + 10,
 			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20, this);
 		}
 		
 		void RenderPaneText (Pane pane, Context cr)
 		{
 			if (Context.GetPaneObject (pane) != null)
-				RenderPaneText (pane, cr, GLib.Markup.EscapeText (Context.GetPaneObject (pane).Name));
+				RenderPaneText (pane, cr, GLib.Markup.EscapeText (Context.GetPaneObject (pane).NameSafe));
 		}
 		
 		void RenderPaneText (Pane pane, Context cr, string text)

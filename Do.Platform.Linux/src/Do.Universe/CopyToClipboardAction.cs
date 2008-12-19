@@ -36,15 +36,15 @@ namespace Do.Universe.Linux
 	public class CopyToClipboardAction : Act
 	{
 
-		public override string Name {
+		protected override string Name {
 			get { return Catalog.GetString ("Copy to Clipboard"); }
 		}
 		
-		public override string Description {
+		protected override string Description {
 			get { return Catalog.GetString ("Copy current text to clipboard"); }
 		}
 		
-		public override string Icon {
+		protected override string Icon {
 			get { return "edit-paste"; }
 		}
 		
@@ -52,7 +52,7 @@ namespace Do.Universe.Linux
 			get { yield return typeof (Item); }
 		}
 		
-		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			string text = "";
 			Item item = items.First ();
@@ -60,7 +60,7 @@ namespace Do.Universe.Linux
 			if (item is ITextItem)
 				text = (item as ITextItem).Text;
 			else
-				text = string.Format ("{0} - {1}", item.Name, item.Description);
+				text = string.Format ("{0} - {1}", item.NameSafe, item.DescriptionSafe);
 			
 			Clipboard.Get (Gdk.Selection.Clipboard).Text =
 				Clipboard.Get (Gdk.Selection.Primary).Text = text;
