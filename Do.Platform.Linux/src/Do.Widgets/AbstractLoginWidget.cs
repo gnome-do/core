@@ -134,9 +134,10 @@ namespace Do.Platform.Linux
 				return;
 			}
 
+			new_account_button.Uri = serviceUri;
+			validate_lbl.Markup = DefaultValidatingLabel;
 			new_account_lbl.Markup = string.Format (NewAccountLabelFormat, serviceName);
 			new_account_button.Label = string.Format (NewAccountButtonFormat, serviceName);
-			new_account_button.Uri = serviceUri;
 		}
 		
 		/// <summary>
