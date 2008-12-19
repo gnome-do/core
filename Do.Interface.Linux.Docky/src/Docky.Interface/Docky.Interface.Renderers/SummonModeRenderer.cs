@@ -71,7 +71,7 @@ namespace Docky.Interface.Renderers
 					continue;
 				
 				string icon = null;
-				double opacity = 1;
+				double opacity = .6 + zoom * .4;
 				switch (PaneDrawState (pane, state)) {
 				case DrawState.NoResult:
 					icon = "gtk-delete";
@@ -84,7 +84,7 @@ namespace Docky.Interface.Renderers
 					break;
 				case DrawState.ExplicitText:
 					icon = "gnome-mime-text";
-					opacity = .2;
+					opacity = .2 * opacity;
 					break;
 				case DrawState.None:
 					continue;
