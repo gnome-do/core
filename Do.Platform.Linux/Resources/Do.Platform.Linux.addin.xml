@@ -1,0 +1,34 @@
+<Addin id="Platform.Linux" namespace="Do" version="1.0">
+ 
+	<Runtime>
+		<Import assembly="Do.Platform.dll" />
+		<Import assembly="Do.Platform.Linux.dll" />
+	</Runtime>
+	
+	<Dependencies>
+		<Addin id="Platform" version="1.0" />
+		<Addin id="Universe" version="1.0" />
+	</Dependencies>
+	
+	<Extension path="/Do/ItemSource">
+		<ItemSource type="Do.Universe.Linux.ApplicationItemSource" />
+		<ItemSource type="Do.Universe.Linux.GNOMESpecialLocationsItemSource" />
+	</Extension>
+
+	<Extension path="/Do/Action">
+		<Action type="Do.Universe.Linux.CopyToClipboardAction" />
+	</Extension>
+
+	<Extension path="/Do/Service">
+		<Service type="Do.Platform.Common.PathsService" />
+		<Service type="Do.Platform.Common.EventsOnlyNotificationsService" />
+
+		<Service type="Do.Platform.Linux.TrayIconService" />
+		<Service type="Do.Platform.Linux.ConsoleLogService" />
+		<Service type="Do.Platform.Linux.EnvironmentService" />
+		<Service type="Do.Platform.Linux.UniverseFactoryService" />
+		<Service type="Do.Platform.Linux.GConfPreferencesService" />
+		<Service type="Do.Platform.Linux.GnomeKeyringSecurePreferencesService" />
+	</Extension>
+	
+</Addin>

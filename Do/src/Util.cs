@@ -34,104 +34,28 @@ using Mono.Unix;
 
 namespace Do
 {
-	public class Util
+
+	public static class Util
 	{
-		static Util ()
-		{
-		}
 
 		public static void Initialize ()
 		{
-			Addins.Util.GetInnerType = o => DoObject.Unwrap (o).GetType ();
-			
 			// Misc
-			Addins.Util.FormatCommonSubstrings = FormatCommonSubstrings;
-			Addins.Util.GetPreferences = GetPreferences;
-
-			// Environment utilities
-			Addins.Util.Environment.Open = Environment.Open;
+			Interface.Util.FormatCommonSubstrings = FormatCommonSubstrings;
 
 			// Appearance utilities			
-			Addins.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
-			Addins.Util.Appearance.PresentWindow = Appearance.PresentWindow;
-			Addins.Util.Appearance.PopupMainMenuAtPosition = MainMenu.Instance.PopupAtPosition;
+			Interface.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
 		}
 		
-		public static IPreferences GetPreferences (string id)
-		{
-			return new Preferences (id);
-		}
-
-		public class Environment
-		{
-			public static void Open (string open_item)
-			{
-				if (open_item == null) return;
-
-				using (Process start_proc = new Process ())
-				{
-					// start_proc.StartInfo.FileName = open_item;
-					// start_proc.StartInfo.UseShellExecute = true;
-					start_proc.StartInfo.FileName = "xdg-open";
-					start_proc.StartInfo.Arguments = open_item;
-					try {
-						Log.Debug ("Opening \"{0}\"...", open_item);
-						start_proc.Start ();
-					} catch (Exception e) {
-						Log.Error ("Failed to open {0}: {1}", open_item, e.Message);
-					}
-				}
-			}
-		}
-
 		public class Appearance
 		{			
 
 			public static string MarkupSafeString (string s)
 			{
-				if (s == null) return string.Empty;
+				if (s == null) return "";
 				return GLib.Markup.EscapeText (s);
 			}
 
-			
-
-			public static void PresentWindow (Gtk.Window window)
-			{
-				window.Present ();
-				window.GdkWindow.Raise ();
-
-				for (int i = 0; i < 100; i++) {
-					if (TryGrabWindow (window)) {
-						break;
-					}
-					Thread.Sleep (100);
-				}
-			}
-
-			private static bool TryGrabWindow (Gtk.Window window)
-			{
-				uint time;
-
-				time = Gtk.Global.CurrentEventTime;
-				if (Pointer.Grab (window.GdkWindow,
-				                  true,
-				                  EventMask.ButtonPressMask |
-				                  EventMask.ButtonReleaseMask |
-				                  EventMask.PointerMotionMask,
-				                  null,
-				                  null,
-				                  time) == GrabStatus.Success)
-				{
-					if (Keyboard.Grab (window.GdkWindow, true, time) == GrabStatus.Success) {
-						Gtk.Grab.Add (window);
-						return true;
-					} else {
-						Pointer.Ungrab (time);
-						return false;
-					}
-				}
-				return false;
-			}
 		}
 
 		public static string FormatCommonSubstrings (string main, string other, string format)
@@ -141,7 +65,7 @@ namespace Do
 			string skipped, matched, remainder;
 			bool matchedTermination;
 
-			result = string.Empty;
+			result = "";
 			match_pos = last_main_cut = 0;
 			lower_main = main.ToLower ();
 			other = other.ToLower ();
@@ -170,13 +94,13 @@ namespace Do
 						remainder = FormatCommonSubstrings ( main.Substring (match_pos + len), other.Substring (pos + len), format);
 					}
 					else {
-						remainder = string.Empty;
+						remainder = "";
 					}
 					result = string.Format ("{0}{1}{2}", skipped, string.Format(format, matched), remainder);
 					break;
 				}
 			}
-			if (result == string.Empty) {
+			if (result == "") {
 				// no matches
 				result = main;
 			}

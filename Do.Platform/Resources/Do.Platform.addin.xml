@@ -1,0 +1,24 @@
+<Addin id="Platform" namespace="Do" version="1.0">
+ 
+	<Runtime>
+		<Import assembly="Do.Platform.dll" />
+	</Runtime>
+
+	<Dependencies>
+		<Addin id="Universe" version="1.0" />
+	</Dependencies>
+	
+	<ExtensionPoint path="/Do/Service">
+		<ExtensionNode name="Service" objectType="Do.Platform.ServiceStack.IService" />
+	</ExtensionPoint>
+
+	<Extension path="/Do/Action">
+		<Action type="Do.Universe.Common.EmailAction" />
+		<Action type="Do.Universe.Common.OpenAction" />
+		<Action type="Do.Universe.Common.OpenUrlAction" />
+		<Action type="Do.Universe.Common.OpenWithAction" />
+		<Action type="Do.Universe.Common.RevealAction" />
+		<Action type="Do.Universe.Common.RunAction" />
+	</Extension>
+	
+</Addin>

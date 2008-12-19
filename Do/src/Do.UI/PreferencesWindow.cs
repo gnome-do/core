@@ -27,6 +27,8 @@ using Mono.Addins.Gui;
 using Do;
 using Do.Addins;
 
+using Do.Platform;
+
 namespace Do.UI
 {	
 	public partial class PreferencesWindow : Window
@@ -38,7 +40,7 @@ namespace Do.UI
 			base (WindowType.Toplevel)
 		{
 			Build ();
-			
+
 			TargetEntry[] targets = {
 				new TargetEntry ("text/uri-list", 0, 0), 
 			};
@@ -48,26 +50,25 @@ namespace Do.UI
 			btn_close.IsFocus = true;
 			// Add notebook pages.
 			foreach (IConfigurable page in Pages) {
-				notebook.AppendPage (
-					page.GetConfiguration (), new Label (page.Name));
+				notebook.AppendPage (page.GetConfiguration (), new Label (page.Name));
 			}
 			
 			//Sets default page to the plugins tab, since this is the most common reason to
 			//open the prefs UI for most users.
-			//notebook.CurrentPage = Array.FindIndex (Pages, (delegate (IConfigurable page) {
-			//	return page.Name == "Plugins";}));
 			notebook.CurrentPage = Pages.FindIndex (p => p.Name == "Plugins");
 		}
 
 		IConfigurable[] pages;
 		IConfigurable[] Pages {
 			get {
-				return pages ?? pages = new IConfigurable[] {
-					new GeneralPreferencesWidget (),
-					new KeybindingsPreferencesWidget (),
-					new ManagePluginsPreferencesWidget (),
-					new ColorConfigurationWidget (),
-				};
+				if (pages == null)
+					pages = new IConfigurable[] {
+						new GeneralPreferencesWidget (),
+						new KeybindingsPreferencesWidget (),
+						new ManagePluginsPreferencesWidget (),
+						new ColorConfigurationWidget (),
+					};
+				return pages;
 			}
 		}
 
@@ -78,7 +79,7 @@ namespace Do.UI
 
 		protected virtual void OnBtnHelpClicked (object sender, EventArgs e)
 		{
-			Util.Environment.Open (HelpUrl);
+			Services.Environment.OpenUrl (HelpUrl);
 		}
 	}
 }

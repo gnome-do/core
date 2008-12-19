@@ -18,15 +18,16 @@
 //
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
+using Do.UI;
 using Do.Addins;
 using Do.Universe;
-using Do.UI;
+using Do.Platform;
 
 namespace Do.Core
 {
-	
 	
 	public class FirstSearchController : SimpleSearchController
 	{
@@ -55,18 +56,19 @@ namespace Do.Core
 		public override IEnumerable<Type> SearchTypes {
 			get {
 				if (TextMode) {
-					return new Type[] { typeof (ITextItem) };
-				} else if (context.SecondaryCursors.Length > 0) {
-					return new Type[] { (Results[SecondaryCursors[0]] as DoObject).Inner.GetType () };
+					yield return typeof (ITextItem);
+				} else if (context.SecondaryCursors.Any ()) {
+					// This is pretty bad.
+					yield return Results [SecondaryCursors [0]].GetType ();
 				} else {
-					return defaultFilter;
+					foreach (Type t in defaultFilter) yield return t;
 				}
 			}
 		}
 
 		public override bool TextMode {
 			get { 
-				return (textMode || ImplicitTextMode); 
+				return textMode || ImplicitTextMode; 
 			}
 			set { 
 				if (context.ParentContext != null) return;
@@ -79,20 +81,20 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
-			List<IObject> results;
+			List<Element> results;
 			if (!TextMode)
 				results = InitialResults ();
 			else
-				results = new List<IObject> ();
+				results = new List<Element> ();
 				
 			
 			if (context.ParentContext == null) {
 				if (DefaultFilter) {
-					results.Add (new DoTextItem (Query));
+					results.Add (new ImplicitTextItem (Query));
 				} else {
 					foreach (Type t in SearchTypes) {
-						if (t == typeof (IItem) || t == typeof (ITextItem)) {
-							results.Add (new DoTextItem (Query));
+						if (t == typeof (Item) || t == typeof (ITextItem)) {
+							results.Add (new ImplicitTextItem (Query));
 						}
 					}
 				}
@@ -117,14 +119,14 @@ namespace Do.Core
 			string query = Query;
 			
 			context = new SimpleSearchContext ();
-			List<IObject> results;
+			List<Element> results;
 			foreach (char c in query.ToCharArray ()) {
 				context.LastContext = context.Clone () as SimpleSearchContext;
 				context.Query += c;
 				
 				results = InitialResults ();
 				
-				results.Add (new DoTextItem (Query));
+				results.Add (new ImplicitTextItem (Query));
 				context.Results = results.ToArray ();
 			}
 			base.OnSearchFinished (true, true, Selection, Query);

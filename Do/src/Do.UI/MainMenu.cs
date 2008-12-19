@@ -18,6 +18,7 @@
  */
 
 using System;
+
 using Gtk;
 using Mono.Unix;
 
@@ -32,16 +33,18 @@ namespace Do.UI
 
 		public static MainMenu Instance {
 			get {
-				return instance ??
+				if (instance == null)
 					instance = new MainMenu ();
+				return instance;
 			}
 		}
 
 		int mainMenuX, mainMenuY;
 
-		public MainMenu ()
+		protected MainMenu ()
 		{
 			MenuItem item;
+
 			// About menu item
 			item = new ImageMenuItem (Catalog.GetString ("_About Do"));
 			(item as ImageMenuItem).Image = new Image (Stock.About, IconSize.Menu);
@@ -49,7 +52,7 @@ namespace Do.UI
 			item.CanFocus = false;
 			item.Activated += OnMainMenuAboutClicked;
 			
-			// Preferences menu item
+			// Do.Preferences menu item
 			item = new ImageMenuItem (Catalog.GetString ("_Preferences"));
 			(item as ImageMenuItem).Image = new Image (Stock.Preferences, IconSize.Menu);
 			Add (item);

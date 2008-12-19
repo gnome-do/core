@@ -22,6 +22,12 @@ using System.IO;
 using System.Reflection;
 
 using Do;
+using Do.Platform;
+// TODO once IServices have their own preferences, we can
+// let TrayIconService configure itself, remove this, and drop
+// our reference to Do.Platform.Linux.
+using Do.Platform.Linux;
+
 using Gtk;
 
 namespace Do.UI
@@ -30,98 +36,90 @@ namespace Do.UI
     [System.ComponentModel.ToolboxItem(true)]
     public partial class GeneralPreferencesWidget : Bin, Addins.IConfigurable
     {
-    	const string AutostartAttribute = "X-GNOME-Autostart-enabled";
-		
-    	string AutostartDir {
-			get {
-				return Paths.Combine (Paths.UserHome, ".config/autostart");
-			}
-		}
-
-    	string AutostartFile {
-			get {
-				return Paths.Combine (AutostartDir, "gnome-do.desktop");
-			}
-		}
-    		
-		new public string Name {
-			get { return "General"; }
-		}
-		
-        public string Description {
-        	get { return ""; }
-        }
-        
-        public string Icon {
-        	get { return ""; }
-        }
+      const string AutostartAttribute = "X-GNOME-Autostart-enabled";
 	
-        public GeneralPreferencesWidget ()
-        {
-            Build ();
+		string AutostartDir {
+			get {
+				return System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "autostart");
+		    }
+		}
+		
+		string AutostartFile {
+		  get {
+		      return System.IO.Path.Combine (AutostartDir, "gnome-do.desktop");
+		    }
+		}
+		
+		new public string Name {
+		  get { return "General"; }
+		}
 			
-			// Setup checkboxes
-        	hide_check.Active = Do.Preferences.QuietStart;
-        	login_check.Active = AutostartEnabled;
-        	notification_check.Active = Do.Preferences.StatusIconVisible;
-        }
-        
-        public Bin GetConfiguration ()
-        {
-        	return this;
-        }
-        
-        /// <value>
-        /// This property sacrifies much efficiency to eschew the gnomedesktop
-        /// dependency and to work more reliably.
-        /// </value>
-        protected bool AutostartEnabled {
-        	get {
-        		try {
-        			return File.Exists (AutostartFile) &&
-        				!File.ReadAllText (AutostartFile).Contains (
-							AutostartAttribute + "=false");
-				} catch (Exception e) {
-					Log.Error ("Failed to get autostart: {0}", e.Message);
-				}
-				return false;
+		  public string Description {
+		  get { return ""; }
+		}
+	        
+		public string Icon {
+		  get { return ""; }
+		}
+		
+		public GeneralPreferencesWidget ()
+		{
+		  Build ();
+		  
+		  // Setup checkboxes
+		  hide_check.Active = Do.Preferences.QuietStart;
+		  login_check.Active = AutostartEnabled;
+		  notification_check.Active = TrayIconService.Visible;
+		}
+	        
+		public Bin GetConfiguration ()
+		{
+		  return this;
+		}
+	        
+		/// <value>
+		/// This property sacrifies much efficiency to eschew the gnomedesktop
+		/// dependency and to work more reliably.
+		/// </value>
+		protected bool AutostartEnabled {
+		  get {
+		      try {
+			  return File.Exists (AutostartFile) && !File.ReadAllText (AutostartFile).Contains (AutostartAttribute + "=false");
+			} catch (Exception e) {
+			  Log.Error ("Failed to get autostart: {0}", e.Message);
 			}
-			set {
-				try {
-					if (File.Exists (AutostartFile))
-						File.Delete (AutostartFile);
-					if (value) {
-						Directory.CreateDirectory (AutostartDir);
-						Stream s = Assembly.GetExecutingAssembly ()
-							.GetManifestResourceStream ("gnome-do.desktop");
-						using (StreamReader sr = new StreamReader (s))
-							File.AppendAllText (AutostartFile, sr.ReadToEnd ());
-						
-					}
-				} catch (Exception e) {
-					Log.Error ("Failed to set autostart: {0}", e.Message);
-				}
+			
+			return false;
+		    }
+		    set {
+		      try {
+			    if (File.Exists (AutostartFile))
+			      File.Delete (AutostartFile);
+			    if (value) {
+			      Directory.CreateDirectory (AutostartDir);
+				Stream s = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("gnome-do.desktop");
+				using (StreamReader sr = new StreamReader (s))
+				  File.AppendAllText (AutostartFile, sr.ReadToEnd ());
+			    }
+			} catch (Exception e) {
+			  Log.Error ("Failed to set autostart: {0}", e.Message);
 			}
-        }
-
-        protected virtual void OnLoginCheckClicked (object sender, EventArgs e)
-        {
-        	AutostartEnabled = login_check.Active;
-        }
-
-        protected virtual void OnHideCheckClicked (object sender, EventArgs e)
-        {
-        	Do.Preferences.QuietStart = hide_check.Active;
-        }
-
-        protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)
-        {	
-        	NotificationIcon trayIcon = Do.NotificationIcon;
-        	Do.Preferences.StatusIconVisible = notification_check.Active;
-        	if (notification_check.Active)
-        		trayIcon.Show ();
-        	else
-        		trayIcon.Hide ();
-        }
+		    }
+		}
+		
+		protected virtual void OnLoginCheckClicked (object sender, EventArgs e)
+		{
+		  AutostartEnabled = login_check.Active;
+		}
+		
+		protected virtual void OnHideCheckClicked (object sender, EventArgs e)
+		{
+		  Do.Preferences.QuietStart = hide_check.Active;
+		}
+		
+		protected virtual void OnNotificationCheckClicked (object sender, System.EventArgs e)
+		{
+		  TrayIconService.Visible = notification_check.Active;
+		}
     }
 }

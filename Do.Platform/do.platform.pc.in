@@ -1,0 +1,6 @@
+Name: Do.Platform
+Description: Generic interfaces to platform-specific functionality.
+Version: @ABI_VERSION@
+
+Requires: do.universe
+Libs: -r:@expanded_libdir@/@PACKAGE@/Do.Platform.dll

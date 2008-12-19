@@ -24,14 +24,15 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
+using Do.Platform;
 using Do.Universe;
 
 namespace Do.Core {
 
 	public interface IRelevanceProvider {
-		void IncreaseRelevance (DoObject target, string match, DoObject other);
-		void DecreaseRelevance (DoObject target, string match, DoObject other);
-		float GetRelevance (DoObject target, string match, DoObject other);
+		void IncreaseRelevance (Element target, string match, Element other);
+		void DecreaseRelevance (Element target, string match, Element other);
+		float GetRelevance (Element target, string match, Element other);
 	}
 
 	[Serializable]
@@ -39,28 +40,22 @@ namespace Do.Core {
 
 		const int SerializeInterval = 15 * 60 * 1000;
 
-		static readonly IRelevanceProvider default_provider;
-
 		static RelevanceProvider ()
 		{
-			default_provider = Deserialize () ?? new HistogramRelevanceProvider ();
+			DefaultProvider = Deserialize () ?? new HistogramRelevanceProvider ();
 			GLib.Timeout.Add (SerializeInterval, OnSerializeTimer);
 		}
 		
-		public static IRelevanceProvider DefaultProvider {
-			get {
-				return default_provider;
-			}
-		}
+		public static IRelevanceProvider DefaultProvider { get; private set; }
 
 		public static string RelevanceFile {
 			get {
-				return Paths.Combine (Paths.ApplicationData, "relevance7");
+				return Path.Combine (Services.Paths.UserDataDirectory, "relevance7");
 			}
 		}
 
 		static bool OnSerializeTimer () {
-			Gtk.Application.Invoke ((sender, args) => Serialize (default_provider));
+			Gtk.Application.Invoke ((sender, args) => Serialize (DefaultProvider));
 			return true;
 		}
 
@@ -233,17 +228,17 @@ namespace Do.Core {
 			return bestMatch;
 		}
 
-		public virtual void IncreaseRelevance (DoObject r, string match, DoObject other)
+		public virtual void IncreaseRelevance (Element r, string match, Element other)
 		{
 		}
 
-		public virtual void DecreaseRelevance (DoObject r, string match, DoObject other)
+		public virtual void DecreaseRelevance (Element r, string match, Element other)
 		{
 		}
 
-		public virtual float GetRelevance (DoObject r, string match, DoObject other)
+		public virtual float GetRelevance (Element r, string match, Element other)
 		{
-			return StringScoreForAbbreviation (r.Name, match);
+			return StringScoreForAbbreviation (r.NameSafe, match);
 		}
 	}
 }

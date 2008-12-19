@@ -19,71 +19,57 @@
 
 using System;
 using System.Threading;
+using System.Collections.Generic;
 
 using Mono.Unix;
 
 using Do.UI;
 using Do.Core;
 using Do.DBusLib;
+using Do.Platform;
 
 namespace Do {
 
-	public static class Do {
+	static class Do {
 		
-		static string [] args;
-		static GConfXKeybinder keybinder;
-		
-		static DoPreferences preferences;
-		static CommandLinePreferences cliprefs;
+		static XKeybinder keybinder;
 		static Controller controller;
-		static IUniverseManager universe_manager;
-		static NotificationIcon notification_icon;
-		
-		static DateTime perfTime;
+		static UniverseManager universe_manager;
 
-		internal static void Main (string[] args)
+		public static CorePreferences Preferences { get; private set; } 
+
+		internal static void Main (string [] args)
 		{
-			perfTime = DateTime.Now;
-			Do.args = args;
-			
-			Catalog.Init ("gnome-do", "/usr/local/share/locale");
+			Catalog.Init ("gnome-do", AssemblyInfo.LocaleDirectory);
 			Gtk.Application.Init ();
+			Gdk.Threads.Init ();
 
 			DetectInstanceAndExit ();
-			Log.Initialize ();
-			Util.Initialize ();
-
-			Gdk.Threads.Init ();			
 			
-			if (CLIPrefs.Debug)
-				Log.LogLevel = LogEntryType.Debug;
+			PluginManager.Initialize ();
+			Preferences = new CorePreferences ();
+
+			if (Preferences.Debug)
+				Log.DisplayLevel = LogLevel.Debug;
+			else if (Preferences.QuietStart)
+				Log.DisplayLevel = LogLevel.Error;
+			else
+				Log.DisplayLevel = LogLevel.Info;
+			
+			Util.Initialize ();
 
 			try {
 				Util.SetProcessName ("gnome-do");
 			} catch (Exception e) {
 				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
-
-			PluginManager.Initialize ();
+			
 			Controller.Initialize ();
 			UniverseManager.Initialize ();
 			DBusRegistrar.RegisterController (Controller);
 			
-			keybinder = new GConfXKeybinder ();
+			keybinder = new XKeybinder ();
 			SetupKeybindings ();
-			
-			//whoever keeps pulling this out. STOP. PLEASE.
-			notification_icon = new NotificationIcon ();
-			
-			// Kick-off update timers.			
-			GLib.Timeout.Add (5 * 60 * 1000, delegate {
-				CheckForUpdates ();
-				return false;
-			});
-			GLib.Timeout.Add (2 * 60 * 60 * 1000, delegate {
-				CheckForUpdates ();
-				return true;
-			});
 
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
@@ -119,69 +105,37 @@ namespace Do {
 			}
 		}
 
-		public static DoPreferences Preferences {
-			get { return preferences ?? 
-					preferences = new DoPreferences (); 
-			}
-		}
-		
-		public static CommandLinePreferences CLIPrefs {
-			get { return cliprefs ?? 
-					cliprefs = new CommandLinePreferences (args); 
-			}
-		}
-
 		public static Controller Controller {
 			get {
-				return controller ??
+				if (controller == null)
 					controller = new Controller ();
+				return controller;
 			}
 		}
 
-		public static IUniverseManager UniverseManager {
+		public static UniverseManager UniverseManager {
 			get {
-				return universe_manager ??
-					universe_manager = new SimpleUniverseManager ();
+				if (universe_manager == null)
+					universe_manager = new UniverseManager ();
+				return universe_manager;
 			}
-		}
-		
-		public static NotificationIcon NotificationIcon {
-			get {
-				return notification_icon ??
-					notification_icon = new NotificationIcon ();
-			}
-		}
-		
-		public static void PrintPerf (string caller)
-		{
-			TimeSpan ts = DateTime.Now.Subtract (perfTime);
-			Console.WriteLine(caller + ": " + ts.TotalMilliseconds);
-			
-			perfTime = DateTime.Now;
 		}
 		
 		static void SetupKeybindings ()
 		{
-			keybinder.Bind ("/apps/gnome-do/preferences/core-preferences/SummonKeyBinding",
-					Preferences.SummonKeyBinding, OnActivate);
+			keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+			// Watch preferences for changes to the keybinding so we
+			// can change the binding when the user reassigns it.
+			Preferences.SummonKeybindingChanged += (sender, e) => {
+				if (e.OldValue != null)
+					keybinder.Unbind (e.OldValue as string);
+				keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+			};
 		}
 		
 		static void OnActivate (object sender, EventArgs args)
 		{
 			controller.Summon ();
-		}
-		
-		private static void CheckForUpdates ()
-		{
-			Thread th = new Thread ((ThreadStart) delegate {
-				if (PluginManager.UpdatesAvailable ())
-					Gtk.Application.Invoke (delegate {
-						NotificationIcon.NotifyUpdatesAvailable ();
-					});
-			});
-			
-			th.IsBackground = true;
-			th.Start ();
 		}
 	}
 }

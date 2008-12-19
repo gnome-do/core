@@ -1,0 +1,6 @@
+Name: Do.Platform.Linux
+Description: Linux-specific functionality
+Version: @ABI_VERSION@
+
+Requires: do.platform
+Libs: -r:@expanded_libdir@/@PACKAGE@/Do.Platform.Linux.dll

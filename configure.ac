@@ -2,8 +2,8 @@ dnl Warning: This is an automatically generated file, do not edit!
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.54])
 
-AC_INIT([gnome-do], [0.7.0.0])
-AM_INIT_AUTOMAKE([foreign])
+AC_INIT([gnome-do], [0.8.0.0])
+AM_INIT_AUTOMAKE([foreign tar-pax])
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -13,7 +13,7 @@ IT_PROG_INTLTOOL([0.35.0])
 SHAMROCK_CONFIGURE_I18N(gnome-do)
 
 dnl Plugin ABI version; bump whenever plugin interface changes
-ABI_VERSION=0.7
+ABI_VERSION=0.8
 AC_SUBST(ABI_VERSION)
 
 RELEASE="false"
@@ -119,23 +119,28 @@ if test -z "$CONFIG_REQUESTED" ; then
 fi
 
 AC_CONFIG_FILES([
-libdo/Makefile
-Do.Addins/Makefile
-Makefile
-Do.DBus/Makefile
-Do/src/AssemblyInfo.cs
-Do.Addins/AssemblyInfo.cs
-Do.DBus/src/AssemblyInfo.cs
+Do/Do.exe.config
 Do/Makefile
 Do/gnome-do
-Do/Do.exe.config
-Do.Addins/do.addins.pc
-Do.DBus/do.dbus.pc
-m4/Makefile
-po/Makefile.in
+Do/src/AssemblyInfo.cs
+Do.Addins/AssemblyInfo.cs
+Do.Addins/Makefile
+Do.DBus/Makefile
+Do.DBus/src/AssemblyInfo.cs
+Do.Interface.Linux/Makefile
+Do.Interface.Linux.Classic/Makefile
+Do.Interface.Linux.Docky/Makefile
+Do.Interface.Linux.GlassFrame/Makefile
+Do.Interface.Linux.HUD/Makefile
+Do.Interface.Linux.Mini/Makefile
+Do.Platform/Makefile
+Do.Platform/src/AssemblyInfo.cs
+Do.Platform.Linux/Makefile
+Do.Universe/Makefile
+libdo/Makefile
+Makefile
 data/Makefile
 data/icons/Makefile
-data/icons/hicolor/Makefile
 data/icons/hicolor/16x16/Makefile
 data/icons/hicolor/16x16/apps/Makefile
 data/icons/hicolor/22x22/Makefile
@@ -146,8 +151,11 @@ data/icons/hicolor/32x32/Makefile
 data/icons/hicolor/32x32/apps/Makefile
 data/icons/hicolor/48x48/Makefile
 data/icons/hicolor/48x48/apps/Makefile
+data/icons/hicolor/Makefile
 data/icons/hicolor/scalable/Makefile
 data/icons/hicolor/scalable/apps/Makefile
+m4/Makefile
+po/Makefile.in
 ])
 
 AC_OUTPUT

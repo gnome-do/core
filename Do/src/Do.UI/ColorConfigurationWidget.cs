@@ -17,95 +17,51 @@
 //
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Addins;
-using Do.Addins.CairoUtils;
 using Do.Universe;
+using Do.Platform;
+using Do.Interface;
+using Do.Interface.CairoUtils;
+using Do.Interface.AnimationBase;
 
 namespace Do.UI
 {
 	public partial class ColorConfigurationWidget : Gtk.Bin, IConfigurable
 	{
-		BezelDrawingArea bda;
-		
-		List<string> themes = new List<string> ();
+		IList<string> Themes { get; set; }
+		bool setup = false;
 		
 		public ColorConfigurationWidget ()
 		{
-			int themeI;
-			Build();
+			Build ();
 			AppPaintable = true;
-			Addins.Util.Appearance.SetColormap (this);
+			Themes = new List<string> ();
+			Interface.Util.Appearance.SetColormap (this);
 			
-			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
+			foreach (IDoWindow theme in Core.PluginManager.GetThemes ()) {
 				theme_combo.AppendText (theme.Name);
-				themes.Add (theme.Name);
+				Themes.Add (theme.Name);
 			}
-			
-			theme_combo.AppendText ("MonoDock");
-			themes.Add ("MonoDock");
-			
+		
 			if (!Screen.IsComposited)
 				theme_combo.Sensitive = false;
 				
 			// Setup theme combo
-            themeI = Array.IndexOf (Themes, Do.Preferences.Theme);
-            themeI = themeI >= 0 ? themeI : 0;
-            theme_combo.Active = themeI;            
+            theme_combo.Active = Math.Max (0, Themes.IndexOf (Do.Preferences.Theme));
 
-			BuildPreview ();
+			SetupButtons ();
 			
 			pin_check.Active = Do.Preferences.AlwaysShowResults;
-			Do.Preferences.PreferenceChanged += OnPrefsChanged;
-		}
-		
-		private void OnPrefsChanged (object o, PreferenceChangedEventArgs args) {
-			if (args.Key == "Theme")
-					BuildPreview ();
 		}
 		
 		protected override void OnDestroyed ()
 		{
-			Do.Preferences.PreferenceChanged -= OnPrefsChanged;
 			base.OnDestroyed ();
-			if (bda != null)
-				bda.Destroy ();
 		}
 
-		
-		bool setup = false;
-		
-		private void BuildPreview ()
-		{
-			if (bda != null) {
-//				preview_align.Remove (bda);
-				preview_align.Remove (preview_align.Child);
-				bda.Destroy ();
-				bda = null;
-			}
-			
-			foreach (IRenderTheme theme in Core.PluginManager.GetThemes ()) {
-				if (theme.Name == Do.Preferences.Theme) {
-					bda = new BezelDrawingArea (null, theme, true);
-					break;
-				}
-			}
-			if (preview_align.Child != null)
-					preview_align.Remove (preview_align.Child);
-				
-			if (bda != null) {
-				this.preview_align.Add (bda);
-				bda.Show ();
-				
-				SetupButtons ();
-			} else {
-				this.preview_align.Add (new Gtk.Label ("No Preview Available"));
-				this.preview_align.Child.Show ();
-				DisableButtons ();
-			}
-		}
-		
 		private void DisableButtons ()
 		{
 			clear_background.Sensitive = false;
@@ -118,8 +74,6 @@ namespace Do.UI
 			setup = true;
 			clear_background.Sensitive = true;
 			background_colorbutton.Sensitive = shadow_check.Sensitive = true;
-			background_colorbutton.Color = bda.BackgroundColor.ConvertToGdk ();
-			background_colorbutton.Alpha = (ushort) (bda.BackgroundColor.A * ushort.MaxValue);
 			shadow_check.Active = BezelDrawingArea.DrawShadow;
 			animation_checkbutton.Active = BezelDrawingArea.Animated;
 			Gtk.Application.Invoke (delegate { setup = false; });
@@ -140,8 +94,8 @@ namespace Do.UI
 		protected virtual void OnClearBackgroundClicked (object sender, System.EventArgs e)
 		{
 			BezelDrawingArea.ResetBackgroundStyle ();
-			background_colorbutton.Color = bda.BackgroundColor.ConvertToGdk ();
-			background_colorbutton.Alpha = (ushort) (bda.BackgroundColor.A * ushort.MaxValue);
+			background_colorbutton.Color = new Gdk.Color (0, 0, 0);
+			background_colorbutton.Alpha = ushort.MinValue;
 		}
 
 		protected virtual void OnShadowCheckClicked (object sender, System.EventArgs e)
@@ -182,11 +136,6 @@ namespace Do.UI
 				return "";
 			}
 		}
-		
-		public string[] Themes {
-        	get {
-				return themes.ToArray ();
-        	}
-        }
+	
 	}
 }

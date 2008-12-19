@@ -26,6 +26,8 @@ using Gnome.Keyring;
 using Gtk;
 using Gdk;
 
+using Do.Platform;
+
 namespace Do.UI
 {
 	/// <summary>
@@ -204,7 +206,7 @@ namespace Do.UI
 		protected virtual void OnNewAcctBtnClicked (object sender, EventArgs e)
 		{
 			if (!String.IsNullOrEmpty (new_acct_btn.Uri))
-				Do.Addins.Util.Environment.Open (new_acct_btn.Uri);
+				Services.Environment.OpenUrl (new_acct_btn.Uri);
 		}
 		
 		/// <summary>
@@ -222,8 +224,7 @@ namespace Do.UI
 				keyring = Ring.GetDefaultKeyring ();
 				ht = new Hashtable ();
 				ht["name"] = keyName;
-				ht["username"] = username;
-				
+				ht["username"] = username; 
 				Ring.CreateItem (keyring, ItemType.GenericSecret, keyName,
 					ht, password, true);
 				                 

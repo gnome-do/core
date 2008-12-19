@@ -21,44 +21,46 @@
 using System;
 using Mono.Unix;
 
-namespace Do.Universe {
+using Do.Platform;
 
-	public class SelectedTextItem : IProxyItem, ITextItem {		
+namespace Do.Universe
+{
+
+	internal class SelectedTextItem : ProxyItem
+	{
 		
-		private static string text;
-		
-		public IObject Inner {
-			get {
-				return new TextItem (Text);
-			}
+		static Item TextItem { get; set; }
+
+		static SelectedTextItem ()
+		{
+			TextItem = Services.UniverseFactory.NewTextItem ("") as Item;
 		}
-		
-		public string Name {
-			get { return Catalog.GetString ("Selected text"); }
-		}
-		
-		public string Description {
-			get { return Catalog.GetString ("Currently selected text."); }
-		}
-		
-		public string Icon {
-			get { return "gtk-select-all"; }
-		}
-		
-		public string Text {
-			get { return text; }
-		}
-		
+
 		public static void UpdateText ()
 		{
+			string text;
 			Gtk.Clipboard primary;
 			
 			primary = Gtk.Clipboard.Get (Gdk.Selection.Primary);
-			if (primary.WaitIsTextAvailable ()) {
-				text = primary.WaitForText ();
-			} else {
-				text = string.Empty;
-			}
+			text = primary.WaitIsTextAvailable () ? primary.WaitForText () : "";
+			TextItem = Services.UniverseFactory.NewTextItem (text) as Item;
 		}
+		
+		public override Item Item {
+			get { return TextItem; }
+		}
+
+		public override string Name {
+			get { return Catalog.GetString ("Selected text"); }
+		}
+
+		public override string Description {
+			get { return Catalog.GetString ("Currently selected text."); }
+		}
+
+		public override string Icon {
+			get { return "gtk-select-all"; }
+		}
+
 	}
 }

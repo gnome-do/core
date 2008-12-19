@@ -1,0 +1,23 @@
+<Addin
+	id="DockyInterface"
+	namespace="Do"
+	version="1.0"
+	name="Docky"
+	description="Do + Dock = Docky!"
+	author="Jason Smith"
+>
+ 
+	<Runtime>
+		<Import assembly="Do.Interface.Linux.Docky.dll"/>
+	</Runtime>
+	
+	<Dependencies>
+		<Addin id="Interface.Linux" version="1.0" />
+	</Dependencies>
+	
+	<!-- Extensions included in this assembly -->
+	<!-- Sources -->
+	<Extension path = "/Do/InterfaceWindow">
+		<InterfaceWindow type="Docky.Interface.DockWindow" />
+	</Extension>
+</Addin>

@@ -21,19 +21,21 @@
 using System;
 using Mono.Unix;
 
-namespace Do.Universe {
+namespace Do.Universe
+{
 
-	public class PreferencesItem : IRunnableItem {		
+	public class PreferencesItem : Item, IRunnableItem
+	{
 		
-		public string Name {
+		public override string Name {
 			get { return Catalog.GetString ("GNOME Do Preferences"); }
 		}
 		
-		public string Description {
+		public override string Description {
 			get { return Catalog.GetString ("Adjust settings, manage plugins, etc."); }
 		}
 		
-		public string Icon {
+		public override string Icon {
 			get { return "gtk-preferences"; }
 		}
 		

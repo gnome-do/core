@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 
-using Do.Addins;
+using Do.Interface;
 using Do.Universe;
 using Do.UI;
 
@@ -36,19 +36,19 @@ namespace Do.Core
 		IUIContext UIContext {get;}
 		
 		/// <value>
-		/// IObject Results from the current Query
+		/// Element Results from the current Query
 		/// </value>
-		IList<IObject> Results {get; set;}
+		IList<Element> Results {get; set;}
 		
 		/// <value>
 		/// The full selection, including secondary selections
 		/// </value>
-		IList<IObject> FullSelection {get;}
+		IList<Element> FullSelection {get;}
 		
 		/// <value>
 		/// The primary selection from the user curosr
 		/// </value>
-		IObject Selection {get;}
+		Element Selection {get;}
 		
 		/// <value>
 		/// The location of the cursor in the results list

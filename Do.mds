@@ -4,13 +4,33 @@
       <Entry build="True" name="Do" configuration="Debug" />
       <Entry build="True" name="Do.Addins" configuration="Debug" />
       <Entry build="True" name="Do.DBus" configuration="Debug" />
-      <Entry build="True" name="Tests" configuration="Debug" />
+      <Entry build="True" name="Do.Platform" configuration="Debug" />
+      <Entry build="True" name="Do.Platform.Linux" configuration="Debug" />
+      <Entry build="True" name="Do.Platform.Windows" configuration="Debug" />
+      <Entry build="True" name="Do.Platform.OSX" configuration="Debug" />
+      <Entry build="True" name="Do.Interface.Linux" configuration="Debug" />
+      <Entry build="True" name="Do.Universe" configuration="Debug" />
+      <Entry build="True" name="Do.Interface.Linux.Docky" configuration="Debug" />
+      <Entry build="True" name="Do.Interface.Linux.Classic" configuration="Debug" />
+      <Entry build="True" name="Do.Interface.Linux.GlassFrame" configuration="Debug" />
+      <Entry build="True" name="Do.Interface.Linux.Mini" configuration="Debug" />
+      <Entry build="True" name="Do.Interface.Linux.HUD" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Release" />
       <Entry build="True" name="Do.Addins" configuration="Release" />
       <Entry build="True" name="Do.DBus" configuration="Release" />
-      <Entry build="True" name="Tests" configuration="Release" />
+      <Entry build="True" name="Do.Platform" configuration="Release" />
+      <Entry build="True" name="Do.Platform.Linux" configuration="Release" />
+      <Entry build="True" name="Do.Platform.Windows" configuration="Release" />
+      <Entry build="True" name="Do.Platform.OSX" configuration="Release" />
+      <Entry build="True" name="Do.Interface.Linux" configuration="Release" />
+      <Entry build="True" name="Do.Universe" configuration="Release" />
+      <Entry build="True" name="Do.Interface.Linux.Docky" configuration="Release" />
+      <Entry build="True" name="Do.Interface.Linux.Classic" configuration="Release" />
+      <Entry build="True" name="Do.Interface.Linux.GlassFrame" configuration="Release" />
+      <Entry build="True" name="Do.Interface.Linux.Mini" configuration="Release" />
+      <Entry build="True" name="Do.Interface.Linux.HUD" configuration="Release" />
       <CustomCommands>
         <Command type="BeforeBuild" command="autogen.sh --enable-release=YES" workingdir="${CombineDir}" />
       </CustomCommands>
@@ -20,13 +40,33 @@
     <Execute type="None" entry="Do" />
     <Execute type="None" entry="Do.Addins" />
     <Execute type="None" entry="Do.DBus" />
-    <Execute type="None" entry="Tests" />
+    <Execute type="None" entry="Do.Platform" />
+    <Execute type="None" entry="Do.Platform.Linux" />
+    <Execute type="None" entry="Do.Platform.Windows" />
+    <Execute type="None" entry="Do.Platform.OSX" />
+    <Execute type="None" entry="Do.Interface.Linux" />
+    <Execute type="None" entry="Do.Universe" />
+    <Execute type="None" entry="Do.Interface.Linux.Docky" />
+    <Execute type="None" entry="Do.Interface.Linux.Classic" />
+    <Execute type="None" entry="Do.Interface.Linux.GlassFrame" />
+    <Execute type="None" entry="Do.Interface.Linux.Mini" />
+    <Execute type="None" entry="Do.Interface.Linux.HUD" />
   </StartMode>
   <MonoDevelop.ChangeLogAddIn.ChangeLogInfo policy="UpdateNearestChangeLog" />
   <Entries>
     <Entry filename="Do/Do.mdp" />
     <Entry filename="Do.Addins/Do.Addins.mdp" />
     <Entry filename="Do.DBus/Do.DBus.mdp" />
-    <Entry filename="Tests/Tests.mdp" />
+    <Entry filename="Do.Platform/Do.Platform.mdp" />
+    <Entry filename="Do.Platform.Linux/Do.Platform.Linux.mdp" />
+    <Entry filename="Do.Platform.Windows/Do.Platform.Windows.mdp" />
+    <Entry filename="Do.Platform.OSX/Do.Platform.OSX.mdp" />
+    <Entry filename="Do.Interface.Linux/Do.Interface.Linux.mdp" />
+    <Entry filename="Do.Universe/Do.Universe.mdp" />
+    <Entry filename="Do.Interface.Linux.Docky/Do.Interface.Linux.Docky.mdp" />
+    <Entry filename="Do.Interface.Linux.Classic/Do.Interface.Linux.Classic.mdp" />
+    <Entry filename="Do.Interface.Linux.GlassFrame/Do.Interface.Linux.GlassFrame.mdp" />
+    <Entry filename="Do.Interface.Linux.Mini/Do.Interface.Linux.Mini.mdp" />
+    <Entry filename="Do.Interface.Linux.HUD/Do.Interface.Linux.HUD.mdp" />
   </Entries>
 </Combine>

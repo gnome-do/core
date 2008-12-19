@@ -1,4 +1,5 @@
 [encoding: UTF-8]
-Do.Addins/src/Do.Universe/ApplicationItem.cs
 Do/src/Do.Core/Controller.cs
+Do.Addins/src/Do.UI/MonoDock/MonoDock.UI/ApplicationDockItem.cs
+Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs
 

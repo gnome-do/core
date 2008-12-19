@@ -32,21 +32,23 @@ using Do.UI;
 using Do.Addins;
 using Do.Universe;
 using Do.DBusLib;
+using Do.Platform;
+using Do.Interface;
 
 namespace Do.Core {
 
 	public class Controller : IController, IDoController, IStatistics {
 		
 		class PerformState {
-			public IAction Action { get; set; }
-			public IEnumerable<IItem> Items { get; set; }
-			public IEnumerable<IItem> ModifierItems { get; set; }
+			public Act Action { get; set; }
+			public IEnumerable<Item> Items { get; set; }
+			public IEnumerable<Item> ModifierItems { get; set; }
 			
 			public PerformState ()
 			{
 			}
 
-			public PerformState (IAction action, IEnumerable<IItem> items, IEnumerable<IItem> modItems)
+			public PerformState (Act action, IEnumerable<Item> items, IEnumerable<Item> modItems)
 			{
 				Action = action;
 				Items = items;
@@ -63,9 +65,9 @@ namespace Do.Core {
 		protected ISearchController[] controllers;
 		protected Thread th;
 		
-		IAction action;
-		List<IItem> items;
-		List<IItem> modItems;
+		Act action;
+		List<Item> items;
+		List<Item> modItems;
 		bool thirdPaneVisible;
 		bool resultsGrown;
 		Gtk.IMContext im;
@@ -73,8 +75,8 @@ namespace Do.Core {
 		public Controller ()
 		{
 			im = new Gtk.IMMulticontext ();
-			items = new List<IItem> ();
-			modItems = new List<IItem> ();
+			items = new List<Item> ();
+			modItems = new List<Item> ();
 			resultsGrown = false;
 			
 			controllers = new SimpleSearchController[3];
@@ -122,11 +124,11 @@ namespace Do.Core {
 
 		public void Initialize ()
 		{
-			ThemeChanged ();
-			Do.Preferences.PreferenceChanged += (sender, args) => { if (args.Key == "Theme") ThemeChanged (); };
+			OnThemeChanged (this, null);
+			Do.Preferences.ThemeChanged += OnThemeChanged;
 		}
 		
-		void ThemeChanged ()
+		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
 		{
 			if (null != window) Vanish ();
 			
@@ -138,7 +140,8 @@ namespace Do.Core {
 			window = null;
 			
 			if (!Gdk.Screen.Default.IsComposited) {
-				window = new ClassicWindow (this);
+				window = new ClassicWindow ();
+				window.Initialize (this);
 				window.KeyPressEvent += KeyPressWrap;
 				Reset ();
 				return;
@@ -149,14 +152,12 @@ namespace Do.Core {
 			
 			window = PluginManager.GetThemes ()
 				.Where (theme => theme.Name == Do.Preferences.Theme)
-				.Select (theme => new Bezel (this, theme))
 				.FirstOrDefault ();
-			
-			if (Do.Preferences.Theme == "MonoDock")
-				window = new MonoDock.UI.DockWindow (this);
 
 			if (window == null)
-				window = new Bezel (this, new ClassicTheme ());
+				window = new ClassicWindow ();
+			
+			window.Initialize (this);
 			
 			if (window is Gtk.Window)
 				(window as Gtk.Window).Title = "Do";
@@ -266,12 +267,12 @@ namespace Do.Core {
 		/// </summary>
 		bool ThirdPaneAllowed {
 			get {
-				IObject first, second;
-				IAction action;
+				Element first, second;
+				Act action;
 
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
-				action = first as IAction ?? second as IAction;
+				action = first as Act ?? second as Act;
 				return action != null &&
 					action.SupportedModifierItemTypes.Any () &&
 					controllers[1].Results.Any ();
@@ -284,14 +285,14 @@ namespace Do.Core {
 		/// </value>
 		bool ThirdPaneRequired {
 			get {
-				IObject first, second;
-				IAction action;
-				IItem item;
+				Element first, second;
+				Act action;
+				Item item;
 
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
-				action = (first as IAction) ?? (second as IAction);
-				item = (first as IItem) ?? (second as IItem);
+				action = first as Act ?? second as Act;
+				item = first as Item ?? second as Item;
 				return action != null && item != null &&
 					action.SupportedModifierItemTypes.Any () &&
 					!action.ModifierItemsOptional &&
@@ -317,12 +318,12 @@ namespace Do.Core {
 		}
 		
 		/// <summary>
-		/// Summons a window with objects in it... seems to work
+		/// Summons a window with elements in it... seems to work
 		/// </summary>
-		/// <param name="objects">
-		/// A <see cref="IObject"/>
+		/// <param name="elements">
+		/// A <see cref="Element"/>
 		/// </param>
-		public void SummonWithObjects (IEnumerable<IObject> objects)
+		public void SummonWithElements (IEnumerable<Element> elements)
 		{
 			if (!IsSummonable) return;
 			
@@ -331,11 +332,11 @@ namespace Do.Core {
 			Summon ();
 			
 			//Someone is going to need to explain this to me -- Now with less stupid!
-			controllers[0].Results = objects.ToList ();
+			controllers[0].Results = elements.ToList ();
 
 			// If there are multiple results, show results window after a short
 			// delay.
-			if (objects.Any ()) {
+			if (elements.Any ()) {
 				GLib.Timeout.Add (50,
 					delegate {
 //						Gdk.Threads.Enter ();
@@ -370,12 +371,12 @@ namespace Do.Core {
 		private void KeyPressWrap (Gdk.EventKey evnt)
 		{
 			// User set keybindings
-			if (KeyEventToString (evnt).Equals (Do.Preferences.SummonKeyBinding)) {
+			if (KeyEventToString (evnt).Equals (Do.Preferences.SummonKeybinding)) {
 				OnSummonKeyPressEvent (evnt);
 				return;
 			} 
 			
-			if (KeyEventToString (evnt).Equals (Do.Preferences.TextModeKeyBinding)) {
+			if (KeyEventToString (evnt).Equals (Do.Preferences.TextModeKeybinding)) {
 				OnTextModePressEvent (evnt);
 				return;
 			}
@@ -534,7 +535,7 @@ namespace Do.Core {
 			if ((Gdk.Key) evnt.KeyValue == RightKey) {
 				// We're attempting to browse the contents of an item, so increase its
 				// relevance.
-				(SearchController.Selection as DoObject)
+				SearchController.Selection
 					.IncreaseRelevance (SearchController.Query, null);
 				if (SearchController.ItemChildSearch ()) GrowResults ();
 			} else if ((Gdk.Key) evnt.KeyValue == LeftKey) {
@@ -542,7 +543,7 @@ namespace Do.Core {
 				// relevance. This makes it so we can merely visit an item's children,
 				// and navigate back out of the item, and leave that item's relevance
 				// unchanged.
-				(SearchController.Selection as DoObject)
+				SearchController.Selection
 					.DecreaseRelevance (SearchController.Query, null);
 				if (SearchController.ItemParentSearch ()) GrowResults ();
 			}
@@ -623,7 +624,7 @@ namespace Do.Core {
 		/// A <see cref="System.String"/> in the form "<Modifier>key"
 		/// </returns>
 		string KeyEventToString (EventKey evnt) {
-			string modifier = string.Empty;
+			string modifier = "";
 			if ((evnt.State & ModifierType.ControlMask) != 0) {
 				modifier += "<Control>";
 			}
@@ -683,7 +684,7 @@ namespace Do.Core {
 		/// This method determines what to do when a search is completed and takes the appropriate action
 		/// </summary>
 		/// <param name="o">
-		/// A <see cref="System.Object"/>
+		/// A <see cref="System.Element"/>
 		/// </param>
 		/// <param name="state">
 		/// A <see cref="SearchFinishState"/>
@@ -781,9 +782,9 @@ namespace Do.Core {
 			resultsGrown = false;
 		}
 		
-		IObject GetSelection (Pane pane)
+		Element GetSelection (Pane pane)
 		{
-			IObject o;
+			Element o;
 
 			try {
 				o = controllers[(int) pane].Selection;
@@ -795,7 +796,7 @@ namespace Do.Core {
 		
 		protected virtual void PerformAction (bool vanish)
 		{
-			IObject first, second, third;
+			Element first, second, third;
 			string actionQuery, itemQuery, modItemQuery;
 
 			items.Clear ();
@@ -810,23 +811,23 @@ namespace Do.Core {
 
 			if (first != null && second != null) {
 
-				if (first is IItem) {
-					foreach (IItem item in controllers[0].FullSelection)
+				if (first is Item) {
+					foreach (Item item in controllers[0].FullSelection)
 						items.Add (item);
-					action = second as IAction;
+					action = second as Act;
 					itemQuery = controllers[0].Query;
 					actionQuery = controllers[1].Query;
 				} else {
-					foreach (IItem item in controllers[1].FullSelection)
+					foreach (Item item in controllers[1].FullSelection)
 						items.Add (item);
-					action = first as IAction;
+					action = first as Act;
 					itemQuery = controllers[1].Query;
 					actionQuery = controllers[0].Query;
 				}
 
 				modItemQuery = null;
 				if (third != null && ThirdPaneVisible) {
-					foreach (IItem item in controllers[2].FullSelection)
+					foreach (Item item in controllers[2].FullSelection)
 						modItems.Add (item);
 					modItemQuery = controllers[2].Query;
 				}
@@ -835,31 +836,31 @@ namespace Do.Core {
 				/// Relevance accounting
 				/////////////////////////////////////////////////////////////
 				
-				if (first is IItem) {
-					// Action is in second pane.
+				if (first is Item) {
+					// Act is in second pane.
 
 					// Increase the relevance of the items.
-					foreach (DoObject item in items)
+					foreach (Element item in items)
 						item.IncreaseRelevance (itemQuery, null);
 
 					// Increase the relevance of the action /for each item/:
-					foreach (DoObject item in items)
-						(action as DoObject).IncreaseRelevance (actionQuery, item as DoObject);
+					foreach (Element item in items)
+						action.IncreaseRelevance (actionQuery, item);
 				} else {
-					// Action is in first pane.
+					// Act is in first pane.
 
 					// Increase the relevance of each item for the action.
-					foreach (DoObject item in items)
-						item.IncreaseRelevance (itemQuery, action as DoObject);
+					foreach (Element item in items)
+						item.IncreaseRelevance (itemQuery, action);
 
-					(action as DoObject).IncreaseRelevance (actionQuery, null);
+					action.IncreaseRelevance (actionQuery, null);
 				}
 
 				if (third != null && ThirdPaneVisible)
-					(third as DoObject).IncreaseRelevance (modItemQuery, action as DoObject);
+					third.IncreaseRelevance (modItemQuery, action);
 
 				PerformState state = new PerformState (action, items, modItems);
-				th = new Thread (new ParameterizedThreadStart (DoPerformWork));
+				th = new Thread (new ParameterizedThreadStart (PerformActionAsync));
 				th.Start (state);
 				th.Join (100);
 			}
@@ -869,10 +870,21 @@ namespace Do.Core {
 			}
 		}
 		
-		private void DoPerformWork (object o)
+		void PerformActionAsync (object state)
 		{
-			PerformState state = o as PerformState;
-			state.Action.Perform (state.Items, state.ModifierItems);
+			PerformState performState = state as PerformState;
+			IEnumerable<Item> results = null;
+
+			results = performState.Action.PerformSafe (performState.Items, performState.ModifierItems);
+
+			// If we have results to feed back into the window, do so in a new
+			// iteration.
+			if (results.Any ()) {
+				GLib.Timeout.Add (10, delegate {
+					Do.Controller.SummonWithElements (results.OfType<Element> ());
+					return false;
+				});
+			}
 		}
 					
 		#region IController Implementation
@@ -883,9 +895,9 @@ namespace Do.Core {
 			if (th != null && th.IsAlive) {
 				Thread.Sleep (100);
 			}
-			
+					
 			if (th != null && th.IsAlive) {
-				NotificationIcon.ShowKillNotification ((o, a) => System.Environment.Exit (20));
+				Services.Notifications.Notify (new StalledActionNotification ());
 				return;
 			}
 			
@@ -905,7 +917,7 @@ namespace Do.Core {
 			resultsGrown = false;
 			window.Vanish ();
 			Do.UniverseManager.UpdatesEnabled = true;
-		}	
+		}
 
 		public void ShowPreferences ()
 		{
@@ -933,17 +945,11 @@ namespace Do.Core {
 			about_window.ProgramName = "GNOME Do";
 			about_window.Modal = false;
 
-			try {
-				Assembly asm = Assembly.GetEntryAssembly ();
-				ProgramVersion ver = asm.GetCustomAttributes (typeof (ProgramVersion), false)[0] as ProgramVersion;
-				about_window.Version = ver.Version + "\n" + ver.Details;
-			} catch {
-				about_window.Version = Catalog.GetString ("Unknown");
-			}
+			about_window.Version = AssemblyInfo.DisplayVersion + "\n" + AssemblyInfo.VersionDetails;
 
 			logo = "gnome-do.svg";
 
-			about_window.Logo = UI.IconProvider.PixbufFromIconName (logo, 140);
+			about_window.Logo = IconProvider.PixbufFromIconName (logo, 140);
 			about_window.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
 			about_window.Comments = "Do things as quickly as possible\n" +
 				"(but no quicker) with your files, bookmarks,\n" +
@@ -978,9 +984,9 @@ namespace Do.Core {
 		
 		public ControlOrientation Orientation { get; set; }
 		
-		public bool ObjectHasChildren (IObject o)
+		public bool ElementHasChildren (Element element)
 		{
-			return Do.UniverseManager.ObjectHasChildren (o);
+			return element is Item && (element as Item).HasChildren ();
 		}
 		
 		public IStatistics Statistics {
@@ -989,22 +995,21 @@ namespace Do.Core {
 			}
 		}
 		
-		public void PerformDefaultAction (IItem item, IEnumerable<Type> filter) 
+		public void PerformDefaultAction (Item item, IEnumerable<Type> filter) 
 		{
-			IAction action =
-				Do.UniverseManager.Search ("", typeof (IAction).Cons (filter), item)
-					.Cast<IAction> ()
-					.Where (a => a.SupportsItem (item))
+			Act action =
+				Do.UniverseManager.Search ("", typeof (Act).Cons (filter), item)
+					.Cast<Act> ()
+					.Where (a => a.SupportsItemSafe (item))
 					.FirstOrDefault ();
 
 			if (action == null) return;
 			
-			DoItem ditem = DoItem.Wrap (item) as DoItem;
-			ditem.IncreaseRelevance ("", null);
+			item.IncreaseRelevance ("", null);
 			
 			PerformState state =
-				new PerformState (action, item.Cons (null), Enumerable.Empty<IItem> ());
-			th = new Thread (new ParameterizedThreadStart (DoPerformWork));
+				new PerformState (action, item.Cons (null), Enumerable.Empty<Item> ());
+			th = new Thread (new ParameterizedThreadStart (PerformActionAsync));
 			th.Start (state);
 			th.Join (100);
 		}
@@ -1012,10 +1017,10 @@ namespace Do.Core {
 
 		#region IStatistics implementation 
 		
-		public IEnumerable<IItem> GetMostUsedItems (int numItems)
+		public IEnumerable<Item> GetMostUsedItems (int numItems)
 		{
-			return Do.UniverseManager.Search ("", typeof (IItem).Cons (null))
-				.Cast<IItem> ()
+			return Do.UniverseManager.Search ("", typeof (Item).Cons (null))
+				.Cast<Item> ()
 				.Take (numItems);
 		}
 		
