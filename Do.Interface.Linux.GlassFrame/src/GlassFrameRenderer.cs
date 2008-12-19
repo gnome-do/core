@@ -31,36 +31,17 @@ namespace Do.Interface
 {
 	public class GlassFrameTopBar: IBezelTitleBarRenderElement
 	{
-		BezelDrawingArea parent;
-		
 		public int Height { get { return 0; } }
 		
 		public GlassFrameTopBar (BezelDrawingArea parent)
 		{
-			this.parent = parent;
 		}
 		
 		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
 		{
-//			int radius = parent.WindowRadius;
 			double x = drawing_area.X;
 			double y = drawing_area.Y;
 			double w = drawing_area.Width;
-//			int glaze_offset = 85;
-//
-//			cr.MoveTo  (x+radius, y);
-//			cr.Arc     (x+w-radius, y+radius, radius, Math.PI*1.5, Math.PI*2);
-//			cr.LineTo  (x+w, y+glaze_offset);
-//			cr.CurveTo (x+2*(w/3), glaze_offset-15,
-//			            x+(w/3), glaze_offset-15,
-//			            x, y+glaze_offset);
-//			cr.Arc     (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
-//			LinearGradient lg = new LinearGradient (x, y, x, glaze_offset);
-//			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
-//			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .25));
-//			cr.Pattern = lg;
-//			cr.Fill ();
-//			lg.Destroy ();
 
 			cr.MoveTo (x + w - 30, y + 17);
 			cr.LineTo (x + w - 20,  y + 17);

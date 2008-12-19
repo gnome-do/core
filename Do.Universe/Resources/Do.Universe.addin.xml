@@ -7,13 +7,9 @@
 	<ExtensionPoint path="/Do/Action">
 		<ExtensionNode name="Action" objectType="Do.Universe.Act"/>
 	</ExtensionPoint>
-		<ExtensionPoint path="/Do/ItemSource">
+	
+	<ExtensionPoint path="/Do/ItemSource">
 		<ExtensionNode name="ItemSource" objectType="Do.Universe.ItemSource"/>
 	</ExtensionPoint>
-
-	<Extension path="/Do/ItemSource">
-	</Extension>	
-	<Extension path="/Do/Action">
-	</Extension>
 
 </Addin>

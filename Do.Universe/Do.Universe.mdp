@@ -16,7 +16,7 @@
   <Contents>
     <File name="Resources/Do.Universe.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Action.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Act.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ContactItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/IApplicationItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/IBookmarkItem.cs" subtype="Code" buildaction="Compile" />
@@ -33,8 +33,6 @@
     <File name="src/Do.Universe/EmptyElement.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/EmptyItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Item.cs" subtype="Code" buildaction="Compile" />
-    <File name="gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ProxyItem.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>

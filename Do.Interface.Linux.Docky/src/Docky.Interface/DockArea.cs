@@ -46,6 +46,7 @@ namespace Docky.Interface
 		const int VerticalBuffer = 5;
 		const int HorizontalBuffer = 7;
 		const int BounceTime = 700;
+		const int SummonTime = 100;
 		const int InsertAnimationTime = BaseAnimationTime*5;
 		const int WindowHeight = 300;
 		const int IconBorderWidth = 2;
@@ -132,13 +133,13 @@ namespace Docky.Interface
 		
 		new DockState State { get; set; }
 		
-		IDockItem[] DockItems { 
+		IDockItem [] DockItems { 
 			get { return item_provider.DockItems.ToArray (); } 
 		}
 		
 		IDockItem CurrentDockItem {
 			get {
-				try { return DockItems[DockItemForX (Cursor.X)]; }
+				try { return DockItems [DockItemForX (Cursor.X)]; }
 				catch { return null; }
 			}
 		}
@@ -176,12 +177,12 @@ namespace Docky.Interface
 					return 0;
 				
 				if (CursorIsOverDockArea) {
-					offset = 1 - Math.Min (1,(DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
+					offset = 1 - Math.Min (1,(DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime);
 					return (int) (offset*MinimumDockArea.Height);
 					
 				} else {
-					offset = Math.Min (1, Math.Min ((DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime, 
-					                   (DateTime.UtcNow - interface_change_time).TotalMilliseconds / BaseAnimationTime));
+					offset = Math.Min (1, Math.Min ((DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime, 
+					                   (DateTime.UtcNow - interface_change_time).TotalMilliseconds / SummonTime));
 					
 					if (InputInterfaceVisible)
 						offset = 1 - offset;
@@ -196,16 +197,16 @@ namespace Docky.Interface
 		double DockIconOpacity {
 			get {
 				double total_time = (DateTime.UtcNow - interface_change_time).TotalMilliseconds;
-				if (BaseAnimationTime < total_time) {
+				if (SummonTime < total_time) {
 					if (InputInterfaceVisible)
 						return 0;
 					return 1;
 				}
 				
 				if (InputInterfaceVisible) {
-					return 1 - (total_time/BaseAnimationTime);
+					return 1 - (total_time/SummonTime);
 				} else {
-					return total_time/BaseAnimationTime;
+					return total_time/SummonTime;
 				}
 			}
 		}
@@ -309,7 +310,7 @@ namespace Docky.Interface
 		}
 		
 		bool InputModeChangeAnimationNeeded {
-			get { return (DateTime.UtcNow - interface_change_time).TotalMilliseconds < BaseAnimationTime; }
+			get { return (DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime; }
 		}
 		
 		bool InputModeSlideAnimationNeeded {
@@ -420,7 +421,8 @@ namespace Docky.Interface
 				cr.PaintWithAlpha (InputAreaOpacity);
 			}
 			
-			if (DockIconOpacity > 0) {
+			bool isNotSummonTransition = InputAreaOpacity == 0 || CursorIsOverDockArea || !DockPreferences.AutoHide;
+			if (DockIconOpacity > 0 && isNotSummonTransition) {
 				if (dock_icon_buffer == null)
 					dock_icon_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				
@@ -449,7 +451,7 @@ namespace Docky.Interface
 			double zoom;
 			IconPositionedCenterX (icon, out center, out zoom);
 			
-			double insertion_ms = (DateTime.UtcNow - DockItems[icon].DockAddItem).TotalMilliseconds;
+			double insertion_ms = (DateTime.UtcNow - DockItems [icon].DockAddItem).TotalMilliseconds;
 			if (insertion_ms < InsertAnimationTime) {
 				// if we just inserted the icon, we scale it down the newer it is.  This gives the nice
 				// zoom in effect for newly inserted icons
@@ -460,30 +462,30 @@ namespace Docky.Interface
 			double x = (center - zoom * IconSize / 2);
 			double y = (Height - (zoom * IconSize)) - VerticalBuffer;
 			
-			int total_ms = (int) (DateTime.UtcNow - DockItems[icon].LastClick).TotalMilliseconds;
+			int total_ms = (int) (DateTime.UtcNow - DockItems [icon].LastClick).TotalMilliseconds;
 			if (total_ms < BounceTime) {
 				y -= Math.Abs (20 * Math.Sin (total_ms * Math.PI / (BounceTime / 2)));
 			}
 			
 			double scale = zoom/DockPreferences.IconQuality;
 			
-			if (DockItems[icon].Scalable) {
+			if (DockItems [icon].Scalable) {
 				cr.Scale (scale, scale);
 				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom
 				// the icon, not move it around.
-				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), x * (1 / scale), y * (1 / scale));
+				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), x * (1 / scale), y * (1 / scale));
 				cr.Paint ();
 				cr.Scale (1 / scale, 1 / scale);
 			} else {
 				// since these dont scale, we have some extra work to do to keep them centered
-				double startx = x + (zoom*DockItems[icon].Width - DockItems[icon].Width) / 2;
-				cr.SetSource (DockItems[icon].GetIconSurface (cr.Target), 
+				double startx = x + (zoom*DockItems [icon].Width - DockItems [icon].Width) / 2;
+				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), 
 				              (int) startx, 
-				              Height - DockItems[icon].Height - (MinimumDockArea.Height - DockItems[icon].Height) / 2);
+				              Height - DockItems [icon].Height - (MinimumDockArea.Height - DockItems [icon].Height) / 2);
 				cr.Paint ();
 			}
 			
-			if (DockItems[icon].DrawIndicator) {
+			if (DockItems [icon].DrawIndicator) {
 				// draws a simple triangle indicator.  Should be replaced by something nicer some day
 				cr.MoveTo (center, Height - 6);
 				cr.LineTo (center + 4, Height);
@@ -494,8 +496,8 @@ namespace Docky.Interface
 				cr.Fill ();
 			}
 			
-			if (DockItemForX (Cursor.X) == icon && CursorIsOverDockArea && DockItems[icon].GetTextSurface () != null) {
-				cr.SetSource (DockItems[icon].GetTextSurface (), 
+			if (DockItemForX (Cursor.X) == icon && CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null) {
+				cr.SetSource (DockItems [icon].GetTextSurface (cr.Target), 
 				              IconNormalCenterX (icon) - (DockPreferences.TextWidth / 2), 
 				              Height - 2 * IconSize - 28);
 				cr.Paint ();
@@ -525,9 +527,9 @@ namespace Docky.Interface
 			//the first icons center is at dock X + border + IconBorder + half its width
 			if (!DockItems.Any ())
 				return 0;
-			int start_x = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth + (DockItems[0].Width / 2);
+			int start_x = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth + (DockItems [0].Width / 2);
 			for (int i=0; i<icon; i++)
-				start_x += DockItems[i].Width + 2 * IconBorderWidth;
+				start_x += DockItems [i].Width + 2 * IconBorderWidth;
 			return start_x;
 		}
 		
@@ -535,9 +537,9 @@ namespace Docky.Interface
 		{
 			int start_x = MinimumDockArea.X + HorizontalBuffer;
 			for (int i=0; i<DockItems.Length; i++) {
-				if (x >= start_x && x <= start_x + DockItems[i].Width + 2 * IconBorderWidth)
+				if (x >= start_x && x <= start_x + DockItems [i].Width + 2 * IconBorderWidth)
 					return i;
-				start_x += DockItems[i].Width + 2 * IconBorderWidth;
+				start_x += DockItems [i].Width + 2 * IconBorderWidth;
 			}
 			return -1;
 		}
@@ -622,7 +624,7 @@ namespace Docky.Interface
 			//sometimes we get a null at the end, and it crashes us
 			data = data.TrimEnd ('\0'); 
 			
-			string[] uriList = Regex.Split (data, "\r\n");
+			string [] uriList = Regex.Split (data, "\r\n");
 			uriList.Where (uri => uri.StartsWith ("file://"))
 				.ForEach (uri => item_provider.AddCustomItemFromFile (uri.Substring (7)));
 			
@@ -724,16 +726,16 @@ namespace Docky.Interface
 			
 			//handling right clicks
 			if (evnt.Button == 3) {
-				if (item_provider.GetIconSource (DockItems[item]) == IconSource.Custom || 
-				    item_provider.GetIconSource (DockItems[item]) == IconSource.Statistics)
+				if (item_provider.GetIconSource (DockItems [item]) == IconSource.Custom || 
+				    item_provider.GetIconSource (DockItems [item]) == IconSource.Statistics)
 					ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
 				return ret_val;
 			}
 			
 			//send off the clicks
-			DockItems[item].Clicked (evnt.Button, window.Controller);
-			if (DockItems[item].LastClick > last_click)
-				last_click = DockItems[item].LastClick;
+			DockItems [item].Clicked (evnt.Button, window.Controller);
+			if (DockItems [item].LastClick > last_click)
+				last_click = DockItems [item].LastClick;
 			AnimatedDraw ();
 			
 			return ret_val;
@@ -783,7 +785,7 @@ namespace Docky.Interface
 			
 			for (int i=0; i<DockItems.Length; i++) {
 				int x = IconNormalCenterX (i);
-				DockItems[i].SetIconRegion (new Gdk.Rectangle (pos.X + (x - IconSize / 2), 
+				DockItems [i].SetIconRegion (new Gdk.Rectangle (pos.X + (x - IconSize / 2), 
 				                                               pos.Y + (Height - VerticalBuffer - IconSize), IconSize, IconSize));
 			}
 		}
@@ -818,6 +820,8 @@ namespace Docky.Interface
 		{
 			interface_change_time = DateTime.UtcNow;
 			InputInterfaceVisible = false;
+			
+			AnimatedDraw ();
 		}
 		
 		public void Reset ()

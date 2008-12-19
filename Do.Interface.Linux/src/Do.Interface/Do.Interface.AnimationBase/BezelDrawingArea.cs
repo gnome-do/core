@@ -165,7 +165,7 @@ namespace Do.Interface.AnimationBase
 		BezelColors colors;
 		BezelGlassResults bezel_results;
 		
-		bool third_pane_visible, preview, parent_configured;
+		bool third_pane_visible, preview;
 		BezelDrawingContext context, old_context;
 		PixbufSurfaceCache surface_cache;
 		Pane focus;
@@ -793,6 +793,7 @@ namespace Do.Interface.AnimationBase
 		void RenderPaneText (Pane pane, Context cr, string text)
 		{
 			if (text.Length == 0) return;
+			text = string.Format ("<b>{0}</b>", text);
 			
 			if (Context.GetPaneTextMode (pane)) {
 				Pango.Color color = new Pango.Color ();
