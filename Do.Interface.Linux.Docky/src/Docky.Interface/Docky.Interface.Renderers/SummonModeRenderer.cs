@@ -42,16 +42,26 @@ namespace Docky.Interface.Renderers
 	
 	public class SummonModeRenderer
 	{
-		Gtk.Widget widget;
+		DockArea parent;
 		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
 		
 		PixbufSurfaceCache LargeIconCache { get; set; }
 		TextRenderer TextUtility { get; set; }
 		
-		public SummonModeRenderer (Gtk.Widget referenceWidget)
+		DockState State {
+			get { return parent.State; }
+		}
+		
+		bool ShouldRenderButton {
+			get {
+				return State [State.CurrentPane] != null && State [State.CurrentPane] is Item;
+			}
+		}
+		
+		public SummonModeRenderer (DockArea parent)
 		{
-			widget = referenceWidget;
-			TextUtility = new TextRenderer (widget);
+			this.parent = parent;
+			TextUtility = new TextRenderer (parent);
 			
 			DockPreferences.IconSizeChanged += delegate {
 				if (LargeIconCache != null)
@@ -60,28 +70,25 @@ namespace Docky.Interface.Renderers
 			};
 		}
 		
-		public SummonClickEvent GetClickEvent (Gdk.Point cursor, DockState state, Gdk.Rectangle dockArea)
+		public SummonClickEvent GetClickEvent (Gdk.Rectangle dockArea)
 		{
-			if (!ShouldRenderButton (state)) return SummonClickEvent.None;
+			if (!ShouldRenderButton) return SummonClickEvent.None;
 			
 			Gdk.Point center = GetButtonCenter (dockArea);
 			Gdk.Rectangle rect = new Gdk.Rectangle (center.X - 10, center.Y - 10, 20, 20);
-			if (rect.Contains (cursor))
+			if (rect.Contains (parent.Cursor))
 				return SummonClickEvent.AddItemToDock;
 			return SummonClickEvent.None;
 		}
 		
 		Gdk.Point GetButtonCenter (Gdk.Rectangle dockArea)
 		{
-			return new Gdk.Point (dockArea.X + dockArea.Width - 20, dockArea.Y + 18);
+			return new Gdk.Point (dockArea.X + 12, dockArea.Y + dockArea.Height - 18);
 		}
 			
-		bool ShouldRenderButton (DockState state)
-		{
-			return state [state.CurrentPane] != null && state [state.CurrentPane] is Item;
-		}
 		
-		public void RenderSummonMode (Context cr, DockState state, Gdk.Rectangle dockArea, int VerticalBuffer)
+		
+		public void RenderSummonMode (Context cr, Gdk.Rectangle dockArea)
 		{
 			if (LargeIconCache == null)
 				LargeIconCache = new PixbufSurfaceCache (10, 2 * DockPreferences.IconSize, 2 * DockPreferences.IconSize, cr.Target);
@@ -90,19 +97,19 @@ namespace Docky.Interface.Renderers
 				Pane pane  = (Pane)i;
 				int left_x;
 				double zoom;
-				GetXForPane (dockArea, state, pane, out left_x, out zoom);
+				GetXForPane (dockArea, pane, out left_x, out zoom);
 				
-				if (pane == Pane.Third && !state.ThirdPaneVisible)
+				if (pane == Pane.Third && !State.ThirdPaneVisible)
 					continue;
 				
 				string icon = null;
 				double opacity = .6 + zoom * .4;
-				switch (PaneDrawState (pane, state)) {
+				switch (PaneDrawState (pane)) {
 				case DrawState.NoResult:
 					icon = "gtk-delete";
 					break;
 				case DrawState.Normal:
-					icon = state[pane].Icon;
+					icon = State[pane].Icon;
 					break;
 				case DrawState.Text:
 					icon = "gnome-mime-text";
@@ -124,26 +131,26 @@ namespace Docky.Interface.Renderers
 				cr.Scale (zoom, zoom);
 				cr.SetSource (LargeIconCache.GetSurface (icon), 
 				              left_x * (1 / zoom), 
-				              ((dockArea.Y + dockArea.Height) - (DockPreferences.IconSize * 2 * zoom) - VerticalBuffer) * (1 / zoom));
+				              ((dockArea.Y + dockArea.Height) - (DockPreferences.IconSize * 2 * zoom) - DockArea.VerticalBuffer) * (1 / zoom));
 				cr.PaintWithAlpha (opacity);
 				cr.Scale (1 / zoom, 1 / zoom);
 			}
 			
-			switch (PaneDrawState (state.CurrentPane, state))
+			switch (PaneDrawState (State.CurrentPane))
 			{
 			case DrawState.NoResult:
-				RenderText (cr, Catalog.GetString ("No result found for") + ": " + state.GetPaneQuery (state.CurrentPane), dockArea);
+				RenderText (cr, Catalog.GetString ("No result found for") + ": " + State.GetPaneQuery (State.CurrentPane), dockArea);
 				break;
 			case DrawState.Normal:
-				RenderNormalText (cr, state, dockArea);
-				if (ShouldRenderButton (state))
-					RenderAddButton (cr, state, dockArea);
+				RenderNormalText (cr, dockArea);
+				if (ShouldRenderButton)
+					RenderAddButton (cr, dockArea);
 				break;
 			case DrawState.Text:
-				RenderTextModeText (cr, state, dockArea);
+				RenderTextModeText (cr, dockArea);
 				break;
 			case DrawState.ExplicitText:
-				RenderExplicitText (cr, state, dockArea);
+				RenderExplicitText (cr, dockArea);
 				break;
 			case DrawState.None:
 				// do nothing
@@ -151,11 +158,11 @@ namespace Docky.Interface.Renderers
 			}
 		}
 		
-		void RenderNormalText (Context cr, DockState state, Gdk.Rectangle dockArea)
+		void RenderNormalText (Context cr, Gdk.Rectangle dockArea)
 		{
 			int base_x = dockArea.X + 15;
-			string text = GLib.Markup.EscapeText (state[state.CurrentPane].Name);
-			text = Do.Interface.Util.FormatCommonSubstrings (text, state.GetPaneQuery (state.CurrentPane), HighlightFormat);
+			string text = GLib.Markup.EscapeText (State[State.CurrentPane].Name);
+			text = Do.Interface.Util.FormatCommonSubstrings (text, State.GetPaneQuery (State.CurrentPane), HighlightFormat);
 			
 			double text_scale = (DockPreferences.IconSize / 64.0);
 			int text_offset = (int) (DockPreferences.IconSize * 3);
@@ -175,18 +182,18 @@ namespace Docky.Interface.Renderers
 			
 			if ((int) (12 * text_scale) > 8) {
 				text_height = (int) (12 * text_scale);
-				TextUtility.RenderLayoutText (cr, GLib.Markup.EscapeText (state[state.CurrentPane].Description), 
+				TextUtility.RenderLayoutText (cr, GLib.Markup.EscapeText (State[State.CurrentPane].Description), 
 				                              base_x + text_offset, dockArea.Y + (int) (42 * text_scale), 
 				                              (int) (500 * text_scale), text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 			}
 		}
 		
-		void RenderExplicitText (Context cr, DockState state, Gdk.Rectangle dockArea)
+		void RenderExplicitText (Context cr, Gdk.Rectangle dockArea)
 		{
 			int base_x = dockArea.X + 15;
 			
 			string text;
-			Element current = state [state.CurrentPane];
+			Element current = State [State.CurrentPane];
 			if (current is ITextItem)
 				text = GLib.Markup.EscapeText ((current as ITextItem).Text);
 			else
@@ -208,12 +215,12 @@ namespace Docky.Interface.Renderers
 			cr.Fill ();
 		}
 		
-		void RenderTextModeText (Context cr, DockState state, Gdk.Rectangle dockArea)
+		void RenderTextModeText (Context cr, Gdk.Rectangle dockArea)
 		{
 			int base_x = dockArea.X + 15;
 			
 			string text;
-			Element current = state [state.CurrentPane];
+			Element current = State [State.CurrentPane];
 			if (current is ITextItem)
 				text = GLib.Markup.EscapeText ((current as ITextItem).Text);
 			else
@@ -248,7 +255,7 @@ namespace Docky.Interface.Renderers
 			                              text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 		}
 		
-		void RenderAddButton (Context cr, DockState state, Gdk.Rectangle dockArea)
+		void RenderAddButton (Context cr, Gdk.Rectangle dockArea)
 		{
 			Gdk.Point buttonCenter = GetButtonCenter (dockArea);
 			int x = buttonCenter.X - 10;
@@ -265,66 +272,66 @@ namespace Docky.Interface.Renderers
 			cr.LineTo (x+16, y+10);
 			cr.Stroke ();
 			
-			TextUtility.RenderLayoutText (cr, "<b>" + Catalog.GetString ("Add To Dock") + "</b>", x - 125, y, 115, 16); 
+//			TextUtility.RenderLayoutText (cr, "<b>" + Catalog.GetString ("Add To Dock") + "</b>", x - 125, y, 115, 16); 
 		}
 		
-		void GetXForPane (Gdk.Rectangle dockArea, DockState state, Pane pane, out int left_x, out double zoom)
+		void GetXForPane (Gdk.Rectangle dockArea, Pane pane, out int left_x, out double zoom)
 		{
 			int base_x = dockArea.X + 15;
 			double zoom_value = .3;
-			double slide_state = Math.Min (1, (DateTime.UtcNow - state.CurrentPaneTime).TotalMilliseconds / DockArea.BaseAnimationTime);
+			double slide_state = Math.Min (1, (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds / DockArea.BaseAnimationTime);
 			
 			double growing_zoom = zoom_value + slide_state * (1 - zoom_value);
 			double shrinking_zoom = zoom_value + (1 - slide_state) * (1 - zoom_value);
 			switch (pane) {
 			case Pane.First:
 				left_x = base_x;
-				if (state.CurrentPane == Pane.First && (state.PreviousPane == Pane.Second || state.PreviousPane == Pane.Third)) {
+				if (State.CurrentPane == Pane.First && (State.PreviousPane == Pane.Second || State.PreviousPane == Pane.Third)) {
 					zoom = growing_zoom;
-				} else if (state.PreviousPane == Pane.First && (state.CurrentPane == Pane.Second || state.CurrentPane == Pane.Third)) {
+				} else if (State.PreviousPane == Pane.First && (State.CurrentPane == Pane.Second || State.CurrentPane == Pane.Third)) {
 					zoom = shrinking_zoom;
 				} else {
 					zoom = zoom_value;
 				}
 				break;
 			case Pane.Second:
-				if (state.PreviousPane == Pane.Second && state.CurrentPane == Pane.First) {
+				if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.First) {
 					zoom = shrinking_zoom;
 					left_x = base_x + (int) ((DockPreferences.IconSize * 2) * (growing_zoom));
-				} else if (state.PreviousPane == Pane.Second && state.CurrentPane == Pane.Third) {
+				} else if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.Third) {
 					zoom = shrinking_zoom;
 					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value);
-				} else if (state.PreviousPane == Pane.First && state.CurrentPane == Pane.Second) {
+				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Second) {
 					zoom = growing_zoom;
 					left_x = base_x + (int) ((DockPreferences.IconSize * 2) * (shrinking_zoom));
-				} else if (state.PreviousPane == Pane.First && state.CurrentPane == Pane.Third) {
+				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Third) {
 					zoom = zoom_value;
 					left_x = base_x + (int) ((DockPreferences.IconSize * 2) * (shrinking_zoom));
-				} else if (state.PreviousPane == Pane.Third && state.CurrentPane == Pane.First) {
+				} else if (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.First) {
 					zoom = zoom_value;
 					left_x = base_x + (int) ((DockPreferences.IconSize * 2) * (growing_zoom));
-				} else {// (state.PreviousPane == Pane.Third && state.CurrentPane == Pane.Second) {
+				} else {// (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.Second) {
 					zoom = growing_zoom;
 					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value);
 				}
 				break;
 			default:
-				if (state.PreviousPane == Pane.Second && state.CurrentPane == Pane.First) {
+				if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.First) {
 					zoom = zoom_value;
 					left_x = base_x + (int) (DockPreferences.IconSize * 2 * (1 + zoom_value));
-				} else if (state.PreviousPane == Pane.Second && state.CurrentPane == Pane.Third) {
+				} else if (State.PreviousPane == Pane.Second && State.CurrentPane == Pane.Third) {
 					zoom = growing_zoom;
 					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value) + (int) ((DockPreferences.IconSize * 2) * (shrinking_zoom));
-				} else if (state.PreviousPane == Pane.First && state.CurrentPane == Pane.Second) {
+				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Second) {
 					zoom = zoom_value;
 					left_x = base_x + (int) (DockPreferences.IconSize * 2 * (1 + zoom_value));
-				} else if (state.PreviousPane == Pane.First && state.CurrentPane == Pane.Third) {
+				} else if (State.PreviousPane == Pane.First && State.CurrentPane == Pane.Third) {
 					zoom = growing_zoom;
 					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value) + (int) ((DockPreferences.IconSize * 2) * (shrinking_zoom));
-				} else if (state.PreviousPane == Pane.Third && state.CurrentPane == Pane.First) {
+				} else if (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.First) {
 					zoom = shrinking_zoom;
 					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value) + (int) ((DockPreferences.IconSize * 2) * (growing_zoom));
-				} else {// (state.PreviousPane == Pane.Third && state.CurrentPane == Pane.Second) {
+				} else {// (State.PreviousPane == Pane.Third && State.CurrentPane == Pane.Second) {
 					zoom = shrinking_zoom;
 					left_x = base_x + (int) (DockPreferences.IconSize * 2 * zoom_value) + (int) ((DockPreferences.IconSize * 2) * (growing_zoom));
 				}
@@ -334,24 +341,24 @@ namespace Docky.Interface.Renderers
 			left_x = (int) (left_x * offset_scale + base_x * (1 - offset_scale));
 		}
 		
-		DrawState PaneDrawState (Pane pane, DockState state)
+		DrawState PaneDrawState (Pane pane)
 		{
-			if (pane != state.CurrentPane && (state.GetTextModeType (state.CurrentPane) == TextModeType.Explicit))
+			if (pane != State.CurrentPane && (State.GetTextModeType (State.CurrentPane) == TextModeType.Explicit))
 				return DrawState.None;
 			
-			if (pane == Pane.Third && !state.ThirdPaneVisible)
+			if (pane == Pane.Third && !State.ThirdPaneVisible)
 				return DrawState.None;
 			
-			if (state.GetTextModeType (pane) == TextModeType.Explicit)
+			if (State.GetTextModeType (pane) == TextModeType.Explicit)
 				return DrawState.ExplicitText;
 			
-			if (state.GetTextMode (pane))
+			if (State.GetTextMode (pane))
 				return DrawState.Text;
 			
-			if (state.GetPaneItem (pane) != null)
+			if (State.GetPaneItem (pane) != null)
 				return DrawState.Normal;
 			
-			if (!string.IsNullOrEmpty (state.GetPaneQuery (pane))) {
+			if (!string.IsNullOrEmpty (State.GetPaneQuery (pane))) {
 				return DrawState.NoResult;
 			}
 			

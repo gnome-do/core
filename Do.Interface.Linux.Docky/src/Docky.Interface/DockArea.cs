@@ -43,8 +43,8 @@ namespace Docky.Interface
 	public class DockArea : Gtk.DrawingArea
 	{
 		public const int BaseAnimationTime = 150;
-		const int VerticalBuffer = 5;
-		const int HorizontalBuffer = 7;
+		public const int VerticalBuffer = 5;
+		public const int HorizontalBuffer = 7;
 		const int BounceTime = 700;
 		const int SummonTime = 100;
 		const int InsertAnimationTime = BaseAnimationTime*5;
@@ -131,7 +131,7 @@ namespace Docky.Interface
 		}
 		#endregion
 		
-		new DockState State { get; set; }
+		public new DockState State { get; set; }
 		
 		SummonModeRenderer SummonRenderer { get; set; }
 		
@@ -234,7 +234,7 @@ namespace Docky.Interface
 		/// <value>
 		/// The current cursor as known to the dock.
 		/// </value>
-		Gdk.Point Cursor {
+		public Gdk.Point Cursor {
 			get {
 				return cursor;
 			}
@@ -427,7 +427,7 @@ namespace Docky.Interface
 				
 				using (Context input_cr = new Context (input_area_buffer)) {
 					input_cr.AlphaFill ();
-					SummonRenderer.RenderSummonMode (input_cr, State, dockArea, VerticalBuffer);
+					SummonRenderer.RenderSummonMode (input_cr, dockArea);
 				}
 				
 				cr.SetSource (input_area_buffer);
@@ -725,7 +725,7 @@ namespace Docky.Interface
 			}
 			
 			if (InputInterfaceVisible) {
-				switch (SummonRenderer.GetClickEvent (new Gdk.Point ((int) evnt.X, (int) evnt.Y), State, GetDockArea ())) {
+				switch (SummonRenderer.GetClickEvent (GetDockArea ())) {
 				case SummonClickEvent.AddItemToDock:
 					item_provider.AddCustomItem (State [State.CurrentPane]);
 					window.RequestClickOff ();
