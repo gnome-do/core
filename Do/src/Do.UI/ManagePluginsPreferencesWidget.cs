@@ -30,7 +30,7 @@ using Mono.Addins.Setup;
 
 using Do;
 using Do.Core;
-using Do.Addins;
+using Do.Interface;
 using Do.Platform;
 
 namespace Do.UI

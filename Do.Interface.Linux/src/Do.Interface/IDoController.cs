@@ -70,11 +70,6 @@ namespace Do.Interface
 		/// </returns>
 		bool ElementHasChildren (Element element);
 		
-		/// <value>
-		/// Get ahold of the current statistics for Do
-		/// </value>
-		IStatistics Statistics { get; }
-		
 		/// <summary>
 		/// Performs the default action on the provided IItem
 		/// </summary>

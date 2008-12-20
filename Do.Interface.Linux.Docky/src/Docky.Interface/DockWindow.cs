@@ -83,7 +83,7 @@ namespace Docky.Interface
 		
 		void Build ()
 		{
-			dock_area = new DockArea (this, Controller.Statistics);
+			dock_area = new DockArea (this);
 			
 			TargetEntry[] targets = {
 				new TargetEntry ("text/uri-list", 0, 0), 
@@ -152,6 +152,11 @@ namespace Docky.Interface
 			GetSize (out main.Width, out main.Height);
 			geo = Screen.GetMonitorGeometry (0);
 			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-main.Height);
+		}
+		
+		public void RequestClickOff ()
+		{
+			Controller.ButtonPressOffWindow ();
 		}
 		
 		public void SetStruts ()

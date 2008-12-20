@@ -144,10 +144,11 @@ namespace Do.Interface.AnimationBase
 #endregion
 		
 #region LocalVariables
+		public const int TextHeight = 11;
+		
 		HUDStyle style;
 		
 		const int BoxLineWidth    = 1;
-		const int TextHeight      = 11;
 		const int BorderWidth     = 15;
 		const int fade_ms         = 150;
 		const int ShadowRadius    = 10;
@@ -200,9 +201,13 @@ namespace Do.Interface.AnimationBase
 			}
 		}
 		
-		public int BoxWidth { get { return PaneOutlineRenderer.Width; } }
+		public int BoxWidth { 
+			get { return PaneOutlineRenderer.Width; } 
+		}
 		
-		public int BoxHeight { get { return PaneOutlineRenderer.Height; } }
+		public int BoxHeight { 
+			get { return PaneOutlineRenderer.Height; } 
+		}
 		
 		public Pane Focus {
 			get { return focus; }
@@ -219,6 +224,8 @@ namespace Do.Interface.AnimationBase
 				return colors;
 			}
 		}
+		
+		public TextRenderer TextUtility { get; set; }
 		
 		public int IconSize {
 			get {
@@ -243,8 +250,8 @@ namespace Do.Interface.AnimationBase
 		}
 		
 		public int TextModeOffset {
-			get {
-				return Math.Max (TitleBarHeight, WindowRadius);
+			get { 
+				return Math.Max (TitleBarHeight, WindowRadius); 
 			}
 		}
 		
@@ -259,29 +266,40 @@ namespace Do.Interface.AnimationBase
 		
 		public int ThreePaneWidth { 
 			get { 
-				return ((2 * WindowBorder) - BorderWidth) + ((BoxWidth + (BorderWidth)) * 3); 
+				return (2 * WindowBorder - BorderWidth) + (BoxWidth + BorderWidth) * 3; 
 			} 
 		}
 		
-		public int TitleBarHeight { get { return TitleBarRenderer.Height; } }
+		public int TitleBarHeight { 
+			get { 
+				return TitleBarRenderer.Height; 
+			} 
+		}
 		
-		public int TwoPaneWidth { get { return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2); } }
+		public int TwoPaneWidth { 
+			get { 
+				return (2 * WindowBorder) - BorderWidth + ((BoxWidth + (BorderWidth)) * 2); 
+			} 
+		}
 		
 		public string HighlightFormat { 
 			get { 
-				if (colors.Background.B == colors.Background.G && 
-				    colors.Background.B == colors.Background.R)
+				if (colors.Background.B == colors.Background.G && colors.Background.B == colors.Background.R)
 					return BezelDefaults.HighlightFormat; 
 				else
 					return "<span underline=\"single\">{0}</span>";
 			} 
 		}
 		
-		public int WindowBorder { get { return BezelDefaults.WindowBorder; } }
+		public int WindowBorder { 
+			get { 
+				return BezelDefaults.WindowBorder; 
+			} 
+		}
 		
 		public int WindowHeight {
 			get {
-				return InternalHeight + 2*ShadowRadius;
+				return InternalHeight + 2 * ShadowRadius;
 			}
 		}
 		
@@ -295,41 +313,49 @@ namespace Do.Interface.AnimationBase
 		
 		public int WindowWidth { 
 			get { 
-				return ((2 * WindowBorder) - BorderWidth) + ((BoxWidth + (BorderWidth)) * 3) + (2*ShadowRadius); 
+				return (2 * WindowBorder - BorderWidth) + ((BoxWidth + BorderWidth) * 3) + 2 * ShadowRadius; 
 			} 
 		}
 #endregion
 #region Animation Properties
 		private bool AnimationNeeded {
 			get {
-				return ExpandNeeded || ShrinkNeeded || TextScaleNeeded || FadeNeeded || WindowFadeNeeded;
+				return  ExpandNeeded || 
+					    ShrinkNeeded || 
+						TextScaleNeeded || 
+						FadeNeeded || 
+						WindowFadeNeeded;
 			}
 		}
 		
 		private bool ExpandNeeded {
 			get {
-				return (ThirdPaneVisible || entry_mode[(int) Focus]) && 
-					drawing_area.Width != ThreePaneWidth; 
+				bool shouldBeExpanded = ThirdPaneVisible || entry_mode [(int) Focus];
+				bool isNotExpanded = drawing_area.Width != ThreePaneWidth;
+				return shouldBeExpanded && isNotExpanded;
 			}
 		}
 		
 		private bool ShrinkNeeded {
 			get {
-				return (!ThirdPaneVisible && !entry_mode[(int) focus])  && 
-					drawing_area.Width != TwoPaneWidth && Focus != Pane.Third;
+				bool shouldNotBeExpanded = !ThirdPaneVisible && !entry_mode [(int) focus];
+				return shouldNotBeExpanded  && (drawing_area.Width != TwoPaneWidth) && (Focus != Pane.Third);
 			}
 		}
 		
 		private bool FadeNeeded {
 			get {
-				return (icon_fade[0] != 1 || icon_fade[1] != 1 || icon_fade[2] != 1);
+				return icon_fade [0] != 1 || 
+					   icon_fade [1] != 1 || 
+					   icon_fade [2] != 1;
 			}
 		}
 		
 		private bool TextScaleNeeded {
 			get {
-				return (entry_mode[(int) Focus] && text_box_scale != 1) ||
-					(!entry_mode[(int) Focus] && text_box_scale != 0);
+				bool textBoxNeedsExpand = entry_mode [(int) Focus] && text_box_scale != 1;
+				bool textBoxNeedsShrink = !entry_mode [(int) Focus] && text_box_scale != 0;
+				return textBoxNeedsExpand || textBoxNeedsShrink;
 			}
 		}
 		
@@ -357,15 +383,25 @@ namespace Do.Interface.AnimationBase
 		}
 #endregion
 #region Renderers
-		public IBezelTitleBarRenderElement TitleBarRenderer { get { return titleBarRenderer; } }
+		public IBezelTitleBarRenderElement TitleBarRenderer { 
+			get { return titleBarRenderer; } 
+		}
 
-		public IBezelWindowRenderElement BackgroundRenderer { get { return backgroundRenderer; } }
+		public IBezelWindowRenderElement BackgroundRenderer { 
+			get { return backgroundRenderer; } 
+		}
 
-		public IBezelPaneRenderElement PaneOutlineRenderer { get { return paneOutlineRenderer; } }
+		public IBezelPaneRenderElement PaneOutlineRenderer { 
+			get { return paneOutlineRenderer; } 
+		}
 
-		public IBezelOverlayRenderElement TextModeOverlayRenderer {	get { return textModeOverlayRenderer; }	}
+		public IBezelOverlayRenderElement TextModeOverlayRenderer {	
+			get { return textModeOverlayRenderer; }	
+		}
 
-		public IBezelDefaults BezelDefaults { get { return bezelDefaults; }	}
+		public IBezelDefaults BezelDefaults { 
+			get { return bezelDefaults; }	
+		}
 #endregion
 #endregion
 		
@@ -374,6 +410,7 @@ namespace Do.Interface.AnimationBase
 		public BezelDrawingArea (IDoController controller, IRenderTheme theme, bool preview) : base ()
 		{
 			this.controller = controller;
+			TextUtility = new TextRenderer (this);
 			
 			DoubleBuffered = false;
 			prefs = Services.Preferences.Get<BezelDrawingArea> ();
@@ -405,9 +442,9 @@ namespace Do.Interface.AnimationBase
 		private void SetDrawingArea ()
 		{
 			if (preview && TwoPaneWidth > 400) {
-				window_scale = 400.0/TwoPaneWidth;
+				window_scale = 400.0 / TwoPaneWidth;
 			}
-			SetSizeRequest ((int)Math.Floor (WindowWidth*window_scale), (int)Math.Floor (WindowHeight*window_scale));
+			SetSizeRequest ((int)Math.Floor (WindowWidth * window_scale), (int)Math.Floor (WindowHeight * window_scale));
 			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
 			if (preview)
 				drawing_area.X = ShadowRadius;
@@ -416,20 +453,22 @@ namespace Do.Interface.AnimationBase
 		private void ResetRenderStyle ()
 		{
 			BuildRenderers ();
+			
 			if (colors == null)
 				colors = new BezelColors (BackgroundColor);
 			else
 				colors.RebuildColors (BackgroundColor);
+			
 			SetDrawingArea ();
 		}
 		
 		private void BuildRenderers ()
 		{
-			this.bezelDefaults           = theme.GetDefaults (this);
-			this.titleBarRenderer        = theme.GetTitleBar (this);
-			this.textModeOverlayRenderer = theme.GetOverlay (this);
-			this.backgroundRenderer      = theme.GetWindow (this);
-			this.paneOutlineRenderer     = theme.GetPane (this);
+			bezelDefaults           = theme.GetDefaults (this);
+			titleBarRenderer        = theme.GetTitleBar (this);
+			textModeOverlayRenderer = theme.GetOverlay (this);
+			backgroundRenderer      = theme.GetWindow (this);
+			paneOutlineRenderer     = theme.GetPane (this);
 		}
 		
 		public PixbufSurfaceCache SurfaceCache {
@@ -453,7 +492,7 @@ namespace Do.Interface.AnimationBase
 			}
 			
 			delta_time = DateTime.Now;
-			timer = GLib.Timeout.Add (1000/65, OnDrawTimeoutElapsed);
+			timer = GLib.Timeout.Add (1000 / 65, OnDrawTimeoutElapsed);
 		}
 		
 		private DrawState PaneDrawState (Pane pane)
@@ -482,7 +521,7 @@ namespace Do.Interface.AnimationBase
 			OldContext.SetPaneObject (pane, Context.GetPaneObject (pane));
 			Context.SetPaneObject (pane, obj);
 			
-			icon_fade[(int) pane] = 0;
+			icon_fade [(int) pane] = 0;
 			Draw ();
 		}
 		
@@ -499,7 +538,7 @@ namespace Do.Interface.AnimationBase
 		
 		public void BezelSetEntryMode (Pane pane, bool entryMode)
 		{
-			entry_mode[(int) pane] = entryMode;
+			entry_mode [(int) pane] = entryMode;
 			Draw ();
 		}
 		
@@ -571,7 +610,7 @@ namespace Do.Interface.AnimationBase
 				//------------Second Pane----------------
 				RenderPane (Pane.Second, cr);
 				//------------Third Pane-----------------
-				if (ThirdPaneVisible /*&& drawing_area.Width == ThreePaneWidth*/) {
+				if (ThirdPaneVisible) {
 					RenderPane (Pane.Third, cr);
 				}
 
@@ -589,7 +628,6 @@ namespace Do.Interface.AnimationBase
 				cr2.Scale (window_scale, window_scale);
 			cr2.SetSourceSurface (surface, 0, 0);
 			cr2.Operator = Operator.Source;
-//			cr2.PaintWithAlpha (window_fade);
 			cr2.Paint ();
 			
 			(cr2 as IDisposable).Dispose ();
@@ -611,17 +649,17 @@ namespace Do.Interface.AnimationBase
 			
 			delta_time = DateTime.Now;
 			if (ExpandNeeded) {
-				drawing_area.Width += (int) ((ThreePaneWidth-TwoPaneWidth)*change);
+				drawing_area.Width += (int) ((ThreePaneWidth - TwoPaneWidth) * change);
 				drawing_area.Width = (drawing_area.Width > ThreePaneWidth) ? ThreePaneWidth : drawing_area.Width;
 				drawing_area.X = (WindowWidth - drawing_area.Width) / 2;
 			} else if (ShrinkNeeded) {
-				drawing_area.Width -= (int) ((ThreePaneWidth-TwoPaneWidth)*change);
+				drawing_area.Width -= (int) ((ThreePaneWidth - TwoPaneWidth) * change);
 				drawing_area.Width = (drawing_area.Width < TwoPaneWidth) ? TwoPaneWidth : drawing_area.Width;
 				drawing_area.X = (WindowWidth - drawing_area.Width) / 2;
 			}
 			
 			if (TextScaleNeeded) {
-				if (entry_mode[(int) Focus]) {
+				if (entry_mode [(int) Focus]) {
 					text_box_scale += change;
 					text_box_scale = (text_box_scale > 1) ? 1 : text_box_scale;
 				} else {
@@ -632,19 +670,19 @@ namespace Do.Interface.AnimationBase
 			
 			if (FadeNeeded) {
 				if (text_box_scale == 1) {
-					icon_fade[0] = icon_fade[1] = icon_fade[2] = 1;
+					icon_fade [0] = icon_fade [1] = icon_fade [2] = 1;
 				}
-				icon_fade[0] += change;
-				icon_fade[1] += change;
-				icon_fade[2] += change;
+				icon_fade [0] += change;
+				icon_fade [1] += change;
+				icon_fade [2] += change;
 				
-				icon_fade[0] = (icon_fade[0] > 1) ? 1 : icon_fade[0];
-				icon_fade[1] = (icon_fade[1] > 1) ? 1 : icon_fade[1];
-				icon_fade[2] = (icon_fade[2] > 1) ? 1 : icon_fade[2];
+				icon_fade [0] = (icon_fade [0] > 1) ? 1 : icon_fade [0];
+				icon_fade [1] = (icon_fade [1] > 1) ? 1 : icon_fade [1];
+				icon_fade [2] = (icon_fade [2] > 1) ? 1 : icon_fade [2];
 			}
 			
 			if (WindowFadeNeeded) {
-				window_fade += (change*.1)+(window_fade/2);
+				window_fade += (change * .1) + (window_fade / 2);
 				window_fade = Math.Min (window_fade, 1);
 			}
 			
@@ -661,7 +699,6 @@ namespace Do.Interface.AnimationBase
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			bool ret = base.OnExposeEvent (evnt);
-//			Draw ();
 			Paint ();
 			return ret;
 		}
@@ -753,11 +790,11 @@ namespace Do.Interface.AnimationBase
 			int x;
 			int y;
 			if (PaneOutlineRenderer.StackIconText) {
-				x = drawing_area.X + offset + ((BoxWidth/2)-(IconSize/2));
+				x = drawing_area.X + offset + (BoxWidth / 2 - IconSize / 2);
 				y = drawing_area.Y + WindowBorder + TitleBarHeight + 3;
 			} else {
 				x = drawing_area.X + offset + 5;
-				y = drawing_area.Y + WindowBorder + TitleBarHeight + ((BoxHeight-IconSize)/2);
+				y = drawing_area.Y + WindowBorder + TitleBarHeight + ((BoxHeight - IconSize) / 2);
 			}
 			cr.SetSource (SurfaceCache.GetSurface (icon), x, y);
 			cr.PaintWithAlpha (calc_alpha * alpha);
@@ -780,8 +817,10 @@ namespace Do.Interface.AnimationBase
 		{
 			if (Context.GetPaneObject (Focus) == null)
 				return;
-			BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
-			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20, this);
+			string text = GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description);
+			int x = drawing_area.X + 10;
+			int y = drawing_area.Y + InternalHeight - WindowBorder - 4;
+			TextUtility.RenderLayoutText (cr, text, x, y, drawing_area.Width - 20, TextHeight);
 		}
 		
 		void RenderPaneText (Pane pane, Context cr)
@@ -799,18 +838,22 @@ namespace Do.Interface.AnimationBase
 				Pango.Color color = new Pango.Color ();
 				color.Blue = color.Green = color.Red = ushort.MaxValue;
 				int y = drawing_area.Y + WindowBorder + TitleBarHeight + 6;
-				BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, 
-				                                 color, Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
+				int x = drawing_area.X + PaneOffset (pane) + 5;
+				
+				TextUtility.RenderLayoutText (cr, text, x, y, BoxWidth - 10, TextHeight, color, 
+				                              Pango.Alignment.Left, Pango.EllipsizeMode.None);
 			} else {
-				text = (!string.IsNullOrEmpty (Context.GetPaneQuery (pane))) ? 
-					Util.FormatCommonSubstrings 
-						(text, Context.GetPaneQuery (pane), HighlightFormat) : text;
+				bool queryIsNull = string.IsNullOrEmpty (Context.GetPaneQuery (pane)); 
+				text = (!queryIsNull) ?	Util.FormatCommonSubstrings (text, Context.GetPaneQuery (pane), HighlightFormat) : text;
+				
 				if (PaneOutlineRenderer.StackIconText) {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - TextHeight - 9;
-					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, this);
+					int x = drawing_area.X + PaneOffset (pane) + 5;
+					TextUtility.RenderLayoutText (cr, text, x, y, BoxWidth - 10, TextHeight);
 				} else {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + (int)(BoxHeight/2);
-					BezelTextUtils.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + IconSize + 10, y, BoxWidth - IconSize - 20, this);
+					int x = drawing_area.X + PaneOffset (pane) + IconSize + 10;
+					TextUtility.RenderLayoutText (cr, text, x, y, BoxWidth - IconSize - 20, TextHeight);
 				}
 			}
 		}
@@ -819,13 +862,10 @@ namespace Do.Interface.AnimationBase
 		{
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = (ushort) (ushort.MaxValue * text_box_scale);
-			int tmp = BezelTextUtils.TextHeight;
-			BezelTextUtils.TextHeight = 18;
-			Gdk.Rectangle cursor = BezelTextUtils.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
+			Gdk.Rectangle cursor = TextUtility.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneQuery (Focus)), 
 			                                                        drawing_area.X + 10, drawing_area.Y + TextModeOffset + 5, 
-			                                                        drawing_area.Width - 20, color, 
-			                                                        Pango.Alignment.Left, Pango.EllipsizeMode.None, this);
-			BezelTextUtils.TextHeight = tmp;
+			                                                        drawing_area.Width - 20, 18, color, 
+			                                                        Pango.Alignment.Left, Pango.EllipsizeMode.None);
 			if (cursor.X == cursor.Y && cursor.X == 0) return;
 			
 			cr.Rectangle (cursor.X, cursor.Y, 2, cursor.Height);
@@ -851,9 +891,3 @@ namespace Do.Interface.AnimationBase
 		}
 	}
 }
-
-				
-
-			
-			
-			

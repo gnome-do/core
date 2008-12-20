@@ -25,7 +25,7 @@ using Gtk;
 using Mono.Addins.Gui;
 
 using Do;
-using Do.Addins;
+using Do.Interface;
 
 using Do.Platform;
 

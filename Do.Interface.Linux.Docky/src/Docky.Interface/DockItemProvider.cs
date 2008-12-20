@@ -45,7 +45,6 @@ namespace Docky.Interface
 		public delegate void DockItemsChangedHandler (IEnumerable<IDockItem> items);
 		public event DockItemsChangedHandler DockItemsChanged;
 		
-		IStatistics statistics;
 		Dictionary<string, IDockItem> custom_items;
 		List<IDockItem> statistical_items, task_items;
 		bool enable_serialization = true;
@@ -62,11 +61,13 @@ namespace Docky.Interface
 				out_items.AddRange (statistical_items);
 				
 				if (custom_items.Any ()) {
-					out_items.Add (Separator);
+//					if (out_items.Any ())
+//						out_items.Add (Separator);
 					out_items.AddRange (custom_items.Values);
 				}
 				if (task_items.Any ()) {
-					out_items.Add (Separator);
+					if (out_items.Any ())
+						out_items.Add (Separator);
 					out_items.AddRange (task_items);
 				}
 				return out_items;
@@ -75,22 +76,14 @@ namespace Docky.Interface
 		
 		SeparatorItem Separator { get; set; }
 		
-		public DockItemProvider(IStatistics statistics)
+		public DockItemProvider ()
 		{
-			this.statistics = statistics;
 			Separator = new SeparatorItem ();
 			
 			custom_items = new Dictionary<string, IDockItem> ();
 			statistical_items = new List<IDockItem> ();
 			task_items = new List<IDockItem> ();
 			
-			enable_serialization = false;
-			foreach (string s in DeserializeCustomItems ()) {
-				if (!File.Exists (s))
-					continue;
-				AddCustomItemFromFile (s);
-			}
-			enable_serialization = true;
 			
 			Wnck.Screen.Default.WindowClosed += delegate(object o, WindowClosedArgs args) {
 				if (args.Window.IsSkipTasklist)
@@ -105,25 +98,49 @@ namespace Docky.Interface
 			};
 			
 			GLib.Timeout.Add (3000, delegate {
+				enable_serialization = false;
+				foreach (string s in DeserializeCustomItems ())
+					AddCustomItem (s);
+				enable_serialization = true;
+				
 				UpdateItems ();
 				return false;
 			});
 		}
 		
-		public void AddCustomItemFromFile (string filename)
+		public void AddCustomItem (Element item)
 		{
-			if (filename.StartsWith ("file://"))
-				filename = filename.Substring ("file://".Length);
-			
-			if (!File.Exists (filename))
+			if (!(item is Item)) {
+				Log.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
 				return;
+			}
+			string id = item.UniqueId;
+			DockItem di = new DockItem (item);
+			custom_items [id] = di;
 			
-			if (filename.EndsWith (".desktop")) {
-				Element o = Services.UniverseFactory.NewApplicationItem (filename) as Element;
-				custom_items[filename] = new DockItem (o);
+			if (enable_serialization)
+				SerializeCustomItems ();
+		}
+		
+		public void AddCustomItem (string identifier)
+		{
+			if (identifier.StartsWith ("file://"))
+				identifier = identifier.Substring ("file://".Length);
+			
+			if (File.Exists (identifier)) {
+				if (identifier.EndsWith (".desktop")) {
+					Element o = Services.UniverseFactory.NewApplicationItem (identifier) as Element;
+					custom_items [identifier] = new DockItem (o);
+				} else {
+					Element o = Services.UniverseFactory.NewFileItem (identifier) as Element;
+					custom_items [identifier] = new DockItem (o);
+				}
 			} else {
-				Element o = Services.UniverseFactory.NewFileItem (filename) as Element;
-				custom_items[filename] = new DockItem (o);
+				Element e = Services.Core.GetElement (identifier);
+				if (e != null)
+					custom_items [identifier] = new DockItem (e);
+				else
+					Log.Error ("Could not add custom item with id: {0}", identifier);
 			}
 			
 			if (enable_serialization)
@@ -139,6 +156,7 @@ namespace Docky.Interface
 					filenames = f.Deserialize (s) as string[];
 				}
 			} catch {
+				Log.Error ("Could not deserialize custom items");
 				filenames = new string[0];
 			}
 			return filenames;
@@ -164,9 +182,11 @@ namespace Docky.Interface
 		
 		IEnumerable<Item> MostUsedItems ()
 		{
-			return statistics
-				.GetMostUsedItems (DockPreferences.AutomaticIcons)
+			return Services.Core
+				.GetItemsOrderedByRelevance ()
 				.Where (item => item.GetType ().Name != "SelectedTextItem")
+				.Where (item => !DockPreferences.ItemBlacklist.Contains (item.UniqueId))
+				.Take (DockPreferences.AutomaticIcons)
 				.OrderByDescending (item => item is IApplicationItem)
 				.ThenBy (item => item.GetType ().Name)
 				.ThenBy (item => item.Safe.Name);
@@ -174,25 +194,28 @@ namespace Docky.Interface
 		
 		public bool RemoveItem (int item)
 		{
+			bool ret_val = false;
 			
-			if (enable_serialization)
-				SerializeCustomItems ();
-			
-			if (GetIconSource (DockItems[item]) == IconSource.Statistics) {
-				DockPreferences.AddBlacklistItem (Util.UIDForElement ((DockItems[item] as DockItem).Element));
+			if (GetIconSource (DockItems [item]) == IconSource.Statistics) {
+				DockPreferences.AddBlacklistItem ((DockItems [item] as DockItem).Element.UniqueId);
 				UpdateItems ();
-				return true;
-			} else if (GetIconSource (DockItems[item]) == IconSource.Custom) {
+				ret_val = true;
+			} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
 				foreach (KeyValuePair<string, IDockItem> kvp in custom_items) {
-					if (kvp.Value.Equals (DockItems[item])) {
+					if (kvp.Value.Equals (DockItems [item])) {
 						custom_items.Remove (kvp.Key);
+						
 						UpdateItems ();
-						return true;
+						ret_val = true;
+						break;
 					}
 				}
 			}
+			
 			UpdateItems ();
-			return false;
+			if (enable_serialization)
+				SerializeCustomItems ();
+			return ret_val;
 		}
 		
 		void SerializeCustomItems ()
@@ -203,6 +226,7 @@ namespace Docky.Interface
 					f.Serialize (s, custom_items.Keys.ToArray ());
 				}
 			} catch {
+				Log.Error ("Could not serialize custom items");
 			}
 		}
 		

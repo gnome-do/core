@@ -22,7 +22,6 @@
     <File name="src/Docky.Interface" subtype="Directory" buildaction="Compile" />
     <File name="src/Docky.Utilities" subtype="Directory" buildaction="Compile" />
     <File name="src/Docky.Interface/ApplicationDockItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/CustomDockItems.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DockArea.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DockItemProvider.cs" subtype="Code" buildaction="Compile" />

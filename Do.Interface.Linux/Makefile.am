@@ -16,7 +16,7 @@ FILES = \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassResults.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassWindow.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelResultsDrawingArea.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/BezelTextUtils.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/TextRenderer.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/IRenderInterfaces.cs \
 	src/Do.Interface/Do.Interface.CairoUtils/CairoUtils.cs \
 	src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs \
@@ -27,10 +27,10 @@ FILES = \
 	src/Do.Interface/Do.Interface.Widgets/ResultsWindow.cs \
 	src/Do.Interface/Do.Interface.Widgets/SymbolDisplayLabel.cs \
 	src/Do.Interface/Do.Interface.Widgets/TextFrame.cs \
+	src/Do.Interface/IConfigurable.cs \
 	src/Do.Interface/IDoController.cs \
 	src/Do.Interface/IDoWindow.cs \
 	src/Do.Interface/IRenderTheme.cs \
-	src/Do.Interface/IStatistics.cs \
 	src/Do.Interface/IUIContext.cs \
 	src/Do.Interface/IconCache.cs \
 	src/Do.Interface/IconProvider.cs \
