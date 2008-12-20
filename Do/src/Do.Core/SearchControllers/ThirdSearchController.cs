@@ -152,7 +152,7 @@ namespace Do.Core
 			Item item;
 			List<Item> items = new List<Item> ();
 			if (FirstController.Selection is Act) {
-				action = (FirstController.Selection as Act).Safe;
+				action = (FirstController.Selection as Act).RetainSafe ();
 				item = SecondController.Selection as Item;
 				foreach (Element obj in SecondController.FullSelection) {
 					if (obj is Item)
@@ -161,7 +161,7 @@ namespace Do.Core
 				
 			} else if (SecondController.Selection is Act) {
 				
-				action = (SecondController.Selection as Act).Safe;
+				action = (SecondController.Selection as Act).RetainSafe ();
 				item   = FirstController.Selection as Item;
 				foreach (Element obj in FirstController.FullSelection) {
 					if (obj is Item)
