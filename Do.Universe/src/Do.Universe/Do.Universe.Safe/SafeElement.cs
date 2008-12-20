@@ -19,8 +19,6 @@
 
 using System;
 
-using Do.Platform;
-
 namespace Do.Universe.Safe
 {
 	
@@ -35,9 +33,8 @@ namespace Do.Universe.Safe
 
 		public static void LogSafeError (Element who, Exception what, string where, string name)
 		{
-			Log.Error ("{0} \"{1}\" encountered an error in {2}: {3}.",
+			Console.Error.WriteLine ("{0} \"{1}\" encountered an error in {2}: {3}.",
 					who.GetType (), name, where, what.Message);
-			Log.Debug (what.StackTrace);
 		}
 
 		public Element Element { protected get; set; }

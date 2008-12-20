@@ -34,9 +34,6 @@ FILES = \
 RESOURCES = \
 	Resources/Do.Universe.addin.xml
 
-PROJECT_REFERENCES = \
-	Do.Platform
-
 REFERENCES =  \
 	System \
 	System.Core \
