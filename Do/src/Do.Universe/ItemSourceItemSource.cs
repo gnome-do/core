@@ -81,7 +81,7 @@ namespace Do.Universe
 		
 		public override IEnumerable<Item> ChildrenOfItem (Item item)
 		{
-			return (item as ItemSourceItem).Source.ItemsSafe;
+			return (item as ItemSourceItem).Source.Safe.Items;
 		}
 	}
 }

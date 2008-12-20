@@ -238,7 +238,7 @@ namespace Do.Core {
 
 		public virtual float GetRelevance (Element r, string match, Element other)
 		{
-			return StringScoreForAbbreviation (r.NameSafe, match);
+			return StringScoreForAbbreviation (r.Safe.Name, match);
 		}
 	}
 }

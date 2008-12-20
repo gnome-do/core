@@ -75,6 +75,10 @@
     <File name="src/PathExtensions.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/Paths.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/QuitItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/EvilAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/EvilElement.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/EvilItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/EvilItemSource.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

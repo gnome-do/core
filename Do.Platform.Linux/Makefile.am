@@ -5,6 +5,8 @@ ASSEMBLY = Do.Platform.Linux
 TARGET = library
 
 FILES = \
+	gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs \
+        gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/ConsoleCrayon.cs \
 	src/Do.Platform/Do.Platform.Linux/ConsoleLogService.cs \
@@ -19,7 +21,8 @@ FILES = \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/CopyToClipboardAction.cs \
-	src/Do.Universe/GNOMESpecialLocationsItemSource.cs
+	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
+	src/Do.Widgets/AbstractLoginWidget.cs
 
 if HAVE_NUNIT
 FILES += \
@@ -27,6 +30,7 @@ FILES += \
 endif
 
 RESOURCES =  \
+	gtk-gui/gui.stetic \
 	Resources/Do.Platform.Linux.addin.xml
 
 PKG_CONFIG_FILES = do.platform.linux.pc

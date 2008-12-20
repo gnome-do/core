@@ -24,6 +24,8 @@ using System.Collections.Generic;
 
 using Mono.Unix;
 
+using Do.Universe.Safe;
+
 namespace Do.Universe
 {
 
@@ -31,9 +33,10 @@ namespace Do.Universe
 		IEquatable<Element>, IComparable<Element>
 	{
 		const string UniqueIdFormat = "{0}: {1} ({2})";
-		static readonly string DefaultName;
-		static readonly string DefaultDescription;
-		static readonly string DefaultIcon;
+
+		public static readonly string DefaultName;
+		public static readonly string DefaultDescription;
+		public static readonly string DefaultIcon;
 
 		static Element ()
 		{
@@ -48,13 +51,52 @@ namespace Do.Universe
 		{
 			uniqueId = DefaultName;
 		}
+		
+		static SafeElement safe_element = new SafeElement ();
+
+		/// <value>
+		/// Quick access to a safe equivalent of the reciever.
+		/// </value>
+		/// <remarks>
+		/// The caller DOES NOT have exclusive access to the value
+		/// returned; DO NOT put the value in a collection, linq statement,
+		/// or otherwise retain the value returned. The following is the
+		/// sole legitimate use:
+		/// <code>
+		/// string name = element.Safe.Name;
+		/// </code>
+		/// In words: access the property, but do not retain it.
+		/// </value>
+		/// </remarks>
+		public SafeElement Safe {
+			get {
+				safe_element.Element = this;
+				return safe_element;
+			}
+		}
+
+		/// <summary>
+		/// Returns a safe equivalent of the reciever. Unlike Safe,
+		/// this returns a new safe wrapper instance that the caller has
+		/// exclusive access to. You may want to call this in a multi-threaded
+		/// context, or if you need a collection of safe instances.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="SafeAct"/>
+		/// </returns>
+		public SafeElement RetainSafe ()
+		{
+			return new SafeElement (this);
+		}
 
 		public string UniqueId {
 			get {
 				// We have to initialize the UniqueId lazily, because it is not safe
 				// to initialize in the constructor, before subclasses have initialized.
-				if (object.Equals (uniqueId, DefaultName))
-					uniqueId = string.Format (UniqueIdFormat, NameSafe, DescriptionSafe, GetType ());
+				if (object.Equals (uniqueId, DefaultName)) { 
+					SafeElement safe = Safe;
+					uniqueId = string.Format (UniqueIdFormat, safe.Name, safe.Description, GetType ());
+				}
 				return uniqueId;
 			}
 		}
@@ -74,46 +116,6 @@ namespace Do.Universe
 		public abstract string Description { get; }
 		
 		public abstract string Icon { get; }
-
-		#region Safe alternatives
-		
-		public string NameSafe {
-			get {
-				try {
-					return Name;
-				} catch (Exception e) {
-					Console.Error.WriteLine ("{0} encountered an error in Name: {1}", GetType (), e.Message);
-					// Log.Debug (e.StackTrace);
-				}
-				return DefaultName;
-			}
-		}
-
-		public string DescriptionSafe {
-			get {
-				try {
-					return Description;
-				} catch (Exception e) {
-					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Description: {2}", GetType (), NameSafe, e.Message);
-					// Log.Debug (e.StackTrace);
-				}
-				return DefaultDescription;
-			}
-		}
-
-		public string IconSafe {
-			get {
-				try {
-					return Icon;
-				} catch (Exception e) {
-					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Icon: {2}", GetType (), NameSafe, e.Message);
-					// Log.Debug (e.StackTrace);
-				}
-				return DefaultIcon;
-			}
-		}
-
-		#endregion
 		
 		public override int GetHashCode ()
 		{

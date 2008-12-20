@@ -189,7 +189,7 @@ namespace Docky.Interface
 				.Where (item => item.GetType ().Name != "SelectedTextItem")
 				.OrderByDescending (item => item is IApplicationItem)
 				.ThenBy (item => item.GetType ().Name)
-				.ThenBy (item => item.NameSafe);
+				.ThenBy (item => item.Safe.Name);
 		}
 		
 		public bool RemoveItem (int item)
