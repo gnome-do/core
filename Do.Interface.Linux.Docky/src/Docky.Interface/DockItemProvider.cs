@@ -155,6 +155,8 @@ namespace Docky.Interface
 					BinaryFormatter f = new BinaryFormatter ();
 					filenames = f.Deserialize (s) as string[];
 				}
+			} catch (FileNotFoundException e) {
+				Log.Debug ("Custom items file not present, nothing to add");
 			} catch {
 				Log.Error ("Could not deserialize custom items");
 				filenames = new string[0];
