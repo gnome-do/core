@@ -32,13 +32,13 @@ namespace Docky.Interface
 {
 	
 	
-	public class DoDockItem : IDockItem
+	public class DoDockItem : AbstractDockItem
 	{
 		
 		Surface icon_surface, text_surface;
 		#region IDockItem implementation 
 		
-		public Surface GetIconSurface (Surface sr)
+		public override Surface GetIconSurface (Surface sr)
 		{
 			if (icon_surface == null) {
 				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
@@ -55,81 +55,62 @@ namespace Docky.Interface
 			return icon_surface;
 		}
 		
-		public Surface GetTextSurface (Surface similar)
-		{
-			if (text_surface == null)
-				text_surface = Util.GetBorderedTextSurface ("Summon GNOME Do", DockPreferences.TextWidth, similar);
-			return text_surface;
-		}
-		
-		public void Clicked (uint button, IDoController controller)
+		public override void Clicked (uint button, IDoController controller)
 		{
 			Services.Windowing.Summon ();
 		}
 		
-		public void SetIconRegion (Gdk.Rectangle region)
-		{
-		}
-		
-		public string Description {
+		public override string Description {
 			get {
 				return "Summon GNOME Do";
 			}
 		}
 		
-		public int Width {
-			get {
-				return DockPreferences.IconSize;
-			}
-		}
-		
-		public int Height {
-			get {
-				return DockPreferences.IconSize;
-			}
-		}
-		
-		public bool Scalable {
+		public override bool Scalable {
 			get {
 				return true;
 			}
 		}
 		
-		public bool DrawIndicator {
+		public override bool DrawIndicator {
 			get {
 				return false;
 			}
 		}
 		
-		public DateTime LastClick {
-			get;
-			private set;
-		}
-		
-		public DateTime DockAddItem {
-			get;
-			set;
-		}
-		
 		#endregion 
 		
 
 		
-		public DoDockItem()
+		public DoDockItem() : base ()
 		{
-			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
+		}
+		
+		protected override void OnIconSizeChanged ()
+		{
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
+			}
+			
+			base.OnIconSizeChanged ();
 		}
 
 		#region IDisposable implementation 
 		
-		public void Dispose ()
+		public override void Dispose ()
 		{
-			throw new System.NotImplementedException();
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
+			}
+			
+			base.Dispose ();
 		}
 		
 		#endregion 
 		
-		public bool Equals (IDockItem other)
+		public override bool Equals (IDockItem other)
 		{
 			return other is DoDockItem;
 		}
