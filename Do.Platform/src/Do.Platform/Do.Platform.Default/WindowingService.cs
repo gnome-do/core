@@ -33,7 +33,7 @@ namespace Do.Platform.Default
 		
 		public void SummonMainWindow ()
 		{
-			Log.Debug ("Default IWondowingService cannot summon.");
+			Log.Debug ("Default IWindowingService cannot summon.");
 		}
 	}
 }
