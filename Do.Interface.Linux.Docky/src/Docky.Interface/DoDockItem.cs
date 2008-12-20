@@ -34,6 +34,7 @@ namespace Docky.Interface
 	
 	public class DoDockItem : AbstractDockItem
 	{
+		const string DoIcon = "gnome-do";
 		
 		Surface icon_surface, text_surface;
 		#region IDockItem implementation 
@@ -44,7 +45,7 @@ namespace Docky.Interface
 				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
 				Context cr = new Context (icon_surface);
 				
-				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName ("gnome-do", DockPreferences.FullIconSize);
+				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (DoIcon, DockPreferences.FullIconSize);
 				
 				Gdk.CairoHelper.SetSourcePixbuf (cr, pbuf, 0, 0);
 				cr.Paint ();
@@ -57,12 +58,12 @@ namespace Docky.Interface
 		
 		public override void Clicked (uint button, IDoController controller)
 		{
-			Services.Windowing.Summon ();
+			Services.Windowing.SummonMainWindow ();
 		}
 		
 		public override string Description {
 			get {
-				return "Summon GNOME Do";
+				return Mono.Posix.Catalog.GetString ("Summon GNOME Do");
 			}
 		}
 		
@@ -82,7 +83,7 @@ namespace Docky.Interface
 		
 
 		
-		public DoDockItem() : base ()
+		public DoDockItem () : base ()
 		{
 		}
 		
