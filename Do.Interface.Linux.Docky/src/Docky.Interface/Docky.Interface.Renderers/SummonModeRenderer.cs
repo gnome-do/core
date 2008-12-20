@@ -42,8 +42,10 @@ namespace Docky.Interface.Renderers
 	
 	public class SummonModeRenderer
 	{
-		DockArea parent;
 		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
+		const int IconSize = 16;
+		
+		DockArea parent;
 		
 		PixbufSurfaceCache LargeIconCache { get; set; }
 		TextRenderer TextUtility { get; set; }
@@ -55,6 +57,12 @@ namespace Docky.Interface.Renderers
 		bool ShouldRenderButton {
 			get {
 				return State [State.CurrentPane] != null && State [State.CurrentPane] is Item;
+			}
+		}
+		
+		int TextOffset {
+			get {
+				return (int) (DockPreferences.IconSize * 3.5);
 			}
 		}
 		
@@ -74,16 +82,16 @@ namespace Docky.Interface.Renderers
 		{
 			if (!ShouldRenderButton) return SummonClickEvent.None;
 			
-			Gdk.Point center = GetButtonCenter (dockArea);
-			Gdk.Rectangle rect = new Gdk.Rectangle (center.X - 10, center.Y - 10, 20, 20);
+			Gdk.Point center = GetButtonCenter (ref dockArea);
+			Gdk.Rectangle rect = new Gdk.Rectangle (center.X - IconSize / 2, center.Y - IconSize / 2, IconSize, IconSize);
 			if (rect.Contains (parent.Cursor))
 				return SummonClickEvent.AddItemToDock;
 			return SummonClickEvent.None;
 		}
 		
-		Gdk.Point GetButtonCenter (Gdk.Rectangle dockArea)
+		Gdk.Point GetButtonCenter (ref Gdk.Rectangle dockArea)
 		{
-			return new Gdk.Point (dockArea.X + 12, dockArea.Y + dockArea.Height - 18);
+			return new Gdk.Point (dockArea.X + IconSize / 2 + 5, dockArea.Y + dockArea.Height - (IconSize / 2 + 5));
 		}
 			
 		
@@ -97,7 +105,7 @@ namespace Docky.Interface.Renderers
 				Pane pane  = (Pane)i;
 				int left_x;
 				double zoom;
-				GetXForPane (dockArea, pane, out left_x, out zoom);
+				GetXForPane (ref dockArea, pane, out left_x, out zoom);
 				
 				if (pane == Pane.Third && !State.ThirdPaneVisible)
 					continue;
@@ -139,18 +147,18 @@ namespace Docky.Interface.Renderers
 			switch (PaneDrawState (State.CurrentPane))
 			{
 			case DrawState.NoResult:
-				RenderText (cr, Catalog.GetString ("No result found for") + ": " + State.GetPaneQuery (State.CurrentPane), dockArea);
+				RenderText (cr, Catalog.GetString ("No result found for") + ": " + State.GetPaneQuery (State.CurrentPane), ref dockArea);
 				break;
 			case DrawState.Normal:
-				RenderNormalText (cr, dockArea);
+				RenderNormalText (cr, ref dockArea);
 				if (ShouldRenderButton)
-					RenderAddButton (cr, dockArea);
+					RenderAddButton (cr, ref dockArea);
 				break;
 			case DrawState.Text:
-				RenderTextModeText (cr, dockArea);
+				RenderTextModeText (cr, ref dockArea);
 				break;
 			case DrawState.ExplicitText:
-				RenderExplicitText (cr, dockArea);
+				RenderExplicitText (cr, ref dockArea);
 				break;
 			case DrawState.None:
 				// do nothing
@@ -158,14 +166,13 @@ namespace Docky.Interface.Renderers
 			}
 		}
 		
-		void RenderNormalText (Context cr, Gdk.Rectangle dockArea)
+		void RenderNormalText (Context cr, ref Gdk.Rectangle dockArea)
 		{
 			int base_x = dockArea.X + 15;
 			string text = GLib.Markup.EscapeText (State[State.CurrentPane].Name);
 			text = Do.Interface.Util.FormatCommonSubstrings (text, State.GetPaneQuery (State.CurrentPane), HighlightFormat);
 			
 			double text_scale = (DockPreferences.IconSize / 64.0);
-			int text_offset = (int) (DockPreferences.IconSize * 3);
 			
 			int text_height;
 			if ((int) (12 * text_scale) > 8)
@@ -176,19 +183,19 @@ namespace Docky.Interface.Renderers
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
 			
-			TextUtility.RenderLayoutText (cr, text, base_x + text_offset, 
+			TextUtility.RenderLayoutText (cr, text, base_x + TextOffset, 
 			                              dockArea.Y + (int) (15 * text_scale), (int) (500 * text_scale), text_height,
 			                              color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 			
 			if ((int) (12 * text_scale) > 8) {
 				text_height = (int) (12 * text_scale);
 				TextUtility.RenderLayoutText (cr, GLib.Markup.EscapeText (State[State.CurrentPane].Description), 
-				                              base_x + text_offset, dockArea.Y + (int) (42 * text_scale), 
+				                              base_x + TextOffset, dockArea.Y + (int) (42 * text_scale), 
 				                              (int) (500 * text_scale), text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 			}
 		}
 		
-		void RenderExplicitText (Context cr, Gdk.Rectangle dockArea)
+		void RenderExplicitText (Context cr, ref Gdk.Rectangle dockArea)
 		{
 			int base_x = dockArea.X + 15;
 			
@@ -215,7 +222,7 @@ namespace Docky.Interface.Renderers
 			cr.Fill ();
 		}
 		
-		void RenderTextModeText (Context cr, Gdk.Rectangle dockArea)
+		void RenderTextModeText (Context cr, ref Gdk.Rectangle dockArea)
 		{
 			int base_x = dockArea.X + 15;
 			
@@ -227,55 +234,59 @@ namespace Docky.Interface.Renderers
 				text = GLib.Markup.EscapeText (current.Name);
 			
 			double text_scale = (DockPreferences.IconSize / 64.0);
-			int text_offset = (int) (DockPreferences.IconSize * 3);
 			int text_height = (int) (15 * text_scale);
 				
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
 			
-			TextUtility.RenderLayoutText (cr, text, base_x + text_offset, 
-			                              dockArea.Y + (int) (15 * text_scale), (dockArea.X + dockArea.Width) - (base_x + text_offset + 40), 
+			TextUtility.RenderLayoutText (cr, text, base_x + TextOffset, 
+			                              dockArea.Y + (int) (15 * text_scale), (dockArea.X + dockArea.Width) - (base_x + TextOffset + 40), 
 			                              text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
 		}
 		
-		void RenderText (Context cr, string text, Gdk.Rectangle dockArea)
+		void RenderText (Context cr, string text, ref Gdk.Rectangle dockArea)
 		{
 			int base_x = dockArea.X + 15;
 			
 			double text_scale = (DockPreferences.IconSize / 64.0);
-			int text_offset = (int) (DockPreferences.IconSize * 3);
 			
 			int text_height = (int) (20 * text_scale);
 				
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
 			
-			TextUtility.RenderLayoutText (cr, text, base_x + text_offset, 
-			                              dockArea.Y + (int) (15 * text_scale), (dockArea.X + dockArea.Width) - (base_x + text_offset + 40), 
+			TextUtility.RenderLayoutText (cr, text, base_x + TextOffset, 
+			                              dockArea.Y + (int) (15 * text_scale), (dockArea.X + dockArea.Width) - (base_x + TextOffset + 40), 
 			                              text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 		}
 		
-		void RenderAddButton (Context cr, Gdk.Rectangle dockArea)
+		void RenderAddButton (Context cr, ref Gdk.Rectangle dockArea)
 		{
-			Gdk.Point buttonCenter = GetButtonCenter (dockArea);
-			int x = buttonCenter.X - 10;
-			int y = buttonCenter.Y - 10;
+			Gdk.Point buttonCenter = GetButtonCenter (ref dockArea);
 			
-			cr.SetRoundedRectanglePath (x, y, 20, 20, 10);
+			int x = buttonCenter.X - IconSize / 2;
+			int y = buttonCenter.Y - IconSize / 2;
+			
+			cr.SetRoundedRectanglePath (x, y, IconSize, IconSize, IconSize / 2);
 			cr.LineWidth = 2;
-			cr.Color = new Cairo.Color (1, 1, 1);
+			switch (GetClickEvent (dockArea)) {
+			case SummonClickEvent.AddItemToDock:
+				cr.Color = new Cairo.Color (1, 1, 1);
+				break;
+			case SummonClickEvent.None:
+				cr.Color = new Cairo.Color (1, 1, 1, .7);
+				break;
+			}
 			cr.Stroke ();
 			
-			cr.MoveTo (x+10, y+4);
-			cr.LineTo (x+10, y+16);
-			cr.MoveTo (x+4, y+10);
-			cr.LineTo (x+16, y+10);
+			cr.MoveTo (x + IconSize / 2, y + 4);
+			cr.LineTo (x + IconSize / 2, y + (IconSize - 4));
+			cr.MoveTo (x + 4, y + IconSize / 2);
+			cr.LineTo (x + (IconSize - 4), y + IconSize / 2);
 			cr.Stroke ();
-			
-//			TextUtility.RenderLayoutText (cr, "<b>" + Catalog.GetString ("Add To Dock") + "</b>", x - 125, y, 115, 16); 
 		}
 		
-		void GetXForPane (Gdk.Rectangle dockArea, Pane pane, out int left_x, out double zoom)
+		void GetXForPane (ref Gdk.Rectangle dockArea, Pane pane, out int left_x, out double zoom)
 		{
 			int base_x = dockArea.X + 15;
 			double zoom_value = .3;
@@ -337,7 +348,7 @@ namespace Docky.Interface.Renderers
 				}
 				break;
 			}
-			double offset_scale = .9;
+			double offset_scale = 1;
 			left_x = (int) (left_x * offset_scale + base_x * (1 - offset_scale));
 		}
 		
