@@ -194,25 +194,28 @@ namespace Docky.Interface
 		
 		public bool RemoveItem (int item)
 		{
+			bool ret_val = false;
 			
-			if (enable_serialization)
-				SerializeCustomItems ();
-			
-			if (GetIconSource (DockItems[item]) == IconSource.Statistics) {
-				DockPreferences.AddBlacklistItem (Util.UIDForElement ((DockItems[item] as DockItem).Element));
+			if (GetIconSource (DockItems [item]) == IconSource.Statistics) {
+				DockPreferences.AddBlacklistItem ((DockItems [item] as DockItem).Element.UniqueId);
 				UpdateItems ();
-				return true;
-			} else if (GetIconSource (DockItems[item]) == IconSource.Custom) {
+				ret_val = true;
+			} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
 				foreach (KeyValuePair<string, IDockItem> kvp in custom_items) {
-					if (kvp.Value.Equals (DockItems[item])) {
+					if (kvp.Value.Equals (DockItems [item])) {
 						custom_items.Remove (kvp.Key);
+						
 						UpdateItems ();
-						return true;
+						ret_val = true;
+						break;
 					}
 				}
 			}
+			
 			UpdateItems ();
-			return false;
+			if (enable_serialization)
+				SerializeCustomItems ();
+			return ret_val;
 		}
 		
 		void SerializeCustomItems ()
@@ -223,6 +226,7 @@ namespace Docky.Interface
 					f.Serialize (s, custom_items.Keys.ToArray ());
 				}
 			} catch {
+				Log.Error ("Could not serialize custom items");
 			}
 		}
 		
