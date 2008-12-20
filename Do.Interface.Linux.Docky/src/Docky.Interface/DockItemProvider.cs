@@ -159,7 +159,7 @@ namespace Docky.Interface
 					filenames = f.Deserialize (s) as string[];
 				}
 			} catch (FileNotFoundException e) {
-				Log.Debug ("Custom items file not present, nothing to add");
+				Log.Debug ("Custom items file not present, nothing to add. " + e.Message);
 				filenames = new string[0];
 			} catch {
 				Log.Error ("Could not deserialize custom items");
