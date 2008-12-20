@@ -62,8 +62,8 @@ namespace Docky.Interface
 				out_items.AddRange (statistical_items);
 				
 				if (custom_items.Any ()) {
-					if (out_items.Any ())
-						out_items.Add (Separator);
+//					if (out_items.Any ())
+//						out_items.Add (Separator);
 					out_items.AddRange (custom_items.Values);
 				}
 				if (task_items.Any ()) {
@@ -113,7 +113,7 @@ namespace Docky.Interface
 		public void AddCustomItem (Element item)
 		{
 			if (!(item is Item)) {
-				Log.Error ("Could not add {0} to custom items for dock", item.NameSafe);
+				Log.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
 				return;
 			}
 			string id = item.UniqueId;

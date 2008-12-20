@@ -7,14 +7,8 @@ PKG_CONFIG_FILES = do.addins.pc
 
 FILES = \
 	AssemblyInfo.cs \
-	gtk-gui/Do.UI.AbstractLoginWidget.cs \
-	gtk-gui/generated.cs \
-	src/Do.Addins/IConfigurable.cs \
-	src/Do.UI/AbstractLoginWidget.cs
+	src/Do.Addins/IConfigurable.cs 
 
-RESOURCES = \
-	gtk-gui/gui.stetic \
-	gtk-gui/objects.xml
 
 REFERENCES =  \
 	System \
