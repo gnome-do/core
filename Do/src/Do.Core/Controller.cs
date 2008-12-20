@@ -870,12 +870,12 @@ namespace Do.Core {
 			}
 		}
 		
-		void PerformActionAsync (object state)
+		void PerformActionAsync (object o)
 		{
-			PerformState performState = state as PerformState;
+			PerformState state = o as PerformState;
 			IEnumerable<Item> results = null;
 
-			results = performState.Action.PerformSafe (performState.Items, performState.ModifierItems);
+			results = state.Action.Safe.Perform (state.Items, state.ModifierItems);
 
 			// If we have results to feed back into the window, do so in a new
 			// iteration.
@@ -999,8 +999,8 @@ namespace Do.Core {
 		{
 			Act action =
 				Do.UniverseManager.Search ("", typeof (Act).Cons (filter), item)
-					.Cast<Act> ()
-					.Where (a => a.SupportsItemSafe (item))
+					.OfType<Act> ()
+					.Where (act => act.Safe.SupportsItem (item))
 					.FirstOrDefault ();
 
 			if (action == null) return;

@@ -21,6 +21,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Do.Universe.Safe;
+
 namespace Do.Universe
 {
 	/// <summary>
@@ -30,6 +32,43 @@ namespace Do.Universe
 	/// </summary>
 	public abstract class ItemSource : Element
 	{
+
+		static SafeItemSource safe_item_source = new SafeItemSource ();
+
+		/// <value>
+		/// Quick access to a safe equivalent of the reciever.
+		/// </value>
+		/// <remarks>
+		/// The caller DOES NOT have exclusive access to the value
+		/// returned; DO NOT put the value in a collection, linq statement,
+		/// or otherwise retain the value returned. The following is the
+		/// sole legitimate use:
+		/// <code>
+		/// source.Safe.UpdateItems ();
+		/// </code>
+		/// In words: access the property, but do not retain it.
+		/// </value>
+		/// </remarks>
+		public new SafeItemSource Safe {
+			get {
+				safe_item_source.ItemSource = this;
+				return safe_item_source;
+			}
+		}
+
+		/// <summary>
+		/// Returns a safe equivalent of the reciever. Unlike Safe,
+		/// this returns a new safe wrapper instance that the caller has
+		/// exclusive access to. You may want to call this in a multi-threaded
+		/// context, or if you need a collection of safe instances.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="SafeAct"/>
+		/// </returns>
+		public new SafeItemSource RetainSafe ()
+		{
+			return new SafeItemSource (this);
+		}
 		
 		/// <value>
 		/// Item sub-types provided/supported by this source. These include any
@@ -69,61 +108,6 @@ namespace Do.Universe
 		public virtual void UpdateItems ()
 		{
 		}
-
-		#region Safe alternatives
-		
-		public void UpdateItemsSafe ()
-		{
-			try {
-				UpdateItems ();
-			} catch (Exception e) {
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in UpdateItems: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
-			}
-		}
-		
-		public IEnumerable<Item> ItemsSafe
-		{
-			get {
-				IEnumerable<Item> items = null;
-				
-				try {
-					// Strictly evaluate the IEnumerable before we leave the try block.
-					items = Items.ToArray ();
-				} catch (Exception e) {
-					items = null;
-					Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Items: {2}", GetType (), NameSafe, e.Message);
-					// Log.Debug (e.StackTrace);
-				} finally {
-					items = items ?? Enumerable.Empty<Item> ();
-				}
-
-				return items;
-			}
-		}
-
-		public IEnumerable<Item> ChildrenOfItemSafe (Item item)
-		{
-			IEnumerable<Item> children = null;
-
-			item = ProxyItem.Unwrap (item);
-
-			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item)))
-			    return Enumerable.Empty<Item> ();
-
-			try {
-				// Strictly evaluate the IEnumerable before we leave the try block.
-				children = ChildrenOfItem (item).ToArray ();
-			} catch (Exception e) {
-				children = null;
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in ChildrenOfItem: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
-			} finally {
-				children = children ?? Enumerable.Empty<Item> ();
-			}
-			return children;
-		}
-		#endregion
 	}
 
 }

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 
 using Do.Platform;
 using Do.Universe;
+using Do.Universe.Safe;
 using Do.Universe.Common;
 
 namespace Do.Core {
@@ -102,19 +103,20 @@ namespace Do.Core {
 			}
 		}
 
-		public override float GetRelevance (Element o, string match, Element other)
+		public override float GetRelevance (Element e, string match, Element other)
 		{
 			RelevanceRecord rec;
 			bool isAction;
 			float relevance = 0f, age = 0f, score = 0f;
+			string name = e.Safe.Name;
 
-			if (!hits.TryGetValue (o.UniqueId, out rec))
-				rec = new RelevanceRecord (o);
+			if (!hits.TryGetValue (e.UniqueId, out rec))
+				rec = new RelevanceRecord (e);
 
 			isAction = rec.IsAction;
 			
 			// Get string similarity score.
-			score = StringScoreForAbbreviation (o.NameSafe, match);
+			score = StringScoreForAbbreviation (name, match);
 			if (score == 0f) return 0f;
 			
 			// We must give a base, non-zero relevance to make scoring rules take
@@ -122,7 +124,7 @@ namespace Do.Core {
 			// relevance, the object with the shorter name comes first. Objects
 			// with shorter names tend to be simpler, and more often what the
 			// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
-			relevance = DefaultRelevance / Math.Max (1, o.NameSafe.Length);
+			relevance = DefaultRelevance / Math.Max (1, name.Length);
 
 			if (0 < rec.Hits) {
 				// On a scale of 0 (new) to 1 (old), how old is the item?
@@ -149,14 +151,14 @@ namespace Do.Core {
 			relevance *= 1f - (age / 2f);
 
 			if (isAction) {
-				Act oa = o as Act;
+				SafeAct action = (e as Act).Safe;
 				// We penalize actions, but only if they're not used in the first pane
 				// often.
 				if (rec.FirstPaneHits < 3)
 					relevance *= 0.8f;
 
 				// Penalize actions that require modifier items.
-				if (!oa.ModifierItemsOptional)
+				if (!action.ModifierItemsOptional)
 					relevance *= 0.8f;
 
 				if (PenalizedActionTypes.Contains (rec.Type))

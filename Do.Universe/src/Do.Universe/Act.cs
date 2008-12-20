@@ -1,4 +1,4 @@
-/* Action.cs
+/* Act.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -21,11 +21,49 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Do.Universe.Safe;
+
 namespace Do.Universe
 {	
 
 	public abstract class Act : Element
 	{
+		static SafeAct safe_act = new SafeAct ();
+
+		/// <value>
+		/// Quick access to a safe equivalent of the reciever.
+		/// </value>
+		/// <remarks>
+		/// The caller DOES NOT have exclusive access to the value
+		/// returned; DO NOT put the value in a collection, linq statement,
+		/// or otherwise retain the value returned. The following is the
+		/// sole legitimate use:
+		/// <code>
+		/// act.Safe.Perform (...);
+		/// </code>
+		/// In words: access the property, but do not retain it.
+		/// </value>
+		/// </remarks>
+		public new SafeAct Safe {
+			get {
+				safe_act.Act = this;
+				return safe_act;
+			}
+		}
+
+		/// <summary>
+		/// Returns a safe equivalent of the reciever. Unlike Safe,
+		/// this returns a new safe wrapper instance that the caller has
+		/// exclusive access to. You may want to call this in a multi-threaded
+		/// context, or if you need a collection of safe instances.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="SafeAct"/>
+		/// </returns>
+		public new SafeAct RetainSafe ()
+		{
+			return new SafeAct (this);
+		}
 		
 		/// <value>
 		/// An array of Item sub-interfaces that this action supports.
@@ -126,83 +164,5 @@ namespace Do.Universe
 		/// </returns>
 		public abstract IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems);
 
-
-		#region Safe alternatives
-		
-		public IEnumerable<Item> DynamicModifierItemsForItemSafe (Item item)
-		{
-			IEnumerable<Item> modItems = null;
-
-			item = ProxyItem.Unwrap (item);
-
-			if (!SupportedModifierItemTypes.Any (type => type.IsInstanceOfType (item)))
-				return Enumerable.Empty<Item> ();
-			
-			try {
-				// Strictly evaluate the IEnumerable before we leave the try block.
-				modItems = DynamicModifierItemsForItem (item).ToArray ();
-			} catch (Exception e) {
-				modItems = null;
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in DynamicModifierItemsForItem: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
-			} finally {
-				modItems = modItems ?? Enumerable.Empty<Item> ();
-			}
-			return modItems;
-		}
-
-		public bool SupportsItemSafe (Item item)
-		{
-			item = ProxyItem.Unwrap (item);
-			
-			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item))) return false;
-
-			try {
-				return SupportsItem (item);
-			} catch (Exception e) {
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in SupportsItem: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
-			}
-			return false;
-		}
-
-		public bool SupportsModifierItemForItemsSafe (IEnumerable<Item> items, Item modItem)
-		{
-			items = ProxyItem.Unwrap (items);
-			modItem = ProxyItem.Unwrap (modItem);
-			
-			if (!SupportedModifierItemTypes.Any (type => type.IsInstanceOfType (modItem))) return false;
-
-			try {
-				return SupportsModifierItemForItems (items, modItem);
-			} catch (Exception e) {
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in SupportsModifierItemForItems: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
-			}
-			return false;
-		}
-
-		public IEnumerable<Item> PerformSafe (IEnumerable<Item> items, IEnumerable<Item> modItems)
-		{
-			IEnumerable<Item> results = null;
-			
-			items = ProxyItem.Unwrap (items);
-			modItems = ProxyItem.Unwrap (modItems);
-			
-			try {
-				// Strictly evaluate the IEnumerable before we leave the try block.
-				results = Perform (items, modItems);
-				if (results != null) results = results.ToArray ();
-			} catch (Exception e) {
-				results = null;
-				Console.Error.WriteLine ("{0} \"{1}\" encountered an error in Perform: {2}", GetType (), NameSafe, e.Message);
-				// Log.Debug (e.StackTrace);
-			} finally {
-				results = results ?? Enumerable.Empty<Item> ();
-			}
-			return results;
-		}
-
-		#endregion
 	}
 }
