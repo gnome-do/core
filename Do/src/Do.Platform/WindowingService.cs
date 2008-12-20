@@ -31,7 +31,12 @@ namespace Do.Platform
 		{
 			UI.MainMenu.Instance.PopupAtPosition (x, y);
 		}
-
+		
+		public void SummonMainWindow ()
+		{
+			Do.Controller.Summon ();
+		}
+		
 #endregion
 
 	}

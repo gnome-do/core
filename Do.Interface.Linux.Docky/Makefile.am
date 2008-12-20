@@ -6,7 +6,9 @@ TARGET = library
 
 FILES = \
 	AssemblyInfo.cs \
+	src/Docky.Interface/AbstractDockItem.cs \
 	src/Docky.Interface/ApplicationDockItem.cs \
+	src/Docky.Interface/DoDockItem.cs \
 	src/Docky.Interface/DockArea.cs \
 	src/Docky.Interface/DockItem.cs \
 	src/Docky.Interface/DockItemProvider.cs \

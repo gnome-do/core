@@ -33,7 +33,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ApplicationDockItem : IDockItem
+	public class ApplicationDockItem : AbstractDockItem
 	{
 		static IEnumerable<String> DesktopFilesDirectories {
 			get {
@@ -50,11 +50,11 @@ namespace Docky.Interface
 		}
 		
 		Wnck.Application application;
-		Surface sr, icon_surface;
+		Surface icon_surface;
 		Gdk.Rectangle icon_region;
 		
 		#region IDockItem implementation 
-		public Surface GetIconSurface (Surface sr)
+		public override Surface GetIconSurface (Surface sr)
 		{
 			if (icon_surface == null) {
 				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
@@ -152,34 +152,15 @@ namespace Docky.Interface
 			return null;
 		}
 		
-		public Surface GetTextSurface (Surface similar)
-		{
-			if (sr == null)
-				sr = Util.GetBorderedTextSurface (application.Name, DockPreferences.TextWidth, similar);
-			return sr;
-		}
-		
-		public string Description {
+		public override  string Description {
 			get {
 				return application.Name;
 			}
 		}
 		
-		public bool DrawIndicator { get { return true; } }
+		public override bool DrawIndicator { get { return true; } }
 		
-		public int Width {
-			get {
-				return DockPreferences.IconSize;
-			}
-		}
-		
-		public int Height {
-			get {
-				return DockPreferences.IconSize;
-			}
-		}
-		
-		public bool Scalable {
+		public override bool Scalable {
 			get {
 				return true;
 			}
@@ -189,25 +170,31 @@ namespace Docky.Interface
 			get { return application; }
 		}
 		
-		public DateTime LastClick { get; set; }
-		
-		public DateTime DockAddItem { get; set; }
 		#endregion 
 		
-		public ApplicationDockItem(Wnck.Application application)
+		public ApplicationDockItem(Wnck.Application application) : base ()
 		{
-			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			this.application = application;
-			DockPreferences.IconSizeChanged += Dispose;
 		}
 		
-		public void Clicked (uint button, IDoController controller)
+		protected override void OnIconSizeChanged ()
+		{
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
+			}
+			
+			base.OnIconSizeChanged ();
+		}
+
+		
+		public override void Clicked (uint button, IDoController controller)
 		{
 			if (button == 1)
 				WindowUtils.PerformLogicalClick (new Wnck.Application[] {application});
 		}
 
-		public void SetIconRegion (Gdk.Rectangle region)
+		public override void SetIconRegion (Gdk.Rectangle region)
 		{
 			if (icon_region == region)
 				return;
@@ -220,25 +207,20 @@ namespace Docky.Interface
 		
 		#region IDisposable implementation 
 		
-		public void Dispose ()
+		public override void Dispose ()
 		{
-//			application.Dispose ();
-			
-			if (sr != null) {
-				sr.Destroy ();
-				sr = null;
-			}
-			
 			if (icon_surface != null) {
 				icon_surface.Destroy ();
 				icon_surface = null;
 			}
+			
+			base.Dispose ();
 		}
 		
 		#endregion 
 		
 		
-		public bool Equals (IDockItem other)
+		public override bool Equals (IDockItem other)
 		{
 			if (!(other is ApplicationDockItem))
 				return false;
