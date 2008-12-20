@@ -52,7 +52,20 @@ namespace Do.Universe.Safe
 		}
 
 		public override IEnumerable<Type> SupportedItemTypes {
-			get { return ItemSource.SupportedItemTypes ?? Type.EmptyTypes; }
+			get {
+				IEnumerable<Type> types = null;
+				try {
+					// We don't strictly evalute here because Linq is unlikely and we
+					// want this to be fast.
+					types = ItemSource.SupportedItemTypes;
+				} catch (Exception e) {
+					types = null;
+					SafeElement.LogSafeError (ItemSource, e, "SupportedItemTypes");
+				} finally {
+					types = types ?? Type.EmptyTypes;
+				}
+				return types;
+			}
 		}
 		
 		public override void UpdateItems ()

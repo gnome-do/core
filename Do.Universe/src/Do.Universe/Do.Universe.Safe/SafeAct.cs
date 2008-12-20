@@ -51,15 +51,48 @@ namespace Do.Universe.Safe
 		}
 
 		public override IEnumerable<Type> SupportedItemTypes {
-			get { return Act.SupportedItemTypes ?? Type.EmptyTypes; }
+			get {
+				IEnumerable<Type> types = null;
+				try {
+					// We don't strictly evalute here because Linq is unlikely and we
+					// want this to be fast.
+					types = Act.SupportedItemTypes;
+				} catch (Exception e) {
+					types = null;
+					SafeElement.LogSafeError (Act, e, "SupportedItemTypes");
+				} finally {
+					types = types ?? Type.EmptyTypes;
+				}
+				return types;
+			}
 		}
 		
 		public override IEnumerable<Type> SupportedModifierItemTypes {
-			get { return Act.SupportedModifierItemTypes ?? Type.EmptyTypes; }
+			get {
+				IEnumerable<Type> types = null;
+				try {
+					// We don't strictly evalute here because Linq is unlikely and we
+					// want this to be fast.
+					types = Act.SupportedModifierItemTypes;
+				} catch (Exception e) {
+					types = null;
+					SafeElement.LogSafeError (Act, e, "SupportedModifierItemTypes");
+				} finally {
+					types = types ?? Type.EmptyTypes;
+				}
+				return types;
+			}
 		}
 		
 		public override bool ModifierItemsOptional {
-			get { return Act.ModifierItemsOptional; }
+			get {
+				try {
+					return Act.ModifierItemsOptional;
+				} catch (Exception e) {
+					SafeElement.LogSafeError (Act, e, "ModifierItemsOptional");
+				}
+				return false;
+			}
 		}
 		
 		public override IEnumerable<Item> DynamicModifierItemsForItem (Item item)
