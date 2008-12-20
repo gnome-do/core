@@ -102,7 +102,7 @@ namespace Do.Universe.Safe
 			item = ProxyItem.Unwrap (item);
 
 			// This is a duplicate check, so we may want to remove it.
-			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item)))
+			if (!SupportedModifierItemTypes.Any (type => type.IsInstanceOfType (item)))
 				return Enumerable.Empty<Item> ();
 			
 			try {
