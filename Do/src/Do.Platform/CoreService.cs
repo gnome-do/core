@@ -41,11 +41,9 @@ namespace Do.Platform
 			return element;
 		}
 		
-		public IEnumerable<Item> GetMostUsedItems (int numItems)
+		public IEnumerable<Item> GetItemsOrderedByRelevance ()
 		{
-			return Do.UniverseManager.Search ("", typeof (Item).Cons (null))
-				.Cast<Item> ()
-				.Take (numItems);
+			return Do.UniverseManager.Search ("", typeof (Item).Cons (null)).Cast<Item> ();
 		}
 
 		#endregion

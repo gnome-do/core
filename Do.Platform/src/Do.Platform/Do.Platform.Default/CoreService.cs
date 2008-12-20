@@ -36,10 +36,10 @@ namespace Do.Platform.Default
 			return new EmptyElement ();
 		}
 		
-		public IEnumerable<Item> GetMostUsedItems (int numItems)
+		public IEnumerable<Item> GetItemsOrderedByRelevance ()
 		{
 			Log.Debug ("Default ICoreService cannot get Elements.");
-			return new Item [0];
+			yield break;
 		}
 		
 		#endregion

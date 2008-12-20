@@ -30,7 +30,7 @@ namespace Do.Platform
 	{
 		Element GetElement (string uniqueId);
 		
-		IEnumerable<Item> GetMostUsedItems (int numItems);
+		IEnumerable<Item> GetItemsOrderedByRelevance ();
 	}
 
 }
