@@ -320,7 +320,11 @@ namespace Do.Interface.AnimationBase
 #region Animation Properties
 		private bool AnimationNeeded {
 			get {
-				return ExpandNeeded || ShrinkNeeded || TextScaleNeeded || FadeNeeded || WindowFadeNeeded;
+				return  ExpandNeeded || 
+					    ShrinkNeeded || 
+						TextScaleNeeded || 
+						FadeNeeded || 
+						WindowFadeNeeded;
 			}
 		}
 		
@@ -813,8 +817,10 @@ namespace Do.Interface.AnimationBase
 		{
 			if (Context.GetPaneObject (Focus) == null)
 				return;
-			TextUtility.RenderLayoutText (cr, GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description), drawing_area.X + 10,
-			                                 drawing_area.Y + InternalHeight - WindowBorder - 4, drawing_area.Width - 20, TextHeight);
+			string text = GLib.Markup.EscapeText (Context.GetPaneObject (Focus).Description);
+			int x = drawing_area.X + 10;
+			int y = drawing_area.Y + InternalHeight - WindowBorder - 4;
+			TextUtility.RenderLayoutText (cr, text, x, y, drawing_area.Width - 20, TextHeight);
 		}
 		
 		void RenderPaneText (Pane pane, Context cr)
@@ -832,18 +838,22 @@ namespace Do.Interface.AnimationBase
 				Pango.Color color = new Pango.Color ();
 				color.Blue = color.Green = color.Red = ushort.MaxValue;
 				int y = drawing_area.Y + WindowBorder + TitleBarHeight + 6;
-				TextUtility.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, 
-				                                 TextHeight, color, Pango.Alignment.Left, Pango.EllipsizeMode.None);
+				int x = drawing_area.X + PaneOffset (pane) + 5;
+				
+				TextUtility.RenderLayoutText (cr, text, x, y, BoxWidth - 10, TextHeight, color, 
+				                              Pango.Alignment.Left, Pango.EllipsizeMode.None);
 			} else {
-				text = (!string.IsNullOrEmpty (Context.GetPaneQuery (pane))) ? 
-					Util.FormatCommonSubstrings 
-						(text, Context.GetPaneQuery (pane), HighlightFormat) : text;
+				bool queryIsNull = string.IsNullOrEmpty (Context.GetPaneQuery (pane)); 
+				text = (!queryIsNull) ?	Util.FormatCommonSubstrings (text, Context.GetPaneQuery (pane), HighlightFormat) : text;
+				
 				if (PaneOutlineRenderer.StackIconText) {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - TextHeight - 9;
-					TextUtility.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + 5, y, BoxWidth - 10, TextHeight);
+					int x = drawing_area.X + PaneOffset (pane) + 5;
+					TextUtility.RenderLayoutText (cr, text, x, y, BoxWidth - 10, TextHeight);
 				} else {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + (int)(BoxHeight/2);
-					TextUtility.RenderLayoutText (cr, text, drawing_area.X + PaneOffset (pane) + IconSize + 10, y, BoxWidth - IconSize - 20, TextHeight);
+					int x = drawing_area.X + PaneOffset (pane) + IconSize + 10;
+					TextUtility.RenderLayoutText (cr, text, x, y, BoxWidth - IconSize - 20, TextHeight);
 				}
 			}
 		}
