@@ -88,8 +88,8 @@ namespace Do.Core
 			InterfaceManager.Initialize ();
 			
 			// Now allow loading of non-services.
-			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnItemSourceChange);
-			AddinManager.AddExtensionNodeHandler ("/Do/Action",  OnActionChange);
+			foreach (string path in ExtensionPaths)
+				AddinManager.AddExtensionNodeHandler (path, OnPluginChanged);
 
 			InstallLocalPlugins (setup);
 		}
@@ -189,68 +189,34 @@ namespace Do.Core
 			}
 		}
 		
-		static void OnActionChange (object s, ExtensionNodeEventArgs args)
+		static void OnPluginChanged (object sender, ExtensionNodeEventArgs args)
 		{
-			ActionChange (args.ExtensionNode as TypeExtensionNode, args.Change);
-		}
-		
-		static void ActionChange (TypeExtensionNode node, ExtensionChange change)
-		{
-			switch (change) {
-			case ExtensionChange.Add:
-				try {
-					Act action = node.GetInstance () as Act;
-					Log.Info ("Loaded \"{0}\" action.", action.Safe.Name);
-				} catch (Exception e) {
-					Log.Error ("Encountered error loading action: {0} \"{1}\"",
-							e.GetType ().Name, e.Message);
-					Log.Debug (e.StackTrace);
-				}
-				break;
-			case ExtensionChange.Remove:
-				try {
-					Act action = node.GetInstance () as Act;
-					Log.Info ("Unloaded \"{0}\" action.", action.Safe.Name);
-				} catch (Exception e) {
-					Log.Error ("Encountered error unloading action: {0} \"{1}\"",
-							e.GetType ().Name, e.Message);
-					Log.Debug (e.StackTrace);
-				}
-				break;
-			}	
-		}
-		
-		static void OnItemSourceChange (object s, ExtensionNodeEventArgs args)
-		{
-			ItemSourceChange (args.ExtensionNode as TypeExtensionNode, args.Change);
-		}
-		
-		static void ItemSourceChange (TypeExtensionNode node, ExtensionChange change)
-		{
-			switch (change) {
-			case ExtensionChange.Add:
-				try {
-					ItemSource source = node.GetInstance () as ItemSource;
-					Log.Info ("Loaded \"{0}\" item source.", source.Safe.Name);
-				} catch (Exception e) {
-					Log.Error ("Encountered error loading item source: {0} \"{1}\"",
-							e.GetType ().Name, e.Message);
-					Log.Debug (e.StackTrace);
-				}
-				break;
-			case ExtensionChange.Remove:
-				try {
-					ItemSource source = node.GetInstance () as ItemSource;
-					Log.Info ("Unloaded \"{0}\".", source.Safe.Name);
-				} catch (Exception e) {
-					Log.Error ("Encountered error unloading item source: {0} \"{1}\"",
-							e.GetType ().Name, e.Message);
-					Log.Debug (e.StackTrace);
-				}
-				break;
-			}	
-		}
+			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
 
+			switch (args.Change) {
+			case ExtensionChange.Add:
+				try {
+					object plugin = node.GetInstance ();
+					Log.Debug ("Loaded \"{0}\" from plugin.", plugin.GetType ().Name);
+				} catch (Exception e) {
+					Log.Error ("Encountered error loading plugin: {0} \"{1}\"",
+							e.GetType ().Name, e.Message);
+					Log.Debug (e.StackTrace);
+				}
+				break;
+			case ExtensionChange.Remove:
+				try {
+					object plugin = node.GetInstance ();
+					Log.Debug ("Unloaded \"{0}\".", plugin.GetType ().Name);
+				} catch (Exception e) {
+					Log.Error ("Encountered error unloading plugin: {0} \"{1}\"",
+							e.GetType ().Name, e.Message);
+					Log.Debug (e.StackTrace);
+				}
+				break;
+			}	
+		}
+		
 		/// <summary>
 		/// Get all objects conforming to type T provided by a given addin.
 		/// </summary>
