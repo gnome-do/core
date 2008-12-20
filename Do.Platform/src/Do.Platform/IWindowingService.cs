@@ -27,5 +27,6 @@ namespace Do.Platform
 	public interface IWindowingService : IService
 	{
 		void ShowMainMenu (int x, int y);
+		void Summon ();
 	}
 }

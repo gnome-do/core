@@ -30,5 +30,10 @@ namespace Do.Platform.Default
 		{
 			Log.Debug ("Default IWindowingService cannot show the main menu.");
 		}
+		
+		public void Summon ()
+		{
+			Log.Debug ("Default IWondowingService cannot summon.");
+		}
 	}
 }

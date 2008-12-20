@@ -58,6 +58,7 @@ namespace Docky.Interface
 		public List<IDockItem> DockItems {
 			get {
 				List<IDockItem> out_items = new List<IDockItem> ();
+				out_items.Add (MenuItem);
 				out_items.AddRange (statistical_items);
 				
 				if (custom_items.Any ()) {
@@ -75,10 +76,12 @@ namespace Docky.Interface
 		}
 		
 		SeparatorItem Separator { get; set; }
+		DoDockItem MenuItem { get; set; }
 		
 		public DockItemProvider ()
 		{
 			Separator = new SeparatorItem ();
+			MenuItem = new DoDockItem ();
 			
 			custom_items = new Dictionary<string, IDockItem> ();
 			statistical_items = new List<IDockItem> ();
