@@ -63,7 +63,7 @@ namespace Docky.Interface
 		
 		public override string Description {
 			get {
-				return Mono.Posix.Catalog.GetString ("Summon GNOME Do");
+				return Mono.Unix.Catalog.GetString ("Summon GNOME Do");
 			}
 		}
 		
