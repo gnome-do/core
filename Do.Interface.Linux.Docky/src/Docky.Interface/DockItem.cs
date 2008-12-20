@@ -41,8 +41,8 @@ namespace Docky.Interface
 		Surface sr, icon_surface;
 		List<Wnck.Application> apps;
 		
-		public string Icon { get { return item.IconSafe; } }
-		public string Description { get { return item.NameSafe; } }
+		public string Icon { get { return item.Icon; } }
+		public string Description { get { return item.Name; } }
 		public Element Element { get { return item; } }
 		
 		public DateTime LastClick { get; set; }
@@ -116,7 +116,7 @@ namespace Docky.Interface
 		public Surface GetTextSurface (Surface similar)
 		{
 			if (sr == null)
-				sr = Util.GetBorderedTextSurface (item.NameSafe, DockPreferences.TextWidth, similar);
+				sr = Util.GetBorderedTextSurface (item.Name, DockPreferences.TextWidth, similar);
 			return sr;
 		}
 		

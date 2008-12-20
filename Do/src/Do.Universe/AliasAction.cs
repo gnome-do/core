@@ -29,31 +29,31 @@ namespace Do.Universe
 	class AliasAction : Act
 	{
 		
-		protected override string Name {
+		public override string Name {
 			get { return Catalog.GetString ("Assign Alias...");  }
 		}
 
-		protected override string Description {
+		public override string Description {
 			get { return Catalog.GetString ("Give an item an alternate name."); }
 		}
 
-		protected override string Icon {
+		public override string Icon {
 			get { return "emblem-symbolic-link"; }
 		}
 
-		protected override IEnumerable<Type> SupportedItemTypes {
+		public override IEnumerable<Type> SupportedItemTypes {
 			get { yield return typeof (Item);  }
 		}
 
-		protected override IEnumerable<Type> SupportedModifierItemTypes {
+		public override IEnumerable<Type> SupportedModifierItemTypes {
 			get { yield return typeof (ITextItem); }
 		}
 
-		protected override bool ModifierItemsOptional {
+		public override bool ModifierItemsOptional {
 			get { return false; }
 		}
 
-		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			string alias;
 			

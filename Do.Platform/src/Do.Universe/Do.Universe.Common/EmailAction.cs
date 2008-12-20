@@ -30,23 +30,23 @@ namespace Do.Universe.Common
 {
 	public class EmailAction : Act
 	{
-		protected override string Name {
+		public override string Name {
 			get {
 				return Catalog.GetString ("Email");
 			}
 		}
 
-		protected override string Description {
+		public override string Description {
 			get {
 				return Catalog.GetString ("Compose a new email to a friend.");
 			}
 		}
 
-		protected override string Icon {
+		public override string Icon {
 			get { return "stock_mail-compose"; }
 		}
 
-		protected override IEnumerable<Type> SupportedItemTypes {
+		public override IEnumerable<Type> SupportedItemTypes {
 			get {
 				yield return typeof (ContactItem);
 				yield return typeof (IContactDetailItem);
@@ -54,18 +54,18 @@ namespace Do.Universe.Common
 			}
 		}
 
-		protected override IEnumerable<Type> SupportedModifierItemTypes {
+		public override IEnumerable<Type> SupportedModifierItemTypes {
 			get {
 				yield return typeof (IFileItem);
 				yield return typeof (ITextItem);
 			}
 		}
 
-		protected override bool ModifierItemsOptional {
+		public override bool ModifierItemsOptional {
 			get { return true; }
 		}
 
-		protected override bool SupportsItem (Item item)
+		public override bool SupportsItem (Item item)
 		{
 			if (item is ContactItem) {
 				return (item as ContactItem).Details.Any (d => d.StartsWith ("email"));
@@ -80,7 +80,7 @@ namespace Do.Universe.Common
 			return false;
 		}
 
-		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			string subject, body;
 			IEnumerable<string> recipients, texts, files;

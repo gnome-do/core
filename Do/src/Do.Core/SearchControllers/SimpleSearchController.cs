@@ -199,7 +199,7 @@ namespace Do.Core
 			List<Element> children = new List<Element> ();
 
 			foreach (ItemSource source in PluginManager.ItemSources) {
-				foreach (Element child in source.ChildrenOfItemSafe (item))
+				foreach (Element child in source.Safe.ChildrenOfItem (item))
 					children.Add (child);
 			}
 			

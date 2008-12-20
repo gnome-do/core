@@ -28,23 +28,23 @@ namespace Do.Universe
 	public class InternalItemSource : ItemSource
 	{
 		
-		protected override IEnumerable<Type> SupportedItemTypes {
+		public override IEnumerable<Type> SupportedItemTypes {
 			get { yield break; }
 		}
 		
-		protected override string Name {
+		public override string Name {
 			get { return Catalog.GetString ("Internal GNOME Do Items"); }
 		}
 		
-		protected override string Description {
+		public override string Description {
 			get { return Catalog.GetString ("Special items relevant to the inner-workings of GNOME Do."); }
 		}
 		
-		protected override string Icon {
+		public override string Icon {
 			get { return "gnome-system"; }
 		}
 		
-		protected override IEnumerable<Item> Items {
+		public override IEnumerable<Item> Items {
 			get {
 				yield return new SelectedTextItem ();
 				yield return new PreferencesItem ();

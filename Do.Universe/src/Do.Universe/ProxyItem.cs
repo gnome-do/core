@@ -62,16 +62,16 @@ namespace Do.Universe
 			get; protected set;
 		}
 
-		protected override string Name {
-			get { return name ?? Item.NameSafe; }
+		public override string Name {
+			get { return name ?? Item.Name; }
 		}
 		
-		protected override string Description {
-			get { return description ?? Item.DescriptionSafe; }
+		public override string Description {
+			get { return description ?? Item.Description; }
 		}
 		
-		protected override string Icon {
-			get { return icon ?? Item.IconSafe; }
+		public override string Icon {
+			get { return icon ?? Item.Icon; }
 		}
 
 		public static Item Unwrap (Item item)

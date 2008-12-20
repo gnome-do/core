@@ -31,23 +31,23 @@ namespace Do.Universe.Common
 	public class RevealAction : Act
 	{
 		
-		protected override string Name {
+		public override string Name {
 			get { return Catalog.GetString ("Reveal"); }
 		}
 		
-		protected override string Description {
+		public override string Description {
 			get { return Catalog.GetString ("Reveals a file in the file manager."); }
 		}
 		
-		protected override string Icon {
+		public override string Icon {
 			get { return "file-manager"; }
 		}
 		
-		protected override IEnumerable<Type> SupportedItemTypes {
+		public override IEnumerable<Type> SupportedItemTypes {
 			get { yield return typeof (IFileItem); }
 		}
 		
-		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			foreach (IFileItem file in items) {
 				Services.Environment.OpenPath (Path.GetDirectoryName (file.Path));

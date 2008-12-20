@@ -21,6 +21,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Do.Universe.Safe;
+
 namespace Do.Universe
 {
 	/// <summary>
@@ -30,6 +32,20 @@ namespace Do.Universe
 	/// </summary>
 	public abstract class ItemSource : Element
 	{
+
+		static SafeItemSource safe_item_source = new SafeItemSource ();
+
+		public new SafeItemSource Safe {
+			get {
+				safe_item_source.ItemSource = this;
+				return safe_item_source;
+			}
+		}
+
+		public new SafeItemSource RetainSafe ()
+		{
+			return new SafeItemSource (this);
+		}
 		
 		/// <value>
 		/// Item sub-types provided/supported by this source. These include any
@@ -39,13 +55,13 @@ namespace Do.Universe
 		/// provides/supports (e.g.  FirefoxBookmarkItem instead of Item or
 		/// BookmarkItem).
 		/// </value>
-		protected abstract IEnumerable<Type> SupportedItemTypes { get; }
+		public abstract IEnumerable<Type> SupportedItemTypes { get; }
 		
 		/// <value>
 		/// The Items provided by this source.
 		/// null is ok---it signifies that no items are provided.
 		/// </value>
-		protected virtual IEnumerable<Item> Items {
+		public virtual IEnumerable<Item> Items {
 			get { yield break; }
 		}
 		
@@ -55,7 +71,7 @@ namespace Do.Universe
 		/// null is ok---it signifies that no children are provided for the Item
 		/// argument.
 		/// </summary>
-		protected virtual IEnumerable<Item> ChildrenOfItem (Item item)
+		public virtual IEnumerable<Item> ChildrenOfItem (Item item)
 		{
 			yield break;
 		}
@@ -66,67 +82,9 @@ namespace Do.Universe
 		/// Example: Re-read bookmarks from the filesystem or check for new email,
 		/// etc.
 		/// </summary>
-		protected virtual void UpdateItems ()
+		public virtual void UpdateItems ()
 		{
 		}
-
-		#region Safe alternatives
-
-		public IEnumerable<Type> SupportedItemTypesSafe {
-			get {
-				return SupportedItemTypes ?? Type.EmptyTypes;
-			}
-		}
-		
-		public void UpdateItemsSafe ()
-		{
-			try {
-				UpdateItems ();
-			} catch (Exception e) {
-				LogSafeError ("UpdateItems", e);
-			}
-		}
-		
-		public IEnumerable<Item> ItemsSafe
-		{
-			get {
-				IEnumerable<Item> items = null;
-				
-				try {
-					// Strictly evaluate the IEnumerable before we leave the try block.
-					items = Items.ToArray ();
-				} catch (Exception e) {
-					items = null;
-					LogSafeError ("Items", e);
-				} finally {
-					items = items ?? Enumerable.Empty<Item> ();
-				}
-
-				return items;
-			}
-		}
-
-		public IEnumerable<Item> ChildrenOfItemSafe (Item item)
-		{
-			IEnumerable<Item> children = null;
-
-			item = ProxyItem.Unwrap (item);
-
-			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item)))
-			    return Enumerable.Empty<Item> ();
-
-			try {
-				// Strictly evaluate the IEnumerable before we leave the try block.
-				children = ChildrenOfItem (item).ToArray ();
-			} catch (Exception e) {
-				children = null;
-				LogSafeError ("ChildrenOfItem", e);
-			} finally {
-				children = children ?? Enumerable.Empty<Item> ();
-			}
-			return children;
-		}
-		#endregion
 	}
 
 }

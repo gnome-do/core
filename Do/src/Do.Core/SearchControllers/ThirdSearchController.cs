@@ -23,6 +23,7 @@ using System.Collections.Generic;
 
 using Do.Interface;
 using Do.Universe;
+using Do.Universe.Safe;
 
 namespace Do.Core
 {
@@ -47,7 +48,7 @@ namespace Do.Core
 					return false;
 				}
 				
-				return action.SupportedModifierItemTypesSafe.Any ();
+				return action.SupportedModifierItemTypes.Any ();
 			}
 		}
 		
@@ -89,7 +90,7 @@ namespace Do.Core
 					else
 						return; //you have done something weird, ignore it!
 					
-					foreach (Type t in action.SupportedModifierItemTypesSafe) {
+					foreach (Type t in action.SupportedModifierItemTypes) {
 						if (t == typeof (ITextItem)) {
 							textMode = value;
 							textModeFinalize = false;
@@ -147,13 +148,12 @@ namespace Do.Core
 
 		private Element[] GetContextResults ()
 		{
-			Act action;
+			SafeAct action;
 			Item item;
 			List<Item> items = new List<Item> ();
 			if (FirstController.Selection is Act) {
-				
-				action = FirstController.Selection as Act;
-				item   = SecondController.Selection as Item;
+				action = (FirstController.Selection as Act).Safe;
+				item = SecondController.Selection as Item;
 				foreach (Element obj in SecondController.FullSelection) {
 					if (obj is Item)
 						items.Add (obj as Item);
@@ -161,7 +161,7 @@ namespace Do.Core
 				
 			} else if (SecondController.Selection is Act) {
 				
-				action = SecondController.Selection as Act;
+				action = (SecondController.Selection as Act).Safe;
 				item   = FirstController.Selection as Item;
 				foreach (Element obj in FirstController.FullSelection) {
 					if (obj is Item)
@@ -174,24 +174,24 @@ namespace Do.Core
 			}
 
 			// If we support nothing, dont search.
-			if (!action.SupportedModifierItemTypesSafe.Any ()) return null;
+			if (!action.SupportedModifierItemTypes.Any ()) return null;
 			
 			List<Element> results = new List<Element> ();
 
 			if (!textMode) {
 				List<Element> initresults = InitialResults ();
 				foreach (Item moditem in initresults) {
-					if (action.SupportsModifierItemForItemsSafe (items, moditem))
+					if (action.SupportsModifierItemForItems (items, moditem))
 						results.Add (moditem);
 				}
 			
 				if (Query.Length == 0)
-					results.AddRange (action.DynamicModifierItemsForItemSafe (item).Cast<Element> ());
+					results.AddRange (action.DynamicModifierItemsForItem (item).Cast<Element> ());
 				results.Sort ();
 			}
 			
 			Item textItem = new ImplicitTextItem (Query);
-			if (action.SupportsModifierItemForItemsSafe (items, textItem))
+			if (action.SupportsModifierItemForItems (items, textItem))
 				results.Add (textItem);
 			
 			return results.ToArray ();

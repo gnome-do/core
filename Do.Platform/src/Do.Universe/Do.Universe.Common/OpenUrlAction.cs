@@ -51,33 +51,33 @@ namespace Do.Universe.Common
 			url_regex = new Regex (UrlPattern, RegexOptions.Compiled);
 		}
 		
-		protected override string Name {
+		public override string Name {
 			get { return  Catalog.GetString ("Open URL"); }
 		}
 		
-		protected override string Description {
+		public override string Description {
 			get { return  Catalog.GetString ("Opens bookmarks and manually-typed URLs."); }
 		}
 		
-		protected override string Icon {
+		public override string Icon {
 			get { return "web-browser"; }
 		}
 		
-		protected override IEnumerable<Type> SupportedItemTypes {
+		public override IEnumerable<Type> SupportedItemTypes {
 			get {
 				yield return typeof (IUrlItem);
 				yield return typeof (ITextItem);
 			}
 		}
 
-		protected override bool SupportsItem (Item item)
+		public override bool SupportsItem (Item item)
 		{
 			if (item is ITextItem)
 				return url_regex.IsMatch ((item as ITextItem).Text);
 			return true;
 		}
 		
-		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			IEnvironmentService env = Services.Environment;
 

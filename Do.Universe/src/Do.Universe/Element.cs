@@ -24,6 +24,8 @@ using System.Collections.Generic;
 
 using Mono.Unix;
 
+using Do.Universe.Safe;
+
 namespace Do.Universe
 {
 
@@ -31,9 +33,10 @@ namespace Do.Universe
 		IEquatable<Element>, IComparable<Element>
 	{
 		const string UniqueIdFormat = "{0}: {1} ({2})";
-		static readonly string DefaultName;
-		static readonly string DefaultDescription;
-		static readonly string DefaultIcon;
+
+		public static readonly string DefaultName;
+		public static readonly string DefaultDescription;
+		public static readonly string DefaultIcon;
 
 		static Element ()
 		{
@@ -48,13 +51,29 @@ namespace Do.Universe
 		{
 			uniqueId = DefaultName;
 		}
+		
+		static SafeElement safe_element = new SafeElement ();
+		
+		public SafeElement Safe {
+			get {
+				safe_element.Element = this;
+				return safe_element;
+			}
+		}
+
+		public SafeElement RetainSafe ()
+		{
+			return new SafeElement (this);
+		}
 
 		public string UniqueId {
 			get {
 				// We have to initialize the UniqueId lazily, because it is not safe
 				// to initialize in the constructor, before subclasses have initialized.
-				if (object.Equals (uniqueId, DefaultName))
-					uniqueId = string.Format (UniqueIdFormat, NameSafe, DescriptionSafe, GetType ());
+				if (object.Equals (uniqueId, DefaultName)) { 
+					SafeElement safe = Safe;
+					uniqueId = string.Format (UniqueIdFormat, safe.Name, safe.Description, GetType ());
+				}
 				return uniqueId;
 			}
 		}
@@ -65,65 +84,15 @@ namespace Do.Universe
 		/// The human-readable name of the element.
 		/// Example: The name of an application, like "Pidgin Internet Messenger."
 		/// </value>
-		protected abstract string Name { get; }
+		public abstract string Name { get; }
 		
 		/// <value>
 		/// The human-readable description of the element.
 		/// Example: The URL of a bookmark or absolute path of a file.
 		/// </value>
-		protected abstract string Description { get; }
+		public abstract string Description { get; }
 		
-		protected abstract string Icon { get; }
-
-		#region Safe alternatives
-		
-		public string NameSafe {
-			get {
-				try {
-					return Name;
-				} catch (Exception e) {
-					LogSafeError ("Name", e, "");
-				}
-				return DefaultName;
-			}
-		}
-
-		public string DescriptionSafe {
-			get {
-				try {
-					return Description;
-				} catch (Exception e) {
-					LogSafeError ("Description", e);
-				}
-				return DefaultDescription;
-			}
-		}
-
-		public string IconSafe {
-			get {
-				try {
-					return Icon;
-				} catch (Exception e) {
-					LogSafeError ("Icon", e);
-				}
-				return DefaultIcon;
-			}
-		}
-
-		#endregion
-
-		protected void LogSafeError (string where, Exception e)
-		{
-			LogSafeError (where, e, NameSafe);
-		}
-
-		protected void LogSafeError (string where, Exception e, string name)
-		{
-				string format = "{0} \"{1}\" encountered an error in {2}: {3}.";
-				string message =
-					string.Format (format, GetType (), name, where, e.Message);
-				Console.Error.WriteLine (message);
-		}
+		public abstract string Icon { get; }
 		
 		public override int GetHashCode ()
 		{

@@ -95,18 +95,18 @@ namespace Do.Universe
 			}
 		}
 		
-		protected override string Name {
+		public override string Name {
 			get { return this ["name"] ?? this ["email"]; }
 		}
 		
-		protected override string Description {
+		public override string Description {
 			get {
 				return this ["description"] ?? AnEmailAddress ??
 					"No description.";
 			}
 		}
 		
-		protected override string Icon {
+		public override string Icon {
 			get {
 				if (null != Photo && File.Exists (Photo))
 					return Photo;

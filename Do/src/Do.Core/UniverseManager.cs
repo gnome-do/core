@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using Do;
 using Do.Addins;
 using Do.Universe;
+using Do.Universe.Safe;
 using Do.Platform;
 
 namespace Do.Core
@@ -163,8 +164,9 @@ namespace Do.Core
 				
 				foreach (ItemSource source in PluginManager.ItemSources) {
 					#warning The Log is not threadsafe...
-					Log.Debug ("Updating item source \"{0}\".", source.NameSafe);
-					UpdateSource (source);
+					SafeItemSource safeSource = source.Safe;
+					Log.Debug ("Updating item source \"{0}\".", safeSource.Name);
+					UpdateSource (safeSource);
 
 					if (UpdateRunTime < DateTime.Now - startUpdate) {
 						Thread.Sleep (UpdateTimeout);
@@ -193,15 +195,15 @@ namespace Do.Core
 		/// <summary>
 		/// Updates an item source and syncs it into the universe
 		/// </summary>
-		void UpdateSource (ItemSource source)
+		void UpdateSource (SafeItemSource source)
 		{
 			lock (universe_lock) {
-				foreach (Item item in source.ItemsSafe) {
+				foreach (Item item in source.Items) {
 					if (universe.ContainsKey (item.UniqueId))
 						universe.Remove (item.UniqueId);
 				}
-				source.UpdateItemsSafe ();
-				foreach (Item item in source.ItemsSafe) {
+				source.UpdateItems ();
+				foreach (Item item in source.Items) {
 					universe  [item.UniqueId] = item;
 				}
 			}
@@ -215,7 +217,7 @@ namespace Do.Core
 			ReloadActions ();
 			
 			foreach (ItemSource source in PluginManager.ItemSources)
-				UpdateSource (source);
+				UpdateSource (source.Safe);
 			
 			Log.Info ("Universe contains {0} items.", universe.Count);
 		}

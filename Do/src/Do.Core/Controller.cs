@@ -274,7 +274,7 @@ namespace Do.Core {
 				second = GetSelection (Pane.Second);
 				action = first as Act ?? second as Act;
 				return action != null &&
-					action.SupportedModifierItemTypesSafe.Any () &&
+					action.SupportedModifierItemTypes.Any () &&
 					controllers[1].Results.Any ();
 			}
 		}
@@ -294,8 +294,8 @@ namespace Do.Core {
 				action = first as Act ?? second as Act;
 				item = first as Item ?? second as Item;
 				return action != null && item != null &&
-					action.SupportedModifierItemTypesSafe.Any () &&
-					!action.ModifierItemsOptionalSafe &&
+					action.SupportedModifierItemTypes.Any () &&
+					!action.ModifierItemsOptional &&
 					controllers[1].Results.Any ();
 			}
 		}
@@ -436,7 +436,7 @@ namespace Do.Core {
 		{
 			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
 			if (SearchController.Selection != null)
-				clip.Text = SearchController.Selection.NameSafe;
+				clip.Text = SearchController.Selection.Name;
 		}
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
@@ -870,12 +870,12 @@ namespace Do.Core {
 			}
 		}
 		
-		void PerformActionAsync (object state)
+		void PerformActionAsync (object o)
 		{
-			PerformState performState = state as PerformState;
+			PerformState state = o as PerformState;
 			IEnumerable<Item> results = null;
 
-			results = performState.Action.PerformSafe (performState.Items, performState.ModifierItems);
+			results = state.Action.Safe.Perform (state.Items, state.ModifierItems);
 
 			// If we have results to feed back into the window, do so in a new
 			// iteration.
@@ -999,8 +999,8 @@ namespace Do.Core {
 		{
 			Act action =
 				Do.UniverseManager.Search ("", typeof (Act).Cons (filter), item)
-					.Cast<Act> ()
-					.Where (a => a.SupportsItemSafe (item))
+					.OfType<Act> ()
+					.Where (act => act.Safe.SupportsItem (item))
 					.FirstOrDefault ();
 
 			if (action == null) return;

@@ -132,7 +132,7 @@ namespace Do.Core
 				//We need to find actions for this item
 				//TODO -- Make this work for multiple items
 				foreach (Act action in initresults) {
-					if (action.SupportsItemSafe (item)) {
+					if (action.Safe.SupportsItem (item)) {
 						results.Add (action);
 					}
 				}
@@ -142,12 +142,12 @@ namespace Do.Core
 				Act action = FirstController.Selection as Act;
 				if (!textMode) {
 					foreach (Item item in initresults) {
-						if (action.SupportsItemSafe (item))
+						if (action.Safe.SupportsItem (item))
 							results.Add (item);
 					}
 				}
 				Item textItem = new ImplicitTextItem (Query);
-				if (action.SupportsItemSafe (textItem))
+				if (action.Safe.SupportsItem (textItem))
 					results.Add (textItem);
 			}
 			
@@ -224,7 +224,7 @@ namespace Do.Core
 					// but speeds up searches since we get more specific results back.  Returning a
 					// typeof (Item) would have the same effect here and MUST be used to debug.
 					// ----return new Type[] {typeof (Item)};
-					return (FirstController.Selection as Act).SupportedItemTypesSafe;
+					return (FirstController.Selection as Act).SupportedItemTypes;
 				} else {
 					if (TextMode)
 						return new [] { typeof (ITextItem) };
@@ -258,11 +258,9 @@ namespace Do.Core
 					textModeFinalize = false;
 				} else if (FirstController.Selection is Act) {
 					Act action = FirstController.Selection as Act;
-					foreach (Type t in action.SupportedItemTypesSafe) {
-						if (t == typeof (ITextItem) && action.SupportsItemSafe (new ImplicitTextItem (Query))) {
-							textMode = value;
-							textModeFinalize = false;
-						}
+					if (action.Safe.SupportsItem (new ImplicitTextItem (Query))) {
+						textMode = value;
+						textModeFinalize = false;
 					}
 				}
 				

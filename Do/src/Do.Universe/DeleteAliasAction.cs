@@ -29,28 +29,28 @@ namespace Do.Universe
 	class DeleteAliasAction : Act
 	{
 		
-		protected override string Name {
+		public override string Name {
 			get { return Catalog.GetString ("Delete Alias"); }
 		}
 
-		protected override string Description {
+		public override string Description {
 			get { return Catalog.GetString ("Deletes an alias."); }
 		}
 
-		protected override string Icon {
+		public override string Icon {
 			get { return "gtk-delete"; }
 		}
 
-		protected override IEnumerable<Type> SupportedItemTypes {
+		public override IEnumerable<Type> SupportedItemTypes {
 			get { yield return typeof (Item); }
 		}
 
-		protected override bool SupportsItem (Item item)
+		public override bool SupportsItem (Item item)
 		{
 			return AliasItemSource.ItemHasAlias (item);
 		}
 
-		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			foreach (Item item in items)
 				AliasItemSource.Unalias (item);

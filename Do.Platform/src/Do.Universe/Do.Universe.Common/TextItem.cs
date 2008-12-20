@@ -35,15 +35,15 @@ namespace Do.Universe.Common
 			Text = text;
 		}
 		
-		protected override string Name {
+		public override string Name {
 			get { return Text; }
 		}
 		
-		protected override string Description {
+		public override string Description {
 			get { return Text; }
 		}
 		
-		protected override string Icon {
+		public override string Icon {
 			get { return "gnome-mime-text"; }
 		}
 		

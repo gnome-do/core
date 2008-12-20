@@ -78,15 +78,15 @@ namespace Do.Universe.Linux {
 			}
 		}
 		
-		protected override string Name {
+		public override string Name {
 			get { return name; }
 		}
 
-		protected override string Description {
+		public override string Description {
 			get { return description; }
 		}
 		
-		protected override string Icon {
+		public override string Icon {
 			get { return icon; }
 		}
 

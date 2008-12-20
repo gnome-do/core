@@ -1,4 +1,4 @@
-/* Action.cs
+/* Act.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -21,17 +21,32 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Do.Universe.Safe;
+
 namespace Do.Universe
 {	
 
 	public abstract class Act : Element
 	{
+		static SafeAct safe_act = new SafeAct ();
+
+		public new SafeAct Safe {
+			get {
+				safe_act.Act = this;
+				return safe_act;
+			}
+		}
+
+		public new SafeAct RetainSafe ()
+		{
+			return new SafeAct (this);
+		}
 		
 		/// <value>
 		/// An array of Item sub-interfaces that this action supports.
 		/// null is ok--it signifies that NO types are supported.
 		/// </value>
-		protected abstract IEnumerable<Type> SupportedItemTypes { get; }
+		public abstract IEnumerable<Type> SupportedItemTypes { get; }
 		
 		/// <value>
 		/// An array of Item sub-interfaces that this action supports as modifier
@@ -41,7 +56,7 @@ namespace Do.Universe
 		/// here, your action will not work with modifier items.
 		/// null is ok--it signifies that NO types are supported.
 		/// </value>
-		protected virtual IEnumerable<Type> SupportedModifierItemTypes {
+		public virtual IEnumerable<Type> SupportedModifierItemTypes {
 			get { yield break; }
 		}
 		
@@ -49,7 +64,7 @@ namespace Do.Universe
 		/// Whether modifier items are optional (if you indicate that modifier
 		/// items are /not/ optional, this means that they are required).
 		/// </value>
-		protected virtual bool ModifierItemsOptional {
+		public virtual bool ModifierItemsOptional {
 			get { return false; }
 		}
 		
@@ -64,7 +79,7 @@ namespace Do.Universe
 		/// A <see cref="System.Boolean"/> indicating whether or not to accept the
 		/// item.
 		/// </returns>
-		protected virtual bool SupportsItem (Item item)
+		public virtual bool SupportsItem (Item item)
 		{
 			return true;
 		}
@@ -89,7 +104,7 @@ namespace Do.Universe
 		/// A <see cref="System.Boolean"/> indicating whether this action supports
 		/// the particular modifier item for the items in the Item array.
 		/// </returns>
-		protected virtual bool SupportsModifierItemForItems (IEnumerable<Item> items, Item modItem)
+		public virtual bool SupportsModifierItemForItems (IEnumerable<Item> items, Item modItem)
 		{
 			return true;
 		}
@@ -106,7 +121,7 @@ namespace Do.Universe
 		/// An <see cref="Item[]"/> containing items to use as modifier items.
 		/// null is ok--it signifies that no modifier items are provided.
 		/// </returns>
-		protected virtual IEnumerable<Item> DynamicModifierItemsForItem (Item item)
+		public virtual IEnumerable<Item> DynamicModifierItemsForItem (Item item)
 		{
 			yield break;
 		}
@@ -124,103 +139,7 @@ namespace Do.Universe
 		/// A <see cref="Item[]"/> of result items to present to the user.
 		/// You may return null--this is the same as returning an empty array.
 		/// </returns>
-		protected abstract IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems);
+		public abstract IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems);
 
-
-		#region Safe alternatives
-
-		public IEnumerable<Type> SupportedItemTypesSafe {
-			get {
-				return SupportedItemTypes ?? Type.EmptyTypes;
-			}
-		}
-		
-		public IEnumerable<Type> SupportedModifierItemTypesSafe {
-			get {
-				return SupportedModifierItemTypes ?? Type.EmptyTypes;
-			}
-		}
-
-		public bool ModifierItemsOptionalSafe {
-			get {
-				return ModifierItemsOptional;
-			}
-		}
-
-		public IEnumerable<Item> DynamicModifierItemsForItemSafe (Item item)
-		{
-			IEnumerable<Item> modItems = null;
-
-			item = ProxyItem.Unwrap (item);
-
-			// This is a duplicate check, so we may want to remove it.
-			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item)))
-				return Enumerable.Empty<Item> ();
-			
-			try {
-				// Strictly evaluate the IEnumerable before we leave the try block.
-				modItems = DynamicModifierItemsForItem (item).ToArray ();
-			} catch (Exception e) {
-				modItems = null;
-				LogSafeError ("DynamicModifierItemsForItem", e);
-				// Log.Debug (e.StackTrace);
-			} finally {
-				modItems = modItems ?? Enumerable.Empty<Item> ();
-			}
-			return modItems;
-		}
-
-		public bool SupportsItemSafe (Item item)
-		{
-			item = ProxyItem.Unwrap (item);
-			
-			if (!SupportedItemTypes.Any (type => type.IsInstanceOfType (item)))
-				return false;
-
-			try {
-				return SupportsItem (item);
-			} catch (Exception e) {
-				LogSafeError ("SupportsItem", e);
-			}
-			return false;
-		}
-
-		public bool SupportsModifierItemForItemsSafe (IEnumerable<Item> items, Item modItem)
-		{
-			items = ProxyItem.Unwrap (items);
-			modItem = ProxyItem.Unwrap (modItem);
-			
-			if (!SupportedModifierItemTypes.Any (type => type.IsInstanceOfType (modItem)))
-				return false;
-
-			try {
-				return SupportsModifierItemForItems (items, modItem);
-			} catch (Exception e) {
-			 	LogSafeError ("SupportsModifierItemForItems", e);
-			}
-			return false;
-		}
-
-		public IEnumerable<Item> PerformSafe (IEnumerable<Item> items, IEnumerable<Item> modItems)
-		{
-			IEnumerable<Item> results = null;
-			
-			items = ProxyItem.Unwrap (items);
-			modItems = ProxyItem.Unwrap (modItems);
-			
-			try {
-				// Strictly evaluate the IEnumerable before we leave the try block.
-				results = Perform (items, modItems);
-				if (results != null) results = results.ToArray ();
-			} catch (Exception e) {
-				results = null;
-				LogSafeError ("Perform", e);
-			} finally {
-				results = results ?? Enumerable.Empty<Item> ();
-			}
-			return results;
-		}
-
-		#endregion
 	}
 }

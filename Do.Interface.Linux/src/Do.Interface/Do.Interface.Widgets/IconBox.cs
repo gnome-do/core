@@ -195,8 +195,8 @@ namespace Do.Interface.Widgets
 				icon = null;
 				name = null;
 				if (value != null) {
-					icon = value.IconSafe;
-					name = value.NameSafe;
+					icon = value.Icon;
+					name = value.Name;
 					
 					if (name == Caption && icon == this.Icon)
 						return;

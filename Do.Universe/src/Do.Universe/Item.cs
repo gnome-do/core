@@ -1,4 +1,4 @@
-/* Item.cs
+/* SafeItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -19,10 +19,25 @@
 
 using System;
 
+using Do.Universe.Safe;
+
 namespace Do.Universe
 {
 	
  	public abstract class Item : Element, IItem
 	{
+		static SafeItem safe_item = new SafeItem ();
+
+		public new SafeItem Safe {
+			get {
+				safe_item.Item = this;
+				return safe_item;
+			}
+		}
+
+		public new SafeItem RetainSafe ()
+		{
+			return new SafeItem (this);
+		}
 	}
 }

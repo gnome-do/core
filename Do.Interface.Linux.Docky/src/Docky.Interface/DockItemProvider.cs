@@ -169,7 +169,7 @@ namespace Docky.Interface
 				.Where (item => item.GetType ().Name != "SelectedTextItem")
 				.OrderByDescending (item => item is IApplicationItem)
 				.ThenBy (item => item.GetType ().Name)
-				.ThenBy (item => item.NameSafe);
+				.ThenBy (item => item.Safe.Name);
 		}
 		
 		public bool RemoveItem (int item)
@@ -179,7 +179,7 @@ namespace Docky.Interface
 				SerializeCustomItems ();
 			
 			if (GetIconSource (DockItems[item]) == IconSource.Statistics) {
-				DockPreferences.AddBlacklistItem ((DockItems[item] as DockItem).Element.UniqueId);
+				DockPreferences.AddBlacklistItem (Util.UIDForElement ((DockItems[item] as DockItem).Element));
 				UpdateItems ();
 				return true;
 			} else if (GetIconSource (DockItems[item]) == IconSource.Custom) {

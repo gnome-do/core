@@ -122,14 +122,14 @@ namespace Do.Core
 
 			// First look for an icon among ItemSources:
 			icon = ObjectsForAddin<ItemSource> (id)
-				.Select (source => source.IconSafe)
+				.Select (source => source.Safe.Icon)
 				.FirstOrDefault ();
 			if (icon != null) return icon;
 
 			// If no icon found among ItemSources, look for an icon among
 			// Actions:		
 			icon = ObjectsForAddin<Act> (id)
-				.Select (source => source.IconSafe)
+				.Select (source => source.Safe.Icon)
 				.FirstOrDefault ();
 			if (icon != null) return icon;
 
@@ -200,7 +200,7 @@ namespace Do.Core
 			case ExtensionChange.Add:
 				try {
 					Act action = node.GetInstance () as Act;
-					Log.Info ("Loaded \"{0}\" action.", action.NameSafe);
+					Log.Info ("Loaded \"{0}\" action.", action.Safe.Name);
 				} catch (Exception e) {
 					Log.Error ("Encountered error loading action: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
@@ -210,7 +210,7 @@ namespace Do.Core
 			case ExtensionChange.Remove:
 				try {
 					Act action = node.GetInstance () as Act;
-					Log.Info ("Unloaded \"{0}\" action.", action.NameSafe);
+					Log.Info ("Unloaded \"{0}\" action.", action.Safe.Name);
 				} catch (Exception e) {
 					Log.Error ("Encountered error unloading action: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
@@ -231,7 +231,7 @@ namespace Do.Core
 			case ExtensionChange.Add:
 				try {
 					ItemSource source = node.GetInstance () as ItemSource;
-					Log.Info ("Loaded \"{0}\" item source.", source.NameSafe);
+					Log.Info ("Loaded \"{0}\" item source.", source.Safe.Name);
 				} catch (Exception e) {
 					Log.Error ("Encountered error loading item source: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
@@ -241,7 +241,7 @@ namespace Do.Core
 			case ExtensionChange.Remove:
 				try {
 					ItemSource source = node.GetInstance () as ItemSource;
-					Log.Info ("Unloaded \"{0}\".", source.NameSafe);
+					Log.Info ("Unloaded \"{0}\".", source.Safe.Name);
 				} catch (Exception e) {
 					Log.Error ("Encountered error unloading item source: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);

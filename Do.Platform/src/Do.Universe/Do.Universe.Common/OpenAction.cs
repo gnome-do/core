@@ -34,19 +34,19 @@ namespace Do.Universe.Common
 	public class OpenAction : Act
 	{
 
-		protected override string Name {
+		public override string Name {
 			get { return Catalog.GetString ("Open"); }
 		}
 		
-		protected override string Description {
+		public override string Description {
 			get { return Catalog.GetString ("Opens many kinds of items."); }
 		}
 		
-		protected override string Icon {
+		public override string Icon {
 			get { return "gtk-open"; }
 		}
 		
-		protected override IEnumerable<Type> SupportedItemTypes {
+		public override IEnumerable<Type> SupportedItemTypes {
 			get {
 				yield return typeof (IOpenableItem);
 				yield return typeof (IUriItem);
@@ -55,7 +55,7 @@ namespace Do.Universe.Common
 			}
 		}
 
-		protected override bool SupportsItem (Item item)
+		public override bool SupportsItem (Item item)
 		{
 			if (item is ITextItem) {	
 				// Check if typed text is a valid path.
@@ -66,7 +66,7 @@ namespace Do.Universe.Common
 			return true;
 		}
 
-		protected override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
+		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			IEnvironmentService env = Services.Environment;
 

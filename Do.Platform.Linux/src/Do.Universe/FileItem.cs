@@ -79,8 +79,8 @@ namespace Do.Universe.Linux {
 		}
 
 		public string Path { get; private set; }
-		protected override string Name { get { return name; } }
-		protected override string Description { get { return description; } }
+		public override string Name { get { return name; } }
+		public override string Description { get { return description; } }
 
 		public string Uri {
 			get { return "file://" + Path; }
@@ -90,7 +90,7 @@ namespace Do.Universe.Linux {
 			get { return Gnome.Vfs.Global.GetMimeType (Path); }
 		}
 
-		protected override string Icon {
+		public override string Icon {
 			get {
 				if (null != icon) return icon;
 
