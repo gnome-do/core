@@ -27,6 +27,7 @@ FILES = \
 	src/Do.Interface/Do.Interface.Widgets/ResultsWindow.cs \
 	src/Do.Interface/Do.Interface.Widgets/SymbolDisplayLabel.cs \
 	src/Do.Interface/Do.Interface.Widgets/TextFrame.cs \
+	src/Do.Interface/IConfigurable.cs \
 	src/Do.Interface/IDoController.cs \
 	src/Do.Interface/IDoWindow.cs \
 	src/Do.Interface/IRenderTheme.cs \

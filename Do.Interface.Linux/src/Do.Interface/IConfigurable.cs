@@ -21,7 +21,7 @@ using System;
 
 using Gtk;
 
-namespace Do.Addins
+namespace Do.Interface
 {
 	public interface IConfigurable
 	{
