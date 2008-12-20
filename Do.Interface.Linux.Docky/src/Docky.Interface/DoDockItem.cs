@@ -35,7 +35,7 @@ namespace Docky.Interface
 	public class DoDockItem : IDockItem
 	{
 		
-		Surface icon_surface;
+		Surface icon_surface, text_surface;
 		#region IDockItem implementation 
 		
 		public Surface GetIconSurface (Surface sr)
@@ -57,7 +57,9 @@ namespace Docky.Interface
 		
 		public Surface GetTextSurface (Surface similar)
 		{
-			return null;
+			if (text_surface == null)
+				text_surface = Util.GetBorderedTextSurface ("Summon GNOME Do", DockPreferences.TextWidth, similar);
+			return text_surface;
 		}
 		
 		public void Clicked (uint button, IDoController controller)
