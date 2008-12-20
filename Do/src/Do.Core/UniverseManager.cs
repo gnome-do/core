@@ -24,7 +24,6 @@ using System.Threading;
 using System.Collections.Generic;
 
 using Do;
-using Do.Addins;
 using Do.Universe;
 using Do.Universe.Safe;
 using Do.Platform;

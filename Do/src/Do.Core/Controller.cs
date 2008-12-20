@@ -29,7 +29,6 @@ using Mono.Unix;
 
 using Do;
 using Do.UI;
-using Do.Addins;
 using Do.Universe;
 using Do.DBusLib;
 using Do.Platform;

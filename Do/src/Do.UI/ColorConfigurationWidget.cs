@@ -20,7 +20,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Do.Addins;
 using Do.Universe;
 using Do.Platform;
 using Do.Interface;

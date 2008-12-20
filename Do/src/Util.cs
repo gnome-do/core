@@ -26,7 +26,6 @@ using System.Runtime.InteropServices;
 
 using Do.UI;
 using Do.Core;
-using Do.Addins;
 using Do.Universe;
 
 using Gdk;

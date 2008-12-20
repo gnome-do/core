@@ -82,7 +82,6 @@ REFERENCES =  \
 	System.Core
 
 PROJECT_REFERENCES = \
-	Do.Addins \
 	Do.DBus \
 	Do.Universe \
 	Do.Platform \

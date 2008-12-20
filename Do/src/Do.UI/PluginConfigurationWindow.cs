@@ -26,7 +26,6 @@ using Gtk;
 using Mono.Addins;
 
 using Do.Core;
-using Do.Addins;
 using Do.Platform;
 using Do.Interface;
 

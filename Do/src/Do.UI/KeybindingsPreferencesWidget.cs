@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using Gtk;
 
 using Do;
-using Do.Addins;
+using Do.Interface;
 
 namespace Do.UI
 {
