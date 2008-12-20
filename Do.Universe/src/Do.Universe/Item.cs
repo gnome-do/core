@@ -28,6 +28,20 @@ namespace Do.Universe
 	{
 		static SafeItem safe_item = new SafeItem ();
 
+		/// <value>
+		/// Quick access to a safe equivalent of the reciever.
+		/// </value>
+		/// <remarks>
+		/// The caller DOES NOT have exclusive access to the value
+		/// returned; DO NOT put the value in a collection, linq statement,
+		/// or otherwise retain the value returned. The following is the
+		/// sole legitimate use:
+		/// <code>
+		/// string name = item.Safe.Name;
+		/// </code>
+		/// In words: access the property, but do not retain it.
+		/// </value>
+		/// </remarks>
 		public new SafeItem Safe {
 			get {
 				safe_item.Item = this;
@@ -35,6 +49,15 @@ namespace Do.Universe
 			}
 		}
 
+		/// <summary>
+		/// Returns a safe equivalent of the reciever. Unlike Safe,
+		/// this returns a new safe wrapper instance that the caller has
+		/// exclusive access to. You may want to call this in a multi-threaded
+		/// context, or if you need a collection of safe instances.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="SafeAct"/>
+		/// </returns>
 		public new SafeItem RetainSafe ()
 		{
 			return new SafeItem (this);
