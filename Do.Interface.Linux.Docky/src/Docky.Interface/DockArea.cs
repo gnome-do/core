@@ -347,10 +347,10 @@ namespace Docky.Interface
 		}
 		#endregion
 		
-		public DockArea (DockWindow window, IStatistics statistics) : base ()
+		public DockArea (DockWindow window) : base ()
 		{
 			this.window = window;
-			item_provider = new DockItemProvider (statistics);
+			item_provider = new DockItemProvider ();
 			State = new DockState ();
 			SummonRenderer = new SummonModeRenderer (this);
 			

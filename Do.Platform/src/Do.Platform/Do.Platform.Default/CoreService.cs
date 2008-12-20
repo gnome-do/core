@@ -18,6 +18,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 using Do.Universe;
 using Do.Platform;
@@ -33,6 +34,12 @@ namespace Do.Platform.Default
 		{
 			Log.Debug ("Default ICoreService cannot get Elements.");
 			return new EmptyElement ();
+		}
+		
+		public IEnumerable<Item> GetMostUsedItems (int numItems)
+		{
+			Log.Debug ("Default ICoreService cannot get Elements.");
+			return new Item [0];
 		}
 		
 		#endregion

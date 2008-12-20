@@ -45,7 +45,6 @@ namespace Docky.Interface
 		public delegate void DockItemsChangedHandler (IEnumerable<IDockItem> items);
 		public event DockItemsChangedHandler DockItemsChanged;
 		
-		IStatistics statistics;
 		Dictionary<string, IDockItem> custom_items;
 		List<IDockItem> statistical_items, task_items;
 		bool enable_serialization = true;
@@ -77,9 +76,8 @@ namespace Docky.Interface
 		
 		SeparatorItem Separator { get; set; }
 		
-		public DockItemProvider(IStatistics statistics)
+		public DockItemProvider ()
 		{
-			this.statistics = statistics;
 			Separator = new SeparatorItem ();
 			
 			custom_items = new Dictionary<string, IDockItem> ();
@@ -184,7 +182,7 @@ namespace Docky.Interface
 		
 		IEnumerable<Item> MostUsedItems ()
 		{
-			return statistics
+			return Services.Core
 				.GetMostUsedItems (DockPreferences.AutomaticIcons)
 				.Where (item => item.GetType ().Name != "SelectedTextItem")
 				.OrderByDescending (item => item is IApplicationItem)

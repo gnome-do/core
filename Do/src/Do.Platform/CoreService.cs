@@ -18,6 +18,8 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Mono.Unix;
 
@@ -37,6 +39,13 @@ namespace Do.Platform
 			Element element;
 			Do.UniverseManager.TryGetElementForUniqueId (uniqueId, out element);
 			return element;
+		}
+		
+		public IEnumerable<Item> GetMostUsedItems (int numItems)
+		{
+			return Do.UniverseManager.Search ("", typeof (Item).Cons (null))
+				.Cast<Item> ()
+				.Take (numItems);
 		}
 
 		#endregion

@@ -18,6 +18,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 using Do.Universe;
 using Do.Platform.ServiceStack;
@@ -28,6 +29,8 @@ namespace Do.Platform
 	public interface ICoreService : IService
 	{
 		Element GetElement (string uniqueId);
+		
+		IEnumerable<Item> GetMostUsedItems (int numItems);
 	}
 
 }

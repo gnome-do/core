@@ -37,7 +37,7 @@ using Do.Interface;
 
 namespace Do.Core {
 
-	public class Controller : IController, IDoController, IStatistics {
+	public class Controller : IController, IDoController {
 		
 		class PerformState {
 			public Act Action { get; set; }
@@ -989,12 +989,6 @@ namespace Do.Core {
 			return element is Item && (element as Item).HasChildren ();
 		}
 		
-		public IStatistics Statistics {
-			get {
-				return this as IStatistics;
-			}
-		}
-		
 		public void PerformDefaultAction (Item item, IEnumerable<Type> filter) 
 		{
 			Act action =
@@ -1014,16 +1008,5 @@ namespace Do.Core {
 			th.Join (100);
 		}
 		#endregion
-
-		#region IStatistics implementation 
-		
-		public IEnumerable<Item> GetMostUsedItems (int numItems)
-		{
-			return Do.UniverseManager.Search ("", typeof (Item).Cons (null))
-				.Cast<Item> ()
-				.Take (numItems);
-		}
-		
-		#endregion 
 	}
 }
