@@ -186,10 +186,10 @@ namespace Docky.Interface
 				.GetItemsOrderedByRelevance ()
 				.Where (item => item.GetType ().Name != "SelectedTextItem")
 				.Where (item => !DockPreferences.ItemBlacklist.Contains (item.UniqueId))
+				.Take (DockPreferences.AutomaticIcons)
 				.OrderByDescending (item => item is IApplicationItem)
 				.ThenBy (item => item.GetType ().Name)
-				.ThenBy (item => item.Safe.Name)
-				.Take (DockPreferences.AutomaticIcons);
+				.ThenBy (item => item.Safe.Name);
 		}
 		
 		public bool RemoveItem (int item)
