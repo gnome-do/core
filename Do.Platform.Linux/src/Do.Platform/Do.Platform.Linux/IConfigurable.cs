@@ -21,7 +21,7 @@ using System;
 
 using Gtk;
 
-namespace Do.Widgets
+namespace Do.Platform.Linux
 {
 	public interface IConfigurable
 	{
