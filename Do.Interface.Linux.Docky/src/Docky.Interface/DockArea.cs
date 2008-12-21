@@ -66,6 +66,7 @@ namespace Docky.Interface
 		int monitor_width;
 		int drag_start_y = 0;
 		int drag_start_icon_size = 0;
+		int remove_drag_start_x;
 		uint animation_timer = 0;
 		
 		double previous_zoom = 0;
@@ -688,16 +689,22 @@ namespace Docky.Interface
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
 		}
-
-		protected override void OnDragEnd (Gdk.DragContext context)
+		
+		protected override void OnDragBegin (Gdk.DragContext context)
 		{
-			if (context.Action == DragAction.Move)
-				item_provider.RemoveItem (DockItemForX (Cursor.X));
-			
-			base.OnDragEnd (context);
+			remove_drag_start_x = Cursor.X;
+			base.OnDragBegin (context);
 		}
 
-		
+		protected override bool OnDragDrop(DragContext context, int x, int y, uint time)
+		{
+			Cursor = new Gdk.Point (x, y);
+			int item = DockItemForX (remove_drag_start_x);
+			if (!CursorIsOverDockArea)
+				item_provider.RemoveItem (item);
+			return base.OnDragDrop (context, x, y, time);
+		}
+
 		#endregion
 		
 		protected override bool OnExposeEvent(EventExpose evnt)
