@@ -85,10 +85,10 @@ namespace Docky.Interface
 		{
 			dock_area = new DockArea (this);
 			
-			TargetEntry[] targets = {
-				new TargetEntry ("text/uri-list", 0, 0), 
-			};
+			TargetEntry[] targets = { new TargetEntry ("text/uri-list", 0, 0), };
+			
 			Gtk.Drag.DestSet (dock_area, DestDefaults.Motion | DestDefaults.Drop, targets, Gdk.DragAction.Copy);
+			Gtk.Drag.SourceSet (dock_area, ModifierType.Button1Mask, new TargetEntry [0], DragAction.Private);
 			
 			Add (dock_area);
 			ShowAll ();
