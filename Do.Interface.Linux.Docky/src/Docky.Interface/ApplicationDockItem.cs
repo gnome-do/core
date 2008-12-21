@@ -33,7 +33,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ApplicationDockItem : AbstractDockItem
+	public class ApplicationDockItem : AbstractDockItem, IRightClickable
 	{
 		static IEnumerable<String> DesktopFilesDirectories {
 			get {
@@ -226,6 +226,16 @@ namespace Docky.Interface
 				return false;
 			
 			return ((other as ApplicationDockItem).application == application);
+		}
+		
+		public IEnumerable<MenuArgs> GetMenuItems ()
+		{
+			List<MenuArgs> outList = new List<MenuArgs> ();
+			foreach (Wnck.Window window in App.Windows) { 
+				Wnck.Window copy = window;
+				outList.Add (new MenuArgs ((o, a) => copy.CenterAndFocusWindow (), copy.Name, Gtk.Stock.GoForward));
+			}
+			return outList;
 		}
 	}
 }

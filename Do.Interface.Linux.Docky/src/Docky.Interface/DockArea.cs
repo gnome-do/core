@@ -397,8 +397,6 @@ namespace Docky.Interface
 		{
 			item_provider.DockItemsChanged += OnDockItemsChanged;
 			
-			ItemMenu.Instance.RemoveClicked += OnItemMenuRemoveClicked;
-			
 			ItemMenu.Instance.Hidden += OnItemMenuHidden;
 		}
 		
@@ -584,7 +582,7 @@ namespace Docky.Interface
 			//the first icons center is at dock X + border + IconBorder + half its width
 			if (!DockItems.Any ())
 				return 0;
-			int start_x = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth; // + (DockItems [0].Width / 2);
+			int start_x = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth;
 			for (int i=0; i<icon; i++)
 				start_x += DockItems [i].Width + 2 * IconBorderWidth;
 			
@@ -646,12 +644,6 @@ namespace Docky.Interface
 			AnimatedDraw ();
 		}
 		
-		void OnItemMenuRemoveClicked (Gdk.Point point)
-		{
-			int item = DockItemForX (point.X);
-			item_provider.RemoveItem (item);
-		}
-		
 		void OnItemMenuHidden (object o, System.EventArgs args)
 		{
 			int x, y;
@@ -667,7 +659,7 @@ namespace Docky.Interface
 			AnimatedDraw ();
 		}
 		
-		#region Drag To Code
+		#region Drag Code
 		
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{
@@ -812,12 +804,12 @@ namespace Docky.Interface
 					return ret_val;
 				
 				//handling right clicks
-//				if (evnt.Button == 3) {
-//					if (item_provider.GetIconSource (DockItems [item]) == IconSource.Custom || 
-//					    item_provider.GetIconSource (DockItems [item]) == IconSource.Statistics)
-//						ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
-//					return ret_val;
-//				}
+				if (evnt.Button == 3) {
+					if (CurrentDockItem is IRightClickable && (CurrentDockItem as IRightClickable).GetMenuItems ().Any ())
+						ItemMenu.Instance.PopupAtPosition ((CurrentDockItem as IRightClickable).GetMenuItems (), 
+						                                   (int) evnt.XRoot, (int) evnt.YRoot);
+					return ret_val;
+				}
 				
 				//send off the clicks
 				DockItems [item].Clicked (evnt.Button, window.Controller);

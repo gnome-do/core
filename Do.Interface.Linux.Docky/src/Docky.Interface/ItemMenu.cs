@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Gtk;
 using Mono.Unix;
 
@@ -39,26 +40,26 @@ namespace Docky.Interface
 
 		public ItemMenu ()
 		{
-			MenuItem item;
-			item = new ImageMenuItem (Catalog.GetString ("_Remove"));
-			(item as ImageMenuItem).Image = new Image (Stock.Remove, IconSize.Menu);
-			Add (item);
-			item.CanFocus = false;
-			item.Activated += OnRemoveClicked;
-
-			ShowAll ();
 		}
 
-		protected void OnRemoveClicked (object o, EventArgs args)
+		public void PopupAtPosition (IEnumerable<MenuArgs> items, int x, int y)
 		{
-			if (RemoveClicked != null)
-				RemoveClicked (new Gdk.Point (mainMenuX, mainMenuY));
-		}
-
-		public void PopupAtPosition (int x, int y)
-		{
+			foreach (Gtk.Widget widget in AllChildren) {
+				Remove (widget);
+				widget.Dispose ();
+			}
+			
 			mainMenuX = x;
 			mainMenuY = y;	
+			foreach (MenuArgs arg in items) {
+				ImageMenuItem item = new ImageMenuItem (arg.Description);
+				item.Image = new Image (arg.Icon, IconSize.Menu);
+				Add (item);
+				item.CanFocus = false;
+				item.Activated += arg.Handler;
+			}
+			ShowAll ();
+			
 			Popup (null, null, PositionMainMenu, 3, Gtk.Global.CurrentEventTime);
 		}
 
@@ -68,8 +69,5 @@ namespace Docky.Interface
 			y = mainMenuY;
 			push_in = true;
 		}
-		
-		public delegate void RemoveClickedHandler (Gdk.Point point);
-		public event RemoveClickedHandler RemoveClicked;
 	}
 }

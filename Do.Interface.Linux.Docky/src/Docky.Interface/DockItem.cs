@@ -31,11 +31,13 @@ using Do.Interface.CairoUtils;
 
 using Docky.Utilities;
 
+using Wnck;
+
 namespace Docky.Interface
 {
 	
 	
-	public class DockItem : AbstractDockItem, IDoDockItem
+	public class DockItem : AbstractDockItem, IDoDockItem, IRightClickable
 	{
 		Element item;
 		Surface icon_surface;
@@ -184,6 +186,25 @@ namespace Docky.Interface
 			
 			base.Dispose ();
 		}
+
+		#region IRightClickable implementation 
+		
+		public IEnumerable<MenuArgs> GetMenuItems ()
+		{
+			List<MenuArgs> outList = new List<MenuArgs> ();
+			foreach (Application app in Apps) {
+				foreach (Wnck.Window window in app.Windows) {
+					Wnck.Window copy_win = window;
+					if (!copy_win.IsSkipTasklist) {
+						outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), copy_win.Name, Gtk.Stock.GoForward));
+					}
+				}
+			}
+			return outList;
+		}
+		
+		#endregion 
+		
 		
 		#endregion 
 		

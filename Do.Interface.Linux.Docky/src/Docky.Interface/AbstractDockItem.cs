@@ -165,6 +165,5 @@ namespace Docky.Interface
 		{
 			return other == this;
 		}
-		
 	}
 }
