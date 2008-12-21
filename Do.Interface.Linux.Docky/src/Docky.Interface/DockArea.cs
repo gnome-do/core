@@ -688,16 +688,15 @@ namespace Docky.Interface
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
 		}
-		
-		protected override void OnDragBegin (Gdk.DragContext context)
-		{
-			base.OnDragBegin (context);
-		}
 
 		protected override void OnDragEnd (Gdk.DragContext context)
 		{
+			if (context.Action == DragAction.Move)
+				item_provider.RemoveItem (DockItemForX (Cursor.X));
+			
 			base.OnDragEnd (context);
 		}
+
 		
 		#endregion
 		
@@ -806,12 +805,12 @@ namespace Docky.Interface
 					return ret_val;
 				
 				//handling right clicks
-				if (evnt.Button == 3) {
-					if (item_provider.GetIconSource (DockItems [item]) == IconSource.Custom || 
-					    item_provider.GetIconSource (DockItems [item]) == IconSource.Statistics)
-						ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
-					return ret_val;
-				}
+//				if (evnt.Button == 3) {
+//					if (item_provider.GetIconSource (DockItems [item]) == IconSource.Custom || 
+//					    item_provider.GetIconSource (DockItems [item]) == IconSource.Statistics)
+//						ItemMenu.Instance.PopupAtPosition ((int) evnt.XRoot, (int) evnt.YRoot);
+//					return ret_val;
+//				}
 				
 				//send off the clicks
 				DockItems [item].Clicked (evnt.Button, window.Controller);
