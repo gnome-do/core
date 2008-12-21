@@ -69,6 +69,7 @@ namespace Docky.Interface
 		uint animation_timer = 0;
 		
 		double previous_zoom = 0;
+		int previous_item_count = 0;
 		
 		
 		DockWindow window;
@@ -445,7 +446,6 @@ namespace Docky.Interface
 					dock_icon_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				
 				using (Context input_cr = new Context (dock_icon_buffer)) {
-//					input_cr.AlphaFill ();
 					DrawIcons (input_cr);
 					
 					if (CursorIsOverDockArea)
@@ -459,7 +459,7 @@ namespace Docky.Interface
 		
 		void DrawIcons (Context cr)
 		{
-			if (ZoomIn == 1 && previous_zoom == 1 && !AnimationNeeded) {
+			if (ZoomIn == 1 && previous_zoom == 1 && !AnimationNeeded && previous_item_count == DockItems.Length) {
 				int current_item = DockItemForX (Cursor.X);
 				
 				int left_item = Math.Max (0, DockItemForX (Cursor.X - DockPreferences.ZoomSize / 2));
@@ -499,6 +499,7 @@ namespace Docky.Interface
 					DrawIcon (cr, i);
 			}
 			previous_zoom = ZoomIn;
+			previous_item_count = DockItems.Length;
 		}
 		
 		void DrawIcon (Context cr, int icon)
@@ -700,11 +701,8 @@ namespace Docky.Interface
 		
 		#endregion
 		
-//		Stopwatch sw = new Stopwatch ();
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
-//			sw.Reset ();
-//			sw.Start ();
 			bool ret_val = base.OnExposeEvent (evnt);
 			// clear the dock area cache... this will cause it to recalculate.
 			minimum_dock_area = new Gdk.Rectangle ();
@@ -730,8 +728,6 @@ namespace Docky.Interface
 			cr2.Paint ();
 			(cr2 as IDisposable).Dispose ();
 			
-//			sw.Stop ();
-//			Console.WriteLine (sw.ElapsedMilliseconds);
 			return ret_val;
 		}
 		
