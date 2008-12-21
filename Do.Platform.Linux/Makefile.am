@@ -13,6 +13,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Linux/GConfPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs \
+	src/Do.Platform/Do.Platform.Linux/IConfigurable.cs \
 	src/Do.Platform/Do.Platform.Linux/NotificationHelper.cs \
 	src/Do.Platform/Do.Platform.Linux/TrayIconPreferences.cs \
 	src/Do.Platform/Do.Platform.Linux/TrayIconService.cs \
@@ -22,7 +23,6 @@ FILES = \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/CopyToClipboardAction.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
-	src/Do.Widgets/IConfigurable.cs \
 	src/Do.Widgets/AbstractLoginWidget.cs
 
 if HAVE_NUNIT
