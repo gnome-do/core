@@ -3,6 +3,7 @@ include $(top_srcdir)/build.rules.mk
 
 ASSEMBLY = Do.Interface.Linux
 TARGET = library
+PKG_CONFIG_FILES = do.interface.linux.pc
 
 FILES = \
 	src/AssemblyInfo.cs \
