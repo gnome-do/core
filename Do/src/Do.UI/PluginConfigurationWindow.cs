@@ -27,6 +27,7 @@ using Mono.Addins;
 
 using Do.Core;
 using Do.Platform;
+using Do.Platform.Linux;
 using Do.Interface;
 
 namespace Do.UI

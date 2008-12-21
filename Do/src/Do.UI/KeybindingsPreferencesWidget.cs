@@ -24,6 +24,7 @@ using Gtk;
 
 using Do;
 using Do.Interface;
+using Do.Platform.Linux;
 
 namespace Do.UI
 {
