@@ -22,6 +22,7 @@ FILES = \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/CopyToClipboardAction.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
+	src/Do.Widgets/IConfigurable.cs \
 	src/Do.Widgets/AbstractLoginWidget.cs
 
 if HAVE_NUNIT

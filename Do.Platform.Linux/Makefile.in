@@ -324,6 +324,7 @@ FILES = gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/CopyToClipboardAction.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
+	src/Do.Widgets/IConfigurable.cs \
 	src/Do.Widgets/AbstractLoginWidget.cs $(am__append_2)
 RESOURCES = \
 	gtk-gui/gui.stetic \
