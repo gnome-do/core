@@ -46,6 +46,11 @@ namespace Do.Platform
 			return Do.UniverseManager.Search ("", typeof (Item).Cons (null)).Cast<Item> ();
 		}
 
+		public void PerformDefaultAction (Item item, IEnumerable<Type> filter)
+		{
+			Do.Controller.PerformDefaultAction (item, filter);
+		}
+		
 		#endregion
 		
 	}

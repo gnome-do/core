@@ -42,6 +42,11 @@ namespace Do.Platform.Default
 			yield break;
 		}
 		
+		public void PerformDefaultAction (Item item, IEnumerable<Type> filter)
+		{
+			Log.Debug ("Default ICoreService cannot perform default actions.");
+		}
+		
 		#endregion
 		
 	}

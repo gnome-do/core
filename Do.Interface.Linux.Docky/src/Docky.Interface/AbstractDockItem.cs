@@ -64,7 +64,7 @@ namespace Docky.Interface
 		/// <param name="controller">
 		/// A <see cref="IDoController"/>
 		/// </param>
-		public virtual void Clicked (uint button, IDoController controller)
+		public virtual void Clicked (uint button)
 		{
 		}
 		

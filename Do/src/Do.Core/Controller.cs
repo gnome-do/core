@@ -967,6 +967,7 @@ namespace Do.Core {
 		#endregion
 		
 		#region IDoController implementation
+		
 		public void NewContextSelection (Pane pane, int index)
 		{
 			if (!controllers[(int) pane].Results.Any () || index == controllers[(int) pane].Cursor) return;
@@ -988,6 +989,8 @@ namespace Do.Core {
 			return element is Item && (element as Item).HasChildren ();
 		}
 		
+		#endregion
+		
 		public void PerformDefaultAction (Item item, IEnumerable<Type> filter) 
 		{
 			Act action =
@@ -1006,6 +1009,5 @@ namespace Do.Core {
 			th.Start (state);
 			th.Join (100);
 		}
-		#endregion
 	}
 }

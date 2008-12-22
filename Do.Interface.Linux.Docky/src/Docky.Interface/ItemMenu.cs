@@ -40,6 +40,7 @@ namespace Docky.Interface
 
 		public ItemMenu ()
 		{
+			
 		}
 
 		public void PopupAtPosition (IEnumerable<MenuArgs> items, int x, int y)
@@ -65,8 +66,9 @@ namespace Docky.Interface
 
 		private void PositionMainMenu (Menu menu, out int x, out int y, out bool push_in)
 		{
-			x = mainMenuX;
-			y = mainMenuY;
+			Gtk.Requisition req = SizeRequest ();
+			x = mainMenuX - req.Width / 2;
+			y = mainMenuY - req.Height;
 			push_in = true;
 		}
 	}

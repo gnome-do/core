@@ -56,7 +56,7 @@ namespace Docky.Interface
 			return icon_surface;
 		}
 		
-		public override void Clicked (uint button, IDoController controller)
+		public override void Clicked (uint button)
 		{
 			Services.Windowing.SummonMainWindow ();
 		}

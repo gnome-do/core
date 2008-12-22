@@ -69,13 +69,5 @@ namespace Do.Interface
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
 		bool ElementHasChildren (Element element);
-		
-		/// <summary>
-		/// Performs the default action on the provided IItem
-		/// </summary>
-		/// <param name="item">
-		/// A <see cref="IItem"/>
-		/// </param>
-		void PerformDefaultAction (Item item, IEnumerable<Type> filter);
 	}
 }

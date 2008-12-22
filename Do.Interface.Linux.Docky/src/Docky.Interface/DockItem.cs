@@ -138,19 +138,25 @@ namespace Docky.Interface
 			return icon_surface;
 		}
 		
-		public override void Clicked (uint button, IDoController controller)
+		public override void Clicked (uint button)
 		{
 			if (!apps.Any () || !HasVisibleApps || button == 2) {
-				LastClick = DateTime.UtcNow;
-				if (Element is IFileItem)
-					controller.PerformDefaultAction (Element as Item, new [] { typeof (OpenAction), });
-				else
-					controller.PerformDefaultAction (Element as Item, Type.EmptyTypes);
+				Launch ();
 				return;
 			}
 				
 			if (button == 1)
 				WindowUtils.PerformLogicalClick (apps);
+		}
+		
+		void Launch ()
+		{
+			LastClick = DateTime.UtcNow;
+			if (Element is IFileItem)
+				Services.Core.PerformDefaultAction (Element as Item, new [] { typeof (OpenAction), });
+			else
+				Services.Core.PerformDefaultAction (Element as Item, Type.EmptyTypes);
+			return;
 		}
 		
 		public override void SetIconRegion (Gdk.Rectangle region)
@@ -192,27 +198,45 @@ namespace Docky.Interface
 		public IEnumerable<MenuArgs> GetMenuItems ()
 		{
 			List<MenuArgs> outList = new List<MenuArgs> ();
-			foreach (Application app in Apps) {
-				foreach (Wnck.Window window in app.Windows) {
-					Wnck.Window copy_win = window;
-					if (!copy_win.IsSkipTasklist) {
-						outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), copy_win.Name, Gtk.Stock.GoForward));
+			
+			if (Apps.Any ()) {
+				foreach (Application app in Apps) {
+					foreach (Wnck.Window window in app.Windows) {
+						Wnck.Window copy_win = window;
+						if (!copy_win.IsSkipTasklist) {
+							string name = copy_win.Name;
+							if (name.Length > 50)
+								name = name.Substring (0, 47) + "...";
+							outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), name, Gtk.Stock.GoForward));
+						}
 					}
 				}
-			}
-			if (outList.Any ()) {
-				outList.Add (new MenuArgs ((o, a) => CloseAllOpenWindows (), "Close All Windows", Gtk.Stock.Close));
+				if (outList.Any ()) {
+					outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore Windows", Gtk.Stock.GoDown));
+					outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All Windows", Gtk.Stock.Quit));
+				}
+			} else {
+				
 			}
 			return outList;
 		}
 		
 		#endregion 
 		#endregion
-		void CloseAllOpenWindows ()
+		void CloseAllOpenWindows (object o, System.EventArgs a)
 		{
-			foreach (Wnck.Application app in Apps)
-				foreach (Wnck.Window win in app.Windows)
-					win.Close (Gtk.Global.CurrentEventTime);
+			List<Wnck.Window> windows = new List<Wnck.Window> ();
+			foreach (Application app in Apps)
+				windows.AddRange (app.Windows);
+			WindowControl.CloseWindows (windows);
+		}
+		
+		void MinimizeRestoreWindows (object o, System.EventArgs a)
+		{
+			List<Wnck.Window> windows = new List<Wnck.Window> ();
+			foreach (Application app in Apps)
+				windows.AddRange (app.Windows);
+			WindowControl.MinimizeRestoreWindows (windows);
 		}
 	}
 }

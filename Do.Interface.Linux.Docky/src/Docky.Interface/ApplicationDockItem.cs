@@ -189,7 +189,7 @@ namespace Docky.Interface
 		}
 
 		
-		public override void Clicked (uint button, IDoController controller)
+		public override void Clicked (uint button)
 		{
 			if (button == 1)
 				WindowUtils.PerformLogicalClick (new Wnck.Application[] {application});
@@ -238,16 +238,13 @@ namespace Docky.Interface
 			}
 			
 			if (outList.Any ()) {
-				outList.Add (new MenuArgs ((o, a) => CloseAllOpenWindows (), "Close All Windows", Gtk.Stock.Close));
+				outList.Add (new MenuArgs ((o, a) => WindowControl.MinimizeRestoreWindows (App.Windows), 
+				                           "Minimize/Restore Windows", 
+				                           "Minimize"));
+				outList.Add (new MenuArgs ((o, a) => WindowControl.CloseWindows (App.Windows), "Close All Windows", Gtk.Stock.Quit));
 			}
 			
 			return outList;
-		}
-		
-		void CloseAllOpenWindows ()
-		{
-			foreach (Wnck.Window win in App.Windows)
-				win.Close (Gtk.Global.CurrentEventTime);
 		}
 	}
 }

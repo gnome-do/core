@@ -24,6 +24,7 @@ FILES = \
 	src/Docky.Interface/Util.cs \
 	src/Docky.Utilities/DockPreferences.cs \
 	src/Docky.Utilities/GtkUtils.cs \
+	src/Docky.Utilities/WindowControl.cs \
 	src/Docky.Utilities/WindowUtils.cs \
 	src/XLib/X11Atoms.cs \
 	src/XLib/Xlib.cs

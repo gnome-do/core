@@ -31,6 +31,8 @@ namespace Do.Platform
 		Element GetElement (string uniqueId);
 		
 		IEnumerable<Item> GetItemsOrderedByRelevance ();
+		
+		void PerformDefaultAction (Item item, IEnumerable<Type> filter);
 	}
 
 }

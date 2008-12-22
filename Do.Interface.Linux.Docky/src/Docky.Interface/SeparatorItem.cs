@@ -94,7 +94,7 @@ namespace Docky.Interface
 			};
 		}
 		
-		public void Clicked (uint button, IDoController controller)
+		public void Clicked (uint button)
 		{
 			
 		}

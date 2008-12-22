@@ -459,8 +459,6 @@ namespace Docky.Interface
 		void DrawIcons (Context cr)
 		{
 			if (ZoomIn == 1 && previous_zoom == 1 && !AnimationNeeded && previous_item_count == DockItems.Length) {
-				int current_item = DockItemForX (Cursor.X);
-				
 				int left_item = Math.Max (0, DockItemForX (Cursor.X - DockPreferences.ZoomSize / 2));
 				
 				int right_item = DockItemForX (Cursor.X + DockPreferences.ZoomSize / 2);
@@ -812,7 +810,7 @@ namespace Docky.Interface
 				}
 				
 				//send off the clicks
-				DockItems [item].Clicked (evnt.Button, window.Controller);
+				DockItems [item].Clicked (evnt.Button);
 				if (DockItems [item].LastClick > last_click)
 					last_click = DockItems [item].LastClick;
 				AnimatedDraw ();
