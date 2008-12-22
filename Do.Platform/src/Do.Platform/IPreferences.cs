@@ -31,7 +31,7 @@ namespace Do.Platform
 
 		bool Set<T>		  (string key, T val);
 		T    Get<T>		  (string key, T def);
-		bool SecureSet<T> (string key, T def);
-		T    SecureGet<T> (string key, T def);
+		bool SetSecure<T> (string key, T def);
+		T    GetSecure<T> (string key, T def);
 	}
 }

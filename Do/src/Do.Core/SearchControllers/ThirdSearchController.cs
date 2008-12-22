@@ -187,6 +187,7 @@ namespace Do.Core
 			
 				if (Query.Length == 0)
 					results.AddRange (action.DynamicModifierItemsForItem (item).Cast<Element> ());
+				
 				results.Sort ();
 			}
 			
