@@ -323,7 +323,7 @@ namespace Docky.Interface
 		}
 		
 		bool BounceAnimationNeeded {
-			get { return DockItems.Any (di => (DateTime.UtcNow - di.DockAddItem).TotalMilliseconds < BounceTime); }
+			get { return DockItems.Any (di => (DateTime.UtcNow - di.LastClick).TotalMilliseconds < BounceTime); }
 		}
 		
 		bool InputModeChangeAnimationNeeded {
