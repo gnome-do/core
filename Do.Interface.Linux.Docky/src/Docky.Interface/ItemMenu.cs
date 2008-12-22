@@ -58,8 +58,8 @@ namespace Docky.Interface
 					continue;
 				}
 				
-				ImageMenuItem item = new ImageMenuItem (arg.Description);
-				item.Image = new Image (arg.Icon, IconSize.Menu);
+				MenuItem item = new ImageMenuItem (arg.Description);
+				(item as ImageMenuItem).Image = new Image (arg.Icon, IconSize.Menu);
 				Add (item);
 				item.CanFocus = false;
 				item.Activated += arg.Handler;
