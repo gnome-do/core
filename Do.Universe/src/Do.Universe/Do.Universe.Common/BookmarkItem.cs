@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Do.Universe
+namespace Do.Universe.Common
 {
 	public class BookmarkItem : Item, IBookmarkItem
 	{

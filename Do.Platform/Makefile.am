@@ -49,7 +49,6 @@ FILES = \
 	src/Do.Universe/Do.Universe.Common/OpenWithAction.cs \
 	src/Do.Universe/Do.Universe.Common/RevealAction.cs \
 	src/Do.Universe/Do.Universe.Common/RunAction.cs \
-	src/Do.Universe/Do.Universe.Common/TextItem.cs \
 	src/EnumerableExtensions.cs
 
 if HAVE_NUNIT

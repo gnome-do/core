@@ -10,6 +10,8 @@ FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Universe/Act.cs \
 	src/Do.Universe/ContactItem.cs \
+	src/Do.Universe/Do.Universe.Common/BookmarkItem.cs \
+	src/Do.Universe/Do.Universe.Common/TextItem.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeAct.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeElement.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeItem.cs \
@@ -19,7 +21,6 @@ FILES = \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/IApplicationItem.cs \
 	src/Do.Universe/IBookmarkItem.cs \
-	src/Do.Universe/BookmarkItem.cs \
 	src/Do.Universe/IContactDetailItem.cs \
 	src/Do.Universe/IFileItem.cs \
 	src/Do.Universe/IItem.cs \

@@ -39,7 +39,9 @@
     <File name="src/Do.Universe/Do.Universe.Safe/SafeElement.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Safe/SafeItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Safe/SafeItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/BookmarkItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/TextItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/BookmarkItem.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
