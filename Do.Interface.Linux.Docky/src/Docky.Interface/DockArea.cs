@@ -459,9 +459,12 @@ namespace Docky.Interface
 		
 		void DrawIcons (Context cr)
 		{
+			// We need to initilize this the first time we use it. However we cant initialize it until our
+			// very first draw starts, and after that it must maintain state, so we signal this with -1;
 			if (previous_x == -1)
 				previous_x = Cursor.X;
 			
+			// Some conditions are not good for doing partial draws.
 			if (ZoomIn == 1 && previous_zoom == 1 && !AnimationNeeded && previous_item_count == DockItems.Length) {
 				int left_item = Math.Max (0, DockItemForX (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
 				
@@ -485,7 +488,9 @@ namespace Docky.Interface
 					IconPositionedCenterX (right_item, out right_x, out right_zoom);
 					right_x += (int) (right_zoom * DockItems [right_item].Width / 2) + IconBorderWidth;
 				}
-					
+				
+				// only clear that area for which we are going to redraw.  If we land this in the middle of an icon
+				// things are going to look ugly, so this calculation MUST be correct.
 				cr.Rectangle (left_x, 0, right_x - left_x, Height);
 				cr.Color = new Cairo.Color (1, 1, 1, 0);
 				cr.Operator = Operator.Source;
@@ -495,6 +500,7 @@ namespace Docky.Interface
 				for (int i=left_item; i<=right_item; i++)
 					DrawIcon (cr, i);
 			} else {
+				// less code, twice as slow...
 				cr.AlphaFill ();
 				for (int i=0; i<DockItems.Length; i++)
 					DrawIcon (cr, i);
@@ -554,6 +560,8 @@ namespace Docky.Interface
 				cr.Fill ();
 			}
 			
+			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
+			// at all instead of rendering a blank surface
 			if (DockItemForX (Cursor.X) == icon && CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null) {
 				int textx = IconNormalCenterX (icon) - (DockPreferences.TextWidth / 2);
 				int texty = Height - 2 * IconSize - 28;
