@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Cairo;
 
@@ -235,7 +236,18 @@ namespace Docky.Interface
 				Wnck.Window copy = window;
 				outList.Add (new MenuArgs ((o, a) => copy.CenterAndFocusWindow (), copy.Name, Gtk.Stock.GoForward));
 			}
+			
+			if (outList.Any ()) {
+				outList.Add (new MenuArgs ((o, a) => CloseAllOpenWindows (), "Close All Windows", Gtk.Stock.Close));
+			}
+			
 			return outList;
+		}
+		
+		void CloseAllOpenWindows ()
+		{
+			foreach (Wnck.Window win in App.Windows)
+				win.Close (Gtk.Global.CurrentEventTime);
 		}
 	}
 }

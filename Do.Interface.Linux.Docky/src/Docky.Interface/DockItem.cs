@@ -200,13 +200,19 @@ namespace Docky.Interface
 					}
 				}
 			}
+			if (outList.Any ()) {
+				outList.Add (new MenuArgs ((o, a) => CloseAllOpenWindows (), "Close All Windows", Gtk.Stock.Close));
+			}
 			return outList;
 		}
 		
 		#endregion 
-		
-		
-		#endregion 
-		
+		#endregion
+		void CloseAllOpenWindows ()
+		{
+			foreach (Wnck.Application app in Apps)
+				foreach (Wnck.Window win in app.Windows)
+					win.Close (Gtk.Global.CurrentEventTime);
+		}
 	}
 }
