@@ -695,13 +695,17 @@ namespace Docky.Interface
 		
 		protected override void OnDragBegin (Gdk.DragContext context)
 		{
+			// the user might not end the drag on the same horizontal position they start it on
 			remove_drag_start_x = Cursor.X;
 			base.OnDragBegin (context);
 		}
 
 		protected override bool OnDragDrop(DragContext context, int x, int y, uint time)
 		{
+			// Make sure our cursor is up to date
 			Cursor = new Gdk.Point (x, y);
+			
+			// Make sure we got the right thing here...
 			int item = DockItemForX (remove_drag_start_x);
 			if (!CursorIsOverDockArea)
 				item_provider.RemoveItem (item);
