@@ -22,6 +22,7 @@ using System.Collections.Generic;
 
 using Do.Universe;
 using Do.Platform;
+using Do.Platform.Linux;
 using Do.Interface;
 using Do.Interface.CairoUtils;
 using Do.Interface.AnimationBase;

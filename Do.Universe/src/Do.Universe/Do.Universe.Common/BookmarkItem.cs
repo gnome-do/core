@@ -1,4 +1,4 @@
-/* KeybindingsPreferencesWidget.cs
+/* BookmarkItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -20,45 +20,21 @@
 using System;
 using System.Collections.Generic;
 
-using Gtk;
-
-using Do;
-using Do.Interface;
-using Do.Platform.Linux;
-
-namespace Do.UI
+namespace Do.Universe.Common
 {
-	[System.ComponentModel.Category("Do")]
-	[System.ComponentModel.ToolboxItem(true)]
-	public partial class KeybindingsPreferencesWidget : Bin, IConfigurable
+	public class BookmarkItem : Item, IBookmarkItem
 	{
-		private KeybindingTreeView kbview;
+		string name, url;
 		
-		new public string Name {
-			get { return "Keyboard"; }
-		}
-		
-        public string Description {
-        	get { return ""; }
-        }
-        
-        public string Icon {
-        	get { return ""; }
-        }
-		
-		public KeybindingsPreferencesWidget ()
+		public BookmarkItem (string name, string url)
 		{
-			Build ();
-			
-			kbview = new KeybindingTreeView ();
-			kbview.ColumnsAutosize ();
-            action_scroll.Add (kbview);
-            action_scroll.ShowAll ();
+			this.name = name;
+			this.url = url;
 		}
-		
-		public Bin GetConfiguration ()
-        {
-        	return this;
-        }
+
+		public override string Name { get { return name; } }
+		public override string Description { get { return url; } }
+		public override string Icon { get { return "www"; } }
+		public string Url { get { return url; } }
 	}
 }

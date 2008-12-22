@@ -26,6 +26,7 @@ using Gdk;
 using Gtk;
 
 using Do.Universe;
+using Do.Universe.Common;
 using Do.Platform;
 using Do.Interface.Widgets;
 
@@ -400,7 +401,7 @@ namespace Do.Interface {
 			
 			if (string.IsNullOrEmpty (context.Query) && context.LargeTextDisplay) {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
-				iconbox[(int) pane].DisplayObject = Services.UniverseFactory.NewTextItem ("Enter Text") as Element;
+				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text") as Element;
 
 				if (!context.Results.Any ()) return;
 			} else {

@@ -22,6 +22,7 @@ using System;
 using Mono.Unix;
 
 using Do.Platform;
+using Do.Universe.Common;
 
 namespace Do.Universe
 {
@@ -33,7 +34,7 @@ namespace Do.Universe
 
 		static SelectedTextItem ()
 		{
-			TextItem = Services.UniverseFactory.NewTextItem ("") as Item;
+			TextItem = new TextItem ("") as Item;
 		}
 
 		public static void UpdateText ()
@@ -43,7 +44,7 @@ namespace Do.Universe
 			
 			primary = Gtk.Clipboard.Get (Gdk.Selection.Primary);
 			text = primary.WaitIsTextAvailable () ? primary.WaitForText () : "";
-			TextItem = Services.UniverseFactory.NewTextItem (text) as Item;
+			TextItem = new TextItem (text);
 		}
 		
 		public override Item Item {

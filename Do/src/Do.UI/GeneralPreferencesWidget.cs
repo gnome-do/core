@@ -34,7 +34,7 @@ namespace Do.UI
 {
     [System.ComponentModel.Category("Do")]
     [System.ComponentModel.ToolboxItem(true)]
-    public partial class GeneralPreferencesWidget : Bin, Interface.IConfigurable
+    public partial class GeneralPreferencesWidget : Bin, IConfigurable
     {
       const string AutostartAttribute = "X-GNOME-Autostart-enabled";
 	

@@ -32,12 +32,4 @@ namespace Do.Platform
 		IFileItem NewFileItem (string path);
 		IApplicationItem NewApplicationItem (string path);	
 	}
-
-	public static class IUniverseFactoryServiceExtensions
-	{
-		public static ITextItem NewTextItem (this IUniverseFactoryService self, string text)
-		{
-			return new TextItem (text);
-		}
-	}
 }

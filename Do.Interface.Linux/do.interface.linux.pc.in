@@ -1,0 +1,6 @@
+Name: Do.Interface.Linux
+Description: GTK+ Interface module for Do
+Version: @ABI_VERSION@
+
+Requires: do.platform do.universe
+Libs: -r:@expanded_libdir@/@PACKAGE@/Do.Interface.Linux.dll

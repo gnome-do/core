@@ -80,7 +80,7 @@ namespace Do.Platform.Preferences
 			return Set (Service, key, val);
 		}
 		
-		public T SecureGet<T> (string key, T def)
+		public T GetSecure<T> (string key, T def)
 		{
 			T val;
 			
@@ -88,7 +88,7 @@ namespace Do.Platform.Preferences
 			return val;
 		}
 
-		public bool SecureSet<T> (string key, T val)
+		public bool SetSecure<T> (string key, T val)
 		{
 			return Set (SecureService, key, val);
 		}
@@ -134,6 +134,5 @@ namespace Do.Platform.Preferences
 			string keypath = AbsolutePathForKey (service, key);
 			return service.TryGet (keypath, out val);
 		}
-
 	}
 }

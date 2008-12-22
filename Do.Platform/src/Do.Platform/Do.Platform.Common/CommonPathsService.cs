@@ -1,4 +1,4 @@
-// PathsService.cs
+// CommonPathsService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -19,11 +19,12 @@
 
 
 using System;
+using Do.Platform.Default;
 
 namespace Do.Platform.Common
 {
 	
-	public class PathsService :  Do.Platform.Default.PathsService
+	public class CommonPathsService : DefaultPathsService
 	{	
 	}
 }

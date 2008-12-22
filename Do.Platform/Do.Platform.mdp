@@ -34,7 +34,6 @@
     <File name="src/Do.Universe/Do.Universe.Common/OpenWithAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Common/RevealAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Common/RunAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/Do.Universe.Common/TextItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/ICoreService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/CoreService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IPreferencesService.cs" subtype="Code" buildaction="Compile" />
@@ -64,11 +63,11 @@
     <File name="src/Do.Platform/NotificationEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Notification.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Common/EventsOnlyNotificationsService.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/IPathsService.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Do.Platform.Default/PathsService.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Do.Platform.Common/PathsService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/SecurePreferencesWrapper.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/ActionableNotification.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/PathsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Default/DefaultPathsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Common/CommonPathsService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

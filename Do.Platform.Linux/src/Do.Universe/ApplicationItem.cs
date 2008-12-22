@@ -34,7 +34,7 @@ namespace Do.Universe.Linux {
 
 	internal class ApplicationItem : Item, IApplicationItem {
 
-		const string DefaultIcon = "applications-other";
+		const string DefaultApplicationIcon = "applications-other";
 
 		static IDictionary<string, ApplicationItem> Instances { get; set; }
 
@@ -69,12 +69,12 @@ namespace Do.Universe.Linux {
 			if (item.Exists ()) {
 				name = item.GetLocalestring ("Name");
 				description = item.GetLocalestring ("Comment");
-				icon = item.GetString ("Icon") ?? DefaultIcon;
+				icon = item.GetString ("Icon") ?? DefaultApplicationIcon;
 			} else {
 				name = Path.GetFileName (item.Location);
 				description =
 					Catalog.GetString ("This application could not be indexed.");
-				icon = DefaultIcon;
+				icon = DefaultApplicationIcon;
 			}
 		}
 		

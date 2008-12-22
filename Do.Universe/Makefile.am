@@ -10,6 +10,8 @@ FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Universe/Act.cs \
 	src/Do.Universe/ContactItem.cs \
+	src/Do.Universe/Do.Universe.Common/BookmarkItem.cs \
+	src/Do.Universe/Do.Universe.Common/TextItem.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeAct.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeElement.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeItem.cs \

@@ -30,6 +30,7 @@ using Mono.Addins.Setup;
 using Do;
 using Do.UI;
 using Do.Platform;
+using Do.Platform.Linux;
 using Do.Universe;
 using Do.Interface;
 

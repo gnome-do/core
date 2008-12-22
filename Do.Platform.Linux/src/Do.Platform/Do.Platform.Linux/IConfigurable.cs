@@ -21,7 +21,7 @@ using System;
 
 using Gtk;
 
-namespace Do.Interface
+namespace Do.Platform.Linux
 {
 	public interface IConfigurable
 	{

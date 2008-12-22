@@ -32,6 +32,7 @@ using Do;
 using Do.Core;
 using Do.Interface;
 using Do.Platform;
+using Do.Platform.Linux;
 
 namespace Do.UI
 {
