@@ -19,6 +19,7 @@ FILES = \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/IApplicationItem.cs \
 	src/Do.Universe/IBookmarkItem.cs \
+	src/Do.Universe/BookmarkItem.cs \
 	src/Do.Universe/IContactDetailItem.cs \
 	src/Do.Universe/IFileItem.cs \
 	src/Do.Universe/IItem.cs \
