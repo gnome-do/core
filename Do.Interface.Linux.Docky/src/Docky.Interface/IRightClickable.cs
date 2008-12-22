@@ -35,11 +35,23 @@ namespace Docky.Interface
 			get; private set;
 		}
 		
-		public MenuArgs (EventHandler handler, string description, string icon)
+		public bool Sensitive {
+			get; private set; 
+		}
+		
+		public MenuArgs (EventHandler handler, string description, string icon, bool sensitive)
 		{
 			Handler = handler;
 			Description = description;
 			Icon = icon;
+			Sensitive = sensitive;
+		}
+	}
+	
+	public class SeparatorMenuArgs : MenuArgs
+	{
+		public SeparatorMenuArgs () : base (null, "Separator", null, true)
+		{
 		}
 	}
 	

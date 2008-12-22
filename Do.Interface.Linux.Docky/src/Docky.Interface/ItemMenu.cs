@@ -53,11 +53,17 @@ namespace Docky.Interface
 			mainMenuX = x;
 			mainMenuY = y;	
 			foreach (MenuArgs arg in items) {
+				if (arg is SeparatorMenuArgs) {
+					Add (new SeparatorMenuItem ());
+					continue;
+				}
+				
 				ImageMenuItem item = new ImageMenuItem (arg.Description);
 				item.Image = new Image (arg.Icon, IconSize.Menu);
 				Add (item);
 				item.CanFocus = false;
 				item.Activated += arg.Handler;
+				item.Sensitive = arg.Sensitive;
 			}
 			ShowAll ();
 			

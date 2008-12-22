@@ -198,8 +198,12 @@ namespace Docky.Interface
 		public IEnumerable<MenuArgs> GetMenuItems ()
 		{
 			List<MenuArgs> outList = new List<MenuArgs> ();
+			bool hasApps = HasVisibleApps;
 			
-			if (Apps.Any ()) {
+			outList.Add (new MenuArgs ((o, a) => Launch (), "Launch Application", Gtk.Stock.Execute, true));
+			
+			if (hasApps) {
+				outList.Add (new SeparatorMenuArgs ());
 				foreach (Application app in Apps) {
 					foreach (Wnck.Window window in app.Windows) {
 						Wnck.Window copy_win = window;
@@ -207,17 +211,17 @@ namespace Docky.Interface
 							string name = copy_win.Name;
 							if (name.Length > 50)
 								name = name.Substring (0, 47) + "...";
-							outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), name, Gtk.Stock.GoForward));
+							outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), name, Gtk.Stock.GoForward, hasApps));
 						}
 					}
 				}
-				if (outList.Any ()) {
-					outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore Windows", Gtk.Stock.GoDown));
-					outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All Windows", Gtk.Stock.Quit));
-				}
-			} else {
-				
+				outList.Add (new SeparatorMenuArgs ());
 			}
+			
+			
+			outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore Windows", Gtk.Stock.GoDown, hasApps));
+			outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All Windows", Gtk.Stock.Quit, hasApps));
+			
 			return outList;
 		}
 		

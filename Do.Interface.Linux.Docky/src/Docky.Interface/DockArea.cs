@@ -71,6 +71,7 @@ namespace Docky.Interface
 		
 		double previous_zoom = 0;
 		int previous_item_count = 0;
+		int previous_x = -1;
 		
 		
 		DockWindow window;
@@ -458,28 +459,31 @@ namespace Docky.Interface
 		
 		void DrawIcons (Context cr)
 		{
+			if (previous_x == -1)
+				previous_x = Cursor.X;
+			
 			if (ZoomIn == 1 && previous_zoom == 1 && !AnimationNeeded && previous_item_count == DockItems.Length) {
-				int left_item = Math.Max (0, DockItemForX (Cursor.X - DockPreferences.ZoomSize / 2));
+				int left_item = Math.Max (0, DockItemForX (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
 				
-				int right_item = DockItemForX (Cursor.X + DockPreferences.ZoomSize / 2);
+				int right_item = DockItemForX (Math.Max (Cursor.X, previous_x) + DockPreferences.ZoomSize / 2);
 				if (right_item == -1) 
 					right_item = DockItems.Length - 1;
 				
 				int left_x, right_x;
-				double d1, d2;
+				double left_zoom, right_zoom;
 				
 				if (left_item == 0) {
 					left_x = 0;
 				} else {
-					IconPositionedCenterX (left_item, out left_x, out d1);
-					left_x -= (int) (d1 * DockItems [left_item].Width / 2) + IconBorderWidth;
+					IconPositionedCenterX (left_item, out left_x, out left_zoom);
+					left_x -= (int) (left_zoom * DockItems [left_item].Width / 2) + IconBorderWidth;
 				}
 				
 				if (right_item == DockItems.Length - 1) {
 					right_x = Width;
 				} else {
-					IconPositionedCenterX (right_item, out right_x, out d2);
-					right_x += (int) (d2 * DockItems [right_item].Width / 2) + IconBorderWidth;
+					IconPositionedCenterX (right_item, out right_x, out right_zoom);
+					right_x += (int) (right_zoom * DockItems [right_item].Width / 2) + IconBorderWidth;
 				}
 					
 				cr.Rectangle (left_x, 0, right_x - left_x, Height);
@@ -497,6 +501,7 @@ namespace Docky.Interface
 			}
 			previous_zoom = ZoomIn;
 			previous_item_count = DockItems.Length;
+			previous_x = Cursor.X;
 		}
 		
 		void DrawIcon (Context cr, int icon)
