@@ -51,7 +51,7 @@ namespace Docky.Interface
 			}
 			
 			mainMenuX = x;
-			mainMenuY = y;	
+			mainMenuY = y;
 			foreach (MenuArgs arg in items) {
 				if (arg is SeparatorMenuArgs) {
 					Add (new SeparatorMenuItem ());

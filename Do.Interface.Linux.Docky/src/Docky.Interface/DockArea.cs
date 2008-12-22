@@ -158,8 +158,12 @@ namespace Docky.Interface
 		double ZoomIn {
 			get {
 				double zoom = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
-				if (!CursorIsOverDockArea)
+				if (!CursorIsOverDockArea) {
 					zoom = 1 - zoom;
+				} else {
+					if (DockPreferences.AutoHide)
+						zoom = 1;
+				}
 				if (InputInterfaceVisible) {
 					zoom = zoom * DockIconOpacity;
 				}
@@ -204,7 +208,7 @@ namespace Docky.Interface
 					if (CursorIsOverDockArea)
 						offset = 1 - offset;
 				}
-				return (int) (offset * MinimumDockArea.Height);
+				return (int) (offset * MinimumDockArea.Height * 1.5);
 			}
 		}
 		
@@ -457,40 +461,46 @@ namespace Docky.Interface
 				previous_x = Cursor.X;
 			
 			// Some conditions are not good for doing partial draws.
-			if (ZoomIn == 1 && previous_zoom == 1 && !AnimationNeeded && previous_item_count == DockItems.Length) {
-				int left_item = Math.Max (0, DockItemForX (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
-				
-				int right_item = DockItemForX (Math.Max (Cursor.X, previous_x) + DockPreferences.ZoomSize / 2);
-				if (right_item == -1) 
-					right_item = DockItems.Length - 1;
-				
-				int left_x, right_x;
-				double left_zoom, right_zoom;
-				
-				if (left_item == 0) {
-					left_x = 0;
-				} else {
-					IconPositionedCenterX (left_item, out left_x, out left_zoom);
-					left_x -= (int) (left_zoom * DockItems [left_item].Width / 2) + IconBorderWidth;
-				}
-				
-				if (right_item == DockItems.Length - 1) {
-					right_x = Width;
-				} else {
-					IconPositionedCenterX (right_item, out right_x, out right_zoom);
-					right_x += (int) (right_zoom * DockItems [right_item].Width / 2) + IconBorderWidth;
-				}
-				
-				// only clear that area for which we are going to redraw.  If we land this in the middle of an icon
-				// things are going to look ugly, so this calculation MUST be correct.
-				cr.Rectangle (left_x, 0, right_x - left_x, Height);
-				cr.Color = new Cairo.Color (1, 1, 1, 0);
-				cr.Operator = Operator.Source;
-				cr.Fill ();
-				cr.Operator = Operator.Over;
-				
-				for (int i=left_item; i<=right_item; i++)
-					DrawIcon (cr, i);
+			bool iconAnimationNeeded = BounceAnimationNeeded || IconInsertionAnimationNeeded;
+			if (ZoomIn == 1 && previous_zoom == 1 && !iconAnimationNeeded && previous_item_count == DockItems.Length) {
+				do {
+					if (previous_x == Cursor.X)
+						break;
+					
+					int left_item = Math.Max (0, DockItemForX (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
+					
+					int right_item = DockItemForX (Math.Max (Cursor.X, previous_x) + DockPreferences.ZoomSize / 2);
+					if (right_item == -1) 
+						right_item = DockItems.Length - 1;
+					
+					int left_x, right_x;
+					double left_zoom, right_zoom;
+					
+					if (left_item == 0) {
+						left_x = 0;
+					} else {
+						IconPositionedCenterX (left_item, out left_x, out left_zoom);
+						left_x -= (int) (left_zoom * DockItems [left_item].Width / 2) + IconBorderWidth;
+					}
+					
+					if (right_item == DockItems.Length - 1) {
+						right_x = Width;
+					} else {
+						IconPositionedCenterX (right_item, out right_x, out right_zoom);
+						right_x += (int) (right_zoom * DockItems [right_item].Width / 2) + IconBorderWidth;
+					}
+					
+					// only clear that area for which we are going to redraw.  If we land this in the middle of an icon
+					// things are going to look ugly, so this calculation MUST be correct.
+					cr.Rectangle (left_x, 0, right_x - left_x, Height);
+					cr.Color = new Cairo.Color (1, 1, 1, 0);
+					cr.Operator = Operator.Source;
+					cr.Fill ();
+					cr.Operator = Operator.Over;
+					
+					for (int i=left_item; i<=right_item; i++)
+						DrawIcon (cr, i);
+				} while (false);
 			} else {
 				// less code, twice as slow...
 				cr.AlphaFill ();
