@@ -56,7 +56,6 @@ namespace Docky.Interface
 		
 		Gdk.Rectangle minimum_dock_area;
 		
-		DateTime last_click = DateTime.UtcNow;
 		DateTime enter_time = DateTime.UtcNow;
 		DateTime interface_change_time = DateTime.UtcNow;
 		
@@ -324,7 +323,7 @@ namespace Docky.Interface
 		}
 		
 		bool BounceAnimationNeeded {
-			get { return (DateTime.UtcNow - last_click).TotalMilliseconds < BounceTime; }
+			get { return DockItems.Any (di => (DateTime.UtcNow - di.DockAddItem).TotalMilliseconds < BounceTime); }
 		}
 		
 		bool InputModeChangeAnimationNeeded {
@@ -385,13 +384,6 @@ namespace Docky.Interface
 				SetParentInputMask ();
 				return false;
 			});
-		}
-		
-		public Surface GetSimilar (int width, int height)
-		{
-			if (backbuffer == null)
-				throw new Exception ("DockArea is not fully initialized");
-			return backbuffer.CreateSimilar (backbuffer.Content, width, height);
 		}
 		
 		void RegisterEvents ()
@@ -828,8 +820,6 @@ namespace Docky.Interface
 				
 				//send off the clicks
 				DockItems [item].Clicked (evnt.Button);
-				if (DockItems [item].LastClick > last_click)
-					last_click = DockItems [item].LastClick;
 				AnimatedDraw ();
 			}
 			return ret_val;
