@@ -28,7 +28,7 @@ using Do.Platform.ServiceStack;
 namespace Do.Platform.Default
 {
 	
-	public class PathsService : IPathsService, IInitializedService
+	public class DefaultPathsService : PathsService, IInitializedService
 	{
 		
 		const string TemporaryDirectoryName = "tmp";
@@ -66,11 +66,11 @@ namespace Do.Platform.Default
 			}
 		}
 		
-		public virtual string UserDataDirectory {
+		public override string UserDataDirectory {
 			get { return Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData), ApplicationDirectoryName); }
 		}
 		
-		public virtual string TemporaryDirectory {
+		public override string TemporaryDirectory {
 			get { return Path.Combine (UserDataDirectory, TemporaryDirectoryName); }
 		}
 		

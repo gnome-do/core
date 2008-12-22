@@ -12,12 +12,12 @@ FILES = \
 	src/Do.Platform/Do.Platform.Common/DictionaryPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Common/EventsOnlyNotificationsService.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogService.cs \
-	src/Do.Platform/Do.Platform.Common/PathsService.cs \
+	src/Do.Platform/Do.Platform.Common/CommonPathsService.cs \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
 	src/Do.Platform/Do.Platform.Default/NotificationsService.cs \
-	src/Do.Platform/Do.Platform.Default/PathsService.cs \
+	src/Do.Platform/Do.Platform.Default/DefaultPathsService.cs \
 	src/Do.Platform/Do.Platform.Default/PreferencesService.cs \
 	src/Do.Platform/Do.Platform.Default/SecurePreferencesService.cs \
 	src/Do.Platform/Do.Platform.Default/UniverseFactoryService.cs \
@@ -30,7 +30,7 @@ FILES = \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/ILogService.cs \
 	src/Do.Platform/INotificationsService.cs \
-	src/Do.Platform/IPathsService.cs \
+	src/Do.Platform/PathsService.cs \
 	src/Do.Platform/IPreferences.cs \
 	src/Do.Platform/IPreferencesService.cs \
 	src/Do.Platform/ISecurePreferencesService.cs \

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 
 using Mono.Addins;
 
+using Do.Platform.Default;
 using Do.Platform.Preferences;
 using Do.Platform.ServiceStack;
 
@@ -33,7 +34,7 @@ namespace Do.Platform
 	{
 
 		static ICoreService core;
-		static IPathsService paths;
+		static PathsService paths;
 		static IWindowingService windowing;
 		static IEnumerable<ILogService> logs;
 		static PreferencesFactory preferences;
@@ -88,7 +89,7 @@ namespace Do.Platform
 				notifications = null;
 			if (service is IWindowingService)
 				windowing = null;
-			if (service is IPathsService)
+			if (service is PathsService)
 				paths = null;
 		}
 
@@ -108,10 +109,10 @@ namespace Do.Platform
 			}
 		}
 
-		public static IPathsService Paths {
+		public static PathsService Paths {
 			get {
 				if (paths == null)
-					paths = LocateService<IPathsService, Default.PathsService> ();
+					paths = LocateService<PathsService, DefaultPathsService> ();
 				return paths;
 			}
 		}
