@@ -402,8 +402,6 @@ namespace Docky.Interface
 		{
 			item_provider.DockItemsChanged += OnDockItemsChanged;
 			
-			ItemMenu.Instance.Hidden += OnItemMenuHidden;
-			
 			dock_item_menu.Hidden += OnDockItemMenuHidden;
 		}
 		
@@ -684,21 +682,6 @@ namespace Docky.Interface
 		void OnDockItemsChanged (IEnumerable<IDockItem> items)
 		{
 			SetIconRegions ();
-			AnimatedDraw ();
-		}
-		
-		void OnItemMenuHidden (object o, System.EventArgs args)
-		{
-			int x, y;
-			Display.GetPointer (out x, out y);
-			
-			Gdk.Rectangle geo;
-			window.GetPosition (out geo.X, out geo.Y);
-			
-			x -= geo.X;
-			y -= geo.Y;
-			
-			Cursor = new Gdk.Point (x, y);
 			AnimatedDraw ();
 		}
 		
