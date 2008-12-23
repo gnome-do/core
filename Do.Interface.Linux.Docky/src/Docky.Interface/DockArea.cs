@@ -73,6 +73,7 @@ namespace Docky.Interface
 		double previous_zoom = 0;
 		int previous_item_count = 0;
 		int previous_x = -1;
+		bool previous_icon_animation_needed = true;
 		
 		
 		DockWindow window;
@@ -330,7 +331,7 @@ namespace Docky.Interface
 		}
 		
 		bool BounceAnimationNeeded {
-			get { return DockItems.Any (di => (DateTime.UtcNow - di.LastClick).TotalMilliseconds < BounceTime); }
+			get { return DockItems.Any (di => (DateTime.UtcNow - di.LastClick).TotalMilliseconds <= BounceTime); }
 		}
 		
 		bool InputModeChangeAnimationNeeded {
@@ -490,7 +491,12 @@ namespace Docky.Interface
 			
 			// Some conditions are not good for doing partial draws.
 			bool iconAnimationNeeded = BounceAnimationNeeded || IconInsertionAnimationNeeded;
-			if (ZoomIn == 1 && previous_zoom == 1 && !iconAnimationNeeded && previous_item_count == DockItems.Length && !drag_resizing) {
+			if (ZoomIn == 1 && 
+			    previous_zoom == 1 && 
+			    !iconAnimationNeeded &&
+			    !previous_icon_animation_needed &&
+			    previous_item_count == DockItems.Length && 
+			    !drag_resizing) {
 				do {
 					if (previous_x == Cursor.X)
 						break;
@@ -538,6 +544,7 @@ namespace Docky.Interface
 			previous_zoom = ZoomIn;
 			previous_item_count = DockItems.Length;
 			previous_x = Cursor.X;
+			previous_icon_animation_needed = iconAnimationNeeded;
 		}
 		
 		void DrawIcon (Context cr, int icon)
@@ -559,7 +566,8 @@ namespace Docky.Interface
 			
 			int total_ms = (int) (DateTime.UtcNow - DockItems [icon].LastClick).TotalMilliseconds;
 			if (total_ms < BounceTime) {
-				y -= Math.Abs (20 * Math.Sin (total_ms * Math.PI / (BounceTime / 2)));
+				// bounces twice
+				y -= Math.Abs (30 * Math.Sin (total_ms * Math.PI / (BounceTime / 2)));
 			}
 			
 			double scale = zoom/DockPreferences.IconQuality;
