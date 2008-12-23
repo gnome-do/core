@@ -56,7 +56,7 @@ namespace Docky.Interface.Renderers
 		
 		bool ShouldRenderButton {
 			get {
-				return State [State.CurrentPane] != null && State [State.CurrentPane] is Item;
+				return State.CurrentPane != Pane.Third && State [State.CurrentPane] != null && State [State.CurrentPane] is Item;
 			}
 		}
 		
@@ -168,7 +168,7 @@ namespace Docky.Interface.Renderers
 		
 		void RenderNormalText (Context cr, ref Gdk.Rectangle dockArea)
 		{
-			int base_x = dockArea.X + 15;
+			int base_x = dockArea.X + 30;
 			string text = GLib.Markup.EscapeText (State[State.CurrentPane].Name);
 			text = Do.Interface.Util.FormatCommonSubstrings (text, State.GetPaneQuery (State.CurrentPane), HighlightFormat);
 			

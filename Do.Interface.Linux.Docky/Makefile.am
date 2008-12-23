@@ -20,6 +20,7 @@ FILES = \
 	src/Docky.Interface/IDockItem.cs \
 	src/Docky.Interface/ItemMenu.cs \
 	src/Docky.Interface/IRightClickable.cs \
+	src/Docky.Interface/MenuArgs.cs \
 	src/Docky.Interface/SeparatorItem.cs \
 	src/Docky.Interface/Util.cs \
 	src/Docky.Utilities/DockPreferences.cs \

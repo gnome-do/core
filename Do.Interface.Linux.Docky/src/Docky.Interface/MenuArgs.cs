@@ -1,4 +1,4 @@
-// IRightClickable.cs
+// MenuArgs.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -17,12 +17,40 @@
 //
 
 using System;
-using System.Collections.Generic;
 
 namespace Docky.Interface
 {
-	public interface IRightClickable
+	public class MenuArgs
 	{
-		IEnumerable<MenuArgs> GetMenuItems ();
+		public EventHandler Handler {
+			get; private set;
+		}
+		
+		public string Description {
+			get; private set;
+		}
+		
+		public string Icon {
+			get; private set;
+		}
+		
+		public bool Sensitive {
+			get; private set; 
+		}
+		
+		public MenuArgs (EventHandler handler, string description, string icon, bool sensitive)
+		{
+			Handler = handler;
+			Description = description;
+			Icon = icon;
+			Sensitive = sensitive;
+		}
+	}
+	
+	public class SeparatorMenuArgs : MenuArgs
+	{
+		public SeparatorMenuArgs () : base (null, "Separator", null, true)
+		{
+		}
 	}
 }
