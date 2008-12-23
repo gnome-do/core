@@ -152,7 +152,7 @@ namespace Docky.Interface
 			cr.Color = new Cairo.Color (0, 0, 0, .9);
 			cr.FillPreserve ();
 			
-			cr.Color = new Cairo.Color (1, 1, 1);
+			cr.Color = new Cairo.Color (.2, .2, .2, .8);
 			cr.Stroke ();
 		}
 	}
