@@ -36,6 +36,21 @@ namespace Docky.Interface
 	
 	public class DockItemMenu : Gtk.Window
 	{
+		class CustomSeparator : HSeparator
+		{
+			protected override bool OnExposeEvent (Gdk.EventExpose evnt)
+			{
+				using (Context cr = CairoHelper.Create (GdkWindow)) {
+					cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, 1);
+					cr.Color = new Cairo.Color (.8, .8, .8, .7);
+					cr.Fill ();
+					
+				}
+				return true;
+			}
+
+		}
+		
 		const int TailHeight = 15;
 		new const int BorderWidth = 2;
 		const int Radius = 10;
@@ -82,9 +97,10 @@ namespace Docky.Interface
 			
 			foreach (MenuArgs arg in args) {
 				if (arg is SeparatorMenuArgs) {
-					vbox.PackStart (new HSeparator ());
+					vbox.PackStart (new CustomSeparator ());
 					continue;
 				}
+				
 				HBox hbox = new HBox ();
 				Label label = new Label ();
 				if (arg.Sensitive)
@@ -97,7 +113,9 @@ namespace Docky.Interface
 				label.Ellipsize = Pango.EllipsizeMode.End;
 				label.Ypad = 0;
 				
-				Gtk.Image image = new Gtk.Image (IconProvider.PixbufFromIconName (arg.Icon, 16));
+				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (arg.Icon, 16);
+				Gtk.Image image = new Gtk.Image (pbuf);
+				pbuf.Dispose ();
 				hbox.PackStart (image, false, false, 0);
 				hbox.PackStart (label, true, true, 2);
 				
@@ -164,7 +182,7 @@ namespace Docky.Interface
 			cr.Arc (BorderWidth + Radius, rect.Height - BorderWidth - Radius - TailHeight, Radius, Math.PI * 0.5, Math.PI);
 			cr.Arc (BorderWidth + Radius, BorderWidth + Radius, Radius, Math.PI, Math.PI * 1.5);
 			
-			cr.Color = new Cairo.Color (0, 0, 0, .9);
+			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .9);
 			cr.FillPreserve ();
 			
 			cr.Color = new Cairo.Color (.2, .2, .2, .8);

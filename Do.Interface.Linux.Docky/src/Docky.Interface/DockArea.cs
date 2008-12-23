@@ -879,8 +879,9 @@ namespace Docky.Interface
 						int item_x;
 						double item_zoom;
 						IconPositionedCenterX (DockItemForX (Cursor.X), out item_x, out item_zoom);
-						int menu_y = Screen.GetMonitorGeometry (0).Height - (int) (DockPreferences.IconSize * item_zoom) - VerticalBuffer;
-						dock_item_menu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), ((int) evnt.XRoot - Cursor.X) + item_x, menu_y);
+						int menu_y = Screen.GetMonitorGeometry (0).Height - (int) (DockPreferences.IconSize * item_zoom);
+						dock_item_menu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), 
+						                      ((int) evnt.XRoot - Cursor.X) + item_x, menu_y);
 					}
 					return ret_val;
 				}
