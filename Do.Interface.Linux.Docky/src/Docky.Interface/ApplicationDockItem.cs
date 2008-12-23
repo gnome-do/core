@@ -241,14 +241,14 @@ namespace Docky.Interface
 			List<MenuArgs> outList = new List<MenuArgs> ();
 			foreach (Wnck.Window window in App.Windows) { 
 				Wnck.Window copy = window;
-				outList.Add (new MenuArgs ((o, a) => copy.CenterAndFocusWindow (), copy.Name, Gtk.Stock.GoForward, true));
+				outList.Add (new MenuArgs ((o, a) => copy.CenterAndFocusWindow (), copy.Name, "forward", true));
 			}
 			
 			if (outList.Any ()) {
 				outList.Add (new SeparatorMenuArgs ());
 				outList.Add (new MenuArgs ((o, a) => WindowControl.MinimizeRestoreWindows (App.Windows), 
 				                           "Minimize/Restore", 
-				                           "Minimize",
+				                           "down",
 				                           true));
 				outList.Add (new MenuArgs ((o, a) => WindowControl.CloseWindows (App.Windows), "Close All", Gtk.Stock.Quit, true));
 			}

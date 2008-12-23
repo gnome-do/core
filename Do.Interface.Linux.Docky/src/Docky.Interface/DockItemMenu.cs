@@ -85,6 +85,7 @@ namespace Docky.Interface
 					vbox.PackStart (new HSeparator ());
 					continue;
 				}
+				HBox hbox = new HBox ();
 				Label label = new Label ();
 				if (arg.Sensitive)
 					label.Markup = "<span color=\"#ffffff\"><b>" + arg.Description + "</b></span>";
@@ -95,7 +96,11 @@ namespace Docky.Interface
 				label.Ellipsize = Pango.EllipsizeMode.End;
 				label.Ypad = 0;
 				
-				Gtk.Button button = new Button (label);
+				Gtk.Image image = new Gtk.Image (IconProvider.PixbufFromIconName (arg.Icon, 16));
+				hbox.PackStart (image, false, false, 0);
+				hbox.PackStart (label, true, true, 3);
+				
+				Gtk.Button button = new Button (hbox);
 				
 				button.Pressed += arg.Handler;
 				button.Pressed += OnButtonPressed;
