@@ -86,7 +86,7 @@ namespace Docky.Interface
 					continue;
 				}
 				Label label = new Label ();
-				label.Markup = "<b>" + arg.Description + "</b>";
+				label.Markup = "<span color=\"#ffffff\"><b>" + arg.Description + "</b></span>";
 				label.ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 				label.ModifyText (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 				label.Ellipsize = Pango.EllipsizeMode.End;
@@ -94,8 +94,12 @@ namespace Docky.Interface
 				button.Pressed += arg.Handler;
 				button.Pressed += OnButtonPressed;
 				button.Relief = ReliefStyle.None;
+				button.CanFocus = false;
 				button.Sensitive = arg.Sensitive;
-				vbox.PackStart (button, false, false, 5);
+				button.ModifyBg (StateType.Prelight, new Gdk.Color ((byte) (byte.MaxValue * 0.15), 
+				                                                    (byte) (byte.MaxValue * 0.15), 
+				                                                    (byte) (byte.MaxValue * 0.15)));
+				vbox.PackStart (button, false, false, 1);
 			}
 			ShowAll ();
 			Gtk.Requisition req = SizeRequest ();
@@ -145,7 +149,7 @@ namespace Docky.Interface
 			cr.Arc (BorderWidth + Radius, rect.Height - BorderWidth - Radius - TailHeight, Radius, Math.PI * 0.5, Math.PI);
 			cr.Arc (BorderWidth + Radius, BorderWidth + Radius, Radius, Math.PI, Math.PI * 1.5);
 			
-			cr.Color = new Cairo.Color (0, 0, 0, .8);
+			cr.Color = new Cairo.Color (0, 0, 0, .9);
 			cr.FillPreserve ();
 			
 			cr.Color = new Cairo.Color (1, 1, 1);
