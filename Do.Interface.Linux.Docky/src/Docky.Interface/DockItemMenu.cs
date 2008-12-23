@@ -37,7 +37,7 @@ namespace Docky.Interface
 	public class DockItemMenu : Gtk.Window
 	{
 		const int TailHeight = 15;
-		const int BorderWidth = 2;
+		new const int BorderWidth = 2;
 		const int Radius = 10;
 		
 		VBox vbox;
@@ -53,7 +53,7 @@ namespace Docky.Interface
 			Modal = true;
 			TypeHint = WindowTypeHint.PopupMenu;
 			
-			WidthRequest = 300;
+			WidthRequest = 225;
 			
 			this.SetCompositeColormap ();
 			
@@ -93,16 +93,22 @@ namespace Docky.Interface
 				label.ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 				label.ModifyText (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 				label.Ellipsize = Pango.EllipsizeMode.End;
+				label.Ypad = 0;
+				
 				Gtk.Button button = new Button (label);
+				
 				button.Pressed += arg.Handler;
 				button.Pressed += OnButtonPressed;
+				
 				button.Relief = ReliefStyle.None;
 				button.CanFocus = false;
 				button.Sensitive = arg.Sensitive;
+				button.BorderWidth = 0;
+				
 				button.ModifyBg (StateType.Prelight, new Gdk.Color ((byte) (byte.MaxValue * 0.15), 
 				                                                    (byte) (byte.MaxValue * 0.15), 
 				                                                    (byte) (byte.MaxValue * 0.15)));
-				vbox.PackStart (button, false, false, 1);
+				vbox.PackStart (button, false, false, 0);
 			}
 			ShowAll ();
 			Gtk.Requisition req = SizeRequest ();
