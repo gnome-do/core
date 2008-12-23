@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 
 using Cairo;
+using Gdk;
 
 using Do.Interface.CairoUtils;
 using Do.Platform;
@@ -71,6 +72,12 @@ namespace Docky.Interface
 			}
 			return icon_surface;
 		}
+		
+		public override Pixbuf GetDragPixbuf ()
+		{
+			return App.Icon;
+		}
+
 		
 		Gdk.Pixbuf GetIcon ()
 		{
@@ -240,10 +247,10 @@ namespace Docky.Interface
 			if (outList.Any ()) {
 				outList.Add (new SeparatorMenuArgs ());
 				outList.Add (new MenuArgs ((o, a) => WindowControl.MinimizeRestoreWindows (App.Windows), 
-				                           "Minimize/Restore Windows", 
+				                           "Minimize/Restore", 
 				                           "Minimize",
 				                           true));
-				outList.Add (new MenuArgs ((o, a) => WindowControl.CloseWindows (App.Windows), "Close All Windows", Gtk.Stock.Quit, true));
+				outList.Add (new MenuArgs ((o, a) => WindowControl.CloseWindows (App.Windows), "Close All", Gtk.Stock.Quit, true));
 			}
 			
 			return outList;

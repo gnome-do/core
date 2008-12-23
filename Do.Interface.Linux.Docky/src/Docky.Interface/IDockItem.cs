@@ -42,7 +42,7 @@ namespace Docky.Interface
 		Surface GetIconSurface (Surface similar);
 		Surface GetTextSurface (Surface similar);
 		
-//		Pixbuf GetDragPixbuf ();
+		Pixbuf GetDragPixbuf ();
 		
 		void Clicked (uint button);
 		void SetIconRegion (Gdk.Rectangle region);

@@ -725,6 +725,9 @@ namespace Docky.Interface
 		{
 			// the user might not end the drag on the same horizontal position they start it on
 			remove_drag_start_x = Cursor.X;
+			int item = DockItemForX (Cursor.X);
+			if (DockItems [item].GetDragPixbuf () != null)
+				Gtk.Drag.SetIconPixbuf (context, DockItems [item].GetDragPixbuf (), 0, 0);
 			base.OnDragBegin (context);
 		}
 		

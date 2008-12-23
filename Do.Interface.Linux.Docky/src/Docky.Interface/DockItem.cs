@@ -43,6 +43,7 @@ namespace Docky.Interface
 		Surface icon_surface;
 		List<Wnck.Application> apps;
 		Gdk.Rectangle icon_region;
+		Gdk.Pixbuf drag_pixbuf;
 		
 		public string Icon { 
 			get { return item.Icon; } 
@@ -120,6 +121,13 @@ namespace Docky.Interface
 			}
 			
 			return pbuf;
+		}
+		
+		public override Pixbuf GetDragPixbuf ()
+		{
+			if (drag_pixbuf == null)
+				drag_pixbuf = IconProvider.PixbufFromIconName (Icon, 32);
+			return drag_pixbuf;
 		}
 		
 		public override Surface GetIconSurface (Surface sr)
@@ -219,8 +227,8 @@ namespace Docky.Interface
 			}
 			
 			
-			outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore Windows", Gtk.Stock.GoDown, hasApps));
-			outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All Windows", Gtk.Stock.Quit, hasApps));
+			outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown, hasApps));
+			outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit, hasApps));
 			
 			return outList;
 		}

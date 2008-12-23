@@ -55,6 +55,11 @@ namespace Docky.Interface
 			return text_surface;
 		}
 		
+		public virtual Pixbuf GetDragPixbuf ()
+		{
+			return null;
+		}
+		
 		/// <summary>
 		/// Called whenever the icon receives a click event
 		/// </summary>

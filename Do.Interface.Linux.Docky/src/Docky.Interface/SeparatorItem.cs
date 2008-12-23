@@ -58,6 +58,11 @@ namespace Docky.Interface
 			return null;
 		}
 		
+		public Gdk.Pixbuf GetDragPixbuf ()
+		{
+			return null;
+		}
+		
 		public string Description {
 			get {
 				return "";
