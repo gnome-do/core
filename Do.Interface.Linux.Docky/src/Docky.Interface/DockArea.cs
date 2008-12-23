@@ -404,6 +404,8 @@ namespace Docky.Interface
 			item_provider.DockItemsChanged += OnDockItemsChanged;
 			
 			dock_item_menu.Hidden += OnDockItemMenuHidden;
+			
+			dock_item_menu.Shown += OnDockItemMenuShown;
 		}
 		
 		void RegisterGtkDragSource ()
@@ -498,7 +500,7 @@ namespace Docky.Interface
 			    previous_item_count == DockItems.Length && 
 			    !drag_resizing) {
 				do {
-					if (previous_x == Cursor.X)
+					if (previous_x == Cursor.X && !dock_item_menu.Visible)
 						break;
 					
 					int left_item = Math.Max (0, DockItemForX (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
@@ -600,7 +602,10 @@ namespace Docky.Interface
 			
 			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
 			// at all instead of rendering a blank surface
-			if (DockItemForX (Cursor.X) == icon && CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null) {
+			if (!dock_item_menu.Visible &&
+			    DockItemForX (Cursor.X) == icon && 
+			    CursorIsOverDockArea && 
+			    DockItems [icon].GetTextSurface (cr.Target) != null) {
 				int textx = IconNormalCenterX (icon) - (DockPreferences.TextWidth / 2);
 				int texty = Height - 2 * IconSize - 28;
 				cr.SetSource (DockItems [icon].GetTextSurface (cr.Target), textx, texty);
@@ -705,6 +710,11 @@ namespace Docky.Interface
 			y -= geo.Y;
 			
 			Cursor = new Gdk.Point (x, y);
+			AnimatedDraw ();
+		}
+		
+		void OnDockItemMenuShown (object o, EventArgs args)
+		{
 			AnimatedDraw ();
 		}
 		
@@ -865,10 +875,11 @@ namespace Docky.Interface
 				//handling right clicks
 				if (evnt.Button == 3) {
 					if (CurrentDockItem is IRightClickable && (CurrentDockItem as IRightClickable).GetMenuItems ().Any ()) {
-						int menu_y = Screen.GetMonitorGeometry (0).Height - MinimumDockArea.Height;
+						
 						int item_x;
 						double item_zoom;
 						IconPositionedCenterX (DockItemForX (Cursor.X), out item_x, out item_zoom);
+						int menu_y = Screen.GetMonitorGeometry (0).Height - (int) (DockPreferences.IconSize * item_zoom) - VerticalBuffer;
 						dock_item_menu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), ((int) evnt.XRoot - Cursor.X) + item_x, menu_y);
 					}
 					return ret_val;
@@ -935,7 +946,7 @@ namespace Docky.Interface
 			if (InputInterfaceVisible) {
 				window.SetInputMask (Height);
 			} else if (CursorIsOverDockArea) {
-				window.SetInputMask (GetDockArea ().Height*2 + 10);
+				window.SetInputMask (GetDockArea ().Height * 2 + 10);
 			} else {
 				if (DockPreferences.AutoHide)
 					window.SetInputMask (1);

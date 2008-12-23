@@ -97,7 +97,7 @@ namespace Docky.Interface
 				label.Ellipsize = Pango.EllipsizeMode.End;
 				label.Ypad = 0;
 				
-				Gtk.Image image = new Gtk.Image (IconProvider.PixbufFromIconName (arg.Icon, 22));
+				Gtk.Image image = new Gtk.Image (IconProvider.PixbufFromIconName (arg.Icon, 16));
 				hbox.PackStart (image, false, false, 0);
 				hbox.PackStart (label, true, true, 2);
 				

@@ -73,6 +73,15 @@ namespace Docky.Interface
 			get { return apps.Select (item => item.Pid); } 
 		}
 		
+		public IEnumerable<Act> ActionsForItem {
+			get {
+				if (!(item is Item))
+					return new Act [0];
+				return Services.Core.GetActionsForItemOrderedByRelevance (item as Item, false);
+			}
+		}
+			
+		
 		bool HasVisibleApps {
 			get {
 				if (apps == null)
@@ -167,6 +176,14 @@ namespace Docky.Interface
 			return;
 		}
 		
+		void Launch (Act action)
+		{
+			LastClick = DateTime.UtcNow;
+			if (!(item is Item))
+				return;
+			Services.Core.PerformActionForItem (action, item as Item);
+		}
+		
 		public override void SetIconRegion (Gdk.Rectangle region)
 		{
 			if (icon_region == region)
@@ -223,7 +240,10 @@ namespace Docky.Interface
 				outList.Add (new SeparatorMenuArgs ());
 			}
 			
-			outList.Add (new MenuArgs ((o, a) => Launch (), "Launch Application", Gtk.Stock.Execute, true));
+			foreach (Act act in ActionsForItem) {
+				Act internal_act = act;
+				outList.Add (new MenuArgs ((o, a) => Launch (internal_act), internal_act.Name, internal_act.Icon, true));
+			}
 			outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown, hasApps));
 			outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit, hasApps));
 			

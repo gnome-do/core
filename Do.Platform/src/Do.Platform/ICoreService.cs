@@ -32,7 +32,11 @@ namespace Do.Platform
 		
 		IEnumerable<Item> GetItemsOrderedByRelevance ();
 		
+		IEnumerable<Act> GetActionsForItemOrderedByRelevance (Item item, bool allowThirdPaneRequiredActions);
+		
 		void PerformDefaultAction (Item item, IEnumerable<Type> filter);
+		
+		void PerformActionForItem (Act action, Item item);
 	}
 
 }

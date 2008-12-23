@@ -1001,6 +1001,11 @@ namespace Do.Core {
 
 			if (action == null) return;
 			
+			PerformActionForItem (action, item);
+		}
+		
+		public void PerformActionForItem (Act action, Item item)
+		{
 			item.IncreaseRelevance ("", null);
 			
 			PerformState state =

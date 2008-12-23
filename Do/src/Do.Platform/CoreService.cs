@@ -51,8 +51,23 @@ namespace Do.Platform
 			Do.Controller.PerformDefaultAction (item, filter);
 		}
 		
-		#endregion
+		public void PerformActionForItem (Act action, Item item)
+		{
+			Do.Controller.PerformActionForItem (action, item);
+		}
 		
+		public IEnumerable<Act> GetActionsForItemOrderedByRelevance (Item item, bool allowThirdPaneRequiredActions)
+		{
+			IEnumerable<Act> actions = Do.UniverseManager
+				.Search ("", typeof (Act).Cons (null), item)
+				.Cast<Act> ()
+				.Where (a => a.Safe.SupportsItem (item));
+			
+			if (allowThirdPaneRequiredActions)
+				return actions;
+			return actions.Where (a => a.Safe.ModifierItemsOptional);
+		}
+		
+		#endregion
 	}
-
 }

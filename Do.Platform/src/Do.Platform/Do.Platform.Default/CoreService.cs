@@ -47,6 +47,17 @@ namespace Do.Platform.Default
 			Log.Debug ("Default ICoreService cannot perform default actions.");
 		}
 		
+		public void PerformActionForItem (Act action, Item item)
+		{
+			Log.Debug ("Default ICoreService cannot perform actions.");
+		}
+		
+		public IEnumerable<Act> GetActionsForItemOrderedByRelevance (Item item, bool allowThirdPaneRequiredActions)
+		{
+			Log.Debug ("Default ICoreService cannot get Actions.");
+			yield break;
+		}
+		
 		#endregion
 		
 	}
