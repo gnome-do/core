@@ -233,7 +233,7 @@ namespace Docky.Interface
 							string name = copy_win.Name;
 							if (name.Length > 50)
 								name = name.Substring (0, 47) + "...";
-							outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), name, "forward", hasApps));
+							outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), name, Icon, hasApps));
 						}
 					}
 				}
