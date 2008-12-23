@@ -48,14 +48,15 @@ namespace Docky.Utilities
 		public static string CmdLineForPid (int pid)
 		{
 			StreamReader reader;
+			string cmdline;
 			try {
 				string procPath = new [] { "/proc", pid.ToString (), "cmdline" }.Aggregate (Path.Combine);
 				reader = new StreamReader (procPath);
+				cmdline = reader.ReadLine ();
+				reader.Close ();
+				reader.Dispose ();
 			} catch { return null; }
 			
-			string cmdline = reader.ReadLine ();
-			reader.Close ();
-			reader.Dispose ();
 			return cmdline;
 		}
 		

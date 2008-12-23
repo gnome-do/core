@@ -61,6 +61,8 @@ namespace Docky.Interface
 		
 		bool cursor_is_handle = false;
 		bool drag_resizing = false;
+		bool gtk_drag_source_set;
+		bool gtk_drag_dest_set;
 		
 		int monitor_width;
 		int drag_start_y = 0;
@@ -248,10 +250,10 @@ namespace Docky.Interface
 				return cursor;
 			}
 			set {
-				bool tmp = CursorIsOverDockArea;
+				bool cursorIsOverDockArea = CursorIsOverDockArea;
 				cursor = value;
 				
-				if (CursorIsOverDockArea != tmp) {
+				if (CursorIsOverDockArea != cursorIsOverDockArea) {
 					SetParentInputMask ();
 					enter_time = DateTime.UtcNow;
 					AnimatedDraw ();
@@ -377,11 +379,15 @@ namespace Docky.Interface
 			AddEvents ((int) EventMask.PointerMotionMask | 
 			           (int) EventMask.LeaveNotifyMask |
 			           (int) EventMask.ButtonPressMask | 
-			           (int) EventMask.ButtonReleaseMask);
+			           (int) EventMask.ButtonReleaseMask |
+			           (int) EventMask.FocusChangeMask);
 			
 			DoubleBuffered = false;
 			
 			RegisterEvents ();
+			
+			RegisterGtkDragDest ();
+			RegisterGtkDragSource ();
 			
 			GLib.Timeout.Add (20, () => {
 				//must be done after construction is complete
@@ -395,6 +401,26 @@ namespace Docky.Interface
 			item_provider.DockItemsChanged += OnDockItemsChanged;
 			
 			ItemMenu.Instance.Hidden += OnItemMenuHidden;
+		}
+		
+		void RegisterGtkDragSource ()
+		{
+			gtk_drag_source_set = true;
+			TargetEntry te = new TargetEntry ("text/uri-list", TargetFlags.OtherApp, 0);
+			Gtk.Drag.SourceSet (this, Gdk.ModifierType.Button1Mask, new [] {te}, DragAction.Copy);
+		}
+		
+		void RegisterGtkDragDest ()
+		{
+			gtk_drag_dest_set = true;
+			TargetEntry dest_te = new TargetEntry ("text/uri-list", 0, 0);
+			Gtk.Drag.DestSet (this, DestDefaults.Motion | DestDefaults.Drop, new [] {dest_te}, Gdk.DragAction.Copy);
+		}
+		
+		void UnregisterGtkDragSource ()
+		{
+			gtk_drag_source_set = false;
+			Gtk.Drag.SourceUnset (this);
 		}
 		
 		void AnimatedDraw ()
@@ -462,7 +488,7 @@ namespace Docky.Interface
 			
 			// Some conditions are not good for doing partial draws.
 			bool iconAnimationNeeded = BounceAnimationNeeded || IconInsertionAnimationNeeded;
-			if (ZoomIn == 1 && previous_zoom == 1 && !iconAnimationNeeded && previous_item_count == DockItems.Length) {
+			if (ZoomIn == 1 && previous_zoom == 1 && !iconAnimationNeeded && previous_item_count == DockItems.Length && !drag_resizing) {
 				do {
 					if (previous_x == Cursor.X)
 						break;
@@ -701,17 +727,12 @@ namespace Docky.Interface
 			remove_drag_start_x = Cursor.X;
 			base.OnDragBegin (context);
 		}
-
-		protected override bool OnDragDrop(DragContext context, int x, int y, uint time)
+		
+		protected override void OnDragEnd (Gdk.DragContext context)
 		{
-			// Make sure our cursor is up to date
-			Cursor = new Gdk.Point (x, y);
-			
-			// Make sure we got the right thing here...
-			int item = DockItemForX (remove_drag_start_x);
-			if (!CursorIsOverDockArea)
-				item_provider.RemoveItem (item);
-			return base.OnDragDrop (context, x, y, time);
+			if (context.DestWindow != window.GdkWindow)
+				item_provider.RemoveItem (DockItemForX (remove_drag_start_x));
+			base.OnDragEnd (context);
 		}
 
 		#endregion
@@ -725,9 +746,9 @@ namespace Docky.Interface
 				return ret_val;
 			
 			if (backbuffer == null) {
-				Context tmp = Gdk.CairoHelper.Create (GdkWindow);
-				backbuffer = tmp.Target.CreateSimilar (tmp.Target.Content, Width, Height);
-				(tmp as IDisposable).Dispose ();
+				Context cursorIsOverDockArea = Gdk.CairoHelper.Create (GdkWindow);
+				backbuffer = cursorIsOverDockArea.Target.CreateSimilar (cursorIsOverDockArea.Target.Content, Width, Height);
+				(cursorIsOverDockArea as IDisposable).Dispose ();
 			}
 			
 			Context cr = new Cairo.Context (backbuffer);
@@ -748,17 +769,25 @@ namespace Docky.Interface
 		
 		protected override bool OnMotionNotifyEvent(EventMotion evnt)
 		{
-			bool tmp = CursorIsOverDockArea;
+			bool cursorIsOverDockArea = CursorIsOverDockArea;
+			bool cursorNearDraggableEdge = CursorNearDraggableEdge;
 			
 			Gdk.Point old_cursor_location = Cursor;
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
 			
-			if (CursorNearDraggableEdge && !cursor_is_handle) {
+			// we do this so that our custom drag isn't destroyed by gtk's drag
+			if (cursorNearDraggableEdge && gtk_drag_source_set) {
+				UnregisterGtkDragSource ();
+			} else if (!cursorNearDraggableEdge && !gtk_drag_source_set && !drag_resizing) {
+				RegisterGtkDragSource ();
+			}
+			
+			if (cursorNearDraggableEdge && !cursor_is_handle) {
 				Gdk.Cursor top_cursor = new Gdk.Cursor (CursorType.TopSide);
 				GdkWindow.Cursor = top_cursor;
 				top_cursor.Dispose ();
 				cursor_is_handle = true;
-			} else if (!CursorNearDraggableEdge && cursor_is_handle && !drag_resizing) {
+			} else if (!cursorNearDraggableEdge && cursor_is_handle && !drag_resizing) {
 				Gdk.Cursor normal_cursor = new Gdk.Cursor (CursorType.LeftPtr);
 				GdkWindow.Cursor = normal_cursor;
 				normal_cursor.Dispose ();
@@ -770,7 +799,7 @@ namespace Docky.Interface
 			
 			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && (old_cursor_location.X != Cursor.X);
 
-			if (tmp != CursorIsOverDockArea || drag_resizing || cursorMoveWarrantsDraw) 
+			if (cursorIsOverDockArea != CursorIsOverDockArea || drag_resizing || cursorMoveWarrantsDraw) 
 				AnimatedDraw ();
 			
 			return base.OnMotionNotifyEvent (evnt);
