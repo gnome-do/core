@@ -730,7 +730,7 @@ namespace Docky.Interface
 		
 		protected override void OnDragEnd (Gdk.DragContext context)
 		{
-			if (context.DestWindow != window.GdkWindow)
+			if (context.DestWindow != window.GdkWindow || !CursorIsOverDockArea)
 				item_provider.RemoveItem (DockItemForX (remove_drag_start_x));
 			base.OnDragEnd (context);
 		}
