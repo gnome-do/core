@@ -78,6 +78,7 @@ namespace Docky.Interface
 		DockWindow window;
 		DockItemProvider item_provider;
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
+		DockItemMenu dock_item_menu;
 		
 		#region public properties
 		public bool InputInterfaceVisible { get; set; }
@@ -364,6 +365,7 @@ namespace Docky.Interface
 			item_provider = new DockItemProvider ();
 			State = new DockState ();
 			SummonRenderer = new SummonModeRenderer (this);
+			dock_item_menu = new DockItemMenu ();
 			
 			Cursor = new Gdk.Point (-1, -1);
 			minimum_dock_area = new Gdk.Rectangle ();
@@ -401,6 +403,8 @@ namespace Docky.Interface
 			item_provider.DockItemsChanged += OnDockItemsChanged;
 			
 			ItemMenu.Instance.Hidden += OnItemMenuHidden;
+			
+			dock_item_menu.Hidden += OnDockItemMenuHidden;
 		}
 		
 		void RegisterGtkDragSource ()
@@ -698,6 +702,21 @@ namespace Docky.Interface
 			AnimatedDraw ();
 		}
 		
+		void OnDockItemMenuHidden (object o, System.EventArgs args)
+		{
+			int x, y;
+			Display.GetPointer (out x, out y);
+			
+			Gdk.Rectangle geo;
+			window.GetPosition (out geo.X, out geo.Y);
+			
+			x -= geo.X;
+			y -= geo.Y;
+			
+			Cursor = new Gdk.Point (x, y);
+			AnimatedDraw ();
+		}
+		
 		#region Drag Code
 		
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
@@ -854,9 +873,12 @@ namespace Docky.Interface
 				
 				//handling right clicks
 				if (evnt.Button == 3) {
-					if (CurrentDockItem is IRightClickable && (CurrentDockItem as IRightClickable).GetMenuItems ().Any ())
-						ItemMenu.Instance.PopupAtPosition ((CurrentDockItem as IRightClickable).GetMenuItems (), 
-						                                   (int) evnt.XRoot, (int) evnt.YRoot);
+					if (CurrentDockItem is IRightClickable && (CurrentDockItem as IRightClickable).GetMenuItems ().Any ()) {
+//						ItemMenu.Instance.PopupAtPosition ((CurrentDockItem as IRightClickable).GetMenuItems (), 
+//						                                   (int) evnt.XRoot, (int) evnt.YRoot);
+						int menu_y = Screen.GetMonitorGeometry (0).Height - MinimumDockArea.Height;
+						dock_item_menu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), (int) evnt.XRoot, menu_y);
+					}
 					return ret_val;
 				}
 				
