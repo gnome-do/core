@@ -67,7 +67,7 @@ namespace Docky.Interface
 			VBox space = new VBox ();
 			space.Add (vbox);
 			space.Add (new Label (" "));
-			vbox.BorderWidth = 10;
+			vbox.BorderWidth = 5;
 			Add (space);
 			space.ShowAll ();
 		}
@@ -96,9 +96,9 @@ namespace Docky.Interface
 				label.Ellipsize = Pango.EllipsizeMode.End;
 				label.Ypad = 0;
 				
-				Gtk.Image image = new Gtk.Image (IconProvider.PixbufFromIconName (arg.Icon, 16));
+				Gtk.Image image = new Gtk.Image (IconProvider.PixbufFromIconName (arg.Icon, 22));
 				hbox.PackStart (image, false, false, 0);
-				hbox.PackStart (label, true, true, 3);
+				hbox.PackStart (label, true, true, 2);
 				
 				Gtk.Button button = new Button (hbox);
 				
