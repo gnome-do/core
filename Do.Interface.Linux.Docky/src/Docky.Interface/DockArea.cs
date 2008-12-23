@@ -857,10 +857,11 @@ namespace Docky.Interface
 				//handling right clicks
 				if (evnt.Button == 3) {
 					if (CurrentDockItem is IRightClickable && (CurrentDockItem as IRightClickable).GetMenuItems ().Any ()) {
-//						ItemMenu.Instance.PopupAtPosition ((CurrentDockItem as IRightClickable).GetMenuItems (), 
-//						                                   (int) evnt.XRoot, (int) evnt.YRoot);
 						int menu_y = Screen.GetMonitorGeometry (0).Height - MinimumDockArea.Height;
-						dock_item_menu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), (int) evnt.XRoot, menu_y);
+						int item_x;
+						double item_zoom;
+						IconPositionedCenterX (DockItemForX (Cursor.X), out item_x, out item_zoom);
+						dock_item_menu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), ((int) evnt.XRoot - Cursor.X) + item_x, menu_y);
 					}
 					return ret_val;
 				}
