@@ -117,7 +117,7 @@ namespace Docky.Interface
 			}
 			ShowAll ();
 			Gtk.Requisition req = SizeRequest ();
-			Move (x - req.Width / 2, y - req.Height);
+			Move (x - req.Width / 3, y - req.Height);
 			
 			Do.Interface.Windowing.PresentWindow (this);
 		}
@@ -156,9 +156,9 @@ namespace Docky.Interface
 			cr.Arc (rect.Width - BorderWidth - Radius, BorderWidth + Radius, Radius, Math.PI * 1.5, Math.PI * 2);
 			cr.Arc (rect.Width - BorderWidth - Radius, rect.Height - BorderWidth - Radius - TailHeight, Radius, 0, Math.PI * 0.5);
 			
-			cr.LineTo (rect.Width / 2 + 20 - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
-			cr.LineTo (rect.Width / 2 + 10 - BorderWidth - Radius, rect.Height - BorderWidth);
-			cr.LineTo (rect.Width / 2 - 0 - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
+			cr.LineTo (rect.Width / 3 + 30 - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
+			cr.LineTo (rect.Width / 3 + 10 - BorderWidth - Radius, rect.Height - BorderWidth);
+			cr.LineTo (rect.Width / 3 + 10 - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
 			
 			cr.Arc (BorderWidth + Radius, rect.Height - BorderWidth - Radius - TailHeight, Radius, Math.PI * 0.5, Math.PI);
 			cr.Arc (BorderWidth + Radius, BorderWidth + Radius, Radius, Math.PI, Math.PI * 1.5);
