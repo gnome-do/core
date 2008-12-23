@@ -86,7 +86,10 @@ namespace Docky.Interface
 					continue;
 				}
 				Label label = new Label ();
-				label.Markup = "<span color=\"#ffffff\"><b>" + arg.Description + "</b></span>";
+				if (arg.Sensitive)
+					label.Markup = "<span color=\"#ffffff\"><b>" + arg.Description + "</b></span>";
+				else
+					label.Markup = "<span color=\"#888888\"><b>" + arg.Description + "</b></span>";
 				label.ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 				label.ModifyText (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 				label.Ellipsize = Pango.EllipsizeMode.End;
