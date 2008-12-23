@@ -238,7 +238,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public bool ResultsCanHide { get { return true; } }
+		public bool ResultsCanHide { get { return false; } }
 		
 		#endregion 
 		
