@@ -93,6 +93,7 @@ namespace Docky.Interface
 					label.Markup = "<span color=\"#888888\"><b>" + arg.Description + "</b></span>";
 				label.ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 				label.ModifyText (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
+				label.Xalign = 0f;
 				label.Ellipsize = Pango.EllipsizeMode.End;
 				label.Ypad = 0;
 				

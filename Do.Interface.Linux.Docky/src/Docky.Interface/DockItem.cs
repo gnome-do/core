@@ -208,10 +208,7 @@ namespace Docky.Interface
 			List<MenuArgs> outList = new List<MenuArgs> ();
 			bool hasApps = HasVisibleApps;
 			
-			outList.Add (new MenuArgs ((o, a) => Launch (), "Launch Application", Gtk.Stock.Execute, true));
-			
 			if (hasApps) {
-				outList.Add (new SeparatorMenuArgs ());
 				foreach (Application app in Apps) {
 					foreach (Wnck.Window window in app.Windows) {
 						Wnck.Window copy_win = window;
@@ -226,7 +223,7 @@ namespace Docky.Interface
 				outList.Add (new SeparatorMenuArgs ());
 			}
 			
-			
+			outList.Add (new MenuArgs ((o, a) => Launch (), "Launch Application", Gtk.Stock.Execute, true));
 			outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown, hasApps));
 			outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit, hasApps));
 			
