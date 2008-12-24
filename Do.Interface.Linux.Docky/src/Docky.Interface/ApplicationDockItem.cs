@@ -63,6 +63,12 @@ namespace Docky.Interface
 				Context cr = new Context (icon_surface);
 				
 				Gdk.Pixbuf pbuf = GetIcon ();
+				if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
+					double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
+					Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
+					pbuf.Dispose ();
+					pbuf = temp;
+				}
 				
 				Gdk.CairoHelper.SetSourcePixbuf (cr, pbuf, 0, 0);
 				cr.Paint ();
