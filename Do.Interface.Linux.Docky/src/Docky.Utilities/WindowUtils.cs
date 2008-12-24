@@ -159,6 +159,8 @@ namespace Docky.Utilities
 				
 				Wnck.Screen.Default.MoveViewport (midX, midY);
 			}
+			if (w.IsMinimized)
+				w.Unminimize (Gtk.Global.CurrentEventTime);
 			
 			w.Activate (Gtk.Global.CurrentEventTime);
 		}
