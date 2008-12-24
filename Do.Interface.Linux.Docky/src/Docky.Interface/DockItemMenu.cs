@@ -34,7 +34,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItemMenu : Gtk.Window
+	public class DockItemMenu : DockPopupMenu
 	{
 		class CustomSeparator : HSeparator
 		{
@@ -56,53 +56,20 @@ namespace Docky.Interface
 
 		}
 		
-		const int TailHeight = 15;
-		new const int BorderWidth = 2;
-		const int Radius = 10;
-		
-		VBox vbox;
-		
-		public DockItemMenu() : base (Gtk.WindowType.Popup)
+		public DockItemMenu() : base ()
 		{
-			Decorated = false;
-			KeepAbove = true;
-			AppPaintable = true;
-			SkipPagerHint = true;
-			SkipTaskbarHint = true;
-			Resizable = false;
-			Modal = true;
-			TypeHint = WindowTypeHint.PopupMenu;
-			
-			WidthRequest = 225;
-			
-			this.SetCompositeColormap ();
-			
-			AddEvents ((int) EventMask.PointerMotionMask | 
-			           (int) EventMask.LeaveNotifyMask |
-			           (int) EventMask.ButtonPressMask | 
-			           (int) EventMask.ButtonReleaseMask |
-			           (int) EventMask.FocusChangeMask);
-			
-			vbox = new VBox ();
-			VBox space = new VBox ();
-			space.Add (vbox);
-			space.Add (new Label (" "));
-			vbox.BorderWidth = 5;
-			Add (space);
-			space.ShowAll ();
 		}
 
-		
 		public void PopUp (IEnumerable<MenuArgs> args, int x, int y)
 		{
-			foreach (Gtk.Widget child in vbox.AllChildren) {
-				vbox.Remove (child);
+			foreach (Gtk.Widget child in Container.AllChildren) {
+				Container.Remove (child);
 				child.Dispose ();
 			}
 			
 			foreach (MenuArgs arg in args) {
 				if (arg is SeparatorMenuArgs) {
-					vbox.PackStart (new CustomSeparator ());
+					Container.PackStart (new CustomSeparator ());
 					continue;
 				}
 				
@@ -137,61 +104,16 @@ namespace Docky.Interface
 				button.ModifyBg (StateType.Prelight, new Gdk.Color ((byte) (byte.MaxValue * 0.15), 
 				                                                    (byte) (byte.MaxValue * 0.15), 
 				                                                    (byte) (byte.MaxValue * 0.15)));
-				vbox.PackStart (button, false, false, 0);
+				Container.PackStart (button, false, false, 0);
 			}
 			ShowAll ();
-			Gtk.Requisition req = SizeRequest ();
-			Move (x - req.Width / 3, y - req.Height);
 			
-			Do.Interface.Windowing.PresentWindow (this);
+			base.PopUp (args, x, y);
 		}
 		
 		void OnButtonPressed (object o, EventArgs args)
 		{
 			Hide ();
-		}
-		
-		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
-		{
-			using (Context cr = Gdk.CairoHelper.Create (GdkWindow)) {
-				cr.AlphaFill ();
-				DrawBackground (cr);
-			}
-			
-			return base.OnExposeEvent (evnt);
-		}
-		
-		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
-		{
-			Gdk.Rectangle rect;
-			GetSize (out rect.Width, out rect.Height);
-			
-			if (evnt.X < 0 || evnt.Y < 0 || evnt.X > rect.Width || evnt.Y > rect.Height)
-				Hide ();
-			return base.OnButtonReleaseEvent (evnt);
-		}
-
-		void DrawBackground (Context cr)
-		{
-			Gdk.Rectangle rect;
-			GetSize (out rect.Width, out rect.Height);
-			
-			cr.MoveTo (BorderWidth + Radius, BorderWidth);
-			cr.Arc (rect.Width - BorderWidth - Radius, BorderWidth + Radius, Radius, Math.PI * 1.5, Math.PI * 2);
-			cr.Arc (rect.Width - BorderWidth - Radius, rect.Height - BorderWidth - Radius - TailHeight, Radius, 0, Math.PI * 0.5);
-			
-			cr.LineTo (rect.Width / 3 + 30 - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
-			cr.LineTo (rect.Width / 3 + 10 - BorderWidth - Radius, rect.Height - BorderWidth);
-			cr.LineTo (rect.Width / 3 + 10 - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
-			
-			cr.Arc (BorderWidth + Radius, rect.Height - BorderWidth - Radius - TailHeight, Radius, Math.PI * 0.5, Math.PI);
-			cr.Arc (BorderWidth + Radius, BorderWidth + Radius, Radius, Math.PI, Math.PI * 1.5);
-			
-			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .9);
-			cr.FillPreserve ();
-			
-			cr.Color = new Cairo.Color (.2, .2, .2, .8);
-			cr.Stroke ();
 		}
 	}
 }

@@ -35,6 +35,12 @@ namespace Docky.Utilities
 	
 	public static class WindowUtils
 	{
+		/// <summary>
+		/// Returns a list of all applications on the default screen
+		/// </summary>
+		/// <returns>
+		/// A <see cref="Application"/> array
+		/// </returns>
 		public static Application[] GetApplications ()
 		{
 			List<Application> apps = new List<Application> ();
@@ -45,6 +51,15 @@ namespace Docky.Utilities
 			return apps.ToArray ();
 		}
 		
+		/// <summary>
+		/// Gets the command line excec string for a PID
+		/// </summary>
+		/// <param name="pid">
+		/// A <see cref="System.Int32"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/>
+		/// </returns>
 		public static string CmdLineForPid (int pid)
 		{
 			StreamReader reader;
@@ -60,6 +75,15 @@ namespace Docky.Utilities
 			return cmdline;
 		}
 		
+		/// <summary>
+		/// Returns a list of applications that match an exec string
+		/// </summary>
+		/// <param name="exec">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="List"/>
+		/// </returns>
 		public static List<Application> GetApplicationList (string exec)
 		{
 			exec = exec.Split (' ')[0];
@@ -91,6 +115,12 @@ namespace Docky.Utilities
 			return apps;
 		}
 		
+		/// <summary>
+		/// Moves the current viewport to the selected window and then raises it
+		/// </summary>
+		/// <param name="w">
+		/// A <see cref="Window"/>
+		/// </param>
 		public static void CenterAndFocusWindow (this Window w) 
 		{
 			if (!w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)) {
@@ -133,6 +163,12 @@ namespace Docky.Utilities
 			w.Activate (Gtk.Global.CurrentEventTime);
 		}
 		
+		/// <summary>
+		/// Performs the "logical" click action on an entire group of applications
+		/// </summary>
+		/// <param name="apps">
+		/// A <see cref="IEnumerable"/>
+		/// </param>
 		public static void PerformLogicalClick (IEnumerable<Application> apps)
 		{
 			bool not_in_viewport = true;

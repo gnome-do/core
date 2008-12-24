@@ -32,19 +32,77 @@ namespace Docky.Interface
 	{
 		string Description { get; }
 		int Width { get; }
+		
+		/// <value>
+		/// the height of the icon
+		/// </value>
 		int Height { get; }
+		
+		//// <value>
+		/// Determines if the icon will be scaled when displayed.  Non-scalable icons should be used only
+		/// in situations where it makes no logical sense.
+		/// </value>
 		bool Scalable { get; }
+		
+		/// <value>
+		/// If the "active applications" indicator should be drawn under the icon
+		/// </value>
 		bool DrawIndicator { get; }
 		
+		/// <value>
+		/// The last time the item was clicked
+		/// </value>
 		DateTime LastClick { get; }
+		
+		/// <value>
+		/// The time at which the Dock Item was added to the dock
+		/// </value>
 		DateTime DockAddItem { get; set; }
 		
+		/// <summary>
+		/// Returns the surface of the icon
+		/// </summary>
+		/// <param name="similar">
+		/// A <see cref="Surface"/> similar surface used to create the icons surface.  This is for peformance reasons
+		/// </param>
+		/// <returns>
+		/// A <see cref="Surface"/> that MUST be either Height * DockPreferences.IconQuality x Width * DockPreferences.IconQuality if scalable, 
+		/// or Height x Width if not scalable
+		/// </returns>
 		Surface GetIconSurface (Surface similar);
+		
+		/// <summary>
+		/// Returns a surface that contains the hover text pre-rendered
+		/// </summary>
+		/// <param name="similar">
+		/// A <see cref="Surface"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="Surface"/>
+		/// </returns>
 		Surface GetTextSurface (Surface similar);
 		
+		/// <summary>
+		/// Returns a pixbuf suitable for using as a gtk dnd icon
+		/// </summary>
 		Pixbuf GetDragPixbuf ();
 		
+		/// <summary>
+		/// Called every time the icon is clicked on
+		/// </summary>
+		/// <param name="button">
+		/// A <see cref="System.UInt32"/>
+		/// </param>
 		void Clicked (uint button);
+		
+		/// <summary>
+		/// Whenever the icons base position is updated, this method will be called.  This is so icons can set their child
+		/// windows minimize target.  Or any other reason they might need it.  Root X,Y coordinates are given, so there
+		/// is no need to translate.
+		/// </summary>
+		/// <param name="region">
+		/// A <see cref="Gdk.Rectangle"/>
+		/// </param>
 		void SetIconRegion (Gdk.Rectangle region);
 	}
 	
