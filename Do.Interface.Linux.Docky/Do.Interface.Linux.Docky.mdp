@@ -29,7 +29,6 @@
     <File name="src/Docky.Interface/DockWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DrawState.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/IDockItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/ItemMenu.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/SeparatorItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Util.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Renderers" subtype="Directory" buildaction="Compile" />

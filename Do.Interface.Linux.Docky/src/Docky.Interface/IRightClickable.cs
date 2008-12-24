@@ -23,6 +23,12 @@ namespace Docky.Interface
 {
 	public interface IRightClickable
 	{
+		/// <summary>
+		/// Returns a collection of the items that are to be placed in a menu
+		/// </summary>
+		/// <returns>
+		/// A <see cref="IEnumerable"/>
+		/// </returns>
 		IEnumerable<MenuArgs> GetMenuItems ();
 	}
 }
