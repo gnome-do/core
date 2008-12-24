@@ -78,7 +78,15 @@ namespace Docky.Interface
 			return App.Icon;
 		}
 
-		
+		/// <summary>
+		/// This method is designed to *attempt* to get a decent pixbuf for the current Application.  There
+		/// are no promises and certainly a decent amount of work that can go into it.  Currently it makes a considerable
+		/// number of guesses at the icon name looking for Desktop files and for regular pixbufs and can take quite a bit
+		/// of time.  Some global caching should be added.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="Gdk.Pixbuf"/>
+		/// </returns>
 		Gdk.Pixbuf GetIcon ()
 		{
 			List<string> guesses = new List<string> ();
@@ -93,11 +101,13 @@ namespace Docky.Interface
 			
 			string exec;
 			try {
+				// this fails on mono pre 2.0
 				exec = System.Diagnostics.Process.GetProcessById (application.Pid).ProcessName.Split (' ')[0];
 			} catch { exec = null; }
 			
 			if (string.IsNullOrEmpty (exec)) {
 				try {
+					// this works on all versions of mono but is less reliable (because I wrote it)
 					exec = WindowUtils.CmdLineForPid (application.Pid).Split (' ')[0];
 				} catch { }
 			}
@@ -180,7 +190,7 @@ namespace Docky.Interface
 		
 		#endregion 
 		
-		public ApplicationDockItem(Wnck.Application application) : base ()
+		public ApplicationDockItem (Wnck.Application application) : base ()
 		{
 			this.application = application;
 		}

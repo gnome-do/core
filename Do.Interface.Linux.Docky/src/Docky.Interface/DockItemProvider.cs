@@ -87,17 +87,17 @@ namespace Docky.Interface
 			
 			
 			Wnck.Screen.Default.WindowClosed += delegate(object o, WindowClosedArgs args) {
-				if (args.Window.IsSkipTasklist)
-					return;
+				if (args.Window.IsSkipTasklist) return;
 				UpdateItems ();
 			};
 			
 			Wnck.Screen.Default.WindowOpened += delegate(object o, WindowOpenedArgs args) {
-				if (args.Window.IsSkipTasklist)
-					return;
+				if (args.Window.IsSkipTasklist)	return;
 				UpdateItems ();
 			};
 			
+			// We give core 3 seconds to update its universe.  Eventually we will need a signal or something,
+			// but for now this works.
 			GLib.Timeout.Add (3000, delegate {
 				enable_serialization = false;
 				foreach (string s in DeserializeCustomItems ())
@@ -238,9 +238,12 @@ namespace Docky.Interface
 		{
 			List<IDockItem> new_items = new List<IDockItem> ();
 			foreach (Item item in MostUsedItems ()) {
+				// this check should be redundant
 				if (DockPreferences.ItemBlacklist.Contains (item.UniqueId))
 					continue;
 				IDockItem di = new DockItem (item);
+				
+				// we dont want redundant things showing up on the dock
 				if (custom_items.Values.Contains (di)) {
 					di.Dispose ();
 					continue;
