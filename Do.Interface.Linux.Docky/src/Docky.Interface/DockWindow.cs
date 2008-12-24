@@ -59,7 +59,7 @@ namespace Docky.Interface
 			controller.Orientation = ControlOrientation.Horizontal;
 			
 			AppPaintable = true;
-			KeepAbove = true;
+//			KeepAbove = true;
 			Decorated = false;
 			SkipPagerHint = true;
 			SkipTaskbarHint = true;
