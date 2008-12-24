@@ -100,17 +100,10 @@ namespace Docky.Interface
 			guesses.Add ("gnome-" + guesses[3]);
 			
 			string exec;
-			try {
-				// this fails on mono pre 2.0
-				exec = System.Diagnostics.Process.GetProcessById (application.Pid).ProcessName.Split (' ')[0];
-			} catch { exec = null; }
+			exec = GetExecStringForPID (application.Pid);
+			if (string.IsNullOrEmpty (exec))
+				exec = GetExecStringForPID (application.Windows[0].Pid);
 			
-			if (string.IsNullOrEmpty (exec)) {
-				try {
-					// this works on all versions of mono but is less reliable (because I wrote it)
-					exec = WindowUtils.CmdLineForPid (application.Pid).Split (' ')[0];
-				} catch { }
-			}
 			
 			if (!string.IsNullOrEmpty (exec)) {
 				guesses.Add (exec);
@@ -155,6 +148,23 @@ namespace Docky.Interface
 				pbuf = temp;
 			}
 			return pbuf;
+		}
+		
+		string GetExecStringForPID (int pid)
+		{
+			string exec;
+			try {
+				// this fails on mono pre 2.0
+				exec = System.Diagnostics.Process.GetProcessById (pid).ProcessName.Split (' ')[0];
+			} catch { exec = null; }
+			
+			if (string.IsNullOrEmpty (exec)) {
+				try {
+					// this works on all versions of mono but is less reliable (because I wrote it)
+					exec = WindowUtils.CmdLineForPid (pid).Split (' ')[0];
+				} catch { }
+			}
+			return exec;
 		}
 		
 		string GetDesktopFile (string base_name)
