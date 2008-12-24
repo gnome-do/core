@@ -772,6 +772,7 @@ namespace Docky.Interface
 		                                            uint info, uint time)
 		{
 			string data = System.Text.Encoding.UTF8.GetString ( selectionData.Data );
+			data = System.Uri.UnescapeDataString (data);
 			//sometimes we get a null at the end, and it crashes us
 			data = data.TrimEnd ('\0'); 
 			
