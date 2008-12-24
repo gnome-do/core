@@ -91,8 +91,8 @@ namespace Docky.Interface
 		{
 			List<string> guesses = new List<string> ();
 			guesses.Add (application.Name.ToLower ().Replace (' ','-'));
-			guesses.Add (application.IconName.ToLower ().Replace (' ','-'));
 			guesses.Add (application.Windows[0].Name.ToLower ().Replace (' ','-'));
+			guesses.Add (application.IconName.ToLower ().Replace (' ','-'));
 			guesses.Add (application.Windows[0].IconName.ToLower ().Replace (' ','-'));
 			guesses.Add ("gnome-" + guesses[0]);
 			guesses.Add ("gnome-" + guesses[1]);
