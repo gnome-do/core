@@ -255,6 +255,7 @@ namespace Docky.Interface
 				bool cursorIsOverDockArea = CursorIsOverDockArea;
 				cursor = value;
 				
+				// When we change over this boundry, it will normally trigger an animation, we need to be sure to catch it
 				if (CursorIsOverDockArea != cursorIsOverDockArea) {
 					SetParentInputMask ();
 					enter_time = DateTime.UtcNow;
@@ -433,6 +434,9 @@ namespace Docky.Interface
 			if (0 < animation_timer)
 				return;
 			
+			// the presense of this queue draw has caused some confusion, so I will explain.
+			// first its here to draw the "first frame".  Without it, we have a 16ms delay till that happens,
+			// however minor that is.  We do everything after 16ms (about 60fps) so we will keep this up.
 			QueueDraw ();
 			animation_timer = GLib.Timeout.Add (16, OnDrawTimeoutElapsed);
 		}
@@ -493,18 +497,26 @@ namespace Docky.Interface
 			
 			// Some conditions are not good for doing partial draws.
 			bool iconAnimationNeeded = BounceAnimationNeeded || IconInsertionAnimationNeeded;
-			if (ZoomIn == 1 && 
-			    previous_zoom == 1 && 
-			    !iconAnimationNeeded &&
-			    !previous_icon_animation_needed &&
-			    previous_item_count == DockItems.Length && 
-			    !drag_resizing) {
+			
+			// we have a couple conditions were this render peformance boost will result in "badness".
+			// in these cases we need to do a full render.
+			bool fast_render = ZoomIn == 1 && 
+				 previous_zoom == 1 && 
+				 previous_item_count == DockItems.Length && 
+				 !iconAnimationNeeded &&
+				 !previous_icon_animation_needed &&
+				 !drag_resizing;
+			
+			if (fast_render) {
 				do {
+					// If the cursor has not moved and the dock_item_menu is not visible (this causes a render change without moving the cursor)
+					// we can do no rendering at all and just take our previous frame as our current result.
 					if (previous_x == Cursor.X && !dock_item_menu.Visible)
 						break;
 					
+					// we need to know the left and right items for the parabolic zoom.  These items represent the only icons that are
+					// actually undergoing change.  By noting what these icons are, we can only draw these icons and those between them.
 					int left_item = Math.Max (0, DockItemForX (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
-					
 					int right_item = DockItemForX (Math.Max (Cursor.X, previous_x) + DockPreferences.ZoomSize / 2);
 					if (right_item == -1) 
 						right_item = DockItems.Length - 1;
@@ -512,6 +524,7 @@ namespace Docky.Interface
 					int left_x, right_x;
 					double left_zoom, right_zoom;
 					
+					// calculates the actual x postions of the borders of the left and right most changing icons
 					if (left_item == 0) {
 						left_x = 0;
 					} else {
@@ -543,6 +556,9 @@ namespace Docky.Interface
 				for (int i=0; i<DockItems.Length; i++)
 					DrawIcon (cr, i);
 			}
+			
+			// To enable this render optimization, we have to keep track of several state items that otherwise
+			// are unimportant.  This is an unfortunate reality we must live with.
 			previous_zoom = ZoomIn;
 			previous_item_count = DockItems.Length;
 			previous_x = Cursor.X;
@@ -601,7 +617,7 @@ namespace Docky.Interface
 			}
 			
 			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
-			// at all instead of rendering a blank surface
+			// at all instead of rendering a blank surface (which is slow)
 			if (!dock_item_menu.Visible &&
 			    DockItemForX (Cursor.X) == icon && 
 			    CursorIsOverDockArea && 
@@ -617,8 +633,10 @@ namespace Docky.Interface
 		{
 			Gdk.Point center = StickIconCenter;
 			
-			double opacity = 1.0/Math.Abs (center.X - Cursor.X) * 30 - .2;
+			// calculates an opacity randing from 0 to 1 depending on how far from the cursor the icon is (only X is calculated)
+			double opacity = 1.0 / Math.Abs (center.X - Cursor.X) * 30 - .2;
 			
+			// draw concentric circles from here on
 			cr.Arc (center.X, center.Y, 3.5, 0, Math.PI*2);
 			cr.LineWidth = 1;
 			cr.Color = new Cairo.Color (1, 1, 1, opacity);
@@ -633,7 +651,9 @@ namespace Docky.Interface
 		
 		int IconNormalCenterX (int icon)
 		{
-			//the first icons center is at dock X + border + IconBorder + half its width
+			// the first icons center is at dock X + border + IconBorder + half its width
+			// it is subtle, but it *is* a mistake to add the half width until the end.  adding
+			// premature will add the wrong width.  It hurts the brain.
 			if (!DockItems.Any ())
 				return 0;
 			int start_x = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth;
@@ -678,6 +698,8 @@ namespace Docky.Interface
 		
 		Gdk.Rectangle GetDockArea ()
 		{
+			// this method is more than somewhat slow on the complexity scale, we want to avoid doing it
+			// more than we have to.  Further, when we do call it, we should always check for this shortcut.
 			if (DockIconOpacity == 0 || ZoomIn == 0)
 				return MinimumDockArea;
 
@@ -700,6 +722,9 @@ namespace Docky.Interface
 		
 		void OnDockItemMenuHidden (object o, System.EventArgs args)
 		{
+			// While an popup menus are being showing, the dock does not recieve mouse updates.  This is
+			// both a good thing and a bad thing.  We must at the very least update the cursor position once the
+			// popup is no longer in view.
 			int x, y;
 			Display.GetPointer (out x, out y);
 			
@@ -713,6 +738,9 @@ namespace Docky.Interface
 			AnimatedDraw ();
 		}
 		
+		/// <summary>
+		/// Only purpose is to trigger one last redraw to eliminate the hover text
+		/// </summary>
 		void OnDockItemMenuShown (object o, EventArgs args)
 		{
 			AnimatedDraw ();
