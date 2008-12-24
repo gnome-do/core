@@ -30,6 +30,7 @@ using Docky.XLib;
 using Do.Universe;
 using Do.Platform;
 using Do.Interface;
+using Do.Interface.CairoUtils;
 
 namespace Docky.Interface
 {
@@ -38,8 +39,9 @@ namespace Docky.Interface
 	public class DockWindow : Gtk.Window, IDoWindow
 	{
 		DockArea dock_area;
-		
+		EventBox eb;
 		IDoController controller;
+		int current_offset = 0;
 		
 		public new string Name {
 			get { return "Docky"; }
@@ -69,11 +71,9 @@ namespace Docky.Interface
 			
 			this.SetCompositeColormap ();
 			
-			Realized += delegate {
-				GdkWindow.SetBackPixmap (null, false);
-			};
+			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
 			
-			StyleSet += delegate {
+			StyleSet += (o, a) => {
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);
 			};
@@ -83,15 +83,41 @@ namespace Docky.Interface
 		
 		void Build ()
 		{
+			eb = new EventBox ();
+			eb.HeightRequest = 1;
+			
+			eb.AddEvents ((int) Gdk.EventMask.PointerMotionMask);
+			eb.MotionNotifyEvent += (o, a) => OnEventBoxMotion ();
+			eb.DragMotion += (o, a) => OnEventBoxMotion ();
+			
+			TargetEntry dest_te = new TargetEntry ("text/uri-list", 0, 0);
+			Gtk.Drag.DestSet (eb, DestDefaults.Motion | DestDefaults.Drop, new [] {dest_te}, Gdk.DragAction.Copy);
+			
+			eb.ExposeEvent += delegate(object o, ExposeEventArgs args) {
+				using (Context cr = CairoHelper.Create (eb.GdkWindow)) {
+					cr.AlphaFill ();
+				}
+			};
+			
 			dock_area = new DockArea (this);
 			
-			Add (dock_area);
+			VBox vbox = new VBox ();
+			vbox.PackStart (eb, false, false, 0);
+			vbox.PackStart (dock_area, false, true, 0);
+			Add (vbox);
 			ShowAll ();
 		}
-
+		
+		void OnEventBoxMotion ()
+		{
+			Reposition ();
+			SetInputMask (1);
+			dock_area.ManualCursorUpdate ();
+		}
 		
 		public void SetInputMask (int heightOffset)
 		{
+			current_offset = heightOffset;
 			int width = Math.Max (Math.Min (800, dock_area.Width), dock_area.DockWidth);
 			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, width, heightOffset, 1);
 			Context cr = Gdk.CairoHelper.Create (pixmap);
@@ -99,10 +125,18 @@ namespace Docky.Interface
 			cr.Color = new Cairo.Color (0, 0, 0, 1);
 			cr.Paint ();
 			
-			InputShapeCombineMask (pixmap, (dock_area.Width - width) / 2, dock_area.Height - heightOffset);
+			InputShapeCombineMask (pixmap, (dock_area.Width - width) / 2, eb.HeightRequest + dock_area.Height - heightOffset);
 			
 			(cr as IDisposable).Dispose ();
 			pixmap.Dispose ();
+			
+			if (heightOffset == 1) {
+				GLib.Timeout.Add (1000, () => {
+					if (current_offset == 1)
+						HideReposition ();
+					return false;
+				});
+			}
 		}
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
@@ -148,6 +182,17 @@ namespace Docky.Interface
 			GetSize (out main.Width, out main.Height);
 			geo = Screen.GetMonitorGeometry (0);
 			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-main.Height);
+		}
+		
+		void HideReposition ()
+		{
+			Gdk.Rectangle geo, main;
+			
+			GetSize (out main.Width, out main.Height);
+			geo = Screen.GetMonitorGeometry (0);
+			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-eb.HeightRequest);
+			
+			InputShapeCombineMask (null, 0, 0);
 		}
 		
 		public void RequestClickOff ()

@@ -409,6 +409,13 @@ namespace Docky.Interface
 			dock_item_menu.Shown += OnDockItemMenuShown;
 			
 			Wnck.Screen.Default.ViewportsChanged += OnWnckViewportsChanged;
+			
+			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
+			
+			StyleSet += (o, a) => { 
+				if (IsRealized)
+					GdkWindow.SetBackPixmap (null, false);
+			};
 		}
 		
 		void RegisterGtkDragSource ()
@@ -745,7 +752,7 @@ namespace Docky.Interface
 			AnimatedDraw ();
 		}
 		
-		void ManualCursorUpdate ()
+		public void ManualCursorUpdate ()
 		{
 			int x, y;
 			Display.GetPointer (out x, out y);
@@ -944,20 +951,6 @@ namespace Docky.Interface
 			if (CursorIsOverDockArea && (int) (evnt.State & leave_mask) == 0 && evnt.Mode == CrossingMode.Normal)
 				Cursor = new Gdk.Point ((int) evnt.X, -1);
 			return base.OnLeaveNotifyEvent (evnt);
-		}
-		
-		protected override void OnRealized ()
-		{
-			base.OnRealized ();
-			if (IsRealized)
-				GdkWindow.SetBackPixmap (null, false);
-		}
-		
-		protected override void OnStyleSet (Gtk.Style previous_style)
-		{
-			if (IsRealized)
-					GdkWindow.SetBackPixmap (null, false);
-			base.OnStyleSet (previous_style);
 		}
 		
 		void StartDrag ()
