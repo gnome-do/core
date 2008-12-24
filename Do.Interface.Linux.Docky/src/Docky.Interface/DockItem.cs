@@ -145,7 +145,10 @@ namespace Docky.Interface
 				Gdk.Pixbuf pixbuf = GetPixbuf ();
 				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
 				Context cr = new Context (icon_surface);
-				Gdk.CairoHelper.SetSourcePixbuf (cr, pixbuf, 0, 0);
+				Gdk.CairoHelper.SetSourcePixbuf (cr, 
+				                                 pixbuf, 
+				                                 (int) ((DockPreferences.FullIconSize - pixbuf.Width) / 2),
+				                                 (int) ((DockPreferences.FullIconSize - pixbuf.Height) / 2));
 				cr.Paint ();
 				
 				(cr as IDisposable).Dispose ();

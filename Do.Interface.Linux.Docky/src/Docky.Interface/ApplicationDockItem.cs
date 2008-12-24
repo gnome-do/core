@@ -70,7 +70,10 @@ namespace Docky.Interface
 					pbuf = temp;
 				}
 				
-				Gdk.CairoHelper.SetSourcePixbuf (cr, pbuf, 0, 0);
+				Gdk.CairoHelper.SetSourcePixbuf (cr, 
+				                                 pbuf, 
+				                                 (int) ((DockPreferences.FullIconSize - pbuf.Width) / 2),
+				                                 (int) ((DockPreferences.FullIconSize - pbuf.Height) / 2));
 				cr.Paint ();
 				
 				pbuf.Dispose ();
