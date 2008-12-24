@@ -62,8 +62,6 @@ namespace Docky.Interface
 				out_items.AddRange (statistical_items);
 				
 				if (custom_items.Any ()) {
-//					if (out_items.Any ())
-//						out_items.Add (Separator);
 					out_items.AddRange (custom_items.Values);
 				}
 				if (task_items.Any ()) {

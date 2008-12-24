@@ -154,23 +154,20 @@ namespace Docky.Utilities
 				}
 			}
 			
-			foreach (Wnck.Application app in apps) {
-				foreach (Wnck.Window window in app.Windows) {
-					switch (GetClickAction (apps)) {
-					case ClickAction.Focus:
-						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-							window.Activate (Gtk.Global.CurrentEventTime);
-						break;
-					case ClickAction.Minimize:
-						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-							window.Minimize ();
-						break;
-					case ClickAction.Restore:
-						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-							window.Unminimize (Gtk.Global.CurrentEventTime);
-						break;
-					}
-				}
+			List<Window> windows = new List<Window> ();
+			foreach (Wnck.Application app in apps)
+				windows.AddRange (app.Windows);
+			
+			switch (GetClickAction (apps)) {
+			case ClickAction.Focus:
+				WindowControl.FocusWindows (windows);
+				break;
+			case ClickAction.Minimize:
+				WindowControl.MinimizeWindows (windows);
+				break;
+			case ClickAction.Restore:
+				WindowControl.RestoreWindows (windows);
+				break;
 			}
 		}
 		

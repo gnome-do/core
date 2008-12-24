@@ -79,6 +79,19 @@ namespace Docky.Utilities
 			}
 		}
 		
+		public static void FocusWindows (IEnumerable<Window> windows)
+		{
+			foreach (Window window in windows) {
+				if (window.IsInViewport (window.Workspace) && !window.IsMinimized)
+					window.Activate (Gtk.Global.CurrentEventTime);
+			}
+		}
+		
+		public static void FocusWindows (Window window)
+		{
+			FocusWindows (new [] {window});
+		}
+		
 		public static void CloseWindows (IEnumerable<Window> windows)
 		{
 			foreach (Window window in windows)
