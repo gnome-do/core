@@ -407,6 +407,8 @@ namespace Docky.Interface
 			dock_item_menu.Hidden += OnDockItemMenuHidden;
 			
 			dock_item_menu.Shown += OnDockItemMenuShown;
+			
+			Wnck.Screen.Default.ViewportsChanged += OnWnckViewportsChanged;
 		}
 		
 		void RegisterGtkDragSource ()
@@ -725,6 +727,26 @@ namespace Docky.Interface
 			// While an popup menus are being showing, the dock does not recieve mouse updates.  This is
 			// both a good thing and a bad thing.  We must at the very least update the cursor position once the
 			// popup is no longer in view.
+			ManualCursorUpdate ();
+			AnimatedDraw ();
+		}
+		
+		void OnWnckViewportsChanged (object o, EventArgs e)
+		{
+			ManualCursorUpdate ();
+			AnimatedDraw ();
+		}
+		
+		/// <summary>
+		/// Only purpose is to trigger one last redraw to eliminate the hover text
+		/// </summary>
+		void OnDockItemMenuShown (object o, EventArgs args)
+		{
+			AnimatedDraw ();
+		}
+		
+		void ManualCursorUpdate ()
+		{
 			int x, y;
 			Display.GetPointer (out x, out y);
 			
@@ -735,15 +757,6 @@ namespace Docky.Interface
 			y -= geo.Y;
 			
 			Cursor = new Gdk.Point (x, y);
-			AnimatedDraw ();
-		}
-		
-		/// <summary>
-		/// Only purpose is to trigger one last redraw to eliminate the hover text
-		/// </summary>
-		void OnDockItemMenuShown (object o, EventArgs args)
-		{
-			AnimatedDraw ();
 		}
 		
 		#region Drag Code
