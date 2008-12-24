@@ -40,7 +40,7 @@ namespace Docky.Interface
 		new const int BorderWidth = 2;
 		const int Radius = 10;
 		
-		protected Gtk.VBox Container { get; private set; } 
+		public Gtk.VBox Container { get; private set; } 
 		
 		public DockPopupMenu() : base (Gtk.WindowType.Popup)
 		{

@@ -872,7 +872,7 @@ namespace Docky.Interface
 				if (item < 0 || item >= DockItems.Length || !CursorIsOverDockArea || InputInterfaceVisible)
 					return ret_val;
 				
-				//handling right clicks
+				//handling right clicks for those icons which request simple right click handling
 				if (evnt.Button == 3) {
 					if (CurrentDockItem is IRightClickable && (CurrentDockItem as IRightClickable).GetMenuItems ().Any ()) {
 						
@@ -882,8 +882,8 @@ namespace Docky.Interface
 						int menu_y = Screen.GetMonitorGeometry (0).Height - (int) (DockPreferences.IconSize * item_zoom);
 						dock_item_menu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), 
 						                      ((int) evnt.XRoot - Cursor.X) + item_x, menu_y);
+						return ret_val;
 					}
-					return ret_val;
 				}
 				
 				//send off the clicks
