@@ -612,9 +612,13 @@ namespace Docky.Interface
 			if (DockItems [icon].Scalable) {
 				if (DockPreferences.Reflections) {
 					cr.Scale (scale, 0-scale);
-					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), 
-					              x * (1 / scale), 
-					              (y - VerticalBuffer*2.7*zoom + 2 * (MinimumDockArea.Height + DockItems [icon].Height) * scale) * (-1 / scale));
+					
+					// get us into a "normal" reflected position
+					double reflect_y = y + 2 * (MinimumDockArea.Height + DockItems [icon].Height) * scale;
+					
+					// move us up a bit based on the vertial buffer and the zoom
+					reflect_y -= VerticalBuffer*2.7*zoom;
+					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target),  x * (1 / scale), reflect_y * (-1 / scale));
 					cr.PaintWithAlpha (.25);	
 					cr.Scale (1 / scale, 1 / (0-scale));
 				}
