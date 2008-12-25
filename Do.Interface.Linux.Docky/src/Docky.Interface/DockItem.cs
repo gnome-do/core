@@ -45,6 +45,8 @@ namespace Docky.Interface
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
 		
+		public event EventHandler RemoveClicked;
+		
 		public string Icon { 
 			get { return item.Icon; } 
 		}
@@ -236,7 +238,7 @@ namespace Docky.Interface
 							string name = copy_win.Name;
 							if (name.Length > 50)
 								name = name.Substring (0, 47) + "...";
-							outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), name, Icon, hasApps));
+							outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), name, Icon, true));
 						}
 					}
 				}
@@ -249,13 +251,14 @@ namespace Docky.Interface
 			}
 			outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown, hasApps));
 			outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit, hasApps));
+			outList.Add (new MenuArgs (OnRemoveClicked, "Remove From Dock", Gtk.Stock.Remove, true));
 			
 			return outList;
 		}
 		
 		#endregion 
 		#endregion
-		void CloseAllOpenWindows (object o, System.EventArgs a)
+		void CloseAllOpenWindows (object o, EventArgs a)
 		{
 			List<Wnck.Window> windows = new List<Wnck.Window> ();
 			foreach (Application app in Apps)
@@ -263,12 +266,18 @@ namespace Docky.Interface
 			WindowControl.CloseWindows (windows);
 		}
 		
-		void MinimizeRestoreWindows (object o, System.EventArgs a)
+		void MinimizeRestoreWindows (object o, EventArgs a)
 		{
 			List<Wnck.Window> windows = new List<Wnck.Window> ();
 			foreach (Application app in Apps)
 				windows.AddRange (app.Windows);
 			WindowControl.MinimizeRestoreWindows (windows);
+		}
+		
+		void OnRemoveClicked (object o, EventArgs a)
+		{
+			if (RemoveClicked != null)
+				RemoveClicked (this, a);
 		}
 	}
 }

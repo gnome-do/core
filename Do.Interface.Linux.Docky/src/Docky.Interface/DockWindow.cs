@@ -111,7 +111,7 @@ namespace Docky.Interface
 		void OnEventBoxMotion ()
 		{
 			Reposition ();
-			SetInputMask (1);
+			SetInputMask (2);
 			Gtk.Application.Invoke ((o, a) => dock_area.ManualCursorUpdate ());
 		}
 		

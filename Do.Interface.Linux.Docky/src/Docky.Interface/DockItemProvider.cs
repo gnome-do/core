@@ -117,6 +117,7 @@ namespace Docky.Interface
 			}
 			string id = item.UniqueId;
 			DockItem di = new DockItem (item);
+			di.RemoveClicked += HandleRemoveClicked;
 			custom_items [id] = di;
 			
 			if (enable_serialization)
@@ -143,6 +144,8 @@ namespace Docky.Interface
 				else
 					Log.Error ("Could not add custom item with id: {0}", identifier);
 			}
+			if (custom_items.ContainsKey (identifier) && custom_items [identifier] is DockItem)
+				(custom_items [identifier] as DockItem).RemoveClicked += HandleRemoveClicked;
 			
 			if (enable_serialization)
 				SerializeCustomItems ();
@@ -249,6 +252,7 @@ namespace Docky.Interface
 					continue;
 				}
 				new_items.Add (di);
+				(di as DockItem).RemoveClicked += HandleRemoveClicked;
 				
 				bool is_set = false;
 				foreach (IDockItem ditem in statistical_items) {
@@ -270,6 +274,16 @@ namespace Docky.Interface
 			if (DockItemsChanged != null)
 				DockItemsChanged (DockItems);
 			
+		}
+
+		void HandleRemoveClicked(object sender, EventArgs e)
+		{
+			for (int i=0; i<DockItems.Count; i++) {
+				if (DockItems [i] == sender) {
+					RemoveItem (i);
+					break;
+				}
+			}
 		}
 		
 		void UpdateWindowItems ()
