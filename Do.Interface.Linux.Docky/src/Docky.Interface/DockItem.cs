@@ -63,10 +63,6 @@ namespace Docky.Interface
 			get { return true; } 
 		}
 		
-		public override bool DrawIndicator { 
-			get { return HasVisibleApps; } 
-		}
-		
 		public Wnck.Application [] Apps { 
 			get { return apps.ToArray (); } 
 		}
@@ -74,6 +70,17 @@ namespace Docky.Interface
 		public IEnumerable<int> Pids { 
 			get { return apps.Select (item => item.Pid); } 
 		}
+		
+		public override int WindowCount {
+			get {
+				int out_val = 0;
+				foreach (Application app in Apps) {
+					out_val += app.Windows.Where (w => !w.IsSkipTasklist).Count ();
+				}
+				return out_val;
+			}
+		}
+
 		
 		public IEnumerable<Act> ActionsForItem {
 			get {

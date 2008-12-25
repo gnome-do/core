@@ -115,8 +115,8 @@ namespace Docky.Interface
 		/// <value>
 		/// Whether or not to draw an application present indicator
 		/// </value>
-		public abstract bool DrawIndicator {
-			get;
+		public virtual int WindowCount {
+			get { return 0; }
 		}
 		
 		/// <value>

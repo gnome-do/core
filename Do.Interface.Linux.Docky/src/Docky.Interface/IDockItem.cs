@@ -47,7 +47,9 @@ namespace Docky.Interface
 		/// <value>
 		/// If the "active applications" indicator should be drawn under the icon
 		/// </value>
-		bool DrawIndicator { get; }
+//		bool DrawIndicator { get; }
+		
+		int WindowCount { get; }
 		
 		/// <value>
 		/// The last time the item was clicked

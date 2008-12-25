@@ -221,6 +221,7 @@ namespace Docky.Interface
 		
 		public void Summon ()
 		{
+			Reposition ();
 			Do.Interface.Windowing.PresentWindow (this);
 			if (!dock_area.InputInterfaceVisible)
 				dock_area.ShowInputInterface ();

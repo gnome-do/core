@@ -73,12 +73,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		public override bool DrawIndicator {
-			get {
-				return false;
-			}
-		}
-		
 		#endregion 
 		
 

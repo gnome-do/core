@@ -69,8 +69,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		public bool DrawIndicator { get { return false; } }
-		
 		public int Width {
 			get {
 				return (int) (DockPreferences.IconSize * .3);
@@ -82,6 +80,8 @@ namespace Docky.Interface
 				return DockPreferences.IconSize;
 			}
 		}
+		
+		public int WindowCount { get { return 0; } }
 		
 		public bool Scalable { get { return false; } }
 		

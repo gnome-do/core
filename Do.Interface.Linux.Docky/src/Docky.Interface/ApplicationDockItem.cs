@@ -195,7 +195,12 @@ namespace Docky.Interface
 			}
 		}
 		
-		public override bool DrawIndicator { get { return true; } }
+		public override int WindowCount {
+			get {
+				return application.Windows.Where (w => !w.IsSkipTasklist).Count ();
+			}
+		}
+
 		
 		public override bool Scalable {
 			get {

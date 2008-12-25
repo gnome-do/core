@@ -46,7 +46,6 @@ namespace Docky.Interface
 		public const int VerticalBuffer = 5;
 		public const int HorizontalBuffer = 7;
 		const int BounceTime = 700;
-		const int SummonTime = 100;
 		const int InsertAnimationTime = BaseAnimationTime*5;
 		const int WindowHeight = 300;
 		const int IconBorderWidth = 2;
@@ -152,6 +151,12 @@ namespace Docky.Interface
 			get {
 				try { return DockItems [DockItemForX (Cursor.X)]; }
 				catch { return null; }
+			}
+		}
+		
+		int SummonTime {
+			get {
+				return DockPreferences.SummonTime;
 			}
 		}
 		
@@ -326,8 +331,8 @@ namespace Docky.Interface
 		
 		bool OpenAnimationNeeded {
 			get { 
-				return (DateTime.UtcNow - enter_time).TotalMilliseconds < BaseAnimationTime ||
-					(DateTime.UtcNow - interface_change_time).TotalMilliseconds < BaseAnimationTime;
+				return (DateTime.UtcNow - enter_time).TotalMilliseconds < SummonTime ||
+					(DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime;
 			}
 		}
 		
@@ -614,16 +619,16 @@ namespace Docky.Interface
 				cr.Paint ();
 			}
 			
-			if (DockItems [icon].DrawIndicator) {
+			if (DockItems [icon].WindowCount > 0) {
 				// draws a simple triangle indicator.  Should be replaced by something nicer some day
-				cr.MoveTo (center, Height - 6);
-				cr.LineTo (center + 4, Height);
-				cr.LineTo (center - 4, Height);
-				cr.ClosePath ();
-				
-				cr.Color = new Cairo.Color (1, 1, 1, .7);
-				cr.Fill ();
+				int indicator_y = Height - 1;
+				DrawGlowIndicator (cr, center, indicator_y);
 			}
+//			else if (DockItems [icon].WindowCount > 1) {
+//				int indicator_y = Height - 1;
+//				DrawGlowIndicator (cr, center - 6, indicator_y);
+//				DrawGlowIndicator (cr, center + 6, indicator_y);
+//			}
 			
 			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
 			// at all instead of rendering a blank surface (which is slow)
@@ -636,6 +641,22 @@ namespace Docky.Interface
 				cr.SetSource (DockItems [icon].GetTextSurface (cr.Target), textx, texty);
 				cr.Paint ();
 			}
+		}
+		
+		void DrawGlowIndicator (Context cr, int x, int y)
+		{
+			cr.MoveTo (x, y);
+			cr.Arc (x, y, 4, 0, Math.PI * 2);
+			
+			RadialGradient rg = new RadialGradient (x, y, 0, x, y, 4);
+			rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
+			rg.AddColorStop (.45, new Cairo.Color (.5, .6, 1, 1));
+			rg.AddColorStop (.7, new Cairo.Color (.5, .6, 1, .8));
+			rg.AddColorStop (1, new Cairo.Color (.5, .6, 1, 0));
+			
+			cr.Pattern = rg;
+			cr.Fill ();
+			rg.Destroy ();
 		}
 		
 		void DrawThumbnailIcon (Context cr)

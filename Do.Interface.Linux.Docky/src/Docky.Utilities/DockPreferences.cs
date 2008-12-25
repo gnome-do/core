@@ -107,6 +107,15 @@ namespace Docky.Utilities
 			}
 		}
 		
+		static int summon_time = prefs.Get<int> ("SummonTime", 100);
+		public static int SummonTime {
+			get { return summon_time; }
+			set {
+				prefs.Set<int> ("SummonTime", value);
+				summon_time = value;
+			}
+		}
+		
 		static int automatic_icons = prefs.Get<int> ("AutomaticIcons", 10);
 		public static int AutomaticIcons {
 			get { return automatic_icons; }
