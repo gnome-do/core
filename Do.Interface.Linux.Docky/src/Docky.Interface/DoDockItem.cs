@@ -68,15 +68,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public override bool Scalable {
-			get {
-				return true;
-			}
-		}
-		
 		#endregion 
-		
-
 		
 		public DoDockItem () : base ()
 		{

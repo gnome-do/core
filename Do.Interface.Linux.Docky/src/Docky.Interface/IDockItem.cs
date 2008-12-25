@@ -107,9 +107,4 @@ namespace Docky.Interface
 		/// </param>
 		void SetIconRegion (Gdk.Rectangle region);
 	}
-	
-	public interface IDoDockItem
-	{
-		Element Element { get; }
-	}
 }

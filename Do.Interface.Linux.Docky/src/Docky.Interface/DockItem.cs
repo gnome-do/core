@@ -37,7 +37,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItem : AbstractDockItem, IDoDockItem, IRightClickable
+	public class DockItem : AbstractDockItem, IRightClickable
 	{
 		Element item;
 		Surface icon_surface;
@@ -57,10 +57,6 @@ namespace Docky.Interface
 		
 		public Element Element { 
 			get { return item; } 
-		}
-		
-		public override bool Scalable { 
-			get { return true; } 
 		}
 		
 		public Wnck.Application [] Apps { 

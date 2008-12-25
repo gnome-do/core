@@ -108,8 +108,8 @@ namespace Docky.Interface
 		/// <value>
 		/// If the icon is scalable or not (provides FullIconSize sized surface)
 		/// </value>
-		public abstract bool Scalable {
-			get;
+		public virtual bool Scalable {
+			get { return true; }
 		}
 		
 		/// <value>

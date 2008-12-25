@@ -203,13 +203,6 @@ namespace Docky.Interface
 				return application.Windows.Where (w => !w.IsSkipTasklist).Count ();
 			}
 		}
-
-		
-		public override bool Scalable {
-			get {
-				return true;
-			}
-		}
 		
 		public Wnck.Application App {
 			get { return application; }
