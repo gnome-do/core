@@ -112,7 +112,7 @@ namespace Docky.Interface
 		{
 			Reposition ();
 			SetInputMask (1);
-			dock_area.ManualCursorUpdate ();
+			Gtk.Application.Invoke ((o, a) => dock_area.ManualCursorUpdate ());
 		}
 		
 		public void SetInputMask (int heightOffset)
