@@ -58,7 +58,8 @@ namespace Docky.Interface
 		
 		public override void Clicked (uint button)
 		{
-			Services.Windowing.SummonMainWindow ();
+			if (button == 1)
+				Services.Windowing.SummonMainWindow ();
 		}
 		
 		public override string Description {
