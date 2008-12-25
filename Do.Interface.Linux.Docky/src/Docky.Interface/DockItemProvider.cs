@@ -331,7 +331,7 @@ namespace Docky.Interface
 				}
 				if (!is_set)
 					api.DockAddItem = DateTime.UtcNow;
-				out_items.Add (new ApplicationDockItem (app));
+				out_items.Add (api);
 			}
 			
 			foreach (IDockItem item in task_items)

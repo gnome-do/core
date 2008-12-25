@@ -108,6 +108,9 @@ namespace Docky.Interface
 			guesses.Add ("gnome-" + guesses[2]);
 			guesses.Add ("gnome-" + guesses[3]);
 			
+			if (application.Name.Length > 4 && application.Name.Contains (" "))
+				guesses.Add (application.Name.Split (' ') [0].ToLower ());
+			
 			string exec;
 			exec = GetExecStringForPID (application.Pid);
 			if (string.IsNullOrEmpty (exec))
@@ -274,8 +277,13 @@ namespace Docky.Interface
 		{
 			List<MenuArgs> outList = new List<MenuArgs> ();
 			foreach (Wnck.Window window in App.Windows) { 
-				Wnck.Window copy = window;
-				outList.Add (new MenuArgs ((o, a) => copy.CenterAndFocusWindow (), copy.Name, "forward", true));
+				Wnck.Window copy_win = window;
+				if (!copy_win.IsSkipTasklist) {
+					string name = copy_win.Name;
+					if (name.Length > 50)
+						name = name.Substring (0, 47) + "...";
+					outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), name, "forward", true));
+				}
 			}
 			
 			if (outList.Any ()) {
