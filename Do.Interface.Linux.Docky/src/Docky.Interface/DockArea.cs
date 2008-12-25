@@ -43,7 +43,6 @@ namespace Docky.Interface
 	public class DockArea : Gtk.DrawingArea
 	{
 		public const int BaseAnimationTime = 150;
-		public const int VerticalBuffer = 5;
 		public const int HorizontalBuffer = 7;
 		const int BounceTime = 700;
 		const int InsertAnimationTime = BaseAnimationTime*5;
@@ -115,6 +114,12 @@ namespace Docky.Interface
 		public int DockHeight {
 			get {
 				return DockPreferences.AutoHide ? 0 : MinimumDockArea.Height;
+			}
+		}
+		
+		public int VerticalBuffer {
+			get {
+				return DockPreferences.Reflections ? 10 : 5;
 			}
 		}
 		
@@ -594,7 +599,7 @@ namespace Docky.Interface
 			
 			// This gives the actual x,y coordinates of the icon 
 			double x = (center - zoom * DockItems [icon].Width / 2);
-			double y = (Height - (zoom * DockItems [icon].Width)) - VerticalBuffer;
+			double y = (Height - (zoom * DockItems [icon].Height)) - VerticalBuffer;
 			
 			int total_ms = (int) (DateTime.UtcNow - DockItems [icon].LastClick).TotalMilliseconds;
 			if (total_ms < BounceTime) {
@@ -605,6 +610,15 @@ namespace Docky.Interface
 			double scale = zoom/DockPreferences.IconQuality;
 			
 			if (DockItems [icon].Scalable) {
+				if (DockPreferences.Reflections) {
+					cr.Scale (scale, 0-scale);
+					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), 
+					              x * (1 / scale), 
+					              (y - VerticalBuffer*2.7*zoom + 2 * (MinimumDockArea.Height + DockItems [icon].Height) * scale) * (-1 / scale));
+					cr.PaintWithAlpha (.25);	
+					cr.Scale (1 / scale, 1 / (0-scale));
+				}
+				
 				cr.Scale (scale, scale);
 				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom
 				// the icon, not move it around.
@@ -624,11 +638,6 @@ namespace Docky.Interface
 				int indicator_y = Height - 1;
 				DrawGlowIndicator (cr, center, indicator_y);
 			}
-//			else if (DockItems [icon].WindowCount > 1) {
-//				int indicator_y = Height - 1;
-//				DrawGlowIndicator (cr, center - 6, indicator_y);
-//				DrawGlowIndicator (cr, center + 6, indicator_y);
-//			}
 			
 			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
 			// at all instead of rendering a blank surface (which is slow)
