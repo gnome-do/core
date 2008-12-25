@@ -42,7 +42,7 @@ namespace Docky.Interface
 				cr.AlphaFill ();
 				
 				for (int i=1; i*6+2 < Height; i++) {
-					cr.Rectangle (Width/2-2, i*6, 4, 2);
+					cr.Rectangle (Width/2-1, i*6, 4, 2);
 				}
 				
 				cr.Color = new Cairo.Color (1, 1, 1, .3);
