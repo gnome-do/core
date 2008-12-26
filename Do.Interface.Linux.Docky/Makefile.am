@@ -23,6 +23,7 @@ FILES = \
 	src/Docky.Interface/IRightClickable.cs \
 	src/Docky.Interface/MenuArgs.cs \
 	src/Docky.Interface/SeparatorItem.cs \
+	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
 	src/Docky.Utilities/DockPreferences.cs \
 	src/Docky.Utilities/GtkUtils.cs \

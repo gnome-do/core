@@ -60,7 +60,7 @@ namespace Docky.Interface
 		{
 		}
 
-		public void PopUp (IEnumerable<MenuArgs> args, int x, int y)
+		public override void PopUp (IEnumerable<MenuArgs> args, int x, int y)
 		{
 			foreach (Gtk.Widget child in Container.AllChildren) {
 				Container.Remove (child);

@@ -158,6 +158,8 @@ namespace Docky.Interface
 		
 		public virtual void Dispose ()
 		{
+			DockPreferences.IconSizeChanged -= OnIconSizeChanged;
+			
 			if (text_surface != null) {
 				text_surface.Destroy ();
 				text_surface = null;

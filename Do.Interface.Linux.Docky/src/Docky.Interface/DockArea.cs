@@ -76,7 +76,7 @@ namespace Docky.Interface
 		
 		DockWindow window;
 		DockItemProvider item_provider;
-		Surface backbuffer, input_area_buffer, dock_icon_buffer;
+		Surface backbuffer, input_area_buffer, dock_icon_buffer, urgent_buffer;
 		DockItemMenu dock_item_menu;
 		
 		#region public properties
@@ -345,6 +345,15 @@ namespace Docky.Interface
 			get { return DockItems.Any (di => (DateTime.UtcNow - di.LastClick).TotalMilliseconds <= BounceTime); }
 		}
 		
+		bool UrgentAnimationNeeded {
+			get { 
+				return DockItems.Where (di => di is IDockAppItem)
+					.Cast <IDockAppItem> ()
+					.Where (dai => dai.NeedsAttention)
+					.Any (dai => (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds < BounceTime);
+			}
+		}
+		
 		bool InputModeChangeAnimationNeeded {
 			get { return (DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime; }
 		}
@@ -362,6 +371,7 @@ namespace Docky.Interface
 				return OpenAnimationNeeded || 
 					   ZoomAnimationNeeded || 
 					   BounceAnimationNeeded || 
+					   UrgentAnimationNeeded ||
 					   InputModeChangeAnimationNeeded || 
 					   InputModeSlideAnimationNeeded || 
 					   IconInsertionAnimationNeeded || 
@@ -399,7 +409,6 @@ namespace Docky.Interface
 			DoubleBuffered = false;
 			
 			RegisterEvents ();
-			
 			RegisterGtkDragDest ();
 			RegisterGtkDragSource ();
 			
@@ -414,6 +423,8 @@ namespace Docky.Interface
 		{
 			item_provider.DockItemsChanged += OnDockItemsChanged;
 			
+			item_provider.ItemNeedsUpdate += HandleItemNeedsUpdate;
+			
 			dock_item_menu.Hidden += OnDockItemMenuHidden;
 			
 			dock_item_menu.Shown += OnDockItemMenuShown;
@@ -426,6 +437,11 @@ namespace Docky.Interface
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);
 			};
+		}
+
+		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)
+		{
+			AnimatedDraw ();
 		}
 		
 		void RegisterGtkDragSource ()
@@ -515,7 +531,7 @@ namespace Docky.Interface
 				previous_x = Cursor.X;
 			
 			// Some conditions are not good for doing partial draws.
-			bool iconAnimationNeeded = BounceAnimationNeeded || IconInsertionAnimationNeeded;
+			bool iconAnimationNeeded = BounceAnimationNeeded || IconInsertionAnimationNeeded || UrgentAnimationNeeded;
 			
 			// we have a couple conditions were this render peformance boost will result in "badness".
 			// in these cases we need to do a full render.
@@ -601,10 +617,21 @@ namespace Docky.Interface
 			double x = (center - zoom * DockItems [icon].Width / 2);
 			double y = (Height - (zoom * DockItems [icon].Height)) - VerticalBuffer;
 			
-			int total_ms = (int) (DateTime.UtcNow - DockItems [icon].LastClick).TotalMilliseconds;
-			if (total_ms < BounceTime) {
+			int bounce_ms = (int) (DateTime.UtcNow - DockItems [icon].LastClick).TotalMilliseconds;
+			
+			// we will set this flag now
+			bool draw_urgency = false;
+			if (bounce_ms < BounceTime) {
 				// bounces twice
-				y -= Math.Abs (30 * Math.Sin (total_ms * Math.PI / (BounceTime / 2)));
+				y -= Math.Abs (30 * Math.Sin (bounce_ms * Math.PI / (BounceTime / 2)));
+			} else {
+				IDockAppItem dai = DockItems [icon] as IDockAppItem;
+				if (dai != null && dai.NeedsAttention) {
+					draw_urgency = true;
+					int urgent_ms = (int) (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds;
+					if (urgent_ms < BounceTime)
+						y -= 100 * Math.Sin (urgent_ms * Math.PI / (BounceTime));
+				}
 			}
 			
 			double scale = zoom/DockPreferences.IconQuality;
@@ -617,7 +644,7 @@ namespace Docky.Interface
 					double reflect_y = y + 2 * (MinimumDockArea.Height + DockItems [icon].Height) * scale;
 					
 					// move us up a bit based on the vertial buffer and the zoom
-					reflect_y -= VerticalBuffer*2.7*zoom;
+					reflect_y -= VerticalBuffer * 2.7 * zoom;
 					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target),  x * (1 / scale), reflect_y * (-1 / scale));
 					cr.PaintWithAlpha (.25);	
 					cr.Scale (1 / scale, 1 / (0-scale));
@@ -626,8 +653,12 @@ namespace Docky.Interface
 				cr.Scale (scale, scale);
 				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom
 				// the icon, not move it around.
-				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), x * (1 / scale), y * (1 / scale));
+				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), x / scale, y / scale);
 				cr.Paint ();
+				if (draw_urgency) {
+					cr.SetSource (GetUrgentSurface (cr), x / scale, y / scale);
+					cr.PaintWithAlpha (.8);
+				}
 				cr.Scale (1 / scale, 1 / scale);
 			} else {
 				// since these dont scale, we have some extra work to do to keep them centered
@@ -654,6 +685,24 @@ namespace Docky.Interface
 				cr.SetSource (DockItems [icon].GetTextSurface (cr.Target), textx, texty);
 				cr.Paint ();
 			}
+		}
+		
+		Surface GetUrgentSurface (Context cr)
+		{
+			if (urgent_buffer == null) {
+				double scale = .75;
+				int size = (int) (DockPreferences.FullIconSize * scale);
+				urgent_buffer = cr.Target.CreateSimilar (cr.Target.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
+				using (cr = new Context (urgent_buffer)) {
+					cr.AlphaFill ();
+					Pixbuf pbuf = IconProvider.PixbufFromIconName ("emblem-important", size);
+					CairoHelper.SetSourcePixbuf (cr, pbuf, DockPreferences.FullIconSize * (1 - scale) / 2, 
+					                             DockPreferences.FullIconSize * (1 - scale) / 2);
+					cr.Paint ();
+					pbuf.Dispose ();
+				}
+			}
+			return urgent_buffer;
 		}
 		
 		void DrawGlowIndicator (Context cr, int x, int y)

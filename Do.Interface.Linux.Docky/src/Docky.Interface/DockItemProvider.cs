@@ -40,10 +40,14 @@ namespace Docky.Interface
 		Unknown,
 	}
 	
+	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);
+	public delegate void DockItemsChangedHandler (IEnumerable<IDockItem> items);
+	
 	public class DockItemProvider
 	{
-		public delegate void DockItemsChangedHandler (IEnumerable<IDockItem> items);
+		
 		public event DockItemsChangedHandler DockItemsChanged;
+		public event UpdateRequestHandler ItemNeedsUpdate;
 		
 		Dictionary<string, IDockItem> custom_items;
 		List<IDockItem> statistical_items, task_items;
@@ -118,6 +122,7 @@ namespace Docky.Interface
 			string id = item.UniqueId;
 			DockItem di = new DockItem (item);
 			di.RemoveClicked += HandleRemoveClicked;
+			di.UpdateNeeded += HandleUpdateNeeded;
 			custom_items [id] = di;
 			
 			if (enable_serialization)
@@ -144,8 +149,11 @@ namespace Docky.Interface
 				else
 					Log.Error ("Could not add custom item with id: {0}", identifier);
 			}
-			if (custom_items.ContainsKey (identifier) && custom_items [identifier] is DockItem)
+			if (custom_items.ContainsKey (identifier) && custom_items [identifier] is DockItem) {
 				(custom_items [identifier] as DockItem).RemoveClicked += HandleRemoveClicked;
+				(custom_items [identifier] as DockItem).UpdateNeeded += HandleUpdateNeeded;
+			}
+			
 			
 			if (enable_serialization)
 				SerializeCustomItems ();
@@ -171,6 +179,7 @@ namespace Docky.Interface
 		
 		public void ForceUpdate ()
 		{
+			Console.WriteLine ("Force");
 			UpdateItems ();
 		}
 		
@@ -253,6 +262,7 @@ namespace Docky.Interface
 				}
 				new_items.Add (di);
 				(di as DockItem).RemoveClicked += HandleRemoveClicked;
+				(di as DockItem).UpdateNeeded += HandleUpdateNeeded;
 				
 				bool is_set = false;
 				foreach (IDockItem ditem in statistical_items) {
@@ -266,14 +276,26 @@ namespace Docky.Interface
 					di.DockAddItem = DateTime.UtcNow;
 			}
 			
-			foreach (IDockItem dock_item in statistical_items)
+			foreach (IDockItem dock_item in statistical_items) {
+				if (dock_item is DockItem) {
+					(dock_item as DockItem).RemoveClicked -= HandleRemoveClicked;
+					(dock_item as DockItem).UpdateNeeded -= HandleUpdateNeeded;	
+				}
 				dock_item.Dispose ();
+			}
+			statistical_items.Clear ();
 			
 			statistical_items = new_items;
 			UpdateWindowItems ();
 			if (DockItemsChanged != null)
 				DockItemsChanged (DockItems);
 			
+		}
+
+		void HandleUpdateNeeded(object sender, UpdateRequestArgs args)
+		{
+			if (ItemNeedsUpdate != null)
+				ItemNeedsUpdate (this, args);
 		}
 
 		void HandleRemoveClicked(object sender, EventArgs e)

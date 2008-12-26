@@ -37,15 +37,18 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItem : AbstractDockItem, IRightClickable
+	public class DockItem : AbstractDockItem, IRightClickable, IDockAppItem
 	{
 		Element item;
 		Surface icon_surface;
 		List<Wnck.Application> apps;
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
+		bool needs_attention;
 		
 		public event EventHandler RemoveClicked;
+		
+		public event UpdateRequestHandler UpdateNeeded;
 		
 		public string Icon { 
 			get { return item.Icon; } 
@@ -64,7 +67,7 @@ namespace Docky.Interface
 		}
 		
 		public IEnumerable<int> Pids { 
-			get { return apps.Select (item => item.Pid); } 
+			get { return apps.Select (item => item.Pid).ToArray (); } 
 		}
 		
 		public override int WindowCount {
@@ -77,6 +80,16 @@ namespace Docky.Interface
 			}
 		}
 
+		public bool NeedsAttention { 
+			get { return needs_attention; } 
+			private set {
+				needs_attention = value;
+				if (value)
+					AttentionRequestStartTime = DateTime.UtcNow;
+			}
+		}
+		
+		public DateTime AttentionRequestStartTime { get; private set; }
 		
 		public IEnumerable<Act> ActionsForItem {
 			get {
@@ -102,7 +115,9 @@ namespace Docky.Interface
 			apps =  new List<Wnck.Application> ();
 			this.item = item;
 			
+			AttentionRequestStartTime = DateTime.UtcNow;
 			UpdateApplication ();
+			NeedsAttention = DetermineAttentionStatus ();
 		}
 		
 		protected override void OnIconSizeChanged ()
@@ -118,9 +133,55 @@ namespace Docky.Interface
 		
 		public void UpdateApplication ()
 		{
+			UnregisterStateChangeEvents ();
+			
 			if (item is IApplicationItem) {
 				apps = WindowUtils.GetApplicationList ((item as IApplicationItem).Exec);
 			}
+			
+			RegisterStateChangeEvents ();
+		}
+		
+		void RegisterStateChangeEvents ()
+		{
+			foreach (Application app in Apps) {
+				foreach (Wnck.Window w in app.Windows) {
+					if (!w.IsSkipTasklist)
+						w.StateChanged += OnWindowStateChanged;
+				}
+			}
+		}
+		
+		void UnregisterStateChangeEvents ()
+		{
+			foreach (Application app in Apps) {
+				foreach (Wnck.Window w in app.Windows) {
+					try {
+						w.StateChanged -= OnWindowStateChanged;
+					} catch {}
+				}
+			}
+		}
+		
+		void OnWindowStateChanged (object o, StateChangedArgs args)
+		{
+			bool needed_attention = NeedsAttention;
+			NeedsAttention = DetermineAttentionStatus ();
+			
+			if (NeedsAttention == needed_attention) return;
+			
+			UpdateRequestType req = NeedsAttention ? UpdateRequestType.NeedsAttentionSet : UpdateRequestType.NeedsAttentionUnset;
+			if (UpdateNeeded != null)
+				UpdateNeeded (null, new UpdateRequestArgs (this, req));
+		}
+		
+		bool DetermineAttentionStatus  ()
+		{
+			foreach (Application app in Apps) {
+				if (app.Windows.Any ((Wnck.Window w) => w.NeedsAttention ()))
+					return true;
+			}
+			return false;
 		}
 		
 		Gdk.Pixbuf GetPixbuf ()
@@ -218,6 +279,13 @@ namespace Docky.Interface
 		
 		public override void Dispose ()
 		{
+			UnregisterStateChangeEvents ();
+			item = null;
+			apps.Clear ();
+			
+			if (drag_pixbuf != null)
+				drag_pixbuf.Dispose ();
+			
 			if (icon_surface != null) {
 				icon_surface.Destroy ();
 				icon_surface = null;
@@ -225,7 +293,7 @@ namespace Docky.Interface
 			
 			base.Dispose ();
 		}
-
+		
 		#region IRightClickable implementation 
 		
 		public IEnumerable<MenuArgs> GetMenuItems ()

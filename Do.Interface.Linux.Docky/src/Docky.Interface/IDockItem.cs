@@ -107,4 +107,13 @@ namespace Docky.Interface
 		/// </param>
 		void SetIconRegion (Gdk.Rectangle region);
 	}
+	
+	public interface IDockAppItem
+	{
+		event UpdateRequestHandler UpdateNeeded;
+		
+		bool NeedsAttention { get; }
+		
+		DateTime AttentionRequestStartTime { get; }
+	}
 }
