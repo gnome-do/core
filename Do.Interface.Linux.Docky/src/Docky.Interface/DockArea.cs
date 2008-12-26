@@ -50,6 +50,7 @@ namespace Docky.Interface
 		const int IconBorderWidth = 2;
 		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
 		
+		#region private variables
 		Gdk.Point cursor;
 		
 		Gdk.Rectangle minimum_dock_area;
@@ -78,6 +79,7 @@ namespace Docky.Interface
 		DockItemProvider item_provider;
 		Surface backbuffer, input_area_buffer, dock_icon_buffer, urgent_buffer;
 		DockItemMenu dock_item_menu;
+		#endregion
 		
 		#region public properties
 		public bool InputInterfaceVisible { get; set; }
@@ -354,6 +356,14 @@ namespace Docky.Interface
 			}
 		}
 		
+		bool UrgentRecentChange {
+			get {
+				return (DateTime.UtcNow - DockItems.Where (di => di is IDockAppItem)
+					.Cast <IDockAppItem> ()
+					.Max (dai => dai.AttentionRequestStartTime)).TotalMilliseconds < BounceTime;
+			}
+		}
+		
 		bool InputModeChangeAnimationNeeded {
 			get { return (DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime; }
 		}
@@ -546,7 +556,7 @@ namespace Docky.Interface
 				do {
 					// If the cursor has not moved and the dock_item_menu is not visible (this causes a render change without moving the cursor)
 					// we can do no rendering at all and just take our previous frame as our current result.
-					if (previous_x == Cursor.X && !dock_item_menu.Visible)
+					if (previous_x == Cursor.X && !dock_item_menu.Visible && !UrgentRecentChange)
 						break;
 					
 					// we need to know the left and right items for the parabolic zoom.  These items represent the only icons that are

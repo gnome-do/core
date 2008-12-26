@@ -41,6 +41,8 @@ namespace Docky.Interface
 		
 		public UpdateRequestArgs(IDockItem item, UpdateRequestType type)
 		{
+			Item = item;
+			Type = type;
 		}
 	}
 }

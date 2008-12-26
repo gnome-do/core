@@ -45,6 +45,7 @@ namespace Docky.Interface
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
 		bool needs_attention;
+		uint handle_timer = 0;
 		
 		public event EventHandler RemoveClicked;
 		
@@ -83,9 +84,10 @@ namespace Docky.Interface
 		public bool NeedsAttention { 
 			get { return needs_attention; } 
 			private set {
+				if (needs_attention == value)
+					return;
 				needs_attention = value;
-				if (value)
-					AttentionRequestStartTime = DateTime.UtcNow;
+				AttentionRequestStartTime = DateTime.UtcNow;
 			}
 		}
 		
@@ -165,14 +167,29 @@ namespace Docky.Interface
 		
 		void OnWindowStateChanged (object o, StateChangedArgs args)
 		{
+			if (handle_timer > 0)
+				return;
+			
+			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
+		}
+		
+		bool HandleUpdate ()
+		{
 			bool needed_attention = NeedsAttention;
 			NeedsAttention = DetermineAttentionStatus ();
 			
-			if (NeedsAttention == needed_attention) return;
+			if (NeedsAttention != needed_attention) {
+				UpdateRequestType req;
+				if (NeedsAttention) 
+					req = UpdateRequestType.NeedsAttentionSet;
+				else
+					req = UpdateRequestType.NeedsAttentionUnset;
+				if (UpdateNeeded != null)
+					UpdateNeeded (this, new UpdateRequestArgs (this, req));
+			}
 			
-			UpdateRequestType req = NeedsAttention ? UpdateRequestType.NeedsAttentionSet : UpdateRequestType.NeedsAttentionUnset;
-			if (UpdateNeeded != null)
-				UpdateNeeded (null, new UpdateRequestArgs (this, req));
+			handle_timer = 0;
+			return false;
 		}
 		
 		bool DetermineAttentionStatus  ()
