@@ -1060,13 +1060,16 @@ namespace Docky.Interface
 		
 		void SetIconRegions ()
 		{
-			Gdk.Rectangle pos;
+			Gdk.Rectangle pos, geo;
 			window.GetPosition (out pos.X, out pos.Y);
 			
+			geo = Screen.GetMonitorGeometry (0);
+			// we use geo here instead of our position for the Y value because we know the parent window
+			// may offset us when hidden. This is not desired...
 			for (int i=0; i<DockItems.Length; i++) {
 				int x = IconNormalCenterX (i);
 				DockItems [i].SetIconRegion (new Gdk.Rectangle (pos.X + (x - IconSize / 2), 
-				                                               pos.Y + (Height - VerticalBuffer - IconSize), IconSize, IconSize));
+				                                               geo.Y + geo.Height - VerticalBuffer - IconSize, IconSize, IconSize));
 			}
 		}
 		

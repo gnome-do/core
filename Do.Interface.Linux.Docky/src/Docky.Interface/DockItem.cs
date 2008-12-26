@@ -39,7 +39,7 @@ namespace Docky.Interface
 	
 	public class DockItem : AbstractDockItem, IRightClickable, IDockAppItem
 	{
-		Element item;
+		Element element;
 		Surface icon_surface;
 		List<Wnck.Application> apps;
 		Gdk.Rectangle icon_region;
@@ -52,15 +52,15 @@ namespace Docky.Interface
 		public event UpdateRequestHandler UpdateNeeded;
 		
 		public string Icon { 
-			get { return item.Icon; } 
+			get { return element.Icon; } 
 		}
 		
 		public override string Description { 
-			get { return item.Name; } 
+			get { return element.Name; } 
 		}
 		
 		public Element Element { 
-			get { return item; } 
+			get { return element; } 
 		}
 		
 		public Wnck.Application [] Apps { 
@@ -68,16 +68,12 @@ namespace Docky.Interface
 		}
 		
 		public IEnumerable<int> Pids { 
-			get { return apps.Select (item => item.Pid).ToArray (); } 
+			get { return apps.Select (element => element.Pid).ToArray (); } 
 		}
 		
 		public override int WindowCount {
 			get {
-				int out_val = 0;
-				foreach (Application app in Apps) {
-					out_val += app.Windows.Where (w => !w.IsSkipTasklist).Count ();
-				}
-				return out_val;
+				return Apps.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ());
 			}
 		}
 
@@ -95,9 +91,9 @@ namespace Docky.Interface
 		
 		public IEnumerable<Act> ActionsForItem {
 			get {
-				if (!(item is Item))
+				if (!(element is Item))
 					return new Act [0];
-				return Services.Core.GetActionsForItemOrderedByRelevance (item as Item, false);
+				return Services.Core.GetActionsForItemOrderedByRelevance (element as Item, false);
 			}
 		}
 			
@@ -112,10 +108,10 @@ namespace Docky.Interface
 			}
 		}	
 		
-		public DockItem (Element item) : base ()
+		public DockItem (Element element) : base ()
 		{
 			apps =  new List<Wnck.Application> ();
-			this.item = item;
+			this.element = element;
 			
 			AttentionRequestStartTime = DateTime.UtcNow;
 			UpdateApplication ();
@@ -137,8 +133,8 @@ namespace Docky.Interface
 		{
 			UnregisterStateChangeEvents ();
 			
-			if (item is IApplicationItem) {
-				apps = WindowUtils.GetApplicationList ((item as IApplicationItem).Exec);
+			if (element is IApplicationItem) {
+				apps = WindowUtils.GetApplicationList ((element as IApplicationItem).Exec);
 			}
 			
 			RegisterStateChangeEvents ();
@@ -170,6 +166,7 @@ namespace Docky.Interface
 			if (handle_timer > 0)
 				return;
 			
+			// we do this delayed so that we dont get a flood of these events.  Certain windows behave badly.
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
 		}
 		
@@ -265,9 +262,9 @@ namespace Docky.Interface
 		void Launch (Act action)
 		{
 			LastClick = DateTime.UtcNow;
-			if (!(item is Item))
+			if (!(element is Item))
 				return;
-			Services.Core.PerformActionForItem (action, item as Item);
+			Services.Core.PerformActionForItem (action, element as Item);
 		}
 		
 		public override void SetIconRegion (Gdk.Rectangle region)
@@ -297,7 +294,7 @@ namespace Docky.Interface
 		public override void Dispose ()
 		{
 			UnregisterStateChangeEvents ();
-			item = null;
+			element = null;
 			apps.Clear ();
 			
 			if (drag_pixbuf != null)

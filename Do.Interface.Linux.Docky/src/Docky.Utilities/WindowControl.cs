@@ -112,5 +112,55 @@ namespace Docky.Utilities
 		{
 			window.Maximize ();
 		}
+		
+		/// <summary>
+		/// Moves the current viewport to the selected window and then raises it
+		/// </summary>
+		/// <param name="w">
+		/// A <see cref="Window"/>
+		/// </param>
+		public static void CenterAndFocusWindow (this Window w) 
+		{
+			if (!w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)) {
+				int viewX, viewY, viewW, viewH;
+				int midX, midY;
+				Screen scrn = Screen.Default;
+				Workspace wsp = scrn.ActiveWorkspace;
+				
+				//get our windows geometry
+				w.GetGeometry (out viewX, out viewY, out viewW, out viewH);
+				
+				//we want to focus on where the middle of the window is
+				midX = viewX + (viewW / 2);
+				midY = viewY + (viewH / 2);
+				
+				//The positions given above are relative to the current viewport
+				//This makes them absolute
+				midX += wsp.ViewportX;
+				midY += wsp.ViewportY;
+				
+				//Check to make sure our middle didn't wrap
+				if (midX > wsp.Width) {
+					midX %= wsp.Width;
+				}
+				
+				if (midY > wsp.Height) {
+					midY %= wsp.Height;
+				}
+				
+				//take care of negative numbers (happens?)
+				while (midX < 0)
+					midX += wsp.Width;
+			
+				while (midY < 0)
+					midX += wsp.Height;
+				
+				Wnck.Screen.Default.MoveViewport (midX, midY);
+			}
+			if (w.IsMinimized)
+				w.Unminimize (Gtk.Global.CurrentEventTime);
+			
+			w.Activate (Gtk.Global.CurrentEventTime);
+		}
 	}
 }

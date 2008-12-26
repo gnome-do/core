@@ -179,7 +179,6 @@ namespace Docky.Interface
 		
 		public void ForceUpdate ()
 		{
-			Console.WriteLine ("Force");
 			UpdateItems ();
 		}
 		
