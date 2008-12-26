@@ -269,10 +269,10 @@ namespace Docky.Interface
 				
 				// When we change over this boundry, it will normally trigger an animation, we need to be sure to catch it
 				if (CursorIsOverDockArea != cursorIsOverDockArea) {
-					SetParentInputMask ();
 					enter_time = DateTime.UtcNow;
 					AnimatedDraw ();
 				}
+				SetParentInputMask ();
 			}
 		}
 		
@@ -877,8 +877,13 @@ namespace Docky.Interface
 			data = data.TrimEnd ('\0'); 
 			
 			string [] uriList = Regex.Split (data, "\r\n");
-			uriList.Where (uri => uri.StartsWith ("file://"))
-				.ForEach (uri => item_provider.AddCustomItem (uri.Substring (7)));
+			if (CurrentDockItem is IDockDragAwareItem) {
+				uriList.Where (uri => uri.StartsWith ("file://"))
+					.ForEach (uri => (CurrentDockItem as IDockDragAwareItem).ReceiveItem (uri.Substring (7)));
+			} else {
+				uriList.Where (uri => uri.StartsWith ("file://"))
+					.ForEach (uri => item_provider.AddCustomItem (uri.Substring (7)));
+			}
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
 		}
@@ -1075,16 +1080,22 @@ namespace Docky.Interface
 		
 		void SetParentInputMask ()
 		{
+			if (window == null)
+				return;
+			
+			int offset;
 			if (InputInterfaceVisible) {
-				window.SetInputMask (Height);
+				offset = Height;
 			} else if (CursorIsOverDockArea) {
-				window.SetInputMask (GetDockArea ().Height * 2 + 10);
+				offset = GetDockArea ().Height * 2 + 10;
 			} else {
 				if (DockPreferences.AutoHide)
-					window.SetInputMask (1);
+					offset = 1;
 				else
-					window.SetInputMask (GetDockArea ().Height);
+					offset = GetDockArea ().Height;
 			}
+			if (window.CurrentOffsetMask != offset)
+				window.SetInputMask (offset);
 		}
 		
 		public void SetPaneContext (IUIContext context, Pane pane)

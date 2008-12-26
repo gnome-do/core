@@ -20,9 +20,11 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs \
 	src/Docky.Interface/DrawState.cs \
 	src/Docky.Interface/IDockItem.cs \
+	src/Docky.Interface/IDockDragAwareItem.cs \
 	src/Docky.Interface/IRightClickable.cs \
 	src/Docky.Interface/MenuArgs.cs \
 	src/Docky.Interface/SeparatorItem.cs \
+	src/Docky.Interface/TrashDockItem.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
 	src/Docky.Utilities/DockPreferences.cs \

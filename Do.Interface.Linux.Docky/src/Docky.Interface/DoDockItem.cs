@@ -39,22 +39,11 @@ namespace Docky.Interface
 		Surface icon_surface;
 		#region IDockItem implementation 
 		
-		public override Surface GetIconSurface (Surface sr)
+		protected override Pixbuf GetSurfacePixbuf ()
 		{
-			if (icon_surface == null) {
-				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-				Context cr = new Context (icon_surface);
-				
-				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (DoIcon, DockPreferences.FullIconSize);
-				
-				Gdk.CairoHelper.SetSourcePixbuf (cr, pbuf, 0, 0);
-				cr.Paint ();
-				
-				pbuf.Dispose ();
-				(cr as IDisposable).Dispose ();
-			}
-			return icon_surface;
+			return IconProvider.PixbufFromIconName (DoIcon, DockPreferences.FullIconSize);
 		}
+
 		
 		public override void Clicked (uint button)
 		{
@@ -73,28 +62,8 @@ namespace Docky.Interface
 		public DoDockItem () : base ()
 		{
 		}
-		
-		protected override void OnIconSizeChanged ()
-		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
-			
-			base.OnIconSizeChanged ();
-		}
 
 		#region IDisposable implementation 
-		
-		public override void Dispose ()
-		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
-			
-			base.Dispose ();
-		}
 		
 		#endregion 
 		

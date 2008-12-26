@@ -47,6 +47,10 @@ namespace Docky.Interface
 			get { return "Docky"; }
 		}
 		
+		public int CurrentOffsetMask {
+			get { return current_offset; }
+		}
+		
 		public IDoController Controller {
 			get { return controller; }
 		}
@@ -117,6 +121,9 @@ namespace Docky.Interface
 		
 		public void SetInputMask (int heightOffset)
 		{
+			if (!IsRealized || current_offset == heightOffset)
+				return;
+			
 			current_offset = heightOffset;
 			int width = Math.Max (Math.Min (800, dock_area.Width), dock_area.DockWidth);
 			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, width, heightOffset, 1);

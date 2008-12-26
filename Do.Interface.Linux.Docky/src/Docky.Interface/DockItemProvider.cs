@@ -68,22 +68,26 @@ namespace Docky.Interface
 				if (custom_items.Any ()) {
 					out_items.AddRange (custom_items.Values);
 				}
+				
+				out_items.Add (Separator);
 				if (task_items.Any ()) {
-					if (out_items.Any ())
-						out_items.Add (Separator);
 					out_items.AddRange (task_items);
 				}
+				
+				out_items.Add (TrashItem);
 				return out_items;
 			}
 		}
 		
-		SeparatorItem Separator { get; set; }
-		DoDockItem MenuItem { get; set; }
+		IDockItem Separator { get; set; }
+		IDockItem MenuItem { get; set; }
+		IDockItem TrashItem { get; set; }
 		
 		public DockItemProvider ()
 		{
 			Separator = new SeparatorItem ();
 			MenuItem = new DoDockItem ();
+			TrashItem = new TrashDockItem ();
 			
 			custom_items = new Dictionary<string, IDockItem> ();
 			statistical_items = new List<IDockItem> ();
@@ -150,7 +154,7 @@ namespace Docky.Interface
 					Log.Error ("Could not add custom item with id: {0}", identifier);
 			}
 			if (custom_items.ContainsKey (identifier) && custom_items [identifier] is DockItem) {
-				(custom_items [identifier] as DockItem).RemoveClicked += HandleRemoveClicked;
+				(custom_items [identifier] as IRightClickable).RemoveClicked += HandleRemoveClicked;
 				(custom_items [identifier] as DockItem).UpdateNeeded += HandleUpdateNeeded;
 			}
 			
@@ -260,7 +264,7 @@ namespace Docky.Interface
 					continue;
 				}
 				new_items.Add (di);
-				(di as DockItem).RemoveClicked += HandleRemoveClicked;
+				(di as IRightClickable).RemoveClicked += HandleRemoveClicked;
 				(di as DockItem).UpdateNeeded += HandleUpdateNeeded;
 				
 				bool is_set = false;
@@ -276,10 +280,12 @@ namespace Docky.Interface
 			}
 			
 			foreach (IDockItem dock_item in statistical_items) {
-				if (dock_item is DockItem) {
-					(dock_item as DockItem).RemoveClicked -= HandleRemoveClicked;
+				if (dock_item is IRightClickable)
+					(dock_item as IRightClickable).RemoveClicked -= HandleRemoveClicked;
+				
+				if (dock_item is DockItem)
 					(dock_item as DockItem).UpdateNeeded -= HandleUpdateNeeded;	
-				}
+				
 				dock_item.Dispose ();
 			}
 			statistical_items.Clear ();

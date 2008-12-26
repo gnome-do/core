@@ -34,10 +34,44 @@ namespace Docky.Interface
 	
 	public abstract class AbstractDockItem : IDockItem
 	{
-		Surface text_surface;
+		Surface text_surface, icon_surface;
 		#region IDockItem implementation 
 		
-		public abstract Surface GetIconSurface (Surface sr);
+		public virtual Surface GetIconSurface (Surface similar)
+		{
+			if (icon_surface == null) {
+				icon_surface = similar.CreateSimilar (similar.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
+				Context cr = new Context (icon_surface);
+				
+				Gdk.Pixbuf pbuf = GetSurfacePixbuf ();
+				if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
+					double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
+					Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
+					pbuf.Dispose ();
+					pbuf = temp;
+				}
+				
+				Gdk.CairoHelper.SetSourcePixbuf (cr, 
+				                                 pbuf, 
+				                                 (int) ((DockPreferences.FullIconSize - pbuf.Width) / 2),
+				                                 (int) ((DockPreferences.FullIconSize - pbuf.Height) / 2));
+				cr.Paint ();
+				
+				pbuf.Dispose ();
+				(cr as IDisposable).Dispose ();
+			}
+			return icon_surface;
+		}
+		
+		protected void RedrawIcon ()
+		{
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
+			}
+		}
+		
+		protected abstract Pixbuf GetSurfacePixbuf ();
 		
 		/// <summary>
 		/// Gets a surface that is useful for display by the Dock based on the Description
@@ -152,6 +186,11 @@ namespace Docky.Interface
 				text_surface.Destroy ();
 				text_surface = null;
 			}
+			
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
+			}
 		}
 
 		#region IDisposable implementation 
@@ -163,6 +202,11 @@ namespace Docky.Interface
 			if (text_surface != null) {
 				text_surface.Destroy ();
 				text_surface = null;
+			}
+			
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
 			}
 		}
 		

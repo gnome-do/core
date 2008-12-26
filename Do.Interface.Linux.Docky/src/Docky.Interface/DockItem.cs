@@ -118,17 +118,6 @@ namespace Docky.Interface
 			NeedsAttention = DetermineAttentionStatus ();
 		}
 		
-		protected override void OnIconSizeChanged ()
-		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
-			
-			base.OnIconSizeChanged ();
-		}
-
-		
 		public void UpdateApplication ()
 		{
 			UnregisterStateChangeEvents ();
@@ -198,7 +187,7 @@ namespace Docky.Interface
 			return false;
 		}
 		
-		Gdk.Pixbuf GetPixbuf ()
+		protected override Gdk.Pixbuf GetSurfacePixbuf ()
 		{
 			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
 			
@@ -217,25 +206,6 @@ namespace Docky.Interface
 			if (drag_pixbuf == null)
 				drag_pixbuf = IconProvider.PixbufFromIconName (Icon, 32);
 			return drag_pixbuf;
-		}
-		
-		public override Surface GetIconSurface (Surface sr)
-		{
-			if (icon_surface == null) {
-				Gdk.Pixbuf pixbuf = GetPixbuf ();
-				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-				Context cr = new Context (icon_surface);
-				Gdk.CairoHelper.SetSourcePixbuf (cr, 
-				                                 pixbuf, 
-				                                 (int) ((DockPreferences.FullIconSize - pixbuf.Width) / 2),
-				                                 (int) ((DockPreferences.FullIconSize - pixbuf.Height) / 2));
-				cr.Paint ();
-				
-				(cr as IDisposable).Dispose ();
-				pixbuf.Dispose ();
-				pixbuf = null;
-			}
-			return icon_surface;
 		}
 		
 		public override void Clicked (uint button)
@@ -299,11 +269,6 @@ namespace Docky.Interface
 			
 			if (drag_pixbuf != null)
 				drag_pixbuf.Dispose ();
-			
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
 			
 			base.Dispose ();
 		}

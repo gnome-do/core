@@ -37,6 +37,8 @@ namespace Docky.Interface
 	
 	public class ApplicationDockItem : AbstractDockItem, IRightClickable
 	{
+		public event EventHandler RemoveClicked;
+		
 		static IEnumerable<String> DesktopFilesDirectories {
 			get {
 				return new string[] {
@@ -56,31 +58,6 @@ namespace Docky.Interface
 		Gdk.Rectangle icon_region;
 		
 		#region IDockItem implementation 
-		public override Surface GetIconSurface (Surface sr)
-		{
-			if (icon_surface == null) {
-				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-				Context cr = new Context (icon_surface);
-				
-				Gdk.Pixbuf pbuf = GetIcon ();
-				if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
-					double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
-					Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
-					pbuf.Dispose ();
-					pbuf = temp;
-				}
-				
-				Gdk.CairoHelper.SetSourcePixbuf (cr, 
-				                                 pbuf, 
-				                                 (int) ((DockPreferences.FullIconSize - pbuf.Width) / 2),
-				                                 (int) ((DockPreferences.FullIconSize - pbuf.Height) / 2));
-				cr.Paint ();
-				
-				pbuf.Dispose ();
-				(cr as IDisposable).Dispose ();
-			}
-			return icon_surface;
-		}
 		
 		public override Pixbuf GetDragPixbuf ()
 		{
@@ -96,7 +73,7 @@ namespace Docky.Interface
 		/// <returns>
 		/// A <see cref="Gdk.Pixbuf"/>
 		/// </returns>
-		Gdk.Pixbuf GetIcon ()
+		protected override Gdk.Pixbuf GetSurfacePixbuf ()
 		{
 			List<string> guesses = new List<string> ();
 			guesses.Add (application.Name.ToLower ().Replace (' ','-'));
@@ -214,16 +191,6 @@ namespace Docky.Interface
 		{
 			this.application = application;
 		}
-		
-		protected override void OnIconSizeChanged ()
-		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
-			
-			base.OnIconSizeChanged ();
-		}
 
 		
 		public override void Clicked (uint button)
@@ -242,21 +209,6 @@ namespace Docky.Interface
 				window.SetIconGeometry (region.X, region.Y, region.Width, region.Height);
 			}
 		}
-		
-		#region IDisposable implementation 
-		
-		public override void Dispose ()
-		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
-			
-			base.Dispose ();
-		}
-		
-		#endregion 
-		
 		
 		public override bool Equals (IDockItem other)
 		{

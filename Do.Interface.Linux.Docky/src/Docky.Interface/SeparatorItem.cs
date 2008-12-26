@@ -101,7 +101,6 @@ namespace Docky.Interface
 		
 		public void Clicked (uint button)
 		{
-			
 		}
 		
 		public void SetIconRegion (Gdk.Rectangle region)
