@@ -1047,6 +1047,8 @@ namespace Docky.Interface
 			
 			SetParentInputMask ();
 			AnimatedDraw ();
+			
+			GLib.Timeout.Add (500, () => { item_provider.ForceUpdate (); return false; });
 		}
 		
 		public void Reset ()
