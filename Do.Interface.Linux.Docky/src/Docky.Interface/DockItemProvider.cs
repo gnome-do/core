@@ -49,8 +49,9 @@ namespace Docky.Interface
 		public event DockItemsChangedHandler DockItemsChanged;
 		public event UpdateRequestHandler ItemNeedsUpdate;
 		
-		Dictionary<string, IDockItem> custom_items;
-		List<IDockItem> statistical_items, task_items;
+		Dictionary<string, DockItem> custom_items;
+		List<DockItem> statistical_items; 
+		List<ApplicationDockItem> task_items;
 		bool enable_serialization = true;
 		
 		string DesktopFilesPath {
@@ -63,15 +64,15 @@ namespace Docky.Interface
 			get {
 				List<IDockItem> out_items = new List<IDockItem> ();
 				out_items.Add (MenuItem);
-				out_items.AddRange (statistical_items);
+				out_items.AddRange (statistical_items.Cast<IDockItem> ());
 				
 				if (custom_items.Any ()) {
-					out_items.AddRange (custom_items.Values);
+					out_items.AddRange (custom_items.Values.Cast<IDockItem> ());
 				}
 				
 				out_items.Add (Separator);
 				if (task_items.Any ()) {
-					out_items.AddRange (task_items);
+					out_items.AddRange (task_items.Cast<IDockItem> ());
 				}
 				
 				out_items.Add (TrashItem);
@@ -89,9 +90,9 @@ namespace Docky.Interface
 			MenuItem = new DoDockItem ();
 			TrashItem = new TrashDockItem ();
 			
-			custom_items = new Dictionary<string, IDockItem> ();
-			statistical_items = new List<IDockItem> ();
-			task_items = new List<IDockItem> ();
+			custom_items = new Dictionary<string, DockItem> ();
+			statistical_items = new List<DockItem> ();
+			task_items = new List<ApplicationDockItem> ();
 			
 			
 			Wnck.Screen.Default.WindowClosed += delegate(object o, WindowClosedArgs args) {
@@ -187,13 +188,13 @@ namespace Docky.Interface
 		}
 		
 		public IconSource GetIconSource (IDockItem item) {
-			if (task_items.Contains (item))
+			if (item is ApplicationDockItem && task_items.Contains (item as ApplicationDockItem))
 				return IconSource.Application;
 			
-			if (statistical_items.Contains (item))
+			if (item is DockItem && statistical_items.Contains (item as DockItem))
 				return IconSource.Statistics;
 			
-			if (custom_items.Values.Contains (item))
+			if (item is DockItem && custom_items.Values.Contains (item as DockItem))
 				return IconSource.Custom;
 			
 			return IconSource.Unknown;
@@ -220,7 +221,7 @@ namespace Docky.Interface
 				UpdateItems ();
 				ret_val = true;
 			} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
-				foreach (KeyValuePair<string, IDockItem> kvp in custom_items) {
+				foreach (KeyValuePair<string, DockItem> kvp in custom_items) {
 					if (kvp.Value.Equals (DockItems [item])) {
 						custom_items.Remove (kvp.Key);
 						
@@ -251,17 +252,15 @@ namespace Docky.Interface
 		
 		void UpdateItems ()
 		{
-			List<IDockItem> new_items = new List<IDockItem> ();
+			List<DockItem> new_items = new List<DockItem> ();
 			IEnumerable<Item> mostUsedItems = MostUsedItems ();
 			
-			IEnumerable<DockItem> dock_items = statistical_items.Cast<DockItem> ();
-			
 			foreach (Item item in mostUsedItems) {
-				if (custom_items.Cast<DockItem> ().Any (di => di.Element == item))
+				if (custom_items.Values.Any (di => di.Element == item))
 					continue;
 				
-				if (dock_items.Any (di => di.Element == item)) {
-					new_items.Add (dock_items.Where (di => di.Element == item).First ());
+				if (statistical_items.Any (di => di.Element == item)) {
+					new_items.Add (statistical_items.Where (di => di.Element == item).First ());
 				} else {
 					DockItem di = new DockItem (item);
 					di.DockAddItem = DateTime.UtcNow;
@@ -269,7 +268,7 @@ namespace Docky.Interface
 				}
 			}
 			
-			foreach (DockItem item in dock_items.Where (di => !new_items.Contains (di))) {
+			foreach (DockItem item in statistical_items.Where (di => !new_items.Contains (di))) {
 				item.RemoveClicked -= HandleRemoveClicked;
 				item.UpdateNeeded -= HandleUpdateNeeded;
 				item.Dispose ();
@@ -300,15 +299,13 @@ namespace Docky.Interface
 		
 		void UpdateWindowItems ()
 		{
-			foreach (IDockItem di in statistical_items.Concat (custom_items.Values)) {
-				if (!(di is DockItem))
-					continue;
-				(di as DockItem).UpdateApplication ();
+			foreach (DockItem di in statistical_items.Concat (custom_items.Values)) {
+				di.UpdateApplication ();
 			}
 			
 			if (Wnck.Screen.Default.ActiveWorkspace == null)
 				return;
-			List<IDockItem> out_items = new List<IDockItem> ();
+			List<ApplicationDockItem> out_items = new List<ApplicationDockItem> ();
 			
 			foreach (Wnck.Application app in WindowUtils.GetApplications ()) {
 				bool good = false;
@@ -319,10 +316,10 @@ namespace Docky.Interface
 				}
 				
 				// Anything we already have, we dont need additional copies of
-				foreach (IDockItem di in statistical_items.Concat (custom_items.Values)) {
-					if (!(di is DockItem) || (di as DockItem).Apps.Count () == 0)
+				foreach (DockItem di in statistical_items.Concat (custom_items.Values)) {
+					if (di.Apps.Count () == 0)
 						continue;
-					if ((di as DockItem).Pids.Contains (app.Pid)) {
+					if (di.Pids.Contains (app.Pid)) {
 						//we found a match already, mark as not good
 						good = false;
 						break;
