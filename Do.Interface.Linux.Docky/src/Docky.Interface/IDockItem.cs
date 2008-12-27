@@ -62,6 +62,22 @@ namespace Docky.Interface
 		DateTime DockAddItem { get; set; }
 		
 		/// <summary>
+		/// Determines if an item is currently accepting drops
+		/// </summary>
+		bool IsAcceptingDrops { get; }
+		
+		/// <summary>
+		/// Recieves an item
+		/// </summary>
+		/// <param name="item">
+		/// A <see cref="System.String"/> representing the URI of the item dropped
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/> indicating if item could be handled or not.
+		/// </returns>
+		bool ReceiveItem (string item);
+		
+		/// <summary>
 		/// Returns the surface of the icon
 		/// </summary>
 		/// <param name="similar">

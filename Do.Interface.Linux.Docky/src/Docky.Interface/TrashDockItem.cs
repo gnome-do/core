@@ -33,7 +33,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class TrashDockItem :  AbstractDockItem, IDockDragAwareItem
+	public class TrashDockItem :  AbstractDockItem
 	{
 		
 		string Trash {
@@ -42,7 +42,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public bool IsAcceptingDrops {
+		public override bool IsAcceptingDrops {
 			get { return true; }
 		}
 		
@@ -59,7 +59,7 @@ namespace Docky.Interface
 
 		#region IDockDragAwareItem implementation 
 		
-		public bool ReceiveItem (string item)
+		public override bool ReceiveItem (string item)
 		{
 			bool trashHadFiles = Directory.GetFiles (Trash).Any ();
 			

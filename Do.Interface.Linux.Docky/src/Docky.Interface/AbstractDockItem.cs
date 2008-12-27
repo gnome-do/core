@@ -37,6 +37,13 @@ namespace Docky.Interface
 		Surface text_surface, icon_surface;
 		#region IDockItem implementation 
 		
+		public virtual bool IsAcceptingDrops { get { return false; } }
+		
+		public virtual bool ReceiveItem (string item) 
+		{
+			return false;
+		}
+		
 		public virtual Surface GetIconSurface (Surface similar)
 		{
 			if (icon_surface == null) {

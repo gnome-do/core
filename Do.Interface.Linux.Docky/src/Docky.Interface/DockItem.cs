@@ -38,21 +38,23 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItem : AbstractDockItem, IRightClickable, IDockAppItem, IDockDragAwareItem
+	public class DockItem : AbstractDockItem, IRightClickable, IDockAppItem
 	{
 		Element element;
 		Surface icon_surface;
 		List<Wnck.Application> apps;
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
-		bool needs_attention;
+		bool needs_attention, accepting_drops;
 		uint handle_timer = 0;
 		
 		public event EventHandler RemoveClicked;
 		
 		public event UpdateRequestHandler UpdateNeeded;
 		
-		public bool IsAcceptingDrops { get; private set; }
+		public override bool IsAcceptingDrops { 
+			get { return accepting_drops; } 
+		}
 		
 		public string Icon { 
 			get { return element.Icon; } 
@@ -120,14 +122,14 @@ namespace Docky.Interface
 			UpdateApplication ();
 			NeedsAttention = DetermineAttentionStatus ();
 			
-			IsAcceptingDrops = false;
+			accepting_drops = false;
 			if (element is IFileItem) {
 				if (System.IO.Directory.Exists ((element as IFileItem).Path))
-					IsAcceptingDrops = true;
+					accepting_drops = true;
 			}
 		}
 		
-		public bool ReceiveItem (string item)
+		public override bool ReceiveItem (string item)
 		{
 			if (!IsAcceptingDrops)
 				return false;

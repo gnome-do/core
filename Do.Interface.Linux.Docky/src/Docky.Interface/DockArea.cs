@@ -667,10 +667,10 @@ namespace Docky.Interface
 				// the icon, not move it around.
 				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), x / scale, y / scale);
 				cr.Paint ();
-				if (GtkDragging && icon == DockItemForX (Cursor.X) && 
-				    DockItems [icon] is IDockDragAwareItem && (DockItems [icon] as IDockDragAwareItem).IsAcceptingDrops) {
+				
+				if (GtkDragging && DockItems [icon].IsAcceptingDrops && icon == DockItemForX (Cursor.X)) {
 					cr.Rectangle (x / scale, y / scale, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-					cr.Color = new Cairo.Color (1, 1, 1, .5);
+					cr.Color = new Cairo.Color (.8, .85, 1, .5);
 					cr.Operator = Operator.Atop;
 					cr.Fill ();
 					cr.Operator = Operator.Over;
@@ -891,9 +891,9 @@ namespace Docky.Interface
 			data = data.TrimEnd ('\0'); 
 			
 			string [] uriList = Regex.Split (data, "\r\n");
-			if (CurrentDockItem is IDockDragAwareItem && (CurrentDockItem as IDockDragAwareItem).IsAcceptingDrops) {
+			if (CurrentDockItem.IsAcceptingDrops) {
 				uriList.Where (uri => uri.StartsWith ("file://"))
-					.ForEach (uri => (CurrentDockItem as IDockDragAwareItem).ReceiveItem (uri.Substring (7)));
+					.ForEach (uri => CurrentDockItem.ReceiveItem (uri.Substring (7)));
 			} else {
 				uriList.Where (uri => uri.StartsWith ("file://"))
 					.ForEach (uri => item_provider.AddCustomItem (uri.Substring (7)));

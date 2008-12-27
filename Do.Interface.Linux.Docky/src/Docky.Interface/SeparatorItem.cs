@@ -81,6 +81,10 @@ namespace Docky.Interface
 			}
 		}
 		
+		public bool IsAcceptingDrops {
+			get { return false; }
+		}
+		
 		public int WindowCount { get { return 0; } }
 		
 		public bool Scalable { get { return false; } }
@@ -97,6 +101,11 @@ namespace Docky.Interface
 					sr.Destroy ();
 				sr = null;
 			};
+		}
+		
+		public bool ReceiveItem (string item)
+		{
+			return false;
 		}
 		
 		public void Clicked (uint button)
