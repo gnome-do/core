@@ -138,7 +138,7 @@ namespace Docky.Interface
 			if (identifier.StartsWith ("file://"))
 				identifier = identifier.Substring ("file://".Length);
 			
-			if (File.Exists (identifier)) {
+			if (File.Exists (identifier) || Directory.Exists (identifier)) {
 				if (identifier.EndsWith (".desktop")) {
 					Element o = Services.UniverseFactory.NewApplicationItem (identifier) as Element;
 					custom_items [identifier] = new DockItem (o);
