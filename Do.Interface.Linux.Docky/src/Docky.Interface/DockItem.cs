@@ -332,8 +332,10 @@ namespace Docky.Interface
 				Act internal_act = act;
 				outList.Add (new MenuArgs ((o, a) => Launch (internal_act), internal_act.Name, internal_act.Icon, true));
 			}
-			outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown, hasApps));
-			outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit, hasApps));
+			if (hasApps) {
+				outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown, true));
+				outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit, true));
+			}
 			outList.Add (new MenuArgs (OnRemoveClicked, "Remove From Dock", Gtk.Stock.Remove, true));
 			
 			return outList;
