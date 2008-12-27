@@ -252,43 +252,28 @@ namespace Docky.Interface
 		void UpdateItems ()
 		{
 			List<IDockItem> new_items = new List<IDockItem> ();
-			foreach (Item item in MostUsedItems ()) {
-				// this check should be redundant
-				if (DockPreferences.ItemBlacklist.Contains (item.UniqueId))
+			IEnumerable<Item> mostUsedItems = MostUsedItems ();
+			
+			IEnumerable<DockItem> dock_items = statistical_items.Cast<DockItem> ();
+			
+			foreach (Item item in mostUsedItems) {
+				if (custom_items.Cast<DockItem> ().Any (di => di.Element == item))
 					continue;
-				IDockItem di = new DockItem (item);
 				
-				// we dont want redundant things showing up on the dock
-				if (custom_items.Values.Contains (di)) {
-					di.Dispose ();
-					continue;
-				}
-				new_items.Add (di);
-				(di as IRightClickable).RemoveClicked += HandleRemoveClicked;
-				(di as DockItem).UpdateNeeded += HandleUpdateNeeded;
-				
-				bool is_set = false;
-				foreach (IDockItem ditem in statistical_items) {
-					if (ditem.Equals (di)) {
-						di.DockAddItem = ditem.DockAddItem;
-						is_set = true;
-						break;
-					}
-				}
-				if (!is_set)
+				if (dock_items.Any (di => di.Element == item)) {
+					new_items.Add (dock_items.Where (di => di.Element == item).First ());
+				} else {
+					DockItem di = new DockItem (item);
 					di.DockAddItem = DateTime.UtcNow;
+					new_items.Add (di);
+				}
 			}
 			
-			foreach (IDockItem dock_item in statistical_items) {
-				if (dock_item is IRightClickable)
-					(dock_item as IRightClickable).RemoveClicked -= HandleRemoveClicked;
-				
-				if (dock_item is DockItem)
-					(dock_item as DockItem).UpdateNeeded -= HandleUpdateNeeded;	
-				
-				dock_item.Dispose ();
+			foreach (DockItem item in dock_items.Where (di => !new_items.Contains (di))) {
+				item.RemoveClicked -= HandleRemoveClicked;
+				item.UpdateNeeded -= HandleUpdateNeeded;
+				item.Dispose ();
 			}
-			statistical_items.Clear ();
 			
 			statistical_items = new_items;
 			UpdateWindowItems ();

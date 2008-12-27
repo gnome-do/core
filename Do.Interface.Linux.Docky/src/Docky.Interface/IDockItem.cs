@@ -31,6 +31,7 @@ namespace Docky.Interface
 	public interface IDockItem : IEquatable<IDockItem>, IDisposable
 	{
 		string Description { get; }
+		
 		int Width { get; }
 		
 		/// <value>
