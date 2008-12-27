@@ -885,13 +885,15 @@ namespace Docky.Interface
 		protected override void OnDragDataReceived (Gdk.DragContext context, int x, int y, Gtk.SelectionData selectionData, 
 		                                            uint info, uint time)
 		{
+			if (!CursorIsOverDockArea) return;
+			
 			string data = System.Text.Encoding.UTF8.GetString ( selectionData.Data );
 			data = System.Uri.UnescapeDataString (data);
 			//sometimes we get a null at the end, and it crashes us
 			data = data.TrimEnd ('\0'); 
 			
 			string [] uriList = Regex.Split (data, "\r\n");
-			if (CurrentDockItem.IsAcceptingDrops) {
+			if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops) {
 				uriList.Where (uri => uri.StartsWith ("file://"))
 					.ForEach (uri => CurrentDockItem.ReceiveItem (uri.Substring (7)));
 			} else {
