@@ -24,6 +24,11 @@ namespace Docky.Interface
 	public interface IDockDragAwareItem
 	{
 		/// <summary>
+		/// Determines if an item is currently accepting drops
+		/// </summary>
+		bool IsAcceptingDrops { get; }
+		
+		/// <summary>
 		/// Recieves an item
 		/// </summary>
 		/// <param name="item">

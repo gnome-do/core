@@ -148,6 +148,8 @@ namespace Docky.Interface
 		
 		public new DockState State { get; set; }
 		
+		bool GtkDragging { get; set; }
+		
 		SummonModeRenderer SummonRenderer { get; set; }
 		
 		IDockItem [] DockItems { 
@@ -665,6 +667,15 @@ namespace Docky.Interface
 				// the icon, not move it around.
 				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), x / scale, y / scale);
 				cr.Paint ();
+				if (GtkDragging && icon == DockItemForX (Cursor.X) && 
+				    DockItems [icon] is IDockDragAwareItem && (DockItems [icon] as IDockDragAwareItem).IsAcceptingDrops) {
+					cr.Rectangle (x / scale, y / scale, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
+					cr.Color = new Cairo.Color (1, 1, 1, .5);
+					cr.Operator = Operator.Atop;
+					cr.Fill ();
+					cr.Operator = Operator.Over;
+				}
+				
 				if (draw_urgency) {
 					cr.SetSource (GetUrgentSurface (cr), x / scale, y / scale);
 					cr.PaintWithAlpha (.8);
@@ -860,9 +871,12 @@ namespace Docky.Interface
 		}
 		
 		#region Drag Code
+
 		
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{
+			GtkDragging = true;
+			
 			Cursor = new Gdk.Point (x, y);
 			AnimatedDraw ();
 			return base.OnDragMotion (context, x, y, time);
@@ -877,7 +891,7 @@ namespace Docky.Interface
 			data = data.TrimEnd ('\0'); 
 			
 			string [] uriList = Regex.Split (data, "\r\n");
-			if (CurrentDockItem is IDockDragAwareItem) {
+			if (CurrentDockItem is IDockDragAwareItem && (CurrentDockItem as IDockDragAwareItem).IsAcceptingDrops) {
 				uriList.Where (uri => uri.StartsWith ("file://"))
 					.ForEach (uri => (CurrentDockItem as IDockDragAwareItem).ReceiveItem (uri.Substring (7)));
 			} else {
@@ -939,6 +953,8 @@ namespace Docky.Interface
 		
 		protected override bool OnMotionNotifyEvent(EventMotion evnt)
 		{
+			GtkDragging = false;
+			
 			bool cursorIsOverDockArea = CursorIsOverDockArea;
 			bool cursorNearDraggableEdge = CursorNearDraggableEdge;
 			

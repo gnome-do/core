@@ -42,6 +42,10 @@ namespace Docky.Interface
 			}
 		}
 		
+		public bool IsAcceptingDrops {
+			get { return true; }
+		}
+		
 		public TrashDockItem()
 		{
 		}

@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Gdk;
@@ -37,7 +38,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItem : AbstractDockItem, IRightClickable, IDockAppItem
+	public class DockItem : AbstractDockItem, IRightClickable, IDockAppItem, IDockDragAwareItem
 	{
 		Element element;
 		Surface icon_surface;
@@ -50,6 +51,8 @@ namespace Docky.Interface
 		public event EventHandler RemoveClicked;
 		
 		public event UpdateRequestHandler UpdateNeeded;
+		
+		public bool IsAcceptingDrops { get; private set; }
 		
 		public string Icon { 
 			get { return element.Icon; } 
@@ -116,6 +119,34 @@ namespace Docky.Interface
 			AttentionRequestStartTime = DateTime.UtcNow;
 			UpdateApplication ();
 			NeedsAttention = DetermineAttentionStatus ();
+			
+			IsAcceptingDrops = false;
+			if (element is IFileItem) {
+				if (System.IO.Directory.Exists ((element as IFileItem).Path))
+					IsAcceptingDrops = true;
+			}
+		}
+		
+		public bool ReceiveItem (string item)
+		{
+			if (!IsAcceptingDrops)
+				return false;
+			
+			if (item.StartsWith ("file://"))
+				item = item.Substring ("file://".Length);
+			
+			if (File.Exists (item)) {
+				try {
+					File.Move (item, System.IO.Path.Combine ((Element as IFileItem).Path, System.IO.Path.GetFileName (item)));
+				} catch { return false; }
+				return true;
+			} else if (Directory.Exists (item)) {
+				try {
+					Directory.Move (item, System.IO.Path.Combine ((Element as IFileItem).Path, System.IO.Path.GetFileName (item)));
+				} catch { return false; }
+				return true;
+			}
+			return false;
 		}
 		
 		public void UpdateApplication ()
