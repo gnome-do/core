@@ -53,6 +53,7 @@ namespace Docky.Interface
 		List<DockItem> statistical_items; 
 		List<ApplicationDockItem> task_items;
 		bool enable_serialization = true;
+		bool custom_items_read = false;
 		
 		string DesktopFilesPath {
 			get {
@@ -60,15 +61,13 @@ namespace Docky.Interface
 			}
 		}
 		
+		public bool UpdatesEnabled { get; set; }
+		
 		public List<IDockItem> DockItems {
 			get {
 				List<IDockItem> out_items = new List<IDockItem> ();
 				out_items.Add (MenuItem);
-				out_items.AddRange (statistical_items.Cast<IDockItem> ());
-				
-				if (custom_items.Any ()) {
-					out_items.AddRange (custom_items.Values.Cast<IDockItem> ());
-				}
+				out_items.AddRange (DragableItems.Cast<IDockItem> ());
 				
 				out_items.Add (Separator);
 				if (task_items.Any ()) {
@@ -78,6 +77,10 @@ namespace Docky.Interface
 				out_items.Add (TrashItem);
 				return out_items;
 			}
+		}
+		
+		IEnumerable<DockItem> DragableItems {
+			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
 		}
 		
 		IDockItem Separator { get; set; }
@@ -108,11 +111,7 @@ namespace Docky.Interface
 			// We give core 3 seconds to update its universe.  Eventually we will need a signal or something,
 			// but for now this works.
 			GLib.Timeout.Add (3000, delegate {
-				enable_serialization = false;
-				foreach (string s in DeserializeCustomItems ())
-					AddCustomItem (s);
-				enable_serialization = true;
-				
+				UpdatesEnabled = true;
 				UpdateItems ();
 				return false;
 			});
@@ -136,32 +135,43 @@ namespace Docky.Interface
 		
 		public void AddCustomItem (string identifier)
 		{
+			DockItem customItem = GetCustomItem (identifier);
+			
+			if (customItem != null) {
+				customItem.RemoveClicked += HandleRemoveClicked;
+				customItem.UpdateNeeded += HandleUpdateNeeded;
+				customItem.Position = DragableItems.Count ();
+				custom_items [identifier] = customItem;
+			}
+			
+			
+			if (enable_serialization)
+				SerializeCustomItems ();
+		}
+		
+		DockItem GetCustomItem (string identifier)
+		{
+			DockItem customItem = null;
+			
 			if (identifier.StartsWith ("file://"))
 				identifier = identifier.Substring ("file://".Length);
 			
 			if (File.Exists (identifier) || Directory.Exists (identifier)) {
 				if (identifier.EndsWith (".desktop")) {
 					Element o = Services.UniverseFactory.NewApplicationItem (identifier) as Element;
-					custom_items [identifier] = new DockItem (o);
+					customItem = new DockItem (o);
 				} else {
 					Element o = Services.UniverseFactory.NewFileItem (identifier) as Element;
-					custom_items [identifier] = new DockItem (o);
+					customItem = new DockItem (o);
 				}
 			} else {
 				Element e = Services.Core.GetElement (identifier);
 				if (e != null)
-					custom_items [identifier] = new DockItem (e);
+					customItem = new DockItem (e);
 				else
 					Log.Error ("Could not add custom item with id: {0}", identifier);
 			}
-			if (custom_items.ContainsKey (identifier) && custom_items [identifier] is DockItem) {
-				(custom_items [identifier] as IRightClickable).RemoveClicked += HandleRemoveClicked;
-				(custom_items [identifier] as DockItem).UpdateNeeded += HandleUpdateNeeded;
-			}
-			
-			
-			if (enable_serialization)
-				SerializeCustomItems ();
+			return customItem;
 		}
 		
 		string[] DeserializeCustomItems ()
@@ -180,6 +190,65 @@ namespace Docky.Interface
 				filenames = new string[0];
 			}
 			return filenames;
+		}
+		
+		public void SwapItemPositions (int item1, int item2)
+		{
+			if (item1 == item2)
+				return;
+			
+			IconSource iconSource1 = GetIconSource (DockItems [item1]);
+			IconSource iconSource2 = GetIconSource (DockItems [item2]);
+			
+			if ((iconSource1 == IconSource.Custom || iconSource1 == IconSource.Statistics) &&
+			    (iconSource2 == IconSource.Custom || iconSource2 == IconSource.Statistics)) {
+				DockItem di1 = DockItems [item1] as DockItem;
+				DockItem di2 = DockItems [item2] as DockItem;
+				int tmp = di1.Position;
+				di1.Position = di2.Position;
+				di2.Position = tmp;
+			}
+			
+			DockItemsChanged (DockItems);
+		}
+		
+		public void MoveItemToPosition (int item, int position)
+		{
+			if (item == position)
+				return;
+			
+			IconSource itemSource = GetIconSource (DockItems [item]);
+			IconSource targetSource = GetIconSource (DockItems [position]);
+			
+			if (itemSource == IconSource.Application || 
+			    itemSource == IconSource.Unknown ||
+			    targetSource == IconSource.Application ||
+			    targetSource == IconSource.Unknown)
+				return;
+			
+			DockItem primaryItem = DockItems [item] as DockItem;
+			DockItem targetItem = DockItems [position] as DockItem;
+			
+			int startPosition = primaryItem.Position;
+			int targetPosition = targetItem.Position;
+			
+			foreach (DockItem di in DragableItems) {
+				if (startPosition < targetPosition) {
+					// the item is being shifted to the right.  Everything greater than item up to and including target item
+					// needs to be shifted to the left
+					if (di.Position > startPosition && di.Position <= targetPosition)
+						di.Position--;
+				} else {
+					// the item is being shifted to the left.  Everthing less than the item and up to and including target item
+					// needs to be shifted to the right
+					if (di.Position < startPosition && di.Position >= targetPosition)
+						di.Position++;
+				}
+			}
+			
+			primaryItem.Position = targetPosition;
+			
+			DockItemsChanged (DockItems);
 		}
 		
 		public void ForceUpdate ()
@@ -204,7 +273,7 @@ namespace Docky.Interface
 		{
 			return Services.Core
 				.GetItemsOrderedByRelevance ()
-				.Where (item => item.GetType ().Name != "SelectedTextItem")
+				.Where (item => item.GetType ().Name != "SelectedTextItem" && item.GetType ().Name != "GNOMETrashFileItem")
 				.Where (item => !DockPreferences.ItemBlacklist.Contains (item.UniqueId))
 				.Take (DockPreferences.AutomaticIcons)
 				.OrderByDescending (item => item is IApplicationItem)
@@ -252,29 +321,43 @@ namespace Docky.Interface
 		
 		void UpdateItems ()
 		{
-			List<DockItem> new_items = new List<DockItem> ();
+			if (!UpdatesEnabled)
+				return;
+			
+			List<DockItem> old_items = statistical_items;
+			statistical_items = new List<DockItem> ();
+			
 			IEnumerable<Item> mostUsedItems = MostUsedItems ();
 			
 			foreach (Item item in mostUsedItems) {
 				if (custom_items.Values.Any (di => di.Element == item))
 					continue;
 				
-				if (statistical_items.Any (di => di.Element == item)) {
-					new_items.Add (statistical_items.Where (di => di.Element == item).First ());
+				if (old_items.Any (di => di.Element == item)) {
+					statistical_items.AddRange (old_items.Where (di => di.Element == item));
 				} else {
 					DockItem di = new DockItem (item);
 					di.DockAddItem = DateTime.UtcNow;
-					new_items.Add (di);
+					di.Position = DragableItems.Count ();
+					statistical_items.Add (di);
 				}
 			}
 			
-			foreach (DockItem item in statistical_items.Where (di => !new_items.Contains (di))) {
+			foreach (DockItem item in  old_items.Where (di => !statistical_items.Contains (di))) {
 				item.RemoveClicked -= HandleRemoveClicked;
 				item.UpdateNeeded -= HandleUpdateNeeded;
 				item.Dispose ();
 			}
 			
-			statistical_items = new_items;
+			if (!custom_items_read) {
+				enable_serialization = false;
+				foreach (string s in DeserializeCustomItems ())
+					AddCustomItem (s);
+				enable_serialization = true;
+				
+				custom_items_read = true;
+			}
+			
 			UpdateWindowItems ();
 			if (DockItemsChanged != null)
 				DockItemsChanged (DockItems);

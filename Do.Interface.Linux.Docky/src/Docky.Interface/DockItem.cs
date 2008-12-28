@@ -81,6 +81,8 @@ namespace Docky.Interface
 				return Apps.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ());
 			}
 		}
+		
+		public int Position { get; set; }
 
 		public bool NeedsAttention { 
 			get { return needs_attention; } 
@@ -115,6 +117,7 @@ namespace Docky.Interface
 		
 		public DockItem (Element element) : base ()
 		{
+			Position = -1;
 			apps =  new List<Wnck.Application> ();
 			this.element = element;
 			

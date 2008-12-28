@@ -150,6 +150,8 @@ namespace Docky.Interface
 		
 		bool GtkDragging { get; set; }
 		
+		bool FullRenderFlag { get; set; }
+		
 		SummonModeRenderer SummonRenderer { get; set; }
 		
 		IDockItem [] DockItems { 
@@ -453,6 +455,7 @@ namespace Docky.Interface
 
 		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)
 		{
+			FullRenderFlag = true;
 			AnimatedDraw ();
 		}
 		
@@ -552,7 +555,8 @@ namespace Docky.Interface
 				 previous_item_count == DockItems.Length && 
 				 !iconAnimationNeeded &&
 				 !previous_icon_animation_needed &&
-				 !drag_resizing;
+				 !drag_resizing &&
+				 !FullRenderFlag;
 			
 			if (fast_render) {
 				do {
@@ -598,6 +602,7 @@ namespace Docky.Interface
 						DrawIcon (cr, i);
 				} while (false);
 			} else {
+				FullRenderFlag = false;
 				// less code, twice as slow...
 				cr.AlphaFill ();
 				for (int i=0; i<DockItems.Length; i++)
@@ -829,6 +834,7 @@ namespace Docky.Interface
 		
 		void OnDockItemsChanged (IEnumerable<IDockItem> items)
 		{
+			FullRenderFlag = true;
 			SetIconRegions ();
 			AnimatedDraw ();
 		}
@@ -916,8 +922,11 @@ namespace Docky.Interface
 		
 		protected override void OnDragEnd (Gdk.DragContext context)
 		{
-			if (context.DestWindow != window.GdkWindow || !CursorIsOverDockArea)
+			if (context.DestWindow != window.GdkWindow || !CursorIsOverDockArea) {
 				item_provider.RemoveItem (DockItemForX (remove_drag_start_x));
+			} else if (CursorIsOverDockArea) {
+				item_provider.MoveItemToPosition (DockItemForX (remove_drag_start_x), DockItemForX (Cursor.X));
+			}
 			base.OnDragEnd (context);
 		}
 
