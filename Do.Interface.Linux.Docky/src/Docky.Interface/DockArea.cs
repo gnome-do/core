@@ -692,7 +692,7 @@ namespace Docky.Interface
 		
 		void DrawGlowIndicator (Context cr, int x, int y, bool urgent)
 		{
-			int size = urgent ? 5 : 4;
+			int size = urgent ? 9 : 4;
 			cr.MoveTo (x, y);
 			cr.Arc (x, y, size, 0, Math.PI * 2);
 			
