@@ -699,14 +699,9 @@ namespace Docky.Interface
 			RadialGradient rg = new RadialGradient (x, y, 0, x, y, size);
 			rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
 			if (urgent) {
-//				rg.AddColorStop (.05, new Cairo.Color (1, .3, .3, 1));
-//				rg.AddColorStop (.15, new Cairo.Color (1, .3, .3, .6));
-//				rg.AddColorStop (.25, new Cairo.Color (1, .3, .3, .25));
-//				rg.AddColorStop (.5, new Cairo.Color (1, .3, .3, .15));
-//				rg.AddColorStop (1, new Cairo.Color (1, .3, .3, 0));
 				rg.AddColorStop (.1, new Cairo.Color (1, .8, .8, 1));
-				rg.AddColorStop (.2, new Cairo.Color (1, .3, .3, .6));
-				rg.AddColorStop (.25, new Cairo.Color (1, .3, .3, .35));
+				rg.AddColorStop (.2, new Cairo.Color (1, .6, .6, .6));
+				rg.AddColorStop (.35, new Cairo.Color (1, .3, .3, .35));
 				rg.AddColorStop (.5, new Cairo.Color (1, .3, .3, .25));
 				rg.AddColorStop (1, new Cairo.Color (1, .3, .3, 0));
 			} else {
