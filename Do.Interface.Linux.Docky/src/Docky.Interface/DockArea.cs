@@ -77,7 +77,7 @@ namespace Docky.Interface
 		
 		DockWindow window;
 		DockItemProvider item_provider;
-		Surface backbuffer, input_area_buffer, dock_icon_buffer, urgent_buffer;
+		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		DockItemMenu dock_item_menu;
 		#endregion
 		
