@@ -662,11 +662,6 @@ namespace Docky.Interface
 					cr.Fill ();
 					cr.Operator = Operator.Over;
 				}
-				
-//				if (draw_urgency) {
-//					cr.SetSource (GetUrgentSurface (cr), x / scale, y / scale);
-//					cr.PaintWithAlpha (.8);
-//				}
 				cr.Scale (1 / scale, 1 / scale);
 			} else {
 				// since these dont scale, we have some extra work to do to keep them centered
@@ -693,24 +688,6 @@ namespace Docky.Interface
 				cr.SetSource (DockItems [icon].GetTextSurface (cr.Target), textx, texty);
 				cr.Paint ();
 			}
-		}
-		
-		Surface GetUrgentSurface (Context cr)
-		{
-			if (urgent_buffer == null) {
-				double scale = .75;
-				int size = (int) (DockPreferences.FullIconSize * scale);
-				urgent_buffer = cr.Target.CreateSimilar (cr.Target.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-				using (cr = new Context (urgent_buffer)) {
-					cr.AlphaFill ();
-					Pixbuf pbuf = IconProvider.PixbufFromIconName ("emblem-important", size);
-					CairoHelper.SetSourcePixbuf (cr, pbuf, DockPreferences.FullIconSize * (1 - scale) / 2, 
-					                             DockPreferences.FullIconSize * (1 - scale) / 2);
-					cr.Paint ();
-					pbuf.Dispose ();
-				}
-			}
-			return urgent_buffer;
 		}
 		
 		void DrawGlowIndicator (Context cr, int x, int y, bool urgent)
