@@ -55,8 +55,6 @@ namespace Do {
 				Log.DisplayLevel = LogLevel.Error;
 			else
 				Log.DisplayLevel = LogLevel.Info;
-			
-			Util.Initialize ();
 
 			try {
 				Util.SetProcessName ("gnome-do");

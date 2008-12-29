@@ -19,111 +19,50 @@
 
 using System;
 using System.Text;
-using System.Threading;
-using System.Diagnostics;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using Do.UI;
-using Do.Core;
-using Do.Universe;
-
-using Gdk;
-using Mono.Unix;
+using Mono.Unix.Native;
 
 namespace Do
 {
 
 	public static class Util
 	{
-
-		public static void Initialize ()
-		{
-			// Misc
-			Interface.Util.FormatCommonSubstrings = FormatCommonSubstrings;
-
-			// Appearance utilities			
-			Interface.Util.Appearance.MarkupSafeString = Appearance.MarkupSafeString;
-		}
 		
-		public class Appearance
-		{			
-
-			public static string MarkupSafeString (string s)
-			{
-				if (s == null) return "";
-				return GLib.Markup.EscapeText (s);
-			}
-
-		}
-
-		public static string FormatCommonSubstrings (string main, string other, string format)
-		{
-			int pos, len, match_pos, last_main_cut;
-			string lower_main, result;
-			string skipped, matched, remainder;
-			bool matchedTermination;
-
-			result = "";
-			match_pos = last_main_cut = 0;
-			lower_main = main.ToLower ();
-			other = other.ToLower ();
-
-			for (pos = 0; pos < other.Length; ++pos) {
-				matchedTermination = false;
-				for (len = 1; len <= other.Length - pos; ++len) {
-					int tmp_match_pos = lower_main.IndexOf (other.Substring (pos, len));
-					if (tmp_match_pos < 0) {
-						len--;
-						matchedTermination = false;
-						break;
-					} else {
-						matchedTermination = true;
-						match_pos = tmp_match_pos;
-					}
-				}
-				if (matchedTermination) {
-					len--;
-				}
-				if (0 < len) {
-					 //Theres a match starting at match_pos with positive length
-					skipped = main.Substring (last_main_cut, match_pos - last_main_cut);
-					matched = main.Substring (match_pos, len);
-					if ( skipped.Length + matched.Length < main.Length) {
-						remainder = FormatCommonSubstrings ( main.Substring (match_pos + len), other.Substring (pos + len), format);
-					}
-					else {
-						remainder = "";
-					}
-					result = string.Format ("{0}{1}{2}", skipped, string.Format(format, matched), remainder);
-					break;
-				}
-			}
-			if (result == "") {
-				// no matches
-				result = main;
-			}
-			return result;
-		}
-
 		[DllImport ("libc")] // Linux
-		private static extern int prctl (int option, byte [] arg2, IntPtr arg3,
-		                                 IntPtr arg4, IntPtr arg5);
+		private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
+		
+		private static int prctl (int option, byte [] arg2)
+		{
+			return prctl (option, arg2, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+		}
+
+		private static int prctl (int option, string arg2)
+		{
+			return prctl (option, Encoding.ASCII.GetBytes (arg2 + "\0"));
+		}
 
 		[DllImport ("libc")] // BSD
-		private static extern void setproctitle (byte [] fmt, byte [] str_arg);
+		private static extern void setproctitle (byte [] fmt, byte [] name);
+
+		private static void setproctitle (string fmt, string name)
+		{
+			setproctitle (Encoding.ASCII.GetBytes (fmt + "\0"), Encoding.ASCII.GetBytes (name + "\0"));
+		}
+
+		private static void setproctitle (string name)
+		{
+			setproctitle ("%s", name);
+		}
 
 		public static void SetProcessName (string name)
 		{
 			try {
-				if (prctl (15 /* PR_SET_NAME */, Encoding.ASCII.GetBytes (name + "\0"),
-					IntPtr.Zero, IntPtr.Zero, IntPtr.Zero) != 0) {
-					throw new ApplicationException ("Error setting process name: " +
-						Mono.Unix.Native.Stdlib.GetLastError ());
+				if (prctl (15 /* PR_SET_NAME */, name) != 0) {
+					throw new ApplicationException ("Error setting process name: " + Stdlib.GetLastError ());
 				}
 			} catch (EntryPointNotFoundException) {
-				setproctitle (Encoding.ASCII.GetBytes ("%s\0"),
-					Encoding.ASCII.GetBytes (name + "\0"));
+				setproctitle (name);
 			}
 		}
 	}
