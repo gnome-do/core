@@ -87,9 +87,11 @@ namespace Do.Universe.Common
 
 			recipients = items
 				.Select (item => {
-					if (item is ContactItem)
-						return (item as ContactItem).Details.FirstOrDefault (d => d.StartsWith ("email"));
-					else if (item is IContactDetailItem)
+					if (item is ContactItem) {
+						ContactItem contact = item as ContactItem;
+						string emailKey = contact.Details.FirstOrDefault (d => d.StartsWith ("email"));
+						return contact [emailKey];
+					} else if (item is IContactDetailItem)
 						return (item as IContactDetailItem).Value;
 					else if (item is ITextItem)
 						return (item as ITextItem).Text;
@@ -97,13 +99,13 @@ namespace Do.Universe.Common
 				})
 				.Where (email => !string.IsNullOrEmpty (email));
 
-			texts = modItems.Where (item => item is ITextItem).Select (item => (item as ITextItem).Text);
-			files = modItems.Where (item => item is IFileItem).Select (item => (item as IFileItem).Path);
+			texts = modItems.OfType<ITextItem> ().Select (item => item.Text);
+			files = modItems.OfType<IFileItem> ().Select (item => item.Path);
 			subject = texts.FirstOrDefault () ?? "";
 			body = texts.Aggregate ("", (a, b) => a + "\n\n" + b);
 
 			Services.Environment.OpenEmail (recipients, subject, body, files); 
-			return null;
+			yield break;
 		}
 	}
 }
