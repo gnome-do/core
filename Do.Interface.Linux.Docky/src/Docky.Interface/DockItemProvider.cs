@@ -23,6 +23,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
+using Do;
 using Do.Interface;
 using Do.Universe;
 using Do.Platform;
@@ -259,6 +260,22 @@ namespace Docky.Interface
 			return IconSource.Unknown;
 		}
 		
+		void HandleUpdateNeeded(object sender, UpdateRequestArgs args)
+		{
+			if (ItemNeedsUpdate != null)
+				ItemNeedsUpdate (this, args);
+		}
+
+		void HandleRemoveClicked(object sender, EventArgs e)
+		{
+			for (int i=0; i<DockItems.Count; i++) {
+				if (DockItems [i] == sender) {
+					RemoveItem (i);
+					break;
+				}
+			}
+		}
+		
 		IEnumerable<Item> MostUsedItems ()
 		{
 			return Services.Core
@@ -406,6 +423,8 @@ namespace Docky.Interface
 					if (sortDictionary.ContainsKey (item.Element.UniqueId))
 						item.Position = sortDictionary [item.Element.UniqueId];
 				}
+				
+				ResolvePositionConflicts (DragableItems);
 			}
 			
 			UpdateWindowItems ();
@@ -414,22 +433,6 @@ namespace Docky.Interface
 			
 		}
 
-		void HandleUpdateNeeded(object sender, UpdateRequestArgs args)
-		{
-			if (ItemNeedsUpdate != null)
-				ItemNeedsUpdate (this, args);
-		}
-
-		void HandleRemoveClicked(object sender, EventArgs e)
-		{
-			for (int i=0; i<DockItems.Count; i++) {
-				if (DockItems [i] == sender) {
-					RemoveItem (i);
-					break;
-				}
-			}
-		}
-		
 		void UpdateWindowItems ()
 		{
 			foreach (DockItem di in statistical_items.Concat (custom_items.Values)) {
@@ -480,6 +483,20 @@ namespace Docky.Interface
 				item.Dispose ();
 					
 			task_items = out_items;
+		}
+		
+		void ResolvePositionConflicts (IEnumerable<DockItem> items)
+		{
+			int maxPostion = items.Select (di => di.Position).Max ();
+			for (int i=0; i<maxPostion; i++) {
+				int count = items.Where (di => di.Position == i).Count ();
+				if (count > 1) {
+					items.Where (di => di.Position > i).ForEach (di => di.Position += count);
+					
+					int offset = 0;
+					items.Where (di => di.Position == i).ForEach (di => di.Position += offset++);
+				}
+			}
 		}
 	}
 }
