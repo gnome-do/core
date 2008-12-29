@@ -28,6 +28,9 @@ namespace Do
 	{
 		public static string Combine (this string self, params string [] paths)
 		{
+			if (self == null) throw new ArgumentNullException ("self");
+			if (paths == null) throw new ArgumentNullException ("paths");
+			
 			return Path.Combine (self, paths.Aggregate (Path.Combine));
 		}
 	}
