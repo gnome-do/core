@@ -657,7 +657,7 @@ namespace Docky.Interface
 				
 				if (GtkDragging && DockItems [icon].IsAcceptingDrops && icon == DockItemForX (Cursor.X)) {
 					cr.Rectangle (x / scale, y / scale, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-					cr.Color = new Cairo.Color (.8, .85, 1, .5);
+					cr.Color = new Cairo.Color (.9, .95, 1, .5);
 					cr.Operator = Operator.Atop;
 					cr.Fill ();
 					cr.Operator = Operator.Over;
