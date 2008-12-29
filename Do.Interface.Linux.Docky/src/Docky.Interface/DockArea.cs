@@ -322,14 +322,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		bool UrgentRecentChange {
-			get {
-				return DockItems.Where (di => di is IDockAppItem)
-					.Cast<IDockAppItem> ()
-					.Any (dai => (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds < BounceTime);
-			}
-		}
-		
 		bool IconAnimationNeeded {
 			get {
 				return AnimationState.CheckCondition ("BounceAnimationNeeded") ||
@@ -559,7 +551,7 @@ namespace Docky.Interface
 				do {
 					// If the cursor has not moved and the dock_item_menu is not visible (this causes a render change without moving the cursor)
 					// we can do no rendering at all and just take our previous frame as our current result.
-					if (previous_x == Cursor.X && !dock_item_menu.Visible && !UrgentRecentChange)
+					if (previous_x == Cursor.X && !dock_item_menu.Visible && !AnimationState.CheckCondition ("UrgentRecentChange"))
 						break;
 					
 					// we need to know the left and right items for the parabolic zoom.  These items represent the only icons that are
