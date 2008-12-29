@@ -663,10 +663,10 @@ namespace Docky.Interface
 					cr.Operator = Operator.Over;
 				}
 				
-				if (draw_urgency) {
-					cr.SetSource (GetUrgentSurface (cr), x / scale, y / scale);
-					cr.PaintWithAlpha (.8);
-				}
+//				if (draw_urgency) {
+//					cr.SetSource (GetUrgentSurface (cr), x / scale, y / scale);
+//					cr.PaintWithAlpha (.8);
+//				}
 				cr.Scale (1 / scale, 1 / scale);
 			} else {
 				// since these dont scale, we have some extra work to do to keep them centered
@@ -679,7 +679,7 @@ namespace Docky.Interface
 			if (DockItems [icon].WindowCount > 0) {
 				// draws a simple triangle indicator.  Should be replaced by something nicer some day
 				int indicator_y = Height - 1;
-				DrawGlowIndicator (cr, center, indicator_y);
+				DrawGlowIndicator (cr, center, indicator_y, draw_urgency);
 			}
 			
 			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
@@ -713,16 +713,24 @@ namespace Docky.Interface
 			return urgent_buffer;
 		}
 		
-		void DrawGlowIndicator (Context cr, int x, int y)
+		void DrawGlowIndicator (Context cr, int x, int y, bool urgent)
 		{
+			int size = urgent ? 5 : 4;
 			cr.MoveTo (x, y);
-			cr.Arc (x, y, 4, 0, Math.PI * 2);
+			cr.Arc (x, y, size, 0, Math.PI * 2);
 			
-			RadialGradient rg = new RadialGradient (x, y, 0, x, y, 4);
+			RadialGradient rg = new RadialGradient (x, y, 0, x, y, size);
 			rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
-			rg.AddColorStop (.45, new Cairo.Color (.5, .6, 1, 1));
-			rg.AddColorStop (.7, new Cairo.Color (.5, .6, 1, .8));
-			rg.AddColorStop (1, new Cairo.Color (.5, .6, 1, 0));
+			if (urgent) {
+				rg.AddColorStop (.2, new Cairo.Color (1, 1, 1, 1));
+				rg.AddColorStop (.65, new Cairo.Color (1, .3, .3, 1));
+				rg.AddColorStop (.7, new Cairo.Color (1, .3, .3, .8));
+				rg.AddColorStop (1, new Cairo.Color (1, .3, .3, 0));
+			} else {
+				rg.AddColorStop (.45, new Cairo.Color (.5, .6, 1, 1));
+				rg.AddColorStop (.7, new Cairo.Color (.5, .6, 1, .8));
+				rg.AddColorStop (1, new Cairo.Color (.5, .6, 1, 0));
+			}
 			
 			cr.Pattern = rg;
 			cr.Fill ();

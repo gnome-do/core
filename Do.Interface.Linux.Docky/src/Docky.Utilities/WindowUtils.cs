@@ -123,17 +123,15 @@ namespace Docky.Utilities
 		/// </param>
 		public static void PerformLogicalClick (IEnumerable<Application> apps)
 		{
-			bool not_in_viewport = true;
-			foreach (Wnck.Application application in apps) {
-				foreach (Wnck.Window window in application.Windows) {
-					if (!window.IsSkipTasklist && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-						not_in_viewport = false;
-				}
-			}
+			bool not_in_viewport = !apps.Any (app => app.Windows
+			                                  .Any (w => !w.IsSkipTasklist && w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)));
+			bool urgent = apps.Any (app => app.Windows.Any (w => w.NeedsAttention ()));
 			
 			if (not_in_viewport) {
 				foreach (Wnck.Application application in apps) {
 					foreach (Wnck.Window window in application.Windows) {
+						if (urgent && !window.NeedsAttention ())
+								continue;
 						if (!window.IsSkipTasklist) {
 							window.CenterAndFocusWindow ();
 							return;

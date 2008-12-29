@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Wnck;
 
@@ -84,6 +85,10 @@ namespace Docky.Utilities
 			foreach (Window window in windows) {
 				if (window.IsInViewport (window.Workspace) && !window.IsMinimized)
 					window.Activate (Gtk.Global.CurrentEventTime);
+			}
+			
+			if (windows.Any (w => w.NeedsAttention ())) {
+				windows.Where (w => w.NeedsAttention ()).First ().Activate (Gtk.Global.CurrentEventTime+2);
 			}
 		}
 		
