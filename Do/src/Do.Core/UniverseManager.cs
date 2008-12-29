@@ -35,7 +35,6 @@ namespace Do.Core
 	{
 
 		Thread thread, update_thread;
-		List<Element> actions;
 		Dictionary<string, Element> universe;
 		
 		object universe_lock = new object ();
@@ -162,7 +161,6 @@ namespace Do.Core
 				}
 				
 				foreach (ItemSource source in PluginManager.ItemSources) {
-					#warning The Log is not threadsafe...
 					SafeItemSource safeSource = source.Safe;
 					Log.Debug ("Updating item source \"{0}\".", safeSource.Name);
 					UpdateSource (safeSource);

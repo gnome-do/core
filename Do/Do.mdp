@@ -5,13 +5,13 @@
       <Build debugmode="True" target="Exe" />
       <Execution runwithwarnings="True" commandlineparameters="--debug" externalconsole="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <EnvironmentVariables />
-      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" win32Icon="../../../../../jason/do/trunk-merge/Do" ctype="CSharpCompilerParameters" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" win32Icon="../../../../../jason/do/trunk-merge/Do" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
       <Output directory="bin/Release" assembly="Do" />
       <Build debugmode="False" target="Exe" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
-      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" win32Icon="../../../../../jason/do/trunk-merge/Do" ctype="CSharpCompilerParameters" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" win32Icon="../../../../../jason/do/trunk-merge/Do" ctype="CSharpCompilerParameters" />
     </Configuration>
   </Configurations>
   <Contents>
@@ -47,12 +47,6 @@
     <File name="gnome-do.desktop" subtype="Code" DeployService.TargetDirectoryId="Linux.DesktopApplications" buildaction="FileCopy" />
     <File name="src/CorePreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/PreferencesItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/SearchControllers/FirstSearchController.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/SearchControllers/ISearchController.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/SearchControllers/SecondSearchController.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/SearchControllers/SimpleSearchContext.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/SearchControllers/SimpleSearchController.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/SearchControllers/ThirdSearchController.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/DoAddinInstaller.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/DoAddinInstallerDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="gtk-gui/Do.UI.DoAddinInstallerDialog.cs" subtype="Code" buildaction="Compile" />
@@ -79,6 +73,12 @@
     <File name="src/Do.Universe/EvilElement.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/EvilItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/EvilItemSource.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/FirstSearchController.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/ISearchController.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/SecondSearchController.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/SimpleSearchContext.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/SimpleSearchController.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/ThirdSearchController.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
