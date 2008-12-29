@@ -362,9 +362,9 @@ namespace Docky.Interface
 		
 		bool UrgentRecentChange {
 			get {
-				return (DateTime.UtcNow - DockItems.Where (di => di is IDockAppItem)
-					.Cast <IDockAppItem> ()
-					.Max (dai => dai.AttentionRequestStartTime)).TotalMilliseconds < BounceTime;
+				return DockItems.Where (di => di is IDockAppItem)
+					.Cast<IDockAppItem> ()
+					.Any (dai => (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds < BounceTime);
 			}
 		}
 		
