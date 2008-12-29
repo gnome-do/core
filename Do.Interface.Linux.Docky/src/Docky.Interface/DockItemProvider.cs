@@ -61,6 +61,12 @@ namespace Docky.Interface
 			}
 		}
 		
+		string SortDictionaryPath {
+			get { 
+				return Path.Combine (Services.Paths.UserDataDirectory, "dock_sort_dictionary");
+			}
+		}
+		
 		public bool UpdatesEnabled { get; set; }
 		
 		public List<IDockItem> DockItems {
@@ -130,7 +136,7 @@ namespace Docky.Interface
 			custom_items [id] = di;
 			
 			if (enable_serialization)
-				SerializeCustomItems ();
+				SerializeData ();
 		}
 		
 		public void AddCustomItem (string identifier)
@@ -146,7 +152,7 @@ namespace Docky.Interface
 			
 			
 			if (enable_serialization)
-				SerializeCustomItems ();
+				SerializeData ();
 		}
 		
 		DockItem GetCustomItem (string identifier)
@@ -174,24 +180,6 @@ namespace Docky.Interface
 			return customItem;
 		}
 		
-		string[] DeserializeCustomItems ()
-		{
-			string[] filenames;
-			try {
-				using (Stream s = File.OpenRead (DesktopFilesPath)) {
-					BinaryFormatter f = new BinaryFormatter ();
-					filenames = f.Deserialize (s) as string[];
-				}
-			} catch (FileNotFoundException e) {
-				Log.Debug ("Custom items file not present, nothing to add. " + e.Message);
-				filenames = new string[0];
-			} catch {
-				Log.Error ("Could not deserialize custom items");
-				filenames = new string[0];
-			}
-			return filenames;
-		}
-		
 		public void SwapItemPositions (int item1, int item2)
 		{
 			if (item1 == item2)
@@ -210,6 +198,7 @@ namespace Docky.Interface
 			}
 			
 			DockItemsChanged (DockItems);
+			SerializeData ();
 		}
 		
 		public void MoveItemToPosition (int item, int position)
@@ -249,6 +238,7 @@ namespace Docky.Interface
 			primaryItem.Position = targetPosition;
 			
 			DockItemsChanged (DockItems);
+			SerializeData ();
 		}
 		
 		public void ForceUpdate ()
@@ -303,8 +293,14 @@ namespace Docky.Interface
 			
 			UpdateItems ();
 			if (enable_serialization)
-				SerializeCustomItems ();
+				SerializeData ();
 			return ret_val;
+		}
+		
+		void SerializeData ()
+		{
+			SerializeCustomItems ();
+			SerializeSortDictionary ();
 		}
 		
 		void SerializeCustomItems ()
@@ -317,6 +313,54 @@ namespace Docky.Interface
 			} catch {
 				Log.Error ("Could not serialize custom items");
 			}
+		}
+		
+		void SerializeSortDictionary ()
+		{
+			try {
+				using (Stream s = File.OpenWrite (SortDictionaryPath)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					f.Serialize (s, DragableItems.ToDictionary (di => di.Element.UniqueId, di => di.Position));
+				}
+			} catch {
+				Log.Error ("Could not serialize sort items");
+			}
+		}
+		
+		string[] DeserializeCustomItems ()
+		{
+			string[] filenames;
+			try {
+				using (Stream s = File.OpenRead (DesktopFilesPath)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					filenames = f.Deserialize (s) as string[];
+				}
+			} catch (FileNotFoundException e) {
+				Log.Debug ("Custom items file not present, nothing to add. " + e.Message);
+				filenames = new string[0];
+			} catch {
+				Log.Error ("Could not deserialize custom items");
+				filenames = new string[0];
+			}
+			return filenames;
+		}
+		
+		Dictionary<string, int> DeserializeSortDictionary ()
+		{
+			Dictionary<string, int> sortDictionary;
+			try {
+				using (Stream s = File.OpenRead (SortDictionaryPath)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					sortDictionary = f.Deserialize (s) as Dictionary<string, int>;
+				}
+			} catch (FileNotFoundException e) {
+				Log.Debug ("Sort Dictionary file not present, nothing to add. " + e.Message);
+				sortDictionary = new Dictionary<string, int> ();
+			} catch {
+				Log.Error ("Could not deserialize sort dictionary");
+				sortDictionary = new Dictionary<string, int> ();
+			}
+			return sortDictionary;
 		}
 		
 		void UpdateItems ()
@@ -356,6 +400,12 @@ namespace Docky.Interface
 				enable_serialization = true;
 				
 				custom_items_read = true;
+				
+				Dictionary<string, int> sortDictionary = DeserializeSortDictionary ();
+				foreach (DockItem item in DragableItems) {
+					if (sortDictionary.ContainsKey (item.Element.UniqueId))
+						item.Position = sortDictionary [item.Element.UniqueId];
+				}
 			}
 			
 			UpdateWindowItems ();

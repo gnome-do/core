@@ -393,6 +393,27 @@ namespace Docky.Interface
 					   ThirdPaneVisibilityAnimationNeeded; 
 			}
 		}
+		
+		bool IconAnimationNeeded {
+			get {
+				return BounceAnimationNeeded || IconInsertionAnimationNeeded || UrgentAnimationNeeded;
+			}
+		}
+		
+		bool CanFastRender {
+			get {
+				// Some conditions are not good for doing partial draws.
+				// we have a couple conditions were this render peformance boost will result in "badness".
+				// in these cases we need to do a full render.
+				return ZoomIn == 1 && 
+					previous_zoom == 1 && 
+					previous_item_count == DockItems.Length && 
+					!IconAnimationNeeded &&
+					!previous_icon_animation_needed &&
+					!drag_resizing &&
+					!FullRenderFlag;
+			}
+		}
 		#endregion
 		
 		public DockArea (DockWindow window) : base ()
@@ -505,6 +526,11 @@ namespace Docky.Interface
 		
 		void DrawDrock (Context cr)
 		{
+			// We need to initilize this the first time we use it. However we cant initialize it until our
+			// very first draw starts, and after that it must maintain state, so we signal this with -1;
+			if (previous_x == -1)
+				previous_x = Cursor.X;
+			
 			Gdk.Rectangle dockArea = GetDockArea ();
 			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
 			
@@ -536,29 +562,18 @@ namespace Docky.Interface
 				cr.SetSource (dock_icon_buffer, 0, IconSize * (1 - DockIconOpacity));
 				cr.PaintWithAlpha (DockIconOpacity);
 			}
+			
+			// To enable this render optimization, we have to keep track of several state items that otherwise
+			// are unimportant.  This is an unfortunate reality we must live with.
+			previous_zoom = ZoomIn;
+			previous_item_count = DockItems.Length;
+			previous_x = Cursor.X;
+			previous_icon_animation_needed = IconAnimationNeeded;
 		}
 		
 		void DrawIcons (Context cr)
 		{
-			// We need to initilize this the first time we use it. However we cant initialize it until our
-			// very first draw starts, and after that it must maintain state, so we signal this with -1;
-			if (previous_x == -1)
-				previous_x = Cursor.X;
-			
-			// Some conditions are not good for doing partial draws.
-			bool iconAnimationNeeded = BounceAnimationNeeded || IconInsertionAnimationNeeded || UrgentAnimationNeeded;
-			
-			// we have a couple conditions were this render peformance boost will result in "badness".
-			// in these cases we need to do a full render.
-			bool fast_render = ZoomIn == 1 && 
-				 previous_zoom == 1 && 
-				 previous_item_count == DockItems.Length && 
-				 !iconAnimationNeeded &&
-				 !previous_icon_animation_needed &&
-				 !drag_resizing &&
-				 !FullRenderFlag;
-			
-			if (fast_render) {
+			if (CanFastRender) {
 				do {
 					// If the cursor has not moved and the dock_item_menu is not visible (this causes a render change without moving the cursor)
 					// we can do no rendering at all and just take our previous frame as our current result.
@@ -608,13 +623,6 @@ namespace Docky.Interface
 				for (int i=0; i<DockItems.Length; i++)
 					DrawIcon (cr, i);
 			}
-			
-			// To enable this render optimization, we have to keep track of several state items that otherwise
-			// are unimportant.  This is an unfortunate reality we must live with.
-			previous_zoom = ZoomIn;
-			previous_item_count = DockItems.Length;
-			previous_x = Cursor.X;
-			previous_icon_animation_needed = iconAnimationNeeded;
 		}
 		
 		void DrawIcon (Context cr, int icon)
