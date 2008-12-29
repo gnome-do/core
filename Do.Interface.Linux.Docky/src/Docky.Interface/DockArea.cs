@@ -148,6 +148,8 @@ namespace Docky.Interface
 		
 		public new DockState State { get; set; }
 		
+		DockAnimationState AnimationState { get; set; }
+		
 		bool GtkDragging { get; set; }
 		
 		bool FullRenderFlag { get; set; }
@@ -320,46 +322,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		bool IconInsertionAnimationNeeded {
-			get {
-				return DockItems.Any (di => (DateTime.UtcNow - di.DockAddItem).TotalMilliseconds < InsertAnimationTime);
-			}
-		}
-		
-		bool PaneChangeAnimationNeeded {
-			get {
-				return (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds < BaseAnimationTime;
-			}
-		}
-		
-		bool ZoomAnimationNeeded {
-			get {
-				bool is_zoomed_fully_in = CursorIsOverDockArea && ZoomIn == 1;
-				bool is_zoomed_fully_out = !CursorIsOverDockArea && ZoomIn == 0;
-				return !(is_zoomed_fully_in || is_zoomed_fully_out); 
-			}
-		}
-		
-		bool OpenAnimationNeeded {
-			get { 
-				return (DateTime.UtcNow - enter_time).TotalMilliseconds < SummonTime ||
-					(DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime;
-			}
-		}
-		
-		bool BounceAnimationNeeded {
-			get { return DockItems.Any (di => (DateTime.UtcNow - di.LastClick).TotalMilliseconds <= BounceTime); }
-		}
-		
-		bool UrgentAnimationNeeded {
-			get { 
-				return DockItems.Where (di => di is IDockAppItem)
-					.Cast <IDockAppItem> ()
-					.Where (dai => dai.NeedsAttention)
-					.Any (dai => (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds < BounceTime);
-			}
-		}
-		
 		bool UrgentRecentChange {
 			get {
 				return DockItems.Where (di => di is IDockAppItem)
@@ -368,35 +330,11 @@ namespace Docky.Interface
 			}
 		}
 		
-		bool InputModeChangeAnimationNeeded {
-			get { return (DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime; }
-		}
-		
-		bool InputModeSlideAnimationNeeded {
-			get { return (DateTime.UtcNow - State.LastCursorChange).TotalMilliseconds < BaseAnimationTime; }
-		}
-		
-		bool ThirdPaneVisibilityAnimationNeeded {
-			get { return (DateTime.UtcNow - State.ThirdChangeTime).TotalMilliseconds < BaseAnimationTime; }
-		}
-		
-		bool AnimationNeeded {
-			get { 
-				return OpenAnimationNeeded || 
-					   ZoomAnimationNeeded || 
-					   BounceAnimationNeeded || 
-					   UrgentAnimationNeeded ||
-					   InputModeChangeAnimationNeeded || 
-					   InputModeSlideAnimationNeeded || 
-					   IconInsertionAnimationNeeded || 
-					   PaneChangeAnimationNeeded || 
-					   ThirdPaneVisibilityAnimationNeeded; 
-			}
-		}
-		
 		bool IconAnimationNeeded {
 			get {
-				return BounceAnimationNeeded || IconInsertionAnimationNeeded || UrgentAnimationNeeded;
+				return AnimationState.CheckCondition ("BounceAnimationNeeded") ||
+					AnimationState.CheckCondition ("IconInsertAnimationNeeded") ||
+					AnimationState.CheckCondition ("UrgentAnimationNeeded");
 			}
 		}
 		
@@ -419,8 +357,13 @@ namespace Docky.Interface
 		public DockArea (DockWindow window) : base ()
 		{
 			this.window = window;
+			
 			item_provider = new DockItemProvider ();
 			State = new DockState ();
+			
+			AnimationState = new DockAnimationState ();
+			BuildAnimationStateEngine ();
+			
 			SummonRenderer = new SummonModeRenderer (this);
 			dock_item_menu = new DockItemMenu ();
 			
@@ -473,6 +416,45 @@ namespace Docky.Interface
 					GdkWindow.SetBackPixmap (null, false);
 			};
 		}
+		
+		void BuildAnimationStateEngine ()
+		{
+			AnimationState.AddCondition ("IconInsertAnimationNeeded", 
+			                             () => DockItems.Any (di => (DateTime.UtcNow - di.DockAddItem).TotalMilliseconds < InsertAnimationTime));
+			
+			AnimationState.AddCondition ("PaneChangeAnimationNeeded",
+			                             () => (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds < BaseAnimationTime);
+		
+			AnimationState.AddCondition ("ZoomAnimationNeeded",
+			                             () => !(CursorIsOverDockArea && ZoomIn == 1) || (!CursorIsOverDockArea && ZoomIn == 0));
+			
+			AnimationState.AddCondition ("OpenAnimationNeeded",
+			                             () => (DateTime.UtcNow - enter_time).TotalMilliseconds < SummonTime ||
+			                             (DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime);
+			
+			AnimationState.AddCondition ("BounceAnimationNeeded",
+			                             () => DockItems.Any (di => (DateTime.UtcNow - di.LastClick).TotalMilliseconds <= BounceTime));
+			
+			AnimationState.AddCondition ("UrgentAnimationNeeded",
+			                             () => DockItems.Where (di => di is IDockAppItem)
+			                             .Cast<IDockAppItem> ()
+			                             .Where (dai => dai.NeedsAttention)
+			                             .Any (dai => (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds < BounceTime));
+			
+			AnimationState.AddCondition ("UrgentRecentChange",
+			                             () => DockItems.Where (di => di is IDockAppItem)
+			                             .Cast<IDockAppItem> ()
+			                             .Any (dai => (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds < BounceTime));
+			
+			AnimationState.AddCondition ("InputModeChangeAnimationNeeded",
+			                             () => (DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime);
+			
+			AnimationState.AddCondition ("InputModeSlideAnimationNeeded",
+			                             () => (DateTime.UtcNow - State.LastCursorChange).TotalMilliseconds < BaseAnimationTime);
+			
+			AnimationState.AddCondition ("ThirdPaneVisibilityAnimationNeeded",
+			                             () => (DateTime.UtcNow - State.ThirdChangeTime).TotalMilliseconds < BaseAnimationTime);
+		}
 
 		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)
 		{
@@ -515,7 +497,7 @@ namespace Docky.Interface
 		bool OnDrawTimeoutElapsed ()
 		{
 			QueueDraw ();
-			if (AnimationNeeded)
+			if (AnimationState.AnimationNeeded)
 				return true;
 			
 			//reset the timer to 0 so that the next time AnimatedDraw is called we fall back into

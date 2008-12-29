@@ -10,6 +10,7 @@ FILES = \
 	src/Docky.Interface/ApplicationDockItem.cs \
 	src/Docky.Interface/DoDockItem.cs \
 	src/Docky.Interface/DockArea.cs \
+	src/Docky.Interface/DockAnimationState.cs \
 	src/Docky.Interface/DockItem.cs \
 	src/Docky.Interface/DockItemMenu.cs \
 	src/Docky.Interface/DockPopupMenu.cs \
