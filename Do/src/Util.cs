@@ -50,19 +50,49 @@ namespace Do
 			setproctitle (Encoding.ASCII.GetBytes (fmt + "\0"), Encoding.ASCII.GetBytes (name + "\0"));
 		}
 
-		private static void setproctitle (string name)
+		/// <summary>
+		/// Sets the name of the current process on Linux. Throws EntryPointNotFoundException
+		/// if we are not on Linux.
+		/// </summary>
+		/// <param name="name">
+		/// A <see cref="System.String"/> name to set the process name to.
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/> indicating whether the set was successful.
+		/// </returns>
+		private static bool SetLinuxProcessName (string name)
+		{
+			return prctl (15 /* PR_SET_NAME */, name) == 0;
+		}
+
+		/// <summary>
+		/// Sets the name of the current process on BSD. Throws EntryPointNotFoundException
+		/// if we are not on BSD.
+		/// </summary>
+		/// <param name="name">
+		/// A <see cref="System.String"/> name to set the process name to.
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/> indicating whether the set was successful.
+		/// </returns>
+		private static void SetBSDProcessName (string name)
 		{
 			setproctitle ("%s", name);
 		}
 
+		/// <summary>
+		/// Sets the name of the current process.
+		/// </summary>
+		/// <param name="name">
+		/// A <see cref="System.String"/> name to set the process name to.
+		/// </param>
 		public static void SetProcessName (string name)
 		{
 			try {
-				if (prctl (15 /* PR_SET_NAME */, name) != 0) {
+				if (!SetLinuxProcessName (name))
 					throw new ApplicationException ("Error setting process name: " + Stdlib.GetLastError ());
-				}
 			} catch (EntryPointNotFoundException) {
-				setproctitle (name);
+				SetBSDProcessName (name);
 			}
 		}
 	}
