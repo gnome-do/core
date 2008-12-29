@@ -43,7 +43,8 @@ namespace Do.UI
 		}
 
 		const int IconSize = 26;
-		const int WrapWidth = 350;
+		const int IconPadding = 8;
+		const int WrapWidth = 324;
 		const string DescriptionFormat =
 			"<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
@@ -90,7 +91,7 @@ namespace Do.UI
 			AppendColumn ("Enable", cell, "active", Column.Enabled);
 
 			cell = new CellRendererPixbuf ();				
-			cell.SetFixedSize (IconSize + 8, IconSize + 8);
+			cell.SetFixedSize (IconSize + IconPadding, IconSize + IconPadding);
 			AppendColumn ("Icon", cell, new TreeCellDataFunc (IconDataFunc));
 
 			cell = new Gtk.CellRendererText ();
