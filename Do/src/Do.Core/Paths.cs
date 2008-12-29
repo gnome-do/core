@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 using Do;
@@ -32,17 +33,20 @@ namespace Do.Core
 		
 		public static string UserPluginsDirectory {
 			get {
-				string userData = Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData);
-				string pluginDirectory = string.Format ("{0}-{1}", PluginsDirectory, AssemblyInfo.DisplayVersion);
+				string userData =
+					Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData);
+				string pluginDirectory
+					= string.Format ("{0}-{1}", PluginsDirectory, AssemblyInfo.DisplayVersion);
 				return userData.Combine (ApplicationDirectory, pluginDirectory);
 			}
 		}
 
 		public static IEnumerable<string> SystemPluginDirectories {
 			get {
-				yield return AppDomain.CurrentDomain.BaseDirectory;
+				yield return AppDomain.CurrentDomain.BaseDirectory.Combine (PluginsDirectory);
 
-				string systemData = Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData);
+				string systemData =
+					Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData);
 				yield return systemData.Combine (ApplicationDirectory, PluginsDirectory);
 			}
 		}
