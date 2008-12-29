@@ -19,18 +19,18 @@ FILES = \
 	src/Do.Core/Controller.cs \
 	src/Do.Core/DoAddinInstaller.cs \
 	src/Do.Core/ElementExtensions.cs \
+	src/Do.Core/FirstSearchController.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
+	src/Do.Core/ISearchController.cs \
 	src/Do.Core/ItemExtensions.cs \
 	src/Do.Core/Paths.cs \
 	src/Do.Core/PluginManager.cs \
 	src/Do.Core/RelevanceProvider.cs \
-	src/Do.Core/SearchControllers/FirstSearchController.cs \
-	src/Do.Core/SearchControllers/ISearchController.cs \
-	src/Do.Core/SearchControllers/SecondSearchController.cs \
-	src/Do.Core/SearchControllers/SimpleSearchContext.cs \
-	src/Do.Core/SearchControllers/SimpleSearchController.cs \
-	src/Do.Core/SearchControllers/ThirdSearchController.cs \
+	src/Do.Core/SecondSearchController.cs \
+	src/Do.Core/SimpleSearchContext.cs \
+	src/Do.Core/SimpleSearchController.cs \
 	src/Do.Core/StalledActionNotification.cs \
+	src/Do.Core/ThirdSearchController.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.Platform/CoreService.cs \
 	src/Do.Platform/WindowingService.cs \
@@ -48,13 +48,13 @@ FILES = \
 	src/Do.UI/PluginUpdateNodeView.cs \
 	src/Do.UI/PreferencesWindow.cs \
 	src/Do.Universe/AliasAction.cs \
-	src/Do.Universe/EvilElement.cs \
-	src/Do.Universe/EvilAction.cs \
-	src/Do.Universe/EvilItem.cs \
-	src/Do.Universe/EvilItemSource.cs \
 	src/Do.Universe/AliasItemSource.cs \
 	src/Do.Universe/ClearLearningItem.cs \
 	src/Do.Universe/DeleteAliasAction.cs \
+	src/Do.Universe/EvilAction.cs \
+	src/Do.Universe/EvilElement.cs \
+	src/Do.Universe/EvilItem.cs \
+	src/Do.Universe/EvilItemSource.cs \
 	src/Do.Universe/InternalItemSource.cs \
 	src/Do.Universe/ItemSourceItemSource.cs \
 	src/Do.Universe/PreferencesItem.cs \
