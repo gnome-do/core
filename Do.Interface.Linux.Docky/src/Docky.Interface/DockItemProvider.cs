@@ -398,6 +398,8 @@ namespace Docky.Interface
 					statistical_items.AddRange (old_items.Where (di => di.Element == item));
 				} else {
 					DockItem di = new DockItem (item);
+					di.RemoveClicked += HandleRemoveClicked;
+					di.UpdateNeeded += HandleUpdateNeeded;
 					di.DockAddItem = DateTime.UtcNow;
 					di.Position = DragableItems.Count ();
 					statistical_items.Add (di);

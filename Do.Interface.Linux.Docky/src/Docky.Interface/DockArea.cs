@@ -333,8 +333,8 @@ namespace Docky.Interface
 		bool IconAnimationNeeded {
 			get {
 				return AnimationState.CheckCondition ("BounceAnimationNeeded") ||
-					AnimationState.CheckCondition ("IconInsertAnimationNeeded") ||
-					AnimationState.CheckCondition ("UrgentAnimationNeeded");
+					   AnimationState.CheckCondition ("IconInsertAnimationNeeded") ||
+					   AnimationState.CheckCondition ("UrgentAnimationNeeded");
 			}
 		}
 		
