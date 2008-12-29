@@ -145,22 +145,28 @@ namespace Do.Core
 
 		private IList<Element> GetContextResults ()
 		{
-			Item item;
-			Act action;
-			IEnumerable<Item> items;
+			Item item = null;
+			Act action = null;
+			IEnumerable<Item> items = null;
 			List<Item> modItems = new List<Item> ();
 
-			item = FirstController.Selection as Item ?? SecondController.Selection as Item;
-			action = SecondController.Selection as Act ?? FirstController.Selection as Act;
+			if (FirstController.Selection is Act) {
+				action = FirstController.Selection as Act;
+				item = SecondController.Selection as Item;
+				items = SecondController.FullSelection.OfType<Item> ();
+			} else if (SecondController.Selection is Act) {
+				action = SecondController.Selection as Act;
+				item = FirstController.Selection as Item;
+				items = FirstController.FullSelection.OfType<Item> ();
+			} else {
+				// TODO find a better exception to throw
+				throw new Exception ("No action available");
+			}
 
 			// If we don't support modifier items, don't search.
 			if (!action.Safe.SupportedModifierItemTypes.Any ())
 				return new List<Element> ();
 			
-			items = (FirstController.Selection is Item
-				? FirstController.FullSelection
-				: SecondController.FullSelection).OfType<Item> ();
-
 			if (!textMode) {
 				// Add appropriate modifier items from universe.
 				foreach (Item modItem in InitialResults ()) {
