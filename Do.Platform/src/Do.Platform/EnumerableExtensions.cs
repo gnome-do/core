@@ -1,40 +1,30 @@
-// Enumerable.cs created with MonoDevelop
-// User: david at 12:49 PM 10/21/2008
+// EnumerableExtensions.cs
 //
-// To change standard headers go to Edit->Preferences->Coding->Standard Headers
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Do
+namespace Do.Platform
 {
 	public static class EnumerableExtensions
 	{
-		/// <summary>
-		/// Finds the index of the first element satsifying the given predicate.
-		/// TODO: remove this
-		/// </summary>
-		/// <param name="self">
-		/// A <see cref="IEnumerable"/> to search.
-		/// </param>
-		/// <param name="p">
-		/// A <see cref="Func"/> predicate.
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.Int32"/> index of the first element satisfying p, or -1
-		/// is no element satisfies p.
-		/// </returns>
-		public static int FindIndex<T> (this IEnumerable<T> self, Func<T, bool> p)
-		{
-			int index = 0;
-			foreach (T x in self) {
-				if (p (x)) return index;
-				else index++;
-			}
-			return -1;
-		}
 
 		/// <summary>
 		/// Performs the specified action on each member of an enumerable.
@@ -42,16 +32,18 @@ namespace Do
 		/// <param name="self">
 		/// A <see cref="IEnumerable"/> whose members will have an action performed on them.
 		/// </param>
-		/// <param name="f">
+		/// <param name="action">
 		/// A <see cref="Action"/> to perform on each member.
 		/// </param>
 		/// <returns>
 		/// The original <see cref="IEnumerable"/> for chaining.
 		/// </returns>
-		public static IEnumerable<T> ForEach<T> (this IEnumerable<T> self, Action<T> f)
+		public static IEnumerable<T> ForEach<T> (this IEnumerable<T> self, Action<T> action)
 		{
-			foreach (T x in self)
-				f (x);
+			if (self == null) throw new ArgumentNullException ("self");
+			if (action == null) throw new ArgumentNullException ("action");
+			
+			foreach (T x in self) action (x);
 			return self;
 		}
 

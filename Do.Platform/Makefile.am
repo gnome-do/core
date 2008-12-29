@@ -8,16 +8,17 @@ PKG_CONFIG_FILES = do.platform.pc
 
 FILES = \
 	src/AssemblyInfo.cs \
+	src/Do.Platform/ActionableNotification.cs \
 	src/Do.Platform/Do.Platform.Common/AbstractLogService.cs \
+	src/Do.Platform/Do.Platform.Common/CommonPathsService.cs \
 	src/Do.Platform/Do.Platform.Common/DictionaryPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Common/EventsOnlyNotificationsService.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogService.cs \
-	src/Do.Platform/Do.Platform.Common/CommonPathsService.cs \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
+	src/Do.Platform/Do.Platform.Default/DefaultPathsService.cs \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
 	src/Do.Platform/Do.Platform.Default/NotificationsService.cs \
-	src/Do.Platform/Do.Platform.Default/DefaultPathsService.cs \
 	src/Do.Platform/Do.Platform.Default/PreferencesService.cs \
 	src/Do.Platform/Do.Platform.Default/SecurePreferencesService.cs \
 	src/Do.Platform/Do.Platform.Default/UniverseFactoryService.cs \
@@ -26,20 +27,20 @@ FILES = \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IService.cs \
+	src/Do.Platform/EnumerableExtensions.cs \
 	src/Do.Platform/ICoreService.cs \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/ILogService.cs \
 	src/Do.Platform/INotificationsService.cs \
-	src/Do.Platform/PathsService.cs \
 	src/Do.Platform/IPreferences.cs \
 	src/Do.Platform/IPreferencesService.cs \
 	src/Do.Platform/ISecurePreferencesService.cs \
 	src/Do.Platform/IUniverseFactoryService.cs \
 	src/Do.Platform/IWindowingService.cs \
-	src/Do.Platform/ActionableNotification.cs \
+	src/Do.Platform/Log.cs \
 	src/Do.Platform/Notification.cs \
 	src/Do.Platform/NotificationEventArgs.cs \
-	src/Do.Platform/Log.cs \
+	src/Do.Platform/PathsService.cs \
 	src/Do.Platform/PreferencesChangedEventArgs.cs \
 	src/Do.Platform/SecurePreferencesWrapper.cs \
 	src/Do.Platform/Services.cs \
@@ -48,8 +49,7 @@ FILES = \
 	src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenWithAction.cs \
 	src/Do.Universe/Do.Universe.Common/RevealAction.cs \
-	src/Do.Universe/Do.Universe.Common/RunAction.cs \
-	src/EnumerableExtensions.cs
+	src/Do.Universe/Do.Universe.Common/RunAction.cs
 
 if HAVE_NUNIT
 FILES += \
