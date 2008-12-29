@@ -18,13 +18,14 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 using Do.Universe.Safe;
 
 namespace Do.Universe
 {
 	
- 	public abstract class Item : Element, IItem
+ 	public abstract class Item : Element, IItem, IComparable<Item>
 	{
 		static SafeItem safe_item = new SafeItem ();
 
@@ -61,6 +62,11 @@ namespace Do.Universe
 		public new SafeItem RetainSafe ()
 		{
 			return new SafeItem (this);
+		}
+
+		public int CompareTo (Item item)
+		{
+			return CompareTo (item as Element);
 		}
 	}
 }
