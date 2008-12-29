@@ -68,6 +68,14 @@ namespace Docky.Interface
 			}
 		}
 		
+		int LastPosition {
+			get {
+				if (!DragableItems.Any ())
+					return 0;
+				return DragableItems.Max (di => di.Position);
+			}
+		}
+		
 		public bool UpdatesEnabled { get; set; }
 		
 		public List<IDockItem> DockItems {
@@ -134,6 +142,7 @@ namespace Docky.Interface
 			DockItem di = new DockItem (item);
 			di.RemoveClicked += HandleRemoveClicked;
 			di.UpdateNeeded += HandleUpdateNeeded;
+			di.Position = LastPosition + 1;
 			custom_items [id] = di;
 			
 			if (enable_serialization)
@@ -147,7 +156,7 @@ namespace Docky.Interface
 			if (customItem != null) {
 				customItem.RemoveClicked += HandleRemoveClicked;
 				customItem.UpdateNeeded += HandleUpdateNeeded;
-				customItem.Position = DragableItems.Count ();
+				customItem.Position = LastPosition + 1;
 				custom_items [identifier] = customItem;
 			}
 			
@@ -181,27 +190,6 @@ namespace Docky.Interface
 			return customItem;
 		}
 		
-		public void SwapItemPositions (int item1, int item2)
-		{
-			if (item1 == item2)
-				return;
-			
-			IconSource iconSource1 = GetIconSource (DockItems [item1]);
-			IconSource iconSource2 = GetIconSource (DockItems [item2]);
-			
-			if ((iconSource1 == IconSource.Custom || iconSource1 == IconSource.Statistics) &&
-			    (iconSource2 == IconSource.Custom || iconSource2 == IconSource.Statistics)) {
-				DockItem di1 = DockItems [item1] as DockItem;
-				DockItem di2 = DockItems [item2] as DockItem;
-				int tmp = di1.Position;
-				di1.Position = di2.Position;
-				di2.Position = tmp;
-			}
-			
-			DockItemsChanged (DockItems);
-			SerializeData ();
-		}
-		
 		public void MoveItemToPosition (int item, int position)
 		{
 			if (item == position)
@@ -210,11 +198,15 @@ namespace Docky.Interface
 			IconSource itemSource = GetIconSource (DockItems [item]);
 			IconSource targetSource = GetIconSource (DockItems [position]);
 			
-			if (itemSource == IconSource.Application || 
-			    itemSource == IconSource.Unknown ||
-			    targetSource == IconSource.Application ||
-			    targetSource == IconSource.Unknown)
+			if (itemSource == IconSource.Application || itemSource == IconSource.Unknown)
 				return;
+			
+			if (targetSource == IconSource.Application || targetSource == IconSource.Unknown) {
+				if (DockItems [position] is TrashDockItem) {
+					RemoveItem (item);
+				}
+				return;
+			}
 			
 			DockItem primaryItem = DockItems [item] as DockItem;
 			DockItem targetItem = DockItems [position] as DockItem;
@@ -401,7 +393,7 @@ namespace Docky.Interface
 					di.RemoveClicked += HandleRemoveClicked;
 					di.UpdateNeeded += HandleUpdateNeeded;
 					di.DockAddItem = DateTime.UtcNow;
-					di.Position = DragableItems.Count ();
+					di.Position = LastPosition + 1;
 					statistical_items.Add (di);
 				}
 			}
