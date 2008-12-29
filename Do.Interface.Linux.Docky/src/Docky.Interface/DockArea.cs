@@ -43,7 +43,7 @@ namespace Docky.Interface
 	public class DockArea : Gtk.DrawingArea
 	{
 		public const int BaseAnimationTime = 150;
-		public const int HorizontalBuffer = 7;
+		const int HorizontalBuffer = 7;
 		const int BounceTime = 700;
 		const int InsertAnimationTime = BaseAnimationTime*5;
 		const int WindowHeight = 300;
