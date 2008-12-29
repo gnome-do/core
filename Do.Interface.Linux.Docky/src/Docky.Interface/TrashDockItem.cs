@@ -66,7 +66,7 @@ namespace Docky.Interface
 			if (item.StartsWith ("file://"))
 				item = item.Substring ("file://".Length);
 			
-			if (!System.IO.File.Exists (item))
+			if (!System.IO.File.Exists (item) && !System.IO.Directory.Exists (item))
 				return false;
 			
 			try {
