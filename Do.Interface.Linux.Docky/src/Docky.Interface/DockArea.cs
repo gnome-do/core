@@ -692,20 +692,28 @@ namespace Docky.Interface
 		
 		void DrawGlowIndicator (Context cr, int x, int y, bool urgent)
 		{
-			int size = urgent ? 9 : 4;
+			int size = urgent ? 12 : 9;
 			cr.MoveTo (x, y);
 			cr.Arc (x, y, size, 0, Math.PI * 2);
 			
 			RadialGradient rg = new RadialGradient (x, y, 0, x, y, size);
 			rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
 			if (urgent) {
-				rg.AddColorStop (.2, new Cairo.Color (1, 1, 1, 1));
-				rg.AddColorStop (.65, new Cairo.Color (1, .3, .3, 1));
-				rg.AddColorStop (.7, new Cairo.Color (1, .3, .3, .8));
+//				rg.AddColorStop (.05, new Cairo.Color (1, .3, .3, 1));
+//				rg.AddColorStop (.15, new Cairo.Color (1, .3, .3, .6));
+//				rg.AddColorStop (.25, new Cairo.Color (1, .3, .3, .25));
+//				rg.AddColorStop (.5, new Cairo.Color (1, .3, .3, .15));
+//				rg.AddColorStop (1, new Cairo.Color (1, .3, .3, 0));
+				rg.AddColorStop (.1, new Cairo.Color (1, .8, .8, 1));
+				rg.AddColorStop (.2, new Cairo.Color (1, .3, .3, .6));
+				rg.AddColorStop (.25, new Cairo.Color (1, .3, .3, .35));
+				rg.AddColorStop (.5, new Cairo.Color (1, .3, .3, .25));
 				rg.AddColorStop (1, new Cairo.Color (1, .3, .3, 0));
 			} else {
-				rg.AddColorStop (.45, new Cairo.Color (.5, .6, 1, 1));
-				rg.AddColorStop (.7, new Cairo.Color (.5, .6, 1, .8));
+				rg.AddColorStop (.1, new Cairo.Color (.5, .6, 1, 1));
+				rg.AddColorStop (.2, new Cairo.Color (.5, .6, 1, .6));
+				rg.AddColorStop (.25, new Cairo.Color (.5, .6, 1, .25));
+				rg.AddColorStop (.5, new Cairo.Color (.5, .6, 1, .15));
 				rg.AddColorStop (1, new Cairo.Color (.5, .6, 1, 0));
 			}
 			
