@@ -58,19 +58,19 @@ namespace Docky.Interface
 		DateTime enter_time = DateTime.UtcNow;
 		DateTime interface_change_time = DateTime.UtcNow;
 		
-		bool cursor_is_handle = false;
-		bool drag_resizing = false;
+		bool cursor_is_handle;
+		bool drag_resizing;
 		bool gtk_drag_source_set;
 		bool gtk_drag_dest_set;
 		
 		int monitor_width;
-		int drag_start_y = 0;
-		int drag_start_icon_size = 0;
+		int drag_start_y;
+		int drag_start_icon_size;
 		int remove_drag_start_x;
-		uint animation_timer = 0;
+		uint animation_timer;
 		
-		double previous_zoom = 0;
-		int previous_item_count = 0;
+		double previous_zoom;
+		int previous_item_count;
 		int previous_x = -1;
 		bool previous_icon_animation_needed = true;
 		
