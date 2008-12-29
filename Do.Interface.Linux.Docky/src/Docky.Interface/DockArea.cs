@@ -426,7 +426,7 @@ namespace Docky.Interface
 			                             () => (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds < BaseAnimationTime);
 		
 			AnimationState.AddCondition ("ZoomAnimationNeeded",
-			                             () => !(CursorIsOverDockArea && ZoomIn == 1) || (!CursorIsOverDockArea && ZoomIn == 0));
+			                             () => (CursorIsOverDockArea && ZoomIn != 1) || (!CursorIsOverDockArea && ZoomIn != 0));
 			
 			AnimationState.AddCondition ("OpenAnimationNeeded",
 			                             () => (DateTime.UtcNow - enter_time).TotalMilliseconds < SummonTime ||
