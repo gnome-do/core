@@ -30,6 +30,7 @@ using Mono.Addins.Setup;
 
 using Do;
 using Do.Core;
+using Do.Core.Addins;
 using Do.Interface;
 using Do.Platform;
 using Do.Platform.Linux;
@@ -77,13 +78,9 @@ namespace Do.UI
 			scrollw.Add (nview);
 			scrollw.ShowAll ();
 
-			//foreach (string repo in PluginManager.RepositoryUrls.Keys) {
-			//	show_combo.AppendText (repo);
-			foreach (string repoName in PluginManager.RepositoryUrls.Keys) {
-				if (PluginManager.RepositoryUrls [repoName].Any ())
-					show_combo.AppendText (repoName);
+			foreach (AddinClassifier cfier in PluginManager.Classifiers) {
+				show_combo.AppendText (cfier.Name);
 			}
-			show_combo.AppendText (PluginManager.AllPluginsRepository);
 			show_combo.Active = 0;
 		}
 		
@@ -187,7 +184,7 @@ namespace Do.UI
 
 		protected void OnBtnUpdateClicked (object sender, EventArgs e)
 		{
-			nview.Refresh (false);
+			nview.Refresh ();
 		}
 
 		protected void OnBtnConfigurePluginClicked (object sender, EventArgs e)
@@ -215,7 +212,7 @@ namespace Do.UI
 
 		protected virtual void OnShowComboChanged (object sender, EventArgs e)
 		{
-			nview.ShowRepository = show_combo.ActiveText;
+			nview.ShowCategory = show_combo.ActiveText;
 			nview.Filter = search_entry.Text = "";
 		}
 

@@ -28,23 +28,72 @@ using Do.Universe;
 
 namespace Do.Interface
 {
-	public delegate string StringTransformationDelegate (string old);
-	public delegate string FormatCommonSubstringsDelegate (string main, string highlight, string format);
+
 	public delegate void DoEventKeyDelegate (Gdk.EventKey key);
 	public delegate void NullEventHandler ();
 	public delegate void SearchStartedEventHandler (bool upstream_search);
 	public delegate void SearchFinishedEventHandler (object controller, SearchFinishState state);
 	
-	/// <summary>
-	/// Useful functionality for plugins. See <see cref="Do.Util"/>.
-	/// </summary>
 	public static class Util
 	{
-		public static FormatCommonSubstringsDelegate FormatCommonSubstrings;
+		public static string FormatCommonSubstrings (string main, string other, string format)
+		{
+			int pos, len, match_pos, last_main_cut;
+			string lower_main, result;
+			string skipped, matched, remainder;
+			bool matchedTermination;
+
+			result = "";
+			match_pos = last_main_cut = 0;
+			lower_main = main.ToLower ();
+			other = other.ToLower ();
+
+			for (pos = 0; pos < other.Length; ++pos) {
+				matchedTermination = false;
+				for (len = 1; len <= other.Length - pos; ++len) {
+					int tmp_match_pos = lower_main.IndexOf (other.Substring (pos, len));
+					if (tmp_match_pos < 0) {
+						len--;
+						matchedTermination = false;
+						break;
+					} else {
+						matchedTermination = true;
+						match_pos = tmp_match_pos;
+					}
+				}
+				if (matchedTermination) {
+					len--;
+				}
+				if (0 < len) {
+					 //Theres a match starting at match_pos with positive length
+					skipped = main.Substring (last_main_cut, match_pos - last_main_cut);
+					matched = main.Substring (match_pos, len);
+					if ( skipped.Length + matched.Length < main.Length) {
+						remainder = FormatCommonSubstrings ( main.Substring (match_pos + len), other.Substring (pos + len), format);
+					}
+					else {
+						remainder = "";
+					}
+					result = string.Format ("{0}{1}{2}", skipped, string.Format(format, matched), remainder);
+					break;
+				}
+			}
+			if (result == "") {
+				// no matches
+				result = main;
+			}
+			return result;
+		}
 		
 		public static class Appearance
 		{
-			public static StringTransformationDelegate MarkupSafeString;
+
+			public static string MarkupSafeString (string s)
+			{
+				if (s == null) throw new ArgumentNullException ("s");
+				
+				return GLib.Markup.EscapeText (s);
+			}
 			
 			public static void SetColormap (Gtk.Widget widget)
 			{

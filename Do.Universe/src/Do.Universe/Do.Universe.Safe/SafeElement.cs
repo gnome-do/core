@@ -22,7 +22,6 @@ using System;
 namespace Do.Universe.Safe
 {
 	
-	
 	public class SafeElement : Element
 	{
 
@@ -51,7 +50,7 @@ namespace Do.Universe.Safe
 		public override string Name {
 			get {
 				try {
-					return Element.Name;
+					return Element.Name ?? Element.DefaultName;
 				} catch (Exception e) {
 					LogSafeError (Element, e, "Name", Element.DefaultName);
 				}
@@ -62,7 +61,7 @@ namespace Do.Universe.Safe
 		public override string Description {
 			get {
 				try {
-					return Element.Description;
+					return Element.Description ?? Element.DefaultDescription;
 				} catch (Exception e) {
 					LogSafeError (Element, e, "Description");
 				}
@@ -73,7 +72,7 @@ namespace Do.Universe.Safe
 		public override string Icon {
 			get {
 				try {
-					return Element.Icon;
+					return Element.Icon ?? Element.DefaultIcon;
 				} catch (Exception e) {
 					LogSafeError (Element, e, "Icon");
 				}

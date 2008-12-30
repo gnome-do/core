@@ -18,9 +18,8 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
-
-using Do;
 
 namespace Do.Core
 {
@@ -29,20 +28,29 @@ namespace Do.Core
 	{
 		const string ApplicationDirectory = "gnome-do";
 		const string PluginsDirectory = "plugins";
-		
+
+		//// <value>
+		/// Directory where Do saves its Mono.Addins repository cache.
+		/// </value>
 		public static string UserPluginsDirectory {
 			get {
-				string userData = Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData);
-				string pluginDirectory = string.Format ("{0}-{1}", PluginsDirectory, AssemblyInfo.DisplayVersion);
+				string userData =
+					Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData);
+				string pluginDirectory
+					= string.Format ("{0}-{1}", PluginsDirectory, AssemblyInfo.DisplayVersion);
 				return userData.Combine (ApplicationDirectory, pluginDirectory);
 			}
 		}
 
+		//// <value>
+		/// Directories where Do looks for Mono.Addins repositories.
+		/// </value>
 		public static IEnumerable<string> SystemPluginDirectories {
 			get {
-				yield return AppDomain.CurrentDomain.BaseDirectory;
+				yield return AppDomain.CurrentDomain.BaseDirectory.Combine (PluginsDirectory);
 
-				string systemData = Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData);
+				string systemData =
+					Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData);
 				yield return systemData.Combine (ApplicationDirectory, PluginsDirectory);
 			}
 		}
