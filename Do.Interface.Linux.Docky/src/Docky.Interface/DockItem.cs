@@ -41,7 +41,6 @@ namespace Docky.Interface
 	public class DockItem : AbstractDockItem, IRightClickable, IDockAppItem
 	{
 		Element element;
-		Surface icon_surface;
 		List<Wnck.Application> apps;
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;

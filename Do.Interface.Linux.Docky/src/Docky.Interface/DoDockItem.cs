@@ -36,7 +36,6 @@ namespace Docky.Interface
 	{
 		const string DoIcon = "gnome-do";
 		
-		Surface icon_surface;
 		#region IDockItem implementation 
 		
 		protected override Pixbuf GetSurfacePixbuf ()

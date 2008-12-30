@@ -61,7 +61,6 @@ namespace Docky.Interface
 		bool cursor_is_handle;
 		bool drag_resizing;
 		bool gtk_drag_source_set;
-		bool gtk_drag_dest_set;
 		
 		int monitor_width;
 		int drag_start_y;
@@ -463,7 +462,6 @@ namespace Docky.Interface
 		
 		void RegisterGtkDragDest ()
 		{
-			gtk_drag_dest_set = true;
 			TargetEntry dest_te = new TargetEntry ("text/uri-list", 0, 0);
 			Gtk.Drag.DestSet (this, DestDefaults.Motion | DestDefaults.Drop, new [] {dest_te}, Gdk.DragAction.Copy);
 		}

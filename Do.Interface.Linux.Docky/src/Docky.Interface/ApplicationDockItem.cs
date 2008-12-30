@@ -54,7 +54,6 @@ namespace Docky.Interface
 		}
 		
 		Wnck.Application application;
-		Surface icon_surface;
 		Gdk.Rectangle icon_region;
 		
 		#region IDockItem implementation 
