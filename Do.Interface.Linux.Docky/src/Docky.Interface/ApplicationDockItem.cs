@@ -79,29 +79,28 @@ namespace Docky.Interface
 			
 			Gdk.Pixbuf pbuf = null;
 			foreach (string guess in guesses) {
-				string icon_guess = guess;
 				if (pbuf != null) {
 					pbuf.Dispose ();
 					pbuf = null;
 				}
 				
-				bool found = IconProvider.PixbufFromIconName (icon_guess, DockPreferences.FullIconSize, out pbuf);
+				bool found = IconProvider.PixbufFromIconName (guess, DockPreferences.FullIconSize, out pbuf);
 				if (found && (pbuf.Width == DockPreferences.FullIconSize || 
 				                     pbuf.Height == DockPreferences.FullIconSize)) {
-					return pbuf;
+					break;
 				} else {
 					pbuf.Dispose ();
 					pbuf = null;
 				}
 			
-				string desktop_path = GetDesktopFile (icon_guess);
+				string desktop_path = GetDesktopFile (guess);
 				if (!string.IsNullOrEmpty (desktop_path)) {
-					Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists);
-					if (pbuf != null)
-						pbuf.Dispose ();
-					pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
-					di.Dispose ();
-					return pbuf;
+					using (Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists)) {
+						if (pbuf != null)
+							pbuf.Dispose ();
+						pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
+					}
+					break;
 				}
 			}
 			
