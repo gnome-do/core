@@ -85,31 +85,28 @@ namespace Docky.Interface
 				}
 				
 				bool found = IconProvider.PixbufFromIconName (guess, DockPreferences.FullIconSize, out pbuf);
-				if (found && (pbuf.Width == DockPreferences.FullIconSize || 
-				                     pbuf.Height == DockPreferences.FullIconSize)) {
+				if (found && (pbuf.Width == DockPreferences.FullIconSize || pbuf.Height == DockPreferences.FullIconSize))
 					break;
-				} else {
-					pbuf.Dispose ();
-					pbuf = null;
-				}
+				
+				pbuf.Dispose ();
+				pbuf = null;
 			
 				string desktop_path = GetDesktopFile (guess);
 				if (!string.IsNullOrEmpty (desktop_path)) {
 					using (Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists)) {
-						if (pbuf != null)
-							pbuf.Dispose ();
 						pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
 					}
 					break;
 				}
 			}
 			
+			// we failed, lets get ourselves an uggggly icon
 			if (pbuf == null)
-				pbuf = IconProvider.PixbufFromIconName (guesses[0], DockPreferences.FullIconSize);
+				pbuf = Application.Icon;
 			
 			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
 				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
-				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
+				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Hyper);
 				pbuf.Dispose ();
 				pbuf = temp;
 			}
