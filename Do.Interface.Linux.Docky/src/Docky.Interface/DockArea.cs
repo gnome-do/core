@@ -797,8 +797,8 @@ namespace Docky.Interface
 			IconPositionedCenterX (0, out start_x, out start_zoom);
 			IconPositionedCenterX (DockItems.Length - 1, out end_x, out end_zoom);
 			
-			int x = start_x - (int)(start_zoom * (IconSize / 2)) - HorizontalBuffer;
-			int end = end_x + (int)(end_zoom * (IconSize / 2)) + HorizontalBuffer;
+			int x = start_x - (int)(start_zoom * (IconSize / 2)) - HorizontalBuffer - IconBorderWidth;
+			int end = end_x + (int)(end_zoom * (IconSize / 2)) + HorizontalBuffer + IconBorderWidth;
 			
 			return new Gdk.Rectangle (x, Height - IconSize - 2 * VerticalBuffer, end - x, IconSize + 2 * VerticalBuffer);
 		}
