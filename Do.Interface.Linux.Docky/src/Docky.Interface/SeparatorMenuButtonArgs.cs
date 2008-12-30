@@ -1,4 +1,4 @@
-// MenuArgs.cs
+// SeparatorMenuButtonArgs.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -20,37 +20,15 @@ using System;
 
 namespace Docky.Interface
 {
-	public class MenuArgs
+	public class SeparatorMenuButtonArgs : AbstractMenuButtonArgs
 	{
-		public EventHandler Handler {
-			get; private set;
-		}
-		
-		public string Description {
-			get; private set;
-		}
-		
-		public string Icon {
-			get; private set;
-		}
-		
-		public bool Sensitive {
-			get; private set; 
-		}
-		
-		public MenuArgs (EventHandler handler, string description, string icon, bool sensitive)
+		public SeparatorMenuButtonArgs () : base ("Separator", null, true)
 		{
-			Handler = handler;
-			Description = description;
-			Icon = icon;
-			Sensitive = sensitive;
 		}
-	}
-	
-	public class SeparatorMenuArgs : MenuArgs
-	{
-		public SeparatorMenuArgs () : base (null, "Separator", null, true)
+		
+		public override void Action ()
 		{
+			
 		}
 	}
 }

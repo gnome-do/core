@@ -447,7 +447,7 @@ namespace Docky.Interface
 				
 				// Anything we already have, we dont need additional copies of
 				foreach (DockItem di in statistical_items.Concat (custom_items.Values)) {
-					if (di.Apps.Count () == 0)
+					if (di.Applications.Count () == 0)
 						continue;
 					if (di.Pids.Contains (app.Pid)) {
 						//we found a match already, mark as not good

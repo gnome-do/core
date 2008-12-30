@@ -60,15 +60,15 @@ namespace Docky.Interface
 		{
 		}
 
-		public override void PopUp (IEnumerable<MenuArgs> args, int x, int y)
+		public override void PopUp (IEnumerable<AbstractMenuButtonArgs> args, int x, int y)
 		{
 			foreach (Gtk.Widget child in Container.AllChildren) {
 				Container.Remove (child);
 				child.Dispose ();
 			}
 			
-			foreach (MenuArgs arg in args) {
-				if (arg is SeparatorMenuArgs) {
+			foreach (AbstractMenuButtonArgs arg in args) {
+				if (arg is SeparatorMenuButtonArgs) {
 					Container.PackStart (new CustomSeparator ());
 					continue;
 				}
@@ -85,9 +85,11 @@ namespace Docky.Interface
 				label.Ellipsize = Pango.EllipsizeMode.End;
 				label.Ypad = 0;
 				
-				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (arg.Icon, 16);
-				Gtk.Image image = new Gtk.Image (pbuf);
-				pbuf.Dispose ();
+				Gtk.Image image;
+				using (Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (arg.Icon, 16)) {
+					image = new Gtk.Image (pbuf);
+				}
+					
 				hbox.PackStart (image, false, false, 0);
 				hbox.PackStart (label, true, true, 2);
 				

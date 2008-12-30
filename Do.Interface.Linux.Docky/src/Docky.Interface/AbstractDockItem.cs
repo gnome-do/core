@@ -60,8 +60,8 @@ namespace Docky.Interface
 				
 				Gdk.CairoHelper.SetSourcePixbuf (cr, 
 				                                 pbuf, 
-				                                 (int) ((DockPreferences.FullIconSize - pbuf.Width) / 2),
-				                                 (int) ((DockPreferences.FullIconSize - pbuf.Height) / 2));
+				                                 (DockPreferences.FullIconSize - pbuf.Width) / 2,
+				                                 (DockPreferences.FullIconSize - pbuf.Height) / 2);
 				cr.Paint ();
 				
 				pbuf.Dispose ();
@@ -124,9 +124,7 @@ namespace Docky.Interface
 		//// <value>
 		/// The value used to for the text surface
 		/// </value>
-		public abstract string Description {
-			get;		
-		}
+		public abstract string Description { get; }
 		
 		/// <value>
 		/// The Widget of the icon.
@@ -141,9 +139,7 @@ namespace Docky.Interface
 		/// The Height of the icon.
 		/// </value>
 		public virtual int Height {
-			get {
-				return DockPreferences.IconSize;
-			}
+			get { return DockPreferences.IconSize; }
 		}
 		
 		/// <value>

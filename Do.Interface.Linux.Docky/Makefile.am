@@ -22,7 +22,9 @@ FILES = \
 	src/Docky.Interface/DrawState.cs \
 	src/Docky.Interface/IDockItem.cs \
 	src/Docky.Interface/IRightClickable.cs \
-	src/Docky.Interface/MenuArgs.cs \
+	src/Docky.Interface/AbstractMenuButtonArgs.cs \
+	src/Docky.Interface/SimpleMenuButtonArgs.cs \
+	src/Docky.Interface/SeparatorMenuButtonArgs.cs \
 	src/Docky.Interface/SeparatorItem.cs \
 	src/Docky.Interface/TrashDockItem.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \

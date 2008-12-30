@@ -1,4 +1,4 @@
-// IRightClickable.cs
+// SimpleMenuButtonArgs.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -17,23 +17,23 @@
 //
 
 using System;
-using System.Collections.Generic;
 
 namespace Docky.Interface
 {
-	public interface IRightClickable
+	
+	
+	public class SimpleMenuButtonArgs : AbstractMenuButtonArgs
 	{
-		/// <summary>
-		/// Returns a collection of the items that are to be placed in a menu
-		/// </summary>
-		/// <returns>
-		/// A <see cref="IEnumerable"/>
-		/// </returns>
-		IEnumerable<AbstractMenuButtonArgs> GetMenuItems ();
+		Action action;
 		
-		/// <summary>
-		/// Lets the dock item provider know that the remove button was clicked
-		/// </summary>
-		event EventHandler RemoveClicked;
+		public SimpleMenuButtonArgs (Action action, string description, string icon) : base (description, icon, true)
+		{
+			this.action = action;
+		}
+		
+		public override void Action ()
+		{
+			action.Invoke ();
+		}
 	}
 }

@@ -78,7 +78,7 @@ namespace Docky.Interface
 		}
 
 		
-		public virtual void PopUp (IEnumerable<MenuArgs> args, int x, int y)
+		public virtual void PopUp (IEnumerable<AbstractMenuButtonArgs> args, int x, int y)
 		{
 			ShowAll ();
 			Gtk.Requisition req = SizeRequest ();

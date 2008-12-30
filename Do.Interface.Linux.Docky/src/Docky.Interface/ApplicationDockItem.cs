@@ -53,6 +53,11 @@ namespace Docky.Interface
 			}
 		}
 		
+		const string MinimizeRestoreText = "Minimize/Restore";
+		const string CloseText = "Close All";
+		
+		const int MenuItemMaxCharacters = 50;
+		
 		Wnck.Application application;
 		Gdk.Rectangle icon_region;
 		
@@ -64,10 +69,7 @@ namespace Docky.Interface
 		}
 
 		/// <summary>
-		/// This method is designed to *attempt* to get a decent pixbuf for the current Application.  There
-		/// are no promises and certainly a decent amount of work that can go into it.  Currently it makes a considerable
-		/// number of guesses at the icon name looking for Desktop files and for regular pixbufs and can take quite a bit
-		/// of time.  Some global caching should be added.
+		/// Returns a Pixbuf suitable for usage in the dock.
 		/// </summary>
 		/// <returns>
 		/// A <see cref="Gdk.Pixbuf"/>
@@ -190,12 +192,11 @@ namespace Docky.Interface
 		{
 			this.application = application;
 		}
-
 		
 		public override void Clicked (uint button)
 		{
 			if (button == 1)
-				WindowUtils.PerformLogicalClick (new Wnck.Application[] {application});
+				WindowUtils.PerformLogicalClick (new [] {application});
 		}
 
 		public override void SetIconRegion (Gdk.Rectangle region)
@@ -217,27 +218,19 @@ namespace Docky.Interface
 			return ((other as ApplicationDockItem).application == application);
 		}
 		
-		public IEnumerable<MenuArgs> GetMenuItems ()
+		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
-			List<MenuArgs> outList = new List<MenuArgs> ();
-			foreach (Wnck.Window window in App.Windows) { 
-				Wnck.Window copy_win = window;
-				if (!copy_win.IsSkipTasklist) {
-					string name = copy_win.Name;
-					if (name.Length > 50)
-						name = name.Substring (0, 47) + "...";
-					outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), name, "forward", true));
-				}
+			List<AbstractMenuButtonArgs> outList = new List<AbstractMenuButtonArgs> ();
+			foreach (Wnck.Window window_ in App.Windows.Where (win => !win.IsSkipTasklist)) {
+				// we make a copy here so that when the lambda is evaluated, it evaluates the right one
+				// this is due to the scoping of the window_ variable.
+				Wnck.Window window = window_;
+				outList.Add (new SimpleMenuButtonArgs (() => window.CenterAndFocusWindow (), window.Name, "forward"));
 			}
 			
-			if (outList.Any ()) {
-				outList.Add (new SeparatorMenuArgs ());
-				outList.Add (new MenuArgs ((o, a) => WindowControl.MinimizeRestoreWindows (App.Windows), 
-				                           "Minimize/Restore", 
-				                           "down",
-				                           true));
-				outList.Add (new MenuArgs ((o, a) => WindowControl.CloseWindows (App.Windows), "Close All", Gtk.Stock.Quit, true));
-			}
+			outList.Add (new SeparatorMenuButtonArgs ());
+			outList.Add (new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (App.Windows), MinimizeRestoreText, "down"));
+			outList.Add (new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (App.Windows), CloseText, Gtk.Stock.Quit));
 			
 			return outList;
 		}

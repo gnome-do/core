@@ -67,7 +67,7 @@ namespace Docky.Interface
 			get { return element; } 
 		}
 		
-		public Wnck.Application [] Apps { 
+		public Wnck.Application [] Applications { 
 			get { return apps.ToArray (); } 
 		}
 		
@@ -77,7 +77,7 @@ namespace Docky.Interface
 		
 		public override int WindowCount {
 			get {
-				return Apps.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ());
+				return Applications.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ());
 			}
 		}
 		
@@ -166,7 +166,7 @@ namespace Docky.Interface
 		
 		void RegisterStateChangeEvents ()
 		{
-			foreach (Application app in Apps) {
+			foreach (Application app in Applications) {
 				foreach (Wnck.Window w in app.Windows) {
 					if (!w.IsSkipTasklist)
 						w.StateChanged += OnWindowStateChanged;
@@ -176,7 +176,7 @@ namespace Docky.Interface
 		
 		void UnregisterStateChangeEvents ()
 		{
-			foreach (Application app in Apps) {
+			foreach (Application app in Applications) {
 				foreach (Wnck.Window w in app.Windows) {
 					try {
 						w.StateChanged -= OnWindowStateChanged;
@@ -215,7 +215,7 @@ namespace Docky.Interface
 		
 		bool DetermineAttentionStatus  ()
 		{
-			foreach (Application app in Apps) {
+			foreach (Application app in Applications) {
 				if (app.Windows.Any ((Wnck.Window w) => w.NeedsAttention ()))
 					return true;
 			}
@@ -225,7 +225,6 @@ namespace Docky.Interface
 		protected override Gdk.Pixbuf GetSurfacePixbuf ()
 		{
 			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
-			
 			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
 				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
 				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), InterpType.Bilinear);
@@ -310,61 +309,57 @@ namespace Docky.Interface
 		
 		#region IRightClickable implementation 
 		
-		public IEnumerable<MenuArgs> GetMenuItems ()
+		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
-			List<MenuArgs> outList = new List<MenuArgs> ();
+			// using yield causes the lambdas to not evaluate properly
+			List<AbstractMenuButtonArgs> outList = new List<AbstractMenuButtonArgs> ();
 			bool hasApps = HasVisibleApps;
 			
 			if (hasApps) {
-				foreach (Application app in Apps) {
-					foreach (Wnck.Window window in app.Windows) {
-						Wnck.Window copy_win = window;
-						if (!copy_win.IsSkipTasklist) {
-							string name = copy_win.Name;
-							if (name.Length > 50)
-								name = name.Substring (0, 47) + "...";
-							outList.Add (new MenuArgs ((o, a) => copy_win.CenterAndFocusWindow (), name, Icon, true));
-						}
+				foreach (Application app in Applications) {
+					foreach (Wnck.Window window_ in app.Windows.Where (win => !win.IsSkipTasklist)) {
+						Wnck.Window window = window_;
+						outList.Add (new SimpleMenuButtonArgs (() => window.CenterAndFocusWindow (), window.Name, Icon));
 					}
 				}
-				outList.Add (new SeparatorMenuArgs ());
+				outList.Add (new SeparatorMenuButtonArgs ());
 			}
 			
-			foreach (Act act in ActionsForItem) {
-				Act internal_act = act;
-				outList.Add (new MenuArgs ((o, a) => Launch (internal_act), internal_act.Name, internal_act.Icon, true));
+			foreach (Act act_ in ActionsForItem) {
+				Act act = act_;
+				outList.Add (new SimpleMenuButtonArgs (() => Launch (act), act.Name, act.Icon));
 			}
 			if (hasApps) {
-				outList.Add (new MenuArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown, true));
-				outList.Add (new MenuArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit, true));
+				outList.Add (new SimpleMenuButtonArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown));
+				outList.Add (new SimpleMenuButtonArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit));
 			}
-			outList.Add (new MenuArgs (OnRemoveClicked, "Remove From Dock", Gtk.Stock.Remove, true));
+			outList.Add (new SimpleMenuButtonArgs (OnRemoveClicked, "Remove From Dock", Gtk.Stock.Remove));
 			
 			return outList;
 		}
 		
 		#endregion 
 		#endregion
-		void CloseAllOpenWindows (object o, EventArgs a)
+		void CloseAllOpenWindows ()
 		{
 			List<Wnck.Window> windows = new List<Wnck.Window> ();
-			foreach (Application app in Apps)
+			foreach (Application app in Applications)
 				windows.AddRange (app.Windows);
 			WindowControl.CloseWindows (windows);
 		}
 		
-		void MinimizeRestoreWindows (object o, EventArgs a)
+		void MinimizeRestoreWindows ()
 		{
 			List<Wnck.Window> windows = new List<Wnck.Window> ();
-			foreach (Application app in Apps)
+			foreach (Application app in Applications)
 				windows.AddRange (app.Windows);
 			WindowControl.MinimizeRestoreWindows (windows);
 		}
 		
-		void OnRemoveClicked (object o, EventArgs a)
+		void OnRemoveClicked ()
 		{
 			if (RemoveClicked != null)
-				RemoveClicked (this, a);
+				RemoveClicked (this, new EventArgs ());
 		}
 	}
 }
