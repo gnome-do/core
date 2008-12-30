@@ -75,29 +75,7 @@ namespace Docky.Interface
 		/// </returns>
 		protected override Gdk.Pixbuf GetSurfacePixbuf ()
 		{
-			List<string> guesses = new List<string> ();
-			guesses.Add (Application.Name.ToLower ().Replace (' ','-'));
-			guesses.Add (Application.Windows[0].Name.ToLower ().Replace (' ','-'));
-			guesses.Add (Application.IconName.ToLower ().Replace (' ','-'));
-			guesses.Add (Application.Windows[0].IconName.ToLower ().Replace (' ','-'));
-			guesses.Add ("gnome-" + guesses[0]);
-			guesses.Add ("gnome-" + guesses[1]);
-			guesses.Add ("gnome-" + guesses[2]);
-			guesses.Add ("gnome-" + guesses[3]);
-			
-			if (Application.Name.Length > 4 && Application.Name.Contains (" "))
-				guesses.Add (Application.Name.Split (' ') [0].ToLower ());
-			
-			string exec;
-			exec = GetExecStringForPID (Application.Pid);
-			if (string.IsNullOrEmpty (exec))
-				exec = GetExecStringForPID (Application.Windows[0].Pid);
-			
-			
-			if (!string.IsNullOrEmpty (exec)) {
-				guesses.Add (exec);
-				guesses.Add (exec.Split ('-')[0]);
-			}
+			List<string> guesses = new List<string> (GetStringGuessList ());
 			
 			Gdk.Pixbuf pbuf = null;
 			foreach (string guess in guesses) {
@@ -137,6 +115,33 @@ namespace Docky.Interface
 				pbuf = temp;
 			}
 			return pbuf;
+		}
+		
+		IEnumerable<string> GetStringGuessList ()
+		{
+			string [] guesses = new [] { Application.Name.ToLower ().Replace (' ','-'),
+				                         Application.Windows[0].Name.ToLower ().Replace (' ','-'),
+				                         Application.IconName.ToLower ().Replace (' ','-'),
+				                         Application.Windows[0].IconName.ToLower ().Replace (' ','-') };
+			foreach (string s in guesses)
+				yield return s;
+			
+			foreach (string s in guesses)
+				yield return "gnome-" + s;
+			
+			if (Application.Name.Length > 4 && Application.Name.Contains (" "))
+				yield return Application.Name.Split (' ') [0].ToLower ();
+			
+			string exec;
+			exec = GetExecStringForPID (Application.Pid);
+			if (string.IsNullOrEmpty (exec))
+				exec = GetExecStringForPID (Application.Windows[0].Pid);
+			
+			
+			if (!string.IsNullOrEmpty (exec)) {
+				yield return exec;
+				yield return exec.Split ('-')[0];
+			}
 		}
 		
 		string GetExecStringForPID (int pid)
