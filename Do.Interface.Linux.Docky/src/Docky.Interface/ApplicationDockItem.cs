@@ -65,7 +65,7 @@ namespace Docky.Interface
 		
 		public override Pixbuf GetDragPixbuf ()
 		{
-			return Applications.Icon;
+			return Application.Icon;
 		}
 
 		/// <summary>
@@ -182,7 +182,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public Wnck.Application Applications {
+		Wnck.Application Application {
 			get { return application; }
 		}
 		
@@ -221,7 +221,7 @@ namespace Docky.Interface
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
 			List<AbstractMenuButtonArgs> outList = new List<AbstractMenuButtonArgs> ();
-			foreach (Wnck.Window window_ in Applications.Windows.Where (win => !win.IsSkipTasklist)) {
+			foreach (Wnck.Window window_ in Application.Windows.Where (win => !win.IsSkipTasklist)) {
 				// we make a copy here so that when the lambda is evaluated, it evaluates the right one
 				// this is due to the scoping of the window_ variable.
 				Wnck.Window window = window_;
@@ -229,8 +229,8 @@ namespace Docky.Interface
 			}
 			
 			outList.Add (new SeparatorMenuButtonArgs ());
-			outList.Add (new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (Applications.Windows), MinimizeRestoreText, "down"));
-			outList.Add (new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (Applications.Windows), CloseText, Gtk.Stock.Quit));
+			outList.Add (new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (Application.Windows), MinimizeRestoreText, "down"));
+			outList.Add (new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (Application.Windows), CloseText, Gtk.Stock.Quit));
 			
 			return outList;
 		}
