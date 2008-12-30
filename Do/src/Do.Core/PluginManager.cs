@@ -23,16 +23,17 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
+using Mono.Unix;
 using Mono.Addins;
 using Mono.Addins.Gui;
 using Mono.Addins.Setup;
 
-using Do;
 using Do.UI;
 using Do.Platform;
 using Do.Platform.Linux;
 using Do.Universe;
 using Do.Interface;
+using Do.Core.Addins;
 
 namespace Do.Core
 {
@@ -42,25 +43,16 @@ namespace Do.Core
 	/// </summary>
 	internal static class PluginManager
 	{
-
-		public const string AllPluginsRepository = "All Available Plugins";
 		const string DefaultPluginIcon = "folder_tar";
 		
-		static IEnumerable<string> ExtensionPaths = new [] { "/Do/ItemSource", "/Do/Action", };
+		static IEnumerable<string> ExtensionPaths =
+			new [] { "/Do/ItemSource", "/Do/Action", };
 
-		static IDictionary<string, IEnumerable<string>> repository_urls;
-		public static IDictionary<string, IEnumerable<string>> RepositoryUrls {
-			get {
-				if (repository_urls != null) return repository_urls;
-
-				repository_urls = new Dictionary<string, IEnumerable<string>> ();      
-				repository_urls ["Local Plugins"] = Paths.SystemPluginDirectories
-					.Select (repo => "file://" + repo)
-					.ToArray ();
-
-				return repository_urls;
-			}
-		}
+		public static readonly IEnumerable<AddinClassifier> Classifiers = new AddinClassifier [] {
+			new OfficialAddinClassifier (),
+			new CommunityAddinClassifier (),
+			new GreedyAddinClassifier (),
+		};
 
 		/// <summary>
 		/// Performs plugin system initialization. Should be called before this
@@ -73,11 +65,10 @@ namespace Do.Core
 
 			// Register repositories.
 			SetupService setup = new SetupService (AddinManager.Registry);
-			foreach (IEnumerable<string> urls in RepositoryUrls.Values) {
-				foreach (string url in urls) {
-					if (!setup.Repositories.ContainsRepository (url)) {
-						setup.Repositories.RegisterRepository (null, url, false);
-					}
+			foreach (string path in Paths.SystemPluginDirectories) {
+				string url = "file://" + path;
+				if (!setup.Repositories.ContainsRepository (url)) {
+					setup.Repositories.RegisterRepository (null, url, false);
 				}
 			}
 
@@ -92,16 +83,10 @@ namespace Do.Core
 			InstallLocalPlugins (setup);
 		}
 
-		public static bool AddinIsFromRepository (Addin a, string name)
+		public static bool PluginClassifiesAs (AddinRepositoryEntry entry, string className)
 		{
-			return name == AllPluginsRepository ||
-				RepositoryUrls [name].Any (url => a.Description.Url.StartsWith (url));
-		}
-
-		public static bool AddinIsFromRepository (AddinRepositoryEntry e, string name)
-		{
-			return name == AllPluginsRepository ||
-				RepositoryUrls [name].Any (url => e.RepositoryUrl.StartsWith (url));
+			AddinClassifier classifier = Classifiers.FirstOrDefault (c => c.Name == className);
+			return classifier == null ? false : classifier.IsMatch (entry);
 		}
 
 		/// <summary>

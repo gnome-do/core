@@ -21,8 +21,6 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using Do;
-
 namespace Do.Core
 {
 	
@@ -30,7 +28,10 @@ namespace Do.Core
 	{
 		const string ApplicationDirectory = "gnome-do";
 		const string PluginsDirectory = "plugins";
-		
+
+		//// <value>
+		/// Directory where Do saves its Mono.Addins repository cache.
+		/// </value>
 		public static string UserPluginsDirectory {
 			get {
 				string userData =
@@ -41,6 +42,9 @@ namespace Do.Core
 			}
 		}
 
+		//// <value>
+		/// Directories where Do looks for Mono.Addins repositories.
+		/// </value>
 		public static IEnumerable<string> SystemPluginDirectories {
 			get {
 				yield return AppDomain.CurrentDomain.BaseDirectory.Combine (PluginsDirectory);

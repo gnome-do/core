@@ -79,6 +79,12 @@
     <File name="src/Do.Core/SimpleSearchContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/SimpleSearchController.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/ThirdSearchController.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Mono.Addins/AddinExtensions.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Mono.Addins/Mono.Addins.Setup/AddinRepositoryEntryExtensions.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/Do.Core.Addins/AddinClassifier.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
