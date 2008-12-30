@@ -26,8 +26,23 @@ namespace Do
 	
 	public static class PathExtensions
 	{
+		/// <summary>
+		/// Shortcut for System.IO.Path.Combine with a varaible number of parameters.
+		/// </summary>
+		/// <param name="self">
+		/// A <see cref="System.String"/> base path.
+		/// </param>
+		/// <param name="paths">
+		/// A <see cref="System.String[]"/> to combine onto the base path. 
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/> fully assembled path.
+		/// </returns>
 		public static string Combine (this string self, params string [] paths)
 		{
+			if (self == null) throw new ArgumentNullException ("self");
+			if (paths == null) throw new ArgumentNullException ("paths");
+			
 			return Path.Combine (self, paths.Aggregate (Path.Combine));
 		}
 	}

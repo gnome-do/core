@@ -41,11 +41,19 @@ namespace Do.Platform
 		static IEnvironmentService environment;
 		static INotificationsService notifications;
 		static IUniverseFactoryService universe_factory;
-		
+
+		/// <summary>
+		/// Initializes the class. Must be called after Mono.Addins is initialized; if this is
+		/// called and Mono.Addins is not initialized, an exception will be thrown.
+		/// </summary>
+		/// <remarks>
+		/// For testing purposes, you may omit the call to Initialize and default services will be
+		/// loaded when Mono.Addins is not available.
+		/// </remarks>
 		public static void Initialize ()
 		{
 			if (!AddinManager.IsInitialized) {
-				// AddinManager.Initialize (Paths.UserPlugins);
+				// TODO find a better exception to throw.
 				throw new Exception ("AddinManager was initialized before Services.");
 			}
 			AddinManager.AddExtensionNodeHandler ("/Do/Service", OnServiceChanged);
@@ -54,17 +62,11 @@ namespace Do.Platform
 		/// <summary>
 		/// When a service is changed, we "dirty the cache".
 		/// </summary>
-		/// <param name="s">
-		/// A <see cref="System.Object"/>
-		/// </param>
-		/// <param name="args">
-		/// A <see cref="ExtensionNodeEventArgs"/>
-		/// </param>
-		static void OnServiceChanged (object s, ExtensionNodeEventArgs args)
+		static void OnServiceChanged (object sender, ExtensionNodeEventArgs e)
 		{
-			IService service = args.ExtensionObject as IService;
+			IService service = e.ExtensionObject as IService;
 
-			switch (args.Change) {
+			switch (e.Change) {
 			case ExtensionChange.Add:
 				if (service is IInitializedService)
 					(service as IInitializedService).Initialize ();
@@ -93,6 +95,9 @@ namespace Do.Platform
 				paths = null;
 		}
 
+		/// <summary>
+		/// All available log services. Used primarily by the static Log class.
+		/// </summary>
 		public static IEnumerable<ILogService> Logs {
 			get {
 				if (logs == null)

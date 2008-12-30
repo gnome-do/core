@@ -34,42 +34,35 @@ namespace Do.UI
 	public partial class PreferencesWindow : Window
 	{
 
+		const int ManagePreferencesPreferencesPageIndex = 2;
 		const string HelpUrl = "http://do.davebsd.com/wiki/index.php?title=Using_Do";
+
+		readonly IEnumerable<IConfigurable> Pages = new IConfigurable [] {
+			new GeneralPreferencesWidget (),
+			new KeybindingsPreferencesWidget (),
+			new ManagePluginsPreferencesWidget (),
+			new ColorConfigurationWidget (),
+		};
 
 		public PreferencesWindow () : 
 			base (WindowType.Toplevel)
 		{
 			Build ();
 
-			TargetEntry[] targets = {
+			btn_close.IsFocus = true;
+			
+			TargetEntry [] targets = {
 				new TargetEntry ("text/uri-list", 0, 0), 
 			};
+			Drag.DestSet (this, DestDefaults.All, targets, Gdk.DragAction.Copy);
 			
-			Gtk.Drag.DestSet (this, DestDefaults.All, targets, Gdk.DragAction.Copy);
-			
-			btn_close.IsFocus = true;
 			// Add notebook pages.
 			foreach (IConfigurable page in Pages) {
 				notebook.AppendPage (page.GetConfiguration (), new Label (page.Name));
 			}
 			
-			//Sets default page to the plugins tab, since this is the most common reason to
-			//open the prefs UI for most users.
-			notebook.CurrentPage = Pages.FindIndex (p => p.Name == "Plugins");
-		}
-
-		IConfigurable[] pages;
-		IConfigurable[] Pages {
-			get {
-				if (pages == null)
-					pages = new IConfigurable[] {
-						new GeneralPreferencesWidget (),
-						new KeybindingsPreferencesWidget (),
-						new ManagePluginsPreferencesWidget (),
-						new ColorConfigurationWidget (),
-					};
-				return pages;
-			}
+			// Sets default page to the plugins tab, a good default.
+			notebook.CurrentPage = ManagePreferencesPreferencesPageIndex;
 		}
 
 		protected virtual void OnBtnCloseClicked (object sender, EventArgs e)

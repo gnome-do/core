@@ -21,9 +21,9 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Do.Interface;
 using Do.Universe;
-using Do.Universe.Safe;
+using Do.Platform;
+using Do.Interface;
 
 namespace Do.Core
 {
@@ -133,70 +133,62 @@ namespace Do.Core
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
 				return new List<Element> (Do.UniverseManager.Search (context.Query, 
-				                                                     SearchTypes, 
-				                                                     context.LastContext.Results, 
-				                                                     FirstController.Selection));
+					SearchTypes, context.LastContext.Results, FirstController.Selection));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
 				return new List<Element> (context.Results);
 			} else { 
 				//else we do things the slow way
-				return new List<Element> (Do.UniverseManager.Search (context.Query, 
-				                                                     SearchTypes, 
-				                                                     FirstController.Selection));
+				return new List<Element> (
+					Do.UniverseManager.Search (context.Query, SearchTypes, FirstController.Selection));
 			}
 		}
 
-		private Element[] GetContextResults ()
+		private IList<Element> GetContextResults ()
 		{
-			SafeAct action;
-			Item item;
-			List<Item> items = new List<Item> ();
+			Item item = null;
+			Act action = null;
+			IEnumerable<Item> items = null;
+			List<Item> modItems = new List<Item> ();
+
 			if (FirstController.Selection is Act) {
-				action = (FirstController.Selection as Act).RetainSafe ();
+				action = FirstController.Selection as Act;
 				item = SecondController.Selection as Item;
-				foreach (Element obj in SecondController.FullSelection) {
-					if (obj is Item)
-						items.Add (obj as Item);
-				}
-				
+				items = SecondController.FullSelection.OfType<Item> ();
 			} else if (SecondController.Selection is Act) {
-				
-				action = (SecondController.Selection as Act).RetainSafe ();
-				item   = FirstController.Selection as Item;
-				foreach (Element obj in FirstController.FullSelection) {
-					if (obj is Item)
-						items.Add (obj as Item);
-				}
-				
+				action = SecondController.Selection as Act;
+				item = FirstController.Selection as Item;
+				items = FirstController.FullSelection.OfType<Item> ();
 			} else {
-				// Log.Error ("Something Very Strange Has Happened");
-				return null;
+				// TODO find a better exception to throw
+				throw new Exception ("No action available");
 			}
 
-			// If we support nothing, dont search.
-			if (!action.SupportedModifierItemTypes.Any ()) return null;
+			// If we don't support modifier items, don't search.
+			if (!action.Safe.SupportedModifierItemTypes.Any ())
+				return new List<Element> ();
 			
-			List<Element> results = new List<Element> ();
-
 			if (!textMode) {
-				List<Element> initresults = InitialResults ();
-				foreach (Item moditem in initresults) {
-					if (action.SupportsModifierItemForItems (items, moditem))
-						results.Add (moditem);
+				// Add appropriate modifier items from universe.
+				foreach (Item modItem in InitialResults ()) {
+					if (action.Safe.SupportsModifierItemForItems (items, modItem))
+						modItems.Add (modItem);
 				}
-			
-				if (Query.Length == 0)
-					results.AddRange (action.DynamicModifierItemsForItem (item).Cast<Element> ());
-				
-				results.Sort ();
+				// Add any dynamic modifier items on the first search.
+				if (Query.Length == 0) {
+					foreach (Item modItem in action.Safe.DynamicModifierItemsForItem (item)) {
+						modItem.UpdateRelevance ("", item);
+						modItems.Add (modItem);
+					}
+				}
+				// Sort modifier items before we potentially add a text item.
+				modItems.Sort ();
 			}
 			
 			Item textItem = new ImplicitTextItem (Query);
-			if (action.SupportsModifierItemForItems (items, textItem))
-				results.Add (textItem);
+			if (action.Safe.SupportsModifierItemForItems (items, textItem))
+				modItems.Add (textItem);
 			
-			return results.ToArray ();
-			
+			return modItems.OfType<Element> ().ToList<Element> ();
 		}
 		
 		public override void Reset ()
