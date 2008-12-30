@@ -48,11 +48,12 @@ namespace Do.Core
 		static IEnumerable<string> ExtensionPaths =
 			new [] { "/Do/ItemSource", "/Do/Action", };
 
-		public static readonly IEnumerable<AddinClassifier> Classifiers = new AddinClassifier [] {
-			new OfficialAddinClassifier (),
-			new CommunityAddinClassifier (),
-			new GreedyAddinClassifier (),
-		};
+		public static readonly IEnumerable<AddinClassifier> Classifiers =
+			new AddinClassifier [] {
+				new OfficialAddinClassifier (),
+				new CommunityAddinClassifier (),
+				new GreedyAddinClassifier (),
+			};
 
 		/// <summary>
 		/// Performs plugin system initialization. Should be called before this
@@ -66,6 +67,7 @@ namespace Do.Core
 			// Register repositories.
 			SetupService setup = new SetupService (AddinManager.Registry);
 			foreach (string path in Paths.SystemPluginDirectories) {
+				if (!Directory.Exists (path)) continue;
 				string url = "file://" + path;
 				if (!setup.Repositories.ContainsRepository (url)) {
 					setup.Repositories.RegisterRepository (null, url, false);
