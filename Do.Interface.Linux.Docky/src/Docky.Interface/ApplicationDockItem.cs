@@ -58,7 +58,6 @@ namespace Docky.Interface
 		
 		const int MenuItemMaxCharacters = 50;
 		
-		Wnck.Application application;
 		Gdk.Rectangle icon_region;
 		
 		#region IDockItem implementation 
@@ -77,22 +76,22 @@ namespace Docky.Interface
 		protected override Gdk.Pixbuf GetSurfacePixbuf ()
 		{
 			List<string> guesses = new List<string> ();
-			guesses.Add (application.Name.ToLower ().Replace (' ','-'));
-			guesses.Add (application.Windows[0].Name.ToLower ().Replace (' ','-'));
-			guesses.Add (application.IconName.ToLower ().Replace (' ','-'));
-			guesses.Add (application.Windows[0].IconName.ToLower ().Replace (' ','-'));
+			guesses.Add (Application.Name.ToLower ().Replace (' ','-'));
+			guesses.Add (Application.Windows[0].Name.ToLower ().Replace (' ','-'));
+			guesses.Add (Application.IconName.ToLower ().Replace (' ','-'));
+			guesses.Add (Application.Windows[0].IconName.ToLower ().Replace (' ','-'));
 			guesses.Add ("gnome-" + guesses[0]);
 			guesses.Add ("gnome-" + guesses[1]);
 			guesses.Add ("gnome-" + guesses[2]);
 			guesses.Add ("gnome-" + guesses[3]);
 			
-			if (application.Name.Length > 4 && application.Name.Contains (" "))
-				guesses.Add (application.Name.Split (' ') [0].ToLower ());
+			if (Application.Name.Length > 4 && Application.Name.Contains (" "))
+				guesses.Add (Application.Name.Split (' ') [0].ToLower ());
 			
 			string exec;
-			exec = GetExecStringForPID (application.Pid);
+			exec = GetExecStringForPID (Application.Pid);
 			if (string.IsNullOrEmpty (exec))
-				exec = GetExecStringForPID (application.Windows[0].Pid);
+				exec = GetExecStringForPID (Application.Windows[0].Pid);
 			
 			
 			if (!string.IsNullOrEmpty (exec)) {
@@ -172,31 +171,31 @@ namespace Docky.Interface
 		
 		public override  string Description {
 			get {
-				return application.Name;
+				return Application.Name;
 			}
 		}
 		
 		public override int WindowCount {
 			get {
-				return application.Windows.Where (w => !w.IsSkipTasklist).Count ();
+				return Application.Windows.Where (w => !w.IsSkipTasklist).Count ();
 			}
 		}
 		
 		Wnck.Application Application {
-			get { return application; }
+			get; set;
 		}
 		
 		#endregion 
 		
 		public ApplicationDockItem (Wnck.Application application) : base ()
 		{
-			this.application = application;
+			Application = application;
 		}
 		
 		public override void Clicked (uint button)
 		{
 			if (button == 1)
-				WindowUtils.PerformLogicalClick (new [] {application});
+				WindowUtils.PerformLogicalClick (new [] {Application});
 		}
 
 		public override void SetIconRegion (Gdk.Rectangle region)
@@ -205,7 +204,7 @@ namespace Docky.Interface
 				return;
 			icon_region = region;
 			
-			foreach (Wnck.Window window in application.Windows) {
+			foreach (Wnck.Window window in Application.Windows) {
 				window.SetIconGeometry (region.X, region.Y, region.Width, region.Height);
 			}
 		}
@@ -215,7 +214,7 @@ namespace Docky.Interface
 			if (!(other is ApplicationDockItem))
 				return false;
 			
-			return ((other as ApplicationDockItem).application == application);
+			return ((other as ApplicationDockItem).Application == Application);
 		}
 		
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
