@@ -23,11 +23,11 @@ using System.Linq;
 
 using Gdk;
 
-using Docky.Utilities;
-
 using Do.Interface;
 using Do.Interface.CairoUtils;
 using Do.Platform;
+
+using Docky.Utilities;
 
 namespace Docky.Interface
 {
@@ -35,6 +35,8 @@ namespace Docky.Interface
 	
 	public class TrashDockItem :  AbstractDockItem
 	{
+		const string TrashEmptyIcon = "gnome-stock-trash";
+		const string TrashFullIcon = "gnome-stock-trash-full";
 		
 		string Trash {
 			get { 
@@ -53,8 +55,8 @@ namespace Docky.Interface
 		protected override Pixbuf GetSurfacePixbuf ()
 		{
 			if (Directory.GetFiles (Trash).Any ())
-				return IconProvider.PixbufFromIconName ("gnome-stock-trash-full", DockPreferences.FullIconSize);
-			return IconProvider.PixbufFromIconName ("gnome-stock-trash", DockPreferences.FullIconSize);
+				return IconProvider.PixbufFromIconName (TrashFullIcon, DockPreferences.FullIconSize);
+			return IconProvider.PixbufFromIconName (TrashEmptyIcon, DockPreferences.FullIconSize);
 		}
 
 		#region IDockDragAwareItem implementation 
@@ -66,6 +68,7 @@ namespace Docky.Interface
 			if (item.StartsWith ("file://"))
 				item = item.Substring ("file://".Length);
 			
+			// if the file doesn't exist for whatever reason, we bail
 			if (!System.IO.File.Exists (item) && !System.IO.Directory.Exists (item))
 				return false;
 			
@@ -77,6 +80,7 @@ namespace Docky.Interface
 				return false;
 			}
 			
+			// we just added to the trash, so it has files now for sure
 			if (!trashHadFiles)
 				RedrawIcon ();
 			return true;

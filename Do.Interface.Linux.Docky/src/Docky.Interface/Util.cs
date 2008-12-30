@@ -20,9 +20,9 @@ using System;
 using System.Collections.Generic;
 
 using Do.Universe;
+using Do.Interface.CairoUtils;
 
 using Cairo;
-using Do.Interface.CairoUtils;
 using Gdk;
 
 namespace Docky.Interface
@@ -37,6 +37,21 @@ namespace Docky.Interface
 	public static class Util
 	{
 		
+		/// <summary>
+		/// Gets a surface containing a transparent black rounded rectangle with the provided text on top.
+		/// </summary>
+		/// <param name="text">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="max_width">
+		/// A <see cref="System.Int32"/>
+		/// </param>
+		/// <param name="similar">
+		/// A <see cref="Surface"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="Surface"/>
+		/// </returns>
 		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar)
 		{
 			Surface sr;
@@ -66,11 +81,6 @@ namespace Docky.Interface
 			layout.FontDescription.Dispose ();
 			layout.Dispose ();
 			return sr;
-		}
-		
-		public static string UIDForElement (Element obj)
-		{
-			return obj.Name + obj.Description + obj.Icon;
 		}
 	}
 }

@@ -41,7 +41,7 @@ namespace Docky.Interface
 		DockArea dock_area;
 		EventBox eb;
 		IDoController controller;
-		int current_offset = 0;
+		int current_offset;
 		
 		public new string Name {
 			get { return "Docky"; }
@@ -65,7 +65,6 @@ namespace Docky.Interface
 			controller.Orientation = ControlOrientation.Horizontal;
 			
 			AppPaintable = true;
-//			KeepAbove = true;
 			Decorated = false;
 			SkipPagerHint = true;
 			SkipTaskbarHint = true;
@@ -89,8 +88,8 @@ namespace Docky.Interface
 		{
 			eb = new EventBox ();
 			eb.HeightRequest = 1;
-			
 			eb.AddEvents ((int) Gdk.EventMask.PointerMotionMask);
+			
 			eb.MotionNotifyEvent += (o, a) => OnEventBoxMotion ();
 			eb.DragMotion += (o, a) => OnEventBoxMotion ();
 			
@@ -291,7 +290,9 @@ namespace Docky.Interface
 			}
 		}
 		
-		public bool ResultsCanHide { get { return false; } }
+		public bool ResultsCanHide { 
+			get { return false; } 
+		}
 		
 		#endregion 
 		

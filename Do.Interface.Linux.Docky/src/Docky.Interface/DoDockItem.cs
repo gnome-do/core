@@ -31,7 +31,6 @@ using Docky.Utilities;
 namespace Docky.Interface
 {
 	
-	
 	public class DoDockItem : AbstractDockItem
 	{
 		const string DoIcon = "gnome-do";

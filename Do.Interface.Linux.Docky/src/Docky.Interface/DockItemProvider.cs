@@ -76,6 +76,14 @@ namespace Docky.Interface
 			}
 		}
 		
+		IDockItem Separator { get; set; }
+		IDockItem MenuItem { get; set; }
+		IDockItem TrashItem { get; set; }
+		
+		IEnumerable<DockItem> DragableItems {
+			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
+		}
+		
 		public bool UpdatesEnabled { get; set; }
 		
 		public List<IDockItem> DockItems {
@@ -94,14 +102,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		IEnumerable<DockItem> DragableItems {
-			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
-		}
-		
-		IDockItem Separator { get; set; }
-		IDockItem MenuItem { get; set; }
-		IDockItem TrashItem { get; set; }
-		
 		public DockItemProvider ()
 		{
 			Separator = new SeparatorItem ();
@@ -114,13 +114,13 @@ namespace Docky.Interface
 			
 			
 			Wnck.Screen.Default.WindowClosed += delegate(object o, WindowClosedArgs args) {
-				if (args.Window.IsSkipTasklist) return;
-				UpdateItems ();
+				if (!args.Window.IsSkipTasklist)
+					UpdateItems ();
 			};
 			
 			Wnck.Screen.Default.WindowOpened += delegate(object o, WindowOpenedArgs args) {
-				if (args.Window.IsSkipTasklist)	return;
-				UpdateItems ();
+				if (!args.Window.IsSkipTasklist)
+					UpdateItems ();
 			};
 			
 			// We give core 3 seconds to update its universe.  Eventually we will need a signal or something,

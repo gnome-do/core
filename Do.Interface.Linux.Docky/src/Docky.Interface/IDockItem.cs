@@ -30,6 +30,9 @@ namespace Docky.Interface
 	
 	public interface IDockItem : IEquatable<IDockItem>, IDisposable
 	{
+		/// <value>
+		/// the description of the icon shown in the hover text
+		/// </value>
 		string Description { get; }
 		
 		int Width { get; }
@@ -46,10 +49,8 @@ namespace Docky.Interface
 		bool Scalable { get; }
 		
 		/// <value>
-		/// If the "active applications" indicator should be drawn under the icon
+		/// The number of windows an application has
 		/// </value>
-//		bool DrawIndicator { get; }
-		
 		int WindowCount { get; }
 		
 		/// <value>
@@ -127,10 +128,19 @@ namespace Docky.Interface
 	
 	public interface IDockAppItem
 	{
+		/// <value>
+		/// Fired whenever an icon needs to be redrawn
+		/// </value>
 		event UpdateRequestHandler UpdateNeeded;
 		
+		/// <summary>
+		/// Determines if an icon is in the urgent state
+		/// </summary>
 		bool NeedsAttention { get; }
 		
+		/// <value>
+		/// The time in which the ugency request was started
+		/// </value>
 		DateTime AttentionRequestStartTime { get; }
 	}
 }

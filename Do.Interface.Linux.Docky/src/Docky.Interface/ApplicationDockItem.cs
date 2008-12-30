@@ -220,6 +220,7 @@ namespace Docky.Interface
 		
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
+			// we use a list because using yield seems to result in the wrong lambda getting called...
 			List<AbstractMenuButtonArgs> outList = new List<AbstractMenuButtonArgs> ();
 			foreach (Wnck.Window window_ in Application.Windows.Where (win => !win.IsSkipTasklist)) {
 				// we make a copy here so that when the lambda is evaluated, it evaluates the right one

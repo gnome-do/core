@@ -664,7 +664,7 @@ namespace Docky.Interface
 				cr.Scale (1 / scale, 1 / scale);
 			} else {
 				// since these dont scale, we have some extra work to do to keep them centered
-				double startx = x + (zoom*DockItems [icon].Width - DockItems [icon].Width) / 2;
+				double startx = x + (zoom * DockItems [icon].Width - DockItems [icon].Width) / 2;
 				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), (int) startx, 
 				              Height - DockItems [icon].Height - (MinimumDockArea.Height - DockItems [icon].Height) / 2);
 				cr.Paint ();
@@ -678,10 +678,9 @@ namespace Docky.Interface
 			
 			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
 			// at all instead of rendering a blank surface (which is slow)
-			if (!dock_item_menu.Visible &&
-			    DockItemForX (Cursor.X) == icon && 
-			    CursorIsOverDockArea && 
-			    DockItems [icon].GetTextSurface (cr.Target) != null) {
+			if (!dock_item_menu.Visible && DockItemForX (Cursor.X) == icon && 
+			    CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null) {
+				
 				int textx = IconNormalCenterX (icon) - (DockPreferences.TextWidth / 2);
 				int texty = Height - 2 * IconSize - 28;
 				cr.SetSource (DockItems [icon].GetTextSurface (cr.Target), textx, texty);
@@ -698,17 +697,17 @@ namespace Docky.Interface
 			RadialGradient rg = new RadialGradient (x, y, 0, x, y, size);
 			rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
 			if (urgent) {
-				rg.AddColorStop (.1, new Cairo.Color (1, .8, .8, 1));
-				rg.AddColorStop (.2, new Cairo.Color (1, .6, .6, .6));
+				rg.AddColorStop (.10, new Cairo.Color (1, .8, .8, 1.0));
+				rg.AddColorStop (.20, new Cairo.Color (1, .6, .6, .60));
 				rg.AddColorStop (.35, new Cairo.Color (1, .3, .3, .35));
-				rg.AddColorStop (.5, new Cairo.Color (1, .3, .3, .25));
-				rg.AddColorStop (1, new Cairo.Color (1, .3, .3, 0));
+				rg.AddColorStop (.50, new Cairo.Color (1, .3, .3, .25));
+				rg.AddColorStop (1.0, new Cairo.Color (1, .3, .3, 0.0));
 			} else {
-				rg.AddColorStop (.1, new Cairo.Color (.5, .6, 1, 1));
-				rg.AddColorStop (.2, new Cairo.Color (.5, .6, 1, .6));
+				rg.AddColorStop (.10, new Cairo.Color (.5, .6, 1, 1.0));
+				rg.AddColorStop (.20, new Cairo.Color (.5, .6, 1, .60));
 				rg.AddColorStop (.25, new Cairo.Color (.5, .6, 1, .25));
-				rg.AddColorStop (.5, new Cairo.Color (.5, .6, 1, .15));
-				rg.AddColorStop (1, new Cairo.Color (.5, .6, 1, 0));
+				rg.AddColorStop (.50, new Cairo.Color (.5, .6, 1, .15));
+				rg.AddColorStop (1.0, new Cairo.Color (.5, .6, 1, 0.0));
 			}
 			
 			cr.Pattern = rg;
@@ -724,13 +723,13 @@ namespace Docky.Interface
 			double opacity = 1.0 / Math.Abs (center.X - Cursor.X) * 30 - .2;
 			
 			// draw concentric circles from here on
-			cr.Arc (center.X, center.Y, 3.5, 0, Math.PI*2);
+			cr.Arc (center.X, center.Y, 3.5, 0, Math.PI * 2);
 			cr.LineWidth = 1;
 			cr.Color = new Cairo.Color (1, 1, 1, opacity);
 			cr.Stroke ();
 			
 			if (!DockPreferences.AutoHide) {
-				cr.Arc (center.X, center.Y, 1.5, 0, Math.PI*2);
+				cr.Arc (center.X, center.Y, 1.5, 0, Math.PI * 2);
 				cr.Color = new Cairo.Color (1, 1, 1, opacity);
 				cr.Fill ();
 			}
@@ -769,11 +768,11 @@ namespace Docky.Interface
 			if (ZoomPixels / 2 == 0) {
 				zoom = 1;
 			} else {
-				zoom = DockPreferences.ZoomPercent - (offset / (double)(ZoomPixels / 2)) * (DockPreferences.ZoomPercent - 1);
+				zoom = DockPreferences.ZoomPercent - (offset / (ZoomPixels / 2.0)) * (DockPreferences.ZoomPercent - 1);
 				zoom = (zoom - 1) * ZoomIn + 1;
 			}
 			
-			offset = (int) ((offset*Math.Sin ((Math.PI/4)*zoom)) * (DockPreferences.ZoomPercent-1));
+			offset = (int) ((offset * Math.Sin ((Math.PI / 4) * zoom)) * (DockPreferences.ZoomPercent-1));
 			
 			if (Cursor.X > center) {
 				center -= offset;
@@ -846,7 +845,6 @@ namespace Docky.Interface
 		}
 		
 		#region Drag Code
-
 		
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{

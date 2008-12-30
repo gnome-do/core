@@ -39,6 +39,7 @@ namespace Docky.Interface
 		const int TailHeight = 15;
 		new const int BorderWidth = 2;
 		const int Radius = 10;
+		const int Width = 225;
 		
 		public Gtk.VBox Container { get; private set; } 
 		
@@ -53,7 +54,7 @@ namespace Docky.Interface
 			Modal = true;
 			TypeHint = WindowTypeHint.PopupMenu;
 			
-			WidthRequest = 225;
+			WidthRequest = Width;
 			
 			this.SetCompositeColormap ();
 			

@@ -19,6 +19,7 @@
 using System;
 
 using Cairo;
+
 using Do.Interface;
 using Do.Interface.CairoUtils;
 
@@ -26,13 +27,48 @@ using Docky.Utilities;
 
 namespace Docky.Interface
 {
-	
-	
 	public class SeparatorItem : IDockItem
 	{
-		
 		Surface sr;
 		#region IDockItem implementation 
+		
+		public DateTime LastClick { get; set; }
+		public DateTime DockAddItem { get; set; }
+		
+		public string Description {
+			get { return ""; }
+		}
+		
+		public int Width {
+			get { return (int) (DockPreferences.IconSize * .3); }
+		}
+		
+		public int Height {
+			get { return DockPreferences.IconSize; }
+		}
+		
+		public bool IsAcceptingDrops {
+			get { return false; }
+		}
+		
+		public int WindowCount { 
+			get { return 0; } 
+		}
+		
+		public bool Scalable { 
+			get { return false; } 
+		}
+		
+		#endregion 
+		
+		public SeparatorItem ()
+		{
+			DockPreferences.IconSizeChanged += delegate {
+				if (sr != null)
+					sr.Destroy ();
+				sr = null;
+			};
+		}
 		
 		public Surface GetIconSurface (Surface buffer)
 		{
@@ -61,46 +97,6 @@ namespace Docky.Interface
 		public Gdk.Pixbuf GetDragPixbuf ()
 		{
 			return null;
-		}
-		
-		public string Description {
-			get {
-				return "";
-			}
-		}
-		
-		public int Width {
-			get {
-				return (int) (DockPreferences.IconSize * .3);
-			}
-		}
-		
-		public int Height {
-			get {
-				return DockPreferences.IconSize;
-			}
-		}
-		
-		public bool IsAcceptingDrops {
-			get { return false; }
-		}
-		
-		public int WindowCount { get { return 0; } }
-		
-		public bool Scalable { get { return false; } }
-		
-		public DateTime LastClick { get; set; }
-		public DateTime DockAddItem { get; set; }
-		
-		#endregion 
-		
-		public SeparatorItem ()
-		{
-			DockPreferences.IconSizeChanged += delegate {
-				if (sr != null)
-					sr.Destroy ();
-				sr = null;
-			};
 		}
 		
 		public bool ReceiveItem (string item)

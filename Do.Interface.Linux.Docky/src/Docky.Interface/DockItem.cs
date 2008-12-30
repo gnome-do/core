@@ -45,11 +45,13 @@ namespace Docky.Interface
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
 		bool needs_attention, accepting_drops;
-		uint handle_timer = 0;
+		uint handle_timer;
 		
 		public event EventHandler RemoveClicked;
 		
 		public event UpdateRequestHandler UpdateNeeded;
+		
+		public DateTime AttentionRequestStartTime { get; private set; }
 		
 		public override bool IsAcceptingDrops { 
 			get { return accepting_drops; } 
@@ -76,15 +78,15 @@ namespace Docky.Interface
 		}
 		
 		public override int WindowCount {
-			get {
-				return Applications.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ());
-			}
+			get { return Applications.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ()); }
 		}
 		
 		public int Position { get; set; }
 
 		public bool NeedsAttention { 
-			get { return needs_attention; } 
+			get { 
+				return needs_attention; 
+			} 
 			private set {
 				if (needs_attention == value)
 					return;
@@ -92,8 +94,6 @@ namespace Docky.Interface
 				AttentionRequestStartTime = DateTime.UtcNow;
 			}
 		}
-		
-		public DateTime AttentionRequestStartTime { get; private set; }
 		
 		public IEnumerable<Act> ActionsForItem {
 			get {
@@ -277,11 +277,8 @@ namespace Docky.Interface
 				return;
 			icon_region = region;
 			
-			foreach (Wnck.Application application in apps) {
-				foreach (Wnck.Window window in application.Windows) {
-					window.SetIconGeometry (region.X, region.Y, region.Width, region.Height);
-				}
-			}
+			Applications.ForEach (app => app.Windows.Where (w => !w.IsSkipTasklist)
+			                                        .ForEach (w => w.SetIconGeometry (region.X, region.Y, region.Width, region.Height)));
 		}
 		
 		public override bool Equals (IDockItem other)

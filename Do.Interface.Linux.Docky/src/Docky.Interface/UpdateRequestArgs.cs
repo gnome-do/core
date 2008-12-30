@@ -21,6 +21,9 @@ using System.Collections.Generic;
 
 namespace Docky.Interface
 {
+	/// <summary>
+	/// An update request
+	/// </summary>
 	public enum UpdateRequestType {
 		NeedsAttentionSet,
 		NeedsAttentionUnset,
@@ -31,10 +34,16 @@ namespace Docky.Interface
 	public class UpdateRequestArgs
 	{
 	
+		/// <value>
+		/// The item requesting the update
+		/// </value>
 		public IDockItem Item {
 			get; private set;
 		}
 		
+		/// <summary>
+		/// The type of update
+		/// </summary>
 		public UpdateRequestType Type {
 			get; private set;
 		}

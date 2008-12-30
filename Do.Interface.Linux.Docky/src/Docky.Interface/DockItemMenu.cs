@@ -115,6 +115,11 @@ namespace Docky.Interface
 		
 		void OnButtonPressed (object o, EventArgs args)
 		{
+			foreach (Gtk.Widget widget in Container.AllChildren) {
+				if (!(widget is Gtk.Button))
+					continue;
+				(widget as Gtk.Button).Activated -= OnButtonPressed;
+			}
 			Hide ();
 		}
 	}
