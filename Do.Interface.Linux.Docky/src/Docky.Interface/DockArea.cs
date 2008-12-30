@@ -582,6 +582,7 @@ namespace Docky.Interface
 					// only clear that area for which we are going to redraw.  If we land this in the middle of an icon
 					// things are going to look ugly, so this calculation MUST be correct.
 					cr.Rectangle (left_x, 0, right_x - left_x, Height);
+					cr.Rectangle (0, 0, Width, Height - (MinimumDockArea.Height + 2));
 					cr.Color = new Cairo.Color (1, 1, 1, 0);
 					cr.Operator = Operator.Source;
 					cr.Fill ();
