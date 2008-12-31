@@ -127,7 +127,7 @@ namespace Docky.Utilities
 			                                  .Any (w => !w.IsSkipTasklist && w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)));
 			bool urgent = apps.Any (app => app.Windows.Any (w => w.NeedsAttention ()));
 			
-			if (not_in_viewport) {
+			if (not_in_viewport || urgent) {
 				foreach (Wnck.Application application in apps) {
 					foreach (Wnck.Window window in application.Windows) {
 						if (urgent && !window.NeedsAttention ())

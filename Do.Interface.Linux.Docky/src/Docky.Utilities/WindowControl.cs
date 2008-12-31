@@ -88,7 +88,7 @@ namespace Docky.Utilities
 			}
 			
 			if (windows.Any (w => w.NeedsAttention ())) {
-				windows.Where (w => w.NeedsAttention ()).First ().Activate (Gtk.Global.CurrentEventTime+2);
+				windows.Where (w => w.NeedsAttention ()).First ().Activate (Gtk.Global.CurrentEventTime+20);
 			}
 		}
 		
