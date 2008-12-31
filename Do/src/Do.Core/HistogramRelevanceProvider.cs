@@ -35,7 +35,7 @@ namespace Do.Core {
 	[Serializable]
 	class HistogramRelevanceProvider : RelevanceProvider {
 
-		const float DefaultRelevance = 0.01f;
+		const float DefaultRelevance = 0.001f;
 		const float DefaultAge = 1f;
 
 		static readonly IEnumerable<Type> RewardedItemTypes = new Type[] {
@@ -143,7 +143,7 @@ namespace Do.Core {
 					relevance = 1f;
 				// Give the most popular items a leg up
 				else if (RewardedItemTypes.Contains (rec.Type))
-					relevance = DefaultRelevance * 2;
+					relevance *= 2;
 			}
 
 			// Newer objects (age -> 0) get scaled by factor -> 1.
@@ -202,7 +202,7 @@ namespace Do.Core {
 
 		public bool IsRelevantForMatch (string match)
 		{
-			return null == match || match.Length == 0 || HasFirstChar (match [0]);
+			return string.IsNullOrEmpty (match) || HasFirstChar (match [0]);
 		}
 		
 		/// <summary>
