@@ -42,6 +42,7 @@ namespace Docky.Interface
 		EventBox eb;
 		IDoController controller;
 		int current_offset;
+		bool is_repositioned_hidden;
 		
 		public new string Name {
 			get { return "Docky"; }
@@ -142,6 +143,9 @@ namespace Docky.Interface
 						HideReposition ();
 					return false;
 				});
+			} else {
+				if (is_repositioned_hidden)
+					Reposition ();
 			}
 		}
 		
@@ -177,7 +181,6 @@ namespace Docky.Interface
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
 			base.OnSizeAllocated (allocation);
-			
 			Reposition ();
 		}
 		
@@ -188,6 +191,8 @@ namespace Docky.Interface
 			GetSize (out main.Width, out main.Height);
 			geo = Screen.GetMonitorGeometry (0);
 			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-main.Height);
+			
+			is_repositioned_hidden = false;
 		}
 		
 		void HideReposition ()
@@ -199,6 +204,8 @@ namespace Docky.Interface
 			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-eb.HeightRequest);
 			
 			InputShapeCombineMask (null, 0, 0);
+			
+			is_repositioned_hidden = true;
 		}
 		
 		public void RequestClickOff ()

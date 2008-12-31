@@ -32,10 +32,14 @@ namespace Docky.Interface
 	public class DockAnimationState
 	{
 		Dictionary<string, AnimationConditionHandler> animation_conditions;
+		bool previous_animation_needed;
 		
 		public bool AnimationNeeded {
 			get {
-				return animation_conditions.Values.Any (handler => handler.Invoke ());
+				bool animationNeeded = animation_conditions.Values.Any (handler => handler.Invoke ());
+				bool retVal = previous_animation_needed || animationNeeded;
+				previous_animation_needed = animationNeeded;
+				return retVal;
 			}
 		}
 		

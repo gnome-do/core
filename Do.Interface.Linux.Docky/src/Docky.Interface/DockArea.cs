@@ -277,7 +277,6 @@ namespace Docky.Interface
 					enter_time = DateTime.UtcNow;
 					AnimatedDraw ();
 				}
-				SetParentInputMask ();
 			}
 		}
 		
@@ -450,6 +449,9 @@ namespace Docky.Interface
 		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)
 		{
 			FullRenderFlag = true;
+			if (args.Type == UpdateRequestType.NeedsAttentionSet) {
+				SetParentInputMask ();
+			}
 			AnimatedDraw ();
 		}
 		
@@ -487,6 +489,11 @@ namespace Docky.Interface
 		bool OnDrawTimeoutElapsed ()
 		{
 			QueueDraw ();
+			
+			// this is a "protected method".  We need to be sure that our input mask is okay on every frame.
+			// 99% of the time this means nothing at all will be done
+			SetParentInputMask ();
+			
 			if (AnimationState.AnimationNeeded)
 				return true;
 			
@@ -1056,6 +1063,7 @@ namespace Docky.Interface
 		void EndDrag ()
 		{
 			drag_resizing = false;
+			window.SetStruts ();
 			
 			FullRenderFlag = true;
 			AnimatedDraw ();
@@ -1087,10 +1095,15 @@ namespace Docky.Interface
 			} else if (CursorIsOverDockArea) {
 				offset = GetDockArea ().Height * 2 + 10;
 			} else {
-				if (DockPreferences.AutoHide && !drag_resizing)
-					offset = 1;
-				else
+				if (DockPreferences.AutoHide && !drag_resizing) {
+					// setting the offset to 2 will trigger the parent window to unhide us if we are hidden.
+					if (AnimationState.CheckCondition ("UrgentAnimationNeeded"))
+						offset = 2;
+					else
+						offset = 1;
+				} else {
 					offset = GetDockArea ().Height;
+				}
 			}
 			if (window.CurrentOffsetMask != offset)
 				window.SetInputMask (offset);
