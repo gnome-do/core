@@ -95,8 +95,8 @@ namespace Docky.Interface
 				
 				Gtk.Button button = new Button (hbox);
 				
-				button.Pressed += arg.Handler;
-				button.Pressed += OnButtonPressed;
+				button.Clicked += arg.Handler;
+				button.Clicked += OnButtonClicked;
 				
 				button.Relief = ReliefStyle.None;
 				button.CanFocus = false;
@@ -113,12 +113,12 @@ namespace Docky.Interface
 			base.PopUp (args, x, y);
 		}
 		
-		void OnButtonPressed (object o, EventArgs args)
+		void OnButtonClicked (object o, EventArgs args)
 		{
 			foreach (Gtk.Widget widget in Container.AllChildren) {
 				if (!(widget is Gtk.Button))
 					continue;
-				(widget as Gtk.Button).Activated -= OnButtonPressed;
+				(widget as Gtk.Button).Activated -= OnButtonClicked;
 			}
 			Hide ();
 		}
