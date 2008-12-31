@@ -313,11 +313,7 @@ namespace Docky.Interface
 			
 			foreach (Act act in ActionsForItem)
 				yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
-			
-			if (hasApps) {
-				yield return new SimpleMenuButtonArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown);
-				yield return new SimpleMenuButtonArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit);
-			}
+
 			yield return new SimpleMenuButtonArgs (OnRemoveClicked, "Remove From Dock", Gtk.Stock.Remove);
 		}
 		
