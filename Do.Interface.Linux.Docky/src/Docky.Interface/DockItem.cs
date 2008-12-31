@@ -100,7 +100,9 @@ namespace Docky.Interface
 			get {
 				if (!(element is Item))
 					yield break;
-				return Services.Core.GetActionsForItemOrderedByRelevance (element as Item, false);
+				
+				foreach (Act act in Services.Core.GetActionsForItemOrderedByRelevance (element as Item, false))
+					yield return act;
 			}
 		}
 			

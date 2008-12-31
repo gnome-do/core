@@ -1056,6 +1056,9 @@ namespace Docky.Interface
 		void EndDrag ()
 		{
 			drag_resizing = false;
+			
+			FullRenderFlag = true;
+			AnimatedDraw ();
 		}
 		
 		void SetIconRegions ()
