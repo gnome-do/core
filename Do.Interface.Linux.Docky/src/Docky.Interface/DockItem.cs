@@ -317,21 +317,6 @@ namespace Docky.Interface
 		
 		#endregion 
 		#endregion
-		void CloseAllOpenWindows ()
-		{
-			List<Wnck.Window> windows = new List<Wnck.Window> ();
-			foreach (Application app in Applications)
-				windows.AddRange (app.Windows);
-			WindowControl.CloseWindows (windows);
-		}
-		
-		void MinimizeRestoreWindows ()
-		{
-			List<Wnck.Window> windows = new List<Wnck.Window> ();
-			foreach (Application app in Applications)
-				windows.AddRange (app.Windows);
-			WindowControl.MinimizeRestoreWindows (windows);
-		}
 		
 		void OnRemoveClicked ()
 		{

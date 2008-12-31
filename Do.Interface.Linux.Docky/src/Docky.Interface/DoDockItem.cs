@@ -31,7 +31,7 @@ using Docky.Utilities;
 namespace Docky.Interface
 {
 	
-	public class DoDockItem : AbstractDockItem
+	public class DoDockItem : AbstractDockItem, IRightClickable
 	{
 		const string DoIcon = "gnome-do";
 		
@@ -69,5 +69,20 @@ namespace Docky.Interface
 		{
 			return other is DoDockItem;
 		}
+
+		#region IRightClickable implementation 
+		
+		public event EventHandler RemoveClicked;
+		
+		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
+		{
+			if (DockPreferences.AutoHide)
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, "Disable Autohide", "disable");
+			else
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, "Enable Autohide", "gtk-ok");
+		}
+		
+		#endregion 
+		
 	}
 }

@@ -210,12 +210,11 @@ namespace Docky.Interface
 		int VerticalOffset {
 			get {
 				double offset = 0;
-				if (!DockPreferences.AutoHide || drag_resizing)
+				// we never hide in there conditions
+				if (!DockPreferences.AutoHide || drag_resizing || InputAreaOpacity == 1)
 					return 0;
 
-				if (InputAreaOpacity == 1) {
-					offset = 0;
-				} else if (InputAreaOpacity > 0) {
+				if (InputAreaOpacity > 0) {
 					if (CursorIsOverDockArea) {
 						return 0;
 					} else {
@@ -278,16 +277,6 @@ namespace Docky.Interface
 					enter_time = DateTime.UtcNow;
 					AnimatedDraw ();
 				}
-			}
-		}
-		
-		/// <value>
-		/// The center of the stick icon
-		/// </value>
-		Gdk.Point StickIconCenter {
-			get {
-				Gdk.Rectangle rect = GetDockArea ();
-				return new Gdk.Point (rect.X + rect.Width - 7, rect.Y + 8);
 			}
 		}
 		
@@ -491,7 +480,6 @@ namespace Docky.Interface
 		bool OnDrawTimeoutElapsed ()
 		{
 			QueueDraw ();
-			
 			// this is a "protected method".  We need to be sure that our input mask is okay on every frame.
 			// 99% of the time this means nothing at all will be done
 			SetParentInputMask ();
@@ -535,9 +523,6 @@ namespace Docky.Interface
 				
 				using (Context input_cr = new Context (dock_icon_buffer)) {
 					DrawIcons (input_cr);
-					
-					if (CursorIsOverDockArea)
-						DrawThumbnailIcon (input_cr);
 				}
 				
 				cr.SetSource (dock_icon_buffer, 0, IconSize * (1 - DockIconOpacity));
@@ -687,7 +672,7 @@ namespace Docky.Interface
 			if (DockItems [icon].WindowCount > 0) {
 				// draws a simple triangle indicator.  Should be replaced by something nicer some day
 				int indicator_y = Height - 1;
-				DrawGlowIndicator (cr, center, indicator_y, draw_urgency);
+				Util.DrawGlowIndicator (cr, center, indicator_y, draw_urgency);
 			}
 			
 			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
@@ -699,53 +684,6 @@ namespace Docky.Interface
 				int texty = Height - 2 * IconSize - 28;
 				cr.SetSource (DockItems [icon].GetTextSurface (cr.Target), textx, texty);
 				cr.Paint ();
-			}
-		}
-		
-		void DrawGlowIndicator (Context cr, int x, int y, bool urgent)
-		{
-			int size = urgent ? 12 : 9;
-			cr.MoveTo (x, y);
-			cr.Arc (x, y, size, 0, Math.PI * 2);
-			
-			RadialGradient rg = new RadialGradient (x, y, 0, x, y, size);
-			rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
-			if (urgent) {
-				rg.AddColorStop (.10, new Cairo.Color (1, .8, .8, 1.0));
-				rg.AddColorStop (.20, new Cairo.Color (1, .6, .6, .60));
-				rg.AddColorStop (.35, new Cairo.Color (1, .3, .3, .35));
-				rg.AddColorStop (.50, new Cairo.Color (1, .3, .3, .25));
-				rg.AddColorStop (1.0, new Cairo.Color (1, .3, .3, 0.0));
-			} else {
-				rg.AddColorStop (.10, new Cairo.Color (.5, .6, 1, 1.0));
-				rg.AddColorStop (.20, new Cairo.Color (.5, .6, 1, .60));
-				rg.AddColorStop (.25, new Cairo.Color (.5, .6, 1, .25));
-				rg.AddColorStop (.50, new Cairo.Color (.5, .6, 1, .15));
-				rg.AddColorStop (1.0, new Cairo.Color (.5, .6, 1, 0.0));
-			}
-			
-			cr.Pattern = rg;
-			cr.Fill ();
-			rg.Destroy ();
-		}
-		
-		void DrawThumbnailIcon (Context cr)
-		{
-			Gdk.Point center = StickIconCenter;
-			
-			// calculates an opacity randing from 0 to 1 depending on how far from the cursor the icon is (only X is calculated)
-			double opacity = 1.0 / Math.Abs (center.X - Cursor.X) * 30 - .2;
-			
-			// draw concentric circles from here on
-			cr.Arc (center.X, center.Y, 3.5, 0, Math.PI * 2);
-			cr.LineWidth = 1;
-			cr.Color = new Cairo.Color (1, 1, 1, opacity);
-			cr.Stroke ();
-			
-			if (!DockPreferences.AutoHide) {
-				cr.Arc (center.X, center.Y, 1.5, 0, Math.PI * 2);
-				cr.Color = new Cairo.Color (1, 1, 1, opacity);
-				cr.Fill ();
 			}
 		}
 		
@@ -1023,15 +961,6 @@ namespace Docky.Interface
 				if (!CursorIsOverDockArea)
 					window.RequestClickOff ();
 			} else {
-				// we are hovering over the pin icon
-				Gdk.Rectangle stick_rect = new Gdk.Rectangle (StickIconCenter.X - 4, StickIconCenter.Y - 4, 8, 8);
-				if (stick_rect.Contains (Cursor)) {
-					DockPreferences.AutoHide = !DockPreferences.AutoHide;
-					window.SetStruts ();
-					AnimatedDraw ();
-					return ret_val;
-				}
-				
 				int item = DockItemForX ((int) evnt.X); //sometimes clicking is not good!
 				if (item < 0 || item >= DockItems.Length || !CursorIsOverDockArea || InputInterfaceVisible)
 					return ret_val;
