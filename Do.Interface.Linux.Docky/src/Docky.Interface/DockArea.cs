@@ -63,6 +63,7 @@ namespace Docky.Interface
 		bool gtk_drag_source_set;
 		
 		int monitor_width;
+		int max_icon_size;
 		int drag_start_y;
 		int drag_start_icon_size;
 		int remove_drag_start_x;
@@ -359,6 +360,7 @@ namespace Docky.Interface
 			
 			Cursor = new Gdk.Point (-1, -1);
 			minimum_dock_area = new Gdk.Rectangle ();
+			max_icon_size = 128;
 			
 			Gdk.Rectangle geo;
 			geo = Screen.GetMonitorGeometry (0);
@@ -541,18 +543,12 @@ namespace Docky.Interface
 				cr.SetSource (dock_icon_buffer, 0, IconSize * (1 - DockIconOpacity));
 				cr.PaintWithAlpha (DockIconOpacity);
 			}
-			
-			// To enable this render optimization, we have to keep track of several state items that otherwise
-			// are unimportant.  This is an unfortunate reality we must live with.
-			previous_zoom = ZoomIn;
-			previous_item_count = DockItems.Length;
-			previous_x = Cursor.X;
-			previous_icon_animation_needed = IconAnimationNeeded;
 		}
 		
 		void DrawIcons (Context cr)
 		{
 			if (CanFastRender) {
+				StoreFastRenderData ();
 				do {
 					// If the cursor has not moved and the dock_item_menu is not visible (this causes a render change without moving the cursor)
 					// we can do no rendering at all and just take our previous frame as our current result.
@@ -604,6 +600,16 @@ namespace Docky.Interface
 					for (int i=0; i<DockItems.Length; i++)
 						DrawIcon (cr, i);
 			}
+		}
+		
+		void StoreFastRenderData ()
+		{
+			// To enable this render optimization, we have to keep track of several state items that otherwise
+			// are unimportant.  This is an unfortunate reality we must live with.
+			previous_zoom = ZoomIn;
+			previous_item_count = DockItems.Length;
+			previous_x = Cursor.X;
+			previous_icon_animation_needed = IconAnimationNeeded;
 		}
 		
 		void DrawIcon (Context cr, int icon)
@@ -810,6 +816,13 @@ namespace Docky.Interface
 		
 		void OnDockItemsChanged (IEnumerable<IDockItem> items)
 		{
+			minimum_dock_area = new Gdk.Rectangle ();
+			
+			max_icon_size = (int) (((double) monitor_width / MinimumDockArea.Width) * IconSize);
+			
+			if (DockPreferences.IconSize > max_icon_size)
+				DockPreferences.IconSize = max_icon_size;
+			
 			FullRenderFlag = true;
 			SetIconRegions ();
 			AnimatedDraw ();
@@ -912,6 +925,7 @@ namespace Docky.Interface
 			bool ret_val = base.OnExposeEvent (evnt);
 			// clear the dock area cache... this will cause it to recalculate.
 			minimum_dock_area = new Gdk.Rectangle ();
+			
 			if (!IsDrawable)
 				return ret_val;
 			
@@ -925,7 +939,8 @@ namespace Docky.Interface
 			cr.AlphaFill ();
 			cr.Operator = Operator.Over;
 			
-			DrawDrock (cr);
+			if (item_provider.UpdatesEnabled)
+				DrawDrock (cr);
 			(cr as IDisposable).Dispose ();
 			
 			Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
@@ -967,7 +982,7 @@ namespace Docky.Interface
 			}
 
 			if (drag_resizing)
-				DockPreferences.IconSize = drag_start_icon_size + (drag_start_y - Cursor.Y);
+				DockPreferences.IconSize = Math.Min (drag_start_icon_size + (drag_start_y - Cursor.Y), max_icon_size);
 			
 			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && (old_cursor_location.X != Cursor.X);
 

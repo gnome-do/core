@@ -126,10 +126,12 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static int automatic_icons = prefs.Get<int> ("AutomaticIcons", 7);
+		static int automatic_icons = prefs.Get<int> ("AutomaticIcons", 10);
 		public static int AutomaticIcons {
 			get { return automatic_icons; }
 			set {
+				if (value < 0)
+					value = 0;
 				prefs.Set<int> ("AutomaticIcons", value);
 				automatic_icons = value;
 			}
