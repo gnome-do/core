@@ -15,14 +15,11 @@
 	</Extension>
 	
 	<Extension path="/Do/ItemSource">
-		<ItemSource type="Do.Universe.AliasItemSource" />
 		<ItemSource type="Do.Universe.InternalItemSource" />
 		<ItemSource type="Do.Universe.ItemSourceItemSource" />
 	</Extension>
 
 	<Extension path="/Do/Action">
-		<Action type="Do.Universe.AliasAction" />
-		<Action type="Do.Universe.DeleteAliasAction" />
 	</Extension>
 	
 	

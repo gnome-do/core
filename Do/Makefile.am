@@ -51,10 +51,7 @@ FILES = \
 	src/Do.UI/PluginSelectionEventArgs.cs \
 	src/Do.UI/PluginUpdateNodeView.cs \
 	src/Do.UI/PreferencesWindow.cs \
-	src/Do.Universe/AliasAction.cs \
-	src/Do.Universe/AliasItemSource.cs \
 	src/Do.Universe/ClearLearningItem.cs \
-	src/Do.Universe/DeleteAliasAction.cs \
 	src/Do.Universe/EvilAction.cs \
 	src/Do.Universe/EvilElement.cs \
 	src/Do.Universe/EvilItem.cs \
