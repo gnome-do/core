@@ -38,21 +38,8 @@ namespace Do.Core {
 		const float DefaultRelevance = 0.001f;
 		const float DefaultAge = 1f;
 
-		static readonly IEnumerable<Type> RewardedItemTypes = new Type[] {
+		static readonly IEnumerable<Type> RewardedItemTypes = new [] {
 			typeof (IApplicationItem),
-		};
-
-		static readonly IEnumerable<Type> RewardedActionTypes = new Type[] {
-			typeof (OpenAction),
-			typeof (OpenUrlAction),
-			typeof (RunAction),
-			typeof (EmailAction),
-		};
-
-		static readonly IEnumerable<Type> PenalizedActionTypes = new Type[] {
-			typeof (AliasAction),
-			typeof (DeleteAliasAction),
-			//typeof (CopyToClipboardAction),
 		};
 
 		DateTime newest_hit, oldest_hit;
@@ -138,11 +125,8 @@ namespace Do.Core {
 				// Objects we don't know about are treated as old.
 				age = DefaultAge;
 
-				// Give the most popular actions a little leg up in the second pane.
-				if (isAction && other != null && RewardedActionTypes.Contains (rec.Type))
-					relevance = 1f;
 				// Give the most popular items a leg up
-				else if (RewardedItemTypes.Contains (rec.Type))
+				if (RewardedItemTypes.Contains (rec.Type))
 					relevance *= 2;
 			}
 
@@ -159,9 +143,6 @@ namespace Do.Core {
 
 				// Penalize actions that require modifier items.
 				if (!action.ModifierItemsOptional)
-					relevance *= 0.8f;
-
-				if (PenalizedActionTypes.Contains (rec.Type))
 					relevance *= 0.8f;
 			}
 
