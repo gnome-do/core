@@ -32,6 +32,9 @@ namespace Docky.Utilities
 	
 	public class DockPreferences
 	{
+		public static event Action AutohideChanged;
+		public static event Action IconSizeChanged;
+		
 		static IPreferences prefs = Services.Preferences.Get<DockPreferences> ();
 		const int DefaultIconSize = 64;
 		
@@ -79,10 +82,21 @@ namespace Docky.Utilities
 			}
 		}
 		
+		static int max_icon_size = 128;
+		public static int MaxIconSize {
+			get { return max_icon_size; }
+			set {
+				int tmp = IconSize;
+				max_icon_size = value;
+				if (tmp != IconSize && IconSizeChanged != null)
+					IconSizeChanged ();
+			}
+		}
+		
 		static int icon_size = prefs.Get<int> ("IconSize", DefaultIconSize);
 		public static int IconSize {
-			get { return icon_size; }
-			set { 
+			get { return Math.Min (icon_size, MaxIconSize); }
+			set {
 				if (value < 24 || value > 128)
 					return;
 				if (Math.Abs (value - 64) < 4)
@@ -95,7 +109,8 @@ namespace Docky.Utilities
 				
 				prefs.Set<int> ("IconSize", value); 
 				icon_size = value;
-				IconSizeChanged ();
+				if (IconSizeChanged != null)
+					IconSizeChanged ();
 			}
 		}
 		
@@ -112,8 +127,13 @@ namespace Docky.Utilities
 		public static bool AutoHide {
 			get { return autohide; }
 			set {
+				if (autohide == value)
+					return;
+				
 				prefs.Set<bool> ("AutoHide", value);
 				autohide = value;
+				if (AutohideChanged != null)
+					AutohideChanged ();
 			}
 		}
 		
@@ -201,6 +221,5 @@ namespace Docky.Utilities
 			} catch { }
 		}
 		#endregion
-		public static event NullEventHandler IconSizeChanged;
 	}
 }

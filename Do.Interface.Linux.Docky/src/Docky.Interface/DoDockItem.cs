@@ -77,12 +77,12 @@ namespace Docky.Interface
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
 			if (DockPreferences.AutoHide)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, "Disable Autohide", "disable");
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, "Disable Autohide", "gtk-delete");
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, "Enable Autohide", "gtk-ok");
 			
 			if (DockPreferences.ZoomEnabled)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, "Disable Zoom", "disable");
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, "Disable Zoom", "gtk-delete");
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = true, "Enable Zoom", "gtk-ok");
 		}

@@ -82,6 +82,9 @@ namespace Docky.Interface
 					GdkWindow.SetBackPixmap (null, false);
 			};
 			
+			DockPreferences.AutohideChanged += SetStruts;
+			DockPreferences.IconSizeChanged += SetStruts;
+			
 			Build ();
 		}
 		

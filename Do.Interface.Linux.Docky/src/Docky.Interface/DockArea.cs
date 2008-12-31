@@ -349,7 +349,6 @@ namespace Docky.Interface
 			
 			Cursor = new Gdk.Point (-1, -1);
 			minimum_dock_area = new Gdk.Rectangle ();
-			max_icon_size = 128;
 			
 			Gdk.Rectangle geo;
 			geo = Screen.GetMonitorGeometry (0);
@@ -756,10 +755,7 @@ namespace Docky.Interface
 		{
 			minimum_dock_area = new Gdk.Rectangle ();
 			
-			max_icon_size = (int) (((double) monitor_width / MinimumDockArea.Width) * IconSize);
-			
-			if (DockPreferences.IconSize > max_icon_size)
-				DockPreferences.IconSize = max_icon_size;
+			DockPreferences.MaxIconSize = (int) (((double) monitor_width / MinimumDockArea.Width) * IconSize);
 			
 			FullRenderFlag = true;
 			SetIconRegions ();
@@ -920,7 +916,7 @@ namespace Docky.Interface
 			}
 
 			if (drag_resizing)
-				DockPreferences.IconSize = Math.Min (drag_start_icon_size + (drag_start_y - Cursor.Y), max_icon_size);
+				DockPreferences.IconSize = Math.Min (drag_start_icon_size + (drag_start_y - Cursor.Y), DockPreferences.MaxIconSize);
 			
 			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && (old_cursor_location.X != Cursor.X);
 
