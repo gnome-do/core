@@ -209,7 +209,7 @@ namespace Docky.Interface
 		int VerticalOffset {
 			get {
 				double offset = 0;
-				if (!DockPreferences.AutoHide || cursor_is_handle)
+				if (!DockPreferences.AutoHide || drag_resizing)
 					return 0;
 
 				if (InputAreaOpacity == 1) {
@@ -593,8 +593,9 @@ namespace Docky.Interface
 				FullRenderFlag = false;
 				// less code, twice as slow...
 				cr.AlphaFill ();
-				for (int i=0; i<DockItems.Length; i++)
-					DrawIcon (cr, i);
+				if (!drag_resizing)
+					for (int i=0; i<DockItems.Length; i++)
+						DrawIcon (cr, i);
 			}
 		}
 		
@@ -1083,7 +1084,7 @@ namespace Docky.Interface
 			} else if (CursorIsOverDockArea) {
 				offset = GetDockArea ().Height * 2 + 10;
 			} else {
-				if (DockPreferences.AutoHide)
+				if (DockPreferences.AutoHide && !drag_resizing)
 					offset = 1;
 				else
 					offset = GetDockArea ().Height;

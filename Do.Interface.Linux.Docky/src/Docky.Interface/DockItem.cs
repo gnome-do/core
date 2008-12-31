@@ -40,7 +40,7 @@ namespace Docky.Interface
 	
 	public class DockItem : AbstractDockItem, IRightClickable, IDockAppItem
 	{
-		Element element;
+		Item element;
 		List<Wnck.Application> apps;
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
@@ -65,7 +65,7 @@ namespace Docky.Interface
 			get { return element.Name; } 
 		}
 		
-		public Element Element { 
+		public Item Element { 
 			get { return element; } 
 		}
 		
@@ -114,7 +114,7 @@ namespace Docky.Interface
 			}
 		}	
 		
-		public DockItem (Element element) : base ()
+		public DockItem (Item element) : base ()
 		{
 			Position = -1;
 			apps =  new List<Wnck.Application> ();
@@ -263,14 +263,6 @@ namespace Docky.Interface
 			return;
 		}
 		
-		void Launch (Act action)
-		{
-			LastClick = DateTime.UtcNow;
-			if (!(element is Item))
-				return;
-			Services.Core.PerformActionForItem (action, element as Item);
-		}
-		
 		public override void SetIconRegion (Gdk.Rectangle region)
 		{
 			if (icon_region == region)
@@ -308,31 +300,25 @@ namespace Docky.Interface
 		
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
-			// using yield causes the lambdas to not evaluate properly
-			List<AbstractMenuButtonArgs> outList = new List<AbstractMenuButtonArgs> ();
 			bool hasApps = HasVisibleApps;
 			
 			if (hasApps) {
 				foreach (Application app in Applications) {
-					foreach (Wnck.Window window_ in app.Windows.Where (win => !win.IsSkipTasklist)) {
-						Wnck.Window window = window_;
-						outList.Add (new SimpleMenuButtonArgs (() => window.CenterAndFocusWindow (), window.Name, Icon));
+					foreach (Wnck.Window window in app.Windows.Where (win => !win.IsSkipTasklist)) {
+						yield return new WindowMenuButtonArgs (window, window.Name, Icon);
 					}
 				}
-				outList.Add (new SeparatorMenuButtonArgs ());
+				yield return new SeparatorMenuButtonArgs ();
 			}
 			
-			foreach (Act act_ in ActionsForItem) {
-				Act act = act_;
-				outList.Add (new SimpleMenuButtonArgs (() => Launch (act), act.Name, act.Icon));
-			}
+			foreach (Act act in ActionsForItem)
+				yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
+			
 			if (hasApps) {
-				outList.Add (new SimpleMenuButtonArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown));
-				outList.Add (new SimpleMenuButtonArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit));
+				yield return new SimpleMenuButtonArgs (MinimizeRestoreWindows, "Minimize/Restore", Gtk.Stock.GoDown);
+				yield return new SimpleMenuButtonArgs (CloseAllOpenWindows, "Close All", Gtk.Stock.Quit);
 			}
-			outList.Add (new SimpleMenuButtonArgs (OnRemoveClicked, "Remove From Dock", Gtk.Stock.Remove));
-			
-			return outList;
+			yield return new SimpleMenuButtonArgs (OnRemoveClicked, "Remove From Dock", Gtk.Stock.Remove);
 		}
 		
 		#endregion 

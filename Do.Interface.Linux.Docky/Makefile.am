@@ -23,12 +23,14 @@ FILES = \
 	src/Docky.Interface/IDockItem.cs \
 	src/Docky.Interface/IRightClickable.cs \
 	src/Docky.Interface/AbstractMenuButtonArgs.cs \
+	src/Docky.Interface/LaunchMenuButtonArgs.cs \
 	src/Docky.Interface/SimpleMenuButtonArgs.cs \
 	src/Docky.Interface/SeparatorMenuButtonArgs.cs \
 	src/Docky.Interface/SeparatorItem.cs \
 	src/Docky.Interface/TrashDockItem.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
+	src/Docky.Interface/WindowMenuButtonArgs.cs \
 	src/Docky.Utilities/DockPreferences.cs \
 	src/Docky.Utilities/GtkUtils.cs \
 	src/Docky.Utilities/WindowControl.cs \

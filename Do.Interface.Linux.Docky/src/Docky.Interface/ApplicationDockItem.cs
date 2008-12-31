@@ -220,20 +220,12 @@ namespace Docky.Interface
 		
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
-			// we use a list because using yield seems to result in the wrong lambda getting called...
-			List<AbstractMenuButtonArgs> outList = new List<AbstractMenuButtonArgs> ();
-			foreach (Wnck.Window window_ in Application.Windows.Where (win => !win.IsSkipTasklist)) {
-				// we make a copy here so that when the lambda is evaluated, it evaluates the right one
-				// this is due to the scoping of the window_ variable.
-				Wnck.Window window = window_;
-				outList.Add (new SimpleMenuButtonArgs (() => window.CenterAndFocusWindow (), window.Name, "forward"));
-			}
+			foreach (Wnck.Window window in Application.Windows.Where (win => !win.IsSkipTasklist))
+				yield return new WindowMenuButtonArgs (window, window.Name, "forward");
 			
-			outList.Add (new SeparatorMenuButtonArgs ());
-			outList.Add (new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (Application.Windows), MinimizeRestoreText, "down"));
-			outList.Add (new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (Application.Windows), CloseText, Gtk.Stock.Quit));
-			
-			return outList;
+			yield return new SeparatorMenuButtonArgs ();
+			yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (Application.Windows), MinimizeRestoreText, "down");
+			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (Application.Windows), CloseText, Gtk.Stock.Quit);
 		}
 	}
 }

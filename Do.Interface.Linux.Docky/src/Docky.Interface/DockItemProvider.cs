@@ -139,7 +139,7 @@ namespace Docky.Interface
 				return;
 			}
 			string id = item.UniqueId;
-			DockItem di = new DockItem (item);
+			DockItem di = new DockItem (item as Item);
 			di.RemoveClicked += HandleRemoveClicked;
 			di.UpdateNeeded += HandleUpdateNeeded;
 			di.Position = LastPosition + 1;
@@ -174,14 +174,14 @@ namespace Docky.Interface
 			
 			if (File.Exists (identifier) || Directory.Exists (identifier)) {
 				if (identifier.EndsWith (".desktop")) {
-					Element o = Services.UniverseFactory.NewApplicationItem (identifier) as Element;
+					Item o = Services.UniverseFactory.NewApplicationItem (identifier) as Item;
 					customItem = new DockItem (o);
 				} else {
-					Element o = Services.UniverseFactory.NewFileItem (identifier) as Element;
+					Item o = Services.UniverseFactory.NewFileItem (identifier) as Item;
 					customItem = new DockItem (o);
 				}
 			} else {
-				Element e = Services.Core.GetElement (identifier);
+				Item e = Services.Core.GetElement (identifier) as Item;
 				if (e != null)
 					customItem = new DockItem (e);
 				else
