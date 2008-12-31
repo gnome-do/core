@@ -53,6 +53,8 @@ namespace Docky.Interface
 		
 		public DateTime AttentionRequestStartTime { get; private set; }
 		
+		public int Position { get; set; }
+		
 		public override bool IsAcceptingDrops { 
 			get { return accepting_drops; } 
 		}
@@ -81,12 +83,11 @@ namespace Docky.Interface
 			get { return Applications.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ()); }
 		}
 		
-		public int Position { get; set; }
-
 		public bool NeedsAttention { 
 			get { 
 				return needs_attention; 
 			} 
+			
 			private set {
 				if (needs_attention == value)
 					return;
@@ -98,7 +99,7 @@ namespace Docky.Interface
 		public IEnumerable<Act> ActionsForItem {
 			get {
 				if (!(element is Item))
-					return new Act [0];
+					yield break;
 				return Services.Core.GetActionsForItemOrderedByRelevance (element as Item, false);
 			}
 		}
@@ -189,7 +190,6 @@ namespace Docky.Interface
 		{
 			if (handle_timer > 0)
 				return;
-			
 			// we do this delayed so that we dont get a flood of these events.  Certain windows behave badly.
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
 		}
@@ -260,7 +260,6 @@ namespace Docky.Interface
 				Services.Core.PerformDefaultAction (Element as Item, new [] { typeof (OpenAction), });
 			else
 				Services.Core.PerformDefaultAction (Element as Item, Type.EmptyTypes);
-			return;
 		}
 		
 		public override void SetIconRegion (Gdk.Rectangle region)
@@ -276,10 +275,7 @@ namespace Docky.Interface
 		public override bool Equals (IDockItem other)
 		{
 			DockItem di = other as DockItem;
-			if (di == null)
-				return false;
-			
-			return di.Element.UniqueId == Element.UniqueId;
+			return di != null && di.Element.UniqueId == Element.UniqueId;
 		}
 
 		#region IDisposable implementation 
