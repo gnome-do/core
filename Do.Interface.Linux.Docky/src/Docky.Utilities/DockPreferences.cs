@@ -33,6 +33,7 @@ namespace Docky.Utilities
 	public class DockPreferences
 	{
 		static IPreferences prefs = Services.Preferences.Get<DockPreferences> ();
+		const int DefaultIconSize = 64;
 		
 		// we can not store these in gconf all the time since we query these a LOT
 		// so we have to use a half and half solution
@@ -47,7 +48,7 @@ namespace Docky.Utilities
 		
 		static int zoom_size = prefs.Get<int> ("ZoomSize", 300);
 		public static int ZoomSize {
-			get { return zoom_size; }
+			get { return (int) (zoom_size * (IconSize / (double) DefaultIconSize)); }
 			set { 
 				prefs.Set<int> ("ZoomSize", value); 
 				zoom_size = value;
@@ -69,7 +70,7 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static int icon_size = prefs.Get<int> ("IconSize", 64);
+		static int icon_size = prefs.Get<int> ("IconSize", DefaultIconSize);
 		public static int IconSize {
 			get { return icon_size; }
 			set { 

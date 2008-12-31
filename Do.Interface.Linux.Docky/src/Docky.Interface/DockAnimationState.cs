@@ -36,6 +36,8 @@ namespace Docky.Interface
 		
 		public bool AnimationNeeded {
 			get {
+				// we will pass one additional animation requirement after none of our handlers say its needed.
+				// this is to allow these handlers to "0" on the screen, and not just be in a half finished state
 				bool animationNeeded = animation_conditions.Values.Any (handler => handler.Invoke ());
 				bool retVal = previous_animation_needed || animationNeeded;
 				previous_animation_needed = animationNeeded;
