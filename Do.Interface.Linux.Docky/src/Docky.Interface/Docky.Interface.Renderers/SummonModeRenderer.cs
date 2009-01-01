@@ -184,14 +184,14 @@ namespace Docky.Interface.Renderers
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
 			
 			TextUtility.RenderLayoutText (cr, text, base_x + TextOffset, 
-			                              dockArea.Y + (int) (15 * text_scale), (int) (500 * text_scale), text_height,
+			                              dockArea.Y + (int) (15 * text_scale), dockArea.Width - TextOffset - 50, text_height,
 			                              color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 			
 			if ((int) (12 * text_scale) > 8) {
 				text_height = (int) (12 * text_scale);
 				TextUtility.RenderLayoutText (cr, GLib.Markup.EscapeText (State[State.CurrentPane].Description), 
 				                              base_x + TextOffset, dockArea.Y + (int) (42 * text_scale), 
-				                              (int) (500 * text_scale), text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
+				                              dockArea.Width - TextOffset - 50, text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 			}
 		}
 		
