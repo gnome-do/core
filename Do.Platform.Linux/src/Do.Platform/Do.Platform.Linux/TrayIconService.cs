@@ -130,11 +130,24 @@ namespace Do.Platform.Linux
 
 		void OnPopupMenu (object sender, EventArgs e) 
 		{
-			int x, y;
-			Screen screen;
+			Services.Windowing.ShowMainMenu (PositionMainMenu);
+		}
 
-			GetLocationOnScreen (out screen, out x, out y); 
-			Services.Windowing.ShowMainMenu (x, y);
+		void PositionMainMenu (int menuHeight, int menuWidth, out int x, out int y)
+		{
+			Screen screen;
+			Rectangle area;
+			Orientation orientation;
+
+			status_icon.GetGeometry (out screen, out area, out orientation);
+
+			x = area.X;
+			y = area.Y;
+
+			if (y + menuHeight >= screen.Height)
+				y -= menuHeight;
+			else
+				y += area.Height;
 		}
 
 	}

@@ -31,6 +31,11 @@ namespace Do.Platform.Default
 			Log.Debug ("Default IWindowingService cannot show the main menu.");
 		}
 		
+		public void ShowMainMenu (PositionMenu menuPositioner)
+		{
+			Log.Debug ("Default IWindowingService cannot show the main menu.");
+		}
+		
 		public void SummonMainWindow ()
 		{
 			Log.Debug ("Default IWindowingService cannot summon.");

@@ -24,6 +24,7 @@ using Mono.Unix;
 
 using Do;
 using Do.Core;
+using Do.Platform;
 
 namespace Do.UI
 {
@@ -86,6 +87,7 @@ namespace Do.UI
 
 		public void PopupAtPosition (int x, int y)
 		{
+			menuPositioner = null;
 			mainMenuX = x;
 			mainMenuY = y;	
 			Popup (null, null, PositionMainMenu, 3, Gtk.Global.CurrentEventTime);
@@ -93,9 +95,22 @@ namespace Do.UI
 
 		private void PositionMainMenu (Menu menu, out int x, out int y, out bool push_in)
 		{
-			x = mainMenuX;
-			y = mainMenuY;
+			if (menuPositioner == null) {
+				x = mainMenuX;
+				y = mainMenuY;
+			} else {
+				Requisition menuReq = menu.SizeRequest ();
+				menuPositioner (menuReq.Height, menuReq.Width, out x, out y);
+			}
 			push_in = true;
+		}
+
+		PositionMenu menuPositioner;
+		
+		public void PopupWithPositioner (PositionMenu menuPositioner)
+		{
+			this.menuPositioner = menuPositioner;
+			Popup (null, null, PositionMainMenu, 3, Gtk.Global.CurrentEventTime);
 		}
 	}
 }
