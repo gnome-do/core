@@ -287,7 +287,7 @@ namespace Do.Interface.AnimationBase
 				if (colors.Background.B == colors.Background.G && colors.Background.B == colors.Background.R)
 					return BezelDefaults.HighlightFormat; 
 				else
-					return "<span underline=\"single\">{0}</span>";
+					return "<span underline=\"single\"><b>{0}</b></span>";
 			} 
 		}
 		
@@ -832,7 +832,6 @@ namespace Do.Interface.AnimationBase
 		void RenderPaneText (Pane pane, Context cr, string text)
 		{
 			if (text.Length == 0) return;
-			text = string.Format ("<b>{0}</b>", text);
 			
 			if (Context.GetPaneTextMode (pane)) {
 				Pango.Color color = new Pango.Color ();
@@ -843,8 +842,10 @@ namespace Do.Interface.AnimationBase
 				TextUtility.RenderLayoutText (cr, text, x, y, BoxWidth - 10, TextHeight, color, 
 				                              Pango.Alignment.Left, Pango.EllipsizeMode.None);
 			} else {
-				bool queryIsNull = string.IsNullOrEmpty (Context.GetPaneQuery (pane)); 
-				text = (!queryIsNull) ?	Util.FormatCommonSubstrings (text, Context.GetPaneQuery (pane), HighlightFormat) : text;
+				string query = Context.GetPaneQuery (pane); 
+				if (!string.IsNullOrEmpty (query)) {
+					text = Util.FormatCommonSubstrings (text, query, HighlightFormat);
+				}
 				
 				if (PaneOutlineRenderer.StackIconText) {
 					int y = drawing_area.Y + WindowBorder + TitleBarHeight + BoxHeight - TextHeight - 9;
