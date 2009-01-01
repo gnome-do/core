@@ -621,8 +621,9 @@ namespace Docky.Interface
 				FullRenderFlag = false;
 				// less code, twice as slow...
 				cr.AlphaFill ();
-				for (int i=0; i<DockItems.Length; i++)
-					DrawIcon (cr, i);
+				if (!drag_resizing || drag_edge != DragEdge.Top)
+					for (int i=0; i<DockItems.Length; i++)
+						DrawIcon (cr, i);
 			}
 		}
 		

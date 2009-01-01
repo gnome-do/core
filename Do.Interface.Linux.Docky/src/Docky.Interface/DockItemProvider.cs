@@ -288,7 +288,7 @@ namespace Docky.Interface
 				.GetItemsOrderedByRelevance ()
 				.Where (item => item.GetType ().Name != "SelectedTextItem" && item.GetType ().Name != "GNOMETrashFileItem")
 				.Where (item => !DockPreferences.ItemBlacklist.Contains (item.UniqueId))
-				.Take (Math.Max (0, DockPreferences.AutomaticIcons - custom_items.Count))
+				.Take (DockPreferences.AutomaticIcons)
 				.OrderByDescending (item => item is IApplicationItem)
 				.ThenBy (item => item.GetType ().Name)
 				.ThenBy (item => item.Safe.Name);
@@ -435,7 +435,10 @@ namespace Docky.Interface
 					di.RemoveClicked += HandleRemoveClicked;
 					di.UpdateNeeded += HandleUpdateNeeded;
 					di.DockAddItem = DateTime.UtcNow;
-					di.Position = LastPosition + 1;
+					int position = LastPosition + 1;
+					if (old_items.Any ())
+						position += old_items.Max (oi => oi.Position);
+					di.Position = position;
 					statistical_items.Add (di);
 				}
 			}
