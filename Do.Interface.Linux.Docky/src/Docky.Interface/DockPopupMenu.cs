@@ -41,6 +41,8 @@ namespace Docky.Interface
 		const int Radius = 10;
 		const int Width = 225;
 		
+		int horizontal_offset;
+		
 		public Gtk.VBox Container { get; private set; } 
 		
 		public DockPopupMenu() : base (Gtk.WindowType.Popup)
@@ -84,7 +86,9 @@ namespace Docky.Interface
 			ShowAll ();
 			Gdk.Rectangle geo = Screen.GetMonitorGeometry (0);
 			Gtk.Requisition req = SizeRequest ();
+			
 			int posx = Math.Min (Math.Max (0, x - req.Width / 3), geo.X + geo.Width - req.Width);
+			horizontal_offset = (x - req.Width / 3) - posx;
 			Move (posx, y - req.Height);
 			
 			Do.Interface.Windowing.PresentWindow (this);
@@ -119,9 +123,9 @@ namespace Docky.Interface
 			cr.Arc (rect.Width - BorderWidth - Radius, BorderWidth + Radius, Radius, Math.PI * 1.5, Math.PI * 2);
 			cr.Arc (rect.Width - BorderWidth - Radius, rect.Height - BorderWidth - Radius - TailHeight, Radius, 0, Math.PI * 0.5);
 			
-			cr.LineTo (rect.Width / 3 + 30 - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
-			cr.LineTo (rect.Width / 3 + 10 - BorderWidth - Radius, rect.Height - BorderWidth);
-			cr.LineTo (rect.Width / 3 + 10 - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
+			cr.LineTo (rect.Width / 3 + 30 + horizontal_offset - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
+			cr.LineTo (rect.Width / 3 + 10 + horizontal_offset - BorderWidth - Radius, rect.Height - BorderWidth);
+			cr.LineTo (rect.Width / 3 + 10 + horizontal_offset - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
 			
 			cr.Arc (BorderWidth + Radius, rect.Height - BorderWidth - Radius - TailHeight, Radius, Math.PI * 0.5, Math.PI);
 			cr.Arc (BorderWidth + Radius, BorderWidth + Radius, Radius, Math.PI, Math.PI * 1.5);

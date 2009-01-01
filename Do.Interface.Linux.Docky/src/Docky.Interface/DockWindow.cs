@@ -42,6 +42,7 @@ namespace Docky.Interface
 		EventBox eb;
 		IDoController controller;
 		int current_offset;
+		uint strut_timer;
 		bool is_repositioned_hidden;
 		
 		public new string Name {
@@ -82,8 +83,8 @@ namespace Docky.Interface
 					GdkWindow.SetBackPixmap (null, false);
 			};
 			
-			DockPreferences.AutohideChanged += SetStruts;
-			DockPreferences.IconSizeChanged += SetStruts;
+			DockPreferences.AutohideChanged += DelaySetStruts;
+			DockPreferences.IconSizeChanged += DelaySetStruts;
 			
 			Build ();
 		}
@@ -118,17 +119,22 @@ namespace Docky.Interface
 		void OnEventBoxMotion ()
 		{
 			Reposition ();
-			SetInputMask (2);
+			SetInputMask (2, false);
 			Gtk.Application.Invoke ((o, a) => dock_area.ManualCursorUpdate ());
 		}
 		
-		public void SetInputMask (int heightOffset)
+		public void SetInputMask (int heightOffset, bool useFullWidth)
 		{
 			if (!IsRealized || current_offset == heightOffset)
 				return;
 			
 			current_offset = heightOffset;
-			int width = Math.Max (Math.Min (800, dock_area.Width), dock_area.DockWidth);
+			int width;
+			if (!useFullWidth)
+				width = Math.Max (Math.Min (800, dock_area.Width), dock_area.DockWidth);
+			else
+				width = dock_area.Width;
+			
 			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, width, heightOffset, 1);
 			Context cr = Gdk.CairoHelper.Create (pixmap);
 			
@@ -216,7 +222,15 @@ namespace Docky.Interface
 			Controller.ButtonPressOffWindow ();
 		}
 		
-		public void SetStruts ()
+		public void DelaySetStruts ()
+		{
+			if (strut_timer > 0)
+				return;
+			
+			strut_timer = GLib.Timeout.Add (250, SetStruts);
+		}
+		
+		public bool SetStruts ()
 		{
 			IntPtr display = Xlib.gdk_x11_drawable_get_xdisplay (GdkWindow.Handle);
 			X11Atoms atoms = new X11Atoms (display);
@@ -224,11 +238,15 @@ namespace Docky.Interface
 			
 			struts[(int) XLib.Struts.Bottom] = (uint) dock_area.DockHeight;
 			
+			strut_timer = 0;
+			
 			if (!IsRealized)
-				return;
+				return false;
 			
 			Xlib.XChangeProperty (display, Xlib.gdk_x11_drawable_get_xid (GdkWindow.Handle), atoms._NET_WM_STRUT, 
 			                      atoms.XA_CARDINAL, 32, (int) XLib.PropertyMode.PropModeReplace, struts, 4);
+				
+			return false;
 		}
 
 		#region IDoWindow implementation 

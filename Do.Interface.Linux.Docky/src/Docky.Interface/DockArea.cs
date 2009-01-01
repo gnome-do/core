@@ -42,6 +42,13 @@ namespace Docky.Interface
 	
 	public class DockArea : Gtk.DrawingArea
 	{
+		enum DragEdge {
+			Top,
+			Left,
+			Right,
+			Unknown,
+		}
+		
 		public const int BaseAnimationTime = 150;
 		const int HorizontalBuffer = 7;
 		const int BounceTime = 700;
@@ -51,20 +58,20 @@ namespace Docky.Interface
 		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
 		
 		#region private variables
-		Gdk.Point cursor;
+		Gdk.Point cursor, drag_start_point;
+		
+		Gdk.CursorType cursor_type = CursorType.LeftPtr;
 		
 		Gdk.Rectangle minimum_dock_area;
 		
 		DateTime enter_time = DateTime.UtcNow;
 		DateTime interface_change_time = DateTime.UtcNow;
 		
-		bool cursor_is_handle;
 		bool drag_resizing;
 		bool gtk_drag_source_set;
 		
 		int monitor_width;
 		int max_icon_size;
-		int drag_start_y;
 		int drag_start_icon_size;
 		int remove_drag_start_x;
 		uint animation_timer;
@@ -74,6 +81,7 @@ namespace Docky.Interface
 		int previous_x = -1;
 		bool previous_icon_animation_needed = true;
 		
+		DragEdge drag_edge;
 		
 		DockWindow window;
 		DockItemProvider item_provider;
@@ -179,6 +187,9 @@ namespace Docky.Interface
 		/// </value>
 		double ZoomIn {
 			get {
+				if (drag_resizing)
+					return 0;
+				
 				double zoom = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
 				if (!CursorIsOverDockArea) {
 					zoom = 1 - zoom;
@@ -295,9 +306,39 @@ namespace Docky.Interface
 			}
 		}
 		
-		bool CursorNearDraggableEdge {
+		bool CursorNearTopDraggableEdge {
 			get {
 				return CursorIsOverDockArea && Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 && CurrentDockItem is SeparatorItem;
+			}
+		}
+		
+		bool CursorNearLeftEdge {
+			get {
+				return CursorIsOverDockArea && Math.Abs (Cursor.X - MinimumDockArea.X) < 8;
+			}
+		}
+		
+		bool CursorNearRightEdge {
+			get {
+				return CursorIsOverDockArea && Math.Abs (Cursor.X - (MinimumDockArea.X + MinimumDockArea.Width)) < 8;
+			}
+		}
+		
+		bool CursorNearDraggableEdge {
+			get {
+				return CursorNearTopDraggableEdge || CursorNearRightEdge || CursorNearLeftEdge;
+			}
+		}
+		
+		DragEdge CurrentDragEdge {
+			get {
+				if (CursorNearTopDraggableEdge)
+					return DragEdge.Top;
+				else if (CursorNearLeftEdge)
+					return DragEdge.Left;
+				else if (CursorNearRightEdge)
+					return DragEdge.Right;
+				return DragEdge.Unknown;
 			}
 		}
 		
@@ -580,9 +621,8 @@ namespace Docky.Interface
 				FullRenderFlag = false;
 				// less code, twice as slow...
 				cr.AlphaFill ();
-				if (!drag_resizing)
-					for (int i=0; i<DockItems.Length; i++)
-						DrawIcon (cr, i);
+				for (int i=0; i<DockItems.Length; i++)
+					DrawIcon (cr, i);
 			}
 		}
 		
@@ -649,8 +689,7 @@ namespace Docky.Interface
 				cr.Scale (scale, scale);
 				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom
 				// the icon, not move it around.
-				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), x / scale, y / scale);
-				cr.Paint ();
+				DockItems [icon].GetIconSurface (cr.Target).Show (cr, x / scale, y / scale);
 				
 				if (GtkDragging && DockItems [icon].IsAcceptingDrops && icon == DockItemForX (Cursor.X)) {
 					cr.Rectangle (x / scale, y / scale, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
@@ -681,8 +720,7 @@ namespace Docky.Interface
 				
 				int textx = IconNormalCenterX (icon) - (DockPreferences.TextWidth / 2);
 				int texty = Height - 2 * IconSize - 28;
-				cr.SetSource (DockItems [icon].GetTextSurface (cr.Target), textx, texty);
-				cr.Paint ();
+				DockItems [icon].GetTextSurface (cr.Target).Show (cr, textx, texty);
 			}
 		}
 		
@@ -745,10 +783,10 @@ namespace Docky.Interface
 			IconPositionedCenterX (0, out start_x, out start_zoom);
 			IconPositionedCenterX (DockItems.Length - 1, out end_x, out end_zoom);
 			
-			int x = start_x - (int)(start_zoom * (IconSize / 2)) - HorizontalBuffer - IconBorderWidth;
-			int end = end_x + (int)(end_zoom * (IconSize / 2)) + HorizontalBuffer + IconBorderWidth;
+			double x = start_x - start_zoom * (IconSize / 2) - (start_zoom * HorizontalBuffer) - IconBorderWidth;
+			double end = end_x + end_zoom * (IconSize / 2) + (end_zoom * HorizontalBuffer) + IconBorderWidth;
 			
-			return new Gdk.Rectangle (x, Height - IconSize - 2 * VerticalBuffer, end - x, IconSize + 2 * VerticalBuffer);
+			return new Gdk.Rectangle ((int) x, Height - IconSize - 2 * VerticalBuffer, (int) (end - x), IconSize + 2 * VerticalBuffer);
 		}
 		
 		void OnDockItemsChanged (IEnumerable<IDockItem> items)
@@ -891,32 +929,14 @@ namespace Docky.Interface
 			GtkDragging = false;
 			
 			bool cursorIsOverDockArea = CursorIsOverDockArea;
-			bool cursorNearDraggableEdge = CursorNearDraggableEdge;
 			
 			Gdk.Point old_cursor_location = Cursor;
 			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
-			
-			// we do this so that our custom drag isn't destroyed by gtk's drag
-			if (cursorNearDraggableEdge && gtk_drag_source_set) {
-				UnregisterGtkDragSource ();
-			} else if (!cursorNearDraggableEdge && !gtk_drag_source_set && !drag_resizing) {
-				RegisterGtkDragSource ();
-			}
-			
-			if (cursorNearDraggableEdge && !cursor_is_handle) {
-				Gdk.Cursor top_cursor = new Gdk.Cursor (CursorType.TopSide);
-				GdkWindow.Cursor = top_cursor;
-				top_cursor.Dispose ();
-				cursor_is_handle = true;
-			} else if (!cursorNearDraggableEdge && cursor_is_handle && !drag_resizing) {
-				Gdk.Cursor normal_cursor = new Gdk.Cursor (CursorType.LeftPtr);
-				GdkWindow.Cursor = normal_cursor;
-				normal_cursor.Dispose ();
-				cursor_is_handle = false;
-			}
+
+			ConfigureCursor ();
 
 			if (drag_resizing)
-				DockPreferences.IconSize = Math.Min (drag_start_icon_size + (drag_start_y - Cursor.Y), DockPreferences.MaxIconSize);
+				HandleDragMotion ();
 			
 			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && (old_cursor_location.X != Cursor.X);
 
@@ -924,6 +944,34 @@ namespace Docky.Interface
 				AnimatedDraw ();
 			
 			return base.OnMotionNotifyEvent (evnt);
+		}
+		
+		void ConfigureCursor ()
+		{
+			// we do this so that our custom drag isn't destroyed by gtk's drag
+			if (CursorNearDraggableEdge && gtk_drag_source_set) {
+				UnregisterGtkDragSource ();
+				
+				if (CursorNearTopDraggableEdge && cursor_type != CursorType.TopSide)
+					SetCursor (CursorType.TopSide);
+				else if (CursorNearLeftEdge && cursor_type != CursorType.LeftSide)
+					SetCursor (CursorType.LeftSide);
+				else if (CursorNearRightEdge && cursor_type != CursorType.RightSide)
+					SetCursor (CursorType.RightSide);
+				
+			} else if (!CursorNearDraggableEdge && !gtk_drag_source_set && !drag_resizing) {
+				RegisterGtkDragSource ();
+				if (cursor_type != CursorType.LeftPtr)
+					SetCursor (CursorType.LeftPtr);
+			}
+		}
+		
+		void SetCursor (Gdk.CursorType type)
+		{
+			cursor_type = type;
+			Gdk.Cursor tmp_cursor = new Gdk.Cursor (type);
+			GdkWindow.Cursor = tmp_cursor;
+			tmp_cursor.Dispose ();
 		}
 		
 		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
@@ -995,9 +1043,10 @@ namespace Docky.Interface
 		
 		void StartDrag ()
 		{
-			drag_start_y = Cursor.Y;
+			drag_start_point = Cursor;
 			drag_start_icon_size = DockPreferences.IconSize;
 			drag_resizing = true;
+			drag_edge = CurrentDragEdge;
 		}
 		
 		void EndDrag ()
@@ -1007,6 +1056,33 @@ namespace Docky.Interface
 			
 			FullRenderFlag = true;
 			AnimatedDraw ();
+		}
+		
+		void HandleDragMotion ()
+		{
+			int movement = 0;
+			switch (drag_edge) {
+			case DragEdge.Top:
+				DockPreferences.IconSize = Math.Min (drag_start_icon_size + (drag_start_point.Y - Cursor.Y), DockPreferences.MaxIconSize);
+				return;
+			case DragEdge.Left:
+				movement = drag_start_point.X - Cursor.X;
+				break;
+			case DragEdge.Right:
+				movement = Cursor.X - drag_start_point.X;
+				break;
+			}
+			
+			if (movement > IconSize / 2 + 2) {
+				DockPreferences.AutomaticIcons++;
+			} else if (movement < 0 - (IconSize / 2 + 2)) {
+				DockPreferences.AutomaticIcons--;
+			} else {
+				return;
+			}
+			
+			item_provider.ForceUpdate ();
+			drag_start_point.X = Cursor.X;
 		}
 		
 		void SetIconRegions ()
@@ -1046,7 +1122,7 @@ namespace Docky.Interface
 				}
 			}
 			if (window.CurrentOffsetMask != offset)
-				window.SetInputMask (offset);
+				window.SetInputMask (offset, drag_resizing);
 		}
 		
 		public void SetPaneContext (IUIContext context, Pane pane)
