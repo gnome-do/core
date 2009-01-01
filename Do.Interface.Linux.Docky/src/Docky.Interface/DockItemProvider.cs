@@ -408,11 +408,10 @@ namespace Docky.Interface
 					if (sortDictionary.ContainsKey (item.Element.UniqueId))
 						item.Position = sortDictionary [item.Element.UniqueId];
 				}
-				
-				ResolvePositionConflicts (DragableItems);
 			}
 			
 			UpdateWindowItems ();
+			SimplifyPositions (DragableItems);
 			OnDockItemsChanged ();
 			
 		}
@@ -435,9 +434,11 @@ namespace Docky.Interface
 					di.RemoveClicked += HandleRemoveClicked;
 					di.UpdateNeeded += HandleUpdateNeeded;
 					di.DockAddItem = DateTime.UtcNow;
+					
 					int position = LastPosition + 1;
 					if (old_items.Any ())
 						position += old_items.Max (oi => oi.Position);
+					
 					di.Position = position;
 					statistical_items.Add (di);
 				}
@@ -502,17 +503,11 @@ namespace Docky.Interface
 			task_items = out_items;
 		}
 		
-		void ResolvePositionConflicts (IEnumerable<DockItem> items)
+		void SimplifyPositions (IEnumerable<DockItem> items)
 		{
-			int maxPostion = items.Select (di => di.Position).Max ();
-			for (int i=0; i<maxPostion; i++) {
-				int count = items.Where (di => di.Position == i).Count ();
-				if (count > 1) {
-					items.Where (di => di.Position > i).ForEach (di => di.Position += count);
-					
-					int offset = 0;
-					items.Where (di => di.Position == i).ForEach (di => di.Position += offset++);
-				}
+			int i=0;
+			foreach (DockItem item in items.OrderBy (di => di.Position).ToArray ()) {
+				item.Position = i++;
 			}
 		}
 		
