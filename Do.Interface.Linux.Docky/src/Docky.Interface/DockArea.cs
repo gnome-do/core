@@ -680,6 +680,7 @@ namespace Docky.Interface
 			
 			if (DockItems [icon].Scalable) {
 				if (DockPreferences.Reflections) {
+					cr.Save ();
 					cr.Scale (scale, 0-scale);
 					
 					// get us into a "normal" reflected position
@@ -689,9 +690,10 @@ namespace Docky.Interface
 					reflect_y -= VerticalBuffer * 2.7 * zoom;
 					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target),  x * (1 / scale), reflect_y * (-1 / scale));
 					cr.PaintWithAlpha (.25);	
-					cr.Scale (1 / scale, 1 / (0-scale));
+					cr.Restore ();
 				}
 				
+				cr.Save ();
 				cr.Scale (scale, scale);
 				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom
 				// the icon, not move it around.
@@ -702,9 +704,8 @@ namespace Docky.Interface
 					cr.Color = new Cairo.Color (.9, .95, 1, .5);
 					cr.Operator = Operator.Atop;
 					cr.Fill ();
-					cr.Operator = Operator.Over;
 				}
-				cr.Scale (1 / scale, 1 / scale);
+				cr.Restore ();
 			} else {
 				// since these dont scale, we have some extra work to do to keep them centered
 				double startx = x + (zoom * DockItems [icon].Width - DockItems [icon].Width) / 2;
