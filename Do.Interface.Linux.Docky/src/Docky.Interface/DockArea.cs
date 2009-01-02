@@ -307,7 +307,9 @@ namespace Docky.Interface
 		
 		bool CursorNearTopDraggableEdge {
 			get {
-				return CursorIsOverDockArea && Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 && CurrentDockItem is SeparatorItem;
+				return CurrentDockItem is SeparatorItem && 
+					   CursorIsOverDockArea && 
+					   Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5;
 			}
 		}
 		
@@ -325,7 +327,9 @@ namespace Docky.Interface
 		
 		bool CursorNearDraggableEdge {
 			get {
-				return CursorNearTopDraggableEdge || CursorNearRightEdge || CursorNearLeftEdge;
+				return CursorNearTopDraggableEdge || 
+					   CursorNearRightEdge || 
+					   CursorNearLeftEdge;
 			}
 		}
 		
