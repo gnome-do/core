@@ -71,7 +71,6 @@ namespace Docky.Interface
 		bool gtk_drag_source_set;
 		
 		int monitor_width;
-		int max_icon_size;
 		int drag_start_icon_size;
 		int remove_drag_start_x;
 		uint animation_timer;
