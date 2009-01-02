@@ -194,6 +194,7 @@ namespace Docky.Interface
 				return;
 			// we do this delayed so that we dont get a flood of these events.  Certain windows behave badly.
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
+			SetIconRegionFromCache ();
 		}
 		
 		bool HandleUpdate ()
@@ -270,8 +271,13 @@ namespace Docky.Interface
 				return;
 			icon_region = region;
 			
+			SetIconRegionFromCache ();
+		}
+		
+		void SetIconRegionFromCache ()
+		{
 			Applications.ForEach (app => app.Windows.Where (w => !w.IsSkipTasklist)
-			                                        .ForEach (w => w.SetIconGeometry (region.X, region.Y, region.Width, region.Height)));
+			                      .ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height)));
 		}
 		
 		public override bool Equals (IDockItem other)

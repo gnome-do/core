@@ -119,15 +119,13 @@ namespace Docky.Interface
 			Wnck.Screen.Default.WindowClosed += delegate(object o, WindowClosedArgs args) {
 				if (args.Window.IsSkipTasklist)
 					return;
-				UpdateWindowItems ();
-				OnDockItemsChanged ();
+				UpdateItems ();
 			};
 			
 			Wnck.Screen.Default.WindowOpened += delegate(object o, WindowOpenedArgs args) {
 				if (args.Window.IsSkipTasklist)
 					return;
-				UpdateWindowItems ();
-				OnDockItemsChanged ();
+				UpdateItems ();
 			};
 			
 			// We give core 3 seconds to update its universe.  Eventually we will need a signal or something,
