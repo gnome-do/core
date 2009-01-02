@@ -62,6 +62,12 @@ namespace Docky.Interface
 		
 		Gdk.Rectangle icon_region;
 		
+		string Exec {
+			get {
+				return MaybeGetExecStringForPID (Application.Pid) ?? MaybeGetExecStringForPID (Application.Windows[0].Pid);
+			}
+		}
+		
 		#region IDockItem implementation 
 		
 		public override Pixbuf GetDragPixbuf ()
@@ -128,19 +134,13 @@ namespace Docky.Interface
 			if (Application.Name.Length > 4 && Application.Name.Contains (" "))
 				yield return Application.Name.Split (' ') [0].ToLower ();
 			
-			string exec;
-			exec = GetExecStringForPID (Application.Pid);
-			if (string.IsNullOrEmpty (exec))
-				exec = GetExecStringForPID (Application.Windows[0].Pid);
-			
-			
-			if (!string.IsNullOrEmpty (exec)) {
-				yield return exec;
-				yield return exec.Split ('-')[0];
+			if (!string.IsNullOrEmpty (Exec)) {
+				yield return Exec;
+				yield return Exec.Split ('-')[0];
 			}
 		}
 		
-		string GetExecStringForPID (int pid)
+		string MaybeGetExecStringForPID (int pid)
 		{
 			string exec;
 			try {
@@ -154,6 +154,9 @@ namespace Docky.Interface
 					exec = WindowUtils.CmdLineForPid (pid).Split (' ')[0];
 				} catch { }
 			}
+			if (exec == "")
+				exec = null;
+			
 			return exec;
 		}
 		
