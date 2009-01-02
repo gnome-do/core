@@ -17,6 +17,7 @@
 //
 
 using System;
+using Mono.Unix;
 
 namespace Docky.Interface
 {
@@ -44,7 +45,7 @@ namespace Docky.Interface
 		
 		public AbstractMenuButtonArgs (string description, string icon, bool sensitive)
 		{
-			Description = description;
+			Description = Catalog.GetString (description);
 			Icon = icon;
 			Sensitive = sensitive;
 		}
