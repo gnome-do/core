@@ -55,7 +55,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		const string MinimizeRestoreText = Catalog.GetString ("Minimize/Restore");
+		const string MinimizeRestoreText = Catalog.GetString ("Minimize") + "/" + Catalog.GetString ("Restore");
 		const string CloseText = Catalog.GetString ("Close All");
 		
 		const int MenuItemMaxCharacters = 50;
