@@ -680,7 +680,6 @@ namespace Docky.Interface
 			
 			if (DockItems [icon].Scalable) {
 				if (DockPreferences.Reflections) {
-					cr.Save ();
 					cr.Scale (scale, 0-scale);
 					
 					// get us into a "normal" reflected position
@@ -690,7 +689,7 @@ namespace Docky.Interface
 					reflect_y -= VerticalBuffer * 2.7 * zoom;
 					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target),  x * (1 / scale), reflect_y * (-1 / scale));
 					cr.PaintWithAlpha (.25);	
-					cr.Restore ();
+					cr.Matrix = new Matrix ();
 				}
 				
 				cr.Save ();
@@ -704,8 +703,9 @@ namespace Docky.Interface
 					cr.Color = new Cairo.Color (.9, .95, 1, .5);
 					cr.Operator = Operator.Atop;
 					cr.Fill ();
+					cr.Operator = Operator.Over;
 				}
-				cr.Restore ();
+				cr.Matrix = new Matrix ();
 			} else {
 				// since these dont scale, we have some extra work to do to keep them centered
 				double startx = x + (zoom * DockItems [icon].Width - DockItems [icon].Width) / 2;
