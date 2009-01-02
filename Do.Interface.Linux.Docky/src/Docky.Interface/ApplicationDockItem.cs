@@ -59,6 +59,8 @@ namespace Docky.Interface
 		string CloseText = Catalog.GetString ("Close All");
 		
 		const int MenuItemMaxCharacters = 50;
+		const string WindowIcon = "forward";
+		const string MinimizeIcon = "down";
 		
 		Gdk.Rectangle icon_region;
 		
@@ -199,7 +201,7 @@ namespace Docky.Interface
 		public override void Clicked (uint button)
 		{
 			if (button == 1)
-				WindowUtils.PerformLogicalClick (new [] {Application});
+				WindowUtils.PerformLogicalClick (new [] { Application });
 		}
 
 		public override void SetIconRegion (Gdk.Rectangle region)
@@ -224,11 +226,15 @@ namespace Docky.Interface
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
 			foreach (Wnck.Window window in Application.Windows.Where (win => !win.IsSkipTasklist))
-				yield return new WindowMenuButtonArgs (window, window.Name, "forward");
+				yield return new WindowMenuButtonArgs (window, window.Name, WindowIcon);
 			
 			yield return new SeparatorMenuButtonArgs ();
-			yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (Application.Windows), MinimizeRestoreText, "down");
-			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (Application.Windows), CloseText, Gtk.Stock.Quit);
+			
+			yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (Application.Windows), 
+			                                       MinimizeRestoreText, MinimizeIcon);
+			
+			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (Application.Windows), 
+			                                       CloseText, Gtk.Stock.Quit);
 		}
 	}
 }
