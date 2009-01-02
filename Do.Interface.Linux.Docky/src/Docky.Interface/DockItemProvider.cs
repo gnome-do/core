@@ -254,8 +254,7 @@ namespace Docky.Interface
 		
 		public void ForceUpdate ()
 		{
-			UpdateStatisticalItems ();
-			OnDockItemsChanged ();
+			UpdateItems ();
 		}
 		
 		public IconSource GetIconSource (IDockItem item) {
