@@ -37,7 +37,9 @@ namespace Docky.Interface
 		Surface text_surface, icon_surface;
 		#region IDockItem implementation 
 		
-		public virtual bool IsAcceptingDrops { get { return false; } }
+		public virtual bool IsAcceptingDrops { 
+			get { return false; } 
+		}
 		
 		public virtual bool ReceiveItem (string item) 
 		{
@@ -46,28 +48,32 @@ namespace Docky.Interface
 		
 		public virtual Surface GetIconSurface (Surface similar)
 		{
-			if (icon_surface == null) {
-				icon_surface = similar.CreateSimilar (similar.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-				Context cr = new Context (icon_surface);
-				
-				Gdk.Pixbuf pbuf = GetSurfacePixbuf ();
-				if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
-					double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
-					Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
-					pbuf.Dispose ();
-					pbuf = temp;
-				}
-				
-				Gdk.CairoHelper.SetSourcePixbuf (cr, 
-				                                 pbuf, 
-				                                 (DockPreferences.FullIconSize - pbuf.Width) / 2,
-				                                 (DockPreferences.FullIconSize - pbuf.Height) / 2);
-				cr.Paint ();
-				
+			return (icon_surface != null) ? icon_surface : icon_surface = MakeIconSurface (similar);
+		}
+		
+		protected virtual Surface MakeIconSurface (Surface similar)
+		{
+			Surface tmp_surface = similar.CreateSimilar (similar.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
+			Context cr = new Context (tmp_surface);
+			
+			Gdk.Pixbuf pbuf = GetSurfacePixbuf ();
+			if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
+				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
+				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
 				pbuf.Dispose ();
-				(cr as IDisposable).Dispose ();
+				pbuf = temp;
 			}
-			return icon_surface;
+			
+			Gdk.CairoHelper.SetSourcePixbuf (cr, 
+			                                 pbuf, 
+			                                 (DockPreferences.FullIconSize - pbuf.Width) / 2,
+			                                 (DockPreferences.FullIconSize - pbuf.Height) / 2);
+			cr.Paint ();
+			
+			pbuf.Dispose ();
+			(cr as IDisposable).Dispose ();
+			
+			return tmp_surface;
 		}
 		
 		protected void RedrawIcon ()
@@ -130,9 +136,7 @@ namespace Docky.Interface
 		/// The Widget of the icon.
 		/// </value>
 		public virtual int Width {
-			get {
-				return DockPreferences.IconSize;
-			}
+			get { return DockPreferences.IconSize; }
 		}
 		
 		/// <value>
@@ -167,10 +171,7 @@ namespace Docky.Interface
 		/// <value>
 		/// When this item was added to the Dock
 		/// </value>
-		public virtual DateTime DockAddItem {
-			get;
-			set;
-		}
+		public virtual DateTime DockAddItem { get; set; }
 		
 		#endregion 
 		

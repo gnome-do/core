@@ -44,8 +44,6 @@ namespace Docky.Interface
 		
 		public AbstractMenuButtonArgs (string description, string icon, bool sensitive)
 		{
-			if (MaxDescriptionCharacters < description.Length)
-				description = description.Substring (0, MaxDescriptionCharacters - 3) + "...";
 			Description = description;
 			Icon = icon;
 			Sensitive = sensitive;
