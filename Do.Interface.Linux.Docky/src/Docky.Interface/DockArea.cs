@@ -578,13 +578,15 @@ namespace Docky.Interface
 			if (CanFastRender) {
 				StoreFastRenderData ();
 				do {
-					// If the cursor has not moved and the dock_item_menu is not visible (this causes a render change without moving the cursor)
-					// we can do no rendering at all and just take our previous frame as our current result.
+					// If the cursor has not moved and the dock_item_menu is not visible (this causes a 
+					// render change without moving the cursor) we can do no rendering at all and just 
+					// take our previous frame as our current result.
 					if (previous_x == Cursor.X && !dock_item_menu.Visible && !AnimationState.CheckCondition ("UrgentRecentChange"))
 						break;
 					
-					// we need to know the left and right items for the parabolic zoom.  These items represent the only icons that are
-					// actually undergoing change.  By noting what these icons are, we can only draw these icons and those between them.
+					// we need to know the left and right items for the parabolic zoom.  These items 
+					// represent the only icons that are atually undergoing change.  By noting what 
+					// these icons are, we can only draw these icons and those between them.
 					int left_item = Math.Max (0, DockItemForX (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
 					int right_item = DockItemForX (Math.Max (Cursor.X, previous_x) + DockPreferences.ZoomSize / 2);
 					if (right_item == -1) 
