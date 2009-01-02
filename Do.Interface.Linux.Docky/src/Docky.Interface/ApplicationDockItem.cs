@@ -91,16 +91,16 @@ namespace Docky.Interface
 				pbuf.Dispose ();
 				pbuf = null;
 			
-				string desktop_path = GetDesktopFile (guess);
-				if (!string.IsNullOrEmpty (desktop_path)) {
-					using (Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists)) {
+				string desktopPath = GetDesktopFile (guess);
+				if (!string.IsNullOrEmpty (desktopPath)) {
+					using (Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktopPath, Gnome.DesktopItemLoadFlags.OnlyIfExists)) {
 						pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
 					}
 					break;
 				}
 			}
 			
-			// we failed, lets get ourselves an uggggly icon
+			// we failed to find an icon, lets use an uggggly one
 			if (pbuf == null)
 				pbuf = Application.Icon;
 			
