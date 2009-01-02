@@ -159,8 +159,8 @@ namespace Do.Core
 				item = FirstController.Selection as Item;
 				items = FirstController.FullSelection.OfType<Item> ();
 			} else {
-				// TODO find a better exception to throw
-				throw new Exception ("No action available");
+				Log.Warn ("No action found. The interface is out of sync.");
+				return new List<Element> ();
 			}
 
 			// If we don't support modifier items, don't search.

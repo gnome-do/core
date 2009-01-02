@@ -32,6 +32,11 @@ namespace Do.Platform
 			UI.MainMenu.Instance.PopupAtPosition (x, y);
 		}
 		
+		public void ShowMainMenu (PositionMenu menuPositioner)
+		{
+			UI.MainMenu.Instance.PopupWithPositioner (menuPositioner);
+		}
+		
 		public void SummonMainWindow ()
 		{
 			Do.Controller.Summon ();

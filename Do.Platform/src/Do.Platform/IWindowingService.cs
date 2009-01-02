@@ -23,10 +23,12 @@ using Do.Platform.ServiceStack;
 
 namespace Do.Platform
 {
+	public delegate void PositionMenu (int menuHeight, int menuWidth, out int x, out int y);
 	
 	public interface IWindowingService : IService
 	{
 		void ShowMainMenu (int x, int y);
+		void ShowMainMenu (PositionMenu menuPositioner);
 		void SummonMainWindow ();
 	}
 }

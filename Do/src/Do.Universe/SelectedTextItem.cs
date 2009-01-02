@@ -34,7 +34,7 @@ namespace Do.Universe
 
 		static SelectedTextItem ()
 		{
-			TextItem = new TextItem ("") as Item;
+			TextItem = new TextItem ("");
 		}
 
 		public static void UpdateText ()
