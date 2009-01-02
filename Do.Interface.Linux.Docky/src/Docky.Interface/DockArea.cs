@@ -43,10 +43,10 @@ namespace Docky.Interface
 	public class DockArea : Gtk.DrawingArea
 	{
 		enum DragEdge {
+			None = 0,
 			Top,
 			Left,
 			Right,
-			Unknown,
 		}
 		
 		public const int BaseAnimationTime = 150;
@@ -337,7 +337,7 @@ namespace Docky.Interface
 					return DragEdge.Left;
 				else if (CursorNearRightEdge)
 					return DragEdge.Right;
-				return DragEdge.Unknown;
+				return DragEdge.None;
 			}
 		}
 		
