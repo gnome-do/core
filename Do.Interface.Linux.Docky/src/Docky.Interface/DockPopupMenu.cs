@@ -113,6 +113,14 @@ namespace Docky.Interface
 				Hide ();
 			return base.OnButtonReleaseEvent (evnt);
 		}
+		
+		protected override bool OnKeyReleaseEvent (Gdk.EventKey evnt)
+		{
+			if (evnt.Key == Gdk.Key.Escape)
+				Hide ();
+			return base.OnKeyReleaseEvent (evnt);
+		}
+
 
 		void DrawBackground (Context cr)
 		{

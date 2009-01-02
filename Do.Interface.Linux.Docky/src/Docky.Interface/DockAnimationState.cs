@@ -58,11 +58,13 @@ namespace Docky.Interface
 			animation_conditions [id] = handler;
 		}
 		
-		public bool CheckCondition (string id)
+		public bool this [string condition]
 		{
-			if (!animation_conditions.ContainsKey (id))
-				throw new Exception (string.Format ("Animation Condition Handler does not contain a condition named {0}", id));
-			return animation_conditions [id].Invoke ();
+			get { 
+				if (!animation_conditions.ContainsKey (condition))
+					throw new Exception (string.Format ("Animation Condition Handler does not contain a condition named {0}", condition));
+				return animation_conditions [condition].Invoke (); 
+			}
 		}
 		
 		public void RemoveCondition (string id)

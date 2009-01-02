@@ -356,9 +356,9 @@ namespace Docky.Interface
 		
 		bool IconAnimationNeeded {
 			get {
-				return AnimationState.CheckCondition ("BounceAnimationNeeded") ||
-					   AnimationState.CheckCondition ("IconInsertAnimationNeeded") ||
-					   AnimationState.CheckCondition ("UrgentAnimationNeeded");
+				return AnimationState ["BounceAnimationNeeded"] ||
+					   AnimationState ["IconInsertAnimationNeeded"] ||
+					   AnimationState ["UrgentAnimationNeeded"];
 			}
 		}
 		
@@ -581,7 +581,7 @@ namespace Docky.Interface
 					// If the cursor has not moved and the dock_item_menu is not visible (this causes a 
 					// render change without moving the cursor) we can do no rendering at all and just 
 					// take our previous frame as our current result.
-					if (previous_x == Cursor.X && !dock_item_menu.Visible && !AnimationState.CheckCondition ("UrgentRecentChange"))
+					if (previous_x == Cursor.X && !dock_item_menu.Visible && !AnimationState ["UrgentRecentChange"])
 						break;
 					
 					// we need to know the left and right items for the parabolic zoom.  These items 
@@ -659,20 +659,20 @@ namespace Docky.Interface
 			double x = center - zoom * DockItems [icon].Width / 2;
 			double y = Height - (zoom * DockItems [icon].Height) - VerticalBuffer;
 			
-			int bounce_ms = (int) (DateTime.UtcNow - DockItems [icon].LastClick).TotalMilliseconds;
+			int bounceMs = (int) (DateTime.UtcNow - DockItems [icon].LastClick).TotalMilliseconds;
 			
 			// we will set this flag now
-			bool draw_urgency = false;
-			if (bounce_ms < BounceTime) {
+			bool drawUrgency = false;
+			if (bounceMs < BounceTime) {
 				// bounces twice
-				y -= Math.Abs (30 * Math.Sin (bounce_ms * Math.PI / (BounceTime / 2)));
+				y -= Math.Abs (30 * Math.Sin (bounceMs * Math.PI / (BounceTime / 2)));
 			} else {
 				IDockAppItem dai = DockItems [icon] as IDockAppItem;
 				if (dai != null && dai.NeedsAttention) {
-					draw_urgency = true;
-					int urgent_ms = (int) (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds;
-					if (urgent_ms < BounceTime)
-						y -= 100 * Math.Sin (urgent_ms * Math.PI / (BounceTime));
+					drawUrgency = true;
+					int urgentMs = (int) (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds;
+					if (urgentMs < BounceTime)
+						y -= 100 * Math.Sin (urgentMs * Math.PI / (BounceTime));
 				}
 			}
 			
@@ -716,7 +716,7 @@ namespace Docky.Interface
 			if (DockItems [icon].WindowCount > 0) {
 				// draws a simple triangle indicator.  Should be replaced by something nicer some day
 				int indicator_y = Height - 1;
-				Util.DrawGlowIndicator (cr, center, indicator_y, draw_urgency);
+				Util.DrawGlowIndicator (cr, center, indicator_y, drawUrgency);
 			}
 			
 			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
@@ -867,10 +867,10 @@ namespace Docky.Interface
 			string [] uriList = Regex.Split (data, "\r\n");
 			if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops) {
 				uriList.Where (uri => uri.StartsWith ("file://"))
-					.ForEach (uri => CurrentDockItem.ReceiveItem (uri.Substring (7)));
+					.ForEach (uri => CurrentDockItem.ReceiveItem (uri.Substring ("file://".Length)));
 			} else {
 				uriList.Where (uri => uri.StartsWith ("file://"))
-					.ForEach (uri => item_provider.AddCustomItem (uri.Substring (7)));
+					.ForEach (uri => item_provider.AddCustomItem (uri.Substring ("file://".Length)));
 			}
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
@@ -1119,7 +1119,7 @@ namespace Docky.Interface
 			} else {
 				if (DockPreferences.AutoHide && !drag_resizing) {
 					// setting the offset to 2 will trigger the parent window to unhide us if we are hidden.
-					if (AnimationState.CheckCondition ("UrgentAnimationNeeded"))
+					if (AnimationState ["UrgentAnimationNeeded"])
 						offset = 2;
 					else
 						offset = 1;
