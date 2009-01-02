@@ -55,8 +55,8 @@ namespace Docky.Interface
 			}
 		}
 		
-		const string MinimizeRestoreText = Catalog.GetString ("Minimize") + "/" + Catalog.GetString ("Restore");
-		const string CloseText = Catalog.GetString ("Close All");
+		string MinimizeRestoreText = Catalog.GetString ("Minimize") + "/" + Catalog.GetString ("Restore");
+		string CloseText = Catalog.GetString ("Close All");
 		
 		const int MenuItemMaxCharacters = 50;
 		
@@ -77,10 +77,8 @@ namespace Docky.Interface
 		/// </returns>
 		protected override Gdk.Pixbuf GetSurfacePixbuf ()
 		{
-			List<string> guesses = new List<string> (GetStringGuessList ());
-			
 			Gdk.Pixbuf pbuf = null;
-			foreach (string guess in guesses) {
+			foreach (string guess in GetStringGuessList ()) {
 				if (pbuf != null) {
 					pbuf.Dispose ();
 					pbuf = null;
