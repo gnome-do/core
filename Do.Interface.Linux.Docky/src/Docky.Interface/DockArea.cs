@@ -587,39 +587,39 @@ namespace Docky.Interface
 					// we need to know the left and right items for the parabolic zoom.  These items 
 					// represent the only icons that are atually undergoing change.  By noting what 
 					// these icons are, we can only draw these icons and those between them.
-					int left_item = Math.Max (0, DockItemForX (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
-					int right_item = DockItemForX (Math.Max (Cursor.X, previous_x) + DockPreferences.ZoomSize / 2);
-					if (right_item == -1) 
-						right_item = DockItems.Length - 1;
+					int leftItem = Math.Max (0, DockItemForX (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
+					int rightItem = DockItemForX (Math.Max (Cursor.X, previous_x) + DockPreferences.ZoomSize / 2);
+					if (rightItem == -1) 
+						rightItem = DockItems.Length - 1;
 					
-					int left_x, right_x;
-					double left_zoom, right_zoom;
+					int leftX, rightX;
+					double leftZoom, rightZoom;
 					
 					// calculates the actual x postions of the borders of the left and right most changing icons
-					if (left_item == 0) {
-						left_x = 0;
+					if (leftItem == 0) {
+						leftX = 0;
 					} else {
-						IconPositionedCenterX (left_item, out left_x, out left_zoom);
-						left_x -= (int) (left_zoom * DockItems [left_item].Width / 2) + IconBorderWidth;
+						IconPositionedCenterX (leftItem, out leftX, out leftZoom);
+						leftX -= (int) (leftZoom * DockItems [leftItem].Width / 2) + IconBorderWidth;
 					}
 					
-					if (right_item == DockItems.Length - 1) {
-						right_x = Width;
+					if (rightItem == DockItems.Length - 1) {
+						rightX = Width;
 					} else {
-						IconPositionedCenterX (right_item, out right_x, out right_zoom);
-						right_x += (int) (right_zoom * DockItems [right_item].Width / 2) + IconBorderWidth;
+						IconPositionedCenterX (rightItem, out rightX, out rightZoom);
+						rightX += (int) (rightZoom * DockItems [rightItem].Width / 2) + IconBorderWidth;
 					}
 					
 					// only clear that area for which we are going to redraw.  If we land this in the middle of an icon
 					// things are going to look ugly, so this calculation MUST be correct.
-					cr.Rectangle (left_x, 0, right_x - left_x, Height);
+					cr.Rectangle (leftX, 0, rightX - leftX, Height);
 					cr.Rectangle (0, 0, Width, Height - (MinimumDockArea.Height + 2));
 					cr.Color = new Cairo.Color (1, 1, 1, 0);
 					cr.Operator = Operator.Source;
 					cr.Fill ();
 					cr.Operator = Operator.Over;
 					
-					for (int i=left_item; i<=right_item; i++)
+					for (int i = leftItem; i <= rightItem; i++)
 						DrawIcon (cr, i);
 				} while (false);
 			} else {
@@ -656,8 +656,8 @@ namespace Docky.Interface
 			}
 			
 			// This gives the actual x,y coordinates of the icon 
-			double x = (center - zoom * DockItems [icon].Width / 2);
-			double y = (Height - (zoom * DockItems [icon].Height)) - VerticalBuffer;
+			double x = center - zoom * DockItems [icon].Width / 2;
+			double y = Height - (zoom * DockItems [icon].Height) - VerticalBuffer;
 			
 			int bounce_ms = (int) (DateTime.UtcNow - DockItems [icon].LastClick).TotalMilliseconds;
 			
