@@ -695,8 +695,8 @@ namespace Docky.Interface
 					cr.Matrix = default_matrix;
 				}
 				
-				cr.Save ();
-				cr.Scale (scale, scale);
+				if (scale != 1)
+					cr.Scale (scale, scale);
 				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom
 				// the icon, not move it around.
 				DockItems [icon].GetIconSurface (cr.Target).Show (cr, x / scale, y / scale);
@@ -708,7 +708,9 @@ namespace Docky.Interface
 					cr.Fill ();
 					cr.Operator = Operator.Over;
 				}
-				cr.Matrix = default_matrix;
+				
+				if (scale != 1)
+					cr.Matrix = default_matrix;
 			} else {
 				// since these dont scale, we have some extra work to do to keep them centered
 				double startx = x + (zoom * DockItems [icon].Width - DockItems [icon].Width) / 2;
