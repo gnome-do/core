@@ -86,6 +86,8 @@ namespace Docky.Interface
 		DockItemProvider item_provider;
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		DockItemMenu dock_item_menu;
+		
+		Matrix default_matrix;
 		#endregion
 		
 		#region public properties
@@ -380,6 +382,7 @@ namespace Docky.Interface
 		
 		public DockArea (DockWindow window) : base ()
 		{
+			default_matrix = new Matrix ();
 			this.window = window;
 			
 			item_provider = new DockItemProvider ();
@@ -689,7 +692,7 @@ namespace Docky.Interface
 					reflect_y -= VerticalBuffer * 2.7 * zoom;
 					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target),  x * (1 / scale), reflect_y * (-1 / scale));
 					cr.PaintWithAlpha (.25);	
-					cr.Matrix = new Matrix ();
+					cr.Matrix = default_matrix;
 				}
 				
 				cr.Save ();
@@ -705,7 +708,7 @@ namespace Docky.Interface
 					cr.Fill ();
 					cr.Operator = Operator.Over;
 				}
-				cr.Matrix = new Matrix ();
+				cr.Matrix = default_matrix;
 			} else {
 				// since these dont scale, we have some extra work to do to keep them centered
 				double startx = x + (zoom * DockItems [icon].Width - DockItems [icon].Width) / 2;
