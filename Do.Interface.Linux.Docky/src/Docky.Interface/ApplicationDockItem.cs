@@ -24,6 +24,8 @@ using System.Linq;
 using Cairo;
 using Gdk;
 
+using Mono.Unix;
+
 using Do.Interface.CairoUtils;
 using Do.Platform;
 using Do.Interface;
@@ -53,8 +55,8 @@ namespace Docky.Interface
 			}
 		}
 		
-		const string MinimizeRestoreText = "Minimize/Restore";
-		const string CloseText = "Close All";
+		const string MinimizeRestoreText = Catalog.GetString ("Minimize/Restore");
+		const string CloseText = Catalog.GetString ("Close All");
 		
 		const int MenuItemMaxCharacters = 50;
 		
