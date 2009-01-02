@@ -78,7 +78,7 @@ namespace Docky.Interface
 		protected override Gdk.Pixbuf GetSurfacePixbuf ()
 		{
 			Gdk.Pixbuf pbuf = null;
-			foreach (string guess in GetStringGuessList ()) {
+			foreach (string guess in GetIconGuesses ()) {
 				if (pbuf != null) {
 					pbuf.Dispose ();
 					pbuf = null;
@@ -113,7 +113,7 @@ namespace Docky.Interface
 			return pbuf;
 		}
 		
-		IEnumerable<string> GetStringGuessList ()
+		IEnumerable<string> GetIconGuesses ()
 		{
 			string [] guesses = new [] { Application.Name.ToLower ().Replace (' ','-'),
 				                         Application.Windows[0].Name.ToLower ().Replace (' ','-'),
