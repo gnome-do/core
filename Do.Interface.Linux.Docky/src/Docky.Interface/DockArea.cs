@@ -190,11 +190,11 @@ namespace Docky.Interface
 					return 0;
 				
 				double zoom = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
-				if (!CursorIsOverDockArea) {
-					zoom = 1 - zoom;
-				} else {
+				if (CursorIsOverDockArea) {
 					if (DockPreferences.AutoHide)
 						zoom = 1;
+				} else {
+					zoom = 1 - zoom;
 				}
 				if (InputInterfaceVisible) {
 					zoom = zoom * DockIconOpacity;
@@ -220,7 +220,7 @@ namespace Docky.Interface
 		int VerticalOffset {
 			get {
 				double offset = 0;
-				// we never hide in there conditions
+				// we never hide in these conditions
 				if (!DockPreferences.AutoHide || drag_resizing || InputAreaOpacity == 1)
 					return 0;
 
