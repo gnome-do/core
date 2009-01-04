@@ -1,7 +1,6 @@
-// ICoreService.cs
-//
-// GNOME Do is the legal property of its developers. Please refer to the
-// COPYRIGHT file distributed with this source distribution.
+// LaunchMenuButtonArgs.cs
+// 
+// Copyright (C) 2008 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,25 +17,28 @@
 //
 
 using System;
-using System.Collections.Generic;
 
 using Do.Universe;
-using Do.Platform.ServiceStack;
+using Do.Platform;
 
-namespace Do.Platform
+namespace Docky.Interface
 {
 	
-	public interface ICoreService : IService
+	
+	public class LaunchMenuButtonArgs : AbstractMenuButtonArgs
 	{
-		Element GetElement (string uniqueId);
+		Act action;
+		Item item;
 		
-		IEnumerable<Item> GetItemsOrderedByRelevance ();
+		public LaunchMenuButtonArgs (Act action, Item item, string description, string icon) : base (description, icon, true)
+		{
+			this.action = action;
+			this.item = item;
+		}
 		
-		IEnumerable<Act> GetActionsForItemOrderedByRelevance (Item item, bool allowThirdPaneRequiredActions);
-		
-		void PerformDefaultAction (Item item, IEnumerable<Type> filter);
-		
-		void PerformActionForItem (Act action, Item item);
+		public override void Action ()
+		{
+			Services.Core.PerformActionForItem (action, item);
+		}
 	}
-
 }

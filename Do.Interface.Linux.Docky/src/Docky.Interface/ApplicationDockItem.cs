@@ -19,8 +19,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Cairo;
+using Gdk;
+
+using Mono.Unix;
 
 using Do.Interface.CairoUtils;
 using Do.Platform;
@@ -33,8 +37,10 @@ namespace Docky.Interface
 {
 	
 	
-	public class ApplicationDockItem : AbstractDockItem
+	public class ApplicationDockItem : AbstractDockItem, IRightClickable
 	{
+		public event EventHandler RemoveClicked;
+		
 		static IEnumerable<String> DesktopFilesDirectories {
 			get {
 				return new string[] {
@@ -49,94 +55,144 @@ namespace Docky.Interface
 			}
 		}
 		
-		Wnck.Application application;
-		Surface icon_surface;
+		string MinimizeRestoreText = Catalog.GetString ("Minimize") + "/" + Catalog.GetString ("Restore");
+		string CloseText = Catalog.GetString ("Close All");
+		
+		const int MenuItemMaxCharacters = 50;
+		const string WindowIcon = "forward";
+		const string MinimizeIcon = "down";
+		
 		Gdk.Rectangle icon_region;
 		
-		#region IDockItem implementation 
-		public override Surface GetIconSurface (Surface sr)
-		{
-			if (icon_surface == null) {
-				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-				Context cr = new Context (icon_surface);
-				
-				Gdk.Pixbuf pbuf = GetIcon ();
-				
-				Gdk.CairoHelper.SetSourcePixbuf (cr, pbuf, 0, 0);
-				cr.Paint ();
-				
-				pbuf.Dispose ();
-				(cr as IDisposable).Dispose ();
+		string Exec {
+			get {
+				return MaybeGetExecStringForPID (Application.Pid) ?? MaybeGetExecStringForPID (Application.Windows[0].Pid);
 			}
-			return icon_surface;
 		}
 		
-		Gdk.Pixbuf GetIcon ()
+		#region IDockItem implementation 
+		
+		public override Pixbuf GetDragPixbuf ()
 		{
-			List<string> guesses = new List<string> ();
-			guesses.Add (application.Name.ToLower ().Replace (' ','-'));
-			guesses.Add (application.IconName.ToLower ().Replace (' ','-'));
-			guesses.Add (application.Windows[0].Name.ToLower ().Replace (' ','-'));
-			guesses.Add (application.Windows[0].IconName.ToLower ().Replace (' ','-'));
-			guesses.Add ("gnome-" + guesses[0]);
-			guesses.Add ("gnome-" + guesses[1]);
-			guesses.Add ("gnome-" + guesses[2]);
-			guesses.Add ("gnome-" + guesses[3]);
-			
-			string exec;
-			try {
-				exec = System.Diagnostics.Process.GetProcessById (application.Pid).ProcessName.Split (' ')[0];
-			} catch { exec = null; }
-			
-			if (string.IsNullOrEmpty (exec)) {
-				try {
-					exec = WindowUtils.CmdLineForPid (application.Pid).Split (' ')[0];
-				} catch { }
-			}
-			
-			if (!string.IsNullOrEmpty (exec)) {
-				guesses.Add (exec);
-				guesses.Add (exec.Split ('-')[0]);
-			}
-			
+			return Application.Icon;
+		}
+
+		/// <summary>
+		/// Returns a Pixbuf suitable for usage in the dock.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="Gdk.Pixbuf"/>
+		/// </returns>
+		protected override Gdk.Pixbuf GetSurfacePixbuf ()
+		{
 			Gdk.Pixbuf pbuf = null;
-			foreach (string guess in guesses) {
-				string icon_guess = guess;
+			foreach (string guess in GetIconGuesses ()) {
 				if (pbuf != null) {
 					pbuf.Dispose ();
 					pbuf = null;
 				}
 				
-				bool found = IconProvider.PixbufFromIconName (icon_guess, DockPreferences.FullIconSize, out pbuf);
-				if (found && (pbuf.Width == DockPreferences.FullIconSize || 
-				                     pbuf.Height == DockPreferences.FullIconSize)) {
-					return pbuf;
-				} else {
-					pbuf.Dispose ();
-					pbuf = null;
-				}
+				bool found = IconProvider.PixbufFromIconName (guess, DockPreferences.FullIconSize, out pbuf);
+				if (found && (pbuf.Width == DockPreferences.FullIconSize || pbuf.Height == DockPreferences.FullIconSize))
+					break;
+				
+				pbuf.Dispose ();
+				pbuf = null;
 			
-				string desktop_path = GetDesktopFile (icon_guess);
-				if (!string.IsNullOrEmpty (desktop_path)) {
-					Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktop_path, Gnome.DesktopItemLoadFlags.OnlyIfExists);
-					if (pbuf != null)
-						pbuf.Dispose ();
-					pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
-					di.Dispose ();
-					return pbuf;
+				string desktopPath = GetDesktopFile (guess);
+				if (!string.IsNullOrEmpty (desktopPath)) {
+					using (Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktopPath, Gnome.DesktopItemLoadFlags.OnlyIfExists)) {
+						pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
+					}
+					break;
 				}
 			}
 			
+			// we failed to find an icon, lets use an uggggly one
 			if (pbuf == null)
-				pbuf = IconProvider.PixbufFromIconName (guesses[0], DockPreferences.FullIconSize);
+				pbuf = Application.Icon;
 			
 			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
 				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
-				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
+				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Hyper);
 				pbuf.Dispose ();
 				pbuf = temp;
 			}
 			return pbuf;
+		}
+		
+		public override string Description {
+			get {
+				if (StringIsValidName (Application.Name))
+					return Application.Name;
+				else if (StringIsValidName (Application.Windows [0].Name))
+					return Application.Windows [0].Name;
+				else if (StringIsValidName (Application.IconName))
+					return Application.IconName;
+				else if (StringIsValidName (Application.Windows [0].IconName))
+					return Application.Windows [0].IconName;
+				return "Unknown";
+			}
+		}
+		
+		int windowCount;
+		public override int WindowCount {
+			get {
+				return windowCount;
+			}
+		}
+		
+		Wnck.Application Application {
+			get; set;
+		}
+		
+		#endregion 
+		
+		public ApplicationDockItem (Wnck.Application application) : base ()
+		{
+			Application = application;
+			windowCount = Application.Windows.Where (w => !w.IsSkipTasklist).Count ();
+		}
+		
+		IEnumerable<string> GetIconGuesses ()
+		{
+			string [] guesses = new [] { Application.Name.ToLower ().Replace (' ','-'),
+				                         Application.Windows[0].Name.ToLower ().Replace (' ','-'),
+				                         Application.IconName.ToLower ().Replace (' ','-'),
+				                         Application.Windows[0].IconName.ToLower ().Replace (' ','-') };
+			foreach (string s in guesses)
+				yield return s;
+			
+			foreach (string s in guesses)
+				yield return "gnome-" + s;
+			
+			if (Description.Length > 4 && Description.Contains (" "))
+				yield return Description.Split (' ') [0].ToLower ();
+			
+			if (!string.IsNullOrEmpty (Exec)) {
+				yield return Exec;
+				yield return Exec.Split ('-')[0];
+			}
+		}
+		
+		string MaybeGetExecStringForPID (int pid)
+		{
+			string exec;
+			try {
+				// this fails on mono pre 2.0
+				exec = System.Diagnostics.Process.GetProcessById (pid).ProcessName.Split (' ')[0];
+			} catch { exec = null; }
+			
+			if (string.IsNullOrEmpty (exec)) {
+				try {
+					// this works on all versions of mono but is less reliable (because I wrote it)
+					exec = WindowUtils.CmdLineForPid (pid).Split (' ')[0];
+				} catch { }
+			}
+			if (exec == "")
+				exec = null;
+			
+			return exec;
 		}
 		
 		string GetDesktopFile (string base_name)
@@ -152,46 +208,15 @@ namespace Docky.Interface
 			return null;
 		}
 		
-		public override  string Description {
-			get {
-				return application.Name;
-			}
-		}
-		
-		public override bool DrawIndicator { get { return true; } }
-		
-		public override bool Scalable {
-			get {
-				return true;
-			}
-		}
-		
-		public Wnck.Application App {
-			get { return application; }
-		}
-		
-		#endregion 
-		
-		public ApplicationDockItem(Wnck.Application application) : base ()
+		bool StringIsValidName (string s)
 		{
-			this.application = application;
+			return (!string.IsNullOrEmpty (s.Trim ()) && s != "<unknown>");
 		}
 		
-		protected override void OnIconSizeChanged ()
-		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
-			
-			base.OnIconSizeChanged ();
-		}
-
-		
-		public override void Clicked (uint button, IDoController controller)
+		public override void Clicked (uint button)
 		{
 			if (button == 1)
-				WindowUtils.PerformLogicalClick (new Wnck.Application[] {application});
+				WindowUtils.PerformLogicalClick (new [] { Application });
 		}
 
 		public override void SetIconRegion (Gdk.Rectangle region)
@@ -200,32 +225,31 @@ namespace Docky.Interface
 				return;
 			icon_region = region;
 			
-			foreach (Wnck.Window window in application.Windows) {
+			foreach (Wnck.Window window in Application.Windows) {
 				window.SetIconGeometry (region.X, region.Y, region.Width, region.Height);
 			}
 		}
-		
-		#region IDisposable implementation 
-		
-		public override void Dispose ()
-		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
-			
-			base.Dispose ();
-		}
-		
-		#endregion 
-		
 		
 		public override bool Equals (IDockItem other)
 		{
 			if (!(other is ApplicationDockItem))
 				return false;
 			
-			return ((other as ApplicationDockItem).application == application);
+			return ((other as ApplicationDockItem).Application == Application);
+		}
+		
+		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
+		{
+			foreach (Wnck.Window window in Application.Windows.Where (win => !win.IsSkipTasklist))
+				yield return new WindowMenuButtonArgs (window, window.Name, WindowIcon);
+			
+			yield return new SeparatorMenuButtonArgs ();
+			
+			yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (Application.Windows), 
+			                                       MinimizeRestoreText, MinimizeIcon);
+			
+			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (Application.Windows), 
+			                                       CloseText, Gtk.Stock.Quit);
 		}
 	}
 }

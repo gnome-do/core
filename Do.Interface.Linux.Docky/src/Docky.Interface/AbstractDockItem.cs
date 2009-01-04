@@ -34,10 +34,57 @@ namespace Docky.Interface
 	
 	public abstract class AbstractDockItem : IDockItem
 	{
-		Surface text_surface;
+		Surface text_surface, icon_surface;
 		#region IDockItem implementation 
 		
-		public abstract Surface GetIconSurface (Surface sr);
+		public virtual bool IsAcceptingDrops { 
+			get { return false; } 
+		}
+		
+		public virtual bool ReceiveItem (string item) 
+		{
+			return false;
+		}
+		
+		public virtual Surface GetIconSurface (Surface similar)
+		{
+			return (icon_surface != null) ? icon_surface : icon_surface = MakeIconSurface (similar);
+		}
+		
+		protected virtual Surface MakeIconSurface (Surface similar)
+		{
+			Surface tmp_surface = similar.CreateSimilar (similar.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
+			Context cr = new Context (tmp_surface);
+			
+			Gdk.Pixbuf pbuf = GetSurfacePixbuf ();
+			if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
+				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
+				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
+				pbuf.Dispose ();
+				pbuf = temp;
+			}
+			
+			Gdk.CairoHelper.SetSourcePixbuf (cr, 
+			                                 pbuf, 
+			                                 (DockPreferences.FullIconSize - pbuf.Width) / 2,
+			                                 (DockPreferences.FullIconSize - pbuf.Height) / 2);
+			cr.Paint ();
+			
+			pbuf.Dispose ();
+			(cr as IDisposable).Dispose ();
+			
+			return tmp_surface;
+		}
+		
+		protected void RedrawIcon ()
+		{
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
+			}
+		}
+		
+		protected abstract Pixbuf GetSurfacePixbuf ();
 		
 		/// <summary>
 		/// Gets a surface that is useful for display by the Dock based on the Description
@@ -51,8 +98,13 @@ namespace Docky.Interface
 		public virtual Surface GetTextSurface (Surface similar)
 		{
 			if (text_surface == null)
-				text_surface = Util.GetBorderedTextSurface (Description, DockPreferences.TextWidth, similar);
+				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (Description), DockPreferences.TextWidth, similar);
 			return text_surface;
+		}
+		
+		public virtual Pixbuf GetDragPixbuf ()
+		{
+			return null;
 		}
 		
 		/// <summary>
@@ -64,7 +116,7 @@ namespace Docky.Interface
 		/// <param name="controller">
 		/// A <see cref="IDoController"/>
 		/// </param>
-		public virtual void Clicked (uint button, IDoController controller)
+		public virtual void Clicked (uint button)
 		{
 		}
 		
@@ -78,40 +130,34 @@ namespace Docky.Interface
 		//// <value>
 		/// The value used to for the text surface
 		/// </value>
-		public abstract string Description {
-			get;		
-		}
+		public abstract string Description { get; }
 		
 		/// <value>
 		/// The Widget of the icon.
 		/// </value>
 		public virtual int Width {
-			get {
-				return DockPreferences.IconSize;
-			}
+			get { return DockPreferences.IconSize; }
 		}
 		
 		/// <value>
 		/// The Height of the icon.
 		/// </value>
 		public virtual int Height {
-			get {
-				return DockPreferences.IconSize;
-			}
+			get { return DockPreferences.IconSize; }
 		}
 		
 		/// <value>
 		/// If the icon is scalable or not (provides FullIconSize sized surface)
 		/// </value>
-		public abstract bool Scalable {
-			get;
+		public virtual bool Scalable {
+			get { return true; }
 		}
 		
 		/// <value>
 		/// Whether or not to draw an application present indicator
 		/// </value>
-		public abstract bool DrawIndicator {
-			get;
+		public virtual int WindowCount {
+			get { return 0; }
 		}
 		
 		/// <value>
@@ -125,10 +171,7 @@ namespace Docky.Interface
 		/// <value>
 		/// When this item was added to the Dock
 		/// </value>
-		public virtual DateTime DockAddItem {
-			get;
-			set;
-		}
+		public virtual DateTime DockAddItem { get; set; }
 		
 		#endregion 
 		
@@ -147,15 +190,27 @@ namespace Docky.Interface
 				text_surface.Destroy ();
 				text_surface = null;
 			}
+			
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
+			}
 		}
 
 		#region IDisposable implementation 
 		
 		public virtual void Dispose ()
 		{
+			DockPreferences.IconSizeChanged -= OnIconSizeChanged;
+			
 			if (text_surface != null) {
 				text_surface.Destroy ();
 				text_surface = null;
+			}
+			
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
 			}
 		}
 		
@@ -165,6 +220,5 @@ namespace Docky.Interface
 		{
 			return other == this;
 		}
-		
 	}
 }

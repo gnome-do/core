@@ -30,6 +30,7 @@ using Docky.XLib;
 using Do.Universe;
 using Do.Platform;
 using Do.Interface;
+using Do.Interface.CairoUtils;
 
 namespace Docky.Interface
 {
@@ -38,11 +39,19 @@ namespace Docky.Interface
 	public class DockWindow : Gtk.Window, IDoWindow
 	{
 		DockArea dock_area;
-		
+		EventBox eb;
 		IDoController controller;
+		int current_offset;
+		uint strut_timer;
+		uint reposition_timer;
+		bool is_repositioned_hidden;
 		
 		public new string Name {
 			get { return "Docky"; }
+		}
+		
+		public int CurrentOffsetMask {
+			get { return current_offset; }
 		}
 		
 		public IDoController Controller {
@@ -59,7 +68,6 @@ namespace Docky.Interface
 			controller.Orientation = ControlOrientation.Horizontal;
 			
 			AppPaintable = true;
-			KeepAbove = true;
 			Decorated = false;
 			SkipPagerHint = true;
 			SkipTaskbarHint = true;
@@ -69,44 +77,86 @@ namespace Docky.Interface
 			
 			this.SetCompositeColormap ();
 			
-			Realized += delegate {
-				GdkWindow.SetBackPixmap (null, false);
-			};
+			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
 			
-			StyleSet += delegate {
+			StyleSet += (o, a) => {
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);
 			};
+			
+			DockPreferences.AutohideChanged += DelaySetStruts;
+			DockPreferences.IconSizeChanged += DelaySetStruts;
 			
 			Build ();
 		}
 		
 		void Build ()
 		{
+			eb = new EventBox ();
+			eb.HeightRequest = 1;
+			eb.AddEvents ((int) Gdk.EventMask.PointerMotionMask);
+			
+			eb.MotionNotifyEvent += (o, a) => OnEventBoxMotion ();
+			eb.DragMotion += (o, a) => OnEventBoxMotion ();
+			
+			TargetEntry dest_te = new TargetEntry ("text/uri-list", 0, 0);
+			Gtk.Drag.DestSet (eb, DestDefaults.Motion | DestDefaults.Drop, new [] {dest_te}, Gdk.DragAction.Copy);
+			
+			eb.ExposeEvent += delegate(object o, ExposeEventArgs args) {
+				using (Context cr = CairoHelper.Create (eb.GdkWindow)) {
+					cr.AlphaFill ();
+				}
+			};
+			
 			dock_area = new DockArea (this);
 			
-			TargetEntry[] targets = {
-				new TargetEntry ("text/uri-list", 0, 0), 
-			};
-			Gtk.Drag.DestSet (dock_area, DestDefaults.Motion | DestDefaults.Drop, targets, Gdk.DragAction.Copy);
-			
-			Add (dock_area);
+			VBox vbox = new VBox ();
+			vbox.PackStart (eb, false, false, 0);
+			vbox.PackStart (dock_area, false, true, 0);
+			Add (vbox);
 			ShowAll ();
 		}
 		
-		public void SetInputMask (int heightOffset)
+		void OnEventBoxMotion ()
 		{
-			int width = Math.Max (Math.Min (800, dock_area.Width), dock_area.DockWidth);
+			Reposition ();
+			SetInputMask (2, false);
+			Gtk.Application.Invoke ((o, a) => dock_area.ManualCursorUpdate ());
+		}
+		
+		public void SetInputMask (int heightOffset, bool useFullWidth)
+		{
+			if (!IsRealized || current_offset == heightOffset)
+				return;
+			
+			current_offset = heightOffset;
+			int width;
+			if (!useFullWidth)
+				width = Math.Max (Math.Min (800, dock_area.Width), dock_area.DockWidth);
+			else
+				width = dock_area.Width;
+			
 			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, width, heightOffset, 1);
 			Context cr = Gdk.CairoHelper.Create (pixmap);
 			
 			cr.Color = new Cairo.Color (0, 0, 0, 1);
 			cr.Paint ();
 			
-			InputShapeCombineMask (pixmap, (dock_area.Width - width) / 2, dock_area.Height - heightOffset);
+			InputShapeCombineMask (pixmap, (dock_area.Width - width) / 2, eb.HeightRequest + dock_area.Height - heightOffset);
 			
 			(cr as IDisposable).Dispose ();
 			pixmap.Dispose ();
+			
+			if (heightOffset == 1) {
+				reposition_timer = GLib.Timeout.Add (500, () => {
+					if (current_offset == 1)
+						HideReposition ();
+					return false;
+				});
+			} else {
+				if (is_repositioned_hidden)
+					Reposition ();
+			}
 		}
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
@@ -141,7 +191,6 @@ namespace Docky.Interface
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
 			base.OnSizeAllocated (allocation);
-			
 			Reposition ();
 		}
 		
@@ -152,6 +201,21 @@ namespace Docky.Interface
 			GetSize (out main.Width, out main.Height);
 			geo = Screen.GetMonitorGeometry (0);
 			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-main.Height);
+			
+			is_repositioned_hidden = false;
+		}
+		
+		void HideReposition ()
+		{
+			Gdk.Rectangle geo, main;
+			
+			GetSize (out main.Width, out main.Height);
+			geo = Screen.GetMonitorGeometry (0);
+			Move (((geo.X+geo.Width)/2) - main.Width/2, geo.Y+geo.Height-eb.HeightRequest);
+			
+			InputShapeCombineMask (null, 0, 0);
+			
+			is_repositioned_hidden = true;
 		}
 		
 		public void RequestClickOff ()
@@ -159,7 +223,15 @@ namespace Docky.Interface
 			Controller.ButtonPressOffWindow ();
 		}
 		
-		public void SetStruts ()
+		public void DelaySetStruts ()
+		{
+			if (strut_timer > 0)
+				return;
+			
+			strut_timer = GLib.Timeout.Add (250, SetStruts);
+		}
+		
+		public bool SetStruts ()
 		{
 			IntPtr display = Xlib.gdk_x11_drawable_get_xdisplay (GdkWindow.Handle);
 			X11Atoms atoms = new X11Atoms (display);
@@ -167,11 +239,15 @@ namespace Docky.Interface
 			
 			struts[(int) XLib.Struts.Bottom] = (uint) dock_area.DockHeight;
 			
+			strut_timer = 0;
+			
 			if (!IsRealized)
-				return;
+				return false;
 			
 			Xlib.XChangeProperty (display, Xlib.gdk_x11_drawable_get_xid (GdkWindow.Handle), atoms._NET_WM_STRUT, 
 			                      atoms.XA_CARDINAL, 32, (int) XLib.PropertyMode.PropModeReplace, struts, 4);
+				
+			return false;
 		}
 
 		#region IDoWindow implementation 
@@ -180,6 +256,7 @@ namespace Docky.Interface
 		
 		public void Summon ()
 		{
+			Reposition ();
 			Do.Interface.Windowing.PresentWindow (this);
 			if (!dock_area.InputInterfaceVisible)
 				dock_area.ShowInputInterface ();
@@ -190,6 +267,7 @@ namespace Docky.Interface
 			uint current_time = Gtk.Global.CurrentEventTime;
 			Gdk.Pointer.Ungrab (current_time);
 			Gdk.Keyboard.Ungrab (current_time);
+			Gtk.Grab.Remove (this);
 			if (dock_area.InputInterfaceVisible)
 				dock_area.HideInputInterface ();
 		}
@@ -242,10 +320,10 @@ namespace Docky.Interface
 			}
 		}
 		
-		public bool ResultsCanHide { get { return true; } }
+		public bool ResultsCanHide { 
+			get { return false; } 
+		}
 		
 		#endregion 
-		
-
 	}
 }

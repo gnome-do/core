@@ -86,6 +86,8 @@ namespace Do.Universe.Safe
 		
 		public override bool ModifierItemsOptional {
 			get {
+				if (!SupportedModifierItemTypes.Any ())
+					return true;
 				try {
 					return Act.ModifierItemsOptional;
 				} catch (Exception e) {

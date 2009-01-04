@@ -20,8 +20,6 @@ using System;
 
 namespace Docky.Interface
 {
-	
-	
 	public enum DrawState
 	{
 		Normal,

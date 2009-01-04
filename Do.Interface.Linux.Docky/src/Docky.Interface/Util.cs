@@ -18,11 +18,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Do.Universe;
+using Do.Interface.CairoUtils;
 
 using Cairo;
-using Do.Interface.CairoUtils;
 using Gdk;
 
 namespace Docky.Interface
@@ -36,7 +37,21 @@ namespace Docky.Interface
 	
 	public static class Util
 	{
-		
+		/// <summary>
+		/// Gets a surface containing a transparent black rounded rectangle with the provided text on top.
+		/// </summary>
+		/// <param name="text">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="max_width">
+		/// A <see cref="System.Int32"/>
+		/// </param>
+		/// <param name="similar">
+		/// A <see cref="Surface"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="Surface"/>
+		/// </returns>
 		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar)
 		{
 			Surface sr;
@@ -68,9 +83,42 @@ namespace Docky.Interface
 			return sr;
 		}
 		
-		public static string UIDForElement (Element obj)
+		public static void DrawGlowIndicator (Context cr, int x, int y, bool urgent, int numberOfWindows)
 		{
-			return obj.Name + obj.Description + obj.Icon;
+			if (numberOfWindows == 1) {
+				DrawSingleIndicator (cr, x, y, urgent);
+			} else if (numberOfWindows > 1) {
+				DrawSingleIndicator (cr, x - 3, y, urgent);
+				DrawSingleIndicator (cr, x + 3, y, urgent);
+			}
+		}
+		
+		static void DrawSingleIndicator (Context cr, int x, int y, bool urgent)
+		{
+			int size = urgent ? 12 : 9;
+			
+			cr.MoveTo (x, y);
+			cr.Arc (x, y, size, 0, Math.PI * 2);
+			
+			RadialGradient rg = new RadialGradient (x, y, 0, x, y, size);
+			rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
+			if (urgent) {
+				rg.AddColorStop (.10, new Cairo.Color (1, .8, .8, 1.0));
+				rg.AddColorStop (.20, new Cairo.Color (1, .6, .6, .60));
+				rg.AddColorStop (.35, new Cairo.Color (1, .3, .3, .35));
+				rg.AddColorStop (.50, new Cairo.Color (1, .3, .3, .25));
+				rg.AddColorStop (1.0, new Cairo.Color (1, .3, .3, 0.0));
+			} else {
+				rg.AddColorStop (.10, new Cairo.Color (.5, .6, 1, 1.0));
+				rg.AddColorStop (.20, new Cairo.Color (.5, .6, 1, .60));
+				rg.AddColorStop (.25, new Cairo.Color (.5, .6, 1, .25));
+				rg.AddColorStop (.50, new Cairo.Color (.5, .6, 1, .15));
+				rg.AddColorStop (1.0, new Cairo.Color (.5, .6, 1, 0.0));
+			}
+			
+			cr.Pattern = rg;
+			cr.Fill ();
+			rg.Destroy ();
 		}
 	}
 }

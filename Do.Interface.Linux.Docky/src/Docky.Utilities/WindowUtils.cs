@@ -35,6 +35,12 @@ namespace Docky.Utilities
 	
 	public static class WindowUtils
 	{
+		/// <summary>
+		/// Returns a list of all applications on the default screen
+		/// </summary>
+		/// <returns>
+		/// A <see cref="Application"/> array
+		/// </returns>
 		public static Application[] GetApplications ()
 		{
 			List<Application> apps = new List<Application> ();
@@ -45,20 +51,39 @@ namespace Docky.Utilities
 			return apps.ToArray ();
 		}
 		
+		/// <summary>
+		/// Gets the command line excec string for a PID
+		/// </summary>
+		/// <param name="pid">
+		/// A <see cref="System.Int32"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/>
+		/// </returns>
 		public static string CmdLineForPid (int pid)
 		{
 			StreamReader reader;
+			string cmdline;
 			try {
 				string procPath = new [] { "/proc", pid.ToString (), "cmdline" }.Aggregate (Path.Combine);
 				reader = new StreamReader (procPath);
+				cmdline = reader.ReadLine ();
+				reader.Close ();
+				reader.Dispose ();
 			} catch { return null; }
 			
-			string cmdline = reader.ReadLine ();
-			reader.Close ();
-			reader.Dispose ();
 			return cmdline;
 		}
 		
+		/// <summary>
+		/// Returns a list of applications that match an exec string
+		/// </summary>
+		/// <param name="exec">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="List"/>
+		/// </returns>
 		public static List<Application> GetApplicationList (string exec)
 		{
 			exec = exec.Split (' ')[0];
@@ -90,61 +115,23 @@ namespace Docky.Utilities
 			return apps;
 		}
 		
-		public static void CenterAndFocusWindow (this Window w) 
-		{
-			if (!w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)) {
-				int viewX, viewY, viewW, viewH;
-				int midX, midY;
-				Screen scrn = Screen.Default;
-				Workspace wsp = scrn.ActiveWorkspace;
-				
-				//get our windows geometry
-				w.GetGeometry (out viewX, out viewY, out viewW, out viewH);
-				
-				//we want to focus on where the middle of the window is
-				midX = viewX + (viewW / 2);
-				midY = viewY + (viewH / 2);
-				
-				//The positions given above are relative to the current viewport
-				//This makes them absolute
-				midX += wsp.ViewportX;
-				midY += wsp.ViewportY;
-				
-				//Check to make sure our middle didn't wrap
-				if (midX > wsp.Width) {
-					midX %= wsp.Width;
-				}
-				
-				if (midY > wsp.Height) {
-					midY %= wsp.Height;
-				}
-				
-				//take care of negative numbers (happens?)
-				while (midX < 0)
-					midX += wsp.Width;
-			
-				while (midY < 0)
-					midX += wsp.Height;
-				
-				Wnck.Screen.Default.MoveViewport (midX, midY);
-			}
-			
-			w.Activate (Gtk.Global.CurrentEventTime);
-		}
-		
+		/// <summary>
+		/// Performs the "logical" click action on an entire group of applications
+		/// </summary>
+		/// <param name="apps">
+		/// A <see cref="IEnumerable"/>
+		/// </param>
 		public static void PerformLogicalClick (IEnumerable<Application> apps)
 		{
-			bool not_in_viewport = true;
-			foreach (Wnck.Application application in apps) {
-				foreach (Wnck.Window window in application.Windows) {
-					if (!window.IsSkipTasklist && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-						not_in_viewport = false;
-				}
-			}
+			bool not_in_viewport = !apps.Any (app => app.Windows
+			                                  .Any (w => !w.IsSkipTasklist && w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)));
+			bool urgent = apps.Any (app => app.Windows.Any (w => w.NeedsAttention ()));
 			
-			if (not_in_viewport) {
+			if (not_in_viewport || urgent) {
 				foreach (Wnck.Application application in apps) {
 					foreach (Wnck.Window window in application.Windows) {
+						if (urgent && !window.NeedsAttention ())
+								continue;
 						if (!window.IsSkipTasklist) {
 							window.CenterAndFocusWindow ();
 							return;
@@ -153,23 +140,20 @@ namespace Docky.Utilities
 				}
 			}
 			
-			foreach (Wnck.Application app in apps) {
-				foreach (Wnck.Window window in app.Windows) {
-					switch (GetClickAction (apps)) {
-					case ClickAction.Focus:
-						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-							window.Activate (Gtk.Global.CurrentEventTime);
-						break;
-					case ClickAction.Minimize:
-						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-							window.Minimize ();
-						break;
-					case ClickAction.Restore:
-						if (window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-							window.Unminimize (Gtk.Global.CurrentEventTime);
-						break;
-					}
-				}
+			List<Window> windows = new List<Window> ();
+			foreach (Wnck.Application app in apps)
+				windows.AddRange (app.Windows);
+			
+			switch (GetClickAction (apps)) {
+			case ClickAction.Focus:
+				WindowControl.FocusWindows (windows);
+				break;
+			case ClickAction.Minimize:
+				WindowControl.MinimizeWindows (windows);
+				break;
+			case ClickAction.Restore:
+				WindowControl.RestoreWindows (windows);
+				break;
 			}
 		}
 		

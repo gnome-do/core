@@ -46,8 +46,28 @@ namespace Do.Platform
 			return Do.UniverseManager.Search ("", typeof (Item).Cons (null)).Cast<Item> ();
 		}
 
-		#endregion
+		public void PerformDefaultAction (Item item, IEnumerable<Type> filter)
+		{
+			Do.Controller.PerformDefaultAction (item, filter);
+		}
 		
+		public void PerformActionForItem (Act action, Item item)
+		{
+			Do.Controller.PerformActionForItem (action, item);
+		}
+		
+		public IEnumerable<Act> GetActionsForItemOrderedByRelevance (Item item, bool allowThirdPaneRequiredActions)
+		{
+			IEnumerable<Act> actions = Do.UniverseManager
+				.Search ("", typeof (Act).Cons (null), item)
+				.Cast<Act> ()
+				.Where (a => a.Safe.SupportsItem (item));
+			
+			if (allowThirdPaneRequiredActions)
+				return actions;
+			return actions.Where (a => a.Safe.ModifierItemsOptional);
+		}
+		
+		#endregion
 	}
-
 }

@@ -1,7 +1,6 @@
-// ICoreService.cs
-//
-// GNOME Do is the legal property of its developers. Please refer to the
-// COPYRIGHT file distributed with this source distribution.
+// AbstractMenuButtonArgs.cs
+// 
+// Copyright (C) 2008 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,25 +17,39 @@
 //
 
 using System;
-using System.Collections.Generic;
+using Mono.Unix;
 
-using Do.Universe;
-using Do.Platform.ServiceStack;
-
-namespace Do.Platform
+namespace Docky.Interface
 {
-	
-	public interface ICoreService : IService
+	public abstract class AbstractMenuButtonArgs
 	{
-		Element GetElement (string uniqueId);
+		const int MaxDescriptionCharacters = 50;
 		
-		IEnumerable<Item> GetItemsOrderedByRelevance ();
+		public EventHandler Handler {
+			get {
+				return (sender, e) => Action ();
+			}
+		}
 		
-		IEnumerable<Act> GetActionsForItemOrderedByRelevance (Item item, bool allowThirdPaneRequiredActions);
+		public string Description {
+			get; private set;
+		}
 		
-		void PerformDefaultAction (Item item, IEnumerable<Type> filter);
+		public string Icon {
+			get; private set;
+		}
 		
-		void PerformActionForItem (Act action, Item item);
+		public bool Sensitive {
+			get; private set; 
+		}
+		
+		public AbstractMenuButtonArgs (string description, string icon, bool sensitive)
+		{
+			Description = Catalog.GetString (description);
+			Icon = icon;
+			Sensitive = sensitive;
+		}
+		
+		public abstract void Action ();
 	}
-
 }
