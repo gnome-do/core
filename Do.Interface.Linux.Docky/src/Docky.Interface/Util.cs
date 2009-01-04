@@ -37,7 +37,6 @@ namespace Docky.Interface
 	
 	public static class Util
 	{
-		
 		/// <summary>
 		/// Gets a surface containing a transparent black rounded rectangle with the provided text on top.
 		/// </summary>

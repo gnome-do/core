@@ -135,9 +135,10 @@ namespace Docky.Interface
 			}
 		}
 		
+		int windowCount;
 		public override int WindowCount {
 			get {
-				return Application.Windows.Where (w => !w.IsSkipTasklist).Count ();
+				return windowCount;
 			}
 		}
 		
@@ -150,6 +151,7 @@ namespace Docky.Interface
 		public ApplicationDockItem (Wnck.Application application) : base ()
 		{
 			Application = application;
+			windowCount = Application.Windows.Where (w => !w.IsSkipTasklist).Count ();
 		}
 		
 		IEnumerable<string> GetIconGuesses ()

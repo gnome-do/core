@@ -165,8 +165,8 @@ namespace Docky.Interface
 		
 		SummonModeRenderer SummonRenderer { get; set; }
 		
-		IDockItem [] DockItems { 
-			get { return item_provider.DockItems.ToArray (); } 
+		List<IDockItem> DockItems { 
+			get { return item_provider.DockItems; } 
 		}
 		
 		IDockItem CurrentDockItem {
@@ -284,6 +284,13 @@ namespace Docky.Interface
 				bool cursorIsOverDockArea = CursorIsOverDockArea;
 				cursor = value;
 				
+				// We set this value here instead of dynamically checking due to performance constraints.
+				// Ideally our CursorIsOverDockArea getter would do this fairly simple calculation, but it gets
+				// called about 20 to 30 times per render loop, so the savings do add up.
+				Gdk.Rectangle rect = MinimumDockArea;
+				rect.Inflate (0, 55);
+				CursorIsOverDockArea = rect.Contains (Cursor); 
+				
 				// When we change over this boundry, it will normally trigger an animation, we need to be sure to catch it
 				if (CursorIsOverDockArea != cursorIsOverDockArea) {
 					enter_time = DateTime.UtcNow;
@@ -309,9 +316,9 @@ namespace Docky.Interface
 		
 		bool CursorNearTopDraggableEdge {
 			get {
-				return CurrentDockItem is SeparatorItem && 
-					   CursorIsOverDockArea && 
-					   Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5;
+				return Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 &&
+					   CursorIsOverDockArea &&
+					   CurrentDockItem is SeparatorItem;
 			}
 		}
 		
@@ -348,13 +355,7 @@ namespace Docky.Interface
 		}
 		
 		#region Animation properties
-		bool CursorIsOverDockArea {
-			get {
-				Gdk.Rectangle rect = MinimumDockArea;
-				rect.Inflate (0, 55);
-				return rect.Contains (Cursor); 
-			}
-		}
+		bool CursorIsOverDockArea {	get; set; }
 		
 		bool IconAnimationNeeded {
 			get {
@@ -371,7 +372,7 @@ namespace Docky.Interface
 				// in these cases we need to do a full render.
 				return ZoomIn == 1 && 
 					previous_zoom == 1 && 
-					previous_item_count == DockItems.Length && 
+					previous_item_count == DockItems.Count && 
 					!IconAnimationNeeded &&
 					!previous_icon_animation_needed &&
 					!drag_resizing &&
@@ -593,7 +594,7 @@ namespace Docky.Interface
 					int leftItem = Math.Max (0, DockItemForX (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
 					int rightItem = DockItemForX (Math.Max (Cursor.X, previous_x) + DockPreferences.ZoomSize / 2);
 					if (rightItem == -1) 
-						rightItem = DockItems.Length - 1;
+						rightItem = DockItems.Count - 1;
 					
 					int leftX, rightX;
 					double leftZoom, rightZoom;
@@ -606,7 +607,7 @@ namespace Docky.Interface
 						leftX -= (int) (leftZoom * DockItems [leftItem].Width / 2) + IconBorderWidth;
 					}
 					
-					if (rightItem == DockItems.Length - 1) {
+					if (rightItem == DockItems.Count - 1) {
 						rightX = Width;
 					} else {
 						IconPositionedCenterX (rightItem, out rightX, out rightZoom);
@@ -630,7 +631,7 @@ namespace Docky.Interface
 				// less code, twice as slow...
 				cr.AlphaFill ();
 				if (!drag_resizing || drag_edge != DragEdge.Top)
-					for (int i=0; i<DockItems.Length; i++)
+					for (int i = 0; i < DockItems.Count; i++)
 						DrawIcon (cr, i);
 			}
 		}
@@ -640,7 +641,7 @@ namespace Docky.Interface
 			// To enable this render optimization, we have to keep track of several state items that otherwise
 			// are unimportant.  This is an unfortunate reality we must live with.
 			previous_zoom = ZoomIn;
-			previous_item_count = DockItems.Length;
+			previous_item_count = DockItems.Count;
 			previous_x = Cursor.X;
 			previous_icon_animation_needed = IconAnimationNeeded;
 		}
@@ -730,7 +731,7 @@ namespace Docky.Interface
 			    CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null) {
 				
 				int textx = IconNormalCenterX (icon) - (DockPreferences.TextWidth / 2);
-				int texty = Height - 2 * IconSize - 28;
+				int texty = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 28;
 				DockItems [icon].GetTextSurface (cr.Target).Show (cr, textx, texty);
 			}
 		}
@@ -742,36 +743,49 @@ namespace Docky.Interface
 			// premature will add the wrong width.  It hurts the brain.
 			if (!DockItems.Any ())
 				return 0;
-			int start_x = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth;
-			for (int i=0; i<icon; i++)
-				start_x += DockItems [i].Width + 2 * IconBorderWidth;
+			int startX = MinimumDockArea.X + HorizontalBuffer + IconBorderWidth;
+			for (int i = 0; i < icon; i++)
+				startX += DockItems [i].Width + 2 * IconBorderWidth;
 			
-			return start_x + DockItems [icon].Width / 2;
+			return startX + DockItems [icon].Width / 2;
 		}
 		
 		int DockItemForX (int x)
 		{
-			int start_x = MinimumDockArea.X + HorizontalBuffer;
-			for (int i=0; i<DockItems.Length; i++) {
-				if (x >= start_x && x <= start_x + DockItems [i].Width + 2 * IconBorderWidth)
+			int startX = MinimumDockArea.X + HorizontalBuffer;
+			int width;
+			for (int i = 0; i < DockItems.Count; i++) {
+				width = DockItems [i].Width + 2 * IconBorderWidth;
+				if (x >= startX && x <= startX + width)
 					return i;
-				start_x += DockItems [i].Width + 2 * IconBorderWidth;
+				startX += width;
 			}
 			return -1;
 		}
 		
 		void IconPositionedCenterX (int icon, out int x, out double zoom)
 		{
+			double halfZoomPixels = ZoomPixels / 2;
+			
+			// get our actual center
 			int center = IconNormalCenterX (icon);
-			int offset = Math.Min (Math.Abs (Cursor.X - center), ZoomPixels / 2);
+			
+			// offset from the center of the true position, ranged between 0 and half of the zoom range
+			int offset = Math.Min (Math.Abs (Cursor.X - center), (int) halfZoomPixels);
 			
 			if (ZoomPixels / 2 == 0) {
 				zoom = 1;
 			} else {
-				zoom = DockPreferences.ZoomPercent - (offset / (ZoomPixels / 2.0)) * (DockPreferences.ZoomPercent - 1);
+				// zoom is calculated as 1 through target_zoom (default 2).  The larger your offset, the smaller your zoom
+				zoom = DockPreferences.ZoomPercent - (offset / halfZoomPixels) * (DockPreferences.ZoomPercent - 1);
+				
+				// we scale our zoom to match the ZoomIn value so a value of 1.25 because 1 + (.25 * ZoomIn)
+				// this makes the icons zoom in smoothly instead of popping to size
 				zoom = (zoom - 1) * ZoomIn + 1;
 			}
 			
+			// we now apply a sin wave to our offset.  This shortens our overall offset but also rounds it out a bit.
+			// instead of a linear shape we get more of an acorn shape, a quick approximation of a parabola
 			offset = (int) ((offset * Math.Sin ((Math.PI / 4) * zoom)) * (DockPreferences.ZoomPercent-1));
 			
 			if (Cursor.X > center) {
@@ -792,7 +806,7 @@ namespace Docky.Interface
 			int start_x, end_x;
 			double start_zoom, end_zoom;
 			IconPositionedCenterX (0, out start_x, out start_zoom);
-			IconPositionedCenterX (DockItems.Length - 1, out end_x, out end_zoom);
+			IconPositionedCenterX (DockItems.Count - 1, out end_x, out end_zoom);
 			
 			double x = start_x - start_zoom * (IconSize / 2) - (start_zoom * HorizontalBuffer) - IconBorderWidth;
 			double end = end_x + end_zoom * (IconSize / 2) + (end_zoom * HorizontalBuffer) + IconBorderWidth;
@@ -967,17 +981,17 @@ namespace Docky.Interface
 		void ConfigureCursor ()
 		{
 			// we do this so that our custom drag isn't destroyed by gtk's drag
-			if (CursorNearDraggableEdge && gtk_drag_source_set) {
+			if (gtk_drag_source_set && CursorNearDraggableEdge) {
 				UnregisterGtkDragSource ();
 				
-				if (CursorNearTopDraggableEdge && cursor_type != CursorType.TopSide)
+				if (cursor_type != CursorType.TopSide && CursorNearTopDraggableEdge)
 					SetCursor (CursorType.TopSide);
-				else if (CursorNearLeftEdge && cursor_type != CursorType.LeftSide)
+				else if (cursor_type != CursorType.LeftSide && CursorNearLeftEdge)
 					SetCursor (CursorType.LeftSide);
-				else if (CursorNearRightEdge && cursor_type != CursorType.RightSide)
+				else if (cursor_type != CursorType.RightSide && CursorNearRightEdge)
 					SetCursor (CursorType.RightSide);
 				
-			} else if (!CursorNearDraggableEdge && !gtk_drag_source_set && !drag_resizing) {
+			} else if (!gtk_drag_source_set && !drag_resizing && !CursorNearDraggableEdge) {
 				RegisterGtkDragSource ();
 				if (cursor_type != CursorType.LeftPtr)
 					SetCursor (CursorType.LeftPtr);
@@ -1024,7 +1038,7 @@ namespace Docky.Interface
 					window.RequestClickOff ();
 			} else {
 				int item = DockItemForX ((int) evnt.X); //sometimes clicking is not good!
-				if (item < 0 || item >= DockItems.Length || !CursorIsOverDockArea || InputInterfaceVisible)
+				if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea || InputInterfaceVisible)
 					return ret_val;
 				
 				//handling right clicks for those icons which request simple right click handling
@@ -1111,7 +1125,7 @@ namespace Docky.Interface
 			geo = Screen.GetMonitorGeometry (0);
 			// we use geo here instead of our position for the Y value because we know the parent window
 			// may offset us when hidden. This is not desired...
-			for (int i=0; i<DockItems.Length; i++) {
+			for (int i = 0; i < DockItems.Count; i++) {
 				int x = IconNormalCenterX (i);
 				DockItems [i].SetIconRegion (new Gdk.Rectangle (pos.X + (x - IconSize / 2), 
 				                                               geo.Y + geo.Height - VerticalBuffer - IconSize, IconSize, IconSize));
