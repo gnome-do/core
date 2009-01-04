@@ -85,7 +85,7 @@ namespace Docky.Interface
 		
 		public static void DrawGlowIndicator (Context cr, int x, int y, bool urgent, int numberOfWindows)
 		{
-			if (numberOfWindows == 1) {
+			if (0 < numberOfWindows) {
 				DrawSingleIndicator (cr, x, y, urgent);
 			} else if (numberOfWindows > 1) {
 				DrawSingleIndicator (cr, x - 3, y, urgent);
