@@ -126,6 +126,7 @@ Do/src/AssemblyInfo.cs
 Do.DBus/Makefile
 Do.DBus/src/AssemblyInfo.cs
 Do.Interface.Linux/Makefile
+Do.Interface.Linux/src/AssemblyInfo.cs
 Do.Interface.Linux.Classic/Makefile
 Do.Interface.Linux.Docky/Makefile
 Do.Interface.Linux.GlassFrame/Makefile
@@ -134,7 +135,11 @@ Do.Interface.Linux.Mini/Makefile
 Do.Platform/Makefile
 Do.Platform/src/AssemblyInfo.cs
 Do.Platform.Linux/Makefile
+Do.Platform.Linux/src/AssemblyInfo.cs
+Do.Platform.OSX/AssemblyInfo.cs
+Do.Platform.Windows/AssemblyInfo.cs
 Do.Universe/Makefile
+Do.Universe/src/AssemblyInfo.cs
 libdo/Makefile
 Makefile
 data/Makefile
