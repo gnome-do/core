@@ -57,6 +57,15 @@ namespace Docky.Utilities
 				zoom_size = value;
 			}
 		}
+
+		static bool indicate_multiple_windows = prefs.Get ("IndicateMultipleWindows", false);
+		public static bool IndicateMultipleWindows {
+			get { return indicate_multiple_windows; }
+			set { 
+				prefs.Set ("IndicateMultipleWindows", value); 
+				indicate_multiple_windows = value;
+			}
+		}
 		
 		static double zoom_percent = prefs.Get<double> ("ZoomPercent", 2);
 		public static double ZoomPercent {
