@@ -23,6 +23,7 @@ using System.Linq;
 
 using Gdk;
 using Cairo;
+using Mono.Unix;
 
 using Do.Interface;
 using Do.Platform;
@@ -98,10 +99,16 @@ namespace Docky.Interface
 		
 		public IEnumerable<Act> ActionsForItem {
 			get {
-				if (!(element is Item))
-					yield break;
-				
-				foreach (Act act in Services.Core.GetActionsForItemOrderedByRelevance (element as Item, false))
+				IEnumerable<Act> actions = Services.Core.GetActionsForItemOrderedByRelevance (element, false);
+				// we want to keep the window operations stable, so we are going to special case them out now.
+				// This has a degree of an abstraction break to it however, but it is important to get right
+				// until a better solution is found.
+				foreach (Act act in actions
+				         .OrderByDescending (act => act.Name != Catalog.GetString ("Close All"))
+				         .ThenByDescending (act => act.Name != Catalog.GetString ("Minimize/Restore"))
+				         .ThenByDescending (act => act.Name != Catalog.GetString ("Maximize"))
+				         .ThenByDescending (act => act.Name != Catalog.GetString ("Shade Window"))
+				         .ThenByDescending (act => act.Relevance))
 					yield return act;
 			}
 		}

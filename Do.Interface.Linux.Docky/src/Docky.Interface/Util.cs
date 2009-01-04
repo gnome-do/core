@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Do.Universe;
 using Do.Interface.CairoUtils;
@@ -83,9 +84,20 @@ namespace Docky.Interface
 			return sr;
 		}
 		
-		public static void DrawGlowIndicator (Context cr, int x, int y, bool urgent)
+		public static void DrawGlowIndicator (Context cr, int x, int y, bool urgent, int numberOfWindows)
+		{
+			if (numberOfWindows == 1) {
+				DrawSingleIndicator (cr, x, y, urgent);
+			} else if (numberOfWindows > 1) {
+				DrawSingleIndicator (cr, x - 3, y, urgent);
+				DrawSingleIndicator (cr, x + 3, y, urgent);
+			}
+		}
+		
+		static void DrawSingleIndicator (Context cr, int x, int y, bool urgent)
 		{
 			int size = urgent ? 12 : 9;
+			
 			cr.MoveTo (x, y);
 			cr.Arc (x, y, size, 0, Math.PI * 2);
 			

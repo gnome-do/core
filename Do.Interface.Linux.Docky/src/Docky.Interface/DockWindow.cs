@@ -43,6 +43,7 @@ namespace Docky.Interface
 		IDoController controller;
 		int current_offset;
 		uint strut_timer;
+		uint reposition_timer;
 		bool is_repositioned_hidden;
 		
 		public new string Name {
@@ -147,7 +148,7 @@ namespace Docky.Interface
 			pixmap.Dispose ();
 			
 			if (heightOffset == 1) {
-				GLib.Timeout.Add (1000, () => {
+				reposition_timer = GLib.Timeout.Add (500, () => {
 					if (current_offset == 1)
 						HideReposition ();
 					return false;
@@ -266,6 +267,7 @@ namespace Docky.Interface
 			uint current_time = Gtk.Global.CurrentEventTime;
 			Gdk.Pointer.Ungrab (current_time);
 			Gdk.Keyboard.Ungrab (current_time);
+			Gtk.Grab.Remove (this);
 			if (dock_area.InputInterfaceVisible)
 				dock_area.HideInputInterface ();
 		}
@@ -323,7 +325,5 @@ namespace Docky.Interface
 		}
 		
 		#endregion 
-		
-
 	}
 }

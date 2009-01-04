@@ -721,8 +721,7 @@ namespace Docky.Interface
 			
 			if (DockItems [icon].WindowCount > 0) {
 				// draws a simple triangle indicator.  Should be replaced by something nicer some day
-				int indicator_y = Height - 1;
-				Util.DrawGlowIndicator (cr, center, indicator_y, drawUrgency);
+				Util.DrawGlowIndicator (cr, center, Height - 1, drawUrgency, DockItems [icon].WindowCount);
 			}
 			
 			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
@@ -887,6 +886,9 @@ namespace Docky.Interface
 			// the user might not end the drag on the same horizontal position they start it on
 			remove_drag_start_x = Cursor.X;
 			int item = DockItemForX (Cursor.X);
+			if (item == -1)
+				return;
+			
 			if (DockItems [item].GetDragPixbuf () != null)
 				Gtk.Drag.SetIconPixbuf (context, DockItems [item].GetDragPixbuf (), 0, 0);
 			base.OnDragBegin (context);
@@ -894,6 +896,9 @@ namespace Docky.Interface
 		
 		protected override void OnDragEnd (Gdk.DragContext context)
 		{
+			if (DockItemForX (remove_drag_start_x) == -1)
+				return;
+			
 			if (context.DestWindow != window.GdkWindow || !CursorIsOverDockArea) {
 				item_provider.RemoveItem (DockItemForX (remove_drag_start_x));
 			} else if (CursorIsOverDockArea) {
@@ -907,6 +912,7 @@ namespace Docky.Interface
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
 			bool ret_val = base.OnExposeEvent (evnt);
+			
 			// clear the dock area cache... this will cause it to recalculate.
 			minimum_dock_area = new Gdk.Rectangle ();
 			
@@ -1160,7 +1166,10 @@ namespace Docky.Interface
 			SetParentInputMask ();
 			AnimatedDraw ();
 			
-			GLib.Timeout.Add (500, () => { item_provider.ForceUpdate (); return false; });
+			GLib.Timeout.Add (500, () => { 
+				item_provider.ForceUpdate (); 
+				return false; 
+			});
 		}
 		
 		public void Reset ()

@@ -121,6 +121,37 @@ namespace Docky.Interface
 			return pbuf;
 		}
 		
+		public override string Description {
+			get {
+				if (StringIsValidName (Application.Name))
+					return Application.Name;
+				else if (StringIsValidName (Application.Windows [0].Name))
+					return Application.Windows [0].Name;
+				else if (StringIsValidName (Application.IconName))
+					return Application.IconName;
+				else if (StringIsValidName (Application.Windows [0].IconName))
+					return Application.Windows [0].IconName;
+				return "Unknown";
+			}
+		}
+		
+		public override int WindowCount {
+			get {
+				return Application.Windows.Where (w => !w.IsSkipTasklist).Count ();
+			}
+		}
+		
+		Wnck.Application Application {
+			get; set;
+		}
+		
+		#endregion 
+		
+		public ApplicationDockItem (Wnck.Application application) : base ()
+		{
+			Application = application;
+		}
+		
 		IEnumerable<string> GetIconGuesses ()
 		{
 			string [] guesses = new [] { Application.Name.ToLower ().Replace (' ','-'),
@@ -133,8 +164,8 @@ namespace Docky.Interface
 			foreach (string s in guesses)
 				yield return "gnome-" + s;
 			
-			if (Application.Name.Length > 4 && Application.Name.Contains (" "))
-				yield return Application.Name.Split (' ') [0].ToLower ();
+			if (Description.Length > 4 && Description.Contains (" "))
+				yield return Description.Split (' ') [0].ToLower ();
 			
 			if (!string.IsNullOrEmpty (Exec)) {
 				yield return Exec;
@@ -175,27 +206,9 @@ namespace Docky.Interface
 			return null;
 		}
 		
-		public override  string Description {
-			get {
-				return Application.Name;
-			}
-		}
-		
-		public override int WindowCount {
-			get {
-				return Application.Windows.Where (w => !w.IsSkipTasklist).Count ();
-			}
-		}
-		
-		Wnck.Application Application {
-			get; set;
-		}
-		
-		#endregion 
-		
-		public ApplicationDockItem (Wnck.Application application) : base ()
+		bool StringIsValidName (string s)
 		{
-			Application = application;
+			return (!string.IsNullOrEmpty (s.Trim ()) && s != "<unknown>");
 		}
 		
 		public override void Clicked (uint button)
