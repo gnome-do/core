@@ -86,6 +86,8 @@ namespace Docky.Utilities
 		/// </returns>
 		public static List<Application> GetApplicationList (string exec)
 		{
+			if (exec.StartsWith ("gksu "))
+				exec = exec.Substring ("gksu ".Length);
 			exec = exec.Split (' ')[0];
 			List<Application> apps = new List<Application> ();
 			Application out_app = null;
