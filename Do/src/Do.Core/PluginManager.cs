@@ -136,17 +136,6 @@ namespace Do.Core
 		}
 
 		/// <summary>
-		/// Finds all UI themes
-		/// </summary>
-		/// <returns>
-		/// A <see cref="IEnumerable`1"/> of IRenderTheme instances from plugins
-		/// </returns>
-		public static IEnumerable<IDoWindow> GetThemes () 
-		{
-			return InterfaceManager.Interfaces;
-		}
-
-		/// <summary>
 		/// Installs plugins that are located in the <see
 		/// cref="Paths.UserPlugins"/> directory.  This will build addins
 		/// (mpack files) and install them.

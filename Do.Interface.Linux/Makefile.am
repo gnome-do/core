@@ -34,6 +34,7 @@ FILES = \
 	src/Do.Interface/IUIContext.cs \
 	src/Do.Interface/IconCache.cs \
 	src/Do.Interface/IconProvider.cs \
+	src/Do.Interface/InterfaceDescription.cs \
 	src/Do.Interface/InterfaceManager.cs \
 	src/Do.Interface/PixbufSurfaceCache.cs \
 	src/Do.Interface/PositionWindow.cs \
