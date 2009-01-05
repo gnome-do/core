@@ -36,7 +36,7 @@ namespace Do.Platform
 		
 		void PerformDefaultAction (Item item, IEnumerable<Type> filter);
 		
-		void PerformActionForItem (Act action, Item item);
+		void PerformActionOnItem (Act action, Item item);
 	}
 
 }

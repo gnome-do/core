@@ -1,4 +1,4 @@
-// UserInterfaces.cs
+// InterfaceManager.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -17,8 +17,8 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 using Mono.Addins;
 
@@ -39,21 +39,31 @@ namespace Do.Interface
 		
 		static void OnInterfaceChanged (object sender, ExtensionNodeEventArgs e)
 		{
-			//fixme: this is very generic but making an instance of the objects at this time wastes LOTS of memory
+			TypeExtensionNode node = e.ExtensionNode as TypeExtensionNode;
+			InterfaceDescription desc = new InterfaceDescription (node);
 			switch (e.Change) {
 			case ExtensionChange.Add:
-				Log.Debug ("User Interface was loaded");
+				Log.Debug ("\"{0}\" interface was loaded", desc.Name);
 				break;
 			case ExtensionChange.Remove:
-				Log.Debug ("User Interface was removed");
+				Log.Debug ("\"{0}\" interface was unloaded", desc.Name);
 				break;
 			}
 		}
 		
-		public static IEnumerable<IDoWindow> Interfaces {
-			get {
-				return AddinManager.GetExtensionObjects ("/Do/InterfaceWindow").Cast<IDoWindow> ();
-			}
+		public static IEnumerable<InterfaceDescription> GetInterfaceDescriptions ()
+		{
+			return AddinManager.GetExtensionNodes ("/Do/InterfaceWindow")
+				.Cast<TypeExtensionNode> ()
+				.Select (node => new InterfaceDescription (node));
+		}
+
+		public static IDoWindow MaybeGetInterfaceNamed (string name)
+		{
+			return GetInterfaceDescriptions ()
+				.Where (d => d.Name == name)
+				.Select (d => d.GetNewInstance ())
+				.FirstOrDefault ();
 		}
 	}
 }

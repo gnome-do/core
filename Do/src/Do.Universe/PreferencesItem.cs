@@ -41,9 +41,7 @@ namespace Do.Universe
 		
 		public void Run ()
 		{
-			Gtk.Application.Invoke (delegate {
-				Do.Controller.ShowPreferences ();
-			});
+			Do.Controller.ShowPreferences ();
 		}
 	}
 }

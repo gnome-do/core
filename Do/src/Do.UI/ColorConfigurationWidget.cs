@@ -41,7 +41,7 @@ namespace Do.UI
 			Themes = new List<string> ();
 			Interface.Util.Appearance.SetColormap (this);
 			
-			foreach (IDoWindow theme in Core.PluginManager.GetThemes ()) {
+			foreach (InterfaceDescription theme in InterfaceManager.GetInterfaceDescriptions ()) {
 				theme_combo.AppendText (theme.Name);
 				Themes.Add (theme.Name);
 			}
