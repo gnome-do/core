@@ -161,12 +161,16 @@ namespace Docky.Interface
 			}
 		}
 
-		void HandleStateChanged(object o, StateChangedArgs args)
+		void HandleStateChanged(object o, Wnck.StateChangedArgs args)
 		{
 			bool tmp = urgent;
 			urgent = DetermineUrgencyStatus ();
 			if (urgent != tmp) {
-				AttentionRequestStartTime = DateTime.UtcNow;
+				UpdateRequestType req = (urgent) ? UpdateRequestType.NeedsAttentionSet : UpdateRequestType.NeedsAttentionUnset;
+				if (urgent)
+					AttentionRequestStartTime = DateTime.UtcNow;
+				if (UpdateNeeded != null)
+					UpdateNeeded (this, new UpdateRequestArgs (this, req));
 			}
 		}
 		

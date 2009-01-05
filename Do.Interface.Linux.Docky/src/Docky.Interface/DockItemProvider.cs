@@ -497,10 +497,13 @@ namespace Docky.Interface
 				if (!is_set)
 					api.DockAddItem = DateTime.UtcNow;
 				out_items.Add (api);
+				api.UpdateNeeded += HandleUpdateNeeded;
 			}
 			
-			foreach (IDockItem item in task_items)
+			foreach (ApplicationDockItem item in task_items) {
 				item.Dispose ();
+				item.UpdateNeeded -= HandleUpdateNeeded;
+			}
 					
 			task_items = out_items;
 		}
