@@ -47,6 +47,7 @@ namespace Docky.Interface
 		Gdk.Pixbuf drag_pixbuf;
 		bool needs_attention, accepting_drops;
 		uint handle_timer;
+		int window_count;
 		
 		public event EventHandler RemoveClicked;
 		
@@ -81,7 +82,7 @@ namespace Docky.Interface
 		}
 		
 		public override int WindowCount {
-			get { return Applications.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ()); }
+			get { return window_count; }
 		}
 		
 		public bool NeedsAttention { 
@@ -169,6 +170,7 @@ namespace Docky.Interface
 			
 			if (element is IApplicationItem) {
 				apps = WindowUtils.GetApplicationList ((element as IApplicationItem).Exec);
+				window_count = Applications.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ());
 			}
 			
 			RegisterStateChangeEvents ();
@@ -201,6 +203,7 @@ namespace Docky.Interface
 				return;
 			// we do this delayed so that we dont get a flood of these events.  Certain windows behave badly.
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
+			window_count = Applications.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ());
 			SetIconRegionFromCache ();
 		}
 		
@@ -226,7 +229,7 @@ namespace Docky.Interface
 		bool DetermineAttentionStatus  ()
 		{
 			foreach (Application app in Applications) {
-				if (app.Windows.Any ((Wnck.Window w) => w.NeedsAttention ()))
+				if (app.Windows.Any ((Wnck.Window w) => w.IsInViewport (w.Workspace) && w.NeedsAttention ()))
 					return true;
 			}
 			return false;
