@@ -37,7 +37,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ApplicationDockItem : AbstractDockItem, IRightClickable
+	public class ApplicationDockItem : AbstractDockItem, IRightClickable, IDockAppItem
 	{
 		public event EventHandler RemoveClicked;
 		
@@ -63,6 +63,7 @@ namespace Docky.Interface
 		const string MinimizeIcon = "down";
 		
 		int windowCount;
+		bool urgent;
 		
 		Gdk.Rectangle icon_region;
 		
@@ -153,6 +154,20 @@ namespace Docky.Interface
 		{
 			Application = application;
 			windowCount = Application.Windows.Where (w => !w.IsSkipTasklist).Count ();
+			AttentionRequestStartTime = DateTime.UtcNow - new TimeSpan (0, 10, 0);
+			
+			foreach (Wnck.Window w in Application.Windows) {
+				w.StateChanged += HandleStateChanged;
+			}
+		}
+
+		void HandleStateChanged(object o, StateChangedArgs args)
+		{
+			bool tmp = urgent;
+			urgent = DetermineUrgencyStatus ();
+			if (urgent != tmp) {
+				AttentionRequestStartTime = DateTime.UtcNow;
+			}
 		}
 		
 		IEnumerable<string> GetIconGuesses ()
@@ -251,6 +266,25 @@ namespace Docky.Interface
 			
 			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (Application.Windows), 
 			                                       CloseText, Gtk.Stock.Quit);
+		}
+
+		#region IDockAppItem implementation 
+		
+		public event UpdateRequestHandler UpdateNeeded;
+		
+		public bool NeedsAttention {
+			get { return urgent; }
+		}
+		
+		public DateTime AttentionRequestStartTime {
+			get; private set;
+		}
+		
+		#endregion 
+		
+		bool DetermineUrgencyStatus ()
+		{
+			return Application.Windows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ());
 		}
 	}
 }

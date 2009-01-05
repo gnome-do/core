@@ -229,7 +229,7 @@ namespace Docky.Interface
 		bool DetermineAttentionStatus  ()
 		{
 			foreach (Application app in Applications) {
-				if (app.Windows.Any (w => w.IsInViewport (w.Workspace) && w.NeedsAttention ()))
+				if (app.Windows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ()))
 					return true;
 			}
 			return false;
