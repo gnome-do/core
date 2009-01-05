@@ -170,7 +170,7 @@ namespace Docky.Interface
 			
 			if (element is IApplicationItem) {
 				apps = WindowUtils.GetApplicationList ((element as IApplicationItem).Exec);
-				window_count = Applications.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ());
+				window_count = Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist).Count ();
 			}
 			
 			RegisterStateChangeEvents ();
@@ -203,7 +203,7 @@ namespace Docky.Interface
 				return;
 			// we do this delayed so that we dont get a flood of these events.  Certain windows behave badly.
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
-			window_count = Applications.Sum (app => app.Windows.Where (w => !w.IsSkipTasklist).Count ());
+			window_count = Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist).Count ();
 			SetIconRegionFromCache ();
 		}
 		
@@ -229,7 +229,7 @@ namespace Docky.Interface
 		bool DetermineAttentionStatus  ()
 		{
 			foreach (Application app in Applications) {
-				if (app.Windows.Any ((Wnck.Window w) => w.IsInViewport (w.Workspace) && w.NeedsAttention ()))
+				if (app.Windows.Any (w => w.IsInViewport (w.Workspace) && w.NeedsAttention ()))
 					return true;
 			}
 			return false;
