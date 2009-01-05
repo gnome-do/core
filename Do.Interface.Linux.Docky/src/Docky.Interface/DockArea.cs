@@ -771,6 +771,7 @@ namespace Docky.Interface
 		{
 			// get our actual center
 			int center = IconNormalCenterX (icon);
+			double zoomInPercent = 1 + (DockPreferences.ZoomPercent - 1) * ZoomIn;
 			
 			// offset from the center of the true position, ranged between 0 and half of the zoom range
 			int offset = Math.Min (Math.Abs (Cursor.X - center), ZoomPixels / 2);
@@ -780,16 +781,11 @@ namespace Docky.Interface
 			} else {
 				// zoom is calculated as 1 through target_zoom (default 2).  The larger your offset, the smaller your zoom
 				zoom = 0 - Math.Pow (offset / (ZoomPixels / 2.0), 2) + 2;
-				zoom = 1 + (zoom - 1) * (DockPreferences.ZoomPercent - 1);
+				zoom = 1 + (zoom - 1) * (zoomInPercent - 1);
 				
-				// this makes the icons zoom in smoothly instead of popping to size
-				zoom = (zoom - 1) * ZoomIn + 1;
-				
-				double reOffset = offset * (DockPreferences.ZoomPercent - 1) - (DockPreferences.ZoomPercent - zoom) * (IconSize * .9);
-				offset = (int) (offset + (reOffset - offset) * ZoomIn);
+				offset = (int) (offset * (zoomInPercent - 1) - (zoomInPercent - zoom) * (IconSize * .9));
 			}
 			
-			offset = (int) (offset * ZoomIn);
 			if (Cursor.X > center) {
 				center -= offset;
 			} else {
