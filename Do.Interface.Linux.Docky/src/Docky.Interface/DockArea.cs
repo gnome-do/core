@@ -714,20 +714,23 @@ namespace Docky.Interface
 				if (scale != 1)
 					cr.Matrix = default_matrix;
 			} else {
-				// since these dont scale, we have some extra work to do to keep them centered
+				// since these dont scale, we have some extra work to do to keep them
+				// centered
 				double startx = x + (zoom * DockItems [icon].Width - DockItems [icon].Width) / 2;
 				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), (int) startx, 
 				              Height - DockItems [icon].Height - (MinimumDockArea.Height - DockItems [icon].Height) / 2);
 				cr.Paint ();
 			}
 			
-			if (DockItems [icon].WindowCount > 0) {
-				// draws a simple triangle indicator.  Should be replaced by something nicer some day
+			if (0 < DockItems [icon].WindowCount) {
+				// draws a simple triangle indicator.  Should be replaced by something
+				// nicer some day
 				Util.DrawGlowIndicator (cr, center, Height - 1, drawUrgency, DockItems [icon].WindowCount);
 			}
 			
-			// we do a null check here to allow things like separator items to supply a null.  This allows us to draw nothing
-			// at all instead of rendering a blank surface (which is slow)
+			// we do a null check here to allow things like separator items to supply
+			// a null.  This allows us to draw nothing at all instead of rendering a
+			// blank surface (which is slow)
 			if (!dock_item_menu.Visible && DockItemForX (Cursor.X) == icon && 
 			    CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null) {
 				

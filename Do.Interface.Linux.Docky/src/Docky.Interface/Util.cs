@@ -26,6 +26,8 @@ using Do.Interface.CairoUtils;
 using Cairo;
 using Gdk;
 
+using Docky.Utilities;
+
 namespace Docky.Interface
 {
 	public enum ClickAction {
@@ -85,11 +87,11 @@ namespace Docky.Interface
 		
 		public static void DrawGlowIndicator (Context cr, int x, int y, bool urgent, int numberOfWindows)
 		{
-			if (numberOfWindows == 1) {
-				DrawSingleIndicator (cr, x, y, urgent);
-			} else if (numberOfWindows > 1) {
+			if (DockPreferences.IndicateMultipleWindows && 1 < numberOfWindows) {
 				DrawSingleIndicator (cr, x - 3, y, urgent);
 				DrawSingleIndicator (cr, x + 3, y, urgent);
+			} else if (0 < numberOfWindows) {
+				DrawSingleIndicator (cr, x, y, urgent);
 			}
 		}
 		
