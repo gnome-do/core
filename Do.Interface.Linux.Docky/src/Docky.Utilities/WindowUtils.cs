@@ -35,6 +35,14 @@ namespace Docky.Utilities
 	
 	public static class WindowUtils
 	{
+		static IEnumerable<string> BadPrefixes {
+			get {
+				yield return "gksu ";
+				yield return "sudo ";
+				yield return "python ";
+			}
+		}
+		
 		/// <summary>
 		/// Returns a list of all applications on the default screen
 		/// </summary>
@@ -86,8 +94,12 @@ namespace Docky.Utilities
 		/// </returns>
 		public static List<Application> GetApplicationList (string exec)
 		{
-			if (exec.StartsWith ("gksu "))
-				exec = exec.Substring ("gksu ".Length);
+			foreach (string s in BadPrefixes) {
+				if (exec.StartsWith (s)) {
+					exec = exec.Substring (s.Length);
+					break;
+				}
+			}
 			exec = exec.Split (' ')[0];
 			List<Application> apps = new List<Application> ();
 			Application out_app = null;
