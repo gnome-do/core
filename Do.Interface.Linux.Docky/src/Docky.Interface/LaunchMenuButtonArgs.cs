@@ -38,7 +38,7 @@ namespace Docky.Interface
 		
 		public override void Action ()
 		{
-			Services.Core.PerformActionForItem (action, item);
+			Services.Core.PerformActionOnItem (action, item);
 		}
 	}
 }

@@ -47,7 +47,7 @@ namespace Do.Platform.Default
 			Log.Debug ("Default ICoreService cannot perform default actions.");
 		}
 		
-		public void PerformActionForItem (Act action, Item item)
+		public void PerformActionOnItem (Act action, Item item)
 		{
 			Log.Debug ("Default ICoreService cannot perform actions.");
 		}

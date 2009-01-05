@@ -62,7 +62,6 @@
     <File name="src/Do.Platform/CoreService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/WindowingService.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Core/StalledActionNotification.cs" subtype="Code" buildaction="Compile" />
     <File name="src/PathExtensions.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/Paths.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/QuitItem.cs" subtype="Code" buildaction="Compile" />

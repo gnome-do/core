@@ -67,7 +67,7 @@ namespace Do.UI
 
 		protected virtual void OnBtnCloseClicked (object sender, EventArgs e)
 		{
-			Destroy ();
+			Hide ();
 		}
 
 		protected virtual void OnBtnHelpClicked (object sender, EventArgs e)

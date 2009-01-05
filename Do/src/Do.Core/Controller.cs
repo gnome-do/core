@@ -38,23 +38,6 @@ namespace Do.Core {
 
 	public class Controller : IController, IDoController {
 		
-		class PerformState {
-			public Act Action { get; set; }
-			public IEnumerable<Item> Items { get; set; }
-			public IEnumerable<Item> ModifierItems { get; set; }
-			
-			public PerformState ()
-			{
-			}
-
-			public PerformState (Act action, IEnumerable<Item> items, IEnumerable<Item> modItems)
-			{
-				Action = action;
-				Items = items;
-				ModifierItems = modItems;
-			}
-		}
-		
 		const int SearchDelay = 250;
 
 		protected IDoWindow window;
@@ -62,13 +45,12 @@ namespace Do.Core {
 		protected Gtk.AboutDialog about_window;
 		protected PreferencesWindow prefs_window;
 		protected ISearchController [] controllers;
-		protected Thread th;
 		
 		Act action;
 		List<Item> items;
 		List<Item> modItems;
 		bool thirdPaneVisible;
-		bool resultsGrown;
+		bool results_grown;
 		Gtk.IMContext im;
 		string last_theme;
 		
@@ -77,7 +59,7 @@ namespace Do.Core {
 			im = new Gtk.IMMulticontext ();
 			items = new List<Item> ();
 			modItems = new List<Item> ();
-			resultsGrown = false;
+			results_grown = false;
 			last_theme = "";
 			
 			controllers = new SimpleSearchController [3];
@@ -452,7 +434,7 @@ namespace Do.Core {
 		void OnSelectionKeyPressEvent (EventKey evnt)
 		{
 			im.Reset ();
-			if (SearchController.Selection is ITextItem || !resultsGrown)
+			if (SearchController.Selection is ITextItem || !results_grown)
 				OnInputKeyPressEvent (evnt);
 			else if (SearchController.ToggleSecondaryCursor (SearchController.Cursor))
 				UpdatePane (CurrentPane);
@@ -577,7 +559,7 @@ namespace Do.Core {
 		{
 			im.Reset ();
 			if (evnt.Key == UpKey) {
-				if (!resultsGrown) {
+				if (!results_grown) {
 					if (SearchController.Cursor > 0)
 						GrowResults ();
 					return;
@@ -589,7 +571,7 @@ namespace Do.Core {
 					SearchController.Cursor--;
                 }
 			} else if (evnt.Key == DownKey) {
-				if (!resultsGrown) {
+				if (!results_grown) {
 					GrowResults ();
 					return;
 				}
@@ -761,7 +743,7 @@ namespace Do.Core {
 		{
 			UpdatePane (CurrentPane);
 			window.GrowResults ();
-			resultsGrown = true;	
+			results_grown = true;	
 		}
 		
 		/// <summary>
@@ -771,7 +753,7 @@ namespace Do.Core {
 		{
 			if (AlwaysShowResults) return;
 			window.ShrinkResults ();
-			resultsGrown = false;
+			results_grown = false;
 		}
 		
 		Element GetSelection (Pane pane)
@@ -851,22 +833,16 @@ namespace Do.Core {
 				if (third != null && ThirdPaneVisible)
 					third.IncreaseRelevance (modItemQuery, action);
 
-				PerformState state = new PerformState (action, items, modItems);
-				th = new Thread (new ParameterizedThreadStart (PerformActionAsync));
-				th.Start (state);
-				th.Join (100);
 			}
 
+			PerformAction (action, items, modItems);
 			if (vanish) Reset ();
 		}
-		
-		void PerformActionAsync (object o)
+
+		void PerformAction (Act action, IEnumerable<Item> items,
+			IEnumerable<Item> modItems)
 		{
-			PerformState state = o as PerformState;
-			IEnumerable<Item> results = null;
-
-			results = state.Action.Safe.Perform (state.Items, state.ModifierItems);
-
+			IEnumerable<Item> results = action.Safe.Perform (items, modItems);
 			// If we have results to feed back into the window, do so in a new
 			// iteration.
 			if (results.Any ()) {
@@ -881,15 +857,6 @@ namespace Do.Core {
 		public void Summon ()
 		{
 			if (!IsSummonable) return;
-
-			if (th != null && th.IsAlive) {
-				Thread.Sleep (100);
-			}
-					
-			if (th != null && th.IsAlive) {
-				Services.Notifications.Notify (new StalledActionNotification ());
-				return;
-			}
 			
 			// We want to disable updates so that any updates to universe dont happen
 			// while controller is summoned.  We will disable this on vanish.  This
@@ -904,7 +871,7 @@ namespace Do.Core {
 		public void Vanish ()
 		{
 			window.ShrinkResults ();
-			resultsGrown = false;
+			results_grown = false;
 			window.Vanish ();
 			Do.UniverseManager.UpdatesEnabled = true;
 		}
@@ -914,11 +881,14 @@ namespace Do.Core {
 			Vanish ();
 			Reset ();
 
-			if (null == prefs_window) {
+			if (prefs_window == null) {
 				prefs_window = new PreferencesWindow ();
-				prefs_window.Destroyed += delegate {
-					Do.UniverseManager.Reload ();
+				prefs_window.Hidden += delegate {
+					// Release the window.
+					prefs_window.Destroy ();
 					prefs_window = null;
+					// Reload universe.
+					Do.UniverseManager.Reload ();
 				};
 			}
 			prefs_window.Show ();
@@ -992,18 +962,15 @@ namespace Do.Core {
 
 			if (action == null) return;
 			
-			PerformActionForItem (action, item);
-		}
-		
-		public void PerformActionForItem (Act action, Item item)
-		{
 			item.IncreaseRelevance ("", null);
-			
-			PerformState state =
-				new PerformState (action, item.Cons (null), Enumerable.Empty<Item> ());
-			th = new Thread (new ParameterizedThreadStart (PerformActionAsync));
-			th.Start (state);
-			th.Join (100);
+			PerformActionOnItem (action, item);
 		}
+
+		public void PerformActionOnItem (Act action, Item item)
+		{
+			PerformAction (action, new [] { item }, new Item [0]);
+		}
+
 	}
+		
 }

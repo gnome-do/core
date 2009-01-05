@@ -51,9 +51,9 @@ namespace Do.Platform
 			Do.Controller.PerformDefaultAction (item, filter);
 		}
 		
-		public void PerformActionForItem (Act action, Item item)
+		public void PerformActionOnItem (Act action, Item item)
 		{
-			Do.Controller.PerformActionForItem (action, item);
+			Do.Controller.PerformActionOnItem (action, item);
 		}
 		
 		public IEnumerable<Act> GetActionsForItemOrderedByRelevance (Item item, bool allowThirdPaneRequiredActions)
