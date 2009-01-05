@@ -41,17 +41,13 @@ namespace Docky.Interface
 		DockArea dock_area;
 		EventBox eb;
 		IDoController controller;
-		int current_offset;
+		Gdk.Rectangle current_mask;
 		uint strut_timer;
 		uint reposition_timer;
 		bool is_repositioned_hidden;
 		
 		public new string Name {
 			get { return "Docky"; }
-		}
-		
-		public int CurrentOffsetMask {
-			get { return current_offset; }
 		}
 		
 		public IDoController Controller {
@@ -120,36 +116,31 @@ namespace Docky.Interface
 		void OnEventBoxMotion ()
 		{
 			Reposition ();
-			SetInputMask (2, false);
+			SetInputMask (new Gdk.Rectangle (current_mask.X, current_mask.Y + (current_mask.Height - 2), current_mask.Width, 2));
 			Gtk.Application.Invoke ((o, a) => dock_area.ManualCursorUpdate ());
 		}
 		
-		public void SetInputMask (int heightOffset, bool useFullWidth)
+		public void SetInputMask (Gdk.Rectangle area)
 		{
-			if (!IsRealized || current_offset == heightOffset)
+			if (!IsRealized || current_mask == area)
 				return;
 			
-			current_offset = heightOffset;
-			int width;
-			if (!useFullWidth)
-				width = Math.Max (Math.Min (800, dock_area.Width), dock_area.DockWidth);
-			else
-				width = dock_area.Width;
+			current_mask = area;
 			
-			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, width, heightOffset, 1);
+			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, area.Width, area.Height, 1);
 			Context cr = Gdk.CairoHelper.Create (pixmap);
 			
 			cr.Color = new Cairo.Color (0, 0, 0, 1);
 			cr.Paint ();
 			
-			InputShapeCombineMask (pixmap, (dock_area.Width - width) / 2, eb.HeightRequest + dock_area.Height - heightOffset);
+			InputShapeCombineMask (pixmap, area.X, eb.HeightRequest + area.Y);
 			
 			(cr as IDisposable).Dispose ();
 			pixmap.Dispose ();
 			
-			if (heightOffset == 1) {
+			if (area.Height == 1) {
 				reposition_timer = GLib.Timeout.Add (500, () => {
-					if (current_offset == 1)
+					if (current_mask.Height == 1)
 						HideReposition ();
 					return false;
 				});

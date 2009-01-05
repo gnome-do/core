@@ -1155,8 +1155,9 @@ namespace Docky.Interface
 					offset = GetDockArea ().Height;
 				}
 			}
-			if (window.CurrentOffsetMask != offset)
-				window.SetInputMask (offset, drag_resizing);
+			
+			int width = (drag_resizing) ? Width : DockWidth;
+			window.SetInputMask (new Gdk.Rectangle ((Width - width) / 2, Height - offset, width, offset));
 		}
 		
 		public void SetPaneContext (IUIContext context, Pane pane)
