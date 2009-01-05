@@ -786,9 +786,10 @@ namespace Docky.Interface
 				zoom = (zoom - 1) * ZoomIn + 1;
 				
 				double reOffset = offset * (DockPreferences.ZoomPercent - 1) - (DockPreferences.ZoomPercent - zoom) * (IconSize * .9);
-				offset = (int) (offset * ZoomIn + (reOffset - offset) * ZoomIn);
+				offset = (int) (offset + (reOffset - offset) * ZoomIn);
 			}
 			
+			offset = (int) (offset * ZoomIn);
 			if (Cursor.X > center) {
 				center -= offset;
 			} else {
