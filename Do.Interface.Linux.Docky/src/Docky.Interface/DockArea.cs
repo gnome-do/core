@@ -210,7 +210,7 @@ namespace Docky.Interface
 		/// </value>
 		int ZoomPixels {
 			get {
-				return (int) (DockPreferences.ZoomSize);// * ZoomIn);
+				return (int) (DockPreferences.ZoomSize);//* ZoomIn);
 			}
 		}
 		
@@ -521,7 +521,8 @@ namespace Docky.Interface
 			// first its here to draw the "first frame".  Without it, we have a 16ms delay till that happens,
 			// however minor that is.  We do everything after 16ms (about 60fps) so we will keep this up.
 			QueueDraw ();
-			animation_timer = GLib.Timeout.Add (16, OnDrawTimeoutElapsed);
+			if (AnimationState.AnimationNeeded)
+				animation_timer = GLib.Timeout.Add (1000/50, OnDrawTimeoutElapsed);
 		}
 		
 		bool OnDrawTimeoutElapsed ()
@@ -775,30 +776,17 @@ namespace Docky.Interface
 				zoom = 1;
 			} else {
 				// zoom is calculated as 1 through target_zoom (default 2).  The larger your offset, the smaller your zoom
-//				zoom = DockPreferences.ZoomPercent - (offset / halfZoomPixels) * (DockPreferences.ZoomPercent - 1);
 				zoom = 0 - Math.Pow (offset / (ZoomPixels / 2.0), 2) + 2;
 				zoom = 1 + (zoom - 1) * (DockPreferences.ZoomPercent - 1);
 				
-				// we scale our zoom to match the ZoomIn value so a value of 1.25 because 1 + (.25 * ZoomIn)
 				// this makes the icons zoom in smoothly instead of popping to size
 				zoom = (zoom - 1) * ZoomIn + 1;
 				
-//				offset = (int) ((offset * Math.Sin ((Math.PI / 2.8) * zoom)) * (DockPreferences.ZoomPercent-1));
-//				offset = (int) (offset * (0 - Math.Pow (offset / ((ZoomPixels / 2.0) * (DockPreferences.ZoomPercent * 1.05)), 2) + 1));
-//				offset -= (int) (DockPreferences.FullIconSize * (DockPreferences.ZoomPercent - zoom) * (zoom - .9));
-//				offset -= (int) ((DockPreferences.ZoomPercent - zoom) * 
-//				                 ((4 - DockPreferences.ZoomPercent) * (IconSize / DockPreferences.ZoomPercent)) * 
-//				                 ZoomIn);
 				double reOffset = offset * (DockPreferences.ZoomPercent - 1) - (DockPreferences.ZoomPercent - zoom) * (IconSize * .9);
 				offset = (int) (offset + (reOffset - offset) * ZoomIn);
 			}
 			
-			// we now apply a sin wave to our offset.  This shortens our overall offset but also rounds it out a bit.
-			// instead of a linear shape we get more of an acorn shape, a quick approximation of a parabola
-//			offset = (int) ((offset * Math.Sin ((Math.PI / 3) * zoom)) * (DockPreferences.ZoomPercent-1));
-			
-//			offset -= (1/(zoom-1))
-			
+			offset = (int) (offset * ZoomIn);
 			if (Cursor.X > center) {
 				center -= offset;
 			} else {
