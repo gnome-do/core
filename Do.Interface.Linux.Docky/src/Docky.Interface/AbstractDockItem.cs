@@ -97,8 +97,9 @@ namespace Docky.Interface
 		/// </returns>
 		public virtual Surface GetTextSurface (Surface similar)
 		{
-			if (text_surface == null)
+			if (text_surface == null) {
 				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (Description), DockPreferences.TextWidth, similar);
+			}
 			return text_surface;
 		}
 		

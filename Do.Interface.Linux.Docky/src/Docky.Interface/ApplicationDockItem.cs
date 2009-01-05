@@ -62,6 +62,8 @@ namespace Docky.Interface
 		const string WindowIcon = "forward";
 		const string MinimizeIcon = "down";
 		
+		int windowCount;
+		
 		Gdk.Rectangle icon_region;
 		
 		string Exec {
@@ -135,7 +137,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		int windowCount;
 		public override int WindowCount {
 			get {
 				return windowCount;
