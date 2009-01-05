@@ -210,7 +210,7 @@ namespace Docky.Interface
 		/// </value>
 		int ZoomPixels {
 			get {
-				return (int) (DockPreferences.ZoomSize * ZoomIn);
+				return (int) (DockPreferences.ZoomSize);// * ZoomIn);
 			}
 		}
 		
@@ -765,28 +765,39 @@ namespace Docky.Interface
 		
 		void IconPositionedCenterX (int icon, out int x, out double zoom)
 		{
-			double halfZoomPixels = ZoomPixels / 2;
-			
 			// get our actual center
 			int center = IconNormalCenterX (icon);
 			
 			// offset from the center of the true position, ranged between 0 and half of the zoom range
-			int offset = Math.Min (Math.Abs (Cursor.X - center), (int) halfZoomPixels);
+			int offset = Math.Min (Math.Abs (Cursor.X - center), ZoomPixels / 2);
 			
-			if (ZoomPixels / 2 == 0) {
+			if (ZoomPixels / 2.0 == 0) {
 				zoom = 1;
 			} else {
 				// zoom is calculated as 1 through target_zoom (default 2).  The larger your offset, the smaller your zoom
-				zoom = DockPreferences.ZoomPercent - (offset / halfZoomPixels) * (DockPreferences.ZoomPercent - 1);
+//				zoom = DockPreferences.ZoomPercent - (offset / halfZoomPixels) * (DockPreferences.ZoomPercent - 1);
+				zoom = 0 - Math.Pow (offset / (ZoomPixels / 2.0), 2) + 2;
+				zoom = 1 + (zoom - 1) * (DockPreferences.ZoomPercent - 1);
 				
 				// we scale our zoom to match the ZoomIn value so a value of 1.25 because 1 + (.25 * ZoomIn)
 				// this makes the icons zoom in smoothly instead of popping to size
 				zoom = (zoom - 1) * ZoomIn + 1;
+				
+//				offset = (int) ((offset * Math.Sin ((Math.PI / 2.8) * zoom)) * (DockPreferences.ZoomPercent-1));
+//				offset = (int) (offset * (0 - Math.Pow (offset / ((ZoomPixels / 2.0) * (DockPreferences.ZoomPercent * 1.05)), 2) + 1));
+//				offset -= (int) (DockPreferences.FullIconSize * (DockPreferences.ZoomPercent - zoom) * (zoom - .9));
+//				offset -= (int) ((DockPreferences.ZoomPercent - zoom) * 
+//				                 ((4 - DockPreferences.ZoomPercent) * (IconSize / DockPreferences.ZoomPercent)) * 
+//				                 ZoomIn);
+				double reOffset = offset * (DockPreferences.ZoomPercent - 1) - (DockPreferences.ZoomPercent - zoom) * (IconSize * .9);
+				offset = (int) (offset + (reOffset - offset) * ZoomIn);
 			}
 			
 			// we now apply a sin wave to our offset.  This shortens our overall offset but also rounds it out a bit.
 			// instead of a linear shape we get more of an acorn shape, a quick approximation of a parabola
-			offset = (int) ((offset * Math.Sin ((Math.PI / 4) * zoom)) * (DockPreferences.ZoomPercent-1));
+//			offset = (int) ((offset * Math.Sin ((Math.PI / 3) * zoom)) * (DockPreferences.ZoomPercent-1));
+			
+//			offset -= (1/(zoom-1))
 			
 			if (Cursor.X > center) {
 				center -= offset;
