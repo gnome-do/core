@@ -30,26 +30,47 @@ namespace Docky.Interface.Renderers
 	
 	public static class DockBackgroundRenderer
 	{
-		public static void RenderDockBackground (Context cr, Gdk.Rectangle dockArea)
+		static Surface sr;
+		static int height;
+		
+		public static void RenderDockBackground (Context context, Gdk.Rectangle dockArea)
 		{
-			cr.SetRoundedRectanglePath (dockArea.X+.5, dockArea.Y+.5, dockArea.Width-1, dockArea.Height+40, 5); //fall off the bottom
-			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
-			cr.FillPreserve ();
+			if (sr == null || dockArea.Height > height) {
+				if (sr != null)
+					sr.Destroy ();
+				
+				height = dockArea.Height;
+				sr = context.Target.CreateSimilar (context.Target.Content, 1000, dockArea.Height);
+				
+				using (Context cr = new Context (sr)) {
+					cr.SetRoundedRectanglePath (.5, .5, 1000 - 1, dockArea.Height+40, 5); //fall off the bottom
+					cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
+					cr.FillPreserve ();
 			
-			//gives the dock a "lifted" look and feel
-			cr.Color = new Cairo.Color (0, 0, 0, .6);
-			cr.LineWidth = 1;
-			cr.Stroke ();
+					//gives the dock a "lifted" look and feel
+					cr.Color = new Cairo.Color (0, 0, 0, .6);
+					cr.LineWidth = 1;
+					cr.Stroke ();
 			
-			cr.SetRoundedRectanglePath (dockArea.X+1.5, dockArea.Y+1.5, dockArea.Width-3, dockArea.Height+40, 5);
-			LinearGradient lg = new LinearGradient (0, dockArea.Y+1.5, 0, dockArea.Y+10);
-			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .4));
-			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
-			cr.Pattern = lg;
-			cr.LineWidth = 1;
-			cr.Stroke ();
+					cr.SetRoundedRectanglePath (1.5, 1.5, 1000 - 3, dockArea.Height + 40, 5);
+					LinearGradient lg = new LinearGradient (0, 1.5, 0, 10);
+					lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .4));
+					lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
+					cr.Pattern = lg;
+					cr.LineWidth = 1;
+					cr.Stroke ();
+				
+					lg.Destroy ();
+				}
+			}
 			
-			lg.Destroy ();
+			context.SetSource (sr, dockArea.X, dockArea.Y);
+			context.Rectangle (dockArea.X, dockArea.Y, dockArea.Width / 2, dockArea.Height);
+			context.Fill ();
+			
+			context.SetSource (sr, dockArea.X + dockArea.Width - 1000, dockArea.Y);
+			context.Rectangle (dockArea.X + dockArea.Width / 2, dockArea.Y, dockArea.Width - dockArea.Width / 2, dockArea.Height);
+			context.Fill ();
 		}
 	}
 }

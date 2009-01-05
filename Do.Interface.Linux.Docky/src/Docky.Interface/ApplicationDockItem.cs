@@ -78,7 +78,7 @@ namespace Docky.Interface
 		{
 			return Application.Icon;
 		}
-
+		
 		/// <summary>
 		/// Returns a Pixbuf suitable for usage in the dock.
 		/// </summary>
