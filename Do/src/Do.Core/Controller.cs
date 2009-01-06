@@ -835,12 +835,16 @@ namespace Do.Core {
 
 			}
 
-			PerformAction (action, items, modItems);
+			GLib.Timeout.Add (100, delegate {
+				Gtk.Application.Invoke ((sender, e) =>
+					PerformAction (action, items, modItems)
+				);
+				return false;
+			});
 			if (vanish) Reset ();
 		}
 
-		void PerformAction (Act action, IEnumerable<Item> items,
-			IEnumerable<Item> modItems)
+		void PerformAction (Act action, IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
 			IEnumerable<Item> results = action.Safe.Perform (items, modItems);
 			// If we have results to feed back into the window, do so in a new
@@ -891,12 +895,7 @@ namespace Do.Core {
 					Do.UniverseManager.Reload ();
 				};
 			}
-			// TODO We need to find a better way for Controller.Vanish to ungrab
-			// focus from the Do window. We have to use PresentWindow here so that
-			// PreferencesItem can open a PreferencesWindow that the user can
-			// actually click on.
-			// prefs_window.Show ();
-			Windowing.PresentWindow (prefs_window);
+			prefs_window.Show ();
 		}
 
 		public void ShowAbout ()
