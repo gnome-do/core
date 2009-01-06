@@ -891,12 +891,8 @@ namespace Do.Core {
 					Do.UniverseManager.Reload ();
 				};
 			}
-			// TODO We need to find a better way for Controller.Vanish to ungrab
-			// focus from the Do window. We have to use PresentWindow here so that
-			// PreferencesItem can open a PreferencesWindow that the user can
-			// actually click on.
-			// prefs_window.Show ();
-			Windowing.PresentWindow (prefs_window);
+			
+			prefs_window.Show ();
 		}
 
 		public void ShowAbout ()

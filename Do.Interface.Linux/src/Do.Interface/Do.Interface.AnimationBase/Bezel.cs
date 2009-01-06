@@ -156,6 +156,7 @@ namespace Do.Interface.AnimationBase
 
 		public void Vanish ()
 		{
+			Interface.Windowing.UngrabWindow (this);
 			Hide ();
 			bezel_glass_window.Hide ();
 		}

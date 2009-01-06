@@ -460,6 +460,19 @@ namespace Docky.Interface
 			};
 		}
 		
+		void UnregisterEvents ()
+		{
+			item_provider.DockItemsChanged -= OnDockItemsChanged;
+			
+			item_provider.ItemNeedsUpdate -= HandleItemNeedsUpdate;
+			
+			dock_item_menu.Hidden -= OnDockItemMenuHidden;
+			
+			dock_item_menu.Shown -= OnDockItemMenuShown;
+			
+			Wnck.Screen.Default.ViewportsChanged -= OnWnckViewportsChanged;
+		}
+		
 		void BuildAnimationStateEngine ()
 		{
 			AnimationState.AddCondition ("IconInsertAnimationNeeded", 
@@ -1222,5 +1235,20 @@ namespace Docky.Interface
 		{
 			State.ClearPane (pane);
 		}
+		
+		public override void Dispose ()
+		{
+			UnregisterEvents ();
+			
+			item_provider.Dispose ();
+			
+			if (cursor_timer > 0)
+				GLib.Source.Remove (cursor_timer);
+			
+			if (animation_timer > 0)
+				GLib.Source.Remove (animation_timer);
+			base.Dispose ();
+		}
+
 	}
 }

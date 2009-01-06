@@ -244,10 +244,7 @@ namespace Docky.Interface
 		
 		public void Vanish ()
 		{
-			uint current_time = Gtk.Global.CurrentEventTime;
-			Gdk.Pointer.Ungrab (current_time);
-			Gdk.Keyboard.Ungrab (current_time);
-			Gtk.Grab.Remove (this);
+			Do.Interface.Windowing.UngrabWindow (this);
 			if (dock_area.InputInterfaceVisible)
 				dock_area.HideInputInterface ();
 		}
@@ -302,6 +299,13 @@ namespace Docky.Interface
 		
 		public bool ResultsCanHide { 
 			get { return false; } 
+		}
+		
+		public override void Dispose ()
+		{
+			dock_area.Dispose ();
+			Destroy ();
+			base.Dispose ();
 		}
 		
 		#endregion 
