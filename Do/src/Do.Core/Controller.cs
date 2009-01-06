@@ -879,8 +879,8 @@ namespace Do.Core {
 					// Reload universe.
 					Do.UniverseManager.Reload ();
 				};
+				Windowing.PresentWindow (PreferencesWindow);
 			}
-			PreferencesWindow.Show ();
 		}
 
 		public void ShowAbout ()
