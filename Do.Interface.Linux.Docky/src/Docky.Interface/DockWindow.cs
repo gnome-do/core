@@ -39,7 +39,6 @@ namespace Docky.Interface
 	public class DockWindow : Gtk.Window, IDoWindow
 	{
 		DockArea dock_area;
-		EventBox eb;
 		IDoController controller;
 		Gdk.Rectangle current_mask;
 		uint strut_timer;
@@ -88,28 +87,8 @@ namespace Docky.Interface
 		
 		void Build ()
 		{
-			eb = new EventBox ();
-			eb.HeightRequest = 1;
-			eb.AddEvents ((int) Gdk.EventMask.PointerMotionMask);
-			
-			eb.MotionNotifyEvent += (o, a) => OnEventBoxMotion ();
-			eb.DragMotion += (o, a) => OnEventBoxMotion ();
-			
-			TargetEntry dest_te = new TargetEntry ("text/uri-list", 0, 0);
-			Gtk.Drag.DestSet (eb, DestDefaults.Motion | DestDefaults.Drop, new [] {dest_te}, Gdk.DragAction.Copy);
-			
-			eb.ExposeEvent += delegate(object o, ExposeEventArgs args) {
-				using (Context cr = CairoHelper.Create (eb.GdkWindow)) {
-					cr.AlphaFill ();
-				}
-			};
-			
 			dock_area = new DockArea (this);
-			
-			VBox vbox = new VBox ();
-			vbox.PackStart (eb, false, false, 0);
-			vbox.PackStart (dock_area, false, true, 0);
-			Add (vbox);
+			Add (dock_area);
 			ShowAll ();
 		}
 		
@@ -133,7 +112,7 @@ namespace Docky.Interface
 			cr.Color = new Cairo.Color (0, 0, 0, 1);
 			cr.Paint ();
 			
-			InputShapeCombineMask (pixmap, area.X, eb.HeightRequest + area.Y);
+			InputShapeCombineMask (pixmap, area.X, area.Y);
 			
 			(cr as IDisposable).Dispose ();
 			pixmap.Dispose ();
@@ -202,7 +181,7 @@ namespace Docky.Interface
 			
 			GetSize (out main.Width, out main.Height);
 			geo = Screen.GetMonitorGeometry (0);
-			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - eb.HeightRequest);
+			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height);
 			
 			InputShapeCombineMask (null, 0, 0);
 			
@@ -216,7 +195,7 @@ namespace Docky.Interface
 			
 			Gdk.Rectangle main;
 			GetSize (out main.Width, out main.Height);
-			return main.Height - eb.HeightRequest;
+			return main.Height;
 		}
 		
 		public void RequestClickOff ()
