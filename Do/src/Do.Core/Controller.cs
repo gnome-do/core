@@ -40,15 +40,11 @@ namespace Do.Core {
 		
 		const int SearchDelay = 250;
 
-		protected IDoWindow window;
-		protected Gtk.Window addin_window;
-		protected Gtk.AboutDialog about_window;
-		protected PreferencesWindow prefs_window;
-		protected ISearchController [] controllers;
+		IDoWindow window;
+		Gtk.AboutDialog about_window;
+		ISearchController [] controllers;
 		
 		Act action;
-		List<Item> items;
-		List<Item> modItems;
 		bool thirdPaneVisible;
 		bool results_grown;
 		Gtk.IMContext im;
@@ -57,8 +53,6 @@ namespace Do.Core {
 		public Controller ()
 		{
 			im = new Gtk.IMMulticontext ();
-			items = new List<Item> ();
-			modItems = new List<Item> ();
 			results_grown = false;
 			last_theme = "";
 			
@@ -147,7 +141,7 @@ namespace Do.Core {
 		}
 
 		bool IsSummonable {
-			get { return prefs_window == null && about_window == null; }
+			get { return PreferencesWindow == null && about_window == null; }
 		}
 
 		/// <value>
@@ -287,9 +281,7 @@ namespace Do.Core {
 			}
 		}
 
-		internal PreferencesWindow PreferencesWindow {
-			get { return prefs_window; }
-		}
+		public PreferencesWindow PreferencesWindow { get; private set; }
 		
 		/// <summary>
 		/// Summons a window with elements in it... seems to work
@@ -772,13 +764,12 @@ namespace Do.Core {
 		{
 			Element first, second, third;
 			string actionQuery, itemQuery, modItemQuery;
+			ICollection<Item> items, modItems;
 
-			items.Clear ();
-			modItems.Clear ();
-			if (vanish) {
-				Vanish ();
-			}
+			if (vanish) Vanish ();
 
+			items = new List<Item> ();
+			modItems = new List<Item> ();
 			first  = GetSelection (Pane.First);
 			second = GetSelection (Pane.Second);
 			third  = GetSelection (Pane.Third);
@@ -812,7 +803,6 @@ namespace Do.Core {
 				
 				if (first is Item) {
 					// Act is in second pane.
-
 					// Increase the relevance of the items.
 					foreach (Element item in items)
 						item.IncreaseRelevance (itemQuery, null);
@@ -822,25 +812,20 @@ namespace Do.Core {
 						action.IncreaseRelevance (actionQuery, item);
 				} else {
 					// Act is in first pane.
-
 					// Increase the relevance of each item for the action.
 					foreach (Element item in items)
 						item.IncreaseRelevance (itemQuery, action);
-
 					action.IncreaseRelevance (actionQuery, null);
 				}
 
 				if (third != null && ThirdPaneVisible)
 					third.IncreaseRelevance (modItemQuery, action);
-
 			}
 
-			GLib.Timeout.Add (100, delegate {
-				Gtk.Application.Invoke ((sender, e) =>
-					PerformAction (action, items, modItems)
-				);
-				return false;
-			});
+			Gtk.Application.Invoke ((sender, e) =>
+				PerformAction (action, items, modItems)
+			);
+
 			if (vanish) Reset ();
 		}
 
@@ -885,17 +870,17 @@ namespace Do.Core {
 			Vanish ();
 			Reset ();
 
-			if (prefs_window == null) {
-				prefs_window = new PreferencesWindow ();
-				prefs_window.Hidden += delegate {
+			if (PreferencesWindow == null) {
+				PreferencesWindow = new PreferencesWindow ();
+				PreferencesWindow.Hidden += delegate {
 					// Release the window.
-					prefs_window.Destroy ();
-					prefs_window = null;
+					PreferencesWindow.Destroy ();
+					PreferencesWindow = null;
 					// Reload universe.
 					Do.UniverseManager.Reload ();
 				};
 			}
-			prefs_window.Show ();
+			PreferencesWindow.Show ();
 		}
 
 		public void ShowAbout ()
