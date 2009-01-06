@@ -55,6 +55,8 @@ namespace Docky.Interface
 		const int InsertAnimationTime = BaseAnimationTime*5;
 		const int WindowHeight = 300;
 		const int IconBorderWidth = 2;
+		const int OffDockWakeupTime = 200;
+		const int OnDockWakeupTime = 20;
 		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
 		
 		#region private variables
@@ -74,6 +76,7 @@ namespace Docky.Interface
 		int drag_start_icon_size;
 		int remove_drag_start_x;
 		uint animation_timer;
+		uint cursor_timer;
 		
 		double previous_zoom;
 		int previous_item_count;
@@ -300,6 +303,7 @@ namespace Docky.Interface
 				
 				// When we change over this boundry, it will normally trigger an animation, we need to be sure to catch it
 				if (CursorIsOverDockArea != cursorIsOverDockArea) {
+					ResetCursorTimer ();
 					enter_time = DateTime.UtcNow;
 					AnimatedDraw ();
 				}
@@ -430,11 +434,8 @@ namespace Docky.Interface
 				SetParentInputMask ();
 				return false;
 			});
-			
-			GLib.Timeout.Add (25, () => {
-				ManualCursorUpdate ();
-				return true;
-			});
+		
+			ResetCursorTimer ();
 		}
 		
 		void RegisterEvents ()
@@ -522,6 +523,23 @@ namespace Docky.Interface
 		{
 			gtk_drag_source_set = false;
 			Gtk.Drag.SourceUnset (this);
+		}
+		
+		void ResetCursorTimer ()
+		{
+			if (cursor_timer > 0)
+				GLib.Source.Remove (cursor_timer);
+			
+			if (CursorIsOverDockArea)
+				cursor_timer = GLib.Timeout.Add (OnDockWakeupTime, OnCursorTimerEllapsed);
+			else
+				cursor_timer = GLib.Timeout.Add (OffDockWakeupTime, OnCursorTimerEllapsed);
+		}
+		
+		bool OnCursorTimerEllapsed ()
+		{
+			ManualCursorUpdate ();
+			return true;
 		}
 		
 		void AnimatedDraw ()
