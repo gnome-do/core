@@ -55,7 +55,7 @@ namespace Docky.Interface
 		const int InsertAnimationTime = BaseAnimationTime*5;
 		const int WindowHeight = 300;
 		const int IconBorderWidth = 2;
-		const int OffDockWakeupTime = 200;
+		const int OffDockWakeupTime = 250;
 		const int OnDockWakeupTime = 20;
 		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
 		
@@ -296,8 +296,10 @@ namespace Docky.Interface
 					CursorIsOverDockArea = rect.Contains (cursor);
 				} else {
 					Gdk.Rectangle small = MinimumDockArea;
-					small.Y += small.Height - 1;
-					small.Height = 1;
+					if (DockPreferences.AutoHide) {
+						small.Y += small.Height - 1;
+						small.Height = 1;
+					}
 					CursorIsOverDockArea = small.Contains (cursor);
 				}
 				
@@ -418,7 +420,7 @@ namespace Docky.Interface
 			this.SetCompositeColormap ();
 			
 			AddEvents ((int) EventMask.PointerMotionMask | 
-			           (int) EventMask.LeaveNotifyMask |
+			           (int) EventMask.EnterNotifyMask |
 			           (int) EventMask.ButtonPressMask | 
 			           (int) EventMask.ButtonReleaseMask |
 			           (int) EventMask.FocusChangeMask);
@@ -966,6 +968,12 @@ namespace Docky.Interface
 		}
 
 		#endregion
+		
+		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
+		{
+			ManualCursorUpdate ();
+			return base.OnEnterNotifyEvent (evnt);
+		}
 		
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
