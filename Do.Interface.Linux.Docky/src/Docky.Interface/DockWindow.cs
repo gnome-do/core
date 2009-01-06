@@ -191,7 +191,7 @@ namespace Docky.Interface
 			
 			GetSize (out main.Width, out main.Height);
 			geo = Screen.GetMonitorGeometry (0);
-			Move ((geo.X+geo.Width/2) - main.Width/2, geo.Y+geo.Height-main.Height);
+			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - main.Height);
 			
 			is_repositioned_hidden = false;
 		}
@@ -202,11 +202,21 @@ namespace Docky.Interface
 			
 			GetSize (out main.Width, out main.Height);
 			geo = Screen.GetMonitorGeometry (0);
-			Move ((geo.X+geo.Width/2) - main.Width/2, geo.Y+geo.Height-eb.HeightRequest);
+			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - eb.HeightRequest);
 			
 			InputShapeCombineMask (null, 0, 0);
 			
 			is_repositioned_hidden = true;
+		}
+		
+		public int WindowHideOffset ()
+		{
+			if (!is_repositioned_hidden)
+				return 0;
+			
+			Gdk.Rectangle main;
+			GetSize (out main.Width, out main.Height);
+			return main.Height - eb.HeightRequest;
 		}
 		
 		public void RequestClickOff ()

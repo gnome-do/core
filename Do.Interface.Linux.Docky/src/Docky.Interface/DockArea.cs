@@ -287,9 +287,16 @@ namespace Docky.Interface
 				// We set this value here instead of dynamically checking due to performance constraints.
 				// Ideally our CursorIsOverDockArea getter would do this fairly simple calculation, but it gets
 				// called about 20 to 30 times per render loop, so the savings do add up.
-				Gdk.Rectangle rect = MinimumDockArea;
-				rect.Inflate (0, 55);
-				CursorIsOverDockArea = rect.Contains (Cursor); 
+				if (cursorIsOverDockArea) {
+					Gdk.Rectangle rect = MinimumDockArea;
+					rect.Inflate (0, 55);
+					CursorIsOverDockArea = rect.Contains (cursor);
+				} else {
+					Gdk.Rectangle small = MinimumDockArea;
+					small.Y += small.Height - 1;
+					small.Height = 1;
+					CursorIsOverDockArea = small.Contains (cursor);
+				}
 				
 				// When we change over this boundry, it will normally trigger an animation, we need to be sure to catch it
 				if (CursorIsOverDockArea != cursorIsOverDockArea) {
@@ -422,6 +429,11 @@ namespace Docky.Interface
 				//must be done after construction is complete
 				SetParentInputMask ();
 				return false;
+			});
+			
+			GLib.Timeout.Add (25, () => {
+				ManualCursorUpdate ();
+				return true;
 			});
 		}
 		
@@ -735,7 +747,7 @@ namespace Docky.Interface
 			    CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null) {
 				
 				int textx = IconNormalCenterX (icon) - (DockPreferences.TextWidth / 2);
-				int texty = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 28;
+				int texty = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 32;
 				DockItems [icon].GetTextSurface (cr.Target).Show (cr, textx, texty);
 			}
 		}
@@ -853,15 +865,29 @@ namespace Docky.Interface
 		public void ManualCursorUpdate ()
 		{
 			int x, y;
+			bool cursorIsOverDockArea = CursorIsOverDockArea;
+			
 			Display.GetPointer (out x, out y);
+			if ((Cursor.X == x && Cursor.Y == y) || dock_item_menu.Visible)
+				return;
 			
 			Gdk.Rectangle geo;
 			window.GetPosition (out geo.X, out geo.Y);
 			
 			x -= geo.X;
-			y -= geo.Y;
-			
+			y -= geo.Y - window.WindowHideOffset ();
+			Gdk.Point old_cursor_location = Cursor;
 			Cursor = new Gdk.Point (x, y);
+
+			ConfigureCursor ();
+
+			if (drag_resizing)
+				HandleDragMotion ();
+			
+			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && (old_cursor_location.X != Cursor.X);
+
+			if (drag_resizing || cursorMoveWarrantsDraw) 
+				AnimatedDraw ();
 		}
 		
 		#region Drag Code
@@ -869,8 +895,6 @@ namespace Docky.Interface
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{
 			GtkDragging = true;
-			
-			Cursor = new Gdk.Point (x, y);
 			AnimatedDraw ();
 			return base.OnDragMotion (context, x, y, time);
 		}
@@ -932,7 +956,7 @@ namespace Docky.Interface
 			// clear the dock area cache... this will cause it to recalculate.
 			minimum_dock_area = new Gdk.Rectangle ();
 			
-			if (!IsDrawable)
+			if (!IsDrawable || window.WindowHideOffset () == Height)
 				return ret_val;
 			
 			if (backbuffer == null) {
@@ -961,22 +985,6 @@ namespace Docky.Interface
 		protected override bool OnMotionNotifyEvent(EventMotion evnt)
 		{
 			GtkDragging = false;
-			
-			bool cursorIsOverDockArea = CursorIsOverDockArea;
-			
-			Gdk.Point old_cursor_location = Cursor;
-			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
-
-			ConfigureCursor ();
-
-			if (drag_resizing)
-				HandleDragMotion ();
-			
-			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && (old_cursor_location.X != Cursor.X);
-
-			if (cursorIsOverDockArea != CursorIsOverDockArea || drag_resizing || cursorMoveWarrantsDraw) 
-				AnimatedDraw ();
-			
 			return base.OnMotionNotifyEvent (evnt);
 		}
 		
@@ -1062,17 +1070,6 @@ namespace Docky.Interface
 				AnimatedDraw ();
 			}
 			return ret_val;
-		}
-		
-		protected override bool OnLeaveNotifyEvent (Gdk.EventCrossing evnt)
-		{
-			Cursor = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
-			ModifierType leave_mask = ModifierType.Button1Mask | ModifierType.Button2Mask | 
-				ModifierType.Button3Mask | ModifierType.Button4Mask | ModifierType.Button5Mask;
-			
-			if (CursorIsOverDockArea && (int) (evnt.State & leave_mask) == 0 && evnt.Mode == CrossingMode.Normal)
-				Cursor = new Gdk.Point ((int) evnt.X, -1);
-			return base.OnLeaveNotifyEvent (evnt);
 		}
 		
 		void StartDrag ()
