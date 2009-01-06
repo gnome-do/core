@@ -75,11 +75,11 @@
       <applyto>/apps/gnome-do/preferences/CorePreferences/Theme</applyto>
       <owner>gnome-do</owner>
       <type>string</type>
-      <default>Classic</default>
+      <default>Classic Interface</default>
       <locale name="C">
          <short>Do UI theme</short>
          <long>
-	   Changes the appearence of Do. Valid entries are Classic, Glass Frame, and Mini.
+					 Changes the appearence of Do. Valid entries are Classic, Glass Frame, and Mini.
          </long>
       </locale>
     </schema>

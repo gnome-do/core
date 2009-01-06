@@ -37,7 +37,7 @@ namespace Do
 		const string AlwaysShowResultsKey = "AlwaysShowResults";
 		const string TextModeKeybindingKey = "TextModeKeybinding";
 
-		const string ThemeDefaultValue = "Classic";
+		const string ThemeDefaultValue = "Classic Interface";
 		const bool QuietStartDefaultValue = false;
 		const bool StartAtLoginDefaultValue = false;
 		const bool AlwaysShowResultsDefaultValue = false;
