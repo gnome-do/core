@@ -485,7 +485,7 @@ namespace Do.Core {
 		{
 			if (im.FilterKeypress (evnt) || ((evnt.State & ModifierType.ControlMask) != 0))
 				return;
-//			im.Reset ();
+			
 			char c;
 			if (evnt.Key == Key.Return) {
 				c = '\n';

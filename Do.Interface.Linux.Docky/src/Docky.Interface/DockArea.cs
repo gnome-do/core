@@ -292,7 +292,7 @@ namespace Docky.Interface
 				// called about 20 to 30 times per render loop, so the savings do add up.
 				if (cursorIsOverDockArea) {
 					Gdk.Rectangle rect = MinimumDockArea;
-					rect.Inflate (0, 55);
+					rect.Inflate (0, DockPreferences.FullIconSize - IconSize + 22);
 					CursorIsOverDockArea = rect.Contains (cursor);
 				} else {
 					Gdk.Rectangle small = MinimumDockArea;
