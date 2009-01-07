@@ -45,7 +45,7 @@ namespace Do.Interface
 			}
 		}
 		
-		public static void UngrabWindow (Gtk.Window window)
+		public static void UnpresentWindow (Gtk.Window window)
 		{
 			uint time;
 			time = Gtk.Global.CurrentEventTime;

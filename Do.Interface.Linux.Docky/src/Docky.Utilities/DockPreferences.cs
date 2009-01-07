@@ -46,7 +46,7 @@ namespace Docky.Utilities
 		public static int TextWidth {
 			get { return text_width; }
 			set { 
-				prefs.Set<int> ("TextWidth", value); 
+				prefs.Set ("TextWidth", value); 
 				text_width = value;
 			}
 		}
@@ -55,7 +55,7 @@ namespace Docky.Utilities
 		public static int ZoomSize {
 			get { return (int) (zoom_size * (IconSize / (double) DefaultIconSize)); }
 			set { 
-				prefs.Set<int> ("ZoomSize", value); 
+				prefs.Set ("ZoomSize", value); 
 				zoom_size = value;
 			}
 		}
@@ -73,7 +73,7 @@ namespace Docky.Utilities
 		public static double ZoomPercent {
 			get { return ZoomEnabled ? zoom_percent : 1; }
 			set {
-				prefs.Set<double> ("ZoomPercent", value);
+				prefs.Set ("ZoomPercent", value);
 				zoom_percent = value;
 			}
 		}
@@ -82,7 +82,7 @@ namespace Docky.Utilities
 		public static bool ZoomEnabled {
 			get { return enable_zoom; }
 			set {
-				prefs.Set<bool> ("EnableZoom", value);
+				prefs.Set ("EnableZoom", value);
 				enable_zoom = value;
 				if (IconSizeChanged != null)
 					IconSizeChanged ();
@@ -120,7 +120,7 @@ namespace Docky.Utilities
 				if (value == icon_size)
 					return;
 				
-				prefs.Set<int> ("IconSize", value); 
+				prefs.Set ("IconSize", value); 
 				icon_size = value;
 				if (IconSizeChanged != null)
 					IconSizeChanged ();
@@ -142,7 +142,7 @@ namespace Docky.Utilities
 				if (autohide == value)
 					return;
 				
-				prefs.Set<bool> ("AutoHide", value);
+				prefs.Set ("AutoHide", value);
 				autohide = value;
 				if (AutohideChanged != null)
 					AutohideChanged ();
@@ -153,7 +153,7 @@ namespace Docky.Utilities
 		public static bool Reflections {
 			get { return reflections; }
 			set {
-				prefs.Set<bool> ("Reflections", value);
+				prefs.Set ("Reflections", value);
 				reflections = value;
 			}
 		}
@@ -162,7 +162,7 @@ namespace Docky.Utilities
 		public static int SummonTime {
 			get { return summon_time; }
 			set {
-				prefs.Set<int> ("SummonTime", value);
+				prefs.Set ("SummonTime", value);
 				summon_time = value;
 			}
 		}
@@ -173,7 +173,7 @@ namespace Docky.Utilities
 			set {
 				if (value < 0)
 					value = 0;
-				prefs.Set<int> ("AutomaticIcons", value);
+				prefs.Set ("AutomaticIcons", value);
 				automatic_icons = value;
 			}
 		}

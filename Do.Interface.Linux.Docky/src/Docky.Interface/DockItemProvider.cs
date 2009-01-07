@@ -130,14 +130,12 @@ namespace Docky.Interface
 		void RegisterEvents ()
 		{
 			Wnck.Screen.Default.WindowClosed += OnWindowClosed;
-			
 			Wnck.Screen.Default.WindowOpened += OnWindowOpened;
 		}
 		
 		void UnregisterEvents ()
 		{
 			Wnck.Screen.Default.WindowClosed -= OnWindowClosed;
-			
 			Wnck.Screen.Default.WindowOpened -= OnWindowOpened;
 		}
 		
@@ -145,14 +143,14 @@ namespace Docky.Interface
 		{
 			if (args.Window.IsSkipTasklist)
 					return;
-				UpdateItems ();
+			UpdateItems ();
 		}
 		
 		private void OnWindowOpened (object o, WindowOpenedArgs args) 
 		{
 			if (args.Window.IsSkipTasklist)
 					return;
-				UpdateItems ();
+			UpdateItems ();
 		}
 		
 		public void AddCustomItem (Element item)

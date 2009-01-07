@@ -53,8 +53,8 @@ namespace Docky.Interface
 		const int BounceTime = 700;
 		const int InsertAnimationTime = BaseAnimationTime*5;
 		const int WindowHeight = 300;
-		const int OffDockWakeupTime = 250;
-		const int OnDockWakeupTime = 20;
+		const uint OffDockWakeupTime = 250;
+		const uint OnDockWakeupTime = 20;
 		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
 		
 		#region private variables
@@ -414,11 +414,9 @@ namespace Docky.Interface
 		void RegisterEvents ()
 		{
 			item_provider.DockItemsChanged += OnDockItemsChanged;
-			
 			item_provider.ItemNeedsUpdate += HandleItemNeedsUpdate;
 			
 			dock_item_menu.Hidden += OnDockItemMenuHidden;
-			
 			dock_item_menu.Shown += OnDockItemMenuShown;
 			
 			Wnck.Screen.Default.ViewportsChanged += OnWnckViewportsChanged;
@@ -434,11 +432,9 @@ namespace Docky.Interface
 		void UnregisterEvents ()
 		{
 			item_provider.DockItemsChanged -= OnDockItemsChanged;
-			
 			item_provider.ItemNeedsUpdate -= HandleItemNeedsUpdate;
 			
 			dock_item_menu.Hidden -= OnDockItemMenuHidden;
-			
 			dock_item_menu.Shown -= OnDockItemMenuShown;
 			
 			Wnck.Screen.Default.ViewportsChanged -= OnWnckViewportsChanged;
@@ -515,10 +511,8 @@ namespace Docky.Interface
 			if (cursor_timer > 0)
 				GLib.Source.Remove (cursor_timer);
 			
-			if (CursorIsOverDockArea || drag_resizing)
-				cursor_timer = GLib.Timeout.Add (OnDockWakeupTime, OnCursorTimerEllapsed);
-			else
-				cursor_timer = GLib.Timeout.Add (OffDockWakeupTime, OnCursorTimerEllapsed);
+			uint time = (CursorIsOverDockArea || drag_resizing) ? OnDockWakeupTime : OffDockWakeupTime;
+			cursor_timer = GLib.Timeout.Add (time, OnCursorTimerEllapsed);
 		}
 		
 		bool OnCursorTimerEllapsed ()
@@ -833,7 +827,7 @@ namespace Docky.Interface
 			if (drag_resizing)
 				HandleDragMotion ();
 			
-			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && (old_cursor_location.X != Cursor.X);
+			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && old_cursor_location.X != Cursor.X;
 
 			if (drag_resizing || cursorMoveWarrantsDraw) 
 				AnimatedDraw (false);
@@ -1058,7 +1052,8 @@ namespace Docky.Interface
 			int movement = 0;
 			switch (drag_edge) {
 			case DragEdge.Top:
-				DockPreferences.IconSize = Math.Min (drag_start_icon_size + (drag_start_point.Y - Cursor.Y), DockPreferences.MaxIconSize);
+				DockPreferences.IconSize = Math.Min (drag_start_icon_size + (drag_start_point.Y - Cursor.Y), 
+				                                     DockPreferences.MaxIconSize);
 				return;
 			case DragEdge.Left:
 				movement = drag_start_point.X - Cursor.X;

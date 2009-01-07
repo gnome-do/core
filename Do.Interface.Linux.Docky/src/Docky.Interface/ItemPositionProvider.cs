@@ -116,8 +116,9 @@ namespace Docky.Interface
 			// get our actual center
 			int center = IconUnzoomedPosition (icon);
 			
-			// ZoomPercent is a number greater than 1.  It should never be less than one.  ZoomIn is a range of 0 to 1.
-			// we need a number that is 1 when ZoomIn is 0, and ZoomPercent when ZoomIn is 1.  Then we treat this as 
+			// ZoomPercent is a number greater than 1.  It should never be less than one.
+			// ZoomIn is a range of 0 to 1. we need a number that is 1 when ZoomIn is 0, 
+			// and ZoomPercent when ZoomIn is 1.  Then we treat this as 
 			// if it were the ZoomPercent for the rest of the calculation
 			double zoomInPercent = 1 + (DockPreferences.ZoomPercent - 1) * zoomByEntryTime;
 			
@@ -127,7 +128,8 @@ namespace Docky.Interface
 			if (ZoomSize / 2.0 == 0) {
 				zoom = 1;
 			} else {
-				// zoom is calculated as 1 through target_zoom (default 2).  The larger your offset, the smaller your zoom
+				// zoom is calculated as 1 through target_zoom (default 2).  
+				// The larger your offset, the smaller your zoom
 				zoom = 0 - Math.Pow (offset / (ZoomSize / 2.0), 2) + 2;
 				zoom = 1 + (zoom - 1) * (zoomInPercent - 1);
 				

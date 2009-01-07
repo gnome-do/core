@@ -243,7 +243,7 @@ namespace Docky.Interface
 		
 		public void Vanish ()
 		{
-			Do.Interface.Windowing.UngrabWindow (this);
+			Do.Interface.Windowing.UnpresentWindow (this);
 			if (dock_area.InputInterfaceVisible)
 				dock_area.HideInputInterface ();
 		}
