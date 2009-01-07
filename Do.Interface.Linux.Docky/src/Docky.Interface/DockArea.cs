@@ -130,7 +130,7 @@ namespace Docky.Interface
 			}
 			set {
 				State.CurrentPane = value;
-				AnimatedDraw ();
+				AnimatedDraw (false);
 			}
 		}
 		
@@ -140,7 +140,7 @@ namespace Docky.Interface
 				if (State.ThirdPaneVisible == value)
 					return;
 				State.ThirdPaneVisible = value;
-				AnimatedDraw ();
+				AnimatedDraw (false);
 			}
 		}
 		#endregion
@@ -287,7 +287,7 @@ namespace Docky.Interface
 				if (CursorIsOverDockArea != cursorIsOverDockArea) {
 					ResetCursorTimer ();
 					enter_time = DateTime.UtcNow;
-					AnimatedDraw ();
+					AnimatedDraw (false);
 				}
 			}
 		}
@@ -485,11 +485,10 @@ namespace Docky.Interface
 
 		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)
 		{
-			FullRenderFlag = true;
 			if (args.Type == UpdateRequestType.NeedsAttentionSet) {
 				SetParentInputMask ();
 			}
-			AnimatedDraw ();
+			AnimatedDraw (true);
 		}
 		
 		void RegisterGtkDragSource ()
@@ -528,8 +527,11 @@ namespace Docky.Interface
 			return true;
 		}
 		
-		void AnimatedDraw ()
+		void AnimatedDraw (bool fullRenderRequired)
 		{
+			if (fullRenderRequired)
+				FullRenderFlag = true;
+			
 			if (0 < animation_timer)
 				return;
 			
@@ -780,9 +782,8 @@ namespace Docky.Interface
 		{
 			DockPreferences.MaxIconSize = (int) (((double) monitor_width / MinimumDockArea.Width) * IconSize);
 			
-			FullRenderFlag = true;
 			SetIconRegions ();
-			AnimatedDraw ();
+			AnimatedDraw (true);
 		}
 		
 		void OnDockItemMenuHidden (object o, System.EventArgs args)
@@ -791,13 +792,13 @@ namespace Docky.Interface
 			// both a good thing and a bad thing.  We must at the very least update the cursor position once the
 			// popup is no longer in view.
 			ManualCursorUpdate ();
-			AnimatedDraw ();
+			AnimatedDraw (false);
 		}
 		
 		void OnWnckViewportsChanged (object o, EventArgs e)
 		{
 			ManualCursorUpdate ();
-			AnimatedDraw ();
+			AnimatedDraw (false);
 		}
 		
 		/// <summary>
@@ -805,7 +806,7 @@ namespace Docky.Interface
 		/// </summary>
 		void OnDockItemMenuShown (object o, EventArgs args)
 		{
-			AnimatedDraw ();
+			AnimatedDraw (false);
 		}
 		
 		public void ManualCursorUpdate ()
@@ -833,7 +834,7 @@ namespace Docky.Interface
 			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && (old_cursor_location.X != Cursor.X);
 
 			if (drag_resizing || cursorMoveWarrantsDraw) 
-				AnimatedDraw ();
+				AnimatedDraw (false);
 		}
 		
 		#region Drag Code
@@ -841,7 +842,7 @@ namespace Docky.Interface
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{
 			GtkDragging = true;
-			AnimatedDraw ();
+			AnimatedDraw (false);
 			return base.OnDragMotion (context, x, y, time);
 		}
 
@@ -895,8 +896,7 @@ namespace Docky.Interface
 			} else if (CursorIsOverDockArea && currentPosition != draggedPosition) {
 				item_provider.MoveItemToPosition (draggedPosition, currentPosition);
 			} else {
-				FullRenderFlag = true;
-				AnimatedDraw ();
+				AnimatedDraw (true);
 			}
 			base.OnDragEnd (context);
 		}
@@ -1024,7 +1024,7 @@ namespace Docky.Interface
 				
 				//send off the clicks
 				DockItems [item].Clicked (evnt.Button);
-				AnimatedDraw ();
+				AnimatedDraw (false);
 			}
 			return ret_val;
 		}
@@ -1044,8 +1044,7 @@ namespace Docky.Interface
 			SetIconRegions ();
 			window.SetStruts ();
 			
-			FullRenderFlag = true;
-			AnimatedDraw ();
+			AnimatedDraw (true);
 			
 			ResetCursorTimer ();
 		}
@@ -1121,7 +1120,7 @@ namespace Docky.Interface
 		public void SetPaneContext (IUIContext context, Pane pane)
 		{
 			State.SetContext (context, pane);
-			AnimatedDraw ();
+			AnimatedDraw (false);
 		}
 		
 		public void ShowInputInterface ()
@@ -1130,7 +1129,7 @@ namespace Docky.Interface
 			InputInterfaceVisible = true;
 			
 			SetParentInputMask ();
-			AnimatedDraw ();
+			AnimatedDraw (false);
 		}
 		
 		public void HideInputInterface ()
@@ -1139,7 +1138,7 @@ namespace Docky.Interface
 			InputInterfaceVisible = false;
 			
 			SetParentInputMask ();
-			AnimatedDraw ();
+			AnimatedDraw (false);
 			
 			GLib.Timeout.Add (500, () => { 
 				item_provider.ForceUpdate (); 
@@ -1150,7 +1149,7 @@ namespace Docky.Interface
 		public void Reset ()
 		{
 			State.Clear ();
-			AnimatedDraw ();
+			AnimatedDraw (false);
 		}
 		
 		public void ClearPane (Pane pane)
