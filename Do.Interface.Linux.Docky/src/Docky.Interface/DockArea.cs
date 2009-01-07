@@ -668,8 +668,10 @@ namespace Docky.Interface
 		void DrawIcon (Context cr, int icon)
 		{
 			// Don't draw the icon we are dragging around
-			if (GtkDragging && PositionProvider.IndexAtPosition (remove_drag_start_x) == icon) {
-				return;
+			if (GtkDragging) {
+				int item = PositionProvider.IndexAtPosition (remove_drag_start_x);
+				if (item == icon && item_provider.ItemCanBeMoved (item))
+					return;
 			}
 			
 			int center;
@@ -873,11 +875,14 @@ namespace Docky.Interface
 			// the user might not end the drag on the same horizontal position they start it on
 			remove_drag_start_x = Cursor.X;
 			int item = PositionProvider.IndexAtPosition (Cursor.X);
-			if (item == -1)
-				return;
 			
-			Gdk.Pixbuf pbuf = DockItems [item].GetDragPixbuf ();
-			
+			Gdk.Pixbuf pbuf;
+			if (item == -1 || !item_provider.ItemCanBeMoved (item)) {
+				pbuf = IconProvider.PixbufFromIconName ("gtk-remove", DockPreferences.IconSize);
+			} else {
+				pbuf = DockItems [item].GetDragPixbuf ();
+			}
+				
 			if (pbuf != null)
 				Gtk.Drag.SetIconPixbuf (context, pbuf, pbuf.Width / 2, pbuf.Height / 2);
 			base.OnDragBegin (context);
@@ -895,9 +900,8 @@ namespace Docky.Interface
 				item_provider.RemoveItem (PositionProvider.IndexAtPosition (remove_drag_start_x));
 			} else if (CursorIsOverDockArea && currentPosition != draggedPosition) {
 				item_provider.MoveItemToPosition (draggedPosition, currentPosition);
-			} else {
-				AnimatedDraw (true);
 			}
+			AnimatedDraw (true);
 			base.OnDragEnd (context);
 		}
 

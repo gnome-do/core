@@ -224,6 +224,14 @@ namespace Docky.Interface
 			return customItem;
 		}
 		
+		public bool ItemCanBeMoved (int item)
+		{
+			if (DockItems [item] is DockItem) {
+				return DragableItems.Contains (DockItems [item] as DockItem);
+			}
+			return false;
+		}
+		
 		public void MoveItemToPosition (int item, int position)
 		{
 			if (item == position)
