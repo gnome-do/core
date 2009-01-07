@@ -665,6 +665,11 @@ namespace Docky.Interface
 		
 		void DrawIcon (Context cr, int icon)
 		{
+			// Don't draw the icon we are dragging around
+			if (GtkDragging && PositionProvider.IndexAtPosition (remove_drag_start_x) == icon) {
+				return;
+			}
+			
 			int center;
 			double zoom;
 			IconZoomedPosition (icon, out center, out zoom);
@@ -870,8 +875,10 @@ namespace Docky.Interface
 			if (item == -1)
 				return;
 			
-			if (DockItems [item].GetDragPixbuf () != null)
-				Gtk.Drag.SetIconPixbuf (context, DockItems [item].GetDragPixbuf (), 0, 0);
+			Gdk.Pixbuf pbuf = DockItems [item].GetDragPixbuf ();
+			
+			if (pbuf != null)
+				Gtk.Drag.SetIconPixbuf (context, pbuf, pbuf.Width / 2, pbuf.Height / 2);
 			base.OnDragBegin (context);
 		}
 		
@@ -880,10 +887,16 @@ namespace Docky.Interface
 			if (PositionProvider.IndexAtPosition (remove_drag_start_x) == -1)
 				return;
 			
+			GtkDragging = false;
+			int draggedPosition = PositionProvider.IndexAtPosition (remove_drag_start_x);
+			int currentPosition = PositionProvider.IndexAtPosition (Cursor.X);
 			if (context.DestWindow != window.GdkWindow || !CursorIsOverDockArea) {
 				item_provider.RemoveItem (PositionProvider.IndexAtPosition (remove_drag_start_x));
-			} else if (CursorIsOverDockArea) {
-				item_provider.MoveItemToPosition (PositionProvider.IndexAtPosition (remove_drag_start_x), PositionProvider.IndexAtPosition (Cursor.X));
+			} else if (CursorIsOverDockArea && currentPosition != draggedPosition) {
+				item_provider.MoveItemToPosition (draggedPosition, currentPosition);
+			} else {
+				FullRenderFlag = true;
+				AnimatedDraw ();
 			}
 			base.OnDragEnd (context);
 		}

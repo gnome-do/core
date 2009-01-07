@@ -251,7 +251,7 @@ namespace Docky.Interface
 		public override Pixbuf GetDragPixbuf ()
 		{
 			if (drag_pixbuf == null)
-				drag_pixbuf = IconProvider.PixbufFromIconName (Icon, 32);
+				drag_pixbuf = IconProvider.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
 			return drag_pixbuf;
 		}
 		

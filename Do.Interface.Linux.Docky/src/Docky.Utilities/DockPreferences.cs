@@ -125,13 +125,12 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static double icon_quality = prefs.Get<double> ("IconQuality", 2);
+		/// <summary>
+		/// Currently returns ZoomPercent.  This is useful in the future case where we wish to optimize for best
+		/// looking icons by picking "good" sizes.  This is not implemented yet however.
+		/// </summary>
 		public static double IconQuality {
-			get { return icon_quality; }
-			set { 
-				prefs.Set<double> ("IconQuality", value); 
-				icon_quality = value;
-			}
+			get { return ZoomPercent; }
 		}
 		
 		static bool autohide = prefs.Get<bool> ("AutoHide", false);
