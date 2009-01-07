@@ -80,7 +80,6 @@ namespace Docky.Interface
 			};
 			
 			DockPreferences.AutohideChanged += DelaySetStruts;
-			DockPreferences.IconSizeChanged += DelaySetStruts;
 			
 			Build ();
 		}

@@ -292,7 +292,7 @@ namespace Docky.Interface
 				// called about 20 to 30 times per render loop, so the savings do add up.
 				if (cursorIsOverDockArea) {
 					Gdk.Rectangle rect = MinimumDockArea;
-					rect.Inflate (0, DockPreferences.FullIconSize - IconSize + 22);
+					rect.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
 					CursorIsOverDockArea = rect.Contains (cursor);
 				} else {
 					Gdk.Rectangle small = MinimumDockArea;
@@ -545,7 +545,7 @@ namespace Docky.Interface
 			if (cursor_timer > 0)
 				GLib.Source.Remove (cursor_timer);
 			
-			if (CursorIsOverDockArea)
+			if (CursorIsOverDockArea || drag_resizing)
 				cursor_timer = GLib.Timeout.Add (OnDockWakeupTime, OnCursorTimerEllapsed);
 			else
 				cursor_timer = GLib.Timeout.Add (OffDockWakeupTime, OnCursorTimerEllapsed);
@@ -1121,11 +1121,15 @@ namespace Docky.Interface
 		
 		void EndDrag ()
 		{
+			drag_edge = DragEdge.None;
 			drag_resizing = false;
+			SetIconRegions ();
 			window.SetStruts ();
 			
 			FullRenderFlag = true;
 			AnimatedDraw ();
+			
+			ResetCursorTimer ();
 		}
 		
 		void HandleDragMotion ()
