@@ -84,6 +84,8 @@ namespace Docky.Utilities
 			set {
 				prefs.Set<bool> ("EnableZoom", value);
 				enable_zoom = value;
+				if (IconSizeChanged != null)
+					IconSizeChanged ();
 			}
 		}
 		
