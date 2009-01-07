@@ -44,7 +44,7 @@ namespace Docky.Interface
 	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);
 	public delegate void DockItemsChangedHandler (IEnumerable<IDockItem> items);
 	
-	public class DockItemProvider
+	public class DockItemProvider : IDisposable
 	{
 		
 		public event DockItemsChangedHandler DockItemsChanged;
@@ -116,17 +116,7 @@ namespace Docky.Interface
 			task_items = new List<ApplicationDockItem> ();
 			
 			
-			Wnck.Screen.Default.WindowClosed += delegate(object o, WindowClosedArgs args) {
-				if (args.Window.IsSkipTasklist)
-					return;
-				UpdateItems ();
-			};
-			
-			Wnck.Screen.Default.WindowOpened += delegate(object o, WindowOpenedArgs args) {
-				if (args.Window.IsSkipTasklist)
-					return;
-				UpdateItems ();
-			};
+			RegisterEvents ();
 			
 			// We give core 3 seconds to update its universe.  Eventually we will need a signal or something,
 			// but for now this works.
@@ -135,6 +125,32 @@ namespace Docky.Interface
 				UpdateItems ();
 				return false;
 			});
+		}
+		
+		void RegisterEvents ()
+		{
+			Wnck.Screen.Default.WindowClosed += OnWindowClosed;
+			Wnck.Screen.Default.WindowOpened += OnWindowOpened;
+		}
+		
+		void UnregisterEvents ()
+		{
+			Wnck.Screen.Default.WindowClosed -= OnWindowClosed;
+			Wnck.Screen.Default.WindowOpened -= OnWindowOpened;
+		}
+		
+		private void OnWindowClosed (object o, WindowClosedArgs args) 
+		{
+			if (args.Window.IsSkipTasklist)
+					return;
+			UpdateItems ();
+		}
+		
+		private void OnWindowOpened (object o, WindowOpenedArgs args) 
+		{
+			if (args.Window.IsSkipTasklist)
+					return;
+			UpdateItems ();
 		}
 		
 		public void AddCustomItem (Element item)
@@ -204,6 +220,14 @@ namespace Docky.Interface
 					Log.Error ("Could not add custom item with id: {0}", identifier);
 			}
 			return customItem;
+		}
+		
+		public bool ItemCanBeMoved (int item)
+		{
+			if (DockItems [item] is DockItem) {
+				return DragableItems.Contains (DockItems [item] as DockItem);
+			}
+			return false;
 		}
 		
 		public void MoveItemToPosition (int item, int position)
@@ -523,6 +547,20 @@ namespace Docky.Interface
 			
 			if (DockItemsChanged != null)
 				DockItemsChanged (DockItems);
+		}
+		
+		public void Dispose ()
+		{
+			UnregisterEvents ();
+			
+			foreach (IDockItem di in DockItems) {
+				if (di is IRightClickable)
+					(di as IRightClickable).RemoveClicked -= HandleRemoveClicked;
+				if (di is IDockAppItem)
+					(di as IDockAppItem).UpdateNeeded -= HandleUpdateNeeded;
+				
+				di.Dispose ();
+			}
 		}
 	}
 }

@@ -39,7 +39,6 @@ namespace Docky.Interface
 	public class DockWindow : Gtk.Window, IDoWindow
 	{
 		DockArea dock_area;
-		EventBox eb;
 		IDoController controller;
 		Gdk.Rectangle current_mask;
 		uint strut_timer;
@@ -81,35 +80,14 @@ namespace Docky.Interface
 			};
 			
 			DockPreferences.AutohideChanged += DelaySetStruts;
-			DockPreferences.IconSizeChanged += DelaySetStruts;
 			
 			Build ();
 		}
 		
 		void Build ()
 		{
-			eb = new EventBox ();
-			eb.HeightRequest = 1;
-			eb.AddEvents ((int) Gdk.EventMask.PointerMotionMask);
-			
-			eb.MotionNotifyEvent += (o, a) => OnEventBoxMotion ();
-			eb.DragMotion += (o, a) => OnEventBoxMotion ();
-			
-			TargetEntry dest_te = new TargetEntry ("text/uri-list", 0, 0);
-			Gtk.Drag.DestSet (eb, DestDefaults.Motion | DestDefaults.Drop, new [] {dest_te}, Gdk.DragAction.Copy);
-			
-			eb.ExposeEvent += delegate(object o, ExposeEventArgs args) {
-				using (Context cr = CairoHelper.Create (eb.GdkWindow)) {
-					cr.AlphaFill ();
-				}
-			};
-			
 			dock_area = new DockArea (this);
-			
-			VBox vbox = new VBox ();
-			vbox.PackStart (eb, false, false, 0);
-			vbox.PackStart (dock_area, false, true, 0);
-			Add (vbox);
+			Add (dock_area);
 			ShowAll ();
 		}
 		
@@ -133,7 +111,7 @@ namespace Docky.Interface
 			cr.Color = new Cairo.Color (0, 0, 0, 1);
 			cr.Paint ();
 			
-			InputShapeCombineMask (pixmap, area.X, eb.HeightRequest + area.Y);
+			InputShapeCombineMask (pixmap, area.X, area.Y);
 			
 			(cr as IDisposable).Dispose ();
 			pixmap.Dispose ();
@@ -191,7 +169,7 @@ namespace Docky.Interface
 			
 			GetSize (out main.Width, out main.Height);
 			geo = Screen.GetMonitorGeometry (0);
-			Move ((geo.X+geo.Width/2) - main.Width/2, geo.Y+geo.Height-main.Height);
+			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - main.Height);
 			
 			is_repositioned_hidden = false;
 		}
@@ -202,11 +180,21 @@ namespace Docky.Interface
 			
 			GetSize (out main.Width, out main.Height);
 			geo = Screen.GetMonitorGeometry (0);
-			Move ((geo.X+geo.Width/2) - main.Width/2, geo.Y+geo.Height-eb.HeightRequest);
+			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height);
 			
 			InputShapeCombineMask (null, 0, 0);
 			
 			is_repositioned_hidden = true;
+		}
+		
+		public int WindowHideOffset ()
+		{
+			if (!is_repositioned_hidden)
+				return 0;
+			
+			Gdk.Rectangle main;
+			GetSize (out main.Width, out main.Height);
+			return main.Height;
 		}
 		
 		public void RequestClickOff ()
@@ -255,10 +243,7 @@ namespace Docky.Interface
 		
 		public void Vanish ()
 		{
-			uint current_time = Gtk.Global.CurrentEventTime;
-			Gdk.Pointer.Ungrab (current_time);
-			Gdk.Keyboard.Ungrab (current_time);
-			Gtk.Grab.Remove (this);
+			Do.Interface.Windowing.UnpresentWindow (this);
 			if (dock_area.InputInterfaceVisible)
 				dock_area.HideInputInterface ();
 		}
@@ -313,6 +298,13 @@ namespace Docky.Interface
 		
 		public bool ResultsCanHide { 
 			get { return false; } 
+		}
+		
+		public override void Dispose ()
+		{
+			dock_area.Dispose ();
+			Destroy ();
+			base.Dispose ();
 		}
 		
 		#endregion 

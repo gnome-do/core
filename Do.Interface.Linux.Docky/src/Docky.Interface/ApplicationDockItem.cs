@@ -66,6 +66,7 @@ namespace Docky.Interface
 		bool urgent;
 		
 		Gdk.Rectangle icon_region;
+		Gdk.Pixbuf drag_pixbuf;
 		
 		string Exec {
 			get {
@@ -77,7 +78,9 @@ namespace Docky.Interface
 		
 		public override Pixbuf GetDragPixbuf ()
 		{
-			return Application.Icon;
+			if (drag_pixbuf == null)
+				drag_pixbuf = GetSurfacePixbuf ();
+			return drag_pixbuf;
 		}
 		
 		/// <summary>

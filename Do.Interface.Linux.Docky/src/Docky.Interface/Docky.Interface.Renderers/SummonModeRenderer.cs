@@ -139,7 +139,7 @@ namespace Docky.Interface.Renderers
 				cr.Scale (zoom, zoom);
 				cr.SetSource (LargeIconCache.GetSurface (icon), 
 				              left_x * (1 / zoom), 
-				              ((dockArea.Y + dockArea.Height) - (DockPreferences.IconSize * 2 * zoom) - parent.VerticalBuffer) * (1 / zoom));
+				              ((dockArea.Y + dockArea.Height) - (DockPreferences.IconSize * 2 * zoom) - 5) * (1 / zoom));
 				cr.PaintWithAlpha (opacity);
 				cr.Scale (1 / zoom, 1 / zoom);
 			}

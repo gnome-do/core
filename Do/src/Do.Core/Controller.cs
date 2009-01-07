@@ -477,7 +477,7 @@ namespace Do.Core {
 		{
 			if (im.FilterKeypress (evnt) || ((evnt.State & ModifierType.ControlMask) != 0))
 				return;
-//			im.Reset ();
+			
 			char c;
 			if (evnt.Key == Key.Return) {
 				c = '\n';
@@ -822,10 +822,7 @@ namespace Do.Core {
 					third.IncreaseRelevance (modItemQuery, action);
 			}
 
-			Gtk.Application.Invoke ((sender, e) =>
-				PerformAction (action, items, modItems)
-			);
-
+			PerformAction (action, items, modItems);
 			if (vanish) Reset ();
 		}
 
@@ -879,8 +876,9 @@ namespace Do.Core {
 					// Reload universe.
 					Do.UniverseManager.Reload ();
 				};
-				Windowing.PresentWindow (PreferencesWindow);
 			}
+			
+			PreferencesWindow.Show ();
 		}
 
 		public void ShowAbout ()
