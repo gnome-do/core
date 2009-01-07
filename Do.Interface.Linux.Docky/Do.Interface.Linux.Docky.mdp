@@ -55,6 +55,7 @@
     <File name="src/Docky.Interface/SimpleMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/LaunchMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/WindowMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/ItemPositionProvider.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

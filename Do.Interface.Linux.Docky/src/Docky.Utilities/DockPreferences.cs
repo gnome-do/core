@@ -34,6 +34,8 @@ namespace Docky.Utilities
 	{
 		public static event Action AutohideChanged;
 		public static event Action IconSizeChanged;
+	
+		public const int IconBorderWidth = 2;
 		
 		static IPreferences prefs = Services.Preferences.Get<DockPreferences> ();
 		const int DefaultIconSize = 64;

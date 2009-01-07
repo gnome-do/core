@@ -45,7 +45,7 @@ namespace Docky.Interface
 		
 		public AbstractMenuButtonArgs (string description, string icon, bool sensitive)
 		{
-			Description = Catalog.GetString (description);
+			Description = Catalog.GetString (GLib.Markup.EscapeText (description));
 			Icon = icon;
 			Sensitive = sensitive;
 		}
