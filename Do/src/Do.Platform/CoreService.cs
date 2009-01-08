@@ -34,8 +34,9 @@ namespace Do.Platform
 	{
 		#region ICoreService
 		
-		public bool UniverseFirstBuildCompleted {
-			get { return Do.UniverseManager.BuildCompleted; }
+		public event EventHandler UniverseInitialized {
+			add    { Do.UniverseManager.Initialized += value; }
+			remove { Do.UniverseManager.Initialized -= value; }
 		}
 
 		public Element GetElement (string uniqueId)

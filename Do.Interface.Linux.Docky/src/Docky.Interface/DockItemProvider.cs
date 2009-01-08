@@ -118,23 +118,12 @@ namespace Docky.Interface
 			statistical_items = new List<DockItem> ();
 			task_items = new List<ApplicationDockItem> ();
 			
-			
 			RegisterEvents ();
-			
-			// We give core 3 seconds to update its universe.  Eventually we will need a signal or something,
-			// but for now this works.
-			GLib.Timeout.Add (200, delegate {
-				if (!Services.Core.UniverseFirstBuildCompleted)
-					return true;
-				
-				UpdatesEnabled = true;
-				UpdateItems ();
-				return false;
-			});
 		}
 		
 		void RegisterEvents ()
 		{
+			Services.Core.UniverseInitialized += OnUniverseInitialized;
 			Wnck.Screen.Default.WindowClosed += OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened += OnWindowOpened;
 			DockPreferences.TrashVisibilityChanged += OnDockItemsChanged;
@@ -142,6 +131,7 @@ namespace Docky.Interface
 		
 		void UnregisterEvents ()
 		{
+			Services.Core.UniverseInitialized -= OnUniverseInitialized;
 			Wnck.Screen.Default.WindowClosed -= OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened -= OnWindowOpened;
 			DockPreferences.TrashVisibilityChanged -= OnDockItemsChanged;
@@ -555,6 +545,12 @@ namespace Docky.Interface
 			
 			if (DockItemsChanged != null)
 				DockItemsChanged (DockItems);
+		}
+
+		void OnUniverseInitialized (object sender, EventArgs e) 
+		{
+			UpdatesEnabled = true;
+			UpdateItems ();
 		}
 		
 		public void Dispose ()

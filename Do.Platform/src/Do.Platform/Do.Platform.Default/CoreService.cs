@@ -28,10 +28,17 @@ namespace Do.Platform.Default
 	
 	public class CoreService : ICoreService
 	{
+
 		#region ICoreService
 		
-		public bool UniverseFirstBuildCompleted {
-			get { return false; }
+		public event EventHandler UniverseInitialized {
+			add {
+				Log.Debug ("Default ICoreService cannot add to UniverseInitialized.");
+				value (this, EventArgs.Empty);
+			}
+			remove {
+				Log.Debug ("Default ICoreService cannot remove from UniverseInitialized.");
+			}
 		}
 		
 		public Element GetElement (string uid)

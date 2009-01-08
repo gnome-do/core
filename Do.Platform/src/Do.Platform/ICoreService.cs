@@ -28,7 +28,7 @@ namespace Do.Platform
 	
 	public interface ICoreService : IService
 	{
-		bool UniverseFirstBuildCompleted { get; }
+		event EventHandler UniverseInitialized;
 		
 		Element GetElement (string uniqueId);
 		

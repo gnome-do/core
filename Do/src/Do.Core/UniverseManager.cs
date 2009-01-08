@@ -36,6 +36,7 @@ namespace Do.Core
 
 		Thread thread, update_thread;
 		Dictionary<string, Element> universe;
+		EventHandler onInitialized;
 		
 		object universe_lock = new object ();
 		
@@ -61,7 +62,18 @@ namespace Do.Core
 			}
 		}
 		
-		public bool BuildCompleted { get; set; }
+		bool BuildCompleted { get; set; }
+
+		public event EventHandler Initialized {
+			add {
+				if (BuildCompleted)
+					value (this, EventArgs.Empty);
+				onInitialized += value;
+			}
+			remove {
+				onInitialized -= value;
+			}
+		}
 		
 		public bool UpdatesEnabled { get; set; }
 		
@@ -219,7 +231,12 @@ namespace Do.Core
 				UpdateSource (source.Safe);
 			
 			Log.Info ("Universe contains {0} items.", universe.Count);
-			BuildCompleted = true;
+
+			Gtk.Application.Invoke ((sender, e) => {
+				BuildCompleted = true;
+				if (onInitialized != null)
+					onInitialized (this, EventArgs.Empty);
+			});
 		}
 		
 		/// <summary>
