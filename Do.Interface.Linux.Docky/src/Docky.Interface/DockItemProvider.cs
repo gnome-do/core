@@ -94,12 +94,15 @@ namespace Docky.Interface
 					output_items.Add (MenuItem);
 					output_items.AddRange (DragableItems.Cast<IDockItem> ());
 				
-					output_items.Add (Separator);
+					if (task_items.Any () || DockPreferences.ShowTrash)
+						output_items.Add (Separator);
+					
 					if (task_items.Any ()) {
 						output_items.AddRange (task_items.Cast<IDockItem> ());
 					}
 				
-					output_items.Add (TrashItem);
+					if (DockPreferences.ShowTrash)
+						output_items.Add (TrashItem);
 				}
 				return output_items;
 			}
@@ -131,12 +134,14 @@ namespace Docky.Interface
 		{
 			Wnck.Screen.Default.WindowClosed += OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened += OnWindowOpened;
+			DockPreferences.TrashVisibilityChanged += OnDockItemsChanged;
 		}
 		
 		void UnregisterEvents ()
 		{
 			Wnck.Screen.Default.WindowClosed -= OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened -= OnWindowOpened;
+			DockPreferences.TrashVisibilityChanged -= OnDockItemsChanged;
 		}
 		
 		private void OnWindowClosed (object o, WindowClosedArgs args) 

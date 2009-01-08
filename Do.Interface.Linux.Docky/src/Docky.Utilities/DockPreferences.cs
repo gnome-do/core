@@ -34,6 +34,7 @@ namespace Docky.Utilities
 	{
 		public static event Action AutohideChanged;
 		public static event Action IconSizeChanged;
+		public static event Action TrashVisibilityChanged;
 	
 		public const int IconBorderWidth = 2;
 		
@@ -146,6 +147,20 @@ namespace Docky.Utilities
 				autohide = value;
 				if (AutohideChanged != null)
 					AutohideChanged ();
+			}
+		}
+		
+		static bool show_trash = prefs.Get<bool> ("ShowTrash", true);
+		public static bool ShowTrash {
+			get { return show_trash; }
+			set {
+				if (show_trash == value)
+					return;
+				prefs.Set ("ShowTrash", value);
+				show_trash = value;
+				
+				if (TrashVisibilityChanged != null)
+					TrashVisibilityChanged ();
 			}
 		}
 		

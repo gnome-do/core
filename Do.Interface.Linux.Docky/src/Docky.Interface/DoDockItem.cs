@@ -34,6 +34,8 @@ namespace Docky.Interface
 	public class DoDockItem : AbstractDockItem, IRightClickable
 	{
 		const string DoIcon = "gnome-do";
+		const string EnableIcon = "gtk-ok";
+		const string DisableIcon = "gtk-delete";
 		
 		#region IDockItem implementation 
 		
@@ -77,14 +79,20 @@ namespace Docky.Interface
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
 			if (DockPreferences.AutoHide)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, "Disable Autohide", "gtk-delete");
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, "Disable Autohide", DisableIcon);
 			else
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, "Enable Autohide", "gtk-ok");
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, "Enable Autohide", EnableIcon);
 			
 			if (DockPreferences.ZoomEnabled)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, "Disable Zoom", "gtk-delete");
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, "Disable Zoom", DisableIcon);
 			else
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = true, "Enable Zoom", "gtk-ok");
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = true, "Enable Zoom", EnableIcon);
+			
+			if (DockPreferences.ShowTrash)
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = false, "Hide Trash Icon", DisableIcon);
+			else
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = true, "Show Trash Icon", EnableIcon);
+			
 		}
 		
 		#endregion 

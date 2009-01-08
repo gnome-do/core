@@ -62,8 +62,8 @@ namespace Docky.Interface
 		
 		Gdk.CursorType cursor_type = CursorType.LeftPtr;
 		
-		DateTime enter_time = DateTime.UtcNow;
-		DateTime interface_change_time = DateTime.UtcNow;
+		DateTime enter_time = DateTime.UtcNow - new TimeSpan (0, 10, 0);
+		DateTime interface_change_time = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 		
 		bool drag_resizing;
 		bool gtk_drag_source_set;
