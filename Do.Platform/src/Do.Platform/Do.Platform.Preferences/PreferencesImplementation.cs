@@ -32,9 +32,7 @@ namespace Do.Platform.Preferences
 		IPreferencesService Service { get; set; }
 		IPreferencesService SecureService { get; set; }
 
-		string OwnerString {
-			get { return typeof (TOwner).Name; }
-		}
+		readonly string OwnerString = typeof (TOwner).FullName.Replace (".", "/");
 		
 		public PreferencesImplementation (IPreferencesService service, ISecurePreferencesService secureService)
 		{
