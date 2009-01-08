@@ -39,7 +39,7 @@ namespace Docky.Interface
 		const int TailHeight = 15;
 		new const int BorderWidth = 2;
 		const int Radius = 10;
-		const int Width = 225;
+		const int Width = 230;
 		
 		int horizontal_offset;
 		

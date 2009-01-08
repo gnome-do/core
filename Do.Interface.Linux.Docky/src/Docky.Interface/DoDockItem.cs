@@ -79,19 +79,32 @@ namespace Docky.Interface
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
 			if (DockPreferences.AutoHide)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, "Disable Autohide", DisableIcon);
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, 
+				                                       "Disable Autohide", DisableIcon);
 			else
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, "Enable Autohide", EnableIcon);
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, 
+				                                       "Enable Autohide", EnableIcon);
 			
 			if (DockPreferences.ZoomEnabled)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, "Disable Zoom", DisableIcon);
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, 
+				                                       "Disable Zoom", DisableIcon);
 			else
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = true, "Enable Zoom", EnableIcon);
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = true, 
+				                                       "Enable Zoom", EnableIcon);
 			
 			if (DockPreferences.ShowTrash)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = false, "Hide Trash Icon", DisableIcon);
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = false, 
+				                                       "Hide Trash Icon", DisableIcon);
 			else
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = true, "Show Trash Icon", EnableIcon);
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = true, 
+				                                       "Show Trash Icon", EnableIcon);
+			
+			if (DockPreferences.IndicateMultipleWindows)
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = false, 
+				                                       "Single Window Indicator", DisableIcon);
+			else
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = true, 
+				                                       "Multiple Window Indicator", EnableIcon);
 			
 		}
 		
