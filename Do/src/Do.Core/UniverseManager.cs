@@ -265,10 +265,12 @@ namespace Do.Core
 		/// </param>
 		public bool TryGetElementForUniqueId (string uid, out Element o)
 		{
-			if (universe.ContainsKey (uid)) {
-				o = universe [uid];
-			} else {
-				o = null;
+			lock (universe_lock) {
+				if (universe.ContainsKey (uid)) {
+					o = universe [uid];
+				} else {
+					o = null;
+				}
 			}
 			return o == null;
 		}
