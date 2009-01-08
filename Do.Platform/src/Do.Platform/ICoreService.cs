@@ -28,6 +28,8 @@ namespace Do.Platform
 	
 	public interface ICoreService : IService
 	{
+		bool UniverseFirstBuildCompleted { get; }
+		
 		Element GetElement (string uniqueId);
 		
 		IEnumerable<Item> GetItemsOrderedByRelevance ();

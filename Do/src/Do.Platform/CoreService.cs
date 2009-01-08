@@ -33,6 +33,10 @@ namespace Do.Platform
 	public class CoreService : ICoreService
 	{
 		#region ICoreService
+		
+		public bool UniverseFirstBuildCompleted {
+			get { return Do.UniverseManager.BuildCompleted; }
+		}
 
 		public Element GetElement (string uniqueId)
 		{

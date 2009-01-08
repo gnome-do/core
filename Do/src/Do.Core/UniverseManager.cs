@@ -61,6 +61,8 @@ namespace Do.Core
 			}
 		}
 		
+		public bool BuildCompleted { get; set; }
+		
 		public bool UpdatesEnabled { get; set; }
 		
 		public UniverseManager ()
@@ -217,6 +219,7 @@ namespace Do.Core
 				UpdateSource (source.Safe);
 			
 			Log.Info ("Universe contains {0} items.", universe.Count);
+			BuildCompleted = true;
 		}
 		
 		/// <summary>

@@ -123,7 +123,10 @@ namespace Docky.Interface
 			
 			// We give core 3 seconds to update its universe.  Eventually we will need a signal or something,
 			// but for now this works.
-			GLib.Timeout.Add (3000, delegate {
+			GLib.Timeout.Add (200, delegate {
+				if (!Services.Core.UniverseFirstBuildCompleted)
+					return true;
+				
 				UpdatesEnabled = true;
 				UpdateItems ();
 				return false;

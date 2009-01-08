@@ -30,6 +30,10 @@ namespace Do.Platform.Default
 	{
 		#region ICoreService
 		
+		public bool UniverseFirstBuildCompleted {
+			get { return false; }
+		}
+		
 		public Element GetElement (string uid)
 		{
 			Log.Debug ("Default ICoreService cannot get Elements.");
