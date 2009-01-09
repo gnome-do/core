@@ -80,31 +80,31 @@ namespace Docky.Interface
 		{
 			if (DockPreferences.AutoHide)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, 
-				                                       "Disable Autohide", DisableIcon);
+				                                       "Pin Visiblity", "status_lock");
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, 
-				                                       "Enable Autohide", EnableIcon);
+				                                       "Unpin Visibility", "status_unlocked");
 			
 			if (DockPreferences.ZoomEnabled)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, 
 				                                       "Disable Zoom", DisableIcon);
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = true, 
-				                                       "Enable Zoom", EnableIcon);
+				                                       "Enable Zoom", "stock_allow-effects");
 			
 			if (DockPreferences.ShowTrash)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = false, 
 				                                       "Hide Trash Icon", DisableIcon);
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = true, 
-				                                       "Show Trash Icon", EnableIcon);
+				                                       "Show Trash Icon", "gnome-stock-trash");
 			
 			if (DockPreferences.IndicateMultipleWindows)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = false, 
 				                                       "Single Window Indicator", DisableIcon);
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = true, 
-				                                       "Multiple Window Indicator", EnableIcon);
+				                                       "Multiple Window Indicator", "gnome-windows");
 			
 		}
 		
