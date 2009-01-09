@@ -33,7 +33,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class TrashDockItem :  AbstractDockItem
+	public class TrashDockItem :  BaseDockItem
 	{
 		const string TrashEmptyIcon = "gnome-stock-trash";
 		const string TrashFullIcon = "gnome-stock-trash-full";
@@ -99,8 +99,12 @@ namespace Docky.Interface
 		{
 			if (button == 1) {
 				Services.Environment.OpenUrl ("trash://");
-				LastClick = DateTime.UtcNow;
+				AnimationType = ClickAnimationType.Bounce;
+			} else {
+				AnimationType = ClickAnimationType.None;
 			}
+			
+			base.Clicked (button);
 		}
 
 	}

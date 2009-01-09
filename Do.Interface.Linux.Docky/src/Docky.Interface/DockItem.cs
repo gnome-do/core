@@ -39,7 +39,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItem : AbstractDockItem, IRightClickable, IDockAppItem
+	public class DockItem : BaseDockItem, IRightClickable, IDockAppItem
 	{
 		Item element;
 		List<Wnck.Application> apps;
@@ -258,17 +258,18 @@ namespace Docky.Interface
 		public override void Clicked (uint button)
 		{
 			if (!apps.Any () || !HasVisibleApps || button == 2) {
+				AnimationType = ClickAnimationType.Bounce;
 				Launch ();
-				return;
-			}
-				
-			if (button == 1)
+			} else if (button == 1) {
+				AnimationType = ClickAnimationType.Darken;
 				WindowUtils.PerformLogicalClick (apps);
+			}
+			
+			base.Clicked (button);
 		}
 		
 		void Launch ()
 		{
-			LastClick = DateTime.UtcNow;
 			if (Element is IFileItem)
 				Services.Core.PerformDefaultAction (Element as Item, new [] { typeof (OpenAction), });
 			else
@@ -290,7 +291,7 @@ namespace Docky.Interface
 			                      .ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height)));
 		}
 		
-		public override bool Equals (IDockItem other)
+		public override bool Equals (BaseDockItem other)
 		{
 			DockItem di = other as DockItem;
 			return di != null && di.Element.UniqueId == Element.UniqueId;

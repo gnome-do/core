@@ -42,7 +42,7 @@ namespace Docky.Interface
 	}
 	
 	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);
-	public delegate void DockItemsChangedHandler (IEnumerable<IDockItem> items);
+	public delegate void DockItemsChangedHandler (IEnumerable<BaseDockItem> items);
 	
 	public class DockItemProvider : IDisposable
 	{
@@ -52,7 +52,7 @@ namespace Docky.Interface
 		
 		Dictionary<string, DockItem> custom_items;
 		List<DockItem> statistical_items;
-		List<IDockItem> output_items; 
+		List<BaseDockItem> output_items; 
 		List<ApplicationDockItem> task_items;
 		bool enable_serialization = true;
 		bool custom_items_read = false;
@@ -77,9 +77,9 @@ namespace Docky.Interface
 			}
 		}
 		
-		IDockItem Separator { get; set; }
-		IDockItem MenuItem { get; set; }
-		IDockItem TrashItem { get; set; }
+		BaseDockItem Separator { get; set; }
+		BaseDockItem MenuItem { get; set; }
+		BaseDockItem TrashItem { get; set; }
 		
 		IEnumerable<DockItem> DragableItems {
 			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
@@ -87,18 +87,18 @@ namespace Docky.Interface
 		
 		public bool UpdatesEnabled { get; set; }
 		
-		public List<IDockItem> DockItems {
+		public List<BaseDockItem> DockItems {
 			get {
 				if (output_items == null) {
-					output_items = new List<IDockItem> ();
+					output_items = new List<BaseDockItem> ();
 					output_items.Add (MenuItem);
-					output_items.AddRange (DragableItems.Cast<IDockItem> ());
+					output_items.AddRange (DragableItems.Cast<BaseDockItem> ());
 				
 					if (task_items.Any () || DockPreferences.ShowTrash)
 						output_items.Add (Separator);
 					
 					if (task_items.Any ()) {
-						output_items.AddRange (task_items.Cast<IDockItem> ());
+						output_items.AddRange (task_items.Cast<BaseDockItem> ());
 					}
 				
 					if (DockPreferences.ShowTrash)
@@ -277,7 +277,7 @@ namespace Docky.Interface
 			UpdateItems ();
 		}
 		
-		public IconSource GetIconSource (IDockItem item) {
+		public IconSource GetIconSource (BaseDockItem item) {
 			if (item is ApplicationDockItem && task_items.Contains (item as ApplicationDockItem))
 				return IconSource.Application;
 			
@@ -311,6 +311,7 @@ namespace Docky.Interface
 			return Services.Core
 				.GetItemsOrderedByRelevance ()
 				.Where (item => item.GetType ().Name != "SelectedTextItem" && item.GetType ().Name != "GNOMETrashFileItem")
+				.Where (item => !(item is ItemSource))
 				.Where (item => !DockPreferences.ItemBlacklist.Contains (item.UniqueId))
 				.Take (DockPreferences.AutomaticIcons)
 				.OrderByDescending (item => item is IApplicationItem)
@@ -557,7 +558,7 @@ namespace Docky.Interface
 		{
 			UnregisterEvents ();
 			
-			foreach (IDockItem di in DockItems) {
+			foreach (BaseDockItem di in DockItems) {
 				if (di is IRightClickable)
 					(di as IRightClickable).RemoveClicked -= HandleRemoveClicked;
 				if (di is IDockAppItem)

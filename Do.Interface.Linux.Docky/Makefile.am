@@ -6,8 +6,9 @@ TARGET = library
 
 FILES = \
 	AssemblyInfo.cs \
-	src/Docky.Interface/AbstractDockItem.cs \
+	src/Docky.Interface/BaseDockItem.cs \
 	src/Docky.Interface/ApplicationDockItem.cs \
+	src/Docky.Interface/ClickAnimationType.cs \
 	src/Docky.Interface/DoDockItem.cs \
 	src/Docky.Interface/DockArea.cs \
 	src/Docky.Interface/DockAnimationState.cs \
@@ -20,7 +21,7 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Renderers/DockBackgroundRenderer.cs \
 	src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs \
 	src/Docky.Interface/DrawState.cs \
-	src/Docky.Interface/IDockItem.cs \
+	src/Docky.Interface/IDockAppItem.cs \
 	src/Docky.Interface/IRightClickable.cs \
 	src/Docky.Interface/ItemPositionProvider.cs \
 	src/Docky.Interface/AbstractMenuButtonArgs.cs \

@@ -104,8 +104,11 @@ namespace Docky.Utilities
 		public static int IconSize {
 			get { return Math.Min (icon_size, MaxIconSize); }
 			set {
-				if (value < 24 || value > 128)
-					return;
+				if (value < 24)
+					value = 24;
+				if (value > 128)
+					value = 128;
+				
 				if (Math.Abs (value - 64) < 4)
 					value = 64;
 				if (Math.Abs (value - 32) < 4)

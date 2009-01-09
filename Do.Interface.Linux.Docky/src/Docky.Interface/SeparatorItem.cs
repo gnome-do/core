@@ -19,6 +19,7 @@
 using System;
 
 using Cairo;
+using Gdk;
 
 using Do.Interface;
 using Do.Interface.CairoUtils;
@@ -27,35 +28,20 @@ using Docky.Utilities;
 
 namespace Docky.Interface
 {
-	public class SeparatorItem : IDockItem
+	public class SeparatorItem : BaseDockItem
 	{
 		Surface sr;
 		#region IDockItem implementation 
 		
-		public DateTime LastClick { get; set; }
-		public DateTime DockAddItem { get; set; }
-		
-		public string Description {
+		public override string Description {
 			get { return ""; }
 		}
 		
-		public int Width {
+		public override int Width {
 			get { return (int) (DockPreferences.IconSize * .3); }
 		}
 		
-		public int Height {
-			get { return DockPreferences.IconSize; }
-		}
-		
-		public bool IsAcceptingDrops {
-			get { return false; }
-		}
-		
-		public int WindowCount { 
-			get { return 0; } 
-		}
-		
-		public bool Scalable { 
+		public override bool Scalable { 
 			get { return false; } 
 		}
 		
@@ -63,6 +49,8 @@ namespace Docky.Interface
 		
 		public SeparatorItem ()
 		{
+			AnimationType = ClickAnimationType.None;
+			
 			DockPreferences.IconSizeChanged += delegate {
 				if (sr != null)
 					sr.Destroy ();
@@ -70,7 +58,13 @@ namespace Docky.Interface
 			};
 		}
 		
-		public Surface GetIconSurface (Surface buffer)
+		protected override Pixbuf GetSurfacePixbuf ()
+		{
+			return null;
+		}
+
+		
+		public override Surface GetIconSurface (Surface buffer)
 		{
 			if (sr == null) {
 				sr = buffer.CreateSimilar (buffer.Content, Width, DockPreferences.IconSize);
@@ -89,32 +83,14 @@ namespace Docky.Interface
 			return sr;
 		}
 		
-		public Surface GetTextSurface (Surface similar)
+		public override Surface GetTextSurface (Surface similar)
 		{
 			return null;
 		}
 		
-		public Gdk.Pixbuf GetDragPixbuf ()
-		{
-			return null;
-		}
-		
-		public bool ReceiveItem (string item)
-		{
-			return false;
-		}
-		
-		public void Clicked (uint button)
-		{
-		}
-		
-		public void SetIconRegion (Gdk.Rectangle region)
-		{
-		}
-
 		#region IDisposable implementation 
 		
-		public void Dispose ()
+		public override void Dispose ()
 		{
 			if (sr != null)
 				sr.Destroy ();
@@ -122,7 +98,7 @@ namespace Docky.Interface
 		
 		#endregion 
 		
-		public bool Equals (IDockItem other) 
+		public override bool Equals (BaseDockItem other) 
 		{
 			return GetHashCode ().Equals (other.GetHashCode ());
 		}

@@ -1,6 +1,6 @@
-// UpdateRequestArgs.cs
+// IDockAppItem.cs
 // 
-// Copyright (C) 2008 GNOME Do
+// Copyright (C) 2009 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,41 +17,25 @@
 //
 
 using System;
-using System.Collections.Generic;
 
-namespace Docky.Interface
-{
-	/// <summary>
-	/// An update request
-	/// </summary>
-	public enum UpdateRequestType {
-		NeedsAttentionSet,
-		NeedsAttentionUnset,
-		IconChanged,
-		NameChanged,
-	}
-	
-	public class UpdateRequestArgs
+namespace Docky.Interface {
+
+	public interface IDockAppItem
 	{
-	
 		/// <value>
-		/// The item requesting the update
+		/// Fired whenever an icon needs to be redrawn
 		/// </value>
-		public BaseDockItem Item {
-			get; private set;
-		}
+		event UpdateRequestHandler UpdateNeeded;
 		
 		/// <summary>
-		/// The type of update
+		/// Determines if an icon is in the urgent state
 		/// </summary>
-		public UpdateRequestType Type {
-			get; private set;
-		}
+		bool NeedsAttention { get; }
 		
-		public UpdateRequestArgs(BaseDockItem item, UpdateRequestType type)
-		{
-			Item = item;
-			Type = type;
-		}
+		/// <value>
+		/// The time in which the ugency request was started
+		/// </value>
+		DateTime AttentionRequestStartTime { get; }
 	}
 }
+

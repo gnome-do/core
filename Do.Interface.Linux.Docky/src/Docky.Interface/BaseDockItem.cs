@@ -32,10 +32,11 @@ namespace Docky.Interface
 {
 
 	
-	public abstract class AbstractDockItem : IDockItem
+	public abstract class BaseDockItem : IDisposable, IEquatable<BaseDockItem>
 	{
-		Surface text_surface, icon_surface;
-		#region IDockItem implementation 
+		Surface text_surface, icon_surface, resize_buffer;
+		uint size_changed_timer;
+		int current_size;
 		
 		public virtual bool IsAcceptingDrops { 
 			get { return false; } 
@@ -53,6 +54,7 @@ namespace Docky.Interface
 		
 		protected virtual Surface MakeIconSurface (Surface similar)
 		{
+			current_size = DockPreferences.FullIconSize;
 			Surface tmp_surface = similar.CreateSimilar (similar.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
 			Context cr = new Context (tmp_surface);
 			
@@ -119,6 +121,7 @@ namespace Docky.Interface
 		/// </param>
 		public virtual void Clicked (uint button)
 		{
+			LastClick = DateTime.UtcNow;
 		}
 		
 		/// <summary>
@@ -174,18 +177,27 @@ namespace Docky.Interface
 		/// </value>
 		public virtual DateTime DockAddItem { get; set; }
 		
-		#endregion 
+		public double MillisecondsFromClick {
+			get {
+				return (DateTime.UtcNow - LastClick).TotalMilliseconds;
+			}
+		}
 		
-
+		public double MillisecondsFromAdd {
+			get {
+				return (DateTime.UtcNow - DockAddItem).TotalMilliseconds;
+			}
+		}
 		
-		public AbstractDockItem ()
+		public virtual ClickAnimationType AnimationType { get; protected set; }
+		
+		public BaseDockItem ()
 		{
 			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
-			
 			DockPreferences.IconSizeChanged += OnIconSizeChanged;
 		}
 		
-		protected virtual void OnIconSizeChanged ()
+		void ResetSurfaces ()
 		{
 			if (text_surface != null) {
 				text_surface.Destroy ();
@@ -196,28 +208,60 @@ namespace Docky.Interface
 				icon_surface.Destroy ();
 				icon_surface = null;
 			}
+			
+			if (resize_buffer != null) {
+				resize_buffer.Destroy ();
+				resize_buffer = null;
+			}
 		}
-
+		
+		void OnIconSizeChanged ()
+		{
+			if (size_changed_timer > 0)
+				GLib.Source.Remove (size_changed_timer);
+			
+			if (icon_surface != null) {
+				if (resize_buffer == null)
+					resize_buffer = CopySurface (icon_surface, current_size, current_size);
+				
+				Surface new_surface = resize_buffer.CreateSimilar (resize_buffer.Content, 
+				                                                  DockPreferences.FullIconSize, 
+				                                                  DockPreferences.FullIconSize);
+				using (Context cr = new Context (new_surface)) {
+					double scale = (double) DockPreferences.FullIconSize / (double) current_size;
+					cr.Scale (scale, scale);
+					resize_buffer.Show (cr, 0, 0);
+				}
+				icon_surface.Destroy ();
+				icon_surface = new_surface;
+			}
+			
+			size_changed_timer = GLib.Timeout.Add (150, delegate {
+				ResetSurfaces ();
+				return false;
+			});
+		}
+		
+		Surface CopySurface (Surface source, int width, int height)
+		{
+			Surface sr = source.CreateSimilar (source.Content, width, height);
+			using (Context cr = new Context (sr)) {
+				source.Show (cr, 0, 0);
+			}
+			return sr;
+		}
+		
 		#region IDisposable implementation 
 		
 		public virtual void Dispose ()
 		{
 			DockPreferences.IconSizeChanged -= OnIconSizeChanged;
-			
-			if (text_surface != null) {
-				text_surface.Destroy ();
-				text_surface = null;
-			}
-			
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
+			ResetSurfaces ();
 		}
 		
 		#endregion 
 		
-		public virtual bool Equals (IDockItem other)
+		public virtual bool Equals (BaseDockItem other)
 		{
 			return other == this;
 		}

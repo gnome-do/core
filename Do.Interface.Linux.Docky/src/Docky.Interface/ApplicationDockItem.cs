@@ -37,7 +37,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ApplicationDockItem : AbstractDockItem, IRightClickable, IDockAppItem
+	public class ApplicationDockItem : BaseDockItem, IRightClickable, IDockAppItem
 	{
 		public event EventHandler RemoveClicked;
 		
@@ -238,8 +238,14 @@ namespace Docky.Interface
 		
 		public override void Clicked (uint button)
 		{
-			if (button == 1)
+			if (button == 1) {
 				WindowUtils.PerformLogicalClick (new [] { Application });
+				AnimationType = ClickAnimationType.Darken;
+			} else {
+				AnimationType = ClickAnimationType.None;
+			}
+			
+			base.Clicked (button);
 		}
 
 		public override void SetIconRegion (Gdk.Rectangle region)
@@ -253,7 +259,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public override bool Equals (IDockItem other)
+		public override bool Equals (BaseDockItem other)
 		{
 			if (!(other is ApplicationDockItem))
 				return false;

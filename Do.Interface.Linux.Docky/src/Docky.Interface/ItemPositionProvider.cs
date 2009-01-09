@@ -35,7 +35,7 @@ namespace Docky.Interface
 		DockItemProvider item_provider;
 		Rectangle clip_area;
 		
-		List<IDockItem> DockItems {
+		List<BaseDockItem> DockItems {
 			get { return item_provider.DockItems; }
 		}
 		
@@ -45,7 +45,7 @@ namespace Docky.Interface
 		public int DockWidth {
 			get {
 				int val = 2 * HorizontalBuffer;
-				foreach (IDockItem di in DockItems)
+				foreach (BaseDockItem di in DockItems)
 					val += 2 * DockPreferences.IconBorderWidth + di.Width;
 				return val;
 			}

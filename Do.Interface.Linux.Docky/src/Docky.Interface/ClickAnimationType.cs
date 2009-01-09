@@ -1,6 +1,6 @@
-// UpdateRequestArgs.cs
+// ClickAnimationType.cs
 // 
-// Copyright (C) 2008 GNOME Do
+// Copyright (C) 2009 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,41 +17,13 @@
 //
 
 using System;
-using System.Collections.Generic;
 
 namespace Docky.Interface
 {
-	/// <summary>
-	/// An update request
-	/// </summary>
-	public enum UpdateRequestType {
-		NeedsAttentionSet,
-		NeedsAttentionUnset,
-		IconChanged,
-		NameChanged,
-	}
-	
-	public class UpdateRequestArgs
+	public enum ClickAnimationType
 	{
-	
-		/// <value>
-		/// The item requesting the update
-		/// </value>
-		public BaseDockItem Item {
-			get; private set;
-		}
-		
-		/// <summary>
-		/// The type of update
-		/// </summary>
-		public UpdateRequestType Type {
-			get; private set;
-		}
-		
-		public UpdateRequestArgs(BaseDockItem item, UpdateRequestType type)
-		{
-			Item = item;
-			Type = type;
-		}
+		None = 0,
+		Bounce,
+		Darken,
 	}
 }

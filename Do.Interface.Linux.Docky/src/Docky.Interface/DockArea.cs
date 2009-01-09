@@ -69,7 +69,6 @@ namespace Docky.Interface
 		bool gtk_drag_source_set;
 		bool previous_icon_animation_needed = true;
 		
-		int monitor_width;
 		int drag_start_icon_size;
 		int remove_drag_start_x;
 		int previous_item_count;
@@ -96,7 +95,7 @@ namespace Docky.Interface
 		/// The width of the docks window, but not the visible dock
 		/// </value>
 		public int Width {
-			get { return monitor_width; }
+			get; private set;
 		}
 		
 		/// <value>
@@ -159,11 +158,11 @@ namespace Docky.Interface
 		
 		SummonModeRenderer SummonRenderer { get; set; }
 		
-		List<IDockItem> DockItems { 
+		List<BaseDockItem> DockItems { 
 			get { return item_provider.DockItems; } 
 		}
 		
-		IDockItem CurrentDockItem {
+		BaseDockItem CurrentDockItem {
 			get {
 				try { return DockItems [PositionProvider.IndexAtPosition (Cursor.X)]; }
 				catch { return null; }
@@ -373,8 +372,8 @@ namespace Docky.Interface
 			Gdk.Rectangle geo;
 			geo = Screen.GetMonitorGeometry (0);
 			
-			monitor_width = geo.Width;
-			SetSizeRequest (geo.Width, Height);
+			Width = geo.Width;
+			SetSizeRequest (Width, Height);
 			
 			item_provider = new DockItemProvider ();
 			State = new DockState ();
@@ -402,11 +401,7 @@ namespace Docky.Interface
 			RegisterGtkDragDest ();
 			RegisterGtkDragSource ();
 			
-			GLib.Timeout.Add (20, () => {
-				//must be done after construction is complete
-				SetParentInputMask ();
-				return false;
-			});
+			window.Realized += (o, e) => SetParentInputMask ();
 		
 			ResetCursorTimer ();
 		}
@@ -443,7 +438,7 @@ namespace Docky.Interface
 		void BuildAnimationStateEngine ()
 		{
 			AnimationState.AddCondition ("IconInsertAnimationNeeded", 
-			                             () => DockItems.Any (di => (DateTime.UtcNow - di.DockAddItem).TotalMilliseconds < InsertAnimationTime));
+			                             () => DockItems.Any (di => di.MillisecondsFromAdd < InsertAnimationTime));
 			
 			AnimationState.AddCondition ("PaneChangeAnimationNeeded",
 			                             () => (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds < BaseAnimationTime);
@@ -456,7 +451,7 @@ namespace Docky.Interface
 			                             (DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime);
 			
 			AnimationState.AddCondition ("BounceAnimationNeeded",
-			                             () => DockItems.Any (di => (DateTime.UtcNow - di.LastClick).TotalMilliseconds <= BounceTime));
+			                             () => DockItems.Any (di => di.MillisecondsFromClick <= BounceTime));
 			
 			AnimationState.AddCondition ("UrgentAnimationNeeded",
 			                             () => DockItems.Where (di => di is IDockAppItem)
@@ -602,7 +597,7 @@ namespace Docky.Interface
 						break;
 					
 					// we need to know the left and right items for the parabolic zoom.  These items 
-					// represent the only icons that are atually undergoing change.  By noting what 
+					// represent the only icons that are actually undergoing change.  By noting what 
 					// these icons are, we can only draw these icons and those between them.
 					int leftItem = Math.Max (0, PositionProvider.IndexAtPosition (Math.Min (Cursor.X, previous_x) - DockPreferences.ZoomSize / 2));
 					int rightItem = PositionProvider.IndexAtPosition (Math.Max (Cursor.X, previous_x) + DockPreferences.ZoomSize / 2);
@@ -643,9 +638,8 @@ namespace Docky.Interface
 				FullRenderFlag = false;
 				// less code, twice as slow...
 				cr.AlphaFill ();
-				if (!drag_resizing || drag_edge != DragEdge.Top)
-					for (int i = 0; i < DockItems.Count; i++)
-						DrawIcon (cr, i);
+				for (int i = 0; i < DockItems.Count; i++)
+					DrawIcon (cr, i);
 			}
 		}
 		
@@ -672,24 +666,23 @@ namespace Docky.Interface
 			double zoom;
 			IconZoomedPosition (icon, out center, out zoom);
 			
-			double insertion_ms = (DateTime.UtcNow - DockItems [icon].DockAddItem).TotalMilliseconds;
-			if (insertion_ms < InsertAnimationTime) {
+			if (DockItems [icon].MillisecondsFromAdd < InsertAnimationTime) {
 				// if we just inserted the icon, we scale it down the newer it is.  This gives the nice
 				// zoom in effect for newly inserted icons
-				zoom *= insertion_ms / InsertAnimationTime;
+				zoom *= DockItems [icon].MillisecondsFromAdd / InsertAnimationTime;
 			}
 			
 			// This gives the actual x,y coordinates of the icon 
 			double x = center - zoom * DockItems [icon].Width / 2;
 			double y = Height - (zoom * DockItems [icon].Height) - PositionProvider.VerticalBuffer;
 			
-			int bounceMs = (int) (DateTime.UtcNow - DockItems [icon].LastClick).TotalMilliseconds;
+			ClickAnimationType animationType = IconAnimation (icon);
 			
 			// we will set this flag now
 			bool drawUrgency = false;
-			if (bounceMs < BounceTime) {
+			if (animationType == ClickAnimationType.Bounce) {
 				// bounces twice
-				y -= Math.Abs (30 * Math.Sin (bounceMs * Math.PI / (BounceTime / 2)));
+				y -= Math.Abs (30 * Math.Sin (DockItems [icon].MillisecondsFromClick * Math.PI / (BounceTime / 2)));
 			} else {
 				IDockAppItem dai = DockItems [icon] as IDockAppItem;
 				if (dai != null && dai.NeedsAttention) {
@@ -709,9 +702,16 @@ namespace Docky.Interface
 				// the icon, not move it around.
 				DockItems [icon].GetIconSurface (cr.Target).Show (cr, x / scale, y / scale);
 				
-				if (GtkDragging && DockItems [icon].IsAcceptingDrops && icon == PositionProvider.IndexAtPosition (Cursor.X)) {
+				bool shade_light = GtkDragging && DockItems [icon].IsAcceptingDrops && icon == PositionProvider.IndexAtPosition (Cursor.X);
+				bool shade_dark = animationType == ClickAnimationType.Darken;
+				if (shade_dark || shade_light) {
 					cr.Rectangle (x / scale, y / scale, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-					cr.Color = new Cairo.Color (.9, .95, 1, .5);
+					
+					if (shade_light) 
+						cr.Color = new Cairo.Color (.9, .95, 1, .5);
+					else
+						cr.Color = new Cairo.Color (0, 0, 0, 1 * (BounceTime - DockItems [icon].MillisecondsFromClick) / BounceTime - .7);
+					
 					cr.Operator = Operator.Atop;
 					cr.Fill ();
 					cr.Operator = Operator.Over;
@@ -746,6 +746,11 @@ namespace Docky.Interface
 			}
 		}
 		
+		ClickAnimationType IconAnimation (int icon)
+		{
+			return (DockItems [icon].MillisecondsFromClick < BounceTime) ? DockItems [icon].AnimationType : ClickAnimationType.None;
+		}
+		
 		void IconZoomedPosition (int icon, out int x, out double zoom)
 		{
 			PositionProvider.IconZoomedPosition (icon, ZoomIn, Cursor, out x, out zoom);
@@ -761,9 +766,9 @@ namespace Docky.Interface
 			return PositionProvider.DockArea (ZoomIn, Cursor);
 		}
 		
-		void OnDockItemsChanged (IEnumerable<IDockItem> items)
+		void OnDockItemsChanged (IEnumerable<BaseDockItem> items)
 		{
-			DockPreferences.MaxIconSize = (int) (((double) monitor_width / MinimumDockArea.Width) * IconSize);
+			DockPreferences.MaxIconSize = (int) (((double) Width / MinimumDockArea.Width) * IconSize);
 			
 			SetIconRegions ();
 			AnimatedDraw (true);
@@ -816,7 +821,7 @@ namespace Docky.Interface
 			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && old_cursor_location.X != Cursor.X;
 
 			if (drag_resizing || cursorMoveWarrantsDraw) 
-				AnimatedDraw (false);
+				AnimatedDraw (drag_resizing);
 		}
 		
 		#region Drag Code

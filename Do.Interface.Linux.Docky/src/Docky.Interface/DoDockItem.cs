@@ -31,7 +31,7 @@ using Docky.Utilities;
 namespace Docky.Interface
 {
 	
-	public class DoDockItem : AbstractDockItem, IRightClickable
+	public class DoDockItem : BaseDockItem, IRightClickable
 	{
 		const string DoIcon = "gnome-do";
 		const string EnableIcon = "gtk-ok";
@@ -67,7 +67,7 @@ namespace Docky.Interface
 		
 		#endregion 
 		
-		public override bool Equals (IDockItem other)
+		public override bool Equals (BaseDockItem other)
 		{
 			return other is DoDockItem;
 		}
