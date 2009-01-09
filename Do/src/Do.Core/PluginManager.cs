@@ -67,7 +67,6 @@ namespace Do.Core
 			// Register repositories.
 			SetupService setup = new SetupService (AddinManager.Registry);
 			foreach (string path in Paths.SystemPluginDirectories) {
-				if (!Directory.Exists (path)) continue;
 				string url = "file://" + path;
 				if (!setup.Repositories.ContainsRepository (url)) {
 					setup.Repositories.RegisterRepository (null, url, false);
