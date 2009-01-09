@@ -300,9 +300,7 @@ namespace Docky.Interface
 		
 		bool CursorNearTopDraggableEdge {
 			get {
-				return Math.Abs (Cursor.Y - MinimumDockArea.Y) < 5 &&
-					   CursorIsOverDockArea &&
-					   CurrentDockItem is SeparatorItem;
+				return Cursor.Y > MinimumDockArea.Y && CursorIsOverDockArea && CurrentDockItem is SeparatorItem;
 			}
 		}
 		
@@ -936,8 +934,8 @@ namespace Docky.Interface
 			if (gtk_drag_source_set && CursorNearDraggableEdge) {
 				UnregisterGtkDragSource ();
 				
-				if (cursor_type != CursorType.TopSide && CursorNearTopDraggableEdge)
-					SetCursor (CursorType.TopSide);
+				if (cursor_type != CursorType.SbVDoubleArrow && CursorNearTopDraggableEdge)
+					SetCursor (CursorType.SbVDoubleArrow);
 				else if (cursor_type != CursorType.LeftSide && CursorNearLeftEdge)
 					SetCursor (CursorType.LeftSide);
 				else if (cursor_type != CursorType.RightSide && CursorNearRightEdge)
