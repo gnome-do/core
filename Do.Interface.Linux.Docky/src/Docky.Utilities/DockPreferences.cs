@@ -35,6 +35,7 @@ namespace Docky.Utilities
 		public static event Action AutohideChanged;
 		public static event Action IconSizeChanged;
 		public static event Action TrashVisibilityChanged;
+		public static event Action AutomaticIconsChanged;
 	
 		public const int IconBorderWidth = 2;
 		
@@ -177,6 +178,9 @@ namespace Docky.Utilities
 					value = 0;
 				prefs.Set ("AutomaticIcons", value);
 				automatic_icons = value;
+				
+				if (AutomaticIconsChanged != null)
+					AutomaticIconsChanged ();
 			}
 		}
 		

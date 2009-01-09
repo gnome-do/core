@@ -43,20 +43,44 @@ namespace Docky.Utilities
 			}
 		}
 		
+		static List<Application> application_list;
+		static bool application_list_update_needed;
+		
+		static WindowUtils ()
+		{
+			Wnck.Screen.Default.WindowClosed += delegate {
+				application_list_update_needed = true;
+			};
+			
+			Wnck.Screen.Default.WindowOpened += delegate {
+				application_list_update_needed = true;
+			};
+			
+			Wnck.Screen.Default.ApplicationOpened += delegate {
+				application_list_update_needed = true;
+			};
+			
+			Wnck.Screen.Default.ApplicationClosed += delegate {
+				application_list_update_needed = true;
+			};
+		}
+		
 		/// <summary>
 		/// Returns a list of all applications on the default screen
 		/// </summary>
 		/// <returns>
 		/// A <see cref="Application"/> array
 		/// </returns>
-		public static Application[] GetApplications ()
+		public static List<Application> GetApplications ()
 		{
-			List<Application> apps = new List<Application> ();
-			foreach (Window w in Wnck.Screen.Default.Windows) {
-				if (!apps.Contains (w.Application))
-					apps.Add (w.Application);
+			if (application_list == null || application_list_update_needed) {
+				application_list = new List<Application> ();
+				foreach (Window w in Wnck.Screen.Default.Windows) {
+					if (!application_list.Contains (w.Application))
+						application_list.Add (w.Application);
+				}
 			}
-			return apps.ToArray ();
+			return application_list;
 		}
 		
 		/// <summary>
@@ -106,7 +130,7 @@ namespace Docky.Utilities
 			foreach (string dir in Directory.GetDirectories ("/proc")) {
 				int pid;
 				out_app = null;
-				try { pid = Convert.ToInt32 (dir.Substring (6)); } 
+				try { pid = Convert.ToInt32 (Path.GetFileName (dir)); } 
 				catch { continue; }
 				
 				string exec_line = CmdLineForPid (pid);

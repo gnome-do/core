@@ -55,7 +55,7 @@ namespace Docky.Interface
 		List<BaseDockItem> output_items; 
 		List<ApplicationDockItem> task_items;
 		bool enable_serialization = true;
-		bool custom_items_read = false;
+		bool custom_items_read;
 		
 		string DesktopFilesPath {
 			get {
@@ -127,6 +127,7 @@ namespace Docky.Interface
 			Wnck.Screen.Default.WindowClosed += OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened += OnWindowOpened;
 			DockPreferences.TrashVisibilityChanged += OnDockItemsChanged;
+			DockPreferences.AutomaticIconsChanged += UpdateItems;
 		}
 		
 		void UnregisterEvents ()
@@ -135,6 +136,7 @@ namespace Docky.Interface
 			Wnck.Screen.Default.WindowClosed -= OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened -= OnWindowOpened;
 			DockPreferences.TrashVisibilityChanged -= OnDockItemsChanged;
+			DockPreferences.AutomaticIconsChanged -= UpdateItems;
 		}
 		
 		private void OnWindowClosed (object o, WindowClosedArgs args) 

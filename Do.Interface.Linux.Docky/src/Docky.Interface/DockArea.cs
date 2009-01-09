@@ -1063,7 +1063,6 @@ namespace Docky.Interface
 				return;
 			}
 			
-			item_provider.ForceUpdate ();
 			drag_start_point.X = Cursor.X;
 		}
 		
