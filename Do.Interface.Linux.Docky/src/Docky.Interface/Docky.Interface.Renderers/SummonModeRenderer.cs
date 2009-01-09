@@ -207,7 +207,7 @@ namespace Docky.Interface.Renderers
 				text = GLib.Markup.EscapeText (current.Name);
 			
 			double text_scale = (DockPreferences.IconSize / 64.0);
-			int text_height = (int) (15 * text_scale);
+			int text_height = Math.Max (11, (int) (15 * text_scale));
 				
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
@@ -234,8 +234,8 @@ namespace Docky.Interface.Renderers
 				text = GLib.Markup.EscapeText (current.Name);
 			
 			double text_scale = (DockPreferences.IconSize / 64.0);
-			int text_height = (int) (15 * text_scale);
-				
+			int text_height = Math.Max (11, (int) (15 * text_scale));
+			
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
 			
