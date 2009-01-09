@@ -47,15 +47,20 @@ namespace Do {
 
 			DetectInstanceAndExit ();
 			
+			// We are conservative with the log at first.
+			Log.DisplayLevel = LogLevel.Error;
+			if (CorePreferences.PeekDebug)
+				Log.DisplayLevel = LogLevel.Debug;
+
 			PluginManager.Initialize ();
 			Preferences = new CorePreferences ();
 
+			// Now we can set the preferred log level.
+			if (Preferences.QuietStart)
+				Log.DisplayLevel = LogLevel.Error;
+			// Check for debug again in case QuietStart is also set.
 			if (Preferences.Debug)
 				Log.DisplayLevel = LogLevel.Debug;
-			else if (Preferences.QuietStart)
-				Log.DisplayLevel = LogLevel.Error;
-			else
-				Log.DisplayLevel = LogLevel.Info;
 
 			try {
 				Util.SetProcessName ("gnome-do");

@@ -63,8 +63,12 @@ namespace Do
 			get { return HasOption (LogToFileOption); }
 		}
 		
-		public bool Debug {
+		public static bool PeekDebug {
 			get { return HasOption (DebugOption); }
+		}
+
+		public bool Debug {
+			get { return CorePreferences.PeekDebug; }
 		}
 
 		public string SummonKeybinding {
@@ -97,7 +101,7 @@ namespace Do
 			set { Preferences.Set (AlwaysShowResultsKey, value); }
 		}
 		
-		bool HasOption (string option)
+		static bool HasOption (string option)
 		{
 			return Env.GetCommandLineArgs ().Contains (option);
 		}
