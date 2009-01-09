@@ -107,10 +107,14 @@ namespace Docky.Interface
 			
 				string desktopPath = GetDesktopFile (guess);
 				if (!string.IsNullOrEmpty (desktopPath)) {
-					using (Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktopPath, Gnome.DesktopItemLoadFlags.OnlyIfExists)) {
-						pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
+					try {
+						using (Gnome.DesktopItem di = Gnome.DesktopItem.NewFromFile (desktopPath, Gnome.DesktopItemLoadFlags.OnlyIfExists)) {
+							pbuf = IconProvider.PixbufFromIconName (di.GetString ("Icon"), DockPreferences.FullIconSize);
+						}
+						break;
+					} catch {
+						continue;
 					}
-					break;
 				}
 			}
 			

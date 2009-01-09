@@ -130,7 +130,7 @@ namespace Docky.Interface
 			Position = -1;
 			apps =  new List<Wnck.Application> ();
 			this.element = element;
-			
+
 			AttentionRequestStartTime = DateTime.UtcNow;
 			UpdateApplication ();
 			NeedsAttention = DetermineAttentionStatus ();

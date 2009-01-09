@@ -175,7 +175,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		#region Zoom Properties
 		/// <value>
 		/// Returns the zoom in percentage (0 through 1)
 		/// </value>
@@ -197,8 +196,6 @@ namespace Docky.Interface
 				return zoom;
 			}
 		}
-		
-		#endregion
 		
 		//// <value>
 		/// The overall offset of the dock as a whole
@@ -1054,7 +1051,7 @@ namespace Docky.Interface
 				movement = Cursor.X - drag_start_point.X;
 				break;
 			}
-			
+
 			if (movement > IconSize / 2 + 2) {
 				DockPreferences.AutomaticIcons++;
 			} else if (movement < 0 - (IconSize / 2 + 2)) {
