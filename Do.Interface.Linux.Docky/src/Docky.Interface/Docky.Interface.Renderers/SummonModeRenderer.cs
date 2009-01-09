@@ -172,26 +172,30 @@ namespace Docky.Interface.Renderers
 			string text = GLib.Markup.EscapeText (State[State.CurrentPane].Name);
 			text = Do.Interface.Util.FormatCommonSubstrings (text, State.GetPaneQuery (State.CurrentPane), HighlightFormat);
 			
-			double text_scale = (DockPreferences.IconSize / 64.0);
-			
-			int text_height;
-			if ((int) (12 * text_scale) > 8)
-				text_height = (int) (20 * text_scale);
-			else
-				text_height = (int) (35 * text_scale);
-				
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;
 			
-			TextUtility.RenderLayoutText (cr, text, base_x + TextOffset, 
-			                              dockArea.Y + (int) (15 * text_scale), dockArea.Width - TextOffset - 50, text_height,
-			                              color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
+			double text_scale = (DockPreferences.IconSize / 64.0);
+			int small_text_height = (int) (12 * text_scale);
 			
-			if ((int) (12 * text_scale) > 8) {
-				text_height = (int) (12 * text_scale);
+			int big_text_height;
+			if (8 < small_text_height) {
+				big_text_height = (int) (20 * text_scale);
+				TextUtility.RenderLayoutText (cr, text, base_x + TextOffset, 
+				                              dockArea.Y + (int) (15 * text_scale), dockArea.Width - TextOffset - 50, 
+				                              big_text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
+				
 				TextUtility.RenderLayoutText (cr, GLib.Markup.EscapeText (State[State.CurrentPane].Description), 
 				                              base_x + TextOffset, dockArea.Y + (int) (42 * text_scale), 
-				                              dockArea.Width - TextOffset - 50, text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
+				                              dockArea.Width - TextOffset - 50, small_text_height, color, 
+				                              Pango.Alignment.Left, Pango.EllipsizeMode.End);
+				
+				
+			} else {
+				big_text_height = (int) (35 * text_scale);
+				TextUtility.RenderLayoutText (cr, text, base_x + TextOffset, 
+				                              dockArea.Y + dockArea.Height / 2 - big_text_height / 2, dockArea.Width - TextOffset - 50, 
+				                              big_text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 			}
 		}
 		
