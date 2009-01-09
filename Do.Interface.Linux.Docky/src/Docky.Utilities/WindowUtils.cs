@@ -118,6 +118,10 @@ namespace Docky.Utilities
 		/// </returns>
 		public static List<Application> GetApplicationList (string exec)
 		{
+			List<Application> apps = new List<Application> ();
+			if (string.IsNullOrEmpty (exec))
+				return apps;
+			
 			foreach (string s in BadPrefixes) {
 				if (exec.StartsWith (s)) {
 					exec = exec.Substring (s.Length);
@@ -125,7 +129,7 @@ namespace Docky.Utilities
 				}
 			}
 			exec = exec.Split (' ')[0];
-			List<Application> apps = new List<Application> ();
+			
 			Application out_app = null;
 			foreach (string dir in Directory.GetDirectories ("/proc")) {
 				int pid;
@@ -139,6 +143,9 @@ namespace Docky.Utilities
 				
 				if (exec_line.Contains (exec)) {
 					foreach (Application app in GetApplications ()) {
+						if (app == null)
+							continue;
+						
 						if (app.Pid == pid) {
 							if (app.Windows.Select (win => !win.IsSkipTasklist).Any ())
 								out_app = app;
