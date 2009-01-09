@@ -67,24 +67,24 @@ namespace Docky.Interface
 		
 		bool drag_resizing;
 		bool gtk_drag_source_set;
+		bool previous_icon_animation_needed = true;
 		
 		int monitor_width;
 		int drag_start_icon_size;
 		int remove_drag_start_x;
+		int previous_item_count;
+		int previous_x = -1;
+		
 		uint animation_timer;
 		uint cursor_timer;
 		
 		double previous_zoom;
-		int previous_item_count;
-		int previous_x = -1;
-		bool previous_icon_animation_needed = true;
 		
 		DragEdge drag_edge;
 		
 		DockWindow window;
 		DockItemProvider item_provider;
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
-		DockItemMenu dock_item_menu;
 		
 		Matrix default_matrix;
 		#endregion
@@ -150,6 +150,8 @@ namespace Docky.Interface
 		DockAnimationState AnimationState { get; set; }
 		
 		ItemPositionProvider PositionProvider { get; set; }
+		
+		DockItemMenu PopupMenu { get; set; }
 		
 		bool GtkDragging { get; set; }
 		
@@ -382,7 +384,7 @@ namespace Docky.Interface
 			BuildAnimationStateEngine ();
 			
 			SummonRenderer = new SummonModeRenderer (this);
-			dock_item_menu = new DockItemMenu ();
+			PopupMenu = new DockItemMenu ();
 			
 			Cursor = new Gdk.Point (-1, -1);
 			
@@ -414,8 +416,8 @@ namespace Docky.Interface
 			item_provider.DockItemsChanged += OnDockItemsChanged;
 			item_provider.ItemNeedsUpdate += HandleItemNeedsUpdate;
 			
-			dock_item_menu.Hidden += OnDockItemMenuHidden;
-			dock_item_menu.Shown += OnDockItemMenuShown;
+			PopupMenu.Hidden += OnDockItemMenuHidden;
+			PopupMenu.Shown += OnDockItemMenuShown;
 			
 			Wnck.Screen.Default.ViewportsChanged += OnWnckViewportsChanged;
 			
@@ -432,8 +434,8 @@ namespace Docky.Interface
 			item_provider.DockItemsChanged -= OnDockItemsChanged;
 			item_provider.ItemNeedsUpdate -= HandleItemNeedsUpdate;
 			
-			dock_item_menu.Hidden -= OnDockItemMenuHidden;
-			dock_item_menu.Shown -= OnDockItemMenuShown;
+			PopupMenu.Hidden -= OnDockItemMenuHidden;
+			PopupMenu.Shown -= OnDockItemMenuShown;
 			
 			Wnck.Screen.Default.ViewportsChanged -= OnWnckViewportsChanged;
 		}
@@ -593,10 +595,10 @@ namespace Docky.Interface
 			if (CanFastRender) {
 				StoreFastRenderData ();
 				do {
-					// If the cursor has not moved and the dock_item_menu is not visible (this causes a 
+					// If the cursor has not moved and the PopupMenu is not visible (this causes a 
 					// render change without moving the cursor) we can do no rendering at all and just 
 					// take our previous frame as our current result.
-					if (previous_x == Cursor.X && !dock_item_menu.Visible && !AnimationState ["UrgentRecentChange"])
+					if (previous_x == Cursor.X && !PopupMenu.Visible && !AnimationState ["UrgentRecentChange"])
 						break;
 					
 					// we need to know the left and right items for the parabolic zoom.  These items 
@@ -735,7 +737,7 @@ namespace Docky.Interface
 			// we do a null check here to allow things like separator items to supply
 			// a null.  This allows us to draw nothing at all instead of rendering a
 			// blank surface (which is slow)
-			if (!dock_item_menu.Visible && PositionProvider.IndexAtPosition (Cursor.X) == icon && 
+			if (!PopupMenu.Visible && PositionProvider.IndexAtPosition (Cursor.X) == icon && 
 			    CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null) {
 				
 				int textx = PositionProvider.IconUnzoomedPosition (icon) - (DockPreferences.TextWidth / 2);
@@ -793,10 +795,9 @@ namespace Docky.Interface
 		public void ManualCursorUpdate ()
 		{
 			int x, y;
-			bool cursorIsOverDockArea = CursorIsOverDockArea;
 			
 			Display.GetPointer (out x, out y);
-			if ((Cursor.X == x && Cursor.Y == y) || dock_item_menu.Visible)
+			if ((Cursor.X == x && Cursor.Y == y) || PopupMenu.Visible)
 				return;
 			
 			Gdk.Rectangle geo;
@@ -899,13 +900,14 @@ namespace Docky.Interface
 			if (!IsDrawable || window.WindowHideOffset () == Height)
 				return ret_val;
 			
+			Context cr;
 			if (backbuffer == null) {
-				Context cursorIsOverDockArea = Gdk.CairoHelper.Create (GdkWindow);
-				backbuffer = cursorIsOverDockArea.Target.CreateSimilar (cursorIsOverDockArea.Target.Content, Width, Height);
-				(cursorIsOverDockArea as IDisposable).Dispose ();
+				cr = Gdk.CairoHelper.Create (GdkWindow);
+				backbuffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
+				(cr as IDisposable).Dispose ();
 			}
 			
-			Context cr = new Cairo.Context (backbuffer);
+			cr = new Cairo.Context (backbuffer);
 			cr.AlphaFill ();
 			cr.Operator = Operator.Over;
 			
@@ -999,7 +1001,7 @@ namespace Docky.Interface
 						double item_zoom;
 						IconZoomedPosition (PositionProvider.IndexAtPosition (Cursor.X), out item_x, out item_zoom);
 						int menu_y = Screen.GetMonitorGeometry (0).Height - (int) (DockPreferences.IconSize * item_zoom);
-						dock_item_menu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), 
+						PopupMenu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), 
 						                      ((int) evnt.XRoot - Cursor.X) + item_x, menu_y);
 						return ret_val;
 					}
@@ -1144,7 +1146,6 @@ namespace Docky.Interface
 		public override void Dispose ()
 		{
 			UnregisterEvents ();
-			
 			item_provider.Dispose ();
 			
 			if (cursor_timer > 0)
