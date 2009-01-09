@@ -164,15 +164,6 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static bool reflections = prefs.Get<bool> ("Reflections", false);
-		public static bool Reflections {
-			get { return reflections; }
-			set {
-				prefs.Set ("Reflections", value);
-				reflections = value;
-			}
-		}
-		
 		static int summon_time = prefs.Get<int> ("SummonTime", 100);
 		public static int SummonTime {
 			get { return summon_time; }

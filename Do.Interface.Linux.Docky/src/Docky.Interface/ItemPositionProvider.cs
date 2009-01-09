@@ -52,7 +52,7 @@ namespace Docky.Interface
 		}
 		
 		public int VerticalBuffer {
-			get { return DockPreferences.Reflections ? 10 : 5; }
+			get { return 5; }
 		}
 		
 		int IconSize {

@@ -703,19 +703,6 @@ namespace Docky.Interface
 			double scale = zoom/DockPreferences.IconQuality;
 			
 			if (DockItems [icon].Scalable) {
-				if (DockPreferences.Reflections) {
-					cr.Scale (scale, 0-scale);
-					
-					// get us into a "normal" reflected position
-					double reflect_y = y + 2 * (MinimumDockArea.Height + DockItems [icon].Height) * scale;
-					
-					// move us up a bit based on the vertial buffer and the zoom
-					reflect_y -= PositionProvider.VerticalBuffer * 2.7 * zoom;
-					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target),  x * (1 / scale), reflect_y * (-1 / scale));
-					cr.PaintWithAlpha (.25);	
-					cr.Matrix = default_matrix;
-				}
-				
 				if (scale != 1)
 					cr.Scale (scale, scale);
 				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom
