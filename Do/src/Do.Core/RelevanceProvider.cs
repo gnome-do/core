@@ -29,7 +29,8 @@ using Do.Universe;
 
 namespace Do.Core {
 
-	public interface IRelevanceProvider {
+	public interface IRelevanceProvider
+	{
 		void IncreaseRelevance (Element target, string match, Element other);
 		void DecreaseRelevance (Element target, string match, Element other);
 		float GetRelevance (Element target, string match, Element other);
@@ -38,7 +39,7 @@ namespace Do.Core {
 	[Serializable]
 	public abstract class RelevanceProvider : IRelevanceProvider {
 
-		const int SerializeInterval = 15 * 60 * 1000;
+		const int SerializeInterval = 10 * 60 * 1000;
 
 		static RelevanceProvider ()
 		{
@@ -71,7 +72,7 @@ namespace Do.Core {
 					BinaryFormatter f = new BinaryFormatter ();
 					provider = f.Deserialize (s) as IRelevanceProvider;
 				}
-				Log.Debug ("Successfully loaded learned usage data.");
+				Log.Debug ("Successfully loaded learned usage data from {0}.", RelevanceFile);
 			} catch (FileNotFoundException) {
 			} catch (Exception e) {
 				Log.Error ("Failed to load learned usage data: {0}", e.Message);
@@ -90,7 +91,7 @@ namespace Do.Core {
 					BinaryFormatter f = new BinaryFormatter ();
 					f.Serialize (s, provider);
 				}
-				Log.Debug ("Successfully saved learned usage data.");
+				Log.Debug ("Successfully saved learned usage data to {0}.", RelevanceFile);
 			} catch (Exception e) {
 				Log.Error ("Failed to save learned usage data: {0}", e.Message);
 			}
