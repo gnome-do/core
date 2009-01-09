@@ -194,7 +194,7 @@ namespace Docky.Interface.Renderers
 			} else {
 				big_text_height = (int) (35 * text_scale);
 				TextUtility.RenderLayoutText (cr, text, base_x + TextOffset, 
-				                              dockArea.Y + dockArea.Height / 2 - big_text_height / 2, dockArea.Width - TextOffset - 50, 
+				                              dockArea.Y + dockArea.Height / 2 - 3 * big_text_height / 5, dockArea.Width - TextOffset - 50, 
 				                              big_text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 			}
 		}
