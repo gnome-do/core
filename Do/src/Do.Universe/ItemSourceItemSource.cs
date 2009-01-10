@@ -30,7 +30,7 @@ namespace Do.Universe
 	internal class ItemSourceItemSource : ItemSource
 	{
 
-		class ItemSourceItem : Item {
+		public class ItemSourceItem : Item {
 
 			public ItemSource Source { get; private set; }
 

@@ -48,14 +48,16 @@ namespace Docky.Interface
 			Left,
 			Right,
 		}
+
+		public readonly TimeSpan BaseAnimationTime = new TimeSpan (0, 0, 0, 0, 150);
 		
-		public const int BaseAnimationTime = 150;
-		const int BounceTime = 700;
-		const int InsertAnimationTime = BaseAnimationTime*5;
 		const int WindowHeight = 300;
 		const uint OffDockWakeupTime = 250;
 		const uint OnDockWakeupTime = 20;
 		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
+
+		TimeSpan BounceTime = new TimeSpan (0, 0, 0, 0, 700);
+		TimeSpan InsertAnimationTime = new TimeSpan (0, 0, 0, 0, 150*5);
 		
 		#region private variables
 		Gdk.Point cursor, drag_start_point;
@@ -94,9 +96,7 @@ namespace Docky.Interface
 		/// <value>
 		/// The width of the docks window, but not the visible dock
 		/// </value>
-		public int Width {
-			get; private set;
-		}
+		public int Width { get; private set; }
 		
 		/// <value>
 		/// The height of the docks window
@@ -109,18 +109,14 @@ namespace Docky.Interface
 		/// The width of the visible dock
 		/// </value>
 		public int DockWidth {
-			get {
-				return PositionProvider.DockWidth;
-			}
+			get { return PositionProvider.DockWidth; }
 		}
 		
 		/// <summary>
 		/// The height of the visible dock
 		/// </summary>
 		public int DockHeight {
-			get {
-				return DockPreferences.AutoHide ? 0 : MinimumDockArea.Height;
-			}
+			get { return DockPreferences.AutoHide ? 0 : MinimumDockArea.Height; }
 		}
 		
 		public Pane CurrentPane {
@@ -169,7 +165,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		int SummonTime {
+		TimeSpan SummonTime {
 			get {
 				return DockPreferences.SummonTime;
 			}
@@ -183,7 +179,7 @@ namespace Docky.Interface
 				if (drag_resizing)
 					return 0;
 				
-				double zoom = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime);
+				double zoom = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime.TotalMilliseconds);
 				if (CursorIsOverDockArea) {
 					if (DockPreferences.AutoHide)
 						zoom = 1;
@@ -211,14 +207,14 @@ namespace Docky.Interface
 					if (CursorIsOverDockArea) {
 						return 0;
 					} else {
-						offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime);
-						offset = Math.Min (offset, Math.Min (1, (DateTime.UtcNow - interface_change_time).TotalMilliseconds / SummonTime));
+						offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime.TotalMilliseconds);
+						offset = Math.Min (offset, Math.Min (1, (DateTime.UtcNow - interface_change_time).TotalMilliseconds / SummonTime.TotalMilliseconds));
 					}
 					
 					if (InputInterfaceVisible)
 						offset = 1 - offset;
 				} else {
-					offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime);
+					offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime.TotalMilliseconds);
 					if (CursorIsOverDockArea)
 						offset = 1 - offset;
 				}
@@ -231,17 +227,17 @@ namespace Docky.Interface
 		/// </value>
 		double DockIconOpacity {
 			get {
-				double total_time = (DateTime.UtcNow - interface_change_time).TotalMilliseconds;
-				if (SummonTime < total_time) {
+				if (SummonTime < DateTime.UtcNow - interface_change_time) {
 					if (InputInterfaceVisible)
 						return 0;
 					return 1;
 				}
-				
+
+				double total_time = (DateTime.UtcNow - interface_change_time).TotalMilliseconds;
 				if (InputInterfaceVisible) {
-					return 1 - (total_time/SummonTime);
+					return 1 - (total_time / SummonTime.TotalMilliseconds);
 				} else {
-					return total_time/SummonTime;
+					return total_time / SummonTime.TotalMilliseconds;
 				}
 			}
 		}
@@ -435,40 +431,40 @@ namespace Docky.Interface
 		void BuildAnimationStateEngine ()
 		{
 			AnimationState.AddCondition ("IconInsertAnimationNeeded", 
-			                             () => DockItems.Any (di => di.MillisecondsFromAdd < InsertAnimationTime));
+			                             () => DockItems.Any (di => di.TimeSinceAdd < InsertAnimationTime));
 			
 			AnimationState.AddCondition ("PaneChangeAnimationNeeded",
-			                             () => (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds < BaseAnimationTime);
+			                             () => (DateTime.UtcNow - State.CurrentPaneTime) < BaseAnimationTime);
 		
 			AnimationState.AddCondition ("ZoomAnimationNeeded",
 			                             () => (CursorIsOverDockArea && ZoomIn != 1) || (!CursorIsOverDockArea && ZoomIn != 0));
 			
 			AnimationState.AddCondition ("OpenAnimationNeeded",
-			                             () => (DateTime.UtcNow - enter_time).TotalMilliseconds < SummonTime ||
-			                             (DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime);
+			                             () => DateTime.UtcNow - enter_time < SummonTime ||
+			                             DateTime.UtcNow - interface_change_time < SummonTime);
 			
 			AnimationState.AddCondition ("BounceAnimationNeeded",
-			                             () => DockItems.Any (di => di.MillisecondsFromClick <= BounceTime));
+			                             () => DockItems.Any (di => di.TimeSinceClick <= BounceTime));
 			
 			AnimationState.AddCondition ("UrgentAnimationNeeded",
 			                             () => DockItems.Where (di => di is IDockAppItem)
 			                             .Cast<IDockAppItem> ()
 			                             .Where (dai => dai.NeedsAttention)
-			                             .Any (dai => (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds < BounceTime));
+			                             .Any (dai => DateTime.UtcNow - dai.AttentionRequestStartTime < BounceTime));
 			
 			AnimationState.AddCondition ("UrgentRecentChange",
 			                             () => DockItems.Where (di => di is IDockAppItem)
 			                             .Cast<IDockAppItem> ()
-			                             .Any (dai => (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds < BounceTime));
+			                             .Any (dai => DateTime.UtcNow - dai.AttentionRequestStartTime < BounceTime));
 			
 			AnimationState.AddCondition ("InputModeChangeAnimationNeeded",
-			                             () => (DateTime.UtcNow - interface_change_time).TotalMilliseconds < SummonTime);
+			                             () => DateTime.UtcNow - interface_change_time < SummonTime);
 			
 			AnimationState.AddCondition ("InputModeSlideAnimationNeeded",
-			                             () => (DateTime.UtcNow - State.LastCursorChange).TotalMilliseconds < BaseAnimationTime);
+			                             () => DateTime.UtcNow - State.LastCursorChange < BaseAnimationTime);
 			
 			AnimationState.AddCondition ("ThirdPaneVisibilityAnimationNeeded",
-			                             () => (DateTime.UtcNow - State.ThirdChangeTime).TotalMilliseconds < BaseAnimationTime);
+			                             () => DateTime.UtcNow - State.ThirdChangeTime < BaseAnimationTime);
 		}
 
 		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)
@@ -663,10 +659,10 @@ namespace Docky.Interface
 			double zoom;
 			IconZoomedPosition (icon, out center, out zoom);
 			
-			if (DockItems [icon].MillisecondsFromAdd < InsertAnimationTime) {
+			if (DockItems [icon].TimeSinceAdd < InsertAnimationTime) {
 				// if we just inserted the icon, we scale it down the newer it is.  This gives the nice
 				// zoom in effect for newly inserted icons
-				zoom *= DockItems [icon].MillisecondsFromAdd / InsertAnimationTime;
+				zoom *= DockItems [icon].TimeSinceAdd.TotalMilliseconds / InsertAnimationTime.TotalMilliseconds;
 			}
 			
 			// This gives the actual x,y coordinates of the icon 
@@ -679,14 +675,15 @@ namespace Docky.Interface
 			bool drawUrgency = false;
 			if (animationType == ClickAnimationType.Bounce) {
 				// bounces twice
-				y -= Math.Abs (30 * Math.Sin (DockItems [icon].MillisecondsFromClick * Math.PI / (BounceTime / 2)));
+				y -= Math.Abs (30 * Math.Sin (DockItems [icon].TimeSinceClick.TotalMilliseconds * Math.PI / (BounceTime.TotalMilliseconds / 2)));
 			} else {
 				IDockAppItem dai = DockItems [icon] as IDockAppItem;
 				if (dai != null && dai.NeedsAttention) {
 					drawUrgency = true;
-					int urgentMs = (int) (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds;
-					if (urgentMs < BounceTime)
-						y -= 100 * Math.Sin (urgentMs * Math.PI / (BounceTime));
+					if (DateTime.UtcNow - dai.AttentionRequestStartTime < BounceTime) {
+						double urgentMs = (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds;
+						y -= 100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds));
+					}
 				}
 			}
 			
@@ -704,11 +701,13 @@ namespace Docky.Interface
 				if (shade_dark || shade_light) {
 					cr.Rectangle (x / scale, y / scale, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
 					
-					if (shade_light) 
+					if (shade_light) {
 						cr.Color = new Cairo.Color (.9, .95, 1, .5);
-					else
-						cr.Color = new Cairo.Color (0, 0, 0, 1 * (BounceTime - DockItems [icon].MillisecondsFromClick) / BounceTime - .7);
-					
+					} else {
+						double opacity = (BounceTime - DockItems [icon].TimeSinceClick).TotalMilliseconds / BounceTime.TotalMilliseconds - .7;
+						cr.Color = new Cairo.Color (0, 0, 0, opacity);
+					}
+						
 					cr.Operator = Operator.Atop;
 					cr.Fill ();
 					cr.Operator = Operator.Over;
@@ -745,7 +744,7 @@ namespace Docky.Interface
 		
 		ClickAnimationType IconAnimation (int icon)
 		{
-			return (DockItems [icon].MillisecondsFromClick < BounceTime) ? DockItems [icon].AnimationType : ClickAnimationType.None;
+			return (DockItems [icon].TimeSinceClick < BounceTime) ? DockItems [icon].AnimationType : ClickAnimationType.None;
 		}
 		
 		void IconZoomedPosition (int icon, out int x, out double zoom)

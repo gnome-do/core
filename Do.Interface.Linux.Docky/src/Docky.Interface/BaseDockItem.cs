@@ -177,16 +177,12 @@ namespace Docky.Interface
 		/// </value>
 		public virtual DateTime DockAddItem { get; set; }
 		
-		public double MillisecondsFromClick {
-			get {
-				return (DateTime.UtcNow - LastClick).TotalMilliseconds;
-			}
+		public TimeSpan TimeSinceClick {
+			get { return DateTime.UtcNow - LastClick; }
 		}
 		
-		public double MillisecondsFromAdd {
-			get {
-				return (DateTime.UtcNow - DockAddItem).TotalMilliseconds;
-			}
+		public TimeSpan TimeSinceAdd {
+			get { return DateTime.UtcNow - DockAddItem; }
 		}
 		
 		public virtual ClickAnimationType AnimationType { get; protected set; }

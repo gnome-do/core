@@ -80,31 +80,31 @@ namespace Docky.Interface
 		{
 			if (DockPreferences.AutoHide)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, 
-				                                       "Pin Visiblity", "status_lock");
+				                                       "Automatically Hide", EnableIcon);
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, 
-				                                       "Unpin Visibility", "status_unlocked");
+				                                       "Automatically Hide", DisableIcon);
 			
 			if (DockPreferences.ZoomEnabled)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, 
-				                                       "Disable Zoom", DisableIcon);
+				                                       "Zoom Icons", EnableIcon);
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = true, 
-				                                       "Enable Zoom", "stock_allow-effects");
+				                                       "Zoom Icons", DisableIcon);
 			
 			if (DockPreferences.ShowTrash)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = false, 
-				                                       "Hide Trash Icon", DisableIcon);
+				                                       "Show Trash", EnableIcon);
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = true, 
-				                                       "Show Trash Icon", "gnome-stock-trash");
+				                                       "Show Trash", DisableIcon);
 			
 			if (DockPreferences.IndicateMultipleWindows)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = false, 
-				                                       "Single Window Indicator", DisableIcon);
+				                                       "Advanced Indicators", EnableIcon);
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = true, 
-				                                       "Multiple Window Indicator", "gnome-windows");
+				                                       "Advanced Indicators", DisableIcon);
 			
 		}
 		

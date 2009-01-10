@@ -294,7 +294,8 @@ namespace Docky.Interface.Renderers
 		{
 			int base_x = dockArea.X + 15;
 			double zoom_value = .3;
-			double slide_state = Math.Min (1, (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds / DockArea.BaseAnimationTime);
+			//fixme
+			double slide_state = Math.Min (1, (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds / parent.BaseAnimationTime.TotalMilliseconds);
 			
 			double growing_zoom = zoom_value + slide_state * (1 - zoom_value);
 			double shrinking_zoom = zoom_value + (1 - slide_state) * (1 - zoom_value);

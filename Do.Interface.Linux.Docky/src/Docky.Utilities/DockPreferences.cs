@@ -161,11 +161,11 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static int summon_time = prefs.Get<int> ("SummonTime", 100);
-		public static int SummonTime {
+		static TimeSpan summon_time = new TimeSpan (0, 0, 0, 0, prefs.Get<int> ("SummonTime", 100));
+		public static TimeSpan SummonTime {
 			get { return summon_time; }
 			set {
-				prefs.Set ("SummonTime", value);
+				prefs.Set ("SummonTime", value.TotalMilliseconds);
 				summon_time = value;
 			}
 		}

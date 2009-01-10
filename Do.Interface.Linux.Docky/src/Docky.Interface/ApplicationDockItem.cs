@@ -132,14 +132,14 @@ namespace Docky.Interface
 		
 		public override string Description {
 			get {
-				if (StringIsValidName (Application.Name))
-					return Application.Name;
-				else if (StringIsValidName (Application.Windows [0].Name))
-					return Application.Windows [0].Name;
-				else if (StringIsValidName (Application.IconName))
+				if (StringIsValidName (Application.IconName))
 					return Application.IconName;
 				else if (StringIsValidName (Application.Windows [0].IconName))
 					return Application.Windows [0].IconName;
+				else if (StringIsValidName (Application.Name))
+					return Application.Name;
+				else if (StringIsValidName (Application.Windows [0].Name))
+					return Application.Windows [0].Name;
 				return "Unknown";
 			}
 		}
@@ -150,9 +150,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		Wnck.Application Application {
-			get; set;
-		}
+		Wnck.Application Application { get; set; }
 		
 		#endregion 
 		
@@ -185,7 +183,9 @@ namespace Docky.Interface
 			string [] guesses = new [] { Application.Name.ToLower ().Replace (' ','-'),
 				                         Application.Windows[0].Name.ToLower ().Replace (' ','-'),
 				                         Application.IconName.ToLower ().Replace (' ','-'),
-				                         Application.Windows[0].IconName.ToLower ().Replace (' ','-') };
+				                         Application.Windows[0].IconName.ToLower ().Replace (' ','-'),
+				                         Application.Windows[0].ClassGroup.ResClass.ToLower ().Replace (' ','-'),
+			};
 			foreach (string s in guesses)
 				yield return s;
 			

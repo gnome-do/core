@@ -95,7 +95,7 @@ namespace Do.Universe
 				// to initialize in the constructor, before subclasses have initialized.
 				if (object.Equals (uniqueId, DefaultName)) { 
 					SafeElement safe = Safe;
-					uniqueId = string.Format (UniqueIdFormat, safe.Name, safe.Description, GetType ());
+					uniqueId = string.Format (UniqueIdFormat, safe.Name, safe.Description, GetType ().FullName);
 				}
 				return uniqueId;
 			}

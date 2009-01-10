@@ -87,9 +87,17 @@ namespace Docky.Utilities
 					window.Activate (Gtk.Global.CurrentEventTime);
 			}
 			
-			if (windows.Any (w => w.NeedsAttention ())) {
-				windows.Where (w => w.NeedsAttention ()).First ().Activate (Gtk.Global.CurrentEventTime+20);
-			}
+			if (windows.Count () <= 1)
+				return;
+			
+			// we do this to make sure our active window is also at the front... Its a tricky thing to do.
+			uint time = Gtk.Global.CurrentEventTime + 200;
+			GLib.Timeout.Add (200, delegate {
+				if (!windows.Any (w => w.IsActive))
+					return false;
+				windows.Where (w => w.IsActive).First ().Activate (time);
+				return false;
+			});
 		}
 		
 		public static void FocusWindows (Window window)
