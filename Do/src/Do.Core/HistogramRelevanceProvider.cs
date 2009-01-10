@@ -37,7 +37,6 @@ namespace Do.Core {
 
 		const float DefaultRelevance = 0.001f;
 		const float DefaultAge = 1f;
-		const int MaxNameLength = 75;
 
 		static readonly IEnumerable<Type> RewardedItemTypes = new [] {
 			typeof (IApplicationItem),
@@ -112,8 +111,7 @@ namespace Do.Core {
 			// relevance, the object with the shorter name comes first. Objects
 			// with shorter names tend to be simpler, and more often what the
 			// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
-			float lengthScale = Math.Min (name.Length, MaxNameLength) / MaxNameLength;
-			relevance = DefaultRelevance + DefaultRelevance / 10 * lengthScale;
+			relevance = DefaultRelevance / Math.Min (1, name.Length);
 
 			if (0 < rec.Hits) {
 				// On a scale of 0 (new) to 1 (old), how old is the item?
