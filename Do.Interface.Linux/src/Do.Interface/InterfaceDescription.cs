@@ -1,8 +1,6 @@
-// PreferencesItem.cs
-//
-// GNOME Do is the legal property of its developers. Please refer to the
-// COPYRIGHT file distributed with this
-// source distribution.
+// InterfaceDescription.cs
+// 
+// Copyright (C) 2008 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,29 +18,38 @@
 
 using System;
 
-using Mono.Unix;
+using Mono.Addins;
 
-namespace Do.Universe
+namespace Do.Interface
 {
-
-	public class PreferencesItem : Item, IRunnableItem
+	
+	
+	public class InterfaceDescription
 	{
+		TypeExtensionNode node;
 		
-		public override string Name {
-			get { return Catalog.GetString ("GNOME Do Preferences"); }
-		}
-		
-		public override string Description {
-			get { return Catalog.GetString ("Adjust settings, manage plugins, etc."); }
-		}
-		
-		public override string Icon {
-			get { return "gtk-preferences"; }
-		}
-		
-		public void Run ()
+		public InterfaceDescription (TypeExtensionNode node)
 		{
-			Do.Controller.ShowPreferences ();
+			if (node == null) throw new ArgumentNullException ("node");
+			
+			this.node = node;
+		}
+
+		public string Name {
+			get {
+				return Addin.Name;
+			}
+		}
+
+		Addin Addin {
+			get {
+				return AddinManager.Registry.GetAddin (node.Addin.Id);
+			}
+		}
+
+		public IDoWindow GetNewInstance ()
+		{
+			return node.CreateInstance () as IDoWindow;
 		}
 	}
 }

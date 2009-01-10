@@ -36,6 +36,7 @@ namespace Do.Core
 
 		Thread thread, update_thread;
 		Dictionary<string, Element> universe;
+		EventHandler onInitialized;
 		
 		object universe_lock = new object ();
 		
@@ -58,6 +59,19 @@ namespace Do.Core
 			get {
 				int milliseconds = DBus.PowerState.OnBattery () ? 600 : 200;
 				return new TimeSpan (0, 0, 0, 0, milliseconds);
+			}
+		}
+		
+		bool BuildCompleted { get; set; }
+
+		public event EventHandler Initialized {
+			add {
+				if (BuildCompleted)
+					value (this, EventArgs.Empty);
+				onInitialized += value;
+			}
+			remove {
+				onInitialized -= value;
 			}
 		}
 		
@@ -217,6 +231,12 @@ namespace Do.Core
 				UpdateSource (source.Safe);
 			
 			Log.Info ("Universe contains {0} items.", universe.Count);
+
+			Gtk.Application.Invoke ((sender, e) => {
+				BuildCompleted = true;
+				if (onInitialized != null)
+					onInitialized (this, EventArgs.Empty);
+			});
 		}
 		
 		/// <summary>
@@ -262,10 +282,12 @@ namespace Do.Core
 		/// </param>
 		public bool TryGetElementForUniqueId (string uid, out Element o)
 		{
-			if (universe.ContainsKey (uid)) {
-				o = universe [uid];
-			} else {
-				o = null;
+			lock (universe_lock) {
+				if (universe.ContainsKey (uid)) {
+					o = universe [uid];
+				} else {
+					o = null;
+				}
 			}
 			return o == null;
 		}

@@ -28,9 +28,17 @@ namespace Do.Platform
 	
 	public interface ICoreService : IService
 	{
+		event EventHandler UniverseInitialized;
+		
 		Element GetElement (string uniqueId);
 		
 		IEnumerable<Item> GetItemsOrderedByRelevance ();
+		
+		IEnumerable<Act> GetActionsForItemOrderedByRelevance (Item item, bool allowThirdPaneRequiredActions);
+		
+		void PerformDefaultAction (Item item, IEnumerable<Type> filter);
+		
+		void PerformActionOnItem (Act action, Item item);
 	}
 
 }

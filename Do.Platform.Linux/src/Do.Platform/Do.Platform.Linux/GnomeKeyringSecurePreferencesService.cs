@@ -102,9 +102,8 @@ namespace Do.Platform.Linux
 					val = item.Secret;
 					return true;
 				}
-			} catch (KeyringException e) {
+			} catch (KeyringException) {
 				Log.Debug (KeyNotFoundMessage, AbsolutePathForKey (key));
-				Log.Error (e.StackTrace);
 			}
 
 			return false;

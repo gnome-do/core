@@ -33,7 +33,6 @@ FILES = \
 	src/Do.Core/SecondSearchController.cs \
 	src/Do.Core/SimpleSearchContext.cs \
 	src/Do.Core/SimpleSearchController.cs \
-	src/Do.Core/StalledActionNotification.cs \
 	src/Do.Core/ThirdSearchController.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.Platform/CoreService.cs \

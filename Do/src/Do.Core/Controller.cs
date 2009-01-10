@@ -38,69 +38,50 @@ namespace Do.Core {
 
 	public class Controller : IController, IDoController {
 		
-		class PerformState {
-			public Act Action { get; set; }
-			public IEnumerable<Item> Items { get; set; }
-			public IEnumerable<Item> ModifierItems { get; set; }
-			
-			public PerformState ()
-			{
-			}
-
-			public PerformState (Act action, IEnumerable<Item> items, IEnumerable<Item> modItems)
-			{
-				Action = action;
-				Items = items;
-				ModifierItems = modItems;
-			}
-		}
-		
 		const int SearchDelay = 250;
 
-		protected IDoWindow window;
-		protected Gtk.Window addin_window;
-		protected Gtk.AboutDialog about_window;
-		protected PreferencesWindow prefs_window;
-		protected ISearchController[] controllers;
-		protected Thread th;
+		IDoWindow window;
+		Gtk.AboutDialog about_window;
+		ISearchController [] controllers;
 		
 		Act action;
-		List<Item> items;
-		List<Item> modItems;
 		bool thirdPaneVisible;
-		bool resultsGrown;
+		bool results_grown;
 		Gtk.IMContext im;
+		string last_theme;
 		
 		public Controller ()
 		{
 			im = new Gtk.IMMulticontext ();
-			items = new List<Item> ();
-			modItems = new List<Item> ();
-			resultsGrown = false;
+			results_grown = false;
+			last_theme = "";
 			
-			controllers = new SimpleSearchController[3];
+			controllers = new SimpleSearchController [3];
 			
 			// Each controller needs to be aware of the controllers before it.
 			// Going down the line however is not needed at current.
-			controllers[0] = new FirstSearchController  ();
-			controllers[1] = new SecondSearchController (controllers[0]);
-			controllers[2] = new ThirdSearchController  (controllers[0], controllers[1]);
+			controllers [0] = new FirstSearchController  ();
+			controllers [1] = new SecondSearchController (controllers [0]);
+			controllers [2] = new ThirdSearchController  (controllers [0], controllers [1]);
 			
 			// We want to show a blank box during our searches
-			// controllers[0].SearchStarted += (u) => { };
-			controllers[1].SearchStarted += (u) => {
+			// controllers [0].SearchStarted += (u) => { };
+			controllers [1].SearchStarted += (u) => {
 				if (u && !ControllerExplicitTextMode (Pane.Second))
 					window.ClearPane (Pane.Second); 
 			};
 
-			controllers[2].SearchStarted += (u) => { 
+			controllers [2].SearchStarted += (u) => { 
 				if (u && !ControllerExplicitTextMode (Pane.Third))
 					window.ClearPane (Pane.Third); 
 			};
 			
-			controllers[0].SearchFinished += (o, state) => SearchFinished (o, state, Pane.First);
-			controllers[1].SearchFinished += (o, state) => SearchFinished (o, state, Pane.Second);
-			controllers[2].SearchFinished += (o, state) => SearchFinished (o, state, Pane.Third);
+			controllers [0].SearchFinished +=
+				(o, state) => SearchFinished (o, state, Pane.First);
+			controllers [1].SearchFinished +=
+				(o, state) => SearchFinished (o, state, Pane.Second);
+			controllers [2].SearchFinished +=
+				(o, state) => SearchFinished (o, state, Pane.Third);
 			
 			im.UsePreedit = false;
 			im.Commit += OnIMCommit;
@@ -112,11 +93,12 @@ namespace Do.Core {
 			foreach (char c in args.Str.ToCharArray ())
 				SearchController.AddChar (c);
 			
-			//Horrible hack:
-			//The reason this exists and exists here is to update the clipboard in a place that
-			//we know will always be safe for GTK.  Unfortunately due to the way we have designed
-			//Do, this has proven extremely difficult to put some place more logical.  We NEED to
-			//rethink how we handle Summon () and audit our usage of Gdk.Threads.Enter ()
+			// Horrible hack: The reason this exists and exists here is to update the
+			// clipboard in a place that we know will always be safe for GTK.
+			// Unfortunately due to the way we have designed Do, this has proven
+			// extremely difficult to put some place more logical.  We NEED to
+			// rethink how we handle Summon () and audit our usage of
+			// Gdk.Threads.Enter ()
 			if (SearchController.Query.Length <= 1)
 				SelectedTextItem.UpdateText ();
 		}
@@ -129,56 +111,44 @@ namespace Do.Core {
 		
 		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
 		{
-			if (null != window) Vanish ();
-			
-			if (window != null)
-				window.KeyPressEvent -= KeyPressWrap;
-			if (window is Gtk.Widget)
-				(window as Gtk.Widget).Destroy ();
-			
-			window = null;
-			
-			if (!Gdk.Screen.Default.IsComposited) {
-				window = new ClassicWindow ();
-				window.Initialize (this);
-				window.KeyPressEvent += KeyPressWrap;
-				Reset ();
+			// If the current theme is already loaded, return.
+			if (window != null && last_theme == Do.Preferences.Theme)
 				return;
+
+			if (window != null) {
+				Vanish ();
+				window.KeyPressEvent -= KeyPressWrap;
+				window.Dispose ();
+				window = null;
 			}
-
-			//reset our Orientation to vertical
-			Orientation = ControlOrientation.Vertical;
 			
-			window = PluginManager.GetThemes ()
-				.Where (theme => theme.Name == Do.Preferences.Theme)
-				.FirstOrDefault ();
+			Orientation = ControlOrientation.Vertical;
 
-			if (window == null)
+			if (Screen.Default.IsComposited) {
+				window = InterfaceManager.MaybeGetInterfaceNamed (Do.Preferences.Theme)
+					?? new ClassicWindow ();
+			} else {
 				window = new ClassicWindow ();
+			}
 			
 			window.Initialize (this);
-			
+			window.KeyPressEvent += KeyPressWrap;
 			if (window is Gtk.Window)
 				(window as Gtk.Window).Title = "Do";
 			
-			// Get key press events from window since we want to control that here.
-			window.KeyPressEvent += KeyPressWrap;
 			Reset ();
+			last_theme = Do.Preferences.Theme;
 		}
 
 		bool IsSummonable {
-			get {
-				return prefs_window == null && about_window == null;
-			}
+			get { return PreferencesWindow == null && about_window == null; }
 		}
 
 		/// <value>
 		/// Convenience Method
 		/// </value>
 		ISearchController SearchController {
-			get {
-				return controllers[(int) CurrentPane];
-			}
+			get { return controllers [(int) CurrentPane]; }
 		}
 		
 		/// <value>
@@ -187,7 +157,7 @@ namespace Do.Core {
 		/// </value>
 		public Pane CurrentPane {
 			set {
-				//If we have no results, we can't go to the second pane
+				// If we have no results, we can't go to the second pane.
 				if (window.CurrentPane == Pane.First &&
 					!SearchController.Results.Any ())
 					return;
@@ -213,9 +183,7 @@ namespace Do.Core {
 					ThirdPaneVisible = true;
 			}
 			
-			get {
-				return window.CurrentPane;
-			}
+			get { return window.CurrentPane; }
 		}
 		
 		/// <value>
@@ -223,7 +191,8 @@ namespace Do.Core {
 		/// </value>
 		bool FirstControllerIsReset {
 			get {
-				return (string.IsNullOrEmpty(controllers[0].Query) && !controllers[0].Results.Any ());
+				return string.IsNullOrEmpty (controllers [0].Query) &&
+					!controllers [0].Results.Any ();
 			}
 		}
 		
@@ -254,8 +223,8 @@ namespace Do.Core {
 		bool ThirdPaneCanClose {
 			get {
 				return (!ThirdPaneRequired &&
-				        controllers[2].Cursor == 0 && 
-				        string.IsNullOrEmpty (controllers[2].Query) && 
+				        controllers [2].Cursor == 0 && 
+				        string.IsNullOrEmpty (controllers [2].Query) && 
 				        !ControllerExplicitTextMode (Pane.Third));
 			}
 		}
@@ -274,7 +243,7 @@ namespace Do.Core {
 				action = first as Act ?? second as Act;
 				return action != null &&
 					action.SupportedModifierItemTypes.Any () &&
-					controllers[1].Results.Any ();
+					controllers [1].Results.Any ();
 			}
 		}
 
@@ -295,7 +264,7 @@ namespace Do.Core {
 				return action != null && item != null &&
 					action.SupportedModifierItemTypes.Any () &&
 					!action.ModifierItemsOptional &&
-					controllers[1].Results.Any ();
+					controllers [1].Results.Any ();
 			}
 		}
 		
@@ -312,9 +281,7 @@ namespace Do.Core {
 			}
 		}
 
-		internal PreferencesWindow PreferencesWindow {
-			get { return prefs_window; }
-		}
+		public PreferencesWindow PreferencesWindow { get; private set; }
 		
 		/// <summary>
 		/// Summons a window with elements in it... seems to work
@@ -331,7 +298,7 @@ namespace Do.Core {
 			Summon ();
 			
 			//Someone is going to need to explain this to me -- Now with less stupid!
-			controllers[0].Results = elements.ToList ();
+			controllers [0].Results = elements.ToList ();
 
 			// If there are multiple results, show results window after a short
 			// delay.
@@ -357,8 +324,8 @@ namespace Do.Core {
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
 		public bool ControllerExplicitTextMode (Pane pane) {
-			return controllers[(int) pane].TextType == TextModeType.Explicit ||
-				controllers[(int) pane].TextType == TextModeType.ExplicitFinalized;
+			return controllers [(int) pane].TextType == TextModeType.Explicit ||
+				controllers [(int) pane].TextType == TextModeType.ExplicitFinalized;
 		}
 		
 #region KeyPress Handling
@@ -459,7 +426,7 @@ namespace Do.Core {
 		void OnSelectionKeyPressEvent (EventKey evnt)
 		{
 			im.Reset ();
-			if (SearchController.Selection is ITextItem || !resultsGrown)
+			if (SearchController.Selection is ITextItem || !results_grown)
 				OnInputKeyPressEvent (evnt);
 			else if (SearchController.ToggleSecondaryCursor (SearchController.Cursor))
 				UpdatePane (CurrentPane);
@@ -510,7 +477,7 @@ namespace Do.Core {
 		{
 			if (im.FilterKeypress (evnt) || ((evnt.State & ModifierType.ControlMask) != 0))
 				return;
-//			im.Reset ();
+			
 			char c;
 			if (evnt.Key == Key.Return) {
 				c = '\n';
@@ -584,7 +551,7 @@ namespace Do.Core {
 		{
 			im.Reset ();
 			if (evnt.Key == UpKey) {
-				if (!resultsGrown) {
+				if (!results_grown) {
 					if (SearchController.Cursor > 0)
 						GrowResults ();
 					return;
@@ -596,7 +563,7 @@ namespace Do.Core {
 					SearchController.Cursor--;
                 }
 			} else if (evnt.Key == DownKey) {
-				if (!resultsGrown) {
+				if (!results_grown) {
 					GrowResults ();
 					return;
 				}
@@ -721,11 +688,11 @@ namespace Do.Core {
 				Reset ();
 				break;
 			case Pane.Second:
-				controllers[1].Reset ();
-				controllers[2].Reset ();
+				controllers [1].Reset ();
+				controllers [2].Reset ();
 				break;
 			case Pane.Third:
-				controllers[2].Reset ();
+				controllers [2].Reset ();
 				break;
 			}
 		}
@@ -742,7 +709,7 @@ namespace Do.Core {
 					ThirdPaneVisible = false;
 				}
 			}
-			window.SetPaneContext (pane, controllers[(int) pane].UIContext);
+			window.SetPaneContext (pane, controllers [(int) pane].UIContext);
 		}
 		
 		/// <summary>
@@ -768,7 +735,7 @@ namespace Do.Core {
 		{
 			UpdatePane (CurrentPane);
 			window.GrowResults ();
-			resultsGrown = true;	
+			results_grown = true;	
 		}
 		
 		/// <summary>
@@ -778,7 +745,7 @@ namespace Do.Core {
 		{
 			if (AlwaysShowResults) return;
 			window.ShrinkResults ();
-			resultsGrown = false;
+			results_grown = false;
 		}
 		
 		Element GetSelection (Pane pane)
@@ -786,7 +753,7 @@ namespace Do.Core {
 			Element o;
 
 			try {
-				o = controllers[(int) pane].Selection;
+				o = controllers [(int) pane].Selection;
 			} catch {
 				o = null;
 			}
@@ -797,13 +764,12 @@ namespace Do.Core {
 		{
 			Element first, second, third;
 			string actionQuery, itemQuery, modItemQuery;
+			ICollection<Item> items, modItems;
 
-			items.Clear ();
-			modItems.Clear ();
-			if (vanish) {
-				Vanish ();
-			}
+			if (vanish) Vanish ();
 
+			items = new List<Item> ();
+			modItems = new List<Item> ();
 			first  = GetSelection (Pane.First);
 			second = GetSelection (Pane.Second);
 			third  = GetSelection (Pane.Third);
@@ -811,24 +777,24 @@ namespace Do.Core {
 			if (first != null && second != null) {
 
 				if (first is Item) {
-					foreach (Item item in controllers[0].FullSelection)
+					foreach (Item item in controllers [0].FullSelection)
 						items.Add (item);
 					action = second as Act;
-					itemQuery = controllers[0].Query;
-					actionQuery = controllers[1].Query;
+					itemQuery = controllers [0].Query;
+					actionQuery = controllers [1].Query;
 				} else {
-					foreach (Item item in controllers[1].FullSelection)
+					foreach (Item item in controllers [1].FullSelection)
 						items.Add (item);
 					action = first as Act;
-					itemQuery = controllers[1].Query;
-					actionQuery = controllers[0].Query;
+					itemQuery = controllers [1].Query;
+					actionQuery = controllers [0].Query;
 				}
 
 				modItemQuery = null;
 				if (third != null && ThirdPaneVisible) {
-					foreach (Item item in controllers[2].FullSelection)
+					foreach (Item item in controllers [2].FullSelection)
 						modItems.Add (item);
-					modItemQuery = controllers[2].Query;
+					modItemQuery = controllers [2].Query;
 				}
 
 				/////////////////////////////////////////////////////////////
@@ -837,7 +803,6 @@ namespace Do.Core {
 				
 				if (first is Item) {
 					// Act is in second pane.
-
 					// Increase the relevance of the items.
 					foreach (Element item in items)
 						item.IncreaseRelevance (itemQuery, null);
@@ -847,35 +812,23 @@ namespace Do.Core {
 						action.IncreaseRelevance (actionQuery, item);
 				} else {
 					// Act is in first pane.
-
 					// Increase the relevance of each item for the action.
 					foreach (Element item in items)
 						item.IncreaseRelevance (itemQuery, action);
-
 					action.IncreaseRelevance (actionQuery, null);
 				}
 
 				if (third != null && ThirdPaneVisible)
 					third.IncreaseRelevance (modItemQuery, action);
-
-				PerformState state = new PerformState (action, items, modItems);
-				th = new Thread (new ParameterizedThreadStart (PerformActionAsync));
-				th.Start (state);
-				th.Join (100);
 			}
 
-			if (vanish) {
-				Reset ();
-			}
+			PerformAction (action, items, modItems);
+			if (vanish) Reset ();
 		}
-		
-		void PerformActionAsync (object o)
+
+		void PerformAction (Act action, IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
-			PerformState state = o as PerformState;
-			IEnumerable<Item> results = null;
-
-			results = state.Action.Safe.Perform (state.Items, state.ModifierItems);
-
+			IEnumerable<Item> results = action.Safe.Perform (items, modItems);
 			// If we have results to feed back into the window, do so in a new
 			// iteration.
 			if (results.Any ()) {
@@ -885,35 +838,26 @@ namespace Do.Core {
 				});
 			}
 		}
-					
+
 		#region IController Implementation
 		public void Summon ()
 		{
 			if (!IsSummonable) return;
-
-			if (th != null && th.IsAlive) {
-				Thread.Sleep (100);
-			}
-					
-			if (th != null && th.IsAlive) {
-				Services.Notifications.Notify (new StalledActionNotification ());
-				return;
-			}
 			
-			// We want to disable updates so that any updates to universe dont happen while controller is
-			// summoned.  We will disable this on vanish.  This way we can be sure to dedicate our CPU
-			// resources to searching and leave updating to a more reasonable time.
+			// We want to disable updates so that any updates to universe dont happen
+			// while controller is summoned.  We will disable this on vanish.  This
+			// way we can be sure to dedicate our CPU resources to searching and
+			// leave updating to a more reasonable time.
 			Do.UniverseManager.UpdatesEnabled = false;
 			window.Summon ();
-			if (AlwaysShowResults)
-				GrowResults ();
+			if (AlwaysShowResults) GrowResults ();
 			im.FocusIn ();
 		}
 		
 		public void Vanish ()
 		{
 			window.ShrinkResults ();
-			resultsGrown = false;
+			results_grown = false;
 			window.Vanish ();
 			Do.UniverseManager.UpdatesEnabled = true;
 		}
@@ -923,14 +867,18 @@ namespace Do.Core {
 			Vanish ();
 			Reset ();
 
-			if (null == prefs_window) {
-				prefs_window = new PreferencesWindow ();
-				prefs_window.Destroyed += delegate {
+			if (PreferencesWindow == null) {
+				PreferencesWindow = new PreferencesWindow ();
+				PreferencesWindow.Hidden += delegate {
+					// Release the window.
+					PreferencesWindow.Destroy ();
+					PreferencesWindow = null;
+					// Reload universe.
 					Do.UniverseManager.Reload ();
-					prefs_window = null;
 				};
 			}
-			prefs_window.Show ();
+			
+			PreferencesWindow.Show ();
 		}
 
 		public void ShowAbout ()
@@ -967,12 +915,13 @@ namespace Do.Core {
 		#endregion
 		
 		#region IDoController implementation
+		
 		public void NewContextSelection (Pane pane, int index)
 		{
-			if (!controllers[(int) pane].Results.Any () || index == controllers[(int) pane].Cursor) return;
+			if (!controllers [(int) pane].Results.Any () || index == controllers [(int) pane].Cursor) return;
 			
-			controllers[(int) pane].Cursor = index;
-			window.SetPaneContext (pane, controllers[(int) pane].UIContext);
+			controllers [(int) pane].Cursor = index;
+			window.SetPaneContext (pane, controllers [(int) pane].UIContext);
 		}
 
 		public void ButtonPressOffWindow ()
@@ -988,6 +937,8 @@ namespace Do.Core {
 			return element is Item && (element as Item).HasChildren ();
 		}
 		
+		#endregion
+		
 		public void PerformDefaultAction (Item item, IEnumerable<Type> filter) 
 		{
 			Act action =
@@ -999,13 +950,14 @@ namespace Do.Core {
 			if (action == null) return;
 			
 			item.IncreaseRelevance ("", null);
-			
-			PerformState state =
-				new PerformState (action, item.Cons (null), Enumerable.Empty<Item> ());
-			th = new Thread (new ParameterizedThreadStart (PerformActionAsync));
-			th.Start (state);
-			th.Join (100);
+			PerformActionOnItem (action, item);
 		}
-		#endregion
+
+		public void PerformActionOnItem (Act action, Item item)
+		{
+			PerformAction (action, new [] { item }, new Item [0]);
+		}
+
 	}
+		
 }

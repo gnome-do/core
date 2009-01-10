@@ -19,6 +19,8 @@
 using System;
 
 using Cairo;
+using Gdk;
+
 using Do.Interface;
 using Do.Interface.CairoUtils;
 
@@ -26,15 +28,43 @@ using Docky.Utilities;
 
 namespace Docky.Interface
 {
-	
-	
-	public class SeparatorItem : IDockItem
+	public class SeparatorItem : BaseDockItem
 	{
-		
 		Surface sr;
 		#region IDockItem implementation 
 		
-		public Surface GetIconSurface (Surface buffer)
+		public override string Description {
+			get { return ""; }
+		}
+		
+		public override int Width {
+			get { return (int) (DockPreferences.IconSize * .3); }
+		}
+		
+		public override bool Scalable { 
+			get { return false; } 
+		}
+		
+		#endregion 
+		
+		public SeparatorItem ()
+		{
+			AnimationType = ClickAnimationType.None;
+			
+			DockPreferences.IconSizeChanged += delegate {
+				if (sr != null)
+					sr.Destroy ();
+				sr = null;
+			};
+		}
+		
+		protected override Pixbuf GetSurfacePixbuf ()
+		{
+			return null;
+		}
+
+		
+		public override Surface GetIconSurface (Surface buffer)
 		{
 			if (sr == null) {
 				sr = buffer.CreateSimilar (buffer.Content, Width, DockPreferences.IconSize);
@@ -42,7 +72,7 @@ namespace Docky.Interface
 				cr.AlphaFill ();
 				
 				for (int i=1; i*6+2 < Height; i++) {
-					cr.Rectangle (Width/2-2, i*6, 4, 2);
+					cr.Rectangle (Width/2-1, i*6, 4, 2);
 				}
 				
 				cr.Color = new Cairo.Color (1, 1, 1, .3);
@@ -53,59 +83,14 @@ namespace Docky.Interface
 			return sr;
 		}
 		
-		public Surface GetTextSurface (Surface similar)
+		public override Surface GetTextSurface (Surface similar)
 		{
 			return null;
 		}
 		
-		public string Description {
-			get {
-				return "";
-			}
-		}
-		
-		public bool DrawIndicator { get { return false; } }
-		
-		public int Width {
-			get {
-				return (int) (DockPreferences.IconSize * .3);
-			}
-		}
-		
-		public int Height {
-			get {
-				return DockPreferences.IconSize;
-			}
-		}
-		
-		public bool Scalable { get { return false; } }
-		
-		public DateTime LastClick { get; set; }
-		public DateTime DockAddItem { get; set; }
-		
-		#endregion 
-		
-		public SeparatorItem ()
-		{
-			DockPreferences.IconSizeChanged += delegate {
-				if (sr != null)
-					sr.Destroy ();
-				sr = null;
-			};
-		}
-		
-		public void Clicked (uint button, IDoController controller)
-		{
-			
-		}
-		
-		public void SetIconRegion (Gdk.Rectangle region)
-		{
-		}
-
 		#region IDisposable implementation 
 		
-		public void Dispose ()
+		public override void Dispose ()
 		{
 			if (sr != null)
 				sr.Destroy ();
@@ -113,7 +98,7 @@ namespace Docky.Interface
 		
 		#endregion 
 		
-		public bool Equals (IDockItem other) 
+		public override bool Equals (BaseDockItem other) 
 		{
 			return GetHashCode ().Equals (other.GetHashCode ());
 		}

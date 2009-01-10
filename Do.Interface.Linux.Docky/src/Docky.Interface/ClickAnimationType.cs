@@ -1,6 +1,6 @@
-// IDockItem.cs
+// ClickAnimationType.cs
 // 
-// Copyright (C) 2008 GNOME Do
+// Copyright (C) 2009 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,35 +18,12 @@
 
 using System;
 
-using Cairo;
-
-using Do.Interface;
-using Do.Universe;
-
 namespace Docky.Interface
 {
-	
-	
-	public interface IDockItem : IEquatable<IDockItem>, IDisposable
+	public enum ClickAnimationType
 	{
-		string Description { get; }
-		int Width { get; }
-		int Height { get; }
-		bool Scalable { get; }
-		bool DrawIndicator { get; }
-		
-		DateTime LastClick { get; }
-		DateTime DockAddItem { get; set; }
-		
-		Surface GetIconSurface (Surface similar);
-		Surface GetTextSurface (Surface similar);
-		
-		void Clicked (uint button, IDoController controller);
-		void SetIconRegion (Gdk.Rectangle region);
-	}
-	
-	public interface IDoDockItem
-	{
-		Element Element { get; }
+		None = 0,
+		Bounce,
+		Darken,
 	}
 }

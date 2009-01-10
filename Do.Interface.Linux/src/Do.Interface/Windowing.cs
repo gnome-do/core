@@ -44,7 +44,17 @@ namespace Do.Interface
 				Thread.Sleep (100);
 			}
 		}
-
+		
+		public static void UnpresentWindow (Gtk.Window window)
+		{
+			uint time;
+			time = Gtk.Global.CurrentEventTime;
+			
+			Pointer.Ungrab (time);
+			Keyboard.Ungrab (time);
+			Gtk.Grab.Remove (window);
+		}
+		
 		private static bool TryGrabWindow (Gtk.Window window)
 		{
 			uint time;

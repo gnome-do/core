@@ -19,6 +19,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Do.Core
@@ -28,6 +29,7 @@ namespace Do.Core
 	{
 		const string ApplicationDirectory = "gnome-do";
 		const string PluginsDirectory = "plugins";
+		const string RepositoryIndicatorFile = "main.mrep";
 
 		//// <value>
 		/// Directory where Do saves its Mono.Addins repository cache.
@@ -43,15 +45,30 @@ namespace Do.Core
 		}
 
 		//// <value>
-		/// Directories where Do looks for Mono.Addins repositories.
+		/// Directories where Do looks for Mono.Addins repositories. These
+		/// directories exist and probably contain valid repositories.
 		/// </value>
 		public static IEnumerable<string> SystemPluginDirectories {
+			get {
+				foreach (string repository in MaybeSystemPluginDirectories) {
+					if (File.Exists (Path.Combine (repository, RepositoryIndicatorFile)))
+						yield return repository;
+				}
+			}
+		}
+
+		//// <value>
+		/// Directories where Do might look for Mono.Addins repositories; these
+		/// directories may not exist or may not be valid repositories.
+		/// </value>
+		static IEnumerable<string> MaybeSystemPluginDirectories {
 			get {
 				yield return AppDomain.CurrentDomain.BaseDirectory.Combine (PluginsDirectory);
 
 				string systemData =
 					Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData);
 				yield return systemData.Combine (ApplicationDirectory, PluginsDirectory);
+				yield return "/usr/local/share".Combine (ApplicationDirectory, PluginsDirectory);
 			}
 		}
 		

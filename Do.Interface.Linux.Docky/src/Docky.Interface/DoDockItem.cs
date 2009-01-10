@@ -31,34 +31,24 @@ using Docky.Utilities;
 namespace Docky.Interface
 {
 	
-	
-	public class DoDockItem : AbstractDockItem
+	public class DoDockItem : BaseDockItem, IRightClickable
 	{
 		const string DoIcon = "gnome-do";
+		const string EnableIcon = "gtk-ok";
+		const string DisableIcon = "gtk-delete";
 		
-		Surface icon_surface;
 		#region IDockItem implementation 
 		
-		public override Surface GetIconSurface (Surface sr)
+		protected override Pixbuf GetSurfacePixbuf ()
 		{
-			if (icon_surface == null) {
-				icon_surface = sr.CreateSimilar (sr.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-				Context cr = new Context (icon_surface);
-				
-				Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (DoIcon, DockPreferences.FullIconSize);
-				
-				Gdk.CairoHelper.SetSourcePixbuf (cr, pbuf, 0, 0);
-				cr.Paint ();
-				
-				pbuf.Dispose ();
-				(cr as IDisposable).Dispose ();
-			}
-			return icon_surface;
+			return IconProvider.PixbufFromIconName (DoIcon, DockPreferences.FullIconSize);
 		}
+
 		
-		public override void Clicked (uint button, IDoController controller)
+		public override void Clicked (uint button)
 		{
-			Services.Windowing.SummonMainWindow ();
+			if (button == 1)
+				Services.Windowing.SummonMainWindow ();
 		}
 		
 		public override string Description {
@@ -67,53 +57,58 @@ namespace Docky.Interface
 			}
 		}
 		
-		public override bool Scalable {
-			get {
-				return true;
-			}
-		}
-		
-		public override bool DrawIndicator {
-			get {
-				return false;
-			}
-		}
-		
 		#endregion 
-		
-
 		
 		public DoDockItem () : base ()
 		{
 		}
-		
-		protected override void OnIconSizeChanged ()
-		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
-			
-			base.OnIconSizeChanged ();
-		}
 
 		#region IDisposable implementation 
 		
-		public override void Dispose ()
+		#endregion 
+		
+		public override bool Equals (BaseDockItem other)
 		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
+			return other is DoDockItem;
+		}
+
+		#region IRightClickable implementation 
+		
+		public event EventHandler RemoveClicked;
+		
+		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
+		{
+			if (DockPreferences.AutoHide)
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, 
+				                                       "Pin Visiblity", "status_lock");
+			else
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, 
+				                                       "Unpin Visibility", "status_unlocked");
 			
-			base.Dispose ();
+			if (DockPreferences.ZoomEnabled)
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, 
+				                                       "Disable Zoom", DisableIcon);
+			else
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = true, 
+				                                       "Enable Zoom", "stock_allow-effects");
+			
+			if (DockPreferences.ShowTrash)
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = false, 
+				                                       "Hide Trash Icon", DisableIcon);
+			else
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = true, 
+				                                       "Show Trash Icon", "gnome-stock-trash");
+			
+			if (DockPreferences.IndicateMultipleWindows)
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = false, 
+				                                       "Single Window Indicator", DisableIcon);
+			else
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = true, 
+				                                       "Multiple Window Indicator", "gnome-windows");
+			
 		}
 		
 		#endregion 
 		
-		public override bool Equals (IDockItem other)
-		{
-			return other is DoDockItem;
-		}
 	}
 }

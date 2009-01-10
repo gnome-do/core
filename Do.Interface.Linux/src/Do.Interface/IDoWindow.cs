@@ -30,7 +30,7 @@ namespace Do.Interface
 		Third = 2,
 	}
 	
-	public interface IDoWindow
+	public interface IDoWindow : IDisposable
 	{
 		/// <value>
 		/// Returns true if window is currently being displayed

@@ -6,23 +6,36 @@ TARGET = library
 
 FILES = \
 	AssemblyInfo.cs \
-	src/Docky.Interface/AbstractDockItem.cs \
+	src/Docky.Interface/BaseDockItem.cs \
 	src/Docky.Interface/ApplicationDockItem.cs \
+	src/Docky.Interface/ClickAnimationType.cs \
 	src/Docky.Interface/DoDockItem.cs \
 	src/Docky.Interface/DockArea.cs \
+	src/Docky.Interface/DockAnimationState.cs \
 	src/Docky.Interface/DockItem.cs \
+	src/Docky.Interface/DockItemMenu.cs \
+	src/Docky.Interface/DockPopupMenu.cs \
 	src/Docky.Interface/DockItemProvider.cs \
 	src/Docky.Interface/DockState.cs \
 	src/Docky.Interface/DockWindow.cs \
 	src/Docky.Interface/Docky.Interface.Renderers/DockBackgroundRenderer.cs \
 	src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs \
 	src/Docky.Interface/DrawState.cs \
-	src/Docky.Interface/IDockItem.cs \
-	src/Docky.Interface/ItemMenu.cs \
+	src/Docky.Interface/IDockAppItem.cs \
+	src/Docky.Interface/IRightClickable.cs \
+	src/Docky.Interface/ItemPositionProvider.cs \
+	src/Docky.Interface/AbstractMenuButtonArgs.cs \
+	src/Docky.Interface/LaunchMenuButtonArgs.cs \
+	src/Docky.Interface/SimpleMenuButtonArgs.cs \
+	src/Docky.Interface/SeparatorMenuButtonArgs.cs \
 	src/Docky.Interface/SeparatorItem.cs \
+	src/Docky.Interface/TrashDockItem.cs \
+	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
+	src/Docky.Interface/WindowMenuButtonArgs.cs \
 	src/Docky.Utilities/DockPreferences.cs \
 	src/Docky.Utilities/GtkUtils.cs \
+	src/Docky.Utilities/WindowControl.cs \
 	src/Docky.Utilities/WindowUtils.cs \
 	src/XLib/X11Atoms.cs \
 	src/XLib/Xlib.cs

@@ -28,7 +28,18 @@ namespace Do.Platform.Default
 	
 	public class CoreService : ICoreService
 	{
+
 		#region ICoreService
+		
+		public event EventHandler UniverseInitialized {
+			add {
+				Log.Debug ("Default ICoreService cannot add to UniverseInitialized.");
+				value (this, EventArgs.Empty);
+			}
+			remove {
+				Log.Debug ("Default ICoreService cannot remove from UniverseInitialized.");
+			}
+		}
 		
 		public Element GetElement (string uid)
 		{
@@ -39,6 +50,22 @@ namespace Do.Platform.Default
 		public IEnumerable<Item> GetItemsOrderedByRelevance ()
 		{
 			Log.Debug ("Default ICoreService cannot get Elements.");
+			yield break;
+		}
+		
+		public void PerformDefaultAction (Item item, IEnumerable<Type> filter)
+		{
+			Log.Debug ("Default ICoreService cannot perform default actions.");
+		}
+		
+		public void PerformActionOnItem (Act action, Item item)
+		{
+			Log.Debug ("Default ICoreService cannot perform actions.");
+		}
+		
+		public IEnumerable<Act> GetActionsForItemOrderedByRelevance (Item item, bool allowThirdPaneRequiredActions)
+		{
+			Log.Debug ("Default ICoreService cannot get Actions.");
 			yield break;
 		}
 		

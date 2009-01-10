@@ -1,8 +1,6 @@
-// PreferencesItem.cs
-//
-// GNOME Do is the legal property of its developers. Please refer to the
-// COPYRIGHT file distributed with this
-// source distribution.
+// IDockAppItem.cs
+// 
+// Copyright (C) 2009 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,29 +18,24 @@
 
 using System;
 
-using Mono.Unix;
+namespace Docky.Interface {
 
-namespace Do.Universe
-{
-
-	public class PreferencesItem : Item, IRunnableItem
+	public interface IDockAppItem
 	{
+		/// <value>
+		/// Fired whenever an icon needs to be redrawn
+		/// </value>
+		event UpdateRequestHandler UpdateNeeded;
 		
-		public override string Name {
-			get { return Catalog.GetString ("GNOME Do Preferences"); }
-		}
+		/// <summary>
+		/// Determines if an icon is in the urgent state
+		/// </summary>
+		bool NeedsAttention { get; }
 		
-		public override string Description {
-			get { return Catalog.GetString ("Adjust settings, manage plugins, etc."); }
-		}
-		
-		public override string Icon {
-			get { return "gtk-preferences"; }
-		}
-		
-		public void Run ()
-		{
-			Do.Controller.ShowPreferences ();
-		}
+		/// <value>
+		/// The time in which the ugency request was started
+		/// </value>
+		DateTime AttentionRequestStartTime { get; }
 	}
 }
+

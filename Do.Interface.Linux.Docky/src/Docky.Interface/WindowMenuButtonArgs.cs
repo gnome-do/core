@@ -1,46 +1,44 @@
-// StalledActionNotification.cs
+// WindowMenuButtonArgs.cs
+// 
+// Copyright (C) 2008 GNOME Do
 //
-// GNOME Do is the legal property of its developers. Please refer to the
-// COPYRIGHT file distributed with this source distribution.
-//  
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 using System;
 
-using Mono.Unix;
+using Wnck;
 
-using Do.Platform;
+using Docky.Utilities;
 
-namespace Do.Core
+namespace Docky.Interface
 {
 	
-	class StalledActionNotification : ActionableNotification
+	
+	public class WindowMenuButtonArgs : AbstractMenuButtonArgs
 	{
-
-		public StalledActionNotification () : base (
-			Catalog.GetString ("GNOME Do"),
-			Catalog.GetString ("Do is still performing the last action. Please wait for it to finish or click \"End Now\" to interrupt."),
-			"dialog-error",
-			Catalog.GetString ("End Now")
-		)
+		Window window;
+		
+		public WindowMenuButtonArgs (Window window, string description, string icon) : base (description, icon, true)
 		{
+			this.window = window;
+		}
+		
+		public override void Action ()
+		{
+			window.CenterAndFocusWindow ();
 		}
 
-		public override void PerformAction ()
-		{
-			Environment.Exit (20);
-		}
 	}
 }

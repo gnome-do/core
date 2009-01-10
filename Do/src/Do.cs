@@ -19,6 +19,7 @@
 
 using System;
 using System.Threading;
+using System.Diagnostics;
 using System.Collections.Generic;
 
 using Mono.Unix;
@@ -46,15 +47,20 @@ namespace Do {
 
 			DetectInstanceAndExit ();
 			
+			// We are conservative with the log at first.
+			Log.DisplayLevel = LogLevel.Error;
+			if (CorePreferences.PeekDebug)
+				Log.DisplayLevel = LogLevel.Debug;
+
 			PluginManager.Initialize ();
 			Preferences = new CorePreferences ();
 
+			// Now we can set the preferred log level.
+			if (Preferences.QuietStart)
+				Log.DisplayLevel = LogLevel.Error;
+			// Check for debug again in case QuietStart is also set.
 			if (Preferences.Debug)
 				Log.DisplayLevel = LogLevel.Debug;
-			else if (Preferences.QuietStart)
-				Log.DisplayLevel = LogLevel.Error;
-			else
-				Log.DisplayLevel = LogLevel.Info;
 
 			try {
 				Util.SetProcessName ("gnome-do");
@@ -82,15 +88,14 @@ namespace Do {
 		/// </summary>
 		static void OnProcessExit (object o, EventArgs args)
 		{
-			Thread th = new Thread (new ThreadStart (delegate {
-				System.Threading.Thread.Sleep (1000);
-				Console.WriteLine ("Process failed to exit cleanly, hard killing");
-				System.Diagnostics.Process process =  System.Diagnostics.Process.GetCurrentProcess ();
-				process.Kill ();
-			}));
+			Thread killThread = new Thread (() => {
+				Thread.Sleep (1000);
+				Log.Warn ("Process failed to exit cleanly, killing.");
+				Process.GetCurrentProcess ().Kill ();
+			});
 			
-			th.IsBackground = true;
-			th.Start ();
+			killThread.IsBackground = true;
+			killThread.Start ();
 		}
 
 		static void DetectInstanceAndExit ()

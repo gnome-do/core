@@ -37,6 +37,7 @@ namespace Do.Core {
 
 		const float DefaultRelevance = 0.001f;
 		const float DefaultAge = 1f;
+		const int MaxNameLength = 75;
 
 		static readonly IEnumerable<Type> RewardedItemTypes = new [] {
 			typeof (IApplicationItem),
@@ -107,11 +108,12 @@ namespace Do.Core {
 			if (score == 0f) return 0f;
 			
 			// We must give a base, non-zero relevance to make scoring rules take
-			// effect. We divide by length so that if two objects have default
+			// effect. We scale by length so that if two objects have default
 			// relevance, the object with the shorter name comes first. Objects
 			// with shorter names tend to be simpler, and more often what the
 			// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
-			relevance = DefaultRelevance / Math.Max (1, name.Length);
+			float lengthScale = Math.Min (name.Length, MaxNameLength) / MaxNameLength;
+			relevance = DefaultRelevance + DefaultRelevance / 10 * lengthScale;
 
 			if (0 < rec.Hits) {
 				// On a scale of 0 (new) to 1 (old), how old is the item?

@@ -32,34 +32,55 @@ namespace Docky.Utilities
 	
 	public class DockPreferences
 	{
-		static IPreferences prefs = Services.Preferences.Get<DockPreferences> ();
+		public static event Action AutohideChanged;
+		public static event Action IconSizeChanged;
+		public static event Action TrashVisibilityChanged;
+		public static event Action AutomaticIconsChanged;
+	
+		public const int IconBorderWidth = 2;
 		
-		// we can not store these in gconf all the time since we query these a LOT
-		// so we have to use a half and half solution
-		static int text_width = prefs.Get<int> ("TextWidth", 350);
+		static IPreferences prefs = Services.Preferences.Get<DockPreferences> ();
+		const int DefaultIconSize = 64;
+		
 		public static int TextWidth {
-			get { return text_width; }
-			set { 
-				prefs.Set<int> ("TextWidth", value); 
-				text_width = value;
-			}
+			get { return 350; }
 		}
 		
 		static int zoom_size = prefs.Get<int> ("ZoomSize", 300);
 		public static int ZoomSize {
-			get { return zoom_size; }
+			get { return (int) (zoom_size * (IconSize / (double) DefaultIconSize)); }
 			set { 
-				prefs.Set<int> ("ZoomSize", value); 
+				prefs.Set ("ZoomSize", value); 
 				zoom_size = value;
+			}
+		}
+
+		static bool indicate_multiple_windows = prefs.Get ("IndicateMultipleWindows", false);
+		public static bool IndicateMultipleWindows {
+			get { return indicate_multiple_windows; }
+			set { 
+				prefs.Set ("IndicateMultipleWindows", value); 
+				indicate_multiple_windows = value;
 			}
 		}
 		
 		static double zoom_percent = prefs.Get<double> ("ZoomPercent", 2);
 		public static double ZoomPercent {
-			get { return zoom_percent; }
+			get { return ZoomEnabled ? zoom_percent : 1; }
 			set {
-				prefs.Set<double> ("ZoomPercent", value);
+				prefs.Set ("ZoomPercent", value);
 				zoom_percent = value;
+			}
+		}
+		
+		static bool enable_zoom = prefs.Get<bool> ("EnableZoom", true);
+		public static bool ZoomEnabled {
+			get { return enable_zoom; }
+			set {
+				prefs.Set ("EnableZoom", value);
+				enable_zoom = value;
+				if (IconSizeChanged != null)
+					IconSizeChanged ();
 			}
 		}
 		
@@ -69,12 +90,26 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static int icon_size = prefs.Get<int> ("IconSize", 64);
+		static int max_icon_size = 128;
+		public static int MaxIconSize {
+			get { return max_icon_size; }
+			set {
+				int tmp = IconSize;
+				max_icon_size = value;
+				if (tmp != IconSize && IconSizeChanged != null)
+					IconSizeChanged ();
+			}
+		}
+		
+		static int icon_size = prefs.Get<int> ("IconSize", DefaultIconSize);
 		public static int IconSize {
-			get { return icon_size; }
-			set { 
-				if (value < 24 || value > 128)
-					return;
+			get { return Math.Min (icon_size, MaxIconSize); }
+			set {
+				if (value < 24)
+					value = 24;
+				if (value > 128)
+					value = 128;
+				
 				if (Math.Abs (value - 64) < 4)
 					value = 64;
 				if (Math.Abs (value - 32) < 4)
@@ -83,36 +118,69 @@ namespace Docky.Utilities
 				if (value == icon_size)
 					return;
 				
-				prefs.Set<int> ("IconSize", value); 
+				prefs.Set ("IconSize", value); 
 				icon_size = value;
-				IconSizeChanged ();
+				if (IconSizeChanged != null)
+					IconSizeChanged ();
 			}
 		}
 		
-		static double icon_quality = prefs.Get<double> ("IconQuality", 2);
+		/// <summary>
+		/// Currently returns ZoomPercent.  This is useful in the future case where we wish to optimize for best
+		/// looking icons by picking "good" sizes.  This is not implemented yet however.
+		/// </summary>
 		public static double IconQuality {
-			get { return icon_quality; }
-			set { 
-				prefs.Set<double> ("IconQuality", value); 
-				icon_quality = value;
-			}
+			get { return ZoomPercent; }
 		}
 		
 		static bool autohide = prefs.Get<bool> ("AutoHide", false);
 		public static bool AutoHide {
 			get { return autohide; }
 			set {
-				prefs.Set<bool> ("AutoHide", value);
+				if (autohide == value)
+					return;
+				
+				prefs.Set ("AutoHide", value);
 				autohide = value;
+				if (AutohideChanged != null)
+					AutohideChanged ();
 			}
 		}
 		
-		static int automatic_icons = prefs.Get<int> ("AutomaticIcons", 10);
+		static bool show_trash = prefs.Get<bool> ("ShowTrash", true);
+		public static bool ShowTrash {
+			get { return show_trash; }
+			set {
+				if (show_trash == value)
+					return;
+				prefs.Set ("ShowTrash", value);
+				show_trash = value;
+				
+				if (TrashVisibilityChanged != null)
+					TrashVisibilityChanged ();
+			}
+		}
+		
+		static int summon_time = prefs.Get<int> ("SummonTime", 100);
+		public static int SummonTime {
+			get { return summon_time; }
+			set {
+				prefs.Set ("SummonTime", value);
+				summon_time = value;
+			}
+		}
+		
+		static int automatic_icons = prefs.Get<int> ("AutomaticIcons", 5);
 		public static int AutomaticIcons {
 			get { return automatic_icons; }
 			set {
-				prefs.Set<int> ("AutomaticIcons", value);
+				if (value < 0)
+					value = 0;
+				prefs.Set ("AutomaticIcons", value);
 				automatic_icons = value;
+				
+				if (AutomaticIconsChanged != null)
+					AutomaticIconsChanged ();
 			}
 		}
 		
@@ -171,6 +239,5 @@ namespace Docky.Utilities
 			} catch { }
 		}
 		#endregion
-		public static event NullEventHandler IconSizeChanged;
 	}
 }

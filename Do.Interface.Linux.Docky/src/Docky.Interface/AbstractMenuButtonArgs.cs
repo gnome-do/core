@@ -1,8 +1,6 @@
-// PreferencesItem.cs
-//
-// GNOME Do is the legal property of its developers. Please refer to the
-// COPYRIGHT file distributed with this
-// source distribution.
+// AbstractMenuButtonArgs.cs
+// 
+// Copyright (C) 2008 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,30 +17,39 @@
 //
 
 using System;
-
 using Mono.Unix;
 
-namespace Do.Universe
+namespace Docky.Interface
 {
-
-	public class PreferencesItem : Item, IRunnableItem
+	public abstract class AbstractMenuButtonArgs
 	{
+		const int MaxDescriptionCharacters = 50;
 		
-		public override string Name {
-			get { return Catalog.GetString ("GNOME Do Preferences"); }
+		public EventHandler Handler {
+			get {
+				return (sender, e) => Action ();
+			}
 		}
 		
-		public override string Description {
-			get { return Catalog.GetString ("Adjust settings, manage plugins, etc."); }
+		public string Description {
+			get; private set;
 		}
 		
-		public override string Icon {
-			get { return "gtk-preferences"; }
+		public string Icon {
+			get; private set;
 		}
 		
-		public void Run ()
+		public bool Sensitive {
+			get; private set; 
+		}
+		
+		public AbstractMenuButtonArgs (string description, string icon, bool sensitive)
 		{
-			Do.Controller.ShowPreferences ();
+			Description = GLib.Markup.EscapeText (Catalog.GetString (description));
+			Icon = icon;
+			Sensitive = sensitive;
 		}
+		
+		public abstract void Action ();
 	}
 }

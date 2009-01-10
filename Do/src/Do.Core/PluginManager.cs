@@ -67,7 +67,6 @@ namespace Do.Core
 			// Register repositories.
 			SetupService setup = new SetupService (AddinManager.Registry);
 			foreach (string path in Paths.SystemPluginDirectories) {
-				if (!Directory.Exists (path)) continue;
 				string url = "file://" + path;
 				if (!setup.Repositories.ContainsRepository (url)) {
 					setup.Repositories.RegisterRepository (null, url, false);
@@ -133,17 +132,6 @@ namespace Do.Core
 		/// </value>
 		public static IEnumerable<Act> Actions {
 			get { return AddinManager.GetExtensionObjects ("/Do/Action").OfType<Act> (); }
-		}
-
-		/// <summary>
-		/// Finds all UI themes
-		/// </summary>
-		/// <returns>
-		/// A <see cref="IEnumerable`1"/> of IRenderTheme instances from plugins
-		/// </returns>
-		public static IEnumerable<IDoWindow> GetThemes () 
-		{
-			return InterfaceManager.Interfaces;
 		}
 
 		/// <summary>
