@@ -38,10 +38,6 @@ namespace Do.Core {
 		const float DefaultRelevance = 0.001f;
 		const float DefaultAge = 1f;
 
-		static readonly IEnumerable<Type> RewardedItemTypes = new [] {
-			typeof (IApplicationItem),
-		};
-
 		DateTime newest_hit, oldest_hit;
 		uint max_item_hits, max_action_hits;
 		Dictionary<string, RelevanceRecord> hits;
@@ -126,13 +122,13 @@ namespace Do.Core {
 				age = DefaultAge;
 
 				// Give the most popular items a leg up
-				if (RewardedItemTypes.Contains (rec.Type))
+				if (typeof (IApplicationItem).IsAssignableFrom (rec.Type))
 					relevance *= 2;
 			}
 
 			// Newer objects (age -> 0) get scaled by factor -> 1.
 			// Older objects (age -> 1) get scaled by factor -> .5.
-			relevance *= 1f - (age / 2f);
+			relevance *= 1f - age / 2f;
 
 			if (isAction) {
 				SafeAct action = (e as Act).Safe;
@@ -146,7 +142,7 @@ namespace Do.Core {
 					relevance *= 0.8f;
 			}
 
-			if (typeof (ItemSource).IsAssignableFrom (rec.Type))
+			if (typeof (ItemSourceItemSource.ItemSourceItem).IsAssignableFrom (rec.Type))
 				relevance *= 0.4f;
 
 			return relevance * 0.30f + score * 0.70f;
@@ -176,9 +172,7 @@ namespace Do.Core {
 		}
 
 		public bool IsAction {
-			get {
-				return typeof (Act).IsAssignableFrom (Type);
-			}
+			get { return typeof (Act).IsAssignableFrom (Type); }
 		}
 
 		public bool IsRelevantForMatch (string match)

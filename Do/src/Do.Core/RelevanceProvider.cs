@@ -77,7 +77,6 @@ namespace Do.Core {
 			} catch (Exception e) {
 				Log.Error ("Failed to load learned usage data: {0}", e.Message);
 			}
-
 			return provider;
 		}
 
