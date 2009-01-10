@@ -80,10 +80,10 @@ namespace Docky.Interface
 		{
 			if (DockPreferences.AutoHide)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, 
-				                                       "Keep Visible", DisableIcon);
+				                                       "Automatically Hide", EnableIcon);
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, 
-				                                       "Keep Visible", EnableIcon);
+				                                       "Automatically Hide", DisableIcon);
 			
 			if (DockPreferences.ZoomEnabled)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, 
