@@ -106,8 +106,10 @@ namespace Do.Core
 		{
 			Element text = new ImplicitTextItem (query);
 
+			string lquery = query.ToLower ();
+
 			foreach (Element element in elements)
-				element.UpdateRelevance (query, other);
+				element.UpdateRelevance (lquery, other);
 
 			return elements
 				.Where (element => epsilon < Math.Abs (element.Relevance) && element.PassesTypeFilter (filter))
