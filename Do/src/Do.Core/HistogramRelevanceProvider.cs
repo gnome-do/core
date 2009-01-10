@@ -111,7 +111,7 @@ namespace Do.Core {
 			// relevance, the object with the shorter name comes first. Objects
 			// with shorter names tend to be simpler, and more often what the
 			// user wants (e.g. "Jay-Z" vs "Jay-Z feat. The Roots").
-			relevance = DefaultRelevance / Math.Min (1, name.Length);
+			relevance = DefaultRelevance / Math.Max (1, name.Length);
 
 			if (0 < rec.Hits) {
 				// On a scale of 0 (new) to 1 (old), how old is the item?
