@@ -49,9 +49,9 @@ namespace Do.Core {
 			hits = new Dictionary<string, RelevanceRecord> ();
 		}
 		
-		void UpdateMaxHits (RelevanceRecord rec)
+		void UpdateMaxHits (RelevanceRecord rec, Element e)
 		{
-			if (rec.IsAction)
+			if (e is Act)
 				max_action_hits = Math.Max (max_action_hits, rec.Hits);
 			else
 				max_item_hits = Math.Max (max_item_hits, rec.Hits);
@@ -72,7 +72,7 @@ namespace Do.Core {
 			if (other == null) rec.FirstPaneHits++;
 			if (0 < match.Length)
 				rec.AddFirstChar (match [0]);
-			UpdateMaxHits (rec);
+			UpdateMaxHits (rec, o);
 		}
 
 		public override void DecreaseRelevance (Element o, string match, Element other)
@@ -96,7 +96,7 @@ namespace Do.Core {
 			if (!hits.TryGetValue (e.UniqueId, out rec))
 				rec = new RelevanceRecord (e);
 
-			isAction = rec.IsAction;
+			isAction = e is Act;
 			
 			// Get string similarity score.
 			score = StringScoreForAbbreviation (name, match);
@@ -122,7 +122,7 @@ namespace Do.Core {
 				age = DefaultAge;
 
 				// Give the most popular items a leg up
-				if (typeof (IApplicationItem).IsAssignableFrom (rec.Type))
+				if (typeof (IApplicationItem).IsInstanceOfType (e))
 					relevance *= 2;
 			}
 
@@ -142,7 +142,7 @@ namespace Do.Core {
 					relevance *= 0.8f;
 			}
 
-			if (typeof (ItemSourceItemSource.ItemSourceItem).IsAssignableFrom (rec.Type))
+			if (typeof (ItemSourceItemSource.ItemSourceItem).IsInstanceOfType (e))
 				relevance *= 0.4f;
 
 			return relevance * 0.30f + score * 0.70f;
@@ -160,19 +160,13 @@ namespace Do.Core {
 		public uint Hits;
 		public uint FirstPaneHits;
 
-		public Type Type;
 		public DateTime LastHit;
 		public string FirstChars;
 		
 		public RelevanceRecord (Element o)
 		{
 			LastHit = DateTime.Now;
-			Type = o.GetType ();
 			FirstChars = "";
-		}
-
-		public bool IsAction {
-			get { return typeof (Act).IsAssignableFrom (Type); }
 		}
 
 		public bool IsRelevantForMatch (string match)
