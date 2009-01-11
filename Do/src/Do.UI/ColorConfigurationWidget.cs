@@ -31,7 +31,14 @@ namespace Do.UI
 {
 	public partial class ColorConfigurationWidget : Gtk.Bin, IConfigurable
 	{
-		IList<string> Themes { get; set; }
+		List<string> themes;
+
+		//TODO Make this an automatic property once mono 1.9 support is dropped
+		List<string> Themes { 
+			get { return themes; }
+			set { themes = value; }
+		}
+
 		bool setup = false;
 		
 		public ColorConfigurationWidget ()
@@ -50,7 +57,7 @@ namespace Do.UI
 				theme_combo.Sensitive = false;
 				
 			// Setup theme combo
-            theme_combo.Active = Math.Max (0, Themes.IndexOf (Do.Preferences.Theme));
+			theme_combo.Active = Math.Max (0, Themes.IndexOf (Do.Preferences.Theme));
 
 			SetupButtons ();
 			

@@ -539,11 +539,11 @@ namespace Do.Core {
 			// If this isn't the first keypress in text mode (we just entered text
 			// mode) or if we're already in text mode, treat keypress as normal
 			// input.
-			bool pass_keypress = (0 < SearchController.Query.Length || SearchController.TextType == TextModeType.Explicit);
-			SearchController.TextMode = true;
-			
-			if (pass_keypress || SearchController.TextMode == false)
+			if (0 < SearchController.Query.Length || SearchController.TextType == TextModeType.Explicit) {
 				OnInputKeyPressEvent (evnt);
+			} else {
+				SearchController.TextMode = true;
+			}
 			UpdatePane (CurrentPane);
 		}
 		
