@@ -70,7 +70,19 @@ namespace Docky.Interface
 		
 		string Exec {
 			get {
-				return MaybeGetExecStringForPID (Application.Pid) ?? MaybeGetExecStringForPID (Application.Windows[0].Pid);
+				string exec;
+				foreach (Wnck.Application app in Applications) {
+					exec = MaybeGetExecStringForPID (app.Pid);
+					if (exec != null)
+						return exec;
+				}
+
+				foreach (Wnck.Window win in VisibleWindows) {
+					exec = MaybeGetExecStringForPID (win.Pid);
+					if (exec != null)
+						return exec;
+				}
+				return null;
 			}
 		}
 		
@@ -119,7 +131,7 @@ namespace Docky.Interface
 			
 			// we failed to find an icon, lets use an uggggly one
 			if (pbuf == null)
-				pbuf = Application.Icon;
+				pbuf = Applications.First ().Icon;
 			
 			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
 				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
@@ -132,35 +144,42 @@ namespace Docky.Interface
 		
 		public override string Description {
 			get {
-				if (StringIsValidName (Application.IconName))
-					return Application.IconName;
-				else if (StringIsValidName (Application.Windows [0].IconName))
-					return Application.Windows [0].IconName;
-				else if (StringIsValidName (Application.Name))
-					return Application.Name;
-				else if (StringIsValidName (Application.Windows [0].Name))
-					return Application.Windows [0].Name;
+				foreach (Wnck.Application application in Applications) {
+					if (StringIsValidName (application.IconName))
+						return application.IconName;
+					else if (StringIsValidName (application.Name))
+						return application.Name;
+				}
+
+				foreach (Wnck.Window window in VisibleWindows) {
+					if (StringIsValidName (window.IconName))
+						return window.IconName;
+					else if (StringIsValidName (window.Name))
+						return window.Name;
+				}
 				return "Unknown";
 			}
 		}
 		
 		public override int WindowCount {
-			get {
-				return windowCount;
-			}
+			get { return windowCount; }
 		}
 		
-		Wnck.Application Application { get; set; }
+		IEnumerable<Wnck.Application> Applications { get; set; }
+
+		IEnumerable<Wnck.Window> VisibleWindows {
+			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
+		}
 		
 		#endregion 
 		
-		public ApplicationDockItem (Wnck.Application application) : base ()
+		public ApplicationDockItem (IEnumerable<Wnck.Application> applications) : base ()
 		{
-			Application = application;
-			windowCount = Application.Windows.Where (w => !w.IsSkipTasklist).Count ();
+			Applications = applications;
+			windowCount = VisibleWindows.Count ();
 			AttentionRequestStartTime = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			
-			foreach (Wnck.Window w in Application.Windows) {
+			foreach (Wnck.Window w in VisibleWindows) {
 				w.StateChanged += HandleStateChanged;
 			}
 		}
@@ -180,12 +199,23 @@ namespace Docky.Interface
 		
 		IEnumerable<string> GetIconGuesses ()
 		{
-			string [] guesses = new [] { Application.Name.ToLower ().Replace (' ','-'),
-				                         Application.Windows[0].Name.ToLower ().Replace (' ','-'),
-				                         Application.IconName.ToLower ().Replace (' ','-'),
-				                         Application.Windows[0].IconName.ToLower ().Replace (' ','-'),
-				                         Application.Windows[0].ClassGroup.ResClass.ToLower ().Replace (' ','-'),
-			};
+			List<string> guesses = new List<string> ();
+			foreach (Wnck.Application app in Applications) {
+				if (!guesses.Contains (PrepName (app.Name)))
+					guesses.Add (PrepName (app.Name));
+				if (!guesses.Contains (PrepName (app.IconName)))
+					guesses.Add (PrepName (app.IconName));
+			}
+
+			foreach (Wnck.Window win in VisibleWindows) {
+				if (!guesses.Contains (PrepName (win.Name)))
+					guesses.Add (PrepName (win.Name));
+				if (!guesses.Contains (PrepName (win.IconName)))
+					guesses.Add (PrepName (win.IconName));
+				if (!guesses.Contains (PrepName (win.ClassGroup.ResClass)))
+					guesses.Add (PrepName (win.ClassGroup.ResClass));
+			}
+			
 			foreach (string s in guesses)
 				yield return s;
 			
@@ -199,6 +229,11 @@ namespace Docky.Interface
 				yield return Exec;
 				yield return Exec.Split ('-')[0];
 			}
+		}
+
+		string PrepName (string s)
+		{
+			return s.ToLower ().Replace (' ', '-');
 		}
 		
 		string MaybeGetExecStringForPID (int pid)
@@ -242,7 +277,7 @@ namespace Docky.Interface
 		public override void Clicked (uint button)
 		{
 			if (button == 1) {
-				WindowUtils.PerformLogicalClick (new [] { Application });
+				WindowUtils.PerformLogicalClick (Applications);
 				AnimationType = ClickAnimationType.Darken;
 			} else {
 				AnimationType = ClickAnimationType.None;
@@ -256,31 +291,29 @@ namespace Docky.Interface
 			if (icon_region == region)
 				return;
 			icon_region = region;
-			
-			foreach (Wnck.Window window in Application.Windows) {
-				window.SetIconGeometry (region.X, region.Y, region.Width, region.Height);
-			}
+
+			VisibleWindows.ForEach (w => w.SetIconGeometry (region.X, region.Y, region.Width, region.Height));
 		}
 		
 		public override bool Equals (BaseDockItem other)
 		{
 			if (!(other is ApplicationDockItem))
 				return false;
-			
-			return ((other as ApplicationDockItem).Application == Application);
+
+			return Applications.Any (app => (other as ApplicationDockItem).Applications.Contains (app));
 		}
 		
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
-			foreach (Wnck.Window window in Application.Windows.Where (win => !win.IsSkipTasklist))
+			foreach (Wnck.Window window in VisibleWindows)
 				yield return new WindowMenuButtonArgs (window, window.Name, WindowIcon);
 			
 			yield return new SeparatorMenuButtonArgs ();
 			
-			yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (Application.Windows), 
+			yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (VisibleWindows), 
 			                                       MinimizeRestoreText, MinimizeIcon);
 			
-			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (Application.Windows), 
+			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
 			                                       CloseText, Gtk.Stock.Quit);
 		}
 
@@ -300,7 +333,7 @@ namespace Docky.Interface
 		
 		bool DetermineUrgencyStatus ()
 		{
-			return Application.Windows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ());
+			return VisibleWindows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ());
 		}
 	}
 }

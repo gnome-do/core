@@ -490,40 +490,22 @@ namespace Docky.Interface
 			if (Wnck.Screen.Default.ActiveWorkspace == null)
 				return;
 			List<ApplicationDockItem> out_items = new List<ApplicationDockItem> ();
+
+			IEnumerable<int> knownPids = statistical_items.Concat (custom_items.Values).SelectMany (di => di.Pids);
 			
-			foreach (Wnck.Application app in WindowUtils.GetApplications ()) {
-				bool good = false;
-				//we dont want any applications that dont have any "real" windows
-				foreach (Wnck.Window w in app.Windows) {
-					if (!w.IsSkipTasklist)
-						good = true;
-				}
-				
-				// Anything we already have, we dont need additional copies of
-				foreach (DockItem di in statistical_items.Concat (custom_items.Values)) {
-					if (di.Applications.Count () == 0)
-						continue;
-					if (di.Pids.Contains (app.Pid)) {
-						//we found a match already, mark as not good
-						good = false;
-						break;
-					}
-				}
-						
-				if (!good) 
-					continue;
-				
-				ApplicationDockItem api = new ApplicationDockItem (app);
-				bool is_set = false;
-				foreach (ApplicationDockItem di in task_items) {
-					if (api.Equals (di)) {
-						api.DockAddItem = di.DockAddItem;
-						is_set = true;
-						break;
-					}
-				}
-				if (!is_set)
+			IEnumerable<Application> prunedApps = WindowUtils.GetApplications ()
+				.Where (app => app.Windows.Any (w => !w.IsSkipTasklist))
+				.Where (app => !knownPids.Contains (app.Pid) && app.Windows.Any ());
+			
+			foreach (IEnumerable<Wnck.Application> apps in prunedApps.
+			         GroupBy (app => (app as Wnck.Application).Windows [0].ClassGroup.ResClass)) {
+				ApplicationDockItem api = new ApplicationDockItem (apps);
+
+				if (task_items.Any (di => di.Equals (api)))
+					api.DockAddItem = task_items.Where (di => di.Equals (api)).First ().DockAddItem;
+				else
 					api.DockAddItem = DateTime.UtcNow;
+
 				out_items.Add (api);
 				api.UpdateNeeded += HandleUpdateNeeded;
 			}
