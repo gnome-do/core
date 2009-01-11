@@ -73,7 +73,8 @@ namespace Docky.Interface
 			get {
 				if (!DragableItems.Any ())
 					return 0;
-				return DragableItems.Max (di => di.Position);
+				//TODO make sane once mono 1.9 support is dropped
+				return DragableItems.Max ((Func<DockItem, int>) (di => di.Position));
 			}
 		}
 		
@@ -463,9 +464,11 @@ namespace Docky.Interface
 					di.DockAddItem = DateTime.UtcNow;
 					
 					int position = LastPosition + 1;
+
+					//TODO fixme once mono 1.9 support is dropped
 					if (old_items.Any ())
-						position += old_items.Max (oi => oi.Position);
-					
+						position += old_items.Max ((Func<DockItem, int>) (oi => oi.Position));
+
 					di.Position = position;
 					statistical_items.Add (di);
 				}
