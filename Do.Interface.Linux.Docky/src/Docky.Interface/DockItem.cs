@@ -120,8 +120,8 @@ namespace Docky.Interface
 				if (apps == null)
 					return false;
 				return apps
-					.Select (app => app.Windows)
-					.Any (wins => wins.Any (win => !win.IsSkipTasklist));
+					.SelectMany (app => app.Windows)
+					.Any (win => !win.IsSkipTasklist);
 			}
 		}	
 		
@@ -318,11 +318,8 @@ namespace Docky.Interface
 			bool hasApps = HasVisibleApps;
 			
 			if (hasApps) {
-				foreach (Application app in Applications) {
-					foreach (Wnck.Window window in app.Windows.Where (win => !win.IsSkipTasklist)) {
+				foreach (Wnck.Window window in Applications.SelectMany (app => app.Windows).Where (w => !w.IsSkipTasklist))
 						yield return new WindowMenuButtonArgs (window, window.Name, Icon);
-					}
-				}
 				yield return new SeparatorMenuButtonArgs ();
 			}
 			
