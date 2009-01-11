@@ -231,19 +231,19 @@ namespace Docky.Interface
 
 		#region IDoWindow implementation 
 		
-		public new event Do.Interface.DoEventKeyDelegate KeyPressEvent;
+		public new event DoEventKeyDelegate KeyPressEvent;
 		
 		public void Summon ()
 		{
 			Reposition ();
-			Do.Interface.Windowing.PresentWindow (this);
+			Windowing.PresentWindow (this);
 			if (!dock_area.InputInterfaceVisible)
 				dock_area.ShowInputInterface ();
 		}
 		
 		public void Vanish ()
 		{
-			Do.Interface.Windowing.UnpresentWindow (this);
+			Windowing.UnpresentWindow (this);
 			if (dock_area.InputInterfaceVisible)
 				dock_area.HideInputInterface ();
 		}

@@ -78,7 +78,7 @@ namespace Docky.Interface
 		}
 		
 		public IEnumerable<int> Pids { 
-			get { return apps.Select (element => element.Pid).ToArray (); } 
+			get { return apps.Select (win => win.Pid).ToArray (); } 
 		}
 		
 		public override int WindowCount {
@@ -119,9 +119,7 @@ namespace Docky.Interface
 			get {
 				if (apps == null)
 					return false;
-				return apps
-					.SelectMany (app => app.Windows)
-					.Any (win => !win.IsSkipTasklist);
+				return apps.SelectMany (app => app.Windows).Any (win => !win.IsSkipTasklist);
 			}
 		}	
 		
@@ -135,11 +133,10 @@ namespace Docky.Interface
 			UpdateApplication ();
 			NeedsAttention = DetermineAttentionStatus ();
 			
-			accepting_drops = false;
-			if (element is IFileItem) {
-				if (System.IO.Directory.Exists ((element as IFileItem).Path))
-					accepting_drops = true;
-			}
+			if (element is IFileItem && System.IO.Directory.Exists ((element as IFileItem).Path))
+				accepting_drops = true;
+			else
+				accepting_drops = false;
 		}
 		
 		public override bool ReceiveItem (string item)
