@@ -2,7 +2,7 @@ dnl Warning: This is an automatically generated file, do not edit!
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.54])
 
-AC_INIT([gnome-do], [0.8.0.0])
+AC_INIT([gnome-do], [0.7.95])
 AM_INIT_AUTOMAKE([foreign tar-pax])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -16,7 +16,7 @@ dnl Plugin ABI version; bump whenever plugin interface changes
 ABI_VERSION=0.8
 AC_SUBST(ABI_VERSION)
 
-RELEASE="false"
+RELEASE="true"
 if [ $RELEASE = "true" ] ; then
    VERSION_INFO="Release"
 else
