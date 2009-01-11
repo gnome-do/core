@@ -101,6 +101,12 @@ namespace Do.Core {
 			// Get string similarity score.
 			score = StringScoreForAbbreviation (name, match);
 			if (score == 0f) return 0f;
+
+			// Pin Run to top for IRunnableItem until we can make a stronger
+			// guarantee that it will remain there.
+			// TODO Remove this when relevance is refactored and improved.
+			if (e is RunAction && other is IRunnableItem)
+				return 1f;
 			
 			// We must give a base, non-zero relevance to make scoring rules take
 			// effect. We scale by length so that if two objects have default
