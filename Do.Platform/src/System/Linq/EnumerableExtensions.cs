@@ -21,7 +21,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Do.Platform
+namespace System.Linq
 {
 	public static class EnumerableExtensions
 	{

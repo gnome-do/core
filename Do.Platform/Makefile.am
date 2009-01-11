@@ -27,7 +27,6 @@ FILES = \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IService.cs \
-	src/Do.Platform/EnumerableExtensions.cs \
 	src/Do.Platform/ICoreService.cs \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/ILogService.cs \
@@ -49,7 +48,8 @@ FILES = \
 	src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenWithAction.cs \
 	src/Do.Universe/Do.Universe.Common/RevealAction.cs \
-	src/Do.Universe/Do.Universe.Common/RunAction.cs
+	src/Do.Universe/Do.Universe.Common/RunAction.cs \
+	src/System/Linq/EnumerableExtensions.cs
 
 if HAVE_NUNIT
 FILES += \
