@@ -56,3 +56,6 @@ PROJECT_REFERENCES = \
 	Do.Interface.Linux \
 	Do.Platform \
 	Do.Universe
+
+module_DATA += $(ASSEMBLY).dll.config
+EXTRA_DIST += $(ASSEMBLY).dll.config

@@ -53,10 +53,10 @@ namespace Docky.XLib {
 	internal class Xlib {
 		const string libX11 = "X11";
 		
-		[DllImport ("libgdk-x11-2.0.so.0")]
+		[DllImport ("libgdk-x11")]
 		public static extern IntPtr gdk_x11_drawable_get_xid (IntPtr handle);
 		
-		[DllImport ("libgdk-x11-2.0.so.0")]
+		[DllImport ("libgdk-x11")]
 		public static extern IntPtr gdk_x11_drawable_get_xdisplay (IntPtr handle);
 		
 		[DllImport (libX11)]
