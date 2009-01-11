@@ -877,7 +877,7 @@ namespace Do.Core {
 					Do.UniverseManager.Reload ();
 				};
 			}
-			
+			Gtk.Grab.Remove (Gtk.Grab.Current);	
 			PreferencesWindow.Show ();
 		}
 
