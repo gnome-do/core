@@ -19,3 +19,7 @@ SUBDIRS = \
 	libdo \
 	m4 \
 	data
+
+# Get rid of the build dir on clean.
+clean-local:
+	rm -rf $(top_builddir)/build
