@@ -63,12 +63,12 @@ namespace Docky.XLib {
 		public extern static IntPtr XOpenDisplay(IntPtr display);
 		
 		[DllImport (libX11)]
-		public extern static int XInternAtoms(IntPtr display, string[] atom_names, int atom_count, bool only_if_exists, int[] atoms);
+		public extern static int XInternAtoms(IntPtr display, string[] atom_names, int atom_count, bool only_if_exists, IntPtr[] atoms);
 		
 		[DllImport (libX11)]
-		public extern static int XChangeProperty(IntPtr display, IntPtr window, int property, int type, int format, int mode, uint[] data, int nelements);
+		public extern static int XChangeProperty(IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, uint[] data, int nelements);
 
 		[DllImport (libX11)]
-		public extern static int XChangeProperty(IntPtr display, IntPtr window, int property, int type, int format, int mode, int[] data, int nelements);
+		public extern static int XChangeProperty(IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, int[] data, int nelements);
 	}
 }
