@@ -19,11 +19,13 @@
 
 using System;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 using Gtk;
+using Mono.Unix;
 using Mono.Addins;
 using Mono.Addins.Gui;
 using Mono.Addins.Setup;
@@ -42,13 +44,13 @@ namespace Do.UI
 	public partial class ManagePluginsPreferencesWidget : Bin, IConfigurable
 	{
 
-		const string PluginWikiPageFormat
-			= "http://www.gnomedo.com/wiki/index.php?title={0}_Plugin";
+		const string PluginWikiPageFormat =
+			"http://do.davebsd.com/wiki/index.php?title={0}_Plugin";
 
 		PluginNodeView nview;
 
 		new public string Name {
-			get { return "Plugins"; }
+			get { return Catalog.GetString ("Plugins"); }
 		}
 
 		public string Description {
@@ -86,8 +88,9 @@ namespace Do.UI
 		
 		protected void OnDragDataReceived (object sender, DragDataReceivedArgs args)
 		{
-			string data = System.Text.Encoding.UTF8.GetString (args.SelectionData.Data);
-			data = data.TrimEnd ('\0'); //sometimes we get a null at the end, and it crashes us
+			string data = Encoding.UTF8.GetString (args.SelectionData.Data);
+			// Sometimes we get a null at the end, and it crashes us.
+			data = data.TrimEnd ('\0');
 			
 			string [] uriList = Regex.Split (data, "\r\n");
 			List<string> errors = new List<string> ();
@@ -120,28 +123,17 @@ namespace Do.UI
 			return this;
 		}
 
-		private void OnPluginSelected (object sender,
-									   PluginSelectionEventArgs args)
+		private void OnPluginSelected (object sender, PluginSelectionEventArgs e)
 		{
 			UpdateButtonState ();
 		}
 
 		protected void UpdateButtonState ()
 		{
-			//string[] selected = nview.GetSelectedAddins ();
-			//btn_configure.Sensitive = 
-			//	selected.Any (id => PluginManager.ConfigurablesForAddin (id).Any ());	
-			//btn_about.Sensitive = selected.Length > 0;
-			btn_configure.Sensitive = false;
-			btn_about.Sensitive = false;
-
-			foreach (string id in nview.GetSelectedAddins ()) {
-				if (PluginManager.ConfigurablesForAddin (id).Any ()) {
-					btn_configure.Sensitive = true;
-					break;
-				}
-			}
-			btn_about.Sensitive = nview.GetSelectedAddins ().Length > 0;
+			btn_configure.Sensitive = nview.GetSelectedAddins ()
+				.SelectMany (id => PluginManager.ConfigurablesForAddin (id))
+				.Any ();
+			btn_about.Sensitive = nview.GetSelectedAddins ().Any ();
 		}
 
 		private void OnPluginToggled (string id, bool enabled)
@@ -160,34 +152,32 @@ namespace Do.UI
 					return;
 				}
 			}
-
 			// Now enable or disable the plugin.
 			if (enabled) {
 				AddinManager.Registry.EnableAddin (id);
 			} else {
 				AddinManager.Registry.DisableAddin (id);
 			}
-
 			UpdateButtonState ();
 		}
 
-		protected void OnDragDataGet (object sender, DragDataGetArgs e)
+		void OnDragDataGet (object sender, DragDataGetArgs e)
 		{
 			Console.Error.WriteLine (e.SelectionData.ToString ());
 		}
 		
-		protected virtual void OnBtnRefreshClicked (object sender, EventArgs e)
+		void OnBtnRefreshClicked (object sender, EventArgs e)
 		{
 			nview.Refresh ();
 			UpdateButtonState ();
 		}
 
-		protected void OnBtnUpdateClicked (object sender, EventArgs e)
+		void OnBtnUpdateClicked (object sender, EventArgs e)
 		{
 			nview.Refresh ();
 		}
 
-		protected void OnBtnConfigurePluginClicked (object sender, EventArgs e)
+		void OnBtnConfigurePluginClicked (object sender, EventArgs e)
 		{
 			Window win;
 			string[] ids;
@@ -200,7 +190,7 @@ namespace Do.UI
 			win.ShowAll ();
 		}
 
-		protected virtual void OnBtnAboutClicked (object sender, EventArgs e)
+		void OnBtnAboutClicked (object sender, EventArgs e)
 		{
 			foreach (string id in nview.GetSelectedAddins ()) {
 				try {
@@ -210,18 +200,18 @@ namespace Do.UI
 			}
 		}
 
-		protected virtual void OnShowComboChanged (object sender, EventArgs e)
+		void OnShowComboChanged (object sender, EventArgs e)
 		{
 			nview.ShowCategory = show_combo.ActiveText;
 			nview.Filter = search_entry.Text = "";
 		}
 
-		protected virtual void OnSearchEntryChanged (object sender, EventArgs e)
+		void OnSearchEntryChanged (object sender, EventArgs e)
 		{
 			nview.Filter = search_entry.Text;
 		}
 
-		protected virtual void OnScrollwDragDataReceived (object o, Gtk.DragDataReceivedArgs args)
+		void OnScrollwDragDataReceived (object o, DragDataReceivedArgs e)
 		{
 		}
 	}
