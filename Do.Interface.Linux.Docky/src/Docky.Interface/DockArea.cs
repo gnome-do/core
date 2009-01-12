@@ -176,7 +176,7 @@ namespace Docky.Interface
 		/// </value>
 		double ZoomIn {
 			get {
-				if (drag_resizing)
+				if (drag_resizing && drag_start_point != Cursor)
 					return 0;
 				
 				double zoom = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / BaseAnimationTime.TotalMilliseconds);
