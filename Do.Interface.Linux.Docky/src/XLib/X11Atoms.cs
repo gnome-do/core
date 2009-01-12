@@ -168,8 +168,8 @@ namespace Docky.XLib {
 		public readonly IntPtr AsyncAtom;
 
 
-		public X11Atoms (IntPtr display) {
-
+		public X11Atoms (Gdk.Window window) {
+			IntPtr display = XLib.Xlib.GdkDrawableXDisplay (window);
 			// make sure this array stays in sync with the statements below
 			string [] atom_names = new string[] {
 				"WM_PROTOCOLS",

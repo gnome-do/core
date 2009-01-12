@@ -212,8 +212,7 @@ namespace Docky.Interface
 		
 		public bool SetStruts ()
 		{
-			IntPtr display = Xlib.GdkDrawableXDisplay (GdkWindow);
-			X11Atoms atoms = new X11Atoms (display);
+			X11Atoms atoms = new X11Atoms (GdkWindow);
 
 			uint[] struts = new uint[12];
 
