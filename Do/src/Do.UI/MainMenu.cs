@@ -30,6 +30,8 @@ namespace Do.UI
 {
 	public class MainMenu : Gtk.Menu
 	{
+		const string DonateLink =
+			"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2453831";
 		static MainMenu instance;
 
 		public static MainMenu Instance {
@@ -42,7 +44,7 @@ namespace Do.UI
 
 		int mainMenuX, mainMenuY;
 
-		protected MainMenu ()
+		MainMenu ()
 		{
 			MenuItem item;
 
@@ -59,6 +61,13 @@ namespace Do.UI
 			Add (item);
 			item.CanFocus = false;
 			item.Activated += OnMainMenuPreferencesClicked;
+
+			// Donate menu item
+			item = new ImageMenuItem (Catalog.GetString ("_Donate!"));
+			(item as ImageMenuItem).Image = new Image (Stock.Yes, IconSize.Menu);
+			Add (item);
+			item.CanFocus = false;
+			item.Activated += OnMainMenuDonateClicked;
 			
 			// Quit menu item
 			item = new ImageMenuItem (Catalog.GetString ("_Quit"));
@@ -69,18 +78,24 @@ namespace Do.UI
 			ShowAll ();
 		}
 
-		protected void OnMainMenuQuitClicked (object o, EventArgs args)
+		void OnMainMenuQuitClicked (object o, EventArgs args)
 		{
 			Do.Controller.Vanish ();
 			Application.Quit ();
 		}
 		
-		protected void OnMainMenuPreferencesClicked (object o, EventArgs args)
+		void OnMainMenuPreferencesClicked (object o, EventArgs args)
 		{
 			Do.Controller.ShowPreferences ();
 		}
 
-		protected void OnMainMenuAboutClicked (object o, EventArgs args)
+		void OnMainMenuDonateClicked (object sender, EventArgs e)
+		{
+			Do.Controller.Vanish ();
+			Services.Environment.OpenUrl (DonateLink);
+		}
+
+		void OnMainMenuAboutClicked (object o, EventArgs args)
 		{
 			Do.Controller.ShowAbout ();
 		}
