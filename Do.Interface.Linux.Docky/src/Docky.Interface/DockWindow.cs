@@ -212,19 +212,19 @@ namespace Docky.Interface
 		
 		public bool SetStruts ()
 		{
-			IntPtr display = Xlib.gdk_x11_drawable_get_xdisplay (GdkWindow.Handle);
+			IntPtr display = Xlib.GdkDrawableXDisplay (GdkWindow);
 			X11Atoms atoms = new X11Atoms (display);
+
 			uint[] struts = new uint[12];
-			
+
 			struts[(int) XLib.Struts.Bottom] = (uint) dock_area.DockHeight;
-			
+
 			strut_timer = 0;
 			
 			if (!IsRealized)
 				return false;
 			
-			Xlib.XChangeProperty (display, Xlib.gdk_x11_drawable_get_xid (GdkWindow.Handle), atoms._NET_WM_STRUT, 
-			                      atoms.XA_CARDINAL, 32, (int) XLib.PropertyMode.PropModeReplace, struts, 4);
+			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT, atoms.XA_CARDINAL, 32, (int) XLib.PropertyMode.PropModeReplace, struts);
 				
 			return false;
 		}

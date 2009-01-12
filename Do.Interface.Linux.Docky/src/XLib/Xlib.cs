@@ -24,6 +24,8 @@
 using System;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Docky.XLib {
 
@@ -52,23 +54,43 @@ namespace Docky.XLib {
 	
 	internal class Xlib {
 		const string libX11 = "X11";
+		const string libGdkX11 = "libgdk-x11";
 		
-		[DllImport ("libgdk-x11")]
-		public static extern IntPtr gdk_x11_drawable_get_xid (IntPtr handle);
+		[DllImport (libGdkX11)]
+		static extern IntPtr gdk_x11_drawable_get_xid (IntPtr handle);
 		
-		[DllImport ("libgdk-x11")]
-		public static extern IntPtr gdk_x11_drawable_get_xdisplay (IntPtr handle);
+		[DllImport (libGdkX11)]
+		static extern IntPtr gdk_x11_drawable_get_xdisplay (IntPtr handle);
+
+		public static IntPtr GdkWindowX11Xid (Gdk.Window window)
+		{
+			return gdk_x11_drawable_get_xid (window.Handle);
+		}
+
+		public static IntPtr GdkDrawableXDisplay (Gdk.Window window)
+		{
+			return gdk_x11_drawable_get_xdisplay (window.Handle);
+		}
 		
 		[DllImport (libX11)]
-		public extern static IntPtr XOpenDisplay(IntPtr display);
+		public extern static IntPtr XOpenDisplay (IntPtr display);
 		
 		[DllImport (libX11)]
-		public extern static int XInternAtoms(IntPtr display, string[] atom_names, int atom_count, bool only_if_exists, IntPtr[] atoms);
+		public extern static int XInternAtoms (IntPtr display, string[] atom_names, int atom_count, bool only_if_exists, IntPtr[] atoms);
 		
 		[DllImport (libX11)]
-		public extern static int XChangeProperty(IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, uint[] data, int nelements);
+		extern static int XChangeProperty (IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, uint[] data, int nelements);
 
 		[DllImport (libX11)]
-		public extern static int XChangeProperty(IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, int[] data, int nelements);
+		extern static int XChangeProperty (IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, byte[] data, int nelements);
+	
+		public static int XChangeProperty (Gdk.Window window, IntPtr property, IntPtr type, int format, int mode, uint[] data)
+		{
+			List<byte> bytes = new List<byte> ();
+			foreach (uint i in data) {
+				bytes.AddRange (BitConverter.GetBytes (i));
+			}
+			return XChangeProperty (GdkDrawableXDisplay (window), GdkWindowX11Xid (window), property, type, format, mode, bytes.ToArray (), data.Length); 
+		}
 	}
 }
