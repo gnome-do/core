@@ -82,15 +82,12 @@ namespace Docky.XLib {
 		extern static int XChangeProperty (IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, uint[] data, int nelements);
 
 		[DllImport (libX11)]
-		extern static int XChangeProperty (IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, byte[] data, int nelements);
+		extern static int XChangeProperty (IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, IntPtr[] data, int nelements);
 	
-		public static int XChangeProperty (Gdk.Window window, IntPtr property, IntPtr type, int format, int mode, uint[] data)
+		public static int XChangeProperty (Gdk.Window window, IntPtr property, IntPtr type, int mode, uint[] data)
 		{
-			List<byte> bytes = new List<byte> ();
-			foreach (uint i in data) {
-				bytes.AddRange (BitConverter.GetBytes (i));
-			}
-			return XChangeProperty (GdkDrawableXDisplay (window), GdkWindowX11Xid (window), property, type, format, mode, bytes.ToArray (), data.Length); 
+			IntPtr [] dataArray = data.Select (i => (IntPtr) i).ToArray ();
+			return XChangeProperty (GdkDrawableXDisplay (window), GdkWindowX11Xid (window), property, type, 32, mode, dataArray, data.Length); 
 		}
 	}
 }
