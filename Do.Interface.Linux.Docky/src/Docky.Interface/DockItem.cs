@@ -105,10 +105,9 @@ namespace Docky.Interface
 				// This has a degree of an abstraction break to it however, but it is important to get right
 				// until a better solution is found.
 				foreach (Act act in actions
-				         .OrderByDescending (act => act.Name != Catalog.GetString ("Close All"))
-				         .ThenByDescending (act => act.Name != Catalog.GetString ("Minimize/Restore"))
-				         .ThenByDescending (act => act.Name != Catalog.GetString ("Maximize"))
-				         .ThenByDescending (act => act.Name != Catalog.GetString ("Shade Window"))
+				         .OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
+				         .ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
+				         .ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
 				         .ThenByDescending (act => act.Relevance))
 					yield return act;
 			}
