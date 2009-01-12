@@ -363,7 +363,7 @@ namespace Docky.Interface
 			this.window = window;
 			
 			Gdk.Rectangle geo;
-			geo = Screen.GetMonitorGeometry (0);
+			geo = Screen.GetMonitorGeometry ((int) DockPreferences.Monitor);
 			
 			Width = geo.Width;
 			SetSizeRequest (Width, Height);
@@ -1001,7 +1001,7 @@ namespace Docky.Interface
 						int item_x;
 						double item_zoom;
 						IconZoomedPosition (PositionProvider.IndexAtPosition (Cursor.X), out item_x, out item_zoom);
-						int menu_y = Screen.GetMonitorGeometry (0).Height - (int) (DockPreferences.IconSize * item_zoom);
+						int menu_y = Screen.GetMonitorGeometry ((int) DockPreferences.Monitor).Height - (int) (DockPreferences.IconSize * item_zoom);
 						PopupMenu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), 
 						                      ((int) evnt.XRoot - Cursor.X) + item_x, menu_y);
 						return ret_val;
@@ -1067,7 +1067,7 @@ namespace Docky.Interface
 			Gdk.Rectangle pos, geo;
 			window.GetPosition (out pos.X, out pos.Y);
 			
-			geo = Screen.GetMonitorGeometry (0);
+			geo = Screen.GetMonitorGeometry ((int) DockPreferences.Monitor);
 			// we use geo here instead of our position for the Y value because we know the parent window
 			// may offset us when hidden. This is not desired...
 			for (int i = 0; i < DockItems.Count; i++) {

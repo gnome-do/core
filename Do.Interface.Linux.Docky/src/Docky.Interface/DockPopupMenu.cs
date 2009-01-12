@@ -88,7 +88,7 @@ namespace Docky.Interface
 		public virtual void PopUp (IEnumerable<AbstractMenuButtonArgs> args, int x, int y)
 		{
 			ShowAll ();
-			Gdk.Rectangle geo = Screen.GetMonitorGeometry (0);
+			Gdk.Rectangle geo = Screen.GetMonitorGeometry ((int) DockPreferences.Monitor);
 			Gtk.Requisition req = SizeRequest ();
 			
 			int posx = Math.Min (Math.Max (0, x - req.Width / TailOffset), geo.X + geo.Width - req.Width);

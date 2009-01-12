@@ -183,6 +183,20 @@ namespace Docky.Utilities
 					AutomaticIconsChanged ();
 			}
 		}
+
+		static uint monitor = prefs.Get<uint> ("Monitor", 0);
+		public static uint Monitor {
+			get {
+				if (monitor < Gdk.Screen.Default.NMonitors - 1)
+					return (uint) Gdk.Screen.Default.NMonitors - 1;
+				return monitor; 
+			}
+			set {
+				if (value >= Gdk.Screen.Default.NMonitors)
+					return;
+				monitor = value;
+			}
+		}
 		
 		#region blacklists
 		static List<string> item_blacklist = DeserializeBlacklist ();
