@@ -185,16 +185,14 @@ namespace Docky.Utilities
 		}
 
 		static int monitor = Math.Max (0, prefs.Get<int> ("Monitor", 0));
-		public static uint Monitor {
+		public static int Monitor {
 			get {
-				if (monitor > Gdk.Screen.Default.NMonitors - 1)
-					return (uint) Gdk.Screen.Default.NMonitors - 1;
-				return (uint) monitor; 
+				return Math.Max (0, Math.Min (monitor, Gdk.Screen.Default.NMonitors - 1)); 
 			}
 			set {
-				if (value >= Gdk.Screen.Default.NMonitors)
-					return;
-				monitor = (int) value;
+				if (value >= Gdk.Screen.Default.NMonitors || value < 0)
+					value = 0;
+				monitor = value;
 				prefs.Set ("Monitor", value);
 			}
 		}
