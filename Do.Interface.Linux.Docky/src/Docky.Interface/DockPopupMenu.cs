@@ -36,11 +36,14 @@ namespace Docky.Interface
 	
 	public class DockPopupMenu : Gtk.Window
 	{
-		const int TailHeight = 15;
+		const int TailHeight = 25;
 		new const int BorderWidth = 2;
 		const int Radius = 10;
 		const int Width = 230;
-		const int TailOffset = 4;
+		const int TailOffset = 2;
+		const double Pointiness = 2;
+		const double BaseCurviness = 1.2;
+		const double TailCurviness = .8;
 		
 		int horizontal_offset;
 		
@@ -130,13 +133,21 @@ namespace Docky.Interface
 			
 			cr.MoveTo (BorderWidth + Radius, BorderWidth);
 			cr.Arc (rect.Width - BorderWidth - Radius, BorderWidth + Radius, Radius, Math.PI * 1.5, Math.PI * 2);
-			cr.Arc (rect.Width - BorderWidth - Radius, rect.Height - BorderWidth - Radius - TailHeight, Radius, 0, Math.PI * 0.5);
+
+			Cairo.PointD rightCurveStart = new Cairo.PointD (rect.Width - BorderWidth, rect.Height - BorderWidth - TailHeight);
+			Cairo.PointD leftCurveStart = new Cairo.PointD (BorderWidth, rect.Height - BorderWidth - TailHeight);
+			Cairo.PointD apex = new Cairo.PointD (rect.Width / 2 + horizontal_offset, rect.Height - BorderWidth);
+			cr.LineTo (rightCurveStart);
 			
-			cr.LineTo (rect.Width / TailOffset + 30 + horizontal_offset - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
-			cr.LineTo (rect.Width / TailOffset + 10 + horizontal_offset - BorderWidth - Radius, rect.Height - BorderWidth);
-			cr.LineTo (rect.Width / TailOffset + 10 + horizontal_offset - BorderWidth - Radius, rect.Height - BorderWidth - TailHeight);
+			cr.CurveTo (rightCurveStart.X, rightCurveStart.Y + TailHeight * BaseCurviness, 
+			            apex.X + 10 * Pointiness, apex.Y - TailHeight * TailCurviness, 
+			            apex.X, apex.Y);
 			
-			cr.Arc (BorderWidth + Radius, rect.Height - BorderWidth - Radius - TailHeight, Radius, Math.PI * 0.5, Math.PI);
+			cr.CurveTo (apex.X - 10 * Pointiness, 
+			            apex.Y - TailHeight * TailCurviness, 
+			            leftCurveStart.X, leftCurveStart.Y + TailHeight * BaseCurviness, 
+			            leftCurveStart.X, leftCurveStart.Y);
+			
 			cr.Arc (BorderWidth + Radius, BorderWidth + Radius, Radius, Math.PI, Math.PI * 1.5);
 			
 			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .9);
