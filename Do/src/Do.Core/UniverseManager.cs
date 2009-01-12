@@ -47,7 +47,7 @@ namespace Do.Core
 		/// </value>
 		TimeSpan UpdateTimeout {
 			get {
-				int minutes = DBus.PowerState.OnBattery () ? 10 : 2;
+				int minutes = DBus.PowerState.OnBattery () ? 10 : 1;
 				return new TimeSpan (0, minutes, 0);
 			}
 		}
@@ -169,6 +169,9 @@ namespace Do.Core
 				if (!UpdatesEnabled) continue;
 				
 				if (thread.IsAlive) thread.Join ();
+
+				// reset our update time so the penalty is actually paid...
+				startUpdate = DateTime.Now;
 				
 				if (rand.Next (10) == 0) {
 					#warning The Log is not threadsafe...
