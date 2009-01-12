@@ -79,9 +79,6 @@ namespace Docky.XLib {
 		public extern static int XInternAtoms (IntPtr display, string[] atom_names, int atom_count, bool only_if_exists, IntPtr[] atoms);
 		
 		[DllImport (libX11)]
-		extern static int XChangeProperty (IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, uint[] data, int nelements);
-
-		[DllImport (libX11)]
 		extern static int XChangeProperty (IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, IntPtr[] data, int nelements);
 	
 		public static int XChangeProperty (Gdk.Window window, IntPtr property, IntPtr type, int mode, uint[] data)

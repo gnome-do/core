@@ -314,7 +314,6 @@ namespace Docky.Interface
 			return Services.Core
 				.GetItemsOrderedByRelevance ()
 				.Where (item => item.GetType ().Name != "SelectedTextItem" && item.GetType ().Name != "GNOMETrashFileItem")
-				.Where (item => !(item is ItemSource))
 				.Where (item => !DockPreferences.ItemBlacklist.Contains (item.UniqueId))
 				.Take (DockPreferences.AutomaticIcons)
 				.OrderByDescending (item => item is IApplicationItem)

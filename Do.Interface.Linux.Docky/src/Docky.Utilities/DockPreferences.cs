@@ -36,6 +36,7 @@ namespace Docky.Utilities
 		public static event Action IconSizeChanged;
 		public static event Action TrashVisibilityChanged;
 		public static event Action AutomaticIconsChanged;
+		public static event Action MonitorChanged;
 	
 		public const int IconBorderWidth = 2;
 		
@@ -190,10 +191,16 @@ namespace Docky.Utilities
 				return Math.Max (0, Math.Min (monitor, Gdk.Screen.Default.NMonitors - 1)); 
 			}
 			set {
+				if (Monitor == value)
+					return;
+				
 				if (value >= Gdk.Screen.Default.NMonitors || value < 0)
 					value = 0;
 				monitor = value;
 				prefs.Set ("Monitor", value);
+
+				if (MonitorChanged != null)
+					MonitorChanged ();
 			}
 		}
 		

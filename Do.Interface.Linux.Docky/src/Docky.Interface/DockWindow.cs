@@ -42,7 +42,6 @@ namespace Docky.Interface
 		IDoController controller;
 		Gdk.Rectangle current_mask;
 		uint strut_timer;
-		uint reposition_timer;
 		bool is_repositioned_hidden;
 		
 		public new string Name {
@@ -78,8 +77,8 @@ namespace Docky.Interface
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);
 			};
-			
-			DockPreferences.AutohideChanged += DelaySetStruts;
+
+			RegisterEvents ();
 			
 			Build ();
 		}
@@ -90,12 +89,27 @@ namespace Docky.Interface
 			Add (dock_area);
 			ShowAll ();
 		}
-		
-		void OnEventBoxMotion ()
+
+		void RegisterEvents ()
 		{
-			Reposition ();
-			SetInputMask (new Gdk.Rectangle (current_mask.X, current_mask.Y + (current_mask.Height - 2), current_mask.Width, 2));
-			Gtk.Application.Invoke ((o, a) => dock_area.ManualCursorUpdate ());
+			DockPreferences.AutohideChanged += DelaySetStruts;
+			DockPreferences.MonitorChanged += HandleMonitorChanged;
+		}
+
+		void UnregisterEvents ()
+		{
+			DockPreferences.AutohideChanged -= DelaySetStruts;
+			DockPreferences.MonitorChanged -= HandleMonitorChanged;
+		}
+
+		void HandleMonitorChanged()
+		{
+			Remove (dock_area);
+			dock_area.Dispose ();
+			
+			dock_area = new DockArea (this);
+			Add (dock_area);
+			ShowAll ();
 		}
 		
 		public void SetInputMask (Gdk.Rectangle area)
@@ -117,7 +131,7 @@ namespace Docky.Interface
 			pixmap.Dispose ();
 			
 			if (area.Height == 1) {
-				reposition_timer = GLib.Timeout.Add (500, () => {
+				GLib.Timeout.Add (500, () => {
 					if (current_mask.Height == 1)
 						HideReposition ();
 					return false;
@@ -301,6 +315,7 @@ namespace Docky.Interface
 		
 		public override void Dispose ()
 		{
+			UnregisterEvents ();
 			dock_area.Dispose ();
 			Destroy ();
 			base.Dispose ();

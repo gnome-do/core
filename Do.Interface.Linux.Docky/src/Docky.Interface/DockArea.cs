@@ -146,7 +146,7 @@ namespace Docky.Interface
 		
 		ItemPositionProvider PositionProvider { get; set; }
 		
-		DockItemMenu PopupMenu { get; set; }
+		new DockItemMenu PopupMenu { get; set; }
 		
 		bool GtkDragging { get; set; }
 		

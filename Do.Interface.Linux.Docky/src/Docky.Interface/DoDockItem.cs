@@ -34,8 +34,8 @@ namespace Docky.Interface
 	public class DoDockItem : BaseDockItem, IRightClickable
 	{
 		const string DoIcon = "gnome-do";
-		const string EnableIcon = "gtk-ok";
-		const string DisableIcon = "gtk-delete";
+		const string EnableIcon = "gtk-apply";
+		const string DisableIcon = "gtk-remove";
 		
 		#region IDockItem implementation 
 		
@@ -105,7 +105,10 @@ namespace Docky.Interface
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = true, 
 				                                       "Advanced Indicators", DisableIcon);
-			
+			if (Gdk.Screen.Default.NMonitors > 1)
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
+				                                       "Switch Monitors", EnableIcon);
+
 		}
 		
 		#endregion 
