@@ -1,8 +1,7 @@
 /* PluginNodeView.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
+ * COPYRIGHT file distributed with this source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,7 +104,7 @@ namespace Do.UI
 			Refresh ();
 		}
 
-		public int DefaultTreeIterCompareFunc(TreeModel model, TreeIter a, TreeIter b)
+		int DefaultTreeIterCompareFunc (TreeModel model, TreeIter a, TreeIter b)
 		{
 			string repA, repB;
 			int scoreA, scoreB;
@@ -127,8 +126,7 @@ namespace Do.UI
 			return scoreB - scoreA;
 		}
 
-		protected virtual void IconDataFunc (TreeViewColumn column,
-			CellRenderer cell, TreeModel model, TreeIter iter)
+		void IconDataFunc (TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
 		{
 			string id, icon;
 			CellRendererPixbuf renderer;
@@ -153,7 +151,7 @@ namespace Do.UI
 			return true;
 		}
 
-		public virtual void Refresh ()
+		public void Refresh ()
 		{
 			ListStore store;
 			SetupService setup;
@@ -173,11 +171,13 @@ namespace Do.UI
 			ScrollFirst (false);
 		}
 
-		void ScrollFirst (bool select)
+		public void ScrollFirst (bool selectFirst)
 		{
-			if ((Model as ListStore).Data.Count == 0) return;
-			ScrollToCell (TreePath.NewFirst (), Columns [0], true, 0, 0);
-			if (select) Selection.SelectPath (TreePath.NewFirst ());
+			if (!IsRealized) return;
+
+			ScrollToPoint (0, 0);
+			if (selectFirst)
+				Selection.SelectPath (TreePath.NewFirst ());
 		}
 
 		string Description (string name, string desc, string version)
