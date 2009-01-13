@@ -188,10 +188,11 @@ namespace Docky.Utilities
 		static int monitor = Math.Max (0, prefs.Get<int> ("Monitor", 0));
 		public static int Monitor {
 			get {
-				return Math.Max (0, Math.Min (monitor, Gdk.Screen.Default.NMonitors - 1)); 
+				monitor = Math.Max (0, Math.Min (monitor, Gdk.Screen.Default.NMonitors - 1));
+				return monitor;
 			}
 			set {
-				if (Monitor == value)
+				if (monitor == value)
 					return;
 				
 				if (value >= Gdk.Screen.Default.NMonitors || value < 0)

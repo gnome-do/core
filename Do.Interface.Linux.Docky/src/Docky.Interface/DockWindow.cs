@@ -182,7 +182,7 @@ namespace Docky.Interface
 			Gdk.Rectangle geo, main;
 			
 			GetSize (out main.Width, out main.Height);
-			geo = Screen.GetMonitorGeometry (DockPreferences.Monitor);
+			geo = LayoutUtils.MonitorGemonetry ();
 			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - main.Height);
 			
 			is_repositioned_hidden = false;
@@ -193,7 +193,7 @@ namespace Docky.Interface
 			Gdk.Rectangle geo, main;
 			
 			GetSize (out main.Width, out main.Height);
-			geo = Screen.GetMonitorGeometry (DockPreferences.Monitor);
+			geo = LayoutUtils.MonitorGemonetry ();
 			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height);
 			
 			InputShapeCombineMask (null, 0, 0);

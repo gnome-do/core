@@ -26,6 +26,7 @@ FILES = \
 	src/Docky.Interface/ItemPositionProvider.cs \
 	src/Docky.Interface/AbstractMenuButtonArgs.cs \
 	src/Docky.Interface/LaunchMenuButtonArgs.cs \
+	src/Docky.Interface/LayoutUtils.cs \
 	src/Docky.Interface/SimpleMenuButtonArgs.cs \
 	src/Docky.Interface/SeparatorMenuButtonArgs.cs \
 	src/Docky.Interface/SeparatorItem.cs \
