@@ -552,6 +552,17 @@ namespace Docky.Interface
 				
 				di.Dispose ();
 			}
+
+			if (!DockItems.Contains (TrashItem))
+				TrashItem.Dispose ();
+			
+			if (!DockItems.Contains (Separator))
+				Separator.Dispose ();
+
+			custom_items.Clear ();
+			statistical_items.Clear ();
+			output_items.Clear (); 
+			task_items.Clear ();
 		}
 	}
 }

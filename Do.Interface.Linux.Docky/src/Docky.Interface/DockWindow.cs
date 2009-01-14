@@ -100,6 +100,9 @@ namespace Docky.Interface
 		{
 			DockPreferences.AutohideChanged -= DelaySetStruts;
 			DockPreferences.MonitorChanged -= HandleMonitorChanged;
+
+			if (strut_timer > 0)
+				GLib.Source.Remove (strut_timer);
 		}
 
 		void HandleMonitorChanged()
@@ -320,11 +323,16 @@ namespace Docky.Interface
 		public override void Dispose ()
 		{
 			UnregisterEvents ();
+
+			Remove (dock_area);
 			dock_area.Dispose ();
+			dock_area.Destroy ();
+			dock_area = null;
+			
 			Destroy ();
 			base.Dispose ();
 		}
-		
+
 		#endregion 
 	}
 }

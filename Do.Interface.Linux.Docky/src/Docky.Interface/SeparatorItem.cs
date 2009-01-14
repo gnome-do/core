@@ -50,12 +50,14 @@ namespace Docky.Interface
 		public SeparatorItem ()
 		{
 			AnimationType = ClickAnimationType.None;
-			
-			DockPreferences.IconSizeChanged += delegate {
-				if (sr != null)
-					sr.Destroy ();
-				sr = null;
-			};
+			DockPreferences.IconSizeChanged += HandleIconSizeChanged;
+		}
+
+		void HandleIconSizeChanged ()
+		{
+			if (sr != null)
+				sr.Destroy ();
+			sr = null;
 		}
 		
 		protected override Pixbuf GetSurfacePixbuf ()
@@ -92,8 +94,11 @@ namespace Docky.Interface
 		
 		public override void Dispose ()
 		{
-			if (sr != null)
+			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
+			if (sr != null) {
 				sr.Destroy ();
+				sr = null;
+			}
 		}
 		
 		#endregion 

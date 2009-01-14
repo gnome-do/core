@@ -29,7 +29,7 @@ namespace Docky.Interface
 {
 	public delegate bool AnimationConditionHandler ();
 	
-	public class DockAnimationState
+	public class DockAnimationState : IDisposable
 	{
 		Dictionary<string, AnimationConditionHandler> animation_conditions;
 		bool previous_animation_needed;
@@ -71,5 +71,15 @@ namespace Docky.Interface
 		{
 			animation_conditions.Remove (id);
 		}
+
+		#region IDisposable implementation 
+		
+		public void Dispose ()
+		{
+			animation_conditions.Clear ();
+		}
+		
+		#endregion 
+		
 	}
 }

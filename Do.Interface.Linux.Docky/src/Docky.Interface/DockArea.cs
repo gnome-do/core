@@ -70,6 +70,7 @@ namespace Docky.Interface
 		bool drag_resizing;
 		bool gtk_drag_source_set;
 		bool previous_icon_animation_needed = true;
+		bool disposed;
 		
 		int drag_start_icon_size;
 		int remove_drag_start_x;
@@ -395,11 +396,9 @@ namespace Docky.Interface
 			RegisterGtkDragDest ();
 			RegisterGtkDragSource ();
 			
-			window.Realized += (o, e) => SetParentInputMask ();
-		
 			ResetCursorTimer ();
 		}
-		
+
 		void RegisterEvents ()
 		{
 			item_provider.DockItemsChanged += OnDockItemsChanged;
@@ -407,18 +406,20 @@ namespace Docky.Interface
 			
 			PopupMenu.Hidden += OnDockItemMenuHidden;
 			PopupMenu.Shown += OnDockItemMenuShown;
+
+			Services.Core.UniverseInitialized += HandleUniverseInitialized;
 			
 			Wnck.Screen.Default.ViewportsChanged += OnWnckViewportsChanged;
-			
+
+			Realized += (o, e) => SetParentInputMask ();
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
-			Realized += (o, a) => SetIconRegions ();
 			
 			StyleSet += (o, a) => { 
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);
 			};
 		}
-		
+
 		void UnregisterEvents ()
 		{
 			item_provider.DockItemsChanged -= OnDockItemsChanged;
@@ -426,6 +427,8 @@ namespace Docky.Interface
 			
 			PopupMenu.Hidden -= OnDockItemMenuHidden;
 			PopupMenu.Shown -= OnDockItemMenuShown;
+
+			Services.Core.UniverseInitialized -= HandleUniverseInitialized;
 			
 			Wnck.Screen.Default.ViewportsChanged -= OnWnckViewportsChanged;
 		}
@@ -476,6 +479,14 @@ namespace Docky.Interface
 			}
 			AnimatedDraw (true);
 		}
+
+		void HandleUniverseInitialized(object sender, EventArgs e)
+		{
+			GLib.Timeout.Add (2000, delegate {
+				SetIconRegions ();
+				return false;
+			});
+		}
 		
 		void RegisterGtkDragSource ()
 		{
@@ -498,6 +509,8 @@ namespace Docky.Interface
 		
 		void ResetCursorTimer ()
 		{
+			if (disposed)
+				return;
 			if (cursor_timer > 0)
 				GLib.Source.Remove (cursor_timer);
 			
@@ -1144,14 +1157,43 @@ namespace Docky.Interface
 		
 		public override void Dispose ()
 		{
+			disposed = true;
 			UnregisterEvents ();
+			UnregisterGtkDragSource ();
+
+			SummonRenderer.Dispose ();
+			SummonRenderer = null;
+			
 			item_provider.Dispose ();
+			item_provider = null;
+
+			PositionProvider.Dispose ();
+			PositionProvider = null;
+
+			AnimationState.Dispose ();
+			AnimationState = null;
+
+			PopupMenu.Destroy ();
+			PopupMenu = null;
+
+			if (backbuffer != null)
+				backbuffer.Destroy ();
+
+			if (input_area_buffer != null)
+				input_area_buffer.Destroy ();
+
+			if (dock_icon_buffer != null)
+				dock_icon_buffer.Destroy ();
+
+			window = null;
 			
 			if (cursor_timer > 0)
 				GLib.Source.Remove (cursor_timer);
 			
 			if (animation_timer > 0)
 				GLib.Source.Remove (animation_timer);
+
+			Destroy ();
 			base.Dispose ();
 		}
 

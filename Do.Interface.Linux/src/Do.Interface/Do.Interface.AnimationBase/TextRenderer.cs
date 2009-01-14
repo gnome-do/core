@@ -29,7 +29,7 @@ namespace Do.Interface.AnimationBase
 {
 	
 	
-	public class TextRenderer
+	public class TextRenderer : IDisposable
 	{
 		Pango.Layout layout;
 		
@@ -85,5 +85,17 @@ namespace Do.Interface.AnimationBase
 			                          Pango.Units.ToPixels (weak.Width),
 			                          Pango.Units.ToPixels (weak.Height));
 		}
+
+		#region IDisposable implementation 
+		
+		public void Dispose ()
+		{
+			ReferenceWidget = null;
+			if (layout != null)
+				layout.Dispose ();
+		}
+		
+		#endregion 
+		
 	}
 }

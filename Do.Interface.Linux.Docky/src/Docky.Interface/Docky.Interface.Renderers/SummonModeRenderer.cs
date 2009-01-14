@@ -40,7 +40,7 @@ namespace Docky.Interface.Renderers
 		None,
 	}
 	
-	public class SummonModeRenderer
+	public class SummonModeRenderer : IDisposable
 	{
 		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
 		const int IconSize = 16;
@@ -71,11 +71,14 @@ namespace Docky.Interface.Renderers
 			this.parent = parent;
 			TextUtility = new TextRenderer (parent);
 			
-			DockPreferences.IconSizeChanged += delegate {
-				if (LargeIconCache != null)
-					LargeIconCache.Dispose ();
-				LargeIconCache = null;
-			};
+			DockPreferences.IconSizeChanged += HandleIconSizeChanged;
+		}
+
+		void HandleIconSizeChanged ()
+		{
+			if (LargeIconCache != null)
+				LargeIconCache.Dispose ();
+			LargeIconCache = null;
 		}
 		
 		public SummonClickEvent GetClickEvent (Gdk.Rectangle dockArea)
@@ -380,5 +383,18 @@ namespace Docky.Interface.Renderers
 			
 			return DrawState.None;
 		}
+
+		#region IDisposable implementation 
+		
+		public void Dispose ()
+		{
+			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
+			parent = null;
+			TextUtility.Dispose ();
+			TextUtility = null;
+		}
+		
+		#endregion 
+		
 	}
 }
