@@ -171,7 +171,7 @@ namespace Docky.Utilities
 				while (midY < 0)
 					midX += wsp.Height;
 				
-				Wnck.Screen.Default.MoveViewport (midX, midY);
+				scrn.MoveViewport (midX, midY);
 			}
 
 			if (w.Workspace != w.Screen.ActiveWorkspace)
