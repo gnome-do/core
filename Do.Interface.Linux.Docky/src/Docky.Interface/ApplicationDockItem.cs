@@ -335,5 +335,14 @@ namespace Docky.Interface
 		{
 			return VisibleWindows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ());
 		}
+
+		public override void Dispose ()
+		{
+			foreach (Wnck.Window w in VisibleWindows)
+				w.StateChanged -= HandleStateChanged;
+			
+			base.Dispose ();
+		}
+
 	}
 }

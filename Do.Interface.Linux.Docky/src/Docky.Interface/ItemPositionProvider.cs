@@ -28,7 +28,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ItemPositionProvider
+	public class ItemPositionProvider : IDisposable
 	{
 		const int HorizontalBuffer = 7;
 		
@@ -156,5 +156,15 @@ namespace Docky.Interface
 			}
 			return -1;
 		}
+
+		#region IDisposable implementation 
+		
+		public void Dispose ()
+		{
+			item_provider = null;
+		}
+		
+		#endregion 
+		
 	}
 }
