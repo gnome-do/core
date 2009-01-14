@@ -110,6 +110,7 @@ namespace Docky.Interface
 			dock_area = new DockArea (this);
 			Add (dock_area);
 			ShowAll ();
+			DelaySetStruts ();
 		}
 		
 		public void SetInputMask (Gdk.Rectangle area)
