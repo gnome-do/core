@@ -137,7 +137,7 @@ namespace Docky.Utilities
 			if (w == null)
 				return;
 			
-			if (!w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)) {
+			if (!w.IsInViewport (w.Screen.ActiveWorkspace)) {
 				int viewX, viewY, viewW, viewH;
 				int midX, midY;
 				Screen scrn = w.Screen;
