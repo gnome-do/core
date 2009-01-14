@@ -140,7 +140,7 @@ namespace Docky.Utilities
 			if (!w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)) {
 				int viewX, viewY, viewW, viewH;
 				int midX, midY;
-				Screen scrn = Screen.Default;
+				Screen scrn = w.Screen;
 				Workspace wsp = scrn.ActiveWorkspace;
 				
 				//get our windows geometry
