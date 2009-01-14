@@ -395,8 +395,6 @@ namespace Docky.Interface
 			RegisterGtkDragDest ();
 			RegisterGtkDragSource ();
 			
-			window.Realized += (o, e) => SetParentInputMask ();
-		
 			ResetCursorTimer ();
 		}
 		
@@ -409,7 +407,8 @@ namespace Docky.Interface
 			PopupMenu.Shown += OnDockItemMenuShown;
 			
 			Wnck.Screen.Default.ViewportsChanged += OnWnckViewportsChanged;
-			
+
+			Realized += (o, e) => SetParentInputMask ();
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
 			Realized += (o, a) => SetIconRegions ();
 			
