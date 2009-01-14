@@ -233,7 +233,8 @@ namespace Docky.Interface
 
 			struts [(int) XLib.Struts.Bottom]      = (uint) dock_area.DockHeight;
 			struts [(int) XLib.Struts.BottomStart] = (uint) LayoutUtils.MonitorGemonetry ().X;
-			struts [(int) XLib.Struts.BottomEnd]   = (uint) LayoutUtils.MonitorGemonetry ().X + (uint) LayoutUtils.MonitorGemonetry ().Width;
+			// subtract 1 to align to 0
+			struts [(int) XLib.Struts.BottomEnd]   = (uint) LayoutUtils.MonitorGemonetry ().X + (uint) LayoutUtils.MonitorGemonetry ().Width - 1;
 
 			strut_timer = 0;
 			
