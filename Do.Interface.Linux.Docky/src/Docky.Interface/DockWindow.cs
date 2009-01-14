@@ -228,16 +228,18 @@ namespace Docky.Interface
 		{
 			X11Atoms atoms = new X11Atoms (GdkWindow);
 
-			uint[] struts = new uint[12];
+			uint [] struts = new uint [12];
 
-			struts[(int) XLib.Struts.Bottom] = (uint) dock_area.DockHeight;
+			struts [(int) XLib.Struts.Bottom]      = (uint) dock_area.DockHeight;
+			struts [(int) XLib.Struts.BottomStart] = (uint) LayoutUtils.MonitorGemonetry ().X;
+			struts [(int) XLib.Struts.BottomEnd]   = (uint) LayoutUtils.MonitorGemonetry ().X + (uint) LayoutUtils.MonitorGemonetry ().Width;
 
 			strut_timer = 0;
 			
 			if (!IsRealized)
 				return false;
 			
-			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT, atoms.XA_CARDINAL, (int) XLib.PropertyMode.PropModeReplace, struts);
+			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT_PARTIAL, atoms.XA_CARDINAL, (int) XLib.PropertyMode.PropModeReplace, struts);
 				
 			return false;
 		}
