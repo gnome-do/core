@@ -107,7 +107,7 @@ namespace Docky.Interface
 				                                       "Advanced Indicators", DisableIcon);
 			if (Gdk.Screen.Default.NMonitors > 1)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
-				                                       "Switch Monitors", EnableIcon);
+				                                       "Switch Monitors", "display");
 
 		}
 		
