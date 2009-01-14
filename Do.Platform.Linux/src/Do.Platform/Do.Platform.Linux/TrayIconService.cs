@@ -66,7 +66,7 @@ namespace Do.Platform.Linux
 		{
 			Preferences = new TrayIconPreferences ();
 			Preferences.IconVisibleChanged += OnIconVisibleChanged;
-			if (Preferences.IconVisible) Show ();
+			if (!Preferences.IconVisible) Hide ();
 
 			// Listen for notifications so we can show a libnotify bubble.
 			Services.Notifications.Notified += OnNotified;
