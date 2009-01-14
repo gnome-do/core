@@ -660,12 +660,6 @@ namespace Docky.Interface
 			double zoom;
 			IconZoomedPosition (icon, out center, out zoom);
 			
-			if (DockItems [icon].TimeSinceAdd < InsertAnimationTime) {
-				// if we just inserted the icon, we scale it down the newer it is.  This gives the nice
-				// zoom in effect for newly inserted icons
-				zoom *= DockItems [icon].TimeSinceAdd.TotalMilliseconds / InsertAnimationTime.TotalMilliseconds;
-			}
-			
 			// This gives the actual x,y coordinates of the icon 
 			double x = center - zoom * DockItems [icon].Width / 2;
 			double y = Height - (zoom * DockItems [icon].Height) - PositionProvider.VerticalBuffer;
@@ -695,7 +689,10 @@ namespace Docky.Interface
 					cr.Scale (scale, scale);
 				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom
 				// the icon, not move it around.
-				DockItems [icon].GetIconSurface (cr.Target).Show (cr, x / scale, y / scale);
+				
+				double fadeInOpacity = Math.Min (DockItems [icon].TimeSinceAdd.TotalMilliseconds / InsertAnimationTime.TotalMilliseconds, 1);
+				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), x/scale, y/scale);
+				cr.PaintWithAlpha (fadeInOpacity);
 				
 				bool shade_light = GtkDragging && DockItems [icon].IsAcceptingDrops && icon == PositionProvider.IndexAtPosition (Cursor.X);
 				bool shade_dark = animationType == ClickAnimationType.Darken;
