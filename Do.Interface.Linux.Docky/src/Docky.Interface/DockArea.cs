@@ -406,19 +406,20 @@ namespace Docky.Interface
 			
 			PopupMenu.Hidden += OnDockItemMenuHidden;
 			PopupMenu.Shown += OnDockItemMenuShown;
+
+			Services.Core.UniverseInitialized += HandleUniverseInitialized;
 			
 			Wnck.Screen.Default.ViewportsChanged += OnWnckViewportsChanged;
 
 			Realized += (o, e) => SetParentInputMask ();
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
-			Realized += (o, a) => SetIconRegions ();
 			
 			StyleSet += (o, a) => { 
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);
 			};
 		}
-		
+
 		void UnregisterEvents ()
 		{
 			item_provider.DockItemsChanged -= OnDockItemsChanged;
@@ -426,6 +427,8 @@ namespace Docky.Interface
 			
 			PopupMenu.Hidden -= OnDockItemMenuHidden;
 			PopupMenu.Shown -= OnDockItemMenuShown;
+
+			Services.Core.UniverseInitialized -= HandleUniverseInitialized;
 			
 			Wnck.Screen.Default.ViewportsChanged -= OnWnckViewportsChanged;
 		}
@@ -475,6 +478,14 @@ namespace Docky.Interface
 				SetParentInputMask ();
 			}
 			AnimatedDraw (true);
+		}
+
+		void HandleUniverseInitialized(object sender, EventArgs e)
+		{
+			GLib.Timeout.Add (2000, delegate {
+				SetIconRegions ();
+				return false;
+			});
 		}
 		
 		void RegisterGtkDragSource ()
