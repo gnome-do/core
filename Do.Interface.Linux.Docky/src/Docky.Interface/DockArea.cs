@@ -411,6 +411,7 @@ namespace Docky.Interface
 			Wnck.Screen.Default.ViewportsChanged += OnWnckViewportsChanged;
 			
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
+			Realized += (o, a) => SetIconRegions ();
 			
 			StyleSet += (o, a) => { 
 				if (IsRealized)
