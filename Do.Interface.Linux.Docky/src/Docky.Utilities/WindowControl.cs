@@ -134,6 +134,9 @@ namespace Docky.Utilities
 		/// </param>
 		public static void CenterAndFocusWindow (this Window w) 
 		{
+			if (w == null)
+				return;
+			
 			if (!w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)) {
 				int viewX, viewY, viewW, viewH;
 				int midX, midY;
