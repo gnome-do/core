@@ -1,4 +1,4 @@
-// PreferencesItem.cs
+// DonateItem.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -21,27 +21,33 @@ using System;
 
 using Mono.Unix;
 
+using Do.Platform;
+
 namespace Do.Universe
 {
 
-	public class PreferencesItem : Item, IRunnableItem
+	public class DonateItem : Item, IRunnableItem
 	{
+
+		const string DonateLink =
+			"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2453831";
 		
 		public override string Name {
-			get { return Catalog.GetString ("Preferences"); }
+			get { return Catalog.GetString ("Donate"); }
 		}
 		
 		public override string Description {
-			get { return Catalog.GetString ("Adjust Do's settings, manage plugins, etc."); }
+			get { return Catalog.GetString ("Support GNOME Do development!"); }
 		}
 		
 		public override string Icon {
-			get { return "gtk-preferences"; }
+			get { return "gtk-yes"; }
 		}
 		
 		public void Run ()
 		{
-			Do.Controller.ShowPreferences ();
+			Do.Controller.Vanish ();
+			Services.Environment.OpenUrl (DonateLink);
 		}
 	}
 }

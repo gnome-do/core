@@ -67,6 +67,8 @@
     <File name="src/Do.Platform/SecurePreferencesWrapper.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/ActionableNotification.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/PathsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/ApplicationService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Default/DefaultApplicationService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/DefaultPathsService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Common/CommonPathsService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/System/Linq/EnumerableExtensions.cs" subtype="Code" buildaction="Compile" />

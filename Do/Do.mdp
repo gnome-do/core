@@ -43,6 +43,8 @@
     <File name="src/Do.UI/KeybindingTreeView.cs" subtype="Code" buildaction="Compile" />
     <File name="gnome-do.desktop" subtype="Code" DeployService.TargetDirectoryId="Linux.DesktopApplications" buildaction="FileCopy" />
     <File name="src/CorePreferences.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/AboutItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/DonateItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/PreferencesItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/DoAddinInstaller.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.UI/DoAddinInstallerDialog.cs" subtype="Code" buildaction="Compile" />
@@ -60,6 +62,7 @@
     <File name="src/Do.Core/UniverseManager.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ClearLearningItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/CoreService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/DoApplicationService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/WindowingService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/PathExtensions.cs" subtype="Code" buildaction="Compile" />

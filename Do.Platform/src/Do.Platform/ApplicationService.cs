@@ -1,4 +1,4 @@
-// PreferencesItem.cs
+// ApplicationService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -18,30 +18,20 @@
 //
 
 using System;
+using System.IO;
+using System.Collections.Generic;
 
-using Mono.Unix;
+using Do.Universe;
+using Do.Platform.ServiceStack;
 
-namespace Do.Universe
+namespace Do.Platform
 {
-
-	public class PreferencesItem : Item, IRunnableItem
+	
+	public abstract class ApplicationService : IService
 	{
-		
-		public override string Name {
-			get { return Catalog.GetString ("Preferences"); }
-		}
-		
-		public override string Description {
-			get { return Catalog.GetString ("Adjust Do's settings, manage plugins, etc."); }
-		}
-		
-		public override string Icon {
-			get { return "gtk-preferences"; }
-		}
-		
-		public void Run ()
-		{
-			Do.Controller.ShowPreferences ();
-		}
+		public abstract IEnumerable<IRunnableItem> MainMenuItems { get; }
+
+		public abstract void RunOnThread (Action action);
+		public abstract void RunOnMainThread (Action action);
 	}
 }

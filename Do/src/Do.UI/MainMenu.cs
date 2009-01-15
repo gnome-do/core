@@ -25,13 +25,15 @@ using Mono.Unix;
 using Do;
 using Do.Core;
 using Do.Platform;
+using Do.Universe;
+using Do.Interface;
 
 namespace Do.UI
 {
+
 	public class MainMenu : Gtk.Menu
 	{
-		const string DonateLink =
-			"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2453831";
+
 		static MainMenu instance;
 
 		public static MainMenu Instance {
@@ -44,60 +46,26 @@ namespace Do.UI
 
 		int mainMenuX, mainMenuY;
 
-		MainMenu ()
+		private MainMenu ()
 		{
-			MenuItem item;
-
-			// About menu item
-			item = new ImageMenuItem (Catalog.GetString ("_About Do"));
-			(item as ImageMenuItem).Image = new Image (Stock.About, IconSize.Menu);
-			Add (item);
-			item.CanFocus = false;
-			item.Activated += OnMainMenuAboutClicked;
-			
-			// Do.Preferences menu item
-			item = new ImageMenuItem (Catalog.GetString ("_Preferences"));
-			(item as ImageMenuItem).Image = new Image (Stock.Preferences, IconSize.Menu);
-			Add (item);
-			item.CanFocus = false;
-			item.Activated += OnMainMenuPreferencesClicked;
-
-			// Donate menu item
-			item = new ImageMenuItem (Catalog.GetString ("_Donate!"));
-			(item as ImageMenuItem).Image = new Image (Stock.Yes, IconSize.Menu);
-			Add (item);
-			item.CanFocus = false;
-			item.Activated += OnMainMenuDonateClicked;
-			
-			// Quit menu item
-			item = new ImageMenuItem (Catalog.GetString ("_Quit"));
-			(item as ImageMenuItem).Image = new Image (Stock.Quit, IconSize.Menu);
-			Add (item);
-			item.Activated += OnMainMenuQuitClicked;
-
+			foreach (IRunnableItem item in Services.Application.MainMenuItems)
+				Add (MenuItemFromRunnableItem (item));
 			ShowAll ();
 		}
 
-		void OnMainMenuQuitClicked (object o, EventArgs args)
+		MenuItem MenuItemFromRunnableItem (IRunnableItem item)
 		{
-			Do.Controller.Vanish ();
-			Application.Quit ();
-		}
-		
-		void OnMainMenuPreferencesClicked (object o, EventArgs args)
-		{
-			Do.Controller.ShowPreferences ();
-		}
-
-		void OnMainMenuDonateClicked (object sender, EventArgs e)
-		{
-			Do.Controller.Vanish ();
-			Services.Environment.OpenUrl (DonateLink);
-		}
-
-		void OnMainMenuAboutClicked (object o, EventArgs args)
-		{
-			Do.Controller.ShowAbout ();
+			int iconSize;
+			Gdk.Pixbuf icon;
+			ImageMenuItem menuItem;
+			
+			menuItem = new ImageMenuItem (item.Name);
+			Icon.SizeLookup (IconSize.Menu, out iconSize, out iconSize);
+			icon = IconProvider.PixbufFromIconName (item.Icon, iconSize);
+			menuItem.Image = new Image (icon);
+			menuItem.CanFocus = false;
+			menuItem.Activated += (sender, e) => item.Run ();
+			return menuItem;
 		}
 
 		public void PopupAtPosition (int x, int y)

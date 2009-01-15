@@ -1,4 +1,4 @@
-/* InternalItemSource.cs
+/* AboutItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -17,43 +17,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
 
+using System;
 using Mono.Unix;
 
-using Do.Platform;
+using Gtk;
 
 namespace Do.Universe
-{
-	
-	public class InternalItemSource : ItemSource
-	{
-		
-		public override IEnumerable<Type> SupportedItemTypes {
-			get { yield break; }
-		}
-		
+{	
+	public class AboutItem : Item, IRunnableItem
+	{		
 		public override string Name {
-			get { return Catalog.GetString ("Internal GNOME Do Items"); }
+			get { return Catalog.GetString ("About Do"); }
 		}
 		
 		public override string Description {
-			get { return Catalog.GetString ("Special items relevant to the inner-workings of GNOME Do."); }
+			get { return Catalog.GetString ("About GNOME Do"); }
 		}
 		
 		public override string Icon {
-			get { return "gnome-system"; }
+			get { return "gtk-about"; }
 		}
 		
-		public override IEnumerable<Item> Items {
-			get {
-				yield return new SelectedTextItem ();
-
-				foreach (Item item in Services.Application.MainMenuItems)
-					yield return item;
-			}
+		public void Run ()
+		{
+			Do.Controller.ShowAbout ();
 		}
-			
 	}
 }

@@ -1,8 +1,7 @@
 /* QuitItem.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
+ * COPYRIGHT file distributed with this source distribution.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +27,7 @@ namespace Do.Universe
 	public class QuitItem : Item, IRunnableItem
 	{		
 		public override string Name {
-			get { return Catalog.GetString ("Quit GNOME Do"); }
+			get { return Catalog.GetString ("Quit"); }
 		}
 		
 		public override string Description {

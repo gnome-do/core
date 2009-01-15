@@ -1,4 +1,4 @@
-// PreferencesItem.cs
+// DefaultApplicationService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -18,30 +18,33 @@
 //
 
 using System;
+using System.IO;
+using System.Collections.Generic;
 
-using Mono.Unix;
+using Do.Universe;
 
-namespace Do.Universe
+namespace Do.Platform
 {
-
-	public class PreferencesItem : Item, IRunnableItem
+	
+	class DefaultApplicationService : ApplicationService
 	{
-		
-		public override string Name {
-			get { return Catalog.GetString ("Preferences"); }
+		public override IEnumerable<IRunnableItem> MainMenuItems {
+			get {
+				Log.Debug ("Default ApplicationService cannot provide MainMenuItems.");
+				yield break;
+			}
 		}
-		
-		public override string Description {
-			get { return Catalog.GetString ("Adjust Do's settings, manage plugins, etc."); }
-		}
-		
-		public override string Icon {
-			get { return "gtk-preferences"; }
-		}
-		
-		public void Run ()
+
+		public override void RunOnThread (Action action)
 		{
-			Do.Controller.ShowPreferences ();
+			Log.Debug ("Default ApplicationService cannot run action on a thread.");
+			action ();
+		}
+
+		public override void RunOnMainThread (Action action)
+		{
+			Log.Debug ("Default ApplicationService cannot run action on the main thread.");
+			action ();
 		}
 	}
 }

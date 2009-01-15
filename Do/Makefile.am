@@ -36,6 +36,7 @@ FILES = \
 	src/Do.Core/ThirdSearchController.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.Platform/CoreService.cs \
+	src/Do.Platform/DoApplicationService.cs \
 	src/Do.Platform/WindowingService.cs \
 	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \
@@ -58,6 +59,8 @@ FILES = \
 	src/Do.Universe/InternalItemSource.cs \
 	src/Do.Universe/ItemSourceItemSource.cs \
 	src/Do.Universe/PreferencesItem.cs \
+	src/Do.Universe/DonateItem.cs \
+	src/Do.Universe/AboutItem.cs \
 	src/Do.Universe/QuitItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
 	src/Do.cs \
