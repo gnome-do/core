@@ -31,7 +31,7 @@ namespace Do.Universe
 		}
 		
 		public override string Description {
-			get { return Catalog.GetString ("Quit GNOME Do -- come back soon!"); }
+			get { return Catalog.GetString ("Quit GNOME Do - come back soon!"); }
 		}
 		
 		public override string Icon {
@@ -40,10 +40,8 @@ namespace Do.Universe
 		
 		public void Run ()
 		{
-			Gtk.Application.Invoke (delegate {
-				Do.Controller.Vanish ();
-				Application.Quit ();
-			});
+			Do.Controller.Vanish ();
+			Application.Quit ();
 		}
 	}
 }
