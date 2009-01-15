@@ -43,14 +43,29 @@ namespace Do.Universe.Linux {
 			Instances = new Dictionary<string, ApplicationItem> ();
 		}
 		
-		public static ApplicationItem CreateFromDesktopItem (string path)
+		public static ApplicationItem MaybeCreateFromDesktopItem (string path)
 		{
 			string key = path;
-			if (!Instances.ContainsKey (key)) {
-				DesktopItem item = DesktopItem.NewFromFile (path, 0);
-				Instances [key] = new ApplicationItem (item);
+			ApplicationItem appItem;
+
+			if (Instances.ContainsKey (key)) {
+					appItem = Instances [key];
+			} else {
+				DesktopItem item = null;
+				try {
+					item = DesktopItem.NewFromFile (path, 0);
+					appItem = new ApplicationItem (item);
+				} catch (Exception e) {
+					appItem = null;
+					item.Dispose ();
+					Log.Error ("Could not load desktop item: {0}", e.Message);
+					Log.Debug (e.StackTrace);
+				}
+
+				if (appItem != null)
+					Instances [key] = appItem;
 			}
-			return Instances [key];
+			return appItem;
 		}
 
 		protected DesktopItem item;

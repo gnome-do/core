@@ -36,7 +36,7 @@ namespace Do.Platform.Linux
 
 		public IApplicationItem NewApplicationItem (string path)
 		{
-			return ApplicationItem.CreateFromDesktopItem (path);
+			return ApplicationItem.MaybeCreateFromDesktopItem (path);
 		}
 	}
 }

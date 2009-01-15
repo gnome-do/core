@@ -93,7 +93,7 @@ namespace Do.Universe.Linux {
 				return Enumerable.Empty<ApplicationItem> ();
 
 			return Directory.GetFiles (dir, "*.desktop")
-				.Select (file => ApplicationItem.CreateFromDesktopItem (file))
+				.Select (file => ApplicationItem.MaybeCreateFromDesktopItem (file))
 				.Where (app => app != null &&
 								app.IsAppropriateForCurrentDesktop &&
 								(show_hidden || !app.NoDisplay));
