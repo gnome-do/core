@@ -27,7 +27,7 @@ using Do.Universe;
 namespace Do.Platform
 {
 	
-	class DoApplicationService : ApplicationService
+	class ApplicationService : AbstractApplicationService
 	{
 
 		IEnumerable<IRunnableItem> items = new IRunnableItem [] {

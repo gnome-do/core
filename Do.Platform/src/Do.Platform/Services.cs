@@ -38,7 +38,7 @@ namespace Do.Platform
 		static IWindowingService windowing;
 		static IEnumerable<ILogService> logs;
 		static PreferencesFactory preferences;
-		static ApplicationService application;
+		static AbstractApplicationService application;
 		static IEnvironmentService environment;
 		static INotificationsService notifications;
 		static IUniverseFactoryService universe_factory;
@@ -94,7 +94,7 @@ namespace Do.Platform
 				windowing = null;
 			if (service is PathsService)
 				paths = null;
-			if (service is ApplicationService)
+			if (service is AbstractApplicationService)
 				application = null;
 		}
 
@@ -125,10 +125,10 @@ namespace Do.Platform
 			}
 		}
 
-		public static ApplicationService Application {
+		public static AbstractApplicationService Application {
 			get {
 				if (application == null)
-					application = LocateService<ApplicationService, DefaultApplicationService> ();
+					application = LocateService<AbstractApplicationService, DefaultApplicationService> ();
 				return application;
 			}
 		}

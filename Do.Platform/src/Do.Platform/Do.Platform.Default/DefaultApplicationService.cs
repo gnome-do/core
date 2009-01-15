@@ -26,7 +26,7 @@ using Do.Universe;
 namespace Do.Platform
 {
 	
-	class DefaultApplicationService : ApplicationService
+	class DefaultApplicationService : AbstractApplicationService
 	{
 		public override IEnumerable<IRunnableItem> MainMenuItems {
 			get {

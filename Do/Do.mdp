@@ -62,7 +62,7 @@
     <File name="src/Do.Core/UniverseManager.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ClearLearningItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/CoreService.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/DoApplicationService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/ApplicationService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/WindowingService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/PathExtensions.cs" subtype="Code" buildaction="Compile" />

@@ -1,4 +1,4 @@
-// ApplicationService.cs
+// AbstractApplicationService.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -27,7 +27,7 @@ using Do.Platform.ServiceStack;
 namespace Do.Platform
 {
 	
-	public abstract class ApplicationService : IService
+	public abstract class AbstractApplicationService : IService
 	{
 		public abstract IEnumerable<IRunnableItem> MainMenuItems { get; }
 

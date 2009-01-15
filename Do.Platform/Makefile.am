@@ -40,7 +40,7 @@ FILES = \
 	src/Do.Platform/Log.cs \
 	src/Do.Platform/Notification.cs \
 	src/Do.Platform/NotificationEventArgs.cs \
-	src/Do.Platform/ApplicationService.cs \
+	src/Do.Platform/AbstractApplicationService.cs \
 	src/Do.Platform/PathsService.cs \
 	src/Do.Platform/PreferencesChangedEventArgs.cs \
 	src/Do.Platform/SecurePreferencesWrapper.cs \

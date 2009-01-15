@@ -36,7 +36,7 @@ FILES = \
 	src/Do.Core/ThirdSearchController.cs \
 	src/Do.Core/UniverseManager.cs \
 	src/Do.Platform/CoreService.cs \
-	src/Do.Platform/DoApplicationService.cs \
+	src/Do.Platform/ApplicationService.cs \
 	src/Do.Platform/WindowingService.cs \
 	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \

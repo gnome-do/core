@@ -11,7 +11,7 @@
 
 	<Extension path="/Do/Service">
 		<Service type="Do.Platform.CoreService" />
-		<Service type="Do.Platform.DoApplicationService" />
+		<Service type="Do.Platform.ApplicationService" />
 		<Service type="Do.Platform.WindowingService" />
 	</Extension>
 	
