@@ -25,6 +25,7 @@ using Gtk;
 
 using Do.Interface;
 using Do.Platform;
+using Do.Universe;
 
 using Docky.Utilities;
 
@@ -105,10 +106,17 @@ namespace Docky.Interface
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = true, 
 				                                       "Advanced Indicators", DisableIcon);
+
+			yield return new SeparatorMenuButtonArgs ();
+			
 			if (Gdk.Screen.Default.NMonitors > 1)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
 				                                       "Switch Monitors", "display");
 
+			foreach (IRunnableItem item_ in Services.Application.MainMenuItems) {
+				IRunnableItem item = item_;
+				yield return new SimpleMenuButtonArgs (() => item.Run (), item.Name, item.Icon);
+			}
 		}
 		
 		#endregion 
