@@ -31,11 +31,11 @@ namespace Do.Universe
 		}
 		
 		public override string Description {
-			get { return Catalog.GetString ("Quit GNOME Do"); }
+			get { return Catalog.GetString ("Quit GNOME Do -- come back soon!"); }
 		}
 		
 		public override string Icon {
-			get { return "process-stop"; }
+			get { return "application-exit"; }
 		}
 		
 		public void Run ()
