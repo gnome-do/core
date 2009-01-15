@@ -114,7 +114,7 @@ namespace Docky.Interface
 				                                       "Switch Monitors", "display");
 
 			foreach (IRunnableItem item in Services.Application.MainMenuItems) {
-				yield return new RunnableMenubuttonArgs (item);
+				yield return new RunnableMenuButtonArgs (item);
 			}
 		}
 		

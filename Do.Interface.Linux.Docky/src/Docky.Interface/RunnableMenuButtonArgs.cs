@@ -24,11 +24,11 @@ namespace Docky.Interface
 {
 	
 	
-	public class RunnableMenubuttonArgs : AbstractMenuButtonArgs
+	public class RunnableMenuButtonArgs : AbstractMenuButtonArgs
 	{
 		IRunnableItem runnable;
 		
-		public RunnableMenubuttonArgs(IRunnableItem item) : base (item.Name, item.Icon, true)
+		public RunnableMenuButtonArgs(IRunnableItem item) : base (item.Name, item.Icon, true)
 		{
 			runnable = item;
 		}
