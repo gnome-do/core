@@ -54,7 +54,6 @@ namespace Docky.Interface
 		const int WindowHeight = 300;
 		const uint OffDockWakeupTime = 250;
 		const uint OnDockWakeupTime = 20;
-		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
 
 		TimeSpan BounceTime = new TimeSpan (0, 0, 0, 0, 700);
 		TimeSpan InsertAnimationTime = new TimeSpan (0, 0, 0, 0, 150*5);
@@ -1076,16 +1075,20 @@ namespace Docky.Interface
 		
 		void SetIconRegions ()
 		{
-			Gdk.Rectangle pos, geo;
+			Gdk.Rectangle pos, area;
 			window.GetPosition (out pos.X, out pos.Y);
+			window.GetSize (out pos.Width, out pos.Height);
 			
-			geo = LayoutUtils.MonitorGemonetry ();
+			int hideOffset = window.WindowHideOffset ();
 			// we use geo here instead of our position for the Y value because we know the parent window
 			// may offset us when hidden. This is not desired...
 			for (int i = 0; i < DockItems.Count; i++) {
 				int x = PositionProvider.IconUnzoomedPosition (i);
-				DockItems [i].SetIconRegion (new Gdk.Rectangle (pos.X + (x - IconSize / 2), 
-				                                               geo.Y + geo.Height - PositionProvider.VerticalBuffer - IconSize, IconSize, IconSize));
+				area = new Gdk.Rectangle (pos.X + (x - IconSize / 2),
+				                          pos.Y + pos.Height - hideOffset - PositionProvider.VerticalBuffer - IconSize,
+				                          IconSize,
+				                          IconSize);
+				DockItems [i].SetIconRegion (area);
 			}
 		}
 		

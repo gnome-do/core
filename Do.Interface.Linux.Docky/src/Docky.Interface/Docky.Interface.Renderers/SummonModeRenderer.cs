@@ -42,7 +42,6 @@ namespace Docky.Interface.Renderers
 	
 	public class SummonModeRenderer : IDisposable
 	{
-		const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
 		const int IconSize = 16;
 		
 		DockArea parent;
@@ -173,7 +172,7 @@ namespace Docky.Interface.Renderers
 		{
 			int base_x = dockArea.X + 30;
 			string text = GLib.Markup.EscapeText (State[State.CurrentPane].Name);
-			text = Do.Interface.Util.FormatCommonSubstrings (text, State.GetPaneQuery (State.CurrentPane), HighlightFormat);
+			text = Do.Interface.Util.FormatCommonSubstrings (text, State.GetPaneQuery (State.CurrentPane), DockPreferences.HighlightFormat);
 			
 			Pango.Color color = new Pango.Color ();
 			color.Blue = color.Red = color.Green = ushort.MaxValue;

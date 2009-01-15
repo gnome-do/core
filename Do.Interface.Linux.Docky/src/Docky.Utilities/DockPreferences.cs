@@ -39,6 +39,7 @@ namespace Docky.Utilities
 		public static event Action MonitorChanged;
 	
 		public const int IconBorderWidth = 2;
+		public const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
 		
 		static IPreferences prefs = Services.Preferences.Get<DockPreferences> ();
 		const int DefaultIconSize = 64;
