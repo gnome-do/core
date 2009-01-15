@@ -20,9 +20,9 @@
 
 using System;
 using System.Linq;
+using System.Threading;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Threading;
 
 using Gdk;
 using Mono.Unix;
@@ -45,7 +45,7 @@ namespace Do.Core {
 		ISearchController [] controllers;
 		
 		Act action;
-		bool thirdPaneVisible;
+		bool third_pane_visible;
 		bool results_grown;
 		Gtk.IMContext im;
 		string last_theme;
@@ -98,7 +98,7 @@ namespace Do.Core {
 			// Unfortunately due to the way we have designed Do, this has proven
 			// extremely difficult to put some place more logical.  We NEED to
 			// rethink how we handle Summon () and audit our usage of
-			// Gdk.Threads.Enter ()
+			// Threads.Enter ()
 			if (SearchController.Query.Length <= 1)
 				SelectedTextItem.UpdateText ();
 		}
@@ -201,42 +201,39 @@ namespace Do.Core {
 		/// </summary>
 		bool ThirdPaneVisible {
 			set {
-				if (value == thirdPaneVisible)
+				if (value == third_pane_visible)
 					return;
 				
-				if (value)
-					window.Grow ();
-				else
-					window.Shrink ();
-				thirdPaneVisible = value;
+				if (value) window.Grow ();
+				else window.Shrink ();
+				third_pane_visible = value;
 			}
-			
 			get {
-				return thirdPaneVisible;
+				return third_pane_visible;
 			}
 		}
 		
 		/// <value>
-		/// Check if the third pane is capable of closing.  When actions require the third pane, this will
-		/// return false
+		/// Check if the third pane is capable of closing.  When actions require
+		/// the third pane, this will return false.
 		/// </value>
 		bool ThirdPaneCanClose {
 			get {
-				return (!ThirdPaneRequired &&
-				        controllers [2].Cursor == 0 && 
-				        string.IsNullOrEmpty (controllers [2].Query) && 
-				        !ControllerExplicitTextMode (Pane.Third));
+				return !ThirdPaneRequired &&
+					controllers [2].Cursor == 0 && 
+					string.IsNullOrEmpty (controllers [2].Query) && 
+					!ControllerExplicitTextMode (Pane.Third);
 			}
 		}
 		
 		/// <summary>
-		/// Determine if the third pane is allowed.  If allowed, tabbing will result in
-		/// third pane opening when tabbing from the second pane.
+		/// Determine if the third pane is allowed.  If allowed, tabbing will
+		/// result in third pane opening when tabbing from the second pane.
 		/// </summary>
 		bool ThirdPaneAllowed {
 			get {
-				Element first, second;
 				Act action;
+				Element first, second;
 
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
@@ -253,9 +250,9 @@ namespace Do.Core {
 		/// </value>
 		bool ThirdPaneRequired {
 			get {
-				Element first, second;
-				Act action;
 				Item item;
+				Act action;
+				Element first, second;
 
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
@@ -269,16 +266,16 @@ namespace Do.Core {
 		}
 		
 		bool AlwaysShowResults {
-			get { return Do.Preferences.AlwaysShowResults || !window.ResultsCanHide; }
+			get {
+				return Do.Preferences.AlwaysShowResults || !window.ResultsCanHide;
+			}
 		}
 
 		/// <value>
-		/// Check if the symbol window is currently visible to the user
+		/// Check if the interface is currently visible.
 		/// </value>
 		public bool IsSummoned {
-			get {
-				return null != window && window.Visible;
-			}
+			get { return null != window && window.Visible; }
 		}
 
 		public PreferencesWindow PreferencesWindow { get; private set; }
@@ -294,28 +291,26 @@ namespace Do.Core {
 			if (!IsSummonable) return;
 			
 			Reset ();
-			
 			Summon ();
 			
-			//Someone is going to need to explain this to me -- Now with less stupid!
+			// Someone is going to need to explain this to me -- Now with less stupid!
 			controllers [0].Results = elements.ToList ();
 
 			// If there are multiple results, show results window after a short
 			// delay.
 			if (elements.Any ()) {
-				GLib.Timeout.Add (50,
-					delegate {
-//						Gdk.Threads.Enter ();
-						GrowResults ();
-//						Gdk.Threads.Leave ();
-						return false;
-					}
-				);
+				GLib.Timeout.Add (50, delegate {
+//				Threads.Enter ();
+					GrowResults ();
+//				Threads.Leave ();
+					return false;
+				});
 			}
 		}
 		
 		/// <summary>
-		/// Determines if the user has requested Text Mode explicitly, even if he has finalized that input
+		/// Determines if the user has requested Text Mode explicitly, even if he
+		/// has finalized that input
 		/// </summary>
 		/// <param name="pane">
 		/// The <see cref="Pane"/> for which you wish to check
@@ -323,19 +318,28 @@ namespace Do.Core {
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		public bool ControllerExplicitTextMode (Pane pane) {
+		public bool ControllerExplicitTextMode (Pane pane)
+		{
 			return controllers [(int) pane].TextType == TextModeType.Explicit ||
 				controllers [(int) pane].TextType == TextModeType.ExplicitFinalized;
 		}
 		
 #region KeyPress Handling
-		Gdk.Key UpKey    { get { return (Orientation == ControlOrientation.Vertical) ? Gdk.Key.Up    : Gdk.Key.Left;  } }
-		Gdk.Key DownKey  { get { return (Orientation == ControlOrientation.Vertical) ? Gdk.Key.Down  : Gdk.Key.Right; } }
-		Gdk.Key LeftKey  { get { return (Orientation == ControlOrientation.Vertical) ? Gdk.Key.Left  : Gdk.Key.Up;    } }
-		Gdk.Key RightKey { get { return (Orientation == ControlOrientation.Vertical) ? Gdk.Key.Right : Gdk.Key.Down;  } }
-		
-		private void KeyPressWrap (Gdk.EventKey evnt)
+
+		Key IfVertical (Key ifKey, Key elseKey)
 		{
+			return Orientation == ControlOrientation.Vertical ? ifKey : elseKey;
+		}
+
+		Key UpKey    { get { return IfVertical (Key.Up, Key.Left); } }
+		Key DownKey  { get { return IfVertical (Key.Down, Key.Right); } }
+		Key LeftKey  { get { return IfVertical (Key.Left, Key.Up); } }
+		Key RightKey { get { return IfVertical (Key.Right, Key.Down); } }
+		
+		private void KeyPressWrap (EventKey evnt)
+		{
+			Key key = (Key) evnt.KeyValue;
+
 			// User set keybindings
 			if (KeyEventToString (evnt).Equals (Do.Preferences.SummonKeybinding)) {
 				OnSummonKeyPressEvent (evnt);
@@ -359,29 +363,29 @@ namespace Do.Core {
 				}
 			}
 
-			if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Escape) {
+			if (key == Key.Escape) {
 				OnEscapeKeyPressEvent (evnt);
-			} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Return ||
-			           (Gdk.Key) evnt.KeyValue == Gdk.Key.ISO_Enter ||
-			           (Gdk.Key) evnt.KeyValue == Gdk.Key.KP_Enter) {
+			} else if (key == Key.Return ||
+			           key == Key.ISO_Enter ||
+			           key == Key.KP_Enter) {
 				OnActivateKeyPressEvent (evnt);
-			} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Delete ||
-			           (Gdk.Key) evnt.KeyValue == Gdk.Key.BackSpace) {
+			} else if (key == Key.Delete ||
+			           key == Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-			} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.Tab ||
-			           (Gdk.Key) evnt.KeyValue == Gdk.Key.ISO_Left_Tab) {
+			} else if (key == Key.Tab ||
+			           key == Key.ISO_Left_Tab) {
 				OnTabKeyPressEvent (evnt);
-			} else if ((Gdk.Key) evnt.KeyValue == UpKey ||
-			           (Gdk.Key) evnt.KeyValue == DownKey ||
-			           (Gdk.Key) evnt.KeyValue == Gdk.Key.Home ||
-			           (Gdk.Key) evnt.KeyValue == Gdk.Key.End ||
-			           (Gdk.Key) evnt.KeyValue == Gdk.Key.Page_Up ||
-			           (Gdk.Key) evnt.KeyValue == Gdk.Key.Page_Down) {
+			} else if (key == UpKey ||
+			           key == DownKey ||
+			           key == Key.Home ||
+			           key == Key.End ||
+			           key == Key.Page_Up ||
+			           key == Key.Page_Down) {
 				OnUpDownKeyPressEvent (evnt);
-			} else if ((Gdk.Key) evnt.KeyValue == RightKey ||
-			           (Gdk.Key) evnt.KeyValue == LeftKey) {
+			} else if (key == RightKey ||
+			           key == LeftKey) {
 				OnRightLeftKeyPressEvent (evnt);
-			} else if ((Gdk.Key) evnt.KeyValue == Gdk.Key.comma) {
+			} else if (key == Key.comma) {
 				OnSelectionKeyPressEvent (evnt);
 			} else {
 				OnInputKeyPressEvent (evnt);
@@ -390,7 +394,7 @@ namespace Do.Core {
 		
 		void OnPasteEvent ()
 		{
-			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
+			Gtk.Clipboard clip = Gtk.Clipboard.Get (Selection.Clipboard);
 			if (!clip.WaitIsTextAvailable ()) {
 				return;
 			}
@@ -400,7 +404,7 @@ namespace Do.Core {
 		
 		void OnCopyEvent ()
 		{
-			Gtk.Clipboard clip = Gtk.Clipboard.Get (Gdk.Selection.Clipboard);
+			Gtk.Clipboard clip = Gtk.Clipboard.Get (Selection.Clipboard);
 			if (SearchController.Selection != null)
 				clip.Text = SearchController.Selection.Name;
 		}
@@ -417,8 +421,8 @@ namespace Do.Core {
 		}
 		
 		/// <summary>
-		/// This will set a secondary cursor unless we are operating on a text item, in which case we
-		/// pass the event to the input key handler
+		/// This will set a secondary cursor unless we are operating on a text
+		/// item, in which case we pass the event to the input key handler.
 		/// </summary>
 		/// <param name="evnt">
 		/// A <see cref="EventKey"/>
@@ -482,7 +486,7 @@ namespace Do.Core {
 			if (evnt.Key == Key.Return) {
 				c = '\n';
 			} else {
-				c = (char) Gdk.Keyval.ToUnicode (evnt.KeyValue);
+				c = (char) Keyval.ToUnicode (evnt.KeyValue);
 			}
 			if (char.IsLetterOrDigit (c)
 					|| char.IsPunctuation (c)
@@ -498,13 +502,13 @@ namespace Do.Core {
 			im.Reset ();
 			if (!SearchController.Results.Any ()) return;
 
-			if ((Gdk.Key) evnt.KeyValue == RightKey) {
+			if ((Key) evnt.KeyValue == RightKey) {
 				// We're attempting to browse the contents of an item, so increase its
 				// relevance.
 				SearchController.Selection
 					.IncreaseRelevance (SearchController.Query, null);
 				if (SearchController.ItemChildSearch ()) GrowResults ();
-			} else if ((Gdk.Key) evnt.KeyValue == LeftKey) {
+			} else if ((Key) evnt.KeyValue == LeftKey) {
 				// We're attempting to browse the parent of an item, so decrease its
 				// relevance. This makes it so we can merely visit an item's children,
 				// and navigate back out of the item, and leave that item's relevance
@@ -568,13 +572,13 @@ namespace Do.Core {
 					return;
 				}
 				SearchController.Cursor++;
-			} else if (evnt.Key == Gdk.Key.Home) {
+			} else if (evnt.Key == Key.Home) {
 				SearchController.Cursor = 0;
-			} else if (evnt.Key == Gdk.Key.End) {
+			} else if (evnt.Key == Key.End) {
 				SearchController.Cursor = SearchController.Results.Count - 1;
-			} else if (evnt.Key == Gdk.Key.Page_Down) {
+			} else if (evnt.Key == Key.Page_Down) {
 				SearchController.Cursor += 5;
-			} else if (evnt.Key == Gdk.Key.Page_Up) {
+			} else if (evnt.Key == Key.Page_Up) {
 				SearchController.Cursor -= 5;
 			}
 		}
