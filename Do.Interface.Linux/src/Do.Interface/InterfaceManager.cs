@@ -27,9 +27,9 @@ using Do.Platform;
 namespace Do.Interface
 {
 	
-	
-	public static class InterfaceManager
+	public class InterfaceManager
 	{
+
 		public static void Initialize ()
 		{
 			if (!AddinManager.IsInitialized)
@@ -43,10 +43,10 @@ namespace Do.Interface
 			InterfaceDescription desc = new InterfaceDescription (node);
 			switch (e.Change) {
 			case ExtensionChange.Add:
-				Log.Debug ("\"{0}\" interface was loaded", desc.Name);
+				Log<InterfaceManager>.Debug ("\"{0}\" interface was loaded", desc.Name);
 				break;
 			case ExtensionChange.Remove:
-				Log.Debug ("\"{0}\" interface was unloaded", desc.Name);
+				Log<InterfaceManager>.Debug ("\"{0}\" interface was unloaded", desc.Name);
 				break;
 			}
 		}

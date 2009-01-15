@@ -72,10 +72,10 @@ namespace Do.Core {
 					BinaryFormatter f = new BinaryFormatter ();
 					provider = f.Deserialize (s) as IRelevanceProvider;
 				}
-				Log.Debug ("Successfully loaded learned usage data from {0}.", RelevanceFile);
+				Log<RelevanceProvider>.Debug ("Successfully loaded learned usage data from {0}.", RelevanceFile);
 			} catch (FileNotFoundException) {
 			} catch (Exception e) {
-				Log.Error ("Failed to load learned usage data: {0}", e.Message);
+				Log<RelevanceProvider>.Error ("Failed to load learned usage data: {0}", e.Message);
 			}
 			return provider;
 		}
@@ -90,9 +90,9 @@ namespace Do.Core {
 					BinaryFormatter f = new BinaryFormatter ();
 					f.Serialize (s, provider);
 				}
-				Log.Debug ("Successfully saved learned usage data to {0}.", RelevanceFile);
+				Log<RelevanceProvider>.Debug ("Successfully saved learned usage data to {0}.", RelevanceFile);
 			} catch (Exception e) {
-				Log.Error ("Failed to save learned usage data: {0}", e.Message);
+				Log<RelevanceProvider>.Error ("Failed to save learned usage data: {0}", e.Message);
 			}
 		}
 

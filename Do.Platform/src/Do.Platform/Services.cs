@@ -189,9 +189,9 @@ namespace Do.Platform
 		{
 			IEnumerable<TService> services = LocateServices<TService> ();
 			if (services.Any ()) {
-				Log.Info ("Successfully located service of type {0}.", typeof (TService).Name);
+				Log<Services>.Info ("Successfully located service of type {0}.", typeof (TService).Name);
 			} else {
-				Log.Fatal ("Service of type {0} not found. Using default service instead.", typeof (TService).Name);
+				Log<Services>.Fatal ("Service of type {0} not found. Using default service instead.", typeof (TService).Name);
 				services = new [] { Activator.CreateInstance<TElse> () as TService };
 			}
 			return services;
@@ -203,7 +203,7 @@ namespace Do.Platform
 			if (AddinManager.IsInitialized) {
 				return AddinManager.GetExtensionObjects ("/Do/Service", true).OfType<TService> ();
 			} else {
-				Log.Warn ("AddinManager is not initialized; only default services are available.");
+				Log<Services>.Warn ("AddinManager is not initialized; only default services are available.");
 				return Enumerable.Empty<TService> ();
 			}
 		}

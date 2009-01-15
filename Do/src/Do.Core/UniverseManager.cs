@@ -24,9 +24,9 @@ using System.Threading;
 using System.Collections.Generic;
 
 using Do;
+using Do.Platform;
 using Do.Universe;
 using Do.Universe.Safe;
-using Do.Platform;
 
 namespace Do.Core
 {
@@ -175,13 +175,13 @@ namespace Do.Core
 				
 				if (rand.Next (10) == 0) {
 					#warning The Log is not threadsafe...
-					Log.Debug ("Updating Actions");
+					Log<UniverseManager>.Debug ("Updating Actions");
 					ReloadActions ();
 				}
 				
 				foreach (ItemSource source in PluginManager.ItemSources) {
 					SafeItemSource safeSource = source.Safe;
-					Log.Debug ("Updating item source \"{0}\".", safeSource.Name);
+					Log<UniverseManager>.Debug ("Updating item source \"{0}\".", safeSource.Name);
 					UpdateSource (safeSource);
 
 					if (UpdateRunTime < DateTime.Now - startUpdate) {
@@ -235,7 +235,7 @@ namespace Do.Core
 			foreach (ItemSource source in PluginManager.ItemSources)
 				UpdateSource (source.Safe);
 			
-			Log.Info ("Universe contains {0} items.", universe.Count);
+			Log<UniverseManager>.Info ("Universe contains {0} items.", universe.Count);
 
 			Gtk.Application.Invoke ((sender, e) => {
 				BuildCompleted = true;
@@ -302,7 +302,7 @@ namespace Do.Core
 		/// </summary>
 		public void Reload ()
 		{
-			Log.Info ("Reloading Universe");
+			Log<UniverseManager>.Info ("Reloading Universe");
 			BuildUniverse ();
 		}
 		
