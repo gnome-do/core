@@ -49,8 +49,8 @@ namespace Do.Platform.Default
 			try {
 				Directory.CreateDirectory (path);
 			} catch (Exception e) {
-				Log.Error ("Could not create directory {0}: {1}", path, e.Message);
-				Log.Debug (e.StackTrace);
+				Log<DefaultPathsService>.Error ("Could not create directory {0}: {1}", path, e.Message);
+				Log<DefaultPathsService>.Debug (e.StackTrace);
 			}
 		}
 
@@ -61,8 +61,8 @@ namespace Do.Platform.Default
 			try {
 				Directory.Delete (path, true);
 			} catch (Exception e) {
-				Log.Error ("Could not delete directory {0}: {1}", path, e.Message);
-				Log.Debug (e.StackTrace);
+				Log<DefaultPathsService>.Error ("Could not delete directory {0}: {1}", path, e.Message);
+				Log<DefaultPathsService>.Debug (e.StackTrace);
 			}
 		}
 		

@@ -20,7 +20,9 @@
     <File name="src/System" subtype="Directory" buildaction="Compile" />
     <File name="src/System/Linq" subtype="Directory" buildaction="Compile" />
     <File name="Resources/Do.Platform.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="src/Do.Platform/LogBase.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Log.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Log<TSender>.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Common" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Platform/Services.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.ServiceStack" subtype="Directory" buildaction="Compile" />

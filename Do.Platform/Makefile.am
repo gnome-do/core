@@ -37,7 +37,9 @@ FILES = \
 	src/Do.Platform/ISecurePreferencesService.cs \
 	src/Do.Platform/IUniverseFactoryService.cs \
 	src/Do.Platform/IWindowingService.cs \
+	src/Do.Platform/LogBase.cs \
 	src/Do.Platform/Log.cs \
+	src/Do.Platform/Log\<TSender\>.cs \
 	src/Do.Platform/Notification.cs \
 	src/Do.Platform/NotificationEventArgs.cs \
 	src/Do.Platform/AbstractApplicationService.cs \

@@ -41,7 +41,7 @@ namespace Do.Core
 	/// <summary>
 	/// PluginManager serves as Do's primary interface to Mono.Addins.
 	/// </summary>
-	internal static class PluginManager
+	internal class PluginManager
 	{
 		const string DefaultPluginIcon = "folder_tar";
 		
@@ -170,21 +170,21 @@ namespace Do.Core
 			case ExtensionChange.Add:
 				try {
 					object plugin = node.GetInstance ();
-					Log.Debug ("Loaded \"{0}\" from plugin.", plugin.GetType ().Name);
+					Log<PluginManager>.Debug ("Loaded \"{0}\" from plugin.", plugin.GetType ().Name);
 				} catch (Exception e) {
-					Log.Error ("Encountered error loading plugin: {0} \"{1}\"",
+					Log<PluginManager>.Error ("Encountered error loading plugin: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
-					Log.Debug (e.StackTrace);
+					Log<PluginManager>.Debug (e.StackTrace);
 				}
 				break;
 			case ExtensionChange.Remove:
 				try {
 					object plugin = node.GetInstance ();
-					Log.Debug ("Unloaded \"{0}\".", plugin.GetType ().Name);
+					Log<PluginManager>.Debug ("Unloaded \"{0}\".", plugin.GetType ().Name);
 				} catch (Exception e) {
-					Log.Error ("Encountered error unloading plugin: {0} \"{1}\"",
+					Log<PluginManager>.Error ("Encountered error unloading plugin: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
-					Log.Debug (e.StackTrace);
+					Log<PluginManager>.Debug (e.StackTrace);
 				}
 				break;
 			}	
@@ -209,9 +209,9 @@ namespace Do.Core
 					try {
 						instance = node.GetInstance ();
 					} catch (Exception e) {
-						Log.Error ("ObjectsForAddin encountered an error: {0} \"{1}\"",
+						Log<PluginManager>.Error ("ObjectsForAddin encountered an error: {0} \"{1}\"",
 								e.GetType ().Name, e.Message);
-						Log.Debug (e.StackTrace);
+						Log<PluginManager>.Debug (e.StackTrace);
 						continue;
 					}
 

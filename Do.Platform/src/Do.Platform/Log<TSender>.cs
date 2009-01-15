@@ -1,4 +1,4 @@
-// Log.cs
+// Log<TSender>.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -22,32 +22,39 @@ using System;
 namespace Do.Platform
 {
 
-	public class Log : LogBase
+	public class Log<TSender> : LogBase
 	{
+
+		const string SenderFormat = "[{0}] {1}";
+
+		static string AddSender (string message)
+		{
+			return string.Format (SenderFormat, typeof (TSender).Name, message);
+		}
 
 		public static void Debug (string msg, params object [] args)
 		{
-			Write (LogLevel.Debug, msg, args);
+			Write (LogLevel.Debug, AddSender (msg), args);
 		}
 		
 		public static void Info (string msg, params object [] args)
 		{
-			Write (LogLevel.Info, msg, args);
+			Write (LogLevel.Info, AddSender (msg), args);
 		}
 		
 		public static void Warn (string msg, params object [] args)
 		{
-			Write (LogLevel.Warn, msg, args);
+			Write (LogLevel.Warn, AddSender (msg), args);
 		}
 		
 		public static void Error (string msg, params object [] args)
 		{
-			Write (LogLevel.Error, msg, args);
+			Write (LogLevel.Error, AddSender (msg), args);
 		}
 		
 		public static void Fatal (string msg, params object [] args)
 		{
-			Write (LogLevel.Fatal, msg, args);
+			Write (LogLevel.Fatal, AddSender (msg), args);
 		}
 	}
 }

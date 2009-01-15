@@ -157,7 +157,7 @@ namespace Docky.Interface
 		public void AddCustomItem (Element item)
 		{
 			if (!(item is Item)) {
-				Log.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
+				Log<DockItemProvider>.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
 				return;
 			}
 			string id = item.UniqueId;
@@ -218,7 +218,7 @@ namespace Docky.Interface
 				if (e != null)
 					customItem = new DockItem (e);
 				else
-					Log.Error ("Could not add custom item with id: {0}", identifier);
+					Log<DockItemProvider>.Error ("Could not add custom item with id: {0}", identifier);
 			}
 			return customItem;
 		}
@@ -361,8 +361,8 @@ namespace Docky.Interface
 					f.Serialize (s, custom_items.Keys.ToArray ());
 				}
 			} catch (Exception e) {
-				Log.Error ("Could not serialize custom items");
-				Log.Error (e.Message);
+				Log<DockItemProvider>.Error ("Could not serialize custom items");
+				Log<DockItemProvider>.Error (e.Message);
 			}
 		}
 		
@@ -374,8 +374,8 @@ namespace Docky.Interface
 					f.Serialize (s, DragableItems.ToDictionary (di => di.Element.UniqueId, di => di.Position));
 				}
 			} catch (Exception e) {
-				Log.Error ("Could not serialize sort items");
-				Log.Error (e.Message);
+				Log<DockItemProvider>.Error ("Could not serialize sort items");
+				Log<DockItemProvider>.Error (e.Message);
 			}
 		}
 		
@@ -388,10 +388,10 @@ namespace Docky.Interface
 					filenames = f.Deserialize (s) as string[];
 				}
 			} catch (FileNotFoundException e) {
-				Log.Debug ("Custom items file not present, nothing to add. " + e.Message);
+				Log<DockItemProvider>.Debug ("Custom items file not present, nothing to add. " + e.Message);
 				filenames = new string[0];
 			} catch {
-				Log.Error ("Could not deserialize custom items");
+				Log<DockItemProvider>.Error ("Could not deserialize custom items");
 				filenames = new string[0];
 			}
 			return filenames;
@@ -406,10 +406,10 @@ namespace Docky.Interface
 					sortDictionary = f.Deserialize (s) as Dictionary<string, int>;
 				}
 			} catch (FileNotFoundException e) {
-				Log.Debug ("Sort Dictionary file not present, nothing to add. " + e.Message);
+				Log<DockItemProvider>.Debug ("Sort Dictionary file not present, nothing to add. " + e.Message);
 				sortDictionary = new Dictionary<string, int> ();
 			} catch {
-				Log.Error ("Could not deserialize sort dictionary");
+				Log<DockItemProvider>.Error ("Could not deserialize sort dictionary");
 				sortDictionary = new Dictionary<string, int> ();
 			}
 			return sortDictionary;
