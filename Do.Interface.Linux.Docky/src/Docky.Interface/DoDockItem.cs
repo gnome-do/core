@@ -113,9 +113,8 @@ namespace Docky.Interface
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
 				                                       "Switch Monitors", "display");
 
-			foreach (IRunnableItem item_ in Services.Application.MainMenuItems) {
-				IRunnableItem item = item_;
-				yield return new SimpleMenuButtonArgs (() => item.Run (), item.Name, item.Icon);
+			foreach (IRunnableItem item in Services.Application.MainMenuItems) {
+				yield return new RunnableMenubuttonArgs (item);
 			}
 		}
 		
