@@ -327,6 +327,7 @@ namespace Docky.Interface
 			
 			if (GetIconSource (DockItems [item]) == IconSource.Statistics) {
 				DockPreferences.AddBlacklistItem ((DockItems [item] as DockItem).Element.UniqueId);
+				DockPreferences.AutomaticIcons--;
 				UpdateItems ();
 				ret_val = true;
 			} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
