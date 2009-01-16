@@ -882,18 +882,18 @@ namespace Docky.Interface
 		
 		protected override void OnDragEnd (Gdk.DragContext context)
 		{
-			if (PositionProvider.IndexAtPosition (remove_drag_start_x) == -1)
-				return;
-			
-			GtkDragging = false;
-			int draggedPosition = PositionProvider.IndexAtPosition (remove_drag_start_x);
-			int currentPosition = PositionProvider.IndexAtPosition (Cursor.X);
-			if (context.DestWindow != window.GdkWindow || !CursorIsOverDockArea) {
-				item_provider.RemoveItem (PositionProvider.IndexAtPosition (remove_drag_start_x));
-			} else if (CursorIsOverDockArea && currentPosition != draggedPosition) {
-				item_provider.MoveItemToPosition (draggedPosition, currentPosition);
+			if (PositionProvider.IndexAtPosition (remove_drag_start_x) != -1) {
+				GtkDragging = false;
+				int draggedPosition = PositionProvider.IndexAtPosition (remove_drag_start_x);
+				int currentPosition = PositionProvider.IndexAtPosition (Cursor.X);
+				if (context.DestWindow != window.GdkWindow || !CursorIsOverDockArea) {
+					item_provider.RemoveItem (PositionProvider.IndexAtPosition (remove_drag_start_x));
+				} else if (CursorIsOverDockArea && currentPosition != draggedPosition) {
+					item_provider.MoveItemToPosition (draggedPosition, currentPosition);
+				}
+				AnimatedDraw (true);
 			}
-			AnimatedDraw (true);
+			remove_drag_start_x = -1;
 			base.OnDragEnd (context);
 		}
 
