@@ -92,12 +92,14 @@ namespace Docky.Interface
 
 		void RegisterEvents ()
 		{
+			DockPreferences.AllowOverlapChanged += DelaySetStruts;
 			DockPreferences.AutohideChanged += DelaySetStruts;
 			DockPreferences.MonitorChanged += HandleMonitorChanged;
 		}
 
 		void UnregisterEvents ()
 		{
+			DockPreferences.AllowOverlapChanged -= DelaySetStruts;
 			DockPreferences.AutohideChanged -= DelaySetStruts;
 			DockPreferences.MonitorChanged -= HandleMonitorChanged;
 

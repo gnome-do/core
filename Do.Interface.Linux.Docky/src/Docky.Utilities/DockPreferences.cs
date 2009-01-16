@@ -37,6 +37,7 @@ namespace Docky.Utilities
 		public static event Action TrashVisibilityChanged;
 		public static event Action AutomaticIconsChanged;
 		public static event Action MonitorChanged;
+		public static event Action AllowOverlapChanged;
 	
 		public const int IconBorderWidth = 2;
 		public const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
@@ -146,6 +147,21 @@ namespace Docky.Utilities
 				autohide = value;
 				if (AutohideChanged != null)
 					AutohideChanged ();
+			}
+		}
+
+		static bool allow_overlap = prefs.Get<bool> ("AllowWindowOverlap", false);
+		public static bool AllowOverlap {
+			get { return allow_overlap; }
+			set {
+				if (allow_overlap == value)
+					return;
+
+				prefs.Set ("AllowWindowOverlap", value);
+				allow_overlap = value;
+				
+				if (AllowOverlapChanged != null)
+					AllowOverlapChanged ();
 			}
 		}
 		

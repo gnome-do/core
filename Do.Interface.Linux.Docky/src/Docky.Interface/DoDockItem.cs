@@ -85,6 +85,15 @@ namespace Docky.Interface
 			else
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, 
 				                                       "Automatically Hide", DisableIcon);
+
+			if (!DockPreferences.AutoHide) {
+				if (DockPreferences.AllowOverlap)
+					yield return new SimpleMenuButtonArgs (() => DockPreferences.AllowOverlap = false,
+					                                       "Allow Window Overlap", EnableIcon);
+				else
+					yield return new SimpleMenuButtonArgs (() => DockPreferences.AllowOverlap = true,
+					                                       "Allow Window Overlap", DisableIcon);
+			}
 			
 			if (DockPreferences.ZoomEnabled)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, 

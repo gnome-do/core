@@ -116,7 +116,7 @@ namespace Docky.Interface
 		/// The height of the visible dock
 		/// </summary>
 		public int DockHeight {
-			get { return DockPreferences.AutoHide ? 0 : MinimumDockArea.Height; }
+			get { return DockPreferences.AutoHide || DockPreferences.AllowOverlap  ? 0 : MinimumDockArea.Height; }
 		}
 		
 		public Pane CurrentPane {
