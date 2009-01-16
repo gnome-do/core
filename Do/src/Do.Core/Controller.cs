@@ -1,22 +1,21 @@
-/* Controller.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Controller.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Linq;
@@ -44,7 +43,6 @@ namespace Do.Core {
 		Gtk.AboutDialog about_window;
 		ISearchController [] controllers;
 		
-		Act action;
 		bool third_pane_visible;
 		bool results_grown;
 		Gtk.IMContext im;
@@ -766,6 +764,7 @@ namespace Do.Core {
 		
 		protected virtual void PerformAction (bool vanish)
 		{
+			Act action;
 			Element first, second, third;
 			string actionQuery, itemQuery, modItemQuery;
 			ICollection<Item> items, modItems;
@@ -777,61 +776,70 @@ namespace Do.Core {
 			first  = GetSelection (Pane.First);
 			second = GetSelection (Pane.Second);
 			third  = GetSelection (Pane.Third);
+			action = first as Act ?? second as Act;
 
-			if (first != null && second != null) {
-
-				if (first is Item) {
-					foreach (Item item in controllers [0].FullSelection)
-						items.Add (item);
-					action = second as Act;
-					itemQuery = controllers [0].Query;
-					actionQuery = controllers [1].Query;
-				} else {
-					foreach (Item item in controllers [1].FullSelection)
-						items.Add (item);
-					action = first as Act;
-					itemQuery = controllers [1].Query;
-					actionQuery = controllers [0].Query;
-				}
-
-				modItemQuery = null;
-				if (third != null && ThirdPaneVisible) {
-					foreach (Item item in controllers [2].FullSelection)
-						modItems.Add (item);
-					modItemQuery = controllers [2].Query;
-				}
-
-				/////////////////////////////////////////////////////////////
-				/// Relevance accounting
-				/////////////////////////////////////////////////////////////
-				
-				if (first is Item) {
-					// Act is in second pane.
-					// Increase the relevance of the items.
-					foreach (Element item in items)
-						item.IncreaseRelevance (itemQuery, null);
-
-					// Increase the relevance of the action /for each item/:
-					foreach (Element item in items)
-						action.IncreaseRelevance (actionQuery, item);
-				} else {
-					// Act is in first pane.
-					// Increase the relevance of each item for the action.
-					foreach (Element item in items)
-						item.IncreaseRelevance (itemQuery, action);
-					action.IncreaseRelevance (actionQuery, null);
-				}
-
-				if (third != null && ThirdPaneVisible)
-					third.IncreaseRelevance (modItemQuery, action);
+			// If the current state of the controller is invalid, warn and return early.
+			if (first == null || second == null || action == null) {
+				Log<Controller>
+					.Warn ("Controller state was not valid, so the action could not be performed.");
+				if (vanish) Reset ();
+				return;
 			}
 
+			if (first is Item) {
+				foreach (Item item in controllers [0].FullSelection)
+					items.Add (item);
+				itemQuery = controllers [0].Query;
+				actionQuery = controllers [1].Query;
+			} else {
+				foreach (Item item in controllers [1].FullSelection)
+					items.Add (item);
+				itemQuery = controllers [1].Query;
+				actionQuery = controllers [0].Query;
+			}
+
+			modItemQuery = null;
+			if (third != null && ThirdPaneVisible) {
+				foreach (Item item in controllers [2].FullSelection)
+					modItems.Add (item);
+				modItemQuery = controllers [2].Query;
+			}
+
+			/////////////////////////////////////////////////////////////
+			/// Relevance accounting
+			/////////////////////////////////////////////////////////////
+			
+			if (first is Item) {
+				// Act is in second pane.
+				// Increase the relevance of the items.
+				foreach (Element item in items)
+					item.IncreaseRelevance (itemQuery, null);
+
+				// Increase the relevance of the action /for each item/:
+				foreach (Element item in items)
+					action.IncreaseRelevance (actionQuery, item);
+			} else {
+				// Act is in first pane.
+				// Increase the relevance of each item for the action.
+				foreach (Element item in items)
+					item.IncreaseRelevance (itemQuery, action);
+				action.IncreaseRelevance (actionQuery, null);
+			}
+
+			if (third != null && ThirdPaneVisible)
+				third.IncreaseRelevance (modItemQuery, action);
+
+			// Finally, we can perform the action.
 			PerformAction (action, items, modItems);
 			if (vanish) Reset ();
 		}
 
 		void PerformAction (Act action, IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
+			if (action == null) throw new ArgumentNullException ("action");
+			if (items == null) throw new ArgumentNullException ("items");
+			if (modItems == null) throw new ArgumentNullException ("modItems");
+
 			IEnumerable<Item> results = action.Safe.Perform (items, modItems);
 			// If we have results to feed back into the window, do so in a new
 			// iteration.
