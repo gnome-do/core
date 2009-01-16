@@ -79,42 +79,21 @@ namespace Docky.Interface
 		
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
-			if (DockPreferences.AutoHide)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = false, 
-				                                       "Automatically Hide", EnableIcon);
-			else
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = true, 
-				                                       "Automatically Hide", DisableIcon);
+			yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = !DockPreferences.AutoHide, 
+			                                       "Automatically Hide", DockPreferences.AutoHide ? EnableIcon : DisableIcon);
 
-			if (!DockPreferences.AutoHide) {
-				if (DockPreferences.AllowOverlap)
-					yield return new SimpleMenuButtonArgs (() => DockPreferences.AllowOverlap = false,
-					                                       "Allow Window Overlap", EnableIcon);
-				else
-					yield return new SimpleMenuButtonArgs (() => DockPreferences.AllowOverlap = true,
-					                                       "Allow Window Overlap", DisableIcon);
-			}
+			if (!DockPreferences.AutoHide)
+				yield return new SimpleMenuButtonArgs (() => DockPreferences.AllowOverlap = !DockPreferences.AllowOverlap,
+				                                       "Allow Window Overlap", DockPreferences.AllowOverlap ? EnableIcon : DisableIcon);
 			
-			if (DockPreferences.ZoomEnabled)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = false, 
-				                                       "Zoom Icons", EnableIcon);
-			else
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = true, 
-				                                       "Zoom Icons", DisableIcon);
+			yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = !DockPreferences.ZoomEnabled, 
+			                                       "Zoom Icons", DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon);
 			
-			if (DockPreferences.ShowTrash)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = false, 
-				                                       "Show Trash", EnableIcon);
-			else
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = true, 
-				                                       "Show Trash", DisableIcon);
+			yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = !DockPreferences.ShowTrash, 
+			                                       "Show Trash", DockPreferences.ShowTrash ? EnableIcon : DisableIcon);
 			
-			if (DockPreferences.IndicateMultipleWindows)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = false, 
-				                                       "Advanced Indicators", EnableIcon);
-			else
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = true, 
-				                                       "Advanced Indicators", DisableIcon);
+			yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = !DockPreferences.IndicateMultipleWindows, 
+			                                       "Advanced Indicators", DockPreferences.IndicateMultipleWindows ? EnableIcon : DisableIcon);
 
 			yield return new SeparatorMenuButtonArgs ();
 			
