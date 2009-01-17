@@ -33,9 +33,11 @@ using Do.DBusLib;
 using Do.Platform;
 using Do.Interface;
 
-namespace Do.Core {
+namespace Do.Core
+{
 
-	public class Controller : IController, IDoController {
+	public class Controller : IController, IDoController
+	{
 		
 		const int SearchDelay = 250;
 
@@ -88,7 +90,7 @@ namespace Do.Core {
 		
 		private void OnIMCommit (object o, Gtk.CommitArgs args)
 		{
-			foreach (char c in args.Str.ToCharArray ())
+			foreach (char c in args.Str)
 				SearchController.AddChar (c);
 			
 			// Horrible hack: The reason this exists and exists here is to update the
