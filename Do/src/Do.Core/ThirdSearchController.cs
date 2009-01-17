@@ -128,14 +128,14 @@ namespace Do.Core
 		
 		protected override List<Element> InitialResults ()
 		{
-			//We continue off our previous results if possible
+			// We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
 				return new List<Element> (Do.UniverseManager.Search (context.Query, 
 					SearchTypes, context.LastContext.Results, FirstController.Selection));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
 				return new List<Element> (context.Results);
 			} else { 
-				//else we do things the slow way
+				// else we do things the slow way
 				return new List<Element> (
 					Do.UniverseManager.Search (context.Query, SearchTypes, FirstController.Selection));
 			}
@@ -157,7 +157,7 @@ namespace Do.Core
 				item = FirstController.Selection as Item;
 				items = FirstController.FullSelection.OfType<Item> ();
 			} else {
-				Log.Warn ("No action found. The interface is out of sync.");
+				Log.Debug ("No action found. The interface is out of sync.");
 				return new List<Element> ();
 			}
 
