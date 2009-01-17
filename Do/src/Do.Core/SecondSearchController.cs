@@ -18,11 +18,12 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
-using Do.Interface;
+using Do.Platform;
 using Do.Universe;
+using Do.Interface;
 
 namespace Do.Core
 {
@@ -79,8 +80,6 @@ namespace Do.Core
 		
 		protected override List<Element> InitialResults ()
 		{
-			if (TextMode)
-				return new List<Element> ();
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
 				return new List<Element> (Do.UniverseManager.Search (context.Query, 
@@ -123,32 +122,25 @@ namespace Do.Core
 		/// </returns>
 		private Element[] GetContextResults ()
 		{
-			List<Element> initresults = InitialResults ();
-			
 			List<Element> results = new List<Element> ();
 			if (FirstController.Selection is Item) {
 				Item item = FirstController.Selection as Item;
-				
-				//We need to find actions for this item
-				//TODO -- Make this work for multiple items
-				foreach (Act action in initresults) {
+				// We need to find actions for this item
+				// TODO -- Make this work for multiple items
+				foreach (Act action in InitialResults ()) {
 					if (action.Safe.SupportsItem (item)) {
 						results.Add (action);
 					}
 				}
-				
 			} else if (FirstController.Selection is Act) {
-				//We need to find items for this action
+				// We need to find items for this action
 				Act action = FirstController.Selection as Act;
 				if (!textMode) {
-					foreach (Item item in initresults) {
+					foreach (Item item in InitialResults ()) {
 						if (action.Safe.SupportsItem (item))
 							results.Add (item);
 					}
 				}
-				Item textItem = new ImplicitTextItem (Query);
-				if (action.Safe.SupportsItem (textItem))
-					results.Add (textItem);
 			}
 			
 			return results.ToArray ();

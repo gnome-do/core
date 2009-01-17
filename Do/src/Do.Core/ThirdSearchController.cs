@@ -128,8 +128,6 @@ namespace Do.Core
 		
 		protected override List<Element> InitialResults ()
 		{
-			if (TextMode)
-				return new List<Element> ();
 			//We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
 				return new List<Element> (Do.UniverseManager.Search (context.Query, 
@@ -183,11 +181,6 @@ namespace Do.Core
 				// Sort modifier items before we potentially add a text item.
 				modItems.Sort ();
 			}
-			
-			Item textItem = new ImplicitTextItem (Query);
-			if (action.Safe.SupportsModifierItemForItems (items, textItem))
-				modItems.Add (textItem);
-			
 			return modItems.OfType<Element> ().ToList<Element> ();
 		}
 		
