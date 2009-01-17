@@ -762,6 +762,8 @@ namespace Do.Core
 			ICollection<Item> items, modItems;
 
 			if (vanish) Vanish ();
+			// Flush main thread queue to get Vanish to complete.
+			Services.Application.FlushMainThreadQueue ();
 
 			items = new List<Item> ();
 			modItems = new List<Item> ();

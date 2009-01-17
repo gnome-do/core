@@ -47,5 +47,12 @@ namespace Do.Platform
 				.Debug ("Cannot run action on the main thread.");
 			action ();
 		}
+
+		public override void FlushMainThreadQueue ()
+		{
+			Log<DefaultApplicationService>
+				.Debug ("Cannot flush main thread queue.");
+		}
+
 	}
 }

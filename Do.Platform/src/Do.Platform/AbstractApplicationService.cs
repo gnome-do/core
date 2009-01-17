@@ -57,6 +57,8 @@ namespace Do.Platform
 
 		public abstract void RunOnMainThread (Action action);
 
+		public abstract void FlushMainThreadQueue ();
+
 		protected void OnSummoned ()
 		{
 			if (Summoned != null)

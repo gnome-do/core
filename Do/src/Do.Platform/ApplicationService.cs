@@ -75,5 +75,11 @@ namespace Do.Platform
 			});
 		}
 
+		public override void FlushMainThreadQueue ()
+		{
+			while (Gtk.Application.EventsPending ())
+				Gtk.Application.RunIteration ();
+		}
+
 	}
 }
