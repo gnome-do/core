@@ -35,7 +35,7 @@ namespace Do.Platform
 			}
 		}
 
-		public override void RunOnThread (Action action, TimeSpan delay)
+		public override void RunOnThread (Action action)
 		{
 			Log<DefaultApplicationService>.Debug ("Cannot run action on a thread.");
 			action ();
@@ -43,15 +43,13 @@ namespace Do.Platform
 
 		public override void RunOnMainThread (Action action)
 		{
-			Log<DefaultApplicationService>
-				.Debug ("Cannot run action on the main thread.");
+			Log<DefaultApplicationService>.Debug ("Cannot run action on the main thread.");
 			action ();
 		}
 
 		public override void FlushMainThreadQueue ()
 		{
-			Log<DefaultApplicationService>
-				.Debug ("Cannot flush main thread queue.");
+			Log<DefaultApplicationService>.Debug ("Cannot flush main thread queue.");
 		}
 
 	}

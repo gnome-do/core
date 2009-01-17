@@ -19,6 +19,7 @@
 
 using System;
 using System.IO;
+using System.Threading;
 using System.Collections.Generic;
 
 using Do.Universe;
@@ -33,17 +34,22 @@ namespace Do.Platform
 
 		public abstract IEnumerable<IRunnableItem> MainMenuItems { get; }
 
-		public void RunOnThread (Action action)
-		{
-			RunOnThread (action, 0);
-		}
+		public abstract void RunOnThread (Action action);
 
 		public void RunOnThread (Action action, int delay)
 		{
 			RunOnThread (action, new TimeSpan (0, 0, 0, 0, delay));
 		}
 
-		public abstract void RunOnThread (Action action, TimeSpan delay);
+		public void RunOnThread (Action action, TimeSpan delay)
+		{
+			RunOnThread (() => {
+				Thread.Sleep (delay);
+				action ();
+			});
+		}
+
+		public abstract void RunOnMainThread (Action action);
 
 		public void RunOnMainThread (Action action, int delay)
 		{
@@ -54,8 +60,6 @@ namespace Do.Platform
 		{
 			RunOnThread (() => RunOnMainThread (action), delay);
 		}
-
-		public abstract void RunOnMainThread (Action action);
 
 		public abstract void FlushMainThreadQueue ();
 

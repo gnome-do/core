@@ -46,12 +46,11 @@ namespace Do.Platform
 			get { return items; }
 		}
 
-		public override void RunOnThread (Action action, TimeSpan delay)
+		public override void RunOnThread (Action action)
 		{
 			if (action == null) throw new ArgumentNullException ("action");
 
 			new Thread (() => {
-				Thread.Sleep (delay);
 				try {
 					action ();
 				} catch (Exception e) {
