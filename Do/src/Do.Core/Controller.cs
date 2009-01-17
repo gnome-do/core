@@ -836,9 +836,7 @@ namespace Do.Core
 
 			IEnumerable<Item> results = action.Safe.Perform (items, modItems);
 			if (results.Any ()) {
-				Services.Application.RunOnMainThread (() => {
-					SummonWithElements (results.OfType<Element> ());
-				});
+				SummonWithElements (results.OfType<Element> ());
 			}
 		}
 
