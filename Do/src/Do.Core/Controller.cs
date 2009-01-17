@@ -42,17 +42,18 @@ namespace Do.Core
 		const int SearchDelay = 250;
 
 		IDoWindow window;
+		string last_theme;
+		bool results_grown;
+		bool third_pane_visible;
+		Gtk.IMContext im_context;
 		Gtk.AboutDialog about_window;
 		ISearchController [] controllers;
-		
-		bool third_pane_visible;
-		bool results_grown;
-		Gtk.IMContext im;
-		string last_theme;
+
+		public event EventHandler Summoned;
 		
 		public Controller ()
 		{
-			im = new Gtk.IMMulticontext ();
+			im_context = new Gtk.IMMulticontext ();
 			results_grown = false;
 			last_theme = "";
 			
@@ -83,30 +84,27 @@ namespace Do.Core
 			controllers [2].SearchFinished +=
 				(o, state) => SearchFinished (o, state, Pane.Third);
 			
-			im.UsePreedit = false;
-			im.Commit += OnIMCommit;
-			im.FocusIn ();
+			im_context.UsePreedit = false;
+			im_context.Commit += OnIMCommit;
+			im_context.FocusIn ();
 		}
 		
-		private void OnIMCommit (object o, Gtk.CommitArgs args)
+		void OnIMCommit (object sender, Gtk.CommitArgs e)
 		{
-			foreach (char c in args.Str)
+			foreach (char c in e.Str)
 				SearchController.AddChar (c);
-			
-			// Horrible hack: The reason this exists and exists here is to update the
-			// clipboard in a place that we know will always be safe for GTK.
-			// Unfortunately due to the way we have designed Do, this has proven
-			// extremely difficult to put some place more logical.  We NEED to
-			// rethink how we handle Summon () and audit our usage of
-			// Threads.Enter ()
-			if (SearchController.Query.Length <= 1)
-				SelectedTextItem.UpdateText ();
 		}
 
 		public void Initialize ()
 		{
 			OnThemeChanged (this, null);
 			Do.Preferences.ThemeChanged += OnThemeChanged;
+		}
+
+		void OnSummoned ()
+		{
+			if (Summoned == null) return;
+			Summoned (this, EventArgs.Empty);
 		}
 		
 		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
@@ -298,14 +296,8 @@ namespace Do.Core
 
 			// If there are multiple results, show results window after a short
 			// delay.
-			if (elements.Any ()) {
-				GLib.Timeout.Add (50, delegate {
-//				Threads.Enter ();
-					GrowResults ();
-//				Threads.Leave ();
-					return false;
-				});
-			}
+			if (1 < elements.Count ())
+				GrowResults ();
 		}
 		
 		/// <summary>
@@ -411,7 +403,7 @@ namespace Do.Core
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
 		{
-			im.Reset ();
+			im_context.Reset ();
 			if (SearchController.TextType == TextModeType.Explicit) {
 				OnInputKeyPressEvent (evnt);
 				return;
@@ -429,7 +421,7 @@ namespace Do.Core
 		/// </param>
 		void OnSelectionKeyPressEvent (EventKey evnt)
 		{
-			im.Reset ();
+			im_context.Reset ();
 			if (SearchController.Selection is ITextItem || !results_grown)
 				OnInputKeyPressEvent (evnt);
 			else if (SearchController.ToggleSecondaryCursor (SearchController.Cursor))
@@ -438,7 +430,7 @@ namespace Do.Core
 		
 		void OnDeleteKeyPressEvent (EventKey evnt)
 		{
-			im.Reset ();
+			im_context.Reset ();
 			SearchController.DeleteChar ();
 		}
 		
@@ -450,7 +442,7 @@ namespace Do.Core
 		
 		void OnEscapeKeyPressEvent (EventKey evnt)
 		{
-			im.Reset ();
+			im_context.Reset ();
 			if (SearchController.TextType == TextModeType.Explicit) {
 				if (SearchController.Query.Length > 0)
 					SearchController.FinalizeTextMode ();
@@ -479,7 +471,7 @@ namespace Do.Core
 		
 		void OnInputKeyPressEvent (EventKey evnt)
 		{
-			if (im.FilterKeypress (evnt) || ((evnt.State & ModifierType.ControlMask) != 0))
+			if (im_context.FilterKeypress (evnt) || ((evnt.State & ModifierType.ControlMask) != 0))
 				return;
 			
 			char c;
@@ -499,7 +491,7 @@ namespace Do.Core
 		
 		void OnRightLeftKeyPressEvent (EventKey evnt)
 		{
-			im.Reset ();
+			im_context.Reset ();
 			if (!SearchController.Results.Any ()) return;
 
 			if ((Key) evnt.KeyValue == RightKey) {
@@ -521,7 +513,7 @@ namespace Do.Core
 		
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
-			im.Reset ();
+			im_context.Reset ();
 			ShrinkResults ();
 
 			if (SearchController.TextType == TextModeType.Explicit) {
@@ -538,7 +530,7 @@ namespace Do.Core
 		
 		void OnTextModePressEvent (EventKey evnt)
 		{
-			im.Reset ();
+			im_context.Reset ();
 
 			// If this isn't the first keypress in text mode (we just entered text
 			// mode) or if we're already in text mode, treat keypress as normal
@@ -553,7 +545,7 @@ namespace Do.Core
 		
 		void OnUpDownKeyPressEvent (EventKey evnt)
 		{
-			im.Reset ();
+			im_context.Reset ();
 			if (evnt.Key == UpKey) {
 				if (!results_grown) {
 					if (SearchController.Cursor > 0)
@@ -780,7 +772,8 @@ namespace Do.Core
 			third  = GetSelection (Pane.Third);
 			action = first as Act ?? second as Act;
 
-			// If the current state of the controller is invalid, warn and return early.
+			// If the current state of the controller is invalid, warn and return
+			// early.
 			if (first == null || second == null || action == null) {
 				Log<Controller>
 					.Warn ("Controller state was not valid, so the action could not be performed.");
@@ -806,6 +799,8 @@ namespace Do.Core
 					modItems.Add (item);
 				modItemQuery = controllers [2].Query;
 			}
+
+			if (vanish) Reset ();
 
 			/////////////////////////////////////////////////////////////
 			/// Relevance accounting
@@ -833,7 +828,6 @@ namespace Do.Core
 
 			// Finally, we can perform the action.
 			PerformAction (action, items, modItems);
-			if (vanish) Reset ();
 		}
 
 		void PerformAction (Act action, IEnumerable<Item> items, IEnumerable<Item> modItems)
@@ -843,20 +837,15 @@ namespace Do.Core
 			if (modItems == null) throw new ArgumentNullException ("modItems");
 
 			IEnumerable<Item> results = action.Safe.Perform (items, modItems);
-			// If we have results to feed back into the window, do so in a new
-			// iteration.
-			if (results.Any ()) {
-				GLib.Timeout.Add (10, delegate {
-					Do.Controller.SummonWithElements (results.OfType<Element> ());
-					return false;
-				});
-			}
+			if (results.Any ())
+				SummonWithElements (results.OfType<Element> ());
 		}
 
 		#region IController Implementation
 		public void Summon ()
 		{
 			if (!IsSummonable) return;
+			OnSummoned ();
 			
 			// We want to disable updates so that any updates to universe dont happen
 			// while controller is summoned.  We will disable this on vanish.  This
@@ -865,7 +854,7 @@ namespace Do.Core
 			Do.UniverseManager.UpdatesEnabled = false;
 			window.Summon ();
 			if (AlwaysShowResults) GrowResults ();
-			im.FocusIn ();
+			im_context.FocusIn ();
 		}
 		
 		public void Vanish ()

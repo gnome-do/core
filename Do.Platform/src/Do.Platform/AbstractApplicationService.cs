@@ -29,9 +29,17 @@ namespace Do.Platform
 	
 	public abstract class AbstractApplicationService : IService
 	{
+		public event EventHandler Summoned;
+
 		public abstract IEnumerable<IRunnableItem> MainMenuItems { get; }
 
 		public abstract void RunOnThread (Action action);
 		public abstract void RunOnMainThread (Action action);
+
+		protected void OnSummoned ()
+		{
+			if (Summoned != null)
+				Summoned (this, EventArgs.Empty);
+		}
 	}
 }

@@ -37,6 +37,11 @@ namespace Do.Platform
 			new QuitItem (),
 		};
 
+		public ApplicationService ()
+		{
+			Do.Controller.Summoned += (sender, e) => OnSummoned ();
+		}
+
 		public override IEnumerable<IRunnableItem> MainMenuItems {
 			get { return items; }
 		}
