@@ -2,20 +2,20 @@
 // 
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
-//
+// 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//
+// 
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
+// 
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//
+// along with this program.  If not, see <http:// www.gnu.org/licenses/>.
+// 
 
 using System;
 using System.Linq;
@@ -59,13 +59,13 @@ namespace Do.Core
 			};
 		}
 		
-		//Similar to running UpdateResults (), except we dont have any timeouts
+		// Similar to running UpdateResults (), except we dont have any timeouts
 		private void FastSearch ()
 		{
 			if (FirstController.Selection == null)
 				return;
 			
-			//Clear our timers
+			// Clear our timers
 			if (timer > 0) {
 				GLib.Source.Remove (timer);
 				timer = 0;
@@ -80,19 +80,15 @@ namespace Do.Core
 		
 		protected override List<Element> InitialResults ()
 		{
-			//We continue off our previous results if possible
+			// We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
-				return new List<Element> (Do.UniverseManager.Search (context.Query, 
-				                                                     SearchTypes, 
-				                                                     context.LastContext.Results, 
-				                                                     FirstController.Selection));
+				return new List<Element> (
+					Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results, FirstController.Selection));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
 				return new List<Element> (context.Results);
 			} else { 
-				//else we do things the slow way
-				return new List<Element> (Do.UniverseManager.Search (context.Query, 
-				                                                     SearchTypes, 
-				                                                     FirstController.Selection));
+				return new List<Element> (
+					Do.UniverseManager.Search (context.Query, SearchTypes, FirstController.Selection));
 			}
 		}
 
@@ -104,7 +100,7 @@ namespace Do.Core
 			if (wait_timer > 0)
 				GLib.Source.Remove (wait_timer);
 			
-			base.OnSearchStarted (true);//trigger our search start now
+			base.OnSearchStarted (true);// trigger our search start now
 			timer = GLib.Timeout.Add (type_wait, delegate {
 				context.Destroy ();
 				context = new SimpleSearchContext ();
@@ -168,7 +164,7 @@ namespace Do.Core
 			if (FirstController.Selection == null)
 				return;
 			
-			//we only do this if its false because we already did it up before the timeout
+			// we only do this if its false because we already did it up before the timeout
 			if (!upstream_search)
 				base.OnSearchStarted (false);
 			
@@ -178,15 +174,15 @@ namespace Do.Core
 			uint ms = Convert.ToUInt32 (DateTime.Now.Subtract (time).TotalMilliseconds);
 			ms += type_wait; // we also know we waited this long at the start
 			if (ms > Timeout || !upstream_search) {
-				//we were too slow, our engine has been defeated and we must return results as
-				//quickly as possible
+				// we were too slow, our engine has been defeated and we must return results as
+				// quickly as possible
 				
-				//Check and see if our selection changed
+				// Check and see if our selection changed
 				bool selection_changed = (context.LastContext != null && 
 				                          context.Selection != context.LastContext.Selection);
 				base.OnSearchFinished (selection_changed, true, Selection, Query);
 			} else {
-				//yay, we beat the user with a stick
+				// yay, we beat the user with a stick
 				if (wait_timer > 0) {
 					GLib.Source.Remove (wait_timer);
 				}
@@ -211,16 +207,12 @@ namespace Do.Core
 		public override IEnumerable<Type> SearchTypes {
 			get { 
 				if (FirstController.Selection is Act) {
-					// the basic idea here is that if the first controller selection is an action
-					// we can move right to filtering on what it supports.  This is not strictly needed,
-					// but speeds up searches since we get more specific results back.  Returning a
-					// typeof (Item) would have the same effect here and MUST be used to debug.
-					// ----return new Type[] {typeof (Item)};
-					return (FirstController.Selection as Act).SupportedItemTypes;
+					foreach (Type t in (FirstController.Selection as Act).SupportedItemTypes)
+						yield return t;
+				} else if (TextMode) {
+					yield return typeof (ITextItem);
 				} else {
-					if (TextMode)
-						return new [] { typeof (ITextItem) };
-					return new [] { typeof (Act) };
+					yield return typeof (Act);
 				}
 			}
 		}
@@ -239,7 +231,7 @@ namespace Do.Core
 		/// <value>
 		/// Set text mode.
 		/// </value>
-		public override bool TextMode { //FIXME
+		public override bool TextMode { // FIXME
 			get { 
 				return (textMode || ImplicitTextMode);
 			}
