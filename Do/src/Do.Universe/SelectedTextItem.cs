@@ -37,15 +37,14 @@ namespace Do.Universe
 		public SelectedTextItem ()
 		{
 			TextItem = new TextItem ("");
-			Services.Application.Summoned += UpdateText;
+			Services.Application.Summoned += UpdateSelection;
 		}
 
-		void UpdateText (object sender, EventArgs e)
+		void UpdateSelection (object sender, EventArgs e)
 		{
 			string text;
 			Clipboard primary;
 			
-			Log<SelectedTextItem>.Warn ("Updating selection! {0}", GetHashCode());
 			primary = Clipboard.Get (Gdk.Selection.Primary);
 			text = primary.WaitIsTextAvailable () ? primary.WaitForText () : "";
 			TextItem = new TextItem (text);

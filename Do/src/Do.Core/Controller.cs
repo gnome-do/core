@@ -243,8 +243,8 @@ namespace Do.Core
 		}
 
 		/// <value>
-		/// Third pane required states that the current controller state requires that the third pane 
-		/// be visible
+		/// Third pane required states that the current controller state requires
+		/// that the third pane be visible.
 		/// </value>
 		bool ThirdPaneRequired {
 			get {
@@ -291,13 +291,11 @@ namespace Do.Core
 			Reset ();
 			Summon ();
 			
-			// Someone is going to need to explain this to me -- Now with less stupid!
 			controllers [0].Results = elements.ToList ();
-
-			// If there are multiple results, show results window after a short
-			// delay.
-			if (1 < elements.Count ())
-				GrowResults ();
+			// If there are multiple results, show results list after a short delay.
+			if (1 < elements.Count ()) {
+				Services.Application.RunOnMainThread (GrowResults, 250);
+			}
 		}
 		
 		/// <summary>
@@ -756,7 +754,7 @@ namespace Do.Core
 			return o;
 		}
 		
-		protected virtual void PerformAction (bool vanish)
+		void PerformAction (bool vanish)
 		{
 			Act action;
 			Element first, second, third;
@@ -837,8 +835,11 @@ namespace Do.Core
 			if (modItems == null) throw new ArgumentNullException ("modItems");
 
 			IEnumerable<Item> results = action.Safe.Perform (items, modItems);
-			if (results.Any ())
-				SummonWithElements (results.OfType<Element> ());
+			if (results.Any ()) {
+				Services.Application.RunOnMainThread (() => {
+					SummonWithElements (results.OfType<Element> ());
+				});
+			}
 		}
 
 		#region IController Implementation
@@ -847,11 +848,6 @@ namespace Do.Core
 			if (!IsSummonable) return;
 			OnSummoned ();
 			
-			// We want to disable updates so that any updates to universe dont happen
-			// while controller is summoned.  We will disable this on vanish.  This
-			// way we can be sure to dedicate our CPU resources to searching and
-			// leave updating to a more reasonable time.
-			Do.UniverseManager.UpdatesEnabled = false;
 			window.Summon ();
 			if (AlwaysShowResults) GrowResults ();
 			im_context.FocusIn ();
@@ -862,7 +858,6 @@ namespace Do.Core
 			window.ShrinkResults ();
 			results_grown = false;
 			window.Vanish ();
-			Do.UniverseManager.UpdatesEnabled = true;
 		}
 
 		public void ShowPreferences ()

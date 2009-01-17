@@ -33,7 +33,28 @@ namespace Do.Platform
 
 		public abstract IEnumerable<IRunnableItem> MainMenuItems { get; }
 
-		public abstract void RunOnThread (Action action);
+		public void RunOnThread (Action action)
+		{
+			RunOnThread (action, 0);
+		}
+
+		public void RunOnThread (Action action, int delay)
+		{
+			RunOnThread (action, new TimeSpan (0, 0, 0, 0, delay));
+		}
+
+		public abstract void RunOnThread (Action action, TimeSpan delay);
+
+		public void RunOnMainThread (Action action, int delay)
+		{
+			RunOnMainThread (action, new TimeSpan (0, 0, 0, 0, delay));
+		}
+
+		public void RunOnMainThread (Action action, TimeSpan delay)
+		{
+			RunOnThread (() => RunOnMainThread (action), delay);
+		}
+
 		public abstract void RunOnMainThread (Action action);
 
 		protected void OnSummoned ()
