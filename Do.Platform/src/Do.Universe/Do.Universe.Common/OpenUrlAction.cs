@@ -32,7 +32,7 @@ namespace Do.Universe.Common
 	public class OpenUrlAction : Act
 	{
 
-		// URL regex taken from http://www.osix.net/modules/article/?id=586
+		// Url regex taken from http://www.osix.net/modules/article/?id=586
 		const string UrlPattern = "^(https?://)"
 	        + "?(([0-9a-zA-Z_!~*'().&=+$%-]+: )?[0-9a-zA-Z_!~*'().&=+$%-]+@)?" //user@
 	        + @"(([0-9]{1,3}\.){3}[0-9]{1,3}" // IP- 199.194.52.184
@@ -52,11 +52,11 @@ namespace Do.Universe.Common
 		}
 		
 		public override string Name {
-			get { return  Catalog.GetString ("Open URL"); }
+			get { return  Catalog.GetString ("Open Url"); }
 		}
 		
 		public override string Description {
-			get { return  Catalog.GetString ("Opens bookmarks and manually-typed URLs."); }
+			get { return  Catalog.GetString ("Opens bookmarks and manually-typed Urls."); }
 		}
 		
 		public override string Icon {
