@@ -38,7 +38,7 @@ namespace Do.UI {
             this.WindowPosition = ((Gtk.WindowPosition)(1));
             this.BorderWidth = ((uint)(6));
             this.DefaultWidth = 400;
-            this.DefaultHeight = 450;
+            this.DefaultHeight = 400;
             // Container child Do.UI.PluginConfigurationWindow.Gtk.Container+ContainerChild
             this.vbox2 = new Gtk.VBox();
             this.vbox2.Name = "vbox2";
