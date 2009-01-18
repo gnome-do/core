@@ -164,19 +164,25 @@ namespace Do.UI
 		public void Refresh ()
 		{
 			ListStore store = Model as ListStore;
+			// We use seen to deduplicate plugins, preferring non-repository
+			// plugins to repository plugins (user-installed plugins override
+			// the repository).
+			ICollection<string> seen = new HashSet<string> ();
 			SetupService setup = new SetupService (AddinManager.Registry);
 			
 			store.Clear ();
 			// Add non-repository plugins.
 			foreach (Addin a in AddinManager.Registry.GetAddins ()) {
-				if (!AddinShouldShow (a)) continue;
+				if (seen.Contains (a.Id) || !AddinShouldShow (a)) continue;
 				store.AppendValues (a.Enabled, Description (a), a.Id);
+				seen.Add (a.Id);
 			}
 			// Add repository plugins.
 			foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
-				if (!AddinShouldShow (e)) continue;
+				if (seen.Contains (e.Addin.Id) || !AddinShouldShow (e)) continue;
 				store.AppendValues (AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
 					Description (e), e.Addin.Id);
+				seen.Add (e.Addin.Id);
 			}
 			ScrollFirst (false);
 		}
