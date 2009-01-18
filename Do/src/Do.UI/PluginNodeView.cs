@@ -200,7 +200,8 @@ namespace Do.UI
 			return Description (a.Name, a.Description, a.Version);
 		}
 
-		public string [] GetSelectedAddins () {
+		public string [] GetSelectedAddins ()
+		{
 			string id;
 			TreeIter iter;
 			ListStore store;
@@ -227,13 +228,16 @@ namespace Do.UI
 
 			addinId = (string) store.GetValue (iter, (int)Column.Id);
 			enabled = (bool) store.GetValue (iter, (int)Column.Enabled);
+			// Set the check state.
 			store.SetValue (iter, (int)Column.Enabled, !enabled);
-			
-			if (null != PluginToggled) {
+			Services.Application.FlushMainThreadQueue ();
+
+			// Notify subscribers.
+			if (null != PluginToggled)
 				PluginToggled (addinId, !enabled);
-			}
+			// Set checked state again (don't assume enable/disable worked).
 			store.SetValue (iter, (int)Column.Enabled,
-					AddinManager.Registry.IsAddinEnabled (addinId));
+				AddinManager.Registry.IsAddinEnabled (addinId));
 		}
 
 		protected void OnSelectionChanged (object sender, EventArgs args)

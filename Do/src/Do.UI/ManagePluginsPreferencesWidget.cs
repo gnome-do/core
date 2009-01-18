@@ -143,10 +143,7 @@ namespace Do.UI
 		{	
 			// If the addin isn't found, install it.
 			if (null == AddinManager.Registry.GetAddin (id)) {
-				IAddinInstaller installer;
-
-				installer = new ConsoleAddinInstaller ();
-				//installer = new Mono.Addins.Gui.AddinInstaller ();
+				IAddinInstaller installer = new ConsoleAddinInstaller ();
 				try {
 					installer.InstallAddins (AddinManager.Registry,
 						string.Format ("Installing \"{0}\" addin...", id), new [] { id });
