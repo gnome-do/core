@@ -64,8 +64,7 @@ namespace Do.UI
 		public ManagePluginsPreferencesWidget()
 		{
 			Build ();
-
-			search_entry.GrabFocus ();
+			
 			nview = new PluginNodeView ();
 			nview.PluginToggled += OnPluginToggled;
 			nview.PluginSelected += OnPluginSelected;
@@ -84,6 +83,10 @@ namespace Do.UI
 				show_combo.AppendText (cfier.Name);
 			}
 			show_combo.Active = 0;
+
+			Services.Application.RunOnMainThread (() =>
+				search_entry.GrabFocus ()
+			);
 		}
 		
 		protected void OnDragDataReceived (object sender, DragDataReceivedArgs args)
