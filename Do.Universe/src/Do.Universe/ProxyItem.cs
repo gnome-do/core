@@ -1,8 +1,8 @@
 //  ProxyItem.cs
 //
-//  GNOME Do is the legal property of its developers, whose names are too numerous
-//  to list here.  Please refer to the COPYRIGHT file distributed with this
-//  source distribution.
+//  GNOME Do is the legal property of its developers, whose names are too
+//  numerous to list here.  Please refer to the COPYRIGHT file distributed with
+//  this source distribution.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -72,6 +72,12 @@ namespace Do.Universe
 		
 		public override string Icon {
 			get { return icon ?? Item.Icon; }
+		}
+
+
+		public override bool PassesTypeFilter (IEnumerable<Type> types)
+		{
+			return Unwrap (Item).PassesTypeFilter (types);
 		}
 
 		public static Item Unwrap (Item item)

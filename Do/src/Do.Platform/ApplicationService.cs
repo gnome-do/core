@@ -37,6 +37,11 @@ namespace Do.Platform
 			new QuitItem (),
 		};
 
+		public ApplicationService ()
+		{
+			Do.Controller.Summoned += (sender, e) => OnSummoned ();
+		}
+
 		public override IEnumerable<IRunnableItem> MainMenuItems {
 			get { return items; }
 		}
@@ -67,6 +72,12 @@ namespace Do.Platform
 					Log.Debug (ex.StackTrace);
 				}
 			});
+		}
+
+		public override void FlushMainThreadQueue ()
+		{
+			while (Gtk.Application.EventsPending ())
+				Gtk.Application.RunIteration ();
 		}
 
 	}

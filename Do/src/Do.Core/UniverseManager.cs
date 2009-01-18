@@ -75,12 +75,9 @@ namespace Do.Core
 			}
 		}
 		
-		public bool UpdatesEnabled { get; set; }
-		
 		public UniverseManager ()
 		{
 			universe = new Dictionary<string, Element> ();
-			UpdatesEnabled = true;
 		}
 
 		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter)
@@ -166,7 +163,7 @@ namespace Do.Core
 
 			while (true) {
 				Thread.Sleep (UpdateTimeout);
-				if (!UpdatesEnabled) continue;
+				if (Do.Controller.IsSummoned) continue;
 				
 				if (thread.IsAlive) thread.Join ();
 

@@ -119,9 +119,7 @@ namespace Do.Core
 		public abstract IEnumerable<Type> SearchTypes { get; }
 		
 		public string Query {
-			get {
-				return context.Query;
-			}
+			get { return context.Query; }
 		}
 
 		protected SimpleSearchController ()
@@ -134,9 +132,7 @@ namespace Do.Core
 		{
 			context.LastContext = (SimpleSearchContext) context.Clone ();
 			context.Query += character;
-			
 			UpdateResults ();
-			
 		}
 		
 		public void FinalizeTextMode ()
@@ -149,13 +145,7 @@ namespace Do.Core
 		
 		protected virtual List<Element> InitialResults ()
 		{
-			if (context.ParentContext != null) {
-				if (context.LastContext != null && context.LastContext.Results.Any ())
-					return new List<Element> (Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results));
-				return new List<Element> (context.Results);
-			} else {
-				return new List<Element> (Do.UniverseManager.Search (context.Query, SearchTypes));
-			}
+			return new List<Element> (Do.UniverseManager.Search (context.Query, SearchTypes));
 		}
 		
 		public virtual void DeleteChar ()
