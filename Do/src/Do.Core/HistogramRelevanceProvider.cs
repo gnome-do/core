@@ -102,10 +102,10 @@ namespace Do.Core {
 			score = StringScoreForAbbreviation (name, match);
 			if (score == 0f) return 0f;
 
-			// Pin Run to top for IRunnableItem until we can make a stronger
-			// guarantee that it will remain there.
+			// Pin some actions to top.
 			// TODO Remove this when relevance is refactored and improved.
-			if (e is RunAction && other is IRunnableItem)
+			if (other != null &&
+				(e is OpenAction || e is RunAction || e is OpenUrlAction))
 				return 1f;
 			
 			// We must give a base, non-zero relevance to make scoring rules take
