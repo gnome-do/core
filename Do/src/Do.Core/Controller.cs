@@ -823,7 +823,7 @@ namespace Do.Core
 				action.IncreaseRelevance (actionQuery, null);
 			}
 
-			if (third != null && ThirdPaneVisible)
+			if (third != null)
 				third.IncreaseRelevance (modItemQuery, action);
 
 			// Finally, we can perform the action.
