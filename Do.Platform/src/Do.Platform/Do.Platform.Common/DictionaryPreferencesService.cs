@@ -48,11 +48,11 @@ namespace Do.Platform.Common
 			object val_object;
 			bool success = Store.TryGetValue (key, out val_object);
 			
+			val = default (T);
 			if (success)
 				val = (T) val_object;
 			
 			return success;
-			
 		}
 
 		#endregion
