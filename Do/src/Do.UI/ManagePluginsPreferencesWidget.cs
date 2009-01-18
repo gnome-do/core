@@ -61,7 +61,7 @@ namespace Do.UI
 			get { return ""; }
 		}
 
-		public ManagePluginsPreferencesWidget()
+		public ManagePluginsPreferencesWidget ()
 		{
 			Build ();
 			
@@ -149,9 +149,10 @@ namespace Do.UI
 				//installer = new Mono.Addins.Gui.AddinInstaller ();
 				try {
 					installer.InstallAddins (AddinManager.Registry,
-							string.Format ("Installing \"{0}\" addin...", id),
-							new string[] { id });
-				} catch (InstallException) {
+						string.Format ("Installing \"{0}\" addin...", id), new [] { id });
+				} catch (InstallException e) {
+					Log<ManagePluginsPreferencesWidget>.Error (e.Message);
+					Log<ManagePluginsPreferencesWidget>.Debug (e.StackTrace);
 					return;
 				}
 			}

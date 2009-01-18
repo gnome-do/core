@@ -145,8 +145,14 @@ namespace Do.Core
 		
 		protected virtual List<Element> InitialResults ()
 		{
-			return new List<Element> (Do.UniverseManager.Search (context.Query, SearchTypes));
-		}
+			if (context.ParentContext != null) {
+				if (context.LastContext != null && context.LastContext.Results.Any ())
+					return new List<Element> (Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results));
+				return new List<Element> (context.Results);
+			} else {
+				return new List<Element> (Do.UniverseManager.Search (context.Query, SearchTypes));
+			}
+		} 
 		
 		public virtual void DeleteChar ()
 		{
