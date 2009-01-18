@@ -230,6 +230,7 @@ namespace Do.UI
 			enabled = (bool) store.GetValue (iter, (int)Column.Enabled);
 			// Set the check state.
 			store.SetValue (iter, (int)Column.Enabled, !enabled);
+			// Flush the gui thread so the checkbox state changes right away.
 			Services.Application.FlushMainThreadQueue ();
 
 			// Notify subscribers.
