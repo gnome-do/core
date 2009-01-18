@@ -144,27 +144,21 @@ namespace Do.UI
 		bool AddinShouldShow (AddinRepositoryEntry entry)
 		{
 			if (entry == null) throw new ArgumentNullException ("entry");
-			
-			// Don't show addins that do not match the filter.
-			if (!entry.Addin.Name.ToLower ().Contains (filter.ToLower ()))
-			    return false;
-			// Make sure addin is allowed by current classifier.
-			if (!PluginManager.PluginClassifiesAs (entry, category))
-				return false;
-			return true;
+			return
+				// Don't show addins that do not match the filter.
+				entry.Addin.Name.ToLower ().Contains (filter.ToLower ()) &&
+				// Make sure addin is allowed by current classifier.
+				PluginManager.PluginClassifiesAs (entry, category);
 		}
 
 		bool AddinShouldShow (Addin addin)
 		{
 			if (addin == null) throw new ArgumentNullException ("addin");
-			
-			// Don't show addins that do not match the filter.
-			if (!addin.Name.ToLower ().Contains (filter.ToLower ()))
-			    return false;
-			// Make sure addin is allowed by current classifier.
-			if (!PluginManager.PluginClassifiesAs (addin, category))
-				return false;
-			return true;
+			return
+				// Don't show addins that do not match the filter.
+				addin.Name.ToLower ().Contains (filter.ToLower ()) &&
+				// Make sure addin is allowed by current classifier.
+				PluginManager.PluginClassifiesAs (addin, category);
 		}
 
 		public void Refresh ()
