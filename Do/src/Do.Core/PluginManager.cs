@@ -90,6 +90,12 @@ namespace Do.Core
 			return classifier == null ? false : classifier.IsMatch (entry);
 		}
 
+		public static bool PluginClassifiesAs (Addin addin, string className)
+		{
+			AddinClassifier classifier = Classifiers.FirstOrDefault (c => c.Name == className);
+			return classifier == null ? false : classifier.IsMatch (addin);
+		}
+
 		/// <summary>
 		/// Given an addin ID, returns an icon that may represent that addin.
 		/// </summary>

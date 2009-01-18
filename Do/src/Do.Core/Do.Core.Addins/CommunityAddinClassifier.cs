@@ -30,6 +30,8 @@ namespace Do.Core.Addins
 	public class CommunityAddinClassifier : AddinClassifier
 	{
 
+		const string CommunityCategory = "Community";
+		
 		public CommunityAddinClassifier () :
 			base (Catalog.GetString ("Community Plugins"))
 		{
@@ -37,7 +39,12 @@ namespace Do.Core.Addins
 
 		public override bool IsMatch (AddinRepositoryEntry entry)
 		{
-			return entry.Addin.Category.Contains ("Community");
+			return InCategory (entry, CommunityCategory);
+		}
+
+		public override bool IsMatch (Addin addin)
+		{
+			return InCategory (addin, CommunityCategory);
 		}
 	}
 }

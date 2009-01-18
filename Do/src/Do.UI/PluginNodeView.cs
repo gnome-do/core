@@ -1,21 +1,21 @@
-/* PluginNodeView.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this source distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// PluginNodeView.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Threading;
@@ -47,8 +47,12 @@ namespace Do.UI
 		const int WrapWidth = 324;
 		const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
-		protected string filter;
-		protected string category;
+		string filter, category;
+
+		public delegate void PluginToggledDelegate (string id, bool enabled);
+
+		public event PluginToggledDelegate PluginToggled;
+		public event EventHandler<PluginSelectionEventArgs> PluginSelected;
 
 		public string Filter {
 			get { return filter; }
@@ -89,14 +93,14 @@ namespace Do.UI
 
 			cell = new CellRendererPixbuf ();				
 			cell.SetFixedSize (IconSize + IconPadding, IconSize + IconPadding);
-			AppendColumn ("Icon", cell, new TreeCellDataFunc (IconDataFunc));
+			AppendColumn ("Icon", cell, IconDataFunc as TreeCellDataFunc);
 
 			cell = new Gtk.CellRendererText ();
 			(cell as CellRendererText).WrapWidth = WrapWidth;
 			(cell as CellRendererText).WrapMode = Pango.WrapMode.Word;
 			AppendColumn ("Plugin", cell, "markup", Column.Description);
 
-			store.SetSortFunc ((int) Column.Id, new TreeIterCompareFunc (DefaultTreeIterCompareFunc));
+			store.SetSortFunc ((int) Column.Id, SortAlphabeticallyWithFilter);
 			store.SetSortColumnId ((int) Column.Id, SortType.Descending);
 
 			Selection.Changed += OnSelectionChanged;
@@ -104,7 +108,7 @@ namespace Do.UI
 			Refresh ();
 		}
 
-		int DefaultTreeIterCompareFunc (TreeModel model, TreeIter a, TreeIter b)
+		int SortAlphabeticallyWithFilter (TreeModel model, TreeIter a, TreeIter b)
 		{
 			string repA, repB;
 			int scoreA, scoreB;
@@ -147,26 +151,38 @@ namespace Do.UI
 			// Make sure addin is allowed by current classifier.
 			if (!PluginManager.PluginClassifiesAs (entry, category))
 				return false;
+			return true;
+		}
 
+		bool AddinShouldShow (Addin addin)
+		{
+			if (addin == null) throw new ArgumentNullException ("addin");
+			
+			// Don't show addins that do not match the filter.
+			if (!addin.Name.ToLower ().Contains (filter.ToLower ()))
+			    return false;
+			// Make sure addin is allowed by current classifier.
+			if (!PluginManager.PluginClassifiesAs (addin, category))
+				return false;
 			return true;
 		}
 
 		public void Refresh ()
 		{
-			ListStore store;
-			SetupService setup;
-
-			store = Model as ListStore;
-			setup = new SetupService (AddinManager.Registry);
+			ListStore store = Model as ListStore;
+			SetupService setup = new SetupService (AddinManager.Registry);
 			
 			store.Clear ();
-			setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+			// Add non-repository plugins.
+			foreach (Addin a in AddinManager.Registry.GetAddins ()) {
+				if (!AddinShouldShow (a)) continue;
+				store.AppendValues (a.Enabled, Description (a), a.Id);
+			}
+			// Add repository plugins.
 			foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
 				if (!AddinShouldShow (e)) continue;
-				store.AppendValues (
-					AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
-					Description (e),
-					e.Addin.Id);
+				store.AppendValues (AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
+					Description (e), e.Addin.Id);
 			}
 			ScrollFirst (false);
 		}
@@ -243,15 +259,9 @@ namespace Do.UI
 
 		protected void OnSelectionChanged (object sender, EventArgs args)
 		{
-			if (null != PluginSelected) {
-				PluginSelected (this, new PluginSelectionEventArgs (GetSelectedAddins ()));
-			}
+			if (PluginSelected == null) return;
+			
+			PluginSelected (this, new PluginSelectionEventArgs (GetSelectedAddins ()));
 		}
-		
-		public event PluginToggledDelegate PluginToggled;
-		public event PluginSelectedDelegate PluginSelected;
-
-		public delegate void PluginToggledDelegate (string id, bool enabled);
-		public delegate void PluginSelectedDelegate (object sender, PluginSelectionEventArgs args);
 	}
 }

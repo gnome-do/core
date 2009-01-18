@@ -4,6 +4,7 @@
 	version="1.0"
 	name="Glass Interface"
 	description="A KDE inspired interface for Do"
+	category="Hidden"
 	author="Jason Smith"
 >
  

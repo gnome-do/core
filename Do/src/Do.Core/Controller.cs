@@ -46,10 +46,12 @@ namespace Do.Core
 		bool results_grown;
 		bool third_pane_visible;
 		Gtk.IMContext im_context;
-		Gtk.AboutDialog about_window;
 		ISearchController [] controllers;
 
 		public event EventHandler Summoned;
+
+		public Gtk.AboutDialog AboutDialog { get; private set; }
+		public PreferencesWindow PreferencesWindow { get; private set; }
 		
 		public Controller ()
 		{
@@ -139,7 +141,7 @@ namespace Do.Core
 		}
 
 		bool IsSummonable {
-			get { return PreferencesWindow == null && about_window == null; }
+			get { return PreferencesWindow == null && AboutDialog == null; }
 		}
 
 		/// <value>
@@ -276,8 +278,6 @@ namespace Do.Core
 			get { return null != window && window.Visible; }
 		}
 
-		public PreferencesWindow PreferencesWindow { get; private set; }
-		
 		/// <summary>
 		/// Summons a window with elements in it... seems to work
 		/// </summary>
@@ -887,29 +887,29 @@ namespace Do.Core
 			Vanish ();
 			Reset ();
 
-			about_window = new Gtk.AboutDialog ();
-			about_window.ProgramName = "GNOME Do";
-			about_window.Modal = false;
+			AboutDialog = new Gtk.AboutDialog ();
+			AboutDialog.ProgramName = "GNOME Do";
+			AboutDialog.Modal = false;
 
-			about_window.Version = AssemblyInfo.DisplayVersion + "\n" + AssemblyInfo.VersionDetails;
+			AboutDialog.Version = AssemblyInfo.DisplayVersion + "\n" + AssemblyInfo.VersionDetails;
 
 			logo = "gnome-do.svg";
 
-			about_window.Logo = IconProvider.PixbufFromIconName (logo, 140);
-			about_window.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
-			about_window.Comments = "Do things as quickly as possible\n" +
+			AboutDialog.Logo = IconProvider.PixbufFromIconName (logo, 140);
+			AboutDialog.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
+			AboutDialog.Comments = "Do things as quickly as possible\n" +
 				"(but no quicker) with your files, bookmarks,\n" +
 				"applications, music, contacts, and more!";
-			about_window.Website = "http://do.davebsd.com/";
-			about_window.WebsiteLabel = "Visit Homepage";
-			about_window.IconName = "gnome-do";
+			AboutDialog.Website = "http://do.davebsd.com/";
+			AboutDialog.WebsiteLabel = "Visit Homepage";
+			AboutDialog.IconName = "gnome-do";
 
-			if (null != about_window.Screen.RgbaColormap)
-				Gtk.Widget.DefaultColormap = about_window.Screen.RgbaColormap;
+			if (AboutDialog.Screen.RgbaColormap != null)
+				Gtk.Widget.DefaultColormap = AboutDialog.Screen.RgbaColormap;
 
-			about_window.Run ();
-			about_window.Destroy ();
-			about_window = null;
+			AboutDialog.Run ();
+			AboutDialog.Destroy ();
+			AboutDialog = null;
 		}
 		#endregion
 		

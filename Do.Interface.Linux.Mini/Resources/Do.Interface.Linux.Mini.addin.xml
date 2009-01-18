@@ -5,6 +5,7 @@
 	name="Mini Interface"
 	description="A theme for those with netbooks"
 	author="Jason Smith"
+	category="Hidden"
 >
  
 	<Runtime>

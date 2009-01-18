@@ -5,6 +5,7 @@
 	name="Docky"
 	description="Do + Dock = Docky!"
 	author="Jason Smith"
+	category="Hidden"
 >
  
 	<Runtime>

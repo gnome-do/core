@@ -37,7 +37,12 @@ namespace Do.Core.Addins
 
 		public override bool IsMatch (AddinRepositoryEntry entry)
 		{
-			return true;
+			return !InCategory (entry, "Hidden");
+		}
+
+		public override bool IsMatch (Addin addin)
+		{
+			return !InCategory (addin, "Hidden");
 		}
 	}
 }

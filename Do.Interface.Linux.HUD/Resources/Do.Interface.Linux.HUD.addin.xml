@@ -5,6 +5,7 @@
 	name="Nouveau Interface"
 	description="A clone of the original HUD interface for Quicksilver"
 	author="Jason Smith"
+	category="Hidden"
 >
  
 	<Runtime>

@@ -1,4 +1,4 @@
-<Addin id="Platform.Linux" namespace="Do" version="1.0">
+<Addin id="Platform.Linux" namespace="Do" version="1.0" category="Hidden">
  
 	<Runtime>
 		<Import assembly="Do.Platform.Linux.dll" />

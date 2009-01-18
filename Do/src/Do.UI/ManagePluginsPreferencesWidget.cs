@@ -164,6 +164,9 @@ namespace Do.UI
 		
 		void OnBtnRefreshClicked (object sender, EventArgs e)
 		{
+			SetupService setup = new SetupService (AddinManager.Registry);
+			setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+			
 			nview.Refresh ();
 			UpdateButtonState ();
 		}
