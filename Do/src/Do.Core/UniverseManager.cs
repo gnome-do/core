@@ -171,7 +171,6 @@ namespace Do.Core
 				startUpdate = DateTime.Now;
 				
 				if (rand.Next (10) == 0) {
-					#warning The Log is not threadsafe...
 					Log<UniverseManager>.Debug ("Updating Actions");
 					ReloadActions ();
 				}

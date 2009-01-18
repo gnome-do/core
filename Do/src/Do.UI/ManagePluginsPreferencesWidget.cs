@@ -163,21 +163,11 @@ namespace Do.UI
 			}
 			UpdateButtonState ();
 		}
-
-		void OnDragDataGet (object sender, DragDataGetArgs e)
-		{
-			Console.Error.WriteLine (e.SelectionData.ToString ());
-		}
 		
 		void OnBtnRefreshClicked (object sender, EventArgs e)
 		{
 			nview.Refresh ();
 			UpdateButtonState ();
-		}
-
-		void OnBtnUpdateClicked (object sender, EventArgs e)
-		{
-			nview.Refresh ();
 		}
 
 		void OnBtnConfigurePluginClicked (object sender, EventArgs e)
