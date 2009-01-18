@@ -58,7 +58,7 @@ namespace Do.UI
 			get { return filter; }
 			set {
 				filter = value ?? "";
-				Refresh ();
+				Refresh (false);
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace Do.UI
 			get { return category; }
 			set {
 				category = value;
-				Refresh ();
+				Refresh (false);
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace Do.UI
 
 			Selection.Changed += OnSelectionChanged;
 
-			Refresh ();
+			Refresh (true);
 		}
 
 		int SortAlphabeticallyWithFilter (TreeModel model, TreeIter a, TreeIter b)
@@ -161,7 +161,7 @@ namespace Do.UI
 				PluginManager.PluginClassifiesAs (addin, category);
 		}
 
-		public void Refresh ()
+		public void Refresh (bool checkRepositories)
 		{
 			ListStore store = Model as ListStore;
 			// We use seen to deduplicate plugins, preferring non-repository
@@ -169,7 +169,9 @@ namespace Do.UI
 			// the repository).
 			ICollection<string> seen = new HashSet<string> ();
 			SetupService setup = new SetupService (AddinManager.Registry);
-			
+
+			if (checkRepositories)
+				setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
 			store.Clear ();
 			// Add non-repository plugins.
 			foreach (Addin a in AddinManager.Registry.GetAddins ()) {
