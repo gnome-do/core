@@ -800,8 +800,6 @@ namespace Do.Core
 				modItemQuery = controllers [2].Query;
 			}
 
-			if (vanish) Reset ();
-
 			/////////////////////////////////////////////////////////////
 			/// Relevance accounting
 			/////////////////////////////////////////////////////////////
@@ -823,8 +821,10 @@ namespace Do.Core
 				action.IncreaseRelevance (actionQuery, null);
 			}
 
-			if (third != null)
+			if (third != null && ThirdPaneVisible)
 				third.IncreaseRelevance (modItemQuery, action);
+
+			if (vanish) Reset ();
 
 			// Finally, we can perform the action.
 			PerformAction (action, items, modItems);
