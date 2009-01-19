@@ -1,4 +1,4 @@
-// HUDConfigurationWidget.cs
+// ColorConfigurationWidget.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //

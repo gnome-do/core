@@ -2,8 +2,12 @@
 <stetic-interface>
   <configuration>
     <images-root-path>..</images-root-path>
-    <target-gtk-version>2.12.7</target-gtk-version>
+    <target-gtk-version>2.12</target-gtk-version>
   </configuration>
+  <import>
+    <widget-library name="Mono.Addins.Gui, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <widget-library name="../bin/Debug/Do.exe" internal="true" />
+  </import>
   <widget class="Gtk.Window" id="Do.UI.PreferencesWindow" design-size="450 470">
     <property name="MemberName" />
     <property name="WidthRequest">440</property>
@@ -686,7 +690,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Bin" id="Do.UI.ColorConfigurationWidget" design-size="425 539">
+  <widget class="Gtk.Bin" id="Do.UI.ColorConfigurationWidget" design-size="462 539">
     <property name="MemberName" />
     <child>
       <widget class="Gtk.VBox" id="vbox2">
@@ -718,10 +722,19 @@
                             <child>
                               <widget class="Gtk.Table" id="table1">
                                 <property name="MemberName" />
-                                <property name="NRows">2</property>
+                                <property name="NRows">3</property>
                                 <property name="NColumns">3</property>
                                 <property name="RowSpacing">6</property>
                                 <property name="ColumnSpacing">16</property>
+                                <child>
+                                  <placeholder />
+                                </child>
+                                <child>
+                                  <placeholder />
+                                </child>
+                                <child>
+                                  <placeholder />
+                                </child>
                                 <child>
                                   <placeholder />
                                 </child>
@@ -730,6 +743,7 @@
                                     <property name="MemberName" />
                                     <property name="Visible">False</property>
                                     <property name="Spacing">6</property>
+                                    <property name="BorderWidth">4</property>
                                     <child>
                                       <widget class="Gtk.Image" id="CompositeWarningIcon">
                                         <property name="MemberName" />
@@ -745,7 +759,8 @@
                                     <child>
                                       <widget class="Gtk.Label" id="CompositeMessageLabel">
                                         <property name="MemberName" />
-                                        <property name="LabelProp" translatable="yes">Compositor required!</property>
+                                        <property name="Tooltip" translatable="yes">A compositor is required to support themes.</property>
+                                        <property name="LabelProp" translatable="yes">Themes not supported.</property>
                                       </widget>
                                       <packing>
                                         <property name="Position">1</property>
@@ -756,8 +771,10 @@
                                     </child>
                                   </widget>
                                   <packing>
-                                    <property name="LeftAttach">2</property>
-                                    <property name="RightAttach">3</property>
+                                    <property name="TopAttach">1</property>
+                                    <property name="BottomAttach">2</property>
+                                    <property name="LeftAttach">1</property>
+                                    <property name="RightAttach">2</property>
                                     <property name="AutoSize">True</property>
                                     <property name="XOptions">Fill</property>
                                     <property name="YOptions">Fill</property>
@@ -807,8 +824,8 @@
                                     </child>
                                   </widget>
                                   <packing>
-                                    <property name="TopAttach">1</property>
-                                    <property name="BottomAttach">2</property>
+                                    <property name="TopAttach">2</property>
+                                    <property name="BottomAttach">3</property>
                                     <property name="LeftAttach">1</property>
                                     <property name="RightAttach">2</property>
                                     <property name="AutoSize">True</property>
@@ -829,8 +846,8 @@
                                     <property name="LabelProp" translatable="yes">Background Color:</property>
                                   </widget>
                                   <packing>
-                                    <property name="TopAttach">1</property>
-                                    <property name="BottomAttach">2</property>
+                                    <property name="TopAttach">2</property>
+                                    <property name="BottomAttach">3</property>
                                     <property name="AutoSize">True</property>
                                     <property name="XOptions">Fill</property>
                                     <property name="YOptions">Fill</property>
@@ -1021,8 +1038,6 @@
                     <property name="MemberName" />
                     <property name="NRows">2</property>
                     <property name="NColumns">2</property>
-                    <property name="RowSpacing">6</property>
-                    <property name="ColumnSpacing">6</property>
                     <child>
                       <placeholder />
                     </child>
