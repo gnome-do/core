@@ -47,6 +47,10 @@ namespace Docky.Interface
 		public new string Name {
 			get { return "Docky"; }
 		}
+
+		public bool IsRepositionHidden {
+			get { return is_repositioned_hidden; }
+		}
 		
 		public IDoController Controller {
 			get { return controller; }
@@ -122,8 +126,12 @@ namespace Docky.Interface
 		{
 			if (!IsRealized || current_mask == area)
 				return;
-			
+
 			current_mask = area;
+			if (area.Width == 0 || area.Height == 0) {
+				InputShapeCombineMask (null, 0, 0);
+				return;
+			}
 			
 			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, area.Width, area.Height, 1);
 			Context cr = Gdk.CairoHelper.Create (pixmap);
@@ -189,7 +197,21 @@ namespace Docky.Interface
 			
 			GetSize (out main.Width, out main.Height);
 			geo = LayoutUtils.MonitorGemonetry ();
-			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - main.Height);
+
+			switch (DockPreferences.Orientation) {
+			case DockOrientation.Bottom:
+				Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - main.Height);
+				break;
+			case DockOrientation.Left:
+				Move (geo.X, geo.Y);
+				break;
+			case DockOrientation.Right:
+				Move (geo.X + geo.Width - main.Width, geo.Y);
+				break;
+			case DockOrientation.Top:
+				Move (geo.X, geo.Y);
+				break;
+			}
 			
 			is_repositioned_hidden = false;
 		}
@@ -200,21 +222,51 @@ namespace Docky.Interface
 			
 			GetSize (out main.Width, out main.Height);
 			geo = LayoutUtils.MonitorGemonetry ();
-			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height);
-			
-			InputShapeCombineMask (null, 0, 0);
+
+			switch (DockPreferences.Orientation) {
+			case DockOrientation.Bottom:
+				Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height);
+				break;
+			case DockOrientation.Left:
+				Move (geo.X - main.Width, geo.Y);
+				break;
+			case DockOrientation.Right:
+				Move (geo.X + geo.Width, geo.Y);
+				break;
+			case DockOrientation.Top:
+				Move (geo.X, geo.Y - main.Height);
+				break;
+			}
+
+			Display.Sync ();
 			
 			is_repositioned_hidden = true;
 		}
 		
-		public int WindowHideOffset ()
+		public void WindowHideOffset (out int x, out int y)
 		{
-			if (!is_repositioned_hidden)
-				return 0;
+			x = y = 0;
+			
+			if (!is_repositioned_hidden) {
+				return;
+			}
 			
 			Gdk.Rectangle main;
 			GetSize (out main.Width, out main.Height);
-			return main.Height;
+			switch (DockPreferences.Orientation) {
+			case DockOrientation.Bottom:
+				y = main.Height;
+				break;
+			case DockOrientation.Left:
+				x = 0 - main.Width;
+				break;
+			case DockOrientation.Right:
+				x = main.Width;
+				break;
+			case DockOrientation.Top:
+				y = 0 - main.Height;
+				break;
+			}
 		}
 		
 		public void RequestClickOff ()
@@ -234,12 +286,7 @@ namespace Docky.Interface
 		{
 			X11Atoms atoms = new X11Atoms (GdkWindow);
 
-			uint [] struts = new uint [12];
-
-			struts [(int) XLib.Struts.Bottom]      = (uint) dock_area.DockHeight;
-			struts [(int) XLib.Struts.BottomStart] = (uint) LayoutUtils.MonitorGemonetry ().X;
-			// subtract 1 to align to 0
-			struts [(int) XLib.Struts.BottomEnd]   = (uint) LayoutUtils.MonitorGemonetry ().X + (uint) LayoutUtils.MonitorGemonetry ().Width - 1;
+			uint [] struts = dock_area.StrutRequest;
 
 			strut_timer = 0;
 			

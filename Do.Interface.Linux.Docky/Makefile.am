@@ -35,6 +35,7 @@ FILES = \
 	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
 	src/Docky.Interface/WindowMenuButtonArgs.cs \
+	src/Docky.Utilities/DockOrientation.cs \
 	src/Docky.Utilities/DockPreferences.cs \
 	src/Docky.Utilities/GtkUtils.cs \
 	src/Docky.Utilities/WindowControl.cs \

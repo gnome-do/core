@@ -137,11 +137,17 @@ namespace Docky.Interface.Renderers
 				
 				if (!LargeIconCache.ContainsKey (icon))
 				    LargeIconCache.AddPixbufSurface (icon, icon);
-				
+
 				cr.Scale (zoom, zoom);
-				cr.SetSource (LargeIconCache.GetSurface (icon), 
-				              left_x * (1 / zoom), 
-				              ((dockArea.Y + dockArea.Height) - (DockPreferences.IconSize * 2 * zoom) - 5) * (1 / zoom));
+				if (DockPreferences.Orientation == DockOrientation.Top) {
+					cr.SetSource (LargeIconCache.GetSurface (icon), 
+					              left_x * (1 / zoom), 
+					              (dockArea.Y * (1 / zoom)));
+				} else {
+					cr.SetSource (LargeIconCache.GetSurface (icon), 
+					              left_x * (1 / zoom), 
+					              ((dockArea.Y + dockArea.Height) - (DockPreferences.IconSize * 2 * zoom) - 5) * (1 / zoom));
+				}
 				cr.PaintWithAlpha (opacity);
 				cr.Scale (1 / zoom, 1 / zoom);
 			}

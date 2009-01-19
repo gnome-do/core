@@ -35,6 +35,7 @@ namespace Docky.Interface
 	public abstract class BaseDockItem : IDisposable, IEquatable<BaseDockItem>
 	{
 		Surface text_surface, icon_surface, resize_buffer;
+		DockOrientation current_orientation;
 		uint size_changed_timer;
 		int current_size;
 		
@@ -99,8 +100,15 @@ namespace Docky.Interface
 		/// </returns>
 		public virtual Surface GetTextSurface (Surface similar)
 		{
-			if (text_surface == null) {
-				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (Description), DockPreferences.TextWidth, similar);
+			if (text_surface == null || DockPreferences.Orientation != current_orientation) {
+				if (text_surface != null)
+					text_surface.Destroy ();
+				
+				current_orientation = DockPreferences.Orientation;
+				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (Description), 
+				                                            DockPreferences.TextWidth, 
+				                                            similar, 
+				                                            current_orientation);
 			}
 			return text_surface;
 		}

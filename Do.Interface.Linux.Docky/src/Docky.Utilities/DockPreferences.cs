@@ -221,6 +221,22 @@ namespace Docky.Utilities
 					MonitorChanged ();
 			}
 		}
+
+		static DockOrientation orientation = (DockOrientation) prefs.Get<int> ("Orientation", 0);
+		public static DockOrientation Orientation {
+			get {
+				return orientation;
+			}
+			set {
+				orientation = value;
+			}
+		}
+
+		public static bool DockIsHorizontal {
+			get {
+				return Orientation == DockOrientation.Top || Orientation == DockOrientation.Bottom;
+			}
+		}
 		
 		#region blacklists
 		static List<string> item_blacklist = DeserializeBlacklist ();

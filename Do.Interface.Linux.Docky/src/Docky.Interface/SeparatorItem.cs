@@ -69,12 +69,21 @@ namespace Docky.Interface
 		public override Surface GetIconSurface (Surface buffer)
 		{
 			if (sr == null) {
-				sr = buffer.CreateSimilar (buffer.Content, Width, DockPreferences.IconSize);
+				if (DockPreferences.DockIsHorizontal)
+					sr = buffer.CreateSimilar (buffer.Content, Width, Height);
+				else
+					sr = buffer.CreateSimilar (buffer.Content, Height, Width);
 				Context cr = new Context (sr);
 				cr.AlphaFill ();
-				
-				for (int i=1; i*6+2 < Height; i++) {
-					cr.Rectangle (Width/2-1, i*6, 4, 2);
+
+				if (DockPreferences.DockIsHorizontal) {
+					for (int i=1; i*6+2 < Height; i++) {
+						cr.Rectangle (Width/2-1, i*6, 4, 2);
+					}
+				} else {
+					for (int i=1; i*6+2 < Height; i++) {
+						cr.Rectangle (i*6, Width/2-1, 2, 4);
+					}
 				}
 				
 				cr.Color = new Cairo.Color (1, 1, 1, .3);

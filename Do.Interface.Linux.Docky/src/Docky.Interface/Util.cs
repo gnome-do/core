@@ -39,6 +39,11 @@ namespace Docky.Interface
 	
 	public static class Util
 	{
+		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar) 
+		{
+			return GetBorderedTextSurface (text, max_width, similar, DockOrientation.Bottom);
+		}
+		
 		/// <summary>
 		/// Gets a surface containing a transparent black rounded rectangle with the provided text on top.
 		/// </summary>
@@ -54,55 +59,77 @@ namespace Docky.Interface
 		/// <returns>
 		/// A <see cref="Surface"/>
 		/// </returns>
-		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar)
+		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar, DockOrientation orientation)
 		{
 			Surface sr;
-			sr = similar.CreateSimilar (similar.Content, max_width, 20);
+			sr = similar.CreateSimilar (similar.Content, max_width, 22);
 			
 			Context cr = new Context (sr);
-			
+
 			Pango.Layout layout = Pango.CairoHelper.CreateLayout (cr);
-			layout.FontDescription = Pango.FontDescription.FromString ("sans-serif bold");
-			layout.Width = Pango.Units.FromPixels (max_width);
-			layout.SetMarkup ("<b>" + text + "</b>");
-			layout.Alignment = Pango.Alignment.Center;
+			layout.FontDescription = Pango.FontDescription.FromString ("sans-serif 11");
+			layout.Width = Pango.Units.FromPixels (max_width - 18);
+			layout.SetMarkup (text);
+			switch (orientation) {
+			case DockOrientation.Left:
+				layout.Alignment = Pango.Alignment.Left;
+				break;
+			case DockOrientation.Right:
+				layout.Alignment = Pango.Alignment.Right;
+				break;
+			default:
+				layout.Alignment = Pango.Alignment.Center;
+				break;
+			}
 			layout.Ellipsize = Pango.EllipsizeMode.End;
 			
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);
 			
-			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) - 10, 0, Pango.Units.ToPixels (rect2.Width) + 20, 20, 10);
-			cr.Color = new Cairo.Color (0.15, 0.15, 0.15, .6);
+			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X), 0, Pango.Units.ToPixels (rect2.Width) + 18, 22, 5);
+			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
 			cr.Fill ();
-			
+
+			Pango.Layout shadow = layout.Copy();
+			shadow.Indent = 1;
+
+			cr.Translate (10, 2);
+			cr.Translate(1,1);
+			Pango.CairoHelper.LayoutPath (cr, shadow);
+			cr.Color = new Cairo.Color (0, 0, 0, 0.6);
+			cr.Fill ();
+			cr.Translate(-1,-1);
+
 			Pango.CairoHelper.LayoutPath (cr, layout);
 			cr.Color = new Cairo.Color (1, 1, 1);
 			cr.Fill ();
-			
+
 			(cr as IDisposable).Dispose ();
+			shadow.FontDescription.Dispose ();
+			shadow.Dispose ();
 			layout.FontDescription.Dispose ();
 			layout.Dispose ();
 			return sr;
 		}
 		
-		public static void DrawGlowIndicator (Context cr, int x, int y, bool urgent, int numberOfWindows)
+		public static void DrawGlowIndicator (Context cr, Gdk.Point location, bool urgent, int numberOfWindows)
 		{
 			if (DockPreferences.IndicateMultipleWindows && 1 < numberOfWindows) {
-				DrawSingleIndicator (cr, x - 3, y, urgent);
-				DrawSingleIndicator (cr, x + 3, y, urgent);
+				DrawSingleIndicator (cr, LayoutUtils.RelMovePoint (location, 3, RelativeMove.RelativeLeft), urgent);
+				DrawSingleIndicator (cr, LayoutUtils.RelMovePoint (location, 3, RelativeMove.RelativeRight), urgent);
 			} else if (0 < numberOfWindows) {
-				DrawSingleIndicator (cr, x, y, urgent);
+				DrawSingleIndicator (cr, location, urgent);
 			}
 		}
 		
-		static void DrawSingleIndicator (Context cr, int x, int y, bool urgent)
+		static void DrawSingleIndicator (Context cr, Gdk.Point location, bool urgent)
 		{
 			int size = urgent ? 12 : 9;
 			
-			cr.MoveTo (x, y);
-			cr.Arc (x, y, size, 0, Math.PI * 2);
+			cr.MoveTo (location.X, location.Y);
+			cr.Arc (location.X, location.Y, size, 0, Math.PI * 2);
 			
-			RadialGradient rg = new RadialGradient (x, y, 0, x, y, size);
+			RadialGradient rg = new RadialGradient (location.X, location.Y, 0, location.X, location.Y, size);
 			rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
 			if (urgent) {
 				rg.AddColorStop (.10, new Cairo.Color (1, .8, .8, 1.0));
