@@ -126,13 +126,24 @@ namespace Do {
 		
 		static void SetupKeybindings ()
 		{
-			keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+			try {
+				keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+			} catch (Exception e) {
+				Log.Error ("Could not bind summon key: {0}", e.Message);
+				Log.Debug (e.StackTrace);
+			}
+
 			// Watch preferences for changes to the keybinding so we
 			// can change the binding when the user reassigns it.
 			Preferences.SummonKeybindingChanged += (sender, e) => {
-				if (e.OldValue != null)
-					keybinder.Unbind (e.OldValue as string);
-				keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+				try {
+					if (e.OldValue != null)
+						keybinder.Unbind (e.OldValue as string);
+					keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+				} catch (Exception ex) {
+					Log.Error ("Could not bind summon key: {0}", ex.Message);
+					Log.Debug (ex.StackTrace);
+				}
 			};
 		}
 		
