@@ -207,10 +207,17 @@ namespace Docky.Interface.Renderers
 			
 			string text;
 			Element current = State [State.CurrentPane];
+			
+			if (current == null)
+				return;
+			
 			if (current is ITextItem)
 				text = GLib.Markup.EscapeText ((current as ITextItem).Text);
 			else
 				text = GLib.Markup.EscapeText (current.Name);
+
+			if (string.IsNullOrEmpty (text))
+			    return;
 			
 			double text_scale = (DockPreferences.IconSize / 64.0);
 			int text_height = Math.Max (11, (int) (15 * text_scale));
