@@ -40,6 +40,11 @@ namespace Do.Universe
 			Services.Application.Summoned += UpdateSelection;
 		}
 
+		~SelectedTextItem ()
+		{
+			Services.Application.Summoned -= UpdateSelection;
+		}
+
 		void UpdateSelection (object sender, EventArgs e)
 		{
 			string text;
