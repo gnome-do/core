@@ -1,8 +1,7 @@
 // OfficialAddinClassifier.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
-// COPYRIGHT file distributed with this
-// source distribution.
+// COPYRIGHT file distributed with this source distribution.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,6 +29,8 @@ namespace Do.Core.Addins
 	public class OfficialAddinClassifier : AddinClassifier
 	{
 
+		const string OfficialCategory = "Official";
+
 		public OfficialAddinClassifier () :
 			base (Catalog.GetString ("Official Plugins"))
 		{
@@ -37,7 +38,12 @@ namespace Do.Core.Addins
 
 		public override bool IsMatch (AddinRepositoryEntry entry)
 		{
-			return entry.Addin.Category.Contains ("Official");
+			return InCategory (entry, OfficialCategory);
+		}
+
+		public override bool IsMatch (Addin addin)
+		{
+			return InCategory (addin, OfficialCategory);
 		}
 	}
 }

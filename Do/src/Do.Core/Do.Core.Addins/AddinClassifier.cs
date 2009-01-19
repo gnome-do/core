@@ -36,6 +36,24 @@ namespace Do.Core.Addins
 			Name = name;
 		}
 
-		public abstract bool IsMatch (AddinRepositoryEntry entry);
+		public virtual bool IsMatch (AddinRepositoryEntry entry)
+		{
+			return false;
+		}
+
+		public virtual bool IsMatch (Addin addin)
+		{
+			return false;
+		}
+
+		protected bool InCategory (AddinRepositoryEntry entry, string category)
+		{
+			return entry.Addin.Category.Contains (category);
+		}
+
+		protected bool InCategory (Addin addin, string category)
+		{
+			return addin.Description.Category.Contains (category);
+		}
 	}
 }

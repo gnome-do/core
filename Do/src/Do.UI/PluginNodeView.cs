@@ -1,21 +1,21 @@
-/* PluginNodeView.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this source distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// PluginNodeView.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Threading;
@@ -47,14 +47,18 @@ namespace Do.UI
 		const int WrapWidth = 324;
 		const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
-		protected string filter;
-		protected string category;
+		string filter, category;
+
+		public delegate void PluginToggledDelegate (string id, bool enabled);
+
+		public event PluginToggledDelegate PluginToggled;
+		public event EventHandler<PluginSelectionEventArgs> PluginSelected;
 
 		public string Filter {
 			get { return filter; }
 			set {
 				filter = value ?? "";
-				Refresh ();
+				Refresh (false);
 			}
 		}
 
@@ -62,7 +66,7 @@ namespace Do.UI
 			get { return category; }
 			set {
 				category = value;
-				Refresh ();
+				Refresh (false);
 			}
 		}
 
@@ -89,22 +93,22 @@ namespace Do.UI
 
 			cell = new CellRendererPixbuf ();				
 			cell.SetFixedSize (IconSize + IconPadding, IconSize + IconPadding);
-			AppendColumn ("Icon", cell, new TreeCellDataFunc (IconDataFunc));
+			AppendColumn ("Icon", cell, IconDataFunc as TreeCellDataFunc);
 
 			cell = new Gtk.CellRendererText ();
 			(cell as CellRendererText).WrapWidth = WrapWidth;
 			(cell as CellRendererText).WrapMode = Pango.WrapMode.Word;
 			AppendColumn ("Plugin", cell, "markup", Column.Description);
 
-			store.SetSortFunc ((int) Column.Id, new TreeIterCompareFunc (DefaultTreeIterCompareFunc));
+			store.SetSortFunc ((int) Column.Id, SortAlphabeticallyWithFilter);
 			store.SetSortColumnId ((int) Column.Id, SortType.Descending);
 
 			Selection.Changed += OnSelectionChanged;
 
-			Refresh ();
+			Refresh (true);
 		}
 
-		int DefaultTreeIterCompareFunc (TreeModel model, TreeIter a, TreeIter b)
+		int SortAlphabeticallyWithFilter (TreeModel model, TreeIter a, TreeIter b)
 		{
 			string repA, repB;
 			int scoreA, scoreB;
@@ -140,33 +144,47 @@ namespace Do.UI
 		bool AddinShouldShow (AddinRepositoryEntry entry)
 		{
 			if (entry == null) throw new ArgumentNullException ("entry");
-			
-			// Don't show addins that do not match the filter.
-			if (!entry.Addin.Name.ToLower ().Contains (filter.ToLower ()))
-			    return false;
-			// Make sure addin is allowed by current classifier.
-			if (!PluginManager.PluginClassifiesAs (entry, category))
-				return false;
-
-			return true;
+			return
+				// Don't show addins that do not match the filter.
+				entry.Addin.Name.ToLower ().Contains (filter.ToLower ()) &&
+				// Make sure addin is allowed by current classifier.
+				PluginManager.PluginClassifiesAs (entry, category);
 		}
 
-		public void Refresh ()
+		bool AddinShouldShow (Addin addin)
 		{
-			ListStore store;
-			SetupService setup;
+			if (addin == null) throw new ArgumentNullException ("addin");
+			return
+				// Don't show addins that do not match the filter.
+				addin.Name.ToLower ().Contains (filter.ToLower ()) &&
+				// Make sure addin is allowed by current classifier.
+				PluginManager.PluginClassifiesAs (addin, category);
+		}
 
-			store = Model as ListStore;
-			setup = new SetupService (AddinManager.Registry);
-			
+		public void Refresh (bool checkRepositories)
+		{
+			ListStore store = Model as ListStore;
+			// We use seen to deduplicate plugins, preferring non-repository
+			// plugins to repository plugins (user-installed plugins override
+			// the repository).
+			ICollection<string> seen = new HashSet<string> ();
+			SetupService setup = new SetupService (AddinManager.Registry);
+
+			if (checkRepositories)
+				setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
 			store.Clear ();
-			setup.Repositories.UpdateAllRepositories (new ConsoleProgressStatus (true));
+			// Add non-repository plugins.
+			foreach (Addin a in AddinManager.Registry.GetAddins ()) {
+				if (seen.Contains (a.Id) || !AddinShouldShow (a)) continue;
+				store.AppendValues (a.Enabled, Description (a), a.Id);
+				seen.Add (a.Id);
+			}
+			// Add repository plugins.
 			foreach (AddinRepositoryEntry e in setup.Repositories.GetAvailableAddins ()) {
-				if (!AddinShouldShow (e)) continue;
-				store.AppendValues (
-					AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
-					Description (e),
-					e.Addin.Id);
+				if (seen.Contains (e.Addin.Id) || !AddinShouldShow (e)) continue;
+				store.AppendValues (AddinManager.Registry.IsAddinEnabled (e.Addin.Id),
+					Description (e), e.Addin.Id);
+				seen.Add (e.Addin.Id);
 			}
 			ScrollFirst (false);
 		}
@@ -200,7 +218,8 @@ namespace Do.UI
 			return Description (a.Name, a.Description, a.Version);
 		}
 
-		public string [] GetSelectedAddins () {
+		public string [] GetSelectedAddins ()
+		{
 			string id;
 			TreeIter iter;
 			ListStore store;
@@ -227,26 +246,24 @@ namespace Do.UI
 
 			addinId = (string) store.GetValue (iter, (int)Column.Id);
 			enabled = (bool) store.GetValue (iter, (int)Column.Enabled);
+			// Set the check state.
 			store.SetValue (iter, (int)Column.Enabled, !enabled);
-			
-			if (null != PluginToggled) {
+			// Flush the gui thread so the checkbox state changes right away.
+			Services.Application.FlushMainThreadQueue ();
+
+			// Notify subscribers.
+			if (null != PluginToggled)
 				PluginToggled (addinId, !enabled);
-			}
+			// Set checked state again (don't assume enable/disable worked).
 			store.SetValue (iter, (int)Column.Enabled,
-					AddinManager.Registry.IsAddinEnabled (addinId));
+				AddinManager.Registry.IsAddinEnabled (addinId));
 		}
 
 		protected void OnSelectionChanged (object sender, EventArgs args)
 		{
-			if (null != PluginSelected) {
-				PluginSelected (this, new PluginSelectionEventArgs (GetSelectedAddins ()));
-			}
+			if (PluginSelected == null) return;
+			
+			PluginSelected (this, new PluginSelectionEventArgs (GetSelectedAddins ()));
 		}
-		
-		public event PluginToggledDelegate PluginToggled;
-		public event PluginSelectedDelegate PluginSelected;
-
-		public delegate void PluginToggledDelegate (string id, bool enabled);
-		public delegate void PluginSelectedDelegate (object sender, PluginSelectionEventArgs args);
 	}
 }

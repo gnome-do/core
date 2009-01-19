@@ -5,6 +5,7 @@
 	name="Classic Interface"
 	description="A Quicksilver inspired interface for GNOME Do"
 	author="Jason Smith"
+	category="Hidden"
 >
  
 	<Runtime>

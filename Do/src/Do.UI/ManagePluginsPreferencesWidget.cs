@@ -61,11 +61,10 @@ namespace Do.UI
 			get { return ""; }
 		}
 
-		public ManagePluginsPreferencesWidget()
+		public ManagePluginsPreferencesWidget ()
 		{
 			Build ();
-
-			search_entry.GrabFocus ();
+			
 			nview = new PluginNodeView ();
 			nview.PluginToggled += OnPluginToggled;
 			nview.PluginSelected += OnPluginSelected;
@@ -84,6 +83,10 @@ namespace Do.UI
 				show_combo.AppendText (cfier.Name);
 			}
 			show_combo.Active = 0;
+
+			Services.Application.RunOnMainThread (() =>
+				search_entry.GrabFocus ()
+			);
 		}
 		
 		protected void OnDragDataReceived (object sender, DragDataReceivedArgs args)
@@ -140,15 +143,13 @@ namespace Do.UI
 		{	
 			// If the addin isn't found, install it.
 			if (null == AddinManager.Registry.GetAddin (id)) {
-				IAddinInstaller installer;
-
-				installer = new ConsoleAddinInstaller ();
-				//installer = new Mono.Addins.Gui.AddinInstaller ();
+				IAddinInstaller installer = new ConsoleAddinInstaller ();
 				try {
 					installer.InstallAddins (AddinManager.Registry,
-							string.Format ("Installing \"{0}\" addin...", id),
-							new string[] { id });
-				} catch (InstallException) {
+						string.Format ("Installing \"{0}\" addin...", id), new [] { id });
+				} catch (InstallException e) {
+					Log<ManagePluginsPreferencesWidget>.Error (e.Message);
+					Log<ManagePluginsPreferencesWidget>.Debug (e.StackTrace);
 					return;
 				}
 			}
@@ -160,21 +161,11 @@ namespace Do.UI
 			}
 			UpdateButtonState ();
 		}
-
-		void OnDragDataGet (object sender, DragDataGetArgs e)
-		{
-			Console.Error.WriteLine (e.SelectionData.ToString ());
-		}
 		
 		void OnBtnRefreshClicked (object sender, EventArgs e)
 		{
-			nview.Refresh ();
+			nview.Refresh (true);
 			UpdateButtonState ();
-		}
-
-		void OnBtnUpdateClicked (object sender, EventArgs e)
-		{
-			nview.Refresh ();
 		}
 
 		void OnBtnConfigurePluginClicked (object sender, EventArgs e)

@@ -30,21 +30,27 @@ namespace Do.Platform
 	{
 		public override IEnumerable<IRunnableItem> MainMenuItems {
 			get {
-				Log.Debug ("Default ApplicationService cannot provide MainMenuItems.");
+				Log<DefaultApplicationService>.Debug ("Cannot provide MainMenuItems.");
 				yield break;
 			}
 		}
 
 		public override void RunOnThread (Action action)
 		{
-			Log.Debug ("Default ApplicationService cannot run action on a thread.");
+			Log<DefaultApplicationService>.Debug ("Cannot run action on a thread.");
 			action ();
 		}
 
 		public override void RunOnMainThread (Action action)
 		{
-			Log.Debug ("Default ApplicationService cannot run action on the main thread.");
+			Log<DefaultApplicationService>.Debug ("Cannot run action on the main thread.");
 			action ();
 		}
+
+		public override void FlushMainThreadQueue ()
+		{
+			Log<DefaultApplicationService>.Debug ("Cannot flush main thread queue.");
+		}
+
 	}
 }

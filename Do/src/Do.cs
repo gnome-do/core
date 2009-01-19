@@ -136,7 +136,7 @@ namespace Do {
 			};
 		}
 		
-		static void OnActivate (object sender, EventArgs args)
+		static void OnActivate (object sender, EventArgs e)
 		{
 			controller.Summon ();
 		}

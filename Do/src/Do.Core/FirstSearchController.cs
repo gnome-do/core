@@ -39,10 +39,8 @@ namespace Do.Core
 			bool update = (SecondaryCursors.Length == 0);
 			bool result = base.ToggleSecondaryCursor (cursorLocation);
 			
-			if (update && result) {
+			if (update && result)
 				UpdateResults ();
-			}
-			
 			return result;
 		}
 		
@@ -80,30 +78,9 @@ namespace Do.Core
 		
 		protected override void UpdateResults ()
 		{
-			List<Element> results;
-			if (!TextMode)
-				results = InitialResults ();
-			else
-				results = new List<Element> ();
-				
-			
-			if (context.ParentContext == null) {
-				if (DefaultFilter) {
-					results.Add (new ImplicitTextItem (Query));
-				} else {
-					foreach (Type t in SearchTypes) {
-						if (t == typeof (Item) || t == typeof (ITextItem)) {
-							results.Add (new ImplicitTextItem (Query));
-						}
-					}
-				}
-			}
-			
-			context.Results = results.ToArray ();
-			//Do.PrintPerf ("FirstControllerResultsAssigned");
-			
-			bool search_changed = (context.LastContext == null || context.LastContext.Selection != context.Selection);
-			base.OnSearchFinished (search_changed, true, Selection, Query);
+			context.Results = InitialResults ();
+			bool searchChanged = context.LastContext == null || context.LastContext.Selection != context.Selection;
+			base.OnSearchFinished (searchChanged, true, Selection, Query);
 		}
 		
 		public override void SetString (string str)
@@ -112,24 +89,15 @@ namespace Do.Core
 			BuildNewContextFromQuery ();
 		}
 
-		
 		private void BuildNewContextFromQuery ()
 		{
-			string query = Query;
-			
 			context = new SimpleSearchContext ();
-			List<Element> results;
-			foreach (char c in query.ToCharArray ()) {
+			foreach (char c in Query.ToCharArray ()) {
 				context.LastContext = context.Clone () as SimpleSearchContext;
 				context.Query += c;
-				
-				results = InitialResults ();
-				
-				results.Add (new ImplicitTextItem (Query));
-				context.Results = results.ToArray ();
+				context.Results = InitialResults ();
 			}
 			base.OnSearchFinished (true, true, Selection, Query);
 		}
-
 	}
 }
