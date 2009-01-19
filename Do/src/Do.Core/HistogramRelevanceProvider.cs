@@ -57,14 +57,17 @@ namespace Do.Core {
 				max_item_hits = Math.Max (max_item_hits, rec.Hits);
 		}
 
-		public override void IncreaseRelevance (Element o, string match, Element other)
+		public override void IncreaseRelevance (Element element, string match, Element other)
 		{
 			RelevanceRecord rec;
 
+			if (element == null) throw new ArgumentNullException ("element");
+
+			match = match ?? "";
 			newest_hit = DateTime.Now;
-			if (!hits.TryGetValue (o.UniqueId, out rec)) {
-				rec = new RelevanceRecord (o);
-				hits [o.UniqueId] = rec;
+			if (!hits.TryGetValue (element.UniqueId, out rec)) {
+				rec = new RelevanceRecord (element);
+				hits [element.UniqueId] = rec;
 			}
 			
 			rec.Hits++;
@@ -72,17 +75,20 @@ namespace Do.Core {
 			if (other == null) rec.FirstPaneHits++;
 			if (0 < match.Length)
 				rec.AddFirstChar (match [0]);
-			UpdateMaxHits (rec, o);
+			UpdateMaxHits (rec, element);
 		}
 
-		public override void DecreaseRelevance (Element o, string match, Element other)
+		public override void DecreaseRelevance (Element element, string match, Element other)
 		{
 			RelevanceRecord rec;
-			
-			if (hits.TryGetValue (o.UniqueId, out rec)) {
+
+			if (element == null) throw new ArgumentNullException ("element");
+
+			match = match ?? "";
+			if (hits.TryGetValue (element.UniqueId, out rec)) {
 				rec.Hits--;
 				if (other == null) rec.FirstPaneHits--;
-				if (rec.Hits == 0) 	hits.Remove (o.UniqueId);
+				if (rec.Hits == 0) hits.Remove (element.UniqueId);
 			}
 		}
 
