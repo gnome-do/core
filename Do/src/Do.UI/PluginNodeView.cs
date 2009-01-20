@@ -44,7 +44,7 @@ namespace Do.UI
 
 		const int IconSize = 26;
 		const int IconPadding = 8;
-		const int WrapWidth = 324;
+		const int WrapWidth = 320;
 		const string DescriptionFormat = "<b>{0}</b> <small>v{2}</small>\n<small>{1}</small>";
 
 		string filter, category;
