@@ -658,7 +658,8 @@ namespace Docky.Interface
 			bool drawUrgency = false;
 			if (animationType == ClickAnimationType.Bounce) {
 				// bounces twice
-				int delta = (int) Math.Abs (30 * Math.Sin (DockItems [icon].TimeSinceClick.TotalMilliseconds * Math.PI / (BounceTime.TotalMilliseconds / 2)));
+				int delta = (int) Math.Abs (30 * Math.Sin 
+				                            (DockItems [icon].TimeSinceClick.TotalMilliseconds * Math.PI / (BounceTime.TotalMilliseconds / 2)));
 				iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 			} else {
 				IDockAppItem dai = DockItems [icon] as IDockAppItem;
@@ -708,7 +709,7 @@ namespace Docky.Interface
 				// centered
 				if (DockPreferences.DockIsHorizontal) {
 					// why this fails to center right... i dont know...
-					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), iconPosition.X, iconPosition.Y - IconSize / 2 + 10);
+					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), iconPosition.X, center.Y - DockItems [icon].Height / 2);
 				} else {
 					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), iconPosition.X - IconSize / 2 + 5, iconPosition.Y);
 				}
