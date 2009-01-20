@@ -24,11 +24,14 @@ using Do.Platform.ServiceStack;
 namespace Do.Platform
 {
 	
-	public class AbstractSystemService : IService
+	public abstract class AbstractSystemService : IService
 	{		
 		public virtual bool GetOnBatteryPower ()
 		{
 			return false;
 		}
+
+		public abstract void EnsureSingleApplicationInstance ();
+		
 	}
 }

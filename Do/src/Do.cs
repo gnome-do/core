@@ -50,6 +50,8 @@ namespace Do {
 				Log.DisplayLevel = LogLevel.Debug;
 
 			PluginManager.Initialize ();
+			Services.System.EnsureSingleApplicationInstance ();
+
 			Preferences = new CorePreferences ();
 
 			// Now we can set the preferred log level.

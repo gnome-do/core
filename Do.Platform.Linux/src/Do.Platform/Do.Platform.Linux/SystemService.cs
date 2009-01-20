@@ -23,13 +23,23 @@ using NDesk.DBus;
 using org.freedesktop.DBus;
 
 using Do.Platform.ServiceStack;
+using Do.Platform.Linux.DBus;
 
 namespace Do.Platform.Linux
 {
 	
 	
-	public class SystemService : AbstractSystemService, IInitializedService
+	public class SystemService : AbstractSystemService, IController, IInitializedService
 	{
+
+		const string PowerManagementName = "org.freedesktop.PowerManagement";
+		const string PowerManagementPath = "/org/freedesktop/PowerManagement";
+
+		[Interface(PowerManagementName)]
+		interface IPowerManagement
+		{
+			bool GetOnBattery ();
+		}
 		
 		public void Initialize ()
 		{
@@ -40,26 +50,46 @@ namespace Do.Platform.Linux
 				Log<SystemService>.Debug (e.StackTrace);
 			}
 		}
-
-		[Interface("org.freedesktop.PowerManagement")]
-		interface IPowerManagementCore
-		{
-			bool GetOnBattery ();
-		}
 	
 		public override bool GetOnBatteryPower ()
 		{
 			try {
-				if (!Bus.Session.NameHasOwner ("org.freedesktop.PowerManagement"))
+				if (!Bus.Session.NameHasOwner (PowerManagementName))
 					return false;
-				IPowerManagementCore power = 
-					Bus.Session.GetObject<IPowerManagementCore> ("org.freedesktop.PowerManagement", new ObjectPath ("/org/freedesktop/PowerManagement"));
+				IPowerManagement power = Bus.Session.GetObject<IPowerManagement> (PowerManagementName, new ObjectPath (PowerManagementPath));
 				return power.GetOnBattery ();
 			} catch (Exception e) {
 				Log<SystemService>.Error ("Could not GetOnBattery: {0}", e.Message);
 				Log<SystemService>.Debug (e.StackTrace);
 			}
 			return false;
+		}
+
+		public override void EnsureSingleApplicationInstance ()
+		{
+			try {
+				IController controller = Registrar.GetControllerInstance ();
+				if (controller == null) {
+					// No IController found on the bus, so no other
+					// instance is running. Register self.
+					Registrar.RegisterController (this);
+				} else {
+					// Another IController was found, so summon it
+					// and exit.
+					controller.Summon ();
+					System.Environment.Exit (0);
+				}
+			} catch (Exception e) {
+				Log<SystemService>.Error ("Could not EnsureSingleApplicationInstance: {0}", e.Message);
+				Log<SystemService>.Debug (e.StackTrace);
+			}
+		}
+
+		public void Summon ()
+		{
+			Gdk.Threads.Enter ();
+			Services.Windowing.SummonMainWindow ();
+			Gdk.Threads.Leave ();
 		}
 	}
 }

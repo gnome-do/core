@@ -32,5 +32,10 @@ namespace Do.Platform.Default
 			Log<DefaultSystemService>.Debug ("Cannot GetOnBatteryPower");
 			return false;
 		}
+
+		public override void EnsureSingleApplicationInstance ()
+		{
+			Log<DefaultSystemService>.Debug ("Cannot EnsureSingleApplicationInstance");
+		}
 	}
 }

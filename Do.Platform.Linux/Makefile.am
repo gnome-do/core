@@ -9,7 +9,6 @@ FILES = \
         gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/ConsoleCrayon.cs \
-	src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.DBus/DBusService.cs \
 	src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.DBus/IController.cs \
 	src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.DBus/Registrar.cs \
 	src/Do.Platform/Do.Platform.Linux/ConsoleLogService.cs \
