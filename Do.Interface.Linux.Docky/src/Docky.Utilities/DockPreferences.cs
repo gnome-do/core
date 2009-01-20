@@ -225,10 +225,14 @@ namespace Docky.Utilities
 		static DockOrientation orientation = (DockOrientation) prefs.Get<int> ("Orientation", 0);
 		public static DockOrientation Orientation {
 			get {
+				if (orientation != DockOrientation.Top && orientation != DockOrientation.Bottom)
+					orientation = DockOrientation.Bottom;
+				
 				return orientation;
 			}
 			set {
 				orientation = value;
+				prefs.Set ("Orientation", (int) value);
 			}
 		}
 

@@ -86,9 +86,13 @@ namespace Docky.Interface
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);
 			
-			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X), 0, Pango.Units.ToPixels (rect2.Width) + 18, 22, 5);
+			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) + .5, .5, Pango.Units.ToPixels (rect2.Width) + 17, 21, 5);
 			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
-			cr.Fill ();
+			cr.FillPreserve ();
+
+			cr.Color = new Cairo.Color (1, 1, 1, .55);
+			cr.LineWidth = 1;
+			cr.Stroke ();
 
 			Pango.Layout shadow = layout.Copy();
 			shadow.Indent = 1;
@@ -115,8 +119,8 @@ namespace Docky.Interface
 		public static void DrawGlowIndicator (Context cr, Gdk.Point location, bool urgent, int numberOfWindows)
 		{
 			if (DockPreferences.IndicateMultipleWindows && 1 < numberOfWindows) {
-				DrawSingleIndicator (cr, LayoutUtils.RelMovePoint (location, 3, RelativeMove.RelativeLeft), urgent);
-				DrawSingleIndicator (cr, LayoutUtils.RelMovePoint (location, 3, RelativeMove.RelativeRight), urgent);
+				DrawSingleIndicator (cr, location.RelativeMovePoint (3, RelativeMove.RelativeLeft), urgent);
+				DrawSingleIndicator (cr, location.RelativeMovePoint (3, RelativeMove.RelativeRight), urgent);
 			} else if (0 < numberOfWindows) {
 				DrawSingleIndicator (cr, location, urgent);
 			}

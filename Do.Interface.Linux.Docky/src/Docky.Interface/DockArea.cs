@@ -599,14 +599,15 @@ namespace Docky.Interface
 			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
 			
 			if (InputAreaOpacity > 0) {
-				if (input_area_buffer == null)
+				if (input_area_buffer == null) {
 					input_area_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
+				}
 				
 				using (Context input_cr = new Context (input_area_buffer)) {
 					input_cr.AlphaFill ();
 					SummonRenderer.RenderSummonMode (input_cr, dockArea);
 				}
-				
+
 				cr.SetSource (input_area_buffer);
 				cr.PaintWithAlpha (InputAreaOpacity);
 			}
@@ -621,7 +622,7 @@ namespace Docky.Interface
 				}
 
 				int offset =  (int) (IconSize * (1 - DockIconOpacity));
-				Gdk.Point iconBufferLocation = LayoutUtils.RelMovePoint (new Gdk.Point (0, 0), offset, RelativeMove.Outward);
+				Gdk.Point iconBufferLocation = new Gdk.Point (0, 0).RelativeMovePoint (offset, RelativeMove.Outward);
 				cr.SetSource (dock_icon_buffer, iconBufferLocation.X, iconBufferLocation.Y);
 				cr.PaintWithAlpha (DockIconOpacity);
 			}
@@ -658,7 +659,7 @@ namespace Docky.Interface
 			if (animationType == ClickAnimationType.Bounce) {
 				// bounces twice
 				int delta = (int) Math.Abs (30 * Math.Sin (DockItems [icon].TimeSinceClick.TotalMilliseconds * Math.PI / (BounceTime.TotalMilliseconds / 2)));
-				iconPosition = LayoutUtils.RelMovePoint (iconPosition, delta, RelativeMove.Inward);
+				iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 			} else {
 				IDockAppItem dai = DockItems [icon] as IDockAppItem;
 				if (dai != null && dai.NeedsAttention) {
@@ -666,7 +667,7 @@ namespace Docky.Interface
 					if (DateTime.UtcNow - dai.AttentionRequestStartTime < BounceTime) {
 						double urgentMs = (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds;
 						int delta = (int) (100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds)));
-						iconPosition = LayoutUtils.RelMovePoint (iconPosition, delta, RelativeMove.Inward);
+						iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 					}
 				}
 			}
@@ -747,10 +748,10 @@ namespace Docky.Interface
 					if (DockPreferences.Orientation == DockOrientation.Top)
 						textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 22;
 				} else {
-					textPoint = LayoutUtils.RelMovePoint (center, (int) ((IconSize / 2) * DockPreferences.ZoomPercent + 10), RelativeMove.Inward);
+					textPoint = center.RelativeMovePoint ((int) ((IconSize / 2) * DockPreferences.ZoomPercent + 10), RelativeMove.Inward);
 					if (DockPreferences.Orientation == DockOrientation.Right)
-						textPoint = LayoutUtils.RelMovePoint (textPoint, DockPreferences.TextWidth, RelativeMove.Inward);
-					textPoint = LayoutUtils.RelMovePoint (textPoint, 10, RelativeMove.RealUp);
+						textPoint = textPoint.RelativeMovePoint (DockPreferences.TextWidth, RelativeMove.Inward);
+					textPoint = textPoint.RelativeMovePoint (10, RelativeMove.RealUp);
 				}
 				DockItems [icon].GetTextSurface (cr.Target).Show (cr, textPoint.X, textPoint.Y);
 			}
@@ -935,7 +936,7 @@ namespace Docky.Interface
 			
 			Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
 			
-			Gdk.Point finalTarget = LayoutUtils.RelMovePoint (new Gdk.Point (0, 0), VerticalOffset, RelativeMove.Outward);
+			Gdk.Point finalTarget = new Gdk.Point (0, 0).RelativeMovePoint (VerticalOffset, RelativeMove.Outward);
 			cr2.SetSource (backbuffer, finalTarget.X, finalTarget.Y);
 			
 			cr2.Operator = Operator.Source;
@@ -1036,8 +1037,8 @@ namespace Docky.Interface
 						double itemZoom;
 						IconZoomedPosition (PositionProvider.IndexAtPosition (Cursor), out itemPosition, out itemZoom);
 						
-						itemPosition = LayoutUtils.RelMovePoint (itemPosition, (int) (IconSize * itemZoom * .9) - IconSize / 2, RelativeMove.Inward);
-						itemPosition = LayoutUtils.RelativePointToRootPoint (itemPosition, window);
+						itemPosition = itemPosition.RelativeMovePoint ((int) (IconSize * itemZoom * .9) - IconSize / 2, RelativeMove.Inward);
+						itemPosition = itemPosition.RelativePointToRootPoint (window);
 						
 						PopupMenu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), itemPosition.X, itemPosition.Y);
 						return ret_val;

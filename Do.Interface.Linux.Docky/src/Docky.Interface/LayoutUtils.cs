@@ -65,7 +65,7 @@ namespace Docky.Interface
 			return monitor_geo;
 		}
 
-		public static Gdk.Point RelativePointToRootPoint (Gdk.Point relativePoint, Gtk.Window window)
+		public static Gdk.Point RelativePointToRootPoint (this Gdk.Point relativePoint, Gtk.Window window)
 		{
 			Gdk.Rectangle geo, main;
 			geo = MonitorGemonetry ();
@@ -73,7 +73,7 @@ namespace Docky.Interface
 			return new Gdk.Point (main.X + relativePoint.X, main.Y + relativePoint.Y);
 		}
 
-		public static Gdk.Point RelMovePoint (Gdk.Point startingLocation, int delta, RelativeMove direction)
+		public static Gdk.Point RelativeMovePoint (this Gdk.Point startingLocation, int delta, RelativeMove direction)
 		{
 			int[] vector = null;
 			switch (direction) {
