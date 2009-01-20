@@ -53,16 +53,11 @@ namespace Docky.Interface
 				Services.Windowing.SummonMainWindow ();
 		}
 		
-		public override string Description {
-			get {
-				return Mono.Unix.Catalog.GetString ("Summon GNOME Do");
-			}
-		}
-		
 		#endregion 
 		
 		public DoDockItem () : base ()
 		{
+			base.SetText (Mono.Unix.Catalog.GetString ("Summon GNOME Do"));
 		}
 
 		#region IDisposable implementation 

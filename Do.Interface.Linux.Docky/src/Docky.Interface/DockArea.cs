@@ -492,15 +492,12 @@ namespace Docky.Interface
 			                             () => DockItems.Any (di => di.TimeSinceClick <= BounceTime));
 			
 			AnimationState.AddCondition ("UrgentAnimationNeeded",
-			                             () => DockItems.Where (di => di is IDockAppItem)
-			                             .Cast<IDockAppItem> ()
-			                             .Where (dai => dai.NeedsAttention)
-			                             .Any (dai => DateTime.UtcNow - dai.AttentionRequestStartTime < BounceTime));
+			                             () => DockItems
+			                             .Where (di => di.NeedsAttention)
+			                             .Any (di => DateTime.UtcNow - di.AttentionRequestStartTime < BounceTime));
 			
 			AnimationState.AddCondition ("UrgentRecentChange",
-			                             () => DockItems.Where (di => di is IDockAppItem)
-			                             .Cast<IDockAppItem> ()
-			                             .Any (dai => DateTime.UtcNow - dai.AttentionRequestStartTime < BounceTime));
+			                             () => DockItems.Any (di => DateTime.UtcNow - di.AttentionRequestStartTime < BounceTime));
 			
 			AnimationState.AddCondition ("InputModeChangeAnimationNeeded",
 			                             () => DateTime.UtcNow - interface_change_time < SummonTime);
@@ -662,11 +659,10 @@ namespace Docky.Interface
 				                            (DockItems [icon].TimeSinceClick.TotalMilliseconds * Math.PI / (BounceTime.TotalMilliseconds / 2)));
 				iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 			} else {
-				IDockAppItem dai = DockItems [icon] as IDockAppItem;
-				if (dai != null && dai.NeedsAttention) {
+				if (DockItems [icon] != null && DockItems [icon].NeedsAttention) {
 					drawUrgency = true;
-					if (DateTime.UtcNow - dai.AttentionRequestStartTime < BounceTime) {
-						double urgentMs = (DateTime.UtcNow - dai.AttentionRequestStartTime).TotalMilliseconds;
+					if (DateTime.UtcNow - DockItems [icon].AttentionRequestStartTime < BounceTime) {
+						double urgentMs = (DateTime.UtcNow - DockItems [icon].AttentionRequestStartTime).TotalMilliseconds;
 						int delta = (int) (100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds)));
 						iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 					}

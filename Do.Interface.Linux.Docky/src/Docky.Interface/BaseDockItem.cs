@@ -34,10 +34,13 @@ namespace Docky.Interface
 	
 	public abstract class BaseDockItem : IDisposable, IEquatable<BaseDockItem>
 	{
+		public event UpdateRequestHandler UpdateNeeded;
+		
 		Surface text_surface, icon_surface, resize_buffer;
 		DockOrientation current_orientation;
 		uint size_changed_timer;
 		int current_size;
+		string description;
 		
 		public virtual bool IsAcceptingDrops { 
 			get { return false; } 
@@ -46,6 +49,21 @@ namespace Docky.Interface
 		public virtual bool ReceiveItem (string item) 
 		{
 			return false;
+		}
+
+		public virtual bool NeedsAttention {
+			get {
+				return false;
+			}
+			protected set { }
+		}
+		
+		public virtual DateTime AttentionRequestStartTime { get; protected set; }
+
+		protected void OnUpdateNeeded (UpdateRequestArgs args) 
+		{
+			if (UpdateNeeded != null)
+				UpdateNeeded (this, args);
 		}
 		
 		public virtual Surface GetIconSurface (Surface similar)
@@ -79,14 +97,6 @@ namespace Docky.Interface
 			return tmp_surface;
 		}
 		
-		protected void RedrawIcon ()
-		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
-		}
-		
 		protected abstract Pixbuf GetSurfacePixbuf ();
 		
 		/// <summary>
@@ -100,12 +110,15 @@ namespace Docky.Interface
 		/// </returns>
 		public virtual Surface GetTextSurface (Surface similar)
 		{
+			if (string.IsNullOrEmpty (description))
+				return null;
+			
 			if (text_surface == null || DockPreferences.Orientation != current_orientation) {
 				if (text_surface != null)
 					text_surface.Destroy ();
 				
 				current_orientation = DockPreferences.Orientation;
-				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (Description), 
+				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (description), 
 				                                            DockPreferences.TextWidth, 
 				                                            similar, 
 				                                            current_orientation);
@@ -138,11 +151,6 @@ namespace Docky.Interface
 		public virtual void SetIconRegion (Gdk.Rectangle region)
 		{
 		}
-		
-		//// <value>
-		/// The value used to for the text surface
-		/// </value>
-		public abstract string Description { get; }
 		
 		/// <value>
 		/// The Widget of the icon.
@@ -197,25 +205,50 @@ namespace Docky.Interface
 		
 		public BaseDockItem ()
 		{
-			LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
+			description = "";
+			AttentionRequestStartTime =  LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			DockPreferences.IconSizeChanged += OnIconSizeChanged;
+		}
+
+		protected void RedrawIcon ()
+		{
+			ResetIconSurface ();
+		}
+
+		protected void SetText (string text)
+		{
+			description = text;
+			ResetTextSurface ();
 		}
 		
 		void ResetSurfaces ()
+		{
+			ResetTextSurface ();
+			ResetBufferSurface ();
+			ResetIconSurface ();
+		}
+
+		void ResetTextSurface ()
 		{
 			if (text_surface != null) {
 				text_surface.Destroy ();
 				text_surface = null;
 			}
-			
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
-			
+		}
+
+		void ResetBufferSurface ()
+		{
 			if (resize_buffer != null) {
 				resize_buffer.Destroy ();
 				resize_buffer = null;
+			}
+		}
+
+		void ResetIconSurface ()
+		{
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
 			}
 		}
 		

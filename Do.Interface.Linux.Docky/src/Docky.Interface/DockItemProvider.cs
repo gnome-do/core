@@ -548,8 +548,7 @@ namespace Docky.Interface
 			foreach (BaseDockItem di in DockItems) {
 				if (di is IRightClickable)
 					(di as IRightClickable).RemoveClicked -= HandleRemoveClicked;
-				if (di is IDockAppItem)
-					(di as IDockAppItem).UpdateNeeded -= HandleUpdateNeeded;
+				di.UpdateNeeded -= HandleUpdateNeeded;
 				
 				di.Dispose ();
 			}

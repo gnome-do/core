@@ -40,7 +40,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItem : BaseDockItem, IRightClickable, IDockAppItem
+	public class DockItem : BaseDockItem, IRightClickable
 	{
 		Item element;
 		List<Wnck.Application> apps;
@@ -52,10 +52,6 @@ namespace Docky.Interface
 		
 		public event EventHandler RemoveClicked;
 		
-		public event UpdateRequestHandler UpdateNeeded;
-		
-		public DateTime AttentionRequestStartTime { get; private set; }
-		
 		public int Position { get; set; }
 		
 		public override bool IsAcceptingDrops { 
@@ -64,10 +60,6 @@ namespace Docky.Interface
 		
 		public string Icon { 
 			get { return element.Icon; } 
-		}
-		
-		public override string Description { 
-			get { return element.Name; } 
 		}
 		
 		public Item Element { 
@@ -86,12 +78,12 @@ namespace Docky.Interface
 			get { return window_count; }
 		}
 		
-		public bool NeedsAttention { 
+		public override bool NeedsAttention { 
 			get { 
 				return needs_attention; 
 			} 
 			
-			private set {
+			protected set {
 				if (needs_attention == value)
 					return;
 				needs_attention = value;
@@ -128,6 +120,8 @@ namespace Docky.Interface
 			Position = -1;
 			apps =  new List<Wnck.Application> ();
 			this.element = element;
+
+			SetText (element.Name);
 
 			AttentionRequestStartTime = DateTime.UtcNow;
 			UpdateApplication ();
@@ -215,8 +209,7 @@ namespace Docky.Interface
 					req = UpdateRequestType.NeedsAttentionSet;
 				else
 					req = UpdateRequestType.NeedsAttentionUnset;
-				if (UpdateNeeded != null)
-					UpdateNeeded (this, new UpdateRequestArgs (this, req));
+				OnUpdateNeeded (new UpdateRequestArgs (this, req));
 			}
 			
 			handle_timer = 0;

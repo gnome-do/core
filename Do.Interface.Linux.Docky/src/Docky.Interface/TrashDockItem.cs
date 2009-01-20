@@ -50,6 +50,7 @@ namespace Docky.Interface
 		
 		public TrashDockItem()
 		{
+			SetText (Mono.Unix.Catalog.GetString ("Trash"));
 		}
 		
 		protected override Pixbuf GetSurfacePixbuf ()
@@ -87,13 +88,6 @@ namespace Docky.Interface
 		}
 		
 		#endregion 
-		
-		
-		public override string Description {
-			get {
-				return "Trash";
-			}
-		}
 		
 		public override void Clicked (uint button)
 		{

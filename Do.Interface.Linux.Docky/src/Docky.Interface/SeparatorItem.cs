@@ -33,10 +33,6 @@ namespace Docky.Interface
 		Surface sr;
 		#region IDockItem implementation 
 		
-		public override string Description {
-			get { return ""; }
-		}
-		
 		public override int Width {
 			get { return (int) (DockPreferences.IconSize * .3); }
 		}
@@ -92,11 +88,6 @@ namespace Docky.Interface
 				(cr as IDisposable).Dispose ();
 			}
 			return sr;
-		}
-		
-		public override Surface GetTextSurface (Surface similar)
-		{
-			return null;
 		}
 		
 		#region IDisposable implementation 

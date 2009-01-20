@@ -48,7 +48,6 @@
     <File name="src/Docky.Interface/DockAnimationState.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/ItemPositionProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/ClickAnimationType.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/IDockAppItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/LayoutUtils.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Utilities/DockOrientation.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Menus" subtype="Directory" buildaction="Compile" />
@@ -60,8 +59,6 @@
     <File name="src/Docky.Interface/Docky.Interface.Menus/RunnableMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Menus/SimpleMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/applets" subtype="Directory" buildaction="Compile" />
-    <File name="src/applets/BatteryMonitor.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

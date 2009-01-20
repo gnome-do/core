@@ -38,7 +38,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ApplicationDockItem : BaseDockItem, IRightClickable, IDockAppItem
+	public class ApplicationDockItem : BaseDockItem, IRightClickable
 	{
 		public event EventHandler RemoveClicked;
 		
@@ -86,8 +86,6 @@ namespace Docky.Interface
 				return null;
 			}
 		}
-		
-		#region IDockItem implementation 
 		
 		public override Pixbuf GetDragPixbuf ()
 		{
@@ -143,7 +141,7 @@ namespace Docky.Interface
 			return pbuf;
 		}
 		
-		public override string Description {
+		string Description {
 			get {
 				foreach (Wnck.Application application in Applications) {
 					if (StringIsValidName (application.IconName))
@@ -171,8 +169,10 @@ namespace Docky.Interface
 		IEnumerable<Wnck.Window> VisibleWindows {
 			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
 		}
-		
-		#endregion 
+
+		public override bool NeedsAttention {
+			get { return urgent; }
+		}
 		
 		public ApplicationDockItem (IEnumerable<Wnck.Application> applications) : base ()
 		{
@@ -183,6 +183,8 @@ namespace Docky.Interface
 			foreach (Wnck.Window w in VisibleWindows) {
 				w.StateChanged += HandleStateChanged;
 			}
+
+			base.SetText (Description);
 		}
 
 		void HandleStateChanged(object o, Wnck.StateChangedArgs args)
@@ -193,8 +195,7 @@ namespace Docky.Interface
 				UpdateRequestType req = (urgent) ? UpdateRequestType.NeedsAttentionSet : UpdateRequestType.NeedsAttentionUnset;
 				if (urgent)
 					AttentionRequestStartTime = DateTime.UtcNow;
-				if (UpdateNeeded != null)
-					UpdateNeeded (this, new UpdateRequestArgs (this, req));
+				OnUpdateNeeded (new UpdateRequestArgs (this, req));
 			}
 		}
 		
@@ -318,20 +319,6 @@ namespace Docky.Interface
 			                                       CloseText, Gtk.Stock.Quit);
 		}
 
-		#region IDockAppItem implementation 
-		
-		public event UpdateRequestHandler UpdateNeeded;
-		
-		public bool NeedsAttention {
-			get { return urgent; }
-		}
-		
-		public DateTime AttentionRequestStartTime {
-			get; private set;
-		}
-		
-		#endregion 
-		
 		bool DetermineUrgencyStatus ()
 		{
 			return VisibleWindows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ());
