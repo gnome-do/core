@@ -28,7 +28,7 @@ namespace Do.UI {
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.PreferencesWindow
-            this.WidthRequest = 440;
+            this.WidthRequest = 428;
             this.HeightRequest = 440;
             this.Name = "Do.UI.PreferencesWindow";
             this.Title = Mono.Unix.Catalog.GetString("GNOME Do Preferences");
@@ -41,7 +41,6 @@ namespace Do.UI {
             this.vbox1.Spacing = 6;
             // Container child vbox1.Gtk.Box+BoxChild
             this.hbox1 = new Gtk.HBox();
-            this.hbox1.HeightRequest = 440;
             this.hbox1.Name = "hbox1";
             this.hbox1.Spacing = 6;
             // Container child hbox1.Gtk.Box+BoxChild
@@ -57,7 +56,6 @@ namespace Do.UI {
             w2.Position = 0;
             // Container child vbox1.Gtk.Box+BoxChild
             this.hbuttonbox2 = new Gtk.HButtonBox();
-            this.hbuttonbox2.Name = "hbuttonbox2";
             // Container child hbuttonbox2.Gtk.ButtonBox+ButtonBoxChild
             this.btn_help = new Gtk.Button();
             this.btn_help.CanFocus = true;
@@ -91,8 +89,6 @@ namespace Do.UI {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 450;
-            this.DefaultHeight = 470;
             this.btn_close.HasDefault = true;
             this.Show();
             this.btn_help.Clicked += new System.EventHandler(this.OnBtnHelpClicked);
