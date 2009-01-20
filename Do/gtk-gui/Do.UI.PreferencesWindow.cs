@@ -91,8 +91,8 @@ namespace Do.UI {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 440;
-            this.DefaultHeight = 440;
+            this.DefaultWidth = 450;
+            this.DefaultHeight = 470;
             this.btn_close.HasDefault = true;
             this.Show();
             this.btn_help.Clicked += new System.EventHandler(this.OnBtnHelpClicked);

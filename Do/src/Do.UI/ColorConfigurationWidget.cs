@@ -1,4 +1,4 @@
-// HUDConfigurationWidget.cs
+// ColorConfigurationWidget.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -53,8 +53,10 @@ namespace Do.UI
 				Themes.Add (theme.Name);
 			}
 		
-			if (!Screen.IsComposited)
+			if (!Screen.IsComposited) {
+				CompositeNotificationBox.Visible = true;
 				theme_combo.Sensitive = false;
+			}
 				
 			// Setup theme combo
 			theme_combo.Active = Math.Max (0, Themes.IndexOf (Do.Preferences.Theme));
