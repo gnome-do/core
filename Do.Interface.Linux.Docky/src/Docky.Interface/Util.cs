@@ -39,6 +39,8 @@ namespace Docky.Interface
 	
 	public static class Util
 	{
+		static int Height = 26;
+		
 		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar) 
 		{
 			return GetBorderedTextSurface (text, max_width, similar, DockOrientation.Bottom);
@@ -62,12 +64,13 @@ namespace Docky.Interface
 		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar, DockOrientation orientation)
 		{
 			Surface sr;
-			sr = similar.CreateSimilar (similar.Content, max_width, 22);
+			sr = similar.CreateSimilar (similar.Content, max_width, Height);
 			
 			Context cr = new Context (sr);
 
 			Pango.Layout layout = Pango.CairoHelper.CreateLayout (cr);
 			layout.FontDescription = Pango.FontDescription.FromString ("sans-serif 11");
+			layout.FontDescription.Weight = Pango.Weight.Semibold;
 			layout.Width = Pango.Units.FromPixels (max_width - 18);
 			layout.SetMarkup (text);
 			switch (orientation) {
@@ -86,18 +89,17 @@ namespace Docky.Interface
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);
 			
-			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) + .5, .5, Pango.Units.ToPixels (rect2.Width) + 17, 21, 5);
+			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X), 1, Pango.Units.ToPixels (rect2.Width) + 18, Height - 2, 5);
 			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
 			cr.FillPreserve ();
 
-			cr.Color = new Cairo.Color (1, 1, 1, .55);
-			cr.LineWidth = 1;
+			cr.Color = new Cairo.Color (1, 1, 1, .8);
 			cr.Stroke ();
 
 			Pango.Layout shadow = layout.Copy();
 			shadow.Indent = 1;
 
-			cr.Translate (10, 2);
+			cr.Translate (10, (int) ((Height - 18) / 2));
 			cr.Translate(1,1);
 			Pango.CairoHelper.LayoutPath (cr, shadow);
 			cr.Color = new Cairo.Color (0, 0, 0, 0.6);
