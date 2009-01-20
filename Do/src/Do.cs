@@ -78,24 +78,7 @@ namespace Do {
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
 			
-			AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
-				
 			Gtk.Application.Run ();
-		}
-		
-		/// <summary>
-		/// Used to deal with older versions of mono hanging on exit.
-		/// </summary>
-		static void OnProcessExit (object o, EventArgs args)
-		{
-			Thread killThread = new Thread (() => {
-				Thread.Sleep (1000);
-				Log.Warn ("Process failed to exit cleanly, killing.");
-				Process.GetCurrentProcess ().Kill ();
-			});
-			
-			killThread.IsBackground = true;
-			killThread.Start ();
 		}
 
 		static void DetectInstanceAndExit ()
