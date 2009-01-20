@@ -31,6 +31,7 @@ using Do.Platform;
 using Do.Interface;
 using Do.Universe;
 
+using Docky.Interface.Menus;
 using Docky.Utilities;
 
 namespace Docky.Interface

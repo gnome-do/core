@@ -1,4 +1,4 @@
-// WindowMenuButtonArgs.cs
+// SeparatorMenuButtonArgs.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -18,27 +18,17 @@
 
 using System;
 
-using Wnck;
-
-using Docky.Utilities;
-
-namespace Docky.Interface
+namespace Docky.Interface.Menus
 {
-	
-	
-	public class WindowMenuButtonArgs : AbstractMenuButtonArgs
+	public class SeparatorMenuButtonArgs : AbstractMenuButtonArgs
 	{
-		Window window;
-		
-		public WindowMenuButtonArgs (Window window, string description, string icon) : base (description, icon, true)
+		public SeparatorMenuButtonArgs () : base ("Separator", null, true)
 		{
-			this.window = window;
 		}
 		
 		public override void Action ()
 		{
-			window.CenterAndFocusWindow ();
+			
 		}
-
 	}
 }

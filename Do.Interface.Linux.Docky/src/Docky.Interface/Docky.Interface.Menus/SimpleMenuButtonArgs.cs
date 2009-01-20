@@ -18,7 +18,7 @@
 
 using System;
 
-namespace Docky.Interface
+namespace Docky.Interface.Menus
 {
 	
 	

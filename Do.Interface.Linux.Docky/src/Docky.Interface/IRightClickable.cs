@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 
+using Docky.Interface.Menus;
+
 namespace Docky.Interface
 {
 	public interface IRightClickable

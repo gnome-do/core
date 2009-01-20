@@ -44,22 +44,23 @@
     <File name="src/Docky.Utilities/WindowControl.cs" subtype="Code" buildaction="Compile" />
     <File name="gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" resource_id="gui.stetic" />
     <File name="gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/AbstractMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/DockItemMenu.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/DockPopupMenu.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/UpdateRequestArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/TrashDockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DockAnimationState.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/SeparatorMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/SimpleMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/LaunchMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/WindowMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/ItemPositionProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/ClickAnimationType.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/IDockAppItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/LayoutUtils.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/RunnableMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Utilities/DockOrientation.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus" subtype="Directory" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/DockPopupMenu.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/DockItemMenu.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/AbstractMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/LaunchMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/SeparatorMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/RunnableMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/SimpleMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

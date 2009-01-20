@@ -30,7 +30,7 @@ using Do.Platform;
 
 using Docky.Utilities;
 
-namespace Docky.Interface
+namespace Docky.Interface.Menus
 {
 	
 	

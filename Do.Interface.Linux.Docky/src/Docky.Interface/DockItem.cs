@@ -25,12 +25,13 @@ using Gdk;
 using Cairo;
 using Mono.Unix;
 
-using Do.Interface;
 using Do.Platform;
 using Do.Universe;
 using Do.Universe.Common;
+using Do.Interface;
 using Do.Interface.CairoUtils;
 
+using Docky.Interface.Menus;
 using Docky.Utilities;
 
 using Wnck;

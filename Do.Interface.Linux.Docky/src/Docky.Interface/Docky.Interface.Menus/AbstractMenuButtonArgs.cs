@@ -19,7 +19,7 @@
 using System;
 using Mono.Unix;
 
-namespace Docky.Interface
+namespace Docky.Interface.Menus
 {
 	public abstract class AbstractMenuButtonArgs
 	{

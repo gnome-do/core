@@ -34,6 +34,7 @@ using Do.Interface.CairoUtils;
 using Do;
 
 using Docky.Utilities;
+using Docky.Interface.Menus;
 using Docky.Interface.Renderers;
 
 namespace Docky.Interface

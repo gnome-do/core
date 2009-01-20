@@ -13,8 +13,14 @@ FILES = \
 	src/Docky.Interface/DockArea.cs \
 	src/Docky.Interface/DockAnimationState.cs \
 	src/Docky.Interface/DockItem.cs \
-	src/Docky.Interface/DockItemMenu.cs \
-	src/Docky.Interface/DockPopupMenu.cs \
+	src/Docky.Interface/Docky.Interface.Menus/AbstractMenuButtonArgs.cs \
+	src/Docky.Interface/Docky.Interface.Menus/DockItemMenu.cs \
+	src/Docky.Interface/Docky.Interface.Menus/DockPopupMenu.cs \
+	src/Docky.Interface/Docky.Interface.Menus/LaunchMenuButtonArgs.cs \
+	src/Docky.Interface/Docky.Interface.Menus/RunnableMenuButtonArgs.cs \
+	src/Docky.Interface/Docky.Interface.Menus/SimpleMenuButtonArgs.cs \
+	src/Docky.Interface/Docky.Interface.Menus/SeparatorMenuButtonArgs.cs \	
+	src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs \
 	src/Docky.Interface/DockItemProvider.cs \
 	src/Docky.Interface/DockState.cs \
 	src/Docky.Interface/DockWindow.cs \
@@ -24,17 +30,11 @@ FILES = \
 	src/Docky.Interface/IDockAppItem.cs \
 	src/Docky.Interface/IRightClickable.cs \
 	src/Docky.Interface/ItemPositionProvider.cs \
-	src/Docky.Interface/AbstractMenuButtonArgs.cs \
-	src/Docky.Interface/LaunchMenuButtonArgs.cs \
 	src/Docky.Interface/LayoutUtils.cs \
-	src/Docky.Interface/RunnableMenuButtonArgs.cs \
-	src/Docky.Interface/SimpleMenuButtonArgs.cs \
-	src/Docky.Interface/SeparatorMenuButtonArgs.cs \
 	src/Docky.Interface/SeparatorItem.cs \
 	src/Docky.Interface/TrashDockItem.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
-	src/Docky.Interface/WindowMenuButtonArgs.cs \
 	src/Docky.Utilities/DockOrientation.cs \
 	src/Docky.Utilities/DockPreferences.cs \
 	src/Docky.Utilities/GtkUtils.cs \
