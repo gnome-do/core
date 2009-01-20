@@ -60,7 +60,6 @@ namespace Do.UI
 				composite_warning_widget.Visible = true;
 				theme_combo.Sensitive = false;
 				animation_check.State = shadow_check.State = Gtk.StateType.Insensitive;
-				animation_check.Active = shadow_check.Active = false;
 			}
 				
 			// Setup theme combo
