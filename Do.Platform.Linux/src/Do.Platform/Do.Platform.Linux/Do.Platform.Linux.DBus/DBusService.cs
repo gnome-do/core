@@ -1,4 +1,4 @@
-/* IController.cs
+/* DBusService.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -18,18 +18,38 @@
  */
 
 using System;
-using NDesk.DBus;
 
-namespace Do.DBusLib
+using Do.Platform;
+using Do.Platform.ServiceStack;
+
+namespace Do.Platform.Linux.DBus
 {
-	[Interface ("org.gnome.Do.Controller")]
-	public interface IController
+	
+	public class DBusService : IController, IInitializedService 
 	{
-		/// <summary>
-		/// Causes an IController instance to show its user interface
-		/// so the user can interact with it. For example, making a
-		/// SymbolWindow become visible and raise to the top.
-		/// </summary>
-		void Summon ();
+
+		public void Initialize ()
+		{
+			DetectInstanceAndExit ();
+			Registrar.RegisterController (this);
+		}
+		
+		public void Summon ()
+		{
+			Gdk.Threads.Enter ();
+			Services.Windowing.SummonMainWindow ();
+			Gdk.Threads.Leave ();
+		}
+
+		void DetectInstanceAndExit ()
+		{
+			IController dbus_controller;
+			dbus_controller = Registrar.GetControllerInstance ();
+			if (dbus_controller != null) {
+				dbus_controller.Summon ();
+				System.Environment.Exit (0);
+			}
+		}
+
 	}
 }

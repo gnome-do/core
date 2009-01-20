@@ -22,6 +22,8 @@
 		<Service type="Do.Platform.Common.CommonPathsService" />
 		<Service type="Do.Platform.Common.EventsOnlyNotificationsService" />
 
+		<Service type="Do.Platform.Linux.DBus.DBusService" />
+		<Service type="Do.Platform.Linux.SystemService" />
 		<Service type="Do.Platform.Linux.TrayIconService" />
 		<Service type="Do.Platform.Linux.ConsoleLogService" />
 		<Service type="Do.Platform.Linux.EnvironmentService" />

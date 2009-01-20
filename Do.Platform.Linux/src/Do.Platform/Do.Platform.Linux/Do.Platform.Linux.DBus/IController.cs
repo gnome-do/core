@@ -20,7 +20,7 @@
 using System;
 using NDesk.DBus;
 
-namespace Do.DBusLib
+namespace Do.Platform.Linux.DBus
 {
 	[Interface ("org.gnome.Do.Controller")]
 	public interface IController

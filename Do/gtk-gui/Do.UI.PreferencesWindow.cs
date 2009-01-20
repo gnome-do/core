@@ -56,6 +56,7 @@ namespace Do.UI {
             w2.Position = 0;
             // Container child vbox1.Gtk.Box+BoxChild
             this.hbuttonbox2 = new Gtk.HButtonBox();
+            this.hbuttonbox2.Name = "hbuttonbox2";
             // Container child hbuttonbox2.Gtk.ButtonBox+ButtonBoxChild
             this.btn_help = new Gtk.Button();
             this.btn_help.CanFocus = true;
@@ -89,6 +90,8 @@ namespace Do.UI {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
+            this.DefaultWidth = 450;
+            this.DefaultHeight = 470;
             this.btn_close.HasDefault = true;
             this.Show();
             this.btn_help.Clicked += new System.EventHandler(this.OnBtnHelpClicked);

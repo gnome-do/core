@@ -36,6 +36,7 @@ namespace Do.Platform
 		static ICoreService core;
 		static PathsService paths;
 		static IWindowingService windowing;
+		static AbstractSystemService system;
 		static IEnumerable<ILogService> logs;
 		static PreferencesFactory preferences;
 		static AbstractApplicationService application;
@@ -96,6 +97,8 @@ namespace Do.Platform
 				paths = null;
 			if (service is AbstractApplicationService)
 				application = null;
+			if (service is AbstractSystemService)
+				system = null;
 		}
 
 		/// <summary>
@@ -130,6 +133,14 @@ namespace Do.Platform
 				if (application == null)
 					application = LocateService<AbstractApplicationService, DefaultApplicationService> ();
 				return application;
+			}
+		}
+
+		public static AbstractSystemService System {
+			get {
+				if (system == null)
+					system = LocateService<AbstractSystemService, DefaultSystemService> ();
+				return system;
 			}
 		}
 

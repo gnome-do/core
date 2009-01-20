@@ -26,7 +26,6 @@ using Mono.Unix;
 
 using Do.UI;
 using Do.Core;
-using Do.DBusLib;
 using Do.Platform;
 
 namespace Do {
@@ -45,8 +44,6 @@ namespace Do {
 			Gtk.Application.Init ();
 			Gdk.Threads.Init ();
 
-			DetectInstanceAndExit ();
-			
 			// We are conservative with the log at first.
 			Log.DisplayLevel = LogLevel.Error;
 			if (CorePreferences.PeekDebug)
@@ -70,7 +67,6 @@ namespace Do {
 			
 			Controller.Initialize ();
 			UniverseManager.Initialize ();
-			DBusRegistrar.RegisterController (Controller);
 			
 			keybinder = new XKeybinder ();
 			SetupKeybindings ();
@@ -81,16 +77,7 @@ namespace Do {
 			Gtk.Application.Run ();
 		}
 
-		static void DetectInstanceAndExit ()
-		{
-			IController dbus_controller;
-			dbus_controller = DBusRegistrar.GetControllerInstance ();
-			if (dbus_controller != null) {
-				dbus_controller.Summon ();
-				System.Environment.Exit (0);
-			}
-		}
-
+		
 		public static Controller Controller {
 			get {
 				if (controller == null)

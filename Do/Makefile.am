@@ -87,7 +87,6 @@ REFERENCES =  \
 	System.Core
 
 PROJECT_REFERENCES = \
-	Do.DBus \
 	Do.Universe \
 	Do.Platform \
 	Do.Platform.Linux \

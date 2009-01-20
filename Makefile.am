@@ -13,7 +13,6 @@ SUBDIRS = \
 	Do.Interface.Linux.HUD \
 	Do.Interface.Linux.Mini \
 	Do.Platform.Linux \
-	Do.DBus \
 	Do \
 	po \
 	libdo \
