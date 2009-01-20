@@ -28,7 +28,6 @@ using Do.Platform.Linux.DBus;
 namespace Do.Platform.Linux
 {
 	
-	
 	public class SystemService : AbstractSystemService, IController, IInitializedService
 	{
 
@@ -72,10 +71,12 @@ namespace Do.Platform.Linux
 				if (controller == null) {
 					// No IController found on the bus, so no other
 					// instance is running. Register self.
+					Log<SystemService>.Debug ("No other application instance detected. Continue startup.");
 					Registrar.RegisterController (this);
 				} else {
 					// Another IController was found, so summon it
 					// and exit.
+					Log<SystemService>.Debug ("Existing application instance detected. Summon and bail.");
 					controller.Summon ();
 					System.Environment.Exit (0);
 				}
