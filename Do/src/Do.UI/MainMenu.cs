@@ -48,7 +48,6 @@ namespace Do.UI
 
 		private MainMenu ()
 		{
-			System.Threading.Thread.CurrentThread.Name = "gtk";
 			foreach (IRunnableItem item in Services.Application.MainMenuItems)
 				Add (MenuItemFromRunnableItem (item));
 			ShowAll ();
