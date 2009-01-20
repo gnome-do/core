@@ -20,7 +20,7 @@
 using System;
 using NDesk.DBus;
 
-namespace Do.DBusLib
+namespace Do.Platform.Linux.DBus
 {
 	[Interface ("org.gnome.Do.Controller")]
 	public interface IController
@@ -31,10 +31,5 @@ namespace Do.DBusLib
 		/// SymbolWindow become visible and raise to the top.
 		/// </summary>
 		void Summon ();
-		
-		/// <summary>
-		/// Causes an IController instance to hide its user interface.
-		/// </summary>
-		void Vanish ();
 	}
 }

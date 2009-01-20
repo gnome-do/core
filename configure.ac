@@ -122,8 +122,6 @@ Do/Do.exe.config
 Do/Makefile
 Do/gnome-do
 Do/src/AssemblyInfo.cs
-Do.DBus/Makefile
-Do.DBus/src/AssemblyInfo.cs
 Do.Interface.Linux/Makefile
 Do.Interface.Linux/src/AssemblyInfo.cs
 Do.Interface.Linux.Classic/Makefile

@@ -1,4 +1,4 @@
-/* DBusRegistrar.cs
+/* Registrar.cs
  *
  * GNOME Do is the legal property of its developers. Please refer to the
  * COPYRIGHT file distributed with this source distribution.
@@ -22,20 +22,19 @@ using System;
 using NDesk.DBus;
 using org.freedesktop.DBus;
 
-namespace Do.DBusLib
+namespace Do.Platform.Linux.DBus
 {
 	/// <summary>
-	/// DBusRegistrar is used for getting DBus-ready classes on and off the
+	/// Registrar is used for getting DBus-ready classes on and off the
 	/// session bus.
 	/// </summary>
-	public class DBusRegistrar
+	static class Registrar
 	{
-		public static readonly string BusName = "org.gnome.Do";
+		const string BusName = "org.gnome.Do";
+		const string BaseItemPath = "/org/gnome/Do";
+		const string ControllerItemPath = BaseItemPath + "/Controller";
 		
-		public static readonly string BaseItemPath = "/org/gnome/Do";
-		public static readonly string ControllerItemPath = BaseItemPath + "/Controller";
-		
-		static DBusRegistrar ()
+		static Registrar ()
 		{
 			try {
 				BusG.Init ();

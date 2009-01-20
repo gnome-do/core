@@ -47,7 +47,7 @@ namespace Do.Core
 		/// </value>
 		TimeSpan UpdateTimeout {
 			get {
-				int minutes = DBus.PowerState.OnBattery () ? 10 : 2;
+				int minutes = Services.System.GetOnBatteryPower () ? 10 : 2;
 				return new TimeSpan (0, minutes, 0);
 			}
 		}
@@ -57,7 +57,7 @@ namespace Do.Core
 		/// </value>
 		TimeSpan UpdateRunTime {
 			get {
-				int milliseconds = DBus.PowerState.OnBattery () ? 600 : 200;
+				int milliseconds = Services.System.GetOnBatteryPower () ? 600 : 200;
 				return new TimeSpan (0, 0, 0, 0, milliseconds);
 			}
 		}

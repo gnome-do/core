@@ -29,14 +29,13 @@ using Mono.Unix;
 using Do;
 using Do.UI;
 using Do.Universe;
-using Do.DBusLib;
 using Do.Platform;
 using Do.Interface;
 
 namespace Do.Core
 {
 
-	public class Controller : IController, IDoController
+	public class Controller : IDoController
 	{
 		
 		const int SearchDelay = 250;

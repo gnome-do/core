@@ -1,6 +1,7 @@
-// PowerState.cs
-// 
-// Copyright (C) 2008 GNOME-Do
+// DefaultSystemService.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,32 +19,23 @@
 
 using System;
 
-using NDesk.DBus;
-using org.freedesktop.DBus;
+using Do.Platform;
 
-namespace Do.DBus
+namespace Do.Platform.Default
 {
-	[Interface("org.freedesktop.PowerManagement")]
-	public interface IPowerManagementCore
-	{
-		bool GetOnBattery ();
-	}
 	
-	public class PowerState
+	public class DefaultSystemService : AbstractSystemService
 	{
-		public static bool OnBattery  ()
+		
+		public override bool GetOnBatteryPower ()
 		{
-			try {
-				if (!Bus.Session.NameHasOwner ("org.freedesktop.PowerManagement")) return false;
-				
-				IPowerManagementCore power = 
-					Bus.Session.GetObject<IPowerManagementCore> ("org.freedesktop.PowerManagement", 
-					                                         new ObjectPath ("/org/freedesktop/PowerManagement"));
-				
-				return power.GetOnBattery ();
-			} catch {
-				return false;
-			}
+			Log<DefaultSystemService>.Debug ("Cannot GetOnBatteryPower");
+			return false;
+		}
+
+		public override void EnsureSingleApplicationInstance ()
+		{
+			Log<DefaultSystemService>.Debug ("Cannot EnsureSingleApplicationInstance");
 		}
 	}
 }

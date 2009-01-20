@@ -49,7 +49,7 @@ namespace Do.Universe
 		{
 			string text;
 			Clipboard primary;
-			
+
 			primary = Clipboard.Get (Gdk.Selection.Primary);
 			text = primary.WaitIsTextAvailable () ? primary.WaitForText () : "";
 			TextItem = new TextItem (text);
