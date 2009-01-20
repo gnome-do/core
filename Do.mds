@@ -2,7 +2,6 @@
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Debug" />
-      <Entry build="True" name="Do.DBus" configuration="Debug" />
       <Entry build="True" name="Do.Platform" configuration="Debug" />
       <Entry build="True" name="Do.Platform.Linux" configuration="Debug" />
       <Entry build="True" name="Do.Platform.Windows" configuration="Debug" />
@@ -17,7 +16,6 @@
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Release" />
-      <Entry build="True" name="Do.DBus" configuration="Release" />
       <Entry build="True" name="Do.Platform" configuration="Release" />
       <Entry build="True" name="Do.Platform.Linux" configuration="Release" />
       <Entry build="True" name="Do.Platform.Windows" configuration="Release" />
@@ -36,7 +34,6 @@
   </Configurations>
   <StartMode startupentry="Do" single="True">
     <Execute type="None" entry="Do" />
-    <Execute type="None" entry="Do.DBus" />
     <Execute type="None" entry="Do.Platform" />
     <Execute type="None" entry="Do.Platform.Linux" />
     <Execute type="None" entry="Do.Platform.Windows" />
@@ -52,7 +49,6 @@
   <MonoDevelop.ChangeLogAddIn.ChangeLogInfo policy="UpdateNearestChangeLog" />
   <Entries>
     <Entry filename="Do/Do.mdp" />
-    <Entry filename="Do.DBus/Do.DBus.mdp" />
     <Entry filename="Do.Platform/Do.Platform.mdp" />
     <Entry filename="Do.Platform.Linux/Do.Platform.Linux.mdp" />
     <Entry filename="Do.Platform.Windows/Do.Platform.Windows.mdp" />

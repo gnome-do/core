@@ -9,8 +9,11 @@ FILES = \
         gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/ConsoleCrayon.cs \
+	src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.DBus/IController.cs \
+	src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.DBus/Registrar.cs \
 	src/Do.Platform/Do.Platform.Linux/ConsoleLogService.cs \
 	src/Do.Platform/Do.Platform.Linux/EnvironmentService.cs \
+	src/Do.Platform/Do.Platform.Linux/SystemService.cs \
 	src/Do.Platform/Do.Platform.Linux/GConfPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs \
 	src/Do.Platform/Do.Platform.Linux/IConfigurable.cs \
@@ -46,6 +49,8 @@ REFERENCES =  \
 	$(GNOME_SHARP_20_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
 	$(GCONF_SHARP_20_LIBS) \
+	$(NDESK_DBUS_10_LIBS) \
+	$(NDESK_DBUS_GLIB_10_LIBS) \
 	$(NOTIFY_SHARP_LIBS)
 
 PROJECT_REFERENCES = \

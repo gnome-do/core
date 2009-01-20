@@ -1,6 +1,0 @@
-Name: Do.DBus
-Description: Do.DBus
-Version: @ABI_VERSION@
-
-Requires: 
-Libs: -r:@expanded_libdir@/@PACKAGE@/Do.DBus.dll

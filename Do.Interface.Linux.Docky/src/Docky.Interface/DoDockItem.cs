@@ -96,12 +96,12 @@ namespace Docky.Interface
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = !DockPreferences.IndicateMultipleWindows, 
 			                                       "Advanced Indicators", DockPreferences.IndicateMultipleWindows ? EnableIcon : DisableIcon);
 
-			yield return new SeparatorMenuButtonArgs ();
-			
 			if (Gdk.Screen.Default.NMonitors > 1)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
 				                                       "Switch Monitors", "display");
-
+			
+			yield return new SeparatorMenuButtonArgs ();
+			
 			foreach (IRunnableItem item in Services.Application.MainMenuItems) {
 				yield return new RunnableMenuButtonArgs (item);
 			}

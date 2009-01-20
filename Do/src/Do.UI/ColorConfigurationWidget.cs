@@ -1,4 +1,4 @@
-// HUDConfigurationWidget.cs
+// ColorConfigurationWidget.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -19,6 +19,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+
+using Mono.Unix;
 
 using Do.Universe;
 using Do.Platform;
@@ -52,15 +54,16 @@ namespace Do.UI
 				theme_combo.AppendText (theme.Name);
 				Themes.Add (theme.Name);
 			}
-		
-			if (!Screen.IsComposited)
+
+			SetupButtons ();
+			if (!Screen.IsComposited) {
+				composite_warning_widget.Visible = true;
 				theme_combo.Sensitive = false;
+				animation_check.State = shadow_check.State = Gtk.StateType.Insensitive;
+			}
 				
 			// Setup theme combo
 			theme_combo.Active = Math.Max (0, Themes.IndexOf (Do.Preferences.Theme));
-
-			SetupButtons ();
-			
 			pin_check.Active = Do.Preferences.AlwaysShowResults;
 		}
 		
@@ -82,7 +85,7 @@ namespace Do.UI
 			clear_background.Sensitive = true;
 			background_colorbutton.Sensitive = shadow_check.Sensitive = true;
 			shadow_check.Active = BezelDrawingArea.DrawShadow;
-			animation_checkbutton.Active = BezelDrawingArea.Animated;
+			animation_check.Active = BezelDrawingArea.Animated;
 			Gtk.Application.Invoke (delegate { setup = false; });
 		}
 		
@@ -123,25 +126,23 @@ namespace Do.UI
 
 		protected virtual void OnAnimationCheckbuttonClicked (object sender, System.EventArgs e)
 		{
-			BezelDrawingArea.Animated = animation_checkbutton.Active;
+			BezelDrawingArea.Animated = animation_check.Active;
 		}
 
-		public string Description {
-			get {
-				return "Color Configuration";
-			}
+		protected virtual void OnCompositeWarningInfoBtnClicked (object sender, System.EventArgs e)
+		{
 		}
 		
 		public new string Name {
-			get {
-				return "Appearance";
-			}
+			get { return Catalog.GetString ("Appearance"); }
+		}
+
+		public string Description {
+			get { return ""; }
 		}
 		
 		public string Icon {
-			get {
-				return "";
-			}
+			get { return ""; }
 		}
 	
 	}

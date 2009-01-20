@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.54])
 
-AC_INIT([gnome-do], [0.7.97])
+AC_INIT([gnome-do], [0.7.98])
 AM_INIT_AUTOMAKE([foreign tar-pax])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -122,8 +122,6 @@ Do/Do.exe.config
 Do/Makefile
 Do/gnome-do
 Do/src/AssemblyInfo.cs
-Do.DBus/Makefile
-Do.DBus/src/AssemblyInfo.cs
 Do.Interface.Linux/Makefile
 Do.Interface.Linux/src/AssemblyInfo.cs
 Do.Interface.Linux.Classic/Makefile

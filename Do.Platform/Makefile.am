@@ -16,6 +16,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Common/FileLogService.cs \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/DefaultApplicationService.cs \
+	src/Do.Platform/Do.Platform.Default/DefaultSystemService.cs \
 	src/Do.Platform/Do.Platform.Default/DefaultPathsService.cs \
 	src/Do.Platform/Do.Platform.Default/EnvironmentService.cs \
 	src/Do.Platform/Do.Platform.Default/LogService.cs \
@@ -43,6 +44,7 @@ FILES = \
 	src/Do.Platform/Notification.cs \
 	src/Do.Platform/NotificationEventArgs.cs \
 	src/Do.Platform/AbstractApplicationService.cs \
+	src/Do.Platform/AbstractSystemService.cs \
 	src/Do.Platform/PathsService.cs \
 	src/Do.Platform/PreferencesChangedEventArgs.cs \
 	src/Do.Platform/SecurePreferencesWrapper.cs \

@@ -33,8 +33,6 @@ namespace Do.UI {
             Stetic.Gui.Initialize(this);
             // Widget Do.UI.GeneralPreferencesWidget
             Stetic.BinContainer.Attach(this);
-            this.WidthRequest = 500;
-            this.HeightRequest = 580;
             this.Name = "Do.UI.GeneralPreferencesWidget";
             // Container child Do.UI.GeneralPreferencesWidget.Gtk.Container+ContainerChild
             this.alignment4 = new Gtk.Alignment(0.5F, 0.5F, 1F, 1F);

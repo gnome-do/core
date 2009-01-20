@@ -26,7 +26,6 @@ using Mono.Unix;
 
 using Do.UI;
 using Do.Core;
-using Do.DBusLib;
 using Do.Platform;
 
 namespace Do {
@@ -45,14 +44,14 @@ namespace Do {
 			Gtk.Application.Init ();
 			Gdk.Threads.Init ();
 
-			DetectInstanceAndExit ();
-			
 			// We are conservative with the log at first.
 			Log.DisplayLevel = LogLevel.Error;
 			if (CorePreferences.PeekDebug)
 				Log.DisplayLevel = LogLevel.Debug;
 
 			PluginManager.Initialize ();
+			Services.System.EnsureSingleApplicationInstance ();
+
 			Preferences = new CorePreferences ();
 
 			// Now we can set the preferred log level.
@@ -70,7 +69,6 @@ namespace Do {
 			
 			Controller.Initialize ();
 			UniverseManager.Initialize ();
-			DBusRegistrar.RegisterController (Controller);
 			
 			keybinder = new XKeybinder ();
 			SetupKeybindings ();
@@ -78,36 +76,10 @@ namespace Do {
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
 			
-			AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
-				
 			Gtk.Application.Run ();
 		}
+
 		
-		/// <summary>
-		/// Used to deal with older versions of mono hanging on exit.
-		/// </summary>
-		static void OnProcessExit (object o, EventArgs args)
-		{
-			Thread killThread = new Thread (() => {
-				Thread.Sleep (1000);
-				Log.Warn ("Process failed to exit cleanly, killing.");
-				Process.GetCurrentProcess ().Kill ();
-			});
-			
-			killThread.IsBackground = true;
-			killThread.Start ();
-		}
-
-		static void DetectInstanceAndExit ()
-		{
-			IController dbus_controller;
-			dbus_controller = DBusRegistrar.GetControllerInstance ();
-			if (dbus_controller != null) {
-				dbus_controller.Summon ();
-				System.Environment.Exit (0);
-			}
-		}
-
 		public static Controller Controller {
 			get {
 				if (controller == null)
@@ -126,13 +98,24 @@ namespace Do {
 		
 		static void SetupKeybindings ()
 		{
-			keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+			try {
+				keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+			} catch (Exception e) {
+				Log.Error ("Could not bind summon key: {0}", e.Message);
+				Log.Debug (e.StackTrace);
+			}
+
 			// Watch preferences for changes to the keybinding so we
 			// can change the binding when the user reassigns it.
 			Preferences.SummonKeybindingChanged += (sender, e) => {
-				if (e.OldValue != null)
-					keybinder.Unbind (e.OldValue as string);
-				keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+				try {
+					if (e.OldValue != null)
+						keybinder.Unbind (e.OldValue as string);
+					keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+				} catch (Exception ex) {
+					Log.Error ("Could not bind summon key: {0}", ex.Message);
+					Log.Debug (ex.StackTrace);
+				}
 			};
 		}
 		

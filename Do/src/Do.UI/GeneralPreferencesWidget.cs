@@ -17,9 +17,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Collections.Generic;
+
+using Gtk;
+using Mono.Unix;
 
 using Do;
 using Do.Platform;
@@ -28,19 +31,18 @@ using Do.Platform;
 // our reference to Do.Platform.Linux.
 using Do.Platform.Linux;
 
-using Gtk;
-
 namespace Do.UI
 {
     [System.ComponentModel.Category("Do")]
     [System.ComponentModel.ToolboxItem(true)]
     public partial class GeneralPreferencesWidget : Bin, IConfigurable
     {
-      const string AutostartAttribute = "X-GNOME-Autostart-enabled";
+		const string AutostartAttribute = "X-GNOME-Autostart-enabled";
 	
 		string AutostartDir {
 			get {
-				return System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "autostart");
+				return System.IO.Path.Combine (
+					Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "autostart");
 		    }
 		}
 		
@@ -51,7 +53,7 @@ namespace Do.UI
 		}
 		
 		new public string Name {
-		  get { return "General"; }
+		  get { return Catalog.GetString ("General"); }
 		}
 			
 		  public string Description {
