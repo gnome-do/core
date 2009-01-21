@@ -100,22 +100,6 @@ namespace Do.Platform.Linux
 			}
 		}
 
-		// This was our previous Open method, but it fails on mono < 2.0
-		void Open_MONO_2 (string open)
-		{
-			using (Process p = new Process ()) {
-				p.StartInfo.FileName = open;
-				p.StartInfo.UseShellExecute = true;
-				try {
-					Log<EnvironmentService>.Info ("Opening \"{0}\"...", open);
-					p.Start ();
-				} catch (Exception e) {
-					Log<EnvironmentService>.Error ("Failed to open {0}: {1}", open, e.Message);
-					Log<EnvironmentService>.Debug (e.StackTrace);
-				}
-			}
-		}
-
 		bool IsExecutableFile (string path)
 		{
 			if (path == null) throw new ArgumentNullException ("path");
