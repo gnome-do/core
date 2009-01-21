@@ -33,7 +33,7 @@ namespace Do.Platform.Linux
 	public class EnvironmentService : IEnvironmentService
 	{
 
-		static string last_command_found;
+		string last_command_found;
 
 		#region IEnvironmentService
 
@@ -76,7 +76,7 @@ namespace Do.Platform.Linux
 		{
 			line = line.Replace ("~", UserHome);
 
-			Log.Info ("Executing \"{0}\"", line);
+			Log<EnvironmentService>.Info ("Executing \"{0}\"", line);
 			if (File.Exists (line)) {
 				Process proc = new Process ();
 				proc.StartInfo.FileName = line;
@@ -89,22 +89,34 @@ namespace Do.Platform.Linux
 
 		#endregion
 
-		static void Open (string open)
+		void Open (string open)
+		{
+			try {
+				Log<EnvironmentService>.Info ("Opening \"{0}\"...", open);
+				Process.Start ("xdg-open", string.Format ("\"{0}\"", open));
+			} catch (Exception e) {
+				Log<EnvironmentService>.Error ("Failed to open {0}: {1}", open, e.Message);
+				Log<EnvironmentService>.Debug (e.StackTrace);
+			}
+		}
+
+		// This was our previous Open method, but it fails on mono < 2.0
+		void Open_MONO_2 (string open)
 		{
 			using (Process p = new Process ()) {
 				p.StartInfo.FileName = open;
 				p.StartInfo.UseShellExecute = true;
 				try {
-					Log.Info ("Opening \"{0}\"...", open);
+					Log<EnvironmentService>.Info ("Opening \"{0}\"...", open);
 					p.Start ();
 				} catch (Exception e) {
-					Log.Error ("Failed to open {0}: {1} \"{2}\"", open, e.GetType ().Name, e.Message);
-					Log.Debug (e.StackTrace);
+					Log<EnvironmentService>.Error ("Failed to open {0}: {1}", open, e.Message);
+					Log<EnvironmentService>.Debug (e.StackTrace);
 				}
 			}
 		}
 
-		static bool IsExecutableFile (string path)
+		bool IsExecutableFile (string path)
 		{
 			if (path == null) throw new ArgumentNullException ("path");
 
@@ -115,7 +127,7 @@ namespace Do.Platform.Linux
 				(info.FileAccessPermissions & FileAccessPermissions.UserExecute);
 		}
 
-		static bool CommandLineIsFoundOnPath (string line)
+		bool CommandLineIsFoundOnPath (string line)
 		{
 			string command;
 			
