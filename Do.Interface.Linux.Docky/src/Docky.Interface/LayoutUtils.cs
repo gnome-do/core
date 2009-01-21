@@ -67,8 +67,7 @@ namespace Docky.Interface
 
 		public static Gdk.Point RelativePointToRootPoint (this Gdk.Point relativePoint, Gtk.Window window)
 		{
-			Gdk.Rectangle geo, main;
-			geo = MonitorGemonetry ();
+			Gdk.Rectangle main;
 			window.GetPosition (out main.X, out main.Y);
 			return new Gdk.Point (main.X + relativePoint.X, main.Y + relativePoint.Y);
 		}

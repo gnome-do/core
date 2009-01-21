@@ -175,6 +175,8 @@ namespace Docky.Interface
 		new DockItemMenu PopupMenu { get; set; }
 		
 		bool GtkDragging { get; set; }
+
+		bool CursorIsOverDockArea {	get; set; }
 		
 		SummonModeRenderer SummonRenderer { get; set; }
 		
@@ -375,18 +377,6 @@ namespace Docky.Interface
 				return DragEdge.None;
 			}
 		}
-		
-		#region Animation properties
-		bool CursorIsOverDockArea {	get; set; }
-		
-		bool IconAnimationNeeded {
-			get {
-				return AnimationState ["BounceAnimationNeeded"] ||
-					   AnimationState ["IconInsertAnimationNeeded"] ||
-					   AnimationState ["UrgentAnimationNeeded"];
-			}
-		}
-		#endregion
 		
 		public DockArea (DockWindow window) : base ()
 		{
@@ -1027,9 +1017,6 @@ namespace Docky.Interface
 				//handling right clicks for those icons which request simple right click handling
 				if (evnt.Button == 3) {
 					if (CurrentDockItem is IRightClickable && (CurrentDockItem as IRightClickable).GetMenuItems ().Any ()) {
-						Gdk.Rectangle geo;
-						geo = LayoutUtils.MonitorGemonetry ();
-						
 						Gdk.Point itemPosition;
 						double itemZoom;
 						IconZoomedPosition (PositionProvider.IndexAtPosition (Cursor), out itemPosition, out itemZoom);

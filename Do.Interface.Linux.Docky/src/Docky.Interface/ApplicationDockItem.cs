@@ -64,7 +64,6 @@ namespace Docky.Interface
 		const string MinimizeIcon = "down";
 		
 		int windowCount;
-		bool urgent;
 		
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
@@ -170,10 +169,6 @@ namespace Docky.Interface
 			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
 		}
 
-		public override bool NeedsAttention {
-			get { return urgent; }
-		}
-		
 		public ApplicationDockItem (IEnumerable<Wnck.Application> applications) : base ()
 		{
 			Applications = applications;
@@ -182,18 +177,24 @@ namespace Docky.Interface
 			
 			foreach (Wnck.Window w in VisibleWindows) {
 				w.StateChanged += HandleStateChanged;
+				w.NameChanged += HandleNameChanged;
 			}
 
 			base.SetText (Description);
 		}
 
+		void HandleNameChanged(object sender, EventArgs e)
+		{
+			SetText (Description);
+		}
+
 		void HandleStateChanged(object o, Wnck.StateChangedArgs args)
 		{
-			bool tmp = urgent;
-			urgent = DetermineUrgencyStatus ();
-			if (urgent != tmp) {
-				UpdateRequestType req = (urgent) ? UpdateRequestType.NeedsAttentionSet : UpdateRequestType.NeedsAttentionUnset;
-				if (urgent)
+			bool tmp = NeedsAttention;
+			NeedsAttention = DetermineUrgencyStatus ();
+			if (NeedsAttention != tmp) {
+				UpdateRequestType req = (NeedsAttention) ? UpdateRequestType.NeedsAttentionSet : UpdateRequestType.NeedsAttentionUnset;
+				if (NeedsAttention)
 					AttentionRequestStartTime = DateTime.UtcNow;
 				OnUpdateNeeded (new UpdateRequestArgs (this, req));
 			}
@@ -326,8 +327,10 @@ namespace Docky.Interface
 
 		public override void Dispose ()
 		{
-			foreach (Wnck.Window w in VisibleWindows)
+			foreach (Wnck.Window w in VisibleWindows) {
 				w.StateChanged -= HandleStateChanged;
+				w.NameChanged -= HandleNameChanged;
+			}
 			
 			base.Dispose ();
 		}

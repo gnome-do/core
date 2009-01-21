@@ -60,8 +60,6 @@ namespace Docky.Interface
 			return IconProvider.PixbufFromIconName (TrashEmptyIcon, DockPreferences.FullIconSize);
 		}
 
-		#region IDockDragAwareItem implementation 
-		
 		public override bool ReceiveItem (string item)
 		{
 			bool trashHadFiles = Directory.GetFiles (Trash).Any ();
@@ -86,8 +84,6 @@ namespace Docky.Interface
 				RedrawIcon ();
 			return true;
 		}
-		
-		#endregion 
 		
 		public override void Clicked (uint button)
 		{

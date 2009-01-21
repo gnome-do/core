@@ -59,13 +59,13 @@ namespace Docky.Interface
 		
 		string DesktopFilesPath {
 			get {
-				return Path.Combine (Services.Paths.UserDataDirectory, "dock_desktop_files");
+				return Path.Combine (Services.Paths.UserDataDirectory, GetType ().Name + "DesktopFiles");
 			}
 		}
 		
 		string SortDictionaryPath {
 			get { 
-				return Path.Combine (Services.Paths.UserDataDirectory, "dock_sort_dictionary");
+				return Path.Combine (Services.Paths.UserDataDirectory, GetType ().Name + "SortDictionary");
 			}
 		}
 		
@@ -73,7 +73,7 @@ namespace Docky.Interface
 			get {
 				if (!DragableItems.Any ())
 					return 0;
-				//TODO make sane once mono 1.9 support is dropped
+				// TODO make sane once mono 1.9 support is dropped
 				return DragableItems.Max ((Func<DockItem, int>) (di => di.Position));
 			}
 		}

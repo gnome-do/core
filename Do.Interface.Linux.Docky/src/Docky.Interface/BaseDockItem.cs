@@ -41,115 +41,49 @@ namespace Docky.Interface
 		uint size_changed_timer;
 		int current_size;
 		string description;
-		
+		bool needs_attention;
+
+		/// <value>
+		/// The currently requested animation type
+		/// </value>
+		public virtual ClickAnimationType AnimationType { get; protected set; }
+
+		/// <value>
+		/// The time at which the NeedsAttention flag was set true
+		/// </value>
+		public virtual DateTime AttentionRequestStartTime { get; protected set; }
+
+		/// <value>
+		/// When this item was added to the Dock
+		/// </value>
+		public virtual DateTime DockAddItem { get; set; }
+
+		/// <value>
+		/// The last time this icon was "clicked" that required an animation
+		/// </value>
+		public virtual DateTime LastClick { get; protected set; }
+
+		/// <value>
+		/// Determines if drop actions will be passed on to the icon
+		/// </value>
 		public virtual bool IsAcceptingDrops { 
 			get { return false; } 
 		}
 		
-		public virtual bool ReceiveItem (string item) 
-		{
-			return false;
-		}
-
-		public virtual bool NeedsAttention {
+		/// <value>
+		/// Determines the type of indicator drawn under the item
+		/// </value>
+		public virtual bool NeedsAttention { 
 			get {
-				return false;
+				return needs_attention;
 			}
-			protected set { }
-		}
-		
-		public virtual DateTime AttentionRequestStartTime { get; protected set; }
-
-		protected void OnUpdateNeeded (UpdateRequestArgs args) 
-		{
-			if (UpdateNeeded != null)
-				UpdateNeeded (this, args);
-		}
-		
-		public virtual Surface GetIconSurface (Surface similar)
-		{
-			return (icon_surface != null) ? icon_surface : icon_surface = MakeIconSurface (similar);
-		}
-		
-		protected virtual Surface MakeIconSurface (Surface similar)
-		{
-			current_size = DockPreferences.FullIconSize;
-			Surface tmp_surface = similar.CreateSimilar (similar.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
-			Context cr = new Context (tmp_surface);
-			
-			Gdk.Pixbuf pbuf = GetSurfacePixbuf ();
-			if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
-				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
-				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
-				pbuf.Dispose ();
-				pbuf = temp;
+			protected set {
+				if (value == needs_attention)
+					return;
+				needs_attention = value;
+				if (needs_attention)
+					AttentionRequestStartTime = DateTime.UtcNow;
 			}
-			
-			Gdk.CairoHelper.SetSourcePixbuf (cr, 
-			                                 pbuf, 
-			                                 (DockPreferences.FullIconSize - pbuf.Width) / 2,
-			                                 (DockPreferences.FullIconSize - pbuf.Height) / 2);
-			cr.Paint ();
-			
-			pbuf.Dispose ();
-			(cr as IDisposable).Dispose ();
-			
-			return tmp_surface;
-		}
-		
-		protected abstract Pixbuf GetSurfacePixbuf ();
-		
-		/// <summary>
-		/// Gets a surface that is useful for display by the Dock based on the Description
-		/// </summary>
-		/// <param name="similar">
-		/// A <see cref="Surface"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="Surface"/>
-		/// </returns>
-		public virtual Surface GetTextSurface (Surface similar)
-		{
-			if (string.IsNullOrEmpty (description))
-				return null;
-			
-			if (text_surface == null || DockPreferences.Orientation != current_orientation) {
-				if (text_surface != null)
-					text_surface.Destroy ();
-				
-				current_orientation = DockPreferences.Orientation;
-				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (description), 
-				                                            DockPreferences.TextWidth, 
-				                                            similar, 
-				                                            current_orientation);
-			}
-			return text_surface;
-		}
-		
-		public virtual Pixbuf GetDragPixbuf ()
-		{
-			return null;
-		}
-		
-		/// <summary>
-		/// Called whenever the icon receives a click event
-		/// </summary>
-		/// <param name="button">
-		/// A <see cref="System.UInt32"/>
-		/// </param>
-		/// <param name="controller">
-		/// A <see cref="IDoController"/>
-		/// </param>
-		public virtual void Clicked (uint button)
-		{
-			LastClick = DateTime.UtcNow;
-		}
-		
-		/// <summary>
-		/// Called whenever an icon get repositioned, so it can update its child applications icon regions
-		/// </summary>
-		public virtual void SetIconRegion (Gdk.Rectangle region)
-		{
 		}
 		
 		/// <value>
@@ -180,19 +114,6 @@ namespace Docky.Interface
 			get { return 0; }
 		}
 		
-		/// <value>
-		/// The last time this icon was "clicked" that required an animation
-		/// </value>
-		public virtual DateTime LastClick {
-			get;
-			protected set;
-		}
-		
-		/// <value>
-		/// When this item was added to the Dock
-		/// </value>
-		public virtual DateTime DockAddItem { get; set; }
-		
 		public TimeSpan TimeSinceClick {
 			get { return DateTime.UtcNow - LastClick; }
 		}
@@ -201,57 +122,102 @@ namespace Docky.Interface
 			get { return DateTime.UtcNow - DockAddItem; }
 		}
 		
-		public virtual ClickAnimationType AnimationType { get; protected set; }
-		
 		public BaseDockItem ()
 		{
+			NeedsAttention = false;
 			description = "";
 			AttentionRequestStartTime =  LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			DockPreferences.IconSizeChanged += OnIconSizeChanged;
 		}
 
-		protected void RedrawIcon ()
+		protected abstract Pixbuf GetSurfacePixbuf ();
+
+		/// <summary>
+		/// Called whenever the icon receives a click event
+		/// </summary>
+		/// <param name="button">
+		/// A <see cref="System.UInt32"/>
+		/// </param>
+		/// <param name="controller">
+		/// A <see cref="IDoController"/>
+		/// </param>
+		public virtual void Clicked (uint button)
 		{
-			ResetIconSurface ();
+			LastClick = DateTime.UtcNow;
 		}
 
-		protected void SetText (string text)
+		Surface CopySurface (Surface source, int width, int height)
 		{
-			description = text;
-			ResetTextSurface ();
-		}
-		
-		void ResetSurfaces ()
-		{
-			ResetTextSurface ();
-			ResetBufferSurface ();
-			ResetIconSurface ();
-		}
-
-		void ResetTextSurface ()
-		{
-			if (text_surface != null) {
-				text_surface.Destroy ();
-				text_surface = null;
+			Surface sr = source.CreateSimilar (source.Content, width, height);
+			using (Context cr = new Context (sr)) {
+				source.Show (cr, 0, 0);
 			}
+			return sr;
 		}
 
-		void ResetBufferSurface ()
+		public virtual Pixbuf GetDragPixbuf ()
 		{
-			if (resize_buffer != null) {
-				resize_buffer.Destroy ();
-				resize_buffer = null;
-			}
+			return null;
 		}
 
-		void ResetIconSurface ()
+		public virtual Surface GetIconSurface (Surface similar)
 		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
-			}
+			return (icon_surface != null) ? icon_surface : icon_surface = MakeIconSurface (similar);
 		}
-		
+
+		/// <summary>
+		/// Gets a surface that is useful for display by the Dock based on the Description
+		/// </summary>
+		/// <param name="similar">
+		/// A <see cref="Surface"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="Surface"/>
+		/// </returns>
+		public virtual Surface GetTextSurface (Surface similar)
+		{
+			if (string.IsNullOrEmpty (description))
+				return null;
+			
+			if (text_surface == null || DockPreferences.Orientation != current_orientation) {
+				if (text_surface != null)
+					text_surface.Destroy ();
+				
+				current_orientation = DockPreferences.Orientation;
+				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (description), 
+				                                            DockPreferences.TextWidth, 
+				                                            similar, 
+				                                            current_orientation);
+			}
+			return text_surface;
+		}
+
+		protected virtual Surface MakeIconSurface (Surface similar)
+		{
+			current_size = DockPreferences.FullIconSize;
+			Surface tmp_surface = similar.CreateSimilar (similar.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
+			Context cr = new Context (tmp_surface);
+			
+			Gdk.Pixbuf pbuf = GetSurfacePixbuf ();
+			if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
+				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
+				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
+				pbuf.Dispose ();
+				pbuf = temp;
+			}
+			
+			Gdk.CairoHelper.SetSourcePixbuf (cr, 
+			                                 pbuf, 
+			                                 (DockPreferences.FullIconSize - pbuf.Width) / 2,
+			                                 (DockPreferences.FullIconSize - pbuf.Height) / 2);
+			cr.Paint ();
+			
+			pbuf.Dispose ();
+			(cr as IDisposable).Dispose ();
+			
+			return tmp_surface;
+		}
+
 		void OnIconSizeChanged ()
 		{
 			if (size_changed_timer > 0)
@@ -278,16 +244,67 @@ namespace Docky.Interface
 				return false;
 			});
 		}
-		
-		Surface CopySurface (Surface source, int width, int height)
+
+		protected void OnUpdateNeeded (UpdateRequestArgs args) 
 		{
-			Surface sr = source.CreateSimilar (source.Content, width, height);
-			using (Context cr = new Context (sr)) {
-				source.Show (cr, 0, 0);
-			}
-			return sr;
+			if (UpdateNeeded != null)
+				UpdateNeeded (this, args);
 		}
-		
+
+		public virtual bool ReceiveItem (string item) 
+		{
+			return false;
+		}
+
+		protected void RedrawIcon ()
+		{
+			ResetIconSurface ();
+		}
+
+		void ResetBufferSurface ()
+		{
+			if (resize_buffer != null) {
+				resize_buffer.Destroy ();
+				resize_buffer = null;
+			}
+		}
+
+		void ResetIconSurface ()
+		{
+			if (icon_surface != null) {
+				icon_surface.Destroy ();
+				icon_surface = null;
+			}
+		}
+
+		void ResetSurfaces ()
+		{
+			ResetTextSurface ();
+			ResetBufferSurface ();
+			ResetIconSurface ();
+		}
+
+		void ResetTextSurface ()
+		{
+			if (text_surface != null) {
+				text_surface.Destroy ();
+				text_surface = null;
+			}
+		}
+
+		/// <summary>
+		/// Called whenever an icon get repositioned, so it can update its child applications icon regions
+		/// </summary>
+		public virtual void SetIconRegion (Gdk.Rectangle region)
+		{
+		}
+
+		protected void SetText (string text)
+		{
+			description = text;
+			ResetTextSurface ();
+		}
+
 		#region IDisposable implementation 
 		
 		public virtual void Dispose ()

@@ -46,7 +46,7 @@ namespace Docky.Interface
 		List<Wnck.Application> apps;
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
-		bool needs_attention, accepting_drops;
+		bool accepting_drops;
 		uint handle_timer;
 		int window_count;
 		
@@ -76,19 +76,6 @@ namespace Docky.Interface
 		
 		public override int WindowCount {
 			get { return window_count; }
-		}
-		
-		public override bool NeedsAttention { 
-			get { 
-				return needs_attention; 
-			} 
-			
-			protected set {
-				if (needs_attention == value)
-					return;
-				needs_attention = value;
-				AttentionRequestStartTime = DateTime.UtcNow;
-			}
 		}
 		
 		public IEnumerable<Act> ActionsForItem {
