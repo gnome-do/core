@@ -45,7 +45,7 @@ namespace Do.Universe.Linux
 
 		public override string Description {
 			get {
-				string warning = Catalog.GetString ("{0} does not appear to be a valid application.");
+				string warning = Catalog.GetString ("Error reading {0}.");
 				return string.Format (warning, ApplicationPath);
 			}
 		}
