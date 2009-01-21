@@ -57,7 +57,7 @@ namespace Do.Universe.Linux {
 					appItem = new ApplicationItem (item);
 				} catch (Exception e) {
 					appItem = null;
-					item.Dispose ();
+					if (item != null) item.Dispose ();
 					Log.Error ("Could not load desktop item: {0}", e.Message);
 					Log.Debug (e.StackTrace);
 				}
