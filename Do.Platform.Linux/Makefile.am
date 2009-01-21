@@ -22,6 +22,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/TrayIconService.cs \
 	src/Do.Platform/Do.Platform.Linux/UniverseFactoryService.cs \
 	src/Do.Universe/ApplicationItem.cs \
+	src/Do.Universe/NullApplicationItem.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/CopyToClipboardAction.cs \
