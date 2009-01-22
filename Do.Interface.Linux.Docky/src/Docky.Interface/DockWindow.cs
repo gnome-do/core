@@ -63,7 +63,7 @@ namespace Docky.Interface
 		public void Initialize (IDoController controller)
 		{
 			this.controller = controller;
-			controller.Orientation = ControlOrientation.Horizontal;
+			controller.Orientation = ControlOrientation.Vertical;
 			
 			AppPaintable = true;
 			Decorated = false;

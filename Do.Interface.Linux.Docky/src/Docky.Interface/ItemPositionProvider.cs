@@ -32,11 +32,10 @@ namespace Docky.Interface
 	{
 		const int HorizontalBuffer = 7;
 		
-		DockItemProvider item_provider;
-		Rectangle clip_area;
+		DockArea parent;
 		
 		List<BaseDockItem> DockItems {
-			get { return item_provider.DockItems; }
+			get { return parent.ItemProvider.DockItems; }
 		}
 		
 		/// <value>
@@ -66,58 +65,63 @@ namespace Docky.Interface
 		}
 		
 		int Width {
-			get { return clip_area.Width; }
+			get { return parent.Width; }
 		}
 		
 		int Height {
-			get { return clip_area.Height; }
+			get { return parent.Height; }
 		}
 		
 		int ZoomSize {
 			get { return DockPreferences.ZoomSize; }
 		}
 		
-		public Rectangle MinimumDockArea { 
-			get {
-				int widthOffset;
-
-				if (DockPreferences.DockIsHorizontal)
-					widthOffset = (Width - DockWidth) / 2;
-				else
-					widthOffset = (Height - DockWidth) / 2;
-				
-				Gdk.Rectangle rect;
-				switch (DockPreferences.Orientation) {
-				case DockOrientation.Bottom:
-					rect = new Gdk.Rectangle (widthOffset, Height - DockHeight, DockWidth, DockHeight);
-					break;
-					
-				case DockOrientation.Left:
-					rect = new Gdk.Rectangle (0, widthOffset, DockHeight, DockWidth);
-					break;
-
-				case DockOrientation.Right:
-					rect = new Gdk.Rectangle (Width - DockHeight, widthOffset, DockHeight, DockWidth);
-					break;
-
-				case DockOrientation.Top:
-					rect = new Gdk.Rectangle (widthOffset, 0, DockWidth, DockHeight);
-					break;
-				default:
-					rect = new Gdk.Rectangle (0, 0, 0, 0);
-					break;
-				}
-				rect.X += clip_area.X;
-				rect.Y += clip_area.Y;
-
-				return rect;
-			}
-		}
+		public Rectangle MinimumDockArea { get; private set; }
 		
-		public ItemPositionProvider(DockItemProvider itemProvider, Gdk.Rectangle clipArea)
+		public ItemPositionProvider(DockArea parent)
 		{
-			item_provider = itemProvider;
-			clip_area = clipArea;
+			this.parent = parent;
+			MinimumDockArea = CalculateMinimumArea ();
+			parent.CursorUpdated += HandleCursorUpdated;
+		}
+
+		void HandleCursorUpdated ()
+		{
+			MinimumDockArea = CalculateMinimumArea ();
+		}
+
+		Rectangle CalculateMinimumArea ()
+		{
+			int widthOffset;
+
+			if (DockPreferences.DockIsHorizontal)
+				widthOffset = (Width - DockWidth) / 2;
+			else
+				widthOffset = (Height - DockWidth) / 2;
+			
+			Gdk.Rectangle rect;
+			switch (DockPreferences.Orientation) {
+			case DockOrientation.Bottom:
+				rect = new Gdk.Rectangle (widthOffset, Height - DockHeight, DockWidth, DockHeight);
+				break;
+				
+			case DockOrientation.Left:
+				rect = new Gdk.Rectangle (0, widthOffset, DockHeight, DockWidth);
+				break;
+
+			case DockOrientation.Right:
+				rect = new Gdk.Rectangle (Width - DockHeight, widthOffset, DockHeight, DockWidth);
+				break;
+
+			case DockOrientation.Top:
+				rect = new Gdk.Rectangle (widthOffset, 0, DockWidth, DockHeight);
+				break;
+			default:
+				rect = new Gdk.Rectangle (0, 0, 0, 0);
+				break;
+			}
+
+			return rect;
 		}
 		
 		public Rectangle DockArea (double zoomByEntryTime, Gdk.Point cursor)
@@ -162,8 +166,6 @@ namespace Docky.Interface
 			}
 			
 			Gdk.Rectangle rect = new Gdk.Rectangle (leftEdge, topEdge, Math.Abs (leftEdge - rightEdge), Math.Abs (topEdge - bottomEdge));
-			rect.X += clip_area.X;
-			rect.Y += clip_area.Y;
 
 			return rect;
 		}
@@ -173,14 +175,24 @@ namespace Docky.Interface
 			// the first icons center is at dock X + border + IconBorder + half its width
 			// it is subtle, but it *is* a mistake to add the half width until the end.  adding
 			// premature will add the wrong width.  It hurts the brain.
-			if (!DockItems.Any ())
+			if (DockItems.Count <= icon)
 				return new Gdk.Point (0, 0);
 
 			int startOffset = HorizontalBuffer + DockPreferences.IconBorderWidth;
-			
-			for (int i = 0; i < icon; i++)
-				startOffset += DockItems [i].Width + 2 * DockPreferences.IconBorderWidth;
-			
+
+
+			// this awkward structure is faster than the simpler implemenation by about 30%
+			// while this would normally mean nothing, this method sees lots of use and can
+			// afford a bit of ugly in exchange for a bit of speed.
+			int i = 0;
+			foreach (BaseDockItem di in DockItems) {
+				if (!(i < icon))
+					break;
+				startOffset += di.Width;
+				i++;
+			}
+
+			startOffset += icon * 2 * DockPreferences.IconBorderWidth;
 			startOffset += DockItems [icon].Width / 2;
 
 			switch (DockPreferences.Orientation) {
@@ -298,14 +310,16 @@ namespace Docky.Interface
 		public int IndexAtPosition (Gdk.Point location)
 		{
 			int position = DockPreferences.DockIsHorizontal ? location.X : location.Y;
-			
 			int startOffset = DockPreferences.DockIsHorizontal ? MinimumDockArea.X + HorizontalBuffer : MinimumDockArea.Y + HorizontalBuffer;
+
+			int i = 0;
 			int width;
-			for (int i = 0; i < DockItems.Count; i++) {
-				width = DockItems [i].Width + 2 * DockPreferences.IconBorderWidth;
+			foreach (BaseDockItem di in DockItems) {
+				width = di.Width + 2 * DockPreferences.IconBorderWidth;
 				if (position >= startOffset && position <= startOffset + width)
 					return i;
 				startOffset += width;
+				i++;
 			}
 			return -1;
 		}
@@ -314,7 +328,7 @@ namespace Docky.Interface
 		
 		public void Dispose ()
 		{
-			item_provider = null;
+			parent = null;
 		}
 		
 		#endregion 

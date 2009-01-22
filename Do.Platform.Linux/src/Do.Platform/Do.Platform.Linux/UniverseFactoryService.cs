@@ -36,7 +36,10 @@ namespace Do.Platform.Linux
 
 		public IApplicationItem NewApplicationItem (string path)
 		{
-			return ApplicationItem.MaybeCreateFromDesktopItem (path);
+			// We attempt to create the Application item, but return a NullApplicationItem
+			// instead of null if MaybeCreateFromDesktopItem fails.
+			IApplicationItem maybe = ApplicationItem.MaybeCreateFromDesktopItem (path);
+			return maybe ?? new NullApplicationItem (path);
 		}
 	}
 }

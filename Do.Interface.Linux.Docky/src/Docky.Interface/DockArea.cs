@@ -50,6 +50,8 @@ namespace Docky.Interface
 			Right,
 		}
 
+		public event System.Action CursorUpdated;
+		
 		public readonly TimeSpan BaseAnimationTime = new TimeSpan (0, 0, 0, 0, 150);
 		
 		const uint OffDockWakeupTime = 250;
@@ -78,7 +80,6 @@ namespace Docky.Interface
 		DragEdge drag_edge;
 		
 		DockWindow window;
-		DockItemProvider item_provider;
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		
 		Matrix default_matrix;
@@ -167,6 +168,8 @@ namespace Docky.Interface
 		#endregion
 		
 		public new DockState State { get; set; }
+
+		public DockItemProvider ItemProvider { get; set; }
 		
 		DockAnimationState AnimationState { get; set; }
 		
@@ -181,7 +184,7 @@ namespace Docky.Interface
 		SummonModeRenderer SummonRenderer { get; set; }
 		
 		List<BaseDockItem> DockItems { 
-			get { return item_provider.DockItems; } 
+			get { return ItemProvider.DockItems; } 
 		}
 		
 		BaseDockItem CurrentDockItem {
@@ -287,6 +290,9 @@ namespace Docky.Interface
 			set {
 				bool cursorIsOverDockArea = CursorIsOverDockArea;
 				cursor = value;
+
+				if (CursorUpdated != null)
+					CursorUpdated ();
 				
 				// We set this value here instead of dynamically checking due to performance constraints.
 				// Ideally our CursorIsOverDockArea getter would do this fairly simple calculation, but it gets
@@ -386,9 +392,9 @@ namespace Docky.Interface
 			SetSize ();
 			SetSizeRequest (Width, Height);
 			
-			item_provider = new DockItemProvider ();
+			ItemProvider = new DockItemProvider ();
 			State = new DockState ();
-			PositionProvider = new ItemPositionProvider (item_provider, new Gdk.Rectangle (0, 0, Width, Height));
+			PositionProvider = new ItemPositionProvider (this);
 			
 			AnimationState = new DockAnimationState ();
 			BuildAnimationStateEngine ();
@@ -431,8 +437,8 @@ namespace Docky.Interface
 
 		void RegisterEvents ()
 		{
-			item_provider.DockItemsChanged += OnDockItemsChanged;
-			item_provider.ItemNeedsUpdate += HandleItemNeedsUpdate;
+			ItemProvider.DockItemsChanged += OnDockItemsChanged;
+			ItemProvider.ItemNeedsUpdate += HandleItemNeedsUpdate;
 			
 			PopupMenu.Hidden += OnDockItemMenuHidden;
 			PopupMenu.Shown += OnDockItemMenuShown;
@@ -452,8 +458,8 @@ namespace Docky.Interface
 
 		void UnregisterEvents ()
 		{
-			item_provider.DockItemsChanged -= OnDockItemsChanged;
-			item_provider.ItemNeedsUpdate -= HandleItemNeedsUpdate;
+			ItemProvider.DockItemsChanged -= OnDockItemsChanged;
+			ItemProvider.ItemNeedsUpdate -= HandleItemNeedsUpdate;
 			
 			PopupMenu.Hidden -= OnDockItemMenuHidden;
 			PopupMenu.Shown -= OnDockItemMenuShown;
@@ -627,7 +633,7 @@ namespace Docky.Interface
 			// Don't draw the icon we are dragging around
 			if (GtkDragging) {
 				int item = PositionProvider.IndexAtPosition (remove_drag_start_point);
-				if (item == icon && item_provider.ItemCanBeMoved (item))
+				if (item == icon && ItemProvider.ItemCanBeMoved (item))
 					return;
 			}
 			
@@ -725,7 +731,7 @@ namespace Docky.Interface
 			// we do a null check here to allow things like separator items to supply
 			// a null.  This allows us to draw nothing at all instead of rendering a
 			// blank surface (which is slow)
-			if (!PopupMenu.Visible && PositionProvider.IndexAtPosition (Cursor) == icon && 
+			if (!PopupMenu.Visible && PositionProvider.IndexAtPosition (Cursor) == icon &&
 			    CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null) {
 
 				Gdk.Point textPoint;
@@ -850,7 +856,7 @@ namespace Docky.Interface
 					.ForEach (uri => CurrentDockItem.ReceiveItem (uri.Substring ("file://".Length)));
 			} else {
 				uriList.Where (uri => uri.StartsWith ("file://"))
-					.ForEach (uri => item_provider.AddCustomItem (uri.Substring ("file://".Length)));
+					.ForEach (uri => ItemProvider.AddCustomItem (uri.Substring ("file://".Length)));
 			}
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
@@ -863,7 +869,7 @@ namespace Docky.Interface
 			int item = PositionProvider.IndexAtPosition (Cursor);
 			
 			Gdk.Pixbuf pbuf;
-			if (item == -1 || !item_provider.ItemCanBeMoved (item)) {
+			if (item == -1 || !ItemProvider.ItemCanBeMoved (item)) {
 				pbuf = IconProvider.PixbufFromIconName ("gtk-remove", DockPreferences.IconSize);
 			} else {
 				pbuf = DockItems [item].GetDragPixbuf ();
@@ -881,9 +887,9 @@ namespace Docky.Interface
 				int draggedPosition = PositionProvider.IndexAtPosition (remove_drag_start_point);
 				int currentPosition = PositionProvider.IndexAtPosition (Cursor);
 				if (context.DestWindow != window.GdkWindow || !CursorIsOverDockArea) {
-					item_provider.RemoveItem (PositionProvider.IndexAtPosition (remove_drag_start_point));
+					ItemProvider.RemoveItem (PositionProvider.IndexAtPosition (remove_drag_start_point));
 				} else if (CursorIsOverDockArea && currentPosition != draggedPosition) {
-					item_provider.MoveItemToPosition (draggedPosition, currentPosition);
+					ItemProvider.MoveItemToPosition (draggedPosition, currentPosition);
 				}
 				AnimatedDraw ();
 			}
@@ -898,7 +904,7 @@ namespace Docky.Interface
 			ManualCursorUpdate ();
 			return base.OnEnterNotifyEvent (evnt);
 		}
-		
+
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
 			bool ret_val = base.OnExposeEvent (evnt);
@@ -917,7 +923,7 @@ namespace Docky.Interface
 			cr.AlphaFill ();
 			cr.Operator = Operator.Over;
 			
-			if (item_provider.UpdatesEnabled)
+			if (ItemProvider.UpdatesEnabled)
 				DrawDrock (cr);
 			(cr as IDisposable).Dispose ();
 			
@@ -929,7 +935,7 @@ namespace Docky.Interface
 			cr2.Operator = Operator.Source;
 			cr2.Paint ();
 			(cr2 as IDisposable).Dispose ();
-			
+
 			return ret_val;
 		}
 		
@@ -1000,7 +1006,7 @@ namespace Docky.Interface
 			if (InputInterfaceVisible) {
 				switch (SummonRenderer.GetClickEvent (GetDockArea ())) {
 				case SummonClickEvent.AddItemToDock:
-					item_provider.AddCustomItem (State [State.CurrentPane]);
+					ItemProvider.AddCustomItem (State [State.CurrentPane]);
 					window.RequestClickOff ();
 					break;
 				case SummonClickEvent.None:
@@ -1185,7 +1191,7 @@ namespace Docky.Interface
 			AnimatedDraw ();
 			
 			GLib.Timeout.Add (500, () => { 
-				item_provider.ForceUpdate (); 
+				ItemProvider.ForceUpdate (); 
 				return false; 
 			});
 		}
@@ -1210,8 +1216,8 @@ namespace Docky.Interface
 			SummonRenderer.Dispose ();
 			SummonRenderer = null;
 			
-			item_provider.Dispose ();
-			item_provider = null;
+			ItemProvider.Dispose ();
+			ItemProvider = null;
 
 			PositionProvider.Dispose ();
 			PositionProvider = null;

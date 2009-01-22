@@ -47,7 +47,10 @@ namespace Docky.Interface.Menus
 		
 		Gtk.Alignment align;
 		
-		public Gtk.VBox Container { get; private set; } 
+		public Gtk.VBox Container { get; private set; }
+
+		// we are making a new one here for speed reasons
+		public new bool Visible { get; private set; }
 		
 		public DockPopupMenu() : base (Gtk.WindowType.Popup)
 		{
@@ -175,6 +178,18 @@ namespace Docky.Interface.Menus
 				Hide ();
 			}
 			return base.OnKeyReleaseEvent (evnt);
+		}
+
+		protected override void OnShown ()
+		{
+			Visible = true;
+			base.OnShown ();
+		}
+
+		protected override void OnHidden ()
+		{
+			Visible = false;
+			base.OnHidden ();
 		}
 
 		void DrawBackground (Context cr)

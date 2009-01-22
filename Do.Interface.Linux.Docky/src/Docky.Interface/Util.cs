@@ -39,7 +39,10 @@ namespace Docky.Interface
 	
 	public static class Util
 	{
+		static int IndicatorSize = 9;
+		static int UrgentIndicatorSize = 12;
 		static int Height = 26;
+		static Surface indicator, urgent_indicator;
 		
 		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar) 
 		{
@@ -130,30 +133,71 @@ namespace Docky.Interface
 		
 		static void DrawSingleIndicator (Context cr, Gdk.Point location, bool urgent)
 		{
-			int size = urgent ? 12 : 9;
-			
-			cr.MoveTo (location.X, location.Y);
-			cr.Arc (location.X, location.Y, size, 0, Math.PI * 2);
-			
-			RadialGradient rg = new RadialGradient (location.X, location.Y, 0, location.X, location.Y, size);
-			rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
 			if (urgent) {
-				rg.AddColorStop (.10, new Cairo.Color (1, .8, .8, 1.0));
-				rg.AddColorStop (.20, new Cairo.Color (1, .6, .6, .60));
-				rg.AddColorStop (.35, new Cairo.Color (1, .3, .3, .35));
-				rg.AddColorStop (.50, new Cairo.Color (1, .3, .3, .25));
-				rg.AddColorStop (1.0, new Cairo.Color (1, .3, .3, 0.0));
+				cr.SetSource (GetUrgentIndicator (cr.Target), location.X - UrgentIndicatorSize / 2.0, location.Y - UrgentIndicatorSize / 2.0);
 			} else {
+				cr.SetSource (GetIndicator (cr.Target), location.X - IndicatorSize / 2.0, location.Y - IndicatorSize / 2.0);
+			}
+
+			cr.Paint ();
+		}
+
+		static Surface GetIndicator (Surface similar)
+		{
+			if (indicator == null) {
+				indicator = similar.CreateSimilar (similar.Content, IndicatorSize, IndicatorSize);
+				Context cr = new Context (indicator);
+
+				double x = IndicatorSize / 2.0;
+				double y = x;
+				
+				cr.MoveTo (x, y);
+				cr.Arc (x, y, IndicatorSize, 0, Math.PI * 2);
+				
+				RadialGradient rg = new RadialGradient (x, y, 0, x, y, IndicatorSize);
+				rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
 				rg.AddColorStop (.10, new Cairo.Color (.5, .6, 1, 1.0));
 				rg.AddColorStop (.20, new Cairo.Color (.5, .6, 1, .60));
 				rg.AddColorStop (.25, new Cairo.Color (.5, .6, 1, .25));
 				rg.AddColorStop (.50, new Cairo.Color (.5, .6, 1, .15));
 				rg.AddColorStop (1.0, new Cairo.Color (.5, .6, 1, 0.0));
+				
+				cr.Pattern = rg;
+				cr.Fill ();
+				rg.Destroy ();
+
+				(cr as IDisposable).Dispose ();
 			}
-			
-			cr.Pattern = rg;
-			cr.Fill ();
-			rg.Destroy ();
+			return indicator;
+		}
+
+		static Surface GetUrgentIndicator (Surface similar)
+		{
+			if (urgent_indicator == null) {
+				urgent_indicator = similar.CreateSimilar (similar.Content, UrgentIndicatorSize, UrgentIndicatorSize);
+				Context cr = new Context (urgent_indicator);
+
+				double x = UrgentIndicatorSize / 2.0;
+				double y = x;
+				
+				cr.MoveTo (x, y);
+				cr.Arc (x, y, UrgentIndicatorSize, 0, Math.PI * 2);
+				
+				RadialGradient rg = new RadialGradient (x, y, 0, x, y, UrgentIndicatorSize);
+				rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
+				rg.AddColorStop (.10, new Cairo.Color (1, .8, .8, 1.0));
+				rg.AddColorStop (.20, new Cairo.Color (1, .6, .6, .60));
+				rg.AddColorStop (.35, new Cairo.Color (1, .3, .3, .35));
+				rg.AddColorStop (.50, new Cairo.Color (1, .3, .3, .25));
+				rg.AddColorStop (1.0, new Cairo.Color (1, .3, .3, 0.0));
+				
+				cr.Pattern = rg;
+				cr.Fill ();
+				rg.Destroy ();
+
+				(cr as IDisposable).Dispose ();
+			}
+			return urgent_indicator;
 		}
 	}
 }
