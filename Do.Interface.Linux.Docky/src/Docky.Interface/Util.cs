@@ -134,9 +134,9 @@ namespace Docky.Interface
 		static void DrawSingleIndicator (Context cr, Gdk.Point location, bool urgent)
 		{
 			if (urgent) {
-				cr.SetSource (GetUrgentIndicator (cr.Target), location.X - UrgentIndicatorSize / 2.0, location.Y - UrgentIndicatorSize / 2.0);
+				cr.SetSource (GetUrgentIndicator (cr.Target), location.X - UrgentIndicatorSize, location.Y - UrgentIndicatorSize);
 			} else {
-				cr.SetSource (GetIndicator (cr.Target), location.X - IndicatorSize / 2.0, location.Y - IndicatorSize / 2.0);
+				cr.SetSource (GetIndicator (cr.Target), location.X - IndicatorSize, location.Y - IndicatorSize);
 			}
 
 			cr.Paint ();
@@ -145,10 +145,10 @@ namespace Docky.Interface
 		static Surface GetIndicator (Surface similar)
 		{
 			if (indicator == null) {
-				indicator = similar.CreateSimilar (similar.Content, IndicatorSize, IndicatorSize);
+				indicator = similar.CreateSimilar (similar.Content, IndicatorSize * 2, IndicatorSize * 2);
 				Context cr = new Context (indicator);
 
-				double x = IndicatorSize / 2.0;
+				double x = IndicatorSize;
 				double y = x;
 				
 				cr.MoveTo (x, y);
@@ -174,10 +174,10 @@ namespace Docky.Interface
 		static Surface GetUrgentIndicator (Surface similar)
 		{
 			if (urgent_indicator == null) {
-				urgent_indicator = similar.CreateSimilar (similar.Content, UrgentIndicatorSize, UrgentIndicatorSize);
+				urgent_indicator = similar.CreateSimilar (similar.Content, UrgentIndicatorSize * 2, UrgentIndicatorSize * 2);
 				Context cr = new Context (urgent_indicator);
 
-				double x = UrgentIndicatorSize / 2.0;
+				double x = UrgentIndicatorSize;
 				double y = x;
 				
 				cr.MoveTo (x, y);

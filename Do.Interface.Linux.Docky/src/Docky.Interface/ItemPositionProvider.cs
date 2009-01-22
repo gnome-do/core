@@ -238,7 +238,7 @@ namespace Docky.Interface
 			double zoomInPercent = 1 + (DockPreferences.ZoomPercent - 1) * zoomByEntryTime;
 			
 			// offset from the center of the true position, ranged between 0 and half of the zoom range
-			double offset = Math.Min (Math.Abs (cursorOrientedPosition - centerOrientedPosition), ZoomSize / 2);
+			int offset = Math.Min (Math.Abs (cursorOrientedPosition - centerOrientedPosition), ZoomSize / 2);
 			
 			if (ZoomSize / 2.0 == 0) {
 				zoom = 1;
@@ -248,13 +248,13 @@ namespace Docky.Interface
 				zoom = 0 - Math.Pow (offset / (ZoomSize / 2.0), 2) + 2;
 				zoom = 1 + (zoom - 1) * (zoomInPercent - 1);
 				
-				offset = offset * (zoomInPercent - 1) - (zoomInPercent - zoom) * (IconSize * .9);
+				offset = (int) (offset * (zoomInPercent - 1) - (zoomInPercent - zoom) * (IconSize * .9));
 			}
 			
 			if (cursorOrientedPosition > centerOrientedPosition) {
-				centerOrientedPosition -= (int) offset;
+				centerOrientedPosition -= offset;
 			} else {
-				centerOrientedPosition += (int) Math.Ceiling (offset);
+				centerOrientedPosition += offset;
 			}
 
 			if (!DockItems [icon].Scalable) {
