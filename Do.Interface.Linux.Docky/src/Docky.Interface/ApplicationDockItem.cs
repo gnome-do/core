@@ -44,15 +44,13 @@ namespace Docky.Interface
 		
 		static IEnumerable<String> DesktopFilesDirectories {
 			get {
-				return new string[] {
-					"~/.local/share/applications/wine",
-					"~/.local/share/applications",
-					"/usr/share/applications",
-					"/usr/share/applications/kde",
-					"/usr/share/applications/kde4",
-					"/usr/share/gdm/applications",
-					"/usr/local/share/applications",
-				};
+				yield return "~/.local/share/applications/wine";
+				yield return "~/.local/share/applications";
+				yield return "/usr/share/applications";
+				yield return "/usr/share/applications/kde";
+				yield return "/usr/share/applications/kde4";
+				yield return "/usr/share/gdm/applications";
+				yield return "/usr/local/share/applications";
 			}
 		}
 		
