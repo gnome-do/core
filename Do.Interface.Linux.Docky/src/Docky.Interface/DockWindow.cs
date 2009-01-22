@@ -31,6 +31,7 @@ using Do.Universe;
 using Do.Platform;
 using Do.Interface;
 using Do.Interface.CairoUtils;
+using Do.Interface.AnimationBase;
 
 namespace Docky.Interface
 {
@@ -38,6 +39,9 @@ namespace Docky.Interface
 	
 	public class DockWindow : Gtk.Window, IDoWindow
 	{
+		BezelGlassResults results;
+		BezelGlassWindow results_window;
+		
 		DockArea dock_area;
 		IDoController controller;
 		Gdk.Rectangle current_mask;
@@ -64,7 +68,13 @@ namespace Docky.Interface
 		{
 			this.controller = controller;
 			controller.Orientation = ControlOrientation.Vertical;
-			
+
+			RegisterEvents ();
+			Build ();
+		}
+		
+		void Build ()
+		{
 			AppPaintable = true;
 			Decorated = false;
 			SkipPagerHint = true;
@@ -75,27 +85,23 @@ namespace Docky.Interface
 			
 			this.SetCompositeColormap ();
 			
+			dock_area = new DockArea (this);
+			Add (dock_area);
+			ShowAll ();
+
+			results = new BezelGlassResults (controller, 300, HUDStyle.Classic, new BezelColors (new Cairo.Color (.1, .1, .1, .8)));
+			results_window = new BezelGlassWindow (results);
+		}
+
+		void RegisterEvents ()
+		{
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
 			
 			StyleSet += (o, a) => {
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);
 			};
-
-			RegisterEvents ();
 			
-			Build ();
-		}
-		
-		void Build ()
-		{
-			dock_area = new DockArea (this);
-			Add (dock_area);
-			ShowAll ();
-		}
-
-		void RegisterEvents ()
-		{
 			DockPreferences.AllowOverlapChanged += DelaySetStruts;
 			DockPreferences.AutohideChanged += DelaySetStruts;
 			DockPreferences.MonitorChanged += HandleMonitorChanged;
@@ -305,6 +311,7 @@ namespace Docky.Interface
 		public void Summon ()
 		{
 			Reposition ();
+			results_window.Show ();
 			Windowing.PresentWindow (this);
 			if (!dock_area.InputInterfaceVisible)
 				dock_area.ShowInputInterface ();
@@ -313,6 +320,7 @@ namespace Docky.Interface
 		public void Vanish ()
 		{
 			Windowing.UnpresentWindow (this);
+			results_window.Hide ();
 			if (dock_area.InputInterfaceVisible)
 				dock_area.HideInputInterface ();
 		}
@@ -334,15 +342,21 @@ namespace Docky.Interface
 		
 		public void GrowResults ()
 		{
+			results.SlideIn ();
 		}
 		
 		public void ShrinkResults ()
 		{
+			results.SlideOut ();
 		}
 		
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
 			dock_area.SetPaneContext (context, pane);
+
+			if (CurrentPane == pane) {
+				results.Context = context;
+			}
 		}
 		
 		public void ClearPane (Pane pane)
@@ -366,7 +380,7 @@ namespace Docky.Interface
 		}
 		
 		public bool ResultsCanHide { 
-			get { return false; } 
+			get { return true; } 
 		}
 		
 		public override void Dispose ()

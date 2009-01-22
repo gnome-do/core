@@ -922,7 +922,7 @@ namespace Docky.Interface
 			cr = new Cairo.Context (backbuffer);
 			cr.AlphaFill ();
 			cr.Operator = Operator.Over;
-			
+
 			if (ItemProvider.UpdatesEnabled)
 				DrawDrock (cr);
 			(cr as IDisposable).Dispose ();
