@@ -82,7 +82,20 @@ namespace Docky.Interface
 		{
 			this.parent = parent;
 			MinimumDockArea = CalculateMinimumArea ();
+
+			RegisterEvents ();
+		}
+
+		void RegisterEvents ()
+		{
 			parent.CursorUpdated += HandleCursorUpdated;
+			DockPreferences.IconSizeChanged += HandleCursorUpdated;
+		}
+
+		void UnregisterEvents ()
+		{
+			parent.CursorUpdated -= HandleCursorUpdated;
+			DockPreferences.IconSizeChanged -= HandleCursorUpdated;
 		}
 
 		void HandleCursorUpdated ()
@@ -328,6 +341,7 @@ namespace Docky.Interface
 		
 		public void Dispose ()
 		{
+			UnregisterEvents ();
 			parent = null;
 		}
 		
