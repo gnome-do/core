@@ -637,13 +637,13 @@ namespace Docky.Interface
 					return;
 			}
 			
-			Gdk.Point center;
+			PointD center;
 			double zoom;
 			IconZoomedPosition (icon, out center, out zoom);
 			
 			// This gives the actual x,y coordinates of the icon
-			Gdk.Point iconPosition = new Gdk.Point ((int) (center.X - zoom * DockItems [icon].Width / 2),
-			                                        (int) (center.Y - zoom * DockItems [icon].Width / 2));
+			PointD iconPosition = new PointD (center.X - zoom * DockItems [icon].Width / 2,
+			                                  center.Y - zoom * DockItems [icon].Width / 2);
 			
 			ClickAnimationType animationType = IconAnimation (icon);
 			
@@ -651,15 +651,15 @@ namespace Docky.Interface
 			bool drawUrgency = false;
 			if (animationType == ClickAnimationType.Bounce) {
 				// bounces twice
-				int delta = (int) Math.Abs (30 * Math.Sin 
-				                            (DockItems [icon].TimeSinceClick.TotalMilliseconds * Math.PI / (BounceTime.TotalMilliseconds / 2)));
+				double delta = Math.Abs (30 * Math.Sin 
+				                         (DockItems [icon].TimeSinceClick.TotalMilliseconds * Math.PI / (BounceTime.TotalMilliseconds / 2)));
 				iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 			} else {
 				if (DockItems [icon] != null && DockItems [icon].NeedsAttention) {
 					drawUrgency = true;
 					if (DateTime.UtcNow - DockItems [icon].AttentionRequestStartTime < BounceTime) {
 						double urgentMs = (DateTime.UtcNow - DockItems [icon].AttentionRequestStartTime).TotalMilliseconds;
-						int delta = (int) (100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds)));
+						double delta = 100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds));
 						iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 					}
 				}
@@ -712,17 +712,17 @@ namespace Docky.Interface
 				Gdk.Point location;
 				switch (DockPreferences.Orientation) {
 				case DockOrientation.Bottom:
-					location = new Gdk.Point (center.X, Height - 1);	
+					location = new Gdk.Point ((int) center.X, Height - 1);	
 					break;
 				case DockOrientation.Left:
-					location = new Gdk.Point (1, center.Y);
+					location = new Gdk.Point (1, (int) center.Y);
 					break;
 				case DockOrientation.Right:
-					location = new Gdk.Point (Width - 1, center.Y);
+					location = new Gdk.Point (Width - 1, (int) center.Y);
 					break;
 				case DockOrientation.Top:
 				default:
-					location = new Gdk.Point (center.X, 1);
+					location = new Gdk.Point ((int) center.X, 1);
 					break;
 				}
 				Util.DrawGlowIndicator (cr, location, drawUrgency, DockItems [icon].WindowCount);
@@ -741,7 +741,8 @@ namespace Docky.Interface
 					if (DockPreferences.Orientation == DockOrientation.Top)
 						textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 22;
 				} else {
-					textPoint = center.RelativeMovePoint ((int) ((IconSize / 2) * DockPreferences.ZoomPercent + 10), RelativeMove.Inward);
+					textPoint.X = (int) (center.RelativeMovePoint ((IconSize / 2) * DockPreferences.ZoomPercent + 10, RelativeMove.Inward).X);
+					textPoint.Y = (int) (center.RelativeMovePoint ((IconSize / 2) * DockPreferences.ZoomPercent + 10, RelativeMove.Inward).Y);
 					if (DockPreferences.Orientation == DockOrientation.Right)
 						textPoint = textPoint.RelativeMovePoint (DockPreferences.TextWidth, RelativeMove.Inward);
 					textPoint = textPoint.RelativeMovePoint (10, RelativeMove.RealUp);
@@ -755,7 +756,7 @@ namespace Docky.Interface
 			return (DockItems [icon].TimeSinceClick < BounceTime) ? DockItems [icon].AnimationType : ClickAnimationType.None;
 		}
 		
-		void IconZoomedPosition (int icon, out Gdk.Point center, out double zoom)
+		void IconZoomedPosition (int icon, out PointD center, out double zoom)
 		{
 			PositionProvider.IconZoomedPosition (icon, ZoomIn, Cursor, out center, out zoom);
 		}
@@ -1023,9 +1024,11 @@ namespace Docky.Interface
 				//handling right clicks for those icons which request simple right click handling
 				if (evnt.Button == 3) {
 					if (CurrentDockItem is IRightClickable && (CurrentDockItem as IRightClickable).GetMenuItems ().Any ()) {
-						Gdk.Point itemPosition;
+						PointD itemPosition_;
 						double itemZoom;
-						IconZoomedPosition (PositionProvider.IndexAtPosition (Cursor), out itemPosition, out itemZoom);
+						IconZoomedPosition (PositionProvider.IndexAtPosition (Cursor), out itemPosition_, out itemZoom);
+
+						Gdk.Point itemPosition = new Gdk.Point ((int) itemPosition_.X, (int) itemPosition_.Y);
 						
 						itemPosition = itemPosition.RelativeMovePoint ((int) (IconSize * itemZoom * .9) - IconSize / 2, RelativeMove.Inward);
 						itemPosition = itemPosition.RelativePointToRootPoint (window);

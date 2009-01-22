@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Cairo;
 using Gdk;
 
 using Docky.Utilities;
@@ -123,6 +124,59 @@ namespace Docky.Interface
 			}
 
 			return new Gdk.Point (startingLocation.X + vector [0], startingLocation.Y + vector [1]);
+		}
+
+		public static PointD RelativeMovePoint (this PointD startingLocation, double delta, RelativeMove direction)
+		{
+			double[] vector = null;
+			switch (direction) {
+			case RelativeMove.RealDown:
+				return new PointD (startingLocation.X, startingLocation.Y + delta);
+				
+			case RelativeMove.RealLeft:
+				return new PointD (startingLocation.X - delta, startingLocation.Y);
+				
+			case RelativeMove.RealRight:
+				return new PointD (startingLocation.X + delta, startingLocation.Y);
+				
+			case RelativeMove.RealUp:
+				return new PointD (startingLocation.X, startingLocation.Y - delta);
+
+			case RelativeMove.Inward:
+			case RelativeMove.RelativeUp:
+				vector = new [] {0, 0 - delta};
+				break;
+				
+			case RelativeMove.Outward:
+			case RelativeMove.RelativeDown:
+				vector = new [] {0, delta};
+				break;
+				
+			case RelativeMove.RelativeLeft:
+				vector = new [] {0 - delta, 0};
+				break;
+				
+			case RelativeMove.RelativeRight:
+				vector = new [] {delta, 0};
+				break;
+			}
+
+			switch (DockPreferences.Orientation) {
+			case DockOrientation.Bottom:
+				// do nothing
+				break;
+			case DockOrientation.Left:
+				vector = new [] {0 - vector [1], vector [0]};
+				break;
+			case DockOrientation.Right:
+				vector = new [] {vector [1], 0 - vector [0]};
+				break;
+			case DockOrientation.Top:
+				vector = new [] {vector [0], 0 - vector [1]};
+				break;
+			}
+
+			return new PointD (startingLocation.X + vector [0], startingLocation.Y + vector [1]);
 		}
 	}
 }
