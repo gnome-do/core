@@ -61,7 +61,7 @@ namespace Docky.Interface
 		TimeSpan InsertAnimationTime = new TimeSpan (0, 0, 0, 0, 150*5);
 		
 		#region private variables
-		Gdk.Point cursor, drag_start_point, remove_drag_start_point;
+		Gdk.Point cursor, drag_start_point;
 		
 		Gdk.CursorType cursor_type = CursorType.LeftPtr;
 		
@@ -167,9 +167,11 @@ namespace Docky.Interface
 		}
 		#endregion
 		
-		public new DockState State { get; set; }
+		public new DockState State { get; private set; }
 
-		public DockItemProvider ItemProvider { get; set; }
+		public DragState DragState { get; private set; }
+
+		public DockItemProvider ItemProvider { get; private set; }
 		
 		DockAnimationState AnimationState { get; set; }
 		
@@ -401,8 +403,11 @@ namespace Docky.Interface
 			
 			SummonRenderer = new SummonModeRenderer (this);
 			PopupMenu = new DockItemMenu ();
-			
+
 			Cursor = new Gdk.Point (-1, -1);
+
+			DragState = new DragState (Cursor, null);
+			DragState.IsFinished = true;
 			
 			this.SetCompositeColormap ();
 			
@@ -632,7 +637,7 @@ namespace Docky.Interface
 		{
 			// Don't draw the icon we are dragging around
 			if (GtkDragging) {
-				int item = PositionProvider.IndexAtPosition (remove_drag_start_point);
+				int item = DockItems.IndexOf (DragState.DragItem);
 				if (item == icon && ItemProvider.ItemCanBeMoved (item))
 					return;
 			}
@@ -732,14 +737,15 @@ namespace Docky.Interface
 			// a null.  This allows us to draw nothing at all instead of rendering a
 			// blank surface (which is slow)
 			if (!PopupMenu.Visible && PositionProvider.IndexAtPosition (Cursor) == icon &&
-			    CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null) {
+			    CursorIsOverDockArea && DockItems [icon].GetTextSurface (cr.Target) != null && !GtkDragging) {
 
 				Gdk.Point textPoint;
 				if (DockPreferences.DockIsHorizontal) {
 					textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (DockPreferences.TextWidth / 2);
-					textPoint.Y = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 32;
 					if (DockPreferences.Orientation == DockOrientation.Top)
 						textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 22;
+					else
+						textPoint.Y = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 38;
 				} else {
 					textPoint.X = (int) (center.RelativeMovePoint ((IconSize / 2) * DockPreferences.ZoomPercent + 10, RelativeMove.Inward).X);
 					textPoint.Y = (int) (center.RelativeMovePoint ((IconSize / 2) * DockPreferences.ZoomPercent + 10, RelativeMove.Inward).Y);
@@ -837,6 +843,19 @@ namespace Docky.Interface
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{
 			GtkDragging = true;
+
+			do {
+				if (DragState.DragItem == null || !DockItems.Contains (DragState.DragItem) || !CursorIsOverDockArea)
+					continue;
+				
+				int draggedPosition = DockItems.IndexOf (DragState.DragItem);
+				int currentPosition = PositionProvider.IndexAtPosition (Cursor);
+				if (draggedPosition == currentPosition || currentPosition == -1)
+					continue;
+				
+				ItemProvider.MoveItemToPosition (draggedPosition, currentPosition);
+			} while (false);
+			
 			AnimatedDraw ();
 			return base.OnDragMotion (context, x, y, time);
 		}
@@ -865,15 +884,20 @@ namespace Docky.Interface
 		
 		protected override void OnDragBegin (Gdk.DragContext context)
 		{
+			GtkDragging = true;
 			// the user might not end the drag on the same horizontal position they start it on
-			remove_drag_start_point = Cursor;
 			int item = PositionProvider.IndexAtPosition (Cursor);
+
+			if (item != -1 && ItemProvider.ItemCanBeMoved (item))
+				DragState = new DragState (Cursor, DockItems [item]);
+			else
+				DragState = new DragState (Cursor, null);
 			
 			Gdk.Pixbuf pbuf;
-			if (item == -1 || !ItemProvider.ItemCanBeMoved (item)) {
+			if (DragState.DragItem == null) {
 				pbuf = IconProvider.PixbufFromIconName ("gtk-remove", DockPreferences.IconSize);
 			} else {
-				pbuf = DockItems [item].GetDragPixbuf ();
+				pbuf = DragState.DragItem.GetDragPixbuf ();
 			}
 				
 			if (pbuf != null)
@@ -883,18 +907,18 @@ namespace Docky.Interface
 		
 		protected override void OnDragEnd (Gdk.DragContext context)
 		{
-			if (PositionProvider.IndexAtPosition (remove_drag_start_point) != -1) {
-				GtkDragging = false;
-				int draggedPosition = PositionProvider.IndexAtPosition (remove_drag_start_point);
+			
+			if (CursorIsOverDockArea) {
 				int currentPosition = PositionProvider.IndexAtPosition (Cursor);
-				if (context.DestWindow != window.GdkWindow || !CursorIsOverDockArea) {
-					ItemProvider.RemoveItem (PositionProvider.IndexAtPosition (remove_drag_start_point));
-				} else if (CursorIsOverDockArea && currentPosition != draggedPosition) {
-					ItemProvider.MoveItemToPosition (draggedPosition, currentPosition);
-				}
-				AnimatedDraw ();
+				if (currentPosition != -1)
+					ItemProvider.DropItemOnPosition (DragState.DragItem, currentPosition);
+			} else {
+				ItemProvider.RemoveItem (DragState.DragItem);
 			}
-			remove_drag_start_point = new Gdk.Point (-1, -1);
+			DragState.IsFinished = true;
+			GtkDragging = false;
+			
+			AnimatedDraw ();
 			base.OnDragEnd (context);
 		}
 

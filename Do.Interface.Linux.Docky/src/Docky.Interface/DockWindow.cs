@@ -87,10 +87,11 @@ namespace Docky.Interface
 			
 			dock_area = new DockArea (this);
 			Add (dock_area);
-			ShowAll ();
 
-			results = new BezelGlassResults (controller, 300, HUDStyle.Classic, new BezelColors (new Cairo.Color (.1, .1, .1, .8)));
+			results = new BezelGlassResults (controller, 450, HUDStyle.Classic, new BezelColors (new Cairo.Color (.1, .1, .1, .8)));
 			results_window = new BezelGlassWindow (results);
+
+			ShowAll ();
 		}
 
 		void RegisterEvents ()
@@ -199,14 +200,16 @@ namespace Docky.Interface
 		
 		void Reposition ()
 		{
-			Gdk.Rectangle geo, main;
+			Gdk.Rectangle geo, main, res;
 			
 			GetSize (out main.Width, out main.Height);
+			results_window.GetSize (out res.Width, out res.Height);
 			geo = LayoutUtils.MonitorGemonetry ();
 
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
 				Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - main.Height);
+				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + geo.Height - dock_area.DockHeight - res.Height);
 				break;
 			case DockOrientation.Left:
 				Move (geo.X, geo.Y);
@@ -216,6 +219,7 @@ namespace Docky.Interface
 				break;
 			case DockOrientation.Top:
 				Move (geo.X, geo.Y);
+				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + dock_area.DockHeight);
 				break;
 			}
 			

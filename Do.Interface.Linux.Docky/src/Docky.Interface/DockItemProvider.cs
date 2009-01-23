@@ -231,23 +231,30 @@ namespace Docky.Interface
 			return false;
 		}
 		
+		public void DropItemOnPosition (BaseDockItem item, int position)
+		{
+			if (DockItems.Contains (item) && 0 <= position && position < DockItems.Count)
+				if (DockItems [position] is TrashDockItem)
+					RemoveItem (item);
+		}
+
+		public void MoveItemToPosition (BaseDockItem item, int position)
+		{
+			if (DockItems.Contains (item) && 0 <= position && position < DockItems.Count)
+				MoveItemToPosition (DockItems.IndexOf (item), position);
+		}
+		
 		public void MoveItemToPosition (int item, int position)
 		{
-			if (item == position)
+			if (item == position || item < 0 || position < 0)
 				return;
 			
 			IconSource itemSource = GetIconSource (DockItems [item]);
 			IconSource targetSource = GetIconSource (DockItems [position]);
 			
-			if (itemSource == IconSource.Application || itemSource == IconSource.Unknown)
+			if (itemSource == IconSource.Application || itemSource == IconSource.Unknown ||
+			    targetSource == IconSource.Application || targetSource == IconSource.Unknown)
 				return;
-			
-			if (targetSource == IconSource.Application || targetSource == IconSource.Unknown) {
-				if (DockItems [position] is TrashDockItem) {
-					RemoveItem (item);
-				}
-				return;
-			}
 			
 			DockItem primaryItem = DockItems [item] as DockItem;
 			DockItem targetItem = DockItems [position] as DockItem;
@@ -319,6 +326,13 @@ namespace Docky.Interface
 				.OrderByDescending (item => item is IApplicationItem)
 				.ThenBy (item => item.GetType ().Name)
 				.ThenBy (item => item.Safe.Name);
+		}
+
+		public bool RemoveItem (BaseDockItem item)
+		{
+			if (!DockItems.Contains (item))
+				return false;
+			return RemoveItem (DockItems.IndexOf (item));
 		}
 		
 		public bool RemoveItem (int item)

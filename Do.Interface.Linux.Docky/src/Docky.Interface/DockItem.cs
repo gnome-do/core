@@ -85,6 +85,7 @@ namespace Docky.Interface
 				// This has a degree of an abstraction break to it however, but it is important to get right
 				// until a better solution is found.
 				foreach (Act act in actions
+				         .Where (act => act.GetType ().Name != "CopyToClipboardAction")
 				         .OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
 				         .ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
 				         .ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
@@ -270,6 +271,8 @@ namespace Docky.Interface
 		
 		public override bool Equals (BaseDockItem other)
 		{
+			if (other == null)
+				return false;
 			DockItem di = other as DockItem;
 			return di != null && di.Element.UniqueId == Element.UniqueId;
 		}

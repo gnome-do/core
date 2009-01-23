@@ -26,6 +26,7 @@ FILES = \
 	src/Docky.Interface/DockWindow.cs \
 	src/Docky.Interface/Docky.Interface.Renderers/DockBackgroundRenderer.cs \
 	src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs \
+	src/Docky.Interface/DragState.cs \
 	src/Docky.Interface/DrawState.cs \
 	src/Docky.Interface/IRightClickable.cs \
 	src/Docky.Interface/ItemPositionProvider.cs \

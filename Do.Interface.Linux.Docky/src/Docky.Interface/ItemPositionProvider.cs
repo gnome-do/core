@@ -90,12 +90,19 @@ namespace Docky.Interface
 		{
 			parent.CursorUpdated += HandleCursorUpdated;
 			DockPreferences.IconSizeChanged += HandleCursorUpdated;
+			parent.ItemProvider.DockItemsChanged += HandleDockItemsChanged;
 		}
 
 		void UnregisterEvents ()
 		{
 			parent.CursorUpdated -= HandleCursorUpdated;
 			DockPreferences.IconSizeChanged -= HandleCursorUpdated;
+			parent.ItemProvider.DockItemsChanged -= HandleDockItemsChanged;
+		}
+
+		void HandleDockItemsChanged(IEnumerable<BaseDockItem> items)
+		{
+			MinimumDockArea = CalculateMinimumArea ();
 		}
 
 		void HandleCursorUpdated ()
