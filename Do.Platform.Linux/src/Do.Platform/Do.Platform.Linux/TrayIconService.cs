@@ -33,7 +33,7 @@ namespace Do.Platform.Linux
 	public class TrayIconService : IInitializedService
 	{
 		const int IconSize = 24;
-		const int NotifyDelay = 250;
+		const int NotifyDelay = 2000;
 		const string IconName = "gnome-do";
 
 		// Must remain static until IServices have their own preferences.
@@ -85,14 +85,19 @@ namespace Do.Platform.Linux
 
 		void OnNotified (object sender, NotificationEventArgs e)
 		{
-			ShowNotification (e.Notification);
+			Services.Application.RunOnMainThread (() => {
+				ShowNotification (e.Notification);
+			});
 		}
 
 		void OnNotificationClosed (object sender, NotificationEventArgs e)
 		{
-			if (!Preferences.IconVisible) Hide ();
+			Services.Application.RunOnMainThread (() => {
+				if (!Preferences.IconVisible) Hide ();
+			});
 		}
 
+		// Only run on the main thread.
 		void ShowNotification (Notification note)
 		{
 			int x, y;
@@ -102,10 +107,9 @@ namespace Do.Platform.Linux
 			GetLocationOnScreen (out screen, out x, out y);
 
 			// We delay this so that the status icon has time to show.
-			GLib.Timeout.Add (NotifyDelay, () => {
-			    Gtk.Application.Invoke ((sender, e) => notifier.Notify (note, screen, x, y));
-			    return false;
-			});
+			Services.Application.RunOnMainThread (() => {
+			    notifier.Notify (note, screen, x, y);
+			}, NotifyDelay);
 		}
 
 		void Show ()
