@@ -49,10 +49,6 @@ namespace Do.Universe.Linux {
 
 			if (path == null) throw new ArgumentNullException ("path");
 
-			// TODO Remove this manual override for lynx.desktop item that
-			// has been causing a weird bug.
-			if (path.Contains ("lynx.desktop")) return null;
-
 			if (Instances.ContainsKey (key)) {
 					appItem = Instances [key];
 			} else {
@@ -62,7 +58,7 @@ namespace Do.Universe.Linux {
 					appItem = new ApplicationItem (item);
 				} catch (Exception e) {
 					appItem = null;
-					if (item != null) item.Dispose ();
+					try { item.Dispose (); } catch { }
 					Log.Error ("Could not load desktop item: {0}", e.Message);
 					Log.Debug (e.StackTrace);
 				}
