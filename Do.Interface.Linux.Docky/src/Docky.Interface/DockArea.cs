@@ -63,7 +63,7 @@ namespace Docky.Interface
 		#region private variables
 		Gdk.Point cursor, drag_start_point;
 		
-		Gdk.CursorType cursor_type = CursorType.LeftPtr;
+		Gdk.CursorType cursor_type;
 		
 		DateTime enter_time = new DateTime (0);
 		DateTime interface_change_time = new DateTime (0);
@@ -405,6 +405,7 @@ namespace Docky.Interface
 			PopupMenu = new DockItemMenu ();
 
 			Cursor = new Gdk.Point (-1, -1);
+			cursor_type = CursorType.LeftPtr;
 
 			DragState = new DragState (Cursor, null);
 			DragState.IsFinished = true;
@@ -415,6 +416,7 @@ namespace Docky.Interface
 			           (int) EventMask.EnterNotifyMask |
 			           (int) EventMask.ButtonPressMask | 
 			           (int) EventMask.ButtonReleaseMask |
+			           (int) EventMask.ScrollMask |
 			           (int) EventMask.FocusChangeMask);
 			
 			DoubleBuffered = false;
@@ -842,7 +844,7 @@ namespace Docky.Interface
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{
 			GtkDragging = true;
-
+			
 			do {
 				if (DragState.DragItem == null || DragState.IsFinished || !DockItems.Contains (DragState.DragItem) || !CursorIsOverDockArea)
 					continue;
@@ -963,12 +965,6 @@ namespace Docky.Interface
 			return ret_val;
 		}
 		
-		protected override bool OnMotionNotifyEvent(EventMotion evnt)
-		{
-			GtkDragging = false;
-			return base.OnMotionNotifyEvent (evnt);
-		}
-		
 		void ConfigureCursor ()
 		{
 			// we do this so that our custom drag isn't destroyed by gtk's drag
@@ -1066,6 +1062,19 @@ namespace Docky.Interface
 				AnimatedDraw ();
 			}
 			return ret_val;
+		}
+
+		protected override bool OnScrollEvent (Gdk.EventScroll evnt)
+		{
+			if ((evnt.State & ModifierType.ControlMask) == ModifierType.ControlMask) {
+				if (evnt.Direction == ScrollDirection.Up) {
+					DockPreferences.ZoomPercent += .1;
+				} else if (evnt.Direction == ScrollDirection.Down) {
+					DockPreferences.ZoomPercent -= .1;
+				}
+				AnimatedDraw ();
+			}
+			return base.OnScrollEvent (evnt);
 		}
 		
 		void StartDrag ()

@@ -71,8 +71,12 @@ namespace Docky.Utilities
 		public static double ZoomPercent {
 			get { return ZoomEnabled ? zoom_percent : 1; }
 			set {
+				if (value < 1)
+					value = 1;
 				prefs.Set ("ZoomPercent", value);
 				zoom_percent = value;
+				if (IconSizeChanged != null)
+					IconSizeChanged ();
 			}
 		}
 		

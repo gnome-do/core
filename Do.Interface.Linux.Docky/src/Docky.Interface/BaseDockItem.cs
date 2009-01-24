@@ -126,7 +126,7 @@ namespace Docky.Interface
 		{
 			NeedsAttention = false;
 			description = "";
-			AttentionRequestStartTime =  LastClick = DateTime.UtcNow - new TimeSpan (0, 10, 0);
+			AttentionRequestStartTime =  LastClick = new DateTime (0);
 			DockPreferences.IconSizeChanged += OnIconSizeChanged;
 		}
 

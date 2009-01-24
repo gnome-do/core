@@ -40,6 +40,7 @@ namespace Docky.Utilities
 				yield return "gksu ";
 				yield return "sudo ";
 				yield return "python ";
+				yield return "mono ";
 			}
 		}
 		
@@ -128,8 +129,9 @@ namespace Docky.Utilities
 					break;
 				}
 			}
-			exec = exec.Split (' ')[0];
 			
+			exec = ProcessExecString (exec);
+
 			Application out_app = null;
 			foreach (string dir in Directory.GetDirectories ("/proc")) {
 				int pid;
@@ -140,7 +142,9 @@ namespace Docky.Utilities
 				string exec_line = CmdLineForPid (pid);
 				if (string.IsNullOrEmpty (exec_line))
 					continue;
-				
+
+				exec_line = ProcessExecString (exec_line);
+
 				if (exec_line.Contains (exec)) {
 					foreach (Application app in GetApplications ()) {
 						if (app == null)
@@ -158,6 +162,15 @@ namespace Docky.Utilities
 					apps.Add (out_app);
 			}
 			return apps;
+		}
+
+		static string ProcessExecString (string exec)
+		{
+			exec = exec.Split (' ') [0];
+			if (exec.Contains ("/"))
+				exec = exec.Split ('/').Last ();
+
+			return exec.ToLower ();
 		}
 		
 		/// <summary>
