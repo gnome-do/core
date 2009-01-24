@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -100,7 +101,7 @@ namespace Docky.Utilities
 			try {
 				string procPath = new [] { "/proc", pid.ToString (), "cmdline" }.Aggregate (Path.Combine);
 				reader = new StreamReader (procPath);
-				cmdline = reader.ReadLine ();
+				cmdline = reader.ReadLine ().Replace (Convert.ToChar (0x0), ' ');
 				reader.Close ();
 				reader.Dispose ();
 			} catch { return null; }
@@ -122,13 +123,6 @@ namespace Docky.Utilities
 			List<Application> apps = new List<Application> ();
 			if (string.IsNullOrEmpty (exec))
 				return apps;
-			
-			foreach (string s in BadPrefixes) {
-				if (exec.StartsWith (s)) {
-					exec = exec.Substring (s.Length);
-					break;
-				}
-			}
 			
 			exec = ProcessExecString (exec);
 
@@ -166,7 +160,14 @@ namespace Docky.Utilities
 
 		static string ProcessExecString (string exec)
 		{
-			exec = exec.Split (' ') [0];
+			foreach (string s in BadPrefixes) {
+				if (exec.StartsWith (s)) {
+					exec = exec.Substring (s.Length);
+					break;
+				}
+			}
+			
+			exec = exec.Split (' ').First ();
 			if (exec.Contains ("/"))
 				exec = exec.Split ('/').Last ();
 
