@@ -636,7 +636,7 @@ namespace Docky.Interface
 		void DrawIcon (Context cr, int icon)
 		{
 			// Don't draw the icon we are dragging around
-			if (GtkDragging) {
+			if (GtkDragging && !DragState.IsFinished) {
 				int item = DockItems.IndexOf (DragState.DragItem);
 				if (item == icon && ItemProvider.ItemCanBeMoved (item))
 					return;
@@ -811,7 +811,7 @@ namespace Docky.Interface
 		public void ManualCursorUpdate ()
 		{
 			int x, y;
-			
+
 			Display.GetPointer (out x, out y);
 			if ((Cursor.X == x && Cursor.Y == y) || PopupMenu.Visible)
 				return;
@@ -839,13 +839,12 @@ namespace Docky.Interface
 		}
 		
 		#region Drag Code
-		
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{
 			GtkDragging = true;
 
 			do {
-				if (DragState.DragItem == null || !DockItems.Contains (DragState.DragItem) || !CursorIsOverDockArea)
+				if (DragState.DragItem == null || DragState.IsFinished || !DockItems.Contains (DragState.DragItem) || !CursorIsOverDockArea)
 					continue;
 				
 				int draggedPosition = DockItems.IndexOf (DragState.DragItem);
