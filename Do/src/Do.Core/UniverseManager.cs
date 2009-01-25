@@ -211,7 +211,7 @@ namespace Do.Core
 			if (source == null) throw new ArgumentNullException ("source");
 			
 			safeSource = source.RetainSafe ();
-			Log<UniverseManager>.Debug ("Updating item source \"{0}\".", safeSource.Name);
+			Log<UniverseManager>.Debug ("Reloading item source \"{0}\"...", safeSource.Name);
 			oldItems = safeSource.Items;
 			// We call UpdateItems outside of the lock so as not to block other
 			// threads in contention for the lock if UpdateItems blocks.
