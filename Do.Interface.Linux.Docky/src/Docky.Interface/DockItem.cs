@@ -322,7 +322,7 @@ namespace Docky.Interface
 			foreach (Act act in ActionsForItem)
 				yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
 
-			yield return new SimpleMenuButtonArgs (OnRemoveClicked, Catlog.GetString ("Remove from Dock"), Gtk.Stock.Remove);
+			yield return new SimpleMenuButtonArgs (OnRemoveClicked, Catalog.GetString ("Remove from Dock"), Gtk.Stock.Remove);
 		}
 		
 		#endregion 
