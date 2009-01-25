@@ -41,7 +41,6 @@ namespace Do.Core
 		const int SearchDelay = 250;
 
 		IDoWindow window;
-		string last_theme;
 		bool results_grown;
 		bool third_pane_visible;
 		Gtk.IMContext im_context;
@@ -56,7 +55,6 @@ namespace Do.Core
 		{
 			im_context = new Gtk.IMMulticontext ();
 			results_grown = false;
-			last_theme = "";
 			
 			controllers = new SimpleSearchController [3];
 			
@@ -98,7 +96,7 @@ namespace Do.Core
 
 		public void Initialize ()
 		{
-			OnThemeChanged (this, null);
+			SetTheme (Do.Preferences.Theme);
 			Do.Preferences.ThemeChanged += OnThemeChanged;
 		}
 
@@ -110,22 +108,33 @@ namespace Do.Core
 		
 		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
 		{
-			// If the current theme is already loaded, return.
-			if (window != null && last_theme == Do.Preferences.Theme)
-				return;
-
-			if (window != null) {
-				Vanish ();
-				window.KeyPressEvent -= KeyPressWrap;
-				window.Dispose ();
-				window = null;
+			string oldTheme = e.OldValue as string, newTheme = Do.Preferences.Theme;
+			
+			// Only change the theme of the old and new themes are different.
+			if (oldTheme != newTheme) {
+				UnsetTheme ();
+				SetTheme (newTheme);
 			}
+		}
+
+		void UnsetTheme ()
+		{
+			if (window == null) return;
+			
+			Vanish ();
+			window.KeyPressEvent -= KeyPressWrap;
+			window.Dispose ();
+			window = null;
+		}
+
+		void SetTheme (string themeName)
+		{
+			Log<Controller>.Debug ("Setting theme {0}", themeName);
 			
 			Orientation = ControlOrientation.Vertical;
 
 			if (Screen.Default.IsComposited) {
-				window = InterfaceManager.MaybeGetInterfaceNamed (Do.Preferences.Theme)
-					?? new ClassicWindow ();
+				window = InterfaceManager.MaybeGetInterfaceNamed (themeName) ?? new ClassicWindow ();
 			} else {
 				window = new ClassicWindow ();
 			}
@@ -136,7 +145,6 @@ namespace Do.Core
 				(window as Gtk.Window).Title = "Do";
 			
 			Reset ();
-			last_theme = Do.Preferences.Theme;
 		}
 
 		bool IsSummonable {

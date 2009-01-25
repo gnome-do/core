@@ -34,13 +34,11 @@ namespace Do.Core
 	public class UniverseManager
 	{
 
-		Thread thread, update_thread;
+		Thread update_thread;
 		Dictionary<string, Element> universe;
-		EventHandler onInitialized;
+		EventHandler initialized;
 		
-		object universe_lock = new object ();
-		
-		float epsilon = 0.00001f;
+		const float epsilon = 0.00001f;
 		
 		/// <value>
 		/// The amount of time between updates.
@@ -68,21 +66,46 @@ namespace Do.Core
 			add {
 				if (BuildCompleted)
 					value (this, EventArgs.Empty);
-				onInitialized += value;
+				initialized += value;
 			}
 			remove {
-				onInitialized -= value;
+				initialized -= value;
 			}
 		}
 		
 		public UniverseManager ()
 		{
 			universe = new Dictionary<string, Element> ();
+
+			update_thread = new Thread (new ThreadStart (UniverseUpdateLoop));
+			update_thread.IsBackground = true;
+			update_thread.Priority = ThreadPriority.Lowest;
+		}
+			
+		public void Initialize ()
+		{
+			Services.Application.RunOnThread (InitializeAsync);
+		}
+
+		public void InitializeAsync ()
+		{
+			// Do the initial load of the universe.
+			ReloadUniverse ();
+
+			// Notify subscribers that the universe has been loaded.
+			Gtk.Application.Invoke ((sender, e) => {
+				BuildCompleted = true;
+				if (initialized != null)
+					initialized (this, EventArgs.Empty);
+			});
+
+			// Start the update thread.
+			update_thread.Start ();
 		}
 
 		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter)
 		{	
-				return Search (query, filter, (Element) null);
+			return Search (query, filter, (Element) null);
 		}
 		
 		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, Element other)
@@ -90,7 +113,7 @@ namespace Do.Core
 			if (filter.Count () == 1 && filter.First () == typeof (Act))
 				return Search (query, filter, PluginManager.Actions.OfType<Element> (), other);
 			else
-				lock (universe_lock) 
+				lock (universe) 
 					return Search (query, filter, universe.Values, other);
 		}
 		
@@ -133,30 +156,9 @@ namespace Do.Core
 		}
 		
 		/// <summary>
-		/// Threaded universe building
+		/// Continuously updates the universe on a worker thread.
 		/// </summary>
-		void BuildUniverse ()
-		{
-			//Originally i had threaded the loading of each plugin, but they dont seem to like this...
-			if (thread != null && thread.IsAlive) return;
-			
-			thread = new Thread (new ThreadStart (LoadUniverse));
-			thread.IsBackground = true;
-			thread.Start ();
-			
-			if (update_thread != null && update_thread.IsAlive)
-				return;
-			
-			update_thread = new Thread (new ThreadStart (UniverseUpdateStart));
-			update_thread.IsBackground = true;
-			update_thread.Priority = ThreadPriority.Lowest;
-			update_thread.Start ();
-		}
-		
-		/// <summary>
-		/// A continuous method that will update universe until a flag is set for it to stop.
-		/// </summary>
-		void UniverseUpdateStart ()
+		void UniverseUpdateLoop ()
 		{
 			Random rand = new Random ();
 			DateTime startUpdate = DateTime.Now;
@@ -164,10 +166,6 @@ namespace Do.Core
 			while (true) {
 				Thread.Sleep (UpdateTimeout);
 				if (Do.Controller.IsSummoned) continue;
-				
-				if (thread.IsAlive) thread.Join ();
-
-				// reset our update time so the penalty is actually paid...
 				startUpdate = DateTime.Now;
 				
 				if (rand.Next (10) == 0) {
@@ -176,9 +174,8 @@ namespace Do.Core
 				}
 				
 				foreach (ItemSource source in PluginManager.ItemSources) {
-					SafeItemSource safeSource = source.Safe;
-					Log<UniverseManager>.Debug ("Updating item source \"{0}\".", safeSource.Name);
-					UpdateSource (safeSource);
+					Log<UniverseManager>.Debug ("Updating item source \"{0}\".", source.Safe.Name);
+					ReloadSource (source);
 
 					if (UpdateRunTime < DateTime.Now - startUpdate) {
 						Thread.Sleep (UpdateTimeout);
@@ -189,12 +186,11 @@ namespace Do.Core
 		}
 		
 		/// <summary>
-		/// Reloads all actions into the universe.  This is a straight reload, no intelligent 
-		/// reloading is done.
+		/// Reloads all actions in the universe.
 		/// </summary>
 		void ReloadActions ()
 		{
-			lock (universe_lock) {
+			lock (universe) {
 				foreach (Act action in PluginManager.Actions) {
 					universe.Remove (action.UniqueId);
 				}
@@ -205,39 +201,41 @@ namespace Do.Core
 		}
 		
 		/// <summary>
-		/// Updates an item source and syncs it into the universe
+		/// Updates an item source and syncs it into the universe. This should
+		/// not be called on the main thread to avoid blocking the UI if the
+		/// item source takes a long time to update.
 		/// </summary>
-		void UpdateSource (SafeItemSource source)
+		void ReloadSource (ItemSource source)
 		{
-			lock (universe_lock) {
-				foreach (Item item in source.Items) {
+			IEnumerable<Item> oldItems, newItems;
+			
+			oldItems = source.Safe.Items;
+			// We call UpdateItems outside of the lock so as not to block other
+			// threads in contention for the lock if UpdateItems blocks.
+			source.Safe.UpdateItems ();
+			newItems = source.Safe.Items;
+			
+			lock (universe) {
+				foreach (Item item in oldItems) {
 					if (universe.ContainsKey (item.UniqueId))
 						universe.Remove (item.UniqueId);
 				}
-				source.UpdateItems ();
-				foreach (Item item in source.Items) {
+				foreach (Item item in newItems) {
 					universe  [item.UniqueId] = item;
 				}
 			}
 		}
 		
-		/// <summary>
-		/// Used to perform and intialization of Do's universe and related indexes
-		/// </summary>
-		void LoadUniverse ()
+		void ReloadUniverse ()
 		{
+			Log<UniverseManager>.Info ("Reloading Universe...");
+			
 			ReloadActions ();
 			
 			foreach (ItemSource source in PluginManager.ItemSources)
-				UpdateSource (source.Safe);
+				ReloadSource (source);
 			
 			Log<UniverseManager>.Info ("Universe contains {0} items.", universe.Count);
-
-			Gtk.Application.Invoke ((sender, e) => {
-				BuildCompleted = true;
-				if (onInitialized != null)
-					onInitialized (this, EventArgs.Empty);
-			});
 		}
 		
 		/// <summary>
@@ -248,7 +246,7 @@ namespace Do.Core
 		/// </param>
 		public void AddItems (IEnumerable<Item> items)
 		{
-			lock (universe_lock) {
+			lock (universe) {
 				foreach (Item item in items) {
 					if (universe.ContainsKey (item.UniqueId)) continue;
 					universe [item.UniqueId] = item;
@@ -265,7 +263,7 @@ namespace Do.Core
 		/// </param>
 		public void DeleteItems (IEnumerable<Item> items)
 		{
-			lock (universe_lock) {
+			lock (universe) {
 				foreach (Item item in items) {
 					universe.Remove (item.UniqueId);
 				}
@@ -283,7 +281,7 @@ namespace Do.Core
 		/// </param>
 		public bool TryGetElementForUniqueId (string uid, out Element o)
 		{
-			lock (universe_lock) {
+			lock (universe) {
 				if (universe.ContainsKey (uid)) {
 					o = universe [uid];
 				} else {
@@ -298,13 +296,7 @@ namespace Do.Core
 		/// </summary>
 		public void Reload ()
 		{
-			Log<UniverseManager>.Info ("Reloading Universe");
-			BuildUniverse ();
-		}
-		
-		public void Initialize ()
-		{
-			BuildUniverse ();
+			Services.Application.RunOnThread (ReloadUniverse);
 		}
 	}
 }
