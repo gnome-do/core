@@ -278,20 +278,20 @@ namespace Do.Core
 		/// <param name="item">
 		/// A <see cref="Element"/>
 		/// </param>
-		public bool TryGetElementForUniqueId (string uid, out Element o)
+		public bool TryGetElementForUniqueId (string uid, out Element element)
 		{
 			lock (universe) {
 				if (universe.ContainsKey (uid)) {
-					o = universe [uid];
+					element = universe [uid];
 				} else {
-					o = null;
+					element = null;
 				}
 			}
-			return o == null;
+			return element == null;
 		}
 		
 		/// <summary>
-		/// Causes the universe to be rebuilt in the background
+		/// Causes the universe to be rebuilt in the background.
 		/// </summary>
 		public void Reload ()
 		{
