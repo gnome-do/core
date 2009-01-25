@@ -169,14 +169,11 @@ namespace Do.Core
 				startUpdate = DateTime.Now;
 				
 				if (rand.Next (10) == 0) {
-					Log<UniverseManager>.Debug ("Updating Actions");
 					ReloadActions ();
 				}
 				
 				foreach (ItemSource source in PluginManager.ItemSources) {
-					Log<UniverseManager>.Debug ("Updating item source \"{0}\".", source.Safe.Name);
 					ReloadSource (source);
-
 					if (UpdateRunTime < DateTime.Now - startUpdate) {
 						Thread.Sleep (UpdateTimeout);
 						startUpdate = DateTime.Now;
@@ -190,6 +187,7 @@ namespace Do.Core
 		/// </summary>
 		void ReloadActions ()
 		{
+			Log<UniverseManager>.Debug ("Reloading actions...");
 			lock (universe) {
 				foreach (Act action in PluginManager.Actions) {
 					universe.Remove (action.UniqueId);
@@ -207,13 +205,18 @@ namespace Do.Core
 		/// </summary>
 		void ReloadSource (ItemSource source)
 		{
+			SafeItemSource safeSource;
 			IEnumerable<Item> oldItems, newItems;
+
+			if (source == null) throw new ArgumentNullException ("source");
 			
-			oldItems = source.Safe.Items;
+			safeSource = source.RetainSafe ();
+			Log<UniverseManager>.Debug ("Updating item source \"{0}\".", safeSource.Name);
+			oldItems = safeSource.Items;
 			// We call UpdateItems outside of the lock so as not to block other
 			// threads in contention for the lock if UpdateItems blocks.
-			source.Safe.UpdateItems ();
-			newItems = source.Safe.Items;
+			safeSource.UpdateItems ();
+			newItems = safeSource.Items;
 			
 			lock (universe) {
 				foreach (Item item in oldItems) {
@@ -228,13 +231,9 @@ namespace Do.Core
 		
 		void ReloadUniverse ()
 		{
-			Log<UniverseManager>.Info ("Reloading Universe...");
-			
+			Log<UniverseManager>.Info ("Reloading universe...");
 			ReloadActions ();
-			
-			foreach (ItemSource source in PluginManager.ItemSources)
-				ReloadSource (source);
-			
+			PluginManager.ItemSources.ForEach (ReloadSource);
 			Log<UniverseManager>.Info ("Universe contains {0} items.", universe.Count);
 		}
 		
