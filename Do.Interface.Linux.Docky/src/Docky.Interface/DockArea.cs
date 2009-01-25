@@ -942,6 +942,9 @@ namespace Docky.Interface
 			if (backbuffer == null) {
 				cr = Gdk.CairoHelper.Create (GdkWindow);
 				backbuffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
+				
+				cr.Target.Destroy ();
+				(cr.Target as IDisposable).Dispose ();
 				(cr as IDisposable).Dispose ();
 			}
 			
@@ -960,8 +963,11 @@ namespace Docky.Interface
 			
 			cr2.Operator = Operator.Source;
 			cr2.Paint ();
-			(cr2 as IDisposable).Dispose ();
-
+			
+			cr2.Target.Destroy ();
+			((IDisposable)cr2.Target).Dispose ();
+			((IDisposable)cr2).Dispose ();
+			
 			return ret_val;
 		}
 		
