@@ -43,6 +43,7 @@ Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs
 Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs
 Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs
 Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs
+Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs
 Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs
 Do.Universe/src/Do.Universe/Element.cs
 # files added by intltool-prepare
