@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 
 using Gdk;
+using Mono.Unix;
 
 using Do.Interface;
 using Do.Interface.CairoUtils;
@@ -91,7 +92,7 @@ namespace Docky.Interface
 		
 		public override string Description {
 			get {
-				return "Trash";
+				return Catalog.GetString ("Trash");
 			}
 		}
 		
