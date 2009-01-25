@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 
 using Gdk;
+using Mono.Unix;
 
 using Do.Interface;
 using Do.Interface.CairoUtils;
@@ -50,7 +51,7 @@ namespace Docky.Interface
 		
 		public TrashDockItem()
 		{
-			SetText (Mono.Unix.Catalog.GetString ("Trash"));
+			SetText (Catalog.GetString ("Trash"));
 		}
 		
 		protected override Pixbuf GetSurfacePixbuf ()
