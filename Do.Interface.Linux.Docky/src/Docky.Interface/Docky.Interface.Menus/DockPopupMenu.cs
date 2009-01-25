@@ -80,19 +80,20 @@ namespace Docky.Interface.Menus
 		protected virtual void Build ()
 		{
 			align = new Gtk.Alignment (0.5f, 0.5f, 1, 1);
+			align.LeftPadding = align.RightPadding = align.TopPadding = align.BottomPadding = 2;
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
-				align.BottomPadding = TailHeight;
+				align.BottomPadding += TailHeight;
 				break;
 			case DockOrientation.Left:
-				align.LeftPadding = TailHeight;
+				align.LeftPadding += TailHeight;
 				break;
 			case DockOrientation.Right:
-				align.RightPadding = TailHeight;
+				align.RightPadding += TailHeight;
 				break;
 			case DockOrientation.Top:
-				align.TopPadding = TailHeight;
+				align.TopPadding += TailHeight;
 				break;
 			}
 			
@@ -202,7 +203,8 @@ namespace Docky.Interface.Menus
 			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .9);
 			cr.FillPreserve ();
 			
-			cr.Color = new Cairo.Color (1, 1, 1, .8);
+			cr.Color = new Cairo.Color (1, 1, 1, .4);
+			cr.LineWidth = 1;
 			cr.Stroke ();
 		}
 
@@ -238,6 +240,10 @@ namespace Docky.Interface.Menus
 				                              size.Height - 2 * BorderWidth - TailHeight);
 				break;
 			}
+
+			context.Translate (.5, .5);
+			mainArea.Width -= 1;
+			mainArea.Height -= 1;
 
 			PointD topLeftRadialCenter = new PointD (mainArea.X + Radius, mainArea.Y + Radius);
 			PointD topRightRadialCenter = new PointD (mainArea.X + mainArea.Width - Radius, mainArea.Y + Radius);
@@ -283,6 +289,8 @@ namespace Docky.Interface.Menus
 			}
 
 			context.ClosePath ();
+
+			context.Translate (-.5, -.5);
 		}
 	}
 }

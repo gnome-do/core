@@ -92,11 +92,12 @@ namespace Docky.Interface
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);
 			
-			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X), 1, Pango.Units.ToPixels (rect2.Width) + 18, Height - 2, 5);
+			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) + .5, 1 + .5, Pango.Units.ToPixels (rect2.Width) + 18 - 1, Height - 2 - 1, 5);
 			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
 			cr.FillPreserve ();
 
-			cr.Color = new Cairo.Color (1, 1, 1, .8);
+			cr.Color = new Cairo.Color (1, 1, 1, .4);
+			cr.LineWidth = 1;
 			cr.Stroke ();
 
 			Pango.Layout shadow = layout.Copy();

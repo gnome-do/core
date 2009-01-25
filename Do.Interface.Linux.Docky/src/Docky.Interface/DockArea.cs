@@ -1249,18 +1249,15 @@ namespace Docky.Interface
 			UnregisterGtkDragSource ();
 
 			SummonRenderer.Dispose ();
-			SummonRenderer = null;
-			
-			ItemProvider.Dispose ();
-			ItemProvider = null;
-
 			PositionProvider.Dispose ();
-			PositionProvider = null;
-
+			ItemProvider.Dispose ();
 			AnimationState.Dispose ();
-			AnimationState = null;
-
 			PopupMenu.Destroy ();
+
+			SummonRenderer = null;
+			PositionProvider = null;
+			AnimationState = null;
+			ItemProvider = null;
 			PopupMenu = null;
 
 			if (backbuffer != null)
