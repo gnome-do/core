@@ -215,15 +215,16 @@ namespace Docky.Interface.Renderers
 			Element current = State [State.CurrentPane];
 			
 			if (current == null)
-				return;
-			
-			if (current is ITextItem)
-				text = GLib.Markup.EscapeText ((current as ITextItem).Text);
+				text = State.GetPaneQuery (State.CurrentPane);
+			else if (current is ITextItem)
+				text = (current as ITextItem).Text;
 			else
-				text = GLib.Markup.EscapeText (current.Name);
+				text = current.Name;
 
 			if (string.IsNullOrEmpty (text))
 			    return;
+
+			text = GLib.Markup.EscapeText (text);
 			
 			double text_scale = (DockPreferences.IconSize / 64.0);
 			int text_height = Math.Max (11, (int) (15 * text_scale));
@@ -247,10 +248,18 @@ namespace Docky.Interface.Renderers
 			
 			string text;
 			Element current = State [State.CurrentPane];
-			if (current is ITextItem)
-				text = GLib.Markup.EscapeText ((current as ITextItem).Text);
+
+			if (current == null)
+				text = State.GetPaneQuery (State.CurrentPane);
+			else if (current is ITextItem)
+				text = (current as ITextItem).Text;
 			else
-				text = GLib.Markup.EscapeText (current.Name);
+				text = current.Name;
+
+			if (string.IsNullOrEmpty (text))
+				return;
+
+			text = GLib.Markup.EscapeText (text);
 			
 			double text_scale = (DockPreferences.IconSize / 64.0);
 			int text_height = Math.Max (11, (int) (15 * text_scale));
