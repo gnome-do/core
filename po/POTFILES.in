@@ -30,7 +30,9 @@ Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs
 Do.Interface.Linux.Docky/src/Docky.Interface/AbstractMenuButtonArgs.cs
 Do.Interface.Linux.Docky/src/Docky.Interface/DockArea.cs
 Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs
+Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs
 Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs
+Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs
 Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs
 Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs
 Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs
