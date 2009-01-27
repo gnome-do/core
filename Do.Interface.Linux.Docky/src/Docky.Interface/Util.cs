@@ -81,9 +81,7 @@ namespace Docky.Interface
 			
 			Context cr = new Context (sr);
 
-			Pango.Layout layout = Pango.CairoHelper.CreateLayout (cr);
-			layout.FontDescription = Pango.FontDescription.FromString ("sans-serif 11");
-			layout.FontDescription.Weight = Pango.Weight.Semibold;
+			Pango.Layout layout = Core.DockServices.DrawingService.GetThemedLayout ();
 			layout.Width = Pango.Units.FromPixels (max_width - 18);
 			layout.SetMarkup (text);
 			switch (orientation) {
@@ -125,9 +123,7 @@ namespace Docky.Interface
 			cr.Fill ();
 
 			(cr as IDisposable).Dispose ();
-			shadow.FontDescription.Dispose ();
 			shadow.Dispose ();
-			layout.FontDescription.Dispose ();
 			layout.Dispose ();
 			return sr;
 		}

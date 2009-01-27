@@ -61,7 +61,12 @@
     <File name="src/Docky.Interface/DragState.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Core" subtype="Directory" buildaction="Compile" />
     <File name="src/Docky.Core/DockServices.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Core/ItemsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/IItemsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/IDockService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/Docky.Core.Default" subtype="Directory" buildaction="Compile" />
+    <File name="src/Docky.Core/Docky.Core.Default/ItemsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/IDrawingService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/Docky.Core.Default/DrawingService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

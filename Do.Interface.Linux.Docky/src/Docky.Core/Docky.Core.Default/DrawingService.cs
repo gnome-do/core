@@ -1,4 +1,4 @@
-// DockServices.cs
+// DrawingService.cs
 // 
 // Copyright (C) 2009 GNOME Do
 //
@@ -17,23 +17,30 @@
 //
 
 using System;
-using System.Collections.Generic;
 
-namespace Docky.Core
+using Docky.Interface;
+
+namespace Docky.Core.Default
 {
 	
-	
-	public static class DockServices
+	public class DrawingService  : IDrawingService
 	{
-		static IItemsService items_service;
-		static IDrawingService drawing_service;
+		#region IDrawingService implementation 
 		
-		public static IItemsService ItemsService {
-			get { return items_service ?? (items_service = new Default.ItemsService () as IItemsService); }
+		public Pango.Layout GetThemedLayout ()
+		{
+			return new Pango.Layout (DockWindow.Window.CreatePangoContext ());
 		}
+		
+		#endregion 
 
-		public static IDrawingService DrawingService {
-			get { return drawing_service ?? (drawing_service = new Default.DrawingService () as IDrawingService); }
+		#region IDisposable implementation 
+		
+		public void Dispose ()
+		{
 		}
+		
+		#endregion 
+		
 	}
 }

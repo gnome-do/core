@@ -33,9 +33,9 @@ using Docky.Utilities;
 
 using Wnck;
 
-namespace Docky.Core
+namespace Docky.Core.Default
 {
-	public class ItemsService : IDisposable
+	public class ItemsService : IItemsService
 	{
 		
 		public event DockItemsChangedHandler DockItemsChanged;
@@ -145,7 +145,7 @@ namespace Docky.Core
 			UpdateItems ();
 		}
 		
-		public void AddCustomItem (Element item)
+		public void AddItemToDock (Element item)
 		{
 			if (!(item is Item)) {
 				Log<ItemsService>.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
@@ -168,7 +168,7 @@ namespace Docky.Core
 				SerializeData ();
 		}
 		
-		public void AddCustomItem (string identifier)
+		public void AddItemToDock (string identifier)
 		{
 			if (custom_items.ContainsKey (identifier))
 				return;
@@ -431,7 +431,7 @@ namespace Docky.Core
 			if (!custom_items_read) {
 				enable_serialization = false;
 				foreach (string s in DeserializeCustomItems ())
-					AddCustomItem (s);
+					AddItemToDock (s);
 				enable_serialization = true;
 				
 				custom_items_read = true;

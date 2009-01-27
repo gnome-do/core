@@ -1,4 +1,4 @@
-// DockServices.cs
+// IDockService.cs
 // 
 // Copyright (C) 2009 GNOME Do
 //
@@ -17,23 +17,10 @@
 //
 
 using System;
-using System.Collections.Generic;
 
 namespace Docky.Core
 {
-	
-	
-	public static class DockServices
+	public interface IDockService : IDisposable
 	{
-		static IItemsService items_service;
-		static IDrawingService drawing_service;
-		
-		public static IItemsService ItemsService {
-			get { return items_service ?? (items_service = new Default.ItemsService () as IItemsService); }
-		}
-
-		public static IDrawingService DrawingService {
-			get { return drawing_service ?? (drawing_service = new Default.DrawingService () as IDrawingService); }
-		}
 	}
 }

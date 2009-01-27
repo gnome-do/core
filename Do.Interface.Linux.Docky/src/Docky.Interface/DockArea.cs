@@ -53,7 +53,7 @@ namespace Docky.Interface
 
 		public event System.Action CursorUpdated;
 		
-		public readonly TimeSpan BaseAnimationTime = new TimeSpan (0, 0, 0, 0, 150);
+		public static readonly TimeSpan BaseAnimationTime = new TimeSpan (0, 0, 0, 0, 150);
 		
 		const uint OffDockWakeupTime = 250;
 		const uint OnDockWakeupTime = 20;
@@ -400,7 +400,7 @@ namespace Docky.Interface
 			AnimationState = new DockAnimationState ();
 			BuildAnimationStateEngine ();
 			
-			SummonRenderer = new SummonModeRenderer (this);
+			SummonRenderer = new SummonModeRenderer ();
 			PopupMenu = new DockItemMenu ();
 
 			Cursor = new Gdk.Point (-1, -1);
@@ -604,7 +604,7 @@ namespace Docky.Interface
 				
 				using (Context input_cr = new Context (input_area_buffer)) {
 					input_cr.AlphaFill ();
-					SummonRenderer.RenderSummonMode (input_cr, dockArea);
+					SummonRenderer.RenderSummonMode (input_cr, dockArea, Cursor);
 				}
 
 				cr.SetSource (input_area_buffer);
@@ -876,7 +876,7 @@ namespace Docky.Interface
 					.ForEach (uri => CurrentDockItem.ReceiveItem (uri.Substring ("file://".Length)));
 			} else {
 				uriList.Where (uri => uri.StartsWith ("file://"))
-					.ForEach (uri => DockServices.ItemsService.AddCustomItem (uri.Substring ("file://".Length)));
+					.ForEach (uri => DockServices.ItemsService.AddItemToDock (uri.Substring ("file://".Length)));
 			}
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
@@ -1029,9 +1029,9 @@ namespace Docky.Interface
 			}
 			
 			if (InputInterfaceVisible) {
-				switch (SummonRenderer.GetClickEvent (GetDockArea ())) {
+				switch (SummonRenderer.GetClickEvent (GetDockArea (), Cursor)) {
 				case SummonClickEvent.AddItemToDock:
-					DockServices.ItemsService.AddCustomItem (State [State.CurrentPane]);
+					DockServices.ItemsService.AddItemToDock (State [State.CurrentPane]);
 					window.RequestClickOff ();
 					break;
 				case SummonClickEvent.None:

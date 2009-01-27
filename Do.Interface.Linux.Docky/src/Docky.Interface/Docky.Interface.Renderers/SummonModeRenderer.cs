@@ -44,8 +44,6 @@ namespace Docky.Interface.Renderers
 	{
 		const int IconSize = 16;
 		
-		DockArea parent;
-		
 		PixbufSurfaceCache LargeIconCache { get; set; }
 		TextRenderer TextUtility { get; set; }
 		
@@ -65,9 +63,8 @@ namespace Docky.Interface.Renderers
 			}
 		}
 		
-		public SummonModeRenderer (DockArea parent)
+		public SummonModeRenderer ()
 		{
-			this.parent = parent;
 			TextUtility = new TextRenderer (DockWindow.Window);
 			
 			DockPreferences.IconSizeChanged += HandleIconSizeChanged;
@@ -80,13 +77,13 @@ namespace Docky.Interface.Renderers
 			LargeIconCache = null;
 		}
 		
-		public SummonClickEvent GetClickEvent (Gdk.Rectangle dockArea)
+		public SummonClickEvent GetClickEvent (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
 			if (!ShouldRenderButton) return SummonClickEvent.None;
 			
 			Gdk.Point center = GetButtonCenter (ref dockArea);
 			Gdk.Rectangle rect = new Gdk.Rectangle (center.X - IconSize / 2, center.Y - IconSize / 2, IconSize, IconSize);
-			if (rect.Contains (parent.Cursor))
+			if (rect.Contains (cursor))
 				return SummonClickEvent.AddItemToDock;
 			return SummonClickEvent.None;
 		}
@@ -98,7 +95,7 @@ namespace Docky.Interface.Renderers
 			
 		
 		
-		public void RenderSummonMode (Context cr, Gdk.Rectangle dockArea)
+		public void RenderSummonMode (Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
 			if (LargeIconCache == null)
 				LargeIconCache = new PixbufSurfaceCache (10, 2 * DockPreferences.IconSize, 2 * DockPreferences.IconSize, cr.Target);
@@ -160,7 +157,7 @@ namespace Docky.Interface.Renderers
 			case DrawState.Normal:
 				RenderNormalText (cr, ref dockArea);
 				if (ShouldRenderButton)
-					RenderAddButton (cr, ref dockArea);
+					RenderAddButton (cr, ref dockArea, ref cursor);
 				break;
 			case DrawState.Text:
 				RenderTextModeText (cr, ref dockArea);
@@ -288,7 +285,7 @@ namespace Docky.Interface.Renderers
 			                              text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 		}
 		
-		void RenderAddButton (Context cr, ref Gdk.Rectangle dockArea)
+		void RenderAddButton (Context cr, ref Gdk.Rectangle dockArea, ref Gdk.Point cursor)
 		{
 			Gdk.Point buttonCenter = GetButtonCenter (ref dockArea);
 			
@@ -297,7 +294,7 @@ namespace Docky.Interface.Renderers
 			
 			cr.SetRoundedRectanglePath (x, y, IconSize, IconSize, IconSize / 2);
 			cr.LineWidth = 2;
-			switch (GetClickEvent (dockArea)) {
+			switch (GetClickEvent (dockArea, cursor)) {
 			case SummonClickEvent.AddItemToDock:
 				cr.Color = new Cairo.Color (1, 1, 1);
 				break;
@@ -319,7 +316,7 @@ namespace Docky.Interface.Renderers
 			int base_x = dockArea.X + 15;
 			double zoom_value = .3;
 			//fixme
-			double slide_state = Math.Min (1, (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds / parent.BaseAnimationTime.TotalMilliseconds);
+			double slide_state = Math.Min (1, (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds / DockArea.BaseAnimationTime.TotalMilliseconds);
 			
 			double growing_zoom = zoom_value + slide_state * (1 - zoom_value);
 			double shrinking_zoom = zoom_value + (1 - slide_state) * (1 - zoom_value);
@@ -410,7 +407,6 @@ namespace Docky.Interface.Renderers
 		public void Dispose ()
 		{
 			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
-			parent = null;
 			TextUtility.Dispose ();
 			TextUtility = null;
 		}

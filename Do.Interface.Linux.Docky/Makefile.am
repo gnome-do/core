@@ -7,7 +7,11 @@ TARGET = library
 FILES = \
 	AssemblyInfo.cs \
 	src/Docky.Core/DockServices.cs \
-	src/Docky.Core/ItemsService.cs \
+	src/Docky.Core/IDockService.cs \
+	src/Docky.Core/IDrawingService.cs \
+	src/Docky.Core/IItemsService.cs \
+	src/Docky.Core/Docky.Core.Default/ItemsService.cs \
+	src/Docky.Core/Docky.Core.Default/DrawingService.cs \
 	src/Docky.Interface/BaseDockItem.cs \
 	src/Docky.Interface/ApplicationDockItem.cs \
 	src/Docky.Interface/ClickAnimationType.cs \
