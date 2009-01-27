@@ -23,6 +23,8 @@ using Cairo;
 using Gdk;
 using Gtk;
 
+using Mono.Unix;
+
 using Do.Interface;
 using Do.Interface.CairoUtils;
 using Do.Universe;
@@ -742,7 +744,7 @@ namespace Do.Interface.AnimationBase
 				break;
 			case DrawState.NoResult:
 				RenderPixbuf (pane, cr, "gtk-question-dialog", 1);
-				RenderPaneText (pane, cr, "No results for: " + Context.GetPaneQuery (pane));
+				RenderPaneText (pane, cr, string.Format (Catalog.GetString ("No results for: {0}"), Context.GetPaneQuery (pane)));
 				break;
 			case DrawState.Text:
 				if (text_box_scale < 1) {
@@ -753,7 +755,7 @@ namespace Do.Interface.AnimationBase
 			case DrawState.None:
 				if (pane == Pane.First) {
 					RenderPixbuf (pane, cr, "search", 1);
-					RenderPaneText (pane, cr, "Type To Search");
+					RenderPaneText (pane, cr, Catalog.GetString ("Type To Search"));
 				}
 				break;
 			}
