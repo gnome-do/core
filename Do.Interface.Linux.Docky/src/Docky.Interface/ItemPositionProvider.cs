@@ -22,6 +22,7 @@ using System.Linq;
 
 using Gdk;
 
+using Docky.Core;
 using Docky.Utilities;
 
 namespace Docky.Interface
@@ -35,7 +36,7 @@ namespace Docky.Interface
 		DockArea parent;
 		
 		List<BaseDockItem> DockItems {
-			get { return parent.ItemProvider.DockItems; }
+			get { return DockServices.ItemsService.DockItems; }
 		}
 		
 		/// <value>
@@ -90,14 +91,14 @@ namespace Docky.Interface
 		{
 			parent.CursorUpdated += HandleCursorUpdated;
 			DockPreferences.IconSizeChanged += HandleCursorUpdated;
-			parent.ItemProvider.DockItemsChanged += HandleDockItemsChanged;
+			DockServices.ItemsService.DockItemsChanged += HandleDockItemsChanged;
 		}
 
 		void UnregisterEvents ()
 		{
 			parent.CursorUpdated -= HandleCursorUpdated;
 			DockPreferences.IconSizeChanged -= HandleCursorUpdated;
-			parent.ItemProvider.DockItemsChanged -= HandleDockItemsChanged;
+			DockServices.ItemsService.DockItemsChanged -= HandleDockItemsChanged;
 		}
 
 		void HandleDockItemsChanged(IEnumerable<BaseDockItem> items)

@@ -68,7 +68,7 @@ namespace Docky.Interface.Renderers
 		public SummonModeRenderer (DockArea parent)
 		{
 			this.parent = parent;
-			TextUtility = new TextRenderer (parent);
+			TextUtility = new TextRenderer (DockWindow.Window);
 			
 			DockPreferences.IconSizeChanged += HandleIconSizeChanged;
 		}

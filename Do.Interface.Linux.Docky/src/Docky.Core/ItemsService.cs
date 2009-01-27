@@ -1,4 +1,4 @@
-// DockItemProvider.cs
+// ItemsService.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -28,23 +28,14 @@ using Do.Interface;
 using Do.Universe;
 using Do.Platform;
 
+using Docky.Interface;
 using Docky.Utilities;
 
 using Wnck;
 
-namespace Docky.Interface
+namespace Docky.Core
 {
-	public enum IconSource {
-		Statistics,
-		Custom,
-		Application,
-		Unknown,
-	}
-	
-	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);
-	public delegate void DockItemsChangedHandler (IEnumerable<BaseDockItem> items);
-	
-	public class DockItemProvider : IDisposable
+	public class ItemsService : IDisposable
 	{
 		
 		public event DockItemsChangedHandler DockItemsChanged;
@@ -109,7 +100,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public DockItemProvider ()
+		public ItemsService ()
 		{
 			Separator = new SeparatorItem ();
 			MenuItem = new DoDockItem ();
@@ -157,7 +148,7 @@ namespace Docky.Interface
 		public void AddCustomItem (Element item)
 		{
 			if (!(item is Item)) {
-				Log<DockItemProvider>.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
+				Log<ItemsService>.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
 				return;
 			}
 			string id = item.UniqueId;
@@ -218,7 +209,7 @@ namespace Docky.Interface
 				if (e != null)
 					customItem = new DockItem (e);
 				else
-					Log<DockItemProvider>.Error ("Could not add custom item with id: {0}", identifier);
+					Log<ItemsService>.Error ("Could not add custom item with id: {0}", identifier);
 			}
 			return customItem;
 		}
@@ -376,8 +367,8 @@ namespace Docky.Interface
 					f.Serialize (s, custom_items.Keys.ToArray ());
 				}
 			} catch (Exception e) {
-				Log<DockItemProvider>.Error ("Could not serialize custom items");
-				Log<DockItemProvider>.Error (e.Message);
+				Log<ItemsService>.Error ("Could not serialize custom items");
+				Log<ItemsService>.Error (e.Message);
 			}
 		}
 		
@@ -389,8 +380,8 @@ namespace Docky.Interface
 					f.Serialize (s, DragableItems.ToDictionary (di => di.Element.UniqueId, di => di.Position));
 				}
 			} catch (Exception e) {
-				Log<DockItemProvider>.Error ("Could not serialize sort items");
-				Log<DockItemProvider>.Error (e.Message);
+				Log<ItemsService>.Error ("Could not serialize sort items");
+				Log<ItemsService>.Error (e.Message);
 			}
 		}
 		
@@ -403,10 +394,10 @@ namespace Docky.Interface
 					filenames = f.Deserialize (s) as string[];
 				}
 			} catch (FileNotFoundException e) {
-				Log<DockItemProvider>.Debug ("Custom items file not present, nothing to add. " + e.Message);
+				Log<ItemsService>.Debug ("Custom items file not present, nothing to add. " + e.Message);
 				filenames = new string[0];
 			} catch {
-				Log<DockItemProvider>.Error ("Could not deserialize custom items");
+				Log<ItemsService>.Error ("Could not deserialize custom items");
 				filenames = new string[0];
 			}
 			return filenames;
@@ -421,10 +412,10 @@ namespace Docky.Interface
 					sortDictionary = f.Deserialize (s) as Dictionary<string, int>;
 				}
 			} catch (FileNotFoundException e) {
-				Log<DockItemProvider>.Debug ("Sort Dictionary file not present, nothing to add. " + e.Message);
+				Log<ItemsService>.Debug ("Sort Dictionary file not present, nothing to add. " + e.Message);
 				sortDictionary = new Dictionary<string, int> ();
 			} catch {
-				Log<DockItemProvider>.Error ("Could not deserialize sort dictionary");
+				Log<ItemsService>.Error ("Could not deserialize sort dictionary");
 				sortDictionary = new Dictionary<string, int> ();
 			}
 			return sortDictionary;

@@ -33,6 +33,7 @@ using Do.Universe;
 using Do.Interface.CairoUtils;
 using Do;
 
+using Docky.Core;
 using Docky.Utilities;
 using Docky.Interface.Menus;
 using Docky.Interface.Renderers;
@@ -173,8 +174,6 @@ namespace Docky.Interface
 
 		public DragState DragState { get; private set; }
 
-		public DockItemProvider ItemProvider { get; private set; }
-		
 		DockAnimationState AnimationState { get; set; }
 		
 		ItemPositionProvider PositionProvider { get; set; }
@@ -188,7 +187,7 @@ namespace Docky.Interface
 		SummonModeRenderer SummonRenderer { get; set; }
 		
 		List<BaseDockItem> DockItems { 
-			get { return ItemProvider.DockItems; } 
+			get { return DockServices.ItemsService.DockItems; } 
 		}
 		
 		BaseDockItem CurrentDockItem {
@@ -396,7 +395,6 @@ namespace Docky.Interface
 			SetSize ();
 			SetSizeRequest (Width, Height);
 			
-			ItemProvider = new DockItemProvider ();
 			PositionProvider = new ItemPositionProvider (this);
 			
 			AnimationState = new DockAnimationState ();
@@ -445,8 +443,8 @@ namespace Docky.Interface
 
 		void RegisterEvents ()
 		{
-			ItemProvider.DockItemsChanged += OnDockItemsChanged;
-			ItemProvider.ItemNeedsUpdate += HandleItemNeedsUpdate;
+			DockServices.ItemsService.DockItemsChanged += OnDockItemsChanged;
+			DockServices.ItemsService.ItemNeedsUpdate += HandleItemNeedsUpdate;
 			
 			PopupMenu.Hidden += OnDockItemMenuHidden;
 			PopupMenu.Shown += OnDockItemMenuShown;
@@ -466,8 +464,8 @@ namespace Docky.Interface
 
 		void UnregisterEvents ()
 		{
-			ItemProvider.DockItemsChanged -= OnDockItemsChanged;
-			ItemProvider.ItemNeedsUpdate -= HandleItemNeedsUpdate;
+			DockServices.ItemsService.DockItemsChanged -= OnDockItemsChanged;
+			DockServices.ItemsService.ItemNeedsUpdate -= HandleItemNeedsUpdate;
 			
 			PopupMenu.Hidden -= OnDockItemMenuHidden;
 			PopupMenu.Shown -= OnDockItemMenuShown;
@@ -641,7 +639,7 @@ namespace Docky.Interface
 			// Don't draw the icon we are dragging around
 			if (GtkDragging && !DragState.IsFinished) {
 				int item = DockItems.IndexOf (DragState.DragItem);
-				if (item == icon && ItemProvider.ItemCanBeMoved (item))
+				if (item == icon && DockServices.ItemsService.ItemCanBeMoved (item))
 					return;
 			}
 			
@@ -855,7 +853,7 @@ namespace Docky.Interface
 				if (draggedPosition == currentPosition || currentPosition == -1)
 					continue;
 				
-				ItemProvider.MoveItemToPosition (draggedPosition, currentPosition);
+				DockServices.ItemsService.MoveItemToPosition (draggedPosition, currentPosition);
 			} while (false);
 			
 			AnimatedDraw ();
@@ -878,7 +876,7 @@ namespace Docky.Interface
 					.ForEach (uri => CurrentDockItem.ReceiveItem (uri.Substring ("file://".Length)));
 			} else {
 				uriList.Where (uri => uri.StartsWith ("file://"))
-					.ForEach (uri => ItemProvider.AddCustomItem (uri.Substring ("file://".Length)));
+					.ForEach (uri => DockServices.ItemsService.AddCustomItem (uri.Substring ("file://".Length)));
 			}
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
@@ -890,7 +888,7 @@ namespace Docky.Interface
 			// the user might not end the drag on the same horizontal position they start it on
 			int item = PositionProvider.IndexAtPosition (Cursor);
 
-			if (item != -1 && ItemProvider.ItemCanBeMoved (item))
+			if (item != -1 && DockServices.ItemsService.ItemCanBeMoved (item))
 				DragState = new DragState (Cursor, DockItems [item]);
 			else
 				DragState = new DragState (Cursor, null);
@@ -913,9 +911,9 @@ namespace Docky.Interface
 			if (CursorIsOverDockArea) {
 				int currentPosition = PositionProvider.IndexAtPosition (Cursor);
 				if (currentPosition != -1)
-					ItemProvider.DropItemOnPosition (DragState.DragItem, currentPosition);
+					DockServices.ItemsService.DropItemOnPosition (DragState.DragItem, currentPosition);
 			} else {
-				ItemProvider.RemoveItem (DragState.DragItem);
+				DockServices.ItemsService.RemoveItem (DragState.DragItem);
 			}
 			DragState.IsFinished = true;
 			GtkDragging = false;
@@ -953,7 +951,7 @@ namespace Docky.Interface
 			cr.AlphaFill ();
 			cr.Operator = Operator.Over;
 
-			if (ItemProvider.UpdatesEnabled)
+			if (DockServices.ItemsService.UpdatesEnabled)
 				DrawDrock (cr);
 			(cr as IDisposable).Dispose ();
 			
@@ -1033,7 +1031,7 @@ namespace Docky.Interface
 			if (InputInterfaceVisible) {
 				switch (SummonRenderer.GetClickEvent (GetDockArea ())) {
 				case SummonClickEvent.AddItemToDock:
-					ItemProvider.AddCustomItem (State [State.CurrentPane]);
+					DockServices.ItemsService.AddCustomItem (State [State.CurrentPane]);
 					window.RequestClickOff ();
 					break;
 				case SummonClickEvent.None:
@@ -1233,7 +1231,7 @@ namespace Docky.Interface
 			AnimatedDraw ();
 			
 			GLib.Timeout.Add (500, () => { 
-				ItemProvider.ForceUpdate (); 
+				DockServices.ItemsService.ForceUpdate (); 
 				return false; 
 			});
 		}
@@ -1257,14 +1255,12 @@ namespace Docky.Interface
 
 			SummonRenderer.Dispose ();
 			PositionProvider.Dispose ();
-			ItemProvider.Dispose ();
 			AnimationState.Dispose ();
 			PopupMenu.Destroy ();
 
 			SummonRenderer = null;
 			PositionProvider = null;
 			AnimationState = null;
-			ItemProvider = null;
 			PopupMenu = null;
 
 			if (backbuffer != null)

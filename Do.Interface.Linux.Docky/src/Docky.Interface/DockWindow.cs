@@ -39,6 +39,8 @@ namespace Docky.Interface
 	
 	public class DockWindow : Gtk.Window, IDoWindow
 	{
+		public static Gtk.Window Window { get; private set; }
+		
 		BezelGlassResults results;
 		BezelGlassWindow results_window;
 		
@@ -62,6 +64,7 @@ namespace Docky.Interface
 		
 		public DockWindow () : base (Gtk.WindowType.Toplevel)
 		{
+			Window = this;
 		}
 		
 		public void Initialize (IDoController controller)

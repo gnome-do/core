@@ -31,5 +31,4 @@
     <ProjectReference type="Project" localcopy="True" refto="Do.Interface.Linux" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Platform" />
   </References>
-  <GtkDesignInfo />
 </Project>

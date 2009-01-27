@@ -6,6 +6,8 @@ TARGET = library
 
 FILES = \
 	AssemblyInfo.cs \
+	src/Docky.Core/DockServices.cs \
+	src/Docky.Core/ItemsService.cs \
 	src/Docky.Interface/BaseDockItem.cs \
 	src/Docky.Interface/ApplicationDockItem.cs \
 	src/Docky.Interface/ClickAnimationType.cs \
@@ -21,7 +23,6 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Menus/SimpleMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/SeparatorMenuButtonArgs.cs \	
 	src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs \
-	src/Docky.Interface/DockItemProvider.cs \
 	src/Docky.Interface/DockState.cs \
 	src/Docky.Interface/DockWindow.cs \
 	src/Docky.Interface/Docky.Interface.Renderers/DockBackgroundRenderer.cs \

@@ -36,6 +36,16 @@ namespace Docky.Interface
 		Restore,
 		None,
 	}
+
+	public enum IconSource {
+		Statistics,
+		Custom,
+		Application,
+		Unknown,
+	}
+	
+	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);
+	public delegate void DockItemsChangedHandler (IEnumerable<BaseDockItem> items);
 	
 	public static class Util
 	{
