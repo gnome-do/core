@@ -50,7 +50,7 @@ namespace Docky.Interface.Renderers
 		TextRenderer TextUtility { get; set; }
 		
 		DockState State {
-			get { return parent.State; }
+			get { return DockState.Instance; }
 		}
 		
 		bool ShouldRenderButton {

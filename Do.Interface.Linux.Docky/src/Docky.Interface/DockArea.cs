@@ -167,7 +167,9 @@ namespace Docky.Interface
 		}
 		#endregion
 		
-		public new DockState State { get; private set; }
+		new DockState State {
+			get { return DockState.Instance; }
+		}
 
 		public DragState DragState { get; private set; }
 
@@ -395,7 +397,6 @@ namespace Docky.Interface
 			SetSizeRequest (Width, Height);
 			
 			ItemProvider = new DockItemProvider ();
-			State = new DockState ();
 			PositionProvider = new ItemPositionProvider (this);
 			
 			AnimationState = new DockAnimationState ();

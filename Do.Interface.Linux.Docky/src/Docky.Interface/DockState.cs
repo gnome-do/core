@@ -30,6 +30,11 @@ namespace Docky.Interface
 	
 	public class DockState
 	{
+		static DockState state;
+		public static DockState Instance {
+			get { return state ?? (state = new DockState ()); }
+		}
+		
 		Element[] current_items = new Element[3];
 		Element[] old_items = new Element[3];
 		
@@ -153,7 +158,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public DockState ()
+		DockState ()
 		{
 			third_pane_visible = false;
 			IntroObject = new DefaultLabelBoxElement ();
