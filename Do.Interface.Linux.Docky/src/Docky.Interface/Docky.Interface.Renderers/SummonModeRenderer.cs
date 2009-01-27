@@ -191,7 +191,7 @@ namespace Docky.Interface.Renderers
 				cr.PaintWithAlpha (opacity);
 				cr.Scale (1 / zoom, 1 / zoom);
 			}
-			
+
 			switch (PaneDrawState (State.CurrentPane))
 			{
 			case DrawState.NoResult:
@@ -434,7 +434,7 @@ namespace Docky.Interface.Renderers
 			if (!string.IsNullOrEmpty (State.GetPaneQuery (pane))) {
 				return DrawState.NoResult;
 			}
-			
+
 			return DrawState.None;
 		}
 

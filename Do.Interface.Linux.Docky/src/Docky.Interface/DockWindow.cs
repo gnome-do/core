@@ -339,11 +339,13 @@ namespace Docky.Interface
 		
 		public void Grow ()
 		{
+			DockState.Instance.ThirdPaneVisible = true;
 			interopService.SignalThirdPaneGrow ();
 		}
 		
 		public void Shrink ()
 		{
+			DockState.Instance.ThirdPaneVisible = false;
 			interopService.SignalThirdPaneShrink ();
 		}
 		

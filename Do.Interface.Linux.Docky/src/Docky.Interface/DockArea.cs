@@ -516,12 +516,6 @@ namespace Docky.Interface
 			
 			AnimationState.AddCondition ("InputModeChangeAnimationNeeded",
 			                             () => DateTime.UtcNow - interface_change_time < SummonTime);
-			
-			AnimationState.AddCondition ("InputModeSlideAnimationNeeded",
-			                             () => DateTime.UtcNow - State.LastCursorChange < BaseAnimationTime);
-			
-			AnimationState.AddCondition ("ThirdPaneVisibilityAnimationNeeded",
-			                             () => DateTime.UtcNow - State.ThirdChangeTime < BaseAnimationTime);
 		}
 
 		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)
