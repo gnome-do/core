@@ -57,6 +57,11 @@ namespace Docky.Interface
 			
 			animation_conditions [id] = handler;
 		}
+
+		public bool Contains (string id)
+		{
+			return animation_conditions.ContainsKey (id);
+		}
 		
 		public bool this [string condition]
 		{

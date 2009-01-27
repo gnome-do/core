@@ -43,6 +43,7 @@ FILES = \
 	src/Docky.Interface/ItemPositionProvider.cs \
 	src/Docky.Interface/LayoutUtils.cs \
 	src/Docky.Interface/PainterService.cs \
+	src/Docky.Interface/PaintNeededArgs.cs \
 	src/Docky.Interface/SeparatorItem.cs \
 	src/Docky.Interface/TrashDockItem.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \

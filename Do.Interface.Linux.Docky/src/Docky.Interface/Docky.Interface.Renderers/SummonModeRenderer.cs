@@ -37,14 +37,11 @@ using Docky.Utilities;
 
 namespace Docky.Interface.Renderers
 {
-	public enum SummonClickEvent {
-		AddItemToDock,
-		None,
-	}
-	
 	public class SummonModeRenderer : IDockPainter
 	{
 		const int IconSize = 16;
+
+		public event EventHandler<PaintNeededArgs> PaintNeeded;
 		
 		PixbufSurfaceCache LargeIconCache { get; set; }
 		TextRenderer TextUtility { get; set; }
@@ -85,6 +82,7 @@ namespace Docky.Interface.Renderers
 			DockPreferences.IconSizeChanged += HandleIconSizeChanged;
 			DockServices.DoInteropService.Summoned += HandleSummoned;
 			DockServices.DoInteropService.Vanished += HandleVanished;
+			DockState.Instance.StateChanged += HandleStateChanged;
 		}
 
 		void UnregisterEvents ()
@@ -92,6 +90,13 @@ namespace Docky.Interface.Renderers
 			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
 			DockServices.DoInteropService.Summoned -= HandleSummoned;
 			DockServices.DoInteropService.Vanished -= HandleVanished;
+			DockState.Instance.StateChanged -= HandleStateChanged;
+		}
+
+		void HandleStateChanged (object sender, EventArgs e)
+		{
+			if (PaintNeeded != null)
+				PaintNeeded (this, new PaintNeededArgs ());
 		}
 
 		void HandleVanished()
@@ -109,17 +114,6 @@ namespace Docky.Interface.Renderers
 			if (LargeIconCache != null)
 				LargeIconCache.Dispose ();
 			LargeIconCache = null;
-		}
-		
-		SummonClickEvent GetClickEvent (Gdk.Rectangle dockArea, Gdk.Point cursor)
-		{
-			if (!ShouldRenderButton) return SummonClickEvent.None;
-			
-			Gdk.Point center = GetButtonCenter (ref dockArea);
-			Gdk.Rectangle rect = new Gdk.Rectangle (center.X - IconSize / 2, center.Y - IconSize / 2, IconSize, IconSize);
-			if (rect.Contains (cursor))
-				return SummonClickEvent.AddItemToDock;
-			return SummonClickEvent.None;
 		}
 
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
@@ -343,14 +337,8 @@ namespace Docky.Interface.Renderers
 			
 			cr.SetRoundedRectanglePath (x, y, IconSize, IconSize, IconSize / 2);
 			cr.LineWidth = 2;
-			switch (GetClickEvent (dockArea, cursor)) {
-			case SummonClickEvent.AddItemToDock:
-				cr.Color = new Cairo.Color (1, 1, 1);
-				break;
-			case SummonClickEvent.None:
-				cr.Color = new Cairo.Color (1, 1, 1, .7);
-				break;
-			}
+			// fixme
+			cr.Color = new Cairo.Color (1, 1, 1);
 			cr.Stroke ();
 			
 			cr.MoveTo (x + IconSize / 2, y + 4);
@@ -364,7 +352,6 @@ namespace Docky.Interface.Renderers
 		{
 			int base_x = dockArea.X + 15;
 			double zoom_value = .3;
-			//fixme
 			double slide_state = Math.Min (1, (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds / DockArea.BaseAnimationTime.TotalMilliseconds);
 			
 			double growing_zoom = zoom_value + slide_state * (1 - zoom_value);

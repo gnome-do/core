@@ -152,7 +152,7 @@ namespace Docky.Interface
 			
 			cr.Color = new Cairo.Color (0, 0, 0, 1);
 			cr.Paint ();
-			
+
 			InputShapeCombineMask (pixmap, area.X, area.Y);
 			
 			(cr as IDisposable).Dispose ();
