@@ -34,6 +34,8 @@ namespace Docky.Interface
 		public static DockState Instance {
 			get { return state ?? (state = new DockState ()); }
 		}
+
+		public event EventHandler StateChanged;
 		
 		Element[] current_items = new Element[3];
 		Element[] old_items = new Element[3];
@@ -75,6 +77,7 @@ namespace Docky.Interface
 				previousPane = currentPane;
 				currentPane = value;
 				current_pane_change = DateTime.UtcNow;
+				OnStateChanged ();
 			}
 		}
 		
@@ -92,6 +95,7 @@ namespace Docky.Interface
 					return;
 				third_pane_visible = value;
 				third_pane_visibility_change = DateTime.UtcNow;
+				OnStateChanged ();
 			}
 		}
 		
@@ -155,6 +159,7 @@ namespace Docky.Interface
 			}
 			set {
 				SetItem (value, pane);
+				OnStateChanged ();
 			}
 		}
 		
@@ -172,11 +177,13 @@ namespace Docky.Interface
 			old_items[(int) pane] = current_items[(int) pane];
 			current_items[(int) pane] = item;
 			timestamps[(int) pane] = DateTime.UtcNow;
+			OnStateChanged ();
 		}
 		
 		void SetQuery (string query, Pane pane)
 		{
 			queries[(int) pane] = query;
+			OnStateChanged ();
 		}
 		
 		void SetResults (IList<Element> resultList, Pane pane)
@@ -197,6 +204,7 @@ namespace Docky.Interface
 			results[(int) pane] = resultList;
 			
 			result_timestamps[(int) pane] = DateTime.UtcNow;
+			OnStateChanged ();
 		}
 		
 		void SetCursor (int cursor, Pane pane)
@@ -207,6 +215,7 @@ namespace Docky.Interface
 			previous_cursors[(int) pane] = cursors[(int) pane];
 			cursors[(int) pane] = cursor;
 			cursor_timestamps[(int) pane] = last_cusor_change = DateTime.UtcNow;
+			OnStateChanged ();
 		}
 		
 		void SetTextMode (bool textMode, Pane pane)
@@ -216,11 +225,13 @@ namespace Docky.Interface
 			
 			text_mode[(int) pane] = textMode;
 			text_mode_timestamps[(int) pane] = DateTime.UtcNow;
+			OnStateChanged ();
 		}
 		
 		void SetTextModeType (TextModeType type, Pane pane)
 		{
 			text_mode_types[(int) pane] = type;
+			OnStateChanged ();
 		}
 		
 		public Element GetPaneItem (Pane pane)
@@ -291,6 +302,7 @@ namespace Docky.Interface
 			
 			text_mode = new bool[3];
 			text_mode_timestamps = new DateTime[3];
+			OnStateChanged ();
 		}
 		
 		public void ClearPane (Pane pane)
@@ -302,6 +314,7 @@ namespace Docky.Interface
 			text_mode_timestamps[i] = result_timestamps[i] = timestamps[i] = DateTime.UtcNow;
 			queries[i] = null;
 			text_mode[i] = false;
+			OnStateChanged ();
 		}
 		
 		public void SetContext (IUIContext context, Pane pane)
@@ -312,6 +325,13 @@ namespace Docky.Interface
 			SetCursor (context.Cursor, pane);
 			SetTextMode (context.LargeTextDisplay, pane);
 			SetTextModeType (context.LargeTextModeType, pane);
+			OnStateChanged ();
+		}
+
+		void OnStateChanged ()
+		{
+			if (StateChanged != null)
+				StateChanged (this, new EventArgs ());
 		}
 	}
 }

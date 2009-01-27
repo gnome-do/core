@@ -45,6 +45,7 @@ namespace Docky.Interface
 		BezelGlassWindow results_window;
 		
 		DockArea dock_area;
+		Interface.DoInteropService interopService;
 		IDoController controller;
 		Gdk.Rectangle current_mask;
 		uint strut_timer;
@@ -71,6 +72,9 @@ namespace Docky.Interface
 		{
 			this.controller = controller;
 			controller.Orientation = ControlOrientation.Vertical;
+
+			interopService = new DoInteropService (controller);
+			Core.DockServices.RegisterService (interopService);
 
 			RegisterEvents ();
 			Build ();
@@ -322,6 +326,7 @@ namespace Docky.Interface
 			Windowing.PresentWindow (this);
 			if (!dock_area.InputInterfaceVisible)
 				dock_area.ShowInputInterface ();
+			interopService.SignalSummon ();
 		}
 		
 		public void Vanish ()
@@ -330,37 +335,41 @@ namespace Docky.Interface
 			results_window.Hide ();
 			if (dock_area.InputInterfaceVisible)
 				dock_area.HideInputInterface ();
+			interopService.SignalVanish ();
 		}
 		
 		public void Reset ()
 		{
-			dock_area.Reset ();
+			DockState.Instance.Clear ();
+			interopService.SignalReset ();
 		}
 		
 		public void Grow ()
 		{
-			dock_area.ThirdPaneVisible = true;
+			interopService.SignalThirdPaneGrow ();
 		}
 		
 		public void Shrink ()
 		{
-			dock_area.ThirdPaneVisible = false;
+			interopService.SignalThirdPaneShrink ();
 		}
 		
 		public void GrowResults ()
 		{
 			results.SlideIn ();
+			interopService.SignalResultsGrow ();
 		}
 		
 		public void ShrinkResults ()
 		{
 			results.SlideOut ();
+			interopService.SignalResultsShrink ();
+			
 		}
 		
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
-			dock_area.SetPaneContext (context, pane);
-
+			DockState.Instance.SetContext (context, pane);
 			if (CurrentPane == pane) {
 				results.Context = context;
 			}
@@ -368,22 +377,16 @@ namespace Docky.Interface
 		
 		public void ClearPane (Pane pane)
 		{
-			dock_area.ClearPane (pane);
+			DockState.Instance.ClearPane (pane);
 		}
 		
 		public new bool Visible {
-			get {
-				return dock_area.InputInterfaceVisible;
-			}
+			get { return dock_area.InputInterfaceVisible; }
 		}
 		
 		public Pane CurrentPane {
-			get {
-				return dock_area.CurrentPane;
-			}
-			set {
-				dock_area.CurrentPane = value;
-			}
+			get { return DockState.Instance.CurrentPane; }
+			set { DockState.Instance.CurrentPane = value; }
 		}
 		
 		public bool ResultsCanHide { 

@@ -32,6 +32,7 @@ using Do.Platform;
 using Do.Universe;
 
 using Docky.Utilities;
+using Docky.Core;
 
 namespace Docky.Interface.Renderers
 {
@@ -77,7 +78,7 @@ namespace Docky.Interface.Renderers
 			LargeIconCache = null;
 		}
 		
-		public SummonClickEvent GetClickEvent (Gdk.Rectangle dockArea, Gdk.Point cursor)
+		SummonClickEvent GetClickEvent (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
 			if (!ShouldRenderButton) return SummonClickEvent.None;
 			
@@ -87,14 +88,22 @@ namespace Docky.Interface.Renderers
 				return SummonClickEvent.AddItemToDock;
 			return SummonClickEvent.None;
 		}
+
+		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
+		{
+			if (!ShouldRenderButton) return;
+
+			Gdk.Point center = GetButtonCenter (ref dockArea);
+			Gdk.Rectangle rect = new Gdk.Rectangle (center.X - IconSize / 2, center.Y - IconSize / 2, IconSize, IconSize);
+			if (rect.Contains (cursor) && State [State.CurrentPane] is Item)
+				DockServices.ItemsService.AddItemToDock (State [State.CurrentPane]);
+		}
 		
 		Gdk.Point GetButtonCenter (ref Gdk.Rectangle dockArea)
 		{
 			return new Gdk.Point (dockArea.X + IconSize / 2 + 5, dockArea.Y + dockArea.Height - (IconSize / 2 + 5));
 		}
 			
-		
-		
 		public void RenderSummonMode (Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
 			if (LargeIconCache == null)

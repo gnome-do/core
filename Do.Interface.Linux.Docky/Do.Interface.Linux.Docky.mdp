@@ -67,6 +67,10 @@
     <File name="src/Docky.Core/Docky.Core.Default/ItemsService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Core/IDrawingService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Core/Docky.Core.Default/DrawingService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/IDockPainter.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/IDoInteropService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/Docky.Core.Default/DoInteropService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/DoInteropService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

@@ -146,26 +146,7 @@ namespace Docky.Interface
 				return values;
 			}
 		}
-		
-		public Pane CurrentPane {
-			get {
-				return State.CurrentPane;
-			}
-			set {
-				State.CurrentPane = value;
-				AnimatedDraw ();
-			}
-		}
-		
-		public bool ThirdPaneVisible { 
-			get { return State.ThirdPaneVisible; }
-			set { 
-				if (State.ThirdPaneVisible == value)
-					return;
-				State.ThirdPaneVisible = value;
-				AnimatedDraw ();
-			}
-		}
+
 		#endregion
 		
 		new DockState State {
@@ -445,6 +426,8 @@ namespace Docky.Interface
 		{
 			DockServices.ItemsService.DockItemsChanged += OnDockItemsChanged;
 			DockServices.ItemsService.ItemNeedsUpdate += HandleItemNeedsUpdate;
+
+			DockState.Instance.StateChanged += HandleStateChanged;
 			
 			PopupMenu.Hidden += OnDockItemMenuHidden;
 			PopupMenu.Shown += OnDockItemMenuShown;
@@ -466,6 +449,8 @@ namespace Docky.Interface
 		{
 			DockServices.ItemsService.DockItemsChanged -= OnDockItemsChanged;
 			DockServices.ItemsService.ItemNeedsUpdate -= HandleItemNeedsUpdate;
+
+			DockState.Instance.StateChanged -= HandleStateChanged;
 			
 			PopupMenu.Hidden -= OnDockItemMenuHidden;
 			PopupMenu.Shown -= OnDockItemMenuShown;
@@ -516,6 +501,11 @@ namespace Docky.Interface
 			if (args.Type == UpdateRequestType.NeedsAttentionSet) {
 				SetParentInputMask ();
 			}
+			AnimatedDraw ();
+		}
+
+		void HandleStateChanged(object sender, EventArgs e)
+		{
 			AnimatedDraw ();
 		}
 
@@ -1029,15 +1019,7 @@ namespace Docky.Interface
 			}
 			
 			if (InputInterfaceVisible) {
-				switch (SummonRenderer.GetClickEvent (GetDockArea (), Cursor)) {
-				case SummonClickEvent.AddItemToDock:
-					DockServices.ItemsService.AddItemToDock (State [State.CurrentPane]);
-					window.RequestClickOff ();
-					break;
-				case SummonClickEvent.None:
-					// Do nothing
-					break;
-				}
+				SummonRenderer.Clicked (GetDockArea (), Cursor);
 				if (!CursorIsOverDockArea)
 					window.RequestClickOff ();
 			} else {
@@ -1207,12 +1189,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		public void SetPaneContext (IUIContext context, Pane pane)
-		{
-			State.SetContext (context, pane);
-			AnimatedDraw ();
-		}
-		
 		public void ShowInputInterface ()
 		{
 			interface_change_time = DateTime.UtcNow;
@@ -1234,17 +1210,6 @@ namespace Docky.Interface
 				DockServices.ItemsService.ForceUpdate (); 
 				return false; 
 			});
-		}
-		
-		public void Reset ()
-		{
-			State.Clear ();
-			AnimatedDraw ();
-		}
-		
-		public void ClearPane (Pane pane)
-		{
-			State.ClearPane (pane);
 		}
 		
 		public override void Dispose ()

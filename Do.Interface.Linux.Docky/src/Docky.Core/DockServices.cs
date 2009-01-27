@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Docky.Core
 {
@@ -25,8 +26,11 @@ namespace Docky.Core
 	
 	public static class DockServices
 	{
+		static List<IDockService> services = new List<IDockService> ();
+		
 		static IItemsService items_service;
 		static IDrawingService drawing_service;
+		static IDoInteropService do_interop_service;
 		
 		public static IItemsService ItemsService {
 			get { return items_service ?? (items_service = new Default.ItemsService () as IItemsService); }
@@ -34,6 +38,26 @@ namespace Docky.Core
 
 		public static IDrawingService DrawingService {
 			get { return drawing_service ?? (drawing_service = new Default.DrawingService () as IDrawingService); }
+		}
+
+		public static IDoInteropService DoInteropService {
+			get { return do_interop_service ?? (do_interop_service = LoadService<IDoInteropService, Default.DoInteropService> ()); }
+		}
+
+		public static void RegisterService (IDockService service)
+		{
+			services.Add (service);
+		}
+
+		static TService LoadService<TService, TElse> ()
+			where TService : class, IDockService
+			where TElse : TService
+		{
+			if (services.Any (s => s is TService)) {
+				return services.Where (s => s is TService) as TService;
+			} else {
+				return Activator.CreateInstance<TElse> () as TService;
+			}
 		}
 	}
 }

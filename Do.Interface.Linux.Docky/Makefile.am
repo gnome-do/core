@@ -10,8 +10,10 @@ FILES = \
 	src/Docky.Core/IDockService.cs \
 	src/Docky.Core/IDrawingService.cs \
 	src/Docky.Core/IItemsService.cs \
+	src/Docky.Core/IDoInteropService.cs \
 	src/Docky.Core/Docky.Core.Default/ItemsService.cs \
 	src/Docky.Core/Docky.Core.Default/DrawingService.cs \
+	src/Docky.Core/Docky.Core.Default/DoInteropService.cs \
 	src/Docky.Interface/BaseDockItem.cs \
 	src/Docky.Interface/ApplicationDockItem.cs \
 	src/Docky.Interface/ClickAnimationType.cs \
@@ -19,6 +21,7 @@ FILES = \
 	src/Docky.Interface/DockArea.cs \
 	src/Docky.Interface/DockAnimationState.cs \
 	src/Docky.Interface/DockItem.cs \
+	src/Docky.Interface/DoInteropService.cs \
 	src/Docky.Interface/Docky.Interface.Menus/AbstractMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/DockItemMenu.cs \
 	src/Docky.Interface/Docky.Interface.Menus/DockPopupMenu.cs \
