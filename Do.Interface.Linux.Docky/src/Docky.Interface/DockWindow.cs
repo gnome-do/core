@@ -146,7 +146,7 @@ namespace Docky.Interface
 				InputShapeCombineMask (null, 0, 0);
 				return;
 			}
-			
+
 			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, area.Width, area.Height, 1);
 			Context cr = Gdk.CairoHelper.Create (pixmap);
 			
@@ -176,7 +176,7 @@ namespace Docky.Interface
 			GetSize (out rect.Width, out rect.Height);
 			GetPosition (out rect.X, out rect.Y);
 			
-			if (!rect.Contains ((int) evnt.XRoot, (int) evnt.YRoot) && dock_area.InputInterfaceVisible) {
+			if (!rect.Contains ((int) evnt.XRoot, (int) evnt.YRoot) && Visible) {
 				controller.ButtonPressOffWindow ();
 			}
 			
@@ -185,7 +185,7 @@ namespace Docky.Interface
 		
 		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
 		{
-			if (dock_area.InputInterfaceVisible)
+			if (Visible)
 				KeyPressEvent (evnt);
 			return base.OnKeyPressEvent (evnt);
 		}
@@ -286,11 +286,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		public void RequestClickOff ()
-		{
-			Controller.ButtonPressOffWindow ();
-		}
-		
 		public void DelaySetStruts ()
 		{
 			if (strut_timer > 0)
@@ -321,20 +316,18 @@ namespace Docky.Interface
 		
 		public void Summon ()
 		{
+			Visible = true;
 			Reposition ();
 			results_window.Show ();
 			Windowing.PresentWindow (this);
-			if (!dock_area.InputInterfaceVisible)
-				dock_area.ShowInputInterface ();
 			interopService.SignalSummon ();
 		}
 		
 		public void Vanish ()
 		{
+			Visible = false;
 			Windowing.UnpresentWindow (this);
 			results_window.Hide ();
-			if (dock_area.InputInterfaceVisible)
-				dock_area.HideInputInterface ();
 			interopService.SignalVanish ();
 		}
 		
@@ -381,7 +374,7 @@ namespace Docky.Interface
 		}
 		
 		public new bool Visible {
-			get { return dock_area.InputInterfaceVisible; }
+			get; private set;
 		}
 		
 		public Pane CurrentPane {

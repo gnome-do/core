@@ -274,7 +274,7 @@ namespace Docky.Interface
 			if (other == null)
 				return false;
 			DockItem di = other as DockItem;
-			return di != null && di.Element.UniqueId == Element.UniqueId;
+			return di != null && di.Element != null && Element != null && di.Element.UniqueId == Element.UniqueId;
 		}
 
 		#region IDisposable implementation 

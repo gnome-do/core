@@ -31,6 +31,7 @@ namespace Docky.Core
 		static IItemsService items_service;
 		static IDrawingService drawing_service;
 		static IDoInteropService do_interop_service;
+		static IPainterService painter_service;
 		
 		public static IItemsService ItemsService {
 			get { return items_service ?? (items_service = new Default.ItemsService () as IItemsService); }
@@ -44,6 +45,10 @@ namespace Docky.Core
 			get { return do_interop_service ?? (do_interop_service = LoadService<IDoInteropService, Default.DoInteropService> ()); }
 		}
 
+		public static IPainterService PainterService {
+			get { return painter_service ?? (painter_service = LoadService<IPainterService, Default.PainterService> ()); }
+		}
+
 		public static void RegisterService (IDockService service)
 		{
 			services.Add (service);
@@ -53,8 +58,8 @@ namespace Docky.Core
 			where TService : class, IDockService
 			where TElse : TService
 		{
-			if (services.Any (s => s is TService)) {
-				return services.Where (s => s is TService) as TService;
+			if (services.OfType<TService> ().Any ()) {
+				return services.OfType<TService> ().First () as TService;
 			} else {
 				return Activator.CreateInstance<TElse> () as TService;
 			}

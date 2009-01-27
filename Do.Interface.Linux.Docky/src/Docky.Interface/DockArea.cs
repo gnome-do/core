@@ -158,12 +158,18 @@ namespace Docky.Interface
 		DockAnimationState AnimationState { get; set; }
 		
 		ItemPositionProvider PositionProvider { get; set; }
+
+		IDockPainter Painter { get; set; }
+
+		IDockPainter LastPainter { get; set; }
 		
 		new DockItemMenu PopupMenu { get; set; }
 		
 		bool GtkDragging { get; set; }
 
 		bool CursorIsOverDockArea {	get; set; }
+
+		bool PainterOverlayVisible { get; set; }
 		
 		SummonModeRenderer SummonRenderer { get; set; }
 		
@@ -200,7 +206,7 @@ namespace Docky.Interface
 					zoom = 1 - zoom;
 				}
 				
-				if (InputInterfaceVisible)
+				if (PainterOverlayVisible)
 					zoom = zoom * DockIconOpacity;
 				
 				return zoom;
@@ -214,10 +220,10 @@ namespace Docky.Interface
 			get {
 				double offset = 0;
 				// we never hide in these conditions
-				if (!DockPreferences.AutoHide || drag_resizing || InputAreaOpacity == 1)
+				if (!DockPreferences.AutoHide || drag_resizing || PainterOpacity == 1)
 					return 0;
 
-				if (InputAreaOpacity > 0) {
+				if (PainterOpacity > 0) {
 					if (CursorIsOverDockArea) {
 						return 0;
 					} else {
@@ -225,7 +231,7 @@ namespace Docky.Interface
 						offset = Math.Min (offset, Math.Min (1, (DateTime.UtcNow - interface_change_time).TotalMilliseconds / SummonTime.TotalMilliseconds));
 					}
 					
-					if (InputInterfaceVisible)
+					if (PainterOverlayVisible)
 						offset = 1 - offset;
 				} else {
 					offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / SummonTime.TotalMilliseconds);
@@ -242,13 +248,13 @@ namespace Docky.Interface
 		double DockIconOpacity {
 			get {
 				if (SummonTime < DateTime.UtcNow - interface_change_time) {
-					if (InputInterfaceVisible)
+					if (PainterOverlayVisible)
 						return 0;
 					return 1;
 				}
 
 				double total_time = (DateTime.UtcNow - interface_change_time).TotalMilliseconds;
-				if (InputInterfaceVisible) {
+				if (PainterOverlayVisible) {
 					return 1 - (total_time / SummonTime.TotalMilliseconds);
 				} else {
 					return total_time / SummonTime.TotalMilliseconds;
@@ -256,7 +262,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		double InputAreaOpacity {
+		double PainterOpacity {
 			get { return 1 - DockIconOpacity; }
 		}
 		
@@ -375,6 +381,8 @@ namespace Docky.Interface
 			
 			SetSize ();
 			SetSizeRequest (Width, Height);
+
+			DockServices.RegisterService (new PainterService (this));
 			
 			PositionProvider = new ItemPositionProvider (this);
 			
@@ -587,21 +595,24 @@ namespace Docky.Interface
 			Gdk.Rectangle dockArea = GetDockArea ();
 			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
 			
-			if (InputAreaOpacity > 0) {
+			if (PainterOpacity > 0) {
 				if (input_area_buffer == null) {
 					input_area_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				}
 				
 				using (Context input_cr = new Context (input_area_buffer)) {
 					input_cr.AlphaFill ();
-					SummonRenderer.RenderSummonMode (input_cr, dockArea, Cursor);
+					if (Painter != null)
+						Painter.Paint (input_cr, dockArea, Cursor);
+					else
+						LastPainter.Paint (input_cr, dockArea, Cursor);
 				}
 
 				cr.SetSource (input_area_buffer);
-				cr.PaintWithAlpha (InputAreaOpacity);
+				cr.PaintWithAlpha (PainterOpacity);
 			}
 			
-			bool isNotSummonTransition = InputAreaOpacity == 0 || CursorIsOverDockArea || !DockPreferences.AutoHide;
+			bool isNotSummonTransition = PainterOpacity == 0 || CursorIsOverDockArea || !DockPreferences.AutoHide;
 			if (DockIconOpacity > 0 && isNotSummonTransition) {
 				if (dock_icon_buffer == null)
 					dock_icon_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
@@ -1017,14 +1028,12 @@ namespace Docky.Interface
 				EndDrag ();
 				return ret_val;
 			}
-			
-			if (InputInterfaceVisible) {
-				SummonRenderer.Clicked (GetDockArea (), Cursor);
-				if (!CursorIsOverDockArea)
-					window.RequestClickOff ();
+
+			if (PainterOverlayVisible) {
+				Painter.Clicked (GetDockArea (), Cursor);
 			} else {
 				int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y); //sometimes clicking is not good!
-				if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea || InputInterfaceVisible)
+				if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea || PainterOverlayVisible)
 					return ret_val;
 				
 				//handling right clicks for those icons which request simple right click handling
@@ -1138,8 +1147,8 @@ namespace Docky.Interface
 				return;
 			
 			int offset;
-			if (InputInterfaceVisible) {
-				offset = (DockPreferences.DockIsHorizontal) ? Height : Width;
+			if (PainterOverlayVisible) {
+				offset = 0;
 			} else if (CursorIsOverDockArea) {
 				offset = (DockPreferences.DockIsHorizontal) ? GetDockArea ().Height : GetDockArea ().Width;
 				offset = offset * 2 + 10;
@@ -1189,28 +1198,69 @@ namespace Docky.Interface
 			}
 		}
 		
-		public void ShowInputInterface ()
+//		public void ShowInputInterface ()
+//		{
+//			interface_change_time = DateTime.UtcNow;
+//			InputInterfaceVisible = true;
+//			
+//			SetParentInputMask ();
+//			AnimatedDraw ();
+//		}
+
+		public bool RequestShowPainter (IDockPainter painter)
 		{
-			interface_change_time = DateTime.UtcNow;
-			InputInterfaceVisible = true;
+			if (Painter == painter)
+				return true;
 			
-			SetParentInputMask ();
-			AnimatedDraw ();
+			if (Painter == null || Painter.Interuptable) {
+				if (Painter != null)
+					Painter.Interupt ();
+				Painter = painter;
+				PainterOverlayVisible = true;
+				interface_change_time = DateTime.UtcNow;
+
+				SetParentInputMask ();
+				AnimatedDraw ();
+			} else {
+				return false;
+			}
+			return true;
 		}
-		
-		public void HideInputInterface ()
+
+		public bool RequestHidePainter (IDockPainter painter)
 		{
+			if (Painter != painter)
+				return false;
+
+			LastPainter = Painter;
+			Painter = null;
+			PainterOverlayVisible = false;
 			interface_change_time = DateTime.UtcNow;
-			InputInterfaceVisible = false;
-			
+
 			SetParentInputMask ();
 			AnimatedDraw ();
-			
+
 			GLib.Timeout.Add (500, () => { 
 				DockServices.ItemsService.ForceUpdate (); 
 				return false; 
 			});
+			
+			return true;
 		}
+		
+//		public void HideInputInterface ()
+//		{
+//			interface_change_time = DateTime.UtcNow;
+//			InputInterfaceVisible = false;
+//			
+//			SetParentInputMask ();
+//			AnimatedDraw ();
+//			
+//			GLib.Timeout.Add (500, () => { 
+//				DockServices.ItemsService.ForceUpdate (); 
+//				return false; 
+//			});
+//		}
 		
 		public override void Dispose ()
 		{

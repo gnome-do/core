@@ -10,10 +10,12 @@ FILES = \
 	src/Docky.Core/IDockService.cs \
 	src/Docky.Core/IDrawingService.cs \
 	src/Docky.Core/IItemsService.cs \
+	src/Docky.Core/IPainterService.cs \
 	src/Docky.Core/IDoInteropService.cs \
 	src/Docky.Core/Docky.Core.Default/ItemsService.cs \
 	src/Docky.Core/Docky.Core.Default/DrawingService.cs \
 	src/Docky.Core/Docky.Core.Default/DoInteropService.cs \
+	src/Docky.Core/Docky.Core.Default/PainterService.cs \
 	src/Docky.Interface/BaseDockItem.cs \
 	src/Docky.Interface/ApplicationDockItem.cs \
 	src/Docky.Interface/ClickAnimationType.cs \
@@ -36,9 +38,11 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs \
 	src/Docky.Interface/DragState.cs \
 	src/Docky.Interface/DrawState.cs \
+	src/Docky.Interface/IDockPainter.cs \
 	src/Docky.Interface/IRightClickable.cs \
 	src/Docky.Interface/ItemPositionProvider.cs \
 	src/Docky.Interface/LayoutUtils.cs \
+	src/Docky.Interface/PainterService.cs \
 	src/Docky.Interface/SeparatorItem.cs \
 	src/Docky.Interface/TrashDockItem.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \

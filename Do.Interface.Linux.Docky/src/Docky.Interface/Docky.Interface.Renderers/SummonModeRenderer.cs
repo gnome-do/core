@@ -31,8 +31,9 @@ using Do.Interface.CairoUtils;
 using Do.Platform;
 using Do.Universe;
 
-using Docky.Utilities;
 using Docky.Core;
+using Docky.Interface;
+using Docky.Utilities;
 
 namespace Docky.Interface.Renderers
 {
@@ -41,7 +42,7 @@ namespace Docky.Interface.Renderers
 		None,
 	}
 	
-	public class SummonModeRenderer : IDisposable
+	public class SummonModeRenderer : IDockPainter
 	{
 		const int IconSize = 16;
 		
@@ -63,12 +64,44 @@ namespace Docky.Interface.Renderers
 				return (int) (DockPreferences.IconSize * 3.5);
 			}
 		}
+
+		public bool DoubleBuffer {
+			get { return true; }
+		}
+
+		public bool Interuptable {
+			get { return false; }
+		}
 		
 		public SummonModeRenderer ()
 		{
 			TextUtility = new TextRenderer (DockWindow.Window);
 			
+			RegisterEvents ();
+		}
+
+		void RegisterEvents ()
+		{
 			DockPreferences.IconSizeChanged += HandleIconSizeChanged;
+			DockServices.DoInteropService.Summoned += HandleSummoned;
+			DockServices.DoInteropService.Vanished += HandleVanished;
+		}
+
+		void UnregisterEvents ()
+		{
+			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
+			DockServices.DoInteropService.Summoned -= HandleSummoned;
+			DockServices.DoInteropService.Vanished -= HandleVanished;
+		}
+
+		void HandleVanished()
+		{
+			DockServices.PainterService.RequestHide (this);
+		}
+
+		void HandleSummoned()
+		{
+			DockServices.PainterService.RequestShow (this);
 		}
 
 		void HandleIconSizeChanged ()
@@ -91,12 +124,19 @@ namespace Docky.Interface.Renderers
 
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
-			if (!ShouldRenderButton) return;
-
 			Gdk.Point center = GetButtonCenter (ref dockArea);
 			Gdk.Rectangle rect = new Gdk.Rectangle (center.X - IconSize / 2, center.Y - IconSize / 2, IconSize, IconSize);
-			if (rect.Contains (cursor) && State [State.CurrentPane] is Item)
+			if (rect.Contains (cursor) && State [State.CurrentPane] is Item) {
 				DockServices.ItemsService.AddItemToDock (State [State.CurrentPane]);
+				DockServices.DoInteropService.RequestClickOff ();
+			} else if (!dockArea.Contains (cursor)) {
+				DockServices.DoInteropService.RequestClickOff ();
+			}
+		}
+
+		public void Interupt ()
+		{
+			Log.Error ("Docky has been interupted innapropriately.  Please report this bug.");
 		}
 		
 		Gdk.Point GetButtonCenter (ref Gdk.Rectangle dockArea)
@@ -104,7 +144,7 @@ namespace Docky.Interface.Renderers
 			return new Gdk.Point (dockArea.X + IconSize / 2 + 5, dockArea.Y + dockArea.Height - (IconSize / 2 + 5));
 		}
 			
-		public void RenderSummonMode (Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
+		public void Paint (Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
 			if (LargeIconCache == null)
 				LargeIconCache = new PixbufSurfaceCache (10, 2 * DockPreferences.IconSize, 2 * DockPreferences.IconSize, cr.Target);
@@ -411,16 +451,11 @@ namespace Docky.Interface.Renderers
 			return DrawState.None;
 		}
 
-		#region IDisposable implementation 
-		
 		public void Dispose ()
 		{
-			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
+			UnregisterEvents ();
 			TextUtility.Dispose ();
 			TextUtility = null;
 		}
-		
-		#endregion 
-		
 	}
 }
