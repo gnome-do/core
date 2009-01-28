@@ -26,7 +26,7 @@ using Do.Interface.CairoUtils;
 
 using Docky.Utilities;
 
-namespace Docky.Interface.Renderers
+namespace Docky.Interface.Painters
 {
 	
 	

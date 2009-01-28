@@ -35,7 +35,7 @@ using Docky.Core;
 using Docky.Interface;
 using Docky.Utilities;
 
-namespace Docky.Interface.Renderers
+namespace Docky.Interface.Painters
 {
 	public class SummonModeRenderer : IDockPainter
 	{
@@ -95,8 +95,14 @@ namespace Docky.Interface.Renderers
 
 		void HandleStateChanged (object sender, EventArgs e)
 		{
-			if (PaintNeeded != null)
-				PaintNeeded (this, new PaintNeededArgs ());
+			if (PaintNeeded != null) {
+				PaintNeededArgs args;
+				if (DateTime.UtcNow - DockState.Instance.CurrentPaneTime < DockArea.BaseAnimationTime) 
+					args = new PaintNeededArgs (DockArea.BaseAnimationTime);
+				else
+					args = new PaintNeededArgs ();
+				PaintNeeded (this, args);
+			}
 		}
 
 		void HandleVanished()

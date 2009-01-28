@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 using Docky.Core;
 
@@ -26,7 +27,7 @@ namespace Docky.Interface
 	
 	public class PainterService : IPainterService
 	{
-		
+		List<IDockPainter> painters;
 		DockArea parent;
 		
 		#region IPainterService implementation 
@@ -45,9 +46,15 @@ namespace Docky.Interface
 		
 
 		
-		public PainterService(DockArea parent)
+		public PainterService (DockArea parent)
 		{
 			this.parent = parent;
+			painters = new List<IDockPainter> ();
+		}
+
+		public void BuildPainters ()
+		{
+			painters.Add (new Painters.SummonModeRenderer ());
 		}
 
 		#region IDisposable implementation 

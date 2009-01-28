@@ -34,8 +34,8 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs \
 	src/Docky.Interface/DockState.cs \
 	src/Docky.Interface/DockWindow.cs \
-	src/Docky.Interface/Docky.Interface.Renderers/DockBackgroundRenderer.cs \
-	src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs \
+	src/Docky.Interface/Docky.Interface.Painters/DockBackgroundRenderer.cs \
+	src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs \
 	src/Docky.Interface/DragState.cs \
 	src/Docky.Interface/DrawState.cs \
 	src/Docky.Interface/IDockPainter.cs \

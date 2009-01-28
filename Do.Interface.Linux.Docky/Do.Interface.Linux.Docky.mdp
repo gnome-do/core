@@ -30,9 +30,9 @@
     <File name="src/Docky.Interface/DrawState.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/SeparatorItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Util.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/Docky.Interface.Renderers" subtype="Directory" buildaction="Compile" />
-    <File name="src/Docky.Interface/Docky.Interface.Renderers/DockBackgroundRenderer.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Painters" subtype="Directory" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Painters/DockBackgroundRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Utilities/DockPreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Utilities/GtkUtils.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Utilities/WindowUtils.cs" subtype="Code" buildaction="Compile" />

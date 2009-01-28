@@ -36,7 +36,7 @@ using Do;
 using Docky.Core;
 using Docky.Utilities;
 using Docky.Interface.Menus;
-using Docky.Interface.Renderers;
+using Docky.Interface.Painters;
 
 namespace Docky.Interface
 {
@@ -150,10 +150,6 @@ namespace Docky.Interface
 
 		#endregion
 		
-		new DockState State {
-			get { return DockState.Instance; }
-		}
-
 		public DragState DragState { get; private set; }
 
 		DockAnimationState AnimationState { get; set; }
@@ -493,9 +489,6 @@ namespace Docky.Interface
 			AnimationState.AddCondition ("IconInsertAnimationNeeded", 
 			                             () => DockItems.Any (di => di.TimeSinceAdd < InsertAnimationTime));
 			
-			AnimationState.AddCondition ("PaneChangeAnimationNeeded",
-			                             () => (DateTime.UtcNow - State.CurrentPaneTime) < BaseAnimationTime);
-		
 			AnimationState.AddCondition ("ZoomAnimationNeeded",
 			                             () => (CursorIsOverDockArea && ZoomIn != 1) || (!CursorIsOverDockArea && ZoomIn != 0));
 			
@@ -538,15 +531,14 @@ namespace Docky.Interface
 		{
 			if (sender != Painter && sender != LastPainter) return;
 			
+			if (args.Animated) {
+				if (AnimationState.Contains ("PainterAnimation"))
+					AnimationState.RemoveCondition ("PainterAnimation");
+			
+				DateTime current_time = DateTime.UtcNow;
+				AnimationState.AddCondition ("PainterAnimation", () => DateTime.UtcNow - current_time < args.AnimationLength);
+			}
 			AnimatedDraw ();
-
-			if (!args.Animated) return;
-			
-			if (AnimationState.Contains ("PainterAnimation"))
-				AnimationState.RemoveCondition ("PainterAnimation");
-			
-			DateTime current_time = DateTime.UtcNow;
-			AnimationState.AddCondition ("PainterAnimation", () => DateTime.UtcNow - current_time < args.AnimationLength);
 		}
 		
 		void RegisterGtkDragSource ()
