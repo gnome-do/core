@@ -163,9 +163,9 @@ namespace Docky.Interface
 		bool CursorIsOverDockArea {	get; set; }
 
 		bool PainterOverlayVisible { get; set; }
-		
-		SummonModeRenderer SummonRenderer { get; set; }
 
+		PainterService PainterService { get; set; }
+		
 		IDockPainter Painter { 
 			get {
 				return painter;
@@ -402,14 +402,15 @@ namespace Docky.Interface
 			SetSize ();
 			SetSizeRequest (Width, Height);
 
-			DockServices.RegisterService (new PainterService (this));
+			PainterService = new PainterService (this);
+			PainterService.BuildPainters ();
+			DockServices.RegisterService (PainterService);
 			
 			PositionProvider = new ItemPositionProvider (this);
 			
 			AnimationState = new DockAnimationState ();
 			BuildAnimationStateEngine ();
 			
-			SummonRenderer = new SummonModeRenderer ();
 			PopupMenu = new DockItemMenu ();
 
 			Cursor = new Gdk.Point (-1, -1);
@@ -1260,12 +1261,10 @@ namespace Docky.Interface
 			UnregisterEvents ();
 			UnregisterGtkDragSource ();
 
-			SummonRenderer.Dispose ();
 			PositionProvider.Dispose ();
 			AnimationState.Dispose ();
 			PopupMenu.Destroy ();
 
-			SummonRenderer = null;
 			PositionProvider = null;
 			AnimationState = null;
 			PopupMenu = null;
