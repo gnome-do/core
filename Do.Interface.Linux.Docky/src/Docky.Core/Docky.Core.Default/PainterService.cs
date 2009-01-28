@@ -31,18 +31,10 @@ namespace Docky.Core.Default
 	{
 		
 		
-		#region IPainterService implementation 
-		
-		public bool RequestShow (IDockPainter painter)
+		#region IPainterService implementation
+		public void RegisterPainter (IDockPainter painter)
 		{
-			Log.Error ("Default Painter Service cannot service show requests");
-			return false;
-		}
-		
-		public bool RequestHide (IDockPainter painter)
-		{
-			Log.Error ("Default Painter Service cannot service hide requests");
-			return false;
+			Log.Error ("Default Painter Services cannot register painters");
 		}
 
 		#region IDisposable implementation 

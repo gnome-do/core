@@ -27,7 +27,9 @@ using Do.Interface;
 using Do.Platform;
 using Do.Universe;
 
+using Docky.Core;
 using Docky.Interface.Menus;
+using Docky.Interface.Painters;
 using Docky.Utilities;
 
 namespace Docky.Interface
@@ -38,6 +40,8 @@ namespace Docky.Interface
 		const string DoIcon = "gnome-do";
 		const string EnableIcon = "gtk-apply";
 		const string DisableIcon = "gtk-remove";
+
+		HotSeatPainter hot_seat_painter;
 		
 		#region IDockItem implementation 
 		
@@ -51,13 +55,18 @@ namespace Docky.Interface
 		{
 			if (button == 1)
 				Services.Windowing.SummonMainWindow ();
+			if (button == 2)
+				hot_seat_painter.Show ();
 		}
 		
 		#endregion 
 		
 		public DoDockItem () : base ()
 		{
-			base.SetText (Mono.Unix.Catalog.GetString ("Summon GNOME Do"));
+			hot_seat_painter = new HotSeatPainter ();
+			DockServices.PainterService.RegisterPainter (hot_seat_painter);
+			
+			SetText (Mono.Unix.Catalog.GetString ("Summon GNOME Do"));
 		}
 
 		#region IDisposable implementation 

@@ -27,6 +27,8 @@ namespace Docky.Interface
 	public interface IDockPainter : IDisposable
 	{
 		event EventHandler<PaintNeededArgs> PaintNeeded;
+		event EventHandler ShowRequested;
+		event EventHandler HideRequested;
 		
 		bool DoubleBuffer { get; }
 

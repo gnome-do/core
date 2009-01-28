@@ -30,21 +30,36 @@ namespace Docky.Interface
 		List<IDockPainter> painters;
 		DockArea parent;
 		
-		#region IPainterService implementation 
-		
-		public bool RequestShow (IDockPainter painter)
+		#region IPainterService implementation
+
+		public void RegisterPainter (IDockPainter painter)
 		{
-			return parent.RequestShowPainter (painter);
-		}
-		
-		public bool RequestHide (IDockPainter painter)
-		{
-			return parent.RequestHidePainter (painter);
+			painters.Add (painter);
+			painter.ShowRequested += HandleShowRequested;
+			painter.HideRequested += HandleHideRequested;
 		}
 
+		void HandleHideRequested(object sender, EventArgs e)
+		{
+			IDockPainter painter = sender as IDockPainter;
+			if (painter == null)
+				return;
+			
+			parent.RequestHidePainter (painter);
+		}
+
+		void HandleShowRequested(object sender, EventArgs e)
+		{
+			IDockPainter painter = sender as IDockPainter;
+			if (painter == null)
+				return;
+			
+			bool shown = parent.RequestShowPainter (painter);
+			if (!shown)
+				painter.Interupt ();
+		}
+		
 		#endregion 
-		
-
 		
 		public PainterService (DockArea parent)
 		{
@@ -54,7 +69,7 @@ namespace Docky.Interface
 
 		public void BuildPainters ()
 		{
-			painters.Add (new Painters.SummonModeRenderer ());
+			RegisterPainter (new Painters.SummonModeRenderer ());
 		}
 
 		#region IDisposable implementation 

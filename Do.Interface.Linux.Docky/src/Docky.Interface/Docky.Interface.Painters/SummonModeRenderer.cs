@@ -42,6 +42,9 @@ namespace Docky.Interface.Painters
 		const int IconSize = 16;
 
 		public event EventHandler<PaintNeededArgs> PaintNeeded;
+
+		public event EventHandler ShowRequested;
+		public event EventHandler HideRequested;
 		
 		PixbufSurfaceCache LargeIconCache { get; set; }
 		TextRenderer TextUtility { get; set; }
@@ -107,12 +110,14 @@ namespace Docky.Interface.Painters
 
 		void HandleVanished()
 		{
-			DockServices.PainterService.RequestHide (this);
+			if (HideRequested != null)
+				HideRequested (this, new EventArgs ());
 		}
 
 		void HandleSummoned()
 		{
-			DockServices.PainterService.RequestShow (this);
+			if (ShowRequested != null)
+				ShowRequested (this, new EventArgs ());
 		}
 
 		void HandleIconSizeChanged ()

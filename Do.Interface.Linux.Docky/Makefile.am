@@ -35,6 +35,7 @@ FILES = \
 	src/Docky.Interface/DockState.cs \
 	src/Docky.Interface/DockWindow.cs \
 	src/Docky.Interface/Docky.Interface.Painters/DockBackgroundRenderer.cs \
+	src/Docky.Interface/Docky.Interface.Painters/HotSeatPainter.cs \
 	src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs \
 	src/Docky.Interface/DragState.cs \
 	src/Docky.Interface/DrawState.cs \

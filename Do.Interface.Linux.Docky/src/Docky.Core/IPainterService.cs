@@ -25,8 +25,6 @@ namespace Docky.Core
 	
 	public interface IPainterService : IDockService
 	{
-		bool RequestShow (IDockPainter painter);
-
-		bool RequestHide (IDockPainter painter);
+		void RegisterPainter (IDockPainter painter);
 	}
 }
