@@ -1,4 +1,4 @@
-<Project name="Do.Interface.Linux.Docky" fileversion="2.0" language="C#" clr-version="Net_2_0" targetFramework="2.0" ctype="DotNetProject">
+<Project name="Do.Interface.Linux.Docky" fileversion="2.0" language="C#" DefaultNamespace="Docky" clr-version="Net_2_0" targetFramework="2.0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
       <Output directory="bin/Debug" assembly="Do.Interface.Linux.Docky" />
@@ -76,6 +76,8 @@
     <File name="src/Docky.Interface/PainterService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/PaintNeededArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Painters/HotSeatPainter.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/DockArea_Rendering.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/DockArea_DragAndDrop.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

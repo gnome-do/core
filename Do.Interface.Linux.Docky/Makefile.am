@@ -21,6 +21,8 @@ FILES = \
 	src/Docky.Interface/ClickAnimationType.cs \
 	src/Docky.Interface/DoDockItem.cs \
 	src/Docky.Interface/DockArea.cs \
+	src/Docky.Interface/DockArea_Rendering.cs \
+	src/Docky.Interface/DockArea_DragAndDrop.cs \
 	src/Docky.Interface/DockAnimationState.cs \
 	src/Docky.Interface/DockItem.cs \
 	src/Docky.Interface/DoInteropService.cs \
