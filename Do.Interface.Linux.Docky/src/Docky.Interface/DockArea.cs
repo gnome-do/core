@@ -724,9 +724,9 @@ namespace Docky.Interface
 				// centered
 				if (DockPreferences.DockIsHorizontal) {
 					// why this fails to center right... i dont know...
-					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), iconPosition.X, center.Y - DockItems [icon].Height / 2);
+					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), (int) iconPosition.X, (int) center.Y - DockItems [icon].Height / 2);
 				} else {
-					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), iconPosition.X - IconSize / 2 + 5, iconPosition.Y);
+					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), (int) iconPosition.X - IconSize / 2 + 5, (int) iconPosition.Y);
 				}
 				cr.Paint ();
 			}
