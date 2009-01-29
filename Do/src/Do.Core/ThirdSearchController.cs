@@ -161,26 +161,24 @@ namespace Do.Core
 				return new List<Element> ();
 			}
 
-			// If we don't support modifier items, don't search.
-			if (!action.Safe.SupportedModifierItemTypes.Any ())
-				return new List<Element> ();
-			
-			if (!textMode) {
-				// Add appropriate modifier items from universe.
-				foreach (Item modItem in InitialResults ()) {
-					if (action.Safe.SupportsModifierItemForItems (items, modItem))
-						modItems.Add (modItem);
-				}
-				// Add any dynamic modifier items on the first search.
-				if (Query.Length == 0) {
-					foreach (Item modItem in action.Safe.DynamicModifierItemsForItem (item)) {
-						modItem.UpdateRelevance ("", item);
-						modItems.Add (modItem);
-					}
-				}
-				// Sort modifier items before we potentially add a text item.
-				modItems.Sort ();
+		// If we don't support modifier items, don't search.
+		if (!action.Safe.SupportedModifierItemTypes.Any ())
+			return new List<Element> ();
+		
+			// Add appropriate modifier items from universe.
+			foreach (Item modItem in InitialResults ()) {
+				if (action.Safe.SupportsModifierItemForItems (items, modItem))
+					modItems.Add (modItem);
 			}
+			// Add any dynamic modifier items on the first search.
+			if (Query.Length == 0) {
+				foreach (Item modItem in action.Safe.DynamicModifierItemsForItem (item)) {
+					modItem.UpdateRelevance ("", item);
+					modItems.Add (modItem);
+				}
+			}
+			// Sort modifier items before we potentially add a text item.
+			modItems.Sort ();
 			return modItems.OfType<Element> ().ToList<Element> ();
 		}
 		
