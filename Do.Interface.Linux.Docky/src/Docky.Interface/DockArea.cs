@@ -495,11 +495,6 @@ namespace Docky.Interface
 				AnimatedDraw ();
 		}
 		
-		#region Drag Code
-		
-
-		#endregion
-		
 		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
 		{
 			ManualCursorUpdate ();
@@ -647,7 +642,7 @@ namespace Docky.Interface
 			}
 		}
 
-		bool RequestShowPainter (IDockPainter painter)
+		public bool RequestShowPainter (IDockPainter painter)
 		{
 			if (Painter == painter)
 				return true;
