@@ -220,7 +220,6 @@ namespace Docky.Interface
 		
 		public DockArea (DockWindow window) : base ()
 		{
-			default_matrix = new Matrix ();
 			this.window = window;
 			
 			SetSize ();
@@ -238,11 +237,7 @@ namespace Docky.Interface
 			PopupMenu = new DockItemMenu ();
 
 			Cursor = new Gdk.Point (-1, -1);
-			cursor_type = CursorType.LeftPtr;
 
-			DragState = new DragState (Cursor, null);
-			DragState.IsFinished = true;
-			
 			this.SetCompositeColormap ();
 			
 			AddEvents ((int) EventMask.PointerMotionMask | 
@@ -253,6 +248,9 @@ namespace Docky.Interface
 			           (int) EventMask.FocusChangeMask);
 			
 			DoubleBuffered = false;
+
+			BuildRendering ();
+			BuildDragAndDrop ();
 			
 			RegisterEvents ();
 			RegisterGtkDragDest ();

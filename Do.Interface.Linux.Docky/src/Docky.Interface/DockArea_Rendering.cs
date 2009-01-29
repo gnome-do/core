@@ -36,6 +36,8 @@ namespace Docky.Interface
 	
 	public partial class DockArea
 	{
+		List<Surface> painter_surfaces;
+		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		IDockPainter painter, last_painter;
 		Matrix default_matrix;
@@ -158,6 +160,12 @@ namespace Docky.Interface
 					last_painter.PaintNeeded -= HandlePaintNeeded;
 				last_painter = value;
 			}
+		}
+
+		void BuildRendering ()
+		{
+			painter_surfaces = new List<Surface> ();
+			default_matrix = new Matrix ();
 		}
 		
 		void DrawDrock (Context cr)

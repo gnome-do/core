@@ -185,6 +185,14 @@ namespace Docky.Interface
 			base.OnDragEnd (context);
 		}
 
+		void BuildDragAndDrop ()
+		{
+			cursor_type = CursorType.LeftPtr;
+
+			DragState = new DragState (Cursor, null);
+			DragState.IsFinished = true;
+		}
+		
 		void ConfigureCursor ()
 		{
 			// we do this so that our custom drag isn't destroyed by gtk's drag
