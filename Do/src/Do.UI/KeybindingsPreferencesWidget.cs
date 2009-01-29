@@ -22,6 +22,8 @@ using System.Collections.Generic;
 
 using Gtk;
 
+using Mono.Unix;
+
 using Do;
 using Do.Interface;
 using Do.Platform.Linux;
@@ -35,7 +37,7 @@ namespace Do.UI
 		private KeybindingTreeView kbview;
 		
 		new public string Name {
-			get { return "Keyboard"; }
+			get { return Catalog.GetString ("Keyboard"); }
 		}
 		
         public string Description {

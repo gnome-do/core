@@ -23,6 +23,8 @@ using Cairo;
 using Gdk;
 using Gtk;
 
+using Mono.Unix;
+
 using Do.Interface;
 using Do.Platform;
 using Do.Universe;
@@ -66,7 +68,7 @@ namespace Docky.Interface
 			hot_seat_painter = new HotSeatPainter ();
 			DockServices.PainterService.RegisterPainter (hot_seat_painter);
 			
-			SetText (Mono.Unix.Catalog.GetString ("Summon GNOME Do"));
+			SetText (Catalog.GetString ("Summon GNOME Do"));
 		}
 
 		#region IDisposable implementation 
@@ -85,24 +87,24 @@ namespace Docky.Interface
 		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
 		{
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = !DockPreferences.AutoHide, 
-			                                       "Automatically Hide", DockPreferences.AutoHide ? EnableIcon : DisableIcon);
+			                                       Catalog.GetString ("Automatically Hide"), DockPreferences.AutoHide ? EnableIcon : DisableIcon);
 
 			if (!DockPreferences.AutoHide)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.AllowOverlap = !DockPreferences.AllowOverlap,
-				                                       "Allow Window Overlap", DockPreferences.AllowOverlap ? EnableIcon : DisableIcon);
+				                                       Catalog.GetString ("Allow Window Overlap"), DockPreferences.AllowOverlap ? EnableIcon : DisableIcon);
 			
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = !DockPreferences.ZoomEnabled, 
-			                                       "Zoom Icons", DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon);
+			                                       Catalog.GetString ("Zoom Icons"), DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon);
 			
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = !DockPreferences.ShowTrash, 
-			                                       "Show Trash", DockPreferences.ShowTrash ? EnableIcon : DisableIcon);
+			                                       Catalog.GetString ("Show Trash"), DockPreferences.ShowTrash ? EnableIcon : DisableIcon);
 			
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = !DockPreferences.IndicateMultipleWindows, 
-			                                       "Advanced Indicators", DockPreferences.IndicateMultipleWindows ? EnableIcon : DisableIcon);
+			                                       Catalog.GetString ("Advanced Indicators"), DockPreferences.IndicateMultipleWindows ? EnableIcon : DisableIcon);
 
 			if (Gdk.Screen.Default.NMonitors > 1)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
-				                                       "Switch Monitors", "display");
+				                                       Catalog.GetString ("Switch Monitors"), "display");
 			
 			yield return new SeparatorMenuButtonArgs ();
 			

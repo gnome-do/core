@@ -895,7 +895,7 @@ namespace Do.Core
 			Reset ();
 
 			AboutDialog = new Gtk.AboutDialog ();
-			AboutDialog.ProgramName = "GNOME Do";
+			AboutDialog.ProgramName = Catalog.GetString ("GNOME Do");
 			AboutDialog.Modal = false;
 
 			AboutDialog.Version = AssemblyInfo.DisplayVersion + "\n" + AssemblyInfo.VersionDetails;
@@ -903,12 +903,12 @@ namespace Do.Core
 			logo = "gnome-do.svg";
 
 			AboutDialog.Logo = IconProvider.PixbufFromIconName (logo, 140);
-			AboutDialog.Copyright = "Copyright \xa9 2008 GNOME Do Developers";
-			AboutDialog.Comments = "Do things as quickly as possible\n" +
+			AboutDialog.Copyright = Catalog.GetString ("Copyright \xa9 2008 GNOME Do Developers");
+			AboutDialog.Comments = Catalog.GetString ("Do things as quickly as possible\n" +
 				"(but no quicker) with your files, bookmarks,\n" +
-				"applications, music, contacts, and more!";
+				"applications, music, contacts, and more!");
 			AboutDialog.Website = "http://do.davebsd.com/";
-			AboutDialog.WebsiteLabel = "Visit Homepage";
+			AboutDialog.WebsiteLabel = Catalog.GetString ("Visit Homepage");
 			AboutDialog.IconName = "gnome-do";
 
 			if (AboutDialog.Screen.RgbaColormap != null)
