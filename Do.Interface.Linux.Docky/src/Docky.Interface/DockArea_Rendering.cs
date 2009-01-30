@@ -36,7 +36,7 @@ namespace Docky.Interface
 	
 	public partial class DockArea
 	{
-		List<Surface> painter_surfaces;
+		Dictionary<IDockPainter, Surface> painter_surfaces;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		IDockPainter painter, last_painter;
@@ -164,7 +164,7 @@ namespace Docky.Interface
 
 		void BuildRendering ()
 		{
-			painter_surfaces = new List<Surface> ();
+			painter_surfaces = new Dictionary<IDockPainter, Surface> ();
 			default_matrix = new Matrix ();
 		}
 		
@@ -172,21 +172,19 @@ namespace Docky.Interface
 		{
 			Gdk.Rectangle dockArea = GetDockArea ();
 			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
+
+			IDockPainter dpaint = (Painter == null) ? LastPainter : Painter;
 			
-			if (PainterOpacity > 0) {
-				if (input_area_buffer == null) {
-					input_area_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
-				}
+			if (PainterOpacity > 0 && dpaint != null) {
+				Surface overlay_surface = GetOverlaySurface (cr);
 				
-				using (Context input_cr = new Context (input_area_buffer)) {
-					input_cr.AlphaFill ();
-					if (Painter != null)
-						Painter.Paint (input_cr, dockArea, Cursor);
-					else
-						LastPainter.Paint (input_cr, dockArea, Cursor);
+				using (Context input_cr = new Context (overlay_surface)) {
+					if (!dpaint.DoubleBuffer)
+						input_cr.AlphaFill ();
+					dpaint.Paint (input_cr, dockArea, Cursor);
 				}
 
-				cr.SetSource (input_area_buffer);
+				cr.SetSource (overlay_surface);
 				cr.PaintWithAlpha (PainterOpacity);
 			}
 			
@@ -367,6 +365,21 @@ namespace Docky.Interface
 		{
 			return (DockItems [icon].TimeSinceClick < BounceTime) ? 
 				DockItems [icon].AnimationType : ClickAnimationType.None;
+		}
+
+		Surface GetOverlaySurface (Context similar)
+		{
+			if (Painter != null && Painter.DoubleBuffer) {
+				if (!painter_surfaces.ContainsKey (Painter))
+					painter_surfaces [Painter] = similar.Target.CreateSimilar (similar.Target.Content, 
+					                                                           Width, Height);
+				return painter_surfaces [Painter];
+			} else {
+				if (input_area_buffer == null)
+					input_area_buffer = similar.Target.CreateSimilar (similar.Target.Content, 
+					                                                  Width, Height);
+				return input_area_buffer;
+			}
 		}
 
 		protected override bool OnExposeEvent(EventExpose evnt)

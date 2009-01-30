@@ -66,7 +66,7 @@ namespace Docky.Interface.Painters
 		}
 
 		public bool DoubleBuffer {
-			get { return true; }
+			get { return false; }
 		}
 
 		public bool Interuptable {
