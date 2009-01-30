@@ -38,6 +38,8 @@ namespace Docky.Interface
 	{
 		const string TrashEmptyIcon = "gnome-stock-trash";
 		const string TrashFullIcon = "gnome-stock-trash-full";
+
+		FileSystemWatcher fsw;
 		
 		string Trash {
 			get { 
@@ -52,11 +54,25 @@ namespace Docky.Interface
 		public TrashDockItem()
 		{
 			SetText (Catalog.GetString ("Trash"));
+			fsw = new FileSystemWatcher (Trash);
+			fsw.IncludeSubdirectories = true;
+			fsw.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
+				| NotifyFilters.FileName | NotifyFilters.DirectoryName;
+
+			fsw.Changed += HandleChanged;
+			fsw.Created += HandleChanged;
+			fsw.Deleted += HandleChanged;
+			fsw.EnableRaisingEvents = true;
+		}
+
+		void HandleChanged(object sender, FileSystemEventArgs e)
+		{
+			RedrawIcon ();
 		}
 		
 		protected override Pixbuf GetSurfacePixbuf ()
 		{
-			if (Directory.GetFiles (Trash).Any ())
+			if (Directory.Exists (Trash) && Directory.GetFiles (Trash).Any ())
 				return IconProvider.PixbufFromIconName (TrashFullIcon, DockPreferences.FullIconSize);
 			return IconProvider.PixbufFromIconName (TrashEmptyIcon, DockPreferences.FullIconSize);
 		}
@@ -80,9 +96,7 @@ namespace Docky.Interface
 				return false;
 			}
 			
-			// we just added to the trash, so it has files now for sure
-			if (!trashHadFiles)
-				RedrawIcon ();
+			RedrawIcon ();
 			return true;
 		}
 		

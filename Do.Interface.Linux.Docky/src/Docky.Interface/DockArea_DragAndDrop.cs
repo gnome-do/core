@@ -143,6 +143,7 @@ namespace Docky.Interface
 			}
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
+			GtkDragging = false;
 		}
 		
 		protected override void OnDragBegin (Gdk.DragContext context)
