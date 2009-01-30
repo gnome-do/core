@@ -631,9 +631,12 @@ namespace Do.Interface.AnimationBase
 			cr2.SetSourceSurface (surface, 0, 0);
 			cr2.Operator = Operator.Source;
 			cr2.Paint ();
+
+			(cr2.Target).Destroy ();
+			((IDisposable)cr2.Target).Dispose ();
+			((IDisposable)cr2).Dispose ();
 			
-			(cr2 as IDisposable).Dispose ();
-			(cr as IDisposable).Dispose ();
+			((IDisposable)cr).Dispose ();
 		}
 		
 		protected override void OnDestroyed ()

@@ -131,11 +131,9 @@ namespace Do.Core
 			} else if (FirstController.Selection is Act) {
 				// We need to find items for this action
 				Act action = FirstController.Selection as Act;
-				if (!textMode) {
-					foreach (Item item in InitialResults ()) {
-						if (action.Safe.SupportsItem (item))
-							results.Add (item);
-					}
+				foreach (Item item in InitialResults ()) {
+					if (action.Safe.SupportsItem (item))
+						results.Add (item);
 				}
 			}
 			

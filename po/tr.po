@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gc\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2008-08-02 13:05+1000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-01-27 00:28-0500\n"
 "PO-Revision-Date: 2008-08-14 05:25+0000\n"
 "Last-Translator: Cinar Sahin <csahin@cmu.edu>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -17,150 +17,52 @@ msgstr ""
 "X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:90
-msgid "Password"
-msgstr "Parola"
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
+msgid "_Reset"
+msgstr ""
 
-#: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:113
-msgid "Username"
-msgstr "Kullanıcı adı"
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
+msgid "Background Color:"
+msgstr ""
 
-#: ../Do.Addins/gtk-gui/Do.UI.AbstractLoginWidget.cs:130
-msgid "<i>Verify and save account information</i>"
-msgstr "<i>Hesap bilgilerini onayla ve kaydet</i>"
-
-#: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:61
-#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:323
-#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:357
-#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:379
-#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:289
-msgid "Type to begin searching"
-msgstr "Aranması için bir şey yazın"
-
-#: ../Do.Addins/src/Do.UI/BaseWidgets/DefaultObjects.cs:62
-#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:324
-#: ../Do.Addins/src/Do.UI/ClassicWindow/ClassicWindow.cs:358
-#: ../Do.Addins/src/Do.UI/DarkFrame/GlassWindow.cs:380
-#: ../Do.Addins/src/Do.UI/MiniWindow/MiniWindow.cs:290
-msgid "Type to start searching."
-msgstr "Aramayı başlatmak için yazın."
-
-#: ../Do.Addins/src/Do.Universe/ApplicationItemSource.cs:71
-msgid "Applications"
-msgstr "Uygulamalar"
-
-#: ../Do.Addins/src/Do.Universe/ApplicationItemSource.cs:75
-msgid "Finds applications in many locations."
-msgstr "Birçok yerde uygulamalar bulur."
-
-#: ../Do.Addins/src/Do.Universe/EmailAction.cs:33
-msgid "Email"
-msgstr "E-posta"
-
-#: ../Do.Addins/src/Do.Universe/EmailAction.cs:39
-msgid "Compose a new email to a friend."
-msgstr "Arkadaşına göndermek için yeni e-posta oluştur"
-
-#: ../Do.Addins/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:55
-msgid "GNOME Special Locations"
-msgstr "GNOME'a Özel Yerler"
-
-#: ../Do.Addins/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:59
-msgid "Special locations in GNOME, such as Computer and Network."
-msgstr "GNOME'da ki özel yerler, Bilgisayar ve Ağ gibi"
-
-#: ../Do.Addins/src/Do.Universe/OpenAction.cs:42
-msgid "Open"
-msgstr "Aç"
-
-#: ../Do.Addins/src/Do.Universe/OpenAction.cs:47
-msgid "Opens many kinds of items."
-msgstr "Bir çok türdeki dosyayı açar."
-
-#: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:53
-msgid "Open URL"
-msgstr "URL Aç"
-
-#: ../Do.Addins/src/Do.Universe/OpenURLAction.cs:58
-msgid "Opens bookmarks and manually-typed URLs."
-msgstr "Yer imlerini ve elle girilen adresleri açar."
-
-#: ../Do.Addins/src/Do.Universe/OpenWithAction.cs:39
-msgid "Open With..."
-msgstr "... ile Aç"
-
-#: ../Do.Addins/src/Do.Universe/OpenWithAction.cs:43
-msgid "Opens files in specific applications."
-msgstr "Dosyaları belirli uygulamalarda açar."
-
-#: ../Do.Addins/src/Do.Universe/RevealAction.cs:35
-msgid "Reveal"
-msgstr "Göster"
-
-#: ../Do.Addins/src/Do.Universe/RevealAction.cs:40
-msgid "Reveals a file in the file manager."
-msgstr "Bir dosyayı, dosya yöneticisinde gösterir."
-
-#: ../Do.Addins/src/Do.Universe/RunAction.cs:34
-msgid "Run"
-msgstr "Çalıştır"
-
-#: ../Do.Addins/src/Do.Universe/RunAction.cs:39
-msgid "Run an application, script, or other executable."
-msgstr "Bir uygulama, script yada diğer çalıştırılabilirleri çalıştır."
-
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:49
-msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
-msgstr "<span size=\"large\"><b>Güncel eklentiler mevcut!</b></span>"
-
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:111
-msgid "_Install Updates"
-msgstr "Güncelemeleri _Yükle"
-
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:65
-msgid "<b>First-launch Behavior</b>"
-msgstr "<b>İlk Açılış Davranışı</b>"
-
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:85
-msgid "Start GNOME Do at login."
-msgstr "Kullanıcı girişinde GNOME Do'yu başlat."
-
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:97
-msgid "Hide window on first launch (quiet mode)."
-msgstr "İlk açışta pencereyi gizle (sessiz mod)."
-
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:109
-msgid "Show notifcation icon"
-msgstr "Bildiri simgesini göster"
-
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:127
-msgid "<b>Appearance</b>"
-msgstr "<b>Görünüm</b>"
-
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:149
-msgid "Theme:"
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
+#, fuzzy
+msgid "_Theme:"
 msgstr "Tema:"
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:157
-msgid "Classic"
-msgstr "Klasik"
-
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:158
-msgid "Glass Frame"
-msgstr "Cam Çerçeve"
-
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:159
-msgid "Mini"
-msgstr "Mini"
-
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:181
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
 msgid "Always show results window"
 msgstr "Sonuç penceresini hep göster."
 
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
+msgid "Show window shadow"
+msgstr ""
+
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:228
+msgid "Animate window"
+msgstr ""
+
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:262
+msgid ""
+"<b>Your display is not properly configured for theme and animation support. "
+"To use these features, you must enable compositing.</b>"
+msgstr ""
+
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
+msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
+msgstr "<span size=\"large\"><b>Güncel eklentiler mevcut!</b></span>"
+
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
+msgid "_Install Updates"
+msgstr "Güncelemeleri _Yükle"
+
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
 msgid "To edit a shortcut, double-click it and type a new one."
-msgstr ""
-"Bir kısayolu düzenlemek için, üzerine çift tıkla ve yeni bir tane yaz."
+msgstr "Bir kısayolu düzenlemek için, üzerine çift tıkla ve yeni bir tane yaz."
+
+#: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
+msgid "GNOME Do Preferences"
+msgstr "GNOME Do Tercihleri"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
 msgid "Show:"
@@ -178,6 +80,23 @@ msgstr "_Yapılandır"
 msgid "_About"
 msgstr "_Hakkında"
 
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
+msgid "<b>First-launch Behavior</b>"
+msgstr "<b>İlk Açılış Davranışı</b>"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
+msgid "Start GNOME Do at login."
+msgstr "Kullanıcı girişinde GNOME Do'yu başlat."
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
+msgid "Hide window on first launch (quiet mode)."
+msgstr "İlk açışta pencereyi gizle (sessiz mod)."
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
+#, fuzzy
+msgid "Show notification icon"
+msgstr "Bildiri simgesini göster"
+
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
 msgstr "EklentiAyarlamaPenceresi"
@@ -190,102 +109,373 @@ msgstr "<span size=\"large\" weight=\"heavy\">Eklenti ismi buraya</span>"
 msgid "page1"
 msgstr "sayfa1"
 
-#: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
-#: ../Do/src/Do.Universe/PreferencesItem.cs:29
-msgid "GNOME Do Preferences"
-msgstr "GNOME Do Tercihleri"
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
+msgid "Some of the required add-ins were not found"
+msgstr "Bazı gerekli eklentiler bulunamadı"
 
-#: ../Do/src/Do.Core/Controller.cs:767
-msgid "Unknown"
-msgstr "Bilinmeyen"
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
+msgid "Installation failed"
+msgstr "Kurulum başarısız oldu"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:35
+msgid ""
+"<b><span size=\"large\">There was an error installing the selected plugins</"
+"span></b>"
+msgstr ""
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:37
+msgid ""
+"<b><span size=\"large\">There was an error installing the selected plugin</"
+"span></b>"
+msgstr ""
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:43
+msgid "and "
+msgstr ""
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:47
+msgid " is not a valid plugin file."
+msgstr ""
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:49
+msgid " are not valid plugin files."
+msgstr ""
+
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
+#, fuzzy
+msgid "Appearance"
+msgstr "<b>Görünüm</b>"
+
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
+#, fuzzy
+msgid "General"
+msgstr "Göster"
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
+msgid "Plugins"
+msgstr ""
+
+#: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
+msgid "Official Plugins"
+msgstr ""
+
+#: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
+msgid "All Plugins"
+msgstr ""
+
+#: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
+msgid "Community Plugins"
+msgstr ""
 
 #: ../Do/src/Do.Core/DoAddinInstaller.cs:37
 msgid "Installation cancelled"
 msgstr "Yükleme iptal edildi"
 
-#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
-msgid "Some of the required add-ins were not found"
-msgstr "Bazı gerekli eklentiler bulunamadı"
-
-#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:171
-msgid "Installation failed"
-msgstr "Kurulum başarısız oldu"
-
-#. About menu item
-#: ../Do/src/Do.UI/MainMenu.cs:46
-msgid "_About Do"
-msgstr "_Do Hakkında"
-
-#. Preferences menu item
-#: ../Do/src/Do.UI/MainMenu.cs:53
-msgid "_Preferences"
-msgstr "_Tercihler"
-
-#. Quit menu item
-#: ../Do/src/Do.UI/MainMenu.cs:60
-msgid "_Quit"
-msgstr "_Çık"
-
-#: ../Do/src/Do.UI/NotificationIcon.cs:46
-msgid "Summon GNOME Do with "
-msgstr "GNOME Do'yu bununla çağır "
-
-#: ../Do/src/Do.Universe/AliasAction.cs:31
-msgid "Assign Alias..."
-msgstr "Rumuz belirle..."
-
-#: ../Do/src/Do.Universe/AliasAction.cs:37
-msgid "Give an item an alternate name."
-msgstr "Bir öğeye alternatif isim ver."
-
-#: ../Do/src/Do.Universe/AliasItemSource.cs:142
-msgid "Alias items"
-msgstr "Rumuz öğeler"
-
-#: ../Do/src/Do.Universe/AliasItemSource.cs:148
-msgid "Aliased items from Do's universe."
-msgstr "Do'nun evreninden rumuz öğeler."
-
-#: ../Do/src/Do.Universe/DeleteAliasAction.cs:31
-msgid "Delete Alias"
-msgstr "Rumuz Sil"
-
-#: ../Do/src/Do.Universe/DeleteAliasAction.cs:37
-msgid "Deletes an alias."
-msgstr "Rumuz siler."
-
-#: ../Do/src/Do.Universe/DoQuitItem.cs:31
-#: ../Do/src/Do.Universe/DoQuitItem.cs:35
-msgid "Quit GNOME Do"
-msgstr "GNOME Do'dan çık."
-
-#: ../Do/src/Do.Universe/InternalItemSource.cs:34
-msgid "Internal GNOME Do Items"
-msgstr "GNOME Do Dahili Öğeler"
-
-#: ../Do/src/Do.Universe/InternalItemSource.cs:38
-msgid "Special items relevant to the inner-workings of GNOME Do."
-msgstr "GNOME Do'nun çalışmasına dağir özel öğeler."
-
-#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:48
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
 msgid "GNOME Do Item Sources"
 msgstr "GNOME Do Öğe Kaynakları"
 
-#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:54
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
 msgid "Item Sources providing all items GNOME Do knows about."
 msgstr "GNOME Do'nun bildiği tüm öğeleri sağlayan öğe kaynakları."
 
-#: ../Do/src/Do.Universe/PreferencesItem.cs:33
-msgid "Adjust settings, manage plugins, etc."
+#: ../Do/src/Do.Universe/PreferencesItem.cs:31
+#, fuzzy
+msgid "Preferences"
+msgstr "_Tercihler"
+
+#: ../Do/src/Do.Universe/PreferencesItem.cs:35
+#, fuzzy
+msgid "Adjust Do's settings, manage plugins, etc."
 msgstr "Ayarları değiştir, eklentileri düzenle, vesaire."
 
-#: ../Do/src/Do.Universe/SelectedTextItem.cs:35
+#: ../Do/src/Do.Universe/QuitItem.cs:30
+#, fuzzy
+msgid "Quit"
+msgstr "_Çık"
+
+#: ../Do/src/Do.Universe/QuitItem.cs:34
+msgid "Quit GNOME Do - come back soon!"
+msgstr ""
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:63
 msgid "Selected text"
 msgstr "Seçili metin"
 
-#: ../Do/src/Do.Universe/SelectedTextItem.cs:39
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:67
 msgid "Currently selected text."
 msgstr "Şu anda seçili metin."
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:33
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:53
+msgid "Clear Learning"
+msgstr ""
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:37
+msgid "Resets Do's learned usage data."
+msgstr ""
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:54
+msgid "Are you sure you want to clear Do's learned usage data?"
+msgstr ""
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr ""
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:49
+msgid "Internal GNOME Do Items"
+msgstr "GNOME Do Dahili Öğeler"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:53
+msgid "Special items relevant to the inner-workings of GNOME Do."
+msgstr "GNOME Do'nun çalışmasına dağir özel öğeler."
+
+#: ../Do/src/Do.Universe/DonateItem.cs:36
+msgid "Donate"
+msgstr ""
+
+#: ../Do/src/Do.Universe/DonateItem.cs:40
+#, fuzzy
+msgid "Support GNOME Do development!"
+msgstr "Kullanıcı girişinde GNOME Do'yu başlat."
+
+#: ../Do/src/Do.Universe/AboutItem.cs:31
+#, fuzzy
+msgid "About Do"
+msgstr "_Do Hakkında"
+
+#: ../Do/src/Do.Universe/AboutItem.cs:35
+#, fuzzy
+msgid "About GNOME Do"
+msgstr "GNOME Do'dan çık."
+
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
+#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:57
+msgid "Type to begin searching"
+msgstr "Aranması için bir şey yazın"
+
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:353
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:387
+#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:58
+msgid "Type to start searching."
+msgstr "Aramayı başlatmak için yazın."
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
+#, fuzzy
+msgid "Minimize"
+msgstr "Mini"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
+msgid "Restore"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
+msgid "Close All"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
+#, fuzzy
+msgid "Summon GNOME Do"
+msgstr "GNOME Do'yu bununla çağır "
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
+msgid "Automatically Hide"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
+msgid "Allow Window Overlap"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
+msgid "Zoom Icons"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
+msgid "Show Trash"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
+msgid "Advanced Indicators"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
+msgid "Switch Monitors"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
+msgid "Remove from Dock"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
+msgid "No result found for"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
+msgid "Trash"
+msgstr ""
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
+#, fuzzy
+msgid "Open Url"
+msgstr "URL Aç"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
+#, fuzzy
+msgid "Opens bookmarks and manually-typed Urls."
+msgstr "Yer imlerini ve elle girilen adresleri açar."
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
+msgid "Reveal"
+msgstr "Göster"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
+msgid "Reveals a file in the file manager."
+msgstr "Bir dosyayı, dosya yöneticisinde gösterir."
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
+msgid "Run"
+msgstr "Çalıştır"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
+msgid "Run an application, script, or other executable."
+msgstr "Bir uygulama, script yada diğer çalıştırılabilirleri çalıştır."
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
+msgid "Email"
+msgstr "E-posta"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:41
+msgid "Compose a new email to a friend."
+msgstr "Arkadaşına göndermek için yeni e-posta oluştur"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:38
+msgid "Open"
+msgstr "Aç"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:42
+msgid "Opens many kinds of items."
+msgstr "Bir çok türdeki dosyayı açar."
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
+msgid "Open With..."
+msgstr "... ile Aç"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
+msgid "Opens files in specific applications."
+msgstr "Dosyaları belirli uygulamalarda açar."
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
+msgid "Password"
+msgstr "Parola"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
+msgid "Username"
+msgstr "Kullanıcı adı"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:124
+msgid "<i>Verify and save account information</i>"
+msgstr "<i>Hesap bilgilerini onayla ve kaydet</i>"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
+msgid "Don't have an account?"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
+#, csharp-format
+msgid "Sign up for {0}"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
+msgid "Validating..."
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
+#, csharp-format
+msgid "Don't have {0}?"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
+#, fuzzy
+msgid "Account validation failed!"
+msgstr "Kurulum başarısız oldu"
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
+#, fuzzy
+msgid "Verify and save account information"
+msgstr "<i>Hesap bilgilerini onayla ve kaydet</i>"
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
+msgid "Account validation succeeded!"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:88
+msgid "Icon"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:92
+msgid "This application could not be indexed."
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:116
+msgid "Exec"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:134
+msgid "OnlyShowIn"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:68
+msgid "Applications"
+msgstr "Uygulamalar"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:72
+msgid "Finds applications in many locations."
+msgstr "Birçok yerde uygulamalar bulur."
+
+#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:40
+msgid "Copy to Clipboard"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:44
+msgid "Copy current text to clipboard"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+msgid "GNOME Special Locations"
+msgstr "GNOME'a Özel Yerler"
+
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+msgid "Special locations in GNOME, such as Computer and Network."
+msgstr "GNOME'da ki özel yerler, Bilgisayar ve Ağ gibi"
+
+#: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
+#, csharp-format
+msgid "Error reading {0}."
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#, csharp-format
+msgid "Error saving {0}"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#, csharp-format
+msgid "Key \"{0}\" not found in keyring"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+msgid "gnome-keyring-daemon could not be reached!"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Element.cs:42
+msgid "No name"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Element.cs:43
+msgid "No description."
+msgstr ""
 
 #: ../Do/gnome-do.desktop.in.h:1
 msgid ""
@@ -298,3 +488,73 @@ msgstr ""
 #: ../Do/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
 msgstr "GNOME Do"
+
+#: ../data/gnome-do.schemas.in.h:1
+#, fuzzy
+msgid "Always show results window."
+msgstr "Sonuç penceresini hep göster."
+
+#: ../data/gnome-do.schemas.in.h:2
+msgid ""
+"Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
+"Mini."
+msgstr ""
+
+#: ../data/gnome-do.schemas.in.h:3
+msgid "Do UI theme"
+msgstr ""
+
+#: ../data/gnome-do.schemas.in.h:4
+msgid "Do summon keybinding."
+msgstr ""
+
+#: ../data/gnome-do.schemas.in.h:5
+msgid "Enable this option to keep Do from popping up as soon as it starts."
+msgstr ""
+
+#: ../data/gnome-do.schemas.in.h:6
+msgid "Hide main window when Do starts."
+msgstr ""
+
+#: ../data/gnome-do.schemas.in.h:7
+msgid "Key used to enter text mode."
+msgstr ""
+
+#: ../data/gnome-do.schemas.in.h:8
+msgid "Set this to the character that should be used to enter text mode."
+msgstr ""
+
+#: ../data/gnome-do.schemas.in.h:9
+msgid "Set this to the key command you would like to use to summon Do."
+msgstr ""
+
+#: ../data/gnome-do.schemas.in.h:10
+msgid "Whether the results window will always show."
+msgstr ""
+
+#~ msgid "Classic"
+#~ msgstr "Klasik"
+
+#~ msgid "Glass Frame"
+#~ msgstr "Cam Çerçeve"
+
+#~ msgid "Unknown"
+#~ msgstr "Bilinmeyen"
+
+#~ msgid "Assign Alias..."
+#~ msgstr "Rumuz belirle..."
+
+#~ msgid "Give an item an alternate name."
+#~ msgstr "Bir öğeye alternatif isim ver."
+
+#~ msgid "Alias items"
+#~ msgstr "Rumuz öğeler"
+
+#~ msgid "Aliased items from Do's universe."
+#~ msgstr "Do'nun evreninden rumuz öğeler."
+
+#~ msgid "Delete Alias"
+#~ msgstr "Rumuz Sil"
+
+#~ msgid "Deletes an alias."
+#~ msgstr "Rumuz siler."
