@@ -105,6 +105,8 @@ namespace Docky.Interface
 		
 		public override bool Equals (BaseDockItem other) 
 		{
+			if (other == null)
+				return false;
 			return GetHashCode ().Equals (other.GetHashCode ());
 		}
 	}
