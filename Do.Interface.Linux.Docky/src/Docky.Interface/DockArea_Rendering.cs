@@ -353,12 +353,22 @@ namespace Docky.Interface
 
 		Gdk.Rectangle GetDockArea ()
 		{
+			Gdk.Rectangle rect;
+			
 			// this method is more than somewhat slow on the complexity scale, we want to avoid doing it
 			// more than we have to.  Further, when we do call it, we should always check for this shortcut.
 			if (DockIconOpacity == 0 || ZoomIn == 0)
-				return MinimumDockArea;
+				rect = MinimumDockArea;
 
-			return PositionProvider.DockArea (ZoomIn, Cursor);
+			rect = PositionProvider.DockArea (ZoomIn, Cursor);
+
+			if (rect.Width < 800 && DockIconOpacity < 1) {
+				int difference = 800 - rect.Width;
+				int alpha = (int) (difference * PainterOpacity);
+				rect.X -= alpha / 2;
+				rect.Width += alpha;
+			}
+			return rect;
 		}
 
 		ClickAnimationType IconAnimation (int icon)
