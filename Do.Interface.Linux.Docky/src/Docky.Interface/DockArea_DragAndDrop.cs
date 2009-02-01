@@ -150,7 +150,7 @@ namespace Docky.Interface
 				
 				IEnumerable<Gdk.Window> windows = Screen.WindowStack;
 				foreach (Gdk.Window w in windows.Reverse ()) {
-					if (w == window.GdkWindow)
+					if (w == window.GdkWindow || !w.IsVisible)
 						continue;
 					
 					Gdk.Rectangle rect;
