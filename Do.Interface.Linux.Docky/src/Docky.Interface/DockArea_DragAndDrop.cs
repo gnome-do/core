@@ -146,8 +146,12 @@ namespace Docky.Interface
 				UnsetDragProxy ();
 			} else {
 				Gdk.Point local_cursor = Cursor.RelativePointToRootPoint (window);
+
+				IEnumerable<Gdk.Window> windows;
+				try {
+					windows = Screen.WindowStack;
+				} catch { return; }
 				
-				IEnumerable<Gdk.Window> windows = Screen.WindowStack;
 				foreach (Gdk.Window w in windows.Reverse ()) {
 					if (w == window.GdkWindow || !w.IsVisible)
 						continue;
