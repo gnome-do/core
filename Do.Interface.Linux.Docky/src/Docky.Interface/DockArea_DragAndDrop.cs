@@ -57,6 +57,8 @@ namespace Docky.Interface
 		
 		Gdk.CursorType cursor_type;
 
+		Gdk.Window drag_proxy;
+
 		DragState DragState { get; set; }
 
 		bool GtkDragging { get; set; }
@@ -103,6 +105,65 @@ namespace Docky.Interface
 			}
 		}
 
+		void RegisterGtkDragSource ()
+		{
+			gtk_drag_source_set = true;
+			TargetEntry te = new TargetEntry ("text/uri-list", TargetFlags.OtherApp, 0);
+			Gtk.Drag.SourceSet (this, Gdk.ModifierType.Button1Mask, new [] {te}, DragAction.Copy);
+		}
+		
+		void RegisterGtkDragDest ()
+		{
+			TargetEntry dest_te = new TargetEntry ("text/uri-list", 0, 0);
+			Gtk.Drag.DestSet (this, DestDefaults.Motion | DestDefaults.Drop, new [] {dest_te}, Gdk.DragAction.Copy);
+		}
+		
+		void UnregisterGtkDragSource ()
+		{
+			gtk_drag_source_set = false;
+			Gtk.Drag.SourceUnset (this);
+		}
+
+		void SetDragProxy (Gdk.Window window)
+		{
+			if (window == drag_proxy)
+				return;
+			drag_proxy = window;
+			Gtk.Drag.DestSetProxy (this, window, DragProtocol.Xdnd, true);
+		}
+
+		void UnsetDragProxy ()
+		{
+			if (drag_proxy == null)
+				return;
+			Console.WriteLine ("Unset");
+			drag_proxy = null;
+			RegisterGtkDragDest ();
+		}
+
+		void DragCursorUpdate ()
+		{
+			if (!GtkDragging || CursorIsOverDockArea) {
+				UnsetDragProxy ();
+			} else {
+				Gdk.Point local_cursor = Cursor.RelativePointToRootPoint (window);
+				
+				IEnumerable<Gdk.Window> windows = Screen.WindowStack;
+				foreach (Gdk.Window w in windows.Reverse ()) {
+					if (w == window.GdkWindow)
+						continue;
+					
+					Gdk.Rectangle rect;
+					int depth;
+					w.GetGeometry (out rect.X, out rect.Y, out rect.Width, out rect.Height, out depth);
+					if (rect.Contains (local_cursor)) {
+						SetDragProxy (w);
+						break;
+					}
+				}
+			}
+		}
+
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
 		{
 			GtkDragging = true;
@@ -127,6 +188,8 @@ namespace Docky.Interface
 		                                            Gtk.SelectionData selectionData, uint info, uint time)
 		{
 			if (!CursorIsOverDockArea) return;
+
+			UnsetDragProxy ();
 			
 			string data = System.Text.Encoding.UTF8.GetString ( selectionData.Data );
 			data = System.Uri.UnescapeDataString (data);

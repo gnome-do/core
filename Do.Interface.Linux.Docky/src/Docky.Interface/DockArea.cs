@@ -209,6 +209,8 @@ namespace Docky.Interface
 					enter_time = DateTime.UtcNow;
 					AnimatedDraw ();
 				}
+
+				DragCursorUpdate ();
 			}
 		}
 		
@@ -239,8 +241,9 @@ namespace Docky.Interface
 			Cursor = new Gdk.Point (-1, -1);
 
 			this.SetCompositeColormap ();
-			
-			AddEvents ((int) EventMask.PointerMotionMask | 
+
+			// fixme, we should be using the PointerMotionHintMask
+			AddEvents ((int) EventMask.PointerMotionMask |
 			           (int) EventMask.EnterNotifyMask |
 			           (int) EventMask.ButtonPressMask | 
 			           (int) EventMask.ButtonReleaseMask |
@@ -266,9 +269,9 @@ namespace Docky.Interface
 			
 			if (DockPreferences.DockIsHorizontal) {
 				Width = geo.Width;
-				Height = 300;
+				Height = 150;
 			} else {
-				Width = 500;
+				Width = 350;
 				Height = geo.Height;
 			}
 		}
@@ -362,25 +365,6 @@ namespace Docky.Interface
 				AnimationState.AddCondition ("PainterAnimation", () => DateTime.UtcNow - current_time < args.AnimationLength);
 			}
 			AnimatedDraw ();
-		}
-		
-		void RegisterGtkDragSource ()
-		{
-			gtk_drag_source_set = true;
-			TargetEntry te = new TargetEntry ("text/uri-list", TargetFlags.OtherApp, 0);
-			Gtk.Drag.SourceSet (this, Gdk.ModifierType.Button1Mask, new [] {te}, DragAction.Copy);
-		}
-		
-		void RegisterGtkDragDest ()
-		{
-			TargetEntry dest_te = new TargetEntry ("text/uri-list", 0, 0);
-			Gtk.Drag.DestSet (this, DestDefaults.Motion | DestDefaults.Drop, new [] {dest_te}, Gdk.DragAction.Copy);
-		}
-		
-		void UnregisterGtkDragSource ()
-		{
-			gtk_drag_source_set = false;
-			Gtk.Drag.SourceUnset (this);
 		}
 		
 		void ResetCursorTimer ()
@@ -493,6 +477,12 @@ namespace Docky.Interface
 
 			if (drag_resizing || cursorMoveWarrantsDraw) 
 				AnimatedDraw ();
+		}
+
+		protected override bool OnMotionNotifyEvent (Gdk.EventMotion evnt)
+		{
+			GtkDragging = false;
+			return base.OnMotionNotifyEvent (evnt);
 		}
 		
 		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
