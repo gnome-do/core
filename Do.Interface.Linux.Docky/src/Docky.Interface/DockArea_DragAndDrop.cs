@@ -136,7 +136,6 @@ namespace Docky.Interface
 		{
 			if (drag_proxy == null)
 				return;
-			Console.WriteLine ("Unset");
 			drag_proxy = null;
 			RegisterGtkDragDest ();
 		}
