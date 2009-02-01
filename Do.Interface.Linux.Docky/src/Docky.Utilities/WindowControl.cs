@@ -137,11 +137,11 @@ namespace Docky.Utilities
 			if (w == null)
 				return;
 			
-			if (!w.IsInViewport (w.Screen.ActiveWorkspace)) {
+			if (!w.IsInViewport (w.Screen.GetWorkspace (0))) {
 				int viewX, viewY, viewW, viewH;
 				int midX, midY;
 				Screen scrn = w.Screen;
-				Workspace wsp = scrn.ActiveWorkspace;
+				Workspace wsp = scrn.GetWorkspace (0);
 				
 				//get our windows geometry
 				w.GetGeometry (out viewX, out viewY, out viewW, out viewH);
