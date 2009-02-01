@@ -83,8 +83,8 @@ namespace Docky.Utilities
 		public static void FocusWindows (IEnumerable<Window> windows)
 		{
 			foreach (Window window in windows) {
-				if (window.IsInViewport (window.Workspace) && !window.IsMinimized)
-					window.Activate (Gtk.Global.CurrentEventTime);
+				if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized)
+					window.CenterAndFocusWindow ();
 			}
 			
 			if (windows.Count () <= 1)
@@ -136,12 +136,12 @@ namespace Docky.Utilities
 		{
 			if (w == null)
 				return;
-			
-			if (!w.IsInViewport (w.Screen.GetWorkspace (0))) {
+
+			if (!w.IsInViewport (w.Screen.ActiveWorkspace)) {
 				int viewX, viewY, viewW, viewH;
 				int midX, midY;
 				Screen scrn = w.Screen;
-				Workspace wsp = scrn.GetWorkspace (0);
+				Workspace wsp = scrn.ActiveWorkspace;
 				
 				//get our windows geometry
 				w.GetGeometry (out viewX, out viewY, out viewW, out viewH);
