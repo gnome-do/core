@@ -136,6 +136,7 @@ namespace Docky.Interface
 		{
 			if (drag_proxy == null)
 				return;
+			Console.WriteLine ("Unset");
 			drag_proxy = null;
 			RegisterGtkDragDest ();
 		}
@@ -156,6 +157,7 @@ namespace Docky.Interface
 					int depth;
 					w.GetGeometry (out rect.X, out rect.Y, out rect.Width, out rect.Height, out depth);
 					if (rect.Contains (local_cursor)) {
+						Console.WriteLine ("Set for " + rect);
 						SetDragProxy (w);
 						break;
 					}

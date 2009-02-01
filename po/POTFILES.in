@@ -10,6 +10,7 @@ Do/src/Do.UI/DoAddinInstallerDialog.cs
 Do/src/Do.UI/PluginErrorDialog.cs
 Do/src/Do.UI/ColorConfigurationWidget.cs
 Do/src/Do.UI/GeneralPreferencesWidget.cs
+Do/src/Do.UI/KeybindingsPreferencesWidget.cs
 Do/src/Do.UI/ManagePluginsPreferencesWidget.cs
 Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs
 Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs
@@ -24,6 +25,7 @@ Do/src/Do.Universe/InternalItemSource.cs
 Do/src/Do.Universe/DonateItem.cs
 Do/src/Do.Universe/AboutItem.cs
 Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs
+Do.Interface.Linux/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs
 Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs
 Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/ResultsWindow.cs
 Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs
