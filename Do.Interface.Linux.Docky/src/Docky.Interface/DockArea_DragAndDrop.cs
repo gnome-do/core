@@ -286,7 +286,8 @@ namespace Docky.Interface
 				}
 				
 			} else if (!gtk_drag_source_set && !drag_resizing && !CursorNearDraggableEdge) {
-				RegisterGtkDragSource ();
+				if (!PainterOverlayVisible)
+					RegisterGtkDragSource ();
 				if (cursor_type != CursorType.LeftPtr)
 					SetCursor (CursorType.LeftPtr);
 			}

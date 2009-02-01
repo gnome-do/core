@@ -649,6 +649,7 @@ namespace Docky.Interface
 			} else {
 				return false;
 			}
+			UnregisterGtkDragSource ();
 			return true;
 		}
 
@@ -668,7 +669,8 @@ namespace Docky.Interface
 				DockServices.ItemsService.ForceUpdate (); 
 				return false; 
 			});
-			
+
+			RegisterGtkDragSource ();
 			return true;
 		}
 
