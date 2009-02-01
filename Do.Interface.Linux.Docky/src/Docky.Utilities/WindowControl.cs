@@ -61,7 +61,7 @@ namespace Docky.Utilities
 		public static void MinimizeWindows (IEnumerable<Window> windows)
 		{
 			foreach (Window window in windows) {
-				if (window.IsInViewport (window.Workspace) && !window.IsMinimized)
+				if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized)
 					window.Minimize ();
 			}
 		}
@@ -75,7 +75,7 @@ namespace Docky.Utilities
 		public static void RestoreWindows (IEnumerable<Window> windows)
 		{
 			foreach (Window window in windows) {
-				if (window.IsInViewport (window.Workspace) && window.IsMinimized)
+				if (window.IsInViewport (window.Screen.ActiveWorkspace) && window.IsMinimized)
 					window.Unminimize (Gtk.Global.CurrentEventTime);
 			}
 		}
