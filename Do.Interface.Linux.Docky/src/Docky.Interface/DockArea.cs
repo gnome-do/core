@@ -269,9 +269,9 @@ namespace Docky.Interface
 			
 			if (DockPreferences.DockIsHorizontal) {
 				Width = geo.Width;
-				Height = 150;
+				Height = 300;
 			} else {
-				Width = 350;
+				Width = 500;
 				Height = geo.Height;
 			}
 		}

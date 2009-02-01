@@ -97,7 +97,7 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static int max_icon_size = 64;
+		static int max_icon_size = 128;
 		public static int MaxIconSize {
 			get { return max_icon_size; }
 			set {
@@ -114,12 +114,11 @@ namespace Docky.Utilities
 			set {
 				if (value < 24)
 					value = 24;
-				if (value > 64)
+				if (value > 128)
+					value = 128;
+				
+				if (Math.Abs (value - 64) < 4)
 					value = 64;
-				
-				if (Math.Abs (value - 48) < 4)
-					value = 48;
-				
 				if (Math.Abs (value - 32) < 4)
 					value = 32;
 				
