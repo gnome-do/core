@@ -70,11 +70,11 @@ namespace Docky.Interface
 			RedrawIcon ();
 		}
 		
-		protected override Pixbuf GetSurfacePixbuf ()
+		protected override Pixbuf GetSurfacePixbuf (int size)
 		{
 			if (Directory.Exists (Trash) && Directory.GetFiles (Trash).Any ())
-				return IconProvider.PixbufFromIconName (TrashFullIcon, DockPreferences.FullIconSize);
-			return IconProvider.PixbufFromIconName (TrashEmptyIcon, DockPreferences.FullIconSize);
+				return IconProvider.PixbufFromIconName (TrashFullIcon, size);
+			return IconProvider.PixbufFromIconName (TrashEmptyIcon, size);
 		}
 
 		public override bool ReceiveItem (string item)

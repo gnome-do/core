@@ -47,9 +47,9 @@ namespace Docky.Interface
 		
 		#region IDockItem implementation 
 		
-		protected override Pixbuf GetSurfacePixbuf ()
+		protected override Pixbuf GetSurfacePixbuf (int size)
 		{
-			return IconProvider.PixbufFromIconName (DoIcon, DockPreferences.FullIconSize);
+			return IconProvider.PixbufFromIconName (DoIcon, size);
 		}
 
 		

@@ -87,7 +87,7 @@ namespace Docky.Interface
 		public override Pixbuf GetDragPixbuf ()
 		{
 			if (drag_pixbuf == null)
-				drag_pixbuf = GetSurfacePixbuf ();
+				drag_pixbuf = GetSurfacePixbuf (DockPreferences.FullIconSize);
 			return drag_pixbuf;
 		}
 		
@@ -97,7 +97,7 @@ namespace Docky.Interface
 		/// <returns>
 		/// A <see cref="Gdk.Pixbuf"/>
 		/// </returns>
-		protected override Gdk.Pixbuf GetSurfacePixbuf ()
+		protected override Gdk.Pixbuf GetSurfacePixbuf (int size)
 		{
 			Gdk.Pixbuf pbuf = null;
 			foreach (string guess in GetIconGuesses ()) {
@@ -106,8 +106,8 @@ namespace Docky.Interface
 					pbuf = null;
 				}
 				
-				bool found = IconProvider.PixbufFromIconName (guess, DockPreferences.FullIconSize, out pbuf);
-				if (found && (pbuf.Width == DockPreferences.FullIconSize || pbuf.Height == DockPreferences.FullIconSize))
+				bool found = IconProvider.PixbufFromIconName (guess, size, out pbuf);
+				if (found && (pbuf.Width == size || pbuf.Height == size))
 					break;
 				
 				pbuf.Dispose ();
@@ -117,7 +117,7 @@ namespace Docky.Interface
 				if (!string.IsNullOrEmpty (desktopPath)) {
 					try {
 						string icon = Services.UniverseFactory.NewApplicationItem (desktopPath).Icon;
-						pbuf = IconProvider.PixbufFromIconName (icon, DockPreferences.FullIconSize);
+						pbuf = IconProvider.PixbufFromIconName (icon, size);
 						break;
 					} catch {
 						continue;
@@ -129,8 +129,8 @@ namespace Docky.Interface
 			if (pbuf == null)
 				pbuf = Applications.First ().Icon;
 			
-			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
-				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
+			if (pbuf.Height != size && pbuf.Width != size ) {
+				double scale = (double)size / Math.Max (pbuf.Width, pbuf.Height);
 				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Hyper);
 				pbuf.Dispose ();
 				pbuf = temp;

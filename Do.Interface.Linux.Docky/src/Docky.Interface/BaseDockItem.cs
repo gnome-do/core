@@ -130,7 +130,7 @@ namespace Docky.Interface
 			DockPreferences.IconSizeChanged += OnIconSizeChanged;
 		}
 
-		protected abstract Pixbuf GetSurfacePixbuf ();
+		protected abstract Pixbuf GetSurfacePixbuf (int size);
 
 		/// <summary>
 		/// Called whenever the icon receives a click event
@@ -162,7 +162,8 @@ namespace Docky.Interface
 
 		public virtual Surface GetIconSurface (Surface similar)
 		{
-			return (icon_surface != null) ? icon_surface : icon_surface = MakeIconSurface (similar);
+			return (icon_surface != null) ? icon_surface 
+				: icon_surface = MakeIconSurface (similar, DockPreferences.FullIconSize);
 		}
 
 		/// <summary>
@@ -192,13 +193,13 @@ namespace Docky.Interface
 			return text_surface;
 		}
 
-		protected virtual Surface MakeIconSurface (Surface similar)
+		protected virtual Surface MakeIconSurface (Surface similar, int size)
 		{
 			current_size = DockPreferences.FullIconSize;
 			Surface tmp_surface = similar.CreateSimilar (similar.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
 			Context cr = new Context (tmp_surface);
 			
-			Gdk.Pixbuf pbuf = GetSurfacePixbuf ();
+			Gdk.Pixbuf pbuf = GetSurfacePixbuf (size);
 			if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
 				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
 				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);

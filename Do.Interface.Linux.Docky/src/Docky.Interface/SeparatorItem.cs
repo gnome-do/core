@@ -56,7 +56,7 @@ namespace Docky.Interface
 			sr = null;
 		}
 		
-		protected override Pixbuf GetSurfacePixbuf ()
+		protected override Pixbuf GetSurfacePixbuf (int size)
 		{
 			return null;
 		}

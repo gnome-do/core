@@ -213,10 +213,10 @@ namespace Docky.Interface
 			return false;
 		}
 		
-		protected override Gdk.Pixbuf GetSurfacePixbuf ()
+		protected override Gdk.Pixbuf GetSurfacePixbuf (int size)
 		{
-			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
-			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
+			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, size);
+			if (pbuf.Height != size && pbuf.Width != size) {
 				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
 				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), InterpType.Bilinear);
 				pbuf.Dispose ();
