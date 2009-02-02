@@ -142,6 +142,8 @@ namespace Docky.Interface
 
 		void DragCursorUpdate ()
 		{
+			if (GtkDragging && (CursorModifier & ModifierType.Button1Mask) != ModifierType.Button1Mask)
+				GtkDragging = false;
 			if (!GtkDragging || CursorIsOverDockArea) {
 				UnsetDragProxy ();
 			} else {

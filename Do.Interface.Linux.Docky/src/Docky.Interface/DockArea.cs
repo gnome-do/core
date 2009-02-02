@@ -140,6 +140,8 @@ namespace Docky.Interface
 		bool CursorIsOverDockArea {	get; set; }
 
 		PainterService PainterService { get; set; }
+
+		ModifierType CursorModifier { get; set; }
 		
 		List<BaseDockItem> DockItems { 
 			get { return DockServices.ItemsService.DockItems; } 
@@ -226,7 +228,7 @@ namespace Docky.Interface
 			
 			SetSize ();
 			SetSizeRequest (Width, Height);
-
+			
 			PainterService = new PainterService (this);
 			PainterService.BuildPainters ();
 			DockServices.RegisterService (PainterService);
@@ -305,8 +307,6 @@ namespace Docky.Interface
 			PopupMenu.Hidden -= OnDockItemMenuHidden;
 			PopupMenu.Shown -= OnDockItemMenuShown;
 
-			Services.Core.UniverseInitialized -= HandleUniverseInitialized;
-			
 			Wnck.Screen.Default.ViewportsChanged -= OnWnckViewportsChanged;
 		}
 		
@@ -452,8 +452,10 @@ namespace Docky.Interface
 		void ManualCursorUpdate ()
 		{
 			int x, y;
+			ModifierType mod;
 
-			Display.GetPointer (out x, out y);
+			Display.GetPointer (out x, out y, out mod);
+			CursorModifier = mod;
 			if ((Cursor.X == x && Cursor.Y == y) || PopupMenu.Visible)
 				return;
 			
