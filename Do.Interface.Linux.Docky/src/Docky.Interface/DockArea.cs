@@ -20,19 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text.RegularExpressions;
-
-using System.Diagnostics;
 
 using Cairo;
 using Gdk;
 using Gtk;
 
 using Do.Platform;
-using Do.Interface;
-using Do.Universe;
-using Do.Interface.CairoUtils;
-using Do;
 
 using Docky.Core;
 using Docky.Utilities;
