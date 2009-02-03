@@ -79,8 +79,6 @@ namespace Docky.Interface
 
 		public override bool ReceiveItem (string item)
 		{
-			bool trashHadFiles = Directory.GetFiles (Trash).Any ();
-			
 			if (item.StartsWith ("file://"))
 				item = item.Substring ("file://".Length);
 			
