@@ -42,17 +42,15 @@ namespace Docky.Interface
 	{
 		public event EventHandler RemoveClicked;
 		
-		static IEnumerable<String> DesktopFilesDirectories {
-			get {
-				yield return "~/.local/share/applications/wine";
-				yield return "~/.local/share/applications";
-				yield return "/usr/share/applications";
-				yield return "/usr/share/applications/kde";
-				yield return "/usr/share/applications/kde4";
-				yield return "/usr/share/gdm/applications";
-				yield return "/usr/local/share/applications";
-			}
-		}
+		static readonly IEnumerable<string> DesktopFilesDirectories = new [] {
+				"~/.local/share/applications/wine",
+				"~/.local/share/applications",
+				"/usr/share/applications",
+				"/usr/share/applications/kde",
+				"/usr/share/applications/kde4",
+				"/usr/share/gdm/applications",
+				"/usr/local/share/applications",
+		};
 		
 		string MinimizeRestoreText = Catalog.GetString ("Minimize") + "/" + Catalog.GetString ("Restore");
 		string CloseText = Catalog.GetString ("Close All");

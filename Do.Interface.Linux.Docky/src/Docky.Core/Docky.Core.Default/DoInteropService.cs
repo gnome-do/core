@@ -28,15 +28,15 @@ namespace Docky.Core.Default
 		
 		#region IDoInteropService implementation 
 		
-		public event Action Summoned;
+		public event EventHandler Summoned;
 		
-		public event Action Vanished;
+		public event EventHandler Vanished;
 
-		public event Action Reset;
+		public event EventHandler Reset;
 		
-		public event Action ResultsGrow;
+		public event EventHandler ResultsGrow;
 		
-		public event Action ResultsShrink;
+		public event EventHandler ResultsShrink;
 		
 		public void RequestClickOff ()
 		{

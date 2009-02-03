@@ -34,19 +34,35 @@ namespace Docky.Core
 		static IPainterService painter_service;
 		
 		public static IItemsService ItemsService {
-			get { return items_service ?? (items_service = new Default.ItemsService () as IItemsService); }
+			get { 
+				if (items_service == null)
+					items_service = new Default.ItemsService () as IItemsService;
+				return items_service;
+			}
 		}
 
 		public static IDrawingService DrawingService {
-			get { return drawing_service ?? (drawing_service = new Default.DrawingService () as IDrawingService); }
+			get { 
+				if (drawing_service == null)
+					drawing_service = new Default.DrawingService () as IDrawingService;
+				return drawing_service; 
+			}
 		}
 
 		public static IDoInteropService DoInteropService {
-			get { return do_interop_service ?? (do_interop_service = LoadService<IDoInteropService, Default.DoInteropService> ()); }
+			get { 
+				if (do_interop_service == null)
+					do_interop_service = LoadService<IDoInteropService, Default.DoInteropService> ();
+				return do_interop_service;
+			}
 		}
 
 		public static IPainterService PainterService {
-			get { return painter_service ?? (painter_service = LoadService<IPainterService, Default.PainterService> ()); }
+			get {
+				if (painter_service == null)
+					painter_service = LoadService<IPainterService, Default.PainterService> ();
+				return painter_service; 
+			}
 		}
 
 		public static void RegisterService (IDockService service)

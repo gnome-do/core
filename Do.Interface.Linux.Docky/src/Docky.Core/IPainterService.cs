@@ -1,4 +1,4 @@
-// IDockInteropService.cs
+// IPainterService.cs
 // 
 // Copyright (C) 2009 GNOME Do
 //

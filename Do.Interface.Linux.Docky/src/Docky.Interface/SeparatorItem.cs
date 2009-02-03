@@ -73,12 +73,12 @@ namespace Docky.Interface
 				cr.AlphaFill ();
 
 				if (DockPreferences.DockIsHorizontal) {
-					for (int i=0; i*6+2 <= Height; i++) {
-						cr.Rectangle (Width/2-1, 2 + i*6, 4, 2);
+					for (int i = 0; i * 6 + 2 <= Height; i++) {
+						cr.Rectangle (Width / 2 - 1, 2 + i * 6, 4, 2);
 					}
 				} else {
-					for (int i=1; i*6+2 < Height; i++) {
-						cr.Rectangle (i*6, Width/2-1, 2, 4);
+					for (int i = 1; i * 6 + 2 < Height; i++) {
+						cr.Rectangle (i * 6, Width / 2 - 1, 2, 4);
 					}
 				}
 				
@@ -107,7 +107,7 @@ namespace Docky.Interface
 		{
 			if (other == null)
 				return false;
-			return GetHashCode ().Equals (other.GetHashCode ());
+			return object.ReferenceEquals (this, other);
 		}
 	}
 }

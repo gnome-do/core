@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -143,7 +144,7 @@ namespace Docky.Interface
 
 		ModifierType CursorModifier { get; set; }
 		
-		List<BaseDockItem> DockItems { 
+		ReadOnlyCollection<BaseDockItem> DockItems { 
 			get { return DockServices.ItemsService.DockItems; } 
 		}
 		
@@ -312,28 +313,28 @@ namespace Docky.Interface
 		
 		void BuildAnimationStateEngine ()
 		{
-			AnimationState.AddCondition ("IconInsertAnimationNeeded", 
+			AnimationState.AddCondition (Animations.IconInsert, 
 			                             () => DockItems.Any (di => di.TimeSinceAdd < InsertAnimationTime));
 			
-			AnimationState.AddCondition ("ZoomAnimationNeeded",
+			AnimationState.AddCondition (Animations.Zoom,
 			                             () => (CursorIsOverDockArea && ZoomIn != 1) || (!CursorIsOverDockArea && ZoomIn != 0));
 			
-			AnimationState.AddCondition ("OpenAnimationNeeded",
+			AnimationState.AddCondition (Animations.Open,
 			                             () => DateTime.UtcNow - enter_time < SummonTime ||
 			                             DateTime.UtcNow - interface_change_time < SummonTime);
 			
-			AnimationState.AddCondition ("BounceAnimationNeeded",
+			AnimationState.AddCondition (Animations.Bounce,
 			                             () => DockItems.Any (di => di.TimeSinceClick <= BounceTime));
 			
-			AnimationState.AddCondition ("UrgentAnimationNeeded",
+			AnimationState.AddCondition (Animations.Urgency,
 			                             () => DockItems
 			                             .Where (di => di.NeedsAttention)
 			                             .Any (di => DateTime.UtcNow - di.AttentionRequestStartTime < BounceTime));
 			
-			AnimationState.AddCondition ("UrgentRecentChange",
+			AnimationState.AddCondition (Animations.UrgencyChanged,
 			                             () => DockItems.Any (di => DateTime.UtcNow - di.AttentionRequestStartTime < BounceTime));
 			
-			AnimationState.AddCondition ("InputModeChangeAnimationNeeded",
+			AnimationState.AddCondition (Animations.InputModeChanged,
 			                             () => DateTime.UtcNow - interface_change_time < SummonTime);
 		}
 
@@ -358,11 +359,11 @@ namespace Docky.Interface
 			if (sender != Painter && sender != LastPainter) return;
 			
 			if (args.Animated) {
-				if (AnimationState.Contains ("PainterAnimation"))
-					AnimationState.RemoveCondition ("PainterAnimation");
+				if (AnimationState.Contains (Animations.Painter))
+					AnimationState.RemoveCondition (Animations.Painter);
 			
 				DateTime current_time = DateTime.UtcNow;
-				AnimationState.AddCondition ("PainterAnimation", () => DateTime.UtcNow - current_time < args.AnimationLength);
+				AnimationState.AddCondition (Animations.Painter, () => DateTime.UtcNow - current_time < args.AnimationLength);
 			}
 			AnimatedDraw ();
 		}
@@ -591,7 +592,7 @@ namespace Docky.Interface
 			} else {
 				if (DockPreferences.AutoHide && !drag_resizing) {
 					// setting the offset to 2 will trigger the parent window to unhide us if we are hidden.
-					if (AnimationState ["UrgentAnimationNeeded"])
+					if (AnimationState [Animations.Urgency])
 						offset = 2;
 					else
 						offset = 1;

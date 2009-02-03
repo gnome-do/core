@@ -42,6 +42,7 @@ namespace Docky.Interface
 		const string DoIcon = "gnome-do";
 		const string EnableIcon = "gtk-apply";
 		const string DisableIcon = "gtk-remove";
+		const string Text = "Summon GNOME Do";
 
 		HotSeatPainter hot_seat_painter;
 		
@@ -68,7 +69,7 @@ namespace Docky.Interface
 			hot_seat_painter = new HotSeatPainter ();
 			DockServices.PainterService.RegisterPainter (hot_seat_painter);
 			
-			SetText (Catalog.GetString ("Summon GNOME Do"));
+			SetText (Catalog.GetString (Text));
 		}
 
 		#region IDisposable implementation 

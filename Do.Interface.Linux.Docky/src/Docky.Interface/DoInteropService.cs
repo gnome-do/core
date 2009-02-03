@@ -34,60 +34,44 @@ namespace Docky.Interface
 		public void SignalSummon ()
 		{
 			if (Summoned != null)
-				Summoned ();
+				Summoned (this, EventArgs.Empty);
 		}
 
 		public void SignalVanish ()
 		{
 			if (Vanished != null)
-				Vanished ();
+				Vanished (this, EventArgs.Empty);
 		}
 
 		public void SignalReset ()
 		{
 			if (Reset != null)
-				Reset ();
+				Reset (this, EventArgs.Empty);
 		}
 
 		public void SignalResultsGrow ()
 		{
 			if (ResultsGrow != null)
-				ResultsGrow ();
+				ResultsGrow (this, EventArgs.Empty);
 		}
 
 		public void SignalResultsShrink ()
 		{
 			if (ResultsShrink != null)
-				ResultsShrink ();
-		}
-
-		public void SignalThirdPaneGrow ()
-		{
-			if (ThirdPaneGrow != null)
-				ThirdPaneGrow ();
-		}
-
-		public void SignalThirdPaneShrink ()
-		{
-			if (ThirdPaneShrink != null)
-				ThirdPaneShrink ();
+				ResultsShrink (this, EventArgs.Empty);
 		}
 		
 		#region IDoInteropService implementation 
 		
-		public event Action Summoned;
+		public event EventHandler Summoned;
 		
-		public event Action Vanished;
+		public event EventHandler Vanished;
 
-		public event Action Reset;
+		public event EventHandler Reset;
 		
-		public event Action ResultsGrow;
+		public event EventHandler ResultsGrow;
 		
-		public event Action ResultsShrink;
-
-		public event Action ThirdPaneGrow;
-
-		public event Action ThirdPaneShrink;
+		public event EventHandler ResultsShrink;
 
 		public void RequestClickOff ()
 		{

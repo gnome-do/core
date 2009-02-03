@@ -24,18 +24,19 @@ namespace Docky.Interface
 	
 	public class PaintNeededArgs : EventArgs
 	{
-
+		const int MinimumLength = 15;
+		
 		public readonly TimeSpan AnimationLength;
 
 		public bool Animated {
-			// anything less than 15 wont show up in our animation loop
-			get { return AnimationLength.Milliseconds > 15; }
+			// anything less than MinimumLength wont show up in our animation loop
+			get { return AnimationLength.Milliseconds > MinimumLength; }
 		}
 		
 		public PaintNeededArgs (TimeSpan animationLength) : base ()
 		{
-			if (animationLength.Milliseconds > 0 && animationLength.Milliseconds < 15)
-				throw new Exception ("Animation length must be 0ms or greater than 15ms");
+			if (animationLength.Milliseconds > 0 && animationLength.Milliseconds < MinimumLength)
+				throw new Exception ("Animation length must be 0ms or greater than " + MinimumLength + "ms");
 			AnimationLength = animationLength;
 		}
 

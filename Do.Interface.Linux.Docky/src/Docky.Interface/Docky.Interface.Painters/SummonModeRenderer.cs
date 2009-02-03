@@ -108,13 +108,13 @@ namespace Docky.Interface.Painters
 			}
 		}
 
-		void HandleVanished()
+		void HandleVanished(object sender, EventArgs e)
 		{
 			if (HideRequested != null)
 				HideRequested (this, new EventArgs ());
 		}
 
-		void HandleSummoned()
+		void HandleSummoned(object sender, EventArgs e)
 		{
 			if (ShowRequested != null)
 				ShowRequested (this, new EventArgs ());

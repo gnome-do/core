@@ -27,7 +27,7 @@ namespace Docky.Interface
 	
 	public class PainterService : IPainterService
 	{
-		List<IDockPainter> painters;
+		ICollection<IDockPainter> painters;
 		DockArea parent;
 		
 		#region IPainterService implementation

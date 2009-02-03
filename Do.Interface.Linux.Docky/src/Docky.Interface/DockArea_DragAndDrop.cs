@@ -45,6 +45,8 @@ namespace Docky.Interface
 			Left,
 			Right,
 		}
+		
+		const int DragHotZoneSize = 8;
 
 		bool drag_resizing;
 		bool gtk_drag_source_set;
@@ -72,16 +74,16 @@ namespace Docky.Interface
 		bool CursorNearLeftEdge {
 			get {
 				if (DockPreferences.DockIsHorizontal)
-					return CursorIsOverDockArea && Math.Abs (Cursor.X - MinimumDockArea.X) < 8;
-				return CursorIsOverDockArea && Math.Abs (Cursor.Y - MinimumDockArea.Y) < 8;
+					return CursorIsOverDockArea && Math.Abs (Cursor.X - MinimumDockArea.X) < DragHotZoneSize;
+				return CursorIsOverDockArea && Math.Abs (Cursor.Y - MinimumDockArea.Y) < DragHotZoneSize;
 			}
 		}
 		
 		bool CursorNearRightEdge {
 			get {
 				if (DockPreferences.DockIsHorizontal)
-					return CursorIsOverDockArea && Math.Abs (Cursor.X - (MinimumDockArea.X + MinimumDockArea.Width)) < 8;
-				return CursorIsOverDockArea && Math.Abs (Cursor.Y - (MinimumDockArea.Y + MinimumDockArea.Height)) < 8;
+					return CursorIsOverDockArea && Math.Abs (Cursor.X - (MinimumDockArea.X + MinimumDockArea.Width)) < DragHotZoneSize;
+				return CursorIsOverDockArea && Math.Abs (Cursor.Y - (MinimumDockArea.Y + MinimumDockArea.Height)) < DragHotZoneSize;
 			}
 		}
 		

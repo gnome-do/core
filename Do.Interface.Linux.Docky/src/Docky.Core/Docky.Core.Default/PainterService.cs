@@ -1,4 +1,4 @@
-// DockyInteropService.cs
+// PainterService.cs
 // 
 // Copyright (C) 2009 GNOME Do
 //
@@ -34,7 +34,7 @@ namespace Docky.Core.Default
 		#region IPainterService implementation
 		public void RegisterPainter (IDockPainter painter)
 		{
-			Log.Error ("Default Painter Services cannot register painters");
+			Log<PainterService>.Error ("Default Painter Services cannot register painters");
 		}
 
 		#region IDisposable implementation 

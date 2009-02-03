@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 using Do;
 using Do.Interface;
@@ -36,9 +37,16 @@ namespace Docky.Core
 		event DockItemsChangedHandler DockItemsChanged;
 		event UpdateRequestHandler ItemNeedsUpdate;
 		
+		/// <summary>
+		/// Enable and disable updates to the items in the list.  
+		/// Useful when universe is still being set up.
+		/// </summary>
 		bool UpdatesEnabled { get; set; }
 		
-		List<BaseDockItem> DockItems { get; }
+		/// <summary>
+		/// gets a read only collection of the dock items
+		/// </summary>
+		ReadOnlyCollection<BaseDockItem> DockItems { get; }
 		
 		void AddItemToDock (Element item);
 		

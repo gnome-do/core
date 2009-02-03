@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 using Gdk;
@@ -35,7 +36,7 @@ namespace Docky.Interface
 		
 		DockArea parent;
 		
-		List<BaseDockItem> DockItems {
+		ReadOnlyCollection<BaseDockItem> DockItems {
 			get { return DockServices.ItemsService.DockItems; }
 		}
 		

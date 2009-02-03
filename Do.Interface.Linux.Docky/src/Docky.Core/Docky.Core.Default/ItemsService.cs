@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -41,9 +42,10 @@ namespace Docky.Core.Default
 		public event DockItemsChangedHandler DockItemsChanged;
 		public event UpdateRequestHandler ItemNeedsUpdate;
 		
-		Dictionary<string, DockItem> custom_items;
+		IDictionary<string, DockItem> custom_items;
 		List<DockItem> statistical_items;
-		List<BaseDockItem> output_items; 
+		List<BaseDockItem> output_items;
+		ReadOnlyCollection<BaseDockItem> readonly_items; 
 		List<ApplicationDockItem> task_items;
 		bool enable_serialization = true;
 		bool custom_items_read;
@@ -62,10 +64,10 @@ namespace Docky.Core.Default
 		
 		int LastPosition {
 			get {
-				if (!DragableItems.Any ())
+				if (!DraggableItems.Any ())
 					return 0;
 				// TODO make sane once mono 1.9 support is dropped
-				return DragableItems.Max ((Func<DockItem, int>) (di => di.Position));
+				return DraggableItems.Max ((Func<DockItem, int>) (di => di.Position));
 			}
 		}
 		
@@ -73,18 +75,17 @@ namespace Docky.Core.Default
 		BaseDockItem MenuItem { get; set; }
 		BaseDockItem TrashItem { get; set; }
 		
-		IEnumerable<DockItem> DragableItems {
+		IEnumerable<DockItem> DraggableItems {
 			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
 		}
 		
 		public bool UpdatesEnabled { get; set; }
 		
-		public List<BaseDockItem> DockItems {
+		public ReadOnlyCollection<BaseDockItem> DockItems {
 			get {
-				if (output_items == null) {
-					output_items = new List<BaseDockItem> ();
+				if (output_items.Count == 0) {
 					output_items.Add (MenuItem);
-					output_items.AddRange (DragableItems.Cast<BaseDockItem> ());
+					output_items.AddRange (DraggableItems.Cast<BaseDockItem> ());
 				
 					if (task_items.Any () || DockPreferences.ShowTrash)
 						output_items.Add (Separator);
@@ -95,8 +96,9 @@ namespace Docky.Core.Default
 				
 					if (DockPreferences.ShowTrash)
 						output_items.Add (TrashItem);
+					
 				}
-				return output_items;
+				return readonly_items;
 			}
 		}
 		
@@ -109,6 +111,9 @@ namespace Docky.Core.Default
 			custom_items = new Dictionary<string, DockItem> ();
 			statistical_items = new List<DockItem> ();
 			task_items = new List<ApplicationDockItem> ();
+			
+			output_items = new List<BaseDockItem> ();
+			readonly_items = output_items.AsReadOnly ();
 			
 			RegisterEvents ();
 		}
@@ -216,28 +221,34 @@ namespace Docky.Core.Default
 		
 		public bool ItemCanBeMoved (int item)
 		{
-			if (DockItems [item] is DockItem) {
-				return DragableItems.Contains (DockItems [item] as DockItem);
-			}
-			return false;
+			return DockItems [item] is DockItem && DraggableItems.Contains (DockItems [item] as DockItem);
 		}
 		
 		public void DropItemOnPosition (BaseDockItem item, int position)
 		{
-			if (DockItems.Contains (item) && 0 <= position && position < DockItems.Count)
+			if (ItemCanInteractWithPosition (item, position))
 				if (DockItems [position] is TrashDockItem)
 					RemoveItem (item);
 		}
 
 		public void MoveItemToPosition (BaseDockItem item, int position)
 		{
-			if (DockItems.Contains (item) && 0 <= position && position < DockItems.Count)
+			if (ItemCanInteractWithPosition (item, position))
 				MoveItemToPosition (DockItems.IndexOf (item), position);
+		}
+		
+		bool ItemCanInteractWithPosition (BaseDockItem item, int position)
+		{
+			return DockItems.Contains (item) && 0 <= position && position < DockItems.Count;
 		}
 		
 		public void MoveItemToPosition (int item, int position)
 		{
-			if (item == position || item < 0 || position < 0)
+			if (item == position || 
+			    item < 0 || 
+			    position < 0 || 
+			    position > DockItems.Count || 
+			    item > DockItems.Count)
 				return;
 			
 			IconSource itemSource = GetIconSource (DockItems [item]);
@@ -253,7 +264,7 @@ namespace Docky.Core.Default
 			int startPosition = primaryItem.Position;
 			int targetPosition = targetItem.Position;
 			
-			foreach (DockItem di in DragableItems) {
+			foreach (DockItem di in DraggableItems) {
 				if (startPosition < targetPosition) {
 					// the item is being shifted to the right.  Everything greater than item up to and including target item
 					// needs to be shifted to the left
@@ -328,7 +339,7 @@ namespace Docky.Core.Default
 			
 			if (GetIconSource (DockItems [item]) == IconSource.Statistics) {
 				DockPreferences.AddBlacklistItem ((DockItems [item] as DockItem).Element.UniqueId);
-				DockPreferences.AutomaticIcons--;
+				DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
 				UpdateItems ();
 				ret_val = true;
 			} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
@@ -373,7 +384,7 @@ namespace Docky.Core.Default
 			try {
 				using (Stream s = File.OpenWrite (SortDictionaryPath)) {
 					BinaryFormatter f = new BinaryFormatter ();
-					f.Serialize (s, DragableItems.ToDictionary (di => di.Element.UniqueId, di => di.Position));
+					f.Serialize (s, DraggableItems.ToDictionary (di => di.Element.UniqueId, di => di.Position));
 				}
 			} catch (Exception e) {
 				Log<ItemsService>.Error ("Could not serialize sort items");
@@ -433,14 +444,14 @@ namespace Docky.Core.Default
 				custom_items_read = true;
 				
 				Dictionary<string, int> sortDictionary = DeserializeSortDictionary ();
-				foreach (DockItem item in DragableItems) {
+				foreach (DockItem item in DraggableItems) {
 					if (sortDictionary.ContainsKey (item.Element.UniqueId))
 						item.Position = sortDictionary [item.Element.UniqueId];
 				}
 			}
 			
 			UpdateWindowItems ();
-			SimplifyPositions (DragableItems);
+			SimplifyPositions (DraggableItems);
 			OnDockItemsChanged ();
 			
 		}
@@ -498,8 +509,8 @@ namespace Docky.Core.Default
 				.Where (app => app.Windows.Any (w => !w.IsSkipTasklist))
 				.Where (app => !knownPids.Contains (app.Pid) && app.Windows.Any ());
 			
-			foreach (IEnumerable<Wnck.Application> apps in prunedApps.
-			         GroupBy (app => (app as Wnck.Application).Windows [0].ClassGroup.ResClass)) {
+			foreach (IEnumerable<Wnck.Application> apps in prunedApps
+			         .GroupBy (app => (app as Wnck.Application).Windows [0].ClassGroup.ResClass)) {
 				ApplicationDockItem api = new ApplicationDockItem (apps);
 
 				if (task_items.Any (di => di.Equals (api)))
@@ -521,7 +532,8 @@ namespace Docky.Core.Default
 		
 		void SimplifyPositions (IEnumerable<DockItem> items)
 		{
-			int i=0;
+			int i = 0;
+			// we call ToArray so our enumerator does get screwed up when we change the Position
 			foreach (DockItem item in items.OrderBy (di => di.Position).ToArray ())
 				item.Position = i++;
 		}
@@ -529,7 +541,7 @@ namespace Docky.Core.Default
 		void OnDockItemsChanged ()
 		{
 			// clear the cache
-			output_items = null;
+			output_items.Clear ();
 			
 			if (DockItemsChanged != null)
 				DockItemsChanged (DockItems);

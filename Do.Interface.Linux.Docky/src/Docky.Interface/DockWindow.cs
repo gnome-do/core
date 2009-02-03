@@ -45,7 +45,7 @@ namespace Docky.Interface
 		BezelGlassWindow results_window;
 		
 		DockArea dock_area;
-		Interface.DoInteropService interopService;
+		Interface.DoInteropService interop_service;
 		IDoController controller;
 		Gdk.Rectangle current_mask;
 		uint strut_timer;
@@ -73,8 +73,8 @@ namespace Docky.Interface
 			this.controller = controller;
 			controller.Orientation = ControlOrientation.Vertical;
 
-			interopService = new DoInteropService (controller);
-			Core.DockServices.RegisterService (interopService);
+			interop_service = new DoInteropService (controller);
+			Core.DockServices.RegisterService (interop_service);
 
 			RegisterEvents ();
 			Build ();
@@ -320,7 +320,7 @@ namespace Docky.Interface
 			Reposition ();
 			results_window.Show ();
 			Windowing.PresentWindow (this);
-			interopService.SignalSummon ();
+			interop_service.SignalSummon ();
 		}
 		
 		public void Vanish ()
@@ -328,37 +328,35 @@ namespace Docky.Interface
 			Visible = false;
 			Windowing.UnpresentWindow (this);
 			results_window.Hide ();
-			interopService.SignalVanish ();
+			interop_service.SignalVanish ();
 		}
 		
 		public void Reset ()
 		{
 			DockState.Instance.Clear ();
-			interopService.SignalReset ();
+			interop_service.SignalReset ();
 		}
 		
 		public void Grow ()
 		{
 			DockState.Instance.ThirdPaneVisible = true;
-			interopService.SignalThirdPaneGrow ();
 		}
 		
 		public void Shrink ()
 		{
 			DockState.Instance.ThirdPaneVisible = false;
-			interopService.SignalThirdPaneShrink ();
 		}
 		
 		public void GrowResults ()
 		{
 			results.SlideIn ();
-			interopService.SignalResultsGrow ();
+			interop_service.SignalResultsGrow ();
 		}
 		
 		public void ShrinkResults ()
 		{
 			results.SlideOut ();
-			interopService.SignalResultsShrink ();
+			interop_service.SignalResultsShrink ();
 			
 		}
 		

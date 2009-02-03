@@ -24,15 +24,15 @@ namespace Docky.Core
 	
 	public interface IDoInteropService : IDockService
 	{
-		event Action Summoned;
+		event EventHandler Summoned;
 		
-		event Action Vanished;
+		event EventHandler Vanished;
 		
-		event Action Reset;
+		event EventHandler Reset;
 		
-		event Action ResultsGrow;
+		event EventHandler ResultsGrow;
 		
-		event Action ResultsShrink;
+		event EventHandler ResultsShrink;
 
 		void RequestClickOff ();
 	}

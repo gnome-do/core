@@ -49,14 +49,14 @@ namespace Docky.Interface
 	
 	public static class Util
 	{
-		static int IndicatorSize = 9;
-		static int UrgentIndicatorSize = 12;
-		static int Height = 26;
+		const int IndicatorSize = 9;
+		const int UrgentIndicatorSize = 12;
+		const int Height = 26;
 		static Surface indicator, urgent_indicator;
 		
-		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar) 
+		public static Surface GetBorderedTextSurface (string text, int maxWidth, Surface similar) 
 		{
-			return GetBorderedTextSurface (text, max_width, similar, DockOrientation.Bottom);
+			return GetBorderedTextSurface (text, maxWidth, similar, DockOrientation.Bottom);
 		}
 		
 		/// <summary>
@@ -65,7 +65,7 @@ namespace Docky.Interface
 		/// <param name="text">
 		/// A <see cref="System.String"/>
 		/// </param>
-		/// <param name="max_width">
+		/// <param name="maxWidth">
 		/// A <see cref="System.Int32"/>
 		/// </param>
 		/// <param name="similar">
@@ -74,15 +74,15 @@ namespace Docky.Interface
 		/// <returns>
 		/// A <see cref="Surface"/>
 		/// </returns>
-		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar, DockOrientation orientation)
+		public static Surface GetBorderedTextSurface (string text, int maxWidth, Surface similar, DockOrientation orientation)
 		{
 			Surface sr;
-			sr = similar.CreateSimilar (similar.Content, max_width, Height);
+			sr = similar.CreateSimilar (similar.Content, maxWidth, Height);
 			
 			Context cr = new Context (sr);
 
 			Pango.Layout layout = Core.DockServices.DrawingService.GetThemedLayout ();
-			layout.Width = Pango.Units.FromPixels (max_width - 18);
+			layout.Width = Pango.Units.FromPixels (maxWidth - 18);
 			layout.SetMarkup (text);
 			switch (orientation) {
 			case DockOrientation.Left:
