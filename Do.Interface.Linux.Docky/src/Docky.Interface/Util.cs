@@ -83,7 +83,7 @@ namespace Docky.Interface
 
 			Pango.Layout layout = Core.DockServices.DrawingService.GetThemedLayout ();
 			layout.Width = Pango.Units.FromPixels (maxWidth - 18);
-			layout.SetMarkup (text);
+			layout.SetMarkup ("<span weight=\"600\">" + text + "</span>");
 			switch (orientation) {
 			case DockOrientation.Left:
 				layout.Alignment = Pango.Alignment.Left;

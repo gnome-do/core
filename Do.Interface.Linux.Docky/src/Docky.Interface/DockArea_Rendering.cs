@@ -334,7 +334,7 @@ namespace Docky.Interface
 				if (DockPreferences.DockIsHorizontal) {
 					textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (DockPreferences.TextWidth / 2);
 					if (DockPreferences.Orientation == DockOrientation.Top)
-						textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 22;
+						textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 10;
 					else
 						textPoint.Y = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 38;
 				} else {

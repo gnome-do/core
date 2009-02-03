@@ -87,15 +87,14 @@ namespace Docky.Core.Default
 					output_items.Add (MenuItem);
 					output_items.AddRange (DraggableItems.Cast<BaseDockItem> ());
 				
-					if (task_items.Any () || DockPreferences.ShowTrash)
-						output_items.Add (Separator);
-					
 					if (task_items.Any ()) {
 						output_items.AddRange (task_items.Cast<BaseDockItem> ());
 					}
 				
-					if (DockPreferences.ShowTrash)
+					if (DockPreferences.ShowTrash) {
+						output_items.Add (Separator);
 						output_items.Add (TrashItem);
+					}
 					
 				}
 				return readonly_items;
