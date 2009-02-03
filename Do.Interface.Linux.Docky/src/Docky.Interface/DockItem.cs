@@ -25,12 +25,13 @@ using Gdk;
 using Cairo;
 using Mono.Unix;
 
-using Do.Interface;
 using Do.Platform;
 using Do.Universe;
 using Do.Universe.Common;
+using Do.Interface;
 using Do.Interface.CairoUtils;
 
+using Docky.Interface.Menus;
 using Docky.Utilities;
 
 using Wnck;
@@ -39,21 +40,17 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItem : BaseDockItem, IRightClickable, IDockAppItem
+	public class DockItem : BaseDockItem, IRightClickable
 	{
 		Item element;
 		List<Wnck.Application> apps;
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
-		bool needs_attention, accepting_drops;
+		bool accepting_drops;
 		uint handle_timer;
 		int window_count;
 		
 		public event EventHandler RemoveClicked;
-		
-		public event UpdateRequestHandler UpdateNeeded;
-		
-		public DateTime AttentionRequestStartTime { get; private set; }
 		
 		public int Position { get; set; }
 		
@@ -63,10 +60,6 @@ namespace Docky.Interface
 		
 		public string Icon { 
 			get { return element.Icon; } 
-		}
-		
-		public override string Description { 
-			get { return element.Name; } 
 		}
 		
 		public Item Element { 
@@ -85,19 +78,6 @@ namespace Docky.Interface
 			get { return window_count; }
 		}
 		
-		public bool NeedsAttention { 
-			get { 
-				return needs_attention; 
-			} 
-			
-			private set {
-				if (needs_attention == value)
-					return;
-				needs_attention = value;
-				AttentionRequestStartTime = DateTime.UtcNow;
-			}
-		}
-		
 		public IEnumerable<Act> ActionsForItem {
 			get {
 				IEnumerable<Act> actions = Services.Core.GetActionsForItemOrderedByRelevance (element, false);
@@ -105,6 +85,7 @@ namespace Docky.Interface
 				// This has a degree of an abstraction break to it however, but it is important to get right
 				// until a better solution is found.
 				foreach (Act act in actions
+				         .Where (act => act.GetType ().Name != "CopyToClipboardAction")
 				         .OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
 				         .ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
 				         .ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
@@ -127,6 +108,8 @@ namespace Docky.Interface
 			Position = -1;
 			apps =  new List<Wnck.Application> ();
 			this.element = element;
+
+			SetText (element.Name);
 
 			AttentionRequestStartTime = DateTime.UtcNow;
 			UpdateApplication ();
@@ -214,8 +197,7 @@ namespace Docky.Interface
 					req = UpdateRequestType.NeedsAttentionSet;
 				else
 					req = UpdateRequestType.NeedsAttentionUnset;
-				if (UpdateNeeded != null)
-					UpdateNeeded (this, new UpdateRequestArgs (this, req));
+				OnUpdateNeeded (new UpdateRequestArgs (this, req));
 			}
 			
 			handle_timer = 0;
@@ -231,10 +213,10 @@ namespace Docky.Interface
 			return false;
 		}
 		
-		protected override Gdk.Pixbuf GetSurfacePixbuf ()
+		protected override Gdk.Pixbuf GetSurfacePixbuf (int size)
 		{
-			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
-			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
+			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, size);
+			if (pbuf.Height != size && pbuf.Width != size) {
 				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
 				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), InterpType.Bilinear);
 				pbuf.Dispose ();
@@ -289,8 +271,10 @@ namespace Docky.Interface
 		
 		public override bool Equals (BaseDockItem other)
 		{
+			if (other == null)
+				return false;
 			DockItem di = other as DockItem;
-			return di != null && di.Element.UniqueId == Element.UniqueId;
+			return di != null && di.Element != null && Element != null && di.Element.UniqueId == Element.UniqueId;
 		}
 
 		#region IDisposable implementation 

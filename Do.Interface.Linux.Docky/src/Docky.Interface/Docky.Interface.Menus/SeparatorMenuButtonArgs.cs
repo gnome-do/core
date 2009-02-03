@@ -1,4 +1,4 @@
-// SimpleMenuButtonArgs.cs
+// SeparatorMenuButtonArgs.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -18,22 +18,17 @@
 
 using System;
 
-namespace Docky.Interface
+namespace Docky.Interface.Menus
 {
-	
-	
-	public class SimpleMenuButtonArgs : AbstractMenuButtonArgs
+	public class SeparatorMenuButtonArgs : AbstractMenuButtonArgs
 	{
-		Action action;
-		
-		public SimpleMenuButtonArgs (Action action, string description, string icon) : base (description, icon, true)
+		public SeparatorMenuButtonArgs () : base ("Separator", null, true)
 		{
-			this.action = action;
 		}
 		
 		public override void Action ()
 		{
-			action.Invoke ();
+			
 		}
 	}
 }

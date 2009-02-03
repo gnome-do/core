@@ -1,6 +1,6 @@
-// WindowMenuButtonArgs.cs
+// DragState.cs
 // 
-// Copyright (C) 2008 GNOME Do
+// Copyright (C) 2009 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,27 +18,21 @@
 
 using System;
 
-using Wnck;
-
-using Docky.Utilities;
-
 namespace Docky.Interface
 {
 	
 	
-	public class WindowMenuButtonArgs : AbstractMenuButtonArgs
+	public class DragState
 	{
-		Window window;
-		
-		public WindowMenuButtonArgs (Window window, string description, string icon) : base (description, icon, true)
-		{
-			this.window = window;
-		}
-		
-		public override void Action ()
-		{
-			window.CenterAndFocusWindow ();
-		}
+		public Gdk.Point StartingPoint {get; set;}
+		public BaseDockItem DragItem {get; set;}
+		public bool IsFinished {get; set;}
 
+		public DragState (Gdk.Point startingPoint, BaseDockItem dragItem)
+		{
+			this.StartingPoint = startingPoint;
+			this.DragItem = dragItem;
+			IsFinished = false;
+		}
 	}
 }

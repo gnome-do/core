@@ -38,6 +38,8 @@ namespace Docky.Interface
 	{
 		const string TrashEmptyIcon = "gnome-stock-trash";
 		const string TrashFullIcon = "gnome-stock-trash-full";
+
+		FileSystemWatcher fsw;
 		
 		string Trash {
 			get { 
@@ -51,17 +53,30 @@ namespace Docky.Interface
 		
 		public TrashDockItem()
 		{
-		}
-		
-		protected override Pixbuf GetSurfacePixbuf ()
-		{
-			if (Directory.GetFiles (Trash).Any ())
-				return IconProvider.PixbufFromIconName (TrashFullIcon, DockPreferences.FullIconSize);
-			return IconProvider.PixbufFromIconName (TrashEmptyIcon, DockPreferences.FullIconSize);
+			SetText (Catalog.GetString ("Trash"));
+			fsw = new FileSystemWatcher (Trash);
+			fsw.IncludeSubdirectories = true;
+			fsw.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
+				| NotifyFilters.FileName | NotifyFilters.DirectoryName;
+
+			fsw.Changed += HandleChanged;
+			fsw.Created += HandleChanged;
+			fsw.Deleted += HandleChanged;
+			fsw.EnableRaisingEvents = true;
 		}
 
-		#region IDockDragAwareItem implementation 
+		void HandleChanged(object sender, FileSystemEventArgs e)
+		{
+			RedrawIcon ();
+		}
 		
+		protected override Pixbuf GetSurfacePixbuf (int size)
+		{
+			if (Directory.Exists (Trash) && Directory.GetFiles (Trash).Any ())
+				return IconProvider.PixbufFromIconName (TrashFullIcon, size);
+			return IconProvider.PixbufFromIconName (TrashEmptyIcon, size);
+		}
+
 		public override bool ReceiveItem (string item)
 		{
 			bool trashHadFiles = Directory.GetFiles (Trash).Any ();
@@ -81,19 +96,8 @@ namespace Docky.Interface
 				return false;
 			}
 			
-			// we just added to the trash, so it has files now for sure
-			if (!trashHadFiles)
-				RedrawIcon ();
+			RedrawIcon ();
 			return true;
-		}
-		
-		#endregion 
-		
-		
-		public override string Description {
-			get {
-				return Catalog.GetString ("Trash");
-			}
 		}
 		
 		public override void Clicked (uint button)

@@ -71,8 +71,12 @@ namespace Docky.Utilities
 		public static double ZoomPercent {
 			get { return ZoomEnabled ? zoom_percent : 1; }
 			set {
+				if (value < 1)
+					value = 1;
 				prefs.Set ("ZoomPercent", value);
 				zoom_percent = value;
+				if (IconSizeChanged != null)
+					IconSizeChanged ();
 			}
 		}
 		
@@ -220,6 +224,24 @@ namespace Docky.Utilities
 				if (MonitorChanged != null)
 					MonitorChanged ();
 			}
+		}
+
+		static DockOrientation orientation = (DockOrientation) prefs.Get<int> ("Orientation", 0);
+		public static DockOrientation Orientation {
+			get {
+				if (orientation != DockOrientation.Top && orientation != DockOrientation.Bottom)
+					orientation = DockOrientation.Bottom;
+				
+				return orientation;
+			}
+			set {
+				orientation = value;
+				prefs.Set ("Orientation", (int) value);
+			}
+		}
+
+		public static bool DockIsHorizontal {
+			get { return Orientation == DockOrientation.Top || Orientation == DockOrientation.Bottom; }
 		}
 		
 		#region blacklists

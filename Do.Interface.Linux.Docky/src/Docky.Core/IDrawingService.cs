@@ -1,6 +1,6 @@
-// LaunchMenuButtonArgs.cs
+// IDrawingSurface.cs
 // 
-// Copyright (C) 2008 GNOME Do
+// Copyright (C) 2009 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,27 +18,10 @@
 
 using System;
 
-using Do.Universe;
-using Do.Platform;
-
-namespace Docky.Interface
+namespace Docky.Core
 {
-	
-	
-	public class LaunchMenuButtonArgs : AbstractMenuButtonArgs
+	public interface IDrawingService : IDockService
 	{
-		Act action;
-		Item item;
-		
-		public LaunchMenuButtonArgs (Act action, Item item, string description, string icon) : base (description, icon, true)
-		{
-			this.action = action;
-			this.item = item;
-		}
-		
-		public override void Action ()
-		{
-			Services.Core.PerformActionOnItem (action, item);
-		}
+		Pango.Layout GetThemedLayout ();
 	}
 }

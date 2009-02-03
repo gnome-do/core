@@ -31,26 +31,26 @@ using Do.Interface.CairoUtils;
 using Do.Platform;
 using Do.Universe;
 
+using Docky.Core;
+using Docky.Interface;
 using Docky.Utilities;
 
-namespace Docky.Interface.Renderers
+namespace Docky.Interface.Painters
 {
-	public enum SummonClickEvent {
-		AddItemToDock,
-		None,
-	}
-	
-	public class SummonModeRenderer : IDisposable
+	public class SummonModeRenderer : IDockPainter
 	{
 		const int IconSize = 16;
-		
-		DockArea parent;
+
+		public event EventHandler<PaintNeededArgs> PaintNeeded;
+
+		public event EventHandler ShowRequested;
+		public event EventHandler HideRequested;
 		
 		PixbufSurfaceCache LargeIconCache { get; set; }
 		TextRenderer TextUtility { get; set; }
 		
 		DockState State {
-			get { return parent.State; }
+			get { return DockState.Instance; }
 		}
 		
 		bool ShouldRenderButton {
@@ -64,13 +64,60 @@ namespace Docky.Interface.Renderers
 				return (int) (DockPreferences.IconSize * 3.5);
 			}
 		}
+
+		public bool DoubleBuffer {
+			get { return false; }
+		}
+
+		public bool Interuptable {
+			get { return false; }
+		}
 		
-		public SummonModeRenderer (DockArea parent)
+		public SummonModeRenderer ()
 		{
-			this.parent = parent;
-			TextUtility = new TextRenderer (parent);
+			TextUtility = new TextRenderer (DockWindow.Window);
 			
+			RegisterEvents ();
+		}
+
+		void RegisterEvents ()
+		{
 			DockPreferences.IconSizeChanged += HandleIconSizeChanged;
+			DockServices.DoInteropService.Summoned += HandleSummoned;
+			DockServices.DoInteropService.Vanished += HandleVanished;
+			DockState.Instance.StateChanged += HandleStateChanged;
+		}
+
+		void UnregisterEvents ()
+		{
+			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
+			DockServices.DoInteropService.Summoned -= HandleSummoned;
+			DockServices.DoInteropService.Vanished -= HandleVanished;
+			DockState.Instance.StateChanged -= HandleStateChanged;
+		}
+
+		void HandleStateChanged (object sender, EventArgs e)
+		{
+			if (PaintNeeded != null) {
+				PaintNeededArgs args;
+				if (DateTime.UtcNow - DockState.Instance.CurrentPaneTime < DockArea.BaseAnimationTime) 
+					args = new PaintNeededArgs (DockArea.BaseAnimationTime);
+				else
+					args = new PaintNeededArgs ();
+				PaintNeeded (this, args);
+			}
+		}
+
+		void HandleVanished(object sender, EventArgs e)
+		{
+			if (HideRequested != null)
+				HideRequested (this, new EventArgs ());
+		}
+
+		void HandleSummoned(object sender, EventArgs e)
+		{
+			if (ShowRequested != null)
+				ShowRequested (this, new EventArgs ());
 		}
 
 		void HandleIconSizeChanged ()
@@ -79,16 +126,22 @@ namespace Docky.Interface.Renderers
 				LargeIconCache.Dispose ();
 			LargeIconCache = null;
 		}
-		
-		public SummonClickEvent GetClickEvent (Gdk.Rectangle dockArea)
+
+		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
-			if (!ShouldRenderButton) return SummonClickEvent.None;
-			
 			Gdk.Point center = GetButtonCenter (ref dockArea);
 			Gdk.Rectangle rect = new Gdk.Rectangle (center.X - IconSize / 2, center.Y - IconSize / 2, IconSize, IconSize);
-			if (rect.Contains (parent.Cursor))
-				return SummonClickEvent.AddItemToDock;
-			return SummonClickEvent.None;
+			if (rect.Contains (cursor) && State [State.CurrentPane] is Item) {
+				DockServices.ItemsService.AddItemToDock (State [State.CurrentPane]);
+				DockServices.DoInteropService.RequestClickOff ();
+			} else if (!dockArea.Contains (cursor)) {
+				DockServices.DoInteropService.RequestClickOff ();
+			}
+		}
+
+		public void Interupt ()
+		{
+			Log.Error ("Docky has been interupted innapropriately.  Please report this bug.");
 		}
 		
 		Gdk.Point GetButtonCenter (ref Gdk.Rectangle dockArea)
@@ -96,9 +149,7 @@ namespace Docky.Interface.Renderers
 			return new Gdk.Point (dockArea.X + IconSize / 2 + 5, dockArea.Y + dockArea.Height - (IconSize / 2 + 5));
 		}
 			
-		
-		
-		public void RenderSummonMode (Context cr, Gdk.Rectangle dockArea)
+		public void Paint (Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
 			if (LargeIconCache == null)
 				LargeIconCache = new PixbufSurfaceCache (10, 2 * DockPreferences.IconSize, 2 * DockPreferences.IconSize, cr.Target);
@@ -137,15 +188,21 @@ namespace Docky.Interface.Renderers
 				
 				if (!LargeIconCache.ContainsKey (icon))
 				    LargeIconCache.AddPixbufSurface (icon, icon);
-				
+
 				cr.Scale (zoom, zoom);
-				cr.SetSource (LargeIconCache.GetSurface (icon), 
-				              left_x * (1 / zoom), 
-				              ((dockArea.Y + dockArea.Height) - (DockPreferences.IconSize * 2 * zoom) - 5) * (1 / zoom));
+				if (DockPreferences.Orientation == DockOrientation.Top) {
+					cr.SetSource (LargeIconCache.GetSurface (icon), 
+					              left_x * (1 / zoom), 
+					              (dockArea.Y * (1 / zoom)));
+				} else {
+					cr.SetSource (LargeIconCache.GetSurface (icon), 
+					              left_x * (1 / zoom), 
+					              ((dockArea.Y + dockArea.Height) - (DockPreferences.IconSize * 2 * zoom) - 5) * (1 / zoom));
+				}
 				cr.PaintWithAlpha (opacity);
 				cr.Scale (1 / zoom, 1 / zoom);
 			}
-			
+
 			switch (PaneDrawState (State.CurrentPane))
 			{
 			case DrawState.NoResult:
@@ -154,7 +211,7 @@ namespace Docky.Interface.Renderers
 			case DrawState.Normal:
 				RenderNormalText (cr, ref dockArea);
 				if (ShouldRenderButton)
-					RenderAddButton (cr, ref dockArea);
+					RenderAddButton (cr, ref dockArea, ref cursor);
 				break;
 			case DrawState.Text:
 				RenderTextModeText (cr, ref dockArea);
@@ -282,7 +339,7 @@ namespace Docky.Interface.Renderers
 			                              text_height, color, Pango.Alignment.Left, Pango.EllipsizeMode.End);
 		}
 		
-		void RenderAddButton (Context cr, ref Gdk.Rectangle dockArea)
+		void RenderAddButton (Context cr, ref Gdk.Rectangle dockArea, ref Gdk.Point cursor)
 		{
 			Gdk.Point buttonCenter = GetButtonCenter (ref dockArea);
 			
@@ -291,14 +348,8 @@ namespace Docky.Interface.Renderers
 			
 			cr.SetRoundedRectanglePath (x, y, IconSize, IconSize, IconSize / 2);
 			cr.LineWidth = 2;
-			switch (GetClickEvent (dockArea)) {
-			case SummonClickEvent.AddItemToDock:
-				cr.Color = new Cairo.Color (1, 1, 1);
-				break;
-			case SummonClickEvent.None:
-				cr.Color = new Cairo.Color (1, 1, 1, .7);
-				break;
-			}
+			// fixme
+			cr.Color = new Cairo.Color (1, 1, 1);
 			cr.Stroke ();
 			
 			cr.MoveTo (x + IconSize / 2, y + 4);
@@ -312,8 +363,7 @@ namespace Docky.Interface.Renderers
 		{
 			int base_x = dockArea.X + 15;
 			double zoom_value = .3;
-			//fixme
-			double slide_state = Math.Min (1, (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds / parent.BaseAnimationTime.TotalMilliseconds);
+			double slide_state = Math.Min (1, (DateTime.UtcNow - State.CurrentPaneTime).TotalMilliseconds / DockArea.BaseAnimationTime.TotalMilliseconds);
 			
 			double growing_zoom = zoom_value + slide_state * (1 - zoom_value);
 			double shrinking_zoom = zoom_value + (1 - slide_state) * (1 - zoom_value);
@@ -395,21 +445,15 @@ namespace Docky.Interface.Renderers
 			if (!string.IsNullOrEmpty (State.GetPaneQuery (pane))) {
 				return DrawState.NoResult;
 			}
-			
+
 			return DrawState.None;
 		}
 
-		#region IDisposable implementation 
-		
 		public void Dispose ()
 		{
-			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
-			parent = null;
+			UnregisterEvents ();
 			TextUtility.Dispose ();
 			TextUtility = null;
 		}
-		
-		#endregion 
-		
 	}
 }

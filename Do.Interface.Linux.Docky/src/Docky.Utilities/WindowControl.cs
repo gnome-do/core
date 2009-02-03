@@ -61,7 +61,7 @@ namespace Docky.Utilities
 		public static void MinimizeWindows (IEnumerable<Window> windows)
 		{
 			foreach (Window window in windows) {
-				if (window.IsInViewport (window.Workspace) && !window.IsMinimized)
+				if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized)
 					window.Minimize ();
 			}
 		}
@@ -75,7 +75,7 @@ namespace Docky.Utilities
 		public static void RestoreWindows (IEnumerable<Window> windows)
 		{
 			foreach (Window window in windows) {
-				if (window.IsInViewport (window.Workspace) && window.IsMinimized)
+				if (window.IsInViewport (window.Screen.ActiveWorkspace) && window.IsMinimized)
 					window.Unminimize (Gtk.Global.CurrentEventTime);
 			}
 		}
@@ -83,8 +83,8 @@ namespace Docky.Utilities
 		public static void FocusWindows (IEnumerable<Window> windows)
 		{
 			foreach (Window window in windows) {
-				if (window.IsInViewport (window.Workspace) && !window.IsMinimized)
-					window.Activate (Gtk.Global.CurrentEventTime);
+				if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized)
+					window.CenterAndFocusWindow ();
 			}
 			
 			if (windows.Count () <= 1)
@@ -136,7 +136,7 @@ namespace Docky.Utilities
 		{
 			if (w == null)
 				return;
-			
+
 			if (!w.IsInViewport (w.Screen.ActiveWorkspace)) {
 				int viewX, viewY, viewW, viewH;
 				int midX, midY;

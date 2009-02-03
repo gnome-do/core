@@ -1,4 +1,4 @@
-// IRightClickable.cs
+// LaunchMenuButtonArgs.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -17,25 +17,28 @@
 //
 
 using System;
-using System.Collections.Generic;
 
-using Docky.Interface.Menus;
+using Do.Universe;
+using Do.Platform;
 
-namespace Docky.Interface
+namespace Docky.Interface.Menus
 {
-	public interface IRightClickable
+	
+	
+	public class LaunchMenuButtonArgs : AbstractMenuButtonArgs
 	{
-		/// <summary>
-		/// Returns a collection of the items that are to be placed in a menu
-		/// </summary>
-		/// <returns>
-		/// A <see cref="IEnumerable"/>
-		/// </returns>
-		IEnumerable<AbstractMenuButtonArgs> GetMenuItems ();
+		Act action;
+		Item item;
 		
-		/// <summary>
-		/// Lets the dock item provider know that the remove button was clicked
-		/// </summary>
-		event EventHandler RemoveClicked;
+		public LaunchMenuButtonArgs (Act action, Item item, string description, string icon) : base (description, icon, true)
+		{
+			this.action = action;
+			this.item = item;
+		}
+		
+		public override void Action ()
+		{
+			Services.Core.PerformActionOnItem (action, item);
+		}
 	}
 }

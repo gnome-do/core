@@ -1,4 +1,4 @@
-// DockItemProvider.cs
+// ItemsService.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -28,53 +29,45 @@ using Do.Interface;
 using Do.Universe;
 using Do.Platform;
 
+using Docky.Interface;
 using Docky.Utilities;
 
 using Wnck;
 
-namespace Docky.Interface
+namespace Docky.Core.Default
 {
-	public enum IconSource {
-		Statistics,
-		Custom,
-		Application,
-		Unknown,
-	}
-	
-	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);
-	public delegate void DockItemsChangedHandler (IEnumerable<BaseDockItem> items);
-	
-	public class DockItemProvider : IDisposable
+	public class ItemsService : IItemsService
 	{
 		
 		public event DockItemsChangedHandler DockItemsChanged;
 		public event UpdateRequestHandler ItemNeedsUpdate;
 		
-		Dictionary<string, DockItem> custom_items;
+		IDictionary<string, DockItem> custom_items;
 		List<DockItem> statistical_items;
-		List<BaseDockItem> output_items; 
+		List<BaseDockItem> output_items;
+		ReadOnlyCollection<BaseDockItem> readonly_items; 
 		List<ApplicationDockItem> task_items;
 		bool enable_serialization = true;
 		bool custom_items_read;
 		
 		string DesktopFilesPath {
 			get {
-				return Path.Combine (Services.Paths.UserDataDirectory, "dock_desktop_files");
+				return Path.Combine (Services.Paths.UserDataDirectory, GetType ().Name + "DesktopFiles");
 			}
 		}
 		
 		string SortDictionaryPath {
 			get { 
-				return Path.Combine (Services.Paths.UserDataDirectory, "dock_sort_dictionary");
+				return Path.Combine (Services.Paths.UserDataDirectory, GetType ().Name + "SortDictionary");
 			}
 		}
 		
 		int LastPosition {
 			get {
-				if (!DragableItems.Any ())
+				if (!DraggableItems.Any ())
 					return 0;
-				//TODO make sane once mono 1.9 support is dropped
-				return DragableItems.Max ((Func<DockItem, int>) (di => di.Position));
+				// TODO make sane once mono 1.9 support is dropped
+				return DraggableItems.Max ((Func<DockItem, int>) (di => di.Position));
 			}
 		}
 		
@@ -82,18 +75,17 @@ namespace Docky.Interface
 		BaseDockItem MenuItem { get; set; }
 		BaseDockItem TrashItem { get; set; }
 		
-		IEnumerable<DockItem> DragableItems {
+		IEnumerable<DockItem> DraggableItems {
 			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
 		}
 		
 		public bool UpdatesEnabled { get; set; }
 		
-		public List<BaseDockItem> DockItems {
+		public ReadOnlyCollection<BaseDockItem> DockItems {
 			get {
-				if (output_items == null) {
-					output_items = new List<BaseDockItem> ();
+				if (output_items.Count == 0) {
 					output_items.Add (MenuItem);
-					output_items.AddRange (DragableItems.Cast<BaseDockItem> ());
+					output_items.AddRange (DraggableItems.Cast<BaseDockItem> ());
 				
 					if (task_items.Any () || DockPreferences.ShowTrash)
 						output_items.Add (Separator);
@@ -104,12 +96,13 @@ namespace Docky.Interface
 				
 					if (DockPreferences.ShowTrash)
 						output_items.Add (TrashItem);
+					
 				}
-				return output_items;
+				return readonly_items;
 			}
 		}
 		
-		public DockItemProvider ()
+		public ItemsService ()
 		{
 			Separator = new SeparatorItem ();
 			MenuItem = new DoDockItem ();
@@ -118,6 +111,9 @@ namespace Docky.Interface
 			custom_items = new Dictionary<string, DockItem> ();
 			statistical_items = new List<DockItem> ();
 			task_items = new List<ApplicationDockItem> ();
+			
+			output_items = new List<BaseDockItem> ();
+			readonly_items = output_items.AsReadOnly ();
 			
 			RegisterEvents ();
 		}
@@ -154,10 +150,10 @@ namespace Docky.Interface
 			UpdateItems ();
 		}
 		
-		public void AddCustomItem (Element item)
+		public void AddItemToDock (Element item)
 		{
 			if (!(item is Item)) {
-				Log<DockItemProvider>.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
+				Log<ItemsService>.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
 				return;
 			}
 			string id = item.UniqueId;
@@ -177,7 +173,7 @@ namespace Docky.Interface
 				SerializeData ();
 		}
 		
-		public void AddCustomItem (string identifier)
+		public void AddItemToDock (string identifier)
 		{
 			if (custom_items.ContainsKey (identifier))
 				return;
@@ -218,36 +214,49 @@ namespace Docky.Interface
 				if (e != null)
 					customItem = new DockItem (e);
 				else
-					Log<DockItemProvider>.Error ("Could not add custom item with id: {0}", identifier);
+					Log<ItemsService>.Error ("Could not add custom item with id: {0}", identifier);
 			}
 			return customItem;
 		}
 		
 		public bool ItemCanBeMoved (int item)
 		{
-			if (DockItems [item] is DockItem) {
-				return DragableItems.Contains (DockItems [item] as DockItem);
-			}
-			return false;
+			return DockItems [item] is DockItem && DraggableItems.Contains (DockItems [item] as DockItem);
+		}
+		
+		public void DropItemOnPosition (BaseDockItem item, int position)
+		{
+			if (ItemCanInteractWithPosition (item, position))
+				if (DockItems [position] is TrashDockItem)
+					RemoveItem (item);
+		}
+
+		public void MoveItemToPosition (BaseDockItem item, int position)
+		{
+			if (ItemCanInteractWithPosition (item, position))
+				MoveItemToPosition (DockItems.IndexOf (item), position);
+		}
+		
+		bool ItemCanInteractWithPosition (BaseDockItem item, int position)
+		{
+			return DockItems.Contains (item) && 0 <= position && position < DockItems.Count;
 		}
 		
 		public void MoveItemToPosition (int item, int position)
 		{
-			if (item == position)
+			if (item == position || 
+			    item < 0 || 
+			    position < 0 || 
+			    position > DockItems.Count || 
+			    item > DockItems.Count)
 				return;
 			
 			IconSource itemSource = GetIconSource (DockItems [item]);
 			IconSource targetSource = GetIconSource (DockItems [position]);
 			
-			if (itemSource == IconSource.Application || itemSource == IconSource.Unknown)
+			if (itemSource == IconSource.Application || itemSource == IconSource.Unknown ||
+			    targetSource == IconSource.Application || targetSource == IconSource.Unknown)
 				return;
-			
-			if (targetSource == IconSource.Application || targetSource == IconSource.Unknown) {
-				if (DockItems [position] is TrashDockItem) {
-					RemoveItem (item);
-				}
-				return;
-			}
 			
 			DockItem primaryItem = DockItems [item] as DockItem;
 			DockItem targetItem = DockItems [position] as DockItem;
@@ -255,7 +264,7 @@ namespace Docky.Interface
 			int startPosition = primaryItem.Position;
 			int targetPosition = targetItem.Position;
 			
-			foreach (DockItem di in DragableItems) {
+			foreach (DockItem di in DraggableItems) {
 				if (startPosition < targetPosition) {
 					// the item is being shifted to the right.  Everything greater than item up to and including target item
 					// needs to be shifted to the left
@@ -301,12 +310,8 @@ namespace Docky.Interface
 
 		void HandleRemoveClicked(object sender, EventArgs e)
 		{
-			for (int i=0; i<DockItems.Count; i++) {
-				if (DockItems [i] == sender) {
-					RemoveItem (i);
-					break;
-				}
-			}
+			if (sender is BaseDockItem)
+				RemoveItem (sender as BaseDockItem);
 		}
 		
 		IEnumerable<Item> MostUsedItems ()
@@ -320,6 +325,13 @@ namespace Docky.Interface
 				.ThenBy (item => item.GetType ().Name)
 				.ThenBy (item => item.Safe.Name);
 		}
+
+		public bool RemoveItem (BaseDockItem item)
+		{
+			if (!DockItems.Contains (item))
+				return false;
+			return RemoveItem (DockItems.IndexOf (item));
+		}
 		
 		public bool RemoveItem (int item)
 		{
@@ -327,7 +339,7 @@ namespace Docky.Interface
 			
 			if (GetIconSource (DockItems [item]) == IconSource.Statistics) {
 				DockPreferences.AddBlacklistItem ((DockItems [item] as DockItem).Element.UniqueId);
-				DockPreferences.AutomaticIcons--;
+				DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
 				UpdateItems ();
 				ret_val = true;
 			} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
@@ -362,8 +374,8 @@ namespace Docky.Interface
 					f.Serialize (s, custom_items.Keys.ToArray ());
 				}
 			} catch (Exception e) {
-				Log<DockItemProvider>.Error ("Could not serialize custom items");
-				Log<DockItemProvider>.Error (e.Message);
+				Log<ItemsService>.Error ("Could not serialize custom items");
+				Log<ItemsService>.Error (e.Message);
 			}
 		}
 		
@@ -372,11 +384,11 @@ namespace Docky.Interface
 			try {
 				using (Stream s = File.OpenWrite (SortDictionaryPath)) {
 					BinaryFormatter f = new BinaryFormatter ();
-					f.Serialize (s, DragableItems.ToDictionary (di => di.Element.UniqueId, di => di.Position));
+					f.Serialize (s, DraggableItems.ToDictionary (di => di.Element.UniqueId, di => di.Position));
 				}
 			} catch (Exception e) {
-				Log<DockItemProvider>.Error ("Could not serialize sort items");
-				Log<DockItemProvider>.Error (e.Message);
+				Log<ItemsService>.Error ("Could not serialize sort items");
+				Log<ItemsService>.Error (e.Message);
 			}
 		}
 		
@@ -389,10 +401,10 @@ namespace Docky.Interface
 					filenames = f.Deserialize (s) as string[];
 				}
 			} catch (FileNotFoundException e) {
-				Log<DockItemProvider>.Debug ("Custom items file not present, nothing to add. " + e.Message);
+				Log<ItemsService>.Debug ("Custom items file not present, nothing to add. " + e.Message);
 				filenames = new string[0];
 			} catch {
-				Log<DockItemProvider>.Error ("Could not deserialize custom items");
+				Log<ItemsService>.Error ("Could not deserialize custom items");
 				filenames = new string[0];
 			}
 			return filenames;
@@ -407,10 +419,10 @@ namespace Docky.Interface
 					sortDictionary = f.Deserialize (s) as Dictionary<string, int>;
 				}
 			} catch (FileNotFoundException e) {
-				Log<DockItemProvider>.Debug ("Sort Dictionary file not present, nothing to add. " + e.Message);
+				Log<ItemsService>.Debug ("Sort Dictionary file not present, nothing to add. " + e.Message);
 				sortDictionary = new Dictionary<string, int> ();
 			} catch {
-				Log<DockItemProvider>.Error ("Could not deserialize sort dictionary");
+				Log<ItemsService>.Error ("Could not deserialize sort dictionary");
 				sortDictionary = new Dictionary<string, int> ();
 			}
 			return sortDictionary;
@@ -426,20 +438,20 @@ namespace Docky.Interface
 			if (!custom_items_read) {
 				enable_serialization = false;
 				foreach (string s in DeserializeCustomItems ())
-					AddCustomItem (s);
+					AddItemToDock (s);
 				enable_serialization = true;
 				
 				custom_items_read = true;
 				
 				Dictionary<string, int> sortDictionary = DeserializeSortDictionary ();
-				foreach (DockItem item in DragableItems) {
+				foreach (DockItem item in DraggableItems) {
 					if (sortDictionary.ContainsKey (item.Element.UniqueId))
 						item.Position = sortDictionary [item.Element.UniqueId];
 				}
 			}
 			
 			UpdateWindowItems ();
-			SimplifyPositions (DragableItems);
+			SimplifyPositions (DraggableItems);
 			OnDockItemsChanged ();
 			
 		}
@@ -497,8 +509,8 @@ namespace Docky.Interface
 				.Where (app => app.Windows.Any (w => !w.IsSkipTasklist))
 				.Where (app => !knownPids.Contains (app.Pid) && app.Windows.Any ());
 			
-			foreach (IEnumerable<Wnck.Application> apps in prunedApps.
-			         GroupBy (app => (app as Wnck.Application).Windows [0].ClassGroup.ResClass)) {
+			foreach (IEnumerable<Wnck.Application> apps in prunedApps
+			         .GroupBy (app => (app as Wnck.Application).Windows [0].ClassGroup.ResClass)) {
 				ApplicationDockItem api = new ApplicationDockItem (apps);
 
 				if (task_items.Any (di => di.Equals (api)))
@@ -520,16 +532,16 @@ namespace Docky.Interface
 		
 		void SimplifyPositions (IEnumerable<DockItem> items)
 		{
-			int i=0;
-			foreach (DockItem item in items.OrderBy (di => di.Position).ToArray ()) {
+			int i = 0;
+			// we call ToArray so our enumerator does get screwed up when we change the Position
+			foreach (DockItem item in items.OrderBy (di => di.Position).ToArray ())
 				item.Position = i++;
-			}
 		}
 		
 		void OnDockItemsChanged ()
 		{
 			// clear the cache
-			output_items = null;
+			output_items.Clear ();
 			
 			if (DockItemsChanged != null)
 				DockItemsChanged (DockItems);
@@ -548,8 +560,7 @@ namespace Docky.Interface
 			foreach (BaseDockItem di in DockItems) {
 				if (di is IRightClickable)
 					(di as IRightClickable).RemoveClicked -= HandleRemoveClicked;
-				if (di is IDockAppItem)
-					(di as IDockAppItem).UpdateNeeded -= HandleUpdateNeeded;
+				di.UpdateNeeded -= HandleUpdateNeeded;
 				
 				di.Dispose ();
 			}

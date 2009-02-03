@@ -31,29 +31,26 @@ using Do.Platform;
 using Do.Interface;
 using Do.Universe;
 
+using Docky.Interface.Menus;
 using Docky.Utilities;
 
 namespace Docky.Interface
 {
 	
 	
-	public class ApplicationDockItem : BaseDockItem, IRightClickable, IDockAppItem
+	public class ApplicationDockItem : BaseDockItem, IRightClickable
 	{
 		public event EventHandler RemoveClicked;
 		
-		static IEnumerable<String> DesktopFilesDirectories {
-			get {
-				return new string[] {
-					"~/.local/share/applications/wine",
-					"~/.local/share/applications",
-					"/usr/share/applications",
-					"/usr/share/applications/kde",
-					"/usr/share/applications/kde4",
-					"/usr/share/gdm/applications",
-					"/usr/local/share/applications",
-				};
-			}
-		}
+		static readonly IEnumerable<string> DesktopFilesDirectories = new [] {
+				"~/.local/share/applications/wine",
+				"~/.local/share/applications",
+				"/usr/share/applications",
+				"/usr/share/applications/kde",
+				"/usr/share/applications/kde4",
+				"/usr/share/gdm/applications",
+				"/usr/local/share/applications",
+		};
 		
 		string MinimizeRestoreText = Catalog.GetString ("Minimize") + "/" + Catalog.GetString ("Restore");
 		string CloseText = Catalog.GetString ("Close All");
@@ -63,7 +60,6 @@ namespace Docky.Interface
 		const string MinimizeIcon = "down";
 		
 		int windowCount;
-		bool urgent;
 		
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
@@ -86,12 +82,10 @@ namespace Docky.Interface
 			}
 		}
 		
-		#region IDockItem implementation 
-		
 		public override Pixbuf GetDragPixbuf ()
 		{
 			if (drag_pixbuf == null)
-				drag_pixbuf = GetSurfacePixbuf ();
+				drag_pixbuf = GetSurfacePixbuf (DockPreferences.FullIconSize);
 			return drag_pixbuf;
 		}
 		
@@ -101,7 +95,7 @@ namespace Docky.Interface
 		/// <returns>
 		/// A <see cref="Gdk.Pixbuf"/>
 		/// </returns>
-		protected override Gdk.Pixbuf GetSurfacePixbuf ()
+		protected override Gdk.Pixbuf GetSurfacePixbuf (int size)
 		{
 			Gdk.Pixbuf pbuf = null;
 			foreach (string guess in GetIconGuesses ()) {
@@ -110,8 +104,8 @@ namespace Docky.Interface
 					pbuf = null;
 				}
 				
-				bool found = IconProvider.PixbufFromIconName (guess, DockPreferences.FullIconSize, out pbuf);
-				if (found && (pbuf.Width == DockPreferences.FullIconSize || pbuf.Height == DockPreferences.FullIconSize))
+				bool found = IconProvider.PixbufFromIconName (guess, size, out pbuf);
+				if (found && (pbuf.Width == size || pbuf.Height == size))
 					break;
 				
 				pbuf.Dispose ();
@@ -121,7 +115,7 @@ namespace Docky.Interface
 				if (!string.IsNullOrEmpty (desktopPath)) {
 					try {
 						string icon = Services.UniverseFactory.NewApplicationItem (desktopPath).Icon;
-						pbuf = IconProvider.PixbufFromIconName (icon, DockPreferences.FullIconSize);
+						pbuf = IconProvider.PixbufFromIconName (icon, size);
 						break;
 					} catch {
 						continue;
@@ -133,8 +127,8 @@ namespace Docky.Interface
 			if (pbuf == null)
 				pbuf = Applications.First ().Icon;
 			
-			if (pbuf.Height != DockPreferences.FullIconSize && pbuf.Width != DockPreferences.FullIconSize) {
-				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
+			if (pbuf.Height != size && pbuf.Width != size ) {
+				double scale = (double)size / Math.Max (pbuf.Width, pbuf.Height);
 				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Hyper);
 				pbuf.Dispose ();
 				pbuf = temp;
@@ -142,7 +136,7 @@ namespace Docky.Interface
 			return pbuf;
 		}
 		
-		public override string Description {
+		string Description {
 			get {
 				foreach (Wnck.Application application in Applications) {
 					if (StringIsValidName (application.IconName))
@@ -170,9 +164,7 @@ namespace Docky.Interface
 		IEnumerable<Wnck.Window> VisibleWindows {
 			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
 		}
-		
-		#endregion 
-		
+
 		public ApplicationDockItem (IEnumerable<Wnck.Application> applications) : base ()
 		{
 			Applications = applications;
@@ -181,19 +173,26 @@ namespace Docky.Interface
 			
 			foreach (Wnck.Window w in VisibleWindows) {
 				w.StateChanged += HandleStateChanged;
+				w.NameChanged += HandleNameChanged;
 			}
+
+			base.SetText (Description);
+		}
+
+		void HandleNameChanged(object sender, EventArgs e)
+		{
+			SetText (Description);
 		}
 
 		void HandleStateChanged(object o, Wnck.StateChangedArgs args)
 		{
-			bool tmp = urgent;
-			urgent = DetermineUrgencyStatus ();
-			if (urgent != tmp) {
-				UpdateRequestType req = (urgent) ? UpdateRequestType.NeedsAttentionSet : UpdateRequestType.NeedsAttentionUnset;
-				if (urgent)
+			bool tmp = NeedsAttention;
+			NeedsAttention = DetermineUrgencyStatus ();
+			if (NeedsAttention != tmp) {
+				UpdateRequestType req = (NeedsAttention) ? UpdateRequestType.NeedsAttentionSet : UpdateRequestType.NeedsAttentionUnset;
+				if (NeedsAttention)
 					AttentionRequestStartTime = DateTime.UtcNow;
-				if (UpdateNeeded != null)
-					UpdateNeeded (this, new UpdateRequestArgs (this, req));
+				OnUpdateNeeded (new UpdateRequestArgs (this, req));
 			}
 		}
 		
@@ -317,20 +316,6 @@ namespace Docky.Interface
 			                                       CloseText, Gtk.Stock.Quit);
 		}
 
-		#region IDockAppItem implementation 
-		
-		public event UpdateRequestHandler UpdateNeeded;
-		
-		public bool NeedsAttention {
-			get { return urgent; }
-		}
-		
-		public DateTime AttentionRequestStartTime {
-			get; private set;
-		}
-		
-		#endregion 
-		
 		bool DetermineUrgencyStatus ()
 		{
 			return VisibleWindows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ());
@@ -338,8 +323,10 @@ namespace Docky.Interface
 
 		public override void Dispose ()
 		{
-			foreach (Wnck.Window w in VisibleWindows)
+			foreach (Wnck.Window w in VisibleWindows) {
 				w.StateChanged -= HandleStateChanged;
+				w.NameChanged -= HandleNameChanged;
+			}
 			
 			base.Dispose ();
 		}

@@ -1,4 +1,4 @@
-// AbstractMenuButtonArgs.cs
+// WindowMenuButtonArgs.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -17,39 +17,28 @@
 //
 
 using System;
-using Mono.Unix;
 
-namespace Docky.Interface
+using Wnck;
+
+using Docky.Utilities;
+
+namespace Docky.Interface.Menus
 {
-	public abstract class AbstractMenuButtonArgs
+	
+	
+	public class WindowMenuButtonArgs : AbstractMenuButtonArgs
 	{
-		const int MaxDescriptionCharacters = 50;
+		Window window;
 		
-		public EventHandler Handler {
-			get {
-				return (sender, e) => Action ();
-			}
-		}
-		
-		public string Description {
-			get; private set;
-		}
-		
-		public string Icon {
-			get; private set;
-		}
-		
-		public bool Sensitive {
-			get; private set; 
-		}
-		
-		public AbstractMenuButtonArgs (string description, string icon, bool sensitive)
+		public WindowMenuButtonArgs (Window window, string description, string icon) : base (description, icon, true)
 		{
-			Description = GLib.Markup.EscapeText (Catalog.GetString (description));
-			Icon = icon;
-			Sensitive = sensitive;
+			this.window = window;
 		}
 		
-		public abstract void Action ();
+		public override void Action ()
+		{
+			window.CenterAndFocusWindow ();
+		}
+
 	}
 }

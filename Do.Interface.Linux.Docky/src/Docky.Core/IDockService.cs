@@ -1,6 +1,6 @@
-// IRightClickable.cs
+// IDockService.cs
 // 
-// Copyright (C) 2008 GNOME Do
+// Copyright (C) 2009 GNOME Do
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,25 +17,10 @@
 //
 
 using System;
-using System.Collections.Generic;
 
-using Docky.Interface.Menus;
-
-namespace Docky.Interface
+namespace Docky.Core
 {
-	public interface IRightClickable
+	public interface IDockService : IDisposable
 	{
-		/// <summary>
-		/// Returns a collection of the items that are to be placed in a menu
-		/// </summary>
-		/// <returns>
-		/// A <see cref="IEnumerable"/>
-		/// </returns>
-		IEnumerable<AbstractMenuButtonArgs> GetMenuItems ();
-		
-		/// <summary>
-		/// Lets the dock item provider know that the remove button was clicked
-		/// </summary>
-		event EventHandler RemoveClicked;
 	}
 }
