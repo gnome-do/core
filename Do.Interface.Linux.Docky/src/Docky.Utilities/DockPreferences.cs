@@ -226,7 +226,7 @@ namespace Docky.Utilities
 			}
 		}
 
-		static DockOrientation orientation = (DockOrientation) prefs.Get<int> ("Orientation", 0);
+		static DockOrientation orientation = (DockOrientation) Enum.Parse (typeof (DockOrientation), prefs.Get<string> ("Orientation", DockOrientation.Bottom.ToString ()));
 		public static DockOrientation Orientation {
 			get {
 				if (orientation != DockOrientation.Top && orientation != DockOrientation.Bottom)
@@ -236,7 +236,7 @@ namespace Docky.Utilities
 			}
 			set {
 				orientation = value;
-				prefs.Set ("Orientation", (int) value);
+				prefs.Set ("Orientation", value.ToString ());
 			}
 		}
 
