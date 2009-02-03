@@ -299,12 +299,8 @@ namespace Docky.Core.Default
 
 		void HandleRemoveClicked(object sender, EventArgs e)
 		{
-			for (int i=0; i<DockItems.Count; i++) {
-				if (DockItems [i] == sender) {
-					RemoveItem (i);
-					break;
-				}
-			}
+			if (sender is BaseDockItem)
+				RemoveItem (sender as BaseDockItem);
 		}
 		
 		IEnumerable<Item> MostUsedItems ()
@@ -526,9 +522,8 @@ namespace Docky.Core.Default
 		void SimplifyPositions (IEnumerable<DockItem> items)
 		{
 			int i=0;
-			foreach (DockItem item in items.OrderBy (di => di.Position).ToArray ()) {
+			foreach (DockItem item in items.OrderBy (di => di.Position).ToArray ())
 				item.Position = i++;
-			}
 		}
 		
 		void OnDockItemsChanged ()

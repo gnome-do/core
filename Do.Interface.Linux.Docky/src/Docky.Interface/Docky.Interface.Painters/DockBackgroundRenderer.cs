@@ -69,13 +69,6 @@ namespace Docky.Interface.Painters
 				}
 			}
 			
-//			context.SetSource (sr, dockArea.X, dockArea.Y);
-//			context.Rectangle (dockArea.X, dockArea.Y, dockArea.Width / 2, dockArea.Height);
-//			context.Fill ();
-//			
-//			context.SetSource (sr, dockArea.X + dockArea.Width - 1000, dockArea.Y);
-//			context.Rectangle (dockArea.X + dockArea.Width / 2, dockArea.Y, dockArea.Width - dockArea.Width / 2, dockArea.Height);
-//			context.Fill ();
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
 				RenderBottomBackground (context, dockArea);

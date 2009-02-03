@@ -182,8 +182,9 @@ namespace Docky.Utilities
 		/// </param>
 		public static void PerformLogicalClick (IEnumerable<Application> apps)
 		{
-			bool not_in_viewport = !apps.Any (app => app.Windows
-			                                  .Any (w => !w.IsSkipTasklist && w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)));
+			bool not_in_viewport = !apps.SelectMany (app => app.Windows)
+				.Any (w => !w.IsSkipTasklist && w.IsInViewport (w.Screen.ActiveWorkspace));
+			
 			bool urgent = apps.Any (app => app.Windows.Any (w => w.NeedsAttention ()));
 			
 			if (not_in_viewport || urgent) {
@@ -202,7 +203,7 @@ namespace Docky.Utilities
 			List<Window> windows = new List<Window> ();
 			foreach (Wnck.Application app in apps)
 				windows.AddRange (app.Windows);
-			
+
 			switch (GetClickAction (apps)) {
 			case ClickAction.Focus:
 				WindowControl.FocusWindows (windows);
