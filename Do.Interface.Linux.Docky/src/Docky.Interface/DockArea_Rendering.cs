@@ -362,8 +362,8 @@ namespace Docky.Interface
 
 			rect = PositionProvider.DockArea (ZoomIn, Cursor);
 
-			if (rect.Width < 800 && DockIconOpacity < 1) {
-				int difference = 800 - rect.Width;
+			if (rect.Width < 10 * rect.Height && DockIconOpacity < 1) {
+				int difference = 10 * rect.Height - rect.Width;
 				int alpha = (int) (difference * PainterOpacity);
 				rect.X -= alpha / 2;
 				rect.Width += alpha;

@@ -111,7 +111,7 @@ namespace Docky.Interface
 			Pango.Layout shadow = layout.Copy();
 			shadow.Indent = 1;
 
-			cr.Translate (10, (int) ((Height - 18) / 2));
+			cr.Translate (10, (int) ((Height - 18) / 2) + 1);
 			cr.Translate(1,1);
 			Pango.CairoHelper.LayoutPath (cr, shadow);
 			cr.Color = new Cairo.Color (0, 0, 0, 0.6);
