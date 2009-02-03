@@ -38,10 +38,11 @@ namespace Docky.Utilities
 	{
 		static IEnumerable<string> BadPrefixes {
 			get {
-				yield return "gksu ";
-				yield return "sudo ";
-				yield return "python ";
-				yield return "mono ";
+				yield return "gksu";
+				yield return "sudo";
+				yield return "python";
+				yield return "python2.4";
+				yield return "python2.5";
 			}
 		}
 		
@@ -97,14 +98,15 @@ namespace Docky.Utilities
 		public static string CmdLineForPid (int pid)
 		{
 			StreamReader reader;
-			string cmdline;
+			string cmdline = null;
+			
 			try {
 				string procPath = new [] { "/proc", pid.ToString (), "cmdline" }.Aggregate (Path.Combine);
 				reader = new StreamReader (procPath);
 				cmdline = reader.ReadLine ().Replace (Convert.ToChar (0x0), ' ');
 				reader.Close ();
 				reader.Dispose ();
-			} catch { return null; }
+			} catch { }
 			
 			return cmdline;
 		}
@@ -158,20 +160,24 @@ namespace Docky.Utilities
 			return apps;
 		}
 
-		static string ProcessExecString (string exec)
+		public static string ProcessExecString (string exec)
 		{
-			foreach (string s in BadPrefixes) {
-				if (exec.StartsWith (s)) {
-					exec = exec.Substring (s.Length);
-					break;
+			string [] parts = exec.Split (' ');
+			for (int i = 0; i < parts.Length; i++) {
+				if (parts [i].Contains ("/"))
+					parts [i] = parts [i].Split ('/').Last ();
+				
+				foreach (string prefix in BadPrefixes) {
+					if (parts [i].StartsWith (prefix)) {
+						parts [i] = parts [i].Substring (prefix.Length);
+					}
+				}
+				
+				if (!string.IsNullOrEmpty (parts [i].Trim ())) {
+					return parts [i].ToLower ();
 				}
 			}
-			
-			exec = exec.Split (' ').First ();
-			if (exec.Contains ("/"))
-				exec = exec.Split ('/').Last ();
-
-			return exec.ToLower ();
+			return null;
 		}
 		
 		/// <summary>

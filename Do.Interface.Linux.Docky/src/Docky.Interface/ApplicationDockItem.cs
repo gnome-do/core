@@ -199,6 +199,12 @@ namespace Docky.Interface
 		IEnumerable<string> GetIconGuesses ()
 		{
 			List<string> guesses = new List<string> ();
+			
+			if (!string.IsNullOrEmpty (Exec)) {
+				yield return Exec;
+				yield return Exec.Split ('-')[0];
+			}
+			
 			foreach (Wnck.Application app in Applications) {
 				if (!guesses.Contains (PrepName (app.Name)))
 					guesses.Add (PrepName (app.Name));
@@ -223,11 +229,6 @@ namespace Docky.Interface
 			
 			if (Description.Length > 4 && Description.Contains (" "))
 				yield return Description.Split (' ') [0].ToLower ();
-			
-			if (!string.IsNullOrEmpty (Exec)) {
-				yield return Exec;
-				yield return Exec.Split ('-')[0];
-			}
 		}
 
 		string PrepName (string s)
@@ -237,18 +238,12 @@ namespace Docky.Interface
 		
 		string MaybeGetExecStringForPID (int pid)
 		{
-			string exec;
-			try {
-				// this fails on mono pre 2.0
-				exec = System.Diagnostics.Process.GetProcessById (pid).ProcessName.Split (' ')[0];
-			} catch { exec = null; }
+			string exec = null;
 			
-			if (string.IsNullOrEmpty (exec)) {
-				try {
-					// this works on all versions of mono but is less reliable (because I wrote it)
-					exec = WindowUtils.CmdLineForPid (pid).Split (' ')[0];
-				} catch { }
-			}
+			try {
+				exec = WindowUtils.ProcessExecString (WindowUtils.CmdLineForPid (pid));
+			} catch { }
+		
 			if (exec == "")
 				exec = null;
 			
