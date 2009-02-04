@@ -32,7 +32,13 @@ namespace Docky.Interface
 		
 		string ThemePath {
 			get {
-				return System.IO.Path.Combine (Services.Paths.UserDataDirectory, "ClockTheme");
+				if (Directory.Exists (System.IO.Path.Combine (Services.Paths.UserDataDirectory, "ClockTheme")))
+					return System.IO.Path.Combine (Services.Paths.UserDataDirectory, "ClockTheme");
+				if (Directory.Exists ("/usr/share/gnome-do/ClockTheme"))
+					return "/usr/share/gnome-do/ClockTheme";
+				if (Directory.Exists ("/usr/local/share/gnome-do/ClockTheme"))
+					return "/usr/local/share/gnome-do/ClockTheme";
+				return "";
 			}
 		}
 		
