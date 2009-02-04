@@ -229,6 +229,7 @@ namespace Docky.Interface
 				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + dock_area.DockHeight);
 				break;
 			}
+			Screen.Display.Sync ();
 			
 			is_repositioned_hidden = false;
 		}
