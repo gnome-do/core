@@ -131,6 +131,10 @@ namespace Docky.Core.Default
 			Wnck.Screen.Default.WindowOpened += OnWindowOpened;
 			DockPreferences.TrashVisibilityChanged += OnDockItemsChanged;
 			DockPreferences.AutomaticIconsChanged += UpdateItems;
+			
+			ClockItem.UpdateNeeded += HandleUpdateNeeded;
+			TrashItem.UpdateNeeded += HandleUpdateNeeded;
+			MenuItem.UpdateNeeded += HandleUpdateNeeded;
 		}
 		
 		void UnregisterEvents ()
@@ -140,6 +144,10 @@ namespace Docky.Core.Default
 			Wnck.Screen.Default.WindowOpened -= OnWindowOpened;
 			DockPreferences.TrashVisibilityChanged -= OnDockItemsChanged;
 			DockPreferences.AutomaticIconsChanged -= UpdateItems;
+			
+			ClockItem.UpdateNeeded -= HandleUpdateNeeded;
+			TrashItem.UpdateNeeded -= HandleUpdateNeeded;
+			MenuItem.UpdateNeeded -= HandleUpdateNeeded;
 		}
 		
 		private void OnWindowClosed (object o, WindowClosedArgs args) 
