@@ -41,6 +41,7 @@ namespace Docky.Utilities
 				yield return "gksu";
 				yield return "sudo";
 				yield return "java";
+				yield return "mono";
 				yield return "python";
 				yield return "python2.4";
 				yield return "python2.5";
@@ -128,7 +129,7 @@ namespace Docky.Utilities
 				return apps;
 			
 			exec = ProcessExecString (exec);
-
+			
 			Application out_app = null;
 			foreach (string dir in Directory.GetDirectories ("/proc")) {
 				int pid;
@@ -172,7 +173,7 @@ namespace Docky.Utilities
 					parts [i] = parts [i].Split ('/').Last ();
 				
 				foreach (string prefix in BadPrefixes) {
-					if (parts [i].StartsWith (prefix)) {
+					if (parts [i].EndsWith (prefix)) {
 						parts [i] = parts [i].Substring (prefix.Length);
 					}
 				}
