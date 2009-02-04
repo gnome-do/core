@@ -19,6 +19,7 @@ FILES = \
 	src/Docky.Interface/BaseDockItem.cs \
 	src/Docky.Interface/ApplicationDockItem.cs \
 	src/Docky.Interface/ClickAnimationType.cs \
+	src/Docky.Interface/ClockDockItem.cs \
 	src/Docky.Interface/DoDockItem.cs \
 	src/Docky.Interface/DockArea.cs \
 	src/Docky.Interface/DockArea_Rendering.cs \
@@ -32,7 +33,7 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Menus/LaunchMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/RunnableMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/SimpleMenuButtonArgs.cs \
-	src/Docky.Interface/Docky.Interface.Menus/SeparatorMenuButtonArgs.cs \	
+	src/Docky.Interface/Docky.Interface.Menus/SeparatorMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs \
 	src/Docky.Interface/DockState.cs \
 	src/Docky.Interface/DockWindow.cs \
@@ -69,6 +70,7 @@ REFERENCES =  \
 	Mono.Posix \
 	$(GTK_SHARP_20_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
+	$(LIBRSVG_SHARP_LIBS) \
 	$(WNCK_SHARP_10_LIBS)
 
 PROJECT_REFERENCES = \

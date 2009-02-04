@@ -279,7 +279,7 @@ namespace Docky.Interface
 				centerOrientedPosition += offset;
 			}
 
-			if (!DockItems [icon].Scalable) {
+			if (DockItems [icon].ScalingType == ScalingType.None) {
 				zoom = 1;
 				switch (DockPreferences.Orientation) {
 				case DockOrientation.Bottom:

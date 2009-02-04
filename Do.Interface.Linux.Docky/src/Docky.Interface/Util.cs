@@ -44,6 +44,12 @@ namespace Docky.Interface
 		Unknown,
 	}
 	
+	public enum ScalingType {
+		None = 0,
+		Upscaled,
+		Downscaled,
+	}
+	
 	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);
 	public delegate void DockItemsChangedHandler (IEnumerable<BaseDockItem> items);
 	

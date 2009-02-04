@@ -183,6 +183,17 @@ namespace Docky.Utilities
 			}
 		}
 		
+		static bool show_clock = prefs.Get<bool> ("ShowClock", true);
+		public static bool ShowClock {
+			get { return show_clock; }
+			set {
+				if (show_clock == value)
+					return;
+				prefs.Set ("ShowClock", value);
+				show_clock = value;
+			}
+		}
+		
 		static TimeSpan summon_time = new TimeSpan (0, 0, 0, 0, prefs.Get<int> ("SummonTime", 100));
 		public static TimeSpan SummonTime {
 			get { return summon_time; }

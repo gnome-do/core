@@ -100,11 +100,8 @@ namespace Docky.Interface
 			get { return DockPreferences.IconSize; }
 		}
 		
-		/// <value>
-		/// If the icon is scalable or not (provides FullIconSize sized surface)
-		/// </value>
-		public virtual bool Scalable {
-			get { return true; }
+		public virtual ScalingType ScalingType {
+			get { return ScalingType.Downscaled; }
 		}
 		
 		/// <value>

@@ -74,6 +74,7 @@ namespace Docky.Core.Default
 		BaseDockItem Separator { get; set; }
 		BaseDockItem MenuItem { get; set; }
 		BaseDockItem TrashItem { get; set; }
+		BaseDockItem ClockItem { get; set; }
 		
 		IEnumerable<DockItem> DraggableItems {
 			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
@@ -91,10 +92,17 @@ namespace Docky.Core.Default
 						output_items.AddRange (task_items.Cast<BaseDockItem> ());
 					}
 				
-					if (DockPreferences.ShowTrash) {
+					if (DockPreferences.ShowTrash || DockPreferences.ShowClock) {
 						output_items.Add (Separator);
-						output_items.Add (TrashItem);
+						
+						if (DockPreferences.ShowClock)
+							output_items.Add (ClockItem);
+						
+						if (DockPreferences.ShowTrash)
+							output_items.Add (TrashItem);
 					}
+					
+					
 					
 				}
 				return readonly_items;
@@ -106,6 +114,7 @@ namespace Docky.Core.Default
 			Separator = new SeparatorItem ();
 			MenuItem = new DoDockItem ();
 			TrashItem = new TrashDockItem ();
+			ClockItem = new ClockDockItem ();
 			
 			custom_items = new Dictionary<string, DockItem> ();
 			statistical_items = new List<DockItem> ();

@@ -252,9 +252,14 @@ namespace Docky.Interface
 				}
 			}
 			
-			double scale = zoom/DockPreferences.IconQuality;
-			
-			if (DockItems [icon].Scalable) {
+			if (DockItems [icon].ScalingType != ScalingType.None) {
+				double scale;
+				
+				if (DockItems [icon].ScalingType == ScalingType.Downscaled)
+					scale= zoom/DockPreferences.IconQuality;
+				else
+					scale = zoom;
+				
 				if (scale != 1)
 					cr.Scale (scale, scale);
 				// we need to multiply x and y by 1 / scale to undo the scaling of the context.  We only want to zoom

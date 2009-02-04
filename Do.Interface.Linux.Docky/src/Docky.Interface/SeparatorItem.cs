@@ -37,9 +37,12 @@ namespace Docky.Interface
 			get { return (int) (DockPreferences.IconSize * .3); }
 		}
 		
-		public override bool Scalable { 
-			get { return false; } 
+		public override ScalingType ScalingType {
+			get {
+				return ScalingType.None;
+			}
 		}
+
 		
 		#endregion 
 		

@@ -40,6 +40,7 @@ namespace Docky.Utilities
 			get {
 				yield return "gksu";
 				yield return "sudo";
+				yield return "java";
 				yield return "python";
 				yield return "python2.4";
 				yield return "python2.5";
@@ -164,6 +165,9 @@ namespace Docky.Utilities
 		{
 			string [] parts = exec.Split (' ');
 			for (int i = 0; i < parts.Length; i++) {
+				if (parts [i].StartsWith ("-"))
+					continue;
+				
 				if (parts [i].Contains ("/"))
 					parts [i] = parts [i].Split ('/').Last ();
 				
