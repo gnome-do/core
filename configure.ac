@@ -142,6 +142,7 @@ Do.Universe/src/AssemblyInfo.cs
 libdo/Makefile
 Makefile
 data/Makefile
+data/Docky.DefaultClockTheme/Makefile
 data/icons/Makefile
 data/icons/hicolor/16x16/Makefile
 data/icons/hicolor/16x16/apps/Makefile
