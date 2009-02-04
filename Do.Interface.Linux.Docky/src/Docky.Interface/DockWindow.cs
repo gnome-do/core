@@ -318,8 +318,8 @@ namespace Docky.Interface
 		public void Summon ()
 		{
 			Visible = true;
-			Reposition ();
 			results_window.Show ();
+			Reposition ();
 			Windowing.PresentWindow (this);
 			interop_service.SignalSummon ();
 		}

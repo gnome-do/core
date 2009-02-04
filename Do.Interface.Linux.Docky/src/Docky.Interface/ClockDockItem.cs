@@ -90,7 +90,7 @@ namespace Docky.Interface
 				cr.Translate (center, center);
 				cr.Color = new Cairo.Color (.15, .15, .15);
 				
-				cr.LineWidth = size / 48;
+				cr.LineWidth = Math.Max (1, size / 48);
 				cr.LineCap = LineCap.Round;
 				double minuteRotation = 2 * Math.PI * (DateTime.Now.Minute / 60.0) + Math.PI;
 				cr.Rotate (minuteRotation);
