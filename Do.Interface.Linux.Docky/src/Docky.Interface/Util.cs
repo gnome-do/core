@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 using Do.Universe;
-using Do.Interface;
 using Do.Interface.CairoUtils;
 
 using Cairo;
