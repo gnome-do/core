@@ -15,7 +15,7 @@ dnl Plugin ABI version; bump whenever plugin interface changes
 ABI_VERSION=0.9
 AC_SUBST(ABI_VERSION)
 
-RELEASE="true"
+RELEASE="false"
 if [ $RELEASE = "true" ] ; then
    VERSION_INFO="Release"
 else
