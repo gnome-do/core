@@ -65,8 +65,9 @@ namespace Docky.Interface
 		}
 
 		
-		public override Surface GetIconSurface (Surface buffer)
+		public override Surface GetIconSurface (Surface buffer, int targetSize, out int actualSize)
 		{
+			actualSize = DockPreferences.IconSize;
 			if (sr == null) {
 				if (DockPreferences.DockIsHorizontal)
 					sr = buffer.CreateSimilar (buffer.Content, Width, Height);

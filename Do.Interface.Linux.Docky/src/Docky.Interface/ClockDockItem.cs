@@ -12,21 +12,17 @@ using Do.Interface;
 using Do.Interface.CairoUtils;
 using Do.Platform;
 
-using Docky.Utilities;
-
 namespace Docky.Interface
 {
 	
 	
 	public class ClockDockItem : BaseDockItem
 	{
-		Surface sr, clock_backdrop;
-		DateTime last_draw;
 		int minute;
 		
 		public override ScalingType ScalingType {
 			get {
-				return ScalingType.Upscaled;
+				return ScalingType.HighLow;
 			}
 		}
 		
@@ -45,7 +41,6 @@ namespace Docky.Interface
 		public ClockDockItem()
 		{
 			GLib.Timeout.Add (1000, ClockUpdateTimer);
-			last_draw = new DateTime (0);
 		}
 		
 		bool ClockUpdateTimer ()
@@ -74,60 +69,54 @@ namespace Docky.Interface
 			pbuf.Dispose ();
 		}
 
-		public override Surface GetIconSurface (Cairo.Surface similar)
+		protected override Surface MakeIconSurface (Cairo.Surface similar, int size)
 		{
-			if (sr == null)
-				sr = similar.CreateSimilar (similar.Content, 
-				                            DockPreferences.IconSize, 
-				                            DockPreferences.IconSize);
+			current_size = size;
+			Surface tmp_surface = similar.CreateSimilar (similar.Content, size, size);
 			
-			if ((DateTime.UtcNow - last_draw).TotalMinutes >= 1) {
-				using (Context cr = new Context (sr)) {
-					cr.AlphaFill ();
-					
-					int center = DockPreferences.IconSize / 2;
-					int radius = center;
-					
-					if (clock_backdrop == null) {
-						clock_backdrop = similar.CreateSimilar (similar.Content,
-						                                        DockPreferences.IconSize,
-						                                        DockPreferences.IconSize);
-						using (Cairo.Context cr2 = new Cairo.Context (clock_backdrop)) {
-							RenderFileOntoContext (cr2, System.IO.Path.Combine (ThemePath, "clock-drop-shadow.svg"), radius * 2);
-							RenderFileOntoContext (cr2, System.IO.Path.Combine (ThemePath, "clock-face.svg"), radius * 2);
-							RenderFileOntoContext (cr2, System.IO.Path.Combine (ThemePath, "clock-marks.svg"), radius * 2);
-							RenderFileOntoContext (cr2, System.IO.Path.Combine (ThemePath, "clock-face-shadow.svg"), radius * 2);
-							RenderFileOntoContext (cr2, System.IO.Path.Combine (ThemePath, "clock-glass.svg"), radius * 2);
-							RenderFileOntoContext (cr2, System.IO.Path.Combine (ThemePath, "clock-frame.svg"), radius * 2);
-						}
-					}
-					
-					clock_backdrop.Show (cr, 0, 0);
+			using (Context cr = new Context (tmp_surface)) {
+				cr.AlphaFill ();
 				
-					cr.Translate (center, center);
-					cr.Color = new Cairo.Color (.15, .15, .15);
-					
-					cr.LineCap = LineCap.Round;
-					double minuteRotation = 2 * Math.PI * (DateTime.Now.Minute / 60.0) + Math.PI;
-					cr.Rotate (minuteRotation);
-					cr.MoveTo (0, radius - radius * .35);
-					cr.LineTo (0, 0 - radius * .15);
-					cr.Stroke ();
-					cr.Rotate (0 - minuteRotation);
-					
-					cr.Color = new Cairo.Color (0, 0, 0);
-					double hourRotation = 2 * Math.PI * (DateTime.Now.Hour / 12.0) + Math.PI + (Math.PI / 6) * DateTime.Now.Minute / 60.0;
-					cr.Rotate (hourRotation);
-					cr.MoveTo (0, radius - radius * .5);
-					cr.LineTo (0, 0 - radius * .15);
-					cr.Stroke ();
-					cr.Rotate (0 - hourRotation);
-					
-					cr.Translate (0 - center, 0 - center);
-				}
+				int center = size / 2;
+				int radius = center;
+				
+				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-drop-shadow.svg"), radius * 2);
+				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-face.svg"), radius * 2);
+				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-marks.svg"), radius * 2);
+				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-face-shadow.svg"), radius * 2);
+				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-glass.svg"), radius * 2);
+				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-frame.svg"), radius * 2);
+				
+				cr.Translate (center, center);
+				cr.Color = new Cairo.Color (.15, .15, .15);
+				
+				cr.LineWidth = size / 48;
+				cr.LineCap = LineCap.Round;
+				double minuteRotation = 2 * Math.PI * (DateTime.Now.Minute / 60.0) + Math.PI;
+				cr.Rotate (minuteRotation);
+				cr.MoveTo (0, radius - radius * .35);
+				cr.LineTo (0, 0 - radius * .15);
+				cr.Stroke ();
+				cr.Rotate (0 - minuteRotation);
+				
+				cr.Color = new Cairo.Color (0, 0, 0);
+				double hourRotation = 2 * Math.PI * (DateTime.Now.Hour / 12.0) + 
+					Math.PI + (Math.PI / 6) * DateTime.Now.Minute / 60.0;
+				cr.Rotate (hourRotation);
+				cr.MoveTo (0, radius - radius * .5);
+				cr.LineTo (0, 0 - radius * .15);
+				cr.Stroke ();
+				cr.Rotate (0 - hourRotation);
+				
+				cr.Translate (0 - center, 0 - center);
 			}
 			
-			return sr;
+			return tmp_surface;
+		}
+		
+		protected override void ResetSurfaces ()
+		{
+			base.ResetSurfaces ();
 		}
 	}
 }

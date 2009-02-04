@@ -36,13 +36,17 @@ namespace Docky.Interface
 	{
 		public event UpdateRequestHandler UpdateNeeded;
 		
-		Surface text_surface, icon_surface, resize_buffer;
+		Surface text_surface, resize_buffer;
 		DockOrientation current_orientation;
 		uint size_changed_timer;
-		int current_size;
+		protected int current_size;
 		string description;
 		bool needs_attention;
 
+		protected virtual Surface IconSurface { get; set; }
+		
+		Surface SecondaryIconSurface { get; set; }
+		
 		/// <value>
 		/// The currently requested animation type
 		/// </value>
@@ -157,10 +161,28 @@ namespace Docky.Interface
 			return null;
 		}
 
-		public virtual Surface GetIconSurface (Surface similar)
+		public virtual Surface GetIconSurface (Surface similar, int targetSize, out int actualSize)
 		{
-			return (icon_surface != null) ? icon_surface 
-				: icon_surface = MakeIconSurface (similar, DockPreferences.FullIconSize);
+			switch (ScalingType) {
+			case ScalingType.HighLow:
+				if (targetSize == DockPreferences.IconSize) {
+					actualSize = DockPreferences.IconSize;
+					return (SecondaryIconSurface != null) ? SecondaryIconSurface 
+						: SecondaryIconSurface = MakeIconSurface (similar, actualSize);
+				}
+				actualSize = DockPreferences.FullIconSize;
+				break;
+			case ScalingType.Downscaled:
+				actualSize = DockPreferences.FullIconSize;
+				break;
+			case ScalingType.Upscaled:
+			case ScalingType.None:
+			default:
+				actualSize = DockPreferences.IconSize;
+				break;
+			}
+			return (IconSurface != null) ? IconSurface 
+					: IconSurface = MakeIconSurface (similar, actualSize);
 		}
 
 		/// <summary>
@@ -221,20 +243,24 @@ namespace Docky.Interface
 			if (size_changed_timer > 0)
 				GLib.Source.Remove (size_changed_timer);
 			
-			if (icon_surface != null) {
+			if (IconSurface != null) {
 				if (resize_buffer == null)
-					resize_buffer = CopySurface (icon_surface, current_size, current_size);
+					resize_buffer = CopySurface (IconSurface, current_size, current_size);
 				
 				Surface new_surface = resize_buffer.CreateSimilar (resize_buffer.Content, 
 				                                                  DockPreferences.FullIconSize, 
 				                                                  DockPreferences.FullIconSize);
 				using (Context cr = new Context (new_surface)) {
-					double scale = (double) DockPreferences.FullIconSize / (double) current_size;
+					double scale;
+					if (ScalingType == ScalingType.Downscaled || ScalingType == ScalingType.HighLow)
+						scale = (double) DockPreferences.FullIconSize / (double) current_size;
+					else
+						scale = (double) DockPreferences.IconSize / (double) current_size;
 					cr.Scale (scale, scale);
 					resize_buffer.Show (cr, 0, 0);
 				}
-				icon_surface.Destroy ();
-				icon_surface = new_surface;
+				IconSurface.Destroy ();
+				IconSurface = new_surface;
 			}
 			
 			size_changed_timer = GLib.Timeout.Add (150, delegate {
@@ -257,6 +283,7 @@ namespace Docky.Interface
 		protected void RedrawIcon ()
 		{
 			ResetIconSurface ();
+			OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
 		}
 
 		void ResetBufferSurface ()
@@ -269,13 +296,18 @@ namespace Docky.Interface
 
 		void ResetIconSurface ()
 		{
-			if (icon_surface != null) {
-				icon_surface.Destroy ();
-				icon_surface = null;
+			if (IconSurface != null) {
+				IconSurface.Destroy ();
+				IconSurface = null;
+			}
+			
+			if (SecondaryIconSurface != null) {
+				SecondaryIconSurface.Destroy ();
+				SecondaryIconSurface = null;
 			}
 		}
 
-		void ResetSurfaces ()
+		protected virtual void ResetSurfaces ()
 		{
 			ResetTextSurface ();
 			ResetBufferSurface ();

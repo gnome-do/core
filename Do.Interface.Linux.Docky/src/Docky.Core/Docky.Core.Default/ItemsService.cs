@@ -102,8 +102,6 @@ namespace Docky.Core.Default
 							output_items.Add (TrashItem);
 					}
 					
-					
-					
 				}
 				return readonly_items;
 			}

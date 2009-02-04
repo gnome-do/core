@@ -48,6 +48,7 @@ namespace Docky.Interface
 		None = 0,
 		Upscaled,
 		Downscaled,
+		HighLow,
 	}
 	
 	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);

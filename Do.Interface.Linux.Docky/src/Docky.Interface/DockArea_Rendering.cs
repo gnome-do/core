@@ -252,13 +252,20 @@ namespace Docky.Interface
 				}
 			}
 			
+			int size;
+			Surface iconSurface = DockItems [icon].GetIconSurface (cr.Target, (int) (IconSize * zoom), out size);
+			
 			if (DockItems [icon].ScalingType != ScalingType.None) {
 				double scale;
 				
-				if (DockItems [icon].ScalingType == ScalingType.Downscaled)
-					scale= zoom/DockPreferences.IconQuality;
-				else
+				if (size == DockPreferences.FullIconSize) {
+					scale = zoom / DockPreferences.IconQuality;
+				} else if (size == DockPreferences.IconSize) {
 					scale = zoom;
+				} else {
+					Do.Platform.Log<DockArea>.Error ("Icon provided in unexpected size");
+					return;
+				}
 				
 				if (scale != 1)
 					cr.Scale (scale, scale);
@@ -267,7 +274,7 @@ namespace Docky.Interface
 				
 				double fadeInOpacity = Math.Min (DockItems [icon].TimeSinceAdd.TotalMilliseconds / 
 				                                 InsertAnimationTime.TotalMilliseconds, 1);
-				cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), 
+				cr.SetSource (iconSurface, 
 				              iconPosition.X / scale, iconPosition.Y / scale);
 				cr.PaintWithAlpha (fadeInOpacity);
 				
@@ -300,10 +307,10 @@ namespace Docky.Interface
 				// centered
 				if (DockPreferences.DockIsHorizontal) {
 					// why this fails to center right... i dont know...
-					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), 
+					cr.SetSource (iconSurface, 
 					              (int) iconPosition.X, (int) center.Y - DockItems [icon].Height / 2);
 				} else {
-					cr.SetSource (DockItems [icon].GetIconSurface (cr.Target), 
+					cr.SetSource (iconSurface, 
 					              (int) iconPosition.X - IconSize / 2 + 5, (int) iconPosition.Y);
 				}
 				cr.Paint ();
