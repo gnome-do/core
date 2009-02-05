@@ -43,7 +43,7 @@ namespace Docky.Interface
 		
 		string Trash {
 			get { 
-				return System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData), "Trash/files/");
+				return Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData), "Trash/files/");
 			}
 		}
 		
@@ -53,6 +53,9 @@ namespace Docky.Interface
 		
 		public TrashDockItem()
 		{
+			if (!Dirctory.Exists (Trash))
+				Directory.CreateDirectory (Trash);
+
 			SetText (Catalog.GetString ("Trash"));
 			fsw = new FileSystemWatcher (Trash);
 			fsw.IncludeSubdirectories = true;
@@ -83,11 +86,11 @@ namespace Docky.Interface
 				item = item.Substring ("file://".Length);
 			
 			// if the file doesn't exist for whatever reason, we bail
-			if (!System.IO.File.Exists (item) && !System.IO.Directory.Exists (item))
+			if (!File.Exists (item) && !Directory.Exists (item))
 				return false;
 			
 			try {
-				System.IO.File.Move (item, Path.Combine (Trash, Path.GetFileName (item)));
+				File.Move (item, Path.Combine (Trash, Path.GetFileName (item)));
 			} catch (Exception e) { 
 				Log.Error (e.Message);
 				Log.Error ("Could not move {0} to trash", item); 

@@ -143,7 +143,7 @@ namespace Docky.Utilities
 
 				exec_line = ProcessExecString (exec_line);
 
-				if (exec_line.Contains (exec)) {
+				if (exec_line != null && exec_line.Contains (exec)) {
 					foreach (Application app in GetApplications ()) {
 						if (app == null)
 							continue;
