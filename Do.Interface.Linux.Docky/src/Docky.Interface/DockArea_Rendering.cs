@@ -392,27 +392,27 @@ namespace Docky.Interface
 		
 		void HandleActiveWindowChanged(object o, Wnck.ActiveWindowChangedArgs args)
 		{
-			ActiveIconChangeTime = DateTime.UtcNow;
-			AnimatedDraw ();
+//			ActiveIconChangeTime = DateTime.UtcNow;
+//			AnimatedDraw ();
 		}
 		
 		PointD MaybeGetActiveWindowCenter ()
 		{
-			for (int i=0; i<DockItems.Count; i++) {
-				if (DockItems [i].ContainsFocusedWindow) {
-					PointD center;
-					double zoom;
-					IconZoomedPosition (i, out center, out zoom);
-					if (DateTime.UtcNow - ActiveIconChangeTime < BaseAnimationTime) {
-						double dSlide = 1 - Math.Min (1, (DateTime.UtcNow - ActiveIconChangeTime).TotalMilliseconds / 
-							BaseAnimationTime.TotalMilliseconds);
-						center.X -= (center.X - last_point.X) * dSlide;
-						center.Y -= (center.Y - last_point.Y) * dSlide;
-						
-					}
-					return center;
-				}
-			}
+//			for (int i=0; i<DockItems.Count; i++) {
+//				if (DockItems [i].ContainsFocusedWindow) {
+//					PointD center;
+//					double zoom;
+//					IconZoomedPosition (i, out center, out zoom);
+//					if (DateTime.UtcNow - ActiveIconChangeTime < BaseAnimationTime) {
+//						double dSlide = 1 - Math.Min (1, (DateTime.UtcNow - ActiveIconChangeTime).TotalMilliseconds / 
+//							BaseAnimationTime.TotalMilliseconds);
+//						center.X -= (center.X - last_point.X) * dSlide;
+//						center.Y -= (center.Y - last_point.Y) * dSlide;
+//						
+//					}
+//					return center;
+//				}
+//			}
 			return new PointD (0, 0);
 		}
 

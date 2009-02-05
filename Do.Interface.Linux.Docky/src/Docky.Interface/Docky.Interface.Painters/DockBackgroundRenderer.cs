@@ -34,6 +34,8 @@ namespace Docky.Interface.Painters
 	{
 		static Surface sr;
 		static int height;
+		
+		const int ShineWidth = 120;
 		const int width = 1500;
 		
 		public static void RenderDockBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
@@ -102,8 +104,8 @@ namespace Docky.Interface.Painters
 			context.Rectangle (dockArea.X + 5, dockArea.Y, dockArea.Width - 10, dockArea.Height);
 			context.Clip ();
 			
-			PointD startShine = new PointD (shine.X - 70, dockArea.Y + 1.5);
-			PointD endShine = new PointD (shine.X + 70, dockArea.Y + 1.5);
+			PointD startShine = new PointD (shine.X - ShineWidth, dockArea.Y + 1.5);
+			PointD endShine = new PointD (shine.X + ShineWidth, dockArea.Y + 1.5);
 			
 			RenderShine (context, startShine, endShine); 
 			
@@ -174,8 +176,8 @@ namespace Docky.Interface.Painters
 			context.Rectangle (dockArea.X + 5, dockArea.Y, dockArea.Width - 10, dockArea.Height);
 			context.Clip ();
 			
-			PointD startShine = new PointD (shine.X - 70, dockArea.Y + dockArea.Height - 1.5);
-			PointD endShine = new PointD (shine.X + 70, dockArea.Y + dockArea.Height - 1.5);
+			PointD startShine = new PointD (shine.X - ShineWidth, dockArea.Y + dockArea.Height - 1.5);
+			PointD endShine = new PointD (shine.X + ShineWidth, dockArea.Y + dockArea.Height - 1.5);
 			
 			RenderShine (context, startShine, endShine); 
 			
@@ -189,9 +191,9 @@ namespace Docky.Interface.Painters
 			
 			LinearGradient lg = new LinearGradient (startShine.X, 0, endShine.X, 0);
 			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
-			lg.AddColorStop (.35, new Cairo.Color (1, 1, 1, .9));
-			lg.AddColorStop (.5, new Cairo.Color (1, 1, 1, .95));
-			lg.AddColorStop (.65, new Cairo.Color (1, 1, 1, .9));
+			lg.AddColorStop (.35, new Cairo.Color (1, 1, 1, .85));
+			lg.AddColorStop (.5, new Cairo.Color (1, 1, 1, .9));
+			lg.AddColorStop (.65, new Cairo.Color (1, 1, 1, .85));
 			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
 			
 			context.Pattern = lg;
