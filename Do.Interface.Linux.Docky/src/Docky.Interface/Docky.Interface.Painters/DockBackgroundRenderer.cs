@@ -95,6 +95,19 @@ namespace Docky.Interface.Painters
 			context.SetSource (sr, dockArea.X + dockArea.Width - width, dockArea.Y);
 			context.Rectangle (dockArea.X + dockArea.Width / 2, dockArea.Y, dockArea.Width - dockArea.Width / 2, dockArea.Height);
 			context.Fill ();
+			
+			if (shine.X == 0 && shine.Y == 0)
+				return;
+			
+			context.Rectangle (dockArea.X + 5, dockArea.Y, dockArea.Width - 10, dockArea.Height);
+			context.Clip ();
+			
+			PointD startShine = new PointD (shine.X - 70, dockArea.Y + 1.5);
+			PointD endShine = new PointD (shine.X + 70, dockArea.Y + 1.5);
+			
+			RenderShine (context, startShine, endShine); 
+			
+			context.ResetClip ();
 		}
 		
 		static void RenderLeftBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
@@ -163,6 +176,14 @@ namespace Docky.Interface.Painters
 			
 			PointD startShine = new PointD (shine.X - 70, dockArea.Y + dockArea.Height - 1.5);
 			PointD endShine = new PointD (shine.X + 70, dockArea.Y + dockArea.Height - 1.5);
+			
+			RenderShine (context, startShine, endShine); 
+			
+			context.ResetClip ();
+		}
+		
+		static void RenderShine (Context context, PointD startShine, PointD endShine)
+		{
 			context.MoveTo (startShine);
 			context.LineTo (endShine);
 			
@@ -178,7 +199,6 @@ namespace Docky.Interface.Painters
 			context.Stroke ();
 			
 			lg.Destroy ();
-			context.ResetClip ();
 		}
 	}
 }
