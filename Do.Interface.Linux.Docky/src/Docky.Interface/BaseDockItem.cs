@@ -74,6 +74,10 @@ namespace Docky.Interface
 			get { return false; } 
 		}
 		
+		public virtual bool ContainsFocusedWindow {
+			get { return false; }
+		}
+		
 		/// <value>
 		/// Determines the type of indicator drawn under the item
 		/// </value>

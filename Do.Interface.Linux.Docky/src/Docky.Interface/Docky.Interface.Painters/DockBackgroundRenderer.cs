@@ -34,8 +34,9 @@ namespace Docky.Interface.Painters
 	{
 		static Surface sr;
 		static int height;
+		const int width = 1500;
 		
-		public static void RenderDockBackground (Context context, Gdk.Rectangle dockArea)
+		public static void RenderDockBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
 		{
 			if (sr == null || 
 			    (DockPreferences.DockIsHorizontal && dockArea.Height != height) ||
@@ -45,10 +46,10 @@ namespace Docky.Interface.Painters
 					sr.Destroy ();
 				
 				height = DockPreferences.DockIsHorizontal ? dockArea.Height : dockArea.Width;
-				sr = context.Target.CreateSimilar (context.Target.Content, 1000, dockArea.Height);
+				sr = context.Target.CreateSimilar (context.Target.Content, width, dockArea.Height);
 				
 				using (Context cr = new Context (sr)) {
-					cr.SetRoundedRectanglePath (.5, .5, 1000 - 1, height+40, 5); // fall off the bottom
+					cr.SetRoundedRectanglePath (.5, .5, width - 1, height+40, 5); // fall off the bottom
 					cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
 					cr.FillPreserve ();
 			
@@ -57,7 +58,7 @@ namespace Docky.Interface.Painters
 					cr.LineWidth = 1;
 					cr.Stroke ();
 			
-					cr.SetRoundedRectanglePath (1.5, 1.5, 1000 - 3, height + 40, 5);
+					cr.SetRoundedRectanglePath (1.5, 1.5, width - 3, height + 40, 5);
 					LinearGradient lg = new LinearGradient (0, 1.5, 0, 10);
 					lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .4));
 					lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
@@ -71,32 +72,32 @@ namespace Docky.Interface.Painters
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
-				RenderBottomBackground (context, dockArea);
+				RenderBottomBackground (context, dockArea, shine);
 				break;
 			case DockOrientation.Left:
-				RenderLeftBackground (context, dockArea);
+				RenderLeftBackground (context, dockArea, shine);
 				break;
 			case DockOrientation.Right:
-				RenderRightBackground (context, dockArea);
+				RenderRightBackground (context, dockArea, shine);
 				break;
 			case DockOrientation.Top:
-				RenderTopBackground (context, dockArea);
+				RenderTopBackground (context, dockArea, shine);
 				break;
 			}
 		}
 
-		static void RenderBottomBackground (Context context, Gdk.Rectangle dockArea)
+		static void RenderBottomBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
 		{
 			context.SetSource (sr, dockArea.X, dockArea.Y);
 			context.Rectangle (dockArea.X, dockArea.Y, dockArea.Width / 2, dockArea.Height);
 			context.Fill ();
 			
-			context.SetSource (sr, dockArea.X + dockArea.Width - 1000, dockArea.Y);
+			context.SetSource (sr, dockArea.X + dockArea.Width - width, dockArea.Y);
 			context.Rectangle (dockArea.X + dockArea.Width / 2, dockArea.Y, dockArea.Width - dockArea.Width / 2, dockArea.Height);
 			context.Fill ();
 		}
 		
-		static void RenderLeftBackground (Context context, Gdk.Rectangle dockArea)
+		static void RenderLeftBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
 		{
 			double rotation = Math.PI * .5;
 
@@ -107,7 +108,7 @@ namespace Docky.Interface.Painters
 			context.Rectangle (dockArea.Y, dockArea.X, dockArea.Height / 2, dockArea.Width);
 			context.Fill ();
 			
-			context.SetSource (sr, dockArea.Y + dockArea.Height - 1000, dockArea.X);
+			context.SetSource (sr, dockArea.Y + dockArea.Height - width, dockArea.X);
 			context.Rectangle (dockArea.Y + dockArea.Height / 2, dockArea.X, dockArea.Height / 2 + 10, dockArea.Width);
 			context.Fill ();
 
@@ -116,22 +117,22 @@ namespace Docky.Interface.Painters
 			context.Translate (0 - height, 0);
 		}
 
-		static void RenderRightBackground (Context context, Gdk.Rectangle dockArea)
+		static void RenderRightBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
 		{
 			double rotation = 0 - Math.PI * 0.5;
 			double translatex, translatey;
 			translatex = 0;
-			translatey = 1000;
+			translatey = width;
 			
 			context.Translate (translatex, translatey);
 			context.Rotate (rotation);
 			
-			context.SetSource (sr, (1000 - dockArea.Height) - dockArea.Y, dockArea.X);
-			context.Rectangle ((1000 - dockArea.Height) - dockArea.Y, dockArea.X, dockArea.Height / 2, dockArea.Width);
+			context.SetSource (sr, (width - dockArea.Height) - dockArea.Y, dockArea.X);
+			context.Rectangle ((width - dockArea.Height) - dockArea.Y, dockArea.X, dockArea.Height / 2, dockArea.Width);
 			context.Fill ();
 			
 			context.SetSource (sr, 0 - dockArea.Y, dockArea.X);
-			context.Rectangle ((1000 - dockArea.Height) - dockArea.Y + dockArea.Height / 2, dockArea.X, dockArea.Height / 2 + 10, dockArea.Width);
+			context.Rectangle ((width - dockArea.Height) - dockArea.Y + dockArea.Height / 2, dockArea.X, dockArea.Height / 2 + 10, dockArea.Width);
 			context.Fill ();
 
 			
@@ -139,7 +140,7 @@ namespace Docky.Interface.Painters
 			context.Translate (0 - translatex, 0 - translatey);
 		}
 
-		static void RenderTopBackground (Context context, Gdk.Rectangle dockArea)
+		static void RenderTopBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
 		{
 			context.Scale (1, -1);
 			
@@ -148,11 +149,36 @@ namespace Docky.Interface.Painters
 			context.Rectangle (dockArea.X, 0 - dockArea.Y - dockArea.Height, dockArea.Width / 2, dockArea.Height);
 			context.Fill ();
 
-			context.SetSource (sr, dockArea.X + dockArea.Width - 1000, 0 - dockArea.Y - dockArea.Height);
+			context.SetSource (sr, dockArea.X + dockArea.Width - width, 0 - dockArea.Y - dockArea.Height);
 			context.Rectangle (dockArea.X + dockArea.Width / 2, dockArea.Y - dockArea.Height, dockArea.Width - dockArea.Width / 2, dockArea.Height);
 			context.Fill ();
 
 			context.Scale (1, -1);
+			
+			if (shine.X == 0 && shine.Y == 0)
+				return;
+			
+			context.Rectangle (dockArea.X + 5, dockArea.Y, dockArea.Width - 10, dockArea.Height);
+			context.Clip ();
+			
+			PointD startShine = new PointD (shine.X - 70, dockArea.Y + dockArea.Height - 1.5);
+			PointD endShine = new PointD (shine.X + 70, dockArea.Y + dockArea.Height - 1.5);
+			context.MoveTo (startShine);
+			context.LineTo (endShine);
+			
+			LinearGradient lg = new LinearGradient (startShine.X, 0, endShine.X, 0);
+			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
+			lg.AddColorStop (.35, new Cairo.Color (1, 1, 1, .9));
+			lg.AddColorStop (.5, new Cairo.Color (1, 1, 1, .95));
+			lg.AddColorStop (.65, new Cairo.Color (1, 1, 1, .9));
+			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
+			
+			context.Pattern = lg;
+			context.LineWidth = 1;
+			context.Stroke ();
+			
+			lg.Destroy ();
+			context.ResetClip ();
 		}
 	}
 }

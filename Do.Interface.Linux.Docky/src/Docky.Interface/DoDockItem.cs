@@ -94,15 +94,18 @@ namespace Docky.Interface
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.AllowOverlap = !DockPreferences.AllowOverlap,
 				                                       Catalog.GetString ("Allow Window Overlap"), DockPreferences.AllowOverlap ? EnableIcon : DisableIcon);
 			
-			yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = !DockPreferences.ZoomEnabled, 
-			                                       Catalog.GetString ("Zoom Icons"), DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon);
+			yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = !DockPreferences.IndicateMultipleWindows, 
+			                                       Catalog.GetString ("Advanced Indicators"), DockPreferences.IndicateMultipleWindows ? EnableIcon : DisableIcon);
+			
+			yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowClock = !DockPreferences.ShowClock, 
+			                                       Catalog.GetString ("Show Clock"), DockPreferences.ShowClock ? EnableIcon : DisableIcon);
 			
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = !DockPreferences.ShowTrash, 
 			                                       Catalog.GetString ("Show Trash"), DockPreferences.ShowTrash ? EnableIcon : DisableIcon);
 			
-			yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = !DockPreferences.IndicateMultipleWindows, 
-			                                       Catalog.GetString ("Advanced Indicators"), DockPreferences.IndicateMultipleWindows ? EnableIcon : DisableIcon);
-
+			yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = !DockPreferences.ZoomEnabled, 
+			                                       Catalog.GetString ("Zoom Icons"), DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon);
+			
 			if (Gdk.Screen.Default.NMonitors > 1)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
 				                                       Catalog.GetString ("Switch Monitors"), "display");

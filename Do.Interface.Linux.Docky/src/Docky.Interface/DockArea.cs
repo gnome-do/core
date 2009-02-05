@@ -283,6 +283,7 @@ namespace Docky.Interface
 			Services.Core.UniverseInitialized += HandleUniverseInitialized;
 			
 			Wnck.Screen.Default.ViewportsChanged += OnWnckViewportsChanged;
+			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
 
 			Realized += (o, e) => SetParentInputMask ();
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
@@ -302,6 +303,7 @@ namespace Docky.Interface
 			PopupMenu.Shown -= OnDockItemMenuShown;
 
 			Wnck.Screen.Default.ViewportsChanged -= OnWnckViewportsChanged;
+			Wnck.Screen.Default.ActiveWindowChanged -= HandleActiveWindowChanged;
 		}
 		
 		void BuildAnimationStateEngine ()
@@ -329,6 +331,9 @@ namespace Docky.Interface
 			
 			AnimationState.AddCondition (Animations.InputModeChanged,
 			                             () => DateTime.UtcNow - interface_change_time < SummonTime);
+			
+			AnimationState.AddCondition (Animations.ActiveWindowChanged,
+			                             () => DateTime.UtcNow - ActiveIconChangeTime < BaseAnimationTime);
 		}
 
 		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)

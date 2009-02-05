@@ -38,6 +38,7 @@ namespace Docky.Interface
 		IconInsert,
 		UrgencyChanged,
 		InputModeChanged,
+		ActiveWindowChanged,
 	}
 	
 	public class DockAnimationState : IDisposable

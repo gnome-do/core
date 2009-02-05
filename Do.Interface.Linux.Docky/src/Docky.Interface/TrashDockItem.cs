@@ -53,10 +53,11 @@ namespace Docky.Interface
 		
 		public TrashDockItem()
 		{
-			if (!Dirctory.Exists (Trash))
+			if (!Directory.Exists (Trash))
 				Directory.CreateDirectory (Trash);
 
 			SetText (Catalog.GetString ("Trash"));
+			
 			fsw = new FileSystemWatcher (Trash);
 			fsw.IncludeSubdirectories = true;
 			fsw.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite

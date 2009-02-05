@@ -41,6 +41,10 @@ namespace Docky.Interface
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		IDockPainter painter, last_painter;
 		Matrix default_matrix;
+		
+		PointD last_point;
+		
+		DateTime ActiveIconChangeTime { get; set; }
 
 		bool PainterOverlayVisible { get; set; }
 		
@@ -171,7 +175,9 @@ namespace Docky.Interface
 		void DrawDrock (Context cr)
 		{
 			Gdk.Rectangle dockArea = GetDockArea ();
-			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
+			PointD shineCenter = MaybeGetActiveWindowCenter ();
+			DockBackgroundRenderer.RenderDockBackground (cr, dockArea, shineCenter);
+			last_point = shineCenter;
 
 			IDockPainter dpaint = (Painter == null) ? LastPainter : Painter;
 			
@@ -374,6 +380,7 @@ namespace Docky.Interface
 
 			rect = PositionProvider.DockArea (ZoomIn, Cursor);
 
+			// fixme this does not work for side dock
 			if (rect.Width < 10 * rect.Height && DockIconOpacity < 1) {
 				int difference = 10 * rect.Height - rect.Width;
 				int alpha = (int) (difference * PainterOpacity);
@@ -381,6 +388,32 @@ namespace Docky.Interface
 				rect.Width += alpha;
 			}
 			return rect;
+		}
+		
+		void HandleActiveWindowChanged(object o, Wnck.ActiveWindowChangedArgs args)
+		{
+			ActiveIconChangeTime = DateTime.UtcNow;
+			AnimatedDraw ();
+		}
+		
+		PointD MaybeGetActiveWindowCenter ()
+		{
+			for (int i=0; i<DockItems.Count; i++) {
+				if (DockItems [i].ContainsFocusedWindow) {
+					PointD center;
+					double zoom;
+					IconZoomedPosition (i, out center, out zoom);
+					if (DateTime.UtcNow - ActiveIconChangeTime < BaseAnimationTime) {
+						double dSlide = 1 - Math.Min (1, (DateTime.UtcNow - ActiveIconChangeTime).TotalMilliseconds / 
+							BaseAnimationTime.TotalMilliseconds);
+						center.X -= (center.X - last_point.X) * dSlide;
+						center.Y -= (center.Y - last_point.Y) * dSlide;
+						
+					}
+					return center;
+				}
+			}
+			return new PointD (0, 0);
 		}
 
 		ClickAnimationType IconAnimation (int icon)

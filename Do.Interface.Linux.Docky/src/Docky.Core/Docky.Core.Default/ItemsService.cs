@@ -129,7 +129,7 @@ namespace Docky.Core.Default
 			Services.Core.UniverseInitialized += OnUniverseInitialized;
 			Wnck.Screen.Default.WindowClosed += OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened += OnWindowOpened;
-			DockPreferences.TrashVisibilityChanged += OnDockItemsChanged;
+			DockPreferences.AppletVisibilityChanged += OnDockItemsChanged;
 			DockPreferences.AutomaticIconsChanged += UpdateItems;
 			
 			ClockItem.UpdateNeeded += HandleUpdateNeeded;
@@ -142,7 +142,7 @@ namespace Docky.Core.Default
 			Services.Core.UniverseInitialized -= OnUniverseInitialized;
 			Wnck.Screen.Default.WindowClosed -= OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened -= OnWindowOpened;
-			DockPreferences.TrashVisibilityChanged -= OnDockItemsChanged;
+			DockPreferences.AppletVisibilityChanged -= OnDockItemsChanged;
 			DockPreferences.AutomaticIconsChanged -= UpdateItems;
 			
 			ClockItem.UpdateNeeded -= HandleUpdateNeeded;

@@ -82,6 +82,12 @@ namespace Docky.Interface
 			}
 		}
 		
+		public override bool ContainsFocusedWindow {
+			get {
+				return Applications.SelectMany (app => app.Windows).Any (win => win.IsActive);
+			}
+		}
+		
 		public override Pixbuf GetDragPixbuf ()
 		{
 			if (drag_pixbuf == null)
