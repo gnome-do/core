@@ -175,9 +175,7 @@ namespace Docky.Interface
 		void DrawDrock (Context cr)
 		{
 			Gdk.Rectangle dockArea = GetDockArea ();
-			PointD shineCenter = MaybeGetActiveWindowCenter ();
-			DockBackgroundRenderer.RenderDockBackground (cr, dockArea, shineCenter);
-			last_point = shineCenter;
+			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
 
 			IDockPainter dpaint = (Painter == null) ? LastPainter : Painter;
 			
@@ -388,32 +386,6 @@ namespace Docky.Interface
 				rect.Width += alpha;
 			}
 			return rect;
-		}
-		
-		void HandleActiveWindowChanged(object o, Wnck.ActiveWindowChangedArgs args)
-		{
-//			ActiveIconChangeTime = DateTime.UtcNow;
-//			AnimatedDraw ();
-		}
-		
-		PointD MaybeGetActiveWindowCenter ()
-		{
-//			for (int i=0; i<DockItems.Count; i++) {
-//				if (DockItems [i].ContainsFocusedWindow) {
-//					PointD center;
-//					double zoom;
-//					IconZoomedPosition (i, out center, out zoom);
-//					if (DateTime.UtcNow - ActiveIconChangeTime < BaseAnimationTime) {
-//						double dSlide = 1 - Math.Min (1, (DateTime.UtcNow - ActiveIconChangeTime).TotalMilliseconds / 
-//							BaseAnimationTime.TotalMilliseconds);
-//						center.X -= (center.X - last_point.X) * dSlide;
-//						center.Y -= (center.Y - last_point.Y) * dSlide;
-//						
-//					}
-//					return center;
-//				}
-//			}
-			return new PointD (0, 0);
 		}
 
 		ClickAnimationType IconAnimation (int icon)

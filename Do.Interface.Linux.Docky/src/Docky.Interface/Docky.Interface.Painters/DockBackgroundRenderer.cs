@@ -38,7 +38,7 @@ namespace Docky.Interface.Painters
 		const int ShineWidth = 120;
 		const int width = 1500;
 		
-		public static void RenderDockBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
+		public static void RenderDockBackground (Context context, Gdk.Rectangle dockArea)
 		{
 			if (sr == null || 
 			    (DockPreferences.DockIsHorizontal && dockArea.Height != height) ||
@@ -74,21 +74,21 @@ namespace Docky.Interface.Painters
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
-				RenderBottomBackground (context, dockArea, shine);
+				RenderBottomBackground (context, dockArea);
 				break;
 			case DockOrientation.Left:
-				RenderLeftBackground (context, dockArea, shine);
+				RenderLeftBackground (context, dockArea);
 				break;
 			case DockOrientation.Right:
-				RenderRightBackground (context, dockArea, shine);
+				RenderRightBackground (context, dockArea);
 				break;
 			case DockOrientation.Top:
-				RenderTopBackground (context, dockArea, shine);
+				RenderTopBackground (context, dockArea);
 				break;
 			}
 		}
 
-		static void RenderBottomBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
+		static void RenderBottomBackground (Context context, Gdk.Rectangle dockArea)
 		{
 			context.SetSource (sr, dockArea.X, dockArea.Y);
 			context.Rectangle (dockArea.X, dockArea.Y, dockArea.Width / 2, dockArea.Height);
@@ -97,22 +97,9 @@ namespace Docky.Interface.Painters
 			context.SetSource (sr, dockArea.X + dockArea.Width - width, dockArea.Y);
 			context.Rectangle (dockArea.X + dockArea.Width / 2, dockArea.Y, dockArea.Width - dockArea.Width / 2, dockArea.Height);
 			context.Fill ();
-			
-			if (shine.X == 0 && shine.Y == 0)
-				return;
-			
-			context.Rectangle (dockArea.X + 5, dockArea.Y, dockArea.Width - 10, dockArea.Height);
-			context.Clip ();
-			
-			PointD startShine = new PointD (shine.X - ShineWidth, dockArea.Y + 1.5);
-			PointD endShine = new PointD (shine.X + ShineWidth, dockArea.Y + 1.5);
-			
-			RenderShine (context, startShine, endShine); 
-			
-			context.ResetClip ();
 		}
 		
-		static void RenderLeftBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
+		static void RenderLeftBackground (Context context, Gdk.Rectangle dockArea)
 		{
 			double rotation = Math.PI * .5;
 
@@ -132,7 +119,7 @@ namespace Docky.Interface.Painters
 			context.Translate (0 - height, 0);
 		}
 
-		static void RenderRightBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
+		static void RenderRightBackground (Context context, Gdk.Rectangle dockArea)
 		{
 			double rotation = 0 - Math.PI * 0.5;
 			double translatex, translatey;
@@ -155,7 +142,7 @@ namespace Docky.Interface.Painters
 			context.Translate (0 - translatex, 0 - translatey);
 		}
 
-		static void RenderTopBackground (Context context, Gdk.Rectangle dockArea, PointD shine)
+		static void RenderTopBackground (Context context, Gdk.Rectangle dockArea)
 		{
 			context.Scale (1, -1);
 			
@@ -169,38 +156,6 @@ namespace Docky.Interface.Painters
 			context.Fill ();
 
 			context.Scale (1, -1);
-			
-			if (shine.X == 0 && shine.Y == 0)
-				return;
-			
-			context.Rectangle (dockArea.X + 5, dockArea.Y, dockArea.Width - 10, dockArea.Height);
-			context.Clip ();
-			
-			PointD startShine = new PointD (shine.X - ShineWidth, dockArea.Y + dockArea.Height - 1.5);
-			PointD endShine = new PointD (shine.X + ShineWidth, dockArea.Y + dockArea.Height - 1.5);
-			
-			RenderShine (context, startShine, endShine); 
-			
-			context.ResetClip ();
-		}
-		
-		static void RenderShine (Context context, PointD startShine, PointD endShine)
-		{
-			context.MoveTo (startShine);
-			context.LineTo (endShine);
-			
-			LinearGradient lg = new LinearGradient (startShine.X, 0, endShine.X, 0);
-			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
-			lg.AddColorStop (.35, new Cairo.Color (1, 1, 1, .85));
-			lg.AddColorStop (.5, new Cairo.Color (1, 1, 1, .9));
-			lg.AddColorStop (.65, new Cairo.Color (1, 1, 1, .85));
-			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
-			
-			context.Pattern = lg;
-			context.LineWidth = 1;
-			context.Stroke ();
-			
-			lg.Destroy ();
 		}
 	}
 }
