@@ -24,6 +24,7 @@ using Do.Universe;
 using Do.Interface.CairoUtils;
 
 using Cairo;
+using Gtk;
 using Gdk;
 
 using Docky.Utilities;
@@ -159,6 +160,9 @@ namespace Docky.Interface
 		static Surface GetIndicator (Surface similar)
 		{
 			if (indicator == null) {
+				Style style = Docky.Interface.DockWindow.Window.Style;
+				Gdk.Color color = style.Backgrounds [(int) StateType.Selected].SetMinimumValue (100);
+
 				indicator = similar.CreateSimilar (similar.Content, IndicatorSize * 2, IndicatorSize * 2);
 				Context cr = new Context (indicator);
 
@@ -170,11 +174,11 @@ namespace Docky.Interface
 				
 				RadialGradient rg = new RadialGradient (x, y, 0, x, y, IndicatorSize);
 				rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
-				rg.AddColorStop (.10, new Cairo.Color (.5, .6, 1, 1.0));
-				rg.AddColorStop (.20, new Cairo.Color (.5, .6, 1, .60));
-				rg.AddColorStop (.25, new Cairo.Color (.5, .6, 1, .25));
-				rg.AddColorStop (.50, new Cairo.Color (.5, .6, 1, .15));
-				rg.AddColorStop (1.0, new Cairo.Color (.5, .6, 1, 0.0));
+				rg.AddColorStop (.10, color.ConvertToCairo (1.0));
+				rg.AddColorStop (.20, color.ConvertToCairo (.60));
+				rg.AddColorStop (.25, color.ConvertToCairo (.25));
+				rg.AddColorStop (.50, color.ConvertToCairo (.15));
+				rg.AddColorStop (1.0, color.ConvertToCairo (0.0));
 				
 				cr.Pattern = rg;
 				cr.Fill ();
@@ -188,6 +192,23 @@ namespace Docky.Interface
 		static Surface GetUrgentIndicator (Surface similar)
 		{
 			if (urgent_indicator == null) {
+				Style style = Docky.Interface.DockWindow.Window.Style;
+				Gdk.Color color = style.Backgrounds [(int) StateType.Selected];
+				byte r, g, b; 
+				double h, s, v;	
+
+				r = (byte) ((color.Red)   >> 8);
+				g = (byte) ((color.Green) >> 8);
+				b = (byte) ((color.Blue)  >> 8);
+				Do.Interface.Util.Appearance.RGBToHSV (r, g, b, out h, out s, out v);
+
+				// see if the theme color is too close to red and if so use
+				// blue instead
+				if (h <= 0.2)
+					color = new Cairo.Color (0.5, 0.6, 1.0, 1.0).ConvertToGdk ();
+				else
+					color = new Cairo.Color (1.0, 0.3, 0.3, 1.0).ConvertToGdk ();
+
 				urgent_indicator = similar.CreateSimilar (similar.Content, UrgentIndicatorSize * 2, UrgentIndicatorSize * 2);
 				Context cr = new Context (urgent_indicator);
 
@@ -199,11 +220,11 @@ namespace Docky.Interface
 				
 				RadialGradient rg = new RadialGradient (x, y, 0, x, y, UrgentIndicatorSize);
 				rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
-				rg.AddColorStop (.10, new Cairo.Color (1, .8, .8, 1.0));
-				rg.AddColorStop (.20, new Cairo.Color (1, .6, .6, .60));
-				rg.AddColorStop (.35, new Cairo.Color (1, .3, .3, .35));
-				rg.AddColorStop (.50, new Cairo.Color (1, .3, .3, .25));
-				rg.AddColorStop (1.0, new Cairo.Color (1, .3, .3, 0.0));
+				rg.AddColorStop (.10, color.ConvertToCairo (1.0));
+				rg.AddColorStop (.20, color.ConvertToCairo (.60));
+				rg.AddColorStop (.35, color.ConvertToCairo (.35));
+				rg.AddColorStop (.50, color.ConvertToCairo (.25));
+				rg.AddColorStop (1.0, color.ConvertToCairo (0.0));
 				
 				cr.Pattern = rg;
 				cr.Fill ();

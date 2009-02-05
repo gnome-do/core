@@ -42,8 +42,6 @@ namespace Docky.Interface
 		IDockPainter painter, last_painter;
 		Matrix default_matrix;
 		
-		PointD last_point;
-		
 		DateTime ActiveIconChangeTime { get; set; }
 
 		bool PainterOverlayVisible { get; set; }
