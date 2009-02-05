@@ -102,7 +102,7 @@ namespace Docky.Interface
 			return true;
 		}
 		
-		public override void Clicked (uint button)
+		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
 		{
 			if (button == 1) {
 				Services.Environment.OpenUrl ("trash://");
@@ -111,7 +111,7 @@ namespace Docky.Interface
 				AnimationType = ClickAnimationType.None;
 			}
 			
-			base.Clicked (button);
+			base.Clicked (button, state, position);
 		}
 
 	}

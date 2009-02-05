@@ -58,7 +58,7 @@ namespace Docky.Interface
 			get { return accepting_drops; } 
 		}
 		
-		public string Icon { 
+		string Icon { 
 			get { return element.Icon; } 
 		}
 		
@@ -233,7 +233,7 @@ namespace Docky.Interface
 			return drag_pixbuf;
 		}
 		
-		public override void Clicked (uint button)
+		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
 		{
 			if (!apps.Any () || !HasVisibleApps || button == 2) {
 				AnimationType = ClickAnimationType.Bounce;
@@ -243,7 +243,7 @@ namespace Docky.Interface
 				WindowUtils.PerformLogicalClick (apps);
 			}
 			
-			base.Clicked (button);
+			base.Clicked (button, state, position);
 		}
 		
 		void Launch ()

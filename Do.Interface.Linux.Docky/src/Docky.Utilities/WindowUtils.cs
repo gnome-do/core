@@ -173,12 +173,11 @@ namespace Docky.Utilities
 					parts [i] = parts [i].Split ('/').Last ();
 				
 				foreach (string prefix in BadPrefixes) {
-					if (parts [i].EndsWith (prefix)) {
-						parts [i] = parts [i].Substring (prefix.Length);
-					}
+					if (parts [i] == prefix)
+						parts [i] = null;
 				}
 				
-				if (!string.IsNullOrEmpty (parts [i].Trim ())) {
+				if (!string.IsNullOrEmpty (parts [i])) {
 					return parts [i].ToLower ();
 				}
 			}

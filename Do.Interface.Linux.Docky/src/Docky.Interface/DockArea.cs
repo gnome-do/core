@@ -533,7 +533,9 @@ namespace Docky.Interface
 				}
 				
 				//send off the clicks
-				DockItems [item].Clicked (evnt.Button);
+				Gdk.Point relative_point = Gdk.Point.Zero;
+				
+				DockItems [item].Clicked (evnt.Button, evnt.State, relative_point);
 				AnimatedDraw ();
 			}
 			return ret_val;

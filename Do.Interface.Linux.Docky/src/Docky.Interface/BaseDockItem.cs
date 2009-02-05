@@ -142,7 +142,7 @@ namespace Docky.Interface
 		/// <param name="controller">
 		/// A <see cref="IDoController"/>
 		/// </param>
-		public virtual void Clicked (uint button)
+		public virtual void Clicked (uint button, ModifierType state, Gdk.Point position)
 		{
 			LastClick = DateTime.UtcNow;
 		}

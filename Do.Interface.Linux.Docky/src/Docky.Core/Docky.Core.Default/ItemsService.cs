@@ -43,9 +43,15 @@ namespace Docky.Core.Default
 		public event UpdateRequestHandler ItemNeedsUpdate;
 		
 		IDictionary<string, DockItem> custom_items;
+		
 		List<DockItem> statistical_items;
+		
 		List<BaseDockItem> output_items;
-		ReadOnlyCollection<BaseDockItem> readonly_items; 
+		List<BaseDockItem> hotseat_items;
+		
+		ReadOnlyCollection<BaseDockItem> readonly_items;
+		ReadOnlyCollection<BaseDockItem> hotseat_readonly_items;
+
 		List<ApplicationDockItem> task_items;
 		bool enable_serialization = true;
 		bool custom_items_read;
@@ -80,10 +86,15 @@ namespace Docky.Core.Default
 			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
 		}
 		
+		bool HotSeatEnabled { get; set; }
+		
 		public bool UpdatesEnabled { get; set; }
 		
 		public ReadOnlyCollection<BaseDockItem> DockItems {
 			get {
+				if (HotSeatEnabled)
+					return hotseat_readonly_items;
+				
 				if (output_items.Count == 0) {
 					output_items.Add (MenuItem);
 					output_items.AddRange (DraggableItems.Cast<BaseDockItem> ());
@@ -120,6 +131,9 @@ namespace Docky.Core.Default
 			
 			output_items = new List<BaseDockItem> ();
 			readonly_items = output_items.AsReadOnly ();
+			
+			hotseat_items = new List<BaseDockItem> ();
+			hotseat_readonly_items = hotseat_items.AsReadOnly ();
 			
 			RegisterEvents ();
 		}
@@ -236,6 +250,39 @@ namespace Docky.Core.Default
 		public bool ItemCanBeMoved (int item)
 		{
 			return DockItems [item] is DockItem && DraggableItems.Contains (DockItems [item] as DockItem);
+		}
+		
+		public bool HotSeatItem (int item)
+		{
+			if (item < 0 || item >= DockItems.Count || !(DockItems [item] is DockItem))
+				return false;
+			
+			DockItem dockitem = DockItems [item] as DockItem;
+			
+			if (dockitem.ActionsForItem.Count () < 3)
+				return false;
+			
+			List<BaseDockItem> actionItems = new List<BaseDockItem> ();
+			actionItems.Add (dockitem);
+			
+			foreach (Act act in dockitem.ActionsForItem) {
+				actionItems.Add (new ActionDockItem (act, dockitem.Element));
+			}
+			
+			hotseat_items.Clear ();
+			hotseat_items.AddRange (actionItems);
+			HotSeatEnabled = true;
+			OnDockItemsChanged ();
+			
+			return true;
+		}
+		
+		public bool ResetHotSeat ()
+		{
+			if (!HotSeatEnabled) return false;
+			
+			HotSeatEnabled = false;
+			return true;
 		}
 		
 		public void DropItemOnPosition (BaseDockItem item, int position)

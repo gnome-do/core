@@ -268,7 +268,7 @@ namespace Docky.Interface
 			return (!string.IsNullOrEmpty (s.Trim ()) && s != "<unknown>");
 		}
 		
-		public override void Clicked (uint button)
+		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
 		{
 			if (button == 1) {
 				WindowUtils.PerformLogicalClick (Applications);
@@ -277,7 +277,7 @@ namespace Docky.Interface
 				AnimationType = ClickAnimationType.None;
 			}
 			
-			base.Clicked (button);
+			base.Clicked (button, state, position);
 		}
 
 		public override void SetIconRegion (Gdk.Rectangle region)

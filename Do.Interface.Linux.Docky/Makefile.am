@@ -17,6 +17,7 @@ FILES = \
 	src/Docky.Core/Docky.Core.Default/DoInteropService.cs \
 	src/Docky.Core/Docky.Core.Default/PainterService.cs \
 	src/Docky.Interface/BaseDockItem.cs \
+	src/Docky.Interface/ActionDockItem.cs \
 	src/Docky.Interface/ApplicationDockItem.cs \
 	src/Docky.Interface/ClickAnimationType.cs \
 	src/Docky.Interface/ClockDockItem.cs \
