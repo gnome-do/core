@@ -58,12 +58,6 @@ namespace Docky.Interface
 			get { return accepting_drops; } 
 		}
 		
-		public override bool ContainsFocusedWindow {
-			get {
-				return Applications.SelectMany (app => app.Windows).Any (win => win.IsActive);
-			}
-		}
-		
 		public string Icon { 
 			get { return element.Icon; } 
 		}
