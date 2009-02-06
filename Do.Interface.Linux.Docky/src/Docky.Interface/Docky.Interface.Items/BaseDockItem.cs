@@ -224,20 +224,22 @@ namespace Docky.Interface
 			Context cr = new Context (tmp_surface);
 			
 			Gdk.Pixbuf pbuf = GetSurfacePixbuf (size);
-			if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
-				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
-				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
+			if (pbuf != null) {
+				if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
+					double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
+					Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
+					pbuf.Dispose ();
+					pbuf = temp;
+				}
+			
+				Gdk.CairoHelper.SetSourcePixbuf (cr, 
+				                                 pbuf, 
+				                                 (DockPreferences.FullIconSize - pbuf.Width) / 2,
+				                                 (DockPreferences.FullIconSize - pbuf.Height) / 2);
+				cr.Paint ();
+			
 				pbuf.Dispose ();
-				pbuf = temp;
 			}
-			
-			Gdk.CairoHelper.SetSourcePixbuf (cr, 
-			                                 pbuf, 
-			                                 (DockPreferences.FullIconSize - pbuf.Width) / 2,
-			                                 (DockPreferences.FullIconSize - pbuf.Height) / 2);
-			cr.Paint ();
-			
-			pbuf.Dispose ();
 			(cr as IDisposable).Dispose ();
 			
 			return tmp_surface;

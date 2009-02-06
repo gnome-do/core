@@ -40,10 +40,9 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItem : BaseDockItem, IRightClickable
+	public class DockItem : WnckDockItem, IRightClickable
 	{
 		Item element;
-		int last_raised;
 		bool hot_seated;
 		int window_count;
 		uint handle_timer;
@@ -68,8 +67,8 @@ namespace Docky.Interface
 			get { return element; } 
 		}
 		
-		public Wnck.Application [] Applications { 
-			get { return apps.ToArray (); } 
+		protected override IEnumerable<Wnck.Application> Applications { 
+			get { return apps; } 
 		}
 		
 		public IEnumerable<int> Pids { 
@@ -80,11 +79,7 @@ namespace Docky.Interface
 			get { return window_count; }
 		}
 		
-		public IEnumerable<Wnck.Window> Windows {
-			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
-		}
-
-		public IEnumerable<Act> ActionsForItem {
+		IEnumerable<Act> ActionsForItem {
 			get {
 				IEnumerable<Act> actions = Services.Core.GetActionsForItemOrderedByRelevance (element, false);
 				// we want to keep the window operations stable, so we are going to special case them out now.
@@ -105,16 +100,15 @@ namespace Docky.Interface
 			get {
 				if (apps == null)
 					return false;
-				return Windows.Any ();
+				return VisibleWindows.Any ();
 			}
 		}	
 		
 		public DockItem (Item element) : base ()
 		{
 			Position = -1;
-			last_raised = -1;
 			this.element = element;
-			apps =  new List<Wnck.Application> ();
+			apps = new List<Wnck.Application> ();
 
 			SetText (element.Name);
 
@@ -213,7 +207,7 @@ namespace Docky.Interface
 		
 		bool DetermineAttentionStatus  ()
 		{
-			return Windows.Any (w => w.NeedsAttention ());
+			return VisibleWindows.Any (w => w.NeedsAttention ());
 		}
 		
 		protected override Gdk.Pixbuf GetSurfacePixbuf (int size)
@@ -283,7 +277,7 @@ namespace Docky.Interface
 		
 		void SetIconRegionFromCache ()
 		{
-			Windows.ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height));
+			VisibleWindows.ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height));
 		}
 		
 		public override bool Equals (BaseDockItem other)
@@ -315,7 +309,7 @@ namespace Docky.Interface
 			bool hasApps = HasVisibleApps;
 			
 			if (hasApps) {
-				foreach (Wnck.Window window in Windows)
+				foreach (Wnck.Window window in VisibleWindows)
 						yield return new WindowMenuButtonArgs (window, window.Name, Icon);
 				yield return new SeparatorMenuButtonArgs ();
 			}
@@ -333,39 +327,6 @@ namespace Docky.Interface
 		{
 			if (RemoveClicked != null)
 				RemoveClicked (this, new EventArgs ());
-		}
-		
-		public override void Scrolled (Gdk.ScrollDirection direction)
-		{
-			if (window_count < 1) return;
-			
-			Wnck.Window focused = Windows.Where (w => w.IsActive).FirstOrDefault ();
-			if (focused != null) {
-				for (; last_raised < window_count; last_raised++) {
-					KeepLastRaiseInBounds ();
-					if (Windows.ElementAt (last_raised).Pid == focused.Pid)
-						break;
-				}
-			}
-			Log.Debug ("ok it crashes in part 2");
-			switch (direction) {
-			case ScrollDirection.Up:
-			case ScrollDirection.Right: last_raised++; break;
-			case ScrollDirection.Down:
-			case ScrollDirection.Left: last_raised--; break;
-			}
-			
-			KeepLastRaiseInBounds ();
-			
-			WindowControl.FocusWindows (Windows.ElementAt (last_raised));
-		}
-		
-		void KeepLastRaiseInBounds ()
-		{
-			if (last_raised == window_count)
-				last_raised = 0;
-			else if (last_raised < 0)
-				last_raised = window_count - 1;
 		}
 	}
 }

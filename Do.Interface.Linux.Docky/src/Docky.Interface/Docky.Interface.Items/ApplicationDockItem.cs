@@ -38,7 +38,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ApplicationDockItem : BaseDockItem, IRightClickable
+	public class ApplicationDockItem : WnckDockItem, IRightClickable
 	{
 		public event EventHandler RemoveClicked;
 		
@@ -63,6 +63,8 @@ namespace Docky.Interface
 		
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
+		
+		IEnumerable<Wnck.Application> applications;
 		
 		string Exec {
 			get {
@@ -159,7 +161,9 @@ namespace Docky.Interface
 			get { return windowCount; }
 		}
 		
-		IEnumerable<Wnck.Application> Applications { get; set; }
+		protected override IEnumerable<Wnck.Application> Applications { 
+			get { return applications; } 
+		}
 
 		IEnumerable<Wnck.Window> VisibleWindows {
 			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
@@ -167,7 +171,7 @@ namespace Docky.Interface
 
 		public ApplicationDockItem (IEnumerable<Wnck.Application> applications) : base ()
 		{
-			Applications = applications;
+			this.applications = applications;
 			windowCount = VisibleWindows.Count ();
 			AttentionRequestStartTime = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			
