@@ -43,13 +43,14 @@ namespace Docky.Interface
 	public class DockItem : BaseDockItem, IRightClickable
 	{
 		Item element;
-		List<Wnck.Application> apps;
-		Gdk.Rectangle icon_region;
-		Gdk.Pixbuf drag_pixbuf;
-		bool accepting_drops;
+		int last_raised;
 		bool hot_seated;
-		uint handle_timer;
 		int window_count;
+		uint handle_timer;
+		bool accepting_drops;
+		Gdk.Pixbuf drag_pixbuf;
+		Gdk.Rectangle icon_region;
+		List<Wnck.Application> apps;
 		
 		public event EventHandler RemoveClicked;
 		
@@ -79,6 +80,10 @@ namespace Docky.Interface
 			get { return window_count; }
 		}
 		
+		public IEnumerable<Wnck.Window> Windows {
+			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
+		}
+
 		public IEnumerable<Act> ActionsForItem {
 			get {
 				IEnumerable<Act> actions = Services.Core.GetActionsForItemOrderedByRelevance (element, false);
@@ -100,15 +105,16 @@ namespace Docky.Interface
 			get {
 				if (apps == null)
 					return false;
-				return apps.SelectMany (app => app.Windows).Any (win => !win.IsSkipTasklist);
+				return Windows.Any ();
 			}
 		}	
 		
 		public DockItem (Item element) : base ()
 		{
 			Position = -1;
-			apps =  new List<Wnck.Application> ();
+			last_raised = -1;
 			this.element = element;
+			apps =  new List<Wnck.Application> ();
 
 			SetText (element.Name);
 
@@ -116,7 +122,7 @@ namespace Docky.Interface
 			UpdateApplication ();
 			NeedsAttention = DetermineAttentionStatus ();
 			
-			if (element is IFileItem && System.IO.Directory.Exists ((element as IFileItem).Path))
+			if (element is IFileItem && Directory.Exists ((element as IFileItem).Path))
 				accepting_drops = true;
 			else
 				accepting_drops = false;
@@ -207,11 +213,7 @@ namespace Docky.Interface
 		
 		bool DetermineAttentionStatus  ()
 		{
-			foreach (Application app in Applications) {
-				if (app.Windows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ()))
-					return true;
-			}
-			return false;
+			return Windows.Any (w => w.NeedsAttention ());
 		}
 		
 		protected override Gdk.Pixbuf GetSurfacePixbuf (int size)
@@ -281,8 +283,7 @@ namespace Docky.Interface
 		
 		void SetIconRegionFromCache ()
 		{
-			Applications.ForEach (app => app.Windows.Where (w => !w.IsSkipTasklist)
-			                      .ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height)));
+			Windows.ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height));
 		}
 		
 		public override bool Equals (BaseDockItem other)
@@ -314,7 +315,7 @@ namespace Docky.Interface
 			bool hasApps = HasVisibleApps;
 			
 			if (hasApps) {
-				foreach (Wnck.Window window in Applications.SelectMany (app => app.Windows).Where (w => !w.IsSkipTasklist))
+				foreach (Wnck.Window window in Windows)
 						yield return new WindowMenuButtonArgs (window, window.Name, Icon);
 				yield return new SeparatorMenuButtonArgs ();
 			}
@@ -332,6 +333,39 @@ namespace Docky.Interface
 		{
 			if (RemoveClicked != null)
 				RemoveClicked (this, new EventArgs ());
+		}
+		
+		public override void Scrolled (Gdk.ScrollDirection direction)
+		{
+			if (window_count < 1) return;
+			
+			Wnck.Window focused = Windows.Where (w => w.IsActive).FirstOrDefault ();
+			if (focused != null) {
+				for (; last_raised < window_count; last_raised++) {
+					KeepLastRaiseInBounds ();
+					if (Windows.ElementAt (last_raised).Pid == focused.Pid)
+						break;
+				}
+			}
+			Log.Debug ("ok it crashes in part 2");
+			switch (direction) {
+			case ScrollDirection.Up:
+			case ScrollDirection.Right: last_raised++; break;
+			case ScrollDirection.Down:
+			case ScrollDirection.Left: last_raised--; break;
+			}
+			
+			KeepLastRaiseInBounds ();
+			
+			WindowControl.FocusWindows (Windows.ElementAt (last_raised));
+		}
+		
+		void KeepLastRaiseInBounds ()
+		{
+			if (last_raised == window_count)
+				last_raised = 0;
+			else if (last_raised < 0)
+				last_raised = window_count - 1;
 		}
 	}
 }

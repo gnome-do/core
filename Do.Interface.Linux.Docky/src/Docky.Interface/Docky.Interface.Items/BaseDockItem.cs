@@ -147,6 +147,10 @@ namespace Docky.Interface
 		{
 			LastClick = DateTime.UtcNow;
 		}
+		
+		public virtual void Scrolled (Gdk.ScrollDirection direction)
+		{
+		}
 
 		Surface CopySurface (Surface source, int width, int height)
 		{

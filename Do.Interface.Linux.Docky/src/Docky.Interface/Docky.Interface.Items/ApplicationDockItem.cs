@@ -279,6 +279,23 @@ namespace Docky.Interface
 			
 			base.Clicked (button, state, position);
 		}
+		
+		/// <summary>
+		/// When wheel is scolled over an application, we should focus it's windows
+		/// </summary>
+		/// <param name="direction">
+		/// A <see cref="Gdk.ScrollDirection"/>
+		/// </param>
+		public override void Scrolled (Gdk.ScrollDirection direction)
+		{
+			base.Scrolled (direction);
+			
+			foreach (Wnck.Application app in Applications) {
+				Log.Debug (app.Name);
+				foreach (Wnck.Window win in app.Windows)
+					Log.Debug (win.Name);
+			}
+		}
 
 		public override void SetIconRegion (Gdk.Rectangle region)
 		{
