@@ -53,7 +53,7 @@ namespace Docky.Interface
 		
 		public WnckDockItem() : base ()
 		{
-			last_raised = -1;
+			last_raised = 0;
 		}
 		
 		public override void Scrolled (Gdk.ScrollDirection direction)
@@ -61,10 +61,12 @@ namespace Docky.Interface
 			if (WindowCount < 1 || (DateTime.UtcNow - last_scroll) < scroll_rate) return;
 			
 			last_scroll = DateTime.UtcNow;
+			
+			// This block will make sure that if we're scrolling on an app that is already active
+			// that when we scroll we move on the next window instead of appearing to do nothing
 			Wnck.Window focused = VisibleWindows.Where (w => w.IsActive).FirstOrDefault ();
 			if (focused != null) {
-				for (; last_raised < WindowCount; last_raised++) {
-					KeepLastRaiseInBounds ();
+				for (; last_raised < WindowCount - 1; last_raised++) {
 					if (VisibleWindows.ElementAt (last_raised).Pid == focused.Pid)
 						break;
 				}
@@ -88,7 +90,7 @@ namespace Docky.Interface
 		
 		void KeepLastRaiseInBounds ()
 		{
-			if (last_raised == WindowCount)
+			if (WindowCount <= last_raised)
 				last_raised = 0;
 			else if (last_raised < 0)
 				last_raised = WindowCount - 1;
