@@ -257,6 +257,9 @@ namespace Docky.Core.Default
 			if (HotSeatEnabled)
 				return false;
 
+			foreach (BaseDockItem bdi in hotseat_items)
+				bdi.Dispose ();
+			
 			hotseat_items.Clear ();
 			hotseat_items.Add (new HotSeatProxyItem (item));
 			hotseat_items.AddRange (seatedItems);
