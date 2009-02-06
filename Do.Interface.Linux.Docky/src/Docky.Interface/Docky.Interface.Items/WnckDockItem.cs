@@ -39,7 +39,7 @@ namespace Docky.Interface
 {
 	
 	
-	public abstract class WnckDockItem : BaseDockItem
+	public abstract class WnckDockItem : AbstractDockItem
 	{
 		int last_raised;
 		TimeSpan scroll_rate = new TimeSpan (0, 0, 0, 0, 300);

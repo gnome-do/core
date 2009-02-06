@@ -1,4 +1,4 @@
-// DockItem.cs
+// ItemDockItem.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -40,7 +40,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItem : WnckDockItem, IRightClickable
+	public class ItemDockItem : WnckDockItem, IRightClickable
 	{
 		Item element;
 		bool hot_seated;
@@ -104,7 +104,7 @@ namespace Docky.Interface
 			}
 		}	
 		
-		public DockItem (Item element) : base ()
+		public ItemDockItem (Item element) : base ()
 		{
 			Position = -1;
 			this.element = element;
@@ -248,7 +248,7 @@ namespace Docky.Interface
 			if (WindowCount == 0) return;
 			
 			IEnumerable<Act> actions = ActionsForItem;
-			List<BaseDockItem> dockitems = new List<BaseDockItem> ();
+			List<AbstractDockItem> dockitems = new List<AbstractDockItem> ();
 					
 			foreach (Act act in ActionsForItem) {
 				dockitems.Add (new ActionDockItem (act, element));
@@ -280,11 +280,11 @@ namespace Docky.Interface
 			VisibleWindows.ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height));
 		}
 		
-		public override bool Equals (BaseDockItem other)
+		public override bool Equals (AbstractDockItem other)
 		{
 			if (other == null)
 				return false;
-			DockItem di = other as DockItem;
+			ItemDockItem di = other as ItemDockItem;
 			return di != null && di.Element != null && Element != null && di.Element.UniqueId == Element.UniqueId;
 		}
 

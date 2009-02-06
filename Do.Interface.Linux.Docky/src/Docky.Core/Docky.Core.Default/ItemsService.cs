@@ -42,15 +42,15 @@ namespace Docky.Core.Default
 		public event DockItemsChangedHandler DockItemsChanged;
 		public event UpdateRequestHandler ItemNeedsUpdate;
 		
-		IDictionary<string, DockItem> custom_items;
+		IDictionary<string, ItemDockItem> custom_items;
 		
-		List<DockItem> statistical_items;
+		List<ItemDockItem> statistical_items;
 		
-		List<BaseDockItem> output_items;
-		List<BaseDockItem> hotseat_items;
+		List<AbstractDockItem> output_items;
+		List<AbstractDockItem> hotseat_items;
 		
-		ReadOnlyCollection<BaseDockItem> readonly_items;
-		ReadOnlyCollection<BaseDockItem> hotseat_readonly_items;
+		ReadOnlyCollection<AbstractDockItem> readonly_items;
+		ReadOnlyCollection<AbstractDockItem> hotseat_readonly_items;
 
 		List<ApplicationDockItem> task_items;
 		bool enable_serialization = true;
@@ -73,16 +73,16 @@ namespace Docky.Core.Default
 				if (!DraggableItems.Any ())
 					return 0;
 				// TODO make sane once mono 1.9 support is dropped
-				return DraggableItems.Max ((Func<DockItem, int>) (di => di.Position));
+				return DraggableItems.Max ((Func<ItemDockItem, int>) (di => di.Position));
 			}
 		}
 		
-		BaseDockItem Separator { get; set; }
-		BaseDockItem MenuItem { get; set; }
-		BaseDockItem TrashItem { get; set; }
-		BaseDockItem ClockItem { get; set; }
+		AbstractDockItem Separator { get; set; }
+		AbstractDockItem MenuItem { get; set; }
+		AbstractDockItem TrashItem { get; set; }
+		AbstractDockItem ClockItem { get; set; }
 		
-		IEnumerable<DockItem> DraggableItems {
+		IEnumerable<ItemDockItem> DraggableItems {
 			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
 		}
 		
@@ -90,17 +90,17 @@ namespace Docky.Core.Default
 		
 		public bool UpdatesEnabled { get; set; }
 		
-		public ReadOnlyCollection<BaseDockItem> DockItems {
+		public ReadOnlyCollection<AbstractDockItem> DockItems {
 			get {
 				if (HotSeatEnabled)
 					return hotseat_readonly_items;
 				
 				if (output_items.Count == 0) {
 					output_items.Add (MenuItem);
-					output_items.AddRange (DraggableItems.Cast<BaseDockItem> ());
+					output_items.AddRange (DraggableItems.Cast<AbstractDockItem> ());
 				
 					if (task_items.Any ()) {
-						output_items.AddRange (task_items.Cast<BaseDockItem> ().OrderBy (bdi => bdi.DockAddItem));
+						output_items.AddRange (task_items.Cast<AbstractDockItem> ().OrderBy (bdi => bdi.DockAddItem));
 					}
 				
 					if (DockPreferences.ShowTrash || DockPreferences.ShowClock) {
@@ -125,14 +125,14 @@ namespace Docky.Core.Default
 			TrashItem = new TrashDockItem ();
 			ClockItem = new ClockDockItem ();
 			
-			custom_items = new Dictionary<string, DockItem> ();
-			statistical_items = new List<DockItem> ();
+			custom_items = new Dictionary<string, ItemDockItem> ();
+			statistical_items = new List<ItemDockItem> ();
 			task_items = new List<ApplicationDockItem> ();
 			
-			output_items = new List<BaseDockItem> ();
+			output_items = new List<AbstractDockItem> ();
 			readonly_items = output_items.AsReadOnly ();
 			
-			hotseat_items = new List<BaseDockItem> ();
+			hotseat_items = new List<AbstractDockItem> ();
 			hotseat_readonly_items = hotseat_items.AsReadOnly ();
 			
 			RegisterEvents ();
@@ -188,7 +188,7 @@ namespace Docky.Core.Default
 			if (custom_items.ContainsKey (id))
 				return;
 			
-			DockItem di = new DockItem (item as Item);
+			ItemDockItem di = new ItemDockItem (item as Item);
 			di.RemoveClicked += HandleRemoveClicked;
 			di.UpdateNeeded += HandleUpdateNeeded;
 			di.Position = LastPosition + 1;
@@ -206,7 +206,7 @@ namespace Docky.Core.Default
 			if (custom_items.ContainsKey (identifier))
 				return;
 			
-			DockItem customItem = GetCustomItem (identifier);
+			ItemDockItem customItem = GetCustomItem (identifier);
 			
 			if (customItem != null) {
 				customItem.RemoveClicked += HandleRemoveClicked;
@@ -222,9 +222,9 @@ namespace Docky.Core.Default
 				SerializeData ();
 		}
 		
-		DockItem GetCustomItem (string identifier)
+		ItemDockItem GetCustomItem (string identifier)
 		{
-			DockItem customItem = null;
+			ItemDockItem customItem = null;
 			
 			if (identifier.StartsWith ("file://"))
 				identifier = identifier.Substring ("file://".Length);
@@ -232,15 +232,15 @@ namespace Docky.Core.Default
 			if (File.Exists (identifier) || Directory.Exists (identifier)) {
 				if (identifier.EndsWith (".desktop")) {
 					Item o = Services.UniverseFactory.NewApplicationItem (identifier) as Item;
-					customItem = new DockItem (o);
+					customItem = new ItemDockItem (o);
 				} else {
 					Item o = Services.UniverseFactory.NewFileItem (identifier) as Item;
-					customItem = new DockItem (o);
+					customItem = new ItemDockItem (o);
 				}
 			} else {
 				Item e = Services.Core.GetElement (identifier) as Item;
 				if (e != null)
-					customItem = new DockItem (e);
+					customItem = new ItemDockItem (e);
 				else
 					Log<ItemsService>.Error ("Could not add custom item with id: {0}", identifier);
 			}
@@ -249,15 +249,15 @@ namespace Docky.Core.Default
 		
 		public bool ItemCanBeMoved (int item)
 		{
-			return DockItems [item] is DockItem && DraggableItems.Contains (DockItems [item] as DockItem);
+			return DockItems [item] is ItemDockItem && DraggableItems.Contains (DockItems [item] as ItemDockItem);
 		}
 		
-		public bool HotSeatItem (BaseDockItem item, List<BaseDockItem> seatedItems)
+		public bool HotSeatItem (AbstractDockItem item, List<AbstractDockItem> seatedItems)
 		{
 			if (HotSeatEnabled)
 				return false;
 
-			foreach (BaseDockItem bdi in hotseat_items)
+			foreach (AbstractDockItem bdi in hotseat_items)
 				bdi.Dispose ();
 			
 			hotseat_items.Clear ();
@@ -269,7 +269,7 @@ namespace Docky.Core.Default
 			return true;
 		}
 		
-		public bool ResetHotSeat (BaseDockItem item)
+		public bool ResetHotSeat (AbstractDockItem item)
 		{
 			if (!HotSeatEnabled) return false;
 			
@@ -278,20 +278,20 @@ namespace Docky.Core.Default
 			return true;
 		}
 		
-		public void DropItemOnPosition (BaseDockItem item, int position)
+		public void DropItemOnPosition (AbstractDockItem item, int position)
 		{
 			if (ItemCanInteractWithPosition (item, position))
 				if (DockItems [position] is TrashDockItem)
 					RemoveItem (item);
 		}
 
-		public void MoveItemToPosition (BaseDockItem item, int position)
+		public void MoveItemToPosition (AbstractDockItem item, int position)
 		{
 			if (ItemCanInteractWithPosition (item, position))
 				MoveItemToPosition (DockItems.IndexOf (item), position);
 		}
 		
-		bool ItemCanInteractWithPosition (BaseDockItem item, int position)
+		bool ItemCanInteractWithPosition (AbstractDockItem item, int position)
 		{
 			return DockItems.Contains (item) && 0 <= position && position < DockItems.Count;
 		}
@@ -312,13 +312,13 @@ namespace Docky.Core.Default
 			    targetSource == IconSource.Application || targetSource == IconSource.Unknown)
 				return;
 			
-			DockItem primaryItem = DockItems [item] as DockItem;
-			DockItem targetItem = DockItems [position] as DockItem;
+			ItemDockItem primaryItem = DockItems [item] as ItemDockItem;
+			ItemDockItem targetItem = DockItems [position] as ItemDockItem;
 			
 			int startPosition = primaryItem.Position;
 			int targetPosition = targetItem.Position;
 			
-			foreach (DockItem di in DraggableItems) {
+			foreach (ItemDockItem di in DraggableItems) {
 				if (startPosition < targetPosition) {
 					// the item is being shifted to the right.  Everything greater than item up to and including target item
 					// needs to be shifted to the left
@@ -343,14 +343,14 @@ namespace Docky.Core.Default
 			UpdateItems ();
 		}
 		
-		public IconSource GetIconSource (BaseDockItem item) {
+		public IconSource GetIconSource (AbstractDockItem item) {
 			if (item is ApplicationDockItem && task_items.Contains (item as ApplicationDockItem))
 				return IconSource.Application;
 			
-			if (item is DockItem && statistical_items.Contains (item as DockItem))
+			if (item is ItemDockItem && statistical_items.Contains (item as ItemDockItem))
 				return IconSource.Statistics;
 			
-			if (item is DockItem && custom_items.Values.Contains (item as DockItem))
+			if (item is ItemDockItem && custom_items.Values.Contains (item as ItemDockItem))
 				return IconSource.Custom;
 			
 			return IconSource.Unknown;
@@ -364,8 +364,8 @@ namespace Docky.Core.Default
 
 		void HandleRemoveClicked(object sender, EventArgs e)
 		{
-			if (sender is BaseDockItem)
-				RemoveItem (sender as BaseDockItem);
+			if (sender is AbstractDockItem)
+				RemoveItem (sender as AbstractDockItem);
 		}
 		
 		IEnumerable<Item> MostUsedItems ()
@@ -380,7 +380,7 @@ namespace Docky.Core.Default
 				.ThenBy (item => item.Safe.Name);
 		}
 
-		public bool RemoveItem (BaseDockItem item)
+		public bool RemoveItem (AbstractDockItem item)
 		{
 			if (!DockItems.Contains (item))
 				return false;
@@ -392,12 +392,12 @@ namespace Docky.Core.Default
 			bool ret_val = false;
 			
 			if (GetIconSource (DockItems [item]) == IconSource.Statistics) {
-				DockPreferences.AddBlacklistItem ((DockItems [item] as DockItem).Element.UniqueId);
+				DockPreferences.AddBlacklistItem ((DockItems [item] as ItemDockItem).Element.UniqueId);
 				DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
 				UpdateItems ();
 				ret_val = true;
 			} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
-				foreach (KeyValuePair<string, DockItem> kvp in custom_items) {
+				foreach (KeyValuePair<string, ItemDockItem> kvp in custom_items) {
 					if (kvp.Value.Equals (DockItems [item])) {
 						custom_items.Remove (kvp.Key);
 						
@@ -498,7 +498,7 @@ namespace Docky.Core.Default
 				custom_items_read = true;
 				
 				Dictionary<string, int> sortDictionary = DeserializeSortDictionary ();
-				foreach (DockItem item in DraggableItems) {
+				foreach (ItemDockItem item in DraggableItems) {
 					if (sortDictionary.ContainsKey (item.Element.UniqueId))
 						item.Position = sortDictionary [item.Element.UniqueId];
 				}
@@ -512,8 +512,8 @@ namespace Docky.Core.Default
 		
 		void UpdateStatisticalItems ()
 		{
-			List<DockItem> old_items = statistical_items;
-			statistical_items = new List<DockItem> ();
+			List<ItemDockItem> old_items = statistical_items;
+			statistical_items = new List<ItemDockItem> ();
 			
 			IEnumerable<Item> mostUsedItems = MostUsedItems ();
 			
@@ -524,7 +524,7 @@ namespace Docky.Core.Default
 				if (old_items.Any (di => di.Element == item)) {
 					statistical_items.AddRange (old_items.Where (di => di.Element == item));
 				} else {
-					DockItem di = new DockItem (item);
+					ItemDockItem di = new ItemDockItem (item);
 					di.RemoveClicked += HandleRemoveClicked;
 					di.UpdateNeeded += HandleUpdateNeeded;
 					di.DockAddItem = DateTime.UtcNow;
@@ -533,14 +533,14 @@ namespace Docky.Core.Default
 
 					//TODO fixme once mono 1.9 support is dropped
 					if (old_items.Any ())
-						position += old_items.Max ((Func<DockItem, int>) (oi => oi.Position));
+						position += old_items.Max ((Func<ItemDockItem, int>) (oi => oi.Position));
 
 					di.Position = position;
 					statistical_items.Add (di);
 				}
 			}
 			
-			foreach (DockItem item in  old_items.Where (di => !statistical_items.Contains (di))) {
+			foreach (ItemDockItem item in  old_items.Where (di => !statistical_items.Contains (di))) {
 				item.RemoveClicked -= HandleRemoveClicked;
 				item.UpdateNeeded -= HandleUpdateNeeded;
 				item.Dispose ();
@@ -549,7 +549,7 @@ namespace Docky.Core.Default
 
 		void UpdateWindowItems ()
 		{
-			foreach (DockItem di in statistical_items.Concat (custom_items.Values)) {
+			foreach (ItemDockItem di in statistical_items.Concat (custom_items.Values)) {
 				di.UpdateApplication ();
 			}
 			
@@ -584,11 +584,11 @@ namespace Docky.Core.Default
 			task_items = out_items;
 		}
 		
-		void SimplifyPositions (IEnumerable<DockItem> items)
+		void SimplifyPositions (IEnumerable<ItemDockItem> items)
 		{
 			int i = 0;
 			// we call ToArray so our enumerator does get screwed up when we change the Position
-			foreach (DockItem item in items.OrderBy (di => di.Position).ToArray ())
+			foreach (ItemDockItem item in items.OrderBy (di => di.Position).ToArray ())
 				item.Position = i++;
 		}
 		
@@ -611,7 +611,7 @@ namespace Docky.Core.Default
 		{
 			UnregisterEvents ();
 			
-			foreach (BaseDockItem di in DockItems) {
+			foreach (AbstractDockItem di in DockItems) {
 				if (di is IRightClickable)
 					(di as IRightClickable).RemoveClicked -= HandleRemoveClicked;
 				di.UpdateNeeded -= HandleUpdateNeeded;

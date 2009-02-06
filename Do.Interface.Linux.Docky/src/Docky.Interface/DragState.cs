@@ -25,10 +25,10 @@ namespace Docky.Interface
 	public class DragState
 	{
 		public Gdk.Point StartingPoint {get; set;}
-		public BaseDockItem DragItem {get; set;}
+		public AbstractDockItem DragItem {get; set;}
 		public bool IsFinished {get; set;}
 
-		public DragState (Gdk.Point startingPoint, BaseDockItem dragItem)
+		public DragState (Gdk.Point startingPoint, AbstractDockItem dragItem)
 		{
 			this.StartingPoint = startingPoint;
 			this.DragItem = dragItem;

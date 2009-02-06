@@ -32,7 +32,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ActionDockItem : BaseDockItem
+	public class ActionDockItem : AbstractDockItem
 	{
 		Act action;
 		Do.Universe.Item target_item;

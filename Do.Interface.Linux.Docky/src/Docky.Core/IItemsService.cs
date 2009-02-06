@@ -46,7 +46,7 @@ namespace Docky.Core
 		/// <summary>
 		/// gets a read only collection of the dock items
 		/// </summary>
-		ReadOnlyCollection<BaseDockItem> DockItems { get; }
+		ReadOnlyCollection<AbstractDockItem> DockItems { get; }
 		
 		void AddItemToDock (Element item);
 		
@@ -54,22 +54,22 @@ namespace Docky.Core
 		
 		bool ItemCanBeMoved (int item);
 		
-		void DropItemOnPosition (BaseDockItem item, int position);
+		void DropItemOnPosition (AbstractDockItem item, int position);
 
-		void MoveItemToPosition (BaseDockItem item, int position);
+		void MoveItemToPosition (AbstractDockItem item, int position);
 		
 		void MoveItemToPosition (int item, int position);
 		
 		void ForceUpdate ();
 		
-		IconSource GetIconSource (BaseDockItem item);
+		IconSource GetIconSource (AbstractDockItem item);
 
-		bool RemoveItem (BaseDockItem item);
+		bool RemoveItem (AbstractDockItem item);
 		
 		bool RemoveItem (int item);
 		
-		bool HotSeatItem (BaseDockItem item, List<BaseDockItem> seatedItems);
+		bool HotSeatItem (AbstractDockItem item, List<AbstractDockItem> seatedItems);
 		
-		bool ResetHotSeat (BaseDockItem item);
+		bool ResetHotSeat (AbstractDockItem item);
 	}
 }

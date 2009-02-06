@@ -32,7 +32,7 @@ namespace Docky.Interface
 {
 
 	
-	public abstract class BaseDockItem : IDisposable, IEquatable<BaseDockItem>
+	public abstract class AbstractDockItem : IDisposable, IEquatable<AbstractDockItem>
 	{
 		public event UpdateRequestHandler UpdateNeeded;
 		
@@ -124,7 +124,7 @@ namespace Docky.Interface
 			get { return DateTime.UtcNow - DockAddItem; }
 		}
 		
-		public BaseDockItem ()
+		public AbstractDockItem ()
 		{
 			NeedsAttention = false;
 			Description = "";
@@ -356,7 +356,7 @@ namespace Docky.Interface
 		
 		#endregion 
 		
-		public virtual bool Equals (BaseDockItem other)
+		public virtual bool Equals (AbstractDockItem other)
 		{
 			return other == this;
 		}

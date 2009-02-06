@@ -310,7 +310,7 @@ namespace Docky.Interface
 			VisibleWindows.ForEach (w => w.SetIconGeometry (region.X, region.Y, region.Width, region.Height));
 		}
 		
-		public override bool Equals (BaseDockItem other)
+		public override bool Equals (AbstractDockItem other)
 		{
 			if (!(other is ApplicationDockItem))
 				return false;

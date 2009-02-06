@@ -28,7 +28,7 @@ using Docky.Utilities;
 
 namespace Docky.Interface
 {
-	public class SeparatorItem : BaseDockItem
+	public class SeparatorItem : AbstractDockItem
 	{
 		Surface sr;
 		#region IDockItem implementation 
@@ -107,7 +107,7 @@ namespace Docky.Interface
 		
 		#endregion 
 		
-		public override bool Equals (BaseDockItem other) 
+		public override bool Equals (AbstractDockItem other) 
 		{
 			if (other == null)
 				return false;

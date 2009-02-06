@@ -34,7 +34,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class TrashDockItem :  BaseDockItem
+	public class TrashDockItem :  AbstractDockItem
 	{
 		const string TrashEmptyIcon = "gnome-stock-trash";
 		const string TrashFullIcon = "gnome-stock-trash-full";

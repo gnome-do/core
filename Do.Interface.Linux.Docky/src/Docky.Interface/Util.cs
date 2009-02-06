@@ -53,7 +53,7 @@ namespace Docky.Interface
 	}
 	
 	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);
-	public delegate void DockItemsChangedHandler (IEnumerable<BaseDockItem> items);
+	public delegate void DockItemsChangedHandler (IEnumerable<AbstractDockItem> items);
 	
 	public static class Util
 	{

@@ -74,8 +74,8 @@
     <File name="src/Docky.Interface/DockArea_DragAndDrop.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Items" subtype="Directory" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Items/ActionDockItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/Docky.Interface.Items/BaseDockItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/Docky.Interface.Items/DockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/AbstractDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/ItemDockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Items/HotSeatProxyItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs" subtype="Code" buildaction="Compile" />

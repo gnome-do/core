@@ -36,7 +36,7 @@ namespace Docky.Interface
 		
 		DockArea parent;
 		
-		ReadOnlyCollection<BaseDockItem> DockItems {
+		ReadOnlyCollection<AbstractDockItem> DockItems {
 			get { return DockServices.ItemsService.DockItems; }
 		}
 		
@@ -46,7 +46,7 @@ namespace Docky.Interface
 		public int DockWidth {
 			get {
 				int val = 2 * HorizontalBuffer;
-				foreach (BaseDockItem di in DockItems)
+				foreach (AbstractDockItem di in DockItems)
 					val += 2 * DockPreferences.IconBorderWidth + di.Width;
 				return val;
 			}
@@ -102,7 +102,7 @@ namespace Docky.Interface
 			DockServices.ItemsService.DockItemsChanged -= HandleDockItemsChanged;
 		}
 
-		void HandleDockItemsChanged(IEnumerable<BaseDockItem> items)
+		void HandleDockItemsChanged(IEnumerable<AbstractDockItem> items)
 		{
 			MinimumDockArea = CalculateMinimumArea ();
 		}
@@ -207,7 +207,7 @@ namespace Docky.Interface
 			// while this would normally mean nothing, this method sees lots of use and can
 			// afford a bit of ugly in exchange for a bit of speed.
 			int i = 0;
-			foreach (BaseDockItem di in DockItems) {
+			foreach (AbstractDockItem di in DockItems) {
 				if (!(i < icon))
 					break;
 				startOffset += di.Width;
@@ -336,7 +336,7 @@ namespace Docky.Interface
 
 			int i = 0;
 			int width;
-			foreach (BaseDockItem di in DockItems) {
+			foreach (AbstractDockItem di in DockItems) {
 				width = di.Width + 2 * DockPreferences.IconBorderWidth;
 				if (position >= startOffset && position <= startOffset + width)
 					return i;

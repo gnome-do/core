@@ -32,7 +32,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ClockDockItem : BaseDockItem
+	public class ClockDockItem : AbstractDockItem
 	{
 		int minute;
 		

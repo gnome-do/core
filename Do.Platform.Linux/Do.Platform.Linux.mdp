@@ -38,7 +38,7 @@
     <File name="src/Do.Platform/Do.Platform.Linux/NotificationHelper.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Linux/TrayIconPreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Widgets" subtype="Directory" buildaction="Compile" />
-    <File name="gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" resource_id="gui.stetic" />
+    <File name="gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
     <File name="gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Widgets/AbstractLoginWidget.cs" subtype="Code" buildaction="Compile" />

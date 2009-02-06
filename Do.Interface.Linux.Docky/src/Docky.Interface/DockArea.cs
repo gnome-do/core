@@ -137,11 +137,11 @@ namespace Docky.Interface
 
 		ModifierType CursorModifier { get; set; }
 		
-		ReadOnlyCollection<BaseDockItem> DockItems { 
+		ReadOnlyCollection<AbstractDockItem> DockItems { 
 			get { return DockServices.ItemsService.DockItems; } 
 		}
 		
-		BaseDockItem CurrentDockItem {
+		AbstractDockItem CurrentDockItem {
 			get {
 				try { return DockItems [PositionProvider.IndexAtPosition (Cursor)]; }
 				catch { return null; }
@@ -412,7 +412,7 @@ namespace Docky.Interface
 			PositionProvider.IconZoomedPosition (icon, ZoomIn, Cursor, out center, out zoom);
 		}
 		
-		void OnDockItemsChanged (IEnumerable<BaseDockItem> items)
+		void OnDockItemsChanged (IEnumerable<AbstractDockItem> items)
 		{
 			DockPreferences.MaxIconSize = (int) (((double) Width / MinimumDockArea.Width) * IconSize);
 			
