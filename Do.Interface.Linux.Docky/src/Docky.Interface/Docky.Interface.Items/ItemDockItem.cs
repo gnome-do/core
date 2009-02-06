@@ -230,19 +230,6 @@ namespace Docky.Interface
 			return drag_pixbuf;
 		}
 		
-		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
-		{
-			if (!apps.Any () || !HasVisibleApps || button == 2) {
-				AnimationType = ClickAnimationType.Bounce;
-				Launch ();
-			} else if (button == 1) {
-				AnimationType = ClickAnimationType.Darken;
-				WindowUtils.PerformLogicalClick (apps);
-			}
-		
-			base.Clicked (button, state, position);
-		}
-		
 		public override void HotSeatRequested ()
 		{
 			if (WindowCount == 0) return;
@@ -258,7 +245,7 @@ namespace Docky.Interface
 			base.HotSeatRequested ();
 		}
 		
-		void Launch ()
+		protected override void Launch ()
 		{
 			if (Element is IFileItem)
 				Services.Core.PerformDefaultAction (Element as Item, new [] { typeof (OpenAction), });

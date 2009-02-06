@@ -272,18 +272,6 @@ namespace Docky.Interface
 			return (!string.IsNullOrEmpty (s.Trim ()) && s != "<unknown>");
 		}
 		
-		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
-		{
-			if (button == 1) {
-				WindowUtils.PerformLogicalClick (Applications);
-				AnimationType = ClickAnimationType.Darken;
-			} else {
-				AnimationType = ClickAnimationType.None;
-			}
-			
-			base.Clicked (button, state, position);
-		}
-		
 		/// <summary>
 		/// When wheel is scolled over an application, we should focus it's windows
 		/// </summary>

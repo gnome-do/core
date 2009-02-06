@@ -51,9 +51,22 @@ namespace Docky.Interface
 			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
 		}
 		
+		protected bool HasVisibleApps {
+			get {
+				if (Applications == null)
+					return false;
+				return VisibleWindows.Any ();
+			}
+		}	
+		
 		public WnckDockItem() : base ()
 		{
 			last_raised = 0;
+		}
+		
+		protected virtual void Launch ()
+		{
+			return;
 		}
 		
 		public override void Scrolled (Gdk.ScrollDirection direction)
@@ -87,6 +100,22 @@ namespace Docky.Interface
 			
 			WindowControl.FocusWindows (VisibleWindows.ElementAt (last_raised));
 		}
+		
+		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)
+		{
+			if (!Applications.Any () || !HasVisibleApps || button == 2) {
+				AnimationType = ClickAnimationType.Bounce;
+				Launch ();
+			} else if (button == 1) {
+				AnimationType = ClickAnimationType.Darken;
+				WindowUtils.PerformLogicalClick (Applications);
+			} else {
+				AnimationType = ClickAnimationType.None;
+			}
+		
+			base.Clicked (button, state, position);
+		}
+
 		
 		void KeepLastRaiseInBounds ()
 		{
