@@ -47,6 +47,7 @@ namespace Docky.Interface
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
 		bool accepting_drops;
+		bool hot_seated;
 		uint handle_timer;
 		int window_count;
 		
@@ -242,8 +243,23 @@ namespace Docky.Interface
 				AnimationType = ClickAnimationType.Darken;
 				WindowUtils.PerformLogicalClick (apps);
 			}
-			
+		
 			base.Clicked (button, state, position);
+		}
+		
+		public override void HotSeatRequested ()
+		{
+			if (WindowCount == 0) return;
+			
+			IEnumerable<Act> actions = ActionsForItem;
+			List<BaseDockItem> dockitems = new List<BaseDockItem> ();
+					
+			foreach (Act act in ActionsForItem) {
+				dockitems.Add (new ActionDockItem (act, element));
+			}
+			
+			hot_seated = Docky.Core.DockServices.ItemsService.HotSeatItem (this, dockitems);
+			base.HotSeatRequested ();
 		}
 		
 		void Launch ()

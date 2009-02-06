@@ -252,36 +252,26 @@ namespace Docky.Core.Default
 			return DockItems [item] is DockItem && DraggableItems.Contains (DockItems [item] as DockItem);
 		}
 		
-		public bool HotSeatItem (int item)
+		public bool HotSeatItem (BaseDockItem item, List<BaseDockItem> seatedItems)
 		{
-			if (item < 0 || item >= DockItems.Count || !(DockItems [item] is DockItem))
+			if (HotSeatEnabled)
 				return false;
-			
-			DockItem dockitem = DockItems [item] as DockItem;
-			
-			if (dockitem.ActionsForItem.Count () < 3)
-				return false;
-			
-			List<BaseDockItem> actionItems = new List<BaseDockItem> ();
-			actionItems.Add (dockitem);
-			
-			foreach (Act act in dockitem.ActionsForItem) {
-				actionItems.Add (new ActionDockItem (act, dockitem.Element));
-			}
-			
+
 			hotseat_items.Clear ();
-			hotseat_items.AddRange (actionItems);
+			hotseat_items.Add (new HotSeatProxyItem (item));
+			hotseat_items.AddRange (seatedItems);
 			HotSeatEnabled = true;
 			OnDockItemsChanged ();
-			
+		
 			return true;
 		}
 		
-		public bool ResetHotSeat ()
+		public bool ResetHotSeat (BaseDockItem item)
 		{
 			if (!HotSeatEnabled) return false;
 			
 			HotSeatEnabled = false;
+			OnDockItemsChanged ();
 			return true;
 		}
 		

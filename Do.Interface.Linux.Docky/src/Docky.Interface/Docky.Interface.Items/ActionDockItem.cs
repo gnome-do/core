@@ -45,6 +45,7 @@ namespace Docky.Interface
 		{
 			this.action = action;
 			this.target_item = targetItem;
+			SetText (action.Name);
 		}
 		
 		protected override Pixbuf GetSurfacePixbuf (int size)

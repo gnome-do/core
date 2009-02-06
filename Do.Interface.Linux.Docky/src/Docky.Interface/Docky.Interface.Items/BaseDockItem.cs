@@ -40,12 +40,13 @@ namespace Docky.Interface
 		DockOrientation current_orientation;
 		uint size_changed_timer;
 		protected int current_size;
-		string description;
 		bool needs_attention;
 
 		protected virtual Surface IconSurface { get; set; }
 		
 		Surface SecondaryIconSurface { get; set; }
+		
+		public string Description { get; private set; }
 		
 		/// <value>
 		/// The currently requested animation type
@@ -126,7 +127,7 @@ namespace Docky.Interface
 		public BaseDockItem ()
 		{
 			NeedsAttention = false;
-			description = "";
+			Description = "";
 			AttentionRequestStartTime =  LastClick = new DateTime (0);
 			DockPreferences.IconSizeChanged += OnIconSizeChanged;
 		}
@@ -196,7 +197,7 @@ namespace Docky.Interface
 		/// </returns>
 		public virtual Surface GetTextSurface (Surface similar)
 		{
-			if (string.IsNullOrEmpty (description))
+			if (string.IsNullOrEmpty (Description))
 				return null;
 			
 			if (text_surface == null || DockPreferences.Orientation != current_orientation) {
@@ -204,7 +205,7 @@ namespace Docky.Interface
 					text_surface.Destroy ();
 				
 				current_orientation = DockPreferences.Orientation;
-				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (description), 
+				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (Description), 
 				                                            DockPreferences.TextWidth, 
 				                                            similar, 
 				                                            current_orientation);
@@ -285,7 +286,7 @@ namespace Docky.Interface
 			ResetIconSurface ();
 			OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
 		}
-
+		
 		void ResetBufferSurface ()
 		{
 			if (resize_buffer != null) {
@@ -321,6 +322,10 @@ namespace Docky.Interface
 				text_surface = null;
 			}
 		}
+		
+		public virtual void HotSeatRequested ()
+		{
+		}
 
 		/// <summary>
 		/// Called whenever an icon get repositioned, so it can update its child applications icon regions
@@ -331,7 +336,7 @@ namespace Docky.Interface
 
 		protected void SetText (string text)
 		{
-			description = text;
+			Description = text;
 			ResetTextSurface ();
 		}
 

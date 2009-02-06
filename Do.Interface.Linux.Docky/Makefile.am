@@ -16,18 +16,21 @@ FILES = \
 	src/Docky.Core/Docky.Core.Default/DrawingService.cs \
 	src/Docky.Core/Docky.Core.Default/DoInteropService.cs \
 	src/Docky.Core/Docky.Core.Default/PainterService.cs \
-	src/Docky.Interface/BaseDockItem.cs \
-	src/Docky.Interface/ActionDockItem.cs \
-	src/Docky.Interface/ApplicationDockItem.cs \
 	src/Docky.Interface/ClickAnimationType.cs \
-	src/Docky.Interface/ClockDockItem.cs \
-	src/Docky.Interface/DoDockItem.cs \
 	src/Docky.Interface/DockArea.cs \
 	src/Docky.Interface/DockArea_Rendering.cs \
 	src/Docky.Interface/DockArea_DragAndDrop.cs \
 	src/Docky.Interface/DockAnimationState.cs \
-	src/Docky.Interface/DockItem.cs \
 	src/Docky.Interface/DoInteropService.cs \
+	src/Docky.Interface/Docky.Interface.Items/BaseDockItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/ActionDockItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/ClockDockItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/DockItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/HotSeatProxyItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/SeparatorItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Menus/AbstractMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/DockItemMenu.cs \
 	src/Docky.Interface/Docky.Interface.Menus/DockPopupMenu.cs \
@@ -49,8 +52,6 @@ FILES = \
 	src/Docky.Interface/LayoutUtils.cs \
 	src/Docky.Interface/PainterService.cs \
 	src/Docky.Interface/PaintNeededArgs.cs \
-	src/Docky.Interface/SeparatorItem.cs \
-	src/Docky.Interface/TrashDockItem.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
 	src/Docky.Utilities/DockOrientation.cs \

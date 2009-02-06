@@ -68,8 +68,8 @@ namespace Docky.Core
 		
 		bool RemoveItem (int item);
 		
-		bool HotSeatItem (int item);
+		bool HotSeatItem (BaseDockItem item, List<BaseDockItem> seatedItems);
 		
-		bool ResetHotSeat ();
+		bool ResetHotSeat (BaseDockItem item);
 	}
 }
