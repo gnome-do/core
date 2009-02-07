@@ -1,22 +1,21 @@
-/* FileItem.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// FileItem.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using IO = System.IO;
@@ -83,7 +82,9 @@ namespace Do.Universe.Linux {
 		public override string Description { get { return description; } }
 
 		public string Uri {
-			get { return "file://" + Path; }
+			get {
+				return System.Uri.EscapeUriString ("file://" + Path);
+			}
 		}
 
 		public string MimeType {
@@ -94,6 +95,7 @@ namespace Do.Universe.Linux {
 			get {
 				if (null != icon) return icon;
 
+				// TODO Filenames with spaces are not
 				string large_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Large);
 				string normal_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Normal);
 				// Generating the thumbnail ourself is too slow for large files.
