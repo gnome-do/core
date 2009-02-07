@@ -138,7 +138,7 @@ namespace Docky.Interface
 			return pbuf;
 		}
 		
-		string Description {
+		string Name {
 			get {
 				foreach (Wnck.Application application in Applications) {
 					if (StringIsValidName (application.IconName))
@@ -165,10 +165,6 @@ namespace Docky.Interface
 			get { return applications; } 
 		}
 
-		IEnumerable<Wnck.Window> VisibleWindows {
-			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
-		}
-
 		public ApplicationDockItem (IEnumerable<Wnck.Application> applications) : base ()
 		{
 			this.applications = applications;
@@ -180,12 +176,12 @@ namespace Docky.Interface
 				w.NameChanged += HandleNameChanged;
 			}
 
-			base.SetText (Description);
+			base.SetText (Name);
 		}
 
 		void HandleNameChanged(object sender, EventArgs e)
 		{
-			SetText (Description);
+			SetText (Name);
 		}
 
 		void HandleStateChanged(object o, Wnck.StateChangedArgs args)
@@ -231,8 +227,8 @@ namespace Docky.Interface
 			foreach (string s in guesses)
 				yield return "gnome-" + s;
 			
-			if (Description.Length > 4 && Description.Contains (" "))
-				yield return Description.Split (' ') [0].ToLower ();
+			if (Name.Length > 4 && Name.Contains (" "))
+				yield return Name.Split (' ') [0].ToLower ();
 		}
 
 		string PrepName (string s)

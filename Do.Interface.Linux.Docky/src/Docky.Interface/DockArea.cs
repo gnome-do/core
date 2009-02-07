@@ -547,7 +547,7 @@ namespace Docky.Interface
 
 		protected override bool OnScrollEvent (Gdk.EventScroll evnt)
 		{
-			int item = item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y);
+			int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y);
 			
 			if ((evnt.State & ModifierType.ControlMask) == ModifierType.ControlMask) {
 				if (evnt.Direction == ScrollDirection.Up) {

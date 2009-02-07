@@ -43,7 +43,6 @@ namespace Docky.Interface
 	public class ItemDockItem : WnckDockItem, IRightClickable
 	{
 		Item element;
-		bool hot_seated;
 		int window_count;
 		uint handle_timer;
 		bool accepting_drops;
@@ -94,15 +93,6 @@ namespace Docky.Interface
 					yield return act;
 			}
 		}
-			
-		
-		bool HasVisibleApps {
-			get {
-				if (apps == null)
-					return false;
-				return VisibleWindows.Any ();
-			}
-		}	
 		
 		public ItemDockItem (Item element) : base ()
 		{
@@ -234,14 +224,13 @@ namespace Docky.Interface
 		{
 			if (WindowCount == 0) return;
 			
-			IEnumerable<Act> actions = ActionsForItem;
 			List<AbstractDockItem> dockitems = new List<AbstractDockItem> ();
 					
 			foreach (Act act in ActionsForItem) {
 				dockitems.Add (new ActionDockItem (act, element));
 			}
 			
-			hot_seated = Docky.Core.DockServices.ItemsService.HotSeatItem (this, dockitems);
+			Docky.Core.DockServices.ItemsService.HotSeatItem (this, dockitems);
 			base.HotSeatRequested ();
 		}
 		
