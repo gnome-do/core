@@ -299,11 +299,6 @@ namespace Docky.Interface
 			                                       CloseText, Gtk.Stock.Quit);
 		}
 
-		bool DetermineUrgencyStatus ()
-		{
-			return VisibleWindows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ());
-		}
-
 		public override void Dispose ()
 		{
 			foreach (Wnck.Window w in VisibleWindows) {

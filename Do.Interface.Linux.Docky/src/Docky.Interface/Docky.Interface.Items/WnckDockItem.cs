@@ -116,6 +116,10 @@ namespace Docky.Interface
 			base.Clicked (button, state, position);
 		}
 
+		protected bool DetermineUrgencyStatus  ()
+		{
+			return VisibleWindows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ());
+		}
 		
 		void KeepLastRaiseInBounds ()
 		{

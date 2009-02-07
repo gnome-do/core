@@ -104,7 +104,7 @@ namespace Docky.Interface
 
 			AttentionRequestStartTime = DateTime.UtcNow;
 			UpdateApplication ();
-			NeedsAttention = DetermineAttentionStatus ();
+			NeedsAttention = DetermineUrgencyStatus ();
 			
 			if (element is IFileItem && Directory.Exists ((element as IFileItem).Path))
 				accepting_drops = true;
@@ -180,7 +180,7 @@ namespace Docky.Interface
 		bool HandleUpdate ()
 		{
 			bool needed_attention = NeedsAttention;
-			NeedsAttention = DetermineAttentionStatus ();
+			NeedsAttention = DetermineUrgencyStatus ();
 			
 			if (NeedsAttention != needed_attention) {
 				UpdateRequestType req;
@@ -193,11 +193,6 @@ namespace Docky.Interface
 			
 			handle_timer = 0;
 			return false;
-		}
-		
-		bool DetermineAttentionStatus  ()
-		{
-			return VisibleWindows.Any (w => w.NeedsAttention ());
 		}
 		
 		protected override Gdk.Pixbuf GetSurfacePixbuf (int size)
