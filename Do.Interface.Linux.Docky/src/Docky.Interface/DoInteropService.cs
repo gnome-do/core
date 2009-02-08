@@ -89,6 +89,7 @@ namespace Docky.Interface
 		
 		public void Dispose ()
 		{
+			DockServices.UnregisterService (this);
 			controller = null;
 		}
 		

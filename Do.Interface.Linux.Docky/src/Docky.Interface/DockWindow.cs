@@ -389,12 +389,16 @@ namespace Docky.Interface
 		
 		public override void Dispose ()
 		{
+			Window = null;
 			UnregisterEvents ();
 
 			Remove (dock_area);
 			dock_area.Dispose ();
 			dock_area.Destroy ();
 			dock_area = null;
+			
+			Core.DockServices.UnregisterService (interop_service);
+			interop_service.Dispose ();
 			
 			Destroy ();
 			base.Dispose ();
