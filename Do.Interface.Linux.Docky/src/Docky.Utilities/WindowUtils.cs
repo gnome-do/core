@@ -148,7 +148,7 @@ namespace Docky.Utilities
 						if (app == null)
 							continue;
 						
-						if (app.Pid == pid) {
+						if (app.Pid == pid || app.Windows.Any (w => w.Pid == pid)) {
 							if (app.Windows.Select (win => !win.IsSkipTasklist).Any ())
 								out_app = app;
 							break;
