@@ -22,15 +22,16 @@ FILES = \
 	src/Docky.Interface/DockArea_DragAndDrop.cs \
 	src/Docky.Interface/DockAnimationState.cs \
 	src/Docky.Interface/DoInteropService.cs \
-	src/Docky.Interface/Docky.Interface.Items/BaseDockItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/AbstractDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/ActionDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/ClockDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs \
-	src/Docky.Interface/Docky.Interface.Items/DockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/HotSeatProxyItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/ItemDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/SeparatorItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/WnckDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Menus/AbstractMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/DockItemMenu.cs \
 	src/Docky.Interface/Docky.Interface.Menus/DockPopupMenu.cs \

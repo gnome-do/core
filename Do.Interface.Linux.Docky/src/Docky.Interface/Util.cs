@@ -53,13 +53,13 @@ namespace Docky.Interface
 	}
 	
 	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);
-	public delegate void DockItemsChangedHandler (IEnumerable<BaseDockItem> items);
+	public delegate void DockItemsChangedHandler (IEnumerable<AbstractDockItem> items);
 	
 	public static class Util
 	{
 		const int IndicatorSize = 9;
 		const int UrgentIndicatorSize = 12;
-		const int Height = 26;
+		const int Height = 35;
 		static Surface indicator, urgent_indicator;
 		
 		public static Surface GetBorderedTextSurface (string text, int maxWidth, Surface similar) 
@@ -82,7 +82,8 @@ namespace Docky.Interface
 		/// <returns>
 		/// A <see cref="Surface"/>
 		/// </returns>
-		public static Surface GetBorderedTextSurface (string text, int maxWidth, Surface similar, DockOrientation orientation)
+		public static Surface GetBorderedTextSurface (string text, int maxWidth, Surface similar, 
+		                                              DockOrientation orientation)
 		{
 			Surface sr;
 			sr = similar.CreateSimilar (similar.Content, maxWidth, Height);
@@ -108,7 +109,14 @@ namespace Docky.Interface
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);
 			
-			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) + .5, 1 + .5, Pango.Units.ToPixels (rect2.Width) + 18 - 1, Height - 2 - 1, 5);
+			int localHeight = Pango.Units.ToPixels (rect2.Height);
+			
+			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) + .5, 
+			                            .5, 
+			                            Pango.Units.ToPixels (rect2.Width) + 20 - 1, 
+			                            localHeight + 10 - 1, 
+			                            5);
+			
 			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
 			cr.FillPreserve ();
 
@@ -119,7 +127,7 @@ namespace Docky.Interface
 			Pango.Layout shadow = layout.Copy();
 			shadow.Indent = 1;
 
-			cr.Translate (10, (int) ((Height - 18) / 2) + 1);
+			cr.Translate (10, 5);
 			cr.Translate(1,1);
 			Pango.CairoHelper.LayoutPath (cr, shadow);
 			cr.Color = new Cairo.Color (0, 0, 0, 0.6);

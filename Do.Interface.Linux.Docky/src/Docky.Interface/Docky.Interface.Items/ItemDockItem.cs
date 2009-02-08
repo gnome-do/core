@@ -1,4 +1,4 @@
-// DockItem.cs
+// ItemDockItem.cs
 // 
 // Copyright (C) 2008 GNOME Do
 //
@@ -40,16 +40,15 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockItem : BaseDockItem, IRightClickable
+	public class ItemDockItem : WnckDockItem, IRightClickable
 	{
 		Item element;
-		List<Wnck.Application> apps;
-		Gdk.Rectangle icon_region;
-		Gdk.Pixbuf drag_pixbuf;
-		bool accepting_drops;
-		bool hot_seated;
-		uint handle_timer;
 		int window_count;
+		uint handle_timer;
+		bool accepting_drops;
+		Gdk.Pixbuf drag_pixbuf;
+		Gdk.Rectangle icon_region;
+		List<Wnck.Application> apps;
 		
 		public event EventHandler RemoveClicked;
 		
@@ -67,8 +66,8 @@ namespace Docky.Interface
 			get { return element; } 
 		}
 		
-		public Wnck.Application [] Applications { 
-			get { return apps.ToArray (); } 
+		protected override IEnumerable<Wnck.Application> Applications { 
+			get { return apps; } 
 		}
 		
 		public IEnumerable<int> Pids { 
@@ -79,7 +78,7 @@ namespace Docky.Interface
 			get { return window_count; }
 		}
 		
-		public IEnumerable<Act> ActionsForItem {
+		IEnumerable<Act> ActionsForItem {
 			get {
 				IEnumerable<Act> actions = Services.Core.GetActionsForItemOrderedByRelevance (element, false);
 				// we want to keep the window operations stable, so we are going to special case them out now.
@@ -94,29 +93,20 @@ namespace Docky.Interface
 					yield return act;
 			}
 		}
-			
 		
-		bool HasVisibleApps {
-			get {
-				if (apps == null)
-					return false;
-				return apps.SelectMany (app => app.Windows).Any (win => !win.IsSkipTasklist);
-			}
-		}	
-		
-		public DockItem (Item element) : base ()
+		public ItemDockItem (Item element) : base ()
 		{
 			Position = -1;
-			apps =  new List<Wnck.Application> ();
 			this.element = element;
+			apps = new List<Wnck.Application> ();
 
 			SetText (element.Name);
 
 			AttentionRequestStartTime = DateTime.UtcNow;
 			UpdateApplication ();
-			NeedsAttention = DetermineAttentionStatus ();
+			NeedsAttention = DetermineUrgencyStatus ();
 			
-			if (element is IFileItem && System.IO.Directory.Exists ((element as IFileItem).Path))
+			if (element is IFileItem && Directory.Exists ((element as IFileItem).Path))
 				accepting_drops = true;
 			else
 				accepting_drops = false;
@@ -190,7 +180,7 @@ namespace Docky.Interface
 		bool HandleUpdate ()
 		{
 			bool needed_attention = NeedsAttention;
-			NeedsAttention = DetermineAttentionStatus ();
+			NeedsAttention = DetermineUrgencyStatus ();
 			
 			if (NeedsAttention != needed_attention) {
 				UpdateRequestType req;
@@ -202,15 +192,6 @@ namespace Docky.Interface
 			}
 			
 			handle_timer = 0;
-			return false;
-		}
-		
-		bool DetermineAttentionStatus  ()
-		{
-			foreach (Application app in Applications) {
-				if (app.Windows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ()))
-					return true;
-			}
 			return false;
 		}
 		
@@ -234,35 +215,21 @@ namespace Docky.Interface
 			return drag_pixbuf;
 		}
 		
-		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
-		{
-			if (!apps.Any () || !HasVisibleApps || button == 2) {
-				AnimationType = ClickAnimationType.Bounce;
-				Launch ();
-			} else if (button == 1) {
-				AnimationType = ClickAnimationType.Darken;
-				WindowUtils.PerformLogicalClick (apps);
-			}
-		
-			base.Clicked (button, state, position);
-		}
-		
 		public override void HotSeatRequested ()
 		{
 			if (WindowCount == 0) return;
 			
-			IEnumerable<Act> actions = ActionsForItem;
-			List<BaseDockItem> dockitems = new List<BaseDockItem> ();
+			List<AbstractDockItem> dockitems = new List<AbstractDockItem> ();
 					
 			foreach (Act act in ActionsForItem) {
 				dockitems.Add (new ActionDockItem (act, element));
 			}
 			
-			hot_seated = Docky.Core.DockServices.ItemsService.HotSeatItem (this, dockitems);
+			Docky.Core.DockServices.ItemsService.HotSeatItem (this, dockitems);
 			base.HotSeatRequested ();
 		}
 		
-		void Launch ()
+		protected override void Launch ()
 		{
 			if (Element is IFileItem)
 				Services.Core.PerformDefaultAction (Element as Item, new [] { typeof (OpenAction), });
@@ -281,15 +248,14 @@ namespace Docky.Interface
 		
 		void SetIconRegionFromCache ()
 		{
-			Applications.ForEach (app => app.Windows.Where (w => !w.IsSkipTasklist)
-			                      .ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height)));
+			VisibleWindows.ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height));
 		}
 		
-		public override bool Equals (BaseDockItem other)
+		public override bool Equals (AbstractDockItem other)
 		{
 			if (other == null)
 				return false;
-			DockItem di = other as DockItem;
+			ItemDockItem di = other as ItemDockItem;
 			return di != null && di.Element != null && Element != null && di.Element.UniqueId == Element.UniqueId;
 		}
 
@@ -314,7 +280,7 @@ namespace Docky.Interface
 			bool hasApps = HasVisibleApps;
 			
 			if (hasApps) {
-				foreach (Wnck.Window window in Applications.SelectMany (app => app.Windows).Where (w => !w.IsSkipTasklist))
+				foreach (Wnck.Window window in VisibleWindows)
 						yield return new WindowMenuButtonArgs (window, window.Name, Icon);
 				yield return new SeparatorMenuButtonArgs ();
 			}

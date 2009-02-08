@@ -30,9 +30,9 @@ namespace Docky.Interface
 {
 	
 	
-	internal class HotSeatProxyItem : BaseDockItem
+	internal class HotSeatProxyItem : AbstractDockItem
 	{
-		BaseDockItem inner;
+		AbstractDockItem inner;
 		
 		public override ClickAnimationType AnimationType {
 			get {
@@ -108,7 +108,7 @@ namespace Docky.Interface
 		}
 
 		
-		public HotSeatProxyItem(BaseDockItem inner) : base ()
+		public HotSeatProxyItem(AbstractDockItem inner) : base ()
 		{
 			this.inner = inner;
 		}

@@ -38,7 +38,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ApplicationDockItem : BaseDockItem, IRightClickable
+	public class ApplicationDockItem : WnckDockItem, IRightClickable
 	{
 		public event EventHandler RemoveClicked;
 		
@@ -63,6 +63,8 @@ namespace Docky.Interface
 		
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
+		
+		IEnumerable<Wnck.Application> applications;
 		
 		string Exec {
 			get {
@@ -136,7 +138,7 @@ namespace Docky.Interface
 			return pbuf;
 		}
 		
-		string Description {
+		string Name {
 			get {
 				foreach (Wnck.Application application in Applications) {
 					if (StringIsValidName (application.IconName))
@@ -159,15 +161,13 @@ namespace Docky.Interface
 			get { return windowCount; }
 		}
 		
-		IEnumerable<Wnck.Application> Applications { get; set; }
-
-		IEnumerable<Wnck.Window> VisibleWindows {
-			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
+		protected override IEnumerable<Wnck.Application> Applications { 
+			get { return applications; } 
 		}
 
 		public ApplicationDockItem (IEnumerable<Wnck.Application> applications) : base ()
 		{
-			Applications = applications;
+			this.applications = applications;
 			windowCount = VisibleWindows.Count ();
 			AttentionRequestStartTime = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			
@@ -176,12 +176,12 @@ namespace Docky.Interface
 				w.NameChanged += HandleNameChanged;
 			}
 
-			base.SetText (Description);
+			base.SetText (Name);
 		}
 
 		void HandleNameChanged(object sender, EventArgs e)
 		{
-			SetText (Description);
+			SetText (Name);
 		}
 
 		void HandleStateChanged(object o, Wnck.StateChangedArgs args)
@@ -227,8 +227,8 @@ namespace Docky.Interface
 			foreach (string s in guesses)
 				yield return "gnome-" + s;
 			
-			if (Description.Length > 4 && Description.Contains (" "))
-				yield return Description.Split (' ') [0].ToLower ();
+			if (Name.Length > 4 && Name.Contains (" "))
+				yield return Name.Split (' ') [0].ToLower ();
 		}
 
 		string PrepName (string s)
@@ -267,18 +267,6 @@ namespace Docky.Interface
 		{
 			return (!string.IsNullOrEmpty (s.Trim ()) && s != "<unknown>");
 		}
-		
-		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
-		{
-			if (button == 1) {
-				WindowUtils.PerformLogicalClick (Applications);
-				AnimationType = ClickAnimationType.Darken;
-			} else {
-				AnimationType = ClickAnimationType.None;
-			}
-			
-			base.Clicked (button, state, position);
-		}
 
 		public override void SetIconRegion (Gdk.Rectangle region)
 		{
@@ -289,7 +277,7 @@ namespace Docky.Interface
 			VisibleWindows.ForEach (w => w.SetIconGeometry (region.X, region.Y, region.Width, region.Height));
 		}
 		
-		public override bool Equals (BaseDockItem other)
+		public override bool Equals (AbstractDockItem other)
 		{
 			if (!(other is ApplicationDockItem))
 				return false;
@@ -309,11 +297,6 @@ namespace Docky.Interface
 			
 			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
 			                                       CloseText, Gtk.Stock.Quit);
-		}
-
-		bool DetermineUrgencyStatus ()
-		{
-			return VisibleWindows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ());
 		}
 
 		public override void Dispose ()

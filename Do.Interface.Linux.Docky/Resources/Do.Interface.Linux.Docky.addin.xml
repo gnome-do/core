@@ -17,7 +17,7 @@
 	</Dependencies>
 
 	<!--<ExtensionPoint path="/Docky/Applet">
-		<ExtensionNode name="DockApplet" objectType="Docky.Interface.BaseDockItem" />
+		<ExtensionNode name="DockApplet" objectType="Docky.Interface.AbstractDockItem" />
 		<ExtensionNode name="DockPainter" objectType="Docky.Interface.IDockPainter" />
 	</ExtensionPoint>-->
 	

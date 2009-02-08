@@ -137,11 +137,11 @@ namespace Docky.Interface
 
 		ModifierType CursorModifier { get; set; }
 		
-		ReadOnlyCollection<BaseDockItem> DockItems { 
+		ReadOnlyCollection<AbstractDockItem> DockItems { 
 			get { return DockServices.ItemsService.DockItems; } 
 		}
 		
-		BaseDockItem CurrentDockItem {
+		AbstractDockItem CurrentDockItem {
 			get {
 				try { return DockItems [PositionProvider.IndexAtPosition (Cursor)]; }
 				catch { return null; }
@@ -412,7 +412,7 @@ namespace Docky.Interface
 			PositionProvider.IconZoomedPosition (icon, ZoomIn, Cursor, out center, out zoom);
 		}
 		
-		void OnDockItemsChanged (IEnumerable<BaseDockItem> items)
+		void OnDockItemsChanged (IEnumerable<AbstractDockItem> items)
 		{
 			DockPreferences.MaxIconSize = (int) (((double) Width / MinimumDockArea.Width) * IconSize);
 			
@@ -547,6 +547,8 @@ namespace Docky.Interface
 
 		protected override bool OnScrollEvent (Gdk.EventScroll evnt)
 		{
+			int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y);
+			
 			if ((evnt.State & ModifierType.ControlMask) == ModifierType.ControlMask) {
 				if (evnt.Direction == ScrollDirection.Up) {
 					DockPreferences.ZoomPercent += .1;
@@ -554,7 +556,10 @@ namespace Docky.Interface
 					DockPreferences.ZoomPercent -= .1;
 				}
 				AnimatedDraw ();
+			} else {
+				DockItems[item].Scrolled (evnt.Direction);
 			}
+			
 			return base.OnScrollEvent (evnt);
 		}
 		

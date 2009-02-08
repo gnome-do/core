@@ -67,7 +67,7 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static double zoom_percent = prefs.Get ("ZoomPercent", 2);
+		static double zoom_percent = prefs.Get ("ZoomPercent", 2.0);
 		public static double ZoomPercent {
 			get { return ZoomEnabled ? zoom_percent : 1; }
 			set {

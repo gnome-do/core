@@ -73,7 +73,6 @@ namespace Do.UI {
             // Container child hbox1.Gtk.Box+BoxChild
             this.show_combo = Gtk.ComboBox.NewText();
             this.show_combo.Name = "show_combo";
-            this.show_combo.Active = 0;
             this.hbox1.Add(this.show_combo);
             Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(this.hbox1[this.show_combo]));
             w3.Position = 1;
