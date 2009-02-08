@@ -557,7 +557,7 @@ namespace Docky.Interface
 				}
 				AnimatedDraw ();
 			} else {
-				DockItems[item].Scrolled (evnt.Direction);
+				DockItems [item].Scrolled (evnt.Direction);
 			}
 			
 			return base.OnScrollEvent (evnt);
@@ -716,6 +716,9 @@ namespace Docky.Interface
 
 			if (dock_icon_buffer != null)
 				dock_icon_buffer.Destroy ();
+			
+			DockServices.UnregisterService (PainterService);
+			PainterService.Dispose ();
 
 			window = null;
 			

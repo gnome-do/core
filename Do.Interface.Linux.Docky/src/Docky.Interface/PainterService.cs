@@ -76,6 +76,11 @@ namespace Docky.Interface
 		
 		public void Dispose ()
 		{
+			DockServices.UnregisterService (this);
+			
+			foreach (IDockPainter painter in painters)
+				painter.Dispose ();
+			
 			parent = null;
 		}
 		
