@@ -27,8 +27,6 @@ namespace Docky.Interface.Painters
 	
 	public class CalendarPainter : IDockPainter
 	{
-		
-		
 		#region IDockPainter implementation 
 		
 		public event EventHandler<PaintNeededArgs> PaintNeeded;
@@ -39,30 +37,38 @@ namespace Docky.Interface.Painters
 		
 		public void Paint (Cairo.Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
-			string cal = "";
+			int centerLine = dockArea.Y + dockArea.Height / 2 + 5;
+			int topTextLine = centerLine - 15;
+			int bottomTextLine = centerLine + 15;
+			
+			cr.MoveTo (dockArea.X + 15, centerLine);
+			cr.LineTo (dockArea.X + dockArea.Width - 15, centerLine);
+			cr.Color = new Cairo.Color (1, 1, 1);
+			cr.Stroke ();
+			
 			DateTime date = DateTime.Now.Date;
 			int daysInMonth = DateTime.DaysInMonth (date.Year, date.Month);
+			
 			for (int i = 1; i <= daysInMonth; i++) {
-				string tmp = i.ToString ();
+				int y = 0;
+				string tmp = i.ToString ().PadLeft (2, '0');
 				DateTime local_date = new DateTime (date.Year, date.Month, i);
 				if (local_date == date)
-					tmp = "<span size=\"xx-large\" underline=\"single\">" + tmp + "</span>";
-				else
-					tmp = "<span size=\"large\">" + tmp + "</span>";
+					tmp = "<span underline=\"single\">" + tmp + "</span>";
 				
 				if (local_date.DayOfWeek == DayOfWeek.Saturday || local_date.DayOfWeek == DayOfWeek.Sunday)
-					tmp = "<b>" + tmp + "</b>";
-				
-				cal += tmp + "   ";
+					y = topTextLine;
+				else
+					y = bottomTextLine;
+			
+				Gdk.Point drawing_point = new Gdk.Point (dockArea.X + i * 25, y);
+				DockServices.DrawingService.RenderTextAtPoint (cr, tmp, drawing_point, dockArea.Width,
+				                                               Pango.Alignment.Left);
 			}
-			Gdk.Point drawing_point = new Gdk.Point (dockArea.X + 10, dockArea.Y + 2 * dockArea.Height / 3);
-			DockServices.DrawingService.RenderTextAtPoint (cr, cal, drawing_point, 
+			Gdk.Point month_point = new Gdk.Point (dockArea.X + 15, dockArea.Y + 10);
+			
+			DockServices.DrawingService.RenderTextAtPoint (cr, "<b>" + date.ToString ("MMMM ") + date.Year + "</b>", month_point, 
 			                                               dockArea.Width, Pango.Alignment.Center);
-			
-			Gdk.Point month_point = new Gdk.Point (drawing_point.X, drawing_point.Y - 25);
-			DockServices.DrawingService.RenderTextAtPoint (cr, "<span size=\"large\"><b>" + date.ToLongDateString () + "</b></span>", 
-			                                               month_point, dockArea.Width, Pango.Alignment.Center);
-			
 		}
 		
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
