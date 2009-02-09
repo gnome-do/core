@@ -67,6 +67,8 @@ namespace Docky.Interface.Painters
 		
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
+			if (HideRequested != null)
+				HideRequested (this, EventArgs.Empty);
 		}
 		
 		public void Interupt ()
