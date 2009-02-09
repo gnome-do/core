@@ -407,11 +407,6 @@ namespace Docky.Interface
 			return false;
 		}
 		
-		void IconZoomedPosition (int icon, out PointD center, out double zoom)
-		{
-			PositionProvider.IconZoomedPosition (icon, ZoomIn, Cursor, out center, out zoom);
-		}
-		
 		void OnDockItemsChanged (IEnumerable<AbstractDockItem> items)
 		{
 			DockPreferences.MaxIconSize = (int) (((double) Width / MinimumDockArea.Width) * IconSize);
