@@ -542,19 +542,7 @@ namespace Docky.Interface
 
 		protected override bool OnScrollEvent (Gdk.EventScroll evnt)
 		{
-			int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y);
-			
-			if ((evnt.State & ModifierType.ControlMask) == ModifierType.ControlMask) {
-				if (evnt.Direction == ScrollDirection.Up) {
-					DockPreferences.ZoomPercent += .1;
-				} else if (evnt.Direction == ScrollDirection.Down) {
-					DockPreferences.ZoomPercent -= .1;
-				}
-				AnimatedDraw ();
-			} else {
-				DockItems [item].Scrolled (evnt.Direction);
-			}
-			
+			DockItems [item].Scrolled (evnt.Direction);
 			return base.OnScrollEvent (evnt);
 		}
 		
