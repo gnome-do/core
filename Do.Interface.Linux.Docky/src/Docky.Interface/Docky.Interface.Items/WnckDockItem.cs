@@ -42,8 +42,9 @@ namespace Docky.Interface
 	public abstract class WnckDockItem : AbstractDockItem
 	{
 		int last_raised;
-		TimeSpan scroll_rate = new TimeSpan (0, 0, 0, 0, 300);
+
 		DateTime last_scroll = new DateTime (0);
+		TimeSpan scroll_rate = new TimeSpan (0, 0, 0, 0, 300);
 		
 		protected abstract IEnumerable<Wnck.Application> Applications { get; }
 		
@@ -97,8 +98,7 @@ namespace Docky.Interface
 			}
 			
 			KeepLastRaiseInBounds ();
-			
-			WindowControl.FocusWindows (VisibleWindows.ElementAt (last_raised));
+			VisibleWindows.ElementAt (last_raised).CenterAndFocusWindow ();
 		}
 		
 		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)

@@ -174,10 +174,11 @@ namespace Docky.Utilities
 				scrn.MoveViewport (midX, midY);
 			}
 
-			if (w.Workspace != null && w.Workspace != w.Screen.ActiveWorkspace)
+			if (w.Workspace != null && w.Workspace != w.Screen.ActiveWorkspace) 
 				w.Workspace.Activate (Gtk.Global.CurrentEventTime);
 			
-			if (w.IsMinimized)
+			
+			if (w.IsMinimized) 
 				w.Unminimize (Gtk.Global.CurrentEventTime);
 			
 			w.Activate (Gtk.Global.CurrentEventTime);
