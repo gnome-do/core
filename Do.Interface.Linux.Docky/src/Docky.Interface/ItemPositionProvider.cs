@@ -35,6 +35,7 @@ namespace Docky.Interface
 		const int HorizontalBuffer = 7;
 		
 		DockArea parent;
+		List<Gdk.Point> static_positions;
 		
 		ReadOnlyCollection<AbstractDockItem> DockItems {
 			get { return DockServices.ItemsService.DockItems; }
@@ -84,6 +85,7 @@ namespace Docky.Interface
 		{
 			this.parent = parent;
 			MinimumDockArea = CalculateMinimumArea ();
+			static_positions = new List<Gdk.Point> ();
 
 			RegisterEvents ();
 		}
@@ -104,6 +106,7 @@ namespace Docky.Interface
 
 		void HandleDockItemsChanged(IEnumerable<AbstractDockItem> items)
 		{
+			static_positions.Clear ();
 			MinimumDockArea = CalculateMinimumArea ();
 		}
 
@@ -193,6 +196,22 @@ namespace Docky.Interface
 		}
 		
 		public Gdk.Point IconUnzoomedPosition (int icon)
+		{
+			if (static_positions.Count != DockItems.Count) {
+				static_positions.Clear ();
+				
+				for (int i = 0; i < DockItems.Count; i++) {
+					static_positions.Add (CalculateIconUnzoomedPosition (i));
+				}
+			}
+			
+			if (DockItems.Count <= icon)
+				return CalculateIconUnzoomedPosition (icon);
+			
+			return static_positions [icon];
+		}
+		
+		private Gdk.Point CalculateIconUnzoomedPosition (int icon)
 		{
 			// the first icons center is at dock X + border + IconBorder + half its width
 			// it is subtle, but it *is* a mistake to add the half width until the end.  adding
