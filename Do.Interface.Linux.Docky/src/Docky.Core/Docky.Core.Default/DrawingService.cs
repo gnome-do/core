@@ -32,6 +32,24 @@ namespace Docky.Core.Default
 			return new Pango.Layout (DockWindow.Window.CreatePangoContext ());
 		}
 		
+		public void RenderTextAtPoint (Cairo.Context cr, string text, Gdk.Point point, int maxWidth, Pango.Alignment align)
+		{
+			Pango.Layout layout = GetThemedLayout ();
+			layout.Width = Pango.Units.FromPixels (maxWidth);
+			layout.SetMarkup (text);
+			layout.Ellipsize = Pango.EllipsizeMode.End;
+			
+			Pango.Rectangle rect1, rect2;
+			layout.GetExtents (out rect1, out rect2);
+			
+			int transX = point.X - Pango.Units.ToPixels (rect2.Height) / 2;
+			cr.Translate (transX, point.Y);
+			Pango.CairoHelper.LayoutPath (cr, layout);
+			cr.Color = new Cairo.Color (1, 1, 1);
+			cr.Fill ();
+			cr.Translate (0 - transX, 0 - point.Y);
+		}
+		
 		#endregion 
 
 		#region IDisposable implementation 

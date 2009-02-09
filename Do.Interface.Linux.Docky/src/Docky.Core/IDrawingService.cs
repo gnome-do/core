@@ -23,5 +23,7 @@ namespace Docky.Core
 	public interface IDrawingService : IDockService
 	{
 		Pango.Layout GetThemedLayout ();
+		
+		void RenderTextAtPoint (Cairo.Context cr, string text, Gdk.Point point, int maxWidth, Pango.Alignment align);
 	}
 }
