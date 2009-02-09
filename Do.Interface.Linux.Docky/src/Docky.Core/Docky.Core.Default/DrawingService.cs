@@ -42,12 +42,12 @@ namespace Docky.Core.Default
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);
 			
-			int transX = point.X - Pango.Units.ToPixels (rect2.Height) / 2;
-			cr.Translate (transX, point.Y);
+			int transY = point.Y - Pango.Units.ToPixels (rect2.Height) / 2;
+			cr.Translate (point.X, transY);
 			Pango.CairoHelper.LayoutPath (cr, layout);
 			cr.Color = new Cairo.Color (1, 1, 1);
 			cr.Fill ();
-			cr.Translate (0 - transX, 0 - point.Y);
+			cr.Translate (0 - point.X, 0 - transY);
 		}
 		
 		#endregion 

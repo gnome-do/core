@@ -43,15 +43,25 @@ namespace Docky.Interface.Painters
 			DateTime date = DateTime.Now.Date;
 			int daysInMonth = DateTime.DaysInMonth (date.Year, date.Month);
 			for (int i = 1; i <= daysInMonth; i++) {
+				string tmp = i.ToString ();
 				DateTime local_date = new DateTime (date.Year, date.Month, i);
-				if (local_date.DayOfWeek == DayOfWeek.Saturday || local_date.DayOfWeek == DayOfWeek.Sunday)
-					cal += "<b>" + i + "</b>  ";
+				if (local_date == date)
+					tmp = "<span size=\"xx-large\" underline=\"single\">" + tmp + "</span>";
 				else
-					cal += i + "  ";
+					tmp = "<span size=\"large\">" + tmp + "</span>";
+				
+				if (local_date.DayOfWeek == DayOfWeek.Saturday || local_date.DayOfWeek == DayOfWeek.Sunday)
+					tmp = "<b>" + tmp + "</b>";
+				
+				cal += tmp + "   ";
 			}
-			Gdk.Point drawing_point = new Gdk.Point (dockArea.X + 10, dockArea.Y + dockArea.Height / 2);
+			Gdk.Point drawing_point = new Gdk.Point (dockArea.X + 10, dockArea.Y + 2 * dockArea.Height / 3);
 			DockServices.DrawingService.RenderTextAtPoint (cr, cal, drawing_point, 
 			                                               dockArea.Width, Pango.Alignment.Center);
+			
+			Gdk.Point month_point = new Gdk.Point (drawing_point.X, drawing_point.Y - 25);
+			DockServices.DrawingService.RenderTextAtPoint (cr, "<span size=\"large\"><b>" + date.ToLongDateString () + "</b></span>", 
+			                                               month_point, dockArea.Width, Pango.Alignment.Center);
 			
 		}
 		
