@@ -538,13 +538,9 @@ namespace Docky.Interface
 					}
 				}
 				
-				if (evnt.Button == 1 && (evnt.State & ModifierType.ControlMask) == ModifierType.ControlMask) {
-					DockItems [item].HotSeatRequested ();
-				} else {
-					//send off the clicks
-					Gdk.Point relative_point = Gdk.Point.Zero;
-					DockItems [item].Clicked (evnt.Button, evnt.State, relative_point);
-				}
+				//send off the clicks
+				Gdk.Point relative_point = Gdk.Point.Zero;
+				DockItems [item].Clicked (evnt.Button, evnt.State, relative_point);
 				
 				AnimatedDraw ();
 			}
