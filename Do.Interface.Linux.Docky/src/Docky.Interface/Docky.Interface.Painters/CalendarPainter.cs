@@ -27,6 +27,18 @@ namespace Docky.Interface.Painters
 	
 	public class CalendarPainter : IDockPainter
 	{
+		const int ArrowSize = 8;
+		
+		DateTime DisplayDate { get; set; }
+		
+		int DaysInDate {
+			get { return DateTime.DaysInMonth (DisplayDate.Year, DisplayDate.Month); }
+		}
+		
+		int TotalWidth {
+			get { return DaysInDate * 25; }
+		}
+		
 		#region IDockPainter implementation 
 		
 		public event EventHandler<PaintNeededArgs> PaintNeeded;
@@ -41,18 +53,17 @@ namespace Docky.Interface.Painters
 			int topTextLine = centerLine - 15;
 			int bottomTextLine = centerLine + 15;
 			
-			DateTime date = DateTime.Now.Date;
-			int daysInMonth = DateTime.DaysInMonth (date.Year, date.Month);
+			int startX = dockArea.X + (dockArea.Width - TotalWidth) / 2;
 			
-			cr.MoveTo (dockArea.X + 15, centerLine);
-			cr.LineTo (dockArea.X + dockArea.Width - 15, centerLine);
-			cr.Color = new Cairo.Color (1, 1, 1);
+			cr.MoveTo (startX, centerLine);
+			cr.LineTo (startX + TotalWidth, centerLine);
+			cr.Color = new Cairo.Color (1, 1, 1, .4);
 			cr.Stroke ();
 			
-			for (int i = 1; i <= daysInMonth; i++) {
+			for (int i = 1; i <= DaysInDate; i++) {
 				int y = 0;
 				string tmp = "<b>" + i.ToString ().PadLeft (2, '0') + "</b>";
-				DateTime local_date = new DateTime (date.Year, date.Month, i);
+				DateTime local_date = new DateTime (DisplayDate.Year, DisplayDate.Month, i);
 				Cairo.Color color;
 				
 				if (local_date.DayOfWeek == DayOfWeek.Saturday || local_date.DayOfWeek == DayOfWeek.Sunday) {
@@ -63,30 +74,82 @@ namespace Docky.Interface.Painters
 					color = new Cairo.Color (1, 1, 1);
 				}
 				
-				if (local_date == date) {
+				if (local_date == DateTime.Today) {
 					tmp = "<span underline=\"single\">" + tmp + "</span>";
 					color = new Cairo.Color (.8, .75, 1);
 				}
 					
-				Gdk.Point drawing_point = new Gdk.Point (dockArea.X + i * 25, y);
+				Gdk.Point drawing_point = new Gdk.Point (startX + (i - 1) * 25, y);
 				DockServices.DrawingService.TextPathAtPoint (cr, tmp, drawing_point, dockArea.Width,
 				                                             Pango.Alignment.Left);
 				cr.Color = color;
 				cr.Fill ();
 				
 			}
-			Gdk.Point month_point = new Gdk.Point (dockArea.X + 15, dockArea.Y + 10);
 			
-			DockServices.DrawingService.TextPathAtPoint (cr, "<b>" + date.ToString ("MMMM ") + date.Year + "</b>", month_point, 
+			Gdk.Rectangle leftArea = LeftPointArea (dockArea);
+			Gdk.Rectangle rightArea = RightPointArea (dockArea);
+			
+			cr.MoveTo (leftArea.X, leftArea.Y + leftArea.Height / 2);
+			cr.LineTo (leftArea.X + leftArea.Width, leftArea.Y);
+			cr.LineTo (leftArea.X + leftArea.Width, leftArea.Y + leftArea.Height);
+			cr.ClosePath ();
+			
+			cr.Color = new Cairo.Color (1, 1, 1);
+			cr.Fill ();
+			
+			cr.MoveTo (rightArea.X + rightArea.Width, rightArea.Y + rightArea.Height / 2);
+			cr.LineTo (rightArea.X, rightArea.Y);
+			cr.LineTo (rightArea.X, rightArea.Y + rightArea.Height);
+			cr.ClosePath ();
+			
+			cr.Color = new Cairo.Color (1, 1, 1);
+			cr.Fill ();
+			
+			
+			Gdk.Point month_point = new Gdk.Point (rightArea.X + rightArea.Width + 10, rightArea.Y + rightArea.Height / 2);
+			DockServices.DrawingService.TextPathAtPoint (cr, "<b>" + DisplayDate.ToString ("MMMM ") + DisplayDate.Year + "</b>", month_point, 
 			                                               dockArea.Width, Pango.Alignment.Center);
 			cr.Color = new Cairo.Color (1, 1, 1);
 			cr.Fill ();
 		}
 		
+		Gdk.Rectangle LeftPointArea (Gdk.Rectangle dockArea)
+		{
+			int height = dockArea.Y + 10;
+			int startX = dockArea.X + 110;
+			
+			return new Gdk.Rectangle (startX, height - ArrowSize / 2, ArrowSize, ArrowSize);
+		}
+		
+		Gdk.Rectangle RightPointArea (Gdk.Rectangle dockArea)
+		{
+			Gdk.Rectangle rect = LeftPointArea (dockArea);
+			rect.X += ArrowSize + 4;
+			
+			return rect;
+		}
+		
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
-			if (HideRequested != null)
-				HideRequested (this, EventArgs.Empty);
+			Gdk.Rectangle left = LeftPointArea (dockArea);
+			Gdk.Rectangle right = RightPointArea (dockArea);
+			Gdk.Rectangle dead = new Gdk.Rectangle (left.X - 10, 
+			                                        left.Y - 10, 
+			                                        right.X + right.Width + 20 - left.X, 
+			                                        left.Height + 20);
+			if (left.Contains (cursor)) {
+				DisplayDate = DisplayDate.AddMonths (-1);
+				RequestDraw ();
+			} else if (right.Contains (cursor)) {
+				DisplayDate = DisplayDate.AddMonths (1);
+				RequestDraw ();
+			} else if (dead.Contains (cursor)) {
+				// do nothing
+			} else {
+				if (HideRequested != null)
+					HideRequested (this, EventArgs.Empty);
+			}
 		}
 		
 		public void Interupt ()
@@ -115,8 +178,15 @@ namespace Docky.Interface.Painters
 		
 		public void Summon ()
 		{
+			DisplayDate = DateTime.Today;
 			if (ShowRequested != null)
 				ShowRequested (this, EventArgs.Empty);
+		}
+		
+		void RequestDraw ()
+		{
+			if (PaintNeeded != null)
+				PaintNeeded (this, new PaintNeededArgs ());
 		}
 
 		#region IDisposable implementation 
