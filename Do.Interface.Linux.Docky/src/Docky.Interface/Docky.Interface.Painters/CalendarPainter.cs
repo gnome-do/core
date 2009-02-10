@@ -41,34 +41,46 @@ namespace Docky.Interface.Painters
 			int topTextLine = centerLine - 15;
 			int bottomTextLine = centerLine + 15;
 			
+			DateTime date = DateTime.Now.Date;
+			int daysInMonth = DateTime.DaysInMonth (date.Year, date.Month);
+			
 			cr.MoveTo (dockArea.X + 15, centerLine);
 			cr.LineTo (dockArea.X + dockArea.Width - 15, centerLine);
 			cr.Color = new Cairo.Color (1, 1, 1);
 			cr.Stroke ();
 			
-			DateTime date = DateTime.Now.Date;
-			int daysInMonth = DateTime.DaysInMonth (date.Year, date.Month);
-			
 			for (int i = 1; i <= daysInMonth; i++) {
 				int y = 0;
 				string tmp = "<b>" + i.ToString ().PadLeft (2, '0') + "</b>";
 				DateTime local_date = new DateTime (date.Year, date.Month, i);
-				if (local_date == date)
-					tmp = "<span underline=\"single\">" + tmp + "</span>";
+				Cairo.Color color;
 				
-				if (local_date.DayOfWeek == DayOfWeek.Saturday || local_date.DayOfWeek == DayOfWeek.Sunday)
+				if (local_date.DayOfWeek == DayOfWeek.Saturday || local_date.DayOfWeek == DayOfWeek.Sunday) {
 					y = topTextLine;
-				else
+					color = new Cairo.Color (1, 1, 1, .85);
+				} else {
 					y = bottomTextLine;
-			
+					color = new Cairo.Color (1, 1, 1);
+				}
+				
+				if (local_date == date) {
+					tmp = "<span underline=\"single\">" + tmp + "</span>";
+					color = new Cairo.Color (.8, .75, 1);
+				}
+					
 				Gdk.Point drawing_point = new Gdk.Point (dockArea.X + i * 25, y);
-				DockServices.DrawingService.RenderTextAtPoint (cr, tmp, drawing_point, dockArea.Width,
-				                                               Pango.Alignment.Left);
+				DockServices.DrawingService.TextPathAtPoint (cr, tmp, drawing_point, dockArea.Width,
+				                                             Pango.Alignment.Left);
+				cr.Color = color;
+				cr.Fill ();
+				
 			}
 			Gdk.Point month_point = new Gdk.Point (dockArea.X + 15, dockArea.Y + 10);
 			
-			DockServices.DrawingService.RenderTextAtPoint (cr, "<b>" + date.ToString ("MMMM ") + date.Year + "</b>", month_point, 
+			DockServices.DrawingService.TextPathAtPoint (cr, "<b>" + date.ToString ("MMMM ") + date.Year + "</b>", month_point, 
 			                                               dockArea.Width, Pango.Alignment.Center);
+			cr.Color = new Cairo.Color (1, 1, 1);
+			cr.Fill ();
 		}
 		
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
