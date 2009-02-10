@@ -76,7 +76,7 @@ namespace Docky.Interface.Painters
 				
 				if (local_date == DateTime.Today) {
 					tmp = "<span underline=\"single\">" + tmp + "</span>";
-					color = new Cairo.Color (.8, .75, 1);
+					color = new Cairo.Color (1, .6, .5);
 				}
 					
 				Gdk.Point drawing_point = new Gdk.Point (startX + (i - 1) * 25, y);
