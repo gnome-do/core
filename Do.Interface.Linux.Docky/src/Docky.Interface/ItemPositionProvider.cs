@@ -93,14 +93,14 @@ namespace Docky.Interface
 		void RegisterEvents ()
 		{
 			parent.CursorUpdated += HandleCursorUpdated;
-			DockPreferences.IconSizeChanged += HandleCursorUpdated;
+			DockPreferences.IconSizeChanged += HandleIconSizeChanged;
 			DockServices.ItemsService.DockItemsChanged += HandleDockItemsChanged;
 		}
 
 		void UnregisterEvents ()
 		{
 			parent.CursorUpdated -= HandleCursorUpdated;
-			DockPreferences.IconSizeChanged -= HandleCursorUpdated;
+			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
 			DockServices.ItemsService.DockItemsChanged -= HandleDockItemsChanged;
 		}
 
@@ -112,6 +112,12 @@ namespace Docky.Interface
 
 		void HandleCursorUpdated ()
 		{
+			MinimumDockArea = CalculateMinimumArea ();
+		}
+		
+		void HandleIconSizeChanged ()
+		{
+			static_positions.Clear ();
 			MinimumDockArea = CalculateMinimumArea ();
 		}
 
