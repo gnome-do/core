@@ -51,7 +51,7 @@ namespace Docky.Interface.Painters
 			
 			for (int i = 1; i <= daysInMonth; i++) {
 				int y = 0;
-				string tmp = i.ToString ().PadLeft (2, '0');
+				string tmp = "<b>" + i.ToString ().PadLeft (2, '0') + "</b>";
 				DateTime local_date = new DateTime (date.Year, date.Month, i);
 				if (local_date == date)
 					tmp = "<span underline=\"single\">" + tmp + "</span>";

@@ -490,16 +490,27 @@ namespace Docky.Interface
 			return base.OnButtonPressEvent (evnt);
 		}
 		
+		public void ProxyButtonReleaseEvent (Gdk.EventButton evnt)
+		{
+			HandleButtonReleaseEvent (evnt);
+		}
+		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			bool ret_val = base.OnButtonPressEvent (evnt);
+			HandleButtonReleaseEvent (evnt);
 			
+			return ret_val;
+		}
+		
+		private void HandleButtonReleaseEvent (Gdk.EventButton evnt)
+		{
 			// lets not do anything in this case
 			if (drag_resizing) {
 				EndDrag ();
-				return ret_val;
+				return;
 			}
-
+			
 			if (PainterOverlayVisible) {
 				Painter.Clicked (GetDockArea (), Cursor);
 				if (PainterOverlayVisible && !GetDockArea ().Contains (Cursor)) {
@@ -508,7 +519,7 @@ namespace Docky.Interface
 			} else {
 				int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y); //sometimes clicking is not good!
 				if (item < 0 || item >= DockItems.Count || !CursorIsOverDockArea || PainterOverlayVisible)
-					return ret_val;
+					return;
 				
 				//handling right clicks for those icons which request simple right click handling
 				if (evnt.Button == 3) {
@@ -523,7 +534,7 @@ namespace Docky.Interface
 						itemPosition = itemPosition.RelativePointToRootPoint (window);
 						
 						PopupMenu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), itemPosition.X, itemPosition.Y);
-						return ret_val;
+						return;
 					}
 				}
 				
@@ -537,7 +548,7 @@ namespace Docky.Interface
 				
 				AnimatedDraw ();
 			}
-			return ret_val;
+			return;
 		}
 
 		protected override bool OnScrollEvent (Gdk.EventScroll evnt)
@@ -640,6 +651,7 @@ namespace Docky.Interface
 			} else {
 				return false;
 			}
+			window.PresentWindow ();
 			UnregisterGtkDragSource ();
 			return true;
 		}
@@ -661,6 +673,7 @@ namespace Docky.Interface
 				return false; 
 			});
 
+			window.UnpresentWindow ();
 			RegisterGtkDragSource ();
 			return true;
 		}
@@ -673,6 +686,9 @@ namespace Docky.Interface
 			Painter = null;
 			PainterOverlayVisible = false;
 			interface_change_time = DateTime.UtcNow;
+			
+			RegisterGtkDragSource ();
+			window.UnpresentWindow ();
 
 			SetParentInputMask ();
 			AnimatedDraw ();
