@@ -432,8 +432,10 @@ namespace Docky.Interface
 			
 			cr = new Cairo.Context (backbuffer);
 			cr.AlphaFill ();
-			cr.Color = new Cairo.Color (1, 0, 0, .1);
-			cr.Paint ();
+			cr.Rectangle (0, 0, Width, Height);
+			cr.LineWidth = 4;
+			cr.Color = new Cairo.Color (1, 0, 0, .4);
+			cr.Stroke ();
 
 			if (DockServices.ItemsService.UpdatesEnabled)
 				DrawDrock (cr);
