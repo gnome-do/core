@@ -415,10 +415,10 @@ namespace Docky.Interface
 
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
-			bool ret_val = base.OnExposeEvent (evnt);
+			bool result = base.OnExposeEvent (evnt);
 			
 			if (!IsDrawable || window.IsRepositionHidden)
-				return ret_val;
+				return result;
 			
 			Context cr;
 			if (backbuffer == null) {
@@ -451,7 +451,7 @@ namespace Docky.Interface
 			((IDisposable)cr2.Target).Dispose ();
 			((IDisposable)cr2).Dispose ();
 			
-			return ret_val;
+			return result;
 		}
 	}
 }

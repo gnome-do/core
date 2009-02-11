@@ -28,6 +28,7 @@ namespace Docky.Interface.Painters
 	public class CalendarPainter : IDockPainter
 	{
 		const int ArrowSize = 8;
+		const int Spacing = 25;
 		
 		DateTime DisplayDate { get; set; }
 		
@@ -36,7 +37,7 @@ namespace Docky.Interface.Painters
 		}
 		
 		int TotalWidth {
-			get { return DaysInDate * 25; }
+			get { return DaysInDate * Spacing; }
 		}
 		
 		#region IDockPainter implementation 
@@ -62,7 +63,7 @@ namespace Docky.Interface.Painters
 			
 			for (int i = 1; i <= DaysInDate; i++) {
 				int y = 0;
-				string tmp = "<b>" + i.ToString ().PadLeft (2, '0') + "</b>";
+				string tmp = string.Format ("<b>{0:00}</b>", i);
 				DateTime local_date = new DateTime (DisplayDate.Year, DisplayDate.Month, i);
 				Cairo.Color color;
 				
@@ -75,11 +76,11 @@ namespace Docky.Interface.Painters
 				}
 				
 				if (local_date == DateTime.Today) {
-					tmp = "<span underline=\"single\">" + tmp + "</span>";
+					tmp = string.Format ("<span underline=\"single\">{0}</span>", tmp);
 					color = new Cairo.Color (1, .6, .5);
 				}
 					
-				Gdk.Point drawing_point = new Gdk.Point (startX + (i - 1) * 25, y);
+				Gdk.Point drawing_point = new Gdk.Point (startX + (i - 1) * Spacing, y);
 				DockServices.DrawingService.TextPathAtPoint (cr, tmp, drawing_point, dockArea.Width,
 				                                             Pango.Alignment.Left);
 				cr.Color = color;

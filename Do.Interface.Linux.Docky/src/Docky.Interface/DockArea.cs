@@ -497,10 +497,10 @@ namespace Docky.Interface
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
-			bool ret_val = base.OnButtonPressEvent (evnt);
+			bool result = base.OnButtonPressEvent (evnt);
 			HandleButtonReleaseEvent (evnt);
 			
-			return ret_val;
+			return result;
 		}
 		
 		private void HandleButtonReleaseEvent (Gdk.EventButton evnt)
