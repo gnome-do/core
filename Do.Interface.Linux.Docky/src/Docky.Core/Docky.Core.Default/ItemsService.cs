@@ -79,8 +79,6 @@ namespace Docky.Core.Default
 		
 		AbstractDockItem Separator { get; set; }
 		AbstractDockItem MenuItem { get; set; }
-		AbstractDockItem TrashItem { get; set; }
-		AbstractDockItem ClockItem { get; set; }
 		
 		IEnumerable<ItemDockItem> DraggableItems {
 			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
@@ -103,16 +101,13 @@ namespace Docky.Core.Default
 						output_items.AddRange (task_items.Cast<AbstractDockItem> ().OrderBy (bdi => bdi.DockAddItem));
 					}
 				
-					if (DockPreferences.ShowTrash || DockPreferences.ShowClock) {
+					if (DockServices.DockletService.ActiveDocklets.Any ()) {
 						output_items.Add (Separator);
 						
-						if (DockPreferences.ShowClock)
-							output_items.Add (ClockItem);
-						
-						if (DockPreferences.ShowTrash)
-							output_items.Add (TrashItem);
+						foreach (AbstractDockletItem adi in DockServices.DockletService.ActiveDocklets) {
+							output_items.Add (adi);
+						}
 					}
-					
 				}
 				return readonly_items;
 			}
@@ -122,8 +117,6 @@ namespace Docky.Core.Default
 		{
 			Separator = new SeparatorItem ();
 			MenuItem = new DoDockItem ();
-			TrashItem = new TrashDockItem ();
-			ClockItem = new ClockDockItem ();
 			
 			custom_items = new Dictionary<string, ItemDockItem> ();
 			statistical_items = new List<ItemDockItem> ();
@@ -143,25 +136,44 @@ namespace Docky.Core.Default
 			Services.Core.UniverseInitialized += OnUniverseInitialized;
 			Wnck.Screen.Default.WindowClosed += OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened += OnWindowOpened;
-			DockPreferences.AppletVisibilityChanged += OnDockItemsChanged;
 			DockPreferences.AutomaticIconsChanged += UpdateItems;
 			
-			ClockItem.UpdateNeeded += HandleUpdateNeeded;
-			TrashItem.UpdateNeeded += HandleUpdateNeeded;
+			DockServices.DockletService.AppletVisibilityChanged += HandleAppletVisibilityChanged; 
 			MenuItem.UpdateNeeded += HandleUpdateNeeded;
+			
+			RegisterDocklets ();
 		}
 		
+		void RegisterDocklets ()
+		{
+			foreach (AbstractDockItem item in DockServices.DockletService.Docklets) {
+				item.UpdateNeeded += HandleUpdateNeeded;
+			}
+		}
+
 		void UnregisterEvents ()
 		{
 			Services.Core.UniverseInitialized -= OnUniverseInitialized;
 			Wnck.Screen.Default.WindowClosed -= OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened -= OnWindowOpened;
-			DockPreferences.AppletVisibilityChanged -= OnDockItemsChanged;
 			DockPreferences.AutomaticIconsChanged -= UpdateItems;
 			
-			ClockItem.UpdateNeeded -= HandleUpdateNeeded;
-			TrashItem.UpdateNeeded -= HandleUpdateNeeded;
+			DockServices.DockletService.AppletVisibilityChanged -= HandleAppletVisibilityChanged; 
 			MenuItem.UpdateNeeded -= HandleUpdateNeeded;
+			
+			UnregisterDocklets ();
+		}
+		
+		void UnregisterDocklets ()
+		{
+			foreach (AbstractDockItem item in DockServices.DockletService.Docklets) {
+				item.UpdateNeeded -= HandleUpdateNeeded;
+			}
+		}
+		
+		void HandleAppletVisibilityChanged(object sender, EventArgs e)
+		{
+			OnDockItemsChanged ();
 		}
 		
 		private void OnWindowClosed (object o, WindowClosedArgs args) 
@@ -358,6 +370,8 @@ namespace Docky.Core.Default
 		
 		void HandleUpdateNeeded(object sender, UpdateRequestArgs args)
 		{
+			if (!DockItems.Contains (args.Item))
+				return;
 			if (ItemNeedsUpdate != null)
 				ItemNeedsUpdate (this, args);
 		}
@@ -619,9 +633,6 @@ namespace Docky.Core.Default
 				
 				di.Dispose ();
 			}
-
-			if (!DockItems.Contains (TrashItem))
-				TrashItem.Dispose ();
 			
 			if (!DockItems.Contains (Separator))
 				Separator.Dispose ();

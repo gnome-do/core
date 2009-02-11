@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Cairo;
 using Gdk;
@@ -40,8 +41,8 @@ namespace Docky.Interface
 	public class DoDockItem : AbstractDockItem, IRightClickable
 	{
 		const string DoIcon = "gnome-do";
-		const string EnableIcon = "gtk-apply";
-		const string DisableIcon = "gtk-remove";
+		public const string EnableIcon = "gtk-apply";
+		public const string DisableIcon = "gtk-remove";
 		const string Text = "Summon GNOME Do";
 
 		HotSeatPainter hot_seat_painter;
@@ -106,11 +107,9 @@ namespace Docky.Interface
 			
 			yield return new SeparatorMenuButtonArgs ();
 			
-			yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowClock = !DockPreferences.ShowClock, 
-			                                       Catalog.GetString ("Show Clock"), DockPreferences.ShowClock ? EnableIcon : DisableIcon);
-			
-			yield return new SimpleMenuButtonArgs (() => DockPreferences.ShowTrash = !DockPreferences.ShowTrash, 
-			                                       Catalog.GetString ("Show Trash"), DockPreferences.ShowTrash ? EnableIcon : DisableIcon);
+			foreach (AbstractDockletItem dockitem in DockServices.DockletService.Docklets) {
+				yield return new ToggleDockletMenuButtonArgs (dockitem);
+			}
 			
 			yield return new SeparatorMenuButtonArgs ();
 			

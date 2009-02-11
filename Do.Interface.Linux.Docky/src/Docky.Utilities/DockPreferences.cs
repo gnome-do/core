@@ -34,7 +34,6 @@ namespace Docky.Utilities
 	{
 		public static event Action AutohideChanged;
 		public static event Action IconSizeChanged;
-		public static event Action AppletVisibilityChanged;
 		public static event Action AutomaticIconsChanged;
 		public static event Action MonitorChanged;
 		public static event Action AllowOverlapChanged;
@@ -166,34 +165,6 @@ namespace Docky.Utilities
 				
 				if (AllowOverlapChanged != null)
 					AllowOverlapChanged ();
-			}
-		}
-		
-		static bool show_trash = prefs.Get ("ShowTrash", false);
-		public static bool ShowTrash {
-			get { return show_trash; }
-			set {
-				if (show_trash == value)
-					return;
-				prefs.Set ("ShowTrash", value);
-				show_trash = value;
-				
-				if (AppletVisibilityChanged != null)
-					AppletVisibilityChanged ();
-			}
-		}
-		
-		static bool show_clock = prefs.Get ("ShowClock", true);
-		public static bool ShowClock {
-			get { return show_clock; }
-			set {
-				if (show_clock == value)
-					return;
-				prefs.Set ("ShowClock", value);
-				show_clock = value;
-				
-				if (AppletVisibilityChanged != null)
-					AppletVisibilityChanged ();
 			}
 		}
 		

@@ -34,10 +34,16 @@ namespace Docky.Interface
 {
 	
 	
-	public class ClockDockItem : AbstractDockItem
+	public class ClockDockItem : AbstractDockletItem
 	{
 		int minute;
 		CalendarPainter cal_painter;
+		
+		public override string Name {
+			get {
+				return "Clock";
+			}
+		}
 		
 		public override ScalingType ScalingType {
 			get {

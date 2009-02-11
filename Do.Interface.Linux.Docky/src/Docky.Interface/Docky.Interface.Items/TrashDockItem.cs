@@ -34,7 +34,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class TrashDockItem :  AbstractDockItem
+	public class TrashDockItem :  AbstractDockletItem
 	{
 		const string TrashEmptyIcon = "gnome-stock-trash";
 		const string TrashFullIcon = "gnome-stock-trash-full";
@@ -50,6 +50,13 @@ namespace Docky.Interface
 		public override bool IsAcceptingDrops {
 			get { return true; }
 		}
+		
+		public override string Name {
+			get {
+				return "Trash";
+			}
+		}
+
 		
 		public TrashDockItem()
 		{

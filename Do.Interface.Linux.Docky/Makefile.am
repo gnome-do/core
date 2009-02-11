@@ -7,6 +7,7 @@ TARGET = library
 FILES = \
 	AssemblyInfo.cs \
 	src/Docky.Core/DockServices.cs \
+	src/Docky.Core/IDockletService.cs \
 	src/Docky.Core/IDockService.cs \
 	src/Docky.Core/IDrawingService.cs \
 	src/Docky.Core/IItemsService.cs \
@@ -15,6 +16,7 @@ FILES = \
 	src/Docky.Core/Docky.Core.Default/ItemsService.cs \
 	src/Docky.Core/Docky.Core.Default/DrawingService.cs \
 	src/Docky.Core/Docky.Core.Default/DoInteropService.cs \
+	src/Docky.Core/Docky.Core.Default/DockletService.cs \
 	src/Docky.Core/Docky.Core.Default/PainterService.cs \
 	src/Docky.Interface/ClickAnimationType.cs \
 	src/Docky.Interface/DockArea.cs \
@@ -23,6 +25,7 @@ FILES = \
 	src/Docky.Interface/DockAnimationState.cs \
 	src/Docky.Interface/DoInteropService.cs \
 	src/Docky.Interface/Docky.Interface.Items/AbstractDockItem.cs \
+	src/Docky.Interface/Docky.Interface.Items/AbstractDockletItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/ActionDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/ClockDockItem.cs \
@@ -39,6 +42,7 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Menus/RunnableMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/SimpleMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/SeparatorMenuButtonArgs.cs \
+	src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs \
 	src/Docky.Interface/DockState.cs \
 	src/Docky.Interface/DockWindow.cs \

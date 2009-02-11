@@ -32,6 +32,15 @@ namespace Docky.Core
 		static IDrawingService drawing_service;
 		static IDoInteropService do_interop_service;
 		static IPainterService painter_service;
+		static IDockletService docklet_service;
+		
+		public static IDockletService DockletService {
+			get {
+				if (docklet_service == null)
+					docklet_service = LoadService<IDockletService, Default.DockletService> ();
+				return docklet_service;
+			}
+		}
 		
 		public static IItemsService ItemsService {
 			get { 

@@ -32,15 +32,22 @@ namespace Docky.Interface.Menus
 		}
 		
 		public string Description {
-			get; private set;
+			get; protected set;
 		}
 		
 		public string Icon {
-			get; private set;
+			get; protected set;
 		}
 		
 		public bool Sensitive {
-			get; private set; 
+			get; protected set; 
+		}
+		
+		public AbstractMenuButtonArgs ()
+		{
+			Description = "";
+			Icon = "";
+			Sensitive = true;
 		}
 		
 		public AbstractMenuButtonArgs (string description, string icon, bool sensitive)

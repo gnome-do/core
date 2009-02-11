@@ -1,5 +1,4 @@
-<Combine name="Do" fileversion="2.0" outputpath="build/bin/">
-  <Policies />
+<Combine fileversion="2.0" outputpath="build/bin/" name="Do">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Debug" />
