@@ -194,7 +194,6 @@ namespace Docky.Interface.Painters
 		
 		public void Dispose ()
 		{
-			throw new System.NotImplementedException();
 		}
 		
 		#endregion 

@@ -517,6 +517,7 @@ namespace Docky.Core.Default
 			
 			IEnumerable<Item> mostUsedItems = MostUsedItems ();
 			
+			DateTime currentTime = DateTime.UtcNow;
 			foreach (Item item in mostUsedItems) {
 				if (custom_items.Values.Any (di => di.Element == item))
 					continue;
@@ -527,7 +528,7 @@ namespace Docky.Core.Default
 					ItemDockItem di = new ItemDockItem (item);
 					di.RemoveClicked += HandleRemoveClicked;
 					di.UpdateNeeded += HandleUpdateNeeded;
-					di.DockAddItem = DateTime.UtcNow;
+					di.DockAddItem = currentTime;
 					
 					int position = LastPosition + 1;
 
