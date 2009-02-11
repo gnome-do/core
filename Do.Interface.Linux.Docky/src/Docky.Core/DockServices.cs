@@ -37,7 +37,7 @@ namespace Docky.Core
 		public static IDockletService DockletService {
 			get {
 				if (docklet_service == null)
-					docklet_service = LoadService<IDockletService, Default.DockletService> ();
+					docklet_service = new Default.DockletService () as IDockletService;
 				return docklet_service;
 			}
 		}
@@ -83,12 +83,6 @@ namespace Docky.Core
 		{
 			if (!services.Contains (service))
 				return;
-			
-//			if (ItemsService == service)
-//				items_service = null;
-			
-//			if (DrawingService == service)
-//				drawing_service = null;
 			
 			if (DoInteropService == service)
 				do_interop_service = null;
