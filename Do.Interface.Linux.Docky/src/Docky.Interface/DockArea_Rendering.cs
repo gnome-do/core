@@ -41,6 +41,7 @@ namespace Docky.Interface
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		IDockPainter painter, last_painter;
 		Matrix default_matrix;
+		long render_count = 0;
 		
 		DateTime ActiveIconChangeTime { get; set; }
 
@@ -209,6 +210,7 @@ namespace Docky.Interface
 		void DrawIcons (Context cr)
 		{
 			cr.AlphaFill ();
+			Console.WriteLine ("Drawing icons: {0} {1}", DockItems.Count, render_count++);
 			for (int i = 0; i < DockItems.Count; i++)
 				DrawIcon (cr, i);
 		}

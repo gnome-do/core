@@ -385,7 +385,7 @@ namespace Docky.Interface
 			
 			// the presense of this queue draw has caused some confusion, so I will explain.
 			// first its here to draw the "first frame".  Without it, we have a 16ms delay till that happens,
-			// however minor that is.  We do everything after 16ms (about 60fps) so we will keep this up.
+			// however minor that is.
 			QueueDraw ();
 			if (AnimationState.AnimationNeeded)
 				animation_timer = GLib.Timeout.Add (1000/50, OnDrawTimeoutElapsed);
