@@ -439,17 +439,17 @@ namespace Docky.Interface
 				DrawDrock (cr);
 			(cr as IDisposable).Dispose ();
 			
-			Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
+			cr = Gdk.CairoHelper.Create (GdkWindow);
 			
 			Gdk.Point finalTarget = new Gdk.Point (0, 0).RelativeMovePoint (VerticalOffset, RelativeMove.Outward);
-			cr2.SetSource (backbuffer, finalTarget.X, finalTarget.Y);
+			cr.SetSource (backbuffer, finalTarget.X, finalTarget.Y);
 			
-			cr2.Operator = Operator.Source;
-			cr2.Paint ();
+			cr.Operator = Operator.Source;
+			cr.Paint ();
 			
-			cr2.Target.Destroy ();
-			((IDisposable)cr2.Target).Dispose ();
-			((IDisposable)cr2).Dispose ();
+			cr.Target.Destroy ();
+			((IDisposable)cr.Target).Dispose ();
+			((IDisposable)cr).Dispose ();
 			
 			return result;
 		}

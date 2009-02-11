@@ -568,8 +568,6 @@ namespace Docky.Core.Default
 				di.UpdateApplication ();
 			}
 			
-			if (Wnck.Screen.Default.ActiveWorkspace == null)
-				return;
 			List<ApplicationDockItem> out_items = new List<ApplicationDockItem> ();
 
 			IEnumerable<int> knownPids = statistical_items.Concat (custom_items.Values).SelectMany (di => di.Pids);

@@ -84,11 +84,11 @@ namespace Docky.Core
 			if (!services.Contains (service))
 				return;
 			
-			if (ItemsService == service)
-				items_service = null;
+//			if (ItemsService == service)
+//				items_service = null;
 			
-			if (DrawingService == service)
-				drawing_service = null;
+//			if (DrawingService == service)
+//				drawing_service = null;
 			
 			if (DoInteropService == service)
 				do_interop_service = null;
@@ -108,28 +108,6 @@ namespace Docky.Core
 			} else {
 				return Activator.CreateInstance<TElse> () as TService;
 			}
-		}
-		
-		public static void Reset ()
-		{
-			if (items_service != null)
-				items_service.Dispose ();
-			
-			if (drawing_service != null)
-				drawing_service.Dispose ();
-			
-			if (do_interop_service != null)
-				do_interop_service.Dispose ();
-			
-			if (painter_service != null)
-				painter_service.Dispose ();
-			
-			items_service = null;
-			drawing_service = null;
-			do_interop_service = null;
-			painter_service = null;
-			
-			services.Clear ();
 		}
 	}
 }

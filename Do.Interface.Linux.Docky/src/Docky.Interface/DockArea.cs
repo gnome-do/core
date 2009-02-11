@@ -282,8 +282,6 @@ namespace Docky.Interface
 
 			Services.Core.UniverseInitialized += HandleUniverseInitialized;
 			
-			Wnck.Screen.Default.ViewportsChanged += OnWnckViewportsChanged;
-
 			Realized += (o, e) => SetParentInputMask ();
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
 			
@@ -300,8 +298,6 @@ namespace Docky.Interface
 
 			PopupMenu.Hidden -= OnDockItemMenuHidden;
 			PopupMenu.Shown -= OnDockItemMenuShown;
-
-			Wnck.Screen.Default.ViewportsChanged -= OnWnckViewportsChanged;
 		}
 		
 		void BuildAnimationStateEngine ()
@@ -420,12 +416,6 @@ namespace Docky.Interface
 			// While an popup menus are being showing, the dock does not recieve mouse updates.  This is
 			// both a good thing and a bad thing.  We must at the very least update the cursor position once the
 			// popup is no longer in view.
-			ManualCursorUpdate ();
-			AnimatedDraw ();
-		}
-		
-		void OnWnckViewportsChanged (object o, EventArgs e)
-		{
 			ManualCursorUpdate ();
 			AnimatedDraw ();
 		}
