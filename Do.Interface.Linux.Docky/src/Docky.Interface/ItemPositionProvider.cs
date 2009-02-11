@@ -30,7 +30,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class ItemPositionProvider : IDisposable
+	internal class ItemPositionProvider : IDisposable
 	{
 		const int HorizontalBuffer = 7;
 		
@@ -81,7 +81,7 @@ namespace Docky.Interface
 		
 		public Rectangle MinimumDockArea { get; private set; }
 		
-		public ItemPositionProvider(DockArea parent)
+		internal ItemPositionProvider(DockArea parent)
 		{
 			this.parent = parent;
 			MinimumDockArea = CalculateMinimumArea ();

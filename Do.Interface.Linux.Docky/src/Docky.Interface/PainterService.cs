@@ -25,7 +25,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class PainterService : IPainterService
+	internal class PainterService : IPainterService
 	{
 		ICollection<IDockPainter> painters;
 		DockArea parent;
@@ -61,7 +61,7 @@ namespace Docky.Interface
 		
 		#endregion 
 		
-		public PainterService (DockArea parent)
+		internal PainterService (DockArea parent)
 		{
 			this.parent = parent;
 			painters = new List<IDockPainter> ();

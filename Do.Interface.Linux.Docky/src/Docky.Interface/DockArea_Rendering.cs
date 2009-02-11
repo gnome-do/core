@@ -34,7 +34,7 @@ namespace Docky.Interface
 {
 	
 	
-	public partial class DockArea
+	internal partial class DockArea
 	{
 		Dictionary<IDockPainter, Surface> painter_surfaces;
 		
@@ -417,10 +417,8 @@ namespace Docky.Interface
 
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
-			bool result = base.OnExposeEvent (evnt);
-			
-			if (!IsDrawable || window.IsRepositionHidden)
-				return result;
+			if (!IsDrawable)
+				return false;
 			
 			Context cr;
 			if (backbuffer == null) {
@@ -451,7 +449,7 @@ namespace Docky.Interface
 			((IDisposable)cr.Target).Dispose ();
 			((IDisposable)cr).Dispose ();
 			
-			return result;
+			return true;
 		}
 	}
 }

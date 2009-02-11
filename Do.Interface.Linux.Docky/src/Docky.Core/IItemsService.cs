@@ -35,13 +35,14 @@ namespace Docky.Core
 	public interface IItemsService : IDockService
 	{
 		event DockItemsChangedHandler DockItemsChanged;
+		
 		event UpdateRequestHandler ItemNeedsUpdate;
 		
 		/// <summary>
 		/// Enable and disable updates to the items in the list.  
 		/// Useful when universe is still being set up.
 		/// </summary>
-		bool UpdatesEnabled { get; set; }
+		bool UpdatesEnabled { get; }
 		
 		/// <summary>
 		/// gets a read only collection of the dock items

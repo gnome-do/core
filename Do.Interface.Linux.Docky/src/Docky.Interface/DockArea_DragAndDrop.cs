@@ -37,7 +37,7 @@ namespace Docky.Interface
 {
 	
 	
-	public partial class DockArea
+	internal partial class DockArea
 	{
 		enum DragEdge {
 			None = 0,

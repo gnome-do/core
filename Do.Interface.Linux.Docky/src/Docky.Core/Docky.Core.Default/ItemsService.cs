@@ -86,7 +86,7 @@ namespace Docky.Core.Default
 		
 		bool HotSeatEnabled { get; set; }
 		
-		public bool UpdatesEnabled { get; set; }
+		public bool UpdatesEnabled { get; private set; }
 		
 		public ReadOnlyCollection<AbstractDockItem> DockItems {
 			get {

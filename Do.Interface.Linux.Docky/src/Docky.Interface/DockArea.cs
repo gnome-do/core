@@ -36,7 +36,7 @@ namespace Docky.Interface
 {
 	
 	
-	public partial class DockArea : Gtk.DrawingArea
+	internal partial class DockArea : Gtk.DrawingArea
 	{
 		public event System.Action CursorUpdated;
 		
