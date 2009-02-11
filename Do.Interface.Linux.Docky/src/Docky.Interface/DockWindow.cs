@@ -50,6 +50,7 @@ namespace Docky.Interface
 		Gdk.Rectangle current_mask;
 		uint strut_timer;
 		bool is_repositioned_hidden;
+		bool presented;
 		
 		public new string Name {
 			get { return "Docky"; }
@@ -176,8 +177,8 @@ namespace Docky.Interface
 			GetSize (out rect.Width, out rect.Height);
 			GetPosition (out rect.X, out rect.Y);
 			
-			if (!rect.Contains ((int) evnt.XRoot, (int) evnt.YRoot) && Visible) {
-				controller.ButtonPressOffWindow ();
+			if (!rect.Contains ((int) evnt.XRoot, (int) evnt.YRoot)) {
+				dock_area.ProxyButtonReleaseEvent (evnt);
 			}
 			
 			return base.OnButtonReleaseEvent (evnt);
@@ -311,6 +312,22 @@ namespace Docky.Interface
 			return false;
 		}
 
+		public void PresentWindow ()
+		{
+			if (!presented)
+				Windowing.PresentWindow (this);
+			
+			presented = true;
+		}
+		
+		public void UnpresentWindow ()
+		{
+			if (presented)
+				Windowing.UnpresentWindow (this);
+			
+			presented = false;
+		}
+		
 		#region IDoWindow implementation 
 		
 		public new event DoEventKeyDelegate KeyPressEvent;
@@ -320,14 +337,14 @@ namespace Docky.Interface
 			Visible = true;
 			results_window.Show ();
 			Reposition ();
-			Windowing.PresentWindow (this);
+			PresentWindow ();
 			interop_service.SignalSummon ();
 		}
 		
 		public void Vanish ()
 		{
 			Visible = false;
-			Windowing.UnpresentWindow (this);
+			UnpresentWindow ();
 			results_window.Hide ();
 			interop_service.SignalVanish ();
 		}

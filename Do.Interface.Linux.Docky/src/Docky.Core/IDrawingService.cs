@@ -24,6 +24,6 @@ namespace Docky.Core
 	{
 		Pango.Layout GetThemedLayout ();
 		
-		void RenderTextAtPoint (Cairo.Context cr, string text, Gdk.Point point, int maxWidth, Pango.Alignment align);
+		void TextPathAtPoint (Cairo.Context cr, string text, Gdk.Point leftCenterPoint, int maxWidth, Pango.Alignment align);
 	}
 }

@@ -415,10 +415,10 @@ namespace Docky.Interface
 
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
-			bool ret_val = base.OnExposeEvent (evnt);
+			bool result = base.OnExposeEvent (evnt);
 			
 			if (!IsDrawable || window.IsRepositionHidden)
-				return ret_val;
+				return result;
 			
 			Context cr;
 			if (backbuffer == null) {
@@ -432,7 +432,8 @@ namespace Docky.Interface
 			
 			cr = new Cairo.Context (backbuffer);
 			cr.AlphaFill ();
-			cr.Operator = Operator.Over;
+			cr.Color = new Cairo.Color (1, 0, 0, .1);
+			cr.Paint ();
 
 			if (DockServices.ItemsService.UpdatesEnabled)
 				DrawDrock (cr);
@@ -450,7 +451,7 @@ namespace Docky.Interface
 			((IDisposable)cr2.Target).Dispose ();
 			((IDisposable)cr2).Dispose ();
 			
-			return ret_val;
+			return result;
 		}
 	}
 }

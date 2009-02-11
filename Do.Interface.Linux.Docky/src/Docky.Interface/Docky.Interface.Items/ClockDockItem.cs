@@ -137,7 +137,7 @@ namespace Docky.Interface
 		
 		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)
 		{
-//			cal_painter.Summon ();
+			cal_painter.Summon ();
 			base.Clicked (button, state, position);
 		}
 	}
