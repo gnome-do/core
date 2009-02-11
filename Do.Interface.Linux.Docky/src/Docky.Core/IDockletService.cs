@@ -32,10 +32,6 @@ namespace Docky.Core
 		
 		IEnumerable<AbstractDockletItem> ActiveDocklets { get; }
 		
-		bool ActivateDocklet (AbstractDockletItem docklet);
-		
-		bool DeactiveDocklet (AbstractDockletItem docklet);
-		
 		bool ToggleDocklet (AbstractDockletItem docklet);
 	}
 }

@@ -37,26 +37,6 @@ namespace Docky.Core.Default
 		
 		public event EventHandler AppletVisibilityChanged;
 		
-		public bool ActivateDocklet (AbstractDockletItem docklet)
-		{
-			if (!docklets.ContainsKey (docklet) || docklets [docklet])
-				return false;
-			
-			docklets [docklet] = true;
-			OnAppletVisibilityChanged ();
-			return true;
-		}
-		
-		public bool DeactiveDocklet (AbstractDockletItem docklet)
-		{
-			if (!docklets.ContainsKey (docklet) || !docklets [docklet])
-				return false;
-			
-			docklets [docklet] = false;
-			OnAppletVisibilityChanged ();
-			return true;
-		}
-		
 		public bool ToggleDocklet (AbstractDockletItem docklet)
 		{
 			if (!docklets.ContainsKey (docklet))
