@@ -210,7 +210,6 @@ namespace Docky.Interface
 		void DrawIcons (Context cr)
 		{
 			cr.AlphaFill ();
-			Console.WriteLine ("Drawing icons: {0} {1}", DockItems.Count, render_count++);
 			for (int i = 0; i < DockItems.Count; i++)
 				DrawIcon (cr, i);
 		}
@@ -420,6 +419,7 @@ namespace Docky.Interface
 			if (!IsDrawable)
 				return false;
 			
+			Console.WriteLine ("Drawing Dock: {0} {1}", DockItems.Count, render_count++);
 			Context cr;
 			if (backbuffer == null) {
 				cr = Gdk.CairoHelper.Create (GdkWindow);
