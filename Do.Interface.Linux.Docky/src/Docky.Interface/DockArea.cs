@@ -53,6 +53,7 @@ namespace Docky.Interface
 		
 		DateTime enter_time = new DateTime (0);
 		DateTime interface_change_time = new DateTime (0);
+		DateTime last_draw_timeout = new DateTime (0);
 		
 		bool disposed;
 		
@@ -376,8 +377,18 @@ namespace Docky.Interface
 		
 		void AnimatedDraw ()
 		{
-			if (0 < animation_timer)
-				return;
+			if (0 < animation_timer) {
+				if ((DateTime.UtcNow - last_draw_timeout).TotalMilliseconds > 500) {
+					// honestly this should never happen.  I am not sure if it does but we are going
+					// to protect against it because there are reports of rendering failing. A condition
+					// where the animation_timer is > 0 without an actual callback tied to it would
+					// forever block future animations.
+					GLib.Source.Remove (animation_timer);
+					animation_timer = 0;
+				} else {
+					return;
+				}
+			}
 			
 			// the presense of this queue draw has caused some confusion, so I will explain.
 			// first its here to draw the "first frame".  Without it, we have a 16ms delay till that happens,
@@ -389,6 +400,7 @@ namespace Docky.Interface
 		
 		bool OnDrawTimeoutElapsed ()
 		{
+			last_draw_timeout = DateTime.UtcNow;
 			QueueDraw ();
 			// this is a "protected method".  We need to be sure that our input mask is okay on every frame.
 			// 99% of the time this means nothing at all will be done
