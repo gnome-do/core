@@ -388,8 +388,7 @@ namespace Docky.Interface
 			// the presense of this queue draw has caused some confusion, so I will explain.
 			// first its here to draw the "first frame".  Without it, we have a 16ms delay till that happens,
 			// however minor that is.
-			QueueDraw ();
-			SetParentInputMask ();
+			MaskAndDraw ();
 			
 			if (AnimationState.AnimationNeeded)
 				animation_timer = GLib.Timeout.Add (1000/50, OnDrawTimeoutElapsed);
@@ -398,10 +397,8 @@ namespace Docky.Interface
 		bool OnDrawTimeoutElapsed ()
 		{
 			last_draw_timeout = DateTime.UtcNow;
-			QueueDraw ();
-			// this is a "protected method".  We need to be sure that our input mask is okay on every frame.
-			// 99% of the time this means nothing at all will be done
-			SetParentInputMask ();
+			
+			MaskAndDraw ();
 			
 			if (AnimationState.AnimationNeeded)
 				return true;
@@ -410,6 +407,14 @@ namespace Docky.Interface
 			//the draw loop.
 			animation_timer = 0;
 			return false;
+		}
+		
+		void MaskAndDraw ()
+		{
+			QueueDraw ();
+			// this is a "protected method".  We need to be sure that our input mask is okay on every frame.
+			// 99% of the time this means nothing at all will be done
+			SetParentInputMask ();
 		}
 		
 		void OnDockItemsChanged (IEnumerable<AbstractDockItem> items)
