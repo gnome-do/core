@@ -18,14 +18,19 @@
 using System;
 using System.Collections.Generic;
 
+using Gdk;
+
+using Do.Interface;
+
 using Docky.Core;
 using Docky.Interface;
+using Docky.Utilities;
 
 namespace Docky.Interface.Painters
 {
 	
 	
-	public class CalendarPainter : IDockPainter
+	public class CalendarPainter : AbstractIntegratedPainter
 	{
 		const int ArrowSize = 8;
 		const int Spacing = 25;
@@ -42,13 +47,12 @@ namespace Docky.Interface.Painters
 		
 		#region IDockPainter implementation 
 		
-		public event EventHandler<PaintNeededArgs> PaintNeeded;
+		protected override Pixbuf GetIcon (int size)
+		{
+			return IconProvider.PixbufFromIconName ("calendar", DockPreferences.FullIconSize);
+		}
 		
-		public event EventHandler ShowRequested;
-		
-		public event EventHandler HideRequested;
-		
-		public void Paint (Cairo.Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
+		protected override void PaintArea (Cairo.Context cr, Gdk.Rectangle dockArea)
 		{
 			int centerLine = dockArea.Y + dockArea.Height / 2 + 5;
 			int topTextLine = centerLine - 15;
@@ -131,7 +135,7 @@ namespace Docky.Interface.Painters
 			return rect;
 		}
 		
-		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
+		protected override void ReceiveClick (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
 			Gdk.Rectangle left = LeftPointArea (dockArea);
 			Gdk.Rectangle right = RightPointArea (dockArea);
@@ -148,24 +152,7 @@ namespace Docky.Interface.Painters
 			} else if (dead.Contains (cursor)) {
 				// do nothing
 			} else {
-				if (HideRequested != null)
-					HideRequested (this, EventArgs.Empty);
-			}
-		}
-		
-		public void Interupt ()
-		{
-		}
-		
-		public bool DoubleBuffer {
-			get {
-				return false;
-			}
-		}
-		
-		public bool Interuptable {
-			get {
-				return true;
+				OnHideRequested ();
 			}
 		}
 		
@@ -180,23 +167,13 @@ namespace Docky.Interface.Painters
 		public void Summon ()
 		{
 			DisplayDate = DateTime.Today;
-			if (ShowRequested != null)
-				ShowRequested (this, EventArgs.Empty);
+			OnShowRequested ();
 		}
 		
 		void RequestDraw ()
 		{
-			if (PaintNeeded != null)
-				PaintNeeded (this, new PaintNeededArgs ());
-		}
-
-		#region IDisposable implementation 
-		
-		public void Dispose ()
-		{
-		}
-		
-		#endregion 
+			OnPaintNeeded (new PaintNeededArgs ());
+		} 
 		
 	}
 }
