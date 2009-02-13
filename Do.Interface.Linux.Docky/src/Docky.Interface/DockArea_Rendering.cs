@@ -416,7 +416,7 @@ namespace Docky.Interface
 
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
-			if (!IsDrawable)
+			if (!IsDrawable || window.IsRepositionHidden)
 				return false;
 			
 			Context cr;
