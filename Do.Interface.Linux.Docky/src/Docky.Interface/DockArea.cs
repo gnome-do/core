@@ -534,7 +534,7 @@ namespace Docky.Interface
 
 						Gdk.Point itemPosition = new Gdk.Point ((int) itemPosition_.X, (int) itemPosition_.Y);
 						
-						itemPosition = itemPosition.RelativeMovePoint ((int) (IconSize * itemZoom * .9) - IconSize / 2, RelativeMove.Inward);
+						itemPosition = itemPosition.RelativeMovePoint ((int) (IconSize * itemZoom * .9 * .5), RelativeMove.Inward);
 						itemPosition = itemPosition.RelativePointToRootPoint (window);
 						
 						PopupMenu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), itemPosition.X, itemPosition.Y);

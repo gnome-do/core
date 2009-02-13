@@ -122,7 +122,7 @@ namespace Docky.Interface.Painters
 		Gdk.Rectangle LeftPointArea (Gdk.Rectangle dockArea)
 		{
 			int height = dockArea.Y + 10;
-			int startX = dockArea.X + 110;
+			int startX = dockArea.X + dockArea.Width / 2 - 300;
 			
 			return new Gdk.Rectangle (startX, height - ArrowSize / 2, ArrowSize, ArrowSize);
 		}

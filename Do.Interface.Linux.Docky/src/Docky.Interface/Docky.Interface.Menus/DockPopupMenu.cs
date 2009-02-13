@@ -36,11 +36,12 @@ namespace Docky.Interface.Menus
 	
 	public class DockPopupMenu : Gtk.Window
 	{
-		const int TailHeight = 20;
+		const int TailHeight = 25;
 		new const int BorderWidth = 2;
 		const int Radius = 10;
 		const int Width = 230;
 		const double Pointiness = 1.5;
+		const double Curviness = 1;
 		
 		int horizontal_offset;
 		int vertical_offset;
@@ -244,49 +245,40 @@ namespace Docky.Interface.Menus
 			context.Translate (.5, .5);
 			mainArea.Width -= 1;
 			mainArea.Height -= 1;
-
+			
 			PointD topLeftRadialCenter = new PointD (mainArea.X + Radius, mainArea.Y + Radius);
 			PointD topRightRadialCenter = new PointD (mainArea.X + mainArea.Width - Radius, mainArea.Y + Radius);
 			PointD bottomRightRadialCenter = new PointD (mainArea.X + mainArea.Width - Radius, mainArea.Y + mainArea.Height - Radius);
 			PointD bottomLeftRadialCenter = new PointD (mainArea.X + Radius, mainArea.Y + mainArea.Height - Radius);
 
-			// draw top line
+
 			context.MoveTo (mainArea.X, mainArea.Y + Radius);
-			context.Arc (topLeftRadialCenter.X, topLeftRadialCenter.Y, Radius, Math.PI, Math.PI * 1.5);
 			if (DockPreferences.Orientation == DockOrientation.Top) {
-				PointD apex = new PointD (mainArea.X + mainArea.Width / 2 - horizontal_offset, BorderWidth);
-
-				context.LineTo (apex.X - 10 * Pointiness, mainArea.Y);
-				context.LineTo (apex);
-				context.LineTo (apex.X + 10 * Pointiness, mainArea.Y);
+				context.RelCurveTo (0, 0 - TailHeight * Curviness,
+				                    mainArea.Width / 2, 0 - TailHeight * (1 - Curviness),
+				                    mainArea.Width / 2, 0 - TailHeight);
+				context.RelCurveTo (0, TailHeight * Curviness,
+				                    mainArea.Width / 2, TailHeight * (1 - Curviness),
+				                    mainArea.Width / 2, TailHeight);
+			} else {
+				context.Arc (topLeftRadialCenter.X, topLeftRadialCenter.Y, Radius, Math.PI, Math.PI * 1.5);
+				context.Arc (topRightRadialCenter.X, topRightRadialCenter.Y, Radius, Math.PI * 1.5, Math.PI * 2);
 			}
-
-			context.Arc (topRightRadialCenter.X, topRightRadialCenter.Y, Radius, Math.PI * 1.5, Math.PI * 2);
-			if (DockPreferences.Orientation == DockOrientation.Right) {
-				PointD apex = new PointD (mainArea.X + mainArea.Width + TailHeight, mainArea.Y + mainArea.Height / 2 - vertical_offset);
-
-				context.LineTo (mainArea.X + mainArea.Width, apex.Y - 10 * Pointiness);
-				context.LineTo (apex);
-				context.LineTo (mainArea.X + mainArea.Width, apex.Y + 10 * Pointiness);
-			}
-
-			context.Arc (bottomRightRadialCenter.X, bottomRightRadialCenter.Y, Radius, 0, Math.PI * .5);
+			
 			if (DockPreferences.Orientation == DockOrientation.Bottom) {
-				PointD apex = new PointD (mainArea.X + mainArea.Width / 2 - horizontal_offset, mainArea.Y + mainArea.Height + TailHeight);
-
-				context.LineTo (apex.X + 10 * Pointiness, mainArea.Y + mainArea.Height);
-				context.LineTo (apex);
-				context.LineTo (apex.X - 10 * Pointiness, mainArea.Y + mainArea.Height);
+				context.LineTo (bottomRightRadialCenter.X + Radius, bottomRightRadialCenter.Y);
+				context.RelCurveTo (0, TailHeight * Curviness,
+				                    0 - mainArea.Width / 2, TailHeight * (1 - Curviness),
+				                    0 - mainArea.Width / 2, TailHeight);
+				
+				context.RelCurveTo (0, 0 - TailHeight * Curviness,
+				                    0 - mainArea.Width / 2, 0 - TailHeight * (1 - Curviness),
+				                    0 - mainArea.Width / 2, 0 - TailHeight);
+			} else {
+				context.Arc (bottomRightRadialCenter.X, bottomRightRadialCenter.Y, Radius, 0, Math.PI * .5);
+				context.Arc (bottomLeftRadialCenter.X, bottomLeftRadialCenter.Y, Radius, Math.PI * .5, Math.PI);
 			}
-
-			context.Arc (bottomLeftRadialCenter.X, bottomLeftRadialCenter.Y, Radius, Math.PI * .5, Math.PI);
-			if (DockPreferences.Orientation == DockOrientation.Left) {
-				PointD apex = new PointD (BorderWidth, mainArea.Y + mainArea.Height / 2 - vertical_offset);
-
-				context.LineTo (mainArea.X, apex.Y + 10 * Pointiness);
-				context.LineTo (apex);
-				context.LineTo (mainArea.X, apex.Y - 10 * Pointiness);
-			}
+			
 
 			context.ClosePath ();
 
