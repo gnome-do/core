@@ -38,8 +38,6 @@ namespace Docky.Interface
 	
 	internal partial class DockArea : Gtk.DrawingArea
 	{
-		public event System.Action CursorUpdated;
-		
 		public static readonly TimeSpan BaseAnimationTime = new TimeSpan (0, 0, 0, 0, 150);
 		
 		const uint OffDockWakeupTime = 250;
@@ -164,9 +162,6 @@ namespace Docky.Interface
 				bool cursorIsOverDockArea = CursorIsOverDockArea;
 				cursor = value;
 
-				if (CursorUpdated != null)
-					CursorUpdated ();
-				
 				// We set this value here instead of dynamically checking due to performance constraints.
 				// Ideally our CursorIsOverDockArea getter would do this fairly simple calculation, but it gets
 				// called about 20 to 30 times per render loop, so the savings do add up.

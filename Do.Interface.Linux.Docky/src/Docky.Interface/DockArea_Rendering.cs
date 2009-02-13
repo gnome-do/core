@@ -41,7 +41,6 @@ namespace Docky.Interface
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		IDockPainter painter, last_painter;
 		Matrix default_matrix;
-		long render_count = 0;
 		
 		DateTime ActiveIconChangeTime { get; set; }
 

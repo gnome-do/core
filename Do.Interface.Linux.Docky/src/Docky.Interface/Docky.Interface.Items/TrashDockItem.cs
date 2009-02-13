@@ -78,9 +78,7 @@ namespace Docky.Interface
 
 		void HandleChanged(object sender, FileSystemEventArgs e)
 		{
-			Gtk.Application.Invoke (delegate {
-				RedrawIcon ();
-			});
+			ResetSurfaces ();
 		}
 		
 		protected override Pixbuf GetSurfacePixbuf (int size)

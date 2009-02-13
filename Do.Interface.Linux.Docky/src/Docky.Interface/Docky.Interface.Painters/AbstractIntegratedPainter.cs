@@ -38,11 +38,6 @@ namespace Docky.Interface.Painters
 		
 		Surface icon_surface;
 		
-		public AbstractIntegratedPainter ()
-		{
-			Gdk.Pixbuf icon = GetIcon (DockPreferences.FullIconSize);
-		}
-		
 		protected abstract Gdk.Pixbuf GetIcon (int size);
 		
 		protected abstract void PaintArea (Cairo.Context context, Gdk.Rectangle paintableArea);
