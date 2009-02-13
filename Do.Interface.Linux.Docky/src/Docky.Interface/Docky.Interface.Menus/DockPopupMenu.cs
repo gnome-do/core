@@ -42,6 +42,7 @@ namespace Docky.Interface.Menus
 		const int Width = 230;
 		const double Pointiness = 1.5;
 		const double Curviness = 1;
+		const double Bluntness = 2;
 		
 		int horizontal_offset;
 		int vertical_offset;
@@ -255,9 +256,9 @@ namespace Docky.Interface.Menus
 			context.MoveTo (mainArea.X, mainArea.Y + Radius);
 			if (DockPreferences.Orientation == DockOrientation.Top) {
 				context.RelCurveTo (0, 0 - TailHeight * Curviness,
-				                    mainArea.Width / 2, 0 - TailHeight * (1 - Curviness),
+				                    mainArea.Width / 2 - 10 * Bluntness, 0 - TailHeight * (1 - Curviness),
 				                    mainArea.Width / 2, 0 - TailHeight);
-				context.RelCurveTo (0, TailHeight * Curviness,
+				context.RelCurveTo (10 * Bluntness, TailHeight * Curviness,
 				                    mainArea.Width / 2, TailHeight * (1 - Curviness),
 				                    mainArea.Width / 2, TailHeight);
 			} else {
@@ -268,10 +269,10 @@ namespace Docky.Interface.Menus
 			if (DockPreferences.Orientation == DockOrientation.Bottom) {
 				context.LineTo (bottomRightRadialCenter.X + Radius, bottomRightRadialCenter.Y);
 				context.RelCurveTo (0, TailHeight * Curviness,
-				                    0 - mainArea.Width / 2, TailHeight * (1 - Curviness),
+				                    0 - mainArea.Width / 2 + 10 * Bluntness, TailHeight * (1 - Curviness),
 				                    0 - mainArea.Width / 2, TailHeight);
 				
-				context.RelCurveTo (0, 0 - TailHeight * Curviness,
+				context.RelCurveTo (0 - 10 * Bluntness, 0 - TailHeight * Curviness,
 				                    0 - mainArea.Width / 2, 0 - TailHeight * (1 - Curviness),
 				                    0 - mainArea.Width / 2, 0 - TailHeight);
 			} else {
