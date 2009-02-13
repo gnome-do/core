@@ -389,6 +389,8 @@ namespace Docky.Interface
 			// first its here to draw the "first frame".  Without it, we have a 16ms delay till that happens,
 			// however minor that is.
 			QueueDraw ();
+			SetParentInputMask ();
+			
 			if (AnimationState.AnimationNeeded)
 				animation_timer = GLib.Timeout.Add (1000/50, OnDrawTimeoutElapsed);
 		}
