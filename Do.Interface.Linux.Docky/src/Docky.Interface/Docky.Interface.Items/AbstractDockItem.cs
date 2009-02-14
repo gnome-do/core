@@ -36,7 +36,7 @@ namespace Docky.Interface
 	{
 		public event UpdateRequestHandler UpdateNeeded;
 		
-		Surface text_surface, resize_buffer;
+		Surface text_surface, resize_buffer, secondary_resize_buffer;
 		DockOrientation current_orientation;
 		uint size_changed_timer;
 		protected int current_size;
@@ -250,7 +250,9 @@ namespace Docky.Interface
 			if (size_changed_timer > 0)
 				GLib.Source.Remove (size_changed_timer);
 			
-			if (IconSurface != null) {
+			if (ScalingType == ScalingType.HighLow) {
+				ResetSurfaces ();
+			} else if (IconSurface != null) {
 				if (resize_buffer == null)
 					resize_buffer = CopySurface (IconSurface, current_size, current_size);
 				
@@ -259,7 +261,7 @@ namespace Docky.Interface
 				                                                  DockPreferences.FullIconSize);
 				using (Context cr = new Context (new_surface)) {
 					double scale;
-					if (ScalingType == ScalingType.Downscaled || ScalingType == ScalingType.HighLow)
+					if (ScalingType == ScalingType.Downscaled)
 						scale = (double) DockPreferences.FullIconSize / (double) current_size;
 					else
 						scale = (double) DockPreferences.IconSize / (double) current_size;
