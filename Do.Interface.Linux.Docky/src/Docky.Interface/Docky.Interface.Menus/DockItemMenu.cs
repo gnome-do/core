@@ -94,7 +94,8 @@ namespace Docky.Interface.Menus
 				hbox.PackStart (label, true, true, 2);
 				
 				Gtk.Button button = new Button (hbox);
-				button.TooltipText = arg.Description;
+				if (arg is WindowMenuButtonArgs)
+					button.TooltipText = arg.Description;
 				
 				button.Clicked += arg.Handler;
 				button.Clicked += OnButtonClicked;
