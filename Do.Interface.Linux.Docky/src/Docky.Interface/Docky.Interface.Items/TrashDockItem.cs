@@ -131,6 +131,7 @@ namespace Docky.Interface
 			Directory.Delete (Trash, true);
 			Directory.CreateDirectory (Trash);
 			
+			// we have now changed the inode and need to get the fsw to reflect this...
 			fsw.Path = "/tmp";
 			fsw.Path = Trash;
 			
