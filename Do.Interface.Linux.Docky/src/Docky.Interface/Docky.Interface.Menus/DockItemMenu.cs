@@ -59,7 +59,7 @@ namespace Docky.Interface.Menus
 		public DockItemMenu() : base ()
 		{
 		}
-
+		
 		public override void PopUp (IEnumerable<AbstractMenuButtonArgs> args, int x, int y)
 		{
 			foreach (Gtk.Widget child in Container.AllChildren) {
@@ -94,6 +94,7 @@ namespace Docky.Interface.Menus
 				hbox.PackStart (label, true, true, 2);
 				
 				Gtk.Button button = new Button (hbox);
+				button.TooltipText = arg.Description;
 				
 				button.Clicked += arg.Handler;
 				button.Clicked += OnButtonClicked;
@@ -103,9 +104,9 @@ namespace Docky.Interface.Menus
 				button.Sensitive = arg.Sensitive;
 				button.BorderWidth = 0;
 				
-				button.ModifyBg (StateType.Prelight, new Gdk.Color ((byte) (byte.MaxValue * 0.15), 
-				                                                    (byte) (byte.MaxValue * 0.15), 
-				                                                    (byte) (byte.MaxValue * 0.15)));
+				button.ModifyBg (StateType.Prelight, new Gdk.Color ((byte) (byte.MaxValue * 0.25), 
+				                                                    (byte) (byte.MaxValue * 0.25), 
+				                                                    (byte) (byte.MaxValue * 0.25)));
 				Container.PackStart (button, false, false, 0);
 			}
 			ShowAll ();
