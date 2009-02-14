@@ -73,7 +73,7 @@ namespace Docky.Interface
 		bool ClockUpdateTimer ()
 		{
 			if (minute != DateTime.UtcNow.Minute) {
-				SetText (DateTime.Now.ToLongDateString () + " " + DateTime.Now.ToShortTimeString ());
+				SetText (DateTime.Now.ToString ("MMM dd, h:mm tt"));
 				RedrawIcon ();
 				minute = DateTime.UtcNow.Minute;
 			}
