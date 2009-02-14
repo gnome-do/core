@@ -34,7 +34,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class TrashDockItem :  AbstractDockletItem
+	public class TrashDockItem :  AbstractDockletItem, IRightClickable
 	{
 		const string TrashEmptyIcon = "gnome-stock-trash";
 		const string TrashFullIcon = "gnome-stock-trash-full";
@@ -123,5 +123,32 @@ namespace Docky.Interface
 			base.Clicked (button, state, position);
 		}
 
+		void EmptyTrash ()
+		{
+			// fixme, this breaks the fsw
+			if (!Directory.Exists (Trash)) return;
+			
+			Directory.Delete (Trash, true);
+			Directory.CreateDirectory (Trash);
+			
+			fsw.Path = "/tmp";
+			fsw.Path = Trash;
+			
+			RedrawIcon ();
+		}
+
+		#region IRightClickable implementation 
+		
+		public event EventHandler RemoveClicked;
+		
+		public IEnumerable<Menus.AbstractMenuButtonArgs> GetMenuItems ()
+		{
+			yield return new Docky.Interface.Menus.SimpleMenuButtonArgs (() => Services.Environment.OpenUrl ("trash://"),
+			                                                             Catalog.GetString ("Open Trash"), TrashFullIcon);
+			yield return new Docky.Interface.Menus.SimpleMenuButtonArgs (EmptyTrash, Catalog.GetString ("Empty Tash"), Gtk.Stock.Delete);
+		}
+		
+		#endregion 
+		
 	}
 }
