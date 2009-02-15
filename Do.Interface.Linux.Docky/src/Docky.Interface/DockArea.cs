@@ -253,7 +253,7 @@ namespace Docky.Interface
 			
 			ResetCursorTimer ();
 		}
-
+		
 		void SetSize ()
 		{
 			Gdk.Rectangle geo;

@@ -36,11 +36,12 @@ namespace Docky.Interface
 	{
 		public event UpdateRequestHandler UpdateNeeded;
 		
-		Surface text_surface, resize_buffer, secondary_resize_buffer;
+		Surface text_surface, resize_buffer;
 		DockOrientation current_orientation;
 		uint size_changed_timer;
-		protected int current_size;
 		bool needs_attention;
+		
+		protected int current_size;
 
 		protected virtual Surface IconSurface { get; set; }
 		
@@ -129,7 +130,14 @@ namespace Docky.Interface
 			NeedsAttention = false;
 			Description = "";
 			AttentionRequestStartTime =  LastClick = new DateTime (0);
+			
 			DockPreferences.IconSizeChanged += OnIconSizeChanged;
+			DockWindow.Window.StyleSet += HandleStyleSet; 
+		}
+
+		void HandleStyleSet(object o, StyleSetArgs args)
+		{
+			ResetSurfaces ();
 		}
 
 		protected abstract Pixbuf GetSurfacePixbuf (int size);
