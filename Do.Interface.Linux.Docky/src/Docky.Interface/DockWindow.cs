@@ -106,10 +106,7 @@ namespace Docky.Interface
 		{
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
 			
-			StyleSet += (o, a) => {
-				if (IsRealized)
-					GdkWindow.SetBackPixmap (null, false);
-			};
+			StyleSet += HandleStyleSet;
 			
 			DockPreferences.AllowOverlapChanged += DelaySetStruts;
 			DockPreferences.AutohideChanged += DelaySetStruts;
@@ -118,6 +115,8 @@ namespace Docky.Interface
 
 		void UnregisterEvents ()
 		{
+			StyleSet -= HandleStyleSet;
+			
 			DockPreferences.AllowOverlapChanged -= DelaySetStruts;
 			DockPreferences.AutohideChanged -= DelaySetStruts;
 			DockPreferences.MonitorChanged -= HandleMonitorChanged;
@@ -135,6 +134,18 @@ namespace Docky.Interface
 			Add (dock_area);
 			ShowAll ();
 			DelaySetStruts ();
+		}
+		
+		void HandleStyleSet(object o, StyleSetArgs args)
+		{
+			if (!IsRealized) return;
+			
+			GdkWindow.SetBackPixmap (null, false);
+			
+			Gdk.Rectangle tmp = current_mask;
+			current_mask = Gdk.Rectangle.Zero;
+			
+			SetInputMask (tmp);
 		}
 		
 		public void SetInputMask (Gdk.Rectangle area)
