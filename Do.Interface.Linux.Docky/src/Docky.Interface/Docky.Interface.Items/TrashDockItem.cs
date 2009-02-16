@@ -128,9 +128,11 @@ namespace Docky.Interface
 			// fixme, this breaks the fsw
 			if (!Directory.Exists (Trash)) return;
 			
-			Directory.Delete (Trash, true);
-			Directory.CreateDirectory (Trash);
-			
+			try {
+				Directory.Delete (Trash, true);
+				Directory.CreateDirectory (Trash);
+			} catch { }
+				
 			// we have now changed the inode and need to get the fsw to reflect this...
 			fsw.Path = "/tmp";
 			fsw.Path = Trash;

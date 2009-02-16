@@ -279,7 +279,6 @@ namespace Do.Interface.AnimationBase
 				num_results = 8;
 				break;
 			}
-//			ItemRenderer = new BezelFullResultItemRenderer (this);
 			
 			surface_buffer = new Dictionary <Element,Surface> ();
 			secondary = new int[0];
@@ -434,13 +433,12 @@ namespace Do.Interface.AnimationBase
 				
 				DrawSlideContexts (child_inout_surface, backbuffer, triplebuffer, old_x, new_x);
 
-				cr.SetSource (triplebuffer, X, -(height*(1-slide_offset)));
+				cr.SetSource (triplebuffer, X, - (height * (1 - slide_offset)));
 				cr.Operator = Operator.Source;
 				cr.Paint ();
 			}
 			
 			(cr as IDisposable).Dispose ();
-//			Console.WriteLine (DateTime.Now.Subtract (time).TotalMilliseconds);
 		}
 		
 		/// <summary>
