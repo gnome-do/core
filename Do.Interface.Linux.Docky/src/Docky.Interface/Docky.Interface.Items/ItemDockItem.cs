@@ -114,8 +114,9 @@ namespace Docky.Interface
 		
 		public override bool ReceiveItem (string item)
 		{
+			bool result = false;
 			if (!IsAcceptingDrops)
-				return false;
+				return result;
 			
 			if (item.StartsWith ("file://"))
 				item = item.Substring ("file://".Length);
@@ -123,15 +124,19 @@ namespace Docky.Interface
 			if (File.Exists (item)) {
 				try {
 					File.Move (item, System.IO.Path.Combine ((Element as IFileItem).Path, System.IO.Path.GetFileName (item)));
-				} catch { return false; }
-				return true;
+					result = true;
+				} catch { 
+					Services.Notifications.Notify ("Docky Error", "Could not move file into Directory");
+				}
 			} else if (Directory.Exists (item)) {
 				try {
 					Directory.Move (item, System.IO.Path.Combine ((Element as IFileItem).Path, System.IO.Path.GetFileName (item)));
-				} catch { return false; }
-				return true;
+					result = true;
+				} catch { 
+					Services.Notifications.Notify ("Docky Error", "Could not move file into Directory");
+				}
 			}
-			return false;
+			return result;
 		}
 		
 		public void UpdateApplication ()
