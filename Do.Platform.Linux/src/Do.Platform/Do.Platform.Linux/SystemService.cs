@@ -18,12 +18,15 @@
 //
 
 using System;
+using System.Reflection;
 
 using NDesk.DBus;
 using org.freedesktop.DBus;
 
 using Do.Platform.ServiceStack;
 using Do.Platform.Linux.DBus;
+
+using Gnome;
 
 namespace Do.Platform.Linux
 {
@@ -33,6 +36,7 @@ namespace Do.Platform.Linux
 
 		const string PowerManagementName = "org.freedesktop.PowerManagement";
 		const string PowerManagementPath = "/org/freedesktop/PowerManagement";
+		const string AutoStartKey = "Hidden";
 
 		[Interface(PowerManagementName)]
 		interface IPowerManagement
@@ -91,6 +95,73 @@ namespace Do.Platform.Linux
 			Gdk.Threads.Enter ();
 			Services.Windowing.SummonMainWindow ();
 			Gdk.Threads.Leave ();
+		}
+		
+
+		string AutoStartDir {
+			get {
+				return System.IO.Path.Combine (
+					Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "autostart");
+		    }
+		}
+		
+		string AutoStartFileName {
+		  get {
+		      return System.IO.Path.Combine (AutoStartDir, "gnome-do.desktop");
+		    }
+		}
+
+		void WriteInitialAutoStartFile (string fileName)
+		{
+			try {
+				System.IO.Stream s = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("gnome-do.desktop");
+				using (System.IO.StreamReader sr = new System.IO.StreamReader (s)) {
+					System.IO.File.AppendAllText (fileName, sr.ReadToEnd ());
+				}
+			} catch (Exception e) {
+				Log<SystemService>.Error ("Failed to write initial autostart file: {0}", e.Message);
+			}
+		}
+		
+		string AutoStartUri {
+			get {
+				return Gnome.Vfs.Uri.GetUriFromLocalPath (AutoStartFileName);
+			}
+		}
+		
+		DesktopItem AutoStartFile {
+			get {
+				if (!System.IO.File.Exists (AutoStartFileName)) {
+					WriteInitialAutoStartFile (AutoStartFileName);
+				}
+				return DesktopItem.NewFromUri (AutoStartUri, DesktopItemLoadFlags.NoTranslations);
+			}
+		}
+		
+		public bool IsAutoStartEnabled ()
+		{
+			DesktopItem autostart = AutoStartFile;
+			
+			if (!autostart.Exists ()) {
+				Log<SystemService>.Error ("Could not open autostart file {0}", AutoStartUri);
+			}
+			
+			if (autostart.AttrExists (AutoStartKey)) {
+				return !String.Equals(autostart.GetString (AutoStartKey), "true", StringComparison.OrdinalIgnoreCase);
+			}
+			return false;
+		}
+		
+		public void SetAutoStart (bool enabled)
+		{
+			DesktopItem autostart = AutoStartFile;
+			
+			autostart.SetBoolean (AutoStartKey, !enabled);
+			try {
+				autostart.Save (null, true);
+			} catch (Exception e) {
+				Log<SystemService>.Error ("Failed to update autostart file: {0}", e.Message);
+			}
 		}
 	}
 }

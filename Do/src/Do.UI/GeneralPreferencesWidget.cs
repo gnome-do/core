@@ -85,12 +85,12 @@ namespace Do.UI
 		/// </value>
 		protected bool AutostartEnabled {
 		  get {
-				return Services.Autostart.IsAutostartEnabled ();
+				return Services.System.IsAutoStartEnabled ();
 			}
 			
 			set {
 				try {
-					Services.Autostart.SetAutostart (value);
+					Services.System.SetAutoStart (value);
 				} catch (Exception e) {
 					Log<GeneralPreferencesWidget>.Error ("Failed to set autostart: {0}", e.Message);
 				}

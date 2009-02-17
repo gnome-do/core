@@ -14,7 +14,6 @@ FILES = \
 	src/Do.Platform/Do.Platform.Common/DictionaryPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Common/EventsOnlyNotificationsService.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogService.cs \
-	src/Do.Platform/Do.Platform.Default/AutostartService.cs \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/DefaultApplicationService.cs \
 	src/Do.Platform/Do.Platform.Default/DefaultSystemService.cs \
@@ -30,7 +29,6 @@ FILES = \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IService.cs \
-	src/Do.Platform/IAutostartService.cs \
 	src/Do.Platform/ICoreService.cs \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/ILogService.cs \

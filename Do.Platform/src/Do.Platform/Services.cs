@@ -33,7 +33,6 @@ namespace Do.Platform
 	public class Services
 	{
 
-		static IAutostartService autostart;
 		static ICoreService core;
 		static PathsService paths;
 		static IWindowingService windowing;
@@ -113,14 +112,6 @@ namespace Do.Platform
 			}
 		}
 		
-		public static IAutostartService Autostart {
-			get {
-				if (autostart == null)
-					autostart = LocateService<IAutostartService, Default.AutostartService> ();
-				return autostart;
-			}
-		}
-
 		public static ICoreService Core {
 			get {
 				if (core == null)
