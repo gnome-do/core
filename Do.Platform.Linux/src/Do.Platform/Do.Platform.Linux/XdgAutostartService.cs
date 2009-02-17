@@ -67,7 +67,7 @@ namespace Do.Platform.Linux
 				if (!File.Exists (AutostartFileName)) {
 					WriteInitialAutostartFile (AutostartFileName);
 				}
-				return DesktopItem.NewFromUri (AutostartUri, null);
+				return DesktopItem.NewFromUri (AutostartUri, DesktopItemLoadFlags.NoTranslations);
 			}
 		}
 		
