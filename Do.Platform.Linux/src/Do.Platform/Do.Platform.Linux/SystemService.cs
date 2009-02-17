@@ -140,7 +140,7 @@ namespace Do.Platform.Linux
 			}
 		}
 		
-		public bool IsAutoStartEnabled ()
+		public override bool IsAutoStartEnabled ()
 		{
 			DesktopItem autostart = AutoStartFile;
 			
@@ -154,7 +154,7 @@ namespace Do.Platform.Linux
 			return false;
 		}
 		
-		public void SetAutoStart (bool enabled)
+		public override void SetAutoStart (bool enabled)
 		{
 			DesktopItem autostart = AutoStartFile;
 			
