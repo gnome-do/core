@@ -91,9 +91,9 @@ namespace Do.UI
 			set {
 				try {
 					Services.Autostart.SetAutostart (value);
+				} catch (Exception e) {
+					Log<GeneralPreferencesWidget>.Error ("Failed to set autostart: {0}", e.Message);
 				}
-			} catch (Exception e) {
-				Log<GeneralPreferencesWidget>.Error ("Failed to set autostart: {0}", e.Message);
 			}
 		}
 		
