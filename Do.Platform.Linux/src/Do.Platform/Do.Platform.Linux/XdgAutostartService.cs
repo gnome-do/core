@@ -67,13 +67,17 @@ namespace Do.Platform.Linux
 				if (!File.Exists (AutostartFileName)) {
 					WriteInitialAutostartFile (AutostartFileName);
 				}
-				return DesktopItem.NewFromUri(AutostartUri);
+				return DesktopItem.NewFromUri (AutostartUri, null);
 			}
 		}
 		
 		public bool IsAutostartEnabled ()
 		{
 			DesktopItem autostart = AutostartFile;
+			
+			if (!autostart.Exists ()) {
+				Log<XdgAutostartService>.Error ("Could not open autostart file {0}", AutostartUri);
+			}
 			
 			if (autostart.AttrExists (GnomeAutostartKey)) {
 				return String.Compare(autostart.GetString (GnomeAutostartKey), "true", true);
