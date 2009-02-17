@@ -111,15 +111,11 @@ namespace Do.Platform.Linux
 		    }
 		}
 
-		void WriteInitialAutoStartFile (string fileName)
+		string InitialAutoStartFile ()
 		{
-			try {
-				System.IO.Stream s = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("gnome-do.desktop");
-				using (System.IO.StreamReader sr = new System.IO.StreamReader (s)) {
-					System.IO.File.AppendAllText (fileName, sr.ReadToEnd ());
-				}
-			} catch (Exception e) {
-				Log<SystemService>.Error ("Failed to write initial autostart file: {0}", e.Message);
+			System.IO.Stream s = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("gnome-do.desktop");
+			using (System.IO.StreamReader sr = new System.IO.StreamReader (s)) {
+				return sr.ReadToEnd ();
 			}
 		}
 		
@@ -131,10 +127,12 @@ namespace Do.Platform.Linux
 		
 		DesktopItem AutoStartFile {
 			get {
-				if (!System.IO.File.Exists (AutoStartFileName)) {
-					WriteInitialAutoStartFile (AutoStartFileName);
+				DesktopItem autostart = DesktopItem.NewFromUri (AutoStartUri, DesktopItemLoadFlags.NoTranslations);
+				if (!autostart.Exists ()) {
+					autostart = new DesktopItem (AutoStartUri, InitialAutoStartFile (), DesktopItemLoadFlags.NoTranslations);
+					autostart.Save (null, true);
 				}
-				return DesktopItem.NewFromUri (AutoStartUri, DesktopItemLoadFlags.NoTranslations);
+				return autostart;
 			}
 		}
 		
