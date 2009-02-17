@@ -287,7 +287,12 @@ namespace Docky.Interface
 			} else {
 				// zoom is calculated as 1 through target_zoom (default 2).  
 				// The larger your offset, the smaller your zoom
+				
+				// First we get the point on our curve that defines out current zoom
+				// offset is always going to fall on a point on the curve >= 0
 				zoom = 1 - Math.Pow (offset / (ZoomSize / 2.0), 2);
+				
+				// scale this to match out zoomInPercent
 				zoom = 1 + zoom * (zoomInPercent - 1);
 				
 				// pull in our offset to make things less spaced out
