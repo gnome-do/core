@@ -130,7 +130,11 @@ namespace Do.Platform.Linux
 				DesktopItem autostart = DesktopItem.NewFromUri (AutoStartUri, DesktopItemLoadFlags.NoTranslations);
 				if (!autostart.Exists ()) {
 					autostart = new DesktopItem (AutoStartUri, InitialAutoStartFile (), DesktopItemLoadFlags.NoTranslations);
-					autostart.Save (null, true);
+					try {
+						autostart.Save (null, true);
+					} catch (Exception e) {
+						Log<SystemService>.Error ("Failed to write initial autostart file: {0}", e.Message);
+					}
 				}
 				return autostart;
 			}
