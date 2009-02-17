@@ -127,11 +127,15 @@ namespace Do.Platform.Linux
 		
 		DesktopItem AutoStartFile {
 			get {
-				DesktopItem autostart = DesktopItem.NewFromUri (AutoStartUri, DesktopItemLoadFlags.NoTranslations);
-				if (!autostart.Exists ()) {
+				DesktopItem autostart;
+				try {
+					autostart = DesktopItem.NewFromUri (AutoStartUri, DesktopItemLoadFlags.NoTranslations);
+				} catch (GLib.GException loadException) {
+					Log<SystemService>.Info ("Unable to load existing autostart file: {0}", loadException.Message);
+					Log<SystemService>.Info ("Writing new autostart file to {0}", AutoStartFileName);
 					autostart = new DesktopItem (AutoStartUri, InitialAutoStartFile (), DesktopItemLoadFlags.NoTranslations);
 					try {
-						autostart.Save (null, true);
+						autostart.Save (AutoStartUri, true);
 					} catch (Exception e) {
 						Log<SystemService>.Error ("Failed to write initial autostart file: {0}", e.Message);
 					}
