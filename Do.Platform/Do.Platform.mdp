@@ -77,7 +77,6 @@
     <File name="src/Do.Platform/AbstractSystemService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/DefaultSystemService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IAutostartService.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Do.Platform.Default/AutostartService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
