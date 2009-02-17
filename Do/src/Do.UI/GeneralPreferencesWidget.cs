@@ -37,21 +37,6 @@ namespace Do.UI
     [System.ComponentModel.ToolboxItem(true)]
     public partial class GeneralPreferencesWidget : Bin, IConfigurable
     {
-		const string AutostartAttribute = "X-GNOME-Autostart-enabled";
-	
-		string AutostartDir {
-			get {
-				return System.IO.Path.Combine (
-					Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "autostart");
-		    }
-		}
-		
-		string AutostartFile {
-		  get {
-		      return System.IO.Path.Combine (AutostartDir, "gnome-do.desktop");
-		    }
-		}
-		
 		new public string Name {
 		  get { return Catalog.GetString ("General"); }
 		}
@@ -79,10 +64,6 @@ namespace Do.UI
 		  return this;
 		}
 	        
-		/// <value>
-		/// This property sacrifies much efficiency to eschew the gnomedesktop
-		/// dependency and to work more reliably.
-		/// </value>
 		protected bool AutostartEnabled {
 		  get {
 				return Services.System.IsAutoStartEnabled ();
