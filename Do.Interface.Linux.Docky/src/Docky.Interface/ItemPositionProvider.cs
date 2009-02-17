@@ -32,8 +32,6 @@ namespace Docky.Interface
 	
 	internal class ItemPositionProvider : IDisposable
 	{
-		const int HorizontalBuffer = 7;
-		
 		DockArea parent;
 		List<Gdk.Point> static_positions;
 		
@@ -61,6 +59,10 @@ namespace Docky.Interface
 		
 		public int VerticalBuffer {
 			get { return 5; }
+		}
+		
+		public int HorizontalBuffer {
+			get { return 7; }
 		}
 		
 		int IconSize {
@@ -285,9 +287,10 @@ namespace Docky.Interface
 			} else {
 				// zoom is calculated as 1 through target_zoom (default 2).  
 				// The larger your offset, the smaller your zoom
-				zoom = 0 - Math.Pow (offset / (ZoomSize / 2.0), 2) + 2;
-				zoom = 1 + (zoom - 1) * (zoomInPercent - 1);
+				zoom = 1 - Math.Pow (offset / (ZoomSize / 2.0), 2);
+				zoom = 1 + zoom * (zoomInPercent - 1);
 				
+				// pull in our offset to make things less spaced out
 				offset = offset * (zoomInPercent - 1) - (zoomInPercent - zoom) * (IconSize * .9);
 			}
 			

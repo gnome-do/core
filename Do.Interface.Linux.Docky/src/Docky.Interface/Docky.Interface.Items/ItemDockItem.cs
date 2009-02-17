@@ -42,6 +42,9 @@ namespace Docky.Interface
 	
 	public class ItemDockItem : WnckDockItem, IRightClickable
 	{
+		const string ErrorMessage = "Docky could not move the file to the requested Directory.  " + 
+			"Please check file name and permissions and try again";
+		
 		Item element;
 		int window_count;
 		uint handle_timer;
@@ -126,14 +129,14 @@ namespace Docky.Interface
 					File.Move (item, System.IO.Path.Combine ((Element as IFileItem).Path, System.IO.Path.GetFileName (item)));
 					result = true;
 				} catch { 
-					Services.Notifications.Notify ("Docky Error", "Could not move file into Directory");
+					Services.Notifications.Notify ("Docky Error", ErrorMessage);
 				}
 			} else if (Directory.Exists (item)) {
 				try {
 					Directory.Move (item, System.IO.Path.Combine ((Element as IFileItem).Path, System.IO.Path.GetFileName (item)));
 					result = true;
 				} catch { 
-					Services.Notifications.Notify ("Docky Error", "Could not move file into Directory");
+					Services.Notifications.Notify ("Docky Error", ErrorMessage);
 				}
 			}
 			return result;
@@ -174,8 +177,7 @@ namespace Docky.Interface
 		
 		void OnWindowStateChanged (object o, StateChangedArgs args)
 		{
-			if (handle_timer > 0)
-				return;
+			if (handle_timer > 0) return;
 			// we do this delayed so that we dont get a flood of these events.  Certain windows behave badly.
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
 			window_count = Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist).Count ();
@@ -244,10 +246,8 @@ namespace Docky.Interface
 		
 		public override void SetIconRegion (Gdk.Rectangle region)
 		{
-			if (icon_region == region)
-				return;
+			if (icon_region == region) return;
 			icon_region = region;
-			
 			SetIconRegionFromCache ();
 		}
 		
@@ -258,8 +258,8 @@ namespace Docky.Interface
 		
 		public override bool Equals (AbstractDockItem other)
 		{
-			if (other == null)
-				return false;
+			if (other == null) return false;
+			
 			ItemDockItem di = other as ItemDockItem;
 			return di != null && di.Element != null && Element != null && di.Element.UniqueId == Element.UniqueId;
 		}

@@ -37,10 +37,17 @@ namespace Docky.Interface
 	
 	internal partial class DockArea
 	{
+		class PreviousRenderData {
+			public bool ForceFullRender { get; set; }
+			public Gdk.Point LastCursor { get; set; }
+			public double ZoomIn { get; set; }
+		}
+		
 		const int IndicatorSize = 9;
 		const int UrgentIndicatorSize = 12;
 		
 		Dictionary<IDockPainter, Surface> painter_surfaces;
+		bool fast_render_fail;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
@@ -48,8 +55,24 @@ namespace Docky.Interface
 		Matrix default_matrix;
 		
 		DateTime ActiveIconChangeTime { get; set; }
+		
+		PreviousRenderData RenderData { get; set; }
 
 		bool PainterOverlayVisible { get; set; }
+
+		bool CanFastRender {
+			get {
+				bool canFastRender = !RenderData.ForceFullRender && 
+					    RenderData.ZoomIn == 1 && 
+						ZoomIn == 1 && 
+						!AnimationState [Animations.IconInsert] &&
+						!AnimationState [Animations.UrgencyChanged] &&
+						!AnimationState [Animations.Bounce];
+				
+				fast_render_fail = canFastRender;
+				return canFastRender && !fast_render_fail;
+			}
+		}
 		
 		/// <value>
 		/// Returns the zoom in percentage (0 through 1)
@@ -171,6 +194,7 @@ namespace Docky.Interface
 
 		void BuildRendering ()
 		{
+			RenderData = new PreviousRenderData ();
 			painter_surfaces = new Dictionary<IDockPainter, Surface> ();
 			default_matrix = new Matrix ();
 		}
@@ -213,9 +237,68 @@ namespace Docky.Interface
 		
 		void DrawIcons (Context cr)
 		{
-			cr.AlphaFill ();
-			for (int i = 0; i < DockItems.Count; i++)
-				DrawIcon (cr, i);
+			if (!CanFastRender) {
+				cr.AlphaFill ();
+				for (int i = 0; i < DockItems.Count; i++)
+					DrawIcon (cr, i);
+			} else {
+			
+				Gdk.Rectangle renderArea = Gdk.Rectangle.Zero;
+				Gdk.Rectangle dockArea = GetDockArea ();
+				
+				int startItemPosition;
+				startItemPosition = Math.Min (Cursor.X, RenderData.LastCursor.X) - (DockPreferences.ZoomSize / 2 + DockPreferences.IconSize);
+				
+				int endItemPosition;
+				endItemPosition = Math.Max (Cursor.X, RenderData.LastCursor.X) + (DockPreferences.ZoomSize / 2 + DockPreferences.IconSize);
+				
+				int startItem = PositionProvider.IndexAtPosition (startItemPosition, Cursor.Y);
+				int endItem = PositionProvider.IndexAtPosition (endItemPosition, Cursor.Y);
+				
+				PointD firstPosition, lastPosition;
+				double firstZoom, lastZoom;
+				
+				// set up our X value
+				if (startItem == -1) {
+					startItem = 0;
+					renderArea.X = dockArea.X;
+				} else {
+					IconZoomedPosition (startItem, out firstPosition, out firstZoom);
+					renderArea.X = (int) (firstPosition.X - (DockItems [startItem].Width * firstZoom) / 2) - 2;
+				}
+				
+				if (endItem == -1) {
+					endItem = DockItems.Count - 1;
+					renderArea.Width = dockArea.Width - (renderArea.X - dockArea.X);
+				} else {
+					IconZoomedPosition (endItem, out lastPosition, out lastZoom);
+				
+					// Add/Sub 2 to provide a good "buffer" into the dead zone between icons
+					renderArea.Width = (int) (lastPosition.X + (DockItems [endItem].Width * lastZoom) / 2) + 2 - renderArea.X;
+				}
+				
+				renderArea.Height = Height;
+				
+				cr.Rectangle (renderArea.X, renderArea.Y, renderArea.Width, renderArea.Height);
+				switch (DockPreferences.Orientation) {
+				case DockOrientation.Bottom:
+					cr.Rectangle (0, Width, 0, Height - dockArea.Height);
+					break;
+				case DockOrientation.Top:
+					cr.Rectangle (0, Width, dockArea.Height, Height - dockArea.Height);
+					break;
+				}
+				cr.Operator = Operator.Clear;
+				cr.Fill ();
+				cr.Operator = Operator.Over;
+				
+				for (int i = startItem; i <= endItem; i++)
+					DrawIcon (cr, i);
+			}
+			
+			RenderData.LastCursor = Cursor;
+			RenderData.ZoomIn = ZoomIn;
+			RenderData.ForceFullRender = false;
 		}
 		
 		void DrawIcon (Context cr, int icon)
@@ -567,6 +650,11 @@ namespace Docky.Interface
 			}
 			
 			base.OnStyleSet (previous_style);
+		}
+		
+		void RequestFullRender ()
+		{
+			RenderData.ForceFullRender = true;
 		}
 	}
 }
