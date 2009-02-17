@@ -85,28 +85,16 @@ namespace Do.UI
 		/// </value>
 		protected bool AutostartEnabled {
 		  get {
-		      try {
-			  return File.Exists (AutostartFile) && !File.ReadAllText (AutostartFile).Contains (AutostartAttribute + "=false");
-			} catch (Exception e) {
-			  Log.Error ("Failed to get autostart: {0}", e.Message);
+				return Services.Autostart.IsAutostartEnabled ();
 			}
 			
-			return false;
-		    }
-		    set {
-		      try {
-			    if (File.Exists (AutostartFile))
-			      File.Delete (AutostartFile);
-			    if (value) {
-			      Directory.CreateDirectory (AutostartDir);
-				Stream s = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("gnome-do.desktop");
-				using (StreamReader sr = new StreamReader (s))
-				  File.AppendAllText (AutostartFile, sr.ReadToEnd ());
-			    }
+			set {
+				try {
+					Services.Autostart.SetAutostart (value);
+				}
 			} catch (Exception e) {
-			  Log.Error ("Failed to set autostart: {0}", e.Message);
+				Log<GeneralPreferencesWidget>.Error ("Failed to set autostart: {0}", e.Message);
 			}
-		    }
 		}
 		
 		protected virtual void OnLoginCheckClicked (object sender, EventArgs e)
