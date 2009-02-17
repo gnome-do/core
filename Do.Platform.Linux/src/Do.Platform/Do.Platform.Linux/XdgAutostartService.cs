@@ -28,7 +28,7 @@ namespace Do.Platform.Linux
 	
 	public class XdgAutostartService : IAutostartService
 	{
-		static const string GnomeAutostartKey = "X-GNOME-Autostart-enabled";
+		const string GnomeAutostartKey = "X-GNOME-Autostart-enabled";
 
 		string AutostartDir {
 			get {
