@@ -49,6 +49,7 @@
     <File name="src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.DBus/Registrar.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Linux/SystemService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/NullApplicationItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Linux/XdgAutostartService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

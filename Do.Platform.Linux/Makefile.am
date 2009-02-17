@@ -21,6 +21,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/TrayIconPreferences.cs \
 	src/Do.Platform/Do.Platform.Linux/TrayIconService.cs \
 	src/Do.Platform/Do.Platform.Linux/UniverseFactoryService.cs \
+	src/Do.Platform/Do.Platform.Linux/XdgAutostartService.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/NullApplicationItem.cs \
 	src/Do.Universe/FileItem.cs \

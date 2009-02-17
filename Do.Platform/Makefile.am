@@ -29,6 +29,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IService.cs \
+	src/Do.Platform/IAutostartService.cs \
 	src/Do.Platform/ICoreService.cs \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/ILogService.cs \
