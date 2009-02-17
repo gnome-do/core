@@ -80,7 +80,7 @@ namespace Do.Platform.Linux
 			}
 			
 			if (autostart.AttrExists (GnomeAutostartKey)) {
-				return String.Compare(autostart.GetString (GnomeAutostartKey), "true", true);
+				return String.Equals(autostart.GetString (GnomeAutostartKey), "true", StringComparison.OrdinalIgnoreCase);
 			}
 			//TODO: Add KDE and XFCE autostart strings.
 			return false;
