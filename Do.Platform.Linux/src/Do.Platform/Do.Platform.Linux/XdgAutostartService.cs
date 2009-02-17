@@ -29,7 +29,7 @@ namespace Do.Platform.Linux
 	
 	public class XdgAutostartService : IAutostartService
 	{
-		const string GnomeAutostartKey = "X-GNOME-Autostart-enabled";
+		const string AutostartKey = "Hidden";
 
 		string AutostartDir {
 			get {
@@ -80,9 +80,8 @@ namespace Do.Platform.Linux
 			}
 			
 			if (autostart.AttrExists (GnomeAutostartKey)) {
-				return String.Equals(autostart.GetString (GnomeAutostartKey), "true", StringComparison.OrdinalIgnoreCase);
+				return !String.Equals(autostart.GetString (AutostartKey), "true", StringComparison.OrdinalIgnoreCase);
 			}
-			//TODO: Add KDE and XFCE autostart strings.
 			return false;
 		}
 		
@@ -90,7 +89,7 @@ namespace Do.Platform.Linux
 		{
 			DesktopItem autostart = AutostartFile;
 			
-			autostart.SetBoolean (GnomeAutostartKey, enabled);
+			autostart.SetBoolean (AutostartKey, !enabled);
 			try {
 				autostart.Save (null, true);
 			} catch (Exception e) {
