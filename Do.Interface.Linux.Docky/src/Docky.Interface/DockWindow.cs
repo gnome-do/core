@@ -31,6 +31,7 @@ using Do.Universe;
 using Do.Platform;
 using Do.Interface;
 using Do.Interface.CairoUtils;
+using Do.Interface.AnimationBase;
 
 namespace Docky.Interface
 {
@@ -38,14 +39,25 @@ namespace Docky.Interface
 	
 	public class DockWindow : Gtk.Window, IDoWindow
 	{
+		public static Gtk.Window Window { get; private set; }
+		
+		BezelGlassResults results;
+		BezelGlassWindow results_window;
+		
 		DockArea dock_area;
+		Interface.DoInteropService interop_service;
 		IDoController controller;
 		Gdk.Rectangle current_mask;
 		uint strut_timer;
 		bool is_repositioned_hidden;
+		bool presented;
 		
 		public new string Name {
 			get { return "Docky"; }
+		}
+
+		public bool IsRepositionHidden {
+			get { return is_repositioned_hidden; }
 		}
 		
 		public IDoController Controller {
@@ -54,13 +66,23 @@ namespace Docky.Interface
 		
 		public DockWindow () : base (Gtk.WindowType.Toplevel)
 		{
+			Window = this;
 		}
 		
 		public void Initialize (IDoController controller)
 		{
 			this.controller = controller;
 			controller.Orientation = ControlOrientation.Vertical;
-			
+
+			interop_service = new DoInteropService (controller);
+			Core.DockServices.RegisterService (interop_service);
+
+			RegisterEvents ();
+			Build ();
+		}
+		
+		void Build ()
+		{
 			AppPaintable = true;
 			Decorated = false;
 			SkipPagerHint = true;
@@ -71,27 +93,21 @@ namespace Docky.Interface
 			
 			this.SetCompositeColormap ();
 			
-			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
-			
-			StyleSet += (o, a) => {
-				if (IsRealized)
-					GdkWindow.SetBackPixmap (null, false);
-			};
-
-			RegisterEvents ();
-			
-			Build ();
-		}
-		
-		void Build ()
-		{
 			dock_area = new DockArea (this);
 			Add (dock_area);
+
+			results = new BezelGlassResults (controller, 450, HUDStyle.Classic, new BezelColors (new Cairo.Color (.1, .1, .1, .8)));
+			results_window = new BezelGlassWindow (results);
+
 			ShowAll ();
 		}
 
 		void RegisterEvents ()
 		{
+			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
+			
+			StyleSet += HandleStyleSet;
+			
 			DockPreferences.AllowOverlapChanged += DelaySetStruts;
 			DockPreferences.AutohideChanged += DelaySetStruts;
 			DockPreferences.MonitorChanged += HandleMonitorChanged;
@@ -99,6 +115,8 @@ namespace Docky.Interface
 
 		void UnregisterEvents ()
 		{
+			StyleSet -= HandleStyleSet;
+			
 			DockPreferences.AllowOverlapChanged -= DelaySetStruts;
 			DockPreferences.AutohideChanged -= DelaySetStruts;
 			DockPreferences.MonitorChanged -= HandleMonitorChanged;
@@ -118,19 +136,35 @@ namespace Docky.Interface
 			DelaySetStruts ();
 		}
 		
+		void HandleStyleSet(object o, StyleSetArgs args)
+		{
+			if (!IsRealized) return;
+			
+			GdkWindow.SetBackPixmap (null, false);
+			
+			Gdk.Rectangle tmp = current_mask;
+			current_mask = Gdk.Rectangle.Zero;
+			
+			SetInputMask (tmp);
+		}
+		
 		public void SetInputMask (Gdk.Rectangle area)
 		{
 			if (!IsRealized || current_mask == area)
 				return;
-			
+
 			current_mask = area;
-			
+			if (area.Width == 0 || area.Height == 0) {
+				InputShapeCombineMask (null, 0, 0);
+				return;
+			}
+
 			Gdk.Pixmap pixmap = new Gdk.Pixmap (null, area.Width, area.Height, 1);
 			Context cr = Gdk.CairoHelper.Create (pixmap);
 			
 			cr.Color = new Cairo.Color (0, 0, 0, 1);
 			cr.Paint ();
-			
+
 			InputShapeCombineMask (pixmap, area.X, area.Y);
 			
 			(cr as IDisposable).Dispose ();
@@ -154,8 +188,8 @@ namespace Docky.Interface
 			GetSize (out rect.Width, out rect.Height);
 			GetPosition (out rect.X, out rect.Y);
 			
-			if (!rect.Contains ((int) evnt.XRoot, (int) evnt.YRoot) && dock_area.InputInterfaceVisible) {
-				controller.ButtonPressOffWindow ();
+			if (!rect.Contains ((int) evnt.XRoot, (int) evnt.YRoot)) {
+				dock_area.ProxyButtonReleaseEvent (evnt);
 			}
 			
 			return base.OnButtonReleaseEvent (evnt);
@@ -163,7 +197,7 @@ namespace Docky.Interface
 		
 		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
 		{
-			if (dock_area.InputInterfaceVisible)
+			if (Visible)
 				KeyPressEvent (evnt);
 			return base.OnKeyPressEvent (evnt);
 		}
@@ -185,11 +219,29 @@ namespace Docky.Interface
 		
 		void Reposition ()
 		{
-			Gdk.Rectangle geo, main;
+			Gdk.Rectangle geo, main, res;
 			
 			GetSize (out main.Width, out main.Height);
+			results_window.GetSize (out res.Width, out res.Height);
 			geo = LayoutUtils.MonitorGemonetry ();
-			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - main.Height);
+
+			switch (DockPreferences.Orientation) {
+			case DockOrientation.Bottom:
+				Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - main.Height);
+				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + geo.Height - dock_area.DockHeight - res.Height);
+				break;
+			case DockOrientation.Left:
+				Move (geo.X, geo.Y);
+				break;
+			case DockOrientation.Right:
+				Move (geo.X + geo.Width - main.Width, geo.Y);
+				break;
+			case DockOrientation.Top:
+				Move (geo.X, geo.Y);
+				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + dock_area.DockHeight);
+				break;
+			}
+			Display.Sync ();
 			
 			is_repositioned_hidden = false;
 		}
@@ -200,26 +252,51 @@ namespace Docky.Interface
 			
 			GetSize (out main.Width, out main.Height);
 			geo = LayoutUtils.MonitorGemonetry ();
-			Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height);
-			
-			InputShapeCombineMask (null, 0, 0);
+
+			switch (DockPreferences.Orientation) {
+			case DockOrientation.Bottom:
+				Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height);
+				break;
+			case DockOrientation.Left:
+				Move (geo.X - main.Width, geo.Y);
+				break;
+			case DockOrientation.Right:
+				Move (geo.X + geo.Width, geo.Y);
+				break;
+			case DockOrientation.Top:
+				Move (geo.X, geo.Y - main.Height);
+				break;
+			}
+
+			Display.Sync ();
 			
 			is_repositioned_hidden = true;
 		}
 		
-		public int WindowHideOffset ()
+		public void WindowHideOffset (out int x, out int y)
 		{
-			if (!is_repositioned_hidden)
-				return 0;
+			x = y = 0;
+			
+			if (!is_repositioned_hidden) {
+				return;
+			}
 			
 			Gdk.Rectangle main;
 			GetSize (out main.Width, out main.Height);
-			return main.Height;
-		}
-		
-		public void RequestClickOff ()
-		{
-			Controller.ButtonPressOffWindow ();
+			switch (DockPreferences.Orientation) {
+			case DockOrientation.Bottom:
+				y = main.Height;
+				break;
+			case DockOrientation.Left:
+				x = 0 - main.Width;
+				break;
+			case DockOrientation.Right:
+				x = main.Width;
+				break;
+			case DockOrientation.Top:
+				y = 0 - main.Height;
+				break;
+			}
 		}
 		
 		public void DelaySetStruts ()
@@ -234,12 +311,7 @@ namespace Docky.Interface
 		{
 			X11Atoms atoms = new X11Atoms (GdkWindow);
 
-			uint [] struts = new uint [12];
-
-			struts [(int) XLib.Struts.Bottom]      = (uint) dock_area.DockHeight;
-			struts [(int) XLib.Struts.BottomStart] = (uint) LayoutUtils.MonitorGemonetry ().X;
-			// subtract 1 to align to 0
-			struts [(int) XLib.Struts.BottomEnd]   = (uint) LayoutUtils.MonitorGemonetry ().X + (uint) LayoutUtils.MonitorGemonetry ().Width - 1;
+			uint [] struts = dock_area.StrutRequest;
 
 			strut_timer = 0;
 			
@@ -251,85 +323,110 @@ namespace Docky.Interface
 			return false;
 		}
 
+		public void PresentWindow ()
+		{
+			if (!presented)
+				Windowing.PresentWindow (this);
+			
+			presented = true;
+		}
+		
+		public void UnpresentWindow ()
+		{
+			if (presented)
+				Windowing.UnpresentWindow (this);
+			
+			presented = false;
+		}
+		
 		#region IDoWindow implementation 
 		
 		public new event DoEventKeyDelegate KeyPressEvent;
 		
 		public void Summon ()
 		{
+			Visible = true;
+			results_window.Show ();
 			Reposition ();
-			Windowing.PresentWindow (this);
-			if (!dock_area.InputInterfaceVisible)
-				dock_area.ShowInputInterface ();
+			PresentWindow ();
+			interop_service.SignalSummon ();
 		}
 		
 		public void Vanish ()
 		{
-			Windowing.UnpresentWindow (this);
-			if (dock_area.InputInterfaceVisible)
-				dock_area.HideInputInterface ();
+			Visible = false;
+			UnpresentWindow ();
+			results_window.Hide ();
+			interop_service.SignalVanish ();
 		}
 		
 		public void Reset ()
 		{
-			dock_area.Reset ();
+			DockState.Instance.Clear ();
+			interop_service.SignalReset ();
 		}
 		
 		public void Grow ()
 		{
-			dock_area.ThirdPaneVisible = true;
+			DockState.Instance.ThirdPaneVisible = true;
 		}
 		
 		public void Shrink ()
 		{
-			dock_area.ThirdPaneVisible = false;
+			DockState.Instance.ThirdPaneVisible = false;
 		}
 		
 		public void GrowResults ()
 		{
+			results.SlideIn ();
+			interop_service.SignalResultsGrow ();
 		}
 		
 		public void ShrinkResults ()
 		{
+			results.SlideOut ();
+			interop_service.SignalResultsShrink ();
+			
 		}
 		
 		public void SetPaneContext (Pane pane, IUIContext context)
 		{
-			dock_area.SetPaneContext (context, pane);
+			DockState.Instance.SetContext (context, pane);
+			if (CurrentPane == pane) {
+				results.Context = context;
+			}
 		}
 		
 		public void ClearPane (Pane pane)
 		{
-			dock_area.ClearPane (pane);
+			DockState.Instance.ClearPane (pane);
 		}
 		
 		public new bool Visible {
-			get {
-				return dock_area.InputInterfaceVisible;
-			}
+			get; private set;
 		}
 		
 		public Pane CurrentPane {
-			get {
-				return dock_area.CurrentPane;
-			}
-			set {
-				dock_area.CurrentPane = value;
-			}
+			get { return DockState.Instance.CurrentPane; }
+			set { DockState.Instance.CurrentPane = value; }
 		}
 		
 		public bool ResultsCanHide { 
-			get { return false; } 
+			get { return true; } 
 		}
 		
 		public override void Dispose ()
 		{
+			Window = null;
 			UnregisterEvents ();
 
 			Remove (dock_area);
 			dock_area.Dispose ();
 			dock_area.Destroy ();
 			dock_area = null;
+			
+			Core.DockServices.UnregisterService (interop_service);
+			interop_service.Dispose ();
 			
 			Destroy ();
 			base.Dispose ();

@@ -37,7 +37,7 @@ namespace Docky.Interface
 		/// <value>
 		/// The item requesting the update
 		/// </value>
-		public BaseDockItem Item {
+		public AbstractDockItem Item {
 			get; private set;
 		}
 		
@@ -48,7 +48,7 @@ namespace Docky.Interface
 			get; private set;
 		}
 		
-		public UpdateRequestArgs(BaseDockItem item, UpdateRequestType type)
+		public UpdateRequestArgs(AbstractDockItem item, UpdateRequestType type)
 		{
 			Item = item;
 			Type = type;

@@ -24,6 +24,7 @@ using Do.Universe;
 using Do.Interface.CairoUtils;
 
 using Cairo;
+using Gtk;
 using Gdk;
 
 using Docky.Utilities;
@@ -36,16 +37,41 @@ namespace Docky.Interface
 		Restore,
 		None,
 	}
+
+	public enum IconSource {
+		Statistics,
+		Custom,
+		Application,
+		Unknown,
+	}
+	
+	public enum ScalingType {
+		None = 0,
+		Upscaled,
+		Downscaled,
+		HighLow,
+	}
+	
+	public delegate void UpdateRequestHandler (object sender, UpdateRequestArgs args);
+	public delegate void DockItemsChangedHandler (IEnumerable<AbstractDockItem> items);
 	
 	public static class Util
 	{
+		const int Height = 35;
+		static Surface indicator, urgent_indicator;
+		
+		public static Surface GetBorderedTextSurface (string text, int maxWidth, Surface similar) 
+		{
+			return GetBorderedTextSurface (text, maxWidth, similar, DockOrientation.Bottom);
+		}
+		
 		/// <summary>
 		/// Gets a surface containing a transparent black rounded rectangle with the provided text on top.
 		/// </summary>
 		/// <param name="text">
 		/// A <see cref="System.String"/>
 		/// </param>
-		/// <param name="max_width">
+		/// <param name="maxWidth">
 		/// A <see cref="System.Int32"/>
 		/// </param>
 		/// <param name="similar">
@@ -54,73 +80,66 @@ namespace Docky.Interface
 		/// <returns>
 		/// A <see cref="Surface"/>
 		/// </returns>
-		public static Surface GetBorderedTextSurface (string text, int max_width, Surface similar)
+		public static Surface GetBorderedTextSurface (string text, int maxWidth, Surface similar, 
+		                                              DockOrientation orientation)
 		{
 			Surface sr;
-			sr = similar.CreateSimilar (similar.Content, max_width, 20);
+			sr = similar.CreateSimilar (similar.Content, maxWidth, Height);
 			
 			Context cr = new Context (sr);
-			
-			Pango.Layout layout = Pango.CairoHelper.CreateLayout (cr);
-			layout.FontDescription = Pango.FontDescription.FromString ("sans-serif bold");
-			layout.Width = Pango.Units.FromPixels (max_width);
-			layout.SetMarkup ("<b>" + text + "</b>");
-			layout.Alignment = Pango.Alignment.Center;
+
+			Pango.Layout layout = Core.DockServices.DrawingService.GetThemedLayout ();
+			layout.Width = Pango.Units.FromPixels (maxWidth - 18);
+			layout.SetMarkup ("<span weight=\"600\">" + text + "</span>");
+			switch (orientation) {
+			case DockOrientation.Left:
+				layout.Alignment = Pango.Alignment.Left;
+				break;
+			case DockOrientation.Right:
+				layout.Alignment = Pango.Alignment.Right;
+				break;
+			default:
+				layout.Alignment = Pango.Alignment.Center;
+				break;
+			}
 			layout.Ellipsize = Pango.EllipsizeMode.End;
 			
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);
 			
-			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) - 10, 0, Pango.Units.ToPixels (rect2.Width) + 20, 20, 10);
-			cr.Color = new Cairo.Color (0.15, 0.15, 0.15, .6);
-			cr.Fill ();
+			int localHeight = Pango.Units.ToPixels (rect2.Height);
 			
+			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) + .5, 
+			                            .5, 
+			                            Pango.Units.ToPixels (rect2.Width) + 20 - 1, 
+			                            localHeight + 10 - 1, 
+			                            5);
+			
+			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
+			cr.FillPreserve ();
+
+			cr.Color = new Cairo.Color (1, 1, 1, .4);
+			cr.LineWidth = 1;
+			cr.Stroke ();
+
+			Pango.Layout shadow = layout.Copy();
+			shadow.Indent = 1;
+
+			cr.Translate (10, 5);
+			cr.Translate(1,1);
+			Pango.CairoHelper.LayoutPath (cr, shadow);
+			cr.Color = new Cairo.Color (0, 0, 0, 0.6);
+			cr.Fill ();
+			cr.Translate(-1,-1);
+
 			Pango.CairoHelper.LayoutPath (cr, layout);
 			cr.Color = new Cairo.Color (1, 1, 1);
 			cr.Fill ();
-			
+
 			(cr as IDisposable).Dispose ();
-			layout.FontDescription.Dispose ();
+			shadow.Dispose ();
 			layout.Dispose ();
 			return sr;
-		}
-		
-		public static void DrawGlowIndicator (Context cr, int x, int y, bool urgent, int numberOfWindows)
-		{
-			if (DockPreferences.IndicateMultipleWindows && 1 < numberOfWindows) {
-				DrawSingleIndicator (cr, x - 3, y, urgent);
-				DrawSingleIndicator (cr, x + 3, y, urgent);
-			} else if (0 < numberOfWindows) {
-				DrawSingleIndicator (cr, x, y, urgent);
-			}
-		}
-		
-		static void DrawSingleIndicator (Context cr, int x, int y, bool urgent)
-		{
-			int size = urgent ? 12 : 9;
-			
-			cr.MoveTo (x, y);
-			cr.Arc (x, y, size, 0, Math.PI * 2);
-			
-			RadialGradient rg = new RadialGradient (x, y, 0, x, y, size);
-			rg.AddColorStop (0, new Cairo.Color (1, 1, 1, 1));
-			if (urgent) {
-				rg.AddColorStop (.10, new Cairo.Color (1, .8, .8, 1.0));
-				rg.AddColorStop (.20, new Cairo.Color (1, .6, .6, .60));
-				rg.AddColorStop (.35, new Cairo.Color (1, .3, .3, .35));
-				rg.AddColorStop (.50, new Cairo.Color (1, .3, .3, .25));
-				rg.AddColorStop (1.0, new Cairo.Color (1, .3, .3, 0.0));
-			} else {
-				rg.AddColorStop (.10, new Cairo.Color (.5, .6, 1, 1.0));
-				rg.AddColorStop (.20, new Cairo.Color (.5, .6, 1, .60));
-				rg.AddColorStop (.25, new Cairo.Color (.5, .6, 1, .25));
-				rg.AddColorStop (.50, new Cairo.Color (.5, .6, 1, .15));
-				rg.AddColorStop (1.0, new Cairo.Color (.5, .6, 1, 0.0));
-			}
-			
-			cr.Pattern = rg;
-			cr.Fill ();
-			rg.Destroy ();
 		}
 	}
 }

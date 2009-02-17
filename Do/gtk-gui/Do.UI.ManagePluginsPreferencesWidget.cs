@@ -73,7 +73,6 @@ namespace Do.UI {
             // Container child hbox1.Gtk.Box+BoxChild
             this.show_combo = Gtk.ComboBox.NewText();
             this.show_combo.Name = "show_combo";
-            this.show_combo.Active = 0;
             this.hbox1.Add(this.show_combo);
             Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(this.hbox1[this.show_combo]));
             w3.Position = 1;
@@ -137,7 +136,7 @@ namespace Do.UI {
             w10.Spacing = 2;
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w11 = new Gtk.Image();
-            w11.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Button, 20);
+            w11.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-preferences", Gtk.IconSize.Button, 16);
             w10.Add(w11);
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w13 = new Gtk.Label();

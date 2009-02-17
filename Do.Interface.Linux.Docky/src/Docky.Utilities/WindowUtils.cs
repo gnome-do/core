@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -37,9 +38,16 @@ namespace Docky.Utilities
 	{
 		static IEnumerable<string> BadPrefixes {
 			get {
-				yield return "gksu ";
-				yield return "sudo ";
-				yield return "python ";
+				yield return "gksu";
+				yield return "sudo";
+				yield return "java";
+				yield return "mono";
+				yield return "ruby";
+				yield return "padsp";
+				yield return "aoss";
+				yield return "python";
+				yield return "python2.4";
+				yield return "python2.5";
 			}
 		}
 		
@@ -95,14 +103,15 @@ namespace Docky.Utilities
 		public static string CmdLineForPid (int pid)
 		{
 			StreamReader reader;
-			string cmdline;
+			string cmdline = null;
+			
 			try {
 				string procPath = new [] { "/proc", pid.ToString (), "cmdline" }.Aggregate (Path.Combine);
 				reader = new StreamReader (procPath);
-				cmdline = reader.ReadLine ();
+				cmdline = reader.ReadLine ().Replace (Convert.ToChar (0x0), ' ');
 				reader.Close ();
 				reader.Dispose ();
-			} catch { return null; }
+			} catch { }
 			
 			return cmdline;
 		}
@@ -122,13 +131,7 @@ namespace Docky.Utilities
 			if (string.IsNullOrEmpty (exec))
 				return apps;
 			
-			foreach (string s in BadPrefixes) {
-				if (exec.StartsWith (s)) {
-					exec = exec.Substring (s.Length);
-					break;
-				}
-			}
-			exec = exec.Split (' ')[0];
+			exec = ProcessExecString (exec);
 			
 			Application out_app = null;
 			foreach (string dir in Directory.GetDirectories ("/proc")) {
@@ -140,13 +143,15 @@ namespace Docky.Utilities
 				string exec_line = CmdLineForPid (pid);
 				if (string.IsNullOrEmpty (exec_line))
 					continue;
-				
-				if (exec_line.Contains (exec)) {
+
+				exec_line = ProcessExecString (exec_line);
+
+				if (exec_line != null && exec_line.Contains (exec)) {
 					foreach (Application app in GetApplications ()) {
 						if (app == null)
 							continue;
 						
-						if (app.Pid == pid) {
+						if (app.Pid == pid || app.Windows.Any (w => w.Pid == pid)) {
 							if (app.Windows.Select (win => !win.IsSkipTasklist).Any ())
 								out_app = app;
 							break;
@@ -159,6 +164,28 @@ namespace Docky.Utilities
 			}
 			return apps;
 		}
+
+		public static string ProcessExecString (string exec)
+		{
+			string [] parts = exec.Split (' ');
+			for (int i = 0; i < parts.Length; i++) {
+				if (parts [i].StartsWith ("-"))
+					continue;
+				
+				if (parts [i].Contains ("/"))
+					parts [i] = parts [i].Split ('/').Last ();
+				
+				foreach (string prefix in BadPrefixes) {
+					if (parts [i] == prefix)
+						parts [i] = null;
+				}
+				
+				if (!string.IsNullOrEmpty (parts [i])) {
+					return parts [i].ToLower ();
+				}
+			}
+			return null;
+		}
 		
 		/// <summary>
 		/// Performs the "logical" click action on an entire group of applications
@@ -168,8 +195,9 @@ namespace Docky.Utilities
 		/// </param>
 		public static void PerformLogicalClick (IEnumerable<Application> apps)
 		{
-			bool not_in_viewport = !apps.Any (app => app.Windows
-			                                  .Any (w => !w.IsSkipTasklist && w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)));
+			bool not_in_viewport = !apps.SelectMany (app => app.Windows)
+				.Any (w => !w.IsSkipTasklist && w.IsInViewport (w.Screen.ActiveWorkspace));
+			
 			bool urgent = apps.Any (app => app.Windows.Any (w => w.NeedsAttention ()));
 			
 			if (not_in_viewport || urgent) {
@@ -188,7 +216,7 @@ namespace Docky.Utilities
 			List<Window> windows = new List<Window> ();
 			foreach (Wnck.Application app in apps)
 				windows.AddRange (app.Windows);
-			
+
 			switch (GetClickAction (apps)) {
 			case ClickAction.Focus:
 				WindowControl.FocusWindows (windows);

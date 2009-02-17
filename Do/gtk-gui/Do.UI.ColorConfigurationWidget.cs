@@ -157,7 +157,6 @@ namespace Do.UI {
             // Container child table1.Gtk.Table+TableChild
             this.theme_combo = Gtk.ComboBox.NewText();
             this.theme_combo.Name = "theme_combo";
-            this.theme_combo.Active = 0;
             this.table1.Add(this.theme_combo);
             Gtk.Table.TableChild w13 = ((Gtk.Table.TableChild)(this.table1[this.theme_combo]));
             w13.LeftAttach = ((uint)(1));

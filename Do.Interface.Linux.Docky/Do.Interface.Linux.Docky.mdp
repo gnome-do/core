@@ -1,11 +1,11 @@
-<Project name="Do.Interface.Linux.Docky" fileversion="2.0" language="C#" clr-version="Net_2_0" targetFramework="2.0" ctype="DotNetProject">
+<Project name="Do.Interface.Linux.Docky" fileversion="2.0" language="C#" DefaultNamespace="Docky" clr-version="Net_2_0" targetFramework="2.0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
       <Output directory="bin/Debug" assembly="Do.Interface.Linux.Docky" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <EnvironmentVariables />
-      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="False" definesymbols="DEBUG" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="False" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
       <Output directory="bin/Release" assembly="Do.Interface.Linux.Docky" />
@@ -22,42 +22,73 @@
     <File name="src/XLib" subtype="Directory" buildaction="Compile" />
     <File name="src/Docky.Interface" subtype="Directory" buildaction="Compile" />
     <File name="src/Docky.Utilities" subtype="Directory" buildaction="Compile" />
-    <File name="src/Docky.Interface/ApplicationDockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DockArea.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/DockItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/DockItemProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DockState.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DockWindow.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DrawState.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/SeparatorItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Util.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/Docky.Interface.Renderers" subtype="Directory" buildaction="Compile" />
-    <File name="src/Docky.Interface/Docky.Interface.Renderers/DockBackgroundRenderer.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Painters" subtype="Directory" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Painters/DockBackgroundRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Utilities/DockPreferences.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Utilities/GtkUtils.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Utilities/WindowUtils.cs" subtype="Code" buildaction="Compile" />
     <File name="src/XLib/X11Atoms.cs" subtype="Code" buildaction="Compile" />
     <File name="src/XLib/Xlib.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/DoDockItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/BaseDockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/IRightClickable.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Utilities/WindowControl.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/AbstractMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/DockItemMenu.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/DockPopupMenu.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/UpdateRequestArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/TrashDockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DockAnimationState.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/SeparatorMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/SimpleMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/LaunchMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/WindowMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/ItemPositionProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/ClickAnimationType.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/IDockAppItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/LayoutUtils.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/RunnableMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Utilities/DockOrientation.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus" subtype="Directory" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/DockPopupMenu.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/DockItemMenu.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/AbstractMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/LaunchMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/SeparatorMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/RunnableMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/SimpleMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/DragState.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core" subtype="Directory" buildaction="Compile" />
+    <File name="src/Docky.Core/DockServices.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/IItemsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/IDockService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/Docky.Core.Default" subtype="Directory" buildaction="Compile" />
+    <File name="src/Docky.Core/Docky.Core.Default/ItemsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/IDrawingService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/Docky.Core.Default/DrawingService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/IDockPainter.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/IDoInteropService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/Docky.Core.Default/DoInteropService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/DoInteropService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/IPainterService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/Docky.Core.Default/PainterService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/PainterService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/PaintNeededArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Painters/HotSeatPainter.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/DockArea_Rendering.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/DockArea_DragAndDrop.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items" subtype="Directory" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/ActionDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/AbstractDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/ItemDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/HotSeatProxyItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/SeparatorItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/ClockDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/WnckDockItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Painters/CalendarPainter.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/IDockletService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Items/AbstractDockletItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Core/Docky.Core.Default/DockletService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Painters/AbstractIntegratedPainter.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -73,6 +104,6 @@
     <ProjectReference type="Project" localcopy="True" refto="Do.Universe" />
     <ProjectReference type="Gac" localcopy="True" refto="gnomedesktop-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gnome-vfs-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="rsvg2-sharp, Version=2.18.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
-  <GtkDesignInfo />
 </Project>

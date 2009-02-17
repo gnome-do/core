@@ -29,9 +29,21 @@ namespace Docky.Interface
 {
 	public delegate bool AnimationConditionHandler ();
 	
+	public enum Animations {
+		Open,
+		Zoom,
+		Bounce,
+		Urgency,
+		Painter,
+		IconInsert,
+		UrgencyChanged,
+		InputModeChanged,
+		ActiveWindowChanged,
+	}
+	
 	public class DockAnimationState : IDisposable
 	{
-		Dictionary<string, AnimationConditionHandler> animation_conditions;
+		Dictionary<Animations, AnimationConditionHandler> animation_conditions;
 		bool previous_animation_needed;
 		
 		public bool AnimationNeeded {
@@ -47,18 +59,23 @@ namespace Docky.Interface
 		
 		public DockAnimationState()
 		{
-			animation_conditions = new Dictionary<string, AnimationConditionHandler> ();
+			animation_conditions = new Dictionary<Animations, AnimationConditionHandler> ();
 		}
 		
-		public void AddCondition (string id, AnimationConditionHandler handler)
+		public void AddCondition (Animations id, AnimationConditionHandler handler)
 		{
 			if (animation_conditions.ContainsKey (id))
 				throw new Exception (string.Format ("Animation Condition Handler already contains callback for {0}", id));
 			
 			animation_conditions [id] = handler;
 		}
+
+		public bool Contains (Animations id)
+		{
+			return animation_conditions.ContainsKey (id);
+		}
 		
-		public bool this [string condition]
+		public bool this [Animations condition]
 		{
 			get { 
 				if (!animation_conditions.ContainsKey (condition))
@@ -67,7 +84,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public void RemoveCondition (string id)
+		public void RemoveCondition (Animations id)
 		{
 			animation_conditions.Remove (id);
 		}

@@ -23,8 +23,6 @@ using Gtk;
 
 namespace Docky.Utilities
 {
-	
-	
 	public static class GtkUtils
 	{
 		public static void SetCompositeColormap (this Gtk.Widget self)

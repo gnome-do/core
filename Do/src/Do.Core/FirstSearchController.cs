@@ -91,8 +91,12 @@ namespace Do.Core
 
 		private void BuildNewContextFromQuery ()
 		{
+			string query = Query;
+			
+			context.Destroy ();
 			context = new SimpleSearchContext ();
-			foreach (char c in Query.ToCharArray ()) {
+			
+			foreach (char c in query.ToCharArray ()) {
 				context.LastContext = context.Clone () as SimpleSearchContext;
 				context.Query += c;
 				context.Results = InitialResults ();

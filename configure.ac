@@ -15,7 +15,7 @@ dnl Plugin ABI version; bump whenever plugin interface changes
 ABI_VERSION=0.9
 AC_SUBST(ABI_VERSION)
 
-RELEASE="true"
+RELEASE="false"
 if [ $RELEASE = "true" ] ; then
    VERSION_INFO="Release"
 else
@@ -64,6 +64,7 @@ PKG_CHECK_MODULES([GNOME_KEYRING_SHARP], [gnome-keyring-sharp-1.0])
 PKG_CHECK_MODULES([GNOME_SHARP_20], [gnome-sharp-2.0])
 PKG_CHECK_MODULES([GNOME_VFS_SHARP_20], [gnome-vfs-sharp-2.0])
 PKG_CHECK_MODULES([GTK_SHARP_20], [gtk-sharp-2.0])
+PKG_CHECK_MODULES([LIBRSVG_SHARP], [rsvg2-sharp-2.0])
 PKG_CHECK_MODULES([MONO_ADDINS], [mono-addins])
 PKG_CHECK_MODULES([MONO_ADDINS_GUI], [mono-addins-gui])
 PKG_CHECK_MODULES([MONO_ADDINS_SETUP], [mono-addins-setup])
@@ -81,6 +82,7 @@ AC_SUBST([GNOME_KEYRING_SHARP_LIBS])
 AC_SUBST([GNOME_SHARP_20_LIBS])
 AC_SUBST([GNOME_VFS_SHARP_20_LIBS])
 AC_SUBST([GTK_SHARP_20_LIBS])
+AC_SUBST([LIBRSVG_SHARP_LIBS])
 AC_SUBST([MONO_ADDINS_LIBS])
 AC_SUBST([MONO_ADDINS_GUI_LIBS])
 AC_SUBST([MONO_ADDINS_SETUP_LIBS])
@@ -140,6 +142,7 @@ Do.Universe/src/AssemblyInfo.cs
 libdo/Makefile
 Makefile
 data/Makefile
+data/Docky.DefaultClockTheme/Makefile
 data/icons/Makefile
 data/icons/hicolor/16x16/Makefile
 data/icons/hicolor/16x16/apps/Makefile

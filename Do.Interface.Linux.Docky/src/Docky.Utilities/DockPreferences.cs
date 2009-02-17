@@ -34,7 +34,6 @@ namespace Docky.Utilities
 	{
 		public static event Action AutohideChanged;
 		public static event Action IconSizeChanged;
-		public static event Action TrashVisibilityChanged;
 		public static event Action AutomaticIconsChanged;
 		public static event Action MonitorChanged;
 		public static event Action AllowOverlapChanged;
@@ -49,7 +48,7 @@ namespace Docky.Utilities
 			get { return 350; }
 		}
 		
-		static int zoom_size = prefs.Get<int> ("ZoomSize", 300);
+		static int zoom_size = prefs.Get ("ZoomSize", 300);
 		public static int ZoomSize {
 			get { return (int) (zoom_size * (IconSize / (double) DefaultIconSize)); }
 			set { 
@@ -67,16 +66,20 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static double zoom_percent = prefs.Get<double> ("ZoomPercent", 2);
+		static double zoom_percent = prefs.Get ("ZoomPercent", 2.0);
 		public static double ZoomPercent {
 			get { return ZoomEnabled ? zoom_percent : 1; }
 			set {
+				if (value < 1)
+					value = 1;
 				prefs.Set ("ZoomPercent", value);
 				zoom_percent = value;
+				if (IconSizeChanged != null)
+					IconSizeChanged ();
 			}
 		}
 		
-		static bool enable_zoom = prefs.Get<bool> ("EnableZoom", true);
+		static bool enable_zoom = prefs.Get ("EnableZoom", true);
 		public static bool ZoomEnabled {
 			get { return enable_zoom; }
 			set {
@@ -104,7 +107,7 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static int icon_size = prefs.Get<int> ("IconSize", DefaultIconSize);
+		static int icon_size = prefs.Get ("IconSize", DefaultIconSize);
 		public static int IconSize {
 			get { return Math.Min (icon_size, MaxIconSize); }
 			set {
@@ -136,7 +139,7 @@ namespace Docky.Utilities
 			get { return ZoomPercent; }
 		}
 		
-		static bool autohide = prefs.Get<bool> ("AutoHide", false);
+		static bool autohide = prefs.Get ("AutoHide", false);
 		public static bool AutoHide {
 			get { return autohide; }
 			set {
@@ -150,7 +153,7 @@ namespace Docky.Utilities
 			}
 		}
 
-		static bool allow_overlap = prefs.Get<bool> ("AllowWindowOverlap", false);
+		static bool allow_overlap = prefs.Get ("AllowWindowOverlap", false);
 		public static bool AllowOverlap {
 			get { return allow_overlap; }
 			set {
@@ -165,21 +168,7 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static bool show_trash = prefs.Get<bool> ("ShowTrash", true);
-		public static bool ShowTrash {
-			get { return show_trash; }
-			set {
-				if (show_trash == value)
-					return;
-				prefs.Set ("ShowTrash", value);
-				show_trash = value;
-				
-				if (TrashVisibilityChanged != null)
-					TrashVisibilityChanged ();
-			}
-		}
-		
-		static TimeSpan summon_time = new TimeSpan (0, 0, 0, 0, prefs.Get<int> ("SummonTime", 100));
+		static TimeSpan summon_time = new TimeSpan (0, 0, 0, 0, prefs.Get ("SummonTime", 100));
 		public static TimeSpan SummonTime {
 			get { return summon_time; }
 			set {
@@ -188,7 +177,7 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static int automatic_icons = prefs.Get<int> ("AutomaticIcons", 5);
+		static int automatic_icons = prefs.Get ("AutomaticIcons", 5);
 		public static int AutomaticIcons {
 			get { return automatic_icons; }
 			set {
@@ -202,7 +191,7 @@ namespace Docky.Utilities
 			}
 		}
 
-		static int monitor = Math.Max (0, prefs.Get<int> ("Monitor", 0));
+		static int monitor = Math.Max (0, prefs.Get ("Monitor", 0));
 		public static int Monitor {
 			get {
 				monitor = Math.Max (0, Math.Min (monitor, Gdk.Screen.Default.NMonitors - 1));
@@ -220,6 +209,24 @@ namespace Docky.Utilities
 				if (MonitorChanged != null)
 					MonitorChanged ();
 			}
+		}
+
+		static DockOrientation orientation = (DockOrientation) Enum.Parse (typeof (DockOrientation), prefs.Get ("Orientation", DockOrientation.Bottom.ToString ()));
+		public static DockOrientation Orientation {
+			get {
+				if (orientation != DockOrientation.Top && orientation != DockOrientation.Bottom)
+					orientation = DockOrientation.Bottom;
+				
+				return orientation;
+			}
+			set {
+				orientation = value;
+				prefs.Set ("Orientation", value.ToString ());
+			}
+		}
+
+		public static bool DockIsHorizontal {
+			get { return Orientation == DockOrientation.Top || Orientation == DockOrientation.Bottom; }
 		}
 		
 		#region blacklists

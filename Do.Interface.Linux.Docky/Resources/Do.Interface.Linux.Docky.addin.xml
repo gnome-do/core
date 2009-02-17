@@ -15,10 +15,14 @@
 	<Dependencies>
 		<Addin id="Interface.Linux" version="1.0" />
 	</Dependencies>
+
+	<!--<ExtensionPoint path="/Docky/Applet">
+		<ExtensionNode name="DockApplet" objectType="Docky.Interface.AbstractDockItem" />
+		<ExtensionNode name="DockPainter" objectType="Docky.Interface.IDockPainter" />
+	</ExtensionPoint>-->
 	
-	<!-- Extensions included in this assembly -->
-	<!-- Sources -->
 	<Extension path = "/Do/InterfaceWindow">
 		<InterfaceWindow type="Docky.Interface.DockWindow" />
 	</Extension>
+
 </Addin>

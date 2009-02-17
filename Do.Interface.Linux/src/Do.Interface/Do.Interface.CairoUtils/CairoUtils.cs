@@ -306,6 +306,34 @@ namespace Do.Interface.CairoUtils
 		}
 		
 		/// <summary>
+		/// Set a color to use a maximum value
+		/// </summary>
+		/// <param name="gdk_color">
+		/// A <see cref="Gdk.Color"/>
+		/// </param>
+		/// <param name="max_value">
+		/// A <see cref="System.Double"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="Gdk.Color"/>
+		/// </returns>
+		public static Gdk.Color SetMinimumValue (this Gdk.Color gdk_color, double min_value)
+		{
+			byte r, g, b; 
+			double h, s, v;
+			
+			r = (byte) ((gdk_color.Red)   >> 8);
+			g = (byte) ((gdk_color.Green) >> 8);
+			b = (byte) ((gdk_color.Blue)  >> 8);
+			
+			Util.Appearance.RGBToHSV (r, g, b, out h, out s, out v);
+			v = Math.Max (v, min_value);
+			Util.Appearance.HSVToRGB (h, s, v, out r, out g, out b);
+			
+			return new Gdk.Color (r, g, b);
+		}
+		
+		/// <summary>
 		/// Convert a Gdk.color to a hex string
 		/// </summary>
 		/// <param name="gdk_color">

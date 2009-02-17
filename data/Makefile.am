@@ -1,4 +1,4 @@
-SUBDIRS = icons
+SUBDIRS = icons Docky.DefaultClockTheme
 
 EXTRA_DIST = $(schemas_in_files)
 CLEANFILES = $(schemas_DATA)
