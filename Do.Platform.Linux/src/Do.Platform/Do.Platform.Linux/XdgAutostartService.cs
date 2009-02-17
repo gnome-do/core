@@ -18,6 +18,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using Do;
 using Do.Platform;
 using Gnome;
