@@ -22,7 +22,7 @@ using Do.Platform.ServiceStack;
 
 namespace Do.Platform
 {	
-	public interface IPlatformServices : IService
+	public interface IAutostartService : IService
 	{
 		bool IsAutostartEnabled ();
 		void SetAutostart (bool enabled);
