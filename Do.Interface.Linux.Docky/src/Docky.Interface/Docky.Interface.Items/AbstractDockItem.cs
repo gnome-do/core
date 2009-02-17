@@ -227,14 +227,14 @@ namespace Docky.Interface
 
 		protected virtual Surface MakeIconSurface (Surface similar, int size)
 		{
-			current_size = DockPreferences.FullIconSize;
-			Surface tmp_surface = similar.CreateSimilar (similar.Content, DockPreferences.FullIconSize, DockPreferences.FullIconSize);
+			current_size = size;
+			Surface tmp_surface = similar.CreateSimilar (similar.Content, size, size);
 			Context cr = new Context (tmp_surface);
 			
 			Gdk.Pixbuf pbuf = GetSurfacePixbuf (size);
 			if (pbuf != null) {
-				if (pbuf.Width != DockPreferences.FullIconSize || pbuf.Height != DockPreferences.FullIconSize) {
-					double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
+				if (pbuf.Width != size || pbuf.Height != size) {
+					double scale = (double)size / Math.Max (pbuf.Width, pbuf.Height);
 					Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), Gdk.InterpType.Bilinear);
 					pbuf.Dispose ();
 					pbuf = temp;
@@ -242,8 +242,8 @@ namespace Docky.Interface
 			
 				Gdk.CairoHelper.SetSourcePixbuf (cr, 
 				                                 pbuf, 
-				                                 (DockPreferences.FullIconSize - pbuf.Width) / 2,
-				                                 (DockPreferences.FullIconSize - pbuf.Height) / 2);
+				                                 (size - pbuf.Width) / 2,
+				                                 (size - pbuf.Height) / 2);
 				cr.Paint ();
 			
 				pbuf.Dispose ();

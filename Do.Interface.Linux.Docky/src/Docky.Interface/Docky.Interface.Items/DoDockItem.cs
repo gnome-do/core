@@ -49,6 +49,13 @@ namespace Docky.Interface
 		
 		#region IDockItem implementation 
 		
+		public override ScalingType ScalingType {
+			get {
+				return ScalingType.HighLow;
+			}
+		}
+
+		
 		protected override Pixbuf GetSurfacePixbuf (int size)
 		{
 			return IconProvider.PixbufFromIconName (DoIcon, size);
