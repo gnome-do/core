@@ -18,7 +18,7 @@
 
 using System;
 
-namespace Do.Platform
+namespace Do.Platform.Default
 {
 	
 	

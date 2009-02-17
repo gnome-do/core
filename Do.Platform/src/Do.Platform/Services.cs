@@ -116,7 +116,7 @@ namespace Do.Platform
 		public static IAutostartService Autostart {
 			get {
 				if (autostart == null)
-					autostart = LocateSErvice<IAutostartService, Default.AutostartService> ();
+					autostart = LocateService<IAutostartService, Default.AutostartService> ();
 				return autostart;
 			}
 		}
