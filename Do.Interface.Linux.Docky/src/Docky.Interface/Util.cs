@@ -58,7 +58,6 @@ namespace Docky.Interface
 	public static class Util
 	{
 		const int Height = 35;
-		static Surface indicator, urgent_indicator;
 		
 		public static Surface GetBorderedTextSurface (string text, int maxWidth, Surface similar) 
 		{
