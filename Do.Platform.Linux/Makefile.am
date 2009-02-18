@@ -36,8 +36,8 @@ endif
 
 RESOURCES =  \
 	gtk-gui/gui.stetic \
-	Resources/Do.Platform.Linux.addin.xml \
-	../Do/gnome-do.desktop
+	Resources/Do.Platform.Linux.addin.xml
+
 
 PKG_CONFIG_FILES = do.platform.linux.pc
 

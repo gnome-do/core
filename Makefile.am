@@ -4,6 +4,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = \
 	. \
+	data \
 	Do.Universe \
 	Do.Platform \
 	Do.Interface.Linux \
@@ -16,8 +17,7 @@ SUBDIRS = \
 	Do \
 	po \
 	libdo \
-	m4 \
-	data
+	m4
 
 # Get rid of the build dir on clean.
 clean-local:

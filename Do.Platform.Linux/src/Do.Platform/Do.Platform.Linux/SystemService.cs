@@ -137,7 +137,7 @@ namespace Do.Platform.Linux
 				} catch (GLib.GException loadException) {
 					Log<SystemService>.Info ("Unable to load existing autostart file: {0}", loadException.Message);
 					Log<SystemService>.Info ("Writing new autostart file to {0}", AutoStartFileName);
-					autostartfile = new DesktopItem (AutoStartUri, InitialAutoStartFile (), DesktopItemLoadFlags.NoTranslations);
+					autostartfile = new DesktopItem ("gnome-do", DesktopItemLoadFlags.NoTranslations);
 					try {
 						autostartfile.Save (AutoStartUri, true);
 					} catch (Exception e) {
