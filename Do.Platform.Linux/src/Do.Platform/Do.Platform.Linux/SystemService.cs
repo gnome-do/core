@@ -37,6 +37,8 @@ namespace Do.Platform.Linux
 		const string PowerManagementName = "org.freedesktop.PowerManagement";
 		const string PowerManagementPath = "/org/freedesktop/PowerManagement";
 		const string AutoStartKey = "Hidden";
+		
+		DesktopItem autostartfile;
 
 		[Interface(PowerManagementName)]
 		interface IPowerManagement
@@ -127,20 +129,22 @@ namespace Do.Platform.Linux
 		
 		DesktopItem AutoStartFile {
 			get {
-				DesktopItem autostart;
+				if (autostartfile != null) 
+					return autostartfile;
+				
 				try {
-					autostart = DesktopItem.NewFromUri (AutoStartUri, DesktopItemLoadFlags.NoTranslations);
+					autostartfile = DesktopItem.NewFromUri (AutoStartUri, DesktopItemLoadFlags.NoTranslations);
 				} catch (GLib.GException loadException) {
 					Log<SystemService>.Info ("Unable to load existing autostart file: {0}", loadException.Message);
 					Log<SystemService>.Info ("Writing new autostart file to {0}", AutoStartFileName);
-					autostart = new DesktopItem (AutoStartUri, InitialAutoStartFile (), DesktopItemLoadFlags.NoTranslations);
+					autostartfile = new DesktopItem (AutoStartUri, InitialAutoStartFile (), DesktopItemLoadFlags.NoTranslations);
 					try {
-						autostart.Save (AutoStartUri, true);
+						autostartfile.Save (AutoStartUri, true);
 					} catch (Exception e) {
 						Log<SystemService>.Error ("Failed to write initial autostart file: {0}", e.Message);
 					}
 				}
-				return autostart;
+				return autostartfile;
 			}
 		}
 		
