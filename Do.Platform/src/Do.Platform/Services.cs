@@ -111,7 +111,7 @@ namespace Do.Platform
 				return logs;
 			}
 		}
-
+		
 		public static ICoreService Core {
 			get {
 				if (core == null)

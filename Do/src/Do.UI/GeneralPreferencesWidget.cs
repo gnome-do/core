@@ -37,21 +37,6 @@ namespace Do.UI
     [System.ComponentModel.ToolboxItem(true)]
     public partial class GeneralPreferencesWidget : Bin, IConfigurable
     {
-		const string AutostartAttribute = "X-GNOME-Autostart-enabled";
-	
-		string AutostartDir {
-			get {
-				return System.IO.Path.Combine (
-					Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "autostart");
-		    }
-		}
-		
-		string AutostartFile {
-		  get {
-		      return System.IO.Path.Combine (AutostartDir, "gnome-do.desktop");
-		    }
-		}
-		
 		new public string Name {
 		  get { return Catalog.GetString ("General"); }
 		}
@@ -79,34 +64,18 @@ namespace Do.UI
 		  return this;
 		}
 	        
-		/// <value>
-		/// This property sacrifies much efficiency to eschew the gnomedesktop
-		/// dependency and to work more reliably.
-		/// </value>
 		protected bool AutostartEnabled {
 		  get {
-		      try {
-			  return File.Exists (AutostartFile) && !File.ReadAllText (AutostartFile).Contains (AutostartAttribute + "=false");
-			} catch (Exception e) {
-			  Log.Error ("Failed to get autostart: {0}", e.Message);
+				return Services.System.IsAutoStartEnabled ();
 			}
 			
-			return false;
-		    }
-		    set {
-		      try {
-			    if (File.Exists (AutostartFile))
-			      File.Delete (AutostartFile);
-			    if (value) {
-			      Directory.CreateDirectory (AutostartDir);
-				Stream s = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("gnome-do.desktop");
-				using (StreamReader sr = new StreamReader (s))
-				  File.AppendAllText (AutostartFile, sr.ReadToEnd ());
-			    }
-			} catch (Exception e) {
-			  Log.Error ("Failed to set autostart: {0}", e.Message);
+			set {
+				try {
+					Services.System.SetAutoStartEnabled (value);
+				} catch (Exception e) {
+					Log<GeneralPreferencesWidget>.Error ("Failed to set autostart: {0}", e.Message);
+				}
 			}
-		    }
 		}
 		
 		protected virtual void OnLoginCheckClicked (object sender, EventArgs e)

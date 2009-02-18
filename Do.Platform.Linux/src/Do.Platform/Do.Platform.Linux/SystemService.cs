@@ -18,12 +18,15 @@
 //
 
 using System;
+using System.Reflection;
 
 using NDesk.DBus;
 using org.freedesktop.DBus;
 
 using Do.Platform.ServiceStack;
 using Do.Platform.Linux.DBus;
+
+using Gnome;
 
 namespace Do.Platform.Linux
 {
@@ -33,6 +36,9 @@ namespace Do.Platform.Linux
 
 		const string PowerManagementName = "org.freedesktop.PowerManagement";
 		const string PowerManagementPath = "/org/freedesktop/PowerManagement";
+		const string AutoStartKey = "Hidden";
+		
+		DesktopItem autostartfile;
 
 		[Interface(PowerManagementName)]
 		interface IPowerManagement
@@ -91,6 +97,83 @@ namespace Do.Platform.Linux
 			Gdk.Threads.Enter ();
 			Services.Windowing.SummonMainWindow ();
 			Gdk.Threads.Leave ();
+		}
+		
+
+		string AutoStartDir {
+			get {
+				return System.IO.Path.Combine (
+					Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "autostart");
+		    }
+		}
+		
+		string AutoStartFileName {
+		  get {
+		      return System.IO.Path.Combine (AutoStartDir, "gnome-do.desktop");
+		    }
+		}
+
+		string InitialAutoStartFile ()
+		{
+			System.IO.Stream s = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("gnome-do.desktop");
+			using (System.IO.StreamReader sr = new System.IO.StreamReader (s)) {
+				return sr.ReadToEnd ();
+			}
+		}
+		
+		string AutoStartUri {
+			get {
+				return Gnome.Vfs.Uri.GetUriFromLocalPath (AutoStartFileName);
+			}
+		}
+		
+		DesktopItem AutoStartFile {
+			get {
+				if (autostartfile != null) 
+					return autostartfile;
+				
+				try {
+					autostartfile = DesktopItem.NewFromUri (AutoStartUri, DesktopItemLoadFlags.NoTranslations);
+				} catch (GLib.GException loadException) {
+					Log<SystemService>.Info ("Unable to load existing autostart file: {0}", loadException.Message);
+					Log<SystemService>.Info ("Writing new autostart file to {0}", AutoStartFileName);
+					autostartfile = DesktopItem.NewFromFile (System.IO.Path.Combine (AssemblyInfo.InstallData, "applications/gnome-do.desktop"),
+					                                         DesktopItemLoadFlags.NoTranslations);
+					try {
+						autostartfile.Save (AutoStartUri, true);
+						autostartfile.Location = AutoStartUri;
+					} catch (Exception e) {
+						Log<SystemService>.Error ("Failed to write initial autostart file: {0}", e.Message);
+					}
+				}
+				return autostartfile;
+			}
+		}
+		
+		public override bool IsAutoStartEnabled ()
+		{
+			DesktopItem autostart = AutoStartFile;
+			
+			if (!autostart.Exists ()) {
+				Log<SystemService>.Error ("Could not open autostart file {0}", AutoStartUri);
+			}
+			
+			if (autostart.AttrExists (AutoStartKey)) {
+				return !String.Equals(autostart.GetString (AutoStartKey), "true", StringComparison.OrdinalIgnoreCase);
+			}
+			return false;
+		}
+		
+		public override void SetAutoStartEnabled (bool enabled)
+		{
+			DesktopItem autostart = AutoStartFile;
+			
+			autostart.SetBoolean (AutoStartKey, !enabled);
+			try {
+				autostart.Save (null, true);
+			} catch (Exception e) {
+				Log<SystemService>.Error ("Failed to update autostart file: {0}", e.Message);
+			}
 		}
 	}
 }

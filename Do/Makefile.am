@@ -72,7 +72,6 @@ FILES = \
 
 RESOURCES = \
 	gtk-gui/gui.stetic \
-	gnome-do.desktop \
 	Resources/Do.addin.xml
 
 REFERENCES =  \
@@ -95,13 +94,9 @@ PROJECT_REFERENCES = \
 #
 # Extra rules for our binary, not worth factoring out
 #
-@INTLTOOL_DESKTOP_RULE@
 
-CLEANFILES += gnome-do.desktop Do.exe.config gnome-do
-EXTRA_DIST += gnome-do.desktop.in Do.exe.config.in gnome-do.in
+CLEANFILES += Do.exe.config gnome-do
+EXTRA_DIST += Do.exe.config.in gnome-do.in
 
 module_DATA += Do.exe.config
 bin_SCRIPTS = gnome-do
-
-applicationsdir = $(datadir)/applications
-applications_DATA = gnome-do.desktop

@@ -43,3 +43,12 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
+
+namespace Do.Platform.Linux
+{
+	internal static class AssemblyInfo
+	{
+		public const string InstallPrefix = "@prefix@";
+		public const string InstallData = "@expanded_datadir@";
+	}
+}

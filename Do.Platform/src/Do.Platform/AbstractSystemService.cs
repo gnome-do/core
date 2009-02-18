@@ -33,5 +33,13 @@ namespace Do.Platform
 
 		public abstract void EnsureSingleApplicationInstance ();
 		
+		public virtual bool IsAutoStartEnabled ()
+		{
+			return false;
+		}
+		public virtual void SetAutoStartEnabled (bool enabled)
+		{
+		}
+		
 	}
 }
