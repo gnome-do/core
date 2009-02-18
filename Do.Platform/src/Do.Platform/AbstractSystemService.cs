@@ -37,7 +37,7 @@ namespace Do.Platform
 		{
 			return false;
 		}
-		public virtual void SetAutoStart (bool enabled)
+		public virtual void SetAutoStartEnabled (bool enabled)
 		{
 		}
 		

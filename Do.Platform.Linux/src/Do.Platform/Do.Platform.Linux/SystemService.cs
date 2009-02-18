@@ -162,7 +162,7 @@ namespace Do.Platform.Linux
 			return false;
 		}
 		
-		public override void SetAutoStart (bool enabled)
+		public override void SetAutoStartEnabled (bool enabled)
 		{
 			DesktopItem autostart = AutoStartFile;
 			
