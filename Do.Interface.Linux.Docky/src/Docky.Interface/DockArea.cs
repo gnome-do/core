@@ -346,9 +346,10 @@ namespace Docky.Interface
 			if (args.Animated) {
 				if (AnimationState.Contains (Animations.Painter))
 					AnimationState.RemoveCondition (Animations.Painter);
-			
+				TimeSpan span = args.AnimationLength;
+				
 				DateTime current_time = DateTime.UtcNow;
-				AnimationState.AddCondition (Animations.Painter, () => DateTime.UtcNow - current_time < args.AnimationLength);
+				AnimationState.AddCondition (Animations.Painter, () => DateTime.UtcNow - current_time < span);
 			}
 			AnimatedDraw ();
 		}
