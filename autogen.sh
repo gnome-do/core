@@ -117,4 +117,4 @@ check_autotool_version intltoolize 0.35
 run intltoolize --force --copy --automake
 
 echo Running $srcdir/configure $conf_flags "$@" ...
-$srcdir/configure --enable-maintainer-mode $conf_flags "$@" \
+$srcdir/configure $conf_flags "$@" \
