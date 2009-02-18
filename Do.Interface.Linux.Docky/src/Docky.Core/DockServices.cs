@@ -73,6 +73,34 @@ namespace Docky.Core
 				return painter_service; 
 			}
 		}
+		
+		public static void Clean ()
+		{
+			if (items_service != null) {
+				items_service.Dispose ();
+				items_service = null;
+			}
+			
+			if (drawing_service != null) {
+				drawing_service.Dispose ();
+				drawing_service = null;
+			}
+			
+			if (do_interop_service != null) {
+				do_interop_service.Dispose ();
+				do_interop_service = null;
+			}
+			if (painter_service != null) {
+				painter_service.Dispose ();
+				painter_service = null;
+			}
+			if (docklet_service != null) {
+				docklet_service.Dispose ();
+				docklet_service = null;
+			}
+			
+			services.Clear ();
+		}
 
 		public static void RegisterService (IDockService service)
 		{

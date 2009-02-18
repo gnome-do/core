@@ -428,6 +428,8 @@ namespace Docky.Interface
 			Core.DockServices.UnregisterService (interop_service);
 			interop_service.Dispose ();
 			
+			Core.DockServices.Clean ();
+			
 			Destroy ();
 			base.Dispose ();
 		}

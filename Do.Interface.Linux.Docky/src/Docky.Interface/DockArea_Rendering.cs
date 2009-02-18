@@ -649,6 +649,8 @@ namespace Docky.Interface
 				urgent_indicator = null;
 			}
 			
+			RequestFullRender ();
+			
 			base.OnStyleSet (previous_style);
 		}
 		
