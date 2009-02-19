@@ -48,6 +48,7 @@ namespace Do.UI
 			"http://do.davebsd.com/wiki/index.php?title={0}_Plugin";
 
 		PluginNodeView nview;
+		SearchEntry search_entry;
 
 		new public string Name {
 			get { return Catalog.GetString ("Plugins"); }
@@ -65,6 +66,7 @@ namespace Do.UI
 		{
 			Build ();
 			
+			search_entry = new SearchEntry ();
 			nview = new PluginNodeView ();
 			nview.PluginToggled += OnPluginToggled;
 			nview.PluginSelected += OnPluginSelected;
@@ -83,9 +85,18 @@ namespace Do.UI
 				show_combo.AppendText (cfier.Name);
 			}
 			show_combo.Active = 0;
-
+			
+			search_entry = new SearchEntry ();
+			
+			search_entry.Changed += OnSearchEntryChanged;
+			search_entry.Show();
+			search_entry.Ready = true;
+			
+			hbox1.PackStart (search_entry,true,true,0);
+			hbox1.ShowAll();
+			
 			Services.Application.RunOnMainThread (() =>
-				search_entry.GrabFocus ()
+				search_entry.InnerEntry.GrabFocus ()
 			);
 		}
 		
@@ -194,12 +205,12 @@ namespace Do.UI
 		void OnShowComboChanged (object sender, EventArgs e)
 		{
 			nview.ShowCategory = show_combo.ActiveText;
-			nview.Filter = search_entry.Text = "";
+			nview.Filter = search_entry.Query;
 		}
 
 		void OnSearchEntryChanged (object sender, EventArgs e)
 		{
-			nview.Filter = search_entry.Text;
+			nview.Filter = search_entry.Query;
 		}
 
 		void OnScrollwDragDataReceived (object o, DragDataReceivedArgs e)

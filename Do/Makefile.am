@@ -51,6 +51,8 @@ FILES = \
 	src/Do.UI/PluginSelectionEventArgs.cs \
 	src/Do.UI/PluginUpdateNodeView.cs \
 	src/Do.UI/PreferencesWindow.cs \
+	src/Do.UI/SearchEntry.cs \
+	src/Do.UI/HoverImageButton.cs \
 	src/Do.Universe/ClearLearningItem.cs \
 	src/Do.Universe/EvilAction.cs \
 	src/Do.Universe/EvilElement.cs \
@@ -100,3 +102,5 @@ EXTRA_DIST += Do.exe.config.in gnome-do.in
 
 module_DATA += Do.exe.config
 bin_SCRIPTS = gnome-do
+
+MCS_FLAGS += -unsafe
