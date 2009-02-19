@@ -450,12 +450,16 @@ namespace Docky.Core.Default
 		void SerializeSortDictionary ()
 		{
 			try {
-				using (Stream s = File.OpenWrite (SortDictionaryPath)) {
-					BinaryFormatter f = new BinaryFormatter ();
-					f.Serialize (s, DraggableItems.ToDictionary (di => di.Element.UniqueId, di => di.Position));
+				if (File.Exists (SortDictionaryPath))
+					File.Delete (SortDictionaryPath);
+				
+				using (StreamWriter writer = new StreamWriter (SortDictionaryPath)) {
+					foreach (ItemDockItem di in DraggableItems) {
+						writer.WriteLine ("{0},{1}", di.Element.UniqueId, di.Position);
+					}
 				}
 			} catch (Exception e) {
-				Log<ItemsService>.Error ("Could not serialize sort items");
+				Log<ItemsService>.Error ("Could not write out sort items");
 				Log<ItemsService>.Error (e.Message);
 			}
 		}
@@ -480,18 +484,19 @@ namespace Docky.Core.Default
 		
 		Dictionary<string, int> DeserializeSortDictionary ()
 		{
-			Dictionary<string, int> sortDictionary;
+			Dictionary<string, int> sortDictionary = new Dictionary<string, int> ();
 			try {
-				using (Stream s = File.OpenRead (SortDictionaryPath)) {
-					BinaryFormatter f = new BinaryFormatter ();
-					sortDictionary = f.Deserialize (s) as Dictionary<string, int>;
+				using (StreamReader reader = new StreamReader (SortDictionaryPath)) {
+					string [] line;
+					while (!reader.EndOfStream) {
+						line = reader.ReadLine ().Split (',');
+						sortDictionary [line [0]] = Convert.ToInt32 (line [1]);
+					}
 				}
 			} catch (FileNotFoundException e) {
 				Log<ItemsService>.Debug ("Sort Dictionary file not present, nothing to add. " + e.Message);
-				sortDictionary = new Dictionary<string, int> ();
 			} catch {
 				Log<ItemsService>.Error ("Could not deserialize sort dictionary");
-				sortDictionary = new Dictionary<string, int> ();
 			}
 			return sortDictionary;
 		}
