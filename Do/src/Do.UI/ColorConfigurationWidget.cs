@@ -82,12 +82,29 @@ namespace Do.UI
 		private void SetupButtons ()
 		{
 			setup = true;
+			ushort alpha;
+			background_colorbutton.Color = ColorFromPrefs(BezelDrawingArea.BgColor, out alpha);
+			background_colorbutton.Alpha = alpha;
 			clear_background.Sensitive = true;
 			background_colorbutton.Sensitive = shadow_check.Sensitive = true;
 			shadow_check.Active = BezelDrawingArea.DrawShadow;
 			animation_check.Active = BezelDrawingArea.Animated;
 			Gtk.Application.Invoke (delegate { setup = false; });
 		}
+		
+		private Gdk.Color ColorFromPrefs(string colorString, out ushort alpha)
+		{
+			byte r,g,b;
+			uint converted = uint.Parse (colorString, System.Globalization.NumberStyles.HexNumber);
+	
+			alpha = (ushort) ((converted & 255) << 8);
+			b = (byte) ((converted >> 8) & 255);
+			g = (byte) ((converted >> 16) & 255);
+			r = (byte) ((converted >> 24) & 255);
+			
+			return new Gdk.Color (r,g,b);
+		}
+			                                                  
 		
 		public Gtk.Bin GetConfiguration ()
 		{
