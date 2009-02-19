@@ -94,15 +94,26 @@ namespace Do.UI
 		
 		private Gdk.Color ColorFromPrefs(string colorString, out ushort alpha)
 		{
+			Gdk.Color prefsColor;
 			byte r,g,b;
-			uint converted = uint.Parse (colorString, System.Globalization.NumberStyles.HexNumber);
-	
-			alpha = (ushort) ((converted & 255) << 8);
-			b = (byte) ((converted >> 8) & 255);
-			g = (byte) ((converted >> 16) & 255);
-			r = (byte) ((converted >> 24) & 255);
+			uint converted;
 			
-			return new Gdk.Color (r,g,b);
+			try {
+				converted = uint.Parse (colorString, System.Globalization.NumberStyles.HexNumber);
+		
+				alpha = (ushort) ((converted & 255) << 8);
+				b = (byte) ((converted >> 8) & 255);
+				g = (byte) ((converted >> 16) & 255);
+				r = (byte) ((converted >> 24) & 255);
+				prefsColor = new Gdk.Color (r,g,b);
+			}
+			catch (Exception e) {
+				prefsColor = new Gdk.Color (0,0,0);
+				alpha = ushort.MaxValue;
+				Log<ColorConfigurationWidget>.Error ("Error setting color: {0}", e.Message);
+			}
+			
+			return prefsColor;
 		}
 			                                                  
 		
