@@ -110,7 +110,8 @@ namespace Do.UI
 			catch (Exception e) {
 				prefsColor = new Gdk.Color (0,0,0);
 				alpha = ushort.MaxValue;
-				Log<ColorConfigurationWidget>.Error ("Error setting color: {0}", e.Message);
+				if (colorString.ToLower () != "default")
+					Log<ColorConfigurationWidget>.Error ("Error setting color: {0}", e.Message);
 			}
 			
 			return prefsColor;
