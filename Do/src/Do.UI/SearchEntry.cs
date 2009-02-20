@@ -38,9 +38,6 @@ namespace Do.UI
         private Entry entry;
         private HoverImageButton clear_button;
 
-        private Menu menu;
-        private int active_filter_id = -1;
-
         private uint changed_timeout_id = 0;
         
         private string empty_message;
@@ -56,11 +53,6 @@ namespace Do.UI
         public event EventHandler Activated {
             add { entry.Activated += value; }
             remove { entry.Activated -= value; }
-        }
-
-        
-        public Menu Menu {
-            get { return menu; }
         }
 
         public SearchEntry()
@@ -251,8 +243,8 @@ namespace Do.UI
 
                 text_gc = new Gdk.GC(text_window);
                 text_gc.Copy(Style.TextGC(StateType.Normal));
-                Gdk.Color color_a = parent.Style.Base(StateType.Normal);
-                Gdk.Color color_b = parent.Style.Text(StateType.Normal);
+                //Gdk.Color color_a = parent.Style.Base(StateType.Normal);
+                //Gdk.Color color_b = parent.Style.Text(StateType.Normal);
 				text_gc.RgbFgColor = new Gdk.Color (0,0,0);
                 //text_gc.RgbFgColor = Hyena.Gui.GtkUtilities.ColorBlend(color_a, color_b);
             }
