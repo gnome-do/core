@@ -52,6 +52,7 @@ namespace Docky.Interface
 		DateTime enter_time = new DateTime (0);
 		DateTime interface_change_time = new DateTime (0);
 		DateTime last_draw_timeout = new DateTime (0);
+		DateTime cursor_update = new DateTime (0);
 		
 		bool disposed;
 		
@@ -445,13 +446,14 @@ namespace Docky.Interface
 		
 		void ManualCursorUpdate ()
 		{
+			if ((DateTime.UtcNow - cursor_update).TotalMilliseconds < 15) {
+				return;
+			}
+			
 			int x, y;
 			ModifierType mod;
 
 			Display.GetPointer (out x, out y, out mod);
-			CursorModifier = mod;
-			if ((Cursor.X == x && Cursor.Y == y) || PopupMenu.Visible)
-				return;
 			
 			Gdk.Rectangle geo, hide_offset;
 			window.GetPosition (out geo.X, out geo.Y);
@@ -459,6 +461,17 @@ namespace Docky.Interface
 
 			x -= geo.X - hide_offset.X;
 			y -= geo.Y - hide_offset.Y;
+			
+			SetupCursor (x, y, mod);
+		}
+		
+		void SetupCursor (int x, int y, ModifierType mod)
+		{
+			CursorModifier = mod;
+			
+			if ((Cursor.X == x && Cursor.Y == y) || PopupMenu.Visible)
+				return;
+			
 			Gdk.Point old_cursor_location = Cursor;
 			Cursor = new Gdk.Point (x, y);
 
@@ -478,6 +491,8 @@ namespace Docky.Interface
 		protected override bool OnMotionNotifyEvent (Gdk.EventMotion evnt)
 		{
 			GtkDragging = false;
+			SetupCursor ((int) evnt.X, (int) evnt.Y, evnt.State);
+			cursor_update = DateTime.UtcNow;
 			return base.OnMotionNotifyEvent (evnt);
 		}
 		

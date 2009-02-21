@@ -312,13 +312,17 @@ namespace Docky.Interface
 			X11Atoms atoms = new X11Atoms (GdkWindow);
 
 			uint [] struts = dock_area.StrutRequest;
+			uint [] first_struts = new [] { struts [0], struts [1], struts [2], struts [3] };
 
 			strut_timer = 0;
 			
 			if (!IsRealized)
 				return false;
+			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT, atoms.XA_CARDINAL,
+			                      (int) XLib.PropertyMode.PropModeReplace, struts);
 			
-			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT_PARTIAL, atoms.XA_CARDINAL, (int) XLib.PropertyMode.PropModeReplace, struts);
+			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT_PARTIAL, atoms.XA_CARDINAL, 
+			                      (int) XLib.PropertyMode.PropModeReplace, first_struts);
 				
 			return false;
 		}
