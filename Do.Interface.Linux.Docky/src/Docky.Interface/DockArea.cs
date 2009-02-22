@@ -371,7 +371,7 @@ namespace Docky.Interface
 			ManualCursorUpdate ();
 			
 			// if we have a painter visible this takes care of interrupting it on mouse off
-			if (!CursorIsOverDockArea && PainterOverlayVisible && (DateTime.UtcNow - enter_time).TotalMilliseconds > 800)
+			if (!CursorIsOverDockArea && PainterOverlayVisible && (DateTime.UtcNow - enter_time).TotalMilliseconds > 400)
 				InterruptPainter ();
 			
 			return true;

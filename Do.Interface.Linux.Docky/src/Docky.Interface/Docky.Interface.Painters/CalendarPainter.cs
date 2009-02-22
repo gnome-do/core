@@ -63,6 +63,10 @@ namespace Docky.Interface.Painters
 			DrawVSeparator (cr, 
 			                new Gdk.Point (paintArea.X + paintArea.Width / 9, paintArea.Y + 4),
 			                new Gdk.Point (paintArea.X + paintArea.Width / 9, paintArea.Y + paintArea.Height - 4));
+			
+			DrawVSeparator (cr,
+			                new Gdk.Point (paintArea.X + 8 * paintArea.Width / 9, paintArea.Y + 4),
+			                new Gdk.Point (paintArea.X + 8 * paintArea.Width / 9, paintArea.Y + paintArea.Height - 4));
 		}
 		
 		protected override void ReceiveClick (Gdk.Rectangle paintArea, Gdk.Point cursor)
@@ -104,7 +108,7 @@ namespace Docky.Interface.Painters
 			for (int i = 0; i < 9; i++) {
 				if (i == 8) {
 					cr.Color = new Cairo.Color (1, 1, 1, .5);
-					text = string.Format ("<b>  {0}</b>", lineStart.AddDays (6).ToString ("MMM"));
+					text = string.Format ("<b>  {0}</b>", lineStart.AddDays (6).ToString ("  MMM"));
 					align = Pango.Alignment.Left;
 				} else if (i == 0) {
 					cr.Color = new Cairo.Color (1, 1, 1, .5);
@@ -127,7 +131,11 @@ namespace Docky.Interface.Painters
 						cr.Fill ();
 					}
 					
-					cr.Color = new Cairo.Color (1, 1, 1);
+					if (day.Month == startDate.Month)
+						cr.Color = new Cairo.Color (1, 1, 1);
+					else
+						cr.Color = new Cairo.Color (1, 1, 1, .8);
+					
 					text = string.Format ("<b>{0:00}</b>", day.Day);
 					dayOffset++;
 				}
