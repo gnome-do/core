@@ -38,6 +38,7 @@ namespace Docky.Core.Default
 			layout.Width = Pango.Units.FromPixels (maxWidth);
 			layout.SetMarkup (text);
 			layout.Ellipsize = Pango.EllipsizeMode.End;
+			layout.Alignment = align;
 			
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);

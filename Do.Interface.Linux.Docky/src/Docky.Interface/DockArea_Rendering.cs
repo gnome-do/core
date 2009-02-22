@@ -487,8 +487,15 @@ namespace Docky.Interface
 			rect = PositionProvider.DockArea (ZoomIn, Cursor);
 
 			// fixme this does not work for side dock
-			if (rect.Width < 10 * rect.Height && DockIconOpacity < 1) {
-				int difference = 10 * rect.Height - rect.Width;
+			int minSize; 
+				
+			if (Painter != null)
+				minSize = Math.Max (Painter.MinimumWidth, 10 * rect.Height);
+			else 
+				minSize = 10 * rect.Height;
+			
+			if (rect.Width < minSize && DockIconOpacity < 1) {
+				int difference = minSize - rect.Width;
 				int alpha = (int) (difference * PainterOpacity);
 				rect.X -= alpha / 2;
 				rect.Width += alpha;

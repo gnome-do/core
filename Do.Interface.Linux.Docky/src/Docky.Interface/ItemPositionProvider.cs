@@ -158,31 +158,31 @@ namespace Docky.Interface
 			IconZoomedPosition (DockItems.Count - 1, zoomByEntryTime, cursor, out endPosition, out end_zoom);
 			
 			int leftEdge, rightEdge, topEdge, bottomEdge;
-			int startEdgeConstant = (int) (start_zoom * (IconSize / 2) + (start_zoom * HorizontalBuffer) + DockPreferences.IconBorderWidth);
-			int endEdgeConstant = (int) (end_zoom * (IconSize / 2) + (end_zoom * HorizontalBuffer) + DockPreferences.IconBorderWidth);
+			double startEdgeConstant = start_zoom * (IconSize / 2) + (start_zoom * HorizontalBuffer) + DockPreferences.IconBorderWidth;
+			double endEdgeConstant = end_zoom * (IconSize / 2) + (end_zoom * HorizontalBuffer) + DockPreferences.IconBorderWidth;
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
-				leftEdge = (int) startPosition.X - startEdgeConstant;
-				rightEdge = (int) endPosition.X + endEdgeConstant;
+				leftEdge = (int) (startPosition.X - startEdgeConstant);
+				rightEdge = (int) (endPosition.X + endEdgeConstant);
 				bottomEdge = Height;
 				topEdge = Height - DockHeight;
 				break;
 			case DockOrientation.Left:
-				topEdge = (int) startPosition.Y - startEdgeConstant;
-				bottomEdge = (int) endPosition.Y + endEdgeConstant;
+				topEdge = (int) (startPosition.Y - startEdgeConstant);
+				bottomEdge = (int) (endPosition.Y + endEdgeConstant);
 				leftEdge = 0;
 				rightEdge = DockHeight;
 				break;
 			case DockOrientation.Right:
-				topEdge = (int) startPosition.Y - startEdgeConstant;
-				bottomEdge = (int) endPosition.Y + endEdgeConstant;
+				topEdge = (int) (startPosition.Y - startEdgeConstant);
+				bottomEdge = (int) (endPosition.Y + endEdgeConstant);
 				leftEdge = Width - DockHeight;
 				rightEdge = Width;
 				break;
 			case DockOrientation.Top:
-				leftEdge = (int) startPosition.X - startEdgeConstant;
-				rightEdge = (int) endPosition.X + endEdgeConstant;
+				leftEdge = (int) (startPosition.X - startEdgeConstant);
+				rightEdge = (int) (endPosition.X + endEdgeConstant);
 				bottomEdge = DockHeight;
 				topEdge = 0;
 				break;

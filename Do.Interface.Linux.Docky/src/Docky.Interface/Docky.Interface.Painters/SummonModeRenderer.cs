@@ -73,6 +73,10 @@ namespace Docky.Interface.Painters
 			get { return false; }
 		}
 		
+		public int MinimumWidth {
+			get { return 300; }
+		}
+		
 		public SummonModeRenderer ()
 		{
 			TextUtility = new TextRenderer (DockWindow.Window);

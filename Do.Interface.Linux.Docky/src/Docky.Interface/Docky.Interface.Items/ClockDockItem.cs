@@ -65,7 +65,7 @@ namespace Docky.Interface
 		
 		public ClockDockItem()
 		{
-			cal_painter = new CalendarPainter ();
+			cal_painter = new CalendarPainter (this);
 			Core.DockServices.PainterService.RegisterPainter (cal_painter);
 			GLib.Timeout.Add (1000, ClockUpdateTimer);
 		}
@@ -143,7 +143,7 @@ namespace Docky.Interface
 		
 		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)
 		{
-//			cal_painter.Summon ();
+			cal_painter.Summon ();
 			base.Clicked (button, state, position);
 		}
 	}

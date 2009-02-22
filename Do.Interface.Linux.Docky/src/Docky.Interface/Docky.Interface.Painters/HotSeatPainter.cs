@@ -56,6 +56,10 @@ namespace Docky.Interface.Painters
 			get { return true; }
 		}
 		
+		public int MinimumWidth {
+			get { return 0; }
+		}
+		
 		#endregion 
 		
 

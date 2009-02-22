@@ -35,10 +35,12 @@ namespace Docky.Interface.Painters
 	public abstract class AbstractIntegratedPainter : IDockPainter
 	{
 		const int BorderSize = 10;
+		int buffer_height = 0;
 		
-		Surface icon_surface;
+		Surface icon_surface, buffer;
+		AbstractDockItem dock_item;
 		
-		protected abstract Gdk.Pixbuf GetIcon (int size);
+		protected abstract int Width { get; }
 		
 		protected abstract void PaintArea (Cairo.Context context, Gdk.Rectangle paintableArea);
 		
@@ -54,7 +56,6 @@ namespace Docky.Interface.Painters
 		
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
-			ReceiveClick (GetPaintArea (dockArea), cursor);
 		}
 		
 		public virtual bool DoubleBuffer {
@@ -65,41 +66,75 @@ namespace Docky.Interface.Painters
 			get { return true; }
 		}
 		
+		public int MinimumWidth {
+			get {
+				return Width + DockPreferences.FullIconSize + 2 * BorderSize;
+			}
+		}
+		
+		public AbstractIntegratedPainter (AbstractDockItem dockItem)
+		{
+			dock_item = dockItem;
+			DockPreferences.IconSizeChanged +=HandleIconSizeChanged; 
+			dockItem.UpdateNeeded +=HandleUpdateNeeded; 
+		}
+
+		void HandleUpdateNeeded(object sender, UpdateRequestArgs args)
+		{
+			if (icon_surface != null)
+				icon_surface.Destroy ();
+			icon_surface = null;
+			
+			OnPaintNeeded (new PaintNeededArgs ());
+		}
+
+		void HandleIconSizeChanged()
+		{
+			if (icon_surface != null)
+				icon_surface.Destroy ();
+			icon_surface = null;
+		}
+		
 		public virtual void Interupt ()
 		{
 		}
 		
 		public void Paint (Cairo.Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
+			if (buffer == null || buffer_height != dockArea.Height) {
+				if (buffer != null)
+					buffer.Destroy ();
+				
+				buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, dockArea.Height);
+				using (Cairo.Context context = new Cairo.Context (buffer)) {
+					PaintArea (context, new Gdk.Rectangle (0, 0, Width, dockArea.Height));
+				}
+				buffer_height = dockArea.Height;
+			}
+			
 			PaintIcon (cr, dockArea);
 			
-			Gdk.Rectangle paintArea = GetPaintArea (dockArea);
-			
-			cr.Rectangle (paintArea.X, paintArea.Y, paintArea.Width, paintArea.Height);
+			cr.Rectangle (dockArea.X, dockArea.Y, dockArea.Width, dockArea.Height);
 			cr.Clip ();
-			
-			PaintArea (cr, paintArea);
-			
+			buffer.Show (cr, dockArea.X + DockPreferences.FullIconSize + 2 * BorderSize, dockArea.Y);
 			cr.ResetClip ();
 		}
 		
 		#endregion 
-		
-		Gdk.Rectangle GetPaintArea (Gdk.Rectangle dockArea)
-		{
-			Gdk.Rectangle paintArea = dockArea;
-			paintArea.X += DockPreferences.FullIconSize + 2 * BorderSize;
-			paintArea.Width -= DockPreferences.FullIconSize + 2 * BorderSize;
-			
-			return paintArea;
-		}
 		
 		void PaintIcon (Cairo.Context cr, Gdk.Rectangle dockArea)
 		{
 			if (icon_surface == null)
 				icon_surface = CreateIconSurface (cr.Target);
 			
-			icon_surface.Show (cr, dockArea.X + BorderSize, dockArea.Y + 5);
+			switch (DockPreferences.Orientation) {
+			case DockOrientation.Top:
+				icon_surface.Show (cr, dockArea.X + BorderSize, dockArea.Y + 5);
+				break;
+			case DockOrientation.Bottom:
+				icon_surface.Show (cr, dockArea.X + BorderSize, dockArea.Y + dockArea.Height - 5 - DockPreferences.FullIconSize);
+				break;
+			}
 		}
 		
 		protected virtual Surface CreateIconSurface (Surface similar)
@@ -107,17 +142,14 @@ namespace Docky.Interface.Painters
 			Surface surface = similar.CreateSimilar (similar.Content,
 			                                           DockPreferences.FullIconSize,
 			                                           DockPreferences.FullIconSize);
-			Gdk.Pixbuf pbuf = GetIcon (DockPreferences.FullIconSize);
 			
-			Context context = new Context (surface);
-			CairoHelper.SetSourcePixbuf (context, 
-			                             pbuf, 
-			                             (DockPreferences.FullIconSize - pbuf.Width) / 2,
-			                             (DockPreferences.FullIconSize - pbuf.Height) / 2);
-			context.Paint ();
+			int actual_size;
+			Surface icon_surface = dock_item.GetIconSurface (similar, DockPreferences.FullIconSize, out actual_size);
 			
-			pbuf.Dispose ();
-			((IDisposable)context).Dispose ();
+			using (Context context = new Context (surface)) {
+				int offset = (DockPreferences.FullIconSize - actual_size) / 2;
+				icon_surface.Show (context, offset, offset);
+			}
 			
 			return surface;
 		}
