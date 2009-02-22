@@ -56,13 +56,14 @@ namespace Docky.Interface.Painters
 		
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
+			OnHideRequested ();
 		}
 		
 		public virtual bool DoubleBuffer {
 			get { return false; }
 		}
 		
-		public virtual bool Interuptable {
+		public virtual bool Interruptable {
 			get { return true; }
 		}
 		
@@ -95,7 +96,7 @@ namespace Docky.Interface.Painters
 			icon_surface = null;
 		}
 		
-		public virtual void Interupt ()
+		public virtual void Interrupt ()
 		{
 		}
 		
@@ -116,7 +117,10 @@ namespace Docky.Interface.Painters
 			
 			cr.Rectangle (dockArea.X, dockArea.Y, dockArea.Width, dockArea.Height);
 			cr.Clip ();
-			buffer.Show (cr, dockArea.X + DockPreferences.FullIconSize + 2 * BorderSize, dockArea.Y);
+			
+			int x = dockArea.X + DockPreferences.FullIconSize + 2 * BorderSize;
+			x = x + (dockArea.Width - MinimumWidth) / 2;
+			buffer.Show (cr, x, dockArea.Y);
 			cr.ResetClip ();
 		}
 		

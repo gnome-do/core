@@ -369,6 +369,11 @@ namespace Docky.Interface
 		bool OnCursorTimerEllapsed ()
 		{
 			ManualCursorUpdate ();
+			
+			// if we have a painter visible this takes care of interrupting it on mouse off
+			if (!CursorIsOverDockArea && PainterOverlayVisible && (DateTime.UtcNow - enter_time).TotalMilliseconds > 800)
+				InterruptPainter ();
+			
 			return true;
 		}
 		
@@ -534,7 +539,7 @@ namespace Docky.Interface
 			if (PainterOverlayVisible) {
 				Painter.Clicked (GetDockArea (), Cursor);
 				if (PainterOverlayVisible && !GetDockArea ().Contains (Cursor)) {
-					InteruptPainter ();
+					InterruptPainter ();
 				}
 			} else {
 				int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y); //sometimes clicking is not good!
@@ -655,9 +660,9 @@ namespace Docky.Interface
 			if (Painter == painter)
 				return true;
 			
-			if (Painter == null || Painter.Interuptable) {
+			if (Painter == null || Painter.Interruptable) {
 				if (Painter != null)
-					Painter.Interupt ();
+					Painter.Interrupt ();
 				Painter = painter;
 				PainterOverlayVisible = true;
 				interface_change_time = DateTime.UtcNow;
@@ -694,11 +699,11 @@ namespace Docky.Interface
 			return true;
 		}
 
-		void InteruptPainter ()
+		void InterruptPainter ()
 		{
 			if (Painter == null) return;
 
-			Painter.Interupt ();
+			Painter.Interrupt ();
 			Painter = null;
 			PainterOverlayVisible = false;
 			interface_change_time = DateTime.UtcNow;

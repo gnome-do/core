@@ -56,7 +56,7 @@ namespace Docky.Interface
 			
 			bool shown = parent.RequestShowPainter (painter);
 			if (!shown)
-				painter.Interupt ();
+				painter.Interrupt ();
 		}
 		
 		#endregion 
