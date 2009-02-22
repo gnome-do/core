@@ -483,16 +483,18 @@ namespace Docky.Interface
 			// more than we have to.  Further, when we do call it, we should always check for this shortcut.
 			if (DockIconOpacity == 0 || ZoomIn == 0)
 				rect = MinimumDockArea;
+			else
+				rect = PositionProvider.DockArea (ZoomIn, Cursor);
 
-			rect = PositionProvider.DockArea (ZoomIn, Cursor);
-
-			// fixme this does not work for side dock
 			int minSize; 
 				
-			if (Painter != null)
+			if (PainterOverlayVisible && Painter != null) {
 				minSize = Math.Max (Painter.MinimumWidth, 10 * rect.Height);
-			else 
+			} else if (!PainterOverlayVisible && LastPainter != null) {
+				minSize = Math.Max (LastPainter.MinimumWidth, 10 * rect.Height);
+			} else {
 				minSize = 10 * rect.Height;
+			}
 			
 			if (rect.Width < minSize && DockIconOpacity < 1) {
 				int difference = minSize - rect.Width;
@@ -500,6 +502,8 @@ namespace Docky.Interface
 				rect.X -= alpha / 2;
 				rect.Width += alpha;
 			}
+			
+			
 			return rect;
 		}
 		
