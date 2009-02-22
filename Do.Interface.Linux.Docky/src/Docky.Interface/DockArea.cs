@@ -701,7 +701,7 @@ namespace Docky.Interface
 
 		void InterruptPainter ()
 		{
-			if (Painter == null) return;
+			if (Painter == null || !Painter.Interruptable) return;
 
 			Painter.Interrupt ();
 			Painter = null;
