@@ -55,7 +55,7 @@ namespace Docky.Interface.Painters
 		
 		protected override int Width {
 			get {
-				return 700;
+				return 670;
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace Docky.Interface.Painters
 			for (int i = 0; i < 9; i++) {
 				if (i == 8) {
 					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
-					text = string.Format ("<b>{0}</b>", lineStart.AddDays (6).ToString ("  MMM"));
+					text = string.Format ("<b>{0}</b>", lineStart.AddDays (6).ToString ("MMM").ToUpper ());
 					align = Pango.Alignment.Left;
 				} else if (i == 0) {
 					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
@@ -152,6 +152,8 @@ namespace Docky.Interface.Painters
 						cr.Color = new Cairo.Color (1, 1, 1, .8);
 					
 					text = string.Format ("{0:00}", day.Day);
+					if (day.Date == DateTime.Today)
+						text = string.Format ("<b>{0}</b>", text);
 					dayOffset++;
 				}
 				DockServices.DrawingService.TextPathAtPoint (cr,
