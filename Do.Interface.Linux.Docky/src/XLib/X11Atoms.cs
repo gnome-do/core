@@ -158,6 +158,7 @@ namespace Docky.XLib {
 		public readonly IntPtr _NET_WM_WINDOW_TYPE_SPLASH;
 		public readonly IntPtr _NET_WM_WINDOW_TYPE_DIALOG;
 		public readonly IntPtr _NET_WM_WINDOW_TYPE_NORMAL;
+		public readonly IntPtr _COMPIZ_WM_WINDOW_BLUR;
 		public readonly IntPtr CLIPBOARD;
 		public readonly IntPtr PRIMARY;
 		public readonly IntPtr DIB;
@@ -232,6 +233,7 @@ namespace Docky.XLib {
 				"_NET_WM_WINDOW_TYPE_DIALOG",
 				"_NET_WM_WINDOW_TYPE_SPLASH",
 				"_NET_WM_WINDOW_TYPE_NORMAL",
+				"_COMPIZ_WM_WINDOW_BLUR",
 				"CLIPBOARD",
 				"PRIMARY",
 				"COMPOUND_TEXT",
@@ -239,7 +241,8 @@ namespace Docky.XLib {
 				"TARGETS",
 				"_SWF_AsyncAtom",
 				"_SWF_PostMessageAtom",
-				"_SWF_HoverAtom" };
+				"_SWF_HoverAtom",
+			};
 
 			IntPtr[] atoms = new IntPtr [atom_names.Length];;
 
@@ -306,6 +309,7 @@ namespace Docky.XLib {
 			_NET_WM_WINDOW_TYPE_DIALOG = atoms [off++];
 			_NET_WM_WINDOW_TYPE_SPLASH = atoms [off++];
 			_NET_WM_WINDOW_TYPE_NORMAL = atoms [off++];
+			_COMPIZ_WM_WINDOW_BLUR = atoms [off++];
 			CLIPBOARD = atoms [off++];
 			PRIMARY = atoms [off++];
 			OEMTEXT = atoms [off++];

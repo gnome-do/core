@@ -318,10 +318,10 @@ namespace Docky.Interface
 			
 			if (!IsRealized)
 				return false;
-			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT, atoms.XA_CARDINAL,
+			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT_PARTIAL, atoms.XA_CARDINAL,
 			                      (int) XLib.PropertyMode.PropModeReplace, struts);
 			
-			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT_PARTIAL, atoms.XA_CARDINAL, 
+			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT, atoms.XA_CARDINAL, 
 			                      (int) XLib.PropertyMode.PropModeReplace, first_struts);
 				
 			return false;
