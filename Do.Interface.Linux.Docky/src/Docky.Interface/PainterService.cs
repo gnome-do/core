@@ -78,8 +78,12 @@ namespace Docky.Interface
 		{
 			DockServices.UnregisterService (this);
 			
-			foreach (IDockPainter painter in painters)
+			foreach (IDockPainter painter in painters) {
+				painter.ShowRequested -= HandleShowRequested;
+				painter.HideRequested -= HandleHideRequested;
 				painter.Dispose ();
+			}
+			painters.Clear ();
 			
 			parent = null;
 		}
