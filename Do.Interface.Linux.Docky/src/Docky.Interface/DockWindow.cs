@@ -100,6 +100,7 @@ namespace Docky.Interface
 			results_window = new BezelGlassWindow (results);
 
 			ShowAll ();
+			Stick ();
 		}
 
 		void RegisterEvents ()
