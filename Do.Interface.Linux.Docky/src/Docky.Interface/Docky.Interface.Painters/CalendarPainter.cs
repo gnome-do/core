@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 using Cairo;
 using Gdk;
@@ -38,6 +39,13 @@ namespace Docky.Interface.Painters
 		
 		ClockDockItem Clock { get; set; }
 		
+		DateTime CalendarStartDate {
+			get {
+				return DateTime.Today.AddDays (0 - (int) DateTime.Today.DayOfWeek + 
+				                               ((int) DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek));
+			}
+		}
+		
 		public CalendarPainter (ClockDockItem clock) : base (clock as AbstractDockItem)
 		{
 			Clock = clock;
@@ -54,13 +62,10 @@ namespace Docky.Interface.Painters
 		
 		protected override void PaintArea (Cairo.Context cr, Gdk.Rectangle paintArea)
 		{
-			DateTime startDay = DateTime.Today;
-			startDay = startDay.AddDays (0 - (int) startDay.DayOfWeek);
-			
 			int height = paintArea.Height / LineHeight;
 			RenderHeader (cr, paintArea);
 			for (int i = 1; i < height; i++)
-				RenderLine (cr, paintArea, startDay, i);
+				RenderLine (cr, paintArea, i);
 			
 //			DrawVSeparator (cr, 
 //			                new Gdk.Point (paintArea.X + paintArea.Width / 9, paintArea.Y + 4),
@@ -104,7 +109,7 @@ namespace Docky.Interface.Painters
 			int offsetSize = paintArea.Width / 9;
 			
 			string text;
-			DateTime day = DateTime.Today.AddDays (0 - (int) DateTime.Today.DayOfWeek);
+			DateTime day = CalendarStartDate;
 			
 			cr.Color = new Cairo.Color (1, 1, 1, .5);
 			for (int i = 1; i < 8; i++) {
@@ -119,9 +124,9 @@ namespace Docky.Interface.Painters
 			}
 		}
 		
-		void RenderLine (Context cr, Gdk.Rectangle paintArea, DateTime startDate, int line)
+		void RenderLine (Context cr, Gdk.Rectangle paintArea, int line)
 		{
-			DateTime lineStart = startDate.AddDays ((line - 1) * 7);
+			DateTime lineStart = CalendarStartDate.AddDays ((line - 1) * 7);
 			int offsetSize = paintArea.Width / 9;
 			int centerLine = paintArea.Y + LineHeight / 2 + LineHeight * line + ((paintArea.Height % LineHeight) / 2);
 			
@@ -141,7 +146,7 @@ namespace Docky.Interface.Painters
 					DateTime day = lineStart.AddDays (dayOffset);
 					align = Pango.Alignment.Center;
 					
-					if (day.Month == startDate.Month)
+					if (day.Month == CalendarStartDate.Month)
 						cr.Color = new Cairo.Color (1, 1, 1);
 					else
 						cr.Color = new Cairo.Color (1, 1, 1, .8);
