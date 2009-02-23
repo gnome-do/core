@@ -136,11 +136,11 @@ namespace Docky.Interface.Painters
 			for (int i = 0; i < 9; i++) {
 				if (i == 8) {
 					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
-					text = string.Format ("<b>  {0}</b>", lineStart.AddDays (6).ToString ("  MMM"));
+					text = string.Format ("<b>{0}</b>", lineStart.AddDays (6).ToString ("  MMM"));
 					align = Pango.Alignment.Left;
 				} else if (i == 0) {
 					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
-					text = string.Format ("<b>W{0:00}  </b>", lineStart.DayOfYear / 7 + 1);
+					text = string.Format ("<b>W{0:00}</b>", lineStart.DayOfYear / 7 + 1);
 					align = Pango.Alignment.Right;
 				} else {
 					DateTime day = lineStart.AddDays (dayOffset);
