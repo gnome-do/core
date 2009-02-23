@@ -33,7 +33,8 @@ namespace Docky.Interface.Painters
 	
 	public class CalendarPainter : AbstractIntegratedPainter
 	{
-		const int LineHeight = 21;
+		const int LineHeight = 16;
+		const double lowlight = .35;
 		
 		ClockDockItem Clock { get; set; }
 		
@@ -57,16 +58,17 @@ namespace Docky.Interface.Painters
 			startDay = startDay.AddDays (0 - (int) startDay.DayOfWeek);
 			
 			int height = paintArea.Height / LineHeight;
-			for (int i = 0; i < height; i++)
+			RenderHeader (cr, paintArea);
+			for (int i = 1; i < height; i++)
 				RenderLine (cr, paintArea, startDay, i);
 			
-			DrawVSeparator (cr, 
-			                new Gdk.Point (paintArea.X + paintArea.Width / 9, paintArea.Y + 4),
-			                new Gdk.Point (paintArea.X + paintArea.Width / 9, paintArea.Y + paintArea.Height - 4));
-			
-			DrawVSeparator (cr,
-			                new Gdk.Point (paintArea.X + 8 * paintArea.Width / 9, paintArea.Y + 4),
-			                new Gdk.Point (paintArea.X + 8 * paintArea.Width / 9, paintArea.Y + paintArea.Height - 4));
+//			DrawVSeparator (cr, 
+//			                new Gdk.Point (paintArea.X + paintArea.Width / 9, paintArea.Y + 4),
+//			                new Gdk.Point (paintArea.X + paintArea.Width / 9, paintArea.Y + paintArea.Height - 4));
+//			
+//			DrawVSeparator (cr,
+//			                new Gdk.Point (paintArea.X + 8 * paintArea.Width / 9, paintArea.Y + 4),
+//			                new Gdk.Point (paintArea.X + 8 * paintArea.Width / 9, paintArea.Y + paintArea.Height - 4));
 		}
 		
 		protected override void ReceiveClick (Gdk.Rectangle paintArea, Gdk.Point cursor)
@@ -96,9 +98,30 @@ namespace Docky.Interface.Painters
 			cr.Translate (.5, 0);
 		}
 		
+		void RenderHeader (Context cr, Gdk.Rectangle paintArea)
+		{
+			int centerLine = paintArea.Y + LineHeight / 2 + ((paintArea.Height % LineHeight) / 2);
+			int offsetSize = paintArea.Width / 9;
+			
+			string text;
+			DateTime day = DateTime.Today.AddDays (0 - (int) DateTime.Today.DayOfWeek);
+			
+			cr.Color = new Cairo.Color (1, 1, 1, .5);
+			for (int i = 1; i < 8; i++) {
+				text =string.Format ("<b>{0}</b>", day.ToString ("ddd").ToUpper ());
+				DockServices.DrawingService.TextPathAtPoint (cr,
+				                                             text,
+				                                             new Gdk.Point (paintArea.X + offsetSize * i, centerLine),
+				                                             offsetSize,
+				                                             Pango.Alignment.Center);
+				cr.Fill ();
+				day = day.AddDays (1);
+			}
+		}
+		
 		void RenderLine (Context cr, Gdk.Rectangle paintArea, DateTime startDate, int line)
 		{
-			DateTime lineStart = startDate.AddDays (line * 7);
+			DateTime lineStart = startDate.AddDays ((line - 1) * 7);
 			int offsetSize = paintArea.Width / 9;
 			int centerLine = paintArea.Y + LineHeight / 2 + LineHeight * line + ((paintArea.Height % LineHeight) / 2);
 			
@@ -107,36 +130,23 @@ namespace Docky.Interface.Painters
 			int dayOffset = 0;
 			for (int i = 0; i < 9; i++) {
 				if (i == 8) {
-					cr.Color = new Cairo.Color (1, 1, 1, .5);
+					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
 					text = string.Format ("<b>  {0}</b>", lineStart.AddDays (6).ToString ("  MMM"));
 					align = Pango.Alignment.Left;
 				} else if (i == 0) {
-					cr.Color = new Cairo.Color (1, 1, 1, .5);
-					text = string.Format ("<b>{0}  </b>", lineStart.DayOfYear / 7 + 1);
+					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
+					text = string.Format ("<b>W{0:00}  </b>", lineStart.DayOfYear / 7 + 1);
 					align = Pango.Alignment.Right;
 				} else {
 					DateTime day = lineStart.AddDays (dayOffset);
 					align = Pango.Alignment.Center;
-					
-					if (line == 0) {
-						cr.Translate (-15, 0);
-						text = string.Format ("<b>{0}</b>", day.DayOfWeek.ToString () [0]);
-						cr.Color = new Cairo.Color (1, 1, 1, .5);
-						DockServices.DrawingService.TextPathAtPoint (cr,
-						                                             text,
-						                                             new Gdk.Point (paintArea.X + offsetSize * i, centerLine),
-						                                             offsetSize,
-						                                             align);
-						cr.Translate (15, 0);
-						cr.Fill ();
-					}
 					
 					if (day.Month == startDate.Month)
 						cr.Color = new Cairo.Color (1, 1, 1);
 					else
 						cr.Color = new Cairo.Color (1, 1, 1, .8);
 					
-					text = string.Format ("<b>{0:00}</b>", day.Day);
+					text = string.Format ("{0:00}", day.Day);
 					dayOffset++;
 				}
 				DockServices.DrawingService.TextPathAtPoint (cr,
