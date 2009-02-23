@@ -40,14 +40,12 @@ namespace Docky.Interface.Painters
 		
 		public static void RenderDockBackground (Context context, Gdk.Rectangle dockArea)
 		{
-			if (sr == null || 
-			    (DockPreferences.DockIsHorizontal && dockArea.Height != height) ||
-			    (!DockPreferences.DockIsHorizontal && dockArea.Width != height)) {
+			if (sr == null || dockArea.Height != height) {
 				
 				if (sr != null)
 					sr.Destroy ();
 				
-				height = DockPreferences.DockIsHorizontal ? dockArea.Height : dockArea.Width;
+				height = dockArea.Height;
 				sr = context.Target.CreateSimilar (context.Target.Content, width, dockArea.Height);
 				
 				using (Context cr = new Context (sr)) {
@@ -76,12 +74,6 @@ namespace Docky.Interface.Painters
 			case DockOrientation.Bottom:
 				RenderBottomBackground (context, dockArea);
 				break;
-			case DockOrientation.Left:
-				RenderLeftBackground (context, dockArea);
-				break;
-			case DockOrientation.Right:
-				RenderRightBackground (context, dockArea);
-				break;
 			case DockOrientation.Top:
 				RenderTopBackground (context, dockArea);
 				break;
@@ -97,49 +89,6 @@ namespace Docky.Interface.Painters
 			context.SetSource (sr, dockArea.X + dockArea.Width - width, dockArea.Y);
 			context.Rectangle (dockArea.X + dockArea.Width / 2, dockArea.Y, dockArea.Width - dockArea.Width / 2, dockArea.Height);
 			context.Fill ();
-		}
-		
-		static void RenderLeftBackground (Context context, Gdk.Rectangle dockArea)
-		{
-			double rotation = Math.PI * .5;
-
-			context.Translate (height, 0);
-			context.Rotate (rotation);
-			
-			context.SetSource (sr, dockArea.Y, dockArea.X);
-			context.Rectangle (dockArea.Y, dockArea.X, dockArea.Height / 2, dockArea.Width);
-			context.Fill ();
-			
-			context.SetSource (sr, dockArea.Y + dockArea.Height - width, dockArea.X);
-			context.Rectangle (dockArea.Y + dockArea.Height / 2, dockArea.X, dockArea.Height / 2 + 10, dockArea.Width);
-			context.Fill ();
-
-			
-			context.Rotate (0 - rotation);
-			context.Translate (0 - height, 0);
-		}
-
-		static void RenderRightBackground (Context context, Gdk.Rectangle dockArea)
-		{
-			double rotation = 0 - Math.PI * 0.5;
-			double translatex, translatey;
-			translatex = 0;
-			translatey = width;
-			
-			context.Translate (translatex, translatey);
-			context.Rotate (rotation);
-			
-			context.SetSource (sr, (width - dockArea.Height) - dockArea.Y, dockArea.X);
-			context.Rectangle ((width - dockArea.Height) - dockArea.Y, dockArea.X, dockArea.Height / 2, dockArea.Width);
-			context.Fill ();
-			
-			context.SetSource (sr, 0 - dockArea.Y, dockArea.X);
-			context.Rectangle ((width - dockArea.Height) - dockArea.Y + dockArea.Height / 2, dockArea.X, dockArea.Height / 2 + 10, dockArea.Width);
-			context.Fill ();
-
-			
-			context.Rotate (0 - rotation);
-			context.Translate (0 - translatex, 0 - translatey);
 		}
 
 		static void RenderTopBackground (Context context, Gdk.Rectangle dockArea)

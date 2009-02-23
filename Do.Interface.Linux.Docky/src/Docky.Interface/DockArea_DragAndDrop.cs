@@ -73,17 +73,13 @@ namespace Docky.Interface
 		
 		bool CursorNearLeftEdge {
 			get {
-				if (DockPreferences.DockIsHorizontal)
-					return CursorIsOverDockArea && Math.Abs (Cursor.X - MinimumDockArea.X) < DragHotZoneSize;
-				return CursorIsOverDockArea && Math.Abs (Cursor.Y - MinimumDockArea.Y) < DragHotZoneSize;
+				return CursorIsOverDockArea && Math.Abs (Cursor.X - MinimumDockArea.X) < DragHotZoneSize;
 			}
 		}
 		
 		bool CursorNearRightEdge {
 			get {
-				if (DockPreferences.DockIsHorizontal)
-					return CursorIsOverDockArea && Math.Abs (Cursor.X - (MinimumDockArea.X + MinimumDockArea.Width)) < DragHotZoneSize;
-				return CursorIsOverDockArea && Math.Abs (Cursor.Y - (MinimumDockArea.Y + MinimumDockArea.Height)) < DragHotZoneSize;
+				return CursorIsOverDockArea && Math.Abs (Cursor.X - (MinimumDockArea.X + MinimumDockArea.Width)) < DragHotZoneSize;
 			}
 		}
 		
@@ -271,22 +267,13 @@ namespace Docky.Interface
 				UnregisterGtkDragSource ();
 
 				if (cursor_type != CursorType.SbVDoubleArrow && CursorNearTopDraggableEdge) {
-					if (DockPreferences.DockIsHorizontal)
-						SetCursor (CursorType.SbVDoubleArrow);
-					else
-						SetCursor (CursorType.SbHDoubleArrow);
+					SetCursor (CursorType.SbVDoubleArrow);
 					
 				} else if (cursor_type != CursorType.LeftSide && CursorNearLeftEdge) {
-					if (DockPreferences.DockIsHorizontal)
-						SetCursor (CursorType.LeftSide);
-					else
-						SetCursor (CursorType.TopSide);
+					SetCursor (CursorType.LeftSide);
 					
 				} else if (cursor_type != CursorType.RightSide && CursorNearRightEdge) {
-					if (DockPreferences.DockIsHorizontal)
-						SetCursor (CursorType.RightSide);
-					else
-						SetCursor (CursorType.BottomSide);
+					SetCursor (CursorType.RightSide);
 				}
 				
 			} else if (!gtk_drag_source_set && !drag_resizing && !CursorNearDraggableEdge) {
@@ -330,16 +317,16 @@ namespace Docky.Interface
 			int movement = 0;
 			switch (drag_edge) {
 			case DragEdge.Top:
-				int delta = DockPreferences.DockIsHorizontal ? drag_start_point.Y - Cursor.Y : drag_start_point.X - Cursor.X;
-				if (DockPreferences.Orientation == DockOrientation.Left || DockPreferences.Orientation == DockOrientation.Top)
+				int delta = drag_start_point.Y - Cursor.Y;
+				if (DockPreferences.Orientation == DockOrientation.Top)
 					delta = 0 - delta;
 				DockPreferences.IconSize = Math.Min (drag_start_icon_size + delta, DockPreferences.MaxIconSize);
 				return;
 			case DragEdge.Left:
-				movement = DockPreferences.DockIsHorizontal ? drag_start_point.X - Cursor.X : drag_start_point.Y - Cursor.Y;
+				movement = drag_start_point.X - Cursor.X;
 				break;
 			case DragEdge.Right:
-				movement = DockPreferences.DockIsHorizontal ? Cursor.X - drag_start_point.X : Cursor.Y - drag_start_point.Y;
+				movement = Cursor.X - drag_start_point.X;
 				break;
 			}
 

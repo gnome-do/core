@@ -112,12 +112,6 @@ namespace Docky.Interface
 			case DockOrientation.Bottom:
 				// do nothing
 				break;
-			case DockOrientation.Left:
-				vector = new [] {0 - vector [1], vector [0]};
-				break;
-			case DockOrientation.Right:
-				vector = new [] {vector [1], 0 - vector [0]};
-				break;
 			case DockOrientation.Top:
 				vector = new [] {vector [0], 0 - vector [1]};
 				break;
@@ -164,12 +158,6 @@ namespace Docky.Interface
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
 				// do nothing
-				break;
-			case DockOrientation.Left:
-				vector = new [] {0 - vector [1], vector [0]};
-				break;
-			case DockOrientation.Right:
-				vector = new [] {vector [1], 0 - vector [0]};
 				break;
 			case DockOrientation.Top:
 				vector = new [] {vector [0], 0 - vector [1]};

@@ -69,21 +69,12 @@ namespace Docky.Interface
 		{
 			actualSize = DockPreferences.IconSize;
 			if (sr == null) {
-				if (DockPreferences.DockIsHorizontal)
-					sr = buffer.CreateSimilar (buffer.Content, Width, Height);
-				else
-					sr = buffer.CreateSimilar (buffer.Content, Height, Width);
+				sr = buffer.CreateSimilar (buffer.Content, Width, Height);
 				Context cr = new Context (sr);
 				cr.AlphaFill ();
 
-				if (DockPreferences.DockIsHorizontal) {
-					for (int i = 0; i * 6 + 2 <= Height; i++) {
-						cr.Rectangle (Width / 2 - 1, 2 + i * 6, 4, 2);
-					}
-				} else {
-					for (int i = 1; i * 6 + 2 < Height; i++) {
-						cr.Rectangle (i * 6, Width / 2 - 1, 2, 4);
-					}
+				for (int i = 0; i * 6 + 2 <= Height; i++) {
+					cr.Rectangle (Width / 2 - 1, 2 + i * 6, 4, 2);
 				}
 				
 				cr.Color = new Cairo.Color (1, 1, 1, .3);

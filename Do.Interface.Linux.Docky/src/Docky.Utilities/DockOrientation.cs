@@ -23,8 +23,6 @@ namespace Docky.Utilities
 	public enum DockOrientation
 	{
 		Bottom = 0,
-		Left,
 		Top,
-		Right,
 	}
 }

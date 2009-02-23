@@ -225,10 +225,6 @@ namespace Docky.Utilities
 			}
 		}
 
-		public static bool DockIsHorizontal {
-			get { return Orientation == DockOrientation.Top || Orientation == DockOrientation.Bottom; }
-		}
-		
 		#region blacklists
 		static List<string> item_blacklist = DeserializeBlacklist ();
 		public static IEnumerable<string> ItemBlacklist {

@@ -230,12 +230,6 @@ namespace Docky.Interface
 				Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - main.Height);
 				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + geo.Height - dock_area.DockHeight - res.Height);
 				break;
-			case DockOrientation.Left:
-				Move (geo.X, geo.Y);
-				break;
-			case DockOrientation.Right:
-				Move (geo.X + geo.Width - main.Width, geo.Y);
-				break;
 			case DockOrientation.Top:
 				Move (geo.X, geo.Y);
 				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + dock_area.DockHeight);
@@ -256,12 +250,6 @@ namespace Docky.Interface
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
 				Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height);
-				break;
-			case DockOrientation.Left:
-				Move (geo.X - main.Width, geo.Y);
-				break;
-			case DockOrientation.Right:
-				Move (geo.X + geo.Width, geo.Y);
 				break;
 			case DockOrientation.Top:
 				Move (geo.X, geo.Y - main.Height);
@@ -286,12 +274,6 @@ namespace Docky.Interface
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
 				y = main.Height;
-				break;
-			case DockOrientation.Left:
-				x = 0 - main.Width;
-				break;
-			case DockOrientation.Right:
-				x = main.Width;
 				break;
 			case DockOrientation.Top:
 				y = 0 - main.Height;

@@ -396,14 +396,8 @@ namespace Docky.Interface
 			} else {
 				// since these dont scale, we have some extra work to do to keep them
 				// centered
-				if (DockPreferences.DockIsHorizontal) {
-					// why this fails to center right... i dont know...
-					cr.SetSource (iconSurface, 
-					              (int) iconPosition.X, (int) center.Y - dockItem.Height / 2);
-				} else {
-					cr.SetSource (iconSurface, 
-					              (int) iconPosition.X - IconSize / 2 + 5, (int) iconPosition.Y);
-				}
+				cr.SetSource (iconSurface, 
+				              (int) iconPosition.X, (int) center.Y - dockItem.Height / 2);
 				cr.Paint ();
 			}
 			
@@ -412,12 +406,6 @@ namespace Docky.Interface
 				switch (DockPreferences.Orientation) {
 				case DockOrientation.Bottom:
 					location = new Gdk.Point ((int) center.X, Height - 1);	
-					break;
-				case DockOrientation.Left:
-					location = new Gdk.Point (1, (int) center.Y);
-					break;
-				case DockOrientation.Right:
-					location = new Gdk.Point (Width - 1, (int) center.Y);
 					break;
 				case DockOrientation.Top:
 				default:
@@ -434,22 +422,13 @@ namespace Docky.Interface
 			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && !GtkDragging) {
 
 				Gdk.Point textPoint;
-				if (DockPreferences.DockIsHorizontal) {
-					textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (DockPreferences.TextWidth / 2);
-					if (DockPreferences.Orientation == DockOrientation.Top)
-						textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 10;
-					else
-						textPoint.Y = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 38;
-				} else {
-					PointD tmp = center.RelativeMovePoint ((IconSize / 2) * DockPreferences.ZoomPercent + 10, 
-					                                          RelativeMove.Inward);
-					
-					textPoint.X = (int) tmp.X;
-					textPoint.Y = (int) tmp.Y;
-					if (DockPreferences.Orientation == DockOrientation.Right)
-						textPoint = textPoint.RelativeMovePoint (DockPreferences.TextWidth, RelativeMove.Inward);
-					textPoint = textPoint.RelativeMovePoint (10, RelativeMove.RealUp);
-				}
+				textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (DockPreferences.TextWidth / 2);
+				
+				if (DockPreferences.Orientation == DockOrientation.Top)
+					textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 10;
+				else
+					textPoint.Y = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 38;
+				
 				dockItem.GetTextSurface (cr.Target).Show (cr, textPoint.X, textPoint.Y);
 			}
 		}

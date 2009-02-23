@@ -90,17 +90,7 @@ namespace Docky.Interface
 			Pango.Layout layout = Core.DockServices.DrawingService.GetThemedLayout ();
 			layout.Width = Pango.Units.FromPixels (maxWidth - 18);
 			layout.SetMarkup ("<span weight=\"600\">" + text + "</span>");
-			switch (orientation) {
-			case DockOrientation.Left:
-				layout.Alignment = Pango.Alignment.Left;
-				break;
-			case DockOrientation.Right:
-				layout.Alignment = Pango.Alignment.Right;
-				break;
-			default:
-				layout.Alignment = Pango.Alignment.Center;
-				break;
-			}
+			layout.Alignment = Pango.Alignment.Center;
 			layout.Ellipsize = Pango.EllipsizeMode.End;
 			
 			Pango.Rectangle rect1, rect2;

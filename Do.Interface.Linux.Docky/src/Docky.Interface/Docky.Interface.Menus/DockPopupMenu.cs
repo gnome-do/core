@@ -88,12 +88,6 @@ namespace Docky.Interface.Menus
 			case DockOrientation.Bottom:
 				align.BottomPadding += TailHeight;
 				break;
-			case DockOrientation.Left:
-				align.LeftPadding += TailHeight;
-				break;
-			case DockOrientation.Right:
-				align.RightPadding += TailHeight;
-				break;
 			case DockOrientation.Top:
 				align.TopPadding += TailHeight;
 				break;
@@ -118,12 +112,6 @@ namespace Docky.Interface.Menus
 			case DockOrientation.Bottom:
 				postion = new Gdk.Point (x - req.Width / 2, y - req.Height);
 				break;
-			case DockOrientation.Left:
-				postion = new Gdk.Point (x, y - req.Height / 2);
-				break;
-			case DockOrientation.Right:
-				postion = new Gdk.Point (x - req.Width, y - req.Height / 2);
-				break;
 			case DockOrientation.Top:
 				postion = new Gdk.Point (x - req.Width / 2, y);
 				break;
@@ -132,19 +120,12 @@ namespace Docky.Interface.Menus
 				break;
 			}
 
-			if (DockPreferences.DockIsHorizontal) {
-				if (postion.X < geo.X) {
-					horizontal_offset = geo.X - postion.X;
-				} else if (postion.X + req.Width > geo.X + geo.Width) {
-					horizontal_offset = postion.X + req.Width - geo.X - geo.Width;
-				}
-			} else {
-				if (postion.Y < geo.Y) {
-					vertical_offset = geo.Y - postion.Y;
-				} else if (postion.Y + req.Height > geo.Y + geo.Height) {
-					vertical_offset = postion.Y + req.Height - geo.Y - geo.Height;
-				}
+			if (postion.X < geo.X) {
+				horizontal_offset = geo.X - postion.X;
+			} else if (postion.X + req.Width > geo.X + geo.Width) {
+				horizontal_offset = postion.X + req.Width - geo.X - geo.Width;
 			}
+			
 			postion.X += horizontal_offset;
 			postion.Y += vertical_offset;
 			Move (postion.X, postion.Y);
@@ -222,18 +203,6 @@ namespace Docky.Interface.Menus
 				                              BorderWidth, 
 				                              size.Width - 2 * BorderWidth, 
 				                              size.Height - 2 * BorderWidth - TailHeight);
-				break;
-			case DockOrientation.Left:
-				mainArea = new Gdk.Rectangle (BorderWidth + TailHeight, 
-				                              BorderWidth, 
-				                              size.Width - 2 * BorderWidth - TailHeight, 
-				                              size.Height - 2 * BorderWidth);
-				break;
-			case DockOrientation.Right:
-				mainArea = new Gdk.Rectangle (BorderWidth, 
-				                              BorderWidth, 
-				                              size.Width - 2 * BorderWidth - TailHeight, 
-				                              size.Height - 2 * BorderWidth);
 				break;
 			case DockOrientation.Top:
 				mainArea = new Gdk.Rectangle (BorderWidth, 

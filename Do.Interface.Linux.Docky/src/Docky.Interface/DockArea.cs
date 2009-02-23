@@ -158,10 +158,7 @@ namespace Docky.Interface
 				// called about 20 to 30 times per render loop, so the savings do add up.
 				if (cursorIsOverDockArea) {
 					Gdk.Rectangle rect = MinimumDockArea;
-					if (DockPreferences.DockIsHorizontal)
-						rect.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
-					else
-						rect.Inflate ((int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22, 0);
+					rect.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
 					CursorIsOverDockArea = rect.Contains (cursor);
 				} else {
 					Gdk.Rectangle small = MinimumDockArea;
@@ -170,13 +167,6 @@ namespace Docky.Interface
 						case DockOrientation.Bottom:
 							small.Y += small.Height - 1;
 							small.Height = 1;
-							break;
-						case DockOrientation.Left:
-							small.Width = 1;
-							break;
-						case DockOrientation.Right:
-							small.X += small.Width - 1;
-							small.Width = 1;
 							break;
 						case DockOrientation.Top:
 							small.Height = 1;
@@ -250,13 +240,8 @@ namespace Docky.Interface
 			Gdk.Rectangle geo;
 			geo = LayoutUtils.MonitorGemonetry ();
 			
-			if (DockPreferences.DockIsHorizontal) {
-				Width = geo.Width;
-				Height = 300;
-			} else {
-				Width = 500;
-				Height = geo.Height;
-			}
+			Width = geo.Width;
+			Height = 300;
 		}
 
 		void RegisterEvents ()
@@ -475,9 +460,7 @@ namespace Docky.Interface
 			if (drag_resizing)
 				HandleDragMotion ();
 			
-			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && 
-				((DockPreferences.DockIsHorizontal && old_cursor_location.X != Cursor.X) ||
-					(!DockPreferences.DockIsHorizontal && old_cursor_location.Y != Cursor.Y));
+			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && old_cursor_location.X != Cursor.X;
 
 			if (drag_resizing || cursorMoveWarrantsDraw) 
 				AnimatedDraw ();
@@ -597,7 +580,7 @@ namespace Docky.Interface
 			if (PainterOverlayVisible) {
 				offset = 0;
 			} else if (CursorIsOverDockArea) {
-				offset = (DockPreferences.DockIsHorizontal) ? GetDockArea ().Height : GetDockArea ().Width;
+				offset = GetDockArea ().Height;
 				offset = offset * 2 + 10;
 			} else {
 				if (DockPreferences.AutoHide && !drag_resizing) {
@@ -607,15 +590,15 @@ namespace Docky.Interface
 					else
 						offset = 1;
 				} else {
-					offset = (DockPreferences.DockIsHorizontal) ? GetDockArea ().Height : GetDockArea ().Width;
+					offset = GetDockArea ().Height;
 				}
 			}
 			
 			int dockSize;
 			if (drag_resizing)
-				dockSize = (DockPreferences.DockIsHorizontal) ? Width : Height;
+				dockSize = Width;
 			else
-				dockSize = (DockPreferences.DockIsHorizontal) ? MinimumDockArea.Width : MinimumDockArea.Height;
+				dockSize = MinimumDockArea.Width;
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
@@ -623,18 +606,6 @@ namespace Docky.Interface
 				                                        Height - offset, 
 				                                        dockSize, 
 				                                        offset));
-				break;
-			case DockOrientation.Left:
-				window.SetInputMask (new Gdk.Rectangle (0, 
-				                                        (Height - dockSize) / 2, 
-				                                        offset, 
-				                                        dockSize));
-				break;
-			case DockOrientation.Right:
-				window.SetInputMask (new Gdk.Rectangle (Width - offset, 
-				                                        (Height - dockSize) / 2, 
-				                                        offset, 
-				                                        dockSize));
 				break;
 			case DockOrientation.Top:
 				window.SetInputMask (new Gdk.Rectangle ((Width - dockSize) / 2, 
