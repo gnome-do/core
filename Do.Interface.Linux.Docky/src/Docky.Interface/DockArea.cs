@@ -99,22 +99,12 @@ namespace Docky.Interface
 				
 				switch (DockPreferences.Orientation) {
 				case DockOrientation.Bottom:
-					values [(int) XLib.Struts.Bottom] = (uint) DockHeight;
+					values [(int) XLib.Struts.Bottom] = (uint) (DockHeight + (Screen.Height - (geo.Y + geo.Height)));
 					values [(int) XLib.Struts.BottomStart] = (uint) geo.X;
 					values [(int) XLib.Struts.BottomEnd] = (uint) (geo.X + geo.Width - 1);
 					break;
-				case DockOrientation.Left:
-					values [(int) XLib.Struts.Left] = (uint) DockHeight;
-					values [(int) XLib.Struts.LeftStart] = (uint) geo.Y;
-					values [(int) XLib.Struts.LeftEnd] = (uint) (geo.Y + geo.Height - 1);
-					break;
-				case DockOrientation.Right:
-					values [(int) XLib.Struts.Right] = (uint) DockHeight;
-					values [(int) XLib.Struts.RightStart] = (uint) geo.Y;
-					values [(int) XLib.Struts.RightEnd] = (uint) (geo.Y + geo.Height - 1);
-					break;
 				case DockOrientation.Top:
-					values [(int) XLib.Struts.Top] = (uint) DockHeight;
+					values [(int) XLib.Struts.Top] = (uint) (DockHeight + geo.Y);
 					values [(int) XLib.Struts.TopStart] = (uint) geo.X;
 					values [(int) XLib.Struts.TopEnd] = (uint) (geo.X + geo.Width - 1);
 					break;
