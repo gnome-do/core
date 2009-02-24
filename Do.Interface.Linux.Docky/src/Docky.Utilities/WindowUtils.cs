@@ -54,6 +54,9 @@ namespace Docky.Utilities
 		static List<Application> application_list;
 		static bool application_list_update_needed;
 		
+		static Dictionary<int, string> exec_lines = new Dictionary<int, string> ();
+		static DateTime last_update = new DateTime (0);
+		
 		static WindowUtils ()
 		{
 			Wnck.Screen.Default.WindowClosed += delegate {
@@ -133,10 +136,33 @@ namespace Docky.Utilities
 			
 			exec = ProcessExecString (exec);
 			
-			Application out_app = null;
+			UpdateExecList ();
+
+			foreach (KeyValuePair<int, string> kvp in exec_lines) {
+				if (kvp.Value != null && kvp.Value.Contains (exec)) {
+					foreach (Application app in GetApplications ()) {
+						if (app == null)
+							continue;
+						
+						if (app.Pid == kvp.Key || app.Windows.Any (w => w.Pid == kvp.Key)) {
+							if (app.Windows.Any (win => !win.IsSkipTasklist))
+								apps.Add (app);
+							break;
+						}
+					}
+				}
+			}
+			return apps;
+		}
+		
+		static void UpdateExecList ()
+		{
+			if ((DateTime.UtcNow - last_update).TotalMilliseconds < 200) return;
+			
+			exec_lines.Clear ();
+			
 			foreach (string dir in Directory.GetDirectories ("/proc")) {
 				int pid;
-				out_app = null;
 				try { pid = Convert.ToInt32 (Path.GetFileName (dir)); } 
 				catch { continue; }
 				
@@ -145,24 +171,11 @@ namespace Docky.Utilities
 					continue;
 
 				exec_line = ProcessExecString (exec_line);
-
-				if (exec_line != null && exec_line.Contains (exec)) {
-					foreach (Application app in GetApplications ()) {
-						if (app == null)
-							continue;
-						
-						if (app.Pid == pid || app.Windows.Any (w => w.Pid == pid)) {
-							if (app.Windows.Select (win => !win.IsSkipTasklist).Any ())
-								out_app = app;
-							break;
-						}
-					}
-				}
 				
-				if (out_app != null)
-					apps.Add (out_app);
+				exec_lines [pid] = exec_line;
 			}
-			return apps;
+			
+			last_update = DateTime.UtcNow;
 		}
 
 		public static string ProcessExecString (string exec)

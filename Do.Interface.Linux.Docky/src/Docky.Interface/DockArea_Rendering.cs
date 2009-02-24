@@ -247,10 +247,12 @@ namespace Docky.Interface
 				Gdk.Rectangle dockArea = GetDockArea ();
 				
 				int startItemPosition;
-				startItemPosition = Math.Min (Cursor.X, RenderData.LastCursor.X) - (DockPreferences.ZoomSize / 2 + DockPreferences.IconSize);
+				startItemPosition = Math.Min (Cursor.X, RenderData.LastCursor.X) - 
+					(DockPreferences.ZoomSize / 2 + DockPreferences.IconSize);
 				
 				int endItemPosition;
-				endItemPosition = Math.Max (Cursor.X, RenderData.LastCursor.X) + (DockPreferences.ZoomSize / 2 + DockPreferences.IconSize);
+				endItemPosition = Math.Max (Cursor.X, RenderData.LastCursor.X) + 
+					(DockPreferences.ZoomSize / 2 + DockPreferences.IconSize);
 				
 				int startItem = PositionProvider.IndexAtPosition (startItemPosition, Cursor.Y);
 				int endItem = PositionProvider.IndexAtPosition (endItemPosition, Cursor.Y);

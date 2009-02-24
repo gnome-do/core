@@ -172,7 +172,8 @@ namespace Docky.Interface
 			GtkDragging = true;
 			
 			do {
-				if (DragState.DragItem == null || DragState.IsFinished || !DockItems.Contains (DragState.DragItem) || !CursorIsOverDockArea)
+				if (DragState.DragItem == null || DragState.IsFinished || 
+				    !DockItems.Contains (DragState.DragItem) || !CursorIsOverDockArea)
 					continue;
 				
 				int draggedPosition = DockItems.IndexOf (DragState.DragItem);

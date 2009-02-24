@@ -136,14 +136,14 @@ namespace Docky.Core.Default
 			Services.Core.UniverseInitialized += OnUniverseInitialized;
 			Wnck.Screen.Default.WindowClosed += OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened += OnWindowOpened;
-			DockPreferences.AutomaticIconsChanged += UpdateItems;
+			DockPreferences.AutomaticIconsChanged += HandleAutomaticIconsChanged;
 			
 			DockServices.DockletService.AppletVisibilityChanged += HandleAppletVisibilityChanged; 
 			MenuItem.UpdateNeeded += HandleUpdateNeeded;
 			
 			RegisterDocklets ();
 		}
-		
+
 		void RegisterDocklets ()
 		{
 			foreach (AbstractDockItem item in DockServices.DockletService.Docklets) {
@@ -156,7 +156,7 @@ namespace Docky.Core.Default
 			Services.Core.UniverseInitialized -= OnUniverseInitialized;
 			Wnck.Screen.Default.WindowClosed -= OnWindowClosed;
 			Wnck.Screen.Default.WindowOpened -= OnWindowOpened;
-			DockPreferences.AutomaticIconsChanged -= UpdateItems;
+			DockPreferences.AutomaticIconsChanged -= HandleAutomaticIconsChanged;
 			
 			DockServices.DockletService.AppletVisibilityChanged -= HandleAppletVisibilityChanged; 
 			MenuItem.UpdateNeeded -= HandleUpdateNeeded;
@@ -169,6 +169,11 @@ namespace Docky.Core.Default
 			foreach (AbstractDockItem item in DockServices.DockletService.Docklets) {
 				item.UpdateNeeded -= HandleUpdateNeeded;
 			}
+		}
+		
+		void HandleAutomaticIconsChanged()
+		{
+			UpdateItems ();
 		}
 		
 		void HandleAppletVisibilityChanged(object sender, EventArgs e)
