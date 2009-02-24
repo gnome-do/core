@@ -66,14 +66,6 @@ namespace Docky.Interface.Painters
 			RenderHeader (cr, paintArea);
 			for (int i = 1; i < height; i++)
 				RenderLine (cr, paintArea, i);
-			
-//			DrawVSeparator (cr, 
-//			                new Gdk.Point (paintArea.X + paintArea.Width / 9, paintArea.Y + 4),
-//			                new Gdk.Point (paintArea.X + paintArea.Width / 9, paintArea.Y + paintArea.Height - 4));
-//			
-//			DrawVSeparator (cr,
-//			                new Gdk.Point (paintArea.X + 8 * paintArea.Width / 9, paintArea.Y + 4),
-//			                new Gdk.Point (paintArea.X + 8 * paintArea.Width / 9, paintArea.Y + paintArea.Height - 4));
 		}
 		
 		protected override void ReceiveClick (Gdk.Rectangle paintArea, Gdk.Point cursor)
@@ -82,26 +74,6 @@ namespace Docky.Interface.Painters
 		}
 		
 		#endregion 
-		
-		void DrawVSeparator (Context cr, Gdk.Point startPoint, Gdk.Point endPoint)
-		{
-			cr.Translate (-.5, 0);
-			
-			cr.MoveTo (startPoint.X, startPoint.Y);
-			cr.LineTo (endPoint.X, endPoint.Y);
-			cr.LineWidth = 1;
-			
-			cr.Color = new Cairo.Color (1, 1, 1, .1);
-			cr.Stroke ();
-			
-			cr.MoveTo (startPoint.X + 1, startPoint.Y);
-			cr.LineTo (endPoint.X + 1, endPoint.Y);
-			
-			cr.Color = new Cairo.Color (1, 1, 1, .3);
-			cr.Stroke ();
-			
-			cr.Translate (.5, 0);
-		}
 		
 		void RenderHeader (Context cr, Gdk.Rectangle paintArea)
 		{
