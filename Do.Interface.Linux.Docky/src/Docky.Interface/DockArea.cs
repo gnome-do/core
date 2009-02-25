@@ -161,7 +161,11 @@ namespace Docky.Interface
 					rect.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
 					CursorIsOverDockArea = rect.Contains (cursor);
 				} else {
-					Gdk.Rectangle small = MinimumDockArea;
+					Gdk.Rectangle small;
+					if (PainterOverlayVisible)
+						small = GetDockArea ();
+					else
+						small = MinimumDockArea;
 					if (DockPreferences.AutoHide) {
 						switch (DockPreferences.Orientation) {
 						case DockOrientation.Bottom:

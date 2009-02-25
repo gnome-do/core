@@ -434,7 +434,7 @@ namespace Docky.Core.Default
 				
 				using (StreamWriter writer = new StreamWriter (SortDictionaryPath)) {
 					foreach (ItemDockItem di in OrderedItems.Where (di => di is ItemDockItem)) {
-						writer.WriteLine ("{0},{1}", di.Element.UniqueId, di.Position);
+						writer.WriteLine ("{0}|{1}", di.Element.UniqueId, di.Position);
 					}
 				}
 			} catch (Exception e) {
@@ -450,13 +450,13 @@ namespace Docky.Core.Default
 				using (StreamReader reader = new StreamReader (SortDictionaryPath)) {
 					string [] line;
 					while (!reader.EndOfStream) {
-						line = reader.ReadLine ().Split (',');
+						line = reader.ReadLine ().Split ('|');
 						sortDictionary [line [0]] = Convert.ToInt32 (line [1]);
 					}
 				}
 			} catch (FileNotFoundException e) {
 				Log<ItemsService>.Debug ("Sort Dictionary file not present, nothing to add. " + e.Message);
-			} catch {
+			} catch (Exception e) {
 				Log<ItemsService>.Error ("Could not deserialize sort dictionary");
 			}
 			return sortDictionary;
