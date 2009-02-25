@@ -34,8 +34,7 @@ AC_PROG_INSTALL
 AC_PROG_CC
 AC_HEADER_STDC
 
-SHAMROCK_FIND_MONO_2_0_COMPILER
-SHAMROCK_CHECK_LINQ_FLAG
+SHAMROCK_FIND_C_SHARP_3_0_COMPILER
 
 
 dnl Find gconftool-2
@@ -120,6 +119,7 @@ if test -z "$CONFIG_REQUESTED" ; then
 fi
 
 AC_CONFIG_FILES([
+BundledLibs/Makefile
 Do/Do.exe.config
 Do/Makefile
 Do/gnome-do
