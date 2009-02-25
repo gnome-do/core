@@ -66,6 +66,21 @@ namespace Docky.Interface
 		
 		IEnumerable<Wnck.Application> applications;
 		
+		string desktop_file;
+		
+		public string DesktopFile {
+			get {
+				if (desktop_file == null) {
+					foreach (string s in GetIconGuesses ()) {
+						desktop_file = GetDesktopFile (s);
+						if (desktop_file != null)
+							break;
+					}
+				}
+				return desktop_file;
+			}
+		}
+		
 		string Exec {
 			get {
 				string exec;

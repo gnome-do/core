@@ -38,208 +38,194 @@ namespace Docky.Core.Default
 {
 	public class ItemsService : IItemsService
 	{
+		// stores items tied with their original identifier so we can remove them later
+		Dictionary<string, AbstractDockItem> custom_items;
 		
-		public event DockItemsChangedHandler DockItemsChanged;
-		public event UpdateRequestHandler ItemNeedsUpdate;
+		// a collection for each of the major types of item
+		List<AbstractDockItem> output_items, task_items, stat_items;
 		
-		IDictionary<string, ItemDockItem> custom_items;
+		// this will be a readonly collection to track out output items
+		ReadOnlyCollection<AbstractDockItem> readonly_output_items;
 		
-		List<ItemDockItem> statistical_items;
+		bool CustomItemsRead { get; set; }
 		
-		List<AbstractDockItem> output_items;
-		List<AbstractDockItem> hotseat_items;
+		//// <value>
+		/// Our main menu.  We only ever need one so we will store it here
+		/// </value>
+		AbstractDockItem MenuItem { get; set; }
 		
-		ReadOnlyCollection<AbstractDockItem> readonly_items;
-		ReadOnlyCollection<AbstractDockItem> hotseat_readonly_items;
-
-		List<ApplicationDockItem> task_items;
-		bool enable_serialization = true;
-		bool custom_items_read;
+		/// <value>
+		/// Our separator.  we can re-use this to render over and over if need be.
+		/// </value>
+		AbstractDockItem Separator { get; set; }
 		
-		string DesktopFilesPath {
+		/// <value>
+		/// The path to the file we will use to serialize out our custom items
+		/// </value>
+		string CustomItemsPath {
 			get {
-				return Path.Combine (Services.Paths.UserDataDirectory, GetType ().Name + "DesktopFiles");
+				return Path.Combine (Services.Paths.UserDataDirectory, GetType ().Name + "_CustomItems");
 			}
 		}
 		
+		/// <value>
+		/// The path to the file we will use to store our sort dictionary
+		/// </value>
 		string SortDictionaryPath {
 			get { 
-				return Path.Combine (Services.Paths.UserDataDirectory, GetType ().Name + "SortDictionary");
+				return Path.Combine (Services.Paths.UserDataDirectory, GetType ().Name + "_SortDictionary");
+			}
+		}
+		
+		IEnumerable<AbstractDockItem> OrderedItems {
+			get {
+				return stat_items
+					    .Concat (custom_items.Values)
+						.Concat (task_items)
+						.OrderBy (di => di.Position);
 			}
 		}
 		
 		int LastPosition {
 			get {
-				if (!DraggableItems.Any ())
+				if (!OrderedItems.Any ())
 					return 0;
-				// TODO make sane once mono 1.9 support is dropped
-				return DraggableItems.Max ((Func<ItemDockItem, int>) (di => di.Position));
+				return OrderedItems.Max ((Func<AbstractDockItem, int>) (di => di.Position));
 			}
 		}
 		
-		AbstractDockItem Separator { get; set; }
-		AbstractDockItem MenuItem { get; set; }
-		
-		IEnumerable<ItemDockItem> DraggableItems {
-			get { return statistical_items.Concat (custom_items.Values).OrderBy (di => di.Position); }
-		}
-		
-		bool HotSeatEnabled { get; set; }
-		
-		public bool UpdatesEnabled { get; private set; }
-		
-		public ReadOnlyCollection<AbstractDockItem> DockItems {
-			get {
-				if (HotSeatEnabled)
-					return hotseat_readonly_items;
-				
-				if (output_items.Count == 0) {
-					output_items.Add (MenuItem);
-					output_items.AddRange (DraggableItems.Cast<AbstractDockItem> ());
-				
-					if (task_items.Any ()) {
-						output_items.AddRange (task_items.Cast<AbstractDockItem> ().OrderBy (bdi => bdi.DockAddItem));
-					}
-				
-					if (DockServices.DockletService.ActiveDocklets.Any ()) {
-						output_items.Add (Separator);
-						
-						foreach (AbstractDockletItem adi in DockServices.DockletService.ActiveDocklets) {
-							output_items.Add (adi);
-						}
-					}
-				}
-				return readonly_items;
-			}
-		}
+		#region Constructor
 		
 		public ItemsService ()
 		{
+			// build our data structures
+			custom_items = new Dictionary<string, AbstractDockItem> ();
+			task_items = new List<AbstractDockItem> ();
+			output_items = new List<AbstractDockItem> ();
+			stat_items = new List<AbstractDockItem> ();
+			
+			// hook up our read only collection
+			readonly_output_items = output_items.AsReadOnly ();
+			
 			Separator = new SeparatorItem ();
 			MenuItem = new DoDockItem ();
-			
-			custom_items = new Dictionary<string, ItemDockItem> ();
-			statistical_items = new List<ItemDockItem> ();
-			task_items = new List<ApplicationDockItem> ();
-			
-			output_items = new List<AbstractDockItem> ();
-			readonly_items = output_items.AsReadOnly ();
-			
-			hotseat_items = new List<AbstractDockItem> ();
-			hotseat_readonly_items = hotseat_items.AsReadOnly ();
 			
 			RegisterEvents ();
 		}
 		
+		#endregion
+		
+		#region Event Handling
 		void RegisterEvents ()
 		{
-			Services.Core.UniverseInitialized += OnUniverseInitialized;
-			Wnck.Screen.Default.WindowClosed += OnWindowClosed;
-			Wnck.Screen.Default.WindowOpened += OnWindowOpened;
-			DockPreferences.AutomaticIconsChanged += HandleAutomaticIconsChanged;
+			// core services
+			Services.Core.UniverseInitialized += HandleUniverseInitialized;
 			
+			// wnck events
+			Wnck.Screen.Default.WindowClosed += HandleWindowClosed; 
+			Wnck.Screen.Default.WindowOpened += HandleWindowOpened; 
+			
+			// Dock Services
+			DockPreferences.AutomaticIconsChanged += HandleAutomaticIconsChanged; 
 			DockServices.DockletService.AppletVisibilityChanged += HandleAppletVisibilityChanged; 
-			MenuItem.UpdateNeeded += HandleUpdateNeeded;
 			
 			RegisterDocklets ();
 		}
-
+		
 		void RegisterDocklets ()
 		{
+			RegisterDockItem (MenuItem);
+			
 			foreach (AbstractDockItem item in DockServices.DockletService.Docklets) {
-				item.UpdateNeeded += HandleUpdateNeeded;
+				RegisterDockItem (item);
 			}
 		}
-
+		
 		void UnregisterEvents ()
 		{
-			Services.Core.UniverseInitialized -= OnUniverseInitialized;
-			Wnck.Screen.Default.WindowClosed -= OnWindowClosed;
-			Wnck.Screen.Default.WindowOpened -= OnWindowOpened;
-			DockPreferences.AutomaticIconsChanged -= HandleAutomaticIconsChanged;
+			// core services
+			Services.Core.UniverseInitialized -= HandleUniverseInitialized;
 			
+			// wnck events
+			Wnck.Screen.Default.WindowClosed -= HandleWindowClosed; 
+			Wnck.Screen.Default.WindowOpened -= HandleWindowOpened; 
+			
+			// Dock Services
+			DockPreferences.AutomaticIconsChanged -= HandleAutomaticIconsChanged; 
 			DockServices.DockletService.AppletVisibilityChanged -= HandleAppletVisibilityChanged; 
-			MenuItem.UpdateNeeded -= HandleUpdateNeeded;
 			
 			UnregisterDocklets ();
 		}
 		
 		void UnregisterDocklets ()
 		{
+			UnregisterDockItem (MenuItem);
+			
 			foreach (AbstractDockItem item in DockServices.DockletService.Docklets) {
-				item.UpdateNeeded -= HandleUpdateNeeded;
+				UnregisterDockItem (item);
 			}
 		}
 		
+		void RegisterDockItem (AbstractDockItem dockItem)
+		{
+			dockItem.UpdateNeeded += HandleUpdateNeeded;
+			if (dockItem is IRightClickable)
+				(dockItem as IRightClickable).RemoveClicked += HandleRemoveClicked;
+		}
+		
+		void UnregisterDockItem (AbstractDockItem dockItem)
+		{
+			dockItem.UpdateNeeded -= HandleUpdateNeeded;
+			if (dockItem is IRightClickable)
+				(dockItem as IRightClickable).RemoveClicked -= HandleRemoveClicked;
+		}
+
+		void HandleAppletVisibilityChanged(object sender, EventArgs e)
+		{
+			OnDockItemsChanged ();
+		}
+
 		void HandleAutomaticIconsChanged()
 		{
 			UpdateItems ();
 		}
 		
-		void HandleAppletVisibilityChanged(object sender, EventArgs e)
+		void HandleRemoveClicked(object sender, EventArgs e)
 		{
-			OnDockItemsChanged ();
+			if (sender is AbstractDockItem)
+				RemoveItem (sender as AbstractDockItem);
 		}
-		
-		private void OnWindowClosed (object o, WindowClosedArgs args) 
+
+		void HandleWindowOpened(object o, WindowOpenedArgs args)
 		{
-			if (args.Window.IsSkipTasklist)
-					return;
+			if (!args.Window.IsSkipTasklist)
+				UpdateItems ();
+		}
+
+		void HandleWindowClosed(object o, WindowClosedArgs args)
+		{
+			if (!args.Window.IsSkipTasklist)
+				UpdateItems ();
+		}
+
+		void HandleUniverseInitialized(object sender, EventArgs e)
+		{
+			UpdatesEnabled = true;
 			UpdateItems ();
 		}
 		
-		private void OnWindowOpened (object o, WindowOpenedArgs args) 
+		void HandleUpdateNeeded(object sender, UpdateRequestArgs args)
 		{
-			if (args.Window.IsSkipTasklist)
-					return;
-			UpdateItems ();
+			if (!DockItems.Contains (args.Item))
+				return;
+			if (ItemNeedsUpdate != null)
+				ItemNeedsUpdate (this, args);
 		}
 		
-		public void AddItemToDock (Element item)
-		{
-			if (!(item is Item)) {
-				Log<ItemsService>.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
-				return;
-			}
-			string id = item.UniqueId;
-			if (custom_items.ContainsKey (id))
-				return;
-			
-			ItemDockItem di = new ItemDockItem (item as Item);
-			di.RemoveClicked += HandleRemoveClicked;
-			di.UpdateNeeded += HandleUpdateNeeded;
-			di.Position = LastPosition + 1;
-			custom_items [id] = di;
-			
-			UpdateStatisticalItems ();
-			OnDockItemsChanged ();
-			
-			if (enable_serialization)
-				SerializeData ();
-		}
+		#endregion
 		
-		public void AddItemToDock (string identifier)
-		{
-			if (custom_items.ContainsKey (identifier))
-				return;
-			
-			ItemDockItem customItem = GetCustomItem (identifier);
-			
-			if (customItem != null) {
-				customItem.RemoveClicked += HandleRemoveClicked;
-				customItem.UpdateNeeded += HandleUpdateNeeded;
-				customItem.Position = LastPosition + 1;
-				custom_items [identifier] = customItem;
-			}
-			
-			UpdateStatisticalItems ();
-			OnDockItemsChanged ();
-			
-			if (enable_serialization)
-				SerializeData ();
-		}
-		
-		ItemDockItem GetCustomItem (string identifier)
+		#region Item Updating
+		AbstractDockItem MaybeCreateCustomItem (string identifier)
 		{
 			ItemDockItem customItem = null;
 			
@@ -264,202 +250,190 @@ namespace Docky.Core.Default
 			return customItem;
 		}
 		
-		public bool ItemCanBeMoved (int item)
+		void SimplifyPositions (IEnumerable<AbstractDockItem> items)
 		{
-			return DockItems [item] is ItemDockItem && DraggableItems.Contains (DockItems [item] as ItemDockItem);
+			int i = 0;
+			// we call ToArray so our enumerator does get screwed up when we change the Position
+			foreach (AbstractDockItem item in items.OrderBy (di => di.Position).ToArray ())
+				item.Position = i++;
 		}
 		
-		public bool HotSeatItem (AbstractDockItem item, List<AbstractDockItem> seatedItems)
+		void UpdateItems ()
 		{
-			if (HotSeatEnabled)
-				return false;
-
-			foreach (AbstractDockItem bdi in hotseat_items)
-				bdi.Dispose ();
-			
-			hotseat_items.Clear ();
-			hotseat_items.Add (new HotSeatProxyItem (item));
-			hotseat_items.AddRange (seatedItems);
-			HotSeatEnabled = true;
-			OnDockItemsChanged ();
-		
-			return true;
-		}
-		
-		public bool ResetHotSeat (AbstractDockItem item)
-		{
-			if (!HotSeatEnabled) return false;
-			
-			HotSeatEnabled = false;
-			OnDockItemsChanged ();
-			return true;
-		}
-		
-		public void DropItemOnPosition (AbstractDockItem item, int position)
-		{
-			if (ItemCanInteractWithPosition (item, position))
-				if (DockItems [position] is TrashDockItem)
-					RemoveItem (item);
-		}
-
-		public void MoveItemToPosition (AbstractDockItem item, int position)
-		{
-			if (ItemCanInteractWithPosition (item, position))
-				MoveItemToPosition (DockItems.IndexOf (item), position);
-		}
-		
-		bool ItemCanInteractWithPosition (AbstractDockItem item, int position)
-		{
-			return DockItems.Contains (item) && 0 <= position && position < DockItems.Count;
-		}
-		
-		public void MoveItemToPosition (int item, int position)
-		{
-			if (item == position || 
-			    item < 0 || 
-			    position < 0 || 
-			    position > DockItems.Count || 
-			    item > DockItems.Count)
+			if (!UpdatesEnabled)
 				return;
 			
-			IconSource itemSource = GetIconSource (DockItems [item]);
-			IconSource targetSource = GetIconSource (DockItems [position]);
+			UpdateStatItems ();
 			
-			if (itemSource == IconSource.Application || itemSource == IconSource.Unknown ||
-			    targetSource == IconSource.Application || targetSource == IconSource.Unknown)
-				return;
+			if (!CustomItemsRead) {
+				foreach (string s in ReadCustomItems ())
+					InternalAddItemToDock (s);
+				
+				Dictionary<string, int> sortDictionary = ReadSortDictionary ();
+				foreach (ItemDockItem item in OrderedItems.Where (di => di is ItemDockItem)) {
+					if (sortDictionary.ContainsKey (item.Element.UniqueId))
+						item.Position = sortDictionary [item.Element.UniqueId];
+				}
+				
+				CustomItemsRead = true;
+			}
 			
-			ItemDockItem primaryItem = DockItems [item] as ItemDockItem;
-			ItemDockItem targetItem = DockItems [position] as ItemDockItem;
+			UpdateTaskItems ();
+			SimplifyPositions (OrderedItems);
 			
-			int startPosition = primaryItem.Position;
-			int targetPosition = targetItem.Position;
+			OnDockItemsChanged ();
+		}
+		
+		void UpdateStatItems ()
+		{
+			List<ItemDockItem> old_items = new List<ItemDockItem> (stat_items.Where (di => di is ItemDockItem)
+			                                                       .Cast<ItemDockItem> ());
+			List<ItemDockItem> local_cust = new List<ItemDockItem> (custom_items.Values
+			                                                        .Where (di => di is ItemDockItem)
+			                                                        .Cast<ItemDockItem> ());
 			
-			foreach (ItemDockItem di in DraggableItems) {
-				if (startPosition < targetPosition) {
-					// the item is being shifted to the right.  Everything greater than item up to and including target item
-					// needs to be shifted to the left
-					if (di.Position > startPosition && di.Position <= targetPosition)
-						di.Position--;
+			stat_items = new List<AbstractDockItem> ();
+			
+			IEnumerable<Item> mostUsedItems = MostUsedItems ();
+			
+			DateTime currentTime = DateTime.UtcNow;
+			foreach (Item item in mostUsedItems) {
+				if (local_cust.Any (di => di.Element == item))
+					continue;
+				
+				if (old_items.Any (di => di.Element == item)) {
+					stat_items.AddRange (old_items.Where (di => di.Element == item).Cast<AbstractDockItem> ());
 				} else {
-					// the item is being shifted to the left.  Everthing less than the item and up to and including target item
-					// needs to be shifted to the right
-					if (di.Position < startPosition && di.Position >= targetPosition)
-						di.Position++;
+					ItemDockItem di = new ItemDockItem (item);
+					RegisterDockItem (di);
+					di.DockAddItem = currentTime;
+					
+					int position = LastPosition + 1;
+
+					//TODO fixme once mono 1.9 support is dropped
+					if (old_items.Any ())
+						position += old_items.Max ((Func<ItemDockItem, int>) (oi => oi.Position));
+
+					di.Position = position;
+					stat_items.Add (di);
 				}
 			}
 			
-			primaryItem.Position = targetPosition;
-			
-			OnDockItemsChanged ();
-			SerializeData ();
+			// potential leak if not all items in stat_items were ItemDockItems!!!
+			foreach (ItemDockItem item in  old_items.Where (di => !stat_items.Contains (di))) {
+				UnregisterDockItem (item);
+				item.Dispose ();
+			}
 		}
 		
-		public void ForceUpdate ()
+		void UpdateTaskItems ()
 		{
-			UpdateItems ();
-		}
-		
-		public IconSource GetIconSource (AbstractDockItem item) {
-			if (item is ApplicationDockItem && task_items.Contains (item as ApplicationDockItem))
-				return IconSource.Application;
+			foreach (ItemDockItem item in OrderedItems.Where (di => di is ItemDockItem)) {
+				item.UpdateApplication ();
+			}
 			
-			if (item is ItemDockItem && statistical_items.Contains (item as ItemDockItem))
-				return IconSource.Statistics;
-			
-			if (item is ItemDockItem && custom_items.Values.Contains (item as ItemDockItem))
-				return IconSource.Custom;
-			
-			return IconSource.Unknown;
-		}
-		
-		void HandleUpdateNeeded(object sender, UpdateRequestArgs args)
-		{
-			if (!DockItems.Contains (args.Item))
-				return;
-			if (ItemNeedsUpdate != null)
-				ItemNeedsUpdate (this, args);
-		}
+			List<ApplicationDockItem> out_items = new List<ApplicationDockItem> ();
 
-		void HandleRemoveClicked(object sender, EventArgs e)
-		{
-			if (sender is AbstractDockItem)
-				RemoveItem (sender as AbstractDockItem);
+			IEnumerable<int> knownPids = OrderedItems
+				    .Where (di => di is ItemDockItem)
+					.Cast<ItemDockItem> ()
+					.SelectMany (di => di.Pids);
+			
+			IEnumerable<Application> prunedApps = WindowUtils.GetApplications ()
+				.Where (app => app.Windows.Any (w => !w.IsSkipTasklist))
+				.Where (app => !knownPids.Contains (app.Pid) && app.Windows.Any ());
+			
+			foreach (IEnumerable<Wnck.Application> apps in prunedApps
+			         .GroupBy (app => (app as Wnck.Application).Windows [0].ClassGroup.ResClass)) {
+				ApplicationDockItem api = new ApplicationDockItem (apps);
+
+				if (task_items.Any (di => di.Equals (api))) {
+					AbstractDockItem match = task_items.Where (di => di.Equals (api)).First ();
+					api.DockAddItem = match.DockAddItem;
+					api.Position = match.Position;
+				} else {
+					api.DockAddItem = DateTime.UtcNow;
+				}
+					
+				out_items.Add (api);
+				RegisterDockItem (api);
+			}
+			
+			foreach (AbstractDockItem item in task_items) {
+				UnregisterDockItem (item);
+				item.Dispose ();
+			}
+			
+			foreach (ApplicationDockItem api in out_items.OrderBy (di => di.DockAddItem)) {
+				if (api.Position == 0)
+					api.Position = LastPosition + 1;
+			}
+					
+			task_items.Clear ();
+			task_items.AddRange (out_items.Cast<AbstractDockItem> ());
 		}
 		
-		IEnumerable<Item> MostUsedItems ()
+		void OnDockItemsChanged ()
 		{
-			return Services.Core
-				.GetItemsOrderedByRelevance ()
-				.Where (item => item.GetType ().Name != "SelectedTextItem" && item.GetType ().Name != "GNOMETrashFileItem")
-				.Where (item => !DockPreferences.ItemBlacklist.Contains (item.UniqueId))
-				.Take (DockPreferences.AutomaticIcons)
-				.OrderByDescending (item => item is IApplicationItem)
-				.ThenBy (item => item.GetType ().Name)
-				.ThenBy (item => item.Safe.Name);
+			output_items.Clear ();
+			
+			if (DockItemsChanged != null)
+				DockItemsChanged (DockItems);
 		}
-
-		public bool RemoveItem (AbstractDockItem item)
+		#endregion
+		
+		#region Item Management
+		bool InternalAddItemToDock (Element item)
 		{
-			if (!DockItems.Contains (item))
+			if (!(item is Item)) {
+				Log<ItemsService>.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
 				return false;
-			return RemoveItem (DockItems.IndexOf (item));
-		}
-		
-		public bool RemoveItem (int item)
-		{
-			bool ret_val = false;
-			
-			if (GetIconSource (DockItems [item]) == IconSource.Statistics) {
-				DockPreferences.AddBlacklistItem ((DockItems [item] as ItemDockItem).Element.UniqueId);
-				DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
-				UpdateItems ();
-				ret_val = true;
-			} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
-				foreach (KeyValuePair<string, ItemDockItem> kvp in custom_items) {
-					if (kvp.Value.Equals (DockItems [item])) {
-						custom_items.Remove (kvp.Key);
-						
-						UpdateItems ();
-						ret_val = true;
-						break;
-					}
-				}
 			}
 			
-			UpdateItems ();
-			if (enable_serialization)
-				SerializeData ();
-			return ret_val;
+			string id = item.UniqueId;
+			if (custom_items.ContainsKey (id))
+				return false;
+			
+			AbstractDockItem dockItem = new ItemDockItem (item as Item);
+			RegisterDockItem (dockItem);
+			
+			dockItem.Position = LastPosition + 1;
+			custom_items [id] = dockItem;
+			
+			return true;
 		}
 		
-		void SerializeData ()
+		bool InternalAddItemToDock (string identifier)
 		{
-			SerializeCustomItems ();
-			SerializeSortDictionary ();
+			if (custom_items.ContainsKey (identifier)) return false;
+			
+			AbstractDockItem customItem = MaybeCreateCustomItem (identifier);
+			
+			if (customItem == null) return false;
+			
+			RegisterDockItem (customItem);
+			customItem.Position = LastPosition + 1;
+			custom_items [identifier] = customItem;
+			
+			return true;
 		}
+		#endregion
 		
-		void SerializeCustomItems ()
+		#region Disk Utilities
+		void WriteData ()
 		{
-			try {
-				using (Stream s = File.OpenWrite (DesktopFilesPath)) {
-					BinaryFormatter f = new BinaryFormatter ();
-					f.Serialize (s, custom_items.Keys.ToArray ());
-				}
-			} catch (Exception e) {
-				Log<ItemsService>.Error ("Could not serialize custom items");
-				Log<ItemsService>.Error (e.Message);
-			}
+			WriteSortDictionary ();
+			WriteCustomItems ();
 		}
 		
-		void SerializeSortDictionary ()
+		void WriteSortDictionary ()
 		{
 			try {
 				if (File.Exists (SortDictionaryPath))
 					File.Delete (SortDictionaryPath);
 				
 				using (StreamWriter writer = new StreamWriter (SortDictionaryPath)) {
-					foreach (ItemDockItem di in DraggableItems) {
+					foreach (ItemDockItem di in OrderedItems.Where (di => di is ItemDockItem)) {
 						writer.WriteLine ("{0},{1}", di.Element.UniqueId, di.Position);
 					}
 				}
@@ -469,25 +443,7 @@ namespace Docky.Core.Default
 			}
 		}
 		
-		string[] DeserializeCustomItems ()
-		{
-			string[] filenames;
-			try {
-				using (Stream s = File.OpenRead (DesktopFilesPath)) {
-					BinaryFormatter f = new BinaryFormatter ();
-					filenames = f.Deserialize (s) as string[];
-				}
-			} catch (FileNotFoundException e) {
-				Log<ItemsService>.Debug ("Custom items file not present, nothing to add. " + e.Message);
-				filenames = new string[0];
-			} catch {
-				Log<ItemsService>.Error ("Could not deserialize custom items");
-				filenames = new string[0];
-			}
-			return filenames;
-		}
-		
-		Dictionary<string, int> DeserializeSortDictionary ()
+		Dictionary<string, int> ReadSortDictionary ()
 		{
 			Dictionary<string, int> sortDictionary = new Dictionary<string, int> ();
 			try {
@@ -506,149 +462,285 @@ namespace Docky.Core.Default
 			return sortDictionary;
 		}
 		
-		void UpdateItems ()
+		void WriteCustomItems ()
 		{
-			if (!UpdatesEnabled)
+			try {
+				using (Stream s = File.OpenWrite (CustomItemsPath)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					f.Serialize (s, custom_items.Keys.ToArray ());
+				}
+			} catch (Exception e) {
+				Log<ItemsService>.Error ("Could not serialize custom items");
+				Log<ItemsService>.Error (e.Message);
+			}
+		}
+		
+		IEnumerable<string> ReadCustomItems ()
+		{
+			string[] filenames;
+			try {
+				using (Stream s = File.OpenRead (CustomItemsPath)) {
+					BinaryFormatter f = new BinaryFormatter ();
+					filenames = f.Deserialize (s) as string[];
+				}
+			} catch (FileNotFoundException e) {
+				Log<ItemsService>.Debug ("Custom items file not present, nothing to add. " + e.Message);
+				filenames = new string[0];
+			} catch {
+				Log<ItemsService>.Error ("Could not deserialize custom items");
+				filenames = new string[0];
+			}
+			return filenames;
+		}
+		#endregion
+		
+		#region Random Useful Functions
+		bool ItemCanInteractWithPosition (AbstractDockItem item, int position)
+		{
+			return DockItems.Contains (item) && 0 <= position && position < DockItems.Count;
+		}
+		
+		int LastNonTaskItemPosition ()
+		{
+			if (!OrderedItems.Any (di => !(di is ApplicationDockItem)))
+				return 0;
+			return OrderedItems
+				.Where (di => !(di is ApplicationDockItem))
+				.Max ((Func<AbstractDockItem, int>) (di => di.Position));
+		}
+		
+		/// <summary>
+		/// Returns the most used items out of GNOME Do and does a tiny bit of filtering and sorting on them
+		/// This is mostly to encourage a better first run experience, but overall this can be improved
+		/// </summary>
+		/// <returns>
+		/// A <see cref="IEnumerable"/> of the most used items from Do's core universe
+		/// </returns>
+		IEnumerable<Item> MostUsedItems ()
+		{
+			return Services.Core
+				.GetItemsOrderedByRelevance ()
+				.Where (item => item.GetType ().Name != "SelectedTextItem" && 
+					        item.GetType ().Name != "GNOMETrashFileItem")
+				.Where (item => !DockPreferences.ItemBlacklist.Contains (item.UniqueId))
+				.Take (DockPreferences.AutomaticIcons)
+				.OrderByDescending (item => item is IApplicationItem)
+				.ThenBy (item => item.GetType ().Name)
+				.ThenBy (item => item.Safe.Name);
+		}
+		#endregion
+		
+		#region IItemsService implementation
+		public event DockItemsChangedHandler DockItemsChanged;
+		public event UpdateRequestHandler ItemNeedsUpdate;
+		
+		public bool UpdatesEnabled { get; private set; }
+		
+		public ReadOnlyCollection<AbstractDockItem> DockItems {
+			get {
+				if (output_items.Count == 0) {
+					output_items.Add (MenuItem);
+					
+					// Add our custom/task/statistical items in one shot
+					output_items.AddRange (OrderedItems);
+				
+					// add a separator and any docklets that are active
+					if (DockServices.DockletService.ActiveDocklets.Any ()) {
+						output_items.Add (Separator);
+						output_items.AddRange (DockServices.DockletService.ActiveDocklets.Cast<AbstractDockItem> ());
+					}
+				}
+				return readonly_output_items;
+			}
+		}
+		
+		public void AddItemToDock (Element item)
+		{
+			if (InternalAddItemToDock (item)) {
+				UpdateItems ();
+				OnDockItemsChanged ();
+			}
+		}
+		
+		public void AddItemToDock (string identifier)
+		{
+			if (InternalAddItemToDock (identifier)) {
+				UpdateItems ();
+				OnDockItemsChanged ();
+			}
+		}
+		
+		public bool ItemCanBeMoved (int item)
+		{
+			if (item < 0 || item > DockItems.Count)
+				return false;
+			
+			return (OrderedItems.Contains (DockItems [item]));
+		}
+		
+		public void DropItemOnPosition (AbstractDockItem item, int position)
+		{
+			do {
+				if (!ItemCanInteractWithPosition (item, position)) continue;
+			
+				if (DockItems [position] is TrashDockItem) {
+					RemoveItem (item);
+					continue;
+				}
+				
+				if (item is ApplicationDockItem && position <= LastNonTaskItemPosition ()) {
+					ApplicationDockItem api = item as ApplicationDockItem;
+					string desktop_file = api.DesktopFile;
+					
+					if (string.IsNullOrEmpty (desktop_file)) continue;
+					
+					AbstractDockItem newItem = MaybeCreateCustomItem (desktop_file);
+					
+					if (newItem == null) continue;
+					
+					newItem.Position = item.Position;
+					newItem.DockAddItem = item.DockAddItem;
+					custom_items [desktop_file] = newItem;
+					UpdateItems ();
+				}
+			} while (false);
+		}
+		
+		public void MoveItemToPosition (AbstractDockItem item, int position)
+		{
+			if (ItemCanInteractWithPosition (item, position))
+				MoveItemToPosition (DockItems.IndexOf (item), position);
+		}
+		
+		public void MoveItemToPosition (int item, int position)
+		{
+			if (item == position || 
+			    item < 0 || 
+			    position < 0 || 
+			    position > DockItems.Count || 
+			    item > DockItems.Count)
 				return;
 			
-			UpdateStatisticalItems ();
+			IconSource itemSource = GetIconSource (DockItems [item]);
+			IconSource targetSource = GetIconSource (DockItems [position]);
 			
-			if (!custom_items_read) {
-				enable_serialization = false;
-				foreach (string s in DeserializeCustomItems ())
-					AddItemToDock (s);
-				enable_serialization = true;
-				
-				custom_items_read = true;
-				
-				Dictionary<string, int> sortDictionary = DeserializeSortDictionary ();
-				foreach (ItemDockItem item in DraggableItems) {
-					if (sortDictionary.ContainsKey (item.Element.UniqueId))
-						item.Position = sortDictionary [item.Element.UniqueId];
-				}
-			}
+			if (itemSource == IconSource.Unknown || targetSource == IconSource.Unknown)
+				return;
 			
-			UpdateWindowItems ();
-			SimplifyPositions (DraggableItems);
-			OnDockItemsChanged ();
+			AbstractDockItem primaryItem = DockItems [item];
+			AbstractDockItem targetItem = DockItems [position];
 			
-		}
-		
-		void UpdateStatisticalItems ()
-		{
-			List<ItemDockItem> old_items = statistical_items;
-			statistical_items = new List<ItemDockItem> ();
+			int startPosition = primaryItem.Position;
+			int targetPosition = targetItem.Position;
 			
-			IEnumerable<Item> mostUsedItems = MostUsedItems ();
-			
-			DateTime currentTime = DateTime.UtcNow;
-			foreach (Item item in mostUsedItems) {
-				if (custom_items.Values.Any (di => di.Element == item))
-					continue;
-				
-				if (old_items.Any (di => di.Element == item)) {
-					statistical_items.AddRange (old_items.Where (di => di.Element == item));
+			foreach (AbstractDockItem di in OrderedItems) {
+				if (startPosition < targetPosition) {
+					// the item is being shifted to the right.  Everything greater than item up to and including target item
+					// needs to be shifted to the left
+					if (di.Position > startPosition && di.Position <= targetPosition)
+						di.Position--;
 				} else {
-					ItemDockItem di = new ItemDockItem (item);
-					di.RemoveClicked += HandleRemoveClicked;
-					di.UpdateNeeded += HandleUpdateNeeded;
-					di.DockAddItem = currentTime;
-					
-					int position = LastPosition + 1;
-
-					//TODO fixme once mono 1.9 support is dropped
-					if (old_items.Any ())
-						position += old_items.Max ((Func<ItemDockItem, int>) (oi => oi.Position));
-
-					di.Position = position;
-					statistical_items.Add (di);
+					// the item is being shifted to the left.  Everthing less than the item and up to and including target item
+					// needs to be shifted to the right
+					if (di.Position < startPosition && di.Position >= targetPosition)
+						di.Position++;
 				}
 			}
 			
-			foreach (ItemDockItem item in  old_items.Where (di => !statistical_items.Contains (di))) {
-				item.RemoveClicked -= HandleRemoveClicked;
-				item.UpdateNeeded -= HandleUpdateNeeded;
-				item.Dispose ();
-			}
-		}
-
-		void UpdateWindowItems ()
-		{
-			foreach (ItemDockItem di in statistical_items.Concat (custom_items.Values)) {
-				di.UpdateApplication ();
-			}
+			primaryItem.Position = targetPosition;
 			
-			List<ApplicationDockItem> out_items = new List<ApplicationDockItem> ();
-
-			IEnumerable<int> knownPids = statistical_items.Concat (custom_items.Values).SelectMany (di => di.Pids);
-			
-			IEnumerable<Application> prunedApps = WindowUtils.GetApplications ()
-				.Where (app => app.Windows.Any (w => !w.IsSkipTasklist))
-				.Where (app => !knownPids.Contains (app.Pid) && app.Windows.Any ());
-			
-			foreach (IEnumerable<Wnck.Application> apps in prunedApps
-			         .GroupBy (app => (app as Wnck.Application).Windows [0].ClassGroup.ResClass)) {
-				ApplicationDockItem api = new ApplicationDockItem (apps);
-
-				if (task_items.Any (di => di.Equals (api)))
-					api.DockAddItem = task_items.Where (di => di.Equals (api)).First ().DockAddItem;
-				else
-					api.DockAddItem = DateTime.UtcNow;
-
-				out_items.Add (api);
-				api.UpdateNeeded += HandleUpdateNeeded;
-			}
-			
-			foreach (ApplicationDockItem item in task_items) {
-				item.Dispose ();
-				item.UpdateNeeded -= HandleUpdateNeeded;
-			}
-					
-			task_items = out_items;
+			OnDockItemsChanged ();
+			WriteData ();
 		}
 		
-		void SimplifyPositions (IEnumerable<ItemDockItem> items)
+		public void ForceUpdate ()
 		{
-			int i = 0;
-			// we call ToArray so our enumerator does get screwed up when we change the Position
-			foreach (ItemDockItem item in items.OrderBy (di => di.Position).ToArray ())
-				item.Position = i++;
-		}
-		
-		void OnDockItemsChanged ()
-		{
-			// clear the cache
-			output_items.Clear ();
-			
-			if (DockItemsChanged != null)
-				DockItemsChanged (DockItems);
-		}
-
-		void OnUniverseInitialized (object sender, EventArgs e) 
-		{
-			UpdatesEnabled = true;
 			UpdateItems ();
 		}
 		
+		public IconSource GetIconSource (AbstractDockItem item)
+		{
+			if (task_items.Contains (item))
+				return IconSource.Application;
+			
+			if (stat_items.Contains (item))
+				return IconSource.Statistics;
+			
+			if (custom_items.Values.Contains (item))
+				return IconSource.Custom;
+			
+			return IconSource.Unknown;
+		}
+		
+		public bool RemoveItem (AbstractDockItem item)
+		{
+			if (!DockItems.Contains (item))
+				return false;
+			return RemoveItem (DockItems.IndexOf (item));
+		}
+		
+		public bool RemoveItem (int item)
+		{
+			bool ret_val = false;
+			
+			if (GetIconSource (DockItems [item]) == IconSource.Statistics && DockItems [item] is ItemDockItem) {
+				DockPreferences.AddBlacklistItem ((DockItems [item] as ItemDockItem).Element.UniqueId);
+				DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
+				UpdateItems ();
+				ret_val = true;
+			} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
+				foreach (KeyValuePair<string, AbstractDockItem> kvp in custom_items) {
+					if (kvp.Value.Equals (DockItems [item])) {
+						custom_items.Remove (kvp.Key);
+						
+						UpdateItems ();
+						ret_val = true;
+						break;
+					}
+				}
+			}
+			
+			UpdateItems ();
+			WriteData ();
+			return ret_val;
+		}
+		
+		public bool HotSeatItem (AbstractDockItem item, List<AbstractDockItem> seatedItems)
+		{
+			Log<ItemsService>.Error ("Items Service cannot currently handle hotseating");
+			return false;
+		}
+		
+		public bool ResetHotSeat (AbstractDockItem item)
+		{
+			Log<ItemsService>.Error ("Items Service cannot currently handle hotseating");
+			return false;
+		}
+		#endregion
+
+		#region IDisposable implementation
 		public void Dispose ()
 		{
 			UnregisterEvents ();
 			
 			foreach (AbstractDockItem di in DockItems) {
-				if (di is IRightClickable)
-					(di as IRightClickable).RemoveClicked -= HandleRemoveClicked;
-				di.UpdateNeeded -= HandleUpdateNeeded;
+				if (di.Disposed)
+					continue;
 				
+				UnregisterDockItem (di);
 				di.Dispose ();
 			}
 			
-			if (!DockItems.Contains (Separator))
+			if (!Separator.Disposed)
 				Separator.Dispose ();
-
+			
 			custom_items.Clear ();
-			statistical_items.Clear ();
-			output_items.Clear (); 
+			stat_items.Clear ();
+			output_items.Clear ();
 			task_items.Clear ();
 		}
+		#endregion
+		
+		
 	}
 }

@@ -55,8 +55,6 @@ namespace Docky.Interface
 		
 		public event EventHandler RemoveClicked;
 		
-		public int Position { get; set; }
-		
 		public override bool IsAcceptingDrops { 
 			get { return accepting_drops; } 
 		}
