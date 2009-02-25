@@ -558,6 +558,7 @@ namespace Docky.Core.Default
 		{
 			if (InternalAddItemToDock (item)) {
 				UpdateItems ();
+				WriteData ();
 				OnDockItemsChanged ();
 			}
 		}
@@ -566,6 +567,7 @@ namespace Docky.Core.Default
 		{
 			if (InternalAddItemToDock (identifier)) {
 				UpdateItems ();
+				WriteData ();
 				OnDockItemsChanged ();
 			}
 		}
