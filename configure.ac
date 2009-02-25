@@ -119,7 +119,7 @@ if test -z "$CONFIG_REQUESTED" ; then
 fi
 
 AC_CONFIG_FILES([
-BundledLibs/Makefile
+BundledLibraries/Makefile
 Do/Do.exe.config
 Do/Makefile
 Do/gnome-do
