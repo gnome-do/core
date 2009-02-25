@@ -703,6 +703,14 @@ namespace Docky.Interface
 			if (dock_icon_buffer != null)
 				dock_icon_buffer.Destroy ();
 			
+			if (LastPainter != null) {
+				LastPainter.PaintNeeded -= HandlePaintNeeded;
+			}
+			
+			if (Painter != null) {
+				Painter.PaintNeeded -= HandlePaintNeeded;
+			}
+			
 			DockServices.UnregisterService (PainterService);
 			PainterService.Dispose ();
 
