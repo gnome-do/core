@@ -48,7 +48,6 @@ namespace Docky.Interface
 		static LayoutUtils ()
 		{
 			Gdk.Screen.Default.SizeChanged += HandleSizeChanged;
-			DockPreferences.MonitorChanged += Recalculate;
 		}
 
 		static void HandleSizeChanged (object sender, EventArgs args)
@@ -56,7 +55,7 @@ namespace Docky.Interface
 			Recalculate ();
 		}
 
-		static void Recalculate ()
+		public static void Recalculate ()
 		{
 			monitor_geo = Gdk.Screen.Default.GetMonitorGeometry (DockPreferences.Monitor);
 		}

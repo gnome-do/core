@@ -206,6 +206,7 @@ namespace Docky.Utilities
 				monitor = value;
 				prefs.Set ("Monitor", value);
 
+				Interface.LayoutUtils.Recalculate ();
 				if (MonitorChanged != null)
 					MonitorChanged ();
 			}
