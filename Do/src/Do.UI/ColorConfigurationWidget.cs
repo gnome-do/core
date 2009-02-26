@@ -134,7 +134,7 @@ namespace Do.UI
 		{
 			BezelDrawingArea.ResetBackgroundStyle ();
 			background_colorbutton.Color = new Gdk.Color (0, 0, 0);
-			background_colorbutton.Alpha = ushort.MinValue;
+			background_colorbutton.Alpha = ushort.MaxValue;
 		}
 
 		protected virtual void OnShadowCheckClicked (object sender, System.EventArgs e)
