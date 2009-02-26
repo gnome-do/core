@@ -131,6 +131,9 @@ namespace Docky.Interface
 			Remove (dock_area);
 			dock_area.Dispose ();
 			
+			// bring us back down to "minimum" size
+			Resize (1, 1);
+			
 			dock_area = new DockArea (this);
 			Add (dock_area);
 			ShowAll ();
