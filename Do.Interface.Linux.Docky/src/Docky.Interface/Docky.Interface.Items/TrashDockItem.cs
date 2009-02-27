@@ -66,7 +66,7 @@ namespace Docky.Interface
 			SetText (Catalog.GetString ("Trash"));
 			
 			fsw = new FileSystemWatcher (Trash);
-			fsw.IncludeSubdirectories = true;
+			fsw.IncludeSubdirectories = false;
 			fsw.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
 			fsw.Changed += HandleChanged;
