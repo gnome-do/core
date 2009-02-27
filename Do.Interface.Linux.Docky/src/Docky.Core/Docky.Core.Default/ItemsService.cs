@@ -604,6 +604,7 @@ namespace Docky.Core.Default
 					newItem.DockAddItem = item.DockAddItem;
 					custom_items [desktop_file] = newItem;
 					UpdateItems ();
+					WriteData ();
 				}
 			} while (false);
 		}

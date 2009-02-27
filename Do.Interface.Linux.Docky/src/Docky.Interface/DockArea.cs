@@ -480,9 +480,8 @@ namespace Docky.Interface
 		
 		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
 		{
-			SetupCursor ((int) evnt.X, (int) evnt.Y, evnt.State);
-			cursor_update = DateTime.UtcNow;
 			ResetCursorTimer ();
+			ManualCursorUpdate ();
 			return base.OnEnterNotifyEvent (evnt);
 		}
 
