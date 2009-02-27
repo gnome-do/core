@@ -47,7 +47,7 @@ namespace Docky.Interface
 		const int UrgentIndicatorSize = 12;
 		
 		Dictionary<IDockPainter, Surface> painter_surfaces;
-		bool fast_render_fail;
+		bool fast_render_fail, first_render_set;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
@@ -55,6 +55,8 @@ namespace Docky.Interface
 		Matrix default_matrix;
 		
 		DateTime ActiveIconChangeTime { get; set; }
+		
+		DateTime FirstRenderTime { get; set; }
 		
 		DateTime RenderTime { get; set; }
 		
@@ -77,29 +79,66 @@ namespace Docky.Interface
 		}
 		
 		/// <value>
-		/// Returns the zoom in percentage (0 through 1)
+		/// Determins the opacity of the icons on the normal dock
 		/// </value>
-		double ZoomIn {
+		double DockIconOpacity {
 			get {
-				if (drag_resizing && drag_start_point != Cursor)
-					return 0;
-				
-				double zoom = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
-					                 BaseAnimationTime.TotalMilliseconds);
-				if (CursorIsOverDockArea) {
-					if (DockPreferences.AutoHide)
-						zoom = 1;
-				} else {
-					zoom = 1 - zoom;
+				if (SummonTime < RenderTime - interface_change_time) {
+					if (PainterOverlayVisible)
+						return 0;
+					return 1;
 				}
-				
-				if (PainterOverlayVisible)
-					zoom = zoom * DockIconOpacity;
-				
-				return zoom;
+
+				double total_time = (RenderTime - interface_change_time).TotalMilliseconds;
+				if (PainterOverlayVisible) {
+					return 1 - (total_time / SummonTime.TotalMilliseconds);
+				} else {
+					return total_time / SummonTime.TotalMilliseconds;
+				}
 			}
 		}
 		
+		/// <value>
+		/// Icon Size used for the dock
+		/// </value>
+		int IconSize { 
+			get { return DockPreferences.IconSize; } 
+		}
+		
+		IDockPainter LastPainter { 
+			get {
+				return last_painter;
+			}
+			set {
+				if (last_painter == value)
+					return;
+				if (last_painter != null)
+					last_painter.PaintNeeded -= HandlePaintNeeded;
+				last_painter = value;
+			}
+		}
+		
+		IDockPainter Painter { 
+			get {
+				return painter;
+			}
+			set {
+				if (value == painter)
+					return;
+				LastPainter = painter;
+				painter = value;
+				if (painter != null)
+					painter.PaintNeeded += HandlePaintNeeded;
+			}
+		}
+
+		/// <summary>
+		/// The opacity of the painter surface
+		/// </summary>
+		double PainterOpacity {
+			get { return 1 - DockIconOpacity; }
+		}
+
 		//// <value>
 		/// The overall offset of the dock as a whole
 		/// </value>
@@ -108,7 +147,10 @@ namespace Docky.Interface
 				double offset = 0;
 				// we never hide in these conditions
 				if (!DockPreferences.AutoHide || drag_resizing || PainterOpacity == 1) {
-					return 0;
+					if ((DateTime.UtcNow - FirstRenderTime) > SummonTime)
+						return 0;
+					offset = 1 - Math.Min (1, (DateTime.UtcNow - FirstRenderTime).TotalMilliseconds / SummonTime.TotalMilliseconds);
+					return (int) (offset * PositionProvider.DockHeight * 1.5);
 				}
 
 				if (PainterOpacity > 0) {
@@ -135,63 +177,26 @@ namespace Docky.Interface
 		}
 		
 		/// <value>
-		/// Determins the opacity of the icons on the normal dock
+		/// Returns the zoom in percentage (0 through 1)
 		/// </value>
-		double DockIconOpacity {
+		double ZoomIn {
 			get {
-				if (SummonTime < RenderTime - interface_change_time) {
-					if (PainterOverlayVisible)
-						return 0;
-					return 1;
-				}
-
-				double total_time = (RenderTime - interface_change_time).TotalMilliseconds;
-				if (PainterOverlayVisible) {
-					return 1 - (total_time / SummonTime.TotalMilliseconds);
+				if (drag_resizing && drag_start_point != Cursor)
+					return 0;
+				
+				double zoom = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
+					                 BaseAnimationTime.TotalMilliseconds);
+				if (CursorIsOverDockArea) {
+					if (DockPreferences.AutoHide)
+						zoom = 1;
 				} else {
-					return total_time / SummonTime.TotalMilliseconds;
+					zoom = 1 - zoom;
 				}
-			}
-		}
-
-		/// <summary>
-		/// The opacity of the painter surface
-		/// </summary>
-		double PainterOpacity {
-			get { return 1 - DockIconOpacity; }
-		}
-
-		/// <value>
-		/// Icon Size used for the dock
-		/// </value>
-		int IconSize { 
-			get { return DockPreferences.IconSize; } 
-		}
-		
-		IDockPainter Painter { 
-			get {
-				return painter;
-			}
-			set {
-				if (value == painter)
-					return;
-				LastPainter = painter;
-				painter = value;
-				if (painter != null)
-					painter.PaintNeeded += HandlePaintNeeded;
-			}
-		}
-
-		IDockPainter LastPainter { 
-			get {
-				return last_painter;
-			}
-			set {
-				if (last_painter == value)
-					return;
-				if (last_painter != null)
-					last_painter.PaintNeeded -= HandlePaintNeeded;
-				last_painter = value;
+				
+				if (PainterOverlayVisible)
+					zoom = zoom * DockIconOpacity;
+				
+				return zoom;
 			}
 		}
 
@@ -613,8 +618,13 @@ namespace Docky.Interface
 			cr = new Cairo.Context (backbuffer);
 			cr.AlphaFill ();
 
-			if (DockServices.ItemsService.UpdatesEnabled)
+			if (DockServices.ItemsService.UpdatesEnabled) {
+				if (!first_render_set) {
+					FirstRenderTime = DateTime.UtcNow;
+					first_render_set = true;
+				}
 				DrawDrock (cr);
+			}
 			(cr as IDisposable).Dispose ();
 			
 			cr = Gdk.CairoHelper.Create (GdkWindow);
