@@ -313,6 +313,8 @@ namespace Docky.Interface
 			}
 			
 			AbstractDockItem dockItem = DockItems [icon];
+			if (dockItem == null) return;
+			
 			PointD center;
 			double zoom;
 			IconZoomedPosition (icon, out center, out zoom);
@@ -324,7 +326,6 @@ namespace Docky.Interface
 			ClickAnimationType animationType = IconAnimation (icon);
 			
 			// we will set this flag now
-			bool drawUrgency = false;
 			if (animationType == ClickAnimationType.Bounce) {
 				// bounces twice
 				double delta = Math.Abs (30 * Math.Sin 
@@ -333,15 +334,12 @@ namespace Docky.Interface
 				
 				iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 			} else {
-				if (dockItem != null && dockItem.NeedsAttention) {
-					drawUrgency = true;
-					if (DateTime.UtcNow - dockItem.AttentionRequestStartTime < BounceTime) {
-						double urgentMs = (DateTime.UtcNow - dockItem.AttentionRequestStartTime)
-							.TotalMilliseconds;
-						
-						double delta = 100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds));
-						iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
-					}
+				if (DateTime.UtcNow - dockItem.AttentionRequestStartTime < BounceTime) {
+					double urgentMs = (DateTime.UtcNow - dockItem.AttentionRequestStartTime)
+						.TotalMilliseconds;
+					
+					double delta = 100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds));
+					iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 				}
 			}
 			
@@ -414,7 +412,7 @@ namespace Docky.Interface
 					location = new Gdk.Point ((int) center.X, 1);
 					break;
 				}
-				DrawGlowIndicator (cr, location, drawUrgency, dockItem.WindowCount);
+				DrawGlowIndicator (cr, location, dockItem.NeedsAttention, dockItem.WindowCount);
 			}
 			
 			// we do a null check here to allow things like separator items to supply

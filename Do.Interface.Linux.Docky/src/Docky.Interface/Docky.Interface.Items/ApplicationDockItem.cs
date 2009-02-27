@@ -184,7 +184,6 @@ namespace Docky.Interface
 		{
 			this.applications = applications;
 			windowCount = VisibleWindows.Count ();
-			AttentionRequestStartTime = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			
 			foreach (Wnck.Window w in VisibleWindows) {
 				w.StateChanged += HandleStateChanged;

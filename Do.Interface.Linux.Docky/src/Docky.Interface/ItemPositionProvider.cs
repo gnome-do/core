@@ -229,6 +229,7 @@ namespace Docky.Interface
 		{
 			// get our actual center
 			Gdk.Point center = IconUnzoomedPosition (icon);
+			cursor = RebaseCursor (cursor);
 
 			double cursorOrientedPosition, centerOrientedPosition;
 			if (DockPreferences.Orientation == DockOrientation.Bottom ||
@@ -322,6 +323,13 @@ namespace Docky.Interface
 				i++;
 			}
 			return -1;
+		}
+		
+		Gdk.Point RebaseCursor (Gdk.Point point)
+		{
+			int left = MinimumDockArea.X;
+			int right = left + MinimumDockArea.Width;
+			return new Gdk.Point (Math.Max (Math.Min (point.X, right), left), point.Y);
 		}
 
 		#region IDisposable implementation 

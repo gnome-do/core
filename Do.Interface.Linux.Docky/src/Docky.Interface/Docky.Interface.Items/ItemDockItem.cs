@@ -103,7 +103,6 @@ namespace Docky.Interface
 
 			SetText (element.Name);
 
-			AttentionRequestStartTime = DateTime.UtcNow;
 			UpdateApplication ();
 			NeedsAttention = DetermineUrgencyStatus ();
 			
