@@ -107,8 +107,9 @@ namespace Docky.Interface
 			get {
 				double offset = 0;
 				// we never hide in these conditions
-				if (!DockPreferences.AutoHide || drag_resizing || PainterOpacity == 1)
+				if (!DockPreferences.AutoHide || drag_resizing || PainterOpacity == 1) {
 					return 0;
+				}
 
 				if (PainterOpacity > 0) {
 					if (CursorIsOverDockArea) {
