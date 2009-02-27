@@ -84,7 +84,7 @@ namespace Docky.Interface
 		
 		protected override Pixbuf GetSurfacePixbuf (int size)
 		{
-			if (Directory.Exists (Trash) && Directory.GetFiles (Trash).Any ())
+			if (Directory.Exists (Trash) && (Directory.GetFiles (Trash).Any () || Directory.GetDirectories (Trash).Any ())
 				return IconProvider.PixbufFromIconName (TrashFullIcon, size);
 			return IconProvider.PixbufFromIconName (TrashEmptyIcon, size);
 		}
