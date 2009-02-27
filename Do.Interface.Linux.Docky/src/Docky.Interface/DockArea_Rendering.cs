@@ -56,6 +56,8 @@ namespace Docky.Interface
 		
 		DateTime ActiveIconChangeTime { get; set; }
 		
+		DateTime RenderTime { get; set; }
+		
 		PreviousRenderData RenderData { get; set; }
 
 		bool PainterOverlayVisible { get; set; }
@@ -82,7 +84,7 @@ namespace Docky.Interface
 				if (drag_resizing && drag_start_point != Cursor)
 					return 0;
 				
-				double zoom = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / 
+				double zoom = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
 					                 BaseAnimationTime.TotalMilliseconds);
 				if (CursorIsOverDockArea) {
 					if (DockPreferences.AutoHide)
@@ -112,17 +114,17 @@ namespace Docky.Interface
 					if (CursorIsOverDockArea) {
 						return 0;
 					} else {
-						offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / 
+						offset = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
 						                   SummonTime.TotalMilliseconds);
 						offset = Math.Min (offset, Math.Min (1, 
-						                                     (DateTime.UtcNow - interface_change_time)
+						                                     (RenderTime - interface_change_time)
 						                                     .TotalMilliseconds / SummonTime.TotalMilliseconds));
 					}
 					
 					if (PainterOverlayVisible)
 						offset = 1 - offset;
 				} else {
-					offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / 
+					offset = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
 					                   SummonTime.TotalMilliseconds);
 					if (CursorIsOverDockArea)
 						offset = 1 - offset;
@@ -136,13 +138,13 @@ namespace Docky.Interface
 		/// </value>
 		double DockIconOpacity {
 			get {
-				if (SummonTime < DateTime.UtcNow - interface_change_time) {
+				if (SummonTime < RenderTime - interface_change_time) {
 					if (PainterOverlayVisible)
 						return 0;
 					return 1;
 				}
 
-				double total_time = (DateTime.UtcNow - interface_change_time).TotalMilliseconds;
+				double total_time = (RenderTime - interface_change_time).TotalMilliseconds;
 				if (PainterOverlayVisible) {
 					return 1 - (total_time / SummonTime.TotalMilliseconds);
 				} else {
@@ -334,8 +336,8 @@ namespace Docky.Interface
 				
 				iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 			} else {
-				if (DateTime.UtcNow - dockItem.AttentionRequestStartTime < BounceTime) {
-					double urgentMs = (DateTime.UtcNow - dockItem.AttentionRequestStartTime)
+				if (RenderTime - dockItem.AttentionRequestStartTime < BounceTime) {
+					double urgentMs = (RenderTime - dockItem.AttentionRequestStartTime)
 						.TotalMilliseconds;
 					
 					double delta = 100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds));
@@ -594,6 +596,8 @@ namespace Docky.Interface
 		{
 			if (!IsDrawable || window.IsRepositionHidden)
 				return false;
+			
+			RenderTime = DateTime.UtcNow;
 			
 			Context cr;
 			if (backbuffer == null) {
