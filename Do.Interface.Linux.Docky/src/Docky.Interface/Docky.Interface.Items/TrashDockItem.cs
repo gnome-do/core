@@ -67,7 +67,7 @@ namespace Docky.Interface
 			
 			fsw = new FileSystemWatcher (Trash);
 			fsw.IncludeSubdirectories = true;
-			fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+			fsw.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
 			fsw.Changed += HandleChanged;
 			fsw.Created += HandleChanged;
