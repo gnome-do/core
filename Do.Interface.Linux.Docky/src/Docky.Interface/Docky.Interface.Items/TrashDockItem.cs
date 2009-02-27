@@ -38,7 +38,7 @@ namespace Docky.Interface
 	{
 		const string TrashEmptyIcon = "gnome-stock-trash";
 		const string TrashFullIcon = "gnome-stock-trash-full";
-
+		
 		FileSystemWatcher fsw;
 		
 		string Trash {
@@ -67,8 +67,7 @@ namespace Docky.Interface
 			
 			fsw = new FileSystemWatcher (Trash);
 			fsw.IncludeSubdirectories = true;
-			fsw.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
-				| NotifyFilters.FileName | NotifyFilters.DirectoryName;
+			fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
 			fsw.Changed += HandleChanged;
 			fsw.Created += HandleChanged;
