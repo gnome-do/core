@@ -137,16 +137,21 @@ namespace Docky.Utilities
 		
 		static bool WindowsShareViewport (Wnck.Window first, Wnck.Window second)
 		{
+			if (first == null || second == null) return false;
+			
+			Wnck.Workspace wksp = first.Workspace ?? second.Workspace;
+			if (wksp == null) return false;
+			
 			Gdk.Rectangle firstGeo, secondGeo;
 			
 			first.GetGeometry (out firstGeo.X, out firstGeo.Y, out firstGeo.Width, out firstGeo.Height);
 			second.GetGeometry (out secondGeo.X, out secondGeo.Y, out secondGeo.Width, out secondGeo.Height);
 			
-			firstGeo.X += first.Workspace.ViewportX;
-			firstGeo.Y += first.Workspace.ViewportY;
+			firstGeo.X += wksp.ViewportX;
+			firstGeo.Y += wksp.ViewportY;
 			
-			secondGeo.X += second.Workspace.ViewportX;
-			secondGeo.Y += second.Workspace.ViewportY;
+			secondGeo.X += wksp.ViewportX;
+			secondGeo.Y += wksp.ViewportY;
 			
 			int viewportWidth, viewportHeight;
 			viewportWidth = first.Screen.Width;
