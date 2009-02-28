@@ -208,28 +208,25 @@ namespace Docky.Utilities
 		/// </param>
 		public static void PerformLogicalClick (IEnumerable<Application> apps)
 		{
-			bool not_in_viewport = !apps.SelectMany (app => app.Windows)
-				.Any (w => !w.IsSkipTasklist && w.IsInViewport (w.Screen.ActiveWorkspace));
+			List<Window> stack = new List<Window> (Wnck.Screen.Default.WindowsStacked);
+			IEnumerable<Window> windows = apps
+				.SelectMany (app => app.Windows)
+				.OrderByDescending (w => stack.IndexOf (w));
 			
-			bool urgent = apps.Any (app => app.Windows.Any (w => w.NeedsAttention ()));
+			bool not_in_viewport = !windows.Any (w => !w.IsSkipTasklist && w.IsInViewport (w.Screen.ActiveWorkspace));
+			bool urgent = windows.Any (w => w.NeedsAttention ());
 			
 			if (not_in_viewport || urgent) {
-				foreach (Wnck.Application application in apps) {
-					foreach (Wnck.Window window in application.Windows) {
-						if (urgent && !window.NeedsAttention ())
-								continue;
-						if (!window.IsSkipTasklist) {
-							window.CenterAndFocusWindow ();
-							return;
-						}
+				foreach (Wnck.Window window in windows) {
+					if (urgent && !window.NeedsAttention ())
+						continue;
+					if (!window.IsSkipTasklist) {
+						window.CenterAndFocusWindow ();
+						return;
 					}
 				}
 			}
 			
-			List<Window> windows = new List<Window> ();
-			foreach (Wnck.Application app in apps)
-				windows.AddRange (app.Windows);
-
 			switch (GetClickAction (apps)) {
 			case ClickAction.Focus:
 				WindowControl.FocusWindows (windows);
