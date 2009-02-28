@@ -221,7 +221,8 @@ namespace Docky.Utilities
 					if (urgent && !window.NeedsAttention ())
 						continue;
 					if (!window.IsSkipTasklist) {
-						window.CenterAndFocusWindow ();
+						WindowControl.IntelligentFocusOffViewportWindow (window, windows);
+//						window.CenterAndFocusWindow ();
 						return;
 					}
 				}

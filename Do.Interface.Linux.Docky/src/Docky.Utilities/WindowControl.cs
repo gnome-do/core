@@ -99,6 +99,7 @@ namespace Docky.Utilities
 				return;
 			
 			// we do this to make sure our active window is also at the front... Its a tricky thing to do.
+			// sometimes compiz plays badly.  This hacks around it
 			uint time = Gtk.Global.CurrentEventTime + 200;
 			GLib.Timeout.Add (200, delegate {
 				windows.First ().Activate (time);
@@ -109,6 +110,55 @@ namespace Docky.Utilities
 		public static void FocusWindows (Window window)
 		{
 			FocusWindows (new [] {window});
+		}
+		
+		public static void IntelligentFocusOffViewportWindow (Window targetWindow, IEnumerable<Window> additionalWindows)
+		{
+			foreach (Window window in additionalWindows.Reverse ()) {
+				if (!window.IsMinimized && WindowsShareViewport (targetWindow, window)) {
+					window.CenterAndFocusWindow ();
+					System.Threading.Thread.Sleep (SleepTime);
+				}
+			}
+			
+			targetWindow.CenterAndFocusWindow ();
+			
+			if (additionalWindows.Count () <= 1)
+				return;
+			
+			// we do this to make sure our active window is also at the front... Its a tricky thing to do.
+			// sometimes compiz plays badly.  This hacks around it
+			uint time = Gtk.Global.CurrentEventTime + 200;
+			GLib.Timeout.Add (200, delegate {
+				targetWindow.Activate (time);
+				return false;
+			});
+		}
+		
+		static bool WindowsShareViewport (Wnck.Window first, Wnck.Window second)
+		{
+			Gdk.Rectangle firstGeo, secondGeo;
+			
+			first.GetGeometry (out firstGeo.X, out firstGeo.Y, out firstGeo.Width, out firstGeo.Height);
+			second.GetGeometry (out secondGeo.X, out secondGeo.Y, out secondGeo.Width, out secondGeo.Height);
+			
+			firstGeo.X += first.Workspace.ViewportX;
+			firstGeo.Y += first.Workspace.ViewportY;
+			
+			secondGeo.X += second.Workspace.ViewportX;
+			secondGeo.Y += second.Workspace.ViewportY;
+			
+			int viewportWidth, viewportHeight;
+			viewportWidth = first.Screen.Width;
+			viewportHeight = first.Screen.Height;
+			
+			int firstViewportX = ((firstGeo.X + firstGeo.Width / 2) / viewportWidth) * viewportWidth;
+			int firstViewportY = ((firstGeo.Y + firstGeo.Height / 2) / viewportHeight) * viewportHeight;
+			
+			Gdk.Rectangle viewpRect = new Gdk.Rectangle (firstViewportX, firstViewportY, 
+			                                             viewportWidth, viewportHeight);
+			
+			return viewpRect.IntersectsWith (secondGeo);
 		}
 		
 		public static void CloseWindows (IEnumerable<Window> windows)
