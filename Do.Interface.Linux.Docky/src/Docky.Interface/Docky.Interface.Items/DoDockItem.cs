@@ -143,9 +143,16 @@ namespace Docky.Interface
 			Gtk.HScale hscale = new Gtk.HScale (1.1, 4, .1);
 			hscale.Value = DockPreferences.ZoomPercent;
 			hscale.Name = "Zoom";
+			hscale.CanFocus = false;
+			hscale.FormatValue +=HandleFormatValue; 
 			hscale.ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
 			hscale.ValueChanged +=HandleValueChanged; 
 			return hscale;
+		}
+
+		void HandleFormatValue(object o, FormatValueArgs args)
+		{
+			args.RetVal = string.Format ("{0}%", args.Value * 100);
 		}
 	}
 }
