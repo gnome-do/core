@@ -30,7 +30,7 @@ namespace Docky.Interface.Menus
 		Act action;
 		Item item;
 		
-		public LaunchMenuButtonArgs (Act action, Item item, string description, string icon) : base (description, icon, true)
+		public LaunchMenuButtonArgs (Act action, Item item, string description, string icon) : base (description, icon)
 		{
 			this.action = action;
 			this.item = item;

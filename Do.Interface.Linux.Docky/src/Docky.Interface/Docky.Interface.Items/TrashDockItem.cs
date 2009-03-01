@@ -143,7 +143,7 @@ namespace Docky.Interface
 		
 		public event EventHandler RemoveClicked;
 		
-		public IEnumerable<Menus.AbstractMenuButtonArgs> GetMenuItems ()
+		public IEnumerable<Menus.AbstractMenuArgs> GetMenuItems ()
 		{
 			yield return new Docky.Interface.Menus.SimpleMenuButtonArgs (() => Services.Environment.OpenUrl ("trash://"),
 			                                                             Catalog.GetString ("Open Trash"), TrashFullIcon);

@@ -299,7 +299,7 @@ namespace Docky.Interface
 			return Applications.Any (app => (other as ApplicationDockItem).Applications.Contains (app));
 		}
 		
-		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
+		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
 			foreach (Wnck.Window window in VisibleWindows)
 				yield return new WindowMenuButtonArgs (window, window.Name, WindowIcon);

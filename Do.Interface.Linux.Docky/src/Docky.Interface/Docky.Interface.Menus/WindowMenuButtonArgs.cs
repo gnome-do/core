@@ -30,7 +30,7 @@ namespace Docky.Interface.Menus
 	{
 		Window window;
 		
-		public WindowMenuButtonArgs (Window window, string description, string icon) : base (description, icon, true)
+		public WindowMenuButtonArgs (Window window, string description, string icon) : base (description, icon)
 		{
 			this.window = window;
 		}

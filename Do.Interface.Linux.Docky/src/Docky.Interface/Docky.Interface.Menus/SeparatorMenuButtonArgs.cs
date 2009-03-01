@@ -18,17 +18,43 @@
 
 using System;
 
+using Cairo;
+using Gdk;
+using Gtk;
+
 namespace Docky.Interface.Menus
 {
-	public class SeparatorMenuButtonArgs : AbstractMenuButtonArgs
+	public class SeparatorMenuButtonArgs : AbstractMenuArgs
 	{
-		public SeparatorMenuButtonArgs () : base ("Separator", null, true)
+		class CustomSeparator : HSeparator
 		{
+			public CustomSeparator () : base ()
+			{
+				HeightRequest = 3;
+			}
+			
+			protected override bool OnExposeEvent (Gdk.EventExpose evnt)
+			{
+				using (Context cr = CairoHelper.Create (GdkWindow)) {
+					cr.Rectangle (evnt.Area.X, evnt.Area.Y + 1, evnt.Area.Width, 1);
+					cr.Color = new Cairo.Color (.8, .8, .8, .7);
+					cr.Fill ();
+					
+				}
+				return true;
+			}
+
 		}
 		
-		public override void Action ()
+		Gtk.Widget widget;
+		
+		public override Widget Widget { 
+			get { return widget; }
+		}
+		
+		public SeparatorMenuButtonArgs () : base ()
 		{
-			
+			widget = new CustomSeparator ();
 		}
 	}
 }

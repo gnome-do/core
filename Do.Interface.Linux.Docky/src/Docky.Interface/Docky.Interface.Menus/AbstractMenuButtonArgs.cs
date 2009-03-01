@@ -17,44 +17,77 @@
 //
 
 using System;
+
+using Gtk;
 using Mono.Unix;
+
+using Do.Interface;
+using Do.Interface.CairoUtils;
+using Do.Platform;
 
 namespace Docky.Interface.Menus
 {
-	public abstract class AbstractMenuButtonArgs
+	public abstract class AbstractMenuButtonArgs : AbstractMenuArgs
 	{
-		const int MaxDescriptionCharacters = 50;
+		Gtk.Widget widget;
 		
-		public EventHandler Handler {
+		public override Gtk.Widget Widget { 
 			get {
-				return (sender, e) => Action ();
+				if (widget == null)
+					widget = BuildWidget ();
+				return widget;
 			}
 		}
 		
-		public string Description {
-			get; protected set;
-		}
+		protected virtual string Description { get; set; }
 		
-		public string Icon {
-			get; protected set;
-		}
-		
-		public bool Sensitive {
-			get; protected set; 
-		}
+		protected virtual string Icon { get; set; }
 		
 		public AbstractMenuButtonArgs ()
 		{
-			Description = "";
-			Icon = "";
-			Sensitive = true;
+			
 		}
 		
-		public AbstractMenuButtonArgs (string description, string icon, bool sensitive)
+		public AbstractMenuButtonArgs (string description, string icon)
 		{
 			Description = GLib.Markup.EscapeText (Catalog.GetString (description));
 			Icon = icon;
-			Sensitive = sensitive;
+		}
+		
+		Gtk.Button BuildWidget ()
+		{
+			HBox hbox = new HBox ();
+			Label label = new Label ();
+			label.Markup = "<span color=\"#ffffff\"><b>" + Description + "</b></span>";
+			label.ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
+			label.ModifyText (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
+			label.Xalign = 0f;
+			label.Ellipsize = Pango.EllipsizeMode.End;
+			label.Ypad = 0;
+			
+			Gtk.Image image;
+			using (Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, 16)) {
+				image = new Gtk.Image (pbuf);
+			}
+				
+			hbox.PackStart (image, false, false, 0);
+			hbox.PackStart (label, true, true, 2);
+			
+			Gtk.Button button = new Gtk.Button (hbox);
+			
+			button.Relief = ReliefStyle.None;
+			button.CanFocus = false;
+			button.BorderWidth = 0;
+			
+			button.ModifyBg (StateType.Prelight, new Gdk.Color ((byte) (byte.MaxValue * 0.25), 
+			                                                    (byte) (byte.MaxValue * 0.25), 
+			                                                    (byte) (byte.MaxValue * 0.25)));
+			
+			button.Clicked += (sender, e) => Action ();
+			button.Clicked += (sender, e) => base.OnActivated ();
+			button.ShowAll ();
+			
+			return button;
 		}
 		
 		public abstract void Action ();

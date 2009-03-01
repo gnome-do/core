@@ -147,7 +147,7 @@ namespace Docky.Interface
 				double offset = 0;
 				// we never hide in these conditions
 				if (!DockPreferences.AutoHide || drag_resizing || PainterOpacity == 1) {
-					if ((DateTime.UtcNow - FirstRenderTime) > SummonTime)
+					if ((RenderTime - FirstRenderTime) > SummonTime)
 						return 0;
 					offset = 1 - Math.Min (1, (DateTime.UtcNow - FirstRenderTime).TotalMilliseconds / SummonTime.TotalMilliseconds);
 					return (int) (offset * PositionProvider.DockHeight * 1.5);

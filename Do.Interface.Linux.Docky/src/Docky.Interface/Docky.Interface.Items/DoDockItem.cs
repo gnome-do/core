@@ -93,7 +93,7 @@ namespace Docky.Interface
 		
 		public event EventHandler RemoveClicked;
 		
-		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
+		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = !DockPreferences.AutoHide, 
 			                                       Catalog.GetString ("Automatically Hide"), DockPreferences.AutoHide ? EnableIcon : DisableIcon);

@@ -277,7 +277,7 @@ namespace Docky.Interface
 		
 		#region IRightClickable implementation 
 		
-		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
+		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
 			bool hasApps = HasVisibleApps;
 			
