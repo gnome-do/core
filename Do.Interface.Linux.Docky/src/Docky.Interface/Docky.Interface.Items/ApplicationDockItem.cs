@@ -208,6 +208,10 @@ namespace Docky.Interface
 					AttentionRequestStartTime = DateTime.UtcNow;
 				OnUpdateNeeded (new UpdateRequestArgs (this, req));
 			}
+			if ((args.ChangedMask & Wnck.WindowState.SkipTasklist) == Wnck.WindowState.SkipTasklist) {
+				if (VisibleWindows.Count () == 0)
+					Core.DockServices.ItemsService.ForceUpdate ();
+			}
 		}
 		
 		IEnumerable<string> GetIconGuesses ()
