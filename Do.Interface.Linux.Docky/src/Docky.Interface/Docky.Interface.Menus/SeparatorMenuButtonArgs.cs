@@ -24,7 +24,7 @@ using Gtk;
 
 namespace Docky.Interface.Menus
 {
-	public class SeparatorMenuButtonArgs : AbstractMenuArgs
+	public class SeparatorMenuButtonArgs : WidgetMenuArgs
 	{
 		class CustomSeparator : HSeparator
 		{
@@ -46,15 +46,9 @@ namespace Docky.Interface.Menus
 
 		}
 		
-		Gtk.Widget widget;
-		
-		public override Widget Widget { 
-			get { return widget; }
-		}
-		
-		public SeparatorMenuButtonArgs () : base ()
+		public SeparatorMenuButtonArgs () : base (new CustomSeparator ())
 		{
-			widget = new CustomSeparator ();
 		}
+		
 	}
 }

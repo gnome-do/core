@@ -36,6 +36,7 @@ namespace Docky.Interface.Menus
 	
 	public class DockItemMenu : DockPopupMenu
 	{
+		IEnumerable<AbstractMenuArgs> current_args;
 		
 		public DockItemMenu() : base ()
 		{
@@ -43,10 +44,7 @@ namespace Docky.Interface.Menus
 		
 		public override void PopUp (IEnumerable<AbstractMenuArgs> args, int x, int y)
 		{
-			foreach (Gtk.Widget child in Container.AllChildren) {
-				Container.Remove (child);
-				child.Dispose ();
-			}
+			current_args = args;
 			
 			foreach (AbstractMenuArgs arg in args) {
 				Container.PackStart (arg.Widget, false, false, 0);
@@ -60,12 +58,21 @@ namespace Docky.Interface.Menus
 		
 		void OnButtonClicked (object o, EventArgs args)
 		{
-			foreach (Gtk.Widget widget in Container.AllChildren) {
-				if (!(widget is Gtk.Button))
-					continue;
-				(widget as Gtk.Button).Activated -= OnButtonClicked;
-			}
 			Hide ();
 		}
+		
+		protected override void OnHidden ()
+		{
+			foreach (Gtk.Widget widget in Container.Children)
+				Container.Remove (widget);
+			
+			foreach (AbstractMenuArgs arg in current_args) {
+				arg.Activated -= OnButtonClicked;
+				arg.Dispose ();
+			}
+			
+			base.OnHidden ();
+		}
+
 	}
 }

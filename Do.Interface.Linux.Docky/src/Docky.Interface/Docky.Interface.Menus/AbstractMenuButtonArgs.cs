@@ -91,5 +91,12 @@ namespace Docky.Interface.Menus
 		}
 		
 		public abstract void Action ();
+		
+		public override void Dispose ()
+		{
+			Widget.Destroy ();
+			base.Dispose ();
+		}
+
 	}
 }

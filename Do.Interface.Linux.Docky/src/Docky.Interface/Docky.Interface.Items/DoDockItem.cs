@@ -108,6 +108,9 @@ namespace Docky.Interface
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = !DockPreferences.ZoomEnabled, 
 			                                       Catalog.GetString ("Zoom Icons"), DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon);
 			
+			if (DockPreferences.ZoomEnabled)
+				yield return new WidgetMenuArgs (BuildScaleWidget ());
+			
 			if (Gdk.Screen.Default.NMonitors > 1)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
 				                                       Catalog.GetString ("Switch Monitors"), "display");
@@ -124,8 +127,25 @@ namespace Docky.Interface
 				yield return new RunnableMenuButtonArgs (item);
 			}
 		}
+
+		void HandleValueChanged(object sender, EventArgs e)
+		{
+			if (!(sender is HScale)) return;
+			
+			HScale scale = sender as HScale;
+			DockPreferences.ZoomPercent = scale.Value;
+		}
 		
 		#endregion 
 		
+		Gtk.HScale BuildScaleWidget ()
+		{
+			Gtk.HScale hscale = new Gtk.HScale (1.1, 4, .1);
+			hscale.Value = DockPreferences.ZoomPercent;
+			hscale.Name = "Zoom";
+			hscale.ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
+			hscale.ValueChanged +=HandleValueChanged; 
+			return hscale;
+		}
 	}
 }

@@ -44,6 +44,7 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Menus/SimpleMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/SeparatorMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs \
+	src/Docky.Interface/Docky.Interface.Menus/WidgetMenuArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs \
 	src/Docky.Interface/DockState.cs \
 	src/Docky.Interface/DockWindow.cs \
