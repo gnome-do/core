@@ -35,6 +35,7 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Items/SeparatorItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/WnckDockItem.cs \
+	src/Docky.Interface/Docky.Interface.Menus/AbstractMenuArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/AbstractMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/DockItemMenu.cs \
 	src/Docky.Interface/Docky.Interface.Menus/DockPopupMenu.cs \
@@ -43,6 +44,7 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Menus/SimpleMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/SeparatorMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs \
+	src/Docky.Interface/Docky.Interface.Menus/WidgetMenuArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs \
 	src/Docky.Interface/DockState.cs \
 	src/Docky.Interface/DockWindow.cs \

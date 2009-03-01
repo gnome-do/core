@@ -31,7 +31,7 @@ namespace Docky.Interface
 		/// <returns>
 		/// A <see cref="IEnumerable"/>
 		/// </returns>
-		IEnumerable<AbstractMenuButtonArgs> GetMenuItems ();
+		IEnumerable<AbstractMenuArgs> GetMenuItems ();
 		
 		/// <summary>
 		/// Lets the dock item provider know that the remove button was clicked

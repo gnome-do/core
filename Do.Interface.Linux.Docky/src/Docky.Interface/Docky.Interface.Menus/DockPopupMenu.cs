@@ -100,7 +100,7 @@ namespace Docky.Interface.Menus
 		}
 
 		
-		public virtual void PopUp (IEnumerable<AbstractMenuButtonArgs> args, int x, int y)
+		public virtual void PopUp (IEnumerable<AbstractMenuArgs> args, int x, int y)
 		{
 			vertical_offset = horizontal_offset = 0;
 			ShowAll ();

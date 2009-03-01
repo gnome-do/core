@@ -48,7 +48,7 @@ namespace Docky.Utilities
 			get { return 350; }
 		}
 		
-		static int zoom_size = prefs.Get ("ZoomSize", 300);
+		static int zoom_size = prefs.Get ("ZoomSize", 330);
 		public static int ZoomSize {
 			get { return (int) (zoom_size * (IconSize / (double) DefaultIconSize)); }
 			set { 

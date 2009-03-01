@@ -252,6 +252,7 @@ namespace Docky.Interface
 		{
 			DockServices.ItemsService.DockItemsChanged += OnDockItemsChanged;
 			DockServices.ItemsService.ItemNeedsUpdate += HandleItemNeedsUpdate;
+			DockPreferences.IconSizeChanged += HandleIconSizeChanged; 
 
 			PopupMenu.Hidden += OnDockItemMenuHidden;
 			PopupMenu.Shown += OnDockItemMenuShown;
@@ -271,6 +272,7 @@ namespace Docky.Interface
 		{
 			DockServices.ItemsService.DockItemsChanged -= OnDockItemsChanged;
 			DockServices.ItemsService.ItemNeedsUpdate -= HandleItemNeedsUpdate;
+			DockPreferences.IconSizeChanged -= HandleIconSizeChanged; 
 
 			PopupMenu.Hidden -= OnDockItemMenuHidden;
 			PopupMenu.Shown -= OnDockItemMenuShown;
@@ -317,6 +319,11 @@ namespace Docky.Interface
 				SetIconRegions ();
 				return false;
 			});
+		}
+		
+		void HandleIconSizeChanged()
+		{
+			AnimatedDraw ();
 		}
 
 		void HandlePaintNeeded (object sender, PaintNeededArgs args)

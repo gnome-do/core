@@ -28,7 +28,7 @@ namespace Docky.Interface.Menus
 	{
 		IRunnableItem runnable;
 		
-		public RunnableMenuButtonArgs(IRunnableItem item) : base (item.Name, item.Icon, true)
+		public RunnableMenuButtonArgs(IRunnableItem item) : base (item.Name, item.Icon)
 		{
 			runnable = item;
 		}

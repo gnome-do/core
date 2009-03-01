@@ -26,7 +26,7 @@ namespace Docky.Interface.Menus
 	{
 		Action action;
 		
-		public SimpleMenuButtonArgs (Action action, string description, string icon) : base (description, icon, true)
+		public SimpleMenuButtonArgs (Action action, string description, string icon) : base (description, icon)
 		{
 			this.action = action;
 		}
