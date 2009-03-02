@@ -200,13 +200,14 @@ namespace Docky.Interface
 			//sometimes we get a null at the end, and it crashes us
 			data = data.TrimEnd ('\0'); 
 			
-			string [] uriList = Regex.Split (data, "\r\n");
+			IEnumerable<string> uriList = Regex.Split (data, "\r\n")
+				.Where (uri => uri.StartsWith ("file://"))
+				.Select (uri => uri.Substring ("file://".Length));
+			
 			if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops) {
-				uriList.Where (uri => uri.StartsWith ("file://"))
-					.ForEach (uri => CurrentDockItem.ReceiveItem (uri.Substring ("file://".Length)));
+				uriList.ForEach (uri => CurrentDockItem.ReceiveItem (uri));
 			} else {
-				uriList.Where (uri => uri.StartsWith ("file://"))
-					.ForEach (uri => DockServices.ItemsService.AddItemToDock (uri.Substring ("file://".Length)));
+				uriList.ForEach (uri => DockServices.ItemsService.AddItemToDock (uri, PositionProvider.IndexAtPosition (Cursor)));
 			}
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);

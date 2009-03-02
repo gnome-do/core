@@ -267,7 +267,7 @@ namespace Docky.Core.Default
 			
 			if (!CustomItemsRead) {
 				foreach (string s in ReadCustomItems ())
-					InternalAddItemToDock (s);
+					InternalAddItemToDock (s, LastPosition + 1);
 				
 				Dictionary<string, int> sortDictionary = ReadSortDictionary ();
 				foreach (ItemDockItem item in OrderedItems.Where (di => di is ItemDockItem)) {
@@ -383,7 +383,7 @@ namespace Docky.Core.Default
 		#endregion
 		
 		#region Item Management
-		bool InternalAddItemToDock (Element item)
+		bool InternalAddItemToDock (Element item, int position)
 		{
 			if (!(item is Item)) {
 				Log<ItemsService>.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
@@ -397,13 +397,15 @@ namespace Docky.Core.Default
 			AbstractDockItem dockItem = new ItemDockItem (item as Item);
 			RegisterDockItem (dockItem);
 			
-			dockItem.Position = LastPosition + 1;
+			MakeHoleAtPosition (position);
+			
+			dockItem.Position = position;
 			custom_items [id] = dockItem;
 			
 			return true;
 		}
 		
-		bool InternalAddItemToDock (string identifier)
+		bool InternalAddItemToDock (string identifier, int position)
 		{
 			if (custom_items.ContainsKey (identifier)) return false;
 			
@@ -412,7 +414,10 @@ namespace Docky.Core.Default
 			if (customItem == null) return false;
 			
 			RegisterDockItem (customItem);
-			customItem.Position = LastPosition + 1;
+			
+			MakeHoleAtPosition (position);
+			
+			customItem.Position = position;
 			custom_items [identifier] = customItem;
 			
 			return true;
@@ -528,6 +533,14 @@ namespace Docky.Core.Default
 				.ThenBy (item => item.GetType ().Name)
 				.ThenBy (item => item.Safe.Name);
 		}
+		
+		void MakeHoleAtPosition (int position)
+		{
+			foreach (AbstractDockItem di in OrderedItems) {
+				if (di.Position >= position)
+					di.Position++;
+			}
+		}
 		#endregion
 		
 		#region IItemsService implementation
@@ -556,16 +569,28 @@ namespace Docky.Core.Default
 		
 		public void AddItemToDock (Element item)
 		{
-			if (InternalAddItemToDock (item)) {
+			AddItemToDock (item, LastPosition + 1);
+		}
+		
+		public void AddItemToDock (string identifier)
+		{
+			AddItemToDock (identifier, LastPosition + 1);
+		}
+		
+		public void AddItemToDock (Element item, int position)
+		{
+			position = DockItems [position].Position;
+			if (InternalAddItemToDock (item, position)) {
 				UpdateItems ();
 				WriteData ();
 				OnDockItemsChanged ();
 			}
 		}
 		
-		public void AddItemToDock (string identifier)
+		public void AddItemToDock (string identifier, int position)
 		{
-			if (InternalAddItemToDock (identifier)) {
+			position = DockItems [position].Position;
+			if (InternalAddItemToDock (identifier, position)) {
 				UpdateItems ();
 				WriteData ();
 				OnDockItemsChanged ();
