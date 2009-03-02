@@ -102,7 +102,7 @@ namespace Docky.Utilities
 			// sometimes compiz plays badly.  This hacks around it
 			uint time = Gtk.Global.CurrentEventTime + 200;
 			GLib.Timeout.Add (200, delegate {
-				windows.First ().Activate (time);
+				windows.Where (w => w.IsInViewport (w.Screen.ActiveWorkspace) && !w.IsMinimized).First ().Activate (time);
 				return false;
 			});
 		}
