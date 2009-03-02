@@ -213,16 +213,16 @@ namespace Docky.Interface
 			}
 
 			startOffset += icon * 2 * DockPreferences.IconBorderWidth;
-			startOffset += DockItems [icon].Width / 2;
+			startOffset += DockItems [icon].Width >> 1;
 
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
 				startOffset += MinimumDockArea.X;
-				return new Gdk.Point (startOffset, Height - DockHeight / 2);
+				return new Gdk.Point (startOffset, Height - (DockHeight >> 1));
 				
 			case DockOrientation.Top:
 				startOffset += MinimumDockArea.X;
-				return new Gdk.Point (startOffset, DockHeight / 2);
+				return new Gdk.Point (startOffset, DockHeight >> 1);
 			default:
 				return new Gdk.Point (0, 0);
 			}
@@ -245,7 +245,7 @@ namespace Docky.Interface
 			double zoomInPercent = 1 + (DockPreferences.ZoomPercent - 1) * zoomByEntryTime;
 			
 			// offset from the center of the true position, ranged between 0 and half of the zoom range
-			double offset = Math.Min (Math.Abs (cursorOrientedPosition - centerOrientedPosition), ZoomSize / 2);
+			double offset = Math.Min (Math.Abs (cursorOrientedPosition - centerOrientedPosition), ZoomSize >> 1);
 			
 			if (ZoomSize == 0) {
 				zoom = 1;

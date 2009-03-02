@@ -275,31 +275,24 @@ namespace Docky.Interface
 			base.Dispose ();
 		}
 		
+		#endregion
+		
 		#region IRightClickable implementation 
 		
 		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
 			bool hasApps = HasVisibleApps;
 			
-			if (hasApps) {
-				foreach (Wnck.Window window in VisibleWindows)
-						yield return new WindowMenuButtonArgs (window, window.Name, Icon);
-				yield return new SeparatorMenuButtonArgs ();
-			}
-			
 			foreach (Act act in ActionsForItem)
 				yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
+			
+			if (hasApps) {
+				yield return new SeparatorMenuButtonArgs ();
+				foreach (Wnck.Window window in VisibleWindows)
+						yield return new WindowMenuButtonArgs (window, window.Name, Icon);
+			}
 
-			yield return new SimpleMenuButtonArgs (OnRemoveClicked, Catalog.GetString ("Remove from Dock"), Gtk.Stock.Remove);
 		}
-		
-		#endregion 
 		#endregion
-		
-		void OnRemoveClicked ()
-		{
-			if (RemoveClicked != null)
-				RemoveClicked (this, new EventArgs ());
-		}
 	}
 }

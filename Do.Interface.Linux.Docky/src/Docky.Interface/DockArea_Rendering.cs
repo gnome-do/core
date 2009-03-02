@@ -328,8 +328,8 @@ namespace Docky.Interface
 			IconZoomedPosition (icon, out center, out zoom);
 			
 			// This gives the actual x,y coordinates of the icon
-			PointD iconPosition = new PointD (center.X - zoom * dockItem.Width / 2,
-			                                  center.Y - zoom * dockItem.Width / 2);
+			PointD iconPosition = new PointD (center.X - zoom * (dockItem.Width >> 1),
+			                                  center.Y - zoom * (dockItem.Width >> 1));
 			
 			ClickAnimationType animationType = IconAnimation (icon);
 			
@@ -405,7 +405,7 @@ namespace Docky.Interface
 				// since these dont scale, we have some extra work to do to keep them
 				// centered
 				cr.SetSource (iconSurface, 
-				              (int) iconPosition.X, (int) center.Y - dockItem.Height / 2);
+				              (int) iconPosition.X, (int) center.Y - (dockItem.Height >> 1));
 				cr.Paint ();
 			}
 			
@@ -430,7 +430,7 @@ namespace Docky.Interface
 			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && !GtkDragging) {
 
 				Gdk.Point textPoint;
-				textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (DockPreferences.TextWidth / 2);
+				textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (DockPreferences.TextWidth >> 1);
 				
 				if (DockPreferences.Orientation == DockOrientation.Top)
 					textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 10;
