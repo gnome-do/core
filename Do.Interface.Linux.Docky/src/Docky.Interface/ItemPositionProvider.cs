@@ -166,7 +166,10 @@ namespace Docky.Interface
 				break;
 			}
 			
-			Gdk.Rectangle rect = new Gdk.Rectangle (leftEdge, topEdge, Math.Abs (leftEdge - rightEdge), Math.Abs (topEdge - bottomEdge));
+			Gdk.Rectangle rect = new Gdk.Rectangle (leftEdge, 
+			                                        topEdge, 
+			                                        Math.Abs (leftEdge - rightEdge), 
+			                                        Math.Abs (topEdge - bottomEdge));
 
 			return rect;
 		}
@@ -232,14 +235,8 @@ namespace Docky.Interface
 			cursor = RebaseCursor (cursor);
 
 			double cursorOrientedPosition, centerOrientedPosition;
-			if (DockPreferences.Orientation == DockOrientation.Bottom ||
-			    DockPreferences.Orientation == DockOrientation.Top) {
-				cursorOrientedPosition = cursor.X;
-				centerOrientedPosition = center.X;
-			} else {
-				cursorOrientedPosition = cursor.Y;
-				centerOrientedPosition = center.Y;
-			}
+			cursorOrientedPosition = cursor.X;
+			centerOrientedPosition = center.X;
 			
 			// ZoomPercent is a number greater than 1.  It should never be less than one.
 			// ZoomIn is a range of 0 to 1. we need a number that is 1 when ZoomIn is 0, 
@@ -250,7 +247,7 @@ namespace Docky.Interface
 			// offset from the center of the true position, ranged between 0 and half of the zoom range
 			double offset = Math.Min (Math.Abs (cursorOrientedPosition - centerOrientedPosition), ZoomSize / 2);
 			
-			if (ZoomSize / 2.0 == 0) {
+			if (ZoomSize == 0) {
 				zoom = 1;
 			} else {
 				// zoom is calculated as 1 through target_zoom (default 2).  

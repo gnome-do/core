@@ -122,11 +122,11 @@ namespace Docky.Interface
 		}
 		
 		public TimeSpan TimeSinceClick {
-			get { return DateTime.UtcNow - LastClick; }
+			get { return DockArea.RenderTime - LastClick; }
 		}
 		
 		public TimeSpan TimeSinceAdd {
-			get { return DateTime.UtcNow - DockAddItem; }
+			get { return DockArea.RenderTime - DockAddItem; }
 		}
 		
 		public AbstractDockItem ()

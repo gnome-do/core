@@ -43,6 +43,8 @@ namespace Docky.Interface
 			public double ZoomIn { get; set; }
 		}
 		
+		public static DateTime RenderTime { get; private set; }
+		
 		const int IndicatorSize = 9;
 		const int UrgentIndicatorSize = 12;
 		
@@ -57,8 +59,6 @@ namespace Docky.Interface
 		DateTime ActiveIconChangeTime { get; set; }
 		
 		DateTime FirstRenderTime { get; set; }
-		
-		DateTime RenderTime { get; set; }
 		
 		PreviousRenderData RenderData { get; set; }
 

@@ -293,11 +293,6 @@ namespace Docky.Interface
 			AnimationState.AddCondition (Animations.Bounce,
 			                             () => DockItems.Any (di => di.TimeSinceClick <= BounceTime));
 			
-			AnimationState.AddCondition (Animations.Urgency,
-			                             () => DockItems
-			                             .Where (di => di.NeedsAttention)
-			                             .Any (di => DateTime.UtcNow - di.AttentionRequestStartTime < BounceTime));
-			
 			AnimationState.AddCondition (Animations.UrgencyChanged,
 			                             () => DockItems.Any (di => DateTime.UtcNow - di.AttentionRequestStartTime < BounceTime));
 			
@@ -597,7 +592,7 @@ namespace Docky.Interface
 			} else {
 				if (DockPreferences.AutoHide && !drag_resizing) {
 					// setting the offset to 2 will trigger the parent window to unhide us if we are hidden.
-					if (AnimationState [Animations.Urgency])
+					if (AnimationState [Animations.UrgencyChanged])
 						offset = 2;
 					else
 						offset = 1;
@@ -606,11 +601,7 @@ namespace Docky.Interface
 				}
 			}
 			
-			int dockSize;
-			if (drag_resizing)
-				dockSize = Width;
-			else
-				dockSize = MinimumDockArea.Width;
+			int dockSize = (drag_resizing) ? Width : MinimumDockArea.Width;
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
