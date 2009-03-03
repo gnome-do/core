@@ -442,7 +442,7 @@ namespace Docky.Interface
 			Display.GetPointer (out x, out y, out mod);
 			
 			Gdk.Rectangle geo, hide_offset;
-			window.GetPosition (out geo.X, out geo.Y);
+			window.GetBufferedPosition (out geo.X, out geo.Y);
 			window.WindowHideOffset (out hide_offset.X, out hide_offset.Y);
 
 			x -= geo.X - hide_offset.X;
