@@ -29,6 +29,7 @@ using Do.Interface.CairoUtils;
 using Do.Platform;
 
 using Docky.Utilities;
+using Docky.Interface.Menus;
 
 namespace Docky.Interface
 {
@@ -143,11 +144,13 @@ namespace Docky.Interface
 		
 		public event EventHandler RemoveClicked;
 		
-		public IEnumerable<Menus.AbstractMenuArgs> GetMenuItems ()
+		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
-			yield return new Docky.Interface.Menus.SimpleMenuButtonArgs (() => Services.Environment.OpenUrl ("trash://"),
-			                                                             Catalog.GetString ("Open Trash"), TrashFullIcon);
-			yield return new Docky.Interface.Menus.SimpleMenuButtonArgs (EmptyTrash, Catalog.GetString ("Empty Tash"), Gtk.Stock.Delete);
+			yield return new SimpleMenuButtonArgs (
+					() => Services.Environment.OpenUrl ("trash://"),
+					Catalog.GetString ("Open Trash"), TrashFullIcon);
+			yield return new SimpleMenuButtonArgs (EmptyTrash,
+					Catalog.GetString ("Empty Trash"), Gtk.Stock.Delete);
 		}
 		
 		#endregion 
