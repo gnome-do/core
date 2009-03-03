@@ -18,8 +18,13 @@
 
 using System;
 
+using Cairo;
+using Gdk;
 using Gtk;
 using Mono.Unix;
+
+using Docky.Core;
+using Docky.Utilities;
 
 using Do.Interface;
 using Do.Interface.CairoUtils;
@@ -29,7 +34,14 @@ namespace Docky.Interface.Menus
 {
 	public abstract class AbstractMenuButtonArgs : AbstractMenuArgs
 	{
+		const string FormatString = "<b>{0}</b>";
+		const int WidthBuffer = 4;
+		const int Height = 22;
+		
 		Gtk.Widget widget;
+		bool hovered;
+		
+		public bool Dark { get; set; }
 		
 		public override Gtk.Widget Widget { 
 			get {
@@ -54,43 +66,99 @@ namespace Docky.Interface.Menus
 			Icon = icon;
 		}
 		
-		Gtk.Button BuildWidget ()
+		Widget BuildWidget ()
 		{
-			HBox hbox = new HBox ();
-			Label label = new Label ();
-			label.Markup = "<span color=\"#ffffff\"><b>" + Description + "</b></span>";
-			label.ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
-			label.ModifyText (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
-			label.Xalign = 0f;
-			label.Ellipsize = Pango.EllipsizeMode.End;
-			label.Ypad = 0;
+			DrawingArea button = new DrawingArea ();
 			
-			Gtk.Image image;
-			using (Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, 16)) {
-				image = new Gtk.Image (pbuf);
-			}
-				
-			hbox.PackStart (image, false, false, 0);
-			hbox.PackStart (label, true, true, 2);
+			button.ExposeEvent += HandleExposeEvent;
+			button.EnterNotifyEvent += HandleEnterNotifyEvent;
+			button.LeaveNotifyEvent += HandleLeaveNotifyEvent; 
+			button.ButtonReleaseEvent += HandleButtonReleaseEvent; 
 			
-			Gtk.Button button = new Gtk.Button (hbox);
-			
-			button.Relief = ReliefStyle.None;
-			button.CanFocus = false;
-			button.BorderWidth = 0;
-			
-			button.ModifyBg (StateType.Prelight, new Gdk.Color ((byte) (byte.MaxValue * 0.25), 
-			                                                    (byte) (byte.MaxValue * 0.25), 
-			                                                    (byte) (byte.MaxValue * 0.25)));
-			
-			button.Clicked += (sender, e) => Action ();
-			button.Clicked += (sender, e) => base.OnActivated ();
-			button.ShowAll ();
+			button.AddEvents ((int) (EventMask.EnterNotifyMask | EventMask.LeaveNotifyMask | EventMask.ButtonReleaseMask));
+			button.HeightRequest = Height;
+
+			button.SetCompositeColormap ();
 			
 			return button;
 		}
 		
+		void HandleButtonReleaseEvent(object o, ButtonReleaseEventArgs args)
+		{
+			Action ();
+			base.OnActivated ();
+		}
+
+		void HandleLeaveNotifyEvent(object o, LeaveNotifyEventArgs args)
+		{
+			(o as Widget).QueueDraw ();
+			hovered = false;
+		}
+
+		void HandleEnterNotifyEvent(object o, EnterNotifyEventArgs args)
+		{
+			(o as Widget).QueueDraw ();
+			hovered = true;
+		}
+
+		void HandleExposeEvent(object o, ExposeEventArgs args)
+		{
+			using (Context cr = CairoHelper.Create (args.Event.Window)) {
+				Gdk.Rectangle area = args.Event.Area;
+				cr.AlphaFill ();
+				LinearGradient lg = new LinearGradient (area.X, area.Y, area.X, area.Y + area.Height);
+				
+				Cairo.Color background = (Dark) ? DockPopupMenu.BackgroundColor.ShadeColor (.7) : DockPopupMenu.BackgroundColor;
+				if (hovered) {
+					Cairo.Color high = background
+						    .ConvertToGdk ()
+							.SetMinimumValue (25)
+							.ConvertToCairo (background.A);
+					
+					lg.AddColorStop (0, high);
+					lg.AddColorStop (1, background);
+				} else {
+					lg.AddColorStop (0, background);
+					lg.AddColorStop (1, background);
+				}
+				cr.Pattern = lg;
+				cr.Paint ();
+				lg.Destroy ();
+				
+				Gdk.Point textPoint;
+				int width;
+				if (Dark) {
+					textPoint = new Gdk.Point (area.X + WidthBuffer + 25, area.Y + area.Height / 2);
+					width = area.Width - WidthBuffer * 2 - 25;
+				} else {
+					textPoint = new Gdk.Point (area.X + WidthBuffer, area.Y + area.Height / 2);
+					width = area.Width - WidthBuffer * 2;
+				}
+				DockServices.DrawingService.TextPathAtPoint (cr, 
+				                                             string.Format (FormatString, Description), 
+				                                             textPoint,
+				                                             width,
+				                                             Pango.Alignment.Left);
+				cr.Color = new Cairo.Color (1, 1, 1);
+				cr.Fill ();
+				
+				if (Dark) {
+					Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, Height - 8);
+					CairoHelper.SetSourcePixbuf (cr, pbuf, WidthBuffer, (Height - pbuf.Height) / 2);
+					cr.Paint ();
+					pbuf.Dispose ();
+				}
+			}
+		}
+		
+		
 		public abstract void Action ();
+		
+		public AbstractMenuButtonArgs AsDark ()
+		{
+			Dark = true;
+			return this;
+		}
 		
 		public override void Dispose ()
 		{

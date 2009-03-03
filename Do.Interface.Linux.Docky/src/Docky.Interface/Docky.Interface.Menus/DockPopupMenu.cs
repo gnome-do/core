@@ -36,18 +36,21 @@ namespace Docky.Interface.Menus
 	
 	public class DockPopupMenu : Gtk.Window
 	{
-		public static readonly Cairo.Color BackgroundColor = new Cairo.Color (0.1, 0.1, 0.1, .9);
+		public static readonly Cairo.Color BackgroundColor = new Cairo.Color (0.13, 0.13, 0.13, .93);
 		
 		const int TailHeight = 25;
 		new const int BorderWidth = 2;
-		const int Radius = 10;
-		const int Width = 170;
+		const int HeaderSize = 20;
+		const int Radius = 6;
+		const int Width = 190;
 		const double Pointiness = 1.5;
 		const double Curviness = 1;
 		const double Bluntness = 2;
 		
 		int horizontal_offset;
 		int vertical_offset;
+		
+		string header;
 		
 		Gtk.Alignment align;
 		
@@ -87,6 +90,7 @@ namespace Docky.Interface.Menus
 			align.LeftPadding = 4;
 			align.RightPadding = 3;
 			align.TopPadding = align.BottomPadding = 7;
+			align.TopPadding += HeaderSize;
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
@@ -103,8 +107,9 @@ namespace Docky.Interface.Menus
 		}
 
 		
-		public virtual void PopUp (IEnumerable<AbstractMenuArgs> args, int x, int y)
+		public virtual void PopUp (string description, IEnumerable<AbstractMenuArgs> args, int x, int y)
 		{
+			header = description;
 			vertical_offset = horizontal_offset = 0;
 			ShowAll ();
 			Gdk.Rectangle geo = LayoutUtils.MonitorGemonetry ();
@@ -189,9 +194,17 @@ namespace Docky.Interface.Menus
 			cr.Color = BackgroundColor;
 			cr.FillPreserve ();
 			
-			cr.Color = new Cairo.Color (1, 1, 1, .4);
+			cr.Color = new Cairo.Color (1, 1, 1, .15);
 			cr.LineWidth = 1;
 			cr.Stroke ();
+			
+			Core.DockServices.DrawingService.TextPathAtPoint (cr, 
+			                                                  string.Format ("<b>{0}</b>", header),
+			                                                  new Gdk.Point (8, (HeaderSize + 10) / 2),
+			                                                  Width - 16,
+			                                                  Pango.Alignment.Center);
+			cr.Color = new Cairo.Color (1, 1, 1);
+			cr.Fill ();
 		}
 
 		void SetBackgroundPath (Context context)

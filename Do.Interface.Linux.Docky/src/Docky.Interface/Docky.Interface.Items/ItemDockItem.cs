@@ -283,13 +283,16 @@ namespace Docky.Interface
 		{
 			bool hasApps = HasVisibleApps;
 			
+			yield return new SeparatorMenuButtonArgs ();
+			
 			foreach (Act act in ActionsForItem)
-				yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
+				yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon).AsDark ();
 			
 			if (hasApps) {
-//				yield return new SeparatorMenuButtonArgs ();
-				foreach (Wnck.Window window in VisibleWindows)
-						yield return new WindowMenuButtonArgs (window);
+				foreach (Wnck.Window window in VisibleWindows) {
+					yield return new SeparatorMenuButtonArgs ();
+					yield return new WindowMenuButtonArgs (window, window.Name, Icon);
+				}
 			}
 
 		}

@@ -42,7 +42,7 @@ namespace Docky.Interface.Menus
 		{
 		}
 		
-		public override void PopUp (IEnumerable<AbstractMenuArgs> args, int x, int y)
+		public override void PopUp (string header, IEnumerable<AbstractMenuArgs> args, int x, int y)
 		{
 			current_args = args;
 			
@@ -53,7 +53,7 @@ namespace Docky.Interface.Menus
 			}
 			ShowAll ();
 			
-			base.PopUp (args, x, y);
+			base.PopUp (header, args, x, y);
 		}
 		
 		void OnButtonClicked (object o, EventArgs args)
