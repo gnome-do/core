@@ -17,28 +17,116 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Cairo;
+using Gdk;
+using Gtk;
 
 using Wnck;
 
+using Docky.Core;
 using Docky.Utilities;
+
+using Do.Interface.CairoUtils;
 
 namespace Docky.Interface.Menus
 {
 	
 	
-	public class WindowMenuButtonArgs : AbstractMenuButtonArgs
+	public class WindowMenuButtonArgs : AbstractMenuArgs
 	{
-		Window window;
+		const string FormatString = "<b>{0}</b>";
+		const int WidthBuffer = 4;
 		
-		public WindowMenuButtonArgs (Window window, string description, string icon) : base (description, icon)
+		Wnck.Window window;
+		DrawingArea button;
+		bool hovered;
+		
+		public override Widget Widget {
+			get {
+				return button;
+			}
+		}
+		
+		public WindowMenuButtonArgs (Wnck.Window window) : base ()
 		{
 			this.window = window;
-		}
-		
-		public override void Action ()
-		{
-			window.CenterAndFocusWindow ();
+			button = new DrawingArea ();
+			
+			button.ExposeEvent += HandleExposeEvent;
+			button.EnterNotifyEvent += HandleEnterNotifyEvent;
+			button.LeaveNotifyEvent += HandleLeaveNotifyEvent; 
+			button.ButtonReleaseEvent += HandleButtonReleaseEvent; 
+			
+			button.AddEvents ((int) (EventMask.EnterNotifyMask | EventMask.LeaveNotifyMask | EventMask.ButtonReleaseMask));
+			button.HeightRequest = 24;
+
+			button.SetCompositeColormap ();
 		}
 
+		void HandleButtonReleaseEvent(object o, ButtonReleaseEventArgs args)
+		{
+			window.CenterAndFocusWindow ();
+			base.OnActivated ();
+		}
+
+		void HandleLeaveNotifyEvent(object o, LeaveNotifyEventArgs args)
+		{
+			button.QueueDraw ();
+			hovered = false;
+		}
+
+		void HandleEnterNotifyEvent(object o, EnterNotifyEventArgs args)
+		{
+			button.QueueDraw ();
+			hovered = true;
+		}
+
+		void HandleExposeEvent(object o, ExposeEventArgs args)
+		{
+			using (Context cr = CairoHelper.Create (args.Event.Window)) {
+				Gdk.Rectangle area = args.Event.Area;
+				cr.AlphaFill ();
+				LinearGradient lg = new LinearGradient (area.X, area.Y, area.X, area.Y + area.Height);
+				if (hovered) {
+					Cairo.Color high = DockPopupMenu.BackgroundColor
+						    .ConvertToGdk ()
+							.SetMinimumValue (25)
+							.ConvertToCairo (DockPopupMenu.BackgroundColor.A);
+					
+					lg.AddColorStop (0, high);
+					lg.AddColorStop (1, DockPopupMenu.BackgroundColor);
+				} else {
+					lg.AddColorStop (0, DockPopupMenu.BackgroundColor);
+					lg.AddColorStop (1, DockPopupMenu.BackgroundColor);
+				}
+				cr.Pattern = lg;
+				cr.Paint ();
+				
+				cr.MoveTo (area.X, area.Y + .5);
+				cr.LineTo (area.X + area.Width, area.Y + .5);
+				cr.Color = new Cairo.Color (1, 1, 1, .15);
+				cr.LineWidth = 1;
+				cr.Stroke ();
+				
+				DockServices.DrawingService.TextPathAtPoint (cr, 
+				                                             string.Format (FormatString, window.Name), 
+				                                             new Gdk.Point (area.X + WidthBuffer, area.Y + area.Height / 2),
+				                                             area.Width - WidthBuffer * 2,
+				                                             Pango.Alignment.Left);
+				cr.Color = new Cairo.Color (1, 1, 1);
+				cr.Fill ();
+				
+				lg.Destroy ();
+			}
+		}
+		
+		public override void Dispose ()
+		{
+			button.Destroy ();
+			base.Dispose ();
+		}
 	}
 }

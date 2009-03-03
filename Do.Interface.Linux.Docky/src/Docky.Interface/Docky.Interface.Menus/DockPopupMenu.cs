@@ -36,10 +36,12 @@ namespace Docky.Interface.Menus
 	
 	public class DockPopupMenu : Gtk.Window
 	{
+		public static readonly Cairo.Color BackgroundColor = new Cairo.Color (0.1, 0.1, 0.1, .9);
+		
 		const int TailHeight = 25;
 		new const int BorderWidth = 2;
 		const int Radius = 10;
-		const int Width = 230;
+		const int Width = 170;
 		const double Pointiness = 1.5;
 		const double Curviness = 1;
 		const double Bluntness = 2;
@@ -82,19 +84,20 @@ namespace Docky.Interface.Menus
 		protected virtual void Build ()
 		{
 			align = new Gtk.Alignment (0.5f, 0.5f, 1, 1);
-			align.LeftPadding = align.RightPadding = align.TopPadding = align.BottomPadding = 2;
+			align.LeftPadding = 4;
+			align.RightPadding = 3;
+			align.TopPadding = align.BottomPadding = 7;
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
-				align.BottomPadding += TailHeight;
+				align.BottomPadding += TailHeight + 3;
 				break;
 			case DockOrientation.Top:
-				align.TopPadding += TailHeight;
+				align.TopPadding += TailHeight + 3;
 				break;
 			}
 			
 			align.Add (Container);
-			Container.BorderWidth = 5;
 			Add (align);
 			align.ShowAll ();
 		}
@@ -183,7 +186,7 @@ namespace Docky.Interface.Menus
 			
 			SetBackgroundPath (cr);
 			
-			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .9);
+			cr.Color = BackgroundColor;
 			cr.FillPreserve ();
 			
 			cr.Color = new Cairo.Color (1, 1, 1, .4);

@@ -287,9 +287,9 @@ namespace Docky.Interface
 				yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
 			
 			if (hasApps) {
-				yield return new SeparatorMenuButtonArgs ();
+//				yield return new SeparatorMenuButtonArgs ();
 				foreach (Wnck.Window window in VisibleWindows)
-						yield return new WindowMenuButtonArgs (window, window.Name, Icon);
+						yield return new WindowMenuButtonArgs (window);
 			}
 
 		}

@@ -311,10 +311,10 @@ namespace Docky.Interface
 			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
 			                                       CloseText, Gtk.Stock.Quit);
 			
-			yield return new SeparatorMenuButtonArgs ();
+//			yield return new SeparatorMenuButtonArgs ();
 			
 			foreach (Wnck.Window window in VisibleWindows)
-				yield return new WindowMenuButtonArgs (window, window.Name, WindowIcon);
+				yield return new WindowMenuButtonArgs (window);
 		}
 
 		public override void Dispose ()
