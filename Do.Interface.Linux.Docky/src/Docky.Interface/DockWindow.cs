@@ -108,7 +108,6 @@ namespace Docky.Interface
 		{
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
 	
-			ConfigureEvent += HandleConfigureEvent;
 			StyleSet += HandleStyleSet;
 			
 			DockPreferences.AllowOverlapChanged += DelaySetStruts;
@@ -118,7 +117,6 @@ namespace Docky.Interface
 
 		void UnregisterEvents ()
 		{
-			ConfigureEvent -= HandleConfigureEvent;
 			StyleSet -= HandleStyleSet;
 			
 			DockPreferences.AllowOverlapChanged -= DelaySetStruts;
@@ -127,12 +125,6 @@ namespace Docky.Interface
 
 			if (strut_timer > 0)
 				GLib.Source.Remove (strut_timer);
-		}
-		
-		void HandleConfigureEvent(object o, ConfigureEventArgs args)
-		{
-			buffer_x = args.Event.X;
-			buffer_y = args.Event.Y;
 		}
 
 		void HandleMonitorChanged()
@@ -297,8 +289,7 @@ namespace Docky.Interface
 				
 		public void GetBufferedPosition (out int x, out int y)
 		{
-			if (buffer_x == 0 && buffer_y == 0)
-				GetPosition (out buffer_x, out buffer_y);
+			GetPosition (out buffer_x, out buffer_y);
 			x = buffer_x;
 			y = buffer_y;
 		}
