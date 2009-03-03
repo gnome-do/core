@@ -200,6 +200,14 @@ namespace Docky.Interface
 			return base.OnButtonReleaseEvent (evnt);
 		}
 		
+		protected override bool OnConfigureEvent (Gdk.EventConfigure evnt)
+		{
+			buffer_x = evnt.X;
+			buffer_y = evnt.Y;
+			return base.OnConfigureEvent (evnt);
+		}
+
+		
 		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
 		{
 			if (Visible)
@@ -289,7 +297,8 @@ namespace Docky.Interface
 				
 		public void GetBufferedPosition (out int x, out int y)
 		{
-			GetPosition (out buffer_x, out buffer_y);
+			if (buffer_x == 0 && buffer_y == 0)
+				GetPosition (out buffer_x, out buffer_y);
 			x = buffer_x;
 			y = buffer_y;
 		}
