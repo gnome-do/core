@@ -285,8 +285,13 @@ namespace Docky.Interface
 			
 			yield return new SeparatorMenuButtonArgs ();
 			
-			foreach (Act act in ActionsForItem)
-				yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon).AsDark ();
+			if (hasApps) {
+				foreach (Act act in ActionsForItem)
+					yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon).AsDark ();
+			} else {
+				foreach (Act act in ActionsForItem)
+					yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
+			}
 			
 			if (hasApps) {
 				foreach (Wnck.Window window in VisibleWindows) {
