@@ -38,7 +38,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="11.313708"
      inkscape:cx="4.6231905"
-     inkscape:cy="5.7573245"
+     inkscape:cy="4.9176352"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -47,8 +47,8 @@
      inkscape:showpageshadow="false"
      inkscape:window-width="1280"
      inkscape:window-height="773"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-x="198"
+     inkscape:window-y="93"
      showborder="true">
     <inkscape:grid
        type="xygrid"
@@ -74,7 +74,7 @@
     <path
        sodipodi:nodetypes="ccccc"
        id="rect7725"
-       d="M 2.39212,11 L 11.60788,11 C 12.37912,11 13,11.97004 13,13 L 1,13 C 1,11.97004 1.62088,11 2.39212,11 z"
+       d="M 2.39212,6 L 11.60788,6 C 12.37912,6 13,6.97004 13,8 L 1,8 C 1,6.97004 1.62088,6 2.39212,6 z"
        style="fill:#eeeeec;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible" />
   </g>
 </svg>
