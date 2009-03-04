@@ -72,7 +72,11 @@ FILES = \
 	src/XLib/Xlib.cs
 
 RESOURCES = \
-	Resources/Do.Interface.Linux.Docky.addin.xml
+	Resources/Do.Interface.Linux.Docky.addin.xml \
+	Resources/close.svg \
+	Resources/run.svg \
+	Resources/minimize.svg \
+	Resources/maximize.svg
 
 REFERENCES =  \
 	System \

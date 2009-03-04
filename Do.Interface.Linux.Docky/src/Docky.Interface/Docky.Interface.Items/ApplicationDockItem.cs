@@ -57,7 +57,14 @@ namespace Docky.Interface
 		
 		const int MenuItemMaxCharacters = 50;
 		const string WindowIcon = "forward";
-		const string MinimizeIcon = "down";
+		
+		string MinimizeIcon {
+			get { return "minimize.svg@" + GetType ().Assembly.FullName; }
+		}
+		
+		string CloseIcon {
+			get { return "close.svg@" + GetType ().Assembly.FullName; }
+		}
 		
 		int windowCount;
 		
@@ -311,7 +318,7 @@ namespace Docky.Interface
 			                                       MinimizeRestoreText, MinimizeIcon).AsDark ();
 			
 			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
-			                                       CloseText, Gtk.Stock.Quit).AsDark ();
+			                                       CloseText, CloseIcon).AsDark ();
 			
 			foreach (Wnck.Window window in VisibleWindows) {
 				yield return new SeparatorMenuButtonArgs ();

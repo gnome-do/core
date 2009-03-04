@@ -88,8 +88,8 @@ namespace Docky.Interface
 				foreach (Act act in actions
 				         .Where (act => act.GetType ().Name != "CopyToClipboardAction")
 				         .OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
-				         .ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
 				         .ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
+				         .ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
 				         .ThenBy (act => act.Name.Length))
 					yield return act;
 			}
