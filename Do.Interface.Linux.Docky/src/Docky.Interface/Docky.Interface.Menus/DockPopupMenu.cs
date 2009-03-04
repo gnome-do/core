@@ -203,7 +203,10 @@ namespace Docky.Interface.Menus
 			cr.Color = BackgroundColor;
 			cr.FillPreserve ();
 			
-			cr.Color = new Cairo.Color (1, 1, 1, .15);
+			cr.LineWidth = 3;
+			cr.StrokePreserve ();
+			
+			cr.Color = new Cairo.Color (1, 1, 1, .25);
 			cr.LineWidth = 1;
 			cr.Stroke ();
 			
