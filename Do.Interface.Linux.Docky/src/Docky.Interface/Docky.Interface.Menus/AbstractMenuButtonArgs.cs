@@ -34,7 +34,7 @@ namespace Docky.Interface.Menus
 {
 	public abstract class AbstractMenuButtonArgs : AbstractMenuArgs
 	{
-		const string FormatString = "<b>{0}</b>";
+		const string FormatString = "{0}";
 		const int WidthBuffer = 4;
 		const int Height = 22;
 		

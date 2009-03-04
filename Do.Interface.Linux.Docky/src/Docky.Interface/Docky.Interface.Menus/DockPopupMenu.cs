@@ -36,7 +36,7 @@ namespace Docky.Interface.Menus
 	
 	public class DockPopupMenu : Gtk.Window
 	{
-		public static readonly Cairo.Color BackgroundColor = new Cairo.Color (0.13, 0.13, 0.13, .93);
+		public static readonly Cairo.Color BackgroundColor = new Cairo.Color (0.13, 0.13, 0.13, .95);
 		
 		const int TailHeight = 25;
 		new const int BorderWidth = 2;
