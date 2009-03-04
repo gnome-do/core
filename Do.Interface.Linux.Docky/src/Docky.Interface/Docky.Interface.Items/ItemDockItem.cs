@@ -90,7 +90,7 @@ namespace Docky.Interface
 				         .OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
 				         .ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
 				         .ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
-				         .ThenByDescending (act => act.Relevance))
+				         .ThenBy (act => act.Name.Length))
 					yield return act;
 			}
 		}
@@ -283,13 +283,21 @@ namespace Docky.Interface
 		{
 			bool hasApps = HasVisibleApps;
 			
-			foreach (Act act in ActionsForItem)
-				yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
+			yield return new SeparatorMenuButtonArgs ();
 			
 			if (hasApps) {
-				yield return new SeparatorMenuButtonArgs ();
-				foreach (Wnck.Window window in VisibleWindows)
-						yield return new WindowMenuButtonArgs (window, window.Name, Icon);
+				foreach (Act act in ActionsForItem)
+					yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon).AsDark ();
+			} else {
+				foreach (Act act in ActionsForItem)
+					yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
+			}
+			
+			if (hasApps) {
+				foreach (Wnck.Window window in VisibleWindows) {
+					yield return new SeparatorMenuButtonArgs ();
+					yield return new WindowMenuButtonArgs (window, window.Name, Icon);
+				}
 			}
 
 		}

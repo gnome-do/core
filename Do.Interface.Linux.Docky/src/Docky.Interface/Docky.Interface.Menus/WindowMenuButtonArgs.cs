@@ -18,9 +18,13 @@
 
 using System;
 
+using Gdk;
+
 using Wnck;
 
 using Docky.Utilities;
+
+using Do.Interface;
 
 namespace Docky.Interface.Menus
 {
@@ -28,9 +32,16 @@ namespace Docky.Interface.Menus
 	
 	public class WindowMenuButtonArgs : AbstractMenuButtonArgs
 	{
-		Window window;
+		Wnck.Window window;
 		
-		public WindowMenuButtonArgs (Window window, string description, string icon) : base (description, icon)
+		public override double IconOpacity {
+			get {
+				return (window.IsMinimized) ? .5 : base.IconOpacity;
+			}
+		}
+
+		
+		public WindowMenuButtonArgs (Wnck.Window window, string description, string icon) : base (description, icon)
 		{
 			this.window = window;
 		}
@@ -39,6 +50,5 @@ namespace Docky.Interface.Menus
 		{
 			window.CenterAndFocusWindow ();
 		}
-
 	}
 }

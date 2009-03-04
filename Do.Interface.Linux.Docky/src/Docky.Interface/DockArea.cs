@@ -538,7 +538,10 @@ namespace Docky.Interface
 						itemPosition = itemPosition.RelativeMovePoint ((int) (IconSize * itemZoom * .9 * .5), RelativeMove.Inward);
 						itemPosition = itemPosition.RelativePointToRootPoint (window);
 						
-						PopupMenu.PopUp ((CurrentDockItem as IRightClickable).GetMenuItems (), itemPosition.X, itemPosition.Y);
+						PopupMenu.PopUp (CurrentDockItem.Description, 
+						                 (CurrentDockItem as IRightClickable).GetMenuItems (), 
+						                 itemPosition.X, 
+						                 itemPosition.Y);
 						return;
 					}
 				}

@@ -36,10 +36,13 @@ namespace Docky.Interface.Menus
 	
 	public class DockPopupMenu : Gtk.Window
 	{
+		public static readonly Cairo.Color BackgroundColor = new Cairo.Color (0.13, 0.13, 0.13, .95);
+		
 		const int TailHeight = 25;
 		new const int BorderWidth = 2;
-		const int Radius = 10;
-		const int Width = 230;
+		const int HeaderSize = 20;
+		const int Radius = 7;
+		const int Width = 180;
 		const double Pointiness = 1.5;
 		const double Curviness = 1;
 		const double Bluntness = 2;
@@ -47,12 +50,23 @@ namespace Docky.Interface.Menus
 		int horizontal_offset;
 		int vertical_offset;
 		
+		string header;
+		
 		Gtk.Alignment align;
 		
 		public Gtk.VBox Container { get; private set; }
 
 		// we are making a new one here for speed reasons
 		public new bool Visible { get; private set; }
+		
+		int HeaderTextOffset {
+			get {
+				if (DockPreferences.Orientation == DockOrientation.Bottom)
+					return (HeaderSize + 10) / 2;
+				else
+					return (TailHeight + 3) + (HeaderSize + 10) / 2;
+			}
+		}
 		
 		public DockPopupMenu() : base (Gtk.WindowType.Popup)
 		{
@@ -82,26 +96,29 @@ namespace Docky.Interface.Menus
 		protected virtual void Build ()
 		{
 			align = new Gtk.Alignment (0.5f, 0.5f, 1, 1);
-			align.LeftPadding = align.RightPadding = align.TopPadding = align.BottomPadding = 2;
+			align.LeftPadding = 4;
+			align.RightPadding = 3;
+			align.TopPadding = align.BottomPadding = 7;
+			align.TopPadding += HeaderSize;
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
-				align.BottomPadding += TailHeight;
+				align.BottomPadding += TailHeight + 3;
 				break;
 			case DockOrientation.Top:
-				align.TopPadding += TailHeight;
+				align.TopPadding += TailHeight + 3;
 				break;
 			}
 			
 			align.Add (Container);
-			Container.BorderWidth = 5;
 			Add (align);
 			align.ShowAll ();
 		}
 
 		
-		public virtual void PopUp (IEnumerable<AbstractMenuArgs> args, int x, int y)
+		public virtual void PopUp (string description, IEnumerable<AbstractMenuArgs> args, int x, int y)
 		{
+			header = description;
 			vertical_offset = horizontal_offset = 0;
 			ShowAll ();
 			Gdk.Rectangle geo = LayoutUtils.MonitorGemonetry ();
@@ -183,12 +200,23 @@ namespace Docky.Interface.Menus
 			
 			SetBackgroundPath (cr);
 			
-			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .9);
+			cr.Color = BackgroundColor;
 			cr.FillPreserve ();
 			
-			cr.Color = new Cairo.Color (1, 1, 1, .4);
+			cr.LineWidth = 3;
+			cr.StrokePreserve ();
+			
+			cr.Color = new Cairo.Color (1, 1, 1, .25);
 			cr.LineWidth = 1;
 			cr.Stroke ();
+			
+			Core.DockServices.DrawingService.TextPathAtPoint (cr, 
+			                                                  string.Format ("<b>{0}</b>", header),
+			                                                  new Gdk.Point (8, HeaderTextOffset),
+			                                                  Width - 16,
+			                                                  Pango.Alignment.Center);
+			cr.Color = new Cairo.Color (1, 1, 1);
+			cr.Fill ();
 		}
 
 		void SetBackgroundPath (Context context)

@@ -30,16 +30,19 @@ namespace Docky.Interface.Menus
 		{
 			public CustomSeparator () : base ()
 			{
-				HeightRequest = 3;
+				HeightRequest = 2;
 			}
 			
 			protected override bool OnExposeEvent (Gdk.EventExpose evnt)
 			{
 				using (Context cr = CairoHelper.Create (GdkWindow)) {
-					cr.Rectangle (evnt.Area.X, evnt.Area.Y + 1, evnt.Area.Width, 1);
-					cr.Color = new Cairo.Color (.8, .8, .8, .7);
+					cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, 1);
+					cr.Color = new Cairo.Color (0, 0, 0, .2);
 					cr.Fill ();
 					
+					cr.Rectangle (evnt.Area.X, evnt.Area.Y + 1, evnt.Area.Width, 1);
+					cr.Color = new Cairo.Color (1, 1, 1, .1);
+					cr.Fill ();
 				}
 				return true;
 			}

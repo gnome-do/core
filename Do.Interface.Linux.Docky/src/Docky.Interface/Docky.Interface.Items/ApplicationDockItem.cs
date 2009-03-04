@@ -305,16 +305,18 @@ namespace Docky.Interface
 		
 		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
-			yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (VisibleWindows), 
-			                                       MinimizeRestoreText, MinimizeIcon);
-			
-			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
-			                                       CloseText, Gtk.Stock.Quit);
-			
 			yield return new SeparatorMenuButtonArgs ();
 			
-			foreach (Wnck.Window window in VisibleWindows)
+			yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (VisibleWindows), 
+			                                       MinimizeRestoreText, MinimizeIcon).AsDark ();
+			
+			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
+			                                       CloseText, Gtk.Stock.Quit).AsDark ();
+			
+			foreach (Wnck.Window window in VisibleWindows) {
+				yield return new SeparatorMenuButtonArgs ();
 				yield return new WindowMenuButtonArgs (window, window.Name, WindowIcon);
+			}
 		}
 
 		public override void Dispose ()

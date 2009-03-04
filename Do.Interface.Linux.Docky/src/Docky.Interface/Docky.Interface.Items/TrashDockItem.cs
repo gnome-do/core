@@ -146,6 +146,8 @@ namespace Docky.Interface
 		
 		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
+			yield return new SeparatorMenuButtonArgs ();
+			
 			yield return new SimpleMenuButtonArgs (
 					() => Services.Environment.OpenUrl ("trash://"),
 					Catalog.GetString ("Open Trash"), TrashFullIcon);
