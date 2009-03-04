@@ -155,7 +155,7 @@ namespace Docky.Interface
 
 		void HandleFormatValue(object o, FormatValueArgs args)
 		{
-			args.RetVal = string.Format ("{0}%", args.Value * 100);
+			args.RetVal = string.Format ("{0}%", Math.Round (args.Value * 100));
 		}
 	}
 }
