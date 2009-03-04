@@ -156,28 +156,28 @@ namespace Docky.Interface
 				// We set this value here instead of dynamically checking due to performance constraints.
 				// Ideally our CursorIsOverDockArea getter would do this fairly simple calculation, but it gets
 				// called about 20 to 30 times per render loop, so the savings do add up.
+				Gdk.Rectangle dockRegion;
+				if (PainterOverlayVisible)
+					dockRegion = GetDockArea ();
+				else
+					dockRegion = MinimumDockArea;
+				
 				if (cursorIsOverDockArea) {
-					Gdk.Rectangle rect = MinimumDockArea;
-					rect.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
-					CursorIsOverDockArea = rect.Contains (cursor);
+					dockRegion.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
+					CursorIsOverDockArea = dockRegion.Contains (cursor);
 				} else {
-					Gdk.Rectangle small;
-					if (PainterOverlayVisible)
-						small = GetDockArea ();
-					else
-						small = MinimumDockArea;
 					if (DockPreferences.AutoHide) {
 						switch (DockPreferences.Orientation) {
 						case DockOrientation.Bottom:
-							small.Y += small.Height - 1;
-							small.Height = 1;
+							dockRegion.Y += dockRegion.Height - 1;
+							dockRegion.Height = 1;
 							break;
 						case DockOrientation.Top:
-							small.Height = 1;
+							dockRegion.Height = 1;
 							break;
 						}
 					}
-					CursorIsOverDockArea = small.Contains (cursor);
+					CursorIsOverDockArea = dockRegion.Contains (cursor);
 				}
 				
 				// When we change over this boundry, it will normally trigger an animation, we need to be sure to catch it
