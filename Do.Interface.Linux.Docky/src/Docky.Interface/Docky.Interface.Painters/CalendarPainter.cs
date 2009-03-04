@@ -112,7 +112,10 @@ namespace Docky.Interface.Painters
 					align = Pango.Alignment.Left;
 				} else if (i == 0) {
 					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
-					text = string.Format ("<b>W{0:00}</b>", lineStart.DayOfYear / 7 + 1);
+					int woy = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear (lineStart, 
+					                                                             DateTimeFormatInfo.CurrentInfo.CalendarWeekRule, 
+					                                                             DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek);
+					text = string.Format ("<b>W{0:00}</b>", woy);
 					align = Pango.Alignment.Right;
 				} else {
 					DateTime day = lineStart.AddDays (dayOffset);
