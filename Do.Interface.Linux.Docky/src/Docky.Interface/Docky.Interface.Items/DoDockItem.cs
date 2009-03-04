@@ -110,8 +110,10 @@ namespace Docky.Interface
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = !DockPreferences.ZoomEnabled, 
 			                                       Catalog.GetString ("Zoom Icons"), DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon).AsDark ();
 			
-			if (DockPreferences.ZoomEnabled)
+			if (DockPreferences.ZoomEnabled) {
+				yield return new SeparatorMenuButtonArgs ();
 				yield return new WidgetMenuArgs (BuildScaleWidget ());
+			}
 			
 			if (Gdk.Screen.Default.NMonitors > 1)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
@@ -123,9 +125,8 @@ namespace Docky.Interface
 				yield return new ToggleDockletMenuButtonArgs (dockitem).AsDark ();
 			}
 			
-			yield return new SeparatorMenuButtonArgs ();
-			
 			foreach (IRunnableItem item in Services.Application.MainMenuItems) {
+				yield return new SeparatorMenuButtonArgs ();
 				yield return new RunnableMenuButtonArgs (item);
 			}
 		}

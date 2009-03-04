@@ -43,6 +43,10 @@ namespace Docky.Interface.Menus
 		
 		public bool Dark { get; set; }
 		
+		public virtual double IconOpacity {
+			get { return 1; }
+		}
+		
 		public override Gtk.Widget Widget { 
 			get {
 				if (widget == null)
@@ -127,13 +131,9 @@ namespace Docky.Interface.Menus
 				
 				Gdk.Point textPoint;
 				int width;
-				if (Dark) {
-					textPoint = new Gdk.Point (area.X + WidthBuffer + 25, area.Y + area.Height / 2);
-					width = area.Width - WidthBuffer * 2 - 25;
-				} else {
-					textPoint = new Gdk.Point (area.X + WidthBuffer, area.Y + area.Height / 2);
-					width = area.Width - WidthBuffer * 2;
-				}
+				textPoint = new Gdk.Point (area.X + WidthBuffer + 25, area.Y + area.Height / 2);
+				width = area.Width - WidthBuffer * 2 - 25;
+				
 				DockServices.DrawingService.TextPathAtPoint (cr, 
 				                                             string.Format (FormatString, Description), 
 				                                             textPoint,
@@ -142,15 +142,17 @@ namespace Docky.Interface.Menus
 				cr.Color = new Cairo.Color (1, 1, 1);
 				cr.Fill ();
 				
-				if (Dark) {
-					Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, Height - 8);
-					CairoHelper.SetSourcePixbuf (cr, pbuf, WidthBuffer, (Height - pbuf.Height) / 2);
-					cr.Paint ();
-					pbuf.Dispose ();
-				}
+				Gdk.Pixbuf pbuf = GetPixbuf (Height - 8);
+				CairoHelper.SetSourcePixbuf (cr, pbuf, WidthBuffer, (Height - pbuf.Height) / 2);
+				cr.PaintWithAlpha (IconOpacity);
+				pbuf.Dispose ();
 			}
 		}
 		
+		protected virtual Gdk.Pixbuf GetPixbuf (int size)
+		{
+			return IconProvider.PixbufFromIconName (Icon, size);
+		}
 		
 		public abstract void Action ();
 		
