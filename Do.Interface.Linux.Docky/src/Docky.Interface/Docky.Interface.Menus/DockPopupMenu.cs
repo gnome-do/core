@@ -41,8 +41,8 @@ namespace Docky.Interface.Menus
 		const int TailHeight = 25;
 		new const int BorderWidth = 2;
 		const int HeaderSize = 20;
-		const int Radius = 6;
-		const int Width = 190;
+		const int Radius = 7;
+		const int Width = 180;
 		const double Pointiness = 1.5;
 		const double Curviness = 1;
 		const double Bluntness = 2;

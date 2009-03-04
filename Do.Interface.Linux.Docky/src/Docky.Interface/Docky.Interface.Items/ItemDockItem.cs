@@ -90,7 +90,7 @@ namespace Docky.Interface
 				         .OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
 				         .ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
 				         .ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
-				         .ThenByDescending (act => act.Relevance))
+				         .ThenBy (act => act.Name.Length))
 					yield return act;
 			}
 		}
