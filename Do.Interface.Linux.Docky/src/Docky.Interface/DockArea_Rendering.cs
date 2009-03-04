@@ -541,7 +541,7 @@ namespace Docky.Interface
 
 				// see if the theme color is too close to red and if so use
 				// blue instead
-				if (h <= 30 || h >= 330)
+				if (h <= 45 || h >= 315)
 					color = new Cairo.Color (0.5, 0.6, 1.0, 1.0).ConvertToGdk ();
 				else
 					color = new Cairo.Color (1.0, 0.3, 0.3, 1.0).ConvertToGdk ();
