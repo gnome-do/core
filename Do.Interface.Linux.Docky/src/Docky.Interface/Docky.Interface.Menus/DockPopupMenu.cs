@@ -59,6 +59,15 @@ namespace Docky.Interface.Menus
 		// we are making a new one here for speed reasons
 		public new bool Visible { get; private set; }
 		
+		int HeaderTextOffset {
+			get {
+				if (DockPreferences.Orientation == DockOrientation.Bottom)
+					return (HeaderSize + 10) / 2;
+				else
+					return (TailHeight + 3) + (HeaderSize + 10) / 2;
+			}
+		}
+		
 		public DockPopupMenu() : base (Gtk.WindowType.Popup)
 		{
 			Decorated = false;
@@ -200,7 +209,7 @@ namespace Docky.Interface.Menus
 			
 			Core.DockServices.DrawingService.TextPathAtPoint (cr, 
 			                                                  string.Format ("<b>{0}</b>", header),
-			                                                  new Gdk.Point (8, (HeaderSize + 10) / 2),
+			                                                  new Gdk.Point (8, HeaderTextOffset),
 			                                                  Width - 16,
 			                                                  Pango.Alignment.Center);
 			cr.Color = new Cairo.Color (1, 1, 1);
