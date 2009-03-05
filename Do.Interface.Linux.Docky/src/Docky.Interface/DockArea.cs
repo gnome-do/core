@@ -312,6 +312,7 @@ namespace Docky.Interface
 
 		void HandleUniverseInitialized(object sender, EventArgs e)
 		{
+			AnimatedDraw ();
 			GLib.Timeout.Add (2000, delegate {
 				SetIconRegions ();
 				return false;
