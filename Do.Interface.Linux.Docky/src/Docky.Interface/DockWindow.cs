@@ -77,6 +77,8 @@ namespace Docky.Interface
 
 			interop_service = new DoInteropService (controller);
 			Core.DockServices.RegisterService (interop_service);
+			
+			Core.DockServices.PainterService.RegisterPainter (new Painters.SummonModeRenderer ());
 
 			RegisterEvents ();
 			Build ();

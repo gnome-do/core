@@ -59,7 +59,6 @@ FILES = \
 	src/Docky.Interface/IRightClickable.cs \
 	src/Docky.Interface/ItemPositionProvider.cs \
 	src/Docky.Interface/LayoutUtils.cs \
-	src/Docky.Interface/PainterService.cs \
 	src/Docky.Interface/PaintNeededArgs.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
