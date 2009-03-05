@@ -123,8 +123,6 @@ namespace Docky.Interface
 		
 		bool CursorIsOverDockArea {	get; set; }
 
-		PainterService PainterService { get; set; }
-
 		ModifierType CursorModifier { get; set; }
 		
 		ReadOnlyCollection<AbstractDockItem> DockItems { 
@@ -204,10 +202,6 @@ namespace Docky.Interface
 			SetSize ();
 			SetSizeRequest (Width, Height);
 			
-			PainterService = new PainterService (this);
-			PainterService.BuildPainters ();
-			DockServices.RegisterService (PainterService);
-			
 			PositionProvider = new ItemPositionProvider (this);
 			
 			AnimationState = new DockAnimationState ();
@@ -253,6 +247,9 @@ namespace Docky.Interface
 			DockServices.ItemsService.DockItemsChanged += OnDockItemsChanged;
 			DockServices.ItemsService.ItemNeedsUpdate += HandleItemNeedsUpdate;
 			DockPreferences.IconSizeChanged += HandleIconSizeChanged; 
+			
+			DockServices.PainterService.PainterShowRequest += HandlePainterShowRequest;
+			DockServices.PainterService.PainterHideRequest += HandlePainterHideRequest;
 
 			PopupMenu.Hidden += OnDockItemMenuHidden;
 			PopupMenu.Shown += OnDockItemMenuShown;
@@ -273,9 +270,14 @@ namespace Docky.Interface
 			DockServices.ItemsService.DockItemsChanged -= OnDockItemsChanged;
 			DockServices.ItemsService.ItemNeedsUpdate -= HandleItemNeedsUpdate;
 			DockPreferences.IconSizeChanged -= HandleIconSizeChanged; 
+			
+			DockServices.PainterService.PainterShowRequest -= HandlePainterShowRequest;
+			DockServices.PainterService.PainterHideRequest -= HandlePainterHideRequest;
 
 			PopupMenu.Hidden -= OnDockItemMenuHidden;
 			PopupMenu.Shown -= OnDockItemMenuShown;
+			
+			Services.Core.UniverseInitialized -= HandleUniverseInitialized;
 		}
 		
 		void BuildAnimationStateEngine ()
@@ -311,6 +313,7 @@ namespace Docky.Interface
 		void HandleUniverseInitialized(object sender, EventArgs e)
 		{
 			GLib.Timeout.Add (2000, delegate {
+				DockServices.ItemsService.ForceUpdate ();
 				SetIconRegions ();
 				return false;
 			});
@@ -334,6 +337,51 @@ namespace Docky.Interface
 				AnimationState.AddCondition (Animations.Painter, () => DateTime.UtcNow - current_time < span);
 			}
 			AnimatedDraw ();
+		}
+		
+		void HandlePainterHideRequest(object sender, EventArgs e)
+		{
+			IDockPainter painter = sender as IDockPainter;
+			if (Painter != painter)
+				return;
+
+			Painter = null;
+			PainterOverlayVisible = false;
+			interface_change_time = DateTime.UtcNow;
+
+			SetParentInputMask ();
+			AnimatedDraw ();
+
+			GLib.Timeout.Add (500, () => { 
+				DockServices.ItemsService.ForceUpdate (); 
+				return false; 
+			});
+
+			window.UnpresentWindow ();
+			RegisterGtkDragSource ();
+		}
+
+		void HandlePainterShowRequest(object sender, EventArgs e)
+		{
+			IDockPainter painter = sender as IDockPainter;
+			if (Painter == painter)
+				return;
+			
+			if (Painter == null || Painter.Interruptable) {
+				if (Painter != null)
+					Painter.Interrupt ();
+				Painter = painter;
+				PainterOverlayVisible = true;
+				interface_change_time = DateTime.UtcNow;
+
+				SetParentInputMask ();
+				AnimatedDraw ();
+			} else {
+				painter.Interrupt ();
+			}
+			
+			window.PresentWindow ();
+			UnregisterGtkDragSource ();
 		}
 		
 		void ResetCursorTimer ()
@@ -622,50 +670,6 @@ namespace Docky.Interface
 			}
 		}
 
-		public bool RequestShowPainter (IDockPainter painter)
-		{
-			if (Painter == painter)
-				return true;
-			
-			if (Painter == null || Painter.Interruptable) {
-				if (Painter != null)
-					Painter.Interrupt ();
-				Painter = painter;
-				PainterOverlayVisible = true;
-				interface_change_time = DateTime.UtcNow;
-
-				SetParentInputMask ();
-				AnimatedDraw ();
-			} else {
-				return false;
-			}
-			window.PresentWindow ();
-			UnregisterGtkDragSource ();
-			return true;
-		}
-
-		public bool RequestHidePainter (IDockPainter painter)
-		{
-			if (Painter != painter)
-				return false;
-
-			Painter = null;
-			PainterOverlayVisible = false;
-			interface_change_time = DateTime.UtcNow;
-
-			SetParentInputMask ();
-			AnimatedDraw ();
-
-			GLib.Timeout.Add (500, () => { 
-				DockServices.ItemsService.ForceUpdate (); 
-				return false; 
-			});
-
-			window.UnpresentWindow ();
-			RegisterGtkDragSource ();
-			return true;
-		}
-
 		void InterruptPainter ()
 		{
 			if (Painter == null || !Painter.Interruptable) return;
@@ -713,9 +717,6 @@ namespace Docky.Interface
 				Painter.PaintNeeded -= HandlePaintNeeded;
 			}
 			
-			DockServices.UnregisterService (PainterService);
-			PainterService.Dispose ();
-
 			window = null;
 			
 			if (cursor_timer > 0)

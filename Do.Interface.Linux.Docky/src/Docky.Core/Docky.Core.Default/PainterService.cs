@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 using Do.Platform;
 
@@ -31,24 +32,59 @@ namespace Docky.Core.Default
 	{
 		
 		
+		ICollection<IDockPainter> painters;
+		
 		#region IPainterService implementation
+		
+		public event EventHandler PainterHideRequest;
+		public event EventHandler PainterShowRequest;
+		
 		public void RegisterPainter (IDockPainter painter)
 		{
-			Log<PainterService>.Error ("Default Painter Services cannot register painters");
+			painters.Add (painter);
+			painter.ShowRequested += HandleShowRequested;
+			painter.HideRequested += HandleHideRequested;
+		}
+
+		void HandleHideRequested(object sender, EventArgs e)
+		{
+			IDockPainter painter = sender as IDockPainter;
+			if (painter == null || PainterHideRequest == null)
+				return;
+			
+			PainterHideRequest (sender, e);
+		}
+
+		void HandleShowRequested(object sender, EventArgs e)
+		{
+			IDockPainter painter = sender as IDockPainter;
+			if (painter == null || PainterShowRequest == null)
+				return;
+			
+			PainterShowRequest (sender, e);
+		}
+		
+		#endregion 
+		
+		public PainterService ()
+		{
+			painters = new List<IDockPainter> ();
 		}
 
 		#region IDisposable implementation 
 		
 		public void Dispose ()
 		{
+			DockServices.UnregisterService (this);
+			
+			foreach (IDockPainter painter in painters) {
+				painter.ShowRequested -= HandleShowRequested;
+				painter.HideRequested -= HandleHideRequested;
+				painter.Dispose ();
+			}
+			painters.Clear ();
 		}
 		
-		#endregion 
-		
-		
-		#endregion 
-		
-
-		
+		#endregion
 	}
 }
