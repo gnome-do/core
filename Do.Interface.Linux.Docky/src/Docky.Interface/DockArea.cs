@@ -312,8 +312,8 @@ namespace Docky.Interface
 
 		void HandleUniverseInitialized(object sender, EventArgs e)
 		{
-			AnimatedDraw ();
 			GLib.Timeout.Add (2000, delegate {
+				DockServices.ItemsService.ForceUpdate ();
 				SetIconRegions ();
 				return false;
 			});
