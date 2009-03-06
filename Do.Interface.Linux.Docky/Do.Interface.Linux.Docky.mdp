@@ -67,7 +67,6 @@
     <File name="src/Docky.Interface/DoInteropService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Core/IPainterService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Core/Docky.Core.Default/PainterService.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/PainterService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/PaintNeededArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Painters/HotSeatPainter.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DockArea_Rendering.cs" subtype="Code" buildaction="Compile" />
@@ -89,6 +88,8 @@
     <File name="src/Docky.Core/Docky.Core.Default/DockletService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Painters/AbstractIntegratedPainter.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/AbstractMenuArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/Docky.Interface.Menus/WidgetMenuArgs.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

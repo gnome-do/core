@@ -55,8 +55,6 @@ namespace Docky.Interface
 		
 		public event EventHandler RemoveClicked;
 		
-		public int Position { get; set; }
-		
 		public override bool IsAcceptingDrops { 
 			get { return accepting_drops; } 
 		}
@@ -90,9 +88,9 @@ namespace Docky.Interface
 				foreach (Act act in actions
 				         .Where (act => act.GetType ().Name != "CopyToClipboardAction")
 				         .OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
-				         .ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
 				         .ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
-				         .ThenByDescending (act => act.Relevance))
+				         .ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
+				         .ThenBy (act => act.Name.Length))
 					yield return act;
 			}
 		}
@@ -105,7 +103,6 @@ namespace Docky.Interface
 
 			SetText (element.Name);
 
-			AttentionRequestStartTime = DateTime.UtcNow;
 			UpdateApplication ();
 			NeedsAttention = DetermineUrgencyStatus ();
 			
@@ -278,31 +275,32 @@ namespace Docky.Interface
 			base.Dispose ();
 		}
 		
+		#endregion
+		
 		#region IRightClickable implementation 
 		
-		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
+		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
 			bool hasApps = HasVisibleApps;
 			
+			yield return new SeparatorMenuButtonArgs ();
+			
 			if (hasApps) {
-				foreach (Wnck.Window window in VisibleWindows)
-						yield return new WindowMenuButtonArgs (window, window.Name, Icon);
-				yield return new SeparatorMenuButtonArgs ();
+				foreach (Act act in ActionsForItem)
+					yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon).AsDark ();
+			} else {
+				foreach (Act act in ActionsForItem)
+					yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
 			}
 			
-			foreach (Act act in ActionsForItem)
-				yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
+			if (hasApps) {
+				foreach (Wnck.Window window in VisibleWindows) {
+					yield return new SeparatorMenuButtonArgs ();
+					yield return new WindowMenuButtonArgs (window, window.Name, Icon);
+				}
+			}
 
-			yield return new SimpleMenuButtonArgs (OnRemoveClicked, Catalog.GetString ("Remove from Dock"), Gtk.Stock.Remove);
 		}
-		
-		#endregion 
 		#endregion
-		
-		void OnRemoveClicked ()
-		{
-			if (RemoveClicked != null)
-				RemoveClicked (this, new EventArgs ());
-		}
 	}
 }

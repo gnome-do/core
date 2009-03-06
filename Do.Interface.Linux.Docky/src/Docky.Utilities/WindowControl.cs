@@ -29,6 +29,8 @@ namespace Docky.Utilities
 	public static class WindowControl
 	{
 		
+		const int SleepTime = 10;
+		
 		/// <summary>
 		/// Handles intelligent minimize/restoring of windows.  If one or more windows is minimized, it restores
 		/// all windows.  If more all are visible, it minimizes.  This operation only takes into account windows
@@ -61,8 +63,10 @@ namespace Docky.Utilities
 		public static void MinimizeWindows (IEnumerable<Window> windows)
 		{
 			foreach (Window window in windows) {
-				if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized)
+				if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized) {
 					window.Minimize ();
+					System.Threading.Thread.Sleep (SleepTime);
+				}
 			}
 		}
 		
@@ -74,28 +78,31 @@ namespace Docky.Utilities
 		/// </param>
 		public static void RestoreWindows (IEnumerable<Window> windows)
 		{
-			foreach (Window window in windows) {
-				if (window.IsInViewport (window.Screen.ActiveWorkspace) && window.IsMinimized)
+			foreach (Window window in windows.Reverse ()) {
+				if (window.IsInViewport (window.Screen.ActiveWorkspace) && window.IsMinimized) {
 					window.Unminimize (Gtk.Global.CurrentEventTime);
+					System.Threading.Thread.Sleep (SleepTime);
+				}
 			}
 		}
 		
 		public static void FocusWindows (IEnumerable<Window> windows)
 		{
-			foreach (Window window in windows) {
-				if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized)
+			foreach (Window window in windows.Reverse ()) {
+				if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized) {
 					window.CenterAndFocusWindow ();
+					System.Threading.Thread.Sleep (SleepTime);
+				}
 			}
 			
 			if (windows.Count () <= 1)
 				return;
 			
 			// we do this to make sure our active window is also at the front... Its a tricky thing to do.
+			// sometimes compiz plays badly.  This hacks around it
 			uint time = Gtk.Global.CurrentEventTime + 200;
 			GLib.Timeout.Add (200, delegate {
-				if (!windows.Any (w => w.IsActive))
-					return false;
-				windows.Where (w => w.IsActive).First ().Activate (time);
+				windows.Where (w => w.IsInViewport (w.Screen.ActiveWorkspace) && !w.IsMinimized).First ().Activate (time);
 				return false;
 			});
 		}
@@ -103,6 +110,60 @@ namespace Docky.Utilities
 		public static void FocusWindows (Window window)
 		{
 			FocusWindows (new [] {window});
+		}
+		
+		public static void IntelligentFocusOffViewportWindow (Window targetWindow, IEnumerable<Window> additionalWindows)
+		{
+			foreach (Window window in additionalWindows.Reverse ()) {
+				if (!window.IsMinimized && WindowsShareViewport (targetWindow, window)) {
+					window.CenterAndFocusWindow ();
+					System.Threading.Thread.Sleep (SleepTime);
+				}
+			}
+			
+			targetWindow.CenterAndFocusWindow ();
+			
+			if (additionalWindows.Count () <= 1)
+				return;
+			
+			// we do this to make sure our active window is also at the front... Its a tricky thing to do.
+			// sometimes compiz plays badly.  This hacks around it
+			uint time = Gtk.Global.CurrentEventTime + 200;
+			GLib.Timeout.Add (200, delegate {
+				targetWindow.Activate (time);
+				return false;
+			});
+		}
+		
+		static bool WindowsShareViewport (Wnck.Window first, Wnck.Window second)
+		{
+			if (first == null || second == null) return false;
+			
+			Wnck.Workspace wksp = first.Workspace ?? second.Workspace;
+			if (wksp == null) return false;
+			
+			Gdk.Rectangle firstGeo, secondGeo;
+			
+			first.GetGeometry (out firstGeo.X, out firstGeo.Y, out firstGeo.Width, out firstGeo.Height);
+			second.GetGeometry (out secondGeo.X, out secondGeo.Y, out secondGeo.Width, out secondGeo.Height);
+			
+			firstGeo.X += wksp.ViewportX;
+			firstGeo.Y += wksp.ViewportY;
+			
+			secondGeo.X += wksp.ViewportX;
+			secondGeo.Y += wksp.ViewportY;
+			
+			int viewportWidth, viewportHeight;
+			viewportWidth = first.Screen.Width;
+			viewportHeight = first.Screen.Height;
+			
+			int firstViewportX = ((firstGeo.X + firstGeo.Width / 2) / viewportWidth) * viewportWidth;
+			int firstViewportY = ((firstGeo.Y + firstGeo.Height / 2) / viewportHeight) * viewportHeight;
+			
+			Gdk.Rectangle viewpRect = new Gdk.Rectangle (firstViewportX, firstViewportY, 
+			                                             viewportWidth, viewportHeight);
+			
+			return viewpRect.IntersectsWith (secondGeo);
 		}
 		
 		public static void CloseWindows (IEnumerable<Window> windows)

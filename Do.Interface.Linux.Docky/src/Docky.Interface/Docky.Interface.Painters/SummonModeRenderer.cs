@@ -69,8 +69,12 @@ namespace Docky.Interface.Painters
 			get { return false; }
 		}
 
-		public bool Interuptable {
+		public bool Interruptable {
 			get { return false; }
+		}
+		
+		public int MinimumWidth {
+			get { return 300; }
 		}
 		
 		public SummonModeRenderer ()
@@ -139,7 +143,7 @@ namespace Docky.Interface.Painters
 			}
 		}
 
-		public void Interupt ()
+		public void Interrupt ()
 		{
 			Log.Error ("Docky has been interupted innapropriately.  Please report this bug.");
 		}

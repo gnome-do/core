@@ -36,93 +36,43 @@ namespace Docky.Interface.Menus
 	
 	public class DockItemMenu : DockPopupMenu
 	{
-		class CustomSeparator : HSeparator
-		{
-			public CustomSeparator () : base ()
-			{
-				HeightRequest = 3;
-			}
-			
-			protected override bool OnExposeEvent (Gdk.EventExpose evnt)
-			{
-				using (Context cr = CairoHelper.Create (GdkWindow)) {
-					cr.Rectangle (evnt.Area.X, evnt.Area.Y + 1, evnt.Area.Width, 1);
-					cr.Color = new Cairo.Color (.8, .8, .8, .7);
-					cr.Fill ();
-					
-				}
-				return true;
-			}
-
-		}
+		IEnumerable<AbstractMenuArgs> current_args;
 		
 		public DockItemMenu() : base ()
 		{
 		}
 		
-		public override void PopUp (IEnumerable<AbstractMenuButtonArgs> args, int x, int y)
+		public override void PopUp (string header, IEnumerable<AbstractMenuArgs> args, int x, int y)
 		{
-			foreach (Gtk.Widget child in Container.AllChildren) {
-				Container.Remove (child);
-				child.Dispose ();
-			}
+			current_args = args;
 			
-			foreach (AbstractMenuButtonArgs arg in args) {
-				if (arg is SeparatorMenuButtonArgs) {
-					Container.PackStart (new CustomSeparator ());
-					continue;
-				}
-				
-				HBox hbox = new HBox ();
-				Label label = new Label ();
-				if (arg.Sensitive)
-					label.Markup = "<span color=\"#ffffff\"><b>" + arg.Description + "</b></span>";
-				else
-					label.Markup = "<span color=\"#888888\"><b>" + arg.Description + "</b></span>";
-				label.ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
-				label.ModifyText (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
-				label.Xalign = 0f;
-				label.Ellipsize = Pango.EllipsizeMode.End;
-				label.Ypad = 0;
-				
-				Gtk.Image image;
-				using (Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (arg.Icon, 16)) {
-					image = new Gtk.Image (pbuf);
-				}
-					
-				hbox.PackStart (image, false, false, 0);
-				hbox.PackStart (label, true, true, 2);
-				
-				Gtk.Button button = new Button (hbox);
-				if (arg is WindowMenuButtonArgs)
-					button.TooltipText = arg.Description;
-				
-				button.Clicked += arg.Handler;
-				button.Clicked += OnButtonClicked;
-				
-				button.Relief = ReliefStyle.None;
-				button.CanFocus = false;
-				button.Sensitive = arg.Sensitive;
-				button.BorderWidth = 0;
-				
-				button.ModifyBg (StateType.Prelight, new Gdk.Color ((byte) (byte.MaxValue * 0.25), 
-				                                                    (byte) (byte.MaxValue * 0.25), 
-				                                                    (byte) (byte.MaxValue * 0.25)));
-				Container.PackStart (button, false, false, 0);
+			foreach (AbstractMenuArgs arg in args) {
+				Container.PackStart (arg.Widget, false, false, 0);
+				arg.Activated += OnButtonClicked;
+				arg.Widget.ShowAll ();
 			}
 			ShowAll ();
 			
-			base.PopUp (args, x, y);
+			base.PopUp (header, args, x, y);
 		}
 		
 		void OnButtonClicked (object o, EventArgs args)
 		{
-			foreach (Gtk.Widget widget in Container.AllChildren) {
-				if (!(widget is Gtk.Button))
-					continue;
-				(widget as Gtk.Button).Activated -= OnButtonClicked;
-			}
 			Hide ();
 		}
+		
+		protected override void OnHidden ()
+		{
+			foreach (Gtk.Widget widget in Container.Children)
+				Container.Remove (widget);
+			
+			foreach (AbstractMenuArgs arg in current_args) {
+				arg.Activated -= OnButtonClicked;
+				arg.Dispose ();
+			}
+			
+			base.OnHidden ();
+		}
+
 	}
 }

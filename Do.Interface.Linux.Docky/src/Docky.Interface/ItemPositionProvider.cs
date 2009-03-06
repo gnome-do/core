@@ -119,26 +119,13 @@ namespace Docky.Interface
 		Rectangle CalculateMinimumArea ()
 		{
 			int widthOffset;
-
-			if (DockPreferences.DockIsHorizontal)
-				widthOffset = (Width - DockWidth) / 2;
-			else
-				widthOffset = (Height - DockWidth) / 2;
+			widthOffset = (Width - DockWidth) / 2;
 			
 			Gdk.Rectangle rect;
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
 				rect = new Gdk.Rectangle (widthOffset, Height - DockHeight, DockWidth, DockHeight);
 				break;
-				
-			case DockOrientation.Left:
-				rect = new Gdk.Rectangle (0, widthOffset, DockHeight, DockWidth);
-				break;
-
-			case DockOrientation.Right:
-				rect = new Gdk.Rectangle (Width - DockHeight, widthOffset, DockHeight, DockWidth);
-				break;
-
 			case DockOrientation.Top:
 				rect = new Gdk.Rectangle (widthOffset, 0, DockWidth, DockHeight);
 				break;
@@ -158,31 +145,19 @@ namespace Docky.Interface
 			IconZoomedPosition (DockItems.Count - 1, zoomByEntryTime, cursor, out endPosition, out end_zoom);
 			
 			int leftEdge, rightEdge, topEdge, bottomEdge;
-			int startEdgeConstant = (int) (start_zoom * (IconSize / 2) + (start_zoom * HorizontalBuffer) + DockPreferences.IconBorderWidth);
-			int endEdgeConstant = (int) (end_zoom * (IconSize / 2) + (end_zoom * HorizontalBuffer) + DockPreferences.IconBorderWidth);
+			double startEdgeConstant = start_zoom * (IconSize / 2) + (start_zoom * HorizontalBuffer) + DockPreferences.IconBorderWidth;
+			double endEdgeConstant = end_zoom * (IconSize / 2) + (end_zoom * HorizontalBuffer) + DockPreferences.IconBorderWidth;
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
-				leftEdge = (int) startPosition.X - startEdgeConstant;
-				rightEdge = (int) endPosition.X + endEdgeConstant;
+				leftEdge = (int) (startPosition.X - startEdgeConstant);
+				rightEdge = (int) (endPosition.X + endEdgeConstant);
 				bottomEdge = Height;
 				topEdge = Height - DockHeight;
 				break;
-			case DockOrientation.Left:
-				topEdge = (int) startPosition.Y - startEdgeConstant;
-				bottomEdge = (int) endPosition.Y + endEdgeConstant;
-				leftEdge = 0;
-				rightEdge = DockHeight;
-				break;
-			case DockOrientation.Right:
-				topEdge = (int) startPosition.Y - startEdgeConstant;
-				bottomEdge = (int) endPosition.Y + endEdgeConstant;
-				leftEdge = Width - DockHeight;
-				rightEdge = Width;
-				break;
 			case DockOrientation.Top:
-				leftEdge = (int) startPosition.X - startEdgeConstant;
-				rightEdge = (int) endPosition.X + endEdgeConstant;
+				leftEdge = (int) (startPosition.X - startEdgeConstant);
+				rightEdge = (int) (endPosition.X + endEdgeConstant);
 				bottomEdge = DockHeight;
 				topEdge = 0;
 				break;
@@ -191,7 +166,10 @@ namespace Docky.Interface
 				break;
 			}
 			
-			Gdk.Rectangle rect = new Gdk.Rectangle (leftEdge, topEdge, Math.Abs (leftEdge - rightEdge), Math.Abs (topEdge - bottomEdge));
+			Gdk.Rectangle rect = new Gdk.Rectangle (leftEdge, 
+			                                        topEdge, 
+			                                        Math.Abs (leftEdge - rightEdge), 
+			                                        Math.Abs (topEdge - bottomEdge));
 
 			return rect;
 		}
@@ -235,24 +213,16 @@ namespace Docky.Interface
 			}
 
 			startOffset += icon * 2 * DockPreferences.IconBorderWidth;
-			startOffset += DockItems [icon].Width / 2;
+			startOffset += DockItems [icon].Width >> 1;
 
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
 				startOffset += MinimumDockArea.X;
-				return new Gdk.Point (startOffset, Height - DockHeight / 2);
+				return new Gdk.Point (startOffset, Height - (DockHeight >> 1));
 				
 			case DockOrientation.Top:
 				startOffset += MinimumDockArea.X;
-				return new Gdk.Point (startOffset, DockHeight / 2);
-			
-			case DockOrientation.Left:
-				startOffset += MinimumDockArea.Y;
-				return new Gdk.Point (DockHeight / 2, startOffset);
-				
-			case DockOrientation.Right:
-				startOffset += MinimumDockArea.Y;
-				return new Gdk.Point (Width - DockHeight / 2, startOffset);
+				return new Gdk.Point (startOffset, DockHeight >> 1);
 			default:
 				return new Gdk.Point (0, 0);
 			}
@@ -262,16 +232,11 @@ namespace Docky.Interface
 		{
 			// get our actual center
 			Gdk.Point center = IconUnzoomedPosition (icon);
+			cursor = RebaseCursor (cursor);
 
 			double cursorOrientedPosition, centerOrientedPosition;
-			if (DockPreferences.Orientation == DockOrientation.Bottom ||
-			    DockPreferences.Orientation == DockOrientation.Top) {
-				cursorOrientedPosition = cursor.X;
-				centerOrientedPosition = center.X;
-			} else {
-				cursorOrientedPosition = cursor.Y;
-				centerOrientedPosition = center.Y;
-			}
+			cursorOrientedPosition = cursor.X;
+			centerOrientedPosition = center.X;
 			
 			// ZoomPercent is a number greater than 1.  It should never be less than one.
 			// ZoomIn is a range of 0 to 1. we need a number that is 1 when ZoomIn is 0, 
@@ -280,9 +245,9 @@ namespace Docky.Interface
 			double zoomInPercent = 1 + (DockPreferences.ZoomPercent - 1) * zoomByEntryTime;
 			
 			// offset from the center of the true position, ranged between 0 and half of the zoom range
-			double offset = Math.Min (Math.Abs (cursorOrientedPosition - centerOrientedPosition), ZoomSize / 2);
+			double offset = Math.Min (Math.Abs (cursorOrientedPosition - centerOrientedPosition), ZoomSize >> 1);
 			
-			if (ZoomSize / 2.0 == 0) {
+			if (ZoomSize == 0) {
 				zoom = 1;
 			} else {
 				// zoom is calculated as 1 through target_zoom (default 2).  
@@ -311,12 +276,6 @@ namespace Docky.Interface
 				case DockOrientation.Bottom:
 					position = new Cairo.PointD (centerOrientedPosition, center.Y);
 					break;
-				case DockOrientation.Left:
-					position = new Cairo.PointD (center.X, centerOrientedPosition);
-					break;
-				case DockOrientation.Right:
-					position = new Cairo.PointD (center.X, centerOrientedPosition);
-					break;
 				case DockOrientation.Top:
 					position = new Cairo.PointD (centerOrientedPosition, center.Y);
 					break;
@@ -332,15 +291,6 @@ namespace Docky.Interface
 			case DockOrientation.Bottom:
 				position = new Cairo.PointD (centerOrientedPosition, Height - zoomedCenterHeight);
 				break;
-				
-			case DockOrientation.Left:
-				position = new Cairo.PointD (zoomedCenterHeight, centerOrientedPosition);
-				break;
-				
-			case DockOrientation.Right:
-				position = new Cairo.PointD (Width - zoomedCenterHeight, centerOrientedPosition);
-				break;
-
 			case DockOrientation.Top:
 				position = new Cairo.PointD (centerOrientedPosition, zoomedCenterHeight);
 				break;
@@ -357,8 +307,8 @@ namespace Docky.Interface
 		
 		public int IndexAtPosition (Gdk.Point location)
 		{
-			int position = DockPreferences.DockIsHorizontal ? location.X : location.Y;
-			int startOffset = DockPreferences.DockIsHorizontal ? MinimumDockArea.X + HorizontalBuffer : MinimumDockArea.Y + HorizontalBuffer;
+			int position = location.X;
+			int startOffset = MinimumDockArea.X + HorizontalBuffer;
 
 			int i = 0;
 			int width;
@@ -370,6 +320,13 @@ namespace Docky.Interface
 				i++;
 			}
 			return -1;
+		}
+		
+		Gdk.Point RebaseCursor (Gdk.Point point)
+		{
+			int left = MinimumDockArea.X;
+			int right = left + MinimumDockArea.Width;
+			return new Gdk.Point (Math.Max (Math.Min (point.X, right), left), point.Y);
 		}
 
 		#region IDisposable implementation 

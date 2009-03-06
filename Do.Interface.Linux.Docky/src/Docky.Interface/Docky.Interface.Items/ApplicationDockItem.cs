@@ -57,7 +57,14 @@ namespace Docky.Interface
 		
 		const int MenuItemMaxCharacters = 50;
 		const string WindowIcon = "forward";
-		const string MinimizeIcon = "down";
+		
+		string MinimizeIcon {
+			get { return "minimize.svg@" + GetType ().Assembly.FullName; }
+		}
+		
+		string CloseIcon {
+			get { return "close.svg@" + GetType ().Assembly.FullName; }
+		}
 		
 		int windowCount;
 		
@@ -65,6 +72,21 @@ namespace Docky.Interface
 		Gdk.Pixbuf drag_pixbuf;
 		
 		IEnumerable<Wnck.Application> applications;
+		
+		string desktop_file;
+		
+		public string DesktopFile {
+			get {
+				if (desktop_file == null) {
+					foreach (string s in GetIconGuesses ()) {
+						desktop_file = GetDesktopFile (s);
+						if (desktop_file != null)
+							break;
+					}
+				}
+				return desktop_file;
+			}
+		}
 		
 		string Exec {
 			get {
@@ -169,7 +191,6 @@ namespace Docky.Interface
 		{
 			this.applications = applications;
 			windowCount = VisibleWindows.Count ();
-			AttentionRequestStartTime = DateTime.UtcNow - new TimeSpan (0, 10, 0);
 			
 			foreach (Wnck.Window w in VisibleWindows) {
 				w.StateChanged += HandleStateChanged;
@@ -193,6 +214,10 @@ namespace Docky.Interface
 				if (NeedsAttention)
 					AttentionRequestStartTime = DateTime.UtcNow;
 				OnUpdateNeeded (new UpdateRequestArgs (this, req));
+			}
+			if ((args.ChangedMask & Wnck.WindowState.SkipTasklist) == Wnck.WindowState.SkipTasklist) {
+				if (VisibleWindows.Count () == 0)
+					Core.DockServices.ItemsService.ForceUpdate ();
 			}
 		}
 		
@@ -285,18 +310,20 @@ namespace Docky.Interface
 			return Applications.Any (app => (other as ApplicationDockItem).Applications.Contains (app));
 		}
 		
-		public IEnumerable<AbstractMenuButtonArgs> GetMenuItems ()
+		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
-			foreach (Wnck.Window window in VisibleWindows)
-				yield return new WindowMenuButtonArgs (window, window.Name, WindowIcon);
-			
 			yield return new SeparatorMenuButtonArgs ();
 			
 			yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (VisibleWindows), 
-			                                       MinimizeRestoreText, MinimizeIcon);
+			                                       MinimizeRestoreText, MinimizeIcon).AsDark ();
 			
 			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
-			                                       CloseText, Gtk.Stock.Quit);
+			                                       CloseText, CloseIcon).AsDark ();
+			
+			foreach (Wnck.Window window in VisibleWindows) {
+				yield return new SeparatorMenuButtonArgs ();
+				yield return new WindowMenuButtonArgs (window, window.Name, WindowIcon);
+			}
 		}
 
 		public override void Dispose ()

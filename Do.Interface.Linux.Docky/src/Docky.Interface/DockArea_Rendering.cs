@@ -43,11 +43,13 @@ namespace Docky.Interface
 			public double ZoomIn { get; set; }
 		}
 		
+		public static DateTime RenderTime { get; private set; }
+		
 		const int IndicatorSize = 9;
 		const int UrgentIndicatorSize = 12;
 		
 		Dictionary<IDockPainter, Surface> painter_surfaces;
-		bool fast_render_fail;
+		bool fast_render_fail, first_render_set;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
@@ -55,6 +57,8 @@ namespace Docky.Interface
 		Matrix default_matrix;
 		
 		DateTime ActiveIconChangeTime { get; set; }
+		
+		DateTime FirstRenderTime { get; set; }
 		
 		PreviousRenderData RenderData { get; set; }
 
@@ -75,74 +79,17 @@ namespace Docky.Interface
 		}
 		
 		/// <value>
-		/// Returns the zoom in percentage (0 through 1)
-		/// </value>
-		double ZoomIn {
-			get {
-				if (drag_resizing && drag_start_point != Cursor)
-					return 0;
-				
-				double zoom = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / 
-					                 BaseAnimationTime.TotalMilliseconds);
-				if (CursorIsOverDockArea) {
-					if (DockPreferences.AutoHide)
-						zoom = 1;
-				} else {
-					zoom = 1 - zoom;
-				}
-				
-				if (PainterOverlayVisible)
-					zoom = zoom * DockIconOpacity;
-				
-				return zoom;
-			}
-		}
-		
-		//// <value>
-		/// The overall offset of the dock as a whole
-		/// </value>
-		int VerticalOffset {
-			get {
-				double offset = 0;
-				// we never hide in these conditions
-				if (!DockPreferences.AutoHide || drag_resizing || PainterOpacity == 1)
-					return 0;
-
-				if (PainterOpacity > 0) {
-					if (CursorIsOverDockArea) {
-						return 0;
-					} else {
-						offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / 
-						                   SummonTime.TotalMilliseconds);
-						offset = Math.Min (offset, Math.Min (1, 
-						                                     (DateTime.UtcNow - interface_change_time)
-						                                     .TotalMilliseconds / SummonTime.TotalMilliseconds));
-					}
-					
-					if (PainterOverlayVisible)
-						offset = 1 - offset;
-				} else {
-					offset = Math.Min (1, (DateTime.UtcNow - enter_time).TotalMilliseconds / 
-					                   SummonTime.TotalMilliseconds);
-					if (CursorIsOverDockArea)
-						offset = 1 - offset;
-				}
-				return (int) (offset * PositionProvider.DockHeight * 1.5);
-			}
-		}
-		
-		/// <value>
 		/// Determins the opacity of the icons on the normal dock
 		/// </value>
 		double DockIconOpacity {
 			get {
-				if (SummonTime < DateTime.UtcNow - interface_change_time) {
+				if (SummonTime < RenderTime - interface_change_time) {
 					if (PainterOverlayVisible)
 						return 0;
 					return 1;
 				}
 
-				double total_time = (DateTime.UtcNow - interface_change_time).TotalMilliseconds;
+				double total_time = (RenderTime - interface_change_time).TotalMilliseconds;
 				if (PainterOverlayVisible) {
 					return 1 - (total_time / SummonTime.TotalMilliseconds);
 				} else {
@@ -150,19 +97,25 @@ namespace Docky.Interface
 				}
 			}
 		}
-
-		/// <summary>
-		/// The opacity of the painter surface
-		/// </summary>
-		double PainterOpacity {
-			get { return 1 - DockIconOpacity; }
-		}
-
+		
 		/// <value>
 		/// Icon Size used for the dock
 		/// </value>
 		int IconSize { 
 			get { return DockPreferences.IconSize; } 
+		}
+		
+		IDockPainter LastPainter { 
+			get {
+				return last_painter;
+			}
+			set {
+				if (last_painter == value)
+					return;
+				if (last_painter != null)
+					last_painter.PaintNeeded -= HandlePaintNeeded;
+				last_painter = value;
+			}
 		}
 		
 		IDockPainter Painter { 
@@ -179,16 +132,71 @@ namespace Docky.Interface
 			}
 		}
 
-		IDockPainter LastPainter { 
+		/// <summary>
+		/// The opacity of the painter surface
+		/// </summary>
+		double PainterOpacity {
+			get { return 1 - DockIconOpacity; }
+		}
+
+		//// <value>
+		/// The overall offset of the dock as a whole
+		/// </value>
+		int VerticalOffset {
 			get {
-				return last_painter;
+				double offset = 0;
+				// we never hide in these conditions
+				if (!DockPreferences.AutoHide || drag_resizing || PainterOpacity == 1) {
+					if ((RenderTime - FirstRenderTime) > SummonTime)
+						return 0;
+					offset = 1 - Math.Min (1, (DateTime.UtcNow - FirstRenderTime).TotalMilliseconds / SummonTime.TotalMilliseconds);
+					return (int) (offset * PositionProvider.DockHeight * 1.5);
+				}
+
+				if (PainterOpacity > 0) {
+					if (CursorIsOverDockArea) {
+						return 0;
+					} else {
+						offset = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
+						                   SummonTime.TotalMilliseconds);
+						offset = Math.Min (offset, Math.Min (1, 
+						                                     (RenderTime - interface_change_time)
+						                                     .TotalMilliseconds / SummonTime.TotalMilliseconds));
+					}
+					
+					if (PainterOverlayVisible)
+						offset = 1 - offset;
+				} else {
+					offset = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
+					                   SummonTime.TotalMilliseconds);
+					if (CursorIsOverDockArea)
+						offset = 1 - offset;
+				}
+				return (int) (offset * PositionProvider.DockHeight * 1.5);
 			}
-			set {
-				if (last_painter == value)
-					return;
-				if (last_painter != null)
-					last_painter.PaintNeeded -= HandlePaintNeeded;
-				last_painter = value;
+		}
+		
+		/// <value>
+		/// Returns the zoom in percentage (0 through 1)
+		/// </value>
+		double ZoomIn {
+			get {
+				if (drag_resizing && drag_start_point != Cursor)
+					return 0;
+				
+				double zoom = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
+					                 BaseAnimationTime.TotalMilliseconds);
+				if (CursorIsOverDockArea) {
+					if (DockPreferences.AutoHide)
+						zoom = 1;
+				} else {
+					zoom = 1 - zoom;
+				}
+				
+				if (PainterOverlayVisible)
+					zoom = zoom * DockIconOpacity;
+				
+				return zoom;
 			}
 		}
 
@@ -247,10 +255,12 @@ namespace Docky.Interface
 				Gdk.Rectangle dockArea = GetDockArea ();
 				
 				int startItemPosition;
-				startItemPosition = Math.Min (Cursor.X, RenderData.LastCursor.X) - (DockPreferences.ZoomSize / 2 + DockPreferences.IconSize);
+				startItemPosition = Math.Min (Cursor.X, RenderData.LastCursor.X) - 
+					(DockPreferences.ZoomSize / 2 + DockPreferences.IconSize);
 				
 				int endItemPosition;
-				endItemPosition = Math.Max (Cursor.X, RenderData.LastCursor.X) + (DockPreferences.ZoomSize / 2 + DockPreferences.IconSize);
+				endItemPosition = Math.Max (Cursor.X, RenderData.LastCursor.X) + 
+					(DockPreferences.ZoomSize / 2 + DockPreferences.IconSize);
 				
 				int startItem = PositionProvider.IndexAtPosition (startItemPosition, Cursor.Y);
 				int endItem = PositionProvider.IndexAtPosition (endItemPosition, Cursor.Y);
@@ -311,18 +321,19 @@ namespace Docky.Interface
 			}
 			
 			AbstractDockItem dockItem = DockItems [icon];
+			if (dockItem == null) return;
+			
 			PointD center;
 			double zoom;
 			IconZoomedPosition (icon, out center, out zoom);
 			
 			// This gives the actual x,y coordinates of the icon
-			PointD iconPosition = new PointD (center.X - zoom * dockItem.Width / 2,
-			                                  center.Y - zoom * dockItem.Width / 2);
+			PointD iconPosition = new PointD (center.X - zoom * (dockItem.Width >> 1),
+			                                  center.Y - zoom * (dockItem.Width >> 1));
 			
 			ClickAnimationType animationType = IconAnimation (icon);
 			
 			// we will set this flag now
-			bool drawUrgency = false;
 			if (animationType == ClickAnimationType.Bounce) {
 				// bounces twice
 				double delta = Math.Abs (30 * Math.Sin 
@@ -331,15 +342,12 @@ namespace Docky.Interface
 				
 				iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 			} else {
-				if (dockItem != null && dockItem.NeedsAttention) {
-					drawUrgency = true;
-					if (DateTime.UtcNow - dockItem.AttentionRequestStartTime < BounceTime) {
-						double urgentMs = (DateTime.UtcNow - dockItem.AttentionRequestStartTime)
-							.TotalMilliseconds;
-						
-						double delta = 100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds));
-						iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
-					}
+				if (RenderTime - dockItem.AttentionRequestStartTime < BounceTime) {
+					double urgentMs = (RenderTime - dockItem.AttentionRequestStartTime)
+						.TotalMilliseconds;
+					
+					double delta = 100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds));
+					iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 				}
 			}
 			
@@ -396,14 +404,8 @@ namespace Docky.Interface
 			} else {
 				// since these dont scale, we have some extra work to do to keep them
 				// centered
-				if (DockPreferences.DockIsHorizontal) {
-					// why this fails to center right... i dont know...
-					cr.SetSource (iconSurface, 
-					              (int) iconPosition.X, (int) center.Y - dockItem.Height / 2);
-				} else {
-					cr.SetSource (iconSurface, 
-					              (int) iconPosition.X - IconSize / 2 + 5, (int) iconPosition.Y);
-				}
+				cr.SetSource (iconSurface, 
+				              (int) iconPosition.X, (int) center.Y - (dockItem.Height >> 1));
 				cr.Paint ();
 			}
 			
@@ -413,18 +415,12 @@ namespace Docky.Interface
 				case DockOrientation.Bottom:
 					location = new Gdk.Point ((int) center.X, Height - 1);	
 					break;
-				case DockOrientation.Left:
-					location = new Gdk.Point (1, (int) center.Y);
-					break;
-				case DockOrientation.Right:
-					location = new Gdk.Point (Width - 1, (int) center.Y);
-					break;
 				case DockOrientation.Top:
 				default:
 					location = new Gdk.Point ((int) center.X, 1);
 					break;
 				}
-				DrawGlowIndicator (cr, location, drawUrgency, dockItem.WindowCount);
+				DrawGlowIndicator (cr, location, dockItem.NeedsAttention, dockItem.WindowCount);
 			}
 			
 			// we do a null check here to allow things like separator items to supply
@@ -434,22 +430,13 @@ namespace Docky.Interface
 			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && !GtkDragging) {
 
 				Gdk.Point textPoint;
-				if (DockPreferences.DockIsHorizontal) {
-					textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (DockPreferences.TextWidth / 2);
-					if (DockPreferences.Orientation == DockOrientation.Top)
-						textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 10;
-					else
-						textPoint.Y = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 38;
-				} else {
-					PointD tmp = center.RelativeMovePoint ((IconSize / 2) * DockPreferences.ZoomPercent + 10, 
-					                                          RelativeMove.Inward);
-					
-					textPoint.X = (int) tmp.X;
-					textPoint.Y = (int) tmp.Y;
-					if (DockPreferences.Orientation == DockOrientation.Right)
-						textPoint = textPoint.RelativeMovePoint (DockPreferences.TextWidth, RelativeMove.Inward);
-					textPoint = textPoint.RelativeMovePoint (10, RelativeMove.RealUp);
-				}
+				textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (DockPreferences.TextWidth >> 1);
+				
+				if (DockPreferences.Orientation == DockOrientation.Top)
+					textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 10;
+				else
+					textPoint.Y = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 38;
+				
 				dockItem.GetTextSurface (cr.Target).Show (cr, textPoint.X, textPoint.Y);
 			}
 		}
@@ -483,16 +470,27 @@ namespace Docky.Interface
 			// more than we have to.  Further, when we do call it, we should always check for this shortcut.
 			if (DockIconOpacity == 0 || ZoomIn == 0)
 				rect = MinimumDockArea;
+			else
+				rect = PositionProvider.DockArea (ZoomIn, Cursor);
 
-			rect = PositionProvider.DockArea (ZoomIn, Cursor);
-
-			// fixme this does not work for side dock
-			if (rect.Width < 10 * rect.Height && DockIconOpacity < 1) {
-				int difference = 10 * rect.Height - rect.Width;
+			int minSize; 
+				
+			if (PainterOverlayVisible && Painter != null) {
+				minSize = Math.Max (Painter.MinimumWidth, 10 * rect.Height);
+			} else if (!PainterOverlayVisible && LastPainter != null) {
+				minSize = Math.Max (LastPainter.MinimumWidth, 10 * rect.Height);
+			} else {
+				minSize = 10 * rect.Height;
+			}
+			
+			if (rect.Width < minSize && DockIconOpacity < 1) {
+				int difference = minSize - rect.Width;
 				int alpha = (int) (difference * PainterOpacity);
 				rect.X -= alpha / 2;
 				rect.Width += alpha;
 			}
+			
+			
 			return rect;
 		}
 		
@@ -543,7 +541,7 @@ namespace Docky.Interface
 
 				// see if the theme color is too close to red and if so use
 				// blue instead
-				if (h <= 30 || h >= byte.MaxValue - 30)
+				if (h <= 45 || h >= 315)
 					color = new Cairo.Color (0.5, 0.6, 1.0, 1.0).ConvertToGdk ();
 				else
 					color = new Cairo.Color (1.0, 0.3, 0.3, 1.0).ConvertToGdk ();
@@ -605,6 +603,8 @@ namespace Docky.Interface
 			if (!IsDrawable || window.IsRepositionHidden)
 				return false;
 			
+			RenderTime = DateTime.UtcNow;
+			
 			Context cr;
 			if (backbuffer == null) {
 				cr = Gdk.CairoHelper.Create (GdkWindow);
@@ -618,8 +618,13 @@ namespace Docky.Interface
 			cr = new Cairo.Context (backbuffer);
 			cr.AlphaFill ();
 
-			if (DockServices.ItemsService.UpdatesEnabled)
+			if (DockServices.ItemsService.UpdatesEnabled) {
+				if (!first_render_set) {
+					FirstRenderTime = DateTime.UtcNow;
+					first_render_set = true;
+				}
 				DrawDrock (cr);
+			}
 			(cr as IDisposable).Dispose ();
 			
 			cr = Gdk.CairoHelper.Create (GdkWindow);

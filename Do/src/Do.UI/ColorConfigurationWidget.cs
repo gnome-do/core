@@ -82,12 +82,42 @@ namespace Do.UI
 		private void SetupButtons ()
 		{
 			setup = true;
+			ushort alpha;
+			background_colorbutton.Color = ReadColor (BezelDrawingArea.BgColor, out alpha);
+			background_colorbutton.Alpha = alpha;
 			clear_background.Sensitive = true;
 			background_colorbutton.Sensitive = shadow_check.Sensitive = true;
 			shadow_check.Active = BezelDrawingArea.DrawShadow;
 			animation_check.Active = BezelDrawingArea.Animated;
 			Gtk.Application.Invoke (delegate { setup = false; });
 		}
+		
+		private Gdk.Color ReadColor (string colorString, out ushort alpha)
+		{
+			Gdk.Color prefsColor;
+			byte r,g,b;
+			uint converted;
+			
+			try {
+				converted = uint.Parse (colorString, System.Globalization.NumberStyles.HexNumber);
+		
+				alpha = (ushort) ((converted & 255) << 8);
+				b = (byte) ((converted >> 8) & 255);
+				g = (byte) ((converted >> 16) & 255);
+				r = (byte) ((converted >> 24) & 255);
+				prefsColor = new Gdk.Color (r,g,b);
+			} catch (Exception e) {
+				prefsColor = new Gdk.Color (0,0,0);
+				alpha = ushort.MaxValue;
+				if (colorString.ToLower () != "default") {
+					Log<ColorConfigurationWidget>.Error ("Error setting color: {0}", e.Message);
+					Log<ColorConfigurationWidget>.Debug (e.StackTrace);
+				}
+			}
+			
+			return prefsColor;
+		}
+			                                                  
 		
 		public Gtk.Bin GetConfiguration ()
 		{
@@ -105,7 +135,7 @@ namespace Do.UI
 		{
 			BezelDrawingArea.ResetBackgroundStyle ();
 			background_colorbutton.Color = new Gdk.Color (0, 0, 0);
-			background_colorbutton.Alpha = ushort.MinValue;
+			background_colorbutton.Alpha = ushort.MaxValue;
 		}
 
 		protected virtual void OnShadowCheckClicked (object sender, System.EventArgs e)

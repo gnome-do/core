@@ -44,7 +44,7 @@ namespace Docky.Interface.Painters
 		{
 		}
 		
-		public void Interupt ()
+		public void Interrupt ()
 		{
 		}
 		
@@ -52,8 +52,12 @@ namespace Docky.Interface.Painters
 			get { return false; }
 		}
 		
-		public bool Interuptable {
+		public bool Interruptable {
 			get { return true; }
+		}
+		
+		public int MinimumWidth {
+			get { return 0; }
 		}
 		
 		#endregion 

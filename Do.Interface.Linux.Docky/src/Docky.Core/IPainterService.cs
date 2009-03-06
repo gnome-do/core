@@ -25,6 +25,10 @@ namespace Docky.Core
 	
 	public interface IPainterService : IDockService
 	{
+		event EventHandler PainterHideRequest;
+		
+		event EventHandler PainterShowRequest;
+		
 		void RegisterPainter (IDockPainter painter);
 	}
 }

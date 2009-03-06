@@ -30,10 +30,26 @@ namespace Docky.Interface.Menus
 		Act action;
 		Item item;
 		
-		public LaunchMenuButtonArgs (Act action, Item item, string description, string icon) : base (description, icon, true)
+		public LaunchMenuButtonArgs (Act action, Item item, string description, string icon) : base (description, icon)
 		{
 			this.action = action;
 			this.item = item;
+			
+			// These actions will get special "themed" icons for the sake of beauty.
+			switch (action.GetType ().Name) {
+			case "WindowCloseAction":
+				Icon = "close.svg@" + GetType ().Assembly.FullName;
+				break;
+			case "WindowMinimizeAction":
+				Icon = "minimize.svg@" + GetType ().Assembly.FullName;
+				break;
+			case "WindowMaximizeAction":
+				Icon = "maximize.svg@" + GetType ().Assembly.FullName;
+				break;
+			case "RunAction":
+				Icon = "run.svg@" + GetType ().Assembly.FullName;
+				break;
+			}
 		}
 		
 		public override void Action ()

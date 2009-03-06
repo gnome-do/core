@@ -35,6 +35,7 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Items/SeparatorItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/WnckDockItem.cs \
+	src/Docky.Interface/Docky.Interface.Menus/AbstractMenuArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/AbstractMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/DockItemMenu.cs \
 	src/Docky.Interface/Docky.Interface.Menus/DockPopupMenu.cs \
@@ -43,6 +44,7 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Menus/SimpleMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/SeparatorMenuButtonArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs \
+	src/Docky.Interface/Docky.Interface.Menus/WidgetMenuArgs.cs \
 	src/Docky.Interface/Docky.Interface.Menus/WindowMenuButtonArgs.cs \
 	src/Docky.Interface/DockState.cs \
 	src/Docky.Interface/DockWindow.cs \
@@ -57,7 +59,6 @@ FILES = \
 	src/Docky.Interface/IRightClickable.cs \
 	src/Docky.Interface/ItemPositionProvider.cs \
 	src/Docky.Interface/LayoutUtils.cs \
-	src/Docky.Interface/PainterService.cs \
 	src/Docky.Interface/PaintNeededArgs.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
@@ -70,7 +71,11 @@ FILES = \
 	src/XLib/Xlib.cs
 
 RESOURCES = \
-	Resources/Do.Interface.Linux.Docky.addin.xml
+	Resources/Do.Interface.Linux.Docky.addin.xml \
+	Resources/close.svg \
+	Resources/run.svg \
+	Resources/minimize.svg \
+	Resources/maximize.svg
 
 REFERENCES =  \
 	System \

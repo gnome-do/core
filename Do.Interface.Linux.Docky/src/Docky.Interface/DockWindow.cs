@@ -51,6 +51,7 @@ namespace Docky.Interface
 		uint strut_timer;
 		bool is_repositioned_hidden;
 		bool presented;
+		int buffer_x, buffer_y;
 		
 		public new string Name {
 			get { return "Docky"; }
@@ -76,6 +77,8 @@ namespace Docky.Interface
 
 			interop_service = new DoInteropService (controller);
 			Core.DockServices.RegisterService (interop_service);
+			
+			Core.DockServices.PainterService.RegisterPainter (new Painters.SummonModeRenderer ());
 
 			RegisterEvents ();
 			Build ();
@@ -100,12 +103,13 @@ namespace Docky.Interface
 			results_window = new BezelGlassWindow (results);
 
 			ShowAll ();
+			Stick ();
 		}
 
 		void RegisterEvents ()
 		{
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
-			
+	
 			StyleSet += HandleStyleSet;
 			
 			DockPreferences.AllowOverlapChanged += DelaySetStruts;
@@ -129,6 +133,9 @@ namespace Docky.Interface
 		{
 			Remove (dock_area);
 			dock_area.Dispose ();
+			
+			// bring us back down to "minimum" size
+			Resize (1, 1);
 			
 			dock_area = new DockArea (this);
 			Add (dock_area);
@@ -195,6 +202,14 @@ namespace Docky.Interface
 			return base.OnButtonReleaseEvent (evnt);
 		}
 		
+		protected override bool OnConfigureEvent (Gdk.EventConfigure evnt)
+		{
+			buffer_x = evnt.X;
+			buffer_y = evnt.Y;
+			return base.OnConfigureEvent (evnt);
+		}
+
+		
 		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
 		{
 			if (Visible)
@@ -230,12 +245,6 @@ namespace Docky.Interface
 				Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height - main.Height);
 				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + geo.Height - dock_area.DockHeight - res.Height);
 				break;
-			case DockOrientation.Left:
-				Move (geo.X, geo.Y);
-				break;
-			case DockOrientation.Right:
-				Move (geo.X + geo.Width - main.Width, geo.Y);
-				break;
 			case DockOrientation.Top:
 				Move (geo.X, geo.Y);
 				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + dock_area.DockHeight);
@@ -256,12 +265,6 @@ namespace Docky.Interface
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
 				Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height);
-				break;
-			case DockOrientation.Left:
-				Move (geo.X - main.Width, geo.Y);
-				break;
-			case DockOrientation.Right:
-				Move (geo.X + geo.Width, geo.Y);
 				break;
 			case DockOrientation.Top:
 				Move (geo.X, geo.Y - main.Height);
@@ -287,16 +290,19 @@ namespace Docky.Interface
 			case DockOrientation.Bottom:
 				y = main.Height;
 				break;
-			case DockOrientation.Left:
-				x = 0 - main.Width;
-				break;
-			case DockOrientation.Right:
-				x = main.Width;
-				break;
 			case DockOrientation.Top:
 				y = 0 - main.Height;
 				break;
 			}
+		}
+		
+				
+		public void GetBufferedPosition (out int x, out int y)
+		{
+			if (buffer_x == 0 && buffer_y == 0)
+				GetPosition (out buffer_x, out buffer_y);
+			x = buffer_x;
+			y = buffer_y;
 		}
 		
 		public void DelaySetStruts ()
@@ -312,13 +318,17 @@ namespace Docky.Interface
 			X11Atoms atoms = new X11Atoms (GdkWindow);
 
 			uint [] struts = dock_area.StrutRequest;
+			uint [] first_struts = new [] { struts [0], struts [1], struts [2], struts [3] };
 
 			strut_timer = 0;
 			
 			if (!IsRealized)
 				return false;
+			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT_PARTIAL, atoms.XA_CARDINAL,
+			                      (int) XLib.PropertyMode.PropModeReplace, struts);
 			
-			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT_PARTIAL, atoms.XA_CARDINAL, (int) XLib.PropertyMode.PropModeReplace, struts);
+			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT, atoms.XA_CARDINAL, 
+			                      (int) XLib.PropertyMode.PropModeReplace, first_struts);
 				
 			return false;
 		}

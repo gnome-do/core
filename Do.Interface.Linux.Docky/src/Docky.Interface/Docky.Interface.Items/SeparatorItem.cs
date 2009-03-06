@@ -69,25 +69,33 @@ namespace Docky.Interface
 		{
 			actualSize = DockPreferences.IconSize;
 			if (sr == null) {
-				if (DockPreferences.DockIsHorizontal)
-					sr = buffer.CreateSimilar (buffer.Content, Width, Height);
-				else
-					sr = buffer.CreateSimilar (buffer.Content, Height, Width);
+				sr = buffer.CreateSimilar (buffer.Content, Width, Height);
 				Context cr = new Context (sr);
 				cr.AlphaFill ();
 
-				if (DockPreferences.DockIsHorizontal) {
-					for (int i = 0; i * 6 + 2 <= Height; i++) {
-						cr.Rectangle (Width / 2 - 1, 2 + i * 6, 4, 2);
-					}
-				} else {
-					for (int i = 1; i * 6 + 2 < Height; i++) {
-						cr.Rectangle (i * 6, Width / 2 - 1, 2, 4);
-					}
-				}
+				cr.LineWidth = 1;
 				
-				cr.Color = new Cairo.Color (1, 1, 1, .3);
-				cr.Fill ();
+				cr.MoveTo (Width / 2 - .5, 0);
+				cr.LineTo (Width / 2 - .5, Height);
+				RadialGradient rg = new RadialGradient (Width / 2, Height / 2, 0, Width / 2, Height / 2, Height / 2);
+				rg.AddColorStop (0, new Cairo.Color (1, 1, 1, .3));
+				rg.AddColorStop (0.3, new Cairo.Color (1, 1, 1, .3));
+				rg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
+				cr.Pattern = rg;
+				cr.Stroke ();
+				
+				rg.Destroy ();
+				
+				cr.MoveTo (Width / 2 + .5, 0);
+				cr.LineTo (Width / 2 + .5, Height);
+				rg = new RadialGradient (Width / 2, Height / 2, 0, Width / 2, Height / 2, Height / 2);
+				rg.AddColorStop (0, new Cairo.Color (1, 1, 1, .15));
+				rg.AddColorStop (0.3, new Cairo.Color (1, 1, 1, .15));
+				rg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
+				cr.Pattern = rg;
+				cr.Stroke ();
+				
+				rg.Destroy ();
 				
 				(cr as IDisposable).Dispose ();
 			}

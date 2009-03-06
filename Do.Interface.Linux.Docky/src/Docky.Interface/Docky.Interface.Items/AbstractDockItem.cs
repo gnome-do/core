@@ -49,6 +49,8 @@ namespace Docky.Interface
 		
 		public string Description { get; private set; }
 		
+		public bool Disposed { get; private set; }
+		
 		/// <value>
 		/// The currently requested animation type
 		/// </value>
@@ -68,6 +70,8 @@ namespace Docky.Interface
 		/// The last time this icon was "clicked" that required an animation
 		/// </value>
 		public virtual DateTime LastClick { get; protected set; }
+		
+		public int Position { get; set; }
 
 		/// <value>
 		/// Determines if drop actions will be passed on to the icon
@@ -118,11 +122,11 @@ namespace Docky.Interface
 		}
 		
 		public TimeSpan TimeSinceClick {
-			get { return DateTime.UtcNow - LastClick; }
+			get { return DockArea.RenderTime - LastClick; }
 		}
 		
 		public TimeSpan TimeSinceAdd {
-			get { return DateTime.UtcNow - DockAddItem; }
+			get { return DockArea.RenderTime - DockAddItem; }
 		}
 		
 		public AbstractDockItem ()
@@ -360,6 +364,7 @@ namespace Docky.Interface
 		
 		public virtual void Dispose ()
 		{
+			Disposed = true;
 			DockPreferences.IconSizeChanged -= OnIconSizeChanged;
 			ResetSurfaces ();
 		}

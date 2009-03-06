@@ -32,12 +32,14 @@ namespace Docky.Interface
 		
 		bool DoubleBuffer { get; }
 
-		bool Interuptable { get; }
+		bool Interruptable { get; }
+		
+		int MinimumWidth { get; }
 		
 		void Paint (Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor);
 
 		void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor);
 
-		void Interupt ();
+		void Interrupt ();
 	}
 }

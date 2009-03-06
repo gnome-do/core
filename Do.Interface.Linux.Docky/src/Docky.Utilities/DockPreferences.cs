@@ -48,7 +48,7 @@ namespace Docky.Utilities
 			get { return 350; }
 		}
 		
-		static int zoom_size = prefs.Get ("ZoomSize", 300);
+		static int zoom_size = prefs.Get ("ZoomSize", 330);
 		public static int ZoomSize {
 			get { return (int) (zoom_size * (IconSize / (double) DefaultIconSize)); }
 			set { 
@@ -66,7 +66,7 @@ namespace Docky.Utilities
 			}
 		}
 		
-		static double zoom_percent = prefs.Get ("ZoomPercent", 2.0);
+		static double zoom_percent = Math.Round (prefs.Get ("ZoomPercent", 2.0), 1);
 		public static double ZoomPercent {
 			get { return ZoomEnabled ? zoom_percent : 1; }
 			set {
@@ -206,6 +206,7 @@ namespace Docky.Utilities
 				monitor = value;
 				prefs.Set ("Monitor", value);
 
+				Interface.LayoutUtils.Recalculate ();
 				if (MonitorChanged != null)
 					MonitorChanged ();
 			}
@@ -225,10 +226,6 @@ namespace Docky.Utilities
 			}
 		}
 
-		public static bool DockIsHorizontal {
-			get { return Orientation == DockOrientation.Top || Orientation == DockOrientation.Bottom; }
-		}
-		
 		#region blacklists
 		static List<string> item_blacklist = DeserializeBlacklist ();
 		public static IEnumerable<string> ItemBlacklist {

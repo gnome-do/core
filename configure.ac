@@ -11,16 +11,18 @@ dnl -- Intl
 IT_PROG_INTLTOOL([0.35.0])
 SHAMROCK_CONFIGURE_I18N(gnome-do)
 
+dnl -- Populate top_srcdir variable
+top_srcdir=$(readlink -f $0 | sed -e s/configure$//)
+
 dnl Plugin ABI version; bump whenever plugin interface changes
 ABI_VERSION=0.9
 AC_SUBST(ABI_VERSION)
 
-RELEASE="false"
-if [ $RELEASE = "true" ] ; then
-   VERSION_INFO="Release"
-else
+if test -d $top_srcdir/.bzr ; then
    VERSION_INFO=`bzr version-info --custom \
    --template="bzr {branch_nick} r{revno}"`
+else
+   VERSION_INFO="Release"
 fi
 AC_SUBST(VERSION_INFO)
 
@@ -34,8 +36,7 @@ AC_PROG_INSTALL
 AC_PROG_CC
 AC_HEADER_STDC
 
-SHAMROCK_FIND_MONO_2_0_COMPILER
-SHAMROCK_CHECK_LINQ_FLAG
+SHAMROCK_FIND_C_SHARP_3_0_COMPILER
 
 
 dnl Find gconftool-2
@@ -120,6 +121,7 @@ if test -z "$CONFIG_REQUESTED" ; then
 fi
 
 AC_CONFIG_FILES([
+BundledLibraries/Makefile
 Do/Do.exe.config
 Do/Makefile
 Do/gnome-do

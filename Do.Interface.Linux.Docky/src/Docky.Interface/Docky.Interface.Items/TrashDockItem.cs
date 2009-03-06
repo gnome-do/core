@@ -29,6 +29,7 @@ using Do.Interface.CairoUtils;
 using Do.Platform;
 
 using Docky.Utilities;
+using Docky.Interface.Menus;
 
 namespace Docky.Interface
 {
@@ -38,7 +39,7 @@ namespace Docky.Interface
 	{
 		const string TrashEmptyIcon = "gnome-stock-trash";
 		const string TrashFullIcon = "gnome-stock-trash-full";
-
+		
 		FileSystemWatcher fsw;
 		
 		string Trash {
@@ -66,9 +67,8 @@ namespace Docky.Interface
 			SetText (Catalog.GetString ("Trash"));
 			
 			fsw = new FileSystemWatcher (Trash);
-			fsw.IncludeSubdirectories = true;
-			fsw.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
-				| NotifyFilters.FileName | NotifyFilters.DirectoryName;
+			fsw.IncludeSubdirectories = false;
+			fsw.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
 			fsw.Changed += HandleChanged;
 			fsw.Created += HandleChanged;
@@ -85,7 +85,7 @@ namespace Docky.Interface
 		
 		protected override Pixbuf GetSurfacePixbuf (int size)
 		{
-			if (Directory.Exists (Trash) && Directory.GetFiles (Trash).Any ())
+			if (Directory.Exists (Trash) && (Directory.GetFiles (Trash).Any () || Directory.GetDirectories (Trash).Any ()))
 				return IconProvider.PixbufFromIconName (TrashFullIcon, size);
 			return IconProvider.PixbufFromIconName (TrashEmptyIcon, size);
 		}
@@ -144,11 +144,15 @@ namespace Docky.Interface
 		
 		public event EventHandler RemoveClicked;
 		
-		public IEnumerable<Menus.AbstractMenuButtonArgs> GetMenuItems ()
+		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
-			yield return new Docky.Interface.Menus.SimpleMenuButtonArgs (() => Services.Environment.OpenUrl ("trash://"),
-			                                                             Catalog.GetString ("Open Trash"), TrashFullIcon);
-			yield return new Docky.Interface.Menus.SimpleMenuButtonArgs (EmptyTrash, Catalog.GetString ("Empty Tash"), Gtk.Stock.Delete);
+			yield return new SeparatorMenuButtonArgs ();
+			
+			yield return new SimpleMenuButtonArgs (
+					() => Services.Environment.OpenUrl ("trash://"),
+					Catalog.GetString ("Open Trash"), TrashFullIcon);
+			yield return new SimpleMenuButtonArgs (EmptyTrash,
+					Catalog.GetString ("Empty Trash"), Gtk.Stock.Delete);
 		}
 		
 		#endregion 

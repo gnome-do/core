@@ -8,6 +8,20 @@ AC_DEFUN([SHAMROCK_FIND_MONO_2_0_COMPILER],
 	SHAMROCK_FIND_PROGRAM_OR_BAIL(MCS, gmcs)
 ])
 
+AC_DEFUN([SHAMROCK_FIND_C_SHARP_3_0_COMPILER],
+[	
+	AC_REQUIRE([SHAMROCK_FIND_MONO_RUNTIME])
+	SHAMROCK_FIND_PROGRAM_OR_BAIL(MCS, gmcs)
+	changequote(<<, >>)
+	MCS_VERSION=$($MCS --version | egrep -o "([[:digit:]]\.)+[[:digit:]]+")
+	changequote([, ])
+	AS_VERSION_COMPARE([$MCS_VERSION], [2.0], [MCS_TOO_OLD="true"])
+	if test "$MCS_TOO_OLD" = "true" ; then
+	   AC_MSG_WARN(["System gmcs too old (found $MCS_VERSION, need >= 2.0).  Using internal copy"])
+	   MCS="$MONO $top_srcdir/BundledLibraries/gmcs.exe"
+	fi
+])
+
 AC_DEFUN([SHAMROCK_FIND_MONO_RUNTIME],
 [
 	SHAMROCK_FIND_PROGRAM_OR_BAIL(MONO, mono)
@@ -37,6 +51,7 @@ AC_DEFUN([SHAMROCK_CHECK_LINQ_FLAG],
 	fi
 	AC_SUBST(MCS_LINQ_FLAG)		
 ])
+
 
 AC_DEFUN([_SHAMROCK_CHECK_MONO_GAC_ASSEMBLIES],
 [
