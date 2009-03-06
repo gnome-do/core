@@ -293,7 +293,6 @@
                 <property name="MemberName" />
                 <property name="IsTextCombo">True</property>
                 <property name="Items" translatable="yes" />
-                <property name="Active">0</property>
                 <signal name="Changed" handler="OnShowComboChanged" />
               </widget>
               <packing>
@@ -720,7 +719,6 @@
                               <widget class="Gtk.Table" id="table1">
                                 <property name="MemberName" />
                                 <property name="NRows">2</property>
-                                <property name="NColumns">3</property>
                                 <property name="RowSpacing">6</property>
                                 <property name="ColumnSpacing">16</property>
                                 <child>
@@ -807,7 +805,6 @@
                                     <property name="MemberName" />
                                     <property name="IsTextCombo">True</property>
                                     <property name="Items" translatable="yes" />
-                                    <property name="Active">0</property>
                                     <signal name="Changed" handler="OnThemeComboChanged" />
                                   </widget>
                                   <packing>
