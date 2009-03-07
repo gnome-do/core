@@ -37,6 +37,8 @@ namespace Docky.Interface
 		
 		public int MaximumWidth { get; set; }
 		
+		public int FontSize { get; set; }
+		
 		public string Text { get; set; }
 		
 		public Pango.WrapMode WrapMode { get; set; }

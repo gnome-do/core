@@ -29,7 +29,9 @@ namespace Docky.Core.Default
 		
 		public Pango.Layout GetThemedLayout ()
 		{
-			return new Pango.Layout (DockWindow.Window.CreatePangoContext ());
+			Pango.Layout layout = new Pango.Layout (DockWindow.Window.CreatePangoContext ());
+			layout.FontDescription = DockWindow.Window.Style.FontDescription;
+			return layout;
 		}
 		
 		public Gdk.Rectangle TextPathAtPoint (TextRenderContext context)
@@ -43,6 +45,9 @@ namespace Docky.Core.Default
 			layout.Ellipsize = context.EllipsizeMode;
 			layout.Alignment = context.Alignment;
 			layout.Wrap = context.WrapMode;
+			
+			if (context.FontSize != 0)
+				layout.FontDescription.Size = Pango.Units.FromPixels (context.FontSize);
 			
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);
