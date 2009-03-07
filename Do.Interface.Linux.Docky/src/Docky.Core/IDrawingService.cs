@@ -24,8 +24,6 @@ namespace Docky.Core
 {
 	public interface IDrawingService : IDockService
 	{
-		Pango.Layout GetThemedLayout ();
-		
 		Gdk.Rectangle TextPathAtPoint (TextRenderContext context);
 	}
 }

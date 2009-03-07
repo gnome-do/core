@@ -27,7 +27,7 @@ namespace Docky.Core.Default
 	{
 		#region IDrawingService implementation 
 		
-		public Pango.Layout GetThemedLayout ()
+		Pango.Layout GetThemedLayout ()
 		{
 			Pango.Layout layout = new Pango.Layout (DockWindow.Window.CreatePangoContext ());
 			layout.FontDescription = DockWindow.Window.Style.FontDescription;
