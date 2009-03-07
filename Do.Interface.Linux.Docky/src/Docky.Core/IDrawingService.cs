@@ -18,12 +18,14 @@
 
 using System;
 
+using Docky.Interface;
+
 namespace Docky.Core
 {
 	public interface IDrawingService : IDockService
 	{
 		Pango.Layout GetThemedLayout ();
 		
-		void TextPathAtPoint (Cairo.Context cr, string text, Gdk.Point leftCenterPoint, int maxWidth, Pango.Alignment align);
+		Gdk.Rectangle TextPathAtPoint (TextRenderContext context);
 	}
 }

@@ -36,6 +36,7 @@ namespace Docky.Interface.Painters
 	{
 		const int LineHeight = 16;
 		const double lowlight = .35;
+		const string BoldFormatString = "<b>{0}</b>";
 		
 		ClockDockItem Clock { get; set; }
 		
@@ -80,17 +81,15 @@ namespace Docky.Interface.Painters
 			int centerLine = paintArea.Y + LineHeight / 2 + ((paintArea.Height % LineHeight) / 2);
 			int offsetSize = paintArea.Width / 9;
 			
-			string text;
 			DateTime day = CalendarStartDate;
+			TextRenderContext textContext = new TextRenderContext (cr, string.Empty, offsetSize);
+			textContext.Alignment = Pango.Alignment.Center;
 			
 			cr.Color = new Cairo.Color (1, 1, 1, .5);
 			for (int i = 1; i < 8; i++) {
-				text =string.Format ("<b>{0}</b>", day.ToString ("ddd").ToUpper ());
-				DockServices.DrawingService.TextPathAtPoint (cr,
-				                                             text,
-				                                             new Gdk.Point (paintArea.X + offsetSize * i, centerLine),
-				                                             offsetSize,
-				                                             Pango.Alignment.Center);
+				textContext.Text = string.Format (BoldFormatString, day.ToString ("ddd").ToUpper ());
+				textContext.LeftCenteredPoint = new Gdk.Point (paintArea.X + offsetSize * i, centerLine);
+				DockServices.DrawingService.TextPathAtPoint (textContext);
 				cr.Fill ();
 				day = day.AddDays (1);
 			}
@@ -102,40 +101,36 @@ namespace Docky.Interface.Painters
 			int offsetSize = paintArea.Width / 9;
 			int centerLine = paintArea.Y + LineHeight / 2 + LineHeight * line + ((paintArea.Height % LineHeight) / 2);
 			
-			Pango.Alignment align;
-			string text;
 			int dayOffset = 0;
+			TextRenderContext textContext = new TextRenderContext (cr, string.Empty, offsetSize);
 			for (int i = 0; i < 9; i++) {
 				if (i == 8) {
 					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
-					text = string.Format ("<b>{0}</b>", lineStart.AddDays (6).ToString ("MMM").ToUpper ());
-					align = Pango.Alignment.Left;
+					textContext.Text = string.Format (BoldFormatString, lineStart.AddDays (6).ToString ("MMM").ToUpper ());
+					textContext.Alignment = Pango.Alignment.Left;
 				} else if (i == 0) {
 					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
 					int woy = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear (lineStart, 
 					                                                             DateTimeFormatInfo.CurrentInfo.CalendarWeekRule, 
 					                                                             DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek);
-					text = string.Format ("<b>W{0:00}</b>", woy);
-					align = Pango.Alignment.Right;
+					textContext.Text = string.Format ("<b>W{0:00}</b>", woy);
+					textContext.Alignment = Pango.Alignment.Right;
 				} else {
 					DateTime day = lineStart.AddDays (dayOffset);
-					align = Pango.Alignment.Center;
+					textContext.Alignment = Pango.Alignment.Center;
 					
 					if (day.Month == CalendarStartDate.Month)
 						cr.Color = new Cairo.Color (1, 1, 1);
 					else
 						cr.Color = new Cairo.Color (1, 1, 1, .8);
 					
-					text = string.Format ("{0:00}", day.Day);
+					textContext.Text = string.Format ("{0:00}", day.Day);
 					if (day.Date == DateTime.Today)
-						text = string.Format ("<b>{0}</b>", text);
+						textContext.Text = string.Format (BoldFormatString, textContext.Text);
 					dayOffset++;
 				}
-				DockServices.DrawingService.TextPathAtPoint (cr,
-				                                             text,
-				                                             new Gdk.Point (paintArea.X + offsetSize * i, centerLine),
-				                                             offsetSize,
-				                                             align);
+				textContext.LeftCenteredPoint = new Gdk.Point (paintArea.X + offsetSize * i, centerLine);
+				DockServices.DrawingService.TextPathAtPoint (textContext);
 				cr.Fill ();
 				
 			}

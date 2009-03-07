@@ -32,13 +32,17 @@ namespace Docky.Core.Default
 			return new Pango.Layout (DockWindow.Window.CreatePangoContext ());
 		}
 		
-		public void TextPathAtPoint (Cairo.Context cr, string text, Gdk.Point point, int maxWidth, Pango.Alignment align)
+		public Gdk.Rectangle TextPathAtPoint (TextRenderContext context)
 		{
+			Cairo.Context cr = context.Context;
+			Gdk.Point point = context.LeftCenteredPoint;
+			
 			Pango.Layout layout = GetThemedLayout ();
-			layout.Width = Pango.Units.FromPixels (maxWidth);
-			layout.SetMarkup (text);
-			layout.Ellipsize = Pango.EllipsizeMode.End;
-			layout.Alignment = align;
+			layout.Width = Pango.Units.FromPixels (context.MaximumWidth);
+			layout.SetMarkup (context.Text);
+			layout.Ellipsize = context.EllipsizeMode;
+			layout.Alignment = context.Alignment;
+			layout.Wrap = context.WrapMode;
 			
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);
@@ -47,6 +51,12 @@ namespace Docky.Core.Default
 			cr.Translate (point.X, transY);
 			Pango.CairoHelper.LayoutPath (cr, layout);
 			cr.Translate (0 - point.X, 0 - transY);
+			
+			Gdk.Rectangle textArea = new Gdk.Rectangle (Pango.Units.ToPixels (rect2.X),
+			                                            Pango.Units.ToPixels (rect2.Y),
+			                                            Pango.Units.ToPixels (rect2.Width),
+			                                            Pango.Units.ToPixels (rect2.Height));
+			return textArea;
 		}
 		
 		#endregion 

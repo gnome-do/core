@@ -44,6 +44,7 @@ namespace Docky.Interface.Menus
 		public WindowMenuButtonArgs (Wnck.Window window, string description, string icon) : base (description, icon)
 		{
 			this.window = window;
+			UseTooltip = true;
 		}
 		
 		public override void Action ()
