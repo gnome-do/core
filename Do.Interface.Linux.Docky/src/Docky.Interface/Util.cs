@@ -90,15 +90,12 @@ namespace Docky.Interface
 			
 			TextRenderContext textContext = new TextRenderContext (cr, string.Format (FormatString, text), maxWidth - 18);
 			textContext.Alignment = Pango.Alignment.Center;
+			
 			Gdk.Rectangle textArea = Core.DockServices.DrawingService.TextPathAtPoint (textContext);
 			cr.NewPath ();
 			
 			int localHeight = textArea.Height;
-			cr.SetRoundedRectanglePath (textArea.X + .5, 
-			                            .5, 
-			                            textArea.Width + 20 - 1, 
-			                            localHeight + 10 - 1, 
-			                            5);
+			cr.SetRoundedRectanglePath (textArea.X + .5,  .5, textArea.Width + 20 - 1,  localHeight + 10 - 1, 5);
 			
 			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
 			cr.FillPreserve ();
