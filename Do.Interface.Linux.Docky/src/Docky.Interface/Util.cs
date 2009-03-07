@@ -93,23 +93,7 @@ namespace Docky.Interface
 			Gdk.Rectangle textArea = Core.DockServices.DrawingService.TextPathAtPoint (textContext);
 			cr.NewPath ();
 			
-//			Pango.Layout layout = Core.DockServices.DrawingService.GetThemedLayout ();
-//			layout.Width = Pango.Units.FromPixels (maxWidth - 18);
-//			layout.SetMarkup ("<span weight=\"600\">" + text + "</span>");
-//			layout.Alignment = Pango.Alignment.Center;
-//			layout.Ellipsize = Pango.EllipsizeMode.End;
-			
-//			Pango.Rectangle rect1, rect2;
-//			layout.GetExtents (out rect1, out rect2);
-			
-//			int localHeight = Pango.Units.ToPixels (rect2.Height);
 			int localHeight = textArea.Height;
-			
-//			cr.SetRoundedRectanglePath (Pango.Units.ToPixels (rect2.X) + .5, 
-//			                            .5, 
-//			                            Pango.Units.ToPixels (rect2.Width) + 20 - 1, 
-//			                            localHeight + 10 - 1, 
-//			                            5);
 			cr.SetRoundedRectanglePath (textArea.X + .5, 
 			                            .5, 
 			                            textArea.Width + 20 - 1, 
@@ -123,27 +107,20 @@ namespace Docky.Interface
 			cr.LineWidth = 1;
 			cr.Stroke ();
 
-//			Pango.Layout shadow = layout.Copy();
-//			shadow.Indent = 1;
-
-//			cr.Translate (10, 5);
 			cr.Translate(1,1);
-			Gdk.Point textPoint = new Gdk.Point (10, (localHeight + 10) / 2);
-			textContext.LeftCenteredPoint = textPoint;
+			
+			textContext.LeftCenteredPoint = new Gdk.Point (10, (localHeight + 10) / 2);
 			Core.DockServices.DrawingService.TextPathAtPoint (textContext);
-//			Pango.CairoHelper.LayoutPath (cr, shadow);
 			cr.Color = new Cairo.Color (0, 0, 0, 0.6);
 			cr.Fill ();
+			
 			cr.Translate(-1,-1);
 
 			Core.DockServices.DrawingService.TextPathAtPoint (textContext);
-//			Pango.CairoHelper.LayoutPath (cr, layout);
 			cr.Color = new Cairo.Color (1, 1, 1);
 			cr.Fill ();
 
 			(cr as IDisposable).Dispose ();
-//			shadow.Dispose ();
-//			layout.Dispose ();
 			return sr;
 		}
 	}
