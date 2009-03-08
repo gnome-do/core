@@ -53,10 +53,15 @@ namespace Docky.Interface
 		};
 		
 		string MinimizeRestoreText = Catalog.GetString ("Minimize") + "/" + Catalog.GetString ("Restore");
+		string MaximizeText = Catalog.GetString ("Maximize");
 		string CloseText = Catalog.GetString ("Close All");
 		
 		const int MenuItemMaxCharacters = 50;
 		const string WindowIcon = "forward";
+		
+		string MaximizeIcon {
+			get { return "maximize.svg@" + GetType ().Assembly.FullName; }
+		}
 		
 		string MinimizeIcon {
 			get { return "minimize.svg@" + GetType ().Assembly.FullName; }
@@ -74,10 +79,12 @@ namespace Docky.Interface
 		IEnumerable<Wnck.Application> applications;
 		
 		string desktop_file;
+		bool checked_desktop_file;
 		
 		public string DesktopFile {
 			get {
-				if (desktop_file == null) {
+				if (desktop_file == null && !checked_desktop_file) {
+					checked_desktop_file = true;
 					foreach (string s in GetIconGuesses ()) {
 						desktop_file = GetDesktopFile (s);
 						if (desktop_file != null)
@@ -314,11 +321,21 @@ namespace Docky.Interface
 		{
 			yield return new SeparatorMenuButtonArgs ();
 			
-			yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (VisibleWindows), 
-			                                       MinimizeRestoreText, MinimizeIcon).AsDark ();
-			
-			yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
-			                                       CloseText, CloseIcon).AsDark ();
+			if (DesktopFile == null) {
+				yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (VisibleWindows), 
+				                                       MinimizeRestoreText, MinimizeIcon).AsDark ();
+				
+				yield return new SimpleMenuButtonArgs (() => WindowControl.MaximizeWindow (VisibleWindows.First ()), 
+				                                       MaximizeText, MaximizeIcon).AsDark ();
+				
+				yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
+				                                       CloseText, CloseIcon).AsDark ();
+			} else {
+				Item item = Services.UniverseFactory.NewApplicationItem (DesktopFile) as Item;
+				
+				foreach (Act act in ActionsForItem (item))
+					yield return new LaunchMenuButtonArgs (act, item, act.Name, act.Icon).AsDark ();
+			}
 			
 			foreach (Wnck.Window window in VisibleWindows) {
 				yield return new SeparatorMenuButtonArgs ();

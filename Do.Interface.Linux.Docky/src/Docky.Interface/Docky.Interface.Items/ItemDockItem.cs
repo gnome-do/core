@@ -79,22 +79,6 @@ namespace Docky.Interface
 			get { return window_count; }
 		}
 		
-		IEnumerable<Act> ActionsForItem {
-			get {
-				IEnumerable<Act> actions = Services.Core.GetActionsForItemOrderedByRelevance (element, false);
-				// we want to keep the window operations stable, so we are going to special case them out now.
-				// This has a degree of an abstraction break to it however, but it is important to get right
-				// until a better solution is found.
-				foreach (Act act in actions
-				         .Where (act => act.GetType ().Name != "CopyToClipboardAction")
-				         .OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
-				         .ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
-				         .ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
-				         .ThenBy (act => act.Name.Length))
-					yield return act;
-			}
-		}
-		
 		public ItemDockItem (Item element) : base ()
 		{
 			Position = -1;
@@ -225,7 +209,7 @@ namespace Docky.Interface
 			
 			List<AbstractDockItem> dockitems = new List<AbstractDockItem> ();
 					
-			foreach (Act act in ActionsForItem) {
+			foreach (Act act in ActionsForItem (element)) {
 				dockitems.Add (new ActionDockItem (act, element));
 			}
 			
@@ -286,10 +270,10 @@ namespace Docky.Interface
 			yield return new SeparatorMenuButtonArgs ();
 			
 			if (hasApps) {
-				foreach (Act act in ActionsForItem)
+				foreach (Act act in ActionsForItem (element))
 					yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon).AsDark ();
 			} else {
-				foreach (Act act in ActionsForItem)
+				foreach (Act act in ActionsForItem (element))
 					yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
 			}
 			
