@@ -43,7 +43,7 @@ namespace Docky.Interface
 		const string DoIcon = "gnome-do";
 		public const string EnableIcon = "gtk-apply";
 		public const string DisableIcon = "gtk-remove";
-		const string Text = "Summon GNOME Do";
+		const string Text = "GNOME Do";
 
 		HotSeatPainter hot_seat_painter;
 		
