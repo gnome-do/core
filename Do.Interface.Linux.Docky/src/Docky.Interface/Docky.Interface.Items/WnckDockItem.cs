@@ -65,6 +65,16 @@ namespace Docky.Interface
 			last_raised = 0;
 		}
 		
+		protected IEnumerable<Act> ActionsForItem (Item item) 
+		{
+			return Services.Core.GetActionsForItemOrderedByRelevance (item, false)
+				    .Where (act => act.GetType ().Name != "CopyToClipboardAction")
+					.OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
+					.ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
+					.ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
+					.ThenBy (act => act.Name.Length);
+		}
+		
 		protected virtual void Launch ()
 		{
 			return;
