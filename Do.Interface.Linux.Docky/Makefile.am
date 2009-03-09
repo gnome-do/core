@@ -60,6 +60,7 @@ FILES = \
 	src/Docky.Interface/ItemPositionProvider.cs \
 	src/Docky.Interface/LayoutUtils.cs \
 	src/Docky.Interface/PaintNeededArgs.cs \
+	src/Docky.Interface/TextRenderContext.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
 	src/Docky.Utilities/DockOrientation.cs \

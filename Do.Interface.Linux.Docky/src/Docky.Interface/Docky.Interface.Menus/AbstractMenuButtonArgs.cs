@@ -59,6 +59,8 @@ namespace Docky.Interface.Menus
 		
 		protected virtual string Icon { get; set; }
 		
+		protected virtual bool UseTooltip { get; set; }
+		
 		public AbstractMenuButtonArgs ()
 		{
 			
@@ -83,6 +85,8 @@ namespace Docky.Interface.Menus
 			button.HeightRequest = Height;
 
 			button.SetCompositeColormap ();
+			if (UseTooltip)
+				button.TooltipText = Description;
 			
 			return button;
 		}
@@ -129,16 +133,16 @@ namespace Docky.Interface.Menus
 				cr.Paint ();
 				lg.Destroy ();
 				
-				Gdk.Point textPoint;
-				int width;
-				textPoint = new Gdk.Point (area.X + WidthBuffer + 25, area.Y + area.Height / 2);
-				width = area.Width - WidthBuffer * 2 - 25;
+				int width = area.Width - WidthBuffer * 2 - 25;
 				
-				DockServices.DrawingService.TextPathAtPoint (cr, 
-				                                             string.Format (FormatString, Description), 
-				                                             textPoint,
-				                                             width,
-				                                             Pango.Alignment.Left);
+				TextRenderContext renderContext = new TextRenderContext (cr, string.Format (FormatString, Description), width);
+				
+				renderContext.LeftCenteredPoint = new Gdk.Point (area.X + WidthBuffer + 25, area.Y + area.Height / 2);
+				renderContext.Alignment = Pango.Alignment.Left;
+				renderContext.EllipsizeMode = Pango.EllipsizeMode.End;
+				
+				DockServices.DrawingService.TextPathAtPoint (renderContext);
+				
 				cr.Color = new Cairo.Color (1, 1, 1);
 				cr.Fill ();
 				

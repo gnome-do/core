@@ -46,6 +46,7 @@ namespace Docky.Interface.Menus
 		const double Pointiness = 1.5;
 		const double Curviness = 1;
 		const double Bluntness = 2;
+		const string FormatString = "<b>{0}</b>";
 		
 		int horizontal_offset;
 		int vertical_offset;
@@ -210,11 +211,11 @@ namespace Docky.Interface.Menus
 			cr.LineWidth = 1;
 			cr.Stroke ();
 			
-			Core.DockServices.DrawingService.TextPathAtPoint (cr, 
-			                                                  string.Format ("<b>{0}</b>", header),
-			                                                  new Gdk.Point (8, HeaderTextOffset),
-			                                                  Width - 16,
-			                                                  Pango.Alignment.Center);
+			TextRenderContext context = new TextRenderContext (cr, string.Format (FormatString, header), Width - 16);
+			context.LeftCenteredPoint = new Gdk.Point (8, HeaderTextOffset);
+			context.Alignment = Pango.Alignment.Center;
+			
+			Core.DockServices.DrawingService.TextPathAtPoint (context);
 			cr.Color = new Cairo.Color (1, 1, 1);
 			cr.Fill ();
 		}
