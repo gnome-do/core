@@ -123,7 +123,6 @@ namespace Docky.Utilities
 						string key = array [i].Trim ().ToLower ();
 						if (string.IsNullOrEmpty (key))
 							continue;
-						Console.WriteLine (key);
 						RemapDictionary [key] = val;
 					}
 				}
