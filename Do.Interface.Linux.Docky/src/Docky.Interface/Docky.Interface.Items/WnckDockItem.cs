@@ -72,7 +72,8 @@ namespace Docky.Interface
 					.OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
 					.ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
 					.ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
-					.ThenBy (act => act.Name.Length);
+					.ThenBy (act => act.Name.Length)
+					.ThenBy (act => act.Name);
 		}
 		
 		protected virtual void Launch ()
