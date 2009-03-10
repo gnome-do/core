@@ -49,7 +49,7 @@ namespace Docky.Interface.Painters
 				sr = context.Target.CreateSimilar (context.Target.Content, width, dockArea.Height);
 				
 				using (Context cr = new Context (sr)) {
-					cr.SetRoundedRectanglePath (.5, .5, width - 1, height+40, 5); // fall off the bottom
+					cr.SetRoundedRectanglePath (.5, .5, width - 1, height + 40, 5); // fall off the bottom
 					cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
 					cr.FillPreserve ();
 			
@@ -72,15 +72,21 @@ namespace Docky.Interface.Painters
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
-				RenderBottomBackground (context, dockArea);
+				RenderBackground (context, dockArea);
 				break;
 			case DockOrientation.Top:
-				RenderTopBackground (context, dockArea);
+				context.Scale (1, -1);
+				context.Translate (0, 0 - (dockArea.Height + dockArea.Y));
+				
+				RenderBackground (context, dockArea);
+				
+				context.Translate (0, dockArea.Height + dockArea.Y);
+				context.Scale (1, -1);
 				break;
 			}
 		}
 
-		static void RenderBottomBackground (Context context, Gdk.Rectangle dockArea)
+		static void RenderBackground (Context context, Gdk.Rectangle dockArea)
 		{
 			context.SetSource (sr, dockArea.X, dockArea.Y);
 			context.Rectangle (dockArea.X, dockArea.Y, dockArea.Width / 2, dockArea.Height);
@@ -89,22 +95,6 @@ namespace Docky.Interface.Painters
 			context.SetSource (sr, dockArea.X + dockArea.Width - width, dockArea.Y);
 			context.Rectangle (dockArea.X + dockArea.Width / 2, dockArea.Y, dockArea.Width - dockArea.Width / 2, dockArea.Height);
 			context.Fill ();
-		}
-
-		static void RenderTopBackground (Context context, Gdk.Rectangle dockArea)
-		{
-			context.Scale (1, -1);
-			
-
-			context.SetSource (sr, dockArea.X, 0 - dockArea.Y - dockArea.Height);
-			context.Rectangle (dockArea.X, 0 - dockArea.Y - dockArea.Height, dockArea.Width / 2, dockArea.Height);
-			context.Fill ();
-
-			context.SetSource (sr, dockArea.X + dockArea.Width - width, 0 - dockArea.Y - dockArea.Height);
-			context.Rectangle (dockArea.X + dockArea.Width / 2, dockArea.Y - dockArea.Height, dockArea.Width - dockArea.Width / 2, dockArea.Height);
-			context.Fill ();
-
-			context.Scale (1, -1);
 		}
 	}
 }
