@@ -287,6 +287,10 @@ namespace Docky.Interface
 			}
 			
 			double zoomedCenterHeight = VerticalBuffer + DockItems [icon].Height * zoom / 2.0;
+			
+			if (zoom == 1)
+				centerOrientedPosition = Math.Round (centerOrientedPosition);
+			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
 				position = new Cairo.PointD (centerOrientedPosition, Height - zoomedCenterHeight);
