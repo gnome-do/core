@@ -36,6 +36,10 @@ namespace Docky.Utilities
 	
 	public static class WindowUtils
 	{
+		static string RemapFile {
+			get { return Path.Combine (Services.Paths.UserDataDirectory, "RemapFile"); }
+		}
+		
 		static IEnumerable<string> BadPrefixes {
 			get {
 				yield return "gksu";
@@ -83,8 +87,49 @@ namespace Docky.Utilities
 		static void BuildRemapDictionary ()
 		{
 			RemapDictionary = new Dictionary<string, string> ();
-			RemapDictionary ["banshee.exe"] = "banshee";
-			RemapDictionary ["banshee-1"] = "banshee";
+			if (!File.Exists (RemapFile)) {
+				RemapDictionary ["banshee.exe"] = "banshee";
+				RemapDictionary ["banshee-1"] = "banshee";
+				
+				StreamWriter writer = new StreamWriter (RemapFile);
+				writer.WriteLine ("# Docky Remap File");
+				writer.WriteLine ("# Add key value pairs following dictionary syntax");
+				writer.WriteLine ("# key, value");
+				writer.WriteLine ("# key, altKey, value");
+				writer.WriteLine ("# Lines starting with # are comments, otherwise # is a valid character");
+				
+				foreach (KeyValuePair<string, string> kvp in RemapDictionary) {
+					writer.WriteLine ("{0}, {1}", kvp.Key, kvp.Value);
+				}
+				writer.Close ();
+				writer.Dispose ();
+			} else {
+				StreamReader reader = new StreamReader (RemapFile);
+				
+				string line;
+				while (!reader.EndOfStream) {
+					line = reader.ReadLine ();
+					if (line.StartsWith ("#") || !line.Contains (","))
+						continue;
+					string [] array = line.Split (',');
+					if (array.Length < 2 || array [0].Length == 0)
+						continue;
+					
+					string val = array [array.Length - 1].Trim ();
+					if (string.IsNullOrEmpty (val))
+						continue;
+					
+					for (int i=0; i < array.Length - 1; i++) {
+						string key = array [i].Trim ();
+						if (string.IsNullOrEmpty (key))
+							continue;
+						RemapDictionary [key] = val;
+					}
+				}
+				
+				reader.Close ();
+				reader.Dispose ();
+			}
 		}
 		
 		/// <summary>
@@ -190,6 +235,9 @@ namespace Docky.Utilities
 
 		public static string ProcessExecString (string exec)
 		{
+			if (RemapDictionary.ContainsKey (exec))
+				return RemapDictionary [exec];
+			
 			string [] parts = exec.Split (' ');
 			for (int i = 0; i < parts.Length; i++) {
 				if (parts [i].StartsWith ("-"))
