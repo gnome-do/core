@@ -427,7 +427,7 @@ namespace Docky.Interface
 			MaskAndDraw ();
 			
 			if (AnimationState.AnimationNeeded)
-				animation_timer = GLib.Timeout.Add (1000/50, OnDrawTimeoutElapsed);
+				animation_timer = GLib.Timeout.Add (1000/60, OnDrawTimeoutElapsed);
 		}
 		
 		bool OnDrawTimeoutElapsed ()

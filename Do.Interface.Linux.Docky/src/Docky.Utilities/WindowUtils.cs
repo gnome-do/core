@@ -51,6 +51,8 @@ namespace Docky.Utilities
 			}
 		}
 		
+		static Dictionary<string, string> RemapDictionary { get; set; }
+		
 		static List<Application> application_list;
 		static bool application_list_update_needed;
 		
@@ -74,6 +76,15 @@ namespace Docky.Utilities
 			Wnck.Screen.Default.ApplicationClosed += delegate {
 				application_list_update_needed = true;
 			};
+			
+			BuildRemapDictionary ();
+		}
+		
+		static void BuildRemapDictionary ()
+		{
+			RemapDictionary = new Dictionary<string, string> ();
+			RemapDictionary ["banshee.exe"] = "banshee";
+			RemapDictionary ["banshee-1"] = "banshee";
 		}
 		
 		/// <summary>
@@ -135,7 +146,6 @@ namespace Docky.Utilities
 				return apps;
 			
 			exec = ProcessExecString (exec);
-			
 			UpdateExecList ();
 
 			foreach (KeyValuePair<int, string> kvp in exec_lines) {
@@ -194,7 +204,10 @@ namespace Docky.Utilities
 				}
 				
 				if (!string.IsNullOrEmpty (parts [i])) {
-					return parts [i].ToLower ();
+					string out_val = parts [i].ToLower ();
+					if (RemapDictionary.ContainsKey (out_val))
+						out_val = RemapDictionary [out_val];
+					return out_val;
 				}
 			}
 			return null;
