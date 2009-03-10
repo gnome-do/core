@@ -115,14 +115,15 @@ namespace Docky.Utilities
 					if (array.Length < 2 || array [0].Length == 0)
 						continue;
 					
-					string val = array [array.Length - 1].Trim ();
+					string val = array [array.Length - 1].Trim ().ToLower ();
 					if (string.IsNullOrEmpty (val))
 						continue;
 					
 					for (int i=0; i < array.Length - 1; i++) {
-						string key = array [i].Trim ();
+						string key = array [i].Trim ().ToLower ();
 						if (string.IsNullOrEmpty (key))
 							continue;
+						Console.WriteLine (key);
 						RemapDictionary [key] = val;
 					}
 				}
@@ -235,8 +236,23 @@ namespace Docky.Utilities
 
 		public static string ProcessExecString (string exec)
 		{
+			exec = exec.ToLower ().Trim ();
+			
 			if (RemapDictionary.ContainsKey (exec))
 				return RemapDictionary [exec];
+			
+			if (exec.StartsWith ("/")) {
+				string first_part = exec.Split (' ')[0];
+				int length = first_part.Length;
+				first_part = first_part.Split ('/').Last ();
+				
+				if (length < exec.Length)
+					 first_part = first_part + " " + exec.Substring (length + 1);
+						
+				if (RemapDictionary.ContainsKey (first_part)) {
+					return RemapDictionary [first_part];
+				}
+			}
 			
 			string [] parts = exec.Split (' ');
 			for (int i = 0; i < parts.Length; i++) {
@@ -252,7 +268,7 @@ namespace Docky.Utilities
 				}
 				
 				if (!string.IsNullOrEmpty (parts [i])) {
-					string out_val = parts [i].ToLower ();
+					string out_val = parts [i];
 					if (RemapDictionary.ContainsKey (out_val))
 						out_val = RemapDictionary [out_val];
 					return out_val;
