@@ -36,7 +36,7 @@ namespace Do.Platform.Linux
 
 		const int IconSize = 24;
 		const int LettersPerWord = 7;
-		const int MillisecondsPerWord = 250;
+		const int MillisecondsPerWord = 350;
 		const int MinNotifyShow = 5000;
 		const int MaxNotifyShow = 10000;
 
