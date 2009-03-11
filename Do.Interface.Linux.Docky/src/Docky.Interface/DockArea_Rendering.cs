@@ -54,7 +54,6 @@ namespace Docky.Interface
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
 		IDockPainter painter, last_painter;
-		Matrix default_matrix;
 		
 		DateTime ActiveIconChangeTime { get; set; }
 		
@@ -204,7 +203,6 @@ namespace Docky.Interface
 		{
 			RenderData = new PreviousRenderData ();
 			painter_surfaces = new Dictionary<IDockPainter, Surface> ();
-			default_matrix = new Matrix ();
 		}
 		
 		void DrawDrock (Context cr)
@@ -400,7 +398,7 @@ namespace Docky.Interface
 				}
 				
 				if (scale != 1)
-					cr.Matrix = default_matrix;
+					cr.IdentityMatrix ();
 			} else {
 				// since these dont scale, we have some extra work to do to keep them
 				// centered
