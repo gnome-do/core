@@ -40,6 +40,8 @@ namespace Docky.Interface.Painters
 	public class SummonModeRenderer : IDockPainter
 	{
 		const int IconSize = 16;
+		
+		bool paint;
 
 		public event EventHandler<PaintNeededArgs> PaintNeeded;
 
@@ -66,7 +68,7 @@ namespace Docky.Interface.Painters
 		}
 
 		public bool DoubleBuffer {
-			get { return false; }
+			get { return true; }
 		}
 
 		public bool Interruptable {
@@ -79,6 +81,7 @@ namespace Docky.Interface.Painters
 		
 		public SummonModeRenderer ()
 		{
+			paint = true;
 			TextUtility = new TextRenderer (DockWindow.Window);
 			
 			RegisterEvents ();
@@ -103,6 +106,7 @@ namespace Docky.Interface.Painters
 		void HandleStateChanged (object sender, EventArgs e)
 		{
 			if (PaintNeeded != null) {
+				paint = true;
 				PaintNeededArgs args;
 				if (DateTime.UtcNow - DockState.Instance.CurrentPaneTime < DockArea.BaseAnimationTime) 
 					args = new PaintNeededArgs (DockArea.BaseAnimationTime);
@@ -122,6 +126,7 @@ namespace Docky.Interface.Painters
 		{
 			if (ShowRequested != null)
 				ShowRequested (this, new EventArgs ());
+			paint = true;
 		}
 
 		void HandleIconSizeChanged ()
@@ -155,6 +160,12 @@ namespace Docky.Interface.Painters
 			
 		public void Paint (Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
+			if (!paint && DateTime.UtcNow - DockState.Instance.CurrentPaneTime > DockArea.BaseAnimationTime)
+				return;
+			
+			paint = false;
+			cr.AlphaFill ();
+			
 			if (LargeIconCache == null)
 				LargeIconCache = new PixbufSurfaceCache (10, 2 * DockPreferences.IconSize, 2 * DockPreferences.IconSize, cr.Target);
 				
