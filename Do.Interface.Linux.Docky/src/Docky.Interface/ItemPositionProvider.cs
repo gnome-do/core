@@ -106,14 +106,12 @@ namespace Docky.Interface
 
 		void HandleDockItemsChanged(IEnumerable<AbstractDockItem> items)
 		{
-			static_positions.Clear ();
-			MinimumDockArea = CalculateMinimumArea ();
+			ForceUpdate ();
 		}
 		
 		void HandleIconSizeChanged ()
 		{
-			static_positions.Clear ();
-			MinimumDockArea = CalculateMinimumArea ();
+			ForceUpdate ();
 		}
 
 		Rectangle CalculateMinimumArea ()
@@ -135,6 +133,12 @@ namespace Docky.Interface
 			}
 
 			return rect;
+		}
+		
+		public void ForceUpdate ()
+		{
+			static_positions.Clear ();
+			MinimumDockArea = CalculateMinimumArea ();
 		}
 		
 		public Rectangle DockArea (double zoomByEntryTime, Gdk.Point cursor)

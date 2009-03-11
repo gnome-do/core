@@ -200,7 +200,6 @@ namespace Docky.Interface
 			this.window = window;
 			
 			SetSize ();
-			SetSizeRequest (Width, Height);
 			
 			PositionProvider = new ItemPositionProvider (this);
 			
@@ -240,17 +239,23 @@ namespace Docky.Interface
 			
 			Width = geo.Width;
 			Height = 300;
+			
+			SetSizeRequest (Width, Height);
 		}
 
 		void RegisterEvents ()
 		{
 			DockServices.ItemsService.DockItemsChanged += OnDockItemsChanged;
 			DockServices.ItemsService.ItemNeedsUpdate += HandleItemNeedsUpdate;
+			
+			DockPreferences.MonitorChanged += HandleMonitorChanged; 
 			DockPreferences.IconSizeChanged += HandleIconSizeChanged; 
 			
 			DockServices.PainterService.PainterShowRequest += HandlePainterShowRequest;
 			DockServices.PainterService.PainterHideRequest += HandlePainterHideRequest;
 
+			Screen.SizeChanged += HandleSizeChanged; 
+			
 			PopupMenu.Hidden += OnDockItemMenuHidden;
 			PopupMenu.Shown += OnDockItemMenuShown;
 
@@ -269,11 +274,15 @@ namespace Docky.Interface
 		{
 			DockServices.ItemsService.DockItemsChanged -= OnDockItemsChanged;
 			DockServices.ItemsService.ItemNeedsUpdate -= HandleItemNeedsUpdate;
+			
+			DockPreferences.MonitorChanged -= HandleMonitorChanged;
 			DockPreferences.IconSizeChanged -= HandleIconSizeChanged; 
 			
 			DockServices.PainterService.PainterShowRequest -= HandlePainterShowRequest;
 			DockServices.PainterService.PainterHideRequest -= HandlePainterHideRequest;
 
+			Screen.SizeChanged -= HandleSizeChanged;
+			
 			PopupMenu.Hidden -= OnDockItemMenuHidden;
 			PopupMenu.Shown -= OnDockItemMenuShown;
 			
@@ -310,6 +319,26 @@ namespace Docky.Interface
 			AnimatedDraw ();
 		}
 
+		void HandleMonitorChanged()
+		{
+			Reconfigure ();
+		}
+		
+		void HandleSizeChanged(object sender, EventArgs e)
+		{
+			Reconfigure ();
+		}
+		
+		void Reconfigure ()
+		{
+			SetSize ();
+			ResetBuffers ();
+			PositionProvider.ForceUpdate ();
+			SetParentInputMask ();
+			SetIconRegions ();
+			window.DelaySetStruts ();
+		}
+		
 		void HandleUniverseInitialized(object sender, EventArgs e)
 		{
 			GLib.Timeout.Add (2000, delegate {
