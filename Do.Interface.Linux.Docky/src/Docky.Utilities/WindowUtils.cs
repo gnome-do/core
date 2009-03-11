@@ -91,44 +91,59 @@ namespace Docky.Utilities
 				RemapDictionary ["banshee.exe"] = "banshee";
 				RemapDictionary ["banshee-1"] = "banshee";
 				
-				StreamWriter writer = new StreamWriter (RemapFile);
-				writer.WriteLine ("# Docky Remap File");
-				writer.WriteLine ("# Add key value pairs following dictionary syntax");
-				writer.WriteLine ("# key, value");
-				writer.WriteLine ("# key, altKey, value");
-				writer.WriteLine ("# Lines starting with # are comments, otherwise # is a valid character");
-				
-				foreach (KeyValuePair<string, string> kvp in RemapDictionary) {
-					writer.WriteLine ("{0}, {1}", kvp.Key, kvp.Value);
-				}
-				writer.Close ();
-				writer.Dispose ();
-			} else {
-				StreamReader reader = new StreamReader (RemapFile);
-				
-				string line;
-				while (!reader.EndOfStream) {
-					line = reader.ReadLine ();
-					if (line.StartsWith ("#") || !line.Contains (","))
-						continue;
-					string [] array = line.Split (',');
-					if (array.Length < 2 || array [0].Length == 0)
-						continue;
+				StreamWriter writer = null;
+				try {
+					writer = new StreamWriter (RemapFile);
+					writer.WriteLine ("# Docky Remap File");
+					writer.WriteLine ("# Add key value pairs following dictionary syntax");
+					writer.WriteLine ("# key, value");
+					writer.WriteLine ("# key, altKey, value");
+					writer.WriteLine ("# Lines starting with # are comments, otherwise # is a valid character");
 					
-					string val = array [array.Length - 1].Trim ().ToLower ();
-					if (string.IsNullOrEmpty (val))
-						continue;
-					
-					for (int i=0; i < array.Length - 1; i++) {
-						string key = array [i].Trim ().ToLower ();
-						if (string.IsNullOrEmpty (key))
-							continue;
-						RemapDictionary [key] = val;
+					foreach (KeyValuePair<string, string> kvp in RemapDictionary) {
+						writer.WriteLine ("{0}, {1}", kvp.Key, kvp.Value);
 					}
+					writer.Close ();
+				} finally {
+					if (writer != null)
+						writer.Dispose ();
 				}
-				
-				reader.Close ();
-				reader.Dispose ();
+			} else {
+				StreamReader reader = null;
+				try {
+					reader = new StreamReader (RemapFile);
+					
+					string line;
+					while (!reader.EndOfStream) {
+						line = reader.ReadLine ();
+						if (line.StartsWith ("#") || !line.Contains (","))
+							continue;
+						string [] array = line.Split (',');
+						if (array.Length < 2 || array [0].Length == 0)
+							continue;
+						
+						string val = array [array.Length - 1].Trim ().ToLower ();
+						if (string.IsNullOrEmpty (val))
+							continue;
+						
+						for (int i=0; i < array.Length - 1; i++) {
+							string key = array [i].Trim ().ToLower ();
+							if (string.IsNullOrEmpty (key))
+								continue;
+							RemapDictionary [key] = val;
+						}
+					}
+					
+					reader.Close ();
+				} catch {
+					Log.Error ("Could not read remap file");
+					RemapDictionary = new Dictionary<string, string> ();
+					RemapDictionary ["banshee.exe"] = "banshee";
+					RemapDictionary ["banshee-1"] = "banshee";
+				} finally {
+					if (reader != null)
+						reader.Dispose ();
+				}
 			}
 		}
 		
