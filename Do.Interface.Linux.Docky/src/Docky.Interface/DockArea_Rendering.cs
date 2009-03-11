@@ -663,5 +663,30 @@ namespace Docky.Interface
 		{
 			RenderData.ForceFullRender = true;
 		}
+		
+		void ResetBuffers()
+		{
+			if (backbuffer != null) {
+				backbuffer.Destroy ();
+				backbuffer = null;
+			}
+			
+			if (dock_icon_buffer != null) {
+				dock_icon_buffer.Destroy ();
+				dock_icon_buffer = null;
+			}
+			
+			if (input_area_buffer != null) {
+				input_area_buffer.Destroy ();
+				input_area_buffer = null;
+			}
+			
+			foreach (Surface sr in painter_surfaces.Values) {
+				sr.Destroy ();
+			}
+			painter_surfaces.Clear ();
+			
+			RequestFullRender ();
+		}
 	}
 }
