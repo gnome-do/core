@@ -239,9 +239,28 @@ namespace Docky.Utilities
 				string exec_line = CmdLineForPid (pid);
 				if (string.IsNullOrEmpty (exec_line))
 					continue;
-
-				exec_line = ProcessExecString (exec_line);
 				
+				if (exec_line.Contains ("java") && exec_line.Contains ("-D")) {
+					foreach (Application app in GetApplications ()) {
+						if (app == null)
+							continue;
+						
+						if (app.Pid == pid || app.Windows.Any (w => w.Pid == pid)) {
+							foreach (Wnck.Window window in app.Windows.Where (win => !win.IsSkipTasklist)) {
+								exec_line = window.ClassGroup.Name;
+								
+								// Vuze is retarded
+								if (exec_line == "SWT")
+									exec_line = window.Name;
+								
+								break;
+							}
+						}
+					}
+				}	
+				
+				exec_line = ProcessExecString (exec_line);
+					
 				exec_lines [pid] = exec_line;
 			}
 			
@@ -256,7 +275,7 @@ namespace Docky.Utilities
 				return RemapDictionary [exec];
 			
 			if (exec.StartsWith ("/")) {
-				string first_part = exec.Split (' ')[0];
+				string first_part = exec.Split (' ') [0];
 				int length = first_part.Length;
 				first_part = first_part.Split ('/').Last ();
 				
@@ -313,7 +332,6 @@ namespace Docky.Utilities
 						continue;
 					if (!window.IsSkipTasklist) {
 						WindowControl.IntelligentFocusOffViewportWindow (window, windows);
-//						window.CenterAndFocusWindow ();
 						return;
 					}
 				}
