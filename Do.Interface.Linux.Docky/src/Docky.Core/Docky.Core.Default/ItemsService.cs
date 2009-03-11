@@ -711,19 +711,21 @@ namespace Docky.Core.Default
 		{
 			bool ret_val = false;
 			
-			if (GetIconSource (DockItems [item]) == IconSource.Statistics && DockItems [item] is ItemDockItem) {
-				DockPreferences.AddBlacklistItem ((DockItems [item] as ItemDockItem).Element.UniqueId);
-				DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
-				UpdateItems ();
-				ret_val = true;
-			} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
-				foreach (KeyValuePair<string, AbstractDockItem> kvp in custom_items) {
-					if (kvp.Value.Equals (DockItems [item])) {
-						custom_items.Remove (kvp.Key);
-						
-						UpdateItems ();
-						ret_val = true;
-						break;
+			if (DockItems [item].WindowCount == 0) {
+				if (GetIconSource (DockItems [item]) == IconSource.Statistics && DockItems [item] is ItemDockItem) {
+					DockPreferences.AddBlacklistItem ((DockItems [item] as ItemDockItem).Element.UniqueId);
+					DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
+					UpdateItems ();
+					ret_val = true;
+				} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
+					foreach (KeyValuePair<string, AbstractDockItem> kvp in custom_items) {
+						if (kvp.Value.Equals (DockItems [item])) {
+							custom_items.Remove (kvp.Key);
+							
+							UpdateItems ();
+							ret_val = true;
+							break;
+						}
 					}
 				}
 			}
