@@ -241,7 +241,7 @@ namespace Docky.Utilities
 				if (string.IsNullOrEmpty (exec_line))
 					continue;
 				
-				if (exec_line.Contains ("java") && exec_line.Contains ("-D")) {
+				if (exec_line.Contains ("java") && exec_line.Contains ("jar")) {
 					foreach (Application app in GetApplications ()) {
 						if (app == null)
 							continue;
