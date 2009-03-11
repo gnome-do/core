@@ -140,6 +140,7 @@ namespace Docky.Utilities
 					RemapDictionary = new Dictionary<string, string> ();
 					RemapDictionary ["banshee.exe"] = "banshee";
 					RemapDictionary ["banshee-1"] = "banshee";
+					RemapDictionary ["azureus"] = "vuze";
 				} finally {
 					if (reader != null)
 						reader.Dispose ();
