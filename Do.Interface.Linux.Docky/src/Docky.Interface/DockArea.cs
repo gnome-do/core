@@ -486,15 +486,21 @@ namespace Docky.Interface
 			
 			int x, y;
 			ModifierType mod;
-
-			Display.GetPointer (out x, out y, out mod);
+			Gdk.Screen screen;
 			
-			Gdk.Rectangle geo, hide_offset;
-			window.GetBufferedPosition (out geo.X, out geo.Y);
-			window.WindowHideOffset (out hide_offset.X, out hide_offset.Y);
+			Display.GetPointer (out screen, out x, out y, out mod);
+			
+			if (screen == Screen) {
+				Gdk.Rectangle geo, hide_offset;
+				window.GetBufferedPosition (out geo.X, out geo.Y);
+				window.WindowHideOffset (out hide_offset.X, out hide_offset.Y);
 
-			x -= geo.X - hide_offset.X;
-			y -= geo.Y - hide_offset.Y;
+				x -= geo.X - hide_offset.X;
+				y -= geo.Y - hide_offset.Y;
+			} else {
+				x = -4000;
+				y = -4000;
+			}
 			
 			SetupCursor (x, y, mod);
 		}
