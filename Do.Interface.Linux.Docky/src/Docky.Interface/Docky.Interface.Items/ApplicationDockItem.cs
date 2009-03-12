@@ -297,7 +297,16 @@ namespace Docky.Interface
 		
 		bool StringIsValidName (string s)
 		{
-			return (!string.IsNullOrEmpty (s.Trim ()) && s != "<unknown>");
+			s = s.Trim ();
+			if (string.IsNullOrEmpty (s) || s == "<unknown>")
+				return false;
+			
+			foreach (string prefix in WindowUtils.BadPrefixes) {
+				if (string.Compare (s, prefix, true) == 0)
+					return false;
+			}
+			
+			return true;
 		}
 
 		public override void SetIconRegion (Gdk.Rectangle region)

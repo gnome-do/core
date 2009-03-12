@@ -40,7 +40,7 @@ namespace Docky.Utilities
 			get { return Path.Combine (Services.Paths.UserDataDirectory, "RemapFile"); }
 		}
 		
-		static IEnumerable<string> BadPrefixes {
+		public static IEnumerable<string> BadPrefixes {
 			get {
 				yield return "gksu";
 				yield return "sudo";
