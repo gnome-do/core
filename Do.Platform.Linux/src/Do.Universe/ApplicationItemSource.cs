@@ -116,13 +116,11 @@ namespace Do.Universe.Linux {
 		
 		static IEnumerable<string> ReadXdgDataDirs ()
 		{
-			List<string> dirs;
 			string home, envPath;
 			
 			const string appDirSuffix = "applications";
 			string [] xdgVars = new [] {"XDG_DATA_HOME", "XDG_DATA_DIRS"};
 			
-			dirs = new List<string> ();
 			home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 				
 			foreach (string xdgVar in xdgVars) {
@@ -130,17 +128,16 @@ namespace Do.Universe.Linux {
 						
 				if (string.IsNullOrEmpty (envPath)) {
 					if (xdgVar == "XDG_DATA_HOME") {
-						dirs.Add (new [] {home, ".local/share", appDirSuffix}.Aggregate (Path.Combine));
+						yield return (new [] {home, ".local/share", appDirSuffix}.Aggregate (Path.Combine));
 					} else if (xdgVar == "XDG_DATA_DIRS") {
-						dirs.Add (Path.Combine ("/usr/local/share/", appDirSuffix));
-						dirs.Add (Path.Combine ("/usr/share/applications", appDirSuffix));
+						yield return Path.Combine ("/usr/local/share/", appDirSuffix);
+						yield return Path.Combine ("/usr/share/applications", appDirSuffix);
 					}
 				} else {
-					dirs.AddRange (envPath.Split (':').Select (dir => Path.Combine (dir, appDirSuffix)));
+					foreach (string dir in envPath.Split (':'))
+						yield return Path.Combine (dir, appDirSuffix);
 				}
 			}
-			
-			return dirs;
 		}
 	}
 }
