@@ -33,26 +33,13 @@ namespace Do.Universe.Linux {
 	public class ApplicationItemSource : ItemSource {
 
 		const bool show_hidden = false;
-
-		private IEnumerable<Item> app_items;
-
-		/// <summary>
-		/// Locations to search for .desktop files.
-		/// </summary>
-		static IEnumerable<String> DesktopFilesDirectories {
-			get {
-				return new [] {
-					Environment.GetFolderPath (Environment.SpecialFolder.Desktop),
-					"~/.local/share/applications",
-					"~/.local/share/applications/wine",
-					"~/.local/share/applications/wine/Programs",
-					"/usr/share/applications",
-					"/usr/share/applications/kde",
-					"/usr/share/applications/kde4",
-					"/usr/share/gdm/applications",
-					"/usr/local/share/applications",
-				};
-			}
+		static IEnumerable<string> desktop_file_directories;
+		
+		IEnumerable<Item> app_items;
+		
+		static ApplicationItemSource ()
+		{
+			desktop_file_directories = ReadXdgDataDirs ();
 		}
 		
 		public ApplicationItemSource ()
@@ -87,21 +74,36 @@ namespace Do.Universe.Linux {
 		/// directory
 		/// where .desktop files can be found.
 		/// </param>
-		private static IEnumerable<ApplicationItem> LoadDesktopFiles (string dir)
+		static IEnumerable<ApplicationItem> LoadDesktopFiles (string dir)
 		{
+			Queue<string> queue;
+			List<ApplicationItem> apps;
+			
 			if (!Directory.Exists (dir))
 				return Enumerable.Empty<ApplicationItem> ();
-
-			return Directory.GetFiles (dir, "*.desktop")
-				.Select (file => ApplicationItem.MaybeCreateFromDesktopItem (file))
-				.Where (app => app != null &&
-								app.IsAppropriateForCurrentDesktop &&
-								(show_hidden || !app.NoDisplay));
+			
+			queue = new Queue<string> ();
+			queue.Enqueue (dir);
+			
+			apps = new List<ApplicationItem> ();
+				
+			while (queue.Count > 0) {
+				dir = queue.Dequeue ();
+				foreach (string d in Directory.GetDirectories (dir))
+					queue.Enqueue (d);
+				
+				apps.AddRange (Directory.GetFiles (dir, "*.desktop")
+					.Select (file => ApplicationItem.MaybeCreateFromDesktopItem (file))
+					.Where (app => app != null && app.IsAppropriateForCurrentDesktop && (show_hidden || !app.NoDisplay))
+				);
+			}
+			
+			return apps;
 		}
-
+		
 		public override void UpdateItems ()
 		{
-			app_items = DesktopFilesDirectories
+			app_items = desktop_file_directories
 				.Select (dir => dir.Replace ("~", Environment.GetFolderPath (Environment.SpecialFolder.Personal)))
 				.SelectMany (dir => LoadDesktopFiles (dir))
 				.Cast<Item> ()
@@ -111,6 +113,34 @@ namespace Do.Universe.Linux {
 		public override IEnumerable<Item> Items {
 			get { return app_items; }
 		}
-
+		
+		static IEnumerable<string> ReadXdgDataDirs ()
+		{
+			List<string> dirs;
+			string home, envPath;
+			
+			const string appDirSuffix = "applications";
+			string [] xdgVars = new [] {"XDG_DATA_HOME", "XDG_DATA_DIRS"};
+			
+			dirs = new List<string> ();
+			home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+				
+			foreach (string xdgVar in xdgVars) {
+				envPath = Environment.GetEnvironmentVariable (xdgVar);
+						
+				if (string.IsNullOrEmpty (envPath)) {
+					if (xdgVar == "XDG_DATA_HOME") {
+						dirs.Add (new [] {home, ".local/share", appDirSuffix}.Aggregate (Path.Combine));
+					} else if (xdgVar == "XDG_DATA_DIRS") {
+						dirs.Add (Path.Combine ("/usr/local/share/", appDirSuffix));
+						dirs.Add (Path.Combine ("/usr/share/applications", appDirSuffix));
+					}
+				} else {
+					dirs.AddRange (envPath.Split (':').Select (dir => Path.Combine (dir, appDirSuffix)));
+				}
+			}
+			
+			return dirs;
+		}
 	}
 }
