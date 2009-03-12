@@ -260,7 +260,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Bin" id="Do.UI.ManagePluginsPreferencesWidget" design-size="365 447">
+  <widget class="Gtk.Bin" id="Do.UI.ManagePluginsPreferencesWidget" design-size="356 447">
     <property name="MemberName" />
     <child>
       <widget class="Gtk.VBox" id="vbox3">
@@ -321,18 +321,7 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="search_entry">
-                <property name="MemberName" />
-                <property name="CanDefault">True</property>
-                <property name="CanFocus">True</property>
-                <property name="IsEditable">True</property>
-                <property name="InvisibleChar">●</property>
-                <signal name="Changed" handler="OnSearchEntryChanged" />
-              </widget>
-              <packing>
-                <property name="Position">3</property>
-                <property name="AutoSize">True</property>
-              </packing>
+              <placeholder />
             </child>
           </widget>
           <packing>
