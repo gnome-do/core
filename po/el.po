@@ -6,47 +6,49 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2008-08-06 03:37+0000\n"
-"Last-Translator: Antonios Dimopoulos <antoniosdimopoulos@gmail.com>\n"
+"PO-Revision-Date: 2009-02-14 22:45+0000\n"
+"Last-Translator: pppd <Unknown>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
+"X-Launchpad-Export-Date: 2009-03-13 16:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
 msgid "_Reset"
-msgstr ""
+msgstr "_Επαναφορά"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
 msgid "Background Color:"
-msgstr ""
+msgstr "Χρώμα Φόντου:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
-#, fuzzy
 msgid "_Theme:"
-msgstr "Θέμα:"
+msgstr "_Θέμα:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
 msgid "Always show results window"
-msgstr "Πάντα εμφάνιση του παραθύρου αποτελεσμάτων"
+msgstr "Συνεχής εμφάνιση του παραθύρου αποτελεσμάτων"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
 msgid "Show window shadow"
-msgstr ""
+msgstr "Εμφάνιση σκιάς παραθύρου"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:228
 msgid "Animate window"
-msgstr ""
+msgstr "Κίνηση Παραθύρου"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:262
 msgid ""
 "<b>Your display is not properly configured for theme and animation support. "
 "To use these features, you must enable compositing.</b>"
 msgstr ""
+"<b>Η οθόνη σας δεν είναι σωστά ρυθμισμένη για το θέμα και την υποστήριξη "
+"κίνησης. Για να χρησιμοποιήσετε αυτά τα χαρακτηριστικά, πρέπει να "
+"ενεργοποιήσετε το compositing.</b>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
@@ -93,12 +95,11 @@ msgstr "Εκκίνηση του GNOME Do κατά την είσοδο."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
-msgstr "Απόκρυψη του παραθύρου κατά την πρώτη εκκίνηση (σιωπηλή λειτουργία)"
+msgstr "Απόκρυψη του παραθύρου κατά την πρώτη εκκίνηση"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
-#, fuzzy
 msgid "Show notification icon"
-msgstr "Εμφάνιση εικονιδίου στην περιοχή ειδοποίησης"
+msgstr "Εμφάνιση εικονιδίου κοινοποίησης"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
@@ -123,53 +124,55 @@ msgstr "Η εγκατάσταση απέτυχε"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:35
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugins</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugins</span></b>"
 msgstr ""
+"<b><span size=\"large\">Υπήρξε ένα σφάλμα κατά την εγκατάσταση των "
+"επιλεγμένων προσθέτων</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugin</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugin</span></b>"
 msgstr ""
+"<b><span size=\"large\">Υπήρξε ένα σφάλμα κατά την εγκατάσταση του "
+"επιλεγμένου προσθέτου</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
 msgid "and "
-msgstr ""
+msgstr "και "
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:47
 msgid " is not a valid plugin file."
-msgstr ""
+msgstr " δεν είναι ένα έγκυρο αρχείο προσθέτου."
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:49
 msgid " are not valid plugin files."
-msgstr ""
+msgstr " δεν είναι έγκυρα αρχεία προσθέτων."
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Εμφάνιση</b>"
+msgstr "Εμφάνιση"
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
-#, fuzzy
 msgid "General"
-msgstr "Εμφάνιση"
+msgstr "Γενικά"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
 msgid "Plugins"
-msgstr ""
+msgstr "Πρόσθετα"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
 msgid "Official Plugins"
-msgstr ""
+msgstr "Επίσημα Πρόσθετα"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
-msgstr ""
+msgstr "Όλα τα Πρόσθετα"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
 msgid "Community Plugins"
-msgstr ""
+msgstr "Πρόσθετα Κοινότητας"
 
 #: ../Do/src/Do.Core/DoAddinInstaller.cs:37
 msgid "Installation cancelled"
@@ -177,30 +180,29 @@ msgstr "Η εγκατάσταση ακυρώθηκε"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
 msgid "GNOME Do Item Sources"
-msgstr ""
+msgstr "Πηγές αντικειμένων του GNOME Do"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
 msgid "Item Sources providing all items GNOME Do knows about."
 msgstr ""
+"Οι πηγές των αντικειμένων παρέχουν όλα τα αντικείμενα που γνωρίζει το GNOME "
+"Do"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
-#, fuzzy
 msgid "Preferences"
-msgstr "_Προτιμήσεις"
+msgstr "Προτιμήσεις"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
-#, fuzzy
 msgid "Adjust Do's settings, manage plugins, etc."
-msgstr "Αλλαγή ρυθμίσεων, διαχείριση προσθέτων, κλπ."
+msgstr "Ρυθμίστε τις ρυθμίσεις του Do, διαχειριστείτε τα πρόσθετα κτλ"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
-#, fuzzy
 msgid "Quit"
-msgstr "_Έξοδος"
+msgstr "Έξοδος"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
-msgstr ""
+msgstr "Τερματισμός του GNOME Do - ελάτε πίσω σύντομα"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:63
 msgid "Selected text"
@@ -208,51 +210,49 @@ msgstr "Επιλεγμένο κείμενο"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:67
 msgid "Currently selected text."
-msgstr ""
+msgstr "Τρέχον επιλεγμένο κείμενο."
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:33
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:53
 msgid "Clear Learning"
-msgstr ""
+msgstr "Καθαρισμός Μάθησης"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:37
 msgid "Resets Do's learned usage data."
-msgstr ""
+msgstr "Επαναφέρει τα δεδομένα χρήσης που έμαθε το Do"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:54
 msgid "Are you sure you want to clear Do's learned usage data?"
 msgstr ""
+"Είστε σίγουρος ότι θέλετε να καθαρίσετε τα δεδομένα χρήσης που έμαθε το Do;"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
 msgid "Clear"
-msgstr ""
+msgstr "Καθαρισμός"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:49
 msgid "Internal GNOME Do Items"
-msgstr ""
+msgstr "Εσωτερικά αντικείμενα του GNOME Do"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:53
 msgid "Special items relevant to the inner-workings of GNOME Do."
-msgstr ""
+msgstr "Ειδικά αντικείμενα σχετικά με τις ενδωο-εργασίας του GNOME Do."
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
-msgstr ""
+msgstr "Δωρεά"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:40
-#, fuzzy
 msgid "Support GNOME Do development!"
-msgstr "Εκκίνηση του GNOME Do κατά την είσοδο."
+msgstr "Υποστηρίξτε την ανάπτυξη του GNOME Do!"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
-#, fuzzy
 msgid "About Do"
-msgstr "_Σχετικά με το Do"
+msgstr "Σχετικά με το Do"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
-#, fuzzy
 msgid "About GNOME Do"
-msgstr "Έξοδος από το Gnome Do"
+msgstr "Σχετικά με το GNOME Do"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
@@ -267,68 +267,64 @@ msgid "Type to start searching."
 msgstr "Πληκτρολόγησε για να αρχίσει η αναζήτηση"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-#, fuzzy
 msgid "Minimize"
-msgstr "Μικρό"
+msgstr "Ελαχιστοποίηση"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Restore"
-msgstr ""
+msgstr "Επαναφορά"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
 msgid "Close All"
-msgstr ""
+msgstr "Κλείσιμο Όλων"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-#, fuzzy
 msgid "Summon GNOME Do"
-msgstr "Κλήση του Gnome Do με "
+msgstr "Ανάδευση του GNOME Do"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
 msgid "Automatically Hide"
-msgstr ""
+msgstr "Αυτόματη Απόκρυψη"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
 msgid "Allow Window Overlap"
-msgstr ""
+msgstr "Επικάλυψη Παραθύρου"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
 msgid "Zoom Icons"
-msgstr ""
+msgstr "Ζοομ Εικονιδίων"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
 msgid "Show Trash"
-msgstr ""
+msgstr "Εμφάνιση Κάδου"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
 msgid "Advanced Indicators"
-msgstr ""
+msgstr "Προχωρημένοι Δείκτες"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
 msgid "Switch Monitors"
-msgstr ""
+msgstr "Εναλλαγή Οθονών"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
 msgid "Remove from Dock"
-msgstr ""
+msgstr "Αφαίρεση από το Dock"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
 msgid "No result found for"
-msgstr ""
+msgstr "Κανένα αποτέλεσμα για"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
 msgid "Trash"
-msgstr ""
+msgstr "Κάδος Απορριμάτων"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
-#, fuzzy
 msgid "Open Url"
-msgstr "Άνοιγμα URL"
+msgstr "Άνοιγμα συνδέσμου"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
-#, fuzzy
 msgid "Opens bookmarks and manually-typed Urls."
-msgstr "Ανοίγει σελιδοδείκτες και διευθύνσεις URL."
+msgstr "Ανοίγει σελιδοδείκτες και συνδέσμους γραμμένους με το χέρι"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
 msgid "Reveal"
@@ -384,51 +380,49 @@ msgstr "<i>Επιβεβαίωση και αποθήκευση πληροφορι
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
 msgid "Don't have an account?"
-msgstr ""
+msgstr "Δεν έχετε λογαριασμό;"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
 #, csharp-format
 msgid "Sign up for {0}"
-msgstr ""
+msgstr "Υπογράψτε για {0}"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
 msgid "Validating..."
-msgstr ""
+msgstr "Επικύρωση..."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
 #, csharp-format
 msgid "Don't have {0}?"
-msgstr ""
+msgstr "Δεν έχετε {0};"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
-#, fuzzy
 msgid "Account validation failed!"
-msgstr "Η εγκατάσταση απέτυχε"
+msgstr "Η επικύρωση του λογαριασμού απέτυχε!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
-#, fuzzy
 msgid "Verify and save account information"
-msgstr "<i>Επιβεβαίωση και αποθήκευση πληροφοριών λογαριασμού</i>"
+msgstr "Επιβεβαίωση  και αποθήκευση πληροφοριών λογαριασμού"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
 msgid "Account validation succeeded!"
-msgstr ""
+msgstr "Η επικύρωση του λογαριασμού πέτυχε!"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:88
 msgid "Icon"
-msgstr ""
+msgstr "Εικονίδιο"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:92
 msgid "This application could not be indexed."
-msgstr ""
+msgstr "Αυτή η εφαρμογή δεν μπορεί να προστεθεί στο ευρετήριο."
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:116
 msgid "Exec"
-msgstr ""
+msgstr "Εκτέλεση"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:134
 msgid "OnlyShowIn"
-msgstr ""
+msgstr "ΜόνοΔείξεΣτο"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:68
 msgid "Applications"
@@ -440,11 +434,11 @@ msgstr "Εύρεση εφαρμογών σε πολλές τοποθεσίες"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:40
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "Αντιγραφή στο Πρόχειρο"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:44
 msgid "Copy current text to clipboard"
-msgstr ""
+msgstr "Αντιγραφή παρόντος κειμένου στο Πρόχειρο"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
 msgid "GNOME Special Locations"
@@ -457,29 +451,29 @@ msgstr "Ειδικές τοποθεσίες του GNOME, όπως ο Υπολο
 #: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
 #, csharp-format
 msgid "Error reading {0}."
-msgstr ""
+msgstr "Σφάλμα ανάγνωσης {0}."
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
 #, csharp-format
 msgid "Error saving {0}"
-msgstr ""
+msgstr "Σφάλμα αποθήκευσης {0}"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
-msgstr ""
+msgstr "Το κλειδί \"{0}\" δεν βρέθηκε στο keyring"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 msgid "gnome-keyring-daemon could not be reached!"
-msgstr ""
+msgstr "Ο gnome-keyring-daemon δεν μπορεί να προσεγγισθεί!"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:42
 msgid "No name"
-msgstr ""
+msgstr "Χωρίς όνομα"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:43
 msgid "No description."
-msgstr ""
+msgstr "Χωρίς περιγραφή."
 
 #: ../Do/gnome-do.desktop.in.h:1
 msgid ""
@@ -495,68 +489,51 @@ msgid "GNOME Do"
 msgstr "GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:1
-#, fuzzy
 msgid "Always show results window."
-msgstr "Πάντα εμφάνιση του παραθύρου αποτελεσμάτων"
+msgstr "Συνεχής εμφάνιση του παραθύρου αποτελεσμάτων."
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
 "Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
 "Mini."
 msgstr ""
+"Αλλάζει την εμφάνιση του GNOME Do. Έγκυρες καταχωρήσεις είναι οι Classic, "
+"Glass Frame, και Mini."
 
 #: ../data/gnome-do.schemas.in.h:3
 msgid "Do UI theme"
-msgstr ""
+msgstr "Θέμα εμφάνισης της διεπαφής χρήστη GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:4
 msgid "Do summon keybinding."
-msgstr ""
+msgstr "Συνδυασμός πλήκτρου ανάδευσης του GNOME Do."
 
 #: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
 msgstr ""
+"Ενεργοποιήστε αυτήν την επιλογή για να μην εμφανίζεται το Do αμέσως μόλις "
+"ξεκινάει."
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
-msgstr ""
+msgstr "Αποκρύψτε το κύριο παράθυρο όταν το Do ξεκινάει."
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr ""
+msgstr "Πλήκτρο που χρησιμοποιείται για να εισέλθετε σε λειτουργία κειμένου"
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
 msgstr ""
+"Θέστε αυτό το χαρακτήρα που θα χρησιμοποιηθεί για την εισαγωγή στην "
+"λειτουργία κειμένου"
 
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
 msgstr ""
+"Θέστε αυτό στην εντολή πλήκτρου που θα θέλατε να χρησιμοποιήσετε για να "
+"αναδεύσετε το GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
-msgstr ""
-
-#~ msgid "Classic"
-#~ msgstr "Κλασσικό"
-
-#~ msgid "Glass Frame"
-#~ msgstr "Γυάλινο Πλαίσιο"
-
-#~ msgid "Unknown"
-#~ msgstr "Άγνωστο"
-
-#~ msgid "Assign Alias..."
-#~ msgstr "Ανάθεση Ψευδωνύμου..."
-
-#~ msgid "Give an item an alternate name."
-#~ msgstr "Δίνει σε έναν αντικείμενο ένα εναλλακτικό όνομα."
-
-#~ msgid "Alias items"
-#~ msgstr "Αντικείμενα με ψευδώνυμο"
-
-#~ msgid "Delete Alias"
-#~ msgstr "Διαγραφή Ψευδωνύμου"
-
-#~ msgid "Deletes an alias."
-#~ msgstr "Διαγράφει ένα ψευδώνυμο."
+msgstr "Εάν θα εμφανίζονται συνέχεια τα αποτελέσματα παραθύρου."

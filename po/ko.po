@@ -1,4 +1,4 @@
-# Persian translation for do
+# Korean translation for do
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the do package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2008-09-21 18:53+0000\n"
-"Last-Translator: KasraKeshavarz <kasra545@movemail.com>\n"
-"Language-Team: Persian <fa@li.org>\n"
+"PO-Revision-Date: 2009-03-11 14:14+0000\n"
+"Last-Translator: Shin Hungjae <Unknown>\n"
+"Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,499 +19,497 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
 msgid "_Reset"
-msgstr ""
+msgstr "리셋(_R)"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
 msgid "Background Color:"
-msgstr ""
+msgstr "배경 색상:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
 msgid "_Theme:"
-msgstr ""
+msgstr "테마(_T):"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
 msgid "Always show results window"
-msgstr "همیشه پنجره‌ی جزییات رو نشان بده."
+msgstr "항상 결과 창 보기"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
 msgid "Show window shadow"
-msgstr ""
+msgstr "창 그림자 보기"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:228
 msgid "Animate window"
-msgstr ""
+msgstr "애니메이션 창"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:262
 msgid ""
 "<b>Your display is not properly configured for theme and animation support. "
 "To use these features, you must enable compositing.</b>"
 msgstr ""
+"b>디스플레이가 애니메이션과 테마를 지원할 적당한 설정이 없습니다. 기능을 사용하기 위해서는 합성이 꼭 활성화 되어야 합니다.</b>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
-msgstr ""
-"<span size=\"large\"><b>افزونه‌های به روز شده در دسترس هستند!</b></span>"
+msgstr "<span size=\"large\"><b>업데이트된 플러그인이 있습니다!</b></span>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
 msgid "_Install Updates"
-msgstr "ـ نصب به‌روز رسانی‌ها"
+msgstr "업데이트 설치(_I)"
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
 msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "برای ویرایش میانبر، دابل کلیک کنید و عبارت جدید را وارد کنید."
+msgstr "단축키를 편집할때, 더블클릭후 새로운 입력하면 됩니다."
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
 msgid "GNOME Do Preferences"
-msgstr "تنظیمات Gnome DO"
+msgstr "GNOME Do 설정"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
 msgid "Show:"
-msgstr "نمایش:"
+msgstr "보기:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:89
 msgid "Search:"
-msgstr "جستجو:"
+msgstr "찾기:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:144
 msgid "_Configure"
-msgstr "_پیکربندی"
+msgstr "설정(_C)"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:170
 msgid "_About"
-msgstr "_درباره"
+msgstr "정보(_A)"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
-msgstr "<b>رفتار در اولین اجرا</b>"
+msgstr "<b>첫번째 실행 동작</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
 msgid "Start GNOME Do at login."
-msgstr "اجرای گنوم-دوو در در هنگام ورود."
+msgstr "로그인시 그놈두 시작."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
-msgstr "مخفی کردن پنجره در اولین اجرا.(حالت سریع)"
+msgstr "첫번째 실행시 창 숨기기(조용한 모드)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
 msgid "Show notification icon"
-msgstr ""
+msgstr "통지 아이콘 보이기"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
-msgstr "پنجره‌ی پیکربندی افزونه‌ها"
+msgstr "플러그인 설정 창"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
-msgstr "<span size=\"large\" weight=\"heavy\">محل نام افزونه</span>"
+msgstr "<span size=\"large\" weight=\"heavy\">이곳에 플러그인 이름</span>"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
 msgid "page1"
-msgstr "صفحه ی اول"
+msgstr "첫면"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
 msgid "Some of the required add-ins were not found"
-msgstr "بعضی از افزودنی‌های لازم پیدا نشدند"
+msgstr "필수 에드인 몇개를 찾을 수 없습니다."
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
 msgid "Installation failed"
-msgstr "عملیت نصب موفق نشد"
+msgstr "설치 실패"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:35
 msgid ""
 "<b><span size=\"large\">There was an error installing the selected "
 "plugins</span></b>"
-msgstr ""
+msgstr "<b><span size=\"large\">선택한 플러그인 설치중 에러 발생</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid ""
 "<b><span size=\"large\">There was an error installing the selected "
 "plugin</span></b>"
-msgstr ""
+msgstr "<b><span size=\"large\">선택한 플러그인 설치중 에러 발생</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
 msgid "and "
-msgstr ""
+msgstr "와(과) "
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:47
 msgid " is not a valid plugin file."
-msgstr ""
+msgstr " 는 잘못된 플러그인파일입니다."
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:49
 msgid " are not valid plugin files."
-msgstr ""
+msgstr " 는 잘못된 플러그인 파일입니다."
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
 msgid "Appearance"
-msgstr ""
+msgstr "모양새"
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
 msgid "General"
-msgstr ""
+msgstr "일반"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
 msgid "Plugins"
-msgstr ""
+msgstr "플러그인"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
 msgid "Official Plugins"
-msgstr ""
+msgstr "공인 플러그인"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
-msgstr ""
+msgstr "모든 플러그인"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
 msgid "Community Plugins"
-msgstr ""
+msgstr "커뮤니티 플러그인"
 
 #: ../Do/src/Do.Core/DoAddinInstaller.cs:37
 msgid "Installation cancelled"
-msgstr "عملیات نصب لغو شد"
+msgstr "설치 취소"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
 msgid "GNOME Do Item Sources"
-msgstr "متن آیتم‌های Gnome DO"
+msgstr "GNOME Do 항목 소스"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
 msgid "Item Sources providing all items GNOME Do knows about."
-msgstr "متن آیتم‌ها مشروط بر این که همه‌ی آیتم‌های Gnome Do آن را دانستند."
+msgstr "항목 소스는 그놈두에 알려진 모든 항목을 제공합니다."
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
 msgid "Preferences"
-msgstr ""
+msgstr "설정"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
 msgid "Adjust Do's settings, manage plugins, etc."
-msgstr ""
+msgstr "두설정 조정, 플러그인 관리, 기타."
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
 msgid "Quit"
-msgstr ""
+msgstr "종료"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
-msgstr ""
+msgstr "그놈 두 종료 - 곧 돌아옵니다."
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:63
 msgid "Selected text"
-msgstr "متن انتخاب شده"
+msgstr "선택된 내용"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:67
 msgid "Currently selected text."
-msgstr "متن‌های انتخاب‌شده‌ی رایج."
+msgstr "현재 선택된 내용"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:33
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:53
 msgid "Clear Learning"
-msgstr ""
+msgstr "배우기 삭제"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:37
 msgid "Resets Do's learned usage data."
-msgstr ""
+msgstr "두 배우기에 사용된 데이터를 지움."
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:54
 msgid "Are you sure you want to clear Do's learned usage data?"
-msgstr ""
+msgstr "두를 배울때 사용된 데이터를 지우기를 원하십니까?"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
 msgid "Clear"
-msgstr ""
+msgstr "삭제"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:49
 msgid "Internal GNOME Do Items"
-msgstr "آیتم‌های داخلی Gnome Do"
+msgstr "내부 그놈두 항목"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:53
 msgid "Special items relevant to the inner-workings of GNOME Do."
-msgstr "آیتم‌های مخصوص مربوط به کار‌های داخلی Gnome Do است."
+msgstr "나열된 항목은 그놈 두의 내부작업자와 관련있습니다."
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
-msgstr ""
+msgstr "기부"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:40
 msgid "Support GNOME Do development!"
-msgstr ""
+msgstr "그놈 Do 개발 지원!"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
 msgid "About Do"
-msgstr ""
+msgstr "Do 정보"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
 msgid "About GNOME Do"
-msgstr ""
+msgstr "그놈 Do 정보"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:57
 msgid "Type to begin searching"
-msgstr "برای شروع جستجو، تایپ کنید"
+msgstr "찾을것의 입력을 사직하세요."
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:353
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:387
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:58
 msgid "Type to start searching."
-msgstr "برای آغاز جستجو، تایپ کنید"
+msgstr "찾을것의 입력을 사직하세요."
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Minimize"
-msgstr ""
+msgstr "최소화"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Restore"
-msgstr ""
+msgstr "복구"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
 msgid "Close All"
-msgstr ""
+msgstr "모두 닫기"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
 msgid "Summon GNOME Do"
-msgstr ""
+msgstr "그놈 Do 소환"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
 msgid "Automatically Hide"
-msgstr ""
+msgstr "자동으로 숨기기"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
 msgid "Allow Window Overlap"
-msgstr ""
+msgstr "창 중첩 허용"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
 msgid "Zoom Icons"
-msgstr ""
+msgstr "줌 아이콘"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
 msgid "Show Trash"
-msgstr ""
+msgstr "쓰렉통 보이기"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
 msgid "Advanced Indicators"
-msgstr ""
+msgstr "고급 지시자"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
 msgid "Switch Monitors"
-msgstr ""
+msgstr "모니터 전환"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
 msgid "Remove from Dock"
-msgstr ""
+msgstr "독에서 제거"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
 msgid "No result found for"
-msgstr ""
+msgstr "다음의 결과를 찾을수 없음"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
 msgid "Trash"
-msgstr ""
+msgstr "쓰레기통"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
 msgid "Open Url"
-msgstr ""
+msgstr "Url 열기"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
 msgid "Opens bookmarks and manually-typed Urls."
-msgstr ""
+msgstr "북마크와 수동으로 입력된 주소 열기."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
 msgid "Reveal"
-msgstr "آشکار شدن"
+msgstr "드러남"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
 msgid "Reveals a file in the file manager."
-msgstr "آشکار شدن یک فایل در برنامه‌ی مدیریت فایل‌ها"
+msgstr "파일관리자에서 파일이 드러남"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
 msgid "Run"
-msgstr "اجرا"
+msgstr "실행"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
 msgid "Run an application, script, or other executable."
-msgstr "یک برنامه ، اسکریپت و یا یک اجرا پذبر را اجرا کن."
+msgstr "스크립트, 무른모나 다른 실행가능한것 실행."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
 msgid "Email"
-msgstr "پست الکترونیکی"
+msgstr "전자메일"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:41
 msgid "Compose a new email to a friend."
-msgstr "فرستادن یک پست الکترونیک به یک دوست"
+msgstr "친구에게 보낼 새메일 작성."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:38
 msgid "Open"
-msgstr "باز کن"
+msgstr "열기"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:42
 msgid "Opens many kinds of items."
-msgstr "انواع گزینه ها را باز کن."
+msgstr "많은 종류의 항목 열기."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
 msgid "Open With..."
-msgstr "بازکردن با..."
+msgstr "다른도구로 열기..."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
 msgid "Opens files in specific applications."
-msgstr "باز کردن فایل‌ها در برنامه‌های مخصوص"
+msgstr "주어진 무른모에서 파일 열기."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
-msgstr "کلمه عبور"
+msgstr "비밀번호"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
 msgid "Username"
-msgstr "نام کاربری"
+msgstr "사용자 이름"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:124
 msgid "<i>Verify and save account information</i>"
-msgstr "<i>بازبینی و ذخیره ی اطلاعات حساب کاربری</i>"
+msgstr "<i>계정정보를 검사하고 저장</i>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
 msgid "Don't have an account?"
-msgstr ""
+msgstr "계정이 없습니까?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
 #, csharp-format
 msgid "Sign up for {0}"
-msgstr ""
+msgstr "{0}용 가입"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
 msgid "Validating..."
-msgstr ""
+msgstr "확인중..."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
 #, csharp-format
 msgid "Don't have {0}?"
-msgstr ""
+msgstr "{0}이 없습니까?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
 msgid "Account validation failed!"
-msgstr ""
+msgstr "계정 검사 실패!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
 msgid "Verify and save account information"
-msgstr ""
+msgstr "계정정보를 검사후 저장"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
 msgid "Account validation succeeded!"
-msgstr ""
+msgstr "계정 검증 성공!"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:88
 msgid "Icon"
-msgstr ""
+msgstr "아이콘"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:92
 msgid "This application could not be indexed."
-msgstr ""
+msgstr "이 무른모는 인덱스를 작성할 수 없습니다."
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:116
 msgid "Exec"
-msgstr ""
+msgstr "실행"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:134
 msgid "OnlyShowIn"
-msgstr ""
+msgstr "보기에만 있음"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:68
 msgid "Applications"
-msgstr "برنامه‌ها"
+msgstr "무른모"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:72
 msgid "Finds applications in many locations."
-msgstr "در حال پیدا کردن برنامه‌ها در مکان‌های مختلف."
+msgstr "많은 경로에서 무른모 검색."
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:40
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "클립보드로 복사"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:44
 msgid "Copy current text to clipboard"
-msgstr ""
+msgstr "현재 내용을 클립보드로 복사"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
 msgid "GNOME Special Locations"
-msgstr "محل‌های مخصوص گنوم"
+msgstr "그놈 특별한 위치"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
 msgid "Special locations in GNOME, such as Computer and Network."
-msgstr "محل‌های مخصوص گنوم،مانند کامپیوتر یا شبکه."
+msgstr "그놈에서 컴퓨터나 네트워크와 같은 특별한 위치."
 
 #: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
 #, csharp-format
 msgid "Error reading {0}."
-msgstr ""
+msgstr "{0} 읽기 오류."
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
 #, csharp-format
 msgid "Error saving {0}"
-msgstr ""
+msgstr "{0} 저장 오류"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
-msgstr ""
+msgstr "키 \"{0}\"이 키링에서 찾을 수 없습니다."
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 msgid "gnome-keyring-daemon could not be reached!"
-msgstr ""
+msgstr "gnome-keyring-daemon이 도달하지 못했습니다."
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:42
 msgid "No name"
-msgstr ""
+msgstr "이름 없음"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:43
 msgid "No description."
-msgstr ""
+msgstr "설명 없음."
 
 #: ../Do/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
-msgstr ""
-"اجرای کار‌ها با حداکثر سرعت ممکن (اما نه سریع‌ترین) با فایل‌های شما، "
-"آدرس‌های اینترنتی ذخیره‌شده،برنامه‌ها،موزیک،مخاطبات و بسیاری دیگر!"
+msgstr "파일, 북마크, 무른모, 음악, 연락처 그외를 가능한한 빨리 할것입니다."
 
 #: ../Do/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
-msgstr "Gnome Do"
+msgstr "그놈 Do"
 
 #: ../data/gnome-do.schemas.in.h:1
 msgid "Always show results window."
-msgstr ""
+msgstr "항상 결과창 보이기."
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
 "Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
 "Mini."
-msgstr ""
+msgstr "Do의 모양새 변경. 유효한 항목은 클래식, 유리프레임, 미니입니다."
 
 #: ../data/gnome-do.schemas.in.h:3
 msgid "Do UI theme"
-msgstr ""
+msgstr "Do UI 테마"
 
 #: ../data/gnome-do.schemas.in.h:4
 msgid "Do summon keybinding."
-msgstr ""
+msgstr "Do keybinding 소환."
 
 #: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
-msgstr ""
+msgstr "이 선택은 시작하자마다 팝업되는것으로부터 Do를 유지시켜줍니다."
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
-msgstr ""
+msgstr "Do가 시작할때 주창 숨기기."
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr ""
+msgstr "키가 텍스트모드 진입에 사용됨."
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
-msgstr ""
+msgstr "텍스트모드로 진입하는데 사용할 문자를 이것으로 설정."
 
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
-msgstr ""
+msgstr "Do를 소환할때 사용하기 좋은 키명령을 이것으로 설정"
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
-msgstr ""
+msgstr "결과에 상관없이 창이 항상 보임."

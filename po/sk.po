@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2008-08-20 09:41+0000\n"
-"Last-Translator: helix84 <Unknown>\n"
+"PO-Revision-Date: 2009-02-05 13:09+0000\n"
+"Last-Translator: Dusan Maliarik <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
+"X-Launchpad-Export-Date: 2009-03-13 16:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
@@ -23,12 +23,11 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
 msgid "Background Color:"
-msgstr ""
+msgstr "Farba pozadia:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
-#, fuzzy
 msgid "_Theme:"
-msgstr "Téma vzhľadu:"
+msgstr "_Téma:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
 msgid "Always show results window"
@@ -36,11 +35,11 @@ msgstr "Vždy zobraziť okno s výsledkami"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
 msgid "Show window shadow"
-msgstr ""
+msgstr "Zobraziť tieň pod oknom"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:228
 msgid "Animate window"
-msgstr ""
+msgstr "Animované okno"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:262
 msgid ""
@@ -55,7 +54,7 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
 msgid "_Install Updates"
-msgstr "Na_inštalovať aktualizácie"
+msgstr "_Nainštalovať aktualizácie"
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
 msgid "To edit a shortcut, double-click it and type a new one."
@@ -79,7 +78,7 @@ msgstr "_Nastaviť"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:170
 msgid "_About"
-msgstr "_O aplikácii..."
+msgstr "_O programe"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
@@ -94,9 +93,8 @@ msgid "Hide window on first launch (quiet mode)."
 msgstr "Skryť okno po prvom spustení (tichý režim)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
-#, fuzzy
 msgid "Show notification icon"
-msgstr "Zobraziť ikonu v oznamovacej oblasti"
+msgstr "Zobraziť ikonu v systémovom paneli"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
@@ -112,27 +110,29 @@ msgstr "stránka1"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
 msgid "Some of the required add-ins were not found"
-msgstr "Niektoré z požadovaných zásuvných modulov neboli nájdené"
+msgstr "Niektoré z požadovaných modulov sa nepodarilo nájsť"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
 msgid "Installation failed"
-msgstr "Inštalácia sa nepodarila"
+msgstr "Inštalácia zlyhala"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:35
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugins</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugins</span></b>"
 msgstr ""
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugin</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugin</span></b>"
 msgstr ""
+"<b><span size=\"large\"> Pri inštalácii vybraného modulu nastala chyba "
+"</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
 msgid "and "
-msgstr ""
+msgstr "a "
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:47
 msgid " is not a valid plugin file."
@@ -143,30 +143,28 @@ msgid " are not valid plugin files."
 msgstr ""
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Vzhľad</b>"
+msgstr "Vzhľad"
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
-#, fuzzy
 msgid "General"
-msgstr "Odhaliť"
+msgstr "Všeobecné"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
 msgid "Plugins"
-msgstr ""
+msgstr "Moduly"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
 msgid "Official Plugins"
-msgstr ""
+msgstr "Oficiálne Moduly"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
-msgstr ""
+msgstr "Všetky Moduly"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
 msgid "Community Plugins"
-msgstr ""
+msgstr "Komunitné Moduly"
 
 #: ../Do/src/Do.Core/DoAddinInstaller.cs:37
 msgid "Installation cancelled"
@@ -181,23 +179,20 @@ msgid "Item Sources providing all items GNOME Do knows about."
 msgstr "Zdroje položiek poskytujúce všetky položky, o ktorých GNOME Do vie."
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
-#, fuzzy
 msgid "Preferences"
-msgstr "_Nastavenia"
+msgstr "Nastavenia"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
-#, fuzzy
 msgid "Adjust Do's settings, manage plugins, etc."
-msgstr "Správa nastavení, zásuvných modulov atď."
+msgstr "Upraviť nastavenia Do, správa modulov, apod."
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
-#, fuzzy
 msgid "Quit"
-msgstr "_Ukončiť"
+msgstr "Ukončiť"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
-msgstr ""
+msgstr "Ukončiť GNOME Do - vráťte sa skoro!"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:63
 msgid "Selected text"
@@ -210,19 +205,19 @@ msgstr "Momentálne vybraný text"
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:33
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:53
 msgid "Clear Learning"
-msgstr ""
+msgstr "Vyčistiť naučené data"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:37
 msgid "Resets Do's learned usage data."
-msgstr ""
+msgstr "Vyčistiť naučené data."
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:54
 msgid "Are you sure you want to clear Do's learned usage data?"
-msgstr ""
+msgstr "Ste si istý že chcete vyčistiť naučené data?"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
 msgid "Clear"
-msgstr ""
+msgstr "Vyčistiť"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:49
 msgid "Internal GNOME Do Items"
@@ -234,98 +229,91 @@ msgstr "Špeciálne položky týkajúce sa vnútorného fungovania GNOME Do."
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
-msgstr ""
+msgstr "Prispejte"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:40
-#, fuzzy
 msgid "Support GNOME Do development!"
-msgstr "Spustiť GNOME Do po prihlásení."
+msgstr "Podporte vývoj GNOME Do!"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
-#, fuzzy
 msgid "About Do"
-msgstr "_O GNOME Do"
+msgstr "O programe Do"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
-#, fuzzy
 msgid "About GNOME Do"
-msgstr "Ukončiť GNOME Do"
+msgstr "O programe GNOME Do"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:57
 msgid "Type to begin searching"
-msgstr "Hľadanie začne, keď začnete písať"
+msgstr "Hľadanie zpustíte písaním"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:353
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:387
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:58
 msgid "Type to start searching."
-msgstr "Hľadanie začne, keď začnete písa"
+msgstr "Hľadanie zpustíte písaním"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-#, fuzzy
 msgid "Minimize"
-msgstr "Mini"
+msgstr "Minimalizovať"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Restore"
-msgstr ""
+msgstr "Obnoviť"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
 msgid "Close All"
-msgstr ""
+msgstr "Zavrieť všetky"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-#, fuzzy
 msgid "Summon GNOME Do"
-msgstr "Vyvolať GNOME Do pomocou "
+msgstr "Vyvolať GNOME Do"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
 msgid "Automatically Hide"
-msgstr ""
+msgstr "Automaticky skrývať"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
 msgid "Allow Window Overlap"
-msgstr ""
+msgstr "Povoliť prekrytie oknom"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
 msgid "Zoom Icons"
-msgstr ""
+msgstr "Zväčšovať ikony"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
 msgid "Show Trash"
-msgstr ""
+msgstr "Zobraz kôš"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
 msgid "Advanced Indicators"
-msgstr ""
+msgstr "Pokročilé ukazovatele"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
 msgid "Switch Monitors"
-msgstr ""
+msgstr "Prepni monitor"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
 msgid "Remove from Dock"
-msgstr ""
+msgstr "Odstrániť z lišty"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
 msgid "No result found for"
-msgstr ""
+msgstr "Žiadne výsledky pre"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
 msgid "Trash"
-msgstr ""
+msgstr "Kôš"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
-#, fuzzy
 msgid "Open Url"
-msgstr "Otvoriť URL"
+msgstr "Otvoriť adresu"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
-#, fuzzy
 msgid "Opens bookmarks and manually-typed Urls."
-msgstr "Otvára záložky a ručne napísané URL"
+msgstr "Otvorí záložky a manuálne napísané adresy"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
 msgid "Reveal"
@@ -349,7 +337,7 @@ msgstr "Email"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:41
 msgid "Compose a new email to a friend."
-msgstr "Napísať nový email priateľovi"
+msgstr "Napísať nový email priateľovi."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:38
 msgid "Open"
@@ -373,7 +361,7 @@ msgstr "Heslo"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
 msgid "Username"
-msgstr "Meno používateľa"
+msgstr "Užívateľské meno"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:124
 msgid "<i>Verify and save account information</i>"
@@ -381,51 +369,49 @@ msgstr "<i>Overiť a uložiť informácie o účte</i>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
 msgid "Don't have an account?"
-msgstr ""
+msgstr "Nemáte účet?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
 #, csharp-format
 msgid "Sign up for {0}"
-msgstr ""
+msgstr "Zaregistrujte sa pre {0}"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
 msgid "Validating..."
-msgstr ""
+msgstr "Overujem..."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
 #, csharp-format
 msgid "Don't have {0}?"
-msgstr ""
+msgstr "Nemáte {0}?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
-#, fuzzy
 msgid "Account validation failed!"
-msgstr "Inštalácia sa nepodarila"
+msgstr "Overenie účtu zlyhalo!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
-#, fuzzy
 msgid "Verify and save account information"
-msgstr "<i>Overiť a uložiť informácie o účte</i>"
+msgstr "Overiť a uložiť informácie o účte"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
 msgid "Account validation succeeded!"
-msgstr ""
+msgstr "Účet bol úspešne overený!"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:88
 msgid "Icon"
-msgstr ""
+msgstr "Ikona"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:92
 msgid "This application could not be indexed."
-msgstr ""
+msgstr "Táto aplikácia nemôže byť zaindexovaná."
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:116
 msgid "Exec"
-msgstr ""
+msgstr "Spustiť"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:134
 msgid "OnlyShowIn"
-msgstr ""
+msgstr "ZobraziťLenV"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:68
 msgid "Applications"
@@ -437,11 +423,11 @@ msgstr "Nájde aplikácie na mnohých miestach."
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:40
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "Kopírovať do schránky"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:44
 msgid "Copy current text to clipboard"
-msgstr ""
+msgstr "Kopírovať text do schránky"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
 msgid "GNOME Special Locations"
@@ -454,12 +440,12 @@ msgstr "Špeciálne miesta v GNOME ako Počítač a Sieť."
 #: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
 #, csharp-format
 msgid "Error reading {0}."
-msgstr ""
+msgstr "Chyba pri čítaní {0}."
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
 #, csharp-format
 msgid "Error saving {0}"
-msgstr ""
+msgstr "Chyba pri ukladaní {0}"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -468,22 +454,22 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 msgid "gnome-keyring-daemon could not be reached!"
-msgstr ""
+msgstr "Nedarí sa kontaktovať gnome-keyring-daemon!"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:42
 msgid "No name"
-msgstr ""
+msgstr "Bez názvu"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:43
 msgid "No description."
-msgstr ""
+msgstr "Bez popisu."
 
 #: ../Do/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr ""
-"Robiť veci tak rýchlo ako sa dá (ale nie rýchlejšie) s vašimi súbormi, "
+"Robiť veci tak rýchlo ako sa dá (ale nie rýchlejšie) s Vašimi súbormi, "
 "záložkami, aplikáciami, hudbou, kontaktami a viac!"
 
 #: ../Do/gnome-do.desktop.in.h:2
@@ -491,23 +477,22 @@ msgid "GNOME Do"
 msgstr "GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:1
-#, fuzzy
 msgid "Always show results window."
-msgstr "Vždy zobraziť okno s výsledkami"
+msgstr "Stále zobrazovať okno výsledkov"
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
 "Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
 "Mini."
-msgstr ""
+msgstr "Mení vzhľad Do. Platnými možnosťami sú Classic, Glass Frame a Mini."
 
 #: ../data/gnome-do.schemas.in.h:3
 msgid "Do UI theme"
-msgstr ""
+msgstr "Téma Do"
 
 #: ../data/gnome-do.schemas.in.h:4
 msgid "Do summon keybinding."
-msgstr ""
+msgstr "Skratka pre vyvolanie Do."
 
 #: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
@@ -515,47 +500,20 @@ msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
-msgstr ""
+msgstr "Skryť hlavné okno keď Do štartuje."
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr ""
+msgstr "Klávesa pre vstup do textového módu."
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
-msgstr ""
+msgstr "Nastavte na znak ktorým sa budete prepínať do textového módu."
 
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
-msgstr ""
+msgstr "Nastavte klávesu ktorou si prajete vyvolávať Do."
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "Classic"
-#~ msgstr "Klasický"
-
-#~ msgid "Glass Frame"
-#~ msgstr "Sklenený rám"
-
-#~ msgid "Unknown"
-#~ msgstr "Neznámy"
-
-#~ msgid "Assign Alias..."
-#~ msgstr "Priradiť alias..."
-
-#~ msgid "Give an item an alternate name."
-#~ msgstr "Zadať alternatívny názov položky."
-
-#~ msgid "Alias items"
-#~ msgstr "Alias položky"
-
-#~ msgid "Aliased items from Do's universe."
-#~ msgstr "Alias položky z priestoru Do"
-
-#~ msgid "Delete Alias"
-#~ msgstr "Zmazať alias"
-
-#~ msgid "Deletes an alias."
-#~ msgstr "Zmaže alias."

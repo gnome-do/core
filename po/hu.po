@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gc\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2008-07-26 05:15+0000\n"
-"Last-Translator: Gergely Máté <gerymate@gmail.com>\n"
+"PO-Revision-Date: 2009-03-09 15:51+0000\n"
+"Last-Translator: Moltenice80 <moltenice80@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
+"X-Launchpad-Export-Date: 2009-03-13 16:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
@@ -23,16 +23,15 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
 msgid "Background Color:"
-msgstr ""
+msgstr "Háttérszín:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
-#, fuzzy
 msgid "_Theme:"
-msgstr "Téma:"
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
 msgid "Always show results window"
-msgstr ""
+msgstr "Eredmény ablak mindig felül"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
 msgid "Show window shadow"
@@ -51,13 +50,13 @@ msgstr ""
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr ""
+"<span size=\"large\"><b>Frissített bővítmények elérhetőek!</b></span>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
 msgid "_Install Updates"
-msgstr ""
+msgstr "_Frissítések telepítése"
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-#, fuzzy
 msgid "To edit a shortcut, double-click it and type a new one."
 msgstr ""
 "Egy gyorsbillentyű szerkesztéséhez kattintsunk rá duplán, majd nyomjuk le az "
@@ -93,7 +92,7 @@ msgstr "A Gnome Do indítása bejelentkezéskor"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
-msgstr "Első indításkor elrejti az ablakot (csendes mód)."
+msgstr "Ablak elrejtése első indításkor (csendes mód)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
 msgid "Show notification icon"
@@ -105,7 +104,8 @@ msgstr "BővítményBeállításAblak"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
-msgstr "<span size=\"large\" weight=\"heavy\">Ide jön a bővítmény neve</span>"
+msgstr ""
+"<span size=\"large\" weight=\"heavy\">Ide jön a bővítmény neve</span>"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
 msgid "page1"
@@ -113,64 +113,67 @@ msgstr "oldal1"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
 msgid "Some of the required add-ins were not found"
-msgstr ""
+msgstr "Néhány szükséges bővítmény nem található"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
 msgid "Installation failed"
-msgstr ""
+msgstr "A telepítés meghiúsult"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:35
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugins</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugins</span></b>"
 msgstr ""
+"<b><span size=\"large\">A kiválasztott modulok telepítése közben hiba "
+"történt</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugin</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugin</span></b>"
 msgstr ""
+"<b><span size=\"large\">A kiválasztott modul telepítése közben hiba "
+"történt</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
 msgid "and "
-msgstr ""
+msgstr "és "
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:47
 msgid " is not a valid plugin file."
-msgstr ""
+msgstr " nem egy szabályos modul fájl."
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:49
 msgid " are not valid plugin files."
-msgstr ""
+msgstr " nem szabályos modul fájlok."
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Megjelenés</b>"
+msgstr "Megjelenés"
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
 msgid "General"
-msgstr ""
+msgstr "Általános"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
 msgid "Plugins"
-msgstr ""
+msgstr "Modulok"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
 msgid "Official Plugins"
-msgstr ""
+msgstr "Hivatalos modulok"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
-msgstr ""
+msgstr "Minden modul"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
 msgid "Community Plugins"
-msgstr ""
+msgstr "Közösségi modulok"
 
 #: ../Do/src/Do.Core/DoAddinInstaller.cs:37
 msgid "Installation cancelled"
-msgstr ""
+msgstr "A telepítés megszakítva"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
 msgid "GNOME Do Item Sources"
@@ -181,18 +184,16 @@ msgid "Item Sources providing all items GNOME Do knows about."
 msgstr ""
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
-#, fuzzy
 msgid "Preferences"
-msgstr "Gnome Do Beállítások"
+msgstr "Beállítások"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
 msgid "Adjust Do's settings, manage plugins, etc."
 msgstr ""
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
-#, fuzzy
 msgid "Quit"
-msgstr "_Kilépés"
+msgstr "Kilépés"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
@@ -200,7 +201,7 @@ msgstr ""
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:63
 msgid "Selected text"
-msgstr ""
+msgstr "kijelölt szöveg"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:67
 msgid "Currently selected text."
@@ -221,7 +222,7 @@ msgstr ""
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
 msgid "Clear"
-msgstr ""
+msgstr "Törlés"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:49
 msgid "Internal GNOME Do Items"
@@ -236,19 +237,16 @@ msgid "Donate"
 msgstr ""
 
 #: ../Do/src/Do.Universe/DonateItem.cs:40
-#, fuzzy
 msgid "Support GNOME Do development!"
-msgstr "A Gnome Do indítása bejelentkezéskor"
+msgstr "Támogasd a GNOME Do fejlesztését!"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
-#, fuzzy
 msgid "About Do"
-msgstr "A Do _Névjegye"
+msgstr "A Do névjegye"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
-#, fuzzy
 msgid "About GNOME Do"
-msgstr "GNOME Do"
+msgstr "A GNOME Do névjegye"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
@@ -263,9 +261,8 @@ msgid "Type to start searching."
 msgstr "Kezdjünk gépelni a keresés elkezdéséhez"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-#, fuzzy
 msgid "Minimize"
-msgstr "Mini"
+msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Restore"
@@ -273,12 +270,11 @@ msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
 msgid "Close All"
-msgstr ""
+msgstr "Összes Bezárása"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-#, fuzzy
 msgid "Summon GNOME Do"
-msgstr "GNOME Do"
+msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
 msgid "Automatically Hide"
@@ -317,14 +313,12 @@ msgid "Trash"
 msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
-#, fuzzy
 msgid "Open Url"
-msgstr "URL megnyitása"
+msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
-#, fuzzy
 msgid "Opens bookmarks and manually-typed Urls."
-msgstr "Könyvjelzőket és kézzel beírt URL-eket nyit meg."
+msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
 msgid "Reveal"
@@ -360,7 +354,7 @@ msgstr "Megnyit különféle dolgokat."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
 msgid "Open With..."
-msgstr ""
+msgstr "Megnyitás ezzel..."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
 msgid "Opens files in specific applications."
@@ -380,7 +374,7 @@ msgstr "<i>A kontó információinak ellenőrzése és mentése</i>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
 msgid "Don't have an account?"
-msgstr ""
+msgstr "Nincsen fiókod?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
 #, csharp-format
@@ -401,9 +395,8 @@ msgid "Account validation failed!"
 msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
-#, fuzzy
 msgid "Verify and save account information"
-msgstr "<i>A kontó információinak ellenőrzése és mentése</i>"
+msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
 msgid "Account validation succeeded!"
@@ -411,7 +404,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:88
 msgid "Icon"
-msgstr ""
+msgstr "Ikon"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:92
 msgid "This application could not be indexed."
@@ -427,7 +420,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:68
 msgid "Applications"
-msgstr ""
+msgstr "Alkalmazások"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:72
 msgid "Finds applications in many locations."
@@ -435,7 +428,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:40
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "Másolás vágólapra"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:44
 msgid "Copy current text to clipboard"
@@ -466,7 +459,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 msgid "gnome-keyring-daemon could not be reached!"
-msgstr ""
+msgstr "gnome-keyring-daemon nem elérhető!"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:42
 msgid "No name"
@@ -474,7 +467,7 @@ msgstr ""
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:43
 msgid "No description."
-msgstr ""
+msgstr "Nincs leírás."
 
 #: ../Do/gnome-do.desktop.in.h:1
 msgid ""
@@ -490,7 +483,7 @@ msgstr "GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:1
 msgid "Always show results window."
-msgstr ""
+msgstr "Mindig mutasd az eredmények ablakot."
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
@@ -512,7 +505,7 @@ msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
-msgstr ""
+msgstr "A főablak elrejtése a Do indulásakor."
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
@@ -525,16 +518,8 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
 msgstr ""
+"Állítsd be arra a billentyűparancsra mellyel elő szeretnéd hívni a Do-t."
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "Classic"
-#~ msgstr "Hagyományos"
-
-#~ msgid "Glass Frame"
-#~ msgstr "Üveg Keret"
-
-#~ msgid "Unknown"
-#~ msgstr "Ismeretlen"

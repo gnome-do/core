@@ -6,15 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2008-08-03 15:21+0000\n"
+"PO-Revision-Date: 2008-08-29 16:28+0000\n"
 "Last-Translator: Миладин Миладиноски <Unknown>\n"
 "Language-Team: Macedonian <mk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
+"X-Launchpad-Export-Date: 2009-03-13 16:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
@@ -26,9 +26,8 @@ msgid "Background Color:"
 msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
-#, fuzzy
 msgid "_Theme:"
-msgstr "Тема:"
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
 msgid "Always show results window"
@@ -50,7 +49,8 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
-msgstr "<span size=\"large\"><b>Надоградени приклучоци се достапни!</b></span>"
+msgstr ""
+"<span size=\"large\"><b>Надоградени приклучоци се достапни!</b></span>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
 msgid "_Install Updates"
@@ -62,7 +62,7 @@ msgstr "За да измениш кратенка, двојно кликни н�
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
 msgid "GNOME Do Preferences"
-msgstr "GNOME Do Подесувања"
+msgstr "GNOME Do подесувања"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
 msgid "Show:"
@@ -81,29 +81,26 @@ msgid "_About"
 msgstr "_За"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
-#, fuzzy
 msgid "<b>First-launch Behavior</b>"
 msgstr "<b>Однесување при прво извршување</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
 msgid "Start GNOME Do at login."
-msgstr "Пушти го GNOME Do при стартување на системот."
+msgstr "Пушти го GNOME Do при логирање на системот."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
 msgstr "Скриј го прозорецот при првото стартување (тивок мод)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
-#, fuzzy
 msgid "Show notification icon"
-msgstr "Прикажи ја нотификационата икона"
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
 msgstr "PluginConfigurationWindow"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
-#, fuzzy
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
 msgstr "<span size=\"large\" weight=\"heavy\">Име на приклучокот овде</span>"
 
@@ -121,14 +118,14 @@ msgstr "Инсталацијата е неуспешна"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:35
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugins</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugins</span></b>"
 msgstr ""
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugin</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugin</span></b>"
 msgstr ""
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
@@ -144,14 +141,12 @@ msgid " are not valid plugin files."
 msgstr ""
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Изглед</b>"
+msgstr ""
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
-#, fuzzy
 msgid "General"
-msgstr "Откриј"
+msgstr ""
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
 msgid "Plugins"
@@ -175,27 +170,24 @@ msgstr "Инсталацијата е откажана"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
 msgid "GNOME Do Item Sources"
-msgstr "Извори на GNOME Do предмети"
+msgstr "Извори на GNOME Do прдмети"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
 msgid "Item Sources providing all items GNOME Do knows about."
 msgstr ""
-"Извори на предметите обезбедувајќи ги сите предмети за кои што GNOME Do знае."
+"Извори на предметите кои што ги обезбедуваат сите предмети за кои што"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
-#, fuzzy
 msgid "Preferences"
-msgstr "_Опции"
+msgstr ""
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
-#, fuzzy
 msgid "Adjust Do's settings, manage plugins, etc."
-msgstr "Прилагоди ги преференците, управувај со приклучоците, итн."
+msgstr ""
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
-#, fuzzy
 msgid "Quit"
-msgstr "_Излез"
+msgstr ""
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
@@ -228,30 +220,27 @@ msgstr ""
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:49
 msgid "Internal GNOME Do Items"
-msgstr "Внатрешни Gnome Do предмети"
+msgstr "Внатрешни GNOME DO предмети"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:53
 msgid "Special items relevant to the inner-workings of GNOME Do."
-msgstr "Специјални предмети релевантини на внатрешните работи од GNOME Do."
+msgstr "Специјални предмети релевантини на внатрешните работи на GNOME Do."
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
 msgstr ""
 
 #: ../Do/src/Do.Universe/DonateItem.cs:40
-#, fuzzy
 msgid "Support GNOME Do development!"
-msgstr "Пушти го GNOME Do при стартување на системот."
+msgstr ""
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
-#, fuzzy
 msgid "About Do"
-msgstr "_За Do"
+msgstr ""
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
-#, fuzzy
 msgid "About GNOME Do"
-msgstr "Исклучи го GNOME Do"
+msgstr ""
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
@@ -266,9 +255,8 @@ msgid "Type to start searching."
 msgstr "Започни со пишување за да почне пребарувањето."
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-#, fuzzy
 msgid "Minimize"
-msgstr "Мини"
+msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Restore"
@@ -279,9 +267,8 @@ msgid "Close All"
 msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-#, fuzzy
 msgid "Summon GNOME Do"
-msgstr "Прикажи го Gnome Do со "
+msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
 msgid "Automatically Hide"
@@ -320,14 +307,12 @@ msgid "Trash"
 msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
-#, fuzzy
 msgid "Open Url"
-msgstr "Отвори URL"
+msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
-#, fuzzy
 msgid "Opens bookmarks and manually-typed Urls."
-msgstr "Отвора обележувачи и рачно напишани URLови."
+msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
 msgid "Reveal"
@@ -400,14 +385,12 @@ msgid "Don't have {0}?"
 msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
-#, fuzzy
 msgid "Account validation failed!"
-msgstr "Инсталацијата е неуспешна"
+msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
-#, fuzzy
 msgid "Verify and save account information"
-msgstr "<i>Верифицирај ја и зачувај ја информацијата за сметката</o>"
+msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
 msgid "Account validation succeeded!"
@@ -451,7 +434,7 @@ msgstr "Специјални локации во GNOME"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
 msgid "Special locations in GNOME, such as Computer and Network."
-msgstr "Специјални локации во GNOME, како Компјутер и Мрежа"
+msgstr "Специјални локации во GNOME, како компјутер и мрежа."
 
 #: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
 #, csharp-format
@@ -481,12 +464,11 @@ msgid "No description."
 msgstr ""
 
 #: ../Do/gnome-do.desktop.in.h:1
-#, fuzzy
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr ""
-"Направи ги работите најбрзо што може (но не побрзо) со вашите фајлови, "
+"Направи ги работите најбрзо што може (но не побрзо) со вашите датотеки, "
 "обележувачи, апликации, музика, контакти, и повеќе!"
 
 #: ../Do/gnome-do.desktop.in.h:2
@@ -494,9 +476,8 @@ msgid "GNOME Do"
 msgstr "GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:1
-#, fuzzy
 msgid "Always show results window."
-msgstr "Секогаш прикажувај го прозорецот со резултати"
+msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
@@ -535,31 +516,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "Classic"
-#~ msgstr "Класичен"
-
-#~ msgid "Glass Frame"
-#~ msgstr "Стаклена Рамка"
-
-#~ msgid "Unknown"
-#~ msgstr "Непознато"
-
-#~ msgid "Assign Alias..."
-#~ msgstr "Додади алиас..."
-
-#~ msgid "Give an item an alternate name."
-#~ msgstr "Додади алтернативно име на предметот."
-
-#~ msgid "Alias items"
-#~ msgstr "Алиас предмети"
-
-#, fuzzy
-#~ msgid "Aliased items from Do's universe."
-#~ msgstr "Прекарувани предмети од Do-овиот универзум."
-
-#~ msgid "Delete Alias"
-#~ msgstr "Избриши алијас"
-
-#~ msgid "Deletes an alias."
-#~ msgstr "Бриши алијас."

@@ -6,37 +6,36 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2008-08-14 03:47+0000\n"
-"Last-Translator: Muhammad Zulfikar <muhzulfikar@gmail.com>\n"
+"PO-Revision-Date: 2009-02-20 15:34+0000\n"
+"Last-Translator: W. Priyambodo <cibermen@gmail.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
+"X-Launchpad-Export-Date: 2009-03-13 16:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
 msgid "_Reset"
-msgstr ""
+msgstr "_Ulangi"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
 msgid "Background Color:"
-msgstr ""
+msgstr "Warna Latar:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
-#, fuzzy
 msgid "_Theme:"
-msgstr "tema:"
+msgstr "_Tema:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
 msgid "Always show results window"
-msgstr "Selalu tampilkan jendela hasil"
+msgstr "Selalu tampilkan hasilnya"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
 msgid "Show window shadow"
-msgstr ""
+msgstr "Tampilkan bayangan jendela"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:228
 msgid "Animate window"
@@ -50,88 +49,88 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
-msgstr ""
+msgstr "<span size=\"large\"><b>Plugin lebih baru telah tersedia!</b></span>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
 msgid "_Install Updates"
-msgstr ""
+msgstr "Pasang Pembaruan"
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
 msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "untuk edit jalan pintas (shortcut), doble klik dan ketik yang baru"
+msgstr ""
+"Untuk menyunting jalan pintas (shortcut), klik-ganda dan ketikkan yang baru."
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
 msgid "GNOME Do Preferences"
-msgstr "preferensi GNOME Do"
+msgstr "Preferensi GNOME Do"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
 msgid "Show:"
-msgstr "tampilkan:"
+msgstr "Tunjukkan:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:89
 msgid "Search:"
-msgstr "cari:"
+msgstr "Cari:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:144
 msgid "_Configure"
-msgstr "konfigurasi:"
+msgstr "_Pengaturan"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:170
 msgid "_About"
-msgstr "_tentang"
+msgstr "_Tentang"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
-msgstr "<b> pelapasan pertama behaviour<b>"
+msgstr "<b>Perilaku Luncuran-pertama<b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
 msgid "Start GNOME Do at login."
-msgstr "memulai GNOME Do pada saat login"
+msgstr "Mulai GNOME Do ketika masuk."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
-msgstr "sembunyikan window saat pelepasan pertama (mode diam)"
+msgstr "Sembunyikan tampilan pada awal (mode senyap)"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
-#, fuzzy
 msgid "Show notification icon"
-msgstr "Tampilkan ikon notifikasi"
+msgstr "Tampilkan pemberitahuan"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
-msgstr "Jendela pengaturan plugin"
+msgstr "TampilanKonfigurasiTambahan"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
-msgstr "<span ukurab=\"besar\" timbangan=\"berat\">nama plugin disini</span>"
+msgstr "<span size=\"large\" weight=\"heavy\">Nama plugin disini</span>"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
 msgid "page1"
-msgstr "halaman 1"
+msgstr "halaman1"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
 msgid "Some of the required add-ins were not found"
-msgstr ""
+msgstr "Beberapa tambahan yang diperlukan tidak ada"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
 msgid "Installation failed"
-msgstr ""
+msgstr "Instalasi gagal"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:35
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugins</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugins</span></b>"
 msgstr ""
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugin</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugin</span></b>"
 msgstr ""
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
 msgid "and "
-msgstr ""
+msgstr "dan "
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:47
 msgid " is not a valid plugin file."
@@ -142,13 +141,12 @@ msgid " are not valid plugin files."
 msgstr ""
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
-#, fuzzy
 msgid "Appearance"
-msgstr "<b> tampilan <b/>"
+msgstr "Penampilan"
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
 msgid "General"
-msgstr ""
+msgstr "Umum"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
 msgid "Plugins"
@@ -177,20 +175,19 @@ msgstr "Item sumber GNOME Do"
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
 msgid "Item Sources providing all items GNOME Do knows about."
 msgstr ""
+"Sumber-sumber Pokok menyediakan semua pokok yang diketahui oleh GNOME Do."
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
-#, fuzzy
 msgid "Preferences"
-msgstr "preferensi GNOME Do"
+msgstr "Preferensi"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
 msgid "Adjust Do's settings, manage plugins, etc."
 msgstr ""
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
-#, fuzzy
 msgid "Quit"
-msgstr "_berhenti"
+msgstr "Keluar"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
@@ -198,11 +195,11 @@ msgstr ""
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:63
 msgid "Selected text"
-msgstr "Tulisan terpilih"
+msgstr "Teks terpilih"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:67
 msgid "Currently selected text."
-msgstr ""
+msgstr "Teks yang dipilih sekarang."
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:33
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:53
@@ -227,60 +224,55 @@ msgstr "Item GNOME Do Internal"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:53
 msgid "Special items relevant to the inner-workings of GNOME Do."
-msgstr ""
+msgstr "Item khusus yang berhubungan dengan kerja di dalam GNOME Do."
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
-msgstr ""
+msgstr "Donasi"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:40
-#, fuzzy
 msgid "Support GNOME Do development!"
-msgstr "memulai GNOME Do pada saat login"
+msgstr "Dukung pengembangan GNOME Do"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
-#, fuzzy
 msgid "About Do"
-msgstr "_tentang Do"
+msgstr "Tentang Do"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
-#, fuzzy
 msgid "About GNOME Do"
-msgstr "Keluar GNOME Do"
+msgstr "Tentang GNOME Do"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:57
 msgid "Type to begin searching"
-msgstr "ketik untuk mengawali pencarian"
+msgstr "Ketik untuk mengawali pencarian"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:353
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:387
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:58
 msgid "Type to start searching."
-msgstr "ketik untuk memulai pencarian"
+msgstr "Ketik untuk memulai pencarian."
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-#, fuzzy
 msgid "Minimize"
-msgstr "kecil"
+msgstr "Minimalkan"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Restore"
-msgstr ""
+msgstr "Kembalikan"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
 msgid "Close All"
 msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-#, fuzzy
 msgid "Summon GNOME Do"
-msgstr "Keluar GNOME Do"
+msgstr "Panggil GNOME Do"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
 msgid "Automatically Hide"
-msgstr ""
+msgstr "Bersembunyi secara automatis"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
 msgid "Allow Window Overlap"
@@ -288,87 +280,83 @@ msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
 msgid "Zoom Icons"
-msgstr ""
+msgstr "Perbesar Ikon"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
 msgid "Show Trash"
-msgstr ""
+msgstr "Tunjukkan Tempat Sampah"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
 msgid "Advanced Indicators"
-msgstr ""
+msgstr "Indikator Lanjut"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
 msgid "Switch Monitors"
-msgstr ""
+msgstr "Pindah Monitor"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
 msgid "Remove from Dock"
-msgstr ""
+msgstr "Hilangkan dari Dock"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
 msgid "No result found for"
-msgstr ""
+msgstr "Tidak ada hasil untuk"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
 msgid "Trash"
-msgstr ""
+msgstr "Tempat Sampah"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
-#, fuzzy
 msgid "Open Url"
-msgstr "buka URL"
+msgstr "Buka Url"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
-#, fuzzy
 msgid "Opens bookmarks and manually-typed Urls."
-msgstr "membuka bookmark dan mengetik URL secara manual"
+msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
 msgid "Reveal"
-msgstr ""
+msgstr "Perlihatkan"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
 msgid "Reveals a file in the file manager."
-msgstr ""
+msgstr "Perlihatkan berkas di dalam manajer berkas."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
 msgid "Run"
-msgstr "jalankan"
+msgstr "Jalankan"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
-#, fuzzy
 msgid "Run an application, script, or other executable."
-msgstr "Menjalankan aplikasi, skrip, dan eksekusi lain"
+msgstr "Menjalankan aplikasi, skrip, atau berkas yang lain."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
 msgid "Email"
-msgstr "Surat"
+msgstr "Surat Elektronik"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:41
 msgid "Compose a new email to a friend."
-msgstr "membuat email baru untuk teman"
+msgstr "Menyusun email baru untuk seorang teman."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:38
 msgid "Open"
-msgstr "buka"
+msgstr "Buka"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:42
 msgid "Opens many kinds of items."
-msgstr "membuka berbagai jenis item"
+msgstr "Membuka berbagai jenis"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
 msgid "Open With..."
-msgstr ""
+msgstr "Buka Dengan..."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
-#, fuzzy
 msgid "Opens files in specific applications."
-msgstr "Membuka berkas di aplikasi spesifik"
+msgstr "Membuka dengan aplikasi khusus"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
-msgstr "kata sandi"
+msgstr "Kata sandi"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
 msgid "Username"
@@ -376,11 +364,11 @@ msgstr "Nama pengguna"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:124
 msgid "<i>Verify and save account information</i>"
-msgstr "<i> verifikasi dan penyimpanan informasi akun<i>"
+msgstr "Pastikan dan Simpan Informasi Pengguna"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
 msgid "Don't have an account?"
-msgstr ""
+msgstr "Tidak punya akun?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
 #, csharp-format
@@ -389,7 +377,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
 msgid "Validating..."
-msgstr ""
+msgstr "Memvalidasi..."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
 #, csharp-format
@@ -398,12 +386,11 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
 msgid "Account validation failed!"
-msgstr ""
+msgstr "Validasi akun gagal!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
-#, fuzzy
 msgid "Verify and save account information"
-msgstr "<i> verifikasi dan penyimpanan informasi akun<i>"
+msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
 msgid "Account validation succeeded!"
@@ -427,12 +414,11 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:68
 msgid "Applications"
-msgstr ""
+msgstr "Aplikasi"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:72
-#, fuzzy
 msgid "Finds applications in many locations."
-msgstr "Mencari aplikasi di beberapa lokasi"
+msgstr "Mencari aplikasi di banyak lokasi."
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:40
 msgid "Copy to Clipboard"
@@ -444,12 +430,11 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
 msgid "GNOME Special Locations"
-msgstr "Lokasi khusus GNOME"
+msgstr "Lokasi Khusus GNOME"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
-#, fuzzy
 msgid "Special locations in GNOME, such as Computer and Network."
-msgstr "Lokasi khusus di GNOME, seperti Komputer dan Jaringan"
+msgstr "Lokasi khusus di GNOME, seperti Komputer dan Jaringan."
 
 #: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
 #, csharp-format
@@ -483,31 +468,32 @@ msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr ""
-"lakukan tindakan secepat mungkin (tetapi tidak lebih cepat) dengan file, "
-"bookmark,aplikasi,musik,kontak, anda dan lainnya"
+"Lakukan tindakan secepat mungkin (tetapi tidak lebih cepat) dengan berkas, "
+"bookmark, aplikasi, musik, kontak dan lainnya milik anda!"
 
 #: ../Do/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
 msgstr "GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:1
-#, fuzzy
 msgid "Always show results window."
-msgstr "Selalu tampilkan jendela hasil"
+msgstr "Selalu tampilkan hasilnya"
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
 "Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
 "Mini."
 msgstr ""
+"Mengubah tampilan Do. Masukan yang cocok adalah Klasik, Bingkai Kaca dan "
+"Mini."
 
 #: ../data/gnome-do.schemas.in.h:3
 msgid "Do UI theme"
-msgstr ""
+msgstr "Tamilan Tema Do"
 
 #: ../data/gnome-do.schemas.in.h:4
 msgid "Do summon keybinding."
-msgstr ""
+msgstr "Kombinasi tombol untuk Do"
 
 #: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
@@ -519,28 +505,16 @@ msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr ""
+msgstr "Gunakan kunci untuk memasukkan teks"
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
-msgstr ""
+msgstr "Aktifkan karakter ini untuk digunakan dalam mode teks."
 
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
-msgstr ""
+msgstr "Gunakan perintah ini jika ingin menggunakan Do."
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "Classic"
-#~ msgstr "klasik"
-
-#~ msgid "Glass Frame"
-#~ msgstr "bingkai kaca"
-
-#~ msgid "Unknown"
-#~ msgstr "tak diketahui"
-
-#~ msgid "Give an item an alternate name."
-#~ msgstr "Berikan sebuahi item sebuah nama alternatif"

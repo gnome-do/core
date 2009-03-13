@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-01-27 00:28-0500\n"
 "PO-Revision-Date: 2008-06-21 10:26+0000\n"
 "Last-Translator: T.Thangavelu <thangavelut@yahoo.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
+"X-Launchpad-Export-Date: 2009-03-13 16:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
@@ -117,14 +117,14 @@ msgstr ""
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:35
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugins</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugins</span></b>"
 msgstr ""
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugin</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugin</span></b>"
 msgstr ""
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
@@ -140,9 +140,8 @@ msgid " are not valid plugin files."
 msgstr ""
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>தோற்றம்</b>"
+msgstr ""
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
 msgid "General"
@@ -185,9 +184,8 @@ msgid "Adjust Do's settings, manage plugins, etc."
 msgstr ""
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
-#, fuzzy
 msgid "Quit"
-msgstr "வெளியேறு (_Q)"
+msgstr ""
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
@@ -235,9 +233,8 @@ msgid "Support GNOME Do development!"
 msgstr ""
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
-#, fuzzy
 msgid "About Do"
-msgstr "இதனைப் _பற்றி"
+msgstr ""
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
 msgid "About GNOME Do"
@@ -308,9 +305,8 @@ msgid "Trash"
 msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
-#, fuzzy
 msgid "Open Url"
-msgstr "திறந்த URL"
+msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
 msgid "Opens bookmarks and manually-typed Urls."
@@ -516,9 +512,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "Classic"
-#~ msgstr "தொன்மையான"
-
-#~ msgid "Unknown"
-#~ msgstr "தெரியாத"

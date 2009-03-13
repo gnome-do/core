@@ -6,56 +6,54 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2008-08-05 15:43+0000\n"
-"Last-Translator: zhandarm <Unknown>\n"
+"PO-Revision-Date: 2009-03-12 22:47+0000\n"
+"Last-Translator: Alexey Nedilko <alexey_nedilko@lavabit.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
+"X-Launchpad-Export-Date: 2009-03-13 16:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
 msgid "_Reset"
-msgstr ""
+msgstr "_Сброс"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
 msgid "Background Color:"
-msgstr ""
+msgstr "Цвет фона:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
-#, fuzzy
 msgid "_Theme:"
-msgstr "Тема:"
+msgstr "_Тема:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
-#, fuzzy
 msgid "Always show results window"
 msgstr "Всегда показывать окно с результатами"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
 msgid "Show window shadow"
-msgstr ""
+msgstr "Показывать тень окна"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:228
 msgid "Animate window"
-msgstr ""
+msgstr "Анимировать окно"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:262
 msgid ""
 "<b>Your display is not properly configured for theme and animation support. "
 "To use these features, you must enable compositing.</b>"
 msgstr ""
+"<b>Ваш графический интерфейс не настроен для поддержки тем и анимации. Чтобы "
+"использовать эти функции, необходимо включить композитинг.</b>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
-#, fuzzy
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
-msgstr "<span size=\"large\"><b>Доступные новые версии плагинов!</b></span>"
+msgstr "<span size=\"large\"><b>Доступны новые версии плагинов!</b></span>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
-#, fuzzy
 msgid "_Install Updates"
 msgstr "_Установить Обновления"
 
@@ -85,7 +83,7 @@ msgstr "_О программе"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
-msgstr "<b>Настройка после первого запуска</b>"
+msgstr "<b>Поведение при первом запуске</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
 msgid "Start GNOME Do at login."
@@ -96,16 +94,14 @@ msgid "Hide window on first launch (quiet mode)."
 msgstr "Не открывать окно при первом запуске (тихий режим)"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
-#, fuzzy
 msgid "Show notification icon"
-msgstr "Показать иконку напоминания"
+msgstr "В область уведомлений"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
 msgstr "Окно настройки модуля"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
-#, fuzzy
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
 msgstr "<span size=\"large\" weight=\"heavy\">Имя плагина</span>"
 
@@ -114,162 +110,149 @@ msgid "page1"
 msgstr "page1"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
-#, fuzzy
 msgid "Some of the required add-ins were not found"
-msgstr "Необходимые дополнения не найдены"
+msgstr "Некоторые необходимые расширения не были найдены"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
-#, fuzzy
 msgid "Installation failed"
-msgstr "Установка неудалась"
+msgstr "Установка завершилась неудачно"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:35
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugins</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugins</span></b>"
 msgstr ""
+"<b><span size=\"large\">При установке выбранных плагинов произошла "
+"ошибка</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugin</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugin</span></b>"
 msgstr ""
+"<b><span size=\"large\">При установке выбранного плагина произошла "
+"ошибка</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
 msgid "and "
-msgstr ""
+msgstr "и "
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:47
 msgid " is not a valid plugin file."
-msgstr ""
+msgstr " не является правильным файлом плагина."
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:49
 msgid " are not valid plugin files."
-msgstr ""
+msgstr " не являются правильными файлами плагинов."
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Внешний вид</b>"
+msgstr "Внешний вид"
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
-#, fuzzy
 msgid "General"
-msgstr "Показать"
+msgstr "Общие"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
 msgid "Plugins"
-msgstr ""
+msgstr "Плагины"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
 msgid "Official Plugins"
-msgstr ""
+msgstr "Официальные плагины"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
-msgstr ""
+msgstr "Все плагины"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
 msgid "Community Plugins"
-msgstr ""
+msgstr "Плагины, предоставляемые сообществом"
 
 #: ../Do/src/Do.Core/DoAddinInstaller.cs:37
-#, fuzzy
 msgid "Installation cancelled"
 msgstr "Установка отменена"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
-#, fuzzy
 msgid "GNOME Do Item Sources"
 msgstr "Исходники предметов Gnome Do"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
-#, fuzzy
 msgid "Item Sources providing all items GNOME Do knows about."
 msgstr ""
-"Исходники предметов обеспечивают все предметы, которые распознает GNOME Do"
+"Исходники, обеспечивающие все виды элементов, которые распознает GNOME Do"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
-#, fuzzy
 msgid "Preferences"
-msgstr "_Параметры"
+msgstr "Параметры"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
-#, fuzzy
 msgid "Adjust Do's settings, manage plugins, etc."
-msgstr "Изменить параметры, настроить плагины и т.д."
+msgstr "Настройка, управление плагинами, и т.д."
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
-#, fuzzy
 msgid "Quit"
-msgstr "_Выход"
+msgstr "Выход"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
-msgstr ""
+msgstr "Закрыть GNOME Do - до скорого!"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:63
-#, fuzzy
 msgid "Selected text"
-msgstr "Выбранный текст"
+msgstr "выделенный текст"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:67
-#, fuzzy
 msgid "Currently selected text."
-msgstr "Выбранный текст"
+msgstr "выделенный текст"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:33
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:53
 msgid "Clear Learning"
-msgstr ""
+msgstr "Очистить наработки"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:37
 msgid "Resets Do's learned usage data."
-msgstr ""
+msgstr "Перезагрузить наработки, сделанные Do в ходе использования"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:54
 msgid "Are you sure you want to clear Do's learned usage data?"
 msgstr ""
+"Вы уверены что хотите очистить наработки, сделанный Do в ходе использования?"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
 msgid "Clear"
-msgstr ""
+msgstr "Очистить"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:49
-#, fuzzy
 msgid "Internal GNOME Do Items"
-msgstr "Внешние предметы GNOME Do"
+msgstr "Внутренние элементы GNOME Do"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:53
-#, fuzzy
 msgid "Special items relevant to the inner-workings of GNOME Do."
 msgstr "Особые предметы GNOME Do."
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
-msgstr ""
+msgstr "Сделать пожертвование"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:40
-#, fuzzy
 msgid "Support GNOME Do development!"
-msgstr "Запускать GNOME Do при входе."
+msgstr "Поддержи разработку GNOME Do!"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
-#, fuzzy
 msgid "About Do"
-msgstr "_О программе"
+msgstr "О Do"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
-#, fuzzy
 msgid "About GNOME Do"
-msgstr "Выйти из GNOME Do"
+msgstr "О GNOME Do"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:57
-#, fuzzy
 msgid "Type to begin searching"
-msgstr "Набирайте для начала поиска"
+msgstr "Введите символы для начала поиска"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:353
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:387
@@ -278,76 +261,70 @@ msgid "Type to start searching."
 msgstr "Наберите, чтобы начать поиск"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-#, fuzzy
 msgid "Minimize"
-msgstr "Мини"
+msgstr "Свернуть"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Restore"
-msgstr ""
+msgstr "Восстановить"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
 msgid "Close All"
-msgstr ""
+msgstr "Закрыть все"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-#, fuzzy
 msgid "Summon GNOME Do"
-msgstr "Запустить GNOME Do с "
+msgstr "Вызвать GNOME Do"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
 msgid "Automatically Hide"
-msgstr ""
+msgstr "Автоматически скрывать"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
 msgid "Allow Window Overlap"
-msgstr ""
+msgstr "Разрешить окошкам наезжать на друг друга"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
 msgid "Zoom Icons"
-msgstr ""
+msgstr "Приближать иконки"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
 msgid "Show Trash"
-msgstr ""
+msgstr "Показывать корзину"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
 msgid "Advanced Indicators"
-msgstr ""
+msgstr "Продвинутые индикаторы"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
 msgid "Switch Monitors"
-msgstr ""
+msgstr "Переключить экраны"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
 msgid "Remove from Dock"
-msgstr ""
+msgstr "Удалить из дока"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
 msgid "No result found for"
-msgstr ""
+msgstr "Не найдено результатов для"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
 msgid "Trash"
-msgstr ""
+msgstr "Корзина"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
-#, fuzzy
 msgid "Open Url"
-msgstr "Открыть URL"
+msgstr "Открыть Url"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
-#, fuzzy
 msgid "Opens bookmarks and manually-typed Urls."
-msgstr "Открывает закладки и набранные вручную URL'ы."
+msgstr "Открывает закладки и интернет-адреса, введенные вручную."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
-#, fuzzy
 msgid "Reveal"
 msgstr "Показать"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
-#, fuzzy
 msgid "Reveals a file in the file manager."
 msgstr "Показывает файл в файловом менеджере."
 
@@ -357,7 +334,7 @@ msgstr "Выполнить"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
 msgid "Run an application, script, or other executable."
-msgstr "Выполнить как приложение, скрипт, или другое исполняемое."
+msgstr "Запустить приложение, скрипт или другой исполняемый файл."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
 msgid "Email"
@@ -365,26 +342,23 @@ msgstr "E-mail"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:41
 msgid "Compose a new email to a friend."
-msgstr "Написать новое письмо другу"
+msgstr "Написать новое письмо другу."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:38
 msgid "Open"
 msgstr "Открыть"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:42
-#, fuzzy
 msgid "Opens many kinds of items."
-msgstr "Открывается множество элементов"
+msgstr "Открывает множество типов файлов"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
-#, fuzzy
 msgid "Open With..."
 msgstr "Открыть с помощью..."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
-#, fuzzy
 msgid "Opens files in specific applications."
-msgstr "Открыть файл в выбранном приложении."
+msgstr "Открывает файлы в выбранном приложении."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -400,191 +374,152 @@ msgstr "<i>Подтвердить и сохранить информацию о�
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
 msgid "Don't have an account?"
-msgstr ""
+msgstr "Не имеете аккаунта?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
 #, csharp-format
 msgid "Sign up for {0}"
-msgstr ""
+msgstr "Зарегистрироваться в {0}"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
 msgid "Validating..."
-msgstr ""
+msgstr "Выполняется проверка..."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
 #, csharp-format
 msgid "Don't have {0}?"
-msgstr ""
+msgstr "Не имеете {0}?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
-#, fuzzy
 msgid "Account validation failed!"
-msgstr "Установка неудалась"
+msgstr "Ошибка при проверке аккаунта!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
-#, fuzzy
 msgid "Verify and save account information"
-msgstr "<i>Подтвердить и сохранить информацию об аккаунте</i>"
+msgstr "Проверка и сохранение информации об аккаунте"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
 msgid "Account validation succeeded!"
-msgstr ""
+msgstr "Проверка аккаунта пройдена!"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:88
 msgid "Icon"
-msgstr ""
+msgstr "Значок"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:92
 msgid "This application could not be indexed."
-msgstr ""
+msgstr "Это приложение не может быть индексировано."
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:116
 msgid "Exec"
-msgstr ""
+msgstr "Выполнение"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:134
 msgid "OnlyShowIn"
-msgstr ""
+msgstr "ПолькоПоказыватьВ"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:68
 msgid "Applications"
 msgstr "Приложения"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:72
-#, fuzzy
 msgid "Finds applications in many locations."
-msgstr "Исчет приложения во всех папках."
+msgstr "Ищет приложения в различных источниках"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:40
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "Копировать в буфер обмена"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:44
 msgid "Copy current text to clipboard"
-msgstr ""
+msgstr "Копировать текст в буфер обмена"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
-#, fuzzy
 msgid "GNOME Special Locations"
-msgstr "Настройки GNOME"
+msgstr "Особые местоположения среды Gnome"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
-#, fuzzy
 msgid "Special locations in GNOME, such as Computer and Network."
-msgstr "Настройки GNOME, такие как Компьютер и Сеть"
+msgstr "Особые местоположения среды GNOME, такие как Компьютер и Сеть"
 
 #: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
 #, csharp-format
 msgid "Error reading {0}."
-msgstr ""
+msgstr "Ошибка при чтении {0}."
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
 #, csharp-format
 msgid "Error saving {0}"
-msgstr ""
+msgstr "Ошибка при сохранении {0}"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
-msgstr ""
+msgstr "Ключ \"{0}\" не найден в брелоке"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 msgid "gnome-keyring-daemon could not be reached!"
-msgstr ""
+msgstr "gnome-keyring-daemon недоступен!"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:42
 msgid "No name"
-msgstr ""
+msgstr "Без имени"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:43
 msgid "No description."
-msgstr ""
+msgstr "Описание отсутствует."
 
 #: ../Do/gnome-do.desktop.in.h:1
-#, fuzzy
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr ""
-"Работайте так быстро, насколько это возможно (но не быстрее) с вашими "
-"файлами, закладками, приложениями, музыкой, контактами и многим другим!"
+"Работайте максимально быстро (но не быстрее) с вашими файлами, закладками, "
+"приложениями, музыкой, контактами и многим другим!"
 
 #: ../Do/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
 msgstr "GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:1
-#, fuzzy
 msgid "Always show results window."
-msgstr "Всегда показывать окно с результатами"
+msgstr "Всегда показывать окно результатов."
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
 "Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
 "Mini."
 msgstr ""
+"Изменяет внешний вид Do. Правильные поля: Classic, Glass Frame и Mini."
 
 #: ../data/gnome-do.schemas.in.h:3
 msgid "Do UI theme"
-msgstr ""
+msgstr "Тема внешнего вида Do"
 
 #: ../data/gnome-do.schemas.in.h:4
 msgid "Do summon keybinding."
-msgstr ""
+msgstr "Вызов по нажатии клавиш"
 
 #: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
-msgstr ""
+msgstr "Включите эту опцию, чтобы окно Do не показывалось при запуске."
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
-msgstr ""
+msgstr "Не показывать главное окно Do при запуске."
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr ""
+msgstr "Кнопка для перехода в текстовый режим."
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
-msgstr ""
+msgstr "Введите символ, отвечающий за переход в текстовой режим."
 
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
-msgstr ""
+msgstr "Укажите сочетание клавиш для вызова Do."
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
-msgstr ""
-
-#~ msgid "Classic"
-#~ msgstr "Классическая"
-
-#~ msgid "Glass Frame"
-#~ msgstr "Стеклянное Окошко"
-
-#~ msgid "Unknown"
-#~ msgstr "Неизвестный"
-
-#, fuzzy
-#~ msgid "Assign Alias..."
-#~ msgstr "Назначить названия..."
-
-#, fuzzy
-#~ msgid "Give an item an alternate name."
-#~ msgstr "Дать предмету другое имя."
-
-#, fuzzy
-#~ msgid "Alias items"
-#~ msgstr "Назначить предметы"
-
-#, fuzzy
-#~ msgid "Aliased items from Do's universe."
-#~ msgstr "Назначеные предметы из Do"
-
-#, fuzzy
-#~ msgid "Delete Alias"
-#~ msgstr "Удалить названия"
-
-#, fuzzy
-#~ msgid "Deletes an alias."
-#~ msgstr "Удалить имя."
+msgstr "Будет ли окно результатов отображаться всегда."

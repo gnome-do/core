@@ -1,16 +1,16 @@
-# Persian translation for do
+# Spanish translation for do
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the do package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+# FIRST AUTHOR <riopedre13@yahoo.es>, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2008-09-21 18:53+0000\n"
-"Last-Translator: KasraKeshavarz <kasra545@movemail.com>\n"
-"Language-Team: Persian <fa@li.org>\n"
+"PO-Revision-Date: 2009-02-26 08:35+0000\n"
+"Last-Translator: Emiliano Goday Caneda <egoday@gmail.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,499 +19,541 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
 msgid "_Reset"
-msgstr ""
+msgstr "_Reiniciar"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
 msgid "Background Color:"
-msgstr ""
+msgstr "Cor de Fondo:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
 msgid "_Theme:"
-msgstr ""
+msgstr "_Tema:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
 msgid "Always show results window"
-msgstr "همیشه پنجره‌ی جزییات رو نشان بده."
+msgstr "Amosar sempre a fiestra de resultados"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
 msgid "Show window shadow"
-msgstr ""
+msgstr "Amosar sombra da fiestra"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:228
 msgid "Animate window"
-msgstr ""
+msgstr "Animar fiestra"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:262
 msgid ""
 "<b>Your display is not properly configured for theme and animation support. "
 "To use these features, you must enable compositing.</b>"
 msgstr ""
+"<b>A túa pantalla non está configurada correctamente para o soporte de temas "
+"e animacións. Para empregar esta característica, debes activar o "
+"compositing.</b>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr ""
-"<span size=\"large\"><b>افزونه‌های به روز شده در دسترس هستند!</b></span>"
+"<span size=\"large\"><b>Están dispoñibles actualizacións de "
+"complementos</b></span>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
 msgid "_Install Updates"
-msgstr "ـ نصب به‌روز رسانی‌ها"
+msgstr "_Instalar actualizacións"
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
 msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "برای ویرایش میانبر، دابل کلیک کنید و عبارت جدید را وارد کنید."
+msgstr "Para editar un acceso rápido, faga dobre clic e escriba un novo."
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
 msgid "GNOME Do Preferences"
-msgstr "تنظیمات Gnome DO"
+msgstr "Preferencias de GNOME Do"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
 msgid "Show:"
-msgstr "نمایش:"
+msgstr "Amosar:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:89
 msgid "Search:"
-msgstr "جستجو:"
+msgstr "Buscar:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:144
 msgid "_Configure"
-msgstr "_پیکربندی"
+msgstr "_Configurar"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:170
 msgid "_About"
-msgstr "_درباره"
+msgstr "_Acerca de..."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
-msgstr "<b>رفتار در اولین اجرا</b>"
+msgstr "<b>Comportamento ó inicio</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
 msgid "Start GNOME Do at login."
-msgstr "اجرای گنوم-دوو در در هنگام ورود."
+msgstr "Executar GNOME Do ó inicio"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
-msgstr "مخفی کردن پنجره در اولین اجرا.(حالت سریع)"
+msgstr "Ocultar fiestra ao executar por primeira vez (modo silencioso)"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
 msgid "Show notification icon"
-msgstr ""
+msgstr "Amosar icona de notificación"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
-msgstr "پنجره‌ی پیکربندی افزونه‌ها"
+msgstr "Fiestra de configuración de complementos"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
-msgstr "<span size=\"large\" weight=\"heavy\">محل نام افزونه</span>"
+msgstr "<span size=\"large\" weight=\"heavy\">Nome do Plugin aquí</span>"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
 msgid "page1"
-msgstr "صفحه ی اول"
+msgstr "páxina1"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
 msgid "Some of the required add-ins were not found"
-msgstr "بعضی از افزودنی‌های لازم پیدا نشدند"
+msgstr "No se encontraron algúns dos complementos requiridos"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
 msgid "Installation failed"
-msgstr "عملیت نصب موفق نشد"
+msgstr "Fallou a instalación"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:35
 msgid ""
 "<b><span size=\"large\">There was an error installing the selected "
 "plugins</span></b>"
 msgstr ""
+"<b><span size=\"large\">Houbo un erro ó instalar os plugins "
+"seleccionados</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid ""
 "<b><span size=\"large\">There was an error installing the selected "
 "plugin</span></b>"
 msgstr ""
+"<b><span size=\"large\">Houbo un erro instalando o plugin "
+"seleccionado</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
 msgid "and "
-msgstr ""
+msgstr "e "
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:47
 msgid " is not a valid plugin file."
-msgstr ""
+msgstr " non é ficheiro de complemento válido"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:49
 msgid " are not valid plugin files."
-msgstr ""
+msgstr " non son ficheiros de complemento válidos"
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
 msgid "Appearance"
-msgstr ""
+msgstr "<b>Aparencia</b>"
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
 msgid "General"
-msgstr ""
+msgstr "Mostrar"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
 msgid "Plugins"
-msgstr ""
+msgstr "Complementos"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
 msgid "Official Plugins"
-msgstr ""
+msgstr "Complementos Oficiais"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
-msgstr ""
+msgstr "Tódolos Complementos"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
 msgid "Community Plugins"
-msgstr ""
+msgstr "Complementos da Comunidade"
 
 #: ../Do/src/Do.Core/DoAddinInstaller.cs:37
 msgid "Installation cancelled"
-msgstr "عملیات نصب لغو شد"
+msgstr "Instalación cancelada"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
 msgid "GNOME Do Item Sources"
-msgstr "متن آیتم‌های Gnome DO"
+msgstr "Fontes do elemento de GNOME DO"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
 msgid "Item Sources providing all items GNOME Do knows about."
-msgstr "متن آیتم‌ها مشروط بر این که همه‌ی آیتم‌های Gnome Do آن را دانستند."
+msgstr ""
+"Fontes do elemento que proporcionan tódolos puntos sobre os que GNOME Do ten "
+"coñecemento"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
 msgid "Preferences"
-msgstr ""
+msgstr "_Preferencias"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
 msgid "Adjust Do's settings, manage plugins, etc."
-msgstr ""
+msgstr "Axustar preferencias, administrar complementos, etc."
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
 msgid "Quit"
-msgstr ""
+msgstr "_Saír"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
-msgstr ""
+msgstr "Saír de GNOME DO - proximamente!"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:63
 msgid "Selected text"
-msgstr "متن انتخاب شده"
+msgstr "Texto seleccionado"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:67
 msgid "Currently selected text."
-msgstr "متن‌های انتخاب‌شده‌ی رایج."
+msgstr "Texto seleccionado actualmente."
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:33
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:53
 msgid "Clear Learning"
-msgstr ""
+msgstr "Limpar Apredizaxe"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:37
 msgid "Resets Do's learned usage data."
-msgstr ""
+msgstr "Reiniciar os datos de uso aprendidos por Do."
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:54
 msgid "Are you sure you want to clear Do's learned usage data?"
-msgstr ""
+msgstr "Estas seguro que queres limpar os datos de uso aprendidos por Do?"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
 msgid "Clear"
-msgstr ""
+msgstr "Limpar"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:49
 msgid "Internal GNOME Do Items"
-msgstr "آیتم‌های داخلی Gnome Do"
+msgstr "Elementos internos de GNOME Do"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:53
 msgid "Special items relevant to the inner-workings of GNOME Do."
-msgstr "آیتم‌های مخصوص مربوط به کار‌های داخلی Gnome Do است."
+msgstr ""
+"Elementos especiais relevantes para o funcionamento interno de Gnome Do."
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
-msgstr ""
+msgstr "Donar"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:40
 msgid "Support GNOME Do development!"
-msgstr ""
+msgstr "Executar GNOME Do ó inicio"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
 msgid "About Do"
-msgstr ""
+msgstr "Acerca de Do"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
 msgid "About GNOME Do"
-msgstr ""
+msgstr "Sobre GNOME Do"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:57
 msgid "Type to begin searching"
-msgstr "برای شروع جستجو، تایپ کنید"
+msgstr "Escriba para empezar a buscar"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:353
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:387
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:58
 msgid "Type to start searching."
-msgstr "برای آغاز جستجو، تایپ کنید"
+msgstr "Escriba para empezar a buscar."
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Minimize"
-msgstr ""
+msgstr "Minimizar"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Restore"
-msgstr ""
+msgstr "Restaurar"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
 msgid "Close All"
-msgstr ""
+msgstr "Pechar Todo"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
 msgid "Summon GNOME Do"
-msgstr ""
+msgstr "Invocar Gnome Do"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
 msgid "Automatically Hide"
-msgstr ""
+msgstr "Agochar Automaticamente"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
 msgid "Allow Window Overlap"
-msgstr ""
+msgstr "Permitir ás fiestras solaparse"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
 msgid "Zoom Icons"
-msgstr ""
+msgstr "Zoom das Iconas"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
 msgid "Show Trash"
-msgstr ""
+msgstr "Amosar Lixo"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
 msgid "Advanced Indicators"
-msgstr ""
+msgstr "Indicadores Avanzados"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
 msgid "Switch Monitors"
-msgstr ""
+msgstr "Trocar Monitores"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
 msgid "Remove from Dock"
-msgstr ""
+msgstr "Eliminar da Barra inferior"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
 msgid "No result found for"
-msgstr ""
+msgstr "Non se atoparon resultados para"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
 msgid "Trash"
-msgstr ""
+msgstr "Lixo"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
 msgid "Open Url"
-msgstr ""
+msgstr "Abrir URL"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
 msgid "Opens bookmarks and manually-typed Urls."
-msgstr ""
+msgstr "Abre marcadores e URLs tecleadas manualmente."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
 msgid "Reveal"
-msgstr "آشکار شدن"
+msgstr "Amosar"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
 msgid "Reveals a file in the file manager."
-msgstr "آشکار شدن یک فایل در برنامه‌ی مدیریت فایل‌ها"
+msgstr "Amosa un ficheiro no administrador de ficheiros."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
 msgid "Run"
-msgstr "اجرا"
+msgstr "Executar"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
 msgid "Run an application, script, or other executable."
-msgstr "یک برنامه ، اسکریپت و یا یک اجرا پذبر را اجرا کن."
+msgstr "Executar unha aplicación, guión ou outro executábel."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
 msgid "Email"
-msgstr "پست الکترونیکی"
+msgstr "Correo electrónico"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:41
 msgid "Compose a new email to a friend."
-msgstr "فرستادن یک پست الکترونیک به یک دوست"
+msgstr "Cree un mensaxe de correo electrónico para un amigo."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:38
 msgid "Open"
-msgstr "باز کن"
+msgstr "Abrir"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:42
 msgid "Opens many kinds of items."
-msgstr "انواع گزینه ها را باز کن."
+msgstr "Abre moitos tipos de elementos."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
 msgid "Open With..."
-msgstr "بازکردن با..."
+msgstr "Abrir con..."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
 msgid "Opens files in specific applications."
-msgstr "باز کردن فایل‌ها در برنامه‌های مخصوص"
+msgstr "Abre ficheiros con aplicacións específicas."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
-msgstr "کلمه عبور"
+msgstr "Contrasinal"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
 msgid "Username"
-msgstr "نام کاربری"
+msgstr "Nome de usuario"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:124
 msgid "<i>Verify and save account information</i>"
-msgstr "<i>بازبینی و ذخیره ی اطلاعات حساب کاربری</i>"
+msgstr "<i>Verificar e gardar a información da conta</i>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
 msgid "Don't have an account?"
-msgstr ""
+msgstr "Non tes unha conta?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
 #, csharp-format
 msgid "Sign up for {0}"
-msgstr ""
+msgstr "Rexistrate para {0}"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
 msgid "Validating..."
-msgstr ""
+msgstr "Validando..."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
 #, csharp-format
 msgid "Don't have {0}?"
-msgstr ""
+msgstr "Non tes {0}?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
 msgid "Account validation failed!"
-msgstr ""
+msgstr "Fallou a instalación"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
 msgid "Verify and save account information"
-msgstr ""
+msgstr "<i>Verificar e gardar a información da conta</i>"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
 msgid "Account validation succeeded!"
-msgstr ""
+msgstr "Conta validade correctamente!"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:88
 msgid "Icon"
-msgstr ""
+msgstr "Icona"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:92
 msgid "This application could not be indexed."
-msgstr ""
+msgstr "Esta aplicación non pode ser indexada."
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:116
 msgid "Exec"
-msgstr ""
+msgstr "Exec"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:134
 msgid "OnlyShowIn"
-msgstr ""
+msgstr "SoAmosar"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:68
 msgid "Applications"
-msgstr "برنامه‌ها"
+msgstr "Aplicacións"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:72
 msgid "Finds applications in many locations."
-msgstr "در حال پیدا کردن برنامه‌ها در مکان‌های مختلف."
+msgstr "Buscar aplicacións en moitas ubicacións."
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:40
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "Copiar do portapapeis"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:44
 msgid "Copy current text to clipboard"
-msgstr ""
+msgstr "Copiar o texto actual ó portapapeis"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
 msgid "GNOME Special Locations"
-msgstr "محل‌های مخصوص گنوم"
+msgstr "Ubicacións especiais de GNOME"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
 msgid "Special locations in GNOME, such as Computer and Network."
-msgstr "محل‌های مخصوص گنوم،مانند کامپیوتر یا شبکه."
+msgstr "Ubicacións especiais en GNOME, como equipo e rede."
 
 #: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
 #, csharp-format
 msgid "Error reading {0}."
-msgstr ""
+msgstr "Erro ó ler {0}."
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
 #, csharp-format
 msgid "Error saving {0}"
-msgstr ""
+msgstr "Erro ó gardar {0}"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
-msgstr ""
+msgstr "Chave \"{0}\" non atopada no anel de chaves"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 msgid "gnome-keyring-daemon could not be reached!"
-msgstr ""
+msgstr "non se pode alcanzar gnome-keyring-daemon!"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:42
 msgid "No name"
-msgstr ""
+msgstr "Sen nome"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:43
 msgid "No description."
-msgstr ""
+msgstr "Sen descrición."
 
 #: ../Do/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr ""
-"اجرای کار‌ها با حداکثر سرعت ممکن (اما نه سریع‌ترین) با فایل‌های شما، "
-"آدرس‌های اینترنتی ذخیره‌شده،برنامه‌ها،موزیک،مخاطبات و بسیاری دیگر!"
+"¡Fai cosas o antes posíbel (pero non máis rápido) cos seus ficheiros, "
+"marcadores, aplicacións, música, contactos e máis!"
 
 #: ../Do/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
-msgstr "Gnome Do"
+msgstr "GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:1
 msgid "Always show results window."
-msgstr ""
+msgstr "Mostrar sempre a fiestra de resultados"
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
 "Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
 "Mini."
 msgstr ""
+"Cambios na apariencia de Do. Son entradas válidas Classic, Glass Frame, e "
+"Mini."
 
 #: ../data/gnome-do.schemas.in.h:3
 msgid "Do UI theme"
-msgstr ""
+msgstr "Tema de Interface de Do"
 
 #: ../data/gnome-do.schemas.in.h:4
 msgid "Do summon keybinding."
-msgstr ""
+msgstr "Atallo de Teclado para lanzar Do"
 
 #: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
-msgstr ""
+msgstr "Activar esta opción para manter Do arriba de todo ó iniciar."
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
-msgstr ""
+msgstr "Agochar a fiestra principal cando Do se inicia."
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr ""
+msgstr "A chave empregada para entrar no modo texto."
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
 msgstr ""
+"Configura este caracter para que sexa empregado para entrar no modo texto."
 
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
 msgstr ""
+"Configuran isto para o atallo de teclado que queres empregar para lanzar Do."
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
-msgstr ""
+msgstr "Se debe amosarse sempre a fiestra de resultados."
+
+#~ msgid "Classic"
+#~ msgstr "Clásico"
+
+#~ msgid "Glass Frame"
+#~ msgstr "Marco transparente"
+
+#~ msgid "Unknown"
+#~ msgstr "Desconocido"
+
+#~ msgid "Assign Alias..."
+#~ msgstr "Asignar alias..."
+
+#~ msgid "Give an item an alternate name."
+#~ msgstr "Dar al ítem un nombre alternativo."
+
+#~ msgid "Alias items"
+#~ msgstr "Alias de los ítems"
+
+#~ msgid "Aliased items from Do's universe."
+#~ msgstr "Alias de los ítems desde el Universo de Do"
+
+#~ msgid "Delete Alias"
+#~ msgstr "Eliminar alias"
+
+#~ msgid "Deletes an alias."
+#~ msgstr "Eliminar un alias."

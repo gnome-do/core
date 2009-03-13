@@ -6,29 +6,28 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2008-08-05 20:01+0000\n"
-"Last-Translator: Miia Ranta <myrtti+launchpad@gmail.com>\n"
+"PO-Revision-Date: 2009-02-04 21:51+0000\n"
+"Last-Translator: Mika Filpus <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-08-23 03:12+0000\n"
+"X-Launchpad-Export-Date: 2009-03-13 16:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
 msgid "_Reset"
-msgstr ""
+msgstr "_Nollaa"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
 msgid "Background Color:"
-msgstr ""
+msgstr "Taustan väri:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
-#, fuzzy
 msgid "_Theme:"
-msgstr "Teema:"
+msgstr "_Teema:"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
 msgid "Always show results window"
@@ -36,11 +35,11 @@ msgstr "Näytä tulosikkuna aina"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
 msgid "Show window shadow"
-msgstr ""
+msgstr "Näytä ikkunan varjot"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:228
 msgid "Animate window"
-msgstr ""
+msgstr "Animointi ikkuna"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:262
 msgid ""
@@ -51,7 +50,7 @@ msgstr ""
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr ""
-"<span size=\"large\"><b>Lisäosiin on saatavilla päivityksiä!</b></span>"
+"<span size=\"large\"><b>Liitännäisiin on saatavilla päivityksiä!</b></span>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
 msgid "_Install Updates"
@@ -63,7 +62,7 @@ msgstr "Muokataksesi oikopolkua, tuplanapauta sitä ja anna uusi polku."
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
 msgid "GNOME Do Preferences"
-msgstr "GNOME Do Asetukset"
+msgstr "GNOME Do -asetukset"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
 msgid "Show:"
@@ -94,9 +93,8 @@ msgid "Hide window on first launch (quiet mode)."
 msgstr "Piilota ikkuna käynnistettäessä (hiljainen tila)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
-#, fuzzy
 msgid "Show notification icon"
-msgstr "Näytä tilaikoni"
+msgstr "Näytä huomiokuvake"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
@@ -112,7 +110,7 @@ msgstr "sivu1"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
 msgid "Some of the required add-ins were not found"
-msgstr "Joitain vaadituista lisäosista ei löytynyt"
+msgstr "Joitain tarvittavia liitännäisiä ei löytynyt"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
 msgid "Installation failed"
@@ -120,15 +118,18 @@ msgstr "Asennus epäonnistui"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:35
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugins</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugins</span></b>"
 msgstr ""
+"<b><span size=\"large\">Virhe valittujen liitännäisten "
+"asennuksessa</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected plugin</"
-"span></b>"
+"<b><span size=\"large\">There was an error installing the selected "
+"plugin</span></b>"
 msgstr ""
+"<b><span size=\"large\">Virhe valittun liitännäisen asennuksessa</span></b>"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
 msgid "and "
@@ -140,17 +141,15 @@ msgstr ""
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:49
 msgid " are not valid plugin files."
-msgstr ""
+msgstr " eivät ole sopivia liitännäistiedostoja"
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Ulkoasu</b>"
+msgstr ""
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
-#, fuzzy
 msgid "General"
-msgstr "Paljasta"
+msgstr ""
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
 msgid "Plugins"
@@ -181,19 +180,16 @@ msgid "Item Sources providing all items GNOME Do knows about."
 msgstr "Kaikkien GNOME Do:n tunnistamien kohteitten lähteet."
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
-#, fuzzy
 msgid "Preferences"
-msgstr "_Asetukset"
+msgstr ""
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
-#, fuzzy
 msgid "Adjust Do's settings, manage plugins, etc."
-msgstr "Muokkaa asetuksia, hallinnoi lisäosia jne."
+msgstr ""
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
-#, fuzzy
 msgid "Quit"
-msgstr "_Lopeta"
+msgstr ""
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
@@ -231,7 +227,7 @@ msgstr "Sisäiset GNOME Do:n kohteet"
 #: ../Do/src/Do.Universe/InternalItemSource.cs:53
 msgid "Special items relevant to the inner-workings of GNOME Do."
 msgstr ""
-"Erikoiskohteet jotka ovat olennaisia GNOME Do:n sisäisille "
+"Erikoiskohteet, jotka ovat olennaisia GNOME Do:n sisäisille "
 "toiminnallisuuksille"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
@@ -239,19 +235,16 @@ msgid "Donate"
 msgstr ""
 
 #: ../Do/src/Do.Universe/DonateItem.cs:40
-#, fuzzy
 msgid "Support GNOME Do development!"
-msgstr "Käynnistä GNOME Do sisäänkirjauduttaessa."
+msgstr ""
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
-#, fuzzy
 msgid "About Do"
-msgstr "Lisätietoj_a Do:sta"
+msgstr ""
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
-#, fuzzy
 msgid "About GNOME Do"
-msgstr "Lopeta GNOME Do"
+msgstr ""
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
@@ -266,9 +259,8 @@ msgid "Type to start searching."
 msgstr "Kirjoita haun käynnistämiseksi."
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-#, fuzzy
 msgid "Minimize"
-msgstr "Mini"
+msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
 msgid "Restore"
@@ -279,17 +271,16 @@ msgid "Close All"
 msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-#, fuzzy
 msgid "Summon GNOME Do"
-msgstr "Kutsu GNOME Do:ta komennolla "
+msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
 msgid "Automatically Hide"
-msgstr ""
+msgstr "Piilota automaattisesti"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
 msgid "Allow Window Overlap"
-msgstr ""
+msgstr "Salli ikkunoiden lomittua"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
 msgid "Zoom Icons"
@@ -297,7 +288,7 @@ msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
 msgid "Show Trash"
-msgstr ""
+msgstr "Näytä Roskakori"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
 msgid "Advanced Indicators"
@@ -305,7 +296,7 @@ msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
 msgid "Switch Monitors"
-msgstr ""
+msgstr "Vaihda näyttöjä"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
 msgid "Remove from Dock"
@@ -320,14 +311,12 @@ msgid "Trash"
 msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
-#, fuzzy
 msgid "Open Url"
-msgstr "Avaa verkko-osoite"
+msgstr "Avaa Url"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
-#, fuzzy
 msgid "Opens bookmarks and manually-typed Urls."
-msgstr "Avaa kirjanmerkkejä ja käsin kirjoitettuja URL-osoitteita."
+msgstr "Avaa kirjanmerkit ja kirjoitetut Url -osoitteet"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
 msgid "Reveal"
@@ -339,11 +328,11 @@ msgstr "Paljastaa tiedoston tiedostohallinnassa."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
 msgid "Run"
-msgstr "Aja"
+msgstr "Suorita"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
 msgid "Run an application, script, or other executable."
-msgstr "Ajaa sovelluksen, skriptin tai muun ajettavan kohteen."
+msgstr "Suorittaa sovelluksen, skriptin tai muun ajettavan kohteen."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
 msgid "Email"
@@ -367,7 +356,7 @@ msgstr "Avaa käyttäen..."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
 msgid "Opens files in specific applications."
-msgstr "Avaa ohjelmia tietyillä sovelluksilla."
+msgstr "Avaa tiedostoja tietyillä sovelluksilla."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -383,7 +372,7 @@ msgstr "<i>Tarkista ja tallenna tilitiedot</i>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
 msgid "Don't have an account?"
-msgstr ""
+msgstr "Sinulla ei ole tiliä?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
 #, csharp-format
@@ -392,7 +381,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
 msgid "Validating..."
-msgstr ""
+msgstr "Varmennetaan..."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
 #, csharp-format
@@ -400,14 +389,12 @@ msgid "Don't have {0}?"
 msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
-#, fuzzy
 msgid "Account validation failed!"
-msgstr "Asennus epäonnistui"
+msgstr "Tilin varmennus epäonnistui!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
-#, fuzzy
 msgid "Verify and save account information"
-msgstr "<i>Tarkista ja tallenna tilitiedot</i>"
+msgstr "Todenna ja tallenna tilin tiedot"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
 msgid "Account validation succeeded!"
@@ -447,12 +434,11 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
 msgid "GNOME Special Locations"
-msgstr "GNOMEn Erikoissijainnit"
+msgstr "Gnomen erikoissijainnit"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
-#, fuzzy
 msgid "Special locations in GNOME, such as Computer and Network."
-msgstr "Erikoissijainnit GNOMEssa, kuten Tietokone ja Verkkoyhteydet"
+msgstr "Erikoissijainnit Gnomessa, kuten Tietokone ja Verkkoyhteydet"
 
 #: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
 #, csharp-format
@@ -482,7 +468,6 @@ msgid "No description."
 msgstr ""
 
 #: ../Do/gnome-do.desktop.in.h:1
-#, fuzzy
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
@@ -495,19 +480,20 @@ msgid "GNOME Do"
 msgstr "GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:1
-#, fuzzy
 msgid "Always show results window."
-msgstr "Näytä tulosikkuna aina"
+msgstr "Näytä aina tulosikkuna."
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
 "Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
 "Mini."
 msgstr ""
+"Muuttaa Do:n ulkoasua. Kelvolliset arvot ovat klassinen, lasinen kehys ja "
+"mini."
 
 #: ../data/gnome-do.schemas.in.h:3
 msgid "Do UI theme"
-msgstr ""
+msgstr "Do-käyttöliittymäteema"
 
 #: ../data/gnome-do.schemas.in.h:4
 msgid "Do summon keybinding."
@@ -523,7 +509,7 @@ msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr ""
+msgstr "Näppäin tekstitilaan siirtymiseksi"
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
@@ -531,35 +517,8 @@ msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
-msgstr ""
+msgstr "Asetetaan Do:n kutsumisnäppäimistökomennoksi."
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "Classic"
-#~ msgstr "Klassinen"
-
-#~ msgid "Glass Frame"
-#~ msgstr "Lasikehys"
-
-#~ msgid "Unknown"
-#~ msgstr "Tuntematon"
-
-#~ msgid "Assign Alias..."
-#~ msgstr "Määritä alias..."
-
-#~ msgid "Give an item an alternate name."
-#~ msgstr "Anna kohteelle vaihtoehtoinen nimi"
-
-#~ msgid "Alias items"
-#~ msgstr "Aliasoidut kohteet"
-
-#~ msgid "Aliased items from Do's universe."
-#~ msgstr "Aliasoidut kohteet Do:n ympäristössä"
-
-#~ msgid "Delete Alias"
-#~ msgstr "Poista alias"
-
-#~ msgid "Deletes an alias."
-#~ msgstr "Poistaa aliaksen"
