@@ -42,6 +42,7 @@ namespace Docky.Interface.Painters
 		const int IconSize = 16;
 		
 		bool paint;
+		Gdk.Rectangle previous_area;
 
 		public event EventHandler<PaintNeededArgs> PaintNeeded;
 
@@ -160,8 +161,13 @@ namespace Docky.Interface.Painters
 			
 		public void Paint (Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
-			if (!paint && DateTime.UtcNow - DockState.Instance.CurrentPaneTime > DockArea.BaseAnimationTime)
+			if (previous_area == dockArea && 
+			    !paint && 
+			    DateTime.UtcNow - DockState.Instance.CurrentPaneTime > DockArea.BaseAnimationTime) {
+				previous_area = dockArea;
 				return;
+			}
+			previous_area = dockArea;
 			
 			paint = false;
 			cr.AlphaFill ();
