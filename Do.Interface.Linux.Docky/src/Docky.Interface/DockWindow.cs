@@ -72,7 +72,6 @@ namespace Docky.Interface
 		
 		public void Initialize (IDoController controller)
 		{
-			Core.DockServices.Clean ();
 			this.controller = controller;
 			controller.Orientation = ControlOrientation.Vertical;
 
