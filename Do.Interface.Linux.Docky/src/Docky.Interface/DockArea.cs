@@ -642,7 +642,7 @@ namespace Docky.Interface
 		{
 			int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y);
 			if (item == -1)
-				return;
+				return false;
 			
 			DockItems [item].Scrolled (evnt.Direction);
 			return base.OnScrollEvent (evnt);
