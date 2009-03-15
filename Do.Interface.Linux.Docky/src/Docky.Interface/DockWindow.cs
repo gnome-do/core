@@ -72,6 +72,7 @@ namespace Docky.Interface
 		
 		public void Initialize (IDoController controller)
 		{
+			Core.DockServices.Clean ();
 			this.controller = controller;
 			controller.Orientation = ControlOrientation.Vertical;
 
@@ -427,9 +428,6 @@ namespace Docky.Interface
 			dock_area.Dispose ();
 			dock_area.Destroy ();
 			dock_area = null;
-			
-			Core.DockServices.UnregisterService (interop_service);
-			interop_service.Dispose ();
 			
 			Core.DockServices.Clean ();
 			
