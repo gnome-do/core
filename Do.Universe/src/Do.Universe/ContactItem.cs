@@ -76,8 +76,17 @@ namespace Do.Universe
 				return detail;
 			}
 			set {
-				if (string.IsNullOrEmpty (key) || string.IsNullOrEmpty (value))
+				if (string.IsNullOrEmpty (key))
 					return;
+				
+				if (string.IsNullOrEmpty (value)) {
+					if (key.StartsWith ("email") || key.StartsWith ("name") || !details.ContainsKey (key))
+						return;
+					
+					details.Remove (key);
+					return;
+				}
+	
 				
 				if (key.StartsWith ("email"))
 					contacts_email[value.ToLower ()] = this;
