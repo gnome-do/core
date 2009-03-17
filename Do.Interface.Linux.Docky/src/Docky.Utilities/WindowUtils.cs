@@ -259,12 +259,12 @@ namespace Docky.Utilities
 						
 						if (app.Pid == pid || app.Windows.Any (w => w.Pid == pid)) {
 							foreach (Wnck.Window window in app.Windows.Where (win => !win.IsSkipTasklist)) {
-								exec_line = window.ClassGroup.Name;
+								exec_line = window.ClassGroup.ResClass;
 								
 								// Vuze is retarded
 								if (exec_line == "SWT")
 									exec_line = window.Name;
-								
+								Console.WriteLine (exec_line);
 								break;
 							}
 						}
