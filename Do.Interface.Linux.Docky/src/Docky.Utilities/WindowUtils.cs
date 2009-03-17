@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using Do.Interface;
 using Do.Universe;
@@ -49,9 +50,7 @@ namespace Docky.Utilities
 				yield return "ruby";
 				yield return "padsp";
 				yield return "aoss";
-				yield return "python";
-				yield return "python2.4";
-				yield return "python2.5";
+				yield return "python(\\d.\\d)?";
 			}
 		}
 		
@@ -216,6 +215,9 @@ namespace Docky.Utilities
 				return apps;
 			
 			exec = ProcessExecString (exec);
+			if (string.IsNullOrEmpty (exec))
+				return apps;
+			
 			UpdateExecList ();
 
 			foreach (KeyValuePair<int, string> kvp in exec_lines) {
@@ -305,9 +307,13 @@ namespace Docky.Utilities
 				if (parts [i].Contains ("/"))
 					parts [i] = parts [i].Split ('/').Last ();
 				
+				Regex regex;
 				foreach (string prefix in BadPrefixes) {
-					if (parts [i] == prefix)
+					regex = new Regex (string.Format ("^{0}$", prefix), RegexOptions.IgnoreCase);
+					if (regex.IsMatch (parts [i])) {
 						parts [i] = null;
+						break;
+					}
 				}
 				
 				if (!string.IsNullOrEmpty (parts [i])) {
