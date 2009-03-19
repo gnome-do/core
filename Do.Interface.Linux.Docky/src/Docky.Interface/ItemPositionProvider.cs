@@ -254,18 +254,27 @@ namespace Docky.Interface
 			if (ZoomSize == 0) {
 				zoom = 1;
 			} else {
+				double offsetPercent = offset / (ZoomSize / 2.0);
 				// zoom is calculated as 1 through target_zoom (default 2).  
 				// The larger your offset, the smaller your zoom
 				
 				// First we get the point on our curve that defines out current zoom
 				// offset is always going to fall on a point on the curve >= 0
-				zoom = 1 - Math.Pow (offset / (ZoomSize / 2.0), 2);
+				zoom = 1 - offsetPercent * offsetPercent;
 				
 				// scale this to match out zoomInPercent
 				zoom = 1 + zoom * (zoomInPercent - 1);
 				
 				// pull in our offset to make things less spaced out
-				offset = offset * (zoomInPercent - 1) - (zoomInPercent - zoom) * (IconSize * .9);
+				// explaination since this is a bit tricky...
+				// we have three terms, basically offset = f(x) * h(x) * g(x)
+				// f(x) == offset identify
+				// h(x) == a number from 0 to DockPreference.ZoomPercent - 1.  This is used to get the smooth "zoom in" effect.
+				//         additionally serves to "curve" the offset based on the max zoom
+				// g(x) == a term used to move the ends of the zoom inward.  Precalculated that the edges should be 66% of the current
+				//         value. The center is 100%. (1 - offsetPercent) == 0,1 distance from center
+				// The .66 value comes from the area under the curve.  Dont as me to explain it too much because it's too clever for me
+				offset = offset * (zoomInPercent - 1) * ((1 - offsetPercent) * (1 - .66) + .66);
 			}
 			
 			if (cursorOrientedPosition > centerOrientedPosition) {
