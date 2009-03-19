@@ -131,7 +131,7 @@ namespace Do.Universe.Linux {
 						yield return (new [] {home, ".local/share", appDirSuffix}.Aggregate (Path.Combine));
 					} else if (xdgVar == "XDG_DATA_DIRS") {
 						yield return Path.Combine ("/usr/local/share/", appDirSuffix);
-						yield return Path.Combine ("/usr/share/applications", appDirSuffix);
+						yield return Path.Combine ("/usr/share/", appDirSuffix);
 					}
 				} else {
 					foreach (string dir in envPath.Split (':'))
