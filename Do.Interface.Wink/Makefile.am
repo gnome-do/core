@@ -4,6 +4,8 @@ include $(top_srcdir)/build.rules.mk
 ASSEMBLY = Do.Interface.Wink
 TARGET = library
 
+PKG_CONFIG_FILES = do.interface.wink.pc
+
 FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Interface.Wink/WindowControl.cs \
