@@ -24,6 +24,7 @@ using Gdk;
 using Gtk;
 
 using Do.Interface;
+using Do.Interface.Wink;
 using Do.Platform;
 
 using Docky.Utilities;

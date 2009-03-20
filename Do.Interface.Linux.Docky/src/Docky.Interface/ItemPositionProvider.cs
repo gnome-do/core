@@ -274,7 +274,7 @@ namespace Docky.Interface
 				// g(x) == a term used to move the ends of the zoom inward.  Precalculated that the edges should be 66% of the current
 				//         value. The center is 100%. (1 - offsetPercent) == 0,1 distance from center
 				// The .66 value comes from the area under the curve.  Dont as me to explain it too much because it's too clever for me
-				offset = offset * (zoomInPercent - 1) * ((1 - offsetPercent) * (1 - .66) + .66);
+				offset = offset * (zoomInPercent - 1) * (1 - offsetPercent / 3);
 			}
 			
 			if (cursorOrientedPosition > centerOrientedPosition) {

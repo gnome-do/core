@@ -29,6 +29,7 @@ using Do.Platform;
 using Do.Universe;
 using Do.Universe.Common;
 using Do.Interface;
+using Do.Interface.Wink;
 using Do.Interface.CairoUtils;
 
 using Docky.Interface.Menus;

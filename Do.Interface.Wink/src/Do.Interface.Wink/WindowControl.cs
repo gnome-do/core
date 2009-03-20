@@ -22,7 +22,7 @@ using System.Linq;
 
 using Wnck;
 
-namespace Docky.Utilities
+namespace Do.Interface.Wink
 {
 	
 	

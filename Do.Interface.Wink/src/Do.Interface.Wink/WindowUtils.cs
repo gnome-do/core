@@ -23,17 +23,18 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-using Do.Interface;
-using Do.Universe;
 using Do.Platform;
-
-using Docky.Interface;
 
 using Wnck;
 
-namespace Docky.Utilities
+namespace Do.Interface.Wink
 {
-	
+	public enum ClickAction {
+		Focus,
+		Minimize,
+		Restore,
+		None,
+	}
 	
 	public static class WindowUtils
 	{
