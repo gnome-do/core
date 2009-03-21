@@ -8,6 +8,7 @@ SUBDIRS = \
 	data \
 	Do.Universe \
 	Do.Platform \
+	Do.Interface.Wink \
 	Do.Interface.Linux \
 	Do.Interface.Linux.Classic \
 	Do.Interface.Linux.Docky \

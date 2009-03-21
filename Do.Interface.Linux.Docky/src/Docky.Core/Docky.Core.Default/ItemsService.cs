@@ -26,6 +26,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 using Do;
 using Do.Interface;
+using Do.Interface.Wink;
 using Do.Universe;
 using Do.Platform;
 

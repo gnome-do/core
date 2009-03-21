@@ -1,4 +1,9 @@
 <Combine fileversion="2.0" outputpath="build/bin/" name="Do">
+  <Policies>
+    <ChangeLogPolicy UpdateMode="Nearest" inheritsSet="Mono">
+      <MessageStyle Header="" Indent="" LineAlign="0" />
+    </ChangeLogPolicy>
+  </Policies>
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Debug" />
@@ -13,6 +18,7 @@
       <Entry build="True" name="Do.Interface.Linux.GlassFrame" configuration="Debug" />
       <Entry build="True" name="Do.Interface.Linux.Mini" configuration="Debug" />
       <Entry build="True" name="Do.Interface.Linux.HUD" configuration="Debug" />
+      <Entry build="True" name="Do.Interface.Wink" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Do" configuration="Release" />
@@ -27,6 +33,7 @@
       <Entry build="True" name="Do.Interface.Linux.GlassFrame" configuration="Release" />
       <Entry build="True" name="Do.Interface.Linux.Mini" configuration="Release" />
       <Entry build="True" name="Do.Interface.Linux.HUD" configuration="Release" />
+      <Entry build="True" name="Do.Interface.Wink" configuration="Release" />
       <CustomCommands>
         <Command type="BeforeBuild" command="autogen.sh --enable-release=YES" workingdir="${CombineDir}" />
       </CustomCommands>
@@ -45,8 +52,8 @@
     <Execute type="None" entry="Do.Interface.Linux.GlassFrame" />
     <Execute type="None" entry="Do.Interface.Linux.Mini" />
     <Execute type="None" entry="Do.Interface.Linux.HUD" />
+    <Execute type="None" entry="Do.Interface.Wink" />
   </StartMode>
-  <MonoDevelop.ChangeLogAddIn.ChangeLogInfo policy="UpdateNearestChangeLog" />
   <Entries>
     <Entry filename="Do/Do.mdp" />
     <Entry filename="Do.Platform/Do.Platform.mdp" />
@@ -60,5 +67,6 @@
     <Entry filename="Do.Interface.Linux.GlassFrame/Do.Interface.Linux.GlassFrame.mdp" />
     <Entry filename="Do.Interface.Linux.Mini/Do.Interface.Linux.Mini.mdp" />
     <Entry filename="Do.Interface.Linux.HUD/Do.Interface.Linux.HUD.mdp" />
+    <Entry filename="Do.Interface.Wink/Do.Interface.Wink.mdp" />
   </Entries>
 </Combine>

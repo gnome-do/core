@@ -26,6 +26,7 @@ using Mono.Unix;
 
 using Do.Platform;
 using Do.Universe;
+using Do.Interface.Wink;
 using Do.Universe.Common;
 using Do.Interface;
 using Do.Interface.CairoUtils;

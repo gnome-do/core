@@ -133,6 +133,7 @@ Do.Interface.Linux.Docky/Makefile
 Do.Interface.Linux.GlassFrame/Makefile
 Do.Interface.Linux.HUD/Makefile
 Do.Interface.Linux.Mini/Makefile
+Do.Interface.Wink/Makefile
 Do.Platform/Makefile
 Do.Platform/src/AssemblyInfo.cs
 Do.Platform.Linux/Makefile
