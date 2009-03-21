@@ -98,12 +98,19 @@ namespace Do.Core
 		{
 			SetTheme (Do.Preferences.Theme);
 			Do.Preferences.ThemeChanged += OnThemeChanged;
+			Screen.Default.CompositedChanged += OnCompositingChanged;
 		}
 
 		void OnSummoned ()
 		{
 			if (Summoned == null) return;
 			Summoned (this, EventArgs.Empty);
+		}
+		
+		void OnCompositingChanged(object sender, EventArgs args)
+		{
+			UnsetTheme();
+			SetTheme(Do.Preferences.Theme);
 		}
 		
 		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
