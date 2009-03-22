@@ -111,7 +111,7 @@ namespace Do.Core
 //                        Do.Keybindings.RegisterShortcut (new Shortcut ("EscapeKey", Catalog.GetString ( "Escape"), OnEscapeKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateEscapeKey", Catalog.GetString ( "Alternate Escape"), OnEscapeKeyPressEvent));
 //                        Do.Keybindings.RegisterShortcut (new Shortcut ("ActivateKey", "Activate", OnActivateKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateActivateKey", "Alternate Activate", OnActivateKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateActivateKey", Catalog.GetString ("Alternate Activate"), OnActivateKeyPressEvent));
 //                        Do.Keybindings.RegisterShortcut (new Shortcut ("DeleteKey", Catalog.GetString ( "Delete Character"), OnDeleteKeyPressEvent));
 //                        Do.Keybindings.RegisterShortcut (new Shortcut ("BackspaceKey", Catalog.GetString ( "Alternate Delete"), OnDeleteKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateDeleteKey", Catalog.GetString ( "Alternate Delete"), OnDeleteKeyPressEvent));
@@ -384,15 +384,6 @@ namespace Do.Core
 		private void KeyPressWrap (EventKey evnt)
 		{
 			Key key = (Key) evnt.KeyValue;
-                        
-			// User set keybindings
-			// Actually, just ask the preferences for the handler. 
-			Shortcut sc = Do.Keybindings.GetShortcutByKeycode(KeyEventToString(evnt));
-                        if (sc != null)
-                        {
-                            sc.Callback(evnt);
-                            return;
-                        }
 
 
 //			if (KeyEventToString (evnt).Equals (Do.Preferences.GetKeybinding)) {
@@ -443,6 +434,16 @@ namespace Do.Core
 			} else if (key == Key.comma) {
 //				OnSelectionKeyPressEvent (evnt);
 			} else {
+                                // User set keybindings - they are the last to
+                                // be checked, so enter/backspace/delete, etc
+                                // all have hardcoded values
+                                // Actually, just ask the preferences for the handler. 
+                                Shortcut sc = Do.Keybindings.GetShortcutByKeycode(KeyEventToString(evnt));
+                                if (sc != null)
+                                {
+                                    sc.Callback(evnt);
+                                    return;
+                                }
 				OnInputKeyPressEvent (evnt);
 			}
 		}

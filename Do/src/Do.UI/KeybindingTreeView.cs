@@ -64,7 +64,6 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 
-                        // TODO: Pull these values from preferences and localize
                         foreach (Shortcut sc in Do.Keybindings.Shortcuts)
                         {
                             store.AppendValues(sc.FriendlyName, Do.Keybindings.GetKeybinding(sc), 
@@ -95,15 +94,26 @@ namespace Do.UI
 		
 		private void OnAccelEdited (object o, AccelEditedArgs args)
 		{
-			TreeIter iter;
+			TreeIter olditer, newiter;
 			ListStore store;
 			
 			store = Model as ListStore;
-			store.GetIter (out iter, new TreePath (args.PathString));
+			store.GetIter (out newiter, new TreePath (args.PathString));
 			
 			string realKey = Gtk.Accelerator.Name (args.AccelKey, args.AccelMods);
 			
-			store.SetValue (iter, (int)Column.Binding, realKey);
+                        // Look for any other rows that have the same binding and then zero that binding out
+                        Model.Foreach ((model, path, iter) => 
+                        {
+                            string binding = model.GetValue(iter, (int)Column.Binding) as string;
+                            if (binding == realKey) {
+                                model.SetValue (iter, (int)Column.Binding, "");
+                            }
+                            return false;
+                        } );
+
+			store.SetValue (newiter, (int)Column.Binding, realKey);
+
 			SaveBindings ();
 		}
 		
@@ -114,7 +124,9 @@ namespace Do.UI
 			
 			store = Model as ListStore;
 			store.GetIter (out iter, new TreePath (args.PathString));
-			store.SetValue (iter, (int)Column.Binding, "DISABLED");
+			store.SetValue (iter, (int)Column.Binding, "");
+
+                        SaveBindings ();
 		}
 		
 		private void SaveBindings ()
@@ -130,7 +142,7 @@ namespace Do.UI
                         binding = model.GetValue (iter, (int)Column.Binding) as string;
                         shortcutname = model.GetValue (iter, (int)Column.ShortcutName) as string;
                     
-                        if (binding != null)
+                        if (binding != null && binding != "DISABLED" && binding != Do.Keybindings.GetKeybinding (shortcutname))
         			Do.Keybindings.BindShortcut(shortcutname, binding);
 //			switch (action.ToLower ()) {
 //			case "summon":
@@ -144,5 +156,7 @@ namespace Do.UI
 //			}
 			return false;
 		}
+                
 	}
+
 }
