@@ -43,16 +43,6 @@ namespace Docky.Interface
 	{
 		public event EventHandler RemoveClicked;
 		
-		static readonly IEnumerable<string> DesktopFilesDirectories = new [] {
-				"~/.local/share/applications/wine",
-				"~/.local/share/applications",
-				"/usr/share/applications",
-				"/usr/share/applications/kde",
-				"/usr/share/applications/kde4",
-				"/usr/share/gdm/applications",
-				"/usr/local/share/applications",
-		};
-		
 		string MinimizeRestoreText = Catalog.GetString ("Minimize") + "/" + Catalog.GetString ("Restore");
 		string MaximizeText = Catalog.GetString ("Maximize");
 		string CloseText = Catalog.GetString ("Close All");
@@ -82,17 +72,13 @@ namespace Docky.Interface
 		string desktop_file;
 		bool checked_desktop_file;
 		
-		public string DesktopFile {
+		IApplicationItem launcher;
+		
+		public IApplicationItem Launcher {
 			get {
-				if (desktop_file == null && !checked_desktop_file) {
-					checked_desktop_file = true;
-					foreach (string s in GetIconGuesses ()) {
-						desktop_file = GetDesktopFile (s);
-						if (desktop_file != null)
-							break;
-					}
-				}
-				return desktop_file;
+				if (launcher == null)
+					launcher = Services.UniverseFactory.MaybeApplicationItemFromCmd (WindowUtils.ProcessExecString (Exec));
+				return launcher;
 			}
 		}
 		
@@ -125,29 +111,23 @@ namespace Docky.Interface
 		protected override Gdk.Pixbuf GetSurfacePixbuf (int size)
 		{
 			Gdk.Pixbuf pbuf = null;
-			foreach (string guess in GetIconGuesses ()) {
-				if (pbuf != null) {
+			
+			if (Launcher == null) {
+				foreach (string guess in GetIconGuesses ()) {
+					if (pbuf != null) {
+						pbuf.Dispose ();
+						pbuf = null;
+					}
+					
+					bool found = IconProvider.PixbufFromIconName (guess, size, out pbuf);
+					if (found && (pbuf.Width == size || pbuf.Height == size))
+						break;
+					
 					pbuf.Dispose ();
 					pbuf = null;
 				}
-				
-				bool found = IconProvider.PixbufFromIconName (guess, size, out pbuf);
-				if (found && (pbuf.Width == size || pbuf.Height == size))
-					break;
-				
-				pbuf.Dispose ();
-				pbuf = null;
-			
-				string desktopPath = GetDesktopFile (guess);
-				if (!string.IsNullOrEmpty (desktopPath)) {
-					try {
-						string icon = Services.UniverseFactory.NewApplicationItem (desktopPath).Icon;
-						pbuf = IconProvider.PixbufFromIconName (icon, size);
-						break;
-					} catch {
-						continue;
-					}
-				}
+			} else {
+				IconProvider.PixbufFromIconName (Launcher.Icon, size, out pbuf);
 			}
 			
 			// we failed to find an icon, lets use an uggggly one
@@ -244,9 +224,6 @@ namespace Docky.Interface
 			foreach (string s in guesses)
 				yield return s;
 			
-			foreach (string s in guesses)
-				yield return "gnome-" + s;
-			
 			if (Name.Length > 4 && Name.Contains (" "))
 				yield return Name.Split (' ') [0].ToLower ();
 		}
@@ -268,19 +245,6 @@ namespace Docky.Interface
 				exec = null;
 			
 			return exec;
-		}
-		
-		string GetDesktopFile (string base_name)
-		{
-			foreach (string dir in DesktopFilesDirectories) {
-				try {
-					if (File.Exists (System.IO.Path.Combine (dir, base_name+".desktop")))
-						return System.IO.Path.Combine (dir, base_name+".desktop");
-					if (File.Exists (System.IO.Path.Combine (dir, "gnome-"+base_name+".desktop")))
-						return System.IO.Path.Combine (dir, "gnome-"+base_name+".desktop");
-				} catch { return null; }
-			}
-			return null;
 		}
 		
 		bool StringIsValidName (string s)
@@ -318,7 +282,8 @@ namespace Docky.Interface
 		{
 			yield return new SeparatorMenuButtonArgs ();
 			
-			if (DesktopFile == null) {
+			Item item = Launcher as Item;
+			if (item == null) {
 				yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (VisibleWindows), 
 				                                       MinimizeRestoreText, MinimizeIcon).AsDark ();
 				
@@ -328,8 +293,6 @@ namespace Docky.Interface
 				yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
 				                                       CloseText, CloseIcon).AsDark ();
 			} else {
-				Item item = Services.UniverseFactory.NewApplicationItem (DesktopFile) as Item;
-				
 				foreach (Act act in ActionsForItem (item))
 					yield return new LaunchMenuButtonArgs (act, item, act.Name, act.Icon).AsDark ();
 			}

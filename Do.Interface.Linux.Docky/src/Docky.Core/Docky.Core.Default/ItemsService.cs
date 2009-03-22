@@ -617,17 +617,20 @@ namespace Docky.Core.Default
 				
 				if (item is ApplicationDockItem && position <= LastNonTaskItemPosition ()) {
 					ApplicationDockItem api = item as ApplicationDockItem;
-					string desktop_file = api.DesktopFile;
 					
-					if (string.IsNullOrEmpty (desktop_file)) continue;
+					if (api.Launcher == null) continue;
 					
-					AbstractDockItem newItem = MaybeCreateCustomItem (desktop_file);
+					Item launcher = api.Launcher as Item;
+					if (launcher == null)
+						continue;
 					
-					if (newItem == null) continue;
+					AbstractDockItem newItem = new ItemDockItem (launcher);
 					
 					newItem.Position = item.Position;
 					newItem.DockAddItem = item.DockAddItem;
-					custom_items [desktop_file] = newItem;
+					custom_items [launcher.UniqueId] = newItem;
+					
+					RegisterDockItem (newItem);
 					UpdateItems ();
 					WriteData ();
 				}

@@ -18,6 +18,8 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Do.Universe;
 using Do.Universe.Linux;
@@ -28,7 +30,6 @@ namespace Do.Platform.Linux
 	
 	public class UniverseFactoryService : IUniverseFactoryService
 	{
-		
 		public IFileItem NewFileItem (string path)
 		{
 			return new FileItem (path);
@@ -40,6 +41,11 @@ namespace Do.Platform.Linux
 			// instead of null if MaybeCreateFromDesktopItem fails.
 			IApplicationItem maybe = ApplicationItem.MaybeCreateFromDesktopItem (path);
 			return maybe ?? new NullApplicationItem (path);
+		}
+		
+		public IApplicationItem MaybeApplicationItemFromCmd (string cmd)
+		{
+			return ApplicationItem.MaybeCreateFromCmd (cmd);
 		}
 	}
 }

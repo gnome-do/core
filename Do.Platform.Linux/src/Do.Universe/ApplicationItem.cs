@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 using Gnome;
 using Mono.Unix;
@@ -66,6 +67,33 @@ namespace Do.Universe.Linux {
 				if (appItem != null)
 					Instances [key] = appItem;
 			}
+			return appItem;
+		}
+		
+		public static ApplicationItem MaybeCreateFromCmd (string cmd)
+		{
+			ApplicationItem appItem = null;
+			
+			if (string.IsNullOrEmpty (cmd))
+				return appItem;
+			
+			Regex regex = new Regex (string .Format ("(^| ){0}( |)", cmd));
+			foreach (ApplicationItem item in Instances.Values) {
+				string path = item.Location;
+				try {
+					if (path.StartsWith ("file://"))
+						path = path.Substring ("file://".Length); 
+				
+					path = Path.GetFileName (path);
+				} catch { continue; }
+				
+				if (regex.IsMatch (path) || regex.IsMatch (item.Exec)) {
+					appItem = item;
+					if (item.IsAppropriateForCurrentDesktop && !item.Hidden)
+						break;
+				}
+			}
+			
 			return appItem;
 		}
 
@@ -114,6 +142,10 @@ namespace Do.Universe.Linux {
 		
 		public string Exec {
 			get { return item.GetString ("Exec"); }
+		}
+		
+		protected string Location {
+			get { return item.Location; }
 		}
 
 		public bool Hidden {
