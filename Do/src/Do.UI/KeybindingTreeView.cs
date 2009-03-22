@@ -29,13 +29,14 @@ namespace Do.UI
 		enum Column {
 			Action = 0,
 			Binding,
+                        DefaultKeybinding,
                         ShortcutName, 
 			NumColumns
 		}
 		
 		public KeybindingTreeView ()
 		{	
-			Model = new ListStore (typeof (string), typeof (string), typeof (string));
+			Model = new ListStore (typeof (string), typeof (string), typeof (string), typeof (string));
 			
 			CellRendererText actionCell = new CellRendererText ();
 			actionCell.Width = 150;
@@ -46,6 +47,10 @@ namespace Do.UI
 			bindingCell.AccelEdited += new AccelEditedHandler (OnAccelEdited);
 			bindingCell.AccelCleared += new AccelClearedHandler (OnAccelCleared);
 			InsertColumn (-1, "Shortcut", bindingCell, "text", (int)Column.Binding);
+                        
+                        CellRendererText defaultbindingCell = new CellRendererText ();
+                        actionCell.Width = 150;
+                        InsertColumn (-1, "Default Shortcut", defaultbindingCell, "text", (int)Column.DefaultKeybinding);
 			
 			RowActivated += new RowActivatedHandler (OnRowActivated);
 			ButtonPressEvent += new ButtonPressEventHandler (OnButtonPress);
@@ -62,7 +67,8 @@ namespace Do.UI
                         // TODO: Pull these values from preferences and localize
                         foreach (Shortcut sc in Do.Keybindings.Shortcuts)
                         {
-                            store.AppendValues(sc.FriendlyName, Do.Keybindings.GetKeybinding(sc), sc.ShortcutName);
+                            store.AppendValues(sc.FriendlyName, Do.Keybindings.GetKeybinding(sc), 
+                                                Do.Keybindings.GetDefaultKeybinding(sc), sc.ShortcutName);
                         }
 //			store.AppendValues ("Summon", Do.Preferences.GetKeybinding("SummonKey"));
 //			store.AppendValues ("Text Mode", Do.Preferences.GetKeybinding("TextModeKey"));

@@ -108,6 +108,23 @@ class CoreKeybindings {
         return null;
     }
 
+    public string GetDefaultKeybinding(Shortcut sc)
+    {
+        return GetDefaultKeybinding (sc.ShortcutName);
+    }
+
+    public string GetDefaultKeybinding(string sc)
+    {
+        foreach(KeyValuePair<string, string> entry in DefaultShortcutMap)
+        {
+            if (entry.Value == sc) {
+                return entry.Key;
+            }
+        }
+        return null;
+    }
+
+
     public bool BindShortcut(Shortcut sc, string keycode)
     {
         // Add this function to our keybinding map

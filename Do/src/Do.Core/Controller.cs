@@ -108,11 +108,13 @@ namespace Do.Core
                         // New shortcuts
                         Do.Keybindings.RegisterShortcut (new Shortcut ("CopyKey", Catalog.GetString ("Copy Text"), OnCopyEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("PasteKey", Catalog.GetString ( "Paste Text"), OnPasteEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("EscapeKey", Catalog.GetString ( "Escape"), OnEscapeKeyPressEvent));
+//                        Do.Keybindings.RegisterShortcut (new Shortcut ("EscapeKey", Catalog.GetString ( "Escape"), OnEscapeKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateEscapeKey", Catalog.GetString ( "Alternate Escape"), OnEscapeKeyPressEvent));
 //                        Do.Keybindings.RegisterShortcut (new Shortcut ("ActivateKey", "Activate", OnActivateKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateActivateKey", "Alternate Activate", OnActivateKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("DeleteKey", Catalog.GetString ( "Delete Character"), OnDeleteKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("BackspaceKey", Catalog.GetString ( "Alternate Delete"), OnDeleteKeyPressEvent));
+//                        Do.Keybindings.RegisterShortcut (new Shortcut ("DeleteKey", Catalog.GetString ( "Delete Character"), OnDeleteKeyPressEvent));
+//                        Do.Keybindings.RegisterShortcut (new Shortcut ("BackspaceKey", Catalog.GetString ( "Alternate Delete"), OnDeleteKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateDeleteKey", Catalog.GetString ( "Alternate Delete"), OnDeleteKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("TabKey", Catalog.GetString ( "Tab"), OnTabKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("UpKey", Catalog.GetString ( "Previous Result"), OnUpKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("DownKey", Catalog.GetString ( "Next Result"), OnDownKeyPressEvent));
@@ -129,10 +131,11 @@ namespace Do.Core
                         Do.Keybindings.BindDefault ("TextModeKey", "period");
                         Do.Keybindings.BindDefault ("CopyKey", "<Control>c");
                         Do.Keybindings.BindDefault ("PasteKey", "<Control>v");
-                        Do.Keybindings.BindDefault ("EscapetKey", "Escape");
+//                        Do.Keybindings.BindDefault ("EscapetKey", "Escape");
                         Do.Keybindings.BindDefault ("ActivateKey", "Return");
-                        Do.Keybindings.BindDefault ("DeleteKey", "Delete");
-                        Do.Keybindings.BindDefault ("BackspaceKey", "Backspace");
+//                        Do.Keybindings.BindDefault ("DeleteKey", "Delete");
+//                        Do.Keybindings.BindDefault ("BackspaceKey", "Backspace");
+//                        Do.Keybindings.BindDefault ("AlternateDeleteKey", "");
                         Do.Keybindings.BindDefault ("TabKey", "Tab");
                         Do.Keybindings.BindDefault ("UpKey", "Up");
                         Do.Keybindings.BindDefault ("DownKey", "Down");
