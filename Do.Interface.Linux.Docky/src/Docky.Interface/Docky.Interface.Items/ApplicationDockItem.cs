@@ -165,6 +165,10 @@ namespace Docky.Interface
 		
 		string Name {
 			get {
+				if (VisibleWindows.Any () && VisibleWindows.Count () == 1) {
+					return VisibleWindows.First ().Name;
+				}
+				
 				foreach (Wnck.Window window in VisibleWindows) {
 					if (StringIsValidName (window.ClassGroup.ResClass))
 						return window.ClassGroup.ResClass;
