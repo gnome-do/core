@@ -8,6 +8,7 @@ PKG_CONFIG_FILES = do.interface.wink.pc
 
 FILES = \
 	src/AssemblyInfo.cs \
+	src/Do.Interface.Wink/ClickAction.cs \
 	src/Do.Interface.Wink/WindowControl.cs \
 	src/Do.Interface.Wink/WindowUtils.cs
 

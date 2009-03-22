@@ -52,7 +52,7 @@ namespace Docky.Interface
 		bool accepting_drops;
 		Gdk.Pixbuf drag_pixbuf;
 		Gdk.Rectangle icon_region;
-		List<Wnck.Application> apps;
+		List<Wnck.Window> windows;
 		
 		public event EventHandler RemoveClicked;
 		
@@ -68,12 +68,12 @@ namespace Docky.Interface
 			get { return element; } 
 		}
 		
-		protected override IEnumerable<Wnck.Application> Applications { 
-			get { return apps; } 
+		public override IEnumerable<Wnck.Window> Windows { 
+			get { return windows; } 
 		}
 		
 		public IEnumerable<int> Pids { 
-			get { return apps.Select (win => win.Pid).ToArray (); } 
+			get { return windows.Select (win => win.Pid).ToArray (); } 
 		}
 		
 		public override int WindowCount {
@@ -84,7 +84,7 @@ namespace Docky.Interface
 		{
 			Position = -1;
 			this.element = element;
-			apps = new List<Wnck.Application> ();
+			windows = new List<Wnck.Window> ();
 
 			SetText (element.Name);
 
@@ -129,8 +129,8 @@ namespace Docky.Interface
 			UnregisterStateChangeEvents ();
 			
 			if (element is IApplicationItem) {
-				apps = WindowUtils.GetApplicationList ((element as IApplicationItem).Exec);
-				window_count = Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist).Count ();
+				windows = WindowUtils.WindowListForCmd ((element as IApplicationItem).Exec);
+				window_count = windows.Where (w => !w.IsSkipTasklist).Count ();
 			}
 			
 			RegisterStateChangeEvents ();
@@ -138,22 +138,16 @@ namespace Docky.Interface
 		
 		void RegisterStateChangeEvents ()
 		{
-			foreach (Application app in Applications) {
-				foreach (Wnck.Window w in app.Windows) {
-					if (!w.IsSkipTasklist)
-						w.StateChanged += OnWindowStateChanged;
-				}
-			}
+			foreach (Wnck.Window w in Windows.Where (w => !w.IsSkipTasklist))
+				w.StateChanged += OnWindowStateChanged;
 		}
 		
 		void UnregisterStateChangeEvents ()
 		{
-			foreach (Application app in Applications) {
-				foreach (Wnck.Window w in app.Windows) {
-					try {
-						w.StateChanged -= OnWindowStateChanged;
-					} catch {}
-				}
+			foreach (Wnck.Window w in Windows) {
+				try {
+					w.StateChanged -= OnWindowStateChanged;
+				} catch {}
 			}
 		}
 		
@@ -162,7 +156,7 @@ namespace Docky.Interface
 			if (handle_timer > 0) return;
 			// we do this delayed so that we dont get a flood of these events.  Certain windows behave badly.
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
-			window_count = Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist).Count ();
+			window_count = Windows.Where (w => !w.IsSkipTasklist).Count ();
 			SetIconRegionFromCache ();
 		}
 		
@@ -252,7 +246,7 @@ namespace Docky.Interface
 		{
 			UnregisterStateChangeEvents ();
 			element = null;
-			apps.Clear ();
+			windows.Clear ();
 			
 			if (drag_pixbuf != null)
 				drag_pixbuf.Dispose ();

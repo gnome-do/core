@@ -335,18 +335,17 @@ namespace Docky.Core.Default
 			
 			List<ApplicationDockItem> out_items = new List<ApplicationDockItem> ();
 
-			IEnumerable<int> knownPids = OrderedItems
+			IEnumerable<Window> knownWindows = OrderedItems
 				    .Where (di => di is ItemDockItem)
 					.Cast<ItemDockItem> ()
-					.SelectMany (di => di.Pids);
+					.SelectMany (di => di.Windows);
 			
-			IEnumerable<Application> prunedApps = WindowUtils.GetApplications ()
-				.Where (app => app.Windows.Any (w => !w.IsSkipTasklist))
-				.Where (app => !knownPids.Contains (app.Pid) && app.Windows.Any ());
+			IEnumerable<Window> prunedWindows = WindowUtils.GetWindows ()
+				.Where (w => !w.IsSkipTasklist && !knownWindows.Contains (w));
 			
-			foreach (IEnumerable<Wnck.Application> apps in prunedApps
-			         .GroupBy (app => (app as Wnck.Application).Windows [0].ClassGroup.ResClass)) {
-				ApplicationDockItem api = new ApplicationDockItem (apps);
+			foreach (IEnumerable<Wnck.Window> windows in prunedWindows
+			         .GroupBy (w => w.ClassGroup.ResClass)) {
+				ApplicationDockItem api = new ApplicationDockItem (windows);
 
 				if (task_items.Any (di => di.Equals (api))) {
 					AbstractDockItem match = task_items.Where (di => di.Equals (api)).First ();

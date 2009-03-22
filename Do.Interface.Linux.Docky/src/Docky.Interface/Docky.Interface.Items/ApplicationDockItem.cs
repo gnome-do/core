@@ -77,7 +77,7 @@ namespace Docky.Interface
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
 		
-		IEnumerable<Wnck.Application> applications;
+		IEnumerable<Wnck.Window> windows;
 		
 		string desktop_file;
 		bool checked_desktop_file;
@@ -99,11 +99,6 @@ namespace Docky.Interface
 		string Exec {
 			get {
 				string exec;
-				foreach (Wnck.Application app in Applications) {
-					exec = MaybeGetExecStringForPID (app.Pid);
-					if (exec != null)
-						return exec;
-				}
 
 				foreach (Wnck.Window win in VisibleWindows) {
 					exec = MaybeGetExecStringForPID (win.Pid);
@@ -157,7 +152,7 @@ namespace Docky.Interface
 			
 			// we failed to find an icon, lets use an uggggly one
 			if (pbuf == null)
-				pbuf = Applications.First ().Icon;
+				pbuf = Windows.First ().Icon;
 			
 			if (pbuf.Height != size && pbuf.Width != size ) {
 				double scale = (double)size / Math.Max (pbuf.Width, pbuf.Height);
@@ -170,14 +165,9 @@ namespace Docky.Interface
 		
 		string Name {
 			get {
-				foreach (Wnck.Application application in Applications) {
-					if (StringIsValidName (application.IconName))
-						return application.IconName;
-					else if (StringIsValidName (application.Name))
-						return application.Name;
-				}
-
 				foreach (Wnck.Window window in VisibleWindows) {
+					if (StringIsValidName (window.ClassGroup.ResClass))
+						return window.ClassGroup.ResClass;
 					if (StringIsValidName (window.IconName))
 						return window.IconName;
 					else if (StringIsValidName (window.Name))
@@ -191,13 +181,13 @@ namespace Docky.Interface
 			get { return windowCount; }
 		}
 		
-		protected override IEnumerable<Wnck.Application> Applications { 
-			get { return applications; } 
+		public override IEnumerable<Wnck.Window> Windows { 
+			get { return windows; } 
 		}
 
-		public ApplicationDockItem (IEnumerable<Wnck.Application> applications) : base ()
+		public ApplicationDockItem (IEnumerable<Wnck.Window> windows) : base ()
 		{
-			this.applications = applications;
+			this.windows = windows;
 			windowCount = VisibleWindows.Count ();
 			
 			foreach (Wnck.Window w in VisibleWindows) {
@@ -236,13 +226,6 @@ namespace Docky.Interface
 			if (!string.IsNullOrEmpty (Exec)) {
 				yield return Exec;
 				yield return Exec.Split ('-')[0];
-			}
-			
-			foreach (Wnck.Application app in Applications) {
-				if (!guesses.Contains (PrepName (app.Name)))
-					guesses.Add (PrepName (app.Name));
-				if (!guesses.Contains (PrepName (app.IconName)))
-					guesses.Add (PrepName (app.IconName));
 			}
 
 			foreach (Wnck.Window win in VisibleWindows) {
@@ -324,7 +307,7 @@ namespace Docky.Interface
 			if (!(other is ApplicationDockItem))
 				return false;
 
-			return Applications.Any (app => (other as ApplicationDockItem).Applications.Contains (app));
+			return Windows.Any (w => (other as ApplicationDockItem).Windows.Contains (w));
 		}
 		
 		public IEnumerable<AbstractMenuArgs> GetMenuItems ()

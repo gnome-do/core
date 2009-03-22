@@ -29,12 +29,6 @@ using Wnck;
 
 namespace Do.Interface.Wink
 {
-	public enum ClickAction {
-		Focus,
-		Minimize,
-		Restore,
-		None,
-	}
 	
 	public static class WindowUtils
 	{
@@ -57,33 +51,36 @@ namespace Do.Interface.Wink
 		
 		static Dictionary<string, string> RemapDictionary { get; set; }
 		
-		static List<Application> application_list;
-		static bool application_list_update_needed;
+		static List<Window> window_list;
+		static bool window_list_update_needed;
 		
 		static Dictionary<int, string> exec_lines = new Dictionary<int, string> ();
 		static DateTime last_update = new DateTime (0);
 		
+		#region ctor
 		static WindowUtils ()
 		{
 			Wnck.Screen.Default.WindowClosed += delegate {
-				application_list_update_needed = true;
+				window_list_update_needed = true;
 			};
 			
 			Wnck.Screen.Default.WindowOpened += delegate {
-				application_list_update_needed = true;
+				window_list_update_needed = true;
 			};
 			
 			Wnck.Screen.Default.ApplicationOpened += delegate {
-				application_list_update_needed = true;
+				window_list_update_needed = true;
 			};
 			
 			Wnck.Screen.Default.ApplicationClosed += delegate {
-				application_list_update_needed = true;
+				window_list_update_needed = true;
 			};
 			
 			BuildRemapDictionary ();
 		}
+		#endregion
 		
+		#region Private Methods
 		static void BuildRemapDictionary ()
 		{
 			if (!File.Exists (RemapFile)) {
@@ -151,87 +148,6 @@ namespace Do.Interface.Wink
 			return remapDict;
 		}
 		
-		/// <summary>
-		/// Returns a list of all applications on the default screen
-		/// </summary>
-		/// <returns>
-		/// A <see cref="Application"/> array
-		/// </returns>
-		public static List<Application> GetApplications ()
-		{
-			if (application_list == null || application_list_update_needed) {
-				application_list = new List<Application> ();
-				foreach (Window w in Wnck.Screen.Default.Windows) {
-					if (!application_list.Contains (w.Application))
-						application_list.Add (w.Application);
-				}
-			}
-			return application_list;
-		}
-		
-		/// <summary>
-		/// Gets the command line excec string for a PID
-		/// </summary>
-		/// <param name="pid">
-		/// A <see cref="System.Int32"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.String"/>
-		/// </returns>
-		public static string CmdLineForPid (int pid)
-		{
-			StreamReader reader;
-			string cmdline = null;
-			
-			try {
-				string procPath = new [] { "/proc", pid.ToString (), "cmdline" }.Aggregate (Path.Combine);
-				reader = new StreamReader (procPath);
-				cmdline = reader.ReadLine ().Replace (Convert.ToChar (0x0), ' ');
-				reader.Close ();
-				reader.Dispose ();
-			} catch { }
-			
-			return cmdline;
-		}
-		
-		/// <summary>
-		/// Returns a list of applications that match an exec string
-		/// </summary>
-		/// <param name="exec">
-		/// A <see cref="System.String"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="List"/>
-		/// </returns>
-		public static List<Application> GetApplicationList (string exec)
-		{
-			List<Application> apps = new List<Application> ();
-			if (string.IsNullOrEmpty (exec))
-				return apps;
-			
-			exec = ProcessExecString (exec);
-			if (string.IsNullOrEmpty (exec))
-				return apps;
-			
-			UpdateExecList ();
-
-			foreach (KeyValuePair<int, string> kvp in exec_lines) {
-				if (kvp.Value != null && kvp.Value.Contains (exec)) {
-					foreach (Application app in GetApplications ()) {
-						if (app == null)
-							continue;
-						
-						if (app.Pid == kvp.Key || app.Windows.Any (w => w.Pid == kvp.Key)) {
-							if (app.Windows.Any (win => !win.IsSkipTasklist))
-								apps.Add (app);
-							break;
-						}
-					}
-				}
-			}
-			return apps;
-		}
-		
 		static void UpdateExecList ()
 		{
 			if ((DateTime.UtcNow - last_update).TotalMilliseconds < 200) return;
@@ -248,20 +164,16 @@ namespace Do.Interface.Wink
 					continue;
 				
 				if (exec_line.Contains ("java") && exec_line.Contains ("jar")) {
-					foreach (Application app in GetApplications ()) {
-						if (app == null)
+					foreach (Window window in GetWindows ()) {
+						if (window == null)
 							continue;
 						
-						if (app.Pid == pid || app.Windows.Any (w => w.Pid == pid)) {
-							foreach (Wnck.Window window in app.Windows.Where (win => !win.IsSkipTasklist)) {
-								exec_line = window.ClassGroup.ResClass;
+						if (window.Pid == pid || window.Application.Pid == pid) {
+							exec_line = window.ClassGroup.ResClass;
 								
-								// Vuze is retarded
-								if (exec_line == "SWT")
-									exec_line = window.Name;
-								Console.WriteLine (exec_line);
-								break;
-							}
+							// Vuze is retarded
+							if (exec_line == "SWT")
+								exec_line = window.Name;
 						}
 					}
 				}	
@@ -273,7 +185,90 @@ namespace Do.Interface.Wink
 			
 			last_update = DateTime.UtcNow;
 		}
-
+		
+		static ClickAction GetClickAction (IEnumerable<Window> windows)
+		{
+			if (!windows.Any ())
+				return ClickAction.None;
+			
+			if (windows.Any (w => w.IsMinimized && w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)))
+				return ClickAction.Restore;
+			
+			if (windows.Any (w => w.IsActive && w.IsInViewport (Wnck.Screen.Default.ActiveWorkspace)))
+				return ClickAction.Minimize;
+			
+			return ClickAction.Focus;
+		}
+		#endregion
+		
+		#region Public Methods
+		/// <summary>
+		/// Returns a list of all windows on the default screen
+		/// </summary>
+		/// <returns>
+		/// A <see cref="List"/>
+		/// </returns>
+		public static List<Window> GetWindows ()
+		{
+			if (window_list == null || window_list_update_needed)
+				window_list = new List<Window> (Wnck.Screen.Default.WindowsStacked);
+			
+			return window_list;
+		}
+		
+		/// <summary>
+		/// Gets the command line excec string for a PID
+		/// </summary>
+		/// <param name="pid">
+		/// A <see cref="System.Int32"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/>
+		/// </returns>
+		public static string CmdLineForPid (int pid)
+		{
+			string cmdline = null;
+			
+			try {
+				string procPath = new [] { "/proc", pid.ToString (), "cmdline" }.Aggregate (Path.Combine);
+				using (StreamReader reader = new StreamReader (procPath)) {
+					cmdline = reader.ReadLine ().Replace (Convert.ToChar (0x0), ' ');
+					reader.Close ();
+				}
+			} catch { }
+			
+			return cmdline;
+		}
+		
+		public static List<Window> WindowListForCmd (string exec)
+		{
+			List<Window> windows = new List<Window> ();
+			if (string.IsNullOrEmpty (exec))
+				return windows;
+			
+			exec = ProcessExecString (exec);
+			if (string.IsNullOrEmpty (exec))
+				return windows;
+			
+			UpdateExecList ();
+			
+			foreach (KeyValuePair<int, string> kvp in exec_lines) {
+				if (!string.IsNullOrEmpty (kvp.Value) && kvp.Value.Contains (exec)) {
+					// we have a matching exec, now we just find every window whose PID matches this exec
+					foreach (Window window in GetWindows ()) {
+						if (window == null)
+							continue;
+						
+						// this window matches the right PID and exec string, we can match it.
+						if ((window.Pid == kvp.Key || window.Application.Pid == kvp.Key) && !windows.Contains (window))
+							windows.Add (window);
+					}
+				}
+			}
+			
+			return windows;
+		}
+		
 		public static string ProcessExecString (string exec)
 		{
 			exec = exec.ToLower ().Trim ();
@@ -327,12 +322,10 @@ namespace Do.Interface.Wink
 		/// <param name="apps">
 		/// A <see cref="IEnumerable"/>
 		/// </param>
-		public static void PerformLogicalClick (IEnumerable<Application> apps)
+		public static void PerformLogicalClick (IEnumerable<Window> windows)
 		{
 			List<Window> stack = new List<Window> (Wnck.Screen.Default.WindowsStacked);
-			IEnumerable<Window> windows = apps
-				.SelectMany (app => app.Windows)
-				.OrderByDescending (w => stack.IndexOf (w));
+			windows = windows.OrderByDescending (w => stack.IndexOf (w));
 			
 			bool not_in_viewport = !windows.Any (w => !w.IsSkipTasklist && w.IsInViewport (w.Screen.ActiveWorkspace));
 			bool urgent = windows.Any (w => w.NeedsAttention ());
@@ -348,7 +341,7 @@ namespace Do.Interface.Wink
 				}
 			}
 			
-			switch (GetClickAction (apps)) {
+			switch (GetClickAction (windows)) {
 			case ClickAction.Focus:
 				WindowControl.FocusWindows (windows);
 				break;
@@ -361,26 +354,6 @@ namespace Do.Interface.Wink
 			}
 		}
 		
-		static ClickAction GetClickAction (IEnumerable<Application> apps)
-		{
-			if (!apps.Any ())
-				return ClickAction.None;
-			
-			foreach (Wnck.Application app in apps) {
-				foreach (Wnck.Window window in app.Windows) {
-					if (window.IsMinimized && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-						return ClickAction.Restore;
-				}
-			}
-			
-			foreach (Wnck.Application app in apps) {
-				foreach (Wnck.Window window in app.Windows) {
-					if (window.IsActive && window.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
-						return ClickAction.Minimize;
-				}
-			}
-			
-			return ClickAction.Focus;
-		}
+		#endregion
 	}
 }
