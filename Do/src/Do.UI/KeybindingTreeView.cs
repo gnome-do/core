@@ -29,12 +29,13 @@ namespace Do.UI
 		enum Column {
 			Action = 0,
 			Binding,
+                        ShortcutName, 
 			NumColumns
 		}
 		
 		public KeybindingTreeView ()
 		{	
-			Model = new ListStore (typeof (string), typeof (string));
+			Model = new ListStore (typeof (string), typeof (string), typeof (string));
 			
 			CellRendererText actionCell = new CellRendererText ();
 			actionCell.Width = 150;
@@ -57,9 +58,14 @@ namespace Do.UI
 		{
 			ListStore store = Model as ListStore;
 			store.Clear ();
-			
-			store.AppendValues ("Summon", Do.Preferences.SummonKeybinding);
-			store.AppendValues ("Text Mode", Do.Preferences.TextModeKeybinding);
+
+                        // TODO: Pull these values from preferences and localize
+                        foreach (Shortcut sc in Do.Keybindings.Shortcuts)
+                        {
+                            store.AppendValues(sc.FriendlyName, Do.Keybindings.GetKeybinding(sc), sc.ShortcutName);
+                        }
+//			store.AppendValues ("Summon", Do.Preferences.GetKeybinding("SummonKey"));
+//			store.AppendValues ("Text Mode", Do.Preferences.GetKeybinding("TextModeKey"));
 		}
 		
 		[GLib.ConnectBefore]
@@ -112,19 +118,24 @@ namespace Do.UI
 		
 		private bool SaveBindingsForeachFunc (TreeModel model, TreePath path, TreeIter iter)
 		{
-			string action, binding;
-			action = model.GetValue (iter, (int)Column.Action) as string;
-			
-			switch (action.ToLower ()) {
-			case "summon":
-				binding = model.GetValue (iter, (int)Column.Binding) as string;
-				Do.Preferences.SummonKeybinding = binding;
-				break;
-			case "text mode":
-				binding = model.GetValue (iter, (int)Column.Binding) as string;
-				Do.Preferences.TextModeKeybinding = binding;
-				break;
-			}
+                        string binding, shortcutname;
+//			string action, binding, shortcutname;
+//			action = model.GetValue (iter, (int)Column.Action) as string;
+                        binding = model.GetValue (iter, (int)Column.Binding) as string;
+                        shortcutname = model.GetValue (iter, (int)Column.ShortcutName) as string;
+                    
+                        if (binding != null)
+        			Do.Keybindings.BindShortcut(shortcutname, binding);
+//			switch (action.ToLower ()) {
+//			case "summon":
+//				binding = model.GetValue (iter, (int)Column.Binding) as string;
+//				Do.Preferences.SetKeybinding("SummonKey", binding);
+//				break;
+//			case "text mode":
+//				binding = model.GetValue (iter, (int)Column.Binding) as string;
+//				Do.Preferences.BindShortcut("TextModeKey", binding);
+//				break;
+//			}
 			return false;
 		}
 	}
