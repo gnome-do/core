@@ -103,33 +103,33 @@ namespace Do.Core
                         // Register Shortcuts
                         // TODO: Localize the text here.
                         // Previous shortcuts
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("SummonKey", "Summon Gnome-Do", OnSummonKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("TextModeKey", "Enter text mode", OnTextModePressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("SummonKey", Catalog.GetString ("Summon Gnome-Do"), OnSummonKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("TextModeKey", Catalog.GetString ("Enter text mode"), OnTextModePressEvent));
                         // New shortcuts
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("CopyKey", "Copy Text", OnCopyEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("PasteKey", "Paste Text", OnPasteEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("EscapeKey", "Escape", OnEscapeKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("ActivateKey", "Activate", OnActivateKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("CopyKey", Catalog.GetString ("Copy Text"), OnCopyEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("PasteKey", Catalog.GetString ( "Paste Text"), OnPasteEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("EscapeKey", Catalog.GetString ( "Escape"), OnEscapeKeyPressEvent));
+//                        Do.Keybindings.RegisterShortcut (new Shortcut ("ActivateKey", "Activate", OnActivateKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateActivateKey", "Alternate Activate", OnActivateKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("DeleteKey", "Delete", OnDeleteKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("BackspaceKey", "Backspace", OnDeleteKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("TabKey", "Tab", OnTabKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("UpKey", "Up", OnUpKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("DownKey", "Down", OnDownKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("HomeKey", "Home", OnHomeKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("EndKey", "End", OnEndKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("PageUpKey", "PgUp", OnPageUpKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("PageDownKey", "PgDown", OnPageDownKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("LeftKey", "Left", OnLeftKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("RightKey", "Right", OnRightKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("CommaKey", "Selection mode entered", OnSelectionKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("DeleteKey", Catalog.GetString ( "Delete Character"), OnDeleteKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("BackspaceKey", Catalog.GetString ( "Alternate Delete"), OnDeleteKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("TabKey", Catalog.GetString ( "Tab"), OnTabKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("UpKey", Catalog.GetString ( "Previous Result"), OnUpKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("DownKey", Catalog.GetString ( "Next Result"), OnDownKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("HomeKey", Catalog.GetString ( "First Result"), OnHomeKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("EndKey", Catalog.GetString ( "Last Result"), OnEndKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("PageUpKey", Catalog.GetString ( "Previous 5 Results"), OnPageUpKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("PageDownKey", Catalog.GetString ( "Next 5 Results"), OnPageDownKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("LeftKey", Catalog.GetString ( "Previous Action"), OnLeftKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("RightKey", Catalog.GetString ( "Next Action"), OnRightKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("CommaKey", Catalog.GetString ( "Selection mode"), OnSelectionKeyPressEvent));
                         
                         // Bind the default values for these shortcuts
-                        Do.Keybindings.BindDefault ("SummonKey", "<Control>backslash");
+                        Do.Keybindings.BindDefault ("SummonKey", "<Super>space");
                         Do.Keybindings.BindDefault ("TextModeKey", "period");
                         Do.Keybindings.BindDefault ("CopyKey", "<Control>c");
                         Do.Keybindings.BindDefault ("PasteKey", "<Control>v");
-                        Do.Keybindings.BindDefault ("EscapeKey", "Escape");
+                        Do.Keybindings.BindDefault ("EscapetKey", "Escape");
                         Do.Keybindings.BindDefault ("ActivateKey", "Return");
                         Do.Keybindings.BindDefault ("DeleteKey", "Delete");
                         Do.Keybindings.BindDefault ("BackspaceKey", "Backspace");
@@ -414,7 +414,7 @@ namespace Do.Core
 				}
 			}
                         
-                        // Currently - only hardcoded are enter keys and escape
+                        // Currently - only hardcoded are enter keys, escape and delete/backspace
 			if (key == Key.Escape) {
 				OnEscapeKeyPressEvent (evnt);
 			} else if (key == Key.Return ||
