@@ -59,7 +59,15 @@ namespace Do
                         // Read all values out of preferences and populate the KeybindingMap
                         ReadShortcuts ();
                 }
-
+                
+                public bool RegisterShortcut (Shortcut sc, string defaultBinding)
+                {
+                        if (!RegisterShortcut (sc))
+                                return false; 
+                        if (!BindDefault (sc, defaultBinding))
+                                return false;
+                        return true;
+                }
 
                 public bool RegisterShortcut (Shortcut sc)
                 {

@@ -106,20 +106,24 @@ namespace Do.Core
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("SummonKey", 
                                                 Catalog.GetString ("Summon Gnome-Do"), 
-                                                OnSummonKeyPressEvent));
+                                                OnSummonKeyPressEvent),
+                                        "<Super>space");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("TextModeKey",
                                                 Catalog.GetString ("Enter text mode"),
-                                                OnTextModePressEvent));
+                                                OnTextModePressEvent),
+                                        "period");
                         // New shortcuts
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("CopyKey",
                                                 Catalog.GetString ("Copy Text"),
-                                                OnCopyEvent));
+                                                OnCopyEvent),
+                                        "<Control>c");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("PasteKey",
                                                 Catalog.GetString ("Paste Text"),
-                                                OnPasteEvent));
+                                                OnPasteEvent),
+                                        "<Control>v");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("AlternateEscapeKey",
                                                 Catalog.GetString ("Alternate Escape"),
@@ -135,64 +139,59 @@ namespace Do.Core
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("ShiftTabKey",
                                                 Catalog.GetString ("Previous Pane"),
-                                                OnShiftTabKeyPressEvent));
+                                                OnShiftTabKeyPressEvent),
+                                        "ISO_Left_Tab");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("TabKey",
                                                 Catalog.GetString ("Next Pane"),
-                                                OnTabKeyPressEvent));
+                                                OnTabKeyPressEvent),
+                                        "Tab");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("UpKey",
                                                 Catalog.GetString ("Previous Result"),
-                                                OnUpKeyPressEvent));
+                                                OnUpKeyPressEvent),
+                                        "Up");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("DownKey",
                                                 Catalog.GetString ("Next Result"),
-                                                OnDownKeyPressEvent));
+                                                OnDownKeyPressEvent),
+                                        "Down");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("HomeKey",
                                                 Catalog.GetString ("First Result"),
-                                                OnHomeKeyPressEvent));
+                                                OnHomeKeyPressEvent),
+                                        "Home");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("EndKey",
                                                 Catalog.GetString ("Last Result"),
-                                                OnEndKeyPressEvent));
+                                                OnEndKeyPressEvent),
+                                        "End");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("PageUpKey",
                                                 Catalog.GetString ("Previous 5 Results"),
-                                                OnPageUpKeyPressEvent));
+                                                OnPageUpKeyPressEvent),
+                                        "Page_Up");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("PageDownKey",
                                                 Catalog.GetString ("Next 5 Results"),
-                                                OnPageDownKeyPressEvent));
+                                                OnPageDownKeyPressEvent),
+                                        "Page_Down");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("LeftKey",
                                                 Catalog.GetString ("Step out of Item"),
-                                                OnLeftKeyPressEvent));
+                                                OnLeftKeyPressEvent),
+                                        "Left");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("RightKey",
                                                 Catalog.GetString ("Browse Into Item"),
-                                                OnRightKeyPressEvent));
+                                                OnRightKeyPressEvent),
+                                        "Right");
                         Do.Keybindings.RegisterShortcut (
                                         new Shortcut ("CommaKey",
                                                 Catalog.GetString ("Selection mode"),
-                                                OnSelectionKeyPressEvent));
+                                                OnSelectionKeyPressEvent),
+                                        "Comma");
                         
-                        // Bind the default values for these shortcuts
-                        Do.Keybindings.BindDefault ("SummonKey", "<Super>space");
-                        Do.Keybindings.BindDefault ("TextModeKey", "period");
-                        Do.Keybindings.BindDefault ("CopyKey", "<Control>c");
-                        Do.Keybindings.BindDefault ("PasteKey", "<Control>v");
-                        Do.Keybindings.BindDefault ("TabKey", "Tab");
-                        Do.Keybindings.BindDefault ("ShiftTabKey", "ISO_Left_Tab");
-                        Do.Keybindings.BindDefault ("UpKey", "Up");
-                        Do.Keybindings.BindDefault ("DownKey", "Down");
-                        Do.Keybindings.BindDefault ("HomeKey", "Home");
-                        Do.Keybindings.BindDefault ("EndKey", "End");
-                        Do.Keybindings.BindDefault ("PageUpKey", "Page_Up");
-                        Do.Keybindings.BindDefault ("PageDownKey", "Page_Down");
-                        Do.Keybindings.BindDefault ("LeftKey", "Left");
-                        Do.Keybindings.BindDefault ("RightKey", "Right");
-                        Do.Keybindings.BindDefault ("CommaKey", "comma");
 		}
 
 		void OnSummoned ()
