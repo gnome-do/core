@@ -30,205 +30,204 @@ using Do.Platform;
 namespace Do
 {
 
-class CoreKeybindings {
-    Dictionary<string, Shortcut> ShortcutMap ; // shortcut name -> shortcut
-    Dictionary<string, string> KeycodeMap ; // keybinding -> shortcut name
-    Dictionary<string, string> DefaultShortcutMap ; // default keybinding -> shortcut name
-    
-    IPreferences Preferences { get; set; }
-    
-    public ArrayList Shortcuts ;
-    public Dictionary<string, List<KeyChangedCb>> PreferencesCbs;
-    public delegate void KeyChangedCb (object sender, PreferencesChangedEventArgs e);
-     
-    public CoreKeybindings ()
-    {
-        
-        Preferences = Services.Preferences.Get<CoreKeybindings> ();
-        Preferences.PreferencesChanged += PreferencesChanged;
+        class CoreKeybindings {
+                Dictionary<string, Shortcut> ShortcutMap ; // shortcut name -> shortcut
+                Dictionary<string, string> KeycodeMap ; // keybinding -> shortcut name
+                Dictionary<string, string> DefaultShortcutMap ; // default keybinding -> shortcut name
 
-        ShortcutMap = new Dictionary<string, Shortcut> (); // shortcut name -> shortcut
-        KeycodeMap = new Dictionary<string, string> (); // keybinding -> shortcut name
-        DefaultShortcutMap = new Dictionary<string, string> (); // default keybinding -> shortcut name
-        Shortcuts = new ArrayList ();
-        PreferencesCbs = new Dictionary<string, List<KeyChangedCb>> ();
-    }
+                IPreferences Preferences { get; set; }
 
-    public void Initialize ()
-    {
-        // Read all values out of preferences and populate the KeybindingMap
-        ReadShortcuts ();
-    }
-        
-    
-    public bool RegisterShortcut (Shortcut sc)
-    {
-        // Add this shortcut to what?
-        if (! Shortcuts.Contains (sc) && ! ShortcutMap.ContainsKey (sc.ShortcutName)) 
-        {
-            Shortcuts.Add (sc);
-            ShortcutMap[sc.ShortcutName] = sc;
-            PreferencesCbs[sc.ShortcutName] = new List<KeyChangedCb> ();
-            SaveShortcuts ();
-            return true;
+                public ArrayList Shortcuts ;
+                public Dictionary<string, List<KeyChangedCb>> PreferencesCbs;
+                public delegate void KeyChangedCb (object sender, PreferencesChangedEventArgs e);
+
+                public CoreKeybindings ()
+                {
+
+                        Preferences = Services.Preferences.Get<CoreKeybindings> ();
+                        Preferences.PreferencesChanged += PreferencesChanged;
+
+                        ShortcutMap = new Dictionary<string, Shortcut> (); // shortcut name -> shortcut
+                        KeycodeMap = new Dictionary<string, string> (); // keybinding -> shortcut name
+                        DefaultShortcutMap = new Dictionary<string, string> (); // default keybinding -> shortcut name
+                        Shortcuts = new ArrayList ();
+                        PreferencesCbs = new Dictionary<string, List<KeyChangedCb>> ();
+                }
+
+                public void Initialize ()
+                {
+                        // Read all values out of preferences and populate the KeybindingMap
+                        ReadShortcuts ();
+                }
+
+
+                public bool RegisterShortcut (Shortcut sc)
+                {
+                        // Add this shortcut to what?
+                        if (! Shortcuts.Contains (sc) && ! ShortcutMap.ContainsKey (sc.ShortcutName)) 
+                        {
+                                Shortcuts.Add (sc);
+                                ShortcutMap [sc.ShortcutName] = sc;
+                                PreferencesCbs [sc.ShortcutName] = new List<KeyChangedCb> ();
+                                SaveShortcuts ();
+                                return true;
+                        }
+                        return false;
+                }
+
+                public Shortcut GetShortcutByKeycode (string keycode)
+                {
+                        if (!KeycodeMap.ContainsKey (keycode)) {
+                                return null;
+                        }
+                        string scname = KeycodeMap [keycode];
+
+                        if (!ShortcutMap.ContainsKey (scname)) {
+                                return null;
+                        }
+
+                        return ShortcutMap [scname];
+
+                }
+
+                public string GetKeybinding (Shortcut sc)
+                {
+                        return GetKeybinding (sc.ShortcutName);
+                }
+
+                public string GetKeybinding (string sc)
+                {
+
+                        foreach (KeyValuePair<string, string> entry in KeycodeMap)
+                        {
+                                if (entry.Value == sc) {
+                                        return entry.Key;
+                                }
+                        }
+                        return null;
+                }
+
+                public string GetDefaultKeybinding (Shortcut sc)
+                {
+                        return GetDefaultKeybinding (sc.ShortcutName);
+                }
+
+                public string GetDefaultKeybinding (string sc)
+                {
+                        foreach (KeyValuePair<string, string> entry in DefaultShortcutMap)
+                        {
+                                if (entry.Value == sc) {
+                                        return entry.Key;
+                                }
+                        }
+                        return null;
+                }
+
+
+                public bool BindShortcut (Shortcut sc, string keycode)
+                {
+                        // Add this function to our keybinding map
+                        return BindShortcut (sc.ShortcutName, keycode);
+
+                }
+
+                public bool BindShortcut (string sc, string keycode)
+                {
+                        string oldcode = GetKeybinding (sc);
+                        if (oldcode != null)
+                                KeycodeMap.Remove (oldcode); // remove the old keybinding from the map
+
+                        KeycodeMap [keycode] = sc;
+                        Preferences.Set (sc, keycode);
+
+                        return true;
+                }
+
+                // Add Default Keycode mapping - used for resetting to default or not overwriting read values
+                public bool BindDefault (Shortcut sc, string keycode)
+                {
+                        return BindDefault (sc.ShortcutName, keycode);
+
+                }
+
+                public bool BindDefault (string sc, string keycode)
+                {
+
+                        string assigned_keycode = GetKeybinding (sc);
+                        if (assigned_keycode == null)
+                        {
+                                // Put this shortcut in the mapping
+                                BindShortcut (sc, keycode);
+                        }
+
+                        DefaultShortcutMap [keycode] = sc;
+                        return true;
+
+                }
+
+                public bool UnregisterShortcut (Shortcut sc)
+                {
+                        if (Shortcuts.Contains (sc))
+                        {
+                                Shortcuts.Remove (sc);
+                                ShortcutMap.Remove (sc.ShortcutName);
+                                SaveShortcuts ();
+                                return true;
+                        }
+                        return false;
+                }
+
+                public bool RegisterNotification (Shortcut sc, KeyChangedCb cb)
+                {
+                        return RegisterNotification (sc.ShortcutName, cb);
+                }
+
+                public bool RegisterNotification (string scname, KeyChangedCb cb)
+                {
+                        PreferencesCbs [scname].Add (cb);
+                        return true;
+                }
+
+                void SaveShortcuts () 
+                {
+                        string scstring = "";
+                        foreach (Shortcut sc in Shortcuts)
+                        {
+                                scstring += sc.ShortcutName.Trim () + ",";
+                        }
+                        Preferences.Set ("RegisteredShortcuts", scstring);
+                } 
+
+                void ReadShortcuts ()
+                {
+                        string scstring = Preferences.Get ("RegisteredShortcuts", "").Trim ();
+                        if (scstring == "") 
+                                return;
+
+                        foreach (string sc in scstring.Split (',')) {
+                                if (sc.Trim () == "") 
+                                        continue;
+
+                                string keycode = Preferences.Get (sc, "");
+                                if (keycode != "")
+                                        BindShortcut (sc, keycode);
+                        }
+                }
+
+                void PreferencesChanged (object sender, PreferencesChangedEventArgs e)
+                {
+
+                        //        if (GetKeybinding (e.Key) != null && GetKeybinding (e.Key).ToString ().Trim () == e.OldValue.ToString ().Trim ())
+                        //            return;
+                        //
+                        if (PreferencesCbs.ContainsKey (e.Key))
+                        {   
+                                foreach (KeyChangedCb cb in PreferencesCbs [e.Key]) {
+                                        cb (this, e);
+                                }
+                        }
+                }
+
         }
-        return false;
-    }
-    
-    public Shortcut GetShortcutByKeycode (string keycode)
-    {
-        // TODO: this part should be error checked. 
-        if (!KeycodeMap.ContainsKey (keycode)) {
-            return null;
-        }
-        string scname = KeycodeMap[keycode];
-        
-        if (!ShortcutMap.ContainsKey (scname)) {
-            return null;
-        }
-            
-        return ShortcutMap[scname];
-
-    }
-
-    public string GetKeybinding (Shortcut sc)
-    {
-        return GetKeybinding (sc.ShortcutName);
-    }
-
-    public string GetKeybinding (string sc)
-    {
-        
-        foreach (KeyValuePair<string, string> entry in KeycodeMap)
-        {
-            if (entry.Value == sc) {
-                return entry.Key;
-            }
-        }
-        return null;
-    }
-
-    public string GetDefaultKeybinding (Shortcut sc)
-    {
-        return GetDefaultKeybinding (sc.ShortcutName);
-    }
-
-    public string GetDefaultKeybinding (string sc)
-    {
-        foreach (KeyValuePair<string, string> entry in DefaultShortcutMap)
-        {
-            if (entry.Value == sc) {
-                return entry.Key;
-            }
-        }
-        return null;
-    }
-
-
-    public bool BindShortcut (Shortcut sc, string keycode)
-    {
-        // Add this function to our keybinding map
-        return BindShortcut (sc.ShortcutName, keycode);
-            
-    }
-
-    public bool BindShortcut (string sc, string keycode)
-    {
-        string oldcode = GetKeybinding (sc);
-        if (oldcode != null)
-            KeycodeMap.Remove (oldcode); // remove the old keybinding from the map
-
-        KeycodeMap[keycode] = sc;
-        Preferences.Set (sc, keycode);
-
-        return true;
-    }
-    
-    // Add Default Keycode mapping - used for resetting to default or not overwriting read values
-    public bool BindDefault (Shortcut sc, string keycode)
-    {
-        return BindDefault (sc.ShortcutName, keycode);
-
-    }
-
-    public bool BindDefault (string sc, string keycode)
-    {
-    
-        string assigned_keycode = GetKeybinding (sc);
-        if (assigned_keycode == null)
-        {
-            // Put this shortcut in the mapping
-            BindShortcut (sc, keycode);
-        }
-
-        DefaultShortcutMap[keycode] = sc;
-        return true;
-
-    }
-
-    public bool UnregisterShortcut (Shortcut sc)
-    {
-        if (Shortcuts.Contains (sc))
-        {
-            Shortcuts.Remove (sc);
-            ShortcutMap.Remove (sc.ShortcutName);
-            SaveShortcuts ();
-            return true;
-        }
-        return false;
-    }
-
-    public bool RegisterNotification (Shortcut sc, KeyChangedCb cb)
-    {
-        return RegisterNotification (sc.ShortcutName, cb);
-    }
-
-    public bool RegisterNotification (string scname, KeyChangedCb cb)
-    {
-        PreferencesCbs[scname].Add (cb);
-        return true;
-    }
-
-    void SaveShortcuts () 
-    {
-        string scstring = "";
-        foreach (Shortcut sc in Shortcuts)
-        {
-            scstring += sc.ShortcutName.Trim () + ",";
-        }
-        Preferences.Set ("RegisteredShortcuts", scstring);
-    } 
-
-    void ReadShortcuts ()
-    {
-        string scstring = Preferences.Get ("RegisteredShortcuts", "").Trim ();
-        if (scstring == "") 
-            return;
-
-        foreach (string sc in scstring.Split (',')) {
-            if (sc.Trim () == "") 
-                continue;
-
-            string keycode = Preferences.Get (sc, "");
-            if (keycode != "")
-                BindShortcut (sc, keycode);
-        }
-    }
-
-    void PreferencesChanged (object sender, PreferencesChangedEventArgs e)
-    {
-        
-//        if (GetKeybinding (e.Key) != null && GetKeybinding (e.Key).ToString ().Trim () == e.OldValue.ToString ().Trim ())
-//            return;
-//
-        if (PreferencesCbs.ContainsKey (e.Key))
-        {   
-            foreach (KeyChangedCb cb in PreferencesCbs[e.Key]) {
-                cb (this, e);
-            }
-        }
-    }
-
-}
 
 }

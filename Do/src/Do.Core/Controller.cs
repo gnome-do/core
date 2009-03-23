@@ -103,25 +103,79 @@ namespace Do.Core
                         // Register Shortcuts
                         // TODO: Localize the text here.
                         // Previous shortcuts
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("SummonKey", Catalog.GetString ("Summon Gnome-Do"), OnSummonKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("TextModeKey", Catalog.GetString ("Enter text mode"), OnTextModePressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("SummonKey", 
+                                                Catalog.GetString ("Summon Gnome-Do"), 
+                                                OnSummonKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("TextModeKey",
+                                                Catalog.GetString ("Enter text mode"),
+                                                OnTextModePressEvent));
                         // New shortcuts
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("CopyKey", Catalog.GetString ("Copy Text"), OnCopyEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("PasteKey", Catalog.GetString ("Paste Text"), OnPasteEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateEscapeKey", Catalog.GetString ("Alternate Escape"), OnEscapeKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateActivateKey", Catalog.GetString ("Alternate Activate"), OnActivateKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateDeleteKey", Catalog.GetString ("Alternate Delete"), OnDeleteKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("ShiftTabKey", Catalog.GetString ("Previous Pane"), OnShiftTabKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("TabKey", Catalog.GetString ("Next Pane"), OnTabKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("UpKey", Catalog.GetString ("Previous Result"), OnUpKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("DownKey", Catalog.GetString ("Next Result"), OnDownKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("HomeKey", Catalog.GetString ("First Result"), OnHomeKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("EndKey", Catalog.GetString ("Last Result"), OnEndKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("PageUpKey", Catalog.GetString ("Previous 5 Results"), OnPageUpKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("PageDownKey", Catalog.GetString ("Next 5 Results"), OnPageDownKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("LeftKey", Catalog.GetString ("Step out of Item"), OnLeftKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("RightKey", Catalog.GetString ("Browse Into Item"), OnRightKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("CommaKey", Catalog.GetString ("Selection mode"), OnSelectionKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("CopyKey",
+                                                Catalog.GetString ("Copy Text"),
+                                                OnCopyEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("PasteKey",
+                                                Catalog.GetString ("Paste Text"),
+                                                OnPasteEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("AlternateEscapeKey",
+                                                Catalog.GetString ("Alternate Escape"),
+                                                OnEscapeKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("AlternateActivateKey",
+                                                Catalog.GetString ("Alternate Activate"),
+                                                OnActivateKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("AlternateDeleteKey",
+                                                Catalog.GetString ("Alternate Delete"),
+                                                OnDeleteKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("ShiftTabKey",
+                                                Catalog.GetString ("Previous Pane"),
+                                                OnShiftTabKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("TabKey",
+                                                Catalog.GetString ("Next Pane"),
+                                                OnTabKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("UpKey",
+                                                Catalog.GetString ("Previous Result"),
+                                                OnUpKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("DownKey",
+                                                Catalog.GetString ("Next Result"),
+                                                OnDownKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("HomeKey",
+                                                Catalog.GetString ("First Result"),
+                                                OnHomeKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("EndKey",
+                                                Catalog.GetString ("Last Result"),
+                                                OnEndKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("PageUpKey",
+                                                Catalog.GetString ("Previous 5 Results"),
+                                                OnPageUpKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("PageDownKey",
+                                                Catalog.GetString ("Next 5 Results"),
+                                                OnPageDownKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("LeftKey",
+                                                Catalog.GetString ("Step out of Item"),
+                                                OnLeftKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("RightKey",
+                                                Catalog.GetString ("Browse Into Item"),
+                                                OnRightKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (
+                                        new Shortcut ("CommaKey",
+                                                Catalog.GetString ("Selection mode"),
+                                                OnSelectionKeyPressEvent));
                         
                         // Bind the default values for these shortcuts
                         Do.Keybindings.BindDefault ("SummonKey", "<Super>space");
@@ -360,8 +414,8 @@ namespace Do.Core
 		{
 			return controllers [(int) pane].TextType == TextModeType.Explicit ||
 				controllers [(int) pane].TextType == TextModeType.ExplicitFinalized;
-		}
-		
+		}	
+
 #region KeyPress Handling
 
 		Key IfVertical (Key ifKey, Key elseKey)
@@ -389,16 +443,16 @@ namespace Do.Core
 			} else if (key == Key.Delete ||
 			           key == Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-			} else {
+                        } else {
                                 // User set keybindings
                                 Shortcut sc = Do.Keybindings.GetShortcutByKeycode (KeyEventToString (evnt));
                                 if (sc != null)
                                 {
-                                    sc.Callback (evnt);
-                                    return;
+                                        sc.Callback (evnt);
+                                        return;
                                 }
-				OnInputKeyPressEvent (evnt);
-			}
+                                OnInputKeyPressEvent (evnt);
+                        }
 		}
 		
 		void OnPasteEvent (EventKey evnt)
@@ -420,14 +474,14 @@ namespace Do.Core
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
 		{
-			im_context.Reset ();
-			if (SearchController.TextType == TextModeType.Explicit) {
-				OnInputKeyPressEvent (evnt);
-				return;
-			}
-			bool shift_pressed = (evnt.State & ModifierType.ShiftMask) != 0;
-			PerformAction (!shift_pressed);
-		}
+                        im_context.Reset ();
+                        if (SearchController.TextType == TextModeType.Explicit) {
+                                OnInputKeyPressEvent (evnt);
+                                return;
+                        }
+                        bool shift_pressed = (evnt.State & ModifierType.ShiftMask) != 0;
+                        PerformAction (!shift_pressed);
+                }
 		
 		/// <summary>
 		/// This will set a secondary cursor unless we are operating on a text
