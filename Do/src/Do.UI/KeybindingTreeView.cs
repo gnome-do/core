@@ -67,11 +67,9 @@ namespace Do.UI
 
                         foreach (Shortcut sc in Do.Keybindings.Shortcuts)
                         {
-                            store.AppendValues(sc.FriendlyName, Do.Keybindings.GetKeybinding(sc), 
-                                                Do.Keybindings.GetDefaultKeybinding(sc), sc.ShortcutName);
+                            store.AppendValues (sc.FriendlyName, Do.Keybindings.GetKeybinding (sc), 
+                                                Do.Keybindings.GetDefaultKeybinding (sc), sc.ShortcutName);
                         }
-//			store.AppendValues ("Summon", Do.Preferences.GetKeybinding("SummonKey"));
-//			store.AppendValues ("Text Mode", Do.Preferences.GetKeybinding("TextModeKey"));
 		}
 		
 		[GLib.ConnectBefore]
@@ -95,25 +93,25 @@ namespace Do.UI
 		
 		private void OnAccelEdited (object o, AccelEditedArgs args)
 		{
-			TreeIter olditer, newiter;
+			TreeIter iter;
 			ListStore store;
 			
 			store = Model as ListStore;
-			store.GetIter (out newiter, new TreePath (args.PathString));
+			store.GetIter (out iter, new TreePath (args.PathString));
 			
 			string realKey = Gtk.Accelerator.Name (args.AccelKey, args.AccelMods);
 			
                         // Look for any other rows that have the same binding and then zero that binding out
-                        Model.Foreach ((model, path, iter) => 
+                        Model.Foreach ((model, path, treeiter) => 
                         {
-                            string binding = model.GetValue(iter, (int)Column.Binding) as string;
+                            string binding = model.GetValue (treeiter, (int)Column.Binding) as string;
                             if (binding == realKey) {
-                                model.SetValue (iter, (int)Column.Binding, "");
+                                model.SetValue (treeiter, (int)Column.Binding, "");
                             }
                             return false;
                         } );
 
-			store.SetValue (newiter, (int)Column.Binding, realKey);
+			store.SetValue (iter, (int)Column.Binding, realKey);
 
 			SaveBindings ();
 		}
@@ -138,23 +136,11 @@ namespace Do.UI
 		private bool SaveBindingsForeachFunc (TreeModel model, TreePath path, TreeIter iter)
 		{
                         string binding, shortcutname;
-//			string action, binding, shortcutname;
-//			action = model.GetValue (iter, (int)Column.Action) as string;
                         binding = model.GetValue (iter, (int)Column.Binding) as string;
                         shortcutname = model.GetValue (iter, (int)Column.ShortcutName) as string;
                     
                         if (binding != null && binding != "DISABLED" && binding != Do.Keybindings.GetKeybinding (shortcutname))
-        			Do.Keybindings.BindShortcut(shortcutname, binding);
-//			switch (action.ToLower ()) {
-//			case "summon":
-//				binding = model.GetValue (iter, (int)Column.Binding) as string;
-//				Do.Preferences.SetKeybinding("SummonKey", binding);
-//				break;
-//			case "text mode":
-//				binding = model.GetValue (iter, (int)Column.Binding) as string;
-//				Do.Preferences.BindShortcut("TextModeKey", binding);
-//				break;
-//			}
+        			Do.Keybindings.BindShortcut (shortcutname, binding);
 			return false;
 		}
                 

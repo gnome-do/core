@@ -34,9 +34,7 @@ namespace Do
 		const string ThemeKey = "Theme";
 		const string QuietStartKey = "QuietStart";
 		const string StartAtLoginKey = "StartAtLogin";
-//		const string SummonKeybindingKey = "SummonKeybinding";
 		const string AlwaysShowResultsKey = "AlwaysShowResults";
-//		const string TextModeKeybindingKey = "TextModeKeybinding";
 
 		const string ThemeDefaultValue = "Classic Interface";
 		const bool QuietStartDefaultValue = false;
@@ -58,9 +56,6 @@ namespace Do
 		public CorePreferences ()
 		{
 			Preferences = Services.Preferences.Get<CorePreferences> ();
-
-//                Dictionary<string, Shortcut> ShortcutMap = new Dictionary<string, Shortcut>(); // shortcut name -> shortcut
-//ferences.Get<CorePreferences> ();
 			Preferences.PreferencesChanged += PreferencesChanged;
 		}
 		
@@ -75,16 +70,6 @@ namespace Do
 		public bool Debug {
 			get { return CorePreferences.PeekDebug; }
 		}
-
-//		public string SummonKeybinding {
-//			get { return Preferences.Get (SummonKeybindingKey, SummonKeybindingDefaultValue); }
-//			set { Preferences.Set (SummonKeybindingKey, value); }
-//		}
-//		
-//		public string TextModeKeybinding {
-//			get { return Preferences.Get (TextModeKeybindingKey, TextModeKeybindingDefaultValue); }
-//			set { Preferences.Set (TextModeKeybindingKey, value); }
-//		}
 
 		public string Theme {
 			get { return Preferences.Get (ThemeKey, ThemeDefaultValue); }
@@ -119,10 +104,6 @@ namespace Do
 				if (ThemeChanged != null)
 					ThemeChanged (this, e);
 				break;
-//			case SummonKeybindingKey:
-//				if (SummonKeybindingChanged != null)
-//					SummonKeybindingChanged (this, e);
-//				break;
 			}
 		}
 	}

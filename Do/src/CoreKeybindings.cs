@@ -39,7 +39,7 @@ class CoreKeybindings {
     
     public ArrayList Shortcuts ;
     public Dictionary<string, List<KeyChangedCb>> PreferencesCbs;
-    public delegate void KeyChangedCb(object sender, PreferencesChangedEventArgs e);
+    public delegate void KeyChangedCb (object sender, PreferencesChangedEventArgs e);
      
     public CoreKeybindings ()
     {
@@ -50,7 +50,7 @@ class CoreKeybindings {
         ShortcutMap = new Dictionary<string, Shortcut> (); // shortcut name -> shortcut
         KeycodeMap = new Dictionary<string, string> (); // keybinding -> shortcut name
         DefaultShortcutMap = new Dictionary<string, string> (); // default keybinding -> shortcut name
-        Shortcuts = new ArrayList();
+        Shortcuts = new ArrayList ();
         PreferencesCbs = new Dictionary<string, List<KeyChangedCb>> ();
     }
 
@@ -61,12 +61,12 @@ class CoreKeybindings {
     }
         
     
-    public bool RegisterShortcut(Shortcut sc)
+    public bool RegisterShortcut (Shortcut sc)
     {
         // Add this shortcut to what?
-        if (! Shortcuts.Contains(sc) && ! ShortcutMap.ContainsKey(sc.ShortcutName)) 
+        if (! Shortcuts.Contains (sc) && ! ShortcutMap.ContainsKey (sc.ShortcutName)) 
         {
-            Shortcuts.Add(sc);
+            Shortcuts.Add (sc);
             ShortcutMap[sc.ShortcutName] = sc;
             PreferencesCbs[sc.ShortcutName] = new List<KeyChangedCb> ();
             SaveShortcuts ();
@@ -75,15 +75,15 @@ class CoreKeybindings {
         return false;
     }
     
-    public Shortcut GetShortcutByKeycode(string keycode)
+    public Shortcut GetShortcutByKeycode (string keycode)
     {
         // TODO: this part should be error checked. 
-        if (!KeycodeMap.ContainsKey(keycode)) {
+        if (!KeycodeMap.ContainsKey (keycode)) {
             return null;
         }
         string scname = KeycodeMap[keycode];
         
-        if (!ShortcutMap.ContainsKey(scname)) {
+        if (!ShortcutMap.ContainsKey (scname)) {
             return null;
         }
             
@@ -91,15 +91,15 @@ class CoreKeybindings {
 
     }
 
-    public string GetKeybinding(Shortcut sc)
+    public string GetKeybinding (Shortcut sc)
     {
-        return GetKeybinding(sc.ShortcutName);
+        return GetKeybinding (sc.ShortcutName);
     }
 
-    public string GetKeybinding(string sc)
+    public string GetKeybinding (string sc)
     {
         
-        foreach(KeyValuePair<string, string> entry in KeycodeMap)
+        foreach (KeyValuePair<string, string> entry in KeycodeMap)
         {
             if (entry.Value == sc) {
                 return entry.Key;
@@ -108,14 +108,14 @@ class CoreKeybindings {
         return null;
     }
 
-    public string GetDefaultKeybinding(Shortcut sc)
+    public string GetDefaultKeybinding (Shortcut sc)
     {
         return GetDefaultKeybinding (sc.ShortcutName);
     }
 
-    public string GetDefaultKeybinding(string sc)
+    public string GetDefaultKeybinding (string sc)
     {
-        foreach(KeyValuePair<string, string> entry in DefaultShortcutMap)
+        foreach (KeyValuePair<string, string> entry in DefaultShortcutMap)
         {
             if (entry.Value == sc) {
                 return entry.Key;
@@ -125,40 +125,40 @@ class CoreKeybindings {
     }
 
 
-    public bool BindShortcut(Shortcut sc, string keycode)
+    public bool BindShortcut (Shortcut sc, string keycode)
     {
         // Add this function to our keybinding map
-        return BindShortcut(sc.ShortcutName, keycode);
+        return BindShortcut (sc.ShortcutName, keycode);
             
     }
 
-    public bool BindShortcut(string sc, string keycode)
+    public bool BindShortcut (string sc, string keycode)
     {
         string oldcode = GetKeybinding (sc);
         if (oldcode != null)
             KeycodeMap.Remove (oldcode); // remove the old keybinding from the map
 
         KeycodeMap[keycode] = sc;
-        Preferences.Set(sc, keycode);
+        Preferences.Set (sc, keycode);
 
         return true;
     }
     
     // Add Default Keycode mapping - used for resetting to default or not overwriting read values
-    public bool BindDefault(Shortcut sc, string keycode)
+    public bool BindDefault (Shortcut sc, string keycode)
     {
-        return BindDefault(sc.ShortcutName, keycode);
+        return BindDefault (sc.ShortcutName, keycode);
 
     }
 
-    public bool BindDefault(string sc, string keycode)
+    public bool BindDefault (string sc, string keycode)
     {
     
-        string assigned_keycode = GetKeybinding(sc);
+        string assigned_keycode = GetKeybinding (sc);
         if (assigned_keycode == null)
         {
             // Put this shortcut in the mapping
-            BindShortcut(sc, keycode);
+            BindShortcut (sc, keycode);
         }
 
         DefaultShortcutMap[keycode] = sc;
@@ -166,26 +166,26 @@ class CoreKeybindings {
 
     }
 
-    public bool UnregisterShortcut(Shortcut sc)
+    public bool UnregisterShortcut (Shortcut sc)
     {
-        if (Shortcuts.Contains(sc))
+        if (Shortcuts.Contains (sc))
         {
-            Shortcuts.Remove(sc);
-            ShortcutMap.Remove(sc.ShortcutName);
+            Shortcuts.Remove (sc);
+            ShortcutMap.Remove (sc.ShortcutName);
             SaveShortcuts ();
             return true;
         }
         return false;
     }
 
-    public bool RegisterNotification(Shortcut sc, KeyChangedCb cb)
+    public bool RegisterNotification (Shortcut sc, KeyChangedCb cb)
     {
-        return RegisterNotification(sc.ShortcutName, cb);
+        return RegisterNotification (sc.ShortcutName, cb);
     }
 
-    public bool RegisterNotification(string scname, KeyChangedCb cb)
+    public bool RegisterNotification (string scname, KeyChangedCb cb)
     {
-        PreferencesCbs[scname].Add(cb);
+        PreferencesCbs[scname].Add (cb);
         return true;
     }
 
@@ -194,34 +194,34 @@ class CoreKeybindings {
         string scstring = "";
         foreach (Shortcut sc in Shortcuts)
         {
-            scstring += sc.ShortcutName.Trim() + ",";
+            scstring += sc.ShortcutName.Trim () + ",";
         }
-        Preferences.Set("RegisteredShortcuts", scstring);
+        Preferences.Set ("RegisteredShortcuts", scstring);
     } 
 
     void ReadShortcuts ()
     {
-        string scstring = Preferences.Get("RegisteredShortcuts", "").Trim();
+        string scstring = Preferences.Get ("RegisteredShortcuts", "").Trim ();
         if (scstring == "") 
             return;
 
-        foreach (string sc in scstring.Split(',')) {
-            if (sc.Trim() == "") 
+        foreach (string sc in scstring.Split (',')) {
+            if (sc.Trim () == "") 
                 continue;
 
-            string keycode = Preferences.Get(sc, "");
+            string keycode = Preferences.Get (sc, "");
             if (keycode != "")
-                BindShortcut(sc, keycode);
+                BindShortcut (sc, keycode);
         }
     }
 
     void PreferencesChanged (object sender, PreferencesChangedEventArgs e)
     {
         
-//        if (GetKeybinding(e.Key) != null && GetKeybinding(e.Key).ToString ().Trim () == e.OldValue.ToString ().Trim ())
+//        if (GetKeybinding (e.Key) != null && GetKeybinding (e.Key).ToString ().Trim () == e.OldValue.ToString ().Trim ())
 //            return;
 //
-        if (PreferencesCbs.ContainsKey(e.Key))
+        if (PreferencesCbs.ContainsKey (e.Key))
         {   
             foreach (KeyChangedCb cb in PreferencesCbs[e.Key]) {
                 cb (this, e);

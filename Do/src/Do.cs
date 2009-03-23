@@ -100,12 +100,12 @@ namespace Do {
 			}
 		}
 
-                static void SummonKeyCb(object sender, PreferencesChangedEventArgs e)
+                static void SummonKeyCb (object sender, PreferencesChangedEventArgs e)
                 {
                     try {
                             if (e.OldValue != null)
                                     keybinder.Unbind (e.OldValue as string);
-                            keybinder.Bind (Keybindings.GetKeybinding("SummonKey"), OnActivate);
+                            keybinder.Bind (Keybindings.GetKeybinding ("SummonKey"), OnActivate);
                     } catch (Exception ex) {
                             Log.Error ("Could not bind summon key: {0}", ex.Message);
                             Log.Debug (ex.StackTrace);
@@ -116,7 +116,7 @@ namespace Do {
 		static void SetupKeybindings ()
 		{
 			try {
-				keybinder.Bind (Keybindings.GetKeybinding("SummonKey"), OnActivate);
+				keybinder.Bind (Keybindings.GetKeybinding ("SummonKey"), OnActivate);
 			} catch (Exception e) {
 				Log.Error ("Could not bind summon key: {0}", e.Message);
 				Log.Debug (e.StackTrace);

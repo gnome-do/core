@@ -31,23 +31,12 @@ namespace Do
     class Shortcut {
             public string ShortcutName; // name of the shortcut
             public string FriendlyName; // display name of the shortcut
-            public BitArray Flags; // future flags (possibly global 
             public ShortcutCallback Callback; // callback function for this shortcut
             
-            public Shortcut(string name, string friendly, ShortcutCallback cb, BitArray flags)
+            public Shortcut (string name, string friendly, ShortcutCallback cb)
             {
                 ShortcutName = name;
                 FriendlyName = friendly;
-                Flags = flags;
-                Callback = cb;
-
-            }
-
-            public Shortcut(string name, string friendly, ShortcutCallback cb)
-            {
-                ShortcutName = name;
-                FriendlyName = friendly;
-                Flags = new BitArray(32, false); // ummm... this should be fixed, I guess. TODO: fix it
                 Callback = cb;
 
             }

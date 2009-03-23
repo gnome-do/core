@@ -107,36 +107,27 @@ namespace Do.Core
                         Do.Keybindings.RegisterShortcut (new Shortcut ("TextModeKey", Catalog.GetString ("Enter text mode"), OnTextModePressEvent));
                         // New shortcuts
                         Do.Keybindings.RegisterShortcut (new Shortcut ("CopyKey", Catalog.GetString ("Copy Text"), OnCopyEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("PasteKey", Catalog.GetString ( "Paste Text"), OnPasteEvent));
-//                        Do.Keybindings.RegisterShortcut (new Shortcut ("EscapeKey", Catalog.GetString ( "Escape"), OnEscapeKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateEscapeKey", Catalog.GetString ( "Alternate Escape"), OnEscapeKeyPressEvent));
-//                        Do.Keybindings.RegisterShortcut (new Shortcut ("ActivateKey", "Activate", OnActivateKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("PasteKey", Catalog.GetString ("Paste Text"), OnPasteEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateEscapeKey", Catalog.GetString ("Alternate Escape"), OnEscapeKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateActivateKey", Catalog.GetString ("Alternate Activate"), OnActivateKeyPressEvent));
-//                        Do.Keybindings.RegisterShortcut (new Shortcut ("DeleteKey", Catalog.GetString ( "Delete Character"), OnDeleteKeyPressEvent));
-//                        Do.Keybindings.RegisterShortcut (new Shortcut ("BackspaceKey", Catalog.GetString ( "Alternate Delete"), OnDeleteKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateDeleteKey", Catalog.GetString ( "Alternate Delete"), OnDeleteKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("ShiftTabKey", Catalog.GetString ( "Previous Pane"), OnShiftTabKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("TabKey", Catalog.GetString ( "Next Pane"), OnTabKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("UpKey", Catalog.GetString ( "Previous Result"), OnUpKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("DownKey", Catalog.GetString ( "Next Result"), OnDownKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("HomeKey", Catalog.GetString ( "First Result"), OnHomeKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("EndKey", Catalog.GetString ( "Last Result"), OnEndKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("PageUpKey", Catalog.GetString ( "Previous 5 Results"), OnPageUpKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("PageDownKey", Catalog.GetString ( "Next 5 Results"), OnPageDownKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("LeftKey", Catalog.GetString ( "Previous Action"), OnLeftKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("RightKey", Catalog.GetString ( "Next Action"), OnRightKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("CommaKey", Catalog.GetString ( "Selection mode"), OnSelectionKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateDeleteKey", Catalog.GetString ("Alternate Delete"), OnDeleteKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("ShiftTabKey", Catalog.GetString ("Previous Pane"), OnShiftTabKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("TabKey", Catalog.GetString ("Next Pane"), OnTabKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("UpKey", Catalog.GetString ("Previous Result"), OnUpKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("DownKey", Catalog.GetString ("Next Result"), OnDownKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("HomeKey", Catalog.GetString ("First Result"), OnHomeKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("EndKey", Catalog.GetString ("Last Result"), OnEndKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("PageUpKey", Catalog.GetString ("Previous 5 Results"), OnPageUpKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("PageDownKey", Catalog.GetString ("Next 5 Results"), OnPageDownKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("LeftKey", Catalog.GetString ("Step out of Item"), OnLeftKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("RightKey", Catalog.GetString ("Browse Into Item"), OnRightKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("CommaKey", Catalog.GetString ("Selection mode"), OnSelectionKeyPressEvent));
                         
                         // Bind the default values for these shortcuts
                         Do.Keybindings.BindDefault ("SummonKey", "<Super>space");
                         Do.Keybindings.BindDefault ("TextModeKey", "period");
                         Do.Keybindings.BindDefault ("CopyKey", "<Control>c");
                         Do.Keybindings.BindDefault ("PasteKey", "<Control>v");
-//                        Do.Keybindings.BindDefault ("EscapetKey", "Escape");
-                        Do.Keybindings.BindDefault ("ActivateKey", "Return");
-//                        Do.Keybindings.BindDefault ("DeleteKey", "Delete");
-//                        Do.Keybindings.BindDefault ("BackspaceKey", "Backspace");
-//                        Do.Keybindings.BindDefault ("AlternateDeleteKey", "");
                         Do.Keybindings.BindDefault ("TabKey", "Tab");
                         Do.Keybindings.BindDefault ("ShiftTabKey", "ISO_Left_Tab");
                         Do.Keybindings.BindDefault ("UpKey", "Up");
@@ -387,28 +378,6 @@ namespace Do.Core
 		{
 			Key key = (Key) evnt.KeyValue;
 
-
-//			if (KeyEventToString (evnt).Equals (Do.Preferences.GetKeybinding)) {
-//				OnSummonKeyPressEvent (evnt);
-//				return;
-//			} 
-//			
-//			if (KeyEventToString (evnt).Equals (Do.Preferences.TextModeKeybinding)) {
-//				OnTextModePressEvent (evnt);
-//				return;
-//			}
-			
-			// Check for paste
-			if ((evnt.State & ModifierType.ControlMask) != 0) {
-				if (evnt.Key == Key.v) {
-//					OnPasteEvent (evnt);
-					return;
-				}
-				if (evnt.Key == Key.c) {
-//					OnCopyEvent (evnt);
-					return;
-				}
-			}
                         
                         // Currently - only hardcoded are enter keys, escape and delete/backspace
 			if (key == Key.Escape) {
@@ -420,30 +389,12 @@ namespace Do.Core
 			} else if (key == Key.Delete ||
 			           key == Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-//			} else if (key == Key.Tab ||
-//			           key == Key.ISO_Left_Tab) {
-//				OnTabKeyPressEvent (evnt);
-//			} else if (key == UpKey ||
-//			           key == DownKey ||
-//			           key == Key.Home ||
-//			           key == Key.End ||
-//			           key == Key.Page_Up ||
-//			           key == Key.Page_Down) {
-//				OnUpDownKeyPressEvent (evnt);
-//			} else if (key == RightKey ||
-//			           key == LeftKey) {
-//				OnRightLeftKeyPressEvent (evnt);
-//			} else if (key == Key.comma) {
-//				OnSelectionKeyPressEvent (evnt);
 			} else {
-                                // User set keybindings - they are the last to
-                                // be checked, so enter/backspace/delete, etc
-                                // all have hardcoded values
-                                // Actually, just ask the preferences for the handler. 
-                                Shortcut sc = Do.Keybindings.GetShortcutByKeycode(KeyEventToString(evnt));
+                                // User set keybindings
+                                Shortcut sc = Do.Keybindings.GetShortcutByKeycode (KeyEventToString (evnt));
                                 if (sc != null)
                                 {
-                                    sc.Callback(evnt);
+                                    sc.Callback (evnt);
                                     return;
                                 }
 				OnInputKeyPressEvent (evnt);
@@ -555,7 +506,7 @@ namespace Do.Core
 			}
 		}
 		
-		void OnLeftKeyPressEvent(EventKey evnt)
+		void OnLeftKeyPressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			if (!SearchController.Results.Any ()) return;
@@ -570,7 +521,7 @@ namespace Do.Core
 		}
 
                 // Hmm.
-                void OnRightKeyPressEvent(EventKey evnt)
+                void OnRightKeyPressEvent (EventKey evnt)
                 {
                     im_context.Reset ();
                     if (!SearchController.Results.Any ()) return;
@@ -603,7 +554,7 @@ namespace Do.Core
                                 SearchController.FinalizeTextMode ();
                                 UpdatePane (CurrentPane);
                         }
-                        PrevPane();
+                        PrevPane ();
                 }
                         
 		
@@ -622,7 +573,7 @@ namespace Do.Core
 			UpdatePane (CurrentPane);
 		}
 		
-                void OnUpKeyPressEvent(EventKey evnt)
+                void OnUpKeyPressEvent (EventKey evnt)
                 {
                     im_context.Reset ();
                     if (!results_grown) {
@@ -672,38 +623,6 @@ namespace Do.Core
                     SearchController.Cursor += 5;
                 }
                         	
-//                void OnUpDownKeyPressEvent (EventKey evnt)
-//                {
-//                        im_context.Reset ();
-//                        if (evnt.Key == UpKey) {
-//                                if (!results_grown) {
-//                                        if (SearchController.Cursor > 0)
-//                                                GrowResults ();
-//                                        return;
-//                                } else {
-//                                        if (SearchController.Cursor <= 0) {
-//                                                ShrinkResults ();
-//                                                return;
-//                                        }
-//                                        SearchController.Cursor--;
-//                }
-//                        } else if (evnt.Key == DownKey) {
-//                                if (!results_grown) {
-//                                        GrowResults ();
-//                                        return;
-//                                }
-//                                SearchController.Cursor++;
-//                        } else if (evnt.Key == Key.Home) {
-//                                SearchController.Cursor = 0;
-//                        } else if (evnt.Key == Key.End) {
-//                                SearchController.Cursor = SearchController.Results.Count - 1;
-//                        } else if (evnt.Key == Key.Page_Down) {
-//                                SearchController.Cursor += 5;
-//                        } else if (evnt.Key == Key.Page_Up) {
-//                                SearchController.Cursor -= 5;
-//                        }
-//                }
-
 		/// <summary>
 		/// Converts a keypress into a human readable string for comparing
 		/// against values in GConf.
