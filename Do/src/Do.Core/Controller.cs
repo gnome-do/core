@@ -115,7 +115,8 @@ namespace Do.Core
 //                        Do.Keybindings.RegisterShortcut (new Shortcut ("DeleteKey", Catalog.GetString ( "Delete Character"), OnDeleteKeyPressEvent));
 //                        Do.Keybindings.RegisterShortcut (new Shortcut ("BackspaceKey", Catalog.GetString ( "Alternate Delete"), OnDeleteKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("AlternateDeleteKey", Catalog.GetString ( "Alternate Delete"), OnDeleteKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (new Shortcut ("TabKey", Catalog.GetString ( "Tab"), OnTabKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("ShiftTabKey", Catalog.GetString ( "Previous Pane"), OnShiftTabKeyPressEvent));
+                        Do.Keybindings.RegisterShortcut (new Shortcut ("TabKey", Catalog.GetString ( "Next Pane"), OnTabKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("UpKey", Catalog.GetString ( "Previous Result"), OnUpKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("DownKey", Catalog.GetString ( "Next Result"), OnDownKeyPressEvent));
                         Do.Keybindings.RegisterShortcut (new Shortcut ("HomeKey", Catalog.GetString ( "First Result"), OnHomeKeyPressEvent));
@@ -137,6 +138,7 @@ namespace Do.Core
 //                        Do.Keybindings.BindDefault ("BackspaceKey", "Backspace");
 //                        Do.Keybindings.BindDefault ("AlternateDeleteKey", "");
                         Do.Keybindings.BindDefault ("TabKey", "Tab");
+                        Do.Keybindings.BindDefault ("ShiftTabKey", "ISO_Left_Tab");
                         Do.Keybindings.BindDefault ("UpKey", "Up");
                         Do.Keybindings.BindDefault ("DownKey", "Down");
                         Do.Keybindings.BindDefault ("HomeKey", "Home");
@@ -418,20 +420,20 @@ namespace Do.Core
 			} else if (key == Key.Delete ||
 			           key == Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-			} else if (key == Key.Tab ||
-			           key == Key.ISO_Left_Tab) {
+//			} else if (key == Key.Tab ||
+//			           key == Key.ISO_Left_Tab) {
 //				OnTabKeyPressEvent (evnt);
-			} else if (key == UpKey ||
-			           key == DownKey ||
-			           key == Key.Home ||
-			           key == Key.End ||
-			           key == Key.Page_Up ||
-			           key == Key.Page_Down) {
+//			} else if (key == UpKey ||
+//			           key == DownKey ||
+//			           key == Key.Home ||
+//			           key == Key.End ||
+//			           key == Key.Page_Up ||
+//			           key == Key.Page_Down) {
 //				OnUpDownKeyPressEvent (evnt);
-			} else if (key == RightKey ||
-			           key == LeftKey) {
+//			} else if (key == RightKey ||
+//			           key == LeftKey) {
 //				OnRightLeftKeyPressEvent (evnt);
-			} else if (key == Key.comma) {
+//			} else if (key == Key.comma) {
 //				OnSelectionKeyPressEvent (evnt);
 			} else {
                                 // User set keybindings - they are the last to
@@ -589,12 +591,21 @@ namespace Do.Core
 				UpdatePane (CurrentPane);
 			}
 				
-			if (evnt.Key == Key.Tab) {
-				NextPane ();
-			} else if (evnt.Key == Key.ISO_Left_Tab) {
-				PrevPane ();
-			}
+                        NextPane ();
 		}
+
+                void OnShiftTabKeyPressEvent (EventKey evnt)
+                {
+                        im_context.Reset ();
+                        ShrinkResults ();
+
+                        if (SearchController.TextType == TextModeType.Explicit) {
+                                SearchController.FinalizeTextMode ();
+                                UpdatePane (CurrentPane);
+                        }
+                        PrevPane();
+                }
+                        
 		
 		void OnTextModePressEvent (EventKey evnt)
 		{

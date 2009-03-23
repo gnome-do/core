@@ -43,6 +43,7 @@ namespace Do.UI
 			InsertColumn (-1, "Action", actionCell, "text", (int)Column.Action);
 			
 			CellRendererAccel bindingCell = new CellRendererAccel ();
+                        bindingCell.AccelMode = CellRendererAccelMode.Gtk;
 			bindingCell.Editable = true;
 			bindingCell.AccelEdited += new AccelEditedHandler (OnAccelEdited);
 			bindingCell.AccelCleared += new AccelClearedHandler (OnAccelCleared);
