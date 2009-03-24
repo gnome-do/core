@@ -78,7 +78,8 @@ namespace Docky.Interface
 		                                              DockOrientation orientation)
 		{
 			Surface sr;
-			sr = similar.CreateSimilar (similar.Content, maxWidth, Height);
+			// we are going to give ourselves a bit of a buffer due to pango weirdness
+			sr = similar.CreateSimilar (similar.Content, maxWidth + 5, Height);
 			
 			Context cr = new Context (sr);
 			
@@ -89,7 +90,7 @@ namespace Docky.Interface
 			cr.NewPath ();
 			
 			int localHeight = textArea.Height;
-			cr.SetRoundedRectanglePath (textArea.X + .5,  .5, textArea.Width + 20 - 1,  localHeight + 10 - 1, 5);
+			cr.SetRoundedRectanglePath (textArea.X + .5, .5, textArea.Width + 20 - 1, localHeight + 10 - 1, 5);
 			
 			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
 			cr.FillPreserve ();

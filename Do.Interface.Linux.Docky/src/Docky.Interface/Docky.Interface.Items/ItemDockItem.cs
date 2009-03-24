@@ -64,6 +64,18 @@ namespace Docky.Interface
 			get { return element.Icon; } 
 		}
 		
+		string Name {
+			get {
+				if (NeedsAttention)
+					return VisibleWindows.Where (w => w.NeedsAttention ()).First ().Name;
+				
+				if (WindowCount == 1)
+					return VisibleWindows.First ().Name;
+				
+				return Element.Name;
+			}
+		}
+		
 		public Item Element { 
 			get { return element; } 
 		}
@@ -86,8 +98,6 @@ namespace Docky.Interface
 			this.element = element;
 			windows = new List<Wnck.Window> ();
 
-			SetText (element.Name);
-
 			UpdateApplication ();
 			NeedsAttention = DetermineUrgencyStatus ();
 			
@@ -95,6 +105,8 @@ namespace Docky.Interface
 				accepting_drops = true;
 			else
 				accepting_drops = false;
+			
+			SetText (Name);
 		}
 		
 		public override bool ReceiveItem (string item)
@@ -126,38 +138,47 @@ namespace Docky.Interface
 		
 		public void UpdateApplication ()
 		{
-			UnregisterStateChangeEvents ();
+			UnregisterWindowEvents ();
 			
 			if (element is IApplicationItem) {
 				windows = WindowUtils.WindowListForCmd ((element as IApplicationItem).Exec);
 				window_count = windows.Where (w => !w.IsSkipTasklist).Count ();
 			}
 			
-			RegisterStateChangeEvents ();
+			RegisterWindowEvents ();
 		}
 		
-		void RegisterStateChangeEvents ()
+		void RegisterWindowEvents ()
 		{
-			foreach (Wnck.Window w in Windows.Where (w => !w.IsSkipTasklist))
-				w.StateChanged += OnWindowStateChanged;
+			foreach (Wnck.Window w in Windows.Where (w => !w.IsSkipTasklist)) {
+				w.StateChanged += HandleStateChanged;
+				w.NameChanged += HandleNameChanged;
+			}
 		}
 		
-		void UnregisterStateChangeEvents ()
+		void UnregisterWindowEvents ()
 		{
 			foreach (Wnck.Window w in Windows) {
 				try {
-					w.StateChanged -= OnWindowStateChanged;
+					w.StateChanged -= HandleStateChanged;
+					w.NameChanged += HandleNameChanged;
 				} catch {}
 			}
 		}
 		
-		void OnWindowStateChanged (object o, StateChangedArgs args)
+		void HandleStateChanged (object o, StateChangedArgs args)
 		{
 			if (handle_timer > 0) return;
 			// we do this delayed so that we dont get a flood of these events.  Certain windows behave badly.
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
 			window_count = Windows.Where (w => !w.IsSkipTasklist).Count ();
 			SetIconRegionFromCache ();
+			SetText (Name);
+		}
+		
+		void HandleNameChanged(object sender, EventArgs e)
+		{
+			SetText (Name);
 		}
 		
 		bool HandleUpdate ()
@@ -244,7 +265,7 @@ namespace Docky.Interface
 		
 		public override void Dispose ()
 		{
-			UnregisterStateChangeEvents ();
+			UnregisterWindowEvents ();
 			element = null;
 			windows.Clear ();
 			

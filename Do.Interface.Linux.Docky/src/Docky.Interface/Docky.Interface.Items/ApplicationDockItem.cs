@@ -144,6 +144,9 @@ namespace Docky.Interface
 		
 		string Name {
 			get {
+				if (NeedsAttention) {
+					return VisibleWindows.Where (w => w.NeedsAttention ()).First ().Name;
+				}
 				if (VisibleWindows.Any () && VisibleWindows.Count () == 1) {
 					return VisibleWindows.First ().Name;
 				}
@@ -200,6 +203,8 @@ namespace Docky.Interface
 				if (VisibleWindows.Count () == 0)
 					Core.DockServices.ItemsService.ForceUpdate ();
 			}
+			
+			SetText (Name);
 		}
 		
 		IEnumerable<string> GetIconGuesses ()

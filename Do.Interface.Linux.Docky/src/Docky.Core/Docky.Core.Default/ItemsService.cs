@@ -344,7 +344,7 @@ namespace Docky.Core.Default
 				.Where (w => !w.IsSkipTasklist && !knownWindows.Contains (w));
 			
 			foreach (IEnumerable<Wnck.Window> windows in prunedWindows
-			         .GroupBy (w => w.ClassGroup.ResClass)) {
+			         .GroupBy (w => w.ClassGroup.ResClass ?? "unknown")) {
 				ApplicationDockItem api = new ApplicationDockItem (windows);
 
 				if (task_items.Any (di => di.Equals (api))) {
