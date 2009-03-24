@@ -340,7 +340,7 @@ namespace Docky.Core.Default
 					.Cast<ItemDockItem> ()
 					.SelectMany (di => di.Windows);
 			
-			IEnumerable<Window> prunedWindows = WindowUtils.GetWindows ()
+			var prunedWindows = WindowUtils.GetWindows ()
 				    .Where (w => !w.IsSkipTasklist && !knownWindows.Contains (w))
 					.GroupBy (w => SafeResClass (w));
 			
