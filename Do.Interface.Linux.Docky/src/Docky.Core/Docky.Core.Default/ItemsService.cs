@@ -341,10 +341,10 @@ namespace Docky.Core.Default
 					.SelectMany (di => di.Windows);
 			
 			IEnumerable<Window> prunedWindows = WindowUtils.GetWindows ()
-				.Where (w => !w.IsSkipTasklist && !knownWindows.Contains (w));
+				    .Where (w => !w.IsSkipTasklist && !knownWindows.Contains (w))
+					.GroupBy (w => SafeResClass (w));
 			
-			foreach (IEnumerable<Wnck.Window> windows in prunedWindows
-			         .GroupBy (w => w.ClassGroup.ResClass ?? "unknown")) {
+			foreach (IEnumerable<Wnck.Window> windows in prunedWindows) {
 				ApplicationDockItem api = new ApplicationDockItem (windows);
 
 				if (task_items.Any (di => di.Equals (api))) {
@@ -371,6 +371,13 @@ namespace Docky.Core.Default
 					
 			task_items.Clear ();
 			task_items.AddRange (out_items.Cast<AbstractDockItem> ());
+		}
+		
+		string SafeResClass (Wnck.Window window)
+		{
+			if (window.ClassGroup != null && window.ClassGroup.ResClass != null)
+				return window.ClassGroup.ResClass;
+			return string.Empty;
 		}
 		
 		void OnDockItemsChanged ()
