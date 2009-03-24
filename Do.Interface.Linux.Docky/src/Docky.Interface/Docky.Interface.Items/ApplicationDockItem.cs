@@ -69,15 +69,14 @@ namespace Docky.Interface
 		
 		IEnumerable<Wnck.Window> windows;
 		
-		string desktop_file;
-		bool checked_desktop_file;
-		
 		IApplicationItem launcher;
 		
 		public IApplicationItem Launcher {
 			get {
-				if (launcher == null)
-					launcher = Services.UniverseFactory.MaybeApplicationItemFromCmd (WindowUtils.ProcessExecString (Exec));
+				if (launcher == null && Exec != null) {
+					string command = WindowUtils.ProcessExecString (Exec);
+					launcher = Services.UniverseFactory.MaybeApplicationItemFromCommand (command);
+				}
 				return launcher;
 			}
 		}

@@ -43,7 +43,7 @@ namespace Do.Platform.Linux
 			return maybe ?? new NullApplicationItem (path);
 		}
 		
-		public IApplicationItem MaybeApplicationItemFromCmd (string cmd)
+		public IApplicationItem MaybeApplicationItemFromCommand (string cmd)
 		{
 			return ApplicationItem.MaybeCreateFromCmd (cmd);
 		}

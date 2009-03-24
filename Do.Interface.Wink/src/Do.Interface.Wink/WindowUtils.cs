@@ -260,7 +260,10 @@ namespace Do.Interface.Wink
 							continue;
 						
 						// this window matches the right PID and exec string, we can match it.
-						if ((window.Pid == kvp.Key || window.Application.Pid == kvp.Key) && !windows.Contains (window))
+						bool pidMatch = window.Pid == kvp.Key || 
+							(window.Application != null && window.Application.Pid == kvp.Key);
+						
+						if (pidMatch && !windows.Contains (window))
 							windows.Add (window);
 					}
 				}
@@ -271,6 +274,9 @@ namespace Do.Interface.Wink
 		
 		public static string ProcessExecString (string exec)
 		{
+			if (string.IsNullOrEmpty (exec))
+				return exec;
+			
 			exec = exec.ToLower ().Trim ();
 			
 			if (RemapDictionary.ContainsKey (exec))

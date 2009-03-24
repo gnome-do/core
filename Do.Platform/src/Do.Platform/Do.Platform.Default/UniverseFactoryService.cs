@@ -42,7 +42,7 @@ namespace Do.Platform.Default
 			return new EmptyApplicationItem ();
 		}
 		
-		public IApplicationItem MaybeApplicationItemFromCmd (string cmd)
+		public IApplicationItem MaybeApplicationItemFromCommand (string cmd)
 		{
 			Log.Debug ("Default IUniverseFactoryService cannot return a useful IApplicationItem.");
 			return null;
