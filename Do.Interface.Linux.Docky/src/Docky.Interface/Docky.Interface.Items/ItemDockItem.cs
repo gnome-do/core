@@ -146,6 +146,7 @@ namespace Docky.Interface
 			}
 			
 			RegisterWindowEvents ();
+			SetText (Name);
 		}
 		
 		void RegisterWindowEvents ()
