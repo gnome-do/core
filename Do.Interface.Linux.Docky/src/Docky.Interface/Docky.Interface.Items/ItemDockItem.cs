@@ -66,10 +66,10 @@ namespace Docky.Interface
 		
 		string Name {
 			get {
-				if (NeedsAttention)
-					return VisibleWindows.Where (w => w.NeedsAttention ()).First ().Name;
+				if (NeedsAttention && AttentionWindows.Any ())
+					return AttentionWindows.First ().Name;
 				
-				if (WindowCount == 1)
+				if (VisibleWindows.Any () && WindowCount == 1)
 					return VisibleWindows.First ().Name;
 				
 				return Element.Name;
@@ -82,6 +82,10 @@ namespace Docky.Interface
 		
 		public override IEnumerable<Wnck.Window> Windows { 
 			get { return windows; } 
+		}
+		
+		IEnumerable<Wnck.Window> AttentionWindows {
+			get { return VisibleWindows.Where (w => w.NeedsAttention ()); }
 		}
 		
 		public IEnumerable<int> Pids { 
@@ -151,7 +155,7 @@ namespace Docky.Interface
 		
 		void RegisterWindowEvents ()
 		{
-			foreach (Wnck.Window w in Windows.Where (w => !w.IsSkipTasklist)) {
+			foreach (Wnck.Window w in VisibleWindows) {
 				w.StateChanged += HandleStateChanged;
 				w.NameChanged += HandleNameChanged;
 			}
@@ -172,7 +176,7 @@ namespace Docky.Interface
 			if (handle_timer > 0) return;
 			// we do this delayed so that we dont get a flood of these events.  Certain windows behave badly.
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
-			window_count = Windows.Where (w => !w.IsSkipTasklist).Count ();
+			window_count = VisibleWindows.Count ();
 			SetIconRegionFromCache ();
 			SetText (Name);
 		}
