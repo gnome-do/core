@@ -21,11 +21,16 @@
     <File name="src/Do.Interface.Wink/WindowControl.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface.Wink/WindowUtils.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface.Wink/ClickAction.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface.Wink/Workspace.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface.Wink/ScreenRegions.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface.Wink/Window.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="wnck-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Platform" />
+    <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
 </Project>
