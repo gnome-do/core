@@ -262,8 +262,8 @@ namespace Docky.Interface
 			if (string.IsNullOrEmpty (s) || s == "<unknown>")
 				return false;
 			
-			foreach (string prefix in WindowUtils.BadPrefixes) {
-				if (string.Compare (s, prefix, true) == 0)
+			foreach (System.Text.RegularExpressions.Regex prefix in WindowUtils.BadPrefixes) {
+				if (prefix.IsMatch (s))
 					return false;
 			}
 			

@@ -36,7 +36,7 @@ namespace Do.Interface.Wink
 			get { return Path.Combine (Services.Paths.UserDataDirectory, "RemapFile"); }
 		}
 		
-		public static IEnumerable<string> BadPrefixes {
+		static IEnumerable<string> PrefixStrings {
 			get {
 				yield return "gksu";
 				yield return "sudo";
@@ -49,6 +49,8 @@ namespace Do.Interface.Wink
 			}
 		}
 		
+		public static IEnumerable<Regex> BadPrefixes { get; private set; }
+		
 		static Dictionary<string, string> RemapDictionary { get; set; }
 		
 		static List<Window> window_list;
@@ -60,6 +62,12 @@ namespace Do.Interface.Wink
 		#region ctor
 		static WindowUtils ()
 		{
+			List<Regex> regex = new List<Regex> ();
+			foreach (string s in PrefixStrings) {
+				 regex.Add (new Regex (string.Format ("^{0}$", s), RegexOptions.IgnoreCase));
+			}
+			BadPrefixes = regex.AsEnumerable ();
+			
 			Wnck.Screen.Default.WindowClosed += delegate {
 				window_list_update_needed = true;
 			};
@@ -152,12 +160,19 @@ namespace Do.Interface.Wink
 		{
 			if ((DateTime.UtcNow - last_update).TotalMilliseconds < 200) return;
 			
-			exec_lines.Clear ();
+			Dictionary<int, string> old = exec_lines;
+			
+			exec_lines = new Dictionary<int, string> ();
 			
 			foreach (string dir in Directory.GetDirectories ("/proc")) {
 				int pid;
 				try { pid = Convert.ToInt32 (Path.GetFileName (dir)); } 
 				catch { continue; }
+				
+				if (old.ContainsKey (pid)) {
+					exec_lines [pid] = old [pid];
+					continue;
+				}
 				
 				string exec_line = CmdLineForPid (pid);
 				if (string.IsNullOrEmpty (exec_line))
@@ -303,9 +318,7 @@ namespace Do.Interface.Wink
 				if (parts [i].Contains ("/"))
 					parts [i] = parts [i].Split ('/').Last ();
 				
-				Regex regex;
-				foreach (string prefix in BadPrefixes) {
-					regex = new Regex (string.Format ("^{0}$", prefix), RegexOptions.IgnoreCase);
+				foreach (Regex regex in BadPrefixes) {
 					if (regex.IsMatch (parts [i])) {
 						parts [i] = null;
 						break;

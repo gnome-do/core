@@ -199,6 +199,7 @@ namespace Docky.Core.Default
 
 		void HandleWindowOpened(object o, WindowOpenedArgs args)
 		{
+			// we do a delayed update so that we allow a small gap for wnck to catch up
 			if (!args.Window.IsSkipTasklist)
 				DelayUpdateItems ();
 		}
