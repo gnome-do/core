@@ -178,7 +178,6 @@ namespace Docky.Interface
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
 			window_count = VisibleWindows.Count ();
 			SetIconRegionFromCache ();
-			SetText (Name);
 		}
 		
 		void HandleNameChanged(object sender, EventArgs e)
@@ -200,6 +199,7 @@ namespace Docky.Interface
 				OnUpdateNeeded (new UpdateRequestArgs (this, req));
 			}
 			
+			SetText (Name);
 			handle_timer = 0;
 			return false;
 		}
