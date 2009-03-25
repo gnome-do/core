@@ -200,13 +200,13 @@ namespace Docky.Core.Default
 		void HandleWindowOpened(object o, WindowOpenedArgs args)
 		{
 			if (!args.Window.IsSkipTasklist)
-				UpdateItems ();
+				DelayUpdateItems ();
 		}
 
 		void HandleWindowClosed(object o, WindowClosedArgs args)
 		{
 			if (!args.Window.IsSkipTasklist)
-				UpdateItems ();
+				DelayUpdateItems ();
 		}
 
 		void HandleUniverseInitialized(object sender, EventArgs e)
@@ -257,6 +257,14 @@ namespace Docky.Core.Default
 			// we call ToArray so our enumerator does get screwed up when we change the Position
 			foreach (AbstractDockItem item in items.OrderBy (di => di.Position).ToArray ())
 				item.Position = i++;
+		}
+		
+		void DelayUpdateItems ()
+		{
+			GLib.Timeout.Add (20, delegate {
+				UpdateItems ();
+				return false;
+			});
 		}
 		
 		void UpdateItems ()
@@ -329,9 +337,8 @@ namespace Docky.Core.Default
 		
 		void UpdateTaskItems ()
 		{
-			foreach (ItemDockItem item in OrderedItems.Where (di => di is ItemDockItem)) {
+			foreach (ItemDockItem item in OrderedItems.Where (di => di is ItemDockItem))
 				item.UpdateApplication ();
-			}
 			
 			List<ApplicationDockItem> out_items = new List<ApplicationDockItem> ();
 

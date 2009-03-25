@@ -219,8 +219,13 @@ namespace Docky.Interface
 			foreach (Wnck.Window win in VisibleWindows) {
 				if (!guesses.Contains (PrepName (win.Name)))
 					guesses.Add (PrepName (win.Name));
+				
 				if (!guesses.Contains (PrepName (win.IconName)))
 					guesses.Add (PrepName (win.IconName));
+				
+				if (win.ClassGroup == null)
+					continue;
+				
 				if (!guesses.Contains (PrepName (win.ClassGroup.ResClass)))
 					guesses.Add (PrepName (win.ClassGroup.ResClass));
 			}
