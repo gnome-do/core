@@ -187,6 +187,17 @@ namespace Do.Interface.Wink
 			window.Maximize ();
 		}
 		
+		public static void MoveToWorkspace (Window window, Workspace workspace)
+		{
+			MoveToWorkspace (new [] {window}, workspace);
+		}
+		
+		public static void MoveToWorkspace (IEnumerable<Window> windows, Workspace workspace)
+		{
+			foreach (Window window in windows.Where (w => w.Workspace != workspace))
+				window.MoveToWorkspace (workspace);
+		}
+		
 		/// <summary>
 		/// Moves the current viewport to the selected window and then raises it
 		/// </summary>
