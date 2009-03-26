@@ -1,22 +1,21 @@
-/* ApplicationItemSource.cs
- *
- * GNOME Do is the legal property of its developers. Please refer to the
- * COPYRIGHT file distributed with this
- * source distribution.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// ApplicationItemSource.cs
+//
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.IO;
@@ -82,22 +81,28 @@ namespace Do.Universe.Linux {
 			if (!Directory.Exists (dir))
 				return Enumerable.Empty<ApplicationItem> ();
 			
+			apps = new List<ApplicationItem> ();
 			queue = new Queue<string> ();
 			queue.Enqueue (dir);
-			
-			apps = new List<ApplicationItem> ();
 				
-			while (queue.Count > 0) {
+			while (queue.Any ()) {
 				dir = queue.Dequeue ();
-				foreach (string d in Directory.GetDirectories (dir))
-					queue.Enqueue (d);
+
+				// Do not index screensavers.
+				if (dir.Contains ("screensavers"))
+					continue;
+
+				foreach (string subdir in Directory.GetDirectories (dir))
+					queue.Enqueue (subdir);
 				
-				apps.AddRange (Directory.GetFiles (dir, "*.desktop")
-					.Select (file => ApplicationItem.MaybeCreateFromDesktopItem (file))
-					.Where (app => app != null && app.IsAppropriateForCurrentDesktop && (show_hidden || !app.NoDisplay))
+				apps.AddRange (
+					Directory.GetFiles (dir, "*.desktop")
+						.Select (f => ApplicationItem.MaybeCreateFromDesktopItem (f))
+						.Where (app =>
+							app != null && app.IsAppropriateForCurrentDesktop &&
+							(show_hidden || !app.NoDisplay))
 				);
 			}
-			
 			return apps;
 		}
 		
@@ -119,7 +124,7 @@ namespace Do.Universe.Linux {
 			string home, envPath;
 			
 			const string appDirSuffix = "applications";
-			string [] xdgVars = new [] {"XDG_DATA_HOME", "XDG_DATA_DIRS"};
+			string [] xdgVars = { "XDG_DATA_HOME", "XDG_DATA_DIRS" };
 			
 			home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 				
@@ -128,14 +133,16 @@ namespace Do.Universe.Linux {
 						
 				if (string.IsNullOrEmpty (envPath)) {
 					if (xdgVar == "XDG_DATA_HOME") {
-						yield return (new [] {home, ".local/share", appDirSuffix}.Aggregate (Path.Combine));
+						yield return
+							new [] { home, ".local/share", appDirSuffix }.Aggregate (Path.Combine);
 					} else if (xdgVar == "XDG_DATA_DIRS") {
 						yield return Path.Combine ("/usr/local/share/", appDirSuffix);
 						yield return Path.Combine ("/usr/share/", appDirSuffix);
 					}
 				} else {
-					foreach (string dir in envPath.Split (':'))
+					foreach (string dir in envPath.Split (':')) {
 						yield return Path.Combine (dir, appDirSuffix);
+					}
 				}
 			}
 		}
