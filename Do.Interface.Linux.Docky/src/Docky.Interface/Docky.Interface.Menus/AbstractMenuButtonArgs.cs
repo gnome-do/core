@@ -48,7 +48,11 @@ namespace Docky.Interface.Menus
 			get { return 1; }
 		}
 		
-		public override Gtk.Widget Widget { get { return widget; } }
+		public override Gtk.Widget Widget {
+			get { return widget; } 
+		}
+		
+		private Gdk.Pixbuf Pixbuf { get; set; }
 		
 		protected string Description { 
 			get {
@@ -113,6 +117,11 @@ namespace Docky.Interface.Menus
 				button.TooltipText = Description;
 			
 			widget = button;
+			
+			if (Pixbuf != null)
+				Pixbuf.Dispose ();
+			
+			Pixbuf = GetPixbuf (Height - 8);
 		}
 		
 		void HandleButtonReleaseEvent(object o, ButtonReleaseEventArgs args)
@@ -172,11 +181,9 @@ namespace Docky.Interface.Menus
 					cr.Fill ();
 				}
 				
-				Gdk.Pixbuf pbuf = GetPixbuf (Height - 8);
-				if (pbuf != null) {
-					CairoHelper.SetSourcePixbuf (cr, pbuf, WidthBuffer, (Height - pbuf.Height) / 2);
+				if (Pixbuf != null) {
+					CairoHelper.SetSourcePixbuf (cr, Pixbuf, WidthBuffer, (Height - Pixbuf.Height) / 2);
 					cr.PaintWithAlpha (IconOpacity);
-					pbuf.Dispose ();
 				}
 			}
 		}
@@ -199,6 +206,7 @@ namespace Docky.Interface.Menus
 		public override void Dispose ()
 		{
 			Widget.Destroy ();
+			Pixbuf.Dispose ();
 			base.Dispose ();
 		}
 
