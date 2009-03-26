@@ -31,8 +31,8 @@ namespace Do
 {
 
         class CoreKeybindings {
-                Dictionary<string, Shortcut> ShortcutMap ; // shortcut name -> shortcut
                 Dictionary<string, string> KeycodeMap ; // keybinding -> shortcut name
+                Dictionary<string, Shortcut> ShortcutMap ; // shortcut name -> shortcut
                 Dictionary<string, string> DefaultShortcutMap ; // default keybinding -> shortcut name
 
                 IPreferences Preferences { get; set; }
@@ -47,10 +47,10 @@ namespace Do
                         Preferences = Services.Preferences.Get<CoreKeybindings> ();
                         Preferences.PreferencesChanged += PreferencesChanged;
 
-                        ShortcutMap = new Dictionary<string, Shortcut> (); // shortcut name -> shortcut
-                        KeycodeMap = new Dictionary<string, string> (); // keybinding -> shortcut name
-                        DefaultShortcutMap = new Dictionary<string, string> (); // default keybinding -> shortcut name
                         Shortcuts = new ArrayList ();
+                        KeycodeMap = new Dictionary<string, string> (); // keybinding -> shortcut name
+                        ShortcutMap = new Dictionary<string, Shortcut> (); // shortcut name -> shortcut
+                        DefaultShortcutMap = new Dictionary<string, string> (); // default keybinding -> shortcut name
                         PreferencesCbs = new Dictionary<string, List<KeyChangedCb>> ();
                 }
 
@@ -71,28 +71,25 @@ namespace Do
 
                 public bool RegisterShortcut (Shortcut sc)
                 {
-                        // Add this shortcut to what?
-                        if (! Shortcuts.Contains (sc) && ! ShortcutMap.ContainsKey (sc.ShortcutName)) 
-                        {
-                                Shortcuts.Add (sc);
-                                ShortcutMap [sc.ShortcutName] = sc;
-                                PreferencesCbs [sc.ShortcutName] = new List<KeyChangedCb> ();
-                                SaveShortcuts ();
-                                return true;
-                        }
-                        return false;
+                        if (Shortcuts.Contains (sc) || ShortcutMap.ContainsKey (sc.ShortcutName)) 
+                            return false;
+
+                        Shortcuts.Add (sc);
+                        ShortcutMap [sc.ShortcutName] = sc;
+                        PreferencesCbs [sc.ShortcutName] = new List<KeyChangedCb> ();
+                        SaveShortcuts ();
+                        return true;
                 }
 
                 public Shortcut GetShortcutByKeycode (string keycode)
                 {
-                        if (!KeycodeMap.ContainsKey (keycode)) {
+                        if (!KeycodeMap.ContainsKey (keycode)) 
                                 return null;
-                        }
+                        
                         string scname = KeycodeMap [keycode];
 
-                        if (!ShortcutMap.ContainsKey (scname)) {
+                        if (!ShortcutMap.ContainsKey (scname)) 
                                 return null;
-                        }
 
                         return ShortcutMap [scname];
 
@@ -108,9 +105,8 @@ namespace Do
 
                         foreach (KeyValuePair<string, string> entry in KeycodeMap)
                         {
-                                if (entry.Value == sc) {
+                                if (entry.Value == sc) 
                                         return entry.Key;
-                                }
                         }
                         return null;
                 }
@@ -124,9 +120,8 @@ namespace Do
                 {
                         foreach (KeyValuePair<string, string> entry in DefaultShortcutMap)
                         {
-                                if (entry.Value == sc) {
+                                if (entry.Value == sc) 
                                         return entry.Key;
-                                }
                         }
                         return null;
                 }
@@ -175,14 +170,13 @@ namespace Do
 
                 public bool UnregisterShortcut (Shortcut sc)
                 {
-                        if (Shortcuts.Contains (sc))
-                        {
-                                Shortcuts.Remove (sc);
-                                ShortcutMap.Remove (sc.ShortcutName);
-                                SaveShortcuts ();
-                                return true;
-                        }
-                        return false;
+                        if (!Shortcuts.Contains (sc))
+                            return false;
+
+                        Shortcuts.Remove (sc);
+                        ShortcutMap.Remove (sc.ShortcutName);
+                        SaveShortcuts ();
+                        return true;
                 }
 
                 public bool RegisterNotification (Shortcut sc, KeyChangedCb cb)
@@ -225,9 +219,6 @@ namespace Do
                 void PreferencesChanged (object sender, PreferencesChangedEventArgs e)
                 {
 
-                        //        if (GetKeybinding (e.Key) != null && GetKeybinding (e.Key).ToString ().Trim () == e.OldValue.ToString ().Trim ())
-                        //            return;
-                        //
                         if (PreferencesCbs.ContainsKey (e.Key))
                         {   
                                 foreach (KeyChangedCb cb in PreferencesCbs [e.Key]) {
