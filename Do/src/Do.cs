@@ -56,7 +56,6 @@ namespace Do {
 			Preferences = new CorePreferences ();
 
                         Keybindings = new CoreKeybindings ();
-                        Keybindings.Initialize ();
 
 			// Now we can set the preferred log level.
 			if (Preferences.QuietStart)

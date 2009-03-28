@@ -52,6 +52,8 @@ namespace Do
                         ShortcutMap = new Dictionary<string, Shortcut> (); // shortcut name -> shortcut
                         DefaultShortcutMap = new Dictionary<string, string> (); // default keybinding -> shortcut name
                         PreferencesCbs = new Dictionary<string, List<KeyChangedCb>> ();
+
+                        Initialize ();
                 }
 
                 public void Initialize ()
@@ -103,8 +105,7 @@ namespace Do
                 public string GetKeybinding (string sc)
                 {
 
-                        foreach (KeyValuePair<string, string> entry in KeycodeMap)
-                        {
+                        foreach (KeyValuePair<string, string> entry in KeycodeMap) {
                                 if (entry.Value == sc) 
                                         return entry.Key;
                         }
@@ -118,8 +119,7 @@ namespace Do
 
                 public string GetDefaultKeybinding (string sc)
                 {
-                        foreach (KeyValuePair<string, string> entry in DefaultShortcutMap)
-                        {
+                        foreach (KeyValuePair<string, string> entry in DefaultShortcutMap) {
                                 if (entry.Value == sc) 
                                         return entry.Key;
                         }
@@ -157,8 +157,7 @@ namespace Do
                 {
 
                         string assigned_keycode = GetKeybinding (sc);
-                        if (assigned_keycode == null)
-                        {
+                        if (assigned_keycode == null) {
                                 // Put this shortcut in the mapping
                                 BindShortcut (sc, keycode);
                         }
@@ -193,8 +192,7 @@ namespace Do
                 void SaveShortcuts () 
                 {
                         string scstring = "";
-                        foreach (Shortcut sc in Shortcuts)
-                        {
+                        foreach (Shortcut sc in Shortcuts) {
                                 scstring += sc.ShortcutName.Trim () + ",";
                         }
                         Preferences.Set ("RegisteredShortcuts", scstring);
@@ -219,8 +217,7 @@ namespace Do
                 void PreferencesChanged (object sender, PreferencesChangedEventArgs e)
                 {
 
-                        if (PreferencesCbs.ContainsKey (e.Key))
-                        {   
+                        if (PreferencesCbs.ContainsKey (e.Key)) {   
                                 foreach (KeyChangedCb cb in PreferencesCbs [e.Key]) {
                                         cb (this, e);
                                 }

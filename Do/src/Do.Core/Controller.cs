@@ -445,8 +445,7 @@ namespace Do.Core
                         } else {
                                 // User set keybindings
                                 Shortcut sc = Do.Keybindings.GetShortcutByKeycode (KeyEventToString (evnt));
-                                if (sc != null)
-                                {
+                                if (sc != null) {
                                         sc.Callback (evnt);
                                         return;
                                 }

@@ -21,6 +21,7 @@
 
 using System;
 using Gtk;
+using Mono.Unix;
 
 namespace Do.UI
 {
@@ -40,18 +41,18 @@ namespace Do.UI
 			
 			CellRendererText actionCell = new CellRendererText ();
 			actionCell.Width = 150;
-			InsertColumn (-1, "Action", actionCell, "text", (int)Column.Action);
+			InsertColumn (-1, Catalog.GetString ("Action"), actionCell, "text", (int)Column.Action);
 			
 			CellRendererAccel bindingCell = new CellRendererAccel ();
                         bindingCell.AccelMode = CellRendererAccelMode.Gtk;
 			bindingCell.Editable = true;
 			bindingCell.AccelEdited += new AccelEditedHandler (OnAccelEdited);
 			bindingCell.AccelCleared += new AccelClearedHandler (OnAccelCleared);
-			InsertColumn (-1, "Shortcut", bindingCell, "text", (int)Column.Binding);
+			InsertColumn (-1, Catalog.GetString ("Shortcut"), bindingCell, "text", (int)Column.Binding);
                         
                         CellRendererText defaultbindingCell = new CellRendererText ();
                         actionCell.Width = 150;
-                        InsertColumn (-1, "Default Shortcut", defaultbindingCell, "text", (int)Column.DefaultKeybinding);
+                        InsertColumn (-1, Catalog.GetString ("Default Shortcut"), defaultbindingCell, "text", (int)Column.DefaultKeybinding);
 			
 			RowActivated += new RowActivatedHandler (OnRowActivated);
 			ButtonPressEvent += new ButtonPressEventHandler (OnButtonPress);
@@ -65,8 +66,7 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 
-                        foreach (Shortcut sc in Do.Keybindings.Shortcuts)
-                        {
+                        foreach (Shortcut sc in Do.Keybindings.Shortcuts) {
                             store.AppendValues (sc.FriendlyName, Do.Keybindings.GetKeybinding (sc), 
                                                 Do.Keybindings.GetDefaultKeybinding (sc), sc.ShortcutName);
                         }
