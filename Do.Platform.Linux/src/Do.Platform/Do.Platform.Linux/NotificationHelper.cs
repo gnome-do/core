@@ -40,14 +40,14 @@ namespace Do.Platform.Linux
        	sound,
        	image_svg,
        	append,
-       	max
+       	max,
+		positioning
 	}
 	
 	internal class NotificationHelper
 	{
 		const string DefaultIconName = "gnome-do";
 
-		const int IconSize = 48;
 		const int LettersPerWord = 7;
 		const int MillisecondsPerWord = 350;
 		const int MinNotifyShow = 5000;
@@ -80,12 +80,11 @@ namespace Do.Platform.Linux
 			notify.Show ();
 		}
 		
-		public string NotificationServerName {
-			get { return LibNotify.Global.ServerInformation.Name; }
-		}
-		
 		public bool SupportsCapability (NotificationCapability capability)
 		{
+			if (capability == NotificationCapability.positioning)
+				return LibNotify.Global.ServerInformation.Name != "notify-osd";
+			
 			return Array.IndexOf (LibNotify.Global.Capabilities, Enum.GetName (typeof (NotificationCapability), capability)) > -1;
 		}
 

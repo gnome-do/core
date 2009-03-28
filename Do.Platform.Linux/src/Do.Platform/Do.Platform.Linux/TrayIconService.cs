@@ -46,7 +46,6 @@ namespace Do.Platform.Linux
 		}
 
 		StatusIcon status_icon;
-		bool supports_positioning;
 		NotificationHelper notifier;
 
 		public TrayIconService ()
@@ -58,8 +57,6 @@ namespace Do.Platform.Linux
 			status_icon.Pixbuf = IconProvider.PixbufFromIconName (IconName, IconSize);
 			status_icon.PopupMenu += OnPopupMenu;
 			status_icon.Activate += OnActivate;
-			
-			supports_positioning = notifier.NotificationServerName != "notify-osd";
 		}
 
 		~TrayIconService ()
@@ -107,7 +104,7 @@ namespace Do.Platform.Linux
 			int x, y;
 			Screen screen;
 			
-			if (supports_positioning) {
+			if (notifier.SupportsCapability (NotificationCapability.positioning)) {
 				Show ();
 				GetLocationOnScreen (out screen, out x, out y);
 				// We delay this so that the status icon has time to show.
