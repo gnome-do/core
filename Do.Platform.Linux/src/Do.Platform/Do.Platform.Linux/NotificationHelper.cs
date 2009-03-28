@@ -28,13 +28,26 @@ using Do.Platform;
 using Do.Interface;
 
 namespace Do.Platform.Linux
-{
+{	
+	public enum NotificationCapability {
+       	actions,
+       	body,
+      	body_hyperlinks,
+       	body_images,
+       	body_markup,
+       	icon_multi,
+       	icon_static,
+       	sound,
+       	image_svg,
+       	append,
+       	max
+	}
 	
 	internal class NotificationHelper
 	{
 		const string DefaultIconName = "gnome-do";
 
-		const int IconSize = 24;
+		const int IconSize = 48;
 		const int LettersPerWord = 7;
 		const int MillisecondsPerWord = 350;
 		const int MinNotifyShow = 5000;
@@ -55,24 +68,39 @@ namespace Do.Platform.Linux
 			return Math.Min (Math.Max (t, MinNotifyShow), MaxNotifyShow);
 		}
 
+		public void Notify (Notification note)
+		{
+			Notify (note, Screen.Default, 0, 0);
+		}
+		
 		public void Notify (Notification note, Screen screen, int x, int y)
 		{
 			LibNotify.Notification notify = ToNotify (note);
 			notify.SetGeometryHints (screen, x, y);
 			notify.Show ();
 		}
+		
+		public string NotificationServerName {
+			get { return LibNotify.Global.ServerInformation.Name; }
+		}
+		
+		public bool SupportsCapability (NotificationCapability capability)
+		{
+			foreach (string cap in LibNotify.Global.Capabilities)
+				Log.Debug ("Supports {0}", cap);
+			return Array.IndexOf (LibNotify.Global.Capabilities, Enum.GetName (typeof (NotificationCapability), capability)) > -1;
+		}
 
 		LibNotify.Notification ToNotify (Notification note)
 		{
 			LibNotify.Notification notify = new LibNotify.Notification ();
-			
-			notify.Icon = string.IsNullOrEmpty (note.Icon)
-				? DefaultIcon
-				: IconProvider.PixbufFromIconName (note.Icon, IconSize);
 			notify.Body = GLib.Markup.EscapeText (note.Body);
 			notify.Summary = GLib.Markup.EscapeText (note.Title);
-			notify.Timeout = ReadableDurationForMessage (note.Title, note.Body);
 			notify.Closed += (sender, e) => OnNotificationClosed (note);
+			notify.Timeout = ReadableDurationForMessage (note.Title, note.Body);
+			notify.IconName = string.IsNullOrEmpty (note.Icon)
+				? DefaultIconName
+				: note.Icon;
 
 			if (note is ActionableNotification) {
 				ActionableNotification anote = note as ActionableNotification;
@@ -85,10 +113,8 @@ namespace Do.Platform.Linux
 
 		void OnNotificationClosed (Notification note)
 		{
-			if (NotificationClosed == null) return;
-			NotificationClosed (this, new NotificationEventArgs (note));
+			if (NotificationClosed != null)
+				NotificationClosed (this, new NotificationEventArgs (note));
 		}
-		
 	}
-
 }

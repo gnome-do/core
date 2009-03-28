@@ -46,6 +46,7 @@ namespace Do.Platform.Linux
 		}
 
 		StatusIcon status_icon;
+		bool supports_positioning;
 		NotificationHelper notifier;
 
 		public TrayIconService ()
@@ -57,6 +58,8 @@ namespace Do.Platform.Linux
 			status_icon.Pixbuf = IconProvider.PixbufFromIconName (IconName, IconSize);
 			status_icon.PopupMenu += OnPopupMenu;
 			status_icon.Activate += OnActivate;
+			
+			supports_positioning = notifier.NotificationServerName != "notify-osd";
 		}
 
 		~TrayIconService ()
@@ -69,7 +72,8 @@ namespace Do.Platform.Linux
 		{
 			Preferences = new TrayIconPreferences ();
 			Preferences.IconVisibleChanged += OnIconVisibleChanged;
-			if (!Preferences.IconVisible) Hide ();
+			if (!Preferences.IconVisible) 
+				Hide ();
 
 			// Listen for notifications so we can show a libnotify bubble.
 			Services.Notifications.Notified += OnNotified;
@@ -102,14 +106,19 @@ namespace Do.Platform.Linux
 		{
 			int x, y;
 			Screen screen;
-
-			Show ();
-			GetLocationOnScreen (out screen, out x, out y);
-
-			// We delay this so that the status icon has time to show.
-			Services.Application.RunOnMainThread (() => {
-			    notifier.Notify (note, screen, x, y);
-			}, NotifyDelay);
+			
+			if (supports_positioning) {
+				Show ();
+				GetLocationOnScreen (out screen, out x, out y);
+				// We delay this so that the status icon has time to show.
+				Services.Application.RunOnMainThread (() => {
+			    	notifier.Notify (note, screen, x, y);
+				}, NotifyDelay);
+			} else {
+				Services.Application.RunOnMainThread (() => {
+					notifier.Notify (note);
+				});
+			}
 		}
 
 		void Show ()
