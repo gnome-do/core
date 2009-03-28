@@ -90,6 +90,15 @@ namespace Do.UI
 			GrabFocus ();
 			SetCursor (args.Path, GetColumn ((int)Column.Binding), true);
 		}
+
+                private bool ClearPreviousBinding (TreeModel model, TreePath path, TreeIter treeiter, string keyBinding) 
+                {
+                        string binding = model.GetValue (treeiter, (int)Column.Binding) as string;
+                        if (binding == keyBinding) {
+                            model.SetValue (treeiter, (int)Column.Binding, "");
+                        }
+                        return false;
+                }
 		
 		private void OnAccelEdited (object o, AccelEditedArgs args)
 		{
@@ -102,14 +111,7 @@ namespace Do.UI
 			string realKey = Gtk.Accelerator.Name (args.AccelKey, args.AccelMods);
 			
                         // Look for any other rows that have the same binding and then zero that binding out
-                        Model.Foreach ((model, path, treeiter) => 
-                        {
-                            string binding = model.GetValue (treeiter, (int)Column.Binding) as string;
-                            if (binding == realKey) {
-                                model.SetValue (treeiter, (int)Column.Binding, "");
-                            }
-                            return false;
-                        } );
+                        Model.Foreach ((model, path, treeiter) => ClearPreviousBinding (model, path, treeiter, realKey));
 
 			store.SetValue (iter, (int)Column.Binding, realKey);
 
