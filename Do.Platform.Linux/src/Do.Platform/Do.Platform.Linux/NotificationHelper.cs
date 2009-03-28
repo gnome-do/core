@@ -86,8 +86,6 @@ namespace Do.Platform.Linux
 		
 		public bool SupportsCapability (NotificationCapability capability)
 		{
-			foreach (string cap in LibNotify.Global.Capabilities)
-				Log.Debug ("Supports {0}", cap);
 			return Array.IndexOf (LibNotify.Global.Capabilities, Enum.GetName (typeof (NotificationCapability), capability)) > -1;
 		}
 

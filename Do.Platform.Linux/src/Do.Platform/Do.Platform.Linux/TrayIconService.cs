@@ -167,6 +167,5 @@ namespace Do.Platform.Linux
 			else
 				y += area.Height;
 		}
-
 	}
 }
