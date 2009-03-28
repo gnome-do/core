@@ -59,7 +59,6 @@ namespace Do.Platform.Linux
 	
 		public NotificationHelper ()
 		{
-			DefaultIcon = IconProvider.PixbufFromIconName (DefaultIconName, IconSize);
 		}
 
 		static int ReadableDurationForMessage (string title, string message)

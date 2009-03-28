@@ -61,8 +61,8 @@ namespace Do.Platform.Linux
 
 		~TrayIconService ()
 		{
-			status_icon.PopupMenu -= OnPopupMenu;
 			status_icon.Activate -= OnActivate;
+			status_icon.PopupMenu -= OnPopupMenu;
 		}
 
 		public void Initialize ()
