@@ -30,7 +30,8 @@ using Do.Platform;
 namespace Do
 {
 
-	class CoreKeybindings {
+	class CoreKeybindings 
+	{
 		Dictionary<string, string> KeycodeMap ; // keybinding -> shortcut name
 		Dictionary<string, Shortcut> ShortcutMap ; // shortcut name -> shortcut
 		Dictionary<string, string> DefaultShortcutMap ; // default keybinding -> shortcut name

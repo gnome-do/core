@@ -22,6 +22,7 @@ using System;
 using Do;
 using Gdk;
 using Mono.Unix;
-namespace Do.Platform {
+namespace Do.Core
+{
 	public delegate void ShortcutCallback (EventKey evtky);
 }

@@ -24,11 +24,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Env = System.Environment;
 
-using Do.Platform;
+using Do.Core;
 
 namespace Do
 {
-	class Shortcut {
+	class Shortcut 
+	{
 		public string ShortcutName; // name of the shortcut
 		public string FriendlyName; // display name of the shortcut
 		public ShortcutCallback Callback; // callback function for this shortcut
