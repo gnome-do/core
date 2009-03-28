@@ -28,19 +28,19 @@ using Do.Platform;
 
 namespace Do
 {
-        class Shortcut {
-                public string ShortcutName; // name of the shortcut
-                public string FriendlyName; // display name of the shortcut
-                public ShortcutCallback Callback; // callback function for this shortcut
+	class Shortcut {
+		public string ShortcutName; // name of the shortcut
+		public string FriendlyName; // display name of the shortcut
+		public ShortcutCallback Callback; // callback function for this shortcut
 
-                public Shortcut (string name, string friendly, ShortcutCallback cb)
-                {
-                        ShortcutName = name;
-                        FriendlyName = friendly;
-                        Callback = cb;
+		public Shortcut (string name, string friendly, ShortcutCallback cb)
+		{
+			ShortcutName = name;
+			FriendlyName = friendly;
+			Callback = cb;
 
-                }
-        }
+		}
+	}
 }
 
 

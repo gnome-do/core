@@ -86,7 +86,7 @@ namespace Do.Core
 			im_context.UsePreedit = false;
 			im_context.Commit += OnIMCommit;
 			im_context.FocusIn ();
-                        
+			
 		}
 		
 		void OnIMCommit (object sender, Gtk.CommitArgs e)
@@ -99,99 +99,99 @@ namespace Do.Core
 		{
 			SetTheme (Do.Preferences.Theme);
 			Do.Preferences.ThemeChanged += OnThemeChanged;
-                        
-                        // Register Shortcuts
-                        // TODO: Localize the text here.
-                        // Previous shortcuts
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("SummonKey", 
-                                                Catalog.GetString ("Summon Gnome-Do"), 
-                                                OnSummonKeyPressEvent),
-                                        "<Super>space");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("TextModeKey",
-                                                Catalog.GetString ("Enter text mode"),
-                                                OnTextModePressEvent),
-                                        "period");
-                        // New shortcuts
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("CopyKey",
-                                                Catalog.GetString ("Copy Text"),
-                                                OnCopyEvent),
-                                        "<Control>c");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("PasteKey",
-                                                Catalog.GetString ("Paste Text"),
-                                                OnPasteEvent),
-                                        "<Control>v");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("AlternateEscapeKey",
-                                                Catalog.GetString ("Alternate Escape"),
-                                                OnEscapeKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("AlternateActivateKey",
-                                                Catalog.GetString ("Alternate Activate"),
-                                                OnActivateKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("AlternateDeleteKey",
-                                                Catalog.GetString ("Alternate Delete"),
-                                                OnDeleteKeyPressEvent));
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("ShiftTabKey",
-                                                Catalog.GetString ("Previous Pane"),
-                                                OnShiftTabKeyPressEvent),
-                                        "ISO_Left_Tab");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("TabKey",
-                                                Catalog.GetString ("Next Pane"),
-                                                OnTabKeyPressEvent),
-                                        "Tab");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("UpKey",
-                                                Catalog.GetString ("Previous Result"),
-                                                OnUpKeyPressEvent),
-                                        "Up");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("DownKey",
-                                                Catalog.GetString ("Next Result"),
-                                                OnDownKeyPressEvent),
-                                        "Down");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("HomeKey",
-                                                Catalog.GetString ("First Result"),
-                                                OnHomeKeyPressEvent),
-                                        "Home");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("EndKey",
-                                                Catalog.GetString ("Last Result"),
-                                                OnEndKeyPressEvent),
-                                        "End");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("PageUpKey",
-                                                Catalog.GetString ("Previous 5 Results"),
-                                                OnPageUpKeyPressEvent),
-                                        "Page_Up");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("PageDownKey",
-                                                Catalog.GetString ("Next 5 Results"),
-                                                OnPageDownKeyPressEvent),
-                                        "Page_Down");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("LeftKey",
-                                                Catalog.GetString ("Step out of Item"),
-                                                OnLeftKeyPressEvent),
-                                        "Left");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("RightKey",
-                                                Catalog.GetString ("Browse Into Item"),
-                                                OnRightKeyPressEvent),
-                                        "Right");
-                        Do.Keybindings.RegisterShortcut (
-                                        new Shortcut ("CommaKey",
-                                                Catalog.GetString ("Selection mode"),
-                                                OnSelectionKeyPressEvent),
-                                        "Comma");
-                        
+			
+			// Register Shortcuts
+			// TODO: Localize the text here.
+			// Previous shortcuts
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("SummonKey", 
+						Catalog.GetString ("Summon Gnome-Do"), 
+						OnSummonKeyPressEvent),
+					"<Super>space");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("TextModeKey",
+						Catalog.GetString ("Enter text mode"),
+						OnTextModePressEvent),
+					"period");
+			// New shortcuts
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("CopyKey",
+						Catalog.GetString ("Copy Text"),
+						OnCopyEvent),
+					"<Control>c");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("PasteKey",
+						Catalog.GetString ("Paste Text"),
+						OnPasteEvent),
+					"<Control>v");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("AlternateEscapeKey",
+						Catalog.GetString ("Alternate Escape"),
+						OnEscapeKeyPressEvent));
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("AlternateActivateKey",
+						Catalog.GetString ("Alternate Activate"),
+						OnActivateKeyPressEvent));
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("AlternateDeleteKey",
+						Catalog.GetString ("Alternate Delete"),
+						OnDeleteKeyPressEvent));
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("ShiftTabKey",
+						Catalog.GetString ("Previous Pane"),
+						OnShiftTabKeyPressEvent),
+					"ISO_Left_Tab");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("TabKey",
+						Catalog.GetString ("Next Pane"),
+						OnTabKeyPressEvent),
+					"Tab");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("UpKey",
+						Catalog.GetString ("Previous Result"),
+						OnUpKeyPressEvent),
+					"Up");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("DownKey",
+						Catalog.GetString ("Next Result"),
+						OnDownKeyPressEvent),
+					"Down");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("HomeKey",
+						Catalog.GetString ("First Result"),
+						OnHomeKeyPressEvent),
+					"Home");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("EndKey",
+						Catalog.GetString ("Last Result"),
+						OnEndKeyPressEvent),
+					"End");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("PageUpKey",
+						Catalog.GetString ("Previous 5 Results"),
+						OnPageUpKeyPressEvent),
+					"Page_Up");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("PageDownKey",
+						Catalog.GetString ("Next 5 Results"),
+						OnPageDownKeyPressEvent),
+					"Page_Down");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("LeftKey",
+						Catalog.GetString ("Step out of Item"),
+						OnLeftKeyPressEvent),
+					"Left");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("RightKey",
+						Catalog.GetString ("Browse Into Item"),
+						OnRightKeyPressEvent),
+					"Right");
+			Do.Keybindings.RegisterShortcut (
+					new Shortcut ("CommaKey",
+						Catalog.GetString ("Selection mode"),
+						OnSelectionKeyPressEvent),
+					"Comma");
+			
 		}
 
 		void OnSummoned ()
@@ -431,26 +431,26 @@ namespace Do.Core
 		{
 			Key key = (Key) evnt.KeyValue;
 
-                        
-                        // Currently - only hardcoded are enter keys, escape and delete/backspace
+			
+			// Currently - only hardcoded are enter keys, escape and delete/backspace
 			if (key == Key.Escape) {
 				OnEscapeKeyPressEvent (evnt);
 			} else if (key == Key.Return ||
-			           key == Key.ISO_Enter ||
-			           key == Key.KP_Enter) {
+				   key == Key.ISO_Enter ||
+				   key == Key.KP_Enter) {
 				OnActivateKeyPressEvent (evnt);
 			} else if (key == Key.Delete ||
-			           key == Key.BackSpace) {
+				   key == Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-                        } else {
-                                // User set keybindings
-                                Shortcut sc = Do.Keybindings.GetShortcutByKeycode (KeyEventToString (evnt));
-                                if (sc != null) {
-                                        sc.Callback (evnt);
-                                        return;
-                                }
-                                OnInputKeyPressEvent (evnt);
-                        }
+			} else {
+				// User set keybindings
+				Shortcut sc = Do.Keybindings.GetShortcutByKeycode (KeyEventToString (evnt));
+				if (sc != null) {
+					sc.Callback (evnt);
+					return;
+				}
+				OnInputKeyPressEvent (evnt);
+			}
 		}
 		
 		void OnPasteEvent (EventKey evnt)
@@ -472,14 +472,14 @@ namespace Do.Core
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
 		{
-                        im_context.Reset ();
-                        if (SearchController.TextType == TextModeType.Explicit) {
-                                OnInputKeyPressEvent (evnt);
-                                return;
-                        }
-                        bool shift_pressed = (evnt.State & ModifierType.ShiftMask) != 0;
-                        PerformAction (!shift_pressed);
-                }
+			im_context.Reset ();
+			if (SearchController.TextType == TextModeType.Explicit) {
+				OnInputKeyPressEvent (evnt);
+				return;
+			}
+			bool shift_pressed = (evnt.State & ModifierType.ShiftMask) != 0;
+			PerformAction (!shift_pressed);
+		}
 		
 		/// <summary>
 		/// This will set a secondary cursor unless we are operating on a text
@@ -563,26 +563,26 @@ namespace Do.Core
 			im_context.Reset ();
 			if (!SearchController.Results.Any ()) return;
 
-                        // We're attempting to browse the parent of an item, so decrease its
-                        // relevance. This makes it so we can merely visit an item's children,
-                        // and navigate back out of the item, and leave that item's relevance
-                        // unchanged.
-                        SearchController.Selection
-                                .DecreaseRelevance (SearchController.Query, null);
-                        if (SearchController.ItemParentSearch ()) GrowResults ();
+			// We're attempting to browse the parent of an item, so decrease its
+			// relevance. This makes it so we can merely visit an item's children,
+			// and navigate back out of the item, and leave that item's relevance
+			// unchanged.
+			SearchController.Selection
+				.DecreaseRelevance (SearchController.Query, null);
+			if (SearchController.ItemParentSearch ()) GrowResults ();
 		}
 
-                // Hmm.
-                void OnRightKeyPressEvent (EventKey evnt)
-                {
-                    im_context.Reset ();
-                    if (!SearchController.Results.Any ()) return;
+		// Hmm.
+		void OnRightKeyPressEvent (EventKey evnt)
+		{
+			im_context.Reset ();
+			if (!SearchController.Results.Any ()) return;
 
-                    // We're attempting to browse the contents of an item, so increase its
-                    // relevance.
-                    SearchController.Selection.IncreaseRelevance (SearchController.Query, null);
-                    if (SearchController.ItemChildSearch ()) GrowResults ();
-                }
+			// We're attempting to browse the contents of an item, so increase its
+			// relevance.
+			SearchController.Selection.IncreaseRelevance (SearchController.Query, null);
+			if (SearchController.ItemChildSearch ()) GrowResults ();
+		}
 
 		void OnTabKeyPressEvent (EventKey evnt)
 		{
@@ -594,21 +594,21 @@ namespace Do.Core
 				UpdatePane (CurrentPane);
 			}
 				
-                        NextPane ();
+			NextPane ();
 		}
 
-                void OnShiftTabKeyPressEvent (EventKey evnt)
-                {
-                        im_context.Reset ();
-                        ShrinkResults ();
+		void OnShiftTabKeyPressEvent (EventKey evnt)
+		{
+			im_context.Reset ();
+			ShrinkResults ();
 
-                        if (SearchController.TextType == TextModeType.Explicit) {
-                                SearchController.FinalizeTextMode ();
-                                UpdatePane (CurrentPane);
-                        }
-                        PrevPane ();
-                }
-                        
+			if (SearchController.TextType == TextModeType.Explicit) {
+				SearchController.FinalizeTextMode ();
+				UpdatePane (CurrentPane);
+			}
+			PrevPane ();
+		}
+			
 		
 		void OnTextModePressEvent (EventKey evnt)
 		{
@@ -625,56 +625,56 @@ namespace Do.Core
 			UpdatePane (CurrentPane);
 		}
 		
-                void OnUpKeyPressEvent (EventKey evnt)
-                {
-                    im_context.Reset ();
-                    if (!results_grown) {
-                        if (SearchController.Cursor > 0)
-                            GrowResults ();
-                        return;
-                    } else {
-                        if (SearchController.Cursor <= 0) {
-                            ShrinkResults ();
-                            return;
-                        }
-                        SearchController.Cursor--;
-                    }
-                }
+		void OnUpKeyPressEvent (EventKey evnt)
+		{
+			im_context.Reset ();
+			if (!results_grown) {
+				if (SearchController.Cursor > 0)
+					GrowResults ();
+				return;
+			} else {
+				if (SearchController.Cursor <= 0) {
+					ShrinkResults ();
+					return;
+				}
+				SearchController.Cursor--;
+			}
+		}
 
 		void OnDownKeyPressEvent (EventKey evnt)
 		{
-                    im_context.Reset ();
-                    if (!results_grown) {
-                            GrowResults ();
-                            return;
-                    }
-                    SearchController.Cursor++;
+			im_context.Reset ();
+			if (!results_grown) {
+				GrowResults ();
+				return;
+			}
+			SearchController.Cursor++;
 		}
-	        
-                void OnHomeKeyPressEvent (EventKey evnt)
-                {
-                    im_context.Reset ();
-                    SearchController.Cursor = 0;
-                }
+		
+		void OnHomeKeyPressEvent (EventKey evnt)
+		{
+			im_context.Reset ();
+			SearchController.Cursor = 0;
+		}
 
-                void OnEndKeyPressEvent (EventKey evnt)
-                {
-                    im_context.Reset ();
-                    SearchController.Cursor = SearchController.Results.Count - 1;
-                }
+		void OnEndKeyPressEvent (EventKey evnt)
+		{
+			im_context.Reset ();
+			SearchController.Cursor = SearchController.Results.Count - 1;
+		}
 
-                void OnPageUpKeyPressEvent (EventKey evnt)
-                {
-                    im_context.Reset ();
-                    SearchController.Cursor -= 5;
-                }
-                
-                void OnPageDownKeyPressEvent (EventKey evnt)
-                {
-                    im_context.Reset ();
-                    SearchController.Cursor += 5;
-                }
-                        	
+		void OnPageUpKeyPressEvent (EventKey evnt)
+		{
+			im_context.Reset ();
+			SearchController.Cursor -= 5;
+		}
+		
+		void OnPageDownKeyPressEvent (EventKey evnt)
+		{
+			im_context.Reset ();
+			SearchController.Cursor += 5;
+		}
+				
 		/// <summary>
 		/// Converts a keypress into a human readable string for comparing
 		/// against values in GConf.
