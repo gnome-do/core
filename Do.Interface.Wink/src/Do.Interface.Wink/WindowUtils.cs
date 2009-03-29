@@ -315,7 +315,6 @@ namespace Do.Interface.Wink
 			
 			string [] parts = exec.Split (splitChar);
 			for (int i = 0; i < parts.Length; i++) {
-				Console.WriteLine (parts[i]);
 				if (parts [i].StartsWith ("-"))
 					continue;
 				

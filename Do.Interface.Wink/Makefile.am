@@ -11,7 +11,8 @@ FILES = \
 	src/Do.Interface.Wink/ClickAction.cs \
 	src/Do.Interface.Wink/WindowControl.cs \
 	src/Do.Interface.Wink/WindowUtils.cs \
-	src/Do.Interface.Wink/ScreenUtils.cs 
+	src/Do.Interface.Wink/ScreenUtils.cs \ 
+	src/Do.Interface.Wink/Viewport.cs
 
 #RESOURCES = \
 #	Resources/Do.Interface.Wnck.addin.xml

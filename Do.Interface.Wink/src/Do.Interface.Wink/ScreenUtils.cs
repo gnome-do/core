@@ -27,6 +27,53 @@ namespace Do.Interface.Wink
 	
 	public static class ScreenUtils
 	{
+		const string ViewportFormatString = "Viewport {0}";
+		static List<Viewport> viewports;
+		
+		public static Viewport ActiveViewport {
+			get {
+				Workspace wsp = Wnck.Screen.Default.ActiveWorkspace;
+				Gdk.Rectangle geo = new Gdk.Rectangle (wsp.ViewportX, wsp.ViewportY, wsp.Screen.Width, wsp.Screen.Height);
+				if (viewports.Any (vp => vp.Area == geo))
+					return viewports.First (vp => vp.Area == geo);
+				return null;
+			}
+		}
+		
+		public static IEnumerable<Viewport> Viewports {
+			get { return viewports.AsEnumerable (); }
+		}
+		
+		static ScreenUtils ()
+		{
+			Wnck.Screen.Default.ViewportsChanged += HandleViewportsChanged;
+			Wnck.Screen.Default.WorkspaceCreated += HandleWorkspaceCreated;
+			Wnck.Screen.Default.WorkspaceDestroyed += HandleWorkspaceDestroyed;
+			
+			UpdateViewports ();
+		}
+		
+		public static void Initialize ()
+		{
+			if (viewports.Count <= 1)
+				UpdateViewports ();
+		}
+
+		static void HandleWorkspaceDestroyed(object o, WorkspaceDestroyedArgs args)
+		{
+			UpdateViewports ();
+		}
+
+		static void HandleWorkspaceCreated(object o, WorkspaceCreatedArgs args)
+		{
+			UpdateViewports ();
+		}
+
+		static void HandleViewportsChanged(object sender, EventArgs e)
+		{
+			UpdateViewports ();
+		}
+		
 		public static bool DesktopShow (Screen screen)
 		{
 			return screen.ShowingDesktop;
@@ -44,11 +91,50 @@ namespace Do.Interface.Wink
 				screen.ToggleShowingDesktop (false);
 		}
 		
-		public static IEnumerable<Window> WorkspaceWindows (Workspace workspace)
+		public static IEnumerable<Window> ViewportWindows (Viewport viewport)
 		{
-			foreach (Window window in WindowUtils.GetWindows ()) {
-				if (window.Workspace == workspace)
+			var windows = WindowUtils.GetWindows ()
+			        .Where (w => w.WindowType != WindowType.Dock && !w.IsSkipTasklist);
+			
+			foreach (Window window in windows) {
+				if (viewport.WindowCenterInViewport (window))
 					yield return window;
+			}
+		}
+		
+		static void UpdateViewports ()
+		{
+			viewports = new List<Viewport> ();
+			int currentViewport = 1;
+			foreach (Wnck.Workspace workspace in Wnck.Screen.Default.Workspaces) {
+				if (workspace.IsVirtual) {
+					int viewportWidth;
+					int viewportHeight;
+					viewportWidth = workspace.Screen.Width;
+					viewportHeight = workspace.Screen.Height;
+					
+					int rows = workspace.Height / viewportHeight;
+					int columns = workspace.Width / viewportWidth;
+					
+					for (int i = 0; i < rows; i++) {
+						for (int j = 0; j < columns; j++) {
+							Gdk.Rectangle area = new Gdk.Rectangle (j * viewportWidth,
+							                                        i * viewportHeight,
+							                                        viewportWidth,
+							                                        viewportHeight);
+							viewports.Add (new Viewport (string.Format (ViewportFormatString, currentViewport),
+							                             area,
+							                             workspace));
+							currentViewport++;
+						}
+					}
+				} else {
+					Viewport viewport = new Viewport (string.Format (ViewportFormatString, currentViewport),
+					                                  new Gdk.Rectangle (0, 0, workspace.Width, workspace.Height),
+					                                  workspace);
+					viewports.Add (viewport);
+					currentViewport++;
+				}
 			}
 		}
 	}

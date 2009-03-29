@@ -22,6 +22,7 @@
     <File name="src/Do.Interface.Wink/WindowUtils.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface.Wink/ClickAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface.Wink/ScreenUtils.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Interface.Wink/Viewport.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
