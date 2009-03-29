@@ -41,13 +41,15 @@ namespace Do.Platform.Linux
        	image_svg,
        	append,
        	max,
-		positioning
+		positioning,
+		scaling
 	}
 	
 	internal class NotificationHelper
 	{
 		const string DefaultIconName = "gnome-do";
-
+		
+		const int IconSize = 48;
 		const int LettersPerWord = 7;
 		const int MillisecondsPerWord = 350;
 		const int MinNotifyShow = 5000;
@@ -59,6 +61,7 @@ namespace Do.Platform.Linux
 	
 		public NotificationHelper ()
 		{
+			DefaultIcon = IconProvider.PixbufFromIconName (DefaultIconName, IconSize);
 		}
 
 		static int ReadableDurationForMessage (string title, string message)
@@ -81,8 +84,12 @@ namespace Do.Platform.Linux
 		
 		public bool SupportsCapability (NotificationCapability capability)
 		{
+			// positioning and scaling are not actual capabilities, i just know for a fact most other servers
+			// support geo. hints, and notify-osd is the only that auto scales images
 			if (capability == NotificationCapability.positioning)
 				return LibNotify.Global.ServerInformation.Name != "notify-osd";
+			else if (capability == NotificationCapability.scaling)
+				return LibNotify.Global.ServerInformation.Name == "notify-osd";
 			
 			return Array.IndexOf (LibNotify.Global.Capabilities, Enum.GetName (typeof (NotificationCapability), capability)) > -1;
 		}
@@ -94,9 +101,16 @@ namespace Do.Platform.Linux
 			notify.Summary = GLib.Markup.EscapeText (note.Title);
 			notify.Closed += (sender, e) => OnNotificationClosed (note);
 			notify.Timeout = ReadableDurationForMessage (note.Title, note.Body);
-			notify.IconName = string.IsNullOrEmpty (note.Icon)
-				? DefaultIconName
-				: note.Icon;
+			
+			if (SupportsCapability (NotificationCapability.scaling)) {
+				notify.IconName = string.IsNullOrEmpty (note.Icon)
+					? DefaultIconName
+					: note.Icon;
+			} else {
+				notify.Icon = string.IsNullOrEmpty (note.Icon)
+					? DefaultIcon
+					: IconProvider.PixbufFromIconName (note.Icon, IconSize);
+			}
 
 			if (note is ActionableNotification) {
 				ActionableNotification anote = note as ActionableNotification;
@@ -114,3 +128,4 @@ namespace Do.Platform.Linux
 		}
 	}
 }
+	
