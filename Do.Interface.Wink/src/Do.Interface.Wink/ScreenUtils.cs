@@ -27,7 +27,7 @@ namespace Do.Interface.Wink
 	
 	public static class ScreenUtils
 	{
-		public bool DesktopShow (Screen screen)
+		public static bool DesktopShow (Screen screen)
 		{
 			return screen.ShowingDesktop;
 		}

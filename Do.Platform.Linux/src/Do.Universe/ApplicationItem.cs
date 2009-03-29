@@ -77,6 +77,7 @@ namespace Do.Universe.Linux {
 			if (string.IsNullOrEmpty (cmd))
 				return appItem;
 			
+			cmd = Regex.Escape (cmd);
 			Regex regex = new Regex (string .Format ("(^| ){0}( |)", cmd));
 			foreach (ApplicationItem item in Instances.Values) {
 				string path = item.Location;

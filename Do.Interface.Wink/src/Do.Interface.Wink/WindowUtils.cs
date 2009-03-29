@@ -247,7 +247,7 @@ namespace Do.Interface.Wink
 			try {
 				string procPath = new [] { "/proc", pid.ToString (), "cmdline" }.Aggregate (Path.Combine);
 				using (StreamReader reader = new StreamReader (procPath)) {
-					cmdline = reader.ReadLine ().Replace (Convert.ToChar (0x0), ' ');
+					cmdline = reader.ReadLine ();
 					reader.Close ();
 				}
 			} catch { }
@@ -297,8 +297,11 @@ namespace Do.Interface.Wink
 			if (RemapDictionary.ContainsKey (exec))
 				return RemapDictionary [exec];
 			
+			char splitChar = Convert.ToChar (0x0);
+			splitChar = exec.Contains (splitChar) ? splitChar : ' ';
+			
 			if (exec.StartsWith ("/")) {
-				string first_part = exec.Split (' ') [0];
+				string first_part = exec.Split (splitChar) [0];
 				int length = first_part.Length;
 				first_part = first_part.Split ('/').Last ();
 				
@@ -310,13 +313,18 @@ namespace Do.Interface.Wink
 				}
 			}
 			
-			string [] parts = exec.Split (' ');
+			string [] parts = exec.Split (splitChar);
 			for (int i = 0; i < parts.Length; i++) {
+				Console.WriteLine (parts[i]);
 				if (parts [i].StartsWith ("-"))
 					continue;
 				
 				if (parts [i].Contains ("/"))
 					parts [i] = parts [i].Split ('/').Last ();
+				
+				//wine apps
+				if (parts [i].Contains ("\\"))
+					parts [i] = parts [i].Split ('\\').Last ();
 				
 				foreach (Regex regex in BadPrefixes) {
 					if (regex.IsMatch (parts [i])) {

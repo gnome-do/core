@@ -10,7 +10,8 @@ FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Interface.Wink/ClickAction.cs \
 	src/Do.Interface.Wink/WindowControl.cs \
-	src/Do.Interface.Wink/WindowUtils.cs
+	src/Do.Interface.Wink/WindowUtils.cs \
+	src/Do.Interface.Wink/ScreenUtils.cs 
 
 #RESOURCES = \
 #	Resources/Do.Interface.Wnck.addin.xml
