@@ -31,18 +31,18 @@ namespace Do.Platform.Linux
 {	
 	public enum NotificationCapability {
        	actions,
-       	body,
+       	append,
+		body,
       	body_hyperlinks,
        	body_images,
        	body_markup,
        	icon_multi,
        	icon_static,
-       	sound,
        	image_svg,
-       	append,
-       	max,
-		positioning,
-		scaling
+		max,
+		positioning, // not an official capability
+		scaling, // not an official capability
+		sound
 	}
 	
 	internal class NotificationHelper
