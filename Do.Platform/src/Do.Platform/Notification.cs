@@ -18,19 +18,18 @@
  */
 
 using System;
-using System.Collections.Generic;
 
 namespace Do.Platform
 {
 	
 	public class Notification
 	{
+
 		protected const string DefaultIcon = "";
 
 		public virtual string Body { get; protected set; }
 		public virtual string Icon { get; protected set; }
 		public virtual string Title { get; protected set; }
-		public virtual Dictionary<string, bool> Capabilities { get; protected set; }
 
 		protected Notification ()
 			: this ("", "", DefaultIcon)
@@ -38,11 +37,6 @@ namespace Do.Platform
 		}
 
 		public Notification (string title, string body, string icon)
-			: this (title, body, icon, new Dictionary<string, bool> ())
-		{
-		}
-		
-		public Notification (string title, string body, string icon, Dictionary<string, bool> capabilities)
 		{
 			if (title == null) throw new ArgumentNullException ("title");
 			if (body == null) throw new ArgumentNullException ("body");
