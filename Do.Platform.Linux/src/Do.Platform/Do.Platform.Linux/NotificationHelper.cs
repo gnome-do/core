@@ -30,15 +30,15 @@ using Do.Interface;
 namespace Do.Platform.Linux
 {	
 	public enum NotificationCapability {
-       	actions,
-       	append,
+       		actions,
+       		append,
 		body,
-      	body_hyperlinks,
-       	body_images,
-       	body_markup,
-       	icon_multi,
-       	icon_static,
-       	image_svg,
+      		body_hyperlinks,
+       		body_images,
+       		body_markup,
+       		icon_multi,
+       		icon_static,
+       		image_svg,
 		max,
 		positioning, // not an official capability
 		scaling, // not an official capability
