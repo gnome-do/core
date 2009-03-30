@@ -46,6 +46,5 @@ namespace Do.Platform
 			Body = body;
 			Icon = icon;
 		}
-
 	}
 }
