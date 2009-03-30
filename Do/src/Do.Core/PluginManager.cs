@@ -63,16 +63,7 @@ namespace Do.Core
 		{
 			// Initialize Mono.Addins.
 			AddinManager.Initialize (Paths.UserPluginsDirectory);
-
-			// Register repositories.
-			SetupService setup = new SetupService (AddinManager.Registry);
-			foreach (string path in Paths.SystemPluginDirectories) {
-				string url = "file://" + path;
-				if (!setup.Repositories.ContainsRepository (url)) {
-					setup.Repositories.RegisterRepository (null, url, false);
-				}
-			}
-
+	
 			// Initialize services before addins that may use them are loaded.
 			Services.Initialize ();
 			InterfaceManager.Initialize ();
@@ -81,7 +72,7 @@ namespace Do.Core
 			foreach (string path in ExtensionPaths)
 				AddinManager.AddExtensionNodeHandler (path, OnPluginChanged);
 
-			InstallLocalPlugins (setup);
+			AddinManager.Registry.Update (null);
 		}
 
 		public static bool PluginClassifiesAs (AddinRepositoryEntry entry, string className)
@@ -140,34 +131,6 @@ namespace Do.Core
 			get { return AddinManager.GetExtensionObjects ("/Do/Action").OfType<Act> (); }
 		}
 
-		/// <summary>
-		/// Installs plugins that are located in the <see
-		/// cref="Paths.UserPlugins"/> directory.  This will build addins
-		/// (mpack files) and install them.
-		/// </summary>
-		/// <param name="setup">
-		/// A <see cref="SetupService"/>
-		/// </param>
-		public static void InstallLocalPlugins (SetupService setup)
-		{
-			IProgressStatus status = new ConsoleProgressStatus (false);
-			// GetFilePaths is like Directory.GetFiles but returned files have directory prefixed.
-			Func<string, string, IEnumerable<string>> GetFilePaths = (dir, pattern) =>
-				Directory.GetFiles (dir, pattern).Select (f => Path.Combine (dir, f));
-			
-			// Create mpack (addin packages) out of dlls.
-			GetFilePaths (Paths.UserPluginsDirectory, "*.dll")
-				.ForEach (path => setup.BuildPackage (status, Paths.UserPluginsDirectory, new[] { path }))
-				// We delete the dlls after creating mpacks so we don't delete any dlls prematurely.
-				.ForEach (File.Delete);
-
-			// Install each mpack file, deleting each file when finished installing it.
-			foreach (string path in GetFilePaths (Paths.UserPluginsDirectory, "*.mpack")) {
-				setup.Install (status, new[] { path });
-				File.Delete (path);
-			}
-		}
-		
 		static void OnPluginChanged (object sender, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
