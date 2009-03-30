@@ -102,7 +102,7 @@ namespace Do.Platform.Linux
 			notify.Closed += (sender, e) => OnNotificationClosed (note);
 			notify.Timeout = ReadableDurationForMessage (note.Title, note.Body);
 			
-			if (SupportsCapability (NotificationCapability.scaling)) {
+			if (SupportsCapability (NotificationCapability.scaling) && !note.Icon.Contains ("@")) {
 				notify.IconName = string.IsNullOrEmpty (note.Icon)
 					? DefaultIconName
 					: note.Icon;
