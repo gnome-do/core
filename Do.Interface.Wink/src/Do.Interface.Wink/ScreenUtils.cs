@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Mono.Unix;
+
 using Wnck;
 
 namespace Do.Interface.Wink
@@ -27,7 +29,7 @@ namespace Do.Interface.Wink
 	
 	public static class ScreenUtils
 	{
-		const string ViewportFormatString = "Viewport {0}";
+		static string ViewportFormatString = Catalog.GetString ("Desktop") + " {0}";
 		static List<Viewport> viewports;
 		
 		public static Viewport ActiveViewport {

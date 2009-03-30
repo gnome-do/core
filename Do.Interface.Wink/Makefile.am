@@ -20,6 +20,7 @@ FILES = \
 REFERENCES =  \
 	System \
 	System.Core \
+	Mono.Posix \
 	$(GTK_SHARP_20_LIBS) \
 	$(WNCK_SHARP_10_LIBS)
 
