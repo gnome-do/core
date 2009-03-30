@@ -21,12 +21,18 @@ using System.Collections.Generic;
 using Gdk;
 using Wnck;
 
+using Do.Platform;
+
 namespace Do.Interface.Wink
 {
 	
 	
 	public class Viewport
 	{
+		static IPreferences prefs = Services.Preferences.Get<Viewport> ();
+		
+		static int x_offset = prefs.Get ("X Offset", 0);
+		static int y_offset = prefs.Get ("Y Offset", 0);
 		
 		Workspace parent;
 		Rectangle area;
@@ -55,8 +61,8 @@ namespace Do.Interface.Wink
 			int x = area.X + (geo.X % area.Width);
 			int y = area.Y + (geo.Y % area.Height);
 			
-			x -= window.Workspace.ViewportX;
-			y -= window.Workspace.ViewportY;
+			x -= window.Workspace.ViewportX + x_offset;
+			y -= window.Workspace.ViewportY + y_offset;
 			
 			WindowMoveResizeMask mask = WindowMoveResizeMask.X | WindowMoveResizeMask.Y;
 			window.SetGeometry (WindowGravity.Current, mask, x, y, 0, 0);
