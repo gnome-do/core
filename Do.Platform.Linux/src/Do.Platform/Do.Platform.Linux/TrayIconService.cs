@@ -61,15 +61,16 @@ namespace Do.Platform.Linux
 
 		~TrayIconService ()
 		{
-			status_icon.PopupMenu -= OnPopupMenu;
 			status_icon.Activate -= OnActivate;
+			status_icon.PopupMenu -= OnPopupMenu;
 		}
 
 		public void Initialize ()
 		{
 			Preferences = new TrayIconPreferences ();
 			Preferences.IconVisibleChanged += OnIconVisibleChanged;
-			if (!Preferences.IconVisible) Hide ();
+			if (!Preferences.IconVisible) 
+				Hide ();
 
 			// Listen for notifications so we can show a libnotify bubble.
 			Services.Notifications.Notified += OnNotified;
@@ -102,14 +103,19 @@ namespace Do.Platform.Linux
 		{
 			int x, y;
 			Screen screen;
-
-			Show ();
-			GetLocationOnScreen (out screen, out x, out y);
-
-			// We delay this so that the status icon has time to show.
-			Services.Application.RunOnMainThread (() => {
-			    notifier.Notify (note, screen, x, y);
-			}, NotifyDelay);
+			
+			if (notifier.SupportsCapability (NotificationCapability.positioning)) {
+				Show ();
+				GetLocationOnScreen (out screen, out x, out y);
+				// We delay this so that the status icon has time to show.
+				Services.Application.RunOnMainThread (() => {
+			    	notifier.Notify (note, screen, x, y);
+				}, NotifyDelay);
+			} else {
+				Services.Application.RunOnMainThread (() => {
+					notifier.Notify (note);
+				});
+			}
 		}
 
 		void Show ()
@@ -158,6 +164,5 @@ namespace Do.Platform.Linux
 			else
 				y += area.Height;
 		}
-
 	}
 }
