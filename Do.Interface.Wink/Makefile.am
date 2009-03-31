@@ -29,5 +29,5 @@ REFERENCES =  \
 PROJECT_REFERENCES = \
 	Do.Platform
 
-#module_DATA += $(ASSEMBLY).dll.config
-#EXTRA_DIST += $(ASSEMBLY).dll.config
+module_DATA += $(ASSEMBLY).dll.config
+EXTRA_DIST += $(ASSEMBLY).dll.config

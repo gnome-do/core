@@ -308,7 +308,7 @@ namespace Docky.Interface
 		
 		public bool SetStruts ()
 		{
-			X11Atoms atoms = new X11Atoms (GdkWindow);
+			X11Atoms atoms = X11Atoms.Instance;
 
 			uint [] struts = dock_area.StrutRequest;
 			uint [] first_struts = new [] { struts [0], struts [1], struts [2], struts [3] };

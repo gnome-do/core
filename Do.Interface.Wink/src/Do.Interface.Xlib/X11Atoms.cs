@@ -26,6 +26,15 @@ using System;
 namespace Do.Interface.Xlib {
 
 	public class X11Atoms {
+		
+		static X11Atoms instance;
+		public static X11Atoms Instance {
+			get {
+				if (instance == null)
+					instance = new X11Atoms (Gdk.Screen.Default.Display);
+				return instance;
+			}
+		}
 
 		// Our atoms
 		public readonly IntPtr AnyPropertyType		= (IntPtr)0;
@@ -169,8 +178,8 @@ namespace Do.Interface.Xlib {
 		public readonly IntPtr AsyncAtom;
 
 
-		public X11Atoms (Gdk.Window window) {
-			IntPtr display = Xlib.GdkDrawableXDisplay (window);
+		X11Atoms (Gdk.Display dsp) {
+			IntPtr display = Xlib.GdkDisplayXDisplay (dsp);
 			// make sure this array stays in sync with the statements below
 			string [] atom_names = new string[] {
 				"WM_PROTOCOLS",
