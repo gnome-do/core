@@ -89,6 +89,3 @@ PROJECT_REFERENCES = \
 	Do.Interface.Wink \
 	Do.Platform \
 	Do.Universe
-
-module_DATA += $(ASSEMBLY).dll.config
-EXTRA_DIST += $(ASSEMBLY).dll.config
