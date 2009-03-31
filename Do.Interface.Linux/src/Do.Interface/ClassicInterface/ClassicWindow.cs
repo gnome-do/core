@@ -324,7 +324,6 @@ namespace Do.Interface {
 		{
 			frame.Radius = Screen.IsComposited ? IconBoxRadius : 0;
 
-			PositionWindow.GetMonitor ();
 			Resize (1, 1);
 			Reposition ();
 			Show ();
