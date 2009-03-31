@@ -108,28 +108,21 @@ namespace Do.UI
 			
 			string [] uriList = Regex.Split (data, "\r\n");
 			List<string> errors = new List<string> ();
-			foreach (string uri in uriList) {
-				string file;
-				string path;
+			for (int i = 0; i < uriList.Length; i++) {
+				string fileName = uriList [i];
 				
-				try {
-					file = uri.Remove (0, 7);
-					string fileName = System.IO.Path.GetFileName (file);
-					if (!file.EndsWith (".dll")) {
-						errors.Add (fileName);
-						continue;
-					}
-
-					path = Paths.UserPluginsDirectory.Combine (fileName);
-					File.Copy (file, path, true);
-				} catch { }
+				if (!fileName.EndsWith (".dll") || !File.Exists (fileName)) {
+					uriList [i] = "";
+					errors.Add (fileName);
+					continue;
+				}
 			} 
 			
 			if (errors.Count > 0)
 				new PluginErrorDialog (errors.ToArray ());
 			
 			SetupService setup = new SetupService (AddinManager.Registry);
-			PluginManager.InstallLocalPlugins (setup);
+			setup.Install (null, uriList);
 		}
 
 		public Bin GetConfiguration ()

@@ -54,6 +54,8 @@ namespace Do.Core
 				new CommunityAddinClassifier (),
 				new GreedyAddinClassifier (),
 			};
+		
+		static IEnumerable<string> SavedPlugins { get; set; }
 
 		/// <summary>
 		/// Performs plugin system initialization. Should be called before this
@@ -63,7 +65,7 @@ namespace Do.Core
 		{
 			// Initialize Mono.Addins.
 			AddinManager.Initialize (Paths.UserPluginsDirectory);
-	
+			
 			// Initialize services before addins that may use them are loaded.
 			Services.Initialize ();
 			InterfaceManager.Initialize ();
@@ -72,7 +74,43 @@ namespace Do.Core
 			foreach (string path in ExtensionPaths)
 				AddinManager.AddExtensionNodeHandler (path, OnPluginChanged);
 
-			AddinManager.Registry.Update (null);
+			// This is a workaround for a Mono.Addins bug where updated addins will get
+			// disabled on update. We save the currently enabled addins, update, then
+			// reenable them with the Id of the new version. It's a bit hackish but lluis
+			// said it's a reasonable approach until that bug is fixed 
+		 	// https://bugzilla.novell.com/show_bug.cgi?id=490302
+			SaveEnabledAddins ();
+			AddinManager.Registry.Update (new ConsoleProgressStatus (false));
+			ReloadEnabledAddins ();
+		}
+		
+		static void SaveEnabledAddins ()
+		{
+			List<string> enabledPlugins = new List<string> ();
+			
+			foreach (Addin addin in AddinManager.Registry.GetAddins ()) {
+				if (addin.Enabled && AddinIsPlugin (addin)) {
+					string name = AddinIdWithoutVersion (addin.Id);
+					Log<PluginManager>.Debug ("Saving {0}", name);
+					enabledPlugins.Add (name);
+				}
+			}
+			
+			SavedPlugins = enabledPlugins;
+		}
+		
+		static void ReloadEnabledAddins ()
+		{
+			IEnumerable<string> allAddins = AddinManager.Registry.GetAddins ().Select (a => a.Id);
+			
+			foreach (string addin in allAddins) {
+				if (SavedPlugins.Contains (AddinIdWithoutVersion (addin))) {
+					Log.Debug ("Enabling {0}", addin);
+					AddinManager.Registry.EnableAddin (addin);
+				}
+			}
+			
+			SavedPlugins = Enumerable.Empty<string> ();
 		}
 
 		public static bool PluginClassifiesAs (AddinRepositoryEntry entry, string className)
@@ -206,6 +244,16 @@ namespace Do.Core
 		public static IEnumerable<IConfigurable> ConfigurablesForAddin (string id)
 		{
 			return ObjectsForAddin<IConfigurable> (id);
+		}
+		
+		static bool AddinIsPlugin (Addin addin)
+		{
+			return ObjectsForAddin<Act> (addin.Id).Any () || ObjectsForAddin<ItemSource> (addin.Id).Any ();
+		}
+				
+		static string AddinIdWithoutVersion (string id)
+		{
+			return id.Substring (0, id.IndexOf (','));
 		}
 	}
 }
