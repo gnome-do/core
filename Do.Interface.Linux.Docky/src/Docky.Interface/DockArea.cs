@@ -26,6 +26,7 @@ using Gdk;
 using Gtk;
 
 using Do.Platform;
+using Do.Interface.Xlib;
 
 using Docky.Core;
 using Docky.Utilities;
@@ -99,14 +100,14 @@ namespace Docky.Interface
 				
 				switch (DockPreferences.Orientation) {
 				case DockOrientation.Bottom:
-					values [(int) XLib.Struts.Bottom] = (uint) (DockHeight + (Screen.Height - (geo.Y + geo.Height)));
-					values [(int) XLib.Struts.BottomStart] = (uint) geo.X;
-					values [(int) XLib.Struts.BottomEnd] = (uint) (geo.X + geo.Width - 1);
+					values [(int) Struts.Bottom] = (uint) (DockHeight + (Screen.Height - (geo.Y + geo.Height)));
+					values [(int) Struts.BottomStart] = (uint) geo.X;
+					values [(int) Struts.BottomEnd] = (uint) (geo.X + geo.Width - 1);
 					break;
 				case DockOrientation.Top:
-					values [(int) XLib.Struts.Top] = (uint) (DockHeight + geo.Y);
-					values [(int) XLib.Struts.TopStart] = (uint) geo.X;
-					values [(int) XLib.Struts.TopEnd] = (uint) (geo.X + geo.Width - 1);
+					values [(int) Struts.Top] = (uint) (DockHeight + geo.Y);
+					values [(int) Struts.TopStart] = (uint) geo.X;
+					values [(int) Struts.TopEnd] = (uint) (geo.X + geo.Width - 1);
 					break;
 				}
 				return values;

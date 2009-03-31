@@ -211,9 +211,11 @@ namespace Docky.Interface
 		{
 			List<string> guesses = new List<string> ();
 			
-			if (!string.IsNullOrEmpty (Exec)) {
-				yield return Exec;
-				yield return Exec.Split ('-')[0];
+			string exec = Exec;
+			if (!string.IsNullOrEmpty (exec)) {
+				yield return exec;
+				yield return exec.Split ('-')[0];
+				yield return WindowUtils.ProcessExecString (exec);
 			}
 
 			foreach (Wnck.Window win in VisibleWindows) {
@@ -228,10 +230,14 @@ namespace Docky.Interface
 				
 				if (!guesses.Contains (PrepName (win.ClassGroup.ResClass)))
 					guesses.Add (PrepName (win.ClassGroup.ResClass));
+				
+				if (!guesses.Contains (PrepName (win.ClassGroup.Name)))
+					guesses.Add (PrepName (win.ClassGroup.Name));
 			}
 			
-			foreach (string s in guesses)
+			foreach (string s in guesses) {
 				yield return s;
+			}
 			
 			if (Name.Length > 4 && Name.Contains (" "))
 				yield return Name.Split (' ') [0].ToLower ();

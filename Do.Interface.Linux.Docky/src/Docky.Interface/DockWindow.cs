@@ -25,11 +25,11 @@ using Gtk;
 using Cairo;
 
 using Docky.Utilities;
-using Docky.XLib;
 
 using Do.Universe;
 using Do.Platform;
 using Do.Interface;
+using Do.Interface.Xlib;
 using Do.Interface.CairoUtils;
 using Do.Interface.AnimationBase;
 
@@ -318,10 +318,10 @@ namespace Docky.Interface
 			if (!IsRealized)
 				return false;
 			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT_PARTIAL, atoms.XA_CARDINAL,
-			                      (int) XLib.PropertyMode.PropModeReplace, struts);
+			                      (int) PropertyMode.PropModeReplace, struts);
 			
 			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT, atoms.XA_CARDINAL, 
-			                      (int) XLib.PropertyMode.PropModeReplace, first_struts);
+			                      (int) PropertyMode.PropModeReplace, first_struts);
 				
 			return false;
 		}

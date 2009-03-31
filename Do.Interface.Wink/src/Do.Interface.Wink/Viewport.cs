@@ -31,8 +31,8 @@ namespace Do.Interface.Wink
 	{
 		static IPreferences prefs = Services.Preferences.Get<Viewport> ();
 		
-		static int x_offset = prefs.Get ("X Offset", 0);
-		static int y_offset = prefs.Get ("Y Offset", 0);
+		static int x_offset = prefs.Get ("X_Offset", 0);
+		static int y_offset = prefs.Get ("Y_Offset", 0);
 		
 		Workspace parent;
 		Rectangle area;

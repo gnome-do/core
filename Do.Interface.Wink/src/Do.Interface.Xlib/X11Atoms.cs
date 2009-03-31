@@ -23,9 +23,9 @@
 
 using System;
 
-namespace Docky.XLib {
+namespace Do.Interface.Xlib {
 
-	internal class X11Atoms {
+	public class X11Atoms {
 
 		// Our atoms
 		public readonly IntPtr AnyPropertyType		= (IntPtr)0;
@@ -170,7 +170,7 @@ namespace Docky.XLib {
 
 
 		public X11Atoms (Gdk.Window window) {
-			IntPtr display = XLib.Xlib.GdkDrawableXDisplay (window);
+			IntPtr display = Xlib.GdkDrawableXDisplay (window);
 			// make sure this array stays in sync with the statements below
 			string [] atom_names = new string[] {
 				"WM_PROTOCOLS",

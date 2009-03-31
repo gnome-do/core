@@ -65,9 +65,7 @@ FILES = \
 	src/Docky.Interface/Util.cs \
 	src/Docky.Utilities/DockOrientation.cs \
 	src/Docky.Utilities/DockPreferences.cs \
-	src/Docky.Utilities/GtkUtils.cs \
-	src/XLib/X11Atoms.cs \
-	src/XLib/Xlib.cs
+	src/Docky.Utilities/GtkUtils.cs
 
 RESOURCES = \
 	Resources/Do.Interface.Linux.Docky.addin.xml \

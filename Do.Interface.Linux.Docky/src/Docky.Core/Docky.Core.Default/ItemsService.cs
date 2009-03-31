@@ -273,11 +273,11 @@ namespace Docky.Core.Default
 			if (!UpdatesEnabled)
 				return;
 			
-			UpdateStatItems ();
-			
 			if (!CustomItemsRead) {
 				foreach (string s in ReadCustomItems ())
 					InternalAddItemToDock (s, LastPosition + 1);
+				
+				UpdateStatItems ();
 				
 				Dictionary<string, int> sortDictionary = ReadSortDictionary ();
 				foreach (ItemDockItem item in OrderedItems.Where (di => di is ItemDockItem)) {
@@ -286,6 +286,8 @@ namespace Docky.Core.Default
 				}
 				
 				CustomItemsRead = true;
+			} else {
+				UpdateStatItems ();
 			}
 			
 			UpdateTaskItems ();

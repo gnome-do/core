@@ -42,6 +42,12 @@ namespace Docky.Interface
 	
 	public abstract class WnckDockItem : AbstractDockItem
 	{
+		// a bad hack, but it works
+		static string [] blacklist = new [] {
+			"CopyToClipboardAction", 
+			"WindowFocusAction",
+		};
+		
 		int last_raised;
 
 		DateTime last_scroll = new DateTime (0);
@@ -69,7 +75,7 @@ namespace Docky.Interface
 		protected IEnumerable<Act> ActionsForItem (Item item) 
 		{
 			return Services.Core.GetActionsForItemOrderedByRelevance (item, false)
-				    .Where (act => act.GetType ().Name != "CopyToClipboardAction")
+				    .Where (act => !blacklist.Contains (act.GetType ().Name))
 					.OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
 					.ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
 					.ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")

@@ -88,11 +88,18 @@ namespace Do.Interface.Wink
 		
 		public static void FocusWindows (IEnumerable<Window> windows)
 		{
-			foreach (Window window in windows.Reverse ()) {
-				if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized) {
-					window.CenterAndFocusWindow ();
-					System.Threading.Thread.Sleep (SleepTime);
+			if (!windows.Any ())
+				return;
+			
+			if (windows.Any (w => w.IsInViewport (w.Screen.ActiveWorkspace))) {
+				foreach (Window window in windows.Reverse ()) {
+					if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized) {
+						window.CenterAndFocusWindow ();
+						System.Threading.Thread.Sleep (SleepTime);
+					}
 				}
+			} else {
+				windows.First ().CenterAndFocusWindow ();
 			}
 			
 			if (windows.Count () <= 1)
@@ -102,7 +109,9 @@ namespace Do.Interface.Wink
 			// sometimes compiz plays badly.  This hacks around it
 			uint time = Gtk.Global.CurrentEventTime + 200;
 			GLib.Timeout.Add (200, delegate {
-				windows.Where (w => w.IsInViewport (w.Screen.ActiveWorkspace) && !w.IsMinimized).First ().Activate (time);
+				try { //unimportant if this fails, its just "nice"
+					windows.Where (w => w.IsInViewport (w.Screen.ActiveWorkspace) && !w.IsMinimized).First ().Activate (time);
+				} catch { }
 				return false;
 			});
 		}

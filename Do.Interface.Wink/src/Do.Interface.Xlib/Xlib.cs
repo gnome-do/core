@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Docky.XLib {
+namespace Do.Interface.Xlib {
 
 	public enum PropertyMode
 	{
@@ -52,7 +52,7 @@ namespace Docky.XLib {
 		BottomEnd = 11
 	}
 	
-	internal class Xlib {
+	public static class Xlib {
 		const string libX11 = "X11";
 		const string libGdkX11 = "libgdk-x11";
 		
@@ -85,6 +85,19 @@ namespace Docky.XLib {
 		{
 			IntPtr [] dataArray = data.Select (i => (IntPtr) i).ToArray ();
 			return XChangeProperty (GdkDrawableXDisplay (window), GdkWindowX11Xid (window), property, type, 32, mode, dataArray, data.Length); 
+		}
+		
+		[DllImport (libX11)]
+		extern static int XGetWindowProperty (IntPtr display, IntPtr window, IntPtr atom, IntPtr long_offset, 
+		                                      IntPtr long_length, bool delete, IntPtr req_type, out IntPtr actual_type, 
+		                                      out int actual_format, out IntPtr nitems, out IntPtr bytes_after, ref IntPtr prop);
+		
+		public static int XGetWindowProperty (Gdk.Window window, IntPtr atom, IntPtr long_offset, 
+		                                      IntPtr long_length, bool delete, IntPtr req_type, out IntPtr actual_type, 
+		                                      out int actual_format, out IntPtr nitems, out IntPtr bytes_after, ref IntPtr prop)
+		{
+			return XGetWindowProperty (GdkDrawableXDisplay (window), GdkWindowX11Xid (window), atom, long_offset, long_length,
+			                           delete, req_type, out actual_type, out actual_format, out nitems, out bytes_after, ref prop);
 		}
 	}
 }
