@@ -244,7 +244,8 @@ namespace Docky.Interface
 				break;
 			}
 			
-			Display.Sync ();
+			if (Display != null)
+				Display.Sync ();
 			
 			is_repositioned_hidden = false;
 		}
@@ -265,7 +266,8 @@ namespace Docky.Interface
 				break;
 			}
 
-			Display.Sync ();
+			if (Display != null)
+				Display.Sync ();
 			
 			is_repositioned_hidden = true;
 		}
