@@ -5,13 +5,13 @@
       <Build debugmode="True" target="Exe" />
       <Execution runwithwarnings="True" commandlineparameters="--debug" externalconsole="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <EnvironmentVariables />
-      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" win32Icon="../../../../../jason/do/trunk-merge/Do" ctype="CSharpCompilerParameters" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
       <Output directory="bin/Release" assembly="Do" />
       <Build debugmode="False" target="Exe" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
-      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" win32Icon="../../../../../jason/do/trunk-merge/Do" ctype="CSharpCompilerParameters" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
   </Configurations>
   <Contents>
@@ -102,6 +102,7 @@
     <ProjectReference type="Project" localcopy="True" refto="Do.Interface.Linux" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Universe" />
   </References>
+  <LanguageParameters ApplicationIcon="../../../../../jason/do/trunk-merge/Do" ctype="CSharpProjectParameters" />
   <Deployment.LinuxDeployData scriptName="gnome-do" />
   <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="Makefile.am" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../">
     <BuildFilesVar Sync="True" Name="FILES" />

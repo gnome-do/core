@@ -31,12 +31,6 @@ using Docky.Utilities;
 
 namespace Docky.Interface
 {
-	public enum ClickAction {
-		Focus,
-		Minimize,
-		Restore,
-		None,
-	}
 
 	public enum IconSource {
 		Statistics,

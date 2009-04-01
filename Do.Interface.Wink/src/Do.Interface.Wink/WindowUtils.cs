@@ -23,17 +23,18 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-using Do.Interface;
-using Do.Universe;
 using Do.Platform;
-
-using Docky.Interface;
 
 using Wnck;
 
-namespace Docky.Utilities
+namespace Do.Interface.Wink
 {
-	
+	public enum ClickAction {
+		Focus,
+		Minimize,
+		Restore,
+		None,
+	}
 	
 	public static class WindowUtils
 	{
@@ -88,58 +89,52 @@ namespace Docky.Utilities
 			if (!File.Exists (RemapFile)) {
 				RemapDictionary = BuildDefaultRemapDictionary ();
 				
-				StreamWriter writer = null;
 				try {
-					writer = new StreamWriter (RemapFile);
-					writer.WriteLine ("# Docky Remap File");
-					writer.WriteLine ("# Add key value pairs following dictionary syntax");
-					writer.WriteLine ("# key, value");
-					writer.WriteLine ("# key, altKey, value");
-					writer.WriteLine ("# Lines starting with # are comments, otherwise # is a valid character");
-					
-					foreach (KeyValuePair<string, string> kvp in RemapDictionary) {
-						writer.WriteLine ("{0}, {1}", kvp.Key, kvp.Value);
+					using (StreamWriter writer = new StreamWriter (RemapFile)) {
+						writer.WriteLine ("# Docky Remap File");
+						writer.WriteLine ("# Add key value pairs following dictionary syntax");
+						writer.WriteLine ("# key, value");
+						writer.WriteLine ("# key, altKey, value");
+						writer.WriteLine ("# Lines starting with # are comments, otherwise # is a valid character");
+						
+						foreach (KeyValuePair<string, string> kvp in RemapDictionary) {
+							writer.WriteLine ("{0}, {1}", kvp.Key, kvp.Value);
+						}
+						writer.Close ();
 					}
-					writer.Close ();
-				} finally {
-					if (writer != null)
-						writer.Dispose ();
+				} catch {
 				}
 			} else {
 				RemapDictionary = new Dictionary<string, string> ();
 				
-				StreamReader reader = null;
 				try {
-					reader = new StreamReader (RemapFile);
-					
-					string line;
-					while (!reader.EndOfStream) {
-						line = reader.ReadLine ();
-						if (line.StartsWith ("#") || !line.Contains (","))
-							continue;
-						string [] array = line.Split (',');
-						if (array.Length < 2 || array [0].Length == 0)
-							continue;
-						
-						string val = array [array.Length - 1].Trim ().ToLower ();
-						if (string.IsNullOrEmpty (val))
-							continue;
-						
-						for (int i=0; i < array.Length - 1; i++) {
-							string key = array [i].Trim ().ToLower ();
-							if (string.IsNullOrEmpty (key))
+					using (StreamReader reader = new StreamReader (RemapFile)) {
+						string line;
+						while (!reader.EndOfStream) {
+							line = reader.ReadLine ();
+							if (line.StartsWith ("#") || !line.Contains (","))
 								continue;
-							RemapDictionary [key] = val;
+							string [] array = line.Split (',');
+							if (array.Length < 2 || array [0].Length == 0)
+								continue;
+							
+							string val = array [array.Length - 1].Trim ().ToLower ();
+							if (string.IsNullOrEmpty (val))
+								continue;
+							
+							for (int i=0; i < array.Length - 1; i++) {
+								string key = array [i].Trim ().ToLower ();
+								if (string.IsNullOrEmpty (key))
+									continue;
+								RemapDictionary [key] = val;
+							}
 						}
+						
+						reader.Close ();
 					}
-					
-					reader.Close ();
 				} catch {
 					Log.Error ("Could not read remap file");
 					RemapDictionary = BuildDefaultRemapDictionary ();
-				} finally {
-					if (reader != null)
-						reader.Dispose ();
 				}
 			}
 		}

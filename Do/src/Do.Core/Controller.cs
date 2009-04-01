@@ -99,6 +99,7 @@ namespace Do.Core
 		{
 			SetTheme (Do.Preferences.Theme);
 			Do.Preferences.ThemeChanged += OnThemeChanged;
+			Screen.Default.CompositedChanged += OnCompositingChanged;
 			
 			// Register Shortcuts
 			// TODO: Localize the text here.
@@ -191,13 +192,18 @@ namespace Do.Core
 						Catalog.GetString ("Selection mode"),
 						OnSelectionKeyPressEvent),
 					"Comma");
-			
 		}
 
 		void OnSummoned ()
 		{
 			if (Summoned == null) return;
 			Summoned (this, EventArgs.Empty);
+		}
+		
+		void OnCompositingChanged(object sender, EventArgs args)
+		{
+			UnsetTheme();
+			SetTheme(Do.Preferences.Theme);
 		}
 		
 		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)

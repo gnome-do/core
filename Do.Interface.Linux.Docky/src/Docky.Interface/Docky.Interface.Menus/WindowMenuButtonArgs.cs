@@ -17,14 +17,13 @@
 //
 
 using System;
-
 using Gdk;
-
 using Wnck;
 
 using Docky.Utilities;
 
 using Do.Interface;
+using Do.Interface.Wink;
 
 namespace Docky.Interface.Menus
 {

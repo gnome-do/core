@@ -66,8 +66,6 @@ FILES = \
 	src/Docky.Utilities/DockOrientation.cs \
 	src/Docky.Utilities/DockPreferences.cs \
 	src/Docky.Utilities/GtkUtils.cs \
-	src/Docky.Utilities/WindowControl.cs \
-	src/Docky.Utilities/WindowUtils.cs \
 	src/XLib/X11Atoms.cs \
 	src/XLib/Xlib.cs
 
@@ -90,6 +88,7 @@ REFERENCES =  \
 
 PROJECT_REFERENCES = \
 	Do.Interface.Linux \
+	Do.Interface.Wink \
 	Do.Platform \
 	Do.Universe
 
