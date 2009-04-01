@@ -113,11 +113,6 @@ namespace Docky.Interface
 			
 			if (Launcher == null) {
 				foreach (string guess in GetIconGuesses ()) {
-					if (pbuf != null) {
-						pbuf.Dispose ();
-						pbuf = null;
-					}
-					
 					bool found = IconProvider.PixbufFromIconName (guess, size, out pbuf);
 					if (found && (pbuf.Width == size || pbuf.Height == size))
 						break;
@@ -211,6 +206,14 @@ namespace Docky.Interface
 		{
 			List<string> guesses = new List<string> ();
 			
+			// open office hack...
+			if (VisibleWindows.Any () &&
+			    VisibleWindows.First ().ClassGroup != null &&
+			    VisibleWindows.First ().ClassGroup.ResClass.ToLower ().Contains ("openoffice")) {
+				yield return "openoffice";
+				yield break;
+			}
+			
 			string exec = Exec;
 			if (!string.IsNullOrEmpty (exec)) {
 				yield return exec;
@@ -238,9 +241,6 @@ namespace Docky.Interface
 			foreach (string s in guesses) {
 				yield return s;
 			}
-			
-			if (Name.Length > 4 && Name.Contains (" "))
-				yield return Name.Split (' ') [0].ToLower ();
 		}
 
 		string PrepName (string s)
