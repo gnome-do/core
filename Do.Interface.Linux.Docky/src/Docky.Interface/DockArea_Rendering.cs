@@ -207,6 +207,8 @@ namespace Docky.Interface
 		
 		void DrawDrock (Context cr)
 		{
+			Console.WriteLine (VerticalOffset);
+			Console.WriteLine (CursorIsOverDockArea);
 			Gdk.Rectangle dockArea = GetDockArea ();
 			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
 

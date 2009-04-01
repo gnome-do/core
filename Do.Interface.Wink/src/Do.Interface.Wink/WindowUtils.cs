@@ -287,19 +287,37 @@ namespace Do.Interface.Wink
 			return windows;
 		}
 		
+		/// <summary>
+		/// This method takes in an "execution string" from proc and applies a heureustic to try
+		/// to magic out the name of the actual executing application.  The executing binary is not
+		/// the desired target all the time.
+		/// </summary>
+		/// <param name="exec">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/>
+		/// </returns>
 		public static string ProcessExecString (string exec)
 		{
 			if (string.IsNullOrEmpty (exec))
 				return exec;
 			
+			// lower it and trim off white space so we can abuse whitespace a bit
 			exec = exec.ToLower ().Trim ();
 			
+			// if the user has specified a specific mapping, we can use that here
 			if (RemapDictionary.ContainsKey (exec))
 				return RemapDictionary [exec];
 			
+			// this is the "split" character or the argument separator.  If the string contains a null
+			// it was fetched from /proc/PID/cmdline and will be nicely split up. Otherwise things get a bit
+			// nasty, and it likely came from a .desktop file.
 			char splitChar = Convert.ToChar (0x0);
 			splitChar = exec.Contains (splitChar) ? splitChar : ' ';
 			
+			// this part is here soley for the remap file so that users may specify to remap based on just the name
+			// without the full path.  If no remap file match is found, the net effect of this is nothing.
 			if (exec.StartsWith ("/")) {
 				string first_part = exec.Split (splitChar) [0];
 				int length = first_part.Length;
@@ -315,25 +333,36 @@ namespace Do.Interface.Wink
 			
 			string [] parts = exec.Split (splitChar);
 			for (int i = 0; i < parts.Length; i++) {
-				if (parts [i].StartsWith ("-"))
+				// we're going to use this a lot
+				string out_val = parts [i];
+				
+				// arguments are useless
+				if (out_val.StartsWith ("-"))
 					continue;
 				
-				if (parts [i].Contains ("/"))
-					parts [i] = parts [i].Split ('/').Last ();
+				// we want the end of paths
+				if (out_val.Contains ("/"))
+					out_val = out_val.Split ('/').Last ();
 				
-				//wine apps
-				if (parts [i].Contains ("\\"))
-					parts [i] = parts [i].Split ('\\').Last ();
+				// wine apps can do it backwards... who knew?
+				if (out_val.Contains ("\\"))
+					out_val = out_val.Split ('\\').Last ();
 				
+				// null out our part if is a bad prefix
 				foreach (Regex regex in BadPrefixes) {
-					if (regex.IsMatch (parts [i])) {
-						parts [i] = null;
+					if (regex.IsMatch (out_val)) {
+						out_val = null;
 						break;
 					}
 				}
 				
-				if (!string.IsNullOrEmpty (parts [i])) {
-					string out_val = parts [i];
+				// check if it was a bad prefix...
+				if (!string.IsNullOrEmpty (out_val)) {
+					// sometimes we hide things with shell scripts.  This is the most common method of doing it.
+					if (out_val.EndsWith (".real"))
+						out_val = out_val.Substring (0, out_val.Length - ".real".Length);
+					
+					// give the remap dictionary one last shot at this
 					if (RemapDictionary.ContainsKey (out_val))
 						out_val = RemapDictionary [out_val];
 					return out_val;

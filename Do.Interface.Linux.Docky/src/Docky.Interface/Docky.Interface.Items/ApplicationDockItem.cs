@@ -317,6 +317,12 @@ namespace Docky.Interface
 				yield return new WindowMenuButtonArgs (window, window.Name, WindowIcon);
 			}
 		}
+		
+		protected override void Launch ()
+		{
+			if (Launcher != null)
+				Launcher.Run ();
+		}
 
 		public override void Dispose ()
 		{

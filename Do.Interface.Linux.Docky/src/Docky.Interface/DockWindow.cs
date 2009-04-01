@@ -243,6 +243,7 @@ namespace Docky.Interface
 				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + dock_area.DockHeight);
 				break;
 			}
+			
 			Display.Sync ();
 			
 			is_repositioned_hidden = false;
@@ -272,20 +273,21 @@ namespace Docky.Interface
 		public void WindowHideOffset (out int x, out int y)
 		{
 			x = y = 0;
+
+			Gdk.Rectangle main, geo;
+			main.Width = dock_area.Width;
+			main.Height = dock_area.Height;
+			GetBufferedPosition (out main.X, out main.Y);
+			geo = LayoutUtils.MonitorGemonetry ();
 			
-			if (!is_repositioned_hidden) {
-				return;
-			}
 			
-			Gdk.Rectangle main;
-			GetSize (out main.Width, out main.Height);
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
-				y = main.Height;
-				break;
+				y = main.Y - ((geo.Y + geo.Height) - main.Height);
+				return;
 			case DockOrientation.Top:
-				y = 0 - main.Height;
-				break;
+				y = main.Y - geo.Y;
+				return;
 			}
 		}
 		

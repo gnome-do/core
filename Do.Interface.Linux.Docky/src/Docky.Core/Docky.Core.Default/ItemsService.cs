@@ -522,15 +522,6 @@ namespace Docky.Core.Default
 			return DockItems.Contains (item) && 0 <= position && position < DockItems.Count;
 		}
 		
-		int LastNonTaskItemPosition ()
-		{
-			if (!OrderedItems.Any (di => !(di is ApplicationDockItem)))
-				return 0;
-			return OrderedItems
-				.Where (di => !(di is ApplicationDockItem))
-				.Max ((Func<AbstractDockItem, int>) (di => di.Position));
-		}
-		
 		/// <summary>
 		/// Returns the most used items out of GNOME Do and does a tiny bit of filtering and sorting on them
 		/// This is mostly to encourage a better first run experience, but overall this can be improved
@@ -632,7 +623,7 @@ namespace Docky.Core.Default
 					continue;
 				}
 				
-				if (item is ApplicationDockItem && position <= LastNonTaskItemPosition ()) {
+				if (item is ApplicationDockItem) {
 					ApplicationDockItem api = item as ApplicationDockItem;
 					
 					if (api.Launcher == null) continue;

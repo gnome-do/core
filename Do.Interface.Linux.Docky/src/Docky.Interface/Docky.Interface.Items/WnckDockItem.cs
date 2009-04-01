@@ -83,10 +83,7 @@ namespace Docky.Interface
 					.ThenBy (act => act.Name);
 		}
 		
-		protected virtual void Launch ()
-		{
-			return;
-		}
+		protected abstract void Launch ();
 		
 		public override void Scrolled (Gdk.ScrollDirection direction)
 		{

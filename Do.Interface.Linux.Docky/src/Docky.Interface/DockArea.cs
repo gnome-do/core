@@ -176,8 +176,11 @@ namespace Docky.Interface
 							break;
 						}
 					}
+					
 					CursorIsOverDockArea = dockRegion.Contains (cursor);
 				}
+				Console.WriteLine (cursor);
+				Console.WriteLine (dockRegion);
 				
 				// When we change over this boundry, it will normally trigger an animation, we need to be sure to catch it
 				if (CursorIsOverDockArea != cursorIsOverDockArea) {
