@@ -39,6 +39,8 @@ namespace Docky.Core.Default
 {
 	public class ItemsService : IItemsService
 	{
+		const int UpdateDelay = 20;
+		
 		// stores items tied with their original identifier so we can remove them later
 		Dictionary<string, AbstractDockItem> custom_items;
 		
@@ -262,7 +264,7 @@ namespace Docky.Core.Default
 		
 		void DelayUpdateItems ()
 		{
-			GLib.Timeout.Add (20, delegate {
+			GLib.Timeout.Add (UpdateDelay, delegate {
 				UpdateItems ();
 				return false;
 			});
@@ -355,18 +357,18 @@ namespace Docky.Core.Default
 					.GroupBy (w => SafeResClass (w));
 			
 			foreach (IEnumerable<Wnck.Window> windows in prunedWindows) {
-				ApplicationDockItem api = new ApplicationDockItem (windows);
+				ApplicationDockItem adi = new ApplicationDockItem (windows);
 
-				if (task_items.Any (di => di.Equals (api))) {
-					AbstractDockItem match = task_items.Where (di => di.Equals (api)).First ();
-					api.DockAddItem = match.DockAddItem;
-					api.Position = match.Position;
+				if (task_items.Any (di => di.Equals (adi))) {
+					AbstractDockItem match = task_items.Where (di => di.Equals (adi)).First ();
+					adi.DockAddItem = match.DockAddItem;
+					adi.Position = match.Position;
 				} else {
-					api.DockAddItem = DateTime.UtcNow;
+					adi.DockAddItem = DateTime.UtcNow;
 				}
 					
-				out_items.Add (api);
-				RegisterDockItem (api);
+				out_items.Add (adi);
+				RegisterDockItem (adi);
 			}
 			
 			foreach (AbstractDockItem item in task_items) {
@@ -374,9 +376,9 @@ namespace Docky.Core.Default
 				item.Dispose ();
 			}
 			
-			foreach (ApplicationDockItem api in out_items.OrderBy (di => di.DockAddItem)) {
-				if (api.Position == 0)
-					api.Position = LastPosition + 1;
+			foreach (ApplicationDockItem adi in out_items.OrderBy (di => di.DockAddItem)) {
+				if (adi.Position == 0)
+					adi.Position = LastPosition + 1;
 			}
 					
 			task_items.Clear ();
@@ -624,11 +626,11 @@ namespace Docky.Core.Default
 				}
 				
 				if (item is ApplicationDockItem) {
-					ApplicationDockItem api = item as ApplicationDockItem;
+					ApplicationDockItem adi = item as ApplicationDockItem;
 					
-					if (api.Launcher == null) continue;
+					if (adi.Launcher == null) continue;
 					
-					Item launcher = api.Launcher as Item;
+					Item launcher = adi.Launcher as Item;
 					if (launcher == null)
 						continue;
 					

@@ -52,7 +52,6 @@ namespace Do.Interface.Wink
 			Wnck.Screen.Default.WorkspaceCreated += HandleWorkspaceCreated;
 			Wnck.Screen.Default.WorkspaceDestroyed += HandleWorkspaceDestroyed;
 			
-//				Wnck.Screen.Default.ForceUpdate ();
 			UpdateViewports ();
 		}
 

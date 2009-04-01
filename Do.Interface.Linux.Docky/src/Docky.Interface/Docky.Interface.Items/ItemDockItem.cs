@@ -166,7 +166,7 @@ namespace Docky.Interface
 			foreach (Wnck.Window w in Windows) {
 				try {
 					w.StateChanged -= HandleStateChanged;
-					w.NameChanged += HandleNameChanged;
+					w.NameChanged -= HandleNameChanged;
 				} catch {}
 			}
 		}

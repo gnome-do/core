@@ -30,6 +30,7 @@ namespace Do.Interface.Wink
 	{
 		
 		const int SleepTime = 10;
+		const int FocusDelay = 200;
 		
 		/// <summary>
 		/// Handles intelligent minimize/restoring of windows.  If one or more windows is minimized, it restores
@@ -107,8 +108,8 @@ namespace Do.Interface.Wink
 			
 			// we do this to make sure our active window is also at the front... Its a tricky thing to do.
 			// sometimes compiz plays badly.  This hacks around it
-			uint time = Gtk.Global.CurrentEventTime + 200;
-			GLib.Timeout.Add (200, delegate {
+			uint time = Gtk.Global.CurrentEventTime + FocusDelay;
+			GLib.Timeout.Add (FocusDelay, delegate {
 				try { //unimportant if this fails, its just "nice"
 					windows.Where (w => w.IsInViewport (w.Screen.ActiveWorkspace) && !w.IsMinimized).First ().Activate (time);
 				} catch { }
@@ -137,8 +138,8 @@ namespace Do.Interface.Wink
 			
 			// we do this to make sure our active window is also at the front... Its a tricky thing to do.
 			// sometimes compiz plays badly.  This hacks around it
-			uint time = Gtk.Global.CurrentEventTime + 200;
-			GLib.Timeout.Add (200, delegate {
+			uint time = Gtk.Global.CurrentEventTime + FocusDelay;
+			GLib.Timeout.Add (FocusDelay, delegate {
 				targetWindow.Activate (time);
 				return false;
 			});
