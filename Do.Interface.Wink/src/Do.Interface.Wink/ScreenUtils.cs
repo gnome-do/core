@@ -87,17 +87,6 @@ namespace Do.Interface.Wink
 				screen.ToggleShowingDesktop (false);
 		}
 		
-		public static IEnumerable<Window> ViewportWindows (Viewport viewport)
-		{
-			var windows = WindowUtils.GetWindows ()
-			        .Where (w => w.WindowType != WindowType.Dock && !w.IsSkipTasklist);
-			
-			foreach (Window window in windows) {
-				if (viewport.WindowCenterInViewport (window))
-					yield return window;
-			}
-		}
-		
 		static void UpdateViewports ()
 		{
 			viewports = new List<Viewport> ();

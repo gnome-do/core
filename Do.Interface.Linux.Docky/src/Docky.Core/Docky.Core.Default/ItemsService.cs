@@ -312,11 +312,11 @@ namespace Docky.Core.Default
 			
 			DateTime currentTime = DateTime.UtcNow;
 			foreach (Item item in mostUsedItems) {
-				if (local_cust.Any (di => di.Element == item))
+				if (local_cust.Any (di => di.Element.UniqueId == item.UniqueId))
 					continue;
 				
 				if (old_items.Any (di => di.Element == item)) {
-					stat_items.AddRange (old_items.Where (di => di.Element == item).Cast<AbstractDockItem> ());
+					stat_items.AddRange (old_items.Where (di => di.Element.UniqueId == item.UniqueId).Cast<AbstractDockItem> ());
 				} else {
 					ItemDockItem di = new ItemDockItem (item);
 					RegisterDockItem (di);
