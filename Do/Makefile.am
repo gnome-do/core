@@ -16,6 +16,7 @@ FILES = \
 	gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/CorePreferences.cs \
+	src/CoreKeybindings.cs \
 	src/Do.Core/Do.Core.Addins/AddinClassifier.cs \
 	src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs \
 	src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs \
@@ -31,6 +32,8 @@ FILES = \
 	src/Do.Core/PluginManager.cs \
 	src/Do.Core/RelevanceProvider.cs \
 	src/Do.Core/SecondSearchController.cs \
+	src/Do.Core/Shortcut.cs \
+	src/Do.Core/ShortcutCallback.cs \
 	src/Do.Core/SimpleSearchContext.cs \
 	src/Do.Core/SimpleSearchController.cs \
 	src/Do.Core/ThirdSearchController.cs \

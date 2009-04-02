@@ -21,6 +21,7 @@
 
 using System;
 using Gtk;
+using Mono.Unix;
 
 namespace Do.UI
 {
@@ -29,22 +30,29 @@ namespace Do.UI
 		enum Column {
 			Action = 0,
 			Binding,
+			DefaultKeybinding,
+			ShortcutName, 
 			NumColumns
 		}
 		
 		public KeybindingTreeView ()
 		{	
-			Model = new ListStore (typeof (string), typeof (string));
+			Model = new ListStore (typeof (string), typeof (string), typeof (string), typeof (string));
 			
 			CellRendererText actionCell = new CellRendererText ();
 			actionCell.Width = 150;
-			InsertColumn (-1, "Action", actionCell, "text", (int)Column.Action);
+			InsertColumn (-1, Catalog.GetString ("Action"), actionCell, "text", (int)Column.Action);
 			
 			CellRendererAccel bindingCell = new CellRendererAccel ();
+			bindingCell.AccelMode = CellRendererAccelMode.Gtk;
 			bindingCell.Editable = true;
 			bindingCell.AccelEdited += new AccelEditedHandler (OnAccelEdited);
 			bindingCell.AccelCleared += new AccelClearedHandler (OnAccelCleared);
-			InsertColumn (-1, "Shortcut", bindingCell, "text", (int)Column.Binding);
+			InsertColumn (-1, Catalog.GetString ("Shortcut"), bindingCell, "text", (int)Column.Binding);
+			
+			CellRendererText defaultbindingCell = new CellRendererText ();
+			actionCell.Width = 150;
+			InsertColumn (-1, Catalog.GetString ("Default Shortcut"), defaultbindingCell, "text", (int)Column.DefaultKeybinding);
 			
 			RowActivated += new RowActivatedHandler (OnRowActivated);
 			ButtonPressEvent += new ButtonPressEventHandler (OnButtonPress);
@@ -57,9 +65,11 @@ namespace Do.UI
 		{
 			ListStore store = Model as ListStore;
 			store.Clear ();
-			
-			store.AppendValues ("Summon", Do.Preferences.SummonKeybinding);
-			store.AppendValues ("Text Mode", Do.Preferences.TextModeKeybinding);
+
+			foreach (Shortcut sc in Do.Keybindings.Shortcuts) {
+				store.AppendValues (sc.FriendlyName, Do.Keybindings.GetKeybinding (sc), 
+					Do.Keybindings.GetDefaultKeybinding (sc), sc.ShortcutName);
+			}
 		}
 		
 		[GLib.ConnectBefore]
@@ -80,6 +90,15 @@ namespace Do.UI
 			GrabFocus ();
 			SetCursor (args.Path, GetColumn ((int)Column.Binding), true);
 		}
+
+		private bool ClearPreviousBinding (TreeModel model, TreePath path, TreeIter treeiter, string keyBinding) 
+		{
+			string binding = model.GetValue (treeiter, (int)Column.Binding) as string;
+			if (binding == keyBinding) {
+				model.SetValue (treeiter, (int)Column.Binding, "");
+			}
+			return false;
+		}
 		
 		private void OnAccelEdited (object o, AccelEditedArgs args)
 		{
@@ -91,7 +110,11 @@ namespace Do.UI
 			
 			string realKey = Gtk.Accelerator.Name (args.AccelKey, args.AccelMods);
 			
+			// Look for any other rows that have the same binding and then zero that binding out
+			Model.Foreach ((model, path, treeiter) => ClearPreviousBinding (model, path, treeiter, realKey));
+
 			store.SetValue (iter, (int)Column.Binding, realKey);
+
 			SaveBindings ();
 		}
 		
@@ -102,7 +125,9 @@ namespace Do.UI
 			
 			store = Model as ListStore;
 			store.GetIter (out iter, new TreePath (args.PathString));
-			store.SetValue (iter, (int)Column.Binding, "DISABLED");
+			store.SetValue (iter, (int)Column.Binding, "");
+
+			SaveBindings ();
 		}
 		
 		private void SaveBindings ()
@@ -112,20 +137,15 @@ namespace Do.UI
 		
 		private bool SaveBindingsForeachFunc (TreeModel model, TreePath path, TreeIter iter)
 		{
-			string action, binding;
-			action = model.GetValue (iter, (int)Column.Action) as string;
+			string binding, shortcutname;
+			binding = model.GetValue (iter, (int)Column.Binding) as string;
+			shortcutname = model.GetValue (iter, (int)Column.ShortcutName) as string;
 			
-			switch (action.ToLower ()) {
-			case "summon":
-				binding = model.GetValue (iter, (int)Column.Binding) as string;
-				Do.Preferences.SummonKeybinding = binding;
-				break;
-			case "text mode":
-				binding = model.GetValue (iter, (int)Column.Binding) as string;
-				Do.Preferences.TextModeKeybinding = binding;
-				break;
-			}
+			if (binding != null && binding != "DISABLED" && binding != Do.Keybindings.GetKeybinding (shortcutname))
+				Do.Keybindings.BindShortcut (shortcutname, binding);
 			return false;
 		}
+		
 	}
+
 }

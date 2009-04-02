@@ -20,22 +20,21 @@
 
 using System;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using Env = System.Environment;
 
 using Do.Platform;
 
 namespace Do
 {
-	
 	class CorePreferences  {
 
 		#region Key constants and default values
 		const string ThemeKey = "Theme";
 		const string QuietStartKey = "QuietStart";
 		const string StartAtLoginKey = "StartAtLogin";
-		const string SummonKeybindingKey = "SummonKeybinding";
 		const string AlwaysShowResultsKey = "AlwaysShowResults";
-		const string TextModeKeybindingKey = "TextModeKeybinding";
 
 		const string ThemeDefaultValue = "Classic Interface";
 		const bool QuietStartDefaultValue = false;
@@ -46,10 +45,11 @@ namespace Do
 
 		const string DebugOption = "--debug";
 		const string LogToFileOption = "--log-to-file";
+                
+
 		#endregion
 
 		public event EventHandler<PreferencesChangedEventArgs> ThemeChanged;
-		public event EventHandler<PreferencesChangedEventArgs> SummonKeybindingChanged;
 		
 		IPreferences Preferences { get; set; }
 		
@@ -69,16 +69,6 @@ namespace Do
 
 		public bool Debug {
 			get { return CorePreferences.PeekDebug; }
-		}
-
-		public string SummonKeybinding {
-			get { return Preferences.Get (SummonKeybindingKey, SummonKeybindingDefaultValue); }
-			set { Preferences.Set (SummonKeybindingKey, value); }
-		}
-		
-		public string TextModeKeybinding {
-			get { return Preferences.Get (TextModeKeybindingKey, TextModeKeybindingDefaultValue); }
-			set { Preferences.Set (TextModeKeybindingKey, value); }
 		}
 
 		public string Theme {
@@ -106,16 +96,13 @@ namespace Do
 			return Env.GetCommandLineArgs ().Contains (option);
 		}
 
+
 		void PreferencesChanged (object sender, PreferencesChangedEventArgs e)
 		{
 			switch (e.Key) {
 			case ThemeKey:
 				if (ThemeChanged != null)
 					ThemeChanged (this, e);
-				break;
-			case SummonKeybindingKey:
-				if (SummonKeybindingChanged != null)
-					SummonKeybindingChanged (this, e);
 				break;
 			}
 		}
