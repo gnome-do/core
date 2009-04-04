@@ -70,7 +70,7 @@ namespace Do.Interface.Wink
 			UpdateViewports ();
 		}
 		
-		public static bool DesktopShow (Screen screen)
+		public static bool DesktopShown (Screen screen)
 		{
 			return screen.ShowingDesktop;
 		}

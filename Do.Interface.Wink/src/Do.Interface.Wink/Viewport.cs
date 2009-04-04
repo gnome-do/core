@@ -158,6 +158,14 @@ namespace Do.Interface.Wink
 			}
 		}
 		
+		public void ShowDesktop ()
+		{
+			if (!ScreenUtils.DesktopShown (parent.Screen))
+				ScreenUtils.ShowDesktop (parent.Screen);
+			else
+				ScreenUtils.UnshowDesktop (parent.Screen);
+		}
+		
 		public void Tile ()
 		{
 			IEnumerable<Wnck.Window> windows = Windows ().Where (w => !w.IsMinimized);
