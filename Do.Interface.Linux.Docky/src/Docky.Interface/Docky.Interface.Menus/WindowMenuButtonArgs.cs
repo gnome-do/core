@@ -38,7 +38,6 @@ namespace Docky.Interface.Menus
 				return (window.IsMinimized) ? .5 : base.IconOpacity;
 			}
 		}
-
 		
 		public WindowMenuButtonArgs (Wnck.Window window, string description, string icon) : base (description, icon)
 		{

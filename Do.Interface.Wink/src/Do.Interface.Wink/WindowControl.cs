@@ -30,6 +30,7 @@ namespace Do.Interface.Wink
 	{
 		
 		const int SleepTime = 10;
+		const int FocusDelay = 200;
 		
 		/// <summary>
 		/// Handles intelligent minimize/restoring of windows.  If one or more windows is minimized, it restores
@@ -88,11 +89,18 @@ namespace Do.Interface.Wink
 		
 		public static void FocusWindows (IEnumerable<Window> windows)
 		{
-			foreach (Window window in windows.Reverse ()) {
-				if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized) {
-					window.CenterAndFocusWindow ();
-					System.Threading.Thread.Sleep (SleepTime);
+			if (!windows.Any ())
+				return;
+			
+			if (windows.Any (w => w.IsInViewport (w.Screen.ActiveWorkspace))) {
+				foreach (Window window in windows.Reverse ()) {
+					if (window.IsInViewport (window.Screen.ActiveWorkspace) && !window.IsMinimized) {
+						window.CenterAndFocusWindow ();
+						System.Threading.Thread.Sleep (SleepTime);
+					}
 				}
+			} else {
+				windows.First ().CenterAndFocusWindow ();
 			}
 			
 			if (windows.Count () <= 1)
@@ -100,9 +108,11 @@ namespace Do.Interface.Wink
 			
 			// we do this to make sure our active window is also at the front... Its a tricky thing to do.
 			// sometimes compiz plays badly.  This hacks around it
-			uint time = Gtk.Global.CurrentEventTime + 200;
-			GLib.Timeout.Add (200, delegate {
-				windows.Where (w => w.IsInViewport (w.Screen.ActiveWorkspace) && !w.IsMinimized).First ().Activate (time);
+			uint time = Gtk.Global.CurrentEventTime + FocusDelay;
+			GLib.Timeout.Add (FocusDelay, delegate {
+				try { //unimportant if this fails, its just "nice"
+					windows.Where (w => w.IsInViewport (w.Screen.ActiveWorkspace) && !w.IsMinimized).First ().Activate (time);
+				} catch { }
 				return false;
 			});
 		}
@@ -128,8 +138,8 @@ namespace Do.Interface.Wink
 			
 			// we do this to make sure our active window is also at the front... Its a tricky thing to do.
 			// sometimes compiz plays badly.  This hacks around it
-			uint time = Gtk.Global.CurrentEventTime + 200;
-			GLib.Timeout.Add (200, delegate {
+			uint time = Gtk.Global.CurrentEventTime + FocusDelay;
+			GLib.Timeout.Add (FocusDelay, delegate {
 				targetWindow.Activate (time);
 				return false;
 			});
@@ -185,6 +195,17 @@ namespace Do.Interface.Wink
 		public static void MaximizeWindow (Window window)
 		{
 			window.Maximize ();
+		}
+		
+		public static void MoveToWorkspace (Window window, Workspace workspace)
+		{
+			MoveToWorkspace (new [] {window}, workspace);
+		}
+		
+		public static void MoveToWorkspace (IEnumerable<Window> windows, Workspace workspace)
+		{
+			foreach (Window window in windows.Where (w => w.Workspace != workspace))
+				window.MoveToWorkspace (workspace);
 		}
 		
 		/// <summary>

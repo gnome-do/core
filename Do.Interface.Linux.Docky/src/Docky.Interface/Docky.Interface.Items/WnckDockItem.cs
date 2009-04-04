@@ -42,20 +42,26 @@ namespace Docky.Interface
 	
 	public abstract class WnckDockItem : AbstractDockItem
 	{
+		// a bad hack, but it works
+		static string [] blacklist = new [] {
+			"CopyToClipboardAction", 
+			"WindowFocusAction",
+		};
+		
 		int last_raised;
 
 		DateTime last_scroll = new DateTime (0);
 		TimeSpan scroll_rate = new TimeSpan (0, 0, 0, 0, 300);
 		
-		protected abstract IEnumerable<Wnck.Application> Applications { get; }
+		public abstract IEnumerable<Wnck.Window> Windows { get; }
 		
 		protected IEnumerable<Wnck.Window> VisibleWindows {
-			get { return Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist); }
+			get { return Windows.Where (w => !w.IsSkipTasklist); }
 		}
 		
 		protected bool HasVisibleApps {
 			get {
-				if (Applications == null)
+				if (Windows == null)
 					return false;
 				return VisibleWindows.Any ();
 			}
@@ -69,7 +75,7 @@ namespace Docky.Interface
 		protected IEnumerable<Act> ActionsForItem (Item item) 
 		{
 			return Services.Core.GetActionsForItemOrderedByRelevance (item, false)
-				    .Where (act => act.GetType ().Name != "CopyToClipboardAction")
+				    .Where (act => !blacklist.Contains (act.GetType ().Name))
 					.OrderByDescending (act => act.GetType ().Name != "WindowCloseAction")
 					.ThenByDescending (act => act.GetType ().Name != "WindowMaximizeAction")
 					.ThenByDescending (act => act.GetType ().Name != "WindowMinimizeAction")
@@ -77,10 +83,7 @@ namespace Docky.Interface
 					.ThenBy (act => act.Name);
 		}
 		
-		protected virtual void Launch ()
-		{
-			return;
-		}
+		protected abstract void Launch ();
 		
 		public override void Scrolled (Gdk.ScrollDirection direction)
 		{
@@ -115,12 +118,12 @@ namespace Docky.Interface
 		
 		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)
 		{
-			if (!Applications.Any () || !HasVisibleApps || button == 2) {
+			if (!Windows.Any () || !HasVisibleApps || button == 2) {
 				AnimationType = ClickAnimationType.Bounce;
 				Launch ();
 			} else if (button == 1) {
 				AnimationType = ClickAnimationType.Darken;
-				WindowUtils.PerformLogicalClick (Applications);
+				WindowUtils.PerformLogicalClick (Windows);
 			} else {
 				AnimationType = ClickAnimationType.None;
 			}

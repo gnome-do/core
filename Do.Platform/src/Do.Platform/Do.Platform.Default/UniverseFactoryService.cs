@@ -41,6 +41,12 @@ namespace Do.Platform.Default
 			Log.Debug ("Default IUniverseFactoryService cannot return a useful IApplicationItem.");
 			return new EmptyApplicationItem ();
 		}
+		
+		public IApplicationItem MaybeApplicationItemFromCommand (string cmd)
+		{
+			Log.Debug ("Default IUniverseFactoryService cannot return a useful IApplicationItem.");
+			return null;
+		}
 
 		class EmptyFileItem : EmptyItem, IFileItem
 		{

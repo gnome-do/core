@@ -18,8 +18,8 @@ dbus-send --session --type=method_call --dest='org.gnome.Do' \
 
 # If Do is not running, run it.
 if pgrep -u "`id -un`" '^gnome-do$' >/dev/null; then
-	mono "$GNOME_DO_EXE" "$@"
+	mono --debug "$GNOME_DO_EXE" "$@" > ~/do.trace 2>&1
 fi
 while [ "$?" -eq "20" ]; do
-	mono "$GNOME_DO_EXE" "$@"
+	mono --debug "$GNOME_DO_EXE" "$@" > ~/do.trace 2>&1
 done

@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Docky.XLib {
+namespace Do.Interface.Xlib {
 
 	public enum PropertyMode
 	{
@@ -52,7 +52,7 @@ namespace Docky.XLib {
 		BottomEnd = 11
 	}
 	
-	internal class Xlib {
+	public static class Xlib {
 		const string libX11 = "X11";
 		const string libGdkX11 = "libgdk-x11";
 		
@@ -61,7 +61,24 @@ namespace Docky.XLib {
 		
 		[DllImport (libGdkX11)]
 		static extern IntPtr gdk_x11_drawable_get_xdisplay (IntPtr handle);
+		
+		[DllImport (libGdkX11)]
+        static extern IntPtr gdk_x11_display_get_xdisplay (IntPtr display);
 
+		[DllImport (libX11)]
+		public extern static IntPtr XOpenDisplay (IntPtr display);
+		
+		[DllImport (libX11)]
+		public extern static int XInternAtoms (IntPtr display, string[] atom_names, int atom_count, bool only_if_exists, IntPtr[] atoms);
+		
+		[DllImport (libX11)]
+		extern static int XChangeProperty (IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, IntPtr[] data, int nelements);
+	
+		[DllImport (libX11)]
+		public extern static int XGetWindowProperty (IntPtr display, IntPtr window, IntPtr atom, IntPtr long_offset, 
+		                                             IntPtr long_length, bool delete, IntPtr req_type, out IntPtr actual_type, 
+		                                             out int actual_format, out IntPtr nitems, out IntPtr bytes_after, out IntPtr prop);
+		
 		public static IntPtr GdkWindowX11Xid (Gdk.Window window)
 		{
 			return gdk_x11_drawable_get_xid (window.Handle);
@@ -72,19 +89,16 @@ namespace Docky.XLib {
 			return gdk_x11_drawable_get_xdisplay (window.Handle);
 		}
 		
-		[DllImport (libX11)]
-		public extern static IntPtr XOpenDisplay (IntPtr display);
+		public static IntPtr GdkDisplayXDisplay (Gdk.Display display)
+		{
+			return gdk_x11_display_get_xdisplay (display.Handle);
+		}
 		
-		[DllImport (libX11)]
-		public extern static int XInternAtoms (IntPtr display, string[] atom_names, int atom_count, bool only_if_exists, IntPtr[] atoms);
-		
-		[DllImport (libX11)]
-		extern static int XChangeProperty (IntPtr display, IntPtr window, IntPtr property, IntPtr type, int format, int mode, IntPtr[] data, int nelements);
-	
 		public static int XChangeProperty (Gdk.Window window, IntPtr property, IntPtr type, int mode, uint[] data)
 		{
 			IntPtr [] dataArray = data.Select (i => (IntPtr) i).ToArray ();
 			return XChangeProperty (GdkDrawableXDisplay (window), GdkWindowX11Xid (window), property, type, 32, mode, dataArray, data.Length); 
 		}
+
 	}
 }

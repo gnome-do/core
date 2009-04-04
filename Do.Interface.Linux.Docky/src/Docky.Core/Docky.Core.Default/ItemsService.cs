@@ -39,6 +39,8 @@ namespace Docky.Core.Default
 {
 	public class ItemsService : IItemsService
 	{
+		const int UpdateDelay = 20;
+		
 		// stores items tied with their original identifier so we can remove them later
 		Dictionary<string, AbstractDockItem> custom_items;
 		
@@ -199,14 +201,15 @@ namespace Docky.Core.Default
 
 		void HandleWindowOpened(object o, WindowOpenedArgs args)
 		{
+			// we do a delayed update so that we allow a small gap for wnck to catch up
 			if (!args.Window.IsSkipTasklist)
-				UpdateItems ();
+				DelayUpdateItems ();
 		}
 
 		void HandleWindowClosed(object o, WindowClosedArgs args)
 		{
 			if (!args.Window.IsSkipTasklist)
-				UpdateItems ();
+				DelayUpdateItems ();
 		}
 
 		void HandleUniverseInitialized(object sender, EventArgs e)
@@ -259,16 +262,24 @@ namespace Docky.Core.Default
 				item.Position = i++;
 		}
 		
+		void DelayUpdateItems ()
+		{
+			GLib.Timeout.Add (UpdateDelay, delegate {
+				UpdateItems ();
+				return false;
+			});
+		}
+		
 		void UpdateItems ()
 		{
 			if (!UpdatesEnabled)
 				return;
 			
-			UpdateStatItems ();
-			
 			if (!CustomItemsRead) {
 				foreach (string s in ReadCustomItems ())
 					InternalAddItemToDock (s, LastPosition + 1);
+				
+				UpdateStatItems ();
 				
 				Dictionary<string, int> sortDictionary = ReadSortDictionary ();
 				foreach (ItemDockItem item in OrderedItems.Where (di => di is ItemDockItem)) {
@@ -277,6 +288,8 @@ namespace Docky.Core.Default
 				}
 				
 				CustomItemsRead = true;
+			} else {
+				UpdateStatItems ();
 			}
 			
 			UpdateTaskItems ();
@@ -299,11 +312,11 @@ namespace Docky.Core.Default
 			
 			DateTime currentTime = DateTime.UtcNow;
 			foreach (Item item in mostUsedItems) {
-				if (local_cust.Any (di => di.Element == item))
+				if (local_cust.Any (di => di.Element.UniqueId == item.UniqueId))
 					continue;
 				
 				if (old_items.Any (di => di.Element == item)) {
-					stat_items.AddRange (old_items.Where (di => di.Element == item).Cast<AbstractDockItem> ());
+					stat_items.AddRange (old_items.Where (di => di.Element.UniqueId == item.UniqueId).Cast<AbstractDockItem> ());
 				} else {
 					ItemDockItem di = new ItemDockItem (item);
 					RegisterDockItem (di);
@@ -329,35 +342,33 @@ namespace Docky.Core.Default
 		
 		void UpdateTaskItems ()
 		{
-			foreach (ItemDockItem item in OrderedItems.Where (di => di is ItemDockItem)) {
+			foreach (ItemDockItem item in OrderedItems.Where (di => di is ItemDockItem))
 				item.UpdateApplication ();
-			}
 			
 			List<ApplicationDockItem> out_items = new List<ApplicationDockItem> ();
 
-			IEnumerable<int> knownPids = OrderedItems
+			IEnumerable<Window> knownWindows = OrderedItems
 				    .Where (di => di is ItemDockItem)
 					.Cast<ItemDockItem> ()
-					.SelectMany (di => di.Pids);
+					.SelectMany (di => di.Windows);
 			
-			IEnumerable<Application> prunedApps = WindowUtils.GetApplications ()
-				.Where (app => app.Windows.Any (w => !w.IsSkipTasklist))
-				.Where (app => !knownPids.Contains (app.Pid) && app.Windows.Any ());
+			var prunedWindows = WindowUtils.GetWindows ()
+				    .Where (w => !w.IsSkipTasklist && !knownWindows.Contains (w))
+					.GroupBy (w => SafeResClass (w));
 			
-			foreach (IEnumerable<Wnck.Application> apps in prunedApps
-			         .GroupBy (app => (app as Wnck.Application).Windows [0].ClassGroup.ResClass)) {
-				ApplicationDockItem api = new ApplicationDockItem (apps);
+			foreach (IEnumerable<Wnck.Window> windows in prunedWindows) {
+				ApplicationDockItem adi = new ApplicationDockItem (windows);
 
-				if (task_items.Any (di => di.Equals (api))) {
-					AbstractDockItem match = task_items.Where (di => di.Equals (api)).First ();
-					api.DockAddItem = match.DockAddItem;
-					api.Position = match.Position;
+				if (task_items.Any (di => di.Equals (adi))) {
+					AbstractDockItem match = task_items.Where (di => di.Equals (adi)).First ();
+					adi.DockAddItem = match.DockAddItem;
+					adi.Position = match.Position;
 				} else {
-					api.DockAddItem = DateTime.UtcNow;
+					adi.DockAddItem = DateTime.UtcNow;
 				}
 					
-				out_items.Add (api);
-				RegisterDockItem (api);
+				out_items.Add (adi);
+				RegisterDockItem (adi);
 			}
 			
 			foreach (AbstractDockItem item in task_items) {
@@ -365,13 +376,20 @@ namespace Docky.Core.Default
 				item.Dispose ();
 			}
 			
-			foreach (ApplicationDockItem api in out_items.OrderBy (di => di.DockAddItem)) {
-				if (api.Position == 0)
-					api.Position = LastPosition + 1;
+			foreach (ApplicationDockItem adi in out_items.OrderBy (di => di.DockAddItem)) {
+				if (adi.Position == 0)
+					adi.Position = LastPosition + 1;
 			}
 					
 			task_items.Clear ();
 			task_items.AddRange (out_items.Cast<AbstractDockItem> ());
+		}
+		
+		string SafeResClass (Wnck.Window window)
+		{
+			if (window.ClassGroup != null && window.ClassGroup.ResClass != null)
+				return window.ClassGroup.ResClass;
+			return string.Empty;
 		}
 		
 		void OnDockItemsChanged ()
@@ -506,15 +524,6 @@ namespace Docky.Core.Default
 			return DockItems.Contains (item) && 0 <= position && position < DockItems.Count;
 		}
 		
-		int LastNonTaskItemPosition ()
-		{
-			if (!OrderedItems.Any (di => !(di is ApplicationDockItem)))
-				return 0;
-			return OrderedItems
-				.Where (di => !(di is ApplicationDockItem))
-				.Max ((Func<AbstractDockItem, int>) (di => di.Position));
-		}
-		
 		/// <summary>
 		/// Returns the most used items out of GNOME Do and does a tiny bit of filtering and sorting on them
 		/// This is mostly to encourage a better first run experience, but overall this can be improved
@@ -616,19 +625,22 @@ namespace Docky.Core.Default
 					continue;
 				}
 				
-				if (item is ApplicationDockItem && position <= LastNonTaskItemPosition ()) {
-					ApplicationDockItem api = item as ApplicationDockItem;
-					string desktop_file = api.DesktopFile;
+				if (item is ApplicationDockItem) {
+					ApplicationDockItem adi = item as ApplicationDockItem;
 					
-					if (string.IsNullOrEmpty (desktop_file)) continue;
+					if (adi.Launcher == null) continue;
 					
-					AbstractDockItem newItem = MaybeCreateCustomItem (desktop_file);
+					Item launcher = adi.Launcher as Item;
+					if (launcher == null)
+						continue;
 					
-					if (newItem == null) continue;
+					AbstractDockItem newItem = new ItemDockItem (launcher);
 					
 					newItem.Position = item.Position;
 					newItem.DockAddItem = item.DockAddItem;
-					custom_items [desktop_file] = newItem;
+					custom_items [launcher.UniqueId] = newItem;
+					
+					RegisterDockItem (newItem);
 					UpdateItems ();
 					WriteData ();
 				}
