@@ -201,9 +201,9 @@ namespace Docky.Interface
 		{
 			this.window = window;
 			
-			SetSize ();
-			
 			PositionProvider = new ItemPositionProvider (this);
+			
+			SetSize ();
 			
 			AnimationState = new DockAnimationState ();
 			BuildAnimationStateEngine ();
@@ -240,7 +240,7 @@ namespace Docky.Interface
 			geo = LayoutUtils.MonitorGemonetry ();
 			
 			Width = geo.Width;
-			Height = 300;
+			Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + 30;
 			
 			SetSizeRequest (Width, Height);
 		}
@@ -333,6 +333,9 @@ namespace Docky.Interface
 		
 		void Reconfigure ()
 		{
+			if (!Visible || !IsRealized || drag_resizing)
+				return;
+			
 			SetSize ();
 			ResetBuffers ();
 			PositionProvider.ForceUpdate ();

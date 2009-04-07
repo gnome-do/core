@@ -425,7 +425,7 @@ namespace Docky.Interface
 			// a null.  This allows us to draw nothing at all instead of rendering a
 			// blank surface (which is slow)
 			if (!PopupMenu.Visible && PositionProvider.IndexAtPosition (Cursor) == icon &&
-			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && !GtkDragging) {
+			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && !GtkDragging && !drag_resizing) {
 
 				Gdk.Point textPoint;
 				textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (DockPreferences.TextWidth >> 1);
@@ -602,7 +602,6 @@ namespace Docky.Interface
 				return false;
 			
 			RenderTime = DateTime.UtcNow;
-			
 			Context cr;
 			if (backbuffer == null) {
 				cr = Gdk.CairoHelper.Create (GdkWindow);
@@ -628,6 +627,7 @@ namespace Docky.Interface
 			cr = Gdk.CairoHelper.Create (GdkWindow);
 			
 			Gdk.Point finalTarget = new Gdk.Point (0, 0).RelativeMovePoint (VerticalOffset, RelativeMove.Outward);
+			
 			cr.SetSource (backbuffer, finalTarget.X, finalTarget.Y);
 			
 			cr.Operator = Operator.Source;
@@ -659,7 +659,8 @@ namespace Docky.Interface
 		
 		void RequestFullRender ()
 		{
-			RenderData.ForceFullRender = true;
+			if (RenderData != null)
+				RenderData.ForceFullRender = true;
 		}
 		
 		void ResetBuffers()
@@ -679,10 +680,12 @@ namespace Docky.Interface
 				input_area_buffer = null;
 			}
 			
-			foreach (Surface sr in painter_surfaces.Values) {
-				sr.Destroy ();
+			if (painter_surfaces != null) {
+				foreach (Surface sr in painter_surfaces.Values) {
+					sr.Destroy ();
+				}
+				painter_surfaces.Clear ();
 			}
-			painter_surfaces.Clear ();
 			
 			RequestFullRender ();
 		}

@@ -312,6 +312,8 @@ namespace Docky.Interface
 			AnimatedDraw ();
 			
 			ResetCursorTimer ();
+			
+			Reconfigure ();
 		}
 		
 		void HandleDragMotion ()

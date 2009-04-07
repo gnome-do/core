@@ -52,6 +52,7 @@ namespace Docky.Interface
 		bool is_repositioned_hidden;
 		bool presented;
 		int buffer_x, buffer_y;
+		int buffer_width, buffer_height;
 		
 		public new string Name {
 			get { return "Docky"; }
@@ -221,6 +222,9 @@ namespace Docky.Interface
 		
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
+			buffer_width = allocation.Width;
+			buffer_height = allocation.Height;
+			
 			base.OnSizeAllocated (allocation);
 			Reposition ();
 		}
@@ -292,7 +296,6 @@ namespace Docky.Interface
 				return;
 			}
 		}
-		
 				
 		public void GetBufferedPosition (out int x, out int y)
 		{
@@ -300,6 +303,14 @@ namespace Docky.Interface
 				GetPosition (out buffer_x, out buffer_y);
 			x = buffer_x;
 			y = buffer_y;
+		}
+		
+		public void GetBufferedSize (out int width, out int height)
+		{
+			if (buffer_width == 0 && buffer_height == 0)
+				GetSize (out buffer_width, out buffer_height);
+			width = buffer_width;
+			height = buffer_height;
 		}
 		
 		public void DelaySetStruts ()
