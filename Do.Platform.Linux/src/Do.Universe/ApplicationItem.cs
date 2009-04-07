@@ -88,10 +88,15 @@ namespace Do.Universe.Linux {
 					path = Path.GetFileName (path);
 				} catch { continue; }
 				
-				if (regex.IsMatch (path) || regex.IsMatch (item.Exec)) {
-					appItem = item;
-					if (item.IsAppropriateForCurrentDesktop && !item.Hidden)
-						break;
+				try {
+					if ((!string.IsNullOrEmpty (path) && regex.IsMatch (path)) || 
+					    (!string.IsNullOrEmpty (item.Exec) && regex.IsMatch (item.Exec))) {
+						appItem = item;
+						if (item.IsAppropriateForCurrentDesktop && !item.Hidden)
+							break;
+					}
+				} catch {
+					// it failed, probably a null somewhere, we dont care really
 				}
 			}
 			
