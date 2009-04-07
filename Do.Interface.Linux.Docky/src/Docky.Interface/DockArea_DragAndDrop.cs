@@ -122,36 +122,21 @@ namespace Docky.Interface
 			Gtk.Drag.SourceUnset (this);
 		}
 
-		void SetDragProxy (Gdk.Window window)
+		void SetDragProxy ()
 		{
-			if (window == drag_proxy)
-				return;
-			drag_proxy = window;
-			Gtk.Drag.DestSetProxy (this, window, DragProtocol.Xdnd, true);
-		}
-
-		void UnsetDragProxy ()
-		{
-			if (drag_proxy == null)
-				return;
-			drag_proxy = null;
-			RegisterGtkDragDest ();
-		}
-
-		void DragCursorUpdate ()
-		{
-			if (GtkDragging && (CursorModifier & ModifierType.Button1Mask) != ModifierType.Button1Mask)
-				GtkDragging = false;
-			if (!GtkDragging || CursorIsOverDockArea) {
-				UnsetDragProxy ();
+			if ((CursorModifier & ModifierType.Button1Mask) != ModifierType.Button1Mask || CursorIsOverDockArea) {
+				if (drag_proxy == null)
+					return;
+				drag_proxy = null;
+				RegisterGtkDragDest ();
 			} else {
 				Gdk.Point local_cursor = Cursor.RelativePointToRootPoint (window);
-
+	
 				IEnumerable<Gdk.Window> windows;
 				try {
 					windows = Screen.WindowStack;
 				} catch { return; }
-				
+					
 				foreach (Gdk.Window w in windows.Reverse ()) {
 					if (w == window.GdkWindow || !w.IsVisible)
 						continue;
@@ -160,11 +145,22 @@ namespace Docky.Interface
 					int depth;
 					w.GetGeometry (out rect.X, out rect.Y, out rect.Width, out rect.Height, out depth);
 					if (rect.Contains (local_cursor)) {
-						SetDragProxy (w);
+						if (w == drag_proxy)
+							break;
+				
+						drag_proxy = w;
+						Gtk.Drag.DestSetProxy (this, w, DragProtocol.Xdnd, true);
 						break;
 					}
 				}
 			}
+		}
+
+		void DragCursorUpdate ()
+		{
+			if (GtkDragging && (CursorModifier & ModifierType.Button1Mask) != ModifierType.Button1Mask)
+				GtkDragging = false;
+			SetDragProxy ();
 		}
 
 		protected override bool OnDragMotion (Gdk.DragContext context, int x, int y, uint time)
@@ -193,8 +189,6 @@ namespace Docky.Interface
 		{
 			if (!CursorIsOverDockArea) return;
 
-			UnsetDragProxy ();
-			
 			string data = System.Text.Encoding.UTF8.GetString ( selectionData.Data );
 			data = System.Uri.UnescapeDataString (data);
 			//sometimes we get a null at the end, and it crashes us
@@ -212,6 +206,7 @@ namespace Docky.Interface
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
 			GtkDragging = false;
+			SetDragProxy ();
 		}
 		
 		protected override void OnDragBegin (Gdk.DragContext context)
