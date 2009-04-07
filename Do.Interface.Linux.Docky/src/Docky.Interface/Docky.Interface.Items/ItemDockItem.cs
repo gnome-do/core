@@ -151,6 +151,7 @@ namespace Docky.Interface
 			
 			RegisterWindowEvents ();
 			SetText (Name);
+			SetIconRegionFromCache ();
 		}
 		
 		void RegisterWindowEvents ()
@@ -237,6 +238,13 @@ namespace Docky.Interface
 			Docky.Core.DockServices.ItemsService.HotSeatItem (this, dockitems);
 			base.HotSeatRequested ();
 		}
+		
+		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)
+		{
+			SetIconRegionFromCache ();
+			base.Clicked (button, state, position);
+		}
+
 		
 		protected override void Launch ()
 		{
