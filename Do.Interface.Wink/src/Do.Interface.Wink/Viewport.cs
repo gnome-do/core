@@ -257,7 +257,7 @@ namespace Do.Interface.Wink
 			if (type == atoms.XA_CARDINAL && format == 32) {
 				extents = new int [(int) nitems];
 				for (int i = 0; i < (int) nitems; i++) {
-					extents [i] = Marshal.ReadInt32 (prop_return, i * 4);
+					extents [i] = Marshal.ReadInt32 (prop_return, i * IntPtr.Size);
 				}
 			}
 			
