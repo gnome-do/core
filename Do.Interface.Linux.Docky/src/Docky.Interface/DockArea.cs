@@ -43,6 +43,8 @@ namespace Docky.Interface
 		
 		const uint OffDockWakeupTime = 250;
 		const uint OnDockWakeupTime = 20;
+		const int UrgentBounceHeight = 100;
+		const int LaunchBounceHeight = 30;
 
 		TimeSpan BounceTime = new TimeSpan (0, 0, 0, 0, 700);
 		TimeSpan InsertAnimationTime = new TimeSpan (0, 0, 0, 0, 150*5);
@@ -240,7 +242,7 @@ namespace Docky.Interface
 			geo = LayoutUtils.MonitorGemonetry ();
 			
 			Width = geo.Width;
-			Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + 30;
+			Height = DockPreferences.FullIconSize + PositionProvider.VerticalBuffer + Math.Max (UrgentBounceHeight, LaunchBounceHeight);
 			
 			SetSizeRequest (Width, Height);
 		}

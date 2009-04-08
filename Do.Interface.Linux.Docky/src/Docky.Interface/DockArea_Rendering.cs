@@ -334,7 +334,7 @@ namespace Docky.Interface
 			// we will set this flag now
 			if (animationType == ClickAnimationType.Bounce) {
 				// bounces twice
-				double delta = Math.Abs (30 * Math.Sin 
+				double delta = Math.Abs (LaunchBounceHeight * Math.Sin 
 				                         (dockItem.TimeSinceClick.TotalMilliseconds * Math.PI / 
 				                          (BounceTime.TotalMilliseconds / 2)));
 				
@@ -344,7 +344,7 @@ namespace Docky.Interface
 					double urgentMs = (RenderTime - dockItem.AttentionRequestStartTime)
 						.TotalMilliseconds;
 					
-					double delta = 100 * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds));
+					double delta = UrgentBounceHeight * Math.Sin (urgentMs * Math.PI / (BounceTime.TotalMilliseconds));
 					iconPosition = iconPosition.RelativeMovePoint (delta, RelativeMove.Inward);
 				}
 			}
