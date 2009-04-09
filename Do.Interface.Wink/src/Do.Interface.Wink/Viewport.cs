@@ -153,7 +153,7 @@ namespace Do.Interface.Wink
 			
 			Gdk.Rectangle screenGeo = GetScreenGeoMinusStruts ();
 			
-			int titleBarSize = GetWindowFrameExtents (windows.First ()) [(int) Position.Top];
+			int titleBarSize = windows.First ().FrameExtents () [(int) Position.Top];
 			int windowHeight = screenGeo.Height - ((windows.Count () - 1) * titleBarSize);
 			int windowWidth = screenGeo.Width - ((windows.Count () - 1) * titleBarSize);
 			
@@ -223,7 +223,7 @@ namespace Do.Interface.Wink
 		{
 			IEnumerable<int []> struts = RawWindows ()
 				.Where (w => w.WindowType == Wnck.WindowType.Dock)
-				.Select (w => GetCardinalWindowProperty (w, X11Atoms.Instance._NET_WM_STRUT_PARTIAL));
+				.Select (w => w.GetCardinalProperty (X11Atoms.Instance._NET_WM_STRUT_PARTIAL));
 			
 			int [] offsets = new int [4];
 			for (int i = 0; i < 4; i++)
@@ -236,42 +236,6 @@ namespace Do.Interface.Wink
 			screenGeo.Y += offsets [(int) Position.Top];
 			
 			return screenGeo;
-		}
-		
-		int [] GetWindowFrameExtents (Wnck.Window window)
-		{
-			return GetCardinalWindowProperty (window, X11Atoms.Instance._NET_FRAME_EXTENTS);
-		}
-		
-		int [] GetCardinalWindowProperty (Wnck.Window window, IntPtr atom)
-		{
-			X11Atoms atoms = X11Atoms.Instance;
-			
-			IntPtr display;
-			IntPtr type;
-			int format;
-			IntPtr prop_return;
-			IntPtr nitems, bytes_after;
-			int result;
-			int [] extents = new int[12];
-			
-			IntPtr window_handle = (IntPtr) window.Xid;
-			
-			display = Xlib.Xlib.GdkDisplayXDisplay (Gdk.Screen.Default.Display);
-			type = IntPtr.Zero;
-			
-			result = Xlib.Xlib.XGetWindowProperty (display, window_handle, atom, (IntPtr) 0,
-			                                  (IntPtr) System.Int32.MaxValue, false, atoms.XA_CARDINAL, out type, out format,
-			                                  out nitems, out bytes_after, out prop_return);
-			
-			if (type == atoms.XA_CARDINAL && format == 32) {
-				extents = new int [(int) nitems];
-				for (int i = 0; i < (int) nitems; i++) {
-					extents [i] = Marshal.ReadInt32 (prop_return, i * IntPtr.Size);
-				}
-			}
-			
-			return extents;
 		}
 		
 		void SetTemporaryWindowGeometry (Wnck.Window window, Gdk.Rectangle area)
