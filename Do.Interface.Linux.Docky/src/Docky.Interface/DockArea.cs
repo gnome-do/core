@@ -205,8 +205,6 @@ namespace Docky.Interface
 			
 			PositionProvider = new ItemPositionProvider (this);
 			
-			SetSize ();
-			
 			AnimationState = new DockAnimationState ();
 			BuildAnimationStateEngine ();
 			
@@ -224,6 +222,7 @@ namespace Docky.Interface
 			           (int) EventMask.ScrollMask |
 			           (int) EventMask.FocusChangeMask);
 			
+			SetSize ();
 			DoubleBuffered = false;
 
 			BuildRendering ();
@@ -242,7 +241,10 @@ namespace Docky.Interface
 			geo = LayoutUtils.MonitorGemonetry ();
 			
 			Width = geo.Width;
-			Height = DockPreferences.FullIconSize + PositionProvider.VerticalBuffer + Math.Max (UrgentBounceHeight, LaunchBounceHeight);
+			if (AnimationState [Animations.UrgencyChanged])
+				Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + UrgentBounceHeight;
+			else
+				Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + LaunchBounceHeight;
 			
 			SetSizeRequest (Width, Height);
 		}
@@ -319,6 +321,12 @@ namespace Docky.Interface
 		{
 			if (args.Type == UpdateRequestType.NeedsAttentionSet) {
 				SetParentInputMask ();
+				Reconfigure ();
+				
+				GLib.Timeout.Add ((uint) BounceTime.Milliseconds + 20, delegate {
+					Reconfigure ();
+					return false;
+				});
 			}
 			AnimatedDraw ();
 		}
