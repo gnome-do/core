@@ -48,7 +48,6 @@ namespace Docky.Interface
 		string CloseText = Catalog.GetString ("Close All");
 		
 		const int MenuItemMaxCharacters = 50;
-		const string WindowIcon = "forward";
 		
 		string MaximizeIcon {
 			get { return "maximize.svg@" + GetType ().Assembly.FullName; }
@@ -60,6 +59,14 @@ namespace Docky.Interface
 		
 		string CloseIcon {
 			get { return "close.svg@" + GetType ().Assembly.FullName; }
+		}
+		
+		string WindowIcon {
+			get {
+				if (Launcher == null)
+					return "forward";
+				return Launcher.Icon;
+			}
 		}
 		
 		int windowCount;

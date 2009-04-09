@@ -43,6 +43,7 @@ namespace Docky.Interface
 		
 		const uint OffDockWakeupTime = 250;
 		const uint OnDockWakeupTime = 20;
+		
 		const int UrgentBounceHeight = 100;
 		const int LaunchBounceHeight = 30;
 
