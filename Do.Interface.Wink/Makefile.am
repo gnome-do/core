@@ -13,7 +13,9 @@ FILES = \
 	src/Do.Interface.Wink/ClickAction.cs \
 	src/Do.Interface.Wink/WindowControl.cs \
 	src/Do.Interface.Wink/WindowUtils.cs \
+	src/Do.Interface.Wink/WnckWindow_Extensions.cs \
 	src/Do.Interface.Wink/ScreenUtils.cs \ 
+	src/Do.Interface.Wink/Position.cs \
 	src/Do.Interface.Wink/Viewport.cs
 
 #RESOURCES = \

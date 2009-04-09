@@ -31,13 +31,6 @@ namespace Do.Interface.Wink
 {
 	public class Viewport
 	{
-		enum Position {
-			Left = 0,
-			Right,
-			Top,
-			Bottom,
-		}
-		
 		private class WindowState {
 			public Gdk.Rectangle Area;
 			public Wnck.WindowState State;
@@ -67,6 +60,27 @@ namespace Do.Interface.Wink
 			window_states = new Dictionary<Wnck.Window, WindowState> ();
 		}
 		
+		WindowMoveResizeMask MoveMask {
+			get {
+				return WindowMoveResizeMask.X | WindowMoveResizeMask.Y;
+			}
+		}
+		
+		WindowMoveResizeMask ResizeMask {
+			get {
+				return WindowMoveResizeMask.Width | WindowMoveResizeMask.Height;
+			}
+		}
+		
+		WindowMoveResizeMask MoveResizeMask {
+			get {
+				return WindowMoveResizeMask.X |
+					   WindowMoveResizeMask.Y |
+					   WindowMoveResizeMask.Height |
+					   WindowMoveResizeMask.Width;
+			}
+		}
+		
 		public bool Contains (Gdk.Point point)
 		{
 			return area.Contains (point);
@@ -88,8 +102,7 @@ namespace Do.Interface.Wink
 		public void MoveWindowInto (Wnck.Window window)
 		{
 			if (parent.IsVirtual) {
-				Rectangle geo;
-				window.GetGeometry (out geo.X, out geo.Y, out geo.Width, out geo.Height);
+				Rectangle geo = window.EasyGeometry ();
 				
 				geo.X += window.Workspace.ViewportX;
 				geo.Y += window.Workspace.ViewportY;
@@ -100,8 +113,7 @@ namespace Do.Interface.Wink
 				x -= window.Workspace.ViewportX;
 				y -= window.Workspace.ViewportY;
 				
-				WindowMoveResizeMask mask = WindowMoveResizeMask.X | WindowMoveResizeMask.Y;
-				SetWorkaroundGeometry (window, WindowGravity.Current, mask, x, y, 0, 0);
+				window.SetWorkaroundGeometry (WindowGravity.Current, MoveMask, x, y, 0, 0);
 			} else {
 				window.MoveToWorkspace (parent);
 			}
@@ -109,8 +121,7 @@ namespace Do.Interface.Wink
 		
 		public bool WindowVisibleInVeiwport (Wnck.Window window)
 		{
-			Rectangle geo;
-			window.GetGeometry (out geo.X, out geo.Y, out geo.Width, out geo.Height);
+			Rectangle geo = window.EasyGeometry ();
 			geo.X += parent.ViewportX;
 			geo.Y += parent.ViewportY;
 			
@@ -119,8 +130,7 @@ namespace Do.Interface.Wink
 		
 		public bool WindowCenterInViewport (Wnck.Window window)
 		{
-			Rectangle geo;
-			window.GetGeometry (out geo.X, out geo.Y, out geo.Width, out geo.Height);
+			Rectangle geo = window.EasyGeometry ();
 			geo.X += parent.ViewportX;
 			geo.Y += parent.ViewportY;
 			
@@ -264,26 +274,9 @@ namespace Do.Interface.Wink
 			return extents;
 		}
 		
-		void SetWorkaroundGeometry (Wnck.Window window, WindowGravity gravity, WindowMoveResizeMask mask, 
-		                                     int x, int y, int width, int height)
-		{
-			if (string.Compare (window.Screen.WindowManagerName, "compiz", true) == 0) {
-				// This is a compiz-ism.  Don't know when they will fix it. You must subtract the top and left
-				// frame extents from a move operation to get the window to actually show in the right spot.
-				// Save for maybe kwin, I think only compiz uses Viewports anyhow, so this is ok.
-				int [] extents = GetWindowFrameExtents (window);
-				
-				x -= extents [(int) Position.Left];
-				y -= extents [(int) Position.Top];
-			}
-			
-			window.SetGeometry (gravity, mask, x, y, width, height);
-		}
-		
 		void SetTemporaryWindowGeometry (Wnck.Window window, Gdk.Rectangle area)
 		{
-			Gdk.Rectangle oldGeo;
-			window.GetGeometry (out oldGeo.X, out oldGeo.Y, out oldGeo.Width, out oldGeo.Height);
+			Gdk.Rectangle oldGeo = window.EasyGeometry ();
 			
 			if (!window_states.ContainsKey (window)) 
 				window_states [window] = new WindowState (oldGeo, window.State);
@@ -291,26 +284,16 @@ namespace Do.Interface.Wink
 			if (window.IsMaximized)
 				window.Unmaximize ();
 			
-			WindowMoveResizeMask mask = WindowMoveResizeMask.Width | 
-				                        WindowMoveResizeMask.Height | 
-				                        WindowMoveResizeMask.X | 
-				                        WindowMoveResizeMask.Y;
-			
-			SetWorkaroundGeometry (window, WindowGravity.Current, mask, area.X, area.Y, area.Width, area.Height);
+			window.SetWorkaroundGeometry (WindowGravity.Current, MoveResizeMask, area.X, area.Y, area.Width, area.Height);
 		}
 		
 		void RestoreTemporaryWindowGeometry (Wnck.Window window)
 		{
 			if (!window_states.ContainsKey (window))
 				return;
-			
-			WindowMoveResizeMask mask = WindowMoveResizeMask.Width | 
-				                        WindowMoveResizeMask.Height | 
-				                        WindowMoveResizeMask.X | 
-				                        WindowMoveResizeMask.Y;
 				
 			WindowState state = window_states [window];
-			SetWorkaroundGeometry (window, WindowGravity.Current, mask, state.Area.X, 
+			window.SetWorkaroundGeometry (WindowGravity.Current, MoveResizeMask, state.Area.X, 
 			                       state.Area.Y, state.Area.Width, state.Area.Height);
 		}
 	}
