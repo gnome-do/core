@@ -146,6 +146,9 @@ namespace Docky.Interface
 		
 		string Name {
 			get {
+				if (!VisibleWindows.Any ())
+					return "Unknown";
+				
 				if (NeedsAttention) {
 					return VisibleWindows.Where (w => w.NeedsAttention ()).First ().Name;
 				}
@@ -154,8 +157,10 @@ namespace Docky.Interface
 				}
 				
 				foreach (Wnck.Window window in VisibleWindows) {
-					if (StringIsValidName (window.ClassGroup.ResClass))
-						return window.ClassGroup.ResClass;
+					if (window.ClassGroup != null) {
+						if (StringIsValidName (window.ClassGroup.ResClass))
+							return window.ClassGroup.ResClass;
+					}
 					if (StringIsValidName (window.IconName))
 						return window.IconName;
 					else if (StringIsValidName (window.Name))

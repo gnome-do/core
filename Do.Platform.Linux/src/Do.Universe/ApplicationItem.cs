@@ -72,10 +72,10 @@ namespace Do.Universe.Linux {
 		
 		public static ApplicationItem MaybeCreateFromCmd (string cmd)
 		{
-			ApplicationItem appItem = null;
-			
 			if (string.IsNullOrEmpty (cmd))
-				return appItem;
+				return null;
+			
+			List<ApplicationItem> appItems = new List<ApplicationItem> ();
 			
 			cmd = Regex.Escape (cmd);
 			Regex regex = new Regex (string .Format ("(^| ){0}( |)", cmd));
@@ -91,16 +91,33 @@ namespace Do.Universe.Linux {
 				try {
 					if ((!string.IsNullOrEmpty (path) && regex.IsMatch (path)) || 
 					    (!string.IsNullOrEmpty (item.Exec) && regex.IsMatch (item.Exec))) {
-						appItem = item;
-						if (item.IsAppropriateForCurrentDesktop && !item.Hidden)
-							break;
+						appItems.Add (item);
 					}
 				} catch {
 					// it failed, probably a null somewhere, we dont care really
 				}
 			}
 			
-			return appItem;
+			ApplicationItem bestMatch = null;
+			
+			foreach (ApplicationItem item in appItems) {
+				if (bestMatch == null) {
+					bestMatch = item;
+					continue;
+				}
+				if (!item.Hidden) {
+					if (bestMatch.Hidden) {
+						bestMatch = item;
+						continue;
+					}
+					if (item.IsAppropriateForCurrentDesktop) {
+						if (!bestMatch.IsAppropriateForCurrentDesktop || (item.Exec == cmd && bestMatch.Exec != cmd))
+							bestMatch = item;
+					}
+				}
+			}
+			
+			return bestMatch;
 		}
 
 		protected DesktopItem item;
