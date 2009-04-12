@@ -135,10 +135,16 @@ namespace Docky.Interface
 				IEnumerable<Gdk.Window> windows;
 				try {
 					windows = Screen.WindowStack;
-				} catch { return; }
-					
+				} catch { 
+					try {
+						windows = Wnck.Screen.Default.WindowsStacked.Select (wnk => Gdk.Window.ForeignNew ((uint) wnk.Xid));
+					} catch {
+						return;
+					}
+				}
+
 				foreach (Gdk.Window w in windows.Reverse ()) {
-					if (w == window.GdkWindow || !w.IsVisible)
+					if (w == null || w == window.GdkWindow || !w.IsVisible)
 						continue;
 					
 					Gdk.Rectangle rect;
