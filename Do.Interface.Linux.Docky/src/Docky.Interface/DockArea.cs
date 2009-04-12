@@ -657,7 +657,7 @@ namespace Docky.Interface
 		protected override bool OnScrollEvent (Gdk.EventScroll evnt)
 		{
 			int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y);
-			if (item == -1)
+			if (item >= DockItems.Count || item < 0)
 				return false;
 			
 			DockItems [item].Scrolled (evnt.Direction);
