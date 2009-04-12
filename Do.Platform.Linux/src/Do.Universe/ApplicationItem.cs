@@ -111,7 +111,7 @@ namespace Do.Universe.Linux {
 						continue;
 					}
 					if (item.IsAppropriateForCurrentDesktop) {
-						if (!bestMatch.IsAppropriateForCurrentDesktop || (item.Exec == cmd && bestMatch.Exec != cmd))
+						if (!bestMatch.IsAppropriateForCurrentDesktop || item.Exec.Length < bestMatch.Exec.Length)
 							bestMatch = item;
 					}
 				}
