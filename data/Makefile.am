@@ -10,6 +10,9 @@ schemas_DATA     = $(schemas_in_files:.schemas.in=.schemas)
 applicationsdir = $(datadir)/applications
 applications_DATA = gnome-do.desktop
 
+startupdir = $(sysconfdir)/xdg/autostart
+startup_DATA = gnome-do.desktop
+
 @INTLTOOL_DESKTOP_RULE@
 
 @INTLTOOL_SCHEMAS_RULE@
