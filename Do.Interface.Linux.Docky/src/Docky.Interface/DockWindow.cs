@@ -80,7 +80,7 @@ namespace Docky.Interface
 			Core.DockServices.RegisterService (interop_service);
 			
 			Core.DockServices.PainterService.RegisterPainter (new Painters.SummonModeRenderer ());
-
+			
 			RegisterEvents ();
 			Build ();
 		}

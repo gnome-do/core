@@ -4,6 +4,8 @@ include $(top_srcdir)/build.rules.mk
 ASSEMBLY = Do.Interface.Linux.Docky
 TARGET = library
 
+PKG_CONFIG_FILES = do.interface.linux.docky.pc
+
 FILES = \
 	AssemblyInfo.cs \
 	src/Docky.Core/DockServices.cs \
@@ -82,6 +84,7 @@ REFERENCES =  \
 	$(GTK_SHARP_20_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
 	$(LIBRSVG_SHARP_LIBS) \
+	$(MONO_ADDINS_LIBS) \
 	$(WNCK_SHARP_10_LIBS)
 
 PROJECT_REFERENCES = \

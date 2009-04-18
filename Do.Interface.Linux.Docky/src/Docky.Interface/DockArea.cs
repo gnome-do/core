@@ -735,7 +735,7 @@ namespace Docky.Interface
 			
 			RegisterGtkDragSource ();
 			window.UnpresentWindow ();
-
+			
 			SetParentInputMask ();
 			AnimatedDraw ();
 		}

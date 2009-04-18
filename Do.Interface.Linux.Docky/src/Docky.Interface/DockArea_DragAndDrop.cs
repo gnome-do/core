@@ -153,7 +153,7 @@ namespace Docky.Interface
 					if (rect.Contains (local_cursor)) {
 						if (w == drag_proxy)
 							break;
-				
+						
 						drag_proxy = w;
 						Gtk.Drag.DestSetProxy (this, w, DragProtocol.Xdnd, true);
 						break;

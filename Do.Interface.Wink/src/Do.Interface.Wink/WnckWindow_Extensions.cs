@@ -66,7 +66,6 @@ namespace Do.Interface.Wink
 		public static int [] GetCardinalProperty (this Wnck.Window window, IntPtr atom)
 		{
 			X11Atoms atoms = X11Atoms.Instance;
-			
 			IntPtr display;
 			IntPtr type;
 			int format;

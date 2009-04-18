@@ -51,7 +51,7 @@ namespace Docky.Interface
 		int last_raised;
 
 		DateTime last_scroll = new DateTime (0);
-		TimeSpan scroll_rate = new TimeSpan (0, 0, 0, 0, 300);
+		TimeSpan scroll_rate = new TimeSpan (0, 0, 0, 0, 200);
 		
 		public abstract IEnumerable<Wnck.Window> Windows { get; }
 		
