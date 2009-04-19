@@ -26,13 +26,14 @@ using Gtk;
 
 using Do.Universe;
 using Do.Platform;
+using Do.Platform.Linux;
 using Do.Interface;
 
 namespace Do.Interface.AnimationBase
 {
 	
 	
-	public abstract class AbstractAnimatedInterface : Gtk.Window, IDoWindow
+	public abstract class AbstractAnimatedInterface : Gtk.Window, IDoWindow, IConfigurable
 	{
 		BezelDrawingArea bezel_drawing_area;
 		BezelGlassResults bezel_glass_results;
@@ -218,6 +219,26 @@ namespace Do.Interface.AnimationBase
 				bezel_glass_results.Clear ();
 			}
 		}
+
+		#region IConfigurable implementation
+		public Bin GetConfiguration ()
+		{
+			throw new System.NotImplementedException();
+		}
+		
+		public string Description {
+			get {
+				return "Animated Interface Configuration";
+			}
+		}
+		
+		public new string Icon {
+			get {
+				return "preferences";
+			}
+		}
+		#endregion
+
 
 		public bool ResultsCanHide { get { return true; } }
 		

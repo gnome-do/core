@@ -25,7 +25,6 @@ using Mono.Unix;
 using LibNotify = Notifications;
 	
 using Do.Platform;
-using Do.Interface;
 
 namespace Do.Platform.Linux
 {	

@@ -65,6 +65,8 @@ namespace Do.UI
 			// Setup theme combo
 			theme_combo.Active = Math.Max (0, Themes.IndexOf (Do.Preferences.Theme));
 			pin_check.Active = Do.Preferences.AlwaysShowResults;
+			
+			SetupConfigurationWidget ();
 		}
 		
 		protected override void OnDestroyed ()
@@ -152,6 +154,20 @@ namespace Do.UI
 		protected virtual void OnThemeComboChanged (object sender, System.EventArgs e)
 		{
 			Do.Preferences.Theme = Themes[theme_combo.Active];
+			SetupConfigurationWidget ();
+		}
+		
+		void SetupConfigurationWidget ()
+		{
+			if (theme_configuration_container.Child != null) {
+				theme_configuration_container.Remove (theme_configuration_container.Child);
+			}
+			
+			if (Do.Controller.Window is IConfigurable) {
+				IConfigurable window = Do.Controller.Window as IConfigurable;
+				theme_configuration_container.Add (window.GetConfiguration ());
+				theme_configuration_container.ShowAll ();
+			}
 		}
 
 		protected virtual void OnAnimationCheckbuttonClicked (object sender, System.EventArgs e)

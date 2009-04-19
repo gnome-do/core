@@ -48,6 +48,12 @@ namespace Do.Core
 
 		public event EventHandler Summoned;
 
+		internal IDoWindow Window {
+			get {
+				return window;
+			}
+		}
+		
 		public Gtk.AboutDialog AboutDialog { get; private set; }
 		public PreferencesWindow PreferencesWindow { get; private set; }
 		
