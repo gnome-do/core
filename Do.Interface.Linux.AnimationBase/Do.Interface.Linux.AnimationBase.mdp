@@ -18,7 +18,8 @@
     <File name="src" subtype="Directory" buildaction="Compile" />
     <File name="Resources" subtype="Directory" buildaction="Compile" />
     <File name="Resources/Do.Interface.Linux.AnimationBase.addin.xml" subtype="Code" buildaction="Nothing" />
-    <File name="src/Do.Interface.AnimationBase" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Interface" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Interface/Do.Interface.AnimationBase" subtype="Directory" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
