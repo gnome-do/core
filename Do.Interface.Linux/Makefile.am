@@ -8,17 +8,6 @@ PKG_CONFIG_FILES = do.interface.linux.pc
 FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Interface/ClassicInterface/ClassicWindow.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/Bezel.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/BezelColors.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/BezelDefaults.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingContext.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassRenderClasses.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassResults.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassWindow.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/BezelResultsDrawingArea.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/TextRenderer.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/IRenderInterfaces.cs \
 	src/Do.Interface/Do.Interface.CairoUtils/CairoUtils.cs \
 	src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs \
 	src/Do.Interface/Do.Interface.Widgets/Frame.cs \
