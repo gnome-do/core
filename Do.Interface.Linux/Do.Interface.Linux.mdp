@@ -21,7 +21,6 @@
     <File name="Resources" subtype="Directory" buildaction="Compile" />
     <File name="Resources/Do.Interface.Linux.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="src/Do.Interface/IDoWindow.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Interface/IRenderTheme.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface/IconCache.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface/IUIContext.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Interface/ResultsWindowSelectionEventArgs.cs" subtype="Code" buildaction="Compile" />
@@ -62,7 +61,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
-    <ProjectReference type="Project" localcopy="True" refto="Do.Platform.Linux" />
     <ProjectReference type="Gac" localcopy="True" refto="gconf-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
 </Project>
