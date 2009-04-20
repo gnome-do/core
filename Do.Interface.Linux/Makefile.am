@@ -19,7 +19,6 @@ FILES = \
 	src/Do.Interface/Do.Interface.Widgets/TextFrame.cs \
 	src/Do.Interface/IDoController.cs \
 	src/Do.Interface/IDoWindow.cs \
-	src/Do.Interface/IRenderTheme.cs \
 	src/Do.Interface/IUIContext.cs \
 	src/Do.Interface/IconCache.cs \
 	src/Do.Interface/IconProvider.cs \

@@ -128,6 +128,7 @@ Do/gnome-do
 Do/src/AssemblyInfo.cs
 Do.Interface.Linux/Makefile
 Do.Interface.Linux/src/AssemblyInfo.cs
+Do.Interface.Linux.AnimationBase/Makefile
 Do.Interface.Linux.Classic/Makefile
 Do.Interface.Linux.Docky/Makefile
 Do.Interface.Linux.GlassFrame/Makefile

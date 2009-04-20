@@ -1,12 +1,12 @@
 # Simple component buildsystem
 include $(top_srcdir)/build.rules.mk
 
-ASSEMBLY = Do.Interface.Linux
+ASSEMBLY = Do.Interface.Linux.AnimationBase
 TARGET = library
-PKG_CONFIG_FILES = do.interface.linux.pc
+PKG_CONFIG_FILES = do.interface.linux.animationbase.pc
 
 FILES = \
-	src/AssemblyInfo.cs \
+	AssemblyInfo.cs \
 	src/Do.Interface/IRenderTheme.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/Bezel.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelColors.cs \
@@ -17,7 +17,7 @@ FILES = \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassResults.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassWindow.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelResultsDrawingArea.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/IRenderInterfacs.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/IRenderInterfaces.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/TextRenderer.cs
 
 RESOURCES = \
