@@ -96,4 +96,5 @@ PROJECT_REFERENCES = \
 	Do.Interface.Wink \
 	Do.Platform \
 	Do.Platform.Linux \
+	Do.Interface.Linux.AnimationBase \
 	Do.Universe

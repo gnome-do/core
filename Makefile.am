@@ -10,6 +10,7 @@ SUBDIRS = \
 	Do.Platform \
 	Do.Interface.Wink \
 	Do.Interface.Linux \
+	Do.Interface.Linux.AnimationBase \
 	Do.Interface.Linux.Classic \
 	Do.Interface.Linux.Docky \
 	Do.Interface.Linux.GlassFrame \
