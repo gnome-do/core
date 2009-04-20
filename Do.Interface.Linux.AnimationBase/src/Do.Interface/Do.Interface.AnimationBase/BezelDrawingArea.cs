@@ -145,7 +145,6 @@ namespace Do.Interface.AnimationBase
 		}
 #endregion
 		
-#region LocalVariables
 		public const int TextHeight = 11;
 		
 		HUDStyle style;
@@ -184,10 +183,7 @@ namespace Do.Interface.AnimationBase
 		bool[] entry_mode = new bool[3];
 		
 		GConf.Client gconfClient;
-#endregion
 		
-#region Properties
-#region Box Format
 		public Cairo.Color BackgroundColor {
 			get {
 				Gdk.Color color = new Gdk.Color ();
@@ -318,8 +314,7 @@ namespace Do.Interface.AnimationBase
 				return (2 * WindowBorder - BorderWidth) + ((BoxWidth + BorderWidth) * 3) + 2 * ShadowRadius; 
 			} 
 		}
-#endregion
-#region Animation Properties
+		
 		private bool AnimationNeeded {
 			get {
 				return  ExpandNeeded || 
@@ -366,8 +361,7 @@ namespace Do.Interface.AnimationBase
 				return window_fade != 1;
 			}
 		}
-#endregion
-#region Contexts
+		
 		private BezelDrawingContext Context {
 			get {
 				if (context == null)
@@ -383,8 +377,7 @@ namespace Do.Interface.AnimationBase
 				return old_context;
 			}
 		}
-#endregion
-#region Renderers
+		
 		public IBezelTitleBarRenderElement TitleBarRenderer { 
 			get { return titleBarRenderer; } 
 		}
@@ -404,8 +397,6 @@ namespace Do.Interface.AnimationBase
 		public IBezelDefaults BezelDefaults { 
 			get { return bezelDefaults; }	
 		}
-#endregion
-#endregion
 		
 		public event EventHandler GtkThemeChanged;
 		

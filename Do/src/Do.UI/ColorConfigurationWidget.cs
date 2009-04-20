@@ -41,8 +41,6 @@ namespace Do.UI
 			set { themes = value; }
 		}
 
-		bool setup = false;
-		
 		public ColorConfigurationWidget ()
 		{
 			Build ();
@@ -55,95 +53,26 @@ namespace Do.UI
 				Themes.Add (theme.Name);
 			}
 
-			SetupButtons ();
 			if (!Screen.IsComposited) {
 				composite_warning_widget.Visible = true;
 				theme_combo.Sensitive = false;
-				animation_check.State = shadow_check.State = Gtk.StateType.Insensitive;
 			}
 				
 			// Setup theme combo
 			theme_combo.Active = Math.Max (0, Themes.IndexOf (Do.Preferences.Theme));
 			pin_check.Active = Do.Preferences.AlwaysShowResults;
 			
-			SetupConfigurationWidget ();
+			theme_configuration_container.ShowAll ();
 		}
 		
-		protected override void OnDestroyed ()
+		protected override void OnShown ()
 		{
-			base.OnDestroyed ();
+			base.OnShown ();
 		}
-
-		private void DisableButtons ()
-		{
-			clear_background.Sensitive = false;
-			background_colorbutton.Sensitive = false;
-			shadow_check.Sensitive = false;
-		}
-		
-		private void SetupButtons ()
-		{
-			setup = true;
-			ushort alpha;
-			background_colorbutton.Color = ReadColor (BezelDrawingArea.BgColor, out alpha);
-			background_colorbutton.Alpha = alpha;
-			clear_background.Sensitive = true;
-			background_colorbutton.Sensitive = shadow_check.Sensitive = true;
-			shadow_check.Active = BezelDrawingArea.DrawShadow;
-			animation_check.Active = BezelDrawingArea.Animated;
-			Gtk.Application.Invoke (delegate { setup = false; });
-		}
-		
-		private Gdk.Color ReadColor (string colorString, out ushort alpha)
-		{
-			Gdk.Color prefsColor;
-			byte r,g,b;
-			uint converted;
-			
-			try {
-				converted = uint.Parse (colorString, System.Globalization.NumberStyles.HexNumber);
-		
-				alpha = (ushort) ((converted & 255) << 8);
-				b = (byte) ((converted >> 8) & 255);
-				g = (byte) ((converted >> 16) & 255);
-				r = (byte) ((converted >> 24) & 255);
-				prefsColor = new Gdk.Color (r,g,b);
-			} catch (Exception e) {
-				prefsColor = new Gdk.Color (0,0,0);
-				alpha = ushort.MaxValue;
-				if (colorString.ToLower () != "default") {
-					Log<ColorConfigurationWidget>.Error ("Error setting color: {0}", e.Message);
-					Log<ColorConfigurationWidget>.Debug (e.StackTrace);
-				}
-			}
-			
-			return prefsColor;
-		}
-			                                                  
 		
 		public Gtk.Bin GetConfiguration ()
 		{
 			return this;
-		}
-
-		protected virtual void OnBackgroundColorbuttonColorSet (object sender, System.EventArgs e)
-		{
-			if (setup) return;
-			string hex_string = string.Format ("{0}{1:X}", background_colorbutton.Color.ColorToHexString (), (byte) (background_colorbutton.Alpha >> 8));
-			BezelDrawingArea.BgColor = hex_string;
-		}
-
-		protected virtual void OnClearBackgroundClicked (object sender, System.EventArgs e)
-		{
-			BezelDrawingArea.ResetBackgroundStyle ();
-			background_colorbutton.Color = new Gdk.Color (0, 0, 0);
-			background_colorbutton.Alpha = ushort.MaxValue;
-		}
-
-		protected virtual void OnShadowCheckClicked (object sender, System.EventArgs e)
-		{
-			if (setup) return;
-			BezelDrawingArea.DrawShadow = shadow_check.Active;
 		}
 
 		protected virtual void OnPinCheckClicked (object sender, System.EventArgs e)
@@ -159,20 +88,15 @@ namespace Do.UI
 		
 		void SetupConfigurationWidget ()
 		{
-			if (theme_configuration_container.Child != null) {
-				theme_configuration_container.Remove (theme_configuration_container.Child);
-			}
+			if (theme_configuration_container.Child != null)
+					theme_configuration_container.Remove (theme_configuration_container.Child);
 			
 			if (Do.Controller.Window is IConfigurable) {
 				IConfigurable window = Do.Controller.Window as IConfigurable;
-				theme_configuration_container.Add (window.GetConfiguration ());
-				theme_configuration_container.ShowAll ();
+				Gtk.Bin bin = window.GetConfiguration ();
+				theme_configuration_container.Add (bin);
 			}
-		}
-
-		protected virtual void OnAnimationCheckbuttonClicked (object sender, System.EventArgs e)
-		{
-			BezelDrawingArea.Animated = animation_check.Active;
+			theme_configuration_container.ShowAll ();
 		}
 
 		protected virtual void OnCompositeWarningInfoBtnClicked (object sender, System.EventArgs e)

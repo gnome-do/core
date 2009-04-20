@@ -8,6 +8,7 @@ PKG_CONFIG_FILES = do.interface.linux.animationbase.pc
 FILES = \
 	AssemblyInfo.cs \
 	src/Do.Interface/IRenderTheme.cs \
+	src/Do.Interface/Do.Interface.AnimationBase/AnimationBaseConfigurationWidget.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/Bezel.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelColors.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelDefaults.cs \
@@ -18,9 +19,13 @@ FILES = \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelGlassWindow.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/BezelResultsDrawingArea.cs \
 	src/Do.Interface/Do.Interface.AnimationBase/IRenderInterfaces.cs \
-	src/Do.Interface/Do.Interface.AnimationBase/TextRenderer.cs
+	src/Do.Interface/Do.Interface.AnimationBase/TextRenderer.cs \
+	gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs \
+	gtk-gui/generated.cs
+
 
 RESOURCES = \
+	gtk-gui/gui.stetic \
 	Resources/Do.Interface.Linux.AnimationBase.addin.xml
 
 REFERENCES =  \

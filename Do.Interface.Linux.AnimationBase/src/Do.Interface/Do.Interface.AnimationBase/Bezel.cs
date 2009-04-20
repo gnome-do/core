@@ -223,7 +223,7 @@ namespace Do.Interface.AnimationBase
 		#region IConfigurable implementation
 		public Bin GetConfiguration ()
 		{
-			throw new System.NotImplementedException();
+			return new AnimationBaseConfigurationWidget (bezel_drawing_area);
 		}
 		
 		public string Description {
