@@ -13,7 +13,7 @@
     <widget-library name="../../Do.Platform.Linux/bin/Debug/Do.Platform.Linux.dll" />
     <widget-library name="../../Do.Interface.Linux.AnimationBase/bin/Debug/Do.Interface.Linux.AnimationBase.dll" />
   </import>
-  <widget class="Gtk.Bin" id="Docky.Interface.DockyConfigurationWidget" design-size="300 248">
+  <widget class="Gtk.Bin" id="Docky.Interface.DockyConfigurationWidget" design-size="376 347">
     <property name="MemberName" />
     <property name="Visible">False</property>
     <child>
@@ -127,9 +127,43 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.Label" id="zoom_size_label">
+          <widget class="Gtk.HBox" id="hbox6">
             <property name="MemberName" />
-            <property name="LabelProp" translatable="yes">Zoom Size</property>
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.Label" id="zoom_size_label">
+                <property name="MemberName" />
+                <property name="Yalign">0.83</property>
+                <property name="LabelProp" translatable="yes">Zoom Size</property>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.HScale" id="zoom_scale">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Lower">0.1</property>
+                <property name="Upper">4</property>
+                <property name="PageIncrement">0.1</property>
+                <property name="PageSize">0.1</property>
+                <property name="StepIncrement">0.1</property>
+                <property name="Value">0.7</property>
+                <property name="DrawValue">True</property>
+                <property name="Digits">0</property>
+                <property name="ValuePos">Top</property>
+                <signal name="FormatValue" handler="OnZoomScaleFormatValue" />
+                <signal name="ValueChanged" handler="OnZoomScaleValueChanged" />
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">5</property>
@@ -139,17 +173,38 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HScale" id="zoom_scale">
+          <widget class="Gtk.HBox" id="hbox7">
             <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Upper">100</property>
-            <property name="PageIncrement">10</property>
-            <property name="StepIncrement">1</property>
-            <property name="DrawValue">True</property>
-            <property name="Digits">0</property>
-            <property name="ValuePos">Top</property>
-            <signal name="FormatValue" handler="OnZoomScaleFormatValue" />
-            <signal name="ValueChanged" handler="OnZoomScaleValueChanged" />
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.Label" id="label4">
+                <property name="MemberName" />
+                <property name="Yalign">0.83</property>
+                <property name="LabelProp" translatable="yes">Zoom Width</property>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.HScale" id="hscale2">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Upper">100</property>
+                <property name="PageIncrement">10</property>
+                <property name="StepIncrement">1</property>
+                <property name="DrawValue">True</property>
+                <property name="Digits">0</property>
+                <property name="ValuePos">Top</property>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">6</property>
@@ -159,29 +214,23 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HButtonBox" id="hbuttonbox2">
+          <widget class="Gtk.ScrolledWindow" id="scrolled_window">
             <property name="MemberName" />
-            <property name="BorderWidth">3</property>
-            <property name="Size">1</property>
+            <property name="CanFocus">True</property>
+            <property name="ShadowType">In</property>
             <child>
-              <widget class="Gtk.Button" id="configure_docklets_button">
+              <widget class="Gtk.Viewport" id="GtkViewport">
                 <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="Type">TextOnly</property>
-                <property name="Label" translatable="yes">Configure Docklets</property>
-                <property name="UseUnderline">True</property>
+                <property name="ShadowType">None</property>
+                <child>
+                  <placeholder />
+                </child>
               </widget>
-              <packing>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
-              </packing>
             </child>
           </widget>
           <packing>
             <property name="Position">7</property>
             <property name="AutoSize">True</property>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
           </packing>
         </child>
       </widget>

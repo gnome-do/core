@@ -37,6 +37,7 @@ namespace Docky.Utilities
 		public static event Action AutomaticIconsChanged;
 		public static event Action MonitorChanged;
 		public static event Action AllowOverlapChanged;
+		public static event Action OrientationChanged;
 	
 		public const int IconBorderWidth = 2;
 		public const string HighlightFormat = "<span foreground=\"#5599ff\">{0}</span>";
@@ -221,8 +222,12 @@ namespace Docky.Utilities
 				return orientation;
 			}
 			set {
+				if (orientation == value)
+					return;
 				orientation = value;
 				prefs.Set ("Orientation", value.ToString ());
+				if (OrientationChanged != null)
+					OrientationChanged ();
 			}
 		}
 

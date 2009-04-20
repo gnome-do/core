@@ -257,6 +257,7 @@ namespace Docky.Interface
 			
 			DockPreferences.MonitorChanged += HandleMonitorChanged; 
 			DockPreferences.IconSizeChanged += HandleIconSizeChanged; 
+			DockPreferences.OrientationChanged += HandleOrientationChanged; 
 			
 			DockServices.PainterService.PainterShowRequest += HandlePainterShowRequest;
 			DockServices.PainterService.PainterHideRequest += HandlePainterHideRequest;
@@ -284,6 +285,7 @@ namespace Docky.Interface
 			
 			DockPreferences.MonitorChanged -= HandleMonitorChanged;
 			DockPreferences.IconSizeChanged -= HandleIconSizeChanged; 
+			DockPreferences.OrientationChanged -= HandleOrientationChanged; 
 			
 			DockServices.PainterService.PainterShowRequest -= HandlePainterShowRequest;
 			DockServices.PainterService.PainterHideRequest -= HandlePainterHideRequest;
@@ -336,6 +338,11 @@ namespace Docky.Interface
 		{
 			Reconfigure ();
 		}
+
+		void HandleOrientationChanged()
+		{
+			Reconfigure ();
+		}
 		
 		void HandleSizeChanged(object sender, EventArgs e)
 		{
@@ -353,6 +360,7 @@ namespace Docky.Interface
 			SetParentInputMask ();
 			SetIconRegions ();
 			window.DelaySetStruts ();
+			window.Reposition ();
 		}
 		
 		void HandleUniverseInitialized(object sender, EventArgs e)
@@ -366,6 +374,7 @@ namespace Docky.Interface
 		
 		void HandleIconSizeChanged()
 		{
+			Reconfigure ();
 			AnimatedDraw ();
 		}
 

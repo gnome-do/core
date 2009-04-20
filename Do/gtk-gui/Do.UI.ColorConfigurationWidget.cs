@@ -39,6 +39,8 @@ namespace Do.UI {
         
         private Gtk.Alignment theme_configuration_container;
         
+        private Gtk.HSeparator hseparator1;
+        
         private Gtk.VBox composite_warning_widget;
         
         private Gtk.Label label1;
@@ -157,6 +159,15 @@ namespace Do.UI {
             w12.PackType = ((Gtk.PackType)(1));
             w12.Position = 1;
             // Container child vbox2.Gtk.Box+BoxChild
+            this.hseparator1 = new Gtk.HSeparator();
+            this.hseparator1.Name = "hseparator1";
+            this.vbox2.Add(this.hseparator1);
+            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.vbox2[this.hseparator1]));
+            w13.PackType = ((Gtk.PackType)(1));
+            w13.Position = 2;
+            w13.Expand = false;
+            w13.Fill = false;
+            // Container child vbox2.Gtk.Box+BoxChild
             this.composite_warning_widget = new Gtk.VBox();
             this.composite_warning_widget.Name = "composite_warning_widget";
             this.composite_warning_widget.Spacing = 6;
@@ -167,10 +178,10 @@ namespace Do.UI {
             this.label1.UseMarkup = true;
             this.label1.Wrap = true;
             this.composite_warning_widget.Add(this.label1);
-            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.composite_warning_widget[this.label1]));
-            w13.Position = 0;
-            w13.Expand = false;
-            w13.Fill = false;
+            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.composite_warning_widget[this.label1]));
+            w14.Position = 0;
+            w14.Expand = false;
+            w14.Fill = false;
             // Container child composite_warning_widget.Gtk.Box+BoxChild
             this.hbuttonbox1 = new Gtk.HButtonBox();
             this.hbuttonbox1.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
@@ -182,18 +193,20 @@ namespace Do.UI {
             this.composite_warning_info_btn.UseUnderline = true;
             this.composite_warning_info_btn.Label = "gtk-dialog-info";
             this.hbuttonbox1.Add(this.composite_warning_info_btn);
-            Gtk.ButtonBox.ButtonBoxChild w14 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox1[this.composite_warning_info_btn]));
-            w14.Expand = false;
-            w14.Fill = false;
-            this.composite_warning_widget.Add(this.hbuttonbox1);
-            Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.composite_warning_widget[this.hbuttonbox1]));
-            w15.Position = 1;
+            Gtk.ButtonBox.ButtonBoxChild w15 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox1[this.composite_warning_info_btn]));
             w15.Expand = false;
             w15.Fill = false;
+            this.composite_warning_widget.Add(this.hbuttonbox1);
+            Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.composite_warning_widget[this.hbuttonbox1]));
+            w16.Position = 1;
+            w16.Expand = false;
+            w16.Fill = false;
             this.vbox2.Add(this.composite_warning_widget);
-            Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.vbox2[this.composite_warning_widget]));
-            w16.PackType = ((Gtk.PackType)(1));
-            w16.Position = 2;
+            Gtk.Box.BoxChild w17 = ((Gtk.Box.BoxChild)(this.vbox2[this.composite_warning_widget]));
+            w17.PackType = ((Gtk.PackType)(1));
+            w17.Position = 3;
+            w17.Expand = false;
+            w17.Fill = false;
             this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();

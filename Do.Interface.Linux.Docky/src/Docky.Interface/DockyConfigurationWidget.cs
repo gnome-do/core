@@ -19,9 +19,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Cairo;
+using Gdk;
 using Gtk;
 
 using Docky.Utilities;
+using Docky.Core;
 
 namespace Docky.Interface
 {
@@ -30,13 +33,54 @@ namespace Docky.Interface
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class DockyConfigurationWidget : Gtk.Bin
 	{
-
+		NodeView docklets_nodeview;
+		
+		[TreeNode (ListOnly=true)]
+		class DockletTreeNode : TreeNode {
+			AbstractDockletItem docklet;
+			
+			public DockletTreeNode (AbstractDockletItem docklet) 
+			{
+				this.docklet = docklet;
+			}
+			
+			[TreeNodeValue (Column=0)]
+			public bool Enabled { 
+				get { return DockServices.DockletService.ActiveDocklets.Contains (docklet); }
+			}
+			
+			[TreeNodeValue (Column=1)]
+			public string Name {
+				get { return docklet.Name; }
+			}
+			
+			public void Toggle ()
+			{
+				DockServices.DockletService.ToggleDocklet (docklet);
+			}
+		}
+		
+		bool setup = false;
+		
+		NodeStore store;
+		NodeStore Store {
+			get {
+				if (store == null) {
+					store = new NodeStore (typeof (DockletTreeNode));
+					
+				}
+				return store;
+			}
+		}
+		
 		public DockyConfigurationWidget()
 		{
+			setup = true;
 			this.Build();
 			
-			zoom_scale.Adjustment.PageSize = .1;
-			zoom_scale.Adjustment.SetBounds (1.1, 4, .1, 1, 1);
+			zoom_scale.Digits = 1;
+			zoom_scale.SetRange (1.1, 4);
+			zoom_scale.SetIncrements (.1, .1);
 			zoom_scale.Value = DockPreferences.ZoomPercent;
 			
 			advanced_indicators_checkbutton.Active = DockPreferences.IndicateMultipleWindows;
@@ -47,6 +91,33 @@ namespace Docky.Interface
 			orientation_combobox.AppendText (DockOrientation.Bottom.ToString ());
 			orientation_combobox.AppendText (DockOrientation.Top.ToString ());
 			orientation_combobox.Active = DockPreferences.Orientation == DockOrientation.Bottom ? 0 : 1;
+			
+			BuildDocklets ();
+			
+			Gtk.Application.Invoke (delegate { setup = false; });
+		}
+		
+		void BuildDocklets ()
+		{
+			docklets_nodeview = new NodeView (Store);
+			scrolled_window.Add (docklets_nodeview);
+			
+			Gtk.CellRendererToggle toggle = new Gtk.CellRendererToggle ();
+			toggle.Toggled += HandleToggled;
+			docklets_nodeview.AppendColumn ("Enabled", toggle, "active", 0);
+			docklets_nodeview.AppendColumn ("Name", new Gtk.CellRendererText (), "text", 1);
+			
+			foreach (AbstractDockletItem adi in DockServices.DockletService.Docklets) {
+				Store.AddNode (new DockletTreeNode (adi));
+			}
+			
+			scrolled_window.ShowAll ();
+		}
+
+		void HandleToggled(object o, ToggledArgs args)
+		{
+			DockletTreeNode node = Store.GetNode (new Gtk.TreePath (args.Path)) as DockletTreeNode;
+			node.Toggle ();
 		}
 		
 		protected virtual void OnZoomScaleFormatValue (object o, Gtk.FormatValueArgs args)
@@ -56,6 +127,7 @@ namespace Docky.Interface
 
 		protected virtual void OnZoomScaleValueChanged (object sender, System.EventArgs e)
 		{
+			if (setup) return;
 			if (!(sender is HScale)) return;
 			
 			HScale scale = sender as HScale;
@@ -64,26 +136,31 @@ namespace Docky.Interface
 
 		protected virtual void OnAdvancedIndicatorsCheckbuttonToggled (object sender, System.EventArgs e)
 		{
+			if (setup) return;
 			DockPreferences.IndicateMultipleWindows = advanced_indicators_checkbutton.Active;
 		}
 
 		protected virtual void OnZoomCheckbuttonToggled (object sender, System.EventArgs e)
 		{
+			if (setup) return;
 			DockPreferences.ZoomEnabled = zoom_checkbutton.Active;
 		}
 
 		protected virtual void OnWindowOverlapCheckbuttonToggled (object sender, System.EventArgs e)
 		{
+			if (setup) return;
 			DockPreferences.AllowOverlap = window_overlap_checkbutton.Active;
 		}
 
 		protected virtual void OnAutohideCheckbuttonToggled (object sender, System.EventArgs e)
 		{
+			if (setup) return;
 			DockPreferences.AutoHide = autohide_checkbutton.Active;
 		}
 
 		protected virtual void OnOrientationComboboxChanged (object sender, System.EventArgs e)
 		{
+			if (setup) return;
 			DockPreferences.Orientation = (DockOrientation) orientation_combobox.Active;
 		}
 	}

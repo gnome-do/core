@@ -825,6 +825,18 @@
           </packing>
         </child>
         <child>
+          <widget class="Gtk.HSeparator" id="hseparator1">
+            <property name="MemberName" />
+          </widget>
+          <packing>
+            <property name="PackType">End</property>
+            <property name="Position">2</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
           <widget class="Gtk.VBox" id="composite_warning_widget">
             <property name="MemberName" />
             <property name="Visible">False</property>
@@ -872,14 +884,13 @@
                 <property name="Fill">False</property>
               </packing>
             </child>
-            <child>
-              <placeholder />
-            </child>
           </widget>
           <packing>
             <property name="PackType">End</property>
-            <property name="Position">2</property>
+            <property name="Position">3</property>
             <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
           </packing>
         </child>
       </widget>

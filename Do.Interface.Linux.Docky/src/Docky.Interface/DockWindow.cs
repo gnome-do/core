@@ -45,8 +45,6 @@ namespace Docky.Interface
 		BezelGlassResults results;
 		BezelGlassWindow results_window;
 		
-		DockyConfigurationWidget config;
-		
 		DockArea dock_area;
 		Interface.DoInteropService interop_service;
 		IDoController controller;
@@ -232,7 +230,7 @@ namespace Docky.Interface
 			Reposition ();
 		}
 		
-		void Reposition ()
+		public void Reposition ()
 		{
 			Gdk.Rectangle geo, main, res;
 			
@@ -458,9 +456,7 @@ namespace Docky.Interface
 		#region IConfigurable implementation
 		public Bin GetConfiguration ()
 		{
-			if (config == null)
-				config = new DockyConfigurationWidget ();
-			return config;
+			return new DockyConfigurationWidget ();
 		}
 		
 		public string Description {

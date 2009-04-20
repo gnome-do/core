@@ -29,13 +29,19 @@ namespace Docky.Interface {
         
         private Gtk.CheckButton advanced_indicators_checkbutton;
         
+        private Gtk.HBox hbox6;
+        
         private Gtk.Label zoom_size_label;
         
         private Gtk.HScale zoom_scale;
         
-        private Gtk.HButtonBox hbuttonbox2;
+        private Gtk.HBox hbox7;
         
-        private Gtk.Button configure_docklets_button;
+        private Gtk.Label label4;
+        
+        private Gtk.HScale hscale2;
+        
+        private Gtk.ScrolledWindow scrolled_window;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
@@ -121,48 +127,80 @@ namespace Docky.Interface {
             w7.Expand = false;
             w7.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
+            this.hbox6 = new Gtk.HBox();
+            this.hbox6.Name = "hbox6";
+            this.hbox6.Spacing = 6;
+            // Container child hbox6.Gtk.Box+BoxChild
             this.zoom_size_label = new Gtk.Label();
             this.zoom_size_label.Name = "zoom_size_label";
+            this.zoom_size_label.Yalign = 0.83F;
             this.zoom_size_label.LabelProp = Mono.Unix.Catalog.GetString("Zoom Size");
-            this.vbox2.Add(this.zoom_size_label);
-            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(this.vbox2[this.zoom_size_label]));
-            w8.Position = 5;
+            this.hbox6.Add(this.zoom_size_label);
+            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(this.hbox6[this.zoom_size_label]));
+            w8.Position = 0;
             w8.Expand = false;
             w8.Fill = false;
-            // Container child vbox2.Gtk.Box+BoxChild
+            // Container child hbox6.Gtk.Box+BoxChild
             this.zoom_scale = new Gtk.HScale(null);
             this.zoom_scale.CanFocus = true;
             this.zoom_scale.Name = "zoom_scale";
-            this.zoom_scale.Adjustment.Upper = 100;
-            this.zoom_scale.Adjustment.PageIncrement = 10;
-            this.zoom_scale.Adjustment.StepIncrement = 1;
+            this.zoom_scale.Adjustment.Lower = 0.1;
+            this.zoom_scale.Adjustment.Upper = 4;
+            this.zoom_scale.Adjustment.PageIncrement = 0.1;
+            this.zoom_scale.Adjustment.PageSize = 0.1;
+            this.zoom_scale.Adjustment.StepIncrement = 0.1;
+            this.zoom_scale.Adjustment.Value = 0.7;
             this.zoom_scale.DrawValue = true;
             this.zoom_scale.Digits = 0;
             this.zoom_scale.ValuePos = ((Gtk.PositionType)(2));
-            this.vbox2.Add(this.zoom_scale);
-            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(this.vbox2[this.zoom_scale]));
-            w9.Position = 6;
-            w9.Expand = false;
-            w9.Fill = false;
-            // Container child vbox2.Gtk.Box+BoxChild
-            this.hbuttonbox2 = new Gtk.HButtonBox();
-            this.hbuttonbox2.Name = "hbuttonbox2";
-            this.hbuttonbox2.BorderWidth = ((uint)(3));
-            // Container child hbuttonbox2.Gtk.ButtonBox+ButtonBoxChild
-            this.configure_docklets_button = new Gtk.Button();
-            this.configure_docklets_button.CanFocus = true;
-            this.configure_docklets_button.Name = "configure_docklets_button";
-            this.configure_docklets_button.UseUnderline = true;
-            this.configure_docklets_button.Label = Mono.Unix.Catalog.GetString("Configure Docklets");
-            this.hbuttonbox2.Add(this.configure_docklets_button);
-            Gtk.ButtonBox.ButtonBoxChild w10 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2[this.configure_docklets_button]));
+            this.hbox6.Add(this.zoom_scale);
+            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(this.hbox6[this.zoom_scale]));
+            w9.Position = 1;
+            this.vbox2.Add(this.hbox6);
+            Gtk.Box.BoxChild w10 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox6]));
+            w10.Position = 5;
             w10.Expand = false;
             w10.Fill = false;
-            this.vbox2.Add(this.hbuttonbox2);
-            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbuttonbox2]));
-            w11.Position = 7;
+            // Container child vbox2.Gtk.Box+BoxChild
+            this.hbox7 = new Gtk.HBox();
+            this.hbox7.Name = "hbox7";
+            this.hbox7.Spacing = 6;
+            // Container child hbox7.Gtk.Box+BoxChild
+            this.label4 = new Gtk.Label();
+            this.label4.Name = "label4";
+            this.label4.Yalign = 0.83F;
+            this.label4.LabelProp = Mono.Unix.Catalog.GetString("Zoom Width");
+            this.hbox7.Add(this.label4);
+            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.hbox7[this.label4]));
+            w11.Position = 0;
             w11.Expand = false;
             w11.Fill = false;
+            // Container child hbox7.Gtk.Box+BoxChild
+            this.hscale2 = new Gtk.HScale(null);
+            this.hscale2.CanFocus = true;
+            this.hscale2.Name = "hscale2";
+            this.hscale2.Adjustment.Upper = 100;
+            this.hscale2.Adjustment.PageIncrement = 10;
+            this.hscale2.Adjustment.StepIncrement = 1;
+            this.hscale2.DrawValue = true;
+            this.hscale2.Digits = 0;
+            this.hscale2.ValuePos = ((Gtk.PositionType)(2));
+            this.hbox7.Add(this.hscale2);
+            Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.hbox7[this.hscale2]));
+            w12.Position = 1;
+            this.vbox2.Add(this.hbox7);
+            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox7]));
+            w13.Position = 6;
+            w13.Expand = false;
+            w13.Fill = false;
+            // Container child vbox2.Gtk.Box+BoxChild
+            this.scrolled_window = new Gtk.ScrolledWindow();
+            this.scrolled_window.CanFocus = true;
+            this.scrolled_window.Name = "scrolled_window";
+            this.scrolled_window.ShadowType = ((Gtk.ShadowType)(1));
+            this.vbox2.Add(this.scrolled_window);
+            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.vbox2[this.scrolled_window]));
+            w14.Position = 7;
             this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
