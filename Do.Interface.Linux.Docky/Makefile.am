@@ -7,7 +7,7 @@ TARGET = library
 PKG_CONFIG_FILES = do.interface.linux.docky.pc
 
 FILES = \
-	gtk-gui/Docky.DockyConfigurationWidget.cs \
+	gtk-gui/Docky.Interface.DockyConfigurationWidget.cs \
 	gtk-gui/generated.cs \
 	AssemblyInfo.cs \
 	src/Docky.Core/DockServices.cs \

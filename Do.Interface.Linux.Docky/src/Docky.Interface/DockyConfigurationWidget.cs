@@ -16,18 +16,75 @@
 // 
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Docky
+using Gtk;
+
+using Docky.Utilities;
+
+namespace Docky.Interface
 {
 	
 	
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class DockyConfigurationWidget : Gtk.Bin
 	{
-		
+
 		public DockyConfigurationWidget()
 		{
 			this.Build();
+			
+			zoom_scale.Adjustment.PageSize = .1;
+			zoom_scale.Adjustment.SetBounds (1.1, 4, .1, 1, 1);
+			zoom_scale.Value = DockPreferences.ZoomPercent;
+			
+			advanced_indicators_checkbutton.Active = DockPreferences.IndicateMultipleWindows;
+			autohide_checkbutton.Active = DockPreferences.AutoHide;
+			window_overlap_checkbutton.Active = DockPreferences.AllowOverlap;
+			zoom_checkbutton.Active = DockPreferences.ZoomEnabled;
+			
+			orientation_combobox.AppendText (DockOrientation.Bottom.ToString ());
+			orientation_combobox.AppendText (DockOrientation.Top.ToString ());
+			orientation_combobox.Active = DockPreferences.Orientation == DockOrientation.Bottom ? 0 : 1;
+		}
+		
+		protected virtual void OnZoomScaleFormatValue (object o, Gtk.FormatValueArgs args)
+		{
+			args.RetVal = string.Format ("{0}%", Math.Round (args.Value * 100));
+		}
+
+		protected virtual void OnZoomScaleValueChanged (object sender, System.EventArgs e)
+		{
+			if (!(sender is HScale)) return;
+			
+			HScale scale = sender as HScale;
+			DockPreferences.ZoomPercent = scale.Value;
+		}
+
+		protected virtual void OnAdvancedIndicatorsCheckbuttonToggled (object sender, System.EventArgs e)
+		{
+			DockPreferences.IndicateMultipleWindows = advanced_indicators_checkbutton.Active;
+		}
+
+		protected virtual void OnZoomCheckbuttonToggled (object sender, System.EventArgs e)
+		{
+			DockPreferences.ZoomEnabled = zoom_checkbutton.Active;
+		}
+
+		protected virtual void OnWindowOverlapCheckbuttonToggled (object sender, System.EventArgs e)
+		{
+			DockPreferences.AllowOverlap = window_overlap_checkbutton.Active;
+		}
+
+		protected virtual void OnAutohideCheckbuttonToggled (object sender, System.EventArgs e)
+		{
+			DockPreferences.AutoHide = autohide_checkbutton.Active;
+		}
+
+		protected virtual void OnOrientationComboboxChanged (object sender, System.EventArgs e)
+		{
+			DockPreferences.Orientation = (DockOrientation) orientation_combobox.Active;
 		}
 	}
 }
