@@ -26,6 +26,7 @@ using Gdk;
 using Gtk;
 
 using Do.Platform;
+using Do.Interface.Xlib;
 
 using Docky.Core;
 using Docky.Utilities;
@@ -42,6 +43,9 @@ namespace Docky.Interface
 		
 		const uint OffDockWakeupTime = 250;
 		const uint OnDockWakeupTime = 20;
+		
+		const int UrgentBounceHeight = 100;
+		const int LaunchBounceHeight = 30;
 
 		TimeSpan BounceTime = new TimeSpan (0, 0, 0, 0, 700);
 		TimeSpan InsertAnimationTime = new TimeSpan (0, 0, 0, 0, 150*5);
@@ -99,14 +103,14 @@ namespace Docky.Interface
 				
 				switch (DockPreferences.Orientation) {
 				case DockOrientation.Bottom:
-					values [(int) XLib.Struts.Bottom] = (uint) (DockHeight + (Screen.Height - (geo.Y + geo.Height)));
-					values [(int) XLib.Struts.BottomStart] = (uint) geo.X;
-					values [(int) XLib.Struts.BottomEnd] = (uint) (geo.X + geo.Width - 1);
+					values [(int) Struts.Bottom] = (uint) (DockHeight + (Screen.Height - (geo.Y + geo.Height)));
+					values [(int) Struts.BottomStart] = (uint) geo.X;
+					values [(int) Struts.BottomEnd] = (uint) (geo.X + geo.Width - 1);
 					break;
 				case DockOrientation.Top:
-					values [(int) XLib.Struts.Top] = (uint) (DockHeight + geo.Y);
-					values [(int) XLib.Struts.TopStart] = (uint) geo.X;
-					values [(int) XLib.Struts.TopEnd] = (uint) (geo.X + geo.Width - 1);
+					values [(int) Struts.Top] = (uint) (DockHeight + geo.Y);
+					values [(int) Struts.TopStart] = (uint) geo.X;
+					values [(int) Struts.TopEnd] = (uint) (geo.X + geo.Width - 1);
 					break;
 				}
 				return values;
@@ -175,6 +179,7 @@ namespace Docky.Interface
 							break;
 						}
 					}
+					
 					CursorIsOverDockArea = dockRegion.Contains (cursor);
 				}
 				
@@ -199,8 +204,6 @@ namespace Docky.Interface
 		{
 			this.window = window;
 			
-			SetSize ();
-			
 			PositionProvider = new ItemPositionProvider (this);
 			
 			AnimationState = new DockAnimationState ();
@@ -220,6 +223,7 @@ namespace Docky.Interface
 			           (int) EventMask.ScrollMask |
 			           (int) EventMask.FocusChangeMask);
 			
+			SetSize ();
 			DoubleBuffered = false;
 
 			BuildRendering ();
@@ -238,7 +242,10 @@ namespace Docky.Interface
 			geo = LayoutUtils.MonitorGemonetry ();
 			
 			Width = geo.Width;
-			Height = 300;
+			if (AnimationState [Animations.UrgencyChanged])
+				Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + UrgentBounceHeight;
+			else
+				Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + LaunchBounceHeight;
 			
 			SetSizeRequest (Width, Height);
 		}
@@ -315,6 +322,12 @@ namespace Docky.Interface
 		{
 			if (args.Type == UpdateRequestType.NeedsAttentionSet) {
 				SetParentInputMask ();
+				Reconfigure ();
+				
+				GLib.Timeout.Add ((uint) BounceTime.Milliseconds + 20, delegate {
+					Reconfigure ();
+					return false;
+				});
 			}
 			AnimatedDraw ();
 		}
@@ -331,6 +344,9 @@ namespace Docky.Interface
 		
 		void Reconfigure ()
 		{
+			if (!Visible || !IsRealized || drag_resizing)
+				return;
+			
 			SetSize ();
 			ResetBuffers ();
 			PositionProvider.ForceUpdate ();
@@ -641,7 +657,7 @@ namespace Docky.Interface
 		protected override bool OnScrollEvent (Gdk.EventScroll evnt)
 		{
 			int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y);
-			if (item == -1)
+			if (item >= DockItems.Count || item < 0)
 				return false;
 			
 			DockItems [item].Scrolled (evnt.Direction);
@@ -719,7 +735,7 @@ namespace Docky.Interface
 			
 			RegisterGtkDragSource ();
 			window.UnpresentWindow ();
-
+			
 			SetParentInputMask ();
 			AnimatedDraw ();
 		}

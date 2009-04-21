@@ -39,7 +39,8 @@ namespace Docky.Interface.Menus
 		const int Height = 22;
 		
 		Gtk.Widget widget;
-		bool hovered;
+		bool hovered, tooltip;
+		string description, icon;
 		
 		public bool Dark { get; set; }
 		
@@ -47,33 +48,60 @@ namespace Docky.Interface.Menus
 			get { return 1; }
 		}
 		
-		public override Gtk.Widget Widget { 
+		public override Gtk.Widget Widget {
+			get { return widget; } 
+		}
+		
+		private Gdk.Pixbuf Pixbuf { get; set; }
+		
+		protected string Description { 
 			get {
-				if (widget == null)
-					widget = BuildWidget ();
-				return widget;
+				return description;
+			}
+			set {
+				description = value;
+				BuildWidget ();
 			}
 		}
 		
-		protected virtual string Description { get; set; }
+		protected string Icon { 
+			get {
+				return icon;
+			}
+			set {
+				icon = value;
+				BuildWidget ();
+			}
+		}
 		
-		protected virtual string Icon { get; set; }
-		
-		protected virtual bool UseTooltip { get; set; }
+		protected bool UseTooltip {
+			get {
+				return tooltip;
+			}
+			set {
+				
+				tooltip = value;
+				BuildWidget ();
+			}
+		}
 		
 		public AbstractMenuButtonArgs ()
 		{
-			
 		}
 		
 		public AbstractMenuButtonArgs (string description, string icon)
 		{
-			Description = GLib.Markup.EscapeText (Catalog.GetString (description));
-			Icon = icon;
+			this.description = GLib.Markup.EscapeText (Catalog.GetString (description));
+			this.icon = icon;
+			
+			BuildWidget ();
 		}
 		
-		Widget BuildWidget ()
+		void BuildWidget ()
 		{
+			if (widget != null)
+				widget.Destroy ();
+			
 			DrawingArea button = new DrawingArea ();
 			
 			button.ExposeEvent += HandleExposeEvent;
@@ -88,7 +116,12 @@ namespace Docky.Interface.Menus
 			if (UseTooltip)
 				button.TooltipText = Description;
 			
-			return button;
+			widget = button;
+			
+			if (Pixbuf != null)
+				Pixbuf.Dispose ();
+			
+			Pixbuf = GetPixbuf (Height - 8);
 		}
 		
 		void HandleButtonReleaseEvent(object o, ButtonReleaseEventArgs args)
@@ -135,27 +168,31 @@ namespace Docky.Interface.Menus
 				
 				int width = area.Width - WidthBuffer * 2 - 25;
 				
-				TextRenderContext renderContext = new TextRenderContext (cr, string.Format (FormatString, Description), width);
+				if (!string.IsNullOrEmpty (Description)) {
+					TextRenderContext renderContext = new TextRenderContext (cr, string.Format (FormatString, Description), width);
+					
+					renderContext.LeftCenteredPoint = new Gdk.Point (area.X + WidthBuffer + 25, area.Y + area.Height / 2);
+					renderContext.Alignment = Pango.Alignment.Left;
+					renderContext.EllipsizeMode = Pango.EllipsizeMode.End;
+					
+					DockServices.DrawingService.TextPathAtPoint (renderContext);
+					
+					cr.Color = new Cairo.Color (1, 1, 1);
+					cr.Fill ();
+				}
 				
-				renderContext.LeftCenteredPoint = new Gdk.Point (area.X + WidthBuffer + 25, area.Y + area.Height / 2);
-				renderContext.Alignment = Pango.Alignment.Left;
-				renderContext.EllipsizeMode = Pango.EllipsizeMode.End;
-				
-				DockServices.DrawingService.TextPathAtPoint (renderContext);
-				
-				cr.Color = new Cairo.Color (1, 1, 1);
-				cr.Fill ();
-				
-				Gdk.Pixbuf pbuf = GetPixbuf (Height - 8);
-				CairoHelper.SetSourcePixbuf (cr, pbuf, WidthBuffer, (Height - pbuf.Height) / 2);
-				cr.PaintWithAlpha (IconOpacity);
-				pbuf.Dispose ();
+				if (Pixbuf != null) {
+					CairoHelper.SetSourcePixbuf (cr, Pixbuf, WidthBuffer, (Height - Pixbuf.Height) / 2);
+					cr.PaintWithAlpha (IconOpacity);
+				}
 			}
 		}
 		
 		protected virtual Gdk.Pixbuf GetPixbuf (int size)
 		{
-			return IconProvider.PixbufFromIconName (Icon, size);
+			if (!string.IsNullOrEmpty (Icon))
+				return IconProvider.PixbufFromIconName (Icon, size);
+			return null;
 		}
 		
 		public abstract void Action ();
@@ -169,6 +206,7 @@ namespace Docky.Interface.Menus
 		public override void Dispose ()
 		{
 			Widget.Destroy ();
+			Pixbuf.Dispose ();
 			base.Dispose ();
 		}
 

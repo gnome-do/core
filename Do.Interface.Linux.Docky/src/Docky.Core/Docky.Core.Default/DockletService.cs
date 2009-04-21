@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Mono.Addins;
+
 using Do.Platform;
 
 using Docky.Core;
@@ -30,7 +32,7 @@ namespace Docky.Core.Default
 	
 	public class DockletService : IDockletService
 	{
-		
+		const string ExtensionPath = "/Docky/Docklet";
 		Dictionary<AbstractDockletItem, bool> docklets;
 		
 		#region IDockletService implementation 
@@ -55,7 +57,7 @@ namespace Docky.Core.Default
 		
 		public IEnumerable<AbstractDockletItem> ActiveDocklets {
 			get {
-				return docklets.Where (kvp => kvp.Value).Select (kvp => kvp.Key);
+				return docklets.Where (kvp => kvp.Value).Select (kvp => kvp.Key).OrderBy (adi => adi.Name);
 			}
 		}
 		
@@ -63,21 +65,36 @@ namespace Docky.Core.Default
 
 		IPreferences prefs;
 		
+		public static IEnumerable<AbstractDockletItem> MADocklets {
+			get { return AddinManager.GetExtensionObjects (ExtensionPath).OfType<AbstractDockletItem> (); }
+		}
+		
 		public DockletService()
 		{
 			prefs = Services.Preferences.Get<DockletService> ();
 			
-			string[] visible = VisibleApplets ();
-			docklets = new Dictionary<AbstractDockletItem, bool> ();
+			AddinManager.AddExtensionNodeHandler (ExtensionPath, HandleDockletsChanged);
 			
-			TrashDockItem trash = new TrashDockItem ();
-			docklets.Add (trash, visible.Contains (trash.GetType ().Name));
-			
-			ClockDockItem clock = new ClockDockItem ();
-			docklets.Add (clock, visible.Contains (clock.GetType ().Name));
+			BuildDocklets ();
 		}
 		
-		string[] VisibleApplets ()
+		void HandleDockletsChanged (object sender, ExtensionNodeEventArgs args)
+		{
+			BuildDocklets ();
+			OnAppletVisibilityChanged ();
+		}
+		
+		void BuildDocklets ()
+		{
+			IEnumerable<string> visible = VisibleApplets ();
+			docklets = new Dictionary<AbstractDockletItem, bool> ();
+			
+			foreach (AbstractDockletItem adi in MADocklets) {
+				docklets.Add (adi, visible.Contains (adi.GetType ().Name));
+			}
+		}
+		
+		IEnumerable<string> VisibleApplets ()
 		{
 			string configString = prefs.Get ("ActiveApplets", "ClockDockItem;");
 			return configString.Split (';');
@@ -103,6 +120,7 @@ namespace Docky.Core.Default
 		
 		public void Dispose ()
 		{
+			AddinManager.RemoveExtensionNodeHandler (ExtensionPath, HandleDockletsChanged);
 		}
 		
 		#endregion 

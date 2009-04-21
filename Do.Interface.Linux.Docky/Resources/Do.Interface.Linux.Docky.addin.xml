@@ -1,5 +1,5 @@
 <Addin
-	id="DockyInterface"
+	id="Interface.Linux.Docky"
 	namespace="Do"
 	version="1.0"
 	name="Docky"
@@ -16,10 +16,15 @@
 		<Addin id="Interface.Linux" version="1.0" />
 	</Dependencies>
 
-	<!--<ExtensionPoint path="/Docky/Applet">
-		<ExtensionNode name="DockApplet" objectType="Docky.Interface.AbstractDockItem" />
-		<ExtensionNode name="DockPainter" objectType="Docky.Interface.IDockPainter" />
-	</ExtensionPoint>-->
+	<ExtensionPoint path="/Docky/Docklet">
+		<ExtensionNode name="Docklet" objectType="Docky.Interface.AbstractDockletItem" />
+		<!--<ExtensionNode name="DockPainter" objectType="Docky.Interface.IDockPainter" />-->
+	</ExtensionPoint>
+	
+	<Extension path="/Docky/Docklet">
+		<Docklet type="Docky.Interface.ClockDockItem" />
+		<Docklet type="Docky.Interface.TrashDockItem" />
+	</Extension>
 	
 	<Extension path = "/Do/InterfaceWindow">
 		<InterfaceWindow type="Docky.Interface.DockWindow" />

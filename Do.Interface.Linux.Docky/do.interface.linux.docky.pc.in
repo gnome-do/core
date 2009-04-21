@@ -1,0 +1,6 @@
+Name: Do.Interface.Linux.Docky
+Description: GNOME Do Docky Interface
+Version: @ABI_VERSION@
+
+Requires: do.interface.linux
+Libs: -r:@expanded_libdir@/@PACKAGE@/Do.Interface.Linux.Docky.dll

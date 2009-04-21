@@ -1,8 +1,7 @@
 // PositionWindow.cs
 //
-//GNOME Do is the legal property of its developers. Please refer to the
-//COPYRIGHT file distributed with this
-//source distribution.
+// GNOME Do is the legal property of its developers. Please refer to the
+// COPYRIGHT file distributed with this source distribution.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,8 +20,11 @@
 //
 
 using System;
+
 using Gdk;
 using Gtk;
+
+using Do.Platform;
 
 namespace Do.Interface
 {
@@ -30,18 +32,22 @@ namespace Do.Interface
 	
 	public class PositionWindow
 	{
-		private int monitor;
-		private Gtk.Window w, r;
+		Gtk.Window w, r;
 		
-		public PositionWindow (Gtk.Window main, Gtk.Window results) {
+		public PositionWindow (Gtk.Window main, Gtk.Window results)
+		{
 			this.w = main;
 			this.r = results;
-			
+		}
+
+		int GetMonitor ()
+		{
+			Display disp;
 			Rectangle point;
-			Display disp = w.Screen.Display;
+
+			disp = w.Screen.Display;
 			disp.GetPointer(out point.X, out point.Y);
-			
-			monitor = w.Screen.GetMonitorAtPoint (point.X, point.Y);
+			return w.Screen.GetMonitorAtPoint (point.X, point.Y);
 		}
 		
 		public void UpdatePosition (int iconboxWidth, Pane currentPane, Rectangle resultsOffset)
@@ -56,12 +62,7 @@ namespace Do.Interface
 				w.GetPosition (out main.X, out main.Y);
 				w.GetSize (out main.Width, out main.Height);
 			
-				//only change monitors if we are currently not showing the window
-				if (!w.Visible) {
-					GetMonitor ();
-				}
-				
-				geo = w.Screen.GetMonitorGeometry (monitor);
+				geo = w.Screen.GetMonitorGeometry (GetMonitor ());
 				main.X = ((geo.Width - main.Width) / 2) + geo.X + normalOffset.X;
 				main.Y = (int)((geo.Height + geo.Y - main.Height) / 2.5) + geo.Y + normalOffset.Y;
 				w.Move (main.X, main.Y);
@@ -75,20 +76,5 @@ namespace Do.Interface
 			});
 		}
 		
-		public bool GetMonitor () {
-			Rectangle point;
-			int tmp;
-			tmp = monitor;
-			
-			Display disp = w.Screen.Display;
-			disp.GetPointer(out point.X, out point.Y);
-			
-			monitor = w.Screen.GetMonitorAtPoint (point.X, point.Y);
-			
-			if (tmp == monitor)
-				return false;
-			else
-				return true;
-		}
 	}
 }

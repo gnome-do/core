@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 using Gnome;
 using Mono.Unix;
@@ -67,6 +68,56 @@ namespace Do.Universe.Linux {
 					Instances [key] = appItem;
 			}
 			return appItem;
+		}
+		
+		public static ApplicationItem MaybeCreateFromCmd (string cmd)
+		{
+			if (string.IsNullOrEmpty (cmd))
+				return null;
+			
+			List<ApplicationItem> appItems = new List<ApplicationItem> ();
+			
+			cmd = Regex.Escape (cmd);
+			Regex regex = new Regex (string .Format ("(^| ){0}( |)", cmd));
+			foreach (ApplicationItem item in Instances.Values) {
+				string path = item.Location;
+				try {
+					if (path.StartsWith ("file://"))
+						path = path.Substring ("file://".Length); 
+				
+					path = Path.GetFileName (path);
+				} catch { continue; }
+				
+				try {
+					if ((!string.IsNullOrEmpty (path) && regex.IsMatch (path)) || 
+					    (!string.IsNullOrEmpty (item.Exec) && regex.IsMatch (item.Exec))) {
+						appItems.Add (item);
+					}
+				} catch {
+					// it failed, probably a null somewhere, we dont care really
+				}
+			}
+			
+			ApplicationItem bestMatch = null;
+			
+			foreach (ApplicationItem item in appItems) {
+				if (bestMatch == null) {
+					bestMatch = item;
+					continue;
+				}
+				if (!item.Hidden) {
+					if (bestMatch.Hidden) {
+						bestMatch = item;
+						continue;
+					}
+					if (item.IsAppropriateForCurrentDesktop) {
+						if (!bestMatch.IsAppropriateForCurrentDesktop || item.Exec.Length < bestMatch.Exec.Length)
+							bestMatch = item;
+					}
+				}
+			}
+			
+			return bestMatch;
 		}
 
 		protected DesktopItem item;
@@ -114,6 +165,10 @@ namespace Do.Universe.Linux {
 		
 		public string Exec {
 			get { return item.GetString ("Exec"); }
+		}
+		
+		protected string Location {
+			get { return item.Location; }
 		}
 
 		public bool Hidden {

@@ -93,7 +93,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins, Version=0.2.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins.Gui, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins.Setup, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
-    <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -101,6 +100,7 @@
     <ProjectReference type="Project" localcopy="True" refto="Do.Platform.Linux" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Interface.Linux" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Universe" />
+    <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
   <LanguageParameters ApplicationIcon="../../../../../jason/do/trunk-merge/Do" ctype="CSharpProjectParameters" />
   <Deployment.LinuxDeployData scriptName="gnome-do" />

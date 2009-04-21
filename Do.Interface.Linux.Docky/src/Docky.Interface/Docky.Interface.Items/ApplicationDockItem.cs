@@ -43,22 +43,11 @@ namespace Docky.Interface
 	{
 		public event EventHandler RemoveClicked;
 		
-		static readonly IEnumerable<string> DesktopFilesDirectories = new [] {
-				"~/.local/share/applications/wine",
-				"~/.local/share/applications",
-				"/usr/share/applications",
-				"/usr/share/applications/kde",
-				"/usr/share/applications/kde4",
-				"/usr/share/gdm/applications",
-				"/usr/local/share/applications",
-		};
-		
 		string MinimizeRestoreText = Catalog.GetString ("Minimize") + "/" + Catalog.GetString ("Restore");
 		string MaximizeText = Catalog.GetString ("Maximize");
 		string CloseText = Catalog.GetString ("Close All");
 		
 		const int MenuItemMaxCharacters = 50;
-		const string WindowIcon = "forward";
 		
 		string MaximizeIcon {
 			get { return "maximize.svg@" + GetType ().Assembly.FullName; }
@@ -72,38 +61,36 @@ namespace Docky.Interface
 			get { return "close.svg@" + GetType ().Assembly.FullName; }
 		}
 		
+		string WindowIcon {
+			get {
+				if (Launcher == null)
+					return "forward";
+				return Launcher.Icon;
+			}
+		}
+		
 		int windowCount;
 		
 		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
 		
-		IEnumerable<Wnck.Application> applications;
+		IEnumerable<Wnck.Window> windows;
 		
-		string desktop_file;
-		bool checked_desktop_file;
+		IApplicationItem launcher;
 		
-		public string DesktopFile {
+		public IApplicationItem Launcher {
 			get {
-				if (desktop_file == null && !checked_desktop_file) {
-					checked_desktop_file = true;
-					foreach (string s in GetIconGuesses ()) {
-						desktop_file = GetDesktopFile (s);
-						if (desktop_file != null)
-							break;
-					}
+				if (launcher == null && Exec != null) {
+					string command = WindowUtils.ProcessExecString (Exec);
+					launcher = Services.UniverseFactory.MaybeApplicationItemFromCommand (command);
 				}
-				return desktop_file;
+				return launcher;
 			}
 		}
 		
 		string Exec {
 			get {
 				string exec;
-				foreach (Wnck.Application app in Applications) {
-					exec = MaybeGetExecStringForPID (app.Pid);
-					if (exec != null)
-						return exec;
-				}
 
 				foreach (Wnck.Window win in VisibleWindows) {
 					exec = MaybeGetExecStringForPID (win.Pid);
@@ -130,34 +117,23 @@ namespace Docky.Interface
 		protected override Gdk.Pixbuf GetSurfacePixbuf (int size)
 		{
 			Gdk.Pixbuf pbuf = null;
-			foreach (string guess in GetIconGuesses ()) {
-				if (pbuf != null) {
+			
+			if (Launcher == null) {
+				foreach (string guess in GetIconGuesses ()) {
+					bool found = IconProvider.PixbufFromIconName (guess, size, out pbuf);
+					if (found && (pbuf.Width == size || pbuf.Height == size))
+						break;
+					
 					pbuf.Dispose ();
 					pbuf = null;
 				}
-				
-				bool found = IconProvider.PixbufFromIconName (guess, size, out pbuf);
-				if (found && (pbuf.Width == size || pbuf.Height == size))
-					break;
-				
-				pbuf.Dispose ();
-				pbuf = null;
-			
-				string desktopPath = GetDesktopFile (guess);
-				if (!string.IsNullOrEmpty (desktopPath)) {
-					try {
-						string icon = Services.UniverseFactory.NewApplicationItem (desktopPath).Icon;
-						pbuf = IconProvider.PixbufFromIconName (icon, size);
-						break;
-					} catch {
-						continue;
-					}
-				}
+			} else {
+				IconProvider.PixbufFromIconName (Launcher.Icon, size, out pbuf);
 			}
 			
 			// we failed to find an icon, lets use an uggggly one
 			if (pbuf == null)
-				pbuf = Applications.First ().Icon;
+				pbuf = Windows.First ().Icon;
 			
 			if (pbuf.Height != size && pbuf.Width != size ) {
 				double scale = (double)size / Math.Max (pbuf.Width, pbuf.Height);
@@ -170,14 +146,21 @@ namespace Docky.Interface
 		
 		string Name {
 			get {
-				foreach (Wnck.Application application in Applications) {
-					if (StringIsValidName (application.IconName))
-						return application.IconName;
-					else if (StringIsValidName (application.Name))
-						return application.Name;
+				if (!VisibleWindows.Any ())
+					return "Unknown";
+				
+				if (NeedsAttention) {
+					return VisibleWindows.Where (w => w.NeedsAttention ()).First ().Name;
 				}
-
+				if (VisibleWindows.Any () && VisibleWindows.Count () == 1) {
+					return VisibleWindows.First ().Name;
+				}
+				
 				foreach (Wnck.Window window in VisibleWindows) {
+					if (window.ClassGroup != null) {
+						if (StringIsValidName (window.ClassGroup.ResClass))
+							return window.ClassGroup.ResClass;
+					}
 					if (StringIsValidName (window.IconName))
 						return window.IconName;
 					else if (StringIsValidName (window.Name))
@@ -191,13 +174,13 @@ namespace Docky.Interface
 			get { return windowCount; }
 		}
 		
-		protected override IEnumerable<Wnck.Application> Applications { 
-			get { return applications; } 
+		public override IEnumerable<Wnck.Window> Windows { 
+			get { return windows; } 
 		}
 
-		public ApplicationDockItem (IEnumerable<Wnck.Application> applications) : base ()
+		public ApplicationDockItem (IEnumerable<Wnck.Window> windows) : base ()
 		{
-			this.applications = applications;
+			this.windows = windows;
 			windowCount = VisibleWindows.Count ();
 			
 			foreach (Wnck.Window w in VisibleWindows) {
@@ -227,41 +210,49 @@ namespace Docky.Interface
 				if (VisibleWindows.Count () == 0)
 					Core.DockServices.ItemsService.ForceUpdate ();
 			}
+			
+			SetText (Name);
 		}
 		
 		IEnumerable<string> GetIconGuesses ()
 		{
 			List<string> guesses = new List<string> ();
 			
-			if (!string.IsNullOrEmpty (Exec)) {
-				yield return Exec;
-				yield return Exec.Split ('-')[0];
+			// open office hack...
+			if (VisibleWindows.Any () &&
+			    VisibleWindows.First ().ClassGroup != null &&
+			    VisibleWindows.First ().ClassGroup.ResClass.ToLower ().Contains ("openoffice")) {
+				yield return "openoffice";
+				yield break;
 			}
 			
-			foreach (Wnck.Application app in Applications) {
-				if (!guesses.Contains (PrepName (app.Name)))
-					guesses.Add (PrepName (app.Name));
-				if (!guesses.Contains (PrepName (app.IconName)))
-					guesses.Add (PrepName (app.IconName));
+			string exec = Exec;
+			if (!string.IsNullOrEmpty (exec)) {
+				yield return exec;
+				yield return exec.Split ('-')[0];
+				yield return WindowUtils.ProcessExecString (exec);
 			}
 
 			foreach (Wnck.Window win in VisibleWindows) {
 				if (!guesses.Contains (PrepName (win.Name)))
 					guesses.Add (PrepName (win.Name));
+				
 				if (!guesses.Contains (PrepName (win.IconName)))
 					guesses.Add (PrepName (win.IconName));
+				
+				if (win.ClassGroup == null)
+					continue;
+				
 				if (!guesses.Contains (PrepName (win.ClassGroup.ResClass)))
 					guesses.Add (PrepName (win.ClassGroup.ResClass));
+				
+				if (!guesses.Contains (PrepName (win.ClassGroup.Name)))
+					guesses.Add (PrepName (win.ClassGroup.Name));
 			}
 			
-			foreach (string s in guesses)
+			foreach (string s in guesses) {
 				yield return s;
-			
-			foreach (string s in guesses)
-				yield return "gnome-" + s;
-			
-			if (Name.Length > 4 && Name.Contains (" "))
-				yield return Name.Split (' ') [0].ToLower ();
+			}
 		}
 
 		string PrepName (string s)
@@ -283,27 +274,14 @@ namespace Docky.Interface
 			return exec;
 		}
 		
-		string GetDesktopFile (string base_name)
-		{
-			foreach (string dir in DesktopFilesDirectories) {
-				try {
-					if (File.Exists (System.IO.Path.Combine (dir, base_name+".desktop")))
-						return System.IO.Path.Combine (dir, base_name+".desktop");
-					if (File.Exists (System.IO.Path.Combine (dir, "gnome-"+base_name+".desktop")))
-						return System.IO.Path.Combine (dir, "gnome-"+base_name+".desktop");
-				} catch { return null; }
-			}
-			return null;
-		}
-		
 		bool StringIsValidName (string s)
 		{
 			s = s.Trim ();
 			if (string.IsNullOrEmpty (s) || s == "<unknown>")
 				return false;
 			
-			foreach (string prefix in WindowUtils.BadPrefixes) {
-				if (string.Compare (s, prefix, true) == 0)
+			foreach (System.Text.RegularExpressions.Regex prefix in WindowUtils.BadPrefixes) {
+				if (prefix.IsMatch (s))
 					return false;
 			}
 			
@@ -324,14 +302,15 @@ namespace Docky.Interface
 			if (!(other is ApplicationDockItem))
 				return false;
 
-			return Applications.Any (app => (other as ApplicationDockItem).Applications.Contains (app));
+			return Windows.Any (w => (other as ApplicationDockItem).Windows.Contains (w));
 		}
 		
 		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
 			yield return new SeparatorMenuButtonArgs ();
 			
-			if (DesktopFile == null) {
+			Item item = Launcher as Item;
+			if (item == null) {
 				yield return new SimpleMenuButtonArgs (() => WindowControl.MinimizeRestoreWindows (VisibleWindows), 
 				                                       MinimizeRestoreText, MinimizeIcon).AsDark ();
 				
@@ -341,8 +320,6 @@ namespace Docky.Interface
 				yield return new SimpleMenuButtonArgs (() => WindowControl.CloseWindows (VisibleWindows), 
 				                                       CloseText, CloseIcon).AsDark ();
 			} else {
-				Item item = Services.UniverseFactory.NewApplicationItem (DesktopFile) as Item;
-				
 				foreach (Act act in ActionsForItem (item))
 					yield return new LaunchMenuButtonArgs (act, item, act.Name, act.Icon).AsDark ();
 			}
@@ -351,6 +328,12 @@ namespace Docky.Interface
 				yield return new SeparatorMenuButtonArgs ();
 				yield return new WindowMenuButtonArgs (window, window.Name, WindowIcon);
 			}
+		}
+		
+		protected override void Launch ()
+		{
+			if (Launcher != null)
+				Launcher.Run ();
 		}
 
 		public override void Dispose ()

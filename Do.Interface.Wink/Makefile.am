@@ -8,8 +8,15 @@ PKG_CONFIG_FILES = do.interface.wink.pc
 
 FILES = \
 	src/AssemblyInfo.cs \
+	src/Do.Interface.Xlib/Xlib.cs \
+	src/Do.Interface.Xlib/X11Atoms.cs \
+	src/Do.Interface.Wink/ClickAction.cs \
 	src/Do.Interface.Wink/WindowControl.cs \
-	src/Do.Interface.Wink/WindowUtils.cs
+	src/Do.Interface.Wink/WindowUtils.cs \
+	src/Do.Interface.Wink/WnckWindow_Extensions.cs \
+	src/Do.Interface.Wink/ScreenUtils.cs \
+	src/Do.Interface.Wink/Position.cs \
+	src/Do.Interface.Wink/Viewport.cs
 
 #RESOURCES = \
 #	Resources/Do.Interface.Wnck.addin.xml
@@ -17,11 +24,12 @@ FILES = \
 REFERENCES =  \
 	System \
 	System.Core \
+	Mono.Posix \
 	$(GTK_SHARP_20_LIBS) \
 	$(WNCK_SHARP_10_LIBS)
 
 PROJECT_REFERENCES = \
 	Do.Platform
 
-#module_DATA += $(ASSEMBLY).dll.config
-#EXTRA_DIST += $(ASSEMBLY).dll.config
+module_DATA += $(ASSEMBLY).dll.config
+EXTRA_DIST += $(ASSEMBLY).dll.config

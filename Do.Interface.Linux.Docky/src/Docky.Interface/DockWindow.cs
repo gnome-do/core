@@ -25,11 +25,11 @@ using Gtk;
 using Cairo;
 
 using Docky.Utilities;
-using Docky.XLib;
 
 using Do.Universe;
 using Do.Platform;
 using Do.Interface;
+using Do.Interface.Xlib;
 using Do.Interface.CairoUtils;
 using Do.Interface.AnimationBase;
 
@@ -52,6 +52,7 @@ namespace Docky.Interface
 		bool is_repositioned_hidden;
 		bool presented;
 		int buffer_x, buffer_y;
+		int buffer_width, buffer_height;
 		
 		public new string Name {
 			get { return "Docky"; }
@@ -79,7 +80,7 @@ namespace Docky.Interface
 			Core.DockServices.RegisterService (interop_service);
 			
 			Core.DockServices.PainterService.RegisterPainter (new Painters.SummonModeRenderer ());
-
+			
 			RegisterEvents ();
 			Build ();
 		}
@@ -221,6 +222,9 @@ namespace Docky.Interface
 		
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
+			buffer_width = allocation.Width;
+			buffer_height = allocation.Height;
+			
 			base.OnSizeAllocated (allocation);
 			Reposition ();
 		}
@@ -243,7 +247,9 @@ namespace Docky.Interface
 				results_window.Move ((geo.X + geo.Width / 2) - res.Width / 2, geo.Y + dock_area.DockHeight);
 				break;
 			}
-			Display.Sync ();
+			
+			if (Display != null)
+				Display.Sync ();
 			
 			is_repositioned_hidden = false;
 		}
@@ -264,7 +270,8 @@ namespace Docky.Interface
 				break;
 			}
 
-			Display.Sync ();
+			if (Display != null)
+				Display.Sync ();
 			
 			is_repositioned_hidden = true;
 		}
@@ -272,23 +279,23 @@ namespace Docky.Interface
 		public void WindowHideOffset (out int x, out int y)
 		{
 			x = y = 0;
+
+			Gdk.Rectangle main, geo;
+			main.Width = dock_area.Width;
+			main.Height = dock_area.Height;
+			GetBufferedPosition (out main.X, out main.Y);
+			geo = LayoutUtils.MonitorGemonetry ();
 			
-			if (!is_repositioned_hidden) {
-				return;
-			}
 			
-			Gdk.Rectangle main;
-			GetSize (out main.Width, out main.Height);
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
-				y = main.Height;
-				break;
+				y = main.Y - ((geo.Y + geo.Height) - main.Height);
+				return;
 			case DockOrientation.Top:
-				y = 0 - main.Height;
-				break;
+				y = main.Y - geo.Y;
+				return;
 			}
 		}
-		
 				
 		public void GetBufferedPosition (out int x, out int y)
 		{
@@ -296,6 +303,14 @@ namespace Docky.Interface
 				GetPosition (out buffer_x, out buffer_y);
 			x = buffer_x;
 			y = buffer_y;
+		}
+		
+		public void GetBufferedSize (out int width, out int height)
+		{
+			if (buffer_width == 0 && buffer_height == 0)
+				GetSize (out buffer_width, out buffer_height);
+			width = buffer_width;
+			height = buffer_height;
 		}
 		
 		public void DelaySetStruts ()
@@ -308,7 +323,7 @@ namespace Docky.Interface
 		
 		public bool SetStruts ()
 		{
-			X11Atoms atoms = new X11Atoms (GdkWindow);
+			X11Atoms atoms = X11Atoms.Instance;
 
 			uint [] struts = dock_area.StrutRequest;
 			uint [] first_struts = new [] { struts [0], struts [1], struts [2], struts [3] };
@@ -318,10 +333,10 @@ namespace Docky.Interface
 			if (!IsRealized)
 				return false;
 			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT_PARTIAL, atoms.XA_CARDINAL,
-			                      (int) XLib.PropertyMode.PropModeReplace, struts);
+			                      (int) PropertyMode.PropModeReplace, struts);
 			
 			Xlib.XChangeProperty (GdkWindow, atoms._NET_WM_STRUT, atoms.XA_CARDINAL, 
-			                      (int) XLib.PropertyMode.PropModeReplace, first_struts);
+			                      (int) PropertyMode.PropModeReplace, first_struts);
 				
 			return false;
 		}

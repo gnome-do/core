@@ -99,8 +99,9 @@ namespace Docky.Interface
 			if (!File.Exists (item) && !Directory.Exists (item))
 				return false;
 			
+			Console.WriteLine (item);
 			try {
-				File.Move (item, Path.Combine (Trash, Path.GetFileName (item)));
+				Services.Environment.Execute (string.Format ("gvfs-trash \"{0}\"", item));
 			} catch (Exception e) { 
 				Log.Error (e.Message);
 				Log.Error ("Could not move {0} to trash", item); 

@@ -37,25 +37,25 @@ namespace Docky.Interface
 
 		public event EventHandler StateChanged;
 		
-		Element[] current_items = new Element[3];
-		Element[] old_items = new Element[3];
+		Element [] current_items = new Element [3];
+		Element [] old_items = new Element [3];
 		
-		string [] queries = new string[3];
+		string [] queries = new string [3];
 		
-		int[] cursors = new int[3];
-		int[] previous_cursors = new int[3];
+		int [] cursors = new int [3];
+		int [] previous_cursors = new int [3];
 		
-		bool[] text_mode = new bool[3];
+		bool [] text_mode = new bool [3];
 		
-		TextModeType[] text_mode_types = new TextModeType[3];
+		TextModeType [] text_mode_types = new TextModeType [3];
 		
-		DateTime[] timestamps = new DateTime[3];
-		DateTime[] result_timestamps = new DateTime[3];
-		DateTime[] cursor_timestamps = new DateTime[3];
-		DateTime[] text_mode_timestamps = new DateTime[3];
+		DateTime [] timestamps = new DateTime [3];
+		DateTime [] result_timestamps = new DateTime [3];
+		DateTime [] cursor_timestamps = new DateTime [3];
+		DateTime [] text_mode_timestamps = new DateTime [3];
 		
-		IList<Element>[] results = new IList<Element>[3];
-		IList<Element>[] results_prev = new IList<Element>[3];
+		IList<Element> [] results = new IList<Element> [3];
+		IList<Element> [] results_prev = new IList<Element> [3];
 		
 		Pane currentPane, previousPane = Pane.Second;
 		
@@ -124,19 +124,19 @@ namespace Docky.Interface
 		#region Timestamps
 		public DateTime FirstChangeTime {
 			get {
-				return timestamps[0];
+				return timestamps [0];
 			}
 		}
 		
 		public DateTime SecondChangeTime {
 			get {
-				return timestamps[1];
+				return timestamps [1];
 			}
 		}
 		
 		public DateTime ThirdChangeTime {
 			get {
-				return timestamps[2];
+				return timestamps [2];
 			}
 		}
 		
@@ -171,27 +171,27 @@ namespace Docky.Interface
 
 		void SetItem (Element item, Pane pane)
 		{
-			if (current_items[(int) pane] == item)
+			if (current_items [(int) pane] == item)
 				return;
 			
-			old_items[(int) pane] = current_items[(int) pane];
-			current_items[(int) pane] = item;
-			timestamps[(int) pane] = DateTime.UtcNow;
+			old_items [(int) pane] = current_items [(int) pane];
+			current_items [(int) pane] = item;
+			timestamps [(int) pane] = DateTime.UtcNow;
 			OnStateChanged ();
 		}
 		
 		void SetQuery (string query, Pane pane)
 		{
-			queries[(int) pane] = query;
+			queries [(int) pane] = query;
 			OnStateChanged ();
 		}
 		
 		void SetResults (IList<Element> resultList, Pane pane)
 		{
-			if (results[(int) pane] != null && resultList.Count == results[(int) pane].Count) {
+			if (results [(int) pane] != null && resultList.Count == results [(int) pane].Count) {
 				bool same = true;
 				for (int i=0; i<resultList.Count; i++) {
-					if (results[(int) pane][i] != resultList[i]) {
+					if (results [(int) pane] [i] != resultList [i]) {
 						same = false;
 						break;
 					}
@@ -200,108 +200,108 @@ namespace Docky.Interface
 					return;
 			}
 			
-			results_prev[(int) pane] = results[(int) pane];
-			results[(int) pane] = resultList;
+			results_prev [(int) pane] = results [(int) pane];
+			results [(int) pane] = resultList;
 			
-			result_timestamps[(int) pane] = DateTime.UtcNow;
+			result_timestamps [(int) pane] = DateTime.UtcNow;
 			OnStateChanged ();
 		}
 		
 		void SetCursor (int cursor, Pane pane)
 		{
-			if (cursor == cursors[(int) pane])
+			if (cursor == cursors [(int) pane])
 				return;
 			
-			previous_cursors[(int) pane] = cursors[(int) pane];
-			cursors[(int) pane] = cursor;
-			cursor_timestamps[(int) pane] = last_cusor_change = DateTime.UtcNow;
+			previous_cursors [(int) pane] = cursors [(int) pane];
+			cursors [(int) pane] = cursor;
+			cursor_timestamps [(int) pane] = last_cusor_change = DateTime.UtcNow;
 			OnStateChanged ();
 		}
 		
 		void SetTextMode (bool textMode, Pane pane)
 		{
-			if (text_mode[(int) pane] == textMode)
+			if (text_mode [(int) pane] == textMode)
 				return;
 			
-			text_mode[(int) pane] = textMode;
-			text_mode_timestamps[(int) pane] = DateTime.UtcNow;
+			text_mode [(int) pane] = textMode;
+			text_mode_timestamps [(int) pane] = DateTime.UtcNow;
 			OnStateChanged ();
 		}
 		
 		void SetTextModeType (TextModeType type, Pane pane)
 		{
-			text_mode_types[(int) pane] = type;
+			text_mode_types [(int) pane] = type;
 			OnStateChanged ();
 		}
 		
 		public Element GetPaneItem (Pane pane)
 		{
-			if (pane == Pane.First && current_items[(int) pane] == null)
+			if (pane == Pane.First && current_items [(int) pane] == null)
 				return IntroObject;
-			return current_items[(int) pane];
+			return current_items [(int) pane];
 		}
 		
 		public Element GetOldPaneItem (Pane pane)
 		{
-			return old_items[(int) pane];
+			return old_items [(int) pane];
 		}
 		
 		public string GetPaneQuery (Pane pane)
 		{
-			return queries[(int) pane] ?? "";
+			return queries [(int) pane] ?? "";
 		}
 		
 		public IList<Element> GetPaneResults (Pane pane)
 		{
-			return results[(int) pane];
+			return results [(int) pane];
 		}
 		
 		public IList<Element> GetPanePreviousResults (Pane pane)
 		{
-			return results_prev[(int) pane];
+			return results_prev [(int) pane];
 		}
 		
 		public DateTime GetPaneResultsTime (Pane pane)
 		{
-			return result_timestamps[(int) pane];
+			return result_timestamps [(int) pane];
 		}
 		
 		public int GetPaneCursor (Pane pane)
 		{
-			return cursors[(int) pane];
+			return cursors [(int) pane];
 		}
 		
 		public int GetPanePreviousCursor (Pane pane)
 		{
-			return previous_cursors[(int) pane];
+			return previous_cursors [(int) pane];
 		}
 		
 		public DateTime GetPaneCursorTime (Pane pane)
 		{
-			return cursor_timestamps[(int) pane];
+			return cursor_timestamps [(int) pane];
 		}
 		
 		public bool GetTextMode (Pane pane)
 		{
-			return text_mode[(int) pane];
+			return text_mode [(int) pane];
 		}
 		
 		public TextModeType GetTextModeType (Pane pane)
 		{
-			return text_mode_types[(int) pane];
+			return text_mode_types [(int) pane];
 		}
 		
 		public void Clear ()
 		{
-			current_items = new Element[3];
-			results = new IList<Element>[3];
-			result_timestamps = new DateTime[3];
-			queries = new string[3];
-			old_items = new Element[3];
-			timestamps = new DateTime[3];
+			current_items = new Element [3];
+			results = new IList<Element> [3];
+			result_timestamps = new DateTime [3];
+			queries = new string [3];
+			old_items = new Element [3];
+			timestamps = new DateTime [3];
 			
-			text_mode = new bool[3];
-			text_mode_timestamps = new DateTime[3];
+			text_mode = new bool [3];
+			text_mode_timestamps = new DateTime [3];
 			OnStateChanged ();
 		}
 		
@@ -309,17 +309,17 @@ namespace Docky.Interface
 		{
 			int i = (int) pane;
 			
-			current_items[i] = null;
-			results[i] = null;
-			text_mode_timestamps[i] = result_timestamps[i] = timestamps[i] = DateTime.UtcNow;
-			queries[i] = null;
-			text_mode[i] = false;
+			current_items [i] = null;
+			results [i] = null;
+			text_mode_timestamps [i] = result_timestamps [i] = timestamps [i] = DateTime.UtcNow;
+			queries [i] = null;
+			text_mode [i] = false;
 			OnStateChanged ();
 		}
 		
 		public void SetContext (IUIContext context, Pane pane)
 		{
-			this[pane] = context.Selection;
+			this [pane] = context.Selection;
 			SetQuery (context.Query, pane);
 			SetResults (context.Results, pane);
 			SetCursor (context.Cursor, pane);

@@ -31,5 +31,6 @@ namespace Do.Platform
 	{
 		IFileItem NewFileItem (string path);
 		IApplicationItem NewApplicationItem (string path);	
+		IApplicationItem MaybeApplicationItemFromCommand (string cmd);
 	}
 }

@@ -4,6 +4,8 @@ include $(top_srcdir)/build.rules.mk
 ASSEMBLY = Do.Interface.Linux.Docky
 TARGET = library
 
+PKG_CONFIG_FILES = do.interface.linux.docky.pc
+
 FILES = \
 	AssemblyInfo.cs \
 	src/Docky.Core/DockServices.cs \
@@ -65,9 +67,7 @@ FILES = \
 	src/Docky.Interface/Util.cs \
 	src/Docky.Utilities/DockOrientation.cs \
 	src/Docky.Utilities/DockPreferences.cs \
-	src/Docky.Utilities/GtkUtils.cs \
-	src/XLib/X11Atoms.cs \
-	src/XLib/Xlib.cs
+	src/Docky.Utilities/GtkUtils.cs
 
 RESOURCES = \
 	Resources/Do.Interface.Linux.Docky.addin.xml \
@@ -84,6 +84,7 @@ REFERENCES =  \
 	$(GTK_SHARP_20_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
 	$(LIBRSVG_SHARP_LIBS) \
+	$(MONO_ADDINS_LIBS) \
 	$(WNCK_SHARP_10_LIBS)
 
 PROJECT_REFERENCES = \
@@ -91,6 +92,3 @@ PROJECT_REFERENCES = \
 	Do.Interface.Wink \
 	Do.Platform \
 	Do.Universe
-
-module_DATA += $(ASSEMBLY).dll.config
-EXTRA_DIST += $(ASSEMBLY).dll.config

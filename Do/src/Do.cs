@@ -37,6 +37,7 @@ namespace Do {
 		static UniverseManager universe_manager;
 
 		public static CorePreferences Preferences { get; private set; } 
+		public static CoreKeybindings Keybindings { get; private set; } 
 
 		internal static void Main (string [] args)
 		{
@@ -53,6 +54,8 @@ namespace Do {
 			Services.System.EnsureSingleApplicationInstance ();
 
 			Preferences = new CorePreferences ();
+
+			Keybindings = new CoreKeybindings ();
 
 			// Now we can set the preferred log level.
 			if (Preferences.QuietStart)
@@ -95,11 +98,24 @@ namespace Do {
 				return universe_manager;
 			}
 		}
+
+		static void SummonKeyCb (object sender, PreferencesChangedEventArgs e)
+		{
+			try {
+				if (e.OldValue != null)
+					keybinder.Unbind (e.OldValue as string);
+				keybinder.Bind (Keybindings.GetKeybinding ("SummonKey"), OnActivate);
+			} catch (Exception ex) {
+				Log.Error ("Could not bind summon key: {0}", ex.Message);
+				Log.Debug (ex.StackTrace);
+			}
+
+		}
 		
 		static void SetupKeybindings ()
 		{
 			try {
-				keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
+				keybinder.Bind (Keybindings.GetKeybinding ("SummonKey"), OnActivate);
 			} catch (Exception e) {
 				Log.Error ("Could not bind summon key: {0}", e.Message);
 				Log.Debug (e.StackTrace);
@@ -107,16 +123,7 @@ namespace Do {
 
 			// Watch preferences for changes to the keybinding so we
 			// can change the binding when the user reassigns it.
-			Preferences.SummonKeybindingChanged += (sender, e) => {
-				try {
-					if (e.OldValue != null)
-						keybinder.Unbind (e.OldValue as string);
-					keybinder.Bind (Preferences.SummonKeybinding, OnActivate);
-				} catch (Exception ex) {
-					Log.Error ("Could not bind summon key: {0}", ex.Message);
-					Log.Debug (ex.StackTrace);
-				}
-			};
+			Keybindings.RegisterNotification ("SummonKey", SummonKeyCb);
 		}
 		
 		static void OnActivate (object sender, EventArgs e)

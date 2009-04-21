@@ -52,7 +52,7 @@ namespace Docky.Interface
 		bool accepting_drops;
 		Gdk.Pixbuf drag_pixbuf;
 		Gdk.Rectangle icon_region;
-		List<Wnck.Application> apps;
+		List<Wnck.Window> windows;
 		
 		public event EventHandler RemoveClicked;
 		
@@ -64,16 +64,32 @@ namespace Docky.Interface
 			get { return element.Icon; } 
 		}
 		
+		string Name {
+			get {
+				if (NeedsAttention && AttentionWindows.Any ())
+					return AttentionWindows.First ().Name;
+				
+				if (VisibleWindows.Any () && WindowCount == 1)
+					return VisibleWindows.First ().Name;
+				
+				return Element.Name;
+			}
+		}
+		
 		public Item Element { 
 			get { return element; } 
 		}
 		
-		protected override IEnumerable<Wnck.Application> Applications { 
-			get { return apps; } 
+		public override IEnumerable<Wnck.Window> Windows { 
+			get { return windows; } 
+		}
+		
+		IEnumerable<Wnck.Window> AttentionWindows {
+			get { return VisibleWindows.Where (w => w.NeedsAttention ()); }
 		}
 		
 		public IEnumerable<int> Pids { 
-			get { return apps.Select (win => win.Pid).ToArray (); } 
+			get { return windows.Select (win => win.Pid).ToArray (); } 
 		}
 		
 		public override int WindowCount {
@@ -84,9 +100,7 @@ namespace Docky.Interface
 		{
 			Position = -1;
 			this.element = element;
-			apps = new List<Wnck.Application> ();
-
-			SetText (element.Name);
+			windows = new List<Wnck.Window> ();
 
 			UpdateApplication ();
 			NeedsAttention = DetermineUrgencyStatus ();
@@ -95,6 +109,8 @@ namespace Docky.Interface
 				accepting_drops = true;
 			else
 				accepting_drops = false;
+			
+			SetText (Name);
 		}
 		
 		public override bool ReceiveItem (string item)
@@ -126,44 +142,48 @@ namespace Docky.Interface
 		
 		public void UpdateApplication ()
 		{
-			UnregisterStateChangeEvents ();
+			UnregisterWindowEvents ();
 			
 			if (element is IApplicationItem) {
-				apps = WindowUtils.GetApplicationList ((element as IApplicationItem).Exec);
-				window_count = Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist).Count ();
+				windows = WindowUtils.WindowListForCmd ((element as IApplicationItem).Exec);
+				window_count = windows.Where (w => !w.IsSkipTasklist).Count ();
 			}
 			
-			RegisterStateChangeEvents ();
+			RegisterWindowEvents ();
+			SetText (Name);
+			SetIconRegionFromCache ();
 		}
 		
-		void RegisterStateChangeEvents ()
+		void RegisterWindowEvents ()
 		{
-			foreach (Application app in Applications) {
-				foreach (Wnck.Window w in app.Windows) {
-					if (!w.IsSkipTasklist)
-						w.StateChanged += OnWindowStateChanged;
-				}
+			foreach (Wnck.Window w in VisibleWindows) {
+				w.StateChanged += HandleStateChanged;
+				w.NameChanged += HandleNameChanged;
 			}
 		}
 		
-		void UnregisterStateChangeEvents ()
+		void UnregisterWindowEvents ()
 		{
-			foreach (Application app in Applications) {
-				foreach (Wnck.Window w in app.Windows) {
-					try {
-						w.StateChanged -= OnWindowStateChanged;
-					} catch {}
-				}
+			foreach (Wnck.Window w in Windows) {
+				try {
+					w.StateChanged -= HandleStateChanged;
+					w.NameChanged -= HandleNameChanged;
+				} catch {}
 			}
 		}
 		
-		void OnWindowStateChanged (object o, StateChangedArgs args)
+		void HandleStateChanged (object o, StateChangedArgs args)
 		{
 			if (handle_timer > 0) return;
 			// we do this delayed so that we dont get a flood of these events.  Certain windows behave badly.
 			handle_timer = GLib.Timeout.Add (100, HandleUpdate);
-			window_count = Applications.SelectMany (a => a.Windows).Where (w => !w.IsSkipTasklist).Count ();
+			window_count = VisibleWindows.Count ();
 			SetIconRegionFromCache ();
+		}
+		
+		void HandleNameChanged(object sender, EventArgs e)
+		{
+			SetText (Name);
 		}
 		
 		bool HandleUpdate ()
@@ -180,6 +200,7 @@ namespace Docky.Interface
 				OnUpdateNeeded (new UpdateRequestArgs (this, req));
 			}
 			
+			SetText (Name);
 			handle_timer = 0;
 			return false;
 		}
@@ -218,6 +239,13 @@ namespace Docky.Interface
 			base.HotSeatRequested ();
 		}
 		
+		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)
+		{
+			SetIconRegionFromCache ();
+			base.Clicked (button, state, position);
+		}
+
+		
 		protected override void Launch ()
 		{
 			if (Element is IFileItem)
@@ -250,9 +278,9 @@ namespace Docky.Interface
 		
 		public override void Dispose ()
 		{
-			UnregisterStateChangeEvents ();
+			UnregisterWindowEvents ();
 			element = null;
-			apps.Clear ();
+			windows.Clear ();
 			
 			if (drag_pixbuf != null)
 				drag_pixbuf.Dispose ();
