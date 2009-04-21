@@ -29,50 +29,17 @@ namespace Do.Core
 	
 	internal static class Paths
 	{
-		const string ApplicationDirectory = "gnome-do";
 		const string PluginsDirectory = "plugins";
-		const string RepositoryIndicatorFile = "main.mrep";
+		const string ApplicationDirectory = "gnome-do";
 
 		//// <value>
 		/// Directory where Do saves its Mono.Addins repository cache.
 		/// </value>
 		public static string UserPluginsDirectory {
 			get {
-				string userData =
-					Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData);
-				string pluginDirectory
-					= string.Format ("{0}-{1}", PluginsDirectory, AssemblyInfo.DisplayVersion);
-				return userData.Combine (ApplicationDirectory, pluginDirectory);
+				string userData = Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData);
+				return userData.Combine (ApplicationDirectory, PluginsDirectory);
 			}
 		}
-
-		//// <value>
-		/// Directories where Do looks for Mono.Addins repositories. These
-		/// directories exist and probably contain valid repositories.
-		/// </value>
-		public static IEnumerable<string> SystemPluginDirectories {
-			get {
-				foreach (string repository in MaybeSystemPluginDirectories) {
-					if (File.Exists (Path.Combine (repository, RepositoryIndicatorFile)))
-						yield return repository;
-				}
-			}
-		}
-
-		//// <value>
-		/// Directories where Do might look for Mono.Addins repositories; these
-		/// directories may not exist or may not be valid repositories.
-		/// </value>
-		static IEnumerable<string> MaybeSystemPluginDirectories {
-			get {
-				yield return AppDomain.CurrentDomain.BaseDirectory.Combine (PluginsDirectory);
-
-				string systemData =
-					Environment.GetFolderPath (Environment.SpecialFolder.CommonApplicationData);
-				yield return systemData.Combine (ApplicationDirectory, PluginsDirectory);
-				yield return "/usr/local/share".Combine (ApplicationDirectory, PluginsDirectory);
-			}
-		}
-		
 	}
 }

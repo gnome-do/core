@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using System.Xml;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -54,17 +55,27 @@ namespace Do.Core
 				new CommunityAddinClassifier (),
 				new GreedyAddinClassifier (),
 			};
-		
-		static IEnumerable<string> SavedPlugins { get; set; }
-
+			
 		/// <summary>
 		/// Performs plugin system initialization. Should be called before this
 		/// class or any Mono.Addins class is used. The ordering is very delicate.
 		/// </summary>
 		public static void Initialize ()
 		{
+			IEnumerable<string> savedPlugins = PluginsEnabledBeforeLoad ();
+			
 			// Initialize Mono.Addins.
 			AddinManager.Initialize (Paths.UserPluginsDirectory);
+			// This is a workaround for a Mono.Addins bug where updated addins will get
+			// disabled on update. We save the currently enabled addins, update, then
+			// reenable them with the Id of the new version. It's a bit hackish but lluis
+			// said it's a reasonable approach until that bug is fixed 
+		 	// https://bugzilla.novell.com/show_bug.cgi?id=490302
+			if (CorePreferences.PeekDebug)
+				AddinManager.Registry.Rebuild (null);
+			else
+				AddinManager.Registry.Update (null);
+			EnableDisabledPlugins (savedPlugins);
 			
 			// Initialize services before addins that may use them are loaded.
 			Services.Initialize ();
@@ -73,48 +84,70 @@ namespace Do.Core
 			// Now allow loading of non-services.
 			foreach (string path in ExtensionPaths)
 				AddinManager.AddExtensionNodeHandler (path, OnPluginChanged);
-
-			// This is a workaround for a Mono.Addins bug where updated addins will get
-			// disabled on update. We save the currently enabled addins, update, then
-			// reenable them with the Id of the new version. It's a bit hackish but lluis
-			// said it's a reasonable approach until that bug is fixed 
-		 	// https://bugzilla.novell.com/show_bug.cgi?id=490302
-			SaveEnabledAddins ();
+		}
+		
+		/// <summary>
+		/// Returns a list of the plugins that were enabled before Mono.Addins was initialised.
+		/// this is read from config.xml.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="IEnumerable"/> of strings containing the versionless plugin id of all
+		/// enabled plugins.
+		/// </returns>
+		static IEnumerable<string> PluginsEnabledBeforeLoad ()
+		{
+			XmlTextReader reader;
+			List<string> plugins;
+		
+			plugins = new List<string> ();
+			
 			try {
-				AddinManager.Registry.Rebuild (null);
-			} catch {
-				AddinManager.Registry.Rebuild (null);
+				// set up the reader by loading file, telling it that whitespace doesn't matter, and the DTD is irrelevant
+				reader = new XmlTextReader (Paths.UserPluginsDirectory.Combine ("addin-db-001", "config.xml"));
+				reader.XmlResolver = null;
+				reader.WhitespaceHandling = WhitespaceHandling.None;
+				reader.MoveToContent ();
+				
+				if (string.IsNullOrEmpty (reader.Name))
+					return Enumerable.Empty<string> ();
+			
+				Log.Debug ("our xml file has {0} attributes", reader.AttributeCount);
+				while (reader.Read ()) {
+					string id;
+					if (reader.NodeType != XmlNodeType.Element || !reader.HasAttributes)
+						continue;
+					
+					reader.MoveToAttribute ("id");
+					id = AddinIdWithoutVersion (reader.Value);
+					
+					if (string.IsNullOrEmpty (id))
+						continue;
+						
+					reader.MoveToAttribute ("enabled");
+					
+					Log.Debug ("Saving or not saving {0} with {1}", id, reader.Value);	
+					if (Boolean.Parse (reader.Value))
+						plugins.Add (id);
+				}
+			} catch (FileNotFoundException e) {
+				Log.Debug ("Could not find locate Mono.Addins config.xml: {0}", e.Message);
+			} catch (XmlException e) {
+				Log.Error ("Error while parsing Mono.Addins config.xml: {0}", e.Message);
+				Log.Debug (e.StackTrace);
 			}
-			ReloadEnabledAddins ();
+			
+			return plugins;
 		}
 		
-		static void SaveEnabledAddins ()
+		static void EnableDisabledPlugins (IEnumerable<string> savedPlugins)
 		{
-			List<string> enabledPlugins = new List<string> ();
-			
 			foreach (Addin addin in AddinManager.Registry.GetAddins ()) {
-				if (addin.Enabled && AddinIsPlugin (addin)) {
-					string name = AddinIdWithoutVersion (addin.Id);
-					Log<PluginManager>.Debug ("Saving {0}", name);
-					enabledPlugins.Add (name);
+				string id = addin.Id;
+				if (!AddinManager.Registry.IsAddinEnabled (id) && savedPlugins.Any (name => id.StartsWith (name))) {
+					Log.Debug ("about to enable {0}", id);
+					AddinManager.Registry.EnableAddin (id);
 				}
 			}
-			
-			SavedPlugins = enabledPlugins;
-		}
-		
-		static void ReloadEnabledAddins ()
-		{
-			IEnumerable<string> allAddins = AddinManager.Registry.GetAddins ().Select (a => a.Id);
-			
-			foreach (string addin in allAddins) {
-				if (SavedPlugins.Contains (AddinIdWithoutVersion (addin))) {
-					Log.Debug ("Enabling {0}", addin);
-					AddinManager.Registry.EnableAddin (addin);
-				}
-			}
-			
-			SavedPlugins = Enumerable.Empty<string> ();
 		}
 
 		public static bool PluginClassifiesAs (AddinRepositoryEntry entry, string className)
@@ -250,11 +283,6 @@ namespace Do.Core
 			return ObjectsForAddin<IConfigurable> (id);
 		}
 		
-		static bool AddinIsPlugin (Addin addin)
-		{
-			return ObjectsForAddin<Act> (addin.Id).Any () || ObjectsForAddin<ItemSource> (addin.Id).Any ();
-		}
-				
 		static string AddinIdWithoutVersion (string id)
 		{
 			return id.Substring (0, id.IndexOf (','));
