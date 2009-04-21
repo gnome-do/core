@@ -59,12 +59,6 @@ namespace Docky.Interface
 			sr = null;
 		}
 		
-		protected override Pixbuf GetSurfacePixbuf (int size)
-		{
-			return null;
-		}
-
-		
 		public override Surface GetIconSurface (Surface buffer, int targetSize, out int actualSize)
 		{
 			actualSize = DockPreferences.IconSize;

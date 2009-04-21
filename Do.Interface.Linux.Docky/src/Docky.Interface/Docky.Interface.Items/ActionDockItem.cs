@@ -37,8 +37,8 @@ namespace Docky.Interface
 		Act action;
 		Do.Universe.Item target_item;
 		
-		string Icon { 
-			get { return action.Icon; } 
+		protected override string Icon {
+			get { return action.Icon; }
 		}
 		
 		public ActionDockItem(Act action, Do.Universe.Item targetItem)
@@ -46,19 +46,6 @@ namespace Docky.Interface
 			this.action = action;
 			this.target_item = targetItem;
 			SetText (action.Name);
-		}
-		
-		protected override Pixbuf GetSurfacePixbuf (int size)
-		{
-			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, size);
-			if (pbuf.Height != size && pbuf.Width != size) {
-				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
-				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), InterpType.Bilinear);
-				pbuf.Dispose ();
-				pbuf = temp;
-			}
-			
-			return pbuf;
 		}
 		
 		public override void Clicked (uint button, ModifierType state, Gdk.Point position)

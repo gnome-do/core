@@ -113,11 +113,6 @@ namespace Docky.Interface
 			this.inner = inner;
 		}
 		
-		protected override Pixbuf GetSurfacePixbuf (int size)
-		{
-			return null;
-		}
-		
 		public override Surface GetIconSurface (Cairo.Surface similar, int targetSize, out int actualSize)
 		{
 			return inner.GetIconSurface (similar, targetSize, out actualSize);

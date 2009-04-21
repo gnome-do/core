@@ -60,7 +60,7 @@ namespace Docky.Interface
 			get { return accepting_drops; } 
 		}
 		
-		string Icon { 
+		protected override string Icon { 
 			get { return element.Icon; } 
 		}
 		
@@ -203,19 +203,6 @@ namespace Docky.Interface
 			SetText (Name);
 			handle_timer = 0;
 			return false;
-		}
-		
-		protected override Gdk.Pixbuf GetSurfacePixbuf (int size)
-		{
-			Gdk.Pixbuf pbuf = IconProvider.PixbufFromIconName (Icon, size);
-			if (pbuf.Height != size && pbuf.Width != size) {
-				double scale = (double)DockPreferences.FullIconSize / Math.Max (pbuf.Width, pbuf.Height);
-				Gdk.Pixbuf temp = pbuf.ScaleSimple ((int) (pbuf.Width * scale), (int) (pbuf.Height * scale), InterpType.Bilinear);
-				pbuf.Dispose ();
-				pbuf = temp;
-			}
-			
-			return pbuf;
 		}
 		
 		public override Pixbuf GetDragPixbuf ()

@@ -80,11 +80,6 @@ namespace Docky.Interface
 			return true;
 		}
 		
-		protected override Pixbuf GetSurfacePixbuf (int size)
-		{
-			return null;
-		}
-		
 		void RenderFileOntoContext (Context cr, string file, int size)
 		{
 			if (!File.Exists (file))

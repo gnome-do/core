@@ -40,10 +40,13 @@ namespace Docky.Interface
 	
 	public class DoDockItem : AbstractDockItem, IRightClickable
 	{
-		const string DoIcon = "gnome-do";
 		public const string EnableIcon = "gtk-apply";
 		public const string DisableIcon = "gtk-remove";
 		const string Text = "GNOME Do";
+		
+		protected override string Icon {
+			get { return "gnome-do"; }
+		}
 
 		HotSeatPainter hot_seat_painter;
 		
@@ -54,13 +57,6 @@ namespace Docky.Interface
 				return ScalingType.HighLow;
 			}
 		}
-
-		
-		protected override Pixbuf GetSurfacePixbuf (int size)
-		{
-			return IconProvider.PixbufFromIconName (DoIcon, size);
-		}
-
 		
 		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
 		{
@@ -79,10 +75,6 @@ namespace Docky.Interface
 			
 			SetText (Catalog.GetString (Text));
 		}
-
-		#region IDisposable implementation 
-		
-		#endregion 
 		
 		public override bool Equals (AbstractDockItem other)
 		{
