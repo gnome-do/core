@@ -342,6 +342,7 @@ namespace Docky.Interface
 		void HandleOrientationChanged()
 		{
 			Reconfigure ();
+			window.Reposition ();
 		}
 		
 		void HandleSizeChanged(object sender, EventArgs e)
@@ -360,7 +361,6 @@ namespace Docky.Interface
 			SetParentInputMask ();
 			SetIconRegions ();
 			window.DelaySetStruts ();
-			window.Reposition ();
 		}
 		
 		void HandleUniverseInitialized(object sender, EventArgs e)

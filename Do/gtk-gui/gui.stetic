@@ -814,6 +814,9 @@
         <child>
           <widget class="Gtk.Alignment" id="theme_configuration_container">
             <property name="MemberName" />
+            <property name="LeftPadding">6</property>
+            <property name="RightPadding">6</property>
+            <property name="BottomPadding">3</property>
             <child>
               <placeholder />
             </child>

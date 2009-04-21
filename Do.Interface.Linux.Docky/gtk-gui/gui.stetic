@@ -59,14 +59,40 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.CheckButton" id="autohide_checkbutton">
+          <widget class="Gtk.HBox" id="hbox8">
             <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Label" translatable="yes">AutoHide</property>
-            <property name="DrawIndicator">True</property>
-            <property name="HasLabel">True</property>
-            <property name="UseUnderline">True</property>
-            <signal name="Toggled" handler="OnAutohideCheckbuttonToggled" />
+            <property name="Homogeneous">True</property>
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.CheckButton" id="autohide_checkbutton">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Label" translatable="yes">Automatically Hide</property>
+                <property name="DrawIndicator">True</property>
+                <property name="HasLabel">True</property>
+                <property name="UseUnderline">True</property>
+                <signal name="Toggled" handler="OnAutohideCheckbuttonToggled" />
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.CheckButton" id="window_overlap_checkbutton">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Label" translatable="yes">Allow Window Overlap</property>
+                <property name="DrawIndicator">True</property>
+                <property name="HasLabel">True</property>
+                <property name="UseUnderline">True</property>
+                <signal name="Toggled" handler="OnWindowOverlapCheckbuttonToggled" />
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">1</property>
@@ -76,51 +102,43 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.CheckButton" id="window_overlap_checkbutton">
+          <widget class="Gtk.HBox" id="hbox9">
             <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Label" translatable="yes">Allow Window Overlap</property>
-            <property name="DrawIndicator">True</property>
-            <property name="HasLabel">True</property>
-            <property name="UseUnderline">True</property>
-            <signal name="Toggled" handler="OnWindowOverlapCheckbuttonToggled" />
+            <property name="Homogeneous">True</property>
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.CheckButton" id="zoom_checkbutton">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Label" translatable="yes">Enable Zoom</property>
+                <property name="DrawIndicator">True</property>
+                <property name="HasLabel">True</property>
+                <property name="UseUnderline">True</property>
+                <signal name="Toggled" handler="OnZoomCheckbuttonToggled" />
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.CheckButton" id="advanced_indicators_checkbutton">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Label" translatable="yes">Indicate Multiple Windows</property>
+                <property name="DrawIndicator">True</property>
+                <property name="HasLabel">True</property>
+                <property name="UseUnderline">True</property>
+                <signal name="Toggled" handler="OnAdvancedIndicatorsCheckbuttonToggled" />
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">2</property>
-            <property name="AutoSize">True</property>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gtk.CheckButton" id="zoom_checkbutton">
-            <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Label" translatable="yes">Zoom Enabled</property>
-            <property name="DrawIndicator">True</property>
-            <property name="HasLabel">True</property>
-            <property name="UseUnderline">True</property>
-            <signal name="Toggled" handler="OnZoomCheckbuttonToggled" />
-          </widget>
-          <packing>
-            <property name="Position">3</property>
-            <property name="AutoSize">True</property>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gtk.CheckButton" id="advanced_indicators_checkbutton">
-            <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Label" translatable="yes">Advanced Indicators</property>
-            <property name="DrawIndicator">True</property>
-            <property name="HasLabel">True</property>
-            <property name="UseUnderline">True</property>
-            <signal name="Toggled" handler="OnAdvancedIndicatorsCheckbuttonToggled" />
-          </widget>
-          <packing>
-            <property name="Position">4</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
@@ -147,6 +165,7 @@
               <widget class="Gtk.HScale" id="zoom_scale">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
+                <property name="UpdatePolicy">Discontinuous</property>
                 <property name="Lower">0.1</property>
                 <property name="Upper">4</property>
                 <property name="PageIncrement">0.1</property>
@@ -166,7 +185,7 @@
             </child>
           </widget>
           <packing>
-            <property name="Position">5</property>
+            <property name="Position">3</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
@@ -177,7 +196,7 @@
             <property name="MemberName" />
             <property name="Spacing">6</property>
             <child>
-              <widget class="Gtk.Label" id="label4">
+              <widget class="Gtk.Label" id="zoom_width_label">
                 <property name="MemberName" />
                 <property name="Yalign">0.83</property>
                 <property name="LabelProp" translatable="yes">Zoom Width</property>
@@ -190,15 +209,19 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.HScale" id="hscale2">
+              <widget class="Gtk.HScale" id="zoom_width_scale">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
+                <property name="UpdatePolicy">Discontinuous</property>
                 <property name="Upper">100</property>
                 <property name="PageIncrement">10</property>
-                <property name="StepIncrement">1</property>
+                <property name="PageSize">10</property>
+                <property name="StepIncrement">10</property>
+                <property name="Value">81</property>
                 <property name="DrawValue">True</property>
                 <property name="Digits">0</property>
                 <property name="ValuePos">Top</property>
+                <signal name="ValueChanged" handler="OnZoomWidthScaleValueChanged" />
               </widget>
               <packing>
                 <property name="Position">1</property>
@@ -207,7 +230,20 @@
             </child>
           </widget>
           <packing>
-            <property name="Position">6</property>
+            <property name="Position">4</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="label5">
+            <property name="MemberName" />
+            <property name="Xalign">0</property>
+            <property name="LabelProp" translatable="yes">Configure Docklets:</property>
+          </widget>
+          <packing>
+            <property name="Position">5</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
@@ -229,7 +265,7 @@
             </child>
           </widget>
           <packing>
-            <property name="Position">7</property>
+            <property name="Position">6</property>
             <property name="AutoSize">True</property>
           </packing>
         </child>

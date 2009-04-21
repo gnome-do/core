@@ -154,6 +154,9 @@ namespace Do.UI {
             // Container child vbox2.Gtk.Box+BoxChild
             this.theme_configuration_container = new Gtk.Alignment(0.5F, 0.5F, 1F, 1F);
             this.theme_configuration_container.Name = "theme_configuration_container";
+            this.theme_configuration_container.LeftPadding = ((uint)(6));
+            this.theme_configuration_container.RightPadding = ((uint)(6));
+            this.theme_configuration_container.BottomPadding = ((uint)(3));
             this.vbox2.Add(this.theme_configuration_container);
             Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.vbox2[this.theme_configuration_container]));
             w12.PackType = ((Gtk.PackType)(1));

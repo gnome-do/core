@@ -65,11 +65,6 @@ namespace Do.UI
 			theme_configuration_container.ShowAll ();
 		}
 		
-		protected override void OnShown ()
-		{
-			base.OnShown ();
-		}
-		
 		public Gtk.Bin GetConfiguration ()
 		{
 			return this;
@@ -114,6 +109,12 @@ namespace Do.UI
 		public string Icon {
 			get { return ""; }
 		}
-	
+
+		public override void Dispose ()
+		{
+			if (theme_configuration_container.Child != null)
+				theme_configuration_container.Child.Dispose ();
+			base.Dispose ();
+		}
 	}
 }

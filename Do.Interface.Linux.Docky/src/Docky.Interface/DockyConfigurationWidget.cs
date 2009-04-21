@@ -83,6 +83,11 @@ namespace Docky.Interface
 			zoom_scale.SetIncrements (.1, .1);
 			zoom_scale.Value = DockPreferences.ZoomPercent;
 			
+			zoom_width_scale.Digits = 0;
+			zoom_width_scale.SetRange (200, 500);
+			zoom_width_scale.SetIncrements (10, 10);
+			zoom_width_scale.Value = DockPreferences.ZoomSize;
+			
 			advanced_indicators_checkbutton.Active = DockPreferences.IndicateMultipleWindows;
 			autohide_checkbutton.Active = DockPreferences.AutoHide;
 			window_overlap_checkbutton.Active = DockPreferences.AllowOverlap;
@@ -94,12 +99,22 @@ namespace Docky.Interface
 			
 			BuildDocklets ();
 			
+			SetSensativity ();
+			
+			DockPreferences.IconSizeChanged += HandleIconSizeChanged; 
+			
 			Gtk.Application.Invoke (delegate { setup = false; });
+		}
+
+		void HandleIconSizeChanged()
+		{
+			SetSensativity ();
 		}
 		
 		void BuildDocklets ()
 		{
 			docklets_nodeview = new NodeView (Store);
+			docklets_nodeview.RulesHint = true;
 			scrolled_window.Add (docklets_nodeview);
 			
 			Gtk.CellRendererToggle toggle = new Gtk.CellRendererToggle ();
@@ -107,14 +122,25 @@ namespace Docky.Interface
 			docklets_nodeview.AppendColumn ("Enabled", toggle, "active", 0);
 			docklets_nodeview.AppendColumn ("Name", new Gtk.CellRendererText (), "text", 1);
 			
+			docklets_nodeview.HeadersVisible = false;
+			
 			foreach (AbstractDockletItem adi in DockServices.DockletService.Docklets) {
 				Store.AddNode (new DockletTreeNode (adi));
 			}
 			
 			scrolled_window.ShowAll ();
 		}
+		
+		void SetSensativity ()
+		{
+			zoom_scale.Sensitive = 
+				zoom_width_scale.Sensitive = 
+					zoom_size_label.Sensitive = 
+					zoom_width_label.Sensitive =
+					DockPreferences.ZoomEnabled;
+		}
 
-		void HandleToggled(object o, ToggledArgs args)
+		void HandleToggled (object o, ToggledArgs args)
 		{
 			DockletTreeNode node = Store.GetNode (new Gtk.TreePath (args.Path)) as DockletTreeNode;
 			node.Toggle ();
@@ -163,5 +189,18 @@ namespace Docky.Interface
 			if (setup) return;
 			DockPreferences.Orientation = (DockOrientation) orientation_combobox.Active;
 		}
+
+		protected virtual void OnZoomWidthScaleValueChanged (object sender, System.EventArgs e)
+		{
+			if (setup) return;
+			DockPreferences.ZoomSize = (int) zoom_width_scale.Value;
+		}
+		
+		public override void Dispose ()
+		{
+			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
+			base.Dispose ();
+		}
+
 	}
 }

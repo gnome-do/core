@@ -21,9 +21,13 @@ namespace Docky.Interface {
         
         private Gtk.ComboBox orientation_combobox;
         
+        private Gtk.HBox hbox8;
+        
         private Gtk.CheckButton autohide_checkbutton;
         
         private Gtk.CheckButton window_overlap_checkbutton;
+        
+        private Gtk.HBox hbox9;
         
         private Gtk.CheckButton zoom_checkbutton;
         
@@ -37,9 +41,11 @@ namespace Docky.Interface {
         
         private Gtk.HBox hbox7;
         
-        private Gtk.Label label4;
+        private Gtk.Label zoom_width_label;
         
-        private Gtk.HScale hscale2;
+        private Gtk.HScale zoom_width_scale;
+        
+        private Gtk.Label label5;
         
         private Gtk.ScrolledWindow scrolled_window;
         
@@ -79,53 +85,65 @@ namespace Docky.Interface {
             w3.Expand = false;
             w3.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
+            this.hbox8 = new Gtk.HBox();
+            this.hbox8.Name = "hbox8";
+            this.hbox8.Homogeneous = true;
+            this.hbox8.Spacing = 6;
+            // Container child hbox8.Gtk.Box+BoxChild
             this.autohide_checkbutton = new Gtk.CheckButton();
             this.autohide_checkbutton.CanFocus = true;
             this.autohide_checkbutton.Name = "autohide_checkbutton";
-            this.autohide_checkbutton.Label = Mono.Unix.Catalog.GetString("AutoHide");
+            this.autohide_checkbutton.Label = Mono.Unix.Catalog.GetString("Automatically Hide");
             this.autohide_checkbutton.DrawIndicator = true;
             this.autohide_checkbutton.UseUnderline = true;
-            this.vbox2.Add(this.autohide_checkbutton);
-            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox2[this.autohide_checkbutton]));
-            w4.Position = 1;
-            w4.Expand = false;
-            w4.Fill = false;
-            // Container child vbox2.Gtk.Box+BoxChild
+            this.hbox8.Add(this.autohide_checkbutton);
+            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.hbox8[this.autohide_checkbutton]));
+            w4.Position = 0;
+            // Container child hbox8.Gtk.Box+BoxChild
             this.window_overlap_checkbutton = new Gtk.CheckButton();
             this.window_overlap_checkbutton.CanFocus = true;
             this.window_overlap_checkbutton.Name = "window_overlap_checkbutton";
             this.window_overlap_checkbutton.Label = Mono.Unix.Catalog.GetString("Allow Window Overlap");
             this.window_overlap_checkbutton.DrawIndicator = true;
             this.window_overlap_checkbutton.UseUnderline = true;
-            this.vbox2.Add(this.window_overlap_checkbutton);
-            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vbox2[this.window_overlap_checkbutton]));
-            w5.Position = 2;
-            w5.Expand = false;
-            w5.Fill = false;
-            // Container child vbox2.Gtk.Box+BoxChild
-            this.zoom_checkbutton = new Gtk.CheckButton();
-            this.zoom_checkbutton.CanFocus = true;
-            this.zoom_checkbutton.Name = "zoom_checkbutton";
-            this.zoom_checkbutton.Label = Mono.Unix.Catalog.GetString("Zoom Enabled");
-            this.zoom_checkbutton.DrawIndicator = true;
-            this.zoom_checkbutton.UseUnderline = true;
-            this.vbox2.Add(this.zoom_checkbutton);
-            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox2[this.zoom_checkbutton]));
-            w6.Position = 3;
+            this.hbox8.Add(this.window_overlap_checkbutton);
+            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.hbox8[this.window_overlap_checkbutton]));
+            w5.Position = 1;
+            this.vbox2.Add(this.hbox8);
+            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox8]));
+            w6.Position = 1;
             w6.Expand = false;
             w6.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
+            this.hbox9 = new Gtk.HBox();
+            this.hbox9.Name = "hbox9";
+            this.hbox9.Homogeneous = true;
+            this.hbox9.Spacing = 6;
+            // Container child hbox9.Gtk.Box+BoxChild
+            this.zoom_checkbutton = new Gtk.CheckButton();
+            this.zoom_checkbutton.CanFocus = true;
+            this.zoom_checkbutton.Name = "zoom_checkbutton";
+            this.zoom_checkbutton.Label = Mono.Unix.Catalog.GetString("Enable Zoom");
+            this.zoom_checkbutton.DrawIndicator = true;
+            this.zoom_checkbutton.UseUnderline = true;
+            this.hbox9.Add(this.zoom_checkbutton);
+            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.hbox9[this.zoom_checkbutton]));
+            w7.Position = 0;
+            // Container child hbox9.Gtk.Box+BoxChild
             this.advanced_indicators_checkbutton = new Gtk.CheckButton();
             this.advanced_indicators_checkbutton.CanFocus = true;
             this.advanced_indicators_checkbutton.Name = "advanced_indicators_checkbutton";
-            this.advanced_indicators_checkbutton.Label = Mono.Unix.Catalog.GetString("Advanced Indicators");
+            this.advanced_indicators_checkbutton.Label = Mono.Unix.Catalog.GetString("Indicate Multiple Windows");
             this.advanced_indicators_checkbutton.DrawIndicator = true;
             this.advanced_indicators_checkbutton.UseUnderline = true;
-            this.vbox2.Add(this.advanced_indicators_checkbutton);
-            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.vbox2[this.advanced_indicators_checkbutton]));
-            w7.Position = 4;
-            w7.Expand = false;
-            w7.Fill = false;
+            this.hbox9.Add(this.advanced_indicators_checkbutton);
+            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(this.hbox9[this.advanced_indicators_checkbutton]));
+            w8.Position = 1;
+            this.vbox2.Add(this.hbox9);
+            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox9]));
+            w9.Position = 2;
+            w9.Expand = false;
+            w9.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
             this.hbox6 = new Gtk.HBox();
             this.hbox6.Name = "hbox6";
@@ -136,14 +154,15 @@ namespace Docky.Interface {
             this.zoom_size_label.Yalign = 0.83F;
             this.zoom_size_label.LabelProp = Mono.Unix.Catalog.GetString("Zoom Size");
             this.hbox6.Add(this.zoom_size_label);
-            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(this.hbox6[this.zoom_size_label]));
-            w8.Position = 0;
-            w8.Expand = false;
-            w8.Fill = false;
+            Gtk.Box.BoxChild w10 = ((Gtk.Box.BoxChild)(this.hbox6[this.zoom_size_label]));
+            w10.Position = 0;
+            w10.Expand = false;
+            w10.Fill = false;
             // Container child hbox6.Gtk.Box+BoxChild
             this.zoom_scale = new Gtk.HScale(null);
             this.zoom_scale.CanFocus = true;
             this.zoom_scale.Name = "zoom_scale";
+            this.zoom_scale.UpdatePolicy = ((Gtk.UpdateType)(1));
             this.zoom_scale.Adjustment.Lower = 0.1;
             this.zoom_scale.Adjustment.Upper = 4;
             this.zoom_scale.Adjustment.PageIncrement = 0.1;
@@ -154,53 +173,66 @@ namespace Docky.Interface {
             this.zoom_scale.Digits = 0;
             this.zoom_scale.ValuePos = ((Gtk.PositionType)(2));
             this.hbox6.Add(this.zoom_scale);
-            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(this.hbox6[this.zoom_scale]));
-            w9.Position = 1;
+            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.hbox6[this.zoom_scale]));
+            w11.Position = 1;
             this.vbox2.Add(this.hbox6);
-            Gtk.Box.BoxChild w10 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox6]));
-            w10.Position = 5;
-            w10.Expand = false;
-            w10.Fill = false;
+            Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox6]));
+            w12.Position = 3;
+            w12.Expand = false;
+            w12.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
             this.hbox7 = new Gtk.HBox();
             this.hbox7.Name = "hbox7";
             this.hbox7.Spacing = 6;
             // Container child hbox7.Gtk.Box+BoxChild
-            this.label4 = new Gtk.Label();
-            this.label4.Name = "label4";
-            this.label4.Yalign = 0.83F;
-            this.label4.LabelProp = Mono.Unix.Catalog.GetString("Zoom Width");
-            this.hbox7.Add(this.label4);
-            Gtk.Box.BoxChild w11 = ((Gtk.Box.BoxChild)(this.hbox7[this.label4]));
-            w11.Position = 0;
-            w11.Expand = false;
-            w11.Fill = false;
-            // Container child hbox7.Gtk.Box+BoxChild
-            this.hscale2 = new Gtk.HScale(null);
-            this.hscale2.CanFocus = true;
-            this.hscale2.Name = "hscale2";
-            this.hscale2.Adjustment.Upper = 100;
-            this.hscale2.Adjustment.PageIncrement = 10;
-            this.hscale2.Adjustment.StepIncrement = 1;
-            this.hscale2.DrawValue = true;
-            this.hscale2.Digits = 0;
-            this.hscale2.ValuePos = ((Gtk.PositionType)(2));
-            this.hbox7.Add(this.hscale2);
-            Gtk.Box.BoxChild w12 = ((Gtk.Box.BoxChild)(this.hbox7[this.hscale2]));
-            w12.Position = 1;
-            this.vbox2.Add(this.hbox7);
-            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox7]));
-            w13.Position = 6;
+            this.zoom_width_label = new Gtk.Label();
+            this.zoom_width_label.Name = "zoom_width_label";
+            this.zoom_width_label.Yalign = 0.83F;
+            this.zoom_width_label.LabelProp = Mono.Unix.Catalog.GetString("Zoom Width");
+            this.hbox7.Add(this.zoom_width_label);
+            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.hbox7[this.zoom_width_label]));
+            w13.Position = 0;
             w13.Expand = false;
             w13.Fill = false;
+            // Container child hbox7.Gtk.Box+BoxChild
+            this.zoom_width_scale = new Gtk.HScale(null);
+            this.zoom_width_scale.CanFocus = true;
+            this.zoom_width_scale.Name = "zoom_width_scale";
+            this.zoom_width_scale.UpdatePolicy = ((Gtk.UpdateType)(1));
+            this.zoom_width_scale.Adjustment.Upper = 100;
+            this.zoom_width_scale.Adjustment.PageIncrement = 10;
+            this.zoom_width_scale.Adjustment.PageSize = 10;
+            this.zoom_width_scale.Adjustment.StepIncrement = 10;
+            this.zoom_width_scale.Adjustment.Value = 81;
+            this.zoom_width_scale.DrawValue = true;
+            this.zoom_width_scale.Digits = 0;
+            this.zoom_width_scale.ValuePos = ((Gtk.PositionType)(2));
+            this.hbox7.Add(this.zoom_width_scale);
+            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.hbox7[this.zoom_width_scale]));
+            w14.Position = 1;
+            this.vbox2.Add(this.hbox7);
+            Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox7]));
+            w15.Position = 4;
+            w15.Expand = false;
+            w15.Fill = false;
+            // Container child vbox2.Gtk.Box+BoxChild
+            this.label5 = new Gtk.Label();
+            this.label5.Name = "label5";
+            this.label5.Xalign = 0F;
+            this.label5.LabelProp = Mono.Unix.Catalog.GetString("Configure Docklets:");
+            this.vbox2.Add(this.label5);
+            Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.vbox2[this.label5]));
+            w16.Position = 5;
+            w16.Expand = false;
+            w16.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
             this.scrolled_window = new Gtk.ScrolledWindow();
             this.scrolled_window.CanFocus = true;
             this.scrolled_window.Name = "scrolled_window";
             this.scrolled_window.ShadowType = ((Gtk.ShadowType)(1));
             this.vbox2.Add(this.scrolled_window);
-            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.vbox2[this.scrolled_window]));
-            w14.Position = 7;
+            Gtk.Box.BoxChild w17 = ((Gtk.Box.BoxChild)(this.vbox2[this.scrolled_window]));
+            w17.Position = 6;
             this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
@@ -213,6 +245,7 @@ namespace Docky.Interface {
             this.advanced_indicators_checkbutton.Toggled += new System.EventHandler(this.OnAdvancedIndicatorsCheckbuttonToggled);
             this.zoom_scale.FormatValue += new Gtk.FormatValueHandler(this.OnZoomScaleFormatValue);
             this.zoom_scale.ValueChanged += new System.EventHandler(this.OnZoomScaleValueChanged);
+            this.zoom_width_scale.ValueChanged += new System.EventHandler(this.OnZoomWidthScaleValueChanged);
         }
     }
 }

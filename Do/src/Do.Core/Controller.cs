@@ -983,6 +983,7 @@ namespace Do.Core
 				PreferencesWindow = new PreferencesWindow ();
 				PreferencesWindow.Hidden += delegate {
 					// Release the window.
+					PreferencesWindow.Dispose ();
 					PreferencesWindow.Destroy ();
 					PreferencesWindow = null;
 					// Reload universe.
