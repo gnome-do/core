@@ -80,7 +80,11 @@ namespace Do.Core
 			// said it's a reasonable approach until that bug is fixed 
 		 	// https://bugzilla.novell.com/show_bug.cgi?id=490302
 			SaveEnabledAddins ();
-			AddinManager.Registry.Update (new ConsoleProgressStatus (false));
+			try {
+				AddinManager.Registry.Rebuild (null);
+			} catch {
+				AddinManager.Registry.Rebuild (null);
+			}
 			ReloadEnabledAddins ();
 		}
 		
