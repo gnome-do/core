@@ -656,6 +656,16 @@ namespace Docky.Interface
 				
 				//send off the clicks
 				Gdk.Point relative_point = Gdk.Point.Zero;
+				double zoom;
+				PointD center;
+				IconZoomedPosition (item, out center, out zoom);
+				
+				int xOffset = (int) (Cursor.X - center.X);
+				int yOffset = (int) (Cursor.Y - center.Y);
+				
+				relative_point.X = (int) (xOffset / zoom);
+				relative_point.Y = (int) (yOffset / zoom);
+				
 				DockItems [item].Clicked (evnt.Button, evnt.State, relative_point);
 				
 				AnimatedDraw ();
