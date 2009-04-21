@@ -10,13 +10,13 @@ SUBDIRS = \
 	Do.Platform \
 	Do.Interface.Wink \
 	Do.Interface.Linux \
+	Do.Platform.Linux \
 	Do.Interface.Linux.AnimationBase \
 	Do.Interface.Linux.Classic \
 	Do.Interface.Linux.Docky \
 	Do.Interface.Linux.GlassFrame \
 	Do.Interface.Linux.HUD \
 	Do.Interface.Linux.Mini \
-	Do.Platform.Linux \
 	Do \
 	po \
 	libdo \
