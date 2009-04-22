@@ -1,0 +1,6 @@
+Name: Do.Interface.Linux.AnimationBase
+Description: GTK+ Interface module for Do Animations
+Version: @ABI_VERSION@
+
+Requires: do.interface.linux do.platform do.universe
+Libs: -r:@expanded_libdir@/@PACKAGE@/Do.Interface.Linux.AnimationBase.dll

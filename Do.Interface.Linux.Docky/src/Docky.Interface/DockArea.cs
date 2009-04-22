@@ -257,6 +257,7 @@ namespace Docky.Interface
 			
 			DockPreferences.MonitorChanged += HandleMonitorChanged; 
 			DockPreferences.IconSizeChanged += HandleIconSizeChanged; 
+			DockPreferences.OrientationChanged += HandleOrientationChanged; 
 			
 			DockServices.PainterService.PainterShowRequest += HandlePainterShowRequest;
 			DockServices.PainterService.PainterHideRequest += HandlePainterHideRequest;
@@ -284,6 +285,7 @@ namespace Docky.Interface
 			
 			DockPreferences.MonitorChanged -= HandleMonitorChanged;
 			DockPreferences.IconSizeChanged -= HandleIconSizeChanged; 
+			DockPreferences.OrientationChanged -= HandleOrientationChanged; 
 			
 			DockServices.PainterService.PainterShowRequest -= HandlePainterShowRequest;
 			DockServices.PainterService.PainterHideRequest -= HandlePainterHideRequest;
@@ -336,6 +338,12 @@ namespace Docky.Interface
 		{
 			Reconfigure ();
 		}
+
+		void HandleOrientationChanged()
+		{
+			Reconfigure ();
+			window.Reposition ();
+		}
 		
 		void HandleSizeChanged(object sender, EventArgs e)
 		{
@@ -366,6 +374,7 @@ namespace Docky.Interface
 		
 		void HandleIconSizeChanged()
 		{
+			Reconfigure ();
 			AnimatedDraw ();
 		}
 
@@ -647,6 +656,16 @@ namespace Docky.Interface
 				
 				//send off the clicks
 				Gdk.Point relative_point = Gdk.Point.Zero;
+				double zoom;
+				PointD center;
+				IconZoomedPosition (item, out center, out zoom);
+				
+				int xOffset = (int) (Cursor.X - center.X);
+				int yOffset = (int) (Cursor.Y - center.Y);
+				
+				relative_point.X = (int) (xOffset / zoom);
+				relative_point.Y = (int) (yOffset / zoom);
+				
 				DockItems [item].Clicked (evnt.Button, evnt.State, relative_point);
 				
 				AnimatedDraw ();

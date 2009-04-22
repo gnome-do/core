@@ -1,0 +1,10 @@
+<Addin id="Interface.Linux.AnimationBase" namespace="Do" version="1.0">
+ 
+	<Runtime>
+		<Import assembly="Do.Interface.Linux.AnimationBase.dll" />
+	</Runtime>
+
+	<Dependencies>
+		<Addin id="Interface.Linux" version="1.0" />
+	</Dependencies>
+</Addin>

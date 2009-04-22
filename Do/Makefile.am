@@ -95,7 +95,8 @@ PROJECT_REFERENCES = \
 	Do.Universe \
 	Do.Platform \
 	Do.Platform.Linux \
-	Do.Interface.Linux
+	Do.Interface.Linux \
+	Do.Interface.Linux.AnimationBase
 
 #
 # Extra rules for our binary, not worth factoring out

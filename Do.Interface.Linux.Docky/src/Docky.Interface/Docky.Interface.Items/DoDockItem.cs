@@ -40,10 +40,13 @@ namespace Docky.Interface
 	
 	public class DoDockItem : AbstractDockItem, IRightClickable
 	{
-		const string DoIcon = "gnome-do";
 		public const string EnableIcon = "gtk-apply";
 		public const string DisableIcon = "gtk-remove";
 		const string Text = "GNOME Do";
+		
+		protected override string Icon {
+			get { return "gnome-do"; }
+		}
 
 		HotSeatPainter hot_seat_painter;
 		
@@ -54,13 +57,6 @@ namespace Docky.Interface
 				return ScalingType.HighLow;
 			}
 		}
-
-		
-		protected override Pixbuf GetSurfacePixbuf (int size)
-		{
-			return IconProvider.PixbufFromIconName (DoIcon, size);
-		}
-
 		
 		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
 		{
@@ -79,10 +75,6 @@ namespace Docky.Interface
 			
 			SetText (Catalog.GetString (Text));
 		}
-
-		#region IDisposable implementation 
-		
-		#endregion 
 		
 		public override bool Equals (AbstractDockItem other)
 		{
@@ -100,62 +92,19 @@ namespace Docky.Interface
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = !DockPreferences.AutoHide, 
 			                                       Catalog.GetString ("Automatically Hide"), DockPreferences.AutoHide ? EnableIcon : DisableIcon).AsDark ();
 
-			if (!DockPreferences.AutoHide)
-				yield return new SimpleMenuButtonArgs (() => DockPreferences.AllowOverlap = !DockPreferences.AllowOverlap,
-				                                       Catalog.GetString ("Allow Window Overlap"), DockPreferences.AllowOverlap ? EnableIcon : DisableIcon).AsDark ();
-			
-			yield return new SimpleMenuButtonArgs (() => DockPreferences.IndicateMultipleWindows = !DockPreferences.IndicateMultipleWindows, 
-			                                       Catalog.GetString ("Advanced Indicators"), DockPreferences.IndicateMultipleWindows ? EnableIcon : DisableIcon).AsDark ();
-			
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = !DockPreferences.ZoomEnabled, 
 			                                       Catalog.GetString ("Zoom Icons"), DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon).AsDark ();
-			
-//			if (DockPreferences.ZoomEnabled) {
-//				yield return new SeparatorMenuButtonArgs ();
-//				yield return new WidgetMenuArgs (BuildScaleWidget ());
-//			}
 			
 			if (Gdk.Screen.Default.NMonitors > 1)
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
 				                                       Catalog.GetString ("Switch Monitors"), "display").AsDark ();
-			
-			yield return new SeparatorMenuButtonArgs ();
-			
-			foreach (AbstractDockletItem dockitem in DockServices.DockletService.Docklets) {
-				yield return new ToggleDockletMenuButtonArgs (dockitem).AsDark ();
-			}
 			
 			foreach (IRunnableItem item in Services.Application.MainMenuItems) {
 				yield return new SeparatorMenuButtonArgs ();
 				yield return new RunnableMenuButtonArgs (item);
 			}
 		}
-
-		void HandleValueChanged(object sender, EventArgs e)
-		{
-			if (!(sender is HScale)) return;
-			
-			HScale scale = sender as HScale;
-			DockPreferences.ZoomPercent = scale.Value;
-		}
 		
 		#endregion 
-		
-		Gtk.HScale BuildScaleWidget ()
-		{
-			Gtk.HScale hscale = new Gtk.HScale (1.1, 4, .1);
-			hscale.Value = DockPreferences.ZoomPercent;
-			hscale.Name = "Zoom";
-			hscale.CanFocus = false;
-			hscale.FormatValue +=HandleFormatValue; 
-			hscale.ModifyFg (StateType.Normal, new Gdk.Color (byte.MaxValue, byte.MaxValue, byte.MaxValue));
-			hscale.ValueChanged +=HandleValueChanged; 
-			return hscale;
-		}
-
-		void HandleFormatValue(object o, FormatValueArgs args)
-		{
-			args.RetVal = string.Format ("{0}%", Math.Round (args.Value * 100));
-		}
 	}
 }

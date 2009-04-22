@@ -28,6 +28,7 @@ using Docky.Utilities;
 
 using Do.Universe;
 using Do.Platform;
+using Do.Platform.Linux;
 using Do.Interface;
 using Do.Interface.Xlib;
 using Do.Interface.CairoUtils;
@@ -37,7 +38,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class DockWindow : Gtk.Window, IDoWindow
+	public class DockWindow : Gtk.Window, IDoWindow, IConfigurable
 	{
 		public static Gtk.Window Window { get; private set; }
 		
@@ -229,7 +230,7 @@ namespace Docky.Interface
 			Reposition ();
 		}
 		
-		void Reposition ()
+		public void Reposition ()
 		{
 			Gdk.Rectangle geo, main, res;
 			
@@ -449,6 +450,26 @@ namespace Docky.Interface
 			base.Dispose ();
 		}
 
+
 		#endregion 
+
+		#region IConfigurable implementation
+		public Bin GetConfiguration ()
+		{
+			return new DockyConfigurationWidget ();
+		}
+		
+		public string Description {
+			get {
+				return "Docky configuration";
+			}
+		}
+		
+		public new string Icon {
+			get {
+				return "panel";
+			}
+		}
+		#endregion
 	}
 }

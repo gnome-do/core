@@ -48,6 +48,7 @@ namespace Do.UI
 			base (WindowType.Toplevel)
 		{
 			Build ();
+			IconName = "gnome-desktop-config";
 
 			btn_close.IsFocus = true;
 			
@@ -71,6 +72,13 @@ namespace Do.UI
 		protected virtual void OnBtnHelpClicked (object sender, EventArgs e)
 		{
 			Services.Environment.OpenUrl (HelpUrl);
+		}
+		
+		public override void Dispose ()
+		{
+			foreach (Gtk.Widget w in notebook.Children)
+				w.Dispose ();
+			base.Dispose ();
 		}
 	}
 }

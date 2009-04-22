@@ -7,6 +7,8 @@ TARGET = library
 PKG_CONFIG_FILES = do.interface.linux.docky.pc
 
 FILES = \
+	gtk-gui/Docky.Interface.DockyConfigurationWidget.cs \
+	gtk-gui/generated.cs \
 	AssemblyInfo.cs \
 	src/Docky.Core/DockServices.cs \
 	src/Docky.Core/IDockletService.cs \
@@ -25,6 +27,7 @@ FILES = \
 	src/Docky.Interface/DockArea_Rendering.cs \
 	src/Docky.Interface/DockArea_DragAndDrop.cs \
 	src/Docky.Interface/DockAnimationState.cs \
+	src/Docky.Interface/DockyConfigurationWidget.cs \
 	src/Docky.Interface/DoInteropService.cs \
 	src/Docky.Interface/Docky.Interface.Items/AbstractDockItem.cs \
 	src/Docky.Interface/Docky.Interface.Items/AbstractDockletItem.cs \
@@ -70,6 +73,7 @@ FILES = \
 	src/Docky.Utilities/GtkUtils.cs
 
 RESOURCES = \
+	gtk-gui/gui.stetic \
 	Resources/Do.Interface.Linux.Docky.addin.xml \
 	Resources/close.svg \
 	Resources/run.svg \
@@ -91,4 +95,6 @@ PROJECT_REFERENCES = \
 	Do.Interface.Linux \
 	Do.Interface.Wink \
 	Do.Platform \
+	Do.Platform.Linux \
+	Do.Interface.Linux.AnimationBase \
 	Do.Universe

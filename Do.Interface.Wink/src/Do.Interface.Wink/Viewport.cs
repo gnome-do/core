@@ -48,16 +48,8 @@ namespace Do.Interface.Wink
 		
 		public string Name { get; private set; }
 		
-		internal Rectangle Area {
+		public Rectangle Area {
 			get { return area; }
-		}
-		
-		internal Viewport(string name, Rectangle area, Workspace parent)
-		{
-			this.area = area;
-			this.parent = parent;
-			Name = name;
-			window_states = new Dictionary<Wnck.Window, WindowState> ();
 		}
 		
 		WindowMoveResizeMask MoveMask {
@@ -79,6 +71,19 @@ namespace Do.Interface.Wink
 					   WindowMoveResizeMask.Height |
 					   WindowMoveResizeMask.Width;
 			}
+		}
+		
+		internal Viewport(string name, Rectangle area, Workspace parent)
+		{
+			this.area = area;
+			this.parent = parent;
+			Name = name;
+			window_states = new Dictionary<Wnck.Window, WindowState> ();
+		}
+		
+		public void Present ()
+		{
+			parent.Screen.MoveViewport (area.X, area.Y);
 		}
 		
 		public bool Contains (Gdk.Point point)

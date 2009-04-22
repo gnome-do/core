@@ -53,11 +53,16 @@ namespace Docky.Interface
 		}
 		
 		public override string Name {
-			get {
-				return "Trash";
-			}
+			get { return "Trash"; }
 		}
 
+		protected override string Icon {
+			get {
+				if (Directory.Exists (Trash) && (Directory.GetFiles (Trash).Any () || Directory.GetDirectories (Trash).Any ()))
+					return TrashFullIcon;
+				return TrashEmptyIcon;
+			}
+		}
 		
 		public TrashDockItem()
 		{
@@ -81,13 +86,6 @@ namespace Docky.Interface
 			Gtk.Application.Invoke (delegate {
 				RedrawIcon ();
 			});
-		}
-		
-		protected override Pixbuf GetSurfacePixbuf (int size)
-		{
-			if (Directory.Exists (Trash) && (Directory.GetFiles (Trash).Any () || Directory.GetDirectories (Trash).Any ()))
-				return IconProvider.PixbufFromIconName (TrashFullIcon, size);
-			return IconProvider.PixbufFromIconName (TrashEmptyIcon, size);
 		}
 
 		public override bool ReceiveItem (string item)

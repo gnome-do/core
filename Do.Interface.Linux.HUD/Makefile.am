@@ -20,4 +20,5 @@ REFERENCES =  \
 
 PROJECT_REFERENCES = \
 	Do.Interface.Linux \
+	Do.Interface.Linux.AnimationBase \
 	Do.Platform

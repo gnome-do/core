@@ -48,6 +48,12 @@ namespace Do.Core
 
 		public event EventHandler Summoned;
 
+		internal IDoWindow Window {
+			get {
+				return window;
+			}
+		}
+		
 		public Gtk.AboutDialog AboutDialog { get; private set; }
 		public PreferencesWindow PreferencesWindow { get; private set; }
 		
@@ -977,6 +983,7 @@ namespace Do.Core
 				PreferencesWindow = new PreferencesWindow ();
 				PreferencesWindow.Hidden += delegate {
 					// Release the window.
+					PreferencesWindow.Dispose ();
 					PreferencesWindow.Destroy ();
 					PreferencesWindow = null;
 					// Reload universe.
