@@ -45,6 +45,19 @@ namespace Docky.Utilities
 		static IPreferences prefs = Services.Preferences.Get<DockPreferences> ();
 		const int DefaultIconSize = 64;
 		
+		static DockPreferences ()
+		{
+			if (System.IO.Directory.Exists ("/proc/module/nvidia")) {
+				// new nvidia drivers have the nasty habbit of migrating out pixmaps out of video memory after 10
+				// minutes or so, so if we recreate them more frequently than that, it doesn't do that to us.
+				GLib.Timeout.Add (5 * 60 * 1000, delegate {
+					if (IconSizeChanged != null)
+						IconSizeChanged ();
+					return true;
+				});
+			}
+		}
+		
 		public static int TextWidth {
 			get { return 350; }
 		}

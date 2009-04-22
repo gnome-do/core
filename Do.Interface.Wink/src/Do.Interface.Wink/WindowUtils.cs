@@ -46,6 +46,7 @@ namespace Do.Interface.Wink
 				yield return "padsp";
 				yield return "aoss";
 				yield return "python(\\d.\\d)?";
+				yield return "(ba)?sh";
 			}
 		}
 		
