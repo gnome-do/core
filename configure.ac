@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.54])
 
-AC_INIT([gnome-do], [0.8.3.2])
+AC_INIT([gnome-do], [0.8.1.2])
 AM_INIT_AUTOMAKE([foreign tar-pax])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -15,7 +15,7 @@ dnl -- Populate top_srcdir variable
 top_srcdir=$(readlink -f $0 | sed -e s/configure$//)
 
 dnl Plugin ABI version; bump whenever plugin interface changes
-ABI_VERSION=1.9
+ABI_VERSION=0.9
 AC_SUBST(ABI_VERSION)
 
 if test -d $top_srcdir/.bzr ; then
