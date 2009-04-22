@@ -46,8 +46,7 @@ namespace Do.Core
 	{
 		const string DefaultPluginIcon = "folder_tar";
 		
-		static IEnumerable<string> ExtensionPaths =
-			new [] { "/Do/ItemSource", "/Do/Action", };
+		static IEnumerable<string> ExtensionPaths = new [] { "/Do/ItemSource", "/Do/Action", };
 
 		public static readonly IEnumerable<AddinClassifier> Classifiers =
 			new AddinClassifier [] {
@@ -169,9 +168,12 @@ namespace Do.Core
 		{
 			XmlTextReader reader;
 			List<string> plugins;
-		
-			plugins = new List<string> ();
 			
+			if (!Directory.Exists (Paths.UserAddinInstallationDirectory))
+				return Enumerable.Empty<string> ();
+				
+			plugins = new List<string> ();
+		
 			try {
 				// set up the reader by loading file, telling it that whitespace doesn't matter, and the DTD is irrelevant
 				using (reader = new XmlTextReader (Paths.UserPluginsDirectory.Combine ("addin-db-001", "config.xml"))) {
@@ -181,7 +183,7 @@ namespace Do.Core
 					
 					if (string.IsNullOrEmpty (reader.Name))
 						return Enumerable.Empty<string> ();
-				
+					
 					while (reader.Read ()) {
 						string id;
 						if (reader.NodeType != XmlNodeType.Element || !reader.HasAttributes)
@@ -206,7 +208,7 @@ namespace Do.Core
 				Log.Debug (e.StackTrace);
 			}
 			
-			return plugins;
+			return plugins;	
 		}
 		
 		static void EnableDisabledPlugins (IEnumerable<string> savedPlugins)
