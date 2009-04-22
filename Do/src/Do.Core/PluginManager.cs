@@ -88,8 +88,7 @@ namespace Do.Core
 		
 		public static void InstallLocalPlugins ()
 		{	
-			string [] manual;
-			IEnumerable<string> saved;
+			IEnumerable<string> saved, manual;
 			
 			manual = Directory.GetFiles (Paths.UserAddinInstallationDirectory, "*.dll")
 				.Select (s => Path.GetFileName (s));
