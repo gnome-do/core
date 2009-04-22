@@ -86,68 +86,22 @@ namespace Do.Core
 				AddinManager.AddExtensionNodeHandler (path, OnPluginChanged);
 		}
 		
-		/// <summary>
-		/// Returns a list of the plugins that were enabled before Mono.Addins was initialised.
-		/// this is read from config.xml.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="IEnumerable"/> of strings containing the versionless plugin id of all
-		/// enabled plugins.
-		/// </returns>
-		static IEnumerable<string> PluginsEnabledBeforeLoad ()
-		{
-			XmlTextReader reader;
-			List<string> plugins;
-		
-			plugins = new List<string> ();
+		public static void InstallLocalPlugins ()
+		{	
+			string [] manual;
+			IEnumerable<string> saved;
 			
-			try {
-				// set up the reader by loading file, telling it that whitespace doesn't matter, and the DTD is irrelevant
-				reader = new XmlTextReader (Paths.UserPluginsDirectory.Combine ("addin-db-001", "config.xml"));
-				reader.XmlResolver = null;
-				reader.WhitespaceHandling = WhitespaceHandling.None;
-				reader.MoveToContent ();
+			manual = Directory.GetFiles (Paths.UserAddinInstallationDirectory, "*.dll");
+			for (int i = 0; i < manual.Length; i++) {
+				manual [i] = Path.GetFileName (manual [i]);
+			}
+			
+			AddinManager.Registry.Rebuild (null);
+			saved = AddinManager.Registry.GetAddins ()
+				.Where (addin => manual.Contains (Path.GetFileName (addin.AddinFile)))
+				.Select (addin => addin.Id);
 				
-				if (string.IsNullOrEmpty (reader.Name))
-					return Enumerable.Empty<string> ();
-			
-				Log.Debug ("our xml file has {0} attributes", reader.AttributeCount);
-				while (reader.Read ()) {
-					string id;
-					if (reader.NodeType != XmlNodeType.Element || !reader.HasAttributes)
-						continue;
-					
-					reader.MoveToAttribute ("id");
-					id = AddinIdWithoutVersion (reader.Value);
-					
-					if (string.IsNullOrEmpty (id))
-						continue;
-						
-					reader.MoveToAttribute ("enabled");
-					
-					Log.Debug ("Saving or not saving {0} with {1}", id, reader.Value);	
-					if (Boolean.Parse (reader.Value))
-						plugins.Add (id);
-				}
-			} catch (FileNotFoundException e) {
-				Log.Debug ("Could not find locate Mono.Addins config.xml: {0}", e.Message);
-			} catch (XmlException e) {
-				Log.Error ("Error while parsing Mono.Addins config.xml: {0}", e.Message);
-				Log.Debug (e.StackTrace);
-			}
-			
-			return plugins;
-		}
-		
-		static void EnableDisabledPlugins (IEnumerable<string> savedPlugins)
-		{
-			foreach (Addin addin in AddinManager.Registry.GetAddins ()) {
-				string id = addin.Id;
-				if (!AddinManager.Registry.IsAddinEnabled (id) && savedPlugins.Any (name => id.StartsWith (name))) {
-					Log.Debug ("about to enable {0}", id);
-					AddinManager.Registry.EnableAddin (id);
-				}
-			}
+			EnableDisabledPlugins (saved);
 		}
 
 		public static bool PluginClassifiesAs (AddinRepositoryEntry entry, string className)
@@ -204,6 +158,66 @@ namespace Do.Core
 		/// </value>
 		public static IEnumerable<Act> Actions {
 			get { return AddinManager.GetExtensionObjects ("/Do/Action").OfType<Act> (); }
+		}
+		
+		/// <summary>
+		/// Returns a list of the plugins that were enabled before Mono.Addins was initialised.
+		/// this is read from config.xml.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="IEnumerable"/> of strings containing the versionless plugin id of all
+		/// enabled plugins.
+		/// </returns>
+		static IEnumerable<string> PluginsEnabledBeforeLoad ()
+		{
+			XmlTextReader reader;
+			List<string> plugins;
+		
+			plugins = new List<string> ();
+			
+			try {
+				// set up the reader by loading file, telling it that whitespace doesn't matter, and the DTD is irrelevant
+				reader = new XmlTextReader (Paths.UserPluginsDirectory.Combine ("addin-db-001", "config.xml"));
+				reader.XmlResolver = null;
+				reader.WhitespaceHandling = WhitespaceHandling.None;
+				reader.MoveToContent ();
+				
+				if (string.IsNullOrEmpty (reader.Name))
+					return Enumerable.Empty<string> ();
+			
+				while (reader.Read ()) {
+					string id;
+					if (reader.NodeType != XmlNodeType.Element || !reader.HasAttributes)
+						continue;
+					
+					reader.MoveToAttribute ("id");
+					id = AddinIdWithoutVersion (reader.Value);
+					
+					if (string.IsNullOrEmpty (id))
+						continue;
+						
+					reader.MoveToAttribute ("enabled");
+					
+					if (Boolean.Parse (reader.Value))
+						plugins.Add (id);
+				}
+			} catch (FileNotFoundException e) {
+				Log.Debug ("Could not find locate Mono.Addins config.xml: {0}", e.Message);
+			} catch (XmlException e) {
+				Log.Error ("Error while parsing Mono.Addins config.xml: {0}", e.Message);
+				Log.Debug (e.StackTrace);
+			}
+			
+			return plugins;
+		}
+		
+		static void EnableDisabledPlugins (IEnumerable<string> savedPlugins)
+		{
+			foreach (Addin addin in AddinManager.Registry.GetAddins ()) {
+				string id = addin.Id;
+				if (!AddinManager.Registry.IsAddinEnabled (id) && savedPlugins.Any (name => id.StartsWith (name)))
+					AddinManager.Registry.EnableAddin (id);
+			}
 		}
 
 		static void OnPluginChanged (object sender, ExtensionNodeEventArgs args)

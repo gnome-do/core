@@ -51,9 +51,7 @@ namespace Do.UI
 
 			btn_close.IsFocus = true;
 			
-			TargetEntry [] targets = {
-				new TargetEntry ("text/uri-list", 0, 0), 
-			};
+			TargetEntry [] targets = { new TargetEntry ("text/uri-list", 0, 0) };
 			Drag.DestSet (this, DestDefaults.All, targets, Gdk.DragAction.Copy);
 			
 			// Add notebook pages.

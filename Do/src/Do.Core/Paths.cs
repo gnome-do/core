@@ -41,5 +41,9 @@ namespace Do.Core
 				return userData.Combine (ApplicationDirectory, PluginsDirectory);
 			}
 		}
+		
+		public static string UserAddinInstallationDirectory {
+			get { return UserPluginsDirectory.Combine ("addins"); }
+		}
 	}
 }
