@@ -88,7 +88,8 @@ REFERENCES =  \
 	$(MONO_ADDINS_SETUP_LIBS) \
 	$(NUNIT_LIBS) \
 	System \
-	System.Core
+	System.Core \
+	System.Xml
 
 PROJECT_REFERENCES = \
 	Do.Universe \
@@ -104,7 +105,7 @@ PROJECT_REFERENCES = \
 CLEANFILES += Do.exe.config gnome-do
 EXTRA_DIST += Do.exe.config.in gnome-do.in
 
-module_DATA += Do.exe.config
+module_DATA += Do.exe.config Do.addins
 bin_SCRIPTS = gnome-do
 
 MCS_FLAGS += -unsafe

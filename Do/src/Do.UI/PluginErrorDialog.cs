@@ -29,12 +29,12 @@ namespace Do.UI
 		
 		public PluginErrorDialog(string[] files)
 		{
+			string errorMessage = Catalog.GetString ("<b><span size=\"large\">There was an error installing the selected") +  "{0}</span></b>";
+			
 			this.Build();
 			
-			if (files.Length > 1)
-				header_lbl.Markup = Catalog.GetString ("<b><span size=\"large\">There was an error installing the selected plugins</span></b>");
-			else
-				header_lbl.Markup = Catalog.GetString ("<b><span size=\"large\">There was an error installing the selected plugin</span></b>");
+			header_lbl.Markup = Catalog.GetPluralString (string.Format (errorMessage, Catalog.GetString ("plugin")),
+				string.Format (errorMessage, Catalog.GetString ("plugins")), files.Length);
 				
 			string errors = "";
 			for (int i = 0; i < files.Length; i++) {

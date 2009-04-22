@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using System.Xml;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -45,8 +46,7 @@ namespace Do.Core
 	{
 		const string DefaultPluginIcon = "folder_tar";
 		
-		static IEnumerable<string> ExtensionPaths =
-			new [] { "/Do/ItemSource", "/Do/Action", };
+		static IEnumerable<string> ExtensionPaths = new [] { "/Do/ItemSource", "/Do/Action", };
 
 		public static readonly IEnumerable<AddinClassifier> Classifiers =
 			new AddinClassifier [] {
@@ -54,25 +54,28 @@ namespace Do.Core
 				new CommunityAddinClassifier (),
 				new GreedyAddinClassifier (),
 			};
-
+			
 		/// <summary>
 		/// Performs plugin system initialization. Should be called before this
 		/// class or any Mono.Addins class is used. The ordering is very delicate.
 		/// </summary>
 		public static void Initialize ()
 		{
+			IEnumerable<string> savedPlugins = PluginsEnabledBeforeLoad ();
+			
 			// Initialize Mono.Addins.
 			AddinManager.Initialize (Paths.UserPluginsDirectory);
-
-			// Register repositories.
-			SetupService setup = new SetupService (AddinManager.Registry);
-			foreach (string path in Paths.SystemPluginDirectories) {
-				string url = "file://" + path;
-				if (!setup.Repositories.ContainsRepository (url)) {
-					setup.Repositories.RegisterRepository (null, url, false);
-				}
-			}
-
+			// This is a workaround for a Mono.Addins bug where updated addins will get
+			// disabled on update. We save the currently enabled addins, update, then
+			// reenable them with the Id of the new version. It's a bit hackish but lluis
+			// said it's a reasonable approach until that bug is fixed 
+		 	// https://bugzilla.novell.com/show_bug.cgi?id=490302
+			if (CorePreferences.PeekDebug)
+				AddinManager.Registry.Rebuild (null);
+			else
+				AddinManager.Registry.Update (null);
+			EnableDisabledPlugins (savedPlugins);
+			
 			// Initialize services before addins that may use them are loaded.
 			Services.Initialize ();
 			InterfaceManager.Initialize ();
@@ -80,8 +83,21 @@ namespace Do.Core
 			// Now allow loading of non-services.
 			foreach (string path in ExtensionPaths)
 				AddinManager.AddExtensionNodeHandler (path, OnPluginChanged);
-
-			InstallLocalPlugins (setup);
+		}
+		
+		public static void InstallLocalPlugins ()
+		{	
+			IEnumerable<string> saved, manual;
+			
+			manual = Directory.GetFiles (Paths.UserAddinInstallationDirectory, "*.dll")
+				.Select (s => Path.GetFileName (s));
+			
+			AddinManager.Registry.Rebuild (null);
+			saved = AddinManager.Registry.GetAddins ()
+				.Where (addin => manual.Contains (Path.GetFileName (addin.AddinFile)))
+				.Select (addin => addin.Id);
+				
+			EnableDisabledPlugins (saved);
 		}
 
 		public static bool PluginClassifiesAs (AddinRepositoryEntry entry, string className)
@@ -139,35 +155,71 @@ namespace Do.Core
 		public static IEnumerable<Act> Actions {
 			get { return AddinManager.GetExtensionObjects ("/Do/Action").OfType<Act> (); }
 		}
-
+		
 		/// <summary>
-		/// Installs plugins that are located in the <see
-		/// cref="Paths.UserPlugins"/> directory.  This will build addins
-		/// (mpack files) and install them.
+		/// Returns a list of the plugins that were enabled before Mono.Addins was initialised.
+		/// this is read from config.xml.
 		/// </summary>
-		/// <param name="setup">
-		/// A <see cref="SetupService"/>
-		/// </param>
-		public static void InstallLocalPlugins (SetupService setup)
+		/// <returns>
+		/// A <see cref="IEnumerable"/> of strings containing the versionless plugin id of all
+		/// enabled plugins.
+		/// </returns>
+		static IEnumerable<string> PluginsEnabledBeforeLoad ()
 		{
-			IProgressStatus status = new ConsoleProgressStatus (false);
-			// GetFilePaths is like Directory.GetFiles but returned files have directory prefixed.
-			Func<string, string, IEnumerable<string>> GetFilePaths = (dir, pattern) =>
-				Directory.GetFiles (dir, pattern).Select (f => Path.Combine (dir, f));
+			XmlTextReader reader;
+			List<string> plugins;
 			
-			// Create mpack (addin packages) out of dlls.
-			GetFilePaths (Paths.UserPluginsDirectory, "*.dll")
-				.ForEach (path => setup.BuildPackage (status, Paths.UserPluginsDirectory, new[] { path }))
-				// We delete the dlls after creating mpacks so we don't delete any dlls prematurely.
-				.ForEach (File.Delete);
-
-			// Install each mpack file, deleting each file when finished installing it.
-			foreach (string path in GetFilePaths (Paths.UserPluginsDirectory, "*.mpack")) {
-				setup.Install (status, new[] { path });
-				File.Delete (path);
+			if (!Directory.Exists (Paths.UserAddinInstallationDirectory))
+				return Enumerable.Empty<string> ();
+				
+			plugins = new List<string> ();
+		
+			try {
+				// set up the reader by loading file, telling it that whitespace doesn't matter, and the DTD is irrelevant
+				using (reader = new XmlTextReader (Paths.UserPluginsDirectory.Combine ("addin-db-001", "config.xml"))) {
+					reader.XmlResolver = null;
+					reader.WhitespaceHandling = WhitespaceHandling.None;
+					reader.MoveToContent ();
+					
+					if (string.IsNullOrEmpty (reader.Name))
+						return Enumerable.Empty<string> ();
+					
+					while (reader.Read ()) {
+						string id;
+						if (reader.NodeType != XmlNodeType.Element || !reader.HasAttributes)
+							continue;
+						
+						reader.MoveToAttribute ("id");
+						id = AddinIdWithoutVersion (reader.Value);
+						
+						if (string.IsNullOrEmpty (id))
+							continue;
+							
+						reader.MoveToAttribute ("enabled");
+						
+						if (Boolean.Parse (reader.Value))
+							plugins.Add (id);
+					}
+				}
+			} catch (FileNotFoundException e) {
+				Log.Debug ("Could not find locate Mono.Addins config.xml: {0}", e.Message);
+			} catch (XmlException e) {
+				Log.Error ("Error while parsing Mono.Addins config.xml: {0}", e.Message);
+				Log.Debug (e.StackTrace);
 			}
+			
+			return plugins;	
 		}
 		
+		static void EnableDisabledPlugins (IEnumerable<string> savedPlugins)
+		{
+			foreach (Addin addin in AddinManager.Registry.GetAddins ()) {
+				string id = addin.Id;
+				if (!AddinManager.Registry.IsAddinEnabled (id) && savedPlugins.Any (name => id.StartsWith (name)))
+					AddinManager.Registry.EnableAddin (id);
+			}
+		}
+
 		static void OnPluginChanged (object sender, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
@@ -243,6 +295,11 @@ namespace Do.Core
 		public static IEnumerable<IConfigurable> ConfigurablesForAddin (string id)
 		{
 			return ObjectsForAddin<IConfigurable> (id);
+		}
+		
+		static string AddinIdWithoutVersion (string id)
+		{
+			return id.Substring (0, id.IndexOf (','));
 		}
 	}
 }
