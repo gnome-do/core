@@ -23,8 +23,8 @@ using Cairo;
 using Gdk;
 using Gtk;
 
-using Docky.Utilities;
 using Docky.Core;
+using Docky.Utilities;
 
 namespace Docky.Interface
 {
@@ -99,7 +99,7 @@ namespace Docky.Interface
 			
 			BuildDocklets ();
 			
-			SetSensativity ();
+			SetSensitivity ();
 			
 			DockPreferences.IconSizeChanged += HandleIconSizeChanged; 
 			
@@ -108,7 +108,7 @@ namespace Docky.Interface
 
 		void HandleIconSizeChanged()
 		{
-			SetSensativity ();
+			SetSensitivity ();
 		}
 		
 		void BuildDocklets ()
@@ -131,13 +131,13 @@ namespace Docky.Interface
 			scrolled_window.ShowAll ();
 		}
 		
-		void SetSensativity ()
+		void SetSensitivity ()
 		{
 			zoom_scale.Sensitive = 
-				zoom_width_scale.Sensitive = 
-					zoom_size_label.Sensitive = 
-					zoom_width_label.Sensitive =
-					DockPreferences.ZoomEnabled;
+			zoom_width_scale.Sensitive = 
+			zoom_size_label.Sensitive = 
+			zoom_width_label.Sensitive =
+			DockPreferences.ZoomEnabled;
 		}
 
 		void HandleToggled (object o, ToggledArgs args)
@@ -153,8 +153,7 @@ namespace Docky.Interface
 
 		protected virtual void OnZoomScaleValueChanged (object sender, System.EventArgs e)
 		{
-			if (setup) return;
-			if (!(sender is HScale)) return;
+			if (setup || !(sender is HScale)) return;
 			
 			HScale scale = sender as HScale;
 			DockPreferences.ZoomPercent = scale.Value;

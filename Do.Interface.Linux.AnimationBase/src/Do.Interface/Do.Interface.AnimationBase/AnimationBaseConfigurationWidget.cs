@@ -32,12 +32,12 @@ namespace Do.Interface.AnimationBase
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class AnimationBaseConfigurationWidget : Gtk.Bin
 	{
-		BezelDrawingArea drawing_area;
 		bool setup = false;
+		BezelDrawingArea drawing_area;
 		
-		public AnimationBaseConfigurationWidget(BezelDrawingArea drawingArea)
+		public AnimationBaseConfigurationWidget (BezelDrawingArea drawingArea)
 		{
-			this.Build();
+			Build ();
 			
 			drawing_area = drawingArea;
 			SetupButtons ();
@@ -46,10 +46,12 @@ namespace Do.Interface.AnimationBase
 		void SetupButtons ()
 		{
 			setup = true;
-			background_colorbutton.Color = drawing_area.BackgroundColor.ConvertToGdk ();
-			background_colorbutton.Alpha = (ushort) (drawing_area.BackgroundColor.A * ushort.MaxValue);
+			
 			shadow_check.Active = BezelDrawingArea.DrawShadow;
 			animation_check.Active = BezelDrawingArea.Animated;
+			
+			background_colorbutton.Color = drawing_area.BackgroundColor.ConvertToGdk ();
+			background_colorbutton.Alpha = (ushort) (drawing_area.BackgroundColor.A * ushort.MaxValue);
 			
 			Gtk.Application.Invoke (delegate { setup = false; });
 		}

@@ -59,8 +59,8 @@ namespace Docky.Interface
 		protected override string Icon {
 			get {
 				if (Directory.Exists (Trash) && (Directory.GetFiles (Trash).Any () || Directory.GetDirectories (Trash).Any ()))
-				return TrashFullIcon;
-			return TrashEmptyIcon;
+					return TrashFullIcon;
+				return TrashEmptyIcon;
 			}
 		}
 		
