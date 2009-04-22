@@ -88,7 +88,8 @@ REFERENCES =  \
 	$(MONO_ADDINS_SETUP_LIBS) \
 	$(NUNIT_LIBS) \
 	System \
-	System.Core
+	System.Core \
+	System.Xml
 
 PROJECT_REFERENCES = \
 	Do.Universe \

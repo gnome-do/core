@@ -25,10 +25,9 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 using Gtk;
-using Mono.Unix;
 using Mono.Addins;
-using Mono.Addins.Gui;
 using Mono.Addins.Setup;
+using Mono.Unix;
 
 using Do;
 using Do.Core;
@@ -44,8 +43,7 @@ namespace Do.UI
 	public partial class ManagePluginsPreferencesWidget : Bin, IConfigurable
 	{
 
-		const string PluginWikiPageFormat =
-			"http://do.davebsd.com/wiki/index.php?title={0}_Plugin";
+		const string PluginWikiPageFormat = "http://do.davebsd.com/wiki/index.php?title={0}_Plugin";
 
 		PluginNodeView nview;
 		SearchEntry search_entry;
@@ -92,37 +90,56 @@ namespace Do.UI
 			search_entry.Show();
 			search_entry.Ready = true;
 			
-			hbox1.PackStart (search_entry,true,true,0);
-			hbox1.ShowAll();
+			hbox1.PackStart (search_entry, true, true, 0);
+			hbox1.ShowAll ();
 			
-			Services.Application.RunOnMainThread (() =>
-				search_entry.InnerEntry.GrabFocus ()
-			);
+			Services.Application.RunOnMainThread (() => search_entry.InnerEntry.GrabFocus ());
 		}
 		
 		protected void OnDragDataReceived (object sender, DragDataReceivedArgs args)
 		{
-			string data = Encoding.UTF8.GetString (args.SelectionData.Data);
+			string data;
+			string [] uriList;
+			List<string> errors;
+			
+			data = Encoding.UTF8.GetString (args.SelectionData.Data);
 			// Sometimes we get a null at the end, and it crashes us.
 			data = data.TrimEnd ('\0');
 			
-			string [] uriList = Regex.Split (data, "\r\n");
-			List<string> errors = new List<string> ();
-			for (int i = 0; i < uriList.Length; i++) {
-				string fileName = uriList [i];
+			errors = new List<string> ();
+			uriList = Regex.Split (data, "\r\n");
+			
+			foreach (string uri in uriList) {
+				string file, path, filename;
 				
-				if (!fileName.EndsWith (".dll") || !File.Exists (fileName)) {
-					uriList [i] = "";
-					errors.Add (fileName);
+				if (string.IsNullOrEmpty (uri))
 					continue;
+					
+				try {
+					file = uri.Remove (0, 7); // 7 is the length of file://
+					// I have to use System.IO here due to a Gtk namespace conflict
+					filename = System.IO.Path.GetFileName (file);
+					
+					if (!file.EndsWith (".dll")) {
+						errors.Add (filename);
+						continue;
+					}
+
+					if (!Directory.Exists (Paths.UserAddinInstallationDirectory))
+						Directory.CreateDirectory (Paths.UserAddinInstallationDirectory);
+					
+					path = Paths.UserAddinInstallationDirectory.Combine (filename);
+					File.Copy (file, path, true);
+					
+					if (errors.Count > 0)
+						new PluginErrorDialog (errors.ToArray ());
+			
+					PluginManager.InstallLocalPlugins ();
+				} catch (Exception e) { 
+					Log<ManagePluginsPreferencesWidget>.Error ("An unexpected error occurred installing your plugin");
+					Log<ManagePluginsPreferencesWidget>.Debug ("{0}\n{1}", e.Message, e.StackTrace);
 				}
 			} 
-			
-			if (errors.Count > 0)
-				new PluginErrorDialog (errors.ToArray ());
-			
-			SetupService setup = new SetupService (AddinManager.Registry);
-			setup.Install (null, uriList);
 		}
 
 		public Bin GetConfiguration ()
