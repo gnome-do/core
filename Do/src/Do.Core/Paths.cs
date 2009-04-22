@@ -31,6 +31,7 @@ namespace Do.Core
 	{
 		const string PluginsDirectory = "plugins";
 		const string ApplicationDirectory = "gnome-do";
+		const string DefaultAddinsDirectory = "addins";
 
 		//// <value>
 		/// Directory where Do saves its Mono.Addins repository cache.
@@ -43,7 +44,7 @@ namespace Do.Core
 		}
 		
 		public static string UserAddinInstallationDirectory {
-			get { return UserPluginsDirectory.Combine ("addins"); }
+			get { return UserPluginsDirectory.Combine (DefaultAddinsDirectory); }
 		}
 	}
 }
