@@ -91,10 +91,8 @@ namespace Do.Core
 			string [] manual;
 			IEnumerable<string> saved;
 			
-			manual = Directory.GetFiles (Paths.UserAddinInstallationDirectory, "*.dll");
-			for (int i = 0; i < manual.Length; i++) {
-				manual [i] = Path.GetFileName (manual [i]);
-			}
+			manual = Directory.GetFiles (Paths.UserAddinInstallationDirectory, "*.dll")
+				.Select (s => Path.GetFileName (s));
 			
 			AddinManager.Registry.Rebuild (null);
 			saved = AddinManager.Registry.GetAddins ()

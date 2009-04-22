@@ -29,7 +29,7 @@ namespace Do.UI
 		
 		public PluginErrorDialog(string[] files)
 		{
-			string errorMessage = Catalog.GetString ("<b><span size=\"large\">There was an error installing the selected {0}</span></b>");
+			string errorMessage = Catalog.GetString ("<b><span size=\"large\">There was an error installing the selected") +  "{0}</span></b>";
 			
 			this.Build();
 			
