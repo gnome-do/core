@@ -177,29 +177,30 @@ namespace Do.Core
 			
 			try {
 				// set up the reader by loading file, telling it that whitespace doesn't matter, and the DTD is irrelevant
-				reader = new XmlTextReader (Paths.UserPluginsDirectory.Combine ("addin-db-001", "config.xml"));
-				reader.XmlResolver = null;
-				reader.WhitespaceHandling = WhitespaceHandling.None;
-				reader.MoveToContent ();
+				using (reader = new XmlTextReader (Paths.UserPluginsDirectory.Combine ("addin-db-001", "config.xml"))) {
+					reader.XmlResolver = null;
+					reader.WhitespaceHandling = WhitespaceHandling.None;
+					reader.MoveToContent ();
+					
+					if (string.IsNullOrEmpty (reader.Name))
+						return Enumerable.Empty<string> ();
 				
-				if (string.IsNullOrEmpty (reader.Name))
-					return Enumerable.Empty<string> ();
-			
-				while (reader.Read ()) {
-					string id;
-					if (reader.NodeType != XmlNodeType.Element || !reader.HasAttributes)
-						continue;
-					
-					reader.MoveToAttribute ("id");
-					id = AddinIdWithoutVersion (reader.Value);
-					
-					if (string.IsNullOrEmpty (id))
-						continue;
+					while (reader.Read ()) {
+						string id;
+						if (reader.NodeType != XmlNodeType.Element || !reader.HasAttributes)
+							continue;
 						
-					reader.MoveToAttribute ("enabled");
-					
-					if (Boolean.Parse (reader.Value))
-						plugins.Add (id);
+						reader.MoveToAttribute ("id");
+						id = AddinIdWithoutVersion (reader.Value);
+						
+						if (string.IsNullOrEmpty (id))
+							continue;
+							
+						reader.MoveToAttribute ("enabled");
+						
+						if (Boolean.Parse (reader.Value))
+							plugins.Add (id);
+					}
 				}
 			} catch (FileNotFoundException e) {
 				Log.Debug ("Could not find locate Mono.Addins config.xml: {0}", e.Message);
