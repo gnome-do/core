@@ -47,7 +47,7 @@ namespace Docky.Utilities
 		
 		static DockPreferences ()
 		{
-			if (System.IO.Directory.Exists ("/proc/module/nvidia")) {
+			if (System.IO.Directory.Exists ("/sys/module/nvidia")) {
 				// new nvidia drivers have the nasty habbit of migrating out pixmaps out of video memory after 10
 				// minutes or so, so if we recreate them more frequently than that, it doesn't do that to us.
 				GLib.Timeout.Add (5 * 60 * 1000, delegate {
