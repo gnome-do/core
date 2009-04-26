@@ -62,6 +62,8 @@ namespace Do.Interface.AnimationBase
 		
 		public int X { get; set; }
 		
+		public bool SlideFromBottom { get; set; }
+		
 		int BottomBorderWidth {
 			get {
 				switch (style) {
@@ -414,7 +416,13 @@ namespace Do.Interface.AnimationBase
 			
 			DrawContextOnSurface (backbuffer);
 			if (child_scroll_offset == 0) {
-				cr.SetSource (backbuffer, X, -(height*(1-slide_offset)));
+				double y;
+				if (SlideFromBottom) {
+					y = height*(1-slide_offset);
+				} else {
+					y = -(height*(1-slide_offset));
+				}
+				cr.SetSource (backbuffer, X, y);
 				cr.Operator = Operator.Source;
 				cr.Paint ();
 			} else {

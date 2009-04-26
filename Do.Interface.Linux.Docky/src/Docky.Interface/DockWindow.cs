@@ -102,6 +102,7 @@ namespace Docky.Interface
 			Add (dock_area);
 
 			results = new BezelGlassResults (controller, 450, HUDStyle.Classic, new BezelColors (new Cairo.Color (.1, .1, .1, .8)));
+			results.SlideFromBottom = DockPreferences.Orientation == DockOrientation.Bottom;
 			results_window = new BezelGlassWindow (results);
 
 			ShowAll ();
@@ -252,6 +253,7 @@ namespace Docky.Interface
 			if (Display != null)
 				Display.Sync ();
 			
+			results.SlideFromBottom = DockPreferences.Orientation == DockOrientation.Bottom;
 			is_repositioned_hidden = false;
 		}
 		

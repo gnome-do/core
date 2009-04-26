@@ -361,6 +361,7 @@ namespace Docky.Interface
 			SetParentInputMask ();
 			SetIconRegions ();
 			window.DelaySetStruts ();
+			AnimatedDraw ();
 		}
 		
 		void HandleUniverseInitialized(object sender, EventArgs e)
