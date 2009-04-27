@@ -26,6 +26,7 @@ using Gtk;
 
 using Do.Interface;
 using Do.Interface.CairoUtils;
+using Do.Interface.Wink;
 
 using Docky.Core;
 using Docky.Utilities;
@@ -49,7 +50,7 @@ namespace Docky.Interface
 		const int UrgentIndicatorSize = 12;
 		
 		Dictionary<IDockPainter, Surface> painter_surfaces;
-		bool fast_render_fail, first_render_set;
+		bool fast_render_fail, first_render_set, last_intersect;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
@@ -97,6 +98,21 @@ namespace Docky.Interface
 			}
 		}
 		
+		bool Hidden {
+			get {
+				bool hidden = false;
+				switch (DockPreferences.AutohideType) {
+				case AutohideType.Autohide:
+					hidden = !CursorIsOverDockArea;
+					break;
+				case AutohideType.Intellihide:
+					hidden = !CursorIsOverDockArea && WindowIntersectingOther;
+					break;
+				}
+				return hidden;
+			}
+		}
+		
 		/// <value>
 		/// Icon Size used for the dock
 		/// </value>
@@ -137,6 +153,24 @@ namespace Docky.Interface
 		double PainterOpacity {
 			get { return 1 - DockIconOpacity; }
 		}
+		
+		bool WindowIntersectingOther {
+			get {
+				bool intersect = false;
+				try {
+					Gdk.Rectangle adjustedDockArea = MinimumDockArea.RelativeRectangleToRootPoint (window);
+					adjustedDockArea.Inflate (-2, -2);
+					intersect = ScreenUtils.ActiveViewport.Windows ().Any (w => w.EasyGeometry ().IntersectsWith (adjustedDockArea));
+				} catch {
+				}
+				if (intersect != last_intersect && DateTime.UtcNow - showhide_time > SummonTime) {
+					showhide_time = DateTime.UtcNow;
+					AnimatedDraw ();
+				}
+				last_intersect = intersect;
+				return intersect;
+			}
+		}
 
 		//// <value>
 		/// The overall offset of the dock as a whole
@@ -145,7 +179,7 @@ namespace Docky.Interface
 			get {
 				double offset = 0;
 				// we never hide in these conditions
-				if (!DockPreferences.AutoHide || drag_resizing || PainterOpacity == 1) {
+				if (DockPreferences.AutohideType == AutohideType.None || drag_resizing || PainterOpacity == 1) {
 					if ((RenderTime - FirstRenderTime) > SummonTime)
 						return 0;
 					offset = 1 - Math.Min (1, (DateTime.UtcNow - FirstRenderTime).TotalMilliseconds / SummonTime.TotalMilliseconds);
@@ -153,10 +187,10 @@ namespace Docky.Interface
 				}
 
 				if (PainterOpacity > 0) {
-					if (CursorIsOverDockArea) {
+					if (!Hidden) {
 						return 0;
 					} else {
-						offset = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
+						offset = Math.Min (1, (RenderTime - showhide_time).TotalMilliseconds / 
 						                   SummonTime.TotalMilliseconds);
 						offset = Math.Min (offset, Math.Min (1, 
 						                                     (RenderTime - interface_change_time)
@@ -166,9 +200,9 @@ namespace Docky.Interface
 					if (PainterOverlayVisible)
 						offset = 1 - offset;
 				} else {
-					offset = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
+					offset = Math.Min (1, (RenderTime - showhide_time).TotalMilliseconds / 
 					                   SummonTime.TotalMilliseconds);
-					if (CursorIsOverDockArea)
+					if (!Hidden)
 						offset = 1 - offset;
 				}
 				return (int) (offset * PositionProvider.DockHeight * 1.5);
@@ -186,7 +220,7 @@ namespace Docky.Interface
 				double zoom = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
 					                 BaseAnimationTime.TotalMilliseconds);
 				if (CursorIsOverDockArea) {
-					if (DockPreferences.AutoHide)
+					if (DockPreferences.AutohideType == AutohideType.Autohide)
 						zoom = 1;
 				} else {
 					zoom = 1 - zoom;
@@ -225,7 +259,7 @@ namespace Docky.Interface
 				cr.PaintWithAlpha (PainterOpacity);
 			}
 			
-			bool isNotSummonTransition = PainterOpacity == 0 || CursorIsOverDockArea || !DockPreferences.AutoHide;
+			bool isNotSummonTransition = PainterOpacity == 0 || !Hidden || !DockPreferences.AutoHide;
 			if (DockIconOpacity > 0 && isNotSummonTransition) {
 				if (dock_icon_buffer == null)
 					dock_icon_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
@@ -598,7 +632,7 @@ namespace Docky.Interface
 
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
-			if (!IsDrawable || window.IsRepositionHidden)
+			if (!IsDrawable)
 				return false;
 			
 			RenderTime = DateTime.UtcNow;

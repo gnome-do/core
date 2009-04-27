@@ -26,6 +26,7 @@ using Gdk;
 using Gtk;
 
 using Do.Platform;
+using Do.Interface.Wink;
 using Do.Interface.Xlib;
 
 using Docky.Core;
@@ -57,6 +58,7 @@ namespace Docky.Interface
 		DateTime interface_change_time = new DateTime (0);
 		DateTime last_draw_timeout = new DateTime (0);
 		DateTime cursor_update = new DateTime (0);
+		DateTime showhide_time = new DateTime (0);
 		
 		bool disposed;
 		
@@ -98,7 +100,7 @@ namespace Docky.Interface
 				uint[] values = new uint[12];
 				Gdk.Rectangle geo = LayoutUtils.MonitorGemonetry ();
 				
-				if (DockPreferences.AutoHide || DockPreferences.AllowOverlap)
+				if (DockPreferences.AutohideType != AutohideType.None)
 					return values;
 				
 				switch (DockPreferences.Orientation) {
@@ -168,7 +170,7 @@ namespace Docky.Interface
 					dockRegion.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
 					CursorIsOverDockArea = dockRegion.Contains (cursor);
 				} else {
-					if (DockPreferences.AutoHide) {
+					if (Hidden) {
 						switch (DockPreferences.Orientation) {
 						case DockOrientation.Bottom:
 							dockRegion.Y += dockRegion.Height - 1;
@@ -183,11 +185,21 @@ namespace Docky.Interface
 					CursorIsOverDockArea = dockRegion.Contains (cursor);
 				}
 				
+				bool codChange = CursorIsOverDockArea != cursorIsOverDockArea;
 				// When we change over this boundry, it will normally trigger an animation, we need to be sure to catch it
-				if (CursorIsOverDockArea != cursorIsOverDockArea) {
+				if (codChange) {
 					ResetCursorTimer ();
 					enter_time = DateTime.UtcNow;
 					AnimatedDraw ();
+					switch (DockPreferences.AutohideType) {
+					case AutohideType.Autohide:
+						showhide_time = enter_time;
+						break;
+					case AutohideType.Intellihide:
+						if (WindowIntersectingOther)
+							showhide_time = enter_time;
+						break;
+					}
 				}
 
 				DragCursorUpdate ();
@@ -197,6 +209,20 @@ namespace Docky.Interface
 		Gdk.Rectangle MinimumDockArea {
 			get {
 				return PositionProvider.MinimumDockArea;
+			}
+		}
+		
+		IEnumerable<Gdk.Window> WindowStack {
+			get {
+				try {
+					return Screen.WindowStack;
+				} catch { 
+					try {
+						return Wnck.Screen.Default.WindowsStacked.Select (wnk => Gdk.Window.ForeignNew ((uint) wnk.Xid));
+					} catch {
+						return null;
+					}
+				}
 			}
 		}
 		
@@ -317,7 +343,8 @@ namespace Docky.Interface
 			                             () => DockItems.Any (di => DateTime.UtcNow - di.AttentionRequestStartTime < BounceTime));
 			
 			AnimationState.AddCondition (Animations.InputModeChanged,
-			                             () => DateTime.UtcNow - interface_change_time < SummonTime);
+			                             () => DateTime.UtcNow - interface_change_time < SummonTime || 
+			                             DateTime.UtcNow - showhide_time < SummonTime);
 		}
 
 		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)
@@ -546,12 +573,11 @@ namespace Docky.Interface
 			Display.GetPointer (out screen, out x, out y, out mod);
 			
 			if (screen == Screen) {
-				Gdk.Rectangle geo, hide_offset;
+				Gdk.Rectangle geo;
 				window.GetBufferedPosition (out geo.X, out geo.Y);
-				window.WindowHideOffset (out hide_offset.X, out hide_offset.Y);
 
-				x -= geo.X - hide_offset.X;
-				y -= geo.Y - hide_offset.Y;
+				x -= geo.X;
+				y -= geo.Y;
 			} else {
 				x = -4000;
 				y = -4000;
@@ -686,17 +712,16 @@ namespace Docky.Interface
 		
 		void SetIconRegions ()
 		{
-			Gdk.Rectangle pos, area, offset;
+			Gdk.Rectangle pos, area;
 			window.GetPosition (out pos.X, out pos.Y);
 			window.GetSize (out pos.Width, out pos.Height);
 			
-			window.WindowHideOffset (out offset.X, out offset.Y);
 			// we use geo here instead of our position for the Y value because we know the parent window
 			// may offset us when hidden. This is not desired...
 			for (int i = 0; i < DockItems.Count; i++) {
 				Gdk.Point position = PositionProvider.IconUnzoomedPosition (i);
-				area = new Gdk.Rectangle (pos.X + (position.X - IconSize / 2) - offset.X,
-				                          pos.Y + (position.Y - IconSize / 2) - offset.Y,
+				area = new Gdk.Rectangle (pos.X + (position.X - IconSize / 2),
+				                          pos.Y + (position.Y - IconSize / 2),
 				                          IconSize,
 				                          IconSize);
 				DockItems [i].SetIconRegion (area);
@@ -715,7 +740,7 @@ namespace Docky.Interface
 				offset = GetDockArea ().Height;
 				offset = offset * 2 + 10;
 			} else {
-				if (DockPreferences.AutoHide && !drag_resizing) {
+				if (Hidden && !drag_resizing) {
 					// setting the offset to 2 will trigger the parent window to unhide us if we are hidden.
 					if (AnimationState [Animations.UrgencyChanged])
 						offset = 2;

@@ -38,5 +38,13 @@ namespace Docky.Utilities
             self.Colormap = colormap;
             colormap.Dispose ();
 		}
+		
+		public static Gdk.Rectangle EasyGeometery (this Gdk.Window self)
+		{
+			Gdk.Rectangle rect;
+			int depth;
+			self.GetGeometry (out rect.X, out rect.Y, out rect.Width, out rect.Height, out depth);
+			return rect;
+		}
 	}
 }

@@ -34,6 +34,7 @@ namespace Docky.Interface
 		Zoom,
 		Bounce,
 		Painter,
+		Summon,
 		IconInsert,
 		UrgencyChanged,
 		InputModeChanged,

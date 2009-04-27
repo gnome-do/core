@@ -50,17 +50,12 @@ namespace Docky.Interface
 		IDoController controller;
 		Gdk.Rectangle current_mask;
 		uint strut_timer;
-		bool is_repositioned_hidden;
 		bool presented;
 		int buffer_x, buffer_y;
 		int buffer_width, buffer_height;
 		
 		public new string Name {
 			get { return "Docky"; }
-		}
-
-		public bool IsRepositionHidden {
-			get { return is_repositioned_hidden; }
 		}
 		
 		public IDoController Controller {
@@ -172,17 +167,6 @@ namespace Docky.Interface
 			
 			(cr as IDisposable).Dispose ();
 			pixmap.Dispose ();
-			
-			if (area.Height == 1) {
-				GLib.Timeout.Add (500, () => {
-					if (current_mask.Height == 1)
-						HideReposition ();
-					return false;
-				});
-			} else {
-				if (is_repositioned_hidden)
-					Reposition ();
-			}
 		}
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
@@ -250,54 +234,7 @@ namespace Docky.Interface
 				break;
 			}
 			
-			if (Display != null)
-				Display.Sync ();
-			
 			results.SlideFromBottom = DockPreferences.Orientation == DockOrientation.Bottom;
-			is_repositioned_hidden = false;
-		}
-		
-		void HideReposition ()
-		{
-			Gdk.Rectangle geo, main;
-			
-			GetSize (out main.Width, out main.Height);
-			geo = LayoutUtils.MonitorGemonetry ();
-
-			switch (DockPreferences.Orientation) {
-			case DockOrientation.Bottom:
-				Move ((geo.X + geo.Width / 2) - main.Width / 2, geo.Y + geo.Height);
-				break;
-			case DockOrientation.Top:
-				Move (geo.X, geo.Y - main.Height);
-				break;
-			}
-
-			if (Display != null)
-				Display.Sync ();
-			
-			is_repositioned_hidden = true;
-		}
-		
-		public void WindowHideOffset (out int x, out int y)
-		{
-			x = y = 0;
-
-			Gdk.Rectangle main, geo;
-			main.Width = dock_area.Width;
-			main.Height = dock_area.Height;
-			GetBufferedPosition (out main.X, out main.Y);
-			geo = LayoutUtils.MonitorGemonetry ();
-			
-			
-			switch (DockPreferences.Orientation) {
-			case DockOrientation.Bottom:
-				y = main.Y - ((geo.Y + geo.Height) - main.Height);
-				return;
-			case DockOrientation.Top:
-				y = main.Y - geo.Y;
-				return;
-			}
 		}
 				
 		public void GetBufferedPosition (out int x, out int y)

@@ -132,16 +132,7 @@ namespace Docky.Interface
 			} else {
 				Gdk.Point local_cursor = Cursor.RelativePointToRootPoint (window);
 	
-				IEnumerable<Gdk.Window> windows;
-				try {
-					windows = Screen.WindowStack;
-				} catch { 
-					try {
-						windows = Wnck.Screen.Default.WindowsStacked.Select (wnk => Gdk.Window.ForeignNew ((uint) wnk.Xid));
-					} catch {
-						return;
-					}
-				}
+				IEnumerable<Gdk.Window> windows = WindowStack;
 
 				foreach (Gdk.Window w in windows.Reverse ()) {
 					if (w == null || w == window.GdkWindow || !w.IsVisible)

@@ -23,9 +23,9 @@ namespace Docky.Interface {
         
         private Gtk.HBox hbox8;
         
-        private Gtk.CheckButton autohide_checkbutton;
+        private Gtk.Label orientation_label1;
         
-        private Gtk.CheckButton window_overlap_checkbutton;
+        private Gtk.ComboBox autohide_combo;
         
         private Gtk.HBox hbox9;
         
@@ -87,28 +87,24 @@ namespace Docky.Interface {
             // Container child vbox2.Gtk.Box+BoxChild
             this.hbox8 = new Gtk.HBox();
             this.hbox8.Name = "hbox8";
-            this.hbox8.Homogeneous = true;
             this.hbox8.Spacing = 6;
             // Container child hbox8.Gtk.Box+BoxChild
-            this.autohide_checkbutton = new Gtk.CheckButton();
-            this.autohide_checkbutton.CanFocus = true;
-            this.autohide_checkbutton.Name = "autohide_checkbutton";
-            this.autohide_checkbutton.Label = Mono.Unix.Catalog.GetString("Automatically Hide");
-            this.autohide_checkbutton.DrawIndicator = true;
-            this.autohide_checkbutton.UseUnderline = true;
-            this.hbox8.Add(this.autohide_checkbutton);
-            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.hbox8[this.autohide_checkbutton]));
+            this.orientation_label1 = new Gtk.Label();
+            this.orientation_label1.Name = "orientation_label1";
+            this.orientation_label1.LabelProp = Mono.Unix.Catalog.GetString("Automatic Hiding:");
+            this.hbox8.Add(this.orientation_label1);
+            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.hbox8[this.orientation_label1]));
             w4.Position = 0;
+            w4.Expand = false;
+            w4.Fill = false;
             // Container child hbox8.Gtk.Box+BoxChild
-            this.window_overlap_checkbutton = new Gtk.CheckButton();
-            this.window_overlap_checkbutton.CanFocus = true;
-            this.window_overlap_checkbutton.Name = "window_overlap_checkbutton";
-            this.window_overlap_checkbutton.Label = Mono.Unix.Catalog.GetString("Allow Window Overlap");
-            this.window_overlap_checkbutton.DrawIndicator = true;
-            this.window_overlap_checkbutton.UseUnderline = true;
-            this.hbox8.Add(this.window_overlap_checkbutton);
-            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.hbox8[this.window_overlap_checkbutton]));
+            this.autohide_combo = Gtk.ComboBox.NewText();
+            this.autohide_combo.Name = "autohide_combo";
+            this.hbox8.Add(this.autohide_combo);
+            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.hbox8[this.autohide_combo]));
             w5.Position = 1;
+            w5.Expand = false;
+            w5.Fill = false;
             this.vbox2.Add(this.hbox8);
             Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox8]));
             w6.Position = 1;
@@ -239,8 +235,7 @@ namespace Docky.Interface {
             }
             this.Hide();
             this.orientation_combobox.Changed += new System.EventHandler(this.OnOrientationComboboxChanged);
-            this.autohide_checkbutton.Toggled += new System.EventHandler(this.OnAutohideCheckbuttonToggled);
-            this.window_overlap_checkbutton.Toggled += new System.EventHandler(this.OnWindowOverlapCheckbuttonToggled);
+            this.autohide_combo.Changed += new System.EventHandler(this.OnAutohideComboChanged);
             this.zoom_checkbutton.Toggled += new System.EventHandler(this.OnZoomCheckbuttonToggled);
             this.advanced_indicators_checkbutton.Toggled += new System.EventHandler(this.OnAdvancedIndicatorsCheckbuttonToggled);
             this.zoom_scale.FormatValue += new Gtk.FormatValueHandler(this.OnZoomScaleFormatValue);

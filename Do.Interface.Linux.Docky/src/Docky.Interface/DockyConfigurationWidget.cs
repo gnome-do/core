@@ -89,13 +89,16 @@ namespace Docky.Interface
 			zoom_width_scale.Value = DockPreferences.ZoomSize;
 			
 			advanced_indicators_checkbutton.Active = DockPreferences.IndicateMultipleWindows;
-			autohide_checkbutton.Active = DockPreferences.AutoHide;
-			window_overlap_checkbutton.Active = DockPreferences.AllowOverlap;
 			zoom_checkbutton.Active = DockPreferences.ZoomEnabled;
 			
 			orientation_combobox.AppendText (DockOrientation.Bottom.ToString ());
 			orientation_combobox.AppendText (DockOrientation.Top.ToString ());
 			orientation_combobox.Active = DockPreferences.Orientation == DockOrientation.Bottom ? 0 : 1;
+			
+			autohide_combo.AppendText (((AutohideType) 0).ToString ());
+			autohide_combo.AppendText (((AutohideType) 1).ToString ());
+			autohide_combo.AppendText (((AutohideType) 2).ToString ());
+			autohide_combo.Active = (int) DockPreferences.AutohideType;
 			
 			BuildDocklets ();
 			
@@ -171,22 +174,16 @@ namespace Docky.Interface
 			DockPreferences.ZoomEnabled = zoom_checkbutton.Active;
 		}
 
-		protected virtual void OnWindowOverlapCheckbuttonToggled (object sender, System.EventArgs e)
-		{
-			if (setup) return;
-			DockPreferences.AllowOverlap = window_overlap_checkbutton.Active;
-		}
-
-		protected virtual void OnAutohideCheckbuttonToggled (object sender, System.EventArgs e)
-		{
-			if (setup) return;
-			DockPreferences.AutoHide = autohide_checkbutton.Active;
-		}
-
 		protected virtual void OnOrientationComboboxChanged (object sender, System.EventArgs e)
 		{
 			if (setup) return;
 			DockPreferences.Orientation = (DockOrientation) orientation_combobox.Active;
+		}
+		
+		protected virtual void OnAutohideComboChanged (object sender, System.EventArgs e)
+		{
+			if (setup) return;
+			DockPreferences.AutohideType = (AutohideType) autohide_combo.Active;
 		}
 
 		protected virtual void OnZoomWidthScaleValueChanged (object sender, System.EventArgs e)

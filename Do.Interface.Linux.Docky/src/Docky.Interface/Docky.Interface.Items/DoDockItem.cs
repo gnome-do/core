@@ -89,9 +89,6 @@ namespace Docky.Interface
 		{
 			yield return new SeparatorMenuButtonArgs ();
 			
-			yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = !DockPreferences.AutoHide, 
-			                                       Catalog.GetString ("Automatically Hide"), DockPreferences.AutoHide ? EnableIcon : DisableIcon).AsDark ();
-
 			yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = !DockPreferences.ZoomEnabled, 
 			                                       Catalog.GetString ("Zoom Icons"), DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon).AsDark ();
 			

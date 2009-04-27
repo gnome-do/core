@@ -68,6 +68,7 @@ FILES = \
 	src/Docky.Interface/TextRenderContext.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
+	src/Docky.Utilities/AutohideType.cs \
 	src/Docky.Utilities/DockOrientation.cs \
 	src/Docky.Utilities/DockPreferences.cs \
 	src/Docky.Utilities/GtkUtils.cs
