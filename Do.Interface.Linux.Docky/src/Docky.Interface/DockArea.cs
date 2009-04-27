@@ -94,7 +94,7 @@ namespace Docky.Interface
 		public int DockHeight {
 			get { return PositionProvider.DockHeight; }
 		}
-
+		
 		public uint[] StrutRequest {
 			get {
 				uint[] values = new uint[12];
@@ -120,6 +120,8 @@ namespace Docky.Interface
 		}
 
 		#endregion
+		
+		bool CheckOverlap { get; set; }
 		
 		DockAnimationState AnimationState { get; set; }
 		
@@ -230,6 +232,7 @@ namespace Docky.Interface
 		{
 			this.window = window;
 			
+			CheckOverlap = true;
 			PositionProvider = new ItemPositionProvider (this);
 			
 			AnimationState = new DockAnimationState ();
@@ -382,6 +385,7 @@ namespace Docky.Interface
 			if (!Visible || !IsRealized || drag_resizing)
 				return;
 			
+			CheckOverlap = false;
 			SetSize ();
 			ResetBuffers ();
 			PositionProvider.ForceUpdate ();
@@ -389,6 +393,9 @@ namespace Docky.Interface
 			SetIconRegions ();
 			window.DelaySetStruts ();
 			AnimatedDraw ();
+			Gtk.Application.Invoke (delegate {
+				CheckOverlap = true;
+			});
 		}
 		
 		void HandleUniverseInitialized(object sender, EventArgs e)

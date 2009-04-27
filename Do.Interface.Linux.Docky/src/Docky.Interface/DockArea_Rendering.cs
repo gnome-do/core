@@ -156,6 +156,9 @@ namespace Docky.Interface
 		
 		bool WindowIntersectingOther {
 			get {
+				if (!CheckOverlap)
+					return last_intersect;
+				
 				bool intersect = false;
 				try {
 					Gdk.Rectangle adjustedDockArea = MinimumDockArea.RelativeRectangleToRootPoint (window);
