@@ -23,6 +23,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security;
+using System.Security.Permissions;
 
 using Do;
 using Do.Interface;
@@ -80,6 +82,12 @@ namespace Docky.Core.Default
 			}
 		}
 		
+		string DesktopFilesDirectory {
+			get {
+				return Path.Combine (Services.Paths.UserDataDirectory, GetType ().Name + "_DesktopFiles");
+			}
+		}
+		
 		IEnumerable<AbstractDockItem> OrderedItems {
 			get {
 				return stat_items
@@ -112,6 +120,9 @@ namespace Docky.Core.Default
 			
 			Separator = new SeparatorItem ();
 			MenuItem = new DoDockItem ();
+			
+			if (!Directory.Exists (DesktopFilesDirectory))
+				Directory.CreateDirectory (DesktopFilesDirectory);
 			
 			RegisterEvents ();
 		}
@@ -229,7 +240,7 @@ namespace Docky.Core.Default
 		#endregion
 		
 		#region Item Updating
-		AbstractDockItem MaybeCreateCustomItem (string identifier)
+		AbstractDockItem MaybeCreateCustomItem (ref string identifier)
 		{
 			ItemDockItem customItem = null;
 			
@@ -238,6 +249,19 @@ namespace Docky.Core.Default
 			
 			if (File.Exists (identifier) || Directory.Exists (identifier)) {
 				if (identifier.EndsWith (".desktop")) {
+					bool writeable = true;
+					try {
+						using (FileStream stream = File.OpenWrite (identifier)) {
+							;
+						}
+					} catch {
+						writeable = false;
+					}
+					if (writeable && Path.GetDirectoryName (identifier) != DesktopFilesDirectory) {
+						string newFile = Path.Combine (DesktopFilesDirectory, Path.GetFileName (identifier));
+						File.Copy (identifier, newFile);
+						identifier = newFile;
+					}
 					Item o = Services.UniverseFactory.NewApplicationItem (identifier) as Item;
 					customItem = new ItemDockItem (o);
 				} else {
@@ -428,7 +452,7 @@ namespace Docky.Core.Default
 		{
 			if (custom_items.ContainsKey (identifier)) return false;
 			
-			AbstractDockItem customItem = MaybeCreateCustomItem (identifier);
+			AbstractDockItem customItem = MaybeCreateCustomItem (ref identifier);
 			
 			if (customItem == null) return false;
 			
@@ -733,6 +757,11 @@ namespace Docky.Core.Default
 				} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
 					foreach (KeyValuePair<string, AbstractDockItem> kvp in custom_items) {
 						if (kvp.Value.Equals (DockItems [item])) {
+							if (kvp.Key.EndsWith (".desktop") && Path.GetDirectoryName (kvp.Key) == DesktopFilesDirectory) {
+								try {
+									File.Delete (kvp.Key);
+								} catch { }
+							}
 							custom_items.Remove (kvp.Key);
 							
 							UpdateItems ();
