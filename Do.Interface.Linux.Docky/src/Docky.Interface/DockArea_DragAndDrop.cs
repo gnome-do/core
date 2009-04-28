@@ -198,7 +198,11 @@ namespace Docky.Interface
 			if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops) {
 				uriList.ForEach (uri => CurrentDockItem.ReceiveItem (uri));
 			} else {
-				uriList.ForEach (uri => DockServices.ItemsService.AddItemToDock (uri, PositionProvider.IndexAtPosition (Cursor)));
+				int index = PositionProvider.IndexAtPosition (Cursor);
+				Gdk.Point center = PositionProvider.IconUnzoomedPosition (index);
+				if (center.X < Cursor.X)
+					index++;
+				uriList.ForEach (uri => DockServices.ItemsService.AddItemToDock (uri, index));
 			}
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
