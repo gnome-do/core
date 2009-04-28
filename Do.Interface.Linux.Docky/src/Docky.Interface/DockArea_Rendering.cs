@@ -166,13 +166,20 @@ namespace Docky.Interface
 					intersect = ScreenUtils.ActiveViewport.Windows ().Any (w => w.EasyGeometry ().IntersectsWith (adjustedDockArea));
 				} catch {
 				}
-				if (intersect != last_intersect && DateTime.UtcNow - showhide_time > SummonTime) {
-					showhide_time = DateTime.UtcNow;
-					AnimatedDraw ();
-				}
-				last_intersect = intersect;
+				
 				return intersect;
 			}
+		}
+		
+		void CheckIntersectionChanged ()
+		{
+			bool intersect = WindowIntersectingOther;
+			if (intersect != last_intersect && DateTime.UtcNow - showhide_time > SummonTime) {
+				showhide_time = RenderTime;
+				AnimatedDraw ();
+			}
+			
+			last_intersect = intersect;
 		}
 
 		//// <value>
@@ -244,6 +251,7 @@ namespace Docky.Interface
 		
 		void DrawDrock (Context cr)
 		{
+			CheckIntersectionChanged ();
 			Gdk.Rectangle dockArea = GetDockArea ();
 			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
 
@@ -663,7 +671,8 @@ namespace Docky.Interface
 			
 			cr = Gdk.CairoHelper.Create (GdkWindow);
 			
-			Gdk.Point finalTarget = new Gdk.Point (0, 0).RelativeMovePoint (VerticalOffset, RelativeMove.Outward);
+			int vert = VerticalOffset;
+			Gdk.Point finalTarget = new Gdk.Point (0, 0).RelativeMovePoint (vert, RelativeMove.Outward);
 			
 			cr.SetSource (backbuffer, finalTarget.X, finalTarget.Y);
 			

@@ -192,7 +192,6 @@ namespace Docky.Interface
 				if (codChange) {
 					ResetCursorTimer ();
 					enter_time = DateTime.UtcNow;
-					AnimatedDraw ();
 					switch (DockPreferences.AutohideType) {
 					case AutohideType.Autohide:
 						showhide_time = enter_time;
@@ -202,6 +201,7 @@ namespace Docky.Interface
 							showhide_time = enter_time;
 						break;
 					}
+					AnimatedDraw ();
 				}
 
 				DragCursorUpdate ();
