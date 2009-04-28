@@ -89,8 +89,8 @@ namespace Do.Universe.Linux {
 				} catch { continue; }
 				
 				try {
-					if ((!string.IsNullOrEmpty (path) && regex.IsMatch (path)) || 
-					    (!string.IsNullOrEmpty (item.Exec) && regex.IsMatch (item.Exec))) {
+					if (!string.IsNullOrEmpty (path) && !string.IsNullOrEmpty (item.Exec) &&
+					    (regex.IsMatch (path) || regex.IsMatch (item.Exec))) {
 						appItems.Add (item);
 					}
 				} catch {
