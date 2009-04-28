@@ -171,17 +171,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		void CheckIntersectionChanged ()
-		{
-			bool intersect = WindowIntersectingOther;
-			if (intersect != last_intersect && DateTime.UtcNow - showhide_time > SummonTime) {
-				showhide_time = RenderTime;
-				AnimatedDraw ();
-			}
-			
-			last_intersect = intersect;
-		}
-
 		//// <value>
 		/// The overall offset of the dock as a whole
 		/// </value>
@@ -230,7 +219,8 @@ namespace Docky.Interface
 				double zoom = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
 					                 BaseAnimationTime.TotalMilliseconds);
 				if (CursorIsOverDockArea) {
-					if (DockPreferences.AutohideType == AutohideType.Autohide)
+					if (DockPreferences.AutohideType == AutohideType.Autohide || 
+					    (DockPreferences.AutohideType == AutohideType.Intellihide && WindowIntersectingOther))
 						zoom = 1;
 				} else {
 					zoom = 1 - zoom;
@@ -247,6 +237,17 @@ namespace Docky.Interface
 		{
 			RenderData = new PreviousRenderData ();
 			painter_surfaces = new Dictionary<IDockPainter, Surface> ();
+		}
+		
+		void CheckIntersectionChanged ()
+		{
+			bool intersect = WindowIntersectingOther;
+			if (intersect != last_intersect && DateTime.UtcNow - showhide_time > SummonTime) {
+				showhide_time = RenderTime;
+				AnimatedDraw ();
+			}
+			
+			last_intersect = intersect;
 		}
 		
 		void DrawDrock (Context cr)

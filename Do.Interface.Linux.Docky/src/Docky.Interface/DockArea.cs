@@ -386,6 +386,7 @@ namespace Docky.Interface
 				return;
 			
 			CheckOverlap = false;
+			
 			SetSize ();
 			ResetBuffers ();
 			PositionProvider.ForceUpdate ();
@@ -393,6 +394,7 @@ namespace Docky.Interface
 			SetIconRegions ();
 			window.DelaySetStruts ();
 			AnimatedDraw ();
+			
 			Gtk.Application.Invoke (delegate {
 				CheckOverlap = true;
 			});
