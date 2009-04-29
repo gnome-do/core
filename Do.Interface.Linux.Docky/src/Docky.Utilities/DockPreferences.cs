@@ -62,13 +62,8 @@ namespace Docky.Utilities
 			get { return 350; }
 		}
 		
-		static int zoom_size = prefs.Get ("ZoomSize", 330);
 		public static int ZoomSize {
-			get { return (int) (zoom_size * (IconSize / (double) DefaultIconSize)); }
-			set { 
-				prefs.Set ("ZoomSize", value); 
-				zoom_size = value;
-			}
+			get { return (int) (330 * (IconSize / (double) DefaultIconSize)); }
 		}
 
 		static bool indicate_multiple_windows = prefs.Get ("IndicateMultipleWindows", false);

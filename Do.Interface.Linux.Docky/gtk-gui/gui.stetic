@@ -187,58 +187,13 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HBox" id="hbox7">
-            <property name="MemberName" />
-            <property name="Spacing">6</property>
-            <child>
-              <widget class="Gtk.Label" id="zoom_width_label">
-                <property name="MemberName" />
-                <property name="Yalign">0.83</property>
-                <property name="LabelProp" translatable="yes">Zoom Width</property>
-              </widget>
-              <packing>
-                <property name="Position">0</property>
-                <property name="AutoSize">True</property>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="Gtk.HScale" id="zoom_width_scale">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="UpdatePolicy">Discontinuous</property>
-                <property name="Upper">100</property>
-                <property name="PageIncrement">10</property>
-                <property name="PageSize">10</property>
-                <property name="StepIncrement">10</property>
-                <property name="Value">81</property>
-                <property name="DrawValue">True</property>
-                <property name="Digits">0</property>
-                <property name="ValuePos">Top</property>
-                <signal name="ValueChanged" handler="OnZoomWidthScaleValueChanged" />
-              </widget>
-              <packing>
-                <property name="Position">1</property>
-                <property name="AutoSize">True</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="Position">4</property>
-            <property name="AutoSize">True</property>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
-          </packing>
-        </child>
-        <child>
           <widget class="Gtk.Label" id="label5">
             <property name="MemberName" />
             <property name="Xalign">0</property>
             <property name="LabelProp" translatable="yes">Configure Docklets:</property>
           </widget>
           <packing>
-            <property name="Position">5</property>
+            <property name="Position">4</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
@@ -260,7 +215,7 @@
             </child>
           </widget>
           <packing>
-            <property name="Position">6</property>
+            <property name="Position">5</property>
             <property name="AutoSize">True</property>
           </packing>
         </child>

@@ -83,11 +83,6 @@ namespace Docky.Interface
 			zoom_scale.SetIncrements (.1, .1);
 			zoom_scale.Value = DockPreferences.ZoomPercent;
 			
-			zoom_width_scale.Digits = 0;
-			zoom_width_scale.SetRange (200, 500);
-			zoom_width_scale.SetIncrements (10, 10);
-			zoom_width_scale.Value = DockPreferences.ZoomSize;
-			
 			advanced_indicators_checkbutton.Active = DockPreferences.IndicateMultipleWindows;
 			zoom_checkbutton.Active = DockPreferences.ZoomEnabled;
 			
@@ -137,9 +132,7 @@ namespace Docky.Interface
 		void SetSensitivity ()
 		{
 			zoom_scale.Sensitive = 
-			zoom_width_scale.Sensitive = 
 			zoom_size_label.Sensitive = 
-			zoom_width_label.Sensitive =
 			DockPreferences.ZoomEnabled;
 		}
 
@@ -184,12 +177,6 @@ namespace Docky.Interface
 		{
 			if (setup) return;
 			DockPreferences.AutohideType = (AutohideType) autohide_combo.Active;
-		}
-
-		protected virtual void OnZoomWidthScaleValueChanged (object sender, System.EventArgs e)
-		{
-			if (setup) return;
-			DockPreferences.ZoomSize = (int) zoom_width_scale.Value;
 		}
 		
 		public override void Dispose ()

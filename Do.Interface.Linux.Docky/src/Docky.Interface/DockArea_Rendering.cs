@@ -242,7 +242,7 @@ namespace Docky.Interface
 		void CheckIntersectionChanged ()
 		{
 			bool intersect = WindowIntersectingOther;
-			if (intersect != last_intersect && DateTime.UtcNow - showhide_time > SummonTime) {
+			if (intersect != last_intersect && DateTime.UtcNow - showhide_time > SummonTime && !CursorIsOverDockArea) {
 				showhide_time = RenderTime;
 				AnimatedDraw ();
 			}
