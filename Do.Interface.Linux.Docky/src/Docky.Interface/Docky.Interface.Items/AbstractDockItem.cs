@@ -305,6 +305,7 @@ namespace Docky.Interface
 			
 			size_changed_timer = GLib.Timeout.Add (150, delegate {
 				ResetSurfaces ();
+				size_changed_timer = 0;
 				return false;
 			});
 		}
@@ -322,6 +323,9 @@ namespace Docky.Interface
 
 		protected void RedrawIcon ()
 		{
+			if (size_changed_timer > 0)
+				return;
+			
 			ResetIconSurface ();
 			OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
 		}

@@ -203,7 +203,7 @@ namespace Docky.Interface
 					}
 					AnimatedDraw ();
 				}
-
+				
 				DragCursorUpdate ();
 			}
 		}
@@ -489,6 +489,8 @@ namespace Docky.Interface
 		bool OnCursorTimerEllapsed ()
 		{
 			ManualCursorUpdate ();
+			if (DockPreferences.AutohideType == AutohideType.Intellihide)
+					CheckIntersectionChanged ();
 			
 			// if we have a painter visible this takes care of interrupting it on mouse off
 			if (!CursorIsOverDockArea && PainterOverlayVisible && (DateTime.UtcNow - enter_time).TotalMilliseconds > 400)

@@ -243,7 +243,7 @@ namespace Docky.Interface
 		{
 			bool intersect = WindowIntersectingOther;
 			if (intersect != last_intersect && DateTime.UtcNow - showhide_time > SummonTime && !CursorIsOverDockArea) {
-				showhide_time = RenderTime;
+				showhide_time = DateTime.UtcNow;
 				AnimatedDraw ();
 			}
 			

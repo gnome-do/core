@@ -87,14 +87,11 @@ namespace Docky.Interface
 		
 		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
-			yield return new SeparatorMenuButtonArgs ();
-			
-			yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = !DockPreferences.ZoomEnabled, 
-			                                       Catalog.GetString ("Zoom Icons"), DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon).AsDark ();
-			
-			if (Gdk.Screen.Default.NMonitors > 1)
+			if (Gdk.Screen.Default.NMonitors > 1) {
+				yield return new SeparatorMenuButtonArgs ();
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
 				                                       Catalog.GetString ("Switch Monitors"), "display").AsDark ();
+			}
 			
 			foreach (IRunnableItem item in Services.Application.MainMenuItems) {
 				yield return new SeparatorMenuButtonArgs ();
