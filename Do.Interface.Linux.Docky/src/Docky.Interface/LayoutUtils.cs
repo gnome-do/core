@@ -68,14 +68,20 @@ namespace Docky.Interface
 		public static Gdk.Rectangle RelativeRectangleToRootPoint (this Gdk.Rectangle relativePoint, Gtk.Window window)
 		{
 			Gdk.Rectangle main;
-			window.GetPosition (out main.X, out main.Y);
+			if (window is DockWindow)
+				(window as DockWindow).GetBufferedPosition (out main.X, out main.Y);
+			else
+				window.GetPosition (out main.X, out main.Y);
 			return new Gdk.Rectangle (main.X + relativePoint.X, main.Y + relativePoint.Y, relativePoint.Width, relativePoint.Height);
 		}
 
 		public static Gdk.Point RelativePointToRootPoint (this Gdk.Point relativePoint, Gtk.Window window)
 		{
 			Gdk.Rectangle main;
-			window.GetPosition (out main.X, out main.Y);
+			if (window is DockWindow)
+				(window as DockWindow).GetBufferedPosition (out main.X, out main.Y);
+			else
+				window.GetPosition (out main.X, out main.Y);
 			return new Gdk.Point (main.X + relativePoint.X, main.Y + relativePoint.Y);
 		}
 

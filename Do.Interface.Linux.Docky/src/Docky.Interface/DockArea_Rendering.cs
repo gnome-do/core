@@ -56,6 +56,8 @@ namespace Docky.Interface
 		Surface indicator, urgent_indicator;
 		IDockPainter painter, last_painter;
 		
+		DateTime LastOverlapCheck { get; set; }
+		
 		DateTime ActiveIconChangeTime { get; set; }
 		
 		DateTime FirstRenderTime { get; set; }
@@ -156,7 +158,7 @@ namespace Docky.Interface
 		
 		bool WindowIntersectingOther {
 			get {
-				if (!CheckOverlap)
+				if (!CheckOverlap || (DateTime.UtcNow - LastOverlapCheck).TotalMilliseconds < 100)
 					return last_intersect;
 				
 				bool intersect = false;
@@ -167,6 +169,7 @@ namespace Docky.Interface
 				} catch {
 				}
 				
+				LastOverlapCheck = DateTime.UtcNow;
 				return intersect;
 			}
 		}
