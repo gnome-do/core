@@ -50,7 +50,7 @@ namespace Docky.Interface
 		const int UrgentIndicatorSize = 12;
 		
 		Dictionary<IDockPainter, Surface> painter_surfaces;
-		bool fast_render_fail, first_render_set, last_intersect;
+		bool next_fast_render, first_render_set, last_intersect;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
@@ -68,15 +68,15 @@ namespace Docky.Interface
 
 		bool CanFastRender {
 			get {
-				bool canFastRender = !RenderData.ForceFullRender && 
+				bool result = next_fast_render;
+				next_fast_render = !RenderData.ForceFullRender && 
 					    RenderData.ZoomIn == 1 && 
 						ZoomIn == 1 && 
 						!AnimationState [Animations.IconInsert] &&
 						!AnimationState [Animations.UrgencyChanged] &&
 						!AnimationState [Animations.Bounce];
 				
-				fast_render_fail = canFastRender;
-				return canFastRender && !fast_render_fail;
+				return result;
 			}
 		}
 		
@@ -154,24 +154,6 @@ namespace Docky.Interface
 		/// </summary>
 		double PainterOpacity {
 			get { return 1 - DockIconOpacity; }
-		}
-		
-		bool WindowIntersectingOther {
-			get {
-				if (!CheckOverlap || (DateTime.UtcNow - LastOverlapCheck).TotalMilliseconds < 100)
-					return last_intersect;
-				
-				bool intersect = false;
-				try {
-					Gdk.Rectangle adjustedDockArea = MinimumDockArea.RelativeRectangleToRootPoint (window);
-					adjustedDockArea.Inflate (-2, -2);
-					intersect = ScreenUtils.ActiveViewport.Windows ().Any (w => w.EasyGeometry ().IntersectsWith (adjustedDockArea));
-				} catch {
-				}
-				
-				LastOverlapCheck = DateTime.UtcNow;
-				return intersect;
-			}
 		}
 		
 		//// <value>
@@ -255,7 +237,6 @@ namespace Docky.Interface
 		
 		void DrawDrock (Context cr)
 		{
-			CheckIntersectionChanged ();
 			Gdk.Rectangle dockArea = GetDockArea ();
 			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
 
@@ -297,7 +278,6 @@ namespace Docky.Interface
 				for (int i = 0; i < DockItems.Count; i++)
 					DrawIcon (cr, i);
 			} else {
-			
 				Gdk.Rectangle renderArea = Gdk.Rectangle.Zero;
 				Gdk.Rectangle dockArea = GetDockArea ();
 				

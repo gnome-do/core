@@ -214,6 +214,8 @@ namespace Docky.Interface
 			}
 		}
 		
+		bool WindowIntersectingOther { get; set; }
+		
 		IEnumerable<Gdk.Window> WindowStack {
 			get {
 				try {
@@ -489,8 +491,10 @@ namespace Docky.Interface
 		bool OnCursorTimerEllapsed ()
 		{
 			ManualCursorUpdate ();
-			if (DockPreferences.AutohideType == AutohideType.Intellihide)
-					CheckIntersectionChanged ();
+			if (DockPreferences.AutohideType == AutohideType.Intellihide) { //FIXME !CIODA correct?
+				UpdateWindowIntersect ();
+				CheckIntersectionChanged ();
+			}
 			
 			// if we have a painter visible this takes care of interrupting it on mouse off
 			if (!CursorIsOverDockArea && PainterOverlayVisible && (DateTime.UtcNow - enter_time).TotalMilliseconds > 400)
@@ -802,6 +806,19 @@ namespace Docky.Interface
 			
 			SetParentInputMask ();
 			AnimatedDraw ();
+		}
+		
+		void UpdateWindowIntersect ()
+		{
+			bool intersect = false;
+			try {
+				Gdk.Rectangle adjustedDockArea = MinimumDockArea.RelativeRectangleToRootPoint (window);
+				adjustedDockArea.Inflate (-2, -2);
+				intersect = ScreenUtils.ActiveViewport.Windows ().Any (w => w.EasyGeometry ().IntersectsWith (adjustedDockArea));
+			} catch {
+			}
+			
+			WindowIntersectingOther = intersect;
 		}
 		
 		public override void Dispose ()
