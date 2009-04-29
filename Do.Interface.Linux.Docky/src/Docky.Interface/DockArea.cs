@@ -363,6 +363,8 @@ namespace Docky.Interface
 					return false;
 				});
 			}
+			
+			RequestFullRender ();
 			AnimatedDraw ();
 		}
 
