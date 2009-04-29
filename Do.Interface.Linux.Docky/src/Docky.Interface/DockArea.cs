@@ -691,7 +691,7 @@ namespace Docky.Interface
 				}
 				
 				//send off the clicks
-				Gdk.Point relative_point = RelativePointOverItem (item);
+				PointD relative_point = RelativePointOverItem (item);
 				DockItems [item].Clicked (evnt.Button, evnt.State, relative_point);
 				
 				AnimatedDraw ();
@@ -699,18 +699,20 @@ namespace Docky.Interface
 			return;
 		}
 		
-		Gdk.Point RelativePointOverItem (int item)
+		PointD RelativePointOverItem (int item)
 		{
-			Gdk.Point relative_point = Gdk.Point.Zero;
+			PointD relative_point = new PointD (0,0);
 			double zoom;
 			PointD center;
 			IconZoomedPosition (item, out center, out zoom);
 			
-			int xOffset = (int) (Cursor.X - center.X);
-			int yOffset = (int) (Cursor.Y - center.Y);
+			int left = (int) (center.X - DockItems [item].Width * zoom / 2);
+			int top = (int) (center.Y - DockItems [item].Height * zoom / 2);
+			int right = (int) (center.X + DockItems [item].Width * zoom / 2);
+			int bottom = (int) (center.Y + DockItems [item].Height * zoom / 2);
 			
-			relative_point.X = (int) (xOffset / zoom);
-			relative_point.Y = (int) (yOffset / zoom);
+			relative_point.X = (Cursor.X - left) / (double) (right - left);
+			relative_point.Y = (Cursor.Y - top) / (double) (bottom - top);
 			
 			return relative_point;
 		}

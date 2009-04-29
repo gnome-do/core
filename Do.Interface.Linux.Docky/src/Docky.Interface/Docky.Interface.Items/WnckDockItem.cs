@@ -116,7 +116,7 @@ namespace Docky.Interface
 			VisibleWindows.ElementAt (last_raised).CenterAndFocusWindow ();
 		}
 		
-		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)
+		public override void Clicked (uint button, Gdk.ModifierType state, PointD position)
 		{
 			if (!Windows.Any () || !HasVisibleApps || button == 2) {
 				AnimationType = ClickAnimationType.Bounce;

@@ -48,7 +48,7 @@ namespace Docky.Interface
 			SetText (action.Name);
 		}
 		
-		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
+		public override void Clicked (uint button, ModifierType state, PointD position)
 		{
 			if (button == 1) {
 				Services.Core.PerformActionOnItem (action, target_item);

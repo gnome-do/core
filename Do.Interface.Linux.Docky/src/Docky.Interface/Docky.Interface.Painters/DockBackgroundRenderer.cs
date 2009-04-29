@@ -88,7 +88,6 @@ namespace Docky.Interface.Painters
 
 		static void RenderBackground (Context context, Gdk.Rectangle dockArea)
 		{
-			
 			context.SetSource (sr, dockArea.X, dockArea.Y);
 			context.Rectangle (dockArea.X, dockArea.Y, dockArea.Width / 2, dockArea.Height);
 			context.Fill ();

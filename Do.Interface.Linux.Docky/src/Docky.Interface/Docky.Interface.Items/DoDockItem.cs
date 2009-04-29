@@ -58,7 +58,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
+		public override void Clicked (uint button, ModifierType state, PointD position)
 		{
 			if (button == 1)
 				Services.Windowing.SummonMainWindow ();

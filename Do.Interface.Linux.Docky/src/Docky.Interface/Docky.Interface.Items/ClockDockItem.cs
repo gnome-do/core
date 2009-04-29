@@ -136,7 +136,7 @@ namespace Docky.Interface
 			return tmp_surface;
 		}
 		
-		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)
+		public override void Clicked (uint button, Gdk.ModifierType state, PointD position)
 		{
 			cal_painter.Summon ();
 			base.Clicked (button, state, position);

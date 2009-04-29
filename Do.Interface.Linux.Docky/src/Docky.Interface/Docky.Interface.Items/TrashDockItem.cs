@@ -110,7 +110,7 @@ namespace Docky.Interface
 			return true;
 		}
 		
-		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
+		public override void Clicked (uint button, ModifierType state, Cairo.PointD position)
 		{
 			if (button == 1) {
 				Services.Environment.OpenUrl ("trash://");
