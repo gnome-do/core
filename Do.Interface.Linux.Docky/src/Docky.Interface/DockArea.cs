@@ -767,11 +767,7 @@ namespace Docky.Interface
 				offset = offset * 2 + 10;
 			} else {
 				if (Hidden && !drag_resizing) {
-					// setting the offset to 2 will trigger the parent window to unhide us if we are hidden.
-					if (AnimationState [Animations.UrgencyChanged])
-						offset = 2;
-					else
-						offset = 1;
+					offset = 1;
 				} else {
 					offset = GetDockArea ().Height;
 				}

@@ -317,12 +317,16 @@ namespace Docky.Interface
 				renderArea.Height = Height;
 				
 				cr.Rectangle (renderArea.X, renderArea.Y, renderArea.Width, renderArea.Height);
+				
+				// clear the areas outside the dock area
+				cr.Rectangle (0, dockArea.Y, dockArea.X, dockArea.Height);
+				cr.Rectangle (dockArea.X + dockArea.Width, dockArea.Y, Width - (dockArea.X + dockArea.Width), dockArea.Height);
 				switch (DockPreferences.Orientation) {
 				case DockOrientation.Bottom:
-					cr.Rectangle (0, Width, 0, Height - dockArea.Height);
+					cr.Rectangle (0, 0, Width, Height - dockArea.Height);
 					break;
 				case DockOrientation.Top:
-					cr.Rectangle (0, Width, dockArea.Height, Height - dockArea.Height);
+					cr.Rectangle (0, dockArea.Height, Width, Height - dockArea.Height);
 					break;
 				}
 				cr.Operator = Operator.Clear;
