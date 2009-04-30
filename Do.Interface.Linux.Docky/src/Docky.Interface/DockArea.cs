@@ -399,6 +399,7 @@ namespace Docky.Interface
 			window.DelaySetStruts ();
 			AnimatedDraw ();
 			
+			// the window can get a bit "out of sync" so we give it some time here
 			Gtk.Application.Invoke (delegate {
 				CheckOverlap = true;
 			});
@@ -812,6 +813,8 @@ namespace Docky.Interface
 		
 		void UpdateWindowIntersect ()
 		{
+			if (!CheckOverlap)
+				return;
 			bool intersect = false;
 			try {
 				Gdk.Rectangle adjustedDockArea = MinimumDockArea.RelativeRectangleToRootPoint (window);
