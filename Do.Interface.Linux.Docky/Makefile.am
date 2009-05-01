@@ -22,6 +22,7 @@ FILES = \
 	src/Docky.Core/Docky.Core.Default/DoInteropService.cs \
 	src/Docky.Core/Docky.Core.Default/DockletService.cs \
 	src/Docky.Core/Docky.Core.Default/PainterService.cs \
+	src/Docky.Interface/AutohideTracker.cs \
 	src/Docky.Interface/ClickAnimationType.cs \
 	src/Docky.Interface/DockArea.cs \
 	src/Docky.Interface/DockArea_Rendering.cs \

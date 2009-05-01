@@ -222,17 +222,15 @@ namespace Docky.Interface
 		{
 			RenderData = new PreviousRenderData ();
 			painter_surfaces = new Dictionary<IDockPainter, Surface> ();
+			AutohideTracker.IntersectionChanged +=HandleIntersectionChanged; 
 		}
-		
-		void CheckIntersectionChanged ()
+
+		void HandleIntersectionChanged(object sender, EventArgs e)
 		{
-			bool intersect = WindowIntersectingOther;
-			if (intersect != last_intersect && DateTime.UtcNow - showhide_time > SummonTime && !CursorIsOverDockArea) {
+			if (DockPreferences.AutohideType == AutohideType.Intellihide) {
 				showhide_time = DateTime.UtcNow;
 				AnimatedDraw ();
 			}
-			
-			last_intersect = intersect;
 		}
 		
 		void DrawDrock (Context cr)

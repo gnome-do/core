@@ -121,7 +121,7 @@ namespace Docky.Interface
 
 		#endregion
 		
-		bool CheckOverlap { get; set; }
+		AutohideTracker AutohideTracker { get; set; }
 		
 		DockAnimationState AnimationState { get; set; }
 		
@@ -208,13 +208,15 @@ namespace Docky.Interface
 			}
 		}
 		
-		Gdk.Rectangle MinimumDockArea {
+		public Gdk.Rectangle MinimumDockArea {
 			get {
 				return PositionProvider.MinimumDockArea;
 			}
 		}
 		
-		bool WindowIntersectingOther { get; set; }
+		bool WindowIntersectingOther { 
+			get { return AutohideTracker.WindowIntersectingOther; }
+		}
 		
 		IEnumerable<Gdk.Window> WindowStack {
 			get {
@@ -234,7 +236,7 @@ namespace Docky.Interface
 		{
 			this.window = window;
 			
-			CheckOverlap = true;
+			AutohideTracker = new AutohideTracker (this);
 			PositionProvider = new ItemPositionProvider (this);
 			
 			AnimationState = new DockAnimationState ();
@@ -389,8 +391,6 @@ namespace Docky.Interface
 			if (!Visible || !IsRealized || drag_resizing)
 				return;
 			
-			CheckOverlap = false;
-			
 			SetSize ();
 			ResetBuffers ();
 			PositionProvider.ForceUpdate ();
@@ -398,11 +398,6 @@ namespace Docky.Interface
 			SetIconRegions ();
 			window.DelaySetStruts ();
 			AnimatedDraw ();
-			
-			// the window can get a bit "out of sync" so we give it some time here
-			Gtk.Application.Invoke (delegate {
-				CheckOverlap = true;
-			});
 		}
 		
 		void HandleUniverseInitialized(object sender, EventArgs e)
@@ -494,10 +489,6 @@ namespace Docky.Interface
 		bool OnCursorTimerEllapsed ()
 		{
 			ManualCursorUpdate ();
-			if (DockPreferences.AutohideType == AutohideType.Intellihide) { //FIXME !CIODA correct?
-				UpdateWindowIntersect ();
-				CheckIntersectionChanged ();
-			}
 			
 			// if we have a painter visible this takes care of interrupting it on mouse off
 			if (!CursorIsOverDockArea && PainterOverlayVisible && (DateTime.UtcNow - enter_time).TotalMilliseconds > 400)
@@ -805,22 +796,6 @@ namespace Docky.Interface
 			
 			SetParentInputMask ();
 			AnimatedDraw ();
-		}
-		
-		void UpdateWindowIntersect ()
-		{
-			if (!CheckOverlap)
-				return;
-			bool intersect = false;
-			try {
-				Gdk.Rectangle adjustedDockArea = MinimumDockArea.RelativeRectangleToRootPoint (window);
-				adjustedDockArea.Inflate (-2, -2);
-//				intersect = ScreenUtils.ActiveViewport.Windows ().Any (w => w.EasyGeometry ().IntersectsWith (adjustedDockArea));
-				intersect = ScreenUtils.ActiveViewport.Windows ().Any (w => w.IsActive && w.EasyGeometry ().IntersectsWith (adjustedDockArea));
-			} catch {
-			}
-			
-			WindowIntersectingOther = intersect;
 		}
 		
 		public override void Dispose ()
