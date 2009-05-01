@@ -119,7 +119,8 @@ namespace Docky.Interface
 			
 			bool intersect = false;
 			try {
-				List<Wnck.Window> windows = new List<Wnck.Window> (ScreenUtils.ActiveViewport.UnprocessedWindows ().Where (w => w.IsActive));
+				List<Wnck.Window> windows = new List<Wnck.Window> (ScreenUtils.ActiveViewport.UnprocessedWindows ()
+				                                                   .Where (w => w.IsActive && w.WindowType != Wnck.WindowType.Desktop));
 				for (int i=0; i<windows.Count; i++) {
 					Wnck.Window window = windows [i];
 					if (window.WindowType == Wnck.WindowType.Dialog || window.WindowType == Wnck.WindowType.Utility) {
