@@ -815,7 +815,8 @@ namespace Docky.Interface
 			try {
 				Gdk.Rectangle adjustedDockArea = MinimumDockArea.RelativeRectangleToRootPoint (window);
 				adjustedDockArea.Inflate (-2, -2);
-				intersect = ScreenUtils.ActiveViewport.Windows ().Any (w => w.EasyGeometry ().IntersectsWith (adjustedDockArea));
+//				intersect = ScreenUtils.ActiveViewport.Windows ().Any (w => w.EasyGeometry ().IntersectsWith (adjustedDockArea));
+				intersect = ScreenUtils.ActiveViewport.Windows ().Any (w => w.IsActive && w.EasyGeometry ().IntersectsWith (adjustedDockArea));
 			} catch {
 			}
 			
