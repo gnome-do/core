@@ -103,8 +103,6 @@ namespace Docky.Interface
 
 		public void UpdateWindowIntersect ()
 		{
-			IEnumerable<Wnck.Window> windows = ScreenUtils.ActiveViewport.Windows ();
-			
 			Gdk.Rectangle adjustedDockArea = parent.MinimumDockArea;
 			Gdk.Rectangle geo = LayoutUtils.MonitorGemonetry ();
 			
@@ -121,9 +119,20 @@ namespace Docky.Interface
 			
 			bool intersect = false;
 			try {
-				if (windows.Any ())
-					intersect = ScreenUtils.ActiveViewport.Windows ().Any (w => w.IsActive && w.EasyGeometry ().IntersectsWith (adjustedDockArea));
-			} catch {
+				List<Wnck.Window> windows = new List<Wnck.Window> (ScreenUtils.ActiveViewport.UnprocessedWindows ().Where (w => w.IsActive));
+				for (int i=0; i<windows.Count; i++) {
+					Wnck.Window window = windows [i];
+					if (window.WindowType == Wnck.WindowType.Dialog || window.WindowType == Wnck.WindowType.Utility) {
+						if (window.Transient != null) {
+							windows.Add (window.Transient);
+						}
+					}
+				}
+				
+				Console.WriteLine (windows.Count);
+				intersect = windows.Any (w => w.EasyGeometry ().IntersectsWith (adjustedDockArea));
+			} catch (Exception e) {
+				Do.Platform.Log <AutohideTracker>.Error (e.Message);
 			}
 			
 			WindowIntersectingOther = intersect;
