@@ -273,8 +273,9 @@ namespace Docky.Interface
 		{
 			if (!CanFastRender) {
 				cr.AlphaFill ();
+				int index = PositionProvider.IndexAtPosition (Cursor);
 				for (int i = 0; i < DockItems.Count; i++)
-					DrawIcon (cr, i);
+					DrawIcon (cr, i, i == index);
 			} else {
 				Gdk.Rectangle renderArea = Gdk.Rectangle.Zero;
 				
@@ -330,8 +331,9 @@ namespace Docky.Interface
 				cr.Fill ();
 				cr.Operator = Operator.Over;
 				
+				int index = PositionProvider.IndexAtPosition (Cursor);
 				for (int i = startItem; i <= endItem; i++)
-					DrawIcon (cr, i);
+					DrawIcon (cr, i, i == index);
 			}
 			
 			RenderData.LastCursor = Cursor;
@@ -339,7 +341,7 @@ namespace Docky.Interface
 			RenderData.ForceFullRender = false;
 		}
 		
-		void DrawIcon (Context cr, int icon)
+		void DrawIcon (Context cr, int icon, bool hovered)
 		{
 			// Don't draw the icon we are dragging around
 			if (GtkDragging && !DragState.IsFinished) {
@@ -454,7 +456,7 @@ namespace Docky.Interface
 			// we do a null check here to allow things like separator items to supply
 			// a null.  This allows us to draw nothing at all instead of rendering a
 			// blank surface (which is slow)
-			if (!PopupMenu.Visible && PositionProvider.IndexAtPosition (Cursor) == icon &&
+			if (!PopupMenu.Visible && hovered &&
 			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && !GtkDragging && !drag_resizing) {
 
 				Gdk.Point textPoint;
