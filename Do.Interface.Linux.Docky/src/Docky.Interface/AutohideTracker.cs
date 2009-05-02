@@ -82,7 +82,6 @@ namespace Docky.Interface
 				args.PreviousWindow.GeometryChanged -= HandleGeometryChanged;
 			
 			SetupActiveWindow ();
-			
 			UpdateWindowIntersect ();
 		}
 		

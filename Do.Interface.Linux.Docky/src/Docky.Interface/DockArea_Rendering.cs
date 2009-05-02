@@ -227,7 +227,7 @@ namespace Docky.Interface
 
 		void HandleIntersectionChanged(object sender, EventArgs e)
 		{
-			if (DockPreferences.AutohideType == AutohideType.Intellihide) {
+			if (DockPreferences.AutohideType == AutohideType.Intellihide && !CursorIsOverDockArea) {
 				showhide_time = DateTime.UtcNow;
 				AnimatedDraw ();
 			}
@@ -259,7 +259,7 @@ namespace Docky.Interface
 					dock_icon_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				
 				using (Context input_cr = new Context (dock_icon_buffer)) {
-					DrawIcons (input_cr);
+					DrawIcons (input_cr, dockArea);
 				}
 
 				int offset =  (int) (IconSize * (1 - DockIconOpacity));
@@ -269,7 +269,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		void DrawIcons (Context cr)
+		void DrawIcons (Context cr, Gdk.Rectangle dockArea)
 		{
 			if (!CanFastRender) {
 				cr.AlphaFill ();
@@ -277,7 +277,6 @@ namespace Docky.Interface
 					DrawIcon (cr, i);
 			} else {
 				Gdk.Rectangle renderArea = Gdk.Rectangle.Zero;
-				Gdk.Rectangle dockArea = GetDockArea ();
 				
 				int startItemPosition;
 				startItemPosition = Math.Min (Cursor.X, RenderData.LastCursor.X) - 

@@ -42,6 +42,8 @@ namespace Docky.Interface
 		uint size_changed_timer;
 		bool needs_attention;
 		
+		bool time_since_click_overdue;
+		
 		protected int current_size;
 
 		protected virtual Surface IconSurface { get; set; }
@@ -70,7 +72,7 @@ namespace Docky.Interface
 		/// <value>
 		/// The last time this icon was "clicked" that required an animation
 		/// </value>
-		public virtual DateTime LastClick { get; protected set; }
+		public virtual DateTime LastClick { get; private set; }
 		
 		public int Position { get; set; }
 
@@ -127,7 +129,17 @@ namespace Docky.Interface
 		}
 		
 		public TimeSpan TimeSinceClick {
-			get { return DockArea.RenderTime - LastClick; }
+			get { 
+				if (time_since_click_overdue)
+					return new TimeSpan (1, 0, 0);
+				
+				TimeSpan result = DockArea.RenderTime - LastClick;
+				
+				if (result.TotalMilliseconds > 1000)
+					time_since_click_overdue = true;
+				
+				return result;
+			}
 		}
 		
 		public TimeSpan TimeSinceAdd {
@@ -138,7 +150,7 @@ namespace Docky.Interface
 		{
 			NeedsAttention = false;
 			Description = "";
-			AttentionRequestStartTime =  LastClick = new DateTime (0);
+			AttentionRequestStartTime = LastClick = new DateTime (0);
 			
 			DockPreferences.IconSizeChanged += OnIconSizeChanged;
 			DockWindow.Window.StyleSet += HandleStyleSet; 
@@ -177,6 +189,7 @@ namespace Docky.Interface
 		public virtual void Clicked (uint button, ModifierType state, PointD position)
 		{
 			LastClick = DateTime.UtcNow;
+			time_since_click_overdue = false;
 		}
 		
 		public virtual void Scrolled (Gdk.ScrollDirection direction)
