@@ -47,6 +47,10 @@ namespace Docky.Interface
 		protected override string Icon {
 			get { return "gnome-do"; }
 		}
+		
+		public override int WindowCount {
+			get { return 1; }
+		}
 
 		HotSeatPainter hot_seat_painter;
 		

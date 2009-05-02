@@ -57,8 +57,6 @@ namespace Docky.Interface
 		{
 			this.parent = parent;
 			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
-			
-			
 		}
 
 		void HandleGeometryChanged (object sender, EventArgs e)
@@ -130,7 +128,6 @@ namespace Docky.Interface
 					}
 				}
 				
-				Console.WriteLine (windows.Count);
 				intersect = windows.Any (w => w.EasyGeometry ().IntersectsWith (adjustedDockArea));
 			} catch (Exception e) {
 				Do.Platform.Log <AutohideTracker>.Error (e.Message);
