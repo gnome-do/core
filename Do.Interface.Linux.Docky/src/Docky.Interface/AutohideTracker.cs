@@ -117,18 +117,14 @@ namespace Docky.Interface
 			
 			bool intersect = false;
 			try {
-				List<Wnck.Window> windows = new List<Wnck.Window> (ScreenUtils.ActiveViewport.UnprocessedWindows ()
-				                                                   .Where (w => w.IsActive && w.WindowType != Wnck.WindowType.Desktop));
-				for (int i=0; i<windows.Count; i++) {
-					Wnck.Window window = windows [i];
-					if (window.WindowType == Wnck.WindowType.Dialog || window.WindowType == Wnck.WindowType.Utility) {
-						if (window.Transient != null) {
-							windows.Add (window.Transient);
-						}
-					}
-				}
+				IEnumerable<Wnck.Window> rawWindows = ScreenUtils.ActiveViewport.UnprocessedWindows ();
+				Wnck.Window activeWindow = rawWindows
+					.Where (w => w.IsActive && w.WindowType != Wnck.WindowType.Desktop)
+					.First ();
 				
-				intersect = windows.Any (w => w.EasyGeometry ().IntersectsWith (adjustedDockArea));
+				intersect = rawWindows.Any (w => w.WindowType != Wnck.WindowType.Desktop && 
+				                            activeWindow.Pid == w.Pid &&
+				                            w.EasyGeometry ().IntersectsWith (adjustedDockArea));
 			} catch (Exception e) {
 				Do.Platform.Log <AutohideTracker>.Error (e.Message);
 			}
