@@ -549,6 +549,7 @@ namespace Docky.Interface
 			DockPreferences.MaxIconSize = (int) (((double) Width / MinimumDockArea.Width) * IconSize);
 			
 			SetIconRegions ();
+			RequestFullRender ();
 			AnimatedDraw ();
 		}
 		
