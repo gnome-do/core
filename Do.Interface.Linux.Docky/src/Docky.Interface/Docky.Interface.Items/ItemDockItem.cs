@@ -226,7 +226,7 @@ namespace Docky.Interface
 			base.HotSeatRequested ();
 		}
 		
-		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)
+		public override void Clicked (uint button, Gdk.ModifierType state, PointD position)
 		{
 			SetIconRegionFromCache ();
 			base.Clicked (button, state, position);

@@ -104,6 +104,11 @@ namespace Do.Interface.Wink
 			return RawWindows ().Where (w => !w.IsSkipTasklist && w.WindowType != Wnck.WindowType.Dock);
 		}
 		
+		public IEnumerable<Wnck.Window> UnprocessedWindows ()
+		{
+			return RawWindows ().Where (w => w.WindowType != Wnck.WindowType.Dock);
+		}
+		
 		public void MoveWindowInto (Wnck.Window window)
 		{
 			if (parent.IsVirtual) {

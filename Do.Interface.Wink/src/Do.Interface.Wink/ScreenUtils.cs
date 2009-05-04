@@ -30,20 +30,27 @@ namespace Do.Interface.Wink
 	public static class ScreenUtils
 	{
 		static string ViewportFormatString = Catalog.GetString ("Desktop") + " {0}";
-		static List<Viewport> viewports;
+		static Dictionary<Workspace, Viewport [,]> layouts;
+		
+		public static event EventHandler ViewportsChanged;
 		
 		public static Viewport ActiveViewport {
 			get {
 				Workspace wsp = Wnck.Screen.Default.ActiveWorkspace;
 				Gdk.Rectangle geo = new Gdk.Rectangle (wsp.ViewportX, wsp.ViewportY, wsp.Screen.Width, wsp.Screen.Height);
-				if (viewports.Any (vp => vp.Area == geo))
-					return viewports.First (vp => vp.Area == geo);
+				if (Viewports.Any (vp => vp.Area == geo))
+					return Viewports.First (vp => vp.Area == geo);
 				return null;
 			}
 		}
 		
 		public static IEnumerable<Viewport> Viewports {
-			get { return viewports.AsEnumerable (); }
+			get { 
+				foreach (Viewport [,] layout in layouts.Values) {
+					foreach (Viewport viewport in layout)
+						yield return viewport;
+				}
+			}
 		}
 		
 		static ScreenUtils ()
@@ -87,11 +94,26 @@ namespace Do.Interface.Wink
 				screen.ToggleShowingDesktop (false);
 		}
 		
+		public static Viewport [,] ViewportLayout ()
+		{
+			return ViewportLayout (Wnck.Screen.Default.ActiveWorkspace);
+		}
+		
+		public static Viewport [,] ViewportLayout (Workspace workspace)
+		{
+			if (!layouts.ContainsKey (workspace))
+				return new Viewport [0,0];
+			
+			return layouts [workspace];
+		}
+		
 		static void UpdateViewports ()
 		{
-			viewports = new List<Viewport> ();
+			layouts = new Dictionary<Workspace, Viewport [,]> ();
+
 			int currentViewport = 1;
 			foreach (Wnck.Workspace workspace in Wnck.Screen.Default.Workspaces) {
+				
 				if (workspace.IsVirtual) {
 					int viewportWidth;
 					int viewportHeight;
@@ -101,26 +123,31 @@ namespace Do.Interface.Wink
 					int rows = workspace.Height / viewportHeight;
 					int columns = workspace.Width / viewportWidth;
 					
+					layouts [workspace] = new Viewport [rows, columns];
+					
 					for (int i = 0; i < rows; i++) {
 						for (int j = 0; j < columns; j++) {
 							Gdk.Rectangle area = new Gdk.Rectangle (j * viewportWidth,
 							                                        i * viewportHeight,
 							                                        viewportWidth,
 							                                        viewportHeight);
-							viewports.Add (new Viewport (string.Format (ViewportFormatString, currentViewport),
-							                             area,
-							                             workspace));
+							layouts [workspace] [i, j] = new Viewport (string.Format (ViewportFormatString, currentViewport),
+							                                           area,
+							                                           workspace);
 							currentViewport++;
 						}
 					}
 				} else {
+					layouts [workspace] = new Viewport [1,1];
 					Viewport viewport = new Viewport (string.Format (ViewportFormatString, currentViewport),
 					                                  new Gdk.Rectangle (0, 0, workspace.Width, workspace.Height),
 					                                  workspace);
-					viewports.Add (viewport);
+					layouts [workspace] [0,0] = viewport;
 					currentViewport++;
 				}
 			}
+			if (ViewportsChanged != null)
+				ViewportsChanged (new object (), EventArgs.Empty);
 		}
 	}
 }

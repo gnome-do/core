@@ -123,7 +123,7 @@ namespace Docky.Interface
 			return inner.GetTextSurface (similar);
 		}
 		
-		public override void Clicked (uint button, Gdk.ModifierType state, Gdk.Point position)
+		public override void Clicked (uint button, Gdk.ModifierType state, PointD position)
 		{
 			DockServices.ItemsService.ResetHotSeat (inner);
 			base.Clicked (button, state, position);

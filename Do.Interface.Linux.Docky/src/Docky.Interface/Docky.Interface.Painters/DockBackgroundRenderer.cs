@@ -35,7 +35,6 @@ namespace Docky.Interface.Painters
 		static Surface sr;
 		static int height;
 		
-		const int ShineWidth = 120;
 		const int width = 1500;
 		
 		public static void RenderDockBackground (Context context, Gdk.Rectangle dockArea)

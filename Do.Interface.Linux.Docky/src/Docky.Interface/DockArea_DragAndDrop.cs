@@ -132,16 +132,7 @@ namespace Docky.Interface
 			} else {
 				Gdk.Point local_cursor = Cursor.RelativePointToRootPoint (window);
 	
-				IEnumerable<Gdk.Window> windows;
-				try {
-					windows = Screen.WindowStack;
-				} catch { 
-					try {
-						windows = Wnck.Screen.Default.WindowsStacked.Select (wnk => Gdk.Window.ForeignNew ((uint) wnk.Xid));
-					} catch {
-						return;
-					}
-				}
+				IEnumerable<Gdk.Window> windows = WindowStack;
 
 				foreach (Gdk.Window w in windows.Reverse ()) {
 					if (w == null || w == window.GdkWindow || !w.IsVisible)
@@ -207,7 +198,11 @@ namespace Docky.Interface
 			if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops) {
 				uriList.ForEach (uri => CurrentDockItem.ReceiveItem (uri));
 			} else {
-				uriList.ForEach (uri => DockServices.ItemsService.AddItemToDock (uri, PositionProvider.IndexAtPosition (Cursor)));
+				int index = PositionProvider.IndexAtPosition (Cursor);
+				Gdk.Point center = PositionProvider.IconUnzoomedPosition (index);
+				if (center.X < Cursor.X)
+					index++;
+				uriList.ForEach (uri => DockServices.ItemsService.AddItemToDock (uri, index));
 			}
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);

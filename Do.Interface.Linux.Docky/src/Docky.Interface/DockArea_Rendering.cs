@@ -26,6 +26,7 @@ using Gtk;
 
 using Do.Interface;
 using Do.Interface.CairoUtils;
+using Do.Interface.Wink;
 
 using Docky.Core;
 using Docky.Utilities;
@@ -49,11 +50,13 @@ namespace Docky.Interface
 		const int UrgentIndicatorSize = 12;
 		
 		Dictionary<IDockPainter, Surface> painter_surfaces;
-		bool fast_render_fail, first_render_set;
+		bool next_fast_render, first_render_set, last_intersect;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
 		IDockPainter painter, last_painter;
+		
+		DateTime LastOverlapCheck { get; set; }
 		
 		DateTime ActiveIconChangeTime { get; set; }
 		
@@ -65,15 +68,15 @@ namespace Docky.Interface
 
 		bool CanFastRender {
 			get {
-				bool canFastRender = !RenderData.ForceFullRender && 
+				bool result = next_fast_render;
+				next_fast_render = !RenderData.ForceFullRender && 
 					    RenderData.ZoomIn == 1 && 
 						ZoomIn == 1 && 
 						!AnimationState [Animations.IconInsert] &&
 						!AnimationState [Animations.UrgencyChanged] &&
 						!AnimationState [Animations.Bounce];
 				
-				fast_render_fail = canFastRender;
-				return canFastRender && !fast_render_fail;
+				return result;
 			}
 		}
 		
@@ -94,6 +97,21 @@ namespace Docky.Interface
 				} else {
 					return total_time / SummonTime.TotalMilliseconds;
 				}
+			}
+		}
+		
+		bool Hidden {
+			get {
+				bool hidden = false;
+				switch (DockPreferences.AutohideType) {
+				case AutohideType.Autohide:
+					hidden = !CursorIsOverDockArea;
+					break;
+				case AutohideType.Intellihide:
+					hidden = !CursorIsOverDockArea && WindowIntersectingOther;
+					break;
+				}
+				return hidden;
 			}
 		}
 		
@@ -137,7 +155,7 @@ namespace Docky.Interface
 		double PainterOpacity {
 			get { return 1 - DockIconOpacity; }
 		}
-
+		
 		//// <value>
 		/// The overall offset of the dock as a whole
 		/// </value>
@@ -145,7 +163,7 @@ namespace Docky.Interface
 			get {
 				double offset = 0;
 				// we never hide in these conditions
-				if (!DockPreferences.AutoHide || drag_resizing || PainterOpacity == 1) {
+				if (DockPreferences.AutohideType == AutohideType.None || drag_resizing || PainterOpacity == 1) {
 					if ((RenderTime - FirstRenderTime) > SummonTime)
 						return 0;
 					offset = 1 - Math.Min (1, (DateTime.UtcNow - FirstRenderTime).TotalMilliseconds / SummonTime.TotalMilliseconds);
@@ -153,10 +171,10 @@ namespace Docky.Interface
 				}
 
 				if (PainterOpacity > 0) {
-					if (CursorIsOverDockArea) {
+					if (!Hidden) {
 						return 0;
 					} else {
-						offset = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
+						offset = Math.Min (1, (RenderTime - showhide_time).TotalMilliseconds / 
 						                   SummonTime.TotalMilliseconds);
 						offset = Math.Min (offset, Math.Min (1, 
 						                                     (RenderTime - interface_change_time)
@@ -166,9 +184,9 @@ namespace Docky.Interface
 					if (PainterOverlayVisible)
 						offset = 1 - offset;
 				} else {
-					offset = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
+					offset = Math.Min (1, (RenderTime - showhide_time).TotalMilliseconds / 
 					                   SummonTime.TotalMilliseconds);
-					if (CursorIsOverDockArea)
+					if (!Hidden)
 						offset = 1 - offset;
 				}
 				return (int) (offset * PositionProvider.DockHeight * 1.5);
@@ -186,7 +204,8 @@ namespace Docky.Interface
 				double zoom = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
 					                 BaseAnimationTime.TotalMilliseconds);
 				if (CursorIsOverDockArea) {
-					if (DockPreferences.AutoHide)
+					if (DockPreferences.AutohideType == AutohideType.Autohide || 
+					    (DockPreferences.AutohideType == AutohideType.Intellihide && WindowIntersectingOther))
 						zoom = 1;
 				} else {
 					zoom = 1 - zoom;
@@ -203,6 +222,15 @@ namespace Docky.Interface
 		{
 			RenderData = new PreviousRenderData ();
 			painter_surfaces = new Dictionary<IDockPainter, Surface> ();
+			AutohideTracker.IntersectionChanged +=HandleIntersectionChanged; 
+		}
+
+		void HandleIntersectionChanged(object sender, EventArgs e)
+		{
+			if (DockPreferences.AutohideType == AutohideType.Intellihide && !CursorIsOverDockArea) {
+				showhide_time = DateTime.UtcNow;
+				AnimatedDraw ();
+			}
 		}
 		
 		void DrawDrock (Context cr)
@@ -225,13 +253,13 @@ namespace Docky.Interface
 				cr.PaintWithAlpha (PainterOpacity);
 			}
 			
-			bool isNotSummonTransition = PainterOpacity == 0 || CursorIsOverDockArea || !DockPreferences.AutoHide;
+			bool isNotSummonTransition = PainterOpacity == 0 || !Hidden || !DockPreferences.AutoHide;
 			if (DockIconOpacity > 0 && isNotSummonTransition) {
 				if (dock_icon_buffer == null)
 					dock_icon_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
 				
 				using (Context input_cr = new Context (dock_icon_buffer)) {
-					DrawIcons (input_cr);
+					DrawIcons (input_cr, dockArea);
 				}
 
 				int offset =  (int) (IconSize * (1 - DockIconOpacity));
@@ -241,16 +269,15 @@ namespace Docky.Interface
 			}
 		}
 		
-		void DrawIcons (Context cr)
+		void DrawIcons (Context cr, Gdk.Rectangle dockArea)
 		{
 			if (!CanFastRender) {
 				cr.AlphaFill ();
+				int index = PositionProvider.IndexAtPosition (Cursor);
 				for (int i = 0; i < DockItems.Count; i++)
-					DrawIcon (cr, i);
+					DrawIcon (cr, i, i == index);
 			} else {
-			
 				Gdk.Rectangle renderArea = Gdk.Rectangle.Zero;
-				Gdk.Rectangle dockArea = GetDockArea ();
 				
 				int startItemPosition;
 				startItemPosition = Math.Min (Cursor.X, RenderData.LastCursor.X) - 
@@ -288,20 +315,25 @@ namespace Docky.Interface
 				renderArea.Height = Height;
 				
 				cr.Rectangle (renderArea.X, renderArea.Y, renderArea.Width, renderArea.Height);
+				
+				// clear the areas outside the dock area
+				cr.Rectangle (0, dockArea.Y, dockArea.X, dockArea.Height);
+				cr.Rectangle (dockArea.X + dockArea.Width, dockArea.Y, Width - (dockArea.X + dockArea.Width), dockArea.Height);
 				switch (DockPreferences.Orientation) {
 				case DockOrientation.Bottom:
-					cr.Rectangle (0, Width, 0, Height - dockArea.Height);
+					cr.Rectangle (0, 0, Width, Height - dockArea.Height);
 					break;
 				case DockOrientation.Top:
-					cr.Rectangle (0, Width, dockArea.Height, Height - dockArea.Height);
+					cr.Rectangle (0, dockArea.Height, Width, Height - dockArea.Height);
 					break;
 				}
 				cr.Operator = Operator.Clear;
 				cr.Fill ();
 				cr.Operator = Operator.Over;
 				
+				int index = PositionProvider.IndexAtPosition (Cursor);
 				for (int i = startItem; i <= endItem; i++)
-					DrawIcon (cr, i);
+					DrawIcon (cr, i, i == index);
 			}
 			
 			RenderData.LastCursor = Cursor;
@@ -309,7 +341,7 @@ namespace Docky.Interface
 			RenderData.ForceFullRender = false;
 		}
 		
-		void DrawIcon (Context cr, int icon)
+		void DrawIcon (Context cr, int icon, bool hovered)
 		{
 			// Don't draw the icon we are dragging around
 			if (GtkDragging && !DragState.IsFinished) {
@@ -424,7 +456,7 @@ namespace Docky.Interface
 			// we do a null check here to allow things like separator items to supply
 			// a null.  This allows us to draw nothing at all instead of rendering a
 			// blank surface (which is slow)
-			if (!PopupMenu.Visible && PositionProvider.IndexAtPosition (Cursor) == icon &&
+			if (!PopupMenu.Visible && hovered &&
 			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && !GtkDragging && !drag_resizing) {
 
 				Gdk.Point textPoint;
@@ -598,7 +630,7 @@ namespace Docky.Interface
 
 		protected override bool OnExposeEvent(EventExpose evnt)
 		{
-			if (!IsDrawable || window.IsRepositionHidden)
+			if (!IsDrawable)
 				return false;
 			
 			RenderTime = DateTime.UtcNow;
@@ -626,7 +658,8 @@ namespace Docky.Interface
 			
 			cr = Gdk.CairoHelper.Create (GdkWindow);
 			
-			Gdk.Point finalTarget = new Gdk.Point (0, 0).RelativeMovePoint (VerticalOffset, RelativeMove.Outward);
+			int vert = VerticalOffset;
+			Gdk.Point finalTarget = new Gdk.Point (0, 0).RelativeMovePoint (vert, RelativeMove.Outward);
 			
 			cr.SetSource (backbuffer, finalTarget.X, finalTarget.Y);
 			

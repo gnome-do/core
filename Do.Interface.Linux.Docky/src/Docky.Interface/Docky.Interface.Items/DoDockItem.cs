@@ -47,6 +47,10 @@ namespace Docky.Interface
 		protected override string Icon {
 			get { return "gnome-do"; }
 		}
+		
+		public override int WindowCount {
+			get { return 1; }
+		}
 
 		HotSeatPainter hot_seat_painter;
 		
@@ -58,7 +62,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		public override void Clicked (uint button, ModifierType state, Gdk.Point position)
+		public override void Clicked (uint button, ModifierType state, PointD position)
 		{
 			if (button == 1)
 				Services.Windowing.SummonMainWindow ();
@@ -87,17 +91,11 @@ namespace Docky.Interface
 		
 		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
 		{
-			yield return new SeparatorMenuButtonArgs ();
-			
-			yield return new SimpleMenuButtonArgs (() => DockPreferences.AutoHide = !DockPreferences.AutoHide, 
-			                                       Catalog.GetString ("Automatically Hide"), DockPreferences.AutoHide ? EnableIcon : DisableIcon).AsDark ();
-
-			yield return new SimpleMenuButtonArgs (() => DockPreferences.ZoomEnabled = !DockPreferences.ZoomEnabled, 
-			                                       Catalog.GetString ("Zoom Icons"), DockPreferences.ZoomEnabled ? EnableIcon : DisableIcon).AsDark ();
-			
-			if (Gdk.Screen.Default.NMonitors > 1)
+			if (Gdk.Screen.Default.NMonitors > 1) {
+				yield return new SeparatorMenuButtonArgs ();
 				yield return new SimpleMenuButtonArgs (() => DockPreferences.Monitor++,
 				                                       Catalog.GetString ("Switch Monitors"), "display").AsDark ();
+			}
 			
 			foreach (IRunnableItem item in Services.Application.MainMenuItems) {
 				yield return new SeparatorMenuButtonArgs ();

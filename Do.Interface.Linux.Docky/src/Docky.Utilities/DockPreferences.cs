@@ -62,13 +62,8 @@ namespace Docky.Utilities
 			get { return 350; }
 		}
 		
-		static int zoom_size = prefs.Get ("ZoomSize", 330);
 		public static int ZoomSize {
-			get { return (int) (zoom_size * (IconSize / (double) DefaultIconSize)); }
-			set { 
-				prefs.Set ("ZoomSize", value); 
-				zoom_size = value;
-			}
+			get { return (int) (330 * (IconSize / (double) DefaultIconSize)); }
 		}
 
 		static bool indicate_multiple_windows = prefs.Get ("IndicateMultipleWindows", false);
@@ -153,33 +148,8 @@ namespace Docky.Utilities
 			get { return ZoomPercent; }
 		}
 		
-		static bool autohide = prefs.Get ("AutoHide", false);
 		public static bool AutoHide {
-			get { return autohide; }
-			set {
-				if (autohide == value)
-					return;
-				
-				prefs.Set ("AutoHide", value);
-				autohide = value;
-				if (AutohideChanged != null)
-					AutohideChanged ();
-			}
-		}
-
-		static bool allow_overlap = prefs.Get ("AllowWindowOverlap", false);
-		public static bool AllowOverlap {
-			get { return allow_overlap; }
-			set {
-				if (allow_overlap == value)
-					return;
-
-				prefs.Set ("AllowWindowOverlap", value);
-				allow_overlap = value;
-				
-				if (AllowOverlapChanged != null)
-					AllowOverlapChanged ();
-			}
+			get { return AutohideType != AutohideType.None; }
 		}
 		
 		static TimeSpan summon_time = new TimeSpan (0, 0, 0, 0, prefs.Get ("SummonTime", 100));
@@ -241,6 +211,19 @@ namespace Docky.Utilities
 				prefs.Set ("Orientation", value.ToString ());
 				if (OrientationChanged != null)
 					OrientationChanged ();
+			}
+		}
+		
+		static AutohideType hide = (AutohideType) Enum.Parse (typeof (AutohideType), prefs.Get ("AutohideType", AutohideType.None.ToString ()));
+		public static AutohideType AutohideType {
+			get { return hide; }
+			set {
+				if (hide == value)
+					return;
+				hide = value;
+				prefs.Set ("AutohideType", value.ToString ());
+				if (AutohideChanged != null)
+					AutohideChanged ();
 			}
 		}
 
