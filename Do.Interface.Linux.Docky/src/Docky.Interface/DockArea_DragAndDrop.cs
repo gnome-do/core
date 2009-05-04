@@ -195,19 +195,22 @@ namespace Docky.Interface
 				.Where (uri => uri.StartsWith ("file://"))
 				.Select (uri => uri.Substring ("file://".Length));
 			
-			if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops) {
-				uriList.ForEach (uri => CurrentDockItem.ReceiveItem (uri));
-			} else {
-				int index = PositionProvider.IndexAtPosition (Cursor);
-				Gdk.Point center = PositionProvider.IconUnzoomedPosition (index);
-				if (center.X < Cursor.X)
-					index++;
-				uriList.ForEach (uri => DockServices.ItemsService.AddItemToDock (uri, index));
+			foreach (string uri in uriList) {
+				if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops && !uri.EndsWith (".desktop")) {
+					CurrentDockItem.ReceiveItem (uri);
+				} else {
+					int index = PositionProvider.IndexAtPosition (Cursor);
+					Gdk.Point center = PositionProvider.IconUnzoomedPosition (index);
+					if (center.X < Cursor.X)
+						index++;
+					DockServices.ItemsService.AddItemToDock (uri, index);
+				}
 			}
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
 			GtkDragging = false;
 			SetDragProxy ();
+			AnimatedDraw ();
 		}
 		
 		protected override void OnDragBegin (Gdk.DragContext context)
