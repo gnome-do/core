@@ -338,6 +338,7 @@ namespace Docky.Interface
 			SetIconRegions ();
 			window.SetStruts ();
 			
+			RequestFullRender ();
 			AnimatedDraw ();
 			
 			ResetCursorTimer ();
