@@ -57,6 +57,18 @@ namespace Docky.Interface
 		{
 			this.parent = parent;
 			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
+			Wnck.Screen.Default.WindowClosed += WnckScreenDefaultWindowClosed;
+			Wnck.Screen.Default.WindowOpened += WnckScreenDefaultWindowOpened;
+		}
+
+		void WnckScreenDefaultWindowOpened (object o, WindowOpenedArgs args)
+		{
+			UpdateWindowIntersect ();
+		}
+
+		void WnckScreenDefaultWindowClosed (object o, WindowClosedArgs args)
+		{
+			UpdateWindowIntersect ();
 		}
 
 		void HandleGeometryChanged (object sender, EventArgs e)
