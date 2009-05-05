@@ -50,6 +50,8 @@ namespace Docky.Interface
 
 		bool drag_resizing;
 		bool gtk_drag_source_set;
+		bool preview_requested;
+		bool preview_completed;
 		
 		int drag_start_icon_size;
 		
@@ -61,9 +63,13 @@ namespace Docky.Interface
 
 		Gdk.Window drag_proxy;
 
+		IEnumerable<string> uri_list;
+		
 		DragState DragState { get; set; }
 
 		bool GtkDragging { get; set; }
+		
+		bool PreviewIsDesktopFile { get; set; }
 
 		bool CursorNearTopDraggableEdge {
 			get {
@@ -106,14 +112,14 @@ namespace Docky.Interface
 		void RegisterGtkDragSource ()
 		{
 			gtk_drag_source_set = true;
-			TargetEntry te = new TargetEntry ("text/uri-list", TargetFlags.OtherApp, 0);
+			TargetEntry te = new TargetEntry ("text/uri-list", TargetFlags.OtherApp | TargetFlags.App, 0);
 			Gtk.Drag.SourceSet (this, Gdk.ModifierType.Button1Mask, new [] {te}, DragAction.Copy);
 		}
 		
 		void RegisterGtkDragDest ()
 		{
 			TargetEntry dest_te = new TargetEntry ("text/uri-list", 0, 0);
-			Gtk.Drag.DestSet (this, DestDefaults.Motion | DestDefaults.Drop, new [] {dest_te}, Gdk.DragAction.Copy);
+			Gtk.Drag.DestSet (this, 0, new [] {dest_te}, Gdk.DragAction.Copy);
 		}
 		
 		void UnregisterGtkDragSource ()
@@ -178,24 +184,20 @@ namespace Docky.Interface
 			} while (false);
 			
 			AnimatedDraw ();
-			return base.OnDragMotion (context, x, y, time);
+			
+			if (!preview_completed) {
+				Gdk.Atom target = Gtk.Drag.DestFindTarget (this, context, null);
+				Gtk.Drag.GetData (this, context, target, Gtk.Global.CurrentEventTime);
+			}
+			
+			Gdk.Drag.Status (context, DragAction.Copy, time);
+			base.OnDragMotion (context, x, y, time);
+			return true;
 		}
-
-		protected override void OnDragDataReceived (Gdk.DragContext context, int x, int y, 
-		                                            Gtk.SelectionData selectionData, uint info, uint time)
+		
+		protected override bool OnDragDrop (Gdk.DragContext context, int x, int y, uint time)
 		{
-			if (!CursorIsOverDockArea) return;
-
-			string data = System.Text.Encoding.UTF8.GetString ( selectionData.Data );
-			data = System.Uri.UnescapeDataString (data);
-			//sometimes we get a null at the end, and it crashes us
-			data = data.TrimEnd ('\0'); 
-			
-			IEnumerable<string> uriList = Regex.Split (data, "\r\n")
-				.Where (uri => uri.StartsWith ("file://"))
-				.Select (uri => uri.Substring ("file://".Length));
-			
-			foreach (string uri in uriList) {
+			foreach (string uri in uri_list) {
 				if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops && !uri.EndsWith (".desktop")) {
 					CurrentDockItem.ReceiveItem (uri);
 				} else {
@@ -207,10 +209,36 @@ namespace Docky.Interface
 				}
 			}
 			
+			Gtk.Drag.Finish (context, true, true, time);
+			return base.OnDragDrop (context, x, y, time);
+		}
+
+		protected override void OnDragDataReceived (Gdk.DragContext context, int x, int y, 
+		                                            Gtk.SelectionData selectionData, uint info, uint time)
+		{
+			if (!CursorIsOverDockArea) return;
+
+			IEnumerable<string> uriList;
+			try {
+				string data = System.Text.Encoding.UTF8.GetString (selectionData.Data);
+				data = System.Uri.UnescapeDataString (data);
+				//sometimes we get a null at the end, and it crashes us
+				data = data.TrimEnd ('\0'); 
+				
+				uriList = Regex.Split (data, "\r\n")
+					.Where (uri => uri.StartsWith ("file://"))
+					.Select (uri => uri.Substring ("file://".Length));
+			} catch {
+				uriList = Enumerable.Empty<string> ();
+			}
+			
+			
+			uri_list = uriList;
+				
+			PreviewIsDesktopFile = !uriList.Any () || uriList.Any (s => s.EndsWith (".desktop"));
+			preview_completed = true;
+			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
-			GtkDragging = false;
-			SetDragProxy ();
-			AnimatedDraw ();
 		}
 		
 		protected override void OnDragBegin (Gdk.DragContext context)
@@ -238,7 +266,6 @@ namespace Docky.Interface
 		
 		protected override void OnDragEnd (Gdk.DragContext context)
 		{
-			
 			if (CursorIsOverDockArea) {
 				int currentPosition = PositionProvider.IndexAtPosition (Cursor);
 				if (currentPosition != -1)
@@ -246,13 +273,16 @@ namespace Docky.Interface
 			} else {
 				DockServices.ItemsService.RemoveItem (DragState.DragItem);
 			}
+			
 			DragState.IsFinished = true;
 			GtkDragging = false;
+			preview_completed = false;
+			SetDragProxy ();
 			
 			AnimatedDraw ();
 			base.OnDragEnd (context);
 		}
-
+		
 		void BuildDragAndDrop ()
 		{
 			cursor_type = CursorType.LeftPtr;

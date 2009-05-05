@@ -407,7 +407,7 @@ namespace Docky.Interface
 				              iconPosition.X / scale, iconPosition.Y / scale);
 				cr.PaintWithAlpha (fadeInOpacity);
 				
-				bool shade_light = GtkDragging && 
+				bool shade_light = GtkDragging && !PreviewIsDesktopFile && CursorIsOverDockArea &&
 					dockItem.IsAcceptingDrops && icon == PositionProvider.IndexAtPosition (Cursor);
 				
 				bool shade_dark = animationType == ClickAnimationType.Darken;
