@@ -199,14 +199,14 @@ namespace Docky.Interface
 		
 		protected override bool OnDragDrop (Gdk.DragContext context, int x, int y, uint time)
 		{
-			if (CursorIsOverDockArea) {
+			int index = PositionProvider.IndexAtPosition (Cursor);
+			if (CursorIsOverDockArea && index >= 0 && index < DockItems.Count) {
 				foreach (string uri in uri_list) {
 					if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops && !uri.EndsWith (".desktop")) {
 						CurrentDockItem.ReceiveItem (uri);
 					} else {
-						int index = PositionProvider.IndexAtPosition (Cursor);
 						Gdk.Point center = PositionProvider.IconUnzoomedPosition (index);
-						if (center.X < Cursor.X)
+						if (center.X < Cursor.X && index < DockItems.Count - 1)
 							index++;
 						DockServices.ItemsService.AddItemToDock (uri, index);
 					}
