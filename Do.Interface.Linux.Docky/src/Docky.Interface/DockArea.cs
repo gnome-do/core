@@ -397,6 +397,7 @@ namespace Docky.Interface
 			SetParentInputMask ();
 			SetIconRegions ();
 			window.DelaySetStruts ();
+			RequestFullRender ();
 			AnimatedDraw ();
 		}
 		

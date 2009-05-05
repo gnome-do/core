@@ -335,11 +335,6 @@ namespace Docky.Interface
 		{
 			drag_edge = DragEdge.None;
 			drag_resizing = false;
-			SetIconRegions ();
-			window.SetStruts ();
-			
-			RequestFullRender ();
-			AnimatedDraw ();
 			
 			ResetCursorTimer ();
 			
