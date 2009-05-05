@@ -50,7 +50,6 @@ namespace Docky.Interface
 
 		bool drag_resizing;
 		bool gtk_drag_source_set;
-		bool preview_requested;
 		bool preview_completed;
 		
 		int drag_start_icon_size;
@@ -161,8 +160,10 @@ namespace Docky.Interface
 
 		void DragCursorUpdate ()
 		{
-			if (GtkDragging && (CursorModifier & ModifierType.Button1Mask) != ModifierType.Button1Mask)
+			if (GtkDragging && (CursorModifier & ModifierType.Button1Mask) != ModifierType.Button1Mask) {
 				GtkDragging = false;
+				preview_completed = false;
+			}
 			SetDragProxy ();
 		}
 
@@ -197,15 +198,17 @@ namespace Docky.Interface
 		
 		protected override bool OnDragDrop (Gdk.DragContext context, int x, int y, uint time)
 		{
-			foreach (string uri in uri_list) {
-				if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops && !uri.EndsWith (".desktop")) {
-					CurrentDockItem.ReceiveItem (uri);
-				} else {
-					int index = PositionProvider.IndexAtPosition (Cursor);
-					Gdk.Point center = PositionProvider.IconUnzoomedPosition (index);
-					if (center.X < Cursor.X)
-						index++;
-					DockServices.ItemsService.AddItemToDock (uri, index);
+			if (CursorIsOverDockArea) {
+				foreach (string uri in uri_list) {
+					if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops && !uri.EndsWith (".desktop")) {
+						CurrentDockItem.ReceiveItem (uri);
+					} else {
+						int index = PositionProvider.IndexAtPosition (Cursor);
+						Gdk.Point center = PositionProvider.IconUnzoomedPosition (index);
+						if (center.X < Cursor.X)
+							index++;
+						DockServices.ItemsService.AddItemToDock (uri, index);
+					}
 				}
 			}
 			
@@ -216,8 +219,6 @@ namespace Docky.Interface
 		protected override void OnDragDataReceived (Gdk.DragContext context, int x, int y, 
 		                                            Gtk.SelectionData selectionData, uint info, uint time)
 		{
-			if (!CursorIsOverDockArea) return;
-
 			IEnumerable<string> uriList;
 			try {
 				string data = System.Text.Encoding.UTF8.GetString (selectionData.Data);
