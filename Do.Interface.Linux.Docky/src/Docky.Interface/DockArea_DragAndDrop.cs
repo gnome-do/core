@@ -50,7 +50,6 @@ namespace Docky.Interface
 
 		bool drag_resizing;
 		bool gtk_drag_source_set;
-		bool preview_completed;
 		
 		int drag_start_icon_size;
 		
@@ -61,6 +60,8 @@ namespace Docky.Interface
 		Gdk.CursorType cursor_type;
 
 		Gdk.Window drag_proxy;
+		
+		Gdk.DragContext drag_context;
 
 		IEnumerable<string> uri_list;
 		
@@ -162,7 +163,6 @@ namespace Docky.Interface
 		{
 			if (GtkDragging && (CursorModifier & ModifierType.Button1Mask) != ModifierType.Button1Mask) {
 				GtkDragging = false;
-				preview_completed = false;
 			}
 			SetDragProxy ();
 		}
@@ -186,9 +186,10 @@ namespace Docky.Interface
 			
 			AnimatedDraw ();
 			
-			if (!preview_completed) {
+			if (drag_context != context) {
 				Gdk.Atom target = Gtk.Drag.DestFindTarget (this, context, null);
 				Gtk.Drag.GetData (this, context, target, Gtk.Global.CurrentEventTime);
+				drag_context = context;
 			}
 			
 			Gdk.Drag.Status (context, DragAction.Copy, time);
@@ -237,7 +238,6 @@ namespace Docky.Interface
 			uri_list = uriList;
 				
 			PreviewIsDesktopFile = !uriList.Any () || uriList.Any (s => s.EndsWith (".desktop"));
-			preview_completed = true;
 			
 			base.OnDragDataReceived (context, x, y, selectionData, info, time);
 		}
@@ -277,7 +277,6 @@ namespace Docky.Interface
 			
 			DragState.IsFinished = true;
 			GtkDragging = false;
-			preview_completed = false;
 			SetDragProxy ();
 			
 			AnimatedDraw ();
