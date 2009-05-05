@@ -259,7 +259,13 @@ namespace Docky.Core.Default
 					}
 					if (writeable && Path.GetDirectoryName (identifier) != DesktopFilesDirectory) {
 						string newFile = Path.Combine (DesktopFilesDirectory, Path.GetFileName (identifier));
-						File.Copy (identifier, newFile);
+						try {
+							Log<ItemsService>.Error ("Could not add custom item with id: {0}, File already exists", identifier);
+							File.Copy (identifier, newFile);
+						} catch {
+							
+							return null; 
+						}
 						identifier = newFile;
 					}
 					Item o = Services.UniverseFactory.NewApplicationItem (identifier) as Item;
