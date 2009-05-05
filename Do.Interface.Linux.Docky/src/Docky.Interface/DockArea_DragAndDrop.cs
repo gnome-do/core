@@ -337,7 +337,6 @@ namespace Docky.Interface
 			drag_resizing = false;
 			
 			ResetCursorTimer ();
-			
 			Reconfigure ();
 		}
 		

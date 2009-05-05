@@ -68,9 +68,8 @@ namespace Docky.Interface
 
 		bool CanFastRender {
 			get {
-				bool result = next_fast_render;
-				next_fast_render = !RenderData.ForceFullRender && 
-					    RenderData.ZoomIn == 1 && 
+				bool result = next_fast_render && !RenderData.ForceFullRender;
+				next_fast_render = RenderData.ZoomIn == 1 && 
 						ZoomIn == 1 && 
 						!AnimationState [Animations.IconInsert] &&
 						!AnimationState [Animations.UrgencyChanged] &&
@@ -692,8 +691,9 @@ namespace Docky.Interface
 		
 		void RequestFullRender ()
 		{
-			if (RenderData != null)
+			if (RenderData != null) {
 				RenderData.ForceFullRender = true;
+			}
 		}
 		
 		void ResetBuffers()
