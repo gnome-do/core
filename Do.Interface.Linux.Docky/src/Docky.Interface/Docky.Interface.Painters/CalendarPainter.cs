@@ -21,8 +21,10 @@ using System.Globalization;
 
 using Cairo;
 using Gdk;
+using Gtk;
 
 using Do.Interface;
+using Do.Interface.CairoUtils;
 
 using Docky.Core;
 using Docky.Interface;
@@ -126,13 +128,18 @@ namespace Docky.Interface.Painters
 					
 					textContext.Text = string.Format ("{0:00}", day.Day);
 					if (day.Date == DateTime.Today)
+					{
+						Style style = Docky.Interface.DockWindow.Window.Style;
+						Gdk.Color color = style.Backgrounds [(int) StateType.Selected].SetMinimumValue (100);
+						cr.Color = color.ConvertToCairo (1.0);
+						
 						textContext.Text = string.Format (BoldFormatString, textContext.Text);
+					}
 					dayOffset++;
 				}
 				textContext.LeftCenteredPoint = new Gdk.Point (paintArea.X + offsetSize * i, centerLine);
 				DockServices.DrawingService.TextPathAtPoint (textContext);
 				cr.Fill ();
-				
 			}
 		}
 		
