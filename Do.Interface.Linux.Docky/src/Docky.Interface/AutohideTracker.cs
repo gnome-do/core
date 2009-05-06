@@ -30,7 +30,7 @@ namespace Docky.Interface
 {
 	
 	
-	public class AutohideTracker
+	public class AutohideTracker : IDisposable
 	{
 		DockArea parent;
 		bool window_intersecting_other;
@@ -142,5 +142,16 @@ namespace Docky.Interface
 			
 			WindowIntersectingOther = intersect;
 		}
+
+		#region IDisposable implementation
+		public void Dispose ()
+		{
+			Wnck.Screen.Default.ActiveWindowChanged -= HandleActiveWindowChanged;
+			Wnck.Screen.Default.WindowClosed -= WnckScreenDefaultWindowClosed;
+			Wnck.Screen.Default.WindowOpened -= WnckScreenDefaultWindowOpened;
+			Wnck.Screen.Default.ActiveWindow.GeometryChanged -= HandleGeometryChanged;
+		}
+		#endregion
+
 	}
 }

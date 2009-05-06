@@ -805,6 +805,7 @@ namespace Docky.Interface
 			UnregisterEvents ();
 			UnregisterGtkDragSource ();
 
+			AutohideTracker.Dispose ();
 			PositionProvider.Dispose ();
 			AnimationState.Dispose ();
 			PopupMenu.Destroy ();
