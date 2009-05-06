@@ -217,26 +217,38 @@ namespace Docky.Interface
 
 		public virtual Surface GetIconSurface (Surface similar, int targetSize, out int actualSize)
 		{
-			switch (ScalingType) {
-			case ScalingType.HighLow:
-				if (targetSize == DockPreferences.IconSize) {
+			Surface sr;
+			do {
+				switch (ScalingType) {
+				case ScalingType.HighLow:
+					if (targetSize == DockPreferences.IconSize) {
+						actualSize = DockPreferences.IconSize;
+						if (SecondaryIconSurface == null) {
+							SecondaryIconSurface = MakeIconSurface (similar, actualSize);
+							current_size = actualSize;
+						}
+						sr = SecondaryIconSurface;
+						continue;
+					}
+					actualSize = DockPreferences.FullIconSize;
+					break;
+				case ScalingType.Downscaled:
+					actualSize = DockPreferences.FullIconSize;
+					break;
+				case ScalingType.Upscaled:
+				case ScalingType.None:
+				default:
 					actualSize = DockPreferences.IconSize;
-					return (SecondaryIconSurface != null) ? SecondaryIconSurface 
-						: SecondaryIconSurface = MakeIconSurface (similar, actualSize);
+					break;
 				}
-				actualSize = DockPreferences.FullIconSize;
-				break;
-			case ScalingType.Downscaled:
-				actualSize = DockPreferences.FullIconSize;
-				break;
-			case ScalingType.Upscaled:
-			case ScalingType.None:
-			default:
-				actualSize = DockPreferences.IconSize;
-				break;
-			}
-			return (IconSurface != null) ? IconSurface 
-					: IconSurface = MakeIconSurface (similar, actualSize);
+				if (IconSurface == null) {
+					IconSurface = MakeIconSurface (similar, actualSize);
+					current_size = actualSize;
+				}
+				sr = IconSurface;
+			} while (false);
+			
+			return sr;
 		}
 
 		/// <summary>
