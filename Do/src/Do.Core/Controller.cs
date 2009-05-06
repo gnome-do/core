@@ -197,7 +197,7 @@ namespace Do.Core
 					new Shortcut ("CommaKey",
 						Catalog.GetString ("Selection mode"),
 						OnSelectionKeyPressEvent),
-					"Comma");
+					"comma");
 		}
 
 		void OnSummoned ()
