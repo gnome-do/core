@@ -188,6 +188,11 @@ namespace Docky.Interface
 		/// </param>
 		public virtual void Clicked (uint button, ModifierType state, PointD position)
 		{
+			SetLastClick ();
+		}
+		
+		protected void SetLastClick ()
+		{
 			LastClick = DateTime.UtcNow;
 			time_since_click_overdue = false;
 		}

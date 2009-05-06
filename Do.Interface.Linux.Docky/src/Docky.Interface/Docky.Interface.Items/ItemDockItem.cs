@@ -43,25 +43,17 @@ namespace Docky.Interface
 	
 	public class ItemDockItem : WnckDockItem, IRightClickable
 	{
-		const string ErrorMessage = "Docky could not move the file to the requested Directory.  " + 
-			"Please check file name and permissions and try again";
-		
-		Item element;
+		Item item;
 		int window_count;
 		uint handle_timer;
-		bool accepting_drops;
 		Gdk.Pixbuf drag_pixbuf;
 		Gdk.Rectangle icon_region;
 		List<Wnck.Window> windows;
 		
 		public event EventHandler RemoveClicked;
 		
-		public override bool IsAcceptingDrops { 
-			get { return accepting_drops; } 
-		}
-		
 		protected override string Icon { 
-			get { return element.Icon; } 
+			get { return item.Icon; } 
 		}
 		
 		string Name {
@@ -72,12 +64,12 @@ namespace Docky.Interface
 				if (VisibleWindows.Any () && WindowCount == 1)
 					return VisibleWindows.First ().Name;
 				
-				return Element.Name;
+				return Item.Name;
 			}
 		}
 		
-		public Item Element { 
-			get { return element; } 
+		public override Item Item { 
+			get { return item; } 
 		}
 		
 		public override IEnumerable<Wnck.Window> Windows { 
@@ -96,56 +88,24 @@ namespace Docky.Interface
 			get { return window_count; }
 		}
 		
-		public ItemDockItem (Item element) : base ()
+		public ItemDockItem (Item item) : base ()
 		{
 			Position = -1;
-			this.element = element;
+			this.item = item;
 			windows = new List<Wnck.Window> ();
 
 			UpdateApplication ();
 			NeedsAttention = DetermineUrgencyStatus ();
 			
-			if (element is IFileItem && Directory.Exists ((element as IFileItem).Path))
-				accepting_drops = true;
-			else
-				accepting_drops = false;
-			
 			SetText (Name);
-		}
-		
-		public override bool ReceiveItem (string item)
-		{
-			bool result = false;
-			if (!IsAcceptingDrops)
-				return result;
-			
-			if (item.StartsWith ("file://"))
-				item = item.Substring ("file://".Length);
-			
-			if (File.Exists (item)) {
-				try {
-					File.Move (item, System.IO.Path.Combine ((Element as IFileItem).Path, System.IO.Path.GetFileName (item)));
-					result = true;
-				} catch { 
-					Services.Notifications.Notify ("Docky Error", ErrorMessage);
-				}
-			} else if (Directory.Exists (item)) {
-				try {
-					Directory.Move (item, System.IO.Path.Combine ((Element as IFileItem).Path, System.IO.Path.GetFileName (item)));
-					result = true;
-				} catch { 
-					Services.Notifications.Notify ("Docky Error", ErrorMessage);
-				}
-			}
-			return result;
 		}
 		
 		public void UpdateApplication ()
 		{
 			UnregisterWindowEvents ();
 			
-			if (element is IApplicationItem) {
-				windows = WindowUtils.WindowListForCmd ((element as IApplicationItem).Exec);
+			if (item is IApplicationItem) {
+				windows = WindowUtils.WindowListForCmd ((item as IApplicationItem).Exec);
 				window_count = windows.Where (w => !w.IsSkipTasklist).Count ();
 			}
 			
@@ -218,8 +178,8 @@ namespace Docky.Interface
 			
 			List<AbstractDockItem> dockitems = new List<AbstractDockItem> ();
 					
-			foreach (Act act in ActionsForItem (element)) {
-				dockitems.Add (new ActionDockItem (act, element));
+			foreach (Act act in ActionsForItem (item)) {
+				dockitems.Add (new ActionDockItem (act, item));
 			}
 			
 			Docky.Core.DockServices.ItemsService.HotSeatItem (this, dockitems);
@@ -235,10 +195,10 @@ namespace Docky.Interface
 		
 		protected override void Launch ()
 		{
-			if (Element is IFileItem)
-				Services.Core.PerformDefaultAction (Element as Item, new [] { typeof (OpenAction), });
+			if (Item is IFileItem)
+				Services.Core.PerformDefaultAction (Item as Item, new [] { typeof (OpenAction), });
 			else
-				Services.Core.PerformDefaultAction (Element as Item, Type.EmptyTypes);
+				Services.Core.PerformDefaultAction (Item as Item, Type.EmptyTypes);
 		}
 		
 		public override void SetIconRegion (Gdk.Rectangle region)
@@ -258,7 +218,7 @@ namespace Docky.Interface
 			if (other == null) return false;
 			
 			ItemDockItem di = other as ItemDockItem;
-			return di != null && di.Element != null && Element != null && di.Element.UniqueId == Element.UniqueId;
+			return di != null && di.Item != null && Item != null && di.Item.UniqueId == Item.UniqueId;
 		}
 
 		#region IDisposable implementation 
@@ -266,7 +226,7 @@ namespace Docky.Interface
 		public override void Dispose ()
 		{
 			UnregisterWindowEvents ();
-			element = null;
+			item = null;
 			windows.Clear ();
 			
 			if (drag_pixbuf != null)
@@ -286,11 +246,11 @@ namespace Docky.Interface
 			yield return new SeparatorMenuButtonArgs ();
 			
 			if (hasApps) {
-				foreach (Act act in ActionsForItem (element))
-					yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon).AsDark ();
+				foreach (Act act in ActionsForItem (item))
+					yield return new LaunchMenuButtonArgs (act, item, act.Name, act.Icon).AsDark ();
 			} else {
-				foreach (Act act in ActionsForItem (element))
-					yield return new LaunchMenuButtonArgs (act, element, act.Name, act.Icon);
+				foreach (Act act in ActionsForItem (item))
+					yield return new LaunchMenuButtonArgs (act, item, act.Name, act.Icon);
 			}
 			
 			if (hasApps) {

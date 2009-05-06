@@ -42,6 +42,9 @@ namespace Docky.Interface
 	
 	public abstract class WnckDockItem : AbstractDockItem
 	{
+		const string ErrorMessage = "Docky could not move the file to the requested Directory.  " + 
+			"Please check file name and permissions and try again";
+		
 		// a bad hack, but it works
 		static string [] blacklist = new [] {
 			"CopyToClipboardAction", 
@@ -49,11 +52,14 @@ namespace Docky.Interface
 		};
 		
 		int last_raised;
-
+		bool? accepting_drops;
+		
 		DateTime last_scroll = new DateTime (0);
 		TimeSpan scroll_rate = new TimeSpan (0, 0, 0, 0, 200);
 		
 		public abstract IEnumerable<Wnck.Window> Windows { get; }
+		
+		public abstract Item Item { get; }
 		
 		protected IEnumerable<Wnck.Window> VisibleWindows {
 			get { return Windows.Where (w => !w.IsSkipTasklist); }
@@ -66,6 +72,15 @@ namespace Docky.Interface
 				return VisibleWindows.Any ();
 			}
 		}	
+		
+		public override bool IsAcceptingDrops {
+			get {
+				if (!accepting_drops.HasValue) {
+					accepting_drops = (Item is IFileItem && Directory.Exists ((Item as IFileItem).Path)) || (Item is IApplicationItem);
+				}
+				return accepting_drops.Value;
+			}
+		}
 		
 		public WnckDockItem() : base ()
 		{
@@ -142,6 +157,44 @@ namespace Docky.Interface
 				last_raised = 0;
 			else if (last_raised < 0)
 				last_raised = WindowCount - 1;
+		}
+		
+		public override bool ReceiveItem (string item)
+		{
+			bool result = false;
+			if (!IsAcceptingDrops)
+				return result;
+			
+			if (item.StartsWith ("file://"))
+				item = item.Substring ("file://".Length);
+			
+			if (File.Exists (item)) {
+				if (Item is IApplicationItem) {
+					try {
+						(Item as IApplicationItem).LaunchWithFiles (Do.Platform.Services.UniverseFactory.NewFileItem (item).Cons (null));
+						SetLastClick ();
+						AnimationType = ClickAnimationType.Bounce;
+						result = true;
+					} catch {
+						Services.Notifications.Notify ("Docky Error", "Docky could not launch application");
+					}
+				} else {
+					try {
+						File.Move (item, System.IO.Path.Combine ((Item as IFileItem).Path, System.IO.Path.GetFileName (item)));
+						result = true;
+					} catch { 
+						Services.Notifications.Notify ("Docky Error", ErrorMessage);
+					}
+				}
+			} else if (Directory.Exists (item)) {
+				try {
+					Directory.Move (item, System.IO.Path.Combine ((Item as IFileItem).Path, System.IO.Path.GetFileName (item)));
+					result = true;
+				} catch { 
+					Services.Notifications.Notify ("Docky Error", ErrorMessage);
+				}
+			}
+			return result;
 		}
 	}
 }

@@ -88,6 +88,12 @@ namespace Docky.Interface
 			}
 		}
 		
+		public override Item Item {
+			get {
+				return Launcher as Item;
+			}
+		}
+		
 		string Exec {
 			get {
 				string exec;

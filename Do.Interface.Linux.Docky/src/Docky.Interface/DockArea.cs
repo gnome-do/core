@@ -381,7 +381,7 @@ namespace Docky.Interface
 			window.Reposition ();
 		}
 		
-		void HandleSizeChanged(object sender, EventArgs e)
+		void HandleSizeChanged (object sender, EventArgs e)
 		{
 			Reconfigure ();
 		}
@@ -400,7 +400,7 @@ namespace Docky.Interface
 			AnimatedDraw ();
 		}
 		
-		void HandleUniverseInitialized(object sender, EventArgs e)
+		void HandleUniverseInitialized (object sender, EventArgs e)
 		{
 			GLib.Timeout.Add (2000, delegate {
 				DockServices.ItemsService.ForceUpdate ();
