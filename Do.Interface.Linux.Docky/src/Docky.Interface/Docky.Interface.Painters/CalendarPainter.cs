@@ -40,12 +40,20 @@ namespace Docky.Interface.Painters
 		const double lowlight = .35;
 		const string BoldFormatString = "<b>{0}</b>";
 		
+		DateTime paint_time;
+		
 		ClockDockItem Clock { get; set; }
 		
 		DateTime CalendarStartDate {
 			get {
 				return DateTime.Today.AddDays (0 - (int) DateTime.Today.DayOfWeek + 
 				                               ((int) DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek));
+			}
+		}
+		
+		protected override bool NeedsRepaint {
+			get {
+				return paint_time.Date != DateTime.Now.Date;
 			}
 		}
 		
@@ -65,6 +73,7 @@ namespace Docky.Interface.Painters
 		
 		protected override void PaintArea (Cairo.Context cr, Gdk.Rectangle paintArea)
 		{
+			paint_time = DateTime.Now;
 			int height = paintArea.Height / LineHeight;
 			RenderHeader (cr, paintArea);
 			for (int i = 1; i < height; i++)

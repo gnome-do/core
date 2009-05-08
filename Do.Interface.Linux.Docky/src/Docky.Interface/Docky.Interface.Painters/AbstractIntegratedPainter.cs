@@ -42,6 +42,10 @@ namespace Docky.Interface.Painters
 		
 		protected abstract int Width { get; }
 		
+		protected virtual bool NeedsRepaint {
+			get { return false; }
+		}
+		
 		protected abstract void PaintArea (Cairo.Context context, Gdk.Rectangle paintableArea);
 		
 		protected abstract void ReceiveClick (Gdk.Rectangle paintArea, Gdk.Point cursor);
@@ -102,7 +106,7 @@ namespace Docky.Interface.Painters
 		
 		public void Paint (Cairo.Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
-			if (buffer == null || buffer_height != dockArea.Height) {
+			if (buffer == null || buffer_height != dockArea.Height || NeedsRepaint) {
 				if (buffer != null)
 					buffer.Destroy ();
 				
