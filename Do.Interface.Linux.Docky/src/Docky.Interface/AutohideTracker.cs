@@ -129,6 +129,7 @@ namespace Docky.Interface
 			bool intersect = false;
 			try {
 				IEnumerable<Wnck.Window> rawWindows = ScreenUtils.ActiveViewport.UnprocessedWindows ();
+				
 				Wnck.Window activeWindow = rawWindows
 					.Where (w => w.IsActive && w.WindowType != Wnck.WindowType.Desktop)
 					.First ();
@@ -136,8 +137,7 @@ namespace Docky.Interface
 				intersect = rawWindows.Any (w => w.WindowType != Wnck.WindowType.Desktop && 
 				                            activeWindow.Pid == w.Pid &&
 				                            w.EasyGeometry ().IntersectsWith (adjustedDockArea));
-			} catch (Exception e) {
-				Do.Platform.Log <AutohideTracker>.Error (e.Message);
+			} catch {
 			}
 			
 			WindowIntersectingOther = intersect;
