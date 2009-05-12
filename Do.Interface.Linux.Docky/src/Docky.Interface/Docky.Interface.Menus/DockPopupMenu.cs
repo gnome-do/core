@@ -92,11 +92,22 @@ namespace Docky.Interface.Menus
 			
 			Container = new Gtk.VBox ();
 			Build ();
+			
+			DockPreferences.OrientationChanged += SetAlignment;
 		}
 		
 		protected virtual void Build ()
 		{
 			align = new Gtk.Alignment (0.5f, 0.5f, 1, 1);
+			SetAlignment ();
+			
+			align.Add (Container);
+			Add (align);
+			align.ShowAll ();
+		}
+
+		void SetAlignment ()
+		{
 			align.LeftPadding = 4;
 			align.RightPadding = 3;
 			align.TopPadding = align.BottomPadding = 7;
@@ -110,12 +121,7 @@ namespace Docky.Interface.Menus
 				align.TopPadding += TailHeight + 3;
 				break;
 			}
-			
-			align.Add (Container);
-			Add (align);
-			align.ShowAll ();
 		}
-
 		
 		public virtual void PopUp (string description, IEnumerable<AbstractMenuArgs> args, int x, int y)
 		{
@@ -282,6 +288,12 @@ namespace Docky.Interface.Menus
 			context.ClosePath ();
 
 			context.Translate (-.5, -.5);
+		}
+		
+		public override void Dispose ()
+		{
+			DockPreferences.OrientationChanged -= SetAlignment;
+			base.Dispose ();
 		}
 	}
 }

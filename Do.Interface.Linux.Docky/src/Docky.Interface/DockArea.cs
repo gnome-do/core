@@ -809,6 +809,7 @@ namespace Docky.Interface
 			PositionProvider.Dispose ();
 			AnimationState.Dispose ();
 			PopupMenu.Destroy ();
+			PopupMenu.Dispose ();
 
 			PositionProvider = null;
 			AnimationState = null;
