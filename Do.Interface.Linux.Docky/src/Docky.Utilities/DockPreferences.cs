@@ -75,6 +75,15 @@ namespace Docky.Utilities
 			}
 		}
 		
+		static bool indicate_active_window = prefs.Get ("IndicateFocusedWindow", false);
+		public static bool IndicateActiveWindow {
+			get { return indicate_active_window; }
+			set { 
+				prefs.Set ("IndicateFocusedWindow", value); 
+				indicate_active_window = value;
+			}
+		}
+		
 		static double zoom_percent = Math.Round (prefs.Get ("ZoomPercent", 2.0), 1);
 		public static double ZoomPercent {
 			get { return ZoomEnabled ? zoom_percent : 1; }

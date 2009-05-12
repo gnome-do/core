@@ -75,6 +75,10 @@ namespace Docky.Interface
 		public virtual DateTime LastClick { get; private set; }
 		
 		public int Position { get; set; }
+		
+		public virtual bool ContainsFocusedWindow {
+			get { return false; }
+		}
 
 		/// <value>
 		/// Determines if drop actions will be passed on to the icon

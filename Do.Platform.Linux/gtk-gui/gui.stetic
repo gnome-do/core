@@ -9,6 +9,7 @@
     <widget-library name="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a" />
     <widget-library name="../../Do.Interface.Linux/bin/Debug/Do.Interface.Linux.dll" />
     <widget-library name="../bin/Debug/Do.Platform.Linux.dll" internal="true" />
+    <widget-library name="gnome-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </import>
   <widget class="Gtk.Bin" id="Do.Platform.Linux.AbstractLoginWidget" design-size="300 300">
     <property name="MemberName" />

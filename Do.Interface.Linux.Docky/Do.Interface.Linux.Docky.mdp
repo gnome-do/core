@@ -111,5 +111,6 @@
     <ProjectReference type="Project" localcopy="True" refto="Do.Interface.Wink" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Platform.Linux" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Interface.Linux.AnimationBase" />
+    <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
 </Project>

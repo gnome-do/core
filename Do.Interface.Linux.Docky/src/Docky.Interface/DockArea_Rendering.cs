@@ -23,6 +23,7 @@ using System.Linq;
 using Cairo;
 using Gdk;
 using Gtk;
+using Wnck;
 
 using Do.Interface;
 using Do.Interface.CairoUtils;
@@ -221,7 +222,15 @@ namespace Docky.Interface
 		{
 			RenderData = new PreviousRenderData ();
 			painter_surfaces = new Dictionary<IDockPainter, Surface> ();
-			AutohideTracker.IntersectionChanged +=HandleIntersectionChanged; 
+			
+			AutohideTracker.IntersectionChanged += HandleIntersectionChanged;
+			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
+		}
+		
+		void HandleActiveWindowChanged (object o, ActiveWindowChangedArgs args)
+		{
+			RequestFullRender ();
+			AnimatedDraw ();
 		}
 
 		void HandleIntersectionChanged(object sender, EventArgs e)
@@ -393,6 +402,37 @@ namespace Docky.Interface
 				} else {
 					Do.Platform.Log<DockArea>.Error ("Icon provided in unexpected size");
 					return;
+				}
+				
+				if (DockPreferences.IndicateActiveWindow && dockItem.ContainsFocusedWindow) {
+					double intenseF = 0.7;
+					double intenseS = 0.8;
+					
+					double xHigh = iconPosition.X + .5;
+					double yHigh = MinimumDockArea.Y;
+					double widthHigh = dockItem.Width * zoom - 1;
+					cr.Rectangle (xHigh, yHigh, widthHigh, DockHeight);
+					
+					LinearGradient lg;
+					if (DockPreferences.Orientation == DockOrientation.Bottom) {
+						lg = new LinearGradient (0, yHigh + DockHeight, 0, yHigh);
+					} else {
+						lg = new LinearGradient (0, yHigh, 0, yHigh + DockHeight);
+					}
+					lg.AddColorStop (0, new Cairo.Color (intenseF, intenseF, intenseF, .3));
+					lg.AddColorStop (1, new Cairo.Color (intenseF, intenseF, intenseF, 0));
+					cr.Pattern = lg;
+					cr.Fill ();
+					lg.Destroy ();
+					
+					cr.MoveTo (xHigh, yHigh);
+					cr.LineTo (xHigh, yHigh + DockHeight);
+					cr.MoveTo (xHigh + widthHigh, yHigh);
+					cr.LineTo (xHigh + widthHigh, yHigh + DockHeight);
+					
+					cr.Color = new Cairo.Color (intenseS, intenseS, intenseS, .4);
+					cr.LineWidth = 1;
+					cr.Stroke ();
 				}
 				
 				if (scale != 1)

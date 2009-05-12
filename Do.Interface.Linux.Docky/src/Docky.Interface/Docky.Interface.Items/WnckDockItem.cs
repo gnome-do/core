@@ -73,6 +73,10 @@ namespace Docky.Interface
 			}
 		}	
 		
+		public override bool ContainsFocusedWindow {
+			get { return VisibleWindows.Any (w => w.IsActive); }
+		}
+		
 		public override bool IsAcceptingDrops {
 			get {
 				if (!accepting_drops.HasValue) {

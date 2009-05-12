@@ -106,6 +106,7 @@
     <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Project" localcopy="True" refto="Do.Interface.Linux.AnimationBase" />
+    <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
   <LanguageParameters ApplicationIcon="../../../../../jason/do/trunk-merge/Do" ctype="CSharpProjectParameters" />
   <Deployment.LinuxDeployData scriptName="gnome-do" />
