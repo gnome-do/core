@@ -229,8 +229,10 @@ namespace Docky.Interface
 		
 		void HandleActiveWindowChanged (object o, ActiveWindowChangedArgs args)
 		{
-			RequestFullRender ();
-			AnimatedDraw ();
+			if (DockPreferences.IndicateActiveWindow) {
+				RequestFullRender ();
+				AnimatedDraw ();
+			}
 		}
 
 		void HandleIntersectionChanged(object sender, EventArgs e)
