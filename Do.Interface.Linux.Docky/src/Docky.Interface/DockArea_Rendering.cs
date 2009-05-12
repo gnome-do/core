@@ -410,9 +410,9 @@ namespace Docky.Interface
 					double intenseF = 0.7;
 					double intenseS = 0.8;
 					
-					double xHigh = iconPosition.X + .5;
+					double xHigh = iconPosition.X - 1.5;
 					double yHigh = MinimumDockArea.Y;
-					double widthHigh = dockItem.Width * zoom - 1;
+					double widthHigh = dockItem.Width * zoom + 2;
 					cr.Rectangle (xHigh, yHigh, widthHigh, DockHeight);
 					
 					LinearGradient lg;
@@ -427,10 +427,16 @@ namespace Docky.Interface
 					cr.Fill ();
 					lg.Destroy ();
 					
+					if (DockPreferences.Orientation == DockOrientation.Bottom)
+						cr.Translate (0, 2);
+					
 					cr.MoveTo (xHigh, yHigh);
-					cr.LineTo (xHigh, yHigh + DockHeight);
+					cr.LineTo (xHigh, yHigh + DockHeight - 2);
 					cr.MoveTo (xHigh + widthHigh, yHigh);
-					cr.LineTo (xHigh + widthHigh, yHigh + DockHeight);
+					cr.LineTo (xHigh + widthHigh, yHigh + DockHeight - 2);
+					
+					if (DockPreferences.Orientation == DockOrientation.Bottom)
+						cr.Translate (0, -2);
 					
 					cr.Color = new Cairo.Color (intenseS, intenseS, intenseS, .4);
 					cr.LineWidth = 1;
