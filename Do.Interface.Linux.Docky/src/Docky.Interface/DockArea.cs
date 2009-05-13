@@ -279,6 +279,7 @@ namespace Docky.Interface
 				Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + UrgentBounceHeight;
 			else
 				Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + LaunchBounceHeight;
+			Height = Math.Max (150, Height);
 			
 			SetSizeRequest (Width, Height);
 		}
