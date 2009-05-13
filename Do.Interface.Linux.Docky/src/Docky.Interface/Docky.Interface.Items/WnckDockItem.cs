@@ -31,6 +31,7 @@ using Do.Universe.Common;
 using Do.Interface;
 using Do.Interface.CairoUtils;
 
+using Docky.Core;
 using Docky.Interface.Menus;
 using Docky.Utilities;
 
@@ -53,6 +54,7 @@ namespace Docky.Interface
 		
 		int last_raised;
 		bool? accepting_drops;
+		Gdk.Rectangle icon_region;
 		
 		DateTime last_scroll = new DateTime (0);
 		TimeSpan scroll_rate = new TimeSpan (0, 0, 0, 0, 200);
@@ -89,6 +91,31 @@ namespace Docky.Interface
 		public WnckDockItem() : base ()
 		{
 			last_raised = 0;
+			RegisterEvents ();
+		}
+
+		void RegisterEvents ()
+		{
+			DockServices.DoInteropService.Summoned += HandleSummoned;
+			DockServices.DoInteropService.Vanished += HandleVanished;
+		}
+
+		void UnregisterEvents ()
+		{
+			DockServices.DoInteropService.Summoned -= HandleSummoned;
+			DockServices.DoInteropService.Vanished -= HandleVanished;
+		}
+		
+		public override void SetIconRegion (Gdk.Rectangle region)
+		{
+			if (icon_region == region) return;
+			icon_region = region;
+			SetIconRegionFromCache ();
+		}
+		
+		protected void SetIconRegionFromCache ()
+		{
+			VisibleWindows.ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height));
 		}
 		
 		protected IEnumerable<Act> ActionsForItem (Item item) 
@@ -150,6 +177,16 @@ namespace Docky.Interface
 			base.Clicked (button, state, position);
 		}
 
+		public void HandleSummoned (object sender, EventArgs e)
+		{
+			VisibleWindows.ForEach (w => w.SetIconGeometry (0, 0, 0, 0));
+		}
+
+		public void HandleVanished (object sender, EventArgs e)
+		{
+			SetIconRegionFromCache ();
+		}
+
 		protected bool DetermineUrgencyStatus  ()
 		{
 			return VisibleWindows.Any (w => !w.IsSkipTasklist && w.NeedsAttention ());
@@ -199,6 +236,12 @@ namespace Docky.Interface
 				}
 			}
 			return result;
+		}
+
+		public override void Dispose ()
+		{
+			UnregisterEvents ();
+			base.Dispose ();
 		}
 	}
 }

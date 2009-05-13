@@ -47,7 +47,6 @@ namespace Docky.Interface
 		int window_count;
 		uint handle_timer;
 		Gdk.Pixbuf drag_pixbuf;
-		Gdk.Rectangle icon_region;
 		List<Wnck.Window> windows;
 		
 		public event EventHandler RemoveClicked;
@@ -199,18 +198,6 @@ namespace Docky.Interface
 				Services.Core.PerformDefaultAction (Item as Item, new [] { typeof (OpenAction), });
 			else
 				Services.Core.PerformDefaultAction (Item as Item, Type.EmptyTypes);
-		}
-		
-		public override void SetIconRegion (Gdk.Rectangle region)
-		{
-			if (icon_region == region) return;
-			icon_region = region;
-			SetIconRegionFromCache ();
-		}
-		
-		void SetIconRegionFromCache ()
-		{
-			VisibleWindows.ForEach (w => w.SetIconGeometry (icon_region.X, icon_region.Y, icon_region.Width, icon_region.Height));
 		}
 		
 		public override bool Equals (AbstractDockItem other)

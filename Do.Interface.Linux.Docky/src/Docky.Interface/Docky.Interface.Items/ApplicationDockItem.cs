@@ -71,7 +71,6 @@ namespace Docky.Interface
 		
 		int windowCount;
 		
-		Gdk.Rectangle icon_region;
 		Gdk.Pixbuf drag_pixbuf;
 		
 		IEnumerable<Wnck.Window> windows;
@@ -294,15 +293,6 @@ namespace Docky.Interface
 			return true;
 		}
 
-		public override void SetIconRegion (Gdk.Rectangle region)
-		{
-			if (icon_region == region)
-				return;
-			icon_region = region;
-
-			VisibleWindows.ForEach (w => w.SetIconGeometry (region.X, region.Y, region.Width, region.Height));
-		}
-		
 		public override bool Equals (AbstractDockItem other)
 		{
 			if (!(other is ApplicationDockItem))
