@@ -24,6 +24,7 @@ using Gdk;
 using Gtk;
 
 using Do.Interface;
+using Do.Interface.CairoUtils;
 using Do.Interface.Wink;
 using Do.Platform;
 
@@ -43,6 +44,8 @@ namespace Docky.Interface
 		bool needs_attention;
 		
 		bool time_since_click_overdue;
+		
+		Cairo.Color? average_color;
 		
 		protected int current_size;
 
@@ -163,6 +166,71 @@ namespace Docky.Interface
 		void HandleStyleSet(object o, StyleSetArgs args)
 		{
 			ResetSurfaces ();
+		}
+		
+		public Cairo.Color AverageColor ()
+		{
+			if (IconSurface == null)
+				return new Cairo.Color (1, 1, 1, 1);
+			
+			if (average_color.HasValue)
+				return average_color.Value;
+				
+			ImageSurface sr = new ImageSurface (Format.ARGB32, current_size, current_size);
+			using (Context cr = new Context (sr)) {
+				cr.Operator = Operator.Source;
+				IconSurface.Show (cr, 0, 0);
+			}
+			
+			sr.Flush ();
+			sr.Finish ();
+			
+			byte [] data = sr.Data;
+			byte a, r, g, b;
+			
+			double rTotal = 0;
+			double gTotal = 0;
+			double bTotal = 0;
+			
+			for (int i=0; i < data.Length - 3; i += 4) {
+				b = data [i + 0];
+				g = data [i + 1];
+				r = data [i + 2];
+				a = data [i + 3];
+				
+				byte max = Math.Max (r, Math.Max (g, b));
+				byte min = Math.Min (r, Math.Min (g, b));
+				double delta = max - min;
+				
+				double sat;
+				if (delta == 0) {
+					sat = 0;
+				} else {
+					sat = delta / max;
+				}
+				double score = .2 + .8 * sat;
+				
+				rTotal += r * score;
+				gTotal += g * score;
+				bTotal += b * score;
+			}
+			double pixelCount = current_size * current_size * byte.MaxValue;
+			
+			r = (byte) (byte.MaxValue * (rTotal / pixelCount));
+			g = (byte) (byte.MaxValue * (gTotal / pixelCount));
+			b = (byte) (byte.MaxValue * (bTotal / pixelCount));
+			
+			double h, s, v;
+			Do.Interface.Util.Appearance.RGBToHSV (r, g, b, out h, out s, out v);
+			v = 100;
+			Do.Interface.Util.Appearance.HSVToRGB (h, s, v, out r, out g, out b);
+			
+			Cairo.Color color = new Cairo.Color ((double) r / byte.MaxValue, (double) g / byte.MaxValue, (double) b / byte.MaxValue);
+			
+			sr.Destroy ();
+			
+			average_color = color;
+			return average_color.Value;
 		}
 
 		protected virtual Pixbuf GetSurfacePixbuf (int size)
@@ -390,6 +458,7 @@ namespace Docky.Interface
 			ResetTextSurface ();
 			ResetBufferSurface ();
 			ResetIconSurface ();
+			average_color = null;
 		}
 
 		void ResetTextSurface ()

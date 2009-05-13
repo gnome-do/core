@@ -129,7 +129,6 @@ namespace Do.Interface
 				val = max / 255.0 * 100.0;
 				
 				if (Math.Abs (delta) < 0.0001) {
-//					val = 0;
 					sat = 0;
 				} else {
 					sat = (delta / max) * 100;

@@ -421,8 +421,10 @@ namespace Docky.Interface
 					} else {
 						lg = new LinearGradient (0, yHigh, 0, yHigh + DockHeight);
 					}
-					lg.AddColorStop (0, new Cairo.Color (intenseF, intenseF, intenseF, .3));
-					lg.AddColorStop (1, new Cairo.Color (intenseF, intenseF, intenseF, 0));
+					
+					Cairo.Color average = dockItem.AverageColor ();
+					lg.AddColorStop (0, new Cairo.Color (average.R, average.G, average.B, .3));
+					lg.AddColorStop (1, new Cairo.Color (average.R, average.G, average.B, 0));
 					cr.Pattern = lg;
 					cr.Fill ();
 					lg.Destroy ();
