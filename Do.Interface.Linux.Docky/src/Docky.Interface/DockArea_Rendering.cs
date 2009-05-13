@@ -412,7 +412,7 @@ namespace Docky.Interface
 					
 					double xHigh = iconPosition.X - 1.5;
 					double yHigh = MinimumDockArea.Y;
-					double widthHigh = dockItem.Width * zoom + 2;
+					double widthHigh = dockItem.Width * zoom + 3;
 					cr.Rectangle (xHigh, yHigh, widthHigh, DockHeight);
 					
 					LinearGradient lg;
