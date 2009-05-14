@@ -32,6 +32,11 @@ namespace Do.Interface.Wink
 		const int SleepTime = 10;
 		const int FocusDelay = 200;
 		
+		static WindowControl ()
+		{
+			Wnck.Global.ClientType = Wnck.ClientType.Pager;
+		}
+		
 		/// <summary>
 		/// Handles intelligent minimize/restoring of windows.  If one or more windows is minimized, it restores
 		/// all windows.  If more all are visible, it minimizes.  This operation only takes into account windows

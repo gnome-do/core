@@ -91,8 +91,6 @@ namespace Docky.Interface
 			CanFocus = false;
 			TypeHint = WindowTypeHint.Dock;
 			
-			Wnck.Global.ClientType = Wnck.ClientType.Pager;
-			
 			this.SetCompositeColormap ();
 			
 			dock_area = new DockArea (this);
