@@ -38,15 +38,15 @@ namespace Docky.Interface.Menus
 	{
 		public static readonly Cairo.Color BackgroundColor = new Cairo.Color (0.13, 0.13, 0.13, .95);
 		
-		const int TailHeight = 25;
+		const int TailHeight = 20;
 		new const int BorderWidth = 2;
 		const int HeaderSize = 20;
-		const int Radius = 7;
+		const int Radius = 6;
 		const int Width = 180;
-		const double Pointiness = 1.5;
-		const double Curviness = 1;
-		const double Bluntness = 2;
+		const double Curviness = .3;
 		const string FormatString = "<b>{0}</b>";
+		
+		const int TailWidth = 20;
 		
 		int horizontal_offset;
 		int vertical_offset;
@@ -210,12 +210,24 @@ namespace Docky.Interface.Menus
 			cr.Color = BackgroundColor;
 			cr.FillPreserve ();
 			
+			LinearGradient lg = (DockPreferences.Orientation == DockOrientation.Bottom) ? 
+				new LinearGradient (0, 0, 0, rect.Height) : new LinearGradient (0, rect.Height, 0, 0);
+			lg.AddColorStop (0, BackgroundColor);
+			lg.AddColorStop (1, new Cairo.Color (BackgroundColor.R, BackgroundColor.G, BackgroundColor.B, 0));
+			cr.Pattern = lg;
 			cr.LineWidth = 3;
 			cr.StrokePreserve ();
 			
-			cr.Color = new Cairo.Color (1, 1, 1, .25);
+			lg.Destroy ();
+			lg = (DockPreferences.Orientation == DockOrientation.Bottom) ? 
+				new LinearGradient (0, 0, 0, rect.Height) : new LinearGradient (0, rect.Height, 0, 0);
+			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .35));
+			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
+			cr.Pattern = lg;
 			cr.LineWidth = 1;
 			cr.Stroke ();
+			
+			lg.Destroy ();
 			
 			TextRenderContext context = new TextRenderContext (cr, string.Format (FormatString, header), Width - 16);
 			context.LeftCenteredPoint = new Gdk.Point (8, HeaderTextOffset);
@@ -258,31 +270,33 @@ namespace Docky.Interface.Menus
 
 
 			context.MoveTo (mainArea.X, mainArea.Y + Radius);
-			if (DockPreferences.Orientation == DockOrientation.Top) {
-				context.RelCurveTo (0, 0 - TailHeight * Curviness,
-				                    mainArea.Width / 2 - 10 * Bluntness, 0 - TailHeight * (1 - Curviness),
-				                    mainArea.Width / 2, 0 - TailHeight);
-				context.RelCurveTo (10 * Bluntness, TailHeight * Curviness,
-				                    mainArea.Width / 2, TailHeight * (1 - Curviness),
-				                    mainArea.Width / 2, TailHeight);
-			} else {
-				context.Arc (topLeftRadialCenter.X, topLeftRadialCenter.Y, Radius, Math.PI, Math.PI * 1.5);
-				context.Arc (topRightRadialCenter.X, topRightRadialCenter.Y, Radius, Math.PI * 1.5, Math.PI * 2);
-			}
 			
-			if (DockPreferences.Orientation == DockOrientation.Bottom) {
-				context.LineTo (bottomRightRadialCenter.X + Radius, bottomRightRadialCenter.Y);
-				context.RelCurveTo (0, TailHeight * Curviness,
-				                    0 - mainArea.Width / 2 + 10 * Bluntness, TailHeight * (1 - Curviness),
-				                    0 - mainArea.Width / 2, TailHeight);
+			context.Arc (topLeftRadialCenter.X, topLeftRadialCenter.Y, Radius, Math.PI, Math.PI * 1.5);
+			if (DockPreferences.Orientation == DockOrientation.Top) {
+				Gdk.Point vertex = new Gdk.Point ();
+				vertex.X = mainArea.X + mainArea.Width / 2;
+				vertex.Y = mainArea.Y - TailHeight;
 				
-				context.RelCurveTo (0 - 10 * Bluntness, 0 - TailHeight * Curviness,
-				                    0 - mainArea.Width / 2, 0 - TailHeight * (1 - Curviness),
-				                    0 - mainArea.Width / 2, 0 - TailHeight);
-			} else {
-				context.Arc (bottomRightRadialCenter.X, bottomRightRadialCenter.Y, Radius, 0, Math.PI * .5);
-				context.Arc (bottomLeftRadialCenter.X, bottomLeftRadialCenter.Y, Radius, Math.PI * .5, Math.PI);
+				Gdk.Point top = new Gdk.Point (vertex.X, vertex.Y + TailHeight);
+				
+				context.LineTo (top.X - TailWidth, top.Y);
+				context.CurveTo (top.X - TailWidth * Curviness, top.Y, vertex.X, vertex.Y, vertex.X, vertex.Y);
+				context.CurveTo (vertex.X, vertex.Y, top.X + TailWidth * Curviness, top.Y, top.X + TailWidth, top.Y);
 			}
+			context.Arc (topRightRadialCenter.X, topRightRadialCenter.Y, Radius, Math.PI * 1.5, Math.PI * 2);
+			context.Arc (bottomRightRadialCenter.X, bottomRightRadialCenter.Y, Radius, 0, Math.PI * .5);
+			if (DockPreferences.Orientation == DockOrientation.Bottom) {
+				Gdk.Point vertex = new Gdk.Point ();
+				vertex.X = mainArea.X + mainArea.Width / 2;
+				vertex.Y = mainArea.Y + mainArea.Height + TailHeight;
+				
+				Gdk.Point top = new Gdk.Point (vertex.X, vertex.Y - TailHeight);
+				
+				context.LineTo (top.X + TailWidth, top.Y);
+				context.CurveTo (top.X + TailWidth * Curviness, top.Y, vertex.X, vertex.Y, vertex.X, vertex.Y);
+				context.CurveTo (vertex.X, vertex.Y, top.X - TailWidth * Curviness, top.Y, top.X - TailWidth, top.Y);
+			}
+			context.Arc (bottomLeftRadialCenter.X, bottomLeftRadialCenter.Y, Radius, Math.PI * .5, Math.PI);
 			
 
 			context.ClosePath ();
