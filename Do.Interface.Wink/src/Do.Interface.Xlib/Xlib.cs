@@ -64,6 +64,9 @@ namespace Do.Interface.Xlib {
 		
 		[DllImport (libGdkX11)]
         static extern IntPtr gdk_x11_display_get_xdisplay (IntPtr display);
+		
+		[DllImport (libGdkX11)]
+		static extern void gdk_x11_window_set_user_time (IntPtr window, uint timestamp);
 
 		[DllImport (libX11)]
 		public extern static IntPtr XOpenDisplay (IntPtr display);
@@ -98,6 +101,11 @@ namespace Do.Interface.Xlib {
 		{
 			IntPtr [] dataArray = data.Select (i => (IntPtr) i).ToArray ();
 			return XChangeProperty (GdkDrawableXDisplay (window), GdkWindowX11Xid (window), property, type, 32, mode, dataArray, data.Length); 
+		}
+		
+		public static void GdkWindowSetUserTime (Gdk.Window window, uint timestamp)
+		{
+			gdk_x11_window_set_user_time (window.Handle, timestamp);
 		}
 
 	}
