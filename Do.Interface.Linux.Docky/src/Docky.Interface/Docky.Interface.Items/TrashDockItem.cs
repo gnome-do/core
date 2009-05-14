@@ -131,8 +131,8 @@ namespace Docky.Interface
 												  ButtonsType.OkCancel,
 												  Catalog.GetString ("Empty all of the items from the trash?"));
 			
-			ResponseType result = (ResponseType)md.Run ();
-			md.Destroy();
+			ResponseType result = (ResponseType) md.Run ();
+			md.Destroy ();
 
 			if (result == ResponseType.Cancel)
 				return;
