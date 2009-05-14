@@ -222,9 +222,6 @@ namespace Docky.Interface
 		{
 			RenderData = new PreviousRenderData ();
 			painter_surfaces = new Dictionary<IDockPainter, Surface> ();
-			
-			AutohideTracker.IntersectionChanged += HandleIntersectionChanged;
-			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
 		}
 		
 		void HandleActiveWindowChanged (object o, ActiveWindowChangedArgs args)

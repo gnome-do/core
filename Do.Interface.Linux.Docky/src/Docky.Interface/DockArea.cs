@@ -306,6 +306,9 @@ namespace Docky.Interface
 			Realized += (o, e) => SetParentInputMask ();
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);
 			
+			AutohideTracker.IntersectionChanged += HandleIntersectionChanged;
+			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
+			
 			StyleSet += (o, a) => { 
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);
@@ -330,6 +333,9 @@ namespace Docky.Interface
 			PopupMenu.Shown -= OnDockItemMenuShown;
 			
 			Services.Core.UniverseInitialized -= HandleUniverseInitialized;
+			
+			AutohideTracker.IntersectionChanged -= HandleIntersectionChanged;
+			Wnck.Screen.Default.ActiveWindowChanged -= HandleActiveWindowChanged;
 		}
 		
 		void BuildAnimationStateEngine ()
