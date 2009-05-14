@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 
 using Gdk;
+using Gtk;
 using Mono.Unix;
 
 using Do.Interface;
@@ -124,6 +125,18 @@ namespace Docky.Interface
 
 		void EmptyTrash ()
 		{
+			MessageDialog md = new MessageDialog (null, 
+												  DialogFlags.Modal,
+												  MessageType.Warning, 
+												  ButtonsType.OkCancel,
+												  Catalog.GetString ("Empty all of the items from the trash?"));
+			
+			ResponseType result = (ResponseType)md.Run ();
+			md.Destroy();
+
+			if (result == ResponseType.Cancel)
+				return;
+
 			// fixme, this breaks the fsw
 			if (!Directory.Exists (Trash)) return;
 			
