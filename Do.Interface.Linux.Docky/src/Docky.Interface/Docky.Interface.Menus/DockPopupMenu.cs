@@ -39,14 +39,13 @@ namespace Docky.Interface.Menus
 		public static readonly Cairo.Color BackgroundColor = new Cairo.Color (0.13, 0.13, 0.13, .95);
 		
 		const int TailHeight = 20;
+		const int TailWidth = 25;
 		new const int BorderWidth = 2;
 		const int HeaderSize = 20;
 		const int Radius = 6;
 		const int Width = 180;
-		const double Curviness = .3;
+		const double Curviness = .05;
 		const string FormatString = "<b>{0}</b>";
-		
-		const int TailWidth = 20;
 		
 		int horizontal_offset;
 		int vertical_offset;
