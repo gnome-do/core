@@ -437,7 +437,7 @@ namespace Docky.Interface
 					if (DockPreferences.Orientation == DockOrientation.Bottom)
 						cr.Translate (0, -2);
 					
-					cr.Color = new Cairo.Color (intenseS, intenseS, intenseS, .4);
+					cr.Color = new Cairo.Color (intenseS, intenseS, intenseS, .3);
 					cr.LineWidth = 1;
 					cr.Stroke ();
 				}
