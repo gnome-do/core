@@ -323,6 +323,7 @@ namespace Docky.Interface
 		public void Reset ()
 		{
 			DockState.Instance.Clear ();
+			results.Clear ();
 			interop_service.SignalReset ();
 		}
 		
