@@ -70,9 +70,7 @@ namespace Docky.Interface
 		bool CanFastRender {
 			get {
 				bool result = next_fast_render && !RenderData.ForceFullRender;
-				next_fast_render = RenderData.ZoomIn == 1 && 
-						ZoomIn == 1;
-				
+				next_fast_render = RenderData.ZoomIn == 1 && ZoomIn == 1 && !drag_resizing;
 				return result;
 			}
 		}
@@ -82,6 +80,8 @@ namespace Docky.Interface
 				return DockPreferences.ZoomEnabled && 
 					    !RenderData.ForceFullRender &&
 					    RenderData.ZoomIn == 0 &&
+						!GtkDragging &&
+						!drag_resizing &&
 						ZoomIn == 0;
 			}
 		}
