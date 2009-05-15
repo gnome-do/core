@@ -290,11 +290,8 @@ namespace Docky.Interface
 			}
 		}
 		
-		System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch ();
 		void DrawIcons (Context cr, Gdk.Rectangle dockArea)
 		{
-			sw.Reset ();
-			sw.Start ();
 			bool animationRequired = AnimationRequiresRender;
 			
 			if (CanFastRender && !animationRequired) {
@@ -365,9 +362,6 @@ namespace Docky.Interface
 			RenderData.LastCursor = Cursor;
 			RenderData.ZoomIn = ZoomIn;
 			RenderData.ForceFullRender = false;
-			
-			sw.Stop ();
-			Console.WriteLine (sw.ElapsedMilliseconds);
 		}
 		
 		void DrawIcon (Context cr, int icon, bool hovered)

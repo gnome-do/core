@@ -180,6 +180,12 @@ namespace Docky.Core.Default
 			}
 		}
 		
+		void ResetDockelts ()
+		{
+			UnregisterDocklets ();
+			RegisterDocklets ();
+		}
+		
 		void RegisterDockItem (AbstractDockItem dockItem)
 		{
 			dockItem.UpdateNeeded += HandleUpdateNeeded;
@@ -194,42 +200,43 @@ namespace Docky.Core.Default
 				(dockItem as IRightClickable).RemoveClicked -= HandleRemoveClicked;
 		}
 
-		void HandleAppletVisibilityChanged(object sender, EventArgs e)
+		void HandleAppletVisibilityChanged (object sender, EventArgs e)
 		{
+			ResetDockelts ();
 			OnDockItemsChanged ();
 		}
 
-		void HandleAutomaticIconsChanged()
+		void HandleAutomaticIconsChanged ()
 		{
 			UpdateItems ();
 		}
 		
-		void HandleRemoveClicked(object sender, EventArgs e)
+		void HandleRemoveClicked (object sender, EventArgs e)
 		{
 			if (sender is AbstractDockItem)
 				RemoveItem (sender as AbstractDockItem);
 		}
 
-		void HandleWindowOpened(object o, WindowOpenedArgs args)
+		void HandleWindowOpened (object o, WindowOpenedArgs args)
 		{
 			// we do a delayed update so that we allow a small gap for wnck to catch up
 			if (!args.Window.IsSkipTasklist)
 				DelayUpdateItems ();
 		}
 
-		void HandleWindowClosed(object o, WindowClosedArgs args)
+		void HandleWindowClosed (object o, WindowClosedArgs args)
 		{
 			if (!args.Window.IsSkipTasklist)
 				DelayUpdateItems ();
 		}
 
-		void HandleUniverseInitialized(object sender, EventArgs e)
+		void HandleUniverseInitialized (object sender, EventArgs e)
 		{
 			UpdatesEnabled = true;
 			UpdateItems ();
 		}
 		
-		void HandleUpdateNeeded(object sender, UpdateRequestArgs args)
+		void HandleUpdateNeeded (object sender, UpdateRequestArgs args)
 		{
 			if (!DockItems.Contains (args.Item))
 				return;

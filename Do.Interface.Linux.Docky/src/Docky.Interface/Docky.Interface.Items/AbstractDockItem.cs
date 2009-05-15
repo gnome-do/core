@@ -432,8 +432,30 @@ namespace Docky.Interface
 			if (size_changed_timer > 0)
 				return;
 			
-			ResetIconSurface ();
-			OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
+			if (IconSurface != null) {
+				GLib.Idle.Add (delegate {
+					switch (ScalingType) {
+					case ScalingType.HighLow:
+						IconSurface = MakeIconSurface (IconSurface, DockPreferences.FullIconSize);
+						SecondaryIconSurface = MakeIconSurface (IconSurface, DockPreferences.IconSize);
+						break;
+					case ScalingType.Downscaled:
+						IconSurface = MakeIconSurface (IconSurface, DockPreferences.FullIconSize);
+						break;
+					case ScalingType.Upscaled:
+					case ScalingType.None:
+					default:
+						IconSurface = MakeIconSurface (IconSurface, DockPreferences.IconSize);
+						break;
+					}
+					
+					OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
+					return false;
+				});
+			} else {
+				ResetIconSurface ();
+				OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
+			}
 		}
 		
 		void ResetBufferSurface ()
