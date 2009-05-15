@@ -95,7 +95,10 @@ namespace Docky.Interface
 		
 		bool SingleItemRender {
 			get {
-				return RenderData.ZoomIn == 0 && ZoomIn == 0 && RenderData.RenderItems.Count == 1;
+				return !RenderData.ForceFullRender && 
+					    RenderData.ZoomIn == 0 && 
+						ZoomIn == 0 && 
+						RenderData.RenderItems.Count == 1;
 			}
 		}
 		
