@@ -44,6 +44,11 @@ namespace Docky.Core.Default
 			if (!docklets.ContainsKey (docklet))
 				return false;
 			
+			if (docklets [docklet])
+				docklet.Disable ();
+			else
+				docklet.Enable ();
+			
 			docklets [docklet] = !docklets [docklet];
 			OnAppletVisibilityChanged ();
 			return true;
@@ -57,7 +62,13 @@ namespace Docky.Core.Default
 		
 		public IEnumerable<AbstractDockletItem> ActiveDocklets {
 			get {
-				return docklets.Where (kvp => kvp.Value).Select (kvp => kvp.Key).OrderBy (adi => adi.Name);
+				if (docklets == null)
+					yield break;
+				foreach (AbstractDockletItem adi in docklets
+				         .Where (kvp => kvp.Value)
+				         .Select (kvp => kvp.Key)
+				         .OrderBy (adi => adi.Name))
+					yield return adi;
 			}
 		}
 		
@@ -86,11 +97,18 @@ namespace Docky.Core.Default
 		
 		void BuildDocklets ()
 		{
+			// ToArray this due to lazy evaluation
+			IEnumerable<AbstractDockletItem> previous = ActiveDocklets.ToArray ();
+			
 			IEnumerable<string> visible = VisibleApplets ();
 			docklets = new Dictionary<AbstractDockletItem, bool> ();
 			
 			foreach (AbstractDockletItem adi in MADocklets) {
 				docklets.Add (adi, visible.Contains (adi.GetType ().Name));
+			}
+			
+			foreach (AbstractDockletItem adi in ActiveDocklets.Where (d => !previous.Contains (d))) {
+				adi.Enable ();
 			}
 		}
 		

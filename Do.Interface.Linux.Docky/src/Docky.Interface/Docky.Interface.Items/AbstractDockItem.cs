@@ -227,6 +227,7 @@ namespace Docky.Interface
 			double h, s, v;
 			Do.Interface.Util.Appearance.RGBToHSV (r, g, b, out h, out s, out v);
 			v = 100;
+			s = Math.Min (100, s * 1.3);
 			Do.Interface.Util.Appearance.HSVToRGB (h, s, v, out r, out g, out b);
 			
 			Cairo.Color color = new Cairo.Color ((double) r / byte.MaxValue, (double) g / byte.MaxValue, (double) b / byte.MaxValue);

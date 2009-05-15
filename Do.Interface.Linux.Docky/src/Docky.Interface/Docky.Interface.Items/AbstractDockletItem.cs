@@ -38,5 +38,13 @@ namespace Docky.Interface
 		public AbstractDockletItem()
 		{
 		}
+		
+		public virtual void Enable ()
+		{
+		}
+		
+		public virtual void Disable ()
+		{
+		}
 	}
 }
