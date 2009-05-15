@@ -132,9 +132,7 @@ namespace Docky.Interface
 		
 		void SetSensitivity ()
 		{
-			zoom_scale.Sensitive = 
-			zoom_size_label.Sensitive = 
-			DockPreferences.ZoomEnabled;
+			zoom_scale.Sensitive = DockPreferences.ZoomEnabled;
 		}
 
 		void HandleToggled (object o, ToggledArgs args)
