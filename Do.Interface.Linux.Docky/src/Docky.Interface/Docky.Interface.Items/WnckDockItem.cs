@@ -76,7 +76,9 @@ namespace Docky.Interface
 		}	
 		
 		public override bool ContainsFocusedWindow {
-			get { return VisibleWindows.Any (w => w.IsActive); }
+			get { 
+				return Windows.Any (w => w.IsActive && (!w.IsSkipTasklist || w.WindowType != Wnck.WindowType.Desktop));
+			}
 		}
 		
 		public override bool IsAcceptingDrops {
