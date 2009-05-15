@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 using Cairo;
 using Gdk;
@@ -42,6 +43,7 @@ namespace Docky.Interface
 		DockOrientation current_orientation;
 		uint size_changed_timer;
 		bool needs_attention;
+		Thread drawing_thread;
 		
 		bool time_since_click_overdue;
 		
@@ -50,6 +52,8 @@ namespace Docky.Interface
 		protected int current_size;
 
 		protected virtual Surface IconSurface { get; set; }
+		
+		protected bool ThreadedDraw { get; set; }
 		
 		Surface SecondaryIconSurface { get; set; }
 		

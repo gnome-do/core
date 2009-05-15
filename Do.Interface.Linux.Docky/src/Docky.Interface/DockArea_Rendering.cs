@@ -71,12 +71,26 @@ namespace Docky.Interface
 			get {
 				bool result = next_fast_render && !RenderData.ForceFullRender;
 				next_fast_render = RenderData.ZoomIn == 1 && 
-						ZoomIn == 1 && 
-						!AnimationState [Animations.IconInsert] &&
-						!AnimationState [Animations.UrgencyChanged] &&
-						!AnimationState [Animations.Bounce];
+						ZoomIn == 1;
 				
 				return result;
+			}
+		}
+		
+		bool CanNoRender {
+			get {
+				return DockPreferences.ZoomEnabled && 
+					    !RenderData.ForceFullRender &&
+					    RenderData.ZoomIn == 0 &&
+						ZoomIn == 0;
+			}
+		}
+		
+		bool AnimationRequiresRender {
+			get {
+				return AnimationState [Animations.IconInsert] ||
+					   AnimationState [Animations.UrgencyChanged] ||
+					   AnimationState [Animations.Bounce];
 			}
 		}
 		
@@ -276,14 +290,14 @@ namespace Docky.Interface
 			}
 		}
 		
+		System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch ();
 		void DrawIcons (Context cr, Gdk.Rectangle dockArea)
 		{
-			if (!CanFastRender) {
-				cr.AlphaFill ();
-				int index = PositionProvider.IndexAtPosition (Cursor);
-				for (int i = 0; i < DockItems.Count; i++)
-					DrawIcon (cr, i, i == index);
-			} else {
+			sw.Reset ();
+			sw.Start ();
+			bool animationRequired = AnimationRequiresRender;
+			
+			if (CanFastRender && !animationRequired) {
 				Gdk.Rectangle renderArea = Gdk.Rectangle.Zero;
 				
 				int startItemPosition;
@@ -341,11 +355,19 @@ namespace Docky.Interface
 				int index = PositionProvider.IndexAtPosition (Cursor);
 				for (int i = startItem; i <= endItem; i++)
 					DrawIcon (cr, i, i == index);
+			} else if (animationRequired || !CanNoRender) {
+				cr.AlphaFill ();
+				int index = PositionProvider.IndexAtPosition (Cursor);
+				for (int i = 0; i < DockItems.Count; i++)
+					DrawIcon (cr, i, i == index);
 			}
 			
 			RenderData.LastCursor = Cursor;
 			RenderData.ZoomIn = ZoomIn;
 			RenderData.ForceFullRender = false;
+			
+			sw.Stop ();
+			Console.WriteLine (sw.ElapsedMilliseconds);
 		}
 		
 		void DrawIcon (Context cr, int icon, bool hovered)
