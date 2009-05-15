@@ -43,6 +43,12 @@ namespace Docky.Interface
 			public bool ForceFullRender { get; set; }
 			public Gdk.Point LastCursor { get; set; }
 			public double ZoomIn { get; set; }
+			public List<AbstractDockItem> RenderItems { get; private set; }
+			
+			public PreviousRenderData ()
+			{
+				RenderItems = new List<AbstractDockItem> ();
+			}
 		}
 		
 		public static DateTime RenderTime { get; private set; }
@@ -79,10 +85,17 @@ namespace Docky.Interface
 			get {
 				return DockPreferences.ZoomEnabled && 
 					    !RenderData.ForceFullRender &&
+						RenderData.RenderItems.Count == 0 &&
 					    RenderData.ZoomIn == 0 &&
 						!GtkDragging &&
 						!drag_resizing &&
 						ZoomIn == 0;
+			}
+		}
+		
+		bool SingleItemRender {
+			get {
+				return RenderData.ZoomIn == 0 && ZoomIn == 0 && RenderData.RenderItems.Count == 1;
 			}
 		}
 		
@@ -246,7 +259,7 @@ namespace Docky.Interface
 			}
 		}
 
-		void HandleIntersectionChanged(object sender, EventArgs e)
+		void HandleIntersectionChanged (object sender, EventArgs e)
 		{
 			if (DockPreferences.AutohideType == AutohideType.Intellihide && !CursorIsOverDockArea) {
 				showhide_time = DateTime.UtcNow;
@@ -295,6 +308,8 @@ namespace Docky.Interface
 			bool animationRequired = AnimationRequiresRender;
 			
 			if (CanFastRender && !animationRequired) {
+				// We are in a zoomed in state where we can render only those icons which are moving around
+				// on screen. This only happens when zoom is enabled
 				Gdk.Rectangle renderArea = Gdk.Rectangle.Zero;
 				
 				int startItemPosition;
@@ -352,7 +367,44 @@ namespace Docky.Interface
 				int index = PositionProvider.IndexAtPosition (Cursor);
 				for (int i = startItem; i <= endItem; i++)
 					DrawIcon (cr, i, i == index);
+			} else if (!animationRequired && SingleItemRender) {
+				// A single icon for some reason needs to be drawn again. This is more or less
+				// a special case of a fast render
+				Gdk.Rectangle renderArea = Gdk.Rectangle.Zero;
+				PointD firstPosition;
+				double firstZoom;
+				
+				AbstractDockItem single = RenderData.RenderItems [0];
+				int index = DockItems.IndexOf (single);
+				
+				// set up our X value
+				IconZoomedPosition (index, out firstPosition, out firstZoom);
+				renderArea.X = (int) (firstPosition.X - (single.Width * firstZoom) / 2) - 2;
+				renderArea.Width = (int) (firstPosition.X + (single.Width * firstZoom) / 2) + 2 - renderArea.X;
+				
+				renderArea.Height = Height;
+				
+				cr.Rectangle (renderArea.X, renderArea.Y, renderArea.Width, renderArea.Height);
+				
+				// clear the areas outside the dock area
+				cr.Rectangle (0, dockArea.Y, dockArea.X, dockArea.Height);
+				cr.Rectangle (dockArea.X + dockArea.Width, dockArea.Y, Width - (dockArea.X + dockArea.Width), dockArea.Height);
+				switch (DockPreferences.Orientation) {
+				case DockOrientation.Bottom:
+					cr.Rectangle (0, 0, Width, Height - dockArea.Height);
+					break;
+				case DockOrientation.Top:
+					cr.Rectangle (0, dockArea.Height, Width, Height - dockArea.Height);
+					break;
+				}
+				cr.Operator = Operator.Clear;
+				cr.Fill ();
+				cr.Operator = Operator.Over;
+				
+				int cur = PositionProvider.IndexAtPosition (Cursor);
+				DrawIcon (cr, index, index == cur);
 			} else if (animationRequired || !CanNoRender) {
+				// we didn't fast render or single icon render, but we can't not render, so we have to do it the slow way
 				cr.AlphaFill ();
 				int index = PositionProvider.IndexAtPosition (Cursor);
 				for (int i = 0; i < DockItems.Count; i++)
@@ -362,6 +414,7 @@ namespace Docky.Interface
 			RenderData.LastCursor = Cursor;
 			RenderData.ZoomIn = ZoomIn;
 			RenderData.ForceFullRender = false;
+			RenderData.RenderItems.Clear ();
 		}
 		
 		void DrawIcon (Context cr, int icon, bool hovered)
@@ -750,6 +803,13 @@ namespace Docky.Interface
 			RequestFullRender ();
 			
 			base.OnStyleSet (previous_style);
+		}
+		
+		void RequestIconRender (AbstractDockItem item)
+		{
+			if (RenderData != null) {
+				RenderData.RenderItems.Add (item);
+			}
 		}
 		
 		void RequestFullRender ()

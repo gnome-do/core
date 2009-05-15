@@ -373,7 +373,11 @@ namespace Docky.Interface
 				});
 			}
 			
-			RequestFullRender ();
+			if (args.Type == UpdateRequestType.IconChanged || args.Type == UpdateRequestType.NameChanged) {
+				RequestIconRender (args.Item);
+			} else {
+				RequestFullRender ();
+			}
 			AnimatedDraw ();
 		}
 
