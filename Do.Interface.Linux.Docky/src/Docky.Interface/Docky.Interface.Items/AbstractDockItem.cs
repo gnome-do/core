@@ -434,21 +434,26 @@ namespace Docky.Interface
 				return;
 			
 			if (IconSurface != null) {
+				Surface similar = IconSurface;
+				Surface second = SecondaryIconSurface;
 				GLib.Idle.Add (delegate {
 					switch (ScalingType) {
 					case ScalingType.HighLow:
-						IconSurface = MakeIconSurface (IconSurface, DockPreferences.FullIconSize);
-						SecondaryIconSurface = MakeIconSurface (IconSurface, DockPreferences.IconSize);
+						IconSurface = MakeIconSurface (similar, DockPreferences.FullIconSize);
+						SecondaryIconSurface = MakeIconSurface (similar, DockPreferences.IconSize);
 						break;
 					case ScalingType.Downscaled:
-						IconSurface = MakeIconSurface (IconSurface, DockPreferences.FullIconSize);
+						IconSurface = MakeIconSurface (similar, DockPreferences.FullIconSize);
 						break;
 					case ScalingType.Upscaled:
 					case ScalingType.None:
 					default:
-						IconSurface = MakeIconSurface (IconSurface, DockPreferences.IconSize);
+						IconSurface = MakeIconSurface (similar, DockPreferences.IconSize);
 						break;
 					}
+					similar.Destroy ();
+					if (second != null)
+						second.Destroy ();
 					
 					OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
 					return false;
