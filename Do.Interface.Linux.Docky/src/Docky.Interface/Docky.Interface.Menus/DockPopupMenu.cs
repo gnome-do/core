@@ -210,7 +210,7 @@ namespace Docky.Interface.Menus
 			cr.FillPreserve ();
 			
 			LinearGradient lg = (DockPreferences.Orientation == DockOrientation.Bottom) ? 
-				new LinearGradient (0, 0, 0, rect.Height) : new LinearGradient (0, rect.Height, 0, 0);
+				new LinearGradient (0, rect.Height - TailHeight, 0, rect.Height) : new LinearGradient (0, TailHeight, 0, 0);
 			lg.AddColorStop (0, BackgroundColor);
 			lg.AddColorStop (1, new Cairo.Color (BackgroundColor.R, BackgroundColor.G, BackgroundColor.B, 0));
 			cr.Pattern = lg;
@@ -219,8 +219,8 @@ namespace Docky.Interface.Menus
 			
 			lg.Destroy ();
 			lg = (DockPreferences.Orientation == DockOrientation.Bottom) ? 
-				new LinearGradient (0, 0, 0, rect.Height) : new LinearGradient (0, rect.Height, 0, 0);
-			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .35));
+				new LinearGradient (0, rect.Height - TailHeight, 0, rect.Height) : new LinearGradient (0, TailHeight, 0, 0);
+			lg.AddColorStop (0, new Cairo.Color (1, 1, 1, .25));
 			lg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
 			cr.Pattern = lg;
 			cr.LineWidth = 1;
