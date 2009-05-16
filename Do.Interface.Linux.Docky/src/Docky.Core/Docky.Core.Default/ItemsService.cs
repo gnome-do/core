@@ -320,6 +320,9 @@ namespace Docky.Core.Default
 				
 				Dictionary<string, int> sortDictionary = ReadSortDictionary ();
 				foreach (ItemDockItem item in OrderedItems.Where (di => di is ItemDockItem)) {
+					if (item.Item == null)
+						continue;
+					
 					if (sortDictionary.ContainsKey (item.Item.UniqueId))
 						item.Position = sortDictionary [item.Item.UniqueId];
 				}
@@ -349,11 +352,13 @@ namespace Docky.Core.Default
 			
 			DateTime currentTime = DateTime.UtcNow;
 			foreach (Item item in mostUsedItems) {
-				if (local_cust.Any (di => di.Item.UniqueId == item.UniqueId))
+				if (local_cust.Any (di => di.Item != null && di.Item.UniqueId == item.UniqueId))
 					continue;
 				
 				if (old_items.Any (di => di.Item == item)) {
-					stat_items.AddRange (old_items.Where (di => di.Item.UniqueId == item.UniqueId).Cast<AbstractDockItem> ());
+					stat_items.AddRange (old_items
+					                     .Where (di => di.Item != null && di.Item.UniqueId == item.UniqueId)
+					                     .Cast<AbstractDockItem> ());
 				} else {
 					ItemDockItem di = new ItemDockItem (item);
 					RegisterDockItem (di);
@@ -495,6 +500,9 @@ namespace Docky.Core.Default
 				
 				using (StreamWriter writer = new StreamWriter (SortDictionaryPath)) {
 					foreach (ItemDockItem di in OrderedItems.Where (di => di is ItemDockItem)) {
+						if (di.Item == null)
+							continue;
+						
 						writer.WriteLine ("{0}|{1}", di.Item.UniqueId, di.Position);
 					}
 				}
@@ -763,10 +771,13 @@ namespace Docky.Core.Default
 			
 			if (DockItems [item].WindowCount == 0) {
 				if (GetIconSource (DockItems [item]) == IconSource.Statistics && DockItems [item] is ItemDockItem) {
-					DockPreferences.AddBlacklistItem ((DockItems [item] as ItemDockItem).Item.UniqueId);
-					DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
-					UpdateItems ();
-					ret_val = true;
+					ItemDockItem di = (DockItems [item] as ItemDockItem);
+					if (di.Item != null) {
+						DockPreferences.AddBlacklistItem ((DockItems [item] as ItemDockItem).Item.UniqueId);
+						DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
+						UpdateItems ();
+						ret_val = true;
+					}
 				} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
 					foreach (KeyValuePair<string, AbstractDockItem> kvp in custom_items) {
 						if (kvp.Value.Equals (DockItems [item])) {
