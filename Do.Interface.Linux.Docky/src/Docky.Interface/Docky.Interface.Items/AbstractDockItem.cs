@@ -41,7 +41,7 @@ namespace Docky.Interface
 		
 		Surface text_surface, resize_buffer;
 		DockOrientation current_orientation;
-		uint size_changed_timer;
+		uint size_changed_timer, redraw_timer;
 		bool needs_attention;
 		
 		bool time_since_click_overdue;
@@ -430,30 +430,33 @@ namespace Docky.Interface
 				return;
 			
 			if (IconSurface != null) {
-				Surface similar = IconSurface;
-				Surface second = SecondaryIconSurface;
-				GLib.Idle.Add (delegate {
-					switch (ScalingType) {
-					case ScalingType.HighLow:
-						IconSurface = MakeIconSurface (similar, DockPreferences.FullIconSize);
-						SecondaryIconSurface = MakeIconSurface (similar, DockPreferences.IconSize);
-						break;
-					case ScalingType.Downscaled:
-						IconSurface = MakeIconSurface (similar, DockPreferences.FullIconSize);
-						break;
-					case ScalingType.Upscaled:
-					case ScalingType.None:
-					default:
-						IconSurface = MakeIconSurface (similar, DockPreferences.IconSize);
-						break;
-					}
-					similar.Destroy ();
-					if (second != null)
-						second.Destroy ();
-					
-					OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
-					return false;
-				});
+				if (redraw_timer == 0) {
+					Surface similar = IconSurface;
+					Surface second = SecondaryIconSurface;
+					redraw_timer = GLib.Idle.Add (delegate {
+						switch (ScalingType) {
+						case ScalingType.HighLow:
+							IconSurface = MakeIconSurface (similar, DockPreferences.FullIconSize);
+							SecondaryIconSurface = MakeIconSurface (similar, DockPreferences.IconSize);
+							break;
+						case ScalingType.Downscaled:
+							IconSurface = MakeIconSurface (similar, DockPreferences.FullIconSize);
+							break;
+						case ScalingType.Upscaled:
+						case ScalingType.None:
+						default:
+							IconSurface = MakeIconSurface (similar, DockPreferences.IconSize);
+							break;
+						}
+						similar.Destroy ();
+						if (second != null)
+							second.Destroy ();
+						
+						OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
+						redraw_timer = 0;
+						return false;
+					});
+				}
 			} else {
 				ResetIconSurface ();
 				OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
