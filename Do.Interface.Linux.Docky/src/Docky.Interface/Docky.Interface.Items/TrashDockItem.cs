@@ -72,6 +72,11 @@ namespace Docky.Interface
 
 			SetText (Catalog.GetString ("Trash"));
 			
+			SetupFileSystemWatch ();
+		}
+		
+		void SetupFileSystemWatch ()
+		{
 			fsw = new FileSystemWatcher (Trash);
 			fsw.IncludeSubdirectories = false;
 			fsw.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
@@ -98,7 +103,6 @@ namespace Docky.Interface
 			if (!File.Exists (item) && !Directory.Exists (item))
 				return false;
 			
-			Console.WriteLine (item);
 			try {
 				Services.Environment.Execute (string.Format ("gvfs-trash \"{0}\"", item));
 			} catch (Exception e) { 
@@ -125,6 +129,9 @@ namespace Docky.Interface
 
 		void EmptyTrash ()
 		{
+			fsw.Dispose ();
+			fsw = null;
+			
 			string message = Catalog.GetString ("<big><b>Empty all of the items from the trash?</b></big>\n\n" + 
 			                                    "If you choose to empty the trash, all items in it\nwill be permanently lost. " + 
 			                                    "Please note that you\ncan also delete them separately.");
@@ -133,7 +140,6 @@ namespace Docky.Interface
 												  MessageType.Warning, 
 												  ButtonsType.None,
 												  message);
-			
 			md.AddButton ("_Cancel", ResponseType.Cancel);
 			md.AddButton ("Empty _Trash", ResponseType.Ok);
 
@@ -149,11 +155,11 @@ namespace Docky.Interface
 			try {
 				Directory.Delete (Trash, true);
 				Directory.CreateDirectory (Trash);
-			} catch { }
+			} catch { 
+				// we dont give a rats ass
+			}
 				
-			// we have now changed the inode and need to get the fsw to reflect this...
-			fsw.Path = "/tmp";
-			fsw.Path = Trash;
+			SetupFileSystemWatch ();
 			
 			RedrawIcon ();
 		}

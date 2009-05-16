@@ -276,7 +276,7 @@ namespace Docky.Interface
 
 		Surface CopySurface (Surface source, int width, int height)
 		{
-			Surface sr = source.CreateSimilar (source.Content, width, height);
+			Surface sr = source.CreateSimilar (Cairo.Content.ColorAlpha, width, height);
 			using (Context cr = new Context (sr)) {
 				source.Show (cr, 0, 0);
 			}
@@ -354,7 +354,7 @@ namespace Docky.Interface
 		protected virtual Surface MakeIconSurface (Surface similar, int size)
 		{
 			current_size = size;
-			Surface tmp_surface = similar.CreateSimilar (similar.Content, size, size);
+			Surface tmp_surface = similar.CreateSimilar (Cairo.Content.ColorAlpha, size, size);
 			Context cr = new Context (tmp_surface);
 			
 			Gdk.Pixbuf pbuf = GetSurfacePixbuf (size);
@@ -390,7 +390,7 @@ namespace Docky.Interface
 				if (resize_buffer == null)
 					resize_buffer = CopySurface (IconSurface, current_size, current_size);
 				
-				Surface new_surface = resize_buffer.CreateSimilar (resize_buffer.Content, 
+				Surface new_surface = resize_buffer.CreateSimilar (Cairo.Content.ColorAlpha, 
 				                                                  DockPreferences.FullIconSize, 
 				                                                  DockPreferences.FullIconSize);
 				using (Context cr = new Context (new_surface)) {

@@ -63,7 +63,7 @@ namespace Docky.Interface
 		{
 			actualSize = DockPreferences.IconSize;
 			if (sr == null) {
-				sr = buffer.CreateSimilar (buffer.Content, Width, Height);
+				sr = buffer.CreateSimilar (Cairo.Content.ColorAlpha, Width, Height);
 				Context cr = new Context (sr);
 				cr.AlphaFill ();
 

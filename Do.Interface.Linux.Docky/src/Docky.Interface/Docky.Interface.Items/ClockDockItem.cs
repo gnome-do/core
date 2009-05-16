@@ -93,7 +93,7 @@ namespace Docky.Interface
 
 		protected override Surface MakeIconSurface (Cairo.Surface similar, int size)
 		{
-			Surface tmp_surface = similar.CreateSimilar (similar.Content, size, size);
+			Surface tmp_surface = similar.CreateSimilar (Cairo.Content.ColorAlpha, size, size);
 			
 			using (Context cr = new Context (tmp_surface)) {
 				cr.AlphaFill ();
