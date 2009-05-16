@@ -125,12 +125,18 @@ namespace Docky.Interface
 
 		void EmptyTrash ()
 		{
+			string message = Catalog.GetString ("<big><b>Empty all of the items from the trash?</b></big>\n\n" + 
+			                                    "If you choose to empty the trash, all items in it\nwill be permanently lost. " + 
+			                                    "Please note that you\ncan also delete them separately.");
 			MessageDialog md = new MessageDialog (null, 
 												  DialogFlags.Modal,
 												  MessageType.Warning, 
-												  ButtonsType.OkCancel,
-												  Catalog.GetString ("Empty all of the items from the trash?"));
+												  ButtonsType.None,
+												  message);
 			
+			md.AddButton ("_Cancel", ResponseType.Cancel);
+			md.AddButton ("Empty _Trash", ResponseType.Ok);
+
 			ResponseType result = (ResponseType) md.Run ();
 			md.Destroy ();
 
