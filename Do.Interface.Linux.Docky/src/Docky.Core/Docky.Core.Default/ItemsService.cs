@@ -220,12 +220,14 @@ namespace Docky.Core.Default
 		void HandleWindowOpened (object o, WindowOpenedArgs args)
 		{
 			// we do a delayed update so that we allow a small gap for wnck to catch up
-			DelayUpdateItems ();
+			if (args.Window.Pid != System.Diagnostics.Process.GetCurrentProcess ().Id)
+				DelayUpdateItems ();
 		}
 
 		void HandleWindowClosed (object o, WindowClosedArgs args)
 		{
-			DelayUpdateItems ();
+			if (args.Window.Pid != System.Diagnostics.Process.GetCurrentProcess ().Id)
+				DelayUpdateItems ();
 		}
 
 		void HandleUniverseInitialized (object sender, EventArgs e)
