@@ -57,7 +57,7 @@ namespace Docky.Interface
 		const int UrgentIndicatorSize = 12;
 		
 		Dictionary<IDockPainter, Surface> painter_surfaces;
-		bool next_fast_render, first_render_set, last_intersect;
+		bool next_fast_render, first_render_set;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
@@ -130,7 +130,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		bool Hidden {
+		bool IsHidden {
 			get {
 				bool hidden = false;
 				switch (DockPreferences.AutohideType) {
@@ -201,7 +201,7 @@ namespace Docky.Interface
 				}
 
 				if (PainterOpacity > 0) {
-					if (!Hidden) {
+					if (!IsHidden) {
 						return 0;
 					} else {
 						offset = Math.Min (1, (RenderTime - showhide_time).TotalMilliseconds / 
@@ -216,7 +216,7 @@ namespace Docky.Interface
 				} else {
 					offset = Math.Min (1, (RenderTime - showhide_time).TotalMilliseconds / 
 					                   SummonTime.TotalMilliseconds);
-					if (!Hidden)
+					if (!IsHidden)
 						offset = 1 - offset;
 				}
 				return (int) (offset * PositionProvider.DockHeight * 1.5);
@@ -290,7 +290,7 @@ namespace Docky.Interface
 				cr.PaintWithAlpha (PainterOpacity);
 			}
 			
-			bool isNotSummonTransition = PainterOpacity == 0 || !Hidden || !DockPreferences.AutoHide;
+			bool isNotSummonTransition = PainterOpacity == 0 || !IsHidden || !DockPreferences.AutoHide;
 			if (DockIconOpacity > 0 && isNotSummonTransition) {
 				if (dock_icon_buffer == null)
 					dock_icon_buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
@@ -476,7 +476,6 @@ namespace Docky.Interface
 				}
 				
 				if (DockPreferences.IndicateActiveWindow && dockItem.ContainsFocusedWindow) {
-					double intenseF = 0.7;
 					double intenseS = 0.8;
 					
 					double xHigh = iconPosition.X - 1.5;

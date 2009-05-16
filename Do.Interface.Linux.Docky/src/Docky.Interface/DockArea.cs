@@ -172,7 +172,7 @@ namespace Docky.Interface
 					dockRegion.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
 					CursorIsOverDockArea = dockRegion.Contains (cursor);
 				} else {
-					if (Hidden) {
+					if (IsHidden) {
 						switch (DockPreferences.Orientation) {
 						case DockOrientation.Bottom:
 							dockRegion.Y += dockRegion.Height - 1;
@@ -769,7 +769,7 @@ namespace Docky.Interface
 				offset = GetDockArea ().Height;
 				offset = offset * 2 + 10;
 			} else {
-				if (Hidden && !drag_resizing) {
+				if (IsHidden && !drag_resizing) {
 					offset = 1;
 				} else {
 					offset = GetDockArea ().Height;

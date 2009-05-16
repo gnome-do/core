@@ -43,7 +43,6 @@ namespace Docky.Interface
 		DockOrientation current_orientation;
 		uint size_changed_timer;
 		bool needs_attention;
-		Thread drawing_thread;
 		
 		bool time_since_click_overdue;
 		
@@ -52,8 +51,6 @@ namespace Docky.Interface
 		protected int current_size;
 
 		protected virtual Surface IconSurface { get; set; }
-		
-		protected bool ThreadedDraw { get; set; }
 		
 		Surface SecondaryIconSurface { get; set; }
 		
@@ -190,7 +187,7 @@ namespace Docky.Interface
 			sr.Finish ();
 			
 			byte [] data = sr.Data;
-			byte a, r, g, b;
+			byte r, g, b;
 			
 			double rTotal = 0;
 			double gTotal = 0;
@@ -200,7 +197,6 @@ namespace Docky.Interface
 				b = data [i + 0];
 				g = data [i + 1];
 				r = data [i + 2];
-				a = data [i + 3];
 				
 				byte max = Math.Max (r, Math.Max (g, b));
 				byte min = Math.Min (r, Math.Min (g, b));
