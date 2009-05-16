@@ -220,13 +220,13 @@ namespace Docky.Core.Default
 		void HandleWindowOpened (object o, WindowOpenedArgs args)
 		{
 			// we do a delayed update so that we allow a small gap for wnck to catch up
-			if (args.Window.Pid != System.Diagnostics.Process.GetCurrentProcess ().Id)
+			if (!args.Window.IsSkipTasklist || args.Window.Pid != System.Diagnostics.Process.GetCurrentProcess ().Id)
 				DelayUpdateItems ();
 		}
 
 		void HandleWindowClosed (object o, WindowClosedArgs args)
 		{
-			if (args.Window.Pid != System.Diagnostics.Process.GetCurrentProcess ().Id)
+			if (!args.Window.IsSkipTasklist || args.Window.Pid != System.Diagnostics.Process.GetCurrentProcess ().Id)
 				DelayUpdateItems ();
 		}
 
