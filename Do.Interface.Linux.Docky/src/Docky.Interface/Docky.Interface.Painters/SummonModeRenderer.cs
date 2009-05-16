@@ -67,6 +67,12 @@ namespace Docky.Interface.Painters
 				return (int) (DockPreferences.IconSize * 3.5);
 			}
 		}
+		
+		TimeSpan RenderBuffer {
+			get {
+				return DockArea.BaseAnimationTime.Add (new TimeSpan (0, 0, 0, 0, 50));
+			}
+		}
 
 		public bool DoubleBuffer {
 			get { return true; }
@@ -109,8 +115,8 @@ namespace Docky.Interface.Painters
 			if (PaintNeeded != null) {
 				paint = true;
 				PaintNeededArgs args;
-				if (DateTime.UtcNow - DockState.Instance.CurrentPaneTime < DockArea.BaseAnimationTime) 
-					args = new PaintNeededArgs (DockArea.BaseAnimationTime);
+				if (DateTime.UtcNow - DockState.Instance.CurrentPaneTime < RenderBuffer) 
+					args = new PaintNeededArgs (RenderBuffer);
 				else
 					args = new PaintNeededArgs ();
 				PaintNeeded (this, args);
@@ -161,9 +167,7 @@ namespace Docky.Interface.Painters
 			
 		public void Paint (Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
-			if (previous_area == dockArea && 
-			    !paint && 
-			    DateTime.UtcNow - DockState.Instance.CurrentPaneTime > DockArea.BaseAnimationTime) {
+			if (previous_area == dockArea && !paint && DateTime.UtcNow - DockState.Instance.CurrentPaneTime > RenderBuffer) {
 				previous_area = dockArea;
 				return;
 			}

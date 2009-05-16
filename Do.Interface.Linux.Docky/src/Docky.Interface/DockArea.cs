@@ -59,6 +59,9 @@ namespace Docky.Interface
 		DateTime last_draw_timeout = new DateTime (0);
 		DateTime cursor_update = new DateTime (0);
 		DateTime showhide_time = new DateTime (0);
+		DateTime painter_time = new DateTime (0);
+		
+		TimeSpan painter_span;
 		
 		bool disposed;
 		
@@ -431,12 +434,10 @@ namespace Docky.Interface
 			if (sender != Painter && sender != LastPainter) return;
 			
 			if (args.Animated) {
-				if (AnimationState.Contains (Animations.Painter))
-					AnimationState.RemoveCondition (Animations.Painter);
-				TimeSpan span = args.AnimationLength;
-				
-				DateTime current_time = DateTime.UtcNow;
-				AnimationState.AddCondition (Animations.Painter, () => DateTime.UtcNow - current_time < span);
+				painter_span = args.AnimationLength;
+				painter_time = DateTime.UtcNow;
+				if (!AnimationState.Contains (Animations.Painter))
+					AnimationState.AddCondition (Animations.Painter, () => DateTime.UtcNow - painter_time < painter_span);
 			}
 			AnimatedDraw ();
 		}
