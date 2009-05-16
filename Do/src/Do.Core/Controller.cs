@@ -603,10 +603,10 @@ namespace Do.Core
 
 			if (SearchController.TextType == TextModeType.Explicit) {
 				SearchController.FinalizeTextMode ();
-				UpdatePane (CurrentPane);
 			}
 				
 			NextPane ();
+			UpdatePane (CurrentPane);
 		}
 
 		void OnShiftTabKeyPressEvent (EventKey evnt)
@@ -616,9 +616,9 @@ namespace Do.Core
 
 			if (SearchController.TextType == TextModeType.Explicit) {
 				SearchController.FinalizeTextMode ();
-				UpdatePane (CurrentPane);
 			}
 			PrevPane ();
+			UpdatePane (CurrentPane);
 		}
 			
 		
