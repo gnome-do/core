@@ -478,9 +478,9 @@ namespace Docky.Interface
 				if (DockPreferences.IndicateActiveWindow && dockItem.ContainsFocusedWindow) {
 					double intenseS = 0.8;
 					
-					double xHigh = Math.Round (iconPosition.X) - 1.5;
+					double xHigh = Math.Floor (iconPosition.X) - 1.5;
 					double yHigh = MinimumDockArea.Y;
-					double widthHigh = Math.Round (dockItem.Width * zoom) + 3;
+					double widthHigh = Math.Ceiling (dockItem.Width * zoom) + 3;
 					cr.Rectangle (xHigh, yHigh, widthHigh, DockHeight);
 					
 					LinearGradient lg;
