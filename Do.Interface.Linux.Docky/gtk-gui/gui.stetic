@@ -185,7 +185,7 @@
                           <widget class="Gtk.Label" id="orientation_label1">
                             <property name="MemberName" />
                             <property name="Xalign">0</property>
-                            <property name="LabelProp" translatable="yes">Automatic Hiding:</property>
+                            <property name="LabelProp" translatable="yes">Hiding:</property>
                           </widget>
                           <packing>
                             <property name="TopAttach">1</property>

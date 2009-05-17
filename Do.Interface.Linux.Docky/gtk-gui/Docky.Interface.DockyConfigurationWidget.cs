@@ -147,7 +147,7 @@ namespace Docky.Interface {
             this.orientation_label1 = new Gtk.Label();
             this.orientation_label1.Name = "orientation_label1";
             this.orientation_label1.Xalign = 0F;
-            this.orientation_label1.LabelProp = Mono.Unix.Catalog.GetString("Automatic Hiding:");
+            this.orientation_label1.LabelProp = Mono.Unix.Catalog.GetString("Hiding:");
             this.table1.Add(this.orientation_label1);
             Gtk.Table.TableChild w7 = ((Gtk.Table.TableChild)(this.table1[this.orientation_label1]));
             w7.TopAttach = ((uint)(1));
