@@ -53,8 +53,8 @@ namespace Do
 	internal static class AssemblyInfo
 	{
 		public const string DisplayVersion = "0.8.1.2";
-		public const string VersionDetails = "bzr do r1147";
-		public const string LocaleDirectory = "/usr/share/locale";
+		public const string VersionDetails = "bzr install-log r1163";
+		public const string LocaleDirectory = "/usr/local/share/locale";
 	}
 }
 
