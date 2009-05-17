@@ -90,7 +90,8 @@ namespace Do.Core
 			IEnumerable<string> saved, manual;
 			
 			manual = Directory.GetFiles (Paths.UserAddinInstallationDirectory, "*.dll")
-				.Select (s => Path.GetFileName (s));
+				.Select (s => Path.GetFileName (s))
+				.ForEach (dll => Log.Debug ("Installing {0}", dll));
 			
 			AddinManager.Registry.Rebuild (null);
 			saved = AddinManager.Registry.GetAddins ()
@@ -98,6 +99,7 @@ namespace Do.Core
 				.Select (addin => addin.Id);
 				
 			EnableDisabledPlugins (saved);
+			manual.ForEach (dll => File.Delete (dll));
 		}
 
 		public static bool PluginClassifiesAs (AddinRepositoryEntry entry, string className)
