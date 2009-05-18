@@ -326,20 +326,30 @@ namespace Docky.Interface
 				int startItem = PositionProvider.IndexAtPosition (startItemPosition, Cursor.Y);
 				int endItem = PositionProvider.IndexAtPosition (endItemPosition, Cursor.Y);
 				
+				int maxClamp = DockItems.Count - 1;
+				
+				startItem = startItem == -1 ? 0 : startItem;
+				endItem = endItem == -1 ? maxClamp : endItem;
+				
+				// these are special cases that we dont want to fall on edges (unless they are the clamps... clamps)
+				if (DockItems [startItem].ContainsFocusedWindow)
+					startItem = Math.Max (0, startItem - 1);
+				
+				if (DockItems [endItem].ContainsFocusedWindow)
+					endItem = Math.Min (maxClamp, endItem + 1);
+				
 				PointD firstPosition, lastPosition;
 				double firstZoom, lastZoom;
 				
 				// set up our X value
-				if (startItem == -1) {
-					startItem = 0;
+				if (startItem == 0) {
 					renderArea.X = dockArea.X;
 				} else {
 					IconZoomedPosition (startItem, out firstPosition, out firstZoom);
 					renderArea.X = (int) (firstPosition.X - (DockItems [startItem].Width * firstZoom) / 2) - 2;
 				}
 				
-				if (endItem == -1) {
-					endItem = DockItems.Count - 1;
+				if (endItem == maxClamp) {
 					renderArea.Width = dockArea.Width - (renderArea.X - dockArea.X);
 				} else {
 					IconZoomedPosition (endItem, out lastPosition, out lastZoom);
@@ -478,9 +488,9 @@ namespace Docky.Interface
 				if (DockPreferences.IndicateActiveWindow && dockItem.ContainsFocusedWindow) {
 					double intenseS = 0.8;
 					
-					double xHigh = Math.Floor (iconPosition.X) - 1.5;
+					double xHigh = iconPosition.X - 1.5;
 					double yHigh = MinimumDockArea.Y;
-					double widthHigh = Math.Ceiling (dockItem.Width * zoom) + 3;
+					double widthHigh = dockItem.Width * zoom + 3;
 					cr.Rectangle (xHigh, yHigh, widthHigh, DockHeight);
 					
 					LinearGradient lg;
