@@ -428,11 +428,10 @@ namespace Docky.Interface
 		{
 			if (size_changed_timer > 0 || redraw_timer > 0)
 				return;
-			
 			if (IconSurface != null) {
-				Surface similar = IconSurface;
-				Surface second = SecondaryIconSurface;
 				redraw_timer = GLib.Idle.Add (delegate {
+					Surface similar = IconSurface;
+					Surface second = SecondaryIconSurface;
 					if (similar != null) {
 						switch (ScalingType) {
 						case ScalingType.HighLow:
