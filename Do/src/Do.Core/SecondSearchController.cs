@@ -274,6 +274,15 @@ namespace Do.Core
 				context.Results = GetContextResults ();
 			}
 			base.OnSearchFinished (true, true, Selection, Query);
-		}	
+		}
+		
+		protected override bool AcceptChildItem (Item item)
+		{
+			if (FirstController.Selection is Act) {
+				Act action = FirstController.Selection as Act;
+				return action.Safe.SupportsItem (item);
+			}
+			return true;
+		}
 	}
 }

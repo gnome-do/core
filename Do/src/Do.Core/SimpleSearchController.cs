@@ -195,7 +195,7 @@ namespace Do.Core
 			List<Element> children = new List<Element> ();
 
 			foreach (ItemSource source in PluginManager.ItemSources) {
-				foreach (Element child in source.Safe.ChildrenOfItem (item))
+				foreach (Element child in source.Safe.ChildrenOfItem (item).Where (i => AcceptChildItem (i)))
 					children.Add (child);
 			}
 			
@@ -211,6 +211,11 @@ namespace Do.Core
 				.ToList ();
 
 			OnSearchFinished (true, context.ParentContext.Query != context.Query, Selection, Query);
+			return true;
+		}
+		
+		protected virtual bool AcceptChildItem (Item item)
+		{
 			return true;
 		}
 		

@@ -223,6 +223,12 @@ namespace Do.Core
 			context.Query = str;
 			BuildNewContextFromQuery ();
 		}
+		
+		public bool ItemChildSearch ()
+		{
+			return base.ItemChildSearch ();
+		}
+
 
 		private void BuildNewContextFromQuery ()
 		{
@@ -239,5 +245,17 @@ namespace Do.Core
 			}
 			base.OnSearchFinished (true, true, Selection, Query);
 		}	
+		
+		protected override bool AcceptChildItem (Item item)
+		{
+			if (FirstController.Selection is Act) {
+				Act action = FirstController.Selection as Act;
+				return action.Safe.SupportsItem (item);
+			} else if (SecondController.Selection is Act) {
+				Act action = SecondController.Selection as Act;
+				return action.Safe.SupportsItem (item);
+			}
+			return true;
+		}
 	}
 }
