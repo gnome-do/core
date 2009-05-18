@@ -426,14 +426,14 @@ namespace Docky.Interface
 
 		protected void RedrawIcon ()
 		{
-			if (size_changed_timer > 0)
+			if (size_changed_timer > 0 || redraw_timer > 0)
 				return;
 			
 			if (IconSurface != null) {
-				if (redraw_timer == 0) {
-					Surface similar = IconSurface;
-					Surface second = SecondaryIconSurface;
-					redraw_timer = GLib.Idle.Add (delegate {
+				Surface similar = IconSurface;
+				Surface second = SecondaryIconSurface;
+				redraw_timer = GLib.Idle.Add (delegate {
+					if (similar != null) {
 						switch (ScalingType) {
 						case ScalingType.HighLow:
 							IconSurface = MakeIconSurface (similar, DockPreferences.FullIconSize);
@@ -451,12 +451,12 @@ namespace Docky.Interface
 						similar.Destroy ();
 						if (second != null)
 							second.Destroy ();
-						
-						OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
-						redraw_timer = 0;
-						return false;
-					});
-				}
+					}
+					
+					OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
+					redraw_timer = 0;
+					return false;
+				});
 			} else {
 				ResetIconSurface ();
 				OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
