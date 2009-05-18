@@ -432,7 +432,10 @@ namespace Docky.Interface
 				redraw_timer = GLib.Idle.Add (delegate {
 					Surface similar = IconSurface;
 					Surface second = SecondaryIconSurface;
-					if (similar != null) {
+					IconSurface = null;
+					SecondaryIconSurface = null;
+					
+					if (similar != null && ((similar.Status & Cairo.Status.SurfaceFinished) != Cairo.Status.SurfaceFinished)) {
 						switch (ScalingType) {
 						case ScalingType.HighLow:
 							IconSurface = MakeIconSurface (similar, DockPreferences.FullIconSize);
@@ -440,19 +443,19 @@ namespace Docky.Interface
 							break;
 						case ScalingType.Downscaled:
 							IconSurface = MakeIconSurface (similar, DockPreferences.FullIconSize);
-							SecondaryIconSurface = null;
 							break;
 						case ScalingType.Upscaled:
 						case ScalingType.None:
 						default:
 							IconSurface = MakeIconSurface (similar, DockPreferences.IconSize);
-							SecondaryIconSurface = null;
 							break;
 						}
-						similar.Destroy ();
-						if (second != null)
-							second.Destroy ();
 					}
+					
+					if (similar != null)
+						similar.Destroy ();
+					if (second != null)
+						second.Destroy ();
 					
 					OnUpdateNeeded (new UpdateRequestArgs (this, UpdateRequestType.IconChanged));
 					redraw_timer = 0;
