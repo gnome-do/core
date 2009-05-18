@@ -441,11 +441,13 @@ namespace Docky.Interface
 							break;
 						case ScalingType.Downscaled:
 							IconSurface = MakeIconSurface (similar, DockPreferences.FullIconSize);
+							SecondaryIconSurface = null;
 							break;
 						case ScalingType.Upscaled:
 						case ScalingType.None:
 						default:
 							IconSurface = MakeIconSurface (similar, DockPreferences.IconSize);
+							SecondaryIconSurface = null;
 							break;
 						}
 						similar.Destroy ();
