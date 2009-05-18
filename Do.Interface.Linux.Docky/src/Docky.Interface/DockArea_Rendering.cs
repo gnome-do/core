@@ -332,7 +332,7 @@ namespace Docky.Interface
 				endItem = endItem == -1 ? maxClamp : endItem;
 				
 				// these are special cases that we dont want to fall on edges (unless they are the clamps... clamps)
-				if (DockItems [startItem].ContainsFocusedWindow)
+				if (startItem > 0 && DockItems [startItem - 1].ContainsFocusedWindow)
 					startItem = Math.Max (0, startItem - 1);
 				
 				if (DockItems [endItem].ContainsFocusedWindow)
