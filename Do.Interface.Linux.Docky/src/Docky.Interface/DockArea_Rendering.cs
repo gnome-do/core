@@ -75,7 +75,7 @@ namespace Docky.Interface
 
 		bool CanFastRender {
 			get {
-				bool result = next_fast_render && !RenderData.ForceFullRender;
+				bool result = next_fast_render && !RenderData.ForceFullRender && RenderData.RenderItems.Count == 0;
 				next_fast_render = RenderData.ZoomIn == 1 && ZoomIn == 1 && !drag_resizing;
 				return result;
 			}

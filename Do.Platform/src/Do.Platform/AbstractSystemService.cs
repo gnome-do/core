@@ -26,6 +26,14 @@ namespace Do.Platform
 	
 	public abstract class AbstractSystemService : IService
 	{		
+		public event EventHandler OnBatteryChanged;
+		
+		protected void OnOnBatteryChanged ()
+		{
+			if (OnBatteryChanged != null)
+				OnBatteryChanged (this, EventArgs.Empty);
+		}
+		
 		public virtual bool GetOnBatteryPower ()
 		{
 			return false;

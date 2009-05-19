@@ -33,35 +33,48 @@ namespace Do.Platform.Linux
 	
 	public class SystemService : AbstractSystemService, IController, IInitializedService
 	{
-
+		delegate void BoolDelegate (bool val);
+		
 		const string PowerManagementName = "org.freedesktop.PowerManagement";
 		const string PowerManagementPath = "/org/freedesktop/PowerManagement";
 		const string AutoStartKey = "Hidden";
 		
-		DesktopItem autostartfile;
-
 		[Interface(PowerManagementName)]
 		interface IPowerManagement
 		{
 			bool GetOnBattery ();
+			event BoolDelegate OnBatteryChanged;
 		}
+		
+		IPowerManagement power;
+		DesktopItem autostartfile;
 		
 		public void Initialize ()
 		{
 			try {
 				BusG.Init ();
+				if (Bus.Session.NameHasOwner (PowerManagementName)) {
+					power = Bus.Session.GetObject<IPowerManagement> (PowerManagementName, new ObjectPath (PowerManagementPath));
+					power.OnBatteryChanged += PowerOnBatteryChanged;
+				}
 			} catch (Exception e) {
 				Log<SystemService>.Error ("Could not initialize dbus: {0}", e.Message);
 				Log<SystemService>.Debug (e.StackTrace);
 			}
 		}
+
+		void PowerOnBatteryChanged (bool val)
+		{
+			OnOnBatteryChanged ();
+		}
 	
 		public override bool GetOnBatteryPower ()
 		{
 			try {
-				if (!Bus.Session.NameHasOwner (PowerManagementName))
+				if (power == null && !Bus.Session.NameHasOwner (PowerManagementName))
 					return false;
-				IPowerManagement power = Bus.Session.GetObject<IPowerManagement> (PowerManagementName, new ObjectPath (PowerManagementPath));
+				if (power == null)
+					power = Bus.Session.GetObject<IPowerManagement> (PowerManagementName, new ObjectPath (PowerManagementPath));
 				return power.GetOnBattery ();
 			} catch (Exception e) {
 				Log<SystemService>.Error ("Could not GetOnBattery: {0}", e.Message);
