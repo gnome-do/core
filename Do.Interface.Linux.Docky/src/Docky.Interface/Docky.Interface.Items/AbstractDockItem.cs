@@ -184,7 +184,6 @@ namespace Docky.Interface
 			}
 			
 			sr.Flush ();
-			sr.Finish ();
 			
 			byte [] data;
 			try {
