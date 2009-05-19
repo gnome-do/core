@@ -25,6 +25,7 @@ using Cairo;
 using Do.Interface;
 
 using Docky.Core;
+using Docky.Core.Default;
 using Docky.Interface;
 using Docky.Utilities;
 
@@ -170,12 +171,14 @@ namespace Docky.Interface.Painters
 		
 		protected void OnShowRequested ()
 		{
+			(DockServices.DockletService as DockletService).SignalDockletSummoned ();
 			if (ShowRequested != null)
 				ShowRequested (this, EventArgs.Empty);
 		}
 		
 		protected void OnHideRequested ()
 		{
+			(DockServices.DockletService as DockletService).SignalDockletVanished ();
 			if (HideRequested != null)
 				HideRequested (this, EventArgs.Empty);
 		}

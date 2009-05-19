@@ -27,7 +27,9 @@ namespace Docky.Core
 	public interface IDockletService : IDockService
 	{
 		event EventHandler AppletVisibilityChanged;
-		
+		event EventHandler DockletSummoned;
+		event EventHandler DockletVanished;
+
 		IEnumerable<AbstractDockletItem> Docklets { get; }
 		
 		IEnumerable<AbstractDockletItem> ActiveDocklets { get; }

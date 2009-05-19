@@ -100,12 +100,16 @@ namespace Docky.Interface
 		{
 			DockServices.DoInteropService.Summoned += HandleSummoned;
 			DockServices.DoInteropService.Vanished += HandleVanished;
+			DockServices.DockletService.DockletSummoned += HandleSummoned;
+			DockServices.DockletService.DockletVanished += HandleVanished;
 		}
 
 		void UnregisterEvents ()
 		{
 			DockServices.DoInteropService.Summoned -= HandleSummoned;
 			DockServices.DoInteropService.Vanished -= HandleVanished;
+			DockServices.DockletService.DockletSummoned -= HandleSummoned;
+			DockServices.DockletService.DockletVanished -= HandleVanished;
 		}
 		
 		public override void SetIconRegion (Gdk.Rectangle region)
