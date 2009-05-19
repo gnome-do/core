@@ -186,7 +186,12 @@ namespace Docky.Interface
 			sr.Flush ();
 			sr.Finish ();
 			
-			byte [] data = sr.Data;
+			byte [] data;
+			try {
+				data = sr.Data;
+			} catch {
+				return new Cairo.Color (1, 1, 1, 1);
+			}
 			byte r, g, b;
 			
 			double rTotal = 0;
