@@ -38,22 +38,6 @@ namespace Docky.Core.Default
 		#region IDockletService implementation 
 		
 		public event EventHandler AppletVisibilityChanged;
-
-		public event EventHandler DockletSummoned;
-
-		public event EventHandler DockletVanished;
-
-		public void SignalDockletSummoned ()
-		{
-			if (DockletSummoned != null)
-				DockletSummoned (this, EventArgs.Empty);
-		}
-
-		public void SignalDockletVanished ()
-		{
-			if (DockletVanished != null)
-				DockletVanished (this, EventArgs.Empty);
-		}
 		
 		public bool ToggleDocklet (AbstractDockletItem docklet)
 		{
