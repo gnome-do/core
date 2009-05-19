@@ -103,6 +103,7 @@ namespace Docky.Interface.Painters
 		
 		public virtual void Interrupt ()
 		{
+			OnHideRequested ();
 		}
 		
 		public void Paint (Cairo.Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)

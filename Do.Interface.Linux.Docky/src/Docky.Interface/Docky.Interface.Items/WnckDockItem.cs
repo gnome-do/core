@@ -98,18 +98,14 @@ namespace Docky.Interface
 
 		void RegisterEvents ()
 		{
-			DockServices.DoInteropService.Summoned += HandleSummoned;
-			DockServices.DoInteropService.Vanished += HandleVanished;
-			DockServices.DockletService.DockletSummoned += HandleSummoned;
-			DockServices.DockletService.DockletVanished += HandleVanished;
+			DockServices.PainterService.PainterShowRequest += HandleShowRequest;
+			DockServices.PainterService.PainterHideRequest += HandleHideRequest;
 		}
 
 		void UnregisterEvents ()
 		{
-			DockServices.DoInteropService.Summoned -= HandleSummoned;
-			DockServices.DoInteropService.Vanished -= HandleVanished;
-			DockServices.DockletService.DockletSummoned -= HandleSummoned;
-			DockServices.DockletService.DockletVanished -= HandleVanished;
+			DockServices.PainterService.PainterShowRequest -= HandleShowRequest;
+			DockServices.PainterService.PainterHideRequest -= HandleHideRequest;
 		}
 		
 		public override void SetIconRegion (Gdk.Rectangle region)
@@ -183,12 +179,12 @@ namespace Docky.Interface
 			base.Clicked (button, state, position);
 		}
 
-		public void HandleSummoned (object sender, EventArgs e)
+		public void HandleShowRequest (object sender, EventArgs e)
 		{
 			VisibleWindows.ForEach (w => w.SetIconGeometry (0, 0, 0, 0));
 		}
 
-		public void HandleVanished (object sender, EventArgs e)
+		public void HandleHideRequest (object sender, EventArgs e)
 		{
 			SetIconRegionFromCache ();
 		}
