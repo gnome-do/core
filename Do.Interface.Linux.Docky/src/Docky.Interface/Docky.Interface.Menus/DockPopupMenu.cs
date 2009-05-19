@@ -146,7 +146,7 @@ namespace Docky.Interface.Menus
 			if (postion.X < geo.X) {
 				horizontal_offset = geo.X - postion.X;
 			} else if (postion.X + req.Width > geo.X + geo.Width) {
-				horizontal_offset = postion.X + req.Width - geo.X - geo.Width;
+				horizontal_offset = (geo.X + geo.Width) - (postion.X + req.Width);
 			}
 			
 			postion.X += horizontal_offset;
@@ -275,6 +275,7 @@ namespace Docky.Interface.Menus
 				Gdk.Point vertex = new Gdk.Point ();
 				vertex.X = mainArea.X + mainArea.Width / 2;
 				vertex.Y = mainArea.Y - TailHeight;
+				vertex.X -= horizontal_offset;
 				
 				Gdk.Point top = new Gdk.Point (vertex.X, vertex.Y + TailHeight);
 				
@@ -288,6 +289,7 @@ namespace Docky.Interface.Menus
 				Gdk.Point vertex = new Gdk.Point ();
 				vertex.X = mainArea.X + mainArea.Width / 2;
 				vertex.Y = mainArea.Y + mainArea.Height + TailHeight;
+				vertex.X -= horizontal_offset;
 				
 				Gdk.Point top = new Gdk.Point (vertex.X, vertex.Y - TailHeight);
 				
