@@ -58,6 +58,8 @@ namespace Docky.Interface
 		
 		public bool Disposed { get; private set; }
 		
+		public Gdk.Rectangle TextSurfaceSize { get; private set; }
+		
 		/// <value>
 		/// The currently requested animation type
 		/// </value>
@@ -347,10 +349,13 @@ namespace Docky.Interface
 					text_surface.Destroy ();
 				
 				current_orientation = DockPreferences.Orientation;
+				Gdk.Rectangle rect;
 				text_surface = Util.GetBorderedTextSurface (GLib.Markup.EscapeText (Description), 
 				                                            DockPreferences.TextWidth, 
 				                                            similar, 
-				                                            current_orientation);
+				                                            current_orientation,
+				                                            out rect);
+				TextSurfaceSize = rect;
 			}
 			return text_surface;
 		}

@@ -54,11 +54,6 @@ namespace Docky.Interface
 		const int Height = 35;
 		const string FormatString = "<span weight=\"600\">{0}</span>";
 		
-		public static Surface GetBorderedTextSurface (string text, int maxWidth, Surface similar) 
-		{
-			return GetBorderedTextSurface (text, maxWidth, similar, DockOrientation.Bottom);
-		}
-		
 		/// <summary>
 		/// Gets a surface containing a transparent black rounded rectangle with the provided text on top.
 		/// </summary>
@@ -75,7 +70,7 @@ namespace Docky.Interface
 		/// A <see cref="Surface"/>
 		/// </returns>
 		public static Surface GetBorderedTextSurface (string text, int maxWidth, Surface similar, 
-		                                              DockOrientation orientation)
+		                                              DockOrientation orientation, out Gdk.Rectangle size)
 		{
 			Surface sr;
 			// we are going to give ourselves a bit of a buffer due to pango weirdness
@@ -89,8 +84,12 @@ namespace Docky.Interface
 			Gdk.Rectangle textArea = Core.DockServices.DrawingService.TextPathAtPoint (textContext);
 			cr.NewPath ();
 			
+			size = new Gdk.Rectangle (0, 0, textArea.Width + 20, Height);
+			textContext.MaximumWidth = textArea.Width;
+			
+			
 			int localHeight = textArea.Height;
-			cr.SetRoundedRectanglePath (textArea.X + .5, .5, textArea.Width + 20 - 1, localHeight + 10 - 1, 5);
+			cr.SetRoundedRectanglePath (.5, .5, textArea.Width + 20 - 1, localHeight + 10 - 1, 5);
 			
 			cr.Color = new Cairo.Color (0.1, 0.1, 0.1, .75);
 			cr.FillPreserve ();

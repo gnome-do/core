@@ -584,17 +584,21 @@ namespace Docky.Interface
 			// a null.  This allows us to draw nothing at all instead of rendering a
 			// blank surface (which is slow)
 			if (!PopupMenu.Visible && hovered &&
-			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && !GtkDragging && !drag_resizing) {
+			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && 
+			    !GtkDragging && !drag_resizing) {
 
 				Gdk.Point textPoint;
-				textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (DockPreferences.TextWidth >> 1);
+				Gdk.Rectangle monitor = LayoutUtils.MonitorGemonetry ();
+				Surface textSurface = dockItem.GetTextSurface (cr.Target);
+				textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (dockItem.TextSurfaceSize.Width >> 1);
+				textPoint.X = Math.Max (monitor.X, Math.Min (monitor.X + monitor.Width - dockItem.TextSurfaceSize.Width, textPoint.X));
 				
 				if (DockPreferences.Orientation == DockOrientation.Top)
 					textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 10;
 				else
 					textPoint.Y = Height - (int) (DockPreferences.ZoomPercent * IconSize) - 38;
 				
-				dockItem.GetTextSurface (cr.Target).Show (cr, textPoint.X, textPoint.Y);
+				textSurface.Show (cr, textPoint.X, textPoint.Y);
 			}
 		}
 		
