@@ -34,7 +34,7 @@ namespace Docky.Interface.Painters
 	
 	public abstract class AbstractIntegratedPainter : IDockPainter
 	{
-		const int BorderSize = 10;
+		protected const int BorderSize = 10;
 		int buffer_height = 0;
 		
 		Surface icon_surface, buffer;
@@ -48,7 +48,10 @@ namespace Docky.Interface.Painters
 		
 		protected abstract void PaintArea (Cairo.Context context, Gdk.Rectangle paintableArea);
 		
-		protected abstract void ReceiveClick (Gdk.Rectangle paintArea, Gdk.Point cursor);
+		protected virtual bool ReceiveClick (Gdk.Rectangle paintArea, Gdk.Point cursor)
+		{
+			return true;
+		}
 		
 		#region IDockPainter implementation 
 		
@@ -60,7 +63,8 @@ namespace Docky.Interface.Painters
 		
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
-			OnHideRequested ();
+			if (!dockArea.Contains (cursor) || ReceiveClick (dockArea, new Gdk.Point (cursor.X - dockArea.Left, cursor.Y - dockArea.Top)))
+				OnHideRequested ();
 		}
 		
 		public virtual bool DoubleBuffer {
@@ -102,6 +106,7 @@ namespace Docky.Interface.Painters
 		
 		public virtual void Interrupt ()
 		{
+			OnHideRequested ();
 		}
 		
 		public void Paint (Cairo.Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor)
