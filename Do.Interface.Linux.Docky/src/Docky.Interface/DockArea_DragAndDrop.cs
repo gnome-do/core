@@ -200,7 +200,7 @@ namespace Docky.Interface
 		protected override bool OnDragDrop (Gdk.DragContext context, int x, int y, uint time)
 		{
 			int index = PositionProvider.IndexAtPosition (Cursor);
-			if (CursorIsOverDockArea && index >= 0 && index < DockItems.Count) {
+			if (CursorIsOverDockArea && index >= 0 && index < DockItems.Count && uri_list != null) {
 				foreach (string uri in uri_list) {
 					if (CurrentDockItem != null && CurrentDockItem.IsAcceptingDrops && !uri.EndsWith (".desktop")) {
 						CurrentDockItem.ReceiveItem (uri);
