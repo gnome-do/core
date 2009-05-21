@@ -99,7 +99,6 @@ namespace Do.Interface.AnimationBase {
             this.shadow_check.CanFocus = true;
             this.shadow_check.Name = "shadow_check";
             this.shadow_check.Label = Mono.Unix.Catalog.GetString("Show window shadow");
-            this.shadow_check.Active = false;
             this.shadow_check.DrawIndicator = true;
             this.shadow_check.UseUnderline = true;
             this.vbox4.Add(this.shadow_check);
@@ -112,6 +111,7 @@ namespace Do.Interface.AnimationBase {
             this.animation_check.CanFocus = true;
             this.animation_check.Name = "animation_check";
             this.animation_check.Label = Mono.Unix.Catalog.GetString("Animate window");
+            this.animation_check.Active = true;
             this.animation_check.DrawIndicator = true;
             this.animation_check.UseUnderline = true;
             this.vbox4.Add(this.animation_check);

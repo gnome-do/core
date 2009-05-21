@@ -86,7 +86,6 @@ namespace Docky.Interface {
             this.active_window_checkbox.CanFocus = true;
             this.active_window_checkbox.Name = "active_window_checkbox";
             this.active_window_checkbox.Label = Mono.Unix.Catalog.GetString("Indicate Active Window");
-            this.active_window_checkbox.Active = false;
             this.active_window_checkbox.DrawIndicator = true;
             this.active_window_checkbox.UseUnderline = true;
             this.table1.Add(this.active_window_checkbox);
@@ -101,7 +100,6 @@ namespace Docky.Interface {
             this.advanced_indicators_checkbutton.CanFocus = true;
             this.advanced_indicators_checkbutton.Name = "advanced_indicators_checkbutton";
             this.advanced_indicators_checkbutton.Label = Mono.Unix.Catalog.GetString("Indicate Multiple Windows");
-            this.advanced_indicators_checkbutton.Active = false;
             this.advanced_indicators_checkbutton.DrawIndicator = true;
             this.advanced_indicators_checkbutton.UseUnderline = true;
             this.table1.Add(this.advanced_indicators_checkbutton);
@@ -193,7 +191,6 @@ namespace Docky.Interface {
             this.zoom_checkbutton.CanFocus = true;
             this.zoom_checkbutton.Name = "zoom_checkbutton";
             this.zoom_checkbutton.Label = Mono.Unix.Catalog.GetString("Zoom");
-            this.zoom_checkbutton.Active = false;
             this.zoom_checkbutton.DrawIndicator = true;
             this.zoom_checkbutton.UseUnderline = true;
             this.table1.Add(this.zoom_checkbutton);

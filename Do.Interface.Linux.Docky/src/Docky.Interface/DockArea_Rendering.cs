@@ -309,6 +309,7 @@ namespace Docky.Interface
 		void DrawIcons (Context cr, Gdk.Rectangle dockArea)
 		{
 			bool animationRequired = AnimationRequiresRender;
+			int index = PositionProvider.IndexAtPosition (Cursor);
 			
 			if (CanFastRender && !animationRequired) {
 				// We are in a zoomed in state where we can render only those icons which are moving around
@@ -377,9 +378,15 @@ namespace Docky.Interface
 				cr.Fill ();
 				cr.Operator = Operator.Over;
 				
-				int index = PositionProvider.IndexAtPosition (Cursor);
-				for (int i = startItem; i <= endItem; i++)
-					DrawIcon (cr, i, i == index);
+				for (int i = startItem; i <= endItem; i++) {
+					if (i == index)
+						continue;
+					DrawIcon (cr, i, false);
+				}
+				// draw hovered item last, for the sake of making sure its on top in certain animations
+				if (index >= startItem && index <= endItem)
+					DrawIcon (cr, index, true);
+				
 			} else if (!animationRequired && SingleItemRender) {
 				// A single icon for some reason needs to be drawn again. This is more or less
 				// a special case of a fast render
@@ -388,10 +395,10 @@ namespace Docky.Interface
 				double firstZoom;
 				
 				AbstractDockItem single = RenderData.RenderItems [0];
-				int index = DockItems.IndexOf (single);
+				int singleIndex = DockItems.IndexOf (single);
 				
 				// set up our X value
-				IconZoomedPosition (index, out firstPosition, out firstZoom);
+				IconZoomedPosition (singleIndex, out firstPosition, out firstZoom);
 				renderArea.X = (int) (firstPosition.X - (single.Width * firstZoom) / 2) - 2;
 				renderArea.Width = (int) (firstPosition.X + (single.Width * firstZoom) / 2) + 2 - renderArea.X;
 				
@@ -414,14 +421,19 @@ namespace Docky.Interface
 				cr.Fill ();
 				cr.Operator = Operator.Over;
 				
-				int cur = PositionProvider.IndexAtPosition (Cursor);
-				DrawIcon (cr, index, index == cur);
+				DrawIcon (cr, singleIndex, index == singleIndex);
 			} else if (animationRequired || !CanNoRender) {
 				// we didn't fast render or single icon render, but we can't not render, so we have to do it the slow way
 				cr.AlphaFill ();
-				int index = PositionProvider.IndexAtPosition (Cursor);
-				for (int i = 0; i < DockItems.Count; i++)
-					DrawIcon (cr, i, i == index);
+				
+				for (int i = 0; i < DockItems.Count; i++) {
+					if (i == index)
+						continue;
+					DrawIcon (cr, i, false);
+				}
+				// draw hovered item last, for the sake of making sure its on top in certain animations
+				if (index >= 0 && index < DockItems.Count)
+					DrawIcon (cr, index, true);
 			}
 			
 			RenderData.LastCursor = Cursor;
