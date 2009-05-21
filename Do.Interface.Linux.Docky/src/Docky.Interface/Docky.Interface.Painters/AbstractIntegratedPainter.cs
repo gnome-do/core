@@ -34,7 +34,7 @@ namespace Docky.Interface.Painters
 	
 	public abstract class AbstractIntegratedPainter : IDockPainter
 	{
-		protected const int BorderSize = 10;
+		protected int BorderSize { get { return 10; } }
 		int buffer_height = 0;
 		
 		Surface icon_surface, buffer;
