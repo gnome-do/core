@@ -72,8 +72,8 @@ namespace Docky.Interface
 				cr.MoveTo (Width / 2 - .5, 0);
 				cr.LineTo (Width / 2 - .5, Height);
 				RadialGradient rg = new RadialGradient (Width / 2, Height / 2, 0, Width / 2, Height / 2, Height / 2);
-				rg.AddColorStop (0, new Cairo.Color (1, 1, 1, .3));
-				rg.AddColorStop (0.3, new Cairo.Color (1, 1, 1, .3));
+				rg.AddColorStop (0, new Cairo.Color (1, 1, 1, .4));
+				rg.AddColorStop (0.3, new Cairo.Color (1, 1, 1, .4));
 				rg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
 				cr.Pattern = rg;
 				cr.Stroke ();
@@ -83,9 +83,9 @@ namespace Docky.Interface
 				cr.MoveTo (Width / 2 + .5, 0);
 				cr.LineTo (Width / 2 + .5, Height);
 				rg = new RadialGradient (Width / 2, Height / 2, 0, Width / 2, Height / 2, Height / 2);
-				rg.AddColorStop (0, new Cairo.Color (1, 1, 1, .15));
-				rg.AddColorStop (0.3, new Cairo.Color (1, 1, 1, .15));
-				rg.AddColorStop (1, new Cairo.Color (1, 1, 1, 0));
+				rg.AddColorStop (0, new Cairo.Color (0, 0, 0, .5));
+				rg.AddColorStop (0.3, new Cairo.Color (0, 0, 0, .5));
+				rg.AddColorStop (1, new Cairo.Color (0, 0, 0, 0));
 				cr.Pattern = rg;
 				cr.Stroke ();
 				
