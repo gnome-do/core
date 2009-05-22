@@ -606,7 +606,7 @@ namespace Docky.Interface
 				Gdk.Rectangle monitor = LayoutUtils.MonitorGemonetry ();
 				Surface textSurface = dockItem.GetTextSurface (cr.Target);
 				textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (dockItem.TextSurfaceSize.Width >> 1);
-				textPoint.X = Math.Max (monitor.X, Math.Min (monitor.X + monitor.Width - dockItem.TextSurfaceSize.Width, textPoint.X));
+				textPoint.X = Math.Max (0, Math.Min (Width - dockItem.TextSurfaceSize.Width, textPoint.X));
 				
 				if (DockPreferences.Orientation == DockOrientation.Top)
 					textPoint.Y = (int) (DockPreferences.ZoomPercent * IconSize) + 10;
