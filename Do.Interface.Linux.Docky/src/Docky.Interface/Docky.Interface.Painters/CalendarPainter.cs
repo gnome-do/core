@@ -80,11 +80,6 @@ namespace Docky.Interface.Painters
 				RenderLine (cr, paintArea, i);
 		}
 		
-		protected override void ReceiveClick (Gdk.Rectangle paintArea, Gdk.Point cursor)
-		{
-			OnHideRequested ();
-		}
-		
 		#endregion 
 		
 		void RenderHeader (Context cr, Gdk.Rectangle paintArea)
