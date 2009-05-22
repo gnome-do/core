@@ -63,7 +63,10 @@ namespace Docky.Interface.Painters
 		
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
-			if (!dockArea.Contains (cursor) || ReceiveClick (dockArea, new Gdk.Point (cursor.X - dockArea.Left, cursor.Y - dockArea.Top)))
+			Gdk.Rectangle paintArea = new Gdk.Rectangle (0, 0, Width, dockArea.Height);
+			Gdk.Point paintAreaCursor = new Gdk.Point (cursor.X - dockArea.Left, cursor.Y - dockArea.Top);
+
+			if (!paintArea.Contains (paintAreaCursor) || ReceiveClick (paintArea, paintAreaCursor))
 				OnHideRequested ();
 		}
 		
