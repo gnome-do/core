@@ -325,6 +325,8 @@ namespace Docky.Interface
 
 		void StartDrag ()
 		{
+			if (PainterOverlayVisible) return;
+			
 			drag_start_point = Cursor;
 			drag_start_icon_size = DockPreferences.IconSize;
 			drag_resizing = true;
@@ -333,6 +335,8 @@ namespace Docky.Interface
 		
 		void EndDrag ()
 		{
+			if (PainterOverlayVisible) return;
+			
 			drag_edge = DragEdge.None;
 			drag_resizing = false;
 			
