@@ -57,7 +57,7 @@ namespace Docky.Interface
 		const int UrgentIndicatorSize = 12;
 		
 		Dictionary<IDockPainter, Surface> painter_surfaces;
-		bool next_fast_render, first_render_set;
+		bool next_fast_render, first_render_set, last_no_render;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
@@ -83,13 +83,16 @@ namespace Docky.Interface
 		
 		bool CanNoRender {
 			get {
-				return DockPreferences.ZoomEnabled && 
+				bool result = DockPreferences.ZoomEnabled && 
 					    !RenderData.ForceFullRender &&
 						RenderData.RenderItems.Count == 0 &&
 					    RenderData.ZoomIn == 0 &&
 						!GtkDragging &&
 						!drag_resizing &&
 						ZoomIn == 0;
+				bool tmp = last_no_render;
+				last_no_render = result;
+				return result && tmp;
 			}
 		}
 		
