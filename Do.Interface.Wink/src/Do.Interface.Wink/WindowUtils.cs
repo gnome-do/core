@@ -32,6 +32,14 @@ namespace Do.Interface.Wink
 	
 	public static class WindowUtils
 	{
+		enum OpenOfficeProducts {
+			Writer,
+			Calc,
+			Base,
+			Math,
+			Impress,
+		}
+		
 		static string RemapFile {
 			get { return Path.Combine (Services.Paths.UserDataDirectory, "RemapFile"); }
 		}
@@ -262,6 +270,11 @@ namespace Do.Interface.Wink
 			if (string.IsNullOrEmpty (exec))
 				return windows;
 			
+			// open office hakk
+			if (exec.Contains ("ooffice")) {
+				return GetOpenOfficeWindows (exec);
+			}
+			
 			exec = ProcessExecString (exec);
 			if (string.IsNullOrEmpty (exec))
 				return windows;
@@ -286,6 +299,23 @@ namespace Do.Interface.Wink
 			}
 			
 			return windows;
+		}
+		
+		static List<Window> GetOpenOfficeWindows (string exec)
+		{
+			if (exec.Contains ("writer")) {
+				return GetWindows ().Where ((Wnck.Window w) => w.Name.Contains ("OpenOffice.org Writer")).ToList ();
+			} else if (exec.Contains ("math")) {
+				return GetWindows ().Where ((Wnck.Window w) => w.Name.Contains ("OpenOffice.org Math")).ToList ();
+			} else if (exec.Contains ("calc")) {
+				return GetWindows ().Where ((Wnck.Window w) => w.Name.Contains ("OpenOffice.org Calc")).ToList ();
+			} else if (exec.Contains ("impress")) {
+				return GetWindows ().Where ((Wnck.Window w) => w.Name.Contains ("OpenOffice.org Impress")).ToList ();
+			} else if (exec.Contains ("draw")) {
+				return GetWindows ().Where ((Wnck.Window w) => w.Name.Contains ("OpenOffice.org Draw")).ToList ();
+			} else {
+				return new List<Window> (0);
+			}
 		}
 		
 		/// <summary>
