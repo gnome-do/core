@@ -205,8 +205,10 @@ namespace Docky.Interface.Menus
 		
 		public override void Dispose ()
 		{
-			Widget.Destroy ();
-			Pixbuf.Dispose ();
+			if (Widget != null)
+				Widget.Destroy ();
+			if (Pixbuf != null)
+				Pixbuf.Dispose ();
 			base.Dispose ();
 		}
 
