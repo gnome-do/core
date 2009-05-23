@@ -59,6 +59,12 @@ namespace Docky.Interface
 			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
 			Wnck.Screen.Default.WindowClosed += WnckScreenDefaultWindowClosed;
 			Wnck.Screen.Default.WindowOpened += WnckScreenDefaultWindowOpened;
+			Wnck.Screen.Default.ViewportsChanged +=HandleViewportsChanged; 
+		}
+
+		void HandleViewportsChanged (object sender, EventArgs e)
+		{
+			UpdateWindowIntersect ();
 		}
 
 		void WnckScreenDefaultWindowOpened (object o, WindowOpenedArgs args)
@@ -150,6 +156,7 @@ namespace Docky.Interface
 			Wnck.Screen.Default.WindowClosed -= WnckScreenDefaultWindowClosed;
 			Wnck.Screen.Default.WindowOpened -= WnckScreenDefaultWindowOpened;
 			Wnck.Screen.Default.ActiveWindow.GeometryChanged -= HandleGeometryChanged;
+			Wnck.Screen.Default.ViewportsChanged -= HandleViewportsChanged; 
 		}
 		#endregion
 
