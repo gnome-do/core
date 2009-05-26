@@ -164,13 +164,6 @@ namespace Docky.Interface
 			return false;
 		}
 		
-		public override Pixbuf GetDragPixbuf ()
-		{
-			if (drag_pixbuf == null)
-				drag_pixbuf = IconProvider.PixbufFromIconName (Icon, DockPreferences.FullIconSize);
-			return drag_pixbuf;
-		}
-		
 		public override void HotSeatRequested ()
 		{
 			if (WindowCount == 0) return;

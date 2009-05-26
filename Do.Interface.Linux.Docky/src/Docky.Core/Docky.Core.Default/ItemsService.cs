@@ -54,6 +54,10 @@ namespace Docky.Core.Default
 		
 		bool CustomItemsRead { get; set; }
 		
+		IEnumerable<AbstractDockItem> Docklets {
+			get { return DockServices.DockletService.ActiveDocklets.Cast<AbstractDockItem> (); }
+		}
+		
 		//// <value>
 		/// Our main menu.  We only ever need one so we will store it here
 		/// </value>
@@ -326,6 +330,10 @@ namespace Docky.Core.Default
 					if (sortDictionary.ContainsKey (item.Item.UniqueId))
 						item.Position = sortDictionary [item.Item.UniqueId];
 				}
+				foreach (AbstractDockItem item in Docklets) {
+					if (sortDictionary.ContainsKey (item.GetType ().FullName))
+					    item.Position = sortDictionary [item.GetType ().FullName];
+				}
 				
 				CustomItemsRead = true;
 			} else {
@@ -334,6 +342,7 @@ namespace Docky.Core.Default
 			
 			UpdateTaskItems ();
 			SimplifyPositions (OrderedItems);
+			SimplifyPositions (Docklets);
 			
 			OnDockItemsChanged ();
 		}
@@ -366,7 +375,7 @@ namespace Docky.Core.Default
 					
 					int position = LastPosition + 1;
 
-					//TODO fixme once mono 1.9 support is dropped
+					// TODO fixme once mono 1.9 support is dropped
 					if (old_items.Any ())
 						position += old_items.Max ((Func<ItemDockItem, int>) (oi => oi.Position));
 
@@ -505,6 +514,9 @@ namespace Docky.Core.Default
 						
 						writer.WriteLine ("{0}|{1}", di.Item.UniqueId, di.Position);
 					}
+					foreach (AbstractDockItem di in Docklets) {
+						writer.WriteLine ("{0}|{1}", di.GetType ().FullName, di.Position);
+					}
 				}
 			} catch (Exception e) {
 				Log<ItemsService>.Error ("Could not write out sort items");
@@ -566,7 +578,7 @@ namespace Docky.Core.Default
 		#region Random Useful Functions
 		bool ItemCanInteractWithPosition (AbstractDockItem item, int position)
 		{
-			return DockItems.Contains (item) && 0 <= position && position < DockItems.Count;
+			return (DockItems.Contains (item) || Docklets.Contains (item)) && position >= 0 && position < DockItems.Count; 
 		}
 		
 		/// <summary>
@@ -615,7 +627,9 @@ namespace Docky.Core.Default
 					// add a separator and any docklets that are active
 					if (DockServices.DockletService.ActiveDocklets.Any ()) {
 						output_items.Add (Separator);
-						output_items.AddRange (DockServices.DockletService.ActiveDocklets.Cast<AbstractDockItem> ());
+						output_items.AddRange (Docklets
+						                       .Cast<AbstractDockItem> ()
+						                       .OrderBy (docklet => docklet.Position));
 					}
 				}
 				return readonly_output_items;
@@ -657,7 +671,7 @@ namespace Docky.Core.Default
 			if (item < 0 || item > DockItems.Count)
 				return false;
 			
-			return (OrderedItems.Contains (DockItems [item]));
+			return (OrderedItems.Contains (DockItems [item]) || Docklets.Contains (DockItems [item]));
 		}
 		
 		public void DropItemOnPosition (AbstractDockItem item, int position)
@@ -710,7 +724,10 @@ namespace Docky.Core.Default
 			IconSource itemSource = GetIconSource (DockItems [item]);
 			IconSource targetSource = GetIconSource (DockItems [position]);
 			
-			if (itemSource == IconSource.Unknown || targetSource == IconSource.Unknown)
+			if (itemSource == IconSource.Unknown || 
+			    targetSource == IconSource.Unknown || 
+			    (itemSource == IconSource.Docklet && targetSource != IconSource.Docklet) ||
+			    (itemSource != IconSource.Docklet && targetSource == IconSource.Docklet))
 				return;
 			
 			AbstractDockItem primaryItem = DockItems [item];
@@ -719,7 +736,13 @@ namespace Docky.Core.Default
 			int startPosition = primaryItem.Position;
 			int targetPosition = targetItem.Position;
 			
-			foreach (AbstractDockItem di in OrderedItems) {
+			IEnumerable<AbstractDockItem> itemSet;
+			if (itemSource == IconSource.Docklet)
+				itemSet = Docklets;
+			else
+				itemSet = OrderedItems;
+			
+			foreach (AbstractDockItem di in itemSet) {
 				if (startPosition < targetPosition) {
 					// the item is being shifted to the right.  Everything greater than item up to and including target item
 					// needs to be shifted to the left
@@ -754,6 +777,9 @@ namespace Docky.Core.Default
 			
 			if (custom_items.Values.Contains (item))
 				return IconSource.Custom;
+			
+			if (Docklets.Contains (item))
+				return IconSource.Docklet;
 			
 			return IconSource.Unknown;
 		}

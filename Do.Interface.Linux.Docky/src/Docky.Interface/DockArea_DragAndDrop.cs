@@ -112,7 +112,8 @@ namespace Docky.Interface
 		void RegisterGtkDragSource ()
 		{
 			gtk_drag_source_set = true;
-			TargetEntry te = new TargetEntry ("text/uri-list", TargetFlags.OtherApp | TargetFlags.App, 0);
+			// we dont really want to offer the drag to anything, merely pretend to, so we set a mimetype nothing takes
+			TargetEntry te = new TargetEntry ("nomatch", TargetFlags.App | TargetFlags.OtherApp, 0);
 			Gtk.Drag.SourceSet (this, Gdk.ModifierType.Button1Mask, new [] {te}, DragAction.Copy);
 		}
 		
@@ -216,7 +217,7 @@ namespace Docky.Interface
 			Gtk.Drag.Finish (context, true, true, time);
 			return base.OnDragDrop (context, x, y, time);
 		}
-
+		
 		protected override void OnDragDataReceived (Gdk.DragContext context, int x, int y, 
 		                                            Gtk.SelectionData selectionData, uint info, uint time)
 		{
@@ -272,7 +273,12 @@ namespace Docky.Interface
 				if (currentPosition != -1)
 					DockServices.ItemsService.DropItemOnPosition (DragState.DragItem, currentPosition);
 			} else {
-				DockServices.ItemsService.RemoveItem (DragState.DragItem);
+				bool result = DockServices.ItemsService.RemoveItem (DragState.DragItem);
+				if (result) {
+					PoofWindow poof = new PoofWindow (DockPreferences.FullIconSize);
+					poof.SetCenterPosition (Cursor.RelativePointToRootPoint (window));
+					poof.Run ();
+				}
 			}
 			
 			DragState.IsFinished = true;
@@ -281,6 +287,12 @@ namespace Docky.Interface
 			
 			AnimatedDraw ();
 			base.OnDragEnd (context);
+		}
+		
+		protected override bool OnDragFailed (Gdk.DragContext drag_context, Gtk.DragResult drag_result)
+		{
+			// disable the animation
+			return true;
 		}
 		
 		void BuildDragAndDrop ()

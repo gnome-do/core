@@ -66,6 +66,7 @@ FILES = \
 	src/Docky.Interface/ItemPositionProvider.cs \
 	src/Docky.Interface/LayoutUtils.cs \
 	src/Docky.Interface/PaintNeededArgs.cs \
+	src/Docky.Interface/PoofWindow.cs \
 	src/Docky.Interface/TextRenderContext.cs \
 	src/Docky.Interface/UpdateRequestArgs.cs \
 	src/Docky.Interface/Util.cs \
@@ -77,6 +78,7 @@ FILES = \
 RESOURCES = \
 	gtk-gui/gui.stetic \
 	Resources/Do.Interface.Linux.Docky.addin.xml \
+	Resources/poof.png \
 	Resources/close.svg \
 	Resources/run.svg \
 	Resources/minimize.svg \

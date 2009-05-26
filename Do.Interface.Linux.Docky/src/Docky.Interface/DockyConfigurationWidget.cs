@@ -203,5 +203,10 @@ namespace Docky.Interface
 			}
 		}
 
+		protected virtual void OnClearRemovedButtonClicked (object sender, System.EventArgs e)
+		{
+			DockPreferences.ClearBlacklist ();
+			DockServices.ItemsService.ForceUpdate ();
+		}
 	}
 }

@@ -250,6 +250,12 @@ namespace Docky.Utilities
 			item_blacklist.Remove (item);
 			SerializeBlacklist ();
 		}
+		
+		public static void ClearBlacklist ()
+		{
+			item_blacklist.Clear ();
+			SerializeBlacklist ();
+		}
 
 		static string BlacklistFile {
 			get {

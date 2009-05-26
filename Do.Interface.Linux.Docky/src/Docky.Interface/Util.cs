@@ -36,6 +36,7 @@ namespace Docky.Interface
 		Statistics,
 		Custom,
 		Application,
+		Docklet,
 		Unknown,
 	}
 	

@@ -92,6 +92,7 @@
     <File name="gtk-gui/Docky.Interface.DockyConfigurationWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Utilities/AutohideType.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/AutohideTracker.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/PoofWindow.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

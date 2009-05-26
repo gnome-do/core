@@ -159,54 +159,8 @@ namespace Docky.Interface
 				return cursor;
 			}
 			set {
-				bool cursorIsOverDockArea = CursorIsOverDockArea;
 				cursor = value;
-
-				// We set this value here instead of dynamically checking due to performance constraints.
-				// Ideally our CursorIsOverDockArea getter would do this fairly simple calculation, but it gets
-				// called about 20 to 30 times per render loop, so the savings do add up.
-				Gdk.Rectangle dockRegion;
-				if (PainterOverlayVisible)
-					dockRegion = GetDockArea ();
-				else
-					dockRegion = MinimumDockArea;
-				
-				if (cursorIsOverDockArea) {
-					dockRegion.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
-					CursorIsOverDockArea = dockRegion.Contains (cursor);
-				} else {
-					if (IsHidden) {
-						switch (DockPreferences.Orientation) {
-						case DockOrientation.Bottom:
-							dockRegion.Y += dockRegion.Height - 1;
-							dockRegion.Height = 1;
-							break;
-						case DockOrientation.Top:
-							dockRegion.Height = 1;
-							break;
-						}
-					}
-					
-					CursorIsOverDockArea = dockRegion.Contains (cursor);
-				}
-				
-				bool codChange = CursorIsOverDockArea != cursorIsOverDockArea;
-				// When we change over this boundry, it will normally trigger an animation, we need to be sure to catch it
-				if (codChange) {
-					ResetCursorTimer ();
-					enter_time = DateTime.UtcNow;
-					switch (DockPreferences.AutohideType) {
-					case AutohideType.Autohide:
-						showhide_time = enter_time;
-						break;
-					case AutohideType.Intellihide:
-						if (WindowIntersectingOther)
-							showhide_time = enter_time;
-						break;
-					}
-					AnimatedDraw ();
-				}
-				
+				UpdateCursorIsOverDockArea ();
 				DragCursorUpdate ();
 			}
 		}
@@ -509,6 +463,52 @@ namespace Docky.Interface
 			return true;
 		}
 		
+		void UpdateCursorIsOverDockArea ()
+		{
+			bool tmp = CursorIsOverDockArea;
+			
+			Gdk.Rectangle dockRegion;
+			if (PainterOverlayVisible)
+				dockRegion = GetDockArea ();
+			else
+				dockRegion = MinimumDockArea;
+			
+			if (tmp) {
+				dockRegion.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
+				CursorIsOverDockArea = dockRegion.Contains (cursor);
+			} else {
+				if (IsHidden) {
+					switch (DockPreferences.Orientation) {
+					case DockOrientation.Bottom:
+						dockRegion.Y += dockRegion.Height - 1;
+						dockRegion.Height = 1;
+						break;
+					case DockOrientation.Top:
+						dockRegion.Height = 1;
+						break;
+					}
+				}
+				
+				CursorIsOverDockArea = dockRegion.Contains (cursor);
+			}
+			
+			if (CursorIsOverDockArea != tmp) {
+				ResetCursorTimer ();
+				enter_time = DateTime.UtcNow;
+				switch (DockPreferences.AutohideType) {
+				case AutohideType.Autohide:
+					showhide_time = enter_time;
+					break;
+				case AutohideType.Intellihide:
+					if (WindowIntersectingOther)
+						showhide_time = enter_time;
+					break;
+				}
+				AnimatedDraw ();
+			}
+			
+		}
+		
 		void AnimatedDraw ()
 		{
 			if (0 < animation_timer) {
@@ -562,6 +562,7 @@ namespace Docky.Interface
 			
 			SetIconRegions ();
 			RequestFullRender ();
+			UpdateCursorIsOverDockArea ();
 			AnimatedDraw ();
 		}
 		

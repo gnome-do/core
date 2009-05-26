@@ -106,13 +106,6 @@ namespace Docky.Interface
 			}
 		}
 		
-		public override Pixbuf GetDragPixbuf ()
-		{
-			if (drag_pixbuf == null)
-				drag_pixbuf = GetSurfacePixbuf (DockPreferences.FullIconSize);
-			return drag_pixbuf;
-		}
-		
 		/// <summary>
 		/// Returns a Pixbuf suitable for usage in the dock.
 		/// </summary>

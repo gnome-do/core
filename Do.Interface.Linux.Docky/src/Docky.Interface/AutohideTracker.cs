@@ -64,7 +64,11 @@ namespace Docky.Interface
 
 		void HandleViewportsChanged (object sender, EventArgs e)
 		{
-			UpdateWindowIntersect ();
+			// only update if the active window is on the current viewport. If it is not this is going to result
+			// in a hiccup when that active window is updated
+			if (Wnck.Screen.Default.ActiveWindow != null)
+				if (Wnck.Screen.Default.ActiveWindow.IsInViewport (Wnck.Screen.Default.ActiveWorkspace))
+					UpdateWindowIntersect ();
 		}
 
 		void WnckScreenDefaultWindowOpened (object o, WindowOpenedArgs args)

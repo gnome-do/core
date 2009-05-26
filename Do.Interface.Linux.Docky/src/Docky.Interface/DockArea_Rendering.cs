@@ -649,14 +649,12 @@ namespace Docky.Interface
 			else
 				rect = PositionProvider.DockArea (ZoomIn, Cursor);
 
-			int minSize; 
+			int minSize = 10 * rect.Height;
 				
 			if (PainterOverlayVisible && Painter != null) {
-				minSize = Math.Max (Painter.MinimumWidth, 10 * rect.Height);
+				minSize = Math.Max (Painter.MinimumWidth, minSize);
 			} else if (!PainterOverlayVisible && LastPainter != null) {
-				minSize = Math.Max (LastPainter.MinimumWidth, 10 * rect.Height);
-			} else {
-				minSize = 10 * rect.Height;
+				minSize = Math.Max (LastPainter.MinimumWidth, minSize);
 			}
 			
 			if (rect.Width < minSize && DockIconOpacity < 1) {
@@ -665,7 +663,6 @@ namespace Docky.Interface
 				rect.X -= alpha / 2;
 				rect.Width += alpha;
 			}
-			
 			
 			return rect;
 		}

@@ -128,7 +128,7 @@ namespace Docky.Interface
 		}
 		
 		protected virtual string Icon {
-			get { return "default"; }
+			get { return null; }
 		}
 		
 		/// <value>
@@ -291,7 +291,21 @@ namespace Docky.Interface
 
 		public virtual Pixbuf GetDragPixbuf ()
 		{
-			return null;
+			Gdk.Pixbuf pbuf = null;
+			try {
+				pbuf = GetSurfacePixbuf (DockPreferences.FullIconSize);
+			} catch {
+				// null it is
+			}
+			if (pbuf == null && IconSurface != null) {
+				// now we do something stupid
+				string tmp = System.IO.Path.GetTempFileName ();
+				IconSurface.WriteToPng (tmp);
+				pbuf = new Pixbuf (tmp);
+				System.IO.File.Delete (tmp);
+			}
+			
+			return pbuf;
 		}
 
 		public virtual Surface GetIconSurface (Surface similar, int targetSize, out int actualSize)
