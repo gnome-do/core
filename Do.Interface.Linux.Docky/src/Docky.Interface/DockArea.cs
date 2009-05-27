@@ -52,21 +52,15 @@ namespace Docky.Interface
 		TimeSpan InsertAnimationTime = new TimeSpan (0, 0, 0, 0, 150*5);
 		
 		#region Private Variables
-		Gdk.Point cursor;
-		
 		DateTime enter_time = new DateTime (0);
 		DateTime interface_change_time = new DateTime (0);
 		DateTime last_draw_timeout = new DateTime (0);
-		DateTime cursor_update = new DateTime (0);
 		DateTime showhide_time = new DateTime (0);
 		DateTime painter_time = new DateTime (0);
 		
 		TimeSpan painter_span;
 		
-		bool disposed;
-		
 		uint animation_timer;
-		uint cursor_timer;
 		
 		DockWindow window;
 		
@@ -126,6 +120,8 @@ namespace Docky.Interface
 		
 		AutohideTracker AutohideTracker { get; set; }
 		
+		CursorTracker CursorTracker { get; set; }
+		
 		DockAnimationState AnimationState { get; set; }
 		
 		ItemPositionProvider PositionProvider { get; set; }
@@ -134,8 +130,6 @@ namespace Docky.Interface
 		
 		bool CursorIsOverDockArea {	get; set; }
 
-		ModifierType CursorModifier { get; set; }
-		
 		ReadOnlyCollection<AbstractDockItem> DockItems { 
 			get { return DockServices.ItemsService.DockItems; } 
 		}
@@ -156,12 +150,7 @@ namespace Docky.Interface
 		/// </value>
 		public Gdk.Point Cursor {
 			get {
-				return cursor;
-			}
-			set {
-				cursor = value;
-				UpdateCursorIsOverDockArea ();
-				DragCursorUpdate ();
+				return CursorTracker.Cursor;
 			}
 		}
 		
@@ -194,6 +183,7 @@ namespace Docky.Interface
 			this.window = window;
 			
 			AutohideTracker = new AutohideTracker (this);
+			CursorTracker = new CursorTracker (window, OffDockWakeupTime);
 			PositionProvider = new ItemPositionProvider (this);
 			
 			AnimationState = new DockAnimationState ();
@@ -201,14 +191,9 @@ namespace Docky.Interface
 			
 			PopupMenu = new DockItemMenu ();
 
-			Cursor = new Gdk.Point (-1, -1);
-
 			this.SetCompositeColormap ();
 
-			// fixme, we should be using the PointerMotionHintMask
-			AddEvents ((int) EventMask.PointerMotionMask |
-			           (int) EventMask.EnterNotifyMask |
-			           (int) EventMask.ButtonPressMask | 
+			AddEvents ((int) EventMask.ButtonPressMask | 
 			           (int) EventMask.ButtonReleaseMask |
 			           (int) EventMask.ScrollMask |
 			           (int) EventMask.FocusChangeMask);
@@ -266,6 +251,8 @@ namespace Docky.Interface
 			AutohideTracker.IntersectionChanged += HandleIntersectionChanged;
 			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
 			
+			CursorTracker.CursorUpdated += HandleCursorUpdated; 
+			
 			StyleSet += (o, a) => { 
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);
@@ -293,6 +280,8 @@ namespace Docky.Interface
 			
 			AutohideTracker.IntersectionChanged -= HandleIntersectionChanged;
 			Wnck.Screen.Default.ActiveWindowChanged -= HandleActiveWindowChanged;
+			
+			CursorTracker.CursorUpdated -= HandleCursorUpdated;
 		}
 		
 		void BuildAnimationStateEngine ()
@@ -316,6 +305,25 @@ namespace Docky.Interface
 			AnimationState.AddCondition (Animations.InputModeChanged,
 			                             () => DateTime.UtcNow - interface_change_time < SummonTime || 
 			                             DateTime.UtcNow - showhide_time < SummonTime);
+		}
+		
+		void HandleCursorUpdated (object sender, CursorUpdatedArgs args)
+		{
+			if (PopupMenu.Visible)
+				return;
+			
+			UpdateCursorIsOverDockArea ();
+			DragCursorUpdate ();
+			
+			ConfigureCursor ();
+
+			if (drag_resizing)
+				HandleDragMotion ();
+			
+			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && args.OldCursor.X != args.NewCursor.X;
+
+			if (drag_resizing || cursorMoveWarrantsDraw) 
+				AnimatedDraw ();
 		}
 
 		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)
@@ -443,24 +451,7 @@ namespace Docky.Interface
 		
 		void ResetCursorTimer ()
 		{
-			if (disposed)
-				return;
-			if (cursor_timer > 0)
-				GLib.Source.Remove (cursor_timer);
-			
-			uint time = (CursorIsOverDockArea || drag_resizing) ? OnDockWakeupTime : OffDockWakeupTime;
-			cursor_timer = GLib.Timeout.Add (time, OnCursorTimerEllapsed);
-		}
-		
-		bool OnCursorTimerEllapsed ()
-		{
-			ManualCursorUpdate ();
-			
-			// if we have a painter visible this takes care of interrupting it on mouse off
-			if (!CursorIsOverDockArea && PainterOverlayVisible && (DateTime.UtcNow - enter_time).TotalMilliseconds > 400)
-				InterruptPainter ();
-			
-			return true;
+			CursorTracker.TimerLength = (CursorIsOverDockArea || drag_resizing) ? OnDockWakeupTime : OffDockWakeupTime;
 		}
 		
 		void UpdateCursorIsOverDockArea ()
@@ -475,7 +466,7 @@ namespace Docky.Interface
 			
 			if (tmp) {
 				dockRegion.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
-				CursorIsOverDockArea = dockRegion.Contains (cursor);
+				CursorIsOverDockArea = dockRegion.Contains (Cursor);
 			} else {
 				if (IsHidden) {
 					switch (DockPreferences.Orientation) {
@@ -489,7 +480,7 @@ namespace Docky.Interface
 					}
 				}
 				
-				CursorIsOverDockArea = dockRegion.Contains (cursor);
+				CursorIsOverDockArea = dockRegion.Contains (Cursor);
 			}
 			
 			if (CursorIsOverDockArea != tmp) {
@@ -505,6 +496,14 @@ namespace Docky.Interface
 					break;
 				}
 				AnimatedDraw ();
+				
+				if (PainterOverlayVisible) {
+					GLib.Timeout.Add (500, delegate {
+						if (!CursorIsOverDockArea && PainterOverlayVisible && (DateTime.UtcNow - enter_time).TotalMilliseconds > 400)
+							Painter.Interrupt ();
+						return false;
+					});
+				}
 			}
 			
 		}
@@ -571,7 +570,7 @@ namespace Docky.Interface
 			// While an popup menus are being showing, the dock does not recieve mouse updates.  This is
 			// both a good thing and a bad thing.  We must at the very least update the cursor position once the
 			// popup is no longer in view.
-			ManualCursorUpdate ();
+			CursorTracker.Enabled = true;
 			AnimatedDraw ();
 		}
 		
@@ -580,69 +579,14 @@ namespace Docky.Interface
 		/// </summary>
 		void OnDockItemMenuShown (object o, EventArgs args)
 		{
+			CursorTracker.Enabled = false;
 			AnimatedDraw ();
-		}
-		
-		void ManualCursorUpdate ()
-		{
-			if ((DateTime.UtcNow - cursor_update).TotalMilliseconds < 15) {
-				return;
-			}
-			
-			int x, y;
-			ModifierType mod;
-			Gdk.Screen screen;
-			
-			Display.GetPointer (out screen, out x, out y, out mod);
-			
-			if (screen == Screen) {
-				Gdk.Rectangle geo;
-				window.GetBufferedPosition (out geo.X, out geo.Y);
-
-				x -= geo.X;
-				y -= geo.Y;
-			} else {
-				x = -4000;
-				y = -4000;
-			}
-			
-			SetupCursor (x, y, mod);
-		}
-		
-		void SetupCursor (int x, int y, ModifierType mod)
-		{
-			CursorModifier = mod;
-			
-			if ((Cursor.X == x && Cursor.Y == y) || PopupMenu.Visible)
-				return;
-			
-			Gdk.Point old_cursor_location = Cursor;
-			Cursor = new Gdk.Point (x, y);
-
-			ConfigureCursor ();
-
-			if (drag_resizing)
-				HandleDragMotion ();
-			
-			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && old_cursor_location.X != Cursor.X;
-
-			if (drag_resizing || cursorMoveWarrantsDraw) 
-				AnimatedDraw ();
 		}
 
 		protected override bool OnMotionNotifyEvent (Gdk.EventMotion evnt)
 		{
 			GtkDragging = false;
-			SetupCursor ((int) evnt.X, (int) evnt.Y, evnt.State);
-			cursor_update = DateTime.UtcNow;
 			return base.OnMotionNotifyEvent (evnt);
-		}
-		
-		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
-		{
-			ResetCursorTimer ();
-			ManualCursorUpdate ();
-			return base.OnEnterNotifyEvent (evnt);
 		}
 
 		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
@@ -814,7 +758,6 @@ namespace Docky.Interface
 		
 		public override void Dispose ()
 		{
-			disposed = true;
 			UnregisterEvents ();
 			UnregisterGtkDragSource ();
 
@@ -846,9 +789,6 @@ namespace Docky.Interface
 			}
 			
 			window = null;
-			
-			if (cursor_timer > 0)
-				GLib.Source.Remove (cursor_timer);
 			
 			if (animation_timer > 0)
 				GLib.Source.Remove (animation_timer);

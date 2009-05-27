@@ -131,13 +131,13 @@ namespace Docky.Interface
 
 		void SetDragProxy ()
 		{
-			if ((CursorModifier & ModifierType.Button1Mask) != ModifierType.Button1Mask || CursorIsOverDockArea) {
+			if ((CursorTracker.ModifierType & ModifierType.Button1Mask) != ModifierType.Button1Mask || CursorIsOverDockArea) {
 				if (drag_proxy == null)
 					return;
 				drag_proxy = null;
 				RegisterGtkDragDest ();
 			} else {
-				Gdk.Point local_cursor = Cursor.RelativePointToRootPoint (window);
+				Gdk.Point local_cursor = CursorTracker.RootCursor;
 	
 				IEnumerable<Gdk.Window> windows = WindowStack;
 
@@ -162,7 +162,7 @@ namespace Docky.Interface
 
 		void DragCursorUpdate ()
 		{
-			if (GtkDragging && (CursorModifier & ModifierType.Button1Mask) != ModifierType.Button1Mask) {
+			if (GtkDragging && (CursorTracker.ModifierType & ModifierType.Button1Mask) != ModifierType.Button1Mask) {
 				GtkDragging = false;
 			}
 			SetDragProxy ();
@@ -276,7 +276,7 @@ namespace Docky.Interface
 				bool result = DockServices.ItemsService.RemoveItem (DragState.DragItem);
 				if (result) {
 					PoofWindow poof = new PoofWindow (DockPreferences.FullIconSize);
-					poof.SetCenterPosition (Cursor.RelativePointToRootPoint (window));
+					poof.SetCenterPosition (CursorTracker.RootCursor);
 					poof.Run ();
 				}
 			}

@@ -603,7 +603,6 @@ namespace Docky.Interface
 			    !GtkDragging && !drag_resizing) {
 
 				Gdk.Point textPoint;
-				Gdk.Rectangle monitor = LayoutUtils.MonitorGemonetry ();
 				Surface textSurface = dockItem.GetTextSurface (cr.Target);
 				textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (dockItem.TextSurfaceSize.Width >> 1);
 				textPoint.X = Math.Max (0, Math.Min (Width - dockItem.TextSurfaceSize.Width, textPoint.X));

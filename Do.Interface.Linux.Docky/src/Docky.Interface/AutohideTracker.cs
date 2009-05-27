@@ -57,9 +57,9 @@ namespace Docky.Interface
 		{
 			this.parent = parent;
 			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
-			Wnck.Screen.Default.WindowClosed += WnckScreenDefaultWindowClosed;
-			Wnck.Screen.Default.WindowOpened += WnckScreenDefaultWindowOpened;
-			Wnck.Screen.Default.ViewportsChanged +=HandleViewportsChanged; 
+			Wnck.Screen.Default.WindowClosed        += WnckScreenDefaultWindowClosed;
+			Wnck.Screen.Default.WindowOpened        += WnckScreenDefaultWindowOpened;
+			Wnck.Screen.Default.ViewportsChanged    += HandleViewportsChanged; 
 		}
 
 		void HandleViewportsChanged (object sender, EventArgs e)

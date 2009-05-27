@@ -24,6 +24,7 @@ FILES = \
 	src/Docky.Core/Docky.Core.Default/PainterService.cs \
 	src/Docky.Interface/AutohideTracker.cs \
 	src/Docky.Interface/ClickAnimationType.cs \
+	src/Docky.Interface/CursorTracker.cs \
 	src/Docky.Interface/DockArea.cs \
 	src/Docky.Interface/DockArea_Rendering.cs \
 	src/Docky.Interface/DockArea_DragAndDrop.cs \
