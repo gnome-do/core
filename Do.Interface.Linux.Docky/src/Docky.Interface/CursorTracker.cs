@@ -76,7 +76,6 @@ namespace Docky.Interface
 		public CursorTracker (Gtk.Window parent, uint timerLength)
 		{
 			Enabled = true;
-			
 			this.parent = parent;
 			
 			parent.MotionNotifyEvent += HandleMotionNotifyEvent; 
@@ -88,7 +87,7 @@ namespace Docky.Interface
 		
 		bool HandleCursorTimeoutElapsed ()
 		{
-			if (!Enabled || (DateTime.UtcNow - last_gtk_update).TotalMilliseconds < 15) {
+			if (!Enabled || (DateTime.UtcNow - last_gtk_update).TotalMilliseconds < timer_length >> 1) {
 				return true;
 			}
 			

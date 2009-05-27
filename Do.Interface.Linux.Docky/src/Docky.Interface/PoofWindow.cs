@@ -81,6 +81,7 @@ namespace Docky
 		void HandleExposeEvent (object o, ExposeEventArgs args)
 		{
 			using (Cairo.Context cr = CairoHelper.Create (window.GdkWindow)) {
+				cr.Scale ((double) size / 128, (double) size / 128);
 				cr.AlphaFill ();
 				int offset;
 				switch ((int) Math.Floor (5 * AnimationState)) {
