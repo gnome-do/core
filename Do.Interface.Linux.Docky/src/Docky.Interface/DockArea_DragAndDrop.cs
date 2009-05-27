@@ -292,7 +292,7 @@ namespace Docky.Interface
 		protected override bool OnDragFailed (Gdk.DragContext drag_context, Gtk.DragResult drag_result)
 		{
 			// disable the animation
-			return true;
+			return CursorIsOverDockArea || (!DragState.IsFinished && DragState.DragItem != null && DragState.DragItem.WindowCount == 0);
 		}
 		
 		void BuildDragAndDrop ()

@@ -24,7 +24,6 @@ namespace Docky
 		
 		int size;
 		int x, y;
-		double last_level;
 		
 		DateTime run_time;
 		
@@ -41,8 +40,8 @@ namespace Docky
 		
 		public void SetCenterPosition (Gdk.Point point)
 		{
-			this.x = point.X - (size / 2);
-			this.y = point.Y - (size / 2);
+			x = point.X - (size / 2);
+			y = point.Y - (size / 2);
 		}
 		
 		public void Run ()
