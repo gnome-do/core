@@ -57,7 +57,6 @@ namespace Do.Platform.Linux {
             this.wrapper_vbox.BorderWidth = ((uint)(10));
             // Container child wrapper_vbox.Gtk.Box+BoxChild
             this.vbox2 = new Gtk.VBox();
-            this.vbox2.Name = "vbox2";
             this.vbox2.Spacing = 6;
             // Container child vbox2.Gtk.Box+BoxChild
             this.account_vbox = new Gtk.VBox();
