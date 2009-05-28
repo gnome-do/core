@@ -38,7 +38,7 @@ namespace Do.Universe.Linux {
 		
 		static ApplicationItemSource ()
 		{
-			desktop_file_directories = ReadXdgDataDirs ();
+			desktop_file_directories = GetDesktopFileDirectories ();
 		}
 		
 		public ApplicationItemSource ()
@@ -73,43 +73,41 @@ namespace Do.Universe.Linux {
 		/// directory
 		/// where .desktop files can be found.
 		/// </param>
-		static IEnumerable<ApplicationItem> LoadDesktopFiles (string dir)
+		IEnumerable<ApplicationItem> LoadDesktopFiles (string dir)
 		{
-			Queue<string> queue;
-			List<ApplicationItem> apps;
-			
-			if (!Directory.Exists (dir))
-				return Enumerable.Empty<ApplicationItem> ();
-			
-			apps = new List<ApplicationItem> ();
-			queue = new Queue<string> ();
-			queue.Enqueue (dir);
-				
-			while (queue.Any ()) {
-				dir = queue.Dequeue ();
-
-				// Do not index screensavers.
-				if (dir.Contains ("screensavers"))
-					continue;
-
-				foreach (string subdir in Directory.GetDirectories (dir))
-					queue.Enqueue (subdir);
-				
-				apps.AddRange (
-					Directory.GetFiles (dir, "*.desktop")
-						.Select (f => ApplicationItem.MaybeCreateFromDesktopItem (f))
-						.Where (app =>
-							app != null && app.IsAppropriateForCurrentDesktop &&
-							(show_hidden || !app.NoDisplay))
-				);
-			}
-			return apps;
+			return GetDesktopFiles ()
+				.Where (ShouldUseDesktopFile)
+				.Select (f => ApplicationItem.MaybeCreateFromDesktopItem (f)).Where (a => a != null)
+				.Where (ShouldUseApplicationItem);
+		}
+		
+		IEnumerable<string> GetDesktopFiles ()
+		{
+			return desktop_file_directories
+				.Where (d => Directory.Exists (d))
+				.SelectMany (d => GetDesktopFiles (d));
+		}
+		
+		IEnumerable<string> GetDesktopFiles (string parent)
+		{
+			IEnumerable<string> baseFiles      = Directory.GetFiles (parent, "*.desktop");
+			IEnumerable<string> recursiveFiles = Directory.GetDirectories (parent).SelectMany (d => GetDesktopFiles (d));
+			return baseFiles.Concat (recursiveFiles);
+		}
+		
+		bool ShouldUseDesktopFile (string path)
+		{
+			return !path.Contains ("screensavers");
+		}
+		
+		bool ShouldUseApplicationItem (ApplicationItem app)
+		{
+			return app.IsAppropriateForCurrentDesktop && (show_hidden || !app.NoDisplay);
 		}
 		
 		public override void UpdateItems ()
 		{
 			app_items = desktop_file_directories
-				.Select (dir => dir.Replace ("~", Environment.GetFolderPath (Environment.SpecialFolder.Personal)))
 				.SelectMany (dir => LoadDesktopFiles (dir))
 				.Cast<Item> ()
 				.ToArray ();
@@ -119,30 +117,45 @@ namespace Do.Universe.Linux {
 			get { return app_items; }
 		}
 		
-		static IEnumerable<string> ReadXdgDataDirs ()
+		/// <summary>
+		/// Return list of directories to scan for .desktop files.
+		/// </summary>
+		/// <comment>
+		/// Returns absolute paths.
+		/// Implements XDG data directory specification.
+		/// </comment>
+		/// <returns>
+		/// A <see cref="IEnumerable"/>
+		/// </returns>
+		static IEnumerable<string> GetDesktopFileDirectories ()
 		{
-			string home, envPath;
+			return new [] {
+				// These are XDG variables...
+				"XDG_DATA_HOME",
+				"XDG_DATA_DIRS"
+			}.SelectMany (v => GetXdgEnvironmentPaths (v));
+		}
+		
+		static IEnumerable<string> GetXdgEnvironmentPaths (string xdgVar)
+		{
+			string envPath = Environment.GetEnvironmentVariable (xdgVar);
 			
-			const string appDirSuffix = "applications";
-			string [] xdgVars = { "XDG_DATA_HOME", "XDG_DATA_DIRS" };
-			
-			home = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
-				
-			foreach (string xdgVar in xdgVars) {
-				envPath = Environment.GetEnvironmentVariable (xdgVar);
-						
-				if (string.IsNullOrEmpty (envPath)) {
-					if (xdgVar == "XDG_DATA_HOME") {
-						yield return
-							new [] { home, ".local/share", appDirSuffix }.Aggregate (Path.Combine);
-					} else if (xdgVar == "XDG_DATA_DIRS") {
-						yield return Path.Combine ("/usr/local/share/", appDirSuffix);
-						yield return Path.Combine ("/usr/share/", appDirSuffix);
-					}
-				} else {
-					foreach (string dir in envPath.Split (':')) {
-						yield return Path.Combine (dir, appDirSuffix);
-					}
+			if (string.IsNullOrEmpty (envPath)) {
+				switch (xdgVar) {
+				case "XDG_DATA_HOME":
+					yield return Path.Combine (
+						Environment.GetFolderPath (Environment.SpecialFolder.Personal),
+						".local/share/applications"
+					);
+					break;
+				case "XDG_DATA_DIRS":
+					yield return "/usr/local/share/applications";
+					yield return "/usr/share/applications";
+					break;
+				}
+			} else {
+				foreach (string dir in envPath.Split (':')) {
+					yield return Path.Combine (dir, "applications");
 				}
 			}
 		}
