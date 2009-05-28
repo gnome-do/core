@@ -678,7 +678,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Bin" id="Do.UI.ColorConfigurationWidget" design-size="411 539">
+  <widget class="Gtk.Bin" id="Do.UI.ColorConfigurationWidget" design-size="419 539">
     <property name="MemberName" />
     <child>
       <widget class="Gtk.VBox" id="vbox2">

@@ -13,7 +13,7 @@
     <widget-library name="../../Do.Interface.Linux.AnimationBase/bin/Debug/Do.Interface.Linux.AnimationBase.dll" />
     <widget-library name="../bin/Debug/Do.Interface.Linux.Docky.dll" internal="true" />
   </import>
-  <widget class="Gtk.Bin" id="Docky.Interface.DockyConfigurationWidget" design-size="540 347">
+  <widget class="Gtk.Bin" id="Docky.Interface.DockyConfigurationWidget" design-size="567 350">
     <property name="MemberName" />
     <property name="Visible">False</property>
     <child>
