@@ -265,8 +265,8 @@ namespace Docky.Interface
 		{
 			X11Atoms atoms = X11Atoms.Instance;
 
-			uint [] struts = dock_area.StrutRequest;
-			uint [] first_struts = new [] { struts [0], struts [1], struts [2], struts [3] };
+			IntPtr [] struts = dock_area.StrutRequest.Select (i => (IntPtr) i).ToArray ();
+			IntPtr [] first_struts = new [] { struts [0], struts [1], struts [2], struts [3] };
 
 			strut_timer = 0;
 			
@@ -279,6 +279,31 @@ namespace Docky.Interface
 			                      (int) PropertyMode.PropModeReplace, first_struts);
 				
 			return false;
+		}
+		
+		public void SetBackgroundBlur (Gdk.Rectangle area)
+		{
+			if (!IsRealized)
+				return;
+			
+			int WindowHeight = dock_area.Height;
+			X11Atoms atoms = X11Atoms.Instance;
+		
+			IntPtr [] data = new IntPtr [8];
+			
+			// this is meant to tell the blur-plugin what and how to blur, somehow
+			// the y-coords are interpreted as being CenterGravity, I wonder why
+			// Kudos to macslow
+			data [0] = (IntPtr) 2;                                   /* threshold               */
+			data [1] = (IntPtr) 0;                                   /* filter                  */
+			data [2] = (IntPtr) XGravity.NorthWestGravity;           /* gravity of top-left     */
+			data [3] = (IntPtr) area.X;                              /* x-coord of top-left     */
+			data [4] = (IntPtr) (WindowHeight / 2 - area.Height);    /* y-coord of top-left     */
+			data [5] = (IntPtr) XGravity.NorthWestGravity;           /* gravity of bottom-right */
+			data [6] = (IntPtr) (area.X + area.Width);               /* bottom-right x-coord    */
+			data [7] = (IntPtr) (WindowHeight / 2);                  /* bottom-right y-coord    */
+			
+			Xlib.XChangeProperty (GdkWindow, atoms._COMPIZ_WM_WINDOW_BLUR, atoms.XA_INTEGER, (int) PropertyMode.PropModeReplace, data);
 		}
 
 		public void PresentWindow ()
