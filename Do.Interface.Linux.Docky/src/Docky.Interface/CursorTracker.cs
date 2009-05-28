@@ -153,6 +153,7 @@ namespace Docky.Interface
 		
 		public void Dispose ()
 		{
+			GLib.Source.Remove (timer);
 			parent.MotionNotifyEvent -= HandleMotionNotifyEvent;
 		}
 	}
