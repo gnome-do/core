@@ -2,7 +2,7 @@
 	id="HUDInterface"
 	namespace="Do"
 	version="1.0"
-	name="Nouveau Interface"
+	name="Nouveau"
 	description="A clone of the original HUD interface for Quicksilver"
 	author="Jason Smith"
 	category="Hidden"
