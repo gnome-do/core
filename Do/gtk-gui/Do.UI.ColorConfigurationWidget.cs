@@ -94,7 +94,7 @@ namespace Do.UI {
             this.vbox3.Name = "vbox3";
             this.vbox3.Spacing = 6;
             // Container child vbox3.Gtk.Box+BoxChild
-            this.table3 = new Gtk.Table(((uint)(2)), ((uint)(2)), false);
+            this.table3 = new Gtk.Table(((uint)(1)), ((uint)(3)), false);
             this.table3.Name = "table3";
             this.table3.RowSpacing = ((uint)(6));
             this.table3.ColumnSpacing = ((uint)(6));
@@ -105,8 +105,6 @@ namespace Do.UI {
             this.hbox10.Spacing = 6;
             this.table3.Add(this.hbox10);
             Gtk.Table.TableChild w1 = ((Gtk.Table.TableChild)(this.table3[this.hbox10]));
-            w1.TopAttach = ((uint)(1));
-            w1.BottomAttach = ((uint)(2));
             w1.XOptions = ((Gtk.AttachOptions)(4));
             w1.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table3.Gtk.Table+TableChild
@@ -136,11 +134,8 @@ namespace Do.UI {
             this.pin_check.UseUnderline = true;
             this.table3.Add(this.pin_check);
             Gtk.Table.TableChild w4 = ((Gtk.Table.TableChild)(this.table3[this.pin_check]));
-            w4.TopAttach = ((uint)(1));
-            w4.BottomAttach = ((uint)(2));
-            w4.LeftAttach = ((uint)(1));
-            w4.RightAttach = ((uint)(2));
-            w4.XOptions = ((Gtk.AttachOptions)(4));
+            w4.LeftAttach = ((uint)(2));
+            w4.RightAttach = ((uint)(3));
             w4.YOptions = ((Gtk.AttachOptions)(4));
             this.vbox3.Add(this.table3);
             Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vbox3[this.table3]));
@@ -159,6 +154,8 @@ namespace Do.UI {
             this.vbox1.Add(this.frame1);
             Gtk.Box.BoxChild w10 = ((Gtk.Box.BoxChild)(this.vbox1[this.frame1]));
             w10.Position = 0;
+            w10.Expand = false;
+            w10.Fill = false;
             // Container child vbox1.Gtk.Box+BoxChild
             this.composite_warning_widget = new Gtk.VBox();
             this.composite_warning_widget.Name = "composite_warning_widget";
@@ -210,6 +207,8 @@ namespace Do.UI {
             this.vbox2.Add(this.alignment1);
             Gtk.Box.BoxChild w17 = ((Gtk.Box.BoxChild)(this.vbox2[this.alignment1]));
             w17.Position = 0;
+            w17.Expand = false;
+            w17.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
             this.theme_configuration_container = new Gtk.Alignment(0.5F, 0.5F, 1F, 1F);
             this.theme_configuration_container.Name = "theme_configuration_container";

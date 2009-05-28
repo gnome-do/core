@@ -2,7 +2,7 @@
 	id="ClassicInterface"
 	namespace="Do"
 	version="1.0"
-	name="Classic Interface"
+	name="Classic"
 	description="A Quicksilver inspired interface for GNOME Do"
 	author="Jason Smith"
 	category="Hidden"
