@@ -511,7 +511,7 @@ namespace Docky.Interface
 				if (PainterOverlayVisible) {
 					GLib.Timeout.Add (500, delegate {
 						if (!CursorIsOverDockArea && PainterOverlayVisible && (DateTime.UtcNow - enter_time).TotalMilliseconds > 400)
-							Painter.Interrupt ();
+							InterruptPainter ();
 						return false;
 					});
 				}
