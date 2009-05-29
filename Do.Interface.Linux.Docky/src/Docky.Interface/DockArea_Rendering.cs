@@ -73,6 +73,9 @@ namespace Docky.Interface
 
 		public bool PainterOverlayVisible { get; set; }
 
+		//// <value>
+		/// Determines if the current rendering state allows for a fast render
+		/// </value>
 		bool CanFastRender {
 			get {
 				bool result = next_fast_render && !RenderData.ForceFullRender && RenderData.RenderItems.Count == 0;
@@ -81,6 +84,9 @@ namespace Docky.Interface
 			}
 		}
 		
+		//// <value>
+		/// Determines if the current rendering state allows for a "no" render
+		/// </value>
 		bool CanNoRender {
 			get {
 				bool result = DockPreferences.ZoomEnabled && 
@@ -96,6 +102,9 @@ namespace Docky.Interface
 			}
 		}
 		
+		//// <value>
+		/// Determins if a single item only needs to be redrawn and updated (usually caused by an update request)
+		/// </value>
 		bool SingleItemRender {
 			get {
 				return !RenderData.ForceFullRender && 
@@ -133,6 +142,9 @@ namespace Docky.Interface
 			}
 		}
 		
+		//// <value>
+		/// Get autohide state
+		/// </value>
 		bool IsHidden {
 			get {
 				bool hidden = false;
