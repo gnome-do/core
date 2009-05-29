@@ -434,7 +434,7 @@ namespace Docky.Interface
 			});
 
 			window.UnpresentWindow ();
-			DnDTracker.Enabled ();
+			DnDTracker.Enable ();
 		}
 
 		void HandlePainterShowRequest(object sender, EventArgs e)
@@ -610,10 +610,7 @@ namespace Docky.Interface
 		private void HandleButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			// lets not do anything in this case
-			if (DnDTracker.DragResizing) {
-				DnDTracker.EndDrag ();
-				return;
-			}
+			if (DnDTracker.DragResizing) return;
 			
 			if (PainterOverlayVisible) {
 				Painter.Clicked (GetDockArea (), Cursor);
@@ -746,7 +743,7 @@ namespace Docky.Interface
 			PainterOverlayVisible = false;
 			interface_change_time = DateTime.UtcNow;
 			
-			DnDTracker.Enabled ();
+			DnDTracker.Enable ();
 			window.UnpresentWindow ();
 			
 			SetParentInputMask ();

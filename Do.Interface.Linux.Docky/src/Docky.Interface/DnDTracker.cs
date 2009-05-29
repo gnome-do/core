@@ -166,7 +166,7 @@ namespace Docky.Interface
 			RegisterGtkDragSource ();
 		}
 		
-		public void Enabled ()
+		public void Enable ()
 		{
 			RegisterGtkDragSource ();
 		}
@@ -178,28 +178,30 @@ namespace Docky.Interface
 		
 		void RegisterEvents ()
 		{
-			parent.DragDataReceived += HandleDragDataReceived;
-			parent.DragMotion       += HandleDragMotionEvent; 
-			parent.DragBegin        += HandleDragBegin;
-			parent.DragEnd          += HandleDragEnd; 
-			parent.DragDrop         += HandleDragDrop;
-			parent.DragFailed       += HandleDragFailed; 
-			parent.ButtonPressEvent += HandleButtonPressEvent;
-			parent.MotionNotifyEvent += HandleMotionNotifyEvent; 
+			parent.DragDataReceived  += HandleDragDataReceived;
+			parent.DragMotion        += HandleDragMotionEvent; 
+			parent.DragBegin         += HandleDragBegin;
+			parent.DragEnd           += HandleDragEnd; 
+			parent.DragDrop          += HandleDragDrop;
+			parent.DragFailed        += HandleDragFailed; 
+			parent.ButtonPressEvent  += HandleButtonPressEvent;
+			parent.MotionNotifyEvent += HandleMotionNotifyEvent;
+			parent.ButtonReleaseEvent += HandleButtonReleaseEvent; 
 			
 			CursorTracker.CursorUpdated += HandleCursorUpdated; 
 		}
 
 		void UnregisterEvents ()
 		{
-			parent.DragDataReceived -= HandleDragDataReceived;
-			parent.DragMotion       -= HandleDragMotionEvent; 
-			parent.DragBegin        -= HandleDragBegin;
-			parent.DragEnd          -= HandleDragEnd; 
-			parent.DragDrop         -= HandleDragDrop;
-			parent.DragFailed       -= HandleDragFailed; 
-			parent.ButtonPressEvent -= HandleButtonPressEvent; 
+			parent.DragDataReceived  -= HandleDragDataReceived;
+			parent.DragMotion        -= HandleDragMotionEvent; 
+			parent.DragBegin         -= HandleDragBegin;
+			parent.DragEnd           -= HandleDragEnd; 
+			parent.DragDrop          -= HandleDragDrop;
+			parent.DragFailed        -= HandleDragFailed; 
+			parent.ButtonPressEvent  -= HandleButtonPressEvent; 
 			parent.MotionNotifyEvent -= HandleMotionNotifyEvent;
+			parent.ButtonReleaseEvent -= HandleButtonReleaseEvent;
 			
 			CursorTracker.CursorUpdated -= HandleCursorUpdated; 
 		}
@@ -213,6 +215,12 @@ namespace Docky.Interface
 		{
 			if (CursorNearDraggableEdge)
 				StartDrag ();
+		}
+
+		void HandleButtonReleaseEvent(object o, ButtonReleaseEventArgs args)
+		{
+			if (DragResizing)
+				EndDrag ();
 		}
 		
 		void HandleCursorUpdated(object sender, CursorUpdatedArgs e)
@@ -443,7 +451,7 @@ namespace Docky.Interface
 			DragEdge = CurrentDragEdge;
 		}
 		
-		public void EndDrag ()
+		void EndDrag ()
 		{
 			if (parent.PainterOverlayVisible) return;
 			
