@@ -122,14 +122,14 @@ namespace Docky.Interface
 		
 		CursorTracker CursorTracker { get; set; }
 		
+		DnDTracker DnDTracker { get; set; }
+		
 		DockAnimationState AnimationState { get; set; }
 		
 		ItemPositionProvider PositionProvider { get; set; }
 
 		new DockItemMenu PopupMenu { get; set; }
 		
-		bool CursorIsOverDockArea {	get; set; }
-
 		ReadOnlyCollection<AbstractDockItem> DockItems { 
 			get { return DockServices.ItemsService.DockItems; } 
 		}
@@ -144,6 +144,8 @@ namespace Docky.Interface
 		TimeSpan SummonTime {
 			get { return DockPreferences.SummonTime; }
 		}
+		
+		public bool CursorIsOverDockArea { get; private set; }
 		
 		/// <value>
 		/// The current cursor as known to the dock.
@@ -182,11 +184,12 @@ namespace Docky.Interface
 		{
 			this.window = window;
 			
-			AutohideTracker = new AutohideTracker (this);
-			CursorTracker = new CursorTracker (window, OffDockWakeupTime);
+			AutohideTracker  = new AutohideTracker (this);
+			CursorTracker    = new CursorTracker (window, OffDockWakeupTime);
 			PositionProvider = new ItemPositionProvider (this);
+			DnDTracker       = new DnDTracker (this, PositionProvider, CursorTracker);
+			AnimationState   = new DockAnimationState ();
 			
-			AnimationState = new DockAnimationState ();
 			BuildAnimationStateEngine ();
 			
 			PopupMenu = new DockItemMenu ();
@@ -202,11 +205,8 @@ namespace Docky.Interface
 			DoubleBuffered = false;
 
 			BuildRendering ();
-			BuildDragAndDrop ();
 			
 			RegisterEvents ();
-			RegisterGtkDragDest ();
-			RegisterGtkDragSource ();
 			
 			ResetCursorTimer ();
 		}
@@ -251,7 +251,10 @@ namespace Docky.Interface
 			AutohideTracker.IntersectionChanged += HandleIntersectionChanged;
 			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
 			
-			CursorTracker.CursorUpdated += HandleCursorUpdated; 
+			CursorTracker.CursorUpdated += HandleCursorUpdated;
+			
+			DnDTracker.DragEnded += HandleDragEnded;
+			DnDTracker.DrawRequired += HandleDrawRequired; 
 			
 			StyleSet += (o, a) => { 
 				if (IsRealized)
@@ -282,6 +285,9 @@ namespace Docky.Interface
 			Wnck.Screen.Default.ActiveWindowChanged -= HandleActiveWindowChanged;
 			
 			CursorTracker.CursorUpdated -= HandleCursorUpdated;
+			
+			DnDTracker.DragEnded -= HandleDragEnded;
+			DnDTracker.DrawRequired -= HandleDrawRequired; 
 		}
 		
 		void BuildAnimationStateEngine ()
@@ -313,17 +319,22 @@ namespace Docky.Interface
 				return;
 			
 			UpdateCursorIsOverDockArea ();
-			DragCursorUpdate ();
-			
-			ConfigureCursor ();
 
-			if (drag_resizing)
-				HandleDragMotion ();
-			
 			bool cursorMoveWarrantsDraw = CursorIsOverDockArea && args.OldCursor.X != args.NewCursor.X;
 
-			if (drag_resizing || cursorMoveWarrantsDraw) 
+			if (DnDTracker.DragResizing || cursorMoveWarrantsDraw) 
 				AnimatedDraw ();
+		}
+		
+		void HandleDrawRequired(object sender, EventArgs e)
+		{
+			AnimatedDraw ();
+		}
+
+		void HandleDragEnded(object sender, EventArgs e)
+		{
+			ResetCursorTimer ();
+			Reconfigure ();
 		}
 
 		void HandleItemNeedsUpdate (object sender, UpdateRequestArgs args)
@@ -362,9 +373,9 @@ namespace Docky.Interface
 			Reconfigure ();
 		}
 		
-		void Reconfigure ()
+		public void Reconfigure ()
 		{
-			if (!Visible || !IsRealized || drag_resizing)
+			if (!Visible || !IsRealized || DnDTracker.DragResizing)
 				return;
 			
 			SetSize ();
@@ -423,7 +434,7 @@ namespace Docky.Interface
 			});
 
 			window.UnpresentWindow ();
-			RegisterGtkDragSource ();
+			DnDTracker.Enabled ();
 		}
 
 		void HandlePainterShowRequest(object sender, EventArgs e)
@@ -446,12 +457,12 @@ namespace Docky.Interface
 			}
 			
 			window.PresentWindow ();
-			UnregisterGtkDragSource ();
+			DnDTracker.Disable ();
 		}
 		
 		void ResetCursorTimer ()
 		{
-			CursorTracker.TimerLength = (CursorIsOverDockArea || drag_resizing) ? OnDockWakeupTime : OffDockWakeupTime;
+			CursorTracker.TimerLength = (CursorIsOverDockArea || DnDTracker.DragResizing) ? OnDockWakeupTime : OffDockWakeupTime;
 		}
 		
 		void UpdateCursorIsOverDockArea ()
@@ -583,20 +594,6 @@ namespace Docky.Interface
 			AnimatedDraw ();
 		}
 
-		protected override bool OnMotionNotifyEvent (Gdk.EventMotion evnt)
-		{
-			GtkDragging = false;
-			return base.OnMotionNotifyEvent (evnt);
-		}
-
-		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
-		{
-			if (CursorNearDraggableEdge)
-				StartDrag ();
-			
-			return base.OnButtonPressEvent (evnt);
-		}
-		
 		public void ProxyButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			HandleButtonReleaseEvent (evnt);
@@ -613,8 +610,8 @@ namespace Docky.Interface
 		private void HandleButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			// lets not do anything in this case
-			if (drag_resizing) {
-				EndDrag ();
+			if (DnDTracker.DragResizing) {
+				DnDTracker.EndDrag ();
 				return;
 			}
 			
@@ -715,14 +712,14 @@ namespace Docky.Interface
 				offset = GetDockArea ().Height;
 				offset = offset * 2 + 10;
 			} else {
-				if (IsHidden && !drag_resizing) {
+				if (IsHidden && !DnDTracker.DragResizing) {
 					offset = 1;
 				} else {
 					offset = GetDockArea ().Height;
 				}
 			}
 			
-			int dockSize = (drag_resizing) ? Width : MinimumDockArea.Width;
+			int dockSize = (DnDTracker.DragResizing) ? Width : MinimumDockArea.Width;
 			
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:
@@ -749,7 +746,7 @@ namespace Docky.Interface
 			PainterOverlayVisible = false;
 			interface_change_time = DateTime.UtcNow;
 			
-			RegisterGtkDragSource ();
+			DnDTracker.Enabled ();
 			window.UnpresentWindow ();
 			
 			SetParentInputMask ();
@@ -759,10 +756,11 @@ namespace Docky.Interface
 		public override void Dispose ()
 		{
 			UnregisterEvents ();
-			UnregisterGtkDragSource ();
+			DnDTracker.Disable ();
 
 			AutohideTracker.Dispose ();
 			CursorTracker.Dispose ();
+			DnDTracker.Dispose ();
 			PositionProvider.Dispose ();
 			AnimationState.Dispose ();
 			PopupMenu.Destroy ();

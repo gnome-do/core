@@ -71,12 +71,12 @@ namespace Docky.Interface
 		
 		PreviousRenderData RenderData { get; set; }
 
-		bool PainterOverlayVisible { get; set; }
+		public bool PainterOverlayVisible { get; set; }
 
 		bool CanFastRender {
 			get {
 				bool result = next_fast_render && !RenderData.ForceFullRender && RenderData.RenderItems.Count == 0;
-				next_fast_render = RenderData.ZoomIn == 1 && ZoomIn == 1 && !drag_resizing;
+				next_fast_render = RenderData.ZoomIn == 1 && ZoomIn == 1 && !DnDTracker.DragResizing;
 				return result;
 			}
 		}
@@ -87,8 +87,8 @@ namespace Docky.Interface
 					    !RenderData.ForceFullRender &&
 						RenderData.RenderItems.Count == 0 &&
 					    RenderData.ZoomIn == 0 &&
-						!GtkDragging &&
-						!drag_resizing &&
+						!DnDTracker.GtkDragging &&
+						!DnDTracker.DragResizing &&
 						ZoomIn == 0;
 				bool tmp = last_no_render;
 				last_no_render = result;
@@ -196,7 +196,7 @@ namespace Docky.Interface
 			get {
 				double offset = 0;
 				// we never hide in these conditions
-				if (DockPreferences.AutohideType == AutohideType.None || drag_resizing || PainterOpacity == 1) {
+				if (DockPreferences.AutohideType == AutohideType.None || DnDTracker.DragResizing || PainterOpacity == 1) {
 					if ((RenderTime - FirstRenderTime) > SummonTime)
 						return 0;
 					offset = 1 - Math.Min (1, (DateTime.UtcNow - FirstRenderTime).TotalMilliseconds / SummonTime.TotalMilliseconds);
@@ -231,7 +231,7 @@ namespace Docky.Interface
 		/// </value>
 		double ZoomIn {
 			get {
-				if (drag_resizing && drag_start_point != Cursor)
+				if (DnDTracker.InternalDragActive)
 					return 0;
 				
 				double zoom = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
@@ -450,8 +450,8 @@ namespace Docky.Interface
 		void DrawIcon (Context cr, int icon, bool hovered)
 		{
 			// Don't draw the icon we are dragging around
-			if (GtkDragging && !DragState.IsFinished) {
-				int item = DockItems.IndexOf (DragState.DragItem);
+			if (DnDTracker.GtkDragging && !DnDTracker.DragState.IsFinished) {
+				int item = DockItems.IndexOf (DnDTracker.DragState.DragItem);
 				if (item == icon && DockServices.ItemsService.ItemCanBeMoved (item))
 					return;
 			}
@@ -551,7 +551,7 @@ namespace Docky.Interface
 				              iconPosition.X / scale, iconPosition.Y / scale);
 				cr.PaintWithAlpha (fadeInOpacity);
 				
-				bool shade_light = GtkDragging && !PreviewIsDesktopFile && CursorIsOverDockArea &&
+				bool shade_light = DnDTracker.GtkDragging && !DnDTracker.PreviewIsDesktopFile && CursorIsOverDockArea &&
 					dockItem.IsAcceptingDrops && icon == PositionProvider.IndexAtPosition (Cursor);
 				
 				bool shade_dark = animationType == ClickAnimationType.Darken;
@@ -602,7 +602,7 @@ namespace Docky.Interface
 			// blank surface (which is slow)
 			if (!PopupMenu.Visible && hovered &&
 			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && 
-			    !GtkDragging && !drag_resizing) {
+			    !DnDTracker.GtkDragging && !DnDTracker.DragResizing) {
 
 				Gdk.Point textPoint;
 				Surface textSurface = dockItem.GetTextSurface (cr.Target);
