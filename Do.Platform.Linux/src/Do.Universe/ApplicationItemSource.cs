@@ -47,7 +47,10 @@ namespace Do.Universe.Linux {
 		}
 
 		public override IEnumerable<Type> SupportedItemTypes {
-			get { yield return typeof (ApplicationItem); }
+			get { 
+				yield return typeof (ApplicationItem); 
+				yield return typeof (CategoryItem);
+			}
 		}
 
 		public override string Name {
@@ -95,6 +98,13 @@ namespace Do.Universe.Linux {
 			return baseFiles.Concat (recursiveFiles);
 		}
 		
+		IEnumerable<CategoryItem> LoadCategoryItems (ApplicationItem appItem)
+		{
+			return appItem.Categories
+				.Where (c => !CategoryItem.ContainsCategory (c))
+				.Select (c => CategoryItem.GetCategoryItem (c));
+		}
+		
 		bool ShouldUseDesktopFile (string path)
 		{
 			return !path.Contains ("screensavers");
@@ -107,14 +117,33 @@ namespace Do.Universe.Linux {
 		
 		public override void UpdateItems ()
 		{
-			app_items = desktop_file_directories
-				.SelectMany (dir => LoadDesktopFiles (dir))
+			IEnumerable<ApplicationItem> appItems = desktop_file_directories
+				.SelectMany (dir => LoadDesktopFiles (dir));
+			
+			IEnumerable<CategoryItem> categoryItems = appItems
+				.SelectMany (a => LoadCategoryItems (a));
+
+			app_items = appItems
 				.Cast<Item> ()
+				.Concat (categoryItems.Cast<Item> ())
+				.Distinct ()
 				.ToArray ();
 		}
 
 		public override IEnumerable<Item> Items {
 			get { return app_items; }
+		}
+		
+		public override IEnumerable<Item> ChildrenOfItem (Item item)
+		{
+			if (item is CategoryItem) {
+				CategoryItem catItem = item as CategoryItem;
+				return app_items
+					.Where (a => a is ApplicationItem)
+					.Where (a => (a as ApplicationItem).Categories.Contains (catItem.Category));
+			} else {
+				return Enumerable.Empty<Item> ();
+			}
 		}
 		
 		/// <summary>

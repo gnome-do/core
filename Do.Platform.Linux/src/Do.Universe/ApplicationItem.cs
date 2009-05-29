@@ -122,6 +122,7 @@ namespace Do.Universe.Linux {
 
 		protected DesktopItem item;
 		string name, description, icon, mimetype;
+		IEnumerable<string> categories;
 
 		/// <summary>
 		/// Create an application item from a desktop file.
@@ -137,11 +138,17 @@ namespace Do.Universe.Linux {
 				name = item.GetLocalestring ("Name");
 				description = item.GetLocalestring ("Comment");
 				icon = item.GetString ("Icon") ?? DefaultApplicationIcon;
+				
+				if (item.AttrExists ("Categories"))
+					categories = item.GetString ("Categories").Split (';');
+				else
+					categories = Enumerable.Empty<string> ();
 			} else {
 				name = Path.GetFileName (item.Location);
 				description =
 					Catalog.GetString ("This application could not be indexed.");
 				icon = DefaultApplicationIcon;
+				categories = Enumerable.Empty<string> ();
 			}
 		}
 		
@@ -155,6 +162,10 @@ namespace Do.Universe.Linux {
 		
 		public override string Icon {
 			get { return icon; }
+		}
+		
+		public IEnumerable<string> Categories {
+			get { return categories; }
 		}
 
 		public bool NoDisplay {
