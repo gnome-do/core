@@ -55,6 +55,8 @@ namespace Do.Interface.Wink
 		
 		static ScreenUtils ()
 		{
+			Wnck.Global.ClientType = ClientType.Pager;
+			
 			Wnck.Screen.Default.ViewportsChanged += HandleViewportsChanged;
 			Wnck.Screen.Default.WorkspaceCreated += HandleWorkspaceCreated;
 			Wnck.Screen.Default.WorkspaceDestroyed += HandleWorkspaceDestroyed;
