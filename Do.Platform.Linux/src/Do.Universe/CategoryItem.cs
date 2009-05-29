@@ -55,7 +55,7 @@ namespace Do.Universe.Linux
 			return Instances [lowCat];
 		}
 		
-		string descritpion, category;
+		string name, descritpion, category;
 		
 		public override string Description {
 			get { return descritpion; }
@@ -66,7 +66,7 @@ namespace Do.Universe.Linux
 		}
 
 		public override string Name {
-			get { return category; }
+			get { return name; }
 		}
 		
 		public string Category {
@@ -76,6 +76,7 @@ namespace Do.Universe.Linux
 		protected CategoryItem (string category)
 		{
 			this.category = category;
+			name = string.Format (Catalog.GetString ("{0} Application Category"), category);
 			descritpion = string.Format (Catalog.GetString ("Applications in the {0} category"), category);
 		}
 	}
