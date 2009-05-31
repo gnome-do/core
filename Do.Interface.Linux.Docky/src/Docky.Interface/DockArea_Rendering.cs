@@ -288,8 +288,8 @@ namespace Docky.Interface
 		void DrawDrock (Context cr)
 		{
 			Gdk.Rectangle dockArea = GetDockArea ();
-			// fixme
 			window.SetBackgroundBlur (dockArea);
+			
 			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
 
 			IDockPainter dpaint = (Painter == null) ? LastPainter : Painter;
