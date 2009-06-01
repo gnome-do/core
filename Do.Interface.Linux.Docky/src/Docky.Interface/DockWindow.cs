@@ -49,7 +49,6 @@ namespace Docky.Interface
 		Interface.DoInteropService interop_service;
 		IDoController controller;
 		Gdk.Rectangle current_mask, blur_mask;
-		Gtk.Window offset_window;
 		
 		uint strut_timer;
 		bool presented;
@@ -104,34 +103,8 @@ namespace Docky.Interface
 
 			ShowAll ();
 			Stick ();
-			
-			BuildOffsetWindow ();
 		}
 		
-		void BuildOffsetWindow ()
-		{
-			offset_window = new Gtk.Window (Gtk.WindowType.Toplevel);
-			offset_window.AppPaintable = true;
-			offset_window.Decorated = false;
-			offset_window.SkipPagerHint = true;
-			offset_window.SkipTaskbarHint = true;
-			offset_window.Resizable = false;
-			offset_window.CanFocus = false;
-			offset_window.TypeHint = WindowTypeHint.Desktop;
-			
-			offset_window.Stick ();
-			offset_window.KeepBelow = true;
-			
-			offset_window.SetCompositeColormap ();
-			
-			offset_window.ExposeEvent += delegate {
-				using (Cairo.Context cr = CairoHelper.Create (offset_window.GdkWindow))
-					cr.AlphaFill ();
-			};
-			
-			offset_window.Show ();
-		}
-
 		void RegisterEvents ()
 		{
 			Realized += (o, a) => GdkWindow.SetBackPixmap (null, false);

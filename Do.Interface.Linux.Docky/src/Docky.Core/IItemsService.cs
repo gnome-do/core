@@ -61,6 +61,8 @@ namespace Docky.Core
 		
 		bool ItemCanBeMoved (int item);
 		
+		bool ItemCanBeRemoved (int item);
+		
 		void DropItemOnPosition (AbstractDockItem item, int position);
 
 		void MoveItemToPosition (AbstractDockItem item, int position);

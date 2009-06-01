@@ -360,9 +360,7 @@ namespace Docky.Core.Default
 			IEnumerable<Item> mostUsedItems = MostUsedItems ();
 			
 			DateTime currentTime = DateTime.UtcNow;
-			foreach (Item item in mostUsedItems) {
-				if (local_cust.Any (di => di.Item != null && di.Item.UniqueId == item.UniqueId))
-					continue;
+			foreach (Item item in mostUsedItems.Where (i => !local_cust.Any (ci => ci.Item != null && ci.Item.UniqueId == i.UniqueId))) {
 				
 				if (old_items.Any (di => di.Item == item)) {
 					stat_items.AddRange (old_items
@@ -407,20 +405,13 @@ namespace Docky.Core.Default
 				    .Where (w => !w.IsSkipTasklist && !knownWindows.Contains (w))
 					.GroupBy (w => SafeResClass (w));
 			
-			foreach (IEnumerable<Wnck.Window> windows in prunedWindows) {
-				ApplicationDockItem adi = new ApplicationDockItem (windows);
-
-				if (task_items.Any (di => di.Equals (adi))) {
-					AbstractDockItem match = task_items.Where (di => di.Equals (adi)).First ();
-					adi.DockAddItem = match.DockAddItem;
-					adi.Position = match.Position;
-				} else {
-					adi.DockAddItem = DateTime.UtcNow;
-				}
-					
-				out_items.Add (adi);
-				RegisterDockItem (adi);
-			}
+			IEnumerable<ApplicationDockItem> apps = WindowUtils.GetWindows ()
+				    .Where (w => !w.IsSkipTasklist && !knownWindows.Contains (w))
+					.GroupBy (w => SafeResClass (w))
+					.Select (ws => CreateApplicationDockItem (ws, task_items));
+			
+			apps.ForEach (a => RegisterDockItem (a));
+			out_items.AddRange (apps);
 			
 			foreach (AbstractDockItem item in task_items) {
 				UnregisterDockItem (item);
@@ -428,12 +419,27 @@ namespace Docky.Core.Default
 			}
 			
 			foreach (ApplicationDockItem adi in out_items.OrderBy (di => di.DockAddItem)) {
-				if (adi.Position == 0)
+				if (adi.Position == 0) // raw and unpositioned items
 					adi.Position = LastPosition + 1;
 			}
 					
 			task_items.Clear ();
 			task_items.AddRange (out_items.Cast<AbstractDockItem> ());
+		}
+		
+		ApplicationDockItem CreateApplicationDockItem (IEnumerable<Wnck.Window> windows, IEnumerable<AbstractDockItem> lastSet)
+		{
+			ApplicationDockItem adi = new ApplicationDockItem (windows);
+			
+			if (lastSet.Any (di => di.Equals (adi))) {
+				AbstractDockItem match = lastSet.Where (di => di.Equals (adi)).First ();
+				adi.DockAddItem = match.DockAddItem;
+				adi.Position = match.Position;
+				} else {
+				adi.DockAddItem = DateTime.UtcNow;
+			}
+			
+			return adi;
 		}
 		
 		string SafeResClass (Wnck.Window window)
@@ -627,9 +633,7 @@ namespace Docky.Core.Default
 					// add a separator and any docklets that are active
 					if (DockServices.DockletService.ActiveDocklets.Any ()) {
 						output_items.Add (Separator);
-						output_items.AddRange (Docklets
-						                       .Cast<AbstractDockItem> ()
-						                       .OrderBy (docklet => docklet.Position));
+						output_items.AddRange (Docklets.OrderBy (docklet => docklet.Position));
 					}
 				}
 				return readonly_output_items;
@@ -672,6 +676,13 @@ namespace Docky.Core.Default
 				return false;
 			
 			return (OrderedItems.Contains (DockItems [item]) || Docklets.Contains (DockItems [item]));
+		}
+		
+		public bool ItemCanBeRemoved (int item)
+		{
+			AbstractDockItem adi = DockItems [item];
+			return adi.WindowCount == 0 && ((GetIconSource (adi) == IconSource.Statistics && adi is ItemDockItem) ||
+			                                (GetIconSource (adi) == IconSource.Custom));
 		}
 		
 		public void DropItemOnPosition (AbstractDockItem item, int position)
@@ -793,38 +804,34 @@ namespace Docky.Core.Default
 		
 		public bool RemoveItem (int item)
 		{
-			bool ret_val = false;
+			bool result = ItemCanBeRemoved (item);
 			
-			if (DockItems [item].WindowCount == 0) {
-				if (GetIconSource (DockItems [item]) == IconSource.Statistics && DockItems [item] is ItemDockItem) {
+			if (result) {
+				if (GetIconSource (DockItems [item]) == IconSource.Statistics) {
 					ItemDockItem di = (DockItems [item] as ItemDockItem);
-					if (di.Item != null) {
-						DockPreferences.AddBlacklistItem ((DockItems [item] as ItemDockItem).Item.UniqueId);
-						DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
-						UpdateItems ();
-						ret_val = true;
-					}
+					DockPreferences.AddBlacklistItem ((DockItems [item] as ItemDockItem).Item.UniqueId);
+					DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
 				} else if (GetIconSource (DockItems [item]) == IconSource.Custom) {
-					foreach (KeyValuePair<string, AbstractDockItem> kvp in custom_items) {
-						if (kvp.Value.Equals (DockItems [item])) {
-							if (kvp.Key.EndsWith (".desktop") && Path.GetDirectoryName (kvp.Key) == DesktopFilesDirectory) {
-								try {
-									File.Delete (kvp.Key);
-								} catch { }
-							}
-							custom_items.Remove (kvp.Key);
-							
-							UpdateItems ();
-							ret_val = true;
-							break;
+					KeyValuePair<string, AbstractDockItem> kvp = custom_items
+						.Where (k => k.Value.Equals (DockItems [item]))
+						.First ();
+					
+					custom_items.Remove (kvp.Key);
+					
+					if (kvp.Key.EndsWith (".desktop") && Path.GetDirectoryName (kvp.Key) == DesktopFilesDirectory) {
+						try {
+							File.Delete (kvp.Key);
+						} catch {
+							// Don't really care, it was only a nice thing to do...
 						}
 					}
 				}
+				
+				UpdateItems ();
+				WriteData ();
 			}
 			
-			UpdateItems ();
-			WriteData ();
-			return ret_val;
+			return result;
 		}
 		
 		public bool HotSeatItem (AbstractDockItem item, List<AbstractDockItem> seatedItems)

@@ -40,6 +40,8 @@ namespace Do.Interface.Wink
 			Impress,
 		}
 		
+		static bool initialized;
+		
 		static string RemapFile {
 			get { return Path.Combine (Services.Paths.UserDataDirectory, "RemapFile"); }
 		}
@@ -69,8 +71,13 @@ namespace Do.Interface.Wink
 		static DateTime last_update = new DateTime (0);
 		
 		#region ctor
-		static WindowUtils ()
+		public static void Initialize ()
 		{
+			if (initialized)
+				return;
+			
+			initialized = true;
+			
 			List<Regex> regex = new List<Regex> ();
 			foreach (string s in PrefixStrings) {
 				 regex.Add (new Regex (string.Format ("^{0}$", s), RegexOptions.IgnoreCase));

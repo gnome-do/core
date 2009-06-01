@@ -42,6 +42,14 @@ namespace Docky.Interface
 	{
 		public static readonly TimeSpan BaseAnimationTime = new TimeSpan (0, 0, 0, 0, 150);
 		
+		static DateTime UpdateTimeStamp (DateTime lastStamp, TimeSpan animationLength)
+		{
+			TimeSpan delta = DateTime.UtcNow - lastStamp;
+			if (delta < animationLength)
+				return DateTime.UtcNow.Subtract (animationLength - delta);
+			return DateTime.UtcNow;
+		}
+		
 		const uint OffDockWakeupTime = 250;
 		const uint OnDockWakeupTime = 20;
 		
@@ -67,6 +75,10 @@ namespace Docky.Interface
 		#endregion
 		
 		#region Public Properties
+		//// <value>
+		/// Returns true if the cursor is over the visible part of the dock or the pixel closest to its autohide edge
+		/// </value>
+		public bool CursorIsOverDockArea { get; private set; }
 		
 		/// <value>
 		/// The width of the docks window, but not the visible dock
@@ -77,6 +89,11 @@ namespace Docky.Interface
 		/// The height of the docks window
 		/// </value>
 		public int Height { get; private set; }
+		
+		//// <value>
+		/// Returns true if the dock is currently being overlayed by an IDockPainter
+		/// </value>
+		public bool PainterOverlayVisible { get; private set; }
 		
 		/// <value>
 		/// The width of the visible dock
@@ -116,6 +133,20 @@ namespace Docky.Interface
 			}
 		}
 
+		/// <value>
+		/// The current cursor as known to the dock.
+		/// </value>
+		public Gdk.Point Cursor {
+			get {
+				return CursorTracker.Cursor;
+			}
+		}
+		
+		public Gdk.Rectangle MinimumDockArea {
+			get {
+				return PositionProvider.MinimumDockArea;
+			}
+		}
 		#endregion
 		
 		AutohideTracker AutohideTracker { get; set; }
@@ -136,30 +167,15 @@ namespace Docky.Interface
 		
 		AbstractDockItem CurrentDockItem {
 			get {
-				try { return DockItems [PositionProvider.IndexAtPosition (Cursor)]; }
-				catch { return null; }
+				int index = PositionProvider.IndexAtPosition (Cursor);
+				if (index >= 0 && index < DockItems.Count)
+					return DockItems [index];
+				return null;
 			}
 		}
 		
 		TimeSpan SummonTime {
 			get { return DockPreferences.SummonTime; }
-		}
-		
-		public bool CursorIsOverDockArea { get; private set; }
-		
-		/// <value>
-		/// The current cursor as known to the dock.
-		/// </value>
-		public Gdk.Point Cursor {
-			get {
-				return CursorTracker.Cursor;
-			}
-		}
-		
-		public Gdk.Rectangle MinimumDockArea {
-			get {
-				return PositionProvider.MinimumDockArea;
-			}
 		}
 		
 		bool WindowIntersectingOther { 
@@ -184,15 +200,17 @@ namespace Docky.Interface
 		{
 			this.window = window;
 			
+			ScreenUtils.Initialize ();
+			WindowUtils.Initialize ();
+			
+			AnimationState   = new DockAnimationState ();
 			AutohideTracker  = new AutohideTracker (this);
 			CursorTracker    = new CursorTracker (window, OffDockWakeupTime);
 			PositionProvider = new ItemPositionProvider (this);
 			DnDTracker       = new DnDTracker (this, PositionProvider, CursorTracker);
-			AnimationState   = new DockAnimationState ();
+			PopupMenu        = new DockItemMenu ();
 			
 			BuildAnimationStateEngine ();
-			
-			PopupMenu = new DockItemMenu ();
 
 			this.SetCompositeColormap ();
 
@@ -299,8 +317,8 @@ namespace Docky.Interface
 			                             () => (CursorIsOverDockArea && ZoomIn != 1) || (!CursorIsOverDockArea && ZoomIn != 0));
 			
 			AnimationState.AddCondition (Animations.Open,
-			                             () => DateTime.UtcNow - enter_time < SummonTime ||
-			                             DateTime.UtcNow - interface_change_time < SummonTime);
+			                             () => DateTime.UtcNow - enter_time < BaseAnimationTime ||
+			                             DateTime.UtcNow - interface_change_time < BaseAnimationTime);
 			
 			AnimationState.AddCondition (Animations.Bounce,
 			                             () => DockItems.Any (di => di.TimeSinceClick <= BounceTime));
@@ -423,7 +441,7 @@ namespace Docky.Interface
 
 			Painter = null;
 			PainterOverlayVisible = false;
-			interface_change_time = DateTime.UtcNow;
+			interface_change_time = UpdateTimeStamp (interface_change_time, SummonTime);
 
 			SetParentInputMask ();
 			AnimatedDraw ();
@@ -448,7 +466,7 @@ namespace Docky.Interface
 					Painter.Interrupt ();
 				Painter = painter;
 				PainterOverlayVisible = true;
-				interface_change_time = DateTime.UtcNow;
+				interface_change_time = UpdateTimeStamp (interface_change_time, SummonTime);
 
 				SetParentInputMask ();
 				AnimatedDraw ();
@@ -496,7 +514,8 @@ namespace Docky.Interface
 			
 			if (CursorIsOverDockArea != tmp) {
 				ResetCursorTimer ();
-				enter_time = DateTime.UtcNow;
+				enter_time = UpdateTimeStamp (enter_time, BaseAnimationTime);
+				
 				switch (DockPreferences.AutohideType) {
 				case AutohideType.Autohide:
 					showhide_time = enter_time;
@@ -741,7 +760,7 @@ namespace Docky.Interface
 			Painter.Interrupt ();
 			Painter = null;
 			PainterOverlayVisible = false;
-			interface_change_time = DateTime.UtcNow;
+			interface_change_time = UpdateTimeStamp (interface_change_time, SummonTime);
 			
 			DnDTracker.Enable ();
 			window.UnpresentWindow ();

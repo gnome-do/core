@@ -57,7 +57,8 @@ namespace Docky.Interface
 		const int UrgentIndicatorSize = 12;
 		
 		Dictionary<IDockPainter, Surface> painter_surfaces;
-		bool next_fast_render, first_render_set, last_no_render;
+		bool next_fast_render, first_render_set, last_no_render, rendering;
+		double? zoom_in_buffer;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
@@ -70,8 +71,6 @@ namespace Docky.Interface
 		DateTime FirstRenderTime { get; set; }
 		
 		PreviousRenderData RenderData { get; set; }
-
-		public bool PainterOverlayVisible { get; set; }
 
 		//// <value>
 		/// Determines if the current rendering state allows for a fast render
@@ -246,6 +245,12 @@ namespace Docky.Interface
 				if (DnDTracker.InternalDragActive)
 					return 0;
 				
+				// we buffer this value during renders since it will be checked many times and we dont need to 
+				// recalculate it each time
+				if (zoom_in_buffer.HasValue && rendering) {
+					return zoom_in_buffer.Value;
+				}
+				
 				double zoom = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
 					                 BaseAnimationTime.TotalMilliseconds);
 				if (CursorIsOverDockArea) {
@@ -258,6 +263,9 @@ namespace Docky.Interface
 				
 				if (PainterOverlayVisible)
 					zoom = zoom * DockIconOpacity;
+				
+				if (rendering)
+					zoom_in_buffer = zoom;
 				
 				return zoom;
 			}
@@ -404,7 +412,7 @@ namespace Docky.Interface
 				if (index >= startItem && index <= endItem)
 					DrawIcon (cr, index, true);
 				
-			} else if (!animationRequired && SingleItemRender) {
+			} else if (SingleItemRender && !animationRequired) {
 				// A single icon for some reason needs to be drawn again. This is more or less
 				// a special case of a fast render
 				Gdk.Rectangle renderArea = Gdk.Rectangle.Zero;
@@ -469,7 +477,7 @@ namespace Docky.Interface
 			}
 			
 			AbstractDockItem dockItem = DockItems [icon];
-			if (dockItem == null) return;
+			if (dockItem == null) return; //happens?
 			
 			PointD center;
 			double zoom;
@@ -683,7 +691,7 @@ namespace Docky.Interface
 		Surface GetIndicator (Surface similar)
 		{
 			if (indicator == null) {
-				Style style = Docky.Interface.DockWindow.Window.Style;
+				Style style = window.Style;
 				Gdk.Color color = style.Backgrounds [(int) StateType.Selected].SetMinimumValue (100);
 
 				indicator = similar.CreateSimilar (similar.Content, IndicatorSize * 2, IndicatorSize * 2);
@@ -789,6 +797,8 @@ namespace Docky.Interface
 			if (!IsDrawable)
 				return false;
 			
+			rendering = true;
+			zoom_in_buffer = null;
 			RenderTime = DateTime.UtcNow;
 			Context cr;
 			if (backbuffer == null) {
@@ -826,6 +836,7 @@ namespace Docky.Interface
 			((IDisposable)cr.Target).Dispose ();
 			((IDisposable)cr).Dispose ();
 			
+			rendering = false;
 			return true;
 		}
 		
