@@ -52,6 +52,21 @@ namespace Do.Interface.Xlib {
 		BottomEnd = 11
 	}
 	
+	public enum XGravity
+	{
+		ForgetGravity = 0,
+		NorthWestGravity = 1,
+		NorthGravity = 2,
+		NorthEastGravity = 3,
+		WestGravity = 4,
+		CenterGravity = 5,
+		EastGravity = 6,
+		SouthWestGravity = 7,
+		SouthGravity = 8,
+		SouthEastGravity = 9,
+		StaticGravity = 10,
+	}
+	
 	public static class Xlib {
 		const string libX11 = "X11";
 		const string libGdkX11 = "libgdk-x11";
@@ -97,10 +112,9 @@ namespace Do.Interface.Xlib {
 			return gdk_x11_display_get_xdisplay (display.Handle);
 		}
 		
-		public static int XChangeProperty (Gdk.Window window, IntPtr property, IntPtr type, int mode, uint[] data)
+		public static int XChangeProperty (Gdk.Window window, IntPtr property, IntPtr type, int mode, IntPtr[] data)
 		{
-			IntPtr [] dataArray = data.Select (i => (IntPtr) i).ToArray ();
-			return XChangeProperty (GdkDrawableXDisplay (window), GdkWindowX11Xid (window), property, type, 32, mode, dataArray, data.Length); 
+			return XChangeProperty (GdkDrawableXDisplay (window), GdkWindowX11Xid (window), property, type, 32, mode, data, data.Length); 
 		}
 		
 		public static void GdkWindowSetUserTime (Gdk.Window window, uint timestamp)

@@ -65,7 +65,6 @@
     <File name="src/Docky.Interface/PaintNeededArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Painters/HotSeatPainter.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/DockArea_Rendering.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Docky.Interface/DockArea_DragAndDrop.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Items" subtype="Directory" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Items/ActionDockItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/Docky.Interface.Items/AbstractDockItem.cs" subtype="Code" buildaction="Compile" />
@@ -93,6 +92,8 @@
     <File name="src/Docky.Utilities/AutohideType.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/AutohideTracker.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Docky.Interface/PoofWindow.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/CursorTracker.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Docky.Interface/DnDTracker.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

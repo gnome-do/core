@@ -71,8 +71,6 @@ namespace Docky.Interface
 		
 		int windowCount;
 		
-		Gdk.Pixbuf drag_pixbuf;
-		
 		IEnumerable<Wnck.Window> windows;
 		
 		IApplicationItem launcher;

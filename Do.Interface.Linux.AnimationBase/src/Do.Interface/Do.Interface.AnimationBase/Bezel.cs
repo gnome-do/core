@@ -149,7 +149,7 @@ namespace Do.Interface.AnimationBase
 			int width, height;
 			GetSize (out width, out height);
 			
-			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (((int)(bezel_drawing_area.WindowWidth-bezel_glass_results.WidthRequest)/2), -10, 0, 0));
+			pw.UpdatePosition (0, Pane.First, new Gdk.Rectangle (((int) (bezel_drawing_area.WindowWidth - bezel_glass_results.WidthRequest) / 2), -10, 0, 0));
 			Show ();
 			bezel_glass_window.Show ();
 			Interface.Windowing.PresentWindow (this);

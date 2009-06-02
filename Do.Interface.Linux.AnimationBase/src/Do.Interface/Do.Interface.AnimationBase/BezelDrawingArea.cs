@@ -437,7 +437,7 @@ namespace Do.Interface.AnimationBase
 			if (preview && TwoPaneWidth > 400) {
 				window_scale = 400.0 / TwoPaneWidth;
 			}
-			SetSizeRequest ((int)Math.Floor (WindowWidth * window_scale), (int)Math.Floor (WindowHeight * window_scale));
+			SetSizeRequest ((int) Math.Floor (WindowWidth * window_scale), (int) Math.Floor (WindowHeight * window_scale));
 			drawing_area  = new Gdk.Rectangle ((WindowWidth - TwoPaneWidth) / 2, ShadowRadius, TwoPaneWidth, InternalHeight);
 			if (preview)
 				drawing_area.X = ShadowRadius;

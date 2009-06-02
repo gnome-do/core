@@ -24,7 +24,6 @@ namespace Docky
 		
 		int size;
 		int x, y;
-		double last_level;
 		
 		DateTime run_time;
 		
@@ -41,8 +40,8 @@ namespace Docky
 		
 		public void SetCenterPosition (Gdk.Point point)
 		{
-			this.x = point.X - (size / 2);
-			this.y = point.Y - (size / 2);
+			x = point.X - (size / 2);
+			y = point.Y - (size / 2);
 		}
 		
 		public void Run ()
@@ -82,6 +81,7 @@ namespace Docky
 		void HandleExposeEvent (object o, ExposeEventArgs args)
 		{
 			using (Cairo.Context cr = CairoHelper.Create (window.GdkWindow)) {
+				cr.Scale ((double) size / 128, (double) size / 128);
 				cr.AlphaFill ();
 				int offset;
 				switch ((int) Math.Floor (5 * AnimationState)) {

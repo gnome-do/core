@@ -29,6 +29,7 @@ namespace Do.Interface.Wink
 	
 	public static class ScreenUtils
 	{
+		static bool initialized;
 		static string ViewportFormatString = Catalog.GetString ("Desktop") + " {0}";
 		static Dictionary<Workspace, Viewport [,]> layouts;
 		
@@ -53,15 +54,20 @@ namespace Do.Interface.Wink
 			}
 		}
 		
-		static ScreenUtils ()
+		public static void Initialize ()
 		{
+			if (initialized)
+				return;
+			
+			initialized = true;
+			
 			Wnck.Screen.Default.ViewportsChanged += HandleViewportsChanged;
 			Wnck.Screen.Default.WorkspaceCreated += HandleWorkspaceCreated;
 			Wnck.Screen.Default.WorkspaceDestroyed += HandleWorkspaceDestroyed;
 			
 			UpdateViewports ();
 		}
-
+		
 		static void HandleWorkspaceDestroyed(object o, WorkspaceDestroyedArgs args)
 		{
 			UpdateViewports ();

@@ -57,7 +57,8 @@ namespace Docky.Interface
 		const int UrgentIndicatorSize = 12;
 		
 		Dictionary<IDockPainter, Surface> painter_surfaces;
-		bool next_fast_render, first_render_set, last_no_render;
+		bool next_fast_render, first_render_set, last_no_render, rendering;
+		double? zoom_in_buffer;
 		
 		Surface backbuffer, input_area_buffer, dock_icon_buffer;
 		Surface indicator, urgent_indicator;
@@ -71,24 +72,28 @@ namespace Docky.Interface
 		
 		PreviousRenderData RenderData { get; set; }
 
-		bool PainterOverlayVisible { get; set; }
-
+		//// <value>
+		/// Determines if the current rendering state allows for a fast render
+		/// </value>
 		bool CanFastRender {
 			get {
 				bool result = next_fast_render && !RenderData.ForceFullRender && RenderData.RenderItems.Count == 0;
-				next_fast_render = RenderData.ZoomIn == 1 && ZoomIn == 1 && !drag_resizing;
+				next_fast_render = RenderData.ZoomIn == 1 && ZoomIn == 1 && !DnDTracker.DragResizing;
 				return result;
 			}
 		}
 		
+		//// <value>
+		/// Determines if the current rendering state allows for a "no" render
+		/// </value>
 		bool CanNoRender {
 			get {
 				bool result = DockPreferences.ZoomEnabled && 
 					    !RenderData.ForceFullRender &&
 						RenderData.RenderItems.Count == 0 &&
 					    RenderData.ZoomIn == 0 &&
-						!GtkDragging &&
-						!drag_resizing &&
+						!DnDTracker.GtkDragging &&
+						!DnDTracker.DragResizing &&
 						ZoomIn == 0;
 				bool tmp = last_no_render;
 				last_no_render = result;
@@ -96,6 +101,9 @@ namespace Docky.Interface
 			}
 		}
 		
+		//// <value>
+		/// Determins if a single item only needs to be redrawn and updated (usually caused by an update request)
+		/// </value>
 		bool SingleItemRender {
 			get {
 				return !RenderData.ForceFullRender && 
@@ -133,6 +141,9 @@ namespace Docky.Interface
 			}
 		}
 		
+		//// <value>
+		/// Get autohide state
+		/// </value>
 		bool IsHidden {
 			get {
 				bool hidden = false;
@@ -196,7 +207,7 @@ namespace Docky.Interface
 			get {
 				double offset = 0;
 				// we never hide in these conditions
-				if (DockPreferences.AutohideType == AutohideType.None || drag_resizing || PainterOpacity == 1) {
+				if (DockPreferences.AutohideType == AutohideType.None || DnDTracker.DragResizing || PainterOpacity == 1) {
 					if ((RenderTime - FirstRenderTime) > SummonTime)
 						return 0;
 					offset = 1 - Math.Min (1, (DateTime.UtcNow - FirstRenderTime).TotalMilliseconds / SummonTime.TotalMilliseconds);
@@ -231,8 +242,14 @@ namespace Docky.Interface
 		/// </value>
 		double ZoomIn {
 			get {
-				if (drag_resizing && drag_start_point != Cursor)
+				if (DnDTracker.InternalDragActive)
 					return 0;
+				
+				// we buffer this value during renders since it will be checked many times and we dont need to 
+				// recalculate it each time
+				if (zoom_in_buffer.HasValue && rendering) {
+					return zoom_in_buffer.Value;
+				}
 				
 				double zoom = Math.Min (1, (RenderTime - enter_time).TotalMilliseconds / 
 					                 BaseAnimationTime.TotalMilliseconds);
@@ -246,6 +263,9 @@ namespace Docky.Interface
 				
 				if (PainterOverlayVisible)
 					zoom = zoom * DockIconOpacity;
+				
+				if (rendering)
+					zoom_in_buffer = zoom;
 				
 				return zoom;
 			}
@@ -276,6 +296,8 @@ namespace Docky.Interface
 		void DrawDrock (Context cr)
 		{
 			Gdk.Rectangle dockArea = GetDockArea ();
+			window.SetBackgroundBlur (dockArea);
+			
 			DockBackgroundRenderer.RenderDockBackground (cr, dockArea);
 
 			IDockPainter dpaint = (Painter == null) ? LastPainter : Painter;
@@ -390,7 +412,7 @@ namespace Docky.Interface
 				if (index >= startItem && index <= endItem)
 					DrawIcon (cr, index, true);
 				
-			} else if (!animationRequired && SingleItemRender) {
+			} else if (SingleItemRender && !animationRequired) {
 				// A single icon for some reason needs to be drawn again. This is more or less
 				// a special case of a fast render
 				Gdk.Rectangle renderArea = Gdk.Rectangle.Zero;
@@ -448,14 +470,14 @@ namespace Docky.Interface
 		void DrawIcon (Context cr, int icon, bool hovered)
 		{
 			// Don't draw the icon we are dragging around
-			if (GtkDragging && !DragState.IsFinished) {
-				int item = DockItems.IndexOf (DragState.DragItem);
+			if (DnDTracker.GtkDragging && !DnDTracker.DragState.IsFinished) {
+				int item = DockItems.IndexOf (DnDTracker.DragState.DragItem);
 				if (item == icon && DockServices.ItemsService.ItemCanBeMoved (item))
 					return;
 			}
 			
 			AbstractDockItem dockItem = DockItems [icon];
-			if (dockItem == null) return;
+			if (dockItem == null) return; //happens?
 			
 			PointD center;
 			double zoom;
@@ -549,7 +571,7 @@ namespace Docky.Interface
 				              iconPosition.X / scale, iconPosition.Y / scale);
 				cr.PaintWithAlpha (fadeInOpacity);
 				
-				bool shade_light = GtkDragging && !PreviewIsDesktopFile && CursorIsOverDockArea &&
+				bool shade_light = DnDTracker.GtkDragging && !DnDTracker.PreviewIsDesktopFile && CursorIsOverDockArea &&
 					dockItem.IsAcceptingDrops && icon == PositionProvider.IndexAtPosition (Cursor);
 				
 				bool shade_dark = animationType == ClickAnimationType.Darken;
@@ -600,10 +622,9 @@ namespace Docky.Interface
 			// blank surface (which is slow)
 			if (!PopupMenu.Visible && hovered &&
 			    CursorIsOverDockArea && dockItem.GetTextSurface (cr.Target) != null && 
-			    !GtkDragging && !drag_resizing) {
+			    !DnDTracker.GtkDragging && !DnDTracker.DragResizing) {
 
 				Gdk.Point textPoint;
-				Gdk.Rectangle monitor = LayoutUtils.MonitorGemonetry ();
 				Surface textSurface = dockItem.GetTextSurface (cr.Target);
 				textPoint.X = PositionProvider.IconUnzoomedPosition (icon).X - (dockItem.TextSurfaceSize.Width >> 1);
 				textPoint.X = Math.Max (0, Math.Min (Width - dockItem.TextSurfaceSize.Width, textPoint.X));
@@ -670,7 +691,7 @@ namespace Docky.Interface
 		Surface GetIndicator (Surface similar)
 		{
 			if (indicator == null) {
-				Style style = Docky.Interface.DockWindow.Window.Style;
+				Style style = window.Style;
 				Gdk.Color color = style.Backgrounds [(int) StateType.Selected].SetMinimumValue (100);
 
 				indicator = similar.CreateSimilar (similar.Content, IndicatorSize * 2, IndicatorSize * 2);
@@ -776,6 +797,8 @@ namespace Docky.Interface
 			if (!IsDrawable)
 				return false;
 			
+			rendering = true;
+			zoom_in_buffer = null;
 			RenderTime = DateTime.UtcNow;
 			Context cr;
 			if (backbuffer == null) {
@@ -813,6 +836,7 @@ namespace Docky.Interface
 			((IDisposable)cr.Target).Dispose ();
 			((IDisposable)cr).Dispose ();
 			
+			rendering = false;
 			return true;
 		}
 		

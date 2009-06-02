@@ -46,7 +46,6 @@ namespace Docky.Interface
 		Item item;
 		int window_count;
 		uint handle_timer;
-		Gdk.Pixbuf drag_pixbuf;
 		List<Wnck.Window> windows;
 		
 		public event EventHandler RemoveClicked;
@@ -208,9 +207,6 @@ namespace Docky.Interface
 			UnregisterWindowEvents ();
 			item = null;
 			windows.Clear ();
-			
-			if (drag_pixbuf != null)
-				drag_pixbuf.Dispose ();
 			
 			base.Dispose ();
 		}
