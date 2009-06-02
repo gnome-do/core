@@ -73,11 +73,7 @@ namespace Docky.Interface {
         
         private Gtk.ScrolledWindow scrolled_window;
         
-        private Gtk.Label GtkLabel4;
-        
-        private Gtk.HBox hbox2;
-        
-        private Gtk.HBox hbox3;
+        private Gtk.Label GtkLabel5;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize(this);
@@ -375,6 +371,7 @@ namespace Docky.Interface {
             w32.BottomAttach = ((uint)(2));
             w32.LeftAttach = ((uint)(1));
             w32.RightAttach = ((uint)(2));
+            w32.XOptions = ((Gtk.AttachOptions)(4));
             w32.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.scrolled_window = new Gtk.ScrolledWindow();
@@ -385,33 +382,18 @@ namespace Docky.Interface {
             Gtk.Table.TableChild w33 = ((Gtk.Table.TableChild)(this.table2[this.scrolled_window]));
             w33.LeftAttach = ((uint)(1));
             w33.RightAttach = ((uint)(2));
-            w33.YOptions = ((Gtk.AttachOptions)(4));
             this.GtkAlignment1.Add(this.table2);
             this.frame2.Add(this.GtkAlignment1);
-            this.GtkLabel4 = new Gtk.Label();
-            this.GtkLabel4.Name = "GtkLabel4";
-            this.GtkLabel4.LabelProp = Mono.Unix.Catalog.GetString("<b>Docklets</b>");
-            this.GtkLabel4.UseMarkup = true;
-            this.frame2.LabelWidget = this.GtkLabel4;
+            this.GtkLabel5 = new Gtk.Label();
+            this.GtkLabel5.Name = "GtkLabel5";
+            this.GtkLabel5.LabelProp = Mono.Unix.Catalog.GetString("<b>Docklets</b>");
+            this.GtkLabel5.UseMarkup = true;
+            this.frame2.LabelWidget = this.GtkLabel5;
             this.vbox2.Add(this.frame2);
             Gtk.Box.BoxChild w36 = ((Gtk.Box.BoxChild)(this.vbox2[this.frame2]));
             w36.Position = 2;
             w36.Expand = false;
             w36.Fill = false;
-            // Container child vbox2.Gtk.Box+BoxChild
-            this.hbox2 = new Gtk.HBox();
-            this.hbox2.Name = "hbox2";
-            this.hbox2.Spacing = 6;
-            // Container child hbox2.Gtk.Box+BoxChild
-            this.hbox3 = new Gtk.HBox();
-            this.hbox3.Name = "hbox3";
-            this.hbox3.Spacing = 6;
-            this.hbox2.Add(this.hbox3);
-            Gtk.Box.BoxChild w37 = ((Gtk.Box.BoxChild)(this.hbox2[this.hbox3]));
-            w37.Position = 1;
-            this.vbox2.Add(this.hbox2);
-            Gtk.Box.BoxChild w38 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox2]));
-            w38.Position = 3;
             this.Add(this.vbox2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
