@@ -31,6 +31,8 @@ namespace Do.Interface.Wink
 {
 	public class Viewport
 	{
+		static Dictionary<Wnck.Window, WindowState> window_states = new Dictionary<Wnck.Window, WindowState> ();
+		
 		private class WindowState {
 			public Gdk.Rectangle Area;
 			public Wnck.WindowState State;
@@ -44,7 +46,6 @@ namespace Do.Interface.Wink
 		
 		Workspace parent;
 		Rectangle area;
-		Dictionary<Wnck.Window, WindowState> window_states;
 		
 		public string Name { get; private set; }
 		
@@ -78,7 +79,6 @@ namespace Do.Interface.Wink
 			this.area = area;
 			this.parent = parent;
 			Name = name;
-			window_states = new Dictionary<Wnck.Window, WindowState> ();
 		}
 		
 		public void Present ()
@@ -152,8 +152,6 @@ namespace Do.Interface.Wink
 		{
 			foreach (Wnck.Window window in Windows ())
 				RestoreTemporaryWindowGeometry (window);
-			
-			window_states.Clear ();
 		}
 		
 		public void Cascade ()
@@ -252,6 +250,9 @@ namespace Do.Interface.Wink
 		{
 			Gdk.Rectangle oldGeo = window.EasyGeometry ();
 			
+			oldGeo.X += parent.ViewportX;
+			oldGeo.Y += parent.ViewportY;
+			
 			if (!window_states.ContainsKey (window)) 
 				window_states [window] = new WindowState (oldGeo, window.State);
 			
@@ -267,8 +268,10 @@ namespace Do.Interface.Wink
 				return;
 				
 			WindowState state = window_states [window];
-			window.SetWorkaroundGeometry (WindowGravity.Current, MoveResizeMask, state.Area.X, 
-			                       state.Area.Y, state.Area.Width, state.Area.Height);
+			window.SetWorkaroundGeometry (WindowGravity.Current, MoveResizeMask, state.Area.X - parent.ViewportX, 
+			                              state.Area.Y - parent.ViewportY, state.Area.Width, state.Area.Height);
+			
+			window_states.Remove (window);
 		}
 	}
 }
