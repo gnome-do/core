@@ -11,7 +11,7 @@ using Do.Interface;
 using Do.Interface.CairoUtils;
 using Docky.Utilities;
 
-namespace Docky
+namespace Docky.Interface
 {
 	
 	
