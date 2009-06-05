@@ -166,6 +166,10 @@ namespace Docky.Interface
 		{
 			if (setup) return;
 			DockPreferences.ZoomEnabled = zoom_checkbutton.Active;
+			
+			setup = true;
+			zoom_scale.Value = DockPreferences.ZoomPercent;
+			Gtk.Application.Invoke (delegate { setup = false; });
 		}
 
 		protected virtual void OnOrientationComboboxChanged (object sender, System.EventArgs e)

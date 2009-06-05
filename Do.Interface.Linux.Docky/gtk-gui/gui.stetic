@@ -6,11 +6,7 @@
   </configuration>
   <import>
     <widget-library name="wnck-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <widget-library name="../../Do.Interface.Linux/bin/Debug/Do.Interface.Linux.dll" />
     <widget-library name="gnomedesktop-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <widget-library name="../../Do.Interface.Wink/bin/Debug/Do.Interface.Wnck.dll" />
-    <widget-library name="../../Do.Platform.Linux/bin/Debug/Do.Platform.Linux.dll" />
-    <widget-library name="../../Do.Interface.Linux.AnimationBase/bin/Debug/Do.Interface.Linux.AnimationBase.dll" />
     <widget-library name="../bin/Debug/Do.Interface.Linux.Docky.dll" internal="true" />
   </import>
   <widget class="Gtk.Bin" id="Docky.Interface.DockyConfigurationWidget" design-size="567 350">
