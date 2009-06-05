@@ -127,7 +127,7 @@ namespace Docky.Interface.Menus
 			header = description;
 			vertical_offset = horizontal_offset = 0;
 			ShowAll ();
-			Gdk.Rectangle geo = LayoutUtils.MonitorGemonetry ();
+			Gdk.Rectangle geo = LayoutUtils.MonitorGeometry ();
 			Gtk.Requisition req = SizeRequest ();
 			
 			Gdk.Point postion;

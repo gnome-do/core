@@ -60,7 +60,7 @@ namespace Docky.Interface
 			monitor_geo = Gdk.Screen.Default.GetMonitorGeometry (DockPreferences.Monitor);
 		}
 		
-		public static Gdk.Rectangle MonitorGemonetry ()
+		public static Gdk.Rectangle MonitorGeometry ()
 		{
 			return monitor_geo;
 		}
