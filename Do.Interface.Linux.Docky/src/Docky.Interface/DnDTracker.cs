@@ -239,7 +239,7 @@ namespace Docky.Interface
 		void HandleDragFailed (object o, DragFailedArgs args)
 		{
 			// disable the animation
-			args.RetVal = DockServices.ItemsService.ItemCanBeRemoved (DockItems.IndexOf (DragState.DragItem));
+			args.RetVal = parent.CursorIsOverDockArea || DockServices.ItemsService.ItemCanBeRemoved (DockItems.IndexOf (DragState.DragItem));
 		}
 
 		void HandleDragDrop (object o, DragDropArgs args)
