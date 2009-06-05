@@ -64,7 +64,7 @@ namespace Docky.Interface.Painters
 		
 		#region IDockPainter implementation 
 		
-		protected override int Width {
+		protected override int PainterWidth {
 			get {
 				return 670;
 			}

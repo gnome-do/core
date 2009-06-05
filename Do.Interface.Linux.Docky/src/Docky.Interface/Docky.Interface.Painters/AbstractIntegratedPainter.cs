@@ -40,7 +40,7 @@ namespace Docky.Interface.Painters
 		Surface icon_surface, buffer;
 		AbstractDockItem dock_item;
 		
-		protected abstract int Width { get; }
+		protected abstract int PainterWidth { get; }
 		
 		protected virtual bool NeedsRepaint {
 			get { return false; }
@@ -64,7 +64,7 @@ namespace Docky.Interface.Painters
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
 			Gdk.Rectangle paintArea = new Gdk.Rectangle (0, 0, Width, dockArea.Height);
-			Gdk.Point paintAreaCursor = new Gdk.Point (cursor.X - dockArea.Left - DockPreferences.FullIconSize - BorderSize - (dockArea.Width - MinimumWidth) / 2,
+			Gdk.Point paintAreaCursor = new Gdk.Point (cursor.X - dockArea.Left - DockPreferences.FullIconSize - BorderSize,
 			                                           cursor.Y - dockArea.Top);
 
 			if (!paintArea.Contains (paintAreaCursor) || ReceiveClick (paintArea, paintAreaCursor))
@@ -79,9 +79,9 @@ namespace Docky.Interface.Painters
 			get { return true; }
 		}
 		
-		public int MinimumWidth {
+		public int Width {
 			get {
-				return Width + DockPreferences.FullIconSize + 2 * BorderSize;
+				return PainterWidth + DockPreferences.FullIconSize + 2 * BorderSize;
 			}
 		}
 		
@@ -119,9 +119,9 @@ namespace Docky.Interface.Painters
 				if (buffer != null)
 					buffer.Destroy ();
 				
-				buffer = cr.Target.CreateSimilar (cr.Target.Content, Width, dockArea.Height);
+				buffer = cr.Target.CreateSimilar (cr.Target.Content, PainterWidth, dockArea.Height);
 				using (Cairo.Context context = new Cairo.Context (buffer)) {
-					PaintArea (context, new Gdk.Rectangle (0, 0, Width, dockArea.Height));
+					PaintArea (context, new Gdk.Rectangle (0, 0, PainterWidth, dockArea.Height));
 				}
 				buffer_height = dockArea.Height;
 			}
@@ -132,7 +132,6 @@ namespace Docky.Interface.Painters
 			cr.Clip ();
 			
 			int x = dockArea.X + DockPreferences.FullIconSize + BorderSize;
-			x = x + (dockArea.Width - MinimumWidth) / 2;
 			buffer.Show (cr, x, dockArea.Y);
 			cr.ResetClip ();
 		}

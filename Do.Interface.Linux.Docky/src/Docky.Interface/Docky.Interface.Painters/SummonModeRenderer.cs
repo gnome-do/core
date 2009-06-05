@@ -82,7 +82,7 @@ namespace Docky.Interface.Painters
 			get { return false; }
 		}
 		
-		public int MinimumWidth {
+		public int Width {
 			get { return 300; }
 		}
 		

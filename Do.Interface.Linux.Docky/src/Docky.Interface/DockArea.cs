@@ -495,7 +495,6 @@ namespace Docky.Interface
 			
 			if (tmp) {
 				dockRegion.Inflate (0, (int) (IconSize * (DockPreferences.ZoomPercent - 1)) + 22);
-				CursorIsOverDockArea = dockRegion.Contains (Cursor);
 			} else {
 				if (IsHidden) {
 					switch (DockPreferences.Orientation) {
@@ -508,9 +507,12 @@ namespace Docky.Interface
 						break;
 					}
 				}
-				
-				CursorIsOverDockArea = dockRegion.Contains (Cursor);
 			}
+			
+			if (PainterOverlayVisible)
+				CursorIsOverDockArea = dockRegion.Contains (new Gdk.Point (dockRegion.X, Cursor.Y));
+			else
+				CursorIsOverDockArea = dockRegion.Contains (Cursor);
 			
 			if (CursorIsOverDockArea != tmp) {
 				ResetCursorTimer ();
