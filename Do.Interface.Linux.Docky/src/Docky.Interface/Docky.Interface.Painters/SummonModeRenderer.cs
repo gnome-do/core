@@ -83,7 +83,7 @@ namespace Docky.Interface.Painters
 		}
 		
 		public int Width {
-			get { return 300; }
+			get { return Math.Max (300, DockArea.PositionProvider.DockWidth); }
 		}
 		
 		public SummonModeRenderer ()

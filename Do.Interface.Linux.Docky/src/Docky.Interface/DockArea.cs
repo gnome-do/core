@@ -157,7 +157,7 @@ namespace Docky.Interface
 		
 		DockAnimationState AnimationState { get; set; }
 		
-		ItemPositionProvider PositionProvider { get; set; }
+		public static ItemPositionProvider PositionProvider { get; protected set; }
 
 		new DockItemMenu PopupMenu { get; set; }
 		
