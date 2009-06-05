@@ -760,7 +760,7 @@ namespace Docky.Interface
 			Painter.Interrupt ();
 			Painter = null;
 			PainterOverlayVisible = false;
-			interface_change_time = UpdateTimeStamp (interface_change_time, SummonTime);
+			interface_change_time = DateTime.UtcNow;
 			
 			DnDTracker.Enable ();
 			window.UnpresentWindow ();
