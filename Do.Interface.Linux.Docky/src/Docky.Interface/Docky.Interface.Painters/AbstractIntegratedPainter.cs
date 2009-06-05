@@ -131,7 +131,7 @@ namespace Docky.Interface.Painters
 			cr.Rectangle (dockArea.X, dockArea.Y, dockArea.Width, dockArea.Height);
 			cr.Clip ();
 			
-			int x = dockArea.X + DockPreferences.FullIconSize + 2 * BorderSize;
+			int x = dockArea.X + DockPreferences.FullIconSize + BorderSize;
 			x = x + (dockArea.Width - MinimumWidth) / 2;
 			buffer.Show (cr, x, dockArea.Y);
 			cr.ResetClip ();
