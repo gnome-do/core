@@ -112,7 +112,7 @@ namespace Docky.Interface
 		public uint[] StrutRequest {
 			get {
 				uint[] values = new uint[12];
-				Gdk.Rectangle geo = LayoutUtils.MonitorGemonetry ();
+				Gdk.Rectangle geo = LayoutUtils.MonitorGeometry ();
 				
 				if (DockPreferences.AutohideType != AutohideType.None)
 					return values;
@@ -232,7 +232,7 @@ namespace Docky.Interface
 		void SetSize ()
 		{
 			Gdk.Rectangle geo;
-			geo = LayoutUtils.MonitorGemonetry ();
+			geo = LayoutUtils.MonitorGeometry ();
 			
 			Width = geo.Width;
 			if (AnimationState [Animations.UrgencyChanged])

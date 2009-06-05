@@ -85,7 +85,7 @@ namespace Docky.Interface
 		{
 			Wnck.Window window = sender as Wnck.Window;
 			
-			Gdk.Rectangle monitor = LayoutUtils.MonitorGemonetry ();
+			Gdk.Rectangle monitor = LayoutUtils.MonitorGeometry ();
 			Gdk.Rectangle geo = window.EasyGeometry ();
 			
 			geo.X = ((geo.X % monitor.Width) + monitor.Width) % monitor.Width;
@@ -113,7 +113,7 @@ namespace Docky.Interface
 			if (active != null) {
 				active.GeometryChanged += HandleGeometryChanged; 
 				Gdk.Rectangle geo = active.EasyGeometry ();
-				Gdk.Rectangle monitor = LayoutUtils.MonitorGemonetry ();
+				Gdk.Rectangle monitor = LayoutUtils.MonitorGeometry ();
 				geo.X = geo.X % monitor.Width;
 				geo.Y = geo.Y % monitor.Height;
 				last_known_geo = geo;
@@ -123,7 +123,7 @@ namespace Docky.Interface
 		public void UpdateWindowIntersect ()
 		{
 			Gdk.Rectangle adjustedDockArea = parent.MinimumDockArea;
-			Gdk.Rectangle geo = LayoutUtils.MonitorGemonetry ();
+			Gdk.Rectangle geo = LayoutUtils.MonitorGeometry ();
 			
 			adjustedDockArea.X = geo.X + (geo.Width - adjustedDockArea.Width) / 2;
 			switch (DockPreferences.Orientation) {

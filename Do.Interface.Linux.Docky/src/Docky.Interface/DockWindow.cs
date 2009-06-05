@@ -222,7 +222,7 @@ namespace Docky.Interface
 			
 			GetSize (out main.Width, out main.Height);
 			results_window.GetSize (out res.Width, out res.Height);
-			geo = LayoutUtils.MonitorGemonetry ();
+			geo = LayoutUtils.MonitorGeometry ();
 
 			switch (DockPreferences.Orientation) {
 			case DockOrientation.Bottom:

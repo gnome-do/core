@@ -64,7 +64,7 @@ namespace Docky.Interface.Painters
 		public void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor)
 		{
 			Gdk.Rectangle paintArea = new Gdk.Rectangle (0, 0, Width, dockArea.Height);
-			Gdk.Point paintAreaCursor = new Gdk.Point (cursor.X - dockArea.Left - DockPreferences.FullIconSize - BorderSize,
+			Gdk.Point paintAreaCursor = new Gdk.Point (cursor.X - dockArea.Left - DockPreferences.FullIconSize - BorderSize - (dockArea.Width - MinimumWidth) / 2,
 			                                           cursor.Y - dockArea.Top);
 
 			if (!paintArea.Contains (paintAreaCursor) || ReceiveClick (paintArea, paintAreaCursor))
@@ -131,7 +131,7 @@ namespace Docky.Interface.Painters
 			cr.Rectangle (dockArea.X, dockArea.Y, dockArea.Width, dockArea.Height);
 			cr.Clip ();
 			
-			int x = dockArea.X + DockPreferences.FullIconSize + 2 * BorderSize;
+			int x = dockArea.X + DockPreferences.FullIconSize + BorderSize;
 			x = x + (dockArea.Width - MinimumWidth) / 2;
 			buffer.Show (cr, x, dockArea.Y);
 			cr.ResetClip ();
