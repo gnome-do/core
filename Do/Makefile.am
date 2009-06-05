@@ -21,6 +21,7 @@ FILES = \
 	src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs \
 	src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs \
 	src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs \
+	src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs \
 	src/Do.Core/Controller.cs \
 	src/Do.Core/DoAddinInstaller.cs \
 	src/Do.Core/ElementExtensions.cs \
