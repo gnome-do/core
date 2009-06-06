@@ -43,7 +43,9 @@ namespace Do.UI
 	public partial class ManagePluginsPreferencesWidget : Bin, IConfigurable
 	{
 
-		const string PluginWikiPageFormat = "http://do.davebsd.com/wiki/index.php?title={0}_Plugin";
+		const string WikiPage = "http://do.davebsd.com/wiki/index.php?title={0}{1}";
+		const string PluginWikiPageFormat = "_Plugin";
+		const string DockletWikiPageFormat = "_Docklet";
 
 		PluginNodeView nview;
 		SearchEntry search_entry;
@@ -206,8 +208,14 @@ namespace Do.UI
 		{
 			foreach (string id in nview.GetSelectedAddins ()) {
 				try {
+					Addin a = AddinManager.Registry.GetAddin (id);
+					string category;
+					if (PluginManager.PluginClassifiesAs (a, "Docklets"))
+						category = DockletWikiPageFormat;
+					else
+						category = PluginWikiPageFormat;
 					string name = Addin.GetIdName (id).Split ('.')[1];
-					Services.Environment.OpenUrl (string.Format (PluginWikiPageFormat, name));
+					Services.Environment.OpenUrl (string.Format (WikiPage, name, category));
 				} catch { }
 			}
 		}
