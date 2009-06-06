@@ -223,12 +223,6 @@ namespace Do.Core
 			context.Query = str;
 			BuildNewContextFromQuery ();
 		}
-		
-		public bool ItemChildSearch ()
-		{
-			return base.ItemChildSearch ();
-		}
-
 
 		private void BuildNewContextFromQuery ()
 		{
