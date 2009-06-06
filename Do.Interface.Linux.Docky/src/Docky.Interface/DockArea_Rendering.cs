@@ -117,7 +117,8 @@ namespace Docky.Interface
 			get {
 				return AnimationState [Animations.IconInsert] ||
 					   AnimationState [Animations.UrgencyChanged] ||
-					   AnimationState [Animations.Bounce];
+					   AnimationState [Animations.Bounce] ||
+					   AnimationState [Animations.InputModeChanged];
 			}
 		}
 		

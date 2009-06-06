@@ -53,7 +53,7 @@ namespace Docky.Core
 		public static IDrawingService DrawingService {
 			get { 
 				if (drawing_service == null)
-					drawing_service = new Default.DrawingService () as IDrawingService;
+					drawing_service = LoadService<IDrawingService, Default.DrawingService> ();
 				return drawing_service; 
 			}
 		}
@@ -109,10 +109,10 @@ namespace Docky.Core
 			services.Add (service);
 		}
 		
-		public static void UnregisterService (IDockService service)
+		public static IDockService UnregisterService (IDockService service)
 		{
 			if (!services.Contains (service))
-				return;
+				return service;
 			
 			if (DoInteropService == service)
 				do_interop_service = null;
@@ -120,7 +120,18 @@ namespace Docky.Core
 			if (PainterService == service)
 				painter_service = null;
 			
+			if (DrawingService == service)
+				drawing_service = null;
+			
+			if (ItemsService == service)
+				items_service = null;
+			
+			if (DockletService == service)
+				docklet_service = null;
+			
 			services.Remove (service);
+			
+			return service;
 		}
 
 		static TService LoadService<TService, TElse> ()

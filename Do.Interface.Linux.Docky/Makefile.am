@@ -62,6 +62,7 @@ FILES = \
 	src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs \
 	src/Docky.Interface/DragState.cs \
 	src/Docky.Interface/DrawState.cs \
+	src/Docky.Interface/DrawingService.cs \
 	src/Docky.Interface/IDockPainter.cs \
 	src/Docky.Interface/IRightClickable.cs \
 	src/Docky.Interface/ItemPositionProvider.cs \

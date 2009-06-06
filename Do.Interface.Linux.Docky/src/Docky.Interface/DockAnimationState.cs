@@ -79,7 +79,7 @@ namespace Docky.Interface
 		{
 			get { 
 				if (!animation_conditions.ContainsKey (condition))
-					throw new Exception (string.Format ("Animation Condition Handler does not contain a condition named {0}", condition));
+					return false;
 				return animation_conditions [condition].Invoke (); 
 			}
 		}

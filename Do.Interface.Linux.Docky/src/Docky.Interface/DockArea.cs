@@ -42,8 +42,6 @@ namespace Docky.Interface
 	{
 		public static readonly TimeSpan BaseAnimationTime = new TimeSpan (0, 0, 0, 0, 150);
 		
-		public static DockArea Instance { get; private set; }
-		
 		static DateTime UpdateTimeStamp (DateTime lastStamp, TimeSpan animationLength)
 		{
 			TimeSpan delta = DateTime.UtcNow - lastStamp;
@@ -73,6 +71,8 @@ namespace Docky.Interface
 		uint animation_timer;
 		
 		DockWindow window;
+		
+		DrawingService drawing_service;
 		
 		#endregion
 		
@@ -200,7 +200,8 @@ namespace Docky.Interface
 		
 		public DockArea (DockWindow window) : base ()
 		{
-			Instance = this;
+			drawing_service = new DrawingService (this);
+			DockServices.RegisterService (drawing_service);
 			
 			this.window = window;
 			
@@ -775,6 +776,8 @@ namespace Docky.Interface
 		
 		public override void Dispose ()
 		{
+			DockServices.UnregisterService (drawing_service).Dispose ();
+			
 			UnregisterEvents ();
 			DnDTracker.Disable ();
 

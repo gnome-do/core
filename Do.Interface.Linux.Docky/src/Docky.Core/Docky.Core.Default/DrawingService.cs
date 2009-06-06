@@ -29,51 +29,19 @@ namespace Docky.Core.Default
 		
 		public int CurrentDockWidth {
 			get {
-				return DockArea.Instance.DockWidth;
+				return 0;
 			}
 		}
 		
 		public int CurrentDockHeight {
 			get {
-				return DockArea.Instance.DockHeight;
+				return 0;
 			}
-		}
-		
-		Pango.Layout GetThemedLayout ()
-		{
-			Pango.Layout layout = new Pango.Layout (DockWindow.Window.CreatePangoContext ());
-			layout.FontDescription = DockWindow.Window.Style.FontDescription;
-			return layout;
 		}
 		
 		public Gdk.Rectangle TextPathAtPoint (TextRenderContext context)
 		{
-			Cairo.Context cr = context.Context;
-			Gdk.Point point = context.LeftCenteredPoint;
-			
-			Pango.Layout layout = GetThemedLayout ();
-			layout.Width = Pango.Units.FromPixels (context.MaximumWidth);
-			layout.SetMarkup (context.Text);
-			layout.Ellipsize = context.EllipsizeMode;
-			layout.Alignment = context.Alignment;
-			layout.Wrap = context.WrapMode;
-			
-			if (context.FontSize != 0)
-				layout.FontDescription.Size = Pango.Units.FromPixels (context.FontSize);
-			
-			Pango.Rectangle rect1, rect2;
-			layout.GetExtents (out rect1, out rect2);
-			
-			int transY = point.Y - Pango.Units.ToPixels (rect2.Height) / 2;
-			cr.Translate (point.X, transY);
-			Pango.CairoHelper.LayoutPath (cr, layout);
-			cr.Translate (0 - point.X, 0 - transY);
-			
-			Gdk.Rectangle textArea = new Gdk.Rectangle (Pango.Units.ToPixels (rect2.X),
-			                                            Pango.Units.ToPixels (rect2.Y),
-			                                            Pango.Units.ToPixels (rect2.Width),
-			                                            Pango.Units.ToPixels (rect2.Height));
-			return textArea;
+			throw new Exception ("Default drawing service cannot render text");
 		}
 		
 		#endregion 
