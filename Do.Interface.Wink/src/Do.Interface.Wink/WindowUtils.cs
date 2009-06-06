@@ -77,6 +77,7 @@ namespace Do.Interface.Wink
 				return;
 			
 			initialized = true;
+			Wnck.Global.ClientType = Wnck.ClientType.Pager;
 			
 			List<Regex> regex = new List<Regex> ();
 			foreach (string s in PrefixStrings) {
