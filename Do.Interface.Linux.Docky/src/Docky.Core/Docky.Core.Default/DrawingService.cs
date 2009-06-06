@@ -27,6 +27,18 @@ namespace Docky.Core.Default
 	{
 		#region IDrawingService implementation 
 		
+		public int CurrentDockWidth {
+			get {
+				return DockArea.Instance.DockWidth;
+			}
+		}
+		
+		public int CurrentDockHeight {
+			get {
+				return DockArea.Instance.DockHeight;
+			}
+		}
+		
 		Pango.Layout GetThemedLayout ()
 		{
 			Pango.Layout layout = new Pango.Layout (DockWindow.Window.CreatePangoContext ());

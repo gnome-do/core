@@ -24,6 +24,10 @@ namespace Docky.Core
 {
 	public interface IDrawingService : IDockService
 	{
+		int CurrentDockWidth { get; }
+		
+		int CurrentDockHeight { get; }
+		
 		Gdk.Rectangle TextPathAtPoint (TextRenderContext context);
 	}
 }

@@ -34,7 +34,7 @@ namespace Docky.Interface
 
 		bool Interruptable { get; }
 		
-		int MinimumWidth { get; }
+		int Width { get; }
 		
 		void Paint (Context cr, Gdk.Rectangle dockArea, Gdk.Point cursor);
 

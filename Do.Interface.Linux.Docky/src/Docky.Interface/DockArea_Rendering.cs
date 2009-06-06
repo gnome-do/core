@@ -670,16 +670,20 @@ namespace Docky.Interface
 			else
 				rect = PositionProvider.DockArea (ZoomIn, Cursor);
 
-			int minSize = 10 * rect.Height;
+			int minWidth = 10 * rect.Height;
+			int maxWidth = LayoutUtils.MonitorGeometry ().Width;
+			int dockWidth = 0;
 				
 			if (PainterOverlayVisible && Painter != null) {
-				minSize = Math.Max (Painter.MinimumWidth, minSize);
+				dockWidth = Math.Min (Painter.Width, maxWidth);
 			} else if (!PainterOverlayVisible && LastPainter != null) {
-				minSize = Math.Max (LastPainter.MinimumWidth, minSize);
+				dockWidth = Math.Min (LastPainter.Width, maxWidth);
+			} else {
+				dockWidth = Math.Max (rect.Width, minWidth);
 			}
 			
-			if (rect.Width < minSize && DockIconOpacity < 1) {
-				int difference = minSize - rect.Width;
+			if (rect.Width != dockWidth && DockIconOpacity < 1) {
+				int difference = dockWidth - rect.Width;
 				int alpha = (int) (difference * PainterOpacity);
 				rect.X -= alpha / 2;
 				rect.Width += alpha;
