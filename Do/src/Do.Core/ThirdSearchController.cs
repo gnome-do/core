@@ -244,10 +244,10 @@ namespace Do.Core
 		{
 			if (FirstController.Selection is Act) {
 				Act action = FirstController.Selection as Act;
-				return action.Safe.SupportsItem (item);
+				return action.Safe.SupportsModifierItemForItems (SecondController.FullSelection.Cast<Item> (), item);
 			} else if (SecondController.Selection is Act) {
 				Act action = SecondController.Selection as Act;
-				return action.Safe.SupportsItem (item);
+				return action.Safe.SupportsModifierItemForItems (FirstController.FullSelection.Cast<Item> (), item);
 			}
 			return true;
 		}
