@@ -260,6 +260,7 @@ namespace Docky.Interface
 			}
 			
 			Gtk.Drag.Finish (args.Context, true, true, args.Time);
+			args.RetVal = true;
 		}
 
 		void HandleDragEnd (object o, DragEndArgs args)
@@ -283,6 +284,7 @@ namespace Docky.Interface
 		
 			OnDragEnded ();
 			OnDrawRequired ();
+			args.RetVal = true;
 		}
 
 		void HandleDragBegin (object o, DragBeginArgs args)
@@ -305,6 +307,7 @@ namespace Docky.Interface
 				
 			if (pbuf != null)
 				Gtk.Drag.SetIconPixbuf (args.Context, pbuf, pbuf.Width / 2, pbuf.Height / 2);
+			args.RetVal = true;
 		}
 
 		void HandleDragMotionEvent (object o, DragMotionArgs args)
@@ -353,11 +356,8 @@ namespace Docky.Interface
 				uriList = Enumerable.Empty<string> ();
 			}
 			
-			
 			uri_list = uriList;
-				
 			PreviewIsDesktopFile = !uriList.Any () || uriList.Any (s => s.EndsWith (".desktop"));
-			
 			args.RetVal = true;
 		}
 		
