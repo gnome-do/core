@@ -228,6 +228,7 @@ namespace Docky.Interface
 			if (GtkDragging && (CursorTracker.ModifierType & ModifierType.Button1Mask) != ModifierType.Button1Mask) {
 				GtkDragging = false;
 			}
+			
 			SetDragProxy ();
 			
 			ConfigureCursor ();
@@ -329,10 +330,11 @@ namespace Docky.Interface
 				Gdk.Atom target = Gtk.Drag.DestFindTarget (parent, args.Context, null);
 				Gtk.Drag.GetData (parent, args.Context, target, Gtk.Global.CurrentEventTime);
 				drag_context = args.Context;
+				
 			}
 			
 			Gdk.Drag.Status (args.Context, DragAction.Copy, args.Time);
-			args.RetVal = false;
+			args.RetVal = true;
 		}
 
 		void HandleDragDataReceived (object o, DragDataReceivedArgs args)
@@ -355,6 +357,8 @@ namespace Docky.Interface
 			uri_list = uriList;
 				
 			PreviewIsDesktopFile = !uriList.Any () || uriList.Any (s => s.EndsWith (".desktop"));
+			
+			args.RetVal = true;
 		}
 		
 		
