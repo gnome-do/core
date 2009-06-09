@@ -142,7 +142,7 @@ namespace Do.Platform.Linux
 
 		string UnwrapHomeFolder (string line)
 		{
-			return Regex.Replace (line, @"^~{1}\/", UserHome + "/");
+			return Regex.Replace (line, @"^~\/", UserHome + "/");
 		}
 		
 	}
