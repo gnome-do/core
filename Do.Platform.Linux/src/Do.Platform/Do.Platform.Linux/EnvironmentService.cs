@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 using Mono.Unix;
 
@@ -63,18 +64,18 @@ namespace Do.Platform.Linux
 
 		public void OpenPath (string path)
 		{
-			Open (path.Replace ("~", UserHome));
+			Open (UnwrapHomeFolder (path));
 		}
 
 		public bool IsExecutable (string line)
 		{
-			line = line.Replace ("~", UserHome);
+			line = UnwrapHomeFolder (line);
 			return IsExecutableFile (line) || CommandLineIsFoundOnPath (line);
 		}
 
 		public void Execute (string line)
 		{
-			line = line.Replace ("~", UserHome);
+			line = UnwrapHomeFolder (line);
 
 			Log<EnvironmentService>.Info ("Executing \"{0}\"", line);
 			if (File.Exists (line)) {
@@ -137,6 +138,11 @@ namespace Do.Platform.Linux
 				return true;
 			}
 			return false;
+		}
+
+		string UnwrapHomeFolder (string line)
+		{
+			return Regex.Replace (line, @"^~{1}\/", UserHome + "/");
 		}
 		
 	}
