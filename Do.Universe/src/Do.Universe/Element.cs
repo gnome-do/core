@@ -116,6 +116,14 @@ namespace Do.Universe
 		
 		public abstract string Icon { get; }
 		
+		/// <value>
+		/// Provides an indication of whether or not this element requires an active
+		/// network connection.
+		/// </value>
+		public virtual bool NetAccessRequired {
+			get { return false; }
+		}
+		
 		public override int GetHashCode ()
 		{
 			return UniqueId.GetHashCode ();

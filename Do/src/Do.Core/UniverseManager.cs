@@ -80,6 +80,13 @@ namespace Do.Core
 			update_thread = new Thread (new ThreadStart (UniverseUpdateLoop));
 			update_thread.IsBackground = true;
 			update_thread.Priority = ThreadPriority.Lowest;
+			
+			Services.Network.StateChanged += OnNetworkStateChanged;
+		}
+
+		void OnNetworkStateChanged (object sender, NetworkStateChangedEventArgs e)
+		{
+			Reload ();
 		}
 			
 		public void Initialize ()
@@ -190,10 +197,12 @@ namespace Do.Core
 			Log<UniverseManager>.Debug ("Reloading actions...");
 			lock (universe) {
 				foreach (Act action in PluginManager.Actions) {
-					universe.Remove (action.UniqueId);
+					if (universe.ContainsKey (action.UniqueId))
+						universe.Remove (action.UniqueId);
 				}
-				foreach (Act action in PluginManager.Actions) {
-						universe [action.UniqueId] = action;			
+				foreach (Act action in PluginManager.Actions.Where (a => ShouldUpdate (a))) {
+					Console.WriteLine ("Adding {0}", action.Name);
+					universe [action.UniqueId] = action;			
 				}
 			}
 		}
@@ -211,22 +220,36 @@ namespace Do.Core
 			if (source == null) throw new ArgumentNullException ("source");
 			
 			safeSource = source.RetainSafe ();
-			Log<UniverseManager>.Debug ("Reloading item source \"{0}\"...", safeSource.Name);
 			oldItems = safeSource.Items;
 			// We call UpdateItems outside of the lock so as not to block other
 			// threads in contention for the lock if UpdateItems blocks.
-			safeSource.UpdateItems ();
-			newItems = safeSource.Items;
+			if (ShouldUpdate (source)) {
+				Log<UniverseManager>.Debug ("Reloading item source \"{0}\"...", safeSource.Name);
+				safeSource.UpdateItems ();
+				newItems = safeSource.Items;
+			} else {
+				newItems = Enumerable.Empty<Item> ();
+			}
 			
 			lock (universe) {
 				foreach (Item item in oldItems) {
 					if (universe.ContainsKey (item.UniqueId))
 						universe.Remove (item.UniqueId);
 				}
+				//only add the items if no net access is required, or if it is, if we have net access
 				foreach (Item item in newItems) {
 					universe  [item.UniqueId] = item;
 				}
 			}
+		}
+		
+		bool ShouldUpdate (Element element)
+		{
+			if (element.NetAccessRequired && Services.Network.IsConnected)
+				return true;
+			else if (!element.NetAccessRequired)
+				return true;
+			return false;
 		}
 		
 		void ReloadUniverse ()
