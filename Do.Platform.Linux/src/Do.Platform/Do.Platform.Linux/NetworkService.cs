@@ -55,8 +55,8 @@ namespace Do.Platform.Linux
 					network.StateChanged += OnStateChanged;
 				}
 			} catch (Exception e) {
-				Log<SystemService>.Error ("Could not initialize dbus: {0}", e.Message);
-				Log<SystemService>.Debug (e.StackTrace);
+				Log<NetworkService>.Error ("Could not initialize dbus: {0}", e.Message);
+				Log<NetworkService>.Debug (e.StackTrace);
 			}
 			
 			SetConnected ();
