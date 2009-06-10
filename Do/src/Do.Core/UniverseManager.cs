@@ -200,10 +200,8 @@ namespace Do.Core
 					if (universe.ContainsKey (action.UniqueId))
 						universe.Remove (action.UniqueId);
 				}
-				foreach (Act action in PluginManager.Actions.Where (a => ShouldUpdate (a))) {
-					Console.WriteLine ("Adding {0}", action.Name);
-					universe [action.UniqueId] = action;			
-				}
+				foreach (Act action in PluginManager.Actions.Where (a => ShouldUpdate (a)))
+					universe [action.UniqueId] = action;
 			}
 		}
 		
