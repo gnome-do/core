@@ -243,11 +243,10 @@ namespace Do.Core
 		
 		bool ShouldUpdate (Element element)
 		{
-			if (element.NetworkRequired && Services.Network.IsConnected)
+			if (element.NetworkRequired && !Services.Network.IsConnected)
+				return false;
+			else
 				return true;
-			else if (!element.NetworkRequired)
-				return true;
-			return false;
 		}
 		
 		void ReloadUniverse ()
