@@ -120,7 +120,7 @@ namespace Do.Universe
 		/// Provides an indication of whether or not this element requires an active
 		/// network connection.
 		/// </value>
-		public virtual bool NetAccessRequired {
+		public virtual bool NetworkRequired {
 			get { return false; }
 		}
 		

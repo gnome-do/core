@@ -243,9 +243,9 @@ namespace Do.Core
 		
 		bool ShouldUpdate (Element element)
 		{
-			if (element.NetAccessRequired && Services.Network.IsConnected)
+			if (element.NetworkRequired && Services.Network.IsConnected)
 				return true;
-			else if (!element.NetAccessRequired)
+			else if (!element.NetworkRequired)
 				return true;
 			return false;
 		}
