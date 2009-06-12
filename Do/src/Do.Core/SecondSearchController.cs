@@ -119,7 +119,15 @@ namespace Do.Core
 		private Element[] GetContextResults ()
 		{
 			List<Element> results = new List<Element> ();
-			if (FirstController.Selection is Item) {
+			
+			if (FirstController.Selection is Act) {
+				// We need to find items for this action
+				Act action = FirstController.Selection as Act;
+				foreach (Item item in InitialResults ()) {
+					if (action.Safe.SupportsItem (item))
+						results.Add (item);
+				}
+			} else if (FirstController.Selection is Item) {
 				Item item = FirstController.Selection as Item;
 				// We need to find actions for this item
 				// TODO -- Make this work for multiple items
@@ -127,13 +135,6 @@ namespace Do.Core
 					if (action.Safe.SupportsItem (item)) {
 						results.Add (action);
 					}
-				}
-			} else if (FirstController.Selection is Act) {
-				// We need to find items for this action
-				Act action = FirstController.Selection as Act;
-				foreach (Item item in InitialResults ()) {
-					if (action.Safe.SupportsItem (item))
-						results.Add (item);
 				}
 			}
 			
