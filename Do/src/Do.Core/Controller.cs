@@ -945,8 +945,8 @@ namespace Do.Core
 				return;
 			}
 			
-			actionQuery = controllers [(int) WorkingActionPane].Query;
-			itemQuery = controllers [(int) WorkingItemPane].Query;
+			actionQuery  = controllers [(int) WorkingActionPane].Query;
+			itemQuery    = controllers [(int) WorkingItemPane].Query;
 			modItemQuery = controllers [(int) Pane.Third].Query;
 			
 			if (modItems != null && ThirdPaneVisible)
@@ -986,8 +986,8 @@ namespace Do.Core
 
 		void PerformAction (Act action, IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
-			if (action == null) throw new ArgumentNullException ("action");
-			if (items == null) throw new ArgumentNullException ("items");
+			if (action == null)   throw new ArgumentNullException ("action");
+			if (items == null)    throw new ArgumentNullException ("items");
 			if (modItems == null) throw new ArgumentNullException ("modItems");
 
 			IEnumerable<Item> results = action.Safe.Perform (items, modItems);
