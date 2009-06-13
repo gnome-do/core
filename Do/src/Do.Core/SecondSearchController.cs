@@ -124,7 +124,7 @@ namespace Do.Core
 				// We need to find items for this action
 				Act action = FirstController.Selection as Act;
 				foreach (Item item in InitialResults ()) {
-					if (action.Safe.SupportsItem (item))
+					if (action.Safe.SupportsItem (item) || ((item is Act) && (item as Act).Safe.SupportsItem (action)))
 						results.Add (item);
 				}
 			} else if (FirstController.Selection is Item) {
@@ -208,6 +208,7 @@ namespace Do.Core
 				if (FirstController.Selection is Act) {
 					foreach (Type t in (FirstController.Selection as Act).SupportedItemTypes)
 						yield return t;
+					yield return typeof (Act);
 				} else if (TextMode) {
 					yield return typeof (ITextItem);
 				} else {
