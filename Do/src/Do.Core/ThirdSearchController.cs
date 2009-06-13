@@ -57,10 +57,14 @@ namespace Do.Core
 			if (FirstController.Selection == null || SecondController.Selection == null)
 				return null;
 			
-			if (FirstController.Selection is Act && (FirstController.Selection as Act).SupportsItem (SecondController.Selection as Item))
-				return FirstController.Selection as Act;
-			else if (SecondController.Selection is Act && (SecondController.Selection as Act).SupportsItem (FirstController.Selection as Item))
-				return SecondController.Selection as Act;
+			Item first, second;
+			first = ProxyItem.Unwrap (FirstController.Selection as Item);
+			second = ProxyItem.Unwrap (SecondController.Selection as Item);
+			
+			if (first is Act && (first as Act).Safe.SupportsItem (second))
+				return first as Act;
+			else if (second is Act && (second as Act).SupportsItem (first))
+				return second as Act;
 			// fixme
 			throw new Exception ("Something strange happened");
 		}
@@ -71,10 +75,14 @@ namespace Do.Core
 			if (FirstController.Selection == null || SecondController.Selection == null)
 				return null;
 			
-			if (FirstController.Selection is Act && (FirstController.Selection as Act).SupportsItem (SecondController.Selection as Item))
-				return SecondController.Selection as Item;
-			else if (SecondController.Selection is Act && (SecondController.Selection as Act).SupportsItem (FirstController.Selection as Item))
-				return FirstController.Selection as Item;
+			Item first, second;
+			first = ProxyItem.Unwrap (FirstController.Selection as Item);
+			second = ProxyItem.Unwrap (SecondController.Selection as Item);
+			
+			if (first is Act && (first as Act).Safe.SupportsItem (second))
+				return second;
+			else if (first is Act && (second as Act).SupportsItem (first))
+				return first;
 			// fixme
 			throw new Exception ("Something strange happened");
 		}

@@ -116,23 +116,23 @@ namespace Do.Core
 		/// <returns>
 		/// A <see cref="Element"/>
 		/// </returns>
-		private Element[] GetContextResults ()
+		private Element [] GetContextResults ()
 		{
 			List<Element> results = new List<Element> ();
+			Item first = ProxyItem.Unwrap (FirstController.Selection as Item);
 			
-			if (FirstController.Selection is Act) {
+			if (first is Act) {
 				// We need to find items for this action
-				Act action = FirstController.Selection as Act;
+				Act action = first as Act;
 				foreach (Item item in InitialResults ()) {
 					if (action.Safe.SupportsItem (item) || ((item is Act) && (item as Act).Safe.SupportsItem (action)))
 						results.Add (item);
 				}
-			} else if (FirstController.Selection is Item) {
-				Item item = FirstController.Selection as Item;
+			} else {
 				// We need to find actions for this item
 				// TODO -- Make this work for multiple items
 				foreach (Act action in InitialResults ()) {
-					if (action.Safe.SupportsItem (item)) {
+					if (action.Safe.SupportsItem (first)) {
 						results.Add (action);
 					}
 				}
@@ -205,8 +205,9 @@ namespace Do.Core
 
 		public override IEnumerable<Type> SearchTypes {
 			get { 
-				if (FirstController.Selection is Act) {
-					foreach (Type t in (FirstController.Selection as Act).SupportedItemTypes)
+				Item item = ProxyItem.Unwrap (FirstController.Selection as Item);
+				if (item is Act) {
+					foreach (Type t in (item as Act).Safe.SupportedItemTypes)
 						yield return t;
 					yield return typeof (Act);
 				} else if (TextMode) {
