@@ -311,14 +311,14 @@ namespace Do.Core
 		
 		Pane WorkingActionPane {
 			get {
-				Element first, second;
+				Item first, second;
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
 				
 				if (first != null && second != null) {
-					if (first is Act && (first as Act).Safe.SupportsItem (second as Item)) {
+					if (first is Act && (first as Act).Safe.SupportsItem (second)) {
 						return Pane.First;
-					} else if (second is Act && (second as Act).Safe.SupportsItem (first as Item)) {
+					} else if (second is Act && (second as Act).Safe.SupportsItem (first)) {
 						return Pane.Second;
 					}
 				}
@@ -328,14 +328,14 @@ namespace Do.Core
 		
 		Pane WorkingItemPane {
 			get {
-				Element first, second;
+				Item first, second;
 				first = GetSelection (Pane.First);
 				second = GetSelection (Pane.Second);
 				
 				if (first != null && second != null) {
-					if (first is Act && (first as Act).Safe.SupportsItem (second as Item)) {
+					if (first is Act && (first as Act).Safe.SupportsItem (second)) {
 						return Pane.Second;
-					} else if (second is Act && (second as Act).Safe.SupportsItem (first as Item)) {
+					} else if (second is Act && (second as Act).Safe.SupportsItem (first)) {
 						return Pane.First;
 					}
 				}
@@ -351,7 +351,7 @@ namespace Do.Core
 		
 		Item WorkingItem {
 			get {
-				return GetSelection (WorkingItemPane) as Item;
+				return GetSelection (WorkingItemPane);
 			}
 		}
 		
@@ -361,13 +361,13 @@ namespace Do.Core
 				if (workingPane == Pane.None)
 					return null;
 				
-				return controllers [(int) workingPane].FullSelection.OfType<Item> ();
+				return controllers [(int) workingPane].FullSelection;
 			}
 		}
 		
 		IEnumerable<Item> WorkingModItems {
 			get {
-				return controllers [(int) Pane.Third].FullSelection.OfType<Item> ();
+				return controllers [(int) Pane.Third].FullSelection;
 			}
 		}
 		
@@ -448,9 +448,9 @@ namespace Do.Core
 		/// Summons a window with elements in it... seems to work
 		/// </summary>
 		/// <param name="elements">
-		/// A <see cref="Element"/>
+		/// A <see cref="Item"/>
 		/// </param>
-		public void SummonWithElements (IEnumerable<Element> elements)
+		public void SummonWithItems (IEnumerable<Item> elements)
 		{
 			if (!IsSummonable) return;
 			
@@ -811,7 +811,7 @@ namespace Do.Core
 		/// This method determines what to do when a search is completed and takes the appropriate action
 		/// </summary>
 		/// <param name="o">
-		/// A <see cref="System.Element"/>
+		/// A <see cref="System.Item"/>
 		/// </param>
 		/// <param name="state">
 		/// A <see cref="SearchFinishState"/>
@@ -909,9 +909,9 @@ namespace Do.Core
 			results_grown = false;
 		}
 		
-		Element GetSelection (Pane pane)
+		Item GetSelection (Pane pane)
 		{
-			Element o;
+			Item o;
 
 			try {
 				o = controllers [(int) pane].Selection;
@@ -924,7 +924,7 @@ namespace Do.Core
 		void PerformAction (bool vanish)
 		{
 			Act action;
-			Element first, second, third;
+			Item first, second, third;
 			string actionQuery, itemQuery, modItemQuery;
 			IEnumerable<Item> items, modItems;
 
@@ -959,22 +959,22 @@ namespace Do.Core
 			if (WorkingActionPane == Pane.Second) {
 				// Act is in second pane.
 				// Increase the relevance of the items.
-				foreach (Element item in items)
+				foreach (Item item in items)
 					item.IncreaseRelevance (itemQuery, null);
 
 				// Increase the relevance of the action /for each item/:
-				foreach (Element item in items)
+				foreach (Item item in items)
 					action.IncreaseRelevance (actionQuery, item);
 			} else {
 				// Act is in first pane.
 				// Increase the relevance of each item for the action.
-				foreach (Element item in items)
+				foreach (Item item in items)
 					item.IncreaseRelevance (itemQuery, action);
 				action.IncreaseRelevance (actionQuery, null);
 			}
 
 			if (modItems != null && ThirdPaneVisible) {
-				foreach (Element item in modItems)
+				foreach (Item item in modItems)
 					item.IncreaseRelevance (modItemQuery, action);
 			}
 
@@ -992,7 +992,7 @@ namespace Do.Core
 
 			IEnumerable<Item> results = action.Safe.Perform (items, modItems);
 			if (results.Any ()) {
-				SummonWithElements (results.OfType<Element> ());
+				SummonWithItems (results);
 			}
 		}
 
@@ -1086,9 +1086,9 @@ namespace Do.Core
 		
 		public ControlOrientation Orientation { get; set; }
 		
-		public bool ElementHasChildren (Element element)
+		public bool ItemHasChildren (Item item)
 		{
-			return element is Item && (element as Item).HasChildren ();
+			return item.HasChildren ();
 		}
 		
 		#endregion

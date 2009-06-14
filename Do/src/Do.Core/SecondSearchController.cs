@@ -42,7 +42,7 @@ namespace Do.Core
 			}
 		}
 		
-		public override Element Selection {
+		public override Item Selection {
 			get { 
 				if (IsSearching)
 					FastSearch ();
@@ -78,16 +78,16 @@ namespace Do.Core
 			base.OnSearchFinished (true, true, Selection, Query);
 		}
 		
-		protected override List<Element> InitialResults ()
+		protected override List<Item> InitialResults ()
 		{
 			// We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
-				return new List<Element> (
+				return new List<Item> (
 					Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results, FirstController.Selection));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
-				return new List<Element> (context.Results);
+				return new List<Item> (context.Results);
 			} else { 
-				return new List<Element> (
+				return new List<Item> (
 					Do.UniverseManager.Search (context.Query, SearchTypes, FirstController.Selection));
 			}
 		}
@@ -114,12 +114,12 @@ namespace Do.Core
 		/// Set up our results list.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="Element"/>
+		/// A <see cref="Item"/>
 		/// </returns>
-		private Element [] GetContextResults ()
+		private Item [] GetContextResults ()
 		{
-			List<Element> results = new List<Element> ();
-			Item first = ProxyItem.Unwrap (FirstController.Selection as Item);
+			List<Item> results = new List<Item> ();
+			Item first = ProxyItem.Unwrap (FirstController.Selection);
 			
 			if (first is Act) {
 				// We need to find items for this action
@@ -205,7 +205,7 @@ namespace Do.Core
 
 		public override IEnumerable<Type> SearchTypes {
 			get { 
-				Item item = ProxyItem.Unwrap (FirstController.Selection as Item);
+				Item item = ProxyItem.Unwrap (FirstController.Selection);
 				if (item is Act) {
 					foreach (Type t in (item as Act).Safe.SupportedItemTypes)
 						yield return t;

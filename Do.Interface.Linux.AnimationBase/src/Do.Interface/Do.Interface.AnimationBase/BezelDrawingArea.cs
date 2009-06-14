@@ -506,7 +506,7 @@ namespace Do.Interface.AnimationBase
 			return DrawState.None;
 		}
 		
-		public void BezelSetPaneObject (Pane pane, Element obj)
+		public void BezelSetPaneObject (Pane pane, Do.Universe.Item obj)
 		{
 			if (Context.GetPaneObject (pane) == obj && obj != null)
 				return;
@@ -767,7 +767,7 @@ namespace Do.Interface.AnimationBase
 		
 		private void RenderPixbuf (Pane pane, Context cr)
 		{
-			Element obj = Context.GetPaneObject (pane);
+			Do.Universe.Item obj = Context.GetPaneObject (pane);
 			RenderPixbuf (pane, cr, obj.Icon, 1);
 		}
 		

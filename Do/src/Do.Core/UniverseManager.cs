@@ -35,7 +35,7 @@ namespace Do.Core
 	{
 
 		Thread update_thread;
-		Dictionary<string, Element> universe;
+		Dictionary<string, Item> universe;
 		EventHandler initialized;
 		
 		const float epsilon = 0.00001f;
@@ -75,7 +75,7 @@ namespace Do.Core
 		
 		public UniverseManager ()
 		{
-			universe = new Dictionary<string, Element> ();
+			universe = new Dictionary<string, Item> ();
 
 			update_thread = new Thread (new ThreadStart (UniverseUpdateLoop));
 			update_thread.IsBackground = true;
@@ -103,32 +103,32 @@ namespace Do.Core
 			update_thread.Start ();
 		}
 
-		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter)
+		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter)
 		{	
-			return Search (query, filter, (Element) null);
+			return Search (query, filter, (Item) null);
 		}
 		
-		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, Element other)
+		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, Item other)
 		{
 			if (filter.Count () == 1 && filter.First () == typeof (Act))
-				return Search (query, filter, PluginManager.Actions.OfType<Element> (), other);
+				return Search (query, filter, PluginManager.Actions.OfType<Item> (), other);
 			else
 				lock (universe) 
 					return Search (query, filter, universe.Values, other);
 		}
 		
-		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, IEnumerable<Element> objects)
+		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, IEnumerable<Item> objects)
 		{
 			return Search (query, filter, objects, null);
 		}
 		
-		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, IEnumerable<Element> elements, Element other)
+		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, IEnumerable<Item> elements, Item other)
 		{
-			Element text = new ImplicitTextItem (query);
+			Item text = new ImplicitTextItem (query);
 
 			string lquery = query.ToLower ();
 
-			foreach (Element element in elements)
+			foreach (Item element in elements)
 				element.UpdateRelevance (lquery, other);
 
 			return elements
@@ -136,7 +136,7 @@ namespace Do.Core
 				.OrderByDescending (element => element.Relevance)
 				.Concat (text.PassesTypeFilter (filter)
 						? new [] { text }
-						: Enumerable.Empty<Element> ()
+						: Enumerable.Empty<Item> ()
 				)
 				.ToArray ();
 		}
@@ -145,14 +145,14 @@ namespace Do.Core
 		/// Returns if an object likely contains children.
 		/// </summary>
 		/// <param name="o">
-		/// A <see cref="Element"/>
+		/// A <see cref="Item"/>
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		public bool ElementHasChildren (Element element)
+		public bool ItemHasChildren (Item item)
 		{
-			return element is Item && (element as Item).HasChildren ();
+			return item.HasChildren ();
 		}
 		
 		/// <summary>
@@ -270,15 +270,15 @@ namespace Do.Core
 		}
 
 		/// <summary>
-		/// Attempts to get an Element for a given UniqueId.
+		/// Attempts to get an Item for a given UniqueId.
 		/// </summary>
 		/// <param name="UniqueId">
 		/// A <see cref="System.String"/>
 		/// </param>
 		/// <param name="item">
-		/// A <see cref="Element"/>
+		/// A <see cref="Item"/>
 		/// </param>
-		public bool TryGetElementForUniqueId (string uid, out Element element)
+		public bool TryGetItemForUniqueId (string uid, out Item element)
 		{
 			lock (universe) {
 				if (universe.ContainsKey (uid)) {

@@ -49,7 +49,7 @@ namespace Do.Core {
 			hits = new Dictionary<string, RelevanceRecord> ();
 		}
 		
-		void UpdateMaxHits (RelevanceRecord rec, Element e)
+		void UpdateMaxHits (RelevanceRecord rec, Item e)
 		{
 			if (e is Act)
 				max_action_hits = Math.Max (max_action_hits, rec.Hits);
@@ -57,7 +57,7 @@ namespace Do.Core {
 				max_item_hits = Math.Max (max_item_hits, rec.Hits);
 		}
 
-		public override void IncreaseRelevance (Element element, string match, Element other)
+		public override void IncreaseRelevance (Item element, string match, Item other)
 		{
 			RelevanceRecord rec;
 
@@ -78,7 +78,7 @@ namespace Do.Core {
 			UpdateMaxHits (rec, element);
 		}
 
-		public override void DecreaseRelevance (Element element, string match, Element other)
+		public override void DecreaseRelevance (Item element, string match, Item other)
 		{
 			RelevanceRecord rec;
 
@@ -92,7 +92,7 @@ namespace Do.Core {
 			}
 		}
 
-		public override float GetRelevance (Element e, string match, Element other)
+		public override float GetRelevance (Item e, string match, Item other)
 		{
 			RelevanceRecord rec;
 			bool isAction;
@@ -175,7 +175,7 @@ namespace Do.Core {
 		public DateTime LastHit;
 		public string FirstChars;
 		
-		public RelevanceRecord (Element o)
+		public RelevanceRecord (Item o)
 		{
 			LastHit = DateTime.Now;
 			FirstChars = "";

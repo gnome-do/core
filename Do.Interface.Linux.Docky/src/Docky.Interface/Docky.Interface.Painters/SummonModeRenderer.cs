@@ -288,7 +288,7 @@ namespace Docky.Interface.Painters
 			int base_x = dockArea.X + 15;
 			
 			string text;
-			Element current = State [State.CurrentPane];
+			Item current = State [State.CurrentPane];
 			
 			if (current == null)
 				text = State.GetPaneQuery (State.CurrentPane);
@@ -323,7 +323,7 @@ namespace Docky.Interface.Painters
 			int base_x = dockArea.X + 15;
 			
 			string text;
-			Element current = State [State.CurrentPane];
+			Item current = State [State.CurrentPane];
 
 			if (current == null)
 				text = State.GetPaneQuery (State.CurrentPane);

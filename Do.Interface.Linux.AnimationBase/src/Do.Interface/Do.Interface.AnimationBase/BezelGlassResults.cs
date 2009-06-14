@@ -43,7 +43,7 @@ namespace Do.Interface.AnimationBase
 		int num_results;
 		int width, height;
 		int border_width, top_border_width;
-		Dictionary <Element, Surface> surface_buffer;
+		Dictionary <Do.Universe.Item, Surface> surface_buffer;
 		Surface highlight_surface, backbuffer, child_inout_surface, triplebuffer, background;
 		
 		DateTime delta_time;
@@ -58,7 +58,7 @@ namespace Do.Interface.AnimationBase
 		IUIContext context = null;
 		BezelColors colors;
 		
-		IList<Element> results;
+		IList<Do.Universe.Item> results;
 		
 		public int X { get; set; }
 		
@@ -127,7 +127,7 @@ namespace Do.Interface.AnimationBase
 			}
 		}
 		
-		public IList<Element> Results {
+		public IList<Do.Universe.Item> Results {
 			get {
 				return results;
 			}
@@ -282,7 +282,7 @@ namespace Do.Interface.AnimationBase
 				break;
 			}
 			
-			surface_buffer = new Dictionary <Element,Surface> ();
+			surface_buffer = new Dictionary <Do.Universe.Item,Surface> ();
 			secondary = new int[0];
 			border_width = 12;
 			top_border_width = 20;
@@ -392,7 +392,7 @@ namespace Do.Interface.AnimationBase
 			foreach (Surface s in surface_buffer.Values)
 				s.Destroy ();
 			
-			surface_buffer = new Dictionary<Element,Surface> ();
+			surface_buffer = new Dictionary<Do.Universe.Item,Surface> ();
 			Draw ();
 		}
 		
@@ -717,14 +717,14 @@ namespace Do.Interface.AnimationBase
 			return base.OnExposeEvent (evnt);
 		}
 
-		void BufferItem (Element item) 
+		void BufferItem (Do.Universe.Item item) 
 		{
 			if (!IsDrawable)
 				return;
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			Surface surface = cr.Target.CreateSimilar (cr.Target.Content, InternalWidth, SurfaceHeight);
 			Context cr2 = new Context (surface);
-			ItemRenderer.RenderElement (cr2, new Gdk.Point (border_width, 0), InternalWidth, item, controller.ElementHasChildren (item));
+			ItemRenderer.RenderElement (cr2, new Gdk.Point (border_width, 0), InternalWidth, item, controller.ItemHasChildren (item));
 			
 			surface_buffer[item] = surface;
 			

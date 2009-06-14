@@ -286,7 +286,7 @@ namespace Docky.Core.Default
 					customItem = new ItemDockItem (o);
 				}
 			} else {
-				Item e = Services.Core.GetElement (identifier) as Item;
+				Item e = Services.Core.GetItem (identifier);
 				if (e != null)
 					customItem = new ItemDockItem (e);
 				else
@@ -459,7 +459,7 @@ namespace Docky.Core.Default
 		#endregion
 		
 		#region Item Management
-		bool InternalAddItemToDock (Element item, int position)
+		bool InternalAddItemToDock (Item item, int position)
 		{
 			if (!(item is Item)) {
 				Log<ItemsService>.Error ("Could not add {0} to custom items for dock", item.Safe.Name);
@@ -640,7 +640,7 @@ namespace Docky.Core.Default
 			}
 		}
 		
-		public void AddItemToDock (Element item)
+		public void AddItemToDock (Item item)
 		{
 			AddItemToDock (item, LastPosition + 1);
 		}
@@ -650,7 +650,7 @@ namespace Docky.Core.Default
 			AddItemToDock (identifier, LastPosition + 1);
 		}
 		
-		public void AddItemToDock (Element item, int position)
+		public void AddItemToDock (Item item, int position)
 		{
 			position = DockItems [position].Position;
 			if (InternalAddItemToDock (item, position)) {

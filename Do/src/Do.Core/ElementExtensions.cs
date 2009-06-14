@@ -1,4 +1,4 @@
-// Element_RelevanceProvider.cs
+// Item_RelevanceProvider.cs
 //
 // GNOME Do is the legal property of its developers. Please refer to the
 // COPYRIGHT file distributed with this source distribution.
@@ -25,62 +25,62 @@ namespace Do.Core
 {
 
 	/// <summary>
-	/// Relevance related extension methods on Element class.
+	/// Relevance related extension methods on Item class.
 	/// </summary>
-	public static class Element_RelevanceProvider
+	public static class Item_RelevanceProvider
 	{
 
 		static readonly IRelevanceProvider provider = RelevanceProvider.DefaultProvider;
 
 		/// <summary>
-		/// Increase the relevance of receiver for string match and other Element.
+		/// Increase the relevance of receiver for string match and other Item.
 		/// </summary>
 		/// <param name="self">
-		/// A <see cref="Element"/> whose relevance is to be increased.
+		/// A <see cref="Item"/> whose relevance is to be increased.
 		/// </param>
 		/// <param name="match">
 		/// A <see cref="System.String"/> of user input for which the receiver should become more relevant.
 		/// </param>
 		/// <param name="other">
-		/// A <see cref="Element"/> (maybe null) context.
+		/// A <see cref="Item"/> (maybe null) context.
 		/// </param>
-		public static void IncreaseRelevance (this Element self, string match, Element other)
+		public static void IncreaseRelevance (this Item self, string match, Item other)
 		{
 			provider.IncreaseRelevance (self, match, other);
 		}
 
 		/// <summary>
-		/// Decrease the relevance of receiver for string match and other Element.
+		/// Decrease the relevance of receiver for string match and other Item.
 		/// </summary>
 		/// <param name="self">
-		/// A <see cref="Element"/> whose relevance is to be increased.
+		/// A <see cref="Item"/> whose relevance is to be increased.
 		/// </param>
 		/// <param name="match">
 		/// A <see cref="System.String"/> of user input for which the receiver should become less relevant.
 		/// </param>
 		/// <param name="other">
-		/// A <see cref="Element"/> (maybe null) context.
+		/// A <see cref="Item"/> (maybe null) context.
 		/// </param>
-		public static void DecreaseRelevance (this Element self, string match, Element other)
+		public static void DecreaseRelevance (this Item self, string match, Item other)
 		{
 			provider.DecreaseRelevance (self, match, other);
 		}
 
 		/// <summary>
 		/// Simply retrieves the receivers relevance and updates the receivers state
-		/// (Element.Relevance is set).
+		/// (Item.Relevance is set).
 		/// </summary>
 		/// <param name="self">
-		/// A <see cref="Element"/> whose relevance should be updated to reflect
+		/// A <see cref="Item"/> whose relevance should be updated to reflect
 		/// the state of the world.
 		/// </param>
 		/// <param name="match">
 		/// A <see cref="System.String"/> to retrieve relevance info for.
 		/// </param>
 		/// <param name="other">
-		/// A <see cref="Element"/> (maybe null) to retrieve relevance info for.
+		/// A <see cref="Item"/> (maybe null) to retrieve relevance info for.
 		/// </param>
-		public static void UpdateRelevance (this Element self, string match, Element other)
+		public static void UpdateRelevance (this Item self, string match, Item other)
 		{
 			self.Relevance = provider.GetRelevance (self, match, other);
 		}

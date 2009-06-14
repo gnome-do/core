@@ -41,15 +41,15 @@ namespace Do.Platform.Default
 			}
 		}
 		
-		public Element GetElement (string uid)
+		public Item GetItem (string uid)
 		{
-			Log.Debug ("Default ICoreService cannot get Elements.");
-			return new EmptyElement ();
+			Log.Debug ("Default ICoreService cannot get Items.");
+			return new EmptyItem ();
 		}
 		
 		public IEnumerable<Item> GetItemsOrderedByRelevance ()
 		{
-			Log.Debug ("Default ICoreService cannot get Elements.");
+			Log.Debug ("Default ICoreService cannot get Items.");
 			yield break;
 		}
 		

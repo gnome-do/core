@@ -39,16 +39,16 @@ namespace Do.Platform
 			remove { Do.UniverseManager.Initialized -= value; }
 		}
 
-		public Element GetElement (string uniqueId)
+		public Item GetItem (string uniqueId)
 		{
-			Element element;
-			Do.UniverseManager.TryGetElementForUniqueId (uniqueId, out element);
+			Item element;
+			Do.UniverseManager.TryGetItemForUniqueId (uniqueId, out element);
 			return element;
 		}
 		
 		public IEnumerable<Item> GetItemsOrderedByRelevance ()
 		{
-			return Do.UniverseManager.Search ("", typeof (Item).Cons (null)).Cast<Item> ();
+			return Do.UniverseManager.Search ("", typeof (Item).Cons (null));
 		}
 
 		public void PerformDefaultAction (Item item, IEnumerable<Type> filter)

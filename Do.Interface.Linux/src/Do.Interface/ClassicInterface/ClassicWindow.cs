@@ -347,7 +347,7 @@ namespace Do.Interface {
 			Resize (1, 1);
 			Reposition ();
 			
-			iconbox[0].DisplayObject = new Do.Interface.Widgets.DefaultIconBoxElement ();
+			iconbox[0].DisplayObject = new Do.Interface.Widgets.DefaultIconBoxItem ();
 			label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 
 			                       Catalog.GetString ("Type to start searching."));
 		}
@@ -381,11 +381,11 @@ namespace Do.Interface {
 			if (!context.Results.Any () && !context.LargeTextDisplay) {
 				if (pane == Pane.First && context.ParentContext == null) {
 					iconbox[0].TextOverlay = context.LargeTextDisplay;
-					iconbox[0].DisplayObject = new Do.Interface.Widgets.DefaultIconBoxElement ();
+					iconbox[0].DisplayObject = new Do.Interface.Widgets.DefaultIconBoxItem ();
 					label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 
 					                       Catalog.GetString ("Type to start searching."));
 				} else {
-					Element noRes = new NoResultsFoundElement (context.Query);
+					Do.Universe.Item noRes = new NoResultsFoundItem (context.Query);
 					for (int i = (int) pane; i < 3; i++) {
 						iconbox[i].Clear ();
 						iconbox[i].DisplayObject = noRes;
@@ -400,7 +400,7 @@ namespace Do.Interface {
 			
 			if (string.IsNullOrEmpty (context.Query) && context.LargeTextDisplay) {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
-				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text") as Element;
+				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text") as Do.Universe.Item;
 
 				if (!context.Results.Any ()) return;
 			} else {

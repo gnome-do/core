@@ -58,8 +58,8 @@ namespace Do.Core
 				return null;
 			
 			Item first, second;
-			first = ProxyItem.Unwrap (FirstController.Selection as Item);
-			second = ProxyItem.Unwrap (SecondController.Selection as Item);
+			first = ProxyItem.Unwrap (FirstController.Selection);
+			second = ProxyItem.Unwrap (SecondController.Selection);
 			
 			if (first is Act && (first as Act).Safe.SupportsItem (second))
 				return first as Act;
@@ -76,8 +76,8 @@ namespace Do.Core
 				return null;
 			
 			Item first, second;
-			first = ProxyItem.Unwrap (FirstController.Selection as Item);
-			second = ProxyItem.Unwrap (SecondController.Selection as Item);
+			first = ProxyItem.Unwrap (FirstController.Selection);
+			second = ProxyItem.Unwrap (SecondController.Selection);
 			
 			if (first is Act && (first as Act).Safe.SupportsItem (second))
 				return second;
@@ -165,32 +165,32 @@ namespace Do.Core
 			});
 		}
 		
-		protected override List<Element> InitialResults ()
+		protected override List<Item> InitialResults ()
 		{
 			Item other = null;
 			try {
 				other = GetContextualItem ();
 			} catch {
-				return new List<Element> ();
+				return new List<Item> ();
 			}
 			
 			// We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
-				return new List<Element> (Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results, other));
+				return new List<Item> (Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results, other));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
-				return new List<Element> (context.Results);
+				return new List<Item> (context.Results);
 			} else { 
 				// else we do things the slow way
-				return new List<Element> (Do.UniverseManager.Search (context.Query, SearchTypes, other));
+				return new List<Item> (Do.UniverseManager.Search (context.Query, SearchTypes, other));
 			}
 		}
 
-		private IList<Element> GetContextResults ()
+		private IList<Item> GetContextResults ()
 		{
 			Item item = null;
 			Act action = null;
 			IEnumerable<Item> items = null;
-			List<Element> modItems = new List<Element> ();
+			List<Item> modItems = new List<Item> ();
 			
 			try {
 				action = GetContextualAction ();
@@ -203,11 +203,11 @@ namespace Do.Core
 				return modItems;
 			
 			if (FirstController.Selection == action) {
-				item = SecondController.Selection as Item;
-				items = SecondController.FullSelection.OfType<Item> ();
+				item = SecondController.Selection;
+				items = SecondController.FullSelection;
 			} else if (SecondController.Selection == action) {
-				item = FirstController.Selection as Item;
-				items = FirstController.FullSelection.OfType<Item> ();
+				item = FirstController.Selection;
+				items = FirstController.FullSelection;
 			} else {
 				Log<ThirdSearchController>.Debug ("No action found. The interface is out of sync.");
 				return modItems;
@@ -296,10 +296,10 @@ namespace Do.Core
 		{
 			if (FirstController.Selection is Act) {
 				Act action = FirstController.Selection as Act;
-				return action.Safe.SupportsModifierItemForItems (SecondController.FullSelection.Cast<Item> (), item);
+				return action.Safe.SupportsModifierItemForItems (SecondController.FullSelection, item);
 			} else if (SecondController.Selection is Act) {
 				Act action = SecondController.Selection as Act;
-				return action.Safe.SupportsModifierItemForItems (FirstController.FullSelection.Cast<Item> (), item);
+				return action.Safe.SupportsModifierItemForItems (FirstController.FullSelection, item);
 			}
 			return true;
 		}

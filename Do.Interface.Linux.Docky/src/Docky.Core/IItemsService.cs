@@ -50,11 +50,11 @@ namespace Docky.Core
 		ReadOnlyCollection<AbstractDockItem> DockItems { get; }
 		
 		#region AddItem Overloads
-		void AddItemToDock (Element item);
+		void AddItemToDock (Item item);
 		
 		void AddItemToDock (string identifier);
 		
-		void AddItemToDock (Element item, int position);
+		void AddItemToDock (Item item, int position);
 		
 		void AddItemToDock (string identifier, int position);
 		#endregion
