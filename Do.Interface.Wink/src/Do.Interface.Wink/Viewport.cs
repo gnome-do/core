@@ -140,6 +140,9 @@ namespace Do.Interface.Wink
 		
 		public bool WindowCenterInViewport (Wnck.Window window)
 		{
+			if (window.Workspace == parent)
+				return false;
+			
 			Rectangle geo = window.EasyGeometry ();
 			geo.X += parent.ViewportX;
 			geo.Y += parent.ViewportY;
