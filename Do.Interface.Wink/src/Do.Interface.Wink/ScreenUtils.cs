@@ -39,8 +39,8 @@ namespace Do.Interface.Wink
 			get {
 				Workspace wsp = Wnck.Screen.Default.ActiveWorkspace;
 				Gdk.Rectangle geo = new Gdk.Rectangle (wsp.ViewportX, wsp.ViewportY, wsp.Screen.Width, wsp.Screen.Height);
-				if (Viewports.Any (vp => vp.Area == geo))
-					return Viewports.First (vp => vp.Area == geo);
+				if (Viewports.Any (vp => vp.IsActive))
+					return Viewports.First (vp => vp.IsActive);
 				return null;
 			}
 		}

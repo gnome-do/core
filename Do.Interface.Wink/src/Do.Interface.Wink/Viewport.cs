@@ -53,6 +53,12 @@ namespace Do.Interface.Wink
 			get { return area; }
 		}
 		
+		public bool IsActive {
+			get {
+				return Wnck.Screen.Default.ActiveWorkspace == parent;
+			}
+		}
+		
 		WindowMoveResizeMask MoveMask {
 			get {
 				return WindowMoveResizeMask.X | WindowMoveResizeMask.Y;
@@ -131,6 +137,9 @@ namespace Do.Interface.Wink
 		
 		public bool WindowVisibleInVeiwport (Wnck.Window window)
 		{
+			if (!window.IsOnWorkspace (parent))
+				return false;
+			
 			Rectangle geo = window.EasyGeometry ();
 			geo.X += parent.ViewportX;
 			geo.Y += parent.ViewportY;
@@ -140,9 +149,9 @@ namespace Do.Interface.Wink
 		
 		public bool WindowCenterInViewport (Wnck.Window window)
 		{
-			if (window.Workspace == parent)
+			if (!window.IsOnWorkspace (parent))
 				return false;
-			
+				
 			Rectangle geo = window.EasyGeometry ();
 			geo.X += parent.ViewportX;
 			geo.Y += parent.ViewportY;
