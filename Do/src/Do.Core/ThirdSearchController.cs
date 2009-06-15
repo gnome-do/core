@@ -81,7 +81,7 @@ namespace Do.Core
 			
 			if (first is Act && (first as Act).Safe.SupportsItem (second))
 				return second;
-			else if (first is Act && (second as Act).SupportsItem (first))
+			else if (second is Act && (second as Act).SupportsItem (first))
 				return first;
 			// fixme
 			throw new Exception ("Something strange happened");
