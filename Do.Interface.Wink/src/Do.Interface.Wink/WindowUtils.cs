@@ -83,6 +83,7 @@ namespace Do.Interface.Wink
 			foreach (string s in PrefixStrings) {
 				 regex.Add (new Regex (string.Format ("^{0}$", s), RegexOptions.IgnoreCase));
 			}
+			
 			BadPrefixes = regex.AsEnumerable ();
 			
 			Wnck.Screen.Default.WindowClosed += delegate {
