@@ -22,6 +22,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic; 
 
+using Do.Universe;
+
 using Do.Platform.ServiceStack;
 
 namespace Do.Platform
@@ -37,6 +39,8 @@ namespace Do.Platform
 			
 		bool IsExecutable (string line);
 		void Execute (string line);
+		
+		void CopyToClipboard (Item item);
 	}
 
 	public static class IEnvironmentServiceExtensions

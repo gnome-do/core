@@ -23,12 +23,10 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Gtk;
-using Gdk;
-
 using Mono.Unix;
 
 using Do.Universe;
+using Do.Platform;
 
 namespace Do.Universe.Linux
 {
@@ -59,28 +57,11 @@ namespace Do.Universe.Linux
 		
 		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
-			string text = "";
 			Item item = items.First ();
 			
-			if (item is ITextItem)
-				text = (item as ITextItem).Text;
-			else if (item is IFileItem)
-				text = (item as IFileItem).Path;
-			else if (item is IUriItem)
-				text = (item as IUriItem).Uri;
-			else if (item is IUrlItem)
-				text = (item as IUrlItem).Url;
-			else if (item is IContactDetailItem)
-				text = (item as IContactDetailItem).Value;
-			else if (item is ContactItem)
-				text = (item as ContactItem).Name;
-			else					
-				text = string.Format ("{0} - {1}", item.Name, item.Description);
-			
-			Clipboard.Get (Gdk.Selection.Clipboard).Text =
-				Clipboard.Get (Gdk.Selection.Primary).Text = text;
+			Services.Environment.CopyToClipboard (item);
 
-			return null;
+			yield break;
 		}
 	}
 }
