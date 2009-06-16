@@ -477,11 +477,6 @@ namespace Do.Core
 		
 		void OnCopyEvent (EventKey evnt)
 		{
-			/*
-			Gtk.Clipboard clip = Gtk.Clipboard.Get (Selection.Clipboard);
-			if (SearchController.Selection != null)
-				clip.Text = SearchController.Selection.Name;
-			 */
 			if (SearchController.Selection is Item)
 				Services.Environment.CopyToClipboard (SearchController.Selection as Item);
 		}
