@@ -55,7 +55,10 @@ namespace Do.Interface.Wink
 		
 		public bool IsActive {
 			get {
-				return Wnck.Screen.Default.ActiveWorkspace == parent;
+				if (!parent.IsVirtual)
+					return Wnck.Screen.Default.ActiveWorkspace == parent;
+				else
+					return Wnck.Screen.Default.ActiveWorkspace.ViewportX == area.X && Wnck.Screen.Default.ActiveWorkspace.ViewportY == area.Y;
 			}
 		}
 		
