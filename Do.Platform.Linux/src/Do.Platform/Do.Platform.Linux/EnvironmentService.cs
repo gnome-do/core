@@ -91,25 +91,30 @@ namespace Do.Platform.Linux
 		{
 			string text = "";
 			
-			if (item is ITextItem)
-				text = (item as ITextItem).Text;
-			else if (item is IFileItem)
-				text = (item as IFileItem).Path;
-			else if (item is IUriItem)
-				text = (item as IUriItem).Uri;
-			else if (item is IUrlItem)
-				text = (item as IUrlItem).Url;
-			else if (item is IContactDetailItem)
-				text = (item as IContactDetailItem).Value;
-			else if (item is ContactItem)
-				text = (item as ContactItem).Name;
-			else					
-				text = string.Format ("{0} - {1}", item.Name, item.Description);
-			
-			Gtk.Clipboard.Get (Gdk.Selection.Clipboard).Text =
-				Gtk.Clipboard.Get (Gdk.Selection.Primary).Text = text;
-			
-			Log.Debug ("Copied to clipboard, \"{0}\"", text);
+			try {			
+				if (item is ITextItem)
+					text = (item as ITextItem).Text;
+				else if (item is IFileItem)
+					text = (item as IFileItem).Path;
+				else if (item is IUriItem)
+					text = (item as IUriItem).Uri;
+				else if (item is IUrlItem)
+					text = (item as IUrlItem).Url;
+				else if (item is IContactDetailItem)
+					text = (item as IContactDetailItem).Value;
+				else if (item is ContactItem)
+					text = (item as ContactItem).Name;
+				else					
+					text = string.Format ("{0} - {1}", item.Name, item.Description);
+				
+				Log<EnvironmentService>.Debug ("Copying \"{0}\" to clipboard.", text);
+				
+				Gtk.Clipboard.Get (Gdk.Selection.Clipboard).Text =
+					Gtk.Clipboard.Get (Gdk.Selection.Primary).Text = text;
+			} catch (Exception e) {
+				Log<EnvironmentService>.Error ("Copy to clipboard failed: {0}", e.Message);
+				Log<EnvironmentService>.Debug (e.StackTrace);
+			}
 		}
 
 		#endregion
