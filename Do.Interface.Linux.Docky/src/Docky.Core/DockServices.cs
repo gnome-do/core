@@ -114,19 +114,19 @@ namespace Docky.Core
 			if (!services.Contains (service))
 				return service;
 			
-			if (DoInteropService == service)
+			if (do_interop_service == service)
 				do_interop_service = null;
 			
-			if (PainterService == service)
+			if (painter_service == service)
 				painter_service = null;
 			
-			if (DrawingService == service)
+			if (drawing_service == service)
 				drawing_service = null;
 			
-			if (ItemsService == service)
+			if (items_service == service)
 				items_service = null;
 			
-			if (DockletService == service)
+			if (docklet_service == service)
 				docklet_service = null;
 			
 			services.Remove (service);
