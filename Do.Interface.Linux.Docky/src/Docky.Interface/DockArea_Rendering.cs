@@ -289,7 +289,7 @@ namespace Docky.Interface
 		void HandleIntersectionChanged (object sender, EventArgs e)
 		{
 			if (DockPreferences.AutohideType == AutohideType.Intellihide && !CursorIsOverDockArea) {
-				showhide_time = DateTime.UtcNow;
+				showhide_time = UpdateTimeStamp (showhide_time, SummonTime);
 				AnimatedDraw ();
 			}
 		}
