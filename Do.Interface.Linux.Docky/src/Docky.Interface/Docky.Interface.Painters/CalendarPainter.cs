@@ -137,7 +137,7 @@ namespace Docky.Interface.Painters
 					textContext.Alignment = Pango.Alignment.Left;
 				} else if (i == 0) {
 					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
-					int woy = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear (lineStart, 
+					int woy = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear (lineStart.AddDays (6), 
 					                                                             DateTimeFormatInfo.CurrentInfo.CalendarWeekRule, 
 					                                                             DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek);
 					textContext.Text = string.Format ("<b>W{0:00}</b>", woy);
