@@ -20,6 +20,8 @@
 using System;
 using System.Collections.Generic;
 
+using Do.Universe;
+
 namespace Do.Platform.Default
 {
 	
@@ -52,6 +54,11 @@ namespace Do.Platform.Default
 		public void Execute (string line)
 		{
 			Log.Debug ("Default IEnvironmentService cannot execute \"{0}\".", line);
+		}
+		
+		public void CopyToClipboard (Item item)
+		{
+			Log.Debug ("Default IEnvironmentService cannot copy \"{0}\".", item.Name);
 		}
 
 		#endregion
