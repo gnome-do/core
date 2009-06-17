@@ -886,16 +886,6 @@ namespace Do.Core
 			third  = GetSelection (Pane.Third);
 			action = first as Act ?? second as Act;
 
-			// If the action requires network access, but we aren't connected, warn
-			// and return early
-			if (action.NetworkRequired && !Services.Network.IsConnected) {
-				Log<Controller>
-					.Warn ("Network access required for {0}.", action.Name);
-				Services.Notifications.Notify (Catalog.GetString ("Network Required"),
-				    Catalog.GetString (String.Format ("{0} requires network access.", action.Name)));
-				return;
-			}
-
 			// If the current state of the controller is invalid, warn and return
 			// early.
 			if (first == null || second == null || action == null) {
