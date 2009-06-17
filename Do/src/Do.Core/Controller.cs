@@ -112,7 +112,7 @@ namespace Do.Core
 			// Previous shortcuts
 			Do.Keybindings.RegisterShortcut (
 					new Shortcut ("SummonKey", 
-						Catalog.GetString ("Summon Gnome-Do"), 
+						Catalog.GetString ("Summon GNOME Do"), 
 						OnSummonKeyPressEvent),
 					"<Super>space");
 			Do.Keybindings.RegisterShortcut (
@@ -195,7 +195,7 @@ namespace Do.Core
 					"Right");
 			Do.Keybindings.RegisterShortcut (
 					new Shortcut ("CommaKey",
-						Catalog.GetString ("Selection mode"),
+						Catalog.GetString ("Multiple selection"),
 						OnSelectionKeyPressEvent),
 					"comma");
 		}
