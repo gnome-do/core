@@ -107,6 +107,14 @@ namespace Do.Universe
 			return true;
 		}
 		
+		/// <value>
+		/// Provides an indication of whether or not this element requires an active
+		/// network connection.
+		/// </value>
+		public virtual bool NetworkRequired {
+			get { return false; }
+		}
+		
 		/// <summary>
 		/// Similar to SupportsItem, but uses an array of Items as a context for
 		/// determining whether or not a modifier item is supported. Items will

@@ -116,14 +116,6 @@ namespace Do.Universe
 		
 		public abstract string Icon { get; }
 		
-		/// <value>
-		/// Provides an indication of whether or not this element requires an active
-		/// network connection.
-		/// </value>
-		public virtual bool NetworkRequired {
-			get { return false; }
-		}
-		
 		public override int GetHashCode ()
 		{
 			return UniqueId.GetHashCode ();
@@ -153,6 +145,5 @@ namespace Do.Universe
 		{
 			return !types.Any () || types.Any (type => type.IsInstanceOfType (this));
 		}
-		
 	}
 }

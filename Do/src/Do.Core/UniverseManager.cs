@@ -200,7 +200,7 @@ namespace Do.Core
 					if (universe.ContainsKey (action.UniqueId))
 						universe.Remove (action.UniqueId);
 				}
-				foreach (Act action in PluginManager.Actions.Where (a => ShouldUpdate (a)))
+				foreach (Act action in PluginManager.Actions)
 					universe [action.UniqueId] = action;
 			}
 		}
@@ -221,32 +221,19 @@ namespace Do.Core
 			oldItems = safeSource.Items;
 			// We call UpdateItems outside of the lock so as not to block other
 			// threads in contention for the lock if UpdateItems blocks.
-			if (ShouldUpdate (source)) {
-				Log<UniverseManager>.Debug ("Reloading item source \"{0}\"...", safeSource.Name);
-				safeSource.UpdateItems ();
-				newItems = safeSource.Items;
-			} else {
-				newItems = Enumerable.Empty<Item> ();
-			}
+			Log<UniverseManager>.Debug ("Reloading item source \"{0}\"...", safeSource.Name);
+			safeSource.UpdateItems ();
+			newItems = safeSource.Items;
 			
 			lock (universe) {
 				foreach (Item item in oldItems) {
 					if (universe.ContainsKey (item.UniqueId))
 						universe.Remove (item.UniqueId);
 				}
-				//only add the items if no net access is required, or if it is, if we have net access
 				foreach (Item item in newItems) {
 					universe  [item.UniqueId] = item;
 				}
 			}
-		}
-		
-		bool ShouldUpdate (Element element)
-		{
-			if (element.NetworkRequired && !Services.Network.IsConnected)
-				return false;
-			else
-				return true;
 		}
 		
 		void ReloadUniverse ()
