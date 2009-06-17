@@ -694,12 +694,9 @@ namespace Docky.Interface
 
 		protected override bool OnScrollEvent (Gdk.EventScroll evnt)
 		{
-			if (PainterOverlayVisible)
-			{
+			if (PainterOverlayVisible) {
 				Painter.Scrolled (evnt.Direction);
-			}
-			else
-			{
+			} else {
 				int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y);
 				if (item >= 0 && item < DockItems.Count)
 					DockItems [item].Scrolled (evnt.Direction);
