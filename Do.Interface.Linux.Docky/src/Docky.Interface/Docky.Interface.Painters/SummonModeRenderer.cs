@@ -154,7 +154,11 @@ namespace Docky.Interface.Painters
 				DockServices.DoInteropService.RequestClickOff ();
 			}
 		}
-
+		
+		public void Scrolled (Gdk.ScrollDirection direction)
+		{
+		}
+		
 		public void Interrupt ()
 		{
 			Log.Error ("Docky has been interupted innapropriately.  Please report this bug.");

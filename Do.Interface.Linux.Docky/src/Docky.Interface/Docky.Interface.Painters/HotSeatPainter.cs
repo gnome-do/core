@@ -44,6 +44,10 @@ namespace Docky.Interface.Painters
 		{
 		}
 		
+		public void Scrolled (Gdk.ScrollDirection direction)
+		{
+		}
+		
 		public void Interrupt ()
 		{
 		}
