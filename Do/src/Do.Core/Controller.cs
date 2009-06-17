@@ -316,9 +316,9 @@ namespace Do.Core
 				second = GetSelection (Pane.Second);
 				
 				if (first != null && second != null) {
-					if (first is Act && (first as Act).Safe.SupportsItem (second)) {
+					if (first.IsAction () && first.AsAction ().Safe.SupportsItem (second)) {
 						return Pane.First;
-					} else if (second is Act && (second as Act).Safe.SupportsItem (first)) {
+					} else if (second.IsAction () && second.AsAction ().Safe.SupportsItem (first)) {
 						return Pane.Second;
 					}
 				}
@@ -333,9 +333,9 @@ namespace Do.Core
 				second = GetSelection (Pane.Second);
 				
 				if (first != null && second != null) {
-					if (first is Act && (first as Act).Safe.SupportsItem (second)) {
+					if (first.IsAction () && first.AsAction ().Safe.SupportsItem (second)) {
 						return Pane.Second;
-					} else if (second is Act && (second as Act).Safe.SupportsItem (first)) {
+					} else if (second.IsAction () && second.AsAction ().Safe.SupportsItem (first)) {
 						return Pane.First;
 					}
 				}
@@ -345,7 +345,7 @@ namespace Do.Core
 		
 		Act WorkingAction {
 			get {
-				return GetSelection (WorkingActionPane) as Act;
+				return GetSelection (WorkingActionPane).AsAction ();
 			}
 		}
 		

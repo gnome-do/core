@@ -58,13 +58,13 @@ namespace Do.Core
 				return null;
 			
 			Item first, second;
-			first = ProxyItem.Unwrap (FirstController.Selection);
-			second = ProxyItem.Unwrap (SecondController.Selection);
+			first = FirstController.Selection;
+			second = SecondController.Selection;
 			
-			if (first is Act && (first as Act).Safe.SupportsItem (second))
-				return first as Act;
-			else if (second is Act && (second as Act).SupportsItem (first))
-				return second as Act;
+			if (first.IsAction () && first.AsAction ().Safe.SupportsItem (second))
+				return first.AsAction ();
+			else if (second.IsAction () && second.AsAction ().SupportsItem (first))
+				return second.AsAction ();
 			// fixme
 			throw new Exception ("Something strange happened");
 		}
@@ -76,12 +76,12 @@ namespace Do.Core
 				return null;
 			
 			Item first, second;
-			first = ProxyItem.Unwrap (FirstController.Selection);
-			second = ProxyItem.Unwrap (SecondController.Selection);
+			first = FirstController.Selection;
+			second = SecondController.Selection;
 			
-			if (first is Act && (first as Act).Safe.SupportsItem (second))
+			if (first.IsAction () && first.AsAction ().Safe.SupportsItem (second))
 				return second;
-			else if (second is Act && (second as Act).SupportsItem (first))
+			else if (second.IsAction () && second.AsAction ().SupportsItem (first))
 				return first;
 			// fixme
 			throw new Exception ("Something strange happened");
@@ -294,11 +294,12 @@ namespace Do.Core
 		
 		protected override bool AcceptChildItem (Item item)
 		{
-			if (FirstController.Selection is Act) {
-				Act action = FirstController.Selection as Act;
+			//fixme
+			if (FirstController.Selection.IsAction () && FirstController.Selection.AsAction ().SupportsItem (SecondController.Selection)) {
+				Act action = FirstController.Selection.AsAction ();
 				return action.Safe.SupportsModifierItemForItems (SecondController.FullSelection, item);
-			} else if (SecondController.Selection is Act) {
-				Act action = SecondController.Selection as Act;
+			} else if (SecondController.Selection.IsAction ()) {
+				Act action = SecondController.Selection.AsAction ();
 				return action.Safe.SupportsModifierItemForItems (FirstController.FullSelection, item);
 			}
 			return true;

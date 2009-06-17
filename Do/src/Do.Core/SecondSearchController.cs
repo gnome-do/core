@@ -119,21 +119,22 @@ namespace Do.Core
 		private Item [] GetContextResults ()
 		{
 			List<Item> results = new List<Item> ();
-			Item first = ProxyItem.Unwrap (FirstController.Selection);
+			Item first = FirstController.Selection;
 			
-			if (first is Act) {
+			if (first.IsAction ()) {
 				// We need to find items for this action
-				Act action = first as Act;
+				Act action = first.AsAction ();
 				foreach (Item item in InitialResults ()) {
-					if (action.Safe.SupportsItem (item) || ((item is Act) && (item as Act).Safe.SupportsItem (action)))
+					if (action.Safe.SupportsItem (item) || (item.IsAction () && item.AsAction ().Safe.SupportsItem (action)))
 						results.Add (item);
 				}
 			} else {
 				// We need to find actions for this item
 				// TODO -- Make this work for multiple items
-				foreach (Act action in InitialResults ()) {
-					if (action.Safe.SupportsItem (first)) {
-						results.Add (action);
+				foreach (Item item in InitialResults ()) {
+					Act action = item.AsAction ();
+					if (action != null && action.Safe.SupportsItem (first)) {
+						results.Add (item);
 					}
 				}
 			}
@@ -205,9 +206,9 @@ namespace Do.Core
 
 		public override IEnumerable<Type> SearchTypes {
 			get { 
-				Item item = ProxyItem.Unwrap (FirstController.Selection);
-				if (item is Act) {
-					foreach (Type t in (item as Act).Safe.SupportedItemTypes)
+				Item item = FirstController.Selection;
+				if (item.IsAction ()) {
+					foreach (Type t in item.AsAction ().Safe.SupportedItemTypes)
 						yield return t;
 					yield return typeof (Act);
 				} else if (TextMode) {
@@ -241,8 +242,8 @@ namespace Do.Core
 				if (!value) {
 					textMode = value;
 					textModeFinalize = false;
-				} else if (FirstController.Selection is Act) {
-					Act action = FirstController.Selection as Act;
+				} else if (FirstController.Selection.IsAction ()) {
+					Act action = FirstController.Selection.AsAction ();
 					if (action.Safe.SupportsItem (new ImplicitTextItem (Query))) {
 						textMode = value;
 						textModeFinalize = false;
@@ -281,8 +282,8 @@ namespace Do.Core
 		
 		protected override bool AcceptChildItem (Item item)
 		{
-			if (FirstController.Selection is Act) {
-				Act action = FirstController.Selection as Act;
+			if (FirstController.Selection.IsAction ()) {
+				Act action = FirstController.Selection.AsAction ();
 				return action.Safe.SupportsItem (item);
 			}
 			return true;

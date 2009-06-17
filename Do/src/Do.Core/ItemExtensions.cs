@@ -29,7 +29,7 @@ namespace Do.Core
 
 	static class ItemExtensions
 	{
-
+		static readonly IRelevanceProvider provider = RelevanceProvider.DefaultProvider;
 		static IDictionary<Item, bool> has_children;
 
 		static ItemExtensions ()
@@ -45,5 +45,67 @@ namespace Do.Core
 			return has_children [self];
 		}
 
+		public static bool IsAction (this Item self) 
+		{
+			return ProxyItem.Unwrap (self) is Act;
+		}
+		
+		public static Act AsAction (this Item self)
+		{
+			return ProxyItem.Unwrap (self) as Act;
+		}
+		
+		/// <summary>
+		/// Increase the relevance of receiver for string match and other Item.
+		/// </summary>
+		/// <param name="self">
+		/// A <see cref="Item"/> whose relevance is to be increased.
+		/// </param>
+		/// <param name="match">
+		/// A <see cref="System.String"/> of user input for which the receiver should become more relevant.
+		/// </param>
+		/// <param name="other">
+		/// A <see cref="Item"/> (maybe null) context.
+		/// </param>
+		public static void IncreaseRelevance (this Item self, string match, Item other)
+		{
+			provider.IncreaseRelevance (self, match, other);
+		}
+
+		/// <summary>
+		/// Decrease the relevance of receiver for string match and other Item.
+		/// </summary>
+		/// <param name="self">
+		/// A <see cref="Item"/> whose relevance is to be increased.
+		/// </param>
+		/// <param name="match">
+		/// A <see cref="System.String"/> of user input for which the receiver should become less relevant.
+		/// </param>
+		/// <param name="other">
+		/// A <see cref="Item"/> (maybe null) context.
+		/// </param>
+		public static void DecreaseRelevance (this Item self, string match, Item other)
+		{
+			provider.DecreaseRelevance (self, match, other);
+		}
+
+		/// <summary>
+		/// Simply retrieves the receivers relevance and updates the receivers state
+		/// (Item.Relevance is set).
+		/// </summary>
+		/// <param name="self">
+		/// A <see cref="Item"/> whose relevance should be updated to reflect
+		/// the state of the world.
+		/// </param>
+		/// <param name="match">
+		/// A <see cref="System.String"/> to retrieve relevance info for.
+		/// </param>
+		/// <param name="other">
+		/// A <see cref="Item"/> (maybe null) to retrieve relevance info for.
+		/// </param>
+		public static float UpdateRelevance (this Item self, string match, Item other)
+		{
+			return self.Relevance = provider.GetRelevance (self, match, other);
+		}
 	}
 }

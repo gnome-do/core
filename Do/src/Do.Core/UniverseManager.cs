@@ -110,11 +110,8 @@ namespace Do.Core
 		
 		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, Item other)
 		{
-			if (filter.Count () == 1 && filter.First () == typeof (Act))
-				return Search (query, filter, PluginManager.Actions.OfType<Item> (), other);
-			else
-				lock (universe) 
-					return Search (query, filter, universe.Values, other);
+			lock (universe) 
+				return Search (query, filter, universe.Values, other);
 		}
 		
 		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, IEnumerable<Item> objects)
@@ -125,19 +122,12 @@ namespace Do.Core
 		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, IEnumerable<Item> elements, Item other)
 		{
 			Item text = new ImplicitTextItem (query);
-
 			string lquery = query.ToLower ();
 
-			foreach (Item element in elements)
-				element.UpdateRelevance (lquery, other);
-
 			return elements
-				.Where (element => epsilon < Math.Abs (element.Relevance) && element.PassesTypeFilter (filter))
+				.Where (element => element.PassesTypeFilter (filter) && epsilon < Math.Abs (element.UpdateRelevance (lquery, other)))
 				.OrderByDescending (element => element.Relevance)
-				.Concat (text.PassesTypeFilter (filter)
-						? new [] { text }
-						: Enumerable.Empty<Item> ()
-				)
+				.Concat (text.PassesTypeFilter (filter) ? new [] { text } : Enumerable.Empty<Item> ())
 				.ToArray ();
 		}
 		
