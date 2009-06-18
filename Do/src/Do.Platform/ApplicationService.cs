@@ -46,18 +46,23 @@ namespace Do.Platform
 			get { return items; }
 		}
 
-		public override void RunOnThread (Action action)
+		public override Thread RunOnThread (Action action)
 		{
 			if (action == null) throw new ArgumentNullException ("action");
 
-			new Thread (() => {
+			Thread newThread = new Thread (() => {
 				try {
 					action ();
+				} catch (ThreadAbortException e) {
 				} catch (Exception e) {
 					Log.Error ("Error in RunOnThread: {0}", e.Message);
 					Log.Debug (e.StackTrace);
 				}
-			}).Start ();
+			});
+			
+			newThread.Start ();
+			
+			return newThread;
 		}
 
 		public override void RunOnMainThread (Action action)
