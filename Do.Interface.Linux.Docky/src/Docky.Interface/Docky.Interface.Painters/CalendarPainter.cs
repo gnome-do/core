@@ -44,10 +44,22 @@ namespace Docky.Interface.Painters
 		
 		ClockDockItem Clock { get; set; }
 		
+		DateTime startDate;
+		public DateTime StartDate
+		{
+			get {
+				return startDate;
+			}
+			set {
+				startDate = value;
+				paint_time = DateTime.Now.Date.AddDays (-100);
+				OnPaintNeeded (new PaintNeededArgs ());
+			}
+		}
+		
 		DateTime CalendarStartDate {
 			get {
-				return DateTime.Today.AddDays (0 - (int) DateTime.Today.DayOfWeek + 
-				                               ((int) DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek));
+				return StartDate.AddDays ((int) DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek - (int) StartDate.DayOfWeek);
 			}
 		}
 		
@@ -60,9 +72,18 @@ namespace Docky.Interface.Painters
 		public CalendarPainter (ClockDockItem clock) : base (clock as AbstractDockItem)
 		{
 			Clock = clock;
+			StartDate = DateTime.Today;
 		}
 		
 		#region IDockPainter implementation 
+
+		public override void Scrolled (Gdk.ScrollDirection direction)
+		{
+			if (direction == Gdk.ScrollDirection.Up)
+				StartDate = StartDate.AddDays (-7);
+			else
+				StartDate = StartDate.AddDays (7);
+		}
 		
 		protected override int PainterWidth {
 			get {
@@ -116,7 +137,7 @@ namespace Docky.Interface.Painters
 					textContext.Alignment = Pango.Alignment.Left;
 				} else if (i == 0) {
 					cr.Color = new Cairo.Color (1, 1, 1, lowlight);
-					int woy = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear (lineStart, 
+					int woy = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear (lineStart.AddDays (6), 
 					                                                             DateTimeFormatInfo.CurrentInfo.CalendarWeekRule, 
 					                                                             DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek);
 					textContext.Text = string.Format ("<b>W{0:00}</b>", woy);
@@ -149,13 +170,8 @@ namespace Docky.Interface.Painters
 		
 		public void Summon ()
 		{
+			StartDate = DateTime.Today;
 			OnShowRequested ();
 		}
-		
-		void RequestDraw ()
-		{
-			OnPaintNeeded (new PaintNeededArgs ());
-		} 
-		
 	}
 }

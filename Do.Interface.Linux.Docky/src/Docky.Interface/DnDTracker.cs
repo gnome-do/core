@@ -331,7 +331,8 @@ namespace Docky.Interface
 			
 			if (drag_context != args.Context) {
 				Gdk.Atom target = Gtk.Drag.DestFindTarget (parent, args.Context, null);
-				Gtk.Drag.GetData (parent, args.Context, target, Gtk.Global.CurrentEventTime);
+				if (target != null)
+					Gtk.Drag.GetData (parent, args.Context, target, Gtk.Global.CurrentEventTime);
 				drag_context = args.Context;
 				
 			}

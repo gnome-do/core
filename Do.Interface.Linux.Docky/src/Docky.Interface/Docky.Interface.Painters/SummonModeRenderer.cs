@@ -83,7 +83,7 @@ namespace Docky.Interface.Painters
 		}
 		
 		public int Width {
-			get { return Math.Max (300, DockServices.DrawingService.CurrentDockWidth); }
+			get { return Math.Max (300, Math.Max (10 * DockServices.DrawingService.CurrentDockHeight, DockServices.DrawingService.CurrentDockWidth)); }
 		}
 		
 		public SummonModeRenderer ()
@@ -154,7 +154,11 @@ namespace Docky.Interface.Painters
 				DockServices.DoInteropService.RequestClickOff ();
 			}
 		}
-
+		
+		public void Scrolled (Gdk.ScrollDirection direction)
+		{
+		}
+		
 		public void Interrupt ()
 		{
 			Log.Error ("Docky has been interupted innapropriately.  Please report this bug.");

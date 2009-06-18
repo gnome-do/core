@@ -112,7 +112,7 @@ namespace Do.Core
 			// Previous shortcuts
 			Do.Keybindings.RegisterShortcut (
 					new Shortcut ("SummonKey", 
-						Catalog.GetString ("Summon Gnome-Do"), 
+						Catalog.GetString ("Summon GNOME Do"), 
 						OnSummonKeyPressEvent),
 					"<Super>space");
 			Do.Keybindings.RegisterShortcut (
@@ -195,7 +195,7 @@ namespace Do.Core
 					"Right");
 			Do.Keybindings.RegisterShortcut (
 					new Shortcut ("CommaKey",
-						Catalog.GetString ("Selection mode"),
+						Catalog.GetString ("Multiple selection"),
 						OnSelectionKeyPressEvent),
 					"comma");
 		}
@@ -477,9 +477,8 @@ namespace Do.Core
 		
 		void OnCopyEvent (EventKey evnt)
 		{
-			Gtk.Clipboard clip = Gtk.Clipboard.Get (Selection.Clipboard);
-			if (SearchController.Selection != null)
-				clip.Text = SearchController.Selection.Name;
+			if (SearchController.Selection is Item)
+				Services.Environment.CopyToClipboard (SearchController.Selection as Item);
 		}
 		
 		void OnActivateKeyPressEvent (EventKey evnt)

@@ -52,7 +52,7 @@ namespace Do.UI
 			
 			CellRendererText defaultbindingCell = new CellRendererText ();
 			actionCell.Width = 150;
-			InsertColumn (-1, Catalog.GetString ("Default Shortcut"), defaultbindingCell, "text", (int)Column.DefaultKeybinding);
+//			InsertColumn (-1, Catalog.GetString ("Default Shortcut"), defaultbindingCell, "text", (int)Column.DefaultKeybinding);
 			
 			RowActivated += new RowActivatedHandler (OnRowActivated);
 			ButtonPressEvent += new ButtonPressEventHandler (OnButtonPress);

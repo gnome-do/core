@@ -53,6 +53,10 @@ namespace Docky.Interface.Painters
 			return true;
 		}
 		
+		public virtual void Scrolled (Gdk.ScrollDirection direction)
+		{
+		}
+		
 		#region IDockPainter implementation 
 		
 		public event EventHandler HideRequested;
