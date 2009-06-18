@@ -51,7 +51,7 @@ namespace Do.Core {
 		
 		void UpdateMaxHits (RelevanceRecord rec, Item e)
 		{
-			if (e is Act)
+			if (e.IsAction ())
 				max_action_hits = Math.Max (max_action_hits, rec.Hits);
 			else
 				max_item_hits = Math.Max (max_item_hits, rec.Hits);
@@ -102,7 +102,7 @@ namespace Do.Core {
 			if (!hits.TryGetValue (e.UniqueId, out rec))
 				rec = new RelevanceRecord (e);
 
-			isAction = e is Act;
+			isAction = e.IsAction ();
 			
 			// Get string similarity score.
 			score = StringScoreForAbbreviation (name, match);
@@ -143,7 +143,7 @@ namespace Do.Core {
 			relevance *= 1f - age / 2f;
 
 			if (isAction) {
-				SafeAct action = (e as Act).Safe;
+				SafeAct action = e.AsAction ().Safe;
 				// We penalize actions, but only if they're not used in the first pane
 				// often.
 				if (rec.FirstPaneHits < 3)
