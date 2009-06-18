@@ -282,7 +282,7 @@ namespace Do.Interface.AnimationBase
 				break;
 			}
 			
-			surface_buffer = new Dictionary <Do.Universe.Item,Surface> ();
+			surface_buffer = new Dictionary <Do.Universe.Item, Surface> ();
 			secondary = new int[0];
 			border_width = 12;
 			top_border_width = 20;
