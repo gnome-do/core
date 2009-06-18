@@ -28,16 +28,36 @@ using Do.Interface;
 using Do.Interface.CairoUtils;
 using Do.Platform;
 
+using Docky.Core;
+using Docky.Interface.Menus;
 using Docky.Interface.Painters;
 
 namespace Docky.Interface
 {
-	
-	
-	public class ClockDockItem : AbstractDockletItem
+	public class ClockDockItem : AbstractDockletItem, IRightClickable
 	{
 		int minute;
 		CalendarPainter cal_painter;
+		
+		static IPreferences prefs = Services.Preferences.Get<ClockDockItem> ();
+		
+		bool digital = prefs.Get<bool> ("ShowDigital", false);
+		bool ShowDigital {
+			get { return digital; }
+			set {
+				digital = value;
+				prefs.Set<bool> ("ShowDigital", value);
+			}
+		}
+		
+		bool show_date = prefs.Get<bool> ("ShowDate", false);
+		bool ShowDate {
+			get { return show_date; }
+			set {
+				show_date = value;
+				prefs.Set<bool> ("ShowDate", value);
+			}
+		}
 		
 		public override string Name {
 			get {
@@ -47,7 +67,7 @@ namespace Docky.Interface
 		
 		public override ScalingType ScalingType {
 			get {
-				return ScalingType.HighLow;
+				return ShowDigital ? ScalingType.Downscaled : ScalingType.HighLow;
 			}
 		}
 		
@@ -96,43 +116,125 @@ namespace Docky.Interface
 			Surface tmp_surface = similar.CreateSimilar (Cairo.Content.ColorAlpha, size, size);
 			
 			using (Context cr = new Context (tmp_surface)) {
-				cr.AlphaFill ();
-				
-				int center = size / 2;
-				int radius = center;
-				
-				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-drop-shadow.svg"), radius * 2);
-				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-face.svg"), radius * 2);
-				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-marks.svg"), radius * 2);
-				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-face-shadow.svg"), radius * 2);
-				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-glass.svg"), radius * 2);
-				RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-frame.svg"), radius * 2);
-				
-				cr.Translate (center, center);
-				cr.Color = new Cairo.Color (.15, .15, .15);
-				
-				cr.LineWidth = Math.Max (1, size / 48);
-				cr.LineCap = LineCap.Round;
-				double minuteRotation = 2 * Math.PI * (DateTime.Now.Minute / 60.0) + Math.PI;
-				cr.Rotate (minuteRotation);
-				cr.MoveTo (0, radius - radius * .35);
-				cr.LineTo (0, 0 - radius * .15);
-				cr.Stroke ();
-				cr.Rotate (0 - minuteRotation);
-				
-				cr.Color = new Cairo.Color (0, 0, 0);
-				double hourRotation = 2 * Math.PI * (DateTime.Now.Hour / 12.0) + 
-					Math.PI + (Math.PI / 6) * DateTime.Now.Minute / 60.0;
-				cr.Rotate (hourRotation);
-				cr.MoveTo (0, radius - radius * .5);
-				cr.LineTo (0, 0 - radius * .15);
-				cr.Stroke ();
-				cr.Rotate (0 - hourRotation);
-				
-				cr.Translate (0 - center, 0 - center);
+				if (ShowDigital)
+					MakeDigitalIcon (cr, size);
+				else
+					MakeAnalogIcon (cr, size);
 			}
 			
 			return tmp_surface;
+		}
+		
+		void MakeDigitalIcon (Context cr, int size)
+		{
+			// shared by all text
+			TextRenderContext textContext = new TextRenderContext (cr, string.Empty, size);
+			textContext.Alignment = Pango.Alignment.Center;
+			textContext.EllipsizeMode = Pango.EllipsizeMode.None;
+			
+			// draw the time, outlined
+			textContext.FontSize = size / 5;
+			if (ShowDate)
+				textContext.LeftCenteredPoint = new Gdk.Point (- size / 20, textContext.FontSize);
+			else
+				textContext.LeftCenteredPoint = new Gdk.Point (- size / 20, size / 2 - size / 8);
+			
+			textContext.Text = string.Format ("<b>{0}</b>", DateTime.Now.ToString ("h:mm"));
+			
+			DockServices.DrawingService.TextPathAtPoint (textContext);
+			cr.LineWidth = 3;
+			cr.Color = new Cairo.Color (0, 0, 0, 0.5);
+			cr.Stroke ();
+
+			DockServices.DrawingService.TextPathAtPoint (textContext);
+			cr.Color = new Cairo.Color (1, 1, 1, 0.8);
+			cr.Fill ();
+			
+			// draw the date, outlined
+			if (ShowDate) {
+				textContext.FontSize = size / 6;
+				textContext.LeftCenteredPoint = new Gdk.Point (-size / 20, size - textContext.FontSize);
+				
+				textContext.Text = string.Format ("<b>{0}</b>", DateTime.Now.ToString ("MMM dd"));
+				
+				DockServices.DrawingService.TextPathAtPoint (textContext);
+				cr.Color = new Cairo.Color (0, 0, 0, 0.5);
+				cr.Stroke ();
+				
+				DockServices.DrawingService.TextPathAtPoint (textContext);
+				cr.Color = new Cairo.Color (1, 1, 1, 0.8);
+				cr.Fill ();
+			}
+			
+			// shared for AM/PM
+			textContext = new TextRenderContext (cr, string.Empty, size / 2);
+			textContext.FontSize = size / 6;
+			
+			// draw AM indicator
+			if (DateTime.Now.Hour < 12)
+				cr.Color = new Cairo.Color (1, 1, 1, 0.9);
+			else
+				cr.Color = new Cairo.Color (1, 1, 1, 0.5);
+			
+			textContext.Text = "<b>am</b>";
+			if (ShowDate)
+				textContext.LeftCenteredPoint = new Gdk.Point (0, size / 2);
+			else
+				textContext.LeftCenteredPoint = new Gdk.Point (0, size / 8 + size / 2 + textContext.FontSize);
+			DockServices.DrawingService.TextPathAtPoint (textContext);
+			cr.Fill ();
+			
+			// draw PM indicator
+			if (DateTime.Now.Hour > 11)
+				cr.Color = new Cairo.Color (1, 1, 1, 0.9);
+			else
+				cr.Color = new Cairo.Color (1, 1, 1, 0.5);
+			
+			textContext.Text = "<b>pm</b>";
+			if (ShowDate)
+				textContext.LeftCenteredPoint = new Gdk.Point (size / 2, size / 2);
+			else
+				textContext.LeftCenteredPoint = new Gdk.Point (size / 2, size / 8 + size / 2 + textContext.FontSize);
+			DockServices.DrawingService.TextPathAtPoint (textContext);
+			cr.Fill ();
+		}
+		
+		void MakeAnalogIcon (Context cr, int size)
+		{
+			cr.AlphaFill ();
+			
+			int center = size / 2;
+			int radius = center;
+			
+			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-drop-shadow.svg"), radius * 2);
+			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-face.svg"), radius * 2);
+			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-marks.svg"), radius * 2);
+			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-face-shadow.svg"), radius * 2);
+			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-glass.svg"), radius * 2);
+			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-frame.svg"), radius * 2);
+			
+			cr.Translate (center, center);
+			cr.Color = new Cairo.Color (.15, .15, .15);
+			
+			cr.LineWidth = Math.Max (1, size / 48);
+			cr.LineCap = LineCap.Round;
+			double minuteRotation = 2 * Math.PI * (DateTime.Now.Minute / 60.0) + Math.PI;
+			cr.Rotate (minuteRotation);
+			cr.MoveTo (0, radius - radius * .35);
+			cr.LineTo (0, 0 - radius * .15);
+			cr.Stroke ();
+			cr.Rotate (0 - minuteRotation);
+			
+			cr.Color = new Cairo.Color (0, 0, 0);
+			double hourRotation = 2 * Math.PI * (DateTime.Now.Hour / 12.0) + 
+				Math.PI + (Math.PI / 6) * DateTime.Now.Minute / 60.0;
+			cr.Rotate (hourRotation);
+			cr.MoveTo (0, radius - radius * .5);
+			cr.LineTo (0, 0 - radius * .15);
+			cr.Stroke ();
+			cr.Rotate (0 - hourRotation);
+			
+			cr.Translate (0 - center, 0 - center);
 		}
 		
 		public override void Clicked (uint button, Gdk.ModifierType state, PointD position)
@@ -140,5 +242,30 @@ namespace Docky.Interface
 			cal_painter.Summon ();
 			base.Clicked (button, state, position);
 		}
+		
+		#region IRightClickable implementation 
+		
+		public event EventHandler RemoveClicked;
+		
+		public IEnumerable<AbstractMenuArgs> GetMenuItems ()
+		{
+			yield return new SeparatorMenuButtonArgs ();
+			
+			if (!ShowDigital) {
+				yield return new SimpleMenuButtonArgs (() => { ShowDigital = true; RedrawIcon (); },
+						Catalog.GetString ("Show Digital"), "");
+			} else {
+				yield return new SimpleMenuButtonArgs (() => { ShowDigital = false; RedrawIcon (); },
+						Catalog.GetString ("Show Analog"), "");
+				if (ShowDate)
+					yield return new SimpleMenuButtonArgs (() => { ShowDate = false; RedrawIcon (); },
+							Catalog.GetString ("Hide Date"), "");
+				else
+					yield return new SimpleMenuButtonArgs (() => { ShowDate = true; RedrawIcon (); },
+							Catalog.GetString ("Show Date"), "");
+			}
+		}
+		
+		#endregion 
 	}
 }
