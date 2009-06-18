@@ -34,7 +34,7 @@ namespace Do.Interface.AnimationBase
 	public interface IBezelResultItemRenderer
 	{
 		int Height { get; }
-		void RenderElement (Context cr, Gdk.Point renderAnchor, int width, Do.Universe.Item item, bool drawArrow);
+		void RenderItem (Context cr, Gdk.Point renderAnchor, int width, Do.Universe.Item item, bool drawArrow);
 	}
 	
 	public class BezelFullResultItemRenderer : IBezelResultItemRenderer
@@ -50,7 +50,7 @@ namespace Do.Interface.AnimationBase
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Point renderAnchor, int width, Do.Universe.Item item, bool drawArrow)
+		public void RenderItem (Context cr, Gdk.Point renderAnchor, int width, Do.Universe.Item item, bool drawArrow)
 		{
 			cr.Rectangle (renderAnchor.X, renderAnchor.Y, width, Height);
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
@@ -120,7 +120,7 @@ namespace Do.Interface.AnimationBase
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Point renderAnchor, int width, Do.Universe.Item item, bool drawArrow)
+		public void RenderItem (Context cr, Gdk.Point renderAnchor, int width, Do.Universe.Item item, bool drawArrow)
 		{
 			cr.Rectangle (renderAnchor.X, renderAnchor.Y, width, Height);
 			cr.Color = new Cairo.Color (0, 0, 0, 0);
