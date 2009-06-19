@@ -146,7 +146,7 @@ namespace Docky.Interface.Painters
 					DateTime day = lineStart.AddDays (dayOffset);
 					textContext.Alignment = Pango.Alignment.Center;
 					
-					if (day.Month == CalendarStartDate.Month)
+					if (day.Month == CalendarStartDate.AddDays (6).Month)
 						cr.Color = new Cairo.Color (1, 1, 1);
 					else
 						cr.Color = new Cairo.Color (1, 1, 1, .8);
