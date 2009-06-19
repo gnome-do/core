@@ -117,7 +117,7 @@ namespace Do.Core
 					"<Super>space");
 			Do.Keybindings.RegisterShortcut (
 					new Shortcut ("TextModeKey",
-						Catalog.GetString ("Enter text mode"),https://bugs.edge.launchpad.net/do/+milestone/0.8.2
+						Catalog.GetString ("Enter text mode"),
 						OnTextModePressEvent),
 					"period");
 			// New shortcuts
