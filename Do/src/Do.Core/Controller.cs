@@ -1061,6 +1061,7 @@ namespace Do.Core
 				"applications, music, contacts, and more!");
 			AboutDialog.Website = "http://do.davebsd.com/";
 			AboutDialog.WebsiteLabel = Catalog.GetString ("Visit Homepage");
+			Gtk.AboutDialog.SetUrlHook((dialog, link) => Services.Environment.OpenUrl (link));
 			AboutDialog.IconName = "gnome-do";
 
 			if (AboutDialog.Screen.RgbaColormap != null)
