@@ -280,10 +280,8 @@ namespace Docky.Interface
 		
 		void HandleActiveWindowChanged (object o, ActiveWindowChangedArgs args)
 		{
-			if (DockPreferences.IndicateActiveWindow) {
-				RequestFullRender ();
-				AnimatedDraw ();
-			}
+			RequestFullRender ();
+			AnimatedDraw ();
 		}
 
 		void HandleIntersectionChanged (object sender, EventArgs e)
@@ -523,43 +521,41 @@ namespace Docky.Interface
 					return;
 				}
 				
-				if (DockPreferences.IndicateActiveWindow && dockItem.ContainsFocusedWindow) {
-					double intenseS = 0.8;
-					
-					double xHigh = iconPosition.X - 1.5;
-					double yHigh = MinimumDockArea.Y;
-					double widthHigh = dockItem.Width * zoom + 3;
-					cr.Rectangle (xHigh, yHigh, widthHigh, DockHeight);
-					
-					LinearGradient lg;
-					if (DockPreferences.Orientation == DockOrientation.Bottom) {
-						lg = new LinearGradient (0, yHigh + DockHeight, 0, yHigh);
-					} else {
-						lg = new LinearGradient (0, yHigh, 0, yHigh + DockHeight);
-					}
-					
-					Cairo.Color average = dockItem.AverageColor ();
-					lg.AddColorStop (0, new Cairo.Color (average.R, average.G, average.B, .3));
-					lg.AddColorStop (1, new Cairo.Color (average.R, average.G, average.B, 0));
-					cr.Pattern = lg;
-					cr.Fill ();
-					lg.Destroy ();
-					
-					if (DockPreferences.Orientation == DockOrientation.Bottom)
-						cr.Translate (0, 2);
-					
-					cr.MoveTo (xHigh, yHigh);
-					cr.LineTo (xHigh, yHigh + DockHeight - 2);
-					cr.MoveTo (xHigh + widthHigh, yHigh);
-					cr.LineTo (xHigh + widthHigh, yHigh + DockHeight - 2);
-					
-					if (DockPreferences.Orientation == DockOrientation.Bottom)
-						cr.Translate (0, -2);
-					
-					cr.Color = new Cairo.Color (intenseS, intenseS, intenseS, .3);
-					cr.LineWidth = 1;
-					cr.Stroke ();
+				double intenseS = 0.8;
+				
+				double xHigh = iconPosition.X - 1.5;
+				double yHigh = MinimumDockArea.Y;
+				double widthHigh = dockItem.Width * zoom + 3;
+				cr.Rectangle (xHigh, yHigh, widthHigh, DockHeight);
+				
+				LinearGradient lg;
+				if (DockPreferences.Orientation == DockOrientation.Bottom) {
+					lg = new LinearGradient (0, yHigh + DockHeight, 0, yHigh);
+				} else {
+					lg = new LinearGradient (0, yHigh, 0, yHigh + DockHeight);
 				}
+				
+				Cairo.Color average = dockItem.AverageColor ();
+				lg.AddColorStop (0, new Cairo.Color (average.R, average.G, average.B, .3));
+				lg.AddColorStop (1, new Cairo.Color (average.R, average.G, average.B, 0));
+				cr.Pattern = lg;
+				cr.Fill ();
+				lg.Destroy ();
+				
+				if (DockPreferences.Orientation == DockOrientation.Bottom)
+					cr.Translate (0, 2);
+				
+				cr.MoveTo (xHigh, yHigh);
+				cr.LineTo (xHigh, yHigh + DockHeight - 2);
+				cr.MoveTo (xHigh + widthHigh, yHigh);
+				cr.LineTo (xHigh + widthHigh, yHigh + DockHeight - 2);
+				
+				if (DockPreferences.Orientation == DockOrientation.Bottom)
+					cr.Translate (0, -2);
+				
+				cr.Color = new Cairo.Color (intenseS, intenseS, intenseS, .3);
+				cr.LineWidth = 1;
+				cr.Stroke ();
 				
 				if (scale != 1)
 					cr.Scale (scale, scale);
