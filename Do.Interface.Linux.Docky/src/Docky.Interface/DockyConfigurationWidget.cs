@@ -85,7 +85,6 @@ namespace Docky.Interface
 			
 			icon_size_scale.Value = DockPreferences.IconSize;
 			
-			active_window_checkbox.Active = DockPreferences.IndicateActiveWindow;
 			advanced_indicators_checkbutton.Active = DockPreferences.IndicateMultipleWindows;
 			zoom_checkbutton.Active = DockPreferences.ZoomEnabled;
 			
@@ -188,12 +187,6 @@ namespace Docky.Interface
 		{
 			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
 			base.Dispose ();
-		}
-
-		protected virtual void OnActiveWindowCheckboxToggled (object sender, System.EventArgs e)
-		{
-			if (setup) return;
-			DockPreferences.IndicateActiveWindow = active_window_checkbox.Active;
 		}
 
 		protected virtual void OnIconSizeScaleValueChanged (object sender, System.EventArgs e)
