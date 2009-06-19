@@ -1036,6 +1036,11 @@ namespace Do.Core
 
 		public void ShowAbout ()
 		{
+			if (AboutDialog != null) {
+				AboutDialog.GdkWindow.Raise ();
+				return;
+			}
+			
 			string logo;
 
 			Vanish ();
@@ -1060,10 +1065,17 @@ namespace Do.Core
 
 			if (AboutDialog.Screen.RgbaColormap != null)
 				Gtk.Widget.DefaultColormap = AboutDialog.Screen.RgbaColormap;
-
-			AboutDialog.Run ();
-			AboutDialog.Destroy ();
-			AboutDialog = null;
+			
+			AboutDialog.Response += delegate {
+				AboutDialog.Hide ();
+			};
+			
+			AboutDialog.Hidden += delegate {
+				AboutDialog.Destroy ();
+				AboutDialog = null;
+			};
+			
+			AboutDialog.Show ();
 		}
 		#endregion
 		
