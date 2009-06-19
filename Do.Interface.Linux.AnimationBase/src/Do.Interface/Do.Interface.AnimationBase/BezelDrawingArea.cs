@@ -506,7 +506,7 @@ namespace Do.Interface.AnimationBase
 			return DrawState.None;
 		}
 		
-		public void BezelSetPaneObject (Pane pane, Element obj)
+		public void BezelSetPaneObject (Pane pane, Do.Universe.Item obj)
 		{
 			if (Context.GetPaneObject (pane) == obj && obj != null)
 				return;
@@ -583,7 +583,7 @@ namespace Do.Interface.AnimationBase
 			cr.Paint ();
 			cr.Operator = Cairo.Operator.Over;
 			
-			BackgroundRenderer.RenderElement (cr, drawing_area);
+			BackgroundRenderer.RenderItem (cr, drawing_area);
 			
 			RenderTitleBar (cr);
 			do {
@@ -762,12 +762,12 @@ namespace Do.Interface.AnimationBase
 				X = drawing_area.X + PaneOffset (pane),
 				Y = drawing_area.Y + WindowBorder + TitleBarHeight,
 			};
-			PaneOutlineRenderer.RenderElement (cr, render_region, (Focus == pane));
+			PaneOutlineRenderer.RenderItem (cr, render_region, (Focus == pane));
 		}
 		
 		private void RenderPixbuf (Pane pane, Context cr)
 		{
-			Element obj = Context.GetPaneObject (pane);
+			Do.Universe.Item obj = Context.GetPaneObject (pane);
 			RenderPixbuf (pane, cr, obj.Icon, 1);
 		}
 		
@@ -872,12 +872,12 @@ namespace Do.Interface.AnimationBase
 		
 		void RenderTextModeOverlay (Context cr) 
 		{
-			TextModeOverlayRenderer.RenderElement (cr, drawing_area, text_box_scale);
+			TextModeOverlayRenderer.RenderItem (cr, drawing_area, text_box_scale);
 		}
 		
 		void RenderTitleBar (Context cr)
 		{
-			TitleBarRenderer.RenderElement (cr, drawing_area);
+			TitleBarRenderer.RenderItem (cr, drawing_area);
 		}
 		
 		public PointLocation GetPointLocation (Gdk.Point point)

@@ -31,25 +31,60 @@ namespace Do.Core
 	
 	public class ThirdSearchController : SimpleSearchController
 	{
-		private ISearchController FirstController, SecondController;
-		private uint timer = 0;
+		ISearchController FirstController, SecondController;
+		uint timer = 0;
 		
-		private bool SearchNeeded {
+		bool SearchNeeded {
 			get {
-				if (FirstController.Selection == null || SecondController.Selection == null)
-					return false;
+				Act act = null;
 				
-				Act action;
-				if (FirstController.Selection is Act) {
-					action = FirstController.Selection as Act;
-				} else if (SecondController.Selection is Act) {
-					action = SecondController.Selection as Act;
-				} else {
-					return false;
+				try {
+					act = GetContextualAction ();
+				} catch (Exception e) {
+					Log<ThirdSearchController>.Error (e.Message);
 				}
 				
-				return action.SupportedModifierItemTypes.Any ();
+				if (act == null)
+					return false;
+				
+				return act.SupportedModifierItemTypes.Any ();
 			}
+		}
+		
+		Act GetContextualAction ()
+		{
+			// fixme : This really should have a buffer to it that gets reset when an upstream selection changes
+			if (FirstController.Selection == null || SecondController.Selection == null)
+				return null;
+			
+			Item first, second;
+			first = FirstController.Selection;
+			second = SecondController.Selection;
+			
+			if (first.IsAction () && first.AsAction ().Safe.SupportsItem (second))
+				return first.AsAction ();
+			else if (second.IsAction () && second.AsAction ().SupportsItem (first))
+				return second.AsAction ();
+			// fixme
+			throw new Exception ("Something strange happened");
+		}
+		
+		Item GetContextualItem ()
+		{
+			// fixme : This really should have a buffer to it that gets reset when an upstream selection changes
+			if (FirstController.Selection == null || SecondController.Selection == null)
+				return null;
+			
+			Item first, second;
+			first = FirstController.Selection;
+			second = SecondController.Selection;
+			
+			if (first.IsAction () && first.AsAction ().Safe.SupportsItem (second))
+				return second;
+			else if (second.IsAction () && second.AsAction ().SupportsItem (first))
+				return first;
+			// fixme
+			throw new Exception ("Something strange happened");
 		}
 		
 		public ThirdSearchController(ISearchController FirstController, ISearchController SecondController) : base ()
@@ -82,12 +117,15 @@ namespace Do.Core
 					textMode = value;
 					textModeFinalize = false;
 				} else {
-					Act action;
-					if (FirstController.Selection is Act)
-						action = FirstController.Selection as Act;
-					else if (SecondController.Selection is Act)
-						action = SecondController.Selection as Act;
-					else
+					Act action = null;
+					
+					try {
+						action = GetContextualAction ();
+					} catch (Exception e) {
+						Log<ThirdSearchController>.Error (e.Message);
+					}
+					
+					if (action == null)
 						return; //you have done something weird, ignore it!
 					
 					foreach (Type t in action.SupportedModifierItemTypes) {
@@ -106,6 +144,7 @@ namespace Do.Core
 		private void OnUpstreamSelectionChanged ()
 		{
 			if (!SearchNeeded) {
+				//fixme - could be doing this a lot when its not needed? causing lots of UI draws?
 				context.Destroy ();
 				context = new SimpleSearchContext ();
 				
@@ -126,44 +165,57 @@ namespace Do.Core
 			});
 		}
 		
-		protected override List<Element> InitialResults ()
+		protected override List<Item> InitialResults ()
 		{
+			Item other = null;
+			try {
+				other = GetContextualItem ();
+			} catch {
+				return new List<Item> ();
+			}
+			
 			// We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
-				return new List<Element> (Do.UniverseManager.Search (context.Query, 
-					SearchTypes, context.LastContext.Results, FirstController.Selection));
+				return new List<Item> (Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results, other));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
-				return new List<Element> (context.Results);
+				return new List<Item> (context.Results);
 			} else { 
 				// else we do things the slow way
-				return new List<Element> (
-					Do.UniverseManager.Search (context.Query, SearchTypes, FirstController.Selection));
+				return new List<Item> (Do.UniverseManager.Search (context.Query, SearchTypes, other));
 			}
 		}
 
-		private IList<Element> GetContextResults ()
+		private IList<Item> GetContextResults ()
 		{
 			Item item = null;
 			Act action = null;
 			IEnumerable<Item> items = null;
 			List<Item> modItems = new List<Item> ();
-
-			if (FirstController.Selection is Act) {
-				action = FirstController.Selection as Act;
-				item = SecondController.Selection as Item;
-				items = SecondController.FullSelection.OfType<Item> ();
-			} else if (SecondController.Selection is Act) {
-				action = SecondController.Selection as Act;
-				item = FirstController.Selection as Item;
-				items = FirstController.FullSelection.OfType<Item> ();
-			} else {
-				Log.Debug ("No action found. The interface is out of sync.");
-				return new List<Element> ();
+			
+			try {
+				action = GetContextualAction ();
+			} catch (Exception e) {
+				Log<ThirdSearchController>.Error (e.Message);
+				return modItems;
 			}
-
-		// If we don't support modifier items, don't search.
-		if (!action.Safe.SupportedModifierItemTypes.Any ())
-			return new List<Element> ();
+			
+			if (action == null)
+				return modItems;
+			
+			if (FirstController.Selection == action) {
+				item = SecondController.Selection;
+				items = SecondController.FullSelection;
+			} else if (SecondController.Selection == action) {
+				item = FirstController.Selection;
+				items = FirstController.FullSelection;
+			} else {
+				Log<ThirdSearchController>.Debug ("No action found. The interface is out of sync.");
+				return modItems;
+			}
+			
+			// If we don't support modifier items, don't search.
+			if (!action.Safe.SupportedModifierItemTypes.Any ())
+				return modItems;
 		
 			// Add appropriate modifier items from universe.
 			foreach (Item modItem in InitialResults ()) {
@@ -179,7 +231,7 @@ namespace Do.Core
 			}
 			// Sort modifier items before we potentially add a text item.
 			modItems.Sort ();
-			return modItems.OfType<Element> ().ToList<Element> ();
+			return modItems;
 		}
 		
 		public override void Reset ()
@@ -242,12 +294,13 @@ namespace Do.Core
 		
 		protected override bool AcceptChildItem (Item item)
 		{
-			if (FirstController.Selection is Act) {
-				Act action = FirstController.Selection as Act;
-				return action.Safe.SupportsModifierItemForItems (SecondController.FullSelection.Cast<Item> (), item);
-			} else if (SecondController.Selection is Act) {
-				Act action = SecondController.Selection as Act;
-				return action.Safe.SupportsModifierItemForItems (FirstController.FullSelection.Cast<Item> (), item);
+			//fixme
+			if (FirstController.Selection.IsAction () && FirstController.Selection.AsAction ().SupportsItem (SecondController.Selection)) {
+				Act action = FirstController.Selection.AsAction ();
+				return action.Safe.SupportsModifierItemForItems (SecondController.FullSelection, item);
+			} else if (SecondController.Selection.IsAction ()) {
+				Act action = SecondController.Selection.AsAction ();
+				return action.Safe.SupportsModifierItemForItems (FirstController.FullSelection, item);
 			}
 			return true;
 		}

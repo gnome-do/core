@@ -26,7 +26,7 @@ using Do.Universe.Safe;
 namespace Do.Universe
 {	
 
-	public abstract class Act : Element
+	public abstract class Act : Item
 	{
 		static SafeAct safe_act = new SafeAct ();
 

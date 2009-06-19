@@ -294,7 +294,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		void DrawDrock (Context cr)
+		void DrawDock (Context cr)
 		{
 			Gdk.Rectangle dockArea = GetDockArea ();
 			window.SetBackgroundBlur (dockArea);
@@ -823,7 +823,7 @@ namespace Docky.Interface
 					FirstRenderTime = DateTime.UtcNow;
 					first_render_set = true;
 				}
-				DrawDrock (cr);
+				DrawDock (cr);
 			}
 			(cr as IDisposable).Dispose ();
 			

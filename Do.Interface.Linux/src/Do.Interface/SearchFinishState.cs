@@ -28,7 +28,7 @@ namespace Do.Interface
 	{
 		private bool selection_changed, query_changed;
 		private string query;
-		private Element selection;
+		private Item selection;
 		
 		public bool SelectionChanged { 
 			get {
@@ -46,13 +46,13 @@ namespace Do.Interface
 			}
 		}
 		
-		public Element Selection {
+		public Item Selection {
 			get {
 				return selection;
 			}
 		}
 		
-		public SearchFinishState(bool selectionChanged, bool queryChanged, Element selection, string query)
+		public SearchFinishState(bool selectionChanged, bool queryChanged, Item selection, string query)
 		{
 			selection_changed = selectionChanged;
 			query_changed = queryChanged;

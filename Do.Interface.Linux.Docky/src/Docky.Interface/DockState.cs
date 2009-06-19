@@ -37,8 +37,8 @@ namespace Docky.Interface
 
 		public event EventHandler StateChanged;
 		
-		Element [] current_items = new Element [3];
-		Element [] old_items = new Element [3];
+		Item [] current_items = new Item [3];
+		Item [] old_items = new Item [3];
 		
 		string [] queries = new string [3];
 		
@@ -54,8 +54,8 @@ namespace Docky.Interface
 		DateTime [] cursor_timestamps = new DateTime [3];
 		DateTime [] text_mode_timestamps = new DateTime [3];
 		
-		IList<Element> [] results = new IList<Element> [3];
-		IList<Element> [] results_prev = new IList<Element> [3];
+		IList<Item> [] results = new IList<Item> [3];
+		IList<Item> [] results_prev = new IList<Item> [3];
 		
 		Pane currentPane, previousPane = Pane.Second;
 		
@@ -65,7 +65,7 @@ namespace Docky.Interface
 		
 		bool third_pane_visible;
 		
-		Element IntroObject { get; set; }
+		Item IntroObject { get; set; }
 		
 		public Pane CurrentPane {
 			get {
@@ -103,19 +103,19 @@ namespace Docky.Interface
 			get { return third_pane_visibility_change; }
 		}
 		
-		public Element First {
+		public Item First {
 			get {
 				return GetPaneItem (Pane.First);
 			}
 		}
 		
-		public Element Second {
+		public Item Second {
 			get {
 				return GetPaneItem (Pane.Second);
 			}
 		}
 		
-		public Element Third {
+		public Item Third {
 			get {
 				return GetPaneItem (Pane.Third);
 			}
@@ -153,7 +153,7 @@ namespace Docky.Interface
 		}
 		#endregion
 		
-		public Element this [Pane pane] {
+		public Item this [Pane pane] {
 			get {
 				return GetPaneItem (pane);
 			}
@@ -166,10 +166,10 @@ namespace Docky.Interface
 		DockState ()
 		{
 			third_pane_visible = false;
-			IntroObject = new DefaultLabelBoxElement ();
+			IntroObject = new DefaultLabelBoxItem ();
 		}
 
-		void SetItem (Element item, Pane pane)
+		void SetItem (Item item, Pane pane)
 		{
 			if (current_items [(int) pane] == item)
 				return;
@@ -186,7 +186,7 @@ namespace Docky.Interface
 			OnStateChanged ();
 		}
 		
-		void SetResults (IList<Element> resultList, Pane pane)
+		void SetResults (IList<Item> resultList, Pane pane)
 		{
 			if (results [(int) pane] != null && resultList.Count == results [(int) pane].Count) {
 				bool same = true;
@@ -234,14 +234,14 @@ namespace Docky.Interface
 			OnStateChanged ();
 		}
 		
-		public Element GetPaneItem (Pane pane)
+		public Item GetPaneItem (Pane pane)
 		{
 			if (pane == Pane.First && current_items [(int) pane] == null)
 				return IntroObject;
 			return current_items [(int) pane];
 		}
 		
-		public Element GetOldPaneItem (Pane pane)
+		public Item GetOldPaneItem (Pane pane)
 		{
 			return old_items [(int) pane];
 		}
@@ -251,12 +251,12 @@ namespace Docky.Interface
 			return queries [(int) pane] ?? "";
 		}
 		
-		public IList<Element> GetPaneResults (Pane pane)
+		public IList<Item> GetPaneResults (Pane pane)
 		{
 			return results [(int) pane];
 		}
 		
-		public IList<Element> GetPanePreviousResults (Pane pane)
+		public IList<Item> GetPanePreviousResults (Pane pane)
 		{
 			return results_prev [(int) pane];
 		}
@@ -293,11 +293,11 @@ namespace Docky.Interface
 		
 		public void Clear ()
 		{
-			current_items = new Element [3];
-			results = new IList<Element> [3];
+			current_items = new Item [3];
+			results = new IList<Item> [3];
 			result_timestamps = new DateTime [3];
 			queries = new string [3];
-			old_items = new Element [3];
+			old_items = new Item [3];
 			timestamps = new DateTime [3];
 			
 			text_mode = new bool [3];

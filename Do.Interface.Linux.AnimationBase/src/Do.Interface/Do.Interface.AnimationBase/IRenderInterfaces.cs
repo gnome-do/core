@@ -46,7 +46,7 @@ namespace Do.Interface.AnimationBase
 		/// area but rather the area that the background should cover.  The edges of Do's window are defined
 		/// by this rect.  The X,Y coordinates represent the top left of the backgrounds location.
 		/// </param>
-		void RenderElement (Context cr, Gdk.Rectangle drawing_area);
+		void RenderItem (Context cr, Gdk.Rectangle drawing_area);
 		
 		/// <summary>
 		/// Returns what was clicked on.
@@ -82,7 +82,7 @@ namespace Do.Interface.AnimationBase
 		/// <param name="drawing_area">
 		/// A <see cref="Gdk.Rectangle"/>
 		/// </param>
-		void RenderElement (Context cr, Gdk.Rectangle drawing_area);
+		void RenderItem (Context cr, Gdk.Rectangle drawing_area);
 		PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point);
 	}
 
@@ -103,7 +103,7 @@ namespace Do.Interface.AnimationBase
 		/// <param name="overlay">
 		/// A <see cref="System.Double"/>
 		/// </param>
-		void RenderElement (Context cr, Gdk.Rectangle drawing_area, double overlay);
+		void RenderItem (Context cr, Gdk.Rectangle drawing_area, double overlay);
 	}
 	
 	/// <summary>
@@ -131,6 +131,6 @@ namespace Do.Interface.AnimationBase
 		/// </value>
 		bool StackIconText { get; }
 		
-		void RenderElement (Context cr, Gdk.Rectangle render_area, bool focused);
+		void RenderItem (Context cr, Gdk.Rectangle render_area, bool focused);
 	}
 }
