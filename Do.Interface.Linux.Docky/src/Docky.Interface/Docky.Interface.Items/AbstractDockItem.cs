@@ -85,6 +85,10 @@ namespace Docky.Interface
 		public virtual bool ContainsFocusedWindow {
 			get { return false; }
 		}
+		
+		public virtual bool ContainsMinimizedWindow {
+			get { return false; }
+		}
 
 		/// <value>
 		/// Determines if drop actions will be passed on to the icon
