@@ -43,6 +43,7 @@ namespace Do.Platform
 		static IEnvironmentService environment;
 		static INotificationsService notifications;
 		static IUniverseFactoryService universe_factory;
+		static INetworkService network;
 
 		/// <summary>
 		/// Initializes the class. Must be called after Mono.Addins is initialized; if this is
@@ -99,6 +100,8 @@ namespace Do.Platform
 				application = null;
 			if (service is AbstractSystemService)
 				system = null;
+			if (service is INetworkService)
+				network = null;
 		}
 
 		/// <summary>
@@ -175,6 +178,14 @@ namespace Do.Platform
 				return universe_factory;
 			}
 		}
+		
+		public static INetworkService Network {
+			get {
+				if (network == null)
+					network = LocateService<INetworkService, Default.NetworkService> ();
+				return network;
+			}
+		}	
 			
 		public static PreferencesFactory Preferences {
 			get {
