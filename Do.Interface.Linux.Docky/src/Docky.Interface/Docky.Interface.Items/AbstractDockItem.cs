@@ -554,6 +554,7 @@ namespace Docky.Interface
 		{
 			Disposed = true;
 			DockPreferences.IconSizeChanged -= OnIconSizeChanged;
+			DockWindow.Window.StyleSet -= HandleStyleSet;
 			ResetSurfaces ();
 		}
 		
