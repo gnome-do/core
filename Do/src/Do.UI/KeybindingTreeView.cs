@@ -81,7 +81,7 @@ namespace Do.UI
 				
 			if (GetPathAtPos ((int) args.Event.X, (int) args.Event.Y,out path)) {
 				GrabFocus ();
-				SetCursor (path, GetColumn ((int )Column.Binding), true);
+				SetCursor (path, GetColumn ((int) Column.Binding), true);
 			}				
 		}
 		
