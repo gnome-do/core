@@ -923,7 +923,6 @@ namespace Do.Core
 		void PerformAction (bool vanish)
 		{
 			Act action;
-			Item first, second, third;
 			string actionQuery, itemQuery, modItemQuery;
 			IEnumerable<Item> items, modItems;
 
