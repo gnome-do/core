@@ -6,9 +6,6 @@
   </configuration>
   <import>
     <widget-library name="Mono.Addins.Gui, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
-    <widget-library name="../../Do.Platform.Linux/bin/Debug/Do.Platform.Linux.dll" />
-    <widget-library name="../../Do.Interface.Linux/bin/Debug/Do.Interface.Linux.dll" />
-    <widget-library name="../../Do.Interface.Linux.AnimationBase/bin/Debug/Do.Interface.Linux.AnimationBase.dll" />
     <widget-library name="../bin/Debug/Do.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="Do.UI.PreferencesWindow" design-size="450 470">
