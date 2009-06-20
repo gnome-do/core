@@ -144,7 +144,6 @@ namespace Do.Core
 		private void OnUpstreamSelectionChanged ()
 		{
 			if (!SearchNeeded) {
-				//fixme - could be doing this a lot when its not needed? causing lots of UI draws?
 				if (context.LastContext != null || context.ParentContext != null || 
 				    !string.IsNullOrEmpty (context.Query) || context.Results.Any () || context.FullSelection.Any ()) {
 					context.Destroy ();
