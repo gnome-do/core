@@ -48,7 +48,7 @@ namespace Do.Platform
 		
 		public IEnumerable<Item> GetItemsOrderedByRelevance ()
 		{
-			return Do.UniverseManager.Search ("", typeof (Item).Cons (null));
+			return Do.UniverseManager.Search ("", typeof (Item).Cons (null)).Where (i => !i.IsAction ());
 		}
 
 		public void PerformDefaultAction (Item item, IEnumerable<Type> filter)
