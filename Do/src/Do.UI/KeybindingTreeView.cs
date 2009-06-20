@@ -122,10 +122,15 @@ namespace Do.UI
 		{
 			TreeIter iter;
 			ListStore store;
-			
+
 			store = Model as ListStore;
 			store.GetIter (out iter, new TreePath (args.PathString));
-			store.SetValue (iter, (int)Column.Binding, "");
+			try {
+				string defaultVal = store.GetValue (iter, (int)Column.DefaultKeybinding).ToString ();
+				store.SetValue (iter, (int)Column.Binding, defaultVal);
+			} catch (Exception e) {
+				store.SetValue (iter, (int)Column.Binding, "");
+			}
 
 			SaveBindings ();
 		}
