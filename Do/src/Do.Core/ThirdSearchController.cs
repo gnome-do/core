@@ -145,10 +145,12 @@ namespace Do.Core
 		{
 			if (!SearchNeeded) {
 				//fixme - could be doing this a lot when its not needed? causing lots of UI draws?
-				context.Destroy ();
-				context = new SimpleSearchContext ();
-				
-				base.OnSearchFinished (true, true, Selection, Query);
+				if (context.LastContext != null || context.ParentContext != null || 
+				    !string.IsNullOrEmpty (context.Query) || context.Results.Any () || context.FullSelection.Any ()) {
+					context.Destroy ();
+					context = new SimpleSearchContext ();
+					base.OnSearchFinished (true, true, Selection, Query);
+				}
 				return;
 			}
 			
