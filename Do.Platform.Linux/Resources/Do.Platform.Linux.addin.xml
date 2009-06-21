@@ -15,7 +15,6 @@
 	</Extension>
 
 	<Extension path="/Do/Action">
-		<Action type="Do.Universe.Linux.CopyToClipboardAction" />
 	</Extension>
 
 	<Extension path="/Do/Service">
