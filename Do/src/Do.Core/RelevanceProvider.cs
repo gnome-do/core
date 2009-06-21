@@ -56,7 +56,7 @@ namespace Do.Core {
 		}
 
 		static bool OnSerializeTimer () {
-			Gtk.Application.Invoke ((sender, args) => Serialize (DefaultProvider));
+			Services.Application.RunOnMainThread (() => Serialize (DefaultProvider));
 			return true;
 		}
 
@@ -83,7 +83,7 @@ namespace Do.Core {
 		/// <summary>
 		/// Serializes relevance data.
 		/// </summary>
-		private static void Serialize (IRelevanceProvider provider)
+		internal static void Serialize (IRelevanceProvider provider)
 		{
 			try {
 				using (Stream s = File.OpenWrite (RelevanceFile)) {

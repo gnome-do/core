@@ -185,7 +185,7 @@ namespace Docky.Interface
 				return painter;
 			}
 			set {
-				if (value == painter)
+				if (painter == value)
 					return;
 				LastPainter = painter;
 				painter = value;

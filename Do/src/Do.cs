@@ -80,6 +80,8 @@ namespace Do {
 				Controller.Summon ();
 			
 			Gtk.Application.Run ();
+			
+			RelevanceProvider.Serialize (RelevanceProvider.DefaultProvider);
 		}
 
 		

@@ -65,7 +65,7 @@ namespace Do.Platform
 		{
 			IEnumerable<Act> actions = Do.UniverseManager
 				.Search ("", typeof (Act).Cons (null), item)
-				.Where (i => i is Act) //no proxy items
+				.Where (i => !(i is ProxyItem)) //no proxy items
 				.Cast<Act> ()
 				.Where (a => a.Safe.SupportsItem (item));
 			

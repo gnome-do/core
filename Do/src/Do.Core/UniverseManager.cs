@@ -100,7 +100,7 @@ namespace Do.Core
 			ReloadUniverse ();
 
 			// Notify subscribers that the universe has been loaded.
-			Gtk.Application.Invoke ((sender, e) => {
+			Services.Application.RunOnMainThread (() => {
 				BuildCompleted = true;
 				if (initialized != null)
 					initialized (this, EventArgs.Empty);

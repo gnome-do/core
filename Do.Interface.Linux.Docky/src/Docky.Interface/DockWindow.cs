@@ -85,6 +85,7 @@ namespace Docky.Interface
 		void Build ()
 		{
 			AppPaintable = true;
+			AcceptFocus = false;
 			Decorated = false;
 			SkipPagerHint = true;
 			SkipTaskbarHint = true;
