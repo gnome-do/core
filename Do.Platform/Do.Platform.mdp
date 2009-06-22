@@ -79,6 +79,9 @@
     <File name="src/Do.Platform/INetworkService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/NetworkStateChangedEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/NetworkService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/AbstractPackageManagerService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Default/DefaultPackageManagerService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.ServiceStack/IStrictService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

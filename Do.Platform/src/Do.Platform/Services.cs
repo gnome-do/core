@@ -19,6 +19,7 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Collections.Generic;
 
 using Mono.Addins;
@@ -35,15 +36,16 @@ namespace Do.Platform
 
 		static ICoreService core;
 		static PathsService paths;
+		static INetworkService network;
 		static IWindowingService windowing;
 		static AbstractSystemService system;
 		static IEnumerable<ILogService> logs;
 		static PreferencesFactory preferences;
-		static AbstractApplicationService application;
 		static IEnvironmentService environment;
 		static INotificationsService notifications;
+		static AbstractApplicationService application;
 		static IUniverseFactoryService universe_factory;
-		static INetworkService network;
+		static AbstractPackageManagerService package_manager;
 
 		/// <summary>
 		/// Initializes the class. Must be called after Mono.Addins is initialized; if this is
@@ -59,14 +61,16 @@ namespace Do.Platform
 				// TODO find a better exception to throw.
 				throw new Exception ("AddinManager was initialized before Services.");
 			}
+			
 			AddinManager.AddExtensionNodeHandler ("/Do/Service", OnServiceChanged);
+			InitializeIStrictServices ();
 		}
-
+		
 		/// <summary>
 		/// When a service is changed, we "dirty the cache".
 		/// </summary>
 		static void OnServiceChanged (object sender, ExtensionNodeEventArgs e)
-		{
+		{			
 			IService service = e.ExtensionObject as IService;
 
 			switch (e.Change) {
@@ -185,8 +189,16 @@ namespace Do.Platform
 					network = LocateService<INetworkService, Default.NetworkService> ();
 				return network;
 			}
-		}	
-			
+		}
+		
+		public static AbstractPackageManagerService PackageManager {
+			get {
+				if (package_manager == null)
+					package_manager = LocateService<AbstractPackageManagerService, Default.DefaultPackageManagerService> ();
+				return package_manager;
+			}
+		}
+		
 		public static PreferencesFactory Preferences {
 			get {
 				if (preferences == null) {
@@ -227,6 +239,21 @@ namespace Do.Platform
 			} else {
 				Log<Services>.Warn ("AddinManager is not initialized; only default services are available.");
 				return Enumerable.Empty<TService> ();
+			}
+		}
+		
+		/// <summary>
+		/// loops through the Property members of this class, and if it's an IStatic gets it's value.
+		/// This will in turn cause a LocateService call, and the appropriate service will be loaded.
+		/// </summary>
+		static InitializeIStrictServices ()
+		{
+			foreach (PropertyInfo property in typeof (Services).GetProperties ()) {
+				Type returnType = property.PropertyType;
+				if (returnType.GetInterface ("Do.Platform.IStrictService") != null) {
+					// this looks stupid, but this is how you call the method on static classes.
+					property.GetValue (null, null);
+				}
 			}
 		}
 	}

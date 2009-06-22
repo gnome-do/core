@@ -11,6 +11,7 @@ SUBDIRS = \
 	Do.Interface.Wink \
 	Do.Interface.Linux \
 	Do.Platform.Linux \
+	Do.Platform.Linux.JoliCloud \
 	Do.Interface.Linux.AnimationBase \
 	Do.Interface.Linux.Classic \
 	Do.Interface.Linux.Docky \

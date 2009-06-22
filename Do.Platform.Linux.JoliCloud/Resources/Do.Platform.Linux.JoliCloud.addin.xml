@@ -1,0 +1,16 @@
+<Addin id="Platform.Linux.JoliCloud" namespace="Do" version="1.0" category="Hidden">
+ 
+	<Runtime>
+		<Import assembly="Do.Platform.Linux.JoliCloud.dll" />
+	</Runtime>
+	
+	<Dependencies>
+		<Addin id="Platform" version="1.0" />
+		<Addin id="Universe" version="1.0" />
+	</Dependencies>
+	
+	<Extension path="/Do/Service">
+		<Service type="Do.Platform.Linux.JoliCloud.PackageManagerService" />
+	</Extension>
+	
+</Addin>

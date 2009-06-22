@@ -51,6 +51,5 @@ namespace Do.Platform
 		{
 			Log<DefaultApplicationService>.Debug ("Cannot flush main thread queue.");
 		}
-
 	}
 }
