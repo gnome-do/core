@@ -26,5 +26,7 @@
   </Contents>
   <References>
     <ProjectReference type="Assembly" localcopy="True" specificVersion="False" refto="../../../../../../usr/local/lib/gnome-do/Do.Platform.dll" />
+    <ProjectReference type="Gac" localcopy="True" refto="NDesk.DBus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f6716e4f9b2ed099" />
+    <ProjectReference type="Assembly" localcopy="True" specificVersion="False" refto="../../../../../../usr/local/lib/gnome-do/Do.Platform.Linux.dll" />
   </References>
 </Project>

@@ -246,7 +246,7 @@ namespace Do.Platform
 		/// loops through the Property members of this class, and if it's an IStatic gets it's value.
 		/// This will in turn cause a LocateService call, and the appropriate service will be loaded.
 		/// </summary>
-		static InitializeIStrictServices ()
+		static void InitializeIStrictServices ()
 		{
 			foreach (PropertyInfo property in typeof (Services).GetProperties ()) {
 				Type returnType = property.PropertyType;

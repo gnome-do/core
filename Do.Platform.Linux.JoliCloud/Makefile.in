@@ -304,10 +304,12 @@ REFERENCES = \
 	System \
 	System.Core \
 	Mono.Posix \
+	$(NDESK_DBUS_10_LIBS) \
 	$(NUNIT_LIBS) 
 
 PROJECT_REFERENCES = \
-	Do.Platform 
+	Do.Platform \
+	Do.Platform.Linux
 
 all: all-am
 

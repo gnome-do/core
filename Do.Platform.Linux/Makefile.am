@@ -6,6 +6,7 @@ TARGET = library
 
 FILES = \
 	gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs \
+	gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs \
         gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/ConsoleCrayon.cs \
@@ -29,7 +30,8 @@ FILES = \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/CopyToClipboardAction.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
-	src/Do.Widgets/AbstractLoginWidget.cs
+	src/Do.Widgets/AbstractLoginWidget.cs \
+	src/Do.Widgets/PluginAvailableDialog.cs
 
 if HAVE_NUNIT
 FILES += \

@@ -17,24 +17,100 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Threading;
+
+using NDesk.DBus;
+using org.freedesktop.DBus;
 
 using Do.Platform;
+using Do.Platform.Linux;
 using Do.Platform.ServiceStack;
 
 namespace Do.Platform.Linux.JoliCloud
 {
+	
+	[Interface ("org.jolicloud.JolicloudDaemon")]
+	interface IJolicloudDaemon
+	{
+		event ActionProcessedEventHandler ActionProcessed;
+	}
+	
+	delegate void ActionProcessedEventHandler (string action, string [] packages, bool success, string error);
 		
 	public class PackageManagerService : AbstractPackageManagerService, IStrictService, IInitializedService
 	{
+		const string ObjectPath = "/SoftwareManager";
+		const string BusName = "org.jolicloud.JolicloudDaemon";
+		
+		IBus session_bus;
+		IJolicloudDaemon daemon;
 		
 		public PackageManagerService()
 		{
-			Log<PackageManagerService>.Debug ("Instance of PackageManagerService created");
 		}
 		
 		public void Initialize ()
 		{
-			Log<PackageManagerService>.Debug ("Package Manager Service loaded and ready");
+			session_bus = Bus.Session.GetObject<IBus> ("org.freedeskop.DBus", new ObjectPath ("/org/freedesktop/DBus"));
+			session_bus.NameOwnerChanged += HandleNameOwnerChanged;
+			
+			// this call will instaniate the daemon, as well as make sure we also got a DBus object
+			if (Daemon == null)
+				Log<PackageManagerService>.Debug ("Failed to locate JoliCloud daemon on DBus.");
+			
+			base.Initialize ();
 		}
+		
+		IJolicloudDaemon Daemon {
+			get {
+				if (daemon == null) {
+					daemon = GetIJoliCloudDaemonObject (ObjectPath);
+					daemon.ActionProcessed += HandleActionProcessed;
+					Log<PackageManagerService>.Debug ("Aquired instance of JolicloudDaemon");
+				}
+				return daemon;
+			}
+		}
+
+		void HandleActionProcessed (string action, string[] packages, bool success, string error)
+		{
+			if (action != "install")
+				return;
+			
+			new PluginAvailableDialog (packages [0]);
+		}
+
+#region DBus handling
+		void HandleNameOwnerChanged (string name, string old_owner, string new_owner)
+		{
+			// if the jolicloud daemon gets released, we should drop our object
+			if (Daemon != null && name == BusName) {
+				Daemon.ActionProcessed -= HandleActionProcessed;
+				daemon = null;
+			}
+		}
+		
+		IJolicloudDaemon GetIJoliCloudDaemonObject (string objectPath)
+		{
+			MaybeStartDaemon ();
+			return Bus.Session.GetObject<IJolicloudDaemon> (BusName, new ObjectPath (objectPath));
+		}
+		
+		bool DaemonIsRunning {
+			get { return Bus.Session.NameHasOwner (BusName); }
+		}
+		
+		void MaybeStartDaemon ()
+		{
+			if (DaemonIsRunning)
+				return;
+			
+			Bus.Session.StartServiceByName (BusName);
+			Thread.Sleep (5000);
+
+			if (!DaemonIsRunning)
+				throw new Exception (string.Format("Name {0} has no owner.", BusName));
+		}
+#endregion
 	}
 }

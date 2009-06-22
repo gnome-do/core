@@ -26,8 +26,27 @@ namespace Do.Platform
 	
 	public abstract class AbstractPackageManagerService : IService
 	{
+		public const string ShowPluginAvailableKey = "ShowPluginAvailableDialog";
+		public const bool ShowPluginAvailableDefault = true;
+		
+		protected AbstractPackageManagerService ()
+		{
+		}
+		
+		protected void Initialize ()
+		{
+			Preferences = Services.Preferences.Get<AbstractPackageManagerService> ();
+		}
+		
+		IPreferences Preferences { get; set; }
+		
 		protected void PromptForPluginInstall (string appName, string pluginName)
 		{
+		}
+		
+		protected bool ShouldShowPluginAvailableDialog {
+			get { return Preferences.Get (ShowPluginAvailableKey, ShowPluginAvailableDefault); }
+			set { Preferences.Get (ShowPluginAvailableKey, value); }
 		}
 	}
 }
