@@ -63,7 +63,7 @@ namespace Do.Platform.Linux
 
 		protected virtual void OnInstallBtnClicked (object sender, System.EventArgs e)
 		{
-			Services.PluginManager.Install (Addin);
+			Services.PluginManager.Install (addin);
 			Destroy ();
 		}
 
