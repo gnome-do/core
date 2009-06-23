@@ -51,7 +51,6 @@ namespace Do.Platform.Linux
 		[Interface(DeviceKitPowerName)]
 		interface IDeviceKitPower : org.freedesktop.DBus.Properties
 		{
-			bool GetOn_Battery ();
 			event Action OnChanged;
 		}
 		
