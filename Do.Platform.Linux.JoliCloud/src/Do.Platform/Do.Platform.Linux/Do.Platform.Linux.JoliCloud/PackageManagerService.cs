@@ -74,6 +74,8 @@ namespace Do.Platform.Linux.JoliCloud
 
 		void HandleActionProcessed (string action, string[] packages, bool success, string error)
 		{
+			string cleanName;
+			
 			/* this block is just commented out for testing purposes
 			 * FIXME this is just a reminder
 			 
@@ -81,7 +83,29 @@ namespace Do.Platform.Linux.JoliCloud
 				return;
 				
 			*/	
-			new PluginAvailableDialog (packages [0]);
+			
+			cleanName = HumanNameFromPackageName (packages [0]);
+			
+			new PluginAvailableDialog (cleanName);
+		}
+		
+		/// <summary>
+		/// Attempts to clean up a package name into something a little bit more friendly.
+		/// </summary>
+		/// <param name="package">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/>
+		/// </returns>
+		string HumanNameFromPackageName (string package)
+		{
+			if (package.Contains ("prism-webapp"))
+				package = package.Substring ("prism-webapp".Length + 1);
+			
+			package.Replace ('-', ' ');
+			
+			return package.ToLower ();
 		}
 		
 #region DBus handling
