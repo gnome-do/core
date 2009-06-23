@@ -17,6 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 
 using Mono.Addins;
 
@@ -29,10 +30,10 @@ namespace Do.Platform.Default
 	/// </summary>	
 	public class PluginManagerService : IPluginManagerService
 	{
-		public Addin [] GetAddins ()
+		public IEnumerable<Addin> GetAddins ()
 		{
 			Log<PluginManagerService>.Error ("Using default service, could not locate any addins");
-			return new Addin [] { };
+			yield break;
 		}
 		
 		public void Install (Addin addin)
