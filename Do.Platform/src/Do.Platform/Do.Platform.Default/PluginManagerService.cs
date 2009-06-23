@@ -31,7 +31,14 @@ namespace Do.Platform.Default
 	{
 		public Addin [] GetAddins ()
 		{
+			Log<PluginManagerService>.Error ("Using default service, could not locate any addins");
 			return new Addin [] { };
+		}
+		
+		public void Install (Addin addin)
+		{
+			Log<PluginManagerService>.Error ("Using default service, could not install addin.");
+			return;
 		}
 	}
 }

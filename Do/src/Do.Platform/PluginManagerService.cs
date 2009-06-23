@@ -34,6 +34,11 @@ namespace Do.Platform
 		{
 			return PluginManager.GetAddins ().ToArray ();
 		}
+		
+		public void Install (Addin addin)
+		{
+			addin.Enabled = true;
+		}
 #endregion
 	}
 }
