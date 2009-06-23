@@ -62,6 +62,9 @@ namespace Do.Platform.Linux
 		
 		public void Initialize ()
 		{
+			// Set a sane default value for on_battery.  Thus, if we don't find a working power manager
+			// we assume we're not on battery.
+			on_battery = false;
 			try {
 				BusG.Init ();
 				if (Bus.Session.NameHasOwner (PowerManagementName)) {
