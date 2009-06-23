@@ -33,7 +33,6 @@ namespace Do.Platform
 
 	public class Services
 	{
-
 		static ICoreService core;
 		static PathsService paths;
 		static INetworkService network;
@@ -43,6 +42,7 @@ namespace Do.Platform
 		static PreferencesFactory preferences;
 		static IEnvironmentService environment;
 		static INotificationsService notifications;
+		static IPluginManagerService plugin_manager;
 		static AbstractApplicationService application;
 		static IUniverseFactoryService universe_factory;
 		static AbstractPackageManagerService package_manager;
@@ -83,29 +83,29 @@ namespace Do.Platform
 			}
 
 			// Dirty the appropriate cache.
+			if (service is ILogService)
+				logs = null;
 			if (service is ICoreService)
 				core = null;
-			if (service is IEnvironmentService)
-				environment = null;
+			if (service is PathsService)
+				paths = null;
+			if (service is INetworkService)
+				network = null;
+			if (service is IWindowingService)
+				windowing = null;
 			// Although it is not obvious, this also takes care of the ISecurePreferences service.
 			if (service is IPreferencesService)
 				preferences = null;
-			if (service is ILogService)
-				logs = null;
-			if (service is IUniverseFactoryService)
-				universe_factory = null;
-			if (service is INotificationsService)
-				notifications = null;
-			if (service is IWindowingService)
-				windowing = null;
-			if (service is PathsService)
-				paths = null;
-			if (service is AbstractApplicationService)
-				application = null;
+			if (service is IEnvironmentService)
+				environment = null;
 			if (service is AbstractSystemService)
 				system = null;
-			if (service is INetworkService)
-				network = null;
+			if (service is INotificationsService)
+				notifications = null;
+			if (service is IUniverseFactoryService)
+				universe_factory = null;			
+			if (service is AbstractApplicationService)
+				application = null;
 		}
 
 		/// <summary>
@@ -198,8 +198,16 @@ namespace Do.Platform
 				return package_manager;
 			}
 		}
-		
+		public static IPluginManagerService PluginManager {
+			get {
+				if (plugin_manager == null)
+					plugin_manager = LocateService<IPluginManagerService, Default.PluginManagerService> ();
+				return plugin_manager;
+			}
+		}
+
 		public static PreferencesFactory Preferences {
+
 			get {
 				if (preferences == null) {
 					IPreferencesService service = LocateService<IPreferencesService, Default.PreferencesService> ();

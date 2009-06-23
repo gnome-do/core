@@ -31,7 +31,7 @@ namespace Do.Platform.Linux
 		const string WikiArticleBaseUrl = "http://do.davebsd.com/wiki/index.php?title=";
 		const string WhatIsDoUrl = WikiArticleBaseUrl + "Main_Page#What_is_GNOME_Do.3F";
 		
-		public PluginAvailableDialog (string package)
+		public PluginAvailableDialog (string package, Addin addin)
 		{
 			this.Build();
 			

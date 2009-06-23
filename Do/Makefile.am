@@ -41,6 +41,7 @@ FILES = \
 	src/Do.Platform/CoreService.cs \
 	src/Do.Platform/ApplicationService.cs \
 	src/Do.Platform/WindowingService.cs \
+	src/Do.Platform/PluginManagerService.cs \
 	src/Do.UI/ColorConfigurationWidget.cs \
 	src/Do.UI/DoAddinInstallerDialog.cs \
 	src/Do.UI/GeneralPreferencesWidget.cs \

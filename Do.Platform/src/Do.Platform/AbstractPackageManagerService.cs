@@ -19,6 +19,8 @@
 
 using System;
 
+using Mono.Addins;
+
 using Do.Platform.ServiceStack;
 
 namespace Do.Platform
@@ -45,6 +47,30 @@ namespace Do.Platform
 		protected bool DontShowPluginAvailableDialog {
 			get { return Preferences.Get (PluginAvailableKey, PluginAvailableDefault); }
 			set { Preferences.Get (PluginAvailableKey, value); }
+		}
+		
+		/// <summary>
+		/// Tries to find a plugin that is appropriate for the packge given.
+		/// i.e. if the package is a twitter prism app, it would give the Microblogging plugin
+		/// </summary>
+		/// <param name="package">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="Addin"/>
+		/// </returns>
+		protected Addin MaybePluginForPackage (string package)
+		{
+			package = package.ToLower ();
+			
+			foreach (Addin addin in Services.PluginManager.GetAddins ()) {
+				if (addin.Name.ToLower ().Contains (package) || addin.Description.Description.Contains (package)) {
+					Log<AbstractPackageManagerService>.Debug ("Plugin found! returning {0}", addin.Name);
+					return addin;
+				}
+			}
+			Log<AbstractPackageManagerService>.Debug ("No plugin found for package {0}", package);
+			return null;
 		}
 	}
 }

@@ -22,6 +22,8 @@ using System.Threading;
 using NDesk.DBus;
 using org.freedesktop.DBus;
 
+using Mono.Addins;
+
 using Do.Platform;
 using Do.Platform.Linux;
 using Do.Platform.ServiceStack;
@@ -74,6 +76,7 @@ namespace Do.Platform.Linux.JoliCloud
 
 		void HandleActionProcessed (string action, string[] packages, bool success, string error)
 		{
+			Addin addin;
 			string cleanName;
 			
 			/* this block is just commented out for testing purposes
@@ -82,11 +85,12 @@ namespace Do.Platform.Linux.JoliCloud
 			if (action != "install" || packages.Length < 1 || DontShowPluginAvailableDialog)
 				return;
 				
-			*/	
-			
+			*/
 			cleanName = HumanNameFromPackageName (packages [0]);
+			if ((addin = MaybePluginForPackage (cleanName)) == null)
+				return;
 			
-			new PluginAvailableDialog (cleanName);
+			new PluginAvailableDialog (cleanName, addin);
 		}
 		
 		/// <summary>
@@ -142,3 +146,4 @@ namespace Do.Platform.Linux.JoliCloud
 #endregion
 	}
 }
+	

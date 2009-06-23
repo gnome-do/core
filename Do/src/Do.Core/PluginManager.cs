@@ -42,7 +42,7 @@ namespace Do.Core
 	/// <summary>
 	/// PluginManager serves as Do's primary interface to Mono.Addins.
 	/// </summary>
-	internal class PluginManager
+	public class PluginManager
 	{
 		const string DefaultPluginIcon = "folder_tar";
 		
@@ -103,6 +103,11 @@ namespace Do.Core
 			manual.ForEach (dll => File.Delete (dll));
 		}
 
+		public static IEnumerable<Addin> GetAddins ()
+		{
+			return AddinManager.Registry.GetAddins ();
+		}
+		
 		public static bool PluginClassifiesAs (AddinRepositoryEntry entry, string className)
 		{
 			AddinClassifier classifier = Classifiers.FirstOrDefault (c => c.Name == className);
