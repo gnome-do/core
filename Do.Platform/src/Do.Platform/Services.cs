@@ -63,7 +63,7 @@ namespace Do.Platform
 			}
 			
 			AddinManager.AddExtensionNodeHandler ("/Do/Service", OnServiceChanged);
-			InitializeIStrictServices ();
+			InitializeStrictServices ();
 		}
 		
 		/// <summary>
@@ -243,10 +243,10 @@ namespace Do.Platform
 		}
 		
 		/// <summary>
-		/// loops through the Property members of this class, and if it's an IStatic gets it's value.
+		/// loops through the Property members of this class, and if it's a strict service gets it's value.
 		/// This will in turn cause a LocateService call, and the appropriate service will be loaded.
 		/// </summary>
-		static void InitializeIStrictServices ()
+		static void InitializeStrictServices ()
 		{
 			foreach (PropertyInfo property in typeof (Services).GetProperties ()) {
 				Type returnType = property.PropertyType;
