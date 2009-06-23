@@ -20,6 +20,7 @@ using System;
 
 using Gtk;
 using Mono.Unix;
+using Mono.Addins;
 
 using Do.Platform;
 
@@ -27,27 +28,28 @@ namespace Do.Platform.Linux
 {
 		
 	public partial class PluginAvailableDialog : Gtk.Dialog
-	{
+	{		
 		const string WikiArticleBaseUrl = "http://do.davebsd.com/wiki/index.php?title=";
 		const string WhatIsDoUrl = WikiArticleBaseUrl + "Main_Page#What_is_GNOME_Do.3F";
+		
+		Addin addin;
 		
 		public PluginAvailableDialog (string package, Addin addin)
 		{
 			this.Build();
-			
-			string pluginName;
+
 			LinkButton wiki_btn, plugin_desc_btn;
 			
-			// TODO - map this from a package to a plugin name
-			pluginName = package;
-			body_lbl.Text = string.Format (body_lbl.Text, pluginName);
+			this.addin = addin;
+			
+			body_lbl.Text = string.Format (body_lbl.Text, package);
 			
 			wiki_btn = new LinkButton (WhatIsDoUrl, Catalog.GetString ("What is Do?"));
 			wiki_btn.Xalign = 0F;
 			link_vbox.Add (wiki_btn);
 			
-			plugin_desc_btn = new LinkButton (WikiArticleBaseUrl + pluginName, 
-				string.Format (Catalog.GetString ("What does the {0} plugin do?"), pluginName));
+			plugin_desc_btn = new LinkButton (WikiArticleBaseUrl + package, 
+				string.Format (Catalog.GetString ("What does the {0} plugin do?"), package));
 			plugin_desc_btn.Xalign = 0F;
 			link_vbox.Add (plugin_desc_btn);
 			
@@ -61,6 +63,8 @@ namespace Do.Platform.Linux
 
 		protected virtual void OnInstallBtnClicked (object sender, System.EventArgs e)
 		{
+			Services.PluginManager.Install (Addin);
+			Destroy ();
 		}
 
 		protected virtual void OnAskChkToggled (object sender, System.EventArgs e)
