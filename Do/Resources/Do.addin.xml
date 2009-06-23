@@ -11,8 +11,9 @@
 
 	<Extension path="/Do/Service">
 		<Service type="Do.Platform.CoreService" />
-		<Service type="Do.Platform.ApplicationService" />
 		<Service type="Do.Platform.WindowingService" />
+		<Service type="Do.Platform.ApplicationService" />
+		<Service type="Do.Platform.PluginManagerService" />
 	</Extension>
 	
 	<Extension path="/Do/ItemSource">
