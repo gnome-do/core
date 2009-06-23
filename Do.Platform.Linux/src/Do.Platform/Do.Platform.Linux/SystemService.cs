@@ -67,9 +67,9 @@ namespace Do.Platform.Linux
 				if (Bus.Session.NameHasOwner (PowerManagementName)) {
 					power = Bus.Session.GetObject<IPowerManagement> (PowerManagementName, new ObjectPath (PowerManagementPath));
 					power.OnBatteryChanged += PowerOnBatteryChanged;
-					/* Annoying hack to determine whether or not org.freedesktop.PowerManagement actually has
-					 * the onbattery property.
-					 */
+					// Annoying hack to determine whether or not org.freedesktop.PowerManagement actually has
+					// the onbattery property.  To do this right, I'd grab the grab the Introspect data, run it through
+					// an XmlDocument, and parse out the methods available.  Try-Catch will do for now.
 					try {
 						on_battery = power.GetOnBattery ();
 					} catch (Exception e) {
