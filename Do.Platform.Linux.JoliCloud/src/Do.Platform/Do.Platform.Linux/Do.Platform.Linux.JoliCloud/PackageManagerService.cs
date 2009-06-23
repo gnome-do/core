@@ -79,15 +79,11 @@ namespace Do.Platform.Linux.JoliCloud
 			Addin addin;
 			string cleanName;
 			
-			/* this block is just commented out for testing purposes
-			 * FIXME this is just a reminder
-			 
 			if (action != "install" || packages.Length < 1 || DontShowPluginAvailableDialog)
 				return;
 				
-			*/
 			cleanName = HumanNameFromPackageName (packages [0]);
-			if ((addin = MaybePluginForPackage (cleanName)) == null)
+			if ((addin = MaybePluginForPackage (cleanName)) == null && !addin.Enabled)
 				return;
 			
 			new PluginAvailableDialog (cleanName, addin);

@@ -182,8 +182,8 @@ namespace Do.Platform.Linux {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 494;
-            this.DefaultHeight = 224;
+            this.DefaultWidth = 486;
+            this.DefaultHeight = 218;
             this.Show();
             this.ask_chk.Toggled += new System.EventHandler(this.OnAskChkToggled);
             this.buttonCancel.Clicked += new System.EventHandler(this.OnButtonCancelClicked);

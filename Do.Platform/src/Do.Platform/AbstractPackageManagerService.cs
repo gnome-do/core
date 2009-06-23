@@ -64,12 +64,10 @@ namespace Do.Platform
 			package = package.ToLower ();
 			
 			foreach (Addin addin in Services.PluginManager.GetAddins ()) {
-				if (addin.Name.ToLower ().Contains (package) || addin.Description.Description.Contains (package)) {
-					Log<AbstractPackageManagerService>.Debug ("Plugin found! returning {0}", addin.Name);
+				if (addin.Name.ToLower ().Contains (package) || addin.Description.Description.Contains (package))
 					return addin;
-				}
 			}
-			Log<AbstractPackageManagerService>.Debug ("No plugin found for package {0}", package);
+			
 			return null;
 		}
 	}
