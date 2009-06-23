@@ -67,25 +67,16 @@ namespace Do.Platform.Linux
 			on_battery = false;
 			try {
 				BusG.Init ();
-				if (Bus.Session.NameHasOwner (PowerManagementName)) {
+				if (Bus.System.NameHasOwner (DeviceKitPowerName)) {
+					devicekit = Bus.System.GetObject<IDeviceKitPower> (DeviceKitPowerName, new ObjectPath (DeviceKitPowerPath));
+					devicekit.OnChanged += DeviceKitOnChanged;
+					on_battery = (bool) devicekit.Get (DeviceKitPowerName, "on-battery");
+					Log<SystemService>.Debug ("Using org.freedesktop.DeviceKit.Power for battery information");
+				} else if (Bus.Session.NameHasOwner (PowerManagementName)) {
 					power = Bus.Session.GetObject<IPowerManagement> (PowerManagementName, new ObjectPath (PowerManagementPath));
 					power.OnBatteryChanged += PowerOnBatteryChanged;
-					// Annoying hack to determine whether or not org.freedesktop.PowerManagement actually has
-					// the onbattery property.  To do this right, I'd grab the grab the Introspect data, run it through
-					// an XmlDocument, and parse out the methods available.  Try-Catch will do for now.
-					try {
-						on_battery = power.GetOnBattery ();
-					} catch (Exception e) {
-						power = null;
-						Log<SystemService>.Debug ("org.freedesktop.PowerManagement does not have OnBattery property.");
-						Log<SystemService>.Debug ("Trying DeviceKit-Power instead.");
-						if (Bus.System.NameHasOwner (DeviceKitPowerName)) {
-							devicekit = Bus.System.GetObject<IDeviceKitPower> (DeviceKitPowerName, new ObjectPath (DeviceKitPowerPath));
-							devicekit.OnChanged += DeviceKitOnChanged;
-							on_battery = (bool) devicekit.Get (DeviceKitPowerName, "on-battery");
-							Log<SystemService>.Debug ("DeviceKit.Power detected.");
-						}
-					}
+					on_battery = power.GetOnBattery ();
+					Log<SystemService>.Debug ("Using org.freedesktop.PowerManager for battery information");
 				}
 			} catch (Exception e) {
 				Log<SystemService>.Error ("Could not initialize dbus: {0}", e.Message);
