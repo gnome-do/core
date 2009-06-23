@@ -283,7 +283,7 @@
                     <child>
                       <widget class="Gtk.Label" id="title_lbl">
                         <property name="MemberName" />
-                        <property name="LabelProp" translatable="yes">&lt;b&gt;&lt;span size="x-large"&gt;Do plugin available!&lt;/span&gt;&lt;/b&gt;</property>
+                        <property name="LabelProp" translatable="yes">&lt;b&gt;&lt;span size="x-large"&gt;There's a Do plugin for that!&lt;/span&gt;&lt;/b&gt;</property>
                         <property name="UseMarkup">True</property>
                       </widget>
                     </child>

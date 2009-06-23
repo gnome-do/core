@@ -74,7 +74,7 @@ namespace Do.Platform.Linux {
             // Container child title_align.Gtk.Container+ContainerChild
             this.title_lbl = new Gtk.Label();
             this.title_lbl.Name = "title_lbl";
-            this.title_lbl.LabelProp = Mono.Unix.Catalog.GetString("<b><span size=\"x-large\">Do plugin available!</span></b>");
+            this.title_lbl.LabelProp = Mono.Unix.Catalog.GetString("<b><span size=\"x-large\">There's a Do plugin for that!</span></b>");
             this.title_lbl.UseMarkup = true;
             this.title_align.Add(this.title_lbl);
             this.hbox1.Add(this.title_align);
