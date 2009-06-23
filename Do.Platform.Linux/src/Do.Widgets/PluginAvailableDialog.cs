@@ -31,14 +31,9 @@ namespace Do.Platform.Linux
 		const string WikiArticleBaseUrl = "http://do.davebsd.com/wiki/index.php?title=";
 		const string WhatIsDoUrl = WikiArticleBaseUrl + "Main_Page#What_is_GNOME_Do.3F";
 		
-		IPreferences prefs;
-		
 		public PluginAvailableDialog (string package)
 		{
 			this.Build();
-			
-			// is this dirty?
-			prefs = Services.Preferences.Get<AbstractPackageManagerService> ();
 			
 			string pluginName;
 			LinkButton wiki_btn, plugin_desc_btn;
@@ -49,17 +44,13 @@ namespace Do.Platform.Linux
 			
 			wiki_btn = new LinkButton (WhatIsDoUrl, Catalog.GetString ("What is Do?"));
 			wiki_btn.Xalign = 0F;
+			link_vbox.Add (wiki_btn);
 			
 			plugin_desc_btn = new LinkButton (WikiArticleBaseUrl + pluginName, 
 				string.Format (Catalog.GetString ("What does the {0} plugin do?"), pluginName));
 			plugin_desc_btn.Xalign = 0F;
-			
-			link_vbox.Add (wiki_btn);
 			link_vbox.Add (plugin_desc_btn);
 			
-			ask_chk.Active = prefs.Get (AbstractPackageManagerService.ShowPluginAvailableKey,
-				AbstractPackageManagerService.ShowPluginAvailableDefault);
-						
 			ShowAll ();
 		}
 		
@@ -74,7 +65,8 @@ namespace Do.Platform.Linux
 
 		protected virtual void OnAskChkToggled (object sender, System.EventArgs e)
 		{
-			prefs.Set (AbstractPackageManagerService.ShowPluginAvailableKey, ask_chk.Active);
+			IPreferences prefs = Services.Preferences.Get<AbstractPackageManagerService> ();
+			prefs.Set (AbstractPackageManagerService.PluginAvailableKey, ask_chk.Active);
 		}		
 	}
 }

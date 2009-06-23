@@ -24,29 +24,27 @@ using Do.Platform.ServiceStack;
 namespace Do.Platform
 {
 	
-	public abstract class AbstractPackageManagerService : IService
+	/// <summary>
+	/// The package manager service is a service that runs and listens for events from a package backend. The idea is
+	/// that when you install a package that has a corresponding Do plugin, Do will see this and ask you if you want to
+	/// enable the corresponding plugin. This architecture allows us to write backends for whatever package manager is in
+	/// use be it apt, rpm, packagekit, or whatever.
+	/// </summary>
+	public abstract class AbstractPackageManagerService : IService, IInitializedService
 	{
-		public const string ShowPluginAvailableKey = "ShowPluginAvailableDialog";
-		public const bool ShowPluginAvailableDefault = true;
+		public const string PluginAvailableKey = "DontShowPluginAvailableDialog";
+		public const bool PluginAvailableDefault = false;
 		
-		protected AbstractPackageManagerService ()
-		{
-		}
-		
-		protected void Initialize ()
+		public virtual void Initialize ()
 		{
 			Preferences = Services.Preferences.Get<AbstractPackageManagerService> ();
 		}
 		
 		IPreferences Preferences { get; set; }
 		
-		protected void PromptForPluginInstall (string appName, string pluginName)
-		{
-		}
-		
-		protected bool ShouldShowPluginAvailableDialog {
-			get { return Preferences.Get (ShowPluginAvailableKey, ShowPluginAvailableDefault); }
-			set { Preferences.Get (ShowPluginAvailableKey, value); }
+		protected bool DontShowPluginAvailableDialog {
+			get { return Preferences.Get (PluginAvailableKey, PluginAvailableDefault); }
+			set { Preferences.Get (PluginAvailableKey, value); }
 		}
 	}
 }

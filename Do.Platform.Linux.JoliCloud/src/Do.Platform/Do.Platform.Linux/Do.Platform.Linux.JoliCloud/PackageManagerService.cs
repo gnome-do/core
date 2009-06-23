@@ -37,7 +37,7 @@ namespace Do.Platform.Linux.JoliCloud
 	
 	delegate void ActionProcessedEventHandler (string action, string [] packages, bool success, string error);
 		
-	public class PackageManagerService : AbstractPackageManagerService, IStrictService, IInitializedService
+	public class PackageManagerService : AbstractPackageManagerService, IStrictService
 	{
 		const string ObjectPath = "/SoftwareManager";
 		const string BusName = "org.jolicloud.JolicloudDaemon";
@@ -49,7 +49,7 @@ namespace Do.Platform.Linux.JoliCloud
 		{
 		}
 		
-		public void Initialize ()
+		public override void Initialize ()
 		{
 			session_bus = Bus.Session.GetObject<IBus> ("org.freedeskop.DBus", new ObjectPath ("/org/freedesktop/DBus"));
 			session_bus.NameOwnerChanged += HandleNameOwnerChanged;
@@ -74,12 +74,16 @@ namespace Do.Platform.Linux.JoliCloud
 
 		void HandleActionProcessed (string action, string[] packages, bool success, string error)
 		{
-			if (action != "install")
+			/* this block is just commented out for testing purposes
+			 * FIXME this is just a reminder
+			 
+			if (action != "install" || packages.Length < 1 || DontShowPluginAvailableDialog)
 				return;
-			
+				
+			*/	
 			new PluginAvailableDialog (packages [0]);
 		}
-
+		
 #region DBus handling
 		void HandleNameOwnerChanged (string name, string old_owner, string new_owner)
 		{
