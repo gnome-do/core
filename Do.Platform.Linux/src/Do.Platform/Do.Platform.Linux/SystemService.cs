@@ -92,6 +92,7 @@ namespace Do.Platform.Linux
 
 		void PowerOnBatteryChanged (bool val)
 		{
+			on_battery = val;
 			OnOnBatteryChanged ();
 		}
 		
@@ -106,20 +107,7 @@ namespace Do.Platform.Linux
 		
 		public override bool GetOnBatteryPower ()
 		{
-			try {
-				if (devicekit != null) {
-					return (bool) devicekit.Get (DeviceKitPowerName, "on-battery");
-				}
-				if (power == null && !Bus.Session.NameHasOwner (PowerManagementName))
-					return false;
-				if (power == null)
-					power = Bus.Session.GetObject<IPowerManagement> (PowerManagementName, new ObjectPath (PowerManagementPath));
-				return power.GetOnBattery ();
-			} catch (Exception e) {
-				Log<SystemService>.Error ("Could not GetOnBattery: {0}", e.Message);
-				Log<SystemService>.Debug (e.StackTrace);
-			}
-			return false;
+			return on_battery;
 		}
 
 		public override void EnsureSingleApplicationInstance ()
