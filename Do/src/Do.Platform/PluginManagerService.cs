@@ -38,6 +38,7 @@ namespace Do.Platform
 		public void Install (Addin addin)
 		{
 			addin.Enabled = true;
+			Do.UniverseManager.Reload ();
 		}
 #endregion
 	}
