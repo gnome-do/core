@@ -42,11 +42,6 @@ namespace Do.UI
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class ManagePluginsPreferencesWidget : Bin, IConfigurable
 	{
-
-		const string WikiPage = "http://do.davebsd.com/wiki/index.php?title={0}{1}";
-		const string PluginWikiPageFormat = "_Plugin";
-		const string DockletWikiPageFormat = "_Docklet";
-
 		PluginNodeView nview;
 		SearchEntry search_entry;
 
@@ -156,10 +151,15 @@ namespace Do.UI
 
 		protected void UpdateButtonState ()
 		{
-			btn_configure.Sensitive = nview.GetSelectedAddins ()
+			string [] ids = nview.GetSelectedAddins ();
+			
+			btn_configure.Sensitive = ids
 				.SelectMany (id => PluginManager.ConfigurablesForAddin (id))
 				.Any ();
-			btn_about.Sensitive = nview.GetSelectedAddins ().Any ();
+			
+			btn_about.Sensitive = ids
+				.Where (id => !string.IsNullOrEmpty (AddinManager.Registry.GetAddin (id).Description.Url))
+				.Any ();
 		}
 
 		private void OnPluginToggled (string id, bool enabled)
@@ -207,22 +207,9 @@ namespace Do.UI
 		void OnBtnAboutClicked (object sender, EventArgs e)
 		{
 			foreach (string id in nview.GetSelectedAddins ()) {
-				try {
-					string name, url;
-					Addin a = AddinManager.Registry.GetAddin (id);
-					name = Addin.GetIdName (id).Split ('.')[1];
-					
-					// plugin manifest files support a Url attribute, if this attribute is set we should
-					// use it instead of trying to guess the wiki page.
-					if (!string.IsNullOrEmpty (a.Description.Url))
-						url = a.Description.Url;
-					else if (PluginManager.PluginClassifiesAs (a, "Docklets"))
-						url = string.Format (DockletWikiPageFormat, name);
-					else
-						url = string.Format (PluginWikiPageFormat, name);
-					
-					Services.Environment.OpenUrl (url);
-				} catch { }
+				Addin addin = AddinManager.Registry.GetAddin (id);
+				if (!string.IsNullOrEmpty (addin.Description.Url))
+					Services.Environment.OpenUrl (addin.Description.Url);
 			}
 		}
 
