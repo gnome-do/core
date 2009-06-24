@@ -29,13 +29,15 @@ namespace Do.Platform.Linux
 		
 	public partial class PluginAvailableDialog : Gtk.Dialog
 	{		
-		const string WikiArticleBaseUrl = "http://do.davebsd.com/wiki/index.php?title=";
-		const string WhatIsDoUrl = WikiArticleBaseUrl + "Main_Page#What_is_GNOME_Do.3F";
+		const string WikiArticleBaseUrl = "http://do.davebsd.com/wiki/index.php?title={0}";
+		const string WhatIsDoUrl = string.Format (WikiArticleBaseUrl, "Main_Page#What_is_GNOME_Do.3F");
 		
 		Addin addin;
 		
 		public PluginAvailableDialog (string package, Addin addin)
 		{
+			string pluginUrl;
+			
 			this.Build();
 
 			LinkButton wiki_btn, plugin_desc_btn;
@@ -48,8 +50,12 @@ namespace Do.Platform.Linux
 			wiki_btn.Xalign = 0F;
 			link_vbox.Add (wiki_btn);
 			
-			plugin_desc_btn = new LinkButton (WikiArticleBaseUrl + package, 
-				string.Format (Catalog.GetString ("What does the {0} plugin do?"), package));
+			// if the URL attribute is set, use it.
+			pluginUrl = string.IsNullOrEmpty (addin.Description.Url)
+				? string.Format (WikiArticleBaseUrl, package)
+				: addin.Description.Url;
+			
+			plugin_desc_btn = new LinkButton (pluginUrl, string.Format (Catalog.GetString ("What does the {0} plugin do?"), package));
 			plugin_desc_btn.Xalign = 0F;
 			link_vbox.Add (plugin_desc_btn);
 			

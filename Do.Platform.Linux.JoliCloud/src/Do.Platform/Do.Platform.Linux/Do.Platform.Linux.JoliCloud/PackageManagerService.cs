@@ -39,6 +39,10 @@ namespace Do.Platform.Linux.JoliCloud
 	
 	delegate void ActionProcessedEventHandler (string action, string [] packages, bool success, string error);
 		
+	/// <summary>
+	/// Listens to the JoliCloud daemon for package install events, and offers to install an appropriate
+	/// plugin if one is found.
+	/// </summary>
 	public class PackageManagerService : AbstractPackageManagerService, IStrictService
 	{
 		const string ObjectPath = "/SoftwareManager";
@@ -47,10 +51,9 @@ namespace Do.Platform.Linux.JoliCloud
 		IBus session_bus;
 		IJolicloudDaemon daemon;
 		
-		public PackageManagerService()
-		{
-		}
-		
+		/// <summary>
+		/// Find jolicloud on the bus
+		/// </summary>
 		public override void Initialize ()
 		{
 			session_bus = Bus.Session.GetObject<IBus> ("org.freedeskop.DBus", new ObjectPath ("/org/freedesktop/DBus"));
@@ -74,6 +77,22 @@ namespace Do.Platform.Linux.JoliCloud
 			}
 		}
 
+		/// <summary>
+		/// When a package manager action is performed we receive a signal, this method processes the signal
+		/// and decides how to act.
+		/// </summary>
+		/// <param name="action">
+		/// A <see cref="System.String"/> the action performed by the package manager
+		/// </param>
+		/// <param name="packages">
+		/// A <see cref="System.String"/> the packages touched by the action
+		/// </param>
+		/// <param name="success">
+		/// A <see cref="System.Boolean"/> did the action succeed
+		/// </param>
+		/// <param name="error">
+		/// A <see cref="System.String"/> errors
+		/// </param>
 		void HandleActionProcessed (string action, string[] packages, bool success, string error)
 		{
 			Addin addin;
