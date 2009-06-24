@@ -37,6 +37,8 @@ namespace Do.Platform.Linux
 		
 		const string PowerManagementName = "org.freedesktop.PowerManagement";
 		const string PowerManagementPath = "/org/freedesktop/PowerManagement";
+		const string DeviceKitPowerName = "org.freedesktop.DeviceKit.Power";
+		const string DeviceKitPowerPath = "/org/freedesktop/DeviceKit/Power";
 		const string AutoStartKey = "Hidden";
 		
 		[Interface(PowerManagementName)]
@@ -46,16 +48,35 @@ namespace Do.Platform.Linux
 			event BoolDelegate OnBatteryChanged;
 		}
 		
+		[Interface(DeviceKitPowerName)]
+		interface IDeviceKitPower : org.freedesktop.DBus.Properties
+		{
+			event Action OnChanged;
+		}
+		
+		bool on_battery;
+		
 		IPowerManagement power;
+		IDeviceKitPower devicekit;
 		DesktopItem autostartfile;
 		
 		public void Initialize ()
 		{
+			// Set a sane default value for on_battery.  Thus, if we don't find a working power manager
+			// we assume we're not on battery.
+			on_battery = false;
 			try {
 				BusG.Init ();
-				if (Bus.Session.NameHasOwner (PowerManagementName)) {
+				if (Bus.System.NameHasOwner (DeviceKitPowerName)) {
+					devicekit = Bus.System.GetObject<IDeviceKitPower> (DeviceKitPowerName, new ObjectPath (DeviceKitPowerPath));
+					devicekit.OnChanged += DeviceKitOnChanged;
+					on_battery = (bool) devicekit.Get (DeviceKitPowerName, "on-battery");
+					Log<SystemService>.Debug ("Using org.freedesktop.DeviceKit.Power for battery information");
+				} else if (Bus.Session.NameHasOwner (PowerManagementName)) {
 					power = Bus.Session.GetObject<IPowerManagement> (PowerManagementName, new ObjectPath (PowerManagementPath));
 					power.OnBatteryChanged += PowerOnBatteryChanged;
+					on_battery = power.GetOnBattery ();
+					Log<SystemService>.Debug ("Using org.freedesktop.PowerManager for battery information");
 				}
 			} catch (Exception e) {
 				Log<SystemService>.Error ("Could not initialize dbus: {0}", e.Message);
@@ -65,22 +86,22 @@ namespace Do.Platform.Linux
 
 		void PowerOnBatteryChanged (bool val)
 		{
+			on_battery = val;
 			OnOnBatteryChanged ();
 		}
-	
+		
+		void DeviceKitOnChanged ()
+		{
+			bool newState = (bool) devicekit.Get (DeviceKitPowerName, "on-battery");
+			if (on_battery != newState) {
+				on_battery = newState;
+				OnOnBatteryChanged ();
+			}
+		}
+		
 		public override bool GetOnBatteryPower ()
 		{
-			try {
-				if (power == null && !Bus.Session.NameHasOwner (PowerManagementName))
-					return false;
-				if (power == null)
-					power = Bus.Session.GetObject<IPowerManagement> (PowerManagementName, new ObjectPath (PowerManagementPath));
-				return power.GetOnBattery ();
-			} catch (Exception e) {
-				Log<SystemService>.Error ("Could not GetOnBattery: {0}", e.Message);
-				Log<SystemService>.Debug (e.StackTrace);
-			}
-			return false;
+			return on_battery;
 		}
 
 		public override void EnsureSingleApplicationInstance ()
