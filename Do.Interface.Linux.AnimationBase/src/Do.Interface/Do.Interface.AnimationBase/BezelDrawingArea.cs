@@ -182,8 +182,6 @@ namespace Do.Interface.AnimationBase
 		double[] icon_fade = new double [] {1, 1, 1};
 		bool[] entry_mode = new bool[3];
 		
-		GConf.Client gconfClient;
-		
 		public Cairo.Color BackgroundColor {
 			get {
 				Gdk.Color color = new Gdk.Color ();
@@ -417,9 +415,6 @@ namespace Do.Interface.AnimationBase
 			
 			ResetRenderStyle ();
 			SetDrawingArea ();
-			
-			gconfClient = new GConf.Client ();
-			gconfClient.AddNotify ("/desktop/gnome/interface", OnGtkThemeChanged);
 			
 			BezelDrawingArea.ThemeChanged += OnThemeChanged;
 			Realized += delegate {
@@ -699,16 +694,14 @@ namespace Do.Interface.AnimationBase
 			return ret;
 		}
 		
-		private void OnGtkThemeChanged (object o, GConf.NotifyEventArgs args)
+		protected override void OnStyleSet (Gtk.Style previous_style)
 		{
-			GLib.Timeout.Add (3000, () => {
-				if (GtkThemeChanged != null)
-					GtkThemeChanged (o, args);
-				Colors.RebuildColors (BackgroundColor);
-				return false;
-			});
+			if (GtkThemeChanged != null)
+				GtkThemeChanged (this, System.EventArgs.Empty);
+			Colors.RebuildColors (BackgroundColor);
+			base.OnStyleSet (previous_style);
 		}
-		
+
 		private void OnThemeChanged (object o, System.EventArgs args)
 		{
 			ResetRenderStyle ();
