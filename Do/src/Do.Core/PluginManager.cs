@@ -102,27 +102,31 @@ namespace Do.Core
 			EnableDisabledPlugins (saved);
 			manual.ForEach (dll => File.Delete (dll));
 		}
-
+		
 		public static void Enable (Addin addin)
 		{
-			Enable (addin.Id);
+			SetAddinEnabled (addin, true);
 		}
 		
 		public static void Enable (string id)
 		{
-			if (!string.IsNullOrEmpty (id))
-				AddinManager.Registry.EnableAddin (id);
+			Enable (AddinManager.Registry.GetAddin (id));
 		}
 		
 		public static void Disable (Addin addin)
 		{
-			Disable (addin.Id);
+			SetAddinEnabled (addin, false);
 		}
 		
 		public static void Disable (string id)
 		{
-			if (!string.IsNullOrEmpty (id))
-				AddinManager.Registry.DisableAddin (id);
+			Disable (AddinManager.Registry.GetAddin (id));
+		}
+		
+		static void SetAddinEnabled (Addin addin, bool enabled)
+		{
+			if (addin != null)
+				addin.Enabled = enabled;
 		}
 		
 		public static IEnumerable<Addin> GetAddins ()
@@ -243,17 +247,15 @@ namespace Do.Core
 		
 		static void EnableDisabledPlugins (IEnumerable<string> savedPlugins)
 		{
-			foreach (Addin addin in AddinManager.Registry.GetAddins ()) {
-				string id = addin.Id;
-				if (!AddinManager.Registry.IsAddinEnabled (id) && savedPlugins.Any (name => id.StartsWith (name)))
-					AddinManager.Registry.EnableAddin (id);
-			}
+			AddinManager.Registry.GetAddins ()
+				.Where (addin => !addin.Enabled && savedPlugins.Any (name => addin.Id.StartsWith (name)))
+				.ForEach (addin => Enable (addin));
 		}
 
 		static void OnPluginChanged (object sender, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
-
+			
 			switch (args.Change) {
 			case ExtensionChange.Add:
 				try {
