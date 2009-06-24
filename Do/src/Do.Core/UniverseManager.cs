@@ -28,6 +28,8 @@ using Do.Platform;
 using Do.Universe;
 using Do.Universe.Safe;
 
+using UniverseCollection = System.Collections.Generic.Dictionary<string, Do.Universe.Item>;
+
 namespace Do.Core
 {
 	
@@ -35,8 +37,9 @@ namespace Do.Core
 	{
 
 		Thread update_thread;
-		Dictionary<string, Item> universe;
+		UniverseCollection universe;
 		EventHandler initialized;
+		object universe_lock;
 		
 		const float epsilon = 0.00001f;
 		
@@ -75,7 +78,8 @@ namespace Do.Core
 		
 		public UniverseManager ()
 		{
-			universe = new Dictionary<string, Item> ();
+			universe = new UniverseCollection ();
+			universe_lock = new object ();
 
 			update_thread = new Thread (new ThreadStart (UniverseUpdateLoop));
 			update_thread.IsBackground = true;
@@ -117,7 +121,7 @@ namespace Do.Core
 		
 		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, Item other)
 		{
-			lock (universe) 
+			lock (universe_lock) 
 				return Search (query, filter, universe.Values, other);
 		}
 		
@@ -158,22 +162,24 @@ namespace Do.Core
 		void UniverseUpdateLoop ()
 		{
 			Random rand = new Random ();
-			DateTime startUpdate = DateTime.Now;
+			DateTime startUpdate = DateTime.UtcNow;
 
 			while (true) {
 				Thread.Sleep (UpdateTimeout);
 				if (Do.Controller.IsSummoned) continue;
-				startUpdate = DateTime.Now;
+				startUpdate = DateTime.UtcNow;
 				
 				if (rand.Next (10) == 0) {
-					ReloadActions ();
+					ReloadActions (universe);
 				}
 				
 				foreach (ItemSource source in PluginManager.ItemSources) {
-					ReloadSource (source);
-					if (UpdateRunTime < DateTime.Now - startUpdate) {
+					ReloadSource (source, universe);
+					
+					if (UpdateRunTime < DateTime.UtcNow - startUpdate) {
 						Thread.Sleep (UpdateTimeout);
-						startUpdate = DateTime.Now;
+						// sleeping for a bit
+						startUpdate = DateTime.UtcNow;
 					}
 				}
 			}
@@ -182,10 +188,10 @@ namespace Do.Core
 		/// <summary>
 		/// Reloads all actions in the universe.
 		/// </summary>
-		void ReloadActions ()
+		void ReloadActions (UniverseCollection universe)
 		{
 			Log<UniverseManager>.Debug ("Reloading actions...");
-			lock (universe) {
+			lock (universe_lock) {
 				foreach (Act action in PluginManager.Actions) {
 					if (universe.ContainsKey (action.UniqueId))
 						universe.Remove (action.UniqueId);
@@ -200,7 +206,7 @@ namespace Do.Core
 		/// not be called on the main thread to avoid blocking the UI if the
 		/// item source takes a long time to update.
 		/// </summary>
-		void ReloadSource (ItemSource source)
+		void ReloadSource (ItemSource source, UniverseCollection universe)
 		{
 			SafeItemSource safeSource;
 			IEnumerable<Item> oldItems, newItems;
@@ -215,7 +221,7 @@ namespace Do.Core
 			safeSource.UpdateItems ();
 			newItems = safeSource.Items;
 			
-			lock (universe) {
+			lock (universe_lock) {
 				foreach (Item item in oldItems) {
 					if (universe.ContainsKey (item.UniqueId))
 						universe.Remove (item.UniqueId);
@@ -229,8 +235,18 @@ namespace Do.Core
 		void ReloadUniverse ()
 		{
 			Log<UniverseManager>.Info ("Reloading universe...");
-			ReloadActions ();
-			PluginManager.ItemSources.ForEach (ReloadSource);
+			
+			// A new temporary universe is created so that searches made during the reload (as threaded 
+			// searches are allowed will not see an interuption in available items. Additionally this 
+			// serves to clear out unused items that are orphaned from their item service.
+			UniverseCollection tmpUniverse = new UniverseCollection ();
+			ReloadActions (tmpUniverse);
+			PluginManager.ItemSources.ForEach (s => ReloadSource (s, tmpUniverse));
+			
+			// Clearing the old universe is not needed and considered harmful as enumerables in existence
+			// already will be based off the old universe. Clearing it may cause an exception to be thrown.
+			// Once those enumerables are destroyed, so too will the old universe be.
+			universe = tmpUniverse;
 			Log<UniverseManager>.Info ("Universe contains {0} items.", universe.Count);
 		}
 		
@@ -242,7 +258,7 @@ namespace Do.Core
 		/// </param>
 		public void AddItems (IEnumerable<Item> items)
 		{
-			lock (universe) {
+			lock (universe_lock) {
 				foreach (Item item in items) {
 					if (universe.ContainsKey (item.UniqueId)) continue;
 					universe [item.UniqueId] = item;
@@ -259,7 +275,7 @@ namespace Do.Core
 		/// </param>
 		public void DeleteItems (IEnumerable<Item> items)
 		{
-			lock (universe) {
+			lock (universe_lock) {
 				foreach (Item item in items) {
 					universe.Remove (item.UniqueId);
 				}
@@ -277,7 +293,7 @@ namespace Do.Core
 		/// </param>
 		public bool TryGetItemForUniqueId (string uid, out Item element)
 		{
-			lock (universe) {
+			lock (universe_lock) {
 				if (universe.ContainsKey (uid)) {
 					element = universe [uid];
 				} else {
