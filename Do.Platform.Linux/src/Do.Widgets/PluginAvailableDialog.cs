@@ -36,8 +36,6 @@ namespace Do.Platform.Linux
 		
 		public PluginAvailableDialog (string package, Addin addin)
 		{
-			string pluginUrl;
-			
 			this.Build();
 
 			LinkButton wiki_btn, plugin_desc_btn;
@@ -50,14 +48,13 @@ namespace Do.Platform.Linux
 			wiki_btn.Xalign = 0F;
 			link_vbox.Add (wiki_btn);
 			
-			// if the URL attribute is set, use it.
-			pluginUrl = string.IsNullOrEmpty (addin.Description.Url)
-				? string.Format (WikiArticleBaseUrl, package)
-				: addin.Description.Url;
-			
-			plugin_desc_btn = new LinkButton (pluginUrl, string.Format (Catalog.GetString ("What does the {0} plugin do?"), package));
-			plugin_desc_btn.Xalign = 0F;
-			link_vbox.Add (plugin_desc_btn);
+			// if the URL attribute is set, then we show a link to the plugin help
+			if (!string.IsNullOrEmpty (addin.Description.Url)) {
+				plugin_desc_btn = new LinkButton (addin.Description.Url,
+					string.Format (Catalog.GetString ("What does the {0} plugin do?"), package));
+				plugin_desc_btn.Xalign = 0F;
+				link_vbox.Add (plugin_desc_btn);
+			}
 			
 			ShowAll ();
 		}
