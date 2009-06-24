@@ -237,15 +237,15 @@ namespace Do.Core
 			Log<UniverseManager>.Info ("Reloading universe...");
 			
 			// A new temporary universe is created so that searches made during the reload (as threaded 
-			// searches are allowed will not see an interuption in available items. Additionally this 
+			// searches are allowed will not see an interuption in available items). Additionally this 
 			// serves to clear out unused items that are orphaned from their item service.
 			UniverseCollection tmpUniverse = new UniverseCollection ();
 			ReloadActions (tmpUniverse);
-			PluginManager.ItemSources.ForEach (s => ReloadSource (s, tmpUniverse));
+			PluginManager.ItemSources.ForEach (source => ReloadSource (source, tmpUniverse));
 			
 			// Clearing the old universe is not needed and considered harmful as enumerables in existence
 			// already will be based off the old universe. Clearing it may cause an exception to be thrown.
-			// Once those enumerables are destroyed, so too will the old universe be.
+			// Once those enumerables are destroyed, so too will the old universe.
 			universe = tmpUniverse;
 			Log<UniverseManager>.Info ("Universe contains {0} items.", universe.Count);
 		}
