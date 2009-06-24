@@ -103,6 +103,28 @@ namespace Do.Core
 			manual.ForEach (dll => File.Delete (dll));
 		}
 
+		public static void Enable (Addin addin)
+		{
+			Enable (addin.Id);
+		}
+		
+		public static void Enable (string id)
+		{
+			if (!string.IsNullOrEmpty (id))
+				AddinManager.Registry.EnableAddin (id);
+		}
+		
+		public static void Disable (Addin addin)
+		{
+			Disable (addin.Id);
+		}
+		
+		public static void Disable (string id)
+		{
+			if (!string.IsNullOrEmpty (id))
+				AddinManager.Registry.DisableAddin (id);
+		}
+		
 		public static IEnumerable<Addin> GetAddins ()
 		{
 			return AddinManager.Registry.GetAddins ();

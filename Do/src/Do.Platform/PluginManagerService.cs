@@ -37,7 +37,7 @@ namespace Do.Platform
 		
 		public void Install (Addin addin)
 		{
-			addin.Enabled = true;
+			PluginManager.Enable (addin);
 			Do.UniverseManager.Reload ();
 		}
 #endregion
