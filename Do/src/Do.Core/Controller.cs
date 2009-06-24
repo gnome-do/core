@@ -932,7 +932,7 @@ namespace Do.Core
 
 			action = WorkingAction;
 			items = WorkingItems;
-			modItems = WorkingModItems;
+			modItems = ThirdPaneVisible ? WorkingModItems : Enumerable.Empty<Item> ();
 			
 			// If the current state of the controller is invalid, warn and return
 			// early.
@@ -947,7 +947,7 @@ namespace Do.Core
 			itemQuery    = controllers [(int) WorkingItemPane].Query;
 			modItemQuery = controllers [(int) Pane.Third].Query;
 			
-			if (modItems != null && ThirdPaneVisible)
+			if (ThirdPaneVisible)
 				modItemQuery = controllers [(int) Pane.Third].Query;
 
 			/////////////////////////////////////////////////////////////
@@ -971,7 +971,7 @@ namespace Do.Core
 				action.IncreaseRelevance (actionQuery, null);
 			}
 
-			if (modItems != null && ThirdPaneVisible) {
+			if (ThirdPaneVisible) {
 				foreach (Item item in modItems)
 					item.IncreaseRelevance (modItemQuery, action);
 			}

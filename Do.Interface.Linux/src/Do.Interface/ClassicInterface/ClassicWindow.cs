@@ -41,7 +41,6 @@ namespace Do.Interface {
 		PositionWindow positionWindow;
 		HBox resultsHBox;
 		IconBox[] iconbox;
-		GConf.Client gconfClient;
 		IDoController controller;
 		
 		const int IconBoxIconSize = 128;
@@ -95,10 +94,6 @@ namespace Do.Interface {
 		public void Initialize (IDoController controller)
 		{
 			this.controller = controller;
-			
-			gconfClient = new GConf.Client ();
-			gconfClient.AddNotify ("/desktop/gnome/interface",
-				new GConf.NotifyEventHandler (DesktopThemeChanged));
 			
 			Build ();
 		}
@@ -250,17 +245,12 @@ namespace Do.Interface {
 			Reposition ();
 		}
 		
-		private void DesktopThemeChanged (object o, GConf.NotifyEventArgs e)
+		protected override void OnStyleSet (Gtk.Style previous_style)
 		{
-			//this is needed to account for the delay between the gconf change
-			//and the theme change propogating to this application.
-			GLib.Timeout.Add (3000, delegate {
-				Gdk.Threads.Enter ();
-				frame.FrameColor = frame.FillColor = BackgroundColor;
-				resultsWindow.UpdateColors (BackgroundColor);
-				Gdk.Threads.Leave ();
-				return false;
-			});
+			frame.FrameColor = frame.FillColor = BackgroundColor;
+			resultsWindow.UpdateColors (BackgroundColor);
+			
+			base.OnStyleSet (previous_style);
 		}
 		
 		public virtual void Reposition ()
