@@ -208,14 +208,20 @@ namespace Do.UI
 		{
 			foreach (string id in nview.GetSelectedAddins ()) {
 				try {
+					string name, url;
 					Addin a = AddinManager.Registry.GetAddin (id);
-					string category;
-					if (PluginManager.PluginClassifiesAs (a, "Docklets"))
-						category = DockletWikiPageFormat;
+					name = Addin.GetIdName (id).Split ('.')[1];
+					
+					// plugin manifest files support a Url attribute, if this attribute is set we should
+					// use it instead of trying to guess the wiki page.
+					if (!string.IsNullOrEmpty (a.Description.Url))
+						url = a.Description.Url;
+					else if (PluginManager.PluginClassifiesAs (a, "Docklets"))
+						url = string.Format (DockletWikiPageFormat, name);
 					else
-						category = PluginWikiPageFormat;
-					string name = Addin.GetIdName (id).Split ('.')[1];
-					Services.Environment.OpenUrl (string.Format (WikiPage, name, category));
+						url = string.Format (PluginWikiPageFormat, name);
+					
+					Services.Environment.OpenUrl (url);
 				} catch { }
 			}
 		}
