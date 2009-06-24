@@ -47,7 +47,7 @@ namespace Do.Core
 		const string DefaultPluginIcon = "folder_tar";
 		
 		static IEnumerable<string> ExtensionPaths = new [] { "/Do/ItemSource", "/Do/Action" };
-		
+
 		public static readonly IEnumerable<AddinClassifier> Classifiers =
 			new AddinClassifier [] {
 				new OfficialAddinClassifier (),
