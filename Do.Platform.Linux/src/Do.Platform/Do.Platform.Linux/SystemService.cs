@@ -92,9 +92,9 @@ namespace Do.Platform.Linux
 		
 		void DeviceKitOnChanged ()
 		{
-			bool new_state = (bool) devicekit.Get (DeviceKitPowerName, "on-battery");
-			if (on_battery != new_state) {
-				on_battery = new_state;
+			bool newState = (bool) devicekit.Get (DeviceKitPowerName, "on-battery");
+			if (on_battery != newState) {
+				on_battery = newState;
 				OnOnBatteryChanged ();
 			}
 		}
