@@ -159,6 +159,7 @@ namespace Do.UI
 			btn_configure.Sensitive = nview.GetSelectedAddins ()
 				.SelectMany (id => PluginManager.ConfigurablesForAddin (id))
 				.Any ();
+
 			btn_about.Sensitive = nview.GetSelectedAddins ().Any ();
 		}
 
@@ -203,8 +204,8 @@ namespace Do.UI
 			win.Modal = true;
 			win.ShowAll ();
 		}
-
-		void OnBtnAboutClicked (object sender, EventArgs args)
+		
+		void OnAboutBtnClicked (object sender, EventArgs args)
 		{
 			foreach (string id in nview.GetSelectedAddins ()) {
 				try {
