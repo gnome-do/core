@@ -66,6 +66,8 @@ namespace Do.UI
 		{
 			Build ();
 			
+			PluginManager.RefreshPlugins ();
+			
 			search_entry = new SearchEntry ();
 			nview = new PluginNodeView ();
 			nview.PluginToggled += OnPluginToggled;
