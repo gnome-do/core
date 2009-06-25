@@ -41,7 +41,6 @@ namespace Do.Interface {
 		PositionWindow positionWindow;
 		HBox resultsHBox;
 		IconBox[] iconbox;
-		GConf.Client gconfClient;
 		IDoController controller;
 		
 		const int IconBoxIconSize = 128;
@@ -95,10 +94,6 @@ namespace Do.Interface {
 		public void Initialize (IDoController controller)
 		{
 			this.controller = controller;
-			
-			gconfClient = new GConf.Client ();
-			gconfClient.AddNotify ("/desktop/gnome/interface",
-				new GConf.NotifyEventHandler (DesktopThemeChanged));
 			
 			Build ();
 		}
@@ -250,17 +245,12 @@ namespace Do.Interface {
 			Reposition ();
 		}
 		
-		private void DesktopThemeChanged (object o, GConf.NotifyEventArgs e)
+		protected override void OnStyleSet (Gtk.Style previous_style)
 		{
-			//this is needed to account for the delay between the gconf change
-			//and the theme change propogating to this application.
-			GLib.Timeout.Add (3000, delegate {
-				Gdk.Threads.Enter ();
-				frame.FrameColor = frame.FillColor = BackgroundColor;
-				resultsWindow.UpdateColors (BackgroundColor);
-				Gdk.Threads.Leave ();
-				return false;
-			});
+			frame.FrameColor = frame.FillColor = BackgroundColor;
+			resultsWindow.UpdateColors (BackgroundColor);
+			
+			base.OnStyleSet (previous_style);
 		}
 		
 		public virtual void Reposition ()
@@ -347,7 +337,7 @@ namespace Do.Interface {
 			Resize (1, 1);
 			Reposition ();
 			
-			iconbox[0].DisplayObject = new Do.Interface.Widgets.DefaultIconBoxElement ();
+			iconbox[0].DisplayObject = new Do.Interface.Widgets.DefaultIconBoxItem ();
 			label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 
 			                       Catalog.GetString ("Type to start searching."));
 		}
@@ -381,11 +371,11 @@ namespace Do.Interface {
 			if (!context.Results.Any () && !context.LargeTextDisplay) {
 				if (pane == Pane.First && context.ParentContext == null) {
 					iconbox[0].TextOverlay = context.LargeTextDisplay;
-					iconbox[0].DisplayObject = new Do.Interface.Widgets.DefaultIconBoxElement ();
+					iconbox[0].DisplayObject = new Do.Interface.Widgets.DefaultIconBoxItem ();
 					label.SetDisplayLabel (Catalog.GetString ("Type to begin searching"), 
 					                       Catalog.GetString ("Type to start searching."));
 				} else {
-					Element noRes = new NoResultsFoundElement (context.Query);
+					Do.Universe.Item noRes = new NoResultsFoundItem (context.Query);
 					for (int i = (int) pane; i < 3; i++) {
 						iconbox[i].Clear ();
 						iconbox[i].DisplayObject = noRes;
@@ -400,7 +390,7 @@ namespace Do.Interface {
 			
 			if (string.IsNullOrEmpty (context.Query) && context.LargeTextDisplay) {
 				iconbox[(int) pane].TextOverlay = context.LargeTextDisplay;
-				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text") as Element;
+				iconbox[(int) pane].DisplayObject = new TextItem ("Enter Text") as Do.Universe.Item;
 
 				if (!context.Results.Any ()) return;
 			} else {

@@ -35,7 +35,7 @@ namespace Do.Core
 	{
 
 		Thread update_thread;
-		Dictionary<string, Element> universe;
+		Dictionary<string, Item> universe;
 		EventHandler initialized;
 		
 		const float epsilon = 0.00001f;
@@ -75,11 +75,18 @@ namespace Do.Core
 		
 		public UniverseManager ()
 		{
-			universe = new Dictionary<string, Element> ();
+			universe = new Dictionary<string, Item> ();
 
 			update_thread = new Thread (new ThreadStart (UniverseUpdateLoop));
 			update_thread.IsBackground = true;
 			update_thread.Priority = ThreadPriority.Lowest;
+			
+			Services.Network.StateChanged += OnNetworkStateChanged;
+		}
+
+		void OnNetworkStateChanged (object sender, NetworkStateChangedEventArgs e)
+		{
+			Reload ();
 		}
 			
 		public void Initialize ()
@@ -93,7 +100,7 @@ namespace Do.Core
 			ReloadUniverse ();
 
 			// Notify subscribers that the universe has been loaded.
-			Gtk.Application.Invoke ((sender, e) => {
+			Services.Application.RunOnMainThread (() => {
 				BuildCompleted = true;
 				if (initialized != null)
 					initialized (this, EventArgs.Empty);
@@ -103,41 +110,31 @@ namespace Do.Core
 			update_thread.Start ();
 		}
 
-		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter)
+		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter)
 		{	
-			return Search (query, filter, (Element) null);
+			return Search (query, filter, (Item) null);
 		}
 		
-		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, Element other)
+		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, Item other)
 		{
-			if (filter.Count () == 1 && filter.First () == typeof (Act))
-				return Search (query, filter, PluginManager.Actions.OfType<Element> (), other);
-			else
-				lock (universe) 
-					return Search (query, filter, universe.Values, other);
+			lock (universe) 
+				return Search (query, filter, universe.Values, other);
 		}
 		
-		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, IEnumerable<Element> objects)
+		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, IEnumerable<Item> objects)
 		{
 			return Search (query, filter, objects, null);
 		}
 		
-		public IEnumerable<Element> Search (string query, IEnumerable<Type> filter, IEnumerable<Element> elements, Element other)
+		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, IEnumerable<Item> elements, Item other)
 		{
-			Element text = new ImplicitTextItem (query);
-
+			Item text = new ImplicitTextItem (query);
 			string lquery = query.ToLower ();
 
-			foreach (Element element in elements)
-				element.UpdateRelevance (lquery, other);
-
 			return elements
-				.Where (element => epsilon < Math.Abs (element.Relevance) && element.PassesTypeFilter (filter))
+				.Where (element => element.PassesTypeFilter (filter) && epsilon < Math.Abs (element.UpdateRelevance (lquery, other)))
 				.OrderByDescending (element => element.Relevance)
-				.Concat (text.PassesTypeFilter (filter)
-						? new [] { text }
-						: Enumerable.Empty<Element> ()
-				)
+				.Concat (text.PassesTypeFilter (filter) ? new [] { text } : Enumerable.Empty<Item> ())
 				.ToArray ();
 		}
 		
@@ -145,14 +142,14 @@ namespace Do.Core
 		/// Returns if an object likely contains children.
 		/// </summary>
 		/// <param name="o">
-		/// A <see cref="Element"/>
+		/// A <see cref="Item"/>
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		public bool ElementHasChildren (Element element)
+		public bool ItemHasChildren (Item item)
 		{
-			return element is Item && (element as Item).HasChildren ();
+			return item.HasChildren ();
 		}
 		
 		/// <summary>
@@ -190,11 +187,11 @@ namespace Do.Core
 			Log<UniverseManager>.Debug ("Reloading actions...");
 			lock (universe) {
 				foreach (Act action in PluginManager.Actions) {
-					universe.Remove (action.UniqueId);
+					if (universe.ContainsKey (action.UniqueId))
+						universe.Remove (action.UniqueId);
 				}
-				foreach (Act action in PluginManager.Actions) {
-						universe [action.UniqueId] = action;			
-				}
+				foreach (Act action in PluginManager.Actions)
+					universe [action.UniqueId] = action;
 			}
 		}
 		
@@ -211,10 +208,10 @@ namespace Do.Core
 			if (source == null) throw new ArgumentNullException ("source");
 			
 			safeSource = source.RetainSafe ();
-			Log<UniverseManager>.Debug ("Reloading item source \"{0}\"...", safeSource.Name);
 			oldItems = safeSource.Items;
 			// We call UpdateItems outside of the lock so as not to block other
 			// threads in contention for the lock if UpdateItems blocks.
+			Log<UniverseManager>.Debug ("Reloading item source \"{0}\"...", safeSource.Name);
 			safeSource.UpdateItems ();
 			newItems = safeSource.Items;
 			
@@ -270,15 +267,15 @@ namespace Do.Core
 		}
 
 		/// <summary>
-		/// Attempts to get an Element for a given UniqueId.
+		/// Attempts to get an Item for a given UniqueId.
 		/// </summary>
 		/// <param name="UniqueId">
 		/// A <see cref="System.String"/>
 		/// </param>
 		/// <param name="item">
-		/// A <see cref="Element"/>
+		/// A <see cref="Item"/>
 		/// </param>
-		public bool TryGetElementForUniqueId (string uid, out Element element)
+		public bool TryGetItemForUniqueId (string uid, out Item element)
 		{
 			lock (universe) {
 				if (universe.ContainsKey (uid)) {

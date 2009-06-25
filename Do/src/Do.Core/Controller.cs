@@ -309,6 +309,68 @@ namespace Do.Core
 			}
 		}
 		
+		Pane WorkingActionPane {
+			get {
+				Item first, second;
+				first = GetSelection (Pane.First);
+				second = GetSelection (Pane.Second);
+				
+				if (first != null && second != null) {
+					if (first.IsAction () && first.AsAction ().Safe.SupportsItem (second)) {
+						return Pane.First;
+					} else if (second.IsAction () && second.AsAction ().Safe.SupportsItem (first)) {
+						return Pane.Second;
+					}
+				}
+				return Pane.None;
+			}
+		}
+		
+		Pane WorkingItemPane {
+			get {
+				Item first, second;
+				first = GetSelection (Pane.First);
+				second = GetSelection (Pane.Second);
+				
+				if (first != null && second != null) {
+					if (first.IsAction () && first.AsAction ().Safe.SupportsItem (second)) {
+						return Pane.Second;
+					} else if (second.IsAction () && second.AsAction ().Safe.SupportsItem (first)) {
+						return Pane.First;
+					}
+				}
+				return Pane.None;
+			}
+		}
+		
+		Act WorkingAction {
+			get {
+				return GetSelection (WorkingActionPane).AsAction ();
+			}
+		}
+		
+		Item WorkingItem {
+			get {
+				return GetSelection (WorkingItemPane);
+			}
+		}
+		
+		IEnumerable<Item> WorkingItems {
+			get {
+				Pane workingPane = WorkingItemPane;
+				if (workingPane == Pane.None)
+					return null;
+				
+				return controllers [(int) workingPane].FullSelection;
+			}
+		}
+		
+		IEnumerable<Item> WorkingModItems {
+			get {
+				return controllers [(int) Pane.Third].FullSelection;
+			}
+		}
+		
 		/// <summary>
 		/// Sets/Unsets third pane visibility if possible.
 		/// </summary>
@@ -345,12 +407,8 @@ namespace Do.Core
 		/// </summary>
 		bool ThirdPaneAllowed {
 			get {
-				Act action;
-				Element first, second;
-
-				first = GetSelection (Pane.First);
-				second = GetSelection (Pane.Second);
-				action = first as Act ?? second as Act;
+				Act action = WorkingAction;
+				
 				return action != null &&
 					action.SupportedModifierItemTypes.Any () &&
 					controllers [1].Results.Any ();
@@ -363,14 +421,9 @@ namespace Do.Core
 		/// </value>
 		bool ThirdPaneRequired {
 			get {
-				Item item;
-				Act action;
-				Element first, second;
-
-				first = GetSelection (Pane.First);
-				second = GetSelection (Pane.Second);
-				action = first as Act ?? second as Act;
-				item = first as Item ?? second as Item;
+				Item item = WorkingItem;
+				Act action = WorkingAction;
+				
 				return action != null && item != null &&
 					action.SupportedModifierItemTypes.Any () &&
 					!action.ModifierItemsOptional &&
@@ -395,9 +448,9 @@ namespace Do.Core
 		/// Summons a window with elements in it... seems to work
 		/// </summary>
 		/// <param name="elements">
-		/// A <see cref="Element"/>
+		/// A <see cref="Item"/>
 		/// </param>
-		public void SummonWithElements (IEnumerable<Element> elements)
+		public void SummonWithItems (IEnumerable<Item> elements)
 		{
 			if (!IsSummonable) return;
 			
@@ -478,7 +531,7 @@ namespace Do.Core
 		void OnCopyEvent (EventKey evnt)
 		{
 			if (SearchController.Selection is Item)
-				Services.Environment.CopyToClipboard (SearchController.Selection as Item);
+				Services.Environment.CopyToClipboard (SearchController.Selection);
 		}
 		
 		void OnActivateKeyPressEvent (EventKey evnt)
@@ -757,7 +810,7 @@ namespace Do.Core
 		/// This method determines what to do when a search is completed and takes the appropriate action
 		/// </summary>
 		/// <param name="o">
-		/// A <see cref="System.Element"/>
+		/// A <see cref="System.Item"/>
 		/// </param>
 		/// <param name="state">
 		/// A <see cref="SearchFinishState"/>
@@ -855,9 +908,9 @@ namespace Do.Core
 			results_grown = false;
 		}
 		
-		Element GetSelection (Pane pane)
+		Item GetSelection (Pane pane)
 		{
-			Element o;
+			Item o;
 
 			try {
 				o = controllers [(int) pane].Selection;
@@ -870,72 +923,58 @@ namespace Do.Core
 		void PerformAction (bool vanish)
 		{
 			Act action;
-			Element first, second, third;
 			string actionQuery, itemQuery, modItemQuery;
-			ICollection<Item> items, modItems;
+			IEnumerable<Item> items, modItems;
 
 			if (vanish) Vanish ();
 			// Flush main thread queue to get Vanish to complete.
 			Services.Application.FlushMainThreadQueue ();
 
-			items = new List<Item> ();
-			modItems = new List<Item> ();
-			first  = GetSelection (Pane.First);
-			second = GetSelection (Pane.Second);
-			third  = GetSelection (Pane.Third);
-			action = first as Act ?? second as Act;
-
+			action = WorkingAction;
+			items = WorkingItems;
+			modItems = ThirdPaneVisible ? WorkingModItems : Enumerable.Empty<Item> ();
+			
 			// If the current state of the controller is invalid, warn and return
 			// early.
-			if (first == null || second == null || action == null) {
+			if (items == null || action == null) {
 				Log<Controller>
 					.Warn ("Controller state was not valid, so the action could not be performed.");
 				if (vanish) Reset ();
 				return;
 			}
-
-			if (first is Item) {
-				foreach (Item item in controllers [0].FullSelection)
-					items.Add (item);
-				itemQuery = controllers [0].Query;
-				actionQuery = controllers [1].Query;
-			} else {
-				foreach (Item item in controllers [1].FullSelection)
-					items.Add (item);
-				itemQuery = controllers [1].Query;
-				actionQuery = controllers [0].Query;
-			}
-
-			modItemQuery = null;
-			if (third != null && ThirdPaneVisible) {
-				foreach (Item item in controllers [2].FullSelection)
-					modItems.Add (item);
-				modItemQuery = controllers [2].Query;
-			}
+			
+			actionQuery  = controllers [(int) WorkingActionPane].Query;
+			itemQuery    = controllers [(int) WorkingItemPane].Query;
+			modItemQuery = controllers [(int) Pane.Third].Query;
+			
+			if (ThirdPaneVisible)
+				modItemQuery = controllers [(int) Pane.Third].Query;
 
 			/////////////////////////////////////////////////////////////
 			/// Relevance accounting
 			/////////////////////////////////////////////////////////////
 			
-			if (first is Item) {
+			if (WorkingActionPane == Pane.Second) {
 				// Act is in second pane.
 				// Increase the relevance of the items.
-				foreach (Element item in items)
+				foreach (Item item in items)
 					item.IncreaseRelevance (itemQuery, null);
 
 				// Increase the relevance of the action /for each item/:
-				foreach (Element item in items)
+				foreach (Item item in items)
 					action.IncreaseRelevance (actionQuery, item);
 			} else {
 				// Act is in first pane.
 				// Increase the relevance of each item for the action.
-				foreach (Element item in items)
+				foreach (Item item in items)
 					item.IncreaseRelevance (itemQuery, action);
 				action.IncreaseRelevance (actionQuery, null);
 			}
 
-			if (third != null && ThirdPaneVisible)
-				third.IncreaseRelevance (modItemQuery, action);
+			if (ThirdPaneVisible) {
+				foreach (Item item in modItems)
+					item.IncreaseRelevance (modItemQuery, action);
+			}
 
 			if (vanish) Reset ();
 
@@ -945,13 +984,13 @@ namespace Do.Core
 
 		void PerformAction (Act action, IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
-			if (action == null) throw new ArgumentNullException ("action");
-			if (items == null) throw new ArgumentNullException ("items");
+			if (action == null)   throw new ArgumentNullException ("action");
+			if (items == null)    throw new ArgumentNullException ("items");
 			if (modItems == null) throw new ArgumentNullException ("modItems");
 
 			IEnumerable<Item> results = action.Safe.Perform (items, modItems);
 			if (results.Any ()) {
-				SummonWithElements (results.OfType<Element> ());
+				SummonWithItems (results);
 			}
 		}
 
@@ -996,6 +1035,11 @@ namespace Do.Core
 
 		public void ShowAbout ()
 		{
+			if (AboutDialog != null) {
+				AboutDialog.GdkWindow.Raise ();
+				return;
+			}
+			
 			string logo;
 
 			Vanish ();
@@ -1016,14 +1060,22 @@ namespace Do.Core
 				"applications, music, contacts, and more!");
 			AboutDialog.Website = "http://do.davebsd.com/";
 			AboutDialog.WebsiteLabel = Catalog.GetString ("Visit Homepage");
+			Gtk.AboutDialog.SetUrlHook((dialog, link) => Services.Environment.OpenUrl (link));
 			AboutDialog.IconName = "gnome-do";
 
 			if (AboutDialog.Screen.RgbaColormap != null)
 				Gtk.Widget.DefaultColormap = AboutDialog.Screen.RgbaColormap;
-
-			AboutDialog.Run ();
-			AboutDialog.Destroy ();
-			AboutDialog = null;
+			
+			AboutDialog.Response += delegate {
+				AboutDialog.Hide ();
+			};
+			
+			AboutDialog.Hidden += delegate {
+				AboutDialog.Destroy ();
+				AboutDialog = null;
+			};
+			
+			AboutDialog.Show ();
 		}
 		#endregion
 		
@@ -1045,9 +1097,9 @@ namespace Do.Core
 		
 		public ControlOrientation Orientation { get; set; }
 		
-		public bool ElementHasChildren (Element element)
+		public bool ItemHasChildren (Item item)
 		{
-			return element is Item && (element as Item).HasChildren ();
+			return item.HasChildren ();
 		}
 		
 		#endregion

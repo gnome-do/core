@@ -187,7 +187,7 @@ namespace Do.Interface.Widgets
 			}
 		}
 
-		public Element DisplayObject
+		public Do.Universe.Item DisplayObject
 		{
 			set {
 				string name, icon;

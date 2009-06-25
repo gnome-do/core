@@ -24,7 +24,6 @@ FILES = \
 	src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs \
 	src/Do.Core/Controller.cs \
 	src/Do.Core/DoAddinInstaller.cs \
-	src/Do.Core/ElementExtensions.cs \
 	src/Do.Core/FirstSearchController.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
 	src/Do.Core/ISearchController.cs \

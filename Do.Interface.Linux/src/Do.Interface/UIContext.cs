@@ -28,8 +28,8 @@ namespace Do.Interface
 	
 	public class UIContext : IUIContext
 	{
-		private Element selection;
-		private IList<Element> results;
+		private Item selection;
+		private IList<Item> results;
 		
 		private int cursor;
 		private int[] secondary;
@@ -40,13 +40,13 @@ namespace Do.Interface
 		
 		private IUIContext parentContext;
 			
-		public Element Selection {
+		public Item Selection {
 			get {
 				return selection;
 			}
 		}
 
-		public IList<Element> Results {
+		public IList<Item> Results {
 			get {
 				return results;
 			}
@@ -88,7 +88,7 @@ namespace Do.Interface
 			}
 		}
 		
-		public UIContext(Element selection, IList<Element> results, int cursor, int[] secondaryCursors, 
+		public UIContext(Item selection, IList<Item> results, int cursor, int[] secondaryCursors, 
 		                 string query, bool largeTextDisplay, TextModeType type, IUIContext parentContext)
 		{
 			this.selection  = selection;

@@ -42,11 +42,6 @@ namespace Do.UI
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class ManagePluginsPreferencesWidget : Bin, IConfigurable
 	{
-
-		const string WikiPage = "http://do.davebsd.com/wiki/index.php?title={0}{1}";
-		const string PluginWikiPageFormat = "_Plugin";
-		const string DockletWikiPageFormat = "_Docklet";
-
 		PluginNodeView nview;
 		SearchEntry search_entry;
 
@@ -156,10 +151,15 @@ namespace Do.UI
 
 		protected void UpdateButtonState ()
 		{
-			btn_configure.Sensitive = nview.GetSelectedAddins ()
+			string [] ids = nview.GetSelectedAddins ();
+			
+			btn_configure.Sensitive = ids
 				.SelectMany (id => PluginManager.ConfigurablesForAddin (id))
 				.Any ();
-			btn_about.Sensitive = nview.GetSelectedAddins ().Any ();
+			
+			btn_about.Sensitive = ids
+				.Where (id => !string.IsNullOrEmpty (AddinManager.Registry.GetAddin (id).Description.Url))
+				.Any ();
 		}
 
 		private void OnPluginToggled (string id, bool enabled)
@@ -207,16 +207,9 @@ namespace Do.UI
 		void OnBtnAboutClicked (object sender, EventArgs e)
 		{
 			foreach (string id in nview.GetSelectedAddins ()) {
-				try {
-					Addin a = AddinManager.Registry.GetAddin (id);
-					string category;
-					if (PluginManager.PluginClassifiesAs (a, "Docklets"))
-						category = DockletWikiPageFormat;
-					else
-						category = PluginWikiPageFormat;
-					string name = Addin.GetIdName (id).Split ('.')[1];
-					Services.Environment.OpenUrl (string.Format (WikiPage, name, category));
-				} catch { }
+				Addin addin = AddinManager.Registry.GetAddin (id);
+				if (!string.IsNullOrEmpty (addin.Description.Url))
+					Services.Environment.OpenUrl (addin.Description.Url);
 			}
 		}
 

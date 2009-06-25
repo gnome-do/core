@@ -6,7 +6,11 @@
   </configuration>
   <import>
     <widget-library name="wnck-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <widget-library name="../../Do.Interface.Linux/bin/Debug/Do.Interface.Linux.dll" />
     <widget-library name="gnomedesktop-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <widget-library name="../../Do.Interface.Wink/bin/Debug/Do.Interface.Wnck.dll" />
+    <widget-library name="../../Do.Platform.Linux/bin/Debug/Do.Platform.Linux.dll" />
+    <widget-library name="../../Do.Interface.Linux.AnimationBase/bin/Debug/Do.Interface.Linux.AnimationBase.dll" />
     <widget-library name="../bin/Debug/Do.Interface.Linux.Docky.dll" internal="true" />
   </import>
   <widget class="Gtk.Bin" id="Docky.Interface.DockyConfigurationWidget" design-size="567 350">
@@ -53,30 +57,7 @@
                           <placeholder />
                         </child>
                         <child>
-                          <widget class="Gtk.CheckButton" id="active_window_checkbox">
-                            <property name="MemberName" />
-                            <property name="CanFocus">True</property>
-                            <property name="Label" translatable="yes">Indicate Active Window</property>
-                            <property name="DrawIndicator">True</property>
-                            <property name="HasLabel">True</property>
-                            <property name="UseUnderline">True</property>
-                            <signal name="Toggled" handler="OnActiveWindowCheckboxToggled" />
-                          </widget>
-                          <packing>
-                            <property name="TopAttach">1</property>
-                            <property name="BottomAttach">2</property>
-                            <property name="LeftAttach">3</property>
-                            <property name="RightAttach">4</property>
-                            <property name="AutoSize">True</property>
-                            <property name="XOptions">Fill</property>
-                            <property name="YOptions">Fill</property>
-                            <property name="XExpand">False</property>
-                            <property name="XFill">True</property>
-                            <property name="XShrink">False</property>
-                            <property name="YExpand">False</property>
-                            <property name="YFill">True</property>
-                            <property name="YShrink">False</property>
-                          </packing>
+                          <placeholder />
                         </child>
                         <child>
                           <widget class="Gtk.CheckButton" id="advanced_indicators_checkbutton">

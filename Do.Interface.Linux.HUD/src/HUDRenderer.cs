@@ -85,7 +85,7 @@ namespace Do.Interface
 			cr.Fill ();
 		}
 		
-		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
+		public void RenderItem (Context cr, Gdk.Rectangle drawing_area)
 		{
 			if (border_buffer == null) {
 				
@@ -189,7 +189,7 @@ namespace Do.Interface
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Rectangle render_region, bool focused)
+		public void RenderItem (Context cr, Gdk.Rectangle render_region, bool focused)
 		{
 			cr.Rectangle (render_region.X, render_region.Y, render_region.Width, render_region.Height); 
 			if (focused)
@@ -225,7 +225,7 @@ namespace Do.Interface
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
+		public void RenderItem (Context cr, Gdk.Rectangle drawing_area)
 		{
 			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, false);
 			cr.Color = parent.Colors.Background;
@@ -256,7 +256,7 @@ namespace Do.Interface
 			this.parent = parent;
 		}
 
-		public void RenderElement (Context cr, Gdk.Rectangle drawing_area, double overlay)
+		public void RenderItem (Context cr, Gdk.Rectangle drawing_area, double overlay)
 		{
 			cr.Rectangle (drawing_area.X, drawing_area.Y + parent.TextModeOffset, drawing_area.Width,
 				              (parent.InternalHeight - parent.TextModeOffset - parent.WindowRadius)); 

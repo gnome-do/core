@@ -36,19 +36,19 @@ namespace Do.Core
 		IUIContext UIContext {get;}
 		
 		/// <value>
-		/// Element Results from the current Query
+		/// Item Results from the current Query
 		/// </value>
-		IList<Element> Results {get; set;}
+		IList<Item> Results {get; set;}
 		
 		/// <value>
 		/// The full selection, including secondary selections
 		/// </value>
-		IList<Element> FullSelection {get;}
+		IList<Item> FullSelection {get;}
 		
 		/// <value>
 		/// The primary selection from the user curosr
 		/// </value>
-		Element Selection {get;}
+		Item Selection {get;}
 		
 		/// <value>
 		/// The location of the cursor in the results list

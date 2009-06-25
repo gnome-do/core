@@ -70,6 +70,7 @@ namespace Docky.Interface.Menus
 		
 		public DockPopupMenu() : base (Gtk.WindowType.Popup)
 		{
+			AcceptFocus = false;
 			Decorated = false;
 			KeepAbove = true;
 			AppPaintable = true;
@@ -266,7 +267,6 @@ namespace Docky.Interface.Menus
 			PointD topRightRadialCenter = new PointD (mainArea.X + mainArea.Width - Radius, mainArea.Y + Radius);
 			PointD bottomRightRadialCenter = new PointD (mainArea.X + mainArea.Width - Radius, mainArea.Y + mainArea.Height - Radius);
 			PointD bottomLeftRadialCenter = new PointD (mainArea.X + Radius, mainArea.Y + mainArea.Height - Radius);
-
 
 			context.MoveTo (mainArea.X, mainArea.Y + Radius);
 			

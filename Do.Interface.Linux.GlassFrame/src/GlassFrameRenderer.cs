@@ -37,7 +37,7 @@ namespace Do.Interface
 		{
 		}
 		
-		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
+		public void RenderItem (Context cr, Gdk.Rectangle drawing_area)
 		{
 			double x = drawing_area.X;
 			double y = drawing_area.Y;
@@ -76,7 +76,7 @@ namespace Do.Interface
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Rectangle render_region, bool focused)
+		public void RenderItem (Context cr, Gdk.Rectangle render_region, bool focused)
 		{
 			if (sr_active == null || surface_height != Height) {
 				surface_height = Height;
@@ -117,7 +117,7 @@ namespace Do.Interface
 			this.parent = parent;
 		}
 		
-		public void RenderElement (Context cr, Gdk.Rectangle drawing_area)
+		public void RenderItem (Context cr, Gdk.Rectangle drawing_area)
 		{
 			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, true);
 			cr.Color = new Cairo.Color (.7, .7, .7, .55);
@@ -157,7 +157,7 @@ namespace Do.Interface
 			this.parent = parent;
 		}
 
-		public void RenderElement (Context cr, Gdk.Rectangle drawing_area, double overlay)
+		public void RenderItem (Context cr, Gdk.Rectangle drawing_area, double overlay)
 		{
 			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, false);
 			cr.Color = new Cairo.Color (parent.Colors.FocusedText.R, 

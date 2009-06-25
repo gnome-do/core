@@ -31,9 +31,9 @@ namespace Do.Core {
 
 	public interface IRelevanceProvider
 	{
-		void IncreaseRelevance (Element target, string match, Element other);
-		void DecreaseRelevance (Element target, string match, Element other);
-		float GetRelevance (Element target, string match, Element other);
+		void IncreaseRelevance (Item target, string match, Item other);
+		void DecreaseRelevance (Item target, string match, Item other);
+		float GetRelevance (Item target, string match, Item other);
 	}
 
 	[Serializable]
@@ -56,7 +56,7 @@ namespace Do.Core {
 		}
 
 		static bool OnSerializeTimer () {
-			Gtk.Application.Invoke ((sender, args) => Serialize (DefaultProvider));
+			Services.Application.RunOnMainThread (() => Serialize (DefaultProvider));
 			return true;
 		}
 
@@ -83,7 +83,7 @@ namespace Do.Core {
 		/// <summary>
 		/// Serializes relevance data.
 		/// </summary>
-		private static void Serialize (IRelevanceProvider provider)
+		internal static void Serialize (IRelevanceProvider provider)
 		{
 			try {
 				using (Stream s = File.OpenWrite (RelevanceFile)) {
@@ -228,15 +228,15 @@ namespace Do.Core {
 			return bestMatch;
 		}
 
-		public virtual void IncreaseRelevance (Element r, string match, Element other)
+		public virtual void IncreaseRelevance (Item r, string match, Item other)
 		{
 		}
 
-		public virtual void DecreaseRelevance (Element r, string match, Element other)
+		public virtual void DecreaseRelevance (Item r, string match, Item other)
 		{
 		}
 
-		public virtual float GetRelevance (Element r, string match, Element other)
+		public virtual float GetRelevance (Item r, string match, Item other)
 		{
 			return StringScoreForAbbreviation (r.Safe.Name, match);
 		}

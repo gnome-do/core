@@ -62,7 +62,7 @@ namespace Do.Interface.Widgets
 
 		protected ScrolledWindow resultsScrolledWindow;
 		protected TreeView resultsTreeview;
-		protected IList<Element> results, stunted_results;
+		protected IList<Do.Universe.Item> results, stunted_results;
 		protected int startResult, endResult;
 		protected Frame frame;
 		protected string query;
@@ -85,7 +85,7 @@ namespace Do.Interface.Widgets
 			this.NumberResultsDisplayed = NumberResults;
 			
 			Build ();
-			results = new Element[0];
+			results = new Do.Universe.Item[0];
 		}
 		
 		public ResultsWindow (Gdk.Color backgroundColor, int DefaultIconSize, 
@@ -98,7 +98,7 @@ namespace Do.Interface.Widgets
 			this.NumberResultsDisplayed = NumberResults;
 			
 			Build ();
-			results = new Element[0];
+			results = new Do.Universe.Item[0];
 		}
 
 		protected void NotifySelectionChanged ()
@@ -180,7 +180,7 @@ namespace Do.Interface.Widgets
 			resultsTreeview.Show ();
 
 			resultsTreeview.Model = new ListStore (new Type[] {
-				typeof (Element),				
+				typeof (Do.Universe.Item),				
 				typeof (string), 
 			});
 
@@ -223,7 +223,7 @@ namespace Do.Interface.Widgets
 		                           TreeModel model, TreeIter iter)
 		{			
 			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
-			Element o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as Element;
+			Do.Universe.Item o = (resultsTreeview.Model as ListStore).GetValue (iter, 0) as Do.Universe.Item;
 			bool isSecondary = false;
 			foreach (int i in secondary)
 				if (model.GetStringFromIter (iter) == i.ToString ())
@@ -287,7 +287,7 @@ namespace Do.Interface.Widgets
 				
 				pushedUpdate = true;
 				if (value == null || !value.Results.Any ()) {
-					Results = new Element [0];
+					Results = new Do.Universe.Item [0];
 					return;
 				}
 				
@@ -305,7 +305,7 @@ namespace Do.Interface.Widgets
 				if (endResult > results.Count)
 					endResult = results.Count;
 				
-				Element[] resultsArray = new Element[endResult - startResult];
+				Do.Universe.Item[] resultsArray = new Do.Universe.Item[endResult - startResult];
 				Array.Copy (results.ToArray (), startResult, resultsArray, 0, resultsArray.Length); 
 				
 				cursor = value.Cursor - offset;
@@ -376,7 +376,7 @@ namespace Do.Interface.Widgets
 			});
 		}
 		
-		public Element SelectedObject
+		public Do.Universe.Item SelectedObject
 		{
 			get {
 				try {
@@ -387,11 +387,11 @@ namespace Do.Interface.Widgets
 			}
 		}
 		
-		public IList<Element> Results
+		public IList<Do.Universe.Item> Results
 		{
 			get {
 				if (stunted_results == null)
-					stunted_results = new List<Element> (0);
+					stunted_results = new List<Do.Universe.Item> (0);
 				return stunted_results;
 			}
 			set {
@@ -412,7 +412,7 @@ namespace Do.Interface.Widgets
 					store = resultsTreeview.Model as ListStore;
 					store.Clear ();
 					
-					foreach (Element result in value) {					
+					foreach (Do.Universe.Item result in value) {					
 						
 						info = string.Format (ResultInfoFormat, 
 						                      GLib.Markup.EscapeText (result.Name), 

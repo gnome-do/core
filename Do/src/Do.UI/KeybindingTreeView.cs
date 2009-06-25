@@ -79,23 +79,23 @@ namespace Do.UI
 			if (!args.Event.Window.Equals (BinWindow))
 				return;
 				
-			if (GetPathAtPos ((int)args.Event.X,(int)args.Event.Y,out path)) {
+			if (GetPathAtPos ((int) args.Event.X, (int) args.Event.Y,out path)) {
 				GrabFocus ();
-				SetCursor (path, GetColumn ((int)Column.Binding), true);
+				SetCursor (path, GetColumn ((int) Column.Binding), true);
 			}				
 		}
 		
 		private void OnRowActivated (object o, RowActivatedArgs args)
 		{
 			GrabFocus ();
-			SetCursor (args.Path, GetColumn ((int)Column.Binding), true);
+			SetCursor (args.Path, GetColumn ((int) Column.Binding), true);
 		}
 
 		private bool ClearPreviousBinding (TreeModel model, TreePath path, TreeIter treeiter, string keyBinding) 
 		{
-			string binding = model.GetValue (treeiter, (int)Column.Binding) as string;
+			string binding = model.GetValue (treeiter, (int) Column.Binding) as string;
 			if (binding == keyBinding) {
-				model.SetValue (treeiter, (int)Column.Binding, "");
+				model.SetValue (treeiter, (int) Column.Binding, "");
 			}
 			return false;
 		}
@@ -113,7 +113,7 @@ namespace Do.UI
 			// Look for any other rows that have the same binding and then zero that binding out
 			Model.Foreach ((model, path, treeiter) => ClearPreviousBinding (model, path, treeiter, realKey));
 
-			store.SetValue (iter, (int)Column.Binding, realKey);
+			store.SetValue (iter, (int) Column.Binding, realKey);
 
 			SaveBindings ();
 		}
@@ -122,10 +122,15 @@ namespace Do.UI
 		{
 			TreeIter iter;
 			ListStore store;
-			
+
 			store = Model as ListStore;
 			store.GetIter (out iter, new TreePath (args.PathString));
-			store.SetValue (iter, (int)Column.Binding, "");
+			try {
+				string defaultVal = store.GetValue (iter, (int) Column.DefaultKeybinding).ToString ();
+				store.SetValue (iter, (int) Column.Binding, defaultVal);
+			} catch (Exception e) {
+				store.SetValue (iter, (int) Column.Binding, "");
+			}
 
 			SaveBindings ();
 		}
@@ -138,8 +143,8 @@ namespace Do.UI
 		private bool SaveBindingsForeachFunc (TreeModel model, TreePath path, TreeIter iter)
 		{
 			string binding, shortcutname;
-			binding = model.GetValue (iter, (int)Column.Binding) as string;
-			shortcutname = model.GetValue (iter, (int)Column.ShortcutName) as string;
+			binding = model.GetValue (iter, (int) Column.Binding) as string;
+			shortcutname = model.GetValue (iter, (int) Column.ShortcutName) as string;
 			
 			if (binding != null && binding != "DISABLED" && binding != Do.Keybindings.GetKeybinding (shortcutname))
 				Do.Keybindings.BindShortcut (shortcutname, binding);

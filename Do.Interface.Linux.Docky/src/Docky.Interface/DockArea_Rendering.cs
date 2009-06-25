@@ -185,7 +185,7 @@ namespace Docky.Interface
 				return painter;
 			}
 			set {
-				if (value == painter)
+				if (painter == value)
 					return;
 				LastPainter = painter;
 				painter = value;
@@ -280,10 +280,8 @@ namespace Docky.Interface
 		
 		void HandleActiveWindowChanged (object o, ActiveWindowChangedArgs args)
 		{
-			if (DockPreferences.IndicateActiveWindow) {
-				RequestFullRender ();
-				AnimatedDraw ();
-			}
+			RequestFullRender ();
+			AnimatedDraw ();
 		}
 
 		void HandleIntersectionChanged (object sender, EventArgs e)
@@ -294,7 +292,7 @@ namespace Docky.Interface
 			}
 		}
 		
-		void DrawDrock (Context cr)
+		void DrawDock (Context cr)
 		{
 			Gdk.Rectangle dockArea = GetDockArea ();
 			window.SetBackgroundBlur (dockArea);
@@ -523,7 +521,7 @@ namespace Docky.Interface
 					return;
 				}
 				
-				if (DockPreferences.IndicateActiveWindow && dockItem.ContainsFocusedWindow) {
+				if (dockItem.ContainsFocusedWindow) {
 					double intenseS = 0.8;
 					
 					double xHigh = iconPosition.X - 1.5;
@@ -570,7 +568,7 @@ namespace Docky.Interface
 				                                 InsertAnimationTime.TotalMilliseconds, 1);
 				cr.SetSource (iconSurface, 
 				              iconPosition.X / scale, iconPosition.Y / scale);
-				cr.PaintWithAlpha (fadeInOpacity);
+				cr.PaintWithAlpha (fadeInOpacity * (dockItem.ContainsMinimizedWindow ? .5 : 1));
 				
 				bool shade_light = DnDTracker.GtkDragging && !DnDTracker.PreviewIsDesktopFile && CursorIsOverDockArea &&
 					dockItem.IsAcceptingDrops && icon == PositionProvider.IndexAtPosition (Cursor);
@@ -823,7 +821,7 @@ namespace Docky.Interface
 					FirstRenderTime = DateTime.UtcNow;
 					first_render_set = true;
 				}
-				DrawDrock (cr);
+				DrawDock (cr);
 			}
 			(cr as IDisposable).Dispose ();
 			
