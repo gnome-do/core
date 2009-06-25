@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 using Mono.Unix;
+using Mono.Unix.Native;
 
 using Do.Platform;
 using Do.Universe;
@@ -64,18 +65,18 @@ namespace Do.Platform.Linux
 
 		public void OpenPath (string path)
 		{
-			Open (UnwrapHomeFolder (path));
+			Open (ExpandPath (path));
 		}
 
 		public bool IsExecutable (string line)
 		{
-			line = UnwrapHomeFolder (line);
+			line = ExpandPath (line);
 			return IsExecutableFile (line) || CommandLineIsFoundOnPath (line);
 		}
 
 		public void Execute (string line)
 		{
-			line = UnwrapHomeFolder (line);
+			line = ExpandPath (line);
 
 			Log<EnvironmentService>.Info ("Executing \"{0}\"", line);
 			if (File.Exists (line)) {
@@ -117,9 +118,25 @@ namespace Do.Platform.Linux
 				Log<EnvironmentService>.Debug (e.StackTrace);
 			}
 		}
-
+		
+		public string ExpandPath (string path)
+		{
+			const string PathPattern = @"^~([^\-\/][^:\s\/]*)?(\/.*)?$";
+			Regex r = new Regex (PathPattern, RegexOptions.None);
+			Match m = r.Match (path);
+			if (!m.Success) 
+				return path;
+			
+			if (String.IsNullOrEmpty (m.Groups[1].Value))
+				return m.Result (UserHome + "$2");
+			else {
+				Passwd pw = Syscall.getpwnam (m.Groups[1].Value);
+				return (pw == null) ? path : m.Result (pw.pw_dir + "$2");
+			}
+		}
+		
 		#endregion
-
+		
 		void Open (string open)
 		{
 			try {
@@ -168,11 +185,6 @@ namespace Do.Platform.Linux
 				return true;
 			}
 			return false;
-		}
-
-		string UnwrapHomeFolder (string line)
-		{
-			return Regex.Replace (line, @"^~\/", UserHome + "/");
 		}
 		
 	}

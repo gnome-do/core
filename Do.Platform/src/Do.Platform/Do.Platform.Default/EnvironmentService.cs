@@ -60,7 +60,13 @@ namespace Do.Platform.Default
 		{
 			Log.Debug ("Default IEnvironmentService cannot copy \"{0}\".", item.Name);
 		}
-
+		
+		public string ExpandPath (string path)
+		{
+			Log.Debug ("Default IEnvironmentService cannot expand path \"{0}\".", path);
+			return path;
+		}
+		
 		#endregion
 	}
 }
