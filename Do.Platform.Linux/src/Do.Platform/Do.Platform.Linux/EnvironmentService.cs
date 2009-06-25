@@ -34,11 +34,12 @@ namespace Do.Platform.Linux
 {
 	public class EnvironmentService : IEnvironmentService
 	{
-
+		
 		string last_command_found;
-
+		const string PathPattern = @"^~([^\-\/][^:\s\/]*)?(\/.*)?$";
+		
 		#region IEnvironmentService
-
+		
 		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
 			string subject, string body, IEnumerable<string> attachments)
 		{
@@ -51,7 +52,7 @@ namespace Do.Platform.Linux
 				attachments.Aggregate ("", (es, e) => string.Format ("{0} --attach '{1}'", es, e))
 			));
 		}
-
+		
 		string UserHome {
 			get { return Environment.GetFolderPath (Environment.SpecialFolder.Personal); }
 		}
@@ -62,18 +63,18 @@ namespace Do.Platform.Linux
 				url = "http://" + url;
 			Open (url);
 		}
-
+		
 		public void OpenPath (string path)
 		{
 			Open (ExpandPath (path));
 		}
-
+		
 		public bool IsExecutable (string line)
 		{
 			line = ExpandPath (line);
 			return IsExecutableFile (line) || CommandLineIsFoundOnPath (line);
 		}
-
+		
 		public void Execute (string line)
 		{
 			line = ExpandPath (line);
@@ -121,7 +122,6 @@ namespace Do.Platform.Linux
 		
 		public string ExpandPath (string path)
 		{
-			const string PathPattern = @"^~([^\-\/][^:\s\/]*)?(\/.*)?$";
 			Regex r = new Regex (PathPattern, RegexOptions.None);
 			Match m = r.Match (path);
 			if (!m.Success) 
