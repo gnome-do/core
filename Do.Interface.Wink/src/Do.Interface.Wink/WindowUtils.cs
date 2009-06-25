@@ -83,6 +83,7 @@ namespace Do.Interface.Wink
 			foreach (string s in PrefixStrings) {
 				 regex.Add (new Regex (string.Format ("^{0}$", s), RegexOptions.IgnoreCase));
 			}
+			
 			BadPrefixes = regex.AsEnumerable ();
 			
 			Wnck.Screen.Default.WindowClosed += delegate {
@@ -300,13 +301,13 @@ namespace Do.Interface.Wink
 						bool pidMatch = window.Pid == kvp.Key || 
 							(window.Application != null && window.Application.Pid == kvp.Key);
 						
-						if (pidMatch && !windows.Contains (window))
+						if (pidMatch)
 							windows.Add (window);
 					}
 				}
 			}
 			
-			return windows;
+			return windows.Distinct ().ToList ();
 		}
 		
 		static List<Window> GetOpenOfficeWindows (string exec)

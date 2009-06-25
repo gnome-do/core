@@ -23,12 +23,10 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using Gtk;
-using Gdk;
-
 using Mono.Unix;
 
 using Do.Universe;
+using Do.Platform;
 
 namespace Do.Universe.Linux
 {
@@ -52,20 +50,18 @@ namespace Do.Universe.Linux
 			get { yield return typeof (Item); }
 		}
 		
+		public override bool SupportsItem (Item item)
+		{
+			return !(item is IApplicationItem);
+		}
+		
 		public override IEnumerable<Item> Perform (IEnumerable<Item> items, IEnumerable<Item> modItems)
 		{
-			string text = "";
 			Item item = items.First ();
-
-			if (item is ITextItem)
-				text = (item as ITextItem).Text;
-			else
-				text = string.Format ("{0} - {1}", item.Name, item.Description);
 			
-			Clipboard.Get (Gdk.Selection.Clipboard).Text =
-				Clipboard.Get (Gdk.Selection.Primary).Text = text;
+			Services.Environment.CopyToClipboard (item);
 
-			return null;
+			yield break;
 		}
 	}
 }

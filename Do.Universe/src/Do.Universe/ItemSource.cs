@@ -30,7 +30,7 @@ namespace Do.Universe
 	/// Example: A "EpiphanyBookmarkItemSource" could provide Items representing
 	/// Epiphany web browser bookmarks.
 	/// </summary>
-	public abstract class ItemSource : Element
+	public abstract class ItemSource : Item
 	{
 
 		static SafeItemSource safe_item_source = new SafeItemSource ();

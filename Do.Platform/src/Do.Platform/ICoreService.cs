@@ -30,7 +30,7 @@ namespace Do.Platform
 	{
 		event EventHandler UniverseInitialized;
 		
-		Element GetElement (string uniqueId);
+		Item GetItem (string uniqueId);
 		
 		IEnumerable<Item> GetItemsOrderedByRelevance ();
 		

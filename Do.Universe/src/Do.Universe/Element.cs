@@ -145,6 +145,5 @@ namespace Do.Universe
 		{
 			return !types.Any () || types.Any (type => type.IsInstanceOfType (this));
 		}
-		
 	}
 }

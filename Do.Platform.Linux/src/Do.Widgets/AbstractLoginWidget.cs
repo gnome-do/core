@@ -206,7 +206,7 @@ namespace Do.Platform.Linux
 		void ValidateCredentials (string username, string password)
 		{
 			bool valid = Validate (username, password);
-			Gtk.Application.Invoke ((o, e) => UpdateInterface (username, password, valid));
+			Services.Application.RunOnMainThread (() => UpdateInterface (username, password, valid));
 		}
 
 		void UpdateInterface (string username, string password, bool valid)

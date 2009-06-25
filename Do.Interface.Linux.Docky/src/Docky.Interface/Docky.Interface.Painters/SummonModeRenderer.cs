@@ -58,7 +58,7 @@ namespace Docky.Interface.Painters
 		
 		bool ShouldRenderButton {
 			get {
-				return State.CurrentPane != Pane.Third && State [State.CurrentPane] != null && State [State.CurrentPane] is Item;
+				return State.CurrentPane != Pane.Third && State [State.CurrentPane] != null;
 			}
 		}
 		
@@ -83,7 +83,7 @@ namespace Docky.Interface.Painters
 		}
 		
 		public int Width {
-			get { return Math.Max (300, DockServices.DrawingService.CurrentDockWidth); }
+			get { return Math.Max (300, Math.Max (10 * DockServices.DrawingService.CurrentDockHeight, DockServices.DrawingService.CurrentDockWidth)); }
 		}
 		
 		public SummonModeRenderer ()
@@ -147,14 +147,18 @@ namespace Docky.Interface.Painters
 		{
 			Gdk.Point center = GetButtonCenter (ref dockArea);
 			Gdk.Rectangle rect = new Gdk.Rectangle (center.X - IconSize / 2, center.Y - IconSize / 2, IconSize, IconSize);
-			if (rect.Contains (cursor) && State [State.CurrentPane] is Item) {
+			if (rect.Contains (cursor) && ShouldRenderButton) {
 				DockServices.ItemsService.AddItemToDock (State [State.CurrentPane]);
 				DockServices.DoInteropService.RequestClickOff ();
 			} else if (!dockArea.Contains (cursor)) {
 				DockServices.DoInteropService.RequestClickOff ();
 			}
 		}
-
+		
+		public void Scrolled (Gdk.ScrollDirection direction)
+		{
+		}
+		
 		public void Interrupt ()
 		{
 			Log.Error ("Docky has been interupted innapropriately.  Please report this bug.");
@@ -288,7 +292,7 @@ namespace Docky.Interface.Painters
 			int base_x = dockArea.X + 15;
 			
 			string text;
-			Element current = State [State.CurrentPane];
+			Item current = State [State.CurrentPane];
 			
 			if (current == null)
 				text = State.GetPaneQuery (State.CurrentPane);
@@ -323,7 +327,7 @@ namespace Docky.Interface.Painters
 			int base_x = dockArea.X + 15;
 			
 			string text;
-			Element current = State [State.CurrentPane];
+			Item current = State [State.CurrentPane];
 
 			if (current == null)
 				text = State.GetPaneQuery (State.CurrentPane);

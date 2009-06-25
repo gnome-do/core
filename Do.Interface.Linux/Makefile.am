@@ -9,7 +9,7 @@ FILES = \
 	src/AssemblyInfo.cs \
 	src/Do.Interface/ClassicInterface/ClassicWindow.cs \
 	src/Do.Interface/Do.Interface.CairoUtils/CairoUtils.cs \
-	src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs \
+	src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs \
 	src/Do.Interface/Do.Interface.Widgets/Frame.cs \
 	src/Do.Interface/Do.Interface.Widgets/GlossyRoundedFrame.cs \
 	src/Do.Interface/Do.Interface.Widgets/HalfRoundedFrame.cs \

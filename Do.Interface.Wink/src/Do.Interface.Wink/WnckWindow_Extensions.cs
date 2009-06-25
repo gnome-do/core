@@ -45,15 +45,13 @@ namespace Do.Interface.Wink
 		public static void SetWorkaroundGeometry (this Wnck.Window window, WindowGravity gravity, WindowMoveResizeMask mask, 
 		                                     int x, int y, int width, int height)
 		{
-			if (string.Compare (window.Screen.WindowManagerName, "compiz", true) == 0) {
-				// This is a compiz-ism.  Don't know when they will fix it. You must subtract the top and left
-				// frame extents from a move operation to get the window to actually show in the right spot.
-				// Save for maybe kwin, I think only compiz uses Viewports anyhow, so this is ok.
-				int [] extents = window.FrameExtents ();
-				
-				x -= extents [(int) Position.Left];
-				y -= extents [(int) Position.Top];
-			}
+			// This is very weird.  Don't know when they will fix it. You must subtract the top and left
+			// frame extents from a move operation to get the window to actually show in the right spot.
+			// Save for maybe kwin, I think only compiz uses Viewports anyhow, so this is ok.
+			int [] extents = window.FrameExtents ();
+			
+			x -= extents [(int) Position.Left];
+			y -= extents [(int) Position.Top];
 			
 			window.SetGeometry (gravity, mask, x, y, width, height);
 		}

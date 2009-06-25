@@ -21,6 +21,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/TrayIconPreferences.cs \
 	src/Do.Platform/Do.Platform.Linux/TrayIconService.cs \
 	src/Do.Platform/Do.Platform.Linux/UniverseFactoryService.cs \
+	src/Do.Platform/Do.Platform.Linux/NetworkService.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/CategoryItem.cs \
 	src/Do.Universe/NullApplicationItem.cs \

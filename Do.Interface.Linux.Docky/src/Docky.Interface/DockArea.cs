@@ -53,7 +53,7 @@ namespace Docky.Interface
 		const uint OffDockWakeupTime = 250;
 		const uint OnDockWakeupTime = 20;
 		
-		const int UrgentBounceHeight = 100;
+		const int UrgentBounceHeight = 80;
 		const int LaunchBounceHeight = 30;
 
 		TimeSpan BounceTime = new TimeSpan (0, 0, 0, 0, 700);
@@ -240,10 +240,7 @@ namespace Docky.Interface
 			geo = LayoutUtils.MonitorGeometry ();
 			
 			Width = geo.Width;
-			if (AnimationState [Animations.UrgencyChanged])
-				Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + UrgentBounceHeight;
-			else
-				Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + LaunchBounceHeight;
+			Height = DockPreferences.FullIconSize + 2 * PositionProvider.VerticalBuffer + UrgentBounceHeight;
 			Height = Math.Max (150, Height);
 			
 			SetSizeRequest (Width, Height);
@@ -697,9 +694,13 @@ namespace Docky.Interface
 
 		protected override bool OnScrollEvent (Gdk.EventScroll evnt)
 		{
-			int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y);
-			if (item >= 0 && item < DockItems.Count && !PainterOverlayVisible)
-				DockItems [item].Scrolled (evnt.Direction);
+			if (PainterOverlayVisible) {
+				Painter.Scrolled (evnt.Direction);
+			} else {
+				int item = PositionProvider.IndexAtPosition ((int) evnt.X, (int) evnt.Y);
+				if (item >= 0 && item < DockItems.Count)
+					DockItems [item].Scrolled (evnt.Direction);
+			}
 			return base.OnScrollEvent (evnt);
 		}
 		

@@ -1,4 +1,4 @@
-// DefaultElements.cs
+// DefaultItems.cs
 //
 //  Copyright (C) 2008 Jason Smith
 //
@@ -26,11 +26,11 @@ using Do.Universe;
 namespace Do.Interface.Widgets
 {
 	
-	public class NoResultsFoundElement : Element
+	public class NoResultsFoundItem : Item
 	{
 		string query;
 		
-		public NoResultsFoundElement (string query)
+		public NoResultsFoundItem (string query)
 		{
 			this.query = query;
 		}
@@ -44,14 +44,14 @@ namespace Do.Interface.Widgets
 		}
 	}
 	
-	public class DefaultIconBoxElement : Element
+	public class DefaultIconBoxItem : Item
 	{
 		public override string Icon { get { return "search"; } }
 		public override string Name { get { return ""; } }
 		public override string Description { get { return ""; } }
 	}
 	
-	public class DefaultLabelBoxElement : Element
+	public class DefaultLabelBoxItem : Item
 	{
 		public override string Icon { get { return "search"; } }
 		public override string Name { get { return Catalog.GetString ("Type to begin searching"); } }

@@ -40,6 +40,8 @@ namespace Docky.Interface
 
 		void Clicked (Gdk.Rectangle dockArea, Gdk.Point cursor);
 
+		void Scrolled (Gdk.ScrollDirection direction);
+
 		void Interrupt ();
 	}
 }

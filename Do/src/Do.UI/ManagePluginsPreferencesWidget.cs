@@ -43,7 +43,7 @@ namespace Do.UI
 	public partial class ManagePluginsPreferencesWidget : Bin, IConfigurable
 	{
 
-		const string WikiPage = "http://do.davebsd.com/wiki/index.php?title={0}{1}";
+		const string WikiPage = "http://do.davebsd.com/wiki/{0}{1}";
 		const string PluginWikiPageFormat = "_Plugin";
 		const string DockletWikiPageFormat = "_Docklet";
 
@@ -204,19 +204,28 @@ namespace Do.UI
 			win.ShowAll ();
 		}
 
-		void OnBtnAboutClicked (object sender, EventArgs e)
+		void OnBtnAboutClicked (object sender, EventArgs args)
 		{
 			foreach (string id in nview.GetSelectedAddins ()) {
 				try {
+					string name, url;
 					Addin a = AddinManager.Registry.GetAddin (id);
-					string category;
+					name = Addin.GetIdName (id).Split ('.')[1];
+					
+					// plugin manifest files support a Url attribute, if this attribute is set we should
+					// use it instead of trying to guess the wiki page.
+					if (!string.IsNullOrEmpty (a.Description.Url))
+						url = a.Description.Url;
 					if (PluginManager.PluginClassifiesAs (a, "Docklets"))
-						category = DockletWikiPageFormat;
+						url = string.Format (WikiPage, name, DockletWikiPageFormat);
 					else
-						category = PluginWikiPageFormat;
-					string name = Addin.GetIdName (id).Split ('.')[1];
-					Services.Environment.OpenUrl (string.Format (WikiPage, name, category));
-				} catch { }
+						url = string.Format (WikiPage, name, PluginWikiPageFormat);
+					
+					Services.Environment.OpenUrl (url);
+				} catch (Exception e) {
+					Log.Debug (e.Message);
+					Log.Debug (e.StackTrace);
+				}
 			}
 		}
 
