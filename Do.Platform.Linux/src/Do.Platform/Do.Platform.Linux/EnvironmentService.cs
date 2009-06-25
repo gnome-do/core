@@ -34,11 +34,13 @@ namespace Do.Platform.Linux
 {
 	public class EnvironmentService : IEnvironmentService
 	{
-
+		
 		string last_command_found;
-
+		const string PathPattern = @"^~([^\-\/][^:\s\/]*)?(\/.*)?$";
+		readonly Regex r = new Regex (PathPattern, RegexOptions.Compiled);
+		
 		#region IEnvironmentService
-
+		
 		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
 			string subject, string body, IEnumerable<string> attachments)
 		{
@@ -121,17 +123,15 @@ namespace Do.Platform.Linux
 		
 		public string ExpandPath (string path)
 		{
-			const string PathPattern = @"^~([^\-\/][^:\s\/]*)?(\/.*)?$";
-			Regex r = new Regex (PathPattern, RegexOptions.None);
 			Match m = r.Match (path);
 			if (!m.Success) 
 				return path;
 			
-			if (String.IsNullOrEmpty (m.Groups[1].Value))
-				return m.Result (UserHome + "$2");
-			else {
+			if (String.IsNullOrEmpty (m.Groups[1].Value)) {
+				return UserHome + m.Groups[2].Value;
+			} else {
 				Passwd pw = Syscall.getpwnam (m.Groups[1].Value);
-				return (pw == null) ? path : m.Result (pw.pw_dir + "$2");
+				return (pw == null) ? path : pw.pw_dir + m.Groups[2].Value;
 			}
 		}
 		
