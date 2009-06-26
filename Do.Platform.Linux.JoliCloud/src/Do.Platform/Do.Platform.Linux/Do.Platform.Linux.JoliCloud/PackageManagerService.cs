@@ -118,9 +118,12 @@ namespace Do.Platform.Linux.JoliCloud
 			new PluginAvailableDialog (cleanName, addin);
 		}
 
-		// the next release of Mono.Addins will have support for tagging in the addin manifest, when this comes out
-		// we'll use it, but for now I'm just going to define a mapping. With the jolicloud case this isn't a big deal
-		// becuase the set of packages available from the installer interface is relatively small.
+		/// <summary>
+		/// Maps an installed package to a Do plugin
+		/// the next release of Mono.Addins will have support for tagging in the addin manifest, when this comes out 
+		/// we'll use it, but for now I'm just going to define a mapping. With the jolicloud case this isn't a big deal
+		/// becuase the set of packages available from the installer interface is relatively small.
+		/// </summary>
 		void LoadJolicloudPackageMap ()
 		{
 			PackagePluginMap = new Dictionary<string, string> {
