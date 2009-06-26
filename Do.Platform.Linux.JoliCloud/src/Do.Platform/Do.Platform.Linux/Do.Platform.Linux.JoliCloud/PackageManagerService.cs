@@ -130,6 +130,8 @@ namespace Do.Platform.Linux.JoliCloud
 #region DBus handling
 		void HandleNameOwnerChanged (string name, string old_owner, string new_owner)
 		{
+			if (name == BusName)
+				Log.Debug ("{0} is not owned by {1}, now {2} is our daddy", name, old_owner, new_owner);
 			// if the jolicloud daemon gets released, we should drop our object
 			if (Daemon != null && name == BusName) {
 				Daemon.ActionProcessed -= HandleActionProcessed;
@@ -153,12 +155,11 @@ namespace Do.Platform.Linux.JoliCloud
 				return;
 			
 			Bus.Session.StartServiceByName (BusName);
-			Thread.Sleep (5000);
+			/*Thread.Sleep (5000);
 
 			if (!DaemonIsRunning)
-				throw new Exception (string.Format("Name {0} has no owner.", BusName));
+				throw new Exception (string.Format("Name {0} has no owner.", BusName));*/
 		}
 #endregion
 	}
 }
-	
