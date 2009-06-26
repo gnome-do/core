@@ -24,7 +24,6 @@
     <File name="src/Do.Universe/FileItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/ConsoleCrayon.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ApplicationItemSource.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Universe/CopyToClipboardAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/GNOMESpecialLocationsItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Linux" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Linux/ConsoleLogService.cs" subtype="Code" buildaction="Compile" />

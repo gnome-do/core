@@ -19,6 +19,7 @@
 		<Action type="Do.Universe.Common.OpenWithAction" />
 		<Action type="Do.Universe.Common.RevealAction" />
 		<Action type="Do.Universe.Common.RunAction" />
+		<Action type="Do.Universe.Common.CopyToClipboardAction" />
 	</Extension>
 	
 </Addin>

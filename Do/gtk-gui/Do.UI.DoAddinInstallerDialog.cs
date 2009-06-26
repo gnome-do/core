@@ -122,7 +122,7 @@ namespace Do.UI {
             w11.Spacing = 2;
             // Container child GtkHBox1.Gtk.Container+ContainerChild
             Gtk.Image w12 = new Gtk.Image();
-            w12.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-ok", Gtk.IconSize.Button, 16);
+            w12.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-ok", Gtk.IconSize.Button, 20);
             w11.Add(w12);
             // Container child GtkHBox1.Gtk.Container+ContainerChild
             Gtk.Label w14 = new Gtk.Label();
