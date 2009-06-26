@@ -63,10 +63,10 @@ namespace Do.Core
 			
 			if (first.IsAction () && first.AsAction ().Safe.SupportsItem (second))
 				return first.AsAction ();
-			else if (second.IsAction () && second.AsAction ().SupportsItem (first))
+			else if (second.IsAction () && second.AsAction ().Safe.SupportsItem (first))
 				return second.AsAction ();
 			// fixme
-			throw new Exception ("Something strange happened");
+			throw new Exception ("Could not get contextual action");
 		}
 		
 		Item GetContextualItem ()
@@ -81,10 +81,10 @@ namespace Do.Core
 			
 			if (first.IsAction () && first.AsAction ().Safe.SupportsItem (second))
 				return second;
-			else if (second.IsAction () && second.AsAction ().SupportsItem (first))
+			else if (second.IsAction () && second.AsAction ().Safe.SupportsItem (first))
 				return first;
 			// fixme
-			throw new Exception ("Something strange happened");
+			throw new Exception ("Could not get contextual item");
 		}
 		
 		public ThirdSearchController(ISearchController FirstController, ISearchController SecondController) : base ()

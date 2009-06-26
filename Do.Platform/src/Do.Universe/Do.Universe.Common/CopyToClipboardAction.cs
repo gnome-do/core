@@ -25,10 +25,9 @@ using System.Collections.Generic;
 
 using Mono.Unix;
 
-using Do.Universe;
 using Do.Platform;
 
-namespace Do.Universe.Linux
+namespace Do.Universe.Common
 {
 
 	public class CopyToClipboardAction : Act
