@@ -363,7 +363,7 @@
               <widget class="Gtk.HButtonBox" id="hbuttonbox1">
                 <property name="MemberName" />
                 <property name="Spacing">6</property>
-                <property name="Size">2</property>
+                <property name="Size">1</property>
                 <property name="LayoutStyle">Start</property>
                 <child>
                   <widget class="Gtk.Button" id="btn_configure">
@@ -381,23 +381,6 @@
                     <property name="Fill">False</property>
                   </packing>
                 </child>
-                <child>
-                  <widget class="Gtk.Button" id="btn_about">
-                    <property name="MemberName" />
-                    <property name="Sensitive">False</property>
-                    <property name="CanFocus">True</property>
-                    <property name="Type">TextAndIcon</property>
-                    <property name="Icon">stock:gtk-about Menu</property>
-                    <property name="Label" translatable="yes">_About</property>
-                    <property name="UseUnderline">True</property>
-                    <signal name="Clicked" handler="OnBtnAboutClicked" />
-                  </widget>
-                  <packing>
-                    <property name="Position">1</property>
-                    <property name="Expand">False</property>
-                    <property name="Fill">False</property>
-                  </packing>
-                </child>
               </widget>
               <packing>
                 <property name="Position">0</property>
@@ -407,17 +390,19 @@
             <child>
               <widget class="Gtk.HButtonBox" id="hbuttonbox2">
                 <property name="MemberName" />
+                <property name="Spacing">6</property>
                 <property name="Size">1</property>
                 <property name="LayoutStyle">End</property>
                 <child>
-                  <widget class="Gtk.Button" id="btn_refresh">
+                  <widget class="Gtk.Button" id="btn_about">
                     <property name="MemberName" />
+                    <property name="Sensitive">False</property>
                     <property name="CanFocus">True</property>
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
-                    <property name="StockId">gtk-refresh</property>
-                    <signal name="Clicked" handler="OnBtnRefreshClicked" />
-                    <property name="label">gtk-refresh</property>
+                    <property name="StockId">gtk-about</property>
+                    <signal name="Clicked" handler="OnAboutBtnClicked" />
+                    <property name="label">gtk-about</property>
                   </widget>
                   <packing>
                     <property name="Expand">False</property>

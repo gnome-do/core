@@ -41,6 +41,8 @@ namespace Do.Platform
 		void Execute (string line);
 		
 		void CopyToClipboard (Item item);
+
+		string ExpandPath (string path);
 	}
 
 	public static class IEnvironmentServiceExtensions
