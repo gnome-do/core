@@ -84,6 +84,8 @@
     <File name="src/Do.Platform/Do.Platform.ServiceStack/IStrictService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IPluginManagerService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/PluginManagerService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.ServiceStack/IStrictService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

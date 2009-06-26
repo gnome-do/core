@@ -63,6 +63,7 @@ FILES = \
 	src/Do.Universe/Do.Universe.Common/OpenWithAction.cs \
 	src/Do.Universe/Do.Universe.Common/RevealAction.cs \
 	src/Do.Universe/Do.Universe.Common/RunAction.cs \
+	src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs \
 	src/System/Linq/EnumerableExtensions.cs
 
 if HAVE_NUNIT
