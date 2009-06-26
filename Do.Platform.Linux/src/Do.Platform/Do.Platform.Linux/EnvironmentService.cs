@@ -37,7 +37,7 @@ namespace Do.Platform.Linux
 		
 		string last_command_found;
 		const string PathPattern = @"^~([^\-\/][^:\s\/]*)?(\/.*)?$";
-		readonly Regex r = new Regex (PathPattern, RegexOptions.Compiled);
+		static readonly Regex r = new Regex (PathPattern, RegexOptions.Compiled);
 		
 		#region IEnvironmentService
 		
