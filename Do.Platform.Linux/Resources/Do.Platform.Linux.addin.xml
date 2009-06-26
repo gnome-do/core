@@ -14,9 +14,6 @@
 		<ItemSource type="Do.Universe.Linux.GNOMESpecialLocationsItemSource" />
 	</Extension>
 
-	<Extension path="/Do/Action">
-	</Extension>
-
 	<Extension path="/Do/Service">
 		<Service type="Do.Platform.Common.CommonPathsService" />
 		<Service type="Do.Platform.Common.EventsOnlyNotificationsService" />
