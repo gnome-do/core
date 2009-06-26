@@ -102,8 +102,11 @@ namespace Do.Platform.Linux.JoliCloud
 				return;
 				
 			cleanName = HumanNameFromPackageName (packages [0]);
-			if ((addin = MaybePluginForPackage (cleanName)) == null && !addin.Enabled)
+			Log<PackageManagerService>.Debug ("Looking for a plugin like {0}", cleanName);
+			addin = MaybePluginForPackage (cleanName);
+			if (addin == null || addin.Enabled)
 				return;
+			
 			
 			new PluginAvailableDialog (cleanName, addin);
 		}
@@ -122,7 +125,7 @@ namespace Do.Platform.Linux.JoliCloud
 			if (package.Contains ("prism-webapp"))
 				package = package.Substring ("prism-webapp".Length + 1);
 			
-			package.Replace ('-', ' ');
+			package.Replace ("-", " ");
 			
 			return package.ToLower ();
 		}
