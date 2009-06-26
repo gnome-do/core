@@ -17,7 +17,9 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.IO;
 using System.Threading;
+using System.Collections.Generic;
 
 using NDesk.DBus;
 using org.freedesktop.DBus;
@@ -50,6 +52,7 @@ namespace Do.Platform.Linux.JoliCloud
 		
 		IBus session_bus;
 		IJolicloudDaemon daemon;
+		Dictionary<string, string> PackagePluginMap;
 		
 		/// <summary>
 		/// Find jolicloud on the bus
@@ -63,6 +66,7 @@ namespace Do.Platform.Linux.JoliCloud
 			if (Daemon == null)
 				Log<PackageManagerService>.Debug ("Failed to locate JoliCloud daemon on DBus.");
 			
+			LoadJolicloudPackageMap ();
 			base.Initialize ();
 		}
 		
@@ -95,20 +99,42 @@ namespace Do.Platform.Linux.JoliCloud
 		/// </param>
 		void HandleActionProcessed (string action, string[] packages, bool success, string error)
 		{
-			Addin addin;
-			string cleanName;
+			Addin addin = null;
+			string cleanName = "";
 			
 			if (action != "install" || packages.Length < 1 || DontShowPluginAvailableDialog)
 				return;
-				
-			cleanName = HumanNameFromPackageName (packages [0]);
-			Log<PackageManagerService>.Debug ("Looking for a plugin like {0}", cleanName);
+			
+			// first check our explicit mapping, then try and clean up the package into something that
+			// might be a plugin name.
+			if (!PackagePluginMap.TryGetValue (packages [0], out cleanName))
+				cleanName = HumanNameFromPackageName (packages [0]);
+			
 			addin = MaybePluginForPackage (cleanName);
+			
 			if (addin == null || addin.Enabled)
 				return;
 			
-			
 			new PluginAvailableDialog (cleanName, addin);
+		}
+
+		// the next release of Mono.Addins will have support for tagging in the addin manifest, when this comes out
+		// we'll use it, but for now I'm just going to define a mapping. With the jolicloud case this isn't a big deal
+		// becuase the set of packages available from the installer interface is relatively small.
+		void LoadJolicloudPackageMap ()
+		{
+			PackagePluginMap = new Dictionary<string, string> {
+				{"skype", "skype"},
+				{"pidgin", "pidgin"},
+				{"evolution", "evolution"},
+				{"nautilus-dropbox", "dropbox"},
+				{"prism-webapp-flickr", "flickr"},
+				{"prism-webapp-youtube", "youtube"},
+				{"prism-webapp-twitter", "microblogging"},
+				{"prism-webapp-gmail", "google contacts"},
+				{"prism-webapp-google-docs", "google docs"},
+				{"prism-webapp-google-calendar", "google calendar"}
+			};
 		}
 		
 		/// <summary>
@@ -121,15 +147,15 @@ namespace Do.Platform.Linux.JoliCloud
 		/// A <see cref="System.String"/>
 		/// </returns>
 		string HumanNameFromPackageName (string package)
-		{
+ 		{
 			if (package.Contains ("prism-webapp"))
 				package = package.Substring ("prism-webapp".Length + 1);
 			
-			package.Replace ("-", " ");
+			package = package.Replace ("-", " ");
 			
 			return package.ToLower ();
 		}
-		
+
 #region DBus handling
 		void HandleNameOwnerChanged (string name, string old_owner, string new_owner)
 		{
@@ -158,10 +184,6 @@ namespace Do.Platform.Linux.JoliCloud
 				return;
 			
 			Bus.Session.StartServiceByName (BusName);
-			/*Thread.Sleep (5000);
-
-			if (!DaemonIsRunning)
-				throw new Exception (string.Format("Name {0} has no owner.", BusName));*/
 		}
 #endregion
 	}

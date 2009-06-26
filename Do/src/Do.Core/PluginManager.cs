@@ -310,7 +310,7 @@ namespace Do.Core
 		/// <returns>
 		/// A <see cref="IEnumerable`1"/> of instances of type T.
 		/// </returns>
-		private static IEnumerable<T> ObjectsForAddin<T> (string id) where T : class
+		static IEnumerable<T> ObjectsForAddin<T> (string id) where T : class
 		{
 			// TODO try using AddinManager.GetExtensionPoints (Type)
 			foreach (string path in ExtensionPaths) {

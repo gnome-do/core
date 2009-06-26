@@ -28,7 +28,7 @@ namespace Do.Platform
 		
 	public interface IPluginManagerService : IService
 	{
-		IEnumerable<Addin> GetAddins ();	
 		void Install (Addin addin);
+		IEnumerable<Addin> GetAddins ();	
 	}
 }
