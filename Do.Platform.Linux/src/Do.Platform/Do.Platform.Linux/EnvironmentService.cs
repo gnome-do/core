@@ -34,10 +34,15 @@ namespace Do.Platform.Linux
 {
 	public class EnvironmentService : IEnvironmentService
 	{
+		const string PathPattern = @"^~([^\-\/][^:\s\/]*)?(\/.*)?$";
 		
 		string last_command_found;
-		const string PathPattern = @"^~([^\-\/][^:\s\/]*)?(\/.*)?$";
-		static readonly Regex r = new Regex (PathPattern, RegexOptions.Compiled);
+		readonly Regex path_matcher;
+		
+		public EnvironmentService ()
+		{
+			 path_matcher = new Regex (PathPattern, RegexOptions.Compiled);
+		}
 		
 		#region IEnvironmentService
 		
@@ -53,7 +58,7 @@ namespace Do.Platform.Linux
 				attachments.Aggregate ("", (es, e) => string.Format ("{0} --attach '{1}'", es, e))
 			));
 		}
-
+		
 		string UserHome {
 			get { return Environment.GetFolderPath (Environment.SpecialFolder.Personal); }
 		}
@@ -64,22 +69,22 @@ namespace Do.Platform.Linux
 				url = "http://" + url;
 			Open (url);
 		}
-
+		
 		public void OpenPath (string path)
 		{
 			Open (ExpandPath (path));
 		}
-
+		
 		public bool IsExecutable (string line)
 		{
 			line = ExpandPath (line);
 			return IsExecutableFile (line) || CommandLineIsFoundOnPath (line);
 		}
-
+		
 		public void Execute (string line)
 		{
 			line = ExpandPath (line);
-
+			
 			Log<EnvironmentService>.Info ("Executing \"{0}\"", line);
 			if (File.Exists (line)) {
 				Process proc = new Process ();
@@ -123,7 +128,7 @@ namespace Do.Platform.Linux
 		
 		public string ExpandPath (string path)
 		{
-			Match m = r.Match (path);
+			Match m = path_matcher.Match (path);
 			if (!m.Success) 
 				return path;
 			
