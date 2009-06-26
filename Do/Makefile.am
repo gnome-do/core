@@ -104,7 +104,7 @@ PROJECT_REFERENCES = \
 #
 
 CLEANFILES += Do.exe.config gnome-do
-EXTRA_DIST += Do.exe.config.in gnome-do.in
+EXTRA_DIST += Do.exe.config.in gnome-do.in Do.addins
 
 module_DATA += Do.exe.config Do.addins
 bin_SCRIPTS = gnome-do

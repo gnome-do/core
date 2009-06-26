@@ -67,7 +67,7 @@ namespace Docky.Interface
 			layout.Wrap = context.WrapMode;
 			
 			if (context.FontSize != 0)
-				layout.FontDescription.Size = Pango.Units.FromPixels (context.FontSize);
+				layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (context.FontSize);
 			
 			Pango.Rectangle rect1, rect2;
 			layout.GetExtents (out rect1, out rect2);
