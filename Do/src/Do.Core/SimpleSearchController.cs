@@ -188,9 +188,6 @@ namespace Do.Core
 		
 		public bool ItemChildSearch ()
 		{
-			if (context.Selection is Act)
-				return false;
-			
 			Item item = context.Selection;
 			List<Item> children = new List<Item> ();
 

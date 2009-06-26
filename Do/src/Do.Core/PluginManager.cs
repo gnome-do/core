@@ -62,20 +62,15 @@ namespace Do.Core
 		/// </summary>
 		public static void Initialize ()
 		{
+			// we need to save these before initializing mono.addins or else ones that have been update in the
+			// plugins directory will be lost.
 			IEnumerable<string> savedPlugins = PluginsEnabledBeforeLoad ();
 			
 			// Initialize Mono.Addins.
-			AddinManager.Initialize (Paths.UserPluginsDirectory);
-			// This is a workaround for a Mono.Addins bug where updated addins will get
-			// disabled on update. We save the currently enabled addins, update, then
-			// reenable them with the Id of the new version. It's a bit hackish but lluis
-			// said it's a reasonable approach until that bug is fixed 
-		 	// https://bugzilla.novell.com/show_bug.cgi?id=490302
-			if (CorePreferences.PeekDebug)
-				AddinManager.Registry.Rebuild (null);
-			else
-				AddinManager.Registry.Update (null);
-			EnableDisabledPlugins (savedPlugins);
+			AddinManager.Initialize (Paths.UserPluginsDirectory);	
+			
+			// reload any enabled plugins that got disabled on init
+			RefreshPlugins (savedPlugins);
 			
 			// Initialize services before addins that may use them are loaded.
 			Services.Initialize ();
@@ -84,6 +79,32 @@ namespace Do.Core
 			// Now allow loading of non-services.
 			foreach (string path in ExtensionPaths)
 				AddinManager.AddExtensionNodeHandler (path, OnPluginChanged);
+		}
+		
+		/// <summary>
+		/// Refresh the addin registry in case any new plugins have shown up
+		/// and also make upgrades.
+		/// </summary>
+		public static void RefreshPlugins ()
+		{
+			IEnumerable<string> savedPlugins = PluginsEnabledBeforeLoad ();
+			RefreshPlugins (savedPlugins);
+		}
+		
+		/// <summary>
+		/// This is a workaround for a Mono.Addins bug where updated addins will get
+		/// disabled on update. We save the currently enabled addins, update, then
+		/// reenable them with the Id of the new version. It's a bit hackish but lluis
+		/// said it's a reasonable approach until that bug is fixed 
+	 	/// https://bugzilla.novell.com/show_bug.cgi?id=490302
+		/// </summary>
+		static void RefreshPlugins (IEnumerable<string> savedPlugins)
+		{
+			if (CorePreferences.PeekDebug)
+				AddinManager.Registry.Rebuild (null);
+			else
+				AddinManager.Registry.Update (null);
+			EnableDisabledPlugins (savedPlugins);
 		}
 		
 		public static void InstallLocalPlugins ()
