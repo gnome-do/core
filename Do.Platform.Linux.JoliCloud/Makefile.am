@@ -22,7 +22,9 @@ REFERENCES =  \
 	System \
 	System.Core \
 	Mono.Posix \
+	$(MONO_ADDINS_LIBS) \
 	$(NDESK_DBUS_10_LIBS) \
+	$(NDESK_DBUS_GLIB_10_LIBS) \
 	$(NUNIT_LIBS) 
 
 PROJECT_REFERENCES = \
