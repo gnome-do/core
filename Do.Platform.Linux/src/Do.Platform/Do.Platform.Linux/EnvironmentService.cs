@@ -22,8 +22,10 @@ using System.IO;
 using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 using Mono.Unix;
+using Mono.Unix.Native;
 
 using Do.Platform;
 using Do.Universe;
@@ -32,11 +34,18 @@ namespace Do.Platform.Linux
 {
 	public class EnvironmentService : IEnvironmentService
 	{
-
+		const string PathPattern = @"^~([^\-\/][^:\s\/]*)?(\/.*)?$";
+		
 		string last_command_found;
-
+		readonly Regex path_matcher;
+		
+		public EnvironmentService ()
+		{
+			 path_matcher = new Regex (PathPattern, RegexOptions.Compiled);
+		}
+		
 		#region IEnvironmentService
-
+		
 		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
 			string subject, string body, IEnumerable<string> attachments)
 		{
@@ -49,7 +58,7 @@ namespace Do.Platform.Linux
 				attachments.Aggregate ("", (es, e) => string.Format ("{0} --attach '{1}'", es, e))
 			));
 		}
-
+		
 		string UserHome {
 			get { return Environment.GetFolderPath (Environment.SpecialFolder.Personal); }
 		}
@@ -60,22 +69,22 @@ namespace Do.Platform.Linux
 				url = "http://" + url;
 			Open (url);
 		}
-
+		
 		public void OpenPath (string path)
 		{
-			Open (path.Replace ("~", UserHome));
+			Open (ExpandPath (path));
 		}
-
+		
 		public bool IsExecutable (string line)
 		{
-			line = line.Replace ("~", UserHome);
+			line = ExpandPath (line);
 			return IsExecutableFile (line) || CommandLineIsFoundOnPath (line);
 		}
-
+		
 		public void Execute (string line)
 		{
-			line = line.Replace ("~", UserHome);
-
+			line = ExpandPath (line);
+			
 			Log<EnvironmentService>.Info ("Executing \"{0}\"", line);
 			if (File.Exists (line)) {
 				Process proc = new Process ();
@@ -116,9 +125,23 @@ namespace Do.Platform.Linux
 				Log<EnvironmentService>.Debug (e.StackTrace);
 			}
 		}
-
+		
+		public string ExpandPath (string path)
+		{
+			Match m = path_matcher.Match (path);
+			if (!m.Success) 
+				return path;
+			
+			if (String.IsNullOrEmpty (m.Groups[1].Value)) {
+				return UserHome + m.Groups[2].Value;
+			} else {
+				Passwd pw = Syscall.getpwnam (m.Groups[1].Value);
+				return (pw == null) ? path : pw.pw_dir + m.Groups[2].Value;
+			}
+		}
+		
 		#endregion
-
+		
 		void Open (string open)
 		{
 			try {
@@ -168,5 +191,6 @@ namespace Do.Platform.Linux
 			}
 			return false;
 		}
+		
 	}
 }

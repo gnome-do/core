@@ -81,6 +81,13 @@ namespace Docky.Interface
 			}
 		}
 		
+		public override bool ContainsMinimizedWindow {
+			get {
+				return Windows.Any (w => w.IsMinimized && (!w.IsSkipTasklist));
+			}
+		}
+
+		
 		public override bool IsAcceptingDrops {
 			get {
 				if (!accepting_drops.HasValue) {

@@ -25,6 +25,7 @@ namespace Do.Interface
 {
 	public enum Pane
 	{
+		None = -1,
 		First = 0,
 		Second = 1,
 		Third = 2,

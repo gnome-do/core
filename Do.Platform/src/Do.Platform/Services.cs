@@ -19,6 +19,7 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Collections.Generic;
 
 using Mono.Addins;
@@ -43,6 +44,7 @@ namespace Do.Platform
 		static IEnvironmentService environment;
 		static INotificationsService notifications;
 		static IUniverseFactoryService universe_factory;
+		static INetworkService network;
 
 		/// <summary>
 		/// Initializes the class. Must be called after Mono.Addins is initialized; if this is
@@ -59,6 +61,7 @@ namespace Do.Platform
 				throw new Exception ("AddinManager was initialized before Services.");
 			}
 			AddinManager.AddExtensionNodeHandler ("/Do/Service", OnServiceChanged);
+			InitializeStrictServices ();
 		}
 
 		/// <summary>
@@ -99,6 +102,8 @@ namespace Do.Platform
 				application = null;
 			if (service is AbstractSystemService)
 				system = null;
+			if (service is INetworkService)
+				network = null;
 		}
 
 		/// <summary>
@@ -175,6 +180,14 @@ namespace Do.Platform
 				return universe_factory;
 			}
 		}
+		
+		public static INetworkService Network {
+			get {
+				if (network == null)
+					network = LocateService<INetworkService, Default.NetworkService> ();
+				return network;
+			}
+		}	
 			
 		public static PreferencesFactory Preferences {
 			get {
@@ -216,6 +229,21 @@ namespace Do.Platform
 			} else {
 				Log<Services>.Warn ("AddinManager is not initialized; only default services are available.");
 				return Enumerable.Empty<TService> ();
+			}
+		}
+		
+		/// <summary>
+		/// loops through the Property members of this class, and if it's a strict service gets it's value.
+		/// This will in turn cause a LocateService call, and the appropriate service will be loaded.
+		/// </summary>
+		static void InitializeStrictServices ()
+		{
+			foreach (PropertyInfo property in typeof (Services).GetProperties ()) {
+				Type returnType = property.PropertyType;
+				if (returnType.GetInterface ("Do.Platform.IStrictService") != null) {
+					// this looks stupid, but this is how you call the method on static classes.
+					property.GetValue (null, null);
+				}
 			}
 		}
 	}

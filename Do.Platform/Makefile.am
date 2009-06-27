@@ -25,10 +25,12 @@ FILES = \
 	src/Do.Platform/Do.Platform.Default/SecurePreferencesService.cs \
 	src/Do.Platform/Do.Platform.Default/UniverseFactoryService.cs \
 	src/Do.Platform/Do.Platform.Default/WindowingService.cs \
+	src/Do.Platform/Do.Platform.Default/NetworkService.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesFactory.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IService.cs \
+	src/Do.Platform/Do.Platform.ServiceStack/IStrictService.cs \
 	src/Do.Platform/ICoreService.cs \
 	src/Do.Platform/IEnvironmentService.cs \
 	src/Do.Platform/ILogService.cs \
@@ -49,12 +51,15 @@ FILES = \
 	src/Do.Platform/PreferencesChangedEventArgs.cs \
 	src/Do.Platform/SecurePreferencesWrapper.cs \
 	src/Do.Platform/Services.cs \
+	src/Do.Platform/INetworkService.cs \
+	src/Do.Platform/NetworkStateChangedEventArgs.cs \
 	src/Do.Universe/Do.Universe.Common/EmailAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenWithAction.cs \
 	src/Do.Universe/Do.Universe.Common/RevealAction.cs \
 	src/Do.Universe/Do.Universe.Common/RunAction.cs \
+	src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs \
 	src/System/Linq/EnumerableExtensions.cs
 
 if HAVE_NUNIT

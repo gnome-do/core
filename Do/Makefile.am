@@ -24,7 +24,6 @@ FILES = \
 	src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs \
 	src/Do.Core/Controller.cs \
 	src/Do.Core/DoAddinInstaller.cs \
-	src/Do.Core/ElementExtensions.cs \
 	src/Do.Core/FirstSearchController.cs \
 	src/Do.Core/HistogramRelevanceProvider.cs \
 	src/Do.Core/ISearchController.cs \
@@ -104,7 +103,7 @@ PROJECT_REFERENCES = \
 #
 
 CLEANFILES += Do.exe.config gnome-do
-EXTRA_DIST += Do.exe.config.in gnome-do.in
+EXTRA_DIST += Do.exe.config.in gnome-do.in Do.addins
 
 module_DATA += Do.exe.config Do.addins
 bin_SCRIPTS = gnome-do

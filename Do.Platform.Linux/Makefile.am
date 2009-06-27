@@ -21,12 +21,12 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/TrayIconPreferences.cs \
 	src/Do.Platform/Do.Platform.Linux/TrayIconService.cs \
 	src/Do.Platform/Do.Platform.Linux/UniverseFactoryService.cs \
+	src/Do.Platform/Do.Platform.Linux/NetworkService.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/CategoryItem.cs \
 	src/Do.Universe/NullApplicationItem.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
-	src/Do.Universe/CopyToClipboardAction.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
 	src/Do.Widgets/AbstractLoginWidget.cs
 

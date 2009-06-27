@@ -42,7 +42,7 @@ namespace Do.Core
 			}
 		}
 		
-		public override Element Selection {
+		public override Item Selection {
 			get { 
 				if (IsSearching)
 					FastSearch ();
@@ -78,16 +78,16 @@ namespace Do.Core
 			base.OnSearchFinished (true, true, Selection, Query);
 		}
 		
-		protected override List<Element> InitialResults ()
+		protected override List<Item> InitialResults ()
 		{
 			// We continue off our previous results if possible
 			if (context.LastContext != null && context.LastContext.Results.Any ()) {
-				return new List<Element> (
+				return new List<Item> (
 					Do.UniverseManager.Search (context.Query, SearchTypes, context.LastContext.Results, FirstController.Selection));
 			} else if (context.ParentContext != null && context.Results.Any ()) {
-				return new List<Element> (context.Results);
+				return new List<Item> (context.Results);
 			} else { 
-				return new List<Element> (
+				return new List<Item> (
 					Do.UniverseManager.Search (context.Query, SearchTypes, FirstController.Selection));
 			}
 		}
@@ -114,26 +114,28 @@ namespace Do.Core
 		/// Set up our results list.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="Element"/>
+		/// A <see cref="Item"/>
 		/// </returns>
-		private Element[] GetContextResults ()
+		private Item [] GetContextResults ()
 		{
-			List<Element> results = new List<Element> ();
-			if (FirstController.Selection is Item) {
-				Item item = FirstController.Selection as Item;
+			List<Item> results = new List<Item> ();
+			Item first = FirstController.Selection;
+			
+			if (first.IsAction ()) {
+				// We need to find items for this action
+				Act action = first.AsAction ();
+				foreach (Item item in InitialResults ()) {
+					if (action.Safe.SupportsItem (item) || (item.IsAction () && item.AsAction ().Safe.SupportsItem (action)))
+						results.Add (item);
+				}
+			} else {
 				// We need to find actions for this item
 				// TODO -- Make this work for multiple items
-				foreach (Act action in InitialResults ()) {
-					if (action.Safe.SupportsItem (item)) {
-						results.Add (action);
-					}
-				}
-			} else if (FirstController.Selection is Act) {
-				// We need to find items for this action
-				Act action = FirstController.Selection as Act;
 				foreach (Item item in InitialResults ()) {
-					if (action.Safe.SupportsItem (item))
+					Act action = item.AsAction ();
+					if (action != null && action.Safe.SupportsItem (first)) {
 						results.Add (item);
+					}
 				}
 			}
 			
@@ -204,9 +206,11 @@ namespace Do.Core
 
 		public override IEnumerable<Type> SearchTypes {
 			get { 
-				if (FirstController.Selection is Act) {
-					foreach (Type t in (FirstController.Selection as Act).SupportedItemTypes)
+				Item item = FirstController.Selection;
+				if (item.IsAction ()) {
+					foreach (Type t in item.AsAction ().Safe.SupportedItemTypes)
 						yield return t;
+					yield return typeof (Act);
 				} else if (TextMode) {
 					yield return typeof (ITextItem);
 				} else {
@@ -238,8 +242,8 @@ namespace Do.Core
 				if (!value) {
 					textMode = value;
 					textModeFinalize = false;
-				} else if (FirstController.Selection is Act) {
-					Act action = FirstController.Selection as Act;
+				} else if (FirstController.Selection.IsAction ()) {
+					Act action = FirstController.Selection.AsAction ();
 					if (action.Safe.SupportsItem (new ImplicitTextItem (Query))) {
 						textMode = value;
 						textModeFinalize = false;
@@ -278,8 +282,8 @@ namespace Do.Core
 		
 		protected override bool AcceptChildItem (Item item)
 		{
-			if (FirstController.Selection is Act) {
-				Act action = FirstController.Selection as Act;
+			if (FirstController.Selection.IsAction ()) {
+				Act action = FirstController.Selection.AsAction ();
 				return action.Safe.SupportsItem (item);
 			}
 			return true;

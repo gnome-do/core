@@ -62,12 +62,12 @@ namespace Do.Interface
 		/// <summary>
 		/// Check and see if an object likely has children
 		/// </summary>
-		/// <param name="element">
-		/// A <see cref="Element"/>
+		/// <param name="item">
+		/// A <see cref="Item"/>
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.Boolean"/>
 		/// </returns>
-		bool ElementHasChildren (Element element);
+		bool ItemHasChildren (Item item);
 	}
 }
