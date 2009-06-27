@@ -47,7 +47,10 @@ namespace Do.Platform
 		/// <param name="action">
 		/// A <see cref="Action"/> to run on a worker thread.
 		/// </param>
-		public abstract void RunOnThread (Action action);
+		/// <returns>
+		/// A reference to the created <see cref="Thread"/>.
+		/// </returns>
+		public abstract Thread RunOnThread (Action action);
 
 		/// <summary>
 		/// Run an action on a worker thread after a delay (ms).
@@ -59,9 +62,12 @@ namespace Do.Platform
 		/// A <see cref="System.Int32"/> delay (in millseconds)
 		/// to wait before running the action.
 		/// </param>
-		public void RunOnThread (Action action, int delay)
+		/// <returns>
+		/// A reference to the created <see cref="Thread"/>.
+		/// </returns>
+		public Thread RunOnThread (Action action, int delay)
 		{
-			RunOnThread (action, new TimeSpan (0, 0, 0, 0, delay));
+			return RunOnThread (action, new TimeSpan (0, 0, 0, 0, delay));
 		}
 
 		/// <summary>
@@ -74,9 +80,12 @@ namespace Do.Platform
 		/// A <see cref="TimeSpan"/> delay to wait before running
 		/// the action.
 		/// </param>
-		public void RunOnThread (Action action, TimeSpan delay)
+		/// <returns>
+		/// A reference to the created <see cref="Thread"/>.
+		/// </returns>
+		public Thread RunOnThread (Action action, TimeSpan delay)
 		{
-			RunOnThread (() => {
+			return RunOnThread (() => {
 				Thread.Sleep (delay);
 				action ();
 			});
