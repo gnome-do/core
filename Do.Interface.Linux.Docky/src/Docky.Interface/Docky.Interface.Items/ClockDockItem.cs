@@ -133,7 +133,7 @@ namespace Docky.Interface
 			textContext.EllipsizeMode = Pango.EllipsizeMode.None;
 			
 			// draw the time, outlined
-			textContext.FontSize = size / 5;
+			textContext.FontSize = size / 4;
 			if (ShowDate)
 				textContext.LeftCenteredPoint = new Gdk.Point (- size / 20, textContext.FontSize);
 			else
@@ -152,7 +152,7 @@ namespace Docky.Interface
 			
 			// draw the date, outlined
 			if (ShowDate) {
-				textContext.FontSize = size / 6;
+				textContext.FontSize = size / 5;
 				textContext.LeftCenteredPoint = new Gdk.Point (-size / 20, size - textContext.FontSize);
 				
 				textContext.Text = string.Format ("<b>{0}</b>", DateTime.Now.ToString ("MMM dd"));
@@ -168,7 +168,7 @@ namespace Docky.Interface
 			
 			// shared for AM/PM
 			textContext = new TextRenderContext (cr, string.Empty, size / 2);
-			textContext.FontSize = size / 6;
+			textContext.FontSize = size / 5;
 			
 			// draw AM indicator
 			if (DateTime.Now.Hour < 12)
