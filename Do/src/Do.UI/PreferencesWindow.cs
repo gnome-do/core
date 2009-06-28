@@ -48,7 +48,7 @@ namespace Do.UI
 			base (WindowType.Toplevel)
 		{
 			Build ();
-			IconName = "gnome-desktop-config";
+			IconName = "gnome-do";
 
 			btn_close.IsFocus = true;
 			

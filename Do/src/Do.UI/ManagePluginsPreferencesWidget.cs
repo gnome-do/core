@@ -42,6 +42,11 @@ namespace Do.UI
 	[System.ComponentModel.ToolboxItem(true)]
 	public partial class ManagePluginsPreferencesWidget : Bin, IConfigurable
 	{
+
+		const string WikiPage = "http://do.davebsd.com/wiki/{0}{1}";
+		const string PluginWikiPageFormat = "_Plugin";
+		const string DockletWikiPageFormat = "_Docklet";
+
 		PluginNodeView nview;
 		SearchEntry search_entry;
 
@@ -60,6 +65,8 @@ namespace Do.UI
 		public ManagePluginsPreferencesWidget ()
 		{
 			Build ();
+			
+			PluginManager.RefreshPlugins ();
 			
 			search_entry = new SearchEntry ();
 			nview = new PluginNodeView ();
@@ -151,15 +158,11 @@ namespace Do.UI
 
 		protected void UpdateButtonState ()
 		{
-			string [] ids = nview.GetSelectedAddins ();
-			
-			btn_configure.Sensitive = ids
+			btn_configure.Sensitive = nview.GetSelectedAddins ()
 				.SelectMany (id => PluginManager.ConfigurablesForAddin (id))
 				.Any ();
-			
-			btn_about.Sensitive = ids
-				.Where (id => !string.IsNullOrEmpty (AddinManager.Registry.GetAddin (id).Description.Url))
-				.Any ();
+
+			btn_about.Sensitive = nview.GetSelectedAddins ().Any ();
 		}
 
 		private void OnPluginToggled (string id, bool enabled)
@@ -203,13 +206,29 @@ namespace Do.UI
 			win.Modal = true;
 			win.ShowAll ();
 		}
-
-		void OnBtnAboutClicked (object sender, EventArgs e)
+		
+		void OnAboutBtnClicked (object sender, EventArgs args)
 		{
 			foreach (string id in nview.GetSelectedAddins ()) {
-				Addin addin = AddinManager.Registry.GetAddin (id);
-				if (!string.IsNullOrEmpty (addin.Description.Url))
-					Services.Environment.OpenUrl (addin.Description.Url);
+				try {
+					string name, url;
+					Addin a = AddinManager.Registry.GetAddin (id);
+					name = Addin.GetIdName (id).Split ('.')[1];
+					
+					// plugin manifest files support a Url attribute, if this attribute is set we should
+					// use it instead of trying to guess the wiki page.
+					if (!string.IsNullOrEmpty (a.Description.Url))
+						url = a.Description.Url;
+					if (PluginManager.PluginClassifiesAs (a, "Docklets"))
+						url = string.Format (WikiPage, name, DockletWikiPageFormat);
+					else
+						url = string.Format (WikiPage, name, PluginWikiPageFormat);
+					
+					Services.Environment.OpenUrl (url);
+				} catch (Exception e) {
+					Log.Debug (e.Message);
+					Log.Debug (e.StackTrace);
+				}
 			}
 		}
 

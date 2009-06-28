@@ -20,6 +20,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Threading;
 
 using Do.Universe;
 
@@ -35,10 +36,11 @@ namespace Do.Platform
 			}
 		}
 
-		public override void RunOnThread (Action action)
+		public override Thread RunOnThread (Action action)
 		{
 			Log<DefaultApplicationService>.Debug ("Cannot run action on a thread.");
 			action ();
+			return null;
 		}
 
 		public override void RunOnMainThread (Action action)
