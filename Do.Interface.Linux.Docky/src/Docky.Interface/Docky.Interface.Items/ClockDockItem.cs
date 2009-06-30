@@ -251,19 +251,12 @@ namespace Docky.Interface
 		{
 			yield return new SeparatorMenuButtonArgs ();
 			
-			if (!ShowDigital) {
-				yield return new SimpleMenuButtonArgs (() => { ShowDigital = true; RedrawIcon (); },
-						Catalog.GetString ("Show Digital"), "");
-			} else {
-				yield return new SimpleMenuButtonArgs (() => { ShowDigital = false; RedrawIcon (); },
-						Catalog.GetString ("Show Analog"), "");
-				if (ShowDate)
-					yield return new SimpleMenuButtonArgs (() => { ShowDate = false; RedrawIcon (); },
-							Catalog.GetString ("Hide Date"), "");
-				else
-					yield return new SimpleMenuButtonArgs (() => { ShowDate = true; RedrawIcon (); },
-							Catalog.GetString ("Show Date"), "");
-			}
+			yield return new SimpleMenuButtonArgs (() => { ShowDigital = !ShowDigital; RedrawIcon (); },
+					Catalog.GetString ("Digital Clock"), ShowDigital ? "gtk-remove" : "gtk-apply");
+			
+			if (ShowDigital)
+				yield return new SimpleMenuButtonArgs (() => { ShowDate = !ShowDate; RedrawIcon (); },
+						Catalog.GetString ("Show Date"), ShowDate ? "gtk-remove" : "gtk-apply");
 		}
 		
 		#endregion 
