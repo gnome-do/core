@@ -41,6 +41,15 @@ namespace Docky.Interface
 		
 		static IPreferences prefs = Services.Preferences.Get<ClockDockItem> ();
 		
+		bool show_military = prefs.Get<bool> ("ShowMilitary", false);
+		bool ShowMilitary {
+			get { return show_military; }
+			set {
+				show_military = value;
+				prefs.Set<bool> ("ShowMilitary", value);
+			}
+		}
+		
 		bool digital = prefs.Get<bool> ("ShowDigital", false);
 		bool ShowDigital {
 			get { return digital; }
@@ -93,7 +102,6 @@ namespace Docky.Interface
 		bool ClockUpdateTimer ()
 		{
 			if (minute != DateTime.UtcNow.Minute) {
-				SetText (DateTime.Now.ToString ("ddd, MMM dd h:mm tt"));
 				RedrawIcon ();
 				minute = DateTime.UtcNow.Minute;
 			}
@@ -113,6 +121,11 @@ namespace Docky.Interface
 
 		protected override Surface MakeIconSurface (Cairo.Surface similar, int size)
 		{
+			if (ShowMilitary)
+				SetText (DateTime.Now.ToString ("ddd, MMM dd HH:mm"));
+			else
+				SetText (DateTime.Now.ToString ("ddd, MMM dd h:mm tt"));
+			
 			Surface tmp_surface = similar.CreateSimilar (Cairo.Content.ColorAlpha, size, size);
 			
 			using (Context cr = new Context (tmp_surface)) {
@@ -134,12 +147,16 @@ namespace Docky.Interface
 			
 			// draw the time, outlined
 			textContext.FontSize = size / 4;
+			int yOffset = ShowMilitary ? textContext.FontSize / 2 : 0;
 			if (ShowDate)
-				textContext.LeftCenteredPoint = new Gdk.Point (- size / 20, textContext.FontSize);
+				textContext.LeftCenteredPoint = new Gdk.Point (- size / 20, yOffset + textContext.FontSize);
 			else
-				textContext.LeftCenteredPoint = new Gdk.Point (- size / 20, size / 2 - size / 8);
+				textContext.LeftCenteredPoint = new Gdk.Point (- size / 20, yOffset + size / 2 - size / 8);
 			
-			textContext.Text = string.Format ("<b>{0}</b>", DateTime.Now.ToString ("h:mm"));
+			if (ShowMilitary)
+				textContext.Text = string.Format ("<b>{0}</b>", DateTime.Now.ToString ("HH:mm"));
+			else
+				textContext.Text = string.Format ("<b>{0}</b>", DateTime.Now.ToString ("h:mm"));
 			
 			DockServices.DrawingService.TextPathAtPoint (textContext);
 			cr.LineWidth = 3;
@@ -166,37 +183,39 @@ namespace Docky.Interface
 				cr.Fill ();
 			}
 			
-			// shared for AM/PM
-			textContext = new TextRenderContext (cr, string.Empty, size / 2);
-			textContext.FontSize = size / 5;
-			
-			// draw AM indicator
-			if (DateTime.Now.Hour < 12)
-				cr.Color = new Cairo.Color (1, 1, 1, 0.9);
-			else
-				cr.Color = new Cairo.Color (1, 1, 1, 0.5);
-			
-			textContext.Text = "<b>am</b>";
-			if (ShowDate)
-				textContext.LeftCenteredPoint = new Gdk.Point (0, size / 2);
-			else
-				textContext.LeftCenteredPoint = new Gdk.Point (0, size / 8 + size / 2 + textContext.FontSize);
-			DockServices.DrawingService.TextPathAtPoint (textContext);
-			cr.Fill ();
-			
-			// draw PM indicator
-			if (DateTime.Now.Hour > 11)
-				cr.Color = new Cairo.Color (1, 1, 1, 0.9);
-			else
-				cr.Color = new Cairo.Color (1, 1, 1, 0.5);
-			
-			textContext.Text = "<b>pm</b>";
-			if (ShowDate)
-				textContext.LeftCenteredPoint = new Gdk.Point (size / 2, size / 2);
-			else
-				textContext.LeftCenteredPoint = new Gdk.Point (size / 2, size / 8 + size / 2 + textContext.FontSize);
-			DockServices.DrawingService.TextPathAtPoint (textContext);
-			cr.Fill ();
+			if (!ShowMilitary) {
+				// shared for AM/PM
+				textContext = new TextRenderContext (cr, string.Empty, size / 2);
+				textContext.FontSize = size / 5;
+				
+				// draw AM indicator
+				if (DateTime.Now.Hour < 12)
+					cr.Color = new Cairo.Color (1, 1, 1, 0.9);
+				else
+					cr.Color = new Cairo.Color (1, 1, 1, 0.5);
+				
+				textContext.Text = "<b>am</b>";
+				if (ShowDate)
+					textContext.LeftCenteredPoint = new Gdk.Point (0, size / 2);
+				else
+					textContext.LeftCenteredPoint = new Gdk.Point (0, size / 8 + size / 2 + textContext.FontSize);
+				DockServices.DrawingService.TextPathAtPoint (textContext);
+				cr.Fill ();
+				
+				// draw PM indicator
+				if (DateTime.Now.Hour > 11)
+					cr.Color = new Cairo.Color (1, 1, 1, 0.9);
+				else
+					cr.Color = new Cairo.Color (1, 1, 1, 0.5);
+				
+				textContext.Text = "<b>pm</b>";
+				if (ShowDate)
+					textContext.LeftCenteredPoint = new Gdk.Point (size / 2, size / 2);
+				else
+					textContext.LeftCenteredPoint = new Gdk.Point (size / 2, size / 8 + size / 2 + textContext.FontSize);
+				DockServices.DrawingService.TextPathAtPoint (textContext);
+				cr.Fill ();
+			}
 		}
 		
 		void MakeAnalogIcon (Context cr, int size)
@@ -253,6 +272,9 @@ namespace Docky.Interface
 			
 			yield return new SimpleMenuButtonArgs (() => { ShowDigital = !ShowDigital; RedrawIcon (); },
 					Catalog.GetString ("Digital Clock"), ShowDigital ? "gtk-apply" : "gtk-remove");
+			
+			yield return new SimpleMenuButtonArgs (() => { ShowMilitary = !ShowMilitary; RedrawIcon (); },
+					Catalog.GetString ("24-Hour Clock"), ShowMilitary ? "gtk-apply" : "gtk-remove");
 			
 			if (ShowDigital)
 				yield return new SimpleMenuButtonArgs (() => { ShowDate = !ShowDate; RedrawIcon (); },
