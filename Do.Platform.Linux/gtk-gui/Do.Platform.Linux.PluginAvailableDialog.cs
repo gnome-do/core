@@ -43,6 +43,7 @@ namespace Do.Platform.Linux {
             Stetic.Gui.Initialize(this);
             // Widget Do.Platform.Linux.PluginAvailableDialog
             this.Name = "Do.Platform.Linux.PluginAvailableDialog";
+            this.Icon = Stetic.IconLoader.LoadIcon(this, "distributor-logo", Gtk.IconSize.Menu, 16);
             this.WindowPosition = ((Gtk.WindowPosition)(4));
             this.BorderWidth = ((uint)(5));
             this.HasSeparator = false;

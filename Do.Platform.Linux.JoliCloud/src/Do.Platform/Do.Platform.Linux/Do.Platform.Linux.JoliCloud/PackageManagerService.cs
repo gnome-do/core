@@ -99,6 +99,7 @@ namespace Do.Platform.Linux.JoliCloud
 		/// </param>
 		void HandleActionProcessed (string action, string[] packages, bool success, string error)
 		{
+			Log<PackageManagerService>.Debug ("got a {0} action", action);
 			Addin addin = null;
 			string cleanName = "";
 			
@@ -115,6 +116,7 @@ namespace Do.Platform.Linux.JoliCloud
 			if (addin == null || addin.Enabled)
 				return;
 			
+			Log<PackageManagerService>.Debug ("Showing dialog for {0}", cleanName);
 			new PluginAvailableDialog (cleanName, addin);
 		}
 
