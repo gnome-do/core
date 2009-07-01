@@ -52,7 +52,13 @@ namespace Do.Platform.Linux.JoliCloud
 		
 		IBus session_bus;
 		IJolicloudDaemon daemon;
+		
 		Dictionary<string, string> PackagePluginMap;
+		
+		public PackageManagerService ()
+		{
+			Log<PackageManagerService>.Debug ("NEW PACMAN SERV");
+		}
 		
 		/// <summary>
 		/// Find jolicloud on the bus
@@ -63,18 +69,20 @@ namespace Do.Platform.Linux.JoliCloud
 			session_bus.NameOwnerChanged += HandleNameOwnerChanged;
 			
 			// this call will instaniate the daemon, as well as make sure we also got a DBus object
-			if (Daemon == null)
-				Log<PackageManagerService>.Debug ("Failed to locate JoliCloud daemon on DBus.");
+			daemon = GetIJoliCloudDaemonObject (ObjectPath);
+			daemon.ActionProcessed += HandleActionProcessed;
 			
 			LoadJolicloudPackageMap ();
 			base.Initialize ();
 		}
 		
+		//// <value>
+		/// This needs to be static to ensure that we only ever have one daemon instance aquired
+		/// </value>
 		IJolicloudDaemon Daemon {
 			get {
 				if (daemon == null) {
 					daemon = GetIJoliCloudDaemonObject (ObjectPath);
-					daemon.ActionProcessed += HandleActionProcessed;
 					Log<PackageManagerService>.Debug ("Aquired instance of JolicloudDaemon");
 				}
 				return daemon;
@@ -167,11 +175,12 @@ namespace Do.Platform.Linux.JoliCloud
 			if (name == BusName)
 				Log.Debug ("{0} is not owned by {1}, now {2} is our daddy", name, old_owner, new_owner);
 			// if the jolicloud daemon gets released, we should drop our object
-			if (Daemon != null && name == BusName) {
-				Daemon.ActionProcessed -= HandleActionProcessed;
+			if (daemon != null && name == BusName) {
+				Log<PackageManagerService>.Debug ("DROPPING DAEMON");
 				daemon = null;
 			}
 		}
+		
 		
 		IJolicloudDaemon GetIJoliCloudDaemonObject (string objectPath)
 		{
