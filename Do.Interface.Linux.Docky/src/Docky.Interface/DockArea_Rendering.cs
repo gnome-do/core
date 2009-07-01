@@ -568,7 +568,7 @@ namespace Docky.Interface
 				                                 InsertAnimationTime.TotalMilliseconds, 1);
 				cr.SetSource (iconSurface, 
 				              iconPosition.X / scale, iconPosition.Y / scale);
-				cr.PaintWithAlpha (fadeInOpacity * (dockItem.ContainsMinimizedWindow ? .5 : 1));
+				cr.PaintWithAlpha (fadeInOpacity);
 				
 				bool shade_light = DnDTracker.GtkDragging && !DnDTracker.PreviewIsDesktopFile && CursorIsOverDockArea &&
 					dockItem.IsAcceptingDrops && icon == PositionProvider.IndexAtPosition (Cursor);
