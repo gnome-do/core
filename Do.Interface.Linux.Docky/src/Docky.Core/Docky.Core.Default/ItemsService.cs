@@ -680,6 +680,7 @@ namespace Docky.Core.Default
 		
 		public bool ItemCanBeRemoved (int item)
 		{
+			if (item < 0 || item >= DockItems.Count) return false;
 			AbstractDockItem adi = DockItems [item];
 			return adi.WindowCount == 0 && ((GetIconSource (adi) == IconSource.Statistics && adi is ItemDockItem) ||
 			                                (GetIconSource (adi) == IconSource.Custom));
