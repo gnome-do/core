@@ -55,9 +55,10 @@ namespace Do.Platform.Linux.JoliCloud
 		
 		Dictionary<string, string> PackagePluginMap;
 		
-		public PackageManagerService ()
+		~PackageManagerService ()
 		{
-			Log<PackageManagerService>.Debug ("NEW PACMAN SERV");
+			if (daemon != null)
+				daemon.ActionProcessed -= HandleActionProcessed;
 		}
 		
 		/// <summary>
