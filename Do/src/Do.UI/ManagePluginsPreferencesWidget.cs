@@ -25,8 +25,8 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 using Gtk;
+
 using Mono.Addins;
-using Mono.Addins.Setup;
 using Mono.Unix;
 
 using Do;
@@ -167,24 +167,10 @@ namespace Do.UI
 
 		private void OnPluginToggled (string id, bool enabled)
 		{	
-			// If the addin isn't found, install it.
-			if (null == AddinManager.Registry.GetAddin (id)) {
-				IAddinInstaller installer = new ConsoleAddinInstaller ();
-				try {
-					installer.InstallAddins (AddinManager.Registry,
-						string.Format ("Installing \"{0}\" addin...", id), new [] { id });
-				} catch (InstallException e) {
-					Log<ManagePluginsPreferencesWidget>.Error (e.Message);
-					Log<ManagePluginsPreferencesWidget>.Debug (e.StackTrace);
-					return;
-				}
-			}
-			// Now enable or disable the plugin.
-			if (enabled) {
-				AddinManager.Registry.EnableAddin (id);
-			} else {
-				AddinManager.Registry.DisableAddin (id);
-			}
+			if (enabled)
+				PluginManager.Enable (id);
+			else
+				PluginManager.Disable (id);	
 			UpdateButtonState ();
 		}
 		

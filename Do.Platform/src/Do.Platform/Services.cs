@@ -36,15 +36,17 @@ namespace Do.Platform
 
 		static ICoreService core;
 		static PathsService paths;
+		static INetworkService network;
 		static IWindowingService windowing;
 		static AbstractSystemService system;
 		static IEnumerable<ILogService> logs;
 		static PreferencesFactory preferences;
-		static AbstractApplicationService application;
 		static IEnvironmentService environment;
 		static INotificationsService notifications;
+		static IPluginManagerService plugin_manager;
+		static AbstractApplicationService application;
 		static IUniverseFactoryService universe_factory;
-		static INetworkService network;
+		
 
 		/// <summary>
 		/// Initializes the class. Must be called after Mono.Addins is initialized; if this is
@@ -81,29 +83,29 @@ namespace Do.Platform
 			}
 
 			// Dirty the appropriate cache.
+			if (service is ILogService)
+				logs = null;
 			if (service is ICoreService)
 				core = null;
-			if (service is IEnvironmentService)
-				environment = null;
+			if (service is PathsService)
+				paths = null;
+			if (service is INetworkService)
+				network = null;
+			if (service is IWindowingService)
+				windowing = null;
 			// Although it is not obvious, this also takes care of the ISecurePreferences service.
 			if (service is IPreferencesService)
 				preferences = null;
-			if (service is ILogService)
-				logs = null;
-			if (service is IUniverseFactoryService)
-				universe_factory = null;
-			if (service is INotificationsService)
-				notifications = null;
-			if (service is IWindowingService)
-				windowing = null;
-			if (service is PathsService)
-				paths = null;
-			if (service is AbstractApplicationService)
-				application = null;
+			if (service is IEnvironmentService)
+				environment = null;
 			if (service is AbstractSystemService)
 				system = null;
-			if (service is INetworkService)
-				network = null;
+			if (service is INotificationsService)
+				notifications = null;
+			if (service is IUniverseFactoryService)
+				universe_factory = null;			
+			if (service is AbstractApplicationService)
+				application = null;
 		}
 
 		/// <summary>
@@ -187,7 +189,15 @@ namespace Do.Platform
 					network = LocateService<INetworkService, Default.NetworkService> ();
 				return network;
 			}
-		}	
+		}
+		
+		public static IPluginManagerService PluginManager {
+			get {
+				if (plugin_manager == null)
+					plugin_manager = LocateService<IPluginManagerService, Default.PluginManagerService> ();
+				return plugin_manager;
+			}
+		}
 			
 		public static PreferencesFactory Preferences {
 			get {

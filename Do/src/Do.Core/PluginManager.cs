@@ -42,7 +42,7 @@ namespace Do.Core
 	/// <summary>
 	/// PluginManager serves as Do's primary interface to Mono.Addins.
 	/// </summary>
-	internal class PluginManager
+	public class PluginManager
 	{
 		const string DefaultPluginIcon = "folder_tar";
 		
@@ -123,7 +123,38 @@ namespace Do.Core
 			EnableDisabledPlugins (saved);
 			manual.ForEach (dll => File.Delete (dll));
 		}
-
+		
+		public static void Enable (Addin addin)
+		{
+			SetAddinEnabled (addin, true);
+		}
+		
+		public static void Enable (string id)
+		{
+			Enable (AddinManager.Registry.GetAddin (id));
+		}
+		
+		public static void Disable (Addin addin)
+		{
+			SetAddinEnabled (addin, false);
+		}
+		
+		public static void Disable (string id)
+		{
+			Disable (AddinManager.Registry.GetAddin (id));
+		}
+		
+		static void SetAddinEnabled (Addin addin, bool enabled)
+		{
+			if (addin != null)
+				addin.Enabled = enabled;
+		}
+		
+		public static IEnumerable<Addin> GetAddins ()
+		{
+			return AddinManager.Registry.GetAddins ();
+		}
+		
 		public static bool PluginClassifiesAs (AddinRepositoryEntry entry, string className)
 		{
 			AddinClassifier classifier = Classifiers.FirstOrDefault (c => c.Name == className);
@@ -237,17 +268,15 @@ namespace Do.Core
 		
 		static void EnableDisabledPlugins (IEnumerable<string> savedPlugins)
 		{
-			foreach (Addin addin in AddinManager.Registry.GetAddins ()) {
-				string id = addin.Id;
-				if (!AddinManager.Registry.IsAddinEnabled (id) && savedPlugins.Any (name => id.StartsWith (name)))
-					AddinManager.Registry.EnableAddin (id);
-			}
+			AddinManager.Registry.GetAddins ()
+				.Where (addin => !addin.Enabled && savedPlugins.Any (name => addin.Id.StartsWith (name)))
+				.ForEach (addin => Enable (addin));
 		}
 
 		static void OnPluginChanged (object sender, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
-
+			
 			switch (args.Change) {
 			case ExtensionChange.Add:
 				try {
