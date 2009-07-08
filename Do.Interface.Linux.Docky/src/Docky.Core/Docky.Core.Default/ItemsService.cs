@@ -692,7 +692,7 @@ namespace Docky.Core.Default
 			do {
 				if (!ItemCanInteractWithPosition (item, position)) continue;
 			
-				if (DockItems [position] is TrashDockItem) {
+				if (DockItems [position] is TrashDockItem && !(item is TrashDockItem)) {
 					RemoveItem (item);
 					continue;
 				}
