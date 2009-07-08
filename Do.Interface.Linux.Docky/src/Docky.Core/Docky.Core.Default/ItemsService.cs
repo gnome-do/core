@@ -165,8 +165,10 @@ namespace Docky.Core.Default
 			Services.Core.UniverseInitialized -= HandleUniverseInitialized;
 			
 			// wnck events
-			Wnck.Screen.Default.WindowClosed -= HandleWindowClosed; 
-			Wnck.Screen.Default.WindowOpened -= HandleWindowOpened; 
+			if (Wnck.Screen.Default != null) {
+				Wnck.Screen.Default.WindowClosed -= HandleWindowClosed; 
+				Wnck.Screen.Default.WindowOpened -= HandleWindowOpened; 
+			}
 			
 			// Dock Services
 			DockPreferences.AutomaticIconsChanged -= HandleAutomaticIconsChanged; 

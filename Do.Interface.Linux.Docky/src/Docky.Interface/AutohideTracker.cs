@@ -163,11 +163,13 @@ namespace Docky.Interface
 		public void Dispose ()
 		{
 			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
-			Wnck.Screen.Default.ActiveWindowChanged -= HandleActiveWindowChanged;
-			Wnck.Screen.Default.WindowClosed -= WnckScreenDefaultWindowClosed;
-			Wnck.Screen.Default.WindowOpened -= WnckScreenDefaultWindowOpened;
-			Wnck.Screen.Default.ActiveWindow.GeometryChanged -= HandleGeometryChanged;
-			Wnck.Screen.Default.ViewportsChanged -= HandleViewportsChanged; 
+			if (Wnck.Screen.Default != null) {
+				Wnck.Screen.Default.ActiveWindowChanged -= HandleActiveWindowChanged;
+				Wnck.Screen.Default.WindowClosed -= WnckScreenDefaultWindowClosed;
+				Wnck.Screen.Default.WindowOpened -= WnckScreenDefaultWindowOpened;
+				Wnck.Screen.Default.ActiveWindow.GeometryChanged -= HandleGeometryChanged;
+				Wnck.Screen.Default.ViewportsChanged -= HandleViewportsChanged; 
+			}
 		}
 		#endregion
 
