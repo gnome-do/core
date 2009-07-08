@@ -1,5 +1,7 @@
 # Simple component buildsystem
+if ENABLE_JOLICLOUD
 include $(top_srcdir)/build.rules.mk
+endif
 
 ASSEMBLY = Do.Platform.Linux.JoliCloud
 TARGET = library

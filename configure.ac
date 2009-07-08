@@ -99,15 +99,18 @@ if test "$have_nunit" != "yes" ; then
 fi
 AC_SUBST([NUNIT_LIBS])
 
-
+dnl {{{ enable debug release configuration
 AC_ARG_ENABLE(debug,
 	AC_HELP_STRING([--enable-debug],
 		[Use 'DEBUG' Configuration [default=YES]]),
 		enable_debug=yes, enable_debug=no)
-AM_CONDITIONAL(ENABLE_DEBUG, test x$enable_debug = xyes)
+AM_CONDITIONAL(ENABLE_DEBUG, test "x$enable_debug" = "xyes")
 if test "x$enable_debug" = "xyes" ; then
 	CONFIG_REQUESTED="yes"
 fi
+dnl }}}
+
+dnl {{{ enable release build configuration
 AC_ARG_ENABLE(release,
 	AC_HELP_STRING([--enable-release],
 		[Use 'RELEASE' Configuration [default=NO]]),
@@ -119,6 +122,15 @@ fi
 if test -z "$CONFIG_REQUESTED" ; then
 	AM_CONDITIONAL(ENABLE_DEBUG, true)
 fi
+dnl }}}
+
+dnl {{{ optionally enable jolicloud package service
+AC_ARG_ENABLE(jolicloud,
+	AC_HELP_STRING([--enable-jolicloud],
+	[Build Do with support for the Jolicloud package manager [default=NO]]),
+	enable_jolicloud=yes, enable_jolicloud=no)
+AM_CONDITIONAL(ENABLE_JOLICLOUD, test "x$enable_jolicloud" = "xyes")
+dnl }}}
 
 AC_CONFIG_FILES([
 BundledLibraries/Makefile
@@ -172,3 +184,21 @@ po/Makefile.in
 ])
 
 AC_OUTPUT
+
+cat <<EOF
+
+${PACKAGE}-${VERSION}
+
+  Build Environment
+    Install Prefix:     ${prefix}
+    Mono C# Compiler:   ${MCS} ${GMCS_FLAGS}
+    Mono Runtime:       ${MONO}
+
+  Package Manager
+    Jolicloud:          ${enable_jolicloud}
+
+  Build/Development
+    Release Build:      ${enable_release}
+    NUnit:              ${have_nunit}
+
+EOF
