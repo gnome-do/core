@@ -33,7 +33,6 @@ namespace Do.Platform
 
 	public class Services
 	{
-
 		static ICoreService core;
 		static PathsService paths;
 		static INetworkService network;
@@ -46,7 +45,7 @@ namespace Do.Platform
 		static IPluginManagerService plugin_manager;
 		static AbstractApplicationService application;
 		static IUniverseFactoryService universe_factory;
-		
+		static AbstractPackageManagerService package_manager;
 
 		/// <summary>
 		/// Initializes the class. Must be called after Mono.Addins is initialized; if this is
@@ -62,15 +61,16 @@ namespace Do.Platform
 				// TODO find a better exception to throw.
 				throw new Exception ("AddinManager was initialized before Services.");
 			}
+			
 			AddinManager.AddExtensionNodeHandler ("/Do/Service", OnServiceChanged);
 			InitializeStrictServices ();
 		}
-
+		
 		/// <summary>
 		/// When a service is changed, we "dirty the cache".
 		/// </summary>
 		static void OnServiceChanged (object sender, ExtensionNodeEventArgs e)
-		{
+		{			
 			IService service = e.ExtensionObject as IService;
 
 			switch (e.Change) {
@@ -191,6 +191,13 @@ namespace Do.Platform
 			}
 		}
 		
+		public static AbstractPackageManagerService PackageManager {
+			get {
+				if (package_manager == null)
+					package_manager = LocateService<AbstractPackageManagerService, Default.DefaultPackageManagerService> ();
+				return package_manager;
+			}
+		}
 		public static IPluginManagerService PluginManager {
 			get {
 				if (plugin_manager == null)
@@ -198,8 +205,9 @@ namespace Do.Platform
 				return plugin_manager;
 			}
 		}
-			
+
 		public static PreferencesFactory Preferences {
+
 			get {
 				if (preferences == null) {
 					IPreferencesService service = LocateService<IPreferencesService, Default.PreferencesService> ();

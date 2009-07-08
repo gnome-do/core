@@ -17,18 +17,16 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 
-using Mono.Addins;
-
-using Do.Platform.ServiceStack;
-
-namespace Do.Platform
+namespace Do.Platform.Linux.JoliCloud
 {
-		
-	public interface IPluginManagerService : IService
+	
+	
+	public class PackageManagerServiceTests
 	{
-		void Install (Addin addin);
-		IEnumerable<Addin> GetAddins ();
+		
+		public PackageManagerServiceTests()
+		{
+		}
 	}
 }

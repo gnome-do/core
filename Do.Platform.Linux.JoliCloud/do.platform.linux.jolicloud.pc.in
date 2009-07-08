@@ -1,0 +1,6 @@
+Name: Do.Platform.Linux.JoliCloud
+Description: JoliCloud-specific functionality
+Version: @ABI_VERSION@
+
+Requires: do.platform
+Libs: -r:@expanded_libdir@/@PACKAGE@/Do.Platform.Linux.JoliCloud.dll

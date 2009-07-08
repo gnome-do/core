@@ -1,0 +1,34 @@
+<Project name="Do.Platform.Linux.JoliCloud" fileversion="2.0" language="C#" targetFramework="2.0" ctype="DotNetProject">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="DotNetProjectConfiguration">
+      <Output directory="bin/Debug" assembly="Do.Platform.Linux.JoliCloud" />
+      <Build debugmode="True" target="Exe" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="False" definesymbols="DEBUG" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+    </Configuration>
+    <Configuration name="Release" ctype="DotNetProjectConfiguration">
+      <Output directory="bin/Release" assembly="Do.Platform.Linux.JoliCloud" />
+      <Build debugmode="False" target="Exe" />
+      <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="False" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+    </Configuration>
+  </Configurations>
+  <Contents>
+    <File name="Resources" subtype="Directory" buildaction="Compile" />
+    <File name="src" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Platform" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Linux" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.JoliCloud" subtype="Directory" buildaction="Compile" />
+    <File name="Resources/Do.Platform.Linux.JoliCloud.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.JoliCloud/PackageManagerService.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.JoliCloud/Tests" subtype="Directory" buildaction="Compile" />
+    <File name="src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.JoliCloud/Tests/PackageManagerServiceTests.cs" subtype="Code" buildaction="Compile" />
+  </Contents>
+  <References>
+    <ProjectReference type="Assembly" localcopy="True" specificVersion="False" refto="../../../../../../usr/local/lib/gnome-do/Do.Platform.dll" />
+    <ProjectReference type="Gac" localcopy="True" refto="NDesk.DBus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f6716e4f9b2ed099" />
+    <ProjectReference type="Assembly" localcopy="True" specificVersion="False" refto="../../../../../../usr/local/lib/gnome-do/Do.Platform.Linux.dll" />
+    <ProjectReference type="Gac" localcopy="True" refto="Mono.Addins, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  </References>
+</Project>

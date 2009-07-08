@@ -30,16 +30,16 @@ namespace Do.Platform.Default
 	/// </summary>	
 	public class PluginManagerService : IPluginManagerService
 	{
-		public IEnumerable<Addin> GetAddins ()
-		{
-			Log<PluginManagerService>.Error ("Using default service, could not locate any addins");
-			yield break;
-		}
-		
 		public void Install (Addin addin)
 		{
 			Log<PluginManagerService>.Error ("Using default service, could not install addin.");
 			return;
+		}
+		
+		public IEnumerable<Addin> GetAddins ()
+		{
+			Log<PluginManagerService>.Error ("Using default service, could not locate any addins");
+			yield break;
 		}
 	}
 }

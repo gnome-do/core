@@ -29,16 +29,16 @@ namespace Do.Platform
 	
 	public class PluginManagerService : IPluginManagerService
 	{
-#region IPluginManagerService Implementation
-		public IEnumerable<Addin> GetAddins ()
-		{
-			return PluginManager.GetAddins ();
-		}
-		
+#region IPluginManagerService Implementation		
 		public void Install (Addin addin)
 		{
 			PluginManager.Enable (addin);
 			Do.UniverseManager.Reload ();
+		}
+		
+		public IEnumerable<Addin> GetAddins ()
+		{
+			return PluginManager.GetAddins ();
 		}
 #endregion
 	}

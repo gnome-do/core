@@ -1,4 +1,4 @@
-//  %filename
+//   PackageManagerService.cs
 // 
 //   GNOME Do is the legal property of its developers. Please refer to the
 //   COPYRIGHT file distributed with this source distribution.
@@ -17,18 +17,17 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 
-using Mono.Addins;
+using Do.Platform;
 
-using Do.Platform.ServiceStack;
-
-namespace Do.Platform
+namespace Do.Platform.Default
 {
-		
-	public interface IPluginManagerService : IService
+	
+	public class DefaultPackageManagerService : AbstractPackageManagerService
 	{
-		void Install (Addin addin);
-		IEnumerable<Addin> GetAddins ();
+		public DefaultPackageManagerService ()
+		{
+			Log<DefaultPackageManagerService>.Warn ("Default service loaded, no package management available");
+		}
 	}
 }

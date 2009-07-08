@@ -6,6 +6,7 @@ TARGET = library
 
 FILES = \
 	gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs \
+	gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs \
         gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/ConsoleCrayon.cs \
@@ -28,7 +29,8 @@ FILES = \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
-	src/Do.Widgets/AbstractLoginWidget.cs
+	src/Do.Widgets/AbstractLoginWidget.cs \
+	src/Do.Widgets/PluginAvailableDialog.cs
 
 if HAVE_NUNIT
 FILES += \
@@ -46,15 +48,16 @@ REFERENCES =  \
 	System \
 	System.Core \
 	Mono.Posix \
-	$(NUNIT_LIBS) \
 	$(GTK_SHARP_20_LIBS) \
 	$(GNOME_KEYRING_SHARP_LIBS) \
 	$(GNOME_SHARP_20_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
 	$(GCONF_SHARP_20_LIBS) \
+	$(MONO_ADDINS_LIBS) \
 	$(NDESK_DBUS_10_LIBS) \
 	$(NDESK_DBUS_GLIB_10_LIBS) \
-	$(NOTIFY_SHARP_LIBS)
+	$(NOTIFY_SHARP_LIBS) \
+	$(NUNIT_LIBS)
 
 PROJECT_REFERENCES = \
 	Do.Universe \
