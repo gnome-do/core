@@ -682,8 +682,9 @@ namespace Docky.Core.Default
 		{
 			if (item < 0 || item >= DockItems.Count) return false;
 			AbstractDockItem adi = DockItems [item];
-			return adi.WindowCount == 0 && ((GetIconSource (adi) == IconSource.Statistics && adi is ItemDockItem) ||
-			                                (GetIconSource (adi) == IconSource.Custom));
+			return Docklets.Contains (DockItems [item]) ||
+					(adi.WindowCount == 0 && ((GetIconSource (adi) == IconSource.Statistics && adi is ItemDockItem) ||
+											(GetIconSource (adi) == IconSource.Custom)));
 		}
 		
 		public void DropItemOnPosition (AbstractDockItem item, int position)
@@ -691,7 +692,7 @@ namespace Docky.Core.Default
 			do {
 				if (!ItemCanInteractWithPosition (item, position)) continue;
 			
-				if (DockItems [position] is TrashDockItem) {
+				if (DockItems [position] is TrashDockItem && !(item is TrashDockItem)) {
 					RemoveItem (item);
 					continue;
 				}
@@ -808,7 +809,9 @@ namespace Docky.Core.Default
 			bool result = ItemCanBeRemoved (item);
 			
 			if (result) {
-				if (GetIconSource (DockItems [item]) == IconSource.Statistics) {
+				if (Docklets.Contains (DockItems [item])) {
+					DockServices.DockletService.ToggleDocklet (DockItems [item] as AbstractDockletItem);
+				} else if (GetIconSource (DockItems [item]) == IconSource.Statistics) {
 					ItemDockItem di = (DockItems [item] as ItemDockItem);
 					DockPreferences.AddBlacklistItem ((DockItems [item] as ItemDockItem).Item.UniqueId);
 					DockPreferences.AutomaticIcons = Math.Max (0, DockPreferences.AutomaticIcons - 1);
