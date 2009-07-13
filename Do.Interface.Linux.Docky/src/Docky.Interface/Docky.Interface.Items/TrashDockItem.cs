@@ -146,17 +146,12 @@ namespace Docky.Interface
 			ResponseType result = (ResponseType) md.Run ();
 			md.Destroy ();
 
-			if (result == ResponseType.Cancel)
-				return;
-
-			// fixme, this breaks the fsw
-			if (!Directory.Exists (Trash)) return;
-			
-			try {
-				Directory.Delete (Trash, true);
-				Directory.CreateDirectory (Trash);
-			} catch { 
-				// we dont give a rats ass
+			if (result != ResponseType.Cancel && 
+				Directory.Exists (Trash)) {
+				try {
+					Directory.Delete (Trash, true);
+					Directory.CreateDirectory (Trash);
+				} catch { /* do nothing */ }
 			}
 				
 			SetupFileSystemWatch ();
