@@ -302,6 +302,7 @@ namespace Docky.Interface
 			
 			text_mode = new bool [3];
 			text_mode_timestamps = new DateTime [3];
+			text_mode_types = new TextModeType [3];
 			OnStateChanged ();
 		}
 		
