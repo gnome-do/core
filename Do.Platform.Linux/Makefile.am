@@ -7,7 +7,7 @@ TARGET = library
 FILES = \
 	gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs \
 	gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs \
-        gtk-gui/generated.cs \
+	gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/Do.Platform/ConsoleCrayon.cs \
 	src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.DBus/IController.cs \
@@ -23,6 +23,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/TrayIconService.cs \
 	src/Do.Platform/Do.Platform.Linux/UniverseFactoryService.cs \
 	src/Do.Platform/Do.Platform.Linux/NetworkService.cs \
+	src/Do.Platform/Do.Platform.Linux/KeyBindingService.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/CategoryItem.cs \
 	src/Do.Universe/NullApplicationItem.cs \

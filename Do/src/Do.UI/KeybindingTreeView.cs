@@ -20,8 +20,13 @@
 
 
 using System;
+using System.Linq;
+
 using Gtk;
 using Mono.Unix;
+
+using Do.Platform;
+using Do.Platform.Common;
 
 namespace Do.UI
 {
@@ -31,13 +36,13 @@ namespace Do.UI
 			Action = 0,
 			Binding,
 			DefaultKeybinding,
-			ShortcutName, 
+			KeyEvent,
 			NumColumns
 		}
 		
 		public KeybindingTreeView ()
 		{	
-			Model = new ListStore (typeof (string), typeof (string), typeof (string), typeof (string));
+			Model = new ListStore (typeof (string), typeof (string), typeof (string), typeof (DoKeyEvents));
 			
 			CellRendererText actionCell = new CellRendererText ();
 			actionCell.Width = 150;
@@ -66,9 +71,8 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 
-			foreach (Shortcut sc in Do.Keybindings.Shortcuts) {
-				store.AppendValues (sc.FriendlyName, Do.Keybindings.GetKeybinding (sc), 
-					Do.Keybindings.GetDefaultKeybinding (sc), sc.ShortcutName);
+			foreach (KeyBinding binding in Services.Keybinder.Bindings.OrderBy (k => k.DisplayName)) {
+				store.AppendValues (binding.DisplayName, binding.KeyString, binding.DefaultKeyString, binding.EventName);
 			}
 		}
 		
@@ -142,12 +146,20 @@ namespace Do.UI
 		
 		private bool SaveBindingsForeachFunc (TreeModel model, TreePath path, TreeIter iter)
 		{
-			string binding, shortcutname;
-			binding = model.GetValue (iter, (int) Column.Binding) as string;
-			shortcutname = model.GetValue (iter, (int) Column.ShortcutName) as string;
-			
-			if (binding != null && binding != "DISABLED" && binding != Do.Keybindings.GetKeybinding (shortcutname))
-				Do.Keybindings.BindShortcut (shortcutname, binding);
+			string newKeyString;
+			newKeyString = model.GetValue (iter, (int) Column.Binding) as string;
+
+			DoKeyEvents keyEvent = (DoKeyEvents) model.GetValue (iter, (int) Column.KeyEvent);
+
+			if (newKeyString != null) {
+				//try to save
+				if (!Services.Keybinder.SetKeyString (keyEvent, newKeyString)) {
+					//if we fail reset to the default value
+					KeyBinding binding = Services.Keybinder.GetBinding (keyEvent);
+					model.SetValue (iter, (int) Column.Binding, binding.DefaultKeyString);
+					Services.Keybinder.SetKeyString (keyEvent, binding.DefaultKeyString);
+				}
+			}
 			return false;
 		}
 		

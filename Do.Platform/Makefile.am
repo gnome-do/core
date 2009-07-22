@@ -14,6 +14,8 @@ FILES = \
 	src/Do.Platform/Do.Platform.Common/DictionaryPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Common/EventsOnlyNotificationsService.cs \
 	src/Do.Platform/Do.Platform.Common/FileLogService.cs \
+	src/Do.Platform/Do.Platform.Common/AbstractKeyBindingService.cs \
+	src/Do.Platform/Do.Platform.Common/DoKeyEvents.cs \
 	src/Do.Platform/Do.Platform.Default/CoreService.cs \
 	src/Do.Platform/Do.Platform.Default/DefaultApplicationService.cs \
 	src/Do.Platform/Do.Platform.Default/DefaultSystemService.cs \
@@ -28,6 +30,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Default/UniverseFactoryService.cs \
 	src/Do.Platform/Do.Platform.Default/WindowingService.cs \
 	src/Do.Platform/Do.Platform.Default/NetworkService.cs \
+	src/Do.Platform/Do.Platform.Default/KeyBindingService.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesFactory.cs \
 	src/Do.Platform/Do.Platform.Preferences/PreferencesImplementation.cs \
 	src/Do.Platform/Do.Platform.ServiceStack/IInitializedService.cs \
@@ -57,6 +60,8 @@ FILES = \
 	src/Do.Platform/Services.cs \
 	src/Do.Platform/INetworkService.cs \
 	src/Do.Platform/NetworkStateChangedEventArgs.cs \
+	src/Do.Platform/IKeyBindingService.cs \
+	src/Do.Platform/KeyBinding.cs \
 	src/Do.Universe/Do.Universe.Common/EmailAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenAction.cs \
 	src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs \
@@ -89,5 +94,6 @@ REFERENCES =  \
 	System \
 	System.Core \
 	Mono.Posix \
+	$(GTK_SHARP_20_LIBS) \
 	$(MONO_ADDINS_LIBS) \
 	$(NUNIT_LIBS)

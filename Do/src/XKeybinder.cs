@@ -28,13 +28,13 @@ namespace Do
 {
 	public class XKeybinder 
 	{
-		[DllImport("libdo")]
+		[DllImport("/usr/local/lib/gnome-do/libdo.so")]
 		static extern void gnomedo_keybinder_init ();
 
-		[DllImport("libdo")]
+		[DllImport("/usr/local/lib/gnome-do/libdo.so")]
 		static extern void gnomedo_keybinder_bind (string keystring, BindkeyHandler handler);
 
-		[DllImport("libdo")]
+		[DllImport("/usr/local/lib/gnome-do/libdo.so")]
 		static extern void gnomedo_keybinder_unbind (string keystring, BindkeyHandler handler);
 
 		public delegate void BindkeyHandler (string key, IntPtr user_data);

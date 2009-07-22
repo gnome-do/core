@@ -27,12 +27,13 @@ using Mono.Unix;
 using Do.UI;
 using Do.Core;
 using Do.Platform;
+using Do.Platform.Common;
 
 namespace Do {
 
 	static class Do {
 		
-		static XKeybinder keybinder;
+		//static XKeybinder keybinder;
 		static Controller controller;
 		static UniverseManager universe_manager;
 
@@ -55,7 +56,7 @@ namespace Do {
 
 			Preferences = new CorePreferences ();
 
-			Keybindings = new CoreKeybindings ();
+			//Keybindings = new CoreKeybindings ();
 
 			// Now we can set the preferred log level.
 			if (Preferences.QuietStart)
@@ -73,7 +74,7 @@ namespace Do {
 			Controller.Initialize ();
 			UniverseManager.Initialize ();
 			
-			keybinder = new XKeybinder ();
+			//keybinder = new XKeybinder ();
 			SetupKeybindings ();
 
 			if (!Preferences.QuietStart)
@@ -100,37 +101,18 @@ namespace Do {
 				return universe_manager;
 			}
 		}
-
-		static void SummonKeyCb (object sender, PreferencesChangedEventArgs e)
-		{
-			try {
-				if (e.OldValue != null)
-					keybinder.Unbind (e.OldValue as string);
-				keybinder.Bind (Keybindings.GetKeybinding ("SummonKey"), OnActivate);
-			} catch (Exception ex) {
-				Log.Error ("Could not bind summon key: {0}", ex.Message);
-				Log.Debug (ex.StackTrace);
-			}
-
-		}
 		
 		static void SetupKeybindings ()
 		{
 			try {
-				keybinder.Bind (Keybindings.GetKeybinding ("SummonKey"), OnActivate);
+				if (!Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.Summon, Catalog.GetString ("Summon Do"),
+					"<Super>space", delegate { controller.Summon (); })))
+					throw new Exception ("Could not bind summon key from preferences value or default.");
 			} catch (Exception e) {
 				Log.Error ("Could not bind summon key: {0}", e.Message);
 				Log.Debug (e.StackTrace);
+				//Gtk.Application.Quit ();
 			}
-
-			// Watch preferences for changes to the keybinding so we
-			// can change the binding when the user reassigns it.
-			Keybindings.RegisterNotification ("SummonKey", SummonKeyCb);
-		}
-		
-		static void OnActivate (object sender, EventArgs e)
-		{
-			controller.Summon ();
 		}
 	}
 }
