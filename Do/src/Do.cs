@@ -102,11 +102,10 @@ namespace Do {
 			try {
 				if (!Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon Do"),
 					"<Super>space", delegate { controller.Summon (); }, true)))
-					throw new Exception ("Could not bind summon key from preferences value or default.");
+					throw new Exception ();
 			} catch (Exception e) {
-				Log.Error ("Could not bind summon key: {0}", e.Message);
+				Log.Fatal ("Could not bind summon key!");
 				Log.Debug (e.StackTrace);
-				//Gtk.Application.Quit ();
 			}
 		}
 	}

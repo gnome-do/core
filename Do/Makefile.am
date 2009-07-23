@@ -101,10 +101,10 @@ PROJECT_REFERENCES = \
 # Extra rules for our binary, not worth factoring out
 #
 
-CLEANFILES += Do.exe.config gnome-do
-EXTRA_DIST += Do.exe.config.in gnome-do.in Do.addins
+CLEANFILES += gnome-do
+EXTRA_DIST += gnome-do.in Do.addins
 
-module_DATA += Do.exe.config Do.addins
+module_DATA += Do.addins
 bin_SCRIPTS = gnome-do
 
 MCS_FLAGS += -unsafe
