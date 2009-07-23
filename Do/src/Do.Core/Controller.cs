@@ -115,7 +115,7 @@ namespace Do.Core
 				OnCopyEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Paste Current Text"), "<Control>v",
 				OnPasteEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Pane"), "ISO_Left_Tab",
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Pane"), "<Shift>Tab",
 				OnPreviousPanePressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next Pane"), "Tab",
 				OnNextPanePressEvent));
@@ -699,7 +699,14 @@ namespace Do.Core
 			if ((evnt.State & ModifierType.Mod1Mask) != 0) {
 				modifier += "<Alt>";
 			}
-			return modifier + evnt.Key.ToString ();
+			if ((evnt.State & ModifierType.ShiftMask) != 0) {
+				modifier += "<Shift>";
+				//if we're pressing shift, and the key is ISO_Left_Tab,
+				//just make it Tab
+				if (evnt.Key == Key.ISO_Left_Tab)
+					return string.Format ("{0}{1}", modifier, Key.Tab);
+			}
+			return string.Format ("{0}{1}", modifier, evnt.Key.ToString ());
 		}
 #endregion
 		

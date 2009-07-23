@@ -134,7 +134,6 @@ dnl }}}
 
 AC_CONFIG_FILES([
 BundledLibraries/Makefile
-Do/Do.exe.config
 Do/Makefile
 Do/gnome-do
 Do/src/AssemblyInfo.cs

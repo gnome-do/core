@@ -110,6 +110,14 @@ namespace Do.UI
 			
 			string realKey = Gtk.Accelerator.Name (args.AccelKey, args.AccelMods);
 			
+			if (args.AccelKey == (uint) Gdk.Key.Super_L) {
+				//setting CellRenderAccelMode to "Other" ignores the Super key as a modifier
+				//this prevents us from grabbing _only_ the Super key.
+				return;
+			}
+			
+			Console.WriteLine ("key: {0}, mods: {1}", args.AccelKey, args.AccelMods);
+			
 			// Look for any other rows that have the same binding and then zero that binding out
 			Model.Foreach ((model, path, treeiter) => ClearPreviousBinding (model, path, treeiter, realKey));
 
