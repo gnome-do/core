@@ -116,8 +116,6 @@ namespace Do.UI
 				return;
 			}
 			
-			Console.WriteLine ("key: {0}, mods: {1}", args.AccelKey, args.AccelMods);
-			
 			// Look for any other rows that have the same binding and then zero that binding out
 			Model.Foreach ((model, path, treeiter) => ClearPreviousBinding (model, path, treeiter, realKey));
 
