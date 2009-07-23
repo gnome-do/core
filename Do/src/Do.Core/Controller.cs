@@ -109,34 +109,37 @@ namespace Do.Core
 			Screen.Default.CompositedChanged += OnCompositingChanged;
 			
 			// Register Shortcuts
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.EnterTextMode, Catalog.GetString ("Enter Text Mode"),
-				"period", OnTextModePressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.Copy, Catalog.GetString ("Copy to Clipboard"),
-				"<Control>c", OnCopyEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.Paste, Catalog.GetString ("Paste Current Text"),
-				"<Control>v", OnPasteEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.PreviousPane, Catalog.GetString ("Previous Pane"),
-				"ISO_Left_Tab", OnPreviousPanePressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.NextPane, Catalog.GetString ("Next Pane"),
-				"Tab", OnNextPanePressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.Up, Catalog.GetString ("Previous Item"),
-				"Up", OnUpKeyPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.Down, Catalog.GetString ("Next Item"),
-				"Down", OnDownKeyPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.First, Catalog.GetString ("First Item"),
-				"Home", OnHomeKeyPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.Last, Catalog.GetString ("Last Item"),
-				"End", OnEndKeyPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.PageLast, Catalog.GetString ("Previous 5 Results"),
-				"Page_Up", OnPageUpKeyPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.PageNext, Catalog.GetString ("Next 5 Results"),
-				"Page_Down", OnPageDownKeyPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.Left, Catalog.GetString ("Step Out of Item"),
-				"Left", OnLeftKeyPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.Right, Catalog.GetString ("Browse Into Item"),
-				"Right", OnRightKeyPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.MultiSelect, Catalog.GetString ("Select Multiple Items"),
-				"comma", OnSelectionKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Enter Text Mode"), "period",
+				OnTextModePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Copy to Clipboard"), "<Control>c",
+				OnCopyEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Paste Current Text"), "<Control>v",
+				OnPasteEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Pane"), "ISO_Left_Tab",
+				OnPreviousPanePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next Pane"), "Tab",
+				OnNextPanePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Item"), "Up",
+				OnUpKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next Item"), "Down",
+				OnDownKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("First Item"), "Home",
+				OnHomeKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Last Item"), "End",
+				OnEndKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous 5 Results"), "Page_Up",
+				OnPageUpKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next 5 Results"), "Page_Down",
+				OnPageDownKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Step Out of Item"), "Left",
+				OnLeftKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Browse Into Item"), "Right",
+				OnRightKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Select Multiple Items"), "comma",
+				OnSelectionKeyPressEvent));
+			//summon in text mode
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon in Text Mode"), "<Super>period",
+				delegate { this.Summon (); SearchController.TextMode = true; UpdatePane (CurrentPane); } , true));
 		}
 
 		void OnSummoned ()
@@ -446,13 +449,10 @@ namespace Do.Core
 			} else if (key == Key.Delete ||
 				   key == Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-			} else {
+			} else if (Services.Keybinder.Bindings.ContainsKey (KeyEventToString (evnt))) {
 				// User set keybindings
-				Shortcut sc = Do.Keybindings.GetShortcutByKeycode (KeyEventToString (evnt));
-				if (sc != null) {
-					sc.Callback (evnt);
-					return;
-				}
+				Services.Keybinder.Bindings [KeyEventToString (evnt)].Callback (evnt);
+			} else {
 				OnInputKeyPressEvent (evnt);
 			}
 		}

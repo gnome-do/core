@@ -13,9 +13,7 @@ namespace Do.Platform
 	public interface IKeyBindingService : IInitializedService
 	{
 		bool RegisterKeyBinding (KeyBinding evnt);
-		KeyBinding GetBinding (DoKeyEvents eventName);
-		KeyBinding GetBinding (string keyString);
-		bool SetKeyString (DoKeyEvents eventName, string keyString);
-		IEnumerable<KeyBinding> Bindings { get; }
+		bool SetKeyString (KeyBinding binding, string keyString);
+		Dictionary<string, KeyBinding> Bindings { get; }
 	}
 }

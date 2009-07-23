@@ -34,31 +34,27 @@ namespace Do.UI
 	{
 		enum Column {
 			Action = 0,
-			Binding,
+			BoundKeyString,
 			DefaultKeybinding,
-			KeyEvent,
+			Binding,
 			NumColumns
 		}
 		
 		public KeybindingTreeView ()
 		{	
-			Model = new ListStore (typeof (string), typeof (string), typeof (string), typeof (DoKeyEvents));
+			Model = new ListStore (typeof (string), typeof (string), typeof (string), typeof (KeyBinding));
 			
 			CellRendererText actionCell = new CellRendererText ();
 			actionCell.Width = 150;
 			InsertColumn (-1, Catalog.GetString ("Action"), actionCell, "text", (int)Column.Action);
 			
 			CellRendererAccel bindingCell = new CellRendererAccel ();
-			bindingCell.AccelMode = CellRendererAccelMode.Gtk;
+			bindingCell.AccelMode = CellRendererAccelMode.Other;
 			bindingCell.Editable = true;
 			bindingCell.AccelEdited += new AccelEditedHandler (OnAccelEdited);
 			bindingCell.AccelCleared += new AccelClearedHandler (OnAccelCleared);
-			InsertColumn (-1, Catalog.GetString ("Shortcut"), bindingCell, "text", (int)Column.Binding);
-			
-			CellRendererText defaultbindingCell = new CellRendererText ();
-			actionCell.Width = 150;
-//			InsertColumn (-1, Catalog.GetString ("Default Shortcut"), defaultbindingCell, "text", (int)Column.DefaultKeybinding);
-			
+			InsertColumn (-1, Catalog.GetString ("Shortcut"), bindingCell, "text", (int)Column.BoundKeyString);
+						
 			RowActivated += new RowActivatedHandler (OnRowActivated);
 			ButtonPressEvent += new ButtonPressEventHandler (OnButtonPress);
 			
@@ -71,8 +67,8 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 
-			foreach (KeyBinding binding in Services.Keybinder.Bindings.OrderBy (k => k.DisplayName)) {
-				store.AppendValues (binding.DisplayName, binding.KeyString, binding.DefaultKeyString, binding.EventName);
+			foreach (KeyBinding binding in Services.Keybinder.Bindings.Values.OrderBy (k => k.Description)) {
+				store.AppendValues (binding.Description, binding.KeyString, binding.DefaultKeyString, binding);
 			}
 		}
 		
@@ -85,21 +81,21 @@ namespace Do.UI
 				
 			if (GetPathAtPos ((int) args.Event.X, (int) args.Event.Y,out path)) {
 				GrabFocus ();
-				SetCursor (path, GetColumn ((int) Column.Binding), true);
+				SetCursor (path, GetColumn ((int) Column.BoundKeyString), true);
 			}				
 		}
 		
 		private void OnRowActivated (object o, RowActivatedArgs args)
 		{
 			GrabFocus ();
-			SetCursor (args.Path, GetColumn ((int) Column.Binding), true);
+			SetCursor (args.Path, GetColumn ((int) Column.BoundKeyString), true);
 		}
 
 		private bool ClearPreviousBinding (TreeModel model, TreePath path, TreeIter treeiter, string keyBinding) 
 		{
-			string binding = model.GetValue (treeiter, (int) Column.Binding) as string;
+			string binding = model.GetValue (treeiter, (int) Column.BoundKeyString) as string;
 			if (binding == keyBinding) {
-				model.SetValue (treeiter, (int) Column.Binding, "");
+				model.SetValue (treeiter, (int) Column.BoundKeyString, "");
 			}
 			return false;
 		}
@@ -117,7 +113,7 @@ namespace Do.UI
 			// Look for any other rows that have the same binding and then zero that binding out
 			Model.Foreach ((model, path, treeiter) => ClearPreviousBinding (model, path, treeiter, realKey));
 
-			store.SetValue (iter, (int) Column.Binding, realKey);
+			store.SetValue (iter, (int) Column.BoundKeyString, realKey);
 
 			SaveBindings ();
 		}
@@ -131,9 +127,9 @@ namespace Do.UI
 			store.GetIter (out iter, new TreePath (args.PathString));
 			try {
 				string defaultVal = store.GetValue (iter, (int) Column.DefaultKeybinding).ToString ();
-				store.SetValue (iter, (int) Column.Binding, defaultVal);
+				store.SetValue (iter, (int) Column.BoundKeyString, defaultVal);
 			} catch (Exception e) {
-				store.SetValue (iter, (int) Column.Binding, "");
+				store.SetValue (iter, (int) Column.BoundKeyString, "");
 			}
 
 			SaveBindings ();
@@ -146,18 +142,15 @@ namespace Do.UI
 		
 		private bool SaveBindingsForeachFunc (TreeModel model, TreePath path, TreeIter iter)
 		{
-			string newKeyString;
-			newKeyString = model.GetValue (iter, (int) Column.Binding) as string;
-
-			DoKeyEvents keyEvent = (DoKeyEvents) model.GetValue (iter, (int) Column.KeyEvent);
+			string newKeyString = model.GetValue (iter, (int) Column.BoundKeyString) as string;
+			KeyBinding binding = model.GetValue (iter, (int) Column.Binding) as KeyBinding;
 
 			if (newKeyString != null) {
 				//try to save
-				if (!Services.Keybinder.SetKeyString (keyEvent, newKeyString)) {
+				if (!Services.Keybinder.SetKeyString (binding, newKeyString)) {
 					//if we fail reset to the default value
-					KeyBinding binding = Services.Keybinder.GetBinding (keyEvent);
-					model.SetValue (iter, (int) Column.Binding, binding.DefaultKeyString);
-					Services.Keybinder.SetKeyString (keyEvent, binding.DefaultKeyString);
+					model.SetValue (iter, (int) Column.BoundKeyString, binding.DefaultKeyString);
+					Services.Keybinder.SetKeyString (binding, binding.DefaultKeyString);
 				}
 			}
 			return false;

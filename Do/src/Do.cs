@@ -33,13 +33,11 @@ namespace Do {
 
 	static class Do {
 		
-		//static XKeybinder keybinder;
 		static Controller controller;
 		static UniverseManager universe_manager;
 
-		public static CorePreferences Preferences { get; private set; } 
-		public static CoreKeybindings Keybindings { get; private set; } 
-
+		public static CorePreferences Preferences { get; private set; }
+		
 		internal static void Main (string [] args)
 		{
 			Catalog.Init ("gnome-do", AssemblyInfo.LocaleDirectory);
@@ -55,8 +53,6 @@ namespace Do {
 			Services.System.EnsureSingleApplicationInstance ();
 
 			Preferences = new CorePreferences ();
-
-			//Keybindings = new CoreKeybindings ();
 
 			// Now we can set the preferred log level.
 			if (Preferences.QuietStart)
@@ -74,12 +70,11 @@ namespace Do {
 			Controller.Initialize ();
 			UniverseManager.Initialize ();
 			
-			//keybinder = new XKeybinder ();
 			SetupKeybindings ();
 
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
-			
+
 			Gtk.Application.Run ();
 			
 			RelevanceProvider.Serialize (RelevanceProvider.DefaultProvider);
@@ -105,8 +100,8 @@ namespace Do {
 		static void SetupKeybindings ()
 		{
 			try {
-				if (!Services.Keybinder.RegisterKeyBinding (new KeyBinding (DoKeyEvents.Summon, Catalog.GetString ("Summon Do"),
-					"<Super>space", delegate { controller.Summon (); })))
+				if (!Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon Do"),
+					"<Super>space", delegate { controller.Summon (); }, true)))
 					throw new Exception ("Could not bind summon key from preferences value or default.");
 			} catch (Exception e) {
 				Log.Error ("Could not bind summon key: {0}", e.Message);

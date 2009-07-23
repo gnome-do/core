@@ -87,7 +87,6 @@
     <File name="src/Do.Platform/Do.Platform.ServiceStack/IStrictService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Common/AbstractKeyBindingService.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Do.Platform/Do.Platform.Common/DoKeyEvents.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/IKeyBindingService.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/KeyBinding.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Platform/Do.Platform.Default/KeyBindingService.cs" subtype="Code" buildaction="Compile" />

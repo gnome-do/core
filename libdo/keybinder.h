@@ -32,11 +32,11 @@ typedef void (* GnomeDoBindkeyHandler) (char *keystring, gpointer user_data);
 
 void gnomedo_keybinder_init   (void);
 
-void gnomedo_keybinder_bind   (const char           *keystring,
+gboolean gnomedo_keybinder_bind   (const char           *keystring,
 			      GnomeDoBindkeyHandler  handler,
 			      gpointer              user_data);
 
-void gnomedo_keybinder_unbind (const char           *keystring,
+gboolean gnomedo_keybinder_unbind (const char           *keystring,
 			      GnomeDoBindkeyHandler  handler);
 
 gboolean gnomedo_keybinder_is_modifier (guint keycode);

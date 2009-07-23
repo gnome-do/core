@@ -64,3 +64,8 @@ PROJECT_REFERENCES = \
 	Do.Universe \
 	Do.Platform \
 	Do.Interface.Linux
+
+CLEANFILES += Do.Platform.Linux.dll.config
+EXTRA_DIST += Do.Platform.Linux.dll.config.in
+
+module_DATA += Do.Platform.Linux.dll.config

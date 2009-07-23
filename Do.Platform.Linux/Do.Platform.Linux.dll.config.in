@@ -1,0 +1,3 @@
+<configuration>
+	<dllmap dll="libdo" target="@expanded_libdir@/@PACKAGE@/libdo.so"/>
+</configuration>

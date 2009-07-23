@@ -13,16 +13,10 @@ namespace Do.Platform.Default
 			Log.Error ("Default keybinding service cannot register key events. {0}", evnt.KeyString);
 			return false;
 		}
-		public KeyBinding GetBinding (DoKeyEvents eventName) {
-			return null;
-		}
-		public KeyBinding GetBinding (string KeyString) {
-			return null;
-		}
-		public bool SetKeyString (DoKeyEvents eventName, string keyString) {
+		public bool SetKeyString (KeyBinding binding, string keyString) {
 			return false;
 		}
-		public IEnumerable<KeyBinding> Bindings { get { return Enumerable.Empty<KeyBinding> (); } }
+		public Dictionary<string, KeyBinding> Bindings { get { return null; } }
 		public void Initialize () {
 		}
 	}

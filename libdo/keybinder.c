@@ -257,7 +257,7 @@ gnomedo_keybinder_init (void)
 			  NULL);
 }
 
-void 
+gboolean 
 gnomedo_keybinder_bind (const char           *keystring,
 		       GnomeDoBindkeyHandler  handler,
 		       gpointer              user_data)
@@ -279,9 +279,11 @@ gnomedo_keybinder_bind (const char           *keystring,
 		g_free (binding->keystring);
 		g_free (binding);
 	}
+
+	return success;
 }
 
-void
+gboolean
 gnomedo_keybinder_unbind (const char           *keystring, 
 			 GnomeDoBindkeyHandler  handler)
 {
@@ -302,6 +304,8 @@ gnomedo_keybinder_unbind (const char           *keystring,
 		g_free (binding);
 		break;
 	}
+
+	return TRUE;
 }
 
 /* 

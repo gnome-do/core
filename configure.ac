@@ -152,6 +152,7 @@ Do.Interface.Wink/src/AssemblyInfo.cs
 Do.Platform/Makefile
 Do.Platform/src/AssemblyInfo.cs
 Do.Platform.Linux/Makefile
+Do.Platform.Linux/Do.Platform.Linux.dll.config
 Do.Platform.Linux/src/AssemblyInfo.cs
 Do.Platform.Linux.JoliCloud/Makefile
 Do.Platform.Linux.JoliCloud/src/AssemblyInfo.cs
