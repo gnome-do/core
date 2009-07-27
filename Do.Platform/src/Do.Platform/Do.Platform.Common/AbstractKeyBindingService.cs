@@ -18,7 +18,7 @@ namespace Do.Platform.Common
 		#region IInitializedService
 
 		public void Initialize () {
-			Bindings = new Dictionary<string, KeyBinding> ();
+			Bindings = new List<KeyBinding> ();
 			
 			prefs = Services.Preferences.Get<AbstractKeyBindingService> ();
 		}
@@ -27,15 +27,14 @@ namespace Do.Platform.Common
 
 		#region IKeyBindingService
 
-		// keyString -> KeyEvent
-		public Dictionary<string, KeyBinding> Bindings { get; private set; }
+		public List<KeyBinding> Bindings { get; private set; }
 
 		public bool RegisterKeyBinding (KeyBinding binding) {
 			bool success = true;
 			
-			//first check if this event is already mapped
-			if (Bindings.ContainsKey (binding.KeyString)) {
-				Log<AbstractKeyBindingService>.Error ("'{0}' is already mapped", binding.KeyString);
+			//first check if this keystring is already used
+			if (Bindings.Any (k => k.KeyString == binding.KeyString)) {
+				Log<AbstractKeyBindingService>.Error ("Key '{0}' is already mapped.", binding.KeyString);
 				return false;
 			}
 
@@ -50,20 +49,22 @@ namespace Do.Platform.Common
 			//if we are registering a key with the OS, do something special
 			if (binding.IsOSKey) {
 				//try to register the key from the prefs with the OS
-				success = RegisterOSKey (binding.KeyString, binding.Callback);
+				if (!string.IsNullOrEmpty (binding.KeyString))
+					success = RegisterOSKey (binding.KeyString, binding.Callback);
 				//if we fail to register the summon key, try again with the default binding
-				if (!success && RegisterOSKey (binding.DefaultKeyString, binding.Callback)) {
+				if (!success && !string.IsNullOrEmpty (binding.DefaultKeyString)) {
+				    success = RegisterOSKey (binding.DefaultKeyString, binding.Callback);
 					//if we succeeded now, change the event's keystring
-					binding.KeyString = binding.DefaultKeyString;
-					success = true;
+					if (success)
+						binding.KeyString = binding.DefaultKeyString;
 				}
 			}
 
 			if (success) {
-				//add the event to our mapped events dict
-				Bindings.Add (binding.KeyString, binding);
+				//add the event to the list of bindings
+				Bindings.Add (binding);
 				//set the bound keystring in the prefs
-				SetKeyString (binding, binding.KeyString);
+				prefs.Set (binding.Description.Replace (' ', '_'), binding.KeyString);
 			}
 
 			return success;
@@ -71,27 +72,39 @@ namespace Do.Platform.Common
 
 		public bool SetKeyString (KeyBinding binding, string newKeyString) {
 			bool success = true;
+			
+			//first check if this keystring exists
+			if (!Bindings.Any (k => k.KeyString == binding.KeyString)) {
+				Log<AbstractKeyBindingService>.Error ("Key '{0}' is not mapped.", binding.KeyString);
+				return false;
+			}
 						
 			//if this key should be registered with the OS
 			if (binding.IsOSKey) {
 				//remove the old keystring from the OS
-				UnRegisterOSKey (binding.KeyString);
+				if (!string.IsNullOrEmpty (binding.KeyString))
+					UnRegisterOSKey (binding.KeyString);
 				//register again with the new keystring
-				success = RegisterOSKey (newKeyString, binding.Callback);
+				if (!string.IsNullOrEmpty (newKeyString))
+					success = RegisterOSKey (newKeyString, binding.Callback);
 			}
 
-			if (success) {				
+			if (success) {
+				/*
 				//first remove the old binding
 				Bindings.Remove (binding.KeyString);
 				//next set the new keystring
 				binding.KeyString = newKeyString;
 				//now add it back to the dict of bindings
 				Bindings.Add (binding.KeyString, binding);
+				*/
+				//set the new keystring
+				Bindings.First (k => k.KeyString == binding.KeyString).KeyString = newKeyString;
 				
 				//save the new value in the prefs
 				prefs.Set (binding.Description.Replace (' ', '_'), binding.KeyString);
 
-				Log<AbstractKeyBindingService>.Debug ("Event '{0}' now mapped to: {1}", binding.Description, binding.KeyString);
+				Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to '{1}'", binding.Description, binding.KeyString);
 			}
 
 			return success;

@@ -14,6 +14,6 @@ namespace Do.Platform
 	{
 		bool RegisterKeyBinding (KeyBinding evnt);
 		bool SetKeyString (KeyBinding binding, string keyString);
-		Dictionary<string, KeyBinding> Bindings { get; }
+		List<KeyBinding> Bindings { get; }
 	}
 }

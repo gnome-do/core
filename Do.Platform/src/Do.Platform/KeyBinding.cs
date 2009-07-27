@@ -21,7 +21,7 @@ namespace Do.Platform
 		{
 		}
 		
-		public KeyBinding (string description, string keyString, EventCallback eventFunc, bool isoskey) 
+		public KeyBinding (string description, string keyString, EventCallback eventFunc, bool isoskey)
 		{
 			this.Description = description;
 			this.KeyString = keyString;
