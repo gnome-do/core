@@ -138,7 +138,7 @@ namespace Do.Core
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Select Multiple Items"), "comma",
 				OnSelectionKeyPressEvent));
 			//summon in text mode
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon in Text Mode"), "<Super>period",
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon in Text Mode"), "",
 				delegate { this.Summon (); SearchController.TextMode = true; UpdatePane (CurrentPane); } , true));
 		}
 
@@ -449,9 +449,9 @@ namespace Do.Core
 			} else if (key == Key.Delete ||
 				   key == Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-			} else if (Services.Keybinder.Bindings.ContainsKey (KeyEventToString (evnt))) {
+			} else if (Services.Keybinder.Bindings.Any (k => k.KeyString == KeyEventToString (evnt))) {
 				// User set keybindings
-				Services.Keybinder.Bindings [KeyEventToString (evnt)].Callback (evnt);
+				Services.Keybinder.Bindings.First (k => k.KeyString == KeyEventToString (evnt)).Callback (evnt);
 			} else {
 				OnInputKeyPressEvent (evnt);
 			}

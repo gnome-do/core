@@ -16,7 +16,7 @@ namespace Do.Platform.Default
 		public bool SetKeyString (KeyBinding binding, string keyString) {
 			return false;
 		}
-		public Dictionary<string, KeyBinding> Bindings { get { return null; } }
+		public List<KeyBinding> Bindings { get { return new List<KeyBinding> (); } }
 		public void Initialize () {
 		}
 	}

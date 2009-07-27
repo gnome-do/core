@@ -37,8 +37,8 @@ namespace Do.Platform.Linux
 		}
 		
 		void KeybindingPressed (string keystring, IntPtr user_data)	{
-			if (Bindings.ContainsKey (keystring)) {
-				Bindings [keystring].Callback (null);
+			if (Bindings.Any (k => k.KeyString == keystring)) {
+				Bindings.First (k => k.KeyString == keystring).Callback (null);
 			}
 		}
 		
@@ -48,7 +48,7 @@ namespace Do.Platform.Linux
 
 		public override bool UnRegisterOSKey (string keyString) {
 			
-			if (Bindings.ContainsKey (keyString)) {
+			if (Bindings.Any (k => k.KeyString == keyString)) {
 				return gnomedo_keybinder_unbind (keyString, key_handler);
 			}
 			return false;

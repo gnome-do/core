@@ -67,7 +67,7 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 
-			foreach (KeyBinding binding in Services.Keybinder.Bindings.Values.OrderBy (k => k.Description)) {
+			foreach (KeyBinding binding in Services.Keybinder.Bindings.OrderBy (k => k.Description)) {
 				store.AppendValues (binding.Description, binding.KeyString, binding.DefaultKeyString, binding);
 			}
 		}
@@ -150,8 +150,9 @@ namespace Do.UI
 		{
 			string newKeyString = model.GetValue (iter, (int) Column.BoundKeyString) as string;
 			KeyBinding binding = model.GetValue (iter, (int) Column.Binding) as KeyBinding;
-
-			if (newKeyString != null) {
+			
+			//only save if the keystring changed
+			if (newKeyString != null && binding.KeyString != newKeyString) {
 				//try to save
 				if (!Services.Keybinder.SetKeyString (binding, newKeyString)) {
 					//if we fail reset to the default value
