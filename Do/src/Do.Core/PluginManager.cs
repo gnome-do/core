@@ -70,7 +70,11 @@ namespace Do.Core
 			AddinManager.Initialize (Paths.UserPluginsDirectory);	
 			
 			// reload any enabled plugins that got disabled on init
-			RefreshPlugins (savedPlugins);
+			if (CorePreferences.PeekDebug)
+				AddinManager.Registry.Rebuild (null);
+			else
+				AddinManager.Registry.Update (null);
+			EnableDisabledPlugins (savedPlugins);
 			
 			// Initialize services before addins that may use them are loaded.
 			Services.Initialize ();
@@ -100,10 +104,7 @@ namespace Do.Core
 		/// </summary>
 		static void RefreshPlugins (IEnumerable<string> savedPlugins)
 		{
-			if (CorePreferences.PeekDebug)
-				AddinManager.Registry.Rebuild (null);
-			else
-				AddinManager.Registry.Update (null);
+			AddinManager.Registry.Update (null);
 			EnableDisabledPlugins (savedPlugins);
 		}
 		
