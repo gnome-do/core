@@ -5,9 +5,6 @@
     <target-gtk-version>2.12</target-gtk-version>
   </configuration>
   <import>
-    <widget-library name="../../Do.Platform.Linux/bin/Debug/Do.Platform.Linux.dll" />
-    <widget-library name="../../Do.Interface.Linux/bin/Debug/Do.Interface.Linux.dll" />
-    <widget-library name="../../Do.Interface.Linux.AnimationBase/bin/Debug/Do.Interface.Linux.AnimationBase.dll" />
     <widget-library name="Mono.Addins.Gui, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <widget-library name="../bin/Debug/Do.exe" internal="true" />
   </import>
@@ -136,6 +133,7 @@
                 <property name="Position">0</property>
                 <property name="AutoSize">False</property>
                 <property name="Expand">False</property>
+                <property name="Fill">False</property>
               </packing>
             </child>
             <child>
@@ -143,7 +141,8 @@
                 <property name="MemberName" />
                 <property name="Ypad">1</property>
                 <property name="Xalign">0</property>
-                <property name="LabelProp" translatable="yes">To edit a shortcut, double-click it and type a new one.</property>
+                <property name="LabelProp" translatable="yes">To edit a shortcut, double-click it and type a new one.
+To restore a shortcut to the default, double click and press Backspace.</property>
                 <property name="Wrap">True</property>
               </widget>
               <packing>

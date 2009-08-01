@@ -38,6 +38,7 @@ namespace Do.Platform
 		static INetworkService network;
 		static IWindowingService windowing;
 		static AbstractSystemService system;
+		static IKeyBindingService keybinder;
 		static IEnumerable<ILogService> logs;
 		static PreferencesFactory preferences;
 		static IEnvironmentService environment;
@@ -198,11 +199,20 @@ namespace Do.Platform
 				return package_manager;
 			}
 		}
+		
 		public static IPluginManagerService PluginManager {
 			get {
 				if (plugin_manager == null)
 					plugin_manager = LocateService<IPluginManagerService, Default.PluginManagerService> ();
 				return plugin_manager;
+			}
+		}
+		
+		public static IKeyBindingService Keybinder {
+			get {
+				if (keybinder == null)
+					keybinder = LocateService<IKeyBindingService, Default.KeyBindingService> ();
+				return keybinder;
 			}
 		}
 

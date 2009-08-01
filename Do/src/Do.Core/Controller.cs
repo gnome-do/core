@@ -30,6 +30,7 @@ using Do;
 using Do.UI;
 using Do.Universe;
 using Do.Platform;
+using Do.Platform.Common;
 using Do.Interface;
 
 namespace Do.Core
@@ -108,96 +109,37 @@ namespace Do.Core
 			Screen.Default.CompositedChanged += OnCompositingChanged;
 			
 			// Register Shortcuts
-			// TODO: Localize the text here.
-			// Previous shortcuts
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("SummonKey", 
-						Catalog.GetString ("Summon GNOME Do"), 
-						OnSummonKeyPressEvent),
-					"<Super>space");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("TextModeKey",
-						Catalog.GetString ("Enter text mode"),
-						OnTextModePressEvent),
-					"period");
-			// New shortcuts
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("CopyKey",
-						Catalog.GetString ("Copy Text"),
-						OnCopyEvent),
-					"<Control>c");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("PasteKey",
-						Catalog.GetString ("Paste Text"),
-						OnPasteEvent),
-					"<Control>v");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("AlternateEscapeKey",
-						Catalog.GetString ("Alternate Escape"),
-						OnEscapeKeyPressEvent));
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("AlternateActivateKey",
-						Catalog.GetString ("Alternate Activate"),
-						OnActivateKeyPressEvent));
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("AlternateDeleteKey",
-						Catalog.GetString ("Alternate Delete"),
-						OnDeleteKeyPressEvent));
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("ShiftTabKey",
-						Catalog.GetString ("Previous Pane"),
-						OnShiftTabKeyPressEvent),
-					"ISO_Left_Tab");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("TabKey",
-						Catalog.GetString ("Next Pane"),
-						OnTabKeyPressEvent),
-					"Tab");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("UpKey",
-						Catalog.GetString ("Previous Result"),
-						OnUpKeyPressEvent),
-					"Up");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("DownKey",
-						Catalog.GetString ("Next Result"),
-						OnDownKeyPressEvent),
-					"Down");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("HomeKey",
-						Catalog.GetString ("First Result"),
-						OnHomeKeyPressEvent),
-					"Home");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("EndKey",
-						Catalog.GetString ("Last Result"),
-						OnEndKeyPressEvent),
-					"End");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("PageUpKey",
-						Catalog.GetString ("Previous 5 Results"),
-						OnPageUpKeyPressEvent),
-					"Page_Up");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("PageDownKey",
-						Catalog.GetString ("Next 5 Results"),
-						OnPageDownKeyPressEvent),
-					"Page_Down");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("LeftKey",
-						Catalog.GetString ("Step out of Item"),
-						OnLeftKeyPressEvent),
-					"Left");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("RightKey",
-						Catalog.GetString ("Browse Into Item"),
-						OnRightKeyPressEvent),
-					"Right");
-			Do.Keybindings.RegisterShortcut (
-					new Shortcut ("CommaKey",
-						Catalog.GetString ("Multiple selection"),
-						OnSelectionKeyPressEvent),
-					"comma");
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Enter Text Mode"), "period",
+				OnTextModePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Copy to Clipboard"), "<Control>c",
+				OnCopyEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Paste Current Text"), "<Control>v",
+				OnPasteEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Pane"), "<Shift>Tab",
+				OnPreviousPanePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next Pane"), "Tab",
+				OnNextPanePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Item"), "Up",
+				OnUpKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next Item"), "Down",
+				OnDownKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("First Item"), "Home",
+				OnHomeKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Last Item"), "End",
+				OnEndKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous 5 Results"), "Page_Up",
+				OnPageUpKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next 5 Results"), "Page_Down",
+				OnPageDownKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Step Out of Item"), "Left",
+				OnLeftKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Browse Into Item"), "Right",
+				OnRightKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Select Multiple Items"), "comma",
+				OnSelectionKeyPressEvent));
+			//summon in text mode
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon in Text Mode"), "",
+				delegate { this.Summon (); SearchController.TextMode = true; UpdatePane (CurrentPane); } , true));
 		}
 
 		void OnSummoned ()
@@ -507,13 +449,10 @@ namespace Do.Core
 			} else if (key == Key.Delete ||
 				   key == Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-			} else {
+			} else if (Services.Keybinder.Bindings.Any (k => k.KeyString == KeyEventToString (evnt))) {
 				// User set keybindings
-				Shortcut sc = Do.Keybindings.GetShortcutByKeycode (KeyEventToString (evnt));
-				if (sc != null) {
-					sc.Callback (evnt);
-					return;
-				}
+				Services.Keybinder.Bindings.First (k => k.KeyString == KeyEventToString (evnt)).Callback (evnt);
+			} else {
 				OnInputKeyPressEvent (evnt);
 			}
 		}
@@ -648,7 +587,7 @@ namespace Do.Core
 			if (SearchController.ItemChildSearch ()) GrowResults ();
 		}
 
-		void OnTabKeyPressEvent (EventKey evnt)
+		void OnNextPanePressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			ShrinkResults ();
@@ -661,7 +600,7 @@ namespace Do.Core
 			UpdatePane (CurrentPane);
 		}
 
-		void OnShiftTabKeyPressEvent (EventKey evnt)
+		void OnPreviousPanePressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			ShrinkResults ();
@@ -760,7 +699,14 @@ namespace Do.Core
 			if ((evnt.State & ModifierType.Mod1Mask) != 0) {
 				modifier += "<Alt>";
 			}
-			return modifier + evnt.Key.ToString ();
+			if ((evnt.State & ModifierType.ShiftMask) != 0) {
+				modifier += "<Shift>";
+				//if we're pressing shift, and the key is ISO_Left_Tab,
+				//just make it Tab
+				if (evnt.Key == Key.ISO_Left_Tab)
+					return string.Format ("{0}{1}", modifier, Key.Tab);
+			}
+			return string.Format ("{0}{1}", modifier, evnt.Key.ToString ());
 		}
 #endregion
 		

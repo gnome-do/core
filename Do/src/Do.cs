@@ -27,18 +27,17 @@ using Mono.Unix;
 using Do.UI;
 using Do.Core;
 using Do.Platform;
+using Do.Platform.Common;
 
 namespace Do {
 
 	static class Do {
 		
-		static XKeybinder keybinder;
 		static Controller controller;
 		static UniverseManager universe_manager;
 
-		public static CorePreferences Preferences { get; private set; } 
-		public static CoreKeybindings Keybindings { get; private set; } 
-
+		public static CorePreferences Preferences { get; private set; }
+		
 		internal static void Main (string [] args)
 		{
 			Catalog.Init ("gnome-do", AssemblyInfo.LocaleDirectory);
@@ -54,8 +53,6 @@ namespace Do {
 			Services.System.EnsureSingleApplicationInstance ();
 
 			Preferences = new CorePreferences ();
-
-			Keybindings = new CoreKeybindings ();
 
 			// Now we can set the preferred log level.
 			if (Preferences.QuietStart)
@@ -73,12 +70,11 @@ namespace Do {
 			Controller.Initialize ();
 			UniverseManager.Initialize ();
 			
-			keybinder = new XKeybinder ();
 			SetupKeybindings ();
 
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
-			
+
 			Gtk.Application.Run ();
 			
 			RelevanceProvider.Serialize (RelevanceProvider.DefaultProvider);
@@ -100,37 +96,17 @@ namespace Do {
 				return universe_manager;
 			}
 		}
-
-		static void SummonKeyCb (object sender, PreferencesChangedEventArgs e)
-		{
-			try {
-				if (e.OldValue != null)
-					keybinder.Unbind (e.OldValue as string);
-				keybinder.Bind (Keybindings.GetKeybinding ("SummonKey"), OnActivate);
-			} catch (Exception ex) {
-				Log.Error ("Could not bind summon key: {0}", ex.Message);
-				Log.Debug (ex.StackTrace);
-			}
-
-		}
 		
 		static void SetupKeybindings ()
 		{
 			try {
-				keybinder.Bind (Keybindings.GetKeybinding ("SummonKey"), OnActivate);
+				if (!Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon Do"),
+					"<Super>space", delegate { controller.Summon (); }, true)))
+					throw new Exception ();
 			} catch (Exception e) {
-				Log.Error ("Could not bind summon key: {0}", e.Message);
+				Log.Fatal ("Could not bind summon key!");
 				Log.Debug (e.StackTrace);
 			}
-
-			// Watch preferences for changes to the keybinding so we
-			// can change the binding when the user reassigns it.
-			Keybindings.RegisterNotification ("SummonKey", SummonKeyCb);
-		}
-		
-		static void OnActivate (object sender, EventArgs e)
-		{
-			controller.Summon ();
 		}
 	}
 }

@@ -16,7 +16,6 @@ FILES = \
 	gtk-gui/generated.cs \
 	src/AssemblyInfo.cs \
 	src/CorePreferences.cs \
-	src/CoreKeybindings.cs \
 	src/Do.Core/Do.Core.Addins/AddinClassifier.cs \
 	src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs \
 	src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs \
@@ -73,8 +72,7 @@ FILES = \
 	src/Mono.Addins/AddinExtensions.cs \
 	src/Mono.Addins/Mono.Addins.Setup/AddinRepositoryEntryExtensions.cs \
 	src/PathExtensions.cs \
-	src/Util.cs \
-	src/XKeybinder.cs
+	src/Util.cs
 
 RESOURCES = \
 	gtk-gui/gui.stetic \
@@ -103,10 +101,10 @@ PROJECT_REFERENCES = \
 # Extra rules for our binary, not worth factoring out
 #
 
-CLEANFILES += Do.exe.config gnome-do
-EXTRA_DIST += Do.exe.config.in gnome-do.in Do.addins
+CLEANFILES += gnome-do
+EXTRA_DIST += gnome-do.in Do.addins
 
-module_DATA += Do.exe.config Do.addins
+module_DATA += Do.addins
 bin_SCRIPTS = gnome-do
 
 MCS_FLAGS += -unsafe
