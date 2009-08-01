@@ -110,7 +110,7 @@ namespace Do.UI
 			
 			string realKey = Gtk.Accelerator.Name (args.AccelKey, args.AccelMods);
 			
-			if (args.AccelKey == (uint) Gdk.Key.Super_L) {
+			if (args.AccelKey == (uint) Gdk.Key.Super_L || args.AccelKey == (uint) Gdk.Key.Super_R) {
 				//setting CellRenderAccelMode to "Other" ignores the Super key as a modifier
 				//this prevents us from grabbing _only_ the Super key.
 				return;

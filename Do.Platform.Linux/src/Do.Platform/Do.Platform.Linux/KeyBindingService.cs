@@ -43,6 +43,8 @@ namespace Do.Platform.Linux
 		}
 		
 		public override bool RegisterOSKey (string keyString, EventCallback cb) {
+			if (string.IsNullOrEmpty (keyString) || cb == null)
+				return false;
 			return gnomedo_keybinder_bind (keyString, key_handler);
 		}
 

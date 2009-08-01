@@ -90,14 +90,6 @@ namespace Do.Platform.Common
 			}
 
 			if (success) {
-				/*
-				//first remove the old binding
-				Bindings.Remove (binding.KeyString);
-				//next set the new keystring
-				binding.KeyString = newKeyString;
-				//now add it back to the dict of bindings
-				Bindings.Add (binding.KeyString, binding);
-				*/
 				//set the new keystring
 				Bindings.First (k => k.KeyString == binding.KeyString).KeyString = newKeyString;
 				
