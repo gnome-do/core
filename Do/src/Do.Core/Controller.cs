@@ -109,6 +109,18 @@ namespace Do.Core
 			Screen.Default.CompositedChanged += OnCompositingChanged;
 			
 			// Register Shortcuts
+			SetupKeybindings ();
+		}
+		
+		void SetupKeybindings ()
+		{
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon Do"), "<Super>space", 
+				OnSummonKeyPressEvent, true));
+			
+			// this keybinding is disabled by default - note the empty binding
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon in Text Mode"), "",
+				OnTextModeSummonKeyPressEvent, true));
+			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Enter Text Mode"), "period",
 				OnTextModePressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Copy to Clipboard"), "<Control>c",
@@ -137,9 +149,6 @@ namespace Do.Core
 				OnRightKeyPressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Select Multiple Items"), "comma",
 				OnSelectionKeyPressEvent));
-			//summon in text mode
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon in Text Mode"), "",
-				delegate { this.Summon (); SearchController.TextMode = true; UpdatePane (CurrentPane); } , true));
 		}
 
 		void OnSummoned ()
@@ -508,8 +517,19 @@ namespace Do.Core
 		
 		void OnSummonKeyPressEvent (EventKey evnt)
 		{
-			Reset ();
-			Vanish ();
+			if (IsSummoned) {
+				Reset ();
+				Vanish ();
+			} else {
+				Summon ();
+			}
+		}
+		
+		void OnTextModeSummonKeyPressEvent (EventKey evnt)
+		{
+			Summon (); 
+			SearchController.TextMode = true; 
+			UpdatePane (CurrentPane);
 		}
 		
 		void OnEscapeKeyPressEvent (EventKey evnt)

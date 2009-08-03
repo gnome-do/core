@@ -70,8 +70,6 @@ namespace Do {
 			Controller.Initialize ();
 			UniverseManager.Initialize ();
 			
-			SetupKeybindings ();
-
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
 
@@ -94,18 +92,6 @@ namespace Do {
 				if (universe_manager == null)
 					universe_manager = new UniverseManager ();
 				return universe_manager;
-			}
-		}
-		
-		static void SetupKeybindings ()
-		{
-			try {
-				if (!Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon Do"),
-					"<Super>space", delegate { controller.Summon (); }, true)))
-					throw new Exception ();
-			} catch (Exception e) {
-				Log.Fatal ("Could not bind summon key!");
-				Log.Debug (e.StackTrace);
 			}
 		}
 	}
