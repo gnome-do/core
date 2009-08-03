@@ -67,7 +67,7 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 
-			foreach (KeyBinding binding in Services.Keybinder.Bindings.OrderBy (k => k.Description)) {
+			foreach (KeyBinding binding in Services.Keybinder.Bindings) { //.OrderBy (k => k.Description)) {
 				store.AppendValues (binding.Description, binding.KeyString, binding.DefaultKeyString, binding);
 			}
 		}
