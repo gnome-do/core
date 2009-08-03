@@ -148,10 +148,10 @@ namespace Do.Core
 			Summoned (this, EventArgs.Empty);
 		}
 		
-		void OnCompositingChanged(object sender, EventArgs args)
+		void OnCompositingChanged (object sender, EventArgs args)
 		{
-			UnsetTheme();
-			SetTheme(Do.Preferences.Theme);
+			UnsetTheme ();
+			SetTheme (Do.Preferences.Theme);
 		}
 		
 		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
