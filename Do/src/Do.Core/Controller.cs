@@ -117,9 +117,9 @@ namespace Do.Core
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon Do"), "<Super>space", 
 				OnSummonKeyPressEvent, true));
 			
-			// this keybinding is disabled by default - note the empty binding
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon in Text Mode"), "",
-				OnTextModeSummonKeyPressEvent, true));
+			// this keybinding is disabled by default, obviously
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon into Text Mode"), 
+				Catalog.GetString( "Disabled"), OnTextModeSummonKeyPressEvent, true));
 			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Enter Text Mode"), "period",
 				OnTextModePressEvent));

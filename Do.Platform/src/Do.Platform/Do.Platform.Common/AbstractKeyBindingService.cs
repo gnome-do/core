@@ -15,21 +15,22 @@ namespace Do.Platform.Common
 
 		IPreferences prefs;
 
-		#region IInitializedService
+#region IInitializedService
 
-		public void Initialize () {
-			Bindings = new List<KeyBinding> ();
-			
+		public void Initialize () 
+		{
+			Bindings = new List<KeyBinding> ();	
 			prefs = Services.Preferences.Get<AbstractKeyBindingService> ();
 		}
 
-		#endregion
+#endregion
 
-		#region IKeyBindingService
+#region IKeyBindingService
 
 		public List<KeyBinding> Bindings { get; private set; }
 
-		public bool RegisterKeyBinding (KeyBinding binding) {
+		public bool RegisterKeyBinding (KeyBinding binding) 
+		{
 			//first check if this keystring is already used
 			if (Bindings.Any (k => k.KeyString == binding.KeyString)) {
 				Log<AbstractKeyBindingService>.Error ("Key '{0}' is already mapped.", binding.KeyString);
@@ -49,14 +50,8 @@ namespace Do.Platform.Common
 				//try to register the key from the prefs with the OS
 				if (!RegisterOSKey (binding.KeyString, binding.Callback)) {
 					//if we fail to register the summon key, try again with the default binding
-					if (RegisterOSKey (binding.DefaultKeyString, binding.Callback)) {
-						//if we succeeded now, change the event's keystring
-						binding.KeyString = binding.DefaultKeyString;
-					} else {
-						//if we still didn't succeed, return false
-						return false;
-					}
-				
+					RegisterOSKey (binding.DefaultKeyString, binding.Callback);
+					binding.KeyString = binding.DefaultKeyString;
 				}
 			}
 
@@ -68,7 +63,8 @@ namespace Do.Platform.Common
 			return true;
 		}
 
-		public bool SetKeyString (KeyBinding binding, string newKeyString) {
+		public bool SetKeyString (KeyBinding binding, string newKeyString) 
+		{
 			//first check if this keystring exists
 			if (!Bindings.Any (k => k.KeyString == binding.KeyString)) {
 				Log<AbstractKeyBindingService>.Error ("Key '{0}' is not mapped.", binding.KeyString);
@@ -94,7 +90,6 @@ namespace Do.Platform.Common
 
 			return true;
 		}
-
-		#endregion
+#endregion
 	}
 }

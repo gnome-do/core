@@ -45,7 +45,7 @@ namespace Do.UI
 			Model = new ListStore (typeof (string), typeof (string), typeof (string), typeof (KeyBinding));
 			
 			CellRendererText actionCell = new CellRendererText ();
-			actionCell.Width = 150;
+			actionCell.Width = 175;
 			InsertColumn (-1, Catalog.GetString ("Action"), actionCell, "text", (int)Column.Action);
 			
 			CellRendererAccel bindingCell = new CellRendererAccel ();
@@ -68,6 +68,7 @@ namespace Do.UI
 			store.Clear ();
 
 			foreach (KeyBinding binding in Services.Keybinder.Bindings) { //.OrderBy (k => k.Description)) {
+				Log<KeybindingTreeView>.Debug (binding.Description);
 				store.AppendValues (binding.Description, binding.KeyString, binding.DefaultKeyString, binding);
 			}
 		}
@@ -161,8 +162,6 @@ namespace Do.UI
 				}
 			}
 			return false;
-		}
-		
+		}	
 	}
-
 }
