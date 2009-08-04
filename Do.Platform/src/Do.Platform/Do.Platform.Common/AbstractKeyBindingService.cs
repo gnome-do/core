@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Mono.Unix;
+
 using Do.Platform.Common;
 
 namespace Do.Platform.Common
@@ -50,8 +52,13 @@ namespace Do.Platform.Common
 				//try to register the key from the prefs with the OS
 				if (!RegisterOSKey (binding.KeyString, binding.Callback)) {
 					//if we fail to register the summon key, try again with the default binding
-					RegisterOSKey (binding.DefaultKeyString, binding.Callback);
-					binding.KeyString = binding.DefaultKeyString;
+					if (RegisterOSKey (binding.DefaultKeyString, binding.Callback)) {
+						binding.KeyString = binding.DefaultKeyString;
+					} else {
+						Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.Description, 
+							binding.KeyString);
+						binding.KeyString = Catalog.GetString ("Disabled");
+					}
 				}
 			}
 
