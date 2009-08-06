@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Mono.Unix;
+
 using Do.Platform.Common;
 
 namespace Do.Platform.Common
@@ -15,24 +17,25 @@ namespace Do.Platform.Common
 
 		IPreferences prefs;
 
-		#region IInitializedService
+#region IInitializedService
 
-		public void Initialize () {
-			Bindings = new List<KeyBinding> ();
-			
+		public void Initialize () 
+		{
+			Bindings = new List<KeyBinding> ();	
 			prefs = Services.Preferences.Get<AbstractKeyBindingService> ();
 		}
 
-		#endregion
+#endregion
 
-		#region IKeyBindingService
+#region IKeyBindingService
 
 		public List<KeyBinding> Bindings { get; private set; }
 
-		public bool RegisterKeyBinding (KeyBinding binding) {
+		public bool RegisterKeyBinding (KeyBinding binding) 
+		{
 			//first check if this keystring is already used
 			if (Bindings.Any (k => k.KeyString == binding.KeyString)) {
-				Log<AbstractKeyBindingService>.Error ("Key '{0}' is already mapped.", binding.KeyString);
+				Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.KeyString);
 				return false;
 			}
 
@@ -50,13 +53,12 @@ namespace Do.Platform.Common
 				if (!RegisterOSKey (binding.KeyString, binding.Callback)) {
 					//if we fail to register the summon key, try again with the default binding
 					if (RegisterOSKey (binding.DefaultKeyString, binding.Callback)) {
-						//if we succeeded now, change the event's keystring
 						binding.KeyString = binding.DefaultKeyString;
 					} else {
-						//if we still didn't succeed, return false
-						return false;
+						Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.Description, 
+							binding.KeyString);
+						binding.KeyString = Catalog.GetString ("Disabled");
 					}
-				
 				}
 			}
 
@@ -68,10 +70,11 @@ namespace Do.Platform.Common
 			return true;
 		}
 
-		public bool SetKeyString (KeyBinding binding, string newKeyString) {
+		public bool SetKeyString (KeyBinding binding, string newKeyString) 
+		{
 			//first check if this keystring exists
 			if (!Bindings.Any (k => k.KeyString == binding.KeyString)) {
-				Log<AbstractKeyBindingService>.Error ("Key '{0}' is not mapped.", binding.KeyString);
+				Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.KeyString);
 				return false;
 			}
 						
@@ -90,11 +93,10 @@ namespace Do.Platform.Common
 			//save the new value in the prefs
 			prefs.Set (binding.Description.Replace (' ', '_'), binding.KeyString);
 
-			Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to '{1}'", binding.Description, binding.KeyString);
+			Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to \"{1}\"", binding.Description, binding.KeyString);
 
 			return true;
 		}
-
-		#endregion
+#endregion
 	}
 }

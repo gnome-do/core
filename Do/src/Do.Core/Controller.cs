@@ -123,30 +123,37 @@ namespace Do.Core
 			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Enter Text Mode"), "period",
 				OnTextModePressEvent));
+			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Copy to Clipboard"), "<Control>c",
 				OnCopyEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Paste Current Text"), "<Control>v",
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Paste from Clipboard"), "<Control>v",
 				OnPasteEvent));
+			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Pane"), "<Shift>Tab",
 				OnPreviousPanePressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next Pane"), "Tab",
 				OnNextPanePressEvent));
+			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Item"), "Up",
 				OnUpKeyPressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next Item"), "Down",
 				OnDownKeyPressEvent));
+			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("First Item"), "Home",
 				OnHomeKeyPressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Last Item"), "End",
 				OnEndKeyPressEvent));
+			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous 5 Results"), "Page_Up",
 				OnPageUpKeyPressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next 5 Results"), "Page_Down",
 				OnPageDownKeyPressEvent));
+			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Step Out of Item"), "Left",
 				OnLeftKeyPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Browse Into Item"), "Right",
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Step Into Item"), "Right",
 				OnRightKeyPressEvent));
+			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Select Multiple Items"), "comma",
 				OnSelectionKeyPressEvent));
 		}

@@ -217,7 +217,6 @@ namespace Do.Platform
 		}
 
 		public static PreferencesFactory Preferences {
-
 			get {
 				if (preferences == null) {
 					IPreferencesService service = LocateService<IPreferencesService, Default.PreferencesService> ();
