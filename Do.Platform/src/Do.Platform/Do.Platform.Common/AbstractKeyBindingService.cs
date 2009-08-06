@@ -35,7 +35,7 @@ namespace Do.Platform.Common
 		{
 			//first check if this keystring is already used
 			if (Bindings.Any (k => k.KeyString == binding.KeyString)) {
-				Log<AbstractKeyBindingService>.Error ("Key '{0}' is already mapped.", binding.KeyString);
+				Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.KeyString);
 				return false;
 			}
 
@@ -74,7 +74,7 @@ namespace Do.Platform.Common
 		{
 			//first check if this keystring exists
 			if (!Bindings.Any (k => k.KeyString == binding.KeyString)) {
-				Log<AbstractKeyBindingService>.Error ("Key '{0}' is not mapped.", binding.KeyString);
+				Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.KeyString);
 				return false;
 			}
 						
@@ -93,7 +93,7 @@ namespace Do.Platform.Common
 			//save the new value in the prefs
 			prefs.Set (binding.Description.Replace (' ', '_'), binding.KeyString);
 
-			Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to '{1}'", binding.Description, binding.KeyString);
+			Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to \"{1}\"", binding.Description, binding.KeyString);
 
 			return true;
 		}
