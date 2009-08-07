@@ -67,8 +67,7 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 
-			foreach (KeyBinding binding in Services.Keybinder.Bindings) { //.OrderBy (k => k.Description)) {
-				Log<KeybindingTreeView>.Debug (binding.Description);
+			foreach (KeyBinding binding in Services.Keybinder.Bindings) {
 				store.AppendValues (binding.Description, binding.KeyString, binding.DefaultKeyString, binding);
 			}
 		}
@@ -96,7 +95,7 @@ namespace Do.UI
 		{
 			string binding = model.GetValue (treeiter, (int) Column.BoundKeyString) as string;
 			if (binding == keyBinding) {
-				model.SetValue (treeiter, (int) Column.BoundKeyString, "");
+				model.SetValue (treeiter, (int) Column.BoundKeyString, Catalog.GetString ("Disabled"));
 			}
 			return false;
 		}
@@ -136,7 +135,7 @@ namespace Do.UI
 				string defaultVal = store.GetValue (iter, (int) Column.DefaultKeybinding).ToString ();
 				store.SetValue (iter, (int) Column.BoundKeyString, defaultVal);
 			} catch (Exception e) {
-				store.SetValue (iter, (int) Column.BoundKeyString, "");
+				store.SetValue (iter, (int) Column.BoundKeyString, Catalog.GetString ("Disabled"));
 			}
 
 			SaveBindings ();
