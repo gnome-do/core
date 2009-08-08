@@ -63,9 +63,8 @@ namespace Do {
 
 			try {
 				Services.System.SetProcessName ("gnome-do");
-				//Util.SetProcessName ("gnome-do");
 			} catch (Exception e) {
-				Log.Error ("Failed to set process name: {0}.", e.Message);
+				Log.Error ("Failed to set process name: {0}", e.Message);
 			}
 			
 			Controller.Initialize ();

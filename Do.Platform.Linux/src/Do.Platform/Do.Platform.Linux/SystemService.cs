@@ -61,15 +61,10 @@ namespace Do.Platform.Linux
 		
 		[DllImport ("libc")] // Linux
 		private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
-		
-		private static int prctl (int option, byte [] arg2)
-		{
-			return prctl (option, arg2, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-		}
 
 		private static int prctl (int option, string arg2)
 		{
-			return prctl (option, Encoding.ASCII.GetBytes (arg2 + "\0"));
+			return prctl (option, Encoding.ASCII.GetBytes (arg2 + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
 		}
 
 		[DllImport ("libc")] // BSD
