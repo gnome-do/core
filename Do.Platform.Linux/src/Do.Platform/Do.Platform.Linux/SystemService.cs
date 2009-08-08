@@ -19,7 +19,9 @@
 
 using System;
 using System.IO;
+using System.Text;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 using NDesk.DBus;
 using org.freedesktop.DBus;
@@ -28,6 +30,8 @@ using Do.Platform.ServiceStack;
 using Do.Platform.Linux.DBus;
 
 using Gnome;
+
+using Mono.Unix.Native;
 
 namespace Do.Platform.Linux
 {
@@ -53,6 +57,27 @@ namespace Do.Platform.Linux
 		interface IDeviceKitPower : org.freedesktop.DBus.Properties
 		{
 			event Action OnChanged;
+		}
+		
+		[DllImport ("libc")] // Linux
+		private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
+		
+		private static int prctl (int option, byte [] arg2)
+		{
+			return prctl (option, arg2, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+		}
+
+		private static int prctl (int option, string arg2)
+		{
+			return prctl (option, Encoding.ASCII.GetBytes (arg2 + "\0"));
+		}
+
+		[DllImport ("libc")] // BSD
+		private static extern void setproctitle (byte [] fmt, byte [] name);
+
+		private static void setproctitle (string fmt, string name)
+		{
+			setproctitle (Encoding.ASCII.GetBytes (fmt + "\0"), Encoding.ASCII.GetBytes (name + "\0"));
 		}
 		
 		bool on_battery;
@@ -211,6 +236,46 @@ namespace Do.Platform.Linux
 				autostart.Save (null, true);
 			} catch (Exception e) {
 				Log<SystemService>.Error ("Failed to update autostart file: {0}", e.Message);
+			}
+		}
+		
+		/// <summary>
+		/// Sets the name of the current process on Linux. Throws EntryPointNotFoundException
+		/// if we are not on Linux.
+		/// </summary>
+		/// <param name="name">
+		/// A <see cref="System.String"/> name to set the process name to.
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/> indicating whether the set was successful.
+		/// </returns>
+		private static bool SetLinuxProcessName (string name)
+		{
+			return prctl (15 /* PR_SET_NAME */, name) == 0;
+		}
+
+		/// <summary>
+		/// Sets the name of the current process on BSD. Throws EntryPointNotFoundException
+		/// if we are not on BSD.
+		/// </summary>
+		/// <param name="name">
+		/// A <see cref="System.String"/> name to set the process name to.
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/> indicating whether the set was successful.
+		/// </returns>
+		private static void SetBSDProcessName (string name)
+		{
+			setproctitle ("%s", name);
+		}
+		
+		public override void SetProcessName (string name)
+		{
+			try {
+				if (!SetLinuxProcessName (name))
+					throw new ApplicationException ("Error setting process name: " + Stdlib.GetLastError ());
+			} catch (EntryPointNotFoundException) {
+				SetBSDProcessName (name);
 			}
 		}
 	}

@@ -18,7 +18,6 @@
     <File name="gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.cs" subtype="Code" buildaction="Compile" />
     <File name="src/XKeybinder.cs" subtype="Code" buildaction="Compile" />
-    <File name="src/Util.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Core/ItemExtensions.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/InternalItemSource.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/ItemSourceItemSource.cs" subtype="Code" buildaction="Compile" />
