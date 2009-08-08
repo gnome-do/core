@@ -45,20 +45,20 @@ namespace Do.Platform.Common
 			//check if this keystring is already used
 			if (Bindings.Any (k => k.KeyString == binding.KeyString)) {
 				Log<AbstractKeyBindingService>.Error ("Key \"{0}\" is already mapped.", binding.KeyString);
-				binding.KeyString = Catalog.GetString ("Disabled");
+				binding.KeyString = "";
 			}
 
 			//if we are registering a key with the OS, do something special
 			if (binding.IsOSKey) {
 				//try to register the key from the prefs with the OS
-				if (!RegisterOSKey (binding.KeyString, binding.Callback) && binding.DefaultKeyString != Catalog.GetString ("Disabled")) {
+				if (!RegisterOSKey (binding.KeyString, binding.Callback)) {
 					//if we fail to register the summon key, try again with the default binding
 					if (RegisterOSKey (binding.DefaultKeyString, binding.Callback)) {
 						binding.KeyString = binding.DefaultKeyString;
 					} else {
 						Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.Description, 
 							binding.KeyString);
-						binding.KeyString = Catalog.GetString ("Disabled");
+						binding.KeyString = "";
 					}
 				}
 			}
@@ -91,7 +91,7 @@ namespace Do.Platform.Common
 			//save the new value in the prefs
 			prefs.Set (binding.Description.Replace (' ', '_'), binding.KeyString);
 
-			if (newKeyString != Catalog.GetString ("Disabled"))
+			if (!string.IsNullOrEmpty (binding.KeyString))
 			    Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to \"{1}\"", binding.Description, binding.KeyString);
 
 			return true;

@@ -36,23 +36,24 @@ namespace Do.Platform.Linux
 			}
 		}
 		
-		void KeybindingPressed (string keystring, IntPtr user_data)	{
+		void KeybindingPressed (string keystring, IntPtr user_data)	
+		{
 			if (Bindings.Any (k => k.KeyString == keystring)) {
 				Bindings.First (k => k.KeyString == keystring).Callback (null);
 			}
 		}
 		
-		public override bool RegisterOSKey (string keyString, EventCallback cb) {
+		public override bool RegisterOSKey (string keyString, EventCallback cb)
+		{
 			if (string.IsNullOrEmpty (keyString) || cb == null)
 				return false;
 			return gnomedo_keybinder_bind (keyString, key_handler);
 		}
 
-		public override bool UnRegisterOSKey (string keyString) {
-			
-			if (Bindings.Any (k => k.KeyString == keyString)) {
+		public override bool UnRegisterOSKey (string keyString)
+		{
+			if (Bindings.Any (k => k.KeyString == keyString))
 				return gnomedo_keybinder_unbind (keyString, key_handler);
-			}
 			return false;
 		}
 	}

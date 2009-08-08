@@ -67,8 +67,11 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 
+			string ks;
+
 			foreach (KeyBinding binding in Services.Keybinder.Bindings) {
-				store.AppendValues (binding.Description, binding.KeyString, binding.DefaultKeyString, binding);
+				ks = (string.IsNullOrEmpty (binding.KeyString)) ? Catalog.GetString ("Disabled") : binding.KeyString;
+				store.AppendValues (binding.Description, ks, binding.DefaultKeyString, binding);
 			}
 		}
 		
@@ -150,6 +153,8 @@ namespace Do.UI
 		{
 			string newKeyString = model.GetValue (iter, (int) Column.BoundKeyString) as string;
 			KeyBinding binding = model.GetValue (iter, (int) Column.Binding) as KeyBinding;
+			
+			newKeyString = (newKeyString == Catalog.GetString ("Disabled")) ? "" : newKeyString;
 			
 			//only save if the keystring changed
 			if (newKeyString != null && binding.KeyString != newKeyString) {
