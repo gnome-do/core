@@ -124,6 +124,9 @@ namespace Do.Core
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Enter Text Mode"), "period",
 				OnTextModePressEvent));
 			
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Clear"), "Escape",
+				OnClearKeyPressEvent));
+			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Copy to Clipboard"), "<Control>c",
 				OnCopyEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Paste from Clipboard"), "<Control>v",
@@ -453,12 +456,11 @@ namespace Do.Core
 		private void KeyPressWrap (EventKey evnt)
 		{
 			Key key = (Key) evnt.KeyValue;
-
 			
-			// Currently - only hardcoded are enter keys, escape and delete/backspace
-			if (key == Key.Escape) {
-				OnEscapeKeyPressEvent (evnt);
-			} else if (key == Key.Return ||
+			Console.WriteLine (evnt.Key.ToString ());
+			
+			// Currently - only hardcoded are enter keys and delete/backspace
+			if (key == Key.Return ||
 				   key == Key.ISO_Enter ||
 				   key == Key.KP_Enter) {
 				OnActivateKeyPressEvent (evnt);
@@ -539,7 +541,7 @@ namespace Do.Core
 			UpdatePane (CurrentPane);
 		}
 		
-		void OnEscapeKeyPressEvent (EventKey evnt)
+		void OnClearKeyPressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			if (SearchController.TextType == TextModeType.Explicit) {
@@ -733,7 +735,6 @@ namespace Do.Core
 				if (evnt.Key == Key.ISO_Left_Tab)
 					return string.Format ("{0}{1}", modifier, Key.Tab);
 			}
-			Console.WriteLine (evnt.Key.ToString ());
 			return string.Format ("{0}{1}", modifier, evnt.Key.ToString ());
 		}
 #endregion

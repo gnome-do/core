@@ -134,8 +134,10 @@ namespace Do.UI
 
 			store = Model as ListStore;
 			store.GetIter (out iter, new TreePath (args.PathString));
+			
 			try {
 				string defaultVal = store.GetValue (iter, (int) Column.DefaultKeybinding).ToString ();
+				defaultVal = (string.IsNullOrEmpty (defaultVal)) ? Catalog.GetString ("Disabled") : defaultVal;
 				store.SetValue (iter, (int) Column.BoundKeyString, defaultVal);
 			} catch (Exception e) {
 				store.SetValue (iter, (int) Column.BoundKeyString, Catalog.GetString ("Disabled"));
