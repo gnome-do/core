@@ -735,7 +735,6 @@ namespace Do.Core
 				if (evnt.Key == Key.ISO_Left_Tab)
 					return string.Format ("{0}{1}", modifier, Key.Tab);
 			}
-			Console.WriteLine (Gtk.Accelerator.Name (evnt.KeyValue, Gdk.ModifierType.None));
 			return string.Format ("{0}{1}", modifier, Gtk.Accelerator.Name (evnt.KeyValue, Gdk.ModifierType.None));
 		}
 #endregion
