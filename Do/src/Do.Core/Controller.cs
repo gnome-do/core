@@ -457,8 +457,6 @@ namespace Do.Core
 		{
 			Key key = (Key) evnt.KeyValue;
 			
-			Console.WriteLine (evnt.Key.ToString ());
-			
 			// Currently - only hardcoded are enter keys and delete/backspace
 			if (key == Key.Return ||
 				   key == Key.ISO_Enter ||
