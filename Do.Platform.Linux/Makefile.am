@@ -29,7 +29,9 @@ FILES = \
 	src/Do.Universe/NullApplicationItem.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
+	src/Do.Universe/GNOMEBookmarkItem.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
+	src/Do.Universe/GNOMETrashItem.cs \
 	src/Do.Widgets/AbstractLoginWidget.cs \
 	src/Do.Widgets/PluginAvailableDialog.cs
 
