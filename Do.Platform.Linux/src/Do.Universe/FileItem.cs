@@ -18,7 +18,6 @@
 //
 
 using System;
-using System.Linq;
 using IO = System.IO;
 using System.Collections.Generic;
 using SpecialFolder = System.Environment.SpecialFolder;
@@ -65,10 +64,14 @@ namespace Do.Universe.Linux {
 		{
 			Gnome.Vfs.Vfs.Initialize ();
 
-			// Initialize SpecialFolderIcons by expaning paths in
-			// SpecialFolderIconsXDG. If an icon already exists in SpecialFolderIcons
-			// for a given path, we don't overwrite it. This way SpecialFolderIconsXDG
-			// defines an ordering for which icons take precedent.
+			// Initialize SpecialFolderIcons by expanding paths in
+			// SpecialFolderIconsXDG.
+			//
+			// If an icon already exists in SpecialFolderIcons for a given path, we
+			// don't overwrite it. This way SpecialFolderIconsXDG defines an ordering
+			// for which icons take precedent; for example, XDG_DOWNLOAD_DIR and
+			// XDG_DESKTOP_DIR are often the same folder, so we use the icon for
+			// whichever one comes first in SpecialFolderIconsXDG.
 			SpecialFolderIcons = new Dictionary<string, string> ();
 			foreach (KeyValuePair<string, string> kv in SpecialFolderIconsXDG) {
 				string path = MaybeReadXdgUserDir (kv.Key);
@@ -186,6 +189,7 @@ namespace Do.Universe.Linux {
 
 				string large_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Large);
 				string normal_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Normal);
+
 				// Generating the thumbnail ourself is too slow for large files.
 				// Suggestion: generate thumbnails asynchronously. Banshee's
 				// notion of job queues may be useful.
