@@ -101,6 +101,7 @@ namespace Do.Platform.Linux
 			string text = "";
 			
 			try {			
+				// TODO: this is absolute garbage
 				if (item is ITextItem)
 					text = (item as ITextItem).Text;
 				else if (item is IFileItem)

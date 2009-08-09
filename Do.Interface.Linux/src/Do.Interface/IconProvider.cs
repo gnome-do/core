@@ -165,9 +165,9 @@ namespace Do.Interface
 				if (pixbuf != null) return true;
 			}
 			
-			// After this point, we assume that the caller's icon cannot be found, so we attempt
-			// to provide a suitable alternative. We return false to indicate that an alternative
-			// icon selection was made.
+			// After this point, we assume that the caller's icon cannot be found, so
+			// we attempt to provide a suitable alternative. We return false to
+			// indicate that an alternative icon selection was made.
 			
 			// Try to load a pretty "no icon found" icon.
 			if (name != MissingIconIcon) {

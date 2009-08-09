@@ -18,8 +18,10 @@
 //
 
 using System;
+using System.Linq;
 using IO = System.IO;
 using System.Collections.Generic;
+using SpecialFolder = System.Environment.SpecialFolder;
 
 using Gnome;
 using Mono.Unix;
@@ -36,10 +38,92 @@ namespace Do.Universe.Linux {
 	/// </summary>
 	internal class FileItem : Item, IFileItem, IOpenableItem {
 
+		// A map from absolute paths to icon names.
+		static readonly Dictionary<string, string> SpecialFolderIcons;
+
+		// A map from XDG user-dir names to icons names.
+		static readonly Dictionary<string, string> SpecialFolderIconsXDG
+			= new Dictionary<string, string> () {
+				{ "XDG_DESKTOP_DIR", "desktop" },
+				{ "XDG_DOWNLOAD_DIR", "folder-downloads" },
+				{ "XDG_TEMPLATES_DIR", "folder-templates" },
+				{ "XDG_PUBLICSHARE_DIR", "folder-publicshare" },
+				{ "XDG_DOCUMENTS_DIR", "folder-documents" },
+				{ "XDG_MUSIC_DIR", "folder-music" },
+				{ "XDG_PICTURES_DIR", "folder-pictures" },
+				{ "XDG_VIDEOS_DIR", "folder-videos" },
+			};
+
+		static string MaybeGetSpecialFolderIconForPath (string path)
+		{
+			return SpecialFolderIcons.ContainsKey (path)
+				? SpecialFolderIcons [path]
+				: null;
+		}
+
 		static FileItem ()
 		{
 			Gnome.Vfs.Vfs.Initialize ();
+
+			// Initialize SpecialFolderIcons by expaning paths in
+			// SpecialFolderIconsXDG. If an icon already exists in SpecialFolderIcons
+			// for a given path, we don't overwrite it. This way SpecialFolderIconsXDG
+			// defines an ordering for which icons take precedent.
+			SpecialFolderIcons = new Dictionary<string, string> ();
+			foreach (KeyValuePair<string, string> kv in SpecialFolderIconsXDG) {
+				string path = MaybeReadXdgUserDir (kv.Key);
+				if (path != null && !SpecialFolderIcons.ContainsKey (path)) {
+					SpecialFolderIcons [path] = kv.Value;
+				}
+			}
+
 		}
+
+		static string MaybeReadXdgUserDir (string key)
+		{
+			string home_dir, config_dir, env_path, user_dirs_path;
+
+			home_dir = Environment.GetFolderPath (SpecialFolder.Personal);
+			config_dir = Environment.GetFolderPath (SpecialFolder.ApplicationData);
+
+			env_path = Environment.GetEnvironmentVariable (key);
+			if (!String.IsNullOrEmpty (env_path)) {
+				return env_path;
+			}
+
+			user_dirs_path = IO.Path.Combine (config_dir, "user-dirs.dirs");
+			if (!IO.File.Exists (user_dirs_path)) {
+				return null;
+			}
+
+			try {
+				using (IO.StreamReader reader = new IO.StreamReader (user_dirs_path)) {
+					string line;
+					while ((line = reader.ReadLine ()) != null) {
+						line = line.Trim ();
+						int delim_index = line.IndexOf ('=');
+						if (delim_index > 8 && line.Substring (0, delim_index) == key) {
+							string path = line.Substring (delim_index + 1).Trim ('"');
+							bool relative = false;
+
+							if (path.StartsWith ("$HOME/")) {
+								relative = true;
+								path = path.Substring (6);
+							} else if (path.StartsWith ("~")) {
+								relative = true;
+								path = path.Substring (1);
+							} else if (!path.StartsWith ("/")) {
+								relative = true;
+							}
+							return relative ? IO.Path.Combine (home_dir, path) : path;
+						}
+					}
+				}
+			} catch (IO.FileNotFoundException) {
+			}
+			return null;
+		}
+
 
 		/// <summary>
 		/// Abbreviates an absolute path by replacing $HOME with ~.
@@ -54,7 +138,7 @@ namespace Do.Universe.Linux {
 		{
 			if (null == path) throw new ArgumentNullException ();
 
-			return path.Replace (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "~");
+			return path.Replace (Environment.GetFolderPath (SpecialFolder.Personal), "~");
 		}
 
 		string name, description, icon;
@@ -93,9 +177,13 @@ namespace Do.Universe.Linux {
 
 		public override string Icon {
 			get {
+				// Icon is memoized.
 				if (null != icon) return icon;
 
-				// TODO Filenames with spaces are not
+				// See if the Path is a special folder with a special icon.
+				icon = MaybeGetSpecialFolderIconForPath (Path);
+				if (icon != null) return icon;
+
 				string large_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Large);
 				string normal_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Normal);
 				// Generating the thumbnail ourself is too slow for large files.
