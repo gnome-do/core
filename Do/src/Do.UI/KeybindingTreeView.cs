@@ -67,9 +67,11 @@ namespace Do.UI
 			ListStore store = Model as ListStore;
 			store.Clear ();
 
-			foreach (KeyBinding binding in Services.Keybinder.Bindings) { //.OrderBy (k => k.Description)) {
-				Log<KeybindingTreeView>.Debug (binding.Description);
-				store.AppendValues (binding.Description, binding.KeyString, binding.DefaultKeyString, binding);
+			string ks;
+
+			foreach (KeyBinding binding in Services.Keybinder.Bindings) {
+				ks = (string.IsNullOrEmpty (binding.KeyString)) ? Catalog.GetString ("Disabled") : binding.KeyString;
+				store.AppendValues (binding.Description, ks, binding.DefaultKeyString, binding);
 			}
 		}
 		
@@ -96,7 +98,7 @@ namespace Do.UI
 		{
 			string binding = model.GetValue (treeiter, (int) Column.BoundKeyString) as string;
 			if (binding == keyBinding) {
-				model.SetValue (treeiter, (int) Column.BoundKeyString, "");
+				model.SetValue (treeiter, (int) Column.BoundKeyString, Catalog.GetString ("Disabled"));
 			}
 			return false;
 		}
@@ -132,11 +134,13 @@ namespace Do.UI
 
 			store = Model as ListStore;
 			store.GetIter (out iter, new TreePath (args.PathString));
+			
 			try {
 				string defaultVal = store.GetValue (iter, (int) Column.DefaultKeybinding).ToString ();
+				defaultVal = (string.IsNullOrEmpty (defaultVal)) ? Catalog.GetString ("Disabled") : defaultVal;
 				store.SetValue (iter, (int) Column.BoundKeyString, defaultVal);
 			} catch (Exception e) {
-				store.SetValue (iter, (int) Column.BoundKeyString, "");
+				store.SetValue (iter, (int) Column.BoundKeyString, Catalog.GetString ("Disabled"));
 			}
 
 			SaveBindings ();
@@ -151,6 +155,8 @@ namespace Do.UI
 		{
 			string newKeyString = model.GetValue (iter, (int) Column.BoundKeyString) as string;
 			KeyBinding binding = model.GetValue (iter, (int) Column.Binding) as KeyBinding;
+			
+			newKeyString = (newKeyString == Catalog.GetString ("Disabled")) ? "" : newKeyString;
 			
 			//only save if the keystring changed
 			if (newKeyString != null && binding.KeyString != newKeyString) {

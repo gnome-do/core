@@ -117,12 +117,15 @@ namespace Do.Core
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon Do"), "<Super>space", 
 				OnSummonKeyPressEvent, true));
 			
-			// this keybinding is disabled by default - note the empty binding
+			// this keybinding is disabled by default - note the empty keybinding
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon in Text Mode"), "",
 				OnTextModeSummonKeyPressEvent, true));
 			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Enter Text Mode"), "period",
 				OnTextModePressEvent));
+			
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Clear"), "Escape",
+				OnClearKeyPressEvent));
 			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Copy to Clipboard"), "<Control>c",
 				OnCopyEvent));
@@ -135,24 +138,24 @@ namespace Do.Core
 				OnNextPanePressEvent));
 			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Item"), "Up",
-				OnUpKeyPressEvent));
+				OnPreviousItemPressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next Item"), "Down",
-				OnDownKeyPressEvent));
+				OnNextItemPressEvent));
 			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("First Item"), "Home",
-				OnHomeKeyPressEvent));
+				OnFirstItemPressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Last Item"), "End",
-				OnEndKeyPressEvent));
+				OnLastItemPressEvent));
 			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous 5 Results"), "Page_Up",
-				OnPageUpKeyPressEvent));
+				OnNextItemPagePressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next 5 Results"), "Page_Down",
-				OnPageDownKeyPressEvent));
+				OnPreviousItemPagePressEvent));
 			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Step Out of Item"), "Left",
-				OnLeftKeyPressEvent));
+				OnStepOutItemPressEvent));
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Step Into Item"), "Right",
-				OnRightKeyPressEvent));
+				OnStepInItemPressEvent));
 			
 			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Select Multiple Items"), "comma",
 				OnSelectionKeyPressEvent));
@@ -453,12 +456,9 @@ namespace Do.Core
 		private void KeyPressWrap (EventKey evnt)
 		{
 			Key key = (Key) evnt.KeyValue;
-
 			
-			// Currently - only hardcoded are enter keys, escape and delete/backspace
-			if (key == Key.Escape) {
-				OnEscapeKeyPressEvent (evnt);
-			} else if (key == Key.Return ||
+			// Currently - only hardcoded are enter keys and delete/backspace
+			if (key == Key.Return ||
 				   key == Key.ISO_Enter ||
 				   key == Key.KP_Enter) {
 				OnActivateKeyPressEvent (evnt);
@@ -539,7 +539,7 @@ namespace Do.Core
 			UpdatePane (CurrentPane);
 		}
 		
-		void OnEscapeKeyPressEvent (EventKey evnt)
+		void OnClearKeyPressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			if (SearchController.TextType == TextModeType.Explicit) {
@@ -588,7 +588,7 @@ namespace Do.Core
 			}
 		}
 		
-		void OnLeftKeyPressEvent (EventKey evnt)
+		void OnStepOutItemPressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			if (!SearchController.Results.Any ()) return;
@@ -603,7 +603,7 @@ namespace Do.Core
 		}
 
 		// Hmm.
-		void OnRightKeyPressEvent (EventKey evnt)
+		void OnStepInItemPressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			if (!SearchController.Results.Any ()) return;
@@ -655,7 +655,7 @@ namespace Do.Core
 			UpdatePane (CurrentPane);
 		}
 		
-		void OnUpKeyPressEvent (EventKey evnt)
+		void OnPreviousItemPressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			if (!results_grown) {
@@ -671,7 +671,7 @@ namespace Do.Core
 			}
 		}
 
-		void OnDownKeyPressEvent (EventKey evnt)
+		void OnNextItemPressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			if (!results_grown) {
@@ -681,25 +681,25 @@ namespace Do.Core
 			SearchController.Cursor++;
 		}
 		
-		void OnHomeKeyPressEvent (EventKey evnt)
+		void OnFirstItemPressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			SearchController.Cursor = 0;
 		}
 
-		void OnEndKeyPressEvent (EventKey evnt)
+		void OnLastItemPressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			SearchController.Cursor = SearchController.Results.Count - 1;
 		}
 
-		void OnPageUpKeyPressEvent (EventKey evnt)
+		void OnNextItemPagePressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			SearchController.Cursor -= 5;
 		}
 		
-		void OnPageDownKeyPressEvent (EventKey evnt)
+		void OnPreviousItemPagePressEvent (EventKey evnt)
 		{
 			im_context.Reset ();
 			SearchController.Cursor += 5;
@@ -733,7 +733,7 @@ namespace Do.Core
 				if (evnt.Key == Key.ISO_Left_Tab)
 					return string.Format ("{0}{1}", modifier, Key.Tab);
 			}
-			return string.Format ("{0}{1}", modifier, evnt.Key.ToString ());
+			return string.Format ("{0}{1}", modifier, Gtk.Accelerator.Name (evnt.KeyValue, Gdk.ModifierType.None));
 		}
 #endregion
 		
