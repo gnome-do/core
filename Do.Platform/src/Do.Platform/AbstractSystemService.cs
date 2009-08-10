@@ -49,5 +49,6 @@ namespace Do.Platform
 		{
 		}
 		
+		public abstract void SetProcessName (string name);
 	}
 }
