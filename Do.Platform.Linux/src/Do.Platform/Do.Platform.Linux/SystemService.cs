@@ -59,20 +59,12 @@ namespace Do.Platform.Linux
 			event Action OnChanged;
 		}
 		
-		[DllImport ("libc")] // Linux
+		[DllImport ("libc")]
 		private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
 
 		private static int prctl (int option, string arg2)
 		{
 			return prctl (option, Encoding.ASCII.GetBytes (arg2 + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-		}
-
-		[DllImport ("libc")] // BSD
-		private static extern void setproctitle (byte [] fmt, byte [] name);
-
-		private static void setproctitle (string fmt, string name)
-		{
-			setproctitle (Encoding.ASCII.GetBytes (fmt + "\0"), Encoding.ASCII.GetBytes (name + "\0"));
 		}
 		
 		bool on_battery;
@@ -234,44 +226,9 @@ namespace Do.Platform.Linux
 			}
 		}
 		
-		/// <summary>
-		/// Sets the name of the current process on Linux. Throws EntryPointNotFoundException
-		/// if we are not on Linux.
-		/// </summary>
-		/// <param name="name">
-		/// A <see cref="System.String"/> name to set the process name to.
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.Boolean"/> indicating whether the set was successful.
-		/// </returns>
-		private static bool SetLinuxProcessName (string name)
-		{
-			return prctl (15 /* PR_SET_NAME */, name) == 0;
-		}
-
-		/// <summary>
-		/// Sets the name of the current process on BSD. Throws EntryPointNotFoundException
-		/// if we are not on BSD.
-		/// </summary>
-		/// <param name="name">
-		/// A <see cref="System.String"/> name to set the process name to.
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.Boolean"/> indicating whether the set was successful.
-		/// </returns>
-		private static void SetBSDProcessName (string name)
-		{
-			setproctitle ("%s", name);
-		}
-		
 		public override void SetProcessName (string name)
 		{
-			try {
-				if (!SetLinuxProcessName (name))
-					throw new ApplicationException ("Error setting process name: " + Stdlib.GetLastError ());
-			} catch (EntryPointNotFoundException) {
-				SetBSDProcessName (name);
-			}
+			prctl (15 /* PR_SET_NAME */, name);
 		}
 	}
 }
