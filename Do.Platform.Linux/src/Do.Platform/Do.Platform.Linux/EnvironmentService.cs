@@ -44,7 +44,7 @@ namespace Do.Platform.Linux
 			 path_matcher = new Regex (PathPattern, RegexOptions.Compiled);
 		}
 		
-		#region IEnvironmentService
+#region IEnvironmentService
 		
 		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
 			string subject, string body, IEnumerable<string> attachments)
@@ -141,7 +141,84 @@ namespace Do.Platform.Linux
 			}
 		}
 		
-		#endregion
+#endregion
+		
+		/// <summary>
+		/// Find the path of the directory that maps to the given XDG dir
+		/// if the xdg variable is not set, return null
+		/// </summary>
+		/// <param name="key">
+		/// A <see cref="System.String"/> XDG directory variable name
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/> path for the XDG directory env. variable
+		/// </returns>
+		public static string MaybePathForXdgVariable (this IEnvironmentService envService, string key)
+		{
+			return PathForXdgVariable (key, null);
+		}
+		
+		/// <summary>
+		/// Find the path of the directory that maps to the given XDG dir
+		/// if the xdg variable is not set, use the fallback value passed in
+		/// </summary>
+		/// <param name="key">
+		/// A <see cref="System.String"/> XDG directory variable name
+		/// </param>
+		/// <param name="fallback">
+		/// A <see cref="System.String"/> default XDG directory name to fallback
+		/// on if the variable is not set.
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/> path for the XDG directory env. variable
+		/// </returns>
+		public static string PathForXdgVariable (this IEnvironmentService envService, string key, string fallback)
+		{
+			string home_dir, config_dir, env_path, user_dirs_path;
+
+			home_dir = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
+			config_dir = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
+
+			env_path = Environment.GetEnvironmentVariable (key);
+			if (!String.IsNullOrEmpty (env_path)) {
+				return env_path;
+			}
+
+			user_dirs_path = Path.Combine (config_dir, "user-dirs.dirs");
+			if (!File.Exists (user_dirs_path)) {
+				return Path.Combine (home_dir, fallback);
+			}
+
+			try {
+				using (StreamReader reader = new StreamReader (user_dirs_path)) {
+					string line;
+					while ((line = reader.ReadLine ()) != null) {
+						line = line.Trim ();
+						int delim_index = line.IndexOf ('=');
+						if (delim_index > 8 && line.Substring (0, delim_index) == key) {
+							string path = line.Substring (delim_index + 1).Trim ('"');
+							bool relative = false;
+
+							if (path.StartsWith ("$HOME/")) {
+								relative = true;
+								path = path.Substring (6);
+							} else if (path.StartsWith ("~")) {
+								relative = true;
+								path = path.Substring (1);
+							} else if (!path.StartsWith ("/")) {
+								relative = true;
+							}
+							return relative ? Path.Combine (home_dir, path) : path;
+						}
+					}
+				}
+			} catch (FileNotFoundException) {
+			}
+			
+			return fallback == null 
+				? null
+				: Path.Combine (home_dir, fallback);
+		}
 		
 		void Open (string open)
 		{
@@ -192,6 +269,5 @@ namespace Do.Platform.Linux
 			}
 			return false;
 		}
-		
 	}
 }

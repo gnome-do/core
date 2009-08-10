@@ -27,6 +27,7 @@ using Mono.Unix;
 
 using Do.Platform;
 using Do.Universe;
+using Do.Platform.Linux;
 
 namespace Do.Universe.Linux {
 
@@ -74,60 +75,14 @@ namespace Do.Universe.Linux {
 			// whichever one comes first in SpecialFolderIconsXDG.
 			SpecialFolderIcons = new Dictionary<string, string> ();
 			foreach (KeyValuePair<string, string> kv in SpecialFolderIconsXDG) {
-				string path = MaybeReadXdgUserDir (kv.Key);
+				string path = Services.Environment.MaybePathForXdgVariable (kv.Key);
 				if (path != null && !SpecialFolderIcons.ContainsKey (path)) {
 					SpecialFolderIcons [path] = kv.Value;
 				}
 			}
 
 		}
-
-		static string MaybeReadXdgUserDir (string key)
-		{
-			string home_dir, config_dir, env_path, user_dirs_path;
-
-			home_dir = Environment.GetFolderPath (SpecialFolder.Personal);
-			config_dir = Environment.GetFolderPath (SpecialFolder.ApplicationData);
-
-			env_path = Environment.GetEnvironmentVariable (key);
-			if (!String.IsNullOrEmpty (env_path)) {
-				return env_path;
-			}
-
-			user_dirs_path = IO.Path.Combine (config_dir, "user-dirs.dirs");
-			if (!IO.File.Exists (user_dirs_path)) {
-				return null;
-			}
-
-			try {
-				using (IO.StreamReader reader = new IO.StreamReader (user_dirs_path)) {
-					string line;
-					while ((line = reader.ReadLine ()) != null) {
-						line = line.Trim ();
-						int delim_index = line.IndexOf ('=');
-						if (delim_index > 8 && line.Substring (0, delim_index) == key) {
-							string path = line.Substring (delim_index + 1).Trim ('"');
-							bool relative = false;
-
-							if (path.StartsWith ("$HOME/")) {
-								relative = true;
-								path = path.Substring (6);
-							} else if (path.StartsWith ("~")) {
-								relative = true;
-								path = path.Substring (1);
-							} else if (!path.StartsWith ("/")) {
-								relative = true;
-							}
-							return relative ? IO.Path.Combine (home_dir, path) : path;
-						}
-					}
-				}
-			} catch (IO.FileNotFoundException) {
-			}
-			return null;
-		}
-
-
+		
 		/// <summary>
 		/// Abbreviates an absolute path by replacing $HOME with ~.
 		/// </summary>
