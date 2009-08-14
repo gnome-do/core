@@ -81,7 +81,11 @@ namespace Do.Platform.Linux
 		
 		NetworkState State {
 			get	{ 
-				return (NetworkState) Enum.ToObject (typeof (NetworkState), network.Get (NetworkManagerName, "State"));
+				try {
+					return (NetworkState) Enum.ToObject (typeof (NetworkState), network.Get (NetworkManagerName, "State"));
+				} catch (Exception) {
+					return NetworkState.Unknown;
+				}
 			}
 		}
 		
