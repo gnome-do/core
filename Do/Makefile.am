@@ -71,8 +71,7 @@ FILES = \
 	src/Do.cs \
 	src/Mono.Addins/AddinExtensions.cs \
 	src/Mono.Addins/Mono.Addins.Setup/AddinRepositoryEntryExtensions.cs \
-	src/PathExtensions.cs \
-	src/Util.cs
+	src/PathExtensions.cs
 
 RESOURCES = \
 	gtk-gui/gui.stetic \

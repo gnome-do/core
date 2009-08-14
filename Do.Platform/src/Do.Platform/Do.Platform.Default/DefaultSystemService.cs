@@ -37,5 +37,10 @@ namespace Do.Platform.Default
 		{
 			Log<DefaultSystemService>.Debug ("Cannot EnsureSingleApplicationInstance");
 		}
+		
+		public override void SetProcessName (string name)
+		{
+			Log<DefaultSystemService>.Debug ("Cannot SetProcessName");
+		}
 	}
 }

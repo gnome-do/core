@@ -19,7 +19,9 @@
 
 using System;
 using System.IO;
+using System.Text;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 using NDesk.DBus;
 using org.freedesktop.DBus;
@@ -28,6 +30,8 @@ using Do.Platform.ServiceStack;
 using Do.Platform.Linux.DBus;
 
 using Gnome;
+
+using Mono.Unix.Native;
 
 namespace Do.Platform.Linux
 {
@@ -53,6 +57,14 @@ namespace Do.Platform.Linux
 		interface IDeviceKitPower : org.freedesktop.DBus.Properties
 		{
 			event Action OnChanged;
+		}
+		
+		[DllImport ("libc")]
+		private static extern int prctl (int option, byte [] arg2, IntPtr arg3, IntPtr arg4, IntPtr arg5);
+
+		private static int prctl (int option, string arg2)
+		{
+			return prctl (option, Encoding.ASCII.GetBytes (arg2 + "\0"), IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
 		}
 		
 		bool on_battery;
@@ -212,6 +224,11 @@ namespace Do.Platform.Linux
 			} catch (Exception e) {
 				Log<SystemService>.Error ("Failed to update autostart file: {0}", e.Message);
 			}
+		}
+		
+		public override void SetProcessName (string name)
+		{
+			prctl (15 /* PR_SET_NAME */, name);
 		}
 	}
 }

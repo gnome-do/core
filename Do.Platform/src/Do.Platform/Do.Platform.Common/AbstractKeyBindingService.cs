@@ -33,19 +33,20 @@ namespace Do.Platform.Common
 
 		public bool RegisterKeyBinding (KeyBinding binding) 
 		{
-			//first check if this keystring is already used
-			if (Bindings.Any (k => k.KeyString == binding.KeyString)) {
-				Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.KeyString);
-				return false;
-			}
-
 			//try to get the keystring from the prefs.  We default to the KeyBinding.KeyString, so we can later check
 			//if the prefs value matches that, we're using the default, otherwise we're using a user specified value
 			string prefsKeyString = prefs.Get (binding.Description.Replace (' ', '_'), binding.KeyString);
+			
 			//if these values don't match then the user has specified a new keystring
 			//update the KeyEvent then continue
 			if (prefsKeyString != binding.KeyString)
 				binding.KeyString = prefsKeyString;
+			
+			//check if this keystring is already used
+			if (Bindings.Any (k => k.KeyString == binding.KeyString)) {
+				Log<AbstractKeyBindingService>.Error ("Key \"{0}\" is already mapped.", binding.KeyString);
+				binding.KeyString = "";
+			}
 
 			//if we are registering a key with the OS, do something special
 			if (binding.IsOSKey) {
@@ -57,7 +58,7 @@ namespace Do.Platform.Common
 					} else {
 						Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.Description, 
 							binding.KeyString);
-						binding.KeyString = Catalog.GetString ("Disabled");
+						binding.KeyString = "";
 					}
 				}
 			}
@@ -73,27 +74,25 @@ namespace Do.Platform.Common
 		public bool SetKeyString (KeyBinding binding, string newKeyString) 
 		{
 			//first check if this keystring exists
-			if (!Bindings.Any (k => k.KeyString == binding.KeyString)) {
-				Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.KeyString);
+			if (!Bindings.Any (k => k.KeyString == binding.KeyString))
 				return false;
-			}
-						
+			
 			//if this key should be registered with the OS
 			if (binding.IsOSKey) {
 				//remove the old keystring from the OS
 				UnRegisterOSKey (binding.KeyString);
-				//register again with the new keystring, otherwise bail
-				if (!RegisterOSKey (newKeyString, binding.Callback))
-					return false;
+				//register again with the new keystring
+				RegisterOSKey (newKeyString, binding.Callback);
 			}
 
 			//set the new keystring
-			Bindings.First (k => k.KeyString == binding.KeyString).KeyString = newKeyString;
+			Bindings.First (k => k.Description == binding.Description).KeyString = newKeyString;
 			
 			//save the new value in the prefs
 			prefs.Set (binding.Description.Replace (' ', '_'), binding.KeyString);
 
-			Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to \"{1}\"", binding.Description, binding.KeyString);
+			if (!string.IsNullOrEmpty (binding.KeyString))
+			    Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to \"{1}\"", binding.Description, binding.KeyString);
 
 			return true;
 		}
