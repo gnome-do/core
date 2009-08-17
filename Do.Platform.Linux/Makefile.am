@@ -14,6 +14,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/Do.Platform.Linux.DBus/Registrar.cs \
 	src/Do.Platform/Do.Platform.Linux/ConsoleLogService.cs \
 	src/Do.Platform/Do.Platform.Linux/EnvironmentService.cs \
+	src/Do.Platform/Do.Platform.Linux/EnvironmentServiceExtensions.cs \
 	src/Do.Platform/Do.Platform.Linux/SystemService.cs \
 	src/Do.Platform/Do.Platform.Linux/GConfPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs \
@@ -29,7 +30,9 @@ FILES = \
 	src/Do.Universe/NullApplicationItem.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
+	src/Do.Universe/GNOMEBookmarkItem.cs \
 	src/Do.Universe/GNOMESpecialLocationsItemSource.cs \
+	src/Do.Universe/GNOMETrashItem.cs \
 	src/Do.Widgets/AbstractLoginWidget.cs \
 	src/Do.Widgets/PluginAvailableDialog.cs
 

@@ -44,7 +44,7 @@ namespace Do.Platform.Linux
 			 path_matcher = new Regex (PathPattern, RegexOptions.Compiled);
 		}
 		
-		#region IEnvironmentService
+#region IEnvironmentService
 		
 		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
 			string subject, string body, IEnumerable<string> attachments)
@@ -101,6 +101,7 @@ namespace Do.Platform.Linux
 			string text = "";
 			
 			try {			
+				// TODO: this is absolute garbage
 				if (item is ITextItem)
 					text = (item as ITextItem).Text;
 				else if (item is IFileItem)
@@ -139,8 +140,7 @@ namespace Do.Platform.Linux
 				return (pw == null) ? path : pw.pw_dir + m.Groups[2].Value;
 			}
 		}
-		
-		#endregion
+#endregion		
 		
 		void Open (string open)
 		{
@@ -191,6 +191,5 @@ namespace Do.Platform.Linux
 			}
 			return false;
 		}
-		
 	}
 }

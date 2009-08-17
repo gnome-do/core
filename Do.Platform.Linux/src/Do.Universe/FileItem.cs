@@ -20,12 +20,14 @@
 using System;
 using IO = System.IO;
 using System.Collections.Generic;
+using SpecialFolder = System.Environment.SpecialFolder;
 
 using Gnome;
 using Mono.Unix;
 
 using Do.Platform;
 using Do.Universe;
+using Do.Platform.Linux;
 
 namespace Do.Universe.Linux {
 
@@ -36,11 +38,51 @@ namespace Do.Universe.Linux {
 	/// </summary>
 	internal class FileItem : Item, IFileItem, IOpenableItem {
 
+		// A map from absolute paths to icon names.
+		static readonly Dictionary<string, string> SpecialFolderIcons;
+
+		// A map from XDG user-dir names to icons names.
+		static readonly Dictionary<string, string> SpecialFolderIconsXDG
+			= new Dictionary<string, string> () {
+				{ "XDG_DESKTOP_DIR", "desktop" },
+				{ "XDG_DOWNLOAD_DIR", "folder-downloads" },
+				{ "XDG_TEMPLATES_DIR", "folder-templates" },
+				{ "XDG_PUBLICSHARE_DIR", "folder-publicshare" },
+				{ "XDG_DOCUMENTS_DIR", "folder-documents" },
+				{ "XDG_MUSIC_DIR", "folder-music" },
+				{ "XDG_PICTURES_DIR", "folder-pictures" },
+				{ "XDG_VIDEOS_DIR", "folder-videos" },
+			};
+
+		static string MaybeGetSpecialFolderIconForPath (string path)
+		{
+			return SpecialFolderIcons.ContainsKey (path)
+				? SpecialFolderIcons [path]
+				: null;
+		}
+
 		static FileItem ()
 		{
 			Gnome.Vfs.Vfs.Initialize ();
-		}
 
+			// Initialize SpecialFolderIcons by expanding paths in
+			// SpecialFolderIconsXDG.
+			//
+			// If an icon already exists in SpecialFolderIcons for a given path, we
+			// don't overwrite it. This way SpecialFolderIconsXDG defines an ordering
+			// for which icons take precedent; for example, XDG_DOWNLOAD_DIR and
+			// XDG_DESKTOP_DIR are often the same folder, so we use the icon for
+			// whichever one comes first in SpecialFolderIconsXDG.
+			SpecialFolderIcons = new Dictionary<string, string> ();
+			foreach (KeyValuePair<string, string> kv in SpecialFolderIconsXDG) {
+				string path = Services.Environment.MaybePathForXdgVariable (kv.Key);
+				if (path != null && !SpecialFolderIcons.ContainsKey (path)) {
+					SpecialFolderIcons [path] = kv.Value;
+				}
+			}
+
+		}
+		
 		/// <summary>
 		/// Abbreviates an absolute path by replacing $HOME with ~.
 		/// </summary>
@@ -54,7 +96,7 @@ namespace Do.Universe.Linux {
 		{
 			if (null == path) throw new ArgumentNullException ();
 
-			return path.Replace (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "~");
+			return path.Replace (Environment.GetFolderPath (SpecialFolder.Personal), "~");
 		}
 
 		string name, description, icon;
@@ -93,11 +135,16 @@ namespace Do.Universe.Linux {
 
 		public override string Icon {
 			get {
+				// Icon is memoized.
 				if (null != icon) return icon;
 
-				// TODO Filenames with spaces are not
+				// See if the Path is a special folder with a special icon.
+				icon = MaybeGetSpecialFolderIconForPath (Path);
+				if (icon != null) return icon;
+
 				string large_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Large);
 				string normal_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Normal);
+
 				// Generating the thumbnail ourself is too slow for large files.
 				// Suggestion: generate thumbnails asynchronously. Banshee's
 				// notion of job queues may be useful.
