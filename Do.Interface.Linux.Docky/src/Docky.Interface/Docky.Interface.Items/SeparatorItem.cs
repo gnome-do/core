@@ -96,6 +96,16 @@ namespace Docky.Interface
 			return sr;
 		}
 		
+		public override void Scrolled (Gdk.ScrollDirection direction)
+		{
+			base.Scrolled (direction);
+			
+			if (direction == Gdk.ScrollDirection.Up)
+				DockPreferences.IconSize += 1;
+			else if (direction == Gdk.ScrollDirection.Down)
+				DockPreferences.IconSize -= 1;
+		}
+
 		#region IDisposable implementation 
 		
 		public override void Dispose ()
