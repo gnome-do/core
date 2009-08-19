@@ -339,9 +339,7 @@ namespace Docky.Interface
 		
 		void HandleKeyPressEvent (Gdk.EventKey key)
 		{
-			KeyBinding clearKeyBinding = null;
-			if (Services.Keybinder.Bindings.Where(p => p.Description == Mono.Unix.Catalog.GetString ("Clear")).Any())
-				clearKeyBinding = Services.Keybinder.Bindings.Where(p => p.Description == Mono.Unix.Catalog.GetString ("Clear")).First();
+			KeyBinding clearKeyBinding = Services.Keybinder.Bindings.Where(p => p.Description == Mono.Unix.Catalog.GetString ("Clear")).FirstOrDefault();
 			if (PainterOverlayVisible &&
 				clearKeyBinding != null && Services.Keybinder.KeyEventToString (key) == clearKeyBinding.KeyString)
 				InterruptPainter ();
