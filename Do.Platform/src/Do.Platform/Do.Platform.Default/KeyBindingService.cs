@@ -16,6 +16,9 @@ namespace Do.Platform.Default
 		public bool SetKeyString (KeyBinding binding, string keyString) {
 			return false;
 		}
+		public string KeyEventToString (Gdk.EventKey evnt) {
+			return "";
+		}
 		public List<KeyBinding> Bindings { get { return new List<KeyBinding> (); } }
 		public void Initialize () {
 		}
