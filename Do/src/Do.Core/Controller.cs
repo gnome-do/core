@@ -465,9 +465,9 @@ namespace Do.Core
 			} else if (key == Key.Delete ||
 				   key == Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-			} else if (Services.Keybinder.Bindings.Any (k => k.KeyString == KeyEventToString (evnt))) {
+			} else if (Services.Keybinder.Bindings.Any (k => k.KeyString == Services.Keybinder.KeyEventToString (evnt))) {
 				// User set keybindings
-				Services.Keybinder.Bindings.First (k => k.KeyString == KeyEventToString (evnt)).Callback (evnt);
+				Services.Keybinder.Bindings.First (k => k.KeyString == Services.Keybinder.KeyEventToString (evnt)).Callback (evnt);
 			} else {
 				OnInputKeyPressEvent (evnt);
 			}
@@ -703,37 +703,6 @@ namespace Do.Core
 		{
 			im_context.Reset ();
 			SearchController.Cursor += 5;
-		}
-				
-		/// <summary>
-		/// Converts a keypress into a human readable string for comparing
-		/// against values in GConf.
-		/// </summary>
-		/// <param name="evnt">
-		/// A <see cref="EventKey"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.String"/> in the form "<Modifier>key"
-		/// </returns>
-		string KeyEventToString (EventKey evnt) {
-			string modifier = "";
-			if ((evnt.State & ModifierType.ControlMask) != 0) {
-				modifier += "<Control>";
-			}
-			if ((evnt.State & ModifierType.SuperMask) != 0) {
-				modifier += "<Super>";
-			}
-			if ((evnt.State & ModifierType.Mod1Mask) != 0) {
-				modifier += "<Alt>";
-			}
-			if ((evnt.State & ModifierType.ShiftMask) != 0) {
-				modifier += "<Shift>";
-				//if we're pressing shift, and the key is ISO_Left_Tab,
-				//just make it Tab
-				if (evnt.Key == Key.ISO_Left_Tab)
-					return string.Format ("{0}{1}", modifier, Key.Tab);
-			}
-			return string.Format ("{0}{1}", modifier, Gtk.Accelerator.Name (evnt.KeyValue, Gdk.ModifierType.None));
 		}
 #endregion
 		

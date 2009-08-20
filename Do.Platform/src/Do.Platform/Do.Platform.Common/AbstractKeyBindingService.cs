@@ -96,6 +96,37 @@ namespace Do.Platform.Common
 
 			return true;
 		}
+		
+		/// <summary>
+		/// Converts a keypress into a human readable string for comparing
+		/// against values in GConf.
+		/// </summary>
+		/// <param name="evnt">
+		/// A <see cref="EventKey"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String"/> in the form "<Modifier>key"
+		/// </returns>
+		public string KeyEventToString (Gdk.EventKey evnt) {
+			string modifier = "";
+			if ((evnt.State & Gdk.ModifierType.ControlMask) != 0) {
+				modifier += "<Control>";
+			}
+			if ((evnt.State & Gdk.ModifierType.SuperMask) != 0) {
+				modifier += "<Super>";
+			}
+			if ((evnt.State & Gdk.ModifierType.Mod1Mask) != 0) {
+				modifier += "<Alt>";
+			}
+			if ((evnt.State & Gdk.ModifierType.ShiftMask) != 0) {
+				modifier += "<Shift>";
+				//if we're pressing shift, and the key is ISO_Left_Tab,
+				//just make it Tab
+				if (evnt.Key == Gdk.Key.ISO_Left_Tab)
+					return string.Format ("{0}{1}", modifier, Gdk.Key.Tab);
+			}
+			return string.Format ("{0}{1}", modifier, Gtk.Accelerator.Name (evnt.KeyValue, Gdk.ModifierType.None));
+		}
 #endregion
 	}
 }

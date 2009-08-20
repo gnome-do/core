@@ -194,7 +194,7 @@ namespace Docky.Interface
 		
 		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
 		{
-			if (Visible)
+			if (Visible || dock_area.PainterOverlayVisible)
 				KeyPressEvent (evnt);
 			return base.OnKeyPressEvent (evnt);
 		}

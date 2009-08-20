@@ -276,6 +276,8 @@ namespace Docky.Interface
 			DnDTracker.DragEnded += HandleDragEnded;
 			DnDTracker.DrawRequired += HandleDrawRequired; 
 			
+			window.KeyPressEvent += HandleKeyPressEvent;
+			
 			StyleSet += (o, a) => { 
 				if (IsRealized)
 					GdkWindow.SetBackPixmap (null, false);
@@ -308,6 +310,8 @@ namespace Docky.Interface
 			
 			DnDTracker.DragEnded -= HandleDragEnded;
 			DnDTracker.DrawRequired -= HandleDrawRequired; 
+			
+			window.KeyPressEvent -= HandleKeyPressEvent;
 		}
 		
 		void BuildAnimationStateEngine ()
@@ -331,6 +335,14 @@ namespace Docky.Interface
 			AnimationState.AddCondition (Animations.InputModeChanged,
 			                             () => DateTime.UtcNow - interface_change_time < SummonTime || 
 			                             DateTime.UtcNow - showhide_time < SummonTime);
+		}
+		
+		void HandleKeyPressEvent (Gdk.EventKey key)
+		{
+			KeyBinding clearKeyBinding = Services.Keybinder.Bindings.Where(p => p.Description == Mono.Unix.Catalog.GetString ("Clear")).FirstOrDefault();
+			if (PainterOverlayVisible &&
+				clearKeyBinding != null && Services.Keybinder.KeyEventToString (key) == clearKeyBinding.KeyString)
+				InterruptPainter ();
 		}
 		
 		void HandleCursorUpdated (object sender, CursorUpdatedArgs args)
