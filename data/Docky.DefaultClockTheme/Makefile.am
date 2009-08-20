@@ -1,4 +1,4 @@
-clockthemedir = $(datadir)/gnome-do/ClockTheme
+clockthemedir = $(datadir)/gnome-do/ClockTheme/default
 clocktheme_DATA = 	clock-drop-shadow.svg  \
 			clock-face.svg \
 			clock-glass.svg \
