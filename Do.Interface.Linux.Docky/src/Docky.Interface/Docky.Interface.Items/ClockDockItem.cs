@@ -270,12 +270,6 @@ namespace Docky.Interface
 			base.Clicked (button, state, position);
 		}
 		
-		public void SelectTheme ()
-		{
-			ClockThemeSelector dlg = new ClockThemeSelector (this);
-			dlg.Show ();
-		}
-		
 		public void SetTheme (string theme)
 		{
 			if (string.IsNullOrEmpty (theme))
@@ -302,10 +296,10 @@ namespace Docky.Interface
 					Catalog.GetString ("24-Hour Clock"), ShowMilitary ? "gtk-apply" : "gtk-remove");
 			
 			yield return new SimpleMenuButtonArgs (() => { ShowDate = !ShowDate; RedrawIcon (); },
-					Catalog.GetString ("Show Date"), ShowDate ? "gtk-apply" : "gtk-remove", ShowDigital);
+					Catalog.GetString ("Show Date"), ShowDate ? "gtk-apply" : "gtk-remove", !ShowDigital);
 			
-			yield return new SimpleMenuButtonArgs (SelectTheme,
-					Catalog.GetString ("Select Theme"), "preferences-desktop-theme", !ShowDigital);
+			yield return new SimpleMenuButtonArgs (() => { new ClockThemeSelector (this).Show (); },
+					Catalog.GetString ("Select Theme"), "preferences-desktop-theme", ShowDigital);
 		}
 		
 		#endregion 
@@ -314,7 +308,7 @@ namespace Docky.Interface
 	public class ClockThemeSelector : Gtk.Dialog
 	{
 		TreeStore labelTreeStore = new TreeStore (typeof (string));
-		TreeView labelTreeView = new TreeView();
+		TreeView labelTreeView = new TreeView ();
 		
 		ClockDockItem DockItem { get; set; }
 		
@@ -334,7 +328,7 @@ namespace Docky.Interface
 			win.Show ();
 			VBox.PackEnd (win);
 			VBox.ShowAll ();
-			AddButton("Close", ResponseType.Close);
+			AddButton ("Close", ResponseType.Close);
 
 			UpdateThemeList ();
 		}
