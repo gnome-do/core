@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 
 using Gdk;
+using Gtk;
 using Cairo;
 using Mono.Unix;
 
@@ -80,14 +81,23 @@ namespace Docky.Interface
 			}
 		}
 		
+		string current_theme = prefs.Get<string> ("ClockTheme", "default");
+		public string CurrentTheme {
+			get { return current_theme; }
+			protected set {
+				current_theme = value;
+				prefs.Set<string> ("ClockTheme", value);
+			}
+		}
+		
 		string ThemePath {
 			get {
-				if (Directory.Exists (System.IO.Path.Combine (Services.Paths.UserDataDirectory, "ClockTheme")))
-					return System.IO.Path.Combine (Services.Paths.UserDataDirectory, "ClockTheme");
-				if (Directory.Exists ("/usr/share/gnome-do/ClockTheme"))
-					return "/usr/share/gnome-do/ClockTheme";
-				if (Directory.Exists ("/usr/local/share/gnome-do/ClockTheme"))
-					return "/usr/local/share/gnome-do/ClockTheme";
+				if (Directory.Exists (System.IO.Path.Combine (Services.Paths.UserDataDirectory, "ClockTheme/" + CurrentTheme)))
+					return System.IO.Path.Combine (Services.Paths.UserDataDirectory, "ClockTheme/" + CurrentTheme);
+				if (Directory.Exists ("/usr/share/gnome-do/ClockTheme/" + CurrentTheme))
+					return "/usr/share/gnome-do/ClockTheme/" + CurrentTheme;
+				if (Directory.Exists ("/usr/local/share/gnome-do/ClockTheme/" + CurrentTheme))
+					return "/usr/local/share/gnome-do/ClockTheme/" + CurrentTheme;
 				return "";
 			}
 		}
@@ -149,9 +159,9 @@ namespace Docky.Interface
 			textContext.FontSize = size / 4;
 			int yOffset = ShowMilitary ? textContext.FontSize / 2 : 0;
 			if (ShowDate)
-				textContext.LeftCenteredPoint = new Gdk.Point (- size / 20, yOffset + textContext.FontSize);
+				textContext.LeftCenteredPoint = new Gdk.Point (0, yOffset + textContext.FontSize);
 			else
-				textContext.LeftCenteredPoint = new Gdk.Point (- size / 20, yOffset + size / 2 - size / 8);
+				textContext.LeftCenteredPoint = new Gdk.Point (0, yOffset + size / 2 - size / 8);
 			
 			if (ShowMilitary)
 				textContext.Text = string.Format ("<b>{0}</b>", DateTime.Now.ToString ("HH:mm"));
@@ -161,24 +171,21 @@ namespace Docky.Interface
 			DockServices.DrawingService.TextPathAtPoint (textContext);
 			cr.LineWidth = 3;
 			cr.Color = new Cairo.Color (0, 0, 0, 0.5);
-			cr.Stroke ();
-
-			DockServices.DrawingService.TextPathAtPoint (textContext);
+			cr.StrokePreserve ();
 			cr.Color = new Cairo.Color (1, 1, 1, 0.8);
 			cr.Fill ();
 			
 			// draw the date, outlined
 			if (ShowDate) {
 				textContext.FontSize = size / 5;
-				textContext.LeftCenteredPoint = new Gdk.Point (-size / 20, size - textContext.FontSize);
+				textContext.LeftCenteredPoint = new Gdk.Point (0, size - textContext.FontSize);
 				
 				textContext.Text = string.Format ("<b>{0}</b>", DateTime.Now.ToString ("MMM dd"));
 				
 				DockServices.DrawingService.TextPathAtPoint (textContext);
+				cr.LineWidth = 2.5;
 				cr.Color = new Cairo.Color (0, 0, 0, 0.5);
-				cr.Stroke ();
-				
-				DockServices.DrawingService.TextPathAtPoint (textContext);
+				cr.StrokePreserve ();
 				cr.Color = new Cairo.Color (1, 1, 1, 0.8);
 				cr.Fill ();
 			}
@@ -196,9 +203,9 @@ namespace Docky.Interface
 				
 				textContext.Text = "<b>am</b>";
 				if (ShowDate)
-					textContext.LeftCenteredPoint = new Gdk.Point (0, size / 2);
+					textContext.LeftCenteredPoint = new Gdk.Point (size / 10, size / 2);
 				else
-					textContext.LeftCenteredPoint = new Gdk.Point (0, size / 8 + size / 2 + textContext.FontSize);
+					textContext.LeftCenteredPoint = new Gdk.Point (size / 10, size / 8 + size / 2 + textContext.FontSize);
 				DockServices.DrawingService.TextPathAtPoint (textContext);
 				cr.Fill ();
 				
@@ -210,9 +217,9 @@ namespace Docky.Interface
 				
 				textContext.Text = "<b>pm</b>";
 				if (ShowDate)
-					textContext.LeftCenteredPoint = new Gdk.Point (size / 2, size / 2);
+					textContext.LeftCenteredPoint = new Gdk.Point (size / 10 + size / 2, size / 2);
 				else
-					textContext.LeftCenteredPoint = new Gdk.Point (size / 2, size / 8 + size / 2 + textContext.FontSize);
+					textContext.LeftCenteredPoint = new Gdk.Point (size / 10 + size / 2, size / 8 + size / 2 + textContext.FontSize);
 				DockServices.DrawingService.TextPathAtPoint (textContext);
 				cr.Fill ();
 			}
@@ -226,11 +233,9 @@ namespace Docky.Interface
 			int radius = center;
 			
 			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-drop-shadow.svg"), radius * 2);
+			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-face-shadow.svg"), radius * 2);
 			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-face.svg"), radius * 2);
 			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-marks.svg"), radius * 2);
-			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-face-shadow.svg"), radius * 2);
-			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-glass.svg"), radius * 2);
-			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-frame.svg"), radius * 2);
 			
 			cr.Translate (center, center);
 			cr.Color = new Cairo.Color (.15, .15, .15);
@@ -245,8 +250,8 @@ namespace Docky.Interface
 			cr.Rotate (0 - minuteRotation);
 			
 			cr.Color = new Cairo.Color (0, 0, 0);
-			double hourRotation = 2 * Math.PI * (DateTime.Now.Hour / 12.0) + 
-				Math.PI + (Math.PI / 6) * DateTime.Now.Minute / 60.0;
+			double hourRotation = 2 * Math.PI * (DateTime.Now.Hour / (ShowMilitary ? 24.0 : 12.0)) + 
+					Math.PI + (Math.PI / (ShowMilitary ? 12.0 : 6.0)) * DateTime.Now.Minute / 60.0;
 			cr.Rotate (hourRotation);
 			cr.MoveTo (0, radius - radius * .5);
 			cr.LineTo (0, 0 - radius * .15);
@@ -254,12 +259,26 @@ namespace Docky.Interface
 			cr.Rotate (0 - hourRotation);
 			
 			cr.Translate (0 - center, 0 - center);
+			
+			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-glass.svg"), radius * 2);
+			RenderFileOntoContext (cr, System.IO.Path.Combine (ThemePath, "clock-frame.svg"), radius * 2);
 		}
 		
 		public override void Clicked (uint button, Gdk.ModifierType state, PointD position)
 		{
 			cal_painter.Summon ();
 			base.Clicked (button, state, position);
+		}
+		
+		public void SetTheme (string theme)
+		{
+			if (string.IsNullOrEmpty (theme))
+				return;
+			
+			Services.Application.RunOnMainThread (() => {
+				CurrentTheme = theme;
+				RedrawIcon ();
+			});
 		}
 		
 		#region IRightClickable implementation 
@@ -276,11 +295,88 @@ namespace Docky.Interface
 			yield return new SimpleMenuButtonArgs (() => { ShowMilitary = !ShowMilitary; RedrawIcon (); },
 					Catalog.GetString ("24-Hour Clock"), ShowMilitary ? "gtk-apply" : "gtk-remove");
 			
-			if (ShowDigital)
-				yield return new SimpleMenuButtonArgs (() => { ShowDate = !ShowDate; RedrawIcon (); },
-						Catalog.GetString ("Show Date"), ShowDate ? "gtk-apply" : "gtk-remove");
+			yield return new SimpleMenuButtonArgs (() => { ShowDate = !ShowDate; RedrawIcon (); },
+					Catalog.GetString ("Show Date"), ShowDate ? "gtk-apply" : "gtk-remove", !ShowDigital);
+			
+			yield return new SimpleMenuButtonArgs (() => { new ClockThemeSelector (this).Show (); },
+					Catalog.GetString ("Select Theme"), "preferences-desktop-theme", ShowDigital);
 		}
 		
 		#endregion 
+	}
+	
+	public class ClockThemeSelector : Gtk.Dialog
+	{
+		TreeStore labelTreeStore = new TreeStore (typeof (string));
+		TreeView labelTreeView = new TreeView ();
+		
+		ClockDockItem DockItem { get; set; }
+		
+		public ClockThemeSelector (ClockDockItem dockItem)
+		{
+			DockItem = dockItem;
+			Title = Catalog.GetString ("Themes");
+			
+			labelTreeView.Model = labelTreeStore;
+			labelTreeView.HeadersVisible = false;
+			labelTreeView.Selection.Changed += OnLabelSelectionChanged;
+			labelTreeView.AppendColumn (Catalog.GetString ("Theme"), new CellRendererText (), "text", 0);
+			
+			ScrolledWindow win = new ScrolledWindow ();
+			win.Add (labelTreeView);
+			win.SetSizeRequest (200, 300);
+			win.Show ();
+			VBox.PackEnd (win);
+			VBox.ShowAll ();
+			AddButton ("Close", ResponseType.Close);
+
+			UpdateThemeList ();
+		}
+		
+		public void UpdateThemeList ()
+		{
+			List<string> themes = new List<string> ();
+			
+			if (Directory.Exists (System.IO.Path.Combine (Services.Paths.UserDataDirectory, "ClockTheme"))) {
+				DirectoryInfo root = new DirectoryInfo (System.IO.Path.Combine (Services.Paths.UserDataDirectory, "ClockTheme"));
+				root.GetDirectories ().ForEach (p => themes.Add (p.Name));
+			}
+			if (Directory.Exists ("/usr/share/gnome-do/ClockTheme")) {
+				DirectoryInfo root = new DirectoryInfo ("/usr/share/gnome-do/ClockTheme");
+				root.GetDirectories ().ForEach (p => themes.Add (p.Name));
+			}
+			if (Directory.Exists ("/usr/local/share/gnome-do/ClockTheme")) {
+				DirectoryInfo root = new DirectoryInfo ("/usr/local/share/gnome-do/ClockTheme");
+				root.GetDirectories ().ForEach (p => themes.Add (p.Name));
+			}
+			
+			labelTreeStore.Clear ();
+			
+			themes.Sort ();
+			
+			int i = 0, selected = -1;
+			themes.Distinct ().ForEach (p => {
+				if (p == DockItem.CurrentTheme)
+					selected = i;
+				labelTreeStore.AppendValues (p);
+				i++;
+			});
+			
+			labelTreeView.Selection.SelectPath(new TreePath("" + selected));
+		}
+		
+		protected virtual void OnLabelSelectionChanged (object o, System.EventArgs args)
+		{
+			TreeIter iter;
+			TreeModel model;
+			
+			if (((TreeSelection)o).GetSelected (out model, out iter))
+				DockItem.SetTheme ((string) model.GetValue (iter, 0));
+		}
+		
+		protected override void OnResponse (ResponseType response_id)
+		{
+			Destroy ();
+		}
 	}
 }

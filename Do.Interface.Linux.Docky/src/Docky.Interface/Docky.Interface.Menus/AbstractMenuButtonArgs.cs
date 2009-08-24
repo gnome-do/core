@@ -43,6 +43,7 @@ namespace Docky.Interface.Menus
 		string description, icon;
 		
 		public bool Dark { get; set; }
+		public bool Disabled { get; set; }
 		
 		public virtual double IconOpacity {
 			get { return 1; }
@@ -126,8 +127,10 @@ namespace Docky.Interface.Menus
 		
 		void HandleButtonReleaseEvent(object o, ButtonReleaseEventArgs args)
 		{
-			Action ();
-			base.OnActivated ();
+			if (!Disabled) {
+				Action ();
+				base.OnActivated ();
+			}
 		}
 
 		void HandleLeaveNotifyEvent(object o, LeaveNotifyEventArgs args)
@@ -150,7 +153,7 @@ namespace Docky.Interface.Menus
 				LinearGradient lg = new LinearGradient (area.X, area.Y, area.X, area.Y + area.Height);
 				
 				Cairo.Color background = (Dark) ? DockPopupMenu.BackgroundColor.ShadeColor (.7) : DockPopupMenu.BackgroundColor;
-				if (hovered) {
+				if (hovered && !Disabled) {
 					Cairo.Color high = background
 						    .ConvertToGdk ()
 							.SetMinimumValue (25)
@@ -177,13 +180,13 @@ namespace Docky.Interface.Menus
 					
 					DockServices.DrawingService.TextPathAtPoint (renderContext);
 					
-					cr.Color = new Cairo.Color (1, 1, 1);
+					cr.Color = new Cairo.Color (1, 1, 1, Disabled ? 0.5 : 1);
 					cr.Fill ();
 				}
 				
 				if (Pixbuf != null) {
 					CairoHelper.SetSourcePixbuf (cr, Pixbuf, WidthBuffer, (Height - Pixbuf.Height) / 2);
-					cr.PaintWithAlpha (IconOpacity);
+					cr.PaintWithAlpha (Disabled ? IconOpacity / 2 : IconOpacity);
 				}
 			}
 		}
@@ -196,6 +199,12 @@ namespace Docky.Interface.Menus
 		}
 		
 		public abstract void Action ();
+		
+		public AbstractMenuButtonArgs AsDisabled ()
+		{
+			Disabled = true;
+			return this;
+		}
 		
 		public AbstractMenuButtonArgs AsDark ()
 		{

@@ -31,6 +31,12 @@ namespace Docky.Interface.Menus
 			this.action = action;
 		}
 		
+		public SimpleMenuButtonArgs (Action action, string description, string icon, bool disabled) : base (description, icon)
+		{
+			this.action = action;
+			Disabled = disabled;
+		}
+		
 		public override void Action ()
 		{
 			action.Invoke ();
