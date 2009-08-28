@@ -44,7 +44,7 @@ namespace Do.Platform.Preferences
 		void HandlePreferencesChanged (object o, PreferencesChangedEventArgs e)
 		{
 			if (e.Key.Length <= OwnerString.Length + 1 || e.Key.Substring(0, OwnerString.Length) != OwnerString) return;
-			OnPreferencesChanged (e.Key.Substring(OwnerString.Length + 1), e.Value, e.OldValue);
+			OnPreferencesChanged (e.Key.Substring(OwnerString.Length + 1), e.OldValue, e.Value);
 		}
 		
 		void OnPreferencesChanged (string key, object oldValue, object newValue)
