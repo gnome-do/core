@@ -93,8 +93,6 @@ namespace Docky.Core.Default
 		
 		void HandlePreferencesChanged (object sender, PreferencesChangedEventArgs args)
 		{
-			Console.WriteLine("key = " + args.Key);
-			Console.WriteLine("val = " + args.Value);
 			if (args.Key != "ActiveApplets")
 				return;
 			BuildDocklets ();
