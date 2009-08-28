@@ -28,6 +28,8 @@ namespace Do.Platform
 	
 	public interface IPreferencesService : IService
 	{
+		event EventHandler<PreferencesChangedEventArgs> PreferencesChanged;
+		
 		bool Set<T>    (string key, T val);
 		bool TryGet<T> (string key, out T val);
 	}

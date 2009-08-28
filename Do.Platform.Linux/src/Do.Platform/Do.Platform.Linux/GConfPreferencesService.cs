@@ -38,6 +38,12 @@ namespace Do.Platform.Linux
 		{
 			RootPath = rootPath;
 			client = new GConf.Client ();
+			client.AddNotify (RootPath, new GConf.NotifyEventHandler (HandleGConfChanged));
+		}
+		
+		void HandleGConfChanged (object sender, GConf.NotifyEventArgs args)
+		{
+			OnPreferencesChanged (args.Key.Substring(RootPath.Length + 1), null, args.Value);
 		}
 
 		string AbsolutePathForKey (string key)
@@ -46,8 +52,16 @@ namespace Do.Platform.Linux
 				return key;
 			return string.Format ("{0}/{1}", RootPath, key);
 		}
-
+		
+		void OnPreferencesChanged (string key, object oldValue, object newValue)
+		{
+			if (PreferencesChanged == null) return;
+			PreferencesChanged (this, new PreferencesChangedEventArgs (key, oldValue, newValue));
+		}
+		
 		#region IPreferencesService
+		
+		public event EventHandler<PreferencesChangedEventArgs> PreferencesChanged;
 		
 		public bool Set<T> (string key, T val)
 		{

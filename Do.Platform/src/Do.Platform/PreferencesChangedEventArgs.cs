@@ -26,11 +26,13 @@ namespace Do.Platform {
 	{
 		public string Key { get; private set; }
 		public object OldValue { get; private set; }
+		public object Value { get; private set; }
 		
-		public PreferencesChangedEventArgs (string key, object oldValue)
+		public PreferencesChangedEventArgs (string key, object oldValue, object newValue)
 		{
 			Key = key;
 			OldValue = oldValue;
+			Value = newValue;
 		}
 	}
 	

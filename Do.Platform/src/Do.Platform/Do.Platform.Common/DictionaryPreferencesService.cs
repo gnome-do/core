@@ -35,7 +35,15 @@ namespace Do.Platform.Common
 			Store = new Dictionary<string, object> ();
 		}
 		
+		void OnPreferencesChanged (string key, object oldValue, object newValue)
+		{
+			if (PreferencesChanged == null) return;
+			PreferencesChanged (this, new PreferencesChangedEventArgs (key, oldValue, newValue));
+		}
+		
 		#region IPreferencesService
+		
+		public event EventHandler<PreferencesChangedEventArgs> PreferencesChanged;
 		
 		public bool Set<T> (string key, T val)
 		{

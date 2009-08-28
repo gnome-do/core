@@ -38,12 +38,19 @@ namespace Do.Platform.Preferences
 		{
 			Service = service;
 			SecureService = new SecurePreferencesServiceWrapper (secureService);
+			Service.PreferencesChanged += HandlePreferencesChanged;
 		}
 		
-		void OnPreferencesChanged (string key, object oldValue)
+		void HandlePreferencesChanged (object o, PreferencesChangedEventArgs e)
+		{
+			if (e.Key.Length <= OwnerString.Length + 1 || e.Key.Substring(0, OwnerString.Length) != OwnerString) return;
+			OnPreferencesChanged (e.Key.Substring(OwnerString.Length + 1), e.Value, e.OldValue);
+		}
+		
+		void OnPreferencesChanged (string key, object oldValue, object newValue)
 		{
 			if (PreferencesChanged == null) return;
-			PreferencesChanged (this, new PreferencesChangedEventArgs (key, oldValue));
+			PreferencesChanged (this, new PreferencesChangedEventArgs (key, oldValue, newValue));
 		}
 
 		#region IPreferences
@@ -109,7 +116,7 @@ namespace Do.Platform.Preferences
 				oldValue = default (T);
 			
 			if (service.Set (keypath, val)) {
-				OnPreferencesChanged (key, oldValue);
+				OnPreferencesChanged (key, oldValue, val);
 				return true;
 			}
 			return false;
