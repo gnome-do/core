@@ -53,8 +53,14 @@ namespace Do.Platform.Linux
 			return string.Format ("{0}/{1}", RootPath, key);
 		}
 		
+		bool IgnoreNextEvent { get; set; }
+		
 		void OnPreferencesChanged (string key, object oldValue, object newValue)
 		{
+			if (IgnoreNextEvent) {
+				IgnoreNextEvent = false;
+				return;
+			}
 			if (PreferencesChanged == null) return;
 			PreferencesChanged (this, new PreferencesChangedEventArgs (key, oldValue, newValue));
 		}
@@ -73,6 +79,7 @@ namespace Do.Platform.Linux
 				Log.Debug (e.StackTrace);
 				success = false;
 			}
+			IgnoreNextEvent = success;
 			return success;
 		}
 
