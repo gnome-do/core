@@ -56,6 +56,18 @@ namespace Do.Interface.AnimationBase
 #region Static Area
 		static IPreferences prefs = Services.Preferences.Get<BezelDrawingArea> ();
 		public static event EventHandler ThemeChanged;
+
+		static BezelDrawingArea()
+		{
+			prefs.PreferencesChanged += HandlePreferencesChanged;
+		}
+		
+		static void HandlePreferencesChanged (object o, PreferencesChangedEventArgs e)
+		{
+			if (e.Key == "Animated" || e.Key == "WindowRadius")
+				return;
+			OnThemeChanged ();
+		}
 		
 		public static bool Animated {
 			get {
@@ -72,7 +84,6 @@ namespace Do.Interface.AnimationBase
 			}
 			set {
 				prefs.Set<string> ("TitleRenderer", value);
-				OnThemeChanged ();
 			}
 		}
 		
@@ -82,7 +93,6 @@ namespace Do.Interface.AnimationBase
 			}
 			set {
 				prefs.Set<string> ("PaneRenderer", value);
-				OnThemeChanged ();
 			}
 		}
 		
@@ -92,7 +102,6 @@ namespace Do.Interface.AnimationBase
 			}
 			set {
 				prefs.Set<string> ("WindowRenderer", value);
-				OnThemeChanged ();
 			}
 		}
 		
@@ -102,7 +111,6 @@ namespace Do.Interface.AnimationBase
 			}
 			set {
 				prefs.Set<string> ("BackgroundColor", value);
-				OnThemeChanged ();
 			}
 		}
 		
@@ -112,7 +120,6 @@ namespace Do.Interface.AnimationBase
 			} 
 			set {
 				prefs.Set<int> ("WindowRadius", Math.Max (-1, value));
-				OnThemeChanged ();
 			}
 		}
 		
@@ -122,7 +129,6 @@ namespace Do.Interface.AnimationBase
 			}
 			set {
 				prefs.Set<bool> ("Shadow", value);
-				OnThemeChanged ();
 			}
 		}
 		
@@ -135,7 +141,6 @@ namespace Do.Interface.AnimationBase
 		public static void ResetBackgroundStyle ()
 		{
 			prefs.Set<string> ("BackgroundColor", "default");
-			OnThemeChanged ();
 		}
 		
 		private static void OnThemeChanged ()
@@ -404,7 +409,6 @@ namespace Do.Interface.AnimationBase
 			TextUtility = new TextRenderer (this);
 			
 			DoubleBuffered = false;
-			prefs = Services.Preferences.Get<BezelDrawingArea> ();
 			this.preview = preview;
 			this.theme = theme;
 			

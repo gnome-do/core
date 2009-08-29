@@ -73,22 +73,22 @@ namespace Do
 
 		public string Theme {
 			get { return Preferences.Get (ThemeKey, ThemeDefaultValue); }
-			set { Preferences.Set (ThemeKey, value); }
+			set { if (ThemeKey != value) Preferences.Set (ThemeKey, value); }
 		}
 
 		public bool QuietStart {
 			get { return Preferences.Get (QuietStartKey, QuietStartDefaultValue); }
-			set { Preferences.Set (QuietStartKey, value); }
+			set { if (QuietStart != value) Preferences.Set (QuietStartKey, value); }
 		}
 
 		public bool StartAtLogin {
 			get { return Preferences.Get(StartAtLoginKey, StartAtLoginDefaultValue); }
-			set { Preferences.Set (StartAtLoginKey, value); }
+			set { if (StartAtLogin != value) Preferences.Set (StartAtLoginKey, value); }
 		}
 		
 		public bool AlwaysShowResults {
 			get { return Preferences.Get (AlwaysShowResultsKey, AlwaysShowResultsDefaultValue); }
-			set { Preferences.Set (AlwaysShowResultsKey, value); }
+			set { if (AlwaysShowResults != value) Preferences.Set (AlwaysShowResultsKey, value); }
 		}
 		
 		static bool HasOption (string option)

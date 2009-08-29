@@ -107,6 +107,20 @@ namespace Docky.Interface
 			cal_painter = new CalendarPainter (this);
 			Core.DockServices.PainterService.RegisterPainter (cal_painter);
 			GLib.Timeout.Add (1000, ClockUpdateTimer);
+			prefs.PreferencesChanged += HandlePreferencesChanged;
+		}
+		
+		void HandlePreferencesChanged (object o, PreferencesChangedEventArgs e)
+		{
+			if (e.Key == "ClockTheme")
+				current_theme = (string)e.OldValue;
+			if (e.Key == "ShowDate")
+				show_date = (bool)e.OldValue;
+			if (e.Key == "ShowDigital")
+				digital = (bool)e.OldValue;
+			if (e.Key == "ShowMilitary")
+				show_military = (bool)e.OldValue;
+			RedrawIcon();
 		}
 		
 		bool ClockUpdateTimer ()

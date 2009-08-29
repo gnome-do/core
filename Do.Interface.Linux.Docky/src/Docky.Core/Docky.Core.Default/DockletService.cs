@@ -50,6 +50,7 @@ namespace Docky.Core.Default
 				docklet.Enable ();
 			
 			docklets [docklet] = !docklets [docklet];
+			SaveConfiguration ();
 			OnAppletVisibilityChanged ();
 			return true;
 		}
@@ -83,15 +84,25 @@ namespace Docky.Core.Default
 		public DockletService()
 		{
 			prefs = Services.Preferences.Get<DockletService> ();
+			prefs.PreferencesChanged += HandlePreferencesChanged;
 			
 			AddinManager.AddExtensionNodeHandler (ExtensionPath, HandleDockletsChanged);
 			
 			BuildDocklets ();
 		}
 		
+		void HandlePreferencesChanged (object sender, PreferencesChangedEventArgs args)
+		{
+			if (args.Key != "ActiveApplets")
+				return;
+			BuildDocklets ();
+			OnAppletVisibilityChanged ();
+		}
+		
 		void HandleDockletsChanged (object sender, ExtensionNodeEventArgs args)
 		{
 			BuildDocklets ();
+			SaveConfiguration ();
 			OnAppletVisibilityChanged ();
 		}
 		
@@ -124,12 +135,12 @@ namespace Docky.Core.Default
 			foreach (AbstractDockletItem abi in ActiveDocklets) {
 				s += abi.GetType ().Name + ";";
 			}
-			prefs.Set ("ActiveApplets", s);
+			if (s != prefs.Get ("ActiveApplets", "ClockDockItem;"))
+				prefs.Set ("ActiveApplets", s);
 		}
 		
 		void OnAppletVisibilityChanged ()
 		{
-			SaveConfiguration ();
 			if (AppletVisibilityChanged != null)
 				AppletVisibilityChanged (this, EventArgs.Empty);
 		}

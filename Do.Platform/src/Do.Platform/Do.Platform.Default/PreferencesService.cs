@@ -29,6 +29,8 @@ namespace Do.Platform.Default
 
 		#region IPreferencesService
 		
+		public event EventHandler<PreferencesChangedEventArgs> PreferencesChanged;
+		
 		public bool Set<T> (string key, T val)
 		{
 			Log.Debug ("Default IPreferencesService cannot set key \"{0}\".", key);

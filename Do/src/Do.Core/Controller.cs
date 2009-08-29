@@ -175,7 +175,8 @@ namespace Do.Core
 		
 		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
 		{
-			string oldTheme = e.OldValue as string, newTheme = Do.Preferences.Theme;
+			if (e.OldValue == null) return;
+			string oldTheme = e.OldValue as string, newTheme = e.Value as string;
 			
 			// Only change the theme of the old and new themes are different.
 			if (oldTheme != newTheme) {

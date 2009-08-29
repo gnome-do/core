@@ -56,6 +56,28 @@ namespace Docky.Utilities
 					return true;
 				});
 			}
+			prefs.PreferencesChanged += HandlePreferencesChanged;
+		}
+		
+		static void HandlePreferencesChanged (object o, PreferencesChangedEventArgs e) {
+			if (e.Key == "IndicateMultipleWindows")
+				SetIndicateMultipleWindows ((bool)e.Value);
+			if (e.Key == "ZoomPercent")
+				SetZoomPercent ((double)e.Value);
+			if (e.Key == "EnableZoom")
+				SetZoomEnabled ((bool)e.Value);
+			if (e.Key == "IconSize")
+				SetIconSize ((int)e.Value);
+			if (e.Key == "SummonTime")
+				SetSummonTime (new TimeSpan (0, 0, 0, 0, (int)e.Value));
+			if (e.Key == "AutomaticIcons")
+				SetAutomaticIcons ((int)e.Value);
+			if (e.Key == "Monitor")
+				SetMonitor (Math.Max (0, (int)e.Value));
+			if (e.Key == "Orientation")
+				SetOrientation ((DockOrientation) Enum.Parse (typeof (DockOrientation), (string)e.Value));
+			if (e.Key == "AutohideType")
+				SetAutohideType ((AutohideType) Enum.Parse (typeof (AutohideType), (string)e.Value));
 		}
 		
 		public static int TextWidth {
@@ -70,33 +92,51 @@ namespace Docky.Utilities
 		public static bool IndicateMultipleWindows {
 			get { return indicate_multiple_windows; }
 			set { 
-				prefs.Set ("IndicateMultipleWindows", value); 
-				indicate_multiple_windows = value;
+				if (SetIndicateMultipleWindows (value))
+					prefs.Set ("IndicateMultipleWindows", value); 
 			}
+		}
+		static bool SetIndicateMultipleWindows (bool val)
+		{
+			if (indicate_multiple_windows == val) return false;
+			indicate_multiple_windows = val;
+			return true;
 		}
 		
 		static double zoom_percent = Math.Round (prefs.Get ("ZoomPercent", 2.0), 1);
 		public static double ZoomPercent {
 			get { return ZoomEnabled ? zoom_percent : 1; }
 			set {
-				if (value < 1)
-					value = 1;
-				prefs.Set ("ZoomPercent", value);
-				zoom_percent = value;
-				if (IconSizeChanged != null)
-					IconSizeChanged ();
+				if (SetZoomPercent (value))
+					prefs.Set ("ZoomPercent", value);
 			}
+		}
+		static bool SetZoomPercent (double val)
+		{
+			if (val < 1)
+				val = 1;
+			if (zoom_percent == val) return false;
+			zoom_percent = val;
+			if (IconSizeChanged != null)
+				IconSizeChanged ();
+			return true;
 		}
 		
 		static bool enable_zoom = prefs.Get ("EnableZoom", true);
 		public static bool ZoomEnabled {
 			get { return enable_zoom; }
 			set {
-				prefs.Set ("EnableZoom", value);
-				enable_zoom = value;
-				if (IconSizeChanged != null)
-					IconSizeChanged ();
+				if (SetZoomEnabled (value))
+					prefs.Set ("EnableZoom", value);
 			}
+		}
+		static bool SetZoomEnabled (bool val)
+		{
+			if (enable_zoom == val) return false;
+			enable_zoom = val;
+			if (IconSizeChanged != null)
+				IconSizeChanged ();
+			return true;
 		}
 		
 		public static int FullIconSize {
@@ -120,19 +160,24 @@ namespace Docky.Utilities
 		public static int IconSize {
 			get { return Math.Min (icon_size, MaxIconSize); }
 			set {
-				if (value < 24)
-					value = 24;
-				if (value > 128)
-					value = 128;
-				
-				if (value == icon_size)
-					return;
-				
-				prefs.Set ("IconSize", value); 
-				icon_size = value;
-				if (IconSizeChanged != null)
-					IconSizeChanged ();
+				if (SetIconSize (value))
+					prefs.Set ("IconSize", value); 
 			}
+		}
+		static bool SetIconSize (int val)
+		{
+			if (val < 24)
+				val = 24;
+			if (val > 128)
+				val = 128;
+			
+			if (val == icon_size)
+				return false;
+			
+			icon_size = val;
+			if (IconSizeChanged != null)
+				IconSizeChanged ();
+			return true;
 		}
 		
 		/// <summary>
@@ -151,23 +196,35 @@ namespace Docky.Utilities
 		public static TimeSpan SummonTime {
 			get { return summon_time; }
 			set {
-				prefs.Set ("SummonTime", value.TotalMilliseconds);
-				summon_time = value;
+				if (SetSummonTime (value))
+					prefs.Set ("SummonTime", value.TotalMilliseconds);
 			}
+		}
+		static bool SetSummonTime (TimeSpan val)
+		{
+			if (summon_time == val) return false;
+			summon_time = val;
+			return true;
 		}
 		
 		static int automatic_icons = prefs.Get ("AutomaticIcons", 5);
 		public static int AutomaticIcons {
 			get { return automatic_icons; }
 			set {
-				if (value < 0)
-					value = 0;
-				prefs.Set ("AutomaticIcons", value);
-				automatic_icons = value;
-				
-				if (AutomaticIconsChanged != null)
-					AutomaticIconsChanged ();
+				if (SetAutomaticIcons (value))
+					prefs.Set ("AutomaticIcons", value);
 			}
+		}
+		static bool SetAutomaticIcons (int val)
+		{
+			if (val < 0)
+				val = 0;
+			if (automatic_icons == val) return false;
+			automatic_icons = val;
+			
+			if (AutomaticIconsChanged != null)
+				AutomaticIconsChanged ();
+			return true;
 		}
 
 		static int monitor = Math.Max (0, prefs.Get ("Monitor", 0));
@@ -177,18 +234,24 @@ namespace Docky.Utilities
 				return monitor;
 			}
 			set {
-				if (monitor == value)
-					return;
-				
-				if (value >= Gdk.Screen.Default.NMonitors || value < 0)
-					value = 0;
-				monitor = value;
-				prefs.Set ("Monitor", value);
-
-				Interface.LayoutUtils.Recalculate ();
-				if (MonitorChanged != null)
-					MonitorChanged ();
+				if (SetMonitor (value))
+					prefs.Set ("Monitor", value);
 			}
+		}
+		static bool SetMonitor (int val)
+		{
+			if (val >= Gdk.Screen.Default.NMonitors || val < 0)
+				val = 0;
+
+			if (monitor == val)
+				return false;
+			
+			monitor = val;
+
+			Interface.LayoutUtils.Recalculate ();
+			if (MonitorChanged != null)
+				MonitorChanged ();
+			return true;
 		}
 
 		static DockOrientation orientation = (DockOrientation) Enum.Parse (typeof (DockOrientation), prefs.Get ("Orientation", DockOrientation.Bottom.ToString ()));
@@ -200,26 +263,36 @@ namespace Docky.Utilities
 				return orientation;
 			}
 			set {
-				if (orientation == value)
-					return;
-				orientation = value;
-				prefs.Set ("Orientation", value.ToString ());
-				if (OrientationChanged != null)
-					OrientationChanged ();
+				if (SetOrientation (value))
+					prefs.Set ("Orientation", value.ToString ());
 			}
+		}
+		static bool SetOrientation (DockOrientation val)
+		{
+			if (orientation == val)
+				return false;
+			orientation = val;
+			if (OrientationChanged != null)
+				OrientationChanged ();
+			return true;
 		}
 		
 		static AutohideType hide = (AutohideType) Enum.Parse (typeof (AutohideType), prefs.Get ("AutohideType", AutohideType.None.ToString ()));
 		public static AutohideType AutohideType {
 			get { return hide; }
 			set {
-				if (hide == value)
-					return;
-				hide = value;
-				prefs.Set ("AutohideType", value.ToString ());
-				if (AutohideChanged != null)
-					AutohideChanged ();
+				if (SetAutohideType (value))
+					prefs.Set ("AutohideType", value.ToString ());
 			}
+		}
+		static bool SetAutohideType (AutohideType val)
+		{
+			if (hide == val)
+				return false;
+			hide = val;
+			if (AutohideChanged != null)
+				AutohideChanged ();
+			return true;
 		}
 
 		#region blacklists

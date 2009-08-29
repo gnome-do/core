@@ -36,6 +36,8 @@ namespace Do.Platform
 		{
 			SecureService = secureService;
 		}
+		
+		public event EventHandler<PreferencesChangedEventArgs> PreferencesChanged;
 
 		public bool Set<T> (string key, T val)
 		{
