@@ -29,19 +29,13 @@ namespace Do.Platform {
 		/// </summary>
 		public string Key { get; private set; }
 		/// <summary>
-		/// The value before the preference changed.
-		/// This value may be null (eg, if the preference was changed outside of Do's process).
-		/// </summary>
-		public object OldValue { get; private set; }
-		/// <summary>
 		/// The new value after the preference changed.
 		/// </summary>
 		public object Value { get; private set; }
 		
-		public PreferencesChangedEventArgs (string key, object oldValue, object newValue)
+		public PreferencesChangedEventArgs (string key, object newValue)
 		{
 			Key = key;
-			OldValue = oldValue;
 			Value = newValue;
 		}
 	}

@@ -133,7 +133,7 @@ namespace Do.Platform.Preferences
 			Preferences.Set (key, val);
 			Assert.IsTrue (PreferencesDidChange);
 			Assert.AreEqual (PreferencesChangedArgs.Key, key);
-			Assert.AreEqual (PreferencesChangedArgs.OldValue as string, oldVal);
+			Assert.AreEqual (PreferencesChangedArgs.Value as string, val);
 		}
 		
 	}

@@ -43,7 +43,8 @@ namespace Do.Platform.Linux
 		
 		void HandleGConfChanged (object sender, GConf.NotifyEventArgs args)
 		{
-			OnPreferencesChanged (args.Key.Substring(RootPath.Length + 1), null, args.Value);
+			if (PreferencesChanged != null)
+				PreferencesChanged (this, new PreferencesChangedEventArgs (args.Key.Substring(RootPath.Length + 1), args.Value));
 		}
 
 		string AbsolutePathForKey (string key)
@@ -51,18 +52,6 @@ namespace Do.Platform.Linux
 			if (key.StartsWith ("/"))
 				return key;
 			return string.Format ("{0}/{1}", RootPath, key);
-		}
-		
-		bool IgnoreNextEvent { get; set; }
-		
-		void OnPreferencesChanged (string key, object oldValue, object newValue)
-		{
-			if (IgnoreNextEvent) {
-				IgnoreNextEvent = false;
-				return;
-			}
-			if (PreferencesChanged == null) return;
-			PreferencesChanged (this, new PreferencesChangedEventArgs (key, oldValue, newValue));
 		}
 		
 		#region IPreferencesService
@@ -79,7 +68,6 @@ namespace Do.Platform.Linux
 				Log.Debug (e.StackTrace);
 				success = false;
 			}
-			IgnoreNextEvent = success;
 			return success;
 		}
 

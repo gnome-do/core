@@ -173,13 +173,14 @@ namespace Do.Core
 			SetTheme (Do.Preferences.Theme);
 		}
 		
+		private string LastTheme { get; set; }
+		
 		void OnThemeChanged (object sender, PreferencesChangedEventArgs e)
 		{
-			if (e.OldValue == null) return;
-			string oldTheme = e.OldValue as string, newTheme = e.Value as string;
+			string newTheme = e.Value as string;
 			
 			// Only change the theme of the old and new themes are different.
-			if (oldTheme != newTheme) {
+			if (LastTheme != newTheme && !string.IsNullOrEmpty (newTheme)) {
 				UnsetTheme ();
 				SetTheme (newTheme);
 			}
@@ -198,6 +199,7 @@ namespace Do.Core
 		void SetTheme (string themeName)
 		{
 			Log<Controller>.Debug ("Setting theme {0}", themeName);
+			LastTheme = themeName;
 			
 			Orientation = ControlOrientation.Vertical;
 

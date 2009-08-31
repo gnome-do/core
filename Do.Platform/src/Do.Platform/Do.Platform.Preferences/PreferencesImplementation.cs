@@ -43,14 +43,10 @@ namespace Do.Platform.Preferences
 		
 		void HandlePreferencesChanged (object o, PreferencesChangedEventArgs e)
 		{
-			if (e.Key.Length <= OwnerString.Length + 1 || e.Key.Substring(0, OwnerString.Length) != OwnerString) return;
-			OnPreferencesChanged (e.Key.Substring(OwnerString.Length + 1), e.OldValue, e.Value);
-		}
-		
-		void OnPreferencesChanged (string key, object oldValue, object newValue)
-		{
-			if (PreferencesChanged == null) return;
-			PreferencesChanged (this, new PreferencesChangedEventArgs (key, oldValue, newValue));
+			if (e.Key.Length <= OwnerString.Length + 1 || e.Key.Substring(0, OwnerString.Length) != OwnerString)
+				return;
+			if (PreferencesChanged != null)
+				PreferencesChanged (this, new PreferencesChangedEventArgs (e.Key.Substring(OwnerString.Length + 1), e.Value));
 		}
 
 		#region IPreferences
@@ -109,17 +105,9 @@ namespace Do.Platform.Preferences
 
 		bool Set<T> (IPreferencesService service, string key, T val)
 		{
-			T oldValue;
 			string keypath = AbsolutePathForKey (service, key);
 			
-			if (!service.TryGet (keypath, out oldValue))
-				oldValue = default (T);
-			
-			if (service.Set (keypath, val)) {
-				OnPreferencesChanged (key, oldValue, val);
-				return true;
-			}
-			return false;
+			return service.Set (keypath, val);
 		}
 
 		bool TryGet<T> (IPreferencesService service, string key, T def, out T val)

@@ -113,13 +113,13 @@ namespace Docky.Interface
 		void HandlePreferencesChanged (object o, PreferencesChangedEventArgs e)
 		{
 			if (e.Key == "ClockTheme")
-				current_theme = (string)e.OldValue;
+				current_theme = (string)e.Value;
 			if (e.Key == "ShowDate")
-				show_date = (bool)e.OldValue;
+				show_date = (bool)e.Value;
 			if (e.Key == "ShowDigital")
-				digital = (bool)e.OldValue;
+				digital = (bool)e.Value;
 			if (e.Key == "ShowMilitary")
-				show_military = (bool)e.OldValue;
+				show_military = (bool)e.Value;
 			RedrawIcon();
 		}
 		
