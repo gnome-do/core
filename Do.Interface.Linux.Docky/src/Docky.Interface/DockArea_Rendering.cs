@@ -602,7 +602,7 @@ namespace Docky.Interface
 				cr.Paint ();
 			}
 			
-			if (0 < dockItem.WindowCount) {
+			if (0 < dockItem.WindowCount || dockItem.NeedsAttention) {
 				Gdk.Point location;
 				switch (DockPreferences.Orientation) {
 				case DockOrientation.Bottom:
@@ -642,7 +642,7 @@ namespace Docky.Interface
 			if (DockPreferences.IndicateMultipleWindows && 1 < numberOfWindows) {
 				DrawSingleIndicator (cr, location.RelativeMovePoint (3, RelativeMove.RelativeLeft), urgent);
 				DrawSingleIndicator (cr, location.RelativeMovePoint (3, RelativeMove.RelativeRight), urgent);
-			} else if (0 < numberOfWindows) {
+			} else if (0 < numberOfWindows || urgent) {
 				DrawSingleIndicator (cr, location, urgent);
 			}
 		}
