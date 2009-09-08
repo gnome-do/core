@@ -150,7 +150,7 @@ namespace Docky.Interface
 					.Where (w => w.IsActive && w.WindowType != Wnck.WindowType.Desktop)
 					.First ();
 				
-				intersect = rawWindows.Any (w => w.WindowType != Wnck.WindowType.Desktop && 
+				intersect = rawWindows.Any (w => !w.IsMinimized && w.WindowType != Wnck.WindowType.Desktop && 
 				                            activeWindow.Pid == w.Pid &&
 				                            w.EasyGeometry ().IntersectsWith (adjustedDockArea));
 			} catch {
