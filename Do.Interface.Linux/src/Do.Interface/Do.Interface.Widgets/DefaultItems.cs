@@ -55,6 +55,6 @@ namespace Do.Interface.Widgets
 	{
 		public override string Icon { get { return "search"; } }
 		public override string Name { get { return Catalog.GetString ("Type to begin searching"); } }
-		public override string Description { get { return Catalog.GetString ("Type to start searching."); } }
+		public override string Description { get { return Catalog.GetString (""); } }
 	}
 }
