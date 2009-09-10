@@ -12,6 +12,10 @@ FILES = \
 	src/Do.Universe/ContactItem.cs \
 	src/Do.Universe/Do.Universe.Common/BookmarkItem.cs \
 	src/Do.Universe/Do.Universe.Common/TextItem.cs \
+	src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs \
+	src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs \
+	src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs \
+	src/Do.Universe/Do.Universe.Common/ContactDetailItem.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeAct.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeElement.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeItem.cs \
@@ -34,6 +38,7 @@ FILES = \
 	src/Do.Universe/ProxyItem.cs
 
 RESOURCES = \
+	Resources/phone.png \
 	Resources/Do.Universe.addin.xml
 
 REFERENCES =  \

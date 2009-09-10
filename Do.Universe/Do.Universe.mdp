@@ -42,6 +42,11 @@
     <File name="src/Do.Universe/Do.Universe.Common" subtype="Directory" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Common/TextItem.cs" subtype="Code" buildaction="Compile" />
     <File name="src/Do.Universe/Do.Universe.Common/BookmarkItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="Resources/phone.png" subtype="Code" buildaction="Nothing" />
+    <File name="src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="src/Do.Universe/Do.Universe.Common/ContactDetailItem.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
