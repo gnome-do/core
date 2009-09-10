@@ -41,7 +41,7 @@ namespace Do.Universe.Common
 
 
 		public override string Icon {
-			get { return "house.png@" + GetType ().Assembly.FullName; }
+			get { return "go-home"; }
 		}
 	}
 }
