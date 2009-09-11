@@ -112,6 +112,7 @@ namespace Docky.Interface
 	
 			StyleSet += HandleStyleSet;
 			
+			Screen.Default.SizeChanged += HandleSizeChanged;
 			DockPreferences.AllowOverlapChanged += DelaySetStruts;
 			DockPreferences.AutohideChanged += DelaySetStruts;
 			DockPreferences.MonitorChanged += HandleMonitorChanged;
@@ -121,6 +122,7 @@ namespace Docky.Interface
 		{
 			StyleSet -= HandleStyleSet;
 			
+			Screen.Default.SizeChanged -= HandleSizeChanged;
 			DockPreferences.AllowOverlapChanged -= DelaySetStruts;
 			DockPreferences.AutohideChanged -= DelaySetStruts;
 			DockPreferences.MonitorChanged -= HandleMonitorChanged;
@@ -129,14 +131,21 @@ namespace Docky.Interface
 				GLib.Source.Remove (strut_timer);
 		}
 
-		void HandleMonitorChanged()
+		void HandleSizeChanged (object o, EventArgs args)
+		{
+			LayoutUtils.Recalculate ();
+			Reposition ();
+			DelaySetStruts ();
+		}
+
+		void HandleMonitorChanged ()
 		{
 			// bring us back down to "minimum" size
 			Resize (1, 1);
 			DelaySetStruts ();
 		}
 		
-		void HandleStyleSet(object o, StyleSetArgs args)
+		void HandleStyleSet (object o, StyleSetArgs args)
 		{
 			if (!IsRealized) return;
 			
