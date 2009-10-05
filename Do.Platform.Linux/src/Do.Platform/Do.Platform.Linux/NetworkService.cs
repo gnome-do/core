@@ -53,13 +53,14 @@ namespace Do.Platform.Linux
 				if (Bus.System.NameHasOwner (NetworkManagerName)) {
 					network = Bus.System.GetObject<INetworkManager> (NetworkManagerName, new ObjectPath (NetworkManagerPath));
 					network.StateChanged += OnStateChanged;
+					SetConnected ();
 				}
 			} catch (Exception e) {
-				Log<NetworkService>.Error ("Could not initialize dbus: {0}", e.Message);
+				// if something bad happened, log the error and assume we are connected
+				Log<NetworkService>.Error ("Could not initialize Network Manager dbus: {0}", e.Message);
 				Log<NetworkService>.Debug (e.StackTrace);
+				this.IsConnected = true;
 			}
-			
-			SetConnected ();
 		}
 
 		void OnStateChanged (uint state)
