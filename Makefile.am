@@ -8,13 +8,11 @@ SUBDIRS = \
 	data \
 	Do.Universe \
 	Do.Platform \
-	Do.Interface.Wink \
 	Do.Interface.Linux \
 	Do.Platform.Linux \
 	Do.Platform.Linux.JoliCloud \
 	Do.Interface.Linux.AnimationBase \
 	Do.Interface.Linux.Classic \
-	Do.Interface.Linux.Docky \
 	Do.Interface.Linux.GlassFrame \
 	Do.Interface.Linux.HUD \
 	Do.Interface.Linux.Mini \

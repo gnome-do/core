@@ -141,13 +141,9 @@ Do.Interface.Linux/Makefile
 Do.Interface.Linux/src/AssemblyInfo.cs
 Do.Interface.Linux.AnimationBase/Makefile
 Do.Interface.Linux.Classic/Makefile
-Do.Interface.Linux.Docky/Makefile
-Do.Interface.Linux.Docky/AssemblyInfo.cs
 Do.Interface.Linux.GlassFrame/Makefile
 Do.Interface.Linux.HUD/Makefile
 Do.Interface.Linux.Mini/Makefile
-Do.Interface.Wink/Makefile
-Do.Interface.Wink/src/AssemblyInfo.cs
 Do.Platform/Makefile
 Do.Platform/src/AssemblyInfo.cs
 Do.Platform.Linux/Makefile
@@ -162,7 +158,6 @@ Do.Universe/src/AssemblyInfo.cs
 libdo/Makefile
 Makefile
 data/Makefile
-data/Docky.DefaultClockTheme/Makefile
 data/icons/Makefile
 data/icons/hicolor/16x16/Makefile
 data/icons/hicolor/16x16/apps/Makefile

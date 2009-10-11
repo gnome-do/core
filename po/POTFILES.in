@@ -10,16 +10,8 @@ Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs
 Do/gtk-gui/Do.UI.PreferencesWindow.cs
 Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs
 Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs
-Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs
-Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs
-Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs
-Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs
-Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/AbstractMenuButtonArgs.cs
-Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs
-Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs
 Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs
 Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs
-Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs
 Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs
 Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs
 Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs
