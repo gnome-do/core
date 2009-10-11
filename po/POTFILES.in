@@ -30,7 +30,6 @@ Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs
 Do/src/Do.Core/Controller.cs
 Do/src/Do.Core/DoAddinInstaller.cs
 Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs
-Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs
 Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs
 Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs
 Do/src/Do.UI/ColorConfigurationWidget.cs

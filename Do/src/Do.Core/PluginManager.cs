@@ -52,7 +52,6 @@ namespace Do.Core
 			new AddinClassifier [] {
 				new OfficialAddinClassifier (),
 				new CommunityAddinClassifier (),
-			    new DockletAddinClassifier (),
 				new GreedyAddinClassifier (),
 			};
 			
