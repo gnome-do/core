@@ -61,7 +61,7 @@
       <applyto>/apps/gnome-do/preferences/Do/CorePreferences/Theme</applyto>
       <owner>gnome-do</owner>
       <type>string</type>
-      <default>Classic Interface</default>
+      <default>Classic</default>
       <locale name="C">
          <short>Do UI theme</short>
          <long>

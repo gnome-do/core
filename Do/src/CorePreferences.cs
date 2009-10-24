@@ -36,7 +36,7 @@ namespace Do
 		const string StartAtLoginKey = "StartAtLogin";
 		const string AlwaysShowResultsKey = "AlwaysShowResults";
 
-		const string ThemeDefaultValue = "Classic Interface";
+		const string ThemeDefaultValue = "Classic";
 		const bool QuietStartDefaultValue = false;
 		const bool StartAtLoginDefaultValue = false;
 		const bool AlwaysShowResultsDefaultValue = false;
@@ -73,7 +73,7 @@ namespace Do
 
 		public string Theme {
 			get { return Preferences.Get (ThemeKey, ThemeDefaultValue); }
-			set { if (ThemeKey != value) Preferences.Set (ThemeKey, value); }
+			set { if (Theme != value) Preferences.Set (ThemeKey, value); }
 		}
 
 		public bool QuietStart {
