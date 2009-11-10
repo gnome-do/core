@@ -906,14 +906,21 @@ namespace Do.Core
 					item.IncreaseRelevance (itemQuery, null);
 
 				// Increase the relevance of the action /for each item/:
-				foreach (Item item in items)
-					action.IncreaseRelevance (actionQuery, item);
+				if (action != null) {
+					foreach (Item item in items)
+						action.IncreaseRelevance (actionQuery, item);
+				} else {
+					Log<Controller>.Debug ("Action is null in 2nd pane!");
+				}
 			} else {
 				// Act is in first pane.
 				// Increase the relevance of each item for the action.
 				foreach (Item item in items)
 					item.IncreaseRelevance (itemQuery, action);
-				action.IncreaseRelevance (actionQuery, null);
+				if (action != null)
+					action.IncreaseRelevance (actionQuery, null);
+				else
+					Log<Controller>.Debug ("Action is null in 1st pane!");
 			}
 
 			if (ThirdPaneVisible) {
