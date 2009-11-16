@@ -104,6 +104,23 @@ namespace Do.Core
 
 		public void Initialize ()
 		{
+			if (Do.Preferences.Theme == "Docky") {
+				string message = Catalog.GetString (
+					"Docky is no longer a GNOME Do theme! " + 
+					"It is now available as a stand-alone application. " +
+					"Your GNOME Do theme has been reset to Classic. " +
+					"Please feel free to change it in Preferences."
+				);
+				Gtk.MessageDialog md = new Gtk.MessageDialog (null, 
+													  Gtk.DialogFlags.Modal,
+													  Gtk.MessageType.Warning, 
+													  Gtk.ButtonsType.Ok,
+													  message);
+				md.Run ();
+				md.Destroy ();
+				Do.Preferences.Theme = "Classic";
+			}
+			
 			SetTheme (Do.Preferences.Theme);
 			Do.Preferences.ThemeChanged += OnThemeChanged;
 			Screen.Default.CompositedChanged += OnCompositingChanged;
