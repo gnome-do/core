@@ -80,6 +80,13 @@ namespace Do.Interface.AnimationBase
 			Add (bezel_drawing_area);
 			
 			pw = new PositionWindow (this, bezel_glass_window);
+			
+			Realized += delegate { GdkWindow.SetBackPixmap (null, false); };
+			
+			StyleSet += delegate {
+				if (IsRealized)
+					GdkWindow.SetBackPixmap (null, false);
+			};
 		}
 		
 		protected override void OnDestroyed ()
