@@ -48,12 +48,9 @@ namespace Do.Universe.Linux
 		public static CategoryItem GetCategoryItem (string category)
 		{
 			string lowCat = category.ToLower ();
-			lock (Instances)
-			{
-				if (!Instances.ContainsKey (lowCat)) {
-					CategoryItem item = new CategoryItem (category);
-					Instances [lowCat] = item;
-				}
+			if (!Instances.ContainsKey (lowCat)) {
+				CategoryItem item = new CategoryItem (category);
+				Instances [lowCat] = item;
 			}
 			return Instances [lowCat];
 		}
