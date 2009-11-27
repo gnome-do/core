@@ -40,6 +40,8 @@ namespace Do.Core
 		UniverseCollection universe;
 		EventHandler initialized;
 		object universe_lock;
+		object universe_monitor;
+		volatile bool universe_reload_requested;
 		
 		const float epsilon = 0.00001f;
 		
@@ -80,6 +82,8 @@ namespace Do.Core
 		{
 			universe = new UniverseCollection ();
 			universe_lock = new object ();
+			universe_monitor = new object ();
+			universe_reload_requested = false;
 
 			update_thread = new Thread (new ThreadStart (UniverseUpdateLoop));
 			update_thread.IsBackground = true;
@@ -165,17 +169,33 @@ namespace Do.Core
 			DateTime startUpdate = DateTime.UtcNow;
 
 			while (true) {
-				Thread.Sleep (UpdateTimeout);
+				lock (universe_monitor) {
+					if (!universe_reload_requested) {
+						Monitor.Wait (universe_monitor, UpdateTimeout);
+					}
+				}
+
 				if (Do.Controller.IsSummoned) continue;
 				startUpdate = DateTime.UtcNow;
-				
+
+				if (universe_reload_requested) {
+					universe_reload_requested = false;
+					ReloadUniverse ();
+					continue;
+				}
+
 				if (rand.Next (10) == 0) {
 					ReloadActions (universe);
+					if (universe_reload_requested)
+						continue;
 				}
-				
+
 				foreach (ItemSource source in PluginManager.ItemSources) {
 					ReloadSource (source, universe);
-					
+
+					if (universe_reload_requested)
+						break;
+
 					if (UpdateRunTime < DateTime.UtcNow - startUpdate) {
 						Thread.Sleep (UpdateTimeout);
 						// sleeping for a bit
@@ -308,7 +328,11 @@ namespace Do.Core
 		/// </summary>
 		public void Reload ()
 		{
-			Services.Application.RunOnThread (ReloadUniverse);
+			universe_reload_requested = true;
+			Log<UniverseManager>.Info ("Requesting universe reload");
+			lock (universe_monitor) {
+				Monitor.PulseAll (universe_monitor);
+			}
 		}
 	}
 }
