@@ -32,7 +32,7 @@ namespace Do.Interface.AnimationBase
 	public class BezelGlassWindow : Gtk.Window
 	{
 		
-		public BezelGlassWindow(BezelGlassResults results) : base (Gtk.WindowType.Toplevel)
+		public BezelGlassWindow (BezelGlassResults results) : base(Gtk.WindowType.Toplevel)
 		{
 			Decorated = false;
 			AppPaintable = true;
@@ -44,6 +44,13 @@ namespace Do.Interface.AnimationBase
 			
 			Add (results);
 			results.Show ();
+			
+			Realized += delegate { GdkWindow.SetBackPixmap (null, false); };
+			
+			StyleSet += delegate {
+				if (IsRealized)
+					GdkWindow.SetBackPixmap (null, false);
+			};
 		}
 		
 		protected override bool OnExposeEvent (EventExpose evnt)

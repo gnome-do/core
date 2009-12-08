@@ -134,6 +134,15 @@ namespace Do.Interface.AnimationBase
 			even_color      = new Cairo.Color (.2, .2, .2, .3);
 			
 			DoubleBuffered = false;
+			
+			Realized += delegate {
+				GdkWindow.SetBackPixmap (null, false);
+			};
+			
+			StyleSet += delegate {
+				if (IsRealized)
+					GdkWindow.SetBackPixmap (null, false);
+			};
 		}
 		
 		private void AnimatedDraw ()
