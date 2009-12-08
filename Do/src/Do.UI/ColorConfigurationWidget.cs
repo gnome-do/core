@@ -78,7 +78,10 @@ namespace Do.UI
 		protected virtual void OnThemeComboChanged (object sender, System.EventArgs e)
 		{
 			Do.Preferences.Theme = Themes[theme_combo.Active];
-			SetupConfigurationWidget ();
+			GLib.Idle.Add (() => {
+				SetupConfigurationWidget ();
+				return false;
+			});
 		}
 		
 		void SetupConfigurationWidget ()
