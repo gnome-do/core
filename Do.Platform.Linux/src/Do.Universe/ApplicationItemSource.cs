@@ -93,8 +93,15 @@ namespace Do.Universe.Linux {
 		
 		IEnumerable<string> GetDesktopFiles (string parent)
 		{
-			IEnumerable<string> baseFiles      = Directory.GetFiles (parent, "*.desktop");
-			IEnumerable<string> recursiveFiles = Directory.GetDirectories (parent).SelectMany (d => GetDesktopFiles (d));
+			IEnumerable<string> baseFiles      = Enumerable.Empty<string> ();
+			IEnumerable<string> recursiveFiles = Enumerable.Empty<string> ();
+			// done separately so failures allow other directories to recurse
+			try {
+				baseFiles = Directory.GetFiles (parent, "*.desktop");
+			} catch (Exception) { }
+			try {
+				recursiveFiles = Directory.GetDirectories (parent).SelectMany (d => GetDesktopFiles (d));
+			} catch (Exception) { }
 			return baseFiles.Concat (recursiveFiles);
 		}
 		
