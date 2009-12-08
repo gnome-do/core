@@ -33,7 +33,7 @@ namespace Do.Universe.Safe
 		public static void LogSafeError (Element who, Exception what, string where, string name)
 		{
 			Console.Error.WriteLine ("{0} \"{1}\" encountered an error in {2}: {3}.",
-					who.GetType (), name, where, what.Message);
+					who.GetType (), name, where, what.ToString ());
 		}
 
 		public Element Element { protected get; set; }
