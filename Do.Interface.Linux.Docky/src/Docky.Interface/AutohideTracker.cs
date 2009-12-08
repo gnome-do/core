@@ -56,6 +56,7 @@ namespace Docky.Interface
 		internal AutohideTracker (DockArea parent)
 		{
 			this.parent = parent;
+			DockPreferences.IconSizeChanged         += HandleIconSizeChanged;
 			Wnck.Screen.Default.ActiveWindowChanged += HandleActiveWindowChanged;
 			Wnck.Screen.Default.WindowClosed        += WnckScreenDefaultWindowClosed;
 			Wnck.Screen.Default.WindowOpened        += WnckScreenDefaultWindowOpened;
@@ -69,6 +70,11 @@ namespace Docky.Interface
 			if (Wnck.Screen.Default.ActiveWindow != null)
 				if (Wnck.Screen.Default.ActiveWindow.IsInViewport (Wnck.Screen.Default.ActiveWorkspace) || !ScreenUtils.ActiveViewport.Windows ().Any ())
 					UpdateWindowIntersect ();
+		}
+
+		void HandleIconSizeChanged ()
+		{
+			UpdateWindowIntersect ();
 		}
 
 		void WnckScreenDefaultWindowOpened (object o, WindowOpenedArgs args)
@@ -156,6 +162,7 @@ namespace Docky.Interface
 		#region IDisposable implementation
 		public void Dispose ()
 		{
+			DockPreferences.IconSizeChanged -= HandleIconSizeChanged;
 			Wnck.Screen.Default.ActiveWindowChanged -= HandleActiveWindowChanged;
 			Wnck.Screen.Default.WindowClosed -= WnckScreenDefaultWindowClosed;
 			Wnck.Screen.Default.WindowOpened -= WnckScreenDefaultWindowOpened;

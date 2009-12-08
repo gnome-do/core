@@ -18,6 +18,7 @@
 //
 
 using System;
+using System.IO;
 using System.Reflection;
 
 using NDesk.DBus;
@@ -174,6 +175,9 @@ namespace Do.Platform.Linux
 					autostartfile = DesktopItem.NewFromFile (System.IO.Path.Combine (AssemblyInfo.InstallData, "applications/gnome-do.desktop"),
 					                                         DesktopItemLoadFlags.NoTranslations);
 					try {
+						if (!Directory.Exists (AutoStartDir))
+							Directory.CreateDirectory (AutoStartDir);
+
 						autostartfile.Save (AutoStartUri, true);
 						autostartfile.Location = AutoStartUri;
 					} catch (Exception e) {
