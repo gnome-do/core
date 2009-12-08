@@ -48,6 +48,7 @@ namespace Do.Platform.Linux
 		
 		public NetworkService ()
 		{
+			this.IsConnected = true;
 			try {
 				BusG.Init ();
 				if (Bus.System.NameHasOwner (NetworkManagerName)) {
@@ -59,7 +60,6 @@ namespace Do.Platform.Linux
 				// if something bad happened, log the error and assume we are connected
 				Log<NetworkService>.Error ("Could not initialize Network Manager dbus: {0}", e.Message);
 				Log<NetworkService>.Debug (e.StackTrace);
-				this.IsConnected = true;
 			}
 		}
 
