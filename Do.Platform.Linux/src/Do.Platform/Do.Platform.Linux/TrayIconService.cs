@@ -35,6 +35,7 @@ namespace Do.Platform.Linux
 		const int IconSize = 24;
 		const int NotifyDelay = 2000;
 		const string IconName = "gnome-do";
+		const string MonochromeIconName = "gnome-do-symbolic";
 
 		// Must remain static until IServices have their own preferences.
 		static TrayIconPreferences Preferences { get; set; }
@@ -53,8 +54,10 @@ namespace Do.Platform.Linux
 			notifier = new NotificationHelper ();
 			notifier.NotificationClosed += OnNotificationClosed;
 			
+			Gtk.IconInfo info = Gtk.IconTheme.Default.ChooseIcon (new [] {MonochromeIconName, IconName}, IconSize, IconLookupFlags.ForceSvg);
+			
 			status_icon = new StatusIcon ();
-			status_icon.Pixbuf = IconProvider.PixbufFromIconName (IconName, IconSize);
+			status_icon.Pixbuf = info.LoadIcon ();
 			status_icon.PopupMenu += OnPopupMenu;
 			status_icon.Activate += OnActivate;
 		}
