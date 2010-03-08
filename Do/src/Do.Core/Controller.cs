@@ -106,18 +106,16 @@ namespace Do.Core
 		{
 			if (Do.Preferences.Theme == "Docky") {
 				string message = Catalog.GetString (
-					"Docky is no longer a GNOME Do theme! " + 
+					"<b>Docky is no longer a Do theme!</b>\n" + 
 					"It is now available as a stand-alone application. " +
 					"Your GNOME Do theme has been reset to Classic. " +
 					"Please feel free to change it in Preferences."
 				);
-				Gtk.MessageDialog md = new Gtk.MessageDialog (null, 
-													  Gtk.DialogFlags.Modal,
-													  Gtk.MessageType.Warning, 
-													  Gtk.ButtonsType.Ok,
-													  message);
-				md.Run ();
-				md.Destroy ();
+
+				Gtk.MessageDialog md = new Gtk.MessageDialog (null, Gtk.DialogFlags.DestroyWithParent, 
+					Gtk.MessageType.Info, Gtk.ButtonsType.Ok, true, message);
+				md.Response += (o, args) => md.Destroy ();
+				md.ShowAll ();
 				Do.Preferences.Theme = "Classic";
 			}
 			
