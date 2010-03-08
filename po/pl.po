@@ -258,58 +258,6 @@ msgstr "Pisz aby rozpocząć wyszukiwanie"
 msgid "Type to start searching."
 msgstr "Pisz aby rozpocząć wyszukiwanie"
 
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-msgid "Minimize"
-msgstr "Minimalizuj"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-msgid "Restore"
-msgstr "Przywróć"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
-msgid "Close All"
-msgstr "Zamknij wszystko"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-msgid "Summon GNOME Do"
-msgstr "Przywołaj GNOME Do"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
-msgid "Automatically Hide"
-msgstr "Automatyczne ukrywanie"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
-msgid "Allow Window Overlap"
-msgstr "Pozwól Na Przekrywanie Okien"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
-msgid "Zoom Icons"
-msgstr "Powiększaj Ikony"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
-msgid "Show Trash"
-msgstr "Pokaż kosz"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
-msgid "Advanced Indicators"
-msgstr "Zaawansowane oznaczenia"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
-msgid "Switch Monitors"
-msgstr "Zmień monitory"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
-msgid "Remove from Dock"
-msgstr "Usuń z Panelu"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
-msgid "No result found for"
-msgstr "Brak rezultatów dla"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
-msgid "Trash"
-msgstr "Kosz"
-
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
 msgid "Open Url"
 msgstr "Otwórz Url"

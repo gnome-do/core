@@ -262,58 +262,6 @@ msgstr "Taper pour commencer la recherche"
 msgid "Type to start searching."
 msgstr "Taper pour démarrer la recherche."
 
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-msgid "Minimize"
-msgstr "Minimiser"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-msgid "Restore"
-msgstr "Restaurer"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
-msgid "Close All"
-msgstr "Fermer tout"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-msgid "Summon GNOME Do"
-msgstr "Afficher GNOME Do"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
-msgid "Automatically Hide"
-msgstr "Cacher automatiquement"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
-msgid "Allow Window Overlap"
-msgstr "Autoriser la superposition des fenêtres"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
-msgid "Zoom Icons"
-msgstr "Icônes de zoom"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
-msgid "Show Trash"
-msgstr "Montrer la Corbeille"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
-msgid "Advanced Indicators"
-msgstr "Indicateurs Avancés"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
-msgid "Switch Monitors"
-msgstr "Intervertir les moniteurs"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
-msgid "Remove from Dock"
-msgstr "Retirer du Dock"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
-msgid "No result found for"
-msgstr "Aucun résultat trouvé pour"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
-msgid "Trash"
-msgstr "Corbeille"
-
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
 msgid "Open Url"
 msgstr "Ouvrir l'url"

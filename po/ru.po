@@ -260,58 +260,6 @@ msgstr "Введите символы для начала поиска"
 msgid "Type to start searching."
 msgstr "Наберите, чтобы начать поиск"
 
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-msgid "Minimize"
-msgstr "Свернуть"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-msgid "Restore"
-msgstr "Восстановить"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
-msgid "Close All"
-msgstr "Закрыть все"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-msgid "Summon GNOME Do"
-msgstr "Вызвать GNOME Do"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
-msgid "Automatically Hide"
-msgstr "Автоматически скрывать"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
-msgid "Allow Window Overlap"
-msgstr "Разрешить окошкам наезжать на друг друга"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
-msgid "Zoom Icons"
-msgstr "Приближать иконки"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
-msgid "Show Trash"
-msgstr "Показывать корзину"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
-msgid "Advanced Indicators"
-msgstr "Продвинутые индикаторы"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
-msgid "Switch Monitors"
-msgstr "Переключить экраны"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
-msgid "Remove from Dock"
-msgstr "Удалить из дока"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
-msgid "No result found for"
-msgstr "Не найдено результатов для"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
-msgid "Trash"
-msgstr "Корзина"
-
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
 msgid "Open Url"
 msgstr "Открыть Url"

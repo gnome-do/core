@@ -1,6 +1,0 @@
-Name: Do.Interface.Wink
-Description: Linux specific interface to large scale interactions with windows via libwnck
-Version: @ABI_VERSION@
-
-Requires: do.platform
-Libs: -r:@expanded_libdir@/@PACKAGE@/Do.Interface.Wink.dll

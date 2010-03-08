@@ -1,4 +1,4 @@
-SUBDIRS = icons Docky.DefaultClockTheme
+SUBDIRS = icons
 
 EXTRA_DIST = $(schemas_in_files) gnome-do.desktop.in 
 CLEANFILES = $(schemas_DATA) gnome-do.desktop

@@ -266,58 +266,6 @@ msgstr "Πληκτρολόγησε για να ξεκινήσει η αναζή�
 msgid "Type to start searching."
 msgstr "Πληκτρολόγησε για να αρχίσει η αναζήτηση"
 
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-msgid "Minimize"
-msgstr "Ελαχιστοποίηση"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:58
-msgid "Restore"
-msgstr "Επαναφορά"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/ApplicationDockItem.cs:59
-msgid "Close All"
-msgstr "Κλείσιμο Όλων"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:59
-msgid "Summon GNOME Do"
-msgstr "Ανάδευση του GNOME Do"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:85
-msgid "Automatically Hide"
-msgstr "Αυτόματη Απόκρυψη"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:89
-msgid "Allow Window Overlap"
-msgstr "Επικάλυψη Παραθύρου"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:92
-msgid "Zoom Icons"
-msgstr "Ζοομ Εικονιδίων"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:95
-msgid "Show Trash"
-msgstr "Εμφάνιση Κάδου"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:98
-msgid "Advanced Indicators"
-msgstr "Προχωρημένοι Δείκτες"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DoDockItem.cs:102
-msgid "Switch Monitors"
-msgstr "Εναλλαγή Οθονών"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/DockItem.cs:325
-msgid "Remove from Dock"
-msgstr "Αφαίρεση από το Dock"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Renderers/SummonModeRenderer.cs:152
-msgid "No result found for"
-msgstr "Κανένα αποτέλεσμα για"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/TrashDockItem.cs:95
-msgid "Trash"
-msgstr "Κάδος Απορριμάτων"
-
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
 msgid "Open Url"
 msgstr "Άνοιγμα συνδέσμου"

@@ -45,7 +45,6 @@ namespace Do.UI
 
 		const string WikiPage = "http://do.davebsd.com/wiki/{0}{1}";
 		const string PluginWikiPageFormat = "_Plugin";
-		const string DockletWikiPageFormat = "_Docklet";
 
 		PluginNodeView nview;
 		SearchEntry search_entry;
@@ -205,10 +204,7 @@ namespace Do.UI
 					// use it instead of trying to guess the wiki page.
 					if (!string.IsNullOrEmpty (a.Description.Url))
 						url = a.Description.Url;
-					if (PluginManager.PluginClassifiesAs (a, "Docklets"))
-						url = string.Format (WikiPage, name, DockletWikiPageFormat);
-					else
-						url = string.Format (WikiPage, name, PluginWikiPageFormat);
+					url = string.Format (WikiPage, name, PluginWikiPageFormat);
 					
 					Services.Environment.OpenUrl (url);
 				} catch (Exception e) {
