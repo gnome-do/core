@@ -34,7 +34,6 @@ namespace Do.UI {
             // Widget Do.UI.DoAddinInstallerDialog
             this.Name = "Do.UI.DoAddinInstallerDialog";
             this.WindowPosition = ((Gtk.WindowPosition)(4));
-            this.HasSeparator = false;
             // Internal child Do.UI.DoAddinInstallerDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";
@@ -117,14 +116,14 @@ namespace Do.UI {
             this.button_ok.UseUnderline = true;
             // Container child button_ok.Gtk.Container+ContainerChild
             Gtk.Alignment w10 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
-            // Container child GtkAlignment1.Gtk.Container+ContainerChild
+            // Container child GtkAlignment.Gtk.Container+ContainerChild
             Gtk.HBox w11 = new Gtk.HBox();
             w11.Spacing = 2;
-            // Container child GtkHBox1.Gtk.Container+ContainerChild
+            // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w12 = new Gtk.Image();
-            w12.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-ok", Gtk.IconSize.Button, 20);
+            w12.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-ok", Gtk.IconSize.Button, 16);
             w11.Add(w12);
-            // Container child GtkHBox1.Gtk.Container+ContainerChild
+            // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w14 = new Gtk.Label();
             w14.LabelProp = Mono.Unix.Catalog.GetString("_Install Updates");
             w14.UseUnderline = true;

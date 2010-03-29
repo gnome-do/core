@@ -32,7 +32,6 @@ namespace Do.UI {
             // Widget Do.UI.PluginErrorDialog
             this.Name = "Do.UI.PluginErrorDialog";
             this.WindowPosition = ((Gtk.WindowPosition)(4));
-            this.HasSeparator = false;
             // Internal child Do.UI.PluginErrorDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";

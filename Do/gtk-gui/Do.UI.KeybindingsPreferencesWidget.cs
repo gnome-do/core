@@ -54,12 +54,13 @@ namespace Do.UI {
             Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.hbox1[this.help_icn]));
             w2.Position = 0;
             w2.Expand = false;
+            w2.Fill = false;
             // Container child hbox1.Gtk.Box+BoxChild
             this.help_lbl = new Gtk.Label();
             this.help_lbl.Name = "help_lbl";
             this.help_lbl.Ypad = 1;
             this.help_lbl.Xalign = 0F;
-            this.help_lbl.LabelProp = Mono.Unix.Catalog.GetString("To edit a shortcut, double-click it and type a new one.");
+            this.help_lbl.LabelProp = Mono.Unix.Catalog.GetString("To edit a shortcut, double-click it and type a new one.\nTo restore a shortcut to the default, double click and press Backspace.");
             this.help_lbl.Wrap = true;
             this.hbox1.Add(this.help_lbl);
             Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(this.hbox1[this.help_lbl]));

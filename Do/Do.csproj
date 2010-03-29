@@ -20,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -28,6 +29,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
@@ -39,6 +41,16 @@
     <Reference Include="Mono.Posix" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="Mono.Addins, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <Package>mono-addins</Package>
+    </Reference>
+    <Reference Include="Mono.Addins.Gui, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <Package>mono-addins-gui</Package>
+    </Reference>
+    <Reference Include="Mono.Addins.Setup, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <Package>mono-addins-setup</Package>
+    </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -101,5 +113,42 @@
     <Compile Include="src\Do.Universe\PreferencesItem.cs" />
     <Compile Include="src\Do.Universe\QuitItem.cs" />
     <Compile Include="src\Do.Universe\SelectedTextItem.cs" />
+    <Compile Include="gtk-gui\generated.cs" />
+    <Compile Include="gtk-gui\Do.UI.PreferencesWindow.cs" />
+    <Compile Include="gtk-gui\Do.UI.KeybindingsPreferencesWidget.cs" />
+    <Compile Include="gtk-gui\Do.UI.GeneralPreferencesWidget.cs" />
+    <Compile Include="gtk-gui\Do.UI.ManagePluginsPreferencesWidget.cs" />
+    <Compile Include="gtk-gui\Do.UI.PluginConfigurationWindow.cs" />
+    <Compile Include="gtk-gui\Do.UI.DoAddinInstallerDialog.cs" />
+    <Compile Include="gtk-gui\Do.UI.ColorConfigurationWidget.cs" />
+    <Compile Include="gtk-gui\Do.UI.PluginErrorDialog.cs" />
+    <Compile Include="src\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Do.Universe\Do.Universe.csproj">
+      <Project>{0F92F14A-CCFC-47E5-BC16-57F8C31F68F9}</Project>
+      <Name>Do.Universe</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Platform\Do.Platform.csproj">
+      <Project>{2EB5EEF4-D946-40A7-BCC7-EAE5003D5CED}</Project>
+      <Name>Do.Platform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Platform.Linux\Do.Platform.Linux.csproj">
+      <Project>{36CA5B12-6730-4777-A472-EBC37CF376BD}</Project>
+      <Name>Do.Platform.Linux</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Interface.Linux\Do.Interface.Linux.csproj">
+      <Project>{5809CEE9-020D-4858-86AE-94E2527146FE}</Project>
+      <Name>Do.Interface.Linux</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Interface.Linux.AnimationBase\Do.Interface.Linux.AnimationBase.csproj">
+      <Project>{FFF96BEF-0FB8-4188-9207-538BF320207F}</Project>
+      <Name>Do.Interface.Linux.AnimationBase</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="gtk-gui\gui.stetic">
+      <LogicalName>gui.stetic</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

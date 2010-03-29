@@ -6,7 +6,7 @@
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FFF96BEF-0FB8-4188-9207-538BF320207F}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>Do.Interface.Linux.AnimationBase</RootNamespace>
     <AssemblyName>Do.Interface.Linux.AnimationBase</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -37,6 +37,12 @@
       <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="Mono.Posix" />
+    <Reference Include="Mono.Cairo, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>gtk-sharp-2.0</Package>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Do.Interface.Linux.AnimationBase.addin.xml" />
@@ -55,6 +61,31 @@
     <Compile Include="src\Do.Interface\Do.Interface.AnimationBase\IRenderInterfaces.cs" />
     <Compile Include="src\Do.Interface\Do.Interface.AnimationBase\TextRenderer.cs" />
     <Compile Include="src\Do.Interface\IRenderTheme.cs" />
+    <Compile Include="gtk-gui\generated.cs" />
+    <Compile Include="gtk-gui\Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Do.Interface.Linux\Do.Interface.Linux.csproj">
+      <Project>{5809CEE9-020D-4858-86AE-94E2527146FE}</Project>
+      <Name>Do.Interface.Linux</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Universe\Do.Universe.csproj">
+      <Project>{0F92F14A-CCFC-47E5-BC16-57F8C31F68F9}</Project>
+      <Name>Do.Universe</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Platform\Do.Platform.csproj">
+      <Project>{2EB5EEF4-D946-40A7-BCC7-EAE5003D5CED}</Project>
+      <Name>Do.Platform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Platform.Linux\Do.Platform.Linux.csproj">
+      <Project>{36CA5B12-6730-4777-A472-EBC37CF376BD}</Project>
+      <Name>Do.Platform.Linux</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="gtk-gui\gui.stetic">
+      <LogicalName>gui.stetic</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
