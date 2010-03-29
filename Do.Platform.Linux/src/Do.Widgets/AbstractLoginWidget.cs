@@ -64,6 +64,7 @@ namespace Do.Platform.Linux
 			// masks chars for passwords
 			password_entry.Visibility = false;
 
+			username_entry.Activated += OnUsernameEntryActivated;
 			password_entry.Activated += OnPasswordEntryActivated;
 			new_account_button.Clicked += OnNewAccountBtnClicked;
 

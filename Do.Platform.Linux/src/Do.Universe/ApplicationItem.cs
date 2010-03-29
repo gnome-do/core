@@ -124,7 +124,7 @@ namespace Do.Universe.Linux {
 		}
 
 		protected DesktopItem item;
-		string name, description, icon, mimetype;
+		string name, description, icon;
 		IEnumerable<string> categories;
 
 		/// <summary>

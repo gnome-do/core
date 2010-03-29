@@ -159,14 +159,6 @@ namespace Do.Platform.Linux
 		      return System.IO.Path.Combine (AutoStartDir, "gnome-do.desktop");
 		    }
 		}
-
-		string InitialAutoStartFile ()
-		{
-			System.IO.Stream s = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("gnome-do.desktop");
-			using (System.IO.StreamReader sr = new System.IO.StreamReader (s)) {
-				return sr.ReadToEnd ();
-			}
-		}
 		
 		string AutoStartUri {
 			get {
