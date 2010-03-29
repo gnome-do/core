@@ -1,0 +1,15 @@
+*.pidb
+*.userprefs
+Makefile.in
+Makefile
+*.pc
+missing
+config.log
+config.status
+configure
+build
+install-sh
+aclocal.m4
+autom4te.cache
+bin
+AssemblyInfo.cs
