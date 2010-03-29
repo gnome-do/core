@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2EB5EEF4-D946-40A7-BCC7-EAE5003D5CED}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Do.Platform</RootNamespace>
+    <AssemblyName>Do.Platform</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>gtk-sharp-2.0</Package>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Do.Platform.addin.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\Do.Platform\Do.Platform.Common\Tests\DictionaryPreferencesServiceTests.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Common\AbstractKeyBindingService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Common\AbstractLogService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Common\CommonPathsService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Common\DictionaryPreferencesService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Common\EventsOnlyNotificationsService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Common\FileLogService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\CoreService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\DefaultApplicationService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\DefaultPackageManagerService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\DefaultPathsService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\DefaultSystemService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\EnvironmentService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\KeyBindingService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\LogService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\NetworkService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\NotificationsService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\PluginManagerService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\PreferencesService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\SecurePreferencesService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\UniverseFactoryService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Default\WindowingService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Preferences\Tests\PreferencesImplementationTests.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Preferences\PreferencesFactory.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Preferences\PreferencesImplementation.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.ServiceStack\IInitializedService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.ServiceStack\IService.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.ServiceStack\IStrictService.cs" />
+    <Compile Include="src\Do.Platform\AbstractApplicationService.cs" />
+    <Compile Include="src\Do.Platform\AbstractPackageManagerService.cs" />
+    <Compile Include="src\Do.Platform\AbstractSystemService.cs" />
+    <Compile Include="src\Do.Platform\ActionableNotification.cs" />
+    <Compile Include="src\Do.Platform\ICoreService.cs" />
+    <Compile Include="src\Do.Platform\IEnvironmentService.cs" />
+    <Compile Include="src\Do.Platform\IKeyBindingService.cs" />
+    <Compile Include="src\Do.Platform\ILogService.cs" />
+    <Compile Include="src\Do.Platform\INetworkService.cs" />
+    <Compile Include="src\Do.Platform\INotificationsService.cs" />
+    <Compile Include="src\Do.Platform\IPluginManagerService.cs" />
+    <Compile Include="src\Do.Platform\IPreferences.cs" />
+    <Compile Include="src\Do.Platform\IPreferencesService.cs" />
+    <Compile Include="src\Do.Platform\ISecurePreferencesService.cs" />
+    <Compile Include="src\Do.Platform\IUniverseFactoryService.cs" />
+    <Compile Include="src\Do.Platform\IWindowingService.cs" />
+    <Compile Include="src\Do.Platform\KeyBinding.cs" />
+    <Compile Include="src\Do.Platform\Log.cs" />
+    <Compile Include="src\Do.Platform\LogBase.cs" />
+    <Compile Include="src\Do.Platform\LogTSender.cs" />
+    <Compile Include="src\Do.Platform\NetworkStateChangedEventArgs.cs" />
+    <Compile Include="src\Do.Platform\Notification.cs" />
+    <Compile Include="src\Do.Platform\NotificationEventArgs.cs" />
+    <Compile Include="src\Do.Platform\PathsService.cs" />
+    <Compile Include="src\Do.Platform\PreferencesChangedEventArgs.cs" />
+    <Compile Include="src\Do.Platform\SecurePreferencesWrapper.cs" />
+    <Compile Include="src\Do.Platform\Services.cs" />
+    <Compile Include="src\Do.Universe\Do.Universe.Common\CopyToClipboardAction.cs" />
+    <Compile Include="src\Do.Universe\Do.Universe.Common\EmailAction.cs" />
+    <Compile Include="src\Do.Universe\Do.Universe.Common\OpenAction.cs" />
+    <Compile Include="src\Do.Universe\Do.Universe.Common\OpenUrlAction.cs" />
+    <Compile Include="src\Do.Universe\Do.Universe.Common\OpenWithAction.cs" />
+    <Compile Include="src\Do.Universe\Do.Universe.Common\RevealAction.cs" />
+    <Compile Include="src\Do.Universe\Do.Universe.Common\RunAction.cs" />
+    <Compile Include="src\System\Linq\EnumerableExtensions.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

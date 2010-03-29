@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1EF59A40-D832-43DD-A5F3-C6A02081CD74}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Do</RootNamespace>
+    <AssemblyName>Do</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>gtk-sharp-2.0</Package>
+    </Reference>
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Package>gtk-sharp-2.0</Package>
+    </Reference>
+    <Reference Include="Mono.Posix" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="Resources\Do.addin.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\CorePreferences.cs" />
+    <Compile Include="src\Do.cs" />
+    <Compile Include="src\IPreferencesBackend.cs" />
+    <Compile Include="src\Notifications.cs" />
+    <Compile Include="src\PathExtensions.cs" />
+    <Compile Include="src\Do.Core\Do.Core.Addins\AddinClassifier.cs" />
+    <Compile Include="src\Do.Core\Do.Core.Addins\CommunityAddinClassifier.cs" />
+    <Compile Include="src\Do.Core\Do.Core.Addins\GreedyAddinClassifier.cs" />
+    <Compile Include="src\Do.Core\Do.Core.Addins\OfficialAddinClassifier.cs" />
+    <Compile Include="src\Do.Core\Controller.cs" />
+    <Compile Include="src\Do.Core\DoAddinInstaller.cs" />
+    <Compile Include="src\Do.Core\FirstSearchController.cs" />
+    <Compile Include="src\Do.Core\HistogramRelevanceProvider.cs" />
+    <Compile Include="src\Do.Core\ISearchController.cs" />
+    <Compile Include="src\Do.Core\ItemExtensions.cs" />
+    <Compile Include="src\Do.Core\Paths.cs" />
+    <Compile Include="src\Do.Core\PluginManager.cs" />
+    <Compile Include="src\Do.Core\RelevanceProvider.cs" />
+    <Compile Include="src\Do.Core\SecondSearchController.cs" />
+    <Compile Include="src\Do.Core\Shortcut.cs" />
+    <Compile Include="src\Do.Core\ShortcutCallback.cs" />
+    <Compile Include="src\Do.Core\SimpleSearchContext.cs" />
+    <Compile Include="src\Do.Core\SimpleSearchController.cs" />
+    <Compile Include="src\Do.Core\ThirdSearchController.cs" />
+    <Compile Include="src\Do.Core\UniverseManager.cs" />
+    <Compile Include="src\Do.Platform\ApplicationService.cs" />
+    <Compile Include="src\Do.Platform\CoreService.cs" />
+    <Compile Include="src\Do.Platform\PluginManagerService.cs" />
+    <Compile Include="src\Do.Platform\WindowingService.cs" />
+    <Compile Include="src\Do.UI\ColorConfigurationWidget.cs" />
+    <Compile Include="src\Do.UI\DoAddinInstallerDialog.cs" />
+    <Compile Include="src\Do.UI\GeneralPreferencesWidget.cs" />
+    <Compile Include="src\Do.UI\HoverImageButton.cs" />
+    <Compile Include="src\Do.UI\KeybindingsPreferencesWidget.cs" />
+    <Compile Include="src\Do.UI\KeybindingTreeView.cs" />
+    <Compile Include="src\Do.UI\MainMenu.cs" />
+    <Compile Include="src\Do.UI\ManagePluginsPreferencesWidget.cs" />
+    <Compile Include="src\Do.UI\PluginConfigurationWindow.cs" />
+    <Compile Include="src\Do.UI\PluginErrorDialog.cs" />
+    <Compile Include="src\Do.UI\PluginNodeView.cs" />
+    <Compile Include="src\Do.UI\PluginSelectionEventArgs.cs" />
+    <Compile Include="src\Do.UI\PluginUpdateNodeView.cs" />
+    <Compile Include="src\Do.UI\PreferencesWindow.cs" />
+    <Compile Include="src\Do.UI\SearchEntry.cs" />
+    <Compile Include="src\Do.Universe\AboutItem.cs" />
+    <Compile Include="src\Do.Universe\ClearLearningItem.cs" />
+    <Compile Include="src\Do.Universe\DonateItem.cs" />
+    <Compile Include="src\Do.Universe\EvilAction.cs" />
+    <Compile Include="src\Do.Universe\EvilElement.cs" />
+    <Compile Include="src\Do.Universe\EvilItem.cs" />
+    <Compile Include="src\Do.Universe\EvilItemSource.cs" />
+    <Compile Include="src\Do.Universe\InternalItemSource.cs" />
+    <Compile Include="src\Do.Universe\ItemSourceItemSource.cs" />
+    <Compile Include="src\Do.Universe\PreferencesItem.cs" />
+    <Compile Include="src\Do.Universe\QuitItem.cs" />
+    <Compile Include="src\Do.Universe\SelectedTextItem.cs" />
+  </ItemGroup>
+</Project>
