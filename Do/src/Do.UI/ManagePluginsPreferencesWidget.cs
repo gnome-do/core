@@ -172,12 +172,6 @@ namespace Do.UI
 				PluginManager.Disable (id);	
 			UpdateButtonState ();
 		}
-		
-		void OnBtnRefreshClicked (object sender, EventArgs e)
-		{
-			nview.Refresh (true);
-			UpdateButtonState ();
-		}
 
 		void OnBtnConfigurePluginClicked (object sender, EventArgs e)
 		{
