@@ -12,7 +12,6 @@ install-sh
 aclocal.m4
 autom4te.cache
 bin
-AssemblyInfo.cs
 po/stamp-it
 po/POTFILES
 po/Makefile.in.in
