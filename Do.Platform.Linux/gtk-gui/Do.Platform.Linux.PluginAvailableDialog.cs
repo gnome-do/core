@@ -46,7 +46,6 @@ namespace Do.Platform.Linux {
             this.Icon = Stetic.IconLoader.LoadIcon(this, "distributor-logo", Gtk.IconSize.Menu, 16);
             this.WindowPosition = ((Gtk.WindowPosition)(4));
             this.BorderWidth = ((uint)(5));
-            this.HasSeparator = false;
             // Internal child Do.Platform.Linux.PluginAvailableDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";
@@ -161,14 +160,14 @@ namespace Do.Platform.Linux {
             this.install_btn.UseUnderline = true;
             // Container child install_btn.Gtk.Container+ContainerChild
             Gtk.Alignment w15 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
-            // Container child GtkAlignment1.Gtk.Container+ContainerChild
+            // Container child GtkAlignment.Gtk.Container+ContainerChild
             Gtk.HBox w16 = new Gtk.HBox();
             w16.Spacing = 2;
-            // Container child GtkHBox1.Gtk.Container+ContainerChild
+            // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w17 = new Gtk.Image();
-            w17.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-ok", Gtk.IconSize.Button, 20);
+            w17.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-ok", Gtk.IconSize.Button, 16);
             w16.Add(w17);
-            // Container child GtkHBox1.Gtk.Container+ContainerChild
+            // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w19 = new Gtk.Label();
             w19.LabelProp = Mono.Unix.Catalog.GetString("_Install");
             w19.UseUnderline = true;

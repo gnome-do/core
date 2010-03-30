@@ -6,6 +6,7 @@
   </configuration>
   <import>
     <widget-library name="../../Do.Interface.Linux/bin/Debug/Do.Interface.Linux.dll" />
+    <widget-library name="../../Do.Platform/bin/Debug/Do.Platform.dll" />
     <widget-library name="../../Do.Platform.Linux/bin/Debug/Do.Platform.Linux.dll" />
     <widget-library name="../bin/Debug/Do.Interface.Linux.AnimationBase.dll" internal="true" />
   </import>

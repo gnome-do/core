@@ -70,8 +70,7 @@ namespace Do.Platform.Linux.JoliCloud
 			session_bus.NameOwnerChanged += HandleNameOwnerChanged;
 			
 			// this call will instaniate the daemon, as well as make sure we also got a DBus object
-			daemon = GetIJoliCloudDaemonObject (ObjectPath);
-			daemon.ActionProcessed += HandleActionProcessed;
+			Daemon.ActionProcessed += HandleActionProcessed;
 			
 			LoadJolicloudPackageMap ();
 			base.Initialize ();

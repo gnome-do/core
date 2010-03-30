@@ -53,7 +53,7 @@ namespace Do.Platform
 			Thread newThread = new Thread (() => {
 				try {
 					action ();
-				} catch (ThreadAbortException e) {
+				} catch (ThreadAbortException) {
 				} catch (Exception e) {
 					Log.Error ("Error in RunOnThread: {0}", e.Message);
 					Log.Debug (e.StackTrace);

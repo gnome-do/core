@@ -461,16 +461,6 @@ namespace Do.Core
 
 #region KeyPress Handling
 
-		Key IfVertical (Key ifKey, Key elseKey)
-		{
-			return Orientation == ControlOrientation.Vertical ? ifKey : elseKey;
-		}
-
-		Key UpKey    { get { return IfVertical (Key.Up, Key.Left); } }
-		Key DownKey  { get { return IfVertical (Key.Down, Key.Right); } }
-		Key LeftKey  { get { return IfVertical (Key.Left, Key.Up); } }
-		Key RightKey { get { return IfVertical (Key.Right, Key.Down); } }
-		
 		private void KeyPressWrap (EventKey evnt)
 		{
 			Key key = (Key) evnt.KeyValue;
