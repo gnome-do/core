@@ -117,7 +117,7 @@ namespace Do.Core
 		}
 
 		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter)
-		{	
+		{
 			return Search (query, filter, (Item) null);
 		}
 		
