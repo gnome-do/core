@@ -50,25 +50,22 @@ namespace Do.Universe.Linux {
 
 			if (path == null) throw new ArgumentNullException ("path");
 
-			lock (Instances)
-			{
-				if (Instances.ContainsKey (key)) {
-						appItem = Instances [key];
-				} else {
-					DesktopItem item = null;
-					try {
-						item = DesktopItem.NewFromFile (path, 0);
-						appItem = new ApplicationItem (item);
-					} catch (Exception e) {
-						appItem = null;
-						try { item.Dispose (); } catch { }
-						Log.Error ("Could not load desktop item: {0}", e.Message);
-						Log.Debug (e.StackTrace);
-					}
-
-					if (appItem != null)
-						Instances [key] = appItem;
+			if (Instances.ContainsKey (key)) {
+					appItem = Instances [key];
+			} else {
+				DesktopItem item = null;
+				try {
+					item = DesktopItem.NewFromFile (path, 0);
+					appItem = new ApplicationItem (item);
+				} catch (Exception e) {
+					appItem = null;
+					try { item.Dispose (); } catch { }
+					Log.Error ("Could not load desktop item: {0}", e.Message);
+					Log.Debug (e.StackTrace);
 				}
+
+				if (appItem != null)
+					Instances [key] = appItem;
 			}
 			return appItem;
 		}

@@ -40,7 +40,8 @@ namespace Do.Core
 		UniverseCollection universe;
 		EventHandler initialized;
 		object universe_lock;
-		
+		ManualResetEvent reload_requested;
+
 		const float epsilon = 0.00001f;
 		
 		/// <value>
@@ -80,6 +81,7 @@ namespace Do.Core
 		{
 			universe = new UniverseCollection ();
 			universe_lock = new object ();
+			reload_requested = new ManualResetEvent (false);
 
 			update_thread = new Thread (new ThreadStart (UniverseUpdateLoop));
 			update_thread.IsBackground = true;
@@ -162,23 +164,33 @@ namespace Do.Core
 		void UniverseUpdateLoop ()
 		{
 			Random rand = new Random ();
-			DateTime startUpdate = DateTime.UtcNow;
 
 			while (true) {
-				Thread.Sleep (UpdateTimeout);
-				if (Do.Controller.IsSummoned) continue;
+				if (reload_requested.WaitOne (UpdateTimeout)) {
+					// We've been asked to do a full reload.  Kick this off, then go back to waiting for the timeout.
+					reload_requested.Reset ();
+					ReloadUniverse ();
+					continue;
+				}
+
+				if (Do.Controller.IsSummoned)
+					continue;
 				startUpdate = DateTime.UtcNow;
-				
+
 				if (rand.Next (10) == 0) {
 					ReloadActions (universe);
 				}
-				
+
 				foreach (ItemSource source in PluginManager.ItemSources) {
 					ReloadSource (source, universe);
-					
+
 					if (UpdateRunTime < DateTime.UtcNow - startUpdate) {
-						Thread.Sleep (UpdateTimeout);
-						// sleeping for a bit
+						// We've exhausted our update timer.  Continue after UpdateTimeout.
+						if (reload_requested.WaitOne (UpdateTimeout)) {
+							// We've been asked to reload the universe; break back to the start of the loop
+							break;
+						}
+						// Start the update timer again, and continue reloading sources…
 						startUpdate = DateTime.UtcNow;
 					}
 				}
@@ -308,7 +320,8 @@ namespace Do.Core
 		/// </summary>
 		public void Reload ()
 		{
-			Services.Application.RunOnThread (ReloadUniverse);
+			Log<UniverseManager>.Info ("Requesting universe reload");
+			reload_requested.Set ();
 		}
 	}
 }
