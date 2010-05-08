@@ -86,6 +86,7 @@ namespace Do.Core
 			update_thread = new Thread (new ThreadStart (UniverseUpdateLoop));
 			update_thread.IsBackground = true;
 			update_thread.Priority = ThreadPriority.Lowest;
+			update_thread.Name = "Universe Update Dispatcher";
 			
 			Services.Network.StateChanged += OnNetworkStateChanged;
 		}
