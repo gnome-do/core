@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Threading;
 using System.ComponentModel;
 
 using Mono.Unix;
@@ -61,52 +62,75 @@ namespace Do.Platform.Linux
 		public bool Set (string key, string val)
 		{
 			Hashtable keyData;
-			
+
 			if (!Ring.Available) {
 				Log.Error (KeyringUnavailableMessage);
 				return false;
 			}
 
 			keyData = new Hashtable ();
-			keyData [AbsolutePathForKey (key)] = key;
-			
-			try {
-				Ring.CreateItem (Ring.GetDefaultKeyring (), ItemType.GenericSecret, AbsolutePathForKey (key), keyData, val.ToString (), true);
-			} catch (KeyringException e) {
-				Log.Error (ErrorSavingMessage, key, e.Message);
-				Log.Debug (e.StackTrace);
+			keyData[AbsolutePathForKey (key)] = key;
+
+			bool success = false;
+			AutoResetEvent completed = new AutoResetEvent (false);
+
+			Services.Application.RunOnMainThread (delegate {
+				try {
+					Ring.CreateItem (Ring.GetDefaultKeyring (), ItemType.GenericSecret, AbsolutePathForKey (key), keyData, val.ToString (), true);
+					success = true;
+				} catch (KeyringException e) {
+					Log.Error (ErrorSavingMessage, key, e.Message);
+					Log.Debug (e.StackTrace);
+					success = false;
+				}
+				completed.Set ();
+			});
+			if (!completed.WaitOne (200)) {
 				return false;
 			}
-
-			return true;
+			return success;
 		}
 
 		public bool TryGet (string key, out string val)
 		{
 			Hashtable keyData;
-			
-			val = "";
-			
+
+			string secret = "";
+
 			if (!Ring.Available) {
 				Log.Error (KeyringUnavailableMessage);
+				val = "";
 				return false;
 			}
 
 			keyData = new Hashtable ();
-			keyData [AbsolutePathForKey (key)] = key;
+			keyData[AbsolutePathForKey (key)] = key;
 			
-			try {
-				foreach (ItemData item in Ring.Find (ItemType.GenericSecret, keyData)) {
-					if (!item.Attributes.ContainsKey (AbsolutePathForKey (key))) continue;
+			bool success = false;
+			AutoResetEvent completed = new AutoResetEvent (false);
 
-					val = item.Secret;
-					return true;
+			Services.Application.RunOnMainThread (delegate {
+				try {
+					foreach (ItemData item in Ring.Find (ItemType.GenericSecret, keyData)) {
+						if (!item.Attributes.ContainsKey (AbsolutePathForKey (key)))
+							continue;
+
+						secret = item.Secret;
+						success = true;
+						break;
+					}
+				} catch (KeyringException) {
+					Log.Debug (KeyNotFoundMessage, AbsolutePathForKey (key));
+					success = false;
+				} finally {
+					completed.Set ();
 				}
-			} catch (KeyringException) {
-				Log.Debug (KeyNotFoundMessage, AbsolutePathForKey (key));
+			});
+			if (!completed.WaitOne (200)) {
+				success = false;
 			}
-
-			return false;
+			val = secret;
+			return success;
 		}
 		
 		#endregion
