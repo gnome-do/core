@@ -165,6 +165,7 @@ namespace Do.Core
 		void UniverseUpdateLoop ()
 		{
 			Random rand = new Random ();
+			DateTime startUpdate;
 
 			while (true) {
 				if (reload_requested.WaitOne (UpdateTimeout)) {
