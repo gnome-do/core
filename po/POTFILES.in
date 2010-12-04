@@ -12,6 +12,7 @@ Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/Bez
 Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs
 Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs
 Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs
+Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs
 Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs
 Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs
 Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs
@@ -19,6 +20,7 @@ Do.Platform.Linux/src/Do.Universe/CategoryItem.cs
 Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs
 Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs
 Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs
+Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs
 Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs
 Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs
 Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs
@@ -47,6 +49,9 @@ Do/src/Do.Universe/PreferencesItem.cs
 Do/src/Do.Universe/QuitItem.cs
 Do/src/Do.Universe/SelectedTextItem.cs
 Do.Universe/src/Do.Universe/Element.cs
+Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs
+Do.Universe/src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs
+Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs
 # files added by intltool-prepare
 data/gnome-do.desktop.in
 data/gnome-do.schemas.in
