@@ -1,6 +1,5 @@
 # List of source files containing translatable strings.
 # Please keep this file in alphabetical order.
-[encoding: UTF-8]
 Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs
 Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs
 Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs
