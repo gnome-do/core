@@ -182,6 +182,10 @@ namespace Do.Platform.Linux
 						if (!Directory.Exists (AutoStartDir))
 							Directory.CreateDirectory (AutoStartDir);
 
+						// This *enables* autostart, by setting the "Hidden" key (which disables autostart) to false.
+						// Explicitly setting this key fixes LP #398303; otherwise our IsAutoStartEnabled method won't find
+						// the AutoStartKey, and will erroneously return false.
+						autostartfile.SetBoolean (AutoStartKey, false);
 						autostartfile.Save (AutoStartUri, true);
 						autostartfile.Location = AutoStartUri;
 					} catch (Exception e) {
