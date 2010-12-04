@@ -17,8 +17,7 @@ AC_DEFUN([SHAMROCK_FIND_C_SHARP_3_0_COMPILER],
 	changequote([, ])
 	AS_VERSION_COMPARE([$MCS_VERSION], [2.0], [MCS_TOO_OLD="true"])
 	if test "$MCS_TOO_OLD" = "true" ; then
-	   AC_MSG_WARN(["System gmcs too old (found $MCS_VERSION, need >= 2.0).  Using internal copy"])
-	   MCS="$MONO $top_srcdir/BundledLibraries/gmcs.exe"
+	   AC_MSG_ERROR(["System gmcs too old (found $MCS_VERSION, need >= 2.0)."])
 	fi
 ])
 

@@ -133,7 +133,6 @@ AM_CONDITIONAL(ENABLE_JOLICLOUD, test "x$enable_jolicloud" = "xyes")
 dnl }}}
 
 AC_CONFIG_FILES([
-BundledLibraries/Makefile
 Do/Makefile
 Do/gnome-do
 Do/src/AssemblyInfo.cs

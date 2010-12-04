@@ -4,7 +4,6 @@ ACLOCAL_AMFLAGS = -I m4 -I m4/shamrock
 
 SUBDIRS = \
 	. \
-	BundledLibraries \
 	data \
 	Do.Universe \
 	Do.Platform \
