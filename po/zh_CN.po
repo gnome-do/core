@@ -7,41 +7,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: Li Linxiao <linxiao.li@yahoo.com>\n"
-"POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2009-02-14 13:34+0000\n"
-"Last-Translator: rainofchaos <rainofchaos@gmail.com>\n"
+"POT-Creation-Date: 2009-06-29 10:02+1000\n"
+"PO-Revision-Date: 2010-06-26 05:02+0000\n"
+"Last-Translator: zhangzichao <Unknown>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-03-13 16:04+0000\n"
+"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
-msgid "_Reset"
-msgstr "重置(_R)"
-
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
-msgid "Background Color:"
-msgstr "背景颜色:"
-
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
-msgid "_Theme:"
-msgstr "主题(_T)："
-
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
 msgstr "总是显示结果窗口"
 
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
-msgid "Show window shadow"
-msgstr "显示窗口阴影"
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:151
+msgid "<b>Selected Theme</b>"
+msgstr "<b>选中的主题</b>"
 
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:228
-msgid "Animate window"
-msgstr "动画窗口"
-
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:262
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:166
 msgid ""
 "<b>Your display is not properly configured for theme and animation support. "
 "To use these features, you must enable compositing.</b>"
@@ -55,37 +39,13 @@ msgstr "<span size=\"large\"><b>升级的插件可用</b></span>"
 msgid "_Install Updates"
 msgstr "安装更新(_I)"
 
-#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "欲编辑某个快捷方式，只需双击并键入一组新的。"
-
-#: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
-msgid "GNOME Do Preferences"
-msgstr "GNOME Do首选项"
-
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
-msgid "Show:"
-msgstr "显示:"
-
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:89
-msgid "Search:"
-msgstr "搜索:"
-
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:144
-msgid "_Configure"
-msgstr "配置(_C)"
-
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:170
-msgid "_About"
-msgstr "关于(_A)"
-
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
 msgstr "<b>首次启动行为</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
 msgid "Start GNOME Do at login."
-msgstr "登陆时启动GNOME Do"
+msgstr "登陆时启动 GNOME Do"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
@@ -94,6 +54,22 @@ msgstr "首次运行时隐藏窗口(安静模式)"
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
 msgid "Show notification icon"
 msgstr "显示通知图标"
+
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
+msgid "To edit a shortcut, double-click it and type a new one."
+msgstr "欲编辑某个快捷方式，只需双击并键入一组新的。"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
+msgid "Show:"
+msgstr "显示:"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:84
+msgid "Search:"
+msgstr "搜索:"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:129
+msgid "_Configure"
+msgstr "配置(_C)"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
@@ -107,198 +83,136 @@ msgstr "<span size=\"large\" weight=\"heavy\">插件名称</span>"
 msgid "page1"
 msgstr "第一页"
 
-#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
-msgid "Some of the required add-ins were not found"
-msgstr "一些所需的插件没有找到"
+#: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
+msgid "GNOME Do Preferences"
+msgstr "GNOME Do 首选项"
 
-#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
-msgid "Installation failed"
-msgstr "安装失败"
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:47
+msgid "Background Color:"
+msgstr "背景颜色:"
 
-#: ../Do/src/Do.UI/PluginErrorDialog.cs:35
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:82
+msgid "_Reset"
+msgstr "重置(_R)"
+
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:101
+msgid "Show window shadow"
+msgstr "显示窗口阴影"
+
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:113
+msgid "Animate window"
+msgstr "窗口动画"
+
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
+#, csharp-format
+msgid "No results for: {0}"
+msgstr "没有{0}的结果"
+
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
+msgid "Type To Search"
+msgstr "输入即搜索"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
+msgid "Indicate Multiple Windows"
+msgstr "显示多个窗口"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
+msgid "Zoom:"
+msgstr "缩放："
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
+msgid "Icon Size:"
+msgstr "图标尺寸："
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
+msgid "Orientation:"
+msgstr "定位："
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
+msgid "Hiding:"
+msgstr "隐藏："
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
+msgid "<b>Docky Behavior</b>"
+msgstr "<b>Docky 行为</b>"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
+msgid "Reinstate Removed Items"
+msgstr "恢复移除的项目"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
+msgid "<b>Docklets</b>"
+msgstr "<b>Docklets</b>"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
+msgid "Minimize"
+msgstr "最小化"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
+msgid "Restore"
+msgstr "还原"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
+msgid "Maximize"
+msgstr "最大化"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
+msgid "Close All"
+msgstr "全部关闭"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
+msgid "Switch Monitors"
+msgstr "切换显示器"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
+msgid "Trash"
+msgstr "回收站"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected "
-"plugins</span></b>"
-msgstr "<b><span size=\"large\">安装所选插件出错</span></b>"
-
-#: ../Do/src/Do.UI/PluginErrorDialog.cs:37
-msgid ""
-"<b><span size=\"large\">There was an error installing the selected "
-"plugin</span></b>"
-msgstr "<b><span size=\"large\">安装所选插件出错</span></b>"
-
-#: ../Do/src/Do.UI/PluginErrorDialog.cs:43
-msgid "and "
-msgstr "与 "
-
-#: ../Do/src/Do.UI/PluginErrorDialog.cs:47
-msgid " is not a valid plugin file."
-msgstr " 不是有效插件文件"
-
-#: ../Do/src/Do.UI/PluginErrorDialog.cs:49
-msgid " are not valid plugin files."
-msgstr " 不是有效插件文件"
-
-#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
-msgid "Appearance"
-msgstr "外观"
-
-#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
-msgid "General"
-msgstr "常规"
-
-#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
-msgid "Plugins"
-msgstr "插件"
-
-#: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
-msgid "Official Plugins"
-msgstr "官方插件"
-
-#: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
-msgid "All Plugins"
-msgstr "所有插件"
-
-#: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
-msgid "Community Plugins"
-msgstr "社区插件"
-
-#: ../Do/src/Do.Core/DoAddinInstaller.cs:37
-msgid "Installation cancelled"
-msgstr "安装已取消"
-
-#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
-msgid "GNOME Do Item Sources"
-msgstr "GNOME Do 条目来源"
-
-#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
-msgid "Item Sources providing all items GNOME Do knows about."
-msgstr "项目来源是GNOME DO能利用的信息。"
-
-#: ../Do/src/Do.Universe/PreferencesItem.cs:31
-msgid "Preferences"
-msgstr "首选项"
-
-#: ../Do/src/Do.Universe/PreferencesItem.cs:35
-msgid "Adjust Do's settings, manage plugins, etc."
-msgstr "调整Do的设置，管理插件等"
-
-#: ../Do/src/Do.Universe/QuitItem.cs:30
-msgid "Quit"
-msgstr "退出"
-
-#: ../Do/src/Do.Universe/QuitItem.cs:34
-msgid "Quit GNOME Do - come back soon!"
-msgstr "退出 GNOME Do - 马上回来！"
-
-#: ../Do/src/Do.Universe/SelectedTextItem.cs:63
-msgid "Selected text"
-msgstr "选择的文字"
-
-#: ../Do/src/Do.Universe/SelectedTextItem.cs:67
-msgid "Currently selected text."
-msgstr "当前选择的文字。"
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:33
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:53
-msgid "Clear Learning"
+"<big><b>Empty all of the items from the trash?</b></big>\n"
+"\n"
+"If you choose to empty the trash, all items in it\n"
+"will be permanently lost. Please note that you\n"
+"can also delete them separately."
 msgstr ""
+"<big><b>清空回收站所有的项目？</b></big>\n"
+"\n"
+"如果您选择清空回收站，所有在回收站的项目\n"
+"都会彻底删除。\n"
+"请注意您也可以逐个地删除。"
 
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:37
-msgid "Resets Do's learned usage data."
-msgstr "重置 Do 记录的使用习惯数据。"
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
+msgid "Open Trash"
+msgstr "打开回收站"
 
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:54
-msgid "Are you sure you want to clear Do's learned usage data?"
-msgstr "你确定要清除 Do 记录的使用习惯数据？"
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
+msgid "Empty Trash"
+msgstr "清空回收站"
 
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
-msgid "Clear"
-msgstr "清除"
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
+msgid "Show"
+msgstr "显示"
 
-#: ../Do/src/Do.Universe/InternalItemSource.cs:49
-msgid "Internal GNOME Do Items"
-msgstr "GNOME Do 内部项目"
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
+msgid "No result found for"
+msgstr "未找到"
 
-#: ../Do/src/Do.Universe/InternalItemSource.cs:53
-msgid "Special items relevant to the inner-workings of GNOME Do."
-msgstr "和 GNOME Do 内部工作相关的特殊项目"
-
-#: ../Do/src/Do.Universe/DonateItem.cs:36
-msgid "Donate"
-msgstr "捐赠"
-
-#: ../Do/src/Do.Universe/DonateItem.cs:40
-msgid "Support GNOME Do development!"
-msgstr "支持 GNOME Do 的开发！"
-
-#: ../Do/src/Do.Universe/AboutItem.cs:31
-msgid "About Do"
-msgstr "关于 Do"
-
-#: ../Do/src/Do.Universe/AboutItem.cs:35
-msgid "About GNOME Do"
-msgstr "关于 GNOME Do"
-
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:57
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
+#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:57
 msgid "Type to begin searching"
 msgstr "键入任意字符开始搜索"
 
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:353
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:387
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:58
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
+#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:58
 msgid "Type to start searching."
 msgstr "键入任意字符开始搜索"
 
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
-msgid "Open Url"
-msgstr "打开网址"
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
-msgid "Opens bookmarks and manually-typed Urls."
-msgstr "打开书签中或手动输入的网址。"
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
-msgid "Reveal"
-msgstr "显示"
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
-msgid "Reveals a file in the file manager."
-msgstr "在文件管理器中显示文件"
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
-msgid "Run"
-msgstr "运行"
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
-msgid "Run an application, script, or other executable."
-msgstr "运行应用程序、脚本或其他可执行文件"
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
-msgid "Email"
-msgstr "电子邮件"
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:41
-msgid "Compose a new email to a friend."
-msgstr "给朋友撰写一封新邮件。"
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:38
-msgid "Open"
-msgstr "打开"
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:42
-msgid "Opens many kinds of items."
-msgstr "打开多种条目"
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
-msgid "Open With..."
-msgstr "打开方式..."
-
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
-msgid "Opens files in specific applications."
-msgstr "用指定的应用程序打开."
+#: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
+msgid "Desktop"
+msgstr "桌面"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -312,9 +226,82 @@ msgstr "用户名"
 msgid "<i>Verify and save account information</i>"
 msgstr "<i>验证并保存帐户信息</i>"
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:180
 msgid "Don't have an account?"
 msgstr "还没有账号？"
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#, csharp-format
+msgid "Error saving {0}"
+msgstr "保存 {0} 出错"
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#, csharp-format
+msgid "Key \"{0}\" not found in keyring"
+msgstr "在钥匙环中未找到钥匙\"{0}\""
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+msgid "gnome-keyring-daemon could not be reached!"
+msgstr "联系不到gnome-keyring-daemon"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:140
+msgid "Icon"
+msgstr "图标"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
+msgid "Categories"
+msgstr "分类"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
+msgid "This application could not be indexed."
+msgstr "该程序无法被索引。"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
+msgid "Exec"
+msgstr "执行"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
+msgid "OnlyShowIn"
+msgstr "只要显示在"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:57
+msgid "Applications"
+msgstr "应用程序"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:61
+msgid "Finds applications in many locations."
+msgstr "在多个位置查找应用程序。"
+
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
+#, csharp-format
+msgid "{0} Application Category"
+msgstr "应用程序分类 {0}"
+
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
+#, csharp-format
+msgid "Applications in the {0} category"
+msgstr "在分类 {0} 中的应用程序"
+
+#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
+msgid "Copy to Clipboard"
+msgstr "复制到剪贴板"
+
+#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:42
+msgid "Copy current text to clipboard"
+msgstr "将当前文字复制到剪贴板"
+
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+msgid "GNOME Special Locations"
+msgstr "GNOME 的特定目录"
+
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+msgid "Special locations in GNOME, such as Computer and Network."
+msgstr "GNOME 的特定目录，比如“计算机”和“网络”"
+
+#: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
+#, csharp-format
+msgid "Error reading {0}."
+msgstr "读取 {0} 出错。"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
 #, csharp-format
@@ -342,64 +329,296 @@ msgstr "验证并保存账户信息"
 msgid "Account validation succeeded!"
 msgstr "账户验证成功！"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:88
-msgid "Icon"
-msgstr "图标"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
+msgid "Email"
+msgstr "电子邮件"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:92
-msgid "This application could not be indexed."
-msgstr "该程序无法被索引。"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:41
+msgid "Compose a new email to a friend."
+msgstr "给朋友撰写一封新邮件。"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:116
-msgid "Exec"
-msgstr "执行"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:38
+msgid "Open"
+msgstr "打开"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:134
-msgid "OnlyShowIn"
-msgstr "只要显示在"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:42
+msgid "Opens many kinds of items."
+msgstr "打开多种条目"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:68
-msgid "Applications"
-msgstr "应用程序"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
+msgid "Open Url"
+msgstr "打开网址"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:72
-msgid "Finds applications in many locations."
-msgstr "在多个位置查找应用程序。"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
+msgid "Opens bookmarks and manually-typed Urls."
+msgstr "打开书签中或手动输入的网址。"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:40
-msgid "Copy to Clipboard"
-msgstr "复制到剪贴板"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
+msgid "Open With..."
+msgstr "打开方式..."
 
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:44
-msgid "Copy current text to clipboard"
-msgstr "将当前文字复制到剪贴板"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
+msgid "Opens files in specific applications."
+msgstr "用指定的应用程序打开."
 
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
-msgid "GNOME Special Locations"
-msgstr "GNOME 的特定目录"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
+msgid "Reveal"
+msgstr "显示"
 
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
-msgid "Special locations in GNOME, such as Computer and Network."
-msgstr "GNOME 的特定目录，比如“计算机”和“网络”"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
+msgid "Reveals a file in the file manager."
+msgstr "在文件管理器中显示文件"
 
-#: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
-#, csharp-format
-msgid "Error reading {0}."
-msgstr "读取 {0} 出错。"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
+msgid "Run"
+msgstr "运行"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
-#, csharp-format
-msgid "Error saving {0}"
-msgstr "保存 {0} 出错"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
+msgid "Run an application, script, or other executable."
+msgstr "运行应用程序、脚本或其他可执行文件"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
-#, csharp-format
-msgid "Key \"{0}\" not found in keyring"
-msgstr "在钥匙环中未找到钥匙\"{0}\""
+#: ../Do/src/Do.Core/Controller.cs:115
+msgid "Summon GNOME Do"
+msgstr "召唤 GNOME Do"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
-msgid "gnome-keyring-daemon could not be reached!"
-msgstr "联系不到gnome-keyring-daemon"
+#: ../Do/src/Do.Core/Controller.cs:120
+msgid "Enter text mode"
+msgstr "文本输入模式"
+
+#: ../Do/src/Do.Core/Controller.cs:126
+msgid "Copy Text"
+msgstr "复制文本"
+
+#: ../Do/src/Do.Core/Controller.cs:131
+msgid "Paste Text"
+msgstr "粘贴文本"
+
+#: ../Do/src/Do.Core/Controller.cs:136
+msgid "Alternate Escape"
+msgstr "替代退出键"
+
+#: ../Do/src/Do.Core/Controller.cs:140
+msgid "Alternate Activate"
+msgstr "替代激活键"
+
+#: ../Do/src/Do.Core/Controller.cs:144
+msgid "Alternate Delete"
+msgstr "替代删除键"
+
+#: ../Do/src/Do.Core/Controller.cs:148
+msgid "Previous Pane"
+msgstr "上一面板"
+
+#: ../Do/src/Do.Core/Controller.cs:153
+msgid "Next Pane"
+msgstr "下一面板"
+
+#: ../Do/src/Do.Core/Controller.cs:158
+msgid "Previous Result"
+msgstr "上一结果"
+
+#: ../Do/src/Do.Core/Controller.cs:163
+msgid "Next Result"
+msgstr "下一结果"
+
+#: ../Do/src/Do.Core/Controller.cs:168
+msgid "First Result"
+msgstr "第一个结果"
+
+#: ../Do/src/Do.Core/Controller.cs:173
+msgid "Last Result"
+msgstr "最后结果"
+
+#: ../Do/src/Do.Core/Controller.cs:178
+msgid "Previous 5 Results"
+msgstr "上五个结果"
+
+#: ../Do/src/Do.Core/Controller.cs:183
+msgid "Next 5 Results"
+msgstr "下五个结果"
+
+#: ../Do/src/Do.Core/Controller.cs:188
+msgid "Step out of Item"
+msgstr "跳出项目"
+
+#: ../Do/src/Do.Core/Controller.cs:193
+msgid "Browse Into Item"
+msgstr "浏览项目"
+
+#: ../Do/src/Do.Core/Controller.cs:198
+msgid "Multiple selection"
+msgstr "多项选择"
+
+#: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
+msgid "GNOME Do"
+msgstr "GNOME Do"
+
+#: ../Do/src/Do.Core/Controller.cs:1057
+msgid "Copyright © 2008 GNOME Do Developers"
+msgstr "版权所有 © 2008 GNOME Do 开发者"
+
+#: ../Do/src/Do.Core/Controller.cs:1058
+msgid ""
+"Do things as quickly as possible\n"
+"(but no quicker) with your files, bookmarks,\n"
+"applications, music, contacts, and more!"
+msgstr ""
+"尽可能快地（但不太快）\n"
+"处理你的文件，书签，\n"
+"程序，音乐，通讯录及更多！"
+
+#: ../Do/src/Do.Core/Controller.cs:1062
+msgid "Visit Homepage"
+msgstr "浏览主页"
+
+#: ../Do/src/Do.Core/DoAddinInstaller.cs:37
+msgid "Installation cancelled"
+msgstr "安装已取消"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
+msgid "Community Plugins"
+msgstr "社区插件"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
+msgid "Docklets"
+msgstr "Docklets"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
+msgid "All Plugins"
+msgstr "所有插件"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
+msgid "Official Plugins"
+msgstr "官方插件"
+
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:102
+msgid "Appearance"
+msgstr "外观"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
+msgid "Some of the required add-ins were not found"
+msgstr "一些所需的插件没有找到"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
+msgid "Installation failed"
+msgstr "安装失败"
+
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:41
+msgid "General"
+msgstr "常规"
+
+#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
+msgid "Keyboard"
+msgstr "键盘"
+
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:44
+msgid "Action"
+msgstr "动作"
+
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
+msgid "Shortcut"
+msgstr "快捷方式"
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
+msgid "Plugins"
+msgstr "插件"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:32
+msgid "<b><span size=\"large\">There was an error installing the selected"
+msgstr "<b><span size=\"large\">选择处有一个错误"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:36
+msgid "plugin"
+msgstr "插件"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:37
+msgid "plugins"
+msgstr "插件"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:43
+msgid "and "
+msgstr "与 "
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:47
+msgid " is not a valid plugin file."
+msgstr " 不是有效插件文件"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:49
+msgid " are not valid plugin files."
+msgstr " 不是有效插件文件"
+
+#: ../Do/src/Do.Universe/AboutItem.cs:31
+msgid "About Do"
+msgstr "关于 Do"
+
+#: ../Do/src/Do.Universe/AboutItem.cs:35
+msgid "About GNOME Do"
+msgstr "关于 GNOME Do"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:33
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:53
+msgid "Clear Learning"
+msgstr "清除学习记录"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:37
+msgid "Resets Do's learned usage data."
+msgstr "重置 Do 记录的使用习惯数据。"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:54
+msgid "Are you sure you want to clear Do's learned usage data?"
+msgstr "你确定要清除 Do 记录的使用习惯数据？"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr "清除"
+
+#: ../Do/src/Do.Universe/DonateItem.cs:36
+msgid "Donate"
+msgstr "捐赠"
+
+#: ../Do/src/Do.Universe/DonateItem.cs:40
+msgid "Support GNOME Do development!"
+msgstr "支持 GNOME Do 的开发！"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:49
+msgid "Internal GNOME Do Items"
+msgstr "GNOME Do 内部项目"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:53
+msgid "Special items relevant to the inner-workings of GNOME Do."
+msgstr "和 GNOME Do 内部工作相关的特殊项目"
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
+msgid "GNOME Do Item Sources"
+msgstr "GNOME Do 条目来源"
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
+msgid "Item Sources providing all items GNOME Do knows about."
+msgstr "项目来源提供所有 GNOME DO 能使用的项目。"
+
+#: ../Do/src/Do.Universe/PreferencesItem.cs:31
+msgid "Preferences"
+msgstr "首选项"
+
+#: ../Do/src/Do.Universe/PreferencesItem.cs:35
+msgid "Adjust Do's settings, manage plugins, etc."
+msgstr "调整Do的设置，管理插件等"
+
+#: ../Do/src/Do.Universe/QuitItem.cs:30
+msgid "Quit"
+msgstr "退出"
+
+#: ../Do/src/Do.Universe/QuitItem.cs:34
+msgid "Quit GNOME Do - come back soon!"
+msgstr "退出 GNOME Do - 马上回来！"
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:63
+msgid "Selected text"
+msgstr "选择的文字"
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:67
+msgid "Currently selected text."
+msgstr "当前选择的文字。"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:42
 msgid "No name"
@@ -409,15 +628,11 @@ msgstr "无名称"
 msgid "No description."
 msgstr "无描述。"
 
-#: ../Do/gnome-do.desktop.in.h:1
+#: ../data/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr "方便快捷地处理你的文件、书签、应用程序、音乐、通讯簿...还有更多！"
-
-#: ../Do/gnome-do.desktop.in.h:2
-msgid "GNOME Do"
-msgstr "GNOME Do"
 
 #: ../data/gnome-do.schemas.in.h:1
 msgid "Always show results window."
@@ -447,16 +662,32 @@ msgstr "在 Do 启动时隐藏主窗口"
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr "进入文本模式到键。"
+msgstr "用于进入文本模式的键。"
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
-msgstr "设置进入文本模式要使用到字符"
+msgstr "设置其为用于进入文本模式的字符。"
 
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
-msgstr "设置希望显示 Do 到键盘命令。"
+msgstr "设置其为召唤Do的键盘命令。"
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "是否总显示结果窗口"
+
+#~ msgid "_About"
+#~ msgstr "关于(_A)"
+
+#~ msgid "_Theme:"
+#~ msgstr "主题(_T)："
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugins</span></b>"
+#~ msgstr "<b><span size=\"large\">安装所选插件出错</span></b>"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugin</span></b>"
+#~ msgstr "<b><span size=\"large\">安装所选插件出错</span></b>"

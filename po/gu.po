@@ -7,45 +7,31 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-01-27 00:28-0500\n"
-"PO-Revision-Date: 2009-01-11 06:24+0000\n"
-"Last-Translator: BKD <bkd.online@gmail.com>\n"
+"POT-Creation-Date: 2009-06-29 10:02+1000\n"
+"PO-Revision-Date: 2009-08-24 04:32+0000\n"
+"Last-Translator: mehul <mehul.n.ved@gmail.com>\n"
 "Language-Team: Gujarati <gu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-03-13 16:04+0000\n"
+"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:128
-msgid "_Reset"
-msgstr "ફરીથી સુયોજિત કરો (_R)"
-
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:150
-msgid "Background Color:"
-msgstr "પાશ્ચદભૂ રંગઃ"
-
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:171
-msgid "_Theme:"
-msgstr "વિષય (_T):"
-
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:200
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
 msgstr "હંમેશા પરિણામની વિન્ડો બતાવો"
 
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:216
-msgid "Show window shadow"
-msgstr "વિન્ડોનો પડછાયો બતાવો"
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:151
+msgid "<b>Selected Theme</b>"
+msgstr "<b>પસંદ કરેલુ દૃશ્યપ્રકાર</b>"
 
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:228
-msgid "Animate window"
-msgstr ""
-
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:262
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:166
 msgid ""
 "<b>Your display is not properly configured for theme and animation support. "
 "To use these features, you must enable compositing.</b>"
 msgstr ""
+"<b>તમારો દેખાવ એ ઍનિમેશન અને દૃશ્યપ્રકાર માટે બરોબર રૂપરેખાંકિત થયેલ નથી. આ "
+"સુવિધા વાપરવામાટે તમારે કૉમ્પોઝિટિંગ શરૂ કરવું પડશે.</b>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
@@ -54,31 +40,6 @@ msgstr "<span size=\"large\"><b>અદ્યતન ઉમેરાઓ ઉપલ�
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
 msgid "_Install Updates"
 msgstr "અદ્યતન આવૃત્તિઓ સ્થાપિત કરો"
-
-#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-msgid "To edit a shortcut, double-click it and type a new one."
-msgstr ""
-"કોઇ શોર્ટકટ સંપાદિત કરવા માટે તેના પર ડબલ ક્લિક કરો અને એક નવો શોર્ટકટ લખો"
-
-#: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
-msgid "GNOME Do Preferences"
-msgstr "જીનોમ ડુ પસંદગીઓ"
-
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:66
-msgid "Show:"
-msgstr "બતાવોઃ"
-
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:89
-msgid "Search:"
-msgstr "શોધો:"
-
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:144
-msgid "_Configure"
-msgstr "રુપરેખાંકિત કરો (_C)"
-
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:170
-msgid "_About"
-msgstr "વિશે (_A)"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
@@ -96,6 +57,23 @@ msgstr "પ્રથમ શરૂઆત વખતે વિન્ડોને �
 msgid "Show notification icon"
 msgstr "સૂચના ચિન્હ બતાવો"
 
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
+msgid "To edit a shortcut, double-click it and type a new one."
+msgstr ""
+"કોઇ શોર્ટકટ સંપાદિત કરવા માટે તેના પર ડબલ ક્લિક કરો અને એક નવો શોર્ટકટ લખો"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
+msgid "Show:"
+msgstr "બતાવોઃ"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:84
+msgid "Search:"
+msgstr "શોધો:"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:129
+msgid "_Configure"
+msgstr "રુપરેખાંકિત કરો (_C)"
+
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
 msgstr "ઉમેરાઓ-રૂપરેખાંકન-વિન્ડો"
@@ -108,174 +86,246 @@ msgstr "<span size=\"large\" weight=\"heavy\">અહીં ઉમેરાનુ
 msgid "page1"
 msgstr "પાનું૧"
 
-#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
-msgid "Some of the required add-ins were not found"
-msgstr "કેટલાક આવશ્યક ઉમેરાઓ મળ્યા નથી"
+#: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
+msgid "GNOME Do Preferences"
+msgstr "જીનોમ ડુ પસંદગીઓ"
 
-#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
-msgid "Installation failed"
-msgstr "સ્થાપન નિષ્ફળ ગયું"
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:47
+msgid "Background Color:"
+msgstr "પાશ્ચદભૂ રંગઃ"
 
-#: ../Do/src/Do.UI/PluginErrorDialog.cs:35
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:82
+msgid "_Reset"
+msgstr "ફરીથી સુયોજિત કરો (_R)"
+
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:101
+msgid "Show window shadow"
+msgstr "વિન્ડોનો પડછાયો બતાવો"
+
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:113
+msgid "Animate window"
+msgstr "વિન્ડો ઍનિમેટ કરો"
+
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
+#, csharp-format
+msgid "No results for: {0}"
+msgstr ""
+
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
+msgid "Type To Search"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
+msgid "Indicate Multiple Windows"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
+msgid "Zoom:"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
+msgid "Icon Size:"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
+msgid "Orientation:"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
+msgid "Hiding:"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
+msgid "<b>Docky Behavior</b>"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
+msgid "Reinstate Removed Items"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
+msgid "<b>Docklets</b>"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
+msgid "Minimize"
+msgstr "નાનું કરો"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
+msgid "Restore"
+msgstr "પાછુ લાવો"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
+msgid "Maximize"
+msgstr ""
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
+msgid "Close All"
+msgstr "બધુ બંધ કરો"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
+msgid "Switch Monitors"
+msgstr "મૉનિટર બદલો"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
+msgid "Trash"
+msgstr "કચરાપેટી"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
 msgid ""
-"<b><span size=\"large\">There was an error installing the selected "
-"plugins</span></b>"
+"<big><b>Empty all of the items from the trash?</b></big>\n"
+"\n"
+"If you choose to empty the trash, all items in it\n"
+"will be permanently lost. Please note that you\n"
+"can also delete them separately."
 msgstr ""
 
-#: ../Do/src/Do.UI/PluginErrorDialog.cs:37
-msgid ""
-"<b><span size=\"large\">There was an error installing the selected "
-"plugin</span></b>"
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
+msgid "Open Trash"
 msgstr ""
 
-#: ../Do/src/Do.UI/PluginErrorDialog.cs:43
-msgid "and "
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
+msgid "Empty Trash"
 msgstr ""
 
-#: ../Do/src/Do.UI/PluginErrorDialog.cs:47
-msgid " is not a valid plugin file."
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
+msgid "Show"
 msgstr ""
 
-#: ../Do/src/Do.UI/PluginErrorDialog.cs:49
-msgid " are not valid plugin files."
-msgstr ""
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
+msgid "No result found for"
+msgstr "કોઇ પરિણામ મળ્યા નહિ:"
 
-#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:137
-msgid "Appearance"
-msgstr ""
-
-#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:56
-msgid "General"
-msgstr ""
-
-#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:53
-msgid "Plugins"
-msgstr ""
-
-#: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
-msgid "Official Plugins"
-msgstr ""
-
-#: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
-msgid "All Plugins"
-msgstr ""
-
-#: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
-msgid "Community Plugins"
-msgstr ""
-
-#: ../Do/src/Do.Core/DoAddinInstaller.cs:37
-msgid "Installation cancelled"
-msgstr "સ્થાપન રદ્દ કર્યુ"
-
-#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
-msgid "GNOME Do Item Sources"
-msgstr "જીનોમ ડુ ની વસ્તુના સ્ત્રોત્ર"
-
-#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
-msgid "Item Sources providing all items GNOME Do knows about."
-msgstr "જીનોમ ડુ ની જાણકારીમાં હોય તેવી દરેક વસ્તુ પૂરી પાડતા સ્ત્રોત્ર"
-
-#: ../Do/src/Do.Universe/PreferencesItem.cs:31
-msgid "Preferences"
-msgstr ""
-
-#: ../Do/src/Do.Universe/PreferencesItem.cs:35
-msgid "Adjust Do's settings, manage plugins, etc."
-msgstr ""
-
-#: ../Do/src/Do.Universe/QuitItem.cs:30
-msgid "Quit"
-msgstr ""
-
-#: ../Do/src/Do.Universe/QuitItem.cs:34
-msgid "Quit GNOME Do - come back soon!"
-msgstr ""
-
-#: ../Do/src/Do.Universe/SelectedTextItem.cs:63
-msgid "Selected text"
-msgstr "પસંદ કરેલ લખાણ"
-
-#: ../Do/src/Do.Universe/SelectedTextItem.cs:67
-msgid "Currently selected text."
-msgstr "હાલનું પસંદ કરેલ લખાણ"
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:33
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:53
-msgid "Clear Learning"
-msgstr ""
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:37
-msgid "Resets Do's learned usage data."
-msgstr ""
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:54
-msgid "Are you sure you want to clear Do's learned usage data?"
-msgstr ""
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
-msgid "Clear"
-msgstr ""
-
-#: ../Do/src/Do.Universe/InternalItemSource.cs:49
-msgid "Internal GNOME Do Items"
-msgstr "જીનોમ ડુ ની અંતર્ગત વસ્તુઓ"
-
-#: ../Do/src/Do.Universe/InternalItemSource.cs:53
-msgid "Special items relevant to the inner-workings of GNOME Do."
-msgstr "જીનોમ ડુ ના અંતર્ગત કાર્યો સાથે જોડાયેલી ખાસ વસ્તુઓ"
-
-#: ../Do/src/Do.Universe/DonateItem.cs:36
-msgid "Donate"
-msgstr ""
-
-#: ../Do/src/Do.Universe/DonateItem.cs:40
-msgid "Support GNOME Do development!"
-msgstr ""
-
-#: ../Do/src/Do.Universe/AboutItem.cs:31
-msgid "About Do"
-msgstr ""
-
-#: ../Do/src/Do.Universe/AboutItem.cs:35
-msgid "About GNOME Do"
-msgstr ""
-
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:352
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:386
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:57
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
+#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:57
 msgid "Type to begin searching"
 msgstr "શોધ શરુ કરવા માટે અહી લખો"
 
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:353
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:387
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultElements.cs:58
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
+#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:58
 msgid "Type to start searching."
 msgstr "શોધ શરુ કરવા માટે અહી લખો."
 
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
-msgid "Open Url"
+#: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
+msgid "Desktop"
 msgstr ""
 
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
-msgid "Opens bookmarks and manually-typed Urls."
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
+msgid "Password"
+msgstr "પાસવર્ડ"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
+msgid "Username"
+msgstr "વપરાશકર્તાનુ નામ"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:124
+msgid "<i>Verify and save account information</i>"
+msgstr "ખાતા માહિતી ચકાસો અને જાળવો"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:180
+msgid "Don't have an account?"
+msgstr "ખાતું ધરાવતા નથી?"
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#, csharp-format
+msgid "Error saving {0}"
+msgstr "{0} ને સાચવવામાં ભૂલ"
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#, csharp-format
+msgid "Key \"{0}\" not found in keyring"
+msgstr "કી-રીંગમાં \"{0}\" આ કી મળી નહિ."
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+msgid "gnome-keyring-daemon could not be reached!"
+msgstr "gnome-keyring-daemon સુધી પહોચી શકાયુ નહિ!"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:140
+msgid "Icon"
+msgstr "ચિહ્ન"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
+msgid "Categories"
 msgstr ""
 
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
-msgid "Reveal"
-msgstr "બતાવો"
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
+msgid "This application could not be indexed."
+msgstr "આ કાર્યક્રમ ઇન્ડેક્સ કરી શકાયો નહિ."
 
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
-msgid "Reveals a file in the file manager."
-msgstr "ફાઇલને ફાઇલ વ્યવસ્થાપકમાં બતાવે છે."
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
+msgid "Exec"
+msgstr "Exec"
 
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
-msgid "Run"
-msgstr "ચલાવો"
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
+msgid "OnlyShowIn"
+msgstr "OnlyShowIn"
 
-#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
-msgid "Run an application, script, or other executable."
-msgstr "કાર્યક્રમ, સ્ક્રિપ્ટ અથવા અન્ય કોઇ ચલાવવાલાયક વસ્તુ ચલાવો."
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:57
+msgid "Applications"
+msgstr "કાર્યક્રમો"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:61
+msgid "Finds applications in many locations."
+msgstr "ઘણી બધી જગ્યાએ કાર્યક્રમો શોધે છે."
+
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
+#, csharp-format
+msgid "{0} Application Category"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
+#, csharp-format
+msgid "Applications in the {0} category"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
+msgid "Copy to Clipboard"
+msgstr "ક્લિપબોર્ડ પર નકલ કરો"
+
+#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:42
+msgid "Copy current text to clipboard"
+msgstr "હાલના લખાણની ક્લિપબોર્ડ પર નકલ કરો"
+
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+msgid "GNOME Special Locations"
+msgstr "જીનોમ ખાસ જગ્યાઓ"
+
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+msgid "Special locations in GNOME, such as Computer and Network."
+msgstr "જીનોમની ખાસ જગ્યાઓ, જેમકે કોમ્પ્યુટર અને નેટવર્ક"
+
+#: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
+#, csharp-format
+msgid "Error reading {0}."
+msgstr "{0} ને વાંચવામાં ભૂલ."
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
+#, csharp-format
+msgid "Sign up for {0}"
+msgstr "{0} માટે સાઇન અપ કરો"
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
+msgid "Validating..."
+msgstr "ચકાસી રહ્યા છીએ..."
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
+#, csharp-format
+msgid "Don't have {0}?"
+msgstr "{0} નથી?"
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
+msgid "Account validation failed!"
+msgstr "ખાતા ચકાસણી નિષ્ફળ ગઇ!"
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
+msgid "Verify and save account information"
+msgstr "ખાતા માહિતી ચકાસો અને સંગ્રહો"
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
+msgid "Account validation succeeded!"
+msgstr "ખાતા ચકાસણી સફળ થઇ!"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
 msgid "Email"
@@ -293,6 +343,14 @@ msgstr "ખોલો"
 msgid "Opens many kinds of items."
 msgstr "ઘણી જાતની વસ્તુઓ ખોલે છે."
 
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
+msgid "Open Url"
+msgstr "URL ખોલો"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
+msgid "Opens bookmarks and manually-typed Urls."
+msgstr "બુકમાર્ક અને હાથેથી ટાઇપ કરવામાં આવેલ URL ખોલો."
+
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
 msgid "Open With..."
 msgstr "આની સાથે ખોલો..."
@@ -301,126 +359,277 @@ msgstr "આની સાથે ખોલો..."
 msgid "Opens files in specific applications."
 msgstr "ફાઇલને એક ખાસ કાર્યક્રમમાં ખોલે છે."
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
-msgid "Password"
-msgstr "પાસવર્ડ"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
+msgid "Reveal"
+msgstr "બતાવો"
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
-msgid "Username"
-msgstr "વપરાશકર્તાનુ નામ"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
+msgid "Reveals a file in the file manager."
+msgstr "ફાઇલને ફાઇલ વ્યવસ્થાપકમાં બતાવે છે."
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:124
-msgid "<i>Verify and save account information</i>"
-msgstr "ખાતા માહિતી ચકાસો અને જાળવો"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
+msgid "Run"
+msgstr "ચલાવો"
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:181
-msgid "Don't have an account?"
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
+msgid "Run an application, script, or other executable."
+msgstr "કાર્યક્રમ, સ્ક્રિપ્ટ અથવા અન્ય કોઇ ચલાવવાલાયક વસ્તુ ચલાવો."
+
+#: ../Do/src/Do.Core/Controller.cs:115
+msgid "Summon GNOME Do"
+msgstr "જીનોમ ડુ ને ચેતવો"
+
+#: ../Do/src/Do.Core/Controller.cs:120
+msgid "Enter text mode"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
-#, csharp-format
-msgid "Sign up for {0}"
+#: ../Do/src/Do.Core/Controller.cs:126
+msgid "Copy Text"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
-msgid "Validating..."
+#: ../Do/src/Do.Core/Controller.cs:131
+msgid "Paste Text"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
-#, csharp-format
-msgid "Don't have {0}?"
+#: ../Do/src/Do.Core/Controller.cs:136
+msgid "Alternate Escape"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
-msgid "Account validation failed!"
+#: ../Do/src/Do.Core/Controller.cs:140
+msgid "Alternate Activate"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
-msgid "Verify and save account information"
+#: ../Do/src/Do.Core/Controller.cs:144
+msgid "Alternate Delete"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
-msgid "Account validation succeeded!"
+#: ../Do/src/Do.Core/Controller.cs:148
+msgid "Previous Pane"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:88
-msgid "Icon"
+#: ../Do/src/Do.Core/Controller.cs:153
+msgid "Next Pane"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:92
-msgid "This application could not be indexed."
+#: ../Do/src/Do.Core/Controller.cs:158
+msgid "Previous Result"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:116
-msgid "Exec"
+#: ../Do/src/Do.Core/Controller.cs:163
+msgid "Next Result"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:134
-msgid "OnlyShowIn"
+#: ../Do/src/Do.Core/Controller.cs:168
+msgid "First Result"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:68
-msgid "Applications"
-msgstr "કાર્યક્રમો"
-
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:72
-msgid "Finds applications in many locations."
-msgstr "ઘણી બધી જગ્યાએ કાર્યક્રમો શોધે છે."
-
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:40
-msgid "Copy to Clipboard"
+#: ../Do/src/Do.Core/Controller.cs:173
+msgid "Last Result"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:44
-msgid "Copy current text to clipboard"
+#: ../Do/src/Do.Core/Controller.cs:178
+msgid "Previous 5 Results"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
-msgid "GNOME Special Locations"
-msgstr "જીનોમ ખાસ જગ્યાઓ"
-
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
-msgid "Special locations in GNOME, such as Computer and Network."
-msgstr "જીનોમની ખાસ જગ્યાઓ, જેમકે કોમ્પ્યુટર અને નેટવર્ક"
-
-#: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
-#, csharp-format
-msgid "Error reading {0}."
+#: ../Do/src/Do.Core/Controller.cs:183
+msgid "Next 5 Results"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
-#, csharp-format
-msgid "Error saving {0}"
+#: ../Do/src/Do.Core/Controller.cs:188
+msgid "Step out of Item"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
-#, csharp-format
-msgid "Key \"{0}\" not found in keyring"
+#: ../Do/src/Do.Core/Controller.cs:193
+msgid "Browse Into Item"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
-msgid "gnome-keyring-daemon could not be reached!"
+#: ../Do/src/Do.Core/Controller.cs:198
+msgid "Multiple selection"
 msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
+msgid "GNOME Do"
+msgstr "જીનોમ ડુ"
+
+#: ../Do/src/Do.Core/Controller.cs:1057
+msgid "Copyright © 2008 GNOME Do Developers"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:1058
+msgid ""
+"Do things as quickly as possible\n"
+"(but no quicker) with your files, bookmarks,\n"
+"applications, music, contacts, and more!"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:1062
+msgid "Visit Homepage"
+msgstr ""
+
+#: ../Do/src/Do.Core/DoAddinInstaller.cs:37
+msgid "Installation cancelled"
+msgstr "સ્થાપન રદ્દ કર્યુ"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
+msgid "Community Plugins"
+msgstr "કૉમ્યુનિટી પ્લગ-ઇનો"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
+msgid "Docklets"
+msgstr ""
+
+#: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
+msgid "All Plugins"
+msgstr "બધા પ્લગ-ઇનો"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
+msgid "Official Plugins"
+msgstr "અધિકૃત પ્લગ-ઇનો"
+
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:102
+msgid "Appearance"
+msgstr "દેખાવ"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
+msgid "Some of the required add-ins were not found"
+msgstr "કેટલાક આવશ્યક ઉમેરાઓ મળ્યા નથી"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
+msgid "Installation failed"
+msgstr "સ્થાપન નિષ્ફળ ગયું"
+
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:41
+msgid "General"
+msgstr "સામાન્ય"
+
+#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
+msgid "Keyboard"
+msgstr ""
+
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:44
+msgid "Action"
+msgstr ""
+
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
+msgid "Shortcut"
+msgstr ""
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
+msgid "Plugins"
+msgstr "પ્લગ-ઇન"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:32
+msgid "<b><span size=\"large\">There was an error installing the selected"
+msgstr ""
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:36
+msgid "plugin"
+msgstr ""
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:37
+msgid "plugins"
+msgstr ""
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:43
+msgid "and "
+msgstr "અને "
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:47
+msgid " is not a valid plugin file."
+msgstr " એ વૈધ પ્લગ-ઇન ફાઇલ નથી."
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:49
+msgid " are not valid plugin files."
+msgstr " એ વૈધ પ્લગ-ઇન ફાઇલો નથી."
+
+#: ../Do/src/Do.Universe/AboutItem.cs:31
+msgid "About Do"
+msgstr "ડુ વિષે"
+
+#: ../Do/src/Do.Universe/AboutItem.cs:35
+msgid "About GNOME Do"
+msgstr "જીનોમ ડુ વિષે"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:33
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:53
+msgid "Clear Learning"
+msgstr "શીખામણ સાફ કરો"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:37
+msgid "Resets Do's learned usage data."
+msgstr "ડુ નો શિખેલો વપરાશ ડેટા રીસેટ કરો"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:54
+msgid "Are you sure you want to clear Do's learned usage data?"
+msgstr "શુ તમે ખરેખર ડુ નો શિખેલો વપરાશ ડેટા રીસેટ કરવા માગો છો?"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr "સાફ કરો"
+
+#: ../Do/src/Do.Universe/DonateItem.cs:36
+msgid "Donate"
+msgstr "દાન કરો"
+
+#: ../Do/src/Do.Universe/DonateItem.cs:40
+msgid "Support GNOME Do development!"
+msgstr "જીનોમ ડુ ના વિકાસમાં ફાળો આપો!"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:49
+msgid "Internal GNOME Do Items"
+msgstr "જીનોમ ડુ ની અંતર્ગત વસ્તુઓ"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:53
+msgid "Special items relevant to the inner-workings of GNOME Do."
+msgstr "જીનોમ ડુ ના અંતર્ગત કાર્યો સાથે જોડાયેલી ખાસ વસ્તુઓ"
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
+msgid "GNOME Do Item Sources"
+msgstr "જીનોમ ડુ ની વસ્તુના સ્ત્રોત્ર"
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
+msgid "Item Sources providing all items GNOME Do knows about."
+msgstr "જીનોમ ડુ ની જાણકારીમાં હોય તેવી દરેક વસ્તુ પૂરી પાડતા સ્ત્રોત્ર"
+
+#: ../Do/src/Do.Universe/PreferencesItem.cs:31
+msgid "Preferences"
+msgstr "પસંદગીઓ"
+
+#: ../Do/src/Do.Universe/PreferencesItem.cs:35
+msgid "Adjust Do's settings, manage plugins, etc."
+msgstr "ડુ ના સેટિંગ બદલો, પ્લગ-ઇનો નું સંચાલન કરો, ઇત્યાદિ."
+
+#: ../Do/src/Do.Universe/QuitItem.cs:30
+msgid "Quit"
+msgstr "બહાર નીકળો"
+
+#: ../Do/src/Do.Universe/QuitItem.cs:34
+msgid "Quit GNOME Do - come back soon!"
+msgstr "જીનોમ ડુ માંથી બહાર નીકળો - જલ્દી પાછા ફરજો!"
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:63
+msgid "Selected text"
+msgstr "પસંદ કરેલ લખાણ"
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:67
+msgid "Currently selected text."
+msgstr "હાલનું પસંદ કરેલ લખાણ"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:42
 msgid "No name"
-msgstr ""
+msgstr "કોઇ નામ નહિ"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:43
 msgid "No description."
-msgstr ""
+msgstr "કોઇ વર્ણન નથી."
 
-#: ../Do/gnome-do.desktop.in.h:1
+#: ../data/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr ""
 "તમારી ફાઇલો, બુકમાર્કો, કાર્યક્રમો, સંગીત, સંબંધો અને અન્ય વસ્તુઓ સાથે ખૂબ "
 "ઝડપથી કામ કરો (પણ હદઉપરાંત ઝડપથી પણ નહી) !"
-
-#: ../Do/gnome-do.desktop.in.h:2
-msgid "GNOME Do"
-msgstr "જીનોમ ડુ"
 
 #: ../data/gnome-do.schemas.in.h:1
 msgid "Always show results window."
@@ -443,10 +652,11 @@ msgstr "ડુ ને હાકલ મારવા માટેની ચાવ�
 #: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
 msgstr ""
+"જ્યારે ડુ શરૂ થાય, ત્યારે તેને ઉભરાવાથી અટકાવવા માટે આ વિકલ્પ સક્રિયકૃત કરો"
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
-msgstr ""
+msgstr "જ્યારે ડુ શરૂ થાય ત્યારે મુખ્ય વિન્ડો બંધ કરો"
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
@@ -462,4 +672,10 @@ msgstr "જે ચાવી આદેશ દ્વારા તમે ડુ ન
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
-msgstr ""
+msgstr "પરિણામ વિન્ડો હંમેશા દેખાશે કે નહિ."
+
+#~ msgid "_Theme:"
+#~ msgstr "વિષય (_T):"
+
+#~ msgid "_About"
+#~ msgstr "વિશે (_A)"

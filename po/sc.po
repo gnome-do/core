@@ -1,0 +1,686 @@
+# Sardinian translation for do
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# This file is distributed under the same license as the do package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: do\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2009-06-29 10:02+1000\n"
+"PO-Revision-Date: 2009-09-16 08:18+0000\n"
+"Last-Translator: Tziu_Riky_Sardinia_Free <Unknown>\n"
+"Language-Team: Sardinian <sc@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
+msgid "Always show results window"
+msgstr "Mosta sempiri sa ventana de is arresultaus"
+
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:151
+msgid "<b>Selected Theme</b>"
+msgstr "Tema Scioberau"
+
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:166
+msgid ""
+"<b>Your display is not properly configured for theme and animation support. "
+"To use these features, you must enable compositing.</b>"
+msgstr ""
+"Su display no est ateretzau po suportai temas i animatzionis. Po impreai "
+"custas fainas, depis abilitai sa componidura."
+
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
+msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
+msgstr "Ddi funti plugins ajorronaus!"
+
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
+msgid "_Install Updates"
+msgstr "_Arregistra ajorronamentus"
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
+msgid "<b>First-launch Behavior</b>"
+msgstr "Cumportamentu de sa primu intràda."
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
+msgid "Start GNOME Do at login."
+msgstr "Oberri GNOME Do a s'intràda."
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
+msgid "Hide window on first launch (quiet mode)."
+msgstr "Cua ventana a sa prima intràda."
+
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
+msgid "Show notification icon"
+msgstr "Mosta icona de cunsillus"
+
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
+msgid "To edit a shortcut, double-click it and type a new one."
+msgstr "Po mudai unu incurtzadorgiu: fai dopiu click e iscrii"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
+msgid "Show:"
+msgstr "Mosta:"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:84
+msgid "Search:"
+msgstr "Agàta:"
+
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:129
+msgid "_Configure"
+msgstr "_Imposta"
+
+#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
+msgid "PluginConfigurationWindow"
+msgstr "VentanaImpostaPlugins"
+
+#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
+msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
+msgstr "<span size=\"ladu\" weight=\"grai\">Nòmini de plugin innòi</span>"
+
+#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
+msgid "page1"
+msgstr "Follu1"
+
+#: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
+msgid "GNOME Do Preferences"
+msgstr "GNOME Do Preferèntzias"
+
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:47
+msgid "Background Color:"
+msgstr "Color'e su Fundu"
+
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:82
+msgid "_Reset"
+msgstr "_Reset"
+
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:101
+msgid "Show window shadow"
+msgstr "Mosta umbra 'e sa Ventana"
+
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:113
+msgid "Animate window"
+msgstr "Anima sa Ventana"
+
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
+#, csharp-format
+msgid "No results for: {0}"
+msgstr "Nudda Arresultaus po: {0}"
+
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
+msgid "Type To Search"
+msgstr "Iscriri Po Agatai"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
+msgid "Indicate Multiple Windows"
+msgstr "Inditza Ventanas Multiplas"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
+msgid "Zoom:"
+msgstr "Zoom:"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
+msgid "Icon Size:"
+msgstr "Mesura 'e s'Icona"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
+msgid "Orientation:"
+msgstr "Orientàda:"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
+msgid "Hiding:"
+msgstr "Cuai:"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
+msgid "<b>Docky Behavior</b>"
+msgstr "<b>Cumportamentu 'e su Docky</b>"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
+msgid "Reinstate Removed Items"
+msgstr "Torranci is elementus boraus"
+
+#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
+msgid "<b>Docklets</b>"
+msgstr "<b>Docklets</b>"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
+msgid "Minimize"
+msgstr "Furria a Piticu"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
+msgid "Restore"
+msgstr "Torra"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
+msgid "Maximize"
+msgstr "Furria a Mannu"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
+msgid "Close All"
+msgstr "Tanca totu"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
+msgid "Switch Monitors"
+msgstr "Ateru Monitor"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
+msgid "Trash"
+msgstr "Aliga"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
+msgid ""
+"<big><b>Empty all of the items from the trash?</b></big>\n"
+"\n"
+"If you choose to empty the trash, all items in it\n"
+"will be permanently lost. Please note that you\n"
+"can also delete them separately."
+msgstr ""
+"<big><b>Fulia totu s'Aliga?</b></big>\n"
+"\n"
+"If you choose to empty the trash, all items in it\n"
+"will be permanently lost. Please note that you\n"
+"can also delete them separately.\n"
+"\n"
+"Si scioberas de sboidai s'Aliga, totus is elementus\n"
+"ant'essi perdius po sempiri. Labai ca si podint \n"
+"fuliai fintzas unu a unu."
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
+msgid "Open Trash"
+msgstr "Oberri s'Aliga"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
+msgid "Empty Trash"
+msgstr "Aliga Sboìda"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
+msgid "Show"
+msgstr "Amosta"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
+msgid "No result found for"
+msgstr "No apu agatau nudda po"
+
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
+#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:57
+msgid "Type to begin searching"
+msgstr "Iscriri po cumentzai a circai"
+
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
+#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:58
+msgid "Type to start searching."
+msgstr "Iscriri po cumentzai a circai"
+
+#: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
+msgid "Desktop"
+msgstr "Desktop"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
+msgid "Password"
+msgstr "Password"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
+msgid "Username"
+msgstr "Username"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:124
+msgid "<i>Verify and save account information</i>"
+msgstr "Cuntrolla i arregistra informatzionis de s'account"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:180
+msgid "Don't have an account?"
+msgstr "No tennis perunu account?"
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#, csharp-format
+msgid "Error saving {0}"
+msgstr "Disacatu arregistrendi {0}"
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#, csharp-format
+msgid "Key \"{0}\" not found in keyring"
+msgstr "No apu agatau sa Crai \"{0}\" in su Keyring"
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+msgid "gnome-keyring-daemon could not be reached!"
+msgstr "No potzu arrici gnome-keyring-daemon"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:140
+msgid "Icon"
+msgstr "Icona"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
+msgid "Categories"
+msgstr "Categorias"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
+msgid "This application could not be indexed."
+msgstr "No podiat ponni su programa in s'indixi"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
+msgid "Exec"
+msgstr "Fai"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
+msgid "OnlyShowIn"
+msgstr "AmostaScetiIn"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:57
+msgid "Applications"
+msgstr "Programas"
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:61
+msgid "Finds applications in many locations."
+msgstr "Agata programas in medas logus"
+
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
+#, csharp-format
+msgid "{0} Application Category"
+msgstr "{0} Categoria 'e su programa"
+
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
+#, csharp-format
+msgid "Applications in the {0} category"
+msgstr "Programas in sa categoria {0}"
+
+#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
+msgid "Copy to Clipboard"
+msgstr "Copia in sa Clipboard"
+
+#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:42
+msgid "Copy current text to clipboard"
+msgstr "Copia custa scrita mein sa Clipboard"
+
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+msgid "GNOME Special Locations"
+msgstr "Logus ispecialis de GNOME"
+
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+msgid "Special locations in GNOME, such as Computer and Network."
+msgstr "Logus ispecialis de GNOME, cumente sa Computadora i sa Network"
+
+#: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
+#, csharp-format
+msgid "Error reading {0}."
+msgstr "Disacatu ligendi {0}."
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
+#, csharp-format
+msgid "Sign up for {0}"
+msgstr "Iscrii a {0}."
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
+msgid "Validating..."
+msgstr "Cunvàlida...."
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
+#, csharp-format
+msgid "Don't have {0}?"
+msgstr "No tennis {0}?"
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
+msgid "Account validation failed!"
+msgstr "Cunvàlida 'e s'account fallìa."
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
+msgid "Verify and save account information"
+msgstr "Castia i arregistra is informatzionis 'e s'account"
+
+#: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
+msgid "Account validation succeeded!"
+msgstr "Cunvàlida 'e s'account arrenescida."
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
+msgid "Email"
+msgstr "Email"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:41
+msgid "Compose a new email to a friend."
+msgstr "Iscrii una email noa a is amigus"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:38
+msgid "Open"
+msgstr "Oberri"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:42
+msgid "Opens many kinds of items."
+msgstr "Oberri diferentis elementus"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
+msgid "Open Url"
+msgstr "Oberri Url"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:58
+msgid "Opens bookmarks and manually-typed Urls."
+msgstr "Oberri Bookmarks i Urls iscritas a manu"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
+msgid "Open With..."
+msgstr "Oberri Cun..."
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
+msgid "Opens files in specific applications."
+msgstr "Oberri elementus cun is programas ispecificus"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
+msgid "Reveal"
+msgstr "Scobèrri"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
+msgid "Reveals a file in the file manager."
+msgstr "Scoberri s'elementu in su File Manager."
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
+msgid "Run"
+msgstr "Cumentza"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
+msgid "Run an application, script, or other executable."
+msgstr "Cumentza unu programa, script o ateru executabili."
+
+#: ../Do/src/Do.Core/Controller.cs:115
+msgid "Summon GNOME Do"
+msgstr "Tzerria GNOME Do"
+
+#: ../Do/src/Do.Core/Controller.cs:120
+msgid "Enter text mode"
+msgstr "Intra in Text Mode"
+
+#: ../Do/src/Do.Core/Controller.cs:126
+msgid "Copy Text"
+msgstr "Copia Text"
+
+#: ../Do/src/Do.Core/Controller.cs:131
+msgid "Paste Text"
+msgstr "Appodda Text"
+
+#: ../Do/src/Do.Core/Controller.cs:136
+msgid "Alternate Escape"
+msgstr "Ateru Esc"
+
+#: ../Do/src/Do.Core/Controller.cs:140
+msgid "Alternate Activate"
+msgstr "Atera Ativatzioni"
+
+#: ../Do/src/Do.Core/Controller.cs:144
+msgid "Alternate Delete"
+msgstr "Ateru Canc"
+
+#: ../Do/src/Do.Core/Controller.cs:148
+msgid "Previous Pane"
+msgstr "Pagin'e Acoa"
+
+#: ../Do/src/Do.Core/Controller.cs:153
+msgid "Next Pane"
+msgstr "Pagin'e Innantis"
+
+#: ../Do/src/Do.Core/Controller.cs:158
+msgid "Previous Result"
+msgstr "Arresultaus Acoa"
+
+#: ../Do/src/Do.Core/Controller.cs:163
+msgid "Next Result"
+msgstr "Arresultaus Innantis"
+
+#: ../Do/src/Do.Core/Controller.cs:168
+msgid "First Result"
+msgstr "Arresultau: su de Unu"
+
+#: ../Do/src/Do.Core/Controller.cs:173
+msgid "Last Result"
+msgstr "Arresultau: s'Urtimu"
+
+#: ../Do/src/Do.Core/Controller.cs:178
+msgid "Previous 5 Results"
+msgstr "5 Arresultaus Acoa"
+
+#: ../Do/src/Do.Core/Controller.cs:183
+msgid "Next 5 Results"
+msgstr "5 Arresultaus Innantis"
+
+#: ../Do/src/Do.Core/Controller.cs:188
+msgid "Step out of Item"
+msgstr "Passanci de cust'elementu"
+
+#: ../Do/src/Do.Core/Controller.cs:193
+msgid "Browse Into Item"
+msgstr "Corrova a intrus de s'elementu"
+
+#: ../Do/src/Do.Core/Controller.cs:198
+msgid "Multiple selection"
+msgstr "Isciobera Medas"
+
+#: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
+msgid "GNOME Do"
+msgstr "GNOME Do"
+
+#: ../Do/src/Do.Core/Controller.cs:1057
+msgid "Copyright © 2008 GNOME Do Developers"
+msgstr "Deretus de Copia © 2008 GNOME Do Developers"
+
+#: ../Do/src/Do.Core/Controller.cs:1058
+msgid ""
+"Do things as quickly as possible\n"
+"(but no quicker) with your files, bookmarks,\n"
+"applications, music, contacts, and more!"
+msgstr ""
+"Fai is cosas su prus lestru ca podis\n"
+"cun is files tuus, is bookmarks,\n"
+"is programas,sa musica,is cuntatus, e ateru!"
+
+#: ../Do/src/Do.Core/Controller.cs:1062
+msgid "Visit Homepage"
+msgstr "Castia s Homepage"
+
+#: ../Do/src/Do.Core/DoAddinInstaller.cs:37
+msgid "Installation cancelled"
+msgstr "Installatzioni fuliàda"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
+msgid "Community Plugins"
+msgstr "Plugins de sa Comunidadi"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
+msgid "Docklets"
+msgstr "Docklets"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
+msgid "All Plugins"
+msgstr "Totus is Plugins"
+
+#: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
+msgid "Official Plugins"
+msgstr "Plugins Officialis"
+
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:102
+msgid "Appearance"
+msgstr "Aparentzia"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
+msgid "Some of the required add-ins were not found"
+msgstr "No apu agatau is add-ins necessarius"
+
+#: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
+msgid "Installation failed"
+msgstr "Installatzioni fallìa"
+
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:41
+msgid "General"
+msgstr "Ginerali"
+
+#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
+msgid "Keyboard"
+msgstr "Butònera"
+
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:44
+msgid "Action"
+msgstr "Faina"
+
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
+msgid "Shortcut"
+msgstr "Acapiu"
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
+msgid "Plugins"
+msgstr "Plugins"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:32
+msgid "<b><span size=\"large\">There was an error installing the selected"
+msgstr "<b><span size=\"large\">Disacatu installendi:"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:36
+msgid "plugin"
+msgstr "plugin"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:37
+msgid "plugins"
+msgstr "plugins"
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:43
+msgid "and "
+msgstr "i "
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:47
+msgid " is not a valid plugin file."
+msgstr " no est elementu de plugin."
+
+#: ../Do/src/Do.UI/PluginErrorDialog.cs:49
+msgid " are not valid plugin files."
+msgstr " no funt elementus de plugin."
+
+#: ../Do/src/Do.Universe/AboutItem.cs:31
+msgid "About Do"
+msgstr "Ita est Do"
+
+#: ../Do/src/Do.Universe/AboutItem.cs:35
+msgid "About GNOME Do"
+msgstr "Ita est GNOME Do"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:33
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:53
+msgid "Clear Learning"
+msgstr "Imparai Craru"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:37
+msgid "Resets Do's learned usage data."
+msgstr "Arresèta is datus de impleu imparau de Do"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:54
+msgid "Are you sure you want to clear Do's learned usage data?"
+msgstr "Ses seguru de borai is datus de impleu imparaus de Do?"
+
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr "Fúlia!"
+
+#: ../Do/src/Do.Universe/DonateItem.cs:36
+msgid "Donate"
+msgstr "Donatzionis"
+
+#: ../Do/src/Do.Universe/DonateItem.cs:40
+msgid "Support GNOME Do development!"
+msgstr "Ajuda s'isvilùpu de GNOME Do!"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:49
+msgid "Internal GNOME Do Items"
+msgstr "Elementus internus de GNOME Do"
+
+#: ../Do/src/Do.Universe/InternalItemSource.cs:53
+msgid "Special items relevant to the inner-workings of GNOME Do."
+msgstr "Elementus ispecialis de importu po su traballu internu de GNOME Do"
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
+msgid "GNOME Do Item Sources"
+msgstr "Arrexini de is Elementus de GNOME Do"
+
+#: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
+msgid "Item Sources providing all items GNOME Do knows about."
+msgstr "Arrexini de is Elementus ca GNOME Do connoscit."
+
+#: ../Do/src/Do.Universe/PreferencesItem.cs:31
+msgid "Preferences"
+msgstr "Preferentzias"
+
+#: ../Do/src/Do.Universe/PreferencesItem.cs:35
+msgid "Adjust Do's settings, manage plugins, etc."
+msgstr "Setiu de Do, plugins, ecc.ecc."
+
+#: ../Do/src/Do.Universe/QuitItem.cs:30
+msgid "Quit"
+msgstr "Bessi"
+
+#: ../Do/src/Do.Universe/QuitItem.cs:34
+msgid "Quit GNOME Do - come back soon!"
+msgstr "Bessi de GNOME Do - Torra Luegus!"
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:63
+msgid "Selected text"
+msgstr "Iscrita scioberàda"
+
+#: ../Do/src/Do.Universe/SelectedTextItem.cs:67
+msgid "Currently selected text."
+msgstr "S'iscrita scioberàda immoi."
+
+#: ../Do.Universe/src/Do.Universe/Element.cs:42
+msgid "No name"
+msgstr "Kene Nòmini"
+
+#: ../Do.Universe/src/Do.Universe/Element.cs:43
+msgid "No description."
+msgstr "Kene descriitura"
+
+#: ../data/gnome-do.desktop.in.h:1
+msgid ""
+"Do things as quickly as possible (but no quicker) with your files, "
+"bookmarks, applications, music, contacts, and more!"
+msgstr ""
+"Fai is cosas su prus lestru ca si podit cun is elementus, bookmarks, "
+"programas, musica, cuntatus, a ateru!"
+
+#: ../data/gnome-do.schemas.in.h:1
+msgid "Always show results window."
+msgstr "Mosta sempiri sa ventana de is arresultaus."
+
+#: ../data/gnome-do.schemas.in.h:2
+msgid ""
+"Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
+"Mini."
+msgstr ""
+"Muda s'aparentzia de Do. Setius validus funti Classic, Glass Frame i Mini."
+
+#: ../data/gnome-do.schemas.in.h:3
+msgid "Do UI theme"
+msgstr "Cara de Do UI."
+
+#: ../data/gnome-do.schemas.in.h:4
+msgid "Do summon keybinding."
+msgstr "Tzerria su Keybinding."
+
+#: ../data/gnome-do.schemas.in.h:5
+msgid "Enable this option to keep Do from popping up as soon as it starts."
+msgstr "Allui custa optzioni po fai bessìri Do candu s'oberrit."
+
+#: ../data/gnome-do.schemas.in.h:6
+msgid "Hide main window when Do starts."
+msgstr "Cua sa ventana principali candu s'oberrit Do."
+
+#: ../data/gnome-do.schemas.in.h:7
+msgid "Key used to enter text mode."
+msgstr "Butòni oberau in su modu de iscritura."
+
+#: ../data/gnome-do.schemas.in.h:8
+msgid "Set this to the character that should be used to enter text mode."
+msgstr "Ponni custu po su carateri de oberai in su modu de iscritura."
+
+#: ../data/gnome-do.schemas.in.h:9
+msgid "Set this to the key command you would like to use to summon Do."
+msgstr "Ponni custu a butòni de cumandu po tzerriai Do."
+
+#: ../data/gnome-do.schemas.in.h:10
+msgid "Whether the results window will always show."
+msgstr "Si sa ventana de arresultaus at'essi mostàda sempiri."
