@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2009-09-23 19:04+0000\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 15:04+0000\n"
 "Last-Translator: Dan Klassen <danklassen@gmail.com>\n"
 "Language-Team: English (Canada) <en_CA@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:48+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -701,3 +701,21 @@ msgstr "Whether the results window will always show."
 #~ msgstr ""
 #~ "<b><span size=\"large\">There was an error installing the selected "
 #~ "plugin</span></b>"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "Automatically Hide"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "Remove from Dock"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "Advanced Indicators"
+
+#~ msgid "Show Trash"
+#~ msgstr "Show Trash"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "Allow Window Overlap"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "Zoom Icons"

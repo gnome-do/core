@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-do\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-09-29 20:13+0000\n"
-"Last-Translator: Thibault Févry <Unknown>\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 15:17+0000\n"
+"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:47+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -710,3 +710,21 @@ msgstr "Indique si la fenêtre de résultats doit toujours être affichée."
 #~ msgstr ""
 #~ "<b><span size=\"large\">Une erreur est survenue lors de l'installation du "
 #~ "greffon sélectionné</span></b>"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "Cacher automatiquement"
+
+#~ msgid "Show Trash"
+#~ msgstr "Montrer la Corbeille"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "Retirer du Dock"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "Autoriser la superposition des fenêtres"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "Icônes de zoom"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "Indicateurs Avancés"

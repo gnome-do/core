@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-03-14 16:43+0000\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 14:44+0000\n"
 "Last-Translator: Hamed Ramezanian <iceage2098@gmail.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:48+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -688,3 +688,34 @@ msgstr "درصورتی که پنجره نتایج همیشه نشان داده �
 
 #~ msgid "_About"
 #~ msgstr "_درباره"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugins</span></b>"
+#~ msgstr "<b><span size=\"large\">اشکال در نصب پلاگین های انتخابی</span></b>"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugin</span></b>"
+#~ msgstr "<b><span size=\"large\">اشکال در نصب پلاگین انتخابی</span></b>"
+
+#~ msgid "_Theme:"
+#~ msgstr "_الگو (ثیم)"
+
+#~ msgid "Show Trash"
+#~ msgstr "نمایش سطل زیاله"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "بزرگ‌نمایی شکلک‌ها"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "پنهان شدن خودکار"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "برداشتن از زبانه"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "شاخص‌های پیش‌رفته"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "روی هم افتادن پنجره‌ها"

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-10-03 12:14+0000\n"
-"Last-Translator: jmb_kz <Unknown>\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-23 14:04+0000\n"
+"Last-Translator: Andrey Olykainen <Unknown>\n"
 "Language-Team: Kazakh <kk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:47+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -448,11 +448,11 @@ msgstr "Келесі 5 нәтиже"
 
 #: ../Do/src/Do.Core/Controller.cs:188
 msgid "Step out of Item"
-msgstr ""
+msgstr "Субмәзірге кіру"
 
 #: ../Do/src/Do.Core/Controller.cs:193
 msgid "Browse Into Item"
-msgstr ""
+msgstr "Субмәзірден шығу"
 
 #: ../Do/src/Do.Core/Controller.cs:198
 msgid "Multiple selection"
@@ -695,3 +695,6 @@ msgstr "Do шақыру үшін пернелердің үйлесімін ор�
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Нәтижелер терезесінің әрқашан көрсетілетіні."
+
+#~ msgid "_Theme:"
+#~ msgstr "_Темасы:"

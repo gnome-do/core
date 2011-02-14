@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2009-09-30 12:36+0000\n"
-"Last-Translator: kulight <Unknown>\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 15:21+0000\n"
+"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:47+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -693,3 +693,21 @@ msgstr "האם חלון התוצאות תמיד יופיע."
 #~ "<b><span size=\"large\">There was an error installing the selected "
 #~ "plugin</span></b>"
 #~ msgstr "<b><span size=\"large\">ארעה שגיאה בהתקנת התוסף הנבחר</span></b>"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "מחוונים מתקדמים"
+
+#~ msgid "Show Trash"
+#~ msgstr "הצג את סל האשפה"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "אפשר חפיפת חלונות"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "התקרבות לסמלים"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "הסתרה אוטומטית"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "הסר מהמעגן"
