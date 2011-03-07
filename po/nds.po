@@ -8,22 +8,22 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-06-29 10:20+1000\n"
-"PO-Revision-Date: 2010-12-05 15:22+0000\n"
-"Last-Translator: ncfiedler <ncfiedler@gnome.org>\n"
+"PO-Revision-Date: 2011-03-06 11:18+0000\n"
+"Last-Translator: sunset_NOVA <sunset_NOVA@gmx.de>\n"
 "Language-Team: German, Low <nds@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-14 04:48+0000\n"
+"X-Launchpad-Export-Date: 2011-03-07 04:44+0000\n"
 "X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
-msgstr "Rutkamen jümmers opwiesen"
+msgstr "Ergebnisfenster immer anzeigen"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:151
 msgid "<b>Selected Theme</b>"
-msgstr "<b>Utwähltes Thema</b>"
+msgstr "<b>Ausgewähltes Thema</b>"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:166
 msgid ""
@@ -65,15 +65,15 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
-msgstr "Wiesen:"
+msgstr "Anzeigen:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:84
 msgid "Search:"
-msgstr "Söken:"
+msgstr "Suchen:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:129
 msgid "_Configure"
-msgstr "_Bewarken"
+msgstr "Einstellen"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
@@ -85,23 +85,23 @@ msgstr "<span size=\"large\" weight=\"heavy\">Plugin-Naam hier</span>"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
 msgid "page1"
-msgstr "Siet 1"
+msgstr "Seite 1"
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
 msgid "GNOME Do Preferences"
-msgstr "GNOME Do Instellens"
+msgstr "GNOME Do Einstellungen"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:47
 msgid "Background Color:"
-msgstr "Achtergrundklöör:"
+msgstr "Hintergrundfarbe"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:82
 msgid "_Reset"
-msgstr "_Torüggsetten"
+msgstr "Zurücksetzen"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:101
 msgid "Show window shadow"
-msgstr "Finsterschatten opwiesen"
+msgstr "Fensterschatten anzeigen"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:113
 msgid "Animate window"
@@ -130,11 +130,11 @@ msgstr "Lüttbillgröte:"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
 msgid "Orientation:"
-msgstr "Utrichten:"
+msgstr "Ausrichtung"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
 msgid "Hiding:"
-msgstr "Verbargen:"
+msgstr "Verbergen"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
 msgid "<b>Docky Behavior</b>"
@@ -154,7 +154,7 @@ msgstr "Lütter maken"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
 msgid "Restore"
-msgstr "Wedderherstellen"
+msgstr "Wiederherstellen"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
 msgid "Maximize"
@@ -162,7 +162,7 @@ msgstr "Gröter maken"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
 msgid "Close All"
-msgstr "Allens sluten"
+msgstr "Alles schließen"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
 msgid "Switch Monitors"
@@ -170,7 +170,7 @@ msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
 msgid "Trash"
-msgstr "Papierkörv"
+msgstr "Papierkorb"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
 msgid ""
@@ -183,11 +183,11 @@ msgstr ""
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
 msgid "Open Trash"
-msgstr "Papierkörv opmaken"
+msgstr "Papierkorb öffnen"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
 msgid "Empty Trash"
-msgstr "Papierkörv leer maken"
+msgstr "Papierkorb leeren"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
 msgid "Show"
@@ -257,7 +257,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
 msgid "Exec"
-msgstr ""
+msgstr "Ausführen"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
 msgid "OnlyShowIn"
