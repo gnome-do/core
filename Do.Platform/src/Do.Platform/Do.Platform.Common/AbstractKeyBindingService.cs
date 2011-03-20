@@ -35,7 +35,7 @@ namespace Do.Platform.Common
 		{
 			//try to get the keystring from the prefs.  We default to the KeyBinding.KeyString, so we can later check
 			//if the prefs value matches that, we're using the default, otherwise we're using a user specified value
-			string prefsKeyString = prefs.Get (binding.Description.Replace (' ', '_'), binding.KeyString);
+			string prefsKeyString = prefs.Get (binding.PreferenceName, binding.KeyString);
 			
 			//if these values don't match then the user has specified a new keystring
 			//update the KeyEvent then continue

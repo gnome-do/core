@@ -129,51 +129,51 @@ namespace Do.Core
 		
 		void SetupKeybindings ()
 		{
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon Do"), "<Super>space", 
-				OnSummonKeyPressEvent, true));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Summon_Do",
+					Catalog.GetString ("Summon Do"), "<Super>space", OnSummonKeyPressEvent, true));
 			
 			// this keybinding is disabled by default - note the empty keybinding
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Summon in Text Mode"), "",
-				OnTextModeSummonKeyPressEvent, true));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Summon_in_Text_Mode",
+					Catalog.GetString ("Summon in Text Mode"), "", OnTextModeSummonKeyPressEvent, true));
 			
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Enter Text Mode"), "period",
-				OnTextModePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Enter_Text_Mode",
+					Catalog.GetString ("Enter Text Mode"), "period", OnTextModePressEvent));
 			
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Clear"), "Escape",
-				OnClearKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Clear",
+					Catalog.GetString ("Clear"), "Escape", OnClearKeyPressEvent));
 			
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Copy to Clipboard"), "<Control>c",
-				OnCopyEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Paste from Clipboard"), "<Control>v",
-				OnPasteEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Copy_to_Clipboard",
+					Catalog.GetString ("Copy to Clipboard"), "<Control>c", OnCopyEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Paste_from_Clipboard",
+					Catalog.GetString ("Paste from Clipboard"), "<Control>v", OnPasteEvent));
 			
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Pane"), "<Shift>Tab",
-				OnPreviousPanePressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next Pane"), "Tab",
-				OnNextPanePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Previous_Pane",
+					Catalog.GetString ("Previous Pane"), "<Shift>Tab", OnPreviousPanePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Next_Pane",
+					Catalog.GetString ("Next Pane"), "Tab", OnNextPanePressEvent));
 			
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous Item"), "Up",
-				OnPreviousItemPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next Item"), "Down",
-				OnNextItemPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Previous_Item",
+					Catalog.GetString ("Previous Item"), "Up", OnPreviousItemPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Next_Item",
+					Catalog.GetString ("Next Item"), "Down", OnNextItemPressEvent));
 			
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("First Item"), "Home",
-				OnFirstItemPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Last Item"), "End",
-				OnLastItemPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("First_Item",
+					Catalog.GetString ("First Item"), "Home", OnFirstItemPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Last_Item",
+					Catalog.GetString ("Last Item"), "End", OnLastItemPressEvent));
 			
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Previous 5 Results"), "Page_Up",
-				OnNextItemPagePressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Next 5 Results"), "Page_Down",
-				OnPreviousItemPagePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Previous_5_Results",
+					Catalog.GetString ("Previous 5 Results"), "Page_Up", OnNextItemPagePressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Next_5_Results",
+					Catalog.GetString ("Next 5 Results"), "Page_Down", OnPreviousItemPagePressEvent));
 			
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Step Out of Item"), "Left",
-				OnStepOutItemPressEvent));
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Step Into Item"), "Right",
-				OnStepInItemPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Step_Out_of_Item",
+					Catalog.GetString ("Step Out of Item"), "Left", OnStepOutItemPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Step_Into_Item",
+					Catalog.GetString ("Step Into Item"), "Right", OnStepInItemPressEvent));
 			
-			Services.Keybinder.RegisterKeyBinding (new KeyBinding (Catalog.GetString ("Select Multiple Items"), "comma",
-				OnSelectionKeyPressEvent));
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Select_Multiple_Items",
+					Catalog.GetString ("Select Multiple Items"), "comma", OnSelectionKeyPressEvent));
 		}
 
 		void OnSummoned ()
