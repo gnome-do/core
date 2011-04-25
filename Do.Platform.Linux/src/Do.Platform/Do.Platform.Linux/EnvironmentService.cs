@@ -175,7 +175,7 @@ namespace Do.Platform.Linux
 		{
 			using (Process executor = new Process ()) {
 				executor.StartInfo.FileName = "xargs";
-				executor.StartInfo.Arguments = "--null xdg-open";
+				executor.StartInfo.Arguments = "--null " + command;
 				executor.StartInfo.UseShellExecute = false;
 				executor.StartInfo.RedirectStandardInput = true;
 				executor.Start ();
