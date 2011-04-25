@@ -146,10 +146,43 @@ namespace Do.Platform.Linux
 		{
 			try {
 				Log<EnvironmentService>.Info ("Opening \"{0}\"...", open);
-				Process.Start ("xdg-open", string.Format ("\"{0}\"", open));
+				RunWithArguments ("xdg-open", new string[] {open});
 			} catch (Exception e) {
 				Log<EnvironmentService>.Error ("Failed to open {0}: {1}", open, e.Message);
 				Log<EnvironmentService>.Debug (e.StackTrace);
+			}
+		}
+
+		/// <summary>
+		/// Run <param name="command"> with <param name="arguments">.
+		/// </summary>
+		/// <remarks>
+		/// There is no escaping or splitting done on the arguments.
+		/// Each argument in <paramref name="arguments"/> is passed as-is to <paramref name="command"/>.
+		///
+		/// This requires us to work around the GODDAMNED BRAINDEAD System.Diagnostics.Process
+		/// API which unavoidably splits on space (and interprets a bunch of other characters).
+		/// We do this by spawning xargs and passing the arguments through stdin.  Since this is
+		/// in Do.Platform.Linux the lack of portability is not an issue.
+		/// </remarks>
+		/// <param name="command">
+		/// The command to run.  A <see cref="System.String"/>
+		/// </param>
+		/// <param name="arguments">
+		/// The set of arguments to pass to <paramref name="command"/>.  A <see cref="IEnumerable<System.String>"/>
+		/// </param>
+		void RunWithArguments (string command, IEnumerable<string> arguments)
+		{
+			using (Process executor = new Process ()) {
+				executor.StartInfo.FileName = "xargs";
+				executor.StartInfo.Arguments = "--null xdg-open";
+				executor.StartInfo.UseShellExecute = false;
+				executor.StartInfo.RedirectStandardInput = true;
+				executor.Start ();
+				foreach (string argument in arguments) {
+					executor.StandardInput.Write ("{0}\0",argument);
+				}
+				executor.StandardInput.Flush ();
 			}
 		}
 
