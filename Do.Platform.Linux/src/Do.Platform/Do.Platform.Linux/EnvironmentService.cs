@@ -49,14 +49,18 @@ namespace Do.Platform.Linux
 		public void OpenEmail (IEnumerable<string> to, IEnumerable<string> cc, IEnumerable<string> bcc,
 			string subject, string body, IEnumerable<string> attachments)
 		{
-			Execute (string.Format ("xdg-email {0} {1} {2} {3} {4} {5}",
-				to.Aggregate ("", (es, e) => string.Format ("{0} '{1}'", es, e)),
-				cc.Aggregate ("", (es, e) => string.Format ("{0} --cc '{1}'", es, e)),
-				bcc.Aggregate ("", (es, e) => string.Format ("{0} --bcc '{1}'", es, e)),
-				subject,
-				body,
-				attachments.Aggregate ("", (es, e) => string.Format ("{0} --attach '{1}'", es, e))
-			));
+			IEnumerable<string> arguments;
+			arguments = cc.SelectMany (address => new string[] { "--cc", address });
+			arguments = arguments.Concat (bcc.SelectMany (address => new string[] { "--bcc", address }));
+			if (!String.IsNullOrEmpty (subject)) {
+				arguments = arguments.Concat (new string[] { "--subject", subject });
+			}
+			if (!String.IsNullOrEmpty (body)) {
+				arguments = arguments.Concat (new string[] { "--body", body });
+			}
+			arguments = arguments.Concat (attachments.SelectMany (attachment => new string[] { "--attach", attachment }));
+			arguments = arguments.Concat (to);
+			RunWithArguments ("xdg-email", arguments);
 		}
 		
 		string UserHome {
