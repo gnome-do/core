@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Do.Universe;
 
@@ -54,6 +55,12 @@ namespace Do.Platform.Default
 		public void Execute (string line)
 		{
 			Log.Debug ("Default IEnvironmentService cannot execute \"{0}\".", line);
+		}
+
+		public void ExecuteWithArguments (string command, IEnumerable<string> arguments)
+		{
+			Log.Debug ("Default IEnvironmentService cannot execute \"{0}\".",
+				arguments.Aggregate (command, (current, item) => current + " " + item));
 		}
 		
 		public void CopyToClipboard (Item item)

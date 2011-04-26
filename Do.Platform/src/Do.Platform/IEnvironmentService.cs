@@ -39,6 +39,22 @@ namespace Do.Platform
 			
 		bool IsExecutable (string line);
 		void Execute (string line);
+
+		/// <summary>
+		/// Execute <paramref name="command"/>, passing each string in <paramref name="arguments"/> as a separate
+		/// argument.
+		/// </summary>
+		/// <remarks>
+		/// No processing is done on <paramref name="arguments"/>.  Specifically, the strings are not split on whitespace,
+		/// nor are quotes handled specially.
+		/// </remarks>
+		/// <param name="command">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="arguments">
+		/// A <see cref="IEnumerable<System.String>"/>
+		/// </param>
+		void ExecuteWithArguments (string command, IEnumerable<string> arguments);
 		
 		void CopyToClipboard (Item item);
 
