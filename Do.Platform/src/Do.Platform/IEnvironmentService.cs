@@ -20,6 +20,7 @@
 
 using System;
 using System.Linq;
+using System.Diagnostics;
 using System.Collections.Generic; 
 
 using Do.Universe;
@@ -54,7 +55,11 @@ namespace Do.Platform
 		/// <param name="arguments">
 		/// A <see cref="IEnumerable<System.String>"/>
 		/// </param>
-		void ExecuteWithArguments (string command, IEnumerable<string> arguments);
+		/// <returns>
+		/// A <see cref="System.Diagnostics.Process"> representing the command & arguments.  This process will
+		/// not have been Started.
+		/// </returns>
+		Process ExecuteWithArguments (string command, IEnumerable<string> arguments);
 		
 		void CopyToClipboard (Item item);
 

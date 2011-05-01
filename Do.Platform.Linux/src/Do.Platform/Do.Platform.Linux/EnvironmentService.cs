@@ -60,7 +60,9 @@ namespace Do.Platform.Linux
 			}
 			arguments = arguments.Concat (attachments.SelectMany (attachment => new string[] { "--attach", attachment }));
 			arguments = arguments.Concat (to);
-			ExecuteWithArguments ("xdg-email", arguments);
+			using (Process emailer = ExecuteWithArguments ("xdg-email", arguments)) {
+				emailer.Start ();
+			}
 		}
 		
 		string UserHome {
@@ -100,23 +102,21 @@ namespace Do.Platform.Linux
 			}
 		}
 
-		public void ExecuteWithArguments (string command, IEnumerable<string> arguments)
+		public Process ExecuteWithArguments (string command, IEnumerable<string> arguments)
 		{
 			// This requires us to work around the GODDAMNED BRAINDEAD System.Diagnostics.Process
 			// API which unavoidably splits on space (and interprets a bunch of other characters).
 			// We do this by spawning xargs and passing the arguments through stdin.  Since this is
 			// in Do.Platform.Linux the lack of portability is not an issue.
-			using (Process executor = new Process ()) {
-				executor.StartInfo.FileName = "xargs";
-				executor.StartInfo.Arguments = "--null " + command;
-				executor.StartInfo.UseShellExecute = false;
-				executor.StartInfo.RedirectStandardInput = true;
-				executor.Start ();
-				foreach (string argument in arguments) {
-					executor.StandardInput.Write ("{0}\0", argument);
-				}
-				executor.StandardInput.Flush ();
+			Process executor = new Process ();
+			executor.StartInfo.FileName = "xargs";
+			executor.StartInfo.Arguments = "--null " + command;
+			executor.StartInfo.UseShellExecute = false;
+			executor.StartInfo.RedirectStandardInput = true;
+			foreach (string argument in arguments) {
+				executor.StandardInput.Write ("{0}\0", argument);
 			}
+			return executor;
 		}
 
 		public void CopyToClipboard (Item item)
@@ -169,7 +169,9 @@ namespace Do.Platform.Linux
 		{
 			try {
 				Log<EnvironmentService>.Info ("Opening \"{0}\"...", open);
-				ExecuteWithArguments ("xdg-open", new string[] {open});
+				using (Process executor = ExecuteWithArguments ("xdg-open", new string[] { open })) {
+					executor.Start ();
+				}
 			} catch (Exception e) {
 				Log<EnvironmentService>.Error ("Failed to open {0}: {1}", open, e.Message);
 				Log<EnvironmentService>.Debug (e.StackTrace);
