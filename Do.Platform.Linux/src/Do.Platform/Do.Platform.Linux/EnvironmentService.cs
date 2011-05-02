@@ -109,10 +109,14 @@ namespace Do.Platform.Linux
 			// We do this by spawning xargs and passing the arguments through stdin.  Since this is
 			// in Do.Platform.Linux the lack of portability is not an issue.
 			Process executor = new Process ();
+			//FIXME: xargs is actually kinda crappy for this
+			//Really, we should be fork/execing.
 			executor.StartInfo.FileName = "xargs";
 			executor.StartInfo.Arguments = "--null " + command;
 			executor.StartInfo.UseShellExecute = false;
 			executor.StartInfo.RedirectStandardInput = true;
+			//FIXME: There's no guarantee that these writes won't block.
+			//If Run() starts to deadlock Do, start looking here!
 			foreach (string argument in arguments) {
 				executor.StandardInput.Write ("{0}\0", argument);
 			}
