@@ -60,7 +60,8 @@ namespace Do.Platform.Linux
 			}
 			arguments = arguments.Concat (attachments.SelectMany (attachment => new string[] { "--attach", attachment }));
 			arguments = arguments.Concat (to);
-			RunWithArguments ("xdg-email", arguments);
+			using (Process emailer = ExecuteWithArguments ("xdg-email", arguments)) {
+			}
 		}
 		
 		string UserHome {
@@ -99,7 +100,33 @@ namespace Do.Platform.Linux
 				Process.Start (line);
 			}
 		}
-		
+
+		public Process ExecuteWithArguments (string command, params string[] arguments)
+		{
+			return ExecuteWithArguments (command, arguments.AsEnumerable ());
+		}
+
+		public Process ExecuteWithArguments (string command, IEnumerable<string> arguments)
+		{
+			// This requires us to work around the GODDAMNED BRAINDEAD System.Diagnostics.Process
+			// API which unavoidably splits on space (and interprets a bunch of other characters).
+			// We do this by spawning xargs and passing the arguments through stdin.  Since this is
+			// in Do.Platform.Linux the lack of portability is not an issue.
+			Process executor = new Process ();
+			//FIXME: xargs is actually kinda crappy for this
+			//Really, we should be fork/execing.
+			executor.StartInfo.FileName = "xargs";
+			executor.StartInfo.Arguments = "--null " + command;
+			executor.StartInfo.UseShellExecute = false;
+			executor.StartInfo.RedirectStandardInput = true;
+			executor.Start ();
+			foreach (string argument in arguments) {
+				executor.StandardInput.Write ("{0}\0", argument);
+			}
+			Log<EnvironmentService>.Debug ("Executing command “{0}”", arguments.Aggregate ((cur, item) => cur + " " + item));
+			return executor;
+		}
+
 		public void CopyToClipboard (Item item)
 		{
 			string text = "";
@@ -150,43 +177,11 @@ namespace Do.Platform.Linux
 		{
 			try {
 				Log<EnvironmentService>.Info ("Opening \"{0}\"...", open);
-				RunWithArguments ("xdg-open", new string[] {open});
+				using (Process executor = ExecuteWithArguments ("xdg-open", open)) {
+				}
 			} catch (Exception e) {
 				Log<EnvironmentService>.Error ("Failed to open {0}: {1}", open, e.Message);
 				Log<EnvironmentService>.Debug (e.StackTrace);
-			}
-		}
-
-		/// <summary>
-		/// Run <param name="command"> with <param name="arguments">.
-		/// </summary>
-		/// <remarks>
-		/// There is no escaping or splitting done on the arguments.
-		/// Each argument in <paramref name="arguments"/> is passed as-is to <paramref name="command"/>.
-		///
-		/// This requires us to work around the GODDAMNED BRAINDEAD System.Diagnostics.Process
-		/// API which unavoidably splits on space (and interprets a bunch of other characters).
-		/// We do this by spawning xargs and passing the arguments through stdin.  Since this is
-		/// in Do.Platform.Linux the lack of portability is not an issue.
-		/// </remarks>
-		/// <param name="command">
-		/// The command to run.  A <see cref="System.String"/>
-		/// </param>
-		/// <param name="arguments">
-		/// The set of arguments to pass to <paramref name="command"/>.  A <see cref="IEnumerable<System.String>"/>
-		/// </param>
-		void RunWithArguments (string command, IEnumerable<string> arguments)
-		{
-			using (Process executor = new Process ()) {
-				executor.StartInfo.FileName = "xargs";
-				executor.StartInfo.Arguments = "--null " + command;
-				executor.StartInfo.UseShellExecute = false;
-				executor.StartInfo.RedirectStandardInput = true;
-				executor.Start ();
-				foreach (string argument in arguments) {
-					executor.StandardInput.Write ("{0}\0",argument);
-				}
-				executor.StandardInput.Flush ();
 			}
 		}
 

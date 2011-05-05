@@ -18,7 +18,9 @@
 //
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 
 using Do.Universe;
 
@@ -55,7 +57,19 @@ namespace Do.Platform.Default
 		{
 			Log.Debug ("Default IEnvironmentService cannot execute \"{0}\".", line);
 		}
-		
+
+		public Process ExecuteWithArguments (string command, IEnumerable<string> arguments)
+		{
+			Log.Debug ("Default IEnvironmentService cannot execute \"{0}\".",
+				arguments.Aggregate (command, (current, item) => current + " " + item));
+			return new Process ();
+		}
+
+		public Process ExecuteWithArguments (string command, params string[] arguments)
+		{
+			return ExecuteWithArguments (command, arguments);
+		}
+
 		public void CopyToClipboard (Item item)
 		{
 			Log.Debug ("Default IEnvironmentService cannot copy \"{0}\".", item.Name);

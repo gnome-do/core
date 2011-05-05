@@ -20,6 +20,7 @@
 
 using System;
 using System.Linq;
+using System.Diagnostics;
 using System.Collections.Generic; 
 
 using Do.Universe;
@@ -39,7 +40,47 @@ namespace Do.Platform
 			
 		bool IsExecutable (string line);
 		void Execute (string line);
-		
+
+		/// <summary>
+		/// Execute <paramref name="command"/>, passing each string in <paramref name="arguments"/> as a separate
+		/// argument.
+		/// </summary>
+		/// <remarks>
+		/// No processing is done on <paramref name="arguments"/>.  Specifically, the strings are not split on whitespace,
+		/// nor are quotes handled specially.  Each argument must be a non-null, non-empty string.
+		/// </remarks>
+		/// <param name="command">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="arguments">
+		/// A <see cref="IEnumerable<System.String>"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Diagnostics.Process"> representing the command & arguments.  This process will
+		/// have been Started.
+		/// </returns>
+		Process ExecuteWithArguments (string command, IEnumerable<string> arguments);
+
+		/// <summary>
+		/// Execute <paramref name="command"/>, passing each string in <paramref name="arguments"/> as a separate
+		/// argument.
+		/// </summary>
+		/// <remarks>
+		/// No processing is done on <paramref name="arguments"/>.  Specifically, the strings are not split on whitespace,
+		/// nor are quotes handled specially.  Each argument must be a non-null, non-empty string.
+		/// </remarks>
+		/// <param name="command">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <param name="arguments">
+		/// A <see cref="System.String[]"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Diagnostics.Process"> representing the command & arguments.  This process will
+		/// have been Start()ed.
+		/// </returns>
+		Process ExecuteWithArguments (string command, params string[] arguments);
+
 		void CopyToClipboard (Item item);
 
 		string ExpandPath (string path);
