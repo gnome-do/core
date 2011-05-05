@@ -15,7 +15,7 @@ dnl -- Populate top_srcdir variable
 top_srcdir=$(readlink -f $0 | sed -e s/configure$//)
 
 dnl Plugin ABI version; bump whenever plugin interface changes
-ABI_VERSION=0.9
+ABI_VERSION=0.10
 AC_SUBST(ABI_VERSION)
 
 if test -d $top_srcdir/.bzr ; then
