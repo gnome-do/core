@@ -37,10 +37,14 @@ namespace Do.Core
 			has_children = new Dictionary<Item, bool> ();
 		}
 
-		public static bool HasChildren (this Item self) {
+		public static bool HasChildren (this Item self)
+		{
 			if (!has_children.ContainsKey (self)) {
-				has_children [self] = PluginManager.ItemSources
-					.Any (source => source.Safe.ChildrenOfItem (self).Any ());
+				has_children[self] = PluginManager.ItemSources
+					.Any (source => source.Safe.ChildrenOfItem (self).Any ())
+					||
+					PluginManager.DynamicItemSources
+					.Any ((source) => source.ChildrenOfItem (self).Any());
 			}
 			return has_children [self];
 		}

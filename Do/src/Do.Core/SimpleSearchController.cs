@@ -195,7 +195,11 @@ namespace Do.Core
 				foreach (Item child in source.Safe.ChildrenOfItem (item).Where (i => AcceptChildItem (i)))
 					children.Add (child);
 			}
-			
+			foreach (DynamicItemSource source in PluginManager.DynamicItemSources) {
+				foreach (Item child in source.ChildrenOfItem (item).Where (i => AcceptChildItem (i)))
+					children.Add (child);
+			}
+
 			if (!children.Any ())
 				return false;
 			

@@ -11,5 +11,8 @@
 	<ExtensionPoint path="/Do/ItemSource">
 		<ExtensionNode name="ItemSource" objectType="Do.Universe.ItemSource"/>
 	</ExtensionPoint>
-
+	
+	<ExtensionPoint path="/Do/DynamicItemSource">
+		<ExtensionNode name="DynamicItemSource" objectType="Do.Universe.DynamicItemSource"/>
+	</ExtensionPoint>
 </Addin>

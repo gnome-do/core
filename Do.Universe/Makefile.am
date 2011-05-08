@@ -20,11 +20,13 @@ FILES = \
 	src/Do.Universe/Do.Universe.Safe/SafeElement.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeItem.cs \
 	src/Do.Universe/Do.Universe.Safe/SafeItemSource.cs \
+	src/Do.Universe/DynamicItemSource.cs \
 	src/Do.Universe/Element.cs \
 	src/Do.Universe/EmptyElement.cs \
 	src/Do.Universe/EmptyItem.cs \
 	src/Do.Universe/IApplicationItem.cs \
 	src/Do.Universe/IBookmarkItem.cs \
+	src/Do.Universe/IChildItemSource.cs \
 	src/Do.Universe/IContactDetailItem.cs \
 	src/Do.Universe/IFileItem.cs \
 	src/Do.Universe/IItem.cs \
