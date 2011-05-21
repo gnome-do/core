@@ -45,11 +45,7 @@ namespace Do.Interface.AnimationBase
 			get { return bezel_drawing_area.Focus; }
 			set { bezel_drawing_area.Focus = value; }
 		}
-		
-		public new string Name { 
-			get { return RenderTheme.Name; }
-		}
-		
+
 		protected abstract IRenderTheme RenderTheme { get; }
 		
 		public AbstractAnimatedInterface () : base (Gtk.WindowType.Toplevel)
@@ -243,6 +239,12 @@ namespace Do.Interface.AnimationBase
 			get {
 				return "preferences";
 			}
+		}
+
+		// This must be an explicit interface method to disambiguate between
+		// Widget.Name and IConfigurable.Name
+		string IConfigurable.Name {
+			get { return RenderTheme.Name; }
 		}
 		#endregion
 

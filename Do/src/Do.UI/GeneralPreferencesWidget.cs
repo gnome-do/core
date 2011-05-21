@@ -37,14 +37,16 @@ namespace Do.UI
     [System.ComponentModel.ToolboxItem(true)]
     public partial class GeneralPreferencesWidget : Bin, IConfigurable
     {
-		new public string Name {
-		  get { return Catalog.GetString ("General"); }
+		// This must be an explicit interface method to disambiguate between
+		// Widget.Name and IConfigurable.Name
+		string IConfigurable.Name {
+			get { return Catalog.GetString ("General"); }
 		}
-			
-		  public string Description {
-		  get { return ""; }
+
+		public string Description {
+			get { return ""; }
 		}
-	        
+
 		public string Icon {
 		  get { return ""; }
 		}
@@ -65,7 +67,7 @@ namespace Do.UI
 		}
 	        
 		protected bool AutostartEnabled {
-		  get {
+	            get {
 				return Services.System.IsAutoStartEnabled ();
 			}
 			

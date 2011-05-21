@@ -101,7 +101,9 @@ namespace Do.UI
 		{
 		}
 		
-		public new string Name {
+		// This must be an explicit interface method to disambiguate between
+		// Widget.Name and IConfigurable.Name
+		string IConfigurable.Name {
 			get { return Catalog.GetString ("Appearance"); }
 		}
 
