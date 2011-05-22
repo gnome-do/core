@@ -124,6 +124,15 @@ if test -z "$CONFIG_REQUESTED" ; then
 fi
 dnl }}}
 
+dnl Use stricter CFLAGS for non-release builds.
+if test "x$enable_release" != "xyes" ; then
+   	DEBUG_CFLAGS="-Wall -Werror \
+		      -DGTK_DISABLE_DEPRECATED 	\
+		      -DGDK_DISABLE_DEPRECATED 	\
+		      -DG_DISABLE_DEPRECATED"
+fi
+AC_SUBST([DEBUG_CFLAGS])
+
 dnl {{{ optionally enable jolicloud package service
 AC_ARG_ENABLE(jolicloud,
 	AC_HELP_STRING([--enable-jolicloud],
