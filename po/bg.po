@@ -10,15 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-03-09 16:44+0000\n"
-"Last-Translator: Siyan Panayotov <Unknown>\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 15:10+0000\n"
+"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:47+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -711,3 +711,51 @@ msgstr "Дали прозорецът с резултати да се показ
 #~ msgstr ""
 #~ "<b><span size=\"large\">Грешка при инсталирането на избрания "
 #~ "плъгин</span></b>"
+
+#~ msgid "Show Trash"
+#~ msgstr "Покажи Кошчето"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "Автоматично скриване"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "Премахни от дока"
+
+#~ msgid "Summon Do"
+#~ msgstr "Отваряне на GNOME Do"
+
+#~ msgid "Summon in Text Mode"
+#~ msgstr "Отваряне в текстов режим"
+
+#~ msgid "Enter Text Mode"
+#~ msgstr "Преминаване в текстов режим"
+
+#~ msgid "Paste from Clipboard"
+#~ msgstr "Поставяне от системния буфер"
+
+#~ msgid "Previous Item"
+#~ msgstr "Предишен резултат"
+
+#~ msgid "Next Item"
+#~ msgstr "Следващ резултат"
+
+#~ msgid "First Item"
+#~ msgstr "Първи резултат"
+
+#~ msgid "Last Item"
+#~ msgstr "Последен резултат"
+
+#~ msgid "Step Out of Item"
+#~ msgstr "Отстъпване от резултат"
+
+#~ msgid "Step Into Item"
+#~ msgstr "Отиване към резултат"
+
+#~ msgid "Select Multiple Items"
+#~ msgstr "Избиране на множество резултати"
+
+#~ msgid "Copyright © 2009 GNOME Do Developers"
+#~ msgstr "Авторски права: © 2009 Разработчиците на GNOME Do"
+
+#~ msgid "Disabled"
+#~ msgstr "Изключен"

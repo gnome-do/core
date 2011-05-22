@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-02-03 15:01+0000\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 15:17+0000\n"
 "Last-Translator: Nguyễn Hào Khôi <nguyenhaokhoi@yahoo.com.vn>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:48+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -703,3 +703,18 @@ msgstr "Cửa sổ kết quả sẽ luôn luôn hiển thị."
 #~ msgstr ""
 #~ "<b><span size=\"large\">Có một lỗi khi cài đặt phần bổ xung được "
 #~ "chọn</span></b>"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "Gỡ bỏ khỏi Dock"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "Thu phóng biểu tượng"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "Cho phép cửa sổ che khuất"
+
+#~ msgid "Show Trash"
+#~ msgstr "Hiện Thùng rác"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "Tự động ẩn"

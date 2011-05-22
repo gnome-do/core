@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-04-08 03:19+0000\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 15:08+0000\n"
 "Last-Translator: Muhammad Heidir <md.heidir@gmail.com>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:48+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -694,3 +694,38 @@ msgstr "Samada window result akan sentiasa dipaparkan"
 
 #~ msgid "_Theme:"
 #~ msgstr "_Tema:"
+
+#~ msgid "_About"
+#~ msgstr "_Tentang"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugins</span></b>"
+#~ msgstr ""
+#~ "<b><span size=\"large\">Terdapat ralat ketika memasang plugin yang "
+#~ "dipilih</span></b>"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugin</span></b>"
+#~ msgstr ""
+#~ "<b><span size=\"large\">Terdapat ralat ketika memasang plugin yang "
+#~ "dipilih</span></b>"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "Petunjuk Maju"
+
+#~ msgid "Show Trash"
+#~ msgstr "Tunjukkan Sampah"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "Benarkan tetingkap bertindan"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "Ikon Zoom"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "Sembunyi automatik"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "Buang dari Dok"

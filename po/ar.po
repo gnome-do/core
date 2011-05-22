@@ -8,15 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-08-19 17:19+0000\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 15:04+0000\n"
 "Last-Translator: faical117 <faical117@yahoo.fr>\n"
 "Language-Team: American English <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:47+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -694,3 +694,21 @@ msgstr "فيما إذا كانت نافذة النتائج ستظهر"
 #~ "<b><span size=\"large\">There was an error installing the selected "
 #~ "plugin</span></b>"
 #~ msgstr "<b><span size=\"large\">وجد خطأ تثبيت الملحق المختار</span></b>"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "إخفاء تلقائي"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "اسمح بامتداد النوافذ"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "قرّب الأيقوتات"
+
+#~ msgid "Show Trash"
+#~ msgstr "أظهر المهملات"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "مدلّلات متقدمة"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "أزل من المرساة"

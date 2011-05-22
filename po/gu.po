@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2009-08-24 04:32+0000\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 15:06+0000\n"
 "Last-Translator: mehul <mehul.n.ved@gmail.com>\n"
 "Language-Team: Gujarati <gu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:47+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -679,3 +679,35 @@ msgstr "પરિણામ વિન્ડો હંમેશા દેખાશ
 
 #~ msgid "_About"
 #~ msgstr "વિશે (_A)"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugins</span></b>"
+#~ msgstr ""
+#~ "<b><span size=\"large\">પસંદ કરેલા પ્લગ-ઇનો સ્થાપિત કરવામાં ભૂલ થઇ "
+#~ "છે</span></b>"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugin</span></b>"
+#~ msgstr ""
+#~ "<b><span size=\"large\">પસંદ કરેલુ પ્લગ-ઇન સ્થાપિત કરવામાં ભૂલ થઇ "
+#~ "છે</span></b>"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "આપોઆપ છુપાવો"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "વિન્ડોનાં ઢંકાવાને છૂટ આપો"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "ચિહ્વો ઝૂમ કરો"
+
+#~ msgid "Show Trash"
+#~ msgstr "કચરાપેટી બતાવો"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "સુધરેલું દર્શક"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "ડોક માંથી હટાવો"

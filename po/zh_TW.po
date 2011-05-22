@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-09-08 13:37+0000\n"
-"Last-Translator: Cheng-Chia Tseng <Unknown>\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 15:06+0000\n"
+"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Traditional Chinese <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:48+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -691,3 +691,21 @@ msgstr "結果視窗是否會永遠顯示。"
 #~ "<b><span size=\"large\">There was an error installing the selected "
 #~ "plugin</span></b>"
 #~ msgstr "<b><span size=\"large\">正在安裝所選的外掛時發生錯誤</span></b>"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "進階的指示器"
+
+#~ msgid "Show Trash"
+#~ msgstr "顯示回收桶"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "允許視窗重疊"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "放大圖示"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "自動隱藏"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "從Dock移除"

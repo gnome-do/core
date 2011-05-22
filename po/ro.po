@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2009-12-20 15:47+0000\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 14:42+0000\n"
 "Last-Translator: sfantu <sfantus1@gmail.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:48+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -708,3 +708,21 @@ msgstr "Dacă fereastra de rezultate va fi tot timpul afișată."
 #~ msgstr ""
 #~ "<b><span size=\"large\">A apărut o eroare la instalarea extensiei "
 #~ "selectate</span></b>"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "Indicatori avansați"
+
+#~ msgid "Show Trash"
+#~ msgstr "Arată gunoiul"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "Permite suprapunerea ferestrelor"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "Mărește pictogramele"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "Ascunde automat"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "Elimină din bara de docare"

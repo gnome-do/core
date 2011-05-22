@@ -7,15 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2009-06-29 02:27+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-19 08:22+0000\n"
+"Last-Translator: ZhongHan Cai <Unknown>\n"
 "Language-Team: English (Australia) <en_AU@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:48+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
+
+#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
+msgid "Empty Trash"
+msgstr "Empty Wastebin"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -23,7 +27,7 @@ msgstr "Always show results window"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:151
 msgid "<b>Selected Theme</b>"
-msgstr ""
+msgstr "<b>Selected Theme</b>"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:166
 msgid ""
@@ -108,43 +112,43 @@ msgstr "Animate window"
 #: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
 #, csharp-format
 msgid "No results for: {0}"
-msgstr ""
+msgstr "No results for: {0}"
 
 #: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
 msgid "Type To Search"
-msgstr ""
+msgstr "Type To Search"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
 msgid "Indicate Multiple Windows"
-msgstr ""
+msgstr "Indicate Multiple Windows"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
 msgid "Zoom:"
-msgstr ""
+msgstr "Zoom:"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
 msgid "Icon Size:"
-msgstr ""
+msgstr "Icon Size:"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
 msgid "Orientation:"
-msgstr ""
+msgstr "Orientation:"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
 msgid "Hiding:"
-msgstr ""
+msgstr "Hiding:"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
 msgid "<b>Docky Behavior</b>"
-msgstr ""
+msgstr "<b>Docky Behavior</b>"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
 msgid "Reinstate Removed Items"
-msgstr ""
+msgstr "Reinstate Removed Items"
 
 #: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
 msgid "<b>Docklets</b>"
-msgstr ""
+msgstr "<b>Docklets</b>"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
 msgid "Minimize"
@@ -156,7 +160,7 @@ msgstr "Restore"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
 msgid "Maximize"
-msgstr ""
+msgstr "Maximise"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
 msgid "Close All"
@@ -178,18 +182,19 @@ msgid ""
 "will be permanently lost. Please note that you\n"
 "can also delete them separately."
 msgstr ""
+"<big><b>Empty all of the items from the trash?</b></big>\n"
+"\n"
+"If you choose to empty the trash, all items in it\n"
+"will be permanently lost. Please note that you\n"
+"can also delete them separately."
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
 msgid "Open Trash"
-msgstr ""
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
-msgid "Empty Trash"
-msgstr ""
+msgstr "Open Trash"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
 msgid "Show"
-msgstr ""
+msgstr "Show"
 
 #: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
 msgid "No result found for"
@@ -209,7 +214,7 @@ msgstr "Type to start searching"
 
 #: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
 msgid "Desktop"
-msgstr ""
+msgstr "Desktop"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -247,7 +252,7 @@ msgstr "Icon"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
 msgid "Categories"
-msgstr ""
+msgstr "Categories"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
 msgid "This application could not be indexed."
@@ -272,12 +277,12 @@ msgstr "Finds applications in many locations."
 #: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
 #, csharp-format
 msgid "{0} Application Category"
-msgstr ""
+msgstr "{0} Application Category"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
 #, csharp-format
 msgid "Applications in the {0} category"
-msgstr ""
+msgstr "Applications in the {0} category"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
 msgid "Copy to Clipboard"
@@ -380,71 +385,71 @@ msgstr "Summon GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:120
 msgid "Enter text mode"
-msgstr ""
+msgstr "Enter text mode"
 
 #: ../Do/src/Do.Core/Controller.cs:126
 msgid "Copy Text"
-msgstr ""
+msgstr "Copy Text"
 
 #: ../Do/src/Do.Core/Controller.cs:131
 msgid "Paste Text"
-msgstr ""
+msgstr "Paste Text"
 
 #: ../Do/src/Do.Core/Controller.cs:136
 msgid "Alternate Escape"
-msgstr ""
+msgstr "Alternate Escape"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Alternate Activate"
-msgstr ""
+msgstr "Alternate Activate"
 
 #: ../Do/src/Do.Core/Controller.cs:144
 msgid "Alternate Delete"
-msgstr ""
+msgstr "Alternate Delete"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Previous Pane"
-msgstr ""
+msgstr "Previous Pane"
 
 #: ../Do/src/Do.Core/Controller.cs:153
 msgid "Next Pane"
-msgstr ""
+msgstr "Next Pane"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Previous Result"
-msgstr ""
+msgstr "Previous Result"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Next Result"
-msgstr ""
+msgstr "Next Result"
 
 #: ../Do/src/Do.Core/Controller.cs:168
 msgid "First Result"
-msgstr ""
+msgstr "First Result"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Last Result"
-msgstr ""
+msgstr "Last Result"
 
 #: ../Do/src/Do.Core/Controller.cs:178
 msgid "Previous 5 Results"
-msgstr ""
+msgstr "Previous 5 Results"
 
 #: ../Do/src/Do.Core/Controller.cs:183
 msgid "Next 5 Results"
-msgstr ""
+msgstr "Next 5 Results"
 
 #: ../Do/src/Do.Core/Controller.cs:188
 msgid "Step out of Item"
-msgstr ""
+msgstr "Step out of Item"
 
 #: ../Do/src/Do.Core/Controller.cs:193
 msgid "Browse Into Item"
-msgstr ""
+msgstr "Browse Into Item"
 
 #: ../Do/src/Do.Core/Controller.cs:198
 msgid "Multiple selection"
-msgstr ""
+msgstr "Multiple selection"
 
 #: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -452,7 +457,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1057
 msgid "Copyright © 2008 GNOME Do Developers"
-msgstr ""
+msgstr "Copyright © 2008 GNOME Do Developers"
 
 #: ../Do/src/Do.Core/Controller.cs:1058
 msgid ""
@@ -460,10 +465,13 @@ msgid ""
 "(but no quicker) with your files, bookmarks,\n"
 "applications, music, contacts, and more!"
 msgstr ""
+"Do things as quickly as possible\n"
+"(but no quicker) with your files, bookmarks,\n"
+"applications, music, contacts, and more!"
 
 #: ../Do/src/Do.Core/Controller.cs:1062
 msgid "Visit Homepage"
-msgstr ""
+msgstr "Visit Homepage"
 
 #: ../Do/src/Do.Core/DoAddinInstaller.cs:37
 msgid "Installation cancelled"
@@ -475,7 +483,7 @@ msgstr "Community Plugins"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
 msgid "Docklets"
-msgstr ""
+msgstr "Docklets"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
@@ -503,15 +511,15 @@ msgstr "General"
 
 #: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
 msgid "Keyboard"
-msgstr ""
+msgstr "Keyboard"
 
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:44
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:51
 msgid "Shortcut"
-msgstr ""
+msgstr "Shortcut"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
 msgid "Plugins"
@@ -519,15 +527,15 @@ msgstr "Plugins"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:32
 msgid "<b><span size=\"large\">There was an error installing the selected"
-msgstr ""
+msgstr "<b><span size=\"large\">There was an error installing the selected"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:36
 msgid "plugin"
-msgstr ""
+msgstr "plugin"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid "plugins"
-msgstr ""
+msgstr "plugins"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
 msgid "and "
@@ -693,3 +701,21 @@ msgstr "Whether the results window will always show."
 #~ msgstr ""
 #~ "<b><span size=\"large\">There was an error installing the selected "
 #~ "plugin</span></b>"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "Advanced Indicators"
+
+#~ msgid "Show Trash"
+#~ msgstr "Show Trash"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "Allow Window Overlap"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "Automatically Hide"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "Remove from Dock"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "Zoom Icons"

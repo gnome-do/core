@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-10-21 09:44+0000\n"
-"Last-Translator: Maksim Sokolskiy <Unknown>\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2010-12-05 15:07+0000\n"
+"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-14 04:48+0000\n"
+"X-Generator: Launchpad (build 12351)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -702,3 +702,21 @@ msgstr "Чи буде вікно з результатами завжди на �
 
 #~ msgid "_Theme:"
 #~ msgstr "_Тема:"
+
+#~ msgid "Show Trash"
+#~ msgstr "Показувати смітник"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "Дозволити перекривання вікнами"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "Збільшувати іконки"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "Покращені індикатори"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "Автоматично приховувати"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "Видалити з Доку"

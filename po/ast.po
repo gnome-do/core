@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-01-07 00:20+0000\n"
-"Last-Translator: Xuacu Saturio <xuacusk8@gmail.com>\n"
+"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"PO-Revision-Date: 2011-04-15 19:08+0000\n"
+"Last-Translator: Xandru <xandru@softastur.org>\n"
 "Language-Team: Asturian <ast@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-16 04:32+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -23,7 +23,7 @@ msgstr "Amosar siempre ventana de resultaos"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:151
 msgid "<b>Selected Theme</b>"
-msgstr "<b>Escoyer Tema</b>"
+msgstr "<b>Tema Seleicionáu</b>"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:166
 msgid ""
@@ -51,7 +51,7 @@ msgstr "Entamar GNOME Do cola sesión."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
-msgstr "Ocultar ventana nel entamu (modu quiet)."
+msgstr "Anubrir ventana nel primer entamu (modu quiet)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
 msgid "Show notification icon"
@@ -683,3 +683,38 @@ msgstr "Si la ventana de resultaos va amosase siempre."
 
 #~ msgid "_About"
 #~ msgstr "_Al rodiu"
+
+#~ msgid "_Theme:"
+#~ msgstr "_Tema:"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugins</span></b>"
+#~ msgstr ""
+#~ "<b><span size=\"large\">Hebo un error instalando los complementos "
+#~ "esbilláos</span></b>"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugin</span></b>"
+#~ msgstr ""
+#~ "<b><span size=\"large\">Hebo un error instalando el complementu "
+#~ "esbilláu</span></b>"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "Indicadores avanzaos"
+
+#~ msgid "Show Trash"
+#~ msgstr "Amosar basoria"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "Permitir sobroponer ventanes"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "Iconos ampliación"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "Anubrir automáticamente"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "Quitar de Dock"
