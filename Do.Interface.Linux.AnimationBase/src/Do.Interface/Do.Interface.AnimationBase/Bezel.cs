@@ -81,7 +81,10 @@ namespace Do.Interface.AnimationBase
 			
 			pw = new PositionWindow (this, bezel_glass_window);
 			
-			Realized += delegate { GdkWindow.SetBackPixmap (null, false); };
+			Realized += delegate {
+				GdkWindow.SetBackPixmap (null, false);
+				GdkWindow.OverrideRedirect = true;
+			};
 			
 			StyleSet += delegate {
 				if (IsRealized)
