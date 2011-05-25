@@ -99,19 +99,24 @@ namespace Do.Interface.AnimationBase
 
 		protected override bool OnButtonPressEvent (EventButton evnt)
 		{
-			Gdk.Point global_point = new Gdk.Point ((int) evnt.XRoot, (int) evnt.YRoot);
-			Gdk.Point local_point = new Gdk.Point ((int) evnt.X, (int) evnt.Y);
+			Gdk.Point global_point = new Gdk.Point ((int)evnt.XRoot, (int)evnt.YRoot);
+			Gdk.Point local_point = new Gdk.Point ((int)evnt.X, (int)evnt.Y);
 			
 			switch (bezel_drawing_area.GetPointLocation (local_point)) {
-			case PointLocation.Close:
-			case PointLocation.Outside:
-				controller.ButtonPressOffWindow ();
-				break;
-			case PointLocation.Preferences:
-				Services.Windowing.ShowMainMenu (global_point.X, global_point.Y);
-				// Have to re-grab the pane from the menu.
-				Interface.Windowing.PresentWindow (this);
-				break;
+				case PointLocation.Close:
+				case PointLocation.Outside:
+					controller.ButtonPressOffWindow ();
+					break;
+				case PointLocation.Preferences:
+					// We need to let the window manager handle the Do window before popping up the
+					// preferences menu so that it can place the menu over the top.
+					GdkWindow.OverrideRedirect = false;
+					Services.Windowing.ShowMainMenu (global_point.X, global_point.Y);
+
+					// Have to re-grab the pane from the menu.
+					Interface.Windowing.PresentWindow (this);
+					GdkWindow.OverrideRedirect = true;
+					break;
 			}
 
 			return base.OnButtonPressEvent (evnt);
