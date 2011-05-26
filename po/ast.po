@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-05-24 19:36+0000\n"
+"PO-Revision-Date: 2011-05-25 05:15+0000\n"
 "Last-Translator: Xandru <xandru@softastur.org>\n"
 "Language-Team: Asturian <ast@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-25 04:32+0000\n"
+"X-Launchpad-Export-Date: 2011-05-26 04:32+0000\n"
 "X-Generator: Launchpad (build 12959)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
@@ -156,7 +156,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Nun m'entrugues al rodiu de plugins Do otra vuelta."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
