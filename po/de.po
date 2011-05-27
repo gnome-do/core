@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: gc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:31+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"PO-Revision-Date: 2011-05-26 07:37+0000\n"
+"Last-Translator: Christian Lins <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
+"X-Launchpad-Export-Date: 2011-05-27 04:42+0000\n"
 "X-Generator: Launchpad (build 12959)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
@@ -584,15 +584,15 @@ msgstr ""
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "Telefon (geschäftlich)"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Telefon (privat)"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Mobiltelefon"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
