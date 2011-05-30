@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: gc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-05-28 13:16+0000\n"
+"PO-Revision-Date: 2011-05-29 20:56+0000\n"
 "Last-Translator: Michael Konrad <Nephelyn@arcor.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-29 04:31+0000\n"
+"X-Launchpad-Export-Date: 2011-05-30 04:35+0000\n"
 "X-Generator: Launchpad (build 12959)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
@@ -45,15 +45,15 @@ msgstr "_Aktualisierungen installieren"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
-msgstr "<b>Verhalten beim ersten Start</b>"
+msgstr "<b>Erststart-Verhalten</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
 msgid "Start GNOME Do at login."
-msgstr "GNOME Do beim Anmelden automatisch ausführen."
+msgstr "GNOME Do beim Anmelden ausführen"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
-msgstr "Fenster beim ersten Start nicht mehr anzeigen (stiller Modus)."
+msgstr "Fenster beim Erststart verstecken (stiller Modus)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
 msgid "Show notification icon"
