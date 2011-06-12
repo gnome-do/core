@@ -18,20 +18,22 @@ BUILD_REFERENCES = $(filter -r:%,$(REFERENCES) $(STD_REFERENCES))
 COMPONENT_REFERENCES = $(foreach ref, $(PROJECT_REFERENCES),-r:$(BUILD_DIR)/$(ref).dll)
 COMPONENT_DEPS = $(foreach ref,$(PROJECT_REFERENCES),$(BUILD_DIR)/$(ref).dll)
 
-OUTPUT_FILES = \
-        $(ASSEMBLY_FILE) \
-        $(ASSEMBLY_FILE).mdb
+OUTPUT_FILES = $(ASSEMBLY_FILE)
+
+if ENABLE_DEBUG
+OUTPUT_FILES += $(ASSEMBLY_FILE).mdb
+endif
 
 moduledir = $(pkglibdir)
 # Install libraries as data; there's no need for them to be excutable
-module_DATA = $(foreach file,$(filter %.dll,$(OUTPUT_FILES)),$(file) $(file).mdb) $(foreach file,$(filter %.exe,$(OUTPUT_FILES)),$(file).mdb)
+module_DATA = $(filter %.dll,$(OUTPUT_FILES)) $(filter %.mdb,$(OUTPUT_FILES))
 # Install executables as scripts
 module_SCRIPTS = $(filter %.exe,$(OUTPUT_FILES))
 
-MCS_FLAGS =  $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4 -debug
+MCS_FLAGS =  $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
 
 if ENABLE_DEBUG
-MCS_FLAGS += -d:DEBUG
+MCS_FLAGS += -d:DEBUG -debug
 endif
 
 all: $(ASSEMBLY_FILE)
