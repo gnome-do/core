@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:20+1000\n"
-"PO-Revision-Date: 2010-12-05 15:07+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"PO-Revision-Date: 2011-05-21 18:59+0000\n"
+"Last-Translator: Павло Вахнівський <Unknown>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-14 04:48+0000\n"
-"X-Generator: Launchpad (build 12351)\n"
+"X-Launchpad-Export-Date: 2011-05-22 04:34+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -34,11 +34,11 @@ msgstr ""
 "анімації. Для використовування цих можливостей, ви маєте активувати "
 "композитний менеджер вікон.</b>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr "<span size=\"large\"><b>Наявні оновлення для додатків!</b></span>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
 msgstr "_Встановити оновлення"
 
@@ -58,9 +58,11 @@ msgstr "Запускати звернутим (quiet mode)."
 msgid "Show notification icon"
 msgstr "Показувати іконку сповіщення"
 
-#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "Натисніть двічі та введіть нову назву."
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:63
+msgid ""
+"To edit a shortcut, double-click it and type a new one.\n"
+"To restore a shortcut to the default, double click and press Backspace."
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -106,100 +108,14 @@ msgstr "Показувати тінь вікна"
 msgid "Animate window"
 msgstr "Оживити вікно"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:735
 #, csharp-format
 msgid "No results for: {0}"
 msgstr "Жодного результату для {0}"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:746
 msgid "Type To Search"
 msgstr "Вводьте для пошуку"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
-msgid "Indicate Multiple Windows"
-msgstr "Визначити наявність декількох вікон"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
-msgid "Zoom:"
-msgstr "Масштаб:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
-msgid "Icon Size:"
-msgstr "Розмір піктограми:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
-msgid "Orientation:"
-msgstr "Розташування:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
-msgid "Hiding:"
-msgstr "Приховування:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
-msgid "<b>Docky Behavior</b>"
-msgstr "<b>Поведінка Docky</b>"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
-msgid "Reinstate Removed Items"
-msgstr "Відновити видалені"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
-msgid "<b>Docklets</b>"
-msgstr "<b>Доклети</b>"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Minimize"
-msgstr "Згорнути"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Restore"
-msgstr "Відновити"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
-msgid "Maximize"
-msgstr "Максимізувати"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
-msgid "Close All"
-msgstr "Закрити всі"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
-msgid "Switch Monitors"
-msgstr "Перемикання моніторів"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
-msgid "Trash"
-msgstr "Смітник"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
-msgid ""
-"<big><b>Empty all of the items from the trash?</b></big>\n"
-"\n"
-"If you choose to empty the trash, all items in it\n"
-"will be permanently lost. Please note that you\n"
-"can also delete them separately."
-msgstr ""
-"<big><b>Очистити смітник повністю?</b></big>\n"
-"\n"
-"Якщо ви очистите смітник, файли з нього\n"
-"видаляться назавжди. Майте на увазі, що ви також\n"
-"можете видаляти їх по-одному."
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
-msgid "Open Trash"
-msgstr "Відкрити смітник"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
-msgid "Empty Trash"
-msgstr "Спорожнити смітник"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
-msgid "Show"
-msgstr "Показати"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
-msgid "No result found for"
-msgstr "Немає результатів"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
@@ -209,13 +125,8 @@ msgstr "Введіть текст для початку пошуку"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:58
 msgid "Type to start searching."
 msgstr "Введіть текст для початку пошуку"
-
-#: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
-msgid "Desktop"
-msgstr "Стільниця"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -233,37 +144,58 @@ msgstr "<i>Перевірка та збереження інформації п�
 msgid "Don't have an account?"
 msgstr "Немає рахунку?"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
+msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
+msgstr "<b><span size=\"x-large\">Для цього є плагін Do!</span></b>"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
+#, csharp-format
+msgid ""
+"A Do plugin for {0} is available for installation. Would you like us to "
+"enable it for you?"
+msgstr ""
+"Плагін Do для {0} доступний для встановлення. Бажаєте, щоб ми ввімкнули його "
+"для Вас?"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
+msgid "Don't ask me about Do plugins again."
+msgstr "Не питайте мене про плагіни Do знов."
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
+msgid "_Install"
+msgstr "_Встановити"
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Error saving {0}"
 msgstr "Помилка збереження {0}"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
 msgstr "Ключ \"{0}\" не був знайдений у keyring"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:38
 msgid "gnome-keyring-daemon could not be reached!"
 msgstr "Не можу отримати доступ до gnome-keyring-daemon!"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:140
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
 msgid "Icon"
 msgstr "Іконка"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:146
 msgid "Categories"
 msgstr "Категорії"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:152
 msgid "This application could not be indexed."
 msgstr "Ця програма не може бути проіндексована"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:181
 msgid "Exec"
 msgstr "Виконати"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:203
 msgid "OnlyShowIn"
 msgstr "ПоказуватиТількиВ"
 
@@ -275,29 +207,21 @@ msgstr "Програми"
 msgid "Finds applications in many locations."
 msgstr "Шукає додатки у багатьох місцях."
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:82
 #, csharp-format
 msgid "{0} Application Category"
 msgstr "{0} Категорія додатку"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:83
 #, csharp-format
 msgid "Applications in the {0} category"
 msgstr "Додатків в {0} категорії"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
-msgid "Copy to Clipboard"
-msgstr "Копіювати у буфер обміну"
-
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:42
-msgid "Copy current text to clipboard"
-msgstr "Копіювати поточний текст у буфер обміну"
-
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:46
 msgid "GNOME Special Locations"
 msgstr "Спеціальні Місця GNOME"
 
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:51
 msgid "Special locations in GNOME, such as Computer and Network."
 msgstr "Додаткові місця у GNOME, такі як Комп'ютер або Мережа"
 
@@ -332,7 +256,26 @@ msgstr "Перевірити та зберегти інформацію про �
 msgid "Account validation succeeded!"
 msgstr "Перевірка рахунку успішна!"
 
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
+msgid "What is Do?"
+msgstr "Що таке Do?"
+
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
+#, csharp-format
+msgid "What does the {0} plugin do?"
+msgstr "Що робить плагін {0}?"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
+#: ../Do/src/Do.Core/Controller.cs:146
+msgid "Copy to Clipboard"
+msgstr "Копіювати у буфер обміну"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:41
+msgid "Copy current text to clipboard"
+msgstr "Копіювати поточний текст у буфер обміну"
+
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs:34
 msgid "Email"
 msgstr "Ел. пошта"
 
@@ -380,35 +323,35 @@ msgstr "Виконати"
 msgid "Run an application, script, or other executable."
 msgstr "Запустити програму, скрипт тощо"
 
-#: ../Do/src/Do.Core/Controller.cs:115
-msgid "Summon GNOME Do"
-msgstr "Викликати GNOME Do"
+#: ../Do/src/Do.Core/Controller.cs:109
+msgid ""
+"<b>Docky is no longer a Do theme!</b>\n"
+"It is now available as a stand-alone application. Your GNOME Do theme has "
+"been reset to Classic. Please feel free to change it in Preferences."
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:120
-msgid "Enter text mode"
-msgstr "Режим введення тексту"
+#: ../Do/src/Do.Core/Controller.cs:133
+msgid "Summon Do"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:126
-msgid "Copy Text"
-msgstr "Скопіювати текст"
-
-#: ../Do/src/Do.Core/Controller.cs:131
-msgid "Paste Text"
-msgstr "Вставити текст"
-
-#: ../Do/src/Do.Core/Controller.cs:136
-msgid "Alternate Escape"
-msgstr "Альтернативний вихід"
+#: ../Do/src/Do.Core/Controller.cs:137
+msgid "Summon in Text Mode"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
-msgid "Alternate Activate"
-msgstr "Альтернативний виклик GNOME Do"
+msgid "Enter Text Mode"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:144
-msgid "Alternate Delete"
-msgstr "Альтернативне видалення символу"
+#: ../Do/src/Do.Core/Controller.cs:143
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr "Очистити"
 
 #: ../Do/src/Do.Core/Controller.cs:148
+msgid "Paste from Clipboard"
+msgstr "Вставити з буферу обміну"
+
+#: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
 msgstr "Попередня панель"
 
@@ -416,51 +359,51 @@ msgstr "Попередня панель"
 msgid "Next Pane"
 msgstr "Наступна панель"
 
+#: ../Do/src/Do.Core/Controller.cs:156
+msgid "Previous Item"
+msgstr "Попередній елемент"
+
 #: ../Do/src/Do.Core/Controller.cs:158
-msgid "Previous Result"
-msgstr "Попередній результат"
+msgid "Next Item"
+msgstr "Наступний елемент"
+
+#: ../Do/src/Do.Core/Controller.cs:161
+msgid "First Item"
+msgstr "Перший елемент"
 
 #: ../Do/src/Do.Core/Controller.cs:163
-msgid "Next Result"
-msgstr "Наступний результат"
+msgid "Last Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:168
-msgid "First Result"
-msgstr "Перший результат"
-
-#: ../Do/src/Do.Core/Controller.cs:173
-msgid "Last Result"
-msgstr "Останній результат"
-
-#: ../Do/src/Do.Core/Controller.cs:178
+#: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
 msgstr "Попередні 5 результатів"
 
-#: ../Do/src/Do.Core/Controller.cs:183
+#: ../Do/src/Do.Core/Controller.cs:168
 msgid "Next 5 Results"
 msgstr "Наступні 5 результатів"
 
-#: ../Do/src/Do.Core/Controller.cs:188
-msgid "Step out of Item"
-msgstr "Увійти в підменю"
+#: ../Do/src/Do.Core/Controller.cs:171
+msgid "Step Out of Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:193
-msgid "Browse Into Item"
-msgstr "Покинути підменю"
+#: ../Do/src/Do.Core/Controller.cs:173
+msgid "Step Into Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:198
-msgid "Multiple selection"
-msgstr "Множинне виділення"
+#: ../Do/src/Do.Core/Controller.cs:176
+msgid "Select Multiple Items"
+msgstr "Обрати одразу декілька елементів"
 
-#: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
+#: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
 msgstr "GNOME Do"
 
-#: ../Do/src/Do.Core/Controller.cs:1057
-msgid "Copyright © 2008 GNOME Do Developers"
-msgstr "Copyright © 2008 GNOME Do Developers"
+#: ../Do/src/Do.Core/Controller.cs:1014
+msgid "Copyright © 2009 GNOME Do Developers"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1058
+#: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
 "Do things as quickly as possible\n"
 "(but no quicker) with your files, bookmarks,\n"
@@ -470,7 +413,7 @@ msgstr ""
 "(але не швидше) із вашими файлами, закладками,\n"
 "програмами, музикою, контактами та чим завгодно!"
 
-#: ../Do/src/Do.Core/Controller.cs:1062
+#: ../Do/src/Do.Core/Controller.cs:1019
 msgid "Visit Homepage"
 msgstr "Відвідати домашню сторінку"
 
@@ -482,10 +425,6 @@ msgstr "Встановлення скасовано"
 msgid "Community Plugins"
 msgstr "Додатки спільноти"
 
-#: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
-msgid "Docklets"
-msgstr "Доклети"
-
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
 msgstr "Всі додатки"
@@ -494,7 +433,7 @@ msgstr "Всі додатки"
 msgid "Official Plugins"
 msgstr "Офіційні додатки"
 
-#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:102
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:107
 msgid "Appearance"
 msgstr "Вигляд"
 
@@ -506,23 +445,31 @@ msgstr "Деякі з запитуваних додатків незнайден
 msgid "Installation failed"
 msgstr "Помилка при встановленні"
 
-#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:41
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:43
 msgid "General"
 msgstr "Загальні"
 
-#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
+#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:42
 msgid "Keyboard"
 msgstr "Клавіатура"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:44
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:49
 msgid "Action"
 msgstr "Дія"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:56
 msgid "Shortcut"
 msgstr "Ярлик"
 
-#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:73
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:101
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:140
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:143
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:159
+msgid "Disabled"
+msgstr ""
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
 msgstr "Додатки"
 
@@ -570,10 +517,6 @@ msgstr "Стерти дані про використання Do"
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:54
 msgid "Are you sure you want to clear Do's learned usage data?"
 msgstr "Ви впевнені що хочете стерти дані про використання Do?"
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
-msgid "Clear"
-msgstr "Очистити"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
@@ -632,6 +575,22 @@ msgstr "Немає назви"
 msgid "No description."
 msgstr "Немає опису."
 
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
+msgid "Address"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
+msgid "Work Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
+msgid "Home Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
+msgid "Mobile Phone"
+msgstr ""
+
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
@@ -688,6 +647,9 @@ msgstr "Чи буде вікно з результатами завжди на �
 #~ msgid "_About"
 #~ msgstr "_Про програму"
 
+#~ msgid "To edit a shortcut, double-click it and type a new one."
+#~ msgstr "Натисніть двічі та введіть нову назву."
+
 #~ msgid ""
 #~ "<b><span size=\"large\">There was an error installing the selected "
 #~ "plugins</span></b>"
@@ -712,11 +674,129 @@ msgstr "Чи буде вікно з результатами завжди на �
 #~ msgid "Zoom Icons"
 #~ msgstr "Збільшувати іконки"
 
+#~ msgid "Switch Monitors"
+#~ msgstr "Перемикання моніторів"
+
+#~ msgid "Minimize"
+#~ msgstr "Згорнути"
+
+#~ msgid "Restore"
+#~ msgstr "Відновити"
+
 #~ msgid "Advanced Indicators"
 #~ msgstr "Покращені індикатори"
 
 #~ msgid "Automatically Hide"
 #~ msgstr "Автоматично приховувати"
 
+#~ msgid "Summon GNOME Do"
+#~ msgstr "Викликати GNOME Do"
+
+#~ msgid "No result found for"
+#~ msgstr "Немає результатів"
+
+#~ msgid "Trash"
+#~ msgstr "Смітник"
+
 #~ msgid "Remove from Dock"
 #~ msgstr "Видалити з Доку"
+
+#~ msgid "Zoom:"
+#~ msgstr "Масштаб:"
+
+#~ msgid "Icon Size:"
+#~ msgstr "Розмір піктограми:"
+
+#~ msgid "Orientation:"
+#~ msgstr "Розташування:"
+
+#~ msgid "Indicate Multiple Windows"
+#~ msgstr "Визначити наявність декількох вікон"
+
+#~ msgid "Hiding:"
+#~ msgstr "Приховування:"
+
+#~ msgid "Show"
+#~ msgstr "Показати"
+
+#~ msgid "Empty Trash"
+#~ msgstr "Спорожнити смітник"
+
+#~ msgid "Desktop"
+#~ msgstr "Стільниця"
+
+#~ msgid "Open Trash"
+#~ msgstr "Відкрити смітник"
+
+#~ msgid "Maximize"
+#~ msgstr "Максимізувати"
+
+#~ msgid "Paste Text"
+#~ msgstr "Вставити текст"
+
+#~ msgid "Previous Result"
+#~ msgstr "Попередній результат"
+
+#~ msgid "Next Result"
+#~ msgstr "Наступний результат"
+
+#~ msgid "First Result"
+#~ msgstr "Перший результат"
+
+#~ msgid "Last Result"
+#~ msgstr "Останній результат"
+
+#~ msgid "Copyright © 2008 GNOME Do Developers"
+#~ msgstr "Copyright © 2008 GNOME Do Developers"
+
+#~ msgid "Copy Text"
+#~ msgstr "Скопіювати текст"
+
+#~ msgid "Alternate Escape"
+#~ msgstr "Альтернативний вихід"
+
+#~ msgid "Enter text mode"
+#~ msgstr "Режим введення тексту"
+
+#~ msgid ""
+#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
+#~ "\n"
+#~ "If you choose to empty the trash, all items in it\n"
+#~ "will be permanently lost. Please note that you\n"
+#~ "can also delete them separately."
+#~ msgstr ""
+#~ "<big><b>Очистити смітник повністю?</b></big>\n"
+#~ "\n"
+#~ "Якщо ви очистите смітник, файли з нього\n"
+#~ "видаляться назавжди. Майте на увазі, що ви також\n"
+#~ "можете видаляти їх по-одному."
+
+#~ msgid "<b>Docky Behavior</b>"
+#~ msgstr "<b>Поведінка Docky</b>"
+
+#~ msgid "Reinstate Removed Items"
+#~ msgstr "Відновити видалені"
+
+#~ msgid "<b>Docklets</b>"
+#~ msgstr "<b>Доклети</b>"
+
+#~ msgid "Alternate Activate"
+#~ msgstr "Альтернативний виклик GNOME Do"
+
+#~ msgid "Alternate Delete"
+#~ msgstr "Альтернативне видалення символу"
+
+#~ msgid "Multiple selection"
+#~ msgstr "Множинне виділення"
+
+#~ msgid "Docklets"
+#~ msgstr "Доклети"
+
+#~ msgid "Browse Into Item"
+#~ msgstr "Покинути підменю"
+
+#~ msgid "Step out of Item"
+#~ msgstr "Увійти в підменю"
+
+#~ msgid "Close All"
+#~ msgstr "Закрити всі"

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"POT-Creation-Date: 2011-05-21 21:42+1000\n"
 "PO-Revision-Date: 2010-12-05 15:08+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-14 04:47+0000\n"
-"X-Generator: Launchpad (build 12351)\n"
+"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -32,11 +32,11 @@ msgid ""
 msgstr ""
 "b>디스플레이가 애니메이션과 테마를 지원할 적당한 설정이 없습니다. 기능을 사용하기 위해서는 합성이 꼭 활성화 되어야 합니다.</b>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr "<span size=\"large\"><b>업데이트된 플러그인이 있습니다!</b></span>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
 msgstr "업데이트 설치(_I)"
 
@@ -56,9 +56,11 @@ msgstr "첫번째 실행시 창 숨기기(조용한 모드)."
 msgid "Show notification icon"
 msgstr "알림 아이콘 보이기"
 
-#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "단축키를 편집할때, 더블클릭후 새로운 입력하면 됩니다."
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:63
+msgid ""
+"To edit a shortcut, double-click it and type a new one.\n"
+"To restore a shortcut to the default, double click and press Backspace."
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -104,95 +106,14 @@ msgstr "창 그림자 보기"
 msgid "Animate window"
 msgstr "애니메이션 창"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:735
 #, csharp-format
 msgid "No results for: {0}"
 msgstr "결과없음: {0}"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:746
 msgid "Type To Search"
 msgstr "검색하고자 하는 것을 입력하세요"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
-msgid "Indicate Multiple Windows"
-msgstr "다중 창 지시"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
-msgid "Zoom:"
-msgstr "확대:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
-msgid "Icon Size:"
-msgstr "아이콘 크기:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
-msgid "Orientation:"
-msgstr "방향:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
-msgid "Hiding:"
-msgstr "숨기기:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
-msgid "<b>Docky Behavior</b>"
-msgstr "<b>독처럼 행동</b>"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
-msgid "Reinstate Removed Items"
-msgstr "지워진 항목 복원하기"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
-msgid "<b>Docklets</b>"
-msgstr "<b>독렛</b>"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Minimize"
-msgstr "최소화"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Restore"
-msgstr "복구"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
-msgid "Maximize"
-msgstr "최대화"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
-msgid "Close All"
-msgstr "모두 닫기"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
-msgid "Switch Monitors"
-msgstr "모니터 전환"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
-msgid "Trash"
-msgstr "쓰레기통"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
-msgid ""
-"<big><b>Empty all of the items from the trash?</b></big>\n"
-"\n"
-"If you choose to empty the trash, all items in it\n"
-"will be permanently lost. Please note that you\n"
-"can also delete them separately."
-msgstr "<big><b>휴지통에 있는 모든 것을 비울까요?</b></big>"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
-msgid "Open Trash"
-msgstr "휴지통 열기"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
-msgid "Empty Trash"
-msgstr "휴지통 비우기"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
-msgid "Show"
-msgstr "보기"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
-msgid "No result found for"
-msgstr "다음의 결과를 찾을수 없음"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
@@ -202,13 +123,8 @@ msgstr "찾을것의 입력을 사직하세요."
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:58
 msgid "Type to start searching."
 msgstr "찾을것의 입력을 사직하세요."
-
-#: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
-msgid "Desktop"
-msgstr "바탕화면"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -226,37 +142,56 @@ msgstr "<i>계정정보를 검사하고 저장</i>"
 msgid "Don't have an account?"
 msgstr "계정이 없습니까?"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
+msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
+#, csharp-format
+msgid ""
+"A Do plugin for {0} is available for installation. Would you like us to "
+"enable it for you?"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
+msgid "Don't ask me about Do plugins again."
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
+msgid "_Install"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Error saving {0}"
 msgstr "{0} 저장 오류"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
 msgstr "키 \"{0}\"이 키링에서 찾을 수 없습니다."
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:38
 msgid "gnome-keyring-daemon could not be reached!"
 msgstr "gnome-keyring-daemon이 도달하지 못했습니다."
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:140
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
 msgid "Icon"
 msgstr "아이콘"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:146
 msgid "Categories"
 msgstr "항목"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:152
 msgid "This application could not be indexed."
 msgstr "이 무른모는 인덱스를 작성할 수 없습니다."
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:181
 msgid "Exec"
 msgstr "실행"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:203
 msgid "OnlyShowIn"
 msgstr "보기에만 있음"
 
@@ -268,29 +203,21 @@ msgstr "응용프로그램"
 msgid "Finds applications in many locations."
 msgstr "많은 경로에서 응용프로그램 검색."
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:82
 #, csharp-format
 msgid "{0} Application Category"
 msgstr "{0} 응용프로그램 분류"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:83
 #, csharp-format
 msgid "Applications in the {0} category"
 msgstr "{0} 항목에 있는 응용프로그램"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
-msgid "Copy to Clipboard"
-msgstr "클립보드로 복사"
-
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:42
-msgid "Copy current text to clipboard"
-msgstr "현재 내용을 클립보드로 복사"
-
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:46
 msgid "GNOME Special Locations"
 msgstr "GNOME 특별 경로들"
 
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:51
 msgid "Special locations in GNOME, such as Computer and Network."
 msgstr "컴퓨터나 네트워크와 같은 GNOME 내의 특별한 경로들."
 
@@ -325,7 +252,26 @@ msgstr "계정정보를 검사후 저장"
 msgid "Account validation succeeded!"
 msgstr "계정 검증 성공!"
 
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
+msgid "What is Do?"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
+#, csharp-format
+msgid "What does the {0} plugin do?"
+msgstr ""
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
+#: ../Do/src/Do.Core/Controller.cs:146
+msgid "Copy to Clipboard"
+msgstr "클립보드로 복사"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:41
+msgid "Copy current text to clipboard"
+msgstr "현재 내용을 클립보드로 복사"
+
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs:34
 msgid "Email"
 msgstr "전자메일"
 
@@ -373,35 +319,35 @@ msgstr "실행"
 msgid "Run an application, script, or other executable."
 msgstr "응용프로그램, 스크립트, 또다른 실행가능한것 실행."
 
-#: ../Do/src/Do.Core/Controller.cs:115
-msgid "Summon GNOME Do"
-msgstr "GNOME Do 호출"
+#: ../Do/src/Do.Core/Controller.cs:109
+msgid ""
+"<b>Docky is no longer a Do theme!</b>\n"
+"It is now available as a stand-alone application. Your GNOME Do theme has "
+"been reset to Classic. Please feel free to change it in Preferences."
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:120
-msgid "Enter text mode"
-msgstr "텍스트 모드 시작"
+#: ../Do/src/Do.Core/Controller.cs:133
+msgid "Summon Do"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:126
-msgid "Copy Text"
-msgstr "문자열 복사"
-
-#: ../Do/src/Do.Core/Controller.cs:131
-msgid "Paste Text"
-msgstr "문자열 붙이기"
-
-#: ../Do/src/Do.Core/Controller.cs:136
-msgid "Alternate Escape"
-msgstr "Escape키 교체"
+#: ../Do/src/Do.Core/Controller.cs:137
+msgid "Summon in Text Mode"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
-msgid "Alternate Activate"
-msgstr "활성키 교체"
+msgid "Enter Text Mode"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:144
-msgid "Alternate Delete"
-msgstr "Delete 키 교체"
+#: ../Do/src/Do.Core/Controller.cs:143
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr "삭제"
 
 #: ../Do/src/Do.Core/Controller.cs:148
+msgid "Paste from Clipboard"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
 msgstr "이전 창"
 
@@ -409,51 +355,51 @@ msgstr "이전 창"
 msgid "Next Pane"
 msgstr "다음 창"
 
+#: ../Do/src/Do.Core/Controller.cs:156
+msgid "Previous Item"
+msgstr ""
+
 #: ../Do/src/Do.Core/Controller.cs:158
-msgid "Previous Result"
-msgstr "이전 결과"
+msgid "Next Item"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:161
+msgid "First Item"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:163
-msgid "Next Result"
-msgstr "다음 결과"
+msgid "Last Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:168
-msgid "First Result"
-msgstr "처음 결과"
-
-#: ../Do/src/Do.Core/Controller.cs:173
-msgid "Last Result"
-msgstr "마지막 결과"
-
-#: ../Do/src/Do.Core/Controller.cs:178
+#: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
 msgstr "지난 5개의 결과"
 
-#: ../Do/src/Do.Core/Controller.cs:183
+#: ../Do/src/Do.Core/Controller.cs:168
 msgid "Next 5 Results"
 msgstr "다음 5개의 결과"
 
-#: ../Do/src/Do.Core/Controller.cs:188
-msgid "Step out of Item"
-msgstr "항목에서 나오기"
+#: ../Do/src/Do.Core/Controller.cs:171
+msgid "Step Out of Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:193
-msgid "Browse Into Item"
-msgstr "아이템 탐색"
+#: ../Do/src/Do.Core/Controller.cs:173
+msgid "Step Into Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:198
-msgid "Multiple selection"
-msgstr "다중 선택"
+#: ../Do/src/Do.Core/Controller.cs:176
+msgid "Select Multiple Items"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
+#: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
 msgstr "GNOME Do"
 
-#: ../Do/src/Do.Core/Controller.cs:1057
-msgid "Copyright © 2008 GNOME Do Developers"
-msgstr "저작권 © 2008 GNOME Do Developers"
+#: ../Do/src/Do.Core/Controller.cs:1014
+msgid "Copyright © 2009 GNOME Do Developers"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1058
+#: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
 "Do things as quickly as possible\n"
 "(but no quicker) with your files, bookmarks,\n"
@@ -463,7 +409,7 @@ msgstr ""
 "(그렇다고 더 빠른건 아니지만) 예를 들면,\n"
 "응용프로그램,음악, 연락처, 그리고 그외의 것들을 처리합니다...!"
 
-#: ../Do/src/Do.Core/Controller.cs:1062
+#: ../Do/src/Do.Core/Controller.cs:1019
 msgid "Visit Homepage"
 msgstr "홈페이지 방문"
 
@@ -475,10 +421,6 @@ msgstr "설치 취소"
 msgid "Community Plugins"
 msgstr "커뮤니티 플러그인"
 
-#: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
-msgid "Docklets"
-msgstr "독렛"
-
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
 msgstr "모든 플러그인"
@@ -487,7 +429,7 @@ msgstr "모든 플러그인"
 msgid "Official Plugins"
 msgstr "공인 플러그인"
 
-#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:102
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:107
 msgid "Appearance"
 msgstr "모양새"
 
@@ -499,23 +441,31 @@ msgstr "필수 에드인 몇개를 찾을 수 없습니다."
 msgid "Installation failed"
 msgstr "설치 실패"
 
-#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:41
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:43
 msgid "General"
 msgstr "일반"
 
-#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
+#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:42
 msgid "Keyboard"
 msgstr "키보드"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:44
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:49
 msgid "Action"
 msgstr "동작"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:56
 msgid "Shortcut"
 msgstr "단축키"
 
-#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:73
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:101
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:140
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:143
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:159
+msgid "Disabled"
+msgstr ""
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
 msgstr "플러그인"
 
@@ -563,10 +513,6 @@ msgstr "Do 프로그램상의 학습된 사용자 통계 데이터를 지움."
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:54
 msgid "Are you sure you want to clear Do's learned usage data?"
 msgstr "Do 프로그램상의 학습된 사용자 통계 데이터를 지우기를 원하십니까?"
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
-msgid "Clear"
-msgstr "삭제"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
@@ -624,6 +570,22 @@ msgstr "이름 없음"
 msgid "No description."
 msgstr "설명 없음."
 
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
+msgid "Address"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
+msgid "Work Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
+msgid "Home Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
+msgid "Mobile Phone"
+msgstr ""
+
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
@@ -678,6 +640,18 @@ msgstr "결과에 상관없이 창이 항상 보임."
 #~ msgid "_About"
 #~ msgstr "정보(_A)"
 
+#~ msgid "Close All"
+#~ msgstr "모두 닫기"
+
+#~ msgid "Minimize"
+#~ msgstr "최소화"
+
+#~ msgid "Restore"
+#~ msgstr "복구"
+
+#~ msgid "To edit a shortcut, double-click it and type a new one."
+#~ msgstr "단축키를 편집할때, 더블클릭후 새로운 입력하면 됩니다."
+
 #~ msgid ""
 #~ "<b><span size=\"large\">There was an error installing the selected "
 #~ "plugins</span></b>"
@@ -700,8 +674,112 @@ msgstr "결과에 상관없이 창이 항상 보임."
 #~ msgid "Zoom Icons"
 #~ msgstr "줌 아이콘"
 
+#~ msgid "Switch Monitors"
+#~ msgstr "모니터 전환"
+
 #~ msgid "Automatically Hide"
 #~ msgstr "자동으로 숨기기"
 
 #~ msgid "Remove from Dock"
 #~ msgstr "독에서 제거"
+
+#~ msgid "Trash"
+#~ msgstr "쓰레기통"
+
+#~ msgid "No result found for"
+#~ msgstr "다음의 결과를 찾을수 없음"
+
+#~ msgid "Reinstate Removed Items"
+#~ msgstr "지워진 항목 복원하기"
+
+#~ msgid "Zoom:"
+#~ msgstr "확대:"
+
+#~ msgid "Icon Size:"
+#~ msgstr "아이콘 크기:"
+
+#~ msgid "Orientation:"
+#~ msgstr "방향:"
+
+#~ msgid "Hiding:"
+#~ msgstr "숨기기:"
+
+#~ msgid "Show"
+#~ msgstr "보기"
+
+#~ msgid "Empty Trash"
+#~ msgstr "휴지통 비우기"
+
+#~ msgid "Desktop"
+#~ msgstr "바탕화면"
+
+#~ msgid "Enter text mode"
+#~ msgstr "텍스트 모드 시작"
+
+#~ msgid "Open Trash"
+#~ msgstr "휴지통 열기"
+
+#~ msgid "Maximize"
+#~ msgstr "최대화"
+
+#~ msgid "Multiple selection"
+#~ msgstr "다중 선택"
+
+#~ msgid "Copyright © 2008 GNOME Do Developers"
+#~ msgstr "저작권 © 2008 GNOME Do Developers"
+
+#~ msgid "Copy Text"
+#~ msgstr "문자열 복사"
+
+#~ msgid "Paste Text"
+#~ msgstr "문자열 붙이기"
+
+#~ msgid ""
+#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
+#~ "\n"
+#~ "If you choose to empty the trash, all items in it\n"
+#~ "will be permanently lost. Please note that you\n"
+#~ "can also delete them separately."
+#~ msgstr "<big><b>휴지통에 있는 모든 것을 비울까요?</b></big>"
+
+#~ msgid "Alternate Activate"
+#~ msgstr "활성키 교체"
+
+#~ msgid "Alternate Escape"
+#~ msgstr "Escape키 교체"
+
+#~ msgid "Summon GNOME Do"
+#~ msgstr "GNOME Do 호출"
+
+#~ msgid "First Result"
+#~ msgstr "처음 결과"
+
+#~ msgid "Alternate Delete"
+#~ msgstr "Delete 키 교체"
+
+#~ msgid "Last Result"
+#~ msgstr "마지막 결과"
+
+#~ msgid "Previous Result"
+#~ msgstr "이전 결과"
+
+#~ msgid "Next Result"
+#~ msgstr "다음 결과"
+
+#~ msgid "Browse Into Item"
+#~ msgstr "아이템 탐색"
+
+#~ msgid "Step out of Item"
+#~ msgstr "항목에서 나오기"
+
+#~ msgid "Indicate Multiple Windows"
+#~ msgstr "다중 창 지시"
+
+#~ msgid "Docklets"
+#~ msgstr "독렛"
+
+#~ msgid "<b>Docky Behavior</b>"
+#~ msgstr "<b>독처럼 행동</b>"
+
+#~ msgid "<b>Docklets</b>"
+#~ msgstr "<b>독렛</b>"

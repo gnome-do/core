@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"POT-Creation-Date: 2011-05-21 21:42+1000\n"
 "PO-Revision-Date: 2010-12-05 15:21+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-14 04:47+0000\n"
-"X-Generator: Launchpad (build 12351)\n"
+"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -33,11 +33,11 @@ msgstr ""
 "<b>התצוגה שלך אינה מוגדרת כראוי לתמיכה בהנפשה ובערכות נושא. כדי להשתמש "
 "בתכונות אלה, עליך לאפשר שימוש בחיבור.</b>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr "<span size=\"large\"><b>תוספים מעודכנים זמינים!</b></span>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
 msgstr "_התקן עדכונים"
 
@@ -57,9 +57,11 @@ msgstr "הסתר את החלון בטעינה הראשונה (מצב שקט)."
 msgid "Show notification icon"
 msgstr "הצג סמל הודעה"
 
-#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "כדי לערוך קיצור דרך, לחץ עליו פעמיים ואז הזן את הקיצור החדש."
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:63
+msgid ""
+"To edit a shortcut, double-click it and type a new one.\n"
+"To restore a shortcut to the default, double click and press Backspace."
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -105,98 +107,14 @@ msgstr "הצג את צל החלון"
 msgid "Animate window"
 msgstr "הנפשת החלון"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:735
 #, csharp-format
 msgid "No results for: {0}"
 msgstr "אין תוצאות עבור: {0}"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:746
 msgid "Type To Search"
 msgstr "הקלד לחיפוש"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
-msgid "Indicate Multiple Windows"
-msgstr "מעיד על מספר חלונות"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
-msgid "Zoom:"
-msgstr "מרחק מתצוגה:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
-msgid "Icon Size:"
-msgstr "גודל צילמית:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
-msgid "Orientation:"
-msgstr "כיוון:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
-msgid "Hiding:"
-msgstr "הסתתרות:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
-msgid "<b>Docky Behavior</b>"
-msgstr "<b>Docky התנהגות</b>"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
-msgid "Reinstate Removed Items"
-msgstr "החזר פריטים שהוסרו"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
-msgid "<b>Docklets</b>"
-msgstr "<b>Docklets</b>"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Minimize"
-msgstr "מזער"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Restore"
-msgstr "שחזר"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
-msgid "Maximize"
-msgstr "הגדלה מירבית"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
-msgid "Close All"
-msgstr "סגור הכול"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
-msgid "Switch Monitors"
-msgstr "החלפת מסכים"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
-msgid "Trash"
-msgstr "פח האשפה"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
-msgid ""
-"<big><b>Empty all of the items from the trash?</b></big>\n"
-"\n"
-"If you choose to empty the trash, all items in it\n"
-"will be permanently lost. Please note that you\n"
-"can also delete them separately."
-msgstr ""
-"<big><b>רוקן את כל הפריטים בסל המחזור?<b></big/>\n"
-"באם תחליט לרוקן את פח המחזור, כל הפריטים בו יאבדו לתמיד.\n"
-"אנא שים לב כי ביכולתך גם למחוק כל פריט בנפרד."
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
-msgid "Open Trash"
-msgstr "פתח את פח האשפה"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
-msgid "Empty Trash"
-msgstr "רוקן את פח האשפה"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
-msgid "Show"
-msgstr "הצג"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
-msgid "No result found for"
-msgstr "לא נמצאו תוצאות עבור"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
@@ -206,13 +124,8 @@ msgstr "הקלד כדי להתחיל בחיפוש"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:58
 msgid "Type to start searching."
 msgstr "הקלד כדי להתחיל בחיפוש."
-
-#: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
-msgid "Desktop"
-msgstr "שולחן עבודה"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -230,37 +143,56 @@ msgstr "<i>וידוא ושמירה של נתוני של החשבון</i>"
 msgid "Don't have an account?"
 msgstr "אין לך חשבון?"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
+msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
+#, csharp-format
+msgid ""
+"A Do plugin for {0} is available for installation. Would you like us to "
+"enable it for you?"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
+msgid "Don't ask me about Do plugins again."
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
+msgid "_Install"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Error saving {0}"
 msgstr "שגיאה בשמירת {0}"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
 msgstr "המפתח \"{0}\" לא נמצא בצרור המפתחות"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:38
 msgid "gnome-keyring-daemon could not be reached!"
 msgstr "לא ניתן להגיע אל gnome-keyring-daemon!"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:140
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
 msgid "Icon"
 msgstr "סמל"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:146
 msgid "Categories"
 msgstr "קטגוריות"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:152
 msgid "This application could not be indexed."
 msgstr "לא ניתן לסדר יישום זה באינדקס."
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:181
 msgid "Exec"
 msgstr "הרצה"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:203
 msgid "OnlyShowIn"
 msgstr "הצג־רק־תחת"
 
@@ -272,29 +204,21 @@ msgstr "יישומים"
 msgid "Finds applications in many locations."
 msgstr "מציאת יישומים במיקומים רבים."
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:82
 #, csharp-format
 msgid "{0} Application Category"
 msgstr "{0} קטגוריית יישומים"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:83
 #, csharp-format
 msgid "Applications in the {0} category"
 msgstr "יישומים {0} בקטגוריה"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
-msgid "Copy to Clipboard"
-msgstr "העתקה ללוח העריכה"
-
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:42
-msgid "Copy current text to clipboard"
-msgstr "העתקת הטקסט הנוכחי ללוח הגזירים"
-
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:46
 msgid "GNOME Special Locations"
 msgstr "המיקומים המיוחדים של GNOME"
 
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:51
 msgid "Special locations in GNOME, such as Computer and Network."
 msgstr "מקומות מיוחדים בגנום, כמו ה'מחשב' וה'רשת'."
 
@@ -329,7 +253,26 @@ msgstr "וידוא ושמירת נתוני החשבון"
 msgid "Account validation succeeded!"
 msgstr "אימות החשבון הצליח!"
 
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
+msgid "What is Do?"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
+#, csharp-format
+msgid "What does the {0} plugin do?"
+msgstr ""
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
+#: ../Do/src/Do.Core/Controller.cs:146
+msgid "Copy to Clipboard"
+msgstr "העתקה ללוח העריכה"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:41
+msgid "Copy current text to clipboard"
+msgstr "העתקת הטקסט הנוכחי ללוח הגזירים"
+
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs:34
 msgid "Email"
 msgstr "דוא\"ל"
 
@@ -377,35 +320,35 @@ msgstr "הפעלה"
 msgid "Run an application, script, or other executable."
 msgstr "הפעלת יישום, סקריפט או קובץ אחר שניתן להרצה."
 
-#: ../Do/src/Do.Core/Controller.cs:115
-msgid "Summon GNOME Do"
-msgstr "זימון GNOME Do"
+#: ../Do/src/Do.Core/Controller.cs:109
+msgid ""
+"<b>Docky is no longer a Do theme!</b>\n"
+"It is now available as a stand-alone application. Your GNOME Do theme has "
+"been reset to Classic. Please feel free to change it in Preferences."
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:120
-msgid "Enter text mode"
-msgstr "הכנס לתצורת טקסט"
+#: ../Do/src/Do.Core/Controller.cs:133
+msgid "Summon Do"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:126
-msgid "Copy Text"
-msgstr "העתק טקסט"
-
-#: ../Do/src/Do.Core/Controller.cs:131
-msgid "Paste Text"
-msgstr "הדבקת טקסט"
-
-#: ../Do/src/Do.Core/Controller.cs:136
-msgid "Alternate Escape"
-msgstr "בריחה חלופית"
+#: ../Do/src/Do.Core/Controller.cs:137
+msgid "Summon in Text Mode"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
-msgid "Alternate Activate"
-msgstr "הפעלה חלופית"
+msgid "Enter Text Mode"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:144
-msgid "Alternate Delete"
-msgstr "מחיקה חלופית"
+#: ../Do/src/Do.Core/Controller.cs:143
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr "ריקון"
 
 #: ../Do/src/Do.Core/Controller.cs:148
+msgid "Paste from Clipboard"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
 msgstr "חלונית קודמת"
 
@@ -413,51 +356,51 @@ msgstr "חלונית קודמת"
 msgid "Next Pane"
 msgstr "חלונית הבאה"
 
+#: ../Do/src/Do.Core/Controller.cs:156
+msgid "Previous Item"
+msgstr ""
+
 #: ../Do/src/Do.Core/Controller.cs:158
-msgid "Previous Result"
-msgstr "תוצאה קודמת"
+msgid "Next Item"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:161
+msgid "First Item"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:163
-msgid "Next Result"
-msgstr "תוצאה הבאה"
+msgid "Last Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:168
-msgid "First Result"
-msgstr "תוצאה ראשונה"
-
-#: ../Do/src/Do.Core/Controller.cs:173
-msgid "Last Result"
-msgstr "תוצאה אחרונה"
-
-#: ../Do/src/Do.Core/Controller.cs:178
+#: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
 msgstr "5 תוצאות קודמות"
 
-#: ../Do/src/Do.Core/Controller.cs:183
+#: ../Do/src/Do.Core/Controller.cs:168
 msgid "Next 5 Results"
 msgstr "5 תוצאות הבאות"
 
-#: ../Do/src/Do.Core/Controller.cs:188
-msgid "Step out of Item"
-msgstr "יציאה מתוך הפריט"
+#: ../Do/src/Do.Core/Controller.cs:171
+msgid "Step Out of Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:193
-msgid "Browse Into Item"
-msgstr "כניסה לתוך הפריט"
+#: ../Do/src/Do.Core/Controller.cs:173
+msgid "Step Into Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:198
-msgid "Multiple selection"
-msgstr "בחירה מרובה"
+#: ../Do/src/Do.Core/Controller.cs:176
+msgid "Select Multiple Items"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
+#: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
 msgstr "GNOME Do"
 
-#: ../Do/src/Do.Core/Controller.cs:1057
-msgid "Copyright © 2008 GNOME Do Developers"
-msgstr "כל הזכויות שמורות © 2008 מפתחי Gnome Do"
+#: ../Do/src/Do.Core/Controller.cs:1014
+msgid "Copyright © 2009 GNOME Do Developers"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1058
+#: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
 "Do things as quickly as possible\n"
 "(but no quicker) with your files, bookmarks,\n"
@@ -467,7 +410,7 @@ msgstr ""
 "(אך לא מהר יותר) עם הקבצים שלך, הסימניות שלך,\n"
 "התוכנות, המוזיקה, אנשי הקשר, ועוד!"
 
-#: ../Do/src/Do.Core/Controller.cs:1062
+#: ../Do/src/Do.Core/Controller.cs:1019
 msgid "Visit Homepage"
 msgstr "בקר בעמוד הבית"
 
@@ -479,10 +422,6 @@ msgstr "ההתקנה בוטלה"
 msgid "Community Plugins"
 msgstr "תוספי הקהילה"
 
-#: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
-msgid "Docklets"
-msgstr "Docklets"
-
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
 msgstr "כל התוספים"
@@ -491,7 +430,7 @@ msgstr "כל התוספים"
 msgid "Official Plugins"
 msgstr "תוספים רשמיים"
 
-#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:102
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:107
 msgid "Appearance"
 msgstr "חזות"
 
@@ -503,23 +442,31 @@ msgstr "כמה מהתוספים הדרושים לא נמצאו"
 msgid "Installation failed"
 msgstr "ההתקנה נכשלה"
 
-#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:41
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:43
 msgid "General"
 msgstr "כללי"
 
-#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
+#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:42
 msgid "Keyboard"
 msgstr "מקלדת"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:44
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:49
 msgid "Action"
 msgstr "פעולה"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:56
 msgid "Shortcut"
 msgstr "קיצור דרך"
 
-#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:73
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:101
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:140
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:143
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:159
+msgid "Disabled"
+msgstr ""
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
 msgstr "תוספים"
 
@@ -567,10 +514,6 @@ msgstr "איפוס נתוני השימוש שנלמדו של Do."
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:54
 msgid "Are you sure you want to clear Do's learned usage data?"
 msgstr "האם אתה בטוח שברצונך לרוקן את נתוני השימוש שנלמדו של Do?"
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
-msgid "Clear"
-msgstr "ריקון"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
@@ -628,6 +571,22 @@ msgstr "אין שם"
 msgid "No description."
 msgstr "אין תיאור."
 
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
+msgid "Address"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
+msgid "Work Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
+msgid "Home Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
+msgid "Mobile Phone"
+msgstr ""
+
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
@@ -684,6 +643,9 @@ msgstr "האם חלון התוצאות תמיד יופיע."
 #~ msgid "_About"
 #~ msgstr "_אודות"
 
+#~ msgid "To edit a shortcut, double-click it and type a new one."
+#~ msgstr "כדי לערוך קיצור דרך, לחץ עליו פעמיים ואז הזן את הקיצור החדש."
+
 #~ msgid ""
 #~ "<b><span size=\"large\">There was an error installing the selected "
 #~ "plugins</span></b>"
@@ -693,6 +655,18 @@ msgstr "האם חלון התוצאות תמיד יופיע."
 #~ "<b><span size=\"large\">There was an error installing the selected "
 #~ "plugin</span></b>"
 #~ msgstr "<b><span size=\"large\">ארעה שגיאה בהתקנת התוסף הנבחר</span></b>"
+
+#~ msgid "Minimize"
+#~ msgstr "מזער"
+
+#~ msgid "Restore"
+#~ msgstr "שחזר"
+
+#~ msgid "Close All"
+#~ msgstr "סגור הכול"
+
+#~ msgid "Summon GNOME Do"
+#~ msgstr "זימון GNOME Do"
 
 #~ msgid "Advanced Indicators"
 #~ msgstr "מחוונים מתקדמים"
@@ -706,8 +680,112 @@ msgstr "האם חלון התוצאות תמיד יופיע."
 #~ msgid "Zoom Icons"
 #~ msgstr "התקרבות לסמלים"
 
+#~ msgid "Switch Monitors"
+#~ msgstr "החלפת מסכים"
+
 #~ msgid "Automatically Hide"
 #~ msgstr "הסתרה אוטומטית"
 
+#~ msgid "No result found for"
+#~ msgstr "לא נמצאו תוצאות עבור"
+
 #~ msgid "Remove from Dock"
 #~ msgstr "הסר מהמעגן"
+
+#~ msgid "Reinstate Removed Items"
+#~ msgstr "החזר פריטים שהוסרו"
+
+#~ msgid "Zoom:"
+#~ msgstr "מרחק מתצוגה:"
+
+#~ msgid "Icon Size:"
+#~ msgstr "גודל צילמית:"
+
+#~ msgid "Orientation:"
+#~ msgstr "כיוון:"
+
+#~ msgid "Hiding:"
+#~ msgstr "הסתתרות:"
+
+#~ msgid "Indicate Multiple Windows"
+#~ msgstr "מעיד על מספר חלונות"
+
+#~ msgid "Show"
+#~ msgstr "הצג"
+
+#~ msgid "Desktop"
+#~ msgstr "שולחן עבודה"
+
+#~ msgid "Maximize"
+#~ msgstr "הגדלה מירבית"
+
+#~ msgid "Copy Text"
+#~ msgstr "העתק טקסט"
+
+#~ msgid "Paste Text"
+#~ msgstr "הדבקת טקסט"
+
+#~ msgid "Enter text mode"
+#~ msgstr "הכנס לתצורת טקסט"
+
+#~ msgid "Multiple selection"
+#~ msgstr "בחירה מרובה"
+
+#~ msgid "First Result"
+#~ msgstr "תוצאה ראשונה"
+
+#~ msgid "Last Result"
+#~ msgstr "תוצאה אחרונה"
+
+#~ msgid "Previous Result"
+#~ msgstr "תוצאה קודמת"
+
+#~ msgid "Next Result"
+#~ msgstr "תוצאה הבאה"
+
+#~ msgid "Empty Trash"
+#~ msgstr "רוקן את פח האשפה"
+
+#~ msgid "Trash"
+#~ msgstr "פח האשפה"
+
+#~ msgid "Open Trash"
+#~ msgstr "פתח את פח האשפה"
+
+#~ msgid "Copyright © 2008 GNOME Do Developers"
+#~ msgstr "כל הזכויות שמורות © 2008 מפתחי Gnome Do"
+
+#~ msgid ""
+#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
+#~ "\n"
+#~ "If you choose to empty the trash, all items in it\n"
+#~ "will be permanently lost. Please note that you\n"
+#~ "can also delete them separately."
+#~ msgstr ""
+#~ "<big><b>רוקן את כל הפריטים בסל המחזור?<b></big/>\n"
+#~ "באם תחליט לרוקן את פח המחזור, כל הפריטים בו יאבדו לתמיד.\n"
+#~ "אנא שים לב כי ביכולתך גם למחוק כל פריט בנפרד."
+
+#~ msgid "Alternate Activate"
+#~ msgstr "הפעלה חלופית"
+
+#~ msgid "Alternate Delete"
+#~ msgstr "מחיקה חלופית"
+
+#~ msgid "<b>Docky Behavior</b>"
+#~ msgstr "<b>Docky התנהגות</b>"
+
+#~ msgid "<b>Docklets</b>"
+#~ msgstr "<b>Docklets</b>"
+
+#~ msgid "Docklets"
+#~ msgstr "Docklets"
+
+#~ msgid "Browse Into Item"
+#~ msgstr "כניסה לתוך הפריט"
+
+#~ msgid "Step out of Item"
+#~ msgstr "יציאה מתוך הפריט"
+
+#~ msgid "Alternate Escape"
+#~ msgstr "בריחה חלופית"

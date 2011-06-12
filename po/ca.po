@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-do\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-29 10:20+1000\n"
+"POT-Creation-Date: 2011-05-21 21:42+1000\n"
 "PO-Revision-Date: 2010-12-05 15:32+0000\n"
 "Last-Translator: Joan Duran <jodufi@gmail.com>\n"
 "Language-Team: Catalan <ubuntu-l10n-ca@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-14 04:47+0000\n"
-"X-Generator: Launchpad (build 12351)\n"
+"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -36,12 +36,12 @@ msgstr ""
 "animacions. Per a utilitzar aquestes funcions heu d'habilitar la "
 "composició.</b>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr ""
 "<span size=\"large\"><b>Hi ha disponibles connectors actualitzats.</b></span>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
 msgstr "_Instal·la les actualitzacions"
 
@@ -61,9 +61,11 @@ msgstr "Oculta la finestra en executar per primer cop (mode silenciós)."
 msgid "Show notification icon"
 msgstr "Mostra la icona de notificació"
 
-#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "Per a editar una drecera, feu-hi doble clic i teclegeu la nova."
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:63
+msgid ""
+"To edit a shortcut, double-click it and type a new one.\n"
+"To restore a shortcut to the default, double click and press Backspace."
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -109,99 +111,14 @@ msgstr "Mostra l'ombra de la finestra"
 msgid "Animate window"
 msgstr "Finestra animada"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:735
 #, csharp-format
 msgid "No results for: {0}"
 msgstr "No s'han trobat resultats per a: {0}"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:746
 msgid "Type To Search"
 msgstr "Teclegeu per a cercar"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
-msgid "Indicate Multiple Windows"
-msgstr "Indica finestres múltiples"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
-msgid "Zoom:"
-msgstr "Apropa:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
-msgid "Icon Size:"
-msgstr "Mida de la icona:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
-msgid "Orientation:"
-msgstr "Orientació:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
-msgid "Hiding:"
-msgstr "Oculta:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
-msgid "<b>Docky Behavior</b>"
-msgstr "<b>Comportament del Docky</b>"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
-msgid "Reinstate Removed Items"
-msgstr "Reinstaura els elements suprimits"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
-msgid "<b>Docklets</b>"
-msgstr "<b>Docklets</b>"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Minimize"
-msgstr "Minimitza"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Restore"
-msgstr "Restaura"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
-msgid "Maximize"
-msgstr "Maximitza"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
-msgid "Close All"
-msgstr "Tanca-ho tot"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
-msgid "Switch Monitors"
-msgstr "Canvia els monitors"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
-msgid "Trash"
-msgstr "Paperera"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
-msgid ""
-"<big><b>Empty all of the items from the trash?</b></big>\n"
-"\n"
-"If you choose to empty the trash, all items in it\n"
-"will be permanently lost. Please note that you\n"
-"can also delete them separately."
-msgstr ""
-"<big><b>Segur que voleu buidar tota la paperera?</b></big>\n"
-"Si decidiu buidar la paperera, tots els elements que conté es perdran "
-"definitivament. Tingueu en compte que també els podeu suprimir "
-"individualment."
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
-msgid "Open Trash"
-msgstr "Obre la paperera"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
-msgid "Empty Trash"
-msgstr "Buida la paperera"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
-msgid "Show"
-msgstr "Mostra"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
-msgid "No result found for"
-msgstr "No s'han trobat resultats per"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
@@ -211,13 +128,8 @@ msgstr "Teclegeu per a començar la cerca"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:58
 msgid "Type to start searching."
 msgstr "Teclegeu per a iniciar la cerca."
-
-#: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
-msgid "Desktop"
-msgstr "Escriptori"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -235,37 +147,56 @@ msgstr "<i>Verifica i desa la informació del compte</i>"
 msgid "Don't have an account?"
 msgstr "No teniu un compte?"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
+msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
+#, csharp-format
+msgid ""
+"A Do plugin for {0} is available for installation. Would you like us to "
+"enable it for you?"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
+msgid "Don't ask me about Do plugins again."
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
+msgid "_Install"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Error saving {0}"
 msgstr "S'ha produït un error en desar {0}."
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
 msgstr "No s'ha trobat la tecla «{0}» a l'anell de claus."
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:38
 msgid "gnome-keyring-daemon could not be reached!"
 msgstr "No s'ha pogut contactar amb el gnome-keyring-daemon."
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:140
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
 msgid "Icon"
 msgstr "Icona"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:146
 msgid "Categories"
 msgstr "Categories"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:152
 msgid "This application could not be indexed."
 msgstr "Aquesta aplicació no s'ha pogut indexar."
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:181
 msgid "Exec"
 msgstr "Executa"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:203
 msgid "OnlyShowIn"
 msgstr "OnlyShowIn"
 
@@ -277,29 +208,21 @@ msgstr "Aplicacions"
 msgid "Finds applications in many locations."
 msgstr "Cerca aplicacions a moltes ubicacions."
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:82
 #, csharp-format
 msgid "{0} Application Category"
 msgstr "{0} Categoria d'aplicació"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:83
 #, csharp-format
 msgid "Applications in the {0} category"
 msgstr "Aplicació en la categoria {0}"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
-msgid "Copy to Clipboard"
-msgstr "Copia al porta-retalls"
-
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:42
-msgid "Copy current text to clipboard"
-msgstr "Copia el text actual al porta-retalls"
-
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:46
 msgid "GNOME Special Locations"
 msgstr "Ubicacions especials del GNOME"
 
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:51
 msgid "Special locations in GNOME, such as Computer and Network."
 msgstr "Ubicacions especials del GNOME, com ara Ordinador i Xarxa."
 
@@ -334,7 +257,26 @@ msgstr "Verifiqueu i deseu la informació del compte"
 msgid "Account validation succeeded!"
 msgstr "S'ha completat amb èxit la validació del compte."
 
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
+msgid "What is Do?"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
+#, csharp-format
+msgid "What does the {0} plugin do?"
+msgstr ""
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
+#: ../Do/src/Do.Core/Controller.cs:146
+msgid "Copy to Clipboard"
+msgstr "Copia al porta-retalls"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:41
+msgid "Copy current text to clipboard"
+msgstr "Copia el text actual al porta-retalls"
+
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs:34
 msgid "Email"
 msgstr "Correu electrònic"
 
@@ -382,35 +324,35 @@ msgstr "Executa"
 msgid "Run an application, script, or other executable."
 msgstr "Executa una aplicació, script o executable."
 
-#: ../Do/src/Do.Core/Controller.cs:115
-msgid "Summon GNOME Do"
-msgstr "Crida al GNOME Do"
+#: ../Do/src/Do.Core/Controller.cs:109
+msgid ""
+"<b>Docky is no longer a Do theme!</b>\n"
+"It is now available as a stand-alone application. Your GNOME Do theme has "
+"been reset to Classic. Please feel free to change it in Preferences."
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:120
-msgid "Enter text mode"
-msgstr "Introduïu en mode text"
+#: ../Do/src/Do.Core/Controller.cs:133
+msgid "Summon Do"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:126
-msgid "Copy Text"
-msgstr "Copia el text"
-
-#: ../Do/src/Do.Core/Controller.cs:131
-msgid "Paste Text"
-msgstr "Enganxa el text"
-
-#: ../Do/src/Do.Core/Controller.cs:136
-msgid "Alternate Escape"
-msgstr "Sortida alternativa"
+#: ../Do/src/Do.Core/Controller.cs:137
+msgid "Summon in Text Mode"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
-msgid "Alternate Activate"
-msgstr "Activació alternativa"
+msgid "Enter Text Mode"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:144
-msgid "Alternate Delete"
-msgstr "Esborrat alternatiu"
+#: ../Do/src/Do.Core/Controller.cs:143
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr "Neteja"
 
 #: ../Do/src/Do.Core/Controller.cs:148
+msgid "Paste from Clipboard"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
 msgstr "Subfinestra anterior"
 
@@ -418,51 +360,51 @@ msgstr "Subfinestra anterior"
 msgid "Next Pane"
 msgstr "Subfinestra següent"
 
+#: ../Do/src/Do.Core/Controller.cs:156
+msgid "Previous Item"
+msgstr ""
+
 #: ../Do/src/Do.Core/Controller.cs:158
-msgid "Previous Result"
-msgstr "Resultat anterior"
+msgid "Next Item"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:161
+msgid "First Item"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:163
-msgid "Next Result"
-msgstr "Resultat següent"
+msgid "Last Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:168
-msgid "First Result"
-msgstr "Primer resultat"
-
-#: ../Do/src/Do.Core/Controller.cs:173
-msgid "Last Result"
-msgstr "Últim resultat"
-
-#: ../Do/src/Do.Core/Controller.cs:178
+#: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
 msgstr "Cinc resultats anteriors"
 
-#: ../Do/src/Do.Core/Controller.cs:183
+#: ../Do/src/Do.Core/Controller.cs:168
 msgid "Next 5 Results"
 msgstr "Cinc resultats següents"
 
-#: ../Do/src/Do.Core/Controller.cs:188
-msgid "Step out of Item"
-msgstr "Salta l'element"
+#: ../Do/src/Do.Core/Controller.cs:171
+msgid "Step Out of Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:193
-msgid "Browse Into Item"
-msgstr "Navegeu en l'element"
+#: ../Do/src/Do.Core/Controller.cs:173
+msgid "Step Into Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:198
-msgid "Multiple selection"
-msgstr "Selecció múltiple"
+#: ../Do/src/Do.Core/Controller.cs:176
+msgid "Select Multiple Items"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
+#: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
 msgstr "GNOME Do"
 
-#: ../Do/src/Do.Core/Controller.cs:1057
-msgid "Copyright © 2008 GNOME Do Developers"
-msgstr "Copyright © 2008 desenvolupadors del GNOME Do"
+#: ../Do/src/Do.Core/Controller.cs:1014
+msgid "Copyright © 2009 GNOME Do Developers"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1058
+#: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
 "Do things as quickly as possible\n"
 "(but no quicker) with your files, bookmarks,\n"
@@ -472,7 +414,7 @@ msgstr ""
 "(però no més ràpid) amb els fitxers, adreces preferides,\n"
 "aplicacions, música, contactes i molt més!"
 
-#: ../Do/src/Do.Core/Controller.cs:1062
+#: ../Do/src/Do.Core/Controller.cs:1019
 msgid "Visit Homepage"
 msgstr "Visiteu la pàgina inicial"
 
@@ -484,10 +426,6 @@ msgstr "Instal·lació cancel·lada"
 msgid "Community Plugins"
 msgstr "Connectors de la comunitat"
 
-#: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
-msgid "Docklets"
-msgstr "Docklets"
-
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
 msgstr "Tots els connectors"
@@ -496,7 +434,7 @@ msgstr "Tots els connectors"
 msgid "Official Plugins"
 msgstr "Connectors oficials"
 
-#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:102
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:107
 msgid "Appearance"
 msgstr "Aparença"
 
@@ -508,23 +446,31 @@ msgstr "No s'han trobat alguns dels complements necessaris"
 msgid "Installation failed"
 msgstr "Ha fallat l'instal·lació"
 
-#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:41
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:43
 msgid "General"
 msgstr "General"
 
-#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
+#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:42
 msgid "Keyboard"
 msgstr "Teclat"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:44
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:49
 msgid "Action"
 msgstr "Acció"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:56
 msgid "Shortcut"
 msgstr "Drecera de teclat"
 
-#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:73
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:101
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:140
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:143
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:159
+msgid "Disabled"
+msgstr ""
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
 msgstr "Connectors"
 
@@ -573,10 +519,6 @@ msgstr "Reinicia les dades d'utilització que el Do ha après."
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:54
 msgid "Are you sure you want to clear Do's learned usage data?"
 msgstr "Segur que voleu netejar les dades d'utilització que el Do ha après?"
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
-msgid "Clear"
-msgstr "Neteja"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
@@ -635,6 +577,22 @@ msgstr "Sense nom"
 #: ../Do.Universe/src/Do.Universe/Element.cs:43
 msgid "No description."
 msgstr "Sense descripció."
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
+msgid "Address"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
+msgid "Work Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
+msgid "Home Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
+msgid "Mobile Phone"
+msgstr ""
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -699,6 +657,15 @@ msgstr "Si s'ha de mostrar sempre la finestra de resultats."
 #~ msgid "_Theme:"
 #~ msgstr "_Tema:"
 
+#~ msgid "Trash"
+#~ msgstr "Paperera"
+
+#~ msgid "Minimize"
+#~ msgstr "Minimitza"
+
+#~ msgid "Restore"
+#~ msgstr "Restaura"
+
 #~ msgid "Advanced Indicators"
 #~ msgstr "Indicadors avançats"
 
@@ -719,8 +686,14 @@ msgstr "Si s'ha de mostrar sempre la finestra de resultats."
 #~ "<b><span size=\"large\">S'ha produït un error en instal·lar el connector "
 #~ "seleccionat</span></b>"
 
+#~ msgid "Close All"
+#~ msgstr "Tanca-ho tot"
+
 #~ msgid "Remove from Dock"
 #~ msgstr "Suprimeix de l'acoblador"
+
+#~ msgid "To edit a shortcut, double-click it and type a new one."
+#~ msgstr "Per a editar una drecera, feu-hi doble clic i teclegeu la nova."
 
 #~ msgid "Allow Window Overlap"
 #~ msgstr "Permet la superposició de finestres"
@@ -730,6 +703,9 @@ msgstr "Si s'ha de mostrar sempre la finestra de resultats."
 
 #~ msgid "Show Trash"
 #~ msgstr "Mostra la paperera"
+
+#~ msgid "Switch Monitors"
+#~ msgstr "Canvia els monitors"
 
 #~ msgid "Classic"
 #~ msgstr "Clàssic"
@@ -757,3 +733,105 @@ msgstr "Si s'ha de mostrar sempre la finestra de resultats."
 
 #~ msgid "Deletes an alias."
 #~ msgstr "Suprimeix un àlies."
+
+#~ msgid "<b>Docky Behavior</b>"
+#~ msgstr "<b>Comportament del Docky</b>"
+
+#~ msgid "Indicate Multiple Windows"
+#~ msgstr "Indica finestres múltiples"
+
+#~ msgid "Open Trash"
+#~ msgstr "Obre la paperera"
+
+#~ msgid "<b>Docklets</b>"
+#~ msgstr "<b>Docklets</b>"
+
+#~ msgid "Multiple selection"
+#~ msgstr "Selecció múltiple"
+
+#~ msgid "Docklets"
+#~ msgstr "Docklets"
+
+#~ msgid "Browse Into Item"
+#~ msgstr "Navegeu en l'element"
+
+#~ msgid "Show"
+#~ msgstr "Mostra"
+
+#~ msgid "Empty Trash"
+#~ msgstr "Buida la paperera"
+
+#~ msgid "Desktop"
+#~ msgstr "Escriptori"
+
+#~ msgid "Maximize"
+#~ msgstr "Maximitza"
+
+#~ msgid "Zoom:"
+#~ msgstr "Apropa:"
+
+#~ msgid "Icon Size:"
+#~ msgstr "Mida de la icona:"
+
+#~ msgid "Orientation:"
+#~ msgstr "Orientació:"
+
+#~ msgid "Copy Text"
+#~ msgstr "Copia el text"
+
+#~ msgid "Paste Text"
+#~ msgstr "Enganxa el text"
+
+#~ msgid "No result found for"
+#~ msgstr "No s'han trobat resultats per"
+
+#~ msgid "Enter text mode"
+#~ msgstr "Introduïu en mode text"
+
+#~ msgid "Summon GNOME Do"
+#~ msgstr "Crida al GNOME Do"
+
+#~ msgid "Step out of Item"
+#~ msgstr "Salta l'element"
+
+#~ msgid "Reinstate Removed Items"
+#~ msgstr "Reinstaura els elements suprimits"
+
+#~ msgid "Hiding:"
+#~ msgstr "Oculta:"
+
+#~ msgid ""
+#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
+#~ "\n"
+#~ "If you choose to empty the trash, all items in it\n"
+#~ "will be permanently lost. Please note that you\n"
+#~ "can also delete them separately."
+#~ msgstr ""
+#~ "<big><b>Segur que voleu buidar tota la paperera?</b></big>\n"
+#~ "Si decidiu buidar la paperera, tots els elements que conté es perdran "
+#~ "definitivament. Tingueu en compte que també els podeu suprimir "
+#~ "individualment."
+
+#~ msgid "First Result"
+#~ msgstr "Primer resultat"
+
+#~ msgid "Last Result"
+#~ msgstr "Últim resultat"
+
+#~ msgid "Previous Result"
+#~ msgstr "Resultat anterior"
+
+#~ msgid "Next Result"
+#~ msgstr "Resultat següent"
+
+#~ msgid "Copyright © 2008 GNOME Do Developers"
+#~ msgstr "Copyright © 2008 desenvolupadors del GNOME Do"
+
+#~ msgid "Alternate Activate"
+#~ msgstr "Activació alternativa"
+
+#~ msgid "Alternate Delete"
+#~ msgstr "Esborrat alternatiu"
+
+#~ msgid "Alternate Escape"
+#~ msgstr "Sortida alternativa"
