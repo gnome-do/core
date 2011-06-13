@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-01-07 00:20+0000\n"
-"Last-Translator: Xuacu Saturio <xuacusk8@gmail.com>\n"
+"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"PO-Revision-Date: 2011-05-25 05:15+0000\n"
+"Last-Translator: Xandru <xandru@softastur.org>\n"
 "Language-Team: Asturian <ast@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-05-26 04:32+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -23,7 +23,7 @@ msgstr "Amosar siempre ventana de resultaos"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:151
 msgid "<b>Selected Theme</b>"
-msgstr "<b>Escoyer Tema</b>"
+msgstr "<b>Tema Seleicionáu</b>"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:166
 msgid ""
@@ -33,11 +33,11 @@ msgstr ""
 "<b>La configuración de pantalla nun ye afayadiza pa sofitar tema y "
 "animación. Pa usar eses carauterístiques, hai qu'activar la composición.</b>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr "<span size=\"large\"><b>¡Hai complementos anovaos!</b></span>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
 msgstr "_Instalar anovaciones"
 
@@ -51,15 +51,17 @@ msgstr "Entamar GNOME Do cola sesión."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
-msgstr "Ocultar ventana nel entamu (modu quiet)."
+msgstr "Anubrir ventana nel primer entamu (modu quiet)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
 msgid "Show notification icon"
 msgstr "Amosar iconu de notificación"
 
-#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "Pa editar un accesu, duble click nél y escribi ún nuevu."
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:63
+msgid ""
+"To edit a shortcut, double-click it and type a new one.\n"
+"To restore a shortcut to the default, double click and press Backspace."
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -105,100 +107,14 @@ msgstr "Amosar solombra de ventana"
 msgid "Animate window"
 msgstr "Animar ventana"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:735
 #, csharp-format
 msgid "No results for: {0}"
 msgstr "Ensin resultaos pa: {0}"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:746
 msgid "Type To Search"
 msgstr "Escribi la gueta"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
-msgid "Indicate Multiple Windows"
-msgstr "Indicar múltiples ventanes"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
-msgid "Zoom:"
-msgstr "Zoom:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
-msgid "Icon Size:"
-msgstr "Tamañu del iconu:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
-msgid "Orientation:"
-msgstr "Orientación:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
-msgid "Hiding:"
-msgstr "Anubriendo:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
-msgid "<b>Docky Behavior</b>"
-msgstr "<b>Comportamientu de Docky</b>"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
-msgid "Reinstate Removed Items"
-msgstr "Restaurar elementos desaniciaos"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
-msgid "<b>Docklets</b>"
-msgstr "<b>Docklets</b>"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Minimize"
-msgstr "Amenorgar"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Restore"
-msgstr "Restaurar"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
-msgid "Maximize"
-msgstr "Maximizar"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
-msgid "Close All"
-msgstr "Zarrar todo"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
-msgid "Switch Monitors"
-msgstr "Conmutar monitores"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
-msgid "Trash"
-msgstr "Basoria"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
-msgid ""
-"<big><b>Empty all of the items from the trash?</b></big>\n"
-"\n"
-"If you choose to empty the trash, all items in it\n"
-"will be permanently lost. Please note that you\n"
-"can also delete them separately."
-msgstr ""
-"<big><b>¿Desaniciar tolos oxetos de la basoria?</b></big>\n"
-"\n"
-"Si escueye vaciar la basoria, tolos oxetos van\n"
-"desaniciase permanentemente. Atalante que\n"
-"puede desanicialos tamién por separao."
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
-msgid "Open Trash"
-msgstr "Abrir Basoria"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
-msgid "Empty Trash"
-msgstr "Vaciar Basoria"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
-msgid "Show"
-msgstr "Amosar"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
-msgid "No result found for"
-msgstr "Nun s'alcontraron resultaos pa"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
@@ -208,13 +124,8 @@ msgstr "Escribi p'aniciar la gueta"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:58
 msgid "Type to start searching."
 msgstr "Escribi p'aniciar la gueta"
-
-#: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
-msgid "Desktop"
-msgstr "Escritoriu"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -232,37 +143,56 @@ msgstr "<i>Verificar y guardar la información de cuenta</i>"
 msgid "Don't have an account?"
 msgstr "¿Nun tienes cuenta?"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
+msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
+msgstr "<b><span size=\"x-large\">¡Hai un plugin Do pa esto!</span></b>"
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
+#, csharp-format
+msgid ""
+"A Do plugin for {0} is available for installation. Would you like us to "
+"enable it for you?"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
+msgid "Don't ask me about Do plugins again."
+msgstr "Nun m'entrugues al rodiu de plugins Do otra vuelta."
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
+msgid "_Install"
+msgstr "_Instalar"
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Error saving {0}"
 msgstr "Error atroxando {0}"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
 msgstr "La clave «{0}» nun ta nel aniellu de claves"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:38
 msgid "gnome-keyring-daemon could not be reached!"
 msgstr "¡Nun pudo contautase con gnome-keyring-daemon!"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:140
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
 msgid "Icon"
 msgstr "Iconu"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:146
 msgid "Categories"
 msgstr "Categoríes"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:152
 msgid "This application could not be indexed."
 msgstr "Esta aplicación nun puede indizase."
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:181
 msgid "Exec"
 msgstr "Exec"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:203
 msgid "OnlyShowIn"
 msgstr "OnlyShowIn"
 
@@ -274,29 +204,21 @@ msgstr "Aplicaciones"
 msgid "Finds applications in many locations."
 msgstr "Alcuentra aplicaciones en munchos llugares."
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:82
 #, csharp-format
 msgid "{0} Application Category"
 msgstr "{0} Categoría d'Aplicación"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:83
 #, csharp-format
 msgid "Applications in the {0} category"
 msgstr "Aplicaciones na {0} categoría"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
-msgid "Copy to Clipboard"
-msgstr "Copiar al cartafueyos"
-
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:42
-msgid "Copy current text to clipboard"
-msgstr "Copiar el testu actual al cartafueyos"
-
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:46
 msgid "GNOME Special Locations"
 msgstr "Llugares especiales de GNOME"
 
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:51
 msgid "Special locations in GNOME, such as Computer and Network."
 msgstr "Llugares especiales de GNOME, como Ordenador y Rede."
 
@@ -331,7 +253,26 @@ msgstr "Verificar y atroxar información de cuenta"
 msgid "Account validation succeeded!"
 msgstr "¡Cuenta validada con éxitu!"
 
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
+msgid "What is Do?"
+msgstr "¿Qué ye Do?"
+
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
+#, csharp-format
+msgid "What does the {0} plugin do?"
+msgstr ""
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
+#: ../Do/src/Do.Core/Controller.cs:146
+msgid "Copy to Clipboard"
+msgstr "Copiar al cartafueyos"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:41
+msgid "Copy current text to clipboard"
+msgstr "Copiar el testu actual al cartafueyos"
+
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs:34
 msgid "Email"
 msgstr "Corréu-e"
 
@@ -379,35 +320,35 @@ msgstr "Executar"
 msgid "Run an application, script, or other executable."
 msgstr "Executar una aplicación, script, o otru executable."
 
-#: ../Do/src/Do.Core/Controller.cs:115
-msgid "Summon GNOME Do"
-msgstr "Llamar a GNOME Do"
+#: ../Do/src/Do.Core/Controller.cs:109
+msgid ""
+"<b>Docky is no longer a Do theme!</b>\n"
+"It is now available as a stand-alone application. Your GNOME Do theme has "
+"been reset to Classic. Please feel free to change it in Preferences."
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:120
-msgid "Enter text mode"
-msgstr "Entrar en mou testu"
+#: ../Do/src/Do.Core/Controller.cs:133
+msgid "Summon Do"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:126
-msgid "Copy Text"
-msgstr "Copiar testu"
-
-#: ../Do/src/Do.Core/Controller.cs:131
-msgid "Paste Text"
-msgstr "Apegar testu"
-
-#: ../Do/src/Do.Core/Controller.cs:136
-msgid "Alternate Escape"
-msgstr "Salida alternativa"
+#: ../Do/src/Do.Core/Controller.cs:137
+msgid "Summon in Text Mode"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
-msgid "Alternate Activate"
-msgstr "Activáu alternativu"
+msgid "Enter Text Mode"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:144
-msgid "Alternate Delete"
-msgstr "Desaniciu alternativu"
+#: ../Do/src/Do.Core/Controller.cs:143
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr "Llimpiar"
 
 #: ../Do/src/Do.Core/Controller.cs:148
+msgid "Paste from Clipboard"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
 msgstr "Panel anterior"
 
@@ -415,51 +356,51 @@ msgstr "Panel anterior"
 msgid "Next Pane"
 msgstr "Panel siguiente"
 
+#: ../Do/src/Do.Core/Controller.cs:156
+msgid "Previous Item"
+msgstr ""
+
 #: ../Do/src/Do.Core/Controller.cs:158
-msgid "Previous Result"
-msgstr "Resultáu anterior"
+msgid "Next Item"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:161
+msgid "First Item"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:163
-msgid "Next Result"
-msgstr "Resultáu siguiente"
+msgid "Last Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:168
-msgid "First Result"
-msgstr "Primer resultáu"
-
-#: ../Do/src/Do.Core/Controller.cs:173
-msgid "Last Result"
-msgstr "Caberu resultáu"
-
-#: ../Do/src/Do.Core/Controller.cs:178
+#: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
 msgstr "5 resultaos anteriores"
 
-#: ../Do/src/Do.Core/Controller.cs:183
+#: ../Do/src/Do.Core/Controller.cs:168
 msgid "Next 5 Results"
 msgstr "5 resultaos siguientes"
 
-#: ../Do/src/Do.Core/Controller.cs:188
-msgid "Step out of Item"
-msgstr "Salir de l'elementu"
+#: ../Do/src/Do.Core/Controller.cs:171
+msgid "Step Out of Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:193
-msgid "Browse Into Item"
-msgstr "Navegar pol elementu"
+#: ../Do/src/Do.Core/Controller.cs:173
+msgid "Step Into Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:198
-msgid "Multiple selection"
-msgstr "Esbilla múltiple"
+#: ../Do/src/Do.Core/Controller.cs:176
+msgid "Select Multiple Items"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
+#: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
 msgstr "GNOME Do"
 
-#: ../Do/src/Do.Core/Controller.cs:1057
-msgid "Copyright © 2008 GNOME Do Developers"
-msgstr "Copyright © 2008 GNOME Do Developers"
+#: ../Do/src/Do.Core/Controller.cs:1014
+msgid "Copyright © 2009 GNOME Do Developers"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1058
+#: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
 "Do things as quickly as possible\n"
 "(but no quicker) with your files, bookmarks,\n"
@@ -468,7 +409,7 @@ msgstr ""
 "¡Fae coses lo más aína dable (pero non más rápido) colos tos ficheros, "
 "marcadores, aplicaciones, música, contautos, y más!"
 
-#: ../Do/src/Do.Core/Controller.cs:1062
+#: ../Do/src/Do.Core/Controller.cs:1019
 msgid "Visit Homepage"
 msgstr "Dir a la web del programa"
 
@@ -480,10 +421,6 @@ msgstr "Instalación encaboxada"
 msgid "Community Plugins"
 msgstr "Complementos de la comunidá"
 
-#: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
-msgid "Docklets"
-msgstr "Docklets"
-
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
 msgstr "Tolos complementos"
@@ -492,7 +429,7 @@ msgstr "Tolos complementos"
 msgid "Official Plugins"
 msgstr "Complementos oficiales"
 
-#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:102
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:107
 msgid "Appearance"
 msgstr "Aspeutu"
 
@@ -504,23 +441,31 @@ msgstr "Dellos añadíos necesarios nun s'alcontraron"
 msgid "Installation failed"
 msgstr "Falló la instalación"
 
-#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:41
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:43
 msgid "General"
 msgstr "Xeneral"
 
-#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
+#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:42
 msgid "Keyboard"
 msgstr "Tecláu"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:44
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:49
 msgid "Action"
 msgstr "Aición"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:56
 msgid "Shortcut"
 msgstr "Atayu"
 
-#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:73
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:101
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:140
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:143
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:159
+msgid "Disabled"
+msgstr ""
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
 msgstr "Complementos"
 
@@ -568,10 +513,6 @@ msgstr "Reaniciar los datos d'usu deprendíos por Do."
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:54
 msgid "Are you sure you want to clear Do's learned usage data?"
 msgstr "¿Tas seguru que quies esborrar los datos d'usu deprendíos por Do?"
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
-msgid "Clear"
-msgstr "Llimpiar"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
@@ -630,6 +571,22 @@ msgstr "Ensin nome"
 msgid "No description."
 msgstr "Ensin descripción"
 
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
+msgid "Address"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
+msgid "Work Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
+msgid "Home Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
+msgid "Mobile Phone"
+msgstr ""
+
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
@@ -683,3 +640,159 @@ msgstr "Si la ventana de resultaos va amosase siempre."
 
 #~ msgid "_About"
 #~ msgstr "_Al rodiu"
+
+#~ msgid "_Theme:"
+#~ msgstr "_Tema:"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugins</span></b>"
+#~ msgstr ""
+#~ "<b><span size=\"large\">Hebo un error instalando los complementos "
+#~ "esbilláos</span></b>"
+
+#~ msgid ""
+#~ "<b><span size=\"large\">There was an error installing the selected "
+#~ "plugin</span></b>"
+#~ msgstr ""
+#~ "<b><span size=\"large\">Hebo un error instalando el complementu "
+#~ "esbilláu</span></b>"
+
+#~ msgid "Restore"
+#~ msgstr "Restaurar"
+
+#~ msgid "Minimize"
+#~ msgstr "Amenorgar"
+
+#~ msgid "Close All"
+#~ msgstr "Zarrar todo"
+
+#~ msgid "Summon GNOME Do"
+#~ msgstr "Llamar a GNOME Do"
+
+#~ msgid "No result found for"
+#~ msgstr "Nun s'alcontraron resultaos pa"
+
+#~ msgid "Advanced Indicators"
+#~ msgstr "Indicadores avanzaos"
+
+#~ msgid "Show Trash"
+#~ msgstr "Amosar basoria"
+
+#~ msgid "Allow Window Overlap"
+#~ msgstr "Permitir sobroponer ventanes"
+
+#~ msgid "Zoom Icons"
+#~ msgstr "Iconos ampliación"
+
+#~ msgid "Switch Monitors"
+#~ msgstr "Conmutar monitores"
+
+#~ msgid "Automatically Hide"
+#~ msgstr "Anubrir automáticamente"
+
+#~ msgid "Trash"
+#~ msgstr "Basoria"
+
+#~ msgid "Remove from Dock"
+#~ msgstr "Quitar de Dock"
+
+#~ msgid "Zoom:"
+#~ msgstr "Zoom:"
+
+#~ msgid "Icon Size:"
+#~ msgstr "Tamañu del iconu:"
+
+#~ msgid "Orientation:"
+#~ msgstr "Orientación:"
+
+#~ msgid "Hiding:"
+#~ msgstr "Anubriendo:"
+
+#~ msgid "Show"
+#~ msgstr "Amosar"
+
+#~ msgid "Empty Trash"
+#~ msgstr "Vaciar Basoria"
+
+#~ msgid "Desktop"
+#~ msgstr "Escritoriu"
+
+#~ msgid "Open Trash"
+#~ msgstr "Abrir Basoria"
+
+#~ msgid "Maximize"
+#~ msgstr "Maximizar"
+
+#~ msgid "To edit a shortcut, double-click it and type a new one."
+#~ msgstr "Pa editar un accesu, duble click nél y escribi ún nuevu."
+
+#~ msgid "<b>Docklets</b>"
+#~ msgstr "<b>Docklets</b>"
+
+#~ msgid "Copy Text"
+#~ msgstr "Copiar testu"
+
+#~ msgid "Docklets"
+#~ msgstr "Docklets"
+
+#~ msgid "Copyright © 2008 GNOME Do Developers"
+#~ msgstr "Copyright © 2008 GNOME Do Developers"
+
+#~ msgid "Enter text mode"
+#~ msgstr "Entrar en mou testu"
+
+#~ msgid "Alternate Escape"
+#~ msgstr "Salida alternativa"
+
+#~ msgid "Paste Text"
+#~ msgstr "Apegar testu"
+
+#~ msgid ""
+#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
+#~ "\n"
+#~ "If you choose to empty the trash, all items in it\n"
+#~ "will be permanently lost. Please note that you\n"
+#~ "can also delete them separately."
+#~ msgstr ""
+#~ "<big><b>¿Desaniciar tolos oxetos de la basoria?</b></big>\n"
+#~ "\n"
+#~ "Si escueye vaciar la basoria, tolos oxetos van\n"
+#~ "desaniciase permanentemente. Atalante que\n"
+#~ "puede desanicialos tamién por separao."
+
+#~ msgid "Reinstate Removed Items"
+#~ msgstr "Restaurar elementos desaniciaos"
+
+#~ msgid "Alternate Activate"
+#~ msgstr "Activáu alternativu"
+
+#~ msgid "Alternate Delete"
+#~ msgstr "Desaniciu alternativu"
+
+#~ msgid "<b>Docky Behavior</b>"
+#~ msgstr "<b>Comportamientu de Docky</b>"
+
+#~ msgid "Indicate Multiple Windows"
+#~ msgstr "Indicar múltiples ventanes"
+
+#~ msgid "Multiple selection"
+#~ msgstr "Esbilla múltiple"
+
+#~ msgid "Browse Into Item"
+#~ msgstr "Navegar pol elementu"
+
+#~ msgid "First Result"
+#~ msgstr "Primer resultáu"
+
+#~ msgid "Last Result"
+#~ msgstr "Caberu resultáu"
+
+#~ msgid "Previous Result"
+#~ msgstr "Resultáu anterior"
+
+#~ msgid "Next Result"
+#~ msgstr "Resultáu siguiente"
+
+#~ msgid "Step out of Item"
+#~ msgstr "Salir de l'elementu"

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-11-01 19:17+0000\n"
-"Last-Translator: उदयराज (Udayraj) <Unknown>\n"
+"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"PO-Revision-Date: 2010-12-05 14:46+0000\n"
+"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Marathi <mr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -33,11 +33,11 @@ msgstr ""
 "<b>साज आणी चलचित्रांकरीता तुमचा दर्शकपट व्यवस्थीत संयोजीत केलेला नाही. ह्या "
 "सुविधांचा लाभ घेण्यासाठी तुम्हाला दृष्यमिश्रण सुरु करावे लागेल.</b>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr "<span size=\"large\"><b>ताजी जोड-साधने ऊपलब्ध आहेत!</b></span>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
 msgstr "नवे बदल स्थापा(_I)"
 
@@ -57,9 +57,11 @@ msgstr "सुरुवातीला चौकट दाखवु नका (�
 msgid "Show notification icon"
 msgstr "सुचक-चिन्ह दाखवा"
 
-#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "एखादा दुवा बदलण्यासाठी, त्याला दु-टिचकी द्या आणी नवे नाव लिहा"
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:63
+msgid ""
+"To edit a shortcut, double-click it and type a new one.\n"
+"To restore a shortcut to the default, double click and press Backspace."
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -105,99 +107,14 @@ msgstr "चौकटीला सावली दाखवा"
 msgid "Animate window"
 msgstr "चौकट जिवंत करा"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:735
 #, csharp-format
 msgid "No results for: {0}"
 msgstr "यासाठी निकाल नाहीत: {0}"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:746
 msgid "Type To Search"
 msgstr "शोधण्यासाठी टाईप करा"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
-msgid "Indicate Multiple Windows"
-msgstr "विविध चौकटी दर्शवा"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
-msgid "Zoom:"
-msgstr "विस्तार:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
-msgid "Icon Size:"
-msgstr "लघुचित्र आकार:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
-msgid "Orientation:"
-msgstr "अभिमुखता:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
-msgid "Hiding:"
-msgstr "अदृष्यता:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
-msgid "<b>Docky Behavior</b>"
-msgstr "<b>चुंब वर्तन</b>"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
-msgid "Reinstate Removed Items"
-msgstr "काढलेले घटक पुर्ववत करा"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
-msgid "<b>Docklets</b>"
-msgstr "<b>चुंब-साधने</b>"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Minimize"
-msgstr "लघुत्तम"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Restore"
-msgstr "पूर्ववत करा"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
-msgid "Maximize"
-msgstr "महत्तम"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
-msgid "Close All"
-msgstr "सर्व बंद करा"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
-msgid "Switch Monitors"
-msgstr "मॉनिटर बदला"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
-msgid "Trash"
-msgstr "कचरापेटी"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
-msgid ""
-"<big><b>Empty all of the items from the trash?</b></big>\n"
-"\n"
-"If you choose to empty the trash, all items in it\n"
-"will be permanently lost. Please note that you\n"
-"can also delete them separately."
-msgstr ""
-"<big><b>कचरापेटीतले सगळे घटक काढून टाकायचेत का?</b></big>\n"
-"जर तुम्ही कचरापेटीले सगळे घटक काढून टाकायचे ठरवलेत\n"
-"तर ते सगळे कायमचे नष्ट होतील. कृपया लक्षात घ्या की तुम्ही\n"
-"त्यांना वेगवेगळे देखील काढून टाकु शकता."
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
-msgid "Open Trash"
-msgstr "कचरापेटी उघडा"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
-msgid "Empty Trash"
-msgstr "कचरापेटी रिकामी करा"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
-msgid "Show"
-msgstr "दाखवा"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
-msgid "No result found for"
-msgstr "यासाठी निकाल सापडले नाहीत"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
@@ -207,13 +124,8 @@ msgstr "शोध सुरु करण्यासाठी टाईप क�
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:58
 msgid "Type to start searching."
 msgstr "शोध सुरु करण्यासाठी टाईप करा"
-
-#: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
-msgid "Desktop"
-msgstr "कार्यस्थळ"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -231,37 +143,56 @@ msgstr "<i>खात्याची माहीती पडताळून स
 msgid "Don't have an account?"
 msgstr "तुमचे खाते नाही?"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
+msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
+#, csharp-format
+msgid ""
+"A Do plugin for {0} is available for installation. Would you like us to "
+"enable it for you?"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
+msgid "Don't ask me about Do plugins again."
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
+msgid "_Install"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Error saving {0}"
 msgstr "हे साठवण्यात समस्या {0}"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
 msgstr "जुडग्यामधे \"{0}\" ही चावी सापडली नाही"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:38
 msgid "gnome-keyring-daemon could not be reached!"
 msgstr "जीनोम-जुडग्यांचा-यक्षापर्यंत पोचण्यात समस्या!"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:140
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
 msgid "Icon"
 msgstr "चित्रसंकेत"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:146
 msgid "Categories"
 msgstr "वर्ग"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:152
 msgid "This application could not be indexed."
 msgstr "ह्या वापरिकेस अनुक्रमित करण्यास असमर्थ"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:181
 msgid "Exec"
 msgstr "चालवा"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:203
 msgid "OnlyShowIn"
 msgstr "यातच दाखवा"
 
@@ -273,29 +204,21 @@ msgstr "वापरिका"
 msgid "Finds applications in many locations."
 msgstr "विवीध ठिकाणी वापरिका शोधतो."
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:82
 #, csharp-format
 msgid "{0} Application Category"
 msgstr "{0} वापरिका वर्ग"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:83
 #, csharp-format
 msgid "Applications in the {0} category"
 msgstr "{0} वर्गातील वापरिका"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
-msgid "Copy to Clipboard"
-msgstr "पृष्ठावर नक्कल करा"
-
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:42
-msgid "Copy current text to clipboard"
-msgstr "आताच्या पाठ्याची पृष्ठावर नक्कल करा"
-
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:46
 msgid "GNOME Special Locations"
 msgstr "जीनोम विशेष स्थळे"
 
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:51
 msgid "Special locations in GNOME, such as Computer and Network."
 msgstr "जीनोम मधील विशेष स्थळे, उदा. संगणक किंवा जाळे"
 
@@ -330,7 +253,26 @@ msgstr "खात्याची माहीती पडताळून सा
 msgid "Account validation succeeded!"
 msgstr "खात्याची पारख यशस्वी!"
 
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
+msgid "What is Do?"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
+#, csharp-format
+msgid "What does the {0} plugin do?"
+msgstr ""
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
+#: ../Do/src/Do.Core/Controller.cs:146
+msgid "Copy to Clipboard"
+msgstr "पृष्ठावर नक्कल करा"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:41
+msgid "Copy current text to clipboard"
+msgstr "आताच्या पाठ्याची पृष्ठावर नक्कल करा"
+
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs:34
 msgid "Email"
 msgstr "विरोप"
 
@@ -378,35 +320,35 @@ msgstr "चालवा"
 msgid "Run an application, script, or other executable."
 msgstr "वापरिका, संहीत, किंवा इतर सचल चालवतो."
 
-#: ../Do/src/Do.Core/Controller.cs:115
-msgid "Summon GNOME Do"
-msgstr "जीनोम-डू ला बोलवा"
+#: ../Do/src/Do.Core/Controller.cs:109
+msgid ""
+"<b>Docky is no longer a Do theme!</b>\n"
+"It is now available as a stand-alone application. Your GNOME Do theme has "
+"been reset to Classic. Please feel free to change it in Preferences."
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:120
-msgid "Enter text mode"
-msgstr "पाठ्य पद्धती सुरु करा"
+#: ../Do/src/Do.Core/Controller.cs:133
+msgid "Summon Do"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:126
-msgid "Copy Text"
-msgstr "पाठ्याची नक्क्ल करा"
-
-#: ../Do/src/Do.Core/Controller.cs:131
-msgid "Paste Text"
-msgstr "पाठ्याची नक्क्ल लावा"
-
-#: ../Do/src/Do.Core/Controller.cs:136
-msgid "Alternate Escape"
-msgstr "अतिरिक्त गमन"
+#: ../Do/src/Do.Core/Controller.cs:137
+msgid "Summon in Text Mode"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
-msgid "Alternate Activate"
-msgstr "अतिरिक्त चलन"
+msgid "Enter Text Mode"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:144
-msgid "Alternate Delete"
-msgstr "अतिरिक्त काढुन टाका"
+#: ../Do/src/Do.Core/Controller.cs:143
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr "पुसा"
 
 #: ../Do/src/Do.Core/Controller.cs:148
+msgid "Paste from Clipboard"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
 msgstr "मागचा पट"
 
@@ -414,51 +356,51 @@ msgstr "मागचा पट"
 msgid "Next Pane"
 msgstr "पुढचा पट"
 
+#: ../Do/src/Do.Core/Controller.cs:156
+msgid "Previous Item"
+msgstr ""
+
 #: ../Do/src/Do.Core/Controller.cs:158
-msgid "Previous Result"
-msgstr "मागचा निकाल"
+msgid "Next Item"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:161
+msgid "First Item"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:163
-msgid "Next Result"
-msgstr "पुढचा निकाल"
+msgid "Last Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:168
-msgid "First Result"
-msgstr "पहिला निकाल"
-
-#: ../Do/src/Do.Core/Controller.cs:173
-msgid "Last Result"
-msgstr "शेवटचा निकाल"
-
-#: ../Do/src/Do.Core/Controller.cs:178
+#: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
 msgstr "मागचे ५ निकाल"
 
-#: ../Do/src/Do.Core/Controller.cs:183
+#: ../Do/src/Do.Core/Controller.cs:168
 msgid "Next 5 Results"
 msgstr "पुढचे ५ निकाल"
 
-#: ../Do/src/Do.Core/Controller.cs:188
-msgid "Step out of Item"
-msgstr "घटकातून बाहेर पडा"
+#: ../Do/src/Do.Core/Controller.cs:171
+msgid "Step Out of Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:193
-msgid "Browse Into Item"
-msgstr "घटकाच्या आत बघा"
+#: ../Do/src/Do.Core/Controller.cs:173
+msgid "Step Into Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:198
-msgid "Multiple selection"
-msgstr "अनेक निवडा"
+#: ../Do/src/Do.Core/Controller.cs:176
+msgid "Select Multiple Items"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
+#: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
 msgstr "जिनोम डू"
 
-#: ../Do/src/Do.Core/Controller.cs:1057
-msgid "Copyright © 2008 GNOME Do Developers"
-msgstr "सर्वाधिकार सुरक्षीत © २००८ जिनोम डू विकसक"
+#: ../Do/src/Do.Core/Controller.cs:1014
+msgid "Copyright © 2009 GNOME Do Developers"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1058
+#: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
 "Do things as quickly as possible\n"
 "(but no quicker) with your files, bookmarks,\n"
@@ -468,7 +410,7 @@ msgstr ""
 "(ह्यापेक्षा जास्त नाही) तुमच्या फाईल्य, खुणा,\n"
 "वापरिका, संगीत, पत्ते, आणी खुप गोष्टींसह!"
 
-#: ../Do/src/Do.Core/Controller.cs:1062
+#: ../Do/src/Do.Core/Controller.cs:1019
 msgid "Visit Homepage"
 msgstr "मुखपृष्टावर जा"
 
@@ -480,10 +422,6 @@ msgstr "प्रतिष्ठापन रद्द केले"
 msgid "Community Plugins"
 msgstr "सांघीक जोड-साधने"
 
-#: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
-msgid "Docklets"
-msgstr "चुंब-साधने"
-
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
 msgstr "सर्व जोड-साधने"
@@ -492,7 +430,7 @@ msgstr "सर्व जोड-साधने"
 msgid "Official Plugins"
 msgstr "अधिकृत जोड-साधने"
 
-#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:102
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:107
 msgid "Appearance"
 msgstr "रूप"
 
@@ -504,23 +442,31 @@ msgstr "काही आवश्यक उपांगे सापडली �
 msgid "Installation failed"
 msgstr "प्रतिष्ठापन अपयशी"
 
-#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:41
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:43
 msgid "General"
 msgstr "साधारण"
 
-#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
+#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:42
 msgid "Keyboard"
 msgstr "कळफलक"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:44
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:49
 msgid "Action"
 msgstr "कृती"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:56
 msgid "Shortcut"
 msgstr "शॉर्टकट"
 
-#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:73
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:101
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:140
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:143
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:159
+msgid "Disabled"
+msgstr ""
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
 msgstr "जोड-साधने"
 
@@ -569,10 +515,6 @@ msgstr "तुमच्या वापराविषयी डु ने श�
 msgid "Are you sure you want to clear Do's learned usage data?"
 msgstr ""
 "तुम्हाला खरंच तुमच्या वापराविषयी डु ने शिकलेली माहीती पुसुन टाकयची आहे का?"
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
-msgid "Clear"
-msgstr "पुसा"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
@@ -630,6 +572,22 @@ msgstr "नाव नाही"
 msgid "No description."
 msgstr "वर्णन नाही."
 
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
+msgid "Address"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
+msgid "Work Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
+msgid "Home Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
+msgid "Mobile Phone"
+msgstr ""
+
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
@@ -679,3 +637,123 @@ msgstr "जिनोम डूला बोलावण्यासाठी क
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "निकालची चौकट नेहमीच दिसेल की नाही."
+
+#~ msgid "Orientation:"
+#~ msgstr "अभिमुखता:"
+
+#~ msgid "<b>Docky Behavior</b>"
+#~ msgstr "<b>चुंब वर्तन</b>"
+
+#~ msgid "Reinstate Removed Items"
+#~ msgstr "काढलेले घटक पुर्ववत करा"
+
+#~ msgid "Hiding:"
+#~ msgstr "अदृष्यता:"
+
+#~ msgid "Empty Trash"
+#~ msgstr "कचरापेटी रिकामी करा"
+
+#~ msgid "Open Trash"
+#~ msgstr "कचरापेटी उघडा"
+
+#~ msgid "Maximize"
+#~ msgstr "महत्तम"
+
+#~ msgid "Minimize"
+#~ msgstr "लघुत्तम"
+
+#~ msgid "Restore"
+#~ msgstr "पूर्ववत करा"
+
+#~ msgid "Close All"
+#~ msgstr "सर्व बंद करा"
+
+#~ msgid "Trash"
+#~ msgstr "कचरापेटी"
+
+#~ msgid "Show"
+#~ msgstr "दाखवा"
+
+#~ msgid "Desktop"
+#~ msgstr "कार्यस्थळ"
+
+#~ msgid "Copy Text"
+#~ msgstr "पाठ्याची नक्क्ल करा"
+
+#~ msgid "Enter text mode"
+#~ msgstr "पाठ्य पद्धती सुरु करा"
+
+#~ msgid "Paste Text"
+#~ msgstr "पाठ्याची नक्क्ल लावा"
+
+#~ msgid "First Result"
+#~ msgstr "पहिला निकाल"
+
+#~ msgid "Last Result"
+#~ msgstr "शेवटचा निकाल"
+
+#~ msgid "Previous Result"
+#~ msgstr "मागचा निकाल"
+
+#~ msgid "Next Result"
+#~ msgstr "पुढचा निकाल"
+
+#~ msgid "Step out of Item"
+#~ msgstr "घटकातून बाहेर पडा"
+
+#~ msgid "Zoom:"
+#~ msgstr "विस्तार:"
+
+#~ msgid ""
+#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
+#~ "\n"
+#~ "If you choose to empty the trash, all items in it\n"
+#~ "will be permanently lost. Please note that you\n"
+#~ "can also delete them separately."
+#~ msgstr ""
+#~ "<big><b>कचरापेटीतले सगळे घटक काढून टाकायचेत का?</b></big>\n"
+#~ "जर तुम्ही कचरापेटीले सगळे घटक काढून टाकायचे ठरवलेत\n"
+#~ "तर ते सगळे कायमचे नष्ट होतील. कृपया लक्षात घ्या की तुम्ही\n"
+#~ "त्यांना वेगवेगळे देखील काढून टाकु शकता."
+
+#~ msgid "Copyright © 2008 GNOME Do Developers"
+#~ msgstr "सर्वाधिकार सुरक्षीत © २००८ जिनोम डू विकसक"
+
+#~ msgid "To edit a shortcut, double-click it and type a new one."
+#~ msgstr "एखादा दुवा बदलण्यासाठी, त्याला दु-टिचकी द्या आणी नवे नाव लिहा"
+
+#~ msgid "Icon Size:"
+#~ msgstr "लघुचित्र आकार:"
+
+#~ msgid "<b>Docklets</b>"
+#~ msgstr "<b>चुंब-साधने</b>"
+
+#~ msgid "No result found for"
+#~ msgstr "यासाठी निकाल सापडले नाहीत"
+
+#~ msgid "Summon GNOME Do"
+#~ msgstr "जीनोम-डू ला बोलवा"
+
+#~ msgid "Multiple selection"
+#~ msgstr "अनेक निवडा"
+
+#~ msgid "Docklets"
+#~ msgstr "चुंब-साधने"
+
+#~ msgid "Browse Into Item"
+#~ msgstr "घटकाच्या आत बघा"
+
+#~ msgid "Alternate Escape"
+#~ msgstr "अतिरिक्त गमन"
+
+#~ msgid "Switch Monitors"
+#~ msgstr "मॉनिटर बदला"
+
+#~ msgid "Alternate Activate"
+#~ msgstr "अतिरिक्त चलन"
+
+#~ msgid "Alternate Delete"
+#~ msgstr "अतिरिक्त काढुन टाका"
+
+#~ msgid "Indicate Multiple Windows"
+#~ msgstr "विविध चौकटी दर्शवा"

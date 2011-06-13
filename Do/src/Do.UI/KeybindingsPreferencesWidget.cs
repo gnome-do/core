@@ -35,18 +35,20 @@ namespace Do.UI
 	public partial class KeybindingsPreferencesWidget : Bin, IConfigurable
 	{
 		private KeybindingTreeView kbview;
-		
-		new public string Name {
+
+		// This must be an explicit interface method to disambiguate between
+		// Widget.Name and IConfigurable.Name
+		string IConfigurable.Name {
 			get { return Catalog.GetString ("Keyboard"); }
 		}
 		
-        public string Description {
-        	get { return ""; }
-        }
-        
-        public string Icon {
-        	get { return ""; }
-        }
+		public string Description {
+			get { return ""; }
+		}
+
+		public string Icon {
+			get { return ""; }
+		}
 		
 		public KeybindingsPreferencesWidget ()
 		{

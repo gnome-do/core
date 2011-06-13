@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-06-29 10:02+1000\n"
-"PO-Revision-Date: 2010-11-30 19:50+0000\n"
-"Last-Translator: denis kambič <Unknown>\n"
+"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"PO-Revision-Date: 2011-01-26 08:49+0000\n"
+"Last-Translator: Andrej Znidarsic <andrej.znidarsic@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-05 11:12+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
+"X-Generator: Launchpad (build 12959)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -33,12 +33,12 @@ msgstr ""
 "<b>Vaš zaslon ni pravilno nastavljen za podporo tem in animacij. Za uporabo "
 "teh funkcij omogočite kompozicijo</bY"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:53
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr ""
 "<span size=\"large\"><b>Na voljo so posodobljeni vključki!</b></span>"
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:129
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
 msgstr "_Namesti posodobitve"
 
@@ -58,9 +58,11 @@ msgstr "Skrij okno ob prvem zagonu (tihi način)."
 msgid "Show notification icon"
 msgstr "Prikaži ikono opozorila"
 
-#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:62
-msgid "To edit a shortcut, double-click it and type a new one."
-msgstr "Za urejanje imena bližnjice jo dvokliknite in natipkajte novo ime."
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:63
+msgid ""
+"To edit a shortcut, double-click it and type a new one.\n"
+"To restore a shortcut to the default, double click and press Backspace."
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -106,100 +108,14 @@ msgstr "Prikaži senco okna"
 msgid "Animate window"
 msgstr "Animiraj okno"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:731
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:735
 #, csharp-format
 msgid "No results for: {0}"
 msgstr "Ni rezultatov za: {0}"
 
-#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:742
+#: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:746
 msgid "Type To Search"
 msgstr "Tipkaj za iskanje"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:109
-msgid "Indicate Multiple Windows"
-msgstr "Prikaži več oken"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:153
-msgid "Zoom:"
-msgstr "Povečava:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:198
-msgid "Icon Size:"
-msgstr "Velikost ikone:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:219
-msgid "Orientation:"
-msgstr "Usmerjenost:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:228
-msgid "Hiding:"
-msgstr "Skrivanje:"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:266
-msgid "<b>Docky Behavior</b>"
-msgstr "<b>Docky obnašanje</b>"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:334
-msgid "Reinstate Removed Items"
-msgstr "Obnovi izbrisane datoteke"
-
-#: ../Do.Interface.Linux.Docky/gtk-gui/Docky.Interface.DockyConfigurationWidget.cs:372
-msgid "<b>Docklets</b>"
-msgstr ""
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Minimize"
-msgstr "Pomanjšaj"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:46
-msgid "Restore"
-msgstr "Obnovi"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:47
-msgid "Maximize"
-msgstr "Razpni"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/ApplicationDockItem.cs:48
-msgid "Close All"
-msgstr "Zapri vse"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/DoDockItem.cs:97
-msgid "Switch Monitors"
-msgstr "Zamenjaj monitorje"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:73
-msgid "Trash"
-msgstr "Koš za smeti"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:135
-msgid ""
-"<big><b>Empty all of the items from the trash?</b></big>\n"
-"\n"
-"If you choose to empty the trash, all items in it\n"
-"will be permanently lost. Please note that you\n"
-"can also delete them separately."
-msgstr ""
-"<big><b>Izbrišem vse predmete iz koša?</b></big>\n"
-"\n"
-"Če izberete to možnost, bodo vsi\n"
-"predmeti v košu izgubljeni. Vsak\n"
-"predmet lahko izbrišete tudi posebej."
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:177
-msgid "Open Trash"
-msgstr "Odpri koš"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Items/TrashDockItem.cs:179
-msgid "Empty Trash"
-msgstr "Izprazni koš"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Menus/ToggleDockletMenuButtonArgs.cs:40
-msgid "Show"
-msgstr "Prikaži"
-
-#: ../Do.Interface.Linux.Docky/src/Docky.Interface/Docky.Interface.Painters/SummonModeRenderer.cs:238
-msgid "No result found for"
-msgstr "Ni najdenih zadetkov za"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
@@ -209,13 +125,8 @@ msgstr "Za začetek iskanja začni tipkati"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
-#: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:58
 msgid "Type to start searching."
 msgstr "Začni tipkati."
-
-#: ../Do.Interface.Wink/src/Do.Interface.Wink/ScreenUtils.cs:33
-msgid "Desktop"
-msgstr "Namizje"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -233,39 +144,58 @@ msgstr "<i>Preveri in shrani informacije o računu</i>"
 msgid "Don't have an account?"
 msgstr "Nimaš ustvarjenega računa?"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:35
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
+msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
+#, csharp-format
+msgid ""
+"A Do plugin for {0} is available for installation. Would you like us to "
+"enable it for you?"
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
+msgid "Don't ask me about Do plugins again."
+msgstr ""
+
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
+msgid "_Install"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Error saving {0}"
 msgstr "Napaka pri shranjevanju {0}"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
 msgstr "Ključ \"{0}\" ni bil najden"
 
-#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
+#: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:38
 msgid "gnome-keyring-daemon could not be reached!"
 msgstr "gnome-keyring-daemon ni dosegljiv!"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:140
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
 msgid "Icon"
 msgstr "Ikona"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:146
 msgid "Categories"
 msgstr "Kategorije"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:149
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:152
 msgid "This application could not be indexed."
 msgstr "Aplikacija ni bila indeksirana."
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:178
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:181
 msgid "Exec"
 msgstr "Izvedljivo"
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:200
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:203
 msgid "OnlyShowIn"
-msgstr ""
+msgstr "OnlyShowIn"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:57
 msgid "Applications"
@@ -275,29 +205,21 @@ msgstr "Aplikacije"
 msgid "Finds applications in many locations."
 msgstr "Najde aplikacije na več mestih."
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:79
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:82
 #, csharp-format
 msgid "{0} Application Category"
 msgstr "{0} Kategorija aplikacije"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:80
+#: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:83
 #, csharp-format
 msgid "Applications in the {0} category"
 msgstr "Aplikacija v {0} kategoriji"
 
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:38
-msgid "Copy to Clipboard"
-msgstr "Kopiraj v odložišče"
-
-#: ../Do.Platform.Linux/src/Do.Universe/CopyToClipboardAction.cs:42
-msgid "Copy current text to clipboard"
-msgstr "Kopiraj trenutni tekst v odložišče"
-
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:57
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:46
 msgid "GNOME Special Locations"
 msgstr "GNOME posebna Mesta"
 
-#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:61
+#: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:51
 msgid "Special locations in GNOME, such as Computer and Network."
 msgstr "Posebna mesta v GNOME-u, kot so Računalnik in Omrežje"
 
@@ -332,7 +254,26 @@ msgstr "Potrdi in shrani informacije o računu"
 msgid "Account validation succeeded!"
 msgstr "Potrjevanje računa uspelo!"
 
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
+msgid "What is Do?"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
+#, csharp-format
+msgid "What does the {0} plugin do?"
+msgstr ""
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
+#: ../Do/src/Do.Core/Controller.cs:146
+msgid "Copy to Clipboard"
+msgstr "Kopiraj v odložišče"
+
+#: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:41
+msgid "Copy current text to clipboard"
+msgstr "Kopiraj trenutni tekst v odložišče"
+
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs:34
 msgid "Email"
 msgstr "E-Pošta"
 
@@ -380,35 +321,35 @@ msgstr "Zaženi"
 msgid "Run an application, script, or other executable."
 msgstr "Zaženi aplikacijo, skripto ali drugo zagonsko datoteko."
 
-#: ../Do/src/Do.Core/Controller.cs:115
-msgid "Summon GNOME Do"
-msgstr "Prikliči GNOME Do"
+#: ../Do/src/Do.Core/Controller.cs:109
+msgid ""
+"<b>Docky is no longer a Do theme!</b>\n"
+"It is now available as a stand-alone application. Your GNOME Do theme has "
+"been reset to Classic. Please feel free to change it in Preferences."
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:120
-msgid "Enter text mode"
-msgstr "Vstopi v besedilni način"
+#: ../Do/src/Do.Core/Controller.cs:133
+msgid "Summon Do"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:126
-msgid "Copy Text"
-msgstr "Kopiraj besedilo"
-
-#: ../Do/src/Do.Core/Controller.cs:131
-msgid "Paste Text"
-msgstr "Prilepi besedilo"
-
-#: ../Do/src/Do.Core/Controller.cs:136
-msgid "Alternate Escape"
-msgstr "Alternativni izhod"
+#: ../Do/src/Do.Core/Controller.cs:137
+msgid "Summon in Text Mode"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
-msgid "Alternate Activate"
-msgstr "Alternativna aktivacija"
+msgid "Enter Text Mode"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:144
-msgid "Alternate Delete"
-msgstr "Alternativni izbris"
+#: ../Do/src/Do.Core/Controller.cs:143
+#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
+msgid "Clear"
+msgstr "Počisti"
 
 #: ../Do/src/Do.Core/Controller.cs:148
+msgid "Paste from Clipboard"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
 msgstr "Prejšnja raven"
 
@@ -416,51 +357,51 @@ msgstr "Prejšnja raven"
 msgid "Next Pane"
 msgstr "Naslednja raven"
 
+#: ../Do/src/Do.Core/Controller.cs:156
+msgid "Previous Item"
+msgstr ""
+
 #: ../Do/src/Do.Core/Controller.cs:158
-msgid "Previous Result"
-msgstr "Prejšnji rezultat"
+msgid "Next Item"
+msgstr ""
+
+#: ../Do/src/Do.Core/Controller.cs:161
+msgid "First Item"
+msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:163
-msgid "Next Result"
-msgstr "Naslednji razultat"
+msgid "Last Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:168
-msgid "First Result"
-msgstr "Prvi razultat"
-
-#: ../Do/src/Do.Core/Controller.cs:173
-msgid "Last Result"
-msgstr "Zadnji rezultat"
-
-#: ../Do/src/Do.Core/Controller.cs:178
+#: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
 msgstr "Prejšnjih 5 rezultatov"
 
-#: ../Do/src/Do.Core/Controller.cs:183
+#: ../Do/src/Do.Core/Controller.cs:168
 msgid "Next 5 Results"
 msgstr "Naslednjih 5 rezultatov"
 
-#: ../Do/src/Do.Core/Controller.cs:188
-msgid "Step out of Item"
-msgstr "Stopi izven predmeta"
+#: ../Do/src/Do.Core/Controller.cs:171
+msgid "Step Out of Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:193
-msgid "Browse Into Item"
-msgstr "Brskaj znotraj predmeta"
+#: ../Do/src/Do.Core/Controller.cs:173
+msgid "Step Into Item"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:198
-msgid "Multiple selection"
-msgstr "Več izbir"
+#: ../Do/src/Do.Core/Controller.cs:176
+msgid "Select Multiple Items"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1049 ../data/gnome-do.desktop.in.h:2
+#: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
 msgstr "GNOME Do"
 
-#: ../Do/src/Do.Core/Controller.cs:1057
-msgid "Copyright © 2008 GNOME Do Developers"
-msgstr "Avtorske pravice © 2008 GNOME Do Razvijalci"
+#: ../Do/src/Do.Core/Controller.cs:1014
+msgid "Copyright © 2009 GNOME Do Developers"
+msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1058
+#: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
 "Do things as quickly as possible\n"
 "(but no quicker) with your files, bookmarks,\n"
@@ -470,7 +411,7 @@ msgstr ""
 "hitrejše) s tvojimi datotekami,\n"
 "zaznamki, aplikacijami, glasbo, kontakti in še!"
 
-#: ../Do/src/Do.Core/Controller.cs:1062
+#: ../Do/src/Do.Core/Controller.cs:1019
 msgid "Visit Homepage"
 msgstr "Obišči domačo stran"
 
@@ -482,10 +423,6 @@ msgstr "Namestitev preklicana"
 msgid "Community Plugins"
 msgstr "Skupinski Vključki"
 
-#: ../Do/src/Do.Core/Do.Core.Addins/DockletAddinClassifier.cs:35
-msgid "Docklets"
-msgstr ""
-
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
 msgstr "Vsi Vključki"
@@ -494,7 +431,7 @@ msgstr "Vsi Vključki"
 msgid "Official Plugins"
 msgstr "Uradni vključki"
 
-#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:102
+#: ../Do/src/Do.UI/ColorConfigurationWidget.cs:107
 msgid "Appearance"
 msgstr "Videz"
 
@@ -506,23 +443,31 @@ msgstr "Nekateri zahtevani dodatki (add"
 msgid "Installation failed"
 msgstr "Namestitev ni uspela."
 
-#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:41
+#: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:43
 msgid "General"
 msgstr "Splošno"
 
-#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:40
+#: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:42
 msgid "Keyboard"
 msgstr "Tipkovnica"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:44
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:49
 msgid "Action"
 msgstr "Dejanje"
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:56
 msgid "Shortcut"
 msgstr "Bližnjica"
 
-#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:54
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:73
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:101
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:140
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:143
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:159
+msgid "Disabled"
+msgstr ""
+
+#: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
 msgstr "Vtičniki"
 
@@ -561,7 +506,7 @@ msgstr "O aplikaciji GNOME Do"
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:33
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:53
 msgid "Clear Learning"
-msgstr ""
+msgstr "Jasno učenje"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:37
 msgid "Resets Do's learned usage data."
@@ -571,10 +516,6 @@ msgstr "Počisti Do-jevo naučene podatke o rabi."
 msgid "Are you sure you want to clear Do's learned usage data?"
 msgstr ""
 "Ali ste prepričani, da želite pobrisati naučene podatke o rabi v Gnome Do?"
-
-#: ../Do/src/Do.Universe/ClearLearningItem.cs:56
-msgid "Clear"
-msgstr "Počisti"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
@@ -586,19 +527,19 @@ msgstr "Podpri razvijanje aplikacije GNOME Do!"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:49
 msgid "Internal GNOME Do Items"
-msgstr ""
+msgstr "Notranji predmeti GNOME Do"
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:53
 msgid "Special items relevant to the inner-workings of GNOME Do."
-msgstr ""
+msgstr "Posebni predmeti, ki spadajo k notranjemu delovanju GNOME Do"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:60
 msgid "GNOME Do Item Sources"
-msgstr ""
+msgstr "Viri predmetov GNOME Do"
 
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
 msgid "Item Sources providing all items GNOME Do knows about."
-msgstr ""
+msgstr "Viri predmetov, ki oskrbujejo vse predmete, ki jih pozna GNOME Do"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
 msgid "Preferences"
@@ -632,6 +573,22 @@ msgstr "Brez imena"
 msgid "No description."
 msgstr "Brez opisa."
 
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
+msgid "Address"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
+msgid "Work Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
+msgid "Home Phone"
+msgstr ""
+
+#: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
+msgid "Mobile Phone"
+msgstr ""
+
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
@@ -656,7 +613,7 @@ msgstr "Tema uporabniškega vmesnika"
 
 #: ../data/gnome-do.schemas.in.h:4
 msgid "Do summon keybinding."
-msgstr ""
+msgstr "Tipkovna bližnjica priklica Do"
 
 #: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
@@ -681,3 +638,124 @@ msgstr "Nastavi za ključen ukaz, s katerim želiš priklicati Do."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Če se bo okno z rezultatom vedno pokazalo."
+
+#~ msgid "Zoom:"
+#~ msgstr "Povečava:"
+
+#~ msgid "Icon Size:"
+#~ msgstr "Velikost ikone:"
+
+#~ msgid "Orientation:"
+#~ msgstr "Usmerjenost:"
+
+#~ msgid "Hiding:"
+#~ msgstr "Skrivanje:"
+
+#~ msgid "Minimize"
+#~ msgstr "Pomanjšaj"
+
+#~ msgid "Restore"
+#~ msgstr "Obnovi"
+
+#~ msgid "Close All"
+#~ msgstr "Zapri vse"
+
+#~ msgid "Maximize"
+#~ msgstr "Razpni"
+
+#~ msgid "Trash"
+#~ msgstr "Koš za smeti"
+
+#~ msgid "Show"
+#~ msgstr "Prikaži"
+
+#~ msgid "Empty Trash"
+#~ msgstr "Izprazni koš"
+
+#~ msgid "Desktop"
+#~ msgstr "Namizje"
+
+#~ msgid "No result found for"
+#~ msgstr "Ni najdenih zadetkov za"
+
+#~ msgid ""
+#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
+#~ "\n"
+#~ "If you choose to empty the trash, all items in it\n"
+#~ "will be permanently lost. Please note that you\n"
+#~ "can also delete them separately."
+#~ msgstr ""
+#~ "<big><b>Izbrišem vse predmete iz koša?</b></big>\n"
+#~ "\n"
+#~ "Če izberete to možnost, bodo vsi\n"
+#~ "predmeti v košu izgubljeni. Vsak\n"
+#~ "predmet lahko izbrišete tudi posebej."
+
+#~ msgid "Open Trash"
+#~ msgstr "Odpri koš"
+
+#~ msgid "Copy Text"
+#~ msgstr "Kopiraj besedilo"
+
+#~ msgid "Summon GNOME Do"
+#~ msgstr "Prikliči GNOME Do"
+
+#~ msgid "Paste Text"
+#~ msgstr "Prilepi besedilo"
+
+#~ msgid "Previous Result"
+#~ msgstr "Prejšnji rezultat"
+
+#~ msgid "Enter text mode"
+#~ msgstr "Vstopi v besedilni način"
+
+#~ msgid "Multiple selection"
+#~ msgstr "Več izbir"
+
+#~ msgid "First Result"
+#~ msgstr "Prvi razultat"
+
+#~ msgid "Last Result"
+#~ msgstr "Zadnji rezultat"
+
+#~ msgid "Next Result"
+#~ msgstr "Naslednji razultat"
+
+#~ msgid "Copyright © 2008 GNOME Do Developers"
+#~ msgstr "Avtorske pravice © 2008 GNOME Do Razvijalci"
+
+#~ msgid "Browse Into Item"
+#~ msgstr "Brskaj znotraj predmeta"
+
+#~ msgid "Step out of Item"
+#~ msgstr "Stopi izven predmeta"
+
+#~ msgid "Indicate Multiple Windows"
+#~ msgstr "Prikaži več oken"
+
+#~ msgid "Switch Monitors"
+#~ msgstr "Zamenjaj monitorje"
+
+#~ msgid "To edit a shortcut, double-click it and type a new one."
+#~ msgstr "Za urejanje imena bližnjice jo dvokliknite in natipkajte novo ime."
+
+#~ msgid "Alternate Escape"
+#~ msgstr "Alternativni izhod"
+
+#~ msgid "<b>Docky Behavior</b>"
+#~ msgstr "<b>Docky obnašanje</b>"
+
+#~ msgid "Alternate Activate"
+#~ msgstr "Alternativna aktivacija"
+
+#~ msgid "Alternate Delete"
+#~ msgstr "Alternativni izbris"
+
+#~ msgid "Reinstate Removed Items"
+#~ msgstr "Obnovi izbrisane datoteke"
+
+#~ msgid "<b>Docklets</b>"
+#~ msgstr "<b>Dockleti</b>"
+
+#~ msgid "Docklets"
+#~ msgstr "Dockleti"
