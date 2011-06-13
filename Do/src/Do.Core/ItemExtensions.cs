@@ -40,7 +40,9 @@ namespace Do.Core
 		public static bool HasChildren (this Item self)
 		{
 			if (!has_children.ContainsKey (self)) {
-				has_children[self] = PluginManager.ItemSources
+				has_children[self] = self.GetChildren ().Any ()
+					||
+					PluginManager.ItemSources
 					.Any (source => source.Safe.ChildrenOfItem (self).Any ())
 					||
 					PluginManager.DynamicItemSources

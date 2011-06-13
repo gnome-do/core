@@ -189,20 +189,18 @@ namespace Do.Core
 		public bool ItemChildSearch ()
 		{
 			Item item = context.Selection;
-			List<Item> children = new List<Item> ();
+			IEnumerable<Item> children = item.GetChildren ();
 
-			foreach (ItemSource source in PluginManager.ItemSources) {
-				foreach (Item child in source.Safe.ChildrenOfItem (item).Where (i => AcceptChildItem (i)))
-					children.Add (child);
-			}
-			foreach (DynamicItemSource source in PluginManager.DynamicItemSources) {
-				foreach (Item child in source.ChildrenOfItem (item).Where (i => AcceptChildItem (i)))
-					children.Add (child);
-			}
+			children = children.Concat (PluginManager.ItemSources
+				.SelectMany (source => source.Safe.ChildrenOfItem (item))
+				.Where (i => AcceptChildItem (i)));
+			children = children.Concat (PluginManager.DynamicItemSources
+				.SelectMany (source => source.ChildrenOfItem (item))
+				.Where (i => AcceptChildItem (i)));
 
 			if (!children.Any ())
 				return false;
-			
+
 			SimpleSearchContext newContext = new SimpleSearchContext ();
 			newContext.ParentContext = context;
 			context = newContext;
