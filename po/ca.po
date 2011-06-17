@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: gnome-do\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:32+0000\n"
-"Last-Translator: Joan Duran <jodufi@gmail.com>\n"
+"PO-Revision-Date: 2011-06-16 22:49+0000\n"
+"Last-Translator: Aldo Mann <Unknown>\n"
 "Language-Team: Catalan <ubuntu-l10n-ca@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-06-17 04:31+0000\n"
+"X-Generator: Launchpad (build 13168)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -150,6 +150,7 @@ msgstr "No teniu un compte?"
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
 msgstr ""
+"<b><span size=\"x-large\">Hi ha un connector de Do per això!</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -160,11 +161,11 @@ msgstr ""
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "No em preguntis pels connectors del Do un altre cop."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Instaŀla"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -259,12 +260,12 @@ msgstr "S'ha completat amb èxit la validació del compte."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Què es Do?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Què fa el connector {0}?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -333,15 +334,15 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Convocar el Do"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "Convocar en mode de text"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "Entrar al mode de text"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -350,7 +351,7 @@ msgstr "Neteja"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Enganxa del porta-retalls"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -362,19 +363,19 @@ msgstr "Subfinestra següent"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Element anterior"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Element següent"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "Primer element"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Últim element"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -402,7 +403,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Copyright © 2009 GNOME Do Developers"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -468,7 +469,7 @@ msgstr "Drecera de teclat"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivat"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -580,19 +581,19 @@ msgstr "Sense descripció."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Adreça"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "Telèfon de la fèina"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Telèfon particular"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Telèfon mòbil"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -616,7 +617,7 @@ msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:3
 msgid "Do UI theme"
-msgstr "Tema d'interfície gràfica del Do"
+msgstr "Tema d'interfície d'usuari del Do"
 
 #: ../data/gnome-do.schemas.in.h:4
 msgid "Do summon keybinding."
@@ -630,7 +631,7 @@ msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
-msgstr "Oculta la finestra principal quan s'inicii el Do."
+msgstr "Oculta la finestra principal quan s'iniciï el Do."
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
