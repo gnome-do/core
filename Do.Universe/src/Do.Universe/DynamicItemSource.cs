@@ -42,54 +42,71 @@ namespace Do.Universe
 	/// </summary>
 	public abstract class DynamicItemSource : Item, IChildItemSource
 	{
-		private EventHandler<ItemsAvailableEventArgs> itemsAvailable;
-		private Dictionary<string, Item> itemBuffer;
-		private object event_lock;
+		private object event_lock = new object ();
+		private bool available_connected = false;
+		private bool unavailable_connected = false;
 
-		public DynamicItemSource ()
-		{
-			itemBuffer = new Dictionary<string, Item> ();
-			event_lock = new object ();
-			ItemsAvailable += (object sender, ItemsAvailableEventArgs e) =>
-			{
-				lock (itemBuffer) {
-					foreach (Item item in e.newItems)
-						itemBuffer.Add (item.UniqueId, item);
-				}
-			};
-			ItemsUnavailable += (object sender, ItemsUnavailableEventArgs e) =>
-			{
-				lock (itemBuffer) {
-					foreach (Item item in e.unavailableItems)
-						itemBuffer.Remove (item.UniqueId);
-				}
-			};
+		/// <summary>
+		/// This function is called when a listener has connected to the ItemsAvailable and ItemsUnavailable event.
+		/// The <typeparamref>DynamicItemSource</typeparamref> MUST NOT raise either event until this has been
+		/// called.
+		/// </summary>
+		protected abstract void Enable ();
+
+		/// <summary>
+		/// This function is called when a listener has disconnected to the ItemsAvailable and ItemsUnavailable event.
+		/// The <typeparamref>DynamicItemSource</typeparamref> MUST NOT raise either event after this has been
+		/// called until a subsequente Enable () call is made.
+		/// </summary>
+		protected abstract void Disable ();
+
+		protected bool Connected {
+			get { return available_connected && unavailable_connected; }
 		}
 
+		private EventHandler<ItemsAvailableEventArgs> itemsAvailable;
 		/// <summary>
 		/// The <typeparamref>DynamicItemSource</typeparamref> raises this event when
 		/// new Items are available and should be added to the Universe.
 		/// </summary>
 		public event EventHandler<ItemsAvailableEventArgs> ItemsAvailable {
 			add {
-				// If there have been any items previously created fire the callback off immediately
-				// to get the subscriber up to speed.
-				// Copy out itemBuffer so that we can modify it at will.  We don't know how long the callback
-				// will be holding on to it.
-				if (itemBuffer.Any ()) {
-					var args = new ItemsAvailableEventArgs ();
-					lock (itemBuffer) {
-						args.newItems = itemBuffer.Values.ToArray ();
+				lock (event_lock) {
+					if (available_connected) {
+						throw new InvalidOperationException ("Attempt to subscribe to ItemsAvailable while a subscriber already exists");
 					}
-					value (this, args);
-				}
-				lock (event_lock)
 					itemsAvailable += value;
+					available_connected = true;
+					if (Connected) {
+						Enable ();
+					}
+				}
 			}
 			remove {
-				lock (event_lock)
+				lock (event_lock) {
+					if (!available_connected) {
+						return;
+					}
 					itemsAvailable -= value;
+					if (Connected) {
+						Disable ();
+					}
+					available_connected = false;
+				}
 			}
+		}
+
+		protected void RaiseItemsAvailable (ItemsAvailableEventArgs args)
+		{
+			EventHandler<ItemsAvailableEventArgs> handler;
+			lock (event_lock) {
+				if (!Connected) {
+					// FIXME: This should really be a Log message rather than an exception
+					throw new InvalidOperationException ("Attempted to raise ItemsAvailable without a subscriber connected.");
+				}
+				handler = itemsAvailable;
+			}
+			handler (this, args);
 		}
 
 		private EventHandler<ItemsUnavailableEventArgs> itemsUnavailable;
@@ -100,13 +117,42 @@ namespace Do.Universe
 		/// </summary>
 		public event EventHandler<ItemsUnavailableEventArgs> ItemsUnavailable {
 			add {
-				lock (event_lock)
+				lock (event_lock) {
+					if (unavailable_connected) {
+						throw new InvalidOperationException ("Attempt to subscribe to ItemsUnavailable while a subscriber already exists");
+					}
 					itemsUnavailable += value;
+					unavailable_connected = true;
+					if (Connected) {
+						Enable ();
+					}
+				}
 			}
 			remove {
-				lock (event_lock)
+				lock (event_lock) {
+					if (!unavailable_connected) {
+						return;
+					}
 					itemsUnavailable -= value;
+					if (Connected) {
+						Disable ();
+					}
+					unavailable_connected = false;
+				}
 			}
+		}
+
+		protected void RaiseItemsUnavailable (ItemsUnavailableEventArgs args)
+		{
+			EventHandler<ItemsUnavailableEventArgs> handler;
+			lock (event_lock) {
+				if (!Connected) {
+					// FIXME: This should really be a Log message rather than an exception
+					throw new InvalidOperationException ("Attempted to raise ItemsUnavailable without a subscriber connected.");
+				}
+				handler = itemsUnavailable;
+			}
+			handler (this, args);
 		}
 
 		/// <value>
