@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: Jenaro Centeno Gómez <jenarocenteno@gmail.com>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-06-01 01:44+0000\n"
-"Last-Translator: Ab aeterno <Unknown>\n"
+"PO-Revision-Date: 2011-06-18 00:28+0000\n"
+"Last-Translator: Aldo Mann <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-02 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-06-18 04:34+0000\n"
+"X-Generator: Launchpad (build 13168)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -66,7 +66,7 @@ msgid ""
 msgstr ""
 "Para editar un acceso directo, haga doble click y escriba uno nuevo.\n"
 "Para restaurar el acceso directo por defecto, haga doble click y presione la "
-"barra espaciadora."
+"tecla de retrocés."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -159,8 +159,8 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
-"Un plugin Do para {0} está disponible para su instalación. ¿Desea usted que "
-"se lo habilitemos?"
+"Un plugin Do para {0} está disponible para su instalación. ¿Desea "
+"habilitarlo?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
@@ -336,8 +336,7 @@ msgid ""
 msgstr ""
 "<b>¡Docky ya no es un tema de Do!</b>\n"
 "Éste está ahora disponible como una aplicación separada. Su tema GNOME Do "
-"fué restaurado a \"Clásico\". Por favor no dude en cambiarlo en "
-"\"Preferencias\"."
+"fué restaurado a «Clásico». Por favor no dude en cambiarlo en «Preferencias»."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
@@ -370,19 +369,19 @@ msgstr "Panel siguiente"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr "Ítem previo"
+msgstr "Elemento anterior"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr "Ítem siguiente"
+msgstr "Elemento siguiente"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr "Primer Ítem"
+msgstr "Primer elemento"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr "Último Ítem"
+msgstr "Último elemento"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -394,15 +393,15 @@ msgstr "Cinco resultados siguientes"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr "Salir del ítem"
+msgstr "Salir del elemento"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr "Entrar en el ítem"
+msgstr "Entrar en el elemento"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr "Seleccione múltiples ítems"
+msgstr "Seleccione múltiples elementos"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
