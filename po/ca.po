@@ -10,13 +10,13 @@ msgstr ""
 "Project-Id-Version: gnome-do\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-06-18 00:31+0000\n"
+"PO-Revision-Date: 2011-06-22 23:54+0000\n"
 "Last-Translator: Aldo Mann <Unknown>\n"
 "Language-Team: Catalan <ubuntu-l10n-ca@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-19 04:31+0000\n"
+"X-Launchpad-Export-Date: 2011-06-23 04:32+0000\n"
 "X-Generator: Launchpad (build 13168)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
@@ -32,9 +32,9 @@ msgid ""
 "<b>Your display is not properly configured for theme and animation support. "
 "To use these features, you must enable compositing.</b>"
 msgstr ""
-"<b>La vostra pantalla no està configurada correctament per a admetre temes i "
-"animacions. Per a utilitzar aquestes funcions heu d'habilitar la "
-"composició.</b>"
+"<b>La pantalla no està configurada correctament per admetre temes i "
+"animacions. Per utilitzar aquestes funcions heu d'habilitar els efectes "
+"gràfics de l'escriptori.</b>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
@@ -112,7 +112,7 @@ msgstr "Mostra l'ombra de la finestra"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:113
 msgid "Animate window"
-msgstr "Finestra animada"
+msgstr "Anima la finestra"
 
 #: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:735
 #, csharp-format
@@ -132,7 +132,7 @@ msgstr "Teclegeu per a començar la cerca"
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
 msgid "Type to start searching."
-msgstr "Teclegeu per a iniciar la cerca."
+msgstr "Teclegeu per iniciar la cerca."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
@@ -153,7 +153,7 @@ msgstr "No teniu un compte?"
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
 msgstr ""
-"<b><span size=\"x-large\">Hi ha un connector de Do per això!</span></b>"
+"<b><span size=\"x-large\">Hi ha un connector de Do per això</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -161,12 +161,12 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
-"Un connector del Do per {0} està disponible per a ser instal·lat. Desitgeu "
+"Un connector del Do per {0} està disponible per ser instal·lat. Desitgeu "
 "activar-lo?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr "No em preguntis pels connectors del Do un altre cop."
+msgstr "No preguntar pels connectors del Do un altre cop."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
@@ -180,7 +180,7 @@ msgstr "S'ha produït un error en desar {0}."
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
-msgstr "No s'ha trobat la tecla «{0}» a l'anell de claus."
+msgstr "No s'ha trobat la clau «{0}» a l'anell de claus."
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:38
 msgid "gnome-keyring-daemon could not be reached!"
@@ -217,7 +217,7 @@ msgstr "Cerca aplicacions a moltes ubicacions."
 #: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:82
 #, csharp-format
 msgid "{0} Application Category"
-msgstr "{0} Categoria d'aplicació"
+msgstr "Categoria d'aplicacions {0}"
 
 #: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:83
 #, csharp-format
@@ -265,7 +265,7 @@ msgstr "S'ha completat amb èxit la validació del compte."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr "Què es Do?"
+msgstr "Què es el Do?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
@@ -338,20 +338,19 @@ msgid ""
 msgstr ""
 "<b>El Docky ja no és un tema del Do</b>\n"
 "Aquest està ara disponible com a una aplicació separada. El tema del GNOME "
-"Do ha estat reajustat al «Clàssic». Si us plau, no dobteu en canviar-lo en "
-"«Preferències»."
+"Do ha estat reajustat a «Clàssic». No dobteu en canviar-lo a Preferències."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr "Convocar el Do"
+msgstr "Invoca el Do"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr "Convocar en mode de text"
+msgstr "Invoca en mode de text"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr "Entrar al mode de text"
+msgstr "Entra al mode de text"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -396,15 +395,15 @@ msgstr "Cinc resultats següents"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr "Sortir de l'element"
+msgstr "Surt de l'element"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr "Entrar a l'element"
+msgstr "Entra a l'element"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr "Seleccioneu múltiples elements"
+msgstr "Seleccionar més d'un element"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -412,7 +411,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr "Copyright © 2009 GNOME Do Developers"
+msgstr "Drets d'autor © 2009 Desenvolupadors del GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -420,13 +419,13 @@ msgid ""
 "(but no quicker) with your files, bookmarks,\n"
 "applications, music, contacts, and more!"
 msgstr ""
-"Realitzeu tasques com més ràpid possible\n"
-"(però no més ràpid) amb els fitxers, adreces preferides,\n"
-"aplicacions, música, contactes i molt més!"
+"Realitzeu tasques el més ràpid possible\n"
+"(però no més ràpid) amb els fitxers, adreces d'interès,\n"
+"aplicacions, música, contactes i molt més."
 
 #: ../Do/src/Do.Core/Controller.cs:1019
 msgid "Visit Homepage"
-msgstr "Visiteu la pàgina inicial"
+msgstr "Visita la pàgina del projecte"
 
 #: ../Do/src/Do.Core/DoAddinInstaller.cs:37
 msgid "Installation cancelled"
@@ -598,7 +597,7 @@ msgstr "Telèfon de la fèina"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr "Telèfon particular"
+msgstr "Telèfon de casa"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
@@ -609,8 +608,8 @@ msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr ""
-"Feu les coses tan ràpid com podeu (però no més ràpid) amb els vostres "
-"fitxers, adreces d'interès, aplicacions, música, contactes i més!"
+"Realitzeu tasques el més ràpid possible (però no més ràpid) amb els fitxers, "
+"adreces d'interès, aplicacions, música, contactes i molt més."
 
 #: ../data/gnome-do.schemas.in.h:1
 msgid "Always show results window."
@@ -621,8 +620,8 @@ msgid ""
 "Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
 "Mini."
 msgstr ""
-"Canvia l'aparença del Do. Les entrades valides són Classic, Glass Frame i "
-"Mini."
+"Canvia l'aparença del Do. Les entrades valides són Classic (Clàssic), Glass "
+"Frame (Marc transparent) i Mini."
 
 #: ../data/gnome-do.schemas.in.h:3
 msgid "Do UI theme"
@@ -635,8 +634,7 @@ msgstr "Assignació de la tecla d'invocació del Do"
 #: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
 msgstr ""
-"Habiliteu aquesta opció per a evitar que el Do es mostri tan bon punt "
-"s'iniciï."
+"Habiliteu aquesta opció per evitar que el Do es mostri tan bon punt s'iniciï."
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
@@ -644,18 +642,17 @@ msgstr "Oculta la finestra principal quan s'iniciï el Do."
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr "Tecla utilitzada per a entrar en mode de text."
+msgstr "Tecla utilitzada per a entrar al mode de text."
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
 msgstr ""
-"Estableix-ho com a caràcter que s'hauria d'utilitzar per entrar en mode de "
-"text."
+"Poseu això en el caràcter que s'hauria d'utilitzar per entrar en mode text."
 
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
 msgstr ""
-"Estableix la tecla d'ordre que s'hauria utilitzar per a invocar el Do."
+"Poseu això en la tecla d'ordre que s'hauria utilitzar per a invocar el Do."
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
