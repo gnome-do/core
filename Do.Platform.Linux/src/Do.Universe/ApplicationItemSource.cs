@@ -226,8 +226,8 @@ namespace Do.Universe.Linux {
 		{
 			return new [] {
 				// These are XDG variables...
-				"XDG_DATA_HOME",
-				"XDG_DATA_DIRS"
+				"XDG_DATA_DIRS",
+				"XDG_DATA_HOME"
 			}.SelectMany (v => GetXdgEnvironmentPaths (v));
 		}
 		
@@ -244,8 +244,8 @@ namespace Do.Universe.Linux {
 					);
 					break;
 				case "XDG_DATA_DIRS":
-					yield return "/usr/local/share/applications";
 					yield return "/usr/share/applications";
+					yield return "/usr/local/share/applications";
 					break;
 				}
 			} else {
