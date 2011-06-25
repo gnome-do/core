@@ -10,8 +10,11 @@
 	</Dependencies>
 	
 	<Extension path="/Do/ItemSource">
-		<ItemSource type="Do.Universe.Linux.ApplicationItemSource" />
 		<ItemSource type="Do.Universe.Linux.GNOMESpecialLocationsItemSource" />
+	</Extension>
+
+	<Extension path="/Do/DynamicItemSource">
+	  <DynamicItemSource type="Do.Universe.Linux.ApplicationItemSource" />
 	</Extension>
 
 	<Extension path="/Do/Service">

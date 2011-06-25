@@ -29,23 +29,20 @@ using Mono.Unix;
 
 namespace Do.Universe.Linux {
 
-	public class ApplicationItemSource : ItemSource {
+	public class ApplicationItemSource : DynamicItemSource {
 
 		const bool show_hidden = false;
+		Dictionary<string, ApplicationItem> app_items = new Dictionary<string, ApplicationItem> ();
+		List<CategoryItem> categories = new List<CategoryItem> ();
+
 		static IEnumerable<string> desktop_file_directories;
-		
-		IEnumerable<Item> app_items;
-		
+		List<FileSystemWatcher> directoryMonitors = new List<FileSystemWatcher> ();
+
 		static ApplicationItemSource ()
 		{
 			desktop_file_directories = GetDesktopFileDirectories ();
 		}
 		
-		public ApplicationItemSource ()
-		{
-			app_items = Enumerable.Empty<Item> ();
-		}
-
 		public override IEnumerable<Type> SupportedItemTypes {
 			get { 
 				yield return typeof (ApplicationItem); 
@@ -76,12 +73,13 @@ namespace Do.Universe.Linux {
 		/// directory
 		/// where .desktop files can be found.
 		/// </param>
-		IEnumerable<ApplicationItem> LoadDesktopFiles (string dir)
+		IEnumerable<KeyValuePair<string, ApplicationItem>> LoadDesktopFiles (string dir)
 		{
 			return GetDesktopFiles ()
 				.Where (ShouldUseDesktopFile)
-				.Select (f => ApplicationItem.MaybeCreateFromDesktopItem (f)).Where (a => a != null)
-				.Where (ShouldUseApplicationItem);
+				.Select (f => new KeyValuePair<string, ApplicationItem> (f, ApplicationItem.MaybeCreateFromDesktopItem (f)))
+				.Where (a => a.Value != null)
+				.Where (a => ShouldUseApplicationItem (a.Value));
 		}
 		
 		IEnumerable<string> GetDesktopFiles ()
@@ -121,33 +119,94 @@ namespace Do.Universe.Linux {
 		{
 			return app.IsAppropriateForCurrentDesktop && (show_hidden || !app.NoDisplay);
 		}
-		
-		public override void UpdateItems ()
+
+		override protected void Enable ()
 		{
-			IEnumerable<ApplicationItem> appItems = desktop_file_directories
-				.SelectMany (dir => LoadDesktopFiles (dir));
-			
-			IEnumerable<CategoryItem> categoryItems = appItems
-				.SelectMany (a => LoadCategoryItems (a));
+			ItemsAvailableEventArgs eventArgs = new ItemsAvailableEventArgs ();
+			lock (app_items) {
+				foreach (var directory in desktop_file_directories.Where (dir => Directory.Exists (dir))) {
+					var monitor = new FileSystemWatcher (directory, "*.desktop");
+					monitor.Created += OnFileCreated;
+					monitor.Deleted += OnFileDeleted;
+					monitor.Error += OnWatcherError;
+					monitor.EnableRaisingEvents = true;
+					directoryMonitors.Add (monitor);
+					Log<ApplicationItemSource>.Debug ("Watching directory {0} for changes.", directory);
+				}
+				foreach (var fileItemPair in desktop_file_directories.SelectMany (dir => LoadDesktopFiles (dir))) {
+					var previousMatch = app_items.FirstOrDefault (pair => pair.Value == fileItemPair.Value);
+					if (previousMatch.Key == null && previousMatch.Value == null) {
+						app_items.Add (fileItemPair.Key, fileItemPair.Value);
+					} else if (fileItemPair.Key != previousMatch.Key){
+						Log.Debug ("Desktop file {0} hides previous file {1}", fileItemPair.Key, previousMatch.Key);
+						app_items.Remove (previousMatch.Key);
+						app_items.Add (fileItemPair.Key, fileItemPair.Value);
+					}
+				}
+				eventArgs.newItems = app_items.Values.Cast<Item> ().ToList ();
 
-			app_items = appItems
-				.Cast<Item> ()
-				.Concat (categoryItems.Cast<Item> ())
-				.Distinct ()
-				.ToArray ();
+				categories = app_items.SelectMany (pair => LoadCategoryItems (pair.Value)).Distinct ().ToList ();
+				eventArgs.newItems = eventArgs.newItems.Concat (categories.ToArray ());
+			}
+			RaiseItemsAvailable (eventArgs);
 		}
 
-		public override IEnumerable<Item> Items {
-			get { return app_items; }
+		override protected void Disable ()
+		{
+			foreach (var watcher in directoryMonitors) {
+				watcher.Dispose ();
+			}
+			directoryMonitors.Clear ();
+			app_items.Clear ();
 		}
-		
+
+		void OnWatcherError (object sender, ErrorEventArgs e)
+		{
+			Log<ApplicationItemSource>.Error ("Error in directory watcher: {0}", e.GetException ().Message);
+		}
+
+		void OnFileDeleted (object sender, FileSystemEventArgs e)
+		{
+			Item disappearingItem;
+			lock (app_items) {
+				Log<ApplicationItemSource>.Debug ("Deskop file removed: {0}", e.FullPath);
+				if (!app_items.ContainsKey (e.FullPath)) {
+					Log.Error ("Desktop file {0} deleted, but not found in Universe", e.FullPath);
+					// FIXME: Should this throw an exception?
+					return;
+				}
+				disappearingItem = app_items[e.FullPath];
+				app_items.Remove (e.FullPath);
+			}
+			RaiseItemsUnavailable (new ItemsUnavailableEventArgs () { unavailableItems = new Item[] { disappearingItem }});
+		}
+
+		void OnFileCreated (object sender, FileSystemEventArgs e)
+		{
+			Log<ApplicationItemSource>.Debug ("New Desktop file found: {0}", e.FullPath);
+			var newItem = ApplicationItem.MaybeCreateFromDesktopItem (e.FullPath);
+			if (newItem == null) {
+				Log.Error ("Found new Desktop file {0} but unable to create an item in the Universe", e.FullPath);
+				return;
+			}
+			lock (app_items) {
+				if (app_items.ContainsKey (e.FullPath)) {
+					Log.Error ("Attempting to add duplicate ApplicationItem {0} to Universe", e.FullPath);
+					return;
+				}
+				app_items[e.FullPath] = newItem;
+			}
+			RaiseItemsAvailable (new ItemsAvailableEventArgs () { newItems = new Item[] { newItem }});
+		}
+
 		public override IEnumerable<Item> ChildrenOfItem (Item item)
 		{
 			if (item is CategoryItem) {
 				CategoryItem catItem = item as CategoryItem;
-				return app_items
+				return app_items.Values
 					.Where (a => a is ApplicationItem)
-					.Where (a => (a as ApplicationItem).Categories.Contains (catItem.Category));
+					.Where (a => (a as ApplicationItem).Categories.Contains (catItem.Category))
+					.Cast<Item> ();
 			} else {
 				return Enumerable.Empty<Item> ();
 			}
