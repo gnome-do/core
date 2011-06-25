@@ -131,7 +131,7 @@ namespace Do.Universe.Linux {
 					monitor.Error += OnWatcherError;
 					monitor.EnableRaisingEvents = true;
 					directoryMonitors.Add (monitor);
-					Log<ApplicationItemSource>.Debug ("Watching directory {0} for changes.", directory);
+					Log<ApplicationItemSource>.Debug ("Watching directory {0} for application changes.", directory);
 				}
 				foreach (var fileItemPair in desktop_file_directories.SelectMany (dir => LoadDesktopFiles (dir))) {
 					var previousMatch = app_items.FirstOrDefault (pair => pair.Value == fileItemPair.Value);
@@ -234,7 +234,7 @@ namespace Do.Universe.Linux {
 		static IEnumerable<string> GetXdgEnvironmentPaths (string xdgVar)
 		{
 			string envPath = Environment.GetEnvironmentVariable (xdgVar);
-			
+
 			if (string.IsNullOrEmpty (envPath)) {
 				switch (xdgVar) {
 				case "XDG_DATA_HOME":
