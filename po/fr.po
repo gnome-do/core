@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: gnome-do\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-04-09 20:47+0000\n"
-"Last-Translator: viktor <Unknown>\n"
+"PO-Revision-Date: 2011-07-02 19:03+0000\n"
+"Last-Translator: Emmanuel Brun <Unknown>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-07-03 04:31+0000\n"
+"X-Generator: Launchpad (build 13168)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -65,6 +65,8 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"Pour éditer un raccourci, double cliquer sur celui-ci et rentrer y un autre\n"
+"Pour remettre un raccourci par défaut, double cliquer et appuyer sur retour."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -148,7 +150,7 @@ msgstr "Vous n'avez pas de compte ?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
-msgstr ""
+msgstr "<b><span size=\"x-large\">Il y a un add-on Do pour ceci !</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -163,7 +165,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Installer"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -258,7 +260,7 @@ msgstr "La validation du compte a réussi !"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Qu'est-ce que Do?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
