@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: gc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-07-05 19:24+0000\n"
+"PO-Revision-Date: 2011-07-07 19:55+0000\n"
 "Last-Translator: Irmak Bıçakçıgil <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-06 04:32+0000\n"
+"X-Launchpad-Export-Date: 2011-07-08 04:41+0000\n"
 "X-Generator: Launchpad (build 13168)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
@@ -364,19 +364,19 @@ msgstr "Sonraki Panel"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Önceki Nesne"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Sonraki Nesne"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "İlk Nesne"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Son Nesne"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -579,7 +579,7 @@ msgstr "Açıklama yok."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Adres"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
