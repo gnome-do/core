@@ -123,7 +123,8 @@ namespace Do.Platform.Linux
 			foreach (string argument in arguments) {
 				executor.StandardInput.Write ("{0}\0", argument);
 			}
-			Log<EnvironmentService>.Debug ("Executing command “{0}”", arguments.Aggregate ((cur, item) => cur + " " + item));
+			executor.StandardInput.Close ();
+			Log<EnvironmentService>.Debug ("Executing command “{0} {1}”", command, arguments.Aggregate ((cur, item) => cur + " " + item));
 			return executor;
 		}
 
