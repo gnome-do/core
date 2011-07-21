@@ -53,9 +53,9 @@ namespace Do.Platform.Common
 				//try to register the key from the prefs with the OS
 				if (!RegisterOSKey (binding.KeyString, binding.Callback)) {
 					//if we fail to register the summon key, try again with the default binding
-					if (RegisterOSKey (binding.DefaultKeyString, binding.Callback)) {
+					if (!string.IsNullOrEmpty (binding.DefaultKeyString) && RegisterOSKey (binding.DefaultKeyString, binding.Callback)) {
 						binding.KeyString = binding.DefaultKeyString;
-					} else {
+					} else if (!string.IsNullOrEmpty (binding.KeyString) && !string.IsNullOrEmpty (binding.DefaultKeyString)) {
 						Log<AbstractKeyBindingService>.Error ("Failed to bind \"{0}\" to \"{1}\"", binding.Description, 
 							binding.KeyString);
 						binding.KeyString = "";
