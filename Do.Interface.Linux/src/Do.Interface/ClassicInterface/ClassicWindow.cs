@@ -322,6 +322,7 @@ namespace Do.Interface {
 
 		public void Vanish ()
 		{
+			Interface.Windowing.UnpresentWindow (this);
 			Hide ();
 		}
 
