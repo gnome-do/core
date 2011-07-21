@@ -11,7 +11,18 @@ AC_DEFUN([SHAMROCK_FIND_MONO_2_0_COMPILER],
 AC_DEFUN([SHAMROCK_FIND_C_SHARP_3_0_COMPILER],
 [	
 	AC_REQUIRE([SHAMROCK_FIND_MONO_RUNTIME])
-	SHAMROCK_FIND_PROGRAM_OR_BAIL(MCS, gmcs)
+	AC_PATH_PROG(DMCS, dmcs, no)
+ 	if test "x$DMCS" = "xno"; then
+	   	AC_PATH_PROG(GMCS, gmcs, no)
+		if test "x$GMCS" = "xno"; then
+		   	AC_MSG_ERROR([You need to install a C♯ compiler.'])
+		else
+			MCS=$GMCS
+		fi
+	else
+		MCS=$DMCS
+	fi
+	AC_SUBST(MCS)
 	changequote(<<, >>)
 	MCS_VERSION=$($MCS --version | egrep -o "([[:digit:]]\.)+[[:digit:]]+")
 	changequote([, ])
