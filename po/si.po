@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:41+0000\n"
-"Last-Translator: Dinuka <bbelekkaya@gmail.com>\n"
+"PO-Revision-Date: 2011-07-24 01:42+0000\n"
+"Last-Translator: Dinuka Thilanga <bbelekkaya@gmail.com>\n"
 "Language-Team: Sinhalese <si@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-07-24 04:31+0000\n"
+"X-Generator: Launchpad (build 13405)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -33,7 +33,7 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
-msgstr ""
+msgstr "<span size=\"large\"><b>යාවත්කාලීන පලගින් තිබේ.!</b></span>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
@@ -45,15 +45,15 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
 msgid "Start GNOME Do at login."
-msgstr ""
+msgstr "ලොගින් වීමේදී GNOME Do අරඹන්න."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
-msgstr ""
+msgstr "පළමු ඇරඹුමේදී (ක්ෂණික විධියෙ) කවුළු සඟවන්න."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
 msgid "Show notification icon"
-msgstr ""
+msgstr "නිවේදන දැනුම් දෙන අයිකනය පෙන්වන්න"
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:63
 msgid ""
@@ -79,7 +79,7 @@ msgstr "PluginConfigurationWindow"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
-msgstr ""
+msgstr "<span size=\"large\" weight=\"heavy\">මෙහි පලගිනයේ නමය</span>"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
 msgid "page1"
