@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: gnome-do\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-07-02 19:03+0000\n"
-"Last-Translator: Emmanuel Brun <Unknown>\n"
+"PO-Revision-Date: 2011-08-02 07:16+0000\n"
+"Last-Translator: xemard.nicolas <Unknown>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-03 04:31+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-08-03 04:32+0000\n"
+"X-Generator: Launchpad (build 13573)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -158,10 +158,12 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"Un plugin Do pour {0} est disponible pour installation. Souhaitez-vous que "
+"nous l'activions pour vous?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Ne plus me demandez à propos de plugins Do."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
@@ -265,7 +267,7 @@ msgstr "Qu'est-ce que Do?"
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Que fait le plugin {0} ?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -331,6 +333,10 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"<b>Docky n'est plus un thème Do!</b>\n"
+"Il est désormais disponible en tant qu'application à part entière. Votre "
+"thème GNOME Do a été remis à Classic. N'hésitez surtout pas à le changer "
+"dans les préférences."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
@@ -342,7 +348,7 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "Entrer dans le mode Texte"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
