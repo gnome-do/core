@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-08-01 15:26+0000\n"
-"Last-Translator: Daniel Nylander <yeager@ubuntu.com>\n"
+"PO-Revision-Date: 2011-08-06 06:29+0000\n"
+"Last-Translator: Stefan Norin <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-08-02 04:31+0000\n"
-"X-Generator: Launchpad (build 13552)\n"
+"X-Launchpad-Export-Date: 2011-08-07 04:34+0000\n"
+"X-Generator: Launchpad (build 13613)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -64,6 +64,9 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"För att redigera en genväg, dubbelklicka på den och skriv in en ny.\n"
+"För att återställa en genväg till den ursprungliga, dubbelklicka och tryck "
+"på backsteg."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -149,6 +152,8 @@ msgstr "Har du inget konto?"
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
 msgstr ""
+"<b><span size=\"x-large\">Det finns en Do insticksmodul för det "
+"där!</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -159,7 +164,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Fråga mig inte om Do insticksmoduler igen."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
@@ -263,7 +268,7 @@ msgstr "Vad är Do?"
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Vad gör insticksmodulen {0}?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -643,161 +648,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Huruvida resultatfönstret alltid ska visas."
-
-#~ msgid "_About"
-#~ msgstr "_Om"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "För att redigera en genväg, dubbelklicka på den och skriv in en ny."
-
-#~ msgid "_Theme:"
-#~ msgstr "_Tema:"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimera"
-
-#~ msgid "Restore"
-#~ msgstr "Återställ"
-
-#~ msgid "Close All"
-#~ msgstr "Stäng alla"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Dölj automatiskt"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Visa GNOME Do"
-
-#~ msgid "No result found for"
-#~ msgstr "Inga resultat hittades för"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Avancerade indikatorer"
-
-#~ msgid "Show Trash"
-#~ msgstr "Visa papperskorg"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Tillåt överlappade fönster"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Zooma ikoner"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Växla skärmar"
-
-#~ msgid "Trash"
-#~ msgstr "Papperskorg"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Ta bort från docka"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Det inträffade ett fel vid installation av de valda "
-#~ "insticksmodulerna</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Det inträffade ett fel vid installation av den valda "
-#~ "insticksmodulen</span></b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zooma:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Töm papperskorgen"
-
-#~ msgid "Show"
-#~ msgstr "Visa"
-
-#~ msgid "Desktop"
-#~ msgstr "Skrivbordet"
-
-#~ msgid "Paste Text"
-#~ msgstr "Klistra in text"
-
-#~ msgid "Copy Text"
-#~ msgstr "Kopiera text"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Töm papperskorgen?</b></big>\n"
-#~ "\n"
-#~ "Om du väljer att tömma papperskorgen, kommer samtliga objekt att försvinna "
-#~ "för gott. Lägg märke till att du även kan ta bort dem en för en."
-
-#~ msgid "Open Trash"
-#~ msgstr "Öppna papperskorgen"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky beteende</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Återinför borttagna objekt"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientering:"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Alternativ avbrytning"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Alternativ aktivering"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Alternativ radering"
-
-#~ msgid "First Result"
-#~ msgstr "Första resultatet"
-
-#~ msgid "Last Result"
-#~ msgstr "Sista resultatet"
-
-#~ msgid "Previous Result"
-#~ msgstr "Föregående resultat"
-
-#~ msgid "Next Result"
-#~ msgstr "Nästa resultat"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Flera val"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklets"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 GNOME Do Developers"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Byt till textläge"
-
-#~ msgid "Hiding:"
-#~ msgstr "Dölj:"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximera"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Ikonstorlek:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indikera flera fönster"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Gå ut ur objektet"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Gå in i objektet"
