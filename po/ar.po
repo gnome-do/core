@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-08-09 02:08+0000\n"
-"Last-Translator: Ahmed Toulan <thelinuxer@ubuntu.com>\n"
+"PO-Revision-Date: 2011-08-14 09:51+0000\n"
+"Last-Translator: Jonathan N. Hindi <jonathan.hindi@gmail.com>\n"
 "Language-Team: American English <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-08-10 04:31+0000\n"
-"X-Generator: Launchpad (build 13636)\n"
+"X-Launchpad-Export-Date: 2011-08-15 04:31+0000\n"
+"X-Generator: Launchpad (build 13674)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -147,6 +147,7 @@ msgstr "أليس لديك حساب؟"
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
 msgstr ""
+"<b><span size=\"x-large\">هناك برنامج مساعد ل\"Do\" لهذا !</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -154,6 +155,7 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"هناك برنامج ل\"Do\" مساعد ل {0} متوفرة للتثبيت. هل تحب منا لتمكينه لك؟"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
@@ -359,11 +361,11 @@ msgstr "الجزء التّالي"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "البند السابق"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "البند التّالي"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
@@ -391,7 +393,7 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "تحديد عناصر متعددة"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
