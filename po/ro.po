@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-06-30 01:45+0000\n"
-"Last-Translator: Osman Eduard <Unknown>\n"
+"PO-Revision-Date: 2011-08-25 18:09+0000\n"
+"Last-Translator: Ciprian Panaite <Unknown>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-01 04:31+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-08-26 04:30+0000\n"
+"X-Generator: Launchpad (build 13779)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -158,6 +158,8 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"Un plugin Do pentru {0} este disponibil pentru instalare. Doriți să vi-l "
+"activăm noi?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
@@ -265,7 +267,7 @@ msgstr "Ce este Do?"
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Care este rolul pluginului {0}?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -331,14 +333,18 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"<b>Docky nu mai este o temă Do!</b>\n"
+"Este acum disponibil ca și aplicație independentă. Tema dumneavoastră pentru "
+"GNOME Do a fost restabilită la Classic. Poate fi schimbată fără robleme de "
+"la Preferințe."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Deschideți Do"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "Deschideți în modul text"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
@@ -387,11 +393,11 @@ msgstr "Următoarele 5 Rezultate"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "Părăsiți elementul"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "Accesați elementul"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
@@ -646,164 +652,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Dacă fereastra de rezultate va fi tot timpul afișată."
-
-#~ msgid "_About"
-#~ msgstr "_Despre"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Temă:"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimizează"
-
-#~ msgid "Restore"
-#~ msgstr "Restaurează"
-
-#~ msgid "Close All"
-#~ msgstr "Închide toate"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Cheamă pe GNOME Do"
-
-#~ msgid "Trash"
-#~ msgstr "Gunoi"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">A apărut o eroare la instalarea extensiilor "
-#~ "selectate</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">A apărut o eroare la instalarea extensiei "
-#~ "selectate</span></b>"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Indicatori avansați"
-
-#~ msgid "Show Trash"
-#~ msgstr "Arată gunoiul"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Permite suprapunerea ferestrelor"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Mărește pictogramele"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Schimbă între monitoare"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Ascunde automat"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Elimină din bara de docare"
-
-#~ msgid "No result found for"
-#~ msgstr "Niciun rezultat găsit pentru"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zoom:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Mărime pictogramă:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientare:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Ascundere:"
-
-#~ msgid "Show"
-#~ msgstr "Arată"
-
-#~ msgid "Copy Text"
-#~ msgstr "Copiază textul"
-
-#~ msgid "Paste Text"
-#~ msgstr "Inserare text"
-
-#~ msgid "Previous Result"
-#~ msgstr "Rezultatul Precedent"
-
-#~ msgid "First Result"
-#~ msgstr "Primul Rezultat"
-
-#~ msgid "Last Result"
-#~ msgstr "Ultimul Rezultat"
-
-#~ msgid "Next Result"
-#~ msgstr "Următorul Rezultat"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Selecţi Multiple"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Goleşte gunoiul"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximizează"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indică Ferestre Multiple"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Ieşire Alternativă"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Activare Alternativă"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Ştergere Alternativă"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 Dezvoltatori GNOME Do"
-
-#~ msgid "Open Trash"
-#~ msgstr "Deschide Coş de Gunoi"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Restaurează Obiectele Înlăturate"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Intră în modul text"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Goliți toate elementele din coșul de gunoi?</b></big>\n"
-#~ "\n"
-#~ "Dacă doriți să goliți coșul de gunoi, toate elementele din el\n"
-#~ "vor fi pierdute permanent. Luați în considerare faptul că\n"
-#~ "puteți de asemenea să le ștergeți separat."
-
-#~ msgid "Step out of Item"
-#~ msgstr "Ieși din element"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Pentru a modifica o scurtătură, faceți dublu-clic pe ea şi introduceți noile "
-#~ "date."
-
-#~ msgid "Desktop"
-#~ msgstr "Desktop"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklets"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Rasfoieste element"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Comportament Docky</b>"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
