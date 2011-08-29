@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-08-26 21:32+0000\n"
+"PO-Revision-Date: 2011-08-28 20:26+0000\n"
 "Last-Translator: Ye Htut Win <Unknown>\n"
 "Language-Team: Burmese <my@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-08-27 04:34+0000\n"
+"X-Launchpad-Export-Date: 2011-08-29 04:30+0000\n"
 "X-Generator: Launchpad (build 13794)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
@@ -549,99 +549,105 @@ msgstr "GNOME Do ၏အမ်ိုးအစား ရင္းျမစ္မ�
 #: ../Do/src/Do.Universe/ItemSourceItemSource.cs:64
 msgid "Item Sources providing all items GNOME Do knows about."
 msgstr ""
+"GNOME Do တြင္အသံုးျပုေသာအမ်ိုးအစားအားလံုးအတြက္ေထာက္ပံ့ေသာအရင္းအျမစ္မ်ား"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
 msgid "Preferences"
-msgstr ""
+msgstr "ဦးစားေပးေရြးခ်ယ္မွု"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
 msgid "Adjust Do's settings, manage plugins, etc."
-msgstr ""
+msgstr "Do ၏အျပင္အဆင္မ်ား၊ထပ္ေပါင္းမွုမ်ား စသည္တို့အား ထိန္းညိွရန္"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
 msgid "Quit"
-msgstr ""
+msgstr "လက္ရွိအပိုင္းမွထြက္သည္"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
-msgstr ""
+msgstr "GNOME Do မွထြက္၍ မျကာမွီျပန္လာမည္။"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:63
 msgid "Selected text"
-msgstr ""
+msgstr "ေရြးခ်ယ္ထားေသာစာလံုး"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:67
 msgid "Currently selected text."
-msgstr ""
+msgstr "ယခုလက္ရွိေရြးထားေသာစာလံုး"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:42
 msgid "No name"
-msgstr ""
+msgstr "အမည္မေပးရေသး"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:43
 msgid "No description."
-msgstr ""
+msgstr "ေဖာ္ျပမွုမရွိေသးျခင္း"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "ဖြင့္လို့သည့္လိပ္စာ"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "အလုပ္မွဖုန္း"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "အိမ္ဖုန္း"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "ေရြ့လ်ားဖုန္း"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
 msgstr ""
+"ျမန္နုိင္သမွ်ျမန္ေအာင္ေဆာင္ရြက္ပါ။(သို့ေသာ္ မျမန္ပါနွင့္) သင့္၏ "
+"ဖိုင္မ်ား၊မွတ္တမ္းမ်ား၊ေဆာင္ရြက္မွုဆိုင္ရာမ်ား၊ေတးဂီတမ်ား၊ဆက္သြယ္ရန္မ်ားနွင့္"
+"အျခားအရာမ်ားအတြက္"
 
 #: ../data/gnome-do.schemas.in.h:1
 msgid "Always show results window."
-msgstr ""
+msgstr "အျမဲတမ္းအေျဖမ်ားကိုေဖာ္ျပပါ"
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
 "Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
 "Mini."
 msgstr ""
+"Do ၏အသြင္အျပင္ကိုေျပာင္းလဲပါ။သက္တမ္းရွိေသးေသာ "
+"ဂႏၱဝင္ပံုစံ၊မွန္မ်က္နွာျပင္ပံုစံ နွင့္ ပံုစံေသး။"
 
 #: ../data/gnome-do.schemas.in.h:3
 msgid "Do UI theme"
-msgstr ""
+msgstr "Do UI အသြင္အျပင္"
 
 #: ../data/gnome-do.schemas.in.h:4
 msgid "Do summon keybinding."
-msgstr ""
+msgstr "Do အတြက္လက္နွိပ္ကြက္မွအျမန္ဝင္နုိင္မွုမ်ားစုစည္းထား"
 
 #: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
-msgstr ""
+msgstr "စဖြင့္သည္နွင့္ Do ပြင့္လာေစရန္ယခု ခ်ိန္ကိုက္ထားမွုျဖင့္ေဆာင္ရြက္သည္။"
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
-msgstr ""
+msgstr "Do စပြင့္ခ်ိန္တြင္ အဓိက window ကိုဖြက္ထားသည္။"
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr ""
+msgstr "စာလံုးျဖင့္ေရးေသာေနရာသို့ဝင္ေနက်ေသာ့"
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
-msgstr ""
+msgstr "စာလံုးျဖင့္ေရးသားေသာေနရာတြင္သံုးရန္ ဝိေသသအျဖစ္ ထားသည္။"
 
 #: ../data/gnome-do.schemas.in.h:9
 msgid "Set this to the key command you would like to use to summon Do."
-msgstr ""
+msgstr "သင့္အေနျဖင့္ Do အစုအေပါင္းတြင္သံုးရန္ အမိန့္ေပးေသာ့ခ်က္အျဖစ္ထားသည္။"
 
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
-msgstr ""
+msgstr "အေျဖမ်ားကိုအျမဲတမ္းေဖာ္ျပပါမည္။"

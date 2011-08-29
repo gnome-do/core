@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-08-06 13:44+0000\n"
-"Last-Translator: Rafael Neri <Unknown>\n"
+"PO-Revision-Date: 2011-08-28 12:19+0000\n"
+"Last-Translator: Charles do Nascimento Liesenfeld <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-08-07 04:34+0000\n"
-"X-Generator: Launchpad (build 13613)\n"
+"X-Launchpad-Export-Date: 2011-08-29 04:30+0000\n"
+"X-Generator: Launchpad (build 13794)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -340,11 +340,11 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Não Convocar"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "Convocar em Modo de Texto"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
@@ -393,11 +393,11 @@ msgstr "Próximos 5 Resultados"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "Saia do item"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "Etapa em item"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"

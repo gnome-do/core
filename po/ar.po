@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-08-14 09:51+0000\n"
+"PO-Revision-Date: 2011-08-28 17:55+0000\n"
 "Last-Translator: Jonathan N. Hindi <jonathan.hindi@gmail.com>\n"
 "Language-Team: American English <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-08-15 04:31+0000\n"
-"X-Generator: Launchpad (build 13674)\n"
+"X-Launchpad-Export-Date: 2011-08-29 04:30+0000\n"
+"X-Generator: Launchpad (build 13794)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -159,7 +159,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "لا تسألني عن الإضافات \"Do\" من جديد."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
@@ -263,7 +263,7 @@ msgstr "ما هو Do ؟"
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "ماذا  ماذا تفعل {0} هذه الإضافة ؟"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -332,11 +332,11 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "استدعى \"Do\""
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "استدعاء في وضع النص"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
