@@ -195,14 +195,43 @@ namespace Do.Universe.Linux {
 
 		public bool IsAppropriateForCurrentDesktop {
 			get {
-				// This check should eventually account for xfce too.  Ideally here
-				// though, we wish to throw away certain items that are not useful to
-				// the current DE.  We are using the same check that xdg-open uses.
-				if (!item.AttrExists ("OnlyShowIn")) return true;
+				string onlyShowIn = item.GetString ("OnlyShowIn");
+				string notShowIn = item.GetString ("NotShowIn");
+				string desktopSession = Environment.GetEnvironmentVariable ("XDG_CURRENT_DESKTOP");
 
-				string show_in = item.GetString ("OnlyShowIn").ToLower ();
-				return !show_in.Contains ("kde") || 
-					Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true";
+				if (desktopSession == null) {
+					// Legacy fallbacks:
+					// If KDE_FULL_SESSION is true, assume kde.
+					// Else, assume GNOME
+					if (Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true") {
+						desktopSession = "KDE";
+					} else {
+						desktopSession = "GNOME";
+					}
+				}
+
+				// It doesn't make sense for a DE to appear in both OnlyShowIn and
+				// NotShowIn.  We choose to prefer OnlyShowIn in this case as it makes
+				// the following checks easier.
+				if (onlyShowIn != null) {
+					foreach (string environment in onlyShowIn.Split (';')) {
+						if (desktopSession.Equals (environment, StringComparison.InvariantCultureIgnoreCase)) {
+							return true;
+						}
+					}
+					// There's an OnlyShowIn attribute, and the current environment doesn't match.
+					return false;
+				}
+
+				if (notShowIn != null) {
+					foreach (string environment in notShowIn.Split (';')) {
+						if (desktopSession.Equals (environment, StringComparison.InvariantCultureIgnoreCase)) {
+							return false;
+						}
+					}
+				}
+
+				return true;
 			}
 		}
 		
