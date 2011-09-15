@@ -120,7 +120,20 @@ namespace Do.Universe
 		{
 			return UniqueId.GetHashCode ();
 		}
-	
+
+		public static bool operator== (Element a, Element b)
+		{
+			if (Object.ReferenceEquals (a, b)) {
+				return true;
+			}
+			return Object.Equals (a, b);
+		}
+
+		public static bool operator!= (Element a, Element b)
+		{
+			return !(a == b);
+		}
+
 		public override bool Equals (object o)
 		{
 			return o is Element && Equals (o as Element);

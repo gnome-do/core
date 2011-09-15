@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Do.Universe.Safe;
@@ -67,6 +68,20 @@ namespace Do.Universe
 		public int CompareTo (Item item)
 		{
 			return CompareTo (item as Element);
+		}
+
+		/// <summary>
+		/// Get the children of this <paramref name="Item"/>.
+		/// </summary>
+		/// <remarks>
+		/// This may (and for many Items will be) an empty Enumerable, signifying no children.
+		/// </remarks>
+		/// <returns>
+		/// A <see cref="IEnumerable<Item>"/>
+		/// </returns>
+		public virtual IEnumerable<Item> GetChildren ()
+		{
+			return Enumerable.Empty<Item> ();
 		}
 	}
 }

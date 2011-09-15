@@ -28,6 +28,8 @@ using Do.Platform;
 using Do.Universe;
 using Do.Universe.Safe;
 
+using Mono.Addins;
+
 using UniverseCollection = System.Collections.Generic.Dictionary<string, Do.Universe.Item>;
 
 namespace Do.Core
@@ -76,10 +78,73 @@ namespace Do.Core
 				initialized -= value;
 			}
 		}
-		
+
+		private Dictionary<DynamicItemSource, UniverseCollection> dynamicUniverses;
+		private IEnumerable<Item> DynamicItems {
+			get {
+				return dynamicUniverses.Values.SelectMany (collection => collection.Values);
+			}
+		}
+
+		private void OnItemsAvailable (object sender, ItemsAvailableEventArgs args)
+		{
+			DynamicItemSource source = sender as DynamicItemSource;
+			if (source == null) {
+				Log<UniverseManager>.Error ("OnItemsAvailable called from a non-DynamicItemSource.");
+				return;
+			}
+			lock (universe_lock) {
+				foreach (Item item in args.newItems) {
+					try {
+						dynamicUniverses[source].Add (item.UniqueId, item);
+					} catch (ArgumentException e) {
+						Log<UniverseManager>.Error ("DynamicItemSource {0} attmpted to add duplicate Item {1}", source.Name, item.UniqueId);
+					}
+				}
+			}
+		}
+
+		private void OnItemsUnavailable (object sender, ItemsUnavailableEventArgs args)
+		{
+			DynamicItemSource source = sender as DynamicItemSource;
+			if (source == null) {
+				Log<UniverseManager>.Error ("OnItemsUnavailable called from a non-DynamicItemSource.");
+				return;
+			}
+			lock (universe_lock) {
+				foreach (Item item in args.unavailableItems) {
+					dynamicUniverses[source].Remove (item.UniqueId);
+				}
+			}
+		}
+
+		private void OnPluginChanged (object sender, ExtensionNodeEventArgs args)
+		{
+			DynamicItemSource source = args.ExtensionObject as DynamicItemSource;
+			switch (args.Change) {
+			case ExtensionChange.Add:
+				lock (universe_lock) {
+					dynamicUniverses[source] = new UniverseCollection ();
+				}
+				source.ItemsAvailable += OnItemsAvailable;
+				source.ItemsUnavailable += OnItemsUnavailable;
+				Log<UniverseManager>.Debug ("Added new DynamicItemSource: {0}", source.Name);
+				break;
+			case ExtensionChange.Remove:
+				source.ItemsAvailable -= OnItemsAvailable;
+				source.ItemsUnavailable -= OnItemsUnavailable;
+				lock (universe_lock) {
+					dynamicUniverses.Remove (source);
+				}
+				Log<UniverseManager>.Debug ("Removed DynamicItemSource: {0}", source.Name);
+				break;
+			}
+		}
+
 		public UniverseManager ()
 		{
 			universe = new UniverseCollection ();
+			dynamicUniverses = new Dictionary<DynamicItemSource, Dictionary<string, Item>> ();
 			universe_lock = new object ();
 			reload_requested = new ManualResetEvent (false);
 
@@ -106,6 +171,9 @@ namespace Do.Core
 			// Do the initial load of the universe.
 			ReloadUniverse ();
 
+			// Hook up to DynamicItemSource notifications
+			AddinManager.AddExtensionNodeHandler ("/Do/DynamicItemSource", OnPluginChanged);
+
 			// Notify subscribers that the universe has been loaded.
 			Services.Application.RunOnMainThread (() => {
 				BuildCompleted = true;
@@ -124,15 +192,15 @@ namespace Do.Core
 		
 		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, Item other)
 		{
-			lock (universe_lock) 
-				return Search (query, filter, universe.Values, other);
+			lock (universe_lock)
+				return Search (query, filter, universe.Values.Concat (DynamicItems), other);
 		}
 		
 		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, IEnumerable<Item> objects)
 		{
 			return Search (query, filter, objects, null);
 		}
-		
+
 		public IEnumerable<Item> Search (string query, IEnumerable<Type> filter, IEnumerable<Item> elements, Item other)
 		{
 			Item text = new ImplicitTextItem (query);

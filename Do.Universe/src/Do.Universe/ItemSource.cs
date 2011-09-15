@@ -30,7 +30,7 @@ namespace Do.Universe
 	/// Example: A "EpiphanyBookmarkItemSource" could provide Items representing
 	/// Epiphany web browser bookmarks.
 	/// </summary>
-	public abstract class ItemSource : Item
+	public abstract class ItemSource : Item, IChildItemSource
 	{
 
 		static SafeItemSource safe_item_source = new SafeItemSource ();
@@ -69,7 +69,7 @@ namespace Do.Universe
 		{
 			return new SafeItemSource (this);
 		}
-		
+
 		/// <value>
 		/// Item sub-types provided/supported by this source. These include any
 		/// types of items provided by the Items property, and the types of items
@@ -79,7 +79,7 @@ namespace Do.Universe
 		/// BookmarkItem).
 		/// </value>
 		public abstract IEnumerable<Type> SupportedItemTypes { get; }
-		
+
 		/// <value>
 		/// The Items provided by this source.
 		/// null is ok---it signifies that no items are provided.
@@ -88,12 +88,6 @@ namespace Do.Universe
 			get { yield break; }
 		}
 		
-		/// <summary>
-		/// Provides a collection of children of an item. Item is guaranteed to be a
-		/// subtype of a type in SupportedItemTypes.
-		/// null is ok---it signifies that no children are provided for the Item
-		/// argument.
-		/// </summary>
 		public virtual IEnumerable<Item> ChildrenOfItem (Item item)
 		{
 			yield break;

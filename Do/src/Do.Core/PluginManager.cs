@@ -46,7 +46,7 @@ namespace Do.Core
 	{
 		const string DefaultPluginIcon = "folder_tar";
 		
-		static IEnumerable<string> ExtensionPaths = new [] { "/Do/ItemSource", "/Do/Action" };
+		static IEnumerable<string> ExtensionPaths = new [] { "/Do/ItemSource", "/Do/Action", "/Do/DynamicItemSource" };
 
 		public static readonly IEnumerable<AddinClassifier> Classifiers =
 			new AddinClassifier [] {
@@ -202,6 +202,13 @@ namespace Do.Core
 		/// </value>
 		public static IEnumerable<ItemSource> ItemSources {
 			get { return AddinManager.GetExtensionObjects ("/Do/ItemSource").OfType<ItemSource> (); }
+		}
+
+		/// <summary>
+		/// All loaded DynamicItemSources.
+		/// </summary>
+		public static IEnumerable<DynamicItemSource> DynamicItemSources {
+			get { return AddinManager.GetExtensionObjects ("/Do/DynamicItemSource").OfType<DynamicItemSource> (); }
 		}
 
 		/// <value>
