@@ -95,7 +95,11 @@ namespace Do.Core
 			}
 			lock (universe_lock) {
 				foreach (Item item in args.newItems) {
-					dynamicUniverses[source].Add (item.UniqueId, item);
+					try {
+						dynamicUniverses[source].Add (item.UniqueId, item);
+					} catch (ArgumentException e) {
+						Log<UniverseManager>.Error ("DynamicItemSource {0} attmpted to add duplicate Item {1}", source.Name, item.UniqueId);
+					}
 				}
 			}
 		}
