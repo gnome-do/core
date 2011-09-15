@@ -113,7 +113,7 @@ namespace Do.Core
 			}
 			lock (universe_lock) {
 				foreach (Item item in args.unavailableItems) {
-					dynamicUniverses[source].Add (item.UniqueId, item);
+					dynamicUniverses[source].Remove (item.UniqueId);
 				}
 			}
 		}
