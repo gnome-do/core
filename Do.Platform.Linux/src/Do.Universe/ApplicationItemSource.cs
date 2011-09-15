@@ -75,7 +75,7 @@ namespace Do.Universe.Linux {
 		/// </param>
 		IEnumerable<KeyValuePair<string, ApplicationItem>> LoadDesktopFiles (string dir)
 		{
-			return GetDesktopFiles ()
+			return GetDesktopFiles (dir)
 				.Where (ShouldUseDesktopFile)
 				.Select (f => new KeyValuePair<string, ApplicationItem> (f, ApplicationItem.MaybeCreateFromDesktopItem (f)))
 				.Where (a => a.Value != null)
