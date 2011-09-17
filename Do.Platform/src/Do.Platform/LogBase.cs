@@ -60,7 +60,8 @@ namespace Do.Platform
 
 		public static void Write (LogLevel level, string msg, params object[] args)
 		{
-			if (level < DisplayLevel) return;
+			if (level < DisplayLevel)
+				return;
 			
 			msg = string.Format (msg, args);
 			if (Writing) {
@@ -84,7 +85,7 @@ namespace Do.Platform
 
 				// Log message.
 				foreach (ILogService log in Services.Logs)
-                    log.Log (level, msg);
+					log.Log (level, msg);
 				
 				Writing = false;
 			}
