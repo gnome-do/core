@@ -50,12 +50,12 @@ namespace Do.Platform
 		public static LogLevel DisplayLevel { get; set; }
 
 		static bool Writing { get; set; }
-		static ICollection<LogCall> PendingLogCalls { get; set; }
+		static ICollection<LogCall> pending_log_calls;
 
 		static LogBase ()
 		{
 			Writing = false;
-			PendingLogCalls = new LinkedList<LogCall> ();
+			pending_log_calls = new LinkedList<LogCall> ();
 		}
 
 		public static void Write (LogLevel level, string msg, params object[] args)
@@ -66,17 +66,16 @@ namespace Do.Platform
 			if (Writing) {
 				// In the process of logging, another log call has been made.
 				// We need to avoid the infinite regress this may cause.
-				PendingLogCalls.Add (new LogCall (level, msg));
+				pending_log_calls.Add (new LogCall (level, msg));
 			} else {
 				Writing = true;
 
-				if (PendingLogCalls.Any ()) {
+				if (pending_log_calls.Any ()) {
 					// Flush delayed log calls.
 					// First, swap PendingLogCalls with an empty collection so it
 					// is not modified while we enumerate.
-					IEnumerable<LogCall> calls = PendingLogCalls;
-					PendingLogCalls = new LinkedList<LogCall> ();
-	
+					var calls = System.Threading.Interlocked.Exchange (ref pending_log_calls, new LinkedList<LogCall> ());
+
 					// Log all pending calls.
 					foreach (LogCall call in calls)
 						foreach (ILogService log in Services.Logs)
