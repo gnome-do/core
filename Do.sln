@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do", "Do\Do.csproj", "{1EF59A40-D832-43DD-A5F3-C6A02081CD74}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do.Interface.Linux", "Do.Interface.Linux\Do.Interface.Linux.csproj", "{5809CEE9-020D-4858-86AE-94E2527146FE}"
