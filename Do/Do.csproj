@@ -64,11 +64,11 @@
     <Reference Include="System.Xml">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="nunit.framework">
+      <Package>mono-nunit</Package>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <None Include="Resources\Do.addin.xml" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="src\CorePreferences.cs" />
     <Compile Include="src\Do.cs" />
@@ -163,5 +163,11 @@
     <EmbeddedResource Include="gtk-gui\gui.stetic">
       <LogicalName>gui.stetic</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Do.addin.xml">
+      <LogicalName>Do.addin.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Tests\" />
   </ItemGroup>
 </Project>

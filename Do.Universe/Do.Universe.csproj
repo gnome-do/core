@@ -45,7 +45,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Do.Universe.addin.xml" />
     <None Include="Resources\phone.png" />
   </ItemGroup>
   <ItemGroup>
@@ -82,4 +81,7 @@
     <Compile Include="src\Do.Universe\IChildItemSource.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Do.Universe.addin.xml" />
+  </ItemGroup>
 </Project>
