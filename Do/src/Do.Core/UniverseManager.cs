@@ -97,7 +97,7 @@ namespace Do.Core
 				foreach (Item item in args.newItems) {
 					try {
 						dynamicUniverses[source].Add (item.UniqueId, item);
-					} catch (ArgumentException e) {
+					} catch (ArgumentException) {
 						Log<UniverseManager>.Error ("DynamicItemSource {0} attmpted to add duplicate Item {1}", source.Name, item.UniqueId);
 					}
 				}
