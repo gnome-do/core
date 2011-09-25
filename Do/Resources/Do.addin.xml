@@ -14,6 +14,7 @@
 		<Service type="Do.Platform.WindowingService" />
 		<Service type="Do.Platform.ApplicationService" />
 		<Service type="Do.Platform.PluginManagerService" />
+		<Service type="Do.MockLogger"/>
 	</Extension>
 	
 	<Extension path="/Do/ItemSource">

@@ -136,6 +136,7 @@
     <Compile Include="gtk-gui\Do.UI.ColorConfigurationWidget.cs" />
     <Compile Include="gtk-gui\Do.UI.PluginErrorDialog.cs" />
     <Compile Include="src\AssemblyInfo.cs" />
+    <Compile Include="src\Tests\TestLogging.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Do.Universe\Do.Universe.csproj">
