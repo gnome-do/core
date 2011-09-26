@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-do\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2011-06-15 12:14+0000\n"
 "Last-Translator: Militi Luca <Unknown>\n"
 "Language-Team: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-16 04:31+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -652,163 +652,3 @@ msgstr "Impostare questo al comando del tasto da usare per richiamare Do."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Indica se mostrare sempre la finestra dei risultati."
-
-#~ msgid "Minimize"
-#~ msgstr "Minimizza"
-
-#~ msgid "Restore"
-#~ msgstr "Ripristina"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Chiama GNOME Do"
-
-#~ msgid "Trash"
-#~ msgstr "Cestino"
-
-#~ msgid "No result found for"
-#~ msgstr "Nessun risultato trovato per"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Rimuovi dalla dock"
-
-#~ msgid "Close All"
-#~ msgstr "Chiudi tutto"
-
-#~ msgid "Show Trash"
-#~ msgstr "Mostra il cestino"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Indicatori avanzati"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Nascondi automaticamente"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Ingrandisci le icone"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Scambia gli schermi"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Si è verificato un errore durante l'installazione "
-#~ "dei plugin selezionati</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Si è verificato un errore durante l'installazione "
-#~ "del plugin selezionato</span></b>"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Consenti la sovrapposizione delle finestre"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Tema"
-
-#~ msgid "_About"
-#~ msgstr "_Informazioni"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zoom:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Dimensione icone:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientamento:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Nascosto:"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Comportamento Dock</b>"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indica finestre multiple"
-
-#~ msgid "Show"
-#~ msgstr "Mostra"
-
-#~ msgid "Desktop"
-#~ msgstr "Desktop"
-
-#~ msgid "Open Trash"
-#~ msgstr "Apri il cestino"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Svuota il cestino"
-
-#~ msgid "Copy Text"
-#~ msgstr "Copia testo"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Esc alternato"
-
-#~ msgid "Paste Text"
-#~ msgstr "Incolla testo"
-
-#~ msgid "Next Result"
-#~ msgstr "Risultato successivo"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Attiva alternato"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Cancella alternato"
-
-#~ msgid "Previous Result"
-#~ msgstr "Risultato precedente"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Selezione multipla"
-
-#~ msgid "First Result"
-#~ msgstr "Primo risultato"
-
-#~ msgid "Last Result"
-#~ msgstr "Ultimo risultato"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 GNOME Do Developers"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Accedi all'elemento"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Esci dall'elemento"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklets"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Ripristina gli elementi eliminati"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Avvia in modalità testo"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Per modificare una scorciatoria, fare doppio clic e digitarne una nuova."
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Rimuovere tutti gli elementi dal cestino?</b></big>\n"
-#~ "\n"
-#~ "Se si sceglie di svuotare il cestino, tutti gli elementi contenuti\n"
-#~ "saranno definitivamente persi. È anche possibile cancellarli\n"
-#~ "separatamente."
-
-#~ msgid "Maximize"
-#~ msgstr "Ingrandisci"

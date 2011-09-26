@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2011-03-21 13:18+0000\n"
 "Last-Translator: jmb_kz <Unknown>\n"
 "Language-Team: Kazakh <kk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -649,129 +649,3 @@ msgstr "Do шақыру үшін пернелердің үйлесімін ор�
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Нәтижелер терезесінің әрқашан көрсетілетіні."
-
-#~ msgid "_Theme:"
-#~ msgstr "_Темасы:"
-
-#~ msgid "Zoom:"
-#~ msgstr "Масштаб:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Бағдары:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Суреттеменің өлшемі:"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Доклеттер</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Кең жаю"
-
-#~ msgid "Hiding:"
-#~ msgstr "Жасыру:"
-
-#~ msgid "Minimize"
-#~ msgstr "Түю"
-
-#~ msgid "Trash"
-#~ msgstr "Корзина"
-
-#~ msgid "Show"
-#~ msgstr "Көрсету"
-
-#~ msgid "Desktop"
-#~ msgstr "Жұмыс үстелі"
-
-#~ msgid "No result found for"
-#~ msgstr "Нәтиже жоқ"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Кәрзеңкені толық тазартайын ба?</b></big>\n"
-#~ "\n"
-#~ "Егер сіз кәрзеңкені тазартсаңыз, ішіндегі файлдар\n"
-#~ "мәңгіге жойылады. Файлдарды біртіңдеп, бір-бірден\n"
-#~ "жою алатыныңызға еске алып кетсеңіз."
-
-#~ msgid "Open Trash"
-#~ msgstr "Кәрзеңкені ашу"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Пернелер қиыстыруын өзгерту үшін, оған тышқанмен екі рет шертіп, жаңасын "
-#~ "енгізіңіз."
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "GNOME Do шақыру"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Мәтін енгізу тәртібі"
-
-#~ msgid "Copy Text"
-#~ msgstr "Мәтінді көшіріп алу"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Балама шығу"
-
-#~ msgid "Paste Text"
-#~ msgstr "Мәтінді енгізіп салу"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "GNOME Do балама шақыру"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Символдың балама жойылуы"
-
-#~ msgid "First Result"
-#~ msgstr "Бірінші нәтиже"
-
-#~ msgid "Previous Result"
-#~ msgstr "Алдыңғы нәтиже"
-
-#~ msgid "Next Result"
-#~ msgstr "Келесі нәтиже"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Көпшілік таңдау"
-
-#~ msgid "Last Result"
-#~ msgstr "Соңғы нәтиже"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Авторлығы © 2008 GNOME Do Өңдеушілер"
-
-#~ msgid "Docklets"
-#~ msgstr "Доклеттер"
-
-#~ msgid "Restore"
-#~ msgstr "Бұрыңғы қалпына қайтару"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Бірнеше терезелерді белгілеу"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky-дың әрекеттері</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Жойылғандарды қайтару"
-
-#~ msgid "Close All"
-#~ msgstr "Бәрін жабу"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Экрандарды ауыстыру"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Субмәзірден шығу"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Субмәзірге кіру"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Қоқыс шелегін тазарту"

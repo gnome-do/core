@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:37+0000\n"
 "Last-Translator: Anmol Sarma <unmole.in@gmail.com>\n"
 "Language-Team: Hindi <hi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -640,124 +640,3 @@ msgstr "इसमें वह की कमांड डालें जिस�
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "क्या परिणाम खिड़की हमेशा दिखाएँ ?"
-
-#~ msgid "Zoom:"
-#~ msgstr "ज़ूमः"
-
-#~ msgid "Icon Size:"
-#~ msgstr "प्रतीक आकार:"
-
-#~ msgid "Hiding:"
-#~ msgstr "छुपाना:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "अनेक विंडो होने का संकेत करें"
-
-#~ msgid "Orientation:"
-#~ msgstr "दिशा निर्धारणः"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>कूड़े-दान खली करना है?</b></big>\n"
-#~ "\n"
-#~ "अगर आप ऐसा करेंगे तो कूड़ेदान की सभी चीज़ें हमेशा के लिए चली जाएँगी. \n"
-#~ "आप चीज़ों को एक-एक कर के भी हटा सकते हैं."
-
-#~ msgid "Open Trash"
-#~ msgstr "कूड़ेदान खोलें"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "मानीटर अदल-बदल-करें"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>डॉक-लेट्स</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "बड़ा करें"
-
-#~ msgid "Minimize"
-#~ msgstr "छोटा करें"
-
-#~ msgid "Restore"
-#~ msgstr "वापस लाएं"
-
-#~ msgid "Close All"
-#~ msgstr "सब बंद करें"
-
-#~ msgid "Trash"
-#~ msgstr "रद्दी"
-
-#~ msgid "Empty Trash"
-#~ msgstr "रद्दी खाली करें"
-
-#~ msgid "Show"
-#~ msgstr "दिखाएँ"
-
-#~ msgid "Desktop"
-#~ msgstr "डेस्कटॉप"
-
-#~ msgid "No result found for"
-#~ msgstr "कुछ नहीं मिला"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "वैकल्पिक नष्ट करना"
-
-#~ msgid "First Result"
-#~ msgstr "पहला परिणाम"
-
-#~ msgid "Last Result"
-#~ msgstr "पिछला परिणाम"
-
-#~ msgid "Previous Result"
-#~ msgstr "पिछला परिणाम"
-
-#~ msgid "Next Result"
-#~ msgstr "अगला परिणाम"
-
-#~ msgid "Step out of Item"
-#~ msgstr "इस चीज़ से बाहर"
-
-#~ msgid "Multiple selection"
-#~ msgstr "बहु चयन"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "प्रतिलिप्यधिकार ©  जीनोम डु के विकासक"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "इस चीज़ में खोजें"
-
-#~ msgid "Copy Text"
-#~ msgstr "टेक्स्ट की प्रति बनाएं"
-
-#~ msgid "Enter text mode"
-#~ msgstr "टेक्स्ट मोड में जाएं"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "वैकल्पिक निस्तार"
-
-#~ msgid "Paste Text"
-#~ msgstr "टेक्स्ट चिपकाएं"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "वैकल्पिक क्रियाशील करें"
-
-#~ msgid "Docklets"
-#~ msgstr "डाकलेट्स"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "शार्टकट में परिवर्तन करने के लिए, उसे दो बार क्लिक करें और नया नाम टाइप करें"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>डाकी का बर्ताव</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "हटाई हुई वस्तुओं को फिर से लगायें"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "जीनोम डु को खोलें"

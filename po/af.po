@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 14:43+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Afrikaans <af@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -643,125 +643,3 @@ msgstr "Stel hierdie tot die sleutelkombinasie om Do op te roep."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Of die resultate-venster altyd vertoon moet word"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "Om 'n kortpad te redigeer, kliek daarop en tik 'n nuwe een."
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky-gedrag</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Verwyderde items terugstel"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zoem:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Afbeeldingsgrootte:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Verskuil:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Vertoon meerdere vensters"
-
-#~ msgid "Orientation:"
-#~ msgstr "Oriëntasie:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Maak asblik leeg"
-
-#~ msgid "Open Trash"
-#~ msgstr "Open asblik"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Wissel beeldskerm"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Verwyder alle items van die asblik?</b></big>\n"
-#~ "\n"
-#~ "As u kies om die asblik leeg te maak sal alle\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Vergroot"
-
-#~ msgid "Minimize"
-#~ msgstr "Verklein"
-
-#~ msgid "Restore"
-#~ msgstr "Herstel"
-
-#~ msgid "Close All"
-#~ msgstr "Sluit alles"
-
-#~ msgid "Trash"
-#~ msgstr "Asblik"
-
-#~ msgid "Show"
-#~ msgstr "Vertoon"
-
-#~ msgid "No result found for"
-#~ msgstr "Geen resultate gevind vir"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Roep GNOME Do"
-
-#~ msgid "Copy Text"
-#~ msgstr "Kopiëer teks"
-
-#~ msgid "Paste Text"
-#~ msgstr "Plak teks"
-
-#~ msgid "Next Result"
-#~ msgstr "Volgende resultaat"
-
-#~ msgid "Previous Result"
-#~ msgstr "Vorige resultaat"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Verken in item"
-
-#~ msgid "First Result"
-#~ msgstr "Eerste resultaat"
-
-#~ msgid "Last Result"
-#~ msgstr "Laaste resultaat"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Kopiereg © 2008 GNOME Do Ontwikkelaars"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Gaan na teksmodus"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Alternatiewe beëindiging"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Alternatiewe aktivering"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Alternatiewe skrap"
-
-#~ msgid "Docklets"
-#~ msgstr "Doklets"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Meerdere seleksies"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Gaan uit item uit"
-
-#~ msgid "Desktop"
-#~ msgstr "Werksarea"

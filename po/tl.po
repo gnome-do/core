@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:03+0000\n"
 "Last-Translator: Dennis Esternon <djwisdom@gmail.com>\n"
 "Language-Team: Tagalog <tl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:34+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -646,127 +646,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Upang i-edit ang isang shortcut, i-double click ito at i-type ng isang "
-#~ "bagong."
-
-#~ msgid "Orientation:"
-#~ msgstr "Pagkakaayos ng Lugar:"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Kaugaliang Docky</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Paglalagay Sa Dating Kalagayan Ng Mga Naalis Na Bagay"
-
-#~ msgid "Zoom:"
-#~ msgstr "Palapitin:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Laki ng Icon:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Pagtatago:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Ipahiwatig ang maramihang bintana"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Linising lubos ang Basurahan"
-
-#~ msgid "Minimize"
-#~ msgstr "Paliitin"
-
-#~ msgid "Open Trash"
-#~ msgstr "Buksan ang Basurahan"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Paglilipat Ng Mga Monitors"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Mga Maliliit na Docks</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Palakihin"
-
-#~ msgid "Restore"
-#~ msgstr "Ibalik"
-
-#~ msgid "Close All"
-#~ msgstr "Pangkalahatang Pagsasara"
-
-#~ msgid "Trash"
-#~ msgstr "Basurahan"
-
-#~ msgid "Show"
-#~ msgstr "Ipakita"
-
-#~ msgid "Desktop"
-#~ msgstr "Desktop"
-
-#~ msgid "No result found for"
-#~ msgstr "Walang resultang nakita para sa"
-
-#~ msgid "Copy Text"
-#~ msgstr "Kopyahin ang Teksto"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Kahaliling Pagtakas"
-
-#~ msgid "Paste Text"
-#~ msgstr "Idikit ang Teksto"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Pumasok sa katangiang tekstwal"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Kahaliling Pagbuhay"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Kahaliling Pagbura"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Tawagin ang GNOME Do"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Maramihang pagpili"
-
-#~ msgid "First Result"
-#~ msgstr "Unang Resulta"
-
-#~ msgid "Last Result"
-#~ msgstr "Huling Resulta"
-
-#~ msgid "Previous Result"
-#~ msgstr "Nakaraang Resulta"
-
-#~ msgid "Next Result"
-#~ msgstr "Susunod na Resulta"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Mag-browse Sa Aytem"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Hakbang Palabas Ng Aytem"
-
-#~ msgid "Docklets"
-#~ msgstr "Mga Maliliit Na Docks"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Karapatang Magpalathala © 2008 Mag bumubuo ng GNOME Do"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Linising lubos ang lahat ng mga bagay mula sa basurahan?</b</big>\n"
-#~ "\n"
-#~ "Kung pinili mong linising lubos ang basurahan, ang lahat ng mga bagay sa "
-#~ "loob nito\n"
-#~ "ay permanenteng mabubura. Mangyaring tandaan na maaari mo\n"
-#~ "ring tanggalin ang mga ito ng hiwalay."

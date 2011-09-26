@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:32+0000\n"
 "Last-Translator: Piotr Puldzian Płucienniczak <puldzian@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -638,162 +638,3 @@ msgstr "Przypisz do kluczowej komendy, której chcesz używać do wywołania Do.
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Niezależnie od tego, czy będą wyniki zawsze wyświetlaj okno."
-
-#~ msgid "_About"
-#~ msgstr "_O wtyczce"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "Aby zmienić skrót, kliknij podwójnie i wpisz nowy."
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Wystąpił błąd podczas instalowania wybranych "
-#~ "wtyczek</span></b>"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Zaawansowane oznaczenia"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Zmień monitory"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimalizuj"
-
-#~ msgid "Restore"
-#~ msgstr "Przywróć"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Automatyczne ukrywanie"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Przywołaj GNOME Do"
-
-#~ msgid "Trash"
-#~ msgstr "Kosz"
-
-#~ msgid "No result found for"
-#~ msgstr "Brak rezultatów dla"
-
-#~ msgid "Close All"
-#~ msgstr "Zamknij wszystko"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Pozwól Na Przekrywanie Okien"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Powiększaj Ikony"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Usuń z Panelu"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Motyw"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Wystąpił błąd podczas instalowania wybranej "
-#~ "wtyczki</span></b>"
-
-#~ msgid "Show Trash"
-#~ msgstr "Pokaż kosz"
-
-#~ msgid "Zoom:"
-#~ msgstr "Powiększenie:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Rozmiar ikony:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Ułożenie:"
-
-#~ msgid "Show"
-#~ msgstr "Pokaż"
-
-#~ msgid "Desktop"
-#~ msgstr "Pulpit"
-
-#~ msgid "Open Trash"
-#~ msgstr "Otwórz kosz"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Opróżnij kosz"
-
-#~ msgid "Copy Text"
-#~ msgstr "Skopiuj tekst"
-
-#~ msgid "Paste Text"
-#~ msgstr "Wklej tekst"
-
-#~ msgid "Maximize"
-#~ msgstr "Maksymalizuj"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Tryb wprowadzania tekstu"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Usunąć wszystkie elementy z kosza?</b></big>\n"
-#~ "\n"
-#~ "Wybierając opróżnienie kosza, wszystkie\n"
-#~ "elementy zostaną z niego trwale usunięte.\n"
-#~ "Zamiast tego można usunąć je pojedynczo."
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Zachowanie Docky</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Przywróć usunięte elementy"
-
-#~ msgid "First Result"
-#~ msgstr "Pierwszy wynik"
-
-#~ msgid "Last Result"
-#~ msgstr "Ostatni wynik"
-
-#~ msgid "Previous Result"
-#~ msgstr "Poprzedni wynik"
-
-#~ msgid "Next Result"
-#~ msgstr "Następny wynik"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Wielokrotne zaznaczenie"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Przeszukaj element"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Wyjdź z elementu"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Uaktywnij (alternatywnie)"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Usuń (alternatywnie)"
-
-#~ msgid "Hiding:"
-#~ msgstr "Ukrywanie:"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Wyjdź (alternatywnie)"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklety</b>"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklety"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 Deweloperzy GNOME Do"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Oznaczaj zbiór okien"

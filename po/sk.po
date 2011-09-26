@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2011-02-14 10:36+0000\n"
 "Last-Translator: helix84 <Unknown>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -638,162 +638,3 @@ msgstr "Nastavte kláves, ktorým si želáte vyvolávať Do."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Či má byť stále zobrazené okno s výsledkami."
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "Odkaz upravíte po dvojitom kliknutí naň a napísaní nového."
-
-#~ msgid "_Theme:"
-#~ msgstr "_Téma:"
-
-#~ msgid "_About"
-#~ msgstr "_O programe"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Pri inštalácii vybraných modulov nastala "
-#~ "chyba</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\"> Pri inštalácii vybraného modulu nastala chyba "
-#~ "</span></b>"
-
-#~ msgid "Close All"
-#~ msgstr "Zavrieť všetky"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimalizovať"
-
-#~ msgid "Restore"
-#~ msgstr "Obnoviť"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Vyvolať GNOME Do"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Povoliť prekrytie oknom"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Zväčšovať ikony"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Pokročilé ukazovatele"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Automaticky skrývať"
-
-#~ msgid "No result found for"
-#~ msgstr "Žiadne výsledky pre"
-
-#~ msgid "Trash"
-#~ msgstr "Kôš"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Odstrániť z lišty"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Prepnúť monitor"
-
-#~ msgid "Show Trash"
-#~ msgstr "Zobrazovať Kôš"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Správanie v režime doku</b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zväčšenie:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Skývanie:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Veľkosť ikony:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientácia:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Vyprázdniť kôš"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Odstrániť všetky položky z koša?</b></big>\n"
-#~ "\n"
-#~ "Ak zvolíte možnosť vysypať kôš, všetky položky v ňom\n"
-#~ "budú nenávratne stratené. Nezabudnite že ich\n"
-#~ "môžete vymazať aj po jednom."
-
-#~ msgid "Open Trash"
-#~ msgstr "Otvoriť Kôš"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Doklety</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximalizovať"
-
-#~ msgid "Show"
-#~ msgstr "Zobraziť"
-
-#~ msgid "Desktop"
-#~ msgstr "Pracovná plocha"
-
-#~ msgid "Copy Text"
-#~ msgstr "Kopírovať text"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Altenatívny Escape"
-
-#~ msgid "Paste Text"
-#~ msgstr "Vložiť text"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Alternatívna Aktivácia"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Prejsť do textového režimu"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Alternatívne Vymazanie"
-
-#~ msgid "First Result"
-#~ msgstr "Prvý výsledok"
-
-#~ msgid "Last Result"
-#~ msgstr "Posledný výsledok"
-
-#~ msgid "Previous Result"
-#~ msgstr "Predchádzajúci výsledok"
-
-#~ msgid "Next Result"
-#~ msgstr "Nasledujúci výsledok"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Vystúpiť z položky"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Viacnásobný výber"
-
-#~ msgid "Docklets"
-#~ msgstr "Doklety"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Všetky práva vyhradené © 2008 GNOME Do vývojári"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Prechádzať v položke"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Obnoviť odstránené položky"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indikovať viacero okien"

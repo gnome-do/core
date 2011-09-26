@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:38+0000\n"
 "Last-Translator: Shivinder Singh <shivinder@gmail.com>\n"
 "Language-Team: Punjabi <pa@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -631,115 +631,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "_Theme:"
-#~ msgstr "ਥੀਮ"
-
-#~ msgid "_About"
-#~ msgstr "ਬਾਰੇ"
-
-#~ msgid "Minimize"
-#~ msgstr "ਛੋਟਾ ਕਰੋ"
-
-#~ msgid "Show Trash"
-#~ msgstr "ਕਬਾੜ ਦਿਖਾਓ"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "ਮਾਨੀਟਰ ਬਦਲੋ"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "ਆਟੋਮੈਟਿਕਲੀ ਲੁਕਾਓ"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "ਡੌਕ ਤੌਂ ਹਟਾਓ"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "ਆਈਕਨ ਜੂਮ ਕਰੋ"
-
-#~ msgid "Zoom:"
-#~ msgstr "ਜ਼ੂਮ:"
-
-#~ msgid "Orientation:"
-#~ msgstr "ਓਰੀਐਂਟੇਸ਼ਨ:"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>ਕੀ ਤੁਸੀਂ ਕੂੜੇ-ਦਾਨ ਨੂੰ ਖਾਲੀ ਕਰਨਾ ਚਾਹਊਂਦੇ ਹੋ?</b></big>\n"
-#~ "\n"
-#~ "ਜੇ ਤੁਸੀਂ ਕੂੜੇ-ਦਾਨ ਨੂੰ ਖਾਲੀ ਕਰਨਾ ਚੁਣਦੇ ਹੋ, ਤਾਂ ਉਸ ਵਿੱਚ ਸਾਰੀਆਂ ਆਈਟਮਾਂ\n"
-#~ "ਹਮੇਸ਼ਾਂ ਲਈ ਖ਼ਤਮ ਹੋ ਜਾਣਗੀਆਂ। ਤੁਸੀਂ ਇਹ ਵੀ ਗ਼ੌਰ ਕਰ ਸਕਦੇ ਹੋ ਕਿ\n"
-#~ "ਇਹ ਆਈਟਮਾਂ ਨੂੰ ਇੱਕਲਿਆਂ ਵੀ ਡਿਲੀਟ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।"
-
-#~ msgid "Open Trash"
-#~ msgstr "ਕੂੜਾ-ਦਾਨ ਖੋਲੋ"
-
-#~ msgid "Maximize"
-#~ msgstr "ਅਧਿਕਤਮ"
-
-#~ msgid "Close All"
-#~ msgstr "ਸਭ ਬੰਦ ਕਰੋ"
-
-#~ msgid "Restore"
-#~ msgstr "ਰੀਸਟੋਰ"
-
-#~ msgid "Trash"
-#~ msgstr "ਕੂੜਾ"
-
-#~ msgid "Empty Trash"
-#~ msgstr "ਕੂੜਾ-ਦਾਨ ਖਾਲੀ ਕਰੋ"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "ਕਿਸੇ ਸ਼ੋਰਟ-ਕੱਟ ਨੂੰ ਐਡਿਟ ਕਰਣ ਵਾਸਤੇ ਉਸਨੂੰ ਡੱਬਲ-ਕਲਿਕ ਕਰੋ ਅਤੇ ਨਵਾਂ ਲਿਖੋ"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>ਡੌਕਲੈੱਟਸ</b>"
-
-#~ msgid "Desktop"
-#~ msgstr "ਡੈਸਕਟਾਪ"
-
-#~ msgid "No result found for"
-#~ msgstr "ਕੋਈ ਨਤੀਜਾ ਨਹੀਂ ਲੱਭਿਆ"
-
-#~ msgid "Icon Size:"
-#~ msgstr "ਆਈਕਨ ਸਾਈਜ਼:"
-
-#~ msgid "Copy Text"
-#~ msgstr "ਟੈਕਸਟ ਕਾਪੀ ਕਰੋ"
-
-#~ msgid "Paste Text"
-#~ msgstr "ਟੈਕਸਟ ਪੇਸਟ ਕਰੋ"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "ਗਨੋਮ-ਡੂ ਖੋਲੋ"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "ਆਲਨਰਨੇਟ ਅਸਕੇਪ"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "ਆਲਨਰਨੇਟ ਐਕਟੀਵੇਟ"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "ਆਲਨਰਨੇਟ ਡਲੀਟ"
-
-#~ msgid "First Result"
-#~ msgstr "ਪਹਿਲਾ ਨਤੀਜਾ"
-
-#~ msgid "Last Result"
-#~ msgstr "ਆਖ਼ਰੀ ਨਤੀਜਾ"
-
-#~ msgid "Previous Result"
-#~ msgstr "ਪਿਛੱਲਾ ਨਤੀਜਾ"
-
-#~ msgid "Next Result"
-#~ msgstr "ਅਗਲਾ ਨਤੀਜਾ"
-
-#~ msgid "Step out of Item"
-#~ msgstr "ਆਈਟਮ ਵਿਚੋਂ ਬਾਹਰ ਆਓ"
-
-#~ msgid "Docklets"
-#~ msgstr "ਡੌਕਲੈੱਟਸ"

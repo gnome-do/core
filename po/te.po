@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:17+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Telugu <te@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:34+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -632,92 +632,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "_About"
-#~ msgstr "గురించి (_A)"
-
-#~ msgid "Restore"
-#~ msgstr "పునస్థాపించు"
-
-#~ msgid "Minimize"
-#~ msgstr "చిన్నగించు"
-
-#~ msgid "Trash"
-#~ msgstr "చెత్తకుండీ"
-
-#~ msgid "_Theme:"
-#~ msgstr "అలంకారం (_T):"
-
-#~ msgid "Maximize"
-#~ msgstr "పెద్దగించు"
-
-#~ msgid "Show"
-#~ msgstr "చూపించు"
-
-#~ msgid "First Result"
-#~ msgstr "మొదటి ఫలితం"
-
-#~ msgid "Last Result"
-#~ msgstr "చివరి ఫలితం"
-
-#~ msgid "Next Result"
-#~ msgstr "తర్వాతి ఫలితం"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "దగ్గర దారిని మార్చుటకు, దానిని డబల్-క్లిక్ చీసి కొత్తదాన్ని సూచించండి"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "ఎక్కువ విండోలను సూచించండి"
-
-#~ msgid "Zoom:"
-#~ msgstr "దూరదర్సనమ్"
-
-#~ msgid "Icon Size:"
-#~ msgstr "ప్రతిమ పరిమాణం :"
-
-#~ msgid "Orientation:"
-#~ msgstr "ధోరణి :"
-
-#~ msgid "Hiding:"
-#~ msgstr "దాచు"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "బోను లో ప్రవర్తన"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "తీసివేసిన అంశములను పునర్నియమించు"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>చిన్న బోనులు <b>"
-
-#~ msgid "Close All"
-#~ msgstr "అన్నింటిని మోసివేయు"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "ప్రదర్శనా యంత్రము మార్పు"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>చెత్తకుండి నుండి అన్ని అంశములను ఖాళి చెయ్యనా ?</b></big>\n"
-#~ "\n"
-#~ "చెత్తకుండి ని ఖాళి చేయుటకు నిర్ణయించిన యడల , అందులోని అన్ని అంశములు \n"
-#~ "శాస్వతంగా పోవును. మీరు వీటిని వేరే  విధానంలో కుడా తొలగించవచ్చు , దయచేసి "
-#~ "గమనించగలరు."
-
-#~ msgid "Open Trash"
-#~ msgstr "చెత్త కుండి ని తెరువు"
-
-#~ msgid "Empty Trash"
-#~ msgstr "చెత్త కుండి ని ఖాళి చెయ్యి"
-
-#~ msgid "No result found for"
-#~ msgstr "దీనికి ఫలితము లేదు"
-
-#~ msgid "Desktop"
-#~ msgstr "బల్లపైన"

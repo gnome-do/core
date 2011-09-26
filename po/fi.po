@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:22+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -641,157 +641,3 @@ msgstr "Aseta komento, jolla Do kutsutaan näkyville."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Määrittää, näytetäänkö tulosikkuna aina."
-
-#~ msgid "_About"
-#~ msgstr "Tietoj_a"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Teema:"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Virhe valittujen liitännäisten "
-#~ "asennuksessa</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Virhe valittun liitännäisen asennuksessa</span></b>"
-
-#~ msgid "Show Trash"
-#~ msgstr "Näytä Roskakori"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Salli ikkunoiden lomittua"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Vaihda näyttöjä"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Piilota automaattisesti"
-
-#~ msgid "Minimize"
-#~ msgstr "Pienennä"
-
-#~ msgid "Restore"
-#~ msgstr "Palauta"
-
-#~ msgid "Close All"
-#~ msgstr "Sulje kaikki"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Poista Dockista"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Kutsu GNOME Do"
-
-#~ msgid "No result found for"
-#~ msgstr "Ei tuloksia haulle"
-
-#~ msgid "Trash"
-#~ msgstr "Roskakori"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Kuvakkeiden koko:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Ilmoita useista ikkunoista"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Ota takaisin käyttöön Poistetut osat"
-
-#~ msgid "Hiding:"
-#~ msgstr "Piilotus:"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Kaksoisnapauta oikopolkua muokataksesi sitä. Sen jälkeen syötä haluamasi "
-#~ "uusi polku."
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Telakan asetukset</b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "Suurenna:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Sijainti:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Tyhjennä roskakori"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Telakkasovelmat</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Suurenna"
-
-#~ msgid "Show"
-#~ msgstr "Näytä"
-
-#~ msgid "Desktop"
-#~ msgstr "Työpöytä"
-
-#~ msgid "Copy Text"
-#~ msgstr "Kopioi teksti"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Vaihtoehtoinen poistuminen"
-
-#~ msgid "Paste Text"
-#~ msgstr "Liitä teksti"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Käytä tekstitilassa"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Vaihtoehtoinen valinta"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Vaihtoehtoinen poistaminen"
-
-#~ msgid "First Result"
-#~ msgstr "Ensimmäinen tulos"
-
-#~ msgid "Last Result"
-#~ msgstr "Viimeinen tulos"
-
-#~ msgid "Previous Result"
-#~ msgstr "Edellinen tulos"
-
-#~ msgid "Next Result"
-#~ msgstr "Seuraava tulos"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Poistu kohteesta"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Monivalinta"
-
-#~ msgid "Docklets"
-#~ msgstr "Telakkasovelmat"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Tekijänoikeus © 2008 GNOME Do -kehittäjät"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Valitse kohde"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Tyhjennetäänkö roskakorin sisältö?</b></big>\n"
-#~ "\n"
-#~ "Jos päätät poistaa roskakorin sisällön,\n"
-#~ "kaikki roskakorissa olevat tiedostot häviävät pysyvästi. Huomaa,\n"
-#~ "että voit poistaa tiedostoja roskakorista myös yksi kerrallaan."
-
-#~ msgid "Open Trash"
-#~ msgstr "Avaa roskakori"

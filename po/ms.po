@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2011-05-25 14:25+0000\n"
 "Last-Translator: Nicholas Ng <nbliang@gmail.com>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-26 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -646,164 +646,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Samada window result akan sentiasa dipaparkan"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Tema:"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Untuk menyunting jalan pintas (shortcut), klik dua kali dan taipkan yang "
-#~ "baru."
-
-#~ msgid "_About"
-#~ msgstr "_Tentang"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Terdapat ralat ketika memasang plugin yang "
-#~ "dipilih</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Terdapat ralat ketika memasang plugin yang "
-#~ "dipilih</span></b>"
-
-#~ msgid "Close All"
-#~ msgstr "Tutup Kesemua"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimakan"
-
-#~ msgid "Restore"
-#~ msgstr "Kembalikan"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Seru GNOME Do"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Petunjuk Maju"
-
-#~ msgid "Show Trash"
-#~ msgstr "Tunjukkan Sampah"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Benarkan tetingkap bertindan"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Ikon Zoom"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Sembunyi automatik"
-
-#~ msgid "No result found for"
-#~ msgstr "Tiada keputusan ditemui untuk"
-
-#~ msgid "Trash"
-#~ msgstr "Sampah"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Buang dari Dok"
-
-#~ msgid "Open Trash"
-#~ msgstr "Membuka Tong Sampah"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid "Show"
-#~ msgstr "Paparkan"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Kosongkan Sampah"
-
-#~ msgid "Copy Text"
-#~ msgstr "Salin Teks"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientasi:"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Tinkahlaku Docky</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Kembalikan Semula Item-Item Yang Telah Dihapuskan"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zoom:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Saiz Ikon:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Menyembunyikan:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Petunjuk Pelbagai Tetingkap"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Hapuskan kesemua item-item didalam tong sampah?</b></big>\n"
-#~ "\n"
-#~ "Jika anda memilih untuk mengosongkan tong sampah, Semua item-item \n"
-#~ "didalamnya akan dihapuskan secara kekal. Anda juga boleh hapuskan\n"
-#~ "setiap item secara berasingan."
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Tukar Pengawas"
-
-#~ msgid "Maximize"
-#~ msgstr "Maksimumkan"
-
-#~ msgid "Desktop"
-#~ msgstr "Ruang Kerja"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Keluar Alternatif"
-
-#~ msgid "Paste Text"
-#~ msgstr "Tampalkan Teks"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Masuk dalam mod teks"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Aktivasi Alternatif"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Hapus Alternatif"
-
-#~ msgid "First Result"
-#~ msgstr "Keputusan Pertama"
-
-#~ msgid "Last Result"
-#~ msgstr "Keputusan Terakhir"
-
-#~ msgid "Previous Result"
-#~ msgstr "Keputusan Sebelumnya"
-
-#~ msgid "Next Result"
-#~ msgstr "Keputusan Seterusnya"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Langkah Keluar Dari Item"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Banyak Pemilihan"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Lihat Kedalam Item"
-
-#~ msgid "Docklets"
-#~ msgstr "Doklets"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Hakcipta Terpelihara © 2008 GNOME Do Developers"

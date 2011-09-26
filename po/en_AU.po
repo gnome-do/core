@@ -7,18 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2011-06-15 14:06+0000\n"
-"Last-Translator: Aldo Mann <Unknown>\n"
+"Last-Translator: Alfredo Hernández <Unknown>\n"
 "Language-Team: English (Australia) <en_AU@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-16 04:31+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Empty Wastebin"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -648,159 +645,3 @@ msgstr "Set this to the key command you would like to use to summon Do."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Whether the results window will always show."
-
-#~ msgid "_About"
-#~ msgstr "_About"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "To edit a shortcut, double-click it and type a new one."
-
-#~ msgid "_Theme:"
-#~ msgstr "_Theme:"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimise"
-
-#~ msgid "Restore"
-#~ msgstr "Restore"
-
-#~ msgid "Close All"
-#~ msgstr "Close All"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Summon GNOME Do"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Advanced Indicators"
-
-#~ msgid "Show Trash"
-#~ msgstr "Show Trash"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Allow Window Overlap"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Switch Monitors"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Automatically Hide"
-
-#~ msgid "No result found for"
-#~ msgstr "No result found for"
-
-#~ msgid "Trash"
-#~ msgstr "Trash"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Remove from Dock"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Zoom Icons"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky Behavior</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Reinstate Removed Items"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Icon Size:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientation:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Hiding:"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zoom:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indicate Multiple Windows"
-
-#~ msgid "Show"
-#~ msgstr "Show"
-
-#~ msgid "Desktop"
-#~ msgstr "Desktop"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-
-#~ msgid "Open Trash"
-#~ msgstr "Open Trash"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximise"
-
-#~ msgid "Copy Text"
-#~ msgstr "Copy Text"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Enter text mode"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Alternate Escape"
-
-#~ msgid "Paste Text"
-#~ msgstr "Paste Text"
-
-#~ msgid "Previous Result"
-#~ msgstr "Previous Result"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Alternate Activate"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Alternate Delete"
-
-#~ msgid "Next Result"
-#~ msgstr "Next Result"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Browse Into Item"
-
-#~ msgid "First Result"
-#~ msgstr "First Result"
-
-#~ msgid "Last Result"
-#~ msgstr "Last Result"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Multiple selection"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 GNOME Do Developers"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Step out of Item"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklets"

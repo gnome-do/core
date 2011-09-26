@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:06+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Traditional Chinese <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:34+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -632,143 +632,3 @@ msgstr "這定你想要用來喚醒GNOME Do的鍵盤命令。"
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "結果視窗是否會永遠顯示。"
-
-#~ msgid "_About"
-#~ msgstr "關於(_A)"
-
-#~ msgid "_Theme:"
-#~ msgstr "佈景主題 (_T)："
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr "<b><span size=\"large\">正在安裝所選的外掛時發生錯誤</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr "<b><span size=\"large\">正在安裝所選的外掛時發生錯誤</span></b>"
-
-#~ msgid "Minimize"
-#~ msgstr "最小化"
-
-#~ msgid "Restore"
-#~ msgstr "回復"
-
-#~ msgid "Close All"
-#~ msgstr "關閉全部"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "喚醒 GNOME Do"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "進階的指示器"
-
-#~ msgid "Show Trash"
-#~ msgstr "顯示回收桶"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "允許視窗重疊"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "放大圖示"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "切換顯示器"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "自動隱藏"
-
-#~ msgid "Trash"
-#~ msgstr "回收桶"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "從Dock移除"
-
-#~ msgid "No result found for"
-#~ msgstr "找不到任何結果有關"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "想更改快速鍵請點兩下左鍵然後輸入新的快速鍵。"
-
-#~ msgid "Zoom:"
-#~ msgstr "縮放："
-
-#~ msgid "Icon Size:"
-#~ msgstr "圖示大小："
-
-#~ msgid "Orientation:"
-#~ msgstr "方向："
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "標示多重視窗"
-
-#~ msgid "Show"
-#~ msgstr "顯示"
-
-#~ msgid "Empty Trash"
-#~ msgstr "清理回收筒"
-
-#~ msgid "Desktop"
-#~ msgstr "桌面"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>是否清理回收筒中的所有項目？</b></big>\n"
-#~ "\n"
-#~ "如果您選擇清理回收筒，在裡面的\n"
-#~ "所有項目都會消失。請注意您也可\n"
-#~ "以將它們個別刪除。"
-
-#~ msgid "Open Trash"
-#~ msgstr "開啟回收筒"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "恢復被移除的項目"
-
-#~ msgid "Maximize"
-#~ msgstr "最大化"
-
-#~ msgid "Hiding:"
-#~ msgstr "隱藏："
-
-#~ msgid "Copy Text"
-#~ msgstr "複製文字"
-
-#~ msgid "Paste Text"
-#~ msgstr "貼上文字"
-
-#~ msgid "Enter text mode"
-#~ msgstr "進入文字模式"
-
-#~ msgid "First Result"
-#~ msgstr "第一個結果"
-
-#~ msgid "Last Result"
-#~ msgstr "最後的結果"
-
-#~ msgid "Previous Result"
-#~ msgstr "前一個結果"
-
-#~ msgid "Next Result"
-#~ msgstr "下一個結果"
-
-#~ msgid "Multiple selection"
-#~ msgstr "多重選擇"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "版權所有 © 2008 GNOME Do 開發群"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky 行為</b>"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Dock 小物</b>"
-
-#~ msgid "Docklets"
-#~ msgstr "Dock 小物"

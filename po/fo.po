@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:13+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Faroese <fo@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -633,101 +633,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Um at úrslitsgluggin altíð skal sýnast."
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Til at ritsjórna ein snarveg, dupultklikk á hann, og skriva so ein nýggjan."
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky atburður</b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "Surra:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Ímyndastødd:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Fjali:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Tøm ruskspannina"
-
-#~ msgid "Trash"
-#~ msgstr "Ruskspann"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Tøma allar liðirnir í ruskspannini?</b></big>\n"
-#~ "\n"
-#~ "Um tú velur at tøma allar liðirnir úr ruskspannini,\n"
-#~ "verðar teir mistir fyri altíð. Vinarliga legg tær í geyma,\n"
-#~ "at tú kann strika teir, ein fyri ein."
-
-#~ msgid "Open Trash"
-#~ msgstr "Lat ruskspannina upp"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Skift skíggja"
-
-#~ msgid "Maximize"
-#~ msgstr "Mesta"
-
-#~ msgid "Minimize"
-#~ msgstr "Minsta"
-
-#~ msgid "Restore"
-#~ msgstr "Endurstovna"
-
-#~ msgid "Close All"
-#~ msgstr "Lat allar aftur"
-
-#~ msgid "Show"
-#~ msgstr "Sýn"
-
-#~ msgid "Desktop"
-#~ msgstr "Skriviborð"
-
-#~ msgid "No result found for"
-#~ msgstr "Eingi úrslit eru funnin fyri"
-
-#~ msgid "Copy Text"
-#~ msgstr "Avrita tekst"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Far í tekststand"
-
-#~ msgid "Paste Text"
-#~ msgstr "Set inn tekst"
-
-#~ msgid "Last Result"
-#~ msgstr "Síðsta úrslit"
-
-#~ msgid "Next Result"
-#~ msgstr "Næsta úrslit"
-
-#~ msgid "First Result"
-#~ msgstr "Fyrsta úrslit"
-
-#~ msgid "Previous Result"
-#~ msgstr "Fyrra úrslitið"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Far út úr liði"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Fleirfalda úrval"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Upphavsrættindi © 2008 GNOME Do mennarir"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Kaga inn í liðin"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Heit á GNOME Do"

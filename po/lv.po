@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:30+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Latvian <lv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -640,130 +640,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Vai rezultātu logs vienmēr būs redzams."
-
-#~ msgid "_About"
-#~ msgstr "_Par"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Tēma:"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimizēt"
-
-#~ msgid "Close All"
-#~ msgstr "Aizvērt visus"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "Lai labotu saīsni, dubult-klikšķini to un ieraksti labojumu."
-
-#~ msgid "Orientation:"
-#~ msgstr "Novietojums:"
-
-#~ msgid "Zoom:"
-#~ msgstr "Tālummaiņa:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Ikonas Izmērs:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Slēpšana:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Norādīt Vairākus Logus"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Iztukšot Miskasti"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Iztukšot visus priekšmetus no miskastes?</b></big>\n"
-#~ "\n"
-#~ "Ja tu izvēlēsies iztukšot miskasti, visi priekšmeti\n"
-#~ "būs neatgriezeniski zaudēti. Ņem vērā, ka tu\n"
-#~ "vari arī tos dzēst pa vienam."
-
-#~ msgid "Open Trash"
-#~ msgstr "Atvērt Miskasti"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Mainīt Monitorus"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky Uzvedība</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Atjaunot Izņemtos Ierakstus"
-
-#~ msgid "Maximize"
-#~ msgstr "Maksimizēt"
-
-#~ msgid "Restore"
-#~ msgstr "Atjaunot"
-
-#~ msgid "Trash"
-#~ msgstr "Miskaste"
-
-#~ msgid "Show"
-#~ msgstr "Rādīt"
-
-#~ msgid "Desktop"
-#~ msgstr "Darbvirsma"
-
-#~ msgid "No result found for"
-#~ msgstr "Nav rezultātu meklējumam"
-
-#~ msgid "Copy Text"
-#~ msgstr "Kopēt Tekstu"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Pāriet teksta režīmā"
-
-#~ msgid "Paste Text"
-#~ msgstr "Ielīmēt Tekstu"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Alternatīva Aktivizēšanai"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Alternatīvā Dzēšanai"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Izsauc GNOME Do"
-
-#~ msgid "First Result"
-#~ msgstr "Pirmais Rezultāts"
-
-#~ msgid "Last Result"
-#~ msgstr "Pēdējais Rezultāts"
-
-#~ msgid "Previous Result"
-#~ msgstr "Iepriekšējais Rezultāts"
-
-#~ msgid "Next Result"
-#~ msgstr "Nākamais Rezultāts"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Pāriet uz Šķirkli"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Iziet no Šķirkļa"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Autortiesības © 2008 GNOME Do Developers"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Vairākkārtēja atlase"
-
-#~ msgid "Docklets"
-#~ msgstr "Dokleti"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Dokleti</b>"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Alternatīva Izeja"

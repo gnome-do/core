@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2011-05-24 12:58+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-25 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -654,163 +654,3 @@ msgstr "Stel dit in voor de toets die Do oproept."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Of het resultatenvenster altijd getoond wordt."
-
-#~ msgid "_About"
-#~ msgstr "_Info"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Thema:"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Roep GNOME Do op"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimaliseren"
-
-#~ msgid "Restore"
-#~ msgstr "Herstellen"
-
-#~ msgid "Close All"
-#~ msgstr "Alles sluiten"
-
-#~ msgid "No result found for"
-#~ msgstr "Geen resultaten gevonden voor"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Geavanceerde indicatoren"
-
-#~ msgid "Show Trash"
-#~ msgstr "Prullenbak tonen"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Versteroverlap toestaan"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Zoomknoppen"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Van beeldscherm wisselen"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Automatisch verbergen"
-
-#~ msgid "Trash"
-#~ msgstr "Prullenbak"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Er is een fout opgetreden bij het installeren van de "
-#~ "gekozen plug-ins</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Er is een fout opgetreden bij het installeren van de "
-#~ "gekozen plug-in</span></b>"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Verwijder uit het Dock"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Pictogramgrootte:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Prullenbak legen"
-
-#~ msgid "Desktop"
-#~ msgstr "Bureaublad"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximaliseren"
-
-#~ msgid "Copy Text"
-#~ msgstr "Tekst kopiëren"
-
-#~ msgid "Paste Text"
-#~ msgstr "Tekst plakken"
-
-#~ msgid "First Result"
-#~ msgstr "Eerste resultaat"
-
-#~ msgid "Last Result"
-#~ msgstr "Laatste resultaat"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 GNOME Do Developers"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zoom:"
-
-#~ msgid "Previous Result"
-#~ msgstr "Vorige resultaat"
-
-#~ msgid "Next Result"
-#~ msgstr "Volgende resultaat"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklets"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid "Hiding:"
-#~ msgstr "Verborgen:"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Alternatief beëindigen"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Alternatief activeren"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Alternatief verwijderen"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Meerdere selecteren"
-
-#~ msgid "Open Trash"
-#~ msgstr "Prullenbak openen"
-
-#~ msgid "Show"
-#~ msgstr "Tonen"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Ga naar tekstmodus"
-
-#~ msgid "Orientation:"
-#~ msgstr "Oriëntatie:"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky-gedrag</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Verwijderde items terugzetten"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Meerdere vensters aangeven"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Dubbelklik op een sneltoets om deze te wijzigen en typ een nieuwe in."
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Item verkennen"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Item verlaten"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Prullenbak leegmaken?</b></big>\n"
-#~ "\n"
-#~ "Indien u ervoor kiest om de prullenbak te legen, dan zullen alle\n"
-#~ "items in de prullenbak verwijderd worden. Let op, het is ook \n"
-#~ "mogelijk om items apart te verwijderen."

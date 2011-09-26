@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 14:43+0000\n"
 "Last-Translator: Rahman Yusri Aftian <fn.aftian@gmail.com>\n"
 "Language-Team: Javanese <jv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -629,21 +629,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "_Theme:"
-#~ msgstr "_Tema"
-
-#~ msgid "_About"
-#~ msgstr "Te_ntang"
-
-#~ msgid "Minimize"
-#~ msgstr "Cilikke"
-
-#~ msgid "Restore"
-#~ msgstr "Balikke"
-
-#~ msgid "Close All"
-#~ msgstr "Tutup Kabeh"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Dhelikke Otomatis"

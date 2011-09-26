@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:08+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -633,153 +633,3 @@ msgstr "Do를 호출하기 위한 키 명령을 이것으로 설정"
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "결과에 상관없이 창이 항상 보임."
-
-#~ msgid "_Theme:"
-#~ msgstr "테마(_T):"
-
-#~ msgid "_About"
-#~ msgstr "정보(_A)"
-
-#~ msgid "Close All"
-#~ msgstr "모두 닫기"
-
-#~ msgid "Minimize"
-#~ msgstr "최소화"
-
-#~ msgid "Restore"
-#~ msgstr "복구"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "단축키를 편집할때, 더블클릭후 새로운 입력하면 됩니다."
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr "<b><span size=\"large\">선택한 플러그인 설치중 에러 발생</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr "<b><span size=\"large\">선택한 플러그인 설치중 에러 발생</span></b>"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "고급 지시자"
-
-#~ msgid "Show Trash"
-#~ msgstr "쓰렉통 보이기"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "창 중첩 허용"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "줌 아이콘"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "모니터 전환"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "자동으로 숨기기"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "독에서 제거"
-
-#~ msgid "Trash"
-#~ msgstr "쓰레기통"
-
-#~ msgid "No result found for"
-#~ msgstr "다음의 결과를 찾을수 없음"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "지워진 항목 복원하기"
-
-#~ msgid "Zoom:"
-#~ msgstr "확대:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "아이콘 크기:"
-
-#~ msgid "Orientation:"
-#~ msgstr "방향:"
-
-#~ msgid "Hiding:"
-#~ msgstr "숨기기:"
-
-#~ msgid "Show"
-#~ msgstr "보기"
-
-#~ msgid "Empty Trash"
-#~ msgstr "휴지통 비우기"
-
-#~ msgid "Desktop"
-#~ msgstr "바탕화면"
-
-#~ msgid "Enter text mode"
-#~ msgstr "텍스트 모드 시작"
-
-#~ msgid "Open Trash"
-#~ msgstr "휴지통 열기"
-
-#~ msgid "Maximize"
-#~ msgstr "최대화"
-
-#~ msgid "Multiple selection"
-#~ msgstr "다중 선택"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "저작권 © 2008 GNOME Do Developers"
-
-#~ msgid "Copy Text"
-#~ msgstr "문자열 복사"
-
-#~ msgid "Paste Text"
-#~ msgstr "문자열 붙이기"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr "<big><b>휴지통에 있는 모든 것을 비울까요?</b></big>"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "활성키 교체"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Escape키 교체"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "GNOME Do 호출"
-
-#~ msgid "First Result"
-#~ msgstr "처음 결과"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Delete 키 교체"
-
-#~ msgid "Last Result"
-#~ msgstr "마지막 결과"
-
-#~ msgid "Previous Result"
-#~ msgstr "이전 결과"
-
-#~ msgid "Next Result"
-#~ msgstr "다음 결과"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "아이템 탐색"
-
-#~ msgid "Step out of Item"
-#~ msgstr "항목에서 나오기"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "다중 창 지시"
-
-#~ msgid "Docklets"
-#~ msgstr "독렛"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>독처럼 행동</b>"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>독렛</b>"

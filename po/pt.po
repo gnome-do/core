@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2011-06-21 21:15+0000\n"
 "Last-Translator: Marcos Aurélio Alcântara <Unknown>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-22 04:31+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -651,162 +651,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Se a janela de resultados deve ser sempre mostrada."
-
-#~ msgid "_About"
-#~ msgstr "_Acerca"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Tema:"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimizar"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Invocar GNOME Do"
-
-#~ msgid "No result found for"
-#~ msgstr "Nenhum resultado encontrado"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Permitir sobreposição de Janelas"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Esconder Automaticamente"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Ocorreu um erro ao instalar os plugins "
-#~ "seleccionados</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Ocorreu um erro ao instalar o plugin "
-#~ "seleccionado</span></b>"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Indicadores Avançados"
-
-#~ msgid "Show Trash"
-#~ msgstr "Mostrar Lixo"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Trocar Monitores"
-
-#~ msgid "Trash"
-#~ msgstr "Lixo"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Remover da Dock"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Zoom nos Ícones"
-
-#~ msgid "Open Trash"
-#~ msgstr "Abrir Lixo"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximizar"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Tamanho do Ícone:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientação:"
-
-#~ msgid "Show"
-#~ msgstr "Mostrar"
-
-#~ msgid "Desktop"
-#~ msgstr "Ambiente de trabalho"
-
-#~ msgid "Copy Text"
-#~ msgstr "Copiar Texto"
-
-#~ msgid "Paste Text"
-#~ msgstr "Colar Texto"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Entrar em modo texto"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Sair Alternativo"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Activar Alternativo"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Eliminar Alternativo"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Explorar o Item"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Sair do Item"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indicar Múltiplas Janelas"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "Para editar um atalho, clique-lhe duas vezes e digite um novo."
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Comportamento da \"Docky\"<b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Restaurar Itens Removidos"
-
-#~ msgid "Zoom:"
-#~ msgstr "Ampliação:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Ocultando:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Esvaziar Lixo"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>\"Docklets\"</b>"
-
-#~ msgid "Restore"
-#~ msgstr "Restaurar"
-
-#~ msgid "Close All"
-#~ msgstr "Fechar Tudo"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Esvaziar todos os itens no lixo?</b></big>\n"
-#~ "\n"
-#~ "Se optar por esvaziar o lixo, todos os itens aí presentes\n"
-#~ "serão eliminados permanentemente. Tenha em atenção\n"
-#~ "que também os pode eliminar separadamente."
-
-#~ msgid "Last Result"
-#~ msgstr "Último Resultado"
-
-#~ msgid "First Result"
-#~ msgstr "Primeiro Resultado"
-
-#~ msgid "Previous Result"
-#~ msgstr "Resultado Anterior"
-
-#~ msgid "Next Result"
-#~ msgstr "Resultado Seguinte"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Selecção múltipla"
-
-#~ msgid "Docklets"
-#~ msgstr "\"Docklets\""
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Direitos de autor © 2008 Programadores GNOME Do"

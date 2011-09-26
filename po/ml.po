@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:01+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Malayalam <ml@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -637,109 +637,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "_Theme:"
-#~ msgstr "ഥീം: (_T)"
-
-#~ msgid "_About"
-#~ msgstr "സംബന്ധിച്ച് _A"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "നീക്കം ചെയ്തവ പുനഃസ്ഥാപിക്കുക"
-
-#~ msgid "Zoom:"
-#~ msgstr "വലുതാക്കുക"
-
-#~ msgid "Icon Size:"
-#~ msgstr "ഐകോൺ വലിപ്പം:"
-
-#~ msgid "Hiding:"
-#~ msgstr "മറയ്ക്കുന്നു"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "നിരവധി ജാലകങ്ങൾ സൂചിപ്പിക്കുക"
-
-#~ msgid "Empty Trash"
-#~ msgstr "ചവറ്റുകുട്ട കാലിയാക്കുക"
-
-#~ msgid "Minimize"
-#~ msgstr "ചെറുതാക്കുക"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr "<big><b>ചവറ്റുകുട്ടയിലുള്ളവയെല്ലാം നീക്കം ചെയ്യുക?</b></big>"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "മോണിറ്ററുകൾ മാറ്റുക"
-
-#~ msgid "Open Trash"
-#~ msgstr "ചവറ്റുകുട്ട തുറക്കുക"
-
-#~ msgid "Restore"
-#~ msgstr "പുനഃസ്ഥാപിക്കുക"
-
-#~ msgid "Close All"
-#~ msgstr "എല്ലാം അടയ്ക്കുക"
-
-#~ msgid "Trash"
-#~ msgstr "ചവറ്റുകുട്ട"
-
-#~ msgid "Show"
-#~ msgstr "കാട്ടുക"
-
-#~ msgid "No result found for"
-#~ msgstr "ഒരു ഫലവും ലഭ്യമല്ല"
-
-#~ msgid "Desktop"
-#~ msgstr "ഡെസ്ക്ടോപ്പ്"
-
-#~ msgid "Paste Text"
-#~ msgstr "എഴുത്ത് സ്ഥാപിക്കുക"
-
-#~ msgid "Copy Text"
-#~ msgstr "എഴുത്ത് പകർത്തുക"
-
-#~ msgid "First Result"
-#~ msgstr "ആദ്യ ഫലം"
-
-#~ msgid "Last Result"
-#~ msgstr "ഒടുവിലത്തെ ഫലം"
-
-#~ msgid "Previous Result"
-#~ msgstr "മുൻ ഫലം"
-
-#~ msgid "Next Result"
-#~ msgstr "അടുത്ത ഫലം"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "പകർപ്പവകാശം © 2008 ജീനോം ഡൂ നിർമ്മാതാക്കൾ"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "ഒരു കുറുക്കുവഴി തിരുത്താനായി, അതിൽ ഡബിൾ ക്ലിക്ക് ചെയ്തശേഷം പുതിയത് ടൈപ്പ് "
-#~ "ചെയ്തു നൽകുക"
-
-#~ msgid "Step out of Item"
-#~ msgstr "ഇനത്തിൽ നിന്നു പുറത്തുകടക്കുക"
-
-#~ msgid "Multiple selection"
-#~ msgstr "നിരവധി തിരഞ്ഞെടുക്കൽ"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "ഇനത്തിനകത്തു തിരയുക"
-
-#~ msgid "Maximize"
-#~ msgstr "വലുതാക്കുക"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>ഡോക്കി പെരുമാറ്റം</b>"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>ഡോക്ക് ലെറ്റുകള്‍</b>"
-
-#~ msgid "Orientation:"
-#~ msgstr "ക്രമീകരണം"

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: Jenaro Centeno Gómez <jenarocenteno@gmail.com>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2011-06-22 23:54+0000\n"
-"Last-Translator: Aldo Mann <Unknown>\n"
+"Last-Translator: Alfredo Hernández <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-24 04:32+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -657,164 +657,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Indica si se debe mostrar siempre la ventana de resultados."
-
-#~ msgid "_Theme:"
-#~ msgstr "_Tema:"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Para editar un acceso directo, pulse dos veces con el ratón y escriba uno "
-#~ "nuevo."
-
-#~ msgid "_About"
-#~ msgstr "Acerca _de"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimizar"
-
-#~ msgid "Restore"
-#~ msgstr "Restaurar"
-
-#~ msgid "Close All"
-#~ msgstr "Cerrar todo"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Llamar a GNOME Do"
-
-#~ msgid "Trash"
-#~ msgstr "Papelera"
-
-#~ msgid "No result found for"
-#~ msgstr "No se han encontrado resultados para"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Ocultar automáticamente"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Hubo un error al instalar los complementos "
-#~ "seleccionados</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Hubo un error al instalar el complemento "
-#~ "seleccionado</span></b>"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Indicadores avanzados"
-
-#~ msgid "Show Trash"
-#~ msgstr "Mostrar papelera"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Ampliar iconos"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Quitar del dock"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Permitir superposición de ventanas"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Comportamiento de Docky</b>"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Tamaño del icono:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientación:"
-
-#~ msgid "Desktop"
-#~ msgstr "Escritorio"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximizar"
-
-#~ msgid "Show"
-#~ msgstr "Mostrar"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indicar múltiples ventanas"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Vaciar la papelera"
-
-#~ msgid "Copy Text"
-#~ msgstr "Copiar texto"
-
-#~ msgid "Paste Text"
-#~ msgstr "Pegar texto"
-
-#~ msgid "Previous Result"
-#~ msgstr "Resultado anterior"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Selección múltiple"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklets"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 Desarrolladores de GNOME Do"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Saltar este objeto"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>¿Borrar todos los archivos de la papelera?</b></big>\n"
-#~ "\n"
-#~ "Si elige vaciar la papelera, todos los elementos en ella\n"
-#~ "se borrarán permanentemente. Tenga en cuenta que\n"
-#~ "también puede borrarlos separadamente."
-
-#~ msgid "Hiding:"
-#~ msgstr "Ocultar:"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Salida alternativa"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Activado alternativo"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Borrado alternativo"
-
-#~ msgid "First Result"
-#~ msgstr "Primer resultado"
-
-#~ msgid "Last Result"
-#~ msgstr "Último resultado"
-
-#~ msgid "Next Result"
-#~ msgstr "Resultado siguiente"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Entrar en modo texto"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Navegar dentro del Objeto"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Cambio de Monitores"
-
-#~ msgid "Zoom:"
-#~ msgstr "Ampliar:"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Restaurar elementos eliminados"
-
-#~ msgid "Open Trash"
-#~ msgstr "Abrir papelera"
