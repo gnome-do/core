@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2010-12-05 15:01+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"PO-Revision-Date: 2011-10-01 06:07+0000\n"
+"Last-Translator: amith kk <Unknown>\n"
 "Language-Team: Malayalam <ml@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2011-10-02 04:44+0000\n"
+"X-Generator: Launchpad (build 14071)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -36,11 +36,11 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
-msgstr "<span size=\"large\"><b>പ്ലഗ്ഗിൻ അപ്‌‌ഡേറ്റുകൾ ലഭ്യമാണ്!</b></span>"
+msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
-msgstr "_അപ്‌‌ഡേറ്റുകൾ ഇൻസ്റ്റോൾ ചെയ്യുക"
+msgstr "അശ"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
@@ -63,6 +63,10 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"ഷോര്‍ട് കുട്ട് എഡിട്  ചെയ്യാന്‍ അതു ഡബിള്‍ ക്ലിക്ക് ചെയ്തു പുതിയ ഒന്നു "
+"ട്യ്പെ ചെയ്യുക..\n"
+"ഒരു ഷൊര്ട്ട്കുട്ട് പഴയ പടി കൊന്ടു വരാന്‍ ഡബിള്‍ ക്ലിക്ക് ചെയ്തു ബാക് സ്പസ് "
+"അടിക്കുക."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
