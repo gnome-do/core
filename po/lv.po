@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2010-12-05 15:30+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"PO-Revision-Date: 2011-10-03 12:28+0000\n"
+"Last-Translator: Rūdolfs Mazurs <Unknown>\n"
 "Language-Team: Latvian <lv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2011-10-05 04:31+0000\n"
+"X-Generator: Launchpad (build 14085)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -63,6 +63,9 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"Lai rediģētu īsceļu, veiciet dubultklikšķi un ievadiet jaunu.\n"
+"Lai atjaunotu īsceļu uz noklusēto vērtību, veiciet dubultklikšķi un spiediet "
+"taustiņu Backspace."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -146,7 +149,7 @@ msgstr "Nav sava konta?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
-msgstr ""
+msgstr "<b><span size=\"x-large\">Tam ir Do spraudnis!</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -154,14 +157,15 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"Do {0} spraudnis ir pieejams instalēšanai. Vai vēlaties, lai to aktivē?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Par spraudņiem man vairs nejautāt."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Instalēt"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -256,12 +260,12 @@ msgstr "Konta pārbaude sekmīga!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Kas ir Do?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Ko dara spraudnis {0}?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -327,18 +331,21 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"<b>Docky vairs nav Do tēma!</b>\n"
+"Tā tagad ir pieejama kā savrupa lietotne. GNOME Do tēma ir atstatīta uz "
+"klasisko. To var mainīt iestatījumos."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Izsaukt Do"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "Izsaukt teksta režīmu"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "Ieiet teksta režīmā"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -347,7 +354,7 @@ msgstr "Notīrīt"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Ielīmēt no starpliktuves"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -359,19 +366,19 @@ msgstr "Nākamais Panelis"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Iepriekšējais vienums"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Nākamais vienums"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "Pirmais vienums"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Pēdējais vienums"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -383,15 +390,15 @@ msgstr "Nākošie 5 Rezultāti"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "Iziet no vienuma"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "Ieiet vienumā"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "Izvēlēties vairākus vienumus"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -399,7 +406,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Autortiesības © 2009 GNOME Do izstrādātāji"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -465,7 +472,7 @@ msgstr "Saīsne"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktivēts"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -575,19 +582,19 @@ msgstr "Nav apraksta."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Adrese"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "Darba tālrunis"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Mājas tālrunis"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Mobilais tālrunis"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
