@@ -30,7 +30,7 @@ module_DATA = $(filter %.dll,$(OUTPUT_FILES)) $(filter %.mdb,$(OUTPUT_FILES))
 # Install executables as scripts
 module_SCRIPTS = $(filter %.exe,$(OUTPUT_FILES))
 
-MCS_FLAGS =  $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
+MCS_FLAGS =  $(MCS_LINQ_FLAG) $(DBUS_BUILD_DEFINES) -noconfig -codepage:utf8 -warn:4
 
 if ENABLE_DEBUG
 MCS_FLAGS += -d:DEBUG -debug
