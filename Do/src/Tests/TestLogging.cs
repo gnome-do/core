@@ -76,6 +76,40 @@ namespace Do
 			var logs = logger.EndLog ();
 			Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, "This is a log message"), logs.ToArray ());
 		}
+
+		[Test()]
+		public void TestMultiThreadedLogging ()
+		{
+			var logMessages = new List<string> ();
+			for (int i = 0; i < 25; i++) {
+				logMessages.Add (string.Format ("Log message {0}", i));
+			}
+
+			logger.StartLog ();
+
+			ManualResetEvent[] waitHandles = new ManualResetEvent[25];
+			for (int i = 0; i < waitHandles.Length; ++i) {
+				waitHandles[i] = new ManualResetEvent (false);
+			}
+
+			int threadCounter = -1;
+			foreach (var message in logMessages) {
+				var thread = new Thread (() => {
+					int i = Interlocked.Increment (ref threadCounter);
+					Log.Debug (logMessages [i]);
+					waitHandles [i].Set ();
+				});
+				thread.Start ();
+			}
+
+			// Should really wait on synchronisation handles.
+			WaitHandle.WaitAll (waitHandles);
+
+			var logs = logger.EndLog ().ToArray ();
+			foreach (var msg in logMessages) {
+				Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, msg), logs);
+			}
+		}
 	}
 }
 
