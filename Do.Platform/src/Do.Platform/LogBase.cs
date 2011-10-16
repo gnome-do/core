@@ -66,12 +66,10 @@ namespace Do.Platform
 			
 			msg = string.Format (msg, args);
 			if (Interlocked.CompareExchange (ref writing, 1, 0) == 0) {
-				if (pending_log_calls.Any ()) {
-					// Flush delayed log calls.
-					// First, swap PendingLogCalls with an empty collection so it
-					// is not modified while we enumerate.
-					var calls = System.Threading.Interlocked.Exchange (ref pending_log_calls, new LinkedList<LogCall> ());
-
+				// First, swap PendingLogCalls with an empty collection so it
+				// is not modified while we enumerate.
+				var calls = System.Threading.Interlocked.Exchange (ref pending_log_calls, new LinkedList<LogCall> ());
+				if (calls.Any ()) {
 					// Log all pending calls.
 					foreach (LogCall call in calls)
 						foreach (ILogService log in Services.Logs)
