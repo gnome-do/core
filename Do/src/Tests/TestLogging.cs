@@ -77,19 +77,19 @@ namespace Do
 			Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, "This is a log message"), logs.ToArray ());
 		}
 
-		[Test()]
+		[Test, Timeout (2000)]
 		public void TestMultiThreadedLogging ()
 		{
 			var logMessages = new List<string> ();
-			for (int i = 0; i < 25; i++) {
+			for (int i = 0; i < 100; i++) {
 				logMessages.Add (string.Format ("Log message {0}", i));
 			}
 
 			logger.StartLog ();
 
-			ManualResetEvent[] waitHandles = new ManualResetEvent[25];
+			ManualResetEvent[] waitHandles = new ManualResetEvent[logMessages.Count];
 			for (int i = 0; i < waitHandles.Length; ++i) {
-				waitHandles[i] = new ManualResetEvent (false);
+				waitHandles [i] = new ManualResetEvent (false);
 			}
 
 			int threadCounter = -1;
@@ -102,8 +102,11 @@ namespace Do
 				thread.Start ();
 			}
 
+
+
 			// Should really wait on synchronisation handles.
-			WaitHandle.WaitAll (waitHandles);
+			foreach (var handle in waitHandles)
+				handle.WaitOne ();
 
 			var logs = logger.EndLog ().ToArray ();
 			foreach (var msg in logMessages) {
