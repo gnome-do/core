@@ -36,11 +36,16 @@ namespace Do
 	public class MockLogger : AbstractLogService
 	{
 		List<Tuple<LogLevel, string>> log;
+		public bool recursiveLog;
 
 		public override void Log (LogLevel level, string msg)
 		{
-			if (log != null)
+			if (log != null) {
 				log.Add (new Tuple<LogLevel, string> (level, msg));
+				if (recursiveLog) {
+					Platform.Log.Debug ("Recursive log: {0}", msg);
+				}
+			}
 		}
 
 		public void StartLog ()
@@ -112,6 +117,34 @@ namespace Do
 			foreach (var msg in logMessages) {
 				Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, msg), logs);
 			}
+		}
+
+		[Test, Description ("Expected fail: Log delays recursive calls until the next Log call")]
+		public void TestRecursiveLogging ()
+		{
+			string msg = "Hello";
+			logger.StartLog ();
+			logger.recursiveLog = true;
+			Log.Debug (msg);
+
+			var logs = logger.EndLog ().ToArray ();
+			Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, msg), logs);
+			Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, String.Format ("Recursive log: {0}", msg)), logs);
+		}
+
+		[Test]
+		public void TestRecursiveLoggingWithFlush ()
+		{
+			string msg = "Hello";
+			logger.StartLog ();
+			logger.recursiveLog = true;
+			Log.Debug (msg);
+
+			Log.Debug ("Flush");
+
+			var logs = logger.EndLog ().ToArray ();
+			Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, msg), logs);
+			Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, String.Format ("Recursive log: {0}", msg)), logs);
 		}
 	}
 }
