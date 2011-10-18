@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2011-06-19 07:47+0000\n"
-"Last-Translator: geniv <geniv.radek@gmail.com>\n"
+"PO-Revision-Date: 2011-10-17 20:49+0000\n"
+"Last-Translator: Mafiosso <pavelvonlostice@seznam.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2011-10-18 04:38+0000\n"
+"X-Generator: Launchpad (build 14157)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -158,6 +158,8 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"Do plugin pro {0} je dostupný k instalaci. Přejete si, abychom jej povolili "
+"pro vás?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
@@ -265,7 +267,7 @@ msgstr "Co to dělá?"
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Co plugin {0} dělá?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -330,7 +332,7 @@ msgid ""
 "<b>Docky is no longer a Do theme!</b>\n"
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
-msgstr ""
+msgstr "<b>Docky již není tématem Do!</b>"
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
@@ -395,7 +397,7 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "Zvolit více prvků"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -403,7 +405,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Copyright © 2009 GNOME Do vývojáři"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
