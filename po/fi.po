@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2010-12-05 15:22+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"PO-Revision-Date: 2011-10-18 18:35+0000\n"
+"Last-Translator: Juhani Numminen <juhaninumminen0@gmail.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2011-10-19 04:36+0000\n"
+"X-Generator: Launchpad (build 14157)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -161,7 +161,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Asenna"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -256,7 +256,7 @@ msgstr "Tunnuksen vahvistus onnistui."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Mikä Do on?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
@@ -359,15 +359,15 @@ msgstr "Seuraava ruutu"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Edellinen kohde"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Seuraava kohde"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "Ensimmäinen kohta"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
