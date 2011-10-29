@@ -107,9 +107,6 @@ namespace Do
 				thread.Start ();
 			}
 
-
-
-			// Should really wait on synchronisation handles.
 			foreach (var handle in waitHandles)
 				handle.WaitOne ();
 
