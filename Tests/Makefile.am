@@ -69,3 +69,4 @@ test-environment: $(COMPONENT_DEPS) $(BUILD_DIR)/Do.exe
 TESTS_ENVIRONMENT=nunit-console
 TESTS=Do.Tests.dll
 
+CLEANFILES=$(foreach component, $(COMPONENT_DEPS), $(notdir $(component))) Do.exe test-environment Do.Tests.dll Do.Tests.dll.mdb TestResult.xml
