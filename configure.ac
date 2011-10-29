@@ -194,6 +194,8 @@ data/icons/hicolor/scalable/apps/Makefile
 data/icons/hicolor/Makefile
 m4/Makefile
 po/Makefile.in
+Tests/Makefile
+Tests/AssemblyInfo.cs
 ])
 
 AC_OUTPUT

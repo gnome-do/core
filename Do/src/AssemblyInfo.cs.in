@@ -48,6 +48,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 
+// Expose internal members to the test assembly
+[assembly: InternalsVisibleTo ("Do.Tests")]
+
 namespace Do
 {
 	internal static class AssemblyInfo

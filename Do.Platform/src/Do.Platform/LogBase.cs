@@ -19,6 +19,7 @@
 
 using System;
 using System.Linq;
+using System.Threading;
 using System.Collections.Generic;
 
 using Do.Universe;
@@ -49,12 +50,12 @@ namespace Do.Platform
 
 		public static LogLevel DisplayLevel { get; set; }
 
-		static bool Writing { get; set; }
+		static int writing;
 		static ICollection<LogCall> pending_log_calls;
 
 		static LogBase ()
 		{
-			Writing = false;
+			writing = 0;
 			pending_log_calls = new LinkedList<LogCall> ();
 		}
 
@@ -64,19 +65,11 @@ namespace Do.Platform
 				return;
 			
 			msg = string.Format (msg, args);
-			if (Writing) {
-				// In the process of logging, another log call has been made.
-				// We need to avoid the infinite regress this may cause.
-				pending_log_calls.Add (new LogCall (level, msg));
-			} else {
-				Writing = true;
-
-				if (pending_log_calls.Any ()) {
-					// Flush delayed log calls.
-					// First, swap PendingLogCalls with an empty collection so it
-					// is not modified while we enumerate.
-					var calls = System.Threading.Interlocked.Exchange (ref pending_log_calls, new LinkedList<LogCall> ());
-
+			if (Interlocked.CompareExchange (ref writing, 1, 0) == 0) {
+				// First, swap PendingLogCalls with an empty collection so it
+				// is not modified while we enumerate.
+				var calls = System.Threading.Interlocked.Exchange (ref pending_log_calls, new LinkedList<LogCall> ());
+				if (calls.Any ()) {
 					// Log all pending calls.
 					foreach (LogCall call in calls)
 						foreach (ILogService log in Services.Logs)
@@ -87,7 +80,11 @@ namespace Do.Platform
 				foreach (ILogService log in Services.Logs)
 					log.Log (level, msg);
 				
-				Writing = false;
+				writing = 0;
+			} else {
+				// In the process of logging, another log call has been made.
+				// We need to avoid the infinite regress this may cause.
+				pending_log_calls.Add (new LogCall (level, msg));
 			}
 		}
 	}

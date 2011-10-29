@@ -57,9 +57,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Do.Platform.addin.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="src\Do.Platform\Do.Platform.Common\Tests\DictionaryPreferencesServiceTests.cs" />
     <Compile Include="src\Do.Platform\Do.Platform.Common\AbstractKeyBindingService.cs" />
     <Compile Include="src\Do.Platform\Do.Platform.Common\AbstractLogService.cs" />
@@ -131,5 +128,10 @@
       <Project>{0F92F14A-CCFC-47E5-BC16-57F8C31F68F9}</Project>
       <Name>Do.Universe</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Do.Platform.addin.xml">
+      <LogicalName>Do.Platform.addin.xml</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

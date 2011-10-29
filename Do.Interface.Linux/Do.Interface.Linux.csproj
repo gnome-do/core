@@ -60,7 +60,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Do.Interface.Linux.addin.xml" />
     <None Include="Resources\settings-triangle.png" />
   </ItemGroup>
   <ItemGroup>
@@ -100,5 +99,10 @@
       <Project>{2EB5EEF4-D946-40A7-BCC7-EAE5003D5CED}</Project>
       <Name>Do.Platform</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Do.Interface.Linux.addin.xml">
+      <LogicalName>Do.Interface.Linux.addin.xml</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

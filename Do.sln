@@ -27,10 +27,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do.Platform.Windows", "Do.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do.Universe", "Do.Universe\Do.Universe.csproj", "{0F92F14A-CCFC-47E5-BC16-57F8C31F68F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
+		Default|Any CPU = Default|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{00C8A58D-8C14-4CC6-AA64-CA9A80EC9465}.Debug|x86.ActiveCfg = Debug|x86
@@ -73,6 +76,12 @@ Global
 		{68C0DB8D-1DFA-47B1-8CD7-548224602EE0}.Debug|x86.Build.0 = Debug|x86
 		{68C0DB8D-1DFA-47B1-8CD7-548224602EE0}.Release|x86.ActiveCfg = Release|x86
 		{68C0DB8D-1DFA-47B1-8CD7-548224602EE0}.Release|x86.Build.0 = Release|x86
+		{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}.Debug|x86.ActiveCfg = Debug|x86
+		{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}.Debug|x86.Build.0 = Debug|x86
+		{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}.Default|Any CPU.ActiveCfg = Debug|x86
+		{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}.Default|Any CPU.Build.0 = Debug|x86
+		{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}.Release|x86.ActiveCfg = Release|x86
+		{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}.Release|x86.Build.0 = Release|x86
 		{F68AFED6-BABE-492F-95F2-435CD9300396}.Debug|x86.ActiveCfg = Debug|x86
 		{F68AFED6-BABE-492F-95F2-435CD9300396}.Debug|x86.Build.0 = Debug|x86
 		{F68AFED6-BABE-492F-95F2-435CD9300396}.Release|x86.ActiveCfg = Release|x86
