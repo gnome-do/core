@@ -20,6 +20,10 @@ SUBDIRS = \
 	libdo \
 	m4
 
+if HAVE_NUNIT
+SUBDIRS += Tests
+endif
+
 # Get rid of the build dir on clean.
 clean-local:
 	rm -rf $(top_builddir)/build

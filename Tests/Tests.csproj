@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="TestLogging.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Tests.addin.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Do\Do.csproj">
+      <Project>{1EF59A40-D832-43DD-A5F3-C6A02081CD74}</Project>
+      <Name>Do</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Interface.Linux\Do.Interface.Linux.csproj">
+      <Project>{5809CEE9-020D-4858-86AE-94E2527146FE}</Project>
+      <Name>Do.Interface.Linux</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Platform\Do.Platform.csproj">
+      <Project>{2EB5EEF4-D946-40A7-BCC7-EAE5003D5CED}</Project>
+      <Name>Do.Platform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Universe\Do.Universe.csproj">
+      <Project>{0F92F14A-CCFC-47E5-BC16-57F8C31F68F9}</Project>
+      <Name>Do.Universe</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.10.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Package>nunit</Package>
+    </Reference>
+  </ItemGroup>
+</Project>
