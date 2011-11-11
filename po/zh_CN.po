@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: Li Linxiao <linxiao.li@yahoo.com>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2010-12-05 15:03+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"PO-Revision-Date: 2011-11-10 14:28+0000\n"
+"Last-Translator: zhanshime <Unknown>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2011-11-11 04:44+0000\n"
+"X-Generator: Launchpad (build 14277)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -60,6 +60,8 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"要编辑一个捷径操作，请双击它并输入新内容\n"
+"要恢复捷径操作为缺省值，请双击然后按Backspace键"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -95,7 +97,7 @@ msgstr "背景颜色:"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:82
 msgid "_Reset"
-msgstr "重置(_R)"
+msgstr "复位(_R)"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:101
 msgid "Show window shadow"
@@ -127,7 +129,7 @@ msgstr "键入任意字符开始搜索"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
-msgstr "口令"
+msgstr "密码"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
 msgid "Username"
@@ -143,22 +145,22 @@ msgstr "还没有账号？"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
-msgstr ""
+msgstr "<b><span size=\"x-large\">有一个合适的Do的插件</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
 msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
-msgstr ""
+msgstr "一个针对{0}的插件可以被安装。你愿意让我们为你激活它吗？"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "别再问我有关Do插件的事了。有木有！"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "安装(_I)"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -196,7 +198,7 @@ msgstr "只要显示在"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:57
 msgid "Applications"
-msgstr "应用程序"
+msgstr "申请"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:61
 msgid "Finds applications in many locations."
@@ -253,12 +255,12 @@ msgstr "账户验证成功！"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "什么是Do？"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "{0}插件有什么用？"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -344,7 +346,7 @@ msgstr "清除"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "从剪贴板粘贴"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -356,19 +358,19 @@ msgstr "下一面板"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "前一项"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "下一个项目"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "第一个项目"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "最后一项"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -462,7 +464,7 @@ msgstr "快捷方式"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "禁用"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -571,19 +573,19 @@ msgstr "无描述。"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "地址"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "办公电话"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "住宅电话"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "移动电话"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""

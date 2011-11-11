@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2010-12-05 15:08+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"PO-Revision-Date: 2011-11-10 07:58+0000\n"
+"Last-Translator: MinSik CHO <Unknown>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2011-11-11 04:44+0000\n"
+"X-Generator: Launchpad (build 14277)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -61,6 +61,8 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"바로가기를 수정하려면, 더블클릭하고 새 설정을 입력하세요.\n"
+"초기값으로 돌리려면 더블클릭하고 백스페이스를 누르세요."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -151,15 +153,15 @@ msgstr ""
 msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
-msgstr ""
+msgstr "{0}를 위한 Do플러그인을 설치할 수 있습니다. 활성화할까요?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Do 플러그인에 대해 다시 물어보지 않기"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_설치"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -254,12 +256,12 @@ msgstr "계정 검증 성공!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Do 가 무엇입니까?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "{0} 플러그인이 하는 일이 무엇입니까?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -325,6 +327,8 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"<b>Docky는 더이상 Do테마가 아닙니다!</b>\n"
+"Docky는 이제 분리된 애플리케이션입니다. 그놈 Do 테마가 클래식으로 재설정되었습니다. 설정에서 바꿀 수 있습니다."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
