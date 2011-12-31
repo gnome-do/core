@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: gnome-do\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2011-08-06 13:13+0000\n"
-"Last-Translator: xemard.nicolas <Unknown>\n"
+"PO-Revision-Date: 2011-12-30 18:24+0000\n"
+"Last-Translator: Cyberscooty <Unknown>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2011-12-31 05:20+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -340,11 +340,11 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Appeler Do"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "Appel en mode texte"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
