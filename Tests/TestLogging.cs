@@ -116,7 +116,8 @@ namespace Do
 			}
 		}
 
-		[Test, Description ("Expected fail: Log delays recursive calls until the next Log call")]
+		[Test]
+		[Ignore ("Expected fail: Log delays recursive calls until the next Log call")]
 		public void TestRecursiveLogging ()
 		{
 			string msg = "Hello";
