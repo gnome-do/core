@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2011-11-04 09:39+0000\n"
-"Last-Translator: Juhani Numminen <juhaninumminen0@gmail.com>\n"
+"PO-Revision-Date: 2012-01-04 05:19+0000\n"
+"Last-Translator: Ville Pilvio <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-05 04:43+0000\n"
-"X-Generator: Launchpad (build 14231)\n"
+"X-Launchpad-Export-Date: 2012-01-05 05:22+0000\n"
+"X-Generator: Launchpad (build 14625)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -371,7 +371,7 @@ msgstr "Ensimmäinen kohta"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Viimeinen kohde"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
