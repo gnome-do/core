@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2010-12-05 14:48+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"PO-Revision-Date: 2012-01-05 15:18+0000\n"
+"Last-Translator: P. Suresh <Unknown>\n"
 "Language-Team: Tamil <ta@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-01-06 04:45+0000\n"
+"X-Generator: Launchpad (build 14637)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -30,6 +30,9 @@ msgid ""
 "<b>Your display is not properly configured for theme and animation support. "
 "To use these features, you must enable compositing.</b>"
 msgstr ""
+"<b>உங்கள் திரை, அடைப்பலகை மற்றும் அசைவூட்ட ஆதரவிற்கு முழுமையாக "
+"அமைக்கப்படவில்லை. இந்த அம்சங்களைப் பயன்படுத்த, நீங்கள் கலவையக்கலை "
+"செயல்படுத்தவும்.</b>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
@@ -37,7 +40,7 @@ msgstr ""
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
-msgstr ""
+msgstr "_புதுப்பிப்புகளை நிறுவு"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
@@ -49,25 +52,28 @@ msgstr "குனோம் டூ வை உள் நழையும் போ�
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
 msgid "Hide window on first launch (quiet mode)."
-msgstr ""
+msgstr "முதல் முறை ஏவும்போது சாளரத்தை மறைக்க (அமைதி முறை)."
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
 msgid "Show notification icon"
-msgstr ""
+msgstr "அறிவிப்புச் சின்னத்தைக் காண்பி."
 
 #: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:63
 msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"ஒரு குறுக்குவிசையை மாற்ற, இரட்டை சொடுக்கி புதியதை தட்டச்சிடவும்.\n"
+"ஒரு குறுக்குவிசையை முன்னிருப்புக்கு மறுசேமிக்க, இரட்டை சொடுக்கி பின்விசையை "
+"அழுத்தவும்."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
-msgstr "காட்டுக:"
+msgstr "காண்பி:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:84
 msgid "Search:"
-msgstr "தேடு:"
+msgstr "தேடுக:"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:129
 msgid "_Configure"
@@ -75,7 +81,7 @@ msgstr "உள்ளமை"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
 msgid "PluginConfigurationWindow"
-msgstr ""
+msgstr "சொருகுநிரல்கட்டமைப்புச்சாளரம்"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
@@ -87,7 +93,7 @@ msgstr "பக்கம் 1"
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
 msgid "GNOME Do Preferences"
-msgstr ""
+msgstr "க்னோம் டூ முன்னுரிமைகள்"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:47
 msgid "Background Color:"
@@ -95,7 +101,7 @@ msgstr "பின்னணி நிறம்:"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:82
 msgid "_Reset"
-msgstr "மறுஅமை (_R)"
+msgstr "_மீட்டமை"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:101
 msgid "Show window shadow"
@@ -103,7 +109,7 @@ msgstr "சாளரத்தின் நிழலைக் காட்டு"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:113
 msgid "Animate window"
-msgstr ""
+msgstr "சாளரத்தை அசைவூட்டு"
 
 #: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:735
 #, csharp-format
@@ -118,28 +124,28 @@ msgstr "தேடுவதற்கு தட்டச்சிடவும்"
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:57
 msgid "Type to begin searching"
-msgstr ""
+msgstr "தேடலைத் துவங்குவதற்குத் தட்டச்சிடவும்"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
 msgid "Type to start searching."
-msgstr ""
+msgstr "தேடலைத் துவங்குவதற்குத் தட்டச்சிடவும்."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
 msgid "Password"
-msgstr "கடவுச்சொல்"
+msgstr "கடவுச்சொல்"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
 msgid "Username"
-msgstr "பயனாளர் பெயர்"
+msgstr "பயனர்பெயர்"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:124
 msgid "<i>Verify and save account information</i>"
-msgstr ""
+msgstr "<i>கணக்குத் தகவல்களை சரிபார்த்துச் சேமிக்கவும்</i>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:180
 msgid "Don't have an account?"
-msgstr ""
+msgstr "கணக்கு இல்லையா?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
@@ -151,19 +157,21 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"ஒரு {0} விற்கான டூ சொருகுநிரல் நிருவலுக்கு உள்ளது. அதனை நாங்கள் "
+"செயல்படுத்துவதை நீங்கள் விரும்புகிறீர்களா?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "என்னிடம் டூ சொருகுநிரல்களைப் பற்றி இனி கேட்காதே."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "நிறுவு (_I)"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
 msgid "Error saving {0}"
-msgstr ""
+msgstr "சேமிப்புப் பிழை {0}"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 #, csharp-format
@@ -176,7 +184,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:143
 msgid "Icon"
-msgstr "சின்னம்"
+msgstr "குறும்படம்"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:146
 msgid "Categories"
@@ -184,7 +192,7 @@ msgstr "வகைகள்"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:152
 msgid "This application could not be indexed."
-msgstr ""
+msgstr "இந்தப் பயன்பாடு குறியிடப்பட முடியாது."
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:181
 msgid "Exec"
@@ -200,7 +208,7 @@ msgstr "செயலிகள்"
 
 #: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:61
 msgid "Finds applications in many locations."
-msgstr ""
+msgstr "பல இடங்களில் பயன்பாடு காணப்படுகிறது."
 
 #: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:82
 #, csharp-format
@@ -210,64 +218,64 @@ msgstr "{0} செயலி வகை"
 #: ../Do.Platform.Linux/src/Do.Universe/CategoryItem.cs:83
 #, csharp-format
 msgid "Applications in the {0} category"
-msgstr ""
+msgstr "{0} வகை செயலி"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:46
 msgid "GNOME Special Locations"
-msgstr ""
+msgstr "க்னோம் சிறப்பு இடங்கள்"
 
 #: ../Do.Platform.Linux/src/Do.Universe/GNOMESpecialLocationsItemSource.cs:51
 msgid "Special locations in GNOME, such as Computer and Network."
-msgstr ""
+msgstr "கணினி மற்றும் பிணையம் போன்ற க்னோம் சிறப்பு இடங்கள்."
 
 #: ../Do.Platform.Linux/src/Do.Universe/NullApplicationItem.cs:48
 #, csharp-format
 msgid "Error reading {0}."
-msgstr ""
+msgstr "படிப்புப் பிழை {0}."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:43
 #, csharp-format
 msgid "Sign up for {0}"
-msgstr ""
+msgstr "{0} விற்குப் பதிவு செய்."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:44
 msgid "Validating..."
-msgstr ""
+msgstr "மதிப்பிடப்படுகிறது..."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:45
 #, csharp-format
 msgid "Don't have {0}?"
-msgstr ""
+msgstr "{0} இல்லையா?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:46
 msgid "Account validation failed!"
-msgstr ""
+msgstr "கணக்கு மெய்ப்பிப்பு செயலிழந்தது!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:47
 msgid "Verify and save account information"
-msgstr ""
+msgstr "கணக்குத் தகவல்களை சரிபார்த்துச் சேமி"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/AbstractLoginWidget.cs:48
 msgid "Account validation succeeded!"
-msgstr ""
+msgstr "கணக்கு மெய்ப்பிப்பு வெற்றிபெற்றது!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "டூ என்றால் என்ன?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "{0} சொருகுநிரல் என்ன செய்யும்?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "பிடிப்புப்பலகைக்கு நகல் எடு"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:41
 msgid "Copy current text to clipboard"
-msgstr ""
+msgstr "தற்போதய உரையை பிடிப்புப்பலகைக்கு நகலெடு."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:35
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/EmailContactDetailItem.cs:34
@@ -276,11 +284,11 @@ msgstr "மின்னஞ்சல்"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/EmailAction.cs:41
 msgid "Compose a new email to a friend."
-msgstr ""
+msgstr "நண்பனுக்குப் புதிய செய்தியை உருவக்கு."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:38
 msgid "Open"
-msgstr "திற"
+msgstr "திறக்கவும்"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:42
 msgid "Opens many kinds of items."
@@ -296,27 +304,27 @@ msgstr ""
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:38
 msgid "Open With..."
-msgstr ""
+msgstr "இதனால் திற..."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenWithAction.cs:42
 msgid "Opens files in specific applications."
-msgstr ""
+msgstr "குறிப்பிட்ட செயலிகளால் கோப்புக்களைத் திற."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:35
 msgid "Reveal"
-msgstr ""
+msgstr "வெளிப்படுத்துக"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RevealAction.cs:39
 msgid "Reveals a file in the file manager."
-msgstr ""
+msgstr "ஒரு கோப்பினை கோப்பு மேலாளரால் வெளிப்படுத்துக."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:36
 msgid "Run"
-msgstr "இயக்கு"
+msgstr "இயக்குக"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/RunAction.cs:40
 msgid "Run an application, script, or other executable."
-msgstr ""
+msgstr "ஒரு செயலி, உரைக்கட்டளை அல்லது பிற இயங்கக்கூடியவைகளை இயக்குக."
 
 #: ../Do/src/Do.Core/Controller.cs:109
 msgid ""
@@ -335,16 +343,16 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "உரை முறையில் நுழைக"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
 msgid "Clear"
-msgstr ""
+msgstr "துடை"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "பிடிப்புப்பலகையிலிருந்து ஒட்டுக."
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -356,47 +364,47 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "முந்தைய உருப்படி"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "அடுத்த உருப்படி"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "முதலாவது உருப்படி"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "இறுதி உருப்படி"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
-msgstr ""
+msgstr "முந்தைய 5 முடிவுகள்"
 
 #: ../Do/src/Do.Core/Controller.cs:168
 msgid "Next 5 Results"
-msgstr ""
+msgstr "அடுத்த 5 முடிவுகள்"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "உருப்படியிலிருந்து வெளியே அடிவை"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "உருப்படிக்குள் அடிவை"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "பல உருப்படிகளைத் தேர்ந்தெடு"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
-msgstr ""
+msgstr "க்னோம் டூ"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "பதிப்புரிமை © 2009 க்னோம் டூ உருவக்குனர்கள்"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -407,51 +415,51 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:1019
 msgid "Visit Homepage"
-msgstr ""
+msgstr "முகப்புப் பக்கத்தை விஜயம் செய்"
 
 #: ../Do/src/Do.Core/DoAddinInstaller.cs:37
 msgid "Installation cancelled"
-msgstr ""
+msgstr "நிறுவல் ரத்து செய்யப்பட்டது"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/CommunityAddinClassifier.cs:36
 msgid "Community Plugins"
-msgstr ""
+msgstr "சமூகம்சார் சொருகுநிரல்கள்"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/GreedyAddinClassifier.cs:34
 msgid "All Plugins"
-msgstr ""
+msgstr "எல்லா சொருகுநிரல்களும்"
 
 #: ../Do/src/Do.Core/Do.Core.Addins/OfficialAddinClassifier.cs:35
 msgid "Official Plugins"
-msgstr ""
+msgstr "அதிகாரப்பூர்வ சொருகுநிரல்கள்"
 
 #: ../Do/src/Do.UI/ColorConfigurationWidget.cs:107
 msgid "Appearance"
-msgstr ""
+msgstr "தோற்றம்"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:159
 msgid "Some of the required add-ins were not found"
-msgstr ""
+msgstr "சில தேவையான மேல்சேர்கள் காணப்படவில்லை"
 
 #: ../Do/src/Do.UI/DoAddinInstallerDialog.cs:172
 msgid "Installation failed"
-msgstr ""
+msgstr "நிறுவல் தோல்வியடைந்தது"
 
 #: ../Do/src/Do.UI/GeneralPreferencesWidget.cs:43
 msgid "General"
-msgstr ""
+msgstr "பொது"
 
 #: ../Do/src/Do.UI/KeybindingsPreferencesWidget.cs:42
 msgid "Keyboard"
-msgstr ""
+msgstr "விசைப்பலகை"
 
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:49
 msgid "Action"
-msgstr ""
+msgstr "செயல்"
 
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:56
 msgid "Shortcut"
-msgstr ""
+msgstr "சுருக்குவிசை"
 
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:73
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:101
@@ -459,11 +467,11 @@ msgstr ""
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "முடக்கப்பட்டது"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
-msgstr ""
+msgstr "சொருகுநிரல்கள்"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:32
 msgid "<b><span size=\"large\">There was an error installing the selected"
@@ -471,36 +479,36 @@ msgstr ""
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:36
 msgid "plugin"
-msgstr ""
+msgstr "சொருகுநிரல்"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:37
 msgid "plugins"
-msgstr ""
+msgstr "சொருகுநிரல்கள்"
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:43
 msgid "and "
-msgstr ""
+msgstr "மற்றும் "
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:47
 msgid " is not a valid plugin file."
-msgstr ""
+msgstr " ஒரு முறையான சொருகுநிரல் கோப்பு இல்லை."
 
 #: ../Do/src/Do.UI/PluginErrorDialog.cs:49
 msgid " are not valid plugin files."
-msgstr ""
+msgstr " முறையான சொருகுநிரல் கொப்புக்கள் இல்லை."
 
 #: ../Do/src/Do.Universe/AboutItem.cs:31
 msgid "About Do"
-msgstr ""
+msgstr "டூ பற்றி"
 
 #: ../Do/src/Do.Universe/AboutItem.cs:35
 msgid "About GNOME Do"
-msgstr ""
+msgstr "க்னோம் டூ பற்றி"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:33
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:53
 msgid "Clear Learning"
-msgstr ""
+msgstr "படிப்பைத் துடை"
 
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:37
 msgid "Resets Do's learned usage data."
@@ -512,11 +520,11 @@ msgstr ""
 
 #: ../Do/src/Do.Universe/DonateItem.cs:36
 msgid "Donate"
-msgstr ""
+msgstr "நன்கொடையளி"
 
 #: ../Do/src/Do.Universe/DonateItem.cs:40
 msgid "Support GNOME Do development!"
-msgstr ""
+msgstr "க்னோம் டூ உருவாக்கத்தை ஆதரி."
 
 #: ../Do/src/Do.Universe/InternalItemSource.cs:49
 msgid "Internal GNOME Do Items"
@@ -536,27 +544,27 @@ msgstr ""
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:31
 msgid "Preferences"
-msgstr ""
+msgstr "முன்னுரிமைகள்"
 
 #: ../Do/src/Do.Universe/PreferencesItem.cs:35
 msgid "Adjust Do's settings, manage plugins, etc."
-msgstr ""
+msgstr "டூ அமைப்புக்களை ஒழுங்குப்படுத்து, சொருகுநிரல்களை நிர்வகி, போன்றவை."
 
 #: ../Do/src/Do.Universe/QuitItem.cs:30
 msgid "Quit"
-msgstr ""
+msgstr "விலகுக"
 
 #: ../Do/src/Do.Universe/QuitItem.cs:34
 msgid "Quit GNOME Do - come back soon!"
-msgstr ""
+msgstr "க்னோம் டூ விலகுக - விரைவில் மீண்டும் வருக!"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:63
 msgid "Selected text"
-msgstr ""
+msgstr "தேரப்பட்ட உரை"
 
 #: ../Do/src/Do.Universe/SelectedTextItem.cs:67
 msgid "Currently selected text."
-msgstr ""
+msgstr "தற்சமையம் தேரப்பட்ட உரை"
 
 #: ../Do.Universe/src/Do.Universe/Element.cs:42
 msgid "No name"
@@ -568,19 +576,19 @@ msgstr "விளக்கம் இல்லை."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "முகவரி"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "அலுவலக தொலைபேசி"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "வீட்டு தொலைபேசி"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "அலைபேசி"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -590,7 +598,7 @@ msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:1
 msgid "Always show results window."
-msgstr ""
+msgstr "எப்பொழுதும் முடிவுகள் சாளரத்தைக் காண்பிக்கவும்."
 
 #: ../data/gnome-do.schemas.in.h:2
 msgid ""
@@ -612,7 +620,7 @@ msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:6
 msgid "Hide main window when Do starts."
-msgstr ""
+msgstr "டூ துவங்குகையில் முகப்பு சாளரத்தை மறைக்கவும்."
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
