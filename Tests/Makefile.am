@@ -1,5 +1,6 @@
 FILES = \
 	TestLogging.cs \
+	TestKeybindingService.cs \
 	AssemblyInfo.cs
 
 RESOURCES = \

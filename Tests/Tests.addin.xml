@@ -10,5 +10,7 @@
 
 	<Extension path="/Do/Service">
 		<Service type="Do.MockLogger"/>
+		<Service type="Do.MockPreferencesService" />
+		<Service type="Do.MockKeybindingService" />
 	</Extension>
 </Addin>
