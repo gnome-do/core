@@ -43,6 +43,7 @@ MCS_FLAGS =  $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
 
 if ENABLE_DEBUG
 MCS_FLAGS += -d:DEBUG -debug
+COMPONENT_DEPS_DEBUG = $(foreach ref,$(COMPONENT_DEPS),$(ref).mdb)
 endif
 
 Do.Tests.dll: $(SOURCES_BUILD) $(RESOURCES_EXPANDED) $(COMPONENT_DEPS) $(BUILD_DIR)/Do.exe test-environment
@@ -61,8 +62,10 @@ Do.Tests.dll: $(SOURCES_BUILD) $(RESOURCES_EXPANDED) $(COMPONENT_DEPS) $(BUILD_D
 	        echo "Compiling $(notdir $@)...";
 	@$(MCS) $(MCS_FLAGS) -target:library -out:$@ $(BUILD_DEFINES) $(BUILD_REFERENCES) $(COMPONENT_REFERENCES) -r:$(BUILD_DIR)/Do.exe $(RESOURCES_BUILD) $(SOURCES_BUILD) 
 
-test-environment: $(COMPONENT_DEPS) $(BUILD_DIR)/Do.exe
-	cp $(COMPONENT_DEPS) .
+export MONO_ENV_OPTIONS=--debug
+
+test-environment: $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) $(BUILD_DIR)/Do.exe
+	cp $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) .
 	cp $(BUILD_DIR)/Do.exe .
 	touch $@
 
