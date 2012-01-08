@@ -23,10 +23,11 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Framework;
 
 using Mono.Addins;
-using Mono.Posix;
+using Mono.Unix;
 
 using Do.Platform;
 using Do.Platform.Common;
@@ -36,13 +37,14 @@ namespace Do
 	class MockPreferencesService : IPreferencesService
 	{
 		public List<string> accessed_members = new List<string> ();
+		public List<Tuple<string, object>> set_members = new List<Tuple<string, object>> ();
 
 		#region IPreferencesService implementation
 		public event EventHandler<PreferencesChangedEventArgs> PreferencesChanged;
 
 		public bool Set<T> (string key, T val)
 		{
-			// No-op
+			set_members.Add (new Tuple<string, object> (key, val));
 			return true;
 		}
 
@@ -53,6 +55,12 @@ namespace Do
 			return false;
 		}
 		#endregion
+
+		public void Reset ()
+		{
+			accessed_members = new List<string> ();
+			set_members = new List<Tuple<string, object>> ();
+		}
 	}
 
 	class MockKeybindingService : AbstractKeyBindingService
@@ -77,6 +85,7 @@ namespace Do
 	{
 		MockKeybindingService keybinder;
 		MockPreferencesService preferences;
+		string initial_lang;
 
 		[SetUp()]
 		public void SetUp ()
@@ -87,6 +96,18 @@ namespace Do
 			AddinManager.Registry.Update ();
 			preferences = AddinManager.GetExtensionObjects ("/Do/Service", true).OfType<MockPreferencesService> ().First ();
 			keybinder = AddinManager.GetExtensionObjects ("/Do/Service", true).OfType<MockKeybindingService> ().First ();
+			initial_lang = System.Environment.GetEnvironmentVariable ("LANGUAGE");
+			preferences.Reset ();
+		}
+
+		[TearDown]
+		public void TearDown ()
+		{
+			if (String.IsNullOrEmpty (initial_lang)) {
+				System.Environment.SetEnvironmentVariable ("LANGUAGE", "");
+			} else {
+				System.Environment.SetEnvironmentVariable ("LANGUAGE", initial_lang);
+			}
 		}
 
 		bool CollectionContainsSubstring (IEnumerable<string> collection, string search)
@@ -103,6 +124,46 @@ namespace Do
 					Catalog.GetString ("Summon Do"), "<Super>space", delegate {}, true));
 
 			Assert.True (CollectionContainsSubstring (preferences.accessed_members, "Summon_Do"));
+		}
+
+
+		[Test()]
+		public void TestKeybindingUsesUntranslatedKey ()
+		{
+			System.Environment.SetEnvironmentVariable ("LANGUAGE", "de");
+			Catalog.Init ("gnome-do", ".");
+
+			if ("Nächstes Element" != Catalog.GetString ("Next Item")) {
+				Assert.Inconclusive ("Translations are not properly set up, test cannot run.");
+			}
+			Services.Keybinder.RegisterKeyBinding (new KeyBinding ("Summon_Do",
+					Catalog.GetString ("Summon Do"), "<Super>space", delegate {}, true));
+
+			Assert.True (CollectionContainsSubstring (preferences.accessed_members, "Summon_Do"));
+		}
+
+		bool IsAllAscii (string text)
+		{
+			return text.All (c => c >= ' ' && c <= '~');
+		}
+
+		[Test]
+		public void TestSetupKeybindingsUsesUntranslatedKeys ()
+		{
+			System.Environment.SetEnvironmentVariable ("LANGUAGE", "de");
+			Catalog.Init ("gnome-do", ".");
+
+			if ("Nächstes Element" != Catalog.GetString ("Next Item")) {
+				Assert.Inconclusive ("Translations are not properly set up, test cannot run.");
+			}
+			Core.Controller controller = new Core.Controller ();
+			var foo = controller.GetType ().GetMethod ("SetupKeybindings", System.Reflection.BindingFlags.NonPublic |
+			                                           System.Reflection.BindingFlags.Instance);
+			foo.Invoke (controller, new object [] { });
+
+			foreach (var key in preferences.accessed_members.Concat (preferences.set_members.Select (pref => pref.Item1))) {
+				Assert.That (IsAllAscii (key), String.Format ("Key “{0}” contains non-ASCII character", key));
+			}
 		}
 	}
 }

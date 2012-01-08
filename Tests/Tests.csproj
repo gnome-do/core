@@ -62,5 +62,10 @@
       <Package>nunit</Package>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="Mono.Posix" />
+    <Reference Include="Mono.Addins, Version=0.6.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <Private>False</Private>
+      <Package>mono-addins</Package>
+    </Reference>
   </ItemGroup>
 </Project>
