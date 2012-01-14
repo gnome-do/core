@@ -87,7 +87,7 @@ namespace Do.Platform.Common
 			Bindings.First (k => k.Description == binding.Description).KeyString = newKeyString;
 			
 			//save the new value in the prefs
-			prefs.Set (binding.Description.Replace (' ', '_'), binding.KeyString);
+			prefs.Set (binding.PreferenceName, binding.KeyString);
 
 			if (!string.IsNullOrEmpty (binding.KeyString))
 			    Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to \"{1}\"", binding.Description, binding.KeyString);
