@@ -165,6 +165,26 @@ namespace Do
 				Assert.That (IsAllAscii (key), String.Format ("Key “{0}” contains non-ASCII character", key));
 			}
 		}
+
+		[Test]
+		public void TestSetKeyStringUsesUntranslatedKey ()
+		{
+			System.Environment.SetEnvironmentVariable ("LANGUAGE", "de");
+			Catalog.Init ("gnome-do", ".");
+
+			if ("Nächstes Element" != Catalog.GetString ("Next Item")) {
+				Assert.Inconclusive ("Translations are not properly set up, test cannot run.");
+			}
+
+			var binding = new KeyBinding ("Next_Item", Catalog.GetString ("Next Item"), "Down", delegate {}, true);
+			keybinder.RegisterKeyBinding (binding);
+
+			keybinder.SetKeyString (binding, "Up");
+
+			foreach (var key in preferences.accessed_members.Concat (preferences.set_members.Select (pref => pref.Item1))) {
+				Assert.That (IsAllAscii (key), String.Format ("Key “{0}” contains non-ASCII character", key));
+			}
+		}
 	}
 }
 
