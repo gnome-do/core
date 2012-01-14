@@ -5,8 +5,6 @@ using System.Text;
 
 using Mono.Unix;
 
-using Do.Platform.Common;
-
 namespace Do.Platform.Common
 {
 	public abstract class AbstractKeyBindingService : IKeyBindingService
