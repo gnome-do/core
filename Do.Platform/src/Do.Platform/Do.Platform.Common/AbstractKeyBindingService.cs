@@ -64,7 +64,7 @@ namespace Do.Platform.Common
 			//add the event to the list of bindings
 			Bindings.Add (binding);
 			//set the bound keystring in the prefs
-			prefs.Set (binding.Description.Replace (' ', '_'), binding.KeyString);
+			prefs.Set (binding.PreferenceName, binding.KeyString);
 
 			return true;
 		}
