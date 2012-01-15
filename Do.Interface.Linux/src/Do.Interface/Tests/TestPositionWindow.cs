@@ -46,6 +46,28 @@ namespace Do.Interface.Linux
 			Assert.AreEqual (412, result.X);
 			Assert.AreEqual (267, result.Y);
 		}
+
+		[Test]
+		public void TestHorizMultiHeadPositionCalc ()
+		{
+			var positioner = new PositionWindow (null, null);
+			var calculatePosition = positioner.GetType ().GetMethod ("CalculateBasePosition",
+			                                                         System.Reflection.BindingFlags.NonPublic |
+			                                                         System.Reflection.BindingFlags.Instance);
+			// Single-head displays have an origin of (0,0)
+			Gdk.Rectangle screen_one = new Gdk.Rectangle (0, 0, 1024, 768);
+			Gdk.Rectangle screen_two = new Gdk.Rectangle (screen_one.Width, 0, 1024, 768);
+			// We only care about width and height here
+			Gdk.Rectangle window = new Gdk.Rectangle (0, 0, 200, 100);
+
+			object[] parameters = new object[] {screen_one, window, new Gdk.Rectangle ()};
+			Gdk.Rectangle screen_one_result = (Gdk.Rectangle)calculatePosition.Invoke (positioner, parameters);
+			parameters = new object[] {screen_two, window, new Gdk.Rectangle ()};
+			Gdk.Rectangle screen_two_result = (Gdk.Rectangle)calculatePosition.Invoke (positioner, parameters);
+
+			Assert.AreEqual (screen_one_result.X + screen_one.Width, screen_two_result.X);
+			Assert.AreEqual (screen_one_result.Y, screen_two_result.Y);
+		}
 	}
 }
 
