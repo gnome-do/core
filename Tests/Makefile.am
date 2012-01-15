@@ -74,7 +74,8 @@ test-environment: $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) $(BUILD_DIR)/Do.exe 
 TESTS_ENVIRONMENT=nunit-console
 TESTS=	Do.Tests.dll \
 	$(BUILD_DIR)/Do.Platform.dll \
-	$(BUILD_DIR)/Do.Platform.Linux.dll
+	$(BUILD_DIR)/Do.Platform.Linux.dll \
+	$(BUILD_DIR)/Do.Interface.Linux.dll
 
 CLEANFILES=$(foreach component, $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) $(DO_EXE_DEBUG), $(notdir $(component))) Do.exe test-environment Do.Tests.dll Do.Tests.dll.mdb TestResult.xml
 EXTRA_DIST=$(FILES) $(RESOURCES)

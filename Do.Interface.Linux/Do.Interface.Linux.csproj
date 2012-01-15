@@ -9,7 +9,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Do.Interface.Linux</RootNamespace>
     <AssemblyName>Do.Interface.Linux</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,19 +33,13 @@
       <Package>gtk-sharp-2.0</Package>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="System">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System.Core">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Package>gtk-sharp-2.0</Package>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Mono.Posix">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="Mono.Posix" />
     <Reference Include="Mono.Addins, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
       <Package>mono-addins</Package>
       <SpecificVersion>False</SpecificVersion>
@@ -55,8 +48,9 @@
       <Package>gtk-sharp-2.0</Package>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Mono.Cairo">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Mono.Cairo" />
+    <Reference Include="nunit.framework">
+      <Package>mono-nunit</Package>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +82,7 @@
     <Compile Include="src\Do.Interface\Do.Interface.Widgets\ResultsWindow.cs" />
     <Compile Include="src\Do.Interface\Do.Interface.Widgets\SymbolDisplayLabel.cs" />
     <Compile Include="src\Do.Interface\Do.Interface.Widgets\TextFrame.cs" />
+    <Compile Include="src\Do.Interface\Tests\TestPositionWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -104,5 +99,8 @@
     <EmbeddedResource Include="Resources\Do.Interface.Linux.addin.xml">
       <LogicalName>Do.Interface.Linux.addin.xml</LogicalName>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Do.Interface\Tests\" />
   </ItemGroup>
 </Project>
