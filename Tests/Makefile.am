@@ -45,6 +45,7 @@ MCS_FLAGS =  $(MCS_LINQ_FLAG) -noconfig -codepage:utf8 -warn:4
 if ENABLE_DEBUG
 MCS_FLAGS += -d:DEBUG -debug
 COMPONENT_DEPS_DEBUG = $(foreach ref,$(COMPONENT_DEPS),$(ref).mdb)
+DO_EXE_DEBUG = $(BUILD_DIR)/Do.exe.mdb
 endif
 
 Do.Tests.dll: $(SOURCES_BUILD) $(RESOURCES_EXPANDED) $(COMPONENT_DEPS) $(BUILD_DIR)/Do.exe test-environment
@@ -65,12 +66,12 @@ Do.Tests.dll: $(SOURCES_BUILD) $(RESOURCES_EXPANDED) $(COMPONENT_DEPS) $(BUILD_D
 
 export MONO_ENV_OPTIONS=--debug
 
-test-environment: $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) $(BUILD_DIR)/Do.exe
+test-environment: $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) $(BUILD_DIR)/Do.exe $(DO_EXE_DEBUG)
 	cp $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) .
-	cp $(BUILD_DIR)/Do.exe .
+	cp $(BUILD_DIR)/Do.exe $(DO_EXE_DEBUG) .
 	touch $@
 
 TESTS_ENVIRONMENT=nunit-console
 TESTS=Do.Tests.dll
 
-CLEANFILES=$(foreach component, $(COMPONENT_DEPS), $(notdir $(component))) Do.exe test-environment Do.Tests.dll Do.Tests.dll.mdb TestResult.xml
+CLEANFILES=$(foreach component, $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) $(DO_EXE_DEBUG), $(notdir $(component))) Do.exe test-environment Do.Tests.dll Do.Tests.dll.mdb TestResult.xml

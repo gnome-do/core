@@ -39,7 +39,6 @@ namespace Do.Platform
 		static IWindowingService windowing;
 		static AbstractSystemService system;
 		static IKeyBindingService keybinder;
-		static IEnumerable<ILogService> logs;
 		static PreferencesFactory preferences;
 		static IEnvironmentService environment;
 		static INotificationsService notifications;
@@ -47,6 +46,9 @@ namespace Do.Platform
 		static AbstractApplicationService application;
 		static IUniverseFactoryService universe_factory;
 		static AbstractPackageManagerService package_manager;
+
+		// Logs are special; ensure we always have at least a default log service
+		static IEnumerable<ILogService> logs = new ILogService[] { new Default.LogService () };
 
 		/// <summary>
 		/// Initializes the class. Must be called after Mono.Addins is initialized; if this is
@@ -62,7 +64,9 @@ namespace Do.Platform
 				// TODO find a better exception to throw.
 				throw new Exception ("AddinManager was initialized before Services.");
 			}
-			
+
+			LoadLogServices ();
+
 			AddinManager.AddExtensionNodeHandler ("/Do/Service", OnServiceChanged);
 			InitializeStrictServices ();
 		}
@@ -75,17 +79,19 @@ namespace Do.Platform
 			IService service = e.ExtensionObject as IService;
 
 			switch (e.Change) {
-			case ExtensionChange.Add:
-				if (service is IInitializedService)
-					(service as IInitializedService).Initialize ();
-				break;
-			case ExtensionChange.Remove:
-				break;
+				case ExtensionChange.Add:
+					if (service is IInitializedService)
+						(service as IInitializedService).Initialize ();
+					break;
+				case ExtensionChange.Remove:
+					break;
 			}
 
-			// Dirty the appropriate cache.
+			// Loggers must be handled specially.
 			if (service is ILogService)
-				logs = null;
+				LoadLogServices ();
+
+			// Dirty the appropriate cache.
 			if (service is ICoreService)
 				core = null;
 			if (service is PathsService)
@@ -109,13 +115,26 @@ namespace Do.Platform
 				application = null;
 		}
 
+		// Log services need to be treated specially.  They're not lazy-initialised,
+		// and cannot log while being initialised.
+
+		static void LoadLogServices ()
+		{
+			IEnumerable<ILogService> tmp = null;
+			if (AddinManager.IsInitialized) {
+				tmp = AddinManager.GetExtensionObjects ("/Do/Service", true).OfType<ILogService> ();
+				if (!tmp.Any ()) {
+					tmp = null;
+				}
+			}
+			logs = tmp ?? new ILogService [] { new Default.LogService () };
+		}
+
 		/// <summary>
 		/// All available log services. Used primarily by the static Log class.
 		/// </summary>
 		public static IEnumerable<ILogService> Logs {
 			get {
-				if (logs == null)
-					logs = LocateServices<ILogService, Default.LogService> ().ToArray ();
 				return logs;
 			}
 		}
