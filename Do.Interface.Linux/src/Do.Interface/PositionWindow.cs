@@ -60,7 +60,7 @@ namespace Do.Interface
 			Rectangle result;
 
 			result.X = ((screen.Width - window.Width) / 2) + screen.X + offset.X;
-			result.Y = (int)((screen.Height + screen.Y - window.Height) / 2.5) + screen.Y + offset.Y;
+			result.Y = (int)((screen.Height - window.Height) / 2.5) + screen.Y + offset.Y;
 
 			return result;
 		}
