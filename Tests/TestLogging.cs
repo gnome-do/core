@@ -117,32 +117,12 @@ namespace Do
 		}
 
 		[Test]
-		[Ignore ("Expected fail: Log delays recursive calls until the next Log call")]
-		public void TestRecursiveLogging ()
+		public void TestRecursiveLoggingThrowsException ()
 		{
 			string msg = "Hello";
 			logger.StartLog ();
 			logger.recursiveLog = true;
-			Log.Debug (msg);
-
-			var logs = logger.EndLog ().ToArray ();
-			Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, msg), logs);
-			Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, String.Format ("Recursive log: {0}", msg)), logs);
-		}
-
-		[Test]
-		public void TestRecursiveLoggingWithFlush ()
-		{
-			string msg = "Hello";
-			logger.StartLog ();
-			logger.recursiveLog = true;
-			Log.Debug (msg);
-
-			Log.Debug ("Flush");
-
-			var logs = logger.EndLog ().ToArray ();
-			Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, msg), logs);
-			Assert.Contains (new Tuple<LogLevel, string> (LogLevel.Debug, String.Format ("Recursive log: {0}", msg)), logs);
+			Assert.Throws<InvalidOperationException> (delegate { Log.Debug (msg); } );
 		}
 	}
 }
