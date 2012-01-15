@@ -36,7 +36,7 @@ namespace Do
 	public class MockLogger : AbstractLogService
 	{
 		List<Tuple<LogLevel, string>> log;
-		public bool recursiveLog;
+		public bool recursiveLog = false;
 
 		public override void Log (LogLevel level, string msg)
 		{
@@ -122,7 +122,9 @@ namespace Do
 			string msg = "Hello";
 			logger.StartLog ();
 			logger.recursiveLog = true;
-			Assert.Throws<InvalidOperationException> (delegate { Log.Debug (msg); } );
+			Assert.Throws<InvalidOperationException> (delegate {
+				Log.Debug (msg); });
+			logger.recursiveLog = false;
 		}
 	}
 }
