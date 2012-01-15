@@ -48,43 +48,34 @@ namespace Do.Platform
 			}
 		}
 
+		static object write_lock = new object ();
+		static bool writing = false;
 		public static LogLevel DisplayLevel { get; set; }
-
-		static int writing;
-		static ICollection<LogCall> pending_log_calls;
-
-		static LogBase ()
-		{
-			writing = 0;
-			pending_log_calls = new LinkedList<LogCall> ();
-		}
 
 		public static void Write (LogLevel level, string msg, params object[] args)
 		{
 			if (level < DisplayLevel)
 				return;
-			
-			msg = string.Format (msg, args);
-			if (Interlocked.CompareExchange (ref writing, 1, 0) == 0) {
-				// First, swap PendingLogCalls with an empty collection so it
-				// is not modified while we enumerate.
-				var calls = System.Threading.Interlocked.Exchange (ref pending_log_calls, new LinkedList<LogCall> ());
-				if (calls.Any ()) {
-					// Log all pending calls.
-					foreach (LogCall call in calls)
-						foreach (ILogService log in Services.Logs)
-							log.Log (call.Level, call.Message);
-				}
 
-				// Log message.
-				foreach (ILogService log in Services.Logs)
-					log.Log (level, msg);
-				
-				writing = 0;
-			} else {
-				// In the process of logging, another log call has been made.
-				// We need to avoid the infinite regress this may cause.
-				pending_log_calls.Add (new LogCall (level, msg));
+			lock (write_lock) {
+				msg = string.Format (msg, args);
+
+				if (writing) {
+					throw new InvalidOperationException (String.Format ("Logger implementation attempted to call Log from its own Log method.\n" +
+						"Message was:\n" +
+						"***************************\n" +
+						"{0}\n" +
+						"***************************", msg));
+				}
+				writing = true;
+
+				try {
+					// Log message.
+					foreach (ILogService log in Services.Logs)
+						log.Log (level, msg);
+				} finally {
+					writing = false;
+				}
 			}
 		}
 	}
