@@ -283,28 +283,28 @@ namespace Do.Core
 		static void OnPluginChanged (object sender, ExtensionNodeEventArgs args)
 		{
 			TypeExtensionNode node = args.ExtensionNode as TypeExtensionNode;
-			
+
 			switch (args.Change) {
-			case ExtensionChange.Add:
-				try {
-					object plugin = node.GetInstance ();
-					Log<PluginManager>.Debug ("Loaded \"{0}\" from plugin.", plugin.GetType ().Name);
-				} catch (Exception e) {
-					Log<PluginManager>.Error ("Encountered error loading plugin: {0} \"{1}\"",
+				case ExtensionChange.Add:
+					try {
+						object plugin = node.GetInstance ();
+						Log<PluginManager>.Debug ("Loaded \"{0}\" from plugin.", plugin.GetType ().Name);
+					} catch (Exception e) {
+						Log<PluginManager>.Error ("Encountered error loading plugin: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
-					Log<PluginManager>.Debug (e.StackTrace);
-				}
-				break;
-			case ExtensionChange.Remove:
-				try {
-					object plugin = node.GetInstance ();
-					Log<PluginManager>.Debug ("Unloaded \"{0}\".", plugin.GetType ().Name);
-				} catch (Exception e) {
-					Log<PluginManager>.Error ("Encountered error unloading plugin: {0} \"{1}\"",
+						Log<PluginManager>.Debug (e.StackTrace);
+					}
+					break;
+				case ExtensionChange.Remove:
+					try {
+						object plugin = node.GetInstance ();
+						Log<PluginManager>.Debug ("Unloaded \"{0}\".", plugin.GetType ().Name);
+					} catch (Exception e) {
+						Log<PluginManager>.Error ("Encountered error unloading plugin: {0} \"{1}\"",
 							e.GetType ().Name, e.Message);
-					Log<PluginManager>.Debug (e.StackTrace);
-				}
-				break;
+						Log<PluginManager>.Debug (e.StackTrace);
+					}
+					break;
 			}	
 		}
 		
