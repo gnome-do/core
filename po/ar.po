@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2011-08-28 17:55+0000\n"
-"Last-Translator: Jonathan N. Hindi <jonathan2_jojo@hotmail.com>\n"
+"PO-Revision-Date: 2012-01-14 09:49+0000\n"
+"Last-Translator: mohamed alaa kotp <m.alaa8@yahoo.com>\n"
 "Language-Team: American English <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-01-15 05:13+0000\n"
+"X-Generator: Launchpad (build 14664)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -340,7 +340,7 @@ msgstr "استدعاء في وضع النص"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "أدخل وضع النص"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -349,7 +349,7 @@ msgstr "امسح"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "نسخ من ذاكرة النصوص"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -369,11 +369,11 @@ msgstr "البند التّالي"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "العنصر الأول"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "العنصر الأخير"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -385,11 +385,11 @@ msgstr "النتائج الخمسة اللاحقة"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "أخرج من العنصر"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "أدخل الى العنصر"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
@@ -401,7 +401,7 @@ msgstr "أداة جنوم"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "جميع الحقوق محفوظة © 2009 لمطورين  \"Gnome Do\""
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -465,7 +465,7 @@ msgstr "إختصار"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "مُعطل"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
