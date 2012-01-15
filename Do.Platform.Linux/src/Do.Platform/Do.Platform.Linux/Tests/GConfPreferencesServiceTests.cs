@@ -35,6 +35,7 @@ namespace Do.Platform.Linux
 		[SetUp]
 		public void SetUp ()
 		{
+			GLib.GType.Init ();
 			Service = new GConfPreferencesService (RootPath);
 		}
 
