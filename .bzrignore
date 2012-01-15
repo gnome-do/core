@@ -1,3 +1,4 @@
+AssemblyInfo.cs
 *.pidb
 *.userprefs
 Makefile.in
@@ -26,3 +27,10 @@ libdo/.deps
 Do/gnome-do
 ltmain.sh
 libtool
+*.gmo
+*.dll
+*.mdb
+*.exe
+config.guess
+config.sub
+depcomp
