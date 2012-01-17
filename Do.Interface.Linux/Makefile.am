@@ -33,6 +33,11 @@ FILES = \
 	src/Do.Interface/Windowing.cs \
 	src/Do.Universe/ImplicitTextItem.cs
 
+if HAVE_NUNIT
+FILES += \
+	src/Do.Interface/Tests/TestPositionWindow.cs
+endif
+
 RESOURCES = \
 	Resources/Do.Interface.Linux.addin.xml \
 	Resources/settings-triangle.png
@@ -43,7 +48,8 @@ REFERENCES =  \
 	Mono.Cairo \
 	Mono.Posix \
 	$(GTK_SHARP_20_LIBS) \
-	$(MONO_ADDINS_LIBS) 
+	$(MONO_ADDINS_LIBS) \
+	$(NUNIT_LIBS)
 
 PROJECT_REFERENCES = \
 	Do.Platform \

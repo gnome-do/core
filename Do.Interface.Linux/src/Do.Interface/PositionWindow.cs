@@ -54,7 +54,17 @@ namespace Do.Interface
 		{
 			UpdatePosition (iconboxWidth, currentPane, resultsOffset, new Gdk.Rectangle ());
 		}
-		
+
+		protected Rectangle CalculateBasePosition (Rectangle screen, Rectangle window, Rectangle offset)
+		{
+			Rectangle result;
+
+			result.X = ((screen.Width - window.Width) / 2) + screen.X + offset.X;
+			result.Y = (int)((screen.Height - window.Height) / 2.5) + screen.Y + offset.Y;
+
+			return result;
+		}
+
 		public void UpdatePosition (int iconboxWidth, Pane currentPane, Rectangle resultsOffset, Rectangle normalOffset) {
 			Gtk.Application.Invoke (delegate {
 				Gdk.Rectangle geo, main, results;
@@ -63,8 +73,7 @@ namespace Do.Interface
 				w.GetSize (out main.Width, out main.Height);
 			
 				geo = w.Screen.GetMonitorGeometry (GetMonitor ());
-				main.X = ((geo.Width - main.Width) / 2) + geo.X + normalOffset.X;
-				main.Y = (int)((geo.Height + geo.Y - main.Height) / 2.5) + geo.Y + normalOffset.Y;
+				main = CalculateBasePosition (geo, main, normalOffset);
 				w.Move (main.X, main.Y);
 				
 				if (r == null) return;
