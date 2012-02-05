@@ -473,9 +473,9 @@ namespace Do.Core
 			} else if (key == Key.Delete ||
 				   key == Key.BackSpace) {
 				OnDeleteKeyPressEvent (evnt);
-			} else if (Services.Keybinder.Bindings.Any (k => k.KeyString == Services.Keybinder.KeyEventToString (evnt))) {
+			} else if (Services.Keybinder.Bindings.Any (k => k.KeyString == Services.Keybinder.KeyEventToString (evnt.KeyValue, (uint)evnt.State))) {
 				// User set keybindings
-				Services.Keybinder.Bindings.First (k => k.KeyString == Services.Keybinder.KeyEventToString (evnt)).Callback (evnt);
+				Services.Keybinder.Bindings.First (k => k.KeyString == Services.Keybinder.KeyEventToString (evnt.KeyValue, (uint)evnt.State)).Callback (evnt);
 			} else {
 				OnInputKeyPressEvent (evnt);
 			}

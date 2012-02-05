@@ -110,8 +110,8 @@ namespace Do.UI
 			
 			store = Model as ListStore;
 			store.GetIter (out iter, new TreePath (args.PathString));
-			
-			string realKey = Gtk.Accelerator.Name (args.AccelKey, args.AccelMods);
+						
+			string realKey = Services.Keybinder.KeyEventToString (args.AccelKey, (uint)args.AccelMods);
 			
 			if (args.AccelKey == (uint) Gdk.Key.Super_L || args.AccelKey == (uint) Gdk.Key.Super_R) {
 				//setting CellRenderAccelMode to "Other" ignores the Super key as a modifier

@@ -105,25 +105,28 @@ namespace Do.Platform.Common
 		/// <returns>
 		/// A <see cref="System.String"/> in the form "<Modifier>key"
 		/// </returns>
-		public string KeyEventToString (Gdk.EventKey evnt) {
+		public string KeyEventToString (uint keycode, uint modifierCode) {
+			// FIXME: This should really use Gtk.Accelerator.Name (key, modifier)
+			// Beware of bug #903566 when doing that!
+			
 			string modifier = "";
-			if ((evnt.State & Gdk.ModifierType.ControlMask) != 0) {
+			if ((modifierCode & (uint)Gdk.ModifierType.ControlMask) != 0) {
 				modifier += "<Control>";
 			}
-			if ((evnt.State & Gdk.ModifierType.SuperMask) != 0) {
+			if ((modifierCode & (uint)Gdk.ModifierType.SuperMask) != 0) {
 				modifier += "<Super>";
 			}
-			if ((evnt.State & Gdk.ModifierType.Mod1Mask) != 0) {
+			if ((modifierCode & (uint)Gdk.ModifierType.Mod1Mask) != 0) {
 				modifier += "<Alt>";
 			}
-			if ((evnt.State & Gdk.ModifierType.ShiftMask) != 0) {
+			if ((modifierCode & (uint)Gdk.ModifierType.ShiftMask) != 0) {
 				modifier += "<Shift>";
 				//if we're pressing shift, and the key is ISO_Left_Tab,
 				//just make it Tab
-				if (evnt.Key == Gdk.Key.ISO_Left_Tab)
+				if (keycode == (uint)Gdk.Key.ISO_Left_Tab)
 					return string.Format ("{0}{1}", modifier, Gdk.Key.Tab);
 			}
-			return string.Format ("{0}{1}", modifier, Gtk.Accelerator.Name (evnt.KeyValue, Gdk.ModifierType.None));
+			return string.Format ("{0}{1}", modifier, Gtk.Accelerator.Name (keycode, Gdk.ModifierType.None));
 		}
 #endregion
 	}
