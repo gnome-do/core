@@ -28,6 +28,12 @@ namespace Do.Interface.Linux
 	[TestFixture()]
 	public class TestPositionWindow
 	{
+		[SetUp]
+		public void Setup()
+		{
+			Gtk.Application.Init ();
+		}
+		
 		[Test()]
 		public void TestSingleHeadPositionCalc ()
 		{
@@ -89,6 +95,33 @@ namespace Do.Interface.Linux
 
 			Assert.AreEqual (screen_one_result.X, screen_two_result.X);
 			Assert.AreEqual (screen_one_result.Y + screen_one.Height, screen_two_result.Y);
+		}
+		
+		[Test]
+		[Timeout (500)]
+		public void TestResultsWindowIsBelowMainWindow ()
+		{
+			Gtk.Window main = new Gtk.Window ("Test Main Window");
+			Gtk.Window results = new Gtk.Window ("Test Results Window");
+			
+			main.Resize (200, 100);
+			results.Resize (200, 100);
+			
+			Gdk.Rectangle resultsOffset = new Gdk.Rectangle (0, 10, 0, 0);
+			
+			var positioner = new PositionWindow (main, results);
+			positioner.UpdatePosition (10, Pane.First, resultsOffset);
+			
+			// Drain the event loop
+			while (Gtk.Global.EventsPending) {
+				Gtk.Main.Iteration ();	
+			}
+			
+			int main_x, main_y;
+			int results_x, results_y;
+			main.GetPosition (out main_x, out main_y);
+			results.GetPosition (out results_x, out results_y);
+			Assert.Greater (results_y, main_y + 100);
 		}
 	}
 }
