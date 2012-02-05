@@ -57,7 +57,7 @@ namespace Do.Interface
 
 		protected Rectangle CalculateBasePosition (Rectangle screen, Rectangle window, Rectangle offset)
 		{
-			Rectangle result;
+			Rectangle result = window;
 
 			result.X = ((screen.Width - window.Width) / 2) + screen.X + offset.X;
 			result.Y = (int)((screen.Height - window.Height) / 2.5) + screen.Y + offset.Y;
