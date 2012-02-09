@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2012-01-14 09:49+0000\n"
-"Last-Translator: mohamed alaa kotp <m.alaa8@yahoo.com>\n"
+"PO-Revision-Date: 2012-02-08 15:31+0000\n"
+"Last-Translator: Mohamed Alaa <m.alaa8@yahoo.com>\n"
 "Language-Team: American English <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-15 05:13+0000\n"
-"X-Generator: Launchpad (build 14664)\n"
+"X-Launchpad-Export-Date: 2012-02-09 05:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -63,6 +63,8 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"لتغيير اختصار, إنقر نقرة مزدوجة عليه ثم قم بادخال الاختصار الجديد.\n"
+"لاستعادة الاختصار الافتراضي, إنقر نقرة مزدوجة عليه ثم اضعط على زر المسح"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -329,6 +331,9 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"</b>Docky لم يعد بعد الأن يعتمد على موضوعات Do<b>\n"
+"انه الآن أصبح تطبيق مستقل بذاته. موضوع GNOME Do خاصتك قد أعيد تعيينه الى "
+"الموضوع الكلاسيكي. من فضلك لا تتردد في تغييره من الأعدادات"
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
@@ -574,19 +579,19 @@ msgstr "لا وصف."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "العنوان"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "هاتف العمل"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "هاتف المنزل"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "الهاتف المحمول"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
