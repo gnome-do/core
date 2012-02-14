@@ -102,7 +102,7 @@ AC_SUBST([DBUS_BUILD_DEFINES])
 AC_SUBST([DBUS_SHARP_LIBS])
 AC_SUBST([DBUS_SHARP_GLIB_LIBS])
 
-PKG_CHECK_MODULES([NUNIT], [nunit], have_nunit=yes, have_nunit=no)
+PKG_CHECK_MODULES([NUNIT], [nunit >= 2.5], have_nunit=yes, have_nunit=no)
 AM_CONDITIONAL(HAVE_NUNIT, test "$have_nunit" = "yes")
 if test "$have_nunit" != "yes" ; then
    NUNIT_LIBS=
