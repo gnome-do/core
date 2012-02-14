@@ -70,30 +70,27 @@ namespace Do.Platform.Linux
 			userDirsPath = Path.Combine (configDir, "user-dirs.dirs");
 
 			if (File.Exists (userDirsPath)) {
-				try {
-					using (StreamReader reader = new StreamReader (userDirsPath)) {
-						string line;
-						while ((line = reader.ReadLine ()) != null) {
-							line = line.Trim ();
-							int delimIndex = line.IndexOf ('=');
-							if (delimIndex > 8 && line.Substring (0, delimIndex) == key) {
-								string path = line.Substring (delimIndex + 1).Trim ('"');
-								bool relative = false;
+				using (StreamReader reader = new StreamReader (userDirsPath)) {
+					string line;
+					while ((line = reader.ReadLine ()) != null) {
+						line = line.Trim ();
+						int delimIndex = line.IndexOf ('=');
+						if (delimIndex > 8 && line.Substring (0, delimIndex) == key) {
+							string path = line.Substring (delimIndex + 1).Trim ('"');
+							bool relative = false;
 
-								if (path.StartsWith ("$HOME/")) {
-									relative = true;
-									path = path.Substring (6);
-								} else if (path.StartsWith ("~")) {
-									relative = true;
-									path = path.Substring (1);
-								} else if (!path.StartsWith ("/")) {
-									relative = true;
-								}
-								return relative ? Path.Combine (homeDir, path) : path;
+							if (path.StartsWith ("$HOME/")) {
+								relative = true;
+								path = path.Substring (6);
+							} else if (path.StartsWith ("~")) {
+								relative = true;
+								path = path.Substring (1);
+							} else if (!path.StartsWith ("/")) {
+								relative = true;
 							}
+							return relative ? Path.Combine (homeDir, path) : path;
 						}
 					}
-				} catch (FileNotFoundException) {
 				}
 			}
 
