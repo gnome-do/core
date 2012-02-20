@@ -218,7 +218,7 @@ namespace Do.Core
 			
 			Orientation = ControlOrientation.Vertical;
 
-			if (Screen.Default.IsComposited) {
+			if ((Screen.Default.IsComposited) && (!Do.Preferences.ForceClassicWindow)) {
 				window = InterfaceManager.MaybeGetInterfaceNamed (themeName) ?? new ClassicWindow ();
 			} else {
 				window = new ClassicWindow ();

@@ -35,11 +35,13 @@ namespace Do
 		const string QuietStartKey = "QuietStart";
 		const string StartAtLoginKey = "StartAtLogin";
 		const string AlwaysShowResultsKey = "AlwaysShowResults";
+		const string ForceClassicWindowKey = "ForceClassicWindow";
 
 		const string ThemeDefaultValue = "Classic";
 		const bool QuietStartDefaultValue = false;
 		const bool StartAtLoginDefaultValue = false;
 		const bool AlwaysShowResultsDefaultValue = false;
+		const bool ForceClassicWindowDefaultValue = false;
 		const string TextModeKeybindingDefaultValue = "period";
 		const string SummonKeybindingDefaultValue = "<Super>space";
 
@@ -89,6 +91,11 @@ namespace Do
 		public bool AlwaysShowResults {
 			get { return Preferences.Get (AlwaysShowResultsKey, AlwaysShowResultsDefaultValue); }
 			set { if (AlwaysShowResults != value) Preferences.Set (AlwaysShowResultsKey, value); }
+		}
+		
+		public bool ForceClassicWindow {
+			get { return Preferences.Get (ForceClassicWindowKey, ForceClassicWindowDefaultValue); }
+			set { if (ForceClassicWindow != value) Preferences.Set (ForceClassicWindowKey, value); }
 		}
 		
 		static bool HasOption (string option)
