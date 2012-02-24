@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-06-13 16:36+1000\n"
-"PO-Revision-Date: 2012-01-05 15:18+0000\n"
-"Last-Translator: P. Suresh <Unknown>\n"
+"PO-Revision-Date: 2012-02-23 06:55+0000\n"
+"Last-Translator: Thangamani Arun - தங்கமணி அருண் <thangam.arunx@gmail.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-06 04:45+0000\n"
-"X-Generator: Launchpad (build 14637)\n"
+"X-Launchpad-Export-Date: 2012-02-24 04:41+0000\n"
+"X-Generator: Launchpad (build 14860)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -37,6 +37,7 @@ msgstr ""
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr ""
+"<span size=\"large\"><b>மேம்படுத்தப்பட்ட ஒட்டுகள் இருக்கின்றன!</b></span>"
 
 #: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
 msgid "_Install Updates"
@@ -44,7 +45,7 @@ msgstr "_புதுப்பிப்புகளை நிறுவு"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
 msgid "<b>First-launch Behavior</b>"
-msgstr ""
+msgstr "<b>முதல்-ஏவு செயல்பாடு</b>"
 
 #: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
 msgid "Start GNOME Do at login."
@@ -85,7 +86,7 @@ msgstr "சொருகுநிரல்கட்டமைப்புச்ச
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
-msgstr ""
+msgstr "<span size=\"large\" weight=\"heavy\">ஒட்டுதலின் பெயர் இங்கே</span>"
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
 msgid "page1"
@@ -114,7 +115,7 @@ msgstr "சாளரத்தை அசைவூட்டு"
 #: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:735
 #, csharp-format
 msgid "No results for: {0}"
-msgstr ""
+msgstr "முடிவுகள் இல்லை: {0}"
 
 #: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:746
 msgid "Type To Search"
@@ -176,7 +177,7 @@ msgstr "சேமிப்புப் பிழை {0}"
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:37
 #, csharp-format
 msgid "Key \"{0}\" not found in keyring"
-msgstr ""
+msgstr "விசைவளையத்தில் \"{0}\" விசை காணவில்லை."
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:38
 msgid "gnome-keyring-daemon could not be reached!"
@@ -292,7 +293,7 @@ msgstr "திறக்கவும்"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenAction.cs:42
 msgid "Opens many kinds of items."
-msgstr ""
+msgstr "பலவாறான உருப்படிகளை திறக்கவும்."
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/OpenUrlAction.cs:54
 msgid "Open Url"
@@ -624,7 +625,7 @@ msgstr "டூ துவங்குகையில் முகப்பு ச
 
 #: ../data/gnome-do.schemas.in.h:7
 msgid "Key used to enter text mode."
-msgstr ""
+msgstr "உரை முறைக்கு நுழைய உதவும் விசை."
 
 #: ../data/gnome-do.schemas.in.h:8
 msgid "Set this to the character that should be used to enter text mode."
