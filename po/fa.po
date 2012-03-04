@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 14:44+0000\n"
 "Last-Translator: Hamed Ramezanian <iceage2098@gmail.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -642,158 +642,3 @@ msgstr "این را به کلیدی مقداردهی کنید که می‌خوا
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "درصورتی که پنجره نتایج همیشه نشان داده شود."
-
-#~ msgid "_About"
-#~ msgstr "_درباره"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr "<b><span size=\"large\">اشکال در نصب پلاگین های انتخابی</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr "<b><span size=\"large\">اشکال در نصب پلاگین انتخابی</span></b>"
-
-#~ msgid "_Theme:"
-#~ msgstr "_الگو (ثیم)"
-
-#~ msgid "Show Trash"
-#~ msgstr "نمایش سطل زیاله"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "بزرگ‌نمایی شکلک‌ها"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "تعویض نمایش‌گر"
-
-#~ msgid "Minimize"
-#~ msgstr "کمینه"
-
-#~ msgid "Restore"
-#~ msgstr "برگردان"
-
-#~ msgid "Close All"
-#~ msgstr "بستن همه‌"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "پنهان شدن خودکار"
-
-#~ msgid "No result found for"
-#~ msgstr "نتایجی یافت نشد برای"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "برداشتن از زبانه"
-
-#~ msgid "Trash"
-#~ msgstr "زباله‌دان"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "شاخص‌های پیش‌رفته"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "روی هم افتادن پنجره‌ها"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "فراخوانی GNOME DO"
-
-#~ msgid "Zoom:"
-#~ msgstr "بزرگ‌نمایی:"
-
-#~ msgid "First Result"
-#~ msgstr "نتیجه‌ی نخست"
-
-#~ msgid "Last Result"
-#~ msgstr "آخرین نتیجه"
-
-#~ msgid "Next Result"
-#~ msgstr "نتیجه‌ی بعدی"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>وضعیت منوی شناور</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "ثبت دوباره موارد حذف شده"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>موارد منوی شناور</b>"
-
-#~ msgid "Orientation:"
-#~ msgstr "موقعیت:"
-
-#~ msgid "Hiding:"
-#~ msgstr "پنهانی"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "نمایش پنجره‌های چندگانه"
-
-#~ msgid "Show"
-#~ msgstr "نمایش"
-
-#~ msgid "Empty Trash"
-#~ msgstr "خالی کردن سطل آشغال"
-
-#~ msgid "Desktop"
-#~ msgstr "رومیزی"
-
-#~ msgid "Enter text mode"
-#~ msgstr "ورود به حالت متنی"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>همه‌ی موارد از سطل آشغال  حذف شوند؟</b></big>\n"
-#~ "\n"
-#~ "اگر شما همه‌ی موارد را از سطل آشغال حذف کنید برای همیشه\n"
-#~ "آنها را از دست می‌دهید. لطفا دقت داشته باشید که می‌توانید همه‌ی\n"
-#~ "آنها را جداگانه حذف کنید."
-
-#~ msgid "Open Trash"
-#~ msgstr "باز کردن سطل آشغال"
-
-#~ msgid "Maximize"
-#~ msgstr "حداکثر کردن"
-
-#~ msgid "Copy Text"
-#~ msgstr "کپی متن"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "رهایی جایگزین"
-
-#~ msgid "Paste Text"
-#~ msgstr "چسباندن متن"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "فعال‌سازی جایگزین"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "حذف کردن جایگزین"
-
-#~ msgid "Previous Result"
-#~ msgstr "نتیجه قبلی"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "حق تالیف © توسعه‌دهندگان GNOME Do"
-
-#~ msgid "Docklets"
-#~ msgstr "موارد منوی شناور"
-
-#~ msgid "Multiple selection"
-#~ msgstr "انتخاب چندگانه"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "گشتن درون مورد"
-
-#~ msgid "Step out of Item"
-#~ msgstr "گذر از مورد"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "برای ویرایش میانبر، دوبار کلیک کنید و عبارت جدید را وارد کنید."
-
-#~ msgid "Icon Size:"
-#~ msgstr "اندازه‌ی شمایل"

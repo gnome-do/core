@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2011-02-14 10:36+0000\n"
-"Last-Translator: helix84 <Unknown>\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2011-10-01 13:34+0000\n"
+"Last-Translator: Peter Mráz <Unknown>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-10-02 04:44+0000\n"
+"X-Generator: Launchpad (build 14071)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -63,6 +63,9 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"Ak chcete zmeniť skratku, urobte dvojklik a zadajte novú.\n"
+"Keď chcete skratku obnoviť na predvolenú, urobte dvojklik a stlačte kláves "
+"Backspace."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -147,6 +150,8 @@ msgstr "Nemáte účet?"
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
 msgstr ""
+"<b><span size=\"x-large\">Pre toto existuje zásuvný modul programu "
+"Do!</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -154,14 +159,16 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"Zásuvný modul programu Do pre {0} je možné nainštalovať. Chcete aby sa to "
+"urobilo automaticky?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Už sa ma nepýtať na zásuvné moduly Do."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "Na_inštalovať"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -256,12 +263,12 @@ msgstr "Účet bol úspešne overený!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Čo je to Do?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Čo robí zásuvný modul {0}?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -327,18 +334,21 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"<b>Docky už nie je témou vzhľadu pre Do!</b>\n"
+"Teraz sa poskytuje ako samostatná aplikácia. Téma vzhľadu GNOME Do bola "
+"zmenená na tému Classic. Môžete ju zmeniť v nastaveniach."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Vyvolať Do"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "Vyvolať v textovom režime"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "Vstúpiť do textového režimu"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -347,7 +357,7 @@ msgstr "Vyčistiť"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Vložiť zo schránky"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -359,19 +369,19 @@ msgstr "Nasledujúci"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Prechádzajúca položka"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Nasledujúca položka"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "Prvá položka"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Posledná položka"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -383,15 +393,15 @@ msgstr "Nasledujúcich 5 výsledkov"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "Vystúpiť z položky"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "Vstúpiť do položky"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "Vybrať viacero položiek"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -399,7 +409,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Copyright © 2009 GNOME Do Developers"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -407,9 +417,9 @@ msgid ""
 "(but no quicker) with your files, bookmarks,\n"
 "applications, music, contacts, and more!"
 msgstr ""
-"Robiť veci tak rýchlo ako je to možné\n"
-"(ale nie rýchlejšie) s vašimi súbormi, záložkami,\n"
-"aplikáciami, hudbou, kontaktami a ešte viac!"
+"Robte veci s vašimi súbormi, záložkami,\n"
+"aplikáciami, hudbou, kontaktami a ďalšími vecami \n"
+"tak rýchlo, ako sa to len dá, no ani o štipku rýchlejšie!"
 
 #: ../Do/src/Do.Core/Controller.cs:1019
 msgid "Visit Homepage"
@@ -465,7 +475,7 @@ msgstr "Zástupca"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "Zakázané"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -574,19 +584,19 @@ msgstr "Bez popisu."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Adresa"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "Tel do práce"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Telefón domov"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Mobilný telefón"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -638,162 +648,3 @@ msgstr "Nastavte kláves, ktorým si želáte vyvolávať Do."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Či má byť stále zobrazené okno s výsledkami."
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "Odkaz upravíte po dvojitom kliknutí naň a napísaní nového."
-
-#~ msgid "_Theme:"
-#~ msgstr "_Téma:"
-
-#~ msgid "_About"
-#~ msgstr "_O programe"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Pri inštalácii vybraných modulov nastala "
-#~ "chyba</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\"> Pri inštalácii vybraného modulu nastala chyba "
-#~ "</span></b>"
-
-#~ msgid "Close All"
-#~ msgstr "Zavrieť všetky"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimalizovať"
-
-#~ msgid "Restore"
-#~ msgstr "Obnoviť"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Vyvolať GNOME Do"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Povoliť prekrytie oknom"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Zväčšovať ikony"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Pokročilé ukazovatele"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Automaticky skrývať"
-
-#~ msgid "No result found for"
-#~ msgstr "Žiadne výsledky pre"
-
-#~ msgid "Trash"
-#~ msgstr "Kôš"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Odstrániť z lišty"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Prepnúť monitor"
-
-#~ msgid "Show Trash"
-#~ msgstr "Zobrazovať Kôš"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Správanie v režime doku</b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zväčšenie:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Skývanie:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Veľkosť ikony:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientácia:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Vyprázdniť kôš"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Odstrániť všetky položky z koša?</b></big>\n"
-#~ "\n"
-#~ "Ak zvolíte možnosť vysypať kôš, všetky položky v ňom\n"
-#~ "budú nenávratne stratené. Nezabudnite že ich\n"
-#~ "môžete vymazať aj po jednom."
-
-#~ msgid "Open Trash"
-#~ msgstr "Otvoriť Kôš"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Doklety</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximalizovať"
-
-#~ msgid "Show"
-#~ msgstr "Zobraziť"
-
-#~ msgid "Desktop"
-#~ msgstr "Pracovná plocha"
-
-#~ msgid "Copy Text"
-#~ msgstr "Kopírovať text"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Altenatívny Escape"
-
-#~ msgid "Paste Text"
-#~ msgstr "Vložiť text"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Alternatívna Aktivácia"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Prejsť do textového režimu"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Alternatívne Vymazanie"
-
-#~ msgid "First Result"
-#~ msgstr "Prvý výsledok"
-
-#~ msgid "Last Result"
-#~ msgstr "Posledný výsledok"
-
-#~ msgid "Previous Result"
-#~ msgstr "Predchádzajúci výsledok"
-
-#~ msgid "Next Result"
-#~ msgstr "Nasledujúci výsledok"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Vystúpiť z položky"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Viacnásobný výber"
-
-#~ msgid "Docklets"
-#~ msgstr "Doklety"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Všetky práva vyhradené © 2008 GNOME Do vývojári"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Prechádzať v položke"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Obnoviť odstránené položky"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indikovať viacero okien"

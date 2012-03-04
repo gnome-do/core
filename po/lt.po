@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 14:54+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -633,106 +633,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "_About"
-#~ msgstr "_Apie"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "Nuorodos redagavimui, paspauskite ją du kartus ir įrašykite naują."
-
-#~ msgid "Orientation:"
-#~ msgstr "Pozicija:"
-
-#~ msgid "Zoom:"
-#~ msgstr "Mastelis:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Ženkliuko dydis:"
-
-#~ msgid "Maximize"
-#~ msgstr "Išdidinti"
-
-#~ msgid "Hiding:"
-#~ msgstr "Slėpimas:"
-
-#~ msgid "Minimize"
-#~ msgstr "Sumažinti"
-
-#~ msgid "Restore"
-#~ msgstr "Atstatyti"
-
-#~ msgid "Close All"
-#~ msgstr "Užverti visus"
-
-#~ msgid "Trash"
-#~ msgstr "Šiukšlės"
-
-#~ msgid "Show"
-#~ msgstr "Rodyti"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Išvalyti šiukšlinę"
-
-#~ msgid "Desktop"
-#~ msgstr "Darbalaukis"
-
-#~ msgid "No result found for"
-#~ msgstr "Rezultatų nerasta"
-
-#~ msgid "Copy Text"
-#~ msgstr "Kopijuoti tekstą"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Teksto įvesties rėžimas"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Iškviesti Gnome Do"
-
-#~ msgid "Paste Text"
-#~ msgstr "Įklijuoti tekstą"
-
-#~ msgid "First Result"
-#~ msgstr "Pirmas rezultatas"
-
-#~ msgid "Last Result"
-#~ msgstr "Paskutinis rezultatas"
-
-#~ msgid "Previous Result"
-#~ msgstr "Buvęs rezultatas"
-
-#~ msgid "Next Result"
-#~ msgstr "Kitas rezultatas"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Daugybinis žymėjimas"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "© 2008 GNOME Do kūrėjai. Visos teisės saugomos"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Doko elgsena</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Atstatyti ištrintus objektus"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Nustatyti keletą langų"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Išvalyti šiukšlinę?</b></big>\n"
-#~ "\n"
-#~ "Jei išvalysite šiūkšlinę, visas jos tūrinys bus \n"
-#~ "negrįžtamai pašalintas. Jūs galite šalinti \n"
-#~ "ir po vieną šiukšlinėje esančių bylų."
-
-#~ msgid "Open Trash"
-#~ msgstr "Atverti šiukšlinę"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Keisti ekranus"

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:02+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2011-10-17 20:49+0000\n"
+"Last-Translator: Mafiosso <pavelvonlostice@seznam.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-10-18 04:38+0000\n"
+"X-Generator: Launchpad (build 14157)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -64,6 +64,9 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"Chcete-li upravit klávesovou zkratku, poklepejte na ni a zadejte novou.\n"
+"Chcete-li obnovit výchozí nastavení zkratky, poklepejte na ni a stiskněte "
+"klávesu Backspace."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -155,14 +158,16 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"Do plugin pro {0} je dostupný k instalaci. Přejete si, abychom jej povolili "
+"pro vás?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Neptejte se mě znovu na Do pluginy."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "Na_instalovat"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -257,12 +262,12 @@ msgstr "Účet byl úspěšně ověřen!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Co to dělá?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Co plugin {0} dělá?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -327,7 +332,7 @@ msgid ""
 "<b>Docky is no longer a Do theme!</b>\n"
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
-msgstr ""
+msgstr "<b>Docky již není tématem Do!</b>"
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
@@ -339,7 +344,7 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "Režim zadávání textu"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -348,7 +353,7 @@ msgstr "Vymazat"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Vložit ze schránky"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -360,19 +365,19 @@ msgstr "Další pole"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Předchozí položka"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Další položka"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "První položka"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Poslední položka"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -384,7 +389,7 @@ msgstr "Dalších 5 výsledků"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "Poslední položka"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
@@ -392,7 +397,7 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "Zvolit více prvků"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -400,7 +405,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Copyright © 2009 GNOME Do vývojáři"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -466,7 +471,7 @@ msgstr "Zkratka"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktivováno"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -575,19 +580,19 @@ msgstr "Bez popisu."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Adresa"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "Telefon do práce"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Telefon domů"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Mobilní telefon"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -638,163 +643,3 @@ msgstr "Nastaví klávesovou zkratku pro vyvolání Do."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Jestli se okno s výsledkem vždy zobrazí."
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Zkratku upravíte dvojitým kliknutím na odpovídající řádek a zadáním nové "
-#~ "zkratky."
-
-#~ msgid "_Theme:"
-#~ msgstr "_Motiv:"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimalizovat"
-
-#~ msgid "Restore"
-#~ msgstr "Obnovit"
-
-#~ msgid "Close All"
-#~ msgstr "Zavřít vše"
-
-#~ msgid "No result found for"
-#~ msgstr "Nenalezen žádný výsledek pro"
-
-#~ msgid "Trash"
-#~ msgstr "Koš"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Vyvolat GNOME Do"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Při instalaci těchto zásuvných modulů došlo k "
-#~ "chybě</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Při instalaci tohoto zásuvného modulu došlo k "
-#~ "chybě</span></b>"
-
-#~ msgid "_About"
-#~ msgstr "_O zásuvném modulu"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Odstranit z doku"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Automaticky skrývat"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Dovolit překrytí okna"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Zvětšovat ikony"
-
-#~ msgid "Show Trash"
-#~ msgstr "Zobrazit koš"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Rozšířené ukazatele"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Přepnout monitory"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Obnovit odstraněné položky"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklety</b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zvětšení:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Velikost ikon:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientace:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Skrývaní"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Chování vzhledu Docky</b>"
-
-#~ msgid "Show"
-#~ msgstr "Zobrazit"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Vyprázdnit koš"
-
-#~ msgid "Desktop"
-#~ msgstr "Pracovní plocha"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Textový režim"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Odstranit všechny soubory z koše?</b></big>\n"
-#~ "\n"
-#~ "Pokud vyprázníte koš, všechny položky v něm budou\n"
-#~ "trvale odstraněny. Můžete je mazat i jednotlivě."
-
-#~ msgid "Open Trash"
-#~ msgstr "Otevřít koš"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximalizovat"
-
-#~ msgid "Copy Text"
-#~ msgstr "Kopírovat text"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Zavřít (alternativa)"
-
-#~ msgid "Paste Text"
-#~ msgstr "Vložit text"
-
-#~ msgid "First Result"
-#~ msgstr "První výsledek"
-
-#~ msgid "Next Result"
-#~ msgstr "Další výsledek"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Aktivovat (alternativa)"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Smazat"
-
-#~ msgid "Previous Result"
-#~ msgstr "Předchozí výsledek"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Hromadný výběr"
-
-#~ msgid "Last Result"
-#~ msgstr "Poslední výsledek"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklety"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 Vývojáři GNOME Do"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Vnořit se do položky"
-
-#~ msgid "Step out of Item"
-#~ msgstr "O úroveň výš"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indikovat mnohonásobná okna"

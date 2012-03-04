@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:28+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -641,160 +641,3 @@ msgstr "A Do előhívásához használandó billentyűparancs."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Mindig látszódjék-e az eredményablak."
-
-#~ msgid "_About"
-#~ msgstr "_Névjegy"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Téma:"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">A kiválasztott modulok telepítése közben hiba "
-#~ "történt</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">A kiválasztott modul telepítése közben hiba "
-#~ "történt</span></b>"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Automatikus elrejtés"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "A GNOME Do előhívása"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Ablak átlapolás engedélyezése"
-
-#~ msgid "Trash"
-#~ msgstr "Kuka"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Eltávolítás a Dokkról"
-
-#~ msgid "Restore"
-#~ msgstr "Visszaállítás"
-
-#~ msgid "Minimize"
-#~ msgstr "Kis méret"
-
-#~ msgid "Show Trash"
-#~ msgstr "Kuka mutatása"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Ikonok nagyítása"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Törölt elemek visszahelyezése"
-
-#~ msgid "Zoom:"
-#~ msgstr "Nagyítás:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Elrejtés:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Többszörös ablakok jelzése"
-
-#~ msgid "Orientation:"
-#~ msgstr "Tájolás:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Kuka ürítése"
-
-#~ msgid "Open Trash"
-#~ msgstr "Kuka megnyitása"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Dockletek</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Teljes méret"
-
-#~ msgid "Close All"
-#~ msgstr "Összes bezárása"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Ikonok mérete:"
-
-#~ msgid "Show"
-#~ msgstr "Megjelenítés"
-
-#~ msgid "Desktop"
-#~ msgstr "Asztal"
-
-#~ msgid "No result found for"
-#~ msgstr "Nincs eredmény ehhez:"
-
-#~ msgid "Copy Text"
-#~ msgstr "Szöveg másolása"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Alternatív Escape"
-
-#~ msgid "Paste Text"
-#~ msgstr "Szöveg beillesztése"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Alternatív Aktiválás"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Szövegbeviteli mód"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Alternatív Delete"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Többszörös kijelölés"
-
-#~ msgid "Docklets"
-#~ msgstr "Dockletek"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Elem megnyitása"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Mindent töröl a Kukából?</b></big>\n"
-#~ "\n"
-#~ "Ha a kiüríti a Kukát, minden benne lévő\n"
-#~ "elem véglegesen elvész. Ne feledje,\n"
-#~ "hogy az elemek egyesével is törölhetők."
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky viselkedése</b>"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Gyorsbillentyű szerkesztéséhez kattintson rá duplán, majd nyomja le az újat."
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Monitorváltás"
-
-#~ msgid "Last Result"
-#~ msgstr "Utolsó találat"
-
-#~ msgid "Previous Result"
-#~ msgstr "Előző találat"
-
-#~ msgid "Next Result"
-#~ msgstr "Következő találat"
-
-#~ msgid "First Result"
-#~ msgstr "Első találat"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Kilépés az elemből"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 A GNOME Do fejlesztői"

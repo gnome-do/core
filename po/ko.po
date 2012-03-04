@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:08+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2011-11-12 14:32+0000\n"
+"Last-Translator: MinSik CHO <Unknown>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-11-13 05:18+0000\n"
+"X-Generator: Launchpad (build 14277)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -61,6 +61,8 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"바로가기를 수정하려면, 더블클릭하고 새 설정을 입력하세요.\n"
+"초기값으로 돌리려면 더블클릭하고 백스페이스를 누르세요."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -144,22 +146,22 @@ msgstr "계정이 없습니까?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
-msgstr ""
+msgstr "<b><span size=\"x-large\">Do 플러그인이 작업을 수행할 수 있습니다!</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
 msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
-msgstr ""
+msgstr "{0}를 위한 Do플러그인을 설치할 수 있습니다. 활성화할까요?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Do 플러그인에 대해 다시 물어보지 않기"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_설치"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -254,12 +256,12 @@ msgstr "계정 검증 성공!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Do 가 무엇입니까?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "{0} 플러그인이 하는 일이 무엇입니까?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -325,6 +327,8 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"<b>Docky는 더이상 Do테마가 아닙니다!</b>\n"
+"Docky는 이제 분리된 애플리케이션입니다. 그놈 Do 테마가 클래식으로 재설정되었습니다. 설정에서 바꿀 수 있습니다."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
@@ -336,7 +340,7 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "텍스트 모드에 진입하기"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -345,7 +349,7 @@ msgstr "삭제"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "클립보드에서 붙여넣기"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -357,19 +361,19 @@ msgstr "다음 창"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "이전 항목"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "다음 항목"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "첫 항목"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "마지막 항목"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -389,7 +393,7 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "다중 선택하기"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -397,7 +401,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "저작권은 GNOME Do 개발자에게 있습니다. (© 2009 그놈 Do 개발자)"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -463,7 +467,7 @@ msgstr "단축키"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -572,19 +576,19 @@ msgstr "설명 없음."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "주소"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "직장 전화"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "집 전화"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "휴대 전화"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -633,153 +637,3 @@ msgstr "Do를 호출하기 위한 키 명령을 이것으로 설정"
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "결과에 상관없이 창이 항상 보임."
-
-#~ msgid "_Theme:"
-#~ msgstr "테마(_T):"
-
-#~ msgid "_About"
-#~ msgstr "정보(_A)"
-
-#~ msgid "Close All"
-#~ msgstr "모두 닫기"
-
-#~ msgid "Minimize"
-#~ msgstr "최소화"
-
-#~ msgid "Restore"
-#~ msgstr "복구"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "단축키를 편집할때, 더블클릭후 새로운 입력하면 됩니다."
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr "<b><span size=\"large\">선택한 플러그인 설치중 에러 발생</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr "<b><span size=\"large\">선택한 플러그인 설치중 에러 발생</span></b>"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "고급 지시자"
-
-#~ msgid "Show Trash"
-#~ msgstr "쓰렉통 보이기"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "창 중첩 허용"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "줌 아이콘"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "모니터 전환"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "자동으로 숨기기"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "독에서 제거"
-
-#~ msgid "Trash"
-#~ msgstr "쓰레기통"
-
-#~ msgid "No result found for"
-#~ msgstr "다음의 결과를 찾을수 없음"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "지워진 항목 복원하기"
-
-#~ msgid "Zoom:"
-#~ msgstr "확대:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "아이콘 크기:"
-
-#~ msgid "Orientation:"
-#~ msgstr "방향:"
-
-#~ msgid "Hiding:"
-#~ msgstr "숨기기:"
-
-#~ msgid "Show"
-#~ msgstr "보기"
-
-#~ msgid "Empty Trash"
-#~ msgstr "휴지통 비우기"
-
-#~ msgid "Desktop"
-#~ msgstr "바탕화면"
-
-#~ msgid "Enter text mode"
-#~ msgstr "텍스트 모드 시작"
-
-#~ msgid "Open Trash"
-#~ msgstr "휴지통 열기"
-
-#~ msgid "Maximize"
-#~ msgstr "최대화"
-
-#~ msgid "Multiple selection"
-#~ msgstr "다중 선택"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "저작권 © 2008 GNOME Do Developers"
-
-#~ msgid "Copy Text"
-#~ msgstr "문자열 복사"
-
-#~ msgid "Paste Text"
-#~ msgstr "문자열 붙이기"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr "<big><b>휴지통에 있는 모든 것을 비울까요?</b></big>"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "활성키 교체"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Escape키 교체"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "GNOME Do 호출"
-
-#~ msgid "First Result"
-#~ msgstr "처음 결과"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Delete 키 교체"
-
-#~ msgid "Last Result"
-#~ msgstr "마지막 결과"
-
-#~ msgid "Previous Result"
-#~ msgstr "이전 결과"
-
-#~ msgid "Next Result"
-#~ msgstr "다음 결과"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "아이템 탐색"
-
-#~ msgid "Step out of Item"
-#~ msgstr "항목에서 나오기"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "다중 창 지시"
-
-#~ msgid "Docklets"
-#~ msgstr "독렛"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>독처럼 행동</b>"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>독렛</b>"

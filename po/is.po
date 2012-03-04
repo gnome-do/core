@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:16+0000\n"
 "Last-Translator: Baldur <baldurpet@gmail.com>\n"
 "Language-Team: Icelandic <is@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -638,158 +638,3 @@ msgstr "Láta þetta verða takkinn sem þú vilt nota til að opna Do."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Hvort glugginn með niðurstöðunum sjáist alltaf."
-
-#~ msgid "_Theme:"
-#~ msgstr "_Þema:"
-
-#~ msgid "_About"
-#~ msgstr "_Upplýsingar"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Villa kom upp við að setja upp viðbæturnar</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Villa kom upp við að setja upp viðbótina</span></b>"
-
-#~ msgid "Minimize"
-#~ msgstr "Smækka"
-
-#~ msgid "Restore"
-#~ msgstr "Endurheimta"
-
-#~ msgid "Close All"
-#~ msgstr "Loka öllu"
-
-#~ msgid "No result found for"
-#~ msgstr "Ekkert fannst þegar leitað var að"
-
-#~ msgid "Show Trash"
-#~ msgstr "Sýna ruslið"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Stækka tákn"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Skipta um skjái"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Fela sjálfkrafa"
-
-#~ msgid "Trash"
-#~ msgstr "Rusl"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Fleiri punktar"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Hylja glugga"
-
-#~ msgid "Zoom:"
-#~ msgstr "Stækkun:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Stærð tákna:"
-
-#~ msgid "Show"
-#~ msgstr "Sýna"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Tæma ruslið"
-
-#~ msgid "Desktop"
-#~ msgstr "Skjáborð"
-
-#~ msgid "Open Trash"
-#~ msgstr "Opna ruslið"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Hvernig Docky hegðar sér</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Bæta við hlutum sem hafa verið fjarlægðir"
-
-#~ msgid "Maximize"
-#~ msgstr "Hámarka"
-
-#~ msgid "Orientation:"
-#~ msgstr "Staðsetning:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Fela sig:"
-
-#~ msgid "Copy Text"
-#~ msgstr "Afrita texta"
-
-#~ msgid "Paste Text"
-#~ msgstr "Líma texta"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Opna GNOME Do"
-
-#~ msgid "First Result"
-#~ msgstr "Fyrstu niðurstöðurnar"
-
-#~ msgid "Last Result"
-#~ msgstr "Síðustu niðurstöðurnar"
-
-#~ msgid "Previous Result"
-#~ msgstr "Fyrri niðurstöður"
-
-#~ msgid "Next Result"
-#~ msgstr "Næstu niðurstöður"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Annar takki til að virkja"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Annar takki til að eyða"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Hægt er að breyta flýtileið með því að tvísmella á hana og slá inn nýja."
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Gefa marga glugga til kynna"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Viltu henda öllu úr ruslinu?</b></big>\n"
-#~ "\n"
-#~ "Allir hlutir í ruslinu munu hverfa að eilífu ef þú\n"
-#~ "ákveður að tæma úr því. Hafðu það í huga að \n"
-#~ "þú getur eitt einni skrá í einu."
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklet</b>"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Annar takki til að hætta"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Byrja að skrifa texta"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Fara úr einhverju"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Velja marga hluti í einu"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklet"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Höfundarréttavarið © 2008 GNOME Do"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Fara í það sem er valið"

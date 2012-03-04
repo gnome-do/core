@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:09+0000\n"
-"Last-Translator: Burhan Teoman <bbteoman@gmail.com>\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2012-02-11 23:03+0000\n"
+"Last-Translator: Hasan Tayyar BEŞİK <sacrosancttayyar@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:34+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2012-02-13 04:32+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -63,6 +63,9 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"Bir kısayolu düzenlemek için, iki kez üzerine tıklayın ve yenisini yazın. \n"
+"Varsayılan kısayolu geri yüklemek için, iki kez tıklayın ve Backspace tuşuna "
+"basın."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -147,6 +150,7 @@ msgstr "Bir hesabınız yok mu?"
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
 msgstr ""
+"<b><span size=\"x-large\">Bunun için bir Do eklentisi mevcut!</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -154,14 +158,16 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"{0} için bir Do eklentisi yükleme için kullanılabilir durumdadır. "
+"Etkinleştirmek ister misiniz?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Bana tekrar Do eklentileri hakkında bir şey sorma."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Yükle"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -256,12 +262,12 @@ msgstr "Hesap doğrulama başarılı oldu!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Do nedir?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "{0} eklentisi ne işe yarar?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -330,7 +336,7 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Summon Do"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
@@ -338,7 +344,7 @@ msgstr ""
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "Yazı moduna geç"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -347,7 +353,7 @@ msgstr "Temizle"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Panodan Yapıştır"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -359,19 +365,19 @@ msgstr "Sonraki Panel"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Önceki Nesne"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Sonraki Nesne"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "İlk Nesne"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Son Nesne"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -399,7 +405,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Telif Hakkı © 2009 GNOME Do Geliştiricileri"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -465,7 +471,7 @@ msgstr "Kısayol"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "Devre dışı"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -574,19 +580,19 @@ msgstr "Açıklama yok."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Adres"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "İş Telefonu"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Ev Telefonu"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Cep Telefonu"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -640,162 +646,3 @@ msgstr "Do'yu çağırmak için kullanılacak tuş komutunu ayarlayın."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Sonuç penceresinin her zaman gösterilip gösterilmeyeceği."
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Bir kısayolu düzenlemek için, üzerine çift tıkla ve yeni bir tane yaz."
-
-#~ msgid "_About"
-#~ msgstr "_Hakkında"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Tema:"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Seçili eklenti yüklenirken bir hata oluştu</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Seçili eklentiler yüklenirken bir hata "
-#~ "oluştu</span></b>"
-
-#~ msgid "Show Trash"
-#~ msgstr "Çöpü Göster"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Pencere Örtüşmesine İzin Ver"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Simgeleri Yakınlaştır"
-
-#~ msgid "Restore"
-#~ msgstr "Geri Yükle"
-
-#~ msgid "Close All"
-#~ msgstr "Tümünü Kapat"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "GNOME Do'yu çağır"
-
-#~ msgid "No result found for"
-#~ msgstr "Sonuç bulunamadı:"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Gelişmiş Göstergeler"
-
-#~ msgid "Trash"
-#~ msgstr "Çöp"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Rıhtımdan Kaldır"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Monitörü değiştir"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Kendiliğinden Gizle"
-
-#~ msgid "Open Trash"
-#~ msgstr "Çöpü Aç"
-
-#~ msgid "Show"
-#~ msgstr "Göster"
-
-#~ msgid "Desktop"
-#~ msgstr "Masaüstü"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Alternatif Çıkış"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Alternatif Etkinleştirme"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Alternatif Silme"
-
-#~ msgid "First Result"
-#~ msgstr "İlk Sonuç"
-
-#~ msgid "Last Result"
-#~ msgstr "Son Sonuç"
-
-#~ msgid "Previous Result"
-#~ msgstr "Önceki Sonuç"
-
-#~ msgid "Next Result"
-#~ msgstr "Sonraki Sonuç"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "İlk öğeyi görüntüle"
-
-#~ msgid "Zoom:"
-#~ msgstr "Yakınlaştır:"
-
-#~ msgid "Maximize"
-#~ msgstr "Ekranı kapla"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Simge Boyutu:"
-
-#~ msgid "Paste Text"
-#~ msgstr "Metni Yapıştır"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Düz metin kipine geç"
-
-#~ msgid "Copy Text"
-#~ msgstr "Metni Kopyala"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Çoklu seçim"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>\"Docky\" Davranışı</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Kaldırılmış Öğeleri Yeniden Kur"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>\"Docklet\"ler</b>"
-
-#~ msgid "Orientation:"
-#~ msgstr "Yönelim:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Gizliyor:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Çoklu Pencereyi Göster"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Öğeden Çık"
-
-#~ msgid "Docklets"
-#~ msgstr "\"Docklet\"ler"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Telif Hakkı © 2008 GNOME Do Geliştiricileri"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Çöp Kutusunu Boşalt"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Çöpteki tüm öğeler silinsin mi?</b></big>\n"
-#~ "\n"
-#~ "Eğer çöpü boşaltmayı seçerseniz, \n"
-#~ "içindeki tüm öğeler kalıcı olarak silinecektir. \n"
-#~ "Öğeleri ayrı ayrı da silebileceğinizi unutmayın."
-
-#~ msgid "Minimize"
-#~ msgstr "Simge Durumuna Küçült"

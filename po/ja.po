@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:12+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -632,144 +632,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "常に結果ウィンドウが表示されるかどうかです。"
-
-#~ msgid "_About"
-#~ msgstr "GNOME Doについて(_A)"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "ショートカットを編集するには、ダブルクリックして新しいものを入力してください。"
-
-#~ msgid "_Theme:"
-#~ msgstr "テーマ(_T):"
-
-#~ msgid "Minimize"
-#~ msgstr "最小化"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "GNOME Doを呼び出す"
-
-#~ msgid "Show Trash"
-#~ msgstr "ゴミ箱を表示"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "ズームアイコン"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "自動的に隠す"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr "<b><span size=\"large\">選択したプラグインをインストールした時のエラーでした</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr "<b><span size=\"large\">選択したプラグインをインストールした時のエラーでした</span></b>"
-
-#~ msgid "No result found for"
-#~ msgstr "検索しましたが見つかりませんでした"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "ドックから消す"
-
-#~ msgid "Hiding:"
-#~ msgstr "非表示:"
-
-#~ msgid "Maximize"
-#~ msgstr "最大化"
-
-#~ msgid "Copy Text"
-#~ msgstr "テキストをコピー"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "エスケープを置き換える"
-
-#~ msgid "Paste Text"
-#~ msgstr "テキストを貼り付け"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "アクティベートを置き換える"
-
-#~ msgid "Previous Result"
-#~ msgstr "前の結果"
-
-#~ msgid "Multiple selection"
-#~ msgstr "複数選択"
-
-#~ msgid "First Result"
-#~ msgstr "最初の結果"
-
-#~ msgid "Last Result"
-#~ msgstr "最後の結果"
-
-#~ msgid "Next Result"
-#~ msgstr "次の結果"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "著作権 © 2008 GNOME Do Developers"
-
-#~ msgid "Zoom:"
-#~ msgstr "ズーム:"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>ゴミ箱からすべてのアイテムを空にしてもよいですか?</b></big>\n"
-#~ "\n"
-#~ "ゴミ箱を空にすると、アイテムは完全に削除されます。 それらを一つ一つ削除することも可能です。"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "デリートを置き換える"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "削除したアイテムを元に戻す"
-
-#~ msgid "Icon Size:"
-#~ msgstr "アイコンのサイズ:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "複数のウィンドウであることを表示する"
-
-#~ msgid "Orientation:"
-#~ msgstr "位置:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Empty Trash（ゴミ箱を空にする）"
-
-#~ msgid "Open Trash"
-#~ msgstr "Open Trash（ゴミ箱を開く）"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Switch Monitors（モニターの切り替え）"
-
-#~ msgid "Trash"
-#~ msgstr "Trash（ゴミ箱）"
-
-#~ msgid "Show"
-#~ msgstr "Show（表示）"
-
-#~ msgid "Desktop"
-#~ msgstr "Desktop（デスクトップ）"
-
-#~ msgid "Restore"
-#~ msgstr "最小化解除"
-
-#~ msgid "Close All"
-#~ msgstr "すべて閉じる"
-
-#~ msgid "Enter text mode"
-#~ msgstr "テキストモードを入力してください"
-
-#~ msgid "Docklets"
-#~ msgstr "ドックレット"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky の挙動</b>"

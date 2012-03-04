@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:19+0000\n"
-"Last-Translator: jon latorre <moebius@etxea.net>\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2011-07-28 10:35+0000\n"
+"Last-Translator: gorkaazk <gorkaazkarate@euskalerria.org>\n"
 "Language-Team: Basque <eu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -62,6 +62,9 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"Laster-bide bat editatzeko, klik bikoitza gainean eta idatzi berri bat.\n"
+"Lehenetsitako baliora atzera eramateko laster-bidea, klik bikoitza eta "
+"sakatu 'atzerako gezia'."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -146,6 +149,7 @@ msgstr "Ez daukazu konturik?"
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
 msgstr ""
+"<b><span size=\"x-large\">Badago Do gehigarririk horretarako!</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -153,14 +157,15 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"Do gehigarria {0} horretarako instalatzeko prest dago. Gaitu nahiko zenuke?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Ez galdetu berriro Do gehigarriei buruz."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Instalatu"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -255,12 +260,12 @@ msgstr "Kontu-egiaztatze arrakastatsua!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Zer da Do delako hori?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Zertarako da {0} gehigarri hori?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -326,18 +331,22 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"<b>Docky dagoeneko ez da Do honetarako gaia!</b>\n"
+"Egun, Docky beste aplikazio independientea bilakatu da, Do honengandik "
+"aldendurik. GNOMEko Do gaia 'Classic gaia' bilakatu da, 'Gai klasikoa'. Zure "
+"hautapenetan aldatzea duzu."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Do horri laguntza eske deitu"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "Laguntza eske deitu testu moduan"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "Sartu testu modua"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -346,7 +355,7 @@ msgstr "Garbitu"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Paper zorrotik itsatsi"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -358,19 +367,19 @@ msgstr "Hurrengo Panela"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Aurreko elementua"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Hurrengo elementua"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "Lehen elementua"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Azken elementua"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -382,15 +391,15 @@ msgstr "Hurrengo 5 Emaitzak"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "Irten elementutik"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "Sartu elementura"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "Hautatu hainbat elementu"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -398,7 +407,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Copyright © 2009 GNOME Do Developers"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -464,7 +473,7 @@ msgstr "Lasterbidea"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "Ezgaiturik"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -576,19 +585,19 @@ msgstr "Deskribapenik ez."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Helbidea"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "Laneko telefonoa"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Etxeko telefonoa"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Sakelako telefonoa"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -641,163 +650,3 @@ msgstr "Hemen ezarri ezazu zein laster-tekla erabiliko den Do agertarazteko."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Ea emaitza-leihoak beti erakutsiko diren."
-
-#~ msgid "_Theme:"
-#~ msgstr "_Gaia:"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "Abiarazle bat editatzeko, egin klik bikoitza eta idatzi berria."
-
-#~ msgid "_About"
-#~ msgstr "Honi _buruz"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Leihoen gainezartzea baimendu"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimizatu"
-
-#~ msgid "Restore"
-#~ msgstr "Berreskuratu"
-
-#~ msgid "Close All"
-#~ msgstr "Guztiak itxi"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Automatikoki ezkutatu"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "GNOME Do deitu"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Errorea gertatu da hautatutako pluginak "
-#~ "instalatzean</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Errorea gertatu da hautatutako plugina "
-#~ "instalatzean</span></b>"
-
-#~ msgid "Show Trash"
-#~ msgstr "Zakarrontzia erakutsi"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Ikonoak handitu"
-
-#~ msgid "Trash"
-#~ msgstr "Zakarrontzia"
-
-#~ msgid "No result found for"
-#~ msgstr "Emaitzarik ez honentzat"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Barratik kendu"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Adierazle aurreratuak"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Monitoreak aldatu"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Leiho Ugari Adierazi"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky-ren Portaera</b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zooma:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Ikono-Tamaina:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Ezkutatzea:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientazioa:"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Kendutako Elementuak Berreskuratu"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Zakarrontzia Hustu"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Zakarrontziko elementu guztiak hustu?</b></big>\n"
-#~ "\n"
-#~ "Zakarrontzia husten baduzu, bertan dauden\n"
-#~ "elementu guztiak galduko dira, betirako.\n"
-#~ "Gogoratu ezazu banaka ere ezabatu\n"
-#~ "ditzakezula."
-
-#~ msgid "Open Trash"
-#~ msgstr "Zakarrontzia Ireki"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklet-ak</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximizatu"
-
-#~ msgid "Show"
-#~ msgstr "Erakutsi"
-
-#~ msgid "Desktop"
-#~ msgstr "Mahaigaina"
-
-#~ msgid "Copy Text"
-#~ msgstr "Testua Kopiatu"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Testu-moduan sartu"
-
-#~ msgid "Paste Text"
-#~ msgstr "Testua Itsatsi"
-
-#~ msgid "First Result"
-#~ msgstr "Lehen Emaitza"
-
-#~ msgid "Last Result"
-#~ msgstr "Azken Emaitza"
-
-#~ msgid "Previous Result"
-#~ msgstr "Aurreko Emaitza"
-
-#~ msgid "Next Result"
-#~ msgstr "Hurrengo Emaitza"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Elementutik Irten"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklet-ak"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 GNOME Do Garatzaileak"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Hautaketa anitza"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Elementua Arakatu"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Ordezko aktibatu"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Ordezko ezabatu"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Ordezko ihes-karaktere"

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:20+0000\n"
 "Last-Translator: SiraNokyoongtong <gumaraa@gmail.com>\n"
 "Language-Team: Thai <th@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:34+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -629,70 +629,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "_About"
-#~ msgstr "เกี่ยวกับ"
-
-#~ msgid "_Theme:"
-#~ msgstr "ธีม:"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "เพื่อแก้ไขคีย์ลัด ให้ดับเบิ้ลคลิกและพิมพ์คีย์ใหม่"
-
-#~ msgid "Zoom:"
-#~ msgstr "ย่อ-ขยาย:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "ขนาดไอคอน:"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>ลบข้อมูลในถังขยะทิ้งทั้งหมด?</b></big>\n"
-#~ "\n"
-#~ "ถ้าคุณต้องการทำให้ถังขยะว่าง, ข้อมูลทั้งหมดในนั้น\n"
-#~ "จะสูญหายอย่างถาวร. โปรดจำไว้ว่าคุณสามารถลบ\n"
-#~ "ข้อมูลเหล่านั้นแยกจากกันได้"
-
-#~ msgid "Open Trash"
-#~ msgstr "เปิดถังขยะ"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "สลับหน้าจอ"
-
-#~ msgid "Restore"
-#~ msgstr "คืนสภาพ"
-
-#~ msgid "Close All"
-#~ msgstr "ปิดทั้งหมด"
-
-#~ msgid "Trash"
-#~ msgstr "ถังขยะ"
-
-#~ msgid "Empty Trash"
-#~ msgstr "เทถังขยะทิ้ง"
-
-#~ msgid "Show"
-#~ msgstr "แสดง"
-
-#~ msgid "Desktop"
-#~ msgstr "พื้นโต๊ะ"
-
-#~ msgid "No result found for"
-#~ msgstr "ไม่พบผลลัพธ์สำหรับ"
-
-#~ msgid "Last Result"
-#~ msgstr "ผลลัพธ์สุดท้าย"
-
-#~ msgid "First Result"
-#~ msgstr "ผลลัพธ์แรก"
-
-#~ msgid "Previous Result"
-#~ msgstr "ผลลัพธ์ก่อนหน้า"
-
-#~ msgid "Next Result"
-#~ msgstr "ผลลัพธ์ถัดไป"

@@ -8,15 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:04+0000\n"
-"Last-Translator: faical117 <faical117@yahoo.fr>\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2012-02-08 15:31+0000\n"
+"Last-Translator: Mohamed Alaa <m.alaa8@yahoo.com>\n"
 "Language-Team: American English <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2012-02-09 05:21+0000\n"
+"X-Generator: Launchpad (build 14763)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -63,6 +63,8 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"لتغيير اختصار, إنقر نقرة مزدوجة عليه ثم قم بادخال الاختصار الجديد.\n"
+"لاستعادة الاختصار الافتراضي, إنقر نقرة مزدوجة عليه ثم اضعط على زر المسح"
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -147,6 +149,7 @@ msgstr "أليس لديك حساب؟"
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
 msgstr ""
+"<b><span size=\"x-large\">هناك برنامج مساعد ل\"Do\" لهذا !</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -154,14 +157,15 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"هناك برنامج ل\"Do\" مساعد ل {0} متوفرة للتثبيت. هل تحب منا لتمكينه لك؟"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "لا تسألني عن الإضافات \"Do\" من جديد."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_ثبّت"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -256,12 +260,12 @@ msgstr "نجحت مصادقة الحساب!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "ما هو Do ؟"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "ماذا  ماذا تفعل {0} هذه الإضافة ؟"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -327,18 +331,21 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"</b>Docky لم يعد بعد الأن يعتمد على موضوعات Do<b>\n"
+"انه الآن أصبح تطبيق مستقل بذاته. موضوع GNOME Do خاصتك قد أعيد تعيينه الى "
+"الموضوع الكلاسيكي. من فضلك لا تتردد في تغييره من الأعدادات"
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "استدعى \"Do\""
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "استدعاء في وضع النص"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "أدخل وضع النص"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -347,7 +354,7 @@ msgstr "امسح"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "نسخ من ذاكرة النصوص"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -359,19 +366,19 @@ msgstr "الجزء التّالي"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "البند السابق"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "البند التّالي"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "العنصر الأول"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "العنصر الأخير"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -383,15 +390,15 @@ msgstr "النتائج الخمسة اللاحقة"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "أخرج من العنصر"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "أدخل الى العنصر"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "تحديد عناصر متعددة"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -399,7 +406,7 @@ msgstr "أداة جنوم"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "جميع الحقوق محفوظة © 2009 لمطورين  \"Gnome Do\""
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -463,7 +470,7 @@ msgstr "إختصار"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "مُعطل"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -572,19 +579,19 @@ msgstr "لا وصف."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "العنوان"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "هاتف العمل"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "هاتف المنزل"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "الهاتف المحمول"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -635,158 +642,3 @@ msgstr "عين هذا إلى أمر المفاتيح الذي تريد استخ�
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "فيما إذا كانت نافذة النتائج ستظهر"
-
-#~ msgid "_About"
-#~ msgstr "_عن"
-
-#~ msgid "_Theme:"
-#~ msgstr "ال_سمة:"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr "<b><span size=\"large\">وجد خطأ تثبيت الملحقات المختارة</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr "<b><span size=\"large\">وجد خطأ تثبيت الملحق المختار</span></b>"
-
-#~ msgid "Close All"
-#~ msgstr "أغلق الكل"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "استدعِ أداء جنوم"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "إخفاء تلقائي"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "اسمح بامتداد النوافذ"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "قرّب الأيقوتات"
-
-#~ msgid "Show Trash"
-#~ msgstr "أظهر المهملات"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "مدلّلات متقدمة"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "أزل من المرساة"
-
-#~ msgid "Icon Size:"
-#~ msgstr "حجم الايقونة :"
-
-#~ msgid "Empty Trash"
-#~ msgstr "تفريغ سلة المهملات"
-
-#~ msgid "Open Trash"
-#~ msgstr "فتح سلة المهملات"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "تبديل الشاشات"
-
-#~ msgid "Copy Text"
-#~ msgstr "نسخ النص"
-
-#~ msgid "Paste Text"
-#~ msgstr "لصق النص"
-
-#~ msgid "First Result"
-#~ msgstr "النتيجة الأولى"
-
-#~ msgid "Last Result"
-#~ msgstr "النتيجة الأخيرة"
-
-#~ msgid "Previous Result"
-#~ msgstr "النتيجة السابقة"
-
-#~ msgid "Next Result"
-#~ msgstr "النتيجة اللاحقة"
-
-#~ msgid "Multiple selection"
-#~ msgstr "تحديد متعدد"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "مطوري أداة جنوم  Copyright © 2008"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "لتحرير الإختصار، انقر مرتين عليه ثم اكتب واحدا جديدا."
-
-#~ msgid "Zoom:"
-#~ msgstr "التقريب:"
-
-#~ msgid "Show"
-#~ msgstr "عرض"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>احذف كل محتويات سلة المهملات؟</b></big>\n"
-#~ "\n"
-#~ "إذا إخترت تفريغ سلة المهملات ,كل محتوياتها\n"
-#~ "ستحذف نهائيا.للعلم أنه بإمكانك ايضا\n"
-#~ "حذفها كل على حدة.."
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>سلوك متذذب</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "اعادة البنود المحذوفة"
-
-#~ msgid "Hiding:"
-#~ msgstr "اخفاء"
-
-#~ msgid "Desktop"
-#~ msgstr "سطح المكتب"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "التفعيل المتغير"
-
-#~ msgid "Step out of Item"
-#~ msgstr "الخروج من البند"
-
-#~ msgid "Enter text mode"
-#~ msgstr "ادخل نظام كتابة النصوص"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "الخروج المتغير"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "الحذف المتغير"
-
-#~ msgid "Orientation:"
-#~ msgstr "التوجيه"
-
-#~ msgid "Maximize"
-#~ msgstr "تكبير"
-
-#~ msgid "Minimize"
-#~ msgstr "تصغير"
-
-#~ msgid "Restore"
-#~ msgstr "إستعادة"
-
-#~ msgid "No result found for"
-#~ msgstr "لاتوجد نتائج ل"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "الإشارة إلى النوافذ المتعددة"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklets"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "استعراض حسب العنصر"
-
-#~ msgid "Trash"
-#~ msgstr "سلة المهملات"

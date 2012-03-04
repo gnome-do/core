@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:17+0000\n"
 "Last-Translator: Nguyễn Hào Khôi <nguyenhaokhoi@yahoo.com.vn>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:34+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -642,157 +642,3 @@ msgstr "Đặt khóa này làm lệnh bạn sử dụng để gọi Do."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Cửa sổ kết quả sẽ luôn luôn hiển thị."
-
-#~ msgid "_About"
-#~ msgstr "_Giới thiệu"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "Để sửa một lối tắt, hãy nhấn đúp chuột lên nó và nhập tên mới"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Diện mạo:"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr "<b><span size=\"large\">c</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Có một lỗi khi cài đặt phần bổ xung được "
-#~ "chọn</span></b>"
-
-#~ msgid "Trash"
-#~ msgstr "Thùng rác"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Gỡ bỏ khỏi Dock"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Gọi GNOME Do"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Thu phóng biểu tượng"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Cho phép cửa sổ che khuất"
-
-#~ msgid "Show Trash"
-#~ msgstr "Hiện Thùng rác"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Chuyển màn hình"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Tự động ẩn"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Cài đặt lại các mục đã gỡ bỏ"
-
-#~ msgid "Zoom:"
-#~ msgstr "Thu phóng:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Cỡ biểu tượng"
-
-#~ msgid "Hiding:"
-#~ msgstr "Ẩn giấu:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Cho biết sự hiện diện nhiều cửa sổ"
-
-#~ msgid "Orientation:"
-#~ msgstr "Vị trí:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Đổ thùng rác"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Đổ đi mọi thứ trong thùng rác ?</b></big>\n"
-#~ "\n"
-#~ "Mọi thứ trong này sẽ mất đi vĩnh viễn nếu bạn\n"
-#~ "chọn đổ rác. Chú ý rằng bạn cũng có thể xóa\n"
-#~ "từng thứ riêng rẽ."
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Tiểu trình Docky</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Phóng to"
-
-#~ msgid "Open Trash"
-#~ msgstr "Mở thùng rácác"
-
-#~ msgid "Minimize"
-#~ msgstr "Thu nhỏ"
-
-#~ msgid "Restore"
-#~ msgstr "Phục hồi"
-
-#~ msgid "Show"
-#~ msgstr "Hiện"
-
-#~ msgid "Desktop"
-#~ msgstr "Desktop"
-
-#~ msgid "No result found for"
-#~ msgstr "Không tìm thấy"
-
-#~ msgid "Copy Text"
-#~ msgstr "Chép văn bản"
-
-#~ msgid "Paste Text"
-#~ msgstr "Dán văn bản"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Vào chế độ văn bản"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Hành vi Docky</b>"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Kích hoạt thay thế"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Xóa thay thế"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Thoát thay thế"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Đa lựa chọn"
-
-#~ msgid "Last Result"
-#~ msgstr "Kết quả cuối"
-
-#~ msgid "First Result"
-#~ msgstr "Kết quả đầu"
-
-#~ msgid "Previous Result"
-#~ msgstr "Kết quả trước"
-
-#~ msgid "Next Result"
-#~ msgstr "Kết quả kế"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Rảo xem vào mục"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Đi vào mục"
-
-#~ msgid "Docklets"
-#~ msgstr "Tiểu trình Docky"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Bản quyền năm 2008 của các Nhà phát triển GNOME Do"
-
-#~ msgid "Close All"
-#~ msgstr "Đóng hết"

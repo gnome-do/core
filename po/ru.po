@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:18+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2011-07-04 14:30+0000\n"
+"Last-Translator: Valerii Kolem <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -62,6 +62,9 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"Для редактирования ярлыка дважды кликните.\n"
+"Для сброса ярлыка к стандартным настройкам дважды кликните и нажмите "
+"Backspace."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -85,7 +88,7 @@ msgstr "<span size=\"large\" weight=\"heavy\">Название плагина</s
 
 #: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
 msgid "page1"
-msgstr "page1"
+msgstr "Страница 1"
 
 #: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
 msgid "GNOME Do Preferences"
@@ -101,7 +104,7 @@ msgstr "_Сброс"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:101
 msgid "Show window shadow"
-msgstr "Показывать тень окна"
+msgstr "Показывать тень от окна"
 
 #: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:113
 msgid "Animate window"
@@ -114,7 +117,7 @@ msgstr "Нет результатов для: {0}"
 
 #: ../Do.Interface.Linux.AnimationBase/src/Do.Interface/Do.Interface.AnimationBase/BezelDrawingArea.cs:746
 msgid "Type To Search"
-msgstr "Начните печатать"
+msgstr "Набирайте чтобы найти"
 
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
 #: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
@@ -141,11 +144,11 @@ msgstr "<i>Подтвердить и сохранить информацию о�
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:180
 msgid "Don't have an account?"
-msgstr "Не имеете аккаунта?"
+msgstr "Нет аккаунта?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
-msgstr ""
+msgstr "<b><span size=\"x-large\">Вот Do-плагин для этого!</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -153,14 +156,16 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"Do-плагин для {0} доступен для установки. Хотите ли вы начать его "
+"использовать?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Не спрашивать больше меня о Do-плагинах."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Установить"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -255,12 +260,12 @@ msgstr "Проверка аккаунта пройдена!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Что такое Do?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Что делает этот плагин {0}?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -326,18 +331,21 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"<b>Docky больше не является темой Do !</b>\n"
+"Оно сейчас доступно как отдельное приложение. Ваша GNOME Do тема была "
+"сброшена в Классический вид. Вы можете легко изменить его в Настройках."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Вызвать Do"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "Вызвать в Текстовом режиме."
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "Войти в текстовый режим"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -346,7 +354,7 @@ msgstr "Очистить"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Вставить из буфера обмена"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -358,19 +366,19 @@ msgstr "Следущая панель"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Предыдущая запись"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Следующая запись"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "Первая запись"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Поседняя запись"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -382,15 +390,15 @@ msgstr "Следующие 5 результатов"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "Выйти из Документа"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "Открыть Документ"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "Выбор нескольких элементов"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -398,7 +406,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Авторские права Разработчиков © GNOME Do, 2009"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -464,7 +472,7 @@ msgstr "Комбинация клавиш"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "Отключено"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -575,19 +583,19 @@ msgstr "Описание отсутствует."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Адрес"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "Рабочий Телефон"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Домашний Телефон"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Мобильный Телефон"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -639,163 +647,3 @@ msgstr "Укажите сочетание клавиш для вызова Do."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Будет ли окно результатов отображаться всегда."
-
-#~ msgid "_About"
-#~ msgstr "_О программе"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Тема:"
-
-#~ msgid "Minimize"
-#~ msgstr "Свернуть"
-
-#~ msgid "Restore"
-#~ msgstr "Восстановить"
-
-#~ msgid "Close All"
-#~ msgstr "Закрыть все"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Автоматически скрывать"
-
-#~ msgid "Show Trash"
-#~ msgstr "Показывать корзину"
-
-#~ msgid "Trash"
-#~ msgstr "Корзина"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">При установке выбранных плагинов произошла "
-#~ "ошибка</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">При установке выбранного плагина произошла "
-#~ "ошибка</span></b>"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Вызвать GNOME Do"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Продвинутые индикаторы"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Приближать иконки"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Переключить экраны"
-
-#~ msgid "No result found for"
-#~ msgstr "Не найдено результатов для"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Удалить из дока"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Разрешить окошкам наезжать на друг друга"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Поведение Docky</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Восстановить удалённые"
-
-#~ msgid "Zoom:"
-#~ msgstr "Увеличение:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Размер значка:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Скрытие"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Отмечать несколько окон"
-
-#~ msgid "Orientation:"
-#~ msgstr "Положение:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Очистить корзину"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Очистить корзину полностью?</b></big>\n"
-#~ "\n"
-#~ "Если вы очистите корзину, файлы из неё\n"
-#~ "удалятся навсегда. Заметьте, что вы также\n"
-#~ "можете удалять их по-одному."
-
-#~ msgid "Open Trash"
-#~ msgstr "Открыть корзину"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Доклеты</b>"
-
-#~ msgid "Copy Text"
-#~ msgstr "Копировать текст"
-
-#~ msgid "Paste Text"
-#~ msgstr "Вставить текст"
-
-#~ msgid "Last Result"
-#~ msgstr "Последний результат"
-
-#~ msgid "First Result"
-#~ msgstr "Первый результат"
-
-#~ msgid "Previous Result"
-#~ msgstr "Предыдущий результат"
-
-#~ msgid "Next Result"
-#~ msgstr "Следующий результат"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Покинуть подменю"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Войти в подменю"
-
-#~ msgid "Docklets"
-#~ msgstr "Доклеты"
-
-#~ msgid "Show"
-#~ msgstr "Показать"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Альтернативный выход"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Режим ввода текста"
-
-#~ msgid "Maximize"
-#~ msgstr "Развернуть"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Альтернативный вызов GNOME Do"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Альтернативное удаление символа"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "© 2008 разработчики GNOME Do"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Массовое выделение"
-
-#~ msgid "Desktop"
-#~ msgstr "Рабочий стол"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Чтобы изменить комбинацию клавиш, дважды щелкните по ней и введите новую."

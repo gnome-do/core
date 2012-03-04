@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 14:46+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Marathi <mr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -637,123 +637,3 @@ msgstr "जिनोम डूला बोलावण्यासाठी क
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "निकालची चौकट नेहमीच दिसेल की नाही."
-
-#~ msgid "Orientation:"
-#~ msgstr "अभिमुखता:"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>चुंब वर्तन</b>"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "काढलेले घटक पुर्ववत करा"
-
-#~ msgid "Hiding:"
-#~ msgstr "अदृष्यता:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "कचरापेटी रिकामी करा"
-
-#~ msgid "Open Trash"
-#~ msgstr "कचरापेटी उघडा"
-
-#~ msgid "Maximize"
-#~ msgstr "महत्तम"
-
-#~ msgid "Minimize"
-#~ msgstr "लघुत्तम"
-
-#~ msgid "Restore"
-#~ msgstr "पूर्ववत करा"
-
-#~ msgid "Close All"
-#~ msgstr "सर्व बंद करा"
-
-#~ msgid "Trash"
-#~ msgstr "कचरापेटी"
-
-#~ msgid "Show"
-#~ msgstr "दाखवा"
-
-#~ msgid "Desktop"
-#~ msgstr "कार्यस्थळ"
-
-#~ msgid "Copy Text"
-#~ msgstr "पाठ्याची नक्क्ल करा"
-
-#~ msgid "Enter text mode"
-#~ msgstr "पाठ्य पद्धती सुरु करा"
-
-#~ msgid "Paste Text"
-#~ msgstr "पाठ्याची नक्क्ल लावा"
-
-#~ msgid "First Result"
-#~ msgstr "पहिला निकाल"
-
-#~ msgid "Last Result"
-#~ msgstr "शेवटचा निकाल"
-
-#~ msgid "Previous Result"
-#~ msgstr "मागचा निकाल"
-
-#~ msgid "Next Result"
-#~ msgstr "पुढचा निकाल"
-
-#~ msgid "Step out of Item"
-#~ msgstr "घटकातून बाहेर पडा"
-
-#~ msgid "Zoom:"
-#~ msgstr "विस्तार:"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>कचरापेटीतले सगळे घटक काढून टाकायचेत का?</b></big>\n"
-#~ "जर तुम्ही कचरापेटीले सगळे घटक काढून टाकायचे ठरवलेत\n"
-#~ "तर ते सगळे कायमचे नष्ट होतील. कृपया लक्षात घ्या की तुम्ही\n"
-#~ "त्यांना वेगवेगळे देखील काढून टाकु शकता."
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "सर्वाधिकार सुरक्षीत © २००८ जिनोम डू विकसक"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "एखादा दुवा बदलण्यासाठी, त्याला दु-टिचकी द्या आणी नवे नाव लिहा"
-
-#~ msgid "Icon Size:"
-#~ msgstr "लघुचित्र आकार:"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>चुंब-साधने</b>"
-
-#~ msgid "No result found for"
-#~ msgstr "यासाठी निकाल सापडले नाहीत"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "जीनोम-डू ला बोलवा"
-
-#~ msgid "Multiple selection"
-#~ msgstr "अनेक निवडा"
-
-#~ msgid "Docklets"
-#~ msgstr "चुंब-साधने"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "घटकाच्या आत बघा"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "अतिरिक्त गमन"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "मॉनिटर बदला"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "अतिरिक्त चलन"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "अतिरिक्त काढुन टाका"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "विविध चौकटी दर्शवा"

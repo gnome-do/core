@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:22+0000\n"
-"Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2012-01-30 16:17+0000\n"
+"Last-Translator: Ville Pilvio <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2012-01-31 04:42+0000\n"
+"X-Generator: Launchpad (build 14734)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
-msgstr "Näytä tulokset ikkunassa"
+msgstr "Näytä tulosikkuna aina"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:151
 msgid "<b>Selected Theme</b>"
@@ -63,6 +63,9 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"Muokkaa pikakuvake tupla-klikkaamalla sitä ja kirjoittamalla uusi komento.\n"
+"Palauta pikakuvakkeen oletus tupla-klikkaamalla sitä ja painamalla peruuta-"
+"näppäintä."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -146,22 +149,22 @@ msgstr "Oletko vailla tunnusta?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
-msgstr ""
+msgstr "<b><span size=\"x-large\">Löytyy Do Liitännäinen sille!</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
 msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
-msgstr ""
+msgstr "Löytyy Asennettava Do Liitännäinen  {0}:lle. Aktivoidaanko se?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Älä kysy Do Liitännäisistä enään."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Asenna"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -256,12 +259,12 @@ msgstr "Tunnuksen vahvistus onnistui."
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "Mikä Do on?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "Mitä tekee {0} Liitännäinen?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -327,18 +330,21 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"<b>Docky ei ole enään Do teema!</b>\n"
+"Se on saatavilla erillisenä ohjelmana. Classic GNOME Do teemasi on "
+"palautettu. Se voidaan muuttaa Asetuksista."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Kutsu Do näkyviin"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "Kutsu Do näkyviin tekstitilassa"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "Siirry tekstitilaan"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -347,7 +353,7 @@ msgstr "Tyhjennä"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Liitä leikepöydältä"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -359,19 +365,19 @@ msgstr "Seuraava ruutu"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Edellinen kohde"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Seuraava kohde"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "Ensimmäinen kohta"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Viimeinen kohde"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -383,15 +389,15 @@ msgstr "Viisi seuraavaa tulosta"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "Poistu pikakuvakkeesta"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "Astu pikakuvakkeeseen"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "Valitse useita kohteita"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -399,7 +405,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Tekijänoikeudet © 2009 GNOME Do Kehittäjät"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -457,7 +463,7 @@ msgstr "Toiminto"
 
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:56
 msgid "Shortcut"
-msgstr "Oikotie"
+msgstr "Pikakuvake"
 
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:73
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:101
@@ -465,7 +471,7 @@ msgstr "Oikotie"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "Poissa käytöstä"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -576,19 +582,19 @@ msgstr "Ei kuvausta."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Osoite"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "Työpuhelin"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Kotipuhelin"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Matkapuhelin"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -641,157 +647,3 @@ msgstr "Aseta komento, jolla Do kutsutaan näkyville."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Määrittää, näytetäänkö tulosikkuna aina."
-
-#~ msgid "_About"
-#~ msgstr "Tietoj_a"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Teema:"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Virhe valittujen liitännäisten "
-#~ "asennuksessa</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Virhe valittun liitännäisen asennuksessa</span></b>"
-
-#~ msgid "Show Trash"
-#~ msgstr "Näytä Roskakori"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Salli ikkunoiden lomittua"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Vaihda näyttöjä"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Piilota automaattisesti"
-
-#~ msgid "Minimize"
-#~ msgstr "Pienennä"
-
-#~ msgid "Restore"
-#~ msgstr "Palauta"
-
-#~ msgid "Close All"
-#~ msgstr "Sulje kaikki"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Poista Dockista"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Kutsu GNOME Do"
-
-#~ msgid "No result found for"
-#~ msgstr "Ei tuloksia haulle"
-
-#~ msgid "Trash"
-#~ msgstr "Roskakori"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Kuvakkeiden koko:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Ilmoita useista ikkunoista"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Ota takaisin käyttöön Poistetut osat"
-
-#~ msgid "Hiding:"
-#~ msgstr "Piilotus:"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Kaksoisnapauta oikopolkua muokataksesi sitä. Sen jälkeen syötä haluamasi "
-#~ "uusi polku."
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Telakan asetukset</b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "Suurenna:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Sijainti:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Tyhjennä roskakori"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Telakkasovelmat</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Suurenna"
-
-#~ msgid "Show"
-#~ msgstr "Näytä"
-
-#~ msgid "Desktop"
-#~ msgstr "Työpöytä"
-
-#~ msgid "Copy Text"
-#~ msgstr "Kopioi teksti"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Vaihtoehtoinen poistuminen"
-
-#~ msgid "Paste Text"
-#~ msgstr "Liitä teksti"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Käytä tekstitilassa"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Vaihtoehtoinen valinta"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Vaihtoehtoinen poistaminen"
-
-#~ msgid "First Result"
-#~ msgstr "Ensimmäinen tulos"
-
-#~ msgid "Last Result"
-#~ msgstr "Viimeinen tulos"
-
-#~ msgid "Previous Result"
-#~ msgstr "Edellinen tulos"
-
-#~ msgid "Next Result"
-#~ msgstr "Seuraava tulos"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Poistu kohteesta"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Monivalinta"
-
-#~ msgid "Docklets"
-#~ msgstr "Telakkasovelmat"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Tekijänoikeus © 2008 GNOME Do -kehittäjät"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Valitse kohde"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Tyhjennetäänkö roskakorin sisältö?</b></big>\n"
-#~ "\n"
-#~ "Jos päätät poistaa roskakorin sisällön,\n"
-#~ "kaikki roskakorissa olevat tiedostot häviävät pysyvästi. Huomaa,\n"
-#~ "että voit poistaa tiedostoja roskakorista myös yksi kerrallaan."
-
-#~ msgid "Open Trash"
-#~ msgstr "Avaa roskakori"

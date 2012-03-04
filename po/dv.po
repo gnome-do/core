@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
 "PO-Revision-Date: 2010-12-05 15:16+0000\n"
 "Last-Translator: Chris Halse Rogers <raof@ubuntu.com>\n"
 "Language-Team: Divehi <dv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:32+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:31+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -631,74 +631,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr ""
-
-#~ msgid "_Theme:"
-#~ msgstr "_ތީމް:"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "ސޯރޓްކަަޓް އެޑިޓް ކުރަން، ޑަބަލް ކްލިކްކޮށްފަ އަލުން ލިޔޭ."
-
-#~ msgid "_About"
-#~ msgstr "_ތާރަފް"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">ހިޔާރު ކުރެވުނު ޕްލަގްއިންސްތައް އިންސްޓޯލް ކުރުމުގަ "
-#~ "މައްސަލައެއްޖެހިއްޖެ</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">ހިޔާރު ކުރެވުނު ޕްލަގްއިން އިންސްޓޯލް ކުރުމުގަ "
-#~ "މައްސަލައެއްޖެހިއްޖެ</span></b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "ޒޫމް:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "އައިކަންގެ ބޮޑުމިން:"
-
-#~ msgid "Orientation:"
-#~ msgstr "އޮރިއެންޓޭޝަން:"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>ޑޮކްލެޓްތައް</b>"
-
-#~ msgid "Close All"
-#~ msgstr "ހުރިހާއެއްޗެއް ކްލޯސްކުރޭ"
-
-#~ msgid "Trash"
-#~ msgstr "ކުނިވަށިގަނޑު"
-
-#~ msgid "Show"
-#~ msgstr "ދައްކާ"
-
-#~ msgid "Desktop"
-#~ msgstr "ޑެސްކްޓޮޕް"
-
-#~ msgid "Copy Text"
-#~ msgstr "ލިޔުން ކޮޕީކުރޭ"
-
-#~ msgid "Paste Text"
-#~ msgstr "ލިޔުން ޕޭސްޓުކުރޭ"
-
-#~ msgid "First Result"
-#~ msgstr "ފުރަތަމަ ނަތީޖާ"
-
-#~ msgid "Last Result"
-#~ msgstr "ފަހު ނަތީޖާ"
-
-#~ msgid "Previous Result"
-#~ msgstr "ފާއިތުވި ނަތީޖާ"
-
-#~ msgid "Next Result"
-#~ msgstr "އަނެއް ނަތީޖާ"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "ކޮޕީރައިޓް © 2008 GNOME Do Developers"
-
-#~ msgid "Docklets"
-#~ msgstr "ޑޮކްލެޓްތައް"

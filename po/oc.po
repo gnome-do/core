@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:19+0000\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2011-10-15 10:04+0000\n"
 "Last-Translator: Cédric VALMARY (Tot en òc) <cvalmary@yahoo.fr>\n"
 "Language-Team: Occitan (post 1500) <oc@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-10-16 05:09+0000\n"
+"X-Generator: Launchpad (build 14124)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -148,7 +148,7 @@ msgstr "Avètz pas de compte ?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
-msgstr ""
+msgstr "<b><span size=\"x-large\">I a un add-on Do per aquò !</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -163,7 +163,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Installar"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -263,7 +263,7 @@ msgstr ""
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "De qué fa l'empeuton {0} ?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -349,7 +349,7 @@ msgstr "Escafar"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Empegar a partir del quichapapièrs"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -361,19 +361,19 @@ msgstr "Volet seguent"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Element precedent"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Element seguent"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "Primièr element"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Darrièr element"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -385,11 +385,11 @@ msgstr "5 resultats seguents"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "Sortir de l'element"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "Entrar dins l'element"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
@@ -401,7 +401,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Copyright © 2009 Desvolopaires GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -467,7 +467,7 @@ msgstr "Acorchi"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivar"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -577,19 +577,19 @@ msgstr "Sens descripcion"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Adreça"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "Telefòn professional"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Telefòn personal"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Telefonet"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -644,124 +644,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Indica se la fenèstra de resultats deu èsser afichada totjorn."
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "Per editar un acorchi, dobleclicatz dessús e picatz-ne un novèl."
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Comportament de Docky</b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zoom :"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Talha de l'icòna :"
-
-#~ msgid "Hiding:"
-#~ msgstr "Amagar :"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Restablir los elements suprimits"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indicar las fenèstras multiplas"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientacion :"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Intervertir los monitors"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximizar"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimizar"
-
-#~ msgid "Restore"
-#~ msgstr "Restablir"
-
-#~ msgid "Close All"
-#~ msgstr "Tampar tot"
-
-#~ msgid "Show"
-#~ msgstr "Afichar"
-
-#~ msgid "Desktop"
-#~ msgstr "Burèu"
-
-#~ msgid "No result found for"
-#~ msgstr "pas cap de resultat trobat per"
-
-#~ msgid "Copy Text"
-#~ msgstr "Copiar lo tèxte"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Passar en mòde tèxte"
-
-#~ msgid "Paste Text"
-#~ msgstr "Empegar lo tèxte"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Acorchi segondari : Activar"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Acorchi segondari : Sortir"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Afichar GNOME Do"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Acorchi segondari : Suprimir"
-
-#~ msgid "First Result"
-#~ msgstr "Primièr resultat"
-
-#~ msgid "Last Result"
-#~ msgstr "Darrièr resultat"
-
-#~ msgid "Previous Result"
-#~ msgstr "Resultat precedent"
-
-#~ msgid "Next Result"
-#~ msgstr "Resultat seguent"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Sortir de l'objècte"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Seleccion multipla"
-
-#~ msgid "Docklets"
-#~ msgstr "Ensèrts dockables"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 Los desvolopaires de GNOME Do"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Percórrer los resultats"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Voidar l'escobilhièr"
-
-#~ msgid "Trash"
-#~ msgstr "Escobilhièr"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Voidar totes los elements de l'escobilhièr ?</b></big>\n"
-#~ "\n"
-#~ "Se causissètz de voidar l'escobilhièr, totes sos elements\n"
-#~ "seràn perduts definitivament. Notatz que los\n"
-#~ "podètz suprimir tanben un per un."
-
-#~ msgid "Open Trash"
-#~ msgstr "Dobrir l'escobilhièr"

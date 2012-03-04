@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:04+0000\n"
-"Last-Translator: Dan Klassen <danklassen@gmail.com>\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2011-06-15 14:06+0000\n"
+"Last-Translator: Alfredo Hernández <Unknown>\n"
 "Language-Team: English (Canada) <en_CA@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:34+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2011-09-26 04:32+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -62,6 +62,8 @@ msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
+"To edit a shortcut, double-click it and type a new one.\n"
+"To restore a shortcut to the default, double click and press Backspace."
 
 #: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
 msgid "Show:"
@@ -145,7 +147,7 @@ msgstr "Don't have an account?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
-msgstr ""
+msgstr "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
 #, csharp-format
@@ -153,14 +155,16 @@ msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
+"A Do plugin for {0} is available for installation. Would you like us to "
+"enable it for you?"
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
 msgid "Don't ask me about Do plugins again."
-msgstr ""
+msgstr "Don't ask me about Do plugins again."
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Install"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -255,12 +259,12 @@ msgstr "Account validation succeeded!"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:46
 msgid "What is Do?"
-msgstr ""
+msgstr "What is Do?"
 
 #: ../Do.Platform.Linux/src/Do.Widgets/PluginAvailableDialog.cs:53
 #, csharp-format
 msgid "What does the {0} plugin do?"
-msgstr ""
+msgstr "What does the {0} plugin do?"
 
 #: ../Do.Platform/src/Do.Universe/Do.Universe.Common/CopyToClipboardAction.cs:37
 #: ../Do/src/Do.Core/Controller.cs:146
@@ -326,18 +330,21 @@ msgid ""
 "It is now available as a stand-alone application. Your GNOME Do theme has "
 "been reset to Classic. Please feel free to change it in Preferences."
 msgstr ""
+"<b>Docky is no longer a Do theme!</b>\n"
+"It is now available as a stand-alone application. Your GNOME Do theme has "
+"been reset to Classic. Please feel free to change it in Preferences."
 
 #: ../Do/src/Do.Core/Controller.cs:133
 msgid "Summon Do"
-msgstr ""
+msgstr "Summon Do"
 
 #: ../Do/src/Do.Core/Controller.cs:137
 msgid "Summon in Text Mode"
-msgstr ""
+msgstr "Summon in Text Mode"
 
 #: ../Do/src/Do.Core/Controller.cs:140
 msgid "Enter Text Mode"
-msgstr ""
+msgstr "Enter Text Mode"
 
 #: ../Do/src/Do.Core/Controller.cs:143
 #: ../Do/src/Do.Universe/ClearLearningItem.cs:56
@@ -346,7 +353,7 @@ msgstr "Clear"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Paste from Clipboard"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -358,19 +365,19 @@ msgstr "Next Pane"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Previous Item"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Next Item"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "First Item"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
-msgstr ""
+msgstr "Last Item"
 
 #: ../Do/src/Do.Core/Controller.cs:166
 msgid "Previous 5 Results"
@@ -382,15 +389,15 @@ msgstr "Next 5 Results"
 
 #: ../Do/src/Do.Core/Controller.cs:171
 msgid "Step Out of Item"
-msgstr ""
+msgstr "Step Out of Item"
 
 #: ../Do/src/Do.Core/Controller.cs:173
 msgid "Step Into Item"
-msgstr ""
+msgstr "Step Into Item"
 
 #: ../Do/src/Do.Core/Controller.cs:176
 msgid "Select Multiple Items"
-msgstr ""
+msgstr "Select Multiple Items"
 
 #: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
 msgid "GNOME Do"
@@ -398,7 +405,7 @@ msgstr "GNOME Do"
 
 #: ../Do/src/Do.Core/Controller.cs:1014
 msgid "Copyright © 2009 GNOME Do Developers"
-msgstr ""
+msgstr "Copyright © 2009 GNOME Do Developers"
 
 #: ../Do/src/Do.Core/Controller.cs:1015
 msgid ""
@@ -464,7 +471,7 @@ msgstr "Shortcut"
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:143
 #: ../Do/src/Do.UI/KeybindingTreeView.cs:159
 msgid "Disabled"
-msgstr ""
+msgstr "Disabled"
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
 msgid "Plugins"
@@ -573,19 +580,19 @@ msgstr "No description."
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/AddressContactDetailItem.cs:34
 msgid "Address"
-msgstr ""
+msgstr "Address"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:34
 msgid "Work Phone"
-msgstr ""
+msgstr "Work Phone"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:35
 msgid "Home Phone"
-msgstr ""
+msgstr "Home Phone"
 
 #: ../Do.Universe/src/Do.Universe/Do.Universe.Common/PhoneContactDetailItem.cs:36
 msgid "Mobile Phone"
-msgstr ""
+msgstr "Mobile Phone"
 
 #: ../data/gnome-do.desktop.in.h:1
 msgid ""
@@ -638,162 +645,3 @@ msgstr "Set this to the key command you would like to use to summon Do."
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Whether the results window will always show."
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr "To edit a shortcut, double-click it and type a new one."
-
-#~ msgid "_About"
-#~ msgstr "_About"
-
-#~ msgid "_Theme:"
-#~ msgstr "_Theme:"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimize"
-
-#~ msgid "Restore"
-#~ msgstr "Restore"
-
-#~ msgid "Close All"
-#~ msgstr "Close All"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Automatically Hide"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Summon GNOME Do"
-
-#~ msgid "No result found for"
-#~ msgstr "No result found for"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Remove from Dock"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Advanced Indicators"
-
-#~ msgid "Show Trash"
-#~ msgstr "Show Trash"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Allow Window Overlap"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Zoom Icons"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Switch Monitors"
-
-#~ msgid "Trash"
-#~ msgstr "Trash"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "<b>Docky Behaviour</b>"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zoom:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Icon Size:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientation:"
-
-#~ msgid "Hiding:"
-#~ msgstr "Hiding:"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Reinstate Removed Items"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Indicate Multiple Windows"
-
-#~ msgid "Show"
-#~ msgstr "Show"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Empty Trash"
-
-#~ msgid "Desktop"
-#~ msgstr "Desktop"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Docklets</b>"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximize"
-
-#~ msgid "Open Trash"
-#~ msgstr "Open Trash"
-
-#~ msgid "Copy Text"
-#~ msgstr "Copy Text"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Enter text mode"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Alternate Escape"
-
-#~ msgid "Paste Text"
-#~ msgstr "Paste Text"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Alternate Activate"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Alternate Delete"
-
-#~ msgid "Previous Result"
-#~ msgstr "Previous Result"
-
-#~ msgid "Next Result"
-#~ msgstr "Next Result"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Multiple selection"
-
-#~ msgid "First Result"
-#~ msgstr "First Result"
-
-#~ msgid "Last Result"
-#~ msgstr "Last Result"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 GNOME Do Developers"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Browse Into Item"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Step out of Item"
-
-#~ msgid "Docklets"
-#~ msgstr "Docklets"

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: do\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-21 21:42+1000\n"
-"PO-Revision-Date: 2010-12-05 15:02+0000\n"
-"Last-Translator: George Kontis <giormatsis@gmail.com>\n"
+"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"PO-Revision-Date: 2012-02-05 09:47+0000\n"
+"Last-Translator: Γουργιώτης Γιώργος (aka Gourgi) <Unknown>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-22 04:33+0000\n"
-"X-Generator: Launchpad (build 12959)\n"
+"X-Launchpad-Export-Date: 2012-02-06 04:40+0000\n"
+"X-Generator: Launchpad (build 14747)\n"
 
 #: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
 msgid "Always show results window"
@@ -163,7 +163,7 @@ msgstr ""
 
 #: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
 msgid "_Install"
-msgstr ""
+msgstr "_Εγκατάσταση"
 
 #: ../Do.Platform.Linux/src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs:36
 #, csharp-format
@@ -349,7 +349,7 @@ msgstr "Καθαρισμός"
 
 #: ../Do/src/Do.Core/Controller.cs:148
 msgid "Paste from Clipboard"
-msgstr ""
+msgstr "Επικόλληση από Πρόχειρο"
 
 #: ../Do/src/Do.Core/Controller.cs:151
 msgid "Previous Pane"
@@ -361,15 +361,15 @@ msgstr "Επόμενο πλαίσιο"
 
 #: ../Do/src/Do.Core/Controller.cs:156
 msgid "Previous Item"
-msgstr ""
+msgstr "Προηγούμενο αντικείμενο"
 
 #: ../Do/src/Do.Core/Controller.cs:158
 msgid "Next Item"
-msgstr ""
+msgstr "Επόμενο αντικείμενο"
 
 #: ../Do/src/Do.Core/Controller.cs:161
 msgid "First Item"
-msgstr ""
+msgstr "Πρώτο αντικείμενο"
 
 #: ../Do/src/Do.Core/Controller.cs:163
 msgid "Last Item"
@@ -652,165 +652,3 @@ msgstr ""
 #: ../data/gnome-do.schemas.in.h:10
 msgid "Whether the results window will always show."
 msgstr "Εάν θα εμφανίζονται συνέχεια τα αποτελέσματα παραθύρου."
-
-#~ msgid "_About"
-#~ msgstr "_Σχετικά"
-
-#~ msgid "To edit a shortcut, double-click it and type a new one."
-#~ msgstr ""
-#~ "Για την επεξεργασία μιας συντόμευσης, κάντε διπλό κλικ πάνω της και "
-#~ "πληκτρολογήστε μια νέα."
-
-#~ msgid "_Theme:"
-#~ msgstr "_Θέμα:"
-
-#~ msgid "No result found for"
-#~ msgstr "Κανένα αποτέλεσμα για"
-
-#~ msgid "Minimize"
-#~ msgstr "Ελαχιστοποίηση"
-
-#~ msgid "Restore"
-#~ msgstr "Επαναφορά"
-
-#~ msgid "Close All"
-#~ msgstr "Κλείσιμο Όλων"
-
-#~ msgid "Trash"
-#~ msgstr "Κάδος Απορριμάτων"
-
-#~ msgid "Remove from Dock"
-#~ msgstr "Αφαίρεση από το Dock"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugins</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Υπήρξε ένα σφάλμα κατά την εγκατάσταση των "
-#~ "επιλεγμένων προσθέτων</span></b>"
-
-#~ msgid ""
-#~ "<b><span size=\"large\">There was an error installing the selected "
-#~ "plugin</span></b>"
-#~ msgstr ""
-#~ "<b><span size=\"large\">Υπήρξε ένα σφάλμα κατά την εγκατάσταση του "
-#~ "επιλεγμένου προσθέτου</span></b>"
-
-#~ msgid "Summon GNOME Do"
-#~ msgstr "Ανάδευση του GNOME Do"
-
-#~ msgid "Show Trash"
-#~ msgstr "Εμφάνιση Κάδου"
-
-#~ msgid "Zoom Icons"
-#~ msgstr "Ζοομ Εικονιδίων"
-
-#~ msgid "Switch Monitors"
-#~ msgstr "Εναλλαγή Οθονών"
-
-#~ msgid "Advanced Indicators"
-#~ msgstr "Προχωρημένοι Δείκτες"
-
-#~ msgid "Automatically Hide"
-#~ msgstr "Αυτόματη Απόκρυψη"
-
-#~ msgid "Allow Window Overlap"
-#~ msgstr "Επικάλυψη Παραθύρου"
-
-#~ msgid "<b>Docky Behavior</b>"
-#~ msgstr "Συμπεριφορά Μπάρας"
-
-#~ msgid "Reinstate Removed Items"
-#~ msgstr "Επαναφορά Διαγραφέντων Αντικειμένων"
-
-#~ msgid "Zoom:"
-#~ msgstr "Μεγέθυνση:"
-
-#~ msgid "Icon Size:"
-#~ msgstr "Μέγεθος εικονιδίου:"
-
-#~ msgid "Indicate Multiple Windows"
-#~ msgstr "Yπέδειξε πολλαπλά παράθυρα"
-
-#~ msgid "Orientation:"
-#~ msgstr "Προσανατολισμός:"
-
-#~ msgid "Empty Trash"
-#~ msgstr "Άδειασμα Απορριμμάτων"
-
-#~ msgid ""
-#~ "<big><b>Empty all of the items from the trash?</b></big>\n"
-#~ "\n"
-#~ "If you choose to empty the trash, all items in it\n"
-#~ "will be permanently lost. Please note that you\n"
-#~ "can also delete them separately."
-#~ msgstr ""
-#~ "Άδειασμα όλων των διαγραφέντων από τον Κάδο Απορριμάτων ;\n"
-#~ "\n"
-#~ "Εάν επιλέξετε να αδειάσετε τον Κάδο Απορριμάτων, όλα τα αντικείμενα σε "
-#~ "αυτόν\n"
-#~ "θα διαγραφούν μόνιμα. Σημειώνεται ότι μπορείτε \n"
-#~ "επίσης να τα διαγράψετε ξεχωριστά."
-
-#~ msgid "Maximize"
-#~ msgstr "Μεγιστοποίηση"
-
-#~ msgid "Open Trash"
-#~ msgstr "Άνοιγμα Κάδου Απορριμάτων"
-
-#~ msgid "Show"
-#~ msgstr "Προβολή"
-
-#~ msgid "Desktop"
-#~ msgstr "Επιφάνεια Eργασίας"
-
-#~ msgid "Copy Text"
-#~ msgstr "Αντιγραφή κειμένου"
-
-#~ msgid "Paste Text"
-#~ msgstr "Επικόλληση κειμένου"
-
-#~ msgid "Multiple selection"
-#~ msgstr "Πολλαπλή επιλογή"
-
-#~ msgid "Alternate Activate"
-#~ msgstr "Εναλλακτική ενεργοποίηση"
-
-#~ msgid "Previous Result"
-#~ msgstr "Προηγούμενο αποτέλεσμα"
-
-#~ msgid "Enter text mode"
-#~ msgstr "Εισαγωγή λειτουργίας κειμένου"
-
-#~ msgid "Hiding:"
-#~ msgstr "Απόκρυψη:"
-
-#~ msgid "Alternate Delete"
-#~ msgstr "Εναλλακτική διαγραφή"
-
-#~ msgid "First Result"
-#~ msgstr "Πρώτο αποτέλεσμα"
-
-#~ msgid "Last Result"
-#~ msgstr "Τελευταίο αποτέλεσμα"
-
-#~ msgid "Next Result"
-#~ msgstr "Επόμενο αποτέλεσμα"
-
-#~ msgid "Alternate Escape"
-#~ msgstr "Εναλακτική έξοδος"
-
-#~ msgid "<b>Docklets</b>"
-#~ msgstr "<b>Εφαρμογίδια</b>"
-
-#~ msgid "Docklets"
-#~ msgstr "Εφαρμογίδια"
-
-#~ msgid "Copyright © 2008 GNOME Do Developers"
-#~ msgstr "Copyright © 2008 GNOME Do Developers"
-
-#~ msgid "Browse Into Item"
-#~ msgstr "Περιήγηση μέσα στο αντικείμενο"
-
-#~ msgid "Step out of Item"
-#~ msgstr "Έξοδος απο το αντικείμενο"
