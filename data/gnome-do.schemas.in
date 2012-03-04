@@ -70,5 +70,17 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnome-do/preferences/Do/CorePreferences/ForceClassicWindow</key>
+      <applyto>/apps/gnome-do/preferences/Do/CorePreferences/ForceClassicWindow</applyto>
+      <owner>gnome-do</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Force classic window</short>
+         <long>Force classic window rendering (disable composite rendering).</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>
