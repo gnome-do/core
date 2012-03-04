@@ -128,6 +128,7 @@ namespace Do.Universe.Linux {
 					var monitor = new FileSystemWatcher (directory, "*.desktop");
 					monitor.Created += OnFileCreated;
 					monitor.Deleted += OnFileDeleted;
+					monitor.Renamed += OnFileRenamed;
 					monitor.Error += OnWatcherError;
 					monitor.EnableRaisingEvents = true;
 					directoryMonitors.Add (monitor);
@@ -197,6 +198,34 @@ namespace Do.Universe.Linux {
 				app_items[e.FullPath] = newItem;
 			}
 			RaiseItemsAvailable (new ItemsAvailableEventArgs () { newItems = new Item[] { newItem }});
+		}
+
+		void OnFileRenamed (object sender, RenamedEventArgs e)
+		{
+			Item disappearingItem = null;
+			ApplicationItem newItem = null;
+			lock (app_items) {
+				if (app_items.ContainsKey (e.OldFullPath)) {
+					Log<ApplicationItemSource>.Debug ("Desktop file {0} moved away", e.OldFullPath);
+					disappearingItem = app_items[e.OldFullPath];
+					app_items.Remove (e.OldFullPath);
+				}
+				if (e.FullPath.EndsWith (".desktop")) {
+					Log<ApplicationItemSource>.Debug ("Desktop file {0} moved into watched directory", e.FullPath);
+					newItem = ApplicationItem.MaybeCreateFromDesktopItem (e.FullPath);
+					if (newItem == null) {
+						Log.Error ("Found new Desktop file {0} but unable to create an item in the Universe", e.FullPath);
+					} else {
+						app_items[e.FullPath] = newItem;
+					}
+				}
+			}
+			if (disappearingItem != null) {
+				RaiseItemsUnavailable (new ItemsUnavailableEventArgs () { unavailableItems = new Item[] { disappearingItem }});
+			}
+			if (newItem != null) {
+				RaiseItemsAvailable (new ItemsAvailableEventArgs () { newItems = new Item[] { newItem }});
+			}
 		}
 
 		public override IEnumerable<Item> ChildrenOfItem (Item item)
