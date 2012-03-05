@@ -63,8 +63,6 @@ namespace Do.Universe.Linux {
 
 		static FileItem ()
 		{
-			Gnome.Vfs.Vfs.Initialize ();
-
 			// Initialize SpecialFolderIcons by expanding paths in
 			// SpecialFolderIconsXDG.
 			//
@@ -130,7 +128,11 @@ namespace Do.Universe.Linux {
 		}
 
 		public string MimeType {
-			get { return Gnome.Vfs.Global.GetMimeType (Path); }
+			get {
+				GLib.File file = GLib.FileFactory.NewFromCommandlineArg(Path);
+				var info = file.QueryInfo ("standard::content-type", GLib.FileQueryInfoFlags.None, null);
+				return info.ContentType;
+			}
 		}
 
 		public override string Icon {

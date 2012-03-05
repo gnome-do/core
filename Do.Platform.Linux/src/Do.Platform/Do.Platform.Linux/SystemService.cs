@@ -166,7 +166,8 @@ namespace Do.Platform.Linux
 		
 		string AutoStartUri {
 			get {
-				return Gnome.Vfs.Uri.GetUriFromLocalPath (AutoStartFileName);
+				var uri = new Uri(AutoStartFileName).ToString();
+				return uri;
 			}
 		}
 		
