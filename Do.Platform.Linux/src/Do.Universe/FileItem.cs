@@ -144,8 +144,8 @@ namespace Do.Universe.Linux {
 				icon = MaybeGetSpecialFolderIconForPath (Path);
 				if (icon != null) return icon;
 
-				string large_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Large);
-				string normal_thumb = Thumbnail.PathForUri (Uri, ThumbnailSize.Normal);
+				string large_thumb = Desktop.ThumbnailPathForUri (Uri, DesktopThumbnailSize.Large);
+				string normal_thumb = Desktop.ThumbnailPathForUri (Uri, DesktopThumbnailSize.Normal);
 
 				// Generating the thumbnail ourself is too slow for large files.
 				// Suggestion: generate thumbnails asynchronously. Banshee's

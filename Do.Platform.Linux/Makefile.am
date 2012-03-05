@@ -27,6 +27,8 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/KeyBindingService.cs \
 	src/Do.Universe/ApplicationItem.cs \
 	src/Do.Universe/CategoryItem.cs \
+	src/Do.Universe/Desktop.cs \
+	src/Do.Universe/DesktopThumbnailSize.cs \
 	src/Do.Universe/NullApplicationItem.cs \
 	src/Do.Universe/FileItem.cs \
 	src/Do.Universe/ApplicationItemSource.cs \
@@ -54,7 +56,6 @@ REFERENCES =  \
 	Mono.Posix \
 	$(GTK_SHARP_20_LIBS) \
 	$(GNOME_KEYRING_SHARP_LIBS) \
-	$(GNOME_SHARP_20_LIBS) \
 	$(GIO_SHARP_LIBS) \
 	$(GNOME_DESKTOP_SHARP_20_LIBS) \
 	$(GCONF_SHARP_20_LIBS) \
