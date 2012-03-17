@@ -2,6 +2,16 @@ EXTRA_DIST = COPYRIGHT
 
 ACLOCAL_AMFLAGS = -I m4 -I m4/shamrock
 
+# Install copied assemblies to our libdir
+copiedlibsdir = $(pkglibdir)
+copiedlibs_DATA = \
+	$(GIO_SHARP_ASSEMBLIES)
+
+$(GIO_SHARP_ASSEMBLIES): $(GIO_SHARP_SOURCE_ASSEMBLIES) 
+	@mkdir -p $(top_builddir)/build
+	@for file in $@ ; do echo " CP " $$file ; done
+	@cp $< $@
+
 SUBDIRS = \
 	. \
 	data \
