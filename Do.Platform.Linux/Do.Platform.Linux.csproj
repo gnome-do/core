@@ -9,7 +9,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Do.Platform.Linux</RootNamespace>
     <AssemblyName>Do.Platform.Linux</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,9 +37,7 @@
       <Package>gtk-sharp-2.0</Package>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Mono.Posix">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="Mono.Posix" />
     <Reference Include="NDesk.DBus.GLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f6716e4f9b2ed099">
       <Package>ndesk-dbus-glib-1.0</Package>
       <SpecificVersion>False</SpecificVersion>
@@ -61,12 +58,8 @@
       <Package>nunit</Package>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="System">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System.Core">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="notify-sharp, Version=0.4.0.0, Culture=neutral, PublicKeyToken=2df29c54e245917a">
       <Package>notify-sharp</Package>
       <SpecificVersion>False</SpecificVersion>
@@ -82,6 +75,9 @@
     <Reference Include="Mono.Addins, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
       <Package>mono-addins</Package>
       <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="gio-sharp">
+      <HintPath>..\build\gio-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +115,8 @@
     <Compile Include="src\Do.Widgets\AbstractLoginWidget.cs" />
     <Compile Include="src\Do.Widgets\PluginAvailableDialog.cs" />
     <Compile Include="src\AssemblyInfo.cs" />
+    <Compile Include="src\Do.Universe\Desktop.cs" />
+    <Compile Include="src\Do.Universe\DesktopThumbnailSize.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Do.Platform\Do.Platform.csproj">
