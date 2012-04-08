@@ -19,6 +19,7 @@
 
 using System;
 using System.Linq;
+using System.Threading;
 using System.Collections.Generic;
 
 using Do.Universe.Safe;
@@ -30,7 +31,7 @@ namespace Do.Universe
 	/// Example: A "EpiphanyBookmarkItemSource" could provide Items representing
 	/// Epiphany web browser bookmarks.
 	/// </summary>
-	public abstract class ItemSource : Item, IChildItemSource
+	public abstract class ItemSource : DynamicItemSource
 	{
 
 		static SafeItemSource safe_item_source = new SafeItemSource ();
@@ -71,26 +72,11 @@ namespace Do.Universe
 		}
 
 		/// <value>
-		/// Item sub-types provided/supported by this source. These include any
-		/// types of items provided by the Items property, and the types of items
-		/// that this source will provide children for.  Please provide types as
-		/// close as possible in ancestry to the static types of items this source
-		/// provides/supports (e.g.  FirefoxBookmarkItem instead of Item or
-		/// BookmarkItem).
-		/// </value>
-		public abstract IEnumerable<Type> SupportedItemTypes { get; }
-
-		/// <value>
 		/// The Items provided by this source.
 		/// null is ok---it signifies that no items are provided.
 		/// </value>
 		public virtual IEnumerable<Item> Items {
 			get { yield break; }
-		}
-		
-		public virtual IEnumerable<Item> ChildrenOfItem (Item item)
-		{
-			yield break;
 		}
 		
 		/// <summary>
@@ -102,6 +88,40 @@ namespace Do.Universe
 		public virtual void UpdateItems ()
 		{
 		}
-	}
 
+
+		#region DynamicItemSource implementation
+		private object update_lock = new object ();
+		private HashSet <Item> last_items;
+		public void UpdateAndEmit ()
+		{
+			lock (update_lock) {
+				UpdateItems ();
+				HashSet<Item> updated_items = new HashSet<Item> (Items);
+
+				var unchanged_items = updated_items.Intersect (last_items);
+				var new_items = updated_items.Except (unchanged_items);
+				var disappearing_items = last_items.Except (unchanged_items);
+
+				if (new_items.Any ()) {
+					RaiseItemsAvailable (new ItemsAvailableEventArgs { newItems = new_items.ToArray ()});
+				}
+				if (disappearing_items.Any ()) {
+					RaiseItemsUnavailable (new ItemsUnavailableEventArgs { unavailableItems = disappearing_items.ToArray ()});
+				}
+				last_items = updated_items;
+			}
+		}
+
+		protected override void Enable ()
+		{
+			last_items = new HashSet<Item> ();
+			UpdateAndEmit ();
+		}
+
+		protected override void Disable ()
+		{
+		}
+		#endregion
+	}
 }

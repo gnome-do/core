@@ -6,7 +6,7 @@
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>Tests</RootNamespace>
     <AssemblyName>Tests</AssemblyName>
   </PropertyGroup>
@@ -35,6 +35,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="TestLogging.cs" />
     <Compile Include="TestKeybindingService.cs" />
+    <Compile Include="TestItemSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tests.addin.xml" />
