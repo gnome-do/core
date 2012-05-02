@@ -9,8 +9,14 @@ copiedlibs_DATA = \
 
 $(GIO_SHARP_ASSEMBLIES): $(GIO_SHARP_SOURCE_ASSEMBLIES) 
 	@mkdir -p $(top_builddir)/build
-	@for file in $@ ; do echo " CP " $$file ; done
-	@cp $< $@
+	@for file in $@ ; do \
+		for source in $? ; do \
+			if [ $$(basename $$source) == $$(basename $$file) ] ; then \
+				echo " CP " $$(basename $$file) ; \
+				cp $$source $$file ; \
+			fi ;\
+		done ; \
+	done
 
 SUBDIRS = \
 	. \
