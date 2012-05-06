@@ -78,7 +78,9 @@ namespace Do.Platform.Common
 			//if this key should be registered with the OS
 			if (binding.IsOSKey) {
 				//register again with the new keystring
-				RegisterOSKey (newKeyString, binding.Callback);
+				if (!RegisterOSKey (newKeyString, binding.Callback))
+					return false;
+
 				//remove the old keystring from the OS
 				UnRegisterOSKey (binding.KeyString);
 			}
