@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-13 16:36+1000\n"
+"POT-Creation-Date: 2012-05-06 19:50+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,91 +17,91 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:132
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:105
 msgid "Always show results window"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:151
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:124
 msgid "<b>Selected Theme</b>"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:166
+#: ../Do/gtk-gui/Do.UI.ColorConfigurationWidget.cs:139
 msgid ""
 "<b>Your display is not properly configured for theme and animation support. "
 "To use these features, you must enable compositing.</b>"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:52
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:37
 msgid "<span size=\"large\"><b>Updated plugins are available!</b></span>"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:128
+#: ../Do/gtk-gui/Do.UI.DoAddinInstallerDialog.cs:113
 msgid "_Install Updates"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:49
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:34
 msgid "<b>First-launch Behavior</b>"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:69
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:54
 msgid "Start GNOME Do at login."
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:81
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:66
 msgid "Hide window on first launch (quiet mode)."
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:93
+#: ../Do/gtk-gui/Do.UI.GeneralPreferencesWidget.cs:78
 msgid "Show notification icon"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:63
+#: ../Do/gtk-gui/Do.UI.KeybindingsPreferencesWidget.cs:51
 msgid ""
 "To edit a shortcut, double-click it and type a new one.\n"
 "To restore a shortcut to the default, double click and press Backspace."
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:62
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:42
 msgid "Show:"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:84
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:64
 msgid "Search:"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:129
+#: ../Do/gtk-gui/Do.UI.ManagePluginsPreferencesWidget.cs:109
 msgid "_Configure"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:36
+#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:21
 msgid "PluginConfigurationWindow"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:62
+#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:47
 msgid "<span size=\"large\" weight=\"heavy\">Plugin name here</span>"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:85
+#: ../Do/gtk-gui/Do.UI.PluginConfigurationWindow.cs:70
 msgid "page1"
 msgstr ""
 
-#: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:34
+#: ../Do/gtk-gui/Do.UI.PreferencesWindow.cs:21
 msgid "GNOME Do Preferences"
 msgstr ""
 
-#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:47
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:33
 msgid "Background Color:"
 msgstr ""
 
-#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:82
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:68
 msgid "_Reset"
 msgstr ""
 
-#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:101
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:87
 msgid "Show window shadow"
 msgstr ""
 
-#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:113
+#: ../Do.Interface.Linux.AnimationBase/gtk-gui/Do.Interface.AnimationBase.AnimationBaseConfigurationWidget.cs:99
 msgid "Animate window"
 msgstr ""
 
@@ -114,49 +114,49 @@ msgstr ""
 msgid "Type To Search"
 msgstr ""
 
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:341
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:375
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
 #: ../Do.Interface.Linux/src/Do.Interface/Do.Interface.Widgets/DefaultItems.cs:57
 msgid "Type to begin searching"
 msgstr ""
 
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:342
-#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:376
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:343
+#: ../Do.Interface.Linux/src/Do.Interface/ClassicInterface/ClassicWindow.cs:377
 msgid "Type to start searching."
 msgstr ""
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:89
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:66
 msgid "Password"
 msgstr ""
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:111
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:88
 msgid "Username"
 msgstr ""
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:124
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:101
 msgid "<i>Verify and save account information</i>"
 msgstr ""
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:180
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.AbstractLoginWidget.cs:157
 msgid "Don't have an account?"
 msgstr ""
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:77
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:57
 msgid "<b><span size=\"x-large\">There's a Do plugin for that!</span></b>"
 msgstr ""
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:98
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:78
 #, csharp-format
 msgid ""
 "A Do plugin for {0} is available for installation. Would you like us to "
 "enable it for you?"
 msgstr ""
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:125
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:105
 msgid "Don't ask me about Do plugins again."
 msgstr ""
 
-#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:172
+#: ../Do.Platform.Linux/gtk-gui/Do.Platform.Linux.PluginAvailableDialog.cs:152
 msgid "_Install"
 msgstr ""
 
@@ -190,15 +190,19 @@ msgstr ""
 msgid "Exec"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:203
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:198
 msgid "OnlyShowIn"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:57
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItem.cs:199
+msgid "NotShowIn"
+msgstr ""
+
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:54
 msgid "Applications"
 msgstr ""
 
-#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:61
+#: ../Do.Platform.Linux/src/Do.Universe/ApplicationItemSource.cs:58
 msgid "Finds applications in many locations."
 msgstr ""
 
@@ -390,7 +394,7 @@ msgstr ""
 msgid "Select Multiple Items"
 msgstr ""
 
-#: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:2
+#: ../Do/src/Do.Core/Controller.cs:1006 ../data/gnome-do.desktop.in.h:1
 msgid "GNOME Do"
 msgstr ""
 
@@ -445,20 +449,30 @@ msgstr ""
 msgid "Keyboard"
 msgstr ""
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:49
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:51
 msgid "Action"
 msgstr ""
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:56
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:58
 msgid "Shortcut"
 msgstr ""
 
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:73
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:101
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:140
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:143
-#: ../Do/src/Do.UI/KeybindingTreeView.cs:159
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:75
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:131
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:154
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:175
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:177
 msgid "Disabled"
+msgstr ""
+
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:140
+msgid "Failed to bind keyboard shortcut"
+msgstr ""
+
+#: ../Do/src/Do.UI/KeybindingTreeView.cs:141
+msgid ""
+"This usually means that some other application has already grabbed the key "
+"combination"
 msgstr ""
 
 #: ../Do/src/Do.UI/ManagePluginsPreferencesWidget.cs:56
@@ -582,7 +596,7 @@ msgstr ""
 msgid "Mobile Phone"
 msgstr ""
 
-#: ../data/gnome-do.desktop.in.h:1
+#: ../data/gnome-do.desktop.in.h:2
 msgid ""
 "Do things as quickly as possible (but no quicker) with your files, "
 "bookmarks, applications, music, contacts, and more!"
@@ -593,25 +607,23 @@ msgid "Always show results window."
 msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:2
-msgid ""
-"Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
-"Mini."
+msgid "Whether the results window will always show."
 msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:3
-msgid "Do UI theme"
+msgid "Hide main window when Do starts."
 msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:4
-msgid "Do summon keybinding."
-msgstr ""
-
-#: ../data/gnome-do.schemas.in.h:5
 msgid "Enable this option to keep Do from popping up as soon as it starts."
 msgstr ""
 
+#: ../data/gnome-do.schemas.in.h:5
+msgid "Do summon keybinding."
+msgstr ""
+
 #: ../data/gnome-do.schemas.in.h:6
-msgid "Hide main window when Do starts."
+msgid "Set this to the key command you would like to use to summon Do."
 msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:7
@@ -623,9 +635,19 @@ msgid "Set this to the character that should be used to enter text mode."
 msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:9
-msgid "Set this to the key command you would like to use to summon Do."
+msgid "Do UI theme"
 msgstr ""
 
 #: ../data/gnome-do.schemas.in.h:10
-msgid "Whether the results window will always show."
+msgid ""
+"Changes the appearence of Do. Valid entries are Classic, Glass Frame, and "
+"Mini."
+msgstr ""
+
+#: ../data/gnome-do.schemas.in.h:11
+msgid "Force classic window"
+msgstr ""
+
+#: ../data/gnome-do.schemas.in.h:12
+msgid "Force classic window rendering (disable composite rendering)."
 msgstr ""

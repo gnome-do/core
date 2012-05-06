@@ -20,9 +20,11 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Gtk;
+using GLib;
 using Mono.Unix;
 
 using Do.Platform;
@@ -94,13 +96,10 @@ namespace Do.UI
 			SetCursor (args.Path, GetColumn ((int) Column.BoundKeyString), true);
 		}
 
-		private bool ClearPreviousBinding (TreeModel model, TreePath path, TreeIter treeiter, string keyBinding) 
+		private bool DoesBindingConflict (TreeModel model, TreePath path, TreeIter treeiter, string newKeyBinding)
 		{
-			string binding = model.GetValue (treeiter, (int) Column.BoundKeyString) as string;
-			if (binding == keyBinding) {
-				model.SetValue (treeiter, (int) Column.BoundKeyString, Catalog.GetString ("Disabled"));
-			}
-			return false;
+			string binding = model.GetValue (treeiter, (int)Column.BoundKeyString) as string;
+			return binding == newKeyBinding;
 		}
 		
 		private void OnAccelEdited (object o, AccelEditedArgs args)
@@ -113,20 +112,55 @@ namespace Do.UI
 						
 			string realKey = Services.Keybinder.KeyEventToString (args.AccelKey, (uint)args.AccelMods);
 			
-			if (args.AccelKey == (uint) Gdk.Key.Super_L || args.AccelKey == (uint) Gdk.Key.Super_R) {
+			if (args.AccelKey == (uint)Gdk.Key.Super_L || args.AccelKey == (uint)Gdk.Key.Super_R) {
 				//setting CellRenderAccelMode to "Other" ignores the Super key as a modifier
 				//this prevents us from grabbing _only_ the Super key.
 				return;
 			}
 			
 			// Look for any other rows that have the same binding and then zero that binding out
-			Model.Foreach ((model, path, treeiter) => ClearPreviousBinding (model, path, treeiter, realKey));
+			// PRECONDITION: There is at most one other row with the same binding.
+			TreeIter conflictingBinding = TreeIter.Zero;
+			Model.Foreach ((model, path, treeiter) => {
+				if (DoesBindingConflict (model, path, treeiter, realKey))
+					conflictingBinding = treeiter;
+				return false;
+			});
 
-			store.SetValue (iter, (int) Column.BoundKeyString, realKey);
+			if (!conflictingBinding.Equals (TreeIter.Zero)) {
+				if (!SetNewBinding (conflictingBinding, Catalog.GetString ("Disabled"))) {
+					// Nothing to do here; we can't set conflicting bindings
+					Log<KeybindingTreeView>.Error ("Failed to unset conflicting keybinding");
+					return;
+				}
+			}
 
-			SaveBindings ();
+			if (!SetNewBinding (iter, realKey)) {
+				Log<KeybindingTreeView>.Debug ("Failed to bind key: {0}", realKey);
+				Services.Notifications.Notify (Catalog.GetString ("Failed to bind keyboard shortcut"),
+				                               Catalog.GetString ("This usually means that some other application has already " +
+				                               	"grabbed the key combination"),
+				                               "error");
+				if (!conflictingBinding.Equals (TreeIter.Zero)) {
+					// This has failed for some reason; reset the old binding
+					SetNewBinding (conflictingBinding, realKey);
+				}
+			}
 		}
-		
+
+		private bool SetNewBinding (TreeIter iter, string newKeyString)
+		{
+			var binding = Model.GetValue (iter, (int)Column.Binding) as KeyBinding;
+			string keyString = newKeyString == Catalog.GetString ("Disabled") ? "" : newKeyString;
+			if (!Services.Keybinder.SetKeyString (binding, keyString)) {
+				// SetKeyString will return false with the binding unchanged if it cannot bind the new string
+				// Do not update the display keystring in this case.
+				return false;
+			}
+			Model.SetValue (iter, (int)Column.BoundKeyString, newKeyString);
+			return true;
+		}
+
 		private void OnAccelCleared (object o, AccelClearedArgs args)
 		{
 			TreeIter iter;
@@ -134,40 +168,16 @@ namespace Do.UI
 
 			store = Model as ListStore;
 			store.GetIter (out iter, new TreePath (args.PathString));
-			
+
+			string keyString;
 			try {
-				string defaultVal = store.GetValue (iter, (int) Column.DefaultKeybinding).ToString ();
-				defaultVal = (string.IsNullOrEmpty (defaultVal)) ? Catalog.GetString ("Disabled") : defaultVal;
-				store.SetValue (iter, (int) Column.BoundKeyString, defaultVal);
+				keyString = store.GetValue (iter, (int)Column.DefaultKeybinding).ToString ();
+				keyString = (string.IsNullOrEmpty (keyString)) ? Catalog.GetString ("Disabled") : keyString;
 			} catch (Exception) {
-				store.SetValue (iter, (int) Column.BoundKeyString, Catalog.GetString ("Disabled"));
+				keyString = Catalog.GetString ("Disabled");
 			}
 
-			SaveBindings ();
+			SetNewBinding (iter, keyString);
 		}
-		
-		private void SaveBindings ()
-		{
-			Model.Foreach (SaveBindingsForeachFunc);
-		}
-		
-		private bool SaveBindingsForeachFunc (TreeModel model, TreePath path, TreeIter iter)
-		{
-			string newKeyString = model.GetValue (iter, (int) Column.BoundKeyString) as string;
-			KeyBinding binding = model.GetValue (iter, (int) Column.Binding) as KeyBinding;
-			
-			newKeyString = (newKeyString == Catalog.GetString ("Disabled")) ? "" : newKeyString;
-			
-			//only save if the keystring changed
-			if (newKeyString != null && binding.KeyString != newKeyString) {
-				//try to save
-				if (!Services.Keybinder.SetKeyString (binding, newKeyString)) {
-					//if we fail reset to the default value
-					model.SetValue (iter, (int) Column.BoundKeyString, binding.DefaultKeyString);
-					Services.Keybinder.SetKeyString (binding, binding.DefaultKeyString);
-				}
-			}
-			return false;
-		}	
 	}
 }
