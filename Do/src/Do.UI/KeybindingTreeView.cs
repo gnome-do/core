@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Gtk;
+using GLib;
 using Mono.Unix;
 
 using Do.Platform;
@@ -136,6 +137,10 @@ namespace Do.UI
 
 			if (!SetNewBinding (iter, realKey)) {
 				Log<KeybindingTreeView>.Debug ("Failed to bind key: {0}", realKey);
+				Services.Notifications.Notify (Catalog.GetString ("Failed to bind keyboard shortcut"),
+				                               Catalog.GetString ("This usually means that some other application has already " +
+				                               	"grabbed the key combination"),
+				                               "error");
 				if (!conflictingBinding.Equals (TreeIter.Zero)) {
 					// This has failed for some reason; reset the old binding
 					SetNewBinding (conflictingBinding, realKey);
