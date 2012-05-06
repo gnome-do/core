@@ -69,16 +69,18 @@ namespace Do.Platform.Common
 			return true;
 		}
 
-		public bool SetKeyString (KeyBinding binding, string newKeyString) 
+		public bool SetKeyString (KeyBinding binding, string newKeyString)
 		{
 			//first check if this keystring exists
 			if (!Bindings.Any (k => k.KeyString == binding.KeyString))
 				return false;
-			
+
 			//if this key should be registered with the OS
 			if (binding.IsOSKey) {
 				//register again with the new keystring
-				if (!RegisterOSKey (newKeyString, binding.Callback))
+
+				//FIXME: Unsetting bindings should probably be a separate exported function.
+				if (newKeyString != "" && !RegisterOSKey (newKeyString, binding.Callback))
 					return false;
 
 				//remove the old keystring from the OS
@@ -92,7 +94,7 @@ namespace Do.Platform.Common
 			prefs.Set (binding.PreferenceName, binding.KeyString);
 
 			if (!string.IsNullOrEmpty (binding.KeyString))
-			    Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to \"{1}\"", binding.Description, binding.KeyString);
+				Log<AbstractKeyBindingService>.Debug ("\"{0}\" now mapped to \"{1}\"", binding.Description, binding.KeyString);
 
 			return true;
 		}
