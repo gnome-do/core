@@ -128,7 +128,7 @@ namespace Do.Core
 				}
 				source.ItemsAvailable += OnItemsAvailable;
 				source.ItemsUnavailable += OnItemsUnavailable;
-				Log<UniverseManager>.Debug ("Added new DynamicItemSource: {0}", source.Name);
+				Log<UniverseManager>.Debug ("Added new ItemSource: {0}", source.Name);
 				break;
 			case ExtensionChange.Remove:
 				source.ItemsAvailable -= OnItemsAvailable;
@@ -136,7 +136,7 @@ namespace Do.Core
 				lock (universe_lock) {
 					dynamicUniverses.Remove (source);
 				}
-				Log<UniverseManager>.Debug ("Removed DynamicItemSource: {0}", source.Name);
+				Log<UniverseManager>.Debug ("Removed ItemSource: {0}", source.Name);
 				break;
 			}
 		}
@@ -168,10 +168,11 @@ namespace Do.Core
 
 		public void InitializeAsync ()
 		{
-			// Do the initial load of the universe.
-			ReloadUniverse ();
+			// Populate the initial actions.
+			ReloadActions(universe);
 
-			// Hook up to DynamicItemSource notifications
+			// Hook up ItemSource notifications
+			AddinManager.AddExtensionNodeHandler ("/Do/ItemSource", OnPluginChanged);
 			AddinManager.AddExtensionNodeHandler ("/Do/DynamicItemSource", OnPluginChanged);
 
 			// Notify subscribers that the universe has been loaded.
@@ -226,44 +227,44 @@ namespace Do.Core
 		{
 			return item.HasChildren ();
 		}
-		
+
+		private bool UpdateItemSources (TimeSpan timeout)
+		{
+			var startUpdate = DateTime.UtcNow;
+			foreach (ItemSource source in PluginManager.ItemSources) {
+				Log<UniverseManager>.Debug ("Reloading item source \"{0}\"...", source.Name);
+				source.UpdateAndEmit ();
+
+				if (timeout < DateTime.UtcNow - startUpdate)
+					return false;
+			}
+			return true;
+		}
+
 		/// <summary>
 		/// Continuously updates the universe on a worker thread.
 		/// </summary>
 		void UniverseUpdateLoop ()
 		{
 			Random rand = new Random ();
-			DateTime startUpdate;
 
 			while (true) {
 				if (reload_requested.WaitOne (UpdateTimeout)) {
-					// We've been asked to do a full reload.  Kick this off, then go back to waiting for the timeout.
 					reload_requested.Reset ();
-					ReloadUniverse ();
+					ReloadActions (universe);
+					if (!UpdateItemSources(new TimeSpan(0, 1, 0)))
+						Log<UniverseManager>.Warn("Updating item sources timed out. Universe will be incomplete!");
 					continue;
 				}
 
 				if (Do.Controller.IsSummoned)
 					continue;
-				startUpdate = DateTime.UtcNow;
 
 				if (rand.Next (10) == 0) {
 					ReloadActions (universe);
 				}
 
-				foreach (ItemSource source in PluginManager.ItemSources) {
-					ReloadSource (source, universe);
-
-					if (UpdateRunTime < DateTime.UtcNow - startUpdate) {
-						// We've exhausted our update timer.  Continue after UpdateTimeout.
-						if (reload_requested.WaitOne (UpdateTimeout)) {
-							// We've been asked to reload the universe; break back to the start of the loop
-							break;
-						}
-						// Start the update timer again, and continue reloading sources…
-						startUpdate = DateTime.UtcNow;
-					}
-				}
+				UpdateItemSources(UpdateTimeout);
 			}
 		}
 		
@@ -283,87 +284,6 @@ namespace Do.Core
 			}
 		}
 		
-		/// <summary>
-		/// Updates an item source and syncs it into the universe. This should
-		/// not be called on the main thread to avoid blocking the UI if the
-		/// item source takes a long time to update.
-		/// </summary>
-		void ReloadSource (ItemSource source, UniverseCollection universe)
-		{
-			SafeItemSource safeSource;
-			IEnumerable<Item> oldItems, newItems;
-
-			if (source == null) throw new ArgumentNullException ("source");
-			
-			safeSource = source.RetainSafe ();
-			oldItems = safeSource.Items;
-			// We call UpdateItems outside of the lock so as not to block other
-			// threads in contention for the lock if UpdateItems blocks.
-			Log<UniverseManager>.Debug ("Reloading item source \"{0}\"...", safeSource.Name);
-			safeSource.UpdateItems ();
-			newItems = safeSource.Items;
-			
-			lock (universe_lock) {
-				foreach (Item item in oldItems) {
-					if (universe.ContainsKey (item.UniqueId))
-						universe.Remove (item.UniqueId);
-				}
-				foreach (Item item in newItems) {
-					universe  [item.UniqueId] = item;
-				}
-			}
-		}
-		
-		void ReloadUniverse ()
-		{
-			Log<UniverseManager>.Info ("Reloading universe...");
-			
-			// A new temporary universe is created so that searches made during the reload (as threaded 
-			// searches are allowed will not see an interuption in available items). Additionally this 
-			// serves to clear out unused items that are orphaned from their item service.
-			UniverseCollection tmpUniverse = new UniverseCollection ();
-			ReloadActions (tmpUniverse);
-			PluginManager.ItemSources.ForEach (source => ReloadSource (source, tmpUniverse));
-			
-			// Clearing the old universe is not needed and considered harmful as enumerables in existence
-			// already will be based off the old universe. Clearing it may cause an exception to be thrown.
-			// Once those enumerables are destroyed, so too will the old universe.
-			universe = tmpUniverse;
-			Log<UniverseManager>.Info ("Universe contains {0} items.", universe.Count);
-		}
-		
-		/// <summary>
-		/// Add a list of Items to the universe
-		/// </summary>
-		/// <param name="items">
-		/// A <see cref="IEnumerable`1"/>
-		/// </param>
-		public void AddItems (IEnumerable<Item> items)
-		{
-			lock (universe_lock) {
-				foreach (Item item in items) {
-					if (universe.ContainsKey (item.UniqueId)) continue;
-					universe [item.UniqueId] = item;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Remove a list of Items from the universe.  This removal does not prevent these
-		/// items from returning to the universe at a future date.
-		/// </summary>
-		/// <param name="items">
-		/// A <see cref="IEnumerable`1"/>
-		/// </param>
-		public void DeleteItems (IEnumerable<Item> items)
-		{
-			lock (universe_lock) {
-				foreach (Item item in items) {
-					universe.Remove (item.UniqueId);
-				}
-			}
-		}
-
 		/// <summary>
 		/// Attempts to get an Item for a given UniqueId.
 		/// </summary>
