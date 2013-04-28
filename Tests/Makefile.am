@@ -1,4 +1,5 @@
 FILES = \
+	TestItemSource.cs \
 	TestLogging.cs \
 	TestKeybindingService.cs \
 	AssemblyInfo.cs

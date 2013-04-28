@@ -6,7 +6,7 @@
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>Tests</RootNamespace>
     <AssemblyName>Tests</AssemblyName>
   </PropertyGroup>
@@ -35,6 +35,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="TestLogging.cs" />
     <Compile Include="TestKeybindingService.cs" />
+    <Compile Include="TestItemSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tests.addin.xml" />
@@ -66,6 +67,14 @@
     <Reference Include="Mono.Addins, Version=0.6.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
       <Private>False</Private>
       <Package>mono-addins</Package>
+    </Reference>
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+      <Package>gtk-sharp-2.0</Package>
+    </Reference>
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+      <Package>gtk-sharp-2.0</Package>
     </Reference>
   </ItemGroup>
 </Project>
