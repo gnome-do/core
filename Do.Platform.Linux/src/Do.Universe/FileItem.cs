@@ -156,7 +156,7 @@ namespace Do.Universe.Linux {
 					icon = normal_thumb;	
 				} else {
 					try {
-						if (MimeType == "x-directory/normal") {
+						if (MimeType == "x-directory/normal" || MimeType == "inode/directory") {
 							icon = "folder";
 						} else if (MimeType.StartsWith ("image")) {
 							icon = "gnome-mime-image";
