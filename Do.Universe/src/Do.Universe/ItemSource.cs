@@ -93,6 +93,10 @@ namespace Do.Universe
 		#region DynamicItemSource implementation
 		private object update_lock = new object ();
 		private HashSet <Item> last_items;
+
+		/// <summary>
+		/// Calls UpdateItems(), then emits signals for the Items changed since last update.
+		/// </summary>
 		public void UpdateAndEmit ()
 		{
 			lock (update_lock) {
