@@ -53,4 +53,5 @@ REFERENCES =  \
 
 PROJECT_REFERENCES = \
 	Do.Platform \
+	Do.Platform.Linux \
 	Do.Universe

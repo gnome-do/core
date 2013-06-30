@@ -23,9 +23,9 @@ SUBDIRS = \
 	data \
 	Do.Universe \
 	Do.Platform \
-	Do.Interface.Linux \
 	Do.Platform.Linux \
 	Do.Platform.Linux.JoliCloud \
+	Do.Interface.Linux \
 	Do.Interface.Linux.AnimationBase \
 	Do.Interface.Linux.Classic \
 	Do.Interface.Linux.GlassFrame \
