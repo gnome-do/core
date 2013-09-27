@@ -21,14 +21,13 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
-using Gnome;
 using Mono.Unix;
 
 using Do.Universe;
 using Do.Platform;
+using GLib;
 
 namespace Do.Universe.Linux {
 
@@ -41,8 +40,23 @@ namespace Do.Universe.Linux {
 		static ApplicationItem ()
 		{
 			Instances = new Dictionary<string, ApplicationItem> ();
+
+			
+			// Populate desktop environment flag, for ShouldShow
+			string desktopSession = Environment.GetEnvironmentVariable ("XDG_CURRENT_DESKTOP");
+			if (desktopSession == null) {
+				// Legacy fallbacks:
+				// If KDE_FULL_SESSION is true, assume kde.
+				// Else, assume GNOME
+				if (Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true") {
+					desktopSession = "KDE";
+				} else {
+					desktopSession = "GNOME";
+				}
+			}
+			DesktopAppInfo.DesktopEnv = desktopSession;
 		}
-		
+
 		public static ApplicationItem MaybeCreateFromDesktopItem (string path)
 		{
 			string key = path;
@@ -55,15 +69,15 @@ namespace Do.Universe.Linux {
 				if (Instances.ContainsKey (key)) {
 						appItem = Instances [key];
 				} else {
-					DesktopItem item = null;
+					DesktopAppInfo item = null;
 					try {
-						item = DesktopItem.NewFromFile (path, 0);
+						item = DesktopAppInfo.NewFromFilename(path);
 						appItem = new ApplicationItem (item);
 					} catch (Exception e) {
 						appItem = null;
 						try { item.Dispose (); } catch { }
-						Log.Error ("Could not load desktop item: {0}", e.Message);
-						Log.Debug (e.StackTrace);
+						Do.Platform.Log.Error ("Could not load desktop item: {0}", e.Message);
+						Do.Platform.Log.Debug (e.StackTrace);
 					}
 
 					if (appItem != null)
@@ -113,8 +127,8 @@ namespace Do.Universe.Linux {
 						bestMatch = item;
 						continue;
 					}
-					if (item.IsAppropriateForCurrentDesktop) {
-						if (!bestMatch.IsAppropriateForCurrentDesktop || item.Exec.Length < bestMatch.Exec.Length)
+					if (item.ShouldShow) {
+						if (!bestMatch.ShouldShow || item.Exec.Length < bestMatch.Exec.Length)
 							bestMatch = item;
 					}
 				}
@@ -123,7 +137,7 @@ namespace Do.Universe.Linux {
 			return bestMatch;
 		}
 
-		protected DesktopItem item;
+		protected GLib.DesktopAppInfo item;
 		string name, description, icon;
 		IEnumerable<string> categories;
 
@@ -134,25 +148,16 @@ namespace Do.Universe.Linux {
 		/// A <see cref="System.String"/> containing the absolute path of
 		/// a desktop (.desktop) file.
 		/// </param>
-		protected ApplicationItem (DesktopItem item)
+		protected ApplicationItem (GLib.DesktopAppInfo item)
 		{
 			this.item = item;
-			if (item.Exists ()) {
-				name = item.GetLocalestring ("Name");
-				description = item.GetLocalestring ("Comment");
-				icon = item.GetString ("Icon") ?? DefaultApplicationIcon;
-				
-				if (item.AttrExists ("Categories"))
-					categories = item.GetString ("Categories").Split (';');
-				else
-					categories = Enumerable.Empty<string> ();
-			} else {
-				name = Path.GetFileName (item.Location);
-				description =
-					Catalog.GetString ("This application could not be indexed.");
-				icon = DefaultApplicationIcon;
-				categories = Enumerable.Empty<string> ();
-			}
+
+			name = item.Name;
+			description = item.Description;
+			icon = item.Icon.ToString() ?? DefaultApplicationIcon;
+
+			// TODO: Populate categories once GIO# exposes them
+			categories = Enumerable.Empty<string> ();
 		}
 		
 		public override string Name {
@@ -173,65 +178,29 @@ namespace Do.Universe.Linux {
 
 		public bool NoDisplay {
 			get {
-				return item.AttrExists ("NoDisplay") && item.GetBoolean ("NoDisplay");
+				return !item.ShouldShow;
 			}
 		}
 		
 		public string Exec {
-			get { return item.GetString ("Exec"); }
+			get { return item.Commandline; }
 		}
 		
 		protected string Location {
-			get { return item.Location; }
+			get { return item.Executable; }
 		}
 
 		public bool Hidden {
-			get { return item.GetBoolean ("NoDisplay"); }
+			get { return item.IsHidden; }
 		}
 		
 		public bool IsUserCustomItem {
-			get { return item.Location.StartsWith ("file:///home"); }
+			get { return item.Executable.StartsWith ("file:///home"); }
 		}
 
-		public bool IsAppropriateForCurrentDesktop {
+		public bool ShouldShow {
 			get {
-				string onlyShowIn = item.GetString ("OnlyShowIn");
-				string notShowIn = item.GetString ("NotShowIn");
-				string desktopSession = Environment.GetEnvironmentVariable ("XDG_CURRENT_DESKTOP");
-
-				if (desktopSession == null) {
-					// Legacy fallbacks:
-					// If KDE_FULL_SESSION is true, assume kde.
-					// Else, assume GNOME
-					if (Environment.GetEnvironmentVariable ("KDE_FULL_SESSION") == "true") {
-						desktopSession = "KDE";
-					} else {
-						desktopSession = "GNOME";
-					}
-				}
-
-				// It doesn't make sense for a DE to appear in both OnlyShowIn and
-				// NotShowIn.  We choose to prefer OnlyShowIn in this case as it makes
-				// the following checks easier.
-				if (onlyShowIn != null) {
-					foreach (string environment in onlyShowIn.Split (';')) {
-						if (desktopSession.Equals (environment, StringComparison.InvariantCultureIgnoreCase)) {
-							return true;
-						}
-					}
-					// There's an OnlyShowIn attribute, and the current environment doesn't match.
-					return false;
-				}
-
-				if (notShowIn != null) {
-					foreach (string environment in notShowIn.Split (';')) {
-						if (desktopSession.Equals (environment, StringComparison.InvariantCultureIgnoreCase)) {
-							return false;
-						}
-					}
-				}
-
-				return true;
+				return item.ShouldShow;
 			}
 		}
 		
@@ -240,14 +209,14 @@ namespace Do.Universe.Linux {
 		/// </summary>
 		public void Run ()
 		{
-			item.Launch (null, DesktopItemLaunchFlags.OnlyOne);
+			item.Launch (null, null);
 		}
 
 		public void LaunchWithFiles (IEnumerable<IFileItem> files)
 		{
 			string [] uris = files.Select (file => file.Uri).ToArray ();
 			GLib.List glist = new GLib.List (uris as object[], typeof (string), false, true);
-			item.Launch (glist, DesktopItemLaunchFlags.OnlyOne);
+			item.Launch (glist, null);
 		}
 	}
 }

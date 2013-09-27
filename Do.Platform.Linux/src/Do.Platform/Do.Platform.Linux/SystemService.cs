@@ -33,7 +33,7 @@ using org.freedesktop.DBus;
 using Do.Platform.ServiceStack;
 using Do.Platform.Linux.DBus;
 
-using Gnome;
+using GLib;
 
 using Mono.Unix.Native;
 
@@ -75,7 +75,7 @@ namespace Do.Platform.Linux
 		
 		IPowerManagement power;
 		IDeviceKitPower devicekit;
-		DesktopItem autostartfile;
+		KeyFile.GKeyFile autostartfile;
 		
 		public void Initialize ()
 		{
@@ -164,38 +164,25 @@ namespace Do.Platform.Linux
 		    }
 		}
 		
-		string AutoStartUri {
-			get {
-				var uri = new Uri(AutoStartFileName).ToString();
-				return uri;
-			}
-		}
-		
-		DesktopItem AutoStartFile {
+		KeyFile.GKeyFile AutoStartFile {
 			get {
 				if (autostartfile != null) 
 					return autostartfile;
 				
 				try {
-					autostartfile = DesktopItem.NewFromUri (AutoStartUri, DesktopItemLoadFlags.NoTranslations);
+					autostartfile = new KeyFile.GKeyFile(AutoStartFileName);
 				} catch (GLib.GException loadException) {
 					Log<SystemService>.Info ("Unable to load existing autostart file: {0}", loadException.Message);
 					Log<SystemService>.Info ("Writing new autostart file to {0}", AutoStartFileName);
-					autostartfile = DesktopItem.NewFromFile (System.IO.Path.Combine (AssemblyInfo.InstallData, "applications/gnome-do.desktop"),
-					                                         DesktopItemLoadFlags.NoTranslations);
-					try {
-						if (!Directory.Exists (AutoStartDir))
-							Directory.CreateDirectory (AutoStartDir);
+					autostartfile = new KeyFile.GKeyFile (System.IO.Path.Combine (AssemblyInfo.InstallData, "applications/gnome-do.desktop"));
+					if (!Directory.Exists (AutoStartDir))
+						Directory.CreateDirectory (AutoStartDir);
 
-						// This *enables* autostart, by setting the "Hidden" key (which disables autostart) to false.
-						// Explicitly setting this key fixes LP #398303; otherwise our IsAutoStartEnabled method won't find
-						// the AutoStartKey, and will erroneously return false.
-						autostartfile.SetBoolean (AutoStartKey, false);
-						autostartfile.Save (AutoStartUri, true);
-						autostartfile.Location = AutoStartUri;
-					} catch (Exception e) {
-						Log<SystemService>.Error ("Failed to write initial autostart file: {0}", e.Message);
-					}
+					// This *enables* autostart, by setting the "Hidden" key (which disables autostart) to false.
+					// Explicitly setting this key fixes LP #398303; otherwise our IsAutoStartEnabled method won't find
+					// the AutoStartKey, and will erroneously return false..
+					autostartfile.SetBoolean ("Desktop Entry", AutoStartKey, false);
+					autostartfile.Save (AutoStartFileName);
 				}
 				return autostartfile;
 			}
@@ -203,27 +190,26 @@ namespace Do.Platform.Linux
 		
 		public override bool IsAutoStartEnabled ()
 		{
-			DesktopItem autostart = AutoStartFile;
-			
-			if (!autostart.Exists ()) {
-				Log<SystemService>.Error ("Could not open autostart file {0}", AutoStartUri);
+			try {
+				return AutoStartFile.GetBoolean ("Desktop Entry", AutoStartKey);
+			} catch (GLib.GException e)	{
+				Log<SystemService>.Info ("Failed to find autostart key in autostart file, assuming enabled");
 			}
-			
-			if (autostart.AttrExists (AutoStartKey)) {
-				return !String.Equals(autostart.GetString (AutoStartKey), "true", StringComparison.OrdinalIgnoreCase);
-			}
-			return false;
+			return true;
 		}
 		
 		public override void SetAutoStartEnabled (bool enabled)
 		{
-			DesktopItem autostart = AutoStartFile;
-			
-			autostart.SetBoolean (AutoStartKey, !enabled);
 			try {
-				autostart.Save (null, true);
-			} catch (Exception e) {
-				Log<SystemService>.Error ("Failed to update autostart file: {0}", e.Message);
+				AutoStartFile.SetBoolean ("Desktop Entry", AutoStartKey, !enabled);
+				try {
+					AutoStartFile.Save (AutoStartFileName);
+				} catch (GLib.GException e) {
+					Log<SystemService>.Error ("Failed to update autostart file: {0}", e.Message);
+				}
+			}
+			catch (Exception e) {
+				Log<SystemService>.Error("Failed to access autostart file: {0}", e.Message);
 			}
 		}
 		

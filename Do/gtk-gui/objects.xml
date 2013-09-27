@@ -11,4 +11,12 @@
     <itemgroups />
     <signals />
   </object>
+  <object type="Do.Platform.Linux.AbstractLoginWidget" palette-category="General" allow-children="false" base-type="Gtk.Bin">
+    <itemgroups />
+    <signals />
+  </object>
+  <object type="Do.Interface.AnimationBase.AnimationBaseConfigurationWidget" palette-category="General" allow-children="false" base-type="Gtk.Bin">
+    <itemgroups />
+    <signals />
+  </object>
 </objects>

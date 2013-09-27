@@ -79,14 +79,14 @@ namespace Do.Universe.Linux {
 				.Where (ShouldUseDesktopFile)
 				.Select (f => new KeyValuePair<string, ApplicationItem> (f, ApplicationItem.MaybeCreateFromDesktopItem (f)))
 				.Where (a => a.Value != null)
-				.Where (a => ShouldUseApplicationItem (a.Value));
+				.Where (a => a.Value.ShouldShow);
 		}
 		
 		IEnumerable<string> GetDesktopFiles ()
 		{
 			return desktop_file_directories
-				.Where (d => Directory.Exists (d))
-				.SelectMany (d => GetDesktopFiles (d));
+				.Where (Directory.Exists)
+				.SelectMany (GetDesktopFiles);
 		}
 		
 		IEnumerable<string> GetDesktopFiles (string parent)
@@ -98,7 +98,7 @@ namespace Do.Universe.Linux {
 				baseFiles = Directory.GetFiles (parent, "*.desktop");
 			} catch (Exception) { }
 			try {
-				recursiveFiles = Directory.GetDirectories (parent).SelectMany (d => GetDesktopFiles (d));
+				recursiveFiles = Directory.GetDirectories (parent).SelectMany (GetDesktopFiles);
 			} catch (Exception) { }
 			return baseFiles.Concat (recursiveFiles);
 		}
@@ -107,7 +107,7 @@ namespace Do.Universe.Linux {
 		{
 			return appItem.Categories
 				.Where (c => !CategoryItem.ContainsCategory (c))
-				.Select (c => CategoryItem.GetCategoryItem (c));
+				.Select (CategoryItem.GetCategoryItem);
 		}
 		
 		bool ShouldUseDesktopFile (string path)
@@ -115,11 +115,6 @@ namespace Do.Universe.Linux {
 			return !path.Contains ("screensavers");
 		}
 		
-		bool ShouldUseApplicationItem (ApplicationItem app)
-		{
-			return app.IsAppropriateForCurrentDesktop && (show_hidden || !app.NoDisplay);
-		}
-
 		override protected void Enable ()
 		{
 			ItemsAvailableEventArgs eventArgs = new ItemsAvailableEventArgs ();
@@ -210,13 +205,13 @@ namespace Do.Universe.Linux {
 					disappearingItem = app_items[e.OldFullPath];
 					app_items.Remove (e.OldFullPath);
 				}
-				if (e.FullPath.EndsWith (".desktop")) {
+				if (e.FullPath.EndsWith (".desktop", StringComparison.Ordinal)) {
 					Log<ApplicationItemSource>.Debug ("Desktop file {0} moved into watched directory", e.FullPath);
 					newItem = ApplicationItem.MaybeCreateFromDesktopItem (e.FullPath);
 					if (newItem == null) {
 						Log.Error ("Found new Desktop file {0} but unable to create an item in the Universe", e.FullPath);
 					} else {
-						app_items[e.FullPath] = newItem;
+						app_items [e.FullPath] = newItem;
 					}
 				}
 			}
