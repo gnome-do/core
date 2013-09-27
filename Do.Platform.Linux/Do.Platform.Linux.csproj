@@ -36,6 +36,7 @@
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Package>gtk-sharp-2.0</Package>
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Posix" />
     <Reference Include="NDesk.DBus.GLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f6716e4f9b2ed099">
@@ -46,16 +47,7 @@
       <Package>ndesk-dbus-1.0</Package>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="gnome-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Package>gnome-sharp-2.0</Package>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Gnome.Keyring, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1a73e1bde00c9b66">
-      <Package>gnome-keyring-sharp-1.0</Package>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="nunit.framework, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
-      <Package>nunit</Package>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
@@ -67,10 +59,7 @@
     <Reference Include="gconf-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Package>gconf-sharp-2.0</Package>
       <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="gnomedesktop-sharp, Version=2.20.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Package>gnome-desktop-sharp-2.0</Package>
-      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Addins, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
       <Package>mono-addins</Package>
@@ -78,6 +67,15 @@
     </Reference>
     <Reference Include="gio-sharp">
       <HintPath>..\build\gio-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gkeyfile-sharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e886e4e52ee77480">
+      <Private>False</Private>
+      <Package>gkeyfile-sharp</Package>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Gnome.Keyring, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1a73e1bde00c9b66">
+      <Private>False</Private>
+      <Package>gnome-keyring-sharp-1.0</Package>
     </Reference>
   </ItemGroup>
   <ItemGroup>

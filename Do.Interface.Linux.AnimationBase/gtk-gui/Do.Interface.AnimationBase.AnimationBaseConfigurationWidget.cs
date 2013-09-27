@@ -11,7 +11,7 @@ namespace Do.Interface.AnimationBase
 		private global::Gtk.Button clear_background;
 		private global::Gtk.CheckButton shadow_check;
 		private global::Gtk.CheckButton animation_check;
-        
+		
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);
