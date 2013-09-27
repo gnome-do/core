@@ -108,10 +108,10 @@ namespace Do.Universe
 				var disappearing_items = last_items.Except (unchanged_items);
 
 				if (new_items.Any ()) {
-					RaiseItemsAvailable (new ItemsAvailableEventArgs { newItems = new_items.ToArray ()});
+					RaiseItemsAvailable (new ItemsAvailableEventArgs { newItems = new_items});
 				}
 				if (disappearing_items.Any ()) {
-					RaiseItemsUnavailable (new ItemsUnavailableEventArgs { unavailableItems = disappearing_items.ToArray ()});
+					RaiseItemsUnavailable (new ItemsUnavailableEventArgs { unavailableItems = disappearing_items});
 				}
 				last_items = updated_items;
 			}
