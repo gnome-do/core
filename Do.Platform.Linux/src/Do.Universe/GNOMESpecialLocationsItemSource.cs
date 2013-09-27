@@ -32,8 +32,26 @@ namespace Do.Universe.Linux {
 
 	public class GNOMESpecialLocationsItemSource : ItemSource {
 
-		static readonly string BookmarksFile =
-			Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".gtk-bookmarks");
+		static readonly string BookmarksFile = FindBookmarksFile();
+
+		static string FindBookmarksFile()
+		{
+			// Try GTK 3.0 path first...
+			string candidate = Path.Combine (Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+			                                 "gtk-3.0",
+			                                 "bookmarks");
+			if (File.Exists (candidate))
+				return candidate;
+
+			// Then try GTK 2.0 path...
+			candidate = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal),
+			                          ".gtk-bookmarks");
+			if  (File.Exists (candidate))
+				return candidate;
+
+			// Whoops! No bookmarks for us!
+			return null;
+		}
 
 		List<Item> items;
 		
@@ -53,7 +71,7 @@ namespace Do.Universe.Linux {
 		}
 		
 		public override string Icon { get { return "user-bookmarks"; } }
-
+			
 		public override IEnumerable<Type> SupportedItemTypes {
 			get { yield return typeof (IUriItem); }
 		}
@@ -75,6 +93,9 @@ namespace Do.Universe.Linux {
 		{
 			string line, uri, name;
 			Regex regex = new Regex ("([^ ]*) (.*)");
+
+			if (BookmarksFile == null)
+				yield break;
 			
 			using (StreamReader reader = new StreamReader (BookmarksFile)) {
 				while ((line = reader.ReadLine ()) != null) {
