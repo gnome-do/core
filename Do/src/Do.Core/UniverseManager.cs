@@ -233,7 +233,12 @@ namespace Do.Core
 			var startUpdate = DateTime.UtcNow;
 			foreach (ItemSource source in PluginManager.ItemSources) {
 				Log<UniverseManager>.Debug ("Reloading item source \"{0}\"...", source.Name);
-				source.UpdateAndEmit ();
+				try {
+					source.UpdateAndEmit ();
+				} catch (Exception e) {
+					Log<UniverseManager>.Error ("Error while updating item source \"{0}\": {1}",
+					                            source.Name, e.Message);
+				}
 
 				if (timeout < DateTime.UtcNow - startUpdate)
 					return false;
