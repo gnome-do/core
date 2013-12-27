@@ -21,10 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do.Platform.Linux", "Do.Pla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do.Platform.Linux.JoliCloud", "Do.Platform.Linux.JoliCloud\Do.Platform.Linux.JoliCloud.csproj", "{68C0DB8D-1DFA-47B1-8CD7-548224602EE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do.Platform.OSX", "Do.Platform.OSX\Do.Platform.OSX.csproj", "{39CF1D2E-FF28-4B4C-86DE-F98D54448A05}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do.Platform.Windows", "Do.Platform.Windows\Do.Platform.Windows.csproj", "{FB3960A8-862B-4774-8479-C0BBA02FD4CF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Do.Universe", "Do.Universe\Do.Universe.csproj", "{0F92F14A-CCFC-47E5-BC16-57F8C31F68F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{ACCE6E6A-C4CD-41F9-81F8-FA6B3DC921D0}"
@@ -60,10 +56,6 @@ Global
 		{36CA5B12-6730-4777-A472-EBC37CF376BD}.Debug|x86.Build.0 = Debug|x86
 		{36CA5B12-6730-4777-A472-EBC37CF376BD}.Release|x86.ActiveCfg = Release|x86
 		{36CA5B12-6730-4777-A472-EBC37CF376BD}.Release|x86.Build.0 = Release|x86
-		{39CF1D2E-FF28-4B4C-86DE-F98D54448A05}.Debug|x86.ActiveCfg = Debug|x86
-		{39CF1D2E-FF28-4B4C-86DE-F98D54448A05}.Debug|x86.Build.0 = Debug|x86
-		{39CF1D2E-FF28-4B4C-86DE-F98D54448A05}.Release|x86.ActiveCfg = Release|x86
-		{39CF1D2E-FF28-4B4C-86DE-F98D54448A05}.Release|x86.Build.0 = Release|x86
 		{5809CEE9-020D-4858-86AE-94E2527146FE}.Debug|x86.ActiveCfg = Debug|x86
 		{5809CEE9-020D-4858-86AE-94E2527146FE}.Debug|x86.Build.0 = Debug|x86
 		{5809CEE9-020D-4858-86AE-94E2527146FE}.Release|x86.ActiveCfg = Release|x86
@@ -86,10 +78,6 @@ Global
 		{F68AFED6-BABE-492F-95F2-435CD9300396}.Debug|x86.Build.0 = Debug|x86
 		{F68AFED6-BABE-492F-95F2-435CD9300396}.Release|x86.ActiveCfg = Release|x86
 		{F68AFED6-BABE-492F-95F2-435CD9300396}.Release|x86.Build.0 = Release|x86
-		{FB3960A8-862B-4774-8479-C0BBA02FD4CF}.Debug|x86.ActiveCfg = Debug|x86
-		{FB3960A8-862B-4774-8479-C0BBA02FD4CF}.Debug|x86.Build.0 = Debug|x86
-		{FB3960A8-862B-4774-8479-C0BBA02FD4CF}.Release|x86.ActiveCfg = Release|x86
-		{FB3960A8-862B-4774-8479-C0BBA02FD4CF}.Release|x86.Build.0 = Release|x86
 		{FFF96BEF-0FB8-4188-9207-538BF320207F}.Debug|x86.ActiveCfg = Debug|x86
 		{FFF96BEF-0FB8-4188-9207-538BF320207F}.Debug|x86.Build.0 = Debug|x86
 		{FFF96BEF-0FB8-4188-9207-538BF320207F}.Release|x86.ActiveCfg = Release|x86

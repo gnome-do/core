@@ -178,8 +178,6 @@ Do.Platform.Linux/Do.Platform.Linux.dll.config
 Do.Platform.Linux/src/AssemblyInfo.cs
 Do.Platform.Linux.JoliCloud/Makefile
 Do.Platform.Linux.JoliCloud/src/AssemblyInfo.cs
-Do.Platform.OSX/AssemblyInfo.cs
-Do.Platform.Windows/AssemblyInfo.cs
 Do.Universe/Makefile
 Do.Universe/src/AssemblyInfo.cs
 libdo/Makefile
