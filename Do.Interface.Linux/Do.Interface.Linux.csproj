@@ -65,7 +65,6 @@
     <Compile Include="src\Do.Interface\Do.Interface.CairoUtils\CairoUtils.cs" />
     <Compile Include="src\Do.Interface\Do.Interface.Widgets\DefaultItems.cs" />
     <Compile Include="src\Do.Interface\IconCache.cs" />
-    <Compile Include="src\Do.Interface\IconProvider.cs" />
     <Compile Include="src\Do.Interface\IDoController.cs" />
     <Compile Include="src\Do.Interface\IDoWindow.cs" />
     <Compile Include="src\Do.Interface\InterfaceDescription.cs" />
@@ -97,6 +96,10 @@
     <ProjectReference Include="..\Do.Platform\Do.Platform.csproj">
       <Project>{2EB5EEF4-D946-40A7-BCC7-EAE5003D5CED}</Project>
       <Name>Do.Platform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Do.Platform.Linux\Do.Platform.Linux.csproj">
+      <Project>{36CA5B12-6730-4777-A472-EBC37CF376BD}</Project>
+      <Name>Do.Platform.Linux</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

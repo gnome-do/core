@@ -26,7 +26,7 @@ using Cairo;
 using Do.Interface;
 using Do.Interface.CairoUtils;
 using Do.Universe;
-using Do.Platform;
+using Do.Platform.Linux;
 
 namespace Do.Interface.AnimationBase
 {

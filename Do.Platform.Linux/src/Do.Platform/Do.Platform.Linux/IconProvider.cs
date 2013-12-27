@@ -18,16 +18,12 @@
  */
 
 using System;
-using System.IO;
 using System.Reflection;
-using System.Collections.Generic;
 
 using Gtk;
 using Gdk;
 
-using Do.Platform;
-
-namespace Do.Interface
+namespace Do.Platform.Linux
 {
 	public static class IconProvider
 	{

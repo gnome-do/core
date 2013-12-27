@@ -27,7 +27,7 @@ using Mono.Addins;
 using Mono.Addins.Setup;
 
 using Do.Core;
-using Do.Platform;
+using Do.Platform.Linux;
 using Do.Universe;
 using Do.Interface;
 

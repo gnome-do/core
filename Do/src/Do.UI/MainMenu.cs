@@ -25,6 +25,7 @@ using Mono.Unix;
 using Do;
 using Do.Core;
 using Do.Platform;
+using Do.Platform.Linux;
 using Do.Universe;
 using Do.Interface;
 

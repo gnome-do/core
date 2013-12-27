@@ -23,7 +23,7 @@ using Gtk;
 using Gdk;
 
 using Do.Universe;
-using Do.Platform;
+using Do.Platform.Linux;
 using Do.Interface;
 
 namespace Do.Interface.Widgets

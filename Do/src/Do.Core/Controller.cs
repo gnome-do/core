@@ -30,7 +30,7 @@ using Do;
 using Do.UI;
 using Do.Universe;
 using Do.Platform;
-using Do.Platform.Common;
+using Do.Platform.Linux;
 using Do.Interface;
 
 namespace Do.Core

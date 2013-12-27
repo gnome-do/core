@@ -21,7 +21,6 @@ FILES = \
 	src/Do.Interface/IDoWindow.cs \
 	src/Do.Interface/IUIContext.cs \
 	src/Do.Interface/IconCache.cs \
-	src/Do.Interface/IconProvider.cs \
 	src/Do.Interface/InterfaceDescription.cs \
 	src/Do.Interface/InterfaceManager.cs \
 	src/Do.Interface/PixbufSurfaceCache.cs \

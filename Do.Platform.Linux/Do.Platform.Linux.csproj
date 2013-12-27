@@ -115,15 +115,12 @@
     <Compile Include="src\AssemblyInfo.cs" />
     <Compile Include="src\Do.Universe\Desktop.cs" />
     <Compile Include="src\Do.Universe\DesktopThumbnailSize.cs" />
+    <Compile Include="src\Do.Platform\Do.Platform.Linux\IconProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Do.Platform\Do.Platform.csproj">
       <Project>{2EB5EEF4-D946-40A7-BCC7-EAE5003D5CED}</Project>
       <Name>Do.Platform</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Do.Interface.Linux\Do.Interface.Linux.csproj">
-      <Project>{5809CEE9-020D-4858-86AE-94E2527146FE}</Project>
-      <Name>Do.Interface.Linux</Name>
     </ProjectReference>
     <ProjectReference Include="..\Do.Universe\Do.Universe.csproj">
       <Project>{0F92F14A-CCFC-47E5-BC16-57F8C31F68F9}</Project>

@@ -24,8 +24,9 @@ using Cairo;
 using Gdk;
 using Gtk;
 
-using Do.Interface;
 using Do.Universe;
+using Do.Platform.Linux;
+using Do.Interface.CairoUtils;
 
 namespace Do.Interface.AnimationBase
 {

@@ -19,6 +19,7 @@ FILES = \
 	src/Do.Platform/Do.Platform.Linux/GConfPreferencesService.cs \
 	src/Do.Platform/Do.Platform.Linux/GnomeKeyringSecurePreferencesService.cs \
 	src/Do.Platform/Do.Platform.Linux/IConfigurable.cs \
+	src/Do.Platform/Do.Platform.Linux/IconProvider.cs \
 	src/Do.Platform/Do.Platform.Linux/NotificationHelper.cs \
 	src/Do.Platform/Do.Platform.Linux/TrayIconPreferences.cs \
 	src/Do.Platform/Do.Platform.Linux/TrayIconService.cs \
@@ -68,8 +69,7 @@ REFERENCES =  \
 
 PROJECT_REFERENCES = \
 	Do.Universe \
-	Do.Platform \
-	Do.Interface.Linux
+	Do.Platform
 
 CLEANFILES += Do.Platform.Linux.dll.config
 EXTRA_DIST += Do.Platform.Linux.dll.config.in

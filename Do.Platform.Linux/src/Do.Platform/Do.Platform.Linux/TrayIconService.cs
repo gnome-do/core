@@ -25,7 +25,6 @@ using Gtk;
 
 using Do.Platform;
 using Do.Platform.ServiceStack;
-using Do.Interface;
 
 namespace Do.Platform.Linux
 {

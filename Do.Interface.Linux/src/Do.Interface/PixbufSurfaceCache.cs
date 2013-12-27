@@ -24,8 +24,8 @@ using Cairo;
 using Gdk;
 using Gtk;
 
-using Do.Platform;
 using Do.Interface;
+using Do.Platform.Linux;
 
 namespace Do.Interface
 {
