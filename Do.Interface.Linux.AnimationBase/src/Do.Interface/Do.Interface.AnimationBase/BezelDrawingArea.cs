@@ -466,8 +466,11 @@ namespace Do.Interface.AnimationBase
 		public PixbufSurfaceCache SurfaceCache {
 			get {
 				if (surface_cache == null) {
-					using (Context cr = CairoHelper.Create (GdkWindow))
-						surface_cache = new PixbufSurfaceCache (50, IconSize, IconSize, cr.Target);
+					using (Context cr = CairoHelper.Create (GdkWindow)) {
+						using (var target = cr.GetTarget ()) {
+							surface_cache = new PixbufSurfaceCache (50, IconSize, IconSize, target);
+						}
+					}
 				}
 				return surface_cache;
 			}
@@ -561,72 +564,68 @@ namespace Do.Interface.AnimationBase
 		{
 			if (!IsDrawable)
 				return;
-			Cairo.Context cr2 = Gdk.CairoHelper.Create (GdkWindow);
+			using (var cr2 = Gdk.CairoHelper.Create (GdkWindow)) {
+				//Much kudos to Ian McIntosh
+				if (surface == null)
+					surface = cr2.CreateSimilarToTarget (WindowWidth, WindowHeight);
 			
-			//Much kudos to Ian McIntosh
-			if (surface == null)
-				surface = cr2.Target.CreateSimilar (cr2.Target.Content, WindowWidth, WindowHeight);
+				using (var cr = new Context (surface)) {
 			
-			Context cr = new Context (surface);
+					if (preview) {
+						Gdk.Color bgColor;
+						using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
+							bgColor = rcstyle.Backgrounds [(int)StateType.Normal];
+						}
+						cr.SetSourceRGBA (bgColor.ConvertToCairo (1));
+					} else {
+						cr.SetSourceRGBA (0, 0, 0, 0);
+					}			
+					cr.Operator = Cairo.Operator.Source;
+					cr.Paint ();
+					cr.Operator = Cairo.Operator.Over;
 			
-			if (preview) {
-				Gdk.Color bgColor;
-				using (Gtk.Style rcstyle = Gtk.Rc.GetStyle (this)) {
-					bgColor = rcstyle.Backgrounds[(int) StateType.Normal];
-				}
-				cr.Color = bgColor.ConvertToCairo (1);
-			} else {
-				cr.Color = new Cairo.Color (0, 0, 0, 0);
-			}			
-			cr.Operator = Cairo.Operator.Source;
-			cr.Paint ();
-			cr.Operator = Cairo.Operator.Over;
+					BackgroundRenderer.RenderItem (cr, drawing_area);
 			
-			BackgroundRenderer.RenderItem (cr, drawing_area);
-			
-			RenderTitleBar (cr);
-			do {
-				if (text_box_scale > 0) {
+					RenderTitleBar (cr);
+					do {
+						if (text_box_scale > 0) {
 					
-					RenderTextModeOverlay (cr);
-					if (text_box_scale == 1) {
-						RenderTextModeText (cr);
-						continue;
+							RenderTextModeOverlay (cr);
+							if (text_box_scale == 1) {
+								RenderTextModeText (cr);
+								continue;
+							}
+						}
+				
+						if (BezelDefaults.RenderDescriptionText)
+							RenderDescriptionText (cr);
+						//--------------First Pane---------------
+						RenderPane (Pane.First, cr);
+						//------------Second Pane----------------
+						RenderPane (Pane.Second, cr);
+						//------------Third Pane-----------------
+						if (ThirdPaneVisible) {
+							RenderPane (Pane.Third, cr);
+						}
+
+						if (text_box_scale > 0) {
+							RenderTextModeOverlay (cr);
+						}
+				
+					} while (false);
+			
+					if (DrawShadow)
+						Util.Appearance.DrawShadow (cr, drawing_area.X, drawing_area.Y, drawing_area.Width, 
+							drawing_area.Height, WindowRadius, new Util.ShadowParameters (.5, ShadowRadius));
+
+					if (window_scale != 1) {//we are likely in preview mode, though this can be set on the fly
+						cr2.Scale (window_scale, window_scale);
 					}
+					cr2.SetSourceSurface (surface, 0, 0);
+					cr2.Operator = Operator.Source;
+					cr2.Paint ();
 				}
-				
-				if (BezelDefaults.RenderDescriptionText)
-					RenderDescriptionText (cr);
-				//--------------First Pane---------------
-				RenderPane (Pane.First, cr);
-				//------------Second Pane----------------
-				RenderPane (Pane.Second, cr);
-				//------------Third Pane-----------------
-				if (ThirdPaneVisible) {
-					RenderPane (Pane.Third, cr);
-				}
-
-				if (text_box_scale > 0) {
-					RenderTextModeOverlay (cr);
-				}
-				
-			} while (false);
-			
-			if (DrawShadow)
-				Util.Appearance.DrawShadow (cr, drawing_area.X, drawing_area.Y, drawing_area.Width, 
-				                            drawing_area.Height, WindowRadius, new Util.ShadowParameters (.5, ShadowRadius));
-
-			if (window_scale != 1) //we are likely in preview mode, though this can be set on the fly
-				cr2.Scale (window_scale, window_scale);
-			cr2.SetSourceSurface (surface, 0, 0);
-			cr2.Operator = Operator.Source;
-			cr2.Paint ();
-
-			(cr2.Target).Destroy ();
-			((IDisposable)cr2.Target).Dispose ();
-			((IDisposable)cr2).Dispose ();
-			
-			((IDisposable)cr).Dispose ();
+			}
 		}
 		
 		protected override void OnDestroyed ()
@@ -634,7 +633,7 @@ namespace Do.Interface.AnimationBase
 			base.OnDestroyed ();
 			BezelDrawingArea.ThemeChanged -= OnThemeChanged;
 			if (surface != null)
-				surface.Destroy ();
+				surface.Dispose ();
 			context = old_context = null;
 		}
 		
@@ -772,7 +771,7 @@ namespace Do.Interface.AnimationBase
 		{
 			int offset = PaneOffset (pane);
 			if (!SurfaceCache.ContainsKey (icon)) {
-				BufferIcon (cr, icon);
+				CreateCachedSurfaceForIcon (icon);
 			}
 			
 			string sec_icon = "";
@@ -795,13 +794,13 @@ namespace Do.Interface.AnimationBase
 				return;
 			
 			if (!SurfaceCache.ContainsKey (OldContext.GetPaneObject (pane).Icon)) {
-				BufferIcon (cr, OldContext.GetPaneObject (pane).Icon);
+				CreateCachedSurfaceForIcon (OldContext.GetPaneObject (pane).Icon);
 			}
 			cr.SetSource (SurfaceCache.GetSurface (OldContext.GetPaneObject (pane).Icon), x, y);
 			cr.PaintWithAlpha (alpha * (1 - calc_alpha));
 		}
 		
-		private void BufferIcon (Context cr, string icon)
+		private void CreateCachedSurfaceForIcon (string icon)
 		{
 			SurfaceCache.AddPixbufSurface (icon, icon);
 		}
@@ -863,7 +862,7 @@ namespace Do.Interface.AnimationBase
 			if (cursor.X == cursor.Y && cursor.X == 0) return;
 			
 			cr.Rectangle (cursor.X, cursor.Y, 2, cursor.Height);
-			cr.Color = new Cairo.Color (.4, .5, 1, .85);
+			cr.SetSourceRGBA (.4, .5, 1, .85);
 			cr.Fill ();
 		}
 		

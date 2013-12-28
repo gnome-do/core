@@ -72,7 +72,7 @@ namespace Do.Interface.Widgets
 			}
 		}
 		
-		protected override Cairo.LinearGradient GetGradient ()
+		protected override Cairo.LinearGradient CreateGradient ()
 		{
 			double r, g, b;
 			

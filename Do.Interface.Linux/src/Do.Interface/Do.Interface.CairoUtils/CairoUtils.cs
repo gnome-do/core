@@ -89,7 +89,7 @@ namespace Do.Interface.CairoUtils
 		public static void AlphaFill (this Context cr)
 		{
 			cr.Save ();
-			cr.Color = new Cairo.Color (0, 0, 0, 0);
+			cr.SetSourceRGBA (0, 0, 0, 0);
 			cr.Operator = Operator.Source;
 			cr.Paint ();
 			cr.Restore ();
@@ -350,6 +350,30 @@ namespace Do.Interface.CairoUtils
 			b = (byte) ((gdk_color.Blue)  >> 8);
 			
 			return string.Format ("{0:X2}{1:X2}{2:X2}", r, g, b);
+		}
+
+		public static void SetSourceRGBA(this Cairo.Context cr, Cairo.Color color)
+		{
+			cr.SetSourceRGBA (color.R, color.G, color.B, color.A);
+		}
+
+		public static void SetSourceRGB(this Cairo.Context cr, Gdk.Color color)
+		{
+			cr.SetSourceRGBA (color.ConvertToCairo(1));
+		}
+
+		/// <summary>
+		/// Helper to create a surface similar to the current target of a context
+		/// </summary>
+		/// <returns>A <see cref="Cairo.Surface"/>. Caller owns this surface, and must dispose it.</returns>
+		/// <param name="cr">Context</param>
+		/// <param name="width">Width for new surface</param>
+		/// <param name="height">Height for new surface</param>
+		public static Surface CreateSimilarToTarget(this Cairo.Context cr, int width, int height)
+		{
+			using (var targetSurface = cr.GetTarget()) {
+				return targetSurface.CreateSimilar (targetSurface.Content, width, height);
+			}
 		}
 	}
 }

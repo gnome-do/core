@@ -18,11 +18,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 using Cairo;
 using Gdk;
-using Gtk;
 
 using Do.Universe;
 using Do.Platform.Linux;
@@ -41,7 +39,7 @@ namespace Do.Interface.AnimationBase
 		
 		int num_results;
 		int width, height;
-		Dictionary <Do.Universe.Item, Surface> surface_buffer;
+		Dictionary <Do.Universe.Item, Surface> surface_cache;
 		Surface highlight_surface, backbuffer, child_inout_surface, triplebuffer;
 		
 		DateTime delta_time;
@@ -51,10 +49,10 @@ namespace Do.Interface.AnimationBase
 		
 		Cairo.Color odd_color, even_color;
 		
-		Do.Universe.Item[] results;
+		Item[] results;
 		
 		
-		public Do.Universe.Item[] Results {
+		public Item[] Results {
 			get {
 				return results;
 			}
@@ -125,7 +123,7 @@ namespace Do.Interface.AnimationBase
 		public BezelResultsDrawingArea(int numberResults, int width) : base ()
 		{
 			num_results = numberResults;
-			surface_buffer = new Dictionary <Do.Universe.Item,Surface> ();
+			surface_cache = new Dictionary <Item,Surface> ();
 			
 			this.width = width;
 			height = num_results * SurfaceHeight;
@@ -205,87 +203,84 @@ namespace Do.Interface.AnimationBase
 		{
 			Results = null;
 			Cursor = 0;
-			foreach (Surface s in surface_buffer.Values)
-				(s as IDisposable).Dispose ();
+			foreach (Surface s in surface_cache.Values)
+				s.Dispose ();
 			
-			surface_buffer = new Dictionary<Do.Universe.Item,Surface> ();
+			surface_cache = new Dictionary<Item,Surface> ();
 		}
 		
 		private void Paint ()
 		{
 			if (!IsDrawable) return;
 			
-			Context cr = Gdk.CairoHelper.Create (GdkWindow);
+			using (Context cr = Gdk.CairoHelper.Create (GdkWindow)) {
 			
-			if (backbuffer == null) {
-				backbuffer = cr.Target.CreateSimilar (cr.Target.Content, width, height);
-			}
-			
-			
-			DrawContextOnSurface (backbuffer);
-			if (child_scroll_offset == 0) {
-				
-				cr.SetSource (backbuffer);
-				cr.Operator = Operator.Source;
-				cr.Paint ();
-			} else {
-				if (triplebuffer == null) {
-					triplebuffer = cr.Target.CreateSimilar (cr.Target.Content, width, height);
+				if (backbuffer == null) {
+					backbuffer = cr.CreateSimilarToTarget (width, height);
 				}
+			
+			
+				DrawContextOnSurface (backbuffer);
+				if (child_scroll_offset == 0) {
 				
-				int old_x, new_x;
-				if (child_scroll_offset > 0) {
-					old_x = (int)(-width*(1-child_scroll_offset));
-					new_x = old_x+width;
+					cr.SetSource (backbuffer);
+					cr.Operator = Operator.Source;
+					cr.Paint ();
 				} else {
-					old_x = (int)(-width*(-1-child_scroll_offset));
-					new_x = old_x-width;
-				}
+					if (triplebuffer == null) {
+						triplebuffer = cr.CreateSimilarToTarget (width, height);
+					}
 				
-				DrawSlideContexts (child_inout_surface, backbuffer, triplebuffer, old_x, new_x);
+					int old_x, new_x;
+					if (child_scroll_offset > 0) {
+						old_x = (int)(-width * (1 - child_scroll_offset));
+						new_x = old_x + width;
+					} else {
+						old_x = (int)(-width * (-1 - child_scroll_offset));
+						new_x = old_x - width;
+					}
+				
+					DrawSlideContexts (child_inout_surface, backbuffer, triplebuffer, old_x, new_x);
 
-				cr.SetSource (triplebuffer);
-				cr.Operator = Operator.Source;
-				cr.Paint ();
+					cr.SetSource (triplebuffer);
+					cr.Operator = Operator.Source;
+					cr.Paint ();
+				}
 			}
-			
-			(cr as IDisposable).Dispose ();
 		}
 		
 		private void DrawSlideContexts (Surface old_surface, Surface new_surface, Surface target_surface,
 		                                int old_x, int new_x)
 		{
-			Context cr = new Context (target_surface);
+			using (Context cr = new Context (target_surface)) {
 			
-			cr.Operator = Operator.Source;
-			cr.SetSource (old_surface, old_x, 0);
-			cr.Paint ();
+				cr.Operator = Operator.Source;
+				cr.SetSource (old_surface, old_x, 0);
+				cr.Paint ();
 			
-			cr.Operator = Operator.Over;
-			cr.SetSource (new_surface, new_x, 0);
-			cr.Paint ();
-			
-			(cr as IDisposable).Dispose ();
+				cr.Operator = Operator.Over;
+				cr.SetSource (new_surface, new_x, 0);
+				cr.Paint ();
+			}
 		}
 		
 		private void DrawContextOnSurface (Surface sr)
 		{
-			Context cr = new Context (sr);
-			cr.Operator = Operator.Source;
-			cr.Rectangle (0, 0, width, height);
-			cr.Color = new Cairo.Color (0, 0, 0, .9);
-			cr.Fill ();
-			cr.Operator = Operator.Over;
+			using (Context cr = new Context (sr)) {
+				cr.Operator = Operator.Source;
+				cr.Rectangle (0, 0, width, height);
+				cr.SetSourceRGBA (0, 0, 0, .9);
+				cr.Fill ();
+				cr.Operator = Operator.Over;
 			
-			if (Results != null) {
-				int start_result = StartResult-(int) Math.Ceiling (scroll_offset);
-				RenderHighlight (cr);
-				for (int i = start_result; i < start_result+num_results+1 && i < Results.Length; i++) {
-					RenderItem (cr, i);
+				if (Results != null) {
+					int start_result = StartResult - (int)Math.Ceiling (scroll_offset);
+					RenderHighlight (cr);
+					for (int i = start_result; i < start_result + num_results + 1 && i < Results.Length; i++) {
+						RenderItem (cr, i);
+					}
 				}
 			}
-			
-			(cr as IDisposable).Dispose ();
 		}
 		
 		public void Draw ()
@@ -296,9 +291,9 @@ namespace Do.Interface.AnimationBase
 		public void InitChildInAnimation ()
 		{
 			if (child_inout_surface == null) {
-				Context cr = Gdk.CairoHelper.Create (GdkWindow);
-				child_inout_surface = cr.Target.CreateSimilar (cr.Target.Content, width, height);
-				(cr as IDisposable).Dispose ();
+				using (Context cr = Gdk.CairoHelper.Create (GdkWindow)) {
+					child_inout_surface = cr.CreateSimilarToTarget (width, height);
+				}
 			}
 			DrawContextOnSurface (child_inout_surface);
 			child_scroll_offset = 1;
@@ -307,9 +302,9 @@ namespace Do.Interface.AnimationBase
 		public void InitChildOutAnimation ()
 		{
 			if (child_inout_surface == null) {
-				Context cr = Gdk.CairoHelper.Create (GdkWindow);
-				child_inout_surface = cr.Target.CreateSimilar (cr.Target.Content, width, height);
-				(cr as IDisposable).Dispose ();
+				using (Context cr = Gdk.CairoHelper.Create (GdkWindow)) {
+					child_inout_surface = cr.CreateSimilarToTarget (width, height);
+				}
 			}
 			DrawContextOnSurface (child_inout_surface);
 			child_scroll_offset = -1;
@@ -321,59 +316,64 @@ namespace Do.Interface.AnimationBase
 			return base.OnExposeEvent (evnt);
 		}
 
-		void BufferItem (Do.Universe.Item item) 
+		void PopulateSurfaceCacheForItem (Item item) 
 		{
 			if (!IsDrawable)
 				return;
 			
-			Context cr = Gdk.CairoHelper.Create (GdkWindow);
-			Surface surface = cr.Target.CreateSimilar (cr.Target.Content, width, SurfaceHeight);
-			Context cr2 = new Context (surface);
-			cr2.Rectangle (0, 0, width, SurfaceHeight);
-			cr2.Color = new Cairo.Color (0, 0, 0, 0);
-			cr2.Operator = Operator.Source;
-			cr2.Fill ();
-			cr2.Operator = Operator.Over;
+			using (Context cr = Gdk.CairoHelper.Create (GdkWindow)) {
+				// We cache this surface, so must not Dispose of it here.
+				var surface = cr.CreateSimilarToTarget (width, SurfaceHeight);
+				using (var cr2 = new Context (surface)) {
+					cr2.Rectangle (0, 0, width, SurfaceHeight);
+					cr2.SetSourceRGBA (0, 0, 0, 0);
+					cr2.Operator = Operator.Source;
+					cr2.Fill ();
+					cr2.Operator = Operator.Over;
 			
-			Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.Icon, IconSize);
-			Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 2, 2);
-			cr2.Paint ();
+					using (Gdk.Pixbuf pixbuf = IconProvider.PixbufFromIconName (item.Icon, IconSize)) {
+						Gdk.CairoHelper.SetSourcePixbuf (cr2, pixbuf, 2, 2);
+						cr2.Paint ();
+					}
 				
-			Pango.Layout layout = new Pango.Layout (this.PangoContext);
-			layout.Width = Pango.Units.FromPixels (width - IconSize - 10);
-			layout.Ellipsize = Pango.EllipsizeMode.End;
-			layout.SetMarkup ("<span foreground=\"#ffffff\">"+item.Name+"</span>");
-			layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
-			layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (10);
+					Pango.Layout layout = new Pango.Layout (this.PangoContext);
+					layout.Width = Pango.Units.FromPixels (width - IconSize - 10);
+					layout.Ellipsize = Pango.EllipsizeMode.End;
+					layout.SetMarkup ("<span foreground=\"#ffffff\">" + item.Name + "</span>");
+					layout.FontDescription = Pango.FontDescription.FromString ("normal bold");
+					layout.FontDescription.AbsoluteSize = Pango.Units.FromPixels (10);
 				
-			cr2.MoveTo (IconSize + 6, 4);
-			Pango.CairoHelper.ShowLayout (cr2, layout);
+					cr2.MoveTo (IconSize + 6, 4);
+					Pango.CairoHelper.ShowLayout (cr2, layout);
 			
-			surface_buffer[item] = surface;
+					if (surface_cache.ContainsKey (item)) {
+						surface_cache [item].Dispose ();
+					}
+					surface_cache [item] = surface;
 			
-			layout.FontDescription.Dispose ();
-			(cr2 as IDisposable).Dispose ();
-			(cr as IDisposable).Dispose ();
+					layout.FontDescription.Dispose ();
+				}
+			}
 		}
 		
 		Surface GetHighlightSource () 
 		{
 			if (highlight_surface == null) {
-				Context cr = Gdk.CairoHelper.Create (GdkWindow);
-				highlight_surface = cr.Target.CreateSimilar (cr.Target.Content, width, SurfaceHeight);
+				using (Context cr = Gdk.CairoHelper.Create (GdkWindow)) {
+					highlight_surface = cr.CreateSimilarToTarget (width, SurfaceHeight);
 				
-				Context cr2 = new Context (highlight_surface);
-				LinearGradient grad = new LinearGradient (0, 0, 0, SurfaceHeight);
+					using (var cr2 = new Context (highlight_surface)) {
+						using (var grad = new LinearGradient (0, 0, 0, SurfaceHeight)) {
 				
-				grad.AddColorStop (0, new Cairo.Color (.2, .48, .81, 1));
-				grad.AddColorStop (1, new Cairo.Color (0, .21, .57, 1));
+							grad.AddColorStop (0, new Cairo.Color (.2, .48, .81, 1));
+							grad.AddColorStop (1, new Cairo.Color (0, .21, .57, 1));
 				
-				cr2.Pattern = grad;
-				cr2.Rectangle (0, 0, width, SurfaceHeight);
-				cr2.Fill ();
-				
-				(cr as IDisposable).Dispose ();
-				(cr2 as IDisposable).Dispose ();
+							cr2.SetSource (grad);
+							cr2.Rectangle (0, 0, width, SurfaceHeight);
+							cr2.Fill ();
+						}
+					}
+				}
 			}
 			return highlight_surface;
 		}
@@ -381,18 +381,22 @@ namespace Do.Interface.AnimationBase
 		void RenderItem (Context cr, int item)
 		{
 			int offset = (int) (SurfaceHeight*scroll_offset);
-			if (!surface_buffer.ContainsKey (Results[item])) {
-				BufferItem (Results[item]);
+			if (!surface_cache.ContainsKey (Results[item])) {
+				PopulateSurfaceCacheForItem (Results[item]);
 			}
 				
 			cr.Rectangle (0, offset+(item-StartResult)*SurfaceHeight, width, SurfaceHeight);
-			cr.Color = (item % 2 == 1) ? odd_color : even_color;
+			if (item % 2 == 1) {
+				cr.SetSourceRGBA (odd_color);
+			} else {
+				cr.SetSourceRGBA (even_color);
+			}
 			cr.Operator = Operator.DestOver;
 			cr.FillPreserve ();
 			
 			cr.Operator = Operator.Over;
 			
-			cr.SetSource (surface_buffer[Results[item]], 0, offset+(item-StartResult)*SurfaceHeight);
+			cr.SetSource (surface_cache[Results[item]], 0, offset+(item-StartResult)*SurfaceHeight);
 			cr.Fill ();
 		}
 		

@@ -53,7 +53,7 @@ namespace Do.Interface.AnimationBase
 		public void RenderItem (Context cr, Gdk.Point renderAnchor, int width, Do.Universe.Item item, bool drawArrow)
 		{
 			cr.Rectangle (renderAnchor.X, renderAnchor.Y, width, Height);
-			cr.Color = new Cairo.Color (0, 0, 0, 0);
+			cr.SetSourceRGBA (0, 0, 0, 0);
 			cr.Operator = Operator.Source;
 			cr.Fill ();
 			cr.Operator = Operator.Over;
@@ -96,7 +96,7 @@ namespace Do.Interface.AnimationBase
 				cr.LineTo (width - 15, 21);
 				Gdk.Color gc = new Gdk.Color ();
 				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
-				cr.Color = gc.ConvertToCairo (1);
+				cr.SetSourceRGB(gc);
 				cr.Fill ();
 			}
 			
@@ -123,7 +123,7 @@ namespace Do.Interface.AnimationBase
 		public void RenderItem (Context cr, Gdk.Point renderAnchor, int width, Do.Universe.Item item, bool drawArrow)
 		{
 			cr.Rectangle (renderAnchor.X, renderAnchor.Y, width, Height);
-			cr.Color = new Cairo.Color (0, 0, 0, 0);
+			cr.SetSourceRGBA (0, 0, 0, 0);
 			cr.Operator = Operator.Source;
 			cr.Fill ();
 			cr.Operator = Operator.Over;
@@ -163,7 +163,7 @@ namespace Do.Interface.AnimationBase
 				cr.LineTo (width - IconSize+2, 15);
 				Gdk.Color gc = new Gdk.Color ();
 				Gdk.Color.Parse ("#" + parent.ItemTextColor, ref gc);
-				cr.Color = gc.ConvertToCairo (1);
+				cr.SetSourceRGB(gc);
 				cr.Stroke ();
 			}
 			

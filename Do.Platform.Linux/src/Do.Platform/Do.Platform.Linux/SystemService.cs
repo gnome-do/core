@@ -192,7 +192,7 @@ namespace Do.Platform.Linux
 		{
 			try {
 				return AutoStartFile.GetBoolean ("Desktop Entry", AutoStartKey);
-			} catch (GLib.GException e)	{
+			} catch (GLib.GException)	{
 				Log<SystemService>.Info ("Failed to find autostart key in autostart file, assuming enabled");
 			}
 			return true;

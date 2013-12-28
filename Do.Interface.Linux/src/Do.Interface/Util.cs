@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using Gdk;
 using Cairo;
 
-using Do.Universe;
+using Do.Interface.CairoUtils;
 
 namespace Do.Interface
 {
@@ -237,96 +237,101 @@ namespace Do.Interface
 			static void FillShadowPattern (Cairo.Context cairo, Cairo.Gradient shadow, ShadowParameters shadowParams)
 			{
 				GetShadowPattern (shadow, shadowParams);
-				cairo.Pattern = shadow;
+				cairo.SetSource (shadow);
 				cairo.Fill ();
 			}
 
 			public static void DrawShadow (Cairo.Context cr, double x, double y, double width, 
 			                                  double height, double radius, ShadowParameters shadowParams)
 			{
-				Surface sr = cr.Target.CreateSimilar (cr.Target.Content, (int)width + (int)(2*shadowParams.shadowRadius) + (int)x, 
-				                                      (int)height + (int)(2*shadowParams.shadowRadius) + (int)y);
-				Context cairo = new Context (sr);
-				
-				radius++;
-				y++;
-				height--;
-				Cairo.Gradient shadow;
-				/* Top Left */
-				shadow = new Cairo.RadialGradient (x+radius, y+radius, radius,
-				                                   x+radius, y+radius, radius+shadowParams.shadowRadius);
-				cairo.Rectangle (x-shadowParams.shadowRadius, y-shadowParams.shadowRadius,
-				                 radius+shadowParams.shadowRadius, radius+shadowParams.shadowRadius);
-				FillShadowPattern (cairo, shadow, shadowParams);
-				shadow.Destroy ();
-				
-				/* Top */
-				shadow = new Cairo.LinearGradient (0.0, y,
-				                                   0.0, y-shadowParams.shadowRadius);
-				cairo.Rectangle (x+radius, y-shadowParams.shadowRadius,
-				                 width-radius*2, shadowParams.shadowRadius);
-				FillShadowPattern (cairo, shadow, shadowParams);
-				shadow.Destroy ();
-				
-				/* Top Right */
-				shadow = new Cairo.RadialGradient (width+x-radius, y+radius, radius,
-				                                   width+x-radius, y+radius, radius+shadowParams.shadowRadius);
-				cairo.Rectangle (width+x-radius, y-shadowParams.shadowRadius,
-				                 radius+shadowParams.shadowRadius, radius+shadowParams.shadowRadius);
-				FillShadowPattern (cairo, shadow, shadowParams);
-				shadow.Destroy ();
-				
-				/* Right */
-				shadow = new Cairo.LinearGradient (width+x, 0.0,
-				                                   width+x+shadowParams.shadowRadius, 0.0);
-				cairo.Rectangle (width+x, y+radius, shadowParams.shadowRadius, height-radius*2);
-				FillShadowPattern (cairo, shadow, shadowParams);
-				shadow.Destroy ();
-				
-				/* Bottom Right */
-				shadow = new Cairo.RadialGradient (width+x-radius, height+y-radius, radius,
-				                                   width+x-radius, height+y-radius, radius+shadowParams.shadowRadius);
-				cairo.Rectangle (width+x-radius, height+y-radius,
-				                radius+shadowParams.shadowRadius, radius+shadowParams.shadowRadius);
-				FillShadowPattern (cairo, shadow, shadowParams);
-				shadow.Destroy ();
-				
-				/* Bottom */
-				shadow = new Cairo.LinearGradient (0.0, height+y, 
-				                                   0.0, height+y+shadowParams.shadowRadius);
-				cairo.Rectangle (x+radius, height+y,
-				                 width-radius*2, shadowParams.shadowRadius);
-				FillShadowPattern (cairo, shadow, shadowParams);
-				shadow.Destroy ();
-				
-				/* Bottom Left */
-				shadow = new Cairo.RadialGradient (x+radius, height+y-radius, radius, 
-				                                   x+radius, height+y-radius, radius+shadowParams.shadowRadius);
-				cairo.Rectangle (x-shadowParams.shadowRadius, height+y-radius,
-				                 radius+shadowParams.shadowRadius, radius+shadowParams.shadowRadius);
-				FillShadowPattern (cairo, shadow, shadowParams);
-				shadow.Destroy ();
-				
-				/* Left */
-				shadow = new Cairo.LinearGradient (x, 0.0, 
-				                                   x-shadowParams.shadowRadius, 0.0);
-				cairo.Rectangle (x-shadowParams.shadowRadius, y+radius, 
-				                 radius+shadowParams.shadowRadius, height-radius*2);
-				FillShadowPattern (cairo, shadow, shadowParams);
-				shadow.Destroy ();
-				
-				y--;
-				height++;
-				/* Clear inner rectangle */
-				GetFrame (cairo, x, y, width, height, radius);
-				cairo.Operator = Cairo.Operator.Clear;
-				cairo.Fill();
-				
-				cr.SetSource (sr);
-				cr.Paint ();
-				
-				(cairo as IDisposable).Dispose ();
-				sr.Destroy ();
+				using (Surface sr = cr.CreateSimilarToTarget ((int)width + (int)(2*shadowParams.shadowRadius) + (int)x, 
+															  (int)height + (int)(2*shadowParams.shadowRadius) + (int)y))
+				{
+					using (Context cairo = new Context (sr))
+					{
+						radius++;
+						y++;
+						height--;
+						Cairo.Gradient shadow;
+						/* Top Left */
+						using (shadow = new Cairo.RadialGradient (x+radius, y+radius, radius,
+																  x+radius, y+radius, radius+shadowParams.shadowRadius))
+						{
+							cairo.Rectangle (x-shadowParams.shadowRadius, y-shadowParams.shadowRadius,
+						                 	radius+shadowParams.shadowRadius, radius+shadowParams.shadowRadius);
+							FillShadowPattern (cairo, shadow, shadowParams);
+						}
+						/* Top */
+						using (shadow = new Cairo.LinearGradient (0.0, y, 0.0, y-shadowParams.shadowRadius))
+						{
+							cairo.Rectangle (x+radius, y-shadowParams.shadowRadius,
+							                 width-radius*2, shadowParams.shadowRadius);
+							FillShadowPattern (cairo, shadow, shadowParams);
+						}					
+						/* Top Right */
+						using (shadow = new Cairo.RadialGradient (width+x-radius, y+radius, radius,
+																  width+x-radius, y+radius, radius+shadowParams.shadowRadius))
+						{
+							cairo.Rectangle (width+x-radius, y-shadowParams.shadowRadius,
+						                 	radius+shadowParams.shadowRadius, radius+shadowParams.shadowRadius);
+							FillShadowPattern (cairo, shadow, shadowParams);
+						}
+					
+						/* Right */
+						using (shadow = new Cairo.LinearGradient (width+x, 0.0,
+																  width+x+shadowParams.shadowRadius, 0.0))
+						{
+							cairo.Rectangle (width+x, y+radius, shadowParams.shadowRadius, height-radius*2);
+							FillShadowPattern (cairo, shadow, shadowParams);
+						}
+					
+						/* Bottom Right */
+						using (shadow = new Cairo.RadialGradient (width+x-radius, height+y-radius, radius,
+																  width+x-radius, height+y-radius, radius+shadowParams.shadowRadius))
+						{
+							cairo.Rectangle (width+x-radius, height+y-radius,
+							                radius+shadowParams.shadowRadius, radius+shadowParams.shadowRadius);
+							FillShadowPattern (cairo, shadow, shadowParams);
+						}
+						
+						/* Bottom */
+						using (shadow = new Cairo.LinearGradient (0.0, height+y, 
+																  0.0, height+y+shadowParams.shadowRadius))
+						{
+							cairo.Rectangle (x+radius, height+y,
+							                 width-radius*2, shadowParams.shadowRadius);
+							FillShadowPattern (cairo, shadow, shadowParams);
+						}
+						
+						/* Bottom Left */
+						using (shadow = new Cairo.RadialGradient (x+radius, height+y-radius, radius, 
+																  x+radius, height+y-radius, radius+shadowParams.shadowRadius))
+						{
+							cairo.Rectangle (x-shadowParams.shadowRadius, height+y-radius,
+							                 radius+shadowParams.shadowRadius, radius+shadowParams.shadowRadius);
+							FillShadowPattern (cairo, shadow, shadowParams);
+						}
+						
+						/* Left */
+						using (shadow = new Cairo.LinearGradient (x, 0.0, 
+																  x-shadowParams.shadowRadius, 0.0))
+						{
+							cairo.Rectangle (x-shadowParams.shadowRadius, y+radius, 
+							                 radius+shadowParams.shadowRadius, height-radius*2);
+							FillShadowPattern (cairo, shadow, shadowParams);
+						}
+						
+						y--;
+						height++;
+						/* Clear inner rectangle */
+						GetFrame (cairo, x, y, width, height, radius);
+						cairo.Operator = Cairo.Operator.Clear;
+						cairo.Fill();
+						
+						cr.SetSource (sr);
+						cr.Paint ();
+					}
+				}
 			}
 		}
 		

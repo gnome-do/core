@@ -76,11 +76,11 @@ namespace Do.Interface.Widgets
 			
 		}
 		
-		protected override LinearGradient GetGradient ()
+		protected override LinearGradient CreateGradient ()
 		{
 			double r, g, b;
 			
-			LinearGradient gloss = base.GetGradient ();
+			var gloss = base.CreateGradient ();
 			r = (double) fillColor.Red / ushort.MaxValue;
 			g = (double) fillColor.Green / ushort.MaxValue;
 			b = (double) fillColor.Blue / ushort.MaxValue;
@@ -97,20 +97,19 @@ namespace Do.Interface.Widgets
 		{
 			base.PaintFill ();
 			
-			Cairo.Gradient fade;
+			using (var fade = new Cairo.LinearGradient (0, 0, 0, height)) {
+				fade.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
+				fade.AddColorStop (.75, new Cairo.Color (1, 1, 1, .25));
 			
-			fade = new Cairo.LinearGradient (0, 0, 0, height);
-			fade.AddColorStop (0,   new Cairo.Color (1, 1, 1, 0));
-			fade.AddColorStop (.75, new Cairo.Color (1, 1, 1, .25));
+				cairo.Save ();
+				cairo.NewPath ();
+				GlossOverlay (cairo);
 			
-			cairo.Save ();
-			cairo.NewPath ();
-			GlossOverlay (cairo);
+				cairo.SetSource (fade);
+				cairo.FillPreserve ();
 			
-			cairo.Pattern = fade;
-			cairo.FillPreserve ();
-			
-			cairo.Restore ();
+				cairo.Restore ();
+			}
 		}
 	}
 }

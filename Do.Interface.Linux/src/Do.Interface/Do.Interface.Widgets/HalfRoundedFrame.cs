@@ -77,7 +77,7 @@ namespace Do.Interface.Widgets
 			cairo.Save ();
 			GetFrame (cairo);
 			
-			cairo.Color = new Cairo.Color (r+offset, g+offset, b+offset, fillAlpha);
+			cairo.SetSourceRGBA (r+offset, g+offset, b+offset, fillAlpha);
 			cairo.FillPreserve ();
 			cairo.Restore ();
 		}
@@ -94,7 +94,7 @@ namespace Do.Interface.Widgets
 			cairo.LineWidth = 2;
 			SemiOutline (cairo);
 			
-			cairo.Color = new Cairo.Color (r+brighten, g+brighten, b+brighten, frameAlpha);
+			cairo.SetSourceRGBA (r+brighten, g+brighten, b+brighten, frameAlpha);
 			cairo.Stroke ();
 			
 			cairo.Restore ();

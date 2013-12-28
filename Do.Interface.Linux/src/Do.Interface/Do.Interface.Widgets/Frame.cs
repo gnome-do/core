@@ -197,13 +197,10 @@ namespace Do.Interface.Widgets
 				if (drawFrame) {
 					PaintBorder ();
 				}
-				
-				if (drawGradient)
-					((IDisposable)cairo.Target).Dispose ();
 			}
 		}
-		
-		protected virtual Cairo.LinearGradient GetGradient ()
+
+		protected virtual Cairo.LinearGradient CreateGradient ()
 		{
 			return new Cairo.LinearGradient (x, y, x, y+height);
 		}
@@ -219,10 +216,13 @@ namespace Do.Interface.Widgets
 			cairo.Save ();
 			GetFrame (cairo);
 			
-			if ( !drawGradient )
-				cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
-			else
-				cairo.Pattern = GetGradient ();
+			if (!drawGradient) {
+				cairo.SetSourceRGBA (r, g, b, fillAlpha);
+			} else { 
+				using (var grad = CreateGradient()) {
+					cairo.SetSource (grad);
+				}
+			}
 			
 			cairo.FillPreserve ();
 			cairo.Restore ();
@@ -240,7 +240,7 @@ namespace Do.Interface.Widgets
 			cairo.LineWidth = 2;
 			GetBorderFrame (cairo);
 
-			cairo.Color = new Cairo.Color (r, g, b, frameAlpha);
+			cairo.SetSourceRGBA (r, g, b, frameAlpha);
 			cairo.Stroke ();
 			cairo.Restore ();
 		}

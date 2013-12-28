@@ -34,15 +34,9 @@
       <Package>gtk-sharp-2.0</Package>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="System">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System.Core">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Mono.Posix">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\phone.png" />

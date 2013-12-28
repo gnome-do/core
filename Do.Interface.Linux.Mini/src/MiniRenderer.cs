@@ -55,13 +55,13 @@ namespace Do.Interface
 			            x+(w/3), glaze_offset+15,
 			            x, y+glaze_offset);
 			cr.Arc     (x+radius, y+radius, radius, Math.PI, Math.PI*1.5);
-			cr.Color = new Cairo.Color (1, 1, 1, .2);
+			cr.SetSourceRGBA (1, 1, 1, .2);
 			cr.Fill ();
 
 			cr.MoveTo (x + w - 30, y + 7);
 			cr.LineTo (x + w - 20,  y + 7);
 			cr.LineTo (x + w - 25, y + 12);
-			cr.Color = new Cairo.Color (1, 1, 1, .95);
+			cr.SetSourceRGBA (1, 1, 1, .95);
 			cr.Fill ();
 		}
 		
@@ -94,18 +94,21 @@ namespace Do.Interface
 		public void RenderItem (Context cr, Gdk.Rectangle render_region, bool focused)
 		{
 			if (sr_active == null || surface_height != Height) {
+				if (sr_active != null) {
+					sr_active.Dispose ();
+				}
 				surface_height = Height;
-				sr_active = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
-				Context c2 = new Context (sr_active);
-				c2.SetRoundedRectanglePath (0, 0, Width, Height, parent.WindowRadius);
-				LinearGradient lg = new LinearGradient (0, 0, 0, Height);
-				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
-				lg.AddColorStop (0.4, new Cairo.Color (1, 1, 1, 0));
-				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .3));
-				c2.Pattern = lg;
-				c2.Fill ();
-				(c2 as IDisposable).Dispose ();
-				lg.Destroy ();
+				sr_active = cr.CreateSimilarToTarget (Width, Height);
+				using (var c2 = new Context (sr_active)) {
+					c2.SetRoundedRectanglePath (0, 0, Width, Height, parent.WindowRadius);
+					using (var lg = new LinearGradient (0, 0, 0, Height)) {
+						lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
+						lg.AddColorStop (0.4, new Cairo.Color (1, 1, 1, 0));
+						lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .3));
+						c2.SetSource (lg);
+						c2.Fill ();
+					}
+				}
 			}
 			
 			if (!focused)
@@ -140,12 +143,12 @@ namespace Do.Interface
 		public void RenderItem (Context cr, Gdk.Rectangle drawing_area)
 		{
 			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, false);
-			LinearGradient lg = new LinearGradient (0, drawing_area.Y, 0, drawing_area.Height);
-			lg.AddColorStop (0, parent.Colors.BackgroundDark);
-			lg.AddColorStop (1, parent.Colors.BackgroundLight);
-			cr.Pattern = lg;
-			lg.Destroy ();
-			cr.Fill ();
+			using (var lg = new LinearGradient (0, drawing_area.Y, 0, drawing_area.Height)) {
+				lg.AddColorStop (0, parent.Colors.BackgroundDark);
+				lg.AddColorStop (1, parent.Colors.BackgroundLight);
+				cr.SetSource (lg);
+				cr.Fill ();
+			}
 		}
 		
 		public PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point)
@@ -168,7 +171,7 @@ namespace Do.Interface
 		public void RenderItem (Context cr, Gdk.Rectangle drawing_area, double overlay)
 		{
 			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, false);
-			cr.Color = new Cairo.Color (parent.Colors.FocusedText.R, 
+			cr.SetSourceRGBA (parent.Colors.FocusedText.R, 
 			                            parent.Colors.FocusedText.G, 
 			                            parent.Colors.FocusedText.B, 
 			                            parent.Colors.FocusedText.A * overlay);

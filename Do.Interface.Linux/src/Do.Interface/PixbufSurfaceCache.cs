@@ -63,51 +63,50 @@ namespace Do.Interface
 		
 		~PixbufSurfaceCache ()
 		{
-			foreach (Entry e in surface_cache.Values)
-				e.surface.Destroy ();
+			Dispose (false);
 		}
 		
 		public Surface AddPixbufSurface (string id, string icon)
 		{
 			Surface sr = EvictLRU ();
-			Context cr = new Context (sr);
+			using (var cr = new Context (sr)) {
 
-			cr.Operator = Operator.Source;
-			cr.Color = new Cairo.Color (0, 0, 0, 0);
-			cr.Paint ();
+				cr.Operator = Operator.Source;
+				cr.SetSourceRGBA (0, 0, 0, 0);
+				cr.Paint ();
 			
-			DrawIconOnSurface (sr, icon);
+				DrawIconOnSurface (sr, icon);
 			
-			surface_cache.Add (id, new Entry (sr, id));
-			(cr as IDisposable).Dispose ();
+				surface_cache.Add (id, new Entry (sr, id));
+			}
 			return sr;
 		}
 		
 		private void DrawIconOnSurface (Surface sr, string icon)
 		{
-			Context cr = new Context (sr);
-			Gdk.Pixbuf pixbuf;
-			pixbuf = IconProvider.PixbufFromIconName (icon, surface_width);
-			if (pixbuf.Height != surface_width && pixbuf.Width != surface_width) {
-				double scale = (double)surface_width / Math.Max (pixbuf.Width, pixbuf.Height);
-				Gdk.Pixbuf temp = pixbuf.ScaleSimple ((int) (pixbuf.Width * scale), (int) (pixbuf.Height * scale), InterpType.Bilinear);
+			using (var cr = new Context (sr)) {
+				Gdk.Pixbuf pixbuf;
+				pixbuf = IconProvider.PixbufFromIconName (icon, surface_width);
+				if (pixbuf.Height != surface_width && pixbuf.Width != surface_width) {
+					double scale = (double)surface_width / Math.Max (pixbuf.Width, pixbuf.Height);
+					Gdk.Pixbuf temp = pixbuf.ScaleSimple ((int)(pixbuf.Width * scale), (int)(pixbuf.Height * scale), InterpType.Bilinear);
+					pixbuf.Dispose ();
+					pixbuf = temp;
+				}
+			
+				if (pixbuf == null) {
+					return;
+				}
+			
+				Gdk.CairoHelper.SetSourcePixbuf (cr, 
+					pixbuf, 
+					(int)((surface_width - pixbuf.Width) / 2), 
+					(int)((surface_height - pixbuf.Height) / 2));
+				cr.Operator = Operator.Over;
+				cr.Paint ();
+
 				pixbuf.Dispose ();
-				pixbuf = temp;
 			}
-			
-			if (pixbuf == null) {
-				(cr as IDisposable).Dispose ();
-				return;
-			}
-			
-			Gdk.CairoHelper.SetSourcePixbuf (cr, 
-			                                 pixbuf, 
-			                                 (int) ((surface_width - pixbuf.Width)/2), 
-			                                 (int) ((surface_height - pixbuf.Height)/2));
-			cr.Operator = Operator.Over;
-			cr.Paint ();
-			pixbuf.Dispose ();
-			(cr as IDisposable).Dispose ();
 		}
 		
 		public Surface GetSurface (string  id)
@@ -134,10 +133,21 @@ namespace Do.Interface
 		
 		public void Dispose ()
 		{
-			foreach (Entry en in surface_cache.Values)
-				en.surface.Destroy ();
+			Dispose (true);
+			System.GC.SuppressFinalize (this);
 		}
-		
+
+		protected virtual void Dispose (bool disposing)
+		{
+			// TODO: Do I remember right? Do we not guarantee that any child object is actually sane
+			// at finalise time?
+			if (disposing) {
+				foreach (Entry en in surface_cache.Values) {
+					en.surface.Dispose ();
+				}
+			}
+		}
+				
 		#endregion 
 		
 		

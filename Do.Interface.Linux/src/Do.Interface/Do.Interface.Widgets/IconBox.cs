@@ -246,7 +246,7 @@ namespace Do.Interface.Widgets
 			                                 (int) (height / 2) - (int) (overlay_pixbuf.Height / 2) + y);
 			cairo.PaintWithAlpha (fillAlpha);
 			
-			cairo.Color = new Cairo.Color (r, g, b, fillAlpha);
+			cairo.SetSourceRGBA (r, g, b, fillAlpha);
 			cairo.FillPreserve ();
 			
 			cairo.Restore ();

@@ -429,7 +429,7 @@ namespace Do.Interface {
 			
 			using (cairo = Gdk.CairoHelper.Create (GdkWindow)) {
 				cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-				cairo.Color = new Cairo.Color (1.0, 1.0, 1.0, 0.0);
+				cairo.SetSourceRGBA (1.0, 1.0, 1.0, 0.0);
 				cairo.Operator = Cairo.Operator.Source;
 				cairo.Paint ();
 			}

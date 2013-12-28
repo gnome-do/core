@@ -46,7 +46,7 @@ namespace Do.Interface
 			cr.MoveTo (x + w - 30, y + 17);
 			cr.LineTo (x + w - 20,  y + 17);
 			cr.LineTo (x + w - 25, y + 22);
-			cr.Color = new Cairo.Color (1, 1, 1, .95);
+			cr.SetSourceRGBA (1, 1, 1, .95);
 			cr.Fill ();
 		}
 		
@@ -79,18 +79,21 @@ namespace Do.Interface
 		public void RenderItem (Context cr, Gdk.Rectangle render_region, bool focused)
 		{
 			if (sr_active == null || surface_height != Height) {
+				if (sr_active != null) {
+					sr_active.Dispose ();
+				}
 				surface_height = Height;
-				sr_active = cr.Target.CreateSimilar (cr.Target.Content, Width, Height);
-				Context c2 = new Context (sr_active);
-				c2.SetRoundedRectanglePath (0, 0, Width, Height, parent.WindowRadius*.6);
-				LinearGradient lg = new LinearGradient (0, 0, 0, Height);
-				lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
-				lg.AddColorStop (0.4, new Cairo.Color (1, 1, 1, 0));
-				lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .3));
-				c2.Pattern = lg;
-				c2.Fill ();
-				lg.Destroy ();
-				(c2 as IDisposable).Dispose ();
+				sr_active = cr.CreateSimilarToTarget (Width, Height);
+				using (var c2 = new Context (sr_active)) {
+					c2.SetRoundedRectanglePath (0, 0, Width, Height, parent.WindowRadius*.6);
+					using (var lg = new LinearGradient (0, 0, 0, Height)) {
+						lg.AddColorStop (0, new Cairo.Color (1, 1, 1, 0));
+						lg.AddColorStop (0.4, new Cairo.Color (1, 1, 1, 0));
+						lg.AddColorStop (1, new Cairo.Color (1, 1, 1, .3));
+						c2.SetSource(lg);
+						c2.Fill ();
+					}
+				}
 			}
 			
 			
@@ -120,11 +123,11 @@ namespace Do.Interface
 		public void RenderItem (Context cr, Gdk.Rectangle drawing_area)
 		{
 			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, true);
-			cr.Color = new Cairo.Color (.7, .7, .7, .55);
+			cr.SetSourceRGBA (.7, .7, .7, .55);
 			cr.FillPreserve ();
 			
 			cr.LineWidth = 1;
-			cr.Color = new Cairo.Color (0, 0, 0, .4);
+			cr.SetSourceRGBA (0, 0, 0, .4);
 			cr.Stroke ();
 			
 			Gdk.Rectangle inter_rect = new Gdk.Rectangle (drawing_area.X+parent.WindowBorder-5,
@@ -132,12 +135,12 @@ namespace Do.Interface
 			                                              drawing_area.Width-(2*parent.WindowBorder)+10,
 			                                              drawing_area.Height-(2*parent.WindowBorder)+10);
 			cr.SetRoundedRectanglePath (inter_rect, parent.WindowRadius*.7, false);
-			LinearGradient lg = new LinearGradient (0, inter_rect.Y, 0, inter_rect.Y+inter_rect.Height);
-			lg.AddColorStop (0, parent.Colors.Background.ShadeColor (2));
-			lg.AddColorStop (1, parent.Colors.Background.ShadeColor (.3));
-			cr.Pattern = lg;
-			cr.Fill ();
-			lg.Destroy ();
+			using (var lg = new LinearGradient (0, inter_rect.Y, 0, inter_rect.Y + inter_rect.Height)) {
+				lg.AddColorStop (0, parent.Colors.Background.ShadeColor (2));
+				lg.AddColorStop (1, parent.Colors.Background.ShadeColor (.3));
+				cr.SetSource(lg);
+				cr.Fill ();
+			}
 		}
 		
 		public PointLocation GetPointLocation (Gdk.Rectangle drawing_area, Gdk.Point point)
@@ -160,7 +163,7 @@ namespace Do.Interface
 		public void RenderItem (Context cr, Gdk.Rectangle drawing_area, double overlay)
 		{
 			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, false);
-			cr.Color = new Cairo.Color (parent.Colors.FocusedText.R, 
+			cr.SetSourceRGBA (parent.Colors.FocusedText.R, 
 			                            parent.Colors.FocusedText.G, 
 			                            parent.Colors.FocusedText.B, 
 			                            parent.Colors.FocusedText.A * overlay);

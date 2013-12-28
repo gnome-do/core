@@ -43,14 +43,15 @@ namespace Do.Interface
 			BezelDrawingArea.ThemeChanged += delegate {
 				if (border_buffer == null)
 					return;
-				border_buffer.Destroy ();
+				border_buffer.Dispose ();
 				border_buffer = null;
 			};
 		}
-		
+
+		// TODO: What? We're using a finalizer without the IDisposable pattern?		
 		~HUDTopBar ()
 		{
-			border_buffer.Destroy ();
+			border_buffer.Dispose ();
 		}
 		
 		private int buttons_offset { get { return Math.Min (10, parent.WindowRadius + 3); } }
@@ -58,7 +59,7 @@ namespace Do.Interface
 		private void RenderCloseCircle (Context cr)
 		{
 			cr.Arc (buttons_offset+6, Height / 2, 6, 0, Math.PI*2);
-			cr.Color = new Cairo.Color (1, 1, 1, .8);
+			cr.SetSourceRGBA (1, 1, 1, .8);
 			cr.Fill ();
 			
 			cr.MoveTo (buttons_offset+9, (Height / 2) - 3);
@@ -66,7 +67,7 @@ namespace Do.Interface
 			cr.MoveTo (buttons_offset+3,  (Height / 2) - 3);
 			cr.LineTo (buttons_offset+9, (Height / 2) + 3);
 			
-			cr.Color = new Cairo.Color (0.2, 0.2, 0.2, .8);
+			cr.SetSourceRGBA (0.2, 0.2, 0.2, .8);
 			cr.LineWidth = 2;
 			cr.Stroke ();
 		}
@@ -75,47 +76,43 @@ namespace Do.Interface
 		{
 			cr.Arc (parent.ThreePaneWidth - (buttons_offset + 6),
 			        Height / 2, 6, 0, Math.PI*2);
-			cr.Color = new Cairo.Color (1, 1, 1, .8);
+			cr.SetSourceRGBA (1, 1, 1, .8);
 			cr.Fill ();
 			
 			cr.MoveTo (parent.ThreePaneWidth - (buttons_offset + 9), (Height / 2) - 2);
 			cr.LineTo (parent.ThreePaneWidth - (buttons_offset + 3),  (Height / 2) - 2);
 			cr.LineTo (parent.ThreePaneWidth - (buttons_offset + 6), (Height / 2) + 3);
-			cr.Color = new Cairo.Color (0.2, 0.2, 0.2, .8);
+			cr.SetSourceRGBA (0.2, 0.2, 0.2, .8);
 			cr.Fill ();
 		}
 		
 		public void RenderItem (Context cr, Gdk.Rectangle drawing_area)
 		{
 			if (border_buffer == null) {
-				
-				Surface surface = cr.Target.CreateSimilar (cr.Target.Content, parent.ThreePaneWidth, Height);
-				Context cr2 = new Context (surface);
-				
-				SetTitlePath (cr2);
-				cr2.Operator = Cairo.Operator.Source;
-				LinearGradient title_grad = new LinearGradient (0, 0, 0, Height);
-				title_grad.AddColorStop (0.0, parent.Colors.TitleBarGlossLight);
-				title_grad.AddColorStop (0.5, parent.Colors.TitleBarGlossDark);
-				title_grad.AddColorStop (0.5, parent.Colors.TitleBarBase);
-				cr2.Pattern = title_grad;
-				cr2.FillPreserve ();
-				cr2.Operator = Cairo.Operator.Over;
-				title_grad.Destroy ();
+				border_buffer = cr.CreateSimilarToTarget (parent.ThreePaneWidth, Height);
+				using (Context cr2 = new Context (border_buffer)) {
+					SetTitlePath (cr2);
+					cr2.Operator = Cairo.Operator.Source;
+					using (var title_grad = new LinearGradient (0, 0, 0, Height)) {
+						title_grad.AddColorStop (0.0, parent.Colors.TitleBarGlossLight);
+						title_grad.AddColorStop (0.5, parent.Colors.TitleBarGlossDark);
+						title_grad.AddColorStop (0.5, parent.Colors.TitleBarBase);
+						cr2.SetSource (title_grad);
+						cr2.FillPreserve ();
+						cr2.Operator = Cairo.Operator.Over;
+					}
+
+					using (var grad = new LinearGradient (0, 0, 0, Height)) {
+						grad.AddColorStop (0, new Cairo.Color (1, 1, 1, .6));
+						grad.AddColorStop (.6, new Cairo.Color (1, 1, 1, 0));
+						cr2.SetSource (grad);
+						cr2.LineWidth = 1;
+						cr2.Stroke ();
+					}
 			
-				LinearGradient grad = new LinearGradient (0, 0, 0, Height);
-				grad.AddColorStop (0, new Cairo.Color (1, 1, 1, .6));
-				grad.AddColorStop (.6, new Cairo.Color (1, 1, 1, 0));
-				cr2.Pattern = grad;
-				cr2.LineWidth = 1;
-				cr2.Stroke ();
-				grad.Destroy ();
-			
-				RenderDownCircle (cr2);
-				RenderCloseCircle (cr2);
-				
-				border_buffer = surface;
-				(cr2 as IDisposable).Dispose ();
+					RenderDownCircle (cr2);
+					RenderCloseCircle (cr2);
+				}
 			}
 			
 			if (drawing_area.Width == parent.ThreePaneWidth) {
@@ -192,16 +189,22 @@ namespace Do.Interface
 		public void RenderItem (Context cr, Gdk.Rectangle render_region, bool focused)
 		{
 			cr.Rectangle (render_region.X, render_region.Y, render_region.Width, render_region.Height); 
-			if (focused)
-				cr.Color = new Cairo.Color (0.3, 0.3, 0.3, 0.6).ColorizeColor (parent.Colors.Background);
-			else
-				cr.Color = new Cairo.Color (0.0, 0.0, 0.0, 0.2).ColorizeColor (parent.Colors.Background);
+			if (focused) {
+				var focused_color = new Cairo.Color (0.3, 0.3, 0.3, 0.6).ColorizeColor (parent.Colors.Background);
+				cr.SetSourceRGBA (focused_color);
+			} else {
+				cr.SetSourceRGBA (0.0, 0.0, 0.0, 0.2);
+			}
 			cr.Fill ();
 			cr.Rectangle (render_region.X + .5, 
 			              render_region.Y + .5, 
 			              render_region.Width - 1, 
 			              render_region.Height - 1);
-			cr.Color = (focused) ? parent.Colors.FocusedLine : parent.Colors.UnfocusedLine;
+			if (focused) {
+				cr.SetSourceRGBA (parent.Colors.FocusedLine);
+			} else {
+				cr.SetSourceRGBA (parent.Colors.UnfocusedLine);
+			}
 			cr.LineWidth = 1;
 			cr.Stroke ();
 		}
@@ -228,11 +231,11 @@ namespace Do.Interface
 		public void RenderItem (Context cr, Gdk.Rectangle drawing_area)
 		{
 			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, false);
-			cr.Color = parent.Colors.Background;
+			cr.SetSourceRGBA(parent.Colors.Background);
 			cr.Fill ();
 				
 			cr.SetRoundedRectanglePath (drawing_area, parent.WindowRadius, true);
-			cr.Color = new Cairo.Color (.35, .35, .35);
+			cr.SetSourceRGB (.35, .35, .35);
 			cr.LineWidth = 1;
 			cr.Stroke ();
 		}
@@ -260,7 +263,7 @@ namespace Do.Interface
 		{
 			cr.Rectangle (drawing_area.X, drawing_area.Y + parent.TextModeOffset, drawing_area.Width,
 				              (parent.InternalHeight - parent.TextModeOffset - parent.WindowRadius)); 
-			cr.Color = new Cairo.Color (parent.Colors.FocusedText.R, 
+			cr.SetSourceRGBA (parent.Colors.FocusedText.R, 
 			                            parent.Colors.FocusedText.G, 
 			                            parent.Colors.FocusedText.B, 
 			                            parent.Colors.FocusedText.A * overlay);
