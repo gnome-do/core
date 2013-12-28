@@ -17,7 +17,7 @@ namespace Do.Platform.Linux
 		private global::Gtk.CheckButton ask_chk;
 		private global::Gtk.Button buttonCancel;
 		private global::Gtk.Button install_btn;
-        
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);
@@ -138,27 +138,15 @@ namespace Do.Platform.Linux
 			this.install_btn.CanFocus = true;
 			this.install_btn.Name = "install_btn";
 			this.install_btn.UseUnderline = true;
-			// Container child install_btn.Gtk.Container+ContainerChild
-			global::Gtk.Alignment w15 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
-			// Container child GtkAlignment.Gtk.Container+ContainerChild
-			global::Gtk.HBox w16 = new global::Gtk.HBox ();
-			w16.Spacing = 2;
-			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Image w17 = new global::Gtk.Image ();
-			w17.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-ok", global::Gtk.IconSize.Button);
-			w16.Add (w17);
-			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Label w19 = new global::Gtk.Label ();
-			w19.LabelProp = global::Mono.Unix.Catalog.GetString ("_Install");
-			w19.UseUnderline = true;
-			w16.Add (w19);
-			w15.Add (w16);
-			this.install_btn.Add (w15);
+			this.install_btn.Label = global::Mono.Unix.Catalog.GetString ("_Install");
+			global::Gtk.Image w15 = new global::Gtk.Image ();
+			w15.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-ok", global::Gtk.IconSize.Button);
+			this.install_btn.Image = w15;
 			this.AddActionWidget (this.install_btn, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w23 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w13 [this.install_btn]));
-			w23.Position = 1;
-			w23.Expand = false;
-			w23.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w16 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w13 [this.install_btn]));
+			w16.Position = 1;
+			w16.Expand = false;
+			w16.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}

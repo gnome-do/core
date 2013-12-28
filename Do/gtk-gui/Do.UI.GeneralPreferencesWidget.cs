@@ -12,7 +12,7 @@ namespace Do.UI
 		private global::Gtk.CheckButton login_check;
 		private global::Gtk.CheckButton hide_check;
 		private global::Gtk.CheckButton notification_check;
-        
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);

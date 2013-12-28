@@ -11,7 +11,7 @@ namespace Do.Interface.AnimationBase
 		private global::Gtk.Button clear_background;
 		private global::Gtk.CheckButton shadow_check;
 		private global::Gtk.CheckButton animation_check;
-		
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);
@@ -54,32 +54,20 @@ namespace Do.Interface.AnimationBase
 			this.clear_background.Name = "clear_background";
 			this.clear_background.UseUnderline = true;
 			this.clear_background.Relief = ((global::Gtk.ReliefStyle)(2));
-			// Container child clear_background.Gtk.Container+ContainerChild
-			global::Gtk.Alignment w3 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
-			// Container child GtkAlignment.Gtk.Container+ContainerChild
-			global::Gtk.HBox w4 = new global::Gtk.HBox ();
-			w4.Spacing = 2;
-			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Image w5 = new global::Gtk.Image ();
-			w5.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-clear", global::Gtk.IconSize.Menu);
-			w4.Add (w5);
-			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Label w7 = new global::Gtk.Label ();
-			w7.LabelProp = global::Mono.Unix.Catalog.GetString ("_Reset");
-			w7.UseUnderline = true;
-			w4.Add (w7);
-			w3.Add (w4);
-			this.clear_background.Add (w3);
+			this.clear_background.Label = global::Mono.Unix.Catalog.GetString ("_Reset");
+			global::Gtk.Image w3 = new global::Gtk.Image ();
+			w3.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-clear", global::Gtk.IconSize.Menu);
+			this.clear_background.Image = w3;
 			this.hbox4.Add (this.clear_background);
-			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.clear_background]));
-			w11.Position = 2;
-			w11.Expand = false;
-			w11.Fill = false;
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.clear_background]));
+			w4.Position = 2;
+			w4.Expand = false;
+			w4.Fill = false;
 			this.vbox4.Add (this.hbox4);
-			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox4]));
-			w12.Position = 0;
-			w12.Expand = false;
-			w12.Fill = false;
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox4]));
+			w5.Position = 0;
+			w5.Expand = false;
+			w5.Fill = false;
 			// Container child vbox4.Gtk.Box+BoxChild
 			this.shadow_check = new global::Gtk.CheckButton ();
 			this.shadow_check.CanFocus = true;
@@ -88,10 +76,10 @@ namespace Do.Interface.AnimationBase
 			this.shadow_check.DrawIndicator = true;
 			this.shadow_check.UseUnderline = true;
 			this.vbox4.Add (this.shadow_check);
-			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.shadow_check]));
-			w13.Position = 1;
-			w13.Expand = false;
-			w13.Fill = false;
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.shadow_check]));
+			w6.Position = 1;
+			w6.Expand = false;
+			w6.Fill = false;
 			// Container child vbox4.Gtk.Box+BoxChild
 			this.animation_check = new global::Gtk.CheckButton ();
 			this.animation_check.CanFocus = true;
@@ -101,10 +89,10 @@ namespace Do.Interface.AnimationBase
 			this.animation_check.DrawIndicator = true;
 			this.animation_check.UseUnderline = true;
 			this.vbox4.Add (this.animation_check);
-			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.animation_check]));
-			w14.Position = 2;
-			w14.Expand = false;
-			w14.Fill = false;
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.animation_check]));
+			w7.Position = 2;
+			w7.Expand = false;
+			w7.Fill = false;
 			this.Add (this.vbox4);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();

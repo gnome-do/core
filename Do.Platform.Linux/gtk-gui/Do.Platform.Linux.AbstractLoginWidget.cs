@@ -20,7 +20,7 @@ namespace Do.Platform.Linux
 		private global::Gtk.HSeparator hseparator1;
 		private global::Gtk.Label new_account_lbl;
 		private global::Gtk.HButtonBox new_account_button_box;
-        
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);

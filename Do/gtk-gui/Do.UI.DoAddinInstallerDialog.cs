@@ -12,7 +12,7 @@ namespace Do.UI
 		private global::Gtk.ProgressBar progress_bar;
 		private global::Gtk.Button button_cancel;
 		private global::Gtk.Button button_ok;
-        
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);
@@ -99,27 +99,15 @@ namespace Do.UI
 			this.button_ok.CanFocus = true;
 			this.button_ok.Name = "button_ok";
 			this.button_ok.UseUnderline = true;
-			// Container child button_ok.Gtk.Container+ContainerChild
-			global::Gtk.Alignment w10 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
-			// Container child GtkAlignment.Gtk.Container+ContainerChild
-			global::Gtk.HBox w11 = new global::Gtk.HBox ();
-			w11.Spacing = 2;
-			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Image w12 = new global::Gtk.Image ();
-			w12.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-ok", global::Gtk.IconSize.Button);
-			w11.Add (w12);
-			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Label w14 = new global::Gtk.Label ();
-			w14.LabelProp = global::Mono.Unix.Catalog.GetString ("_Install Updates");
-			w14.UseUnderline = true;
-			w11.Add (w14);
-			w10.Add (w11);
-			this.button_ok.Add (w10);
+			this.button_ok.Label = global::Mono.Unix.Catalog.GetString ("_Install Updates");
+			global::Gtk.Image w10 = new global::Gtk.Image ();
+			w10.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-ok", global::Gtk.IconSize.Button);
+			this.button_ok.Image = w10;
 			this.AddActionWidget (this.button_ok, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w18 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w8 [this.button_ok]));
-			w18.Position = 1;
-			w18.Expand = false;
-			w18.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w11 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w8 [this.button_ok]));
+			w11.Position = 1;
+			w11.Expand = false;
+			w11.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}

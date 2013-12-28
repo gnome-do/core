@@ -10,7 +10,7 @@ namespace Do.UI
 		private global::Gtk.HButtonBox hbuttonbox2;
 		private global::Gtk.Button btn_help;
 		private global::Gtk.Button btn_close;
-        
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);

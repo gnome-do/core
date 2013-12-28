@@ -9,7 +9,7 @@ namespace Do.UI
 		private global::Gtk.HBox hbox1;
 		private global::Gtk.Image help_icn;
 		private global::Gtk.Label help_lbl;
-        
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);

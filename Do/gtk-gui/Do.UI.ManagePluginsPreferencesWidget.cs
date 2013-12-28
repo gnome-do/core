@@ -17,7 +17,7 @@ namespace Do.UI
 		private global::Gtk.Button btn_configure;
 		private global::Gtk.HButtonBox hbuttonbox2;
 		private global::Gtk.Button btn_about;
-        
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);
@@ -95,29 +95,17 @@ namespace Do.UI
 			this.btn_configure.CanFocus = true;
 			this.btn_configure.Name = "btn_configure";
 			this.btn_configure.UseUnderline = true;
-			// Container child btn_configure.Gtk.Container+ContainerChild
-			global::Gtk.Alignment w8 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
-			// Container child GtkAlignment.Gtk.Container+ContainerChild
-			global::Gtk.HBox w9 = new global::Gtk.HBox ();
-			w9.Spacing = 2;
-			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Image w10 = new global::Gtk.Image ();
-			w10.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-preferences", global::Gtk.IconSize.Button);
-			w9.Add (w10);
-			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Label w12 = new global::Gtk.Label ();
-			w12.LabelProp = global::Mono.Unix.Catalog.GetString ("_Configure");
-			w12.UseUnderline = true;
-			w9.Add (w12);
-			w8.Add (w9);
-			this.btn_configure.Add (w8);
+			this.btn_configure.Label = global::Mono.Unix.Catalog.GetString ("_Configure");
+			global::Gtk.Image w8 = new global::Gtk.Image ();
+			w8.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-preferences", global::Gtk.IconSize.Button);
+			this.btn_configure.Image = w8;
 			this.hbuttonbox1.Add (this.btn_configure);
-			global::Gtk.ButtonBox.ButtonBoxChild w16 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox1 [this.btn_configure]));
-			w16.Expand = false;
-			w16.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w9 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox1 [this.btn_configure]));
+			w9.Expand = false;
+			w9.Fill = false;
 			this.hbox2.Add (this.hbuttonbox1);
-			global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.hbuttonbox1]));
-			w17.Position = 0;
+			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.hbuttonbox1]));
+			w10.Position = 0;
 			// Container child hbox2.Gtk.Box+BoxChild
 			this.hbuttonbox2 = new global::Gtk.HButtonBox ();
 			this.hbuttonbox2.Name = "hbuttonbox2";
@@ -132,17 +120,17 @@ namespace Do.UI
 			this.btn_about.UseUnderline = true;
 			this.btn_about.Label = "gtk-about";
 			this.hbuttonbox2.Add (this.btn_about);
-			global::Gtk.ButtonBox.ButtonBoxChild w18 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2 [this.btn_about]));
-			w18.Expand = false;
-			w18.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w11 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2 [this.btn_about]));
+			w11.Expand = false;
+			w11.Fill = false;
 			this.hbox2.Add (this.hbuttonbox2);
-			global::Gtk.Box.BoxChild w19 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.hbuttonbox2]));
-			w19.Position = 1;
+			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.hbuttonbox2]));
+			w12.Position = 1;
 			this.vbox3.Add (this.hbox2);
-			global::Gtk.Box.BoxChild w20 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.hbox2]));
-			w20.Position = 2;
-			w20.Expand = false;
-			w20.Fill = false;
+			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.hbox2]));
+			w13.Position = 2;
+			w13.Expand = false;
+			w13.Fill = false;
 			this.Add (this.vbox3);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();

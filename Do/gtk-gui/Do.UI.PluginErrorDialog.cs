@@ -11,7 +11,7 @@ namespace Do.UI
 		private global::Gtk.Label header_lbl;
 		private global::Gtk.Image image33;
 		private global::Gtk.Button buttonOk;
-        
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);

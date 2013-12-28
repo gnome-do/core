@@ -24,7 +24,7 @@ namespace Do.UI
 		private global::Gtk.Button composite_warning_info_btn;
 		private global::Gtk.HSeparator hseparator1;
 		private global::Gtk.Alignment theme_configuration_container;
-        
+
 		protected virtual void Build ()
 		{
 			global::Stetic.Gui.Initialize (this);
