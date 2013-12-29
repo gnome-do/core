@@ -309,6 +309,24 @@ namespace Do.Core
 			}
 			return element == null;
 		}
+
+		/// <summary>
+		/// Resolves the ItemSource for an Item.
+		/// </summary>
+		/// <returns>The sources for item.</returns>
+		/// <param name="element">Element.</param>
+		/// <remarks>Debug only</remarks>
+		internal IEnumerable<DynamicItemSource> ResolveSourcesForItem (Item element)
+		{
+			lock (universe_lock) {
+				foreach (KeyValuePair<DynamicItemSource, UniverseCollection> entry in dynamicUniverses) {
+					if (entry.Value.ContainsKey (element.UniqueId)) {
+						yield return entry.Key;
+					}
+				}
+			}
+			yield break;
+		}
 		
 		/// <summary>
 		/// Causes the universe to be rebuilt in the background.

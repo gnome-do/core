@@ -39,6 +39,9 @@ namespace Do.Universe
 			items.Add (new SelectedTextItem ());
 			foreach (Item item in Services.Application.MainMenuItems)
 				items.Add (item);
+			if (Do.Preferences.Debug) {
+				items.Add (new DebugItemAction ());
+			}
 		}
 		
 		public override IEnumerable<Type> SupportedItemTypes {

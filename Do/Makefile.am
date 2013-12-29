@@ -64,6 +64,7 @@ FILES = \
 	src/Do.Universe/ItemSourceItemSource.cs \
 	src/Do.Universe/PreferencesItem.cs \
 	src/Do.Universe/DonateItem.cs \
+	src/Do.Universe/DebugItemAction.cs \
 	src/Do.Universe/AboutItem.cs \
 	src/Do.Universe/QuitItem.cs \
 	src/Do.Universe/SelectedTextItem.cs \
@@ -71,6 +72,8 @@ FILES = \
 	src/Mono.Addins/AddinExtensions.cs \
 	src/Mono.Addins/Mono.Addins.Setup/AddinRepositoryEntryExtensions.cs \
 	src/PathExtensions.cs
+
+
 
 RESOURCES = \
 	gtk-gui/gui.stetic \
