@@ -66,11 +66,11 @@ PKG_CHECK_MODULES([GIO_SHARP], [gio-sharp-2.0])
 files="`$PKG_CONFIG --variable=Libraries gio-sharp-2.0`"
 for file in $files; do
 	GIO_SHARP_SOURCE_ASSEMBLIES="$GIO_SHARP_SOURCE_ASSEMBLIES $file"
-	GIO_SHARP_ASSEMBLIES="$GIO_SHARP_ASSEMBLIES $top_srcdir/build/$(basename $file)"
+	GIO_SHARP_ASSEMBLIES="$GIO_SHARP_ASSEMBLIES $(pwd)/build/$(basename $file)"
 	[[ -r "$file.config" ]] && GIO_SHARP_SOURCE_ASSEMBLIES="$GIO_SHARP_SOURCE_ASSEMBLIES $file.config"
-	[[ -r "$file.config" ]] && GIO_SHARP_ASSEMBLIES="$GIO_SHARP_ASSEMBLIES $top_srcdir/build/$(basename $file).config"
+	[[ -r "$file.config" ]] && GIO_SHARP_ASSEMBLIES="$GIO_SHARP_ASSEMBLIES $(pwd)/build/$(basename $file).config"
 
-	GIO_SHARP_LIBS="$GIO_SHARP_LIBS -r:$top_srcdir/build/$(basename $file)"
+	GIO_SHARP_LIBS="$GIO_SHARP_LIBS -r:$(pwd)/build/$(basename $file)"
 done
 AC_SUBST([GIO_SHARP_SOURCE_ASSEMBLIES])
 AC_SUBST([GIO_SHARP_ASSEMBLIES])
