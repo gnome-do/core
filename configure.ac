@@ -160,6 +160,17 @@ AC_ARG_ENABLE(jolicloud,
 AM_CONDITIONAL(ENABLE_JOLICLOUD, test "x$enable_jolicloud" = "xyes")
 dnl }}}
 
+dnl {{{ check to see whether to include compatibility shims for Mono.Cairo < 3.2
+AC_MSG_CHECKING([for Mono.Cairo ≥ 3.2])
+PKG_CHECK_EXISTS([mono-cairo >= 3.2], need_cairo_shim=no, need_cairo_shim=yes)
+if test "x$need_cairo_shim" = "xno" ; then 
+   AC_MSG_RESULT([yes])
+else
+   AC_MSG_RESULT([no, using compatibility shim])
+fi
+AM_CONDITIONAL(NEED_CAIRO_SHIM, test "x$need_cairo_shim" = "xyes")
+dnl }}
+
 AC_CONFIG_FILES([
 Do/Makefile
 Do/gnome-do

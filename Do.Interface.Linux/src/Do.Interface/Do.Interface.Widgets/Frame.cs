@@ -20,6 +20,8 @@
 using System;
 using Gtk;
 using Gdk;
+// For Mono.Cairo 3.2 compatibility shims
+using Do.Interface.CairoUtils;
 
 namespace Do.Interface.Widgets
 {

@@ -37,6 +37,15 @@ FILES += \
 	src/Do.Interface/Tests/TestPositionWindow.cs
 endif
 
+if NEED_CAIRO_SHIM
+FILES += \
+	src/Do.Interface/Do.Interface.CairoUtils/Cairo32Compatibility.cs
+endif
+
+# Automake won't do this for us
+EXTRA_DIST += \
+	src/Do.Interface/Do.Interface.CairoUtils/Cairo32Compatibility.cs
+
 RESOURCES = \
 	Resources/Do.Interface.Linux.addin.xml \
 	Resources/settings-triangle.png
