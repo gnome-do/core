@@ -40,6 +40,9 @@ endif
 if NEED_CAIRO_SHIM
 FILES += \
 	src/Do.Interface/Do.Interface.CairoUtils/Cairo32Compatibility.cs
+
+BUILD_DEFINES = \
+	-define:USING_OLD_CAIRO
 endif
 
 # Automake won't do this for us

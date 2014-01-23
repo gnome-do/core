@@ -371,9 +371,13 @@ namespace Do.Interface.CairoUtils
 		/// <param name="height">Height for new surface</param>
 		public static Surface CreateSimilarToTarget(this Cairo.Context cr, int width, int height)
 		{
+#if USING_OLD_CAIRO
+			return cr.GetTarget().CreateSimilar (cr.GetTarget().Content, width, height);
+#else
 			using (var targetSurface = cr.GetTarget()) {
 				return targetSurface.CreateSimilar (targetSurface.Content, width, height);
 			}
+#endif
 		}
 	}
 }
