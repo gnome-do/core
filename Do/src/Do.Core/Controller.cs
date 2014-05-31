@@ -1011,11 +1011,11 @@ namespace Do.Core
 			logo = "gnome-do.svg";
 
 			AboutDialog.Logo = IconProvider.PixbufFromIconName (logo, 140);
-			AboutDialog.Copyright = Catalog.GetString ("Copyright \xa9 2009 GNOME Do Developers");
+			AboutDialog.Copyright = Catalog.GetString ("Copyright \xa9 2014 GNOME Do Developers");
 			AboutDialog.Comments = Catalog.GetString ("Do things as quickly as possible\n" +
 				"(but no quicker) with your files, bookmarks,\n" +
 				"applications, music, contacts, and more!");
-			AboutDialog.Website = "http://do.davebsd.com/";
+			AboutDialog.Website = "http://do.cooperteam.net/";
 			AboutDialog.WebsiteLabel = Catalog.GetString ("Visit Homepage");
 			Gtk.AboutDialog.SetUrlHook((dialog, link) => Services.Environment.OpenUrl (link));
 			AboutDialog.IconName = "gnome-do";

@@ -43,9 +43,6 @@ namespace Do.UI
 	public partial class ManagePluginsPreferencesWidget : Bin, IConfigurable
 	{
 
-		const string WikiPage = "http://do.davebsd.com/wiki/{0}{1}";
-		const string PluginWikiPageFormat = "_Plugin";
-
 		PluginNodeView nview;
 		SearchEntry search_entry;
 
@@ -200,10 +197,10 @@ namespace Do.UI
 					// plugin manifest files support a Url attribute, if this attribute is set we should
 					// use it instead of trying to guess the wiki page.
 					if (!string.IsNullOrEmpty (a.Description.Url))
+                    {
 						url = a.Description.Url;
-					url = string.Format (WikiPage, name, PluginWikiPageFormat);
-					
-					Services.Environment.OpenUrl (url);
+                        Services.Environment.OpenUrl (url);
+                    }
 				} catch (Exception e) {
 					Log.Debug (e.Message);
 					Log.Debug (e.StackTrace);
