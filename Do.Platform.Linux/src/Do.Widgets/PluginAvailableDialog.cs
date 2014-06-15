@@ -29,7 +29,7 @@ namespace Do.Platform.Linux
 		
 	public partial class PluginAvailableDialog : Gtk.Dialog
 	{		
-		const string WhatIsDoUrl = "http://do.davebsd.com/wiki/index.php?title=Main_Page#What_is_GNOME_Do.3F";
+		const string WhatIsDoUrl = "http://do.cooperteam.net/";
 		
 		Addin addin;
 		

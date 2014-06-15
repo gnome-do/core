@@ -35,7 +35,7 @@ namespace Do.UI
 	{
 
 		const int ManagePreferencesPreferencesPageIndex = 2;
-		const string HelpUrl = "http://do.davebsd.com/wiki/index.php?title=Using_Do";
+		const string HelpUrl = "https://answers.launchpad.net/do";
 
 		readonly IEnumerable<IConfigurable> Pages = new IConfigurable [] {
 			new GeneralPreferencesWidget (),
