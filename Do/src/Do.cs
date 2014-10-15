@@ -41,8 +41,8 @@ namespace Do {
 		internal static void Main (string [] args)
 		{
 			Catalog.Init ("gnome-do", AssemblyInfo.LocaleDirectory);
-			Gtk.Application.Init ();
 			Gdk.Threads.Init ();
+			Gtk.Application.Init ();
 
 			// We are conservative with the log at first.
 			Log.DisplayLevel = LogLevel.Error;
@@ -73,8 +73,10 @@ namespace Do {
 			if (!Preferences.QuietStart)
 				Controller.Summon ();
 
+			Gdk.Threads.Enter ();
 			Gtk.Application.Run ();
-			
+			Gdk.Threads.Leave ();
+
 			RelevanceProvider.Serialize (RelevanceProvider.DefaultProvider);
 		}
 
