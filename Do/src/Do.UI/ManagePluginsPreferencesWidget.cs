@@ -190,10 +190,9 @@ namespace Do.UI
 		{
 			foreach (string id in nview.GetSelectedAddins ()) {
 				try {
-					string name, url;
+					string url;
 					Addin a = AddinManager.Registry.GetAddin (id);
-					name = Addin.GetIdName (id).Split ('.')[1];
-					
+
 					// plugin manifest files support a Url attribute, if this attribute is set we should
 					// use it instead of trying to guess the wiki page.
 					if (!string.IsNullOrEmpty (a.Description.Url))
