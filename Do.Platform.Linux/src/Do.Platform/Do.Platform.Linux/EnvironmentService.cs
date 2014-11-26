@@ -70,8 +70,11 @@ namespace Do.Platform.Linux
 		
 		public void OpenUrl (string url)
 		{
-			if (!url.Contains ("://"))
+			if (!Uri.IsWellFormedUriString (url, UriKind.Absolute))
+			{
+				//TODO: It'd be nice to check if we can resolve https:// and use that, otherwise http://
 				url = "http://" + url;
+			}
 			Open (url);
 		}
 		
