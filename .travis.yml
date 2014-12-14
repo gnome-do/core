@@ -1,0 +1,11 @@
+language: csharp
+solution: Do.sln
+
+script:
+  - ./autogen.sh
+  - make
+  - make check
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y intltool autoconf automake libtool libdbus2.0-cil-dev libdbus-glib2.0-cil-dev libnunit-cil-dev libmono-cairo4.0-cil pkg-config libgio2.0-cil-dev libgkeyfile-cil-dev libgtk2.0-cil-dev libglib2.0-cil-dev libgconf2.0-cil-dev libgconf2-dev libgnome-keyring1.0-cil-dev libmono-addins-cil-dev libmono-addins-gui-cil-dev libnotify-cil-dev libglib2.0-dev libgtk2.0-dev librsvg2-2.0-cil-dev libwnck1.0-cil-dev
