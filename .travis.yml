@@ -4,7 +4,7 @@ solution: Do.sln
 script:
   - ./autogen.sh
   - make
-  - make check
+  - make check TESTS_ENVIRONMENT=nunit-console
 
 before_install:
   - sudo apt-get update -qq
