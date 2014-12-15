@@ -4,8 +4,8 @@ solution: Do.sln
 script:
   - ./autogen.sh
   - make
-  - make check TESTS_ENVIRONMENT=nunit-console
+  - make check TESTS_ENVIRONMENT=dbus-test-runner --task=nunit-console -p
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y intltool autoconf automake libtool libdbus1.0-cil-dev libdbus-glib1.0-cil-dev libnunit-cil-dev libmono-cairo4.0-cil pkg-config libgio2.0-cil-dev libgkeyfile-cil-dev libgtk2.0-cil-dev libglib2.0-cil-dev libgconf2.0-cil-dev libgconf2-dev libgnome-keyring1.0-cil-dev libmono-addins-cil-dev libmono-addins-gui-cil-dev libnotify-cil-dev libglib2.0-dev libgtk2.0-dev librsvg2-2.0-cil-dev libwnck1.0-cil-dev nunit-console
+  - sudo apt-get install -y intltool autoconf automake libtool libdbus1.0-cil-dev libdbus-glib1.0-cil-dev libnunit-cil-dev libmono-cairo4.0-cil pkg-config libgio2.0-cil-dev libgkeyfile-cil-dev libgtk2.0-cil-dev libglib2.0-cil-dev libgconf2.0-cil-dev libgconf2-dev libgnome-keyring1.0-cil-dev libmono-addins-cil-dev libmono-addins-gui-cil-dev libnotify-cil-dev libglib2.0-dev libgtk2.0-dev librsvg2-2.0-cil-dev libwnck1.0-cil-dev nunit-console dbus-test-runner

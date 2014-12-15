@@ -65,8 +65,6 @@ Do.Tests.dll: $(SOURCES_BUILD) $(RESOURCES_EXPANDED) $(COMPONENT_DEPS) $(BUILD_D
 	        echo "Compiling $(notdir $@)...";
 	@$(MCS) $(MCS_FLAGS) -target:library -out:$@ $(BUILD_DEFINES) $(BUILD_REFERENCES) $(COMPONENT_REFERENCES) -r:$(BUILD_DIR)/Do.exe $(RESOURCES_BUILD) $(SOURCES_BUILD) 
 
-export MONO_ENV_OPTIONS=--debug
-
 test-environment: $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) $(BUILD_DIR)/Do.exe $(DO_EXE_DEBUG)
 	cp $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) .
 	cp $(BUILD_DIR)/Do.exe $(DO_EXE_DEBUG) .
@@ -76,9 +74,11 @@ TESTS=	Do.Tests.dll \
 	$(BUILD_DIR)/Do.Platform.dll \
 	$(BUILD_DIR)/Do.Platform.Linux.dll \
 	$(BUILD_DIR)/Do.Interface.Linux.dll
+
+AM_TESTS_ENVIRONMENT = MONO_ENV_OPTIONS=--debug
 TEST_EXTENSIONS = .dll
-DLL_LOG_COMPILER = nunit-console
-AM_DLL_LOG_FLAGS = -labels -nodots
+DLL_LOG_COMPILER = dbus-test-runner --task=nunit-console
+AM_DLL_LOG_FLAGS = -p -labels -p -nodots -p
 
 CLEANFILES=$(foreach component, $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) $(DO_EXE_DEBUG), $(notdir $(component))) Do.exe test-environment Do.Tests.dll Do.Tests.dll.mdb TestResult.xml
 EXTRA_DIST=$(FILES) $(RESOURCES)
