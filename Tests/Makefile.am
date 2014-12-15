@@ -77,7 +77,7 @@ TESTS=	Do.Tests.dll \
 
 AM_TESTS_ENVIRONMENT = MONO_ENV_OPTIONS=--debug
 TEST_EXTENSIONS = .dll
-DLL_LOG_COMPILER = dbus-test-runner --task=nunit-console
+DLL_LOG_COMPILER = xvfb-run -a dbus-test-runner --task=nunit-console
 AM_DLL_LOG_FLAGS = -p -labels -p -nodots -p
 
 CLEANFILES=$(foreach component, $(COMPONENT_DEPS) $(COMPONENT_DEPS_DEBUG) $(DO_EXE_DEBUG), $(notdir $(component))) Do.exe test-environment Do.Tests.dll Do.Tests.dll.mdb TestResult.xml
