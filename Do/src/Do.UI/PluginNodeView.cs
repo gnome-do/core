@@ -94,7 +94,7 @@ namespace Do.UI
 
 			cell = new CellRendererPixbuf ();				
 			cell.SetFixedSize (IconSize + IconPadding, IconSize + IconPadding);
-			AppendColumn ("Icon", cell, IconDataFunc as TreeCellDataFunc);
+			AppendColumn ("Icon", cell, (TreeCellDataFunc)IconDataFunc);
 
 			cell = new Gtk.CellRendererText ();
 			(cell as CellRendererText).WrapWidth = WrapWidth;
