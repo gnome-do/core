@@ -39,12 +39,12 @@ namespace Do.Platform.Linux
 		const string NetworkManagerPath = "/org/freedesktop/NetworkManager";
 		
 		[Interface(NetworkManagerName)]
-		interface INetworkManager : org.freedesktop.DBus.Properties
+		public interface INetworkManager : org.freedesktop.DBus.Properties
 		{
 			event StateChangedHandler StateChanged;
 		}
 		
-		delegate void StateChangedHandler (uint state);
+		public delegate void StateChangedHandler (uint state);
 		
 		INetworkManager network;
 		

@@ -38,12 +38,12 @@ namespace Do.Platform.Linux.JoliCloud
 {
 	
 	[Interface ("org.jolicloud.JolicloudDaemon")]
-	interface IJolicloudDaemon
+	public interface IJolicloudDaemon
 	{
 		event ActionProcessedEventHandler ActionProcessed;
 	}
 	
-	delegate void ActionProcessedEventHandler (string action, string [] packages, bool success, string error);
+	public delegate void ActionProcessedEventHandler (string action, string [] packages, bool success, string error);
 		
 	/// <summary>
 	/// Listens to the JoliCloud daemon for package install events, and offers to install an appropriate

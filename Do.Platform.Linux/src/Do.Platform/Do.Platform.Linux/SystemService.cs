@@ -42,7 +42,7 @@ namespace Do.Platform.Linux
 	
 	public class SystemService : AbstractSystemService, IController, IInitializedService
 	{
-		delegate void BoolDelegate (bool val);
+		public delegate void BoolDelegate (bool val);
 		
 		const string PowerManagementName = "org.freedesktop.PowerManagement";
 		const string PowerManagementPath = "/org/freedesktop/PowerManagement";
@@ -51,14 +51,14 @@ namespace Do.Platform.Linux
 		const string AutoStartKey = "Hidden";
 		
 		[Interface(PowerManagementName)]
-		interface IPowerManagement
+		public interface IPowerManagement
 		{
 			bool GetOnBattery ();
 			event BoolDelegate OnBatteryChanged;
 		}
 		
 		[Interface(DeviceKitPowerName)]
-		interface IDeviceKitPower : org.freedesktop.DBus.Properties
+		public interface IDeviceKitPower : org.freedesktop.DBus.Properties
 		{
 			event Action OnChanged;
 		}
