@@ -18,9 +18,8 @@ dnl Plugin ABI version; bump whenever plugin interface changes
 ABI_VERSION=0.11
 AC_SUBST(ABI_VERSION)
 
-if test -d $top_srcdir/.bzr ; then
-   VERSION_INFO=`bzr version-info --custom \
-   --template="bzr {branch_nick} r{revno}"`
+if test -d $top_srcdir/.git ; then
+   VERSION_INFO=$(git describe)
 else
    VERSION_INFO="Release"
 fi
