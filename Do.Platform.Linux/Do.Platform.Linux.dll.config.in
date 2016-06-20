@@ -1,4 +1,4 @@
 <configuration>
 	<dllmap dll="libdo" target="@expanded_libdir@/@PACKAGE@/libdo.so"/>
-	<dllmap dll="gnome-desktop-2" target="libgnome-desktop-2.so.17"/>
+	<dllmap dll="gnome-desktop-3" target="libgnome-desktop-3.so.12"/>
 </configuration>
