@@ -1,5 +1,7 @@
 language: csharp
 solution: Do.sln
+sudo: required
+dist: trusty
 
 script:
   - ./autogen.sh
