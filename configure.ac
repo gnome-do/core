@@ -15,7 +15,7 @@ dnl -- Populate top_srcdir variable
 top_srcdir=$(readlink -f $0 | sed -e s/configure$//)
 
 dnl Plugin ABI version; bump whenever plugin interface changes
-ABI_VERSION=0.11
+ABI_VERSION=1.0
 AC_SUBST(ABI_VERSION)
 
 if test -d $top_srcdir/.git ; then
@@ -94,17 +94,9 @@ AC_SUBST([NOTIFY_SHARP_LIBS])
 AC_SUBST([GKEYFILE_SHARP_LIBS])
 
 dnl -- Use D-Bus# where available.
-PKG_CHECK_MODULES([DBUS_SHARP], [dbus-sharp-2.0], HAVE_DBUS_SHARP=yes, HAVE_DBUS_SHARP=no)
-PKG_CHECK_MODULES([DBUS_SHARP_GLIB], [dbus-sharp-glib-2.0], HAVE_DBUS_SHARP_GLIB=yes, HAVE_DBUS_SHARP_GLIB=no)
+PKG_CHECK_MODULES([DBUS_SHARP], [dbus-sharp-2.0])
+PKG_CHECK_MODULES([DBUS_SHARP_GLIB], [dbus-sharp-glib-2.0])
 
-if test "x$HAVE_DBUS_SHARP" = "xyes" ; then
-	DBUS_BUILD_DEFINES=-define:USE_DBUS_SHARP
-else
-   	PKG_CHECK_MODULES([DBUS_SHARP], [ndesk-dbus-1.0])
-   	PKG_CHECK_MODULES([DBUS_SHARP_GLIB], [ndesk-dbus-glib-1.0])
-fi
-
-AC_SUBST([DBUS_BUILD_DEFINES])
 AC_SUBST([DBUS_SHARP_LIBS])
 AC_SUBST([DBUS_SHARP_GLIB_LIBS])
 

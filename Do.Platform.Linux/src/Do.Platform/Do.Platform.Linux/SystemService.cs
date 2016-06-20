@@ -23,11 +23,7 @@ using System.Text;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-#if USE_DBUS_SHARP
 using DBus;
-#else
-using NDesk.DBus;
-#endif
 using org.freedesktop.DBus;
 
 using Do.Platform.ServiceStack;

@@ -19,11 +19,7 @@
 
 using System;
 
-#if USE_DBUS_SHARP
 using DBus;
-#else
-using NDesk.DBus;
-#endif
 using org.freedesktop.DBus;
 
 namespace Do.Platform.Linux.DBus
