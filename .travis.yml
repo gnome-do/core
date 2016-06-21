@@ -6,7 +6,7 @@ dist: trusty
 script:
   - ./autogen.sh
   - make
-  - make check TESTS_ENVIRONMENT="xvfb-run -a dbus-test-runner --task=nunit-console -p "
+  - make check
 
 before_install:
   - sudo apt-get update -qq
